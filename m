@@ -2,99 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0193C8AE1
-	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 20:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4B03C8D2A
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 21:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240057AbhGNSbn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Jul 2021 14:31:43 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:55496 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbhGNSbk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Jul 2021 14:31:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1626287328; x=1657823328;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nUrPuatobHKMHbBSvnB/MtWNobqFZh/U9CeTgX581Hc=;
-  b=qJDWQj9pchcc9Ppv0sgI0jHpFHKWkm5Mo4Cw0c1PzZLabubXsyV/XMMV
-   Q9AmWCtkSCtzVlwFTTzuINUiS2roqUtrTnBJ6f+ijFGxRQ1vh9YJwC2W6
-   kTWLq5Qnfc/r1RBMsjAe84Au1zYfivW4cLeG4UO4FQGuajGkXpHvWmCoY
-   BEfuE1WOmb9uJRekFeI9BySvvRIwnjRodFW9xMtNdKWHSSLhFVW82M5V/
-   tO6b2k05naeRcQgKx12INc4whUhUmGcyRvzn7CAOHJo/cHHOXUDAndgFR
-   jIG0wen96ctq6LHdQJJIns68vjmd1uvJD/VD3ik39MDapavlcbhAUDD9/
-   Q==;
-IronPort-SDR: BVVGlpckuDz33Y4MPxP6wSu1Mnj93l+4QZYQKMwyRtw7AV566LwsOxFydKj3Eixkz0IzehaVw2
- wQfJ4v2dTOKTppqCyTFWECjyTUnj265Cdpf1J2viRpOSSmg4GZMMyNNxupRck9CzDv8Rx992/+
- xnSuHVvpgqf2wDe55kch6pU2ItgsYhpAqfT1LyWhdcw720ppU+uzEzcQ507u3qqXXrZyh5uWcz
- i5Fdy5GURDp9frwXLT6je5TE43bblNDt/ccdpZCqOY+jdWBaWmlt78XwhwrBsjUwVFyCFC2qN9
- bXY=
-X-IronPort-AV: E=Sophos;i="5.84,239,1620716400"; 
-   d="scan'208";a="135875339"
-Received: from f5out.microchip.com (HELO smtp.microsemi.com) ([198.175.253.81])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jul 2021 11:28:47 -0700
-Received: from AVMBX2.microsemi.net (10.10.46.68) by AVMBX1.microsemi.net
- (10.10.46.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 14 Jul
- 2021 11:28:47 -0700
-Received: from brunhilda.pdev.net (10.238.32.34) by avmbx2.microsemi.net
- (10.10.46.68) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Wed, 14 Jul 2021 11:28:47 -0700
-Received: by brunhilda.pdev.net (Postfix, from userid 1467)
-        id 5FF0F703472; Wed, 14 Jul 2021 13:28:47 -0500 (CDT)
-From:   Don Brace <don.brace@microchip.com>
-To:     <hch@infradead.org>, <martin.petersen@oracle.com>,
-        <jejb@linux.vnet.ibm.com>, <linux-scsi@vger.kernel.org>
-CC:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
-        <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
-        <gerry.morong@microchip.com>, <mahesh.rajashekhara@microchip.com>,
-        <mike.mcgowen@microchip.com>, <murthy.bhat@microchip.com>,
-        <balsundar.p@microchip.com>, <joseph.szczypek@hpe.com>,
-        <jeff@canonical.com>, <POSWALD@suse.com>,
-        <john.p.donnelly@oracle.com>, <mwilck@suse.com>,
-        <pmenzel@molgen.mpg.de>, <linux-kernel@vger.kernel.org>
-Subject: [smartpqi updates V3 PATCH 9/9] smartpqi: update version to 2.1.10-020
-Date:   Wed, 14 Jul 2021 13:28:47 -0500
-Message-ID: <20210714182847.50360-10-don.brace@microchip.com>
-X-Mailer: git-send-email 2.28.0.rc1.9.ge7ae437ac1
-In-Reply-To: <20210714182847.50360-1-don.brace@microchip.com>
-References: <20210714182847.50360-1-don.brace@microchip.com>
+        id S232402AbhGNTnx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Jul 2021 15:43:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38404 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235954AbhGNTnR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 14 Jul 2021 15:43:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A8A2A613D1;
+        Wed, 14 Jul 2021 19:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626291621;
+        bh=jWSKzkJ1vsphKuArPC7UbEpDSmeIB1msXfkM5MF16iA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MKU4DkbhrBJ2I7myv25ZDqHSMmmDR6ZO7sw/fbJNJq5kKOeO0DOx4OUTV3dN4AmGl
+         tEC9kzFKhe5BAbdLAdQ4C89+F3Y6t45TpMgxqFus6BGLpA8KRZdEOd6Haxk/NwXHj8
+         r2h2OMez9DDkd/NZpL1H5HebeJRE7TVzC8s2nmzlmqppo+5wPkY0SMsolcDj0f1kC/
+         JUDP6+29PuQKfc4jRSB1Zn50eWPniRSSswGEOhr6kSZPjxGbwp1ZP1RXClTp1Vh9HZ
+         GajBnCqode4oBaj1JdiaHIBW+VPU9yXiYdhxGSu9tzEwjAscs8Y6nNIO7mcuDW3pS9
+         88yhzkEEQbwTA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.13 098/108] scsi: aic7xxx: Fix unintentional sign extension issue on left shift of u8
+Date:   Wed, 14 Jul 2021 15:37:50 -0400
+Message-Id: <20210714193800.52097-98-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210714193800.52097-1-sashal@kernel.org>
+References: <20210714193800.52097-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
-Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
-Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
-Reviewed-by: Scott Teel <scott.teel@microchip.com>
-Reviewed-by: Gerry Morong <gerry.morong@microchip.com>
-Signed-off-by: Don Brace <don.brace@microchip.com>
----
- drivers/scsi/smartpqi/smartpqi_init.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+From: Colin Ian King <colin.king@canonical.com>
 
-diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index ab1c9c483478..c1f0f8da9fe2 100644
---- a/drivers/scsi/smartpqi/smartpqi_init.c
-+++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -33,11 +33,11 @@
- #define BUILD_TIMESTAMP
- #endif
- 
--#define DRIVER_VERSION		"2.1.8-045"
-+#define DRIVER_VERSION		"2.1.10-020"
- #define DRIVER_MAJOR		2
- #define DRIVER_MINOR		1
--#define DRIVER_RELEASE		8
--#define DRIVER_REVISION		45
-+#define DRIVER_RELEASE		10
-+#define DRIVER_REVISION		20
- 
- #define DRIVER_NAME		"Microchip SmartPQI Driver (v" \
- 				DRIVER_VERSION BUILD_TIMESTAMP ")"
+[ Upstream commit 332a9dd1d86f1e7203fc7f0fd7e82f0b304200fe ]
+
+The shifting of the u8 integer returned fom ahc_inb(ahc, port+3) by 24 bits
+to the left will be promoted to a 32 bit signed int and then sign-extended
+to a u64. In the event that the top bit of the u8 is set then all then all
+the upper 32 bits of the u64 end up as also being set because of the
+sign-extension. Fix this by casting the u8 values to a u64 before the 24
+bit left shift.
+
+[ This dates back to 2002, I found the offending commit from the git
+history git://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git,
+commit f58eb66c0b0a ("Update aic7xxx driver to 6.2.10...") ]
+
+Link: https://lore.kernel.org/r/20210621151727.20667-1-colin.king@canonical.com
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Addresses-Coverity: ("Unintended sign extension")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/aic7xxx/aic7xxx_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_core.c b/drivers/scsi/aic7xxx/aic7xxx_core.c
+index 4b04ab8908f8..a396f048a031 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_core.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_core.c
+@@ -493,7 +493,7 @@ ahc_inq(struct ahc_softc *ahc, u_int port)
+ 	return ((ahc_inb(ahc, port))
+ 	      | (ahc_inb(ahc, port+1) << 8)
+ 	      | (ahc_inb(ahc, port+2) << 16)
+-	      | (ahc_inb(ahc, port+3) << 24)
++	      | (((uint64_t)ahc_inb(ahc, port+3)) << 24)
+ 	      | (((uint64_t)ahc_inb(ahc, port+4)) << 32)
+ 	      | (((uint64_t)ahc_inb(ahc, port+5)) << 40)
+ 	      | (((uint64_t)ahc_inb(ahc, port+6)) << 48)
 -- 
-2.28.0.rc1.9.ge7ae437ac1
+2.30.2
 
