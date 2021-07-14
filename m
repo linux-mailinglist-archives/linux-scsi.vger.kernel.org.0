@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5CA3C8AE3
-	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 20:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D476D3C8AE6
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 20:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240065AbhGNSbn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Jul 2021 14:31:43 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:34842 "EHLO
+        id S240083AbhGNSbq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Jul 2021 14:31:46 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:55496 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbhGNSbk (ORCPT
+        with ESMTP id S240007AbhGNSbk (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Jul 2021 14:31:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
   t=1626287328; x=1657823328;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LFpZ+CYZzqb1YpQvsDbpspaRBSX0vQfqNpAp5FAHVuQ=;
-  b=j7BDWbX7mOX0+uLI+1lvTR6fCJSKdX+8Ud2z5ZWvxGXpgUJ2+V33s7nx
-   2+Af/vb/q2BU9pXfMfRrWNb+hS7BLcQCZYqEKym4c8KNp52Z6XMvRGrGJ
-   d6ypvRhBAk+aiaWx8KfIR29kdYh9OKaUNVyYsjLG4/iUkgw4NiQa+bN+T
-   XOvmWuODJmpJTRjD5hgVNSGVjeuRfIca3S+3hyEZ9J5NBrEFo6RoYCfCc
-   9QTHHp5oVkxapDmVMn6qFxpR7MQk5ZduOqvlOcA8A9ixJSkxkQkNEEMYL
-   DD39Zm8/z6NEEj2yzF+XiwuzmnrwIQdq7jH/vCQ/ovUmxDE9XG0D2mSk0
-   g==;
-IronPort-SDR: 7aXrA4IZH8g+83YxKBqJV7n6Xpe9JLzBdqblJxp6iHPkFs3jdiBtKMm1YtOZQlwPstkBtycIU4
- 8wqlNHj7U+rkrn4h0VuUTk1lNmGQPZgi/nCcE/ELG9BaZan+MbdTOjsso/EQDIjU5d1nUAosOr
- E/movizdG9gfsUWP8VG3uYwcbmpF2NHpVyzyWvq9IAn09O07UNj8gqPsxFn4zmicTYp5+jECq4
- 6127XDwkC+kk7YvUo/zPWTl8u4MPOVf3hMlfXREhCPQziNOL8H1PDF+X66Z5cClOolfjz3U9ZR
- Xyk=
+  bh=YCU1lNbnN3QiScgV4I4qmlBlxDGRHX9C+VP7ZGwbfYg=;
+  b=2AEGO/AArr5VDQPA9ujtadgIRaQqgyhWRjl/hot8O7Q9t1Ii1DqN1Ru9
+   oP9/w2Jt8uXIBcAIKEb+mepy6ImWspXcJDDyR+Ip+HVotrIBIAbi/aJBD
+   KAz7sskl8cw7uGar9PcIW6nRg/igU5HrBLkaRM5WnKYnX6qYpNvpLXELo
+   AP5fVlHeyvhbz/bIilmTKlL+5xWfNsf7Nt4+LtWNLoNHncL8YmEUx5NKg
+   T51pxvYFLu1tUVAU4DSgy9KDEAWEvSrB2JtIecoNlGToNymySoC1lSbOf
+   4777scFpKVQGmX3YqyGLvuD6BNqeaJN51vGf2Gn+DfgfqbnH18eDK3s99
+   A==;
+IronPort-SDR: RvAJnvaO8m8cdFmG/3ImMEzxHkbbN8HR9VpV9Njb78jnlN/p3xJqiixc8wi63QDcEl15T36lMG
+ k3ZDKbJm5Ubsn2rx3poZdTje0gtI4yPpxDW3FfNR46aP+IgyuD0wif3OwxR+tOkYz2Ck1anIbd
+ 1b45doyga8gwT4rf+8B1GwNdjBbIaUGr4ht0y946npZXOXxHF98j3R9sxCKAjsoXKNcJDRnL2D
+ aEr2R3/LI3Illk4cmRPpxMf7BmFUeW5nY52Qr1iG3elyjrfE+ogfreJaRzmqpT4qmsbyf7DQq/
+ 4qs=
 X-IronPort-AV: E=Sophos;i="5.84,239,1620716400"; 
-   d="scan'208";a="122053848"
+   d="scan'208";a="135875340"
 Received: from f5out.microchip.com (HELO smtp.microsemi.com) ([198.175.253.81])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jul 2021 11:28:47 -0700
-Received: from AVMBX1.microsemi.net (10.10.46.67) by AVMBX2.microsemi.net
- (10.10.46.68) with Microsoft SMTP Server (version=TLS1_2,
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jul 2021 11:28:48 -0700
+Received: from AUSMBX1.microsemi.net (10.10.76.217) by AVMBX1.microsemi.net
+ (10.10.46.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 14 Jul
  2021 11:28:47 -0700
-Received: from brunhilda.pdev.net (10.238.32.34) by avmbx1.microsemi.net
- (10.10.46.67) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+Received: from brunhilda.pdev.net (10.238.32.34) by ausmbx1.microsemi.net
+ (10.10.76.217) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
  Transport; Wed, 14 Jul 2021 11:28:47 -0700
 Received: by brunhilda.pdev.net (Postfix, from userid 1467)
-        id 52FE370345B; Wed, 14 Jul 2021 13:28:47 -0500 (CDT)
+        id 5956C703469; Wed, 14 Jul 2021 13:28:47 -0500 (CDT)
 From:   Don Brace <don.brace@microchip.com>
 To:     <hch@infradead.org>, <martin.petersen@oracle.com>,
         <jejb@linux.vnet.ibm.com>, <linux-scsi@vger.kernel.org>
@@ -53,9 +53,9 @@ CC:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <jeff@canonical.com>, <POSWALD@suse.com>,
         <john.p.donnelly@oracle.com>, <mwilck@suse.com>,
         <pmenzel@molgen.mpg.de>, <linux-kernel@vger.kernel.org>
-Subject: [smartpqi updates V3 PATCH 7/9] smartpqi: add PCI IDs for new ZTE controllers
-Date:   Wed, 14 Jul 2021 13:28:45 -0500
-Message-ID: <20210714182847.50360-8-don.brace@microchip.com>
+Subject: [smartpqi updates V3 PATCH 8/9] smartpqi: fix isr accessing uninitialized data
+Date:   Wed, 14 Jul 2021 13:28:46 -0500
+Message-ID: <20210714182847.50360-9-don.brace@microchip.com>
 X-Mailer: git-send-email 2.28.0.rc1.9.ge7ae437ac1
 In-Reply-To: <20210714182847.50360-1-don.brace@microchip.com>
 References: <20210714182847.50360-1-don.brace@microchip.com>
@@ -66,71 +66,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Balsundar P <balsundar.p@microchip.com>
+From: Mike McGowen <mike.mcgowen@microchip.com>
 
-Added support for ZTE RM241-18i 2G device ID.
-VID_9005, DID_028F, SVID_1CF2 and SDID_5445
-
-Added support for ZTE RM242-18i 4G device ID.
-VID_9005, DID_028F, SVID_1CF2 and SDID_5446
-
-Added support for ZTE RM243-18i device ID.
-VID_9005, DID_028F, SVID_1CF2 and SDID_5447
-
-Added support for ZTE SDPSA/B-18i 4G device ID.
-VID_9005, DID_028F, SVID_1CF2 and SDID_0B27
-
-Added support for ZTE SDPSA/B_I-18i device ID.
-VID_9005, DID_028F, SVID_1CF2 and SDID_0B29
-
-Added support for ZTE SDPSA/B_L-18i 2G device ID.
-VID_9005, DID_028F, SVID_1CF2 and SDID_0B45
+Correct driver's ISR accessing a data structure member
+that has not been fully initialized during driver
+initialization.
+  - The pqi queue groups can have uninitialized members
+    when an interrupt fires. This has not resulted in
+    any driver crashes. This was found during our own
+    internal testing. No bugs were ever filed.
 
 Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
-Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
-Signed-off-by: Balsundar P <balsundar.p@microchip.com>
+Signed-off-by: Mike McGowen <mike.mcgowen@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/scsi/smartpqi/smartpqi_init.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index c0b181ba795c..f0e84354f782 100644
+index f0e84354f782..ab1c9c483478 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -9185,6 +9185,30 @@ static const struct pci_device_id pqi_pci_id_table[] = {
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       0x1dfc, 0x3161)
- 	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x1cf2, 0x5445)
-+	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x1cf2, 0x5446)
-+	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x1cf2, 0x5447)
-+	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x1cf2, 0x0b27)
-+	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x1cf2, 0x0b29)
-+	},
-+	{
-+		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
-+			       0x1cf2, 0x0b45)
-+	},
- 	{
- 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
- 			       PCI_ANY_ID, PCI_ANY_ID)
+@@ -7760,11 +7760,11 @@ static int pqi_ctrl_init(struct pqi_ctrl_info *ctrl_info)
+ 
+ 	pqi_init_operational_queues(ctrl_info);
+ 
+-	rc = pqi_request_irqs(ctrl_info);
++	rc = pqi_create_queues(ctrl_info);
+ 	if (rc)
+ 		return rc;
+ 
+-	rc = pqi_create_queues(ctrl_info);
++	rc = pqi_request_irqs(ctrl_info);
+ 	if (rc)
+ 		return rc;
+ 
 -- 
 2.28.0.rc1.9.ge7ae437ac1
 
