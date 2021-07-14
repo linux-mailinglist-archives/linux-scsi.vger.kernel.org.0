@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8330A3C8AE5
-	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 20:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2C43C8AE0
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jul 2021 20:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240071AbhGNSbo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Jul 2021 14:31:44 -0400
+        id S240055AbhGNSbm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Jul 2021 14:31:42 -0400
 Received: from esa.microchip.iphmx.com ([68.232.154.123]:36768 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbhGNSbk (ORCPT
+        with ESMTP id S229806AbhGNSbk (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Jul 2021 14:31:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1626287329; x=1657823329;
+  t=1626287328; x=1657823328;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KCeMB1351RaaFzihjYpmyZpKn1nIlXa9kenq/xuiRIQ=;
-  b=RU3E/GaF7jouPSzsRG3qrUxIb9LwONZxZcQL+yHqJordnS0s0VwGVmfa
-   25Y9pNAZ4/DvtIQmpaKBoy0Dimv8kmTv+d58SahSf87x36aGzmkH9nrq8
-   qrfyiM76zLxVyvW4ZNR6DcfTIGaK/yQBXnt1hOJDNr0bjrciwEL+HUjmT
-   scUEKKjHVR2kJTPjhLrX7Pj0im4PUIPT/UgQEobD8viIxysw45uBBUhrW
-   pCzi2IwUm6u6Y+ke0H5k4xOZ5j9zS4p7+KWteEMRGuPj06o0EZb/eAarN
-   n0tSHseTHJ0UsKHJf2QqjcCM/azUjUmmiaqALYRf5vOW2TFPpTYG4dl+y
+  bh=7GWo7ZtH3qsEMz3OZG0KlNbXjxhc+zeAxPNwHr5M6lE=;
+  b=ZStwnPkfB4WqERe0VDBUOnX+1KAzOEocykGz1YvSvBsCqfj/8jZfLh8A
+   cFaJjY6liGdB5bEHC0t6idZo1ugPNT6F3xIEOukEJmCSBHeX0OnUFsakv
+   VegyyYpl0Rr8H499spXwotGiF9BsH6pW+tXbyaIA1hpts20VQFDof3rDj
+   8d3VT69xMANFawjuMuFoOBmycn33VX8+lvUImRD8MhkrQIEUmNI7ssyd5
+   48FQtUuRk/11b1xBqxjdDmvlJdXMpjmUvrIK5zy7TBio9vaVIdM9dsSIo
+   YX9m2AeyY0HC+D/16juaiKCc7RYb3KcHM7970AaYEialiezeaaW2Xz4eG
    w==;
-IronPort-SDR: R/UJecjkn+ryGiP98Qaz4qUHoSknoEIa2mP0pcc3S2CDIafx1DMsuvjZLvUbk9YZRnBP5Mg5y/
- j+EirzZNO/jlzIfdVAJ/gSyE/F66vE/qibhvw6U1UebyVJRNLcIVvfBIy/Kzr385ZKZHL6lD69
- siqS0cQJT6BnKBwO6rI80gHvmNThbrZs64S7jA1lkAvmnagUaBVH4/8B3uBzdRP3yknNtSBhix
- yVF6UwIdsZWHidXnQ52riIecE3KYWBUa0TLPyTL/LRhyTzG8Qu0KJGEGDC3whrFZVpRrySreyU
- TsY=
+IronPort-SDR: rsGY4UadCLikoJ2XBTGXz3xFiGGwI3CyaSPeSo1T2Bt9hVKzM6crPFrolNp+cbtHs6hzcoDih8
+ Am2slXikLIQldo0Z4zaTZmc4kJh+ulsCNCj54thgVqWafBr9HWFqi5V6qQH4r5nO6r9VYOe+7f
+ /r6HRdv6XQc5O+ELb/FqWrnenL2ow/brN5Qmfh0csrd8h4ZrNV8TaQG32Lsg98er/dilsam4sp
+ wzx8U0l8qQ8e+vmQUC3seRTlmGLHBU/NFkCJy+LsJYa0NxOJTi118EGKmlIgfvIf9L1z+ttqha
+ BnE=
 X-IronPort-AV: E=Sophos;i="5.84,239,1620716400"; 
-   d="scan'208";a="124579308"
+   d="scan'208";a="124579306"
 Received: from smtpout.microchip.com (HELO smtp.microsemi.com) ([198.175.253.82])
   by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jul 2021 11:28:48 -0700
-Received: from AUSMBX2.microsemi.net (10.10.76.218) by AUSMBX1.microsemi.net
+Received: from AUSMBX1.microsemi.net (10.10.76.217) by AUSMBX1.microsemi.net
  (10.10.76.217) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 14 Jul
  2021 11:28:47 -0700
-Received: from brunhilda.pdev.net (10.238.32.34) by ausmbx2.microsemi.net
- (10.10.76.218) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
+Received: from brunhilda.pdev.net (10.238.32.34) by ausmbx1.microsemi.net
+ (10.10.76.217) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
  Transport; Wed, 14 Jul 2021 11:28:47 -0700
 Received: by brunhilda.pdev.net (Postfix, from userid 1467)
-        id 339DC70260E; Wed, 14 Jul 2021 13:28:47 -0500 (CDT)
+        id 39FD27026B1; Wed, 14 Jul 2021 13:28:47 -0500 (CDT)
 From:   Don Brace <don.brace@microchip.com>
 To:     <hch@infradead.org>, <martin.petersen@oracle.com>,
         <jejb@linux.vnet.ibm.com>, <linux-scsi@vger.kernel.org>
@@ -53,9 +53,9 @@ CC:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <jeff@canonical.com>, <POSWALD@suse.com>,
         <john.p.donnelly@oracle.com>, <mwilck@suse.com>,
         <pmenzel@molgen.mpg.de>, <linux-kernel@vger.kernel.org>
-Subject: [smartpqi updates V3 PATCH 2/9] smartpqi: update copyright notices
-Date:   Wed, 14 Jul 2021 13:28:40 -0500
-Message-ID: <20210714182847.50360-3-don.brace@microchip.com>
+Subject: [smartpqi updates V3 PATCH 3/9] smartpqi: change driver module MACROS to microchip
+Date:   Wed, 14 Jul 2021 13:28:41 -0500
+Message-ID: <20210714182847.50360-4-don.brace@microchip.com>
 X-Mailer: git-send-email 2.28.0.rc1.9.ge7ae437ac1
 In-Reply-To: <20210714182847.50360-1-don.brace@microchip.com>
 References: <20210714182847.50360-1-don.brace@microchip.com>
@@ -66,117 +66,45 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Kevin Barnett <kevin.barnett@microchip.com>
-
-Updated copyright notices and company name strings to reflect
-Microchip ownership.
-
-Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
-Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
-Reviewed-by: Scott Teel <scott.teel@microchip.com>
-Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
-Signed-off-by: Don Brace <don.brace@microchip.com>
+Change driver module MACROS to reflect copyright changes.
+  - Microsemi to Microchip.
 ---
- drivers/scsi/smartpqi/Kconfig                  | 2 +-
- drivers/scsi/smartpqi/smartpqi.h               | 6 +++---
- drivers/scsi/smartpqi/smartpqi_init.c          | 4 ++--
- drivers/scsi/smartpqi/smartpqi_sas_transport.c | 4 ++--
- drivers/scsi/smartpqi/smartpqi_sis.c           | 4 ++--
- drivers/scsi/smartpqi/smartpqi_sis.h           | 4 ++--
- 6 files changed, 12 insertions(+), 12 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/smartpqi/Kconfig b/drivers/scsi/smartpqi/Kconfig
-index cb9e4e968b60..eac7baecf42f 100644
---- a/drivers/scsi/smartpqi/Kconfig
-+++ b/drivers/scsi/smartpqi/Kconfig
-@@ -1,7 +1,7 @@
- #
- # Kernel configuration file for the SMARTPQI
- #
--# Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries
-+# Copyright (c) 2019-2021 Microchip Technology Inc. and its subsidiaries
- # Copyright (c) 2017-2018 Microsemi Corporation
- # Copyright (c) 2016 Microsemi Corporation
- # Copyright (c) 2016 PMC-Sierra, Inc.
-diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
-index d7dac5572274..f340afc011b5 100644
---- a/drivers/scsi/smartpqi/smartpqi.h
-+++ b/drivers/scsi/smartpqi/smartpqi.h
-@@ -1,7 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- *    driver for Microsemi PQI-based storage controllers
-- *    Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries
-+ *    driver for Microchip PQI-based storage controllers
-+ *    Copyright (c) 2019-2021 Microchip Technology Inc. and its subsidiaries
-  *    Copyright (c) 2016-2018 Microsemi Corporation
-  *    Copyright (c) 2016 PMC-Sierra, Inc.
-  *
-@@ -59,7 +59,7 @@ struct pqi_device_registers {
- /*
-  * controller registers
-  *
-- * These are defined by the Microsemi implementation.
-+ * These are defined by the Microchip implementation.
-  *
-  * Some registers (those named sis_*) are only used when in
-  * legacy SIS mode before we transition the controller into
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 64ea4650ca10..6ce17a191c0b 100644
+index 6ce17a191c0b..29382b290243 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- *    driver for Microsemi PQI-based storage controllers
-- *    Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries
-+ *    driver for Microchip PQI-based storage controllers
-+ *    Copyright (c) 2019-2021 Microchip Technology Inc. and its subsidiaries
-  *    Copyright (c) 2016-2018 Microsemi Corporation
-  *    Copyright (c) 2016 PMC-Sierra, Inc.
-  *
-diff --git a/drivers/scsi/smartpqi/smartpqi_sas_transport.c b/drivers/scsi/smartpqi/smartpqi_sas_transport.c
-index dd628cc87f78..afd9bafebd1d 100644
---- a/drivers/scsi/smartpqi/smartpqi_sas_transport.c
-+++ b/drivers/scsi/smartpqi/smartpqi_sas_transport.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- *    driver for Microsemi PQI-based storage controllers
-- *    Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries
-+ *    driver for Microchip PQI-based storage controllers
-+ *    Copyright (c) 2019-2021 Microchip Technology Inc. and its subsidiaries
-  *    Copyright (c) 2016-2018 Microsemi Corporation
-  *    Copyright (c) 2016 PMC-Sierra, Inc.
-  *
-diff --git a/drivers/scsi/smartpqi/smartpqi_sis.c b/drivers/scsi/smartpqi/smartpqi_sis.c
-index c954620628e0..d63c46a8e38b 100644
---- a/drivers/scsi/smartpqi/smartpqi_sis.c
-+++ b/drivers/scsi/smartpqi/smartpqi_sis.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- *    driver for Microsemi PQI-based storage controllers
-- *    Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries
-+ *    driver for Microchip PQI-based storage controllers
-+ *    Copyright (c) 2019-2021 Microchip Technology Inc. and its subsidiaries
-  *    Copyright (c) 2016-2018 Microsemi Corporation
-  *    Copyright (c) 2016 PMC-Sierra, Inc.
-  *
-diff --git a/drivers/scsi/smartpqi/smartpqi_sis.h b/drivers/scsi/smartpqi/smartpqi_sis.h
-index 12cd2ab1aead..d29c1352a826 100644
---- a/drivers/scsi/smartpqi/smartpqi_sis.h
-+++ b/drivers/scsi/smartpqi/smartpqi_sis.h
-@@ -1,7 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- *    driver for Microsemi PQI-based storage controllers
-- *    Copyright (c) 2019-2020 Microchip Technology Inc. and its subsidiaries
-+ *    driver for Microchip PQI-based storage controllers
-+ *    Copyright (c) 2019-2021 Microchip Technology Inc. and its subsidiaries
-  *    Copyright (c) 2016-2018 Microsemi Corporation
-  *    Copyright (c) 2016 PMC-Sierra, Inc.
-  *
+@@ -39,7 +39,7 @@
+ #define DRIVER_RELEASE		8
+ #define DRIVER_REVISION		45
+ 
+-#define DRIVER_NAME		"Microsemi PQI Driver (v" \
++#define DRIVER_NAME		"Microchip SmartPQI Driver (v" \
+ 				DRIVER_VERSION BUILD_TIMESTAMP ")"
+ #define DRIVER_NAME_SHORT	"smartpqi"
+ 
+@@ -48,8 +48,8 @@
+ #define PQI_POST_RESET_DELAY_SECS			5
+ #define PQI_POST_OFA_RESET_DELAY_UPON_TIMEOUT_SECS	10
+ 
+-MODULE_AUTHOR("Microsemi");
+-MODULE_DESCRIPTION("Driver for Microsemi Smart Family Controller version "
++MODULE_AUTHOR("Microchip");
++MODULE_DESCRIPTION("Driver for Microchip Smart Family Controller version "
+ 	DRIVER_VERSION);
+ MODULE_VERSION(DRIVER_VERSION);
+ MODULE_LICENSE("GPL");
+@@ -8451,7 +8451,7 @@ static void pqi_print_ctrl_info(struct pci_dev *pci_dev,
+ 	if (id->driver_data)
+ 		ctrl_description = (char *)id->driver_data;
+ 	else
+-		ctrl_description = "Microsemi Smart Family Controller";
++		ctrl_description = "Microchip Smart Family Controller";
+ 
+ 	dev_info(&pci_dev->dev, "%s found\n", ctrl_description);
+ }
 -- 
 2.28.0.rc1.9.ge7ae437ac1
 
