@@ -2,99 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9163CA380
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Jul 2021 19:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC7E3CA447
+	for <lists+linux-scsi@lfdr.de>; Thu, 15 Jul 2021 19:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbhGOREg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Jul 2021 13:04:36 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:50418 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbhGOREg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Jul 2021 13:04:36 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 30F801FE5A;
-        Thu, 15 Jul 2021 17:01:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1626368502; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cmubAet99w7xkVJgHd71Bh2zXx4vYIktuP7LSlDUzRE=;
-        b=upkIIo6jD6kfOlw7O79ysYs6wqUJBBpe9PQHqG42h8IVtpft9Qwg20ZGjeCwCnTZEaYCWN
-        iEuUuqi/eJpoZM6o49hWGZUk6U8DvjHt0aqWXzOQxJuSfptQnPaK3Q1a7uAO/VHMQwIyUy
-        Rbht7hJQ00vWUl83YE/NW/aZg+1uIjs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0326113C3F;
-        Thu, 15 Jul 2021 17:01:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ilkvOvVp8GApEgAAMHmgww
-        (envelope-from <mwilck@suse.com>); Thu, 15 Jul 2021 17:01:41 +0000
-Message-ID: <779ddba3c7d184b6b65a17ac1203d7dd5c0def6f.camel@suse.com>
-Subject: Re: [PATCH] scsi: dm-mpath: do not fail paths when the target
- returns ALUA state transition
-From:   Martin Wilck <mwilck@suse.com>
-To:     Brian Bunker <brian@purestorage.com>, linux-scsi@vger.kernel.org
-Cc:     Hannes Reinecke <hare@suse.com>
-Date:   Thu, 15 Jul 2021 19:01:41 +0200
-In-Reply-To: <CAHZQxyLY3vNeuNiEHC3SzWzBgUaN-ZPOYyZ3bA=Ah63WYwgdfw@mail.gmail.com>
-References: <CAHZQxyLY3vNeuNiEHC3SzWzBgUaN-ZPOYyZ3bA=Ah63WYwgdfw@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.40.2 
+        id S235808AbhGOR2s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Jul 2021 13:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231941AbhGOR2r (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Jul 2021 13:28:47 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E6C0613E0
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Jul 2021 10:25:53 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id w188so7493175oif.10
+        for <linux-scsi@vger.kernel.org>; Thu, 15 Jul 2021 10:25:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=A07qw47jpyx7/pJf1ZS9aQv4pD7PiHBZWlsl9UoiurRqqc+7ZndQI51YdaaD0nkecu
+         Qd4i+G02coH8O2I/r6ZupOF8oYSIAoIwVq4zkuCtuhDJYsbynWGQdegcG7aq+QxGg/bp
+         poyp2DbaibSeABlojQr/pIAqMWExNaHg4RIE+IQzBlXdCiQq16Yp/UqkBXwITYu4DgIP
+         XTs1gXkC7Br62pPmJXs/2nF+jRhXCAs3iAxTxuy51YthTghMWE/kONdSGZKCG8sWM+Ev
+         WU1ATEDaIH5W63c7UQCvZTdM21+mq9I9FOl7BCTb650pCRFEJMZ521zklByg85zlNwmj
+         7b/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=LFW3YbiSYGgqSCFOpceqyS3Raf92qIWJB9o4I6sYSDH8rLPQB1xC+o3RdQ8Fdb06JM
+         ZU+sSAZwA4GfWSD+ry1zLTYulaS+dARN5b9LNGhujb505T12Hm2nJcqws+dZtT0wRNxL
+         bI5m01KFfWCXIPUDUfZEGJfUKYOeH7LZEdfVobSaT6WOObBCXwesOAdlNlw3N8q4+uCn
+         FU9rvQsLBpPh2ju+LKnSDzuCs9Y6vBlhvImT8Wf1xbh472QbJNv+SDtX7diiLRRc/wGu
+         OdyfrJhOKL5/kUw/+WIOafrAh7IqJtg8ZZDL81H1zT9/VvacLyKwqZ0gYLxCFQo+qfHh
+         9yng==
+X-Gm-Message-State: AOAM530EAfW0cLXcnQjk9XbD/ENUV6nKr6eHh13n6+1W3Mf2I5nGc1Ef
+        aUJpiBwj/oSCD4heCHLxVWrjzaTaZBT+Hasr1SwM38p5TDk=
+X-Google-Smtp-Source: ABdhPJyZMrq1Z7I3pjjmyAtUHW3ABh0oEghTe77F5dAxRk/llsByjQhtZ30eIUOoh7sIooPsLTy5+nPJ1BCNgIavtsM=
+X-Received: by 2002:a17:90b:d8f:: with SMTP id bg15mr10963237pjb.152.1626369941880;
+ Thu, 15 Jul 2021 10:25:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:fc85:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:41
+ -0700 (PDT)
+Reply-To: faty.muhamad@gmail.com
+From:   Ms Fatima Muhammad <general.infofederalreserve@gmail.com>
+Date:   Thu, 15 Jul 2021 17:25:41 +0000
+Message-ID: <CAJzJz_Dwu6rUxmnqq1QV9qD4hugxutFJZuENGUwx7RamXm5txA@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Do, 2021-07-15 at 09:57 -0700, Brian Bunker wrote:
-> When paths return an ALUA state transition, do not fail those paths.
-> The expectation is that the transition is short lived until the new
-> ALUA state is entered. There might not be other paths in an online
-> state to serve the request which can lead to an unexpected I/O error
-> on the multipath device.
-> 
-> Signed-off-by: Brian Bunker <brian@purestorage.com>
-> Acked-by: Krishna Kant <krishna.kant@purestorage.com>
-> Acked-by: Seamus Connor <sconnor@purestorage.com>
-> --
-> diff --git a/drivers/md/dm-mpath.c b/drivers/md/dm-mpath.c
-> index bced42f082b0..28948cc481f9 100644
-> --- a/drivers/md/dm-mpath.c
-> +++ b/drivers/md/dm-mpath.c
-> @@ -1652,12 +1652,12 @@ static int multipath_end_io(struct dm_target
-> *ti, struct request *clone,
->         if (error && blk_path_error(error)) {
->                 struct multipath *m = ti->private;
-> 
-> -               if (error == BLK_STS_RESOURCE)
-> +               if (error == BLK_STS_RESOURCE || error ==
-> BLK_STS_AGAIN)
->                         r = DM_ENDIO_DELAY_REQUEUE;
->                 else
->                         r = DM_ENDIO_REQUEUE;
-> 
-> -               if (pgpath)
-> +               if (pgpath && (error != BLK_STS_AGAIN))
->                         fail_path(pgpath);
-> 
->                 if (!atomic_read(&m->nr_valid_paths) &&
-> --
-> 
-> Thanks,
-> Brian
-> 
-> Brian Bunker
-> PURE Storage, Inc.
-> brian@purestorage.com
-> 
+Hello Dear,
 
-Reviewed-by: Martin Wilck <mwilck@suse.com>
+My name is Ms.Fatima Muhammad., Please forgive me for stressing you
+with my predicaments and I sorry to approach you through this media
+because is serves the fastest means of  my communication right now,
 
+I came across your Email from my personal search and I decided to
+contact you believing you will be honest to fulfill my business
+proposal which I believe that will be a very good opportunity for both
+of us. Please it is my pleasure to contact you today for a business
+partnership investments projects worth $4.6 million USD which I intend
+to establish in your country..
 
+Pls If this business proposal offends your moral and ethic values do
+accept my apology. therefore kindly contact me immediately if you are
+interested for more details.
+
+Thank you for your wiliness to help me
+Yours Sincerely Fatima Muhammad
