@@ -2,79 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 378463CBC60
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Jul 2021 21:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D49243CBC9F
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Jul 2021 21:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbhGPTZm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 16 Jul 2021 15:25:42 -0400
-Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:31406 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbhGPTZl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 16 Jul 2021 15:25:41 -0400
-Received: from [192.168.1.18] ([86.243.172.93])
-        by mwinf5d84 with ME
-        id VvNj2500921Fzsu03vNjpQ; Fri, 16 Jul 2021 21:22:44 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 16 Jul 2021 21:22:44 +0200
-X-ME-IP: 86.243.172.93
-Subject: Re: [PATCH AUTOSEL 4.9 17/18] scsi: be2iscsi: Fix some missing space
- in some messages
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org,
-        Kernel Janitors <kernel-janitors@vger.kernel.org>
-References: <20210714194806.55962-1-sashal@kernel.org>
- <20210714194806.55962-17-sashal@kernel.org>
-From:   Marion & Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Message-ID: <615a1135-bbb0-0384-8499-716f26fba08a@wanadoo.fr>
-Date:   Fri, 16 Jul 2021 21:22:43 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210714194806.55962-17-sashal@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        id S233000AbhGPTeo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 16 Jul 2021 15:34:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56735 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232897AbhGPTem (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 16 Jul 2021 15:34:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1626463907;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=KeSyheTSekXEMQGa/eiEM4Ezddm+G93OaxD1X1K3A7M=;
+        b=CdV4ND3Jti1XRVXcN4ykahWZHNw+sNg+B12ODwnYtTXnw+Uy1V8n8Q362dlzRPFhRweRNi
+        Cx80zOwEM2l+SHw4fZAg8Af9y1cbKdDpd2EZtpQYBMfUPXGG5ev/2STPmrdvGxQpi65uYH
+        otbnpZmK2znjg8SHMUiz/KJTZzxAifg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-7-LlhQaJzzPWWx2oslK2h57Q-1; Fri, 16 Jul 2021 15:31:46 -0400
+X-MC-Unique: LlhQaJzzPWWx2oslK2h57Q-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B98431023F40;
+        Fri, 16 Jul 2021 19:31:44 +0000 (UTC)
+Received: from localhost.localdomain.com (ovpn-114-195.rdu2.redhat.com [10.10.114.195])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E8DAA60862;
+        Fri, 16 Jul 2021 19:31:43 +0000 (UTC)
+From:   John Pittman <jpittman@redhat.com>
+To:     martin.petersen@oracle.com
+Cc:     jejb@linux.ibm.com, bvanassche@acm.org, linux-scsi@vger.kernel.org,
+        loberman@redhat.com, djeffery@redhat.com,
+        John Pittman <jpittman@redhat.com>
+Subject: [PATCH] scsi: sd: only print initial write protect status if enabled
+Date:   Fri, 16 Jul 2021 15:31:40 -0400
+Message-Id: <20210716193140.25591-1-jpittman@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Having a write protect status of zero is generally the assumed
+state when a scsi attached disk is presented to the kernel. For
+this reason, only print the state of write protect if it is
+enabled. If the user needs the write protect status, sysfs can
+easily be checked after boot. As an additional positive
+consequence, this change will decrease the chattiness of scsi
+scan logging which has been shown to overwhelm systems when
+thousands of sd devices are attached.
 
-Le 14/07/2021 à 21:48, Sasha Levin a écrit :
-> From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->
-> [ Upstream commit c7fa2c855e892721bafafdf6393342c000e0ef77 ]
->
-> Fix a few style issues reported by checkpatch.pl:
->
->   - Avoid duplicated word in comment.
->
->   - Add missing space in messages.
->
->   - Unneeded continuation line character.
->
->   - Unneeded extra spaces.
->
->   - Unneeded log message after memory allocation failure.
->
-> Link: https://lore.kernel.org/r/8cb62f0eb96ec7ce7a73fe97cb4490dd5121ecff.1623482155.git.christophe.jaillet@wanadoo.fr
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: John Pittman <jpittman@redhat.com>
+Reviewed-by: Laurence Oberman <loberman@redhat.com>
+---
+ drivers/scsi/sd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hi,
-
-I always appreciate to have some patches backported, but in this 
-particular case, I wonder what is the rational to backport up to 4.9 
-some checkpatch warning about log message?
-
-Keeping code aligned to ease other future backport?
-
-I thought that the rule for backport was that it needed to fix a real 
-issue (and sometimes a real 'potential' issue)
-
-CJ
-
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index b8d55af763f9..30c549cdf35f 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -2702,8 +2702,8 @@ sd_read_write_protect_flag(struct scsi_disk *sdkp, unsigned char *buffer)
+ 		sdkp->write_prot = ((data.device_specific & 0x80) != 0);
+ 		set_disk_ro(sdkp->disk, sdkp->write_prot);
+ 		if (sdkp->first_scan || old_wp != sdkp->write_prot) {
+-			sd_printk(KERN_NOTICE, sdkp, "Write Protect is %s\n",
+-				  sdkp->write_prot ? "on" : "off");
++			if (sdkp->write_prot)
++				sd_printk(KERN_NOTICE, sdkp, "Write Protect is on");
+ 			sd_printk(KERN_DEBUG, sdkp, "Mode Sense: %4ph\n", buffer);
+ 		}
+ 	}
+-- 
+2.17.2
 
