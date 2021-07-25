@@ -2,101 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7DA3D49C7
-	for <lists+linux-scsi@lfdr.de>; Sat, 24 Jul 2021 22:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0683D4D2D
+	for <lists+linux-scsi@lfdr.de>; Sun, 25 Jul 2021 12:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbhGXTh6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 24 Jul 2021 15:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
+        id S230010AbhGYKQL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 25 Jul 2021 06:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbhGXTh6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 24 Jul 2021 15:37:58 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197B8C061575;
-        Sat, 24 Jul 2021 13:18:29 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id m10-20020a17090a34cab0290176b52c60ddso2582210pjf.4;
-        Sat, 24 Jul 2021 13:18:29 -0700 (PDT)
+        with ESMTP id S229538AbhGYKQL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 25 Jul 2021 06:16:11 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5267BC061757
+        for <linux-scsi@vger.kernel.org>; Sun, 25 Jul 2021 03:56:41 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id hs23so10741854ejc.13
+        for <linux-scsi@vger.kernel.org>; Sun, 25 Jul 2021 03:56:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=j0Y5lg+CANEVDMJqiubmCGKpfDDcpR39r3NrRybVPUM=;
-        b=rvgwdw+ST98gmlzef1I5Cwu9XSeP8jAl/SS5BZJUh6ezd1oyOoSuuwA901E7zqVwS1
-         GU+DrvpmZDz4ZhqTgF54z52gBwDf14yS13bwwxVKmSqzDf8pSXEAAGio6+tyKQ9SHTAO
-         k7H2K6MSAZ4Q8SXO1gUyy0YoLn+OI2oTnMiHuVlO1PP2pABoxfUchZrzeLomyVf7xB4M
-         0xV7e5GdqG9/6CHB49/0Gvbds5w7tuB51WoFRUVo57NfWyU0ZwAIFpbyqC5c7IY2mb0n
-         uu3DeYfLqS8WZcjaLXkCWRa97TR2pTyc2YpLv1n/gxgJGC3noZmv1Z0O6jZxgEcC4snD
-         FTQA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=wfYoIbXkKb4zyoFrfqNBohA6xpxaoBFYaoffzN4CfD8=;
+        b=BzxVVVhH22/6v1cR2WpItFD6MYWZljDUyx1Vlqp5eX3DClRWJ4i9of62KYDyhZy1CO
+         CXNbGOASKml2J5xwFCfjnjHBLM7ka+Y/yd4OJSFj00MWTuv/UUaMot26L15+iGm+bneP
+         Qi5Iu7V/dozn8kQ5QeSRQ97ZeNzrSZxdR7rmNSLGruXky7cPBxU8dhaS+TkdRTA9y+Rj
+         QSI7miYQgcDXzMvFbPVZRnxdiAYecmXPJOyZGpVg96dr98Fd+iqlxcVmQwgmE+kBuYRt
+         0oq0QxLSSkOPZoBo/M5itMj5TxToFe7aHSFgi4FnKrGwEnrGBdVWcvaBw4lATvhsjt9J
+         0MXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=j0Y5lg+CANEVDMJqiubmCGKpfDDcpR39r3NrRybVPUM=;
-        b=JYveNn8M74EPoCBDXqgeqea6zJ61aC/FBHHGcvTIz4xTQpBFMK+lwrrjmfQQlMnNeS
-         XwJALCMlNpdt9vfWlMV3zjqlZbA8z3HcNXW8y2zIe+0NjOKen3wkoOgYSF2lYkV0lZCM
-         4QhBBaroUZuXWC86xOXQknQoIySg/WoMxkT5mgujQAre7sIqnUL5FzjOjDNM7BWje/y/
-         611Oj8VEC2XuwAj03unfkQnZ7iMEdwK9Kz2yiQuOfLiOADlz9h1AABgA4b5TUjXcd2gf
-         /zhzKq4AXlVMACgtBdnVnowLJTIss2XcBWTEZn+3kvytZE4FCvHzzPulkCEScGksRHlO
-         1Skw==
-X-Gm-Message-State: AOAM533jFwJqS5wxdF1FLVPp9UapWHeLQRxyaOy8FafGdE+Yn50WQQrD
-        jJ7YO2u61g+6Yr3l88NT7zM4fmQf+Mc=
-X-Google-Smtp-Source: ABdhPJyrebTop0PWuimFp3zvxLdJI34hoJcBS4irA/hDgJKx8uarXxZFl+b7CoHX9uHsGMU833TkfQ==
-X-Received: by 2002:a17:90a:6b81:: with SMTP id w1mr10301549pjj.146.1627157908430;
-        Sat, 24 Jul 2021 13:18:28 -0700 (PDT)
-Received: from [192.168.1.40] (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id f15sm34919820pgv.92.2021.07.24.13.18.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jul 2021 13:18:28 -0700 (PDT)
-Subject: Re: [BUG] scsi: lpfc: possible ABBA deadlock
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <652256c8-6fce-a506-76a9-e1502a5ff82e@gmail.com>
-From:   James Smart <jsmart2021@gmail.com>
-Message-ID: <5496b03b-49aa-88e3-e058-1d97c91b1b0b@gmail.com>
-Date:   Sat, 24 Jul 2021 13:18:27 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=wfYoIbXkKb4zyoFrfqNBohA6xpxaoBFYaoffzN4CfD8=;
+        b=HWuAZdiR0/JPyh2vFHr/YW805STGQDpoIY27tsbtafnirGYluOMx9cKnVynZlmYdAz
+         oM+S8/glK6BMsRpY/Ab83d7QNFdV1DF9TNYnQwr4NzNhfd7Uei3S/IMP8nj0+7U93NyP
+         ITmwbIzajnebfnfX3hDLCOE2uYSwBximOlPcoZgWXYPoN9H2GaLAddy9OIo7WgsA0R3K
+         6DeXAc/g1/T5gXypadqtvDNFisNdOX30GF/Bv78T+Oc8p9WxzjRxv8v1U7p0cbx5IFHB
+         90HP7LcGUj9CFzpGtZlqKGPS0LpQQd833g6KJHrFrQT8XBYbb3S60m2ysVRL5SE81ltz
+         +Rhw==
+X-Gm-Message-State: AOAM53018VP4Z/6Yjkpz4IeUApuvMCcvOn0/B2iLnDuafaJbgUVWs7ms
+        NjhqZzoaJPSdSbVuAe39EG3RO9AynL9uvtr2Kt8=
+X-Google-Smtp-Source: ABdhPJwYt28T3u2QXMB/lDdRi4TK06HDLtLk4h67PvjLXBMX/sYbvvNLQtCrBZsL0lJdYKo2LW0nvP9SRH8Yv0oMCpc=
+X-Received: by 2002:a05:6402:b8f:: with SMTP id cf15mr15303104edb.286.1627210599739;
+ Sun, 25 Jul 2021 03:56:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <652256c8-6fce-a506-76a9-e1502a5ff82e@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a50:cb86:0:0:0:0:0 with HTTP; Sun, 25 Jul 2021 03:56:39
+ -0700 (PDT)
+Reply-To: pzongo277@gmail.com
+From:   "Mr.Phillip Zongo" <donatusg20@gmail.com>
+Date:   Sun, 25 Jul 2021 03:56:39 -0700
+Message-ID: <CANFazhVS78FuTJjR1qDsBon-sD7ebJxxj5X3an3d0D=n-_8smg@mail.gmail.com>
+Subject: Mr.Phillip Zongo
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/15/2021 3:37 AM, Jia-Ju Bai wrote:
-> Hello,
-> 
-> I find there is a possible ABBA deadlock in the lpfc driver in Linux 5.10:
-> 
-> In lpfc_nvmet_unsol_fcp_issue_abort():
-> 3502:     spin_lock_irqsave(&ctxp->ctxlock, flags);
-> 3504: spin_lock(&phba->sli4_hba.abts_nvmet_buf_list_lock);
-> 
-> In lpfc_sli4_nvmet_xri_aborted():
-> 1787: spin_lock(&phba->sli4_hba.abts_nvmet_buf_list_lock);
-> 1794:     spin_lock(&ctxp->ctxlock);
-> 
-> When lpfc_nvmet_unsol_fcp_issue_abort() and 
-> lpfc_sli4_nvmet_xri_aborted() are concurrently executed, the deadlock 
-> can occur.
-> 
-> I am not quite sure whether this possible deadlock is real and how to 
-> fix it if it is real.
-> Any feedback would be appreciated, thanks :)
-> 
-> 
-> Best wishes,
-> Jia-Ju Bai
+I am Mr.Phillip Zongo. I work at the bank. I get your contact from
+internet search i hope that you will not expose or betray this trust
+and confident that am about to have in you for the benefit of our both
+families i am in need of your help as a foreigner to transfer sum of
+$15 million U.S dollars (Fifteen million U.S dollars) into your
+account risk is completely %100 free.
 
-Jia-Ju,
 
-It's a valid issue, but rather difficult to actually occur. We've put 
-together a fix and am testing it. Will post when ready.
+Please I will like you to keep this proposal as top secret and Also
+note that you will have 40% of the above mentioned fund, while 60%
+will be for me.if you agree to transact this business with me I will
+give you full details of this transaction immediately you notify me
+your interest by sending your data.
 
--- james
 
+Your Full Name.
+
+Your Country.
+
+Your Age.
+
+Your Occupation.
+
+Your phone Number.
+
+Your office or House Address.
+
+Copy of your passport or id card.
+
+
+Thanks
+
+
+Mr.Phillip Zongo
