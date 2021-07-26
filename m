@@ -2,33 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4453D58A7
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jul 2021 13:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB8E3D58DA
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jul 2021 13:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233504AbhGZLCT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 26 Jul 2021 07:02:19 -0400
-Received: from smtpbguseast3.qq.com ([54.243.244.52]:42703 "EHLO
-        smtpbguseast3.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbhGZLCS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 26 Jul 2021 07:02:18 -0400
-X-QQ-mid: bizesmtp51t1627299758t4xbo5eq
+        id S233591AbhGZLJC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 26 Jul 2021 07:09:02 -0400
+Received: from smtpbg702.qq.com ([203.205.195.102]:55711 "EHLO
+        smtpproxy21.qq.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233570AbhGZLJC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 26 Jul 2021 07:09:02 -0400
+X-Greylist: delayed 166106 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Jul 2021 07:09:01 EDT
+X-QQ-mid: bizesmtp45t1627300161t2s8pii1
 Received: from localhost.localdomain (unknown [58.240.82.166])
         by esmtp6.qq.com (ESMTP) with 
-        id ; Mon, 26 Jul 2021 19:42:31 +0800 (CST)
+        id ; Mon, 26 Jul 2021 19:49:14 +0800 (CST)
 X-QQ-SSF: 01400000008000103000B00B0000000
-X-QQ-FEAT: 5eVkbtW6/SC+6wAnJpFwnj0MoKG1KKSm/+cM6LG7wFKt+5jJNatP/18/vO/9U
-        ZHwWzrwJi35bXTDxgDar70uShKHnIKKNueZMfK9tIm4ixZUwVwLhtw5QmKkuikNfCdef6eW
-        EeSyiFlRdInbCUu3cxQzfEyOa8LaucqdN/zMWTtNralfalMgVMxok7zNSR8RdlzMHc7Wkj5
-        88Rew/+8AXRVjQPep+iwDGBd8ihASqw72dQlgK5DE65dMickncuR9SpAQ02Mlzo1/cEymr6
-        p357Oh2DnhJnsSLBk/rvwFVj8cyNNJdqpkhS4EWpMTs7gLoQe2aW1qps15eGf4xBPvo6TUR
-        ZJkGQt9AcufwqIeJs4=
+X-QQ-FEAT: jIuKqQTmtbxgJRL5evlLzzhIfzh9cGgegIfQuWljjhTp3gZaLojByFuQkd8/r
+        QoEnU2NESUFgX5AEhatsPcpPQbE7/4tg/ODcTKZ2+vTA24kf2ksX0Lvh5XQwFGKEhM6bfdd
+        WlfiYDrUrV2GYNO0DMMOIBG7ksfcGd/MoGqcpwKxyWoOowlwW30K4Um078CZQZphfYCFzfZ
+        Rt0VIdhcj/uDCCWw/u5GYEtvk7/EZudMw/ts9fnnK2cbQck3l5A0aCao/sqLwXBsdEVpmg/
+        S6T7VPUaLZdrJb2GAcXWig63ma0S1KpxlKtOyoCbpzFizVsZscTo/2bTKkMMv7YL3ihkUKj
+        WmqdRVHg2LutzPIzoKRxCAfQf+oPw==
 X-QQ-GoodBg: 2
 From:   Li Manyi <limanyi@uniontech.com>
-To:     limanyi@uniontech.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+To:     axboe@kernel.dk, jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Li Manyi <limanyi@uniontech.com>
 Subject: [PATCH] scsi: sr: Return correct event when media event code is 3
-Date:   Mon, 26 Jul 2021 19:42:27 +0800
-Message-Id: <20210726114227.3661-1-limanyi@uniontech.com>
+Date:   Mon, 26 Jul 2021 19:49:13 +0800
+Message-Id: <20210726114913.6760-1-limanyi@uniontech.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
