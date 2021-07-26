@@ -2,176 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A16E63D58D9
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jul 2021 13:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588553D5CC8
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jul 2021 17:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbhGZLHo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 26 Jul 2021 07:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233570AbhGZLHl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 26 Jul 2021 07:07:41 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3AEC061757
-        for <linux-scsi@vger.kernel.org>; Mon, 26 Jul 2021 04:48:09 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id n10so11353802plf.4
-        for <linux-scsi@vger.kernel.org>; Mon, 26 Jul 2021 04:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=VCYyoAV3bMIz1OuGDYFczYhys8rL7kYCMHI9ZyJaboA=;
-        b=GxJYk2RPwsCaWQeO5ZKvm+yIjLjtNyJV9twkel/YYtfEGJXVB8vzSlYvveUOCJpQt7
-         28h5Bd+faC7Y+xVLdpvVHWQTywcrHbje5KWltmvUuoD5XZJeGS8mZLkE37/2UGTQnfXf
-         tQpWFGfAwfMCGXk63tHvCemaZJcHkE2Cx1YeY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=VCYyoAV3bMIz1OuGDYFczYhys8rL7kYCMHI9ZyJaboA=;
-        b=MtDogAQkQtigzZ55K5NdfDQw34MIu2oPd+kXczmKAdXv+8c4dxFBhAHojwJ97gV01I
-         wHnbDm8YHQkps8wsg/hjWrc6rJQ1vZGXpYV+wBuXg/TRuUlX6I2pwEWQKHJx1RXZ9SV0
-         JvBahn1dyUkTFxnSCAtTr+UxucbKqRrnFh3T7KPX2jvV02DQqxrvXsL9eCND8TNFjoqj
-         9+iEAinhSJNlnescvSMbhBufHF5yEBy+VqI3F8U9E8Ng4yEQ3kEnARwMg6IaZXM+2NOP
-         ZE4HxW9Rdcrohny167jZcKjn+rtsW6pzTnx4w2bwSNTSNaiqEE8fjYmIaumIobC34oUm
-         tGBg==
-X-Gm-Message-State: AOAM532tyndZtd0tntGDn/pBJ0TzPq+ZnI6RbiuWDm67M4kTTNjmDDwX
-        getdiSV0dKvyfQ87XYnNPkxdqGgt2ecZlHnMcbmOnjTvaCobrxLW4GfA770d0lvELOD669chB7v
-        egYTuXjEjDMt9yl4DBeDZ/uZgFb9gu/8fLRX911yKLUvpw9t9Vj+t9atYDxTCn/yNtIgXONhDTo
-        GX9PDvPGagMHY=
-X-Google-Smtp-Source: ABdhPJzTO103eHt3n7ivFixhxKiMwyPw8Jx6r84oJxVM4HFNI/Ss8NtqmdXEW3xKx+dpo6bVWMPzsA==
-X-Received: by 2002:a17:90a:688f:: with SMTP id a15mr17064231pjd.84.1627300088536;
-        Mon, 26 Jul 2021 04:48:08 -0700 (PDT)
-Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id g9sm44042329pfr.133.2021.07.26.04.48.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 04:48:07 -0700 (PDT)
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com
-Cc:     sathya.prakash@broadcom.com, thenzl@redhat.com,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH] scsi: Don't print target alloc failed print for ENXIO
-Date:   Mon, 26 Jul 2021 17:24:02 +0530
-Message-Id: <20210726115402.1936-1-sreekanth.reddy@broadcom.com>
-X-Mailer: git-send-email 2.27.0
+        id S234983AbhGZOgz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 26 Jul 2021 10:36:55 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:44206 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234941AbhGZOgy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 26 Jul 2021 10:36:54 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 1E06A46169;
+        Mon, 26 Jul 2021 15:17:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received; s=mta-01; t=1627312640; x=
+        1629127041; bh=mwkYi8+lEBsrM4/D2o1xt/YV+mLTsFqLxpB6vBgpD/A=; b=W
+        fpjCT6I1odg+2GL1wfW2M7GirEFMSkB5ErnLLIFdgoOH5UZH/SuXifA47DSxnM8q
+        /H73SB5BvUOV1lsFMzBFVAj2RhMk45rKPDbduJkiVvooQ+GOGB7x+eoZwpocWAYR
+        zKmT61EYnb1HAh5dzN/eVoD18vEL+drbP6p2ubSIqg=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AKMVHgCWRvVt; Mon, 26 Jul 2021 18:17:20 +0300 (MSK)
+Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 57531412C6;
+        Mon, 26 Jul 2021 18:17:19 +0300 (MSK)
+Received: from yadro.com (10.199.0.6) by T-EXCH-04.corp.yadro.com
+ (172.17.100.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Mon, 26
+ Jul 2021 18:17:18 +0300
+From:   Sergey Samoylenko <s.samoylenko@yadro.com>
+To:     <martin.petersen@oracle.com>, <michael.christie@oracle.com>,
+        <ddiss@suse.de>, <bvanassche@acm.org>,
+        <target-devel@vger.kernel.org>
+CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
+        Sergey Samoylenko <s.samoylenko@yadro.com>
+Subject: [v2 0/2] target: core: Fix sense key for invalid XCOPY request
+Date:   Mon, 26 Jul 2021 18:16:44 +0300
+Message-ID: <20210726151646.32631-1-s.samoylenko@yadro.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c11d5305c805530e"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.199.0.6]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-04.corp.yadro.com (172.17.100.104)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000c11d5305c805530e
-Content-Transfer-Encoding: 8bit
+EXTENDED COPY tests in libiscsi [1] show that TCM doesn't
+follow SPC4 when detects invalid parameters in a XCOPY
+command or IO errors. The replies from TCM contain wrong sense
+key or ASCQ for incorrect request.
 
-Don't print 'target allocation failed' message if the driver
-returns -ENXIO error value for target_alloc callback function.
-Driver returns -ENXIO value if corresponding H:C:T:L entry
-is empty.
+The series fixes the following tests from libiscsi:
 
-Removing this print reduces the scan time if the user issues
-SCAN_WILD_CARD scan operation through sysfs parameter on a host
-with a lot of empty H:C:T:L entries.
+  SCSI.ExtendedCopy.DescrType
+  SCSI.ExtendedCopy.DescrLimits
+  SCSI.ExtendedCopy.ParamHdr
+  SCSI.ExtendedCopy.ValidSegDescr
+  SCSI.ExtendedCopy.ValidTgtDescr
 
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
----
- drivers/scsi/scsi_scan.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+1. https://github.com/sahlberg/libiscsi
 
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index b059bf2b61d4..5b6996a2401b 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -475,7 +475,8 @@ static struct scsi_target *scsi_alloc_target(struct device *parent,
- 		error = shost->hostt->target_alloc(starget);
- 
- 		if(error) {
--			dev_printk(KERN_ERR, dev, "target allocation failed, error %d\n", error);
-+			if (error != -ENXIO)
-+				dev_err(dev, "target allocation failed, error %d\n", error);
- 			/* don't want scsi_target_reap to do the final
- 			 * put because it will be under the host lock */
- 			scsi_target_destroy(starget);
+Sergey Samoylenko (2):
+  target: allows backend drivers to fail with specific sense codes
+  target: core: Fix sense key for invalid XCOPY request
+
+ drivers/target/target_core_transport.c | 21 ++++++++++++++++++---
+ drivers/target/target_core_xcopy.c     | 26 +++++++++++++++-----------
+ include/target/target_core_backend.h   |  1 +
+ include/target/target_core_base.h      |  2 ++
+ 4 files changed, 36 insertions(+), 14 deletions(-)
+
 -- 
-2.27.0
+2.25.1
 
-
---000000000000c11d5305c805530e
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-5AGo2E3pe+2yEgkxKvM2fnniZHUiSjbrfKk6nl9RIXPOKUP5HntZFdA5XuNYXWM+HPs3O0AJwBm/
-VCZsZtkjVjxeBmTXiXDnxytdsHdGrHGymPfjJYatDu6d1KRVDlMCAwEAAaOCAd0wggHZMA4GA1Ud
-DwEB/wQEAwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUu
-Z2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggr
-BgEFBQcwAYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
-YTIwMjAwTQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3
-Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4
-aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmww
-JwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUClVHbAvhzGT8
-s2/6xOf58NkGMQ8wDQYJKoZIhvcNAQELBQADggEBAENRsP1H3calKC2Sstg/8li8byKiqljCFkfi
-IhcJsjPOOR9UZnMFxAoH/s2AlM7mQDR7rZ2MxRuUnIa6Cp5W5w1lUJHktjCUHnQq5nIAZ9GH5SDY
-pgzbFsoYX8U2QCmkAC023FF++ZDJuc9aj0R/nhABxmUYErIze2jV/VO8Pj7TnCrBONZ/Qvf8G5CQ
-X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
-eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
-Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILp2FcTplIsIUib0Obk+
-jGk5BwmJn8J2UGPj5vhUKYQvMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIxMDcyNjExNDgwOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
-BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCXB38fJ2ld1nt2++zJdp8z6fB9zwVj3IyElXs4
-7StBjHMatGZbGUxtOjEzo4kOd4t0GwOGFLM8PmFy9OgcnDjb4MC2jQFB6oAybnAAf8Wy3UUxIpfv
-rm8ZEIa0GFRD6Mnqz6chyN4cnfr1yr3Kwq4bNW6ImMBg57HzbmZYwtmRZqUfwYAuH89MpVolyG5t
-QAHmt77Pb3k6Kat/aMIPYY1au3oAQzxPkbf28YXddp8ndeqt5AGc4HdNcO137qwpxzBvxflaXx0J
-dNHMbmtNqD/AWljy+DRXj6BlBSn91sTHaeqfVain2y2jOuckzSsaPbqh6jHSf+sD7FbvbZtFXLqo
---000000000000c11d5305c805530e--
