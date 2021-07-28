@@ -2,68 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A96713D94B8
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Jul 2021 19:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D17573D97C2
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Jul 2021 23:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbhG1R5o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Jul 2021 13:57:44 -0400
-Received: from mail-pl1-f173.google.com ([209.85.214.173]:41951 "EHLO
-        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbhG1R5n (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Jul 2021 13:57:43 -0400
-Received: by mail-pl1-f173.google.com with SMTP id z3so2311800plg.8;
-        Wed, 28 Jul 2021 10:57:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=EywUrwmDEYhu/C9G+WVdp4Z5iyUVek4SiiVWGHgmbts=;
-        b=tRmjelcdaPFren8gQvK+8oGj6fQEKctZM8E9Opr4FmjZwzKFeB/zFm2ECgYPDpSHEV
-         TwTfaK74voCOOb0DERDOUQwVSVrcXDDSsclsVYYEg+ZZXTl2X7bAStUFloiFGzS5mBVQ
-         ONkL3kesqUJbWHeOw60aH8nlR7wpcxlnWjs6yWTRMu3M3Ip7JNWeGnOCCEp9KiB0dD2G
-         Y2AGpBkcSRgazVTcQ2bayrsK0st2YIok18Gz7c/NC6Z2Pim6ULYy1ECczwa2k2X5alCM
-         bwDTv1YAhn4VwgPJbU4ly8vUbQrJrMSvpJ5PzPD88kKpbPYRwmAgrkF2nWxt4c1mi2PI
-         9GTA==
-X-Gm-Message-State: AOAM5332CQiFiEJJA3y+0BiIg/s1kQlyAe0gJ24jpFWoohoZ0ycejlD6
-        b6trZRTIQzSiS6pQC/158c4=
-X-Google-Smtp-Source: ABdhPJyme3f78+dFR7yRDsxTQGMO9Iqmm/DCaTI/bhVxUGjkEmYy4jxfd2bMZhpDjNj610DWQ5XuyQ==
-X-Received: by 2002:a17:90a:35b:: with SMTP id 27mr915718pjf.209.1627495060727;
-        Wed, 28 Jul 2021 10:57:40 -0700 (PDT)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:1:3328:5f8d:f6e2:85ea])
-        by smtp.gmail.com with ESMTPSA id l1sm381521pjq.1.2021.07.28.10.57.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jul 2021 10:57:39 -0700 (PDT)
-Subject: Re: [PATCH] scsi: ufs: Allow async suspend/resume callbacks
-To:     Vincent Palomares <paillon@google.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-References: <20210728012743.1063928-1-paillon@google.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <a7091f96-12a3-a244-040a-c41a7c5e3617@acm.org>
-Date:   Wed, 28 Jul 2021 10:57:38 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S231964AbhG1Vuw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Jul 2021 17:50:52 -0400
+Received: from mail.cmac.md ([188.237.172.100]:41354 "EHLO mail.cmac.md"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230156AbhG1Vuw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 28 Jul 2021 17:50:52 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.cmac.md (Postfix) with ESMTP id 18EAB5F6A55;
+        Wed, 28 Jul 2021 23:47:10 +0300 (EEST)
+Received: from mail.cmac.md ([127.0.0.1])
+        by localhost (mail.cmac.md [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id yNLzC1Wp5--g; Wed, 28 Jul 2021 23:47:09 +0300 (EEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.cmac.md (Postfix) with ESMTP id 889895F6A56;
+        Wed, 28 Jul 2021 23:47:09 +0300 (EEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.cmac.md 889895F6A56
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cmac.md;
+        s=A7EBCE9A-F7D5-11E8-BEB1-DB694232E4A3; t=1627505229;
+        bh=lNeDGnOZ7OoTZnOZYdQRfJ+34CntaQrMIcGiDyuxHig=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=aIJdEZk4ERP0G9t2dFHmnogDydL940CvM+z3nlCLvyseIJV4qXOVboubd4QRy2JPM
+         foiBsHz0JrJZchPS/I9QIyo5jvZv6gZDakV+XOhfQOSRmwQhSTCcMVsAFuMSCeecbe
+         89wIZxrhY5KqGER2slwE7woElQMtj6rJdSMrFceYt7zg9Jwj8MaKt5fBzcbNaPcOCi
+         0n3TttUNZ3SObHTx+40/EeD8nZoSIMpkybL8bPE89HVCq9U9MXH9eeMMqUFy6clo9o
+         GAilS8Q5WZYbwSkxsi93PRmXsXTBhBU7TVz5dt953RAG1TJ9HzeOH+8PeUJFszUEHA
+         4g3BWYlU4lyaw==
+X-Virus-Scanned: amavisd-new at mail.cmac.md
+Received: from mail.cmac.md ([127.0.0.1])
+        by localhost (mail.cmac.md [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id QhmXoZ-YQCCV; Wed, 28 Jul 2021 23:47:09 +0300 (EEST)
+Received: from DESKTOP-JSQ933K.realtek (unknown [124.13.244.127])
+        by mail.cmac.md (Postfix) with ESMTPSA id AA4CC5EAE52;
+        Wed, 28 Jul 2021 23:47:02 +0300 (EEST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <20210728012743.1063928-1-paillon@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re: Congratulations
+To:     Recipients <info@cmac.md>
+From:   "Coca Cola" <info@cmac.md>
+Date:   Thu, 29 Jul 2021 04:46:48 +0800
+Reply-To: cocacolaeuropedepot@gmail.com
+Message-Id: <20210728204702.AA4CC5EAE52@mail.cmac.md>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/27/21 6:27 PM, Vincent Palomares wrote:
-> Are there any suspend/resume dependencies for UFS drivers not tracked by
-> the device parent relationship?
+Congratulation To You
 
-Not that I know of. Since I like this patch:
+You have won $1,500,000.00 in Coca Cola Promotion 2021 Edition
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Claim your payment now by contacting us via email: coca.cola21@groupmail.co=
+m.
+
+For any assistance, you can call our customer toll free helpline number +1(=
+607) 948-9239.
+
+Sincerely,
+Sir. Jan S. Gustavsson.
+Director Strategic Dev/Secy/Gen Cnsl, Coca-Cola HBC AG.
