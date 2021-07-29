@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7745B3D9AAA
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jul 2021 02:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239633D9AAF
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jul 2021 02:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233118AbhG2A6I (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Jul 2021 20:58:08 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:28330 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233017AbhG2A6I (ORCPT
+        id S233165AbhG2A6K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Jul 2021 20:58:10 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:63152 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233056AbhG2A6I (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Jul 2021 20:58:08 -0400
 Received: from epcas3p4.samsung.com (unknown [182.195.41.22])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20210729005804epoutp03c477c8f670be76cc8ad335108d82ba15~WHRNualKE0148501485epoutp03d
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210729005804epoutp0253558c485d7800e32dceef5265214043~WHROAetWd0166001660epoutp02X
         for <linux-scsi@vger.kernel.org>; Thu, 29 Jul 2021 00:58:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20210729005804epoutp03c477c8f670be76cc8ad335108d82ba15~WHRNualKE0148501485epoutp03d
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210729005804epoutp0253558c485d7800e32dceef5265214043~WHROAetWd0166001660epoutp02X
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1627520284;
-        bh=YKj/GyUBBlEmfwiy02zZ5bInnkvpsqU6Km1bRuNWeUA=;
+        bh=ZJq34MoG2V6IAKA8hoHAqxq+UsHCZb+emd+W9MVSItc=;
         h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=QeLOWJtuthPoJRVpzYD7ii70PQK0PTb6ExwqEm1up51/GTIAKYfyI/ddVIrLD9xMK
-         ZPKOR2n6McMMqRoRbsZD6SnI1I+cgnAKsJIzX3lLBw3S3O0akz/C5a5/4cldCF+eGE
-         3ox37zRY/A+4JSxLgfbKgGPBjS5I8rBsS7OTgrng=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas3p4.samsung.com (KnoxPortal) with ESMTP id
-        20210729005804epcas3p4aea169b9f2e9dd0edf112cb116dde71f~WHRNTNEWY0911709117epcas3p4F;
+        b=k2irI7WMrcWHVqfV7EuZNRBLyfvZedDR6OafWgH3qoDPtqyijAJCqWr1YAzGgYzSr
+         Qb1p/IA8LQRFQ2BbYM+J76Jy43k3lVlGUjfItpAI1faXlqEDqIocu573/nChD//XeH
+         tooEErIMJo9IfPGQXI1hzSJ4FARzE+hdcuOaa3Qg=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas3p1.samsung.com (KnoxPortal) with ESMTP id
+        20210729005804epcas3p167c070d4157fc9aef04d004ba272e933~WHRNmsNcL0831108311epcas3p1x;
         Thu, 29 Jul 2021 00:58:04 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp3.localdomain
-        (Postfix) with ESMTP id 4GZsb012Brz4x9QC; Thu, 29 Jul 2021 00:58:04 +0000
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp4.localdomain
+        (Postfix) with ESMTP id 4GZsb03LPxz4x9QG; Thu, 29 Jul 2021 00:58:04 +0000
         (GMT)
 Mime-Version: 1.0
-Subject: RE: [PATCH v3 04/18] scsi: ufs: Rename the second
- ufshcd_probe_hba() argument
+Subject: RE: [PATCH v3 05/18] scsi: ufs: Use DECLARE_COMPLETION_ONSTACK()
+ where appropriate
 Reply-To: daejun7.park@samsung.com
 Sender: Daejun Park <daejun7.park@samsung.com>
 From:   Daejun Park <daejun7.park@samsung.com>
@@ -41,42 +41,45 @@ CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         Jaegeuk Kim <jaegeuk@kernel.org>,
         Avri Altman <avri.altman@wdc.com>,
         Bean Huo <beanhuo@micron.com>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Can Guo <cang@codeaurora.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
         Stanley Chu <stanley.chu@mediatek.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Daejun Park <daejun7.park@samsung.com>
 X-Priority: 3
 X-Content-Kind-Code: NORMAL
-In-Reply-To: <20210722033439.26550-5-bvanassche@acm.org>
+In-Reply-To: <20210722033439.26550-6-bvanassche@acm.org>
 X-CPGS-Detection: blocking_info_exchange
 X-Drm-Type: N,general
 X-Msg-Generator: Mail
 X-Msg-Type: PERSONAL
 X-Reply-Demand: N
-Message-ID: <1226204845.121627520284129.JavaMail.epsvc@epcpadp4>
-Date:   Thu, 29 Jul 2021 09:56:57 +0900
-X-CMS-MailID: 20210729005657epcms2p66805a8fd925daba9b52a29ceb31a6f30
+Message-ID: <1150284200.161627520284458.JavaMail.epsvc@epcpadp4>
+Date:   Thu, 29 Jul 2021 09:57:07 +0900
+X-CMS-MailID: 20210729005707epcms2p779e83f1000601c7583376659d482f753
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 X-CPGSPASS: Y
 X-CPGSPASS: Y
 X-Hop-Count: 3
-X-CMS-RootMailID: 20210722033520epcas2p31c6f801eda7f100491c85e3f9c7d6600
-References: <20210722033439.26550-5-bvanassche@acm.org>
+X-CMS-RootMailID: 20210722033523epcas2p22ea9a4afaeb46870638ff4429010a3c1
+References: <20210722033439.26550-6-bvanassche@acm.org>
         <20210722033439.26550-1-bvanassche@acm.org>
-        <CGME20210722033520epcas2p31c6f801eda7f100491c85e3f9c7d6600@epcms2p6>
+        <CGME20210722033523epcas2p22ea9a4afaeb46870638ff4429010a3c1@epcms2p7>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 Hi Bart,
 
->Rename the second argument of ufshcd_probe_hba() such that the name of
->that argument reflects its purpose instead of how the function is called.
->See also commit 1b9e21412f72 ("scsi: ufs: Split ufshcd_probe_hba() based
->on its called flow").
+>From Documentation/scheduler/completion.rst: "When a completion is declared
+>as a local variable within a function, then the initialization should
+>always use DECLARE_COMPLETION_ONSTACK() explicitly, not just to make
+>lockdep happy, but also to make it clear that limited scope had been
+>considered and is intentional."
 
 Reviewed-by: Daejun Park <daejun7.park@samsung.com>
 
