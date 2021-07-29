@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9295E3D9AAC
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jul 2021 02:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5F13D9AB5
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jul 2021 03:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbhG2A6K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Jul 2021 20:58:10 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:28342 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233028AbhG2A6I (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Jul 2021 20:58:08 -0400
+        id S232993AbhG2BAI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Jul 2021 21:00:08 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:46911 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232904AbhG2BAH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Jul 2021 21:00:07 -0400
 Received: from epcas3p2.samsung.com (unknown [182.195.41.20])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20210729005804epoutp039d0c6859c9ea73c366f840f4f688253f~WHRN3KxW70207902079epoutp03I
-        for <linux-scsi@vger.kernel.org>; Thu, 29 Jul 2021 00:58:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20210729005804epoutp039d0c6859c9ea73c366f840f4f688253f~WHRN3KxW70207902079epoutp03I
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210729010003epoutp01945f30c5a38ca5b2729405f6691f4589~WHS83p55Q0174601746epoutp01s
+        for <linux-scsi@vger.kernel.org>; Thu, 29 Jul 2021 01:00:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210729010003epoutp01945f30c5a38ca5b2729405f6691f4589~WHS83p55Q0174601746epoutp01s
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1627520284;
-        bh=1+1j0xT8px/pbohTmjReOTlDRXB0aN0TnSAmNUQezVw=;
+        s=mail20170921; t=1627520404;
+        bh=nsHWm7siuj6X9DeJKRLdqlAV79LHd6653ZlBm9s7+W4=;
         h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=Nc5nEZOdiS37nZRK0oDmOOBf4+1rUdKwOWUf5ycQ3LCe7Sj1Cgilg1E+659f9W6WI
-         fLGKKWY+vcPcNqeOxwlAQM6Fztqn1rya+gGLE21kQuayY2zVPtg/fFPqeIFAunoUNG
-         rtcd4RTG5qnNCJ77KP53tt/xZlAkL5b8y1BdzBKc=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        b=mtF3BMts7AVsBZ/1tZrMGCi6hizgQvmN5ljnA1RjCOOkuacR2Xp1kSQI5bB3cNc6w
+         iTfo3B6timG/DxrSntXtAGfzrIQhhGbFdOTmndJTe/qsOpxKU5FAocMAQcEmDFza97
+         hb3Tbj1hjKe135f7mFnIexuF0cjG5urPykm9/Jl0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
         epcas3p3.samsung.com (KnoxPortal) with ESMTP id
-        20210729005804epcas3p3e27ac74d448fdccff6fcec41256246e2~WHRNcZQIv2558225582epcas3p3q;
-        Thu, 29 Jul 2021 00:58:04 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp4.localdomain
-        (Postfix) with ESMTP id 4GZsb0275nz4x9QG; Thu, 29 Jul 2021 00:58:04 +0000
+        20210729010002epcas3p3726e3767e9baaeffd05200f5d18b184a~WHS7gHA2I0885608856epcas3p3w;
+        Thu, 29 Jul 2021 01:00:02 +0000 (GMT)
+Received: from epcpadp3 (unknown [182.195.40.17]) by epsnrtp1.localdomain
+        (Postfix) with ESMTP id 4GZsdG2fpyz4x9QH; Thu, 29 Jul 2021 01:00:02 +0000
         (GMT)
 Mime-Version: 1.0
-Subject: RE: [PATCH v3 07/18] scsi: ufs: Verify UIC locking requirements at
- runtime
+Subject: RE: [PATCH v3 08/18] scsi: ufs: Improve static type checking for
+ the host controller state
 Reply-To: daejun7.park@samsung.com
 Sender: Daejun Park <daejun7.park@samsung.com>
 From:   Daejun Park <daejun7.park@samsung.com>
@@ -40,46 +40,45 @@ CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         Jaegeuk Kim <jaegeuk@kernel.org>,
         Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
         Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
         Kiwoong Kim <kwmad.kim@samsung.com>,
         Keoseong Park <keosung.park@samsung.com>,
         Daejun Park <daejun7.park@samsung.com>
 X-Priority: 3
 X-Content-Kind-Code: NORMAL
-In-Reply-To: <20210722033439.26550-8-bvanassche@acm.org>
+In-Reply-To: <20210722033439.26550-9-bvanassche@acm.org>
 X-CPGS-Detection: blocking_info_exchange
 X-Drm-Type: N,general
 X-Msg-Generator: Mail
 X-Msg-Type: PERSONAL
 X-Reply-Demand: N
-Message-ID: <1652149987.141627520284286.JavaMail.epsvc@epcpadp4>
-Date:   Thu, 29 Jul 2021 09:57:18 +0900
-X-CMS-MailID: 20210729005718epcms2p4cd83e29482f0520a2095d8ac2766a7bc
+Message-ID: <1891546521.01627520402353.JavaMail.epsvc@epcpadp3>
+Date:   Thu, 29 Jul 2021 09:57:22 +0900
+X-CMS-MailID: 20210729005722epcms2p1e4543ff65b25ff23c62b501c1856ecf5
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 X-CPGSPASS: Y
 X-CPGSPASS: Y
 X-Hop-Count: 3
-X-CMS-RootMailID: 20210722033527epcas2p384eefb77dff85f5d8d59beede98b6bdc
-References: <20210722033439.26550-8-bvanassche@acm.org>
+X-CMS-RootMailID: 20210722033531epcas2p4a4a975689ad7966d3db56dd81a7a255f
+References: <20210722033439.26550-9-bvanassche@acm.org>
         <20210722033439.26550-1-bvanassche@acm.org>
-        <CGME20210722033527epcas2p384eefb77dff85f5d8d59beede98b6bdc@epcms2p4>
+        <CGME20210722033531epcas2p4a4a975689ad7966d3db56dd81a7a255f@epcms2p1>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 Hi Bart,
 
->Instead of documenting the locking requirements of the UIC code as comments,
->use lockdep_assert_held() such that lockdep verifies the lockdep
->requirements at runtime if lockdep is enabled.
+>Assign a name to the enumeration type for UFS host controller states and
+>remove the default clause from switch statements on this enumeration type
+>to make the compiler warn about unhandled enumeration labels.
 
 Reviewed-by: Daejun Park <daejun7.park@samsung.com>
 
