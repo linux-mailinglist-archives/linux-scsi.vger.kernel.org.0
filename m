@@ -2,82 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 004523D9AAD
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jul 2021 02:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FB53D9AAE
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jul 2021 02:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233149AbhG2A6J (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Jul 2021 20:58:09 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:28308 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232837AbhG2A6I (ORCPT
+        id S233162AbhG2A6K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Jul 2021 20:58:10 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:63134 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233052AbhG2A6I (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Jul 2021 20:58:08 -0400
-Received: from epcas3p3.samsung.com (unknown [182.195.41.21])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20210729005804epoutp033a5d2d7bae83598f5db205ff7b36420c~WHRNY-wxD0146501465epoutp03Q
+Received: from epcas3p2.samsung.com (unknown [182.195.41.20])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20210729005804epoutp024c3938393c38b4e625dfffb8570a43f8~WHRNvFqFX3252532525epoutp02Y
         for <linux-scsi@vger.kernel.org>; Thu, 29 Jul 2021 00:58:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20210729005804epoutp033a5d2d7bae83598f5db205ff7b36420c~WHRNY-wxD0146501465epoutp03Q
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20210729005804epoutp024c3938393c38b4e625dfffb8570a43f8~WHRNvFqFX3252532525epoutp02Y
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1627520284;
-        bh=9wDBDaonJnjihyl38hInlp4SeZJwmet42/Kfv1+YiRo=;
+        bh=0EVBSdNRcpHjmzjtLfJgPZmkfKC2IZoDUvT7MpXl/KE=;
         h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=teor421nsEU94EYi63A/sAB8unDUVRPfX2wxwncMkjGJo/8hCQvvuOXHK5OuzHT3s
-         UpntLbKZF06gR/dM+RBw1l/fMyNfhUgu+xELzq4o9f7mATVt1GSuLzgkx4LiR28/kW
-         iGdSMlzHfmVwBq53KBQBrRpSUWZqfxC8FCO6wwUk=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas3p1.samsung.com (KnoxPortal) with ESMTP id
-        20210729005803epcas3p18f7d644272ba0b04e618b9318ded8db8~WHRM5DVWj0828608286epcas3p1V;
-        Thu, 29 Jul 2021 00:58:03 +0000 (GMT)
-Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp2.localdomain
-        (Postfix) with ESMTP id 4GZsZz5097z4x9QB; Thu, 29 Jul 2021 00:58:03 +0000
+        b=tyrgXkqePuq7GybEKzfMeJ+4zmLA5yokTBVUckjdPGmrwxAyBX2+yjjsYyb8fEJth
+         l5ah3pNjReNbg9menJfK0FCpYJYuTto1iVL0yYM8cldI+OcxraAZoPfwz5xdf3IwY9
+         qC7QMu6h28hvFK6MpoGvdBFW5GX1hcOpY/0r4bnA=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas3p3.samsung.com (KnoxPortal) with ESMTP id
+        20210729005804epcas3p32947a6046a34f100cf72fb5e2e7b13e9~WHRNJZLBe2556725567epcas3p3q;
+        Thu, 29 Jul 2021 00:58:04 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp3.localdomain
+        (Postfix) with ESMTP id 4GZsZz6vQCz4x9QC; Thu, 29 Jul 2021 00:58:03 +0000
         (GMT)
 Mime-Version: 1.0
-Subject: RE: [PATCH v3 01/18] scsi: ufs: Fix memory corruption by
- ufshcd_read_desc_param()
+Subject: RE: [PATCH v3 02/18] scsi: ufs: Reduce power management code
+ duplication
 Reply-To: daejun7.park@samsung.com
 Sender: Daejun Park <daejun7.park@samsung.com>
 From:   Daejun Park <daejun7.park@samsung.com>
-To:     Bart Van Assche <bvanassche@acm.org>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Daejun Park <daejun7.park@samsung.com>
 CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         Jaegeuk Kim <jaegeuk@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Can Guo <cang@codeaurora.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
         Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Can Guo <cang@codeaurora.org>,
         Asutosh Das <asutoshd@codeaurora.org>,
-        Daejun Park <daejun7.park@samsung.com>
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        Yue Hu <huyue2@yulong.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Sergey Shtylyov <s.shtylyov@omprussia.ru>,
+        Keoseong Park <keosung.park@samsung.com>
 X-Priority: 3
 X-Content-Kind-Code: NORMAL
-In-Reply-To: <20210722033439.26550-2-bvanassche@acm.org>
+In-Reply-To: <20210722033439.26550-3-bvanassche@acm.org>
 X-CPGS-Detection: blocking_info_exchange
 X-Drm-Type: N,general
 X-Msg-Generator: Mail
 X-Msg-Type: PERSONAL
 X-Reply-Demand: N
-Message-ID: <878274034.81627520283675.JavaMail.epsvc@epcpadp4>
-Date:   Thu, 29 Jul 2021 09:56:40 +0900
-X-CMS-MailID: 20210729005640epcms2p5116a5684f2cdf75d8109f5583969c421
+Message-ID: <2145970759.101627520283941.JavaMail.epsvc@epcpadp4>
+Date:   Thu, 29 Jul 2021 09:56:46 +0900
+X-CMS-MailID: 20210729005646epcms2p29e8015169199c3a08b53802269343fe6
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 X-CPGSPASS: Y
 X-CPGSPASS: Y
 X-Hop-Count: 3
-X-CMS-RootMailID: 20210722033504epcas2p1cc3c6f61e81814004c36b89c7c9e3dd5
-References: <20210722033439.26550-2-bvanassche@acm.org>
+X-CMS-RootMailID: 20210722033510epcas2p410be4f2f387e98babeefc754a9fc1414
+References: <20210722033439.26550-3-bvanassche@acm.org>
         <20210722033439.26550-1-bvanassche@acm.org>
-        <CGME20210722033504epcas2p1cc3c6f61e81814004c36b89c7c9e3dd5@epcms2p5>
+        <CGME20210722033510epcas2p410be4f2f387e98babeefc754a9fc1414@epcms2p2>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 Hi Bart,
 
->If param_offset > buff_len then the memcpy() statement in
->ufshcd_read_desc_param() corrupts memory since it copies
->256 + buff_len - param_offset bytes into a buffer with size buff_len.
->Since param_offset < 256 this results in writing past the bound of the
->output buffer.
+>Move the dev_get_drvdata() calls into the ufshcd_{system,runtime}_*()
+>functions. Remove ufshcd_runtime_idle() since it is empty. This patch
+>does not change any functionality.
 
 Reviewed-by: Daejun Park <daejun7.park@samsung.com>
 
