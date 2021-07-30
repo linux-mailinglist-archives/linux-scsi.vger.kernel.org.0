@@ -2,100 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C32E3DBAAE
-	for <lists+linux-scsi@lfdr.de>; Fri, 30 Jul 2021 16:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B7C3DBCC8
+	for <lists+linux-scsi@lfdr.de>; Fri, 30 Jul 2021 18:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239176AbhG3OfX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 30 Jul 2021 10:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbhG3OfW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 30 Jul 2021 10:35:22 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CA8C061765
-        for <linux-scsi@vger.kernel.org>; Fri, 30 Jul 2021 07:35:17 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id k4so6118077wms.3
-        for <linux-scsi@vger.kernel.org>; Fri, 30 Jul 2021 07:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=evM83UWLLBaHWTgiCoLiGlU2n3sM1GhOgvdbrohd5Iw=;
-        b=CnSxaocE9rSmmap9/rUJze2+O0QSZe6upcrNazlgP9VVLWdYbED0oEtZxeTPnL2YYH
-         8NPN5dIcjc/pXbHb/Px3iooxOxObxKmX77xsto8lReKeV9ufjjQHPHxLrGl4PFaVmg/q
-         egbCyexbR+UzIxeghVIxGA7sF1j0yZQ09N39QbBBhy4L/Sq/Oowketq8u8T0QAdeRGQx
-         X1eRkEZDuQf057MDIlWfq/dcsh60P7kVz8AHit8UQJVn4qEQW4y4CxcDq6ymEaSOIlmk
-         glpIg/6Ah+9frB6Gl5c/5JzaI3Pc9Ng4sVpHcN0gnAo2d2HpnFEmsBu7ONRYhH/u8sjY
-         SbGw==
+        id S229601AbhG3QFP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 30 Jul 2021 12:05:15 -0400
+Received: from mail-pj1-f52.google.com ([209.85.216.52]:37608 "EHLO
+        mail-pj1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229570AbhG3QFO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 30 Jul 2021 12:05:14 -0400
+Received: by mail-pj1-f52.google.com with SMTP id a4-20020a17090aa504b0290176a0d2b67aso21506834pjq.2;
+        Fri, 30 Jul 2021 09:05:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=evM83UWLLBaHWTgiCoLiGlU2n3sM1GhOgvdbrohd5Iw=;
-        b=PVhi5OxsU4JT115CnchTX7JF98kdQuVgR/SUTzIf4LtuG4r2DaF7uj/yDmn+2FvORc
-         4osjA09FGuqsnlDBShaqNyEbwOUo1ckYQUE18v8QHhezRh8EBBKIXTvmQEqjtDghazWt
-         MlfWj9vmboE5mvRcTha+s8B/ocGykbtHVp3IxqN01WNo1y6iiPuzcb+QEKbx5cRnJuVw
-         RJtNPuAY9lWYX+cUFMbHCLYVCur5G3QMnNUpg3AdlFLFnOEU1xUVpWjuhz3QuKKaJ2eg
-         sivf3ZXOSj2GWktiYjIZiBpAGvA55BV0Ncgrq9Wz5WK5A1dRG2ak9viU87Bf3SPzvrLc
-         KoTA==
-X-Gm-Message-State: AOAM532lBApcd2kJuV7WNxKh2VMCubOLm44xm9HpmxR+AzQvszq7I7uj
-        vSlqVhx9ATi4cNtFF8O3SSmW7VnbO++y8RD6ZKQ=
-X-Google-Smtp-Source: ABdhPJw5gciqIQ1aZc9VpGNLqeZs+OvlLbEu3MFBM+bM/x9t5/gDrp7qEZSOgkl+67ClMpDklrjuRtN5rf4KK3P52Cc=
-X-Received: by 2002:a1c:7506:: with SMTP id o6mr3335914wmc.155.1627655715444;
- Fri, 30 Jul 2021 07:35:15 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Mb1gO+6STzLWuQhCsk6+1XZIXPWL26jkAcu9s9eX/WM=;
+        b=LOtV3XNjZJohMmWgMYVuJTC7qRGR7Bmo2BFoyfuyY8/8WpDTTJDibU4S88ng2z0TwQ
+         j7q9YBy6RQBkYihYVQI+Le+hLa5snX7YUhtZK5KjWE4dC7kLo01htdu/ZOEaJSihI5I1
+         7B+f2JjFtSi9wQ35DnkExeAcZVtKMbQ/GBjii3l2NXSlS+8mDcfDW713To2fWmAMQZ50
+         WEr/HPfxU7ii0vYMHbmTyqVlax3zS9p3IswT0krHqHX/pBynvf3b8m+XvOf2Ls2zm3zf
+         S/yvK6e5eCu4SYx0AbX6+hbRlm/KxrNOLTmFy4c98Aa3cTEdSDVF8nCZ2O8GWZTEjZ/g
+         x5BQ==
+X-Gm-Message-State: AOAM533jWpYEU2JWyAGfWPdPsQFXdIaJQCQ3X96dwvaUPmTGzdboaDHS
+        t/Xejicxqw8SxeVDnRAYNAU=
+X-Google-Smtp-Source: ABdhPJwy2js4U4Iak2ex7sFLzTif9lZyITB6DErOQjLoUeAcFMkysbqnCLlnlpw94AUCOgqEqlpJxw==
+X-Received: by 2002:aa7:9546:0:b029:32e:5fdf:9576 with SMTP id w6-20020aa795460000b029032e5fdf9576mr3353456pfq.5.1627661107884;
+        Fri, 30 Jul 2021 09:05:07 -0700 (PDT)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:1:684a:6173:abee:6f13])
+        by smtp.gmail.com with ESMTPSA id r128sm2997972pfc.155.2021.07.30.09.05.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jul 2021 09:05:07 -0700 (PDT)
+Subject: Re: [PATCH] scsi: ufs: Allow async suspend/resume callbacks
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Vincent Palomares <paillon@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+References: <20210728012743.1063928-1-paillon@google.com>
+ <DM6PR04MB6575579560F7CB1B71103F28FCEB9@DM6PR04MB6575.namprd04.prod.outlook.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <1630ebc3-b40e-31e3-1efa-67717e186b0a@acm.org>
+Date:   Fri, 30 Jul 2021 09:05:05 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Received: by 2002:a05:600c:209:0:0:0:0 with HTTP; Fri, 30 Jul 2021 07:35:14
- -0700 (PDT)
-Reply-To: miss.aishsgaddafi5050@gmail.com
-From:   "Miss.Aisha Gaddafi" <zarkzalem@gmail.com>
-Date:   Fri, 30 Jul 2021 07:35:14 -0700
-Message-ID: <CAFwgKNc+fVnhF-s0Kmi3rqTr-0C+hPT_QwWx=UVjJcBjPQzS4A@mail.gmail.com>
-Subject: THE AMOUNT IS 27.5 MILLIOMS USD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+In-Reply-To: <DM6PR04MB6575579560F7CB1B71103F28FCEB9@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-2KPYudiyINmI2KfYrdivINiMDQoNCtij2YbYpyDZhdmE2YPYqSDYrNmF2KfZhCDYp9mE2YLYsNin
-2YHZiiDYjCDYpdit2K/ZiSDYqNmG2KfYqiDYp9mE2LHYptmK2LMg2KfZhNmE2YrYqNmKINin2YTZ
-hdit2KfYtdixINiMINij2YbYpyDZhdmC2YrZhQ0K2K3Yp9mE2YrZi9inINmB2Yog2KXYrdiv2Ykg
-2KfZhNiv2YjZhCDYp9mE2KPZgdix2YrZgtmK2Kkg2Iwg2YTYs9mI2KEg2KfZhNit2Lgg2YPZhNin
-2KzYptipLiDZgdmKINmH2LDZhyDYp9mE2KPYq9mG2KfYoSDYjA0K2LnYp9im2YTYqtmKINmH2Yog
-2YfYr9mBINin2YTYr9mI2YQg2KfZhNi62LHYqNmK2Kkg2KjZgtmK2KfYr9ipINin2YTZhtin2KrZ
-iCDYp9mE2LDZiiDZitix2YrYryDYqtiv2YXZitixINmI2KfZhNiv2Yog2KjYo9mKDQrYq9mF2YYu
-INil2YYg2KfYs9iq2KvZhdin2LHYp9iq2YbYpyDZiNit2LPYp9io2KfYqtmG2Kcg2KfZhNmF2LXY
-sdmB2YrYqSDZgdmKINin2YTYudiv2YrYryDZhdmGINin2YTYqNmE2K/Yp9mGINmH2Yog2KPZh9iv
-2KfZgdmH2YUNCtmE2YTYqtis2YXZitivLg0KDQrZhNmC2K8g2KrZhSDYqtmD2YTZitmB2Yog2KjY
-p9mE2KfYqti12KfZhCDYqNmF2LPYqtir2YXYsSAvINi02LHZitmDINij2KzZhtio2Yog2YXZh9iq
-2YUg2LPZitmD2YjZhiDZgtin2K/YsdmL2Kcg2LnZhNmJINin2YTYqti52KfZhdmEINmF2LnZhw0K
-2KfZhNiz2YrYt9ix2Kkg2KfZhNmF2LfZhNmC2Kkg2LnZhNmJINis2LLYoSDZhdmGINin2YTYo9mF
-2YjYp9mEINin2YTZh9in2KbZhNipINin2YTZhdiq2KfYrdipINmE2YTYrdiz2KfYqCDYp9mE2K7Y
-p9i1INmF2Lkg2KPYrtmKDQrYp9mE2LHYp9it2YQg2KfZhNiw2Yog2YLZj9iq2YQg2YHZiiDYutin
-2LHYqSDYrNmI2YrYqSDZhNit2YTZgSDYtNmF2KfZhCDYp9mE2KPYt9mE2LPZiiDYjCDZhdmGINij
-2KzZhCDYp9iz2KrYq9mF2KfYsSDZhdit2KrZhdmEDQrZgdmKINio2YTYr9mDLg0KDQrYpdiw2Kcg
-2YPYp9mG2Kog2YfYsNmHINin2YTZhdi52KfZhdmE2Kkg2KrZh9mF2YMg2Iwg2YHZhNinINmK2KrY
-udmK2YYg2LnZhNmK2YMg2KfZhNil2YHYtdin2K0g2LnZhtmH2Kcg2YTYo9mKINi02K7YtSDYqNiz
-2KjYqA0K2YXYpyDZitis2LHZiiDZhdi5INi52KfYptmE2KrZiiDYqNij2YPZhdmE2YfYpyDYjCDY
-pdiw2Kcg2LnYsdmB2Kog2KfZhNij2YXYqSDYp9mE2YXYqtit2K/YqSDZh9iw2Kcg2KfZhNit2LPY
-p9ioINiMINmB2LPZiNmBDQrZitmC2YjZhdmI2YYg2KjYqtis2YXZitiv2Ycg2KPYq9mG2KfYoSDY
-qtis2YXZitivINin2YTYotiu2LHZitmGINmE2LDZhNmDINin2K3YqtmB2Lgg2KjZh9iw2Ycg2KfZ
-hNmF2LnYp9mF2YTYqSDZhNmAINio2YbZgdiz2YMNCtmB2YLYtyDYrdiq2Ykg2YbZhtiq2YfZiiDZ
-hdmGINiw2YTZgy4NCtij2LHZitivINiq2K3ZiNmK2YQg2YfYsNmHINin2YTYo9mF2YjYp9mEINil
-2YTZiSDYrdiz2KfYqNmDINmB2YjYsdmL2Kcg2YTYp9iz2KrYq9mF2KfYsdmH2Kcg2YHZiiDYqNmE
-2K/ZgyDZhNij2YbZhtmKINmE2KcNCtij2LHZitivINij2YYg2KrYudix2YEg2KfZhNij2YXYqSDY
-p9mE2YXYqtit2K/YqSDYudmGINmH2LDYpyDYp9mE2K3Ys9in2KguDQoNCtmE2LDZhNmDINil2LDY
-pyDZg9mG2Kog2YLYp9iv2LHZi9inINi52YTZiSDYpdiv2KfYsdipINmF2YbYtNij2Kkg2YjZitmF
-2YPZhtmDINin2YTYrdmB2KfYuCDYudmE2Ykg2YXYs9iq2YjZiSDYudin2YTZjSDZhdmGDQrYp9mE
-2LPYsdmK2Kkg2KfZhNmF2LfZhNmI2Kgg2YHZiiDZh9iw2Kcg2KfZhNmF2LTYsdmI2Lkg2Iwg2YHZ
-itix2KzZiSDYp9mE2LHYryDYqNin2YTZhdi52YTZiNmF2KfYqiDYp9mE2KrYp9mE2YrYqSDZhNmE
-2K3YtdmI2YQNCti52YTZiSDYqtmB2KfYtdmK2YQg2KfZhNmF2LTYsdmI2LkuINmK2LHYrNmJINin
-2YTYp9iq2LXYp9mEINio2Yog2LnZhNmJINio2LHZitiv2Yog2KfZhNil2YTZg9iq2LHZiNmG2YoN
-CihtaXNzLmFpc2hzZ2FkZGFmaTUwNTBAZ21haWwuY29tKQ0KDQoNCjEuINin2LPZhdmDINin2YTZ
-g9in2YXZhCDigKbigKbigKbigKbigKYNCjIuINi52YbZiNin2YbZgyDYp9mE2K3Yp9mE2Yog4oCm
-4oCm4oCmDQozLiDYrNmG2LPZitiq2YMgLi4uLi4uLi4uLi4uLi4uLi4NCjQuINi52YXYsdmDIOKA
-puKApuKApuKApuKApg0KNS4g2YXZh9mG2KrZgyAuLi4uLi4uLi4NCjYuINij2LHYs9mEINmE2Yog
-2YbYs9iu2Kkg2YXZhdiz2YjYrdipINi22YjYptmK2YvYpyDZhdmGINi12YjYsdiq2YMNCg0K2KPZ
-gdi22YQg2KfZhNiq2K3Yp9mK2KcNCtin2YTYotmG2LPYqSDYudin2KbYtNipINin2YTZgtiw2KfZ
-gdmKDQo=
+On 7/28/21 11:48 PM, Avri Altman wrote:
+> Vincent wrote:
+>> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>> index b87ff68aa9aa..9ec5c308a0ea 100644
+>> --- a/drivers/scsi/ufs/ufshcd.c
+>> +++ b/drivers/scsi/ufs/ufshcd.c
+>> @@ -9625,6 +9625,7 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem
+>> *mmio_base, unsigned int irq)
+>>          async_schedule(ufshcd_async_scan, hba);
+>>          ufs_sysfs_add_nodes(hba->dev);
+>>
+>> +       device_enable_async_suspend(dev);
+>>          return 0;
+> Isn't device_enable_async_suspend is being called for each lun in scsi_sysfs_add_sdev Anyway?
+
+Hi Avri,
+
+Our measurements have shown that resume takes longer than it should with 
+encryption enabled. While suspending we change the power mode of the UFS 
+device to a mode in which it loses crypto keys. Restoring crypto keys 
+during resume (blk_ksm_reprogram_all_keys()) takes about 31 ms. This is 
+the long pole and takes much more time than resuming LUNs. This patch 
+makes UFS resume happen concurrently with resuming other devices in the 
+system instead of serializing it. Measurements have shown that this 
+patch significantly improves the time needed to resume an Android device.
+
+Bart.
