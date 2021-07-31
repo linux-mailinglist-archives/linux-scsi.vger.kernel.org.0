@@ -2,80 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A163DC664
-	for <lists+linux-scsi@lfdr.de>; Sat, 31 Jul 2021 16:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA703DC8E5
+	for <lists+linux-scsi@lfdr.de>; Sun,  1 Aug 2021 01:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbhGaOtQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 31 Jul 2021 10:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S229505AbhGaXWD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 31 Jul 2021 19:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbhGaOtP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 31 Jul 2021 10:49:15 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4F5C06175F
-        for <linux-scsi@vger.kernel.org>; Sat, 31 Jul 2021 07:49:05 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l19so19445351pjz.0
-        for <linux-scsi@vger.kernel.org>; Sat, 31 Jul 2021 07:49:05 -0700 (PDT)
+        with ESMTP id S229458AbhGaXWC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 31 Jul 2021 19:22:02 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE5EC06175F
+        for <linux-scsi@vger.kernel.org>; Sat, 31 Jul 2021 16:21:55 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id a1so1328491ioa.12
+        for <linux-scsi@vger.kernel.org>; Sat, 31 Jul 2021 16:21:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gapp-nthu-edu-tw.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uS/8eZw40GesqzhF7lVX2xV8dW5LTzB5oO2GcYreBAg=;
-        b=XUWkY2HdckcIRNL7YSE8fQWXAW+gV8T0plYFze2f32gWcVRnBpesYyeK8bJfZjcsO+
-         2/X3pZcby2aauRbTcF03jA6CJkuzPZJ7yvLLu+TJSypUyqnHr96FADRUrDnpx6m5ycyk
-         prbaTXxF6otVCEmhkrRK6VlgoVKt9NGGizQrq84xUd3jJrvri0od8kBAS+Ex6Qo5DpGb
-         NR6McpJVOkbCqmPZ+xNRjXa2VeoZHYd5P8GbsPds60QEXvBSiHy0odrh86Hh51zQjoo9
-         HXAh10zbJMApXrpaK86uDTYj3MtU+uN3lOkGODaQTyxBJkTojdT6ctxvMENmDtasjXL+
-         QGsw==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=FCAlHwKghI205wTZ5Z0xQp3SR9+6820WRK8lRLKqL7g=;
+        b=MWoVuHLhFpszllY+OF8DSte4pLcyOpBtxsvY6Szo+Cz5WdzDySucMDt4VTZCkzigSb
+         Jz6r1O7G9HcUkCA7vnYaWmVCuewcQV2B5i0d4rzVGVLqM8qaHRb+pXhJEeLTqs6yGKXy
+         8J/QpRrP8l+k58XtMq4ivAoH/Jdb/BEY/T+c/XDH8+ATEOwdhndXtoMzHe4os66CL4B8
+         OlZ4fxhjyITeKOetZG+C/+I4MQXfKhnWevFQtkYI7YOrgu6bsuWUn2+6ztv5NL2GdHaT
+         IEhCDxEX3cGmsVI2uQsjDL0J2tZb3+nPHkmGw4nODyd1zZhGZnBPB99bHOH0JiF/McYz
+         Bmfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uS/8eZw40GesqzhF7lVX2xV8dW5LTzB5oO2GcYreBAg=;
-        b=iOj5NsPsbtSY+QMJqArc6bMmeDwTnjzgpb55RGj3JkefyxyRhyDGMHZDW185L6ZhOc
-         +kak1QnRbz6nsxIb863Yz1zuKsegtvM6zH5wPTt/hnNzDzocCbwJzPXC5LhLD2JawoZN
-         iuJ6dHeVlTCSObVUjmo69j/3nlYaWCPa+7zUrBAzqi0qTKGr5cw8qkJf6NepfVG471PB
-         h1wcX4IQUSXvy/R80kMJgQKZ95Xfv3+wNSr5O3gX6HQa0LUTARadZJ5whe/+ubw80rO7
-         pMQkWM+Cx1oqF8rRGTfo0uyZ+Xb+81SPKcqUp/no1m5XwY0l5WLNZ5W9SpcQorm6pe5m
-         2WjA==
-X-Gm-Message-State: AOAM532Ty1vSp9VTqBjsasF3dXZVlJDRmpUy96deEN1ZizKBrux1MGT8
-        MLMBf0i8KCUkFjOIXTVUsnjcfsRKZLmeljRny+IzLg==
-X-Google-Smtp-Source: ABdhPJyhQCZQ7uDajChAsumTsGXSKd/+8YRaIJz8pW6soPRN+ohYJD52YTdAPJBk/Yv49iwU/bltpivn5zcKQZNAzpE=
-X-Received: by 2002:a65:6487:: with SMTP id e7mr6953397pgv.27.1627742945068;
- Sat, 31 Jul 2021 07:49:05 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=FCAlHwKghI205wTZ5Z0xQp3SR9+6820WRK8lRLKqL7g=;
+        b=Gf1aVaKa/NbOFUVqZYosSMzaxgPtffgQ5J+3+sblzGZDkoc8g9fCZziz/pc5mCBH4l
+         UReomqAeCbAsKkY0KweajaaSuSmDJwIrBVsgPE8BcdRtsu0gyGk6UJOHbob2N7oFctVb
+         U0jXaWNAM7o81u1MjLWTRg/FqePOUgfzd6td1U9t7D8DuLAVPSKJr64rueHBJdLoZn9t
+         fX1En0WygWpRTIjjxyfxIF/RTZHXelBdMOIFqzigO81YdNjCQvPcSEAtF0ENtAzMY92y
+         H/+50mwOGL0tk2C23USs5Um+VPeh7FRtWK8BNUuJcEgnKJQuifiNtp4cuzespVrVXO+8
+         VWhA==
+X-Gm-Message-State: AOAM530SPGE2PzS8ca41ZqYQpOA29Ujk31ddf2Hw5lSt4aMKI4YN6ZS4
+        B8EmbPqVKf5pzDYx7aQGYuCENWRZB/19C1QKuuc=
+X-Google-Smtp-Source: ABdhPJyngVXzMJHT8iWSGvLhzZIMWZBmaWFJTOUnzj9bsINiMirVWcdpwDc53BOjCsbyJQkZjzhgV11unQWgGOSk/uM=
+X-Received: by 2002:a6b:5c18:: with SMTP id z24mr2054870ioh.88.1627773714514;
+ Sat, 31 Jul 2021 16:21:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210722033439.26550-1-bvanassche@acm.org> <CGME20210722033513epcas2p22e4c2e6ea644992ede2739ebe381d53f@epcms2p8>
- <20210722033439.26550-4-bvanassche@acm.org> <1381713434.61627520283503.JavaMail.epsvc@epcpadp4>
-In-Reply-To: <1381713434.61627520283503.JavaMail.epsvc@epcpadp4>
-From:   Stanley Chu <chu.stanley@gapp.nthu.edu.tw>
-Date:   Sat, 31 Jul 2021 22:48:54 +0800
-Message-ID: <CAOBeenbNhUk3t-For7UDAk4OcGC1wgiauYS+Gj6zM9dgwvAYBw@mail.gmail.com>
-Subject: Re: [PATCH v3 03/18] scsi: ufs: Only include power management code if necessary
-To:     daejun7.park@samsung.com
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Keoseong Park <keosung.park@samsung.com>
+Reply-To: davidschantal90@gmail.com
+Sender: susancha62@gmail.com
+Received: by 2002:a05:6e02:198e:0:0:0:0 with HTTP; Sat, 31 Jul 2021 16:21:53
+ -0700 (PDT)
+From:   "Dr. Abu Salam" <abu347454@gmail.com>
+Date:   Sat, 31 Jul 2021 16:21:53 -0700
+X-Google-Sender-Auth: j0V-YIOPVvbWGrBfLDHey86_4Uk
+Message-ID: <CAHFYgy59NeiNHp33TBSzatG+sH0b4ZCuvCN1exoxnMS3mf83nQ@mail.gmail.com>
+Subject: GREETINGS FROM ABU SALAM.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Bart,
+Dear Friend,
 
->
-> >This patch slightly reduces the UFS driver size if built with power
-> >management support disabled.
->
+I'm sorry but happy to inform you about my success in getting those
+funds transferred under the cooperation of a new partner from Vietnam,
+though I tried my best to involve you in the business but God decided
+the whole situations. Presently I=E2=80=99m in Vietnam for investment proje=
+cts
+with my own share of the total sum. Meanwhile, I didn't forget your
+past efforts and attempts to assist me in transferring those funds
+despite that it failed us some how.
 
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+Now contact my secretary in Burkina Faso her name is Ms. Chantal
+Davids on her e-mail address below (davidschantal90@gmail.com) ask her
+to send you the total of $1.450,000.00 (One million four hundred and
+fifty thousand united state of America dollars) which I kept for your
+compensation for all the past efforts and attempts to assist me in
+this matter. I appreciated your efforts at that time very much. So
+feel free and get in touched with my secretary Ms. Chantal Davids and
+instruct her where to send the amount to you. Please do let me know
+immediately you receive it so that we can share joy after all the
+sufferness at that time.
+
+In the moment, I=E2=80=99m very busy here because of the investment project=
+s
+which I and the new partner are having at hand, finally, remember that
+I had forwarded instruction to the secretary on your behalf to receive
+that money, so feel free to get in touch with Ms. Chantal Davids she
+will send the amount to you without any delay OK. Extend my greetings
+to your family.
+
+My Best regards
+
+Yours brother
+Dr. Abu Salam
+Greetings from Vietnam.
