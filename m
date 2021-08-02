@@ -2,74 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0733DCF74
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Aug 2021 06:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62983DD01B
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Aug 2021 07:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbhHBEYn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Aug 2021 00:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbhHBEYm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Aug 2021 00:24:42 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FB1C061799
-        for <linux-scsi@vger.kernel.org>; Sun,  1 Aug 2021 21:24:33 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id yk17so21058566ejb.11
-        for <linux-scsi@vger.kernel.org>; Sun, 01 Aug 2021 21:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=WDq9P0bY1AsY9kO7VoQiuEkd/+xeN2uAzVka1J/B7YABFMMcv9zsRMDuUzGU3t7LVq
-         x60AdfwMQPfhhBT91CFmxmNgG6fRcK6BFaIDqx+Ms1vLOgOAYNOd4Xbt+10CNKTcRAMK
-         KeTYcmNC0bNtdVd3yLIRxS8Pr5sLxpts2NC88pKkxuGBDjkmUnJislac8lDy7dNnd85N
-         dz7rwNTEXx7I9NqC47E4asccGsO9/P6huztRZkI4lkvRJ5hB7XcOxioVdhTGqNDSXebW
-         Md0Dh2ya6SQXgvhbdFNsJy7D030uG2HCPIxJG2TxztPigkWx+ZXfNLX+hVWs0ri0sCK7
-         k48A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=obJQyy5qAxFv1Si8PxWN4TunHlvWONLAADWoEPrtq7MiM4epz0bGMyh1do8ptmFbNP
-         b2DOA5Y3K+Ryi4+7PE4i6et2XI00g3iOemnqhc3izJ05UNYIPnG+XZ8XJ0GVImLT4iBB
-         Qzlv7NeqRunClQlPtilZBcRf4zNLNlsuUEVwPtJUhuXGSJ6GjYz2Jl1XUA9QX6Ir66//
-         FwEDDCE5Nil2BWOuPKLOiYGzGt6yG6T0zXLVBTZTH27Tlko/UMPvijR2GPb0cf10GqYp
-         DdSQh/MY2aGePFf84FgXZMW205bjdIb9A/F+QHUOLBw83RGgYFWIAbwp73QUOLhRxseI
-         LqIw==
-X-Gm-Message-State: AOAM531+B7J0dYLczp2ICBSi5zdcyC/PqSLtJ9QrpJLFAy1X9Cup3xyH
-        pryE+d4lgIs3Mprz8ybtWrjN5mRMPCxCunrYHxg=
-X-Google-Smtp-Source: ABdhPJyge6CE4/3PK9Ai4ltivb6MMxmm7LTQ2s8bjzS0dUrr9KzpIrZxfzN76q9x5Xx6YjpKdH1irFSuudYhIT6knzs=
-X-Received: by 2002:a17:906:3b87:: with SMTP id u7mr13818454ejf.66.1627878272087;
- Sun, 01 Aug 2021 21:24:32 -0700 (PDT)
+        id S231136AbhHBFp2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Aug 2021 01:45:28 -0400
+Received: from mga11.intel.com ([192.55.52.93]:50717 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230417AbhHBFp1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 2 Aug 2021 01:45:27 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10063"; a="210282397"
+X-IronPort-AV: E=Sophos;i="5.84,288,1620716400"; 
+   d="scan'208";a="210282397"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2021 22:45:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,288,1620716400"; 
+   d="scan'208";a="509840578"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.79]) ([10.237.72.79])
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Aug 2021 22:44:59 -0700
+Subject: Re: [PATCH V4 2/2] scsi: ufshcd: Fix device links when BOOT WLUN
+ fails to probe
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Bean Huo <huobean@gmail.com>, Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20210716114408.17320-1-adrian.hunter@intel.com>
+ <20210716114408.17320-3-adrian.hunter@intel.com>
+ <DM6PR04MB65758A834069CC7B56669905FC109@DM6PR04MB6575.namprd04.prod.outlook.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <2a19830e-47cb-4c2a-ddbc-f2370af01452@intel.com>
+Date:   Mon, 2 Aug 2021 08:45:01 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.11.0
 MIME-Version: 1.0
-Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:24:31
- -0700 (PDT)
-Reply-To: ablahikazabl67@gmail.com
-From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
-Date:   Mon, 2 Aug 2021 05:24:31 +0100
-Message-ID: <CAKwBCXtg5uyf7Jb2AAcE1ghxD-+sCDTGfZ6n10fsvHdbE918iA@mail.gmail.com>
-Subject: More Authentic Information
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <DM6PR04MB65758A834069CC7B56669905FC109@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Dear Partner,
+On 17/07/21 9:02 pm, Avri Altman wrote:
+>> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>> index 708b3b62fc4d..9864a8ee0263 100644
+>> --- a/drivers/scsi/ufs/ufshcd.c
+>> +++ b/drivers/scsi/ufs/ufshcd.c
+>> @@ -5020,15 +5020,34 @@ static int ufshcd_slave_configure(struct scsi_device
+>> *sdev)
+>>  static void ufshcd_slave_destroy(struct scsi_device *sdev)
+>>  {
+>>         struct ufs_hba *hba;
+>> +       unsigned long flags;
+>>
+>>         hba = shost_priv(sdev->host);
+>>         /* Drop the reference as it won't be needed anymore */
+>>         if (ufshcd_scsi_to_upiu_lun(sdev->lun) == UFS_UPIU_UFS_DEVICE_WLUN) {
+>> -               unsigned long flags;
+>> -
+>>                 spin_lock_irqsave(hba->host->host_lock, flags);
+>>                 hba->sdev_ufs_device = NULL;
+>>                 spin_unlock_irqrestore(hba->host->host_lock, flags);
+>> +       } else if (hba->sdev_ufs_device) {
+>> +               struct device *supplier = NULL;
+>> +
+>> +               /* Ensure UFS Device WLUN exists and does not disappear */
+>> +               spin_lock_irqsave(hba->host->host_lock, flags);
+>> +               if (hba->sdev_ufs_device) {
+> Was just checked in the outer clause?
 
-I am soliciting your partnership to relocate $12.5 Million to your
-country for investment on my behalf and you will be entitled to 30% of
-the sum once the transaction is successful made.
+Yes, but need to re-check with the spinlock locked.
 
-Please indicate your genuine interest if you are capable so that i
-will send you the authentic details and documents of the transaction
-in awareness with some of my fellow Directors in the bank.
+> 
+> Thanks,
+> Avri
+> 
+>> +                       supplier = &hba->sdev_ufs_device->sdev_gendev;
+>> +                       get_device(supplier);
+>> +               }
+>> +               spin_unlock_irqrestore(hba->host->host_lock, flags);
+>> +
+>> +               if (supplier) {
+>> +                       /*
+>> +                        * If a LUN fails to probe (e.g. absent BOOT WLUN), the
+>> +                        * device will not have been registered but can still
+>> +                        * have a device link holding a reference to the device.
+>> +                        */
+>> +                       device_link_remove(&sdev->sdev_gendev, supplier);
+>> +                       put_device(supplier);
+>> +               }
+>>         }
+>>  }
+>>
+>> --
+>> 2.17.1
+> 
 
-If you are interested, here is my private Email address:
-(ablahikazabl67@gmail.com)
-For more authentic and legit information.
-
-
-Regards :  Abdoulahi Kazim
