@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 656443E077B
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Aug 2021 20:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003FB3E077E
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Aug 2021 20:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240173AbhHDSVy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 Aug 2021 14:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
+        id S240208AbhHDSV4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 Aug 2021 14:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240184AbhHDSVw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Aug 2021 14:21:52 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E724C061799;
-        Wed,  4 Aug 2021 11:21:39 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id c16so3221900wrp.13;
-        Wed, 04 Aug 2021 11:21:39 -0700 (PDT)
+        with ESMTP id S238225AbhHDSVy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Aug 2021 14:21:54 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B4CC06179E;
+        Wed,  4 Aug 2021 11:21:40 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id n11so1728924wmd.2;
+        Wed, 04 Aug 2021 11:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TSOBKjAd++Kj/iKty0QearydCYGWn+33+zYOdWLDwPE=;
-        b=iENdKfgemjNQnTRL4GkafjFYn8A9iq0lzeKRdTLknb742+ibJsewCAUz3avJekux3w
-         bpVR+/SvdO/YgTgxr82Kcx0pEIbGL8mB2cjniAWc7+uSWRjcwgqfyURbFrGJGeMXVuPL
-         n0mF2VNlWAZp+xekDTSFg/iXNTP8hgHfm4Qs2+kwrzEz+ff+Y6sXN1LlwRovLHkiJvUx
-         3u/rQJV9n8P6Z+FSR3PyK2fkeAtOmVEiKR4W3CD2DUicbad2BeyvLGEKyARt0JoeuJCC
-         jrPDhbsFV9HkYVJfNqU0F7JSGXoovRCrhck7dOkWxM8U2h/s6CmZHppV8xSkbAL3j43g
-         fwpw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=X9/XirZyPGqfcWkK+RkVlCuaFc9xmCxe9G0B+gDsYv0=;
+        b=ky2CiTZ9wjVXtdkptRoOWXQmScPD6SAaQUWeq/D/V+/qQ1fM2OQuy8ZbelPSbeaVAK
+         ZTfL3IKxlnQizo7JEoqQwbxHvWNBNyrqbCHFQTfQ/izOMg7Too+Fa0hZhmjlEWkMBHJ1
+         CAqJZQ3KdJ9sU8nRbmDfM47ug2yJKME9K6oFt+69pth1EtcrUcUrgzoFjF4U8RV9p0PK
+         zrQWYgkwdvgDquts2AoV6q12sWfy0nQu5x+JaTovrCENjRQ67vb+Jtn9wR/Qt/vIgewf
+         IIDuzWPoqHTtZ9rFSopRu2Q2pM1FTPvMDKu9FehpY2r8QPuQsity8ynstddSFqsnODnp
+         vYSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TSOBKjAd++Kj/iKty0QearydCYGWn+33+zYOdWLDwPE=;
-        b=nAtcTBcH0K1xbURiAYJgDgSBHZ9lLCXb0KUja3dCWnjGc8aL4E7Du+MZ38B4IyZwwf
-         Vc2N9wjiIl6Dj2NR75yexhteUK/zGVEZ2TIKCBh8k/cx/+dicvPV6mgvDFGgkXZhtSEG
-         wOHT6YKIrMG+Gr9ZIRz/gUM4ZUTAOUa8ouPYt3EtlDH5tTKxA/gXAJ5un3VeZJsKsq33
-         5DKr4I16lLuQdba1mF9Iy06pXCfx5wJfjxBNWfinb/JtK49Os5/EH8B1gLeCYqS2R89V
-         iNqtVRbh20zVKc0/g9CV+cYKHB2wwM7rTD1Oj9oN8DyP3+9OkkaiTaCAYNXHW1eNmuw9
-         Z9lA==
-X-Gm-Message-State: AOAM532+8VYXD86b5z9Mm8k7yj+uvOTj6TxtwO1ANzbsX+z5Hj8iDBYp
-        xNE0ihHKNuslMifXICPF4No=
-X-Google-Smtp-Source: ABdhPJxjE6//47ZoicP7+WuAiBf7OsG8JUwkIagI8ZwH3M+Z/ArcLPZKzQFZZbKBI22acsQebXLfBA==
-X-Received: by 2002:a5d:5703:: with SMTP id a3mr658765wrv.333.1628101298071;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=X9/XirZyPGqfcWkK+RkVlCuaFc9xmCxe9G0B+gDsYv0=;
+        b=J6wITgT2jRI6FWSNJ74wZsKjL8AU8c9p7ZCAWLTrMoTDZdhHjEUPfsejBNbFrMEw1l
+         rQRXyvFrLEMnsQY/RAQPnbk3pstKdM9p8o4GmVmcQob02GtBQXXj3zsKsGZ0AZeKszfQ
+         AX/Uxo+UMBgDi1QefK+1TF93R0EGZzEFw9sWCIydeIn4L1wU9SYaRHeEyiatT0POyTcc
+         9f6nWfBNR+VdIwJSMugcKY6YXZYSUF74NaXKuxZVgnJ6o6TVfqUaiQVTKG0GIUUcn3/1
+         PLSubGyVg2Yte4wDYpDIO66rqCfrUwViy10Pbu6tbLOLOU4RNzgv5Ju7Pmto/noVXSaH
+         hk5g==
+X-Gm-Message-State: AOAM533Gy24xEt9D9l440qnlDcJ4g280P8TqPM0o3Vfo+HogOLDcT6MQ
+        v/yBXjnEfgaLW+lEUrF9wW0=
+X-Google-Smtp-Source: ABdhPJztFy1g8TAyEPNqF2wldkPnT4N1xzOx4EfbYvqig+9IcCgBfIDyjwMOrtAInST6Gc+6LSZnHw==
+X-Received: by 2002:a1c:980e:: with SMTP id a14mr826899wme.123.1628101298817;
         Wed, 04 Aug 2021 11:21:38 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5bfdd7.dynamic.kabel-deutschland.de. [95.91.253.215])
-        by smtp.gmail.com with ESMTPSA id n5sm2914880wme.47.2021.08.04.11.21.37
+        by smtp.gmail.com with ESMTPSA id n5sm2914880wme.47.2021.08.04.11.21.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Aug 2021 11:21:37 -0700 (PDT)
+        Wed, 04 Aug 2021 11:21:38 -0700 (PDT)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -54,10 +54,12 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         beanhuo@micron.com, bvanassche@acm.org, cang@codeaurora.org,
         daejun7.park@samsung.com
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/2] two changes for UFS/HPB
-Date:   Wed,  4 Aug 2021 20:21:26 +0200
-Message-Id: <20210804182128.458356-1-huobean@gmail.com>
+Subject: [PATCH v1 1/2] scsi: ufs: Add L2P entry swap quirk for Micron UFS in HPB READ command
+Date:   Wed,  4 Aug 2021 20:21:27 +0200
+Message-Id: <20210804182128.458356-2-huobean@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210804182128.458356-1-huobean@gmail.com>
+References: <20210804182128.458356-1-huobean@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -66,18 +68,85 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-These patches are based on the Martin's git Repo 5.15/scsi-staging branch
+For the Micron UFS, L2P entry need to be swapped in HPB READ command
+before sending HPB READ command to the UFS device. Add this quirk
+UFS_DEVICE_QUIRK_SWAP_L2P_ENTRY_FOR_HPB_READ to fix this inconsistency.
 
-Bean Huo (2):
-  scsi: ufs: Add L2P entry swap quirk for Micron UFS in HPB READ command
-  scsi: ufs: Add lu_enable sysfs node
-
- drivers/scsi/ufs/ufs-sysfs.c  |  3 ++-
+Fixes: 2fff76f87542 ("scsi: ufs: ufshpb: Prepare HPB read for cached sub-region")
+Signed-off-by: Bean Huo <beanhuo@micron.com>
+---
  drivers/scsi/ufs/ufs_quirks.h |  6 ++++++
  drivers/scsi/ufs/ufshcd.c     |  3 ++-
  drivers/scsi/ufs/ufshpb.c     | 15 ++++++++++-----
- 4 files changed, 20 insertions(+), 7 deletions(-)
+ 3 files changed, 18 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/scsi/ufs/ufs_quirks.h b/drivers/scsi/ufs/ufs_quirks.h
+index 07f559ac5883..35ec9ea79869 100644
+--- a/drivers/scsi/ufs/ufs_quirks.h
++++ b/drivers/scsi/ufs/ufs_quirks.h
+@@ -116,4 +116,10 @@ struct ufs_dev_fix {
+  */
+ #define UFS_DEVICE_QUIRK_DELAY_AFTER_LPM        (1 << 11)
+ 
++/*
++ * Some UFS devices require L2P entry should be swapped before being sent to the
++ * UFS device for HPB READ command.
++ */
++#define UFS_DEVICE_QUIRK_SWAP_L2P_ENTRY_FOR_HPB_READ (1 << 12)
++
+ #endif /* UFS_QUIRKS_H_ */
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 47a5085f16a9..c3a14d3b0030 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -199,7 +199,8 @@ ufs_get_desired_pm_lvl_for_dev_link_state(enum ufs_dev_pwr_mode dev_state,
+ static struct ufs_dev_fix ufs_fixups[] = {
+ 	/* UFS cards deviations table */
+ 	UFS_FIX(UFS_VENDOR_MICRON, UFS_ANY_MODEL,
+-		UFS_DEVICE_QUIRK_DELAY_BEFORE_LPM),
++		UFS_DEVICE_QUIRK_DELAY_BEFORE_LPM |
++		UFS_DEVICE_QUIRK_SWAP_L2P_ENTRY_FOR_HPB_READ),
+ 	UFS_FIX(UFS_VENDOR_SAMSUNG, UFS_ANY_MODEL,
+ 		UFS_DEVICE_QUIRK_DELAY_BEFORE_LPM |
+ 		UFS_DEVICE_QUIRK_HOST_PA_TACTIVATE |
+diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
+index 54e8e019bdbe..d0eb14be47a3 100644
+--- a/drivers/scsi/ufs/ufshpb.c
++++ b/drivers/scsi/ufs/ufshpb.c
+@@ -323,15 +323,19 @@ ufshpb_get_pos_from_lpn(struct ufshpb_lu *hpb, unsigned long lpn, int *rgn_idx,
+ }
+ 
+ static void
+-ufshpb_set_hpb_read_to_upiu(struct ufshpb_lu *hpb, struct ufshcd_lrb *lrbp,
+-			    u32 lpn, __be64 ppn, u8 transfer_len, int read_id)
++ufshpb_set_hpb_read_to_upiu(struct ufs_hba *hba, struct ufshpb_lu *hpb,
++			    struct ufshcd_lrb *lrbp, u32 lpn, __be64 ppn,
++			    u8 transfer_len, int read_id)
+ {
+ 	unsigned char *cdb = lrbp->cmd->cmnd;
+-
++	__be64 ppn_tmp = ppn;
+ 	cdb[0] = UFSHPB_READ;
+ 
++	if (hba->dev_quirks & UFS_DEVICE_QUIRK_SWAP_L2P_ENTRY_FOR_HPB_READ)
++		ppn_tmp = swab64(ppn);
++
+ 	/* ppn value is stored as big-endian in the host memory */
+-	memcpy(&cdb[6], &ppn, sizeof(__be64));
++	memcpy(&cdb[6], &ppn_tmp, sizeof(__be64));
+ 	cdb[14] = transfer_len;
+ 	cdb[15] = read_id;
+ 
+@@ -689,7 +693,8 @@ int ufshpb_prep(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ 		}
+ 	}
+ 
+-	ufshpb_set_hpb_read_to_upiu(hpb, lrbp, lpn, ppn, transfer_len, read_id);
++	ufshpb_set_hpb_read_to_upiu(hba, hpb, lrbp, lpn, ppn, transfer_len,
++				    read_id);
+ 
+ 	hpb->stats.hit_cnt++;
+ 	return 0;
 -- 
 2.25.1
 
