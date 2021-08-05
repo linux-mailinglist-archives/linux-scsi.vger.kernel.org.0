@@ -2,61 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEB83E1256
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Aug 2021 12:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D719A3E127E
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Aug 2021 12:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240430AbhHEKKv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Aug 2021 06:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240490AbhHEKKh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Aug 2021 06:10:37 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897BEC0617BA
-        for <linux-scsi@vger.kernel.org>; Thu,  5 Aug 2021 03:10:17 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id p21so7530810edi.9
-        for <linux-scsi@vger.kernel.org>; Thu, 05 Aug 2021 03:10:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=J67+rxbQxfS8kPDQ/50P30WNOuT2eFzd+bURjICaS/k=;
-        b=iS9YA7D4AkLyKrMVsoVYMawu0L36NuU4+ZSSyySlEHd80Db/SKmaXNHUYbn10iE1ak
-         iC2IvrlH8v1AbmVGIfByuGkfSJI0XOychxHlUayNB69sXT4UE/GxiJdUnwpUeLi55ukG
-         xxmbK315oyKozAfiGnXEqKK3PxzEgZV5MZYS8JrbDSFfNkjPPnwGCrlh5tDeKwhJwNKw
-         T5dIuH8sR8enUCr5iznpK0TZ2LjgjrjjYSvOKCwjpML2kXz9bFVQEOg044XfixvXje/K
-         h6N675zJB4VwjShIVvQTmJWjRDKft4Rcevz64ZRcI/rUzQ/43BUMnv9UMxVY4mSVx0dv
-         +ZPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=J67+rxbQxfS8kPDQ/50P30WNOuT2eFzd+bURjICaS/k=;
-        b=ok1o0NIS2AoPMD1ndtLRUh2KmwWngdvbVJVA90GYXtk4I+Fexx1+Z3j7SNpKXHNclV
-         xtRRLxpANPblSyxWdJsUceVRu8brhC3W9oW1kfwc58ETo+HdivXlK9+W9N7T/6wCDymB
-         NKjCWFTHy8I2KvRfgs5Ej6PjLp0+YHJr1PpUFD61dSbrZrBfEq/1tX8D3knb+8qNVNM9
-         1QprLlITix4WCP7E96iplWTLzFbjmEHejh4H3GO8zLR0xs18fDsCrrvF/4hCPNzSDGhS
-         X8XPdGm+ucbk+HN0SQd1NL7bGrzdknlt0lM1nPDR4+63LZeUbzM1G+lmvPLmrqeDAWss
-         UHcg==
-X-Gm-Message-State: AOAM530nw/3Q00lldBF+Wog+4Ci+T/+6P6JDQ7flJYNKu7G/t0QwD/lR
-        DcjNY7FR38nNXJQ1+gASvPYkB5bIWh3NNSNOR+Y=
-X-Google-Smtp-Source: ABdhPJz/RKmv260xIbuerDTPdwMwXLpAeKReSpRsKd2xVxrYh4CfQJfzAebDIdig2CS2Izsib4l5qV0PM0JZd046dok=
-X-Received: by 2002:a05:6402:40c7:: with SMTP id z7mr5373679edb.193.1628158216069;
- Thu, 05 Aug 2021 03:10:16 -0700 (PDT)
+        id S240138AbhHEKUs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Aug 2021 06:20:48 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:32430 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240232AbhHEKUr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Aug 2021 06:20:47 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 175AElYP017619
+        for <linux-scsi@vger.kernel.org>; Thu, 5 Aug 2021 03:20:32 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=+kPH02DbDT6dNMZZj1cWsg3T/FH2+adNpfblwstJuW0=;
+ b=WhPex1apCXCRxoh+O5IfiIA1x0Bp+01zvGgYm51RDb8bWYNMQt6a6jMH/KCBiPrFWjtE
+ OZhENzBl7v8v/zjqHjI4n8STZnhBmV8w3+bR+8YTQtcPozGcNOllM94RNlJf+Tcr1e15
+ nRWSox+JP5uW1JwJ95sb0OzcqC+ewcnEuLPdCbJcJDKKWPEdikyBjJBU28WV0gklJMyu
+ EYAh/l51YSC1wkwBlTKJGj3VJTcuSJGyDIY9MNaP+FmchKDWa8qN4DylsD+j9pokRaUM
+ p5I0xnutV1ePLBKWdlMtl8zF5AmeDcUbyEZgBZiFQKmgxWJCPM2GU26wjHA1VAXO6yyp XA== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com with ESMTP id 3a8ata0hvg-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Thu, 05 Aug 2021 03:20:31 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 5 Aug
+ 2021 03:20:30 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Thu, 5 Aug 2021 03:20:29 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id 29D353F7064;
+        Thu,  5 Aug 2021 03:20:30 -0700 (PDT)
+Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 175AKTe3020218;
+        Thu, 5 Aug 2021 03:20:29 -0700
+Received: (from root@localhost)
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 175AKT5J020217;
+        Thu, 5 Aug 2021 03:20:29 -0700
+From:   Nilesh Javali <njavali@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>
+Subject: [PATCH 00/14] qla2xxx driver bug fixes
+Date:   Thu, 5 Aug 2021 03:19:51 -0700
+Message-ID: <20210805102005.20183-1-njavali@marvell.com>
+X-Mailer: git-send-email 2.12.0
 MIME-Version: 1.0
-Received: by 2002:a05:6408:258c:b029:e3:fe5c:5c2d with HTTP; Thu, 5 Aug 2021
- 03:10:15 -0700 (PDT)
-Reply-To: theresabangurah3333@yahoo.com
-From:   Theresa Bangurah <mariamabah77879@gmail.com>
-Date:   Thu, 5 Aug 2021 11:10:15 +0100
-Message-ID: <CAAi==jrP1LU0nh-DrLEYOsm5GW=VtCGzFW8zeRyVbCcv17qusA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 6cAIYIQM8FePOJYroSPvYbst3Poxfow2
+X-Proofpoint-GUID: 6cAIYIQM8FePOJYroSPvYbst3Poxfow2
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-05_03:2021-08-05,2021-08-05 signatures=0
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Martin,
+
+Please apply the qla2xxx driver bug fixes to the scsi tree at your
+earliest convenience.
+
+Thanks,
+Nilesh
+
+
+Arun Easi (3):
+  qla2xxx: Add host attribute to trigger MPI hang
+  qla2xxx: Show OS name and version in FDMI-1
+  qla2xxx: suppress unnecessary log messages during login
+
+Nilesh Javali (1):
+  qla2xxx: Update version to 10.02.06.100-k
+
+Quinn Tran (5):
+  qla2xxx: adjust request/response queue size for 28xx
+  qla2xxx: fix debug print of 64G link speed
+  qla2xxx: fix port type info
+  qla2xxx: fix unsafe removal from link list
+  qla2xxx: fix npiv create erroneous error
+
+Saurav Kashyap (5):
+  qla2xxx: Change %p to %px in the log messages
+  qla2xxx: Changes to support FCP2 Target
+  qla2xxx: Changes to support kdump kernel
+  qla2xxx: Changes to support kdump kernel for NVMe BFS
+  qla2xxx: Sync queue idx with queue_pair_map idx
+
+ drivers/scsi/qla2xxx/qla_attr.c    |  25 +++++
+ drivers/scsi/qla2xxx/qla_dbg.c     |   3 +-
+ drivers/scsi/qla2xxx/qla_def.h     |  11 +-
+ drivers/scsi/qla2xxx/qla_edif.c    |  78 +++++++-------
+ drivers/scsi/qla2xxx/qla_gs.c      |   6 +-
+ drivers/scsi/qla2xxx/qla_init.c    |  63 +++++++----
+ drivers/scsi/qla2xxx/qla_iocb.c    |  18 ++--
+ drivers/scsi/qla2xxx/qla_isr.c     |  51 +++++----
+ drivers/scsi/qla2xxx/qla_mbx.c     |   2 +-
+ drivers/scsi/qla2xxx/qla_mid.c     |  58 +++++-----
+ drivers/scsi/qla2xxx/qla_nvme.c    |  61 +++++------
+ drivers/scsi/qla2xxx/qla_os.c      | 111 +++++++++++--------
+ drivers/scsi/qla2xxx/qla_sup.c     |   4 +-
+ drivers/scsi/qla2xxx/qla_target.c  | 168 +++++++++++++++--------------
+ drivers/scsi/qla2xxx/qla_tmpl.c    |   8 +-
+ drivers/scsi/qla2xxx/qla_version.h |   6 +-
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c |  18 ++--
+ 17 files changed, 384 insertions(+), 307 deletions(-)
+
+
+base-commit: 2c03a047d2fcae6d526e8630c820bc40560ec1eb
 -- 
-My name is Mrs.Theresa Bangurah,i am American citizen i have something
-important to tell you.Reply me immediately you get this message.God
-bless you.
+2.19.0.rc0
+
