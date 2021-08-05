@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F3D3E1C7F
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Aug 2021 21:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16853E1C81
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Aug 2021 21:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242592AbhHETUd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Aug 2021 15:20:33 -0400
-Received: from mail-pj1-f44.google.com ([209.85.216.44]:44554 "EHLO
-        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242897AbhHETUc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Aug 2021 15:20:32 -0400
-Received: by mail-pj1-f44.google.com with SMTP id e2-20020a17090a4a02b029016f3020d867so11979041pjh.3
-        for <linux-scsi@vger.kernel.org>; Thu, 05 Aug 2021 12:20:17 -0700 (PDT)
+        id S242934AbhHETUe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Aug 2021 15:20:34 -0400
+Received: from mail-pj1-f42.google.com ([209.85.216.42]:51960 "EHLO
+        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242925AbhHETUd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Aug 2021 15:20:33 -0400
+Received: by mail-pj1-f42.google.com with SMTP id mt6so11334177pjb.1
+        for <linux-scsi@vger.kernel.org>; Thu, 05 Aug 2021 12:20:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Pn1VtD1tYrSQKn6a7r5bpjdxUKUUURP2YmONsgIBodw=;
-        b=F+ds0CF5/NM3AaEX4o4xJ7qbcO1D5TJIYKycK8skgWtkrFFrs4hrDUpJ+DDcE+4mjC
-         Aldwwe/PYV/q9fbKfh0mlxJ6p7A2X1TlvQmLgPxa1mVKGBy1659924Sgq8RnW76zDepG
-         BiC0WmfLbdmf+KWZWBmAbT4xFbol8sOLxA2svDsZfDwVrdSux9k9FsOuG8rtWfBwek3T
-         JrBEi0GivrtpgBSQXo1HJL8up00KPFKyRWhLA1B/BNc7/j4PHqZgtez3XZCAFYbF39CW
-         k1aT2rD1d3mlIY7VtSiyp39r6wHZE8vlcWEnzm2d78plJ9Aum2WFbhro6VF2Gnq/Xass
-         4Ylw==
-X-Gm-Message-State: AOAM530Eb5gHovdvDmFmHO2LgN8+BKgOAZR4w9bKPp8AY6w0mH4hyKhW
-        JIxxHG1JKAqrciPQt3WBNUQ=
-X-Google-Smtp-Source: ABdhPJwGun3JNpImYNZW9KXc5yEkqFRnXeyEvxLO7siFw7BR++5EOccqD35pg8Kn8ET64o3CyoNiZg==
-X-Received: by 2002:a63:c14a:: with SMTP id p10mr180481pgi.311.1628191216731;
-        Thu, 05 Aug 2021 12:20:16 -0700 (PDT)
+        bh=TMLCx7WeEQe4ZBsSl0axnckf7a0fh04bRQwe8iGs0W4=;
+        b=CD3uXbaIoKy6ARxAw/69blD0Z8TGCypcugAkne3dAlRUjQcDEVrqT+9GzbJJm5OZEF
+         Q/nl6cF+cuasSuDYlcM4iwzmjxxKZt8j0p/M22/oRrtvINDxjvx+dKataigWOAVEZOOs
+         Kw6zD0SkZM8aylnwf5Ko7JConuewl622ewmi4ucOTS3tqVrPZNmQH/oUuslchIawfDso
+         Hm/RrQwUiXFa+3jOls8EmAwK2ozw71FhX9TgYpkkwQR7vu8sfeGQOHCSqxn2CT1LLwER
+         TBnLMwTFbxlGWvVJWnLv8muYH+TFdRhlnVlgHJDJJyYqLElnKgyggspJDQaPXKTF5K/g
+         nPUQ==
+X-Gm-Message-State: AOAM533elUPvuV2a6ahAMrkE0YRs+oKJc5/0oHQI7bWE1MjxSZ/ghAnp
+        tHMv8RxjBG72iJDxb5HrbnI=
+X-Google-Smtp-Source: ABdhPJyOjHXbIXcDemPjdHym/DkLfaFtJZcE70d0EfeLTJZ1h+bXDvqdnIaV+0RTnMM7I4J3fc4Seg==
+X-Received: by 2002:a65:6a0a:: with SMTP id m10mr312703pgu.145.1628191218250;
+        Thu, 05 Aug 2021 12:20:18 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:1:93c2:eaf5:530d:627d])
-        by smtp.gmail.com with ESMTPSA id t1sm8859429pgr.65.2021.08.05.12.20.15
+        by smtp.gmail.com with ESMTPSA id t1sm8859429pgr.65.2021.08.05.12.20.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Aug 2021 12:20:16 -0700 (PDT)
+        Thu, 05 Aug 2021 12:20:17 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v4 48/52] virtio_scsi: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Thu,  5 Aug 2021 12:18:24 -0700
-Message-Id: <20210805191828.3559897-49-bvanassche@acm.org>
+Subject: [PATCH v4 49/52] xen-scsifront: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Thu,  5 Aug 2021 12:18:25 -0700
+Message-Id: <20210805191828.3559897-50-bvanassche@acm.org>
 X-Mailer: git-send-email 2.32.0.605.g8dce9f2422-goog
 In-Reply-To: <20210805191828.3559897-1-bvanassche@acm.org>
 References: <20210805191828.3559897-1-bvanassche@acm.org>
@@ -54,31 +54,21 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 Prepare for removal of the request pointer by using scsi_cmd_to_rq()
 instead. This patch does not change any functionality.
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/virtio_scsi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/xen-scsifront.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-index b0deaf4af5a3..c25ce8f0e0af 100644
---- a/drivers/scsi/virtio_scsi.c
-+++ b/drivers/scsi/virtio_scsi.c
-@@ -519,7 +519,7 @@ static void virtio_scsi_init_hdr_pi(struct virtio_device *vdev,
- 				    struct virtio_scsi_cmd_req_pi *cmd_pi,
- 				    struct scsi_cmnd *sc)
- {
--	struct request *rq = sc->request;
-+	struct request *rq = scsi_cmd_to_rq(sc);
- 	struct blk_integrity *bi;
+diff --git a/drivers/scsi/xen-scsifront.c b/drivers/scsi/xen-scsifront.c
+index ec9d399fbbd8..0204e314b482 100644
+--- a/drivers/scsi/xen-scsifront.c
++++ b/drivers/scsi/xen-scsifront.c
+@@ -212,7 +212,7 @@ static int scsifront_do_request(struct vscsifrnt_info *info,
+ 	memcpy(ring_req->cmnd, sc->cmnd, sc->cmd_len);
  
- 	virtio_scsi_init_hdr(vdev, (struct virtio_scsi_cmd_req *)cmd_pi, sc);
-@@ -543,7 +543,7 @@ static void virtio_scsi_init_hdr_pi(struct virtio_device *vdev,
- static struct virtio_scsi_vq *virtscsi_pick_vq_mq(struct virtio_scsi *vscsi,
- 						  struct scsi_cmnd *sc)
- {
--	u32 tag = blk_mq_unique_tag(sc->request);
-+	u32 tag = blk_mq_unique_tag(scsi_cmd_to_rq(sc));
- 	u16 hwq = blk_mq_unique_tag_to_hwq(tag);
+ 	ring_req->sc_data_direction   = (uint8_t)sc->sc_data_direction;
+-	ring_req->timeout_per_command = sc->request->timeout / HZ;
++	ring_req->timeout_per_command = scsi_cmd_to_rq(sc)->timeout / HZ;
  
- 	return &vscsi->req_vqs[hwq];
+ 	for (i = 0; i < (shadow->nr_segments & ~VSCSIIF_SG_GRANT); i++)
+ 		ring_req->seg[i] = shadow->seg[i];
