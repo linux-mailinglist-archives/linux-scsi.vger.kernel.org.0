@@ -2,53 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5593E11D1
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Aug 2021 12:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEB83E1256
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Aug 2021 12:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240116AbhHEKCi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Aug 2021 06:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
+        id S240430AbhHEKKv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Aug 2021 06:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240009AbhHEKCh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Aug 2021 06:02:37 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AE1C061765
-        for <linux-scsi@vger.kernel.org>; Thu,  5 Aug 2021 03:02:23 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id m13so5941895iol.7
-        for <linux-scsi@vger.kernel.org>; Thu, 05 Aug 2021 03:02:23 -0700 (PDT)
+        with ESMTP id S240490AbhHEKKh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Aug 2021 06:10:37 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897BEC0617BA
+        for <linux-scsi@vger.kernel.org>; Thu,  5 Aug 2021 03:10:17 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id p21so7530810edi.9
+        for <linux-scsi@vger.kernel.org>; Thu, 05 Aug 2021 03:10:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JgSrcULNaOdiEU0gJY4fVzPMy894wr9ygHl+ydiVexI=;
-        b=u5vQzCaq3VN3zLl7AhC4YeiL3grFkVQLUzixIk1MEC4phpItbb7UYpVy/fYETnqkhI
-         YWbSNwx+RKH0rl5MjKSMFW3NlLs2rrAUVLrKLO62sE+zKvCyFIa2NszV5vp45wjzdp7A
-         j6bNe/ZZUcIPcWOvpuslZUQy9zYFfEw1aYTtsGX9Lx53dSMsh6d0pQIFuWLXddKUCDXX
-         IdXPTg7BNPP7dXOJDoIZ2MoJ4U0JUuV0irfnaX5faRJfo6FNGOeZN1h1oIfE6NwBTgXz
-         xYcaCsPLskfs/26JwEeEzQuEvn/UPwa01aNr39BkFjOMtjOZFWpgihqd64FvTbLEGXdN
-         OatQ==
+        bh=J67+rxbQxfS8kPDQ/50P30WNOuT2eFzd+bURjICaS/k=;
+        b=iS9YA7D4AkLyKrMVsoVYMawu0L36NuU4+ZSSyySlEHd80Db/SKmaXNHUYbn10iE1ak
+         iC2IvrlH8v1AbmVGIfByuGkfSJI0XOychxHlUayNB69sXT4UE/GxiJdUnwpUeLi55ukG
+         xxmbK315oyKozAfiGnXEqKK3PxzEgZV5MZYS8JrbDSFfNkjPPnwGCrlh5tDeKwhJwNKw
+         T5dIuH8sR8enUCr5iznpK0TZ2LjgjrjjYSvOKCwjpML2kXz9bFVQEOg044XfixvXje/K
+         h6N675zJB4VwjShIVvQTmJWjRDKft4Rcevz64ZRcI/rUzQ/43BUMnv9UMxVY4mSVx0dv
+         +ZPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=JgSrcULNaOdiEU0gJY4fVzPMy894wr9ygHl+ydiVexI=;
-        b=BENVQWnMjhTy+lZorBzS134SK29uxjtj5whX/SwDiJpGlMAwBIZlyaxBydlhuBmlNV
-         CJkQjwQ5pe7GzvmAegPc3exDBM/PZX1vEQ51RBNb4fmvk475KHhq1mfJDOgCpw3+Jr7M
-         lMunEaOgcvZFpgTJk57L/z+Nkk3xluuy44VxyKMzqQ7FYJbJNm0BJlj2O8yNUILzp3u/
-         AOEOAgCEgtlIEc00smWzQFeexfusCLc1pBy63NZxjFRkfnqdNUC546VFzfXVijkua2Tf
-         lwBLWtC8QwoP2RfJ7Zb5KEGAiv+N8UNHhbgSOqCtlZAr7XZTNxB5uBx0XIkq14PaP/0s
-         T8bg==
-X-Gm-Message-State: AOAM532CWkfaLVjaAkekSInUTwsoGeuh8xPfpdqvUSnCmlrU0waVMiYL
-        6KkNQ8mqw7WzBqoc2hyKjWGtH9TrBBF1m7xGYMc=
-X-Google-Smtp-Source: ABdhPJyChLD3S/2HDJ+NMbsRvIUwSdGj0RY1X8yg+HWvRaCBdhtZjqsRrZyBYF+CFtxYhYhVKd8gKVZSVJD34kwjkqA=
-X-Received: by 2002:a5e:9743:: with SMTP id h3mr674177ioq.52.1628157741664;
- Thu, 05 Aug 2021 03:02:21 -0700 (PDT)
+        bh=J67+rxbQxfS8kPDQ/50P30WNOuT2eFzd+bURjICaS/k=;
+        b=ok1o0NIS2AoPMD1ndtLRUh2KmwWngdvbVJVA90GYXtk4I+Fexx1+Z3j7SNpKXHNclV
+         xtRRLxpANPblSyxWdJsUceVRu8brhC3W9oW1kfwc58ETo+HdivXlK9+W9N7T/6wCDymB
+         NKjCWFTHy8I2KvRfgs5Ej6PjLp0+YHJr1PpUFD61dSbrZrBfEq/1tX8D3knb+8qNVNM9
+         1QprLlITix4WCP7E96iplWTLzFbjmEHejh4H3GO8zLR0xs18fDsCrrvF/4hCPNzSDGhS
+         X8XPdGm+ucbk+HN0SQd1NL7bGrzdknlt0lM1nPDR4+63LZeUbzM1G+lmvPLmrqeDAWss
+         UHcg==
+X-Gm-Message-State: AOAM530nw/3Q00lldBF+Wog+4Ci+T/+6P6JDQ7flJYNKu7G/t0QwD/lR
+        DcjNY7FR38nNXJQ1+gASvPYkB5bIWh3NNSNOR+Y=
+X-Google-Smtp-Source: ABdhPJz/RKmv260xIbuerDTPdwMwXLpAeKReSpRsKd2xVxrYh4CfQJfzAebDIdig2CS2Izsib4l5qV0PM0JZd046dok=
+X-Received: by 2002:a05:6402:40c7:: with SMTP id z7mr5373679edb.193.1628158216069;
+ Thu, 05 Aug 2021 03:10:16 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a4f:ce86:0:0:0:0:0 with HTTP; Thu, 5 Aug 2021 03:02:21 -0700 (PDT)
-Reply-To: pointerscott009@gmail.com
-From:   Sir Jakes <sirjakes12@gmail.com>
-Date:   Thu, 5 Aug 2021 11:02:21 +0100
-Message-ID: <CAE2OSQdBT0Oithx6+ELvyYggOdz-jrz5_cNVACoCZK-tb_AUgQ@mail.gmail.com>
-Subject: Business Office Offer.
+Received: by 2002:a05:6408:258c:b029:e3:fe5c:5c2d with HTTP; Thu, 5 Aug 2021
+ 03:10:15 -0700 (PDT)
+Reply-To: theresabangurah3333@yahoo.com
+From:   Theresa Bangurah <mariamabah77879@gmail.com>
+Date:   Thu, 5 Aug 2021 11:10:15 +0100
+Message-ID: <CAAi==jrP1LU0nh-DrLEYOsm5GW=VtCGzFW8zeRyVbCcv17qusA@mail.gmail.com>
+Subject: Hello
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
@@ -56,21 +57,6 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 -- 
-Dear Sir / Madam,
-We are experts in Finance, Investments, and Advisory.
-We grant loans to interested investors, Companies & Individuals
-Available offer as follows:-
-Consolidation, Buying, Building, Business Improving, Refinancing
-Commercial Property and Personal Loan.
-We fund for $50,000,000.00 million up to $500,000,000.00 million at @
-2% Interest rate duration of 1/25 years without resorting to your
-bank.
-
-Kindly revert back if you have projects that need funding for
-immediate consideration and negotiation by contacting us back with
-Loan Amount Needed and Duration for further processing.
-
-Pointers Financial Corporation
-25954 Eden Landing Rd, Hayward
-CA 94545 United States.
-Loan Department.
+My name is Mrs.Theresa Bangurah,i am American citizen i have something
+important to tell you.Reply me immediately you get this message.God
+bless you.
