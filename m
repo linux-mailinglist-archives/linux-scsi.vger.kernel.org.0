@@ -2,52 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A713E237E
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Aug 2021 08:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC58F3E2381
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Aug 2021 08:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243426AbhHFGtv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 Aug 2021 02:49:51 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:61422 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243437AbhHFGtq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Aug 2021 02:49:46 -0400
+        id S243432AbhHFGtx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 6 Aug 2021 02:49:53 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:39351 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243443AbhHFGtu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Aug 2021 02:49:50 -0400
 Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210806064929epoutp014eea8cfc67842cb40796d9afa2c17228~YpOUw5AyY0697906979epoutp01r
-        for <linux-scsi@vger.kernel.org>; Fri,  6 Aug 2021 06:49:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210806064929epoutp014eea8cfc67842cb40796d9afa2c17228~YpOUw5AyY0697906979epoutp01r
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20210806064932epoutp04c925ae07c6e4fe797966c1c9252fe4cc~YpOXE8Xud2302323023epoutp041
+        for <linux-scsi@vger.kernel.org>; Fri,  6 Aug 2021 06:49:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20210806064932epoutp04c925ae07c6e4fe797966c1c9252fe4cc~YpOXE8Xud2302323023epoutp041
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1628232569;
-        bh=gJCCy2Ht0sPXrCRoSqLiiOd5tzgdsC+3Sxg7b2d4PBY=;
+        s=mail20170921; t=1628232572;
+        bh=fti1qP8SGNzP4EIajI2EXvOvy3xeuS4CpNTRd509E0Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:In-Reply-To:References:From;
-        b=gUtBk4eZEJY95Kxs3YVohaf2SUkojMJEs9LJHKUcxqoEPJs3crgcxNfV/4AKdlJpb
-         y4M/dBhYHRSgoDQ7UutY4QqhlDMrT9V3LYBCO7gZPCmSRhzw+lm4i6tobvIajSDUdb
-         csGFH6sJ3rZ/a6ynR4mW2ExAobeVCXRp+AfzusYU=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        b=g/7x+OTLuskajlKd+Jo+5GS9c0o+QSbQtsRSj7AnOScmEBsgbe5VjZ2vTQmnWRyNb
+         TTZjALa7NDIFTLZE2OoUTUT7/B82u+hMJRXO3PWzg5v6YXPZr3end9NswGQZNpY1RZ
+         URjQijc5SEd9iJU2nWirKKSeVqKTwIsuwKIspz9U=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
         epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20210806064928epcas2p2ac917e0d17344f5c78f9b576765f09d2~YpOUEC3QG3198631986epcas2p2n;
-        Fri,  6 Aug 2021 06:49:28 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.40.183]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Ggx0j65jRz4x9QK; Fri,  6 Aug
-        2021 06:49:25 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        46.6D.03626.57BDC016; Fri,  6 Aug 2021 15:49:25 +0900 (KST)
+        20210806064931epcas2p26faab7e99d3a5642bec4aa1e8d1b44df~YpOWaVQkc3198631986epcas2p2v;
+        Fri,  6 Aug 2021 06:49:31 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.40.187]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4Ggx0n1Kf0z4x9QS; Fri,  6 Aug
+        2021 06:49:29 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2B.92.09541.67BDC016; Fri,  6 Aug 2021 15:49:26 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20210806064924epcas2p4572538fd1fa7a73d8262737e38a9b537~YpOQHobrM2181121811epcas2p4q;
-        Fri,  6 Aug 2021 06:49:24 +0000 (GMT)
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20210806064925epcas2p2ba7e711758614384c17648d4924d025c~YpORI8Alc3198631986epcas2p2d;
+        Fri,  6 Aug 2021 06:49:25 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210806064924epsmtrp1f9e7f456007d9b64e4ad86eeebca6e3b~YpOQGh4fp0395203952epsmtrp1j;
-        Fri,  6 Aug 2021 06:49:24 +0000 (GMT)
-X-AuditID: b6c32a47-6a9ff70000010e2a-e8-610cdb755f87
+        20210806064925epsmtrp1031d2959838d952099dc7abde66a6d63~YpORIFxG10418604186epsmtrp11;
+        Fri,  6 Aug 2021 06:49:25 +0000 (GMT)
+X-AuditID: b6c32a46-0abff70000002545-7e-610cdb76e927
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A0.21.32548.47BDC016; Fri,  6 Aug 2021 15:49:24 +0900 (KST)
+        E1.21.32548.57BDC016; Fri,  6 Aug 2021 15:49:25 +0900 (KST)
 Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20210806064924epsmtip141562bf2d87059faaa06d7ef61f1b48d~YpOP21uae3134831348epsmtip12;
-        Fri,  6 Aug 2021 06:49:24 +0000 (GMT)
+        20210806064925epsmtip1b7d7f2697612b64d675b8b7760c29e9d~YpOQ0oPvl2886428864epsmtip1Y;
+        Fri,  6 Aug 2021 06:49:25 +0000 (GMT)
 From:   Kiwoong Kim <kwmad.kim@samsung.com>
 To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
@@ -56,116 +56,211 @@ To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         hy50.seo@samsung.com, sh425.lee@samsung.com,
         bhoon95.kim@samsung.com
 Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: [RFC PATCH v1 1/2] scsi: ufs: introduce vendor isr
-Date:   Fri,  6 Aug 2021 15:34:11 +0900
-Message-Id: <0f6f2337e98f8a8a7dfae816bc001af28fa3a7be.1628231581.git.kwmad.kim@samsung.com>
+Subject: [RFC PATCH v1 2/2] scsi: ufs: ufs-exynos: implement exynos isr
+Date:   Fri,  6 Aug 2021 15:34:12 +0900
+Message-Id: <7d2030d91425a01f964f7a9309c1aa3a0ce6a2d6.1628231581.git.kwmad.kim@samsung.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1628231581.git.kwmad.kim@samsung.com>
 In-Reply-To: <cover.1628231581.git.kwmad.kim@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJJsWRmVeSWpSXmKPExsWy7bCmuW7pbZ5Eg29L9CxOPlnDZvFg3jY2
-        i5c/r7JZHHzYyWLxdekzVotP65exWqxe/IDFYtGNbUwWN7ccZbG4vGsOm0X39R1sFsuP/2Oy
-        6Lp7g9Fi6b+3LA58Hpf7epk8Fu95yeQxYdEBRo/v6zvYPD4+vcXi0bdlFaPH501yHu0HupkC
-        OKJybDJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOADldS
-        KEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFBgaFugVJ+YWl+al6yXn51oZGhgYmQJV
-        JuRkvPjVy16whb+i4fYRlgbGzzxdjJwcEgImEj+v3GDrYuTiEBLYwSixZMoGKOcTo8TnaUuZ
-        IZzPjBLHPm5lhmnpautjA7GFBHYxSsyfJQVR9INRouPYG1aQBJuApsTTm1OZQGwRgX1MEkd3
-        pYPYzALqErsmnACLCwtYS/xvWMUOYrMIqEos3dzC0sXIwcErEC3x5kYoxC45iZvnOsH2cgpY
-        Siy62c6EzpYQmMkhsbfFFsJ2kfj49CTUncISr45vYYewpSRe9rdB2fUS+6Y2sILcLCHQwyjx
-        dN8/RoiEscSsZ+2MIDcwA92/fpc+iCkhoCxx5BYLxPV8Eh2H/7JDhHklOtqEIBqVJX5Nmgw1
-        RFJi5s07UJs8JD4/62eHhA7QpnVXtjBPYJSfhbBgASPjKkax1ILi3PTUYqMCY+S428QITqNa
-        7jsYZ7z9oHeIkYmD8RCjBAezkghv8mKuRCHelMTKqtSi/Pii0pzU4kOMpsBgnMgsJZqcD0zk
-        eSXxhqZGZmYGlqYWpmZGFkrivBpxXxOEBNITS1KzU1MLUotg+pg4OKUamMyd+griTn6P3Hxk
-        ZxmfvXSe3vy/5wS3XkgLuu3tbcnLveSGNpfI4vnS8hbqqpVPyy4sFj6eNXX5FW2Re/EPj5x/
-        sKZyyXk5HQbtzW53i+cv0md+tkO8ozDHluXOnCf87NdWztY5LZl0cuXFmsr7hS6GXILd09Sn
-        Nhdq5nKGpFg/nJn1fKL9mUlpy/43L895zHK39dh9BcX/pXz/X63U+dnwKaNg6RE31Qcvlm27
-        sOTSrpWXDYIWz1EvDz/C01+6/J9aVIqOpzRrSPAsDdWd53d/2Nn7f5b7+z2BS1odb25evlvr
-        GmNe0tX5drmuL0T3MXUefbzK6WqOyIINohUfvoU+uvv6sJbRd2llseVvOlcpsRRnJBpqMRcV
-        JwIA0Ct3AiwEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrALMWRmVeSWpSXmKPExsWy7bCSnG7JbZ5Eg/6PUhYnn6xhs3gwbxub
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBJsWRmVeSWpSXmKPExsWy7bCmqW7ZbZ5Eg661XBYnn6xhs3gwbxub
         xcufV9ksDj7sZLH4uvQZq8Wn9ctYLVYvfsBisejGNiaLm1uOslhc3jWHzaL7+g42i+XH/zFZ
         dN29wWix9N9bFgc+j8t9vUwei/e8ZPKYsOgAo8f39R1sHh+f3mLx6NuyitHj8yY5j/YD3UwB
-        HFFcNimpOZllqUX6dglcGS9+9bIXbOGvaLh9hKWB8TNPFyMnh4SAiURXWx9bFyMXh5DADkaJ
-        fXNvsEEkJCVO7HzOCGELS9xvOcIKYgsJfGOU+DM/EMRmE9CUeHpzKhNIs4jAOSaJqZeXMoEk
-        mAXUJXZNOAFmCwtYS/xvWMUOYrMIqEos3dzC0sXIwcErEC3x5kYoxHw5iZvnOplBbE4BS4lF
-        N9uZIHZZSKza+5wNl/gERoEFjAyrGCVTC4pz03OLDQuM8lLL9YoTc4tL89L1kvNzNzGCI0FL
-        awfjnlUf9A4xMnEwHmKU4GBWEuFNXsyVKMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJeCGB
-        9MSS1OzU1ILUIpgsEwenVAOTwqGphyVYsi75y1nfihFzt79VrXvOVGnlmj8Zq77yBFVJ7fq4
-        uuzAPZM/zM+4DSS8Nl9f/7zIad1KTZPjj/3WXtRxzWd8Vd0b3HPkmrBgAU9AlLx5pkL5LL2z
-        Nh0fZiQ6P/5keir4yXzjJMcojvuL1dl52yJV7ASLa+zWLE17075OUbXRJTSc46xu3VRVXt/d
-        vx8/trNxuT5pl5PMgv0pklOXVxUCU5749aZag5yboiE5v8S1hVK3BvQH1TFanbz2JPXujFfN
-        270sZ59Wdi2cK5qlzD+pZeqWm7+X7Fp+cMnO0FfSbfe3d0fGr1g9d13rgfWCTPFML/8u/VOY
-        mXxm/g2JxFOHJOxm1T45WqXEUpyRaKjFXFScCACDScjg8wIAAA==
-X-CMS-MailID: 20210806064924epcas2p4572538fd1fa7a73d8262737e38a9b537
+        HFE5NhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlAhysp
+        lCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCgwNC/SKE3OLS/PS9ZLzc60MDQyMTIEq
+        E3Iy3nz8xlQwS62iZ/cFtgbG53JdjJwcEgImEk8mnGcBsYUEdjBK9E8PgLA/MUr8+aXRxcgF
+        ZH9mlLi/YzMbTMOiBxfYIBK7GCWmruxihHB+MEo8fLKTCaSKTUBT4unNqWC2iMA+Jomju9JB
+        bGYBdYldE06AxYUF3CU6zjSzg9gsAqoSvQengtm8AtES186dZ4XYJidx81wnM4jNKWApsehm
+        OxMqmwuoZiqHRPuvXqAiDiDHRWL5QzuIXmGJV8e3sEPYUhIv+9ug7HqJfVMbWCF6exglnu77
+        xwiRMJaY9aydEWQOM9AD63fpQ4xUljhyiwXifD6JjsN/2SHCvBIdbUIQjcoSvyZNhhoiKTHz
+        5h2oEg+JY7e9IKEDtOjElCdsExjlZyHMX8DIuIpRLLWgODc9tdiowAg56jYxgpOoltsOxilv
+        P+gdYmTiYDzEKMHBrCTCm7yYK1GINyWxsiq1KD++qDQntfgQoykwGCcyS4km5wPTeF5JvKGp
+        kZmZgaWphamZkYWSOK9G3NcEIYH0xJLU7NTUgtQimD4mDk6pBqbLmvfWJz+tL256pf+nyKTB
+        eM8hqS0zqq+emuX4bZpAwhX9iZw3a8/NuB33LHzywsqGpO3qu/+f5Q8+uf9Nod/j905ZU2Wn
+        uGl/2sxtaeMzwXwte12I6FbRzcxmCh2Tj/g1es5frda+50WLxf6kqY+OOd983vyGe7lX/i77
+        J8XWHG8mC9VOWhnl2b9vyZ6uNvNG/q9V7CFXxI6Z7b66x+3Hj3TVt9XGWU8+xZ/gLu7V6T7D
+        /vZoVJRZoG/P/scRPLIrU9duFeKZ/TovYa3Lxa33IybIVU8uT1kbuqabV88o1eXNKblVBydz
+        //h3qvfwpvida9QyP68wKuN5o/LA0MhwXe5C02rPt0+CBJtfV7UosRRnJBpqMRcVJwIAqp+C
+        kisEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrILMWRmVeSWpSXmKPExsWy7bCSnG7pbZ5EgwtT5CxOPlnDZvFg3jY2
+        i5c/r7JZHHzYyWLxdekzVotP65exWqxe/IDFYtGNbUwWN7ccZbG4vGsOm0X39R1sFsuP/2Oy
+        6Lp7g9Fi6b+3LA58Hpf7epk8Fu95yeQxYdEBRo/v6zvYPD4+vcXi0bdlFaPH501yHu0HupkC
+        OKK4bFJSczLLUov07RK4Mt58/MZUMEutomf3BbYGxudyXYycHBICJhKLHlxgA7GFBHYwStxq
+        SIWIS0qc2PmcEcIWlrjfcoS1i5ELqOYbo8SrmRtZQBJsApoST29OZQJJiAicY5KYenkpE0iC
+        WUBdYteEE2C2sIC7RMeZZnYQm0VAVaL34FQwm1cgWuLaufOsEBvkJG6e62QGsTkFLCUW3Wxn
+        grjIQmLV3udsuMQnMAosYGRYxSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kRHAtaWjsY
+        96z6oHeIkYmD8RCjBAezkghv8mKuRCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeW
+        pGanphakFsFkmTg4pRqYYqpkLH7HVa7/e+t7r35xfcTeIsdpX7ribBtZz0e8CdJftF6fJfv1
+        0d3Je0uD3mvPmf33bYbJ0ibOh+8CNaR/91192yd/fnPGBo5YncauH6cOnXJwZ3fS/KHKnVZR
+        ueK62a7bm9bd9tPc92XJwyMy1mfXn3jz78n+PXoxsyINO+P9sxi3tvnozMx6Op+7u7rW1Cx8
+        MbN7xxFxjW+BxVmejKV/NYQWtFccFJ4qs3DKrBZDLf/gdJX2wnz+E3PXbGGYVHlzrrSAU+fm
+        2mdm61xjhO45cNYWxx3xucvtd8n1hobDB/8Vi/kYz6gUbRP90CT161jhzK5LqwtYPvs4sjs1
+        tHJ3rXj76sJt0WW+PdVKLMUZiYZazEXFiQAdfAPo9AIAAA==
+X-CMS-MailID: 20210806064925epcas2p2ba7e711758614384c17648d4924d025c
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210806064924epcas2p4572538fd1fa7a73d8262737e38a9b537
+X-CMS-RootMailID: 20210806064925epcas2p2ba7e711758614384c17648d4924d025c
 References: <cover.1628231581.git.kwmad.kim@samsung.com>
-        <CGME20210806064924epcas2p4572538fd1fa7a73d8262737e38a9b537@epcas2p4.samsung.com>
+        <CGME20210806064925epcas2p2ba7e711758614384c17648d4924d025c@epcas2p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch is to activate some interrupt sources
-that aren't defined in UFSHCI specifications. Those
-purpose could be error handling, workaround or whatever.
+Based on some events in the real world, I implement
+this to block the host's working in some abnormal
+conditions using an vendor specific interrupt for
+cases that some contexts of a pending request in the
+host isn't the same with those of its corresponding UPIUs
+if they should have been the same exactly.
 
 Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
 ---
- drivers/scsi/ufs/ufshcd.c | 10 ++++++++++
- drivers/scsi/ufs/ufshcd.h |  8 ++++++++
- 2 files changed, 18 insertions(+)
+ drivers/scsi/ufs/ufs-exynos.c | 78 +++++++++++++++++++++++++++++------
+ 1 file changed, 66 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 05495c34a2b7..f85a9b335e0b 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -6428,6 +6428,16 @@ static irqreturn_t ufshcd_tmc_handler(struct ufs_hba *hba)
- static irqreturn_t ufshcd_sl_intr(struct ufs_hba *hba, u32 intr_status)
- {
- 	irqreturn_t retval = IRQ_NONE;
-+	int res = 0;
-+	unsigned long flags;
+diff --git a/drivers/scsi/ufs/ufs-exynos.c b/drivers/scsi/ufs/ufs-exynos.c
+index cf46d6f86e0e..2cfe959e05b6 100644
+--- a/drivers/scsi/ufs/ufs-exynos.c
++++ b/drivers/scsi/ufs/ufs-exynos.c
+@@ -31,6 +31,8 @@
+ #define HCI_RXPRDT_ENTRY_SIZE	0x04
+ #define HCI_1US_TO_CNT_VAL	0x0C
+ #define CNT_VAL_1US_MASK	0x3FF
++#define VENDOR_SPECIFIC_IS	0x38
++#define VENDOR_SPECIFIC_IE	0x3C
+ #define HCI_UTRL_NEXUS_TYPE	0x40
+ #define HCI_UTMRL_NEXUS_TYPE	0x44
+ #define HCI_SW_RST		0x50
+@@ -74,6 +76,18 @@
+ 				 UIC_TRANSPORT_NO_CONNECTION_RX |\
+ 				 UIC_TRANSPORT_BAD_TC)
+ 
++enum exynos_ufs_vs_interrupt {
++	/*
++	 * This occurs when information of a pending request isn't
++	 * the same with incoming UPIU for the request. For example,
++	 * if UFS driver rings with task tag #1, subsequential UPIUs
++	 * for this must have one as the value of task tag. But if
++	 * it's corrutped until the host receives it or incoming UPIUs
++	 * has an unexpected value for task tag, this raises.
++	 */
++	RX_UPIU_HIT_ERROR	= 1 << 19,
++};
 +
-+	retval = ufshcd_vops_intr(hba, &res);
-+	if (res) {
-+		spin_lock_irqsave(hba->host->host_lock, flags);
-+		hba->force_reset = true;
-+		ufshcd_schedule_eh_work(hba);
-+		spin_unlock_irqrestore(hba->host->host_lock, flags);
-+	}
+ enum {
+ 	UNIPRO_L1_5 = 0,/* PHY Adapter */
+ 	UNIPRO_L2,	/* Data Link */
+@@ -996,6 +1010,10 @@ static int exynos_ufs_init(struct ufs_hba *hba)
+ 		goto out;
+ 	exynos_ufs_specify_phy_time_attr(ufs);
+ 	exynos_ufs_config_smu(ufs);
++
++	/* enable vendor interrupts */
++	hci_writel(ufs, VENDOR_SPECIFIC_IE, RX_UPIU_HIT_ERROR);
++
+ 	return 0;
  
- 	if (intr_status & UFSHCD_UIC_MASK)
- 		retval |= ufshcd_uic_cmd_compl(hba, intr_status);
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 971cfabc4a1e..1ed0a911f864 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -356,6 +356,7 @@ struct ufs_hba_variant_ops {
- 			       const union ufs_crypto_cfg_entry *cfg, int slot);
- 	void	(*event_notify)(struct ufs_hba *hba,
- 				enum ufs_event_type evt, void *data);
-+	irqreturn_t	(*intr)(struct ufs_hba *hba, int *res);
- };
- 
- /* clock gating state  */
-@@ -1296,6 +1297,13 @@ static inline void ufshcd_vops_config_scaling_param(struct ufs_hba *hba,
- 		hba->vops->config_scaling_param(hba, profile, data);
+ phy_off:
+@@ -1005,26 +1023,33 @@ static int exynos_ufs_init(struct ufs_hba *hba)
+ 	return ret;
  }
  
-+static inline irqreturn_t ufshcd_vops_intr(struct ufs_hba *hba, int *res)
+-static int exynos_ufs_host_reset(struct ufs_hba *hba)
++static int exynos_ufs_host_reset(struct exynos_ufs *ufs)
+ {
+-	struct exynos_ufs *ufs = ufshcd_get_variant(hba);
+ 	unsigned long timeout = jiffies + msecs_to_jiffies(1);
+-	u32 val;
+-	int ret = 0;
+-
+-	exynos_ufs_disable_auto_ctrl_hcc_save(ufs, &val);
+ 
++	/* host reset */
+ 	hci_writel(ufs, UFS_SW_RST_MASK, HCI_SW_RST);
+-
+ 	do {
+ 		if (!(hci_readl(ufs, HCI_SW_RST) & UFS_SW_RST_MASK))
+-			goto out;
++			return 0;
+ 	} while (time_before(jiffies, timeout));
+ 
+-	dev_err(hba->dev, "timeout host sw-reset\n");
+-	ret = -ETIMEDOUT;
++	pr_err("timeout host sw-reset\n");
++	return -ETIMEDOUT;
++}
++
++static int exynos_ufs_host_init(struct ufs_hba *hba)
 +{
-+	if (hba->vops && hba->vops->intr)
-+		return hba->vops->intr(hba, res);
++	struct exynos_ufs *ufs = ufshcd_get_variant(hba);
++	u32 val;
++	int ret;
++
++	exynos_ufs_disable_auto_ctrl_hcc_save(ufs, &val);
++
++	ret = exynos_ufs_host_reset(ufs);
++	if (ret)
++		return ret;
+ 
+-out:
+ 	exynos_ufs_auto_ctrl_hcc_restore(ufs, &val);
+ 	return ret;
+ }
+@@ -1110,7 +1135,7 @@ static int exynos_ufs_hce_enable_notify(struct ufs_hba *hba,
+ 
+ 	switch (status) {
+ 	case PRE_CHANGE:
+-		ret = exynos_ufs_host_reset(hba);
++		ret = exynos_ufs_host_init(hba);
+ 		if (ret)
+ 			return ret;
+ 		exynos_ufs_dev_hw_reset(hba);
+@@ -1198,6 +1223,34 @@ static int exynos_ufs_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 	return 0;
+ }
+ 
++static irqreturn_t exynos_ufs_isr(struct ufs_hba *hba, int *res)
++{
++	struct exynos_ufs *ufs = ufshcd_get_variant(hba);
++	u32 status;
++
++	status = hci_readl(ufs, VENDOR_SPECIFIC_IS);
++	hci_writel(ufs, status, VENDOR_SPECIFIC_IS);
++	/*
++	 * If host doesn't guarantee integrity of UTP transmission,
++	 * it needs to be reset immediately to make it unable to
++	 * proceed requests. Because w/o this, if UTP functions
++	 * in host doesn't work properly for such system power margins,
++	 * DATA IN from broken devices or whatever in the real world,
++	 * some unexpected events could happen, such as tranferring
++	 * a broken DATA IN to a device. It could be various types of
++	 * problems on the level of file system. In this case, I think
++	 * blocking the host's functionality is the best strategy.
++	 * Perhaps, if its root cause is temporary, system could recover.
++	 */
++	if (status & RX_UPIU_HIT_ERROR) {
++		pr_err("%s: status: 0x%08x\n", __func__, status);
++		exynos_ufs_host_reset(ufs);
++		*res = 1;
++		return IRQ_HANDLED;
++	}
 +	return IRQ_NONE;
 +}
 +
- extern struct ufs_pm_lvl_states ufs_pm_lvl_states[];
+ static struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
+ 	.name				= "exynos_ufs",
+ 	.init				= exynos_ufs_init,
+@@ -1209,6 +1262,7 @@ static struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
+ 	.hibern8_notify			= exynos_ufs_hibern8_notify,
+ 	.suspend			= exynos_ufs_suspend,
+ 	.resume				= exynos_ufs_resume,
++	.intr				= exynos_ufs_isr,
+ };
  
- /*
+ static int exynos_ufs_probe(struct platform_device *pdev)
 -- 
 2.31.1
 
