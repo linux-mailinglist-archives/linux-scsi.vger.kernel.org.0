@@ -2,70 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA133E2C2D
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Aug 2021 16:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDD33E2C70
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Aug 2021 16:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236797AbhHFOLK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 Aug 2021 10:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236814AbhHFOKw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Aug 2021 10:10:52 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E39AC0617BB
-        for <linux-scsi@vger.kernel.org>; Fri,  6 Aug 2021 07:10:33 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id f13so13161333edq.13
-        for <linux-scsi@vger.kernel.org>; Fri, 06 Aug 2021 07:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/oMubRmlLM5EZ/UdY6Fj3wsfS2kyoMzN9ASXgZ3xneY=;
-        b=q3xyYt1HrVQnyL1KZndhIFKim0Z6RZXWCajZa6+jKaUt/xPBmWrU2b2TpwIqgxHoY3
-         6sUeXJPoUC3zz+xqx5Y/7bh16ON7BcCcP2liy5jl/yv+hyxVGmxIcBCDJXoapuOO0RIl
-         REN9Zv+ClhtVVEMybVDTEUTnyt+YraWqvgNO4CiPEvSNbjJp0ymaQzc4FwPALfOqM4La
-         f+KzIMXFoGuca5XlZdCXXnnqi+xUiOGsem/cV9JUjNFonSZWOzEGazowyEr2eG3dp5DR
-         pLBa7cN2FmOkeXw/dSFAaB7k29Eu0Yivashc8iQbXHlro4ZoI7aiyRP21+G8wGDlMmu6
-         HPDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/oMubRmlLM5EZ/UdY6Fj3wsfS2kyoMzN9ASXgZ3xneY=;
-        b=VeeyZKRJEaIj9BHMzieb50ZPqApxxGe2mB4XcpzMPs8AA+iyC/no+BiJfxh5Yy0XV3
-         10Sx2ma1RiszAaHPwTcdda9YEhyFStpeOrV11xXbEBPbkCE4wu9bwPMV2wgw+CbBmpz/
-         KiUpC6KhlXWmdw5BMjoJbzpcnEsWqIQUkqQyJgzY6ATwMUw4aX1OT0X016zK5l3joABJ
-         VekM6l7eO/fJcmMqF2j8/SeJJhVakT0gpEjv6bzMEIOLwgiMHMOiNThZiSIJ1aeRB/la
-         cYh96WvWm5nx1zyUfHe9AvuJfK+76ByS15mpmVTpgZTn9L7K4FibmdH0a2GeIyy8ryKW
-         682Q==
-X-Gm-Message-State: AOAM533B/j67nA0TsHxN0F0Pe6Lzn+JHfj/UP1xKG1kuuxjZIRr3Dw1D
-        u+Qt/Me+Sefen2945rmpvBq6o8zCHLmZhW9o1g==
-X-Google-Smtp-Source: ABdhPJx229jhz+o+nQwdgIkoqR5HwLh3S4+JGHt0eG+5fB4X3WTmNmInTj1ZpuXDIVm9CYEhhFZzLyuZYbLrplGdX6A=
-X-Received: by 2002:a05:6402:3094:: with SMTP id de20mr13526197edb.272.1628259031175;
- Fri, 06 Aug 2021 07:10:31 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a54:26cf:0:0:0:0:0 with HTTP; Fri, 6 Aug 2021 07:10:30 -0700 (PDT)
-Reply-To: mrmaxwellwatford@gmail.com
-From:   Maxwell Watford <orchowskiruthi@gmail.com>
-Date:   Fri, 6 Aug 2021 14:10:30 +0000
-Message-ID: <CA+q9Q6OJB6Z0+y=5_3MBDNGkAUG9rVxg7bZVma38uDOvJ+sOGw@mail.gmail.com>
-Subject: i need your reply
-To:     orchowskiruthi@gmail.com
+        id S238286AbhHFOZ1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 6 Aug 2021 10:25:27 -0400
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:58440 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238173AbhHFOZZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Aug 2021 10:25:25 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 767C71280FF3;
+        Fri,  6 Aug 2021 07:25:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1628259909;
+        bh=s5+B4QRewIbzQPdXyLAv3VXyjmXcsQqeb/7Sh6rTCZg=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=HMNtluiaXPdn/jITwwT+zK4BZ3CNG37HdJzelgGhwK1iJyrOOWJQzX4Vx9+qXePFM
+         lwuKWR70NtWFSOQ/22c+UVyzN10i9Pe6+xZA8Rgq3sFVBZgoXxsd79KORzaS5vucZZ
+         k/+t+O3KmuvUth067zUUJtNpADkVfZWBHTMfCi38=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id s6r71DMOlSMJ; Fri,  6 Aug 2021 07:25:09 -0700 (PDT)
+Received: from [IPv6:2601:600:8280:66d1::c447] (unknown [IPv6:2601:600:8280:66d1::c447])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id DF5AE1280FF2;
+        Fri,  6 Aug 2021 07:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1628259909;
+        bh=s5+B4QRewIbzQPdXyLAv3VXyjmXcsQqeb/7Sh6rTCZg=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=HMNtluiaXPdn/jITwwT+zK4BZ3CNG37HdJzelgGhwK1iJyrOOWJQzX4Vx9+qXePFM
+         lwuKWR70NtWFSOQ/22c+UVyzN10i9Pe6+xZA8Rgq3sFVBZgoXxsd79KORzaS5vucZZ
+         k/+t+O3KmuvUth067zUUJtNpADkVfZWBHTMfCi38=
+Message-ID: <1647f71e4ef539ff17538223c944d9ec58806bdb.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 1/9] libata: fix ata_host_alloc_pinfo()
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Damien Le Moal <damien.lemoal@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-ide@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>
+Date:   Fri, 06 Aug 2021 07:25:07 -0700
+In-Reply-To: <20210806074252.398482-2-damien.lemoal@wdc.com>
+References: <20210806074252.398482-1-damien.lemoal@wdc.com>
+         <20210806074252.398482-2-damien.lemoal@wdc.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings,
+On Fri, 2021-08-06 at 16:42 +0900, Damien Le Moal wrote:
+> Avoid a potential NULL pointer dereference by testing that the ATA
+> port
+> info variable "pi".
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+> ---
+>  drivers/ata/libata-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+> index 61c762961ca8..ea8b91297f12 100644
+> --- a/drivers/ata/libata-core.c
+> +++ b/drivers/ata/libata-core.c
+> @@ -5458,7 +5458,7 @@ struct ata_host *ata_host_alloc_pinfo(struct
+> device *dev,
+>  		ap->link.flags |= pi->link_flags;
+>  		ap->ops = pi->port_ops;
 
-We are writing to you from Ecowas Finance Controller Office Lome Togo,
-because we have received a file from the Ministry of Finance Lome-
-Togo, concerning an Inherited Fund bearing your name on it, And after
-our verifications, we found out that the funds belong to you.
+Hey, pi is used here
 
-It has been awarded and I will like to guide you to claim the funds.
-Please contact me at my private email address
-(mrmaxwellwatford@gmail.com) for more information and directive
+>  
+> -		if (!host->ops && (pi->port_ops !=
+> &ata_dummy_port_ops))
+> +		if (!host->ops && pi && pi->port_ops !=
+> &ata_dummy_port_ops)
 
-I am looking forward to your urgent reply,
-Best regards
-Mr Maxwell Watford
+So checking it here is just going to get us a load of static checker
+reports.
+
+James
+
+
