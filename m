@@ -2,271 +2,276 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A1F3E2679
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Aug 2021 10:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D703E2684
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Aug 2021 10:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243425AbhHFIw4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 Aug 2021 04:52:56 -0400
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:58529 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbhHFIwz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Aug 2021 04:52:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1628239961; x=1659775961;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=VMAZWBcCUsqdqPldfxq8YvOHvrjywNyJte+53J/X2jI=;
-  b=eiaWRAaXZr9dzSq5I+zvqdD72IxOQIxuYRa/DiDGdp3CDVqvrMCqMtRK
-   s6m1fGPxobEDSHdDdD07OpowPlnfMyVtbW6ck41FhonI9MOVDxFA0uPRy
-   HQJjgt6opkZ12vPIqzj19jQLImL1PdCKeWM62whxENG5P1292GgFD2MJw
-   XBiSs6TnPfp2E8sG63gGP9/y15UuK7kwCGAXMaDSWFHUjIs8BfqXyuTQl
-   KT/IEYFW6vuULjSjCvCicyMIhAPhteQ58XAXikuD/MPjx3SmOVrv6SRi8
-   dipK8Z4Cy8kr70VyQQowojcatFv/RpFjPv9yYkFy048NpD5CG4kl+bKZL
-   w==;
-X-IronPort-AV: E=Sophos;i="5.84,300,1620662400"; 
-   d="scan'208";a="177047533"
-Received: from mail-bn1nam07lp2040.outbound.protection.outlook.com (HELO NAM02-BN1-obe.outbound.protection.outlook.com) ([104.47.51.40])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Aug 2021 16:52:39 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VP4o61nNkf7ayyFvO5EXWRH1cyywGJSHrx5tzkDtfKpd3WDq2Wm5GvMhnSAWzITmbJ0Szd5FhoiKs4eLK94wsYlS1KhVCFxkjuxaAnv+CzjJSrzgoRXzY4/roA9v5bw1MkAXFUmdSffA4xMgXbZxYa8lJ0qZ1NSfICf3SV/TAVdPp//06GreDsBxQAVq6DeY+BzBHHyQo1DP3fo1+Lp0Deaij97bf00e9gVS/F1zzl1Z8r4j0oKxM6oMEHbPR0rA1BIvjFaX4h9RgLWBv7r5ClwOevfqdK+cST4BE6nrjskMwAPopSrRn3LqOI2ZANSZ/B8U14CS4k4MAfLY2DTsCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VMAZWBcCUsqdqPldfxq8YvOHvrjywNyJte+53J/X2jI=;
- b=TUBwluN+u5G7TVC7gCiM3ClYnP/JJ4tptFmDrLEJ/hJ3mgFMLALneRClJ5gV/5v7F4+fVlMNVEQRReGQwSMLCDjdSauVlD/hCn/sbdKjdwDagqEXFsSoxEmT7IZ88gpbHk3Bdgj26tcR17bG4KupehBie2s16OJwL5gFZ4gqQHAKGD/LdRr0KOxMkUlEMXNKUWkOFxJwIczZYkcyLOD+0+iP/GoAs2hRJpk0P0qfBaWbUmtC833lHKAYd08manMSMnWiy17H+iT8j3hBSlBxr4cdKmx9qZ3+i4j43YToUxL3N4GRvrFuPX5duFBMI2i99tFojNQzT6bFE7W765l6pA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        id S243811AbhHFIzT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 6 Aug 2021 04:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243782AbhHFIzS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Aug 2021 04:55:18 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86151C06179C
+        for <linux-scsi@vger.kernel.org>; Fri,  6 Aug 2021 01:55:02 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id d10-20020a9d4f0a0000b02904f51c5004e3so3798887otl.9
+        for <linux-scsi@vger.kernel.org>; Fri, 06 Aug 2021 01:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VMAZWBcCUsqdqPldfxq8YvOHvrjywNyJte+53J/X2jI=;
- b=gtz23y3iDFGDMrQTLJUwcdWU0UAdNs1NsjXwzd9Y2jDtwzJWow5PXFKF/xPUt9nlt1In6e6mYYyLEVbyfIB+9RGUTNHGMo5RLfhs2QvZe0WUcQSMKnAayq9xd6/0buXBqAxYS8Lh2D+5Eyrb9wBv+0186dkbHp0jgQiSWlXvtac=
-Received: from DM6PR04MB7081.namprd04.prod.outlook.com (2603:10b6:5:244::21)
- by DM5PR04MB1004.namprd04.prod.outlook.com (2603:10b6:4:41::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15; Fri, 6 Aug
- 2021 08:52:36 +0000
-Received: from DM6PR04MB7081.namprd04.prod.outlook.com
- ([fe80::e521:352:1d70:31c]) by DM6PR04MB7081.namprd04.prod.outlook.com
- ([fe80::e521:352:1d70:31c%7]) with mapi id 15.20.4394.018; Fri, 6 Aug 2021
- 08:52:36 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>
-Subject: Re: [PATCH v3 0/4] Initial support for multi-actuator HDDs
-Thread-Topic: [PATCH v3 0/4] Initial support for multi-actuator HDDs
-Thread-Index: AQHXgb7nBT0SP/zb8kqWuIxTGXvQIg==
-Date:   Fri, 6 Aug 2021 08:52:36 +0000
-Message-ID: <DM6PR04MB7081A6623985C0F299A8AB21E7F39@DM6PR04MB7081.namprd04.prod.outlook.com>
-References: <20210726013806.84815-1-damien.lemoal@wdc.com>
- <yq18s1ffdz7.fsf@ca-mkp.ca.oracle.com>
- <DM6PR04MB7081398426CA28606DC39491E7F39@DM6PR04MB7081.namprd04.prod.outlook.com>
- <c3a28f3f-52c4-e7bc-8bd7-bec2feae25fa@suse.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: suse.de; dkim=none (message not signed)
- header.d=none;suse.de; dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: dc5bd84c-2c66-435f-d27d-08d958b789c8
-x-ms-traffictypediagnostic: DM5PR04MB1004:
-x-microsoft-antispam-prvs: <DM5PR04MB1004522F1EFA8F190CB2F5CBE7F39@DM5PR04MB1004.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: W0gAHlfboK6xf5zeVpIqQ6/xlX++pHauRPhfj19BiutVnuM+xaprs3e/Is19zOIs9GqylHCzgg6cxZbKUyyQ35kd4brGdEZeRXXvtCr6nYbOvmpwRswV6oG8NKn1WPHqq8s5VbqOspYPZ/YRoWrUeFIINJ15oRrYjQMaOFnEeBFX1S2NFDS2htk4ktR24C9BMzIepdLKMRWl32HcYTJ75uOXCznM14Juf7A1cIlw5a2r/4bHDVDqomRobqCLXV5cLjjvDS/icawRNcH/SHsQ2A8B/MHT+thoek0uCwbbn4bnmajofQRYArm2BTi4Js9oOBBOYYHjEaS+OkLFOmJL6YklLKRdlL4nO0hBAY5muEa3KNR2O3egCQnV/QA2TYPN4o59LBYb2Zbd4NGihtmV8UTEgAOArwlaDoAh+NMVC1wZ28nDcCOu6jyuSXVQAHHZ+16exjb6LDWO7amf5DAlc7UaWMF8xupnIOUlb/O32Lv4rLEJKFgP09lT5v7T6O1lf0T1UvOz5K0MzRRT+Ax1jL9iDMcdMBuMgwT8yud1VGqDKk1l/6h6YmJ9xJPBxglTr+N5Xk/2rUXwff29lRWhZ0feQ32mzShAgbFICBdCnW6RYsYaNYho/LmCCLr+DBJ5oMjbWHZo5K2zfSxxXjh3lQDn2Kaf7X2eHZAJxJ4ys6sw16r3D8ZpI7cChlnoZXIbI1PUkHrXc88XNuh0aFL0l/iLDxeKVgdN/nrm85qn6h9xbDehdxPDr6wDkEH4NrVsxXWu++FAZTt5vuCbON0BTEi5l4pzn+sjffPyC1FeP+Y=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB7081.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(396003)(136003)(39850400004)(346002)(366004)(83380400001)(38070700005)(8676002)(66556008)(33656002)(2906002)(6506007)(66476007)(52536014)(55016002)(66446008)(64756008)(478600001)(4326008)(7696005)(186003)(71200400001)(76116006)(86362001)(122000001)(316002)(8936002)(91956017)(110136005)(9686003)(54906003)(53546011)(66946007)(966005)(38100700002)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?nc0WjaMh22GsANu7aaSQiI9ivxNS6L5AsfnYtbFzsX5PwZdlr3ONjIRWIr+A?=
- =?us-ascii?Q?9TwYT/4W0Fcq1ILSjK1Wa59KV+JSIvX6p3pNuID81qyKJOMAEFPh371+fcwU?=
- =?us-ascii?Q?pLPoqg8+h0pkRQkmpikIBEz6C6cIOpgi4/fcAE7Jn/K3eqzBHkAy0yWO2zf5?=
- =?us-ascii?Q?RBEKNBhRjD2iRs7crjnjsJW0B/x7tosWP+qlrywqGK2oQHMV5OGHODgXHClr?=
- =?us-ascii?Q?TmlNGI/VMVj3Y+mDNY92TAWyYRtuMhniScsCY7EattoHJy1SHTvdNob9NdYV?=
- =?us-ascii?Q?I0YxRJC5POO1+F7Rb6eJLulHoB9n9Smuoud6xlYeU/VDDh1jyswfjcP0tdq9?=
- =?us-ascii?Q?5657rBUohn7CDZLPxSWr3znlJs9CcOF4Edd05bu7XC9ozCmxzMgGdYGq6YuC?=
- =?us-ascii?Q?mwqBGIcyp/eCvsw2ly+J1JoxRjI7mwBCINXI+L7mFEevRIuJ2eCOgLXvOZaI?=
- =?us-ascii?Q?QcGkA2eZqX6NbvOAGM7DTs5/k4ezXIYGr+IRQ3vjqJKF71R+2ZfmOkOi86EZ?=
- =?us-ascii?Q?DfY1yeRHor6eMl3XCjGTqHgvHqzItXukNXBF1O1YLdijoZza9sGzfqemaiCl?=
- =?us-ascii?Q?s1ZKxg2fsjRhhLlQQggsBW0q0yH01ZSG1o5MA1sEszmo/zFq1ubK+7JoFL3B?=
- =?us-ascii?Q?o2UATWHro2ur3kBBCG9QroInqj92MJSv37ma+eiwFYYrao9Z+zRZ3hWZobwq?=
- =?us-ascii?Q?NP+CCQe4KyujyIEtIIVW5FYo/K098SfTk8r3CGXwn4+8wkGvjqcJCuVavIPY?=
- =?us-ascii?Q?R0U+l3X0CBMUcIOXH9zN7lc4hS7i7e5ZVIx+YNzkHtB5zFYRTMAj8+LMYj6l?=
- =?us-ascii?Q?K4g1+pfrqmFkeqADG5huvwvXUFIYen9RTwgWYdXV7xBQZSHDhowqvDbjr57d?=
- =?us-ascii?Q?/PTkN5qAK2yQFM2E9yK6jFcVMYX03ZKvqD/tlW5zxVkpnTuQ2btgCRFi1Zf9?=
- =?us-ascii?Q?4lFn/AvdtcPuAUkhYICRA1IkUp9DqJT+Ohih4e0Sq3S2O3jMgc155tM3WQxT?=
- =?us-ascii?Q?e6K++NUnPNqllFry2BvHX4ugXMIMPXLe1OXbTBbRMoXh/EM0uIwbWeGt3kZE?=
- =?us-ascii?Q?o68IVqdS4qRSjv/hEswnJaaBzDSfmrxTDgJqQIXFPXghx7B+bDFtOa8c9ojq?=
- =?us-ascii?Q?xxZGvSTVYBbYx/hn/xQc7nnzXGP/RAtPw+2TyZ6ntMLVftuyJvnremML9rwA?=
- =?us-ascii?Q?mKP7iu4C3/S5tRHmyEn9ReHt4105EcTIpKHgEmBNfLxQn1xhktoaKdMPbPfr?=
- =?us-ascii?Q?AEzRczha/xHoXo3z16xpluqisH4siMopgEL+ZiKQZDNoBci4xBKCl4C9wm7q?=
- =?us-ascii?Q?n8Iy4FvrwUQYg8clHF7j3k0L6DEUF1dZdScA1o7dDDjZniyyy1rsi4Ns0szy?=
- =?us-ascii?Q?auN9zxH7gr7hk/zZfvDFLB0Itr0FmOu4bcf40OysVQZ7Gil2/Q=3D=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4E42M+mcc1BSHxT4FR3BHV5FDGch8ZbVEmckoRQKNEA=;
+        b=Bt02DC652tXOcWwr2mUjk36MmtLFA6N1gk/eKLCf1c0Tcq1SCN0B2BXn493BTgPjtt
+         6ZLF0FBzpaLKdH6qw14xfMwNKV/w531oDHTvLWyXtZLIXf1eiVRbvscZrnYyjBmX/vik
+         aJsq3DhNgDLEVcGVz2sYPbA64xl9ow6CWrTQ8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4E42M+mcc1BSHxT4FR3BHV5FDGch8ZbVEmckoRQKNEA=;
+        b=C4VqBd8CHfCFwQW50CkKCGQwizVLq/VVGb/hFQRqUiTzG8DTXuSm9IbYlLOXPV9itp
+         1yPHZXwmTCLO/aqNizktbLizNyEJY0ouhNSCfuYPJ4O7+gM8+pmFdpWXrwyuf0GnuhhC
+         499ZXoc2H9YLjR8kXwOKMvBTPbkQBemmWyeGd4JxRu57mQOs2cqjh5I7bUyVlYG27Dg0
+         mPH/xiAqu8ChS09cvrDZptZR240ueg0X7jirRYrCadXzntVWV9z0oObrZQf1F53M5VAv
+         zI6yG+r2c8TNmcZyAsKg9ahzCPhfvnXna0Dhaa/yCeIXdNUhIKG4WsdaOIMhDlwJ1bqv
+         uZnQ==
+X-Gm-Message-State: AOAM530cG+PAzpOoimCCIDvC6/W2QjFi//cRSfcDybKEcAqqSfFbQqSX
+        u93f+/+gOGMhgSKdtbISAQvgnViAkO82VHy6Z8GNsrhs17Cx2pdK
+X-Google-Smtp-Source: ABdhPJwUbALNSlNSC8icYgxyFUrSEnrWJP5ENADRBHlZgfsVbbKz5g2OW38CCOeAgzI1FNK4mxJJwvIvgUo4wj9XYvU=
+X-Received: by 2002:a05:6830:1d73:: with SMTP id l19mr6671887oti.316.1628240101470;
+ Fri, 06 Aug 2021 01:55:01 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB7081.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc5bd84c-2c66-435f-d27d-08d958b789c8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Aug 2021 08:52:36.1832
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jf/eJBVjnCxuT2Wq2vSl0Imtks1Do+2g/rCGQEMtSyvZ0xp14Ju5gTblG0XreGX7IEzEBBMv6Q5ih5lzYKPe1g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB1004
+References: <20210720232624.1493424-1-nitesh@redhat.com> <20210720232624.1493424-6-nitesh@redhat.com>
+In-Reply-To: <20210720232624.1493424-6-nitesh@redhat.com>
+From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Date:   Fri, 6 Aug 2021 14:24:49 +0530
+Message-ID: <CAK=zhgo29UsFsK_q9RYnEocmTA20kUVX4BNnrpJPh35Ssb49zw@mail.gmail.com>
+Subject: Re: [PATCH v5 05/14] scsi: mpt3sas: Use irq_set_affinity_and_hint
+To:     Nitesh Narayan Lal <nitesh@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-pci@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        jesse.brandeburg@intel.com, robin.murphy@arm.com,
+        mtosatti@redhat.com, Ingo Molnar <mingo@kernel.org>,
+        jbrandeb@kernel.org, frederic@kernel.org, juri.lelli@redhat.com,
+        abelits@marvell.com, Bjorn Helgaas <bhelgaas@google.com>,
+        rostedt@goodmis.org, Peter Zijlstra <peterz@infradead.org>,
+        David Miller <davem@davemloft.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        stephen@networkplumber.org, rppt@linux.vnet.ibm.com,
+        chris.friesen@windriver.com, maz@kernel.org,
+        Neil Horman <nhorman@tuxdriver.com>, pjwaskiewicz@gmail.com,
+        sassmann@redhat.com, Tomas Henzl <thenzl@redhat.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan Srikanteshwara 
+        <shivasharan.srikanteshwara@broadcom.com>,
+        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jkc@redhat.com, faisal.latif@intel.com,
+        shiraz.saleem@intel.com, tariqt@nvidia.com, ahleihel@redhat.com,
+        kheib@redhat.com, borisp@nvidia.com, saeedm@nvidia.com,
+        benve@cisco.com, govind@gmx.com, jassisinghbrar@gmail.com,
+        ajit.khaparde@broadcom.com, sriharsha.basavapatna@broadcom.com,
+        somnath.kotur@broadcom.com, nilal@redhat.com,
+        tatyana.e.nikolova@intel.com, mustafa.ismail@intel.com,
+        ahs3@redhat.com, leonro@nvidia.com,
+        Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
+        bjorn.andersson@linaro.org, chunkuang.hu@kernel.org,
+        yongqiang.niu@mediatek.com, baolin.wang7@gmail.com,
+        poros@redhat.com, minlei@redhat.com,
+        "Ewan D. Milne" <emilne@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>, _govind@gmx.com,
+        kabel@kernel.org, viresh.kumar@linaro.org,
+        Tushar.Khandelwal@arm.com, kuba@kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000e2e43205c8e030bb"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2021/08/06 17:36, Hannes Reinecke wrote:=0A=
-> On 8/6/21 6:05 AM, Damien Le Moal wrote:=0A=
->> On 2021/08/06 12:42, Martin K. Petersen wrote:=0A=
->>>=0A=
->>> Damien,=0A=
->>>=0A=
->>>> Single LUN multi-actuator hard-disks are cappable to seek and execute=
-=0A=
->>>> multiple commands in parallel. This capability is exposed to the host=
-=0A=
->>>> using the Concurrent Positioning Ranges VPD page (SCSI) and Log (ATA).=
-=0A=
->>>> Each positioning range describes the contiguous set of LBAs that an=0A=
->>>> actuator serves.=0A=
->>>=0A=
->>> I have to say that I prefer the multi-LUN model.=0A=
->>=0A=
->> It is certainly easier: nothing to do :)=0A=
->> SATA, as usual, makes things harder...=0A=
->>=0A=
->>>=0A=
->>>> The first patch adds the block layer plumbing to expose concurrent=0A=
->>>> sector ranges of the device through sysfs as a sub-directory of the=0A=
->>>> device sysfs queue directory.=0A=
->>>=0A=
->>> So how do you envision this range reporting should work when putting=0A=
->>> DM/MD on top of a multi-actuator disk?=0A=
->>=0A=
->> The ranges are attached to the device request queue. So the DM/MD target=
- driver=0A=
->> can use that information from the underlying devices for whatever possib=
-le=0A=
->> optimization. For the logical device exposed by the target driver, the r=
-anges=0A=
->> are not limits so they are not inherited. As is, right now, DM target de=
-vices=0A=
->> will not show any range information for the logical devices they create,=
- even if=0A=
->> the underlying devices have multiple ranges.=0A=
->>=0A=
->> The DM/MD target driver is free to set any range information pertinent t=
-o the=0A=
->> target. E.g. dm-liear could set the range information corresponding to s=
-ector=0A=
->> chunks from different devices used to build the dm-linear device.=0A=
->>=0A=
-> And indeed, that would be the easiest consumer.=0A=
-> One 'just' needs to have a simple script converting the sysfs ranges=0A=
-> into the corresponding dm-linear table definitions, and create one DM=0A=
-> device for each range.=0A=
-> That would simulate the multi-LUN approach.=0A=
-> Not sure if that would warrant a 'real' DM target, seeing that it's=0A=
-> fully scriptable.=0A=
-> =0A=
->>> And even without multi-actuator drives, how would you express concurren=
-t=0A=
->>> ranges on a DM/MD device sitting on top of a several single-actuator=0A=
->>> devices?=0A=
->>=0A=
->> Similar comment as above: it is up to the DM/MD target driver to decide =
-if range=0A=
->> information can be useful. For dm-linear, there are obvious cases where =
-it is.=0A=
->> Ex: 2 single actuator drives concatenated together can generate 2 ranges=
-=0A=
->> similarly to a real split-actuator disk. Expressing the chunks of a dm-l=
-inear=0A=
->> setup as ranges may not always be possible though, that is, if we keep t=
-he=0A=
->> assumption that a range is independent from others in terms of command=
-=0A=
->> execution. Ex: a dm-linear setup that shuffles a drive LBA mapping (high=
- to low=0A=
->> and low to high) has no business showing sector ranges.=0A=
->>=0A=
->>> While I appreciate that it is easy to just export what the hardware=0A=
->>> reports in sysfs, I also think we should consider how filesystems would=
-=0A=
->>> use that information. And how things would work outside of the simple=
-=0A=
->>> fs-on-top-of-multi-actuator-drive case.=0A=
->>=0A=
->> Without any change anywhere in existing code (kernel and applications us=
-ing raw=0A=
->> disk accesses), things will just work as is. The multi/split actuator dr=
-ive will=0A=
->> behave as a single actuator drive, even for commands spanning range boun=
-daries.=0A=
->> Your guess on potential IOPS gains is as good as mine in this case. Perf=
-ormance=0A=
->> will totally depend on the workload but will not be worse than an equiva=
-lent=0A=
->> single actuator disk.=0A=
->>=0A=
->> FS block allocators can definitely use the range information to distribu=
-te=0A=
->> writes among actuators. For reads, well, gains will depend on the worklo=
-ad,=0A=
->> obviously, but optimizations at the block IO scheduler level can improve=
- things=0A=
->> too, especially if the drive is being used at a QD beyond its capability=
- (that=0A=
->> is, requests are accumulated in the IO scheduler).=0A=
->>=0A=
->> Similar write optimization can be achieved by applications using block d=
-evice=0A=
->> files directly. This series is intended for this case for now. FS and bl=
-oc IO=0A=
->> scheduler optimization can be added later.=0A=
->>=0A=
->>=0A=
-> Rumours have it that Paolo Valente is working on adapting BFQ to utilize=
-=0A=
-> the range information for better actuator utilisation.=0A=
-=0A=
-Paolo has a talk on this subject scheduled for SNIA SDC 2021.=0A=
-=0A=
-https://storagedeveloper.org/events/sdc-2021/abstracts#hd-Walker=0A=
-=0A=
-> And eventually one should modify filesystem utilities like xfs to adapt=
-=0A=
-> the metadata layout to multi-actuator drives.=0A=
-> =0A=
-> The _real_ fun starts once the HDD manufactures starts putting out=0A=
-> multi-actuator SMR drives :-)=0A=
-=0A=
-Well, that does not change things that much in the end. The same constraint=
-s=0A=
-remain, and the sector ranges will be aligned to zones. So no added difficu=
-lty.=0A=
-=0A=
-> =0A=
-> Cheers,=0A=
-> =0A=
-> Hannes=0A=
-> =0A=
-=0A=
-=0A=
--- =0A=
-Damien Le Moal=0A=
-Western Digital Research=0A=
+--000000000000e2e43205c8e030bb
+Content-Type: text/plain; charset="UTF-8"
+
+On Wed, Jul 21, 2021 at 4:57 AM Nitesh Narayan Lal <nitesh@redhat.com> wrote:
+>
+> The driver uses irq_set_affinity_hint() specifically for the high IOPS
+> queue interrupts for two purposes:
+>
+> - To set the affinity_hint which is consumed by the userspace for
+>   distributing the interrupts
+>
+> - To apply an affinity that it provides
+>
+> The driver enforces its own affinity to bind the high IOPS queue interrupts
+> to the local NUMA node. However, irq_set_affinity_hint() applying the
+> provided cpumask as an affinity (if not NULL) for the interrupt is an
+> undocumented side effect.
+>
+> To remove this side effect irq_set_affinity_hint() has been marked
+> as deprecated and new interfaces have been introduced. Hence, replace the
+> irq_set_affinity_hint() with the new interface irq_set_affinity_and_hint()
+> where the provided mask needs to be applied as the affinity and
+> affinity_hint pointer needs to be set and replace with
+> irq_update_affinity_hint() where only affinity_hint needs to be updated.
+>
+
+Changes looks good and also verified that the high iops queue's IRQs
+are affinitied to local numa node.
+
+Reviewed-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> Signed-off-by: Nitesh Narayan Lal <nitesh@redhat.com>
+> ---
+>  drivers/scsi/mpt3sas/mpt3sas_base.c | 21 ++++++++++-----------
+>  1 file changed, 10 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+> index c39955239d1c..c1a11962f227 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+> @@ -2991,6 +2991,7 @@ _base_check_enable_msix(struct MPT3SAS_ADAPTER *ioc)
+>  static void
+>  _base_free_irq(struct MPT3SAS_ADAPTER *ioc)
+>  {
+> +       unsigned int irq;
+>         struct adapter_reply_queue *reply_q, *next;
+>
+>         if (list_empty(&ioc->reply_queue_list))
+> @@ -2998,9 +2999,10 @@ _base_free_irq(struct MPT3SAS_ADAPTER *ioc)
+>
+>         list_for_each_entry_safe(reply_q, next, &ioc->reply_queue_list, list) {
+>                 list_del(&reply_q->list);
+> -               if (ioc->smp_affinity_enable)
+> -                       irq_set_affinity_hint(pci_irq_vector(ioc->pdev,
+> -                           reply_q->msix_index), NULL);
+> +               if (ioc->smp_affinity_enable) {
+> +                       irq = pci_irq_vector(ioc->pdev, reply_q->msix_index);
+> +                       irq_update_affinity_hint(irq, NULL);
+> +               }
+>                 free_irq(pci_irq_vector(ioc->pdev, reply_q->msix_index),
+>                          reply_q);
+>                 kfree(reply_q);
+> @@ -3056,16 +3058,13 @@ _base_request_irq(struct MPT3SAS_ADAPTER *ioc, u8 index)
+>   * @ioc: per adapter object
+>   *
+>   * The enduser would need to set the affinity via /proc/irq/#/smp_affinity
+> - *
+> - * It would nice if we could call irq_set_affinity, however it is not
+> - * an exported symbol
+>   */
+>  static void
+>  _base_assign_reply_queues(struct MPT3SAS_ADAPTER *ioc)
+>  {
+> -       unsigned int cpu, nr_cpus, nr_msix, index = 0;
+> +       unsigned int cpu, nr_cpus, nr_msix, index = 0, irq;
+>         struct adapter_reply_queue *reply_q;
+> -       int local_numa_node;
+> +       const struct cpumask *mask;
+>
+>         if (!_base_is_controller_msix_enabled(ioc))
+>                 return;
+> @@ -3088,11 +3087,11 @@ _base_assign_reply_queues(struct MPT3SAS_ADAPTER *ioc)
+>                  * corresponding to high iops queues.
+>                  */
+>                 if (ioc->high_iops_queues) {
+> -                       local_numa_node = dev_to_node(&ioc->pdev->dev);
+> +                       mask = cpumask_of_node(dev_to_node(&ioc->pdev->dev));
+>                         for (index = 0; index < ioc->high_iops_queues;
+>                             index++) {
+> -                               irq_set_affinity_hint(pci_irq_vector(ioc->pdev,
+> -                                   index), cpumask_of_node(local_numa_node));
+> +                               irq = pci_irq_vector(ioc->pdev, index);
+> +                               irq_set_affinity_and_hint(irq, mask);
+>                         }
+>                 }
+>
+> --
+> 2.27.0
+>
+
+--000000000000e2e43205c8e030bb
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIQdgYJKoZIhvcNAQcCoIIQZzCCEGMCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg3NMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
+MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
+rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
+aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
+e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
+cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
+MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
+KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
+/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
+TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
+YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
+b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
+CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
+BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
+jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
+9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
+/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
+jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
+AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
+dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
+MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
+IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
+XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
+J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
+nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVUwggQ9oAMCAQICDHJ6qvXSR4uS891jDjANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMTAyMjIxMzAyMTFaFw0yMjA5MTUxMTUxNTZaMIGU
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGDAWBgNVBAMTD1NyZWVrYW50aCBSZWRkeTErMCkGCSqGSIb3
+DQEJARYcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEP
+ADCCAQoCggEBAM11a0WXhMRf+z55FvPxVs60RyUZmrtnJOnUab8zTrgbomymXdRB6/75SvK5zuoS
+vqbhMdvYrRV5ratysbeHnjsfDV+GJzHuvcv9KuCzInOX8G3rXAa0Ow/iodgTPuiGxulzqKO85XKn
+bwqwW9vNSVVW+q/zGg4hpJr4GCywE9qkW7qSYva67acR6vw3nrl2OZpwPjoYDRgUI8QRLxItAgyi
+5AGo2E3pe+2yEgkxKvM2fnniZHUiSjbrfKk6nl9RIXPOKUP5HntZFdA5XuNYXWM+HPs3O0AJwBm/
+VCZsZtkjVjxeBmTXiXDnxytdsHdGrHGymPfjJYatDu6d1KRVDlMCAwEAAaOCAd0wggHZMA4GA1Ud
+DwEB/wQEAwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUu
+Z2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggr
+BgEFBQcwAYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
+YTIwMjAwTQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3
+Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4
+aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmww
+JwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
+BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUClVHbAvhzGT8
+s2/6xOf58NkGMQ8wDQYJKoZIhvcNAQELBQADggEBAENRsP1H3calKC2Sstg/8li8byKiqljCFkfi
+IhcJsjPOOR9UZnMFxAoH/s2AlM7mQDR7rZ2MxRuUnIa6Cp5W5w1lUJHktjCUHnQq5nIAZ9GH5SDY
+pgzbFsoYX8U2QCmkAC023FF++ZDJuc9aj0R/nhABxmUYErIze2jV/VO8Pj7TnCrBONZ/Qvf8G5CQ
+X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
+eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
+Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
+MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
+0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIHGcjA9kKHvPIHX+klsZ
+wzPQtoRt275a2289l8ZnwnDsMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIxMDgwNjA4NTUwMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAJePjWHiUI9thsxtmg+5mkHJIkX1IPFlpSIzId
+iGditYwulmUWSateElSnXlRdIpbMK5cD3U4B9KmPIJo2+tWkF0o7Aq7Q2NGRXVztfpXNNMcgmual
+K32mbTudUOntuMl+eBW+JHbKOYYxBU1ojm7dA4RRppxIK36nmZlKpxtd9izofqog0okJM6OQLbX5
+H2KB4FUkVs3xBfZ0UvTY1v6VA/nxW/uA0L4UefhEhk3W/DGjS/fZOJYpb9JXnyDr5nok9xAM8bGR
+HFJDhCwjOy0Ge2w06Q4XmhJ994BHFousratRFbu4qeeTDwhBUeevaDWEeOuwy46IPuw/lUca/hN1
+--000000000000e2e43205c8e030bb--
