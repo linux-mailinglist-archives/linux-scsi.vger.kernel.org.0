@@ -2,219 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8013E237A
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Aug 2021 08:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3503E2442
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Aug 2021 09:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243388AbhHFGt2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 Aug 2021 02:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243372AbhHFGtK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Aug 2021 02:49:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAACC061799
-        for <linux-scsi@vger.kernel.org>; Thu,  5 Aug 2021 23:48:54 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mBtcu-0007Bd-Gw; Fri, 06 Aug 2021 08:46:40 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mBtce-0004p1-8f; Fri, 06 Aug 2021 08:46:24 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mBtce-0003LN-5b; Fri, 06 Aug 2021 08:46:24 +0200
-Date:   Fri, 6 Aug 2021 08:46:23 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-pci@vger.kernel.org, Alexander Duyck <alexanderduyck@fb.com>,
-        Russell Currey <ruscur@russell.cc>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        oss-drivers@corigine.com, Paul Mackerras <paulus@samba.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jiri Olsa <jolsa@redhat.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        linux-perf-users@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-scsi@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Ido Schimmel <idosch@nvidia.com>, x86@kernel.org,
-        qat-linux@intel.com,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Fiona Trahe <fiona.trahe@intel.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Michael Buesch <m@bues.ch>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
+        id S235693AbhHFHnK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 6 Aug 2021 03:43:10 -0400
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:24064 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229512AbhHFHnJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Aug 2021 03:43:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1628235774; x=1659771774;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=A0KuRh0UPtzurt2GlNEMB8FVWMOxKIxeUcV1alAGh6k=;
+  b=qgvoH5D8vIH//JRvvZcnvofZ5tzy3kq0q2YdViMNdM+YKmJbZ2B7eNfN
+   bLk41xCWduxWOO6VV/JNn06J9ykpk4W+AiOZC6ztjeCU2+z8VCgThAly9
+   Jr5/LV9WQG9+FcsB/iTh3EX/NSC6kx79GQbV0qotI2yLrJkgikENrkw7f
+   TtachOoy9xfCy50ntCWIJMxtf4yhcy+8Nl6DlrXvpls+R7tcchjoh9Yj2
+   5URf5D0EW4MPPrJ7+iPrWvpkozM3+xVDZ29Ywci5gKL+/WkN6GQjQFVxE
+   Cd4vOkqOpxUufiPbKI3/GENC+EyGMAV1xInulC3xf2OBV2SC2FClpPE7P
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.84,300,1620662400"; 
+   d="scan'208";a="181296839"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 06 Aug 2021 15:42:53 +0800
+IronPort-SDR: EqHd7YH1kxlB0iRmDzst4IRX9mPPgNOoqvvOWnvambkalbEHVInjcr80XWjyq97sU9rtA5oInY
+ sBidpe6W303hMuZGUi/SFViiP+dTE9oJcF4PYVG3uOn5DtUH9VGc/vrHQ16W3vC05rX/oGGGCe
+ AD48K6gbUvoHQbzMG5PEqhz3k2sv9fqQ7JvLN+1cLyly/lIMBIMvk6iiI+CVKJgRjjjPmLgmWR
+ xsFknzUsjSByfiCGH8WegvkJLWAwsYESh/v15XSGqLJedwGbYKNKN98FgAZX+v47UmhTqp1u2X
+ 1lKI9CKE5/lEGgufAgA0N/BX
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2021 00:20:22 -0700
+IronPort-SDR: YAvcNGLkkx3czfg4CB5iwxC0jdTIz/VaLHoc+ZuX+Mvefp5yaVqfmYHSMczbB+l7tIdLc6Tkln
+ fgoxJQ9lOdzMgq1/TcOXfe/CAj4GWIeBsIVQezrjVSkPHrhYxFmWt3MXVdkSvOWRHOmaFCJKj4
+ V6Tzob02kpNxtsK+L1xJOvqexZA4gUg9+s1ycNJDVc3GAHqLod80mi3NuHyOK+d0Pt4MsyoEsN
+ HCax5hZEofqGgHt603FPqulEtlZvGyh3Mvh81FLgg6TalVQoW/YYlCBTYsx0xzLcMoLTCcd+LH
+ r1A=
+WDCIronportException: Internal
+Received: from washi.fujisawa.hgst.com ([10.149.53.254])
+  by uls-op-cesaip02.wdc.com with ESMTP; 06 Aug 2021 00:42:53 -0700
+From:   Damien Le Moal <damien.lemoal@wdc.com>
+To:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-ide@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     Sathya Prakash <sathya.prakash@broadcom.com>,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        xen-devel@lists.xenproject.org, Vadym Kochan <vkochan@marvell.com>,
-        MPT-FusionLinux.pdl@broadcom.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        linux-kernel@vger.kernel.org, Taras Chornyi <tchornyi@marvell.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
-        netdev@vger.kernel.org, Frederic Barrat <fbarrat@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v2 0/6] PCI: Drop duplicated tracking of a pci_dev's
- bound driver
-Message-ID: <20210806064623.3lxl4clzbjpmchef@pengutronix.de>
-References: <20210803100150.1543597-1-u.kleine-koenig@pengutronix.de>
- <20210805234234.GA1797883@bjorn-Precision-5520>
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>
+Subject: [PATCH v2 0/9] libata cleanups and improvements
+Date:   Fri,  6 Aug 2021 16:42:43 +0900
+Message-Id: <20210806074252.398482-1-damien.lemoal@wdc.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nllglfksvmzlkdkm"
-Content-Disposition: inline
-In-Reply-To: <20210805234234.GA1797883@bjorn-Precision-5520>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-scsi@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+The first two patches of this series fix potential NULL pointer
+dereference problems.
+The following three patches cleanup libata-core code in the area of
+device configuration (ata_dev_configure() function).
+Patch r64 improves ata_read_log_page() to avoid unnecessary warning
+messages and patch 7 adds an informational message on device scan to
+advertize the features supported by a device.
 
---nllglfksvmzlkdkm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Path 8 adds the new sysfs ahci device attribute ncq_prio_supported to
+indicate that a disk supports NCQ priority. Patch 9 does the same for
+the mpt3sas driver, adding the sas_ncq_prio_supported device attribute.
 
-Hello Bjorn,
+Changes from v1:
+* Added patch 1 and 2 to fix problems reported by the kernel test robot
+* Use strscpy() instead of strcpy in patch 4
+* Use sysfs_emit in patch 8 and 9 as suggested by Bart
+* Fix typos in comments of the new sas_ncq_prio_supported attribute in
+  patch 9
 
-On Thu, Aug 05, 2021 at 06:42:34PM -0500, Bjorn Helgaas wrote:
-> On Tue, Aug 03, 2021 at 12:01:44PM +0200, Uwe Kleine-K=F6nig wrote:
-> > Hello,
-> >=20
-> > changes since v1 (https://lore.kernel.org/linux-pci/20210729203740.1377=
-045-1-u.kleine-koenig@pengutronix.de):
-> >=20
-> > - New patch to simplify drivers/pci/xen-pcifront.c, spotted and
-> >   suggested by Boris Ostrovsky
-> > - Fix a possible NULL pointer dereference I introduced in xen-pcifront.c
-> > - A few whitespace improvements
-> > - Add a commit log to patch #6 (formerly #5)
-> >=20
-> > I also expanded the audience for patches #4 and #6 to allow affected
-> > people to actually see the changes to their drivers.
-> >=20
-> > Interdiff can be found below.
-> >=20
-> > The idea is still the same: After a few cleanups (#1 - #3) a new macro
-> > is introduced abstracting access to struct pci_dev->driver. All users
-> > are then converted to use this and in the last patch the macro is
-> > changed to make use of struct pci_dev::dev->driver to get rid of the
-> > duplicated tracking.
->=20
-> I love the idea of this series!
+Damien Le Moal (9):
+  libata: fix ata_host_alloc_pinfo()
+  libata: fix ata_host_start()
+  libata: cleanup device sleep capability detection
+  libata: cleanup ata_dev_configure()
+  libata: cleanup NCQ priority handling
+  libata: fix ata_read_log_page() warning
+  libata: print feature list on device scan
+  libahci: Introduce ncq_prio_supported sysfs sttribute
+  scsi: mpt3sas: Introduce sas_ncq_prio_supported sysfs sttribute
 
-\o/
+ drivers/ata/libahci.c              |   1 +
+ drivers/ata/libata-core.c          | 253 +++++++++++++++--------------
+ drivers/ata/libata-sata.c          |  61 ++++---
+ drivers/scsi/mpt3sas/mpt3sas_ctl.c |  19 +++
+ include/linux/libata.h             |   5 +
+ 5 files changed, 192 insertions(+), 147 deletions(-)
 
-> I looked at all the bus_type.probe() methods, it looks like pci_dev is
-> not the only offender here.  At least the following also have a driver
-> pointer in the device struct:
->=20
->   parisc_device.driver
->   acpi_device.driver
->   dio_dev.driver
->   hid_device.driver
->   pci_dev.driver
->   pnp_dev.driver
->   rio_dev.driver
->   zorro_dev.driver
+-- 
+2.31.1
 
-Right, when I converted zorro_dev it was pointed out that the code was
-copied from pci and the latter has the same construct. :-)
-See
-https://lore.kernel.org/r/20210730191035.1455248-5-u.kleine-koenig@pengutro=
-nix.de
-for the patch, I don't find where pci was pointed out, maybe it was on
-irc only.
-
-> Do you plan to do the same for all of them, or is there some reason
-> why they need the pointer and PCI doesn't?
-
-There is a list of cleanup stuff I intend to work on. Considering how
-working on that list only made it longer in the recent past, maybe it
-makes more sense to not work on it :-)
-
-> In almost all cases, other buses define a "to_<bus>_driver()"
-> interface.  In fact, PCI already has a to_pci_driver().
->=20
-> This series adds pci_driver_of_dev(), which basically just means we
-> can do this:
->=20
->   pdrv =3D pci_driver_of_dev(pdev);
->=20
-> instead of this:
->=20
->   pdrv =3D to_pci_driver(pdev->dev.driver);
->=20
-> I don't see any other "<bus>_driver_of_dev()" interfaces, so I assume
-> other buses just live with the latter style?  I'd rather not be
-> different and have two ways to get the "struct pci_driver *" unless
-> there's a good reason.
-
-Among few the busses I already fixed in this regard pci was the first
-that has a considerable amount of usage. So I considered it worth giving
-it a name.
-=20
-> Looking through the places that care about pci_dev.driver (the ones
-> updated by patch 5/6), many of them are ... a little dubious to begin
-> with.  A few need the "struct pci_error_handlers *err_handler"
-> pointer, so that's probably legitimate.  But many just need a name,
-> and should probably be using dev_driver_string() instead.
-
-Yeah, I considered adding a function to get the driver name from a
-pci_dev and a function to get the error handlers. Maybe it's an idea to
-introduce these two and then use to_pci_driver(pdev->dev.driver) for the
-few remaining users? Maybe doing that on top of my current series makes
-sense to have a clean switch from pdev->driver to pdev->dev.driver?!
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---nllglfksvmzlkdkm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmEM2rwACgkQwfwUeK3K
-7AlqBggAh2Z8+ZW+YMYlQQ8AzujRmGYo9gKX26eGdp2jNjZUeOc0CEZwm/GiW4aZ
-9+W1RS3i+O6ToHVYkt9fNEpdUGO3YdBKiMHGWsrkQuwNjm4Yv5Dlx/wRz0dU4vIX
-QQDa5tw6Mow1g0gjZqHvDuwbgKoJyHXzFD115kBaINYN/XqOLST9YvMqxxSsHHsD
-qRmpU59QTxEqHXKIsgABctdVnQBkbixppZH3/6nu+Xh7qkZvczBLpx/C5V1+XeAv
-47LOxaH3wiLQBS/sICKlAFeYcbAyNhwh+nbMxx5i3lG6O6LhaeX46FPMoTG6qiAj
-MaO1mAnwrEO35eTXFBgw4IYh37zS9A==
-=/ZHI
------END PGP SIGNATURE-----
-
---nllglfksvmzlkdkm--
