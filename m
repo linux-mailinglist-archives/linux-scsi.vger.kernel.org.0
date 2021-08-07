@@ -2,148 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7A13E3502
-	for <lists+linux-scsi@lfdr.de>; Sat,  7 Aug 2021 12:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989143E3528
+	for <lists+linux-scsi@lfdr.de>; Sat,  7 Aug 2021 13:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbhHGK4p (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 7 Aug 2021 06:56:45 -0400
-Received: from smtpbg704.qq.com ([203.205.195.105]:33057 "EHLO
-        smtpproxy21.qq.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231687AbhHGK4o (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 7 Aug 2021 06:56:44 -0400
-X-QQ-mid: bizesmtp41t1628333771tok4ud4z
-Received: from localhost.localdomain (unknown [125.69.42.194])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Sat, 07 Aug 2021 18:56:10 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: Rrz2csB1TU0Qwsk/qlXbx4vcERuTtEo3P+PTX+6ijfugqOkKyBpVs+cDPGAcT
-        PrKQvolgJ1MLaQdWeIQWbQURTHoc9bM3bahOktDStKRWr6ooBTl4s2k5hsIEmbXlWEa//Z9
-        jJDi+B2Bu7yOkZRFvOl7qO0xf5Y6Lr00hRr9QeRKeadgZTkcU3hFVKwLOS74e92vjpIGtv+
-        zc1lI6I9iGzUqMIRBnQnkrFsNo1a0FEgUxxy0iFu1gpXcc507SBhnAGdQ75vNTTlMihgYh2
-        kZ9lUwZ7hyKIvfhba9Mrs4GMPFeVM/sk7uTdhPEgi52fhipmRAI/olH1pUujSO5X5ENHGC5
-        XQ6CY7n
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     martin.petersen@oracle.com
-Cc:     jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] scsi: aha1542: Remove unneeded semicolon
-Date:   Sat,  7 Aug 2021 18:55:25 +0800
-Message-Id: <20210807105525.192240-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.32.0
+        id S232057AbhHGLTr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 7 Aug 2021 07:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231922AbhHGLTq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 7 Aug 2021 07:19:46 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD98C0613CF
+        for <linux-scsi@vger.kernel.org>; Sat,  7 Aug 2021 04:19:28 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id u13-20020a17090abb0db0290177e1d9b3f7so26587517pjr.1
+        for <linux-scsi@vger.kernel.org>; Sat, 07 Aug 2021 04:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=d3t/0aB1Hb6b8x3cPGobwFTgI937lYUWcHaLVtAx3vY=;
+        b=q7U71+UeADXjGvjMZo4m+zpweuQMjOMIwaHgc75vFwAIOxdaoltdhV9go+7jmnG+4N
+         RLcjpuA2lzqUpKHthCmquVLElyL0N+nM0KTdruF57bFoHQnkIIIqV6LHu6ktzGnM7esV
+         t3BHbrgvpqBMI6byMSIVwK6J202dX/Na8yEY0hJlq7bizgEjq3RKamjCDWCdGRZeabXy
+         xl3VwlP94O2XhEWH8G3czUSK2B+68acY2QNNzk+x0D6yKhm6goP38jcIWtzM9yFy1Fw2
+         W4NxRCec5mcDIo/TwUdTVJ4jVe75qlqn3Nvi1//FbPEVpPnWO0dkQUCVjAuiNuwwpcjD
+         0BZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=d3t/0aB1Hb6b8x3cPGobwFTgI937lYUWcHaLVtAx3vY=;
+        b=ecMcIx0y5CWFu75McqFspUmTeBNhJ26eoa7L5XGSNcEaQ6uQj3I/02XVCqfALip9sx
+         9XffvkwdSDn8jJO3b0yVmOiGpMLQxbXllNW9THHFjHdWaDyAeWVE7BrgKvU+eVPy9Nxt
+         fyy/4dwpgqyoqvvvbn9ox7WqUXxn8WgqjvwnNnNyNyT4pRn9Ka7V/gD/v3N/r1CgxZ8V
+         CieNuHU543Fj2SgZLZzOG8nPt8YQJy/Ov0iX5071u4NP2GbIfLU/BF0jtbhn9yt1muHl
+         HW0MNSGj8rvFwWv7D0btxlz20k01HhlblbvtKr6dEK2NYumUyWWyaS8bo12xxmLY7Xgp
+         v35w==
+X-Gm-Message-State: AOAM530JnQ3i+qFKZuk47Idb38wgtWcz3UPDE2j2K5MVmRNqSXckAcC6
+        1A28JO8JT0Dj/M7bJbJ8KLR5EKpyIcbo4mZHsO0=
+X-Google-Smtp-Source: ABdhPJzQ4rn9YHFK8+kfN12LifdmY/PlHL3wtRyJCwiHMZElHBi3vDl6ZrY+ZbE73+mwjHwxoCILRgYK9ynrkn+wyiQ=
+X-Received: by 2002:a17:903:2345:b029:12c:da21:2a08 with SMTP id
+ c5-20020a1709032345b029012cda212a08mr12733214plh.20.1628335168038; Sat, 07
+ Aug 2021 04:19:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgforeign:qybgforeign2
-X-QQ-Bgrelay: 1
+Received: by 2002:a05:6a20:2896:b029:22:79d1:bebc with HTTP; Sat, 7 Aug 2021
+ 04:19:27 -0700 (PDT)
+Reply-To: samuelakin244@gmail.com
+From:   Mr Samuel Akin <samukafand@gmail.com>
+Date:   Sat, 7 Aug 2021 11:19:27 +0000
+Message-ID: <CAHLDSs=z7fV2J4K0L95xZMmxJ_NU40UP7d5CSkPHgxgEXEyemw@mail.gmail.com>
+Subject: I am waiting for your reply
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The semicolon after a code block bracket is unneeded in C. Thus, we can
-remove the redundant semicolon from the code safely.
-
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/scsi/aha1542.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/scsi/aha1542.c b/drivers/scsi/aha1542.c
-index 1210e61afb18..7229748a57b9 100644
---- a/drivers/scsi/aha1542.c
-+++ b/drivers/scsi/aha1542.c
-@@ -304,7 +304,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
- 		if (flag & SCRD)
- 			printk("SCRD ");
- 		printk("status %02x\n", inb(STATUS(sh->io_port)));
--	};
-+	}
- #endif
- 	number_serviced = 0;
- 
-@@ -346,7 +346,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
- 			if (!number_serviced)
- 				shost_printk(KERN_WARNING, sh, "interrupt received, but no mail.\n");
- 			return IRQ_HANDLED;
--		};
-+		}
- 
- 		mbo = (scsi2int(mb[mbi].ccbptr) - (unsigned long)aha1542->ccb_handle) / sizeof(struct ccb);
- 		mbistatus = mb[mbi].status;
-@@ -411,7 +411,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
- 						 */
- 		my_done(tmp_cmd);
- 		number_serviced++;
--	};
-+	}
- }
- 
- static int aha1542_queuecommand(struct Scsi_Host *sh, struct scsi_cmnd *cmd)
-@@ -537,7 +537,7 @@ static void setup_mailboxes(struct Scsi_Host *sh)
- 		any2scsi(aha1542->mb[i].ccbptr,
- 			 aha1542->ccb_handle + i * sizeof(struct ccb));
- 		aha1542->mb[AHA1542_MAILBOXES + i].status = 0;
--	};
-+	}
- 	aha1542_intr_reset(sh->io_port);	/* reset interrupts, so they don't block */
- 	any2scsi(mb_cmd + 2, aha1542->mb_handle);
- 	if (aha1542_out(sh->io_port, mb_cmd, 5))
-@@ -552,7 +552,7 @@ static int aha1542_getconfig(struct Scsi_Host *sh)
- 	i = inb(STATUS(sh->io_port));
- 	if (i & DF) {
- 		i = inb(DATA(sh->io_port));
--	};
-+	}
- 	aha1542_outb(sh->io_port, CMD_RETCONF);
- 	aha1542_in(sh->io_port, inquiry_result, 3, 0);
- 	if (!wait_mask(INTRFLAGS(sh->io_port), INTRMASK, HACC, 0, 0))
-@@ -581,7 +581,7 @@ static int aha1542_getconfig(struct Scsi_Host *sh)
- 	default:
- 		shost_printk(KERN_ERR, sh, "Unable to determine DMA channel.\n");
- 		return -1;
--	};
-+	}
- 	switch (inquiry_result[1]) {
- 	case 0x40:
- 		sh->irq = 15;
-@@ -604,7 +604,7 @@ static int aha1542_getconfig(struct Scsi_Host *sh)
- 	default:
- 		shost_printk(KERN_ERR, sh, "Unable to determine IRQ level.\n");
- 		return -1;
--	};
-+	}
- 	sh->this_id = inquiry_result[2] & 7;
- 	return 0;
- }
-@@ -639,7 +639,7 @@ static int aha1542_mbenable(struct Scsi_Host *sh)
- 
- 		if (aha1542_out(sh->io_port, mbenable_cmd, 3))
- 			goto fail;
--	};
-+	}
- 	while (0) {
- fail:
- 		shost_printk(KERN_ERR, sh, "Mailbox init failed\n");
-@@ -657,7 +657,7 @@ static int aha1542_query(struct Scsi_Host *sh)
- 	i = inb(STATUS(sh->io_port));
- 	if (i & DF) {
- 		i = inb(DATA(sh->io_port));
--	};
-+	}
- 	aha1542_outb(sh->io_port, CMD_INQUIRY);
- 	aha1542_in(sh->io_port, inquiry_result, 4, 0);
- 	if (!wait_mask(INTRFLAGS(sh->io_port), INTRMASK, HACC, 0, 0))
-@@ -676,7 +676,7 @@ static int aha1542_query(struct Scsi_Host *sh)
- 	if (inquiry_result[0] == 0x43) {
- 		shost_printk(KERN_INFO, sh, "Emulation mode not supported for AHA-1740 hardware, use aha1740 driver instead.\n");
- 		return 1;
--	};
-+	}
- 
- 	/*
- 	 * Always call this - boards that do not support extended bios translation
 -- 
-2.32.0
+Dear friend, Greetings!
 
+I apologize if this email comes as a surprise to you. I have a
+business proposal that will be of great benefit to both of us. If you
+are willing to discuss further on this matter, I expect you reply.
+promptly so that I will give you further details.
 
-
+Best Regards,
+Mr.Samuel Akin
