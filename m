@@ -2,92 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E78833E39BE
-	for <lists+linux-scsi@lfdr.de>; Sun,  8 Aug 2021 11:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E183E3D58
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Aug 2021 02:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbhHHJBl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 8 Aug 2021 05:01:41 -0400
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:59571 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbhHHJBk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 8 Aug 2021 05:01:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1628413281; x=1659949281;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=bjgGRXxjJDNLHzEfzuNKdyk/I6//YiMoxvenotPsMHA=;
-  b=chq0CCd2+dy8PTMMG+WrxC6g+2ATXbOd78f3EsUlCKeFdlc4t63uGXZW
-   lsVgPljKp9tdxnZYVxh7pjEgX6+xvyuSSldLE0lRcKFF3Z56npu6FWi+m
-   1JkPE4f9GHtAN22X4BNJk67awgzA3oioYApobmbpIhWMfFROWtXWEQmlC
-   1M8eXyGODR4tZyGtMAUetwCf7KxFhF5RCB07x8FbrQwF/zIZcyF8NV4gF
-   55FQUqDvjld0LcisakJNa7joIYF5pMsj+e6eeQeXofOdDTR75YtJv2bg6
-   5FCot8nmCq8BR9FVjyM6lX4Nb7u0ukLOaWTKmTcH23OTFvqjFugFB3q5m
-   A==;
-X-IronPort-AV: E=Sophos;i="5.84,305,1620662400"; 
-   d="scan'208";a="280449782"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 08 Aug 2021 17:01:21 +0800
-IronPort-SDR: fJaxbcIW++bYCTtmNWhuc3GRBvQE4JfjebWgsmJKzsSxIRwgVeOgPmrnpWS8XD2XeGsw8oGSep
- uVg/QLPX2e0ULpeGMbYF3ymPgVxv557bb2sWPIoSsSqsBl0lc7330kGjuIIlFkSxUWx1yBx8ww
- cfIKgMbYGBQK7hWzx+ZhiGytuW2HsNkp4dyB+o3hA4UZQiICnuEGBT7HlMrlA+crssB/8QX/tA
- ONjkKClXBawQtRK8Vor9uMPa+DDGrVuymehtAsys5kI3tKJ6zcqJWNDdZ3n4SnC4P6EwiC2gko
- Yp0FKtNjhBuiZey7swp5PHD7
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2021 01:36:56 -0700
-IronPort-SDR: lPE7UCqk6qeiVobRoFkeWH+ksh8W4hROFo5RGGkKM71ycIe8DqVLg//RTI76zsRLo2co6DlP3t
- q8MLY3qUtbN7prth2t08xKQmGPpEhp0z33jEjoVILevtBzNxbnvglZwQZcpKKIVIdSVlfJ3ffT
- dqiB2BLmjTjxO976EEK94ipktntTVLoXMlEWO+sWsGTln1lF+Bzs6ik69cfj4L7jUIopJiAy2B
- 9mJfktIjNB/xDswzDRDXbB66qYsz8ReDBd38r/KQoSwa4HhE2y3ltMbKOWr7ptjAWobPg8StT4
- wJE=
-WDCIronportException: Internal
-Received: from bxygm33.sdcorp.global.sandisk.com (HELO BXYGM33.ad.shared) ([10.0.231.247])
-  by uls-op-cesaip02.wdc.com with ESMTP; 08 Aug 2021 02:01:19 -0700
-From:   Avri Altman <avri.altman@wdc.com>
-To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bart Van Assche <bvanassche@acm.org>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH 4/4] scsi: ufshpb: Do not report victim error in HCM
-Date:   Sun,  8 Aug 2021 12:00:24 +0300
-Message-Id: <20210808090024.21721-5-avri.altman@wdc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210808090024.21721-1-avri.altman@wdc.com>
-References: <20210808090024.21721-1-avri.altman@wdc.com>
+        id S230076AbhHIAiC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 8 Aug 2021 20:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229977AbhHIAiC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 8 Aug 2021 20:38:02 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE3DC061760
+        for <linux-scsi@vger.kernel.org>; Sun,  8 Aug 2021 17:37:41 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id 75so1143168uav.8
+        for <linux-scsi@vger.kernel.org>; Sun, 08 Aug 2021 17:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=IwQwIEMO6IV4H5w74jkoPcnclADDutU0ZQzyT44GfHs=;
+        b=RZ4UlwCXMPu41tELJ3ZoWL6FY4DwcL42X5rKZcXeAlHlvdeW1gzCzqItOxtudPeRL0
+         ZI3wisdiz2953DiS8EGHuXMNAhJOqyGrdAM5wp+k0AUPQkP60GEa74T/mR/sZoUlD04W
+         T20WCTvsOhjxlLXDDFKeQdwE6DlCkBeqwmbzlq6vkZekxRt97CkT0ICMCjOdwtjlgKyX
+         HA0IDVErIIzFUYzu2cVCGa8JK5/+zuYU/ehQYg5UdgeOXSrhbvXZdSMPcku7s9Jue6Ni
+         dmzmsVwj4T5M3/Ax9wh2RqtCXE0Ee1cfAw075xvZTl4TxjhhYO/HVZWC4Zh64Dtpbl3H
+         pedA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=IwQwIEMO6IV4H5w74jkoPcnclADDutU0ZQzyT44GfHs=;
+        b=cK3A29P9sfBYhshLAYXQs7ImqSqI/Bf5BOx0O4PtlXOiZr3LeZcR3NdaiEnQNIkDz0
+         FTXAz/IBtYKvZeJ5s2WoSZUauzYjJ8ZK9xCFthr7IzsxXZXkAgEqQKxB3ANlmGydPAce
+         zNJJRFvOx75bWcdkNyFSY+roIFMtOcsVxZMliDCVSisMaN2rgROWbw9st9/k5kaOWOpo
+         0a1bnHazEB1QDi4bPO4Q29GT5DVmQJh7F6avSJQQiiXS6PgzIwmXW76JzIJF85bUQRaD
+         l1iItHqaR95Urs1ZDMN1dcJl3c0ecbvRVIBAo0WiJUnYoA0+TZsGsOT7aErgG1IrIAUm
+         Ghfw==
+X-Gm-Message-State: AOAM532+r+tAHPbt3fOSCC7mEorCqlHYFjWMMjFj7glb3F7FykGrUqHJ
+        nJxgU/LTWuvHo3zbtzBwMF6TByee5SiFVnSAllevGwaWoIJmXw==
+X-Google-Smtp-Source: ABdhPJy2Md+pee1ruy+wMkEhMimYLnuI/UWG9K4h1crKeo9oqNqxjp7eLlI+IRCNl8lMneM2m2DF5R8s2AZDxnjdK10=
+X-Received: by 2002:a25:e70c:: with SMTP id e12mr27037028ybh.333.1628469015735;
+ Sun, 08 Aug 2021 17:30:15 -0700 (PDT)
+MIME-Version: 1.0
+Reply-To: isabellasayouba@gmail.com
+Sender: kaborekabore3@gmail.com
+Received: by 2002:a05:7110:3213:b029:ea:eb33:9a30 with HTTP; Sun, 8 Aug 2021
+ 17:30:15 -0700 (PDT)
+From:   "Mrs. Issabella Sayouba" <isabellasayouba@gmail.com>
+Date:   Mon, 9 Aug 2021 00:30:15 +0000
+X-Google-Sender-Auth: BL6-jJAO2OQOCoGyz0lSLyRgAr4
+Message-ID: <CALdjqPayXiNaUhC5rFZGAe2CTydpMDRgb40RXB85rNpyd5UM_g@mail.gmail.com>
+Subject: God's Select
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In host control mode, eviction is perceived as an extreme measure.
-There are several conditions that both the entering and exiting regions
-should meet, so that eviction will take place.
+God's Select
 
-The common case however, is that those conditions are rarely met, so it
-is normal that the act of eviction fails.  Therefore, Do not report an
-error in host control mode if eviction fails.
+I am writing this mail to you with heavy tears In my eyes and great
+sorrow in my heart, My Name is Mrs Isabella Sayouba, I am from Tunisia
+and I am contacting you from a Hospital in Burkina Faso, I want to
+tell you this because I don't have any other option than to tell you
+as I was touched to open up to you, I married to Mr. Sayouba Brown who
+worked with Tunisia Ambassador in Burkina Faso for nine years before
+he died in the year 2005. We were married for eleven years without a
+child.
 
-Fixes: 6c59cb501b86 (scsi: ufs: ufshpb: Make eviction depend on region's reads)
-Signed-off-by: Avri Altman <avri.altman@wdc.com>
----
- drivers/scsi/ufs/ufshpb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+He died after a brief illness that lasted for only five days. Since
+his death I decided not to remarry, When my late husband was alive he
+deposited the sum of US$8.5m (Eight Million Five hundred Thousand
+Dollars) in a bank in Ouagadougou the capital city of Burkina Faso in
+west Africa Presently this money is still in the bank. He made this
+money available for exportation of Gold from Burkina Faso mining.
 
-diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index cd48367f94cc..aafb55136c7e 100644
---- a/drivers/scsi/ufs/ufshpb.c
-+++ b/drivers/scsi/ufs/ufshpb.c
-@@ -1385,7 +1385,8 @@ static int ufshpb_add_region(struct ufshpb_lu *hpb, struct ufshpb_region *rgn)
- 			victim_rgn = ufshpb_victim_lru_info(hpb);
- 			if (!victim_rgn) {
- 				dev_warn(&hpb->sdev_ufs_lu->sdev_dev,
--				    "cannot get victim region error\n");
-+				    "cannot get victim region %s\n",
-+				    hpb->is_hcm ? "" : "error");
- 				ret = -ENOMEM;
- 				goto out;
- 			}
--- 
-2.17.1
+Recently, my doctor told me that I would not last for the period of
+seven months due to cancer problem. The one that disturbs me most is
+my stroke sickness. Having known my condition I decided to hand this
+money over to you to take care of the less-privileged people, you will
+utilize this money the way I am going to instruct herein. I want you
+to take 30 Percent of the total money for your personal use While 70%
+of the money will go to charity" people in the street and helping the
+orphanage. I grew up as an Orphan and I don't have anybody as my
+family member, just to endeavor that the house of God is maintained.
+Am doing this so that God will forgive my sins and accept my soul in
+the paradise because this illness has suffered me so much.
 
+As soon as I receive your reply I shall give you the contact of the
+bank in Burkina Faso and I will also instruct the Bank Manager to
+issue you an authority letter that will prove you the present
+beneficiary of the money in the bank that is if you assure me that you
+will act accordingly as I Stated herein.
+
+From Mrs. Isabella Sayouba.
