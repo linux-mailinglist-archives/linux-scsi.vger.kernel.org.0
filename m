@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6A83E4FB9
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE533E4FBA
 	for <lists+linux-scsi@lfdr.de>; Tue, 10 Aug 2021 01:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235439AbhHIXEf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S235520AbhHIXEf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Mon, 9 Aug 2021 19:04:35 -0400
-Received: from mail-pj1-f49.google.com ([209.85.216.49]:41740 "EHLO
-        mail-pj1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235467AbhHIXEa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 19:04:30 -0400
-Received: by mail-pj1-f49.google.com with SMTP id fa24-20020a17090af0d8b0290178bfa69d97so2487914pjb.0
-        for <linux-scsi@vger.kernel.org>; Mon, 09 Aug 2021 16:04:09 -0700 (PDT)
+Received: from mail-pl1-f177.google.com ([209.85.214.177]:38821 "EHLO
+        mail-pl1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235676AbhHIXEb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 19:04:31 -0400
+Received: by mail-pl1-f177.google.com with SMTP id a5so2656075plh.5
+        for <linux-scsi@vger.kernel.org>; Mon, 09 Aug 2021 16:04:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=x8zxBgk79cdBC45+HLy/e1lDboxU7tCb3KFICdDIvz0=;
-        b=sPkevpWcBuRoSsT3E0TfWNRiZjR0btR8bM74p/KrRDzAx8BL/jwQ6AMIaSdFOcpPSn
-         PVVKXCVZsNMmmKWF6AmQHOp0BlWZZI+AnAxKrPvfUCd84N4c2BtHhCPYBF1K0x7ZnJgY
-         UMftin039hywUhWH54dSumGRH1y0y6klmJB2ojcvsaxjyBFG6fmoOldIxFREwXz1bwD7
-         J77yAZExBvE4x4XW5UUbdfL9DbHC72Cv06e2nWAsmOs6PK4wzrdXkfB2JvW6wruwIsqZ
-         1TKXOGP+2YqBoslbcbzjQWPJ03L+/6HUkJy9DI/PC1yAsdD0UwJoIH30bsyL/c4+ORWc
-         yklQ==
-X-Gm-Message-State: AOAM5300hJRbkInqJhvXip6XV4/hAuHifQT3xlk34bnV2ieOT0vD2HUu
-        Qg2TaPklg4e0CiEEjRpB4vQ=
-X-Google-Smtp-Source: ABdhPJz1Ws5f6zydBqHZ/Ynl7W7+SGBbnQlWzVbrnlkcqGtMaGJDcnZpAOM1iFIIcTqAUF8vNAcLXQ==
-X-Received: by 2002:a62:7b50:0:b029:3cd:e227:3486 with SMTP id w77-20020a627b500000b02903cde2273486mr62286pfc.74.1628550248993;
-        Mon, 09 Aug 2021 16:04:08 -0700 (PDT)
+        bh=l6VDWq6IVEh87e1uNmLaYE9v1k4d4/jK9l4qdKk6+CY=;
+        b=f0XDGhghGcp01AjxSx4P/Oz5dnbbJshI4FYfhEvCkT+NRr7fRgIOY9AnGOnZLrTRDD
+         EDYyNPH1faO/oHCAY8KgrM+IP2vlS/Lt7O4RNQdHB+ScFP+W2nRdcbQWEnmctiNITg4j
+         4UihcBXPwPHFToIZ6iXA78bJNbpaWJpwSS272MPidj7iWwmbfSihNe50cwN7q7yAQ+NM
+         wri+iCwcN8dIFzNBD2r+WN9xfa056uZGln8m+w8TWcaNj9vsFHzf4D5N3Ife5/nTxJUk
+         ll8aA6t0dpUDWFlox1hBLUXyrFiiOTrjclAacE85FXMN3G5SsTqFChggCD4dkFdfBZZp
+         SQOA==
+X-Gm-Message-State: AOAM530l4UP7eknKNCHayTnjfflPXGJGJiGvWXSg62x8igVJKCl8fMzH
+        mMI9DqIaYq7VLRmINCPQt28=
+X-Google-Smtp-Source: ABdhPJyv2xaiCyCj0X+Tgb37URVGrXScI4466Hgz3mh/AlvtH4ZqwOnxQUaUlBpt6+Ytb0uLuUz8JQ==
+X-Received: by 2002:aa7:9254:0:b029:3c9:268e:ae68 with SMTP id 20-20020aa792540000b02903c9268eae68mr14697510pfp.58.1628550250550;
+        Mon, 09 Aug 2021 16:04:10 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:7dd4:e46e:368b:7454])
-        by smtp.gmail.com with ESMTPSA id j6sm24102260pgq.0.2021.08.09.16.04.07
+        by smtp.gmail.com with ESMTPSA id j6sm24102260pgq.0.2021.08.09.16.04.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 16:04:08 -0700 (PDT)
+        Mon, 09 Aug 2021 16:04:09 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Ming Lei <ming.lei@redhat.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v5 04/52] sr: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Mon,  9 Aug 2021 16:03:07 -0700
-Message-Id: <20210809230355.8186-5-bvanassche@acm.org>
+Subject: [PATCH v5 05/52] scsi_transport_fc: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Mon,  9 Aug 2021 16:03:08 -0700
+Message-Id: <20210809230355.8186-6-bvanassche@acm.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210809230355.8186-1-bvanassche@acm.org>
 References: <20210809230355.8186-1-bvanassche@acm.org>
@@ -59,49 +59,19 @@ Cc: Hannes Reinecke <hare@suse.de>
 Cc: Ming Lei <ming.lei@redhat.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/sr.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/scsi/scsi_transport_fc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index 6203a8b58d40..6a96151d3630 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -331,7 +331,8 @@ static int sr_done(struct scsi_cmnd *SCpnt)
- 	int good_bytes = (result == 0 ? this_count : 0);
- 	int block_sectors = 0;
- 	long error_sector;
--	struct scsi_cd *cd = scsi_cd(SCpnt->request->rq_disk);
-+	struct request *rq = scsi_cmd_to_rq(SCpnt);
-+	struct scsi_cd *cd = scsi_cd(rq->rq_disk);
+diff --git a/drivers/scsi/scsi_transport_fc.c b/drivers/scsi/scsi_transport_fc.c
+index 49748cd817a5..60e406bcf42a 100644
+--- a/drivers/scsi/scsi_transport_fc.c
++++ b/drivers/scsi/scsi_transport_fc.c
+@@ -3804,7 +3804,7 @@ bool fc_eh_should_retry_cmd(struct scsi_cmnd *scmd)
+ 	struct fc_rport *rport = starget_to_rport(scsi_target(scmd->device));
  
- #ifdef DEBUG
- 	scmd_printk(KERN_INFO, SCpnt, "done: %x\n", result);
-@@ -353,16 +354,14 @@ static int sr_done(struct scsi_cmnd *SCpnt)
- 				break;
- 			error_sector =
- 				get_unaligned_be32(&SCpnt->sense_buffer[3]);
--			if (SCpnt->request->bio != NULL)
--				block_sectors =
--					bio_sectors(SCpnt->request->bio);
-+			if (rq->bio != NULL)
-+				block_sectors = bio_sectors(rq->bio);
- 			if (block_sectors < 4)
- 				block_sectors = 4;
- 			if (cd->device->sector_size == 2048)
- 				error_sector <<= 2;
- 			error_sector &= ~(block_sectors - 1);
--			good_bytes = (error_sector -
--				      blk_rq_pos(SCpnt->request)) << 9;
-+			good_bytes = (error_sector - blk_rq_pos(rq)) << 9;
- 			if (good_bytes < 0 || good_bytes >= this_count)
- 				good_bytes = 0;
- 			/*
-@@ -394,7 +393,7 @@ static blk_status_t sr_init_command(struct scsi_cmnd *SCpnt)
- {
- 	int block = 0, this_count, s_size;
- 	struct scsi_cd *cd;
--	struct request *rq = SCpnt->request;
-+	struct request *rq = scsi_cmd_to_rq(SCpnt);
- 	blk_status_t ret;
- 
- 	ret = scsi_alloc_sgtables(SCpnt);
+ 	if ((rport->port_state != FC_PORTSTATE_ONLINE) &&
+-		(scmd->request->cmd_flags & REQ_FAILFAST_TRANSPORT)) {
++		(scsi_cmd_to_rq(scmd)->cmd_flags & REQ_FAILFAST_TRANSPORT)) {
+ 		set_host_byte(scmd, DID_TRANSPORT_MARGINAL);
+ 		return false;
+ 	}
