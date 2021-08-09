@@ -2,140 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FB73E450D
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Aug 2021 13:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B543E4659
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Aug 2021 15:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234488AbhHILvD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Aug 2021 07:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
+        id S235376AbhHINRh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Aug 2021 09:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234295AbhHILvC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 07:51:02 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC24C0613D3;
-        Mon,  9 Aug 2021 04:50:41 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id s22-20020a17090a1c16b0290177caeba067so34110367pjs.0;
-        Mon, 09 Aug 2021 04:50:41 -0700 (PDT)
+        with ESMTP id S235319AbhHINRh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 09:17:37 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA7DC0613D3
+        for <linux-scsi@vger.kernel.org>; Mon,  9 Aug 2021 06:17:16 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id z18so29387245ybg.8
+        for <linux-scsi@vger.kernel.org>; Mon, 09 Aug 2021 06:17:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=lEzRqawbCO3Oz7zqhJzZDzxmM9xxyvbKbGJKK51n77s=;
-        b=CGGbHiQxQHOtVwEfubzZ9ceQPWqmETo95FQMcSqJ0TCV2NzJ9F0fuC3wm/RCnSVZRG
-         Z5wfMX20T4zAnugcvmObELxDMvAfiA9i05R3D86KdMluIyMeW7LNQ7qDLkiZGME09a+n
-         /qspJvkO+BTbNWqmzQqscmIVX799p/dhOPaHU9sg4Ev+7YK54vf4byFGi7Idl0ioojXN
-         +c3GokUwZvjCMXT4CFAFbtPnB6Hak/lmGqHob1fNDdTCHPN1n6Y9rAcDfX4xy3k+eV1J
-         tkXE1oibwbxSXIyroWAAjsNdKB0kvGXA4l2ghjQisC/7svtWGQSnq7O97HsqM+P3aNba
-         ovxA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=rvzzwED4vbLaIUZh7QWQGaJAclI42U8j3pd6Pk9p3bY=;
+        b=fxZ+qISms+F9emTQJzBd/wJbbhHchw1jB0VGh2aY8rrpaDAY/lhNkaCd32AWMOUpNb
+         gqJ25K3uf10f7Nr1p2kPTaOwVhL0Qwu31f6Adb9j/nRAZe8uGk4Ykxt8auN5DuAzsnbd
+         9MSKgug7F1Ob3iLbs1rEGWqiIPFNYSnCgvD+4hOmYwYIA9/E30qDNhgFC05Nx5mjp+ly
+         BbU4dtllWkGhoUwk7AUm45r/7rs/aukwXWegqt49z3Pc4hRWh0ElXzZphHbUtQBcLHfb
+         oFhlLzsyJe72WwER5IXcxnMgoRj31BNWzW+QMX6aWUty8eK5ZADAapOkN0si5G7Or5Mi
+         PdxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=lEzRqawbCO3Oz7zqhJzZDzxmM9xxyvbKbGJKK51n77s=;
-        b=A97jSCOkVTzJB3GNNsADe4xz+yuX/nmKbigmMzHf909KxQdnuJus0AHSzM3/61bWmv
-         O5Aa0wxCQuOF7r2m1gVMWs4xDIHtP3jTOLfepLZs+NG4N+ssB5f7Gi1iy1r/vVqAXc69
-         uKn+/hSHni0nqKaI5QjE1VPa9OdPujhmyHdnrYeumO8D5K8pVIwdusbjglapT2VDBDvq
-         K/2cQSqPabn/gOrX8/2Wg80YJHuO8Ilw4jYuOVTz/BcckCXT0Eh+jglPfWHZhPtI1gYX
-         ZSJaRDy4Q9zvE0X9qw779Cqzi6EjVjnv3xi0N6sV9Kt7zXhk+jdKVVYmm6Av95QoIf7H
-         iMMQ==
-X-Gm-Message-State: AOAM533/mHWAHH0uRzB90rbjosJ8cDt51kYcTbGBv+7yzAgISvvn0qbh
-        Alyr0G1zB8AWkamDI17hMiY=
-X-Google-Smtp-Source: ABdhPJxJrRwYquMEhsP80YPY2COvRlMDmLJN3BmTl+5y3TJFofzDG7vEJ3GquXp8SItJi85ZD/nmGw==
-X-Received: by 2002:a17:902:c641:b029:12c:ef04:fa86 with SMTP id s1-20020a170902c641b029012cef04fa86mr9762891pls.40.1628509841418;
-        Mon, 09 Aug 2021 04:50:41 -0700 (PDT)
-Received: from [10.177.0.134] ([85.203.23.214])
-        by smtp.gmail.com with ESMTPSA id z16sm22469492pgu.21.2021.08.09.04.50.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Aug 2021 04:50:41 -0700 (PDT)
-Subject: Re: [PATCH] scsi: target: pscsi: Fix possible null-pointer
- dereference in pscsi_complete_cmd()
-To:     Bodo Stroesser <bostroesser@gmail.com>
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
-        TOTE Robot <oslab@tsinghua.edu.cn>, martin.petersen@oracle.com
-References: <20210807134651.245436-1-islituo@gmail.com>
- <dea07ecc-7700-5ee7-aa40-2d4455dc6c3f@gmail.com>
-From:   Tuo Li <islituo@gmail.com>
-Message-ID: <7c6622d0-2f28-27a7-250e-9a8fd79691a8@gmail.com>
-Date:   Mon, 9 Aug 2021 19:50:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=rvzzwED4vbLaIUZh7QWQGaJAclI42U8j3pd6Pk9p3bY=;
+        b=cr7W92yDBqSiksESHwdwHT4em/h3CX4z1oLXfUUxiMaMOYY9n8GZJ/6EeqXZ7UBvtF
+         HX+mB4M3efF/0Xv4ulCUDGKLW565A82BOAJBIJun7hndirIplOHhOpsnziYQB1MBjx5C
+         BXCn1/eRum01MsxFpxwltgTvvVeVNTsX0l2qWOhIHRKVrbX7eypHjv/cmkhsJTf1NxZO
+         YBUsjzRfF3/3GjAf9VWkTwq0k52Lm9CVwcUtsKjD6VlGy9iI5+dwi5xSthR2j/rn5WDz
+         JINQtF+QDHHyGtwedPZjfXxayVdMf7VsylGE0ZdXHVh5PuTR/9gWxXVZlMSzSs3Cu7FD
+         4h+Q==
+X-Gm-Message-State: AOAM530bwqOZpmEue5fcXL+6y4VgMp+6bylXcYbPxV7urEQHlKA3WaPl
+        ZnnrSvzlFtm0l/EF/9fPC7U/yKZW8ldV5Ym4Az8=
+X-Google-Smtp-Source: ABdhPJytjbaGueQuhRE0fiR4Gl+yQHIQYBcF97wnecrybhQaAOPFUGvyDEMPIDoPRyO1wpAiEIPIp2/CzsZvH72uofk=
+X-Received: by 2002:a25:d450:: with SMTP id m77mr32105726ybf.412.1628515036034;
+ Mon, 09 Aug 2021 06:17:16 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <dea07ecc-7700-5ee7-aa40-2d4455dc6c3f@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Received: by 2002:a25:7393:0:0:0:0:0 with HTTP; Mon, 9 Aug 2021 06:17:15 -0700 (PDT)
+Reply-To: infoglobasece@gmail.com
+From:   GLOBAL FINANCIAL SECURITY MONITORING UNIT 
+        <engrudwonghenn@gmail.com>
+Date:   Mon, 9 Aug 2021 14:17:15 +0100
+Message-ID: <CAF0nSwSNBSEdUc-3tJqnY_YoSQh9Qf5WQuxgbjjXCQduyuP5vg@mail.gmail.com>
+Subject: Reply ASAP.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Thanks for your feedback. We will prepare a V2 patch and put the 
-transport_kunmap_data_sg()
-into the else-branch of the if (!buf).
+Global Financial Security Monitoring Unit
 
-Best wishes,
-Tuo Li
+24/25, the Shard, 32 London Bridge St, London SE1 9SG, UK
 
-On 2021/8/9 18:36, Bodo Stroesser wrote:
-> On 07.08.21 15:46, Tuo Li wrote:
->> The return value of transport_kmap_data_sg() is assigned to the variable
->> buf:
->>    buf = transport_kmap_data_sg(cmd);
->>
->> And then it is checked:
->>    if (!buf) {
->>
->> This indicates that buf can be NULL. However, it is dereferenced in the
->> following statements:
->>    if (!(buf[3] & 0x80))
->>      buf[3] |= 0x80;
->>    if (!(buf[2] & 0x80))
->>     buf[2] |= 0x80;
->>
->> To fix these possible null-pointer dereferences, dereference buf only 
->> when
->> it is not NULL.
->>
->> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
->> Signed-off-by: Tuo Li <islituo@gmail.com>
->> ---
->>   drivers/target/target_core_pscsi.c | 14 +++++++-------
->>   1 file changed, 7 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/target/target_core_pscsi.c 
->> b/drivers/target/target_core_pscsi.c
->> index 2629d2ef3970..560815729182 100644
->> --- a/drivers/target/target_core_pscsi.c
->> +++ b/drivers/target/target_core_pscsi.c
->> @@ -620,14 +620,14 @@ static void pscsi_complete_cmd(struct se_cmd 
->> *cmd, u8 scsi_status,
->>               buf = transport_kmap_data_sg(cmd);
->>               if (!buf) {
->>                   ; /* XXX: TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE */
->> -            }
->> -
->> -            if (cdb[0] == MODE_SENSE_10) {
->> -                if (!(buf[3] & 0x80))
->> -                    buf[3] |= 0x80;
->>               } else {
->> -                if (!(buf[2] & 0x80))
->> -                    buf[2] |= 0x80;
->> +                if (cdb[0] == MODE_SENSE_10) {
->> +                    if (!(buf[3] & 0x80))
->> +                        buf[3] |= 0x80;
->> +                } else {
->> +                    if (!(buf[2] & 0x80))
->> +                        buf[2] |= 0x80;
->> +                }
->>               }
->>                 transport_kunmap_data_sg(cmd);
->>
->
-> I'm wondering whether we should better put the
-> transport_kunmap_data_sg into the else-branch of the if (!buf)?
-> AFAICS, calling it after transport_kmap_data_sg failed does not
-> cause problems, but I feel it would be cleaner.
->
-> Otherwise it looks good to me.
 
+
+
+                Compensation Approved Sum Of $USD 4.5 million dollars/
+Debt Reconciliation.
+
+
+lnvestment Compensation sum of USD$4.5 million dollars have been
+approved through the World Bank Mass Assisted Project Deposit Fund.
+This compensation payment was initiated to assist those who has failed
+prey to fraudulent business / communications in different categories ,
+Inheritance, Contracts, Lottery, Romance Scam, Diplomatic Payment,
+Fraudulent Loan Transactions, Unsuccessful Investment transactions ,
+Those who has also failed victim of BEC Scams also known as Wire ,
+Mass assisted fund was approved to settle failed business, you are
+qualified to receive this approved investment funds as long as you
+have receive fraudulent proposal before, many people have suffered
+untold lost/ hardship in the hands of those unscrupulous elements and
+evil-minded people operating all kinds of fraud just to make a dirty
+living and misery out of innocent souls. You are entitled to receive
+this investment compensation fund as long as you have received a scam
+/fraudulent message through whichever way.
+
+NB: Special compensation for victims of COVID -19 through a world mass
+assisted project, we are going to guide you with covid 19 compensation
+process once you respond
+to this message.
+
+Attention Please indicate if you have received any compensation before
+now, to the amount of (U.S.D $4.5M) from the New World Bank mass
+assisted project investment
+funds. Your email address was enlisted on the investment compensation
+global manifest booklet submitted by World Bank Project auditors.We
+want to know if you are interested to receive the compensation, in
+this regard, we shall finalize your compensation transaction through
+the appropriate legal means nominated by World Bank auditors.
+
+Your response is highly imminent.
+
+Micheal Bricks
+
+Consultant agent (FIMS)
