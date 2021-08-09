@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE533E4FBA
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Aug 2021 01:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB313E4FB8
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Aug 2021 01:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235520AbhHIXEf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S229688AbhHIXEf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Mon, 9 Aug 2021 19:04:35 -0400
-Received: from mail-pl1-f177.google.com ([209.85.214.177]:38821 "EHLO
-        mail-pl1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235676AbhHIXEb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 19:04:31 -0400
-Received: by mail-pl1-f177.google.com with SMTP id a5so2656075plh.5
-        for <linux-scsi@vger.kernel.org>; Mon, 09 Aug 2021 16:04:10 -0700 (PDT)
+Received: from mail-pl1-f174.google.com ([209.85.214.174]:39631 "EHLO
+        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235520AbhHIXEd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 19:04:33 -0400
+Received: by mail-pl1-f174.google.com with SMTP id l11so6717364plk.6
+        for <linux-scsi@vger.kernel.org>; Mon, 09 Aug 2021 16:04:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=l6VDWq6IVEh87e1uNmLaYE9v1k4d4/jK9l4qdKk6+CY=;
-        b=f0XDGhghGcp01AjxSx4P/Oz5dnbbJshI4FYfhEvCkT+NRr7fRgIOY9AnGOnZLrTRDD
-         EDYyNPH1faO/oHCAY8KgrM+IP2vlS/Lt7O4RNQdHB+ScFP+W2nRdcbQWEnmctiNITg4j
-         4UihcBXPwPHFToIZ6iXA78bJNbpaWJpwSS272MPidj7iWwmbfSihNe50cwN7q7yAQ+NM
-         wri+iCwcN8dIFzNBD2r+WN9xfa056uZGln8m+w8TWcaNj9vsFHzf4D5N3Ife5/nTxJUk
-         ll8aA6t0dpUDWFlox1hBLUXyrFiiOTrjclAacE85FXMN3G5SsTqFChggCD4dkFdfBZZp
-         SQOA==
-X-Gm-Message-State: AOAM530l4UP7eknKNCHayTnjfflPXGJGJiGvWXSg62x8igVJKCl8fMzH
-        mMI9DqIaYq7VLRmINCPQt28=
-X-Google-Smtp-Source: ABdhPJyv2xaiCyCj0X+Tgb37URVGrXScI4466Hgz3mh/AlvtH4ZqwOnxQUaUlBpt6+Ytb0uLuUz8JQ==
-X-Received: by 2002:aa7:9254:0:b029:3c9:268e:ae68 with SMTP id 20-20020aa792540000b02903c9268eae68mr14697510pfp.58.1628550250550;
-        Mon, 09 Aug 2021 16:04:10 -0700 (PDT)
+        bh=6C1YMminU/sYC5PWrfQ8cJBHDuyZ+19QMjzEYfMIJRQ=;
+        b=PAdfdG6PSPJr8dP/bok/ZSwDzQEMOq1V9PXcLyxH5Y4+s/f+Nev2sReXGjXAAVraFX
+         F9x6motQsrhWE9iKvlnj6So8EfqqS3sXuUemGFfSL/YPVAvkgjQAjglVOBXt96gv95va
+         to+SYaPjOfqFQeCnORKKYXTH//ehce3/dN3QftiTd5mTmPCQW2wTGCsJFdMZZMsxfMa6
+         TgvkwtpdxfRA/yfzipppdo9cn+419pnVCnCiDuB+7gC12kwDO0mEEuBVyf0bWVKKAPan
+         Woi5yxjEeiy+wHCvUG6xR+2Likf8popCsAc97Eg9L+QJjwiLHchoGBoo6DeSSe5tM2tn
+         4zFg==
+X-Gm-Message-State: AOAM532SUMf0907EwbS7L+qqvbeTkMDMvFRF4TThNJmh//+MO8/O/DX2
+        4GtHOQ/qHiYjvtYca86eZyM=
+X-Google-Smtp-Source: ABdhPJy07tpDrFqCdVf8Ds71OGT4rxBIcwedR5+bmi/eTMU+OgWU2MvoBi71vCop7ESVyJwfxNdoUg==
+X-Received: by 2002:a17:902:850a:b029:12c:8da9:8bd2 with SMTP id bj10-20020a170902850ab029012c8da98bd2mr22556222plb.58.1628550252048;
+        Mon, 09 Aug 2021 16:04:12 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:7dd4:e46e:368b:7454])
-        by smtp.gmail.com with ESMTPSA id j6sm24102260pgq.0.2021.08.09.16.04.09
+        by smtp.gmail.com with ESMTPSA id j6sm24102260pgq.0.2021.08.09.16.04.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 16:04:09 -0700 (PDT)
+        Mon, 09 Aug 2021 16:04:11 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
         Ming Lei <ming.lei@redhat.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v5 05/52] scsi_transport_fc: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Mon,  9 Aug 2021 16:03:08 -0700
-Message-Id: <20210809230355.8186-6-bvanassche@acm.org>
+Subject: [PATCH v5 06/52] scsi_transport_spi: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Mon,  9 Aug 2021 16:03:09 -0700
+Message-Id: <20210809230355.8186-7-bvanassche@acm.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210809230355.8186-1-bvanassche@acm.org>
 References: <20210809230355.8186-1-bvanassche@acm.org>
@@ -59,19 +59,19 @@ Cc: Hannes Reinecke <hare@suse.de>
 Cc: Ming Lei <ming.lei@redhat.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/scsi_transport_fc.c | 2 +-
+ drivers/scsi/scsi_transport_spi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_transport_fc.c b/drivers/scsi/scsi_transport_fc.c
-index 49748cd817a5..60e406bcf42a 100644
---- a/drivers/scsi/scsi_transport_fc.c
-+++ b/drivers/scsi/scsi_transport_fc.c
-@@ -3804,7 +3804,7 @@ bool fc_eh_should_retry_cmd(struct scsi_cmnd *scmd)
- 	struct fc_rport *rport = starget_to_rport(scsi_target(scmd->device));
- 
- 	if ((rport->port_state != FC_PORTSTATE_ONLINE) &&
--		(scmd->request->cmd_flags & REQ_FAILFAST_TRANSPORT)) {
-+		(scsi_cmd_to_rq(scmd)->cmd_flags & REQ_FAILFAST_TRANSPORT)) {
- 		set_host_byte(scmd, DID_TRANSPORT_MARGINAL);
- 		return false;
+diff --git a/drivers/scsi/scsi_transport_spi.c b/drivers/scsi/scsi_transport_spi.c
+index 5af7a10e9514..bd72c38d7bfc 100644
+--- a/drivers/scsi/scsi_transport_spi.c
++++ b/drivers/scsi/scsi_transport_spi.c
+@@ -1230,7 +1230,7 @@ int spi_populate_tag_msg(unsigned char *msg, struct scsi_cmnd *cmd)
+ {
+         if (cmd->flags & SCMD_TAGGED) {
+ 		*msg++ = SIMPLE_QUEUE_TAG;
+-        	*msg++ = cmd->request->tag;
++		*msg++ = scsi_cmd_to_rq(cmd)->tag;
+         	return 2;
  	}
+ 
