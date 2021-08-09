@@ -2,137 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A66513E46D8
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Aug 2021 15:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43503E47BD
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Aug 2021 16:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbhHINni (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Aug 2021 09:43:38 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:7811 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbhHINni (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 09:43:38 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Gjy2Z39jgzYmhN;
-        Mon,  9 Aug 2021 21:43:02 +0800 (CST)
-Received: from dggema773-chm.china.huawei.com (10.1.198.217) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Mon, 9 Aug 2021 21:43:15 +0800
-Received: from localhost.huawei.com (10.175.124.27) by
- dggema773-chm.china.huawei.com (10.1.198.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Mon, 9 Aug 2021 21:43:14 +0800
-From:   <lijinlin3@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <john.garry@huawei.com>, <bvanassche@acm.org>,
-        <qiulaibin@huawei.com>, <linfeilong@huawei.com>,
-        <wubo40@huawei.com>, <lijinlin3@huawei.com>
-Subject: [PATCH v2] scsi: core: Fix hang of freezing queue between blocking and running device
-Date:   Mon, 9 Aug 2021 22:13:08 +0800
-Message-ID: <20210809141308.3700854-1-lijinlin3@huawei.com>
-X-Mailer: git-send-email 2.27.0
+        id S235358AbhHIOim (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Aug 2021 10:38:42 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3606 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235246AbhHIOfA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 10:35:00 -0400
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Gjz9K62K8z6D9Lc;
+        Mon,  9 Aug 2021 22:33:57 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Mon, 9 Aug 2021 16:34:24 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 9 Aug 2021 15:34:21 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <axboe@kernel.dk>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <kashyap.desai@broadcom.com>,
+        <hare@suse.de>, <ming.lei@redhat.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH v2 00/11] blk-mq: Reduce static requests memory footprint for shared sbitmap
+Date:   Mon, 9 Aug 2021 22:29:27 +0800
+Message-ID: <1628519378-211232-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggema773-chm.china.huawei.com (10.1.198.217)
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Li Jinlin <lijinlin3@huawei.com>
+Currently a full set of static requests are allocated per hw queue per
+tagset when shared sbitmap is used.
 
-We found a hang issue, the test steps are as follows:
-  1. blocking device via scsi_device_set_state()
-  2. dd if=/dev/sda of=/mnt/t.log bs=1M count=10
-  3. echo none > /sys/block/sda/queue/scheduler
-  4. echo "running" >/sys/block/sda/device/state
+However, only tagset->queue_depth number of requests may be active at
+any given time. As such, only tagset->queue_depth number of static
+requests are required.
 
-Step 3 and 4 should finish this work after step 4, but they hangs.
+The same goes for using an IO scheduler, which allocates a full set of
+static requests per hw queue per request queue.
 
-  CPU#0               CPU#1                CPU#2
-  ---------------     ----------------     ----------------
-                                           Step 1: blocking device
+This series changes shared sbitmap support by using a shared tags per
+tagset and request queue. Ming suggested something along those lines in
+v1. But we'll keep name "shared sbitmap" name as it is fimilar. In using
+a shared tags, the static rqs also become shared, reducing the number of
+sets of static rqs, reducing memory usage.
 
-                                           Step 2: dd xxxx
-                                                  ^^^^^^ get request
-                                                         q_usage_counter++
+Patch "blk-mq: Use shared tags for shared sbitmap support" is a bit big,
+and could be broken down. But then maintaining ability to bisect
+becomes harder and each sub-patch would get more convoluted.
 
-                      Step 3: switching scheculer
-                      elv_iosched_store
-                        elevator_switch
-                          blk_mq_freeze_queue
-                            blk_freeze_queue
-                              > blk_freeze_queue_start
-                                ^^^^^^ mq_freeze_depth++
+For megaraid sas driver on my 128-CPU arm64 system with 1x SATA disk, we
+save approx. 300MB(!) [370MB -> 60MB]
 
-                              > blk_mq_run_hw_queues
-                                ^^^^^^ can't run queue when dev blocked
+Baseline is 2112f5c1330a (for-5.15/block) loop: Select I/O scheduler ...
 
-                              > blk_mq_freeze_queue_wait
-                                ^^^^^^ Hang here!!!
-                                       wait q_usage_counter==0
+Changes since v1:
+- Switch to use blk_mq_tags for shared sbitmap
+- Add new blk_mq_ops init request callback
+- Add some RB tags (thanks!)
 
-  Step 4: running device
-  store_state_field
-    scsi_rescan_device
-      scsi_attach_vpd
-        scsi_vpd_inquiry
-          __scsi_execute
-            blk_get_request
-              blk_mq_alloc_request
-                blk_queue_enter
-                ^^^^^^ Hang here!!!
-                       wait mq_freeze_depth==0
+John Garry (11):
+  blk-mq: Change rqs check in blk_mq_free_rqs()
+  block: Rename BLKDEV_MAX_RQ -> BLKDEV_DEFAULT_RQ
+  blk-mq: Relocate shared sbitmap resize in blk_mq_update_nr_requests()
+  blk-mq: Invert check in blk_mq_update_nr_requests()
+  blk-mq-sched: Rename blk_mq_sched_alloc_{tags -> map_and_request}()
+  blk-mq: Pass driver tags to blk_mq_clear_rq_mapping()
+  blk-mq: Add blk_mq_tag_update_sched_shared_sbitmap()
+  blk-mq: Add blk_mq_ops.init_request_no_hctx()
+  scsi: Set blk_mq_ops.init_request_no_hctx
+  blk-mq: Use shared tags for shared sbitmap support
+  blk-mq: Stop using pointers for blk_mq_tags bitmap tags
 
-    blk_mq_run_hw_queues
-    ^^^^^^ dispatch IO, q_usage_counter will reduce to zero
+ block/bfq-iosched.c      |   4 +-
+ block/blk-core.c         |   2 +-
+ block/blk-mq-debugfs.c   |   8 +--
+ block/blk-mq-sched.c     |  92 +++++++++++++------------
+ block/blk-mq-sched.h     |   2 +-
+ block/blk-mq-tag.c       | 111 +++++++++++++-----------------
+ block/blk-mq-tag.h       |  12 ++--
+ block/blk-mq.c           | 144 +++++++++++++++++++++++----------------
+ block/blk-mq.h           |   8 +--
+ block/kyber-iosched.c    |   4 +-
+ block/mq-deadline-main.c |   2 +-
+ drivers/block/rbd.c      |   2 +-
+ drivers/scsi/scsi_lib.c  |   6 +-
+ include/linux/blk-mq.h   |  20 +++---
+ include/linux/blkdev.h   |   5 +-
+ 15 files changed, 218 insertions(+), 204 deletions(-)
 
-                            blk_mq_unfreeze_queue
-                            ^^^^^ mq_freeze_depth--
-
-Step 3 and 4 wait for each other.
-
-To fix this, we need to run queue before rescanning device when the device
-state changes to SDEV_RUNNING.
-
-Fixes: f0f82e2476f6 ("scsi: core: Fix capacity set to zero after offlinining device")
-Signed-off-by: Li Jinlin <lijinlin3@huawei.com>
-Signed-off-by: Qiu Laibin <qiulaibin@huawei.com>
----
-changes since v1 send with Message-ID:
-20210805143231.1713299-1-lijinlin3@huawei.com
-
- - Modify the subject to make it distinct
- - Modify the message to fix typo and make it distinct
- - Reduce the number of SOB
-
- drivers/scsi/scsi_sysfs.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index c3a710bceba0..aa701582c950 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -809,12 +809,12 @@ store_state_field(struct device *dev, struct device_attribute *attr,
- 	ret = scsi_device_set_state(sdev, state);
- 	/*
- 	 * If the device state changes to SDEV_RUNNING, we need to
--	 * rescan the device to revalidate it, and run the queue to
--	 * avoid I/O hang.
-+	 * run the queue to avoid I/O hang, and rescan the device
-+	 * to revalidate it.
- 	 */
- 	if (ret == 0 && state == SDEV_RUNNING) {
--		scsi_rescan_device(dev);
- 		blk_mq_run_hw_queues(sdev->request_queue, true);
-+		scsi_rescan_device(dev);
- 	}
- 	mutex_unlock(&sdev->state_mutex);
- 
 -- 
-2.27.0
+2.26.2
 
