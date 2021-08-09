@@ -2,46 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 628BE3E4FDF
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Aug 2021 01:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED18A3E4FDE
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Aug 2021 01:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237026AbhHIXFZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Aug 2021 19:05:25 -0400
-Received: from mail-pl1-f174.google.com ([209.85.214.174]:38910 "EHLO
-        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbhHIXFX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 19:05:23 -0400
-Received: by mail-pl1-f174.google.com with SMTP id a5so2658420plh.5
-        for <linux-scsi@vger.kernel.org>; Mon, 09 Aug 2021 16:05:02 -0700 (PDT)
+        id S237034AbhHIXF0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Aug 2021 19:05:26 -0400
+Received: from mail-pj1-f48.google.com ([209.85.216.48]:44579 "EHLO
+        mail-pj1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237011AbhHIXFZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 19:05:25 -0400
+Received: by mail-pj1-f48.google.com with SMTP id hv22-20020a17090ae416b0290178c579e424so2396032pjb.3
+        for <linux-scsi@vger.kernel.org>; Mon, 09 Aug 2021 16:05:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tPKq1F1MPTyTLjK6rpWD5zr2FjUTqF7F8c4lG2mKQnc=;
-        b=nIbQNj6E/NsBtTDuluDXYOFgIIHi+dt63HS14NwDMYKwpZzF3q2ymhadM1rMCb5/cE
-         l3B6m6J2C+DJOhnY9tfdOVa5LX1htrx2z+qILOvBznvFfWNzJi4fczHDbH7JtlKiV8LL
-         0BtrfYNVXEBR3DB1e+ZR/+WrZJ9SLEZ8Whlo8VR55MtvPmJWeKEZRC0V+3T6dBtF98FG
-         tx7l9WOSPWgg5a8f6XHO/A9vM7ekSaEmnZZniemhGYFoIuQqX5rqeSzHNi5rGZm4VPR9
-         +1RRIC0dtd2KTBmOe2O+Z50uiFMi278FJxdtJRFPYg7Jw5USF6lmPajc+v6h9J6KIATd
-         KUAw==
-X-Gm-Message-State: AOAM533dKANasWJw9xc0RUfLr3PqKgvoHPogOPg4lhLcFTXelLveiBqo
-        SkNHCxwNVjBGhZU1iPywxE0=
-X-Google-Smtp-Source: ABdhPJwVXa2qm97y5YSjyAwsQYRLMUbceWFScaroQ8/ONTHz7GrsYgIbSsBIKEumE2MGSVvEKgurLw==
-X-Received: by 2002:a17:902:e549:b029:12c:bf10:36c9 with SMTP id n9-20020a170902e549b029012cbf1036c9mr22027345plf.66.1628550302195;
-        Mon, 09 Aug 2021 16:05:02 -0700 (PDT)
+        bh=8THQL4IBWnjCFG34wAR/rrdTZqIKDZOaWTk3GhOvU/Y=;
+        b=du1bH7oY+RIClm8Ll+MxVimjoHv4bVFH1rkSduXbVBbY5GeuCZCVMGp8W63KWN7rkR
+         wy9bFeCzS4gfp2yopfzDYQm329fuaXQ/aa9mVp8pc1ah8RgjSXjSn2fWBHSfIMgzez0I
+         fYLMs2aFx34ySupL/L2pvvPlMT/ZZMJqHK7BKuu7xW2QyR2YpdsoqhmMtgoRNGYkZpR6
+         JHbIxmgpYskFnvLDk+tvSIafZtU1mWbzrhTPaHSW6WZ3VR2APpDxcvtf4YWT+Xv4Ra+K
+         6OOFEiTjtk50bA16Rh54+rtRheeQCcs9oVMepg5A7fKu7cMKvvVVJKtz0lKToDEbnSOK
+         8cQg==
+X-Gm-Message-State: AOAM533ku8tRJMWQr/RgtHTr0tHUSen6afm9ygfXLGMMWrKThQ09LbUq
+        qIxXgy/TRe75qfcNkytzpNBf4Wy1CHlu4Q==
+X-Google-Smtp-Source: ABdhPJwZKch0pjIwxyDxyEv2DOXzUoA1R1nhUuWMsdcSiepJjB9G+JJdrwkUJOlNTsDfjN/r8uE3gA==
+X-Received: by 2002:a17:90a:514f:: with SMTP id k15mr14453983pjm.95.1628550303775;
+        Mon, 09 Aug 2021 16:05:03 -0700 (PDT)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:7dd4:e46e:368b:7454])
-        by smtp.gmail.com with ESMTPSA id j6sm24102260pgq.0.2021.08.09.16.05.01
+        by smtp.gmail.com with ESMTPSA id j6sm24102260pgq.0.2021.08.09.16.05.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 16:05:01 -0700 (PDT)
+        Mon, 09 Aug 2021 16:05:03 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Nilesh Javali <njavali@marvell.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
         GR-QLogic-Storage-Upstream@marvell.com,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v5 38/52] qla2xxx: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
-Date:   Mon,  9 Aug 2021 16:03:41 -0700
-Message-Id: <20210809230355.8186-39-bvanassche@acm.org>
+Subject: [PATCH v5 39/52] qla4xxx: Use scsi_cmd_to_rq() instead of scsi_cmnd.request
+Date:   Mon,  9 Aug 2021 16:03:42 -0700
+Message-Id: <20210809230355.8186-40-bvanassche@acm.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210809230355.8186-1-bvanassche@acm.org>
 References: <20210809230355.8186-1-bvanassche@acm.org>
@@ -56,28 +57,42 @@ instead. This patch does not change any functionality.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_os.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/qla4xxx/ql4_iocb.c | 2 +-
+ drivers/scsi/qla4xxx/ql4_os.c   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 868037c7d608..126ac7e24ea9 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -854,7 +854,7 @@ qla2xxx_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 		uint16_t hwq;
- 		struct qla_qpair *qpair = NULL;
+diff --git a/drivers/scsi/qla4xxx/ql4_iocb.c b/drivers/scsi/qla4xxx/ql4_iocb.c
+index c57cec6fff6d..28eab07935ba 100644
+--- a/drivers/scsi/qla4xxx/ql4_iocb.c
++++ b/drivers/scsi/qla4xxx/ql4_iocb.c
+@@ -288,7 +288,7 @@ int qla4xxx_send_command_to_isp(struct scsi_qla_host *ha, struct srb * srb)
+ 	/* Acquire hardware specific lock */
+ 	spin_lock_irqsave(&ha->hardware_lock, flags);
  
--		tag = blk_mq_unique_tag(cmd->request);
-+		tag = blk_mq_unique_tag(scsi_cmd_to_rq(cmd));
- 		hwq = blk_mq_unique_tag_to_hwq(tag);
- 		qpair = ha->queue_pair_map[hwq];
+-	index = (uint32_t)cmd->request->tag;
++	index = scsi_cmd_to_rq(cmd)->tag;
  
-@@ -1763,7 +1763,7 @@ static void qla2x00_abort_srb(struct qla_qpair *qp, srb_t *sp, const int res,
- 		}
+ 	/*
+ 	 * Check to see if adapter is online before placing request on
+diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
+index 3f7737386193..f1ea65c6e5f5 100644
+--- a/drivers/scsi/qla4xxx/ql4_os.c
++++ b/drivers/scsi/qla4xxx/ql4_os.c
+@@ -9282,7 +9282,7 @@ static int qla4xxx_eh_device_reset(struct scsi_cmnd *cmd)
+ 	DEBUG2(printk(KERN_INFO
+ 		      "scsi%ld: DEVICE_RESET cmd=%p jiffies = 0x%lx, to=%x,"
+ 		      "dpc_flags=%lx, status=%x allowed=%d\n", ha->host_no,
+-		      cmd, jiffies, cmd->request->timeout / HZ,
++		      cmd, jiffies, scsi_cmd_to_rq(cmd)->timeout / HZ,
+ 		      ha->dpc_flags, cmd->result, cmd->allowed));
  
- 		spin_lock_irqsave(qp->qp_lock_ptr, *flags);
--		if (ret_cmd && blk_mq_request_started(cmd->request))
-+		if (ret_cmd && blk_mq_request_started(scsi_cmd_to_rq(cmd)))
- 			sp->done(sp, res);
- 	} else {
- 		sp->done(sp, res);
+ 	rval = qla4xxx_isp_check_reg(ha);
+@@ -9349,7 +9349,7 @@ static int qla4xxx_eh_target_reset(struct scsi_cmnd *cmd)
+ 	DEBUG2(printk(KERN_INFO
+ 		      "scsi%ld: TARGET_DEVICE_RESET cmd=%p jiffies = 0x%lx, "
+ 		      "to=%x,dpc_flags=%lx, status=%x allowed=%d\n",
+-		      ha->host_no, cmd, jiffies, cmd->request->timeout / HZ,
++		      ha->host_no, cmd, jiffies, scsi_cmd_to_rq(cmd)->timeout / HZ,
+ 		      ha->dpc_flags, cmd->result, cmd->allowed));
+ 
+ 	rval = qla4xxx_isp_check_reg(ha);
