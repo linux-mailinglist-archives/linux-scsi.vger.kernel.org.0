@@ -2,340 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C94693E47B2
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Aug 2021 16:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CAA63E485B
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Aug 2021 17:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235521AbhHIOiQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Aug 2021 10:38:16 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3617 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234924AbhHIOgR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 10:36:17 -0400
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Gjz9v3Yk0z6C9lG;
-        Mon,  9 Aug 2021 22:34:27 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Mon, 9 Aug 2021 16:34:56 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 9 Aug 2021 15:34:53 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <axboe@kernel.dk>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <kashyap.desai@broadcom.com>,
-        <hare@suse.de>, <ming.lei@redhat.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 11/11] blk-mq: Stop using pointers for blk_mq_tags bitmap tags
-Date:   Mon, 9 Aug 2021 22:29:38 +0800
-Message-ID: <1628519378-211232-12-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1628519378-211232-1-git-send-email-john.garry@huawei.com>
-References: <1628519378-211232-1-git-send-email-john.garry@huawei.com>
+        id S235293AbhHIPKM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Aug 2021 11:10:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:48130 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235200AbhHIPKL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Aug 2021 11:10:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1628521790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Cz/OjkiJV+Jis1cff9B5JIt1Qzucd6eUIIOwKG7RT8I=;
+        b=Rhy986clx5wbfE14L3Sg8g78kJ0wa1Rp62uFTMLt0k3ozsvXNIKoLSY4oEXWd84jvdVDTQ
+        zScKXVIRErrYTw2Rir0Ycw/PdpxsjnavRWddGY4LL5PtV1XUW6UO2goAiNl8oGoQo8xwkK
+        DFPTIqIkNoWE+Hw0i3NUWwPw+LgSXLs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-601--QQiEgCzNH2lywXpR6CrOg-1; Mon, 09 Aug 2021 11:09:49 -0400
+X-MC-Unique: -QQiEgCzNH2lywXpR6CrOg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 559561853025;
+        Mon,  9 Aug 2021 15:09:48 +0000 (UTC)
+Received: from emilne.bos.redhat.com (unknown [10.18.25.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EA5F05DA60;
+        Mon,  9 Aug 2021 15:09:47 +0000 (UTC)
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     stable@vger.kernel.org, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com
+Subject: [PATCH] lpfc: move initialization of phba->poll_list earlier to avoid crash
+Date:   Mon,  9 Aug 2021 11:09:47 -0400
+Message-Id: <20210809150947.18104-1-emilne@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that we use shared tags for shared sbitmap support, we don't require
-the tags sbitmap pointers, so drop them.
+The phba->poll_list is traversed in case of an error in lpfc_sli4_hba_setup(),
+so it must be initialized earlier in case the error path is taken.
 
-This essentially reverts commit 222a5ae03cdd ("blk-mq: Use pointers for
-blk_mq_tags bitmap tags").
+[  490.030738] lpfc 0000:65:00.0: 0:1413 Failed to init iocb list.
+[  490.036661] BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
+[  490.044485] PGD 0 P4D 0
+[  490.047027] Oops: 0000 [#1] SMP PTI
+[  490.050518] CPU: 0 PID: 7 Comm: kworker/0:1 Kdump: loaded Tainted: G          I      --------- -  - 4.18.
+[  490.060511] Hardware name: Dell Inc. PowerEdge R440/0WKGTH, BIOS 1.4.8 05/22/2018
+[  490.067994] Workqueue: events work_for_cpu_fn
+[  490.072371] RIP: 0010:lpfc_sli4_cleanup_poll_list+0x20/0xb0 [lpfc]
+[  490.078546] Code: cf e9 04 f7 fe ff 0f 1f 40 00 0f 1f 44 00 00 41 57 49 89 ff 41 56 41 55 41 54 4d 8d a79
+[  490.097291] RSP: 0018:ffffbd1a463dbcc8 EFLAGS: 00010246
+[  490.102518] RAX: 0000000000008200 RBX: ffff945cdb8c0000 RCX: 0000000000000000
+[  490.109649] RDX: 0000000000018200 RSI: ffff9468d0e16818 RDI: 0000000000000000
+[  490.116783] RBP: ffff945cdb8c1740 R08: 00000000000015c5 R09: 0000000000000042
+[  490.123915] R10: 0000000000000000 R11: ffffbd1a463dbab0 R12: ffff945cdb8c25c0
+[  490.131049] R13: 00000000fffffff4 R14: 0000000000001800 R15: ffff945cdb8c0000
+[  490.138182] FS:  0000000000000000(0000) GS:ffff9468d0e00000(0000) knlGS:0000000000000000
+[  490.146267] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  490.152013] CR2: 0000000000000000 CR3: 000000042ca10002 CR4: 00000000007706f0
+[  490.159146] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  490.166277] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  490.173409] PKRU: 55555554
+[  490.176123] Call Trace:
+[  490.178598]  lpfc_sli4_queue_destroy+0x7f/0x3c0 [lpfc]
+[  490.183745]  lpfc_sli4_hba_setup+0x1bc7/0x23e0 [lpfc]
+[  490.188797]  ? kernfs_activate+0x63/0x80
+[  490.192721]  ? kernfs_add_one+0xe7/0x130
+[  490.196647]  ? __kernfs_create_file+0x80/0xb0
+[  490.201020]  ? lpfc_pci_probe_one_s4.isra.48+0x46f/0x9e0 [lpfc]
+[  490.206944]  lpfc_pci_probe_one_s4.isra.48+0x46f/0x9e0 [lpfc]
+[  490.212697]  lpfc_pci_probe_one+0x179/0xb70 [lpfc]
+[  490.217492]  local_pci_probe+0x41/0x90
+[  490.221246]  work_for_cpu_fn+0x16/0x20
+[  490.224994]  process_one_work+0x1a7/0x360
+[  490.229009]  ? create_worker+0x1a0/0x1a0
+[  490.232933]  worker_thread+0x1cf/0x390
+[  490.236687]  ? create_worker+0x1a0/0x1a0
+[  490.240612]  kthread+0x116/0x130
+[  490.243846]  ? kthread_flush_work_fn+0x10/0x10
+[  490.248293]  ret_from_fork+0x35/0x40
+[  490.251869] Modules linked in: lpfc(+) xt_CHECKSUM ipt_MASQUERADE xt_conntrack ipt_REJECT nf_reject_ipv4i
+[  490.332609] CR2: 0000000000000000
 
-Signed-off-by: John Garry <john.garry@huawei.com>
+Fixes: 93a4d6f40198 ("scsi: lpfc: Add registration for CPU Offline/Online events")
+Cc: stable@vger.kernel.org
+Signed-off-by: Ewan D. Milne <emilne@redhat.com>
 ---
- block/bfq-iosched.c      |  4 ++--
- block/blk-mq-debugfs.c   |  8 +++----
- block/blk-mq-tag.c       | 50 ++++++++++++++++------------------------
- block/blk-mq-tag.h       |  7 ++----
- block/blk-mq.c           |  8 +++----
- block/kyber-iosched.c    |  4 ++--
- block/mq-deadline-main.c |  2 +-
- 7 files changed, 35 insertions(+), 48 deletions(-)
+ drivers/scsi/lpfc/lpfc_init.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 727955918563..91ba4eacafaa 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -6881,8 +6881,8 @@ static void bfq_depth_updated(struct blk_mq_hw_ctx *hctx)
- 	struct blk_mq_tags *tags = hctx->sched_tags;
- 	unsigned int min_shallow;
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 5983e05b648f..e29523a1b530 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -13193,6 +13193,8 @@ lpfc_pci_probe_one_s4(struct pci_dev *pdev, const struct pci_device_id *pid)
+ 	if (!phba)
+ 		return -ENOMEM;
  
--	min_shallow = bfq_update_depths(bfqd, tags->bitmap_tags);
--	sbitmap_queue_min_shallow_depth(tags->bitmap_tags, min_shallow);
-+	min_shallow = bfq_update_depths(bfqd, &tags->bitmap_tags);
-+	sbitmap_queue_min_shallow_depth(&tags->bitmap_tags, min_shallow);
- }
++	INIT_LIST_HEAD(&phba->poll_list);
++
+ 	/* Perform generic PCI device enabling operation */
+ 	error = lpfc_enable_pci_dev(phba);
+ 	if (error)
+@@ -13327,7 +13329,6 @@ lpfc_pci_probe_one_s4(struct pci_dev *pdev, const struct pci_device_id *pid)
+ 	/* Enable RAS FW log support */
+ 	lpfc_sli4_ras_setup(phba);
  
- static int bfq_init_hctx(struct blk_mq_hw_ctx *hctx, unsigned int index)
-diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
-index 4b66d2776eda..4000376330c9 100644
---- a/block/blk-mq-debugfs.c
-+++ b/block/blk-mq-debugfs.c
-@@ -452,11 +452,11 @@ static void blk_mq_debugfs_tags_show(struct seq_file *m,
- 		   atomic_read(&tags->active_queues));
+-	INIT_LIST_HEAD(&phba->poll_list);
+ 	timer_setup(&phba->cpuhp_poll_timer, lpfc_sli4_poll_hbtimer, 0);
+ 	cpuhp_state_add_instance_nocalls(lpfc_cpuhp_state, &phba->cpuhp);
  
- 	seq_puts(m, "\nbitmap_tags:\n");
--	sbitmap_queue_show(tags->bitmap_tags, m);
-+	sbitmap_queue_show(&tags->bitmap_tags, m);
- 
- 	if (tags->nr_reserved_tags) {
- 		seq_puts(m, "\nbreserved_tags:\n");
--		sbitmap_queue_show(tags->breserved_tags, m);
-+		sbitmap_queue_show(&tags->breserved_tags, m);
- 	}
- }
- 
-@@ -487,7 +487,7 @@ static int hctx_tags_bitmap_show(void *data, struct seq_file *m)
- 	if (res)
- 		goto out;
- 	if (hctx->tags)
--		sbitmap_bitmap_show(&hctx->tags->bitmap_tags->sb, m);
-+		sbitmap_bitmap_show(&hctx->tags->bitmap_tags.sb, m);
- 	mutex_unlock(&q->sysfs_lock);
- 
- out:
-@@ -521,7 +521,7 @@ static int hctx_sched_tags_bitmap_show(void *data, struct seq_file *m)
- 	if (res)
- 		goto out;
- 	if (hctx->sched_tags)
--		sbitmap_bitmap_show(&hctx->sched_tags->bitmap_tags->sb, m);
-+		sbitmap_bitmap_show(&hctx->sched_tags->bitmap_tags.sb, m);
- 	mutex_unlock(&q->sysfs_lock);
- 
- out:
-diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-index e97bbf477b96..b84955ee0967 100644
---- a/block/blk-mq-tag.c
-+++ b/block/blk-mq-tag.c
-@@ -46,9 +46,9 @@ bool __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
-  */
- void blk_mq_tag_wakeup_all(struct blk_mq_tags *tags, bool include_reserve)
- {
--	sbitmap_queue_wake_all(tags->bitmap_tags);
-+	sbitmap_queue_wake_all(&tags->bitmap_tags);
- 	if (include_reserve)
--		sbitmap_queue_wake_all(tags->breserved_tags);
-+		sbitmap_queue_wake_all(&tags->breserved_tags);
- }
- 
- /*
-@@ -104,10 +104,10 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
- 			WARN_ON_ONCE(1);
- 			return BLK_MQ_NO_TAG;
- 		}
--		bt = tags->breserved_tags;
-+		bt = &tags->breserved_tags;
- 		tag_offset = 0;
- 	} else {
--		bt = tags->bitmap_tags;
-+		bt = &tags->bitmap_tags;
- 		tag_offset = tags->nr_reserved_tags;
- 	}
- 
-@@ -153,9 +153,9 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
- 						data->ctx);
- 		tags = blk_mq_tags_from_data(data);
- 		if (data->flags & BLK_MQ_REQ_RESERVED)
--			bt = tags->breserved_tags;
-+			bt = &tags->breserved_tags;
- 		else
--			bt = tags->bitmap_tags;
-+			bt = &tags->bitmap_tags;
- 
- 		/*
- 		 * If destination hw queue is changed, fake wake up on
-@@ -189,10 +189,10 @@ void blk_mq_put_tag(struct blk_mq_tags *tags, struct blk_mq_ctx *ctx,
- 		const int real_tag = tag - tags->nr_reserved_tags;
- 
- 		BUG_ON(real_tag >= tags->nr_tags);
--		sbitmap_queue_clear(tags->bitmap_tags, real_tag, ctx->cpu);
-+		sbitmap_queue_clear(&tags->bitmap_tags, real_tag, ctx->cpu);
- 	} else {
- 		BUG_ON(tag >= tags->nr_reserved_tags);
--		sbitmap_queue_clear(tags->breserved_tags, tag, ctx->cpu);
-+		sbitmap_queue_clear(&tags->breserved_tags, tag, ctx->cpu);
- 	}
- }
- 
-@@ -343,9 +343,9 @@ static void __blk_mq_all_tag_iter(struct blk_mq_tags *tags,
- 	WARN_ON_ONCE(flags & BT_TAG_ITER_RESERVED);
- 
- 	if (tags->nr_reserved_tags)
--		bt_tags_for_each(tags, tags->breserved_tags, fn, priv,
-+		bt_tags_for_each(tags, &tags->breserved_tags, fn, priv,
- 				 flags | BT_TAG_ITER_RESERVED);
--	bt_tags_for_each(tags, tags->bitmap_tags, fn, priv, flags);
-+	bt_tags_for_each(tags, &tags->bitmap_tags, fn, priv, flags);
- }
- 
- /**
-@@ -462,8 +462,8 @@ void blk_mq_queue_tag_busy_iter(struct request_queue *q, busy_iter_fn *fn,
- 			continue;
- 
- 		if (tags->nr_reserved_tags)
--			bt_for_each(hctx, tags->breserved_tags, fn, priv, true);
--		bt_for_each(hctx, tags->bitmap_tags, fn, priv, false);
-+			bt_for_each(hctx, &tags->breserved_tags, fn, priv, true);
-+		bt_for_each(hctx, &tags->bitmap_tags, fn, priv, false);
- 	}
- 	blk_queue_exit(q);
- }
-@@ -498,19 +498,9 @@ int blk_mq_init_bitmaps(struct sbitmap_queue *bitmap_tags,
- static int blk_mq_init_bitmap_tags(struct blk_mq_tags *tags,
- 				   int node, int alloc_policy)
- {
--	int ret;
--
--	ret = blk_mq_init_bitmaps(&tags->__bitmap_tags,
--				  &tags->__breserved_tags,
--				  tags->nr_tags, tags->nr_reserved_tags,
--				  node, alloc_policy);
--	if (ret)
--		return ret;
--
--	tags->bitmap_tags = &tags->__bitmap_tags;
--	tags->breserved_tags = &tags->__breserved_tags;
--
--	return 0;
-+	return blk_mq_init_bitmaps(&tags->bitmap_tags, &tags->breserved_tags,
-+				   tags->nr_tags, tags->nr_reserved_tags,
-+				   node, alloc_policy);
- }
- 
- void blk_mq_exit_shared_sbitmap(struct blk_mq_tag_set *set)
-@@ -547,8 +537,8 @@ struct blk_mq_tags *blk_mq_init_tags(unsigned int total_tags,
- 
- void blk_mq_free_tags(struct blk_mq_tags *tags)
- {
--	sbitmap_queue_free(tags->bitmap_tags);
--	sbitmap_queue_free(tags->breserved_tags);
-+	sbitmap_queue_free(&tags->bitmap_tags);
-+	sbitmap_queue_free(&tags->breserved_tags);
- 	kfree(tags);
- }
- 
-@@ -605,7 +595,7 @@ int blk_mq_tag_update_depth(struct blk_mq_hw_ctx *hctx,
- 		 * Don't need (or can't) update reserved tags here, they
- 		 * remain static and should never need resizing.
- 		 */
--		sbitmap_queue_resize(tags->bitmap_tags,
-+		sbitmap_queue_resize(&tags->bitmap_tags,
- 				tdepth - tags->nr_reserved_tags);
- 	}
- 
-@@ -616,12 +606,12 @@ void blk_mq_tag_resize_shared_sbitmap(struct blk_mq_tag_set *set, unsigned int s
- {
- 	struct blk_mq_tags *tags = set->shared_sbitmap_tags;
- 
--	sbitmap_queue_resize(&tags->__bitmap_tags, size - set->reserved_tags);
-+	sbitmap_queue_resize(&tags->bitmap_tags, size - set->reserved_tags);
- }
- 
- void blk_mq_tag_update_sched_shared_sbitmap(struct request_queue *q)
- {
--	sbitmap_queue_resize(q->shared_sbitmap_tags->bitmap_tags,
-+	sbitmap_queue_resize(&q->shared_sbitmap_tags->bitmap_tags,
- 			     q->nr_requests - q->tag_set->reserved_tags);
- }
- 
-diff --git a/block/blk-mq-tag.h b/block/blk-mq-tag.h
-index c9fc52ee07c4..ba6502a9a5d8 100644
---- a/block/blk-mq-tag.h
-+++ b/block/blk-mq-tag.h
-@@ -11,11 +11,8 @@ struct blk_mq_tags {
- 
- 	atomic_t active_queues;
- 
--	struct sbitmap_queue *bitmap_tags;
--	struct sbitmap_queue *breserved_tags;
--
--	struct sbitmap_queue __bitmap_tags;
--	struct sbitmap_queue __breserved_tags;
-+	struct sbitmap_queue bitmap_tags;
-+	struct sbitmap_queue breserved_tags;
- 
- 	struct request **rqs;
- 	struct request **static_rqs;
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index d3dd5fab3426..a98ba16f7a76 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -1082,14 +1082,14 @@ static inline unsigned int queued_to_index(unsigned int queued)
- 
- static bool __blk_mq_get_driver_tag(struct request *rq)
- {
--	struct sbitmap_queue *bt = rq->mq_hctx->tags->bitmap_tags;
-+	struct sbitmap_queue *bt = &rq->mq_hctx->tags->bitmap_tags;
- 	unsigned int tag_offset = rq->mq_hctx->tags->nr_reserved_tags;
- 	int tag;
- 
- 	blk_mq_tag_busy(rq->mq_hctx);
- 
- 	if (blk_mq_tag_is_reserved(rq->mq_hctx->sched_tags, rq->internal_tag)) {
--		bt = rq->mq_hctx->tags->breserved_tags;
-+		bt = &rq->mq_hctx->tags->breserved_tags;
- 		tag_offset = 0;
- 	} else {
- 		if (!hctx_may_queue(rq->mq_hctx, bt))
-@@ -1132,7 +1132,7 @@ static int blk_mq_dispatch_wake(wait_queue_entry_t *wait, unsigned mode,
- 		struct sbitmap_queue *sbq;
- 
- 		list_del_init(&wait->entry);
--		sbq = hctx->tags->bitmap_tags;
-+		sbq = &hctx->tags->bitmap_tags;
- 		atomic_dec(&sbq->ws_active);
- 	}
- 	spin_unlock(&hctx->dispatch_wait_lock);
-@@ -1150,7 +1150,7 @@ static int blk_mq_dispatch_wake(wait_queue_entry_t *wait, unsigned mode,
- static bool blk_mq_mark_tag_wait(struct blk_mq_hw_ctx *hctx,
- 				 struct request *rq)
- {
--	struct sbitmap_queue *sbq = hctx->tags->bitmap_tags;
-+	struct sbitmap_queue *sbq = &hctx->tags->bitmap_tags;
- 	struct wait_queue_head *wq;
- 	wait_queue_entry_t *wait;
- 	bool ret;
-diff --git a/block/kyber-iosched.c b/block/kyber-iosched.c
-index 81e3279ecd57..d6f9f17e40b4 100644
---- a/block/kyber-iosched.c
-+++ b/block/kyber-iosched.c
-@@ -451,11 +451,11 @@ static void kyber_depth_updated(struct blk_mq_hw_ctx *hctx)
- {
- 	struct kyber_queue_data *kqd = hctx->queue->elevator->elevator_data;
- 	struct blk_mq_tags *tags = hctx->sched_tags;
--	unsigned int shift = tags->bitmap_tags->sb.shift;
-+	unsigned int shift = tags->bitmap_tags.sb.shift;
- 
- 	kqd->async_depth = (1U << shift) * KYBER_ASYNC_PERCENT / 100U;
- 
--	sbitmap_queue_min_shallow_depth(tags->bitmap_tags, kqd->async_depth);
-+	sbitmap_queue_min_shallow_depth(&tags->bitmap_tags, kqd->async_depth);
- }
- 
- static int kyber_init_hctx(struct blk_mq_hw_ctx *hctx, unsigned int hctx_idx)
-diff --git a/block/mq-deadline-main.c b/block/mq-deadline-main.c
-index 6f612e6dc82b..9cdc80da28fe 100644
---- a/block/mq-deadline-main.c
-+++ b/block/mq-deadline-main.c
-@@ -554,7 +554,7 @@ static void dd_depth_updated(struct blk_mq_hw_ctx *hctx)
- 
- 	dd->async_depth = max(1UL, 3 * q->nr_requests / 4);
- 
--	sbitmap_queue_min_shallow_depth(tags->bitmap_tags, dd->async_depth);
-+	sbitmap_queue_min_shallow_depth(&tags->bitmap_tags, dd->async_depth);
- }
- 
- /* Called by blk_mq_init_hctx() and blk_mq_init_sched(). */
 -- 
-2.26.2
+2.20.1
 
