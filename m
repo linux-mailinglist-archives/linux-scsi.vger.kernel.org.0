@@ -2,79 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3207C3E7D5A
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Aug 2021 18:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 375573E7E0A
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Aug 2021 19:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232893AbhHJQUC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 10 Aug 2021 12:20:02 -0400
-Received: from mail-pl1-f182.google.com ([209.85.214.182]:46622 "EHLO
-        mail-pl1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231974AbhHJQUB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 Aug 2021 12:20:01 -0400
-Received: by mail-pl1-f182.google.com with SMTP id k2so21749529plk.13
-        for <linux-scsi@vger.kernel.org>; Tue, 10 Aug 2021 09:19:39 -0700 (PDT)
+        id S231229AbhHJRMu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 10 Aug 2021 13:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229474AbhHJRMu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 Aug 2021 13:12:50 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E6CC0613C1
+        for <linux-scsi@vger.kernel.org>; Tue, 10 Aug 2021 10:12:27 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id q11so9072911wrr.9
+        for <linux-scsi@vger.kernel.org>; Tue, 10 Aug 2021 10:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=+MDYu2cZk5y6qEtCDaD7IWEU7wQ5JsJjonx7gGHCu64=;
+        b=GRNUIHc7UR6+JAiNxr0XByUIrbOVZHH0ol4G8bTa4UFEMX7F38BEwOYwLzJcmAkrLL
+         04+esfkuJ5d9If8JZ77uqLKxk8MXHPA4OT+M3c25h2E5qpljlG1oqFQa6ywvpeq9qu+C
+         fwRIUtNmrRGklk5s3pVSN8QfdK5XeOlLmFSBO6cNUNefKTCGzJSFb2UBNbWt/9nDYUV4
+         OJpTYlXYqDTkXejRwJRzBzqq+ZKRJNubt3jbKi6kqZUrAtqF7p+FVjSxvoxDHr3oW5pa
+         esP1yqdWeL2tnbQwy8YAdaKA/94OcaskJY4EQZegysayOw4eqFegjvRl9olhQ+BFiSYb
+         r4Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lhxaEcH6Ty8ZON9r6QN0oqfG1NpyTNolpIbj8GZBVBg=;
-        b=LmQ07Dzbf1/k946SeaWovm0h9D5phI4H3lPvL2SXm/sU+EBvSX0wnyOTIC2iy8QtfG
-         5sBjGzxG3SkFCQXwPGo359qSfLeNOXcz34no3TokPP/1jjEr6sWW/FiBZN2fZo4bT+J3
-         1MkiTNuizpcsr33eylaDhoGPUHZSN97ppHUgauj00nwaSm5Tc/F1V73zuRe9R5DW9xc1
-         yAF3GKDqfl92cA5rzuNjWFWNm0wWyJEq0qGVhKzDIf+ymDh/eysJqSkpPLxRuibkV9m4
-         s9OZATEyvcxXDtVKWh2RkTxgCrx+DMAWKakWjg6Ba08Nd0ThR8slZaIFqFakk+nSb9yY
-         naHw==
-X-Gm-Message-State: AOAM533BZV2Rg39EphftiD8EZhVOTou1oLcYmoCld/Ko77nZhOR0gGVX
-        KcnUF2b3kBxaqw1q4dwBHD5fD5mT0jye5r9/
-X-Google-Smtp-Source: ABdhPJx0TTXyzho36GXe9tiaQGhlwWbi91KRt0fJAujxiUURJWruSlst584BIgh1vcJcc26xb3TuXA==
-X-Received: by 2002:a63:d14c:: with SMTP id c12mr121217pgj.412.1628612378861;
-        Tue, 10 Aug 2021 09:19:38 -0700 (PDT)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:1:c4:6dc5:1d3:61fa])
-        by smtp.gmail.com with ESMTPSA id c12sm23494090pfl.56.2021.08.10.09.19.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Aug 2021 09:19:38 -0700 (PDT)
-Subject: Re: [PATCH v5 00/52] Remove the request pointer from struct scsi_cmnd
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org
-References: <20210809230355.8186-1-bvanassche@acm.org>
- <yq1a6lpvpk0.fsf@ca-mkp.ca.oracle.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <a6563829-2e1e-8117-de45-876004a288ff@acm.org>
-Date:   Tue, 10 Aug 2021 09:19:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=+MDYu2cZk5y6qEtCDaD7IWEU7wQ5JsJjonx7gGHCu64=;
+        b=Fu0N/NqnaaW2Gf37tbD4wDojwjtFTFmU5raFCWZR238nHxLELzwNRDUrL95mTwmDWe
+         WADP6q5JDEYL6o+hkHoZML3BlakDWSVC4f9g8RySFUl5R9/O4Dgqj4XD9eiIgAcjLMJ7
+         3Pw+9UH0oQMk0fU1HJshCaosWpWT9jHr/HZqaUfcyH1xHE7NWzW/7gCkj2a3pIG1yNCx
+         pc1Tojh521XEsG3t8hjS265NbG/ZEK6Pt8B2m7O2v3Q7MYir6sZ95NbxxmW+JsJv7Mq5
+         d735VUXx5cXVPUv5tlkbAtYmbvaOaYNtnXRuei4UTZbpB/eeuVUUstnca5p/sxXHKwA2
+         Pn7g==
+X-Gm-Message-State: AOAM532WIlP1kZde8DIAnw8REDZsgPfraLM4G+NA/idZtqsteblx1x55
+        NPtVBljpAHqXYxs6ctdQIzgP+2POF32nM34PqLU=
+X-Google-Smtp-Source: ABdhPJxTm3qKUELiMFxpvNv4nvf6lVtpHDTCKb7mW2HjPHktnoVdnsfVyzN5GWoFNEmjSNN8TvEUm6DA9OalsABMDd4=
+X-Received: by 2002:adf:e107:: with SMTP id t7mr32349301wrz.165.1628615546574;
+ Tue, 10 Aug 2021 10:12:26 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <yq1a6lpvpk0.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Reply-To: mrakainkarim7@gmail.com
+Sender: duobnezwo@gmail.com
+Received: by 2002:adf:ba4d:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 10:12:26
+ -0700 (PDT)
+From:   Mr Akain Karim <aeyuhlmy739@gmail.com>
+Date:   Tue, 10 Aug 2021 10:12:26 -0700
+X-Google-Sender-Auth: iCGS4b5YBnbqUkEGUh0vE-A3eWM
+Message-ID: <CAA0PdhY6HAnV=i6xn+X=N6xxGGJac0KE_uyAwEUCWwkpLhOymQ@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/9/21 10:28 PM, Martin K. Petersen wrote:
->> This patch series implements the following two changes for all SCSI drivers:
->> - Use blk_mq_rq_from_pdu() instead of the request member of struct scsi_cmnd
->>    since adding an offset to a pointer is faster than pointer indirection.
->> - Remove the request pointer from struct scsi_cmnd.
-> 
-> There were failures in storvsc and ufshpb. I fixed them up.
-
-Hmm ... the basis of this patch series is commit 40fd8845c025 ("scsi: 
-target: core: Drop unnecessary se_cmd ASC/ASCQ members"). That was the 
-tip of the staging branch up until about two days ago. I'm not sure what 
-I missed?
-
-> Also rebased my PI series on top and fixed scsi_logical_block_count() to
-> use scsi_cmd_to_rq().
-
-Thanks!
-
->> Please consider this patch series for kernel v5.14.
-> 
-> A bit too late for 5.14 :)
-
-Right, that part of the cover letter should have been updated.
-
-Bart.
+-- 
+*Compliment of the day,I am Mr. Akain Karim,  I Have a Business Proposal of
+$10.5million for you and I  was compelled to use this medium due to the
+nature of this project, I have access to very vital information that can be
+used to transfer this huge amount of money, which may culminate into the
+investment of the said funds into your company or any lucrative venture in
+your country. If you will like to assist me as a partner then indicate your
+interest, after which we shall both discuss the modalities and the sharing
+percentage.Upon receipt of your reply on your expression of Interest.I will
+give you full details on how the business will be executed and I am open
+for negotiation.Thanks for your anticipated cooperation.Best RegardsMr. 	
+Akain Karim*  Please feel free to reach me on my e-mail:mrakainkarim7@gmail.com
