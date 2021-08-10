@@ -2,69 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F34DF3E7EAC
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Aug 2021 19:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8EF3E84E9
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Aug 2021 23:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233134AbhHJRes (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 10 Aug 2021 13:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232667AbhHJReO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 Aug 2021 13:34:14 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE55DC061371
-        for <linux-scsi@vger.kernel.org>; Tue, 10 Aug 2021 10:33:13 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id m18so19028246ljo.1
-        for <linux-scsi@vger.kernel.org>; Tue, 10 Aug 2021 10:33:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
-        b=RsiBBdA9QKOcTCF5lGXKVsjmClQ3sMV8nYRHi5UzQ6RFRdaZ6t981j56diJ7q3WLiT
-         dSrogDmRt6kwHS+J+pcIdphvlu5Vk62bOJudqb0dzEOf5Tr6sAVMWTY2NbEn++ZnSdaf
-         F4yj6h4F7VBk6uVCXN4p2StSiBpSckLhr0NJoCtUTvVh+gCrpSdvA2dss+nT8Q4XWg+b
-         4x9fMuBGMminOSzPCK8njOsWexpWsfb2omBFXa3GLhHqzUauC1r8oyB3fDvFuiS7qNjT
-         fDqijYMWxjmP3EeBvtWaIUY7Z5YEma/9OhqmI5Ya7ZKqW/5hzlkm8xAdNsqyzESz/5Xj
-         5sZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
-        b=rU/Fmg8G7CmEKqnkW7VfUvae2j91ECadHoiwgm3CLGELrtYNLR6N28dbX69Rh6c6hF
-         o90puAbvRxA6ktOBygMwtC7m9b5eMf/sdiW/RzxI8o7lF82G6Z8Laj23KFW6rl+13JHs
-         2DBFT3S0ygFTcXezgP3MzPQjzzeqZcKsOS5BtNEV7Eh75GEFG0LxxNmYsoNLWcqIxgOL
-         yTtO6q8yBUjxw5u+UfPjhHoYxC9KdvXLP4E6tKTWeX3Vu465dQiAvcRdMNegNwauRwFe
-         oc3llJkvZaA6Hct39W8mWns3t7Ih5GI/ycSPFbKz0tlxcEy4vxF2P06DfojK0soeJkXx
-         MjGQ==
-X-Gm-Message-State: AOAM533LeRV5gW0WdIBZVXE8yrHwZXW2YK0ncloVfiu3ADgUxBzCJjn2
-        71O1x2fwoBcp9cjrv+ODGxqUYICn9poYujZYzzQ=
-X-Google-Smtp-Source: ABdhPJw+sC+pBQw0G+0ULVvin/r/jCVVb1V7XUqN67UCoWrnBzyIXnaSzK5br1SZrCupI/L0LIZWgMfi7vhpZK+Wcm0=
-X-Received: by 2002:a05:651c:32c:: with SMTP id b12mr1745558ljp.198.1628616792032;
- Tue, 10 Aug 2021 10:33:12 -0700 (PDT)
+        id S233460AbhHJVFY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 10 Aug 2021 17:05:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57706 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232739AbhHJVFN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 10 Aug 2021 17:05:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 216AE60E09;
+        Tue, 10 Aug 2021 21:04:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628629490;
+        bh=C9XBDAJhXG+Rn8ZoatuMyt7pr8cmprWx13pjHSQveVo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=I/wE/F/TPJo5nPASsKpzfqi6kRfsDyGVgwUvtu1SNYrjx3u0uWGF+5cFyVO+Iw7FL
+         Zpz81Q6hMJ2ibs+nDTDxkw1UAFH4axgXqvsKMrUMthjbaFnebPEHj3z0Di5SZms8MP
+         tbxcmiuDAkHGZqdhEOF7rMWh08625ku6s57Faytx+g2rGlsXmxP2Dn6oeHS51lkHqf
+         iA8NsoRbEVlVuujpP2AB65KdQDSdcIJhoDTKkbIgB6xlDkF73dYN051gb88d4EiUi/
+         Dm2buvPvfrwStr0QbMdcWmowzMf/g5D17cvI/0DbvZUzHlI8rHUEGeN85oPrK1fs3z
+         ZV6gMDhC2g0OQ==
+Date:   Tue, 10 Aug 2021 16:07:41 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Don Brace <don.brace@microchip.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     storagedev@microchip.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] scsi: smartpqi: Replace one-element array with
+ flexible-array member
+Message-ID: <20210810210741.GA58765@embeddedor>
 MIME-Version: 1.0
-Received: by 2002:ac2:5d2e:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 10:33:10
- -0700 (PDT)
-Reply-To: majidmuzaffar8@gmail.com
-From:   Majid Muzaffar <ing.abdullabin.rishid.me@gmail.com>
-Date:   Tue, 10 Aug 2021 20:33:10 +0300
-Message-ID: <CAFsu49XXzY7ugKhGzJm5OPKe2LG1R35c-Dkp83VgS3+u27y=sQ@mail.gmail.com>
-Subject: Proposal
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Salam alaikum,
+There is a regular need in the kernel to provide a way to declare having
+a dynamically sized set of trailing elements in a structure. Kernel code
+should always use “flexible array members”[1] for these cases. The older
+style of one-element or zero-length arrays should no longer be used[2].
 
-I am the investment officer of UAE based investment company who are
-ready to fund projects outside UAE, in the form of debt finance. We
-grant loan to both Corporate and private entities at a low interest
-rate of 3% ROI per annum. The terms are very flexible and interesting.
-Kindly revert back if you have projects that needs funding for further
-discussion and negotiation.
+Refactor the code a bit according to the use of a flexible-array member
+in struct pqi_event_config instead of a one-element array, and use the
+struct_size() helper.
 
-Thanks
+This helps with the ongoing efforts to globally enable -Warray-bounds
+and get us closer to being able to tighten the FORTIFY_SOURCE routines
+on memcpy().
 
-investment officer
+This issue was found with the help of Coccinelle and audited and fixed,
+manually.
+
+[1] https://en.wikipedia.org/wiki/Flexible_array_member
+[2] https://www.kernel.org/doc/html/v5.10/process/deprecated.html#zero-length-and-one-element-arrays
+
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/109
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/scsi/smartpqi/smartpqi.h      | 2 +-
+ drivers/scsi/smartpqi/smartpqi_init.c | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
+index f340afc011b5..70eca203d72f 100644
+--- a/drivers/scsi/smartpqi/smartpqi.h
++++ b/drivers/scsi/smartpqi/smartpqi.h
+@@ -415,7 +415,7 @@ struct pqi_event_config {
+ 	u8	reserved[2];
+ 	u8	num_event_descriptors;
+ 	u8	reserved1;
+-	struct pqi_event_descriptor descriptors[1];
++	struct pqi_event_descriptor descriptors[];
+ };
+ 
+ #define PQI_MAX_EVENT_DESCRIPTORS	255
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index c1f0f8da9fe2..f9107127bd6e 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -4740,8 +4740,7 @@ static int pqi_create_queues(struct pqi_ctrl_info *ctrl_info)
+ }
+ 
+ #define PQI_REPORT_EVENT_CONFIG_BUFFER_LENGTH	\
+-	(offsetof(struct pqi_event_config, descriptors) + \
+-	(PQI_MAX_EVENT_DESCRIPTORS * sizeof(struct pqi_event_descriptor)))
++	struct_size((struct pqi_event_config *)0, descriptors, PQI_MAX_EVENT_DESCRIPTORS)
+ 
+ static int pqi_configure_events(struct pqi_ctrl_info *ctrl_info,
+ 	bool enable_events)
+-- 
+2.27.0
+
