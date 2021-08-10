@@ -2,63 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DB53E5B4E
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Aug 2021 15:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E2C3E5C21
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Aug 2021 15:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241346AbhHJNYY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 10 Aug 2021 09:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
+        id S241885AbhHJNs3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 10 Aug 2021 09:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241343AbhHJNYV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 Aug 2021 09:24:21 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B73C061798
-        for <linux-scsi@vger.kernel.org>; Tue, 10 Aug 2021 06:23:58 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id t26so8535340uao.12
-        for <linux-scsi@vger.kernel.org>; Tue, 10 Aug 2021 06:23:58 -0700 (PDT)
+        with ESMTP id S240131AbhHJNs3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 Aug 2021 09:48:29 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333BEC0613D3;
+        Tue, 10 Aug 2021 06:48:07 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d1so21071872pll.1;
+        Tue, 10 Aug 2021 06:48:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=2tvLhkad0w+Mh63WhnFJkmRFgYsLXsJmUqGVjzUAFIo=;
-        b=qJkL8fZ0S06Z0FQYNh/4MmhK7j+A3bS9xjmC8OhX22QJHec66aC0Yf4uxmFTWU4uq4
-         4zaEpRJNfTE5P16qMJLxRcIb0ytBzoINHrciZ16oueveU7FDwweNrhTU3c5UDo/z56b1
-         V6OdxuJ3tySYUYaZ04rAyM/uWtPYMenii8jy05cVXjVhDDgXkFHgaK2GOhpBsc52YFve
-         VL8iidod2m9w/QUkoClpuMrUGWkFzng1pEsZ+h9zY+IQVIYyQzRt6aNjeoljVsfoneAG
-         aU0zlSqRp6BET5jUs8EdKhkDPhg4/tsUe0YNuMP0A6vUsTut9Hk4K2nn2uiUPyEelDJr
-         VDiA==
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=CNbvPsnGAfa3fu8fS5mw3q/ySea1UUbi6hadd0bmWeo=;
+        b=hoINABunSBYQ2JkYYVpHWvnqfcKfMeuLsEs5RBPS9/roCQMZMiD8Wxk9YzMTPbAdEd
+         YzUET3flnDrEnas2moHTKPj3eqswt2kl5ojHJntcAq8jcq2IuxIMYACvccw+Lm85ZX7M
+         aTNYTHMibdUa38vFxAe5MBByd9PxmMuhpsXSTHF0c8hmGdN2V/LQfCSpHOUcMdE2n7MT
+         jtyOHqPjjBavBY4g4/yMQVtRbmLKampGH4MPxTklXrluLEYLLNczihZlhKO8zIvnnvZ9
+         iz+y5QDYlyCqWxuviWQBmvC1EeSkgtS6YU61oTcz6Rxw4sxi0GTJYiBp2PZZj+q1mwqw
+         fBNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=2tvLhkad0w+Mh63WhnFJkmRFgYsLXsJmUqGVjzUAFIo=;
-        b=bHIM0vVcWtECAa1RL9pL1uLz42CfbAUPIgPgc/h6ZRL5MmpgLRkm/Ui9qdFcrnoxh9
-         adbbGl3kmYgTqLwgeqBydA4+js6Ndt0JLKNvC03Ss/HbhOfdVntyrR6fY2Y/wcZh1gqF
-         9hgRQtQtBmZeCzJmpmyo3DDIdh+I+KvrXiitQXpq/i2vCM9WYlT/RdJSV+w864cE8nGm
-         +1y+sgQPv3+0eq0v31nmhsDMdosb9+GNWmba0wVK54Xnecv9Ir3ZtOsokE0T2O67qPyS
-         jfPVVI6MJmVNcouCzWani7FywGHGRpeBwZqM9ozX+W2hDaq0eGyDE7uiXkNkcszH6Ocg
-         Zwbg==
-X-Gm-Message-State: AOAM533vCcZWHKcRHKbS8BZnPBlZcINm+FQ++Evv1zD7tVaWx8XGXrIt
-        bZVi268xzOyH8fdKzJlwpVHOOm3YrS089yXGurQ=
-X-Google-Smtp-Source: ABdhPJzvLPSDVsAzGJ6P6qYZROOmnBdkR5scyeQ8xySEfopDOzsn96BkEsNJXYQk9ma1do3JY374g/deOX6n1CT3K3s=
-X-Received: by 2002:ab0:3b59:: with SMTP id o25mr9024839uaw.80.1628601838128;
- Tue, 10 Aug 2021 06:23:58 -0700 (PDT)
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=CNbvPsnGAfa3fu8fS5mw3q/ySea1UUbi6hadd0bmWeo=;
+        b=N3+0KnM+5IZ4US73trrCGcKJutOc9pjhRFK8mV46n+9gBCxlTzLg/y3VMTA94OqpU2
+         tYJZmWkIv/v1HUmPrjHgcQ6WKPX9b0li+9BwN5vjZBn2gsG95lmRJGunc96Gi2RNxHHu
+         sTdUzvOg5WDKoeduk6+yrskxNvFjxL/y0Tb9GzDPjmnr4iNjmQdBtW5QmmvhUM8f8PwP
+         NuTb1Za89AWjSmPqi8zmXLDYi7k0e3CGMx9C3Qi5ScxSlr0hWW2scn3qzJkZxkWiEwjR
+         DGf3hhdDxi1sMl9vP1jOawtHczFu/bKB0nSQj5TOqGkAUEC3wGuSb8I+WC63QXidTssK
+         XaZg==
+X-Gm-Message-State: AOAM5311Z8iG3aSKOMGDCSYMp1Er7bX38o4ih4+lnpie/E4T7YMsh6G7
+        TxFMyF6mnhV6A+eCVKFKf164oR5K0SB46FZG
+X-Google-Smtp-Source: ABdhPJxDb2+ly1WlR776U/zcEbiEs6orYG1yRVBz/Bbo75OnSuxjbvfHOT0X/0rejyW2zB2iDRDzYQ==
+X-Received: by 2002:a17:902:d890:b029:12d:f2:e8d6 with SMTP id b16-20020a170902d890b029012d00f2e8d6mr7240709plz.42.1628603286547;
+        Tue, 10 Aug 2021 06:48:06 -0700 (PDT)
+Received: from [10.178.0.62] ([85.203.23.37])
+        by smtp.gmail.com with ESMTPSA id x13sm22637326pjh.30.2021.08.10.06.48.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Aug 2021 06:48:06 -0700 (PDT)
+To:     martin.petersen@oracle.com
+Cc:     baijiaju1990@gmail.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+From:   Tuo Li <islituo@gmail.com>
+Subject: [BUG] scsi: iscsi: possible null-pointer dereference in
+ iscsit_tpg_add_network_portal()
+Message-ID: <89aaa039-2f03-f657-a555-a6a99f38db6d@gmail.com>
+Date:   Tue, 10 Aug 2021 21:48:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Sender: immeublesourou@gmail.com
-Received: by 2002:ab0:3903:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 06:23:57
- -0700 (PDT)
-From:   John Kumor <owo219901@gmail.com>
-Date:   Wed, 11 Aug 2021 01:23:57 +1200
-X-Google-Sender-Auth: yS3UzgPnn68wNDbf-hnce3gLnn0
-Message-ID: <CAHdg_cT_K-3CiTtG_z=2JyS3OA_ir2VvAFdLZYYHbPxjicSz0w@mail.gmail.com>
-Subject: Urgent
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-My dear,
-Greetings! I trust that all is well with you and your family. Did you
-receive my previous email?
-Regards
-John Kumor.
+Hello,
+
+Our static analysis tool finds a possible null-pointer dereference in 
+the iscsi driver in Linux 5.14.0-rc3:
+
+The variable tpg->tpg_tiqn is checked in:
+496:    if (tpg->tpg_tiqn)
+
+This indicates that it can be NULL. If so, a null-pointer dereference 
+will occur:
+508:    pr_debug("CORE[%s] - Added Network Portal: %pISpc,%hu on %s\n", 
+tpg->tpg_tiqn->tiqn, ...)
+
+I am not quite sure whether this possible null-pointer dereference is 
+real and how to fix it if it is real.
+Any feedback would be appreciated, thanks!
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+
+Best wishes,
+Tuo Li
