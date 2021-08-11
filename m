@@ -2,83 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D33E23E927B
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Aug 2021 15:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6433C3E9293
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Aug 2021 15:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbhHKNYM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Aug 2021 09:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
+        id S231814AbhHKNZY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Aug 2021 09:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbhHKNYA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Aug 2021 09:24:00 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45501C0613D5
-        for <linux-scsi@vger.kernel.org>; Wed, 11 Aug 2021 06:23:34 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id x12so3013189wrr.11
-        for <linux-scsi@vger.kernel.org>; Wed, 11 Aug 2021 06:23:34 -0700 (PDT)
+        with ESMTP id S231878AbhHKNZR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Aug 2021 09:25:17 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F1DC061799;
+        Wed, 11 Aug 2021 06:24:53 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id s22-20020a17090a1c16b0290177caeba067so9600431pjs.0;
+        Wed, 11 Aug 2021 06:24:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=1JCDntCYl8I5zCny8wbHrT9QcCmV49onFhrbCjYiN68=;
-        b=M/VwBKNWsjWafTbwYXrY5aFLdngUi5NyR1/5OpC1OFjqv56XuOx9CbFU7Y83wCcqis
-         W0upd2IVQZK8d6aUF0sPM5A3U1wbITyyqb9NOtlevfEqWYTUVO10ycF0UIkWUeibfiGG
-         lUF5XhbK+P3yJvMj1Kjh0ZlRYKKknMwKAUaM2y2tYu0l//d1crBNWK5s05JoDWBoZnm/
-         C1AyRgLoJ6IjP/qMt4IvalCmaEjNUUmNu8MzwlDFUbsFyinbwkvEAlj7wRmJGLA9QDDP
-         Y+Dx/tDJF8kHbfx5TlL5tIQQ9U7j2AdV5oV0KY2+QqFflyKaztKsWxBnXBhPS51tTG1C
-         LhEg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7W29cLmj2qeifcnEP+7O9P/s+IF/H1sNoqJtFlRWsVM=;
+        b=hnX6Fbn3sZNtOM0IiEjv1p5YklFP81Bx39I9A/hm6HUH+C+J57XpkEwFzHcIVlP3Ou
+         hyOCZTAARs3+F3TCUwhzoWcybTIfu7twMhC+VPW9C5AzqkikmxFnNgu4Ch1Lgb+jbCEk
+         esnijG6uQoRQ4SnFVBjdVjCHAuOWl2Mn61MlleatPIJyuLS6UaYQwGnmPvmjLIpTJa2S
+         HpRguc5JtGBixyfV56y9+E5Csy/9F3iNtVtLVCp1O0cUJ6iHi77Z3dGBXlhhuwZkfO7G
+         cERbkGm/efRUt3qUMW77gWk8w6ay9QX0RY9XUIjNf2yt7WJTVWNrHUtpDXbA11D7iukP
+         q8sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=1JCDntCYl8I5zCny8wbHrT9QcCmV49onFhrbCjYiN68=;
-        b=F3gCkBbTm+DGQKMwB1fOeMw9W/JECaslHVi8I+KVWoqZc3Ke5VBPhsTVhZl4gRHiuW
-         nFol9Ol2L6EGtsJ4FBitEbsloaFf4gWVME/a0cUKOi8aXDl8BxWXzBJD971EBLAjf5hu
-         lzfEzvSkE0WV8MIvHcAim+VXHlhHm/h8eRS2NXiZwR7Ewk9KZcNCSEScw5sJiZTDbc5u
-         JtRRFhcPG/7oYJjABuECLRRTiDaFSNHHyF4RVV3LZgyaX9hXXiIkh7uyWPgQmMkPLa1S
-         Eihseq7PyoUi89kcArZQ/OiClQRwZ3vgnE6CTBaQWT1ScPTZH3eCTG4h7Bmqet0unokc
-         E8gw==
-X-Gm-Message-State: AOAM531YjYqL9I0oVBTFhGhFu+1jUMk9VFZF5VkIO+wQfXvS6xos2HF8
-        8CPGzwvs7YlWEBsebdvcset2zlJxswtM0hgR7Zw=
-X-Google-Smtp-Source: ABdhPJzou5Oc0rDFwMx/WI8OJD5IcFK3pK+j9fEK4jvhkqFa1Gt18yuQiDQnkuNhzor+o6tqMBMw7qge/w1qJdiFOkk=
-X-Received: by 2002:adf:e0c8:: with SMTP id m8mr36834475wri.261.1628688212737;
- Wed, 11 Aug 2021 06:23:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7W29cLmj2qeifcnEP+7O9P/s+IF/H1sNoqJtFlRWsVM=;
+        b=jaoCHeE+CDa5sZkhbNkkIwi5Q+Wgmdzj99ucu4wEFmfmP98y9yfQysMn5MHax0zxAh
+         /luHG6FnWfhwNkTN+VW2xokbRUVV/5bg1V0GePkXyQmnY1hZSbbFbHnKoXugj1vER/2i
+         P+eaXzU4d4chmDWtuWlYmxJmTw21mgEavTNKjE08i/1Bfdk1w0M3B9ExYrN8Pxht79Wa
+         3E+PvXC3rVTZlCMPYPJ2tneQQwIXSyk4zBHLW0uVhZQvilxvTponGKh6daawbgMa4agx
+         Hti+r27fNfQgJDBgM+CLtL3gLpe0rFB6WU5LREUcTx7Jh1cguCmInOuHYJAGnB0wdqSR
+         3pNQ==
+X-Gm-Message-State: AOAM530SQ/QftenBx6R3RRKbvoiqlC4vLcGmLiMearROYwZ9B4G9lNeR
+        d65kFe4OhoT/vJ1KBL3R+/Y=
+X-Google-Smtp-Source: ABdhPJwpFtYj0IsB7kGWdVscS5MzJTwhgZR+O1kLVBlilObCPUMi6o50vbf4pj2FDByS5trpGAgqxA==
+X-Received: by 2002:a63:86c8:: with SMTP id x191mr244739pgd.166.1628688293331;
+        Wed, 11 Aug 2021 06:24:53 -0700 (PDT)
+Received: from localhost.localdomain ([45.135.186.103])
+        by smtp.gmail.com with ESMTPSA id 11sm32404623pgh.52.2021.08.11.06.24.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Aug 2021 06:24:52 -0700 (PDT)
+From:   Tuo Li <islituo@gmail.com>
+To:     sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
+        Tuo Li <islituo@gmail.com>, TOTE Robot <oslab@tsinghua.edu.cn>
+Subject: [PATCH] scsi: mpt3sas: Fix a possible divide-by-zero bug in base_mod64()
+Date:   Wed, 11 Aug 2021 06:24:39 -0700
+Message-Id: <20210811132439.10370-1-islituo@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a5d:44c4:0:0:0:0:0 with HTTP; Wed, 11 Aug 2021 06:23:32
- -0700 (PDT)
-Reply-To: fareedafarah.mrs@gmail.com
-From:   "Mrs.Fareeda Farah." <fareedafarah.mrs1@gmail.com>
-Date:   Wed, 11 Aug 2021 14:23:32 +0100
-Message-ID: <CA+PSBQMR1093CxWLsteROwq=V7_6UdaMnvxeWyiwBBkUAkGdyA@mail.gmail.com>
-Subject: Hello My Dear friend.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+The variable divisor is checked in:
+  if (!divisor)
+
+This indicates that divisor can be NULL.
+If so, a divide-by-zero bug will occur:
+  remainder = do_div(dividend, divisor);
+
+To fix the possible bug, the function returns 0 when divisor is zero.
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Tuo Li <islituo@gmail.com>
+---
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index 19b1c0cf5f2a..3550998ea38b 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -1594,8 +1594,10 @@ static u32 base_mod64(u64 dividend, u32 divisor)
+ {
+ 	u32 remainder;
+ 
+-	if (!divisor)
++	if (!divisor) {
+ 		pr_err("mpt3sas: DIVISOR is zero, in div fn\n");
++		return 0;
++	}
+ 	remainder = do_div(dividend, divisor);
+ 	return remainder;
+ }
 -- 
-Hello My Dear friend.
+2.25.1
 
-I am Mrs. Fareeda Farah, from Tunisia
-I 'm married to Mr. Abaulkarim Farah who worked with Tunisia embassy
-in Burkina Faso for nine years before he died in the year 2014.We were
-married for eleven years without a child. He died after a brief
-illness that lasted for five days.
-Since his death I decided not to remarry, When my late husband was
-Alive he deposited the sum of US$ 9.2m (Nine million two hundred
-Thousand dollars) in a bank in Burkina Faso, Presently this money is
-still in bank. And My Doctor told me that I don't have much time to
-live because of the cancer problem,
-Having known my condition I decided to hand you over this fond to take
-care of the less-privileged people, you will utilize this money the
-way I am going to instruct herein. I want you to take 30 Percent of
-the total money for your personal use While 70% of the money will go
-to charity" people and helping the orphanage.
-I don't want my husband's efforts to be used by the Government. I grew
-up as an Orphan and I don't have anybody as my family member,
-I am expecting your respond.through private email: (fareedafarah.mrs@gmail.com)
-
-69966
-Regards,
-Mrs.Fareeda Farah.
-fareedafarah.mrs@gmail.com
