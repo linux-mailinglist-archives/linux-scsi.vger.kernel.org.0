@@ -2,153 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D38A3E8B7B
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Aug 2021 10:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE233E9035
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Aug 2021 14:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236313AbhHKIJT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Aug 2021 04:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
+        id S237471AbhHKMMk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Aug 2021 08:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235491AbhHKIH5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Aug 2021 04:07:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A86C06179B
-        for <linux-scsi@vger.kernel.org>; Wed, 11 Aug 2021 01:06:50 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mDjG9-000161-Uk; Wed, 11 Aug 2021 10:06:45 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mDjG8-0000Ok-K4; Wed, 11 Aug 2021 10:06:44 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mDjG5-0002xQ-I8; Wed, 11 Aug 2021 10:06:41 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pci@vger.kernel.org, kernel@pengutronix.de,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH v3 5/8] scsi: message: fusion: Remove unused parameter of mpt_pci driver's probe()
-Date:   Wed, 11 Aug 2021 10:06:34 +0200
-Message-Id: <20210811080637.2596434-6-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210811080637.2596434-1-u.kleine-koenig@pengutronix.de>
-References: <20210811080637.2596434-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S237482AbhHKMMk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Aug 2021 08:12:40 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A29C0613D5
+        for <linux-scsi@vger.kernel.org>; Wed, 11 Aug 2021 05:12:16 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id 188so3289785ioa.8
+        for <linux-scsi@vger.kernel.org>; Wed, 11 Aug 2021 05:12:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=rf85IIrYDoX56EbvJwzXLS38sc5yj7QH4axMImYh7js=;
+        b=fOTveZ8OENSuynasYQzF2Szndnwdo25p5PZSKJL8G2RvgYwOXw7nG30yn+TJyMDxDb
+         iRQjJ78GyCYqGz4/feYpR60x0nrvHQ9eYfqP8Wb7JJcQxuB+Pzo4tvTx1pw6mf6rArog
+         f924pJHxWgKA5oCcKTQIsoMsF2ZZoLJ5pIQHhkEbNeO2qpLcgpxycqgf3SKPrcFJvmCT
+         aDbYItOEdVheErAFUmdLe0nQIW01pdLG/sX+L+Bk0O9vOBMvGCr1uEeCeasdmAMJkEA/
+         eoGZkOnDxY/H52ISxM7Krx5yAb7DKFCikrs9a1Nrp9URt1zeOJN9ETfwFFkIsjzVDNd+
+         WADA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=rf85IIrYDoX56EbvJwzXLS38sc5yj7QH4axMImYh7js=;
+        b=ZjLeg//qs0TTrhUj2q5kFjS6I9+XkudpSzx47dMvlfmkzQwPFRBM/7YmIQFiH0PKIZ
+         GemLLkidtkFJ6ll8Tpft/5BkB3KeGWF+BRcEKFjZREKhH3yQIYRSnO/m29mvV6yDx+fp
+         j5MQb0EriUhuQy1SSh9t1Xk0m4yf5It8q49usx8fUQxVrz674jzwiWkDYSZLbmo+bVyq
+         OEmFKGkS8rmw6gndWmVqecWg4q80+p9Z45jSYyBLhQoi5snyigkcghXlRfGk8keeWkpk
+         znb2MXtzIFjPVz4XBhCxTQoPao64FtRiR2ZAwOhYEiGpfaRgDZ4Va7YWjFMo9BJDjZOT
+         H1bw==
+X-Gm-Message-State: AOAM531Qy5j+XLus6/TjP++jq6VObidkmPCXGyfOxdUZ/q6oRBHrXNtU
+        yUfTXjpIgCizqLVImK6X9vxeEctuP5VeUlhYBtE=
+X-Google-Smtp-Source: ABdhPJwWkATQ1H0AD8L8zUuYAzlVLn6aJevgIBd2XmwdfifSRTf77DJiEoZwT97jTA4OjB8JcxW1lPjdm9TUC147wUo=
+X-Received: by 2002:a05:6638:618:: with SMTP id g24mr31765261jar.94.1628683932979;
+ Wed, 11 Aug 2021 05:12:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Patch-Hashes: v=1; h=sha256; i=Qw3P/Tfw3H2aE9nuVn1p4NHDqaHGErEmfJmO6L2HF80=; m=FydmVf3EHrOfk/Erk3jkwyQcrbBSqB9qg6qvIrOZYWc=; p=swgwO0gHobGOw9bvcebWnvhUeGHl0wdD920V7Jm9gyE=; g=2a2dbd5e6a461e2ef057dc0c5df0fe68c3d03bd6
-X-Patch-Sig: m=pgp; i=u.kleine-koenig@pengutronix.de; s=0x0D2511F322BFAB1C1580266BE2DCDD9132669BD6; b=iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmEThPAACgkQwfwUeK3K7An6AQf9HbB AWMOP2HMDlnih7eHXcXdJtSx6gTmG1dHIjZmnFWItgP26RdvnX62x8rIvIYjYw2RmjiqbG7zaeHc5 2uS/EZPYcswtt7b9MHXONx4XxFXjfETgxDVmQTKE94r51OU4oYTRqhEw1bJl2PhMZVWmiYqlPV8ea yEW6fWZEXsZG4OyL19XX0gyKsKpKvV7Cdt69drzVkU3iye/Rrzgu0XBORdQohcSbeSVlNvN1ag/AS /vDB+UoTm463yoTsdfacXoZHbKLtrbt86WMYr0+TBYCM/0hj1UmSCaOX8qIyUR7IWRIIkiFsR3REY +Fkh6XUXXyDGFHkpVI21a/oLbHVWNXw==
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-scsi@vger.kernel.org
+Received: by 2002:a05:6602:d2:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:12:12
+ -0700 (PDT)
+Reply-To: mr.sawadogomichel1@gmail.com
+From:   "Mr.Sawadogo Michel" <mr.michaelmadada@gmail.com>
+Date:   Wed, 11 Aug 2021 05:12:12 -0700
+Message-ID: <CAOHp2QLCa_3AF51=n3=3q=OsaXo0xetpv4-v6Pot1d77pMMVMg@mail.gmail.com>
+Subject: Hello Dear Friend Your Urgent Response Is Needed
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The only two drivers don't make use of the id parameter, so drop it.
+Hello Dear Friend,
 
-This removes a usage of struct pci_dev::driver which is planned to be
-removed as it tracks duplicate data.
+My name is Mr.Sawadogo Michel. I have decided to seek a confidential
+co-operation  with you in the execution of the deal described
+here-under for our both  mutual benefit and I hope you will keep it a
+top secret because of the nature  of the transaction, During the
+course of our bank year auditing, I discovered  an unclaimed/abandoned
+fund, sum total of {US$19.3 Million United State  Dollars} in the bank
+account that belongs to a Saudi Arabia businessman Who unfortunately
+lost his life and entire family in a Motor Accident.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/message/fusion/mptbase.c | 7 ++-----
- drivers/message/fusion/mptbase.h | 2 +-
- drivers/message/fusion/mptctl.c  | 4 ++--
- drivers/message/fusion/mptlan.c  | 2 +-
- 4 files changed, 6 insertions(+), 9 deletions(-)
+Now our bank has been waiting for any of the relatives to come-up for
+the claim but nobody has done that. I personally has been unsuccessful
+in locating any of the relatives, now, I sincerely seek your consent
+to present you as the next of kin / Will Beneficiary to the deceased
+so that the proceeds of this account valued at {US$19.3 Million United
+State Dollars} can be paid to you, which we will share in these
+percentages ratio, 60% to me and 40% to you. All I request is your
+utmost sincere co-operation; trust and maximum confidentiality to
+achieve this project successfully. I have carefully mapped out the
+moralities for execution of this transaction under a legitimate
+arrangement to protect you from any breach of the law both in your
+country and here in Burkina Faso when the fund is being transferred to
+your bank account.
 
-diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
-index 7f7abc9069f7..b94d5e4fdc23 100644
---- a/drivers/message/fusion/mptbase.c
-+++ b/drivers/message/fusion/mptbase.c
-@@ -829,7 +829,6 @@ int
- mpt_device_driver_register(struct mpt_pci_driver * dd_cbfunc, u8 cb_idx)
- {
- 	MPT_ADAPTER	*ioc;
--	const struct pci_device_id *id;
- 
- 	if (!cb_idx || cb_idx >= MPT_MAX_PROTOCOL_DRIVERS)
- 		return -EINVAL;
-@@ -838,10 +837,8 @@ mpt_device_driver_register(struct mpt_pci_driver * dd_cbfunc, u8 cb_idx)
- 
- 	/* call per pci device probe entry point */
- 	list_for_each_entry(ioc, &ioc_list, list) {
--		id = ioc->pcidev->driver ?
--		    ioc->pcidev->driver->id_table : NULL;
- 		if (dd_cbfunc->probe)
--			dd_cbfunc->probe(ioc->pcidev, id);
-+			dd_cbfunc->probe(ioc->pcidev);
- 	 }
- 
- 	return 0;
-@@ -2032,7 +2029,7 @@ mpt_attach(struct pci_dev *pdev, const struct pci_device_id *id)
- 	for(cb_idx = 0; cb_idx < MPT_MAX_PROTOCOL_DRIVERS; cb_idx++) {
- 		if(MptDeviceDriverHandlers[cb_idx] &&
- 		  MptDeviceDriverHandlers[cb_idx]->probe) {
--			MptDeviceDriverHandlers[cb_idx]->probe(pdev,id);
-+			MptDeviceDriverHandlers[cb_idx]->probe(pdev);
- 		}
- 	}
- 
-diff --git a/drivers/message/fusion/mptbase.h b/drivers/message/fusion/mptbase.h
-index b9e0376be723..4bd0682c65d3 100644
---- a/drivers/message/fusion/mptbase.h
-+++ b/drivers/message/fusion/mptbase.h
-@@ -257,7 +257,7 @@ typedef enum {
- } MPT_DRIVER_CLASS;
- 
- struct mpt_pci_driver{
--	int  (*probe) (struct pci_dev *dev, const struct pci_device_id *id);
-+	int  (*probe) (struct pci_dev *dev);
- 	void (*remove) (struct pci_dev *dev);
- };
- 
-diff --git a/drivers/message/fusion/mptctl.c b/drivers/message/fusion/mptctl.c
-index 72025996cd70..ae433c150b37 100644
---- a/drivers/message/fusion/mptctl.c
-+++ b/drivers/message/fusion/mptctl.c
-@@ -114,7 +114,7 @@ static int mptctl_do_reset(MPT_ADAPTER *iocp, unsigned long arg);
- static int mptctl_hp_hostinfo(MPT_ADAPTER *iocp, unsigned long arg, unsigned int cmd);
- static int mptctl_hp_targetinfo(MPT_ADAPTER *iocp, unsigned long arg);
- 
--static int  mptctl_probe(struct pci_dev *, const struct pci_device_id *);
-+static int  mptctl_probe(struct pci_dev *);
- static void mptctl_remove(struct pci_dev *);
- 
- #ifdef CONFIG_COMPAT
-@@ -2838,7 +2838,7 @@ static long compat_mpctl_ioctl(struct file *f, unsigned int cmd, unsigned long a
-  */
- 
- static int
--mptctl_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-+mptctl_probe(struct pci_dev *pdev)
- {
- 	MPT_ADAPTER *ioc = pci_get_drvdata(pdev);
- 
-diff --git a/drivers/message/fusion/mptlan.c b/drivers/message/fusion/mptlan.c
-index 3261cac762de..7c1af5e6eb0b 100644
---- a/drivers/message/fusion/mptlan.c
-+++ b/drivers/message/fusion/mptlan.c
-@@ -1377,7 +1377,7 @@ mpt_register_lan_device (MPT_ADAPTER *mpt_dev, int pnum)
- }
- 
- static int
--mptlan_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-+mptlan_probe(struct pci_dev *pdev)
- {
- 	MPT_ADAPTER 		*ioc = pci_get_drvdata(pdev);
- 	struct net_device	*dev;
--- 
-2.30.2
+I will have to provide all the relevant document that will be
+requested to indicate that you are the rightful beneficiary of this
+legacy and our bank will release the fund to you without any further
+delay, upon your consideration and acceptance of this offer, please
+send me the following information as stated below so we can proceed
+and get this fund transferred to your designated bank account
+immediately.
 
+-Your Full Name:
+-Your Contact Address:
+-Your direct Mobile telephone Number:
+-Your Date of Birth:
+-Your occupation:
+
+I await your swift response and re-assurance.
+
+Best regards,
+Mr.Sawadogo Michel.
