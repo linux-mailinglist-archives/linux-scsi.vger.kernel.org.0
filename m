@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F6B3EAE68
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Aug 2021 04:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FC73EAE69
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Aug 2021 04:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237801AbhHMCJX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 12 Aug 2021 22:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S238071AbhHMCJY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 12 Aug 2021 22:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237262AbhHMCJT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Aug 2021 22:09:19 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318ACC0613D9
+        with ESMTP id S237397AbhHMCJU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Aug 2021 22:09:20 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA6CC0617A8
         for <linux-scsi@vger.kernel.org>; Thu, 12 Aug 2021 19:08:53 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id e19so9881546pla.10
+Received: by mail-pj1-x1035.google.com with SMTP id hv22-20020a17090ae416b0290178c579e424so13766097pjb.3
         for <linux-scsi@vger.kernel.org>; Thu, 12 Aug 2021 19:08:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=uJBmo6WbdZ+cUStJhJ08cbRtP5lkk6/v82/DZd9CSIw=;
-        b=L/s/uEbhdRW/gqsFYrjQ8Jd6/FC/3Bu9+GCKjoIz00n/3rVhCLILvV/jjaE7hwdevH
-         BiQWRGBFFIPG0iTAieY0JlWdPdQFm9cNWQ1QEjAaJTyQb+d5rk+cf/LWxQoJfaz8xHmy
-         KJMW/uWYZuyaQX+BcS66AmngAHNfsKagHLcBWHhA3/JDEGTAmuqJDmpEomq39ik7UtU2
-         /sChoB504dWWBsxQHjZDsczsBKxKzTwZLsF1yKkI0idfulMkPkILeDW2l4kPw2q+stPz
-         h6B3ioKbsRMaNxsVbg80mqMtOtoR8BUnux5EGUMFI2JT8oUhJfxp3xT8gJnh8BNmi0nb
-         4zIw==
+        bh=F/A7VSlvmGzeCK+0ncV3gGPboaz3XpxYIz6K1z0oJfg=;
+        b=Iad1ciQ0RKhR1TUxXYl7HKDaPiTqFGs8JDsrB0Y+tLzVX/JdiTrJa6XxtN8Wn3Hawr
+         us0orwUsF3lYzBO34lYC8GB3CRH84zZH+YmZtoIfU8F4CgVLosJd4mZvmRFuJ8bKcRFZ
+         qxe1xzl++89xbx0852maR7GuNwlxuPiQKHRAzpaJDq+nTIwlUNlF0x6mInntXZRTNKt9
+         hSmz6nIo22KvJ2E/0lagiowKHpI17Iv/iYUdcguxvfPt084acwuMfnTocVyqT6k1bAb9
+         ykqDLXR2SPXFMyWGPB2zHb6ab0zVBhJBfVc9aB/PoxyGRYFbsirdgVWDKhYKzw5XC7w+
+         PvCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uJBmo6WbdZ+cUStJhJ08cbRtP5lkk6/v82/DZd9CSIw=;
-        b=PfxeOt9qskeA9pm0oTYak5rFyNIOWkda5PzMDSPMuScCtA8CEf6tvCX1n++DyF4hrc
-         jSAeVufKVot1gwNhFSCyiZBqSeeJ1QI31EbSzocCrOYG75duk4dGBuvTviTxOKqDVRli
-         EOt1P/r0cl2luT+j2C+GIDqN+f0cukYZoJSwGCcPJe/LZw8HXXoClotYk+pl84TL8LZQ
-         /wjxeYMr4UhsIg4F4GnfG7zt83wpVyJioc6Xd2HzbuR8jzRcOruSOvDQHxn59pLMDsKc
-         an1TWLKN0jgrt6MO45ST5rjXfjY/ZWYL3iFK3db5TkkLX1z1Nl7KbKqmN8Bg2AXvZm1K
-         3OYA==
-X-Gm-Message-State: AOAM530PV8PIDI0NVmeEX/yBif7FGN9Aw5j94nE2iOke3pHX3/HjQsUN
-        3xaKxdWWOVzVadfYDmoVTd4mi9KUvp0=
-X-Google-Smtp-Source: ABdhPJzcrVXuQkRvDCq8J8GBmhziAqaFsr/3o7EvyH9GSvdX3Q3xrC8AJF+lphUFVbkGGztJzvhsmQ==
-X-Received: by 2002:a63:950a:: with SMTP id p10mr65637pgd.362.1628820532604;
-        Thu, 12 Aug 2021 19:08:52 -0700 (PDT)
+        bh=F/A7VSlvmGzeCK+0ncV3gGPboaz3XpxYIz6K1z0oJfg=;
+        b=ILO2PFk/ZHElhSiybUx2sf69oUYScodtR0hDYeffQjJAFAJu7dKDzDNqRxktsvR6j4
+         mqa/djJcKc8KyHXeofxz8Mv+WiSFDFJVH+AOLpsc24UM1s4jYbI+Hz/2g06nUFOFqpjP
+         /0PjqBx/y2CPNUrqxdynC4Z0S5KSkV1YzrineiHktpXu2Ds+M+XVZfCuO81SVh+y8i1u
+         nfD3xkesOVmhS5tnNxU5f2ComwH3AqoZuokDC/dhMfzVnD6goEbTbKZIRdrdi0IbsxBr
+         iG68ymKKjF2LJeX9tkPIHHnoWrVtMVYmmV34k1Of4ZUkZaSUfVJAADuHAg7fXDm2o8s8
+         km3g==
+X-Gm-Message-State: AOAM532z/ZBSfdQcSvSs2NZ0BQh36ZvZXbcUbsX9KZ99Lte05GCGwz9o
+        cHQPNuF3MKJlv0vK2umxZPR8GhHiuUA=
+X-Google-Smtp-Source: ABdhPJxqXgNGp4U599vWpTp5SQQgq0GSaNxyqM7HAeKiD6Dub1jV0ZlVVTmZNPEj04ICqc6scGBvxQ==
+X-Received: by 2002:a63:3c5d:: with SMTP id i29mr51874pgn.147.1628820533258;
+        Thu, 12 Aug 2021 19:08:53 -0700 (PDT)
 Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
         by smtp.gmail.com with ESMTPSA id ca7sm102619pjb.11.2021.08.12.19.08.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Aug 2021 19:08:52 -0700 (PDT)
+        Thu, 12 Aug 2021 19:08:53 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 06/16] lpfc: Add cm statistics buffer support
-Date:   Thu, 12 Aug 2021 19:08:02 -0700
-Message-Id: <20210813020812.99014-7-jsmart2021@gmail.com>
+Subject: [PATCH 07/16] lpfc: Add support for cm enablement buffer
+Date:   Thu, 12 Aug 2021 19:08:03 -0700
+Message-Id: <20210813020812.99014-8-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210813020812.99014-1-jsmart2021@gmail.com>
 References: <20210813020812.99014-1-jsmart2021@gmail.com>
@@ -63,386 +63,502 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The cmf framework requires the driver to maintain a cm statistics table,
-accessible inband, of congestion related statistics that are reported
-per minute, rolled up to per hour, and rolled up again per day. Several
-days worth may be maintained.  The table is registered with the adapter
-when the MIB feature is enabled.
+As part of the cmf framework, the firmware maintains a table with
+congestion related state information, specifically whether enabled and
+if enabled, whether monitoring or actively managing congestion.
 
-Add definition of the table and add support to register the table
-with the adapter. Includes definition and initialization of event counters
-that are later added to the statistics table.
+Add definition of the table and add support to read the table from the
+adapter and determine if it is enabled. In support of this, the
+READ_OBJECT mailbox command definition is added to the driver.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc.h      | 133 ++++++++++++++++++++++++++++++++++
- drivers/scsi/lpfc/lpfc_crtn.h |   3 +
- drivers/scsi/lpfc/lpfc_hw4.h  |  17 +++++
- drivers/scsi/lpfc/lpfc_init.c | 109 ++++++++++++++++++++++++++++
- drivers/scsi/lpfc/lpfc_sli.c  |  10 +++
- 5 files changed, 272 insertions(+)
+ drivers/scsi/lpfc/lpfc.h      |  29 ++++++
+ drivers/scsi/lpfc/lpfc_attr.c |   5 -
+ drivers/scsi/lpfc/lpfc_crtn.h |   4 +
+ drivers/scsi/lpfc/lpfc_hw4.h  |  32 ++++++
+ drivers/scsi/lpfc/lpfc_init.c | 188 ++++++++++++++++++++++++++++++++++
+ drivers/scsi/lpfc/lpfc_sli.c  | 110 ++++++++++++++++++++
+ 6 files changed, 363 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
-index f23905b89ee3..169cef789f73 100644
+index 169cef789f73..5a356a1d517c 100644
 --- a/drivers/scsi/lpfc/lpfc.h
 +++ b/drivers/scsi/lpfc/lpfc.h
-@@ -403,6 +403,127 @@ struct lpfc_trunk_link  {
+@@ -114,6 +114,12 @@ struct lpfc_sli2_slim;
+ #define LPFC_MBX_NO_WAIT	0
+ #define LPFC_MBX_WAIT		1
+ 
++#define LPFC_CFG_PARAM_MAGIC_NUM 0xFEAA0005
++#define LPFC_PORT_CFG_NAME "/cfg/port.cfg"
++
++#define lpfc_rangecheck(val, min, max) \
++	((uint)(val) >= (uint)(min) && (val) <= (max))
++
+ enum lpfc_polling_flags {
+ 	ENABLE_FCP_RING_POLLING = 0x1,
+ 	DISABLE_FCP_RING_INT    = 0x2
+@@ -403,6 +409,26 @@ struct lpfc_trunk_link  {
  				     link3;
  };
  
-+/* Max number of days of congestion data */
-+#define LPFC_MAX_CGN_DAYS 10
-+
-+/* Format of congestion buffer info
-+ * This structure defines memory thats allocated and registered with
-+ * the HBA firmware. When adding or removing fields from this structure
-+ * the alignment must match the HBA firmware.
-+ */
-+
-+struct lpfc_cgn_info {
-+	/* Header */
-+	__le16   cgn_info_size;		/* is sizeof(struct lpfc_cgn_info) */
-+	uint8_t  cgn_info_version;	/* represents format of structure */
-+#define LPFC_CGN_INFO_V1	1
-+#define LPFC_CGN_INFO_V2	2
-+#define LPFC_CGN_INFO_V3	3
-+	uint8_t  cgn_info_mode;		/* 0=off 1=managed 2=monitor only */
-+	uint8_t  cgn_info_detect;
-+	uint8_t  cgn_info_action;
-+	uint8_t  cgn_info_level0;
-+	uint8_t  cgn_info_level1;
-+	uint8_t  cgn_info_level2;
-+
-+	/* Start Time */
-+	uint8_t  cgn_info_month;
-+	uint8_t  cgn_info_day;
-+	uint8_t  cgn_info_year;
-+	uint8_t  cgn_info_hour;
-+	uint8_t  cgn_info_minute;
-+	uint8_t  cgn_info_second;
-+
-+	/* minute / hours / daily indices */
-+	uint8_t  cgn_index_minute;
-+	uint8_t  cgn_index_hour;
-+	uint8_t  cgn_index_day;
-+
-+	__le16   cgn_warn_freq;
-+	__le16   cgn_alarm_freq;
-+	__le16   cgn_lunq;
-+	uint8_t  cgn_pad1[8];
-+
-+	/* Driver Information */
-+	__le16   cgn_drvr_min[60];
-+	__le32   cgn_drvr_hr[24];
-+	__le32   cgn_drvr_day[LPFC_MAX_CGN_DAYS];
-+
-+	/* Congestion Warnings */
-+	__le16   cgn_warn_min[60];
-+	__le32   cgn_warn_hr[24];
-+	__le32   cgn_warn_day[LPFC_MAX_CGN_DAYS];
-+
-+	/* Latency Information */
-+	__le32   cgn_latency_min[60];
-+	__le32   cgn_latency_hr[24];
-+	__le32   cgn_latency_day[LPFC_MAX_CGN_DAYS];
-+
-+	/* Bandwidth Information */
-+	__le16   cgn_bw_min[60];
-+	__le16   cgn_bw_hr[24];
-+	__le16   cgn_bw_day[LPFC_MAX_CGN_DAYS];
-+
-+	/* Congestion Alarms */
-+	__le16   cgn_alarm_min[60];
-+	__le32   cgn_alarm_hr[24];
-+	__le32   cgn_alarm_day[LPFC_MAX_CGN_DAYS];
-+
-+	/* Start of congestion statistics */
-+	uint8_t  cgn_stat_npm;		/* Notifications per minute */
-+
-+	/* Start Time */
-+	uint8_t  cgn_stat_month;
-+	uint8_t  cgn_stat_day;
-+	uint8_t  cgn_stat_year;
-+	uint8_t  cgn_stat_hour;
-+	uint8_t  cgn_stat_minute;
-+	uint8_t  cgn_pad2[2];
-+
-+	__le32   cgn_notification;
-+	__le32   cgn_peer_notification;
-+	__le32   link_integ_notification;
-+	__le32   delivery_notification;
-+
-+	uint8_t  cgn_stat_cgn_month; /* Last congestion notification FPIN */
-+	uint8_t  cgn_stat_cgn_day;
-+	uint8_t  cgn_stat_cgn_year;
-+	uint8_t  cgn_stat_cgn_hour;
-+	uint8_t  cgn_stat_cgn_min;
-+	uint8_t  cgn_stat_cgn_sec;
-+
-+	uint8_t  cgn_stat_peer_month; /* Last peer congestion FPIN */
-+	uint8_t  cgn_stat_peer_day;
-+	uint8_t  cgn_stat_peer_year;
-+	uint8_t  cgn_stat_peer_hour;
-+	uint8_t  cgn_stat_peer_min;
-+	uint8_t  cgn_stat_peer_sec;
-+
-+	uint8_t  cgn_stat_lnk_month; /* Last link integrity FPIN */
-+	uint8_t  cgn_stat_lnk_day;
-+	uint8_t  cgn_stat_lnk_year;
-+	uint8_t  cgn_stat_lnk_hour;
-+	uint8_t  cgn_stat_lnk_min;
-+	uint8_t  cgn_stat_lnk_sec;
-+
-+	uint8_t  cgn_stat_del_month; /* Last delivery notification FPIN */
-+	uint8_t  cgn_stat_del_day;
-+	uint8_t  cgn_stat_del_year;
-+	uint8_t  cgn_stat_del_hour;
-+	uint8_t  cgn_stat_del_min;
-+	uint8_t  cgn_stat_del_sec;
-+#define LPFC_CGN_STAT_SIZE	48
-+#define LPFC_CGN_DATA_SIZE	(sizeof(struct lpfc_cgn_info) -  \
-+				LPFC_CGN_STAT_SIZE - sizeof(uint32_t))
-+
-+	__le32   cgn_info_crc;
-+#define LPFC_CGN_CRC32_MAGIC_NUMBER	0x1EDC6F41
-+#define LPFC_CGN_CRC32_SEED		0xFFFFFFFF
++/* Format of congestion module parameters */
++struct lpfc_cgn_param {
++	uint32_t cgn_param_magic;
++	uint8_t  cgn_param_version;	/* version 1 */
++	uint8_t  cgn_param_mode;	/* 0=off 1=managed 2=monitor only */
++#define LPFC_CFG_OFF		0
++#define LPFC_CFG_MANAGED	1
++#define LPFC_CFG_MONITOR	2
++	uint8_t  cgn_rsvd1;
++	uint8_t  cgn_rsvd2;
++	uint8_t  cgn_param_level0;
++	uint8_t  cgn_param_level1;
++	uint8_t  cgn_param_level2;
++	uint8_t  byte11;
++	uint8_t  byte12;
++	uint8_t  byte13;
++	uint8_t  byte14;
++	uint8_t  byte15;
 +};
 +
-+#define LPFC_CGN_INFO_SZ	(sizeof(struct lpfc_cgn_info) -  \
-+				sizeof(uint32_t))
+ /* Max number of days of congestion data */
+ #define LPFC_MAX_CGN_DAYS 10
+ 
+@@ -1491,6 +1517,9 @@ struct lpfc_hba {
+ 	u32 cgn_sig_freq;
+ 	u32 cgn_acqe_cnt;
+ 
++	/* Congestion parameters from flash */
++	struct lpfc_cgn_param cgn_p;
 +
- struct lpfc_cgn_acqe_stat {
- 	atomic64_t alarm;
- 	atomic64_t warn;
-@@ -1374,10 +1495,22 @@ struct lpfc_hba {
+ 	/* Statistics counter for ACQE cgn alarms and warnings */
  	struct lpfc_cgn_acqe_stat cgn_acqe_stat;
  
- 	/* Congestion buffer information */
-+	struct lpfc_dmabuf *cgn_i;      /* Congestion Info buffer */
- 	atomic_t cgn_fabric_warn_cnt;   /* Total warning cgn events for info */
- 	atomic_t cgn_fabric_alarm_cnt;  /* Total alarm cgn events for info */
- 	atomic_t cgn_sync_warn_cnt;     /* Total warning events for SYNC wqe */
- 	atomic_t cgn_sync_alarm_cnt;    /* Total alarm events for SYNC wqe */
-+	atomic_t cgn_driver_evt_cnt;    /* Total driver cgn events for fmw */
-+	atomic_t cgn_latency_evt_cnt;
-+	struct timespec64 cgn_daily_ts;
-+	atomic64_t cgn_latency_evt;     /* Avg latency per minute */
-+	unsigned long cgn_evt_timestamp;
-+#define LPFC_CGN_TIMER_TO_MIN   60000 /* ms in a minute */
-+	uint32_t cgn_evt_minute;
-+#define LPFC_SEC_MIN		60
-+#define LPFC_MIN_HOUR		60
-+#define LPFC_HOUR_DAY		24
-+#define LPFC_MIN_DAY		(LPFC_MIN_HOUR * LPFC_HOUR_DAY)
+diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+index d16d3544084f..449409cad60d 100644
+--- a/drivers/scsi/lpfc/lpfc_attr.c
++++ b/drivers/scsi/lpfc/lpfc_attr.c
+@@ -2248,11 +2248,6 @@ lpfc_sriov_hw_max_virtfn_show(struct device *dev,
+ 	return scnprintf(buf, PAGE_SIZE, "%d\n", max_nr_virtfn);
+ }
  
- 	struct hlist_node cpuhp;	/* used for cpuhp per hba callback */
- 	struct timer_list cpuhp_poll_timer;
+-static inline bool lpfc_rangecheck(uint val, uint min, uint max)
+-{
+-	return val >= min && val <= max;
+-}
+-
+ /**
+  * lpfc_enable_bbcr_set: Sets an attribute value.
+  * @phba: pointer the the adapter structure.
 diff --git a/drivers/scsi/lpfc/lpfc_crtn.h b/drivers/scsi/lpfc/lpfc_crtn.h
-index b1db01884990..e7fad8cd10ee 100644
+index e7fad8cd10ee..947c4ba847f6 100644
 --- a/drivers/scsi/lpfc/lpfc_crtn.h
 +++ b/drivers/scsi/lpfc/lpfc_crtn.h
-@@ -58,6 +58,7 @@ void lpfc_request_features(struct lpfc_hba *, struct lpfcMboxq *);
- int lpfc_sli4_mbox_rsrc_extent(struct lpfc_hba *, struct lpfcMboxq *,
- 			   uint16_t, uint16_t, bool);
- int lpfc_get_sli4_parameters(struct lpfc_hba *, LPFC_MBOXQ_t *);
-+int lpfc_reg_congestion_buf(struct lpfc_hba *phba);
- struct lpfc_vport *lpfc_find_vport_by_did(struct lpfc_hba *, uint32_t);
- void lpfc_cleanup_rcv_buffers(struct lpfc_vport *);
- void lpfc_rcv_seq_check_edtov(struct lpfc_vport *);
-@@ -74,6 +75,8 @@ int lpfc_init_iocb_list(struct lpfc_hba *phba, int cnt);
- void lpfc_free_iocb_list(struct lpfc_hba *phba);
- int lpfc_post_rq_buffer(struct lpfc_hba *phba, struct lpfc_queue *hrq,
+@@ -77,6 +77,7 @@ int lpfc_post_rq_buffer(struct lpfc_hba *phba, struct lpfc_queue *hrq,
  			struct lpfc_queue *drq, int count, int idx);
-+void lpfc_init_congestion_stat(struct lpfc_hba *phba);
-+void lpfc_init_congestion_buf(struct lpfc_hba *phba);
+ void lpfc_init_congestion_stat(struct lpfc_hba *phba);
+ void lpfc_init_congestion_buf(struct lpfc_hba *phba);
++int lpfc_sli4_cgn_params_read(struct lpfc_hba *phba);
  int lpfc_config_cgn_signal(struct lpfc_hba *phba);
  
  void lpfc_mbx_cmpl_local_config_link(struct lpfc_hba *, LPFC_MBOXQ_t *);
+@@ -220,6 +221,9 @@ irqreturn_t lpfc_sli_fp_intr_handler(int, void *);
+ irqreturn_t lpfc_sli4_intr_handler(int, void *);
+ irqreturn_t lpfc_sli4_hba_intr_handler(int, void *);
+ 
++int lpfc_read_object(struct lpfc_hba *phba, char *s, uint32_t *datap,
++		     uint32_t len);
++
+ void lpfc_sli4_cleanup_poll_list(struct lpfc_hba *phba);
+ int lpfc_sli4_poll_eq(struct lpfc_queue *q, uint8_t path);
+ void lpfc_sli4_poll_hbtimer(struct timer_list *t);
 diff --git a/drivers/scsi/lpfc/lpfc_hw4.h b/drivers/scsi/lpfc/lpfc_hw4.h
-index ebee1d302a49..3e81d02fb24f 100644
+index 3e81d02fb24f..973af1f86d28 100644
 --- a/drivers/scsi/lpfc/lpfc_hw4.h
 +++ b/drivers/scsi/lpfc/lpfc_hw4.h
-@@ -1025,6 +1025,7 @@ struct mbox_header {
- #define LPFC_MBOX_OPCODE_SET_HOST_DATA			0x5D
- #define LPFC_MBOX_OPCODE_SEND_ACTIVATION		0x73
- #define LPFC_MBOX_OPCODE_RESET_LICENSES			0x74
-+#define LPFC_MBOX_OPCODE_REG_CONGESTION_BUF		0x8E
- #define LPFC_MBOX_OPCODE_GET_RSRC_EXTENT_INFO		0x9A
- #define LPFC_MBOX_OPCODE_GET_ALLOC_RSRC_EXTENT		0x9B
- #define LPFC_MBOX_OPCODE_ALLOC_RSRC_EXTENT		0x9C
-@@ -3503,6 +3504,21 @@ struct lpfc_mbx_get_sli4_parameters {
- 	struct lpfc_sli4_parameters sli4_parameters;
+@@ -1134,6 +1134,12 @@ struct lpfc_mbx_sge {
+ 	uint32_t length;
  };
  
-+struct lpfc_mbx_reg_congestion_buf {
-+	struct mbox_header header;
-+	uint32_t word0;
-+#define lpfc_mbx_reg_cgn_buf_type_WORD		word0
-+#define lpfc_mbx_reg_cgn_buf_type_SHIFT		0
-+#define lpfc_mbx_reg_cgn_buf_type_MASK		0xFF
-+#define lpfc_mbx_reg_cgn_buf_cnt_WORD		word0
-+#define lpfc_mbx_reg_cgn_buf_cnt_SHIFT		16
-+#define lpfc_mbx_reg_cgn_buf_cnt_MASK		0xFF
-+	uint32_t word1;
++struct lpfc_mbx_host_buf {
 +	uint32_t length;
-+	uint32_t addr_lo;
-+	uint32_t addr_hi;
++	uint32_t pa_lo;
++	uint32_t pa_hi;
 +};
 +
- struct lpfc_rscr_desc_generic {
- #define LPFC_RSRC_DESC_WSIZE			22
- 	uint32_t desc[LPFC_RSRC_DESC_WSIZE];
-@@ -3902,6 +3918,7 @@ struct lpfc_mqe {
- 		struct lpfc_mbx_query_fw_config query_fw_cfg;
- 		struct lpfc_mbx_set_beacon_config beacon_config;
- 		struct lpfc_mbx_get_sli4_parameters get_sli4_parameters;
-+		struct lpfc_mbx_reg_congestion_buf reg_congestion_buf;
- 		struct lpfc_mbx_set_link_diag_state link_diag_state;
- 		struct lpfc_mbx_set_link_diag_loopback link_diag_loopback;
- 		struct lpfc_mbx_run_link_diag_test link_diag_test;
+ struct lpfc_mbx_nembed_cmd {
+ 	struct lpfc_sli4_cfg_mhdr cfg_mhdr;
+ #define LPFC_SLI4_MBX_SGE_MAX_PAGES	19
+@@ -1144,6 +1150,30 @@ struct lpfc_mbx_nembed_sge_virt {
+ 	void *addr[LPFC_SLI4_MBX_SGE_MAX_PAGES];
+ };
+ 
++struct lpfc_mbx_read_object {  /* Version 0 */
++	struct mbox_header header;
++	union {
++		struct {
++			uint32_t word0;
++#define lpfc_mbx_rd_object_rlen_SHIFT	0
++#define lpfc_mbx_rd_object_rlen_MASK	0x00FFFFFF
++#define lpfc_mbx_rd_object_rlen_WORD	word0
++			uint32_t rd_object_offset;
++			uint32_t rd_object_name[26];
++#define LPFC_OBJ_NAME_SZ 104   /* 26 x sizeof(uint32_t) is 104. */
++			uint32_t rd_object_cnt;
++			struct lpfc_mbx_host_buf rd_object_hbuf[4];
++		} request;
++		struct {
++			uint32_t rd_object_actual_rlen;
++			uint32_t word1;
++#define lpfc_mbx_rd_object_eof_SHIFT	31
++#define lpfc_mbx_rd_object_eof_MASK	0x1
++#define lpfc_mbx_rd_object_eof_WORD	word1
++		} response;
++	} u;
++};
++
+ struct lpfc_mbx_eq_create {
+ 	struct mbox_header header;
+ 	union {
+@@ -2339,6 +2369,7 @@ struct lpfc_mbx_redisc_fcf_tbl {
+ #define ADD_STATUS_OPERATION_ALREADY_ACTIVE		0x67
+ #define ADD_STATUS_FW_NOT_SUPPORTED			0xEB
+ #define ADD_STATUS_INVALID_REQUEST			0x4B
++#define ADD_STATUS_INVALID_OBJECT_NAME			0xA0
+ #define ADD_STATUS_FW_DOWNLOAD_HW_DISABLED              0x58
+ 
+ struct lpfc_mbx_sli4_config {
+@@ -3893,6 +3924,7 @@ struct lpfc_mqe {
+ 		struct lpfc_mbx_unreg_fcfi unreg_fcfi;
+ 		struct lpfc_mbx_mq_create mq_create;
+ 		struct lpfc_mbx_mq_create_ext mq_create_ext;
++		struct lpfc_mbx_read_object read_object;
+ 		struct lpfc_mbx_eq_create eq_create;
+ 		struct lpfc_mbx_modify_eq_delay eq_delay;
+ 		struct lpfc_mbx_cq_create cq_create;
 diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 9e4446302855..71166c24ae89 100644
+index 71166c24ae89..a34f667e1cd0 100644
 --- a/drivers/scsi/lpfc/lpfc_init.c
 +++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -12234,6 +12234,115 @@ lpfc_sli4_hba_unset(struct lpfc_hba *phba)
- 		phba->pport->work_port_events = 0;
+@@ -6113,6 +6113,194 @@ lpfc_sli4_async_grp5_evt(struct lpfc_hba *phba,
+ 			phba->sli4_hba.link_state.logical_speed);
  }
  
-+
-+void
-+lpfc_init_congestion_buf(struct lpfc_hba *phba)
++/**
++ * lpfc_cgn_params_val - Validate FW congestion parameters.
++ * @phba: pointer to lpfc hba data structure.
++ * @p_cfg_param: pointer to FW provided congestion parameters.
++ *
++ * This routine validates the congestion parameters passed
++ * by the FW to the driver via an ACQE event.
++ **/
++static void
++lpfc_cgn_params_val(struct lpfc_hba *phba, struct lpfc_cgn_param *p_cfg_param)
 +{
-+	lpfc_printf_log(phba, KERN_INFO, LOG_CGN_MGMT,
-+			"6235 INIT Congestion Buffer %p\n", phba->cgn_i);
++	spin_lock_irq(&phba->hbalock);
 +
-+	if (!phba->cgn_i)
-+		return;
++	if (!lpfc_rangecheck(p_cfg_param->cgn_param_mode, LPFC_CFG_OFF,
++			     LPFC_CFG_MONITOR)) {
++		lpfc_printf_log(phba, KERN_ERR, LOG_CGN_MGMT,
++				"6225 CMF mode param out of range: %d\n",
++				 p_cfg_param->cgn_param_mode);
++		p_cfg_param->cgn_param_mode = LPFC_CFG_OFF;
++	}
 +
-+	atomic_set(&phba->cgn_fabric_warn_cnt, 0);
-+	atomic_set(&phba->cgn_fabric_alarm_cnt, 0);
-+	atomic_set(&phba->cgn_sync_alarm_cnt, 0);
-+	atomic_set(&phba->cgn_sync_warn_cnt, 0);
-+
-+	atomic64_set(&phba->cgn_acqe_stat.alarm, 0);
-+	atomic64_set(&phba->cgn_acqe_stat.warn, 0);
-+	atomic_set(&phba->cgn_driver_evt_cnt, 0);
-+	atomic_set(&phba->cgn_latency_evt_cnt, 0);
-+	atomic64_set(&phba->cgn_latency_evt, 0);
-+	phba->cgn_evt_minute = 0;
-+
-+	phba->cgn_evt_timestamp = jiffies +
-+		msecs_to_jiffies(LPFC_CGN_TIMER_TO_MIN);
-+}
-+
-+void
-+lpfc_init_congestion_stat(struct lpfc_hba *phba)
-+{
-+	lpfc_printf_log(phba, KERN_INFO, LOG_CGN_MGMT,
-+			"6236 INIT Congestion Stat %p\n", phba->cgn_i);
-+
-+	if (!phba->cgn_i)
-+		return;
++	spin_unlock_irq(&phba->hbalock);
 +}
 +
 +/**
-+ * __lpfc_reg_congestion_buf - register congestion info buffer with HBA
-+ * @phba: Pointer to hba context object.
-+ * @reg: flag to determine register or unregister.
-+ */
-+static int
-+__lpfc_reg_congestion_buf(struct lpfc_hba *phba, int reg)
++ * lpfc_cgn_params_parse - Process a FW cong parm change event
++ * @phba: pointer to lpfc hba data structure.
++ * @p_cgn_param: pointer to a data buffer with the FW cong params.
++ * @len: the size of pdata in bytes.
++ *
++ * This routine validates the congestion management buffer signature
++ * from the FW, validates the contents and makes corrections for
++ * valid, in-range values.  If the signature magic is correct and
++ * after parameter validation, the contents are copied to the driver's
++ * @phba structure. If the magic is incorrect, an error message is
++ * logged.
++ **/
++static void
++lpfc_cgn_params_parse(struct lpfc_hba *phba,
++		      struct lpfc_cgn_param *p_cgn_param, uint32_t len)
 +{
-+	struct lpfc_mbx_reg_congestion_buf *reg_congestion_buf;
-+	union  lpfc_sli4_cfg_shdr *shdr;
-+	uint32_t shdr_status, shdr_add_status;
-+	LPFC_MBOXQ_t *mboxq;
-+	int length, rc;
++	uint32_t oldmode;
 +
-+	if (!phba->cgn_i)
-+		return -ENXIO;
++	/* Make sure the FW has encoded the correct magic number to
++	 * validate the congestion parameter in FW memory.
++	 */
++	if (p_cgn_param->cgn_param_magic == LPFC_CFG_PARAM_MAGIC_NUM) {
++		lpfc_printf_log(phba, KERN_INFO, LOG_CGN_MGMT | LOG_INIT,
++				"4668 FW cgn parm buffer data: "
++				"magic 0x%x version %d mode %d "
++				"level0 %d level1 %d "
++				"level2 %d byte13 %d "
++				"byte14 %d byte15 %d "
++				"byte11 %d byte12 %d activeMode %d\n",
++				p_cgn_param->cgn_param_magic,
++				p_cgn_param->cgn_param_version,
++				p_cgn_param->cgn_param_mode,
++				p_cgn_param->cgn_param_level0,
++				p_cgn_param->cgn_param_level1,
++				p_cgn_param->cgn_param_level2,
++				p_cgn_param->byte13,
++				p_cgn_param->byte14,
++				p_cgn_param->byte15,
++				p_cgn_param->byte11,
++				p_cgn_param->byte12,
++				phba->cmf_active_mode);
 +
-+	mboxq = mempool_alloc(phba->mbox_mem_pool, GFP_KERNEL);
-+	if (!mboxq) {
-+		lpfc_printf_log(phba, KERN_ERR, LOG_MBOX,
-+				"2641 REG_CONGESTION_BUF mbox allocation fail: "
-+				"HBA state x%x reg %d\n",
-+				phba->pport->port_state, reg);
-+		return -ENOMEM;
++		oldmode = phba->cmf_active_mode;
++
++		/* Any parameters out of range are corrected to defaults
++		 * by this routine.  No need to fail.
++		 */
++		lpfc_cgn_params_val(phba, p_cgn_param);
++
++		/* Parameters are verified, move them into driver storage */
++		spin_lock_irq(&phba->hbalock);
++		memcpy(&phba->cgn_p, p_cgn_param,
++		       sizeof(struct lpfc_cgn_param));
++
++		spin_unlock_irq(&phba->hbalock);
++
++		phba->cmf_active_mode = phba->cgn_p.cgn_param_mode;
++
++		switch (oldmode) {
++		case LPFC_CFG_OFF:
++			if (phba->cgn_p.cgn_param_mode != LPFC_CFG_OFF) {
++				/* Turning CMF on */
++
++				if (phba->link_state >= LPFC_LINK_UP) {
++					phba->cgn_reg_fpin =
++						phba->cgn_init_reg_fpin;
++					phba->cgn_reg_signal =
++						phba->cgn_init_reg_signal;
++					lpfc_issue_els_edc(phba->pport, 0);
++				}
++			}
++			break;
++		case LPFC_CFG_MANAGED:
++			switch (phba->cgn_p.cgn_param_mode) {
++			case LPFC_CFG_OFF:
++				/* Turning CMF off */
++				if (phba->link_state >= LPFC_LINK_UP)
++					lpfc_issue_els_edc(phba->pport, 0);
++				break;
++			case LPFC_CFG_MONITOR:
++				lpfc_printf_log(phba, KERN_INFO, LOG_CGN_MGMT,
++						"4661 Switch from MANAGED to "
++						"`MONITOR mode\n");
++				break;
++			}
++			break;
++		case LPFC_CFG_MONITOR:
++			switch (phba->cgn_p.cgn_param_mode) {
++			case LPFC_CFG_OFF:
++				/* Turning CMF off */
++				if (phba->link_state >= LPFC_LINK_UP)
++					lpfc_issue_els_edc(phba->pport, 0);
++				break;
++			case LPFC_CFG_MANAGED:
++				lpfc_printf_log(phba, KERN_INFO, LOG_CGN_MGMT,
++						"4662 Switch from MONITOR to "
++						"MANAGED mode\n");
++				break;
++			}
++			break;
++		}
++	} else {
++		lpfc_printf_log(phba, KERN_ERR, LOG_CGN_MGMT | LOG_INIT,
++				"4669 FW cgn parm buf wrong magic 0x%x "
++				"version %d\n", p_cgn_param->cgn_param_magic,
++				p_cgn_param->cgn_param_version);
 +	}
-+
-+	length = (sizeof(struct lpfc_mbx_reg_congestion_buf) -
-+		sizeof(struct lpfc_sli4_cfg_mhdr));
-+	lpfc_sli4_config(phba, mboxq, LPFC_MBOX_SUBSYSTEM_COMMON,
-+			 LPFC_MBOX_OPCODE_REG_CONGESTION_BUF, length,
-+			 LPFC_SLI4_MBX_EMBED);
-+	reg_congestion_buf = &mboxq->u.mqe.un.reg_congestion_buf;
-+	bf_set(lpfc_mbx_reg_cgn_buf_type, reg_congestion_buf, 1);
-+	if (reg > 0)
-+		bf_set(lpfc_mbx_reg_cgn_buf_cnt, reg_congestion_buf, 1);
-+	else
-+		bf_set(lpfc_mbx_reg_cgn_buf_cnt, reg_congestion_buf, 0);
-+	reg_congestion_buf->length = sizeof(struct lpfc_cgn_info);
-+	reg_congestion_buf->addr_lo =
-+		putPaddrLow(phba->cgn_i->phys);
-+	reg_congestion_buf->addr_hi =
-+		putPaddrHigh(phba->cgn_i->phys);
-+
-+	rc = lpfc_sli_issue_mbox(phba, mboxq, MBX_POLL);
-+	shdr = (union lpfc_sli4_cfg_shdr *)
-+		&mboxq->u.mqe.un.sli4_config.header.cfg_shdr;
-+	shdr_status = bf_get(lpfc_mbox_hdr_status, &shdr->response);
-+	shdr_add_status = bf_get(lpfc_mbox_hdr_add_status,
-+				 &shdr->response);
-+	mempool_free(mboxq, phba->mbox_mem_pool);
-+	if (shdr_status || shdr_add_status || rc) {
-+		lpfc_printf_log(phba, KERN_ERR, LOG_INIT,
-+				"2642 REG_CONGESTION_BUF mailbox "
-+				"failed with status x%x add_status x%x,"
-+				" mbx status x%x reg %d\n",
-+				shdr_status, shdr_add_status, rc, reg);
-+		return -ENXIO;
-+	}
-+	return 0;
 +}
 +
-+static int
-+lpfc_unreg_congestion_buf(struct lpfc_hba *phba)
-+{
-+	return __lpfc_reg_congestion_buf(phba, 0);
-+}
-+
++/**
++ * lpfc_sli4_cgn_params_read - Read and Validate FW congestion parameters.
++ * @phba: pointer to lpfc hba data structure.
++ *
++ * This routine issues a read_object mailbox command to
++ * get the congestion management parameters from the FW
++ * parses it and updates the driver maintained values.
++ *
++ * Returns
++ *  0     if the object was empty
++ *  -Eval if an error was encountered
++ *  Count if bytes were read from object
++ **/
 +int
-+lpfc_reg_congestion_buf(struct lpfc_hba *phba)
++lpfc_sli4_cgn_params_read(struct lpfc_hba *phba)
 +{
-+	return __lpfc_reg_congestion_buf(phba, 1);
++	int ret = 0;
++	struct lpfc_cgn_param *p_cgn_param = NULL;
++	u32 *pdata = NULL;
++	u32 len = 0;
++
++	/* Find out if the FW has a new set of congestion parameters. */
++	len = sizeof(struct lpfc_cgn_param);
++	pdata = kzalloc(len, GFP_KERNEL);
++	ret = lpfc_read_object(phba, (char *)LPFC_PORT_CFG_NAME,
++			       pdata, len);
++
++	/* 0 means no data.  A negative means error.  A positive means
++	 * bytes were copied.
++	 */
++	if (!ret) {
++		lpfc_printf_log(phba, KERN_ERR, LOG_CGN_MGMT | LOG_INIT,
++				"4670 CGN RD OBJ returns no data\n");
++		goto rd_obj_err;
++	} else if (ret < 0) {
++		/* Some error.  Just exit and return it to the caller.*/
++		goto rd_obj_err;
++	}
++
++	lpfc_printf_log(phba, KERN_INFO, LOG_CGN_MGMT | LOG_INIT,
++			"6234 READ CGN PARAMS Successful %d\n", len);
++
++	/* Parse data pointer over len and update the phba congestion
++	 * parameters with values passed back.  The receive rate values
++	 * may have been altered in FW, but take no action here.
++	 */
++	p_cgn_param = (struct lpfc_cgn_param *)pdata;
++	lpfc_cgn_params_parse(phba, p_cgn_param, len);
++
++ rd_obj_err:
++	kfree(pdata);
++	return ret;
 +}
 +
  /**
-  * lpfc_get_sli4_parameters - Get the SLI4 Config PARAMETERS.
-  * @phba: Pointer to HBA context object.
+  * lpfc_sli4_async_event_proc - Process all the pending asynchronous event
+  * @phba: pointer to lpfc hba data structure.
 diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 3b6576d3be6d..e6d03a0cf5c1 100644
+index e6d03a0cf5c1..b42c2dc49c83 100644
 --- a/drivers/scsi/lpfc/lpfc_sli.c
 +++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -7713,6 +7713,16 @@ lpfc_cmf_setup(struct lpfc_hba *phba)
- 			sli4_params->mi_ver);
- 
- 	mempool_free(mboxq, phba->mbox_mem_pool);
-+
-+	/* Initialize atomic counters */
-+	atomic_set(&phba->cgn_fabric_warn_cnt, 0);
-+	atomic_set(&phba->cgn_fabric_alarm_cnt, 0);
-+	atomic_set(&phba->cgn_sync_alarm_cnt, 0);
-+	atomic_set(&phba->cgn_sync_warn_cnt, 0);
-+	atomic_set(&phba->cgn_driver_evt_cnt, 0);
-+	atomic_set(&phba->cgn_latency_evt_cnt, 0);
-+	atomic64_set(&phba->cgn_latency_evt, 0);
-+
- 	return 0;
+@@ -21705,6 +21705,116 @@ struct lpfc_io_buf *lpfc_get_io_buf(struct lpfc_hba *phba,
+ 	return lpfc_cmd;
  }
  
++/**
++ * lpfc_read_object - Retrieve object data from HBA
++ * @phba: The HBA for which this call is being executed.
++ * @rdobject: Pathname of object data we want to read.
++ * @datap: Pointer to where data will be copied to.
++ * @datasz: size of data area
++ *
++ * This routine is limited to object sizes of LPFC_BPL_SIZE (1024) or less.
++ * The data will be truncated if datasz is not large enough.
++ * Version 1 is not supported with Embedded mbox cmd, so we must use version 0.
++ * Returns the actual bytes read from the object.
++ */
++int
++lpfc_read_object(struct lpfc_hba *phba, char *rdobject, uint32_t *datap,
++		 uint32_t datasz)
++{
++	struct lpfc_mbx_read_object *read_object;
++	LPFC_MBOXQ_t *mbox;
++	int rc, length, eof, j, byte_cnt = 0;
++	uint32_t shdr_status, shdr_add_status;
++	union lpfc_sli4_cfg_shdr *shdr;
++	struct lpfc_dmabuf *pcmd;
++
++	/* sanity check on queue memory */
++	if (!datap)
++		return -ENODEV;
++
++	mbox = mempool_alloc(phba->mbox_mem_pool, GFP_KERNEL);
++	if (!mbox)
++		return -ENOMEM;
++	length = (sizeof(struct lpfc_mbx_read_object) -
++		  sizeof(struct lpfc_sli4_cfg_mhdr));
++	lpfc_sli4_config(phba, mbox, LPFC_MBOX_SUBSYSTEM_COMMON,
++			 LPFC_MBOX_OPCODE_READ_OBJECT,
++			 length, LPFC_SLI4_MBX_EMBED);
++	read_object = &mbox->u.mqe.un.read_object;
++	shdr = (union lpfc_sli4_cfg_shdr *)&read_object->header.cfg_shdr;
++
++	bf_set(lpfc_mbox_hdr_version, &shdr->request, LPFC_Q_CREATE_VERSION_0);
++	bf_set(lpfc_mbx_rd_object_rlen, &read_object->u.request, datasz);
++	read_object->u.request.rd_object_offset = 0;
++	read_object->u.request.rd_object_cnt = 1;
++
++	memset((void *)read_object->u.request.rd_object_name, 0,
++	       LPFC_OBJ_NAME_SZ);
++	sprintf((uint8_t *)read_object->u.request.rd_object_name, rdobject);
++	for (j = 0; j < strlen(rdobject); j++)
++		read_object->u.request.rd_object_name[j] =
++			cpu_to_le32(read_object->u.request.rd_object_name[j]);
++
++	pcmd = kmalloc(sizeof(*pcmd), GFP_KERNEL);
++	if (pcmd)
++		pcmd->virt = lpfc_mbuf_alloc(phba, MEM_PRI, &pcmd->phys);
++	if (!pcmd || !pcmd->virt) {
++		kfree(pcmd);
++		mempool_free(mbox, phba->mbox_mem_pool);
++		return -ENOMEM;
++	}
++	memset((void *)pcmd->virt, 0, LPFC_BPL_SIZE);
++	read_object->u.request.rd_object_hbuf[0].pa_lo =
++		putPaddrLow(pcmd->phys);
++	read_object->u.request.rd_object_hbuf[0].pa_hi =
++		putPaddrHigh(pcmd->phys);
++	read_object->u.request.rd_object_hbuf[0].length = LPFC_BPL_SIZE;
++
++	mbox->vport = phba->pport;
++	mbox->mbox_cmpl = lpfc_sli_def_mbox_cmpl;
++	mbox->ctx_buf = NULL;
++	mbox->ctx_ndlp = NULL;
++
++	rc = lpfc_sli_issue_mbox(phba, mbox, MBX_POLL);
++	shdr_status = bf_get(lpfc_mbox_hdr_status, &shdr->response);
++	shdr_add_status = bf_get(lpfc_mbox_hdr_add_status, &shdr->response);
++
++	if (shdr_status == STATUS_FAILED &&
++	    shdr_add_status == ADD_STATUS_INVALID_OBJECT_NAME) {
++		lpfc_printf_log(phba, KERN_ERR, LOG_INIT | LOG_CGN_MGMT,
++				"4674 No port cfg file in FW.\n");
++		byte_cnt = -ENOENT;
++	} else if (shdr_status || shdr_add_status || rc) {
++		lpfc_printf_log(phba, KERN_ERR, LOG_INIT | LOG_CGN_MGMT,
++				"2625 READ_OBJECT mailbox failed with "
++				"status x%x add_status x%x, mbx status x%x\n",
++				shdr_status, shdr_add_status, rc);
++		byte_cnt = -ENXIO;
++	} else {
++		/* Success */
++		length = read_object->u.response.rd_object_actual_rlen;
++		eof = bf_get(lpfc_mbx_rd_object_eof, &read_object->u.response);
++		lpfc_printf_log(phba, KERN_INFO, LOG_INIT | LOG_CGN_MGMT,
++				"2626 READ_OBJECT Success len %d:%d, EOF %d\n",
++				length, datasz, eof);
++
++		/* Detect the port config file exists but is empty */
++		if (!length && eof) {
++			byte_cnt = 0;
++			goto exit;
++		}
++
++		byte_cnt = length;
++		lpfc_sli_pcimem_bcopy(pcmd->virt, datap, byte_cnt);
++	}
++
++ exit:
++	lpfc_mbuf_free(phba, pcmd->virt, pcmd->phys);
++	kfree(pcmd);
++	mempool_free(mbox, phba->mbox_mem_pool);
++	return byte_cnt;
++}
++
+ /**
+  * lpfc_get_sgl_per_hdwq - Get one SGL chunk from hdwq's pool
+  * @phba: The HBA for which this call is being executed.
 -- 
 2.26.2
 
