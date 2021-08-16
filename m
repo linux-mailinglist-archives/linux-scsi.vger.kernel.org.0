@@ -2,118 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C83583ED2E7
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Aug 2021 13:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF203ED315
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Aug 2021 13:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235858AbhHPLLl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Aug 2021 07:11:41 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:55558 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbhHPLLl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Aug 2021 07:11:41 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1CB761FE29;
-        Mon, 16 Aug 2021 11:11:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1629112269; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fQLCqoGLB8wD1bVQrV6+hI3/ERfrf7diJmaBFIK3Mxc=;
-        b=eHIT7Ra3TM9AadU2N5MuKKXo/XPyyQ8s1CIenv8Tg/g0hsC/szJJm6cQ+eojl7GVX3jbij
-        7j34TZlWYl8l9HrQ32MfGBaVnK6l2SyIk7ZmslSvyM3kdMgBCuIjTbZ02PiWfI5qOdeRHu
-        EvgJfF7WAr9lK6eP3K/3CIKo6O8eWm8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1629112269;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fQLCqoGLB8wD1bVQrV6+hI3/ERfrf7diJmaBFIK3Mxc=;
-        b=+v/pI8gcnihBHzcGSdhfSlXQyhwfHwBUGNDOv1USO0a7L4eBehsNS7asOC82Oj385Pbj38
-        OHQAkt6n4B+MRlCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F1BB913B0A;
-        Mon, 16 Aug 2021 11:11:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id URAYOsxHGmEXYwAAMHmgww
-        (envelope-from <hare@suse.de>); Mon, 16 Aug 2021 11:11:08 +0000
-Subject: Re: [PATCH 2/3] scsi: fnic: Stop setting scsi_cmnd.tag
-To:     John Garry <john.garry@huawei.com>, Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     satishkh@cisco.com, sebaddel@cisco.com, kartilak@cisco.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1628862553-179450-1-git-send-email-john.garry@huawei.com>
- <1628862553-179450-3-git-send-email-john.garry@huawei.com>
- <3e5d1bd4-cee9-7fd0-93a4-58d808e198f6@acm.org>
- <20210814073948.GA21536@lst.de>
- <b6216e3f-5339-18e4-ca31-61c7968efbb1@suse.de>
- <2e6dd74f-bd5a-22b8-f20b-d4b54fc4ade3@huawei.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <9ec48220-68aa-e2d1-5555-d7307e29260d@suse.de>
-Date:   Mon, 16 Aug 2021 13:11:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S236083AbhHPLdQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Aug 2021 07:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231758AbhHPLdQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Aug 2021 07:33:16 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC128C061764
+        for <linux-scsi@vger.kernel.org>; Mon, 16 Aug 2021 04:32:44 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id r5so26207332oiw.7
+        for <linux-scsi@vger.kernel.org>; Mon, 16 Aug 2021 04:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=HuggBh1HUDX1i68VuAJnE0VRBMVLHr8VHBZk1GiuMzA=;
+        b=Vla/AGTVtCtYIbL3Z6rqrtuxUR3LhSxQAbc+FIImCuZ8XQtPKCYo6GrdLAPStg7VUe
+         q+/L//UP7AauxOs7dshKYa08AJe40Q+PE+RpVJZNuvcb9COpaUEeidrFXadKetkdHPqC
+         nr42ozNaT2wm6OpFOPAk6D7Etw+c/oFXx6dySaVgrIQY0L65HGwyVuJU7okvguOxSYAd
+         5wwVm3oeOCFnCQXeKYFA2PV8dZhf8Pkq6euMdaxjZGXZVQ8Qui/saxO1R3nOSlS2Xa8l
+         O8jaNBU8uHcendTUQaN0kx5pLVKnGjNFnDPslzfD+PqxDnfJsEmVrxQKKq4V3tqQ1Adq
+         YHMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=HuggBh1HUDX1i68VuAJnE0VRBMVLHr8VHBZk1GiuMzA=;
+        b=nKtnlpr8AQolhw4Ljff+IJWkFhPv1LXhdGNAdE7cjADOYcuHA2zCXN3+UxQo4nMV7z
+         3vdO+ZmOraiT2qSvD+Y/Kuc9TH0E/nMO9ukA7Fs0XcIWRJw8GJBZZ3DlKpRpdMtNBGK3
+         TyiL+OzmKstXkwhz4B9LeD+edj+RAk/OGxKqzdAfK1G8v/nFvWk8Sh9XPxaZPLlc8CDA
+         ygpraL0IM79yKY0iC6RzmLjZ8sqplbPDmFxKwZ8PcLKdmJ+B/ZO3NyJdVCl1djiRoK9s
+         h/zmZIBe1y0yvgFKkq710zxEI9e8q50p/YOBO+XYwhx909jwoYKZID1ZUeigRVlQ0Kif
+         Grzg==
+X-Gm-Message-State: AOAM533xC/nLyOAMDiDOQB9SFiQs3KVYofhHtThlF/N61Sb5kCIKYID3
+        xHn0+uEnO6/SWPebJYVzpXz/si1bGjLsCGhvFCw=
+X-Google-Smtp-Source: ABdhPJzfxYMBFB0GFuPlXVxvC+NhnroWP4PP91N3cQ+J/Z7d0t+MqQGCzEqIGj48jA+csiwqSvr71l49JwxQXa/5fYI=
+X-Received: by 2002:aca:d11:: with SMTP id 17mr10818449oin.67.1629113564037;
+ Mon, 16 Aug 2021 04:32:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <2e6dd74f-bd5a-22b8-f20b-d4b54fc4ade3@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ac9:728:0:0:0:0:0 with HTTP; Mon, 16 Aug 2021 04:32:43 -0700 (PDT)
+Reply-To: slizachungg@yahoo.com
+From:   MRS SLIZA CHUNG <inforco43@gmail.com>
+Date:   Mon, 16 Aug 2021 12:32:43 +0100
+Message-ID: <CAFiRojjrqA_kYCsRZsNjosT+2_H7THuzwdaVX_rQg4aHpyGDoA@mail.gmail.com>
+Subject: re:Attn:Sir /Madam
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/16/21 12:00 PM, John Garry wrote:
-> On 14/08/2021 13:35, Hannes Reinecke wrote:
->> On 8/14/21 9:39 AM, Christoph Hellwig wrote:
->>> On Fri, Aug 13, 2021 at 08:17:45PM -0700, Bart Van Assche wrote:
->>>> On 8/13/21 6:49 AM, John Garry wrote:
->>>>> It is never read. Setting it and the request tag seems dodgy
->>>>> anyway.
->>>>
->>>> This is done because there is code in the SCSI error handler that may
->>>> allocate a SCSI command without allocating a tag. See also
->>>> scsi_ioctl_reset().
-> 
-> Right, so we just get a loan of the tag of a real request. fnic driver
-> comment:
-> 
-> "Really should fix the midlayer to pass in a proper request for ioctls..."
-> 
->>>
->>> Yes.  Hannes had a great series to stop passing the pointless scsi_cmnd
->>> to the reset methods.  Hannes, any chance you coul look into
->>> resurrecting that?
->>>
->> Sure.
-> 
-> The latest iteration of that series - at v7 - still passed that fake
-> SCSI command to the reset method, and the reset method allocated the
-> internal command.
-> 
-> So will we change change scsi_ioctl_reset() to allocate an internal
-> command, rather than the LLDD?
-> 
-Nah, Christoph was talking about my patch series to revamp the SCSI
-error handler.
-With that one we'll be passing the respective objects to the SCSI EH
-functions (ie struct scsi_device for eh_device_reset()), doing away with
-the need to allocate an internal command for ioctl reset.
-Currently revamping the patchset, should be ready later this week.
-
-Cheers,
-
-Hannes
 -- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+Dear Beloved friend
+
+
+I am writing this mail to you with heavy tears in my eyes and great
+sorrow in my heart. As I informed you earlier, I am (Mrs.)Sliza Chung
+from Singapore and a widow to the late Masahiko chung, I am 63 years
+old, suffering from long time Cancer of the breast. From all
+indications my condition is really deteriorating and it's quite
+obvious that I won't live more than 2 months according to my doctors.
+
+
+I have some funds I inherited from my late loving husband Mr. Masahiko
+chung, the sum of ($3,500.000,00) which he deposited in a Bank .I need
+a very honest and God fearing person that can use these funds for
+Charity work, helping the Less Privileges, and 20% of this money will
+be for your time and expenses, while 80% goes to charities. Please let
+me know if I can TRUST YOU ON THIS to carry out this favor for me.
+
+
+I look forward to your prompt reply for more details .
+
+
+
+Yours sincerely
+
+MRS SLIZA CHUNG
