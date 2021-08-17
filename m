@@ -2,50 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA73F3EE96E
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FAF3EE97B
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239855AbhHQJSA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 05:18:00 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:33374 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239478AbhHQJRT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:19 -0400
+        id S239627AbhHQJSO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 05:18:14 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:47744 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239516AbhHQJRV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:21 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C448821D94;
+        by smtp-out2.suse.de (Postfix) with ESMTP id CB6A82002D;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1629191802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=62DbAeL6E9OpiRbBzPXF4p/G/dd/IQPP352bnvG02Os=;
-        b=zKFX+RZJK6QJMRZ60trsMwK/Lbzu3iplwSp4YGy9TTitc7xoBtg23OjR7yRGTCWBoxZGgU
-        W8NaFK94f8TiaGxB05PerECJn4baDf+TKJUd34/T7Abh0++I0gK7fumySwmCid7gHvar7e
-        ybPPiPPkTtrnJqi6BZ3JYyCmMCyvKSc=
+        bh=GJLbgBiS7QA2K+oaYrzUl/AREUHVEloGWanz8odi41U=;
+        b=IQF8il/RTemLVdTM6/0a8sgvdvfJcRs46apLOELGwuG8pjxhIByshg3MWSzvYJ5ZRHOW+7
+        0tL180lIZpgXHwlqmUrVZ9wWrdml/sy8hQAIiUb63OMbFjfh9ErJFH1z2QVgOTZl0XJtyg
+        PJzn1d+YiQjQrkbY7uUwnL3vMk0jdLg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1629191802;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=62DbAeL6E9OpiRbBzPXF4p/G/dd/IQPP352bnvG02Os=;
-        b=RXfrhkE+rqBQP4GBFcBs6n3DGZSRnomfRz3CusM0d6ra5IEM3fvz1cbaJ63Rdiu1U3wOk6
-        5z4JKXjC3beLuVDg==
+        bh=GJLbgBiS7QA2K+oaYrzUl/AREUHVEloGWanz8odi41U=;
+        b=BLkvs5VrMbnemaUQdRJGpWw1rxIjI4dXh6H3Wq/PicQIBBznLLRYAdEStgauYzl4Gri1PH
+        /gTn401r8/yayOCg==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id BDE26A3BBB;
+        by relay2.suse.de (Postfix) with ESMTP id C4313A3BBC;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id BAD89518CEB9; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
+        id C1224518CEBB; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 45/51] fas216: Rework device reset to not rely on SCSI command pointer
-Date:   Tue, 17 Aug 2021 11:14:50 +0200
-Message-Id: <20210817091456.73342-46-hare@suse.de>
+Subject: [PATCH 46/51] csiostor: use separate TMF command
+Date:   Tue, 17 Aug 2021 11:14:51 +0200
+Message-Id: <20210817091456.73342-47-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210817091456.73342-1-hare@suse.de>
 References: <20210817091456.73342-1-hare@suse.de>
@@ -55,112 +55,180 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The device reset code should not rely on the SCSI command pointer;
-it will be going away with the device reset handler rework.
+Set one command aside as a TMF command, and use this command to
+send the TMF. This avoids having to rely on the passed-in scsi
+command when resetting the device.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/arm/fas216.c | 39 +++++++++++++++++++--------------------
- 1 file changed, 19 insertions(+), 20 deletions(-)
+ drivers/scsi/csiostor/csio_hw.h   |  2 ++
+ drivers/scsi/csiostor/csio_init.c |  2 +-
+ drivers/scsi/csiostor/csio_scsi.c | 44 ++++++++++++++++++++-----------
+ 3 files changed, 32 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/scsi/arm/fas216.c b/drivers/scsi/arm/fas216.c
-index 4f17b24a291f..e08aa01006ea 100644
---- a/drivers/scsi/arm/fas216.c
-+++ b/drivers/scsi/arm/fas216.c
-@@ -1990,7 +1990,6 @@ static void fas216_devicereset_done(FAS216_Info *info, struct scsi_cmnd *SCpnt,
- {
- 	fas216_log(info, LOG_ERROR, "fas216 device reset complete");
+diff --git a/drivers/scsi/csiostor/csio_hw.h b/drivers/scsi/csiostor/csio_hw.h
+index e351af6e7c81..8e22dccd6d88 100644
+--- a/drivers/scsi/csiostor/csio_hw.h
++++ b/drivers/scsi/csiostor/csio_hw.h
+@@ -68,6 +68,8 @@
  
--	info->rstSCpnt = NULL;
- 	info->rst_dev_status = 1;
- 	wake_up(&info->eh_wait);
+ #define CSIO_MAX_LUN		0xFFFF
+ #define CSIO_MAX_QUEUE		2048
++#define CSIO_TMF_TAG		(CSIO_MAX_QUEUE - 1)
++
+ #define CSIO_MAX_CMD_PER_LUN	32
+ #define CSIO_MAX_DDP_BUF_SIZE	(1024 * 1024)
+ #define CSIO_MAX_SECTOR_SIZE	128
+diff --git a/drivers/scsi/csiostor/csio_init.c b/drivers/scsi/csiostor/csio_init.c
+index 390b07bf92b9..7a80e0cf32d7 100644
+--- a/drivers/scsi/csiostor/csio_init.c
++++ b/drivers/scsi/csiostor/csio_init.c
+@@ -621,7 +621,7 @@ csio_shost_init(struct csio_hw *hw, struct device *dev,
+ 	/* Link common lnode to this lnode */
+ 	ln->dev_num = (shost->host_no << 16);
+ 
+-	shost->can_queue = CSIO_MAX_QUEUE;
++	shost->can_queue = CSIO_MAX_QUEUE - 1;
+ 	shost->this_id = -1;
+ 	shost->unique_id = shost->host_no;
+ 	shost->max_cmd_len = 16; /* Max CDB length supported */
+diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
+index c22acfc7caba..0f3c997618c1 100644
+--- a/drivers/scsi/csiostor/csio_scsi.c
++++ b/drivers/scsi/csiostor/csio_scsi.c
+@@ -2052,17 +2052,20 @@ csio_tm_cbfn(struct csio_hw *hw, struct csio_ioreq *req)
+ 
+ 	/* Wake up the TM handler thread */
+ 	csio_scsi_cmnd(req) = NULL;
++	cmnd->host_scribble = NULL;
  }
-@@ -2145,12 +2144,12 @@ static void fas216_done(FAS216_Info *info, unsigned int result)
  
- 	fas216_checkmagic(info);
- 
--	if (!info->SCpnt)
-+	if (!info->SCpnt && info->rst_dev_status)
- 		goto no_command;
- 
- 	SCpnt = info->SCpnt;
- 	info->SCpnt = NULL;
--    	info->scsi.phase = PHASE_IDLE;
-+	info->scsi.phase = PHASE_IDLE;
- 
- 	if (info->scsi.aborting) {
- 		fas216_log(info, 0, "uncaught abort - returning DID_ABORT");
-@@ -2162,7 +2161,7 @@ static void fas216_done(FAS216_Info *info, unsigned int result)
- 	 * Sanity check the completion - if we have zero bytes left
- 	 * to transfer, we should not have a valid pointer.
- 	 */
--	if (info->scsi.SCp.ptr && info->scsi.SCp.this_residual == 0) {
-+	if (SCpnt && info->scsi.SCp.ptr && info->scsi.SCp.this_residual == 0) {
- 		scmd_printk(KERN_INFO, SCpnt,
- 			    "zero bytes left to transfer, but buffer pointer still valid: ptr=%p len=%08x\n",
- 			    info->scsi.SCp.ptr, info->scsi.SCp.this_residual);
-@@ -2175,12 +2174,18 @@ static void fas216_done(FAS216_Info *info, unsigned int result)
- 	 * the sense information, fas216_kick will re-assert the busy
- 	 * status.
- 	 */
--	info->device[SCpnt->device->id].parity_check = 0;
--	clear_bit(SCpnt->device->id * 8 +
--		  (u8)(SCpnt->device->lun & 0x7), info->busyluns);
--
--	fn = (void (*)(FAS216_Info *, struct scsi_cmnd *, unsigned int))SCpnt->host_scribble;
--	fn(info, SCpnt, result);
-+	if (SCpnt) {
-+		info->device[SCpnt->device->id].parity_check = 0;
-+		clear_bit(SCpnt->device->id * 8 +
-+			  (u8)(SCpnt->device->lun & 0x7), info->busyluns);
-+	}
-+	if (!info->rst_dev_status) {
-+		info->rst_dev_status = 1;
-+		wake_up(&info->eh_wait);
-+	} else {
-+		fn = (void (*)(FAS216_Info *, struct scsi_cmnd *, unsigned int))SCpnt->host_scribble;
-+		fn(info, SCpnt, result);
-+	}
- 
- 	if (info->scsi.irq) {
- 		spin_lock_irqsave(&info->host_lock, flags);
-@@ -2477,9 +2482,10 @@ int fas216_eh_abort(struct scsi_cmnd *SCpnt)
-  */
- int fas216_eh_device_reset(struct scsi_cmnd *SCpnt)
+ static int
+ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
  {
--	FAS216_Info *info = (FAS216_Info *)SCpnt->device->host->hostdata;
-+	struct scsi_device *sdev = SCpnt->device;
-+	FAS216_Info *info = (FAS216_Info *)sdev->host->hostdata;
+-	struct csio_lnode *ln = shost_priv(cmnd->device->host);
++	struct scsi_device *sdev = cmnd->device;
++	struct csio_lnode *ln = shost_priv(sdev->host);
+ 	struct csio_hw *hw = csio_lnode_to_hw(ln);
+ 	struct csio_scsim *scsim = csio_hw_to_scsim(hw);
+-	struct csio_rnode *rn = (struct csio_rnode *)(cmnd->device->hostdata);
++	struct csio_rnode *rn = (struct csio_rnode *)(sdev->hostdata);
+ 	struct csio_ioreq *ioreq = NULL;
+ 	struct csio_scsi_qset *sqset;
++	struct scsi_cmnd *tmf_cmnd;
  	unsigned long flags;
--	int i, res = FAILED, target = SCpnt->device->id;
-+	int i, res = FAILED, target = sdev->id;
+ 	int retval;
+ 	int count, ret;
+@@ -2073,13 +2076,13 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 		goto fail;
  
- 	fas216_log(info, LOG_ERROR, "device reset for target %d", target);
+ 	csio_dbg(hw, "Request to reset LUN:%llu (ssni:0x%x tgtid:%d)\n",
+-		      cmnd->device->lun, rn->flowid, rn->scsi_id);
++		      sdev->lun, rn->flowid, rn->scsi_id);
  
-@@ -2493,7 +2499,7 @@ int fas216_eh_device_reset(struct scsi_cmnd *SCpnt)
- 		 * and we need a bus reset.
- 		 */
- 		if (info->SCpnt && !info->scsi.disconnectable &&
--		    info->SCpnt->device->id == SCpnt->device->id)
-+		    info->SCpnt->device->id == sdev->id)
- 			break;
+ 	if (!csio_is_lnode_ready(ln)) {
+ 		csio_err(hw,
+ 			 "LUN reset cannot be issued on non-ready"
+ 			 " local node vnpi:0x%x (LUN:%llu)\n",
+-			 ln->vnp_flowid, cmnd->device->lun);
++			 ln->vnp_flowid, sdev->lun);
+ 		goto fail;
+ 	}
  
- 		/*
-@@ -2511,14 +2517,7 @@ int fas216_eh_device_reset(struct scsi_cmnd *SCpnt)
- 		for (i = 0; i < 8; i++)
- 			clear_bit(target * 8 + i, info->busyluns);
+@@ -2099,7 +2102,15 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 		csio_err(hw,
+ 			 "LUN reset cannot be issued on non-ready"
+ 			 " remote node ssni:0x%x (LUN:%llu)\n",
+-			 rn->flowid, cmnd->device->lun);
++			 rn->flowid, sdev->lun);
++		goto fail;
++	}
++
++	tmf_cmnd = scsi_host_find_tag(sdev->host, CSIO_TMF_TAG);
++	if (!tmf_cmnd || tmf_cmnd->host_scribble) {
++		csio_err(hw,
++			 "LUN reset TMF already busy (LUN:%llu)\n",
++			 sdev->lun);
+ 		goto fail;
+ 	}
  
--		/*
--		 * Hijack this SCSI command structure to send
--		 * a bus device reset message to this device.
--		 */
--		SCpnt->host_scribble = (void *)fas216_devicereset_done;
--
- 		info->rst_dev_status = 0;
--		info->rstSCpnt = SCpnt;
+@@ -2119,11 +2130,12 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	ioreq->iq_idx		= sqset->iq_idx;
+ 	ioreq->eq_idx		= sqset->eq_idx;
  
- 		if (info->scsi.phase == PHASE_IDLE)
- 			fas216_kick(info);
+-	csio_scsi_cmnd(ioreq)	= cmnd;
+-	cmnd->host_scribble	= (unsigned char *)ioreq;
+-	cmnd->SCp.Status	= 0;
++	csio_scsi_cmnd(ioreq)	= tmf_cmnd;
++	tmf_cmnd->host_scribble	= (unsigned char *)ioreq;
++	tmf_cmnd->SCp.Status	= 0;
++	tmf_cmnd->device	= sdev;
+ 
+-	cmnd->SCp.Message	= FCP_TMF_LUN_RESET;
++	tmf_cmnd->SCp.Message	= FCP_TMF_LUN_RESET;
+ 	ioreq->tmo		= CSIO_SCSI_LUNRST_TMO_MS / 1000;
+ 
+ 	/*
+@@ -2140,7 +2152,7 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	sld.level = CSIO_LEV_LUN;
+ 	sld.lnode = ioreq->lnode;
+ 	sld.rnode = ioreq->rnode;
+-	sld.oslun = cmnd->device->lun;
++	sld.oslun = sdev->lun;
+ 
+ 	spin_lock_irqsave(&hw->lock, flags);
+ 	/* Kick off TM SM on the ioreq */
+@@ -2150,6 +2162,7 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	if (retval != 0) {
+ 		csio_err(hw, "Failed to issue LUN reset, req:%p, status:%d\n",
+ 			    ioreq, retval);
++		tmf_cmnd->host_scribble = NULL;
+ 		goto fail_ret_ioreq;
+ 	}
+ 
+@@ -2163,20 +2176,21 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	/* LUN reset timed-out */
+ 	if (((struct scsi_cmnd *)csio_scsi_cmnd(ioreq)) == cmnd) {
+ 		csio_err(hw, "LUN reset (%d:%llu) timed out\n",
+-			 cmnd->device->id, cmnd->device->lun);
++			 sdev->id, sdev->lun);
+ 
+ 		spin_lock_irq(&hw->lock);
+ 		csio_scsi_drvcleanup(ioreq);
+ 		list_del_init(&ioreq->sm.sm_list);
+ 		spin_unlock_irq(&hw->lock);
+ 
++		tmf_cmnd->host_scribble = NULL;
+ 		goto fail_ret_ioreq;
+ 	}
+ 
+ 	/* LUN reset returned, check cached status */
+-	if (cmnd->SCp.Status != FW_SUCCESS) {
++	if (tmf_cmnd->SCp.Status != FW_SUCCESS) {
+ 		csio_err(hw, "LUN reset failed (%d:%llu), status: %d\n",
+-			 cmnd->device->id, cmnd->device->lun, cmnd->SCp.Status);
++			 sdev->id, sdev->lun, tmf_cmnd->SCp.Status);
+ 		goto fail;
+ 	}
+ 
+@@ -2196,7 +2210,7 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	if (retval != 0) {
+ 		csio_err(hw,
+ 			 "Attempt to abort I/Os during LUN reset of %llu"
+-			 " returned %d\n", cmnd->device->lun, retval);
++			 " returned %d\n", sdev->lun, retval);
+ 		/* Return I/Os back to active_q */
+ 		spin_lock_irq(&hw->lock);
+ 		list_splice_tail_init(&local_q, &scsim->active_q);
+@@ -2207,7 +2221,7 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	CSIO_INC_STATS(rn, n_lun_rst);
+ 
+ 	csio_info(hw, "LUN reset occurred (%d:%llu)\n",
+-		  cmnd->device->id, cmnd->device->lun);
++		  sdev->id, sdev->lun);
+ 
+ 	return SUCCESS;
+ 
 -- 
 2.29.2
 
