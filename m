@@ -2,50 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 323813EE962
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4CA3EE958
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239696AbhHQJRk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 05:17:40 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:47570 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239377AbhHQJRR (ORCPT
+        id S239575AbhHQJRc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 05:17:32 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:33312 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239310AbhHQJRR (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:17 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 410792001F;
+        by smtp-out1.suse.de (Postfix) with ESMTP id 46D8E21D44;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1629191802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ESQWh2Y2DOmrJhSx6b6KuX/7q2iX56teg3hpJ4YA9pE=;
-        b=u/54hoNIvrHmF0zN8WoU8XvdpaaDPkl5Fuq24QGL3AqzCskQwcqVu1Vj8jpuktrEHtckJI
-        6P/9FWGJsUItlNcCIFExDT21BP3ETwkQdTxLhWpkxzy/5gl8bDv2JaWl2V2hFNMpEixpk9
-        DtZ3BCnpRTW0Jz2TSMgRkYt0b45Nbn4=
+        bh=cMEH0o3KwZ3qPbyOGuvmtd11cUkKiVSaGqOGZExzpkk=;
+        b=FlLufHL+k5Z/Ep+gggiNmkbE2ZN1vohuWlBQDK2m2/DT28IQntG2AG5MdErIcfPt9X3OYX
+        DhVgy8v26gqZAATAA9VOn6jwPQNY99vUF8kG6L+dTMKAy5/2ALTZI6/1NvWXo8p7E3tlUI
+        vdvnmgog4pOXRuA1RW66Yghu5MdjnoE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1629191802;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ESQWh2Y2DOmrJhSx6b6KuX/7q2iX56teg3hpJ4YA9pE=;
-        b=/Ii9VtIbC/Oq2G03pYv9DgjjR3oIF473bU26W0adSBZZL7ygW/YWGaqZmUi900mMRZ3myz
-        Ix3+oqHnTPUGbwBQ==
+        bh=cMEH0o3KwZ3qPbyOGuvmtd11cUkKiVSaGqOGZExzpkk=;
+        b=nVhblV1EgEPeYdSfc4/a1+PtsIS6HF39oGsNM5QOHbqw51Raiw52PVFBYgBXOAyCMJ6/2H
+        /Vj9nKRykJTE8yAQ==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 3ABF5A3BA8;
+        by relay2.suse.de (Postfix) with ESMTP id 41548A3BA9;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 37DCC518CE8F; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
+        id 3E8C3518CE91; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH 24/51] ibmvfc: open-code reset loop for target reset
-Date:   Tue, 17 Aug 2021 11:14:29 +0200
-Message-Id: <20210817091456.73342-25-hare@suse.de>
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        James Smart <james.smart@broadcom.com>
+Subject: [PATCH 25/51] lpfc: use fc_block_rport()
+Date:   Tue, 17 Aug 2021 11:14:30 +0200
+Message-Id: <20210817091456.73342-26-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210817091456.73342-1-hare@suse.de>
 References: <20210817091456.73342-1-hare@suse.de>
@@ -55,87 +55,88 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Hannes Reinecke <hare@suse.com>
+Use fc_block_rport() instead of fc_block_scsi_eh() as the SCSI command
+will be removed as argument for SCSI EH functions.
 
-For target reset we need a device to send the target reset to,
-so open-code the loop in target reset to send the target reset TMF
-to the correct device.
-
-Signed-off-by: Hannes Reinecke <hare@suse.com>
-Cc: Tyrel Datwyler <tyreld@linux.ibm.com>
+Signed-off-by: Hannes Reinecke <hare@suse.de>
+Cc: James Smart <james.smart@broadcom.com>
 ---
- drivers/scsi/ibmvscsi/ibmvfc.c | 42 +++++++++++++++++++---------------
- 1 file changed, 23 insertions(+), 19 deletions(-)
+ drivers/scsi/lpfc/lpfc_scsi.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index 0a946aad66e5..1a5e2c2cc189 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -2909,18 +2909,6 @@ static void ibmvfc_dev_cancel_all_noreset(struct scsi_device *sdev, void *data)
- 	*rc |= ibmvfc_cancel_all(sdev, IBMVFC_TMF_SUPPRESS_ABTS);
- }
- 
--/**
-- * ibmvfc_dev_cancel_all_reset - Device iterated cancel all function
-- * @sdev:	scsi device struct
-- * @data:	return code
-- *
-- **/
--static void ibmvfc_dev_cancel_all_reset(struct scsi_device *sdev, void *data)
--{
--	unsigned long *rc = data;
--	*rc |= ibmvfc_cancel_all(sdev, IBMVFC_TMF_TGT_RESET);
--}
--
- /**
-  * ibmvfc_eh_target_reset_handler - Reset the target
-  * @cmd:	scsi command struct
-@@ -2930,22 +2918,38 @@ static void ibmvfc_dev_cancel_all_reset(struct scsi_device *sdev, void *data)
-  **/
- static int ibmvfc_eh_target_reset_handler(struct scsi_cmnd *cmd)
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index d68c08af5514..0bbf767f7253 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -5727,6 +5727,7 @@ static int
+ lpfc_abort_handler(struct scsi_cmnd *cmnd)
  {
--	struct scsi_device *sdev = cmd->device;
--	struct ibmvfc_host *vhost = shost_priv(sdev->host);
--	struct scsi_target *starget = scsi_target(sdev);
-+	struct scsi_target *starget = scsi_target(cmd->device);
-+	struct fc_rport *rport = starget_to_rport(starget);
-+	struct Scsi_Host *shost = rport_to_shost(rport);
-+	struct ibmvfc_host *vhost = shost_priv(shost);
- 	int block_rc;
- 	int reset_rc = 0;
- 	int rc = FAILED;
- 	unsigned long cancel_rc = 0;
-+	bool tgt_reset = false;
+ 	struct Scsi_Host  *shost = cmnd->device->host;
++	struct fc_rport *rport = starget_to_rport(scsi_target(cmnd->device));
+ 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
+ 	struct lpfc_hba   *phba = vport->phba;
+ 	struct lpfc_iocbq *iocb;
+@@ -5738,7 +5739,7 @@ lpfc_abort_handler(struct scsi_cmnd *cmnd)
+ 	unsigned long flags;
+ 	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(waitq);
  
- 	ENTER;
--	block_rc = fc_block_scsi_eh(cmd);
-+	block_rc = fc_block_rport(rport);
- 	ibmvfc_wait_while_resetting(vhost);
- 	if (block_rc != FAST_IO_FAIL) {
--		starget_for_each_device(starget, &cancel_rc, ibmvfc_dev_cancel_all_reset);
--		reset_rc = ibmvfc_reset_device(sdev, IBMVFC_TARGET_RESET, "target");
-+		struct scsi_device *sdev;
-+
-+		shost_for_each_device(sdev, shost) {
-+			if ((sdev->channel != starget->channel) ||
-+			    (sdev->id != starget->id))
-+				continue;
-+
-+			cancel_rc |= ibmvfc_cancel_all(sdev,
-+						       IBMVFC_TMF_TGT_RESET);
-+			if (!tgt_reset) {
-+				reset_rc = ibmvfc_reset_device(sdev,
-+					IBMVFC_TARGET_RESET, "target");
-+				tgt_reset = true;
-+			}
-+		}
- 	} else
--		starget_for_each_device(starget, &cancel_rc, ibmvfc_dev_cancel_all_noreset);
-+		starget_for_each_device(starget, &cancel_rc,
-+					ibmvfc_dev_cancel_all_noreset);
+-	status = fc_block_scsi_eh(cmnd);
++	status = fc_block_rport(rport);
+ 	if (status != 0 && status != SUCCESS)
+ 		return status;
  
- 	if (!cancel_rc && !reset_rc)
- 		rc = ibmvfc_wait_for_ops(vhost, starget, ibmvfc_match_target);
+@@ -6187,6 +6188,7 @@ static int
+ lpfc_device_reset_handler(struct scsi_cmnd *cmnd)
+ {
+ 	struct Scsi_Host  *shost = cmnd->device->host;
++	struct fc_rport *rport = starget_to_rport(scsi_target(cmnd->device));
+ 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
+ 	struct lpfc_rport_data *rdata;
+ 	struct lpfc_nodelist *pnode;
+@@ -6196,7 +6198,7 @@ lpfc_device_reset_handler(struct scsi_cmnd *cmnd)
+ 	int status;
+ 	u32 logit = LOG_FCP;
+ 
+-	rdata = lpfc_rport_data_from_scsi_device(cmnd->device);
++	rdata = rport->dd_data;
+ 	if (!rdata || !rdata->pnode) {
+ 		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
+ 				 "0798 Device Reset rdata failure: rdata x%px\n",
+@@ -6204,7 +6206,7 @@ lpfc_device_reset_handler(struct scsi_cmnd *cmnd)
+ 		return FAILED;
+ 	}
+ 	pnode = rdata->pnode;
+-	status = fc_block_scsi_eh(cmnd);
++	status = fc_block_rport(rport);
+ 	if (status != 0 && status != SUCCESS)
+ 		return status;
+ 
+@@ -6261,6 +6263,7 @@ static int
+ lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
+ {
+ 	struct Scsi_Host  *shost = cmnd->device->host;
++	struct fc_rport *rport = starget_to_rport(scsi_target(cmnd->device));
+ 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
+ 	struct lpfc_rport_data *rdata;
+ 	struct lpfc_nodelist *pnode;
+@@ -6273,7 +6276,7 @@ lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
+ 	unsigned long flags;
+ 	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(waitq);
+ 
+-	rdata = lpfc_rport_data_from_scsi_device(cmnd->device);
++	rdata = rport->dd_data;
+ 	if (!rdata || !rdata->pnode) {
+ 		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
+ 				 "0799 Target Reset rdata failure: rdata x%px\n",
+@@ -6281,7 +6284,7 @@ lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
+ 		return FAILED;
+ 	}
+ 	pnode = rdata->pnode;
+-	status = fc_block_scsi_eh(cmnd);
++	status = fc_block_rport(rport);
+ 	if (status != 0 && status != SUCCESS)
+ 		return status;
+ 
 -- 
 2.29.2
 
