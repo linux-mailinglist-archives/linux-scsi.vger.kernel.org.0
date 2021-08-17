@@ -2,60 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE073EE614
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 07:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4373EE616
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 07:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234119AbhHQFOY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 01:14:24 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:43588 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233861AbhHQFOX (ORCPT
+        id S237616AbhHQFOZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 01:14:25 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:26882 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234139AbhHQFOY (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 17 Aug 2021 01:14:23 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 17GMLCqV012247
-        for <linux-scsi@vger.kernel.org>; Mon, 16 Aug 2021 22:13:50 -0700
+        Tue, 17 Aug 2021 01:14:24 -0400
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 17H2lb7B006738
+        for <linux-scsi@vger.kernel.org>; Mon, 16 Aug 2021 22:13:52 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=2aehGJq2LIK9qSme0lTF+q/mDH5AD4/eoOvt+K4UDek=;
- b=iP0zldps/aopg9prKrc5zIYGKIasS/Z/HbpH2rZNPNNifF5CwR8pkTmjUCPU/cn/6NcO
- wB4fDLvpo/uFKxtwnVuT9lTWwEb6KI8OSKvJDFkpXCPCDmNHTI4ZceKDDiv+aWgUWRkU
- OOAA13rMM0QtrnN62XRLSN9MuMS6/oi5//jtxmNv4hZmrNjFGb5pk9WFe7ZStV1ufqeJ
- fh6ge0OeXHT3OLcTCkwAl7PPIYfY5W3owW/TeK1M1nXS1gqFdcMmTSr7Qb6/2Z7hzv/L
- U1Q07taFbV3SeZeBCdzDqoNOX/Rmuwe8hbpCQaI+rTZurXsSRZNPc41+5WY+PIfPPtlR mQ== 
+ content-type; s=pfpt0220; bh=F+0ijfdKYxj/3Wl2Qbf0GREddfSar2ZYAXZDgzsLm30=;
+ b=MugO+A3Oft5ba4lUUuqVFs8m2Dw8H+f8RLUUDPawliKnO8LXkxZ4A51zP7B85a6iJVra
+ r8+3zEkSWazsuzfPWuKTLErDNZm501+7c2+6yaGc9Mgu6XDZAwhBoVAcRAzN7++GBVS1
+ cRc16GJ3On2rOCaWECSRC+P9UipS9PzQ9jwree5QmyCrfOgVQ5n0XtiP85wEZRXtgE30
+ Y3UfkUlE8B22cPG7ySUpMBBxHh7pxBUAsCxaJYz4kCOtMF0JVE/jh0TdlyG/JaT0DGC2
+ ZwTpElo0CiuoLE6yXMzl0GAcrsF10uESQkAWC/aUAC0w+2b4pYcUgEISizYGtfJyreKS Og== 
 Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com with ESMTP id 3ag0qxh1ut-1
+        by mx0a-0016f401.pphosted.com with ESMTP id 3ag4n0rdcv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Mon, 16 Aug 2021 22:13:50 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+        for <linux-scsi@vger.kernel.org>; Mon, 16 Aug 2021 22:13:52 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 16 Aug
- 2021 22:13:48 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Mon, 16 Aug 2021 22:13:48 -0700
+ 2021 22:13:50 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Mon, 16 Aug 2021 22:13:50 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 01BD03F70AB;
-        Mon, 16 Aug 2021 22:13:47 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id D8B663F70A8;
+        Mon, 16 Aug 2021 22:13:50 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 17H5DgU0002516;
-        Mon, 16 Aug 2021 22:13:42 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 17H5DoHx002520;
+        Mon, 16 Aug 2021 22:13:50 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 17H5Db0U002515;
-        Mon, 16 Aug 2021 22:13:37 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 17H5DlRQ002519;
+        Mon, 16 Aug 2021 22:13:47 -0700
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH 01/12] qla2xxx: edif: Fix stale session
-Date:   Mon, 16 Aug 2021 22:13:04 -0700
-Message-ID: <20210817051315.2477-2-njavali@marvell.com>
+Subject: [PATCH 02/12] qla2xxx: edif: reject AUTH ELS on session down
+Date:   Mon, 16 Aug 2021 22:13:05 -0700
+Message-ID: <20210817051315.2477-3-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20210817051315.2477-1-njavali@marvell.com>
 References: <20210817051315.2477-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: PiFza-vHWXO-dz8y4n2cU5rz4x3FzAYY
-X-Proofpoint-GUID: PiFza-vHWXO-dz8y4n2cU5rz4x3FzAYY
+X-Proofpoint-GUID: QWumS9cu_RoQwN_C8BHZdRX0tB_IqoWE
+X-Proofpoint-ORIG-GUID: QWumS9cu_RoQwN_C8BHZdRX0tB_IqoWE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-08-17_01,2021-08-16_02,2020-04-07_01
@@ -65,62 +65,57 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-FW indicates session has been torn down via UPDATE SA IOCB
-or ELS Passthrough IOCB, driver need to also tear down the
-session.
+Reject inflight AUTH ELS if driver is going through session recovery.
 
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_edif.c | 8 ++++++++
- drivers/scsi/qla2xxx/qla_edif.h | 2 ++
- drivers/scsi/qla2xxx/qla_isr.c  | 1 +
- 3 files changed, 11 insertions(+)
+ drivers/scsi/qla2xxx/qla_edif.c | 2 +-
+ drivers/scsi/qla2xxx/qla_edif.h | 6 ++++++
+ drivers/scsi/qla2xxx/qla_os.c   | 2 +-
+ 3 files changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_edif.c b/drivers/scsi/qla2xxx/qla_edif.c
-index 2db954a7aaf1..7d16955383dd 100644
+index 7d16955383dd..555c38bea08a 100644
 --- a/drivers/scsi/qla2xxx/qla_edif.c
 +++ b/drivers/scsi/qla2xxx/qla_edif.c
-@@ -2674,6 +2674,14 @@ qla28xx_sa_update_iocb_entry(scsi_qla_host_t *v, struct req_que *req,
- 		    __func__, pkt->sa_index, nport_handle);
- 		qla_edif_sadb_delete_sa_index(sp->fcport, nport_handle,
- 		    le16_to_cpu(pkt->sa_index));
-+		switch (le16_to_cpu(pkt->u.comp_sts)) {
-+		case CS_PORT_EDIF_UNAVAIL:
-+		case CS_PORT_EDIF_LOGOUT:
-+			qlt_schedule_sess_for_deletion(sp->fcport);
-+			break;
-+		default:
-+			break;
-+		}
- 	}
+@@ -2376,7 +2376,7 @@ void qla24xx_auth_els(scsi_qla_host_t *vha, void **pkt, struct rsp_que **rsp)
+ 	fcport = qla2x00_find_fcport_by_pid(host, &purex->pur_info.pur_sid);
  
- 	sp->done(sp, 0);
+ 	if (host->e_dbell.db_flags != EDB_ACTIVE ||
+-	    (fcport && fcport->loop_id == FC_NO_LOOP_ID)) {
++	    (fcport && EDIF_SESSION_DOWN(fcport))) {
+ 		ql_dbg(ql_dbg_edif, host, 0x0910c, "%s e_dbell.db_flags =%x %06x\n",
+ 		    __func__, host->e_dbell.db_flags,
+ 		    fcport ? fcport->d_id.b24 : 0);
 diff --git a/drivers/scsi/qla2xxx/qla_edif.h b/drivers/scsi/qla2xxx/qla_edif.h
-index 1cff02e5bd43..88495df9a3c2 100644
+index 88495df9a3c2..9384765460cf 100644
 --- a/drivers/scsi/qla2xxx/qla_edif.h
 +++ b/drivers/scsi/qla2xxx/qla_edif.h
-@@ -63,6 +63,8 @@ struct sa_update_28xx {
- 	union {
- 		__le16 nport_handle;  /* in: N_PORT handle. */
- 		__le16 comp_sts;              /* out: completion status */
-+#define CS_PORT_EDIF_UNAVAIL	0x28
-+#define CS_PORT_EDIF_LOGOUT	0x29
- #define CS_PORT_EDIF_SUPP_NOT_RDY 0x64
- #define CS_PORT_EDIF_INV_REQ      0x66
+@@ -127,4 +127,10 @@ struct enode {
+ 		struct purexevent	purexinfo;
  	} u;
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index cb02dade85f8..c2fc75a9ca61 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -2235,6 +2235,7 @@ qla24xx_els_ct_entry(scsi_qla_host_t *v, struct req_que *req,
- 			} else if (comp_status == CS_PORT_LOGGED_OUT) {
- 				els->u.els_plogi.len = 0;
- 				res = DID_IMM_RETRY << 16;
-+				qlt_schedule_sess_for_deletion(sp->fcport);
- 			} else {
- 				els->u.els_plogi.len = 0;
- 				res = DID_ERROR << 16;
+ };
++
++#define EDIF_SESSION_DOWN(_s) \
++	(_s->disc_state == DSC_DELETE_PEND || \
++	 _s->disc_state == DSC_DELETED || \
++	 !_s->edif.app_sess_online)
++
+ #endif	/* __QLA_EDIF_H */
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 5c01b1eaf84e..94e12a398d7f 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -4345,7 +4345,7 @@ qla2x00_mem_alloc(struct qla_hw_data *ha, uint16_t req_len, uint16_t rsp_len,
+ 		goto fail_elsrej;
+ 	}
+ 	ha->elsrej.c->er_cmd = ELS_LS_RJT;
+-	ha->elsrej.c->er_reason = ELS_RJT_BUSY;
++	ha->elsrej.c->er_reason = ELS_RJT_LOGIC;
+ 	ha->elsrej.c->er_explan = ELS_EXPL_UNAB_DATA;
+ 	return 0;
+ 
 -- 
 2.23.1
 
