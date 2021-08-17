@@ -2,50 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0F63EE950
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2031A3EE952
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239538AbhHQJRZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 05:17:25 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:33302 "EHLO
+        id S239545AbhHQJR1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 05:17:27 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:33304 "EHLO
         smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239136AbhHQJRQ (ORCPT
+        with ESMTP id S239151AbhHQJRQ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:16 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1092721D1C;
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1B08D21D26;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1629191802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BRQjIvn88nKilpzDQwexcfZLv6sotDCud9QpMCrTNX8=;
-        b=KzWJQ49YunTF46umJTs2luOAF8YCfr0uobd9AE/305B9VvU0O12IoC6mTShruhzjmaig5a
-        tZX8fJfSFrvbtRUXVmYz7oQ9jOdvV4whjttGkHDGtVaF//WJpZpvHVFNiD3Kk5oZVQkLDF
-        8hnuKNL2N3LPaN3qaGqKSgndG+jo6to=
+        bh=Oiya3yiIsKryh7s1PYvS4XpqSdNu7+s1gDW8melp4j4=;
+        b=Zixd+C5ejuaDyPVkFqCCBqQfvAQ3CNfGBwGszm3glYqzyARA3BLb5pX4UwjG8BswjtgofT
+        OXSlBx9v0nuPo5PZ4W7Cypu4z5ew4zFfF6/RIhdCEdgazv4VkW2X5LW5veD03L0UFz+Sdd
+        /Ra7atE4UBMoPo1TMKTyhA4y6MMbEIM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1629191802;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BRQjIvn88nKilpzDQwexcfZLv6sotDCud9QpMCrTNX8=;
-        b=WQs13IA47DBr+QCscJzgLDtcD69B3V5Y+SiRsvPmzecqzFYlUhjUqj5eGRrXxyQx1A2lgZ
-        V7tBwF/psSsdZnCQ==
+        bh=Oiya3yiIsKryh7s1PYvS4XpqSdNu7+s1gDW8melp4j4=;
+        b=teQhy/vWyyCxfv5TaY2HhP5e34kCYjWN3LmShXPQmdCpwQWKJyWBxGiybRGxDTU7H0Z9Az
+        M/btEPutaA/bBKCQ==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 06E49A3BA3;
+        by relay2.suse.de (Postfix) with ESMTP id 0E3B3A3BA4;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 03E6F518CE7F; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
+        id 09F70518CE81; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Nilesh Javali <njavali@marvell.com>
-Subject: [PATCH 16/51] qla2xxx: Do not call fc_block_scsi_eh() during bus reset
-Date:   Tue, 17 Aug 2021 11:14:21 +0200
-Message-Id: <20210817091456.73342-17-hare@suse.de>
+        Hannes Reinecke <hare@suse.com>,
+        David Kershner <david.kershner@unisys.com>
+Subject: [PATCH 17/51] visorhba: select first device on the bus for bus_reset()
+Date:   Tue, 17 Aug 2021 11:14:22 +0200
+Message-Id: <20210817091456.73342-18-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210817091456.73342-1-hare@suse.de>
 References: <20210817091456.73342-1-hare@suse.de>
@@ -55,43 +56,54 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When calling bus reset the driver will be doing a full SAN resync
-anyway, so there is no need to wait for any pending RSCNs; they'll
-be re-issued during resync anyway.
+As we're moving away from having the scsi command as an argument
+to bus_reset() we need to select the first device on the bus to
+send the bus reset to.
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
-Cc: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Hannes Reinecke <hare@suse.com>
+Cc: David Kershner <david.kershner@unisys.com>
 ---
- drivers/scsi/qla2xxx/qla_os.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ .../staging/unisys/visorhba/visorhba_main.c   | 21 ++++++++++---------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 64820a3d34dd..a84a85288c2e 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -1538,7 +1538,6 @@ static int
- qla2xxx_eh_bus_reset(struct scsi_cmnd *cmd)
+diff --git a/drivers/staging/unisys/visorhba/visorhba_main.c b/drivers/staging/unisys/visorhba/visorhba_main.c
+index fdbcb6576fcd..bfb4a70432f3 100644
+--- a/drivers/staging/unisys/visorhba/visorhba_main.c
++++ b/drivers/staging/unisys/visorhba/visorhba_main.c
+@@ -368,23 +368,24 @@ static int visorhba_device_reset_handler(struct scsi_cmnd *scsicmd)
+  */
+ static int visorhba_bus_reset_handler(struct scsi_cmnd *scsicmd)
  {
- 	scsi_qla_host_t *vha = shost_priv(cmd->device->host);
--	fc_port_t *fcport = (struct fc_port *) cmd->device->hostdata;
- 	int ret = FAILED;
- 	unsigned int id;
- 	uint64_t lun;
-@@ -1554,15 +1553,6 @@ qla2xxx_eh_bus_reset(struct scsi_cmnd *cmd)
- 	id = cmd->device->id;
- 	lun = cmd->device->lun;
+-	struct scsi_device *scsidev;
++	struct scsi_device *scsidev = NULL, *tmp;
++	struct Scsi_Host *scsihost = scsicmd->device->host;
+ 	struct visordisk_info *vdisk;
+-	int rtn;
++	int rtn = SUCCESS;
  
--	if (!fcport) {
--		return ret;
+-	scsidev = scsicmd->device;
+-	shost_for_each_device(scsidev, scsidev->host) {
+-		vdisk = scsidev->hostdata;
++	shost_for_each_device(tmp, scsihost) {
++		if (tmp->channel != scsicmd->device->channel)
++			continue;
++		vdisk = tmp->hostdata;
+ 		if (atomic_read(&vdisk->error_count) < VISORHBA_ERROR_COUNT)
+ 			atomic_inc(&vdisk->error_count);
+ 		else
+ 			atomic_set(&vdisk->ios_threshold, IOS_ERROR_THRESHOLD);
++		if (!scsidev)
++			scsidev = tmp;
+ 	}
+-	rtn = forward_taskmgmt_command(TASK_MGMT_BUS_RESET, scsidev);
+-	if (rtn == SUCCESS) {
+-		scsicmd->result = DID_RESET << 16;
+-		scsicmd->scsi_done(scsicmd);
 -	}
--
--	ret = fc_block_scsi_eh(cmd);
--	if (ret != 0)
--		return ret;
--	ret = FAILED;
--
- 	if (qla2x00_chip_is_down(vha))
- 		return ret;
++	if (scsidev)
++		rtn = forward_taskmgmt_command(TASK_MGMT_BUS_RESET, scsidev);
+ 	return rtn;
+ }
  
 -- 
 2.29.2
