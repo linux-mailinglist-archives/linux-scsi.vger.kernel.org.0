@@ -2,50 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C134C3EE96A
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA593EE963
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239562AbhHQJRu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 05:17:50 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:47546 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239474AbhHQJRT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:19 -0400
+        id S235993AbhHQJRm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 05:17:42 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:33326 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239383AbhHQJRR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:17 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 71A3220024;
+        by smtp-out1.suse.de (Postfix) with ESMTP id 79B1721D71;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1629191802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Y2BFk28My2JNIp6T2foNXVrxjFcL7k+sAuDlYqrlhjo=;
-        b=RqjbO9eUJ8Tebq7UIOcYoduQLv4GEZ2tJxe347Q5r55Jy+AJxJ//zO5dryxHmaWr6pQtio
-        +fV0QpQ8WzuArV791ZXmtL0oL3IEKg3mwZsGDGsHonGEB1UuS5fIs3aKofBclTxUKiEWGn
-        5uqZ7hHcjRDrlq5PfajUZoErJcSR9CI=
+        bh=7/qqau6iRJhTarNpzpM+BK4TSRMqSL+XqvwgHs6oQh0=;
+        b=speac0dmF1hsnP1ucTP992OdsscbEhvNqmOCkhkk8/q8cji6sXqBnldKakx+q+suvJuDGa
+        oRVy3mouEjkDgg5D1dLM8V8coRrSYsoKYeUIQzWoJCv1KUjWB/nIQpSCypiugKsoMXoy1L
+        cIDFQhAKX4B23+ARtjvZsvvpB/T+aSc=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1629191802;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Y2BFk28My2JNIp6T2foNXVrxjFcL7k+sAuDlYqrlhjo=;
-        b=q9ewdiRoXf9EdKwSWKKG9dtFsxcACRM87kqSaSrcuXtKz+8De5YvHNRrrruGVny1qhEAI7
-        pmiL6LtGbmb3fWDA==
+        bh=7/qqau6iRJhTarNpzpM+BK4TSRMqSL+XqvwgHs6oQh0=;
+        b=4pUcrtCoFo50jbKKvliF+wKq0FCU5bDZKzSdRZ41gDXtFQHufADyL4TZRbfu/RrNb8Y/2e
+        u+CJ1q9iDc3EzfCA==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 6B99DA3BB0;
+        by relay2.suse.de (Postfix) with ESMTP id 72D9DA3BB1;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 68965518CE9F; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
+        id 6F927518CEA1; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 32/51] sym53c8xx_2: rework reset handling
-Date:   Tue, 17 Aug 2021 11:14:37 +0200
-Message-Id: <20210817091456.73342-33-hare@suse.de>
+Subject: [PATCH 33/51] bfa: Do not use scsi command to signal TMF status
+Date:   Tue, 17 Aug 2021 11:14:38 +0200
+Message-Id: <20210817091456.73342-34-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210817091456.73342-1-hare@suse.de>
 References: <20210817091456.73342-1-hare@suse.de>
@@ -55,143 +55,230 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Split off the combined abort and device reset handling into
-distinct functions.
-And the current device reset handler really is a target reset,
-so rename it.
+The bfa driver hijacks the scsi command to signal the TMF status,
+which will no longer work if the TMF handler will be converted.
+So rework TMF handling to not use a scsi command but rather add
+new TMF fields to the per-device structure.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/sym53c8xx_2/sym_glue.c | 82 +++++++++++++++++++----------
- 1 file changed, 55 insertions(+), 27 deletions(-)
+ drivers/scsi/bfa/bfad_im.c | 109 ++++++++++++++++++++-----------------
+ drivers/scsi/bfa/bfad_im.h |   2 +
+ 2 files changed, 61 insertions(+), 50 deletions(-)
 
-diff --git a/drivers/scsi/sym53c8xx_2/sym_glue.c b/drivers/scsi/sym53c8xx_2/sym_glue.c
-index 2e5ab844fe09..3d00afd8cbca 100644
---- a/drivers/scsi/sym53c8xx_2/sym_glue.c
-+++ b/drivers/scsi/sym53c8xx_2/sym_glue.c
-@@ -567,7 +567,10 @@ static void sym53c8xx_timer(struct timer_list *t)
-  *  Generic method for our eh processing.
-  *  The 'op' argument tells what we have to do.
-  */
--static int sym_eh_handler(int op, char *opname, struct scsi_cmnd *cmd)
-+/*
-+ * Error handlers called from the eh thread (one thread per HBA).
-+ */
-+static int sym53c8xx_eh_abort_handler(struct scsi_cmnd *cmd)
+diff --git a/drivers/scsi/bfa/bfad_im.c b/drivers/scsi/bfa/bfad_im.c
+index 6b5841b1c06e..0cd5f5d7cc6b 100644
+--- a/drivers/scsi/bfa/bfad_im.c
++++ b/drivers/scsi/bfa/bfad_im.c
+@@ -147,13 +147,12 @@ void
+ bfa_cb_tskim_done(void *bfad, struct bfad_tskim_s *dtsk,
+ 		   enum bfi_tskim_status tsk_status)
  {
- 	struct sym_ucmd *ucmd = SYM_UCMD_PTR(cmd);
- 	struct Scsi_Host *shost = cmd->device->host;
-@@ -579,7 +582,7 @@ static int sym_eh_handler(int op, char *opname, struct scsi_cmnd *cmd)
- 	int sts = -1;
- 	struct completion eh_done;
+-	struct scsi_cmnd *cmnd = (struct scsi_cmnd *)dtsk;
++	struct bfad_itnim_data_s *itnim_data = (struct bfad_itnim_data_s *)dtsk;
+ 	wait_queue_head_t *wq;
  
--	scmd_printk(KERN_WARNING, cmd, "%s operation started\n", opname);
-+	scmd_printk(KERN_WARNING, cmd, "ABORT operation started\n");
+-	cmnd->SCp.Status |= tsk_status << 1;
+-	set_bit(IO_DONE_BIT, (unsigned long *)&cmnd->SCp.Status);
+-	wq = (wait_queue_head_t *) cmnd->SCp.ptr;
+-	cmnd->SCp.ptr = NULL;
++	itnim_data->tmf_status |= tsk_status << 1;
++	set_bit(IO_DONE_BIT, &itnim_data->tmf_status);
++	wq = itnim_data->tmf_wq;
  
+ 	if (wq)
+ 		wake_up(wq);
+@@ -238,15 +237,16 @@ bfad_im_abort_handler(struct scsi_cmnd *cmnd)
+ }
+ 
+ static bfa_status_t
+-bfad_im_target_reset_send(struct bfad_s *bfad, struct scsi_cmnd *cmnd,
+-		     struct bfad_itnim_s *itnim)
++bfad_im_target_reset_send(struct bfad_s *bfad,
++			  struct bfad_itnim_data_s *itnim_data)
+ {
++	struct bfad_itnim_s *itnim = itnim_data->itnim;
+ 	struct bfa_tskim_s *tskim;
+ 	struct bfa_itnim_s *bfa_itnim;
+ 	bfa_status_t    rc = BFA_STATUS_OK;
+ 	struct scsi_lun scsilun;
+ 
+-	tskim = bfa_tskim_alloc(&bfad->bfa, (struct bfad_tskim_s *) cmnd);
++	tskim = bfa_tskim_alloc(&bfad->bfa, (struct bfad_tskim_s *) itnim_data);
+ 	if (!tskim) {
+ 		BFA_LOG(KERN_ERR, bfad, bfa_log_level,
+ 			"target reset, fail to allocate tskim\n");
+@@ -254,12 +254,6 @@ bfad_im_target_reset_send(struct bfad_s *bfad, struct scsi_cmnd *cmnd,
+ 		goto out;
+ 	}
+ 
+-	/*
+-	 * Set host_scribble to NULL to avoid aborting a task command if
+-	 * happens.
+-	 */
+-	cmnd->host_scribble = NULL;
+-	cmnd->SCp.Status = 0;
+ 	bfa_itnim = bfa_fcs_itnim_get_halitn(&itnim->fcs_itnim);
  	/*
- 	 * Escalate to host reset if the PCI bus went down
-@@ -597,19 +600,7 @@ static int sym_eh_handler(int op, char *opname, struct scsi_cmnd *cmd)
- 		}
- 	}
- 
--	/* Try to proceed the operation we have been asked for */
--	sts = -1;
--	switch(op) {
--	case SYM_EH_ABORT:
--		sts = sym_abort_scsiio(np, cmd, 1);
--		break;
--	case SYM_EH_DEVICE_RESET:
--		sts = sym_reset_scsi_target(np, cmd->device->id);
--		break;
--	default:
--		break;
--	}
--
-+	sts = sym_abort_scsiio(np, cmd, 1);
- 	/* On error, restore everything and cross fingers :) */
- 	if (sts)
- 		cmd_queued = 0;
-@@ -626,23 +617,60 @@ static int sym_eh_handler(int op, char *opname, struct scsi_cmnd *cmd)
- 		spin_unlock_irq(shost->host_lock);
- 	}
- 
--	dev_warn(&cmd->device->sdev_gendev, "%s operation %s.\n", opname,
-+	dev_warn(&cmd->device->sdev_gendev, "ABORT operation %s.\n",
- 			sts==0 ? "complete" :sts==-2 ? "timed-out" : "failed");
- 	return sts ? SCSI_FAILED : SCSI_SUCCESS;
- }
- 
--
--/*
-- * Error handlers called from the eh thread (one thread per HBA).
-- */
--static int sym53c8xx_eh_abort_handler(struct scsi_cmnd *cmd)
-+static int sym53c8xx_eh_target_reset_handler(struct scsi_cmnd *cmd)
+ 	 * bfa_itnim can be NULL if the port gets disconnected and the bfa
+@@ -290,10 +284,11 @@ bfad_im_target_reset_send(struct bfad_s *bfad, struct scsi_cmnd *cmnd,
+ static int
+ bfad_im_reset_lun_handler(struct scsi_cmnd *cmnd)
  {
--	return sym_eh_handler(SYM_EH_ABORT, "ABORT", cmd);
--}
-+	struct scsi_target *starget = scsi_target(cmd->device);
-+	struct Scsi_Host *shost = dev_to_shost(starget->dev.parent);
-+	struct sym_data *sym_data = shost_priv(shost);
-+	struct pci_dev *pdev = sym_data->pdev;
-+	struct sym_hcb *np = sym_data->ncb;
-+	SYM_QUEHEAD *qp;
-+	int sts;
-+	struct completion eh_done;
+-	struct Scsi_Host *shost = cmnd->device->host;
++	struct scsi_device *sdev = cmnd->device;
++	struct Scsi_Host *shost = sdev->host;
+ 	struct bfad_im_port_s *im_port =
+ 			(struct bfad_im_port_s *) shost->hostdata[0];
+-	struct bfad_itnim_data_s *itnim_data = cmnd->device->hostdata;
++	struct bfad_itnim_data_s *itnim_data = sdev->hostdata;
+ 	struct bfad_s         *bfad = im_port->bfad;
+ 	struct bfa_tskim_s *tskim;
+ 	struct bfad_itnim_s   *itnim;
+@@ -305,14 +300,20 @@ bfad_im_reset_lun_handler(struct scsi_cmnd *cmnd)
+ 	struct scsi_lun scsilun;
  
--static int sym53c8xx_eh_device_reset_handler(struct scsi_cmnd *cmd)
--{
--	return sym_eh_handler(SYM_EH_DEVICE_RESET, "DEVICE RESET", cmd);
-+	starget_printk(KERN_WARNING, starget,
-+		       "TARGET RESET operation started\n");
-+
-+	/*
-+	 * Escalate to host reset if the PCI bus went down
-+	 */
-+	if (pci_channel_offline(pdev))
-+		return SCSI_FAILED;
-+
-+	spin_lock_irq(shost->host_lock);
-+	sts = sym_reset_scsi_target(np, starget->id);
-+	if (!sts) {
-+		FOR_EACH_QUEUED_ELEMENT(&np->busy_ccbq, qp) {
-+			struct sym_ccb *cp = sym_que_entry(qp, struct sym_ccb,
-+							   link_ccbq);
-+			struct scsi_cmnd *cmd = cp->cmd;
-+			struct sym_ucmd *ucmd;
-+
-+			if (!cmd || cmd->device->channel != starget->channel ||
-+			    cmd->device->id != starget->id)
-+				continue;
-+
-+			ucmd = SYM_UCMD_PTR(cmd);
-+			init_completion(&eh_done);
-+			ucmd->eh_done = &eh_done;
-+			spin_unlock_irq(shost->host_lock);
-+			if (!wait_for_completion_timeout(&eh_done, 5*HZ)) {
-+				ucmd->eh_done = NULL;
-+				sts = -2;
-+			}
-+			spin_lock_irq(shost->host_lock);
-+		}
+ 	spin_lock_irqsave(&bfad->bfad_lock, flags);
++	if (itnim_data->tmf_wq) {
++		BFA_LOG(KERN_ERR, bfad, bfa_log_level,
++			"LUN reset, TMF already active");
++		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
++		rc = FAILED;
++		goto out;
 +	}
-+	spin_unlock_irq(shost->host_lock);
-+
-+	starget_printk(KERN_WARNING, starget, "TARGET RESET operation %s.\n",
-+			sts==0 ? "complete" :sts==-2 ? "timed-out" : "failed");
-+	return SCSI_SUCCESS;
- }
+ 	itnim = itnim_data->itnim;
+ 	if (!itnim) {
+ 		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
+ 		rc = FAILED;
+ 		goto out;
+ 	}
+-
+-	tskim = bfa_tskim_alloc(&bfad->bfa, (struct bfad_tskim_s *) cmnd);
++	tskim = bfa_tskim_alloc(&bfad->bfa, (struct bfad_tskim_s *) itnim_data);
+ 	if (!tskim) {
+ 		BFA_LOG(KERN_ERR, bfad, bfa_log_level,
+ 				"LUN reset, fail to allocate tskim");
+@@ -321,13 +322,8 @@ bfad_im_reset_lun_handler(struct scsi_cmnd *cmnd)
+ 		goto out;
+ 	}
  
- static int sym53c8xx_eh_bus_reset_handler(struct Scsi_Host *shost, int channel)
-@@ -1660,7 +1688,7 @@ static struct scsi_host_template sym2_template = {
- 	.slave_configure	= sym53c8xx_slave_configure,
- 	.slave_destroy		= sym53c8xx_slave_destroy,
- 	.eh_abort_handler	= sym53c8xx_eh_abort_handler,
--	.eh_device_reset_handler = sym53c8xx_eh_device_reset_handler,
-+	.eh_target_reset_handler = sym53c8xx_eh_target_reset_handler,
- 	.eh_bus_reset_handler	= sym53c8xx_eh_bus_reset_handler,
- 	.eh_host_reset_handler	= sym53c8xx_eh_host_reset_handler,
- 	.this_id		= 7,
+-	/*
+-	 * Set host_scribble to NULL to avoid aborting a task command
+-	 * if happens.
+-	 */
+-	cmnd->host_scribble = NULL;
+-	cmnd->SCp.ptr = (char *)&wq;
+-	cmnd->SCp.Status = 0;
++	itnim_data->tmf_wq = &wq;
++	itnim_data->tmf_status = 0;
+ 	bfa_itnim = bfa_fcs_itnim_get_halitn(&itnim->fcs_itnim);
+ 	/*
+ 	 * bfa_itnim can be NULL if the port gets disconnected and the bfa
+@@ -342,15 +338,16 @@ bfad_im_reset_lun_handler(struct scsi_cmnd *cmnd)
+ 		rc = FAILED;
+ 		goto out;
+ 	}
+-	int_to_scsilun(cmnd->device->lun, &scsilun);
++	int_to_scsilun(sdev->lun, &scsilun);
+ 	bfa_tskim_start(tskim, bfa_itnim, scsilun,
+ 			    FCP_TM_LUN_RESET, BFAD_LUN_RESET_TMO);
+ 	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
+ 
+-	wait_event(wq, test_bit(IO_DONE_BIT,
+-			(unsigned long *)&cmnd->SCp.Status));
+-
+-	task_status = cmnd->SCp.Status >> 1;
++	wait_event(wq, test_bit(IO_DONE_BIT, &itnim_data->tmf_status));
++	spin_lock_irqsave(&bfad->bfad_lock, flags);
++	itnim_data->tmf_wq = NULL;
++	task_status = itnim_data->tmf_status >> 1;
++	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
+ 	if (task_status != BFI_TSKIM_STS_OK) {
+ 		BFA_LOG(KERN_ERR, bfad, bfa_log_level,
+ 			"LUN reset failure, status: %d\n", task_status);
+@@ -367,37 +364,49 @@ bfad_im_reset_lun_handler(struct scsi_cmnd *cmnd)
+ static int
+ bfad_im_reset_target_handler(struct scsi_cmnd *cmnd)
+ {
+-	struct Scsi_Host *shost = cmnd->device->host;
+ 	struct scsi_target *starget = scsi_target(cmnd->device);
++	struct fc_rport *rport = starget_to_rport(starget);
++	struct Scsi_Host *shost = rport_to_shost(rport);
++	struct bfad_itnim_data_s *itnim_data;
++	struct bfad_itnim_s *itnim;
+ 	struct bfad_im_port_s *im_port =
+ 				(struct bfad_im_port_s *) shost->hostdata[0];
+ 	struct bfad_s         *bfad = im_port->bfad;
+-	struct bfad_itnim_s   *itnim;
+ 	unsigned long   flags;
+ 	u32        rc, rtn = FAILED;
+ 	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(wq);
+ 	enum bfi_tskim_status task_status;
+ 
+ 	spin_lock_irqsave(&bfad->bfad_lock, flags);
+-	itnim = bfad_get_itnim(im_port, starget->id);
+-	if (itnim) {
+-		cmnd->SCp.ptr = (char *)&wq;
+-		rc = bfad_im_target_reset_send(bfad, cmnd, itnim);
+-		if (rc == BFA_STATUS_OK) {
+-			/* wait target reset to complete */
+-			spin_unlock_irqrestore(&bfad->bfad_lock, flags);
+-			wait_event(wq, test_bit(IO_DONE_BIT,
+-					(unsigned long *)&cmnd->SCp.Status));
+-			spin_lock_irqsave(&bfad->bfad_lock, flags);
++	if (!rport->dd_data) {
++		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
++		return rtn;
++	}
++	itnim_data = rport->dd_data;
++	if (itnim_data->tmf_wq) {
++		BFA_LOG(KERN_ERR, bfad, bfa_log_level,
++			"target reset failed, TMF already active");
++		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
++		return rtn;
++	}
++	itnim = itnim_data->itnim;
+ 
+-			task_status = cmnd->SCp.Status >> 1;
+-			if (task_status != BFI_TSKIM_STS_OK)
+-				BFA_LOG(KERN_ERR, bfad, bfa_log_level,
+-					"target reset failure,"
+-					" status: %d\n", task_status);
+-			else
+-				rtn = SUCCESS;
+-		}
++	itnim_data->tmf_wq = &wq;
++	itnim_data->tmf_status = 0;
++	rc = bfad_im_target_reset_send(bfad, itnim_data);
++	if (rc == BFA_STATUS_OK) {
++		/* wait target reset to complete */
++		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
++		wait_event(wq, test_bit(IO_DONE_BIT, &itnim_data->tmf_status));
++		spin_lock_irqsave(&bfad->bfad_lock, flags);
++
++		task_status = itnim_data->tmf_status >> 1;
++		if (task_status != BFI_TSKIM_STS_OK)
++			BFA_LOG(KERN_ERR, bfad, bfa_log_level,
++				"target reset failure,"
++				" status: %d\n", task_status);
++		else
++			rtn = SUCCESS;
+ 	}
+ 	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
+ 
+diff --git a/drivers/scsi/bfa/bfad_im.h b/drivers/scsi/bfa/bfad_im.h
+index f16d4b219e44..93fffd4e13bd 100644
+--- a/drivers/scsi/bfa/bfad_im.h
++++ b/drivers/scsi/bfa/bfad_im.h
+@@ -45,6 +45,8 @@ u32 bfad_im_supported_speeds(struct bfa_s *bfa);
+ 
+ struct bfad_itnim_data_s {
+ 	struct bfad_itnim_s *itnim;
++	wait_queue_head_t *tmf_wq;
++	unsigned long tmf_status;
+ };
+ 
+ struct bfad_im_port_s {
 -- 
 2.29.2
 
