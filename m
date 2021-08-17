@@ -2,50 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA593EE963
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA2A3EE96F
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235993AbhHQJRm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 05:17:42 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:33326 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239383AbhHQJRR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:17 -0400
+        id S239856AbhHQJSA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 05:18:00 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:47664 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239488AbhHQJRU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:20 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 79B1721D71;
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7DC5020025;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1629191802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7/qqau6iRJhTarNpzpM+BK4TSRMqSL+XqvwgHs6oQh0=;
-        b=speac0dmF1hsnP1ucTP992OdsscbEhvNqmOCkhkk8/q8cji6sXqBnldKakx+q+suvJuDGa
-        oRVy3mouEjkDgg5D1dLM8V8coRrSYsoKYeUIQzWoJCv1KUjWB/nIQpSCypiugKsoMXoy1L
-        cIDFQhAKX4B23+ARtjvZsvvpB/T+aSc=
+        bh=jwU5Uji0VGmmIm0tuyQivcxGQu+jcrA2PzTb90fYs9c=;
+        b=ewpO802Cevls+dsg1YHaHOzCo7q2o1MuN5HtzZVNuwSOHb3jIRgJXd4+bCXPBHZAddGMMf
+        ftKjlZ6UZk8VQs1y4UoDYw2nA5JWDkyJFCsDMbNCeR2Dkiznn6C5JUQUZI8NlvsPCxSsK8
+        vnn33r+vxlFpnAGyK/5TSHVMl2LlPi0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1629191802;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7/qqau6iRJhTarNpzpM+BK4TSRMqSL+XqvwgHs6oQh0=;
-        b=4pUcrtCoFo50jbKKvliF+wKq0FCU5bDZKzSdRZ41gDXtFQHufADyL4TZRbfu/RrNb8Y/2e
-        u+CJ1q9iDc3EzfCA==
+        bh=jwU5Uji0VGmmIm0tuyQivcxGQu+jcrA2PzTb90fYs9c=;
+        b=JCUQ2JHbwFbOQVnZtmiWBJMzOpF6Bq0F7Zh1OaVIztQLOkd/UPbdA6nxgSk5StWOfVSaL0
+        4tpnHqPfENIJbVAQ==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 72D9DA3BB1;
+        by relay2.suse.de (Postfix) with ESMTP id 77FC8A3BB2;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 6F927518CEA1; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
+        id 7594D518CEA3; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 33/51] bfa: Do not use scsi command to signal TMF status
-Date:   Tue, 17 Aug 2021 11:14:38 +0200
-Message-Id: <20210817091456.73342-34-hare@suse.de>
+Subject: [PATCH 34/51] scsi_transport_iscsi: use session as argument for iscsi_block_scsi_eh()
+Date:   Tue, 17 Aug 2021 11:14:39 +0200
+Message-Id: <20210817091456.73342-35-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210817091456.73342-1-hare@suse.de>
 References: <20210817091456.73342-1-hare@suse.de>
@@ -55,230 +55,143 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The bfa driver hijacks the scsi command to signal the TMF status,
-which will no longer work if the TMF handler will be converted.
-So rework TMF handling to not use a scsi command but rather add
-new TMF fields to the per-device structure.
+We should be passing in the session directly instead of deriving it
+from the scsi command.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/bfa/bfad_im.c | 109 ++++++++++++++++++++-----------------
- drivers/scsi/bfa/bfad_im.h |   2 +
- 2 files changed, 61 insertions(+), 50 deletions(-)
+ drivers/scsi/qla4xxx/ql4_os.c       | 34 ++++++++++++++++++-----------
+ drivers/scsi/scsi_transport_iscsi.c |  6 ++---
+ include/scsi/scsi_transport_iscsi.h |  2 +-
+ 3 files changed, 24 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/scsi/bfa/bfad_im.c b/drivers/scsi/bfa/bfad_im.c
-index 6b5841b1c06e..0cd5f5d7cc6b 100644
---- a/drivers/scsi/bfa/bfad_im.c
-+++ b/drivers/scsi/bfa/bfad_im.c
-@@ -147,13 +147,12 @@ void
- bfa_cb_tskim_done(void *bfad, struct bfad_tskim_s *dtsk,
- 		   enum bfi_tskim_status tsk_status)
+diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
+index f4b046867627..130bc0c58c2e 100644
+--- a/drivers/scsi/qla4xxx/ql4_os.c
++++ b/drivers/scsi/qla4xxx/ql4_os.c
+@@ -9262,15 +9262,18 @@ static int qla4xxx_eh_abort(struct scsi_cmnd *cmd)
+  **/
+ static int qla4xxx_eh_device_reset(struct scsi_cmnd *cmd)
  {
--	struct scsi_cmnd *cmnd = (struct scsi_cmnd *)dtsk;
-+	struct bfad_itnim_data_s *itnim_data = (struct bfad_itnim_data_s *)dtsk;
- 	wait_queue_head_t *wq;
+-	struct scsi_qla_host *ha = to_qla_host(cmd->device->host);
+-	struct ddb_entry *ddb_entry = cmd->device->hostdata;
++	struct scsi_device *sdev = cmd->device;
++	struct scsi_qla_host *ha = to_qla_host(sdev->host);
++	struct iscsi_cls_session *session;
++	struct ddb_entry *ddb_entry = sdev->hostdata;
+ 	int ret = FAILED, stat;
+ 	int rval;
  
--	cmnd->SCp.Status |= tsk_status << 1;
--	set_bit(IO_DONE_BIT, (unsigned long *)&cmnd->SCp.Status);
--	wq = (wait_queue_head_t *) cmnd->SCp.ptr;
--	cmnd->SCp.ptr = NULL;
-+	itnim_data->tmf_status |= tsk_status << 1;
-+	set_bit(IO_DONE_BIT, &itnim_data->tmf_status);
-+	wq = itnim_data->tmf_wq;
+ 	if (!ddb_entry)
+ 		return ret;
  
- 	if (wq)
- 		wake_up(wq);
-@@ -238,15 +237,16 @@ bfad_im_abort_handler(struct scsi_cmnd *cmnd)
+-	ret = iscsi_block_scsi_eh(cmd);
++	session = starget_to_session(scsi_target(sdev));
++	ret = iscsi_block_scsi_eh(session);
+ 	if (ret)
+ 		return ret;
+ 	ret = FAILED;
+@@ -9331,19 +9334,25 @@ static int qla4xxx_eh_device_reset(struct scsi_cmnd *cmd)
+  **/
+ static int qla4xxx_eh_target_reset(struct scsi_cmnd *cmd)
+ {
+-	struct scsi_qla_host *ha = to_qla_host(cmd->device->host);
+-	struct ddb_entry *ddb_entry = cmd->device->hostdata;
++	struct scsi_target *starget = scsi_target(cmd->device);
++	struct iscsi_cls_session *cls_session = starget_to_session(starget);
++	struct iscsi_session *sess;
++	struct scsi_qla_host *ha;
++	struct ddb_entry *ddb_entry;
+ 	int stat, ret;
+ 	int rval;
+ 
++	sess = cls_session->dd_data;
++	ddb_entry = sess->dd_data;
+ 	if (!ddb_entry)
+ 		return FAILED;
++	ha = ddb_entry->ha;
+ 
+-	ret = iscsi_block_scsi_eh(cmd);
++	ret = iscsi_block_scsi_eh(cls_session);
+ 	if (ret)
+ 		return ret;
+ 
+-	starget_printk(KERN_INFO, scsi_target(cmd->device),
++	starget_printk(KERN_INFO, starget,
+ 		       "WARM TARGET RESET ISSUED.\n");
+ 
+ 	DEBUG2(printk(KERN_INFO
+@@ -9360,14 +9369,13 @@ static int qla4xxx_eh_target_reset(struct scsi_cmnd *cmd)
+ 
+ 	stat = qla4xxx_reset_target(ha, ddb_entry);
+ 	if (stat != QLA_SUCCESS) {
+-		starget_printk(KERN_INFO, scsi_target(cmd->device),
++		starget_printk(KERN_INFO, starget,
+ 			       "WARM TARGET RESET FAILED.\n");
+ 		return FAILED;
+ 	}
+ 
+-	if (qla4xxx_eh_wait_for_commands(ha, scsi_target(cmd->device),
+-					 NULL)) {
+-		starget_printk(KERN_INFO, scsi_target(cmd->device),
++	if (qla4xxx_eh_wait_for_commands(ha, starget, NULL)) {
++		starget_printk(KERN_INFO, starget,
+ 			       "WARM TARGET DEVICE RESET FAILED - "
+ 			       "waiting for commands.\n");
+ 		return FAILED;
+@@ -9376,13 +9384,13 @@ static int qla4xxx_eh_target_reset(struct scsi_cmnd *cmd)
+ 	/* Send marker. */
+ 	if (qla4xxx_send_marker_iocb(ha, ddb_entry, cmd->device->lun,
+ 		MM_TGT_WARM_RESET) != QLA_SUCCESS) {
+-		starget_printk(KERN_INFO, scsi_target(cmd->device),
++		starget_printk(KERN_INFO, starget,
+ 			       "WARM TARGET DEVICE RESET FAILED - "
+ 			       "marker iocb failed.\n");
+ 		return FAILED;
+ 	}
+ 
+-	starget_printk(KERN_INFO, scsi_target(cmd->device),
++	starget_printk(KERN_INFO, starget,
+ 		       "WARM TARGET RESET SUCCEEDED.\n");
+ 	return SUCCESS;
  }
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index b07105ae7c91..7eac4a003541 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -1868,17 +1868,15 @@ static void iscsi_scan_session(struct work_struct *work)
  
- static bfa_status_t
--bfad_im_target_reset_send(struct bfad_s *bfad, struct scsi_cmnd *cmnd,
--		     struct bfad_itnim_s *itnim)
-+bfad_im_target_reset_send(struct bfad_s *bfad,
-+			  struct bfad_itnim_data_s *itnim_data)
+ /**
+  * iscsi_block_scsi_eh - block scsi eh until session state has transistioned
+- * @cmd: scsi cmd passed to scsi eh handler
++ * @session: iscsi session derived from scsi eh handler argument
+  *
+  * If the session is down this function will wait for the recovery
+  * timer to fire or for the session to be logged back in. If the
+  * recovery timer fires then FAST_IO_FAIL is returned. The caller
+  * should pass this error value to the scsi eh.
+  */
+-int iscsi_block_scsi_eh(struct scsi_cmnd *cmd)
++int iscsi_block_scsi_eh(struct iscsi_cls_session *session)
  {
-+	struct bfad_itnim_s *itnim = itnim_data->itnim;
- 	struct bfa_tskim_s *tskim;
- 	struct bfa_itnim_s *bfa_itnim;
- 	bfa_status_t    rc = BFA_STATUS_OK;
- 	struct scsi_lun scsilun;
+-	struct iscsi_cls_session *session =
+-			starget_to_session(scsi_target(cmd->device));
+ 	unsigned long flags;
+ 	int ret = 0;
  
--	tskim = bfa_tskim_alloc(&bfad->bfa, (struct bfad_tskim_s *) cmnd);
-+	tskim = bfa_tskim_alloc(&bfad->bfa, (struct bfad_tskim_s *) itnim_data);
- 	if (!tskim) {
- 		BFA_LOG(KERN_ERR, bfad, bfa_log_level,
- 			"target reset, fail to allocate tskim\n");
-@@ -254,12 +254,6 @@ bfad_im_target_reset_send(struct bfad_s *bfad, struct scsi_cmnd *cmnd,
- 		goto out;
- 	}
- 
--	/*
--	 * Set host_scribble to NULL to avoid aborting a task command if
--	 * happens.
--	 */
--	cmnd->host_scribble = NULL;
--	cmnd->SCp.Status = 0;
- 	bfa_itnim = bfa_fcs_itnim_get_halitn(&itnim->fcs_itnim);
- 	/*
- 	 * bfa_itnim can be NULL if the port gets disconnected and the bfa
-@@ -290,10 +284,11 @@ bfad_im_target_reset_send(struct bfad_s *bfad, struct scsi_cmnd *cmnd,
- static int
- bfad_im_reset_lun_handler(struct scsi_cmnd *cmnd)
- {
--	struct Scsi_Host *shost = cmnd->device->host;
-+	struct scsi_device *sdev = cmnd->device;
-+	struct Scsi_Host *shost = sdev->host;
- 	struct bfad_im_port_s *im_port =
- 			(struct bfad_im_port_s *) shost->hostdata[0];
--	struct bfad_itnim_data_s *itnim_data = cmnd->device->hostdata;
-+	struct bfad_itnim_data_s *itnim_data = sdev->hostdata;
- 	struct bfad_s         *bfad = im_port->bfad;
- 	struct bfa_tskim_s *tskim;
- 	struct bfad_itnim_s   *itnim;
-@@ -305,14 +300,20 @@ bfad_im_reset_lun_handler(struct scsi_cmnd *cmnd)
- 	struct scsi_lun scsilun;
- 
- 	spin_lock_irqsave(&bfad->bfad_lock, flags);
-+	if (itnim_data->tmf_wq) {
-+		BFA_LOG(KERN_ERR, bfad, bfa_log_level,
-+			"LUN reset, TMF already active");
-+		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
-+		rc = FAILED;
-+		goto out;
-+	}
- 	itnim = itnim_data->itnim;
- 	if (!itnim) {
- 		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
- 		rc = FAILED;
- 		goto out;
- 	}
--
--	tskim = bfa_tskim_alloc(&bfad->bfa, (struct bfad_tskim_s *) cmnd);
-+	tskim = bfa_tskim_alloc(&bfad->bfa, (struct bfad_tskim_s *) itnim_data);
- 	if (!tskim) {
- 		BFA_LOG(KERN_ERR, bfad, bfa_log_level,
- 				"LUN reset, fail to allocate tskim");
-@@ -321,13 +322,8 @@ bfad_im_reset_lun_handler(struct scsi_cmnd *cmnd)
- 		goto out;
- 	}
- 
--	/*
--	 * Set host_scribble to NULL to avoid aborting a task command
--	 * if happens.
--	 */
--	cmnd->host_scribble = NULL;
--	cmnd->SCp.ptr = (char *)&wq;
--	cmnd->SCp.Status = 0;
-+	itnim_data->tmf_wq = &wq;
-+	itnim_data->tmf_status = 0;
- 	bfa_itnim = bfa_fcs_itnim_get_halitn(&itnim->fcs_itnim);
- 	/*
- 	 * bfa_itnim can be NULL if the port gets disconnected and the bfa
-@@ -342,15 +338,16 @@ bfad_im_reset_lun_handler(struct scsi_cmnd *cmnd)
- 		rc = FAILED;
- 		goto out;
- 	}
--	int_to_scsilun(cmnd->device->lun, &scsilun);
-+	int_to_scsilun(sdev->lun, &scsilun);
- 	bfa_tskim_start(tskim, bfa_itnim, scsilun,
- 			    FCP_TM_LUN_RESET, BFAD_LUN_RESET_TMO);
- 	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
- 
--	wait_event(wq, test_bit(IO_DONE_BIT,
--			(unsigned long *)&cmnd->SCp.Status));
--
--	task_status = cmnd->SCp.Status >> 1;
-+	wait_event(wq, test_bit(IO_DONE_BIT, &itnim_data->tmf_status));
-+	spin_lock_irqsave(&bfad->bfad_lock, flags);
-+	itnim_data->tmf_wq = NULL;
-+	task_status = itnim_data->tmf_status >> 1;
-+	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
- 	if (task_status != BFI_TSKIM_STS_OK) {
- 		BFA_LOG(KERN_ERR, bfad, bfa_log_level,
- 			"LUN reset failure, status: %d\n", task_status);
-@@ -367,37 +364,49 @@ bfad_im_reset_lun_handler(struct scsi_cmnd *cmnd)
- static int
- bfad_im_reset_target_handler(struct scsi_cmnd *cmnd)
- {
--	struct Scsi_Host *shost = cmnd->device->host;
- 	struct scsi_target *starget = scsi_target(cmnd->device);
-+	struct fc_rport *rport = starget_to_rport(starget);
-+	struct Scsi_Host *shost = rport_to_shost(rport);
-+	struct bfad_itnim_data_s *itnim_data;
-+	struct bfad_itnim_s *itnim;
- 	struct bfad_im_port_s *im_port =
- 				(struct bfad_im_port_s *) shost->hostdata[0];
- 	struct bfad_s         *bfad = im_port->bfad;
--	struct bfad_itnim_s   *itnim;
- 	unsigned long   flags;
- 	u32        rc, rtn = FAILED;
- 	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(wq);
- 	enum bfi_tskim_status task_status;
- 
- 	spin_lock_irqsave(&bfad->bfad_lock, flags);
--	itnim = bfad_get_itnim(im_port, starget->id);
--	if (itnim) {
--		cmnd->SCp.ptr = (char *)&wq;
--		rc = bfad_im_target_reset_send(bfad, cmnd, itnim);
--		if (rc == BFA_STATUS_OK) {
--			/* wait target reset to complete */
--			spin_unlock_irqrestore(&bfad->bfad_lock, flags);
--			wait_event(wq, test_bit(IO_DONE_BIT,
--					(unsigned long *)&cmnd->SCp.Status));
--			spin_lock_irqsave(&bfad->bfad_lock, flags);
-+	if (!rport->dd_data) {
-+		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
-+		return rtn;
-+	}
-+	itnim_data = rport->dd_data;
-+	if (itnim_data->tmf_wq) {
-+		BFA_LOG(KERN_ERR, bfad, bfa_log_level,
-+			"target reset failed, TMF already active");
-+		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
-+		return rtn;
-+	}
-+	itnim = itnim_data->itnim;
- 
--			task_status = cmnd->SCp.Status >> 1;
--			if (task_status != BFI_TSKIM_STS_OK)
--				BFA_LOG(KERN_ERR, bfad, bfa_log_level,
--					"target reset failure,"
--					" status: %d\n", task_status);
--			else
--				rtn = SUCCESS;
--		}
-+	itnim_data->tmf_wq = &wq;
-+	itnim_data->tmf_status = 0;
-+	rc = bfad_im_target_reset_send(bfad, itnim_data);
-+	if (rc == BFA_STATUS_OK) {
-+		/* wait target reset to complete */
-+		spin_unlock_irqrestore(&bfad->bfad_lock, flags);
-+		wait_event(wq, test_bit(IO_DONE_BIT, &itnim_data->tmf_status));
-+		spin_lock_irqsave(&bfad->bfad_lock, flags);
-+
-+		task_status = itnim_data->tmf_status >> 1;
-+		if (task_status != BFI_TSKIM_STS_OK)
-+			BFA_LOG(KERN_ERR, bfad, bfa_log_level,
-+				"target reset failure,"
-+				" status: %d\n", task_status);
-+		else
-+			rtn = SUCCESS;
- 	}
- 	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
- 
-diff --git a/drivers/scsi/bfa/bfad_im.h b/drivers/scsi/bfa/bfad_im.h
-index f16d4b219e44..93fffd4e13bd 100644
---- a/drivers/scsi/bfa/bfad_im.h
-+++ b/drivers/scsi/bfa/bfad_im.h
-@@ -45,6 +45,8 @@ u32 bfad_im_supported_speeds(struct bfa_s *bfa);
- 
- struct bfad_itnim_data_s {
- 	struct bfad_itnim_s *itnim;
-+	wait_queue_head_t *tmf_wq;
-+	unsigned long tmf_status;
- };
- 
- struct bfad_im_port_s {
+diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
+index c5d7810fd792..50d714c05440 100644
+--- a/include/scsi/scsi_transport_iscsi.h
++++ b/include/scsi/scsi_transport_iscsi.h
+@@ -453,7 +453,7 @@ extern struct iscsi_endpoint *iscsi_create_endpoint(int dd_size);
+ extern void iscsi_destroy_endpoint(struct iscsi_endpoint *ep);
+ extern struct iscsi_endpoint *iscsi_lookup_endpoint(u64 handle);
+ extern void iscsi_put_endpoint(struct iscsi_endpoint *ep);
+-extern int iscsi_block_scsi_eh(struct scsi_cmnd *cmd);
++extern int iscsi_block_scsi_eh(struct iscsi_cls_session *session);
+ extern struct iscsi_iface *iscsi_create_iface(struct Scsi_Host *shost,
+ 					      struct iscsi_transport *t,
+ 					      uint32_t iface_type,
 -- 
 2.29.2
 
