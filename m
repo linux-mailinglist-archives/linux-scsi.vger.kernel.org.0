@@ -2,29 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 987D93EE61C
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 07:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8563EE61F
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 07:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237600AbhHQFOf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 01:14:35 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:15180 "EHLO
+        id S238009AbhHQFOi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 01:14:38 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:58766 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S237701AbhHQFOZ (ORCPT
+        by vger.kernel.org with ESMTP id S237763AbhHQFO0 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 17 Aug 2021 01:14:25 -0400
+        Tue, 17 Aug 2021 01:14:26 -0400
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 17H2m1BO006952
+        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 17H2m1BP006952
         for <linux-scsi@vger.kernel.org>; Mon, 16 Aug 2021 22:13:53 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=GhuM204tRkoBJ9OWVnSdEree0Z70Q+fAW1CP2o4UJHY=;
- b=SiMIO7648iDOGUHpq6NqoGxBC+OMOBxCMZ0Wu4EzErAhJossK+xZsqKEqJ2GZ5ywDls8
- MgcQc6wT2PbgK1sIUOa2ON6ddPW9+PgGO58eAhQ8DwOrhX6ehbFaEmxc+wEBMFSc7bRh
- Ij+fPOUAsXTZGz+Jslv3bg0JOSxvjzvFVjULi0wIs3oShOiFqHsADBn4NRyhLT1Dj8n1
- G6tQb17RY7F/HGoarD9gKPdMln+mM0e1Li4M6LBQsh3oVmL6zSL/zO7kIPp0V53bUGrU
- vE7CfRPFt2MkQ1e4G5lv7hrG6+cBwTLjuQIuM1ezV2/liJVKEguErQGkxqcSJsQWtSF2 ww== 
+ content-type; s=pfpt0220; bh=T+z5LjyzOpct1kqOk8a0LU12K7aL/fXOBQo76Il/z9s=;
+ b=Z4erhVWUn6nE/HUz30RNFG8fAQQKFLoekZGoeyAyJtAcmSc3DjeRfX+uTXwHL1EVJjer
+ K4r3brm6DCqs26arikVQTHqtpuqQNMWsH/kIs0ud2g/SVE15OViyL2H5PFFThpgxotUN
+ udk8Pv3tiQhr5iFsrEc7+qjdM0e7GaEogvp7NPzl3GvVxZHGnp7oI58VGcFS0mycBQIc
+ 6emuTj2rCil9HZ/c18AXhFHZOGRAwzZDttjV4HA/KkBpAuRhISHfW8UsOaQmGdpxG0ri
+ RYNpsl+uv17jOWFV85KSMwWuFw1NnNkU0fG88uZiyulxUqmN2/A/ySvQQyLztoj/SGej GA== 
 Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com with ESMTP id 3ag4n0rdcu-5
+        by mx0a-0016f401.pphosted.com with ESMTP id 3ag4n0rdcu-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
         for <linux-scsi@vger.kernel.org>; Mon, 16 Aug 2021 22:13:53 -0700
 Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
@@ -34,28 +34,28 @@ Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
  (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
  Transport; Mon, 16 Aug 2021 22:13:51 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 8D84A3F70AF;
+        by maili.marvell.com (Postfix) with ESMTP id AC0EB3F70B1;
         Mon, 16 Aug 2021 22:13:51 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 17H5DpI5002544;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 17H5DpOF002548;
         Mon, 16 Aug 2021 22:13:51 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 17H5DplC002543;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 17H5DpWr002547;
         Mon, 16 Aug 2021 22:13:51 -0700
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH 08/12] qla2xxx: Fix hang on NVME command timeouts
-Date:   Mon, 16 Aug 2021 22:13:11 -0700
-Message-ID: <20210817051315.2477-9-njavali@marvell.com>
+Subject: [PATCH 09/12] qla2xxx: fix NVME retry
+Date:   Mon, 16 Aug 2021 22:13:12 -0700
+Message-ID: <20210817051315.2477-10-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20210817051315.2477-1-njavali@marvell.com>
 References: <20210817051315.2477-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: F7b3zW99Wi9mIYupLYvwD-Dmk-3uwL81
-X-Proofpoint-ORIG-GUID: F7b3zW99Wi9mIYupLYvwD-Dmk-3uwL81
+X-Proofpoint-GUID: wWzwTXFl0Gf6Ffu6UQwiZvB4YNJrjMFh
+X-Proofpoint-ORIG-GUID: wWzwTXFl0Gf6Ffu6UQwiZvB4YNJrjMFh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-08-17_01,2021-08-16_02,2020-04-07_01
@@ -63,169 +63,178 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Arun Easi <aeasi@marvell.com>
+From: Quinn Tran <qutran@marvell.com>
 
-The abort callback gets called only when it gets posted to firmware. The
-refcounting is done properly in the callback. On internal errors,
-the callback is not invoked leading to a hung IO. Fix this by having
-separate error code when command gets returned from firmware.
+For target port that register itself as both FCP + NVME,
+initiator driver will try to login one mode at a time. If the last
+mode did not succeed, then driver will try the other mode.
 
-Signed-off-by: Arun Easi <aeasi@marvell.com>
+When error is encountered, current code only flip to other mode
+one time (NVME->FCP) and remain on the last mode.  Driver wrongly
+assumed target port does not support PRLI NVME, instead it was
+not ready to receive PRLI.
+
+This patch will alternate back and forth on every PRLI failure
+until login retry count has depleted or it is succeeded.
+
+Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_def.h  |  3 +++
- drivers/scsi/qla2xxx/qla_init.c |  6 +++---
- drivers/scsi/qla2xxx/qla_mbx.c  |  4 ++--
- drivers/scsi/qla2xxx/qla_nvme.c | 26 +++++++++++++++++---------
- 4 files changed, 25 insertions(+), 14 deletions(-)
+ drivers/scsi/qla2xxx/qla_def.h  |  9 ++++++--
+ drivers/scsi/qla2xxx/qla_gs.c   |  8 +++++++
+ drivers/scsi/qla2xxx/qla_init.c | 41 ++++++++++++++-------------------
+ drivers/scsi/qla2xxx/qla_mbx.c  |  3 +++
+ drivers/scsi/qla2xxx/qla_os.c   |  5 ++++
+ 5 files changed, 40 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index ddc6932f05fa..cb5bf2585cb7 100644
+index cb5bf2585cb7..be2eb75ee1a3 100644
 --- a/drivers/scsi/qla2xxx/qla_def.h
 +++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -5166,6 +5166,9 @@ struct secure_flash_update_block_pk {
- #define QLA_BUSY			0x107
- #define QLA_ALREADY_REGISTERED		0x109
- #define QLA_OS_TIMER_EXPIRED		0x10a
-+#define QLA_ERR_NO_QPAIR		0x10b
-+#define QLA_ERR_NOT_FOUND		0x10c
-+#define QLA_ERR_FROM_FW			0x10d
+@@ -2517,6 +2517,8 @@ typedef struct fc_port {
+ 	unsigned int n2n_flag:1;
+ 	unsigned int explicit_logout:1;
+ 	unsigned int prli_pend_timer:1;
++	unsigned int do_prli_nvme:1;
++
+ 	uint8_t nvme_flag;
  
- #define NVRAM_DELAY()		udelay(10)
+ 	uint8_t node_name[WWN_SIZE];
+@@ -5351,9 +5353,12 @@ struct sff_8247_a0 {
+ #define NVME_FCP_TARGET(fcport) \
+ 	(FCP_TYPE(fcport) && NVME_TYPE(fcport)) \
  
++#define NVME_PRIORITY(ha, fcport) \
++	(NVME_FCP_TARGET(fcport) && \
++	 (ha->fc4_type_priority == FC4_PRIORITY_NVME))
++
+ #define NVME_TARGET(ha, fcport) \
+-	((NVME_FCP_TARGET(fcport) && \
+-	(ha->fc4_type_priority == FC4_PRIORITY_NVME)) || \
++	(fcport->do_prli_nvme || \
+ 	NVME_ONLY_TARGET(fcport)) \
+ 
+ #define PRLI_PHASE(_cls) \
+diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
+index df6e3ef52e2c..ebc8fdb0b43d 100644
+--- a/drivers/scsi/qla2xxx/qla_gs.c
++++ b/drivers/scsi/qla2xxx/qla_gs.c
+@@ -3504,6 +3504,14 @@ void qla24xx_async_gnnft_done(scsi_qla_host_t *vha, srb_t *sp)
+ 			fcport->last_rscn_gen = fcport->rscn_gen;
+ 			fcport->fc4_type = rp->fc4type;
+ 			found = true;
++
++			if (fcport->scan_needed) {
++				if (NVME_PRIORITY(vha->hw, fcport))
++					fcport->do_prli_nvme = 1;
++				else
++					fcport->do_prli_nvme = 0;
++			}
++
+ 			/*
+ 			 * If device was not a fabric device before.
+ 			 */
 diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index a70c68bb1d2d..255f3a8884db 100644
+index 255f3a8884db..1e4e3e83b5c7 100644
 --- a/drivers/scsi/qla2xxx/qla_init.c
 +++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -157,7 +157,7 @@ int qla24xx_async_abort_cmd(srb_t *cmd_sp, bool wait)
- 	sp = qla2xxx_get_qpair_sp(cmd_sp->vha, cmd_sp->qpair, cmd_sp->fcport,
- 				  GFP_ATOMIC);
- 	if (!sp)
--		return rval;
-+		return QLA_MEMORY_ALLOC_FAILED;
+@@ -2000,6 +2000,7 @@ qla24xx_async_abort_command(srb_t *sp)
+ static void
+ qla24xx_handle_prli_done_event(struct scsi_qla_host *vha, struct event_arg *ea)
+ {
++	struct srb *sp;
+ 	WARN_ONCE(!qla2xxx_is_valid_mbs(ea->data[0]), "mbs: %#x\n",
+ 		  ea->data[0]);
  
- 	abt_iocb = &sp->u.iocb_cmd;
- 	sp->type = SRB_ABT_CMD;
-@@ -190,7 +190,7 @@ int qla24xx_async_abort_cmd(srb_t *cmd_sp, bool wait)
- 	if (wait) {
- 		wait_for_completion(&abt_iocb->u.abt.comp);
- 		rval = abt_iocb->u.abt.comp_status == CS_COMPLETE ?
--			QLA_SUCCESS : QLA_FUNCTION_FAILED;
-+			QLA_SUCCESS : QLA_ERR_FROM_FW;
- 		sp->free(sp);
- 	}
+@@ -2027,22 +2028,27 @@ qla24xx_handle_prli_done_event(struct scsi_qla_host *vha, struct event_arg *ea)
+ 			break;
+ 		}
  
-@@ -1988,7 +1988,7 @@ qla24xx_async_abort_command(srb_t *sp)
++		sp = ea->sp;
+ 		ql_dbg(ql_dbg_disc, vha, 0x2118,
+-		       "%s %d %8phC priority %s, fc4type %x\n",
++		       "%s %d %8phC priority %s, fc4type %x prev try %s\n",
+ 		       __func__, __LINE__, ea->fcport->port_name,
+ 		       vha->hw->fc4_type_priority == FC4_PRIORITY_FCP ?
+-		       "FCP" : "NVMe", ea->fcport->fc4_type);
++		       "FCP" : "NVMe", ea->fcport->fc4_type,
++		       (sp->u.iocb_cmd.u.logio.flags & SRB_LOGIN_NVME_PRLI) ?
++			"NVME" : "FCP");
  
- 	if (handle == req->num_outstanding_cmds) {
- 		/* Command not found. */
--		return QLA_FUNCTION_FAILED;
-+		return QLA_ERR_NOT_FOUND;
- 	}
- 	if (sp->type == SRB_FXIOCB_DCMD)
- 		return qlafx00_fx_disc(vha, &vha->hw->mr.fcport,
+-		if (N2N_TOPO(vha->hw)) {
+-			if (vha->hw->fc4_type_priority == FC4_PRIORITY_FCP) {
+-				ea->fcport->fc4_type &= ~FS_FC4TYPE_FCP;
+-				ea->fcport->fc4_type |= FS_FC4TYPE_NVME;
+-			} else {
+-				ea->fcport->fc4_type &= ~FS_FC4TYPE_NVME;
+-				ea->fcport->fc4_type |= FS_FC4TYPE_FCP;
+-			}
++		if (NVME_FCP_TARGET(ea->fcport)) {
++			if (sp->u.iocb_cmd.u.logio.flags & SRB_LOGIN_NVME_PRLI)
++				ea->fcport->do_prli_nvme = 0;
++			else
++				ea->fcport->do_prli_nvme = 1;
++		} else {
++			ea->fcport->do_prli_nvme = 0;
++		}
+ 
+-			if (ea->fcport->n2n_link_reset_cnt < 3) {
++		if (N2N_TOPO(vha->hw)) {
++			if (ea->fcport->n2n_link_reset_cnt <
++			    vha->hw->login_retry_count) {
+ 				ea->fcport->n2n_link_reset_cnt++;
+ 				vha->relogin_jif = jiffies + 2 * HZ;
+ 				/*
+@@ -2062,19 +2068,6 @@ qla24xx_handle_prli_done_event(struct scsi_qla_host *vha, struct event_arg *ea)
+ 			 * switch connect. login failed. Take connection down
+ 			 * and allow relogin to retrigger
+ 			 */
+-			if (NVME_FCP_TARGET(ea->fcport)) {
+-				ql_dbg(ql_dbg_disc, vha, 0x2118,
+-				       "%s %d %8phC post %s prli\n",
+-				       __func__, __LINE__,
+-				       ea->fcport->port_name,
+-				       (ea->fcport->fc4_type & FS_FC4TYPE_NVME)
+-				       ? "NVMe" : "FCP");
+-				if (vha->hw->fc4_type_priority == FC4_PRIORITY_NVME)
+-					ea->fcport->fc4_type &= ~FS_FC4TYPE_NVME;
+-				else
+-					ea->fcport->fc4_type &= ~FS_FC4TYPE_FCP;
+-			}
+-
+ 			ea->fcport->flags &= ~FCF_ASYNC_SENT;
+ 			ea->fcport->keep_nport_handle = 0;
+ 			ea->fcport->logout_on_delete = 1;
 diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 2964f5280bed..fcc219172aa9 100644
+index fcc219172aa9..438af0d55135 100644
 --- a/drivers/scsi/qla2xxx/qla_mbx.c
 +++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -3245,7 +3245,7 @@ qla24xx_abort_command(srb_t *sp)
- 	if (sp->qpair)
- 		req = sp->qpair->req;
- 	else
--		return QLA_FUNCTION_FAILED;
-+		return QLA_ERR_NO_QPAIR;
+@@ -4050,6 +4050,9 @@ qla24xx_report_id_acquisition(scsi_qla_host_t *vha,
+ 				fcport->n2n_flag = 1;
+ 				fcport->keep_nport_handle = 1;
+ 				fcport->login_retry = vha->hw->login_retry_count;
++				fcport->fc4_type = FS_FC4TYPE_FCP;
++				if (vha->flags.nvme_enabled)
++					fcport->fc4_type |= FS_FC4TYPE_NVME;
  
- 	if (ql2xasynctmfenable)
- 		return qla24xx_async_abort_command(sp);
-@@ -3258,7 +3258,7 @@ qla24xx_abort_command(srb_t *sp)
- 	spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
- 	if (handle == req->num_outstanding_cmds) {
- 		/* Command not found. */
--		return QLA_FUNCTION_FAILED;
-+		return QLA_ERR_NOT_FOUND;
- 	}
+ 				if (wwn_to_u64(vha->port_name) >
+ 				    wwn_to_u64(fcport->port_name)) {
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index bc8abe226fa6..064dbbeda0ee 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -5184,6 +5184,11 @@ void qla24xx_create_new_sess(struct scsi_qla_host *vha, struct qla_work_evt *e)
+ 			    WWN_SIZE);
  
- 	abt = dma_pool_zalloc(ha->s_dma_pool, GFP_KERNEL, &abt_dma);
-diff --git a/drivers/scsi/qla2xxx/qla_nvme.c b/drivers/scsi/qla2xxx/qla_nvme.c
-index d294b590581e..1c5da2dbd6f9 100644
---- a/drivers/scsi/qla2xxx/qla_nvme.c
-+++ b/drivers/scsi/qla2xxx/qla_nvme.c
-@@ -227,11 +227,11 @@ static void qla_nvme_abort_work(struct work_struct *work)
- 	srb_t *sp = priv->sp;
- 	fc_port_t *fcport = sp->fcport;
- 	struct qla_hw_data *ha = fcport->vha->hw;
--	int rval;
-+	int rval, abts_done_called = 1;
- 
- 	ql_dbg(ql_dbg_io, fcport->vha, 0xffff,
--	       "%s called for sp=%p, hndl=%x on fcport=%p deleted=%d\n",
--	       __func__, sp, sp->handle, fcport, fcport->deleted);
-+	       "%s called for sp=%p, hndl=%x on fcport=%p desc=%p deleted=%d\n",
-+	       __func__, sp, sp->handle, fcport, sp->u.iocb_cmd.u.nvme.desc, fcport->deleted);
- 
- 	if (!ha->flags.fw_started || fcport->deleted == QLA_SESS_DELETED)
- 		goto out;
-@@ -251,12 +251,20 @@ static void qla_nvme_abort_work(struct work_struct *work)
- 	    __func__, (rval != QLA_SUCCESS) ? "Failed to abort" : "Aborted",
- 	    sp, sp->handle, fcport, rval);
- 
-+	/*
-+	 * If async tmf is enabled, the abort callback is called only on
-+	 * return codes QLA_SUCCESS and QLA_ERR_FROM_FW.
-+	 */
-+	if (ql2xasynctmfenable &&
-+	    rval != QLA_SUCCESS && rval != QLA_ERR_FROM_FW)
-+		abts_done_called = 0;
+ 			fcport->fc4_type = e->u.new_sess.fc4_type;
++			if (NVME_PRIORITY(vha->hw, fcport))
++				fcport->do_prli_nvme = 1;
++			else
++				fcport->do_prli_nvme = 0;
 +
- 	/*
- 	 * Returned before decreasing kref so that I/O requests
- 	 * are waited until ABTS complete. This kref is decreased
- 	 * at qla24xx_abort_sp_done function.
- 	 */
--	if (ql2xabts_wait_nvme && QLA_ABTS_WAIT_ENABLED(sp))
-+	if (abts_done_called && ql2xabts_wait_nvme && QLA_ABTS_WAIT_ENABLED(sp))
- 		return;
- out:
- 	/* kref_get was done before work was schedule. */
-@@ -804,14 +812,14 @@ void qla_nvme_abort_process_comp_status(struct abort_entry_24xx *abt, srb_t *ori
- 	case CS_PORT_LOGGED_OUT:
- 	/* BA_RJT was received for the ABTS */
- 	case CS_PORT_CONFIG_CHG:
--		ql_dbg(ql_dbg_async + ql_dbg_mbx, vha, 0xf09d,
-+		ql_dbg(ql_dbg_async, vha, 0xf09d,
- 		       "Abort I/O IOCB completed with error, comp_status=%x\n",
- 		comp_status);
- 		break;
- 
- 	/* BA_RJT was received for the ABTS */
- 	case CS_REJECT_RECEIVED:
--		ql_dbg(ql_dbg_async + ql_dbg_mbx, vha, 0xf09e,
-+		ql_dbg(ql_dbg_async, vha, 0xf09e,
- 		       "BA_RJT was received for the ABTS rjt_vendorUnique = %u",
- 			abt->fw.ba_rjt_vendorUnique);
- 		ql_dbg(ql_dbg_async + ql_dbg_mbx, vha, 0xf09e,
-@@ -820,18 +828,18 @@ void qla_nvme_abort_process_comp_status(struct abort_entry_24xx *abt, srb_t *ori
- 		break;
- 
- 	case CS_COMPLETE:
--		ql_dbg(ql_dbg_async + ql_dbg_mbx, vha, 0xf09f,
-+		ql_dbg(ql_dbg_async + ql_dbg_verbose, vha, 0xf09f,
- 		       "IOCB request is completed successfully comp_status=%x\n",
- 		comp_status);
- 		break;
- 
- 	case CS_IOCB_ERROR:
--		ql_dbg(ql_dbg_async + ql_dbg_mbx, vha, 0xf0a0,
-+		ql_dbg(ql_dbg_async, vha, 0xf0a0,
- 		       "IOCB request is failed, comp_status=%x\n", comp_status);
- 		break;
- 
- 	default:
--		ql_dbg(ql_dbg_async + ql_dbg_mbx, vha, 0xf0a1,
-+		ql_dbg(ql_dbg_async, vha, 0xf0a1,
- 		       "Invalid Abort IO IOCB Completion Status %x\n",
- 		comp_status);
- 		break;
+ 			if (e->u.new_sess.fc4_type & FS_FCP_IS_N2N) {
+ 				fcport->dm_login_expire = jiffies +
+ 					QLA_N2N_WAIT_TIME * HZ;
 -- 
 2.23.1
 
