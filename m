@@ -2,50 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 944EC3EE957
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3049F3EE94D
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239573AbhHQJRb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 05:17:31 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:47558 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234347AbhHQJRQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:16 -0400
+        id S239523AbhHQJRW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 05:17:22 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:33236 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235988AbhHQJRP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:15 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 01C9E2001A;
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0ADF521D1A;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1629191802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2AbeA5ShB3lXtR9kF5FC6uyxPwkXQ0MdHy4poxrqhk0=;
-        b=ccx9zG8nS1oK2H96MUksKbv6GUzL6e+eQdSE3A88uo/M6/yiUBF7vVsJbFRvTeFCMt736y
-        wQ3PHt69qaDBjqTtqGgnG9YC4OFzJGJKZSzEVaVUSDVn9fofbArVVOJ2edeRp+bDPnqYO7
-        HsvTmt7ziRnxhkiXSarJAsDSVLpanM0=
+        bh=0twZ8+gpwMBts+TajsUwzMhyCe/gO42X6KQ2yfFXzV0=;
+        b=dpoMU9DCBagQfgcwnrHRYaqL6VWkA/19ggw/+qNg4DN0V0/Uau51fKGegShSXfSlCaDKk5
+        OIfyDmzM8i51NK4JDMsAigKI5PkRY3EtvpVNGE72FJTL3B1eiVjgJcHUgBC8ywqF1lvVjo
+        dRfUgDJJSNU/dArQujYoRNVXrktr3r8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1629191802;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2AbeA5ShB3lXtR9kF5FC6uyxPwkXQ0MdHy4poxrqhk0=;
-        b=KbUK1V0105gEad1UlvP2M8aKyUKySrx87eMAOdm5RaonriJjsdoauDhXde4bCrFpiY8zpT
-        7YcbUeo2K9BkkoAw==
+        bh=0twZ8+gpwMBts+TajsUwzMhyCe/gO42X6KQ2yfFXzV0=;
+        b=84Vn1BCKxdhdfL+MAAfcINPOt1nZ/2BX0dMUVOtYrfYUJaXpn5iNYhrwQlCT2PIuhp5/pb
+        ewVWCXQEPcBs0BAw==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id EE814A3BA0;
-        Tue, 17 Aug 2021 09:16:41 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTP id 029EDA3BA2;
+        Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id EB7C7518CE7B; Tue, 17 Aug 2021 11:16:41 +0200 (CEST)
+        id F2864518CE7D; Tue, 17 Aug 2021 11:16:41 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 14/51] pmcraid: Select device in pmcraid_eh_bus_reset_handler()
-Date:   Tue, 17 Aug 2021 11:14:19 +0200
-Message-Id: <20210817091456.73342-15-hare@suse.de>
+        Hannes Reinecke <hare@suse.com>,
+        Nilesh Javali <njavali@marvell.com>
+Subject: [PATCH 15/51] qla2xxx: open-code qla2xxx_generic_reset()
+Date:   Tue, 17 Aug 2021 11:14:20 +0200
+Message-Id: <20210817091456.73342-16-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210817091456.73342-1-hare@suse.de>
 References: <20210817091456.73342-1-hare@suse.de>
@@ -55,102 +56,175 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The reset code requires a device to be selected, but we shouldn't
-rely on the command to provide a device for us. So select the first
-device on the bus when sending down a bus reset.
+Device and target reset will be using different calling sequences,
+so there's not point in trying to combine both.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
+Cc: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/pmcraid.c | 46 ++++++++++++++++++++++++++++++++++--------
- 1 file changed, 38 insertions(+), 8 deletions(-)
+ drivers/scsi/qla2xxx/qla_os.c | 91 +++++++++++++++++++++++++----------
+ 1 file changed, 65 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-index f9cd69889fe7..f29107536887 100644
---- a/drivers/scsi/pmcraid.c
-+++ b/drivers/scsi/pmcraid.c
-@@ -2691,7 +2691,7 @@ static int pmcraid_error_handler(struct pmcraid_cmd *cmd)
-  *	SUCCESS / FAILED
-  */
- static int pmcraid_reset_device(
--	struct scsi_cmnd *scsi_cmd,
-+	struct scsi_device *scsi_dev,
- 	unsigned long timeout,
- 	u8 modifier)
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 97568af82750..64820a3d34dd 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -1388,13 +1388,20 @@ static char *reset_errors[] = {
+ };
+ 
+ static int
+-__qla2xxx_eh_generic_reset(char *name, enum nexus_wait_type type,
+-    struct scsi_cmnd *cmd, int (*do_reset)(struct fc_port *, uint64_t, int))
++qla2xxx_eh_device_reset(struct scsi_cmnd *cmd)
  {
-@@ -2703,11 +2703,11 @@ static int pmcraid_reset_device(
- 	u32 ioasc;
+ 	scsi_qla_host_t *vha = shost_priv(cmd->device->host);
++	struct qla_hw_data *ha = vha->hw;
+ 	fc_port_t *fcport = (struct fc_port *) cmd->device->hostdata;
+ 	int err;
  
- 	pinstance =
--		(struct pmcraid_instance *)scsi_cmd->device->host->hostdata;
--	res = scsi_cmd->device->hostdata;
-+		(struct pmcraid_instance *)scsi_dev->host->hostdata;
-+	res = scsi_dev->hostdata;
- 
- 	if (!res) {
--		sdev_printk(KERN_ERR, scsi_cmd->device,
-+		sdev_printk(KERN_ERR, scsi_dev,
- 			    "reset_device: NULL resource pointer\n");
++	if (qla2x00_isp_reg_stat(ha)) {
++		ql_log(ql_log_info, vha, 0x803e,
++		    "PCI/Register disconnect, exiting.\n");
++		qla_pci_set_eeh_busy(vha);
++		return FAILED;
++	}
++
+ 	if (!fcport) {
  		return FAILED;
  	}
-@@ -3018,16 +3018,46 @@ static int pmcraid_eh_device_reset_handler(struct scsi_cmnd *scmd)
- {
- 	scmd_printk(KERN_INFO, scmd,
- 		    "resetting device due to an I/O command timeout.\n");
--	return pmcraid_reset_device(scmd,
-+	return pmcraid_reset_device(scmd->device,
- 				    PMCRAID_INTERNAL_TIMEOUT,
- 				    RESET_DEVICE_LUN);
+@@ -1407,8 +1414,8 @@ __qla2xxx_eh_generic_reset(char *name, enum nexus_wait_type type,
+ 		return SUCCESS;
+ 
+ 	ql_log(ql_log_info, vha, 0x8009,
+-	    "%s RESET ISSUED nexus=%ld:%d:%llu cmd=%p.\n", name, vha->host_no,
+-	    cmd->device->id, cmd->device->lun, cmd);
++	    "DEVICE RESET ISSUED nexus=%ld:%d:%llu cmd=%p.\n",
++	    vha->host_no, cmd->device->id, cmd->device->lun, cmd);
+ 
+ 	err = 0;
+ 	if (qla2x00_wait_for_hba_online(vha) != QLA_SUCCESS) {
+@@ -1417,29 +1424,29 @@ __qla2xxx_eh_generic_reset(char *name, enum nexus_wait_type type,
+ 		goto eh_reset_failed;
+ 	}
+ 	err = 2;
+-	if (do_reset(fcport, cmd->device->lun, 1)
++	if (ha->isp_ops->lun_reset(fcport, cmd->device->lun, 1)
+ 		!= QLA_SUCCESS) {
+ 		ql_log(ql_log_warn, vha, 0x800c,
+-		    "do_reset failed for cmd=%p.\n", cmd);
++		    "lun_reset failed for cmd=%p.\n", cmd);
+ 		goto eh_reset_failed;
+ 	}
+ 	err = 3;
+ 	if (qla2x00_eh_wait_for_pending_commands(vha, cmd->device->id,
+-	    cmd->device->lun, type) != QLA_SUCCESS) {
++	    cmd->device->lun, WAIT_LUN) != QLA_SUCCESS) {
+ 		ql_log(ql_log_warn, vha, 0x800d,
+ 		    "wait for pending cmds failed for cmd=%p.\n", cmd);
+ 		goto eh_reset_failed;
+ 	}
+ 
+ 	ql_log(ql_log_info, vha, 0x800e,
+-	    "%s RESET SUCCEEDED nexus:%ld:%d:%llu cmd=%p.\n", name,
++	    "DEVICE RESET SUCCEEDED nexus:%ld:%d:%llu cmd=%p.\n",
+ 	    vha->host_no, cmd->device->id, cmd->device->lun, cmd);
+ 
+ 	return SUCCESS;
+ 
+ eh_reset_failed:
+ 	ql_log(ql_log_info, vha, 0x800f,
+-	    "%s RESET FAILED: %s nexus=%ld:%d:%llu cmd=%p.\n", name,
++	    "DEVICE RESET FAILED: %s nexus=%ld:%d:%llu cmd=%p.\n",
+ 	    reset_errors[err], vha->host_no, cmd->device->id, cmd->device->lun,
+ 	    cmd);
+ 	vha->reset_cmd_err_cnt++;
+@@ -1447,37 +1454,69 @@ __qla2xxx_eh_generic_reset(char *name, enum nexus_wait_type type,
  }
  
- static int pmcraid_eh_bus_reset_handler(struct scsi_cmnd *scmd)
+ static int
+-qla2xxx_eh_device_reset(struct scsi_cmnd *cmd)
++qla2xxx_eh_target_reset(struct scsi_cmnd *cmd)
  {
--	scmd_printk(KERN_INFO, scmd,
-+	struct Scsi_Host *host = scmd->device->host;
-+	struct pmcraid_instance *pinstance =
-+		(struct pmcraid_instance *)host->hostdata;
-+	struct pmcraid_resource_entry *res = NULL;
-+	struct pmcraid_resource_entry *temp;
-+	struct scsi_device *sdev = NULL;
-+	unsigned long lock_flags;
-+
-+	/*
-+	 * The reset device code insists on us passing down
-+	 * a device, so grab the first device on the bus.
-+	 */
-+	spin_lock_irqsave(&pinstance->resource_lock, lock_flags);
-+	list_for_each_entry(temp, &pinstance->used_res_q, queue) {
-+		if (scmd->device->channel == PMCRAID_VSET_BUS_ID &&
-+		    RES_IS_VSET(temp->cfg_entry)) {
-+			res = temp;
-+			break;
-+		} else if (scmd->device->channel == PMCRAID_PHYS_BUS_ID &&
-+			   RES_IS_GSCSI(temp->cfg_entry)) {
-+			res = temp;
-+			break;
-+		}
-+	}
-+	if (res)
-+		sdev = res->scsi_dev;
-+	spin_unlock_irqrestore(&pinstance->resource_lock, lock_flags);
-+	if (!sdev)
+ 	scsi_qla_host_t *vha = shost_priv(cmd->device->host);
++	fc_port_t *fcport = (struct fc_port *) cmd->device->hostdata;
+ 	struct qla_hw_data *ha = vha->hw;
++	int err;
+ 
+ 	if (qla2x00_isp_reg_stat(ha)) {
+-		ql_log(ql_log_info, vha, 0x803e,
++		ql_log(ql_log_info, vha, 0x803f,
+ 		    "PCI/Register disconnect, exiting.\n");
+ 		qla_pci_set_eeh_busy(vha);
+ 		return FAILED;
+ 	}
+ 
+-	return __qla2xxx_eh_generic_reset("DEVICE", WAIT_LUN, cmd,
+-	    ha->isp_ops->lun_reset);
+-}
++	if (!fcport) {
 +		return FAILED;
++	}
+ 
+-static int
+-qla2xxx_eh_target_reset(struct scsi_cmnd *cmd)
+-{
+-	scsi_qla_host_t *vha = shost_priv(cmd->device->host);
+-	struct qla_hw_data *ha = vha->hw;
++	err = fc_block_scsi_eh(cmd);
++	if (err != 0)
++		return err;
+ 
+-	if (qla2x00_isp_reg_stat(ha)) {
+-		ql_log(ql_log_info, vha, 0x803f,
+-		    "PCI/Register disconnect, exiting.\n");
+-		qla_pci_set_eeh_busy(vha);
+-		return FAILED;
++	if (fcport->deleted)
++		return SUCCESS;
 +
-+	sdev_printk(KERN_INFO, sdev,
- 		    "Doing bus reset due to an I/O command timeout.\n");
--	return pmcraid_reset_device(scmd,
-+	return pmcraid_reset_device(sdev,
- 				    PMCRAID_RESET_BUS_TIMEOUT,
- 				    RESET_DEVICE_BUS);
++	ql_log(ql_log_info, vha, 0x8009,
++	    "TARGET RESET ISSUED nexus=%ld:%d:%llu cmd=%p.\n", vha->host_no,
++	    cmd->device->id, cmd->device->lun, cmd);
++
++	err = 0;
++	if (qla2x00_wait_for_hba_online(vha) != QLA_SUCCESS) {
++		ql_log(ql_log_warn, vha, 0x800a,
++		    "Wait for hba online failed for cmd=%p.\n", cmd);
++		goto eh_reset_failed;
++	}
++	err = 2;
++	if (ha->isp_ops->target_reset(fcport, cmd->device->lun, 1)
++		!= QLA_SUCCESS) {
++		ql_log(ql_log_warn, vha, 0x800c,
++		    "target_reset failed for cmd=%p.\n", cmd);
++		goto eh_reset_failed;
+ 	}
++	err = 3;
++	if (qla2x00_eh_wait_for_pending_commands(vha, cmd->device->id,
++	    cmd->device->lun, WAIT_TARGET) != QLA_SUCCESS) {
++		ql_log(ql_log_warn, vha, 0x800d,
++		    "wait for pending cmds failed for cmd=%p.\n", cmd);
++		goto eh_reset_failed;
++	}
++
++	ql_log(ql_log_info, vha, 0x800e,
++	    "TARGET RESET SUCCEEDED nexus:%ld:%d:%llu cmd=%p.\n",
++	    vha->host_no, cmd->device->id, cmd->device->lun, cmd);
+ 
+-	return __qla2xxx_eh_generic_reset("TARGET", WAIT_TARGET, cmd,
+-	    ha->isp_ops->target_reset);
++	return SUCCESS;
++
++eh_reset_failed:
++	ql_log(ql_log_info, vha, 0x800f,
++	    "TARGET RESET FAILED: %s nexus=%ld:%d:%llu cmd=%p.\n",
++	    reset_errors[err], vha->host_no, cmd->device->id, cmd->device->lun,
++	    cmd);
++	vha->reset_cmd_err_cnt++;
++	return FAILED;
  }
-@@ -3036,7 +3066,7 @@ static int pmcraid_eh_target_reset_handler(struct scsi_cmnd *scmd)
- {
- 	scmd_printk(KERN_INFO, scmd,
- 		    "Doing target reset due to an I/O command timeout.\n");
--	return pmcraid_reset_device(scmd,
-+	return pmcraid_reset_device(scmd->device,
- 				    PMCRAID_INTERNAL_TIMEOUT,
- 				    RESET_DEVICE_TARGET);
- }
+ 
+ /**************************************************************************
 -- 
 2.29.2
 
