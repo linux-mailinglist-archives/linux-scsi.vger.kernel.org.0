@@ -2,322 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC2A3EF173
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 20:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D29A3EF4E4
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 23:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbhHQSKN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 14:10:13 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:49970 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232880AbhHQSKM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 14:10:12 -0400
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6ACC221FAA;
-        Tue, 17 Aug 2021 18:09:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1629223776; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yf13cKoZwtr0fEGQ9si3b5x2310rWTYLji8+U4E5n2I=;
-        b=A+bi7Xl8QLa0mTtSmqmc+iVRcqvc0lpLVWfgKU6hayjN4plMUXRJpZPdMskf4gs5kIY3U+
-        K/foqHEprLYyfbRw0sN4QxcXRmSd+YOvs/vIzYEpk+K7TN8u4twBsnVDf9wNYSJVzJo810
-        UC/1Otd8f2bJ/VfBa7ydMrH2Begna7o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1629223776;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yf13cKoZwtr0fEGQ9si3b5x2310rWTYLji8+U4E5n2I=;
-        b=XMBFu5Zms7LiVigGDU4ll72eIjheAKSTA3W9NkP3XhvOXclzjJcleWRIyj2wDNBBzGb/7z
-        sUC1q/a67/nQMcAA==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 2CA94136BF;
-        Tue, 17 Aug 2021 18:09:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id rcgBCWD7G2E0fQAAGKfGzw
-        (envelope-from <hare@suse.de>); Tue, 17 Aug 2021 18:09:36 +0000
-Subject: Re: [PATCH 49/51] scsi: Move eh_device_reset_handler() to use
- scsi_device as argument
-To:     Steffen Maier <maier@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-References: <20210817091456.73342-1-hare@suse.de>
- <20210817091456.73342-50-hare@suse.de>
- <0a09a529-7e28-1b56-3ca3-7b172956f3a5@linux.ibm.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <fc1a49dd-28e8-54a0-b94a-67857296b60c@suse.de>
-Date:   Tue, 17 Aug 2021 20:09:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-MIME-Version: 1.0
-In-Reply-To: <0a09a529-7e28-1b56-3ca3-7b172956f3a5@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S235035AbhHQVYx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 17:24:53 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13322 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235082AbhHQVYr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 17 Aug 2021 17:24:47 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17HL3TM6103570
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Aug 2021 17:24:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id; s=pp1;
+ bh=yA0c2xcDdgJqczjpJbyEpXf7+X8Pw2KSkfLTexqbUA8=;
+ b=Zrd46VTEGeTqAp1d4XsegXBqYEFNmfK2IKgW4s7zAJoxgzBvzyGGv3PLhtqZb6vakRiU
+ OHqW7yWtoAXxYwpFMTzDCmRYHZEMMMUo1inIEdNJ8a6RinETCWNA5ZSeoiM6L+jPT2s+
+ i/SabSgKHBFEq51jdgahNvvlsMJWbNut33CBYrrSxetOAJP60nYYLU0xOzrLzipSGxzb
+ VnRRYx70Ox7eUstHmRvAbg0xXSuXA4f+SMES9TlploL6x3nduwKu051iGikvlFklZATc
+ OQH2fTTRVGExysd30pyiuj/FYFhiV20Tflh+sDy/cDc8iMYwPweDn56DaiHHVM09jQnm Ag== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3agcww8fnh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Aug 2021 17:24:13 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17HL98eT017554
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Aug 2021 21:24:13 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma04wdc.us.ibm.com with ESMTP id 3ae5fcp4uv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Aug 2021 21:24:13 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17HLOBtx42729792
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Aug 2021 21:24:11 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 523926A063;
+        Tue, 17 Aug 2021 21:24:11 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 08B8B6A057;
+        Tue, 17 Aug 2021 21:24:10 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.40.195.89])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 17 Aug 2021 21:24:10 +0000 (GMT)
+From:   wenxiong@linux.vnet.ibm.com
+To:     jejb@linux.ibm.com
+Cc:     linux-scsi@vger.kernel.org, brking1@linux.vnet.ibm.com,
+        wenxiong@us.ibm.com, Wen Xiong <wenxiong@linux.vnet.ibm.com>
+Subject: [PATCH 1/1] scsi/ses: Saw "Failed to get diagnostic page 0x1" during
+Date:   Tue, 17 Aug 2021 14:57:35 -0500
+Message-Id: <1629230255-11616-1-git-send-email-wenxiong@linux.vnet.ibm.com>
+X-Mailer: git-send-email 1.6.0.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fsIcYIxGZdVxPJgfK3Plz_FkmXi4LWLh
+X-Proofpoint-ORIG-GUID: fsIcYIxGZdVxPJgfK3Plz_FkmXi4LWLh
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-17_08:2021-08-17,2021-08-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ phishscore=0 clxscore=1015 malwarescore=0 spamscore=0 impostorscore=0
+ bulkscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2107140000 definitions=main-2108170132
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/17/21 6:13 PM, Steffen Maier wrote:
-> On 8/17/21 11:14 AM, Hannes Reinecke wrote:
->> When resetting a device we shouldn't depend on an existing SCSI
->> command, as this might be completed at any time.
->> Rather we should use 'struct scsi_device' as argument for
->> eh_device_reset_handler().
->>
->> Signed-off-by: Hannes Reinecke <hare@suse.com>
-> 
-> Acked-by: Steffen Maier <maier@linux.ibm.com> # for zfcp
-> 
-> However, independent review comments for common code below...
-> 
->> ---
->>   Documentation/scsi/scsi_eh.rst                |  2 +-
->>   Documentation/scsi/scsi_mid_low_api.rst       |  4 +--
-> 
->>   drivers/s390/scsi/zfcp_scsi.c                 |  4 +--
-> 
->>   drivers/scsi/scsi_error.c                     | 35 +++++++++++++------
-> 
->>   include/scsi/scsi_host.h                      |  2 +-
->>   62 files changed, 314 insertions(+), 329 deletions(-)
->>
->> diff --git a/Documentation/scsi/scsi_eh.rst 
->> b/Documentation/scsi/scsi_eh.rst
->> index e09c81a54702..23f0d09668d9 100644
->> --- a/Documentation/scsi/scsi_eh.rst
->> +++ b/Documentation/scsi/scsi_eh.rst
->> @@ -214,7 +214,7 @@ considered to fail always.
->>   ::
->>
->>       int (* eh_abort_handler)(struct scsi_cmnd *);
->> -    int (* eh_device_reset_handler)(struct scsi_cmnd *);
->> +    int (* eh_device_reset_handler)(struct scsi_device *);
->>       int (* eh_target_reset_handler)(struct scsi_target *);
->>       int (* eh_bus_reset_handler)(struct Scsi_Host *, int);
->>       int (* eh_host_reset_handler)(struct Scsi_Host *);
->> diff --git a/Documentation/scsi/scsi_mid_low_api.rst 
->> b/Documentation/scsi/scsi_mid_low_api.rst
->> index 0afc1b4f89af..4650c0c6a22a 100644
->> --- a/Documentation/scsi/scsi_mid_low_api.rst
->> +++ b/Documentation/scsi/scsi_mid_low_api.rst
->> @@ -778,7 +778,7 @@ Details::
->>
->>       /**
->>       *      eh_device_reset_handler - issue SCSI device reset
->> -    *      @scp: identifies SCSI device to be reset
->> +    *      @sdev: identifies SCSI device to be reset
->>       *
->>       *      Returns SUCCESS if command aborted else FAILED
->>       *
->> @@ -791,7 +791,7 @@ Details::
->>       *
->>       *      Optionally defined in: LLD
->>       **/
->> -    int eh_device_reset_handler(struct scsi_cmnd * scp)
->> +    int eh_device_reset_handler(struct scsi_device * sdev)
->>
->>
->>       /**
-> 
-> 
->> diff --git a/drivers/s390/scsi/zfcp_scsi.c 
->> b/drivers/s390/scsi/zfcp_scsi.c
->> index 6492c3b1b12f..4fa626763bb6 100644
->> --- a/drivers/s390/scsi/zfcp_scsi.c
->> +++ b/drivers/s390/scsi/zfcp_scsi.c
->> @@ -333,10 +333,8 @@ static int zfcp_scsi_task_mgmt_function(struct 
->> scsi_device *sdev, u8 tm_flags)
->>       return retval;
->>   }
->>
->> -static int zfcp_scsi_eh_device_reset_handler(struct scsi_cmnd *scpnt)
->> +static int zfcp_scsi_eh_device_reset_handler(struct scsi_device *sdev)
->>   {
->> -    struct scsi_device *sdev = scpnt->device;
->> -
->>       return zfcp_scsi_task_mgmt_function(sdev, FCP_TMF_LUN_RESET);
->>   }
->>
-> 
-> 
->> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
->> index 1d8e2f655833..44e29558b068 100644
->> --- a/drivers/scsi/scsi_error.c
->> +++ b/drivers/scsi/scsi_error.c
->> @@ -910,7 +910,7 @@ static enum scsi_disposition 
->> scsi_try_bus_device_reset(struct scsi_cmnd *scmd)
-> 
->>     struct scsi_host_template *hostt = scmd->device->host->hostt;
-> 
->>       if (!hostt->eh_device_reset_handler)
->>           return FAILED;
->>
->> -    rtn = hostt->eh_device_reset_handler(scmd);
->> +    rtn = hostt->eh_device_reset_handler(scmd->device);
->>       if (rtn == SUCCESS)
->>           __scsi_report_device_reset(scmd->device, NULL);
->>       return rtn;
-> 
-> ok
-> (now that we use scmd->device 3 times in this function we could 
-> introduce a local variable sdev, similarly as starget in patch 36; but 
-> that would be more changed lines)
-> 
-> 
->> @@ -1195,6 +1195,7 @@ scsi_eh_action(struct scsi_cmnd *scmd, enum 
->> scsi_disposition rtn)
->>    * scsi_eh_finish_cmd - Handle a cmd that eh is finished with.
-> 
-> That old comment seems now in front of the new internal 
-> __scsi_eh_finish_cmd rathern than scsi_eh_finish_cmd ?
-> 
->>    * @scmd:    Original SCSI cmd that eh has finished.
->>    * @done_q:    Queue for processed commands.
->> + * @result:    Final command status to be set
-> 
-> You introduce a 3rd argument named "host_byte" (not "result") below?
-> 
->>    *
->>    * Notes:
->>    *    We don't want to use the normal command completion while we 
->> are are
-> 
->>  *    still handling errors - it may cause other commands to be queued,
->>  *    and that would disturb what we are doing.  Thus we really want to
-> 
->> @@ -1203,10 +1204,18 @@ scsi_eh_action(struct scsi_cmnd *scmd, enum 
->> scsi_disposition rtn)
->>    *    keep a list of pending commands for final completion, and once we
->>    *    are ready to leave error handling we handle completion for real.
->>    */
->> -void scsi_eh_finish_cmd(struct scsi_cmnd *scmd, struct list_head 
->> *done_q)
->> +void __scsi_eh_finish_cmd(struct scsi_cmnd *scmd, struct list_head 
->> *done_q,
-> 
-> Should that new internal helper be static?
-> 
->> +            int host_byte)
->>   {
->> +    if (host_byte)
->> +        set_host_byte(scmd, host_byte);
->>       list_move_tail(&scmd->eh_entry, done_q);
->>   }
->> +
-> 
-> I whish we still had a kdoc for the actual API function 
-> scsi_eh_finish_cmd().
-> 
->> +void scsi_eh_finish_cmd(struct scsi_cmnd *scmd, struct list_head 
->> *done_q)
->> +{
->> +    __scsi_eh_finish_cmd(scmd, done_q, 0);
->> +}
->>   EXPORT_SYMBOL(scsi_eh_finish_cmd);
->>
->>   /**
->> @@ -1381,7 +1390,8 @@ static int scsi_eh_test_devices(struct list_head 
->> *cmd_list,
->>                   if (finish_cmds &&
->>                       (try_stu ||
->>                        scsi_eh_action(scmd, SUCCESS) == SUCCESS))
->> -                    scsi_eh_finish_cmd(scmd, done_q);
->> +                    __scsi_eh_finish_cmd(scmd, done_q,
->> +                                 DID_RESET);
->>                   else
->>                       list_move_tail(&scmd->eh_entry, work_q);
->>               }
->> @@ -1529,8 +1539,9 @@ static int scsi_eh_bus_device_reset(struct 
->> Scsi_Host *shost,
->>                                work_q, eh_entry) {
->>                       if (scmd->device == sdev &&
->>                           scsi_eh_action(scmd, rtn) != FAILED)
->> -                        scsi_eh_finish_cmd(scmd,
->> -                                   done_q);
->> +                        __scsi_eh_finish_cmd(scmd,
->> +                                     done_q,
->> +                                     DID_RESET);
->>                   }
->>               }
->>           } else {
->> @@ -1598,7 +1609,8 @@ static int scsi_eh_target_reset(struct Scsi_Host 
->> *shost,
->>               if (rtn == SUCCESS)
->>                   list_move_tail(&scmd->eh_entry, &check_list);
->>               else if (rtn == FAST_IO_FAIL)
->> -                scsi_eh_finish_cmd(scmd, done_q);
->> +                __scsi_eh_finish_cmd(scmd, done_q,
->> +                             DID_TRANSPORT_DISRUPTED);
->>               else
->>                   /* push back on work queue for further processing */
->>                   list_move(&scmd->eh_entry, work_q);
->> @@ -1663,8 +1675,9 @@ static int scsi_eh_bus_reset(struct Scsi_Host 
->> *shost,
->>               list_for_each_entry_safe(scmd, next, work_q, eh_entry) {
->>                   if (channel == scmd_channel(scmd)) {
->>                       if (rtn == FAST_IO_FAIL)
->> -                        scsi_eh_finish_cmd(scmd,
->> -                                   done_q);
->> +                        __scsi_eh_finish_cmd(scmd,
->> +                                     done_q,
->> +                                     DID_TRANSPORT_DISRUPTED);
->>                       else
->>                           list_move_tail(&scmd->eh_entry,
->>                                      &check_list);
->> @@ -1707,9 +1720,9 @@ static int scsi_eh_host_reset(struct Scsi_Host 
->> *shost,
->>           if (rtn == SUCCESS) {
->>               list_splice_init(work_q, &check_list);
->>           } else if (rtn == FAST_IO_FAIL) {
->> -            list_for_each_entry_safe(scmd, next, work_q, eh_entry) {
->> -                    scsi_eh_finish_cmd(scmd, done_q);
->> -            }
->> +            list_for_each_entry_safe(scmd, next, work_q, eh_entry)
->> +                __scsi_eh_finish_cmd(scmd, done_q,
->> +                             DID_TRANSPORT_DISRUPTED);
->>           } else {
->>               SCSI_LOG_ERROR_RECOVERY(3,
->>                   shost_printk(KERN_INFO, shost,
-> 
-> I don't understand the RESET vs. DISRUPTED depending on escalation level.
-> Care to explain in the patch description (or even code comment)?
-> Is there any functional change compared to today and if so which?
-> 
-> 
-Well.
-That's arguably slightly odd, but anyway:
-_in principle_ an EH handler might return FAST_IO_FAIL, which would 
-indicate that the EH function could not complete due the transport being 
-busy (eg RSCN processing taking longer than expected). In that case it's 
-expected to be a transient condition, which might/should be resolved 
-with a simple retry.
-Hence we should indicate that by completing commands with 
-DID_TRANSPORT_DISRUPTED, to allow upper layers to retry.
+From: Wen Xiong <wenxiong@linux.vnet.ibm.com>
 
-Having said that it's slightly odd to have FAST_IO_FAIL being returned 
-from a host reset, as really the intention is that the driver will be in 
-a stable state after reset.
-But this doesn't seem to be true for zfcp, as we're calling 
-fc_block_rport() after the reset itself, which means that there's a 
-chance we'll be running into this situation.
+We saw two errors with Slider drawer:
+- Failed to get diagnostic page 0x1 during booting up
+- /sys/class/enclosure are empty with ipr adapter + Slider drawer
 
-Cheers,
+From scsi logging level with error=3, looks ses_recv_diag not try on a UA.
+Added scsi_test_unit_ready() which retried with UA. The patch fixes
+both of above errors.
 
-Hannes
+Signed-Off-by: Wen Xiong <wenxiong@linux.vnet.ibm.com>
+Reviewed-by: Brian King <brking@linux.vnet.ibm.com>
+---
+ drivers/scsi/ses.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
+index c2afba2a5414..5811639a0747 100644
+--- a/drivers/scsi/ses.c
++++ b/drivers/scsi/ses.c
+@@ -633,6 +633,8 @@ static int ses_intf_add(struct device *cdev,
+ 	int num_enclosures;
+ 	struct enclosure_device *edev;
+ 	struct ses_component *scomp = NULL;
++	struct scsi_sense_hdr sshdr;
++	int ret;
+ 
+ 	if (!scsi_device_enclosure(sdev)) {
+ 		/* not an enclosure, but might be in one */
+@@ -654,6 +656,10 @@ static int ses_intf_add(struct device *cdev,
+ 	if (!hdr_buf || !ses_dev)
+ 		goto err_init_free;
+ 
++	ret = scsi_test_unit_ready(sdev, SES_TIMEOUT, SES_RETRIES, &sshdr);
++	if (!scsi_status_is_good(ret))
++		goto err_init_free;
++
+ 	page = 1;
+ 	result = ses_recv_diag(sdev, page, hdr_buf, INIT_ALLOC_SIZE);
+ 	if (result)
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+2.27.0
+
