@@ -2,29 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 005423EE617
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 07:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3CA3EE619
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 07:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237769AbhHQFO0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 01:14:26 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:28234 "EHLO
+        id S237903AbhHQFO3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 01:14:29 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:12860 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234162AbhHQFOZ (ORCPT
+        by vger.kernel.org with ESMTP id S237592AbhHQFOZ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
         Tue, 17 Aug 2021 01:14:25 -0400
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 17H2lb7C006738
-        for <linux-scsi@vger.kernel.org>; Mon, 16 Aug 2021 22:13:52 -0700
+        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 17H2lb7D006738
+        for <linux-scsi@vger.kernel.org>; Mon, 16 Aug 2021 22:13:53 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=dNaKr1XEg2fGjLqpti7nQlZA5q0/lZ9Bz3Ezi1S9gpg=;
- b=ZYJHjjK/sRF8MPX+4g0neZqP2bYJzR4ik/BLrcKretAoBt4Jebp7NchNsqhXcxrbljCq
- 3FUiJL92azFrXZF+n+ucytTPW6lhs6oXAQ0gMrVLOsQ+x4QcvvTxsq6daRqMc3KhHtYg
- VpY+ZeHv8x91FDvH9RAOYf01hQywNSPMBCkEHAxsN17dsPC95YrvXqJ0RMOAAwkAJ/7S
- VGpfoOZ2cMjVEb4jbVdeiomDf8W4wPAOgJynEeNp0JczTnFBXKLXTslctTtMvmF3Zf38
- f9VQmjN/s2jDqQ5Sg7/6Snzvs2WdluadxubhQk+rItuqDsdBoWMZ6pq88W7C6dD7KkKT Vg== 
+ content-type; s=pfpt0220; bh=HDMjiF/yHznlpOMEdnOMG0i+Kz/vCnMzdyjfNhqMZqI=;
+ b=DRQ9jAcXaL+pVvz++Ksfm//dqW3bQ58kDNK/DRBwMurnGdA/CIGAqbJ8/mBmlXAudbG5
+ 9RVwU37KuVPb+b92SZMV1y5pZT7XK8IaSoL99SYwSgbZeKGGEu/vcS83zev4G/XvGj91
+ 1NEe0dUg46xMX9mHUQ9nMVYTsY1M2dayoFUjZw6NN5DdefF8F5sGqUikhwoquqZoYcvC
+ /GnS6Ff5Qq0UblD8pvtvbW/kU1t8DAKgYYetq6zBKL+vVXhdIWgYMCn81MR2WHsGdggh
+ UUZBN9K1T5YIaRZaimYhew/FLsJQydqh62YMLvKNMG8MKn1/5hSJEJPXz2Bf7DeZsEeC ew== 
 Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com with ESMTP id 3ag4n0rdcv-2
+        by mx0a-0016f401.pphosted.com with ESMTP id 3ag4n0rdcv-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
         for <linux-scsi@vger.kernel.org>; Mon, 16 Aug 2021 22:13:52 -0700
 Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
@@ -34,28 +34,28 @@ Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
  Transport; Mon, 16 Aug 2021 22:13:51 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 4FA6C3F70AD;
+        by maili.marvell.com (Postfix) with ESMTP id 624333F70AE;
         Mon, 16 Aug 2021 22:13:51 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 17H5DpR4002536;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 17H5Dpbo002540;
         Mon, 16 Aug 2021 22:13:51 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 17H5DpLQ002535;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 17H5DpVo002539;
         Mon, 16 Aug 2021 22:13:51 -0700
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH 06/12] qla2xxx: edif: do secure plogi when auth app is present
-Date:   Mon, 16 Aug 2021 22:13:09 -0700
-Message-ID: <20210817051315.2477-7-njavali@marvell.com>
+Subject: [PATCH 07/12] qla2xxx: fix NVME | FCP personality change
+Date:   Mon, 16 Aug 2021 22:13:10 -0700
+Message-ID: <20210817051315.2477-8-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20210817051315.2477-1-njavali@marvell.com>
 References: <20210817051315.2477-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: GkjotsJNFzngMczMq7wsH6woeRBEtkMh
-X-Proofpoint-ORIG-GUID: GkjotsJNFzngMczMq7wsH6woeRBEtkMh
+X-Proofpoint-GUID: 0cJx4Kci2hOg27gW947wBxJbb-_uON_Q
+X-Proofpoint-ORIG-GUID: 0cJx4Kci2hOg27gW947wBxJbb-_uON_Q
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-08-17_01,2021-08-16_02,2020-04-07_01
@@ -65,134 +65,49 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-For initiator mode, always do secure login when authentication app started.
-Also remove redundant flags to indicate secure connection.
+Currently driver saves the personality type (FCP|NVME) at the
+start of first discovery of the remote device. If the remote device
+personality do change over time, then qla driver needs to present
+that to user to decide.
 
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_def.h    | 2 --
- drivers/scsi/qla2xxx/qla_edif.c   | 6 +++---
- drivers/scsi/qla2xxx/qla_init.c   | 7 ++-----
- drivers/scsi/qla2xxx/qla_iocb.c   | 5 ++++-
- drivers/scsi/qla2xxx/qla_target.c | 4 +---
- 5 files changed, 10 insertions(+), 14 deletions(-)
+ drivers/scsi/qla2xxx/qla_gs.c   | 1 +
+ drivers/scsi/qla2xxx/qla_init.c | 5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index 031107b6024f..ddc6932f05fa 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -2620,7 +2620,6 @@ typedef struct fc_port {
- 		uint32_t	enable:1;	/* device is edif enabled/req'd */
- 		uint32_t	app_stop:2;
- 		uint32_t	app_started:1;
--		uint32_t	secured_login:1;
- 		uint32_t	aes_gmac:1;
- 		uint32_t	app_sess_online:1;
- 		uint32_t	tx_sa_set:1;
-@@ -2631,7 +2630,6 @@ typedef struct fc_port {
- 		uint32_t	rx_rekey_cnt;
- 		uint64_t	tx_bytes;
- 		uint64_t	rx_bytes;
--		uint8_t		non_secured_login;
- 		uint8_t		auth_state;
- 		uint16_t	authok:1;
- 		uint16_t	rekey_cnt;
-diff --git a/drivers/scsi/qla2xxx/qla_edif.c b/drivers/scsi/qla2xxx/qla_edif.c
-index bb5cda85b60f..dc10874a0c99 100644
---- a/drivers/scsi/qla2xxx/qla_edif.c
-+++ b/drivers/scsi/qla2xxx/qla_edif.c
-@@ -568,7 +568,7 @@ qla_edif_app_start(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 
- 			if (atomic_read(&vha->loop_state) == LOOP_DOWN)
- 				break;
--			if (!fcport->edif.secured_login)
-+			if (!(fcport->flags & FCF_FCSP_DEVICE))
+diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
+index 11401cfc35a1..df6e3ef52e2c 100644
+--- a/drivers/scsi/qla2xxx/qla_gs.c
++++ b/drivers/scsi/qla2xxx/qla_gs.c
+@@ -3502,6 +3502,7 @@ void qla24xx_async_gnnft_done(scsi_qla_host_t *vha, srb_t *sp)
  				continue;
- 
- 			fcport->edif.app_started = 1;
-@@ -647,7 +647,7 @@ qla_edif_app_stop(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 	qla_edb_stop(vha);          /* stop db */
- 
- 	list_for_each_entry_safe(fcport, tf, &vha->vp_fcports, list) {
--		if (fcport->edif.non_secured_login)
-+		if (!(fcport->flags & FCF_FCSP_DEVICE))
- 			continue;
- 
- 		if (fcport->flags & FCF_FCSP_DEVICE) {
-@@ -948,7 +948,7 @@ qla_edif_app_getfcinfo(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 			ql_dbg(ql_dbg_edif, vha, 0x2058,
- 			    "Found FC_SP fcport - nn %8phN pn %8phN pcnt %d portid=%06x secure %d.\n",
- 			    fcport->node_name, fcport->port_name, pcnt,
--			    fcport->d_id.b24, fcport->edif.secured_login);
-+			    fcport->d_id.b24, fcport->flags & FCF_FCSP_DEVICE);
- 
- 			switch (fcport->edif.auth_state) {
- 			case VND_CMD_AUTH_STATE_ELS_RCVD:
+ 			fcport->scan_state = QLA_FCPORT_FOUND;
+ 			fcport->last_rscn_gen = fcport->rscn_gen;
++			fcport->fc4_type = rp->fc4type;
+ 			found = true;
+ 			/*
+ 			 * If device was not a fabric device before.
 diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 4c5acfde0788..7e6fb4ad4255 100644
+index 7e6fb4ad4255..a70c68bb1d2d 100644
 --- a/drivers/scsi/qla2xxx/qla_init.c
 +++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -1435,18 +1435,15 @@ static int	qla_chk_secure_login(scsi_qla_host_t	*vha, fc_port_t *fcport,
- 		ql_dbg(ql_dbg_disc, vha, 0x104d,
- 		    "Secure Login established on %8phC\n",
- 		    fcport->port_name);
--		fcport->edif.secured_login = 1;
--		fcport->edif.non_secured_login = 0;
- 		fcport->flags |= FCF_FCSP_DEVICE;
- 	} else {
- 		ql_dbg(ql_dbg_disc, vha, 0x104d,
- 		    "non-Secure Login %8phC",
- 		    fcport->port_name);
--		fcport->edif.secured_login = 0;
--		fcport->edif.non_secured_login = 1;
-+		fcport->flags &= ~FCF_FCSP_DEVICE;
- 	}
- 	if (vha->hw->flags.edif_enabled) {
--		if (fcport->edif.secured_login) {
-+		if (fcport->flags & FCF_FCSP_DEVICE) {
- 			qla2x00_set_fcport_disc_state(fcport, DSC_LOGIN_AUTH_PEND);
- 			/* Start edif prli timer & ring doorbell for app */
- 			fcport->edif.rx_sa_set = 0;
-diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-index eef1fa2b45c2..9d4ad1d2b00a 100644
---- a/drivers/scsi/qla2xxx/qla_iocb.c
-+++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -1552,6 +1552,9 @@ qla24xx_start_scsi(srb_t *sp)
- 	struct scsi_qla_host *vha = sp->vha;
- 	struct qla_hw_data *ha = vha->hw;
+@@ -1610,11 +1610,12 @@ int qla24xx_fcport_handle_login(struct scsi_qla_host *vha, fc_port_t *fcport)
+ 	u16 sec;
  
-+	if (sp->fcport->edif.enable  && (sp->fcport->flags & FCF_FCSP_DEVICE))
-+		return qla28xx_start_scsi_edif(sp);
-+
- 	/* Setup device pointers. */
- 	req = vha->req;
- 	rsp = req->rsp;
-@@ -1910,7 +1913,7 @@ qla2xxx_start_scsi_mq(srb_t *sp)
- 	struct qla_hw_data *ha = vha->hw;
- 	struct qla_qpair *qpair = sp->qpair;
+ 	ql_dbg(ql_dbg_disc, vha, 0x20d8,
+-	    "%s %8phC DS %d LS %d P %d fl %x confl %p rscn %d|%d login %d lid %d scan %d\n",
++	    "%s %8phC DS %d LS %d P %d fl %x confl %p rscn %d|%d login %d lid %d scan %d fc4type %x\n",
+ 	    __func__, fcport->port_name, fcport->disc_state,
+ 	    fcport->fw_login_state, fcport->login_pause, fcport->flags,
+ 	    fcport->conflict, fcport->last_rscn_gen, fcport->rscn_gen,
+-	    fcport->login_gen, fcport->loop_id, fcport->scan_state);
++	    fcport->login_gen, fcport->loop_id, fcport->scan_state,
++	    fcport->fc4_type);
  
--	if (sp->fcport->edif.enable)
-+	if (sp->fcport->edif.enable && (sp->fcport->flags & FCF_FCSP_DEVICE))
- 		return qla28xx_start_scsi_edif(sp);
- 
- 	/* Acquire qpair specific lock */
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index 2f4da88995ea..b3478ed9b12e 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -636,10 +636,8 @@ int qla24xx_async_notify_ack(scsi_qla_host_t *vha, fc_port_t *fcport,
- 		fcport->fw_login_state = DSC_LS_PLOGI_PEND;
- 		c = "PLOGI";
- 		if (vha->hw->flags.edif_enabled &&
--		    (le16_to_cpu(ntfy->u.isp24.flags) & NOTIFY24XX_FLAGS_FCSP)) {
-+		    (le16_to_cpu(ntfy->u.isp24.flags) & NOTIFY24XX_FLAGS_FCSP))
- 			fcport->flags |= FCF_FCSP_DEVICE;
--			fcport->edif.secured_login = 1;
--		}
- 		break;
- 	case SRB_NACK_PRLI:
- 		fcport->fw_login_state = DSC_LS_PRLI_PEND;
+ 	if (fcport->scan_state != QLA_FCPORT_FOUND)
+ 		return 0;
 -- 
 2.23.1
 
