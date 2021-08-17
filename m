@@ -2,113 +2,210 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D29A3EF4E4
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 23:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D63A3EF416
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 22:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235035AbhHQVYx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 17:24:53 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13322 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235082AbhHQVYr (ORCPT
+        id S234254AbhHQUav (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 16:30:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24859 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230459AbhHQUat (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 17 Aug 2021 17:24:47 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17HL3TM6103570
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Aug 2021 17:24:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id; s=pp1;
- bh=yA0c2xcDdgJqczjpJbyEpXf7+X8Pw2KSkfLTexqbUA8=;
- b=Zrd46VTEGeTqAp1d4XsegXBqYEFNmfK2IKgW4s7zAJoxgzBvzyGGv3PLhtqZb6vakRiU
- OHqW7yWtoAXxYwpFMTzDCmRYHZEMMMUo1inIEdNJ8a6RinETCWNA5ZSeoiM6L+jPT2s+
- i/SabSgKHBFEq51jdgahNvvlsMJWbNut33CBYrrSxetOAJP60nYYLU0xOzrLzipSGxzb
- VnRRYx70Ox7eUstHmRvAbg0xXSuXA4f+SMES9TlploL6x3nduwKu051iGikvlFklZATc
- OQH2fTTRVGExysd30pyiuj/FYFhiV20Tflh+sDy/cDc8iMYwPweDn56DaiHHVM09jQnm Ag== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3agcww8fnh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Aug 2021 17:24:13 -0400
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17HL98eT017554
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Aug 2021 21:24:13 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma04wdc.us.ibm.com with ESMTP id 3ae5fcp4uv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Aug 2021 21:24:13 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17HLOBtx42729792
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Aug 2021 21:24:11 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 523926A063;
-        Tue, 17 Aug 2021 21:24:11 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 08B8B6A057;
-        Tue, 17 Aug 2021 21:24:10 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.40.195.89])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 17 Aug 2021 21:24:10 +0000 (GMT)
-From:   wenxiong@linux.vnet.ibm.com
-To:     jejb@linux.ibm.com
-Cc:     linux-scsi@vger.kernel.org, brking1@linux.vnet.ibm.com,
-        wenxiong@us.ibm.com, Wen Xiong <wenxiong@linux.vnet.ibm.com>
-Subject: [PATCH 1/1] scsi/ses: Saw "Failed to get diagnostic page 0x1" during
-Date:   Tue, 17 Aug 2021 14:57:35 -0500
-Message-Id: <1629230255-11616-1-git-send-email-wenxiong@linux.vnet.ibm.com>
-X-Mailer: git-send-email 1.6.0.2
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: fsIcYIxGZdVxPJgfK3Plz_FkmXi4LWLh
-X-Proofpoint-ORIG-GUID: fsIcYIxGZdVxPJgfK3Plz_FkmXi4LWLh
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-17_08:2021-08-17,2021-08-17 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 suspectscore=0
- phishscore=0 clxscore=1015 malwarescore=0 spamscore=0 impostorscore=0
- bulkscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2107140000 definitions=main-2108170132
+        Tue, 17 Aug 2021 16:30:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1629232215;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1AzhVHNoK9/20Cs/2nFYANQH0mGD63ytSsU0paNtXcA=;
+        b=X9E1fucILElXctiFUEw7YkwfD1oHVnsX5H5mldsQN8Zd6jzDx4SJVsVkRlfzRjfyKEgY7h
+        u3LiHjFVINKrnQMehA7ewxb0GWAkLc51VncZZLXGGMyq64TYwhdwsmK0XhogZJUhyZTRvx
+        aAlLaf/7geuczrnNd2TjLez+AiCBodo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-32-oJPkAuZMNWKAa0j1_RC_Og-1; Tue, 17 Aug 2021 16:30:12 -0400
+X-MC-Unique: oJPkAuZMNWKAa0j1_RC_Og-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3636A801AC5;
+        Tue, 17 Aug 2021 20:30:09 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 70BBB5C1D5;
+        Tue, 17 Aug 2021 20:29:59 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 17HKTwMF031021;
+        Tue, 17 Aug 2021 16:29:58 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 17HKTtxE031017;
+        Tue, 17 Aug 2021 16:29:55 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Tue, 17 Aug 2021 16:29:55 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     SelvaKumar S <selvakuma.s1@samsung.com>
+cc:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        snitzer@redhat.com, djwong@kernel.org, dm-devel@redhat.com,
+        hch@lst.de, agk@redhat.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, nitheshshetty@gmail.com,
+        willy@infradead.org, nj.shetty@samsung.com, kch@kernel.org,
+        selvajove@gmail.com, javier.gonz@samsung.com, kbusch@kernel.org,
+        axboe@kernel.dk, damien.lemoal@wdc.com, joshi.k@samsung.com,
+        martin.petersen@oracle.com, linux-api@vger.kernel.org,
+        johannes.thumshirn@wdc.com, linux-fsdevel@vger.kernel.org,
+        joshiiitr@gmail.com, asml.silence@gmail.com
+Subject: Re: [dm-devel] [PATCH 7/7] dm kcopyd: add simple copy offload
+ support
+In-Reply-To: <20210817101423.12367-8-selvakuma.s1@samsung.com>
+Message-ID: <alpine.LRH.2.02.2108171626250.30363@file01.intranet.prod.int.rdu2.redhat.com>
+References: <20210817101423.12367-1-selvakuma.s1@samsung.com> <CGME20210817101822epcas5p470644cf681d5e8db5367dc7998305c65@epcas5p4.samsung.com> <20210817101423.12367-8-selvakuma.s1@samsung.com>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Wen Xiong <wenxiong@linux.vnet.ibm.com>
 
-We saw two errors with Slider drawer:
-- Failed to get diagnostic page 0x1 during booting up
-- /sys/class/enclosure are empty with ipr adapter + Slider drawer
 
-From scsi logging level with error=3, looks ses_recv_diag not try on a UA.
-Added scsi_test_unit_ready() which retried with UA. The patch fixes
-both of above errors.
+On Tue, 17 Aug 2021, SelvaKumar S wrote:
 
-Signed-Off-by: Wen Xiong <wenxiong@linux.vnet.ibm.com>
-Reviewed-by: Brian King <brking@linux.vnet.ibm.com>
----
- drivers/scsi/ses.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+> Introduce copy_jobs to use copy-offload, if supported by underlying devices
+> otherwise fall back to existing method.
 
-diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
-index c2afba2a5414..5811639a0747 100644
---- a/drivers/scsi/ses.c
-+++ b/drivers/scsi/ses.c
-@@ -633,6 +633,8 @@ static int ses_intf_add(struct device *cdev,
- 	int num_enclosures;
- 	struct enclosure_device *edev;
- 	struct ses_component *scomp = NULL;
-+	struct scsi_sense_hdr sshdr;
-+	int ret;
- 
- 	if (!scsi_device_enclosure(sdev)) {
- 		/* not an enclosure, but might be in one */
-@@ -654,6 +656,10 @@ static int ses_intf_add(struct device *cdev,
- 	if (!hdr_buf || !ses_dev)
- 		goto err_init_free;
- 
-+	ret = scsi_test_unit_ready(sdev, SES_TIMEOUT, SES_RETRIES, &sshdr);
-+	if (!scsi_status_is_good(ret))
-+		goto err_init_free;
-+
- 	page = 1;
- 	result = ses_recv_diag(sdev, page, hdr_buf, INIT_ALLOC_SIZE);
- 	if (result)
--- 
-2.27.0
+dm-kcopyd is usually used on the dm-linear target. And this patchset 
+doesn't support passing copy requests through the linear target - so this 
+patch doesn't seem useful.
+
+Mikulas
+
+> run_copy_jobs() calls block layer copy offload API, if both source and
+> destination request queue are same and support copy offload.
+> On successful completion, destination regions copied count is made zero,
+> failed regions are processed via existing method.
+> 
+> Signed-off-by: SelvaKumar S <selvakuma.s1@samsung.com>
+> Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
+> ---
+>  drivers/md/dm-kcopyd.c | 56 +++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 50 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/md/dm-kcopyd.c b/drivers/md/dm-kcopyd.c
+> index 37b03ab7e5c9..d9ee105a6127 100644
+> --- a/drivers/md/dm-kcopyd.c
+> +++ b/drivers/md/dm-kcopyd.c
+> @@ -74,18 +74,20 @@ struct dm_kcopyd_client {
+>  	atomic_t nr_jobs;
+>  
+>  /*
+> - * We maintain four lists of jobs:
+> + * We maintain five lists of jobs:
+>   *
+> - * i)   jobs waiting for pages
+> - * ii)  jobs that have pages, and are waiting for the io to be issued.
+> - * iii) jobs that don't need to do any IO and just run a callback
+> - * iv) jobs that have completed.
+> + * i)	jobs waiting to try copy offload
+> + * ii)   jobs waiting for pages
+> + * iii)  jobs that have pages, and are waiting for the io to be issued.
+> + * iv) jobs that don't need to do any IO and just run a callback
+> + * v) jobs that have completed.
+>   *
+> - * All four of these are protected by job_lock.
+> + * All five of these are protected by job_lock.
+>   */
+>  	spinlock_t job_lock;
+>  	struct list_head callback_jobs;
+>  	struct list_head complete_jobs;
+> +	struct list_head copy_jobs;
+>  	struct list_head io_jobs;
+>  	struct list_head pages_jobs;
+>  };
+> @@ -579,6 +581,43 @@ static int run_io_job(struct kcopyd_job *job)
+>  	return r;
+>  }
+>  
+> +static int run_copy_job(struct kcopyd_job *job)
+> +{
+> +	int r, i, count = 0;
+> +	unsigned long flags = 0;
+> +	struct range_entry srange;
+> +
+> +	struct request_queue *src_q, *dest_q;
+> +
+> +	for (i = 0; i < job->num_dests; i++) {
+> +		srange.src = job->source.sector;
+> +		srange.len = job->source.count;
+> +
+> +		src_q = bdev_get_queue(job->source.bdev);
+> +		dest_q = bdev_get_queue(job->dests[i].bdev);
+> +
+> +		if (src_q != dest_q && !src_q->limits.copy_offload)
+> +			break;
+> +
+> +		r = blkdev_issue_copy(job->source.bdev, 1, &srange,
+> +			job->dests[i].bdev, job->dests[i].sector, GFP_KERNEL, flags);
+> +		if (r)
+> +			break;
+> +
+> +		job->dests[i].count = 0;
+> +		count++;
+> +	}
+> +
+> +	if (count == job->num_dests) {
+> +		push(&job->kc->complete_jobs, job);
+> +	} else {
+> +		push(&job->kc->pages_jobs, job);
+> +		r = 0;
+> +	}
+> +
+> +	return r;
+> +}
+> +
+>  static int run_pages_job(struct kcopyd_job *job)
+>  {
+>  	int r;
+> @@ -659,6 +698,7 @@ static void do_work(struct work_struct *work)
+>  	spin_unlock_irq(&kc->job_lock);
+>  
+>  	blk_start_plug(&plug);
+> +	process_jobs(&kc->copy_jobs, kc, run_copy_job);
+>  	process_jobs(&kc->complete_jobs, kc, run_complete_job);
+>  	process_jobs(&kc->pages_jobs, kc, run_pages_job);
+>  	process_jobs(&kc->io_jobs, kc, run_io_job);
+> @@ -676,6 +716,8 @@ static void dispatch_job(struct kcopyd_job *job)
+>  	atomic_inc(&kc->nr_jobs);
+>  	if (unlikely(!job->source.count))
+>  		push(&kc->callback_jobs, job);
+> +	else if (job->source.bdev->bd_disk == job->dests[0].bdev->bd_disk)
+> +		push(&kc->copy_jobs, job);
+>  	else if (job->pages == &zero_page_list)
+>  		push(&kc->io_jobs, job);
+>  	else
+> @@ -916,6 +958,7 @@ struct dm_kcopyd_client *dm_kcopyd_client_create(struct dm_kcopyd_throttle *thro
+>  	spin_lock_init(&kc->job_lock);
+>  	INIT_LIST_HEAD(&kc->callback_jobs);
+>  	INIT_LIST_HEAD(&kc->complete_jobs);
+> +	INIT_LIST_HEAD(&kc->copy_jobs);
+>  	INIT_LIST_HEAD(&kc->io_jobs);
+>  	INIT_LIST_HEAD(&kc->pages_jobs);
+>  	kc->throttle = throttle;
+> @@ -971,6 +1014,7 @@ void dm_kcopyd_client_destroy(struct dm_kcopyd_client *kc)
+>  
+>  	BUG_ON(!list_empty(&kc->callback_jobs));
+>  	BUG_ON(!list_empty(&kc->complete_jobs));
+> +	WARN_ON(!list_empty(&kc->copy_jobs));
+>  	BUG_ON(!list_empty(&kc->io_jobs));
+>  	BUG_ON(!list_empty(&kc->pages_jobs));
+>  	destroy_workqueue(kc->kcopyd_wq);
+> -- 
+> 2.25.1
+> 
+> 
+> --
+> dm-devel mailing list
+> dm-devel@redhat.com
+> https://listman.redhat.com/mailman/listinfo/dm-devel
+> 
 
