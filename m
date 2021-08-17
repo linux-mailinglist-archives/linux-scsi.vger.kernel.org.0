@@ -2,50 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4CA3EE958
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A733EE967
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239575AbhHQJRc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 05:17:32 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:33312 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239310AbhHQJRR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:17 -0400
+        id S239775AbhHQJRs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 05:17:48 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:47642 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239421AbhHQJRT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:19 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 46D8E21D44;
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4EF8120020;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1629191802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cMEH0o3KwZ3qPbyOGuvmtd11cUkKiVSaGqOGZExzpkk=;
-        b=FlLufHL+k5Z/Ep+gggiNmkbE2ZN1vohuWlBQDK2m2/DT28IQntG2AG5MdErIcfPt9X3OYX
-        DhVgy8v26gqZAATAA9VOn6jwPQNY99vUF8kG6L+dTMKAy5/2ALTZI6/1NvWXo8p7E3tlUI
-        vdvnmgog4pOXRuA1RW66Yghu5MdjnoE=
+        bh=rxeY5QszmYMOPruGd/89hd4F/74QafagIg/0WVeAxNY=;
+        b=PDCWZbHpxI6sTGq+FEYWMCpkWz9GEKQyidewHfd9vQfByBvb++3I16YdU5Yo2EO6FpnN6b
+        DOHdKLIHtYzjHE12PfY3PcfTLnLApDt5iPpbNR4XXyJsqaQadcK+0dwgx6bS/on8lxPkZG
+        F1XwFuZQ2Kq/5fc0oIXcMEOytEJ3qNo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1629191802;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cMEH0o3KwZ3qPbyOGuvmtd11cUkKiVSaGqOGZExzpkk=;
-        b=nVhblV1EgEPeYdSfc4/a1+PtsIS6HF39oGsNM5QOHbqw51Raiw52PVFBYgBXOAyCMJ6/2H
-        /Vj9nKRykJTE8yAQ==
+        bh=rxeY5QszmYMOPruGd/89hd4F/74QafagIg/0WVeAxNY=;
+        b=x71PTpcJyGBR33sgnznv8UgNG2E9mSMkgpjNnIle0Kc2h5n8wFG3bQL9qZHdJOVQAzPnRG
+        8/FV4ydNot8QbxDw==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 41548A3BA9;
+        by relay2.suse.de (Postfix) with ESMTP id 477D0A3BA8;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 3E8C3518CE91; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
+        id 4405A518CE93; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Hannes Reinecke <hare@suse.com>,
         James Smart <james.smart@broadcom.com>
-Subject: [PATCH 25/51] lpfc: use fc_block_rport()
-Date:   Tue, 17 Aug 2021 11:14:30 +0200
-Message-Id: <20210817091456.73342-26-hare@suse.de>
+Subject: [PATCH 26/51] lpfc: use rport as argument for lpfc_send_taskmgmt()
+Date:   Tue, 17 Aug 2021 11:14:31 +0200
+Message-Id: <20210817091456.73342-27-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210817091456.73342-1-hare@suse.de>
 References: <20210817091456.73342-1-hare@suse.de>
@@ -55,88 +56,74 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use fc_block_rport() instead of fc_block_scsi_eh() as the SCSI command
-will be removed as argument for SCSI EH functions.
+Instead of passing in a scsi device we should be using the rport;
+we already have the target and lun id as parameters, so there's
+no need to pass the scsi device, too.
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Hannes Reinecke <hare@suse.com>
 Cc: James Smart <james.smart@broadcom.com>
 ---
- drivers/scsi/lpfc/lpfc_scsi.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/scsi/lpfc/lpfc_scsi.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
-index d68c08af5514..0bbf767f7253 100644
+index 0bbf767f7253..78ca8fa9495f 100644
 --- a/drivers/scsi/lpfc/lpfc_scsi.c
 +++ b/drivers/scsi/lpfc/lpfc_scsi.c
-@@ -5727,6 +5727,7 @@ static int
- lpfc_abort_handler(struct scsi_cmnd *cmnd)
+@@ -5981,7 +5981,7 @@ lpfc_check_fcp_rsp(struct lpfc_vport *vport, struct lpfc_io_buf *lpfc_cmd)
+ /**
+  * lpfc_send_taskmgmt - Generic SCSI Task Mgmt Handler
+  * @vport: The virtual port for which this call is being executed.
+- * @cmnd: Pointer to scsi_cmnd data structure.
++ * @rport: Pointer to remote port
+  * @tgt_id: Target ID of remote device.
+  * @lun_id: Lun number for the TMF
+  * @task_mgmt_cmd: type of TMF to send
+@@ -5994,7 +5994,7 @@ lpfc_check_fcp_rsp(struct lpfc_vport *vport, struct lpfc_io_buf *lpfc_cmd)
+  *   0x2002 - Success.
+  **/
+ static int
+-lpfc_send_taskmgmt(struct lpfc_vport *vport, struct scsi_cmnd *cmnd,
++lpfc_send_taskmgmt(struct lpfc_vport *vport, struct fc_rport *rport,
+ 		   unsigned int tgt_id, uint64_t lun_id,
+ 		   uint8_t task_mgmt_cmd)
  {
- 	struct Scsi_Host  *shost = cmnd->device->host;
-+	struct fc_rport *rport = starget_to_rport(scsi_target(cmnd->device));
- 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
- 	struct lpfc_hba   *phba = vport->phba;
- 	struct lpfc_iocbq *iocb;
-@@ -5738,7 +5739,7 @@ lpfc_abort_handler(struct scsi_cmnd *cmnd)
- 	unsigned long flags;
- 	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(waitq);
- 
--	status = fc_block_scsi_eh(cmnd);
-+	status = fc_block_rport(rport);
- 	if (status != 0 && status != SUCCESS)
- 		return status;
- 
-@@ -6187,6 +6188,7 @@ static int
- lpfc_device_reset_handler(struct scsi_cmnd *cmnd)
- {
- 	struct Scsi_Host  *shost = cmnd->device->host;
-+	struct fc_rport *rport = starget_to_rport(scsi_target(cmnd->device));
- 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
- 	struct lpfc_rport_data *rdata;
- 	struct lpfc_nodelist *pnode;
-@@ -6196,7 +6198,7 @@ lpfc_device_reset_handler(struct scsi_cmnd *cmnd)
+@@ -6007,7 +6007,7 @@ lpfc_send_taskmgmt(struct lpfc_vport *vport, struct scsi_cmnd *cmnd,
+ 	int ret;
  	int status;
- 	u32 logit = LOG_FCP;
  
 -	rdata = lpfc_rport_data_from_scsi_device(cmnd->device);
 +	rdata = rport->dd_data;
- 	if (!rdata || !rdata->pnode) {
- 		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
- 				 "0798 Device Reset rdata failure: rdata x%px\n",
-@@ -6204,7 +6206,7 @@ lpfc_device_reset_handler(struct scsi_cmnd *cmnd)
+ 	if (!rdata || !rdata->pnode)
  		return FAILED;
- 	}
  	pnode = rdata->pnode;
--	status = fc_block_scsi_eh(cmnd);
-+	status = fc_block_rport(rport);
- 	if (status != 0 && status != SUCCESS)
- 		return status;
- 
-@@ -6261,6 +6263,7 @@ static int
- lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
- {
- 	struct Scsi_Host  *shost = cmnd->device->host;
-+	struct fc_rport *rport = starget_to_rport(scsi_target(cmnd->device));
- 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
- 	struct lpfc_rport_data *rdata;
- 	struct lpfc_nodelist *pnode;
-@@ -6273,7 +6276,7 @@ lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
- 	unsigned long flags;
- 	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(waitq);
- 
--	rdata = lpfc_rport_data_from_scsi_device(cmnd->device);
-+	rdata = rport->dd_data;
- 	if (!rdata || !rdata->pnode) {
- 		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
- 				 "0799 Target Reset rdata failure: rdata x%px\n",
-@@ -6281,7 +6284,7 @@ lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
+@@ -6017,7 +6017,7 @@ lpfc_send_taskmgmt(struct lpfc_vport *vport, struct scsi_cmnd *cmnd,
  		return FAILED;
- 	}
- 	pnode = rdata->pnode;
--	status = fc_block_scsi_eh(cmnd);
-+	status = fc_block_rport(rport);
- 	if (status != 0 && status != SUCCESS)
- 		return status;
+ 	lpfc_cmd->timeout = phba->cfg_task_mgmt_tmo;
+ 	lpfc_cmd->rdata = rdata;
+-	lpfc_cmd->pCmd = cmnd;
++	lpfc_cmd->pCmd = NULL;
+ 	lpfc_cmd->ndlp = pnode;
  
+ 	status = lpfc_scsi_prep_task_mgmt_cmd(vport, lpfc_cmd, lun_id,
+@@ -6226,7 +6226,7 @@ lpfc_device_reset_handler(struct scsi_cmnd *cmnd)
+ 	fc_host_post_vendor_event(shost, fc_get_event_number(),
+ 		sizeof(scsi_event), (char *)&scsi_event, LPFC_NL_VENDOR_ID);
+ 
+-	status = lpfc_send_taskmgmt(vport, cmnd, tgt_id, lun_id,
++	status = lpfc_send_taskmgmt(vport, rport, tgt_id, lun_id,
+ 						FCP_LUN_RESET);
+ 	if (status != SUCCESS)
+ 		logit =  LOG_TRACE_EVENT;
+@@ -6312,7 +6312,7 @@ lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
+ 	fc_host_post_vendor_event(shost, fc_get_event_number(),
+ 		sizeof(scsi_event), (char *)&scsi_event, LPFC_NL_VENDOR_ID);
+ 
+-	status = lpfc_send_taskmgmt(vport, cmnd, tgt_id, lun_id,
++	status = lpfc_send_taskmgmt(vport, rport, tgt_id, lun_id,
+ 					FCP_TARGET_RESET);
+ 	if (status != SUCCESS) {
+ 		logit = LOG_TRACE_EVENT;
 -- 
 2.29.2
 
