@@ -2,51 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2031A3EE952
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590603EE955
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239545AbhHQJR1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 05:17:27 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:33304 "EHLO
+        id S239563AbhHQJRa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 05:17:30 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:33306 "EHLO
         smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239151AbhHQJRQ (ORCPT
+        with ESMTP id S239267AbhHQJRQ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:16 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1B08D21D26;
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1E81921D3B;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1629191802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Oiya3yiIsKryh7s1PYvS4XpqSdNu7+s1gDW8melp4j4=;
-        b=Zixd+C5ejuaDyPVkFqCCBqQfvAQ3CNfGBwGszm3glYqzyARA3BLb5pX4UwjG8BswjtgofT
-        OXSlBx9v0nuPo5PZ4W7Cypu4z5ew4zFfF6/RIhdCEdgazv4VkW2X5LW5veD03L0UFz+Sdd
-        /Ra7atE4UBMoPo1TMKTyhA4y6MMbEIM=
+        bh=nMCpDwdQuHGWQIUjkeyKrf/jcFqbs6U8/UihLkQVXnA=;
+        b=f1NajFg/1uDBJosVsQXF8kHyqK9HhkxXfBs09itbXFSZwFx3nENsXYoDteKIQDnPEf7sM+
+        lm0nZlws4psJDo01eRQWOkpAtUCML+ChgIjDevynMDK/UcK/qMQsoZHEE7ltT1nJckS/57
+        EQrf0m/QKA5kohXsUXg0tf6P7rzLFP4=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1629191802;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Oiya3yiIsKryh7s1PYvS4XpqSdNu7+s1gDW8melp4j4=;
-        b=teQhy/vWyyCxfv5TaY2HhP5e34kCYjWN3LmShXPQmdCpwQWKJyWBxGiybRGxDTU7H0Z9Az
-        M/btEPutaA/bBKCQ==
+        bh=nMCpDwdQuHGWQIUjkeyKrf/jcFqbs6U8/UihLkQVXnA=;
+        b=H26uADHFx906L5xMsHp4ud0yeC59UPPMz14CgDRVsFGtAiKAoViCupC0QLbft+jii6Jf8/
+        C8GH02/CTtX5wHAg==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 0E3B3A3BA4;
+        by relay2.suse.de (Postfix) with ESMTP id 12E6CA3BA5;
         Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 09F70518CE81; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
+        id 102CB518CE83; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Hannes Reinecke <hare@suse.com>,
-        David Kershner <david.kershner@unisys.com>
-Subject: [PATCH 17/51] visorhba: select first device on the bus for bus_reset()
-Date:   Tue, 17 Aug 2021 11:14:22 +0200
-Message-Id: <20210817091456.73342-18-hare@suse.de>
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+Subject: [PATCH 18/51] ncr53c8xx: remove 'sync_reset' argument from ncr_reset_bus()
+Date:   Tue, 17 Aug 2021 11:14:23 +0200
+Message-Id: <20210817091456.73342-19-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210817091456.73342-1-hare@suse.de>
 References: <20210817091456.73342-1-hare@suse.de>
@@ -56,55 +54,52 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-As we're moving away from having the scsi command as an argument
-to bus_reset() we need to select the first device on the bus to
-send the bus reset to.
+From: Hannes Reinecke <hare@suse.com>
+
+Always '1', so we can remove it.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
-Cc: David Kershner <david.kershner@unisys.com>
 ---
- .../staging/unisys/visorhba/visorhba_main.c   | 21 ++++++++++---------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ drivers/scsi/ncr53c8xx.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/unisys/visorhba/visorhba_main.c b/drivers/staging/unisys/visorhba/visorhba_main.c
-index fdbcb6576fcd..bfb4a70432f3 100644
---- a/drivers/staging/unisys/visorhba/visorhba_main.c
-+++ b/drivers/staging/unisys/visorhba/visorhba_main.c
-@@ -368,23 +368,24 @@ static int visorhba_device_reset_handler(struct scsi_cmnd *scsicmd)
-  */
- static int visorhba_bus_reset_handler(struct scsi_cmnd *scsicmd)
+diff --git a/drivers/scsi/ncr53c8xx.c b/drivers/scsi/ncr53c8xx.c
+index c76e9f05d042..3d2daaf2368c 100644
+--- a/drivers/scsi/ncr53c8xx.c
++++ b/drivers/scsi/ncr53c8xx.c
+@@ -4553,7 +4553,7 @@ static void ncr_start_reset(struct ncb *np)
+ **
+ **==========================================================
+ */
+-static int ncr_reset_bus (struct ncb *np, struct scsi_cmnd *cmd, int sync_reset)
++static int ncr_reset_bus (struct ncb *np, struct scsi_cmnd *cmd)
  {
--	struct scsi_device *scsidev;
-+	struct scsi_device *scsidev = NULL, *tmp;
-+	struct Scsi_Host *scsihost = scsicmd->device->host;
- 	struct visordisk_info *vdisk;
--	int rtn;
-+	int rtn = SUCCESS;
- 
--	scsidev = scsicmd->device;
--	shost_for_each_device(scsidev, scsidev->host) {
--		vdisk = scsidev->hostdata;
-+	shost_for_each_device(tmp, scsihost) {
-+		if (tmp->channel != scsicmd->device->channel)
-+			continue;
-+		vdisk = tmp->hostdata;
- 		if (atomic_read(&vdisk->error_count) < VISORHBA_ERROR_COUNT)
- 			atomic_inc(&vdisk->error_count);
- 		else
- 			atomic_set(&vdisk->ios_threshold, IOS_ERROR_THRESHOLD);
-+		if (!scsidev)
-+			scsidev = tmp;
+ /*	struct scsi_device        *device    = cmd->device; */
+ 	struct ccb *cp;
+@@ -4600,11 +4600,10 @@ static int ncr_reset_bus (struct ncb *np, struct scsi_cmnd *cmd, int sync_reset)
+ 	ncr_wakeup(np, HS_RESET);
+ /*
+  * If the involved command was not in a driver queue, and the 
+- * scsi driver told us reset is synchronous, and the command is not 
+- * currently in the waiting list, complete it with DID_RESET status,
+- * in order to keep it alive.
++ * command is not currently in the waiting list, complete it
++ * with DID_RESET status in order to keep it alive.
+  */
+-	if (!found && sync_reset && !retrieve_from_waiting_list(0, np, cmd)) {
++	if (!found && !retrieve_from_waiting_list(0, np, cmd)) {
+ 		set_host_byte(cmd, DID_RESET);
+ 		ncr_queue_done_cmd(np, cmd);
  	}
--	rtn = forward_taskmgmt_command(TASK_MGMT_BUS_RESET, scsidev);
--	if (rtn == SUCCESS) {
--		scsicmd->result = DID_RESET << 16;
--		scsicmd->scsi_done(scsicmd);
--	}
-+	if (scsidev)
-+		rtn = forward_taskmgmt_command(TASK_MGMT_BUS_RESET, scsidev);
- 	return rtn;
- }
+@@ -8125,7 +8124,7 @@ static int ncr53c8xx_bus_reset(struct scsi_cmnd *cmd)
+ 	 */
  
+ 	spin_lock_irqsave(&np->smp_lock, flags);
+-	sts = ncr_reset_bus(np, cmd, 1);
++	sts = ncr_reset_bus(np, cmd);
+ 
+ 	done_list     = np->done_list;
+ 	np->done_list = NULL;
 -- 
 2.29.2
 
