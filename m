@@ -2,50 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BBE3EE94C
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA68B3EE94E
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239418AbhHQJRV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 05:17:21 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:47422 "EHLO
+        id S239527AbhHQJRW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 05:17:22 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:47450 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235947AbhHQJRP (ORCPT
+        with ESMTP id S235981AbhHQJRP (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:15 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C7FE220013;
+        by smtp-out2.suse.de (Postfix) with ESMTP id D6A5620014;
         Tue, 17 Aug 2021 09:16:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1629191801; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DlDhx/qFtGavyP4HP0CZPaT7DeM3oruXXgo9tmPTz2M=;
-        b=L0fZMI8h9McgS7DhANGsLC3BjVxm066Qw3Qxg+Cczt5XzCf4r+7zphfcmQqv6h5oOpbars
-        rMjWzR3bgrlXdD0vM8C6QGut+HOoJLw+XjBUieObjpK+JSQqR7LzD16rKG8G4qemgDkNX+
-        lZAEZ6wYKD31UCVhGXHiKgF1sC03DC8=
+        bh=QM8+N+Fjtm2c/LTrtQP2sO2xn/YHy1e/vJXLx+ti6dY=;
+        b=qIQN5a6Wh/6GU14vlgdsOTO73syHpo220zwQSUrAM+MX2MdeKYtbUCZyzFGSAzhjcE7W9w
+        IiYJGGFvnhf36hosmVMkkeoVNtU2mUJ/YkXF6D1ABTTf5KUjE4exOk+Mbr5QUho7dTgYCc
+        /ZRlyE7E7yiTKuc4Cy8KF4rkv7u7iWs=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1629191801;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DlDhx/qFtGavyP4HP0CZPaT7DeM3oruXXgo9tmPTz2M=;
-        b=MxHtAau1e/BCuq78S5lP6+Psncl3fzYIiuirin+eEhtkFKYgmO1xd/SI3llGDMCqCwmR3p
-        jqRmEV+bshRLNvAA==
+        bh=QM8+N+Fjtm2c/LTrtQP2sO2xn/YHy1e/vJXLx+ti6dY=;
+        b=VpNbocFnXNj0u1VgNcXi9UJZfZsklCW01+f6knUojr+Rruwgh/Zo+UiD+hz4Gv4ipjuaQo
+        7KMZRwgEocxp9zBQ==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id C22CAA3B99;
+        by relay2.suse.de (Postfix) with ESMTP id C7F61A3B9A;
         Tue, 17 Aug 2021 09:16:41 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id BF52F518CE6D; Tue, 17 Aug 2021 11:16:41 +0200 (CEST)
+        id C5B54518CE6F; Tue, 17 Aug 2021 11:16:41 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 07/51] megaraid: pass in NULL scb for host reset
-Date:   Tue, 17 Aug 2021 11:14:12 +0200
-Message-Id: <20210817091456.73342-8-hare@suse.de>
+        Hannes Reinecke <hare@suse.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Benjamin Block <bblock@linux.ibm.com>
+Subject: [PATCH 08/51] zfcp: open-code fc_block_scsi_eh() for host reset
+Date:   Tue, 17 Aug 2021 11:14:13 +0200
+Message-Id: <20210817091456.73342-9-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210817091456.73342-1-hare@suse.de>
 References: <20210817091456.73342-1-hare@suse.de>
@@ -55,94 +57,64 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When calling a host reset we shouldn't rely on the command triggering
-the reset, so allow megaraid_abort_and_reset() to be called with a
-NULL scb.
-And drop the pointless 'bus_reset' and 'target_reset' handlers, which
-just call the same function as host_reset.
+When issuing a host reset we should be waiting for all
+ports to become unblocked; just waiting for one might
+be resulting in host reset to return too early.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
+Cc: Steffen Maier <maier@linux.ibm.com>
+Cc: Benjamin Block <bblock@linux.ibm.com>
 ---
- drivers/scsi/megaraid.c | 42 ++++++++++++++++-------------------------
- 1 file changed, 16 insertions(+), 26 deletions(-)
+ drivers/s390/scsi/zfcp_scsi.c | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/megaraid.c b/drivers/scsi/megaraid.c
-index 56910e94dbf2..7c53933fb1b4 100644
---- a/drivers/scsi/megaraid.c
-+++ b/drivers/scsi/megaraid.c
-@@ -1905,7 +1905,7 @@ megaraid_reset(struct scsi_cmnd *cmd)
+diff --git a/drivers/s390/scsi/zfcp_scsi.c b/drivers/s390/scsi/zfcp_scsi.c
+index 9da9b2b2a580..9393f1587e8a 100644
+--- a/drivers/s390/scsi/zfcp_scsi.c
++++ b/drivers/s390/scsi/zfcp_scsi.c
+@@ -373,9 +373,11 @@ static int zfcp_scsi_eh_target_reset_handler(struct scsi_cmnd *scpnt)
  
- 	spin_lock_irq(&adapter->lock);
+ static int zfcp_scsi_eh_host_reset_handler(struct scsi_cmnd *scpnt)
+ {
+-	struct zfcp_scsi_dev *zfcp_sdev = sdev_to_zfcp(scpnt->device);
+-	struct zfcp_adapter *adapter = zfcp_sdev->port->adapter;
+-	int ret = SUCCESS, fc_ret;
++	struct Scsi_Host *host = scpnt->device->host;
++	struct zfcp_adapter *adapter = (struct zfcp_adapter *)host->hostdata[0];
++	int ret = SUCCESS;
++	unsigned long flags;
++	struct zfcp_port *port;
  
--	rval =  megaraid_abort_and_reset(adapter, cmd, SCB_RESET);
-+	rval =  megaraid_abort_and_reset(adapter, NULL, SCB_RESET);
- 
- 	/*
- 	 * This is required here to complete any completed requests
-@@ -1944,7 +1944,7 @@ megaraid_abort_and_reset(adapter_t *adapter, struct scsi_cmnd *cmd, int aor)
- 
- 		scb = list_entry(pos, scb_t, list);
- 
--		if (scb->cmd == cmd) { /* Found command */
-+		if (!cmd || scb->cmd == cmd) { /* Found command */
- 
- 			scb->state |= aor;
- 
-@@ -1963,31 +1963,23 @@ megaraid_abort_and_reset(adapter_t *adapter, struct scsi_cmnd *cmd, int aor)
- 
- 				return FAILED;
- 			}
--			else {
--
--				/*
--				 * Not yet issued! Remove from the pending
--				 * list
--				 */
--				dev_warn(&adapter->dev->dev,
--					"%s-[%x], driver owner\n",
--					(aor==SCB_ABORT) ? "ABORTING":"RESET",
--					scb->idx);
--
--				mega_free_scb(adapter, scb);
--
--				if( aor == SCB_ABORT ) {
--					cmd->result = (DID_ABORT << 16);
--				}
--				else {
--					cmd->result = (DID_RESET << 16);
--				}
-+			/*
-+			 * Not yet issued! Remove from the pending
-+			 * list
-+			 */
-+			dev_warn(&adapter->dev->dev,
-+				 "%s-[%x], driver owner\n",
-+				 (cmd) ? "ABORTING":"RESET",
-+				 scb->idx);
-+			mega_free_scb(adapter, scb);
- 
-+			if (cmd) {
-+				cmd->result = (DID_ABORT << 16);
- 				list_add_tail(SCSI_LIST(cmd),
--						&adapter->completed_list);
--
--				return SUCCESS;
-+					      &adapter->completed_list);
- 			}
-+
-+			return SUCCESS;
- 		}
+ 	if (!(adapter->connection_features & FSF_FEATURE_NPIV_MODE)) {
+ 		zfcp_erp_port_forced_reopen_all(adapter, 0, "schrh_p");
+@@ -383,9 +385,24 @@ static int zfcp_scsi_eh_host_reset_handler(struct scsi_cmnd *scpnt)
  	}
+ 	zfcp_erp_adapter_reopen(adapter, 0, "schrh_1");
+ 	zfcp_erp_wait(adapter);
+-	fc_ret = fc_block_scsi_eh(scpnt);
+-	if (fc_ret)
+-		ret = fc_ret;
++retry_rport_blocked:
++	spin_lock_irqsave(host->host_lock, flags);
++	list_for_each_entry(port, &adapter->port_list, list) {
++		struct fc_rport *rport = port->rport;
++
++		if (rport->port_state == FC_PORTSTATE_BLOCKED) {
++			if (rport->flags & FC_RPORT_FAST_FAIL_TIMEDOUT)
++				ret = FAST_IO_FAIL;
++			else
++				ret = NEEDS_RETRY;
++			break;
++		}
++	}
++	spin_unlock_irqrestore(host->host_lock, flags);
++	if (ret == NEEDS_RETRY) {
++		msleep(1000);
++		goto retry_rport_blocked;
++	}
  
-@@ -4135,8 +4127,6 @@ static struct scsi_host_template megaraid_template = {
- 	.sg_tablesize			= MAX_SGLIST,
- 	.cmd_per_lun			= DEF_CMD_PER_LUN,
- 	.eh_abort_handler		= megaraid_abort,
--	.eh_device_reset_handler	= megaraid_reset,
--	.eh_bus_reset_handler		= megaraid_reset,
- 	.eh_host_reset_handler		= megaraid_reset,
- 	.no_write_same			= 1,
- };
+ 	zfcp_dbf_scsi_eh("schrh_r", adapter, ~0, ret);
+ 	return ret;
 -- 
 2.29.2
 
