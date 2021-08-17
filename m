@@ -2,117 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D8B3EE978
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7C33EEA4F
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Aug 2021 11:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239336AbhHQJSL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 05:18:11 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:47748 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239388AbhHQJRV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:17:21 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id F1D8020031;
-        Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1629191802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=REUvCDjGKDy6I/jUjHfIYSMuy1Fh5JzfD6YjKjh7N1w=;
-        b=d6u53/ASZ4HGf6gRWKhGo7afkG8a5/vBmU26u+w0R+8Qgw2mSQdVMLp5/Z3ABgDdMv8PPN
-        WU3UeE52/lA/ZyAvmbrsvqHI9vQDgrv1xLWcZ+pspX6uZiVHxEZTShv15ydaIREQFzO0vx
-        8E0088SZ+Ken3TARUZ7k3uZ6W8NQpKQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1629191802;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=REUvCDjGKDy6I/jUjHfIYSMuy1Fh5JzfD6YjKjh7N1w=;
-        b=KyW6h1KM7BuZaSLniUTafke3U3X/nsGMDYstGx3wcvlujL2UBISiJGw1QHatbp7kNnmXE/
-        oqgR3M3LXeU+t8Cw==
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id EB8CAA3BC1;
-        Tue, 17 Aug 2021 09:16:42 +0000 (UTC)
-Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id E8A84518CEC5; Tue, 17 Aug 2021 11:16:42 +0200 (CEST)
-From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 51/51] scsi_error: streamline scsi_eh_bus_device_reset()
-Date:   Tue, 17 Aug 2021 11:14:56 +0200
-Message-Id: <20210817091456.73342-52-hare@suse.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210817091456.73342-1-hare@suse.de>
-References: <20210817091456.73342-1-hare@suse.de>
+        id S235611AbhHQJwX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 05:52:23 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3654 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235293AbhHQJwW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 05:52:22 -0400
+Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GpmW25HqVz6CCR8;
+        Tue, 17 Aug 2021 17:50:54 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.8; Tue, 17 Aug 2021 11:51:48 +0200
+Received: from [10.202.227.179] (10.202.227.179) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.8; Tue, 17 Aug 2021 10:51:47 +0100
+Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+References: <20210817194710.1cb707ba@canb.auug.org.au>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <c27c2909-1701-b972-dd7c-98bdc53ab8f9@huawei.com>
+Date:   Tue, 17 Aug 2021 10:51:46 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210817194710.1cb707ba@canb.auug.org.au>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.179]
+X-ClientProxiedBy: lhreml702-chm.china.huawei.com (10.201.108.51) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Hannes Reinecke <hare@suse.com>
+On 17/08/2021 10:47, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the scsi-mkp tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> In file included from include/linux/byteorder/big_endian.h:5,
+>                   from arch/powerpc/include/uapi/asm/byteorder.h:14,
+>                   from include/asm-generic/bitops/le.h:7,
+>                   from arch/powerpc/include/asm/bitops.h:265,
+>                   from include/linux/bitops.h:33,
+>                   from include/linux/kernel.h:12,
+>                   from include/linux/list.h:9,
+>                   from include/linux/module.h:12,
+>                   from drivers/scsi/ibmvscsi/ibmvfc.c:10:
+> drivers/scsi/ibmvscsi/ibmvfc.c: In function 'ibmvfc_queuecommand':
+> drivers/scsi/ibmvscsi/ibmvfc.c:1959:39: error: 'struct scsi_cmnd' has no member named 'tag'
+>   1959 |   vfc_cmd->task_tag = cpu_to_be64(cmnd->tag);
+>        |                                       ^~
+> include/uapi/linux/byteorder/big_endian.h:37:51: note: in definition of macro '__cpu_to_be64'
+>     37 | #define __cpu_to_be64(x) ((__force __be64)(__u64)(x))
+>        |                                                   ^
+> drivers/scsi/ibmvscsi/ibmvfc.c:1959:23: note: in expansion of macro 'cpu_to_be64'
+>   1959 |   vfc_cmd->task_tag = cpu_to_be64(cmnd->tag);
+>        |                       ^~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>    c7c43e3c7147 ("scsi: core: Remove scsi_cmnd.tag")
+> 
+> I have used the scsi-mkp tree from next-20210816 for today.
+> 
 
-Streamline to use a similar code flow than the other reset functions.
+sorry... I only built x86 and arm64 allmodconfig. Let me check this.
 
-Signed-off-by: Hannes Reinecke <hare@suse.com>
----
- drivers/scsi/scsi_error.c | 26 +++++++++++---------------
- 1 file changed, 11 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 5cfff3fa306c..d4ab10113648 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -1516,6 +1516,7 @@ static int scsi_eh_bus_device_reset(struct Scsi_Host *shost,
- {
- 	struct scsi_cmnd *scmd, *bdr_scmd, *next;
- 	struct scsi_device *sdev;
-+	LIST_HEAD(check_list);
- 	enum scsi_disposition rtn;
- 
- 	shost_for_each_device(sdev, shost) {
-@@ -1541,27 +1542,22 @@ static int scsi_eh_bus_device_reset(struct Scsi_Host *shost,
- 			sdev_printk(KERN_INFO, sdev,
- 				     "%s: Sending BDR\n", current->comm));
- 		rtn = scsi_try_bus_device_reset(sdev);
--		if (rtn == SUCCESS || rtn == FAST_IO_FAIL) {
--			if (!scsi_device_online(sdev) ||
--			    rtn == FAST_IO_FAIL ||
--			    !scsi_eh_tur(bdr_scmd)) {
--				list_for_each_entry_safe(scmd, next,
--							 work_q, eh_entry) {
--					if (scmd->device == sdev &&
--					    scsi_eh_action(scmd, rtn) != FAILED)
--						__scsi_eh_finish_cmd(scmd,
--								     done_q,
--								     DID_RESET);
--				}
--			}
--		} else {
-+		if (rtn != SUCCESS && rtn != FAST_IO_FAIL)
- 			SCSI_LOG_ERROR_RECOVERY(3,
- 				sdev_printk(KERN_INFO, sdev,
- 					    "%s: BDR failed\n", current->comm));
-+		list_for_each_entry_safe(scmd, next, work_q, eh_entry) {
-+			if (scmd->device != sdev)
-+				continue;
-+			if (rtn == SUCCESS)
-+				list_move_tail(&scmd->eh_entry, &check_list);
-+			else if (rtn == FAST_IO_FAIL)
-+				__scsi_eh_finish_cmd(scmd, done_q,
-+						     DID_TRANSPORT_DISRUPTED);
- 		}
- 	}
- 
--	return list_empty(work_q);
-+	return scsi_eh_test_devices(&check_list, work_q, done_q, 0);
- }
- 
- /**
--- 
-2.29.2
-
+Thanks
