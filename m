@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B8C3EF7D1
-	for <lists+linux-scsi@lfdr.de>; Wed, 18 Aug 2021 04:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CC73EF7D4
+	for <lists+linux-scsi@lfdr.de>; Wed, 18 Aug 2021 04:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235909AbhHRCEb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Aug 2021 22:04:31 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:14225 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbhHRCEb (ORCPT
+        id S236630AbhHRCEh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Aug 2021 22:04:37 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:8032 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233380AbhHRCEb (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Aug 2021 22:04:31 -0400
 Received: from dggeme754-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GqB5J37jwz1CXcJ;
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GqB5J4KpnzYqPN;
         Wed, 18 Aug 2021 10:03:32 +0800 (CST)
 Received: from huawei.com (10.175.127.227) by dggeme754-chm.china.huawei.com
  (10.3.19.100) with Microsoft SMTP Server (version=TLS1_2,
@@ -22,10 +22,12 @@ From:   Ye Bin <yebin10@huawei.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
         <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     Ye Bin <yebin10@huawei.com>
-Subject: [PATCH -next 0/2] Fix out-of-bound in resp_readcap16 and resp_report_tgtpgs
-Date:   Wed, 18 Aug 2021 10:14:26 +0800
-Message-ID: <20210818021428.3720233-1-yebin10@huawei.com>
+Subject: [PATCH -next 1/2] scsi:scsi_debug: Fix out-of-bound in resp_readcap16
+Date:   Wed, 18 Aug 2021 10:14:27 +0800
+Message-ID: <20210818021428.3720233-2-yebin10@huawei.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210818021428.3720233-1-yebin10@huawei.com>
+References: <20210818021428.3720233-1-yebin10@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -37,13 +39,76 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Ye Bin (2):
-  scsi:scsi_debug: Fix out-of-bound in resp_readcap16
-  scsi:scsi_debug: Fix potential OOB in resp_report_tgtpgs
+We got following warning when runing syzkaller:
+[ 3813.830724] sg_write: data in/out 65466/242 bytes for SCSI command 0x9e-- guessing data in;
+[ 3813.830724]    program syz-executor not setting count and/or reply_len properly
+[ 3813.836956] ==================================================================
+[ 3813.839465] BUG: KASAN: stack-out-of-bounds in sg_copy_buffer+0x157/0x1e0
+[ 3813.841773] Read of size 4096 at addr ffff8883cf80f540 by task syz-executor/1549
+[ 3813.846612] Call Trace:
+[ 3813.846995]  dump_stack+0x108/0x15f
+[ 3813.847524]  print_address_description+0xa5/0x372
+[ 3813.848243]  kasan_report.cold+0x236/0x2a8
+[ 3813.849439]  check_memory_region+0x240/0x270
+[ 3813.850094]  memcpy+0x30/0x80
+[ 3813.850553]  sg_copy_buffer+0x157/0x1e0
+[ 3813.853032]  sg_copy_from_buffer+0x13/0x20
+[ 3813.853660]  fill_from_dev_buffer+0x135/0x370
+[ 3813.854329]  resp_readcap16+0x1ac/0x280
+[ 3813.856917]  schedule_resp+0x41f/0x1630
+[ 3813.858203]  scsi_debug_queuecommand+0xb32/0x17e0
+[ 3813.862699]  scsi_dispatch_cmd+0x330/0x950
+[ 3813.863329]  scsi_request_fn+0xd8e/0x1710
+[ 3813.863946]  __blk_run_queue+0x10b/0x230
+[ 3813.864544]  blk_execute_rq_nowait+0x1d8/0x400
+[ 3813.865220]  sg_common_write.isra.0+0xe61/0x2420
+[ 3813.871637]  sg_write+0x6c8/0xef0
+[ 3813.878853]  __vfs_write+0xe4/0x800
+[ 3813.883487]  vfs_write+0x17b/0x530
+[ 3813.884008]  ksys_write+0x103/0x270
+[ 3813.886268]  __x64_sys_write+0x77/0xc0
+[ 3813.886841]  do_syscall_64+0x106/0x360
+[ 3813.887415]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
- drivers/scsi/scsi_debug.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+We can reproduce this issue with following syzkaller log:
+r0 = openat(0xffffffffffffff9c, &(0x7f0000000040)='./file0\x00', 0x26e1, 0x0)
+r1 = syz_open_procfs(0xffffffffffffffff, &(0x7f0000000000)='fd/3\x00')
+open_by_handle_at(r1, &(0x7f00000003c0)=ANY=[@ANYRESHEX], 0x602000)
+r2 = syz_open_dev$sg(&(0x7f0000000000), 0x0, 0x40782)
+write$binfmt_aout(r2, &(0x7f0000000340)=ANY=[@ANYBLOB="00000000deff000000000000000000000000000000000000000000000000000047f007af9e107a41ec395f1bded7be24277a1501ff6196a83366f4e6362bc0ff2b247f68a972989b094b2da4fb3607fcf611a22dd04310d28c75039d"], 0x126)
 
+As in resp_readcap16 we get "int alloc_len" value -1104926854, and then pass
+huge arr_len to fill_from_dev_buffer, but arr is only has 32 bytes space. So
+lead to OOB in sg_copy_buffer.
+To solve this issue just define alloc_len with U32 type.
+
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ drivers/scsi/scsi_debug.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 66f507469a31..be0440545744 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -1856,7 +1856,7 @@ static int resp_readcap16(struct scsi_cmnd *scp,
+ {
+ 	unsigned char *cmd = scp->cmnd;
+ 	unsigned char arr[SDEBUG_READCAP16_ARR_SZ];
+-	int alloc_len;
++	u32 alloc_len;
+ 
+ 	alloc_len = get_unaligned_be32(cmd + 10);
+ 	/* following just in case virtual_gb changed */
+@@ -1885,7 +1885,7 @@ static int resp_readcap16(struct scsi_cmnd *scp,
+ 	}
+ 
+ 	return fill_from_dev_buffer(scp, arr,
+-			    min_t(int, alloc_len, SDEBUG_READCAP16_ARR_SZ));
++			    min_t(u32, alloc_len, SDEBUG_READCAP16_ARR_SZ));
+ }
+ 
+ #define SDEBUG_MAX_TGTPGS_ARR_SZ 1412
 -- 
 2.31.1
 
