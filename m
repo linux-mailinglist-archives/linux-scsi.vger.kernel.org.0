@@ -2,209 +2,120 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 859043F15C7
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Aug 2021 11:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0297F3F15D1
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Aug 2021 11:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236661AbhHSJIU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Aug 2021 05:08:20 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:60242 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235475AbhHSJIF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Aug 2021 05:08:05 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id E9DED21BDD;
-        Thu, 19 Aug 2021 09:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1629364048; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fXnMvkw0hihOFWADfDSWmtHiZimH6I6lGU6S4XzOVKU=;
-        b=K1GjPK8mSFP2+pgYoJSbU+Ou2bzN1onJFC2iLuFQ0w32siLn4ps45tarNmTDwmRx+LT7Hj
-        qszm1EJk1msHjvIW0HEUuL7UivdK7KOyv+8BfEl1647L1IwBLxf+6GeedyVqqPQhUdf2n6
-        Jo2rmjuBX6XEU+5dP1BOvfbRZmctKBQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1629364048;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fXnMvkw0hihOFWADfDSWmtHiZimH6I6lGU6S4XzOVKU=;
-        b=/H/ERfLRHNi+EUAUWP0ANv4mm7HnM+Pzn+j5Ar82gNytfhSRt3UotV00SrxaSBVStYx/il
-        wC63NIjBC4CBt6BQ==
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 29177A3BAB;
-        Thu, 19 Aug 2021 09:07:19 +0000 (UTC)
-Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id D58C5518D27B; Thu, 19 Aug 2021 11:07:28 +0200 (CEST)
-From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 4/4] sym53c8xx_2: rework reset handling
-Date:   Thu, 19 Aug 2021 11:07:16 +0200
-Message-Id: <20210819090716.94049-5-hare@suse.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210819090716.94049-1-hare@suse.de>
-References: <20210819090716.94049-1-hare@suse.de>
+        id S236873AbhHSJKJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Aug 2021 05:10:09 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:3671 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229804AbhHSJKI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Aug 2021 05:10:08 -0400
+Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GqzTG6WSDz6BGCj;
+        Thu, 19 Aug 2021 17:08:34 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Thu, 19 Aug 2021 11:09:29 +0200
+Received: from [10.202.227.179] (10.202.227.179) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Thu, 19 Aug 2021 10:09:28 +0100
+Subject: Re: [PATCH 0/3] Remove scsi_cmnd.tag
+To:     Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     <satishkh@cisco.com>, <sebaddel@cisco.com>, <kartilak@cisco.com>,
+        <jejb@linux.ibm.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <hch@lst.de>
+References: <1628862553-179450-1-git-send-email-john.garry@huawei.com>
+ <yq14kbppa42.fsf@ca-mkp.ca.oracle.com>
+ <176ce4f2-42c9-bba6-c8f9-70a08faa21b8@huawei.com>
+ <e0d7ba32-2999-794e-2ccb-fdba2c847eb1@acm.org>
+ <038ec0c6-92c9-0f2a-7d81-afb91b8343af@suse.de>
+ <c9d9891b-780b-4641-2b60-6319d525e17c@huawei.com>
+ <6090371d-9688-11ae-8219-ba9929a96526@suse.de>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <6c83bd7f-9fd2-1b43-627f-615467fa55d4@huawei.com>
+Date:   Thu, 19 Aug 2021 10:09:27 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
+In-Reply-To: <6090371d-9688-11ae-8219-ba9929a96526@suse.de>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.202.227.179]
+X-ClientProxiedBy: lhreml710-chm.china.huawei.com (10.201.108.61) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Split off the combined abort and device reset handling into
-distinct functions.
-And the current device reset handler really is a target reset,
-so rename it.
+On 19/08/2021 08:50, Hannes Reinecke wrote:
+>>>    select CPU_32v4 if ARCH_RPC
+>>
+>> Does that build fully for xconfig or any others which you tried?
+>>
+>  > Yep, xconfig and full build works.
+> 
+> Well.
+> 
+> Would've worked if you hadn't messed up tag handling for acornscsi :-)
+>  > Besides: tag handling in acornscsi (and fas216, for that matter) seems
+> to be completely broken.
+> 
+> Consider this beauty:
+> 
+> #ifdef CONFIG_SCSI_ACORNSCSI_TAGGED_QUEUE
+>         /*
+>          * tagged queueing - allocate a new tag to this command
+>          */
+>         if (SCpnt->device->simple_tags) {
+>             SCpnt->device->current_tag += 1;
+>             if (SCpnt->device->current_tag == 0)
+>                 SCpnt->device->current_tag = 1;
+>             SCpnt->tag = SCpnt->device->current_tag;
+>         } else
+> #endif
 
-Signed-off-by: Hannes Reinecke <hare@suse.com>
----
- drivers/scsi/sym53c8xx_2/sym_glue.c | 86 ++++++++++++++++-------------
- 1 file changed, 49 insertions(+), 37 deletions(-)
+So isn't this just using the scsi_cmnd.tag as it own scribble?
 
-diff --git a/drivers/scsi/sym53c8xx_2/sym_glue.c b/drivers/scsi/sym53c8xx_2/sym_glue.c
-index 817b2584b4aa..8773fbdfd559 100644
---- a/drivers/scsi/sym53c8xx_2/sym_glue.c
-+++ b/drivers/scsi/sym53c8xx_2/sym_glue.c
-@@ -585,13 +585,12 @@ static int sym_eh_wait_for_commands(struct Scsi_Host *shost)
- }
- 
- /*
-- *  Generic method for our eh processing.
-- *  The 'op' argument tells what we have to do.
-+ * Error handlers called from the eh thread (one thread per HBA).
-  */
--static int sym_eh_handler(struct Scsi_Host *shost, int op,
--			  char *opname, struct scsi_cmnd *cmd)
-+static int sym53c8xx_eh_abort_handler(struct scsi_cmnd *cmd)
- {
- 	struct sym_ucmd *ucmd = SYM_UCMD_PTR(cmd);
-+	struct Scsi_Host *shost = cmd->device->host;
- 	struct sym_data *sym_data = shost_priv(shost);
- 	struct sym_hcb *np = sym_data->ncb;
- 	SYM_QUEHEAD *qp;
-@@ -599,7 +598,7 @@ static int sym_eh_handler(struct Scsi_Host *shost, int op,
- 	int sts = -1;
- 	struct completion eh_done;
- 
--	scmd_printk(KERN_WARNING, cmd, "%s operation started\n", opname);
-+	scmd_printk(KERN_WARNING, cmd, "ABORT operation started\n");
- 
- 	spin_lock_irq(shost->host_lock);
- 	/* This one is queued in some place -> to wait for completion */
-@@ -611,19 +610,7 @@ static int sym_eh_handler(struct Scsi_Host *shost, int op,
- 		}
- 	}
- 
--	/* Try to proceed the operation we have been asked for */
--	sts = -1;
--	switch(op) {
--	case SYM_EH_ABORT:
--		sts = sym_abort_scsiio(np, cmd, 1);
--		break;
--	case SYM_EH_DEVICE_RESET:
--		sts = sym_reset_scsi_target(np, cmd->device->id);
--		break;
--	default:
--		break;
--	}
--
-+	sts = sym_abort_scsiio(np, cmd, 1);
- 	/* On error, restore everything and cross fingers :) */
- 	if (sts)
- 		cmd_queued = 0;
-@@ -640,35 +627,60 @@ static int sym_eh_handler(struct Scsi_Host *shost, int op,
- 		spin_unlock_irq(shost->host_lock);
- 	}
- 
--	dev_warn(&cmd->device->sdev_gendev, "%s operation %s.\n", opname,
-+	dev_warn(&cmd->device->sdev_gendev, "ABORT operation %s.\n",
- 			sts==0 ? "complete" :sts==-2 ? "timed-out" : "failed");
- 	return sts ? SCSI_FAILED : SCSI_SUCCESS;
- }
- 
--
--/*
-- * Error handlers called from the eh thread (one thread per HBA).
-- */
--static int sym53c8xx_eh_abort_handler(struct scsi_cmnd *cmd)
-+static int sym53c8xx_eh_target_reset_handler(struct scsi_cmnd *cmd)
- {
--	struct Scsi_Host *shost = cmd->device->host;
-+	struct scsi_target *starget = scsi_target(cmd->device);
-+	struct Scsi_Host *shost = dev_to_shost(starget->dev.parent);
- 	struct sym_data *sym_data = shost_priv(shost);
- 	struct pci_dev *pdev = sym_data->pdev;
-+	struct sym_hcb *np = sym_data->ncb;
-+	SYM_QUEHEAD *qp;
-+	int sts;
-+	struct completion eh_done;
- 
-+	starget_printk(KERN_WARNING, starget,
-+		       "TARGET RESET operation started\n");
-+
-+	/*
-+	 * Escalate to host reset if the PCI bus went down
-+	 */
- 	if (pci_channel_offline(pdev))
--		return FAILED;
--	return sym_eh_handler(shost, SYM_EH_ABORT, "ABORT", cmd);
--}
-+		return SCSI_FAILED;
- 
--static int sym53c8xx_eh_device_reset_handler(struct scsi_cmnd *cmd)
--{
--	struct Scsi_Host *shost = cmd->device->host;
--	struct sym_data *sym_data = shost_priv(shost);
--	struct pci_dev *pdev = sym_data->pdev;
-+	spin_lock_irq(shost->host_lock);
-+	sts = sym_reset_scsi_target(np, starget->id);
-+	if (!sts) {
-+		FOR_EACH_QUEUED_ELEMENT(&np->busy_ccbq, qp) {
-+			struct sym_ccb *cp = sym_que_entry(qp, struct sym_ccb,
-+							   link_ccbq);
-+			struct scsi_cmnd *cmd = cp->cmd;
-+			struct sym_ucmd *ucmd;
-+
-+			if (!cmd || cmd->device->channel != starget->channel ||
-+			    cmd->device->id != starget->id)
-+				continue;
- 
--	if (pci_channel_offline(pdev))
--		return FAILED;
--	return sym_eh_handler(shost, SYM_EH_DEVICE_RESET, "DEVICE RESET", cmd);
-+			ucmd = SYM_UCMD_PTR(cmd);
-+			init_completion(&eh_done);
-+			ucmd->eh_done = &eh_done;
-+			spin_unlock_irq(shost->host_lock);
-+			if (!wait_for_completion_timeout(&eh_done, 5*HZ)) {
-+				ucmd->eh_done = NULL;
-+				sts = -2;
-+			}
-+			spin_lock_irq(shost->host_lock);
-+		}
-+	}
-+	spin_unlock_irq(shost->host_lock);
-+
-+	starget_printk(KERN_WARNING, starget, "TARGET RESET operation %s.\n",
-+			sts==0 ? "complete" :sts==-2 ? "timed-out" : "failed");
-+	return SCSI_SUCCESS;
- }
- 
- static int sym53c8xx_eh_bus_reset_handler(struct scsi_cmnd *cmd)
-@@ -1699,7 +1711,7 @@ static struct scsi_host_template sym2_template = {
- 	.slave_configure	= sym53c8xx_slave_configure,
- 	.slave_destroy		= sym53c8xx_slave_destroy,
- 	.eh_abort_handler	= sym53c8xx_eh_abort_handler,
--	.eh_device_reset_handler = sym53c8xx_eh_device_reset_handler,
-+	.eh_target_reset_handler = sym53c8xx_eh_target_reset_handler,
- 	.eh_bus_reset_handler	= sym53c8xx_eh_bus_reset_handler,
- 	.eh_host_reset_handler	= sym53c8xx_eh_host_reset_handler,
- 	.this_id		= 7,
--- 
-2.29.2
+> 
+> which is broken on _soo many_ counts.
+> Not only does it try to allocate its own tags, the code also assumes 
+> that a tag value of '0' indicates that tagged queueing is not active:
+> 
 
+In case you missed it, Arnd B tried to clear out some old platforms 
+earlier this year. With respect to rpc, Russell King apparently still 
+uses it and has some SCSI patches:
+
+https://lore.kernel.org/lkml/20210109174357.GB1551@shell.armlinux.org.uk/
+
+I wonder what they are and maybe we can check. Anyway... I'd run any 
+changes by him...
+
+> static
+> void acornscsi_abortcmd(AS_Host *host, unsigned char tag)
+> {
+>      host->scsi.phase = PHASE_ABORTED;
+>      sbic_arm_write(host, SBIC_CMND, CMND_ASSERTATN);
+> 
+>      msgqueue_flush(&host->scsi.msgs);
+> #ifdef CONFIG_SCSI_ACORNSCSI_TAGGED_QUEUE
+>      if (tag)
+>          msgqueue_addmsg(&host->scsi.msgs, 2, ABORT_TAG, tag);
+>      else
+> #endif
+>          msgqueue_addmsg(&host->scsi.msgs, 1, ABORT);
+> }
+> 
+> And, of course, there's the usual confusion about when to check for
+> sdev->tagged_supported and sdev->simple_tags.
+> 
+> Drop me a note if I can give a hand.
+
+Thanks! Let's see what happens to the series which you just sent.
