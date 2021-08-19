@@ -2,93 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B07E03F15DB
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Aug 2021 11:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A55C3F15E7
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Aug 2021 11:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237525AbhHSJLG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Aug 2021 05:11:06 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:36676 "EHLO
+        id S237005AbhHSJNI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Aug 2021 05:13:08 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:36764 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237480AbhHSJLA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Aug 2021 05:11:00 -0400
+        with ESMTP id S234211AbhHSJNF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Aug 2021 05:13:05 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 83208200B2;
-        Thu, 19 Aug 2021 09:10:23 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id E58F51FD84;
+        Thu, 19 Aug 2021 09:12:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1629364223; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mypCkcN03B6JdHrT6lxH/iNV6wSnQ4DHefYz3yCgc/I=;
-        b=Ec3ExpIHcxyD6SLUhBC0rdQSjuaChgflfONv7OjnEsegoEyiJYt2avSB8fogIuw3Hxtecd
-        otCF8hVwRBDlvl+J4JIA3lyBb6CgOHhLvKb7Zhgqyfg1sKONeE1ood4nM3CQ9SN9U63RNG
-        rI6/Jti3zx5BqCO3iiAMNuf7Gw7tEuY=
+        t=1629364348; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=eEoS7LeK32LRG5fToGNY0grWPPNf12oS4YZHjvgmZ4M=;
+        b=f6m7hT0LsK5m68R2GjsFuh1nlhTgnYsq+bMRhjHcYwKIfAn3glxD1yOulQTjwFC+N3Jo8v
+        uOuyAIXgr/tFDCUX3ROW2YgvuphoOtBSAD4MSsb2g4Zq1R3BLnipKlwsr+g7kRnCiJKMA8
+        +bXM3zk5pk99tXIkWMUmtbZMROangUM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1629364223;
+        s=susede2_ed25519; t=1629364348;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mypCkcN03B6JdHrT6lxH/iNV6wSnQ4DHefYz3yCgc/I=;
-        b=xoghmLb0BCqIingFfLCpeItQ4Ba+vnCpqxpAAWeo2OEFLudVvkYwSLME1nFxHfVqNjAnEa
-        /6FFh4gTDOiUWxDA==
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=eEoS7LeK32LRG5fToGNY0grWPPNf12oS4YZHjvgmZ4M=;
+        b=8aOxuYAd2B04R9gIRGKO/cL4lKdpzMFbrg6H6FyHr+J0lV5Sa4A+CCprOTf7qrzbQxzTnv
+        fLG6ic76fdlAZ+AA==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id BC72FA3BA1;
-        Thu, 19 Aug 2021 09:10:13 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTP id 28E73A3B9A;
+        Thu, 19 Aug 2021 09:12:19 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 75E37518D284; Thu, 19 Aug 2021 11:10:23 +0200 (CEST)
+        id CE416518D286; Thu, 19 Aug 2021 11:12:28 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 3/3] mptfc: iterate over all rports during bus reset
-Date:   Thu, 19 Aug 2021 11:10:17 +0200
-Message-Id: <20210819091017.94142-4-hare@suse.de>
+Subject: [PATCH 0/3] snic: Fixes for SCSI EH rework
+Date:   Thu, 19 Aug 2021 11:12:21 +0200
+Message-Id: <20210819091224.94213-1-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210819091017.94142-1-hare@suse.de>
-References: <20210819091017.94142-1-hare@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When issuing a bus reset we need to call fc_block_rport() on all
-ports, otherwise we might be executing the bus reset call prematurely.
+Hi all,
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
----
- drivers/message/fusion/mptfc.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+with the SCSI EH rework the scsi_cmnd argument for the SCSI EH
+callbacks is going away, so we need to fixup the drivers to work
+without it.
 
-diff --git a/drivers/message/fusion/mptfc.c b/drivers/message/fusion/mptfc.c
-index 3962951c1e9a..952dc85bba08 100644
---- a/drivers/message/fusion/mptfc.c
-+++ b/drivers/message/fusion/mptfc.c
-@@ -227,14 +227,18 @@ mptfc_bus_reset(struct scsi_cmnd *SCpnt)
- {
- 	struct scsi_device	*sdev = SCpnt->device;
- 	struct Scsi_Host	*shost = sdev->host;
--	struct fc_rport		*rport = starget_to_rport(scsi_target(sdev));
- 	MPT_SCSI_HOST		*hd = shost_priv(shost);
- 	MPT_ADAPTER 		*ioc = hd->ioc;
-+	struct mptfc_rport_info	*ri;
- 	int rval;
- 
--	rval = fc_block_rport(rport);
--	if (rval)
--		return rval;
-+	list_for_each_entry(ri, &ioc->fc_rports, list) {
-+		rval = fc_block_rport(ri->rport);
-+		if (rval)
-+			return rval;
-+		if (ioc->active == 0)
-+			return FAILED;
-+	}
- 	dfcprintk (ioc, printk(MYIOC_s_DEBUG_FMT
- 		"%s.%d: %d:%llu, executing recovery.\n",
- 		ioc->name, __func__, ioc->sh->host_no,
+This patchset modifies the snic driver to not rely on a
+specific command for the SCSI EH callbacks.
+
+As usual, comments and reviews are welcome.
+
+Hannes Reinecke (3):
+  snic: reserve tag for TMF
+  snic: use dedicated device reset command
+  snic: Use scsi_host_busy_iter() to traverse commands
+
+ drivers/scsi/snic/snic.h      |   3 +-
+ drivers/scsi/snic/snic_main.c |   3 +
+ drivers/scsi/snic/snic_scsi.c | 308 ++++++++++++++++------------------
+ 3 files changed, 149 insertions(+), 165 deletions(-)
+
 -- 
 2.29.2
 
