@@ -2,120 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0297F3F15D1
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Aug 2021 11:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 673DD3F15DA
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Aug 2021 11:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236873AbhHSJKJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Aug 2021 05:10:09 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3671 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbhHSJKI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Aug 2021 05:10:08 -0400
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GqzTG6WSDz6BGCj;
-        Thu, 19 Aug 2021 17:08:34 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Thu, 19 Aug 2021 11:09:29 +0200
-Received: from [10.202.227.179] (10.202.227.179) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Thu, 19 Aug 2021 10:09:28 +0100
-Subject: Re: [PATCH 0/3] Remove scsi_cmnd.tag
-To:     Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     <satishkh@cisco.com>, <sebaddel@cisco.com>, <kartilak@cisco.com>,
-        <jejb@linux.ibm.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <hch@lst.de>
-References: <1628862553-179450-1-git-send-email-john.garry@huawei.com>
- <yq14kbppa42.fsf@ca-mkp.ca.oracle.com>
- <176ce4f2-42c9-bba6-c8f9-70a08faa21b8@huawei.com>
- <e0d7ba32-2999-794e-2ccb-fdba2c847eb1@acm.org>
- <038ec0c6-92c9-0f2a-7d81-afb91b8343af@suse.de>
- <c9d9891b-780b-4641-2b60-6319d525e17c@huawei.com>
- <6090371d-9688-11ae-8219-ba9929a96526@suse.de>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <6c83bd7f-9fd2-1b43-627f-615467fa55d4@huawei.com>
-Date:   Thu, 19 Aug 2021 10:09:27 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S237494AbhHSJLG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Aug 2021 05:11:06 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:60320 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237374AbhHSJLA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Aug 2021 05:11:00 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 797BB21BDD;
+        Thu, 19 Aug 2021 09:10:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1629364223; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=HLhMSiKgs+WVfMATBWy2NPfvHwoY3i+WzNtKX9gjp8M=;
+        b=MuN7cYHLVamq6ORrZThr70v1r0Ynpa3F6HppGI+CGJQRbRBBm3dYPIu8DdcELOyGGgd9EX
+        hxDAj432z86wqWjxyHSzByxDAmDvFonEIsd+J4O9W2A+TkvUgQv29P5su60O3A+v2VCsNF
+        8DJYM1cyoGdO3GFLiCWSuZwQPmH/W2o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1629364223;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=HLhMSiKgs+WVfMATBWy2NPfvHwoY3i+WzNtKX9gjp8M=;
+        b=FT8DrnqKcOghvQqaxJ7lubGSL+ovoA7BRvQ37FvTDuaqlhfGobkSKCqBE2XcWf/qQr/KyB
+        X/S9Q1WAgnCbxKAw==
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id B3808A3B9C;
+        Thu, 19 Aug 2021 09:10:13 +0000 (UTC)
+Received: by adalid.arch.suse.de (Postfix, from userid 16045)
+        id 66C7D518D27E; Thu, 19 Aug 2021 11:10:23 +0200 (CEST)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH 0/3] mptfusion: Fixes for SCSI EH rework
+Date:   Thu, 19 Aug 2021 11:10:14 +0200
+Message-Id: <20210819091017.94142-1-hare@suse.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <6090371d-9688-11ae-8219-ba9929a96526@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.202.227.179]
-X-ClientProxiedBy: lhreml710-chm.china.huawei.com (10.201.108.61) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 19/08/2021 08:50, Hannes Reinecke wrote:
->>>    select CPU_32v4 if ARCH_RPC
->>
->> Does that build fully for xconfig or any others which you tried?
->>
->  > Yep, xconfig and full build works.
-> 
-> Well.
-> 
-> Would've worked if you hadn't messed up tag handling for acornscsi :-)
->  > Besides: tag handling in acornscsi (and fas216, for that matter) seems
-> to be completely broken.
-> 
-> Consider this beauty:
-> 
-> #ifdef CONFIG_SCSI_ACORNSCSI_TAGGED_QUEUE
->         /*
->          * tagged queueing - allocate a new tag to this command
->          */
->         if (SCpnt->device->simple_tags) {
->             SCpnt->device->current_tag += 1;
->             if (SCpnt->device->current_tag == 0)
->                 SCpnt->device->current_tag = 1;
->             SCpnt->tag = SCpnt->device->current_tag;
->         } else
-> #endif
+Hi all,
 
-So isn't this just using the scsi_cmnd.tag as it own scribble?
+with the SCSI EH rework the scsi_cmnd argument for the SCSI EH
+callbacks is going away, so we need to fixup the drivers to work
+without it.
 
-> 
-> which is broken on _soo many_ counts.
-> Not only does it try to allocate its own tags, the code also assumes 
-> that a tag value of '0' indicates that tagged queueing is not active:
-> 
+This patchset modifies the mptfusion driver to not rely on a
+specific command for the SCSI EH callbacks.
 
-In case you missed it, Arnd B tried to clear out some old platforms 
-earlier this year. With respect to rpc, Russell King apparently still 
-uses it and has some SCSI patches:
+As usual, comments and reviews are welcome.
 
-https://lore.kernel.org/lkml/20210109174357.GB1551@shell.armlinux.org.uk/
+Hannes Reinecke (3):
+  mptfusion: correct definitions for mptscsih_dev_reset()
+  mptfc: use fc_block_rport() instead of open-coding it
+  mptfc: iterate over all rports during bus reset
 
-I wonder what they are and maybe we can check. Anyway... I'd run any 
-changes by him...
+ drivers/message/fusion/mptfc.c    | 96 +++++++++++++++----------------
+ drivers/message/fusion/mptscsih.c | 55 +++++++++++++++++-
+ drivers/message/fusion/mptscsih.h |  1 +
+ 3 files changed, 100 insertions(+), 52 deletions(-)
 
-> static
-> void acornscsi_abortcmd(AS_Host *host, unsigned char tag)
-> {
->      host->scsi.phase = PHASE_ABORTED;
->      sbic_arm_write(host, SBIC_CMND, CMND_ASSERTATN);
-> 
->      msgqueue_flush(&host->scsi.msgs);
-> #ifdef CONFIG_SCSI_ACORNSCSI_TAGGED_QUEUE
->      if (tag)
->          msgqueue_addmsg(&host->scsi.msgs, 2, ABORT_TAG, tag);
->      else
-> #endif
->          msgqueue_addmsg(&host->scsi.msgs, 1, ABORT);
-> }
-> 
-> And, of course, there's the usual confusion about when to check for
-> sdev->tagged_supported and sdev->simple_tags.
-> 
-> Drop me a note if I can give a hand.
+-- 
+2.29.2
 
-Thanks! Let's see what happens to the series which you just sent.
