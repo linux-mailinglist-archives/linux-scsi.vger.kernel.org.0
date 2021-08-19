@@ -2,79 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCF73F1602
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Aug 2021 11:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF36D3F160B
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Aug 2021 11:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237558AbhHSJRc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Aug 2021 05:17:32 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:60598 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237216AbhHSJRR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Aug 2021 05:17:17 -0400
+        id S232827AbhHSJUB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Aug 2021 05:20:01 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:37176 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229448AbhHSJUA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Aug 2021 05:20:00 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1ADEF220C4;
-        Thu, 19 Aug 2021 09:16:40 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 41D06200B2;
+        Thu, 19 Aug 2021 09:19:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1629364600; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4Oa5R4qC7wZVEInk4ooM8lcxb6YmdVs0y7XfwsdbdgY=;
-        b=z0zSuoAg+ukSB0r14kDJNuCHFNZnM2ggpUGNGcf5KI+06kNCh/BEX5r71ZkxYWfjCPPCch
-        bDu1bL+1pk/18iyQQON+N7Wx0gGzv0G9CKAOFDB7RdEclSHPfCg8q7QlLEi37oTHKj+2wf
-        Ee15s3j/IAzLuwJ2Mlsr+5hHBrc740E=
+        t=1629364764; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=jvyBlpnMdOIvXrO2ECjxFVOqBD2NVJVVULdnx15ntFE=;
+        b=qMw0+0vrW9IkI3/oTTzByJ+EJPTqBBEsFRXtVAuohfQqJ1efc1VWefFX7PDElGpsvNscVd
+        xGEI2w2ObEwfWrv/kzskh4PIXmc2tTkB0Y5tFvtZXEj29AQm76LcM3tMM2e6WnqRZhGtbM
+        gOPB/HOl5iFuBE8ml3I7hhqveKWQjOE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1629364600;
+        s=susede2_ed25519; t=1629364764;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4Oa5R4qC7wZVEInk4ooM8lcxb6YmdVs0y7XfwsdbdgY=;
-        b=Wd8J2DNUojsotp1LsFXaqqJ7Sy0Mr3z7i4IkI0+pcMNw8L1MtNKVPXpJrOksLOOU+0gMyo
-        CWCSi/+uuHfQIrBA==
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=jvyBlpnMdOIvXrO2ECjxFVOqBD2NVJVVULdnx15ntFE=;
+        b=eVoy/VLxr1KGiW5hHY1Hn+Ai5bgT1TBGYdTpXAiJprttGHBbWKMXY6WaEgInHIYyxtLCvt
+        DzOd8RsQG8hGgnAw==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 58B9CA3BA2;
-        Thu, 19 Aug 2021 09:16:30 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTP id 7FA57A3B98;
+        Thu, 19 Aug 2021 09:19:14 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 0BE9C518D294; Thu, 19 Aug 2021 11:16:40 +0200 (CEST)
+        id 2D460518D296; Thu, 19 Aug 2021 11:19:24 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
+        Nilesh Javali <njavali@marvell.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 3/3] megaraid: remove pointless bus_reset and device_reset handler
-Date:   Thu, 19 Aug 2021 11:16:36 +0200
-Message-Id: <20210819091636.94311-4-hare@suse.de>
+Subject: [PATCH 0/3] qla2xxx: Fixes for SCSI EH rework
+Date:   Thu, 19 Aug 2021 11:19:10 +0200
+Message-Id: <20210819091913.94436-1-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210819091636.94311-1-hare@suse.de>
-References: <20210819091636.94311-1-hare@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Both bus and device reset would be calling into the same function
-as host reset, so remove them as host reset will always be called.
+Hi all,
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
----
- drivers/scsi/megaraid.c | 2 --
- 1 file changed, 2 deletions(-)
+with the SCSI EH rework the scsi_cmnd argument for the SCSI EH
+callbacks is going away, so we need to fixup the drivers to work
+without it.
 
-diff --git a/drivers/scsi/megaraid.c b/drivers/scsi/megaraid.c
-index b213ad62639d..ad0ea6dbd513 100644
---- a/drivers/scsi/megaraid.c
-+++ b/drivers/scsi/megaraid.c
-@@ -4156,8 +4156,6 @@ static struct scsi_host_template megaraid_template = {
- 	.sg_tablesize			= MAX_SGLIST,
- 	.cmd_per_lun			= DEF_CMD_PER_LUN,
- 	.eh_abort_handler		= megaraid_abort,
--	.eh_device_reset_handler	= megaraid_reset,
--	.eh_bus_reset_handler		= megaraid_reset,
- 	.eh_host_reset_handler		= megaraid_reset,
- 	.no_write_same			= 1,
- };
+This patchset modifies the qla2xxx driver to not rely on a
+specific command for the SCSI EH callbacks.
+
+As usual, comments and reviews are welcome.
+
+Hannes Reinecke (3):
+  qla2xxx: Do not call fc_block_scsi_eh() during bus reset
+  qla2xxx: Open-code qla2xxx_eh_target_reset()
+  qla2xxx: Open-code qla2xxx_eh_device_reset()
+
+ drivers/scsi/qla2xxx/qla_os.c | 116 ++++++++++++++++++++++------------
+ 1 file changed, 74 insertions(+), 42 deletions(-)
+
 -- 
 2.29.2
 
