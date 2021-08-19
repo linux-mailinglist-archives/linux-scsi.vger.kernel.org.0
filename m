@@ -2,50 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A553F15C5
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Aug 2021 11:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 189C23F15C6
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Aug 2021 11:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236796AbhHSJIR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Aug 2021 05:08:17 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:36574 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236203AbhHSJIF (ORCPT
+        id S234640AbhHSJIT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Aug 2021 05:08:19 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:60248 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236661AbhHSJIF (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Aug 2021 05:08:05 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E26FC1FD82;
+        by smtp-out1.suse.de (Postfix) with ESMTP id EC5FC220BD;
         Thu, 19 Aug 2021 09:07:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1629364048; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c1PVoZnm72z63Pj+wvu55uGHBd3Y0RSTl4RzZxajjSY=;
-        b=mPGoZi/epaGu6jVxgtmfidGywlkpylEXBfSBbdrNgejx+hRE7pHY8/6sGwga9vl8DM1Wh5
-        jvzrViLQsrRcOMz/kBjsIno0oXg056/EL73UjAsmxmrgepFoPfZWpcahS8Uvjdnlb34Dqc
-        kjGkqJAEwhbL7tqniiSgZbjHJzVQHz8=
+        bh=ZFUnIWTuLS7lVSUfq5t4Rg4TGq+Tdn43GGf7cSylo24=;
+        b=xaOYxFPTfcKvFk9DJKcXtgPV9LzPtarZ9IOXyoZk/HJiSQWfVWWKQ5FkE/jT098KCLGmw2
+        7GZGNIcauE9CZFvuoVPw9pk8AJIB9W5jF3Nq1IZ5PKN0xu2ARPuaGaAwhasa9BbMzPrvDs
+        5fe7rUs+hKkUc5ieKC+LN/b4BPsib5M=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1629364048;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c1PVoZnm72z63Pj+wvu55uGHBd3Y0RSTl4RzZxajjSY=;
-        b=Q9fQ3oJDmQMsHXaSnHdDvgEew1Cw2F/EXFSv+pZBN3TNkkyP/2rMZPC84Cw5vaM4Bl0hIS
-        M42gGIOAhMf5tgDw==
+        bh=ZFUnIWTuLS7lVSUfq5t4Rg4TGq+Tdn43GGf7cSylo24=;
+        b=mwQV43pvZYKtbC/moZ0ld+IGIvH3IlQ1wgN4WJyafCNCFSJY6d/0vWaR3mlwivr6vc2098
+        CCSIezsoWa6LTlCA==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 236E7A3BA9;
+        by relay2.suse.de (Postfix) with ESMTP id 25C9EA3BAA;
         Thu, 19 Aug 2021 09:07:19 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id CA50F518D277; Thu, 19 Aug 2021 11:07:28 +0200 (CEST)
+        id CFD15518D279; Thu, 19 Aug 2021 11:07:28 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         Matthew Wilcox <willy@infradead.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 2/4] sym53c8xx_2: split off host reset from sym_eh_handler()
-Date:   Thu, 19 Aug 2021 11:07:14 +0200
-Message-Id: <20210819090716.94049-3-hare@suse.de>
+Subject: [PATCH 3/4] sym53c8xx_2: split off bus reset from sym_eh_handler()
+Date:   Thu, 19 Aug 2021 11:07:15 +0200
+Message-Id: <20210819090716.94049-4-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210819090716.94049-1-hare@suse.de>
 References: <20210819090716.94049-1-hare@suse.de>
@@ -55,91 +55,66 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-For host reset we need to wait for all pending command to complete;
-there might be more than one command queued and we'll need to wait
-for all of them.
-So split off the host reset functionality from sym_eh_handler()
-and add a wait loop for all commands.
+Bus reset is similar to host reset, and we also need to wait for
+all commands to complete. So split off bus reset from sym_eh_handler()
+and wait for all commands to complete after resetting the SCSI bus.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/sym53c8xx_2/sym_glue.c | 42 ++++++++++++++++++++++++-----
- 1 file changed, 35 insertions(+), 7 deletions(-)
+ drivers/scsi/sym53c8xx_2/sym_glue.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/scsi/sym53c8xx_2/sym_glue.c b/drivers/scsi/sym53c8xx_2/sym_glue.c
-index dafdab5869fa..86cba915b62d 100644
+index 86cba915b62d..817b2584b4aa 100644
 --- a/drivers/scsi/sym53c8xx_2/sym_glue.c
 +++ b/drivers/scsi/sym53c8xx_2/sym_glue.c
-@@ -563,7 +563,27 @@ static void sym53c8xx_timer(struct timer_list *t)
+@@ -562,7 +562,6 @@ static void sym53c8xx_timer(struct timer_list *t)
+  */
  #define SYM_EH_ABORT		0
  #define SYM_EH_DEVICE_RESET	1
- #define SYM_EH_BUS_RESET	2
--#define SYM_EH_HOST_RESET	3
-+
-+static int sym_eh_wait_for_commands(struct Scsi_Host *shost)
-+{
-+	struct sym_data *sym_data = shost_priv(shost);
-+	struct sym_hcb *np = sym_data->ncb;
-+	int rval = SUCCESS, count = 10; /* 5 seconds */
-+
-+	/* Wait for any queued commands to complete */
-+	spin_lock_irq(shost->host_lock);
-+	while (!sym_que_empty(&np->busy_ccbq)) {
-+		if (--count == 0) {
-+			rval = FAILED;
-+			break;
-+		}
-+		spin_unlock_irq(shost->host_lock);
-+		msleep(500);
-+		spin_lock_irq(shost->host_lock);
-+	}
-+	spin_unlock_irq(shost->host_lock);
-+	return rval;
-+}
+-#define SYM_EH_BUS_RESET	2
  
- /*
-  *  Generic method for our eh processing.
-@@ -605,11 +625,6 @@ static int sym_eh_handler(struct Scsi_Host *shost, int op,
- 		sym_reset_scsi_bus(np, 1);
- 		sts = 0;
+ static int sym_eh_wait_for_commands(struct Scsi_Host *shost)
+ {
+@@ -621,10 +620,6 @@ static int sym_eh_handler(struct Scsi_Host *shost, int op,
+ 	case SYM_EH_DEVICE_RESET:
+ 		sts = sym_reset_scsi_target(np, cmd->device->id);
  		break;
--	case SYM_EH_HOST_RESET:
--		sym_reset_scsi_bus(np, 0);
--		sym_start_up(shost, 1);
+-	case SYM_EH_BUS_RESET:
+-		sym_reset_scsi_bus(np, 1);
 -		sts = 0;
 -		break;
  	default:
  		break;
  	}
-@@ -677,6 +692,10 @@ static int sym53c8xx_eh_host_reset_handler(struct scsi_cmnd *cmd)
+@@ -681,10 +676,26 @@ static int sym53c8xx_eh_bus_reset_handler(struct scsi_cmnd *cmd)
  	struct Scsi_Host *shost = cmd->device->host;
  	struct sym_data *sym_data = shost_priv(shost);
  	struct pci_dev *pdev = sym_data->pdev;
 +	struct sym_hcb *np = sym_data->ncb;
 +	int rval = SUCCESS;
+ 
+ 	if (pci_channel_offline(pdev))
+ 		return FAILED;
+-	return sym_eh_handler(shost, SYM_EH_BUS_RESET, "BUS RESET", cmd);
 +
-+	shost_printk(KERN_WARNING, shost, "HOST RESET operation started\n");
- 
- 	/* We may be in an error condition because the PCI bus
- 	 * went down. In this case, we need to wait until the
-@@ -710,7 +729,16 @@ static int sym53c8xx_eh_host_reset_handler(struct scsi_cmnd *cmd)
- 			return SCSI_FAILED;
- 	}
- 
--	return sym_eh_handler(shost, SYM_EH_HOST_RESET, "HOST RESET", cmd);
++	shost_printk(KERN_WARNING, shost, "BUS RESET operation started\n");
++
 +	spin_lock_irq(shost->host_lock);
-+	sym_reset_scsi_bus(np, 0);
-+	sym_start_up(shost, 1);
++	if (sym_reset_scsi_bus(np, 1))
++		rval = FAILED;
 +	spin_unlock_irq(shost->host_lock);
 +
-+	rval = sym_eh_wait_for_commands(shost);
++	if (rval == SUCCESS)
++		rval = sym_eh_wait_for_commands(shost);
 +
-+	shost_printk(KERN_WARNING, shost, "HOST RESET operation %s.\n",
-+		     rval == SUCCESS ? "complete" : "failed");
++	shost_printk(KERN_WARNING, shost, "BUS RESET operation %s.\n",
++			rval == SUCCESS ? "complete" : "failed");
++
 +	return rval;
  }
  
- /*
+ static int sym53c8xx_eh_host_reset_handler(struct scsi_cmnd *cmd)
 -- 
 2.29.2
 
