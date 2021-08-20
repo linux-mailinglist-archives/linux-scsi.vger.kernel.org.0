@@ -2,49 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFF83F2995
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Aug 2021 11:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5163F2998
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Aug 2021 11:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238891AbhHTJys (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 20 Aug 2021 05:54:48 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:37348 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238508AbhHTJys (ORCPT
+        id S238857AbhHTJyu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 20 Aug 2021 05:54:50 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:56200 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238748AbhHTJys (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Fri, 20 Aug 2021 05:54:48 -0400
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E56CB1FDEF;
+        by smtp-out1.suse.de (Postfix) with ESMTP id EA0172210D;
         Fri, 20 Aug 2021 09:54:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1629453249; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8NCxU4/1zd+k2/TeWycg5N5FfmmIoUDYnXA4EHkYlAk=;
-        b=ituR165UuSklTR2EIflc+MLojMG1n1WFR6Hksb6WFkH7d+4j60eM4ixpIGMwvqd9TFNXGu
-        v4g5qt+sHeyRF73LOS4bUQ2V5NjqxdcupFBnwRiPIALg3eUzgBQ/8BfMyjDBMa98LJg44O
-        HKmMiOinr6Vj5X+MoyFvzl1POizOzL0=
+        bh=PDa4b0uMMZpqGGQWu3VRWsZgnZ7b1VfFjaPKU4/hGIY=;
+        b=DUUYiZLqmabUXITsqd1/y1EyyscJdR6F/C+So3dRggp2CRXc8D2ga5/30rxK1/Hoqr2z+Z
+        NdSKwouTO0Vl6Kq4ngYUCqa5c1BqzDaYrDYJcUhMktc65N73nnRC8wktjWqZwMBfK7kHq9
+        i6aea1PKVRrwHa4O9DP6CNtjFJcCsWY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1629453249;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8NCxU4/1zd+k2/TeWycg5N5FfmmIoUDYnXA4EHkYlAk=;
-        b=vgXHcwtud0iNFYYeErg3M0vmMqn+vHqCtIsMnMh+lkkmUQaXzjRrDx0xLJJySp0z1zEZOI
-        UVWXH10Uu6O39kAA==
+        bh=PDa4b0uMMZpqGGQWu3VRWsZgnZ7b1VfFjaPKU4/hGIY=;
+        b=d9uOOuJJmhxASr6Fb91al/elcwe3boUVRBXIBadK8zSqdG2luUsGImVtWj1GhpULD+aVML
+        nmlg3ZruCyODNlAg==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id DEBBEA3BA1;
+        by relay2.suse.de (Postfix) with ESMTP id E34CDA3BA2;
         Fri, 20 Aug 2021 09:54:09 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id CFC7E518D453; Fri, 20 Aug 2021 11:54:09 +0200 (CEST)
+        id D56EB518D455; Fri, 20 Aug 2021 11:54:09 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 2/3] ncr53c8xx: Complete all commands during bus reset
-Date:   Fri, 20 Aug 2021 11:54:04 +0200
-Message-Id: <20210820095405.12801-3-hare@suse.de>
+Subject: [PATCH 3/3] ncr53c8xx: Remove unused code
+Date:   Fri, 20 Aug 2021 11:54:05 +0200
+Message-Id: <20210820095405.12801-4-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210820095405.12801-1-hare@suse.de>
 References: <20210820095405.12801-1-hare@suse.de>
@@ -56,38 +56,114 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Hannes Reinecke <hare@suse.com>
 
-ncr_reset_bus() will complete all outstanding commands anyway, so
-there's no need to single out a specific command.
-
 Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/ncr53c8xx.c | 35 ++---------------------------------
- 1 file changed, 2 insertions(+), 33 deletions(-)
+ drivers/scsi/ncr53c8xx.c | 163 ---------------------------------------
+ 1 file changed, 163 deletions(-)
 
 diff --git a/drivers/scsi/ncr53c8xx.c b/drivers/scsi/ncr53c8xx.c
-index 3d2daaf2368c..1c1f5df83dca 100644
+index 1c1f5df83dca..e7115cba4b28 100644
 --- a/drivers/scsi/ncr53c8xx.c
 +++ b/drivers/scsi/ncr53c8xx.c
-@@ -4553,12 +4553,8 @@ static void ncr_start_reset(struct ncb *np)
+@@ -1453,11 +1453,6 @@ struct head {
+ #define  xerr_status   phys.xerr_st
+ #define  nego_status   phys.nego_st
+ 
+-#if 0
+-#define  sync_status   phys.sync_st
+-#define  wide_status   phys.wide_st
+-#endif
+-
+ /*==========================================================
  **
- **==========================================================
- */
--static int ncr_reset_bus (struct ncb *np, struct scsi_cmnd *cmd)
-+static int ncr_reset_bus (struct ncb *np)
- {
+ **      Declaration of structs:     Data structure block
+@@ -1980,9 +1975,6 @@ static inline char *ncr_name (struct ncb *np)
+ #define	RELOC_SOFTC	0x40000000
+ #define	RELOC_LABEL	0x50000000
+ #define	RELOC_REGISTER	0x60000000
+-#if 0
+-#define	RELOC_KVAR	0x70000000
+-#endif
+ #define	RELOC_LABELH	0x80000000
+ #define	RELOC_MASK	0xf0000000
+ 
+@@ -1991,21 +1983,7 @@ static inline char *ncr_name (struct ncb *np)
+ #define PADDRH(label)   (RELOC_LABELH | offsetof(struct scripth, label))
+ #define	RADDR(label)	(RELOC_REGISTER | REG(label))
+ #define	FADDR(label,ofs)(RELOC_REGISTER | ((REG(label))+(ofs)))
+-#if 0
+-#define	KVAR(which)	(RELOC_KVAR | (which))
+-#endif
+ 
+-#if 0
+-#define	SCRIPT_KVAR_JIFFIES	(0)
+-#define	SCRIPT_KVAR_FIRST		SCRIPT_KVAR_JIFFIES
+-#define	SCRIPT_KVAR_LAST		SCRIPT_KVAR_JIFFIES
+-/*
+- * Kernel variables referenced in the scripts.
+- * THESE MUST ALL BE ALIGNED TO A 4-BYTE BOUNDARY.
+- */
+-static void *script_kvars[] __initdata =
+-	{ (void *)&jiffies };
+-#endif
+ 
+ static	struct script script0 __initdata = {
+ /*--------------------------< START >-----------------------*/ {
+@@ -2162,11 +2140,6 @@ static	struct script script0 __initdata = {
+ 	SCR_COPY (1),
+ 		RADDR (scratcha),
+ 		NADDR (msgout),
+-#if 0
+-	SCR_COPY (1),
+-		RADDR (scratcha),
+-		NADDR (msgin),
+-#endif
+ 	/*
+ 	**	Anticipate the COMMAND phase.
+ 	**	This is the normal case for initial selection.
+@@ -4378,10 +4351,6 @@ static int ncr_queue_command (struct ncb *np, struct scsi_cmnd *cmd)
+ 	cp->parity_status		= 0;
+ 
+ 	cp->xerr_status			= XE_OK;
+-#if 0
+-	cp->sync_status			= tp->sval;
+-	cp->wide_status			= tp->wval;
+-#endif
+ 
+ 	/*----------------------------------------------------
+ 	**
+@@ -4580,89 +4549,6 @@ static int ncr_reset_bus (struct ncb *np)
+ 	return SUCCESS;
+ }
+ 
+-#if 0 /* unused and broken.. */
+-/*==========================================================
+-**
+-**
+-**	Abort an SCSI command.
+-**	This is called from the generic SCSI driver.
+-**
+-**
+-**==========================================================
+-*/
+-static int ncr_abort_command (struct ncb *np, struct scsi_cmnd *cmd)
+-{
 -/*	struct scsi_device        *device    = cmd->device; */
 -	struct ccb *cp;
 -	int found;
+-	int retv;
 -
- /*
-  * Return immediately if reset is in progress.
-  */
-@@ -4572,24 +4568,6 @@ static int ncr_reset_bus (struct ncb *np, struct scsi_cmnd *cmd)
-  * delay of 2 seconds will be completed.
-  */
- 	ncr_start_reset(np);
 -/*
-- * First, look in the wakeup list
+- * First, look for the scsi command in the waiting list
+- */
+-	if (remove_from_waiting_list(np, cmd)) {
+-		set_host_byte(cmd, DID_ABORT);
+-		ncr_queue_done_cmd(np, cmd);
+-		return SCSI_ABORT_SUCCESS;
+-	}
+-
+-/*
+- * Then, look in the wakeup list
 - */
 -	for (found=0, cp=np->ccb; cp; cp=cp->link_ccb) {
 -		/*
@@ -99,39 +175,123 @@ index 3d2daaf2368c..1c1f5df83dca 100644
 -			break;
 -		}
 -	}
--/*
-- * Then, look in the waiting list
-- */
--	if (!found && retrieve_from_waiting_list(0, np, cmd))
--		found = 1;
- /*
-  * Wake-up all awaiting commands with DID_RESET.
-  */
-@@ -4598,15 +4576,6 @@ static int ncr_reset_bus (struct ncb *np, struct scsi_cmnd *cmd)
-  * Wake-up all pending commands with HS_RESET -> DID_RESET.
-  */
- 	ncr_wakeup(np, HS_RESET);
--/*
-- * If the involved command was not in a driver queue, and the 
-- * command is not currently in the waiting list, complete it
-- * with DID_RESET status in order to keep it alive.
-- */
--	if (!found && !retrieve_from_waiting_list(0, np, cmd)) {
--		set_host_byte(cmd, DID_RESET);
--		ncr_queue_done_cmd(np, cmd);
+-
+-	if (!found) {
+-		return SCSI_ABORT_NOT_RUNNING;
 -	}
+-
+-	if (np->settle_time) {
+-		return SCSI_ABORT_SNOOZE;
+-	}
+-
+-	/*
+-	**	If the CCB is active, patch schedule jumps for the 
+-	**	script to abort the command.
+-	*/
+-
+-	switch(cp->host_status) {
+-	case HS_BUSY:
+-	case HS_NEGOTIATE:
+-		printk ("%s: abort ccb=%p (cancel)\n", ncr_name (np), cp);
+-			cp->start.schedule.l_paddr =
+-				cpu_to_scr(NCB_SCRIPTH_PHYS (np, cancel));
+-		retv = SCSI_ABORT_PENDING;
+-		break;
+-	case HS_DISCONNECT:
+-		cp->restart.schedule.l_paddr =
+-				cpu_to_scr(NCB_SCRIPTH_PHYS (np, abort));
+-		retv = SCSI_ABORT_PENDING;
+-		break;
+-	default:
+-		retv = SCSI_ABORT_NOT_RUNNING;
+-		break;
+-
+-	}
+-
+-	/*
+-	**      If there are no requests, the script
+-	**      processor will sleep on SEL_WAIT_RESEL.
+-	**      Let's wake it up, since it may have to work.
+-	*/
+-	OUTB (nc_istat, SIGP);
+-
+-	return retv;
+-}
+-#endif
+-
+ static void ncr_detach(struct ncb *np)
+ {
+ 	struct ccb *cp;
+@@ -5421,27 +5307,6 @@ static void ncr_getsync(struct ncb *np, u_char sfac, u_char *fakp, u_char *scntl
+ 	*/
+ 	fak = (kpc - 1) / div_10M[div] + 1;
  
- 	return SUCCESS;
+-#if 0	/* This optimization does not seem very useful */
+-
+-	per = (fak * div_10M[div]) / clk;
+-
+-	/*
+-	**	Why not to try the immediate lower divisor and to choose 
+-	**	the one that allows the fastest output speed ?
+-	**	We don't want input speed too much greater than output speed.
+-	*/
+-	if (div >= 1 && fak < 8) {
+-		u_long fak2, per2;
+-		fak2 = (kpc - 1) / div_10M[div-1] + 1;
+-		per2 = (fak2 * div_10M[div-1]) / clk;
+-		if (per2 < per && fak2 <= 8) {
+-			fak = fak2;
+-			per = per2;
+-			--div;
+-		}
+-	}
+-#endif
+-
+ 	if (fak < 4) fak = 4;	/* Should never happen, too bad ... */
+ 
+ 	/*
+@@ -5479,10 +5344,6 @@ static void ncr_set_sync_wide_status (struct ncb *np, u_char target)
+ 	for (cp = np->ccb; cp; cp = cp->link_ccb) {
+ 		if (!cp->cmd) continue;
+ 		if (scmd_id(cp->cmd) != target) continue;
+-#if 0
+-		cp->sync_status = tp->sval;
+-		cp->wide_status = tp->wval;
+-#endif
+ 		cp->phys.select.sel_scntl3 = tp->wval;
+ 		cp->phys.select.sel_sxfer  = tp->sval;
+ 	}
+@@ -8104,30 +7965,6 @@ static int ncr53c8xx_bus_reset(struct scsi_cmnd *cmd)
+ 	return sts;
  }
-@@ -8124,7 +8093,7 @@ static int ncr53c8xx_bus_reset(struct scsi_cmnd *cmd)
- 	 */
  
- 	spin_lock_irqsave(&np->smp_lock, flags);
--	sts = ncr_reset_bus(np, cmd);
-+	sts = ncr_reset_bus(np);
+-#if 0 /* unused and broken */
+-static int ncr53c8xx_abort(struct scsi_cmnd *cmd)
+-{
+-	struct ncb *np = ((struct host_data *) cmd->device->host->hostdata)->ncb;
+-	int sts;
+-	unsigned long flags;
+-	struct scsi_cmnd *done_list;
+-
+-	printk("ncr53c8xx_abort\n");
+-
+-	NCR_LOCK_NCB(np, flags);
+-
+-	sts = ncr_abort_command(np, cmd);
+-out:
+-	done_list     = np->done_list;
+-	np->done_list = NULL;
+-	NCR_UNLOCK_NCB(np, flags);
+-
+-	ncr_flush_done_cmds(done_list);
+-
+-	return sts;
+-}
+-#endif
+-
  
- 	done_list     = np->done_list;
- 	np->done_list = NULL;
+ /*
+ **	Scsi command waiting list management.
 -- 
 2.29.2
 
