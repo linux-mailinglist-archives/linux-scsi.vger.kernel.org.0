@@ -2,194 +2,421 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F953F8149
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Aug 2021 05:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D643F81E6
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Aug 2021 07:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237872AbhHZDvE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 25 Aug 2021 23:51:04 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:34636 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbhHZDvD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 Aug 2021 23:51:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1629949817; x=1661485817;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=zBJGn4hGhPwJ9Tgx45UyaLNVQIJ/H70uu9YT53Uj2y8=;
-  b=Mx3bDsCRl5N/XzTmUqI/QfsObZXQX1S0SVOJRiKu1ueacF6a4EcQ/qoW
-   O0v6GrNwg5uhAyf0Prt2NZOCZYTkuAVpgW8v2xaXMtVJ+C6PXIVOVwtGS
-   er/OShMuS94gZwVJk8mu8K/MsQuF9VPlCkqsA5x77vWh+Ude9+5m4+pVY
-   MhwYCEhiW2XC3gqAd+JWqMmDWq08hRoZgB99NH/1GnAFb+oS2HHxADY2j
-   zz2TEiPWZaTjV23UgqJWeZ74VHGjxB55B9ZjXG5nxvPFGLzYSx3HxLKXu
-   LXwPeFtMv/rHhoZVubnTH3T3z3h/6wCVBbjVZm5VNMv8LMFuRmkN6stnF
-   A==;
-X-IronPort-AV: E=Sophos;i="5.84,352,1620662400"; 
-   d="scan'208";a="290028371"
-Received: from mail-bn8nam11lp2177.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.177])
-  by ob1.hgst.iphmx.com with ESMTP; 26 Aug 2021 11:50:16 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=akZB1ztDvCcIeyCH7ZROnZcx5I9aZtOnnm5nL06U5TrRVObQVTA3CvLe14J+MfVkFTgk/FEGCkwWSvFZqPCdHPH/+J5Q921STXNA0HPJmOvuyEhQZmgcQh4mPjGnFjZlPwHfDlZXJDNcOIlg9atw8PFyFYqBrkpMfcd2SsY5uCgZabnGRZ5taB0hvTG9ZAhRcaN69OZPmHzUNXXFoXqlInErZC2DceRrmhaIDH/2VFVQtrk55PfxNpaVG3JMAQGVBjFsCEOuzWlokdwWWzrDB63YK9HPDHjtTEvb4O1iH2xoTnzsU6V6M3PKmhPCMpDPVOl5jM097yCcXy8ge93Bfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v5T20neaxCD7c37+xabow6NjH6D3WXDsY9+crG8bZ6Q=;
- b=FGLL5n1y4iB5WLLNcMeTEsyghO4SKljz1BmYVSL3vDOamVrUOZPfeq8PnIPmOpTJXADHQ/6u6AoYC1A+u2Qf51JY8k9RUME1t00RwVFdwlsCOkV4hB6EPlk7hzmiPFcqXcPK7VKLoUx5Bf1CdML6OxTSjHKN2gaBLggyUF62VSkFuI9Y48z8yPQP7Vwn2k85/feZ224aMNLpECeHlKDZ2PZcCu4xKLSYCHZNRzN0oHc56+ree5msSAzKx0x75eoEXUqn7OoHdTGekj1gCVc71KW9x9RgidFZ9S4Q2jfcP44VdVlOJQckN/PB5MAArCEu+ZSNX1pxmlIv9mH6sEYbKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        id S238926AbhHZFFz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Aug 2021 01:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238546AbhHZFFv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Aug 2021 01:05:51 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E637C0612E7
+        for <linux-scsi@vger.kernel.org>; Wed, 25 Aug 2021 22:05:04 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 17so2081398pgp.4
+        for <linux-scsi@vger.kernel.org>; Wed, 25 Aug 2021 22:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v5T20neaxCD7c37+xabow6NjH6D3WXDsY9+crG8bZ6Q=;
- b=x5BQflg/GwoeTZjuesrWfHPRtGedWo/MyH/uj5s9ZBQXtTLplQrtWihZd+MMh0VjxOJcFucxXi18uTEoipFgeKlFkNa1qSWMO6fLRF/L+ko91sn+Ivfm+Q+5HTrVBWq/28uqmU/uNzhi29gS+vsS+CEX6sCSJ5wirBEmKQ4Geu8=
-Received: from DM6PR04MB7081.namprd04.prod.outlook.com (2603:10b6:5:244::21)
- by DM5PR04MB0443.namprd04.prod.outlook.com (2603:10b6:3:a6::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.22; Thu, 26 Aug
- 2021 03:50:15 +0000
-Received: from DM6PR04MB7081.namprd04.prod.outlook.com
- ([fe80::e521:352:1d70:31c]) by DM6PR04MB7081.namprd04.prod.outlook.com
- ([fe80::e521:352:1d70:31c%9]) with mapi id 15.20.4436.027; Thu, 26 Aug 2021
- 03:50:15 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     Jens Axboe <axboe@kernel.dk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH v5 0/5] Initial support for multi-actuator HDDs
-Thread-Topic: [PATCH v5 0/5] Initial support for multi-actuator HDDs
-Thread-Index: AQHXj060+x8p8fG9EkmgObG6vBUOOw==
-Date:   Thu, 26 Aug 2021 03:50:15 +0000
-Message-ID: <DM6PR04MB7081B82BD60E0C96F31C84E7E7C79@DM6PR04MB7081.namprd04.prod.outlook.com>
-References: <20210812075015.1090959-1-damien.lemoal@wdc.com>
- <DM6PR04MB7081E6B85744B1F86AC5E7CBE7C79@DM6PR04MB7081.namprd04.prod.outlook.com>
- <yq1tujd9bwg.fsf@ca-mkp.ca.oracle.com>
- <DM6PR04MB70818AEAA6539E3834519E9AE7C79@DM6PR04MB7081.namprd04.prod.outlook.com>
- <yq1ilzsannu.fsf@ca-mkp.ca.oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: oracle.com; dkim=none (message not signed)
- header.d=none;oracle.com; dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9e410375-895a-444f-6fab-08d968449d1d
-x-ms-traffictypediagnostic: DM5PR04MB0443:
-x-microsoft-antispam-prvs: <DM5PR04MB044313D5A62A2A4C78B2F3D8E7C79@DM5PR04MB0443.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZdPfJnfds7BW3zLY6LdQrB/FGi+oVWvqnlI6JDdRzDDQpTkj8okDfs+mMT2uIBJfqvv3G05aVmcwaSywhxVZOcWPalKKRfmz0eukCNnXxS2dTp8KsmPr3Biakx/odyG5paQ9mP8RECmRIC21qhBClQWXbFfhty9N0fhV0oudQyMHuBBlk74vo/JbzPl1NM5lgkOE8KMl3OgWRt/3XFizyln6l59etJoVAYKKMn6dDxrxqO8Op+F9Mm0kQPexxNJw0j3ndwX7tNJ+n1drr51RL09q1LyP1gwmWhR25nAkr8OQH1jqE/JSk3R5DoOqI0VlHpC6RTCDMm1Zd1/JftbtpMoUpT2JCqFt83S6iTfTtgIMdCuRoMlZgB9H5qOtzSvgm/ISGJVBF03/Kys/cbFqeK9hKm5PlEybPXWk8laqNcoBju9mzzl9gb4IJ61GEzbefLt+oAIdmnl26VCinJbmMugf0XyofkC++cWmC8hWEwNrKXwSGvzuQgfSXtiqiaJE7tKaDyQ6LHkbmwQzCEjBegW0MCj5z35T3PrT/VQc6+cPS19w9ltaHz6UR7XNCI8b+do0NUmtZQ1OnIYXY1GH5t8bCaTFrQoz4IJK/FnhCiTVUetvW+Ao+2pL4J6/HDOophjaH+D/FSoJ+QqO5MduiimMh27V6A35wDOV/eGE4TYX8n6nDFuHUuEyTs5s4IgmqecXZl9S3VwtEjtpNm0bvQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB7081.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(366004)(346002)(376002)(136003)(66476007)(66556008)(64756008)(76116006)(38070700005)(186003)(55016002)(91956017)(66946007)(7696005)(66446008)(6916009)(122000001)(316002)(4326008)(8676002)(5660300002)(9686003)(54906003)(52536014)(53546011)(6506007)(38100700002)(33656002)(86362001)(71200400001)(8936002)(2906002)(83380400001)(478600001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?CZvsUmFc2hgLY8RbW5TiQvBeaEso0PSB5P5mRWULZ+fEwxEmOnqKbW3Gbp0s?=
- =?us-ascii?Q?jV+zBlf83+9kdBB3mF5hTpQyvakHLxxU/PoPn1ljL4DesJsuukVW5dZwE+FC?=
- =?us-ascii?Q?zp9WhhWCl4qMKaqtmKlhvXRGkejrphn2M4tbBm6eN+lONq3d14J+jdFRKGh/?=
- =?us-ascii?Q?w5u3y2GykTTTOYUlWvJowZZY0/bmAvta76LS5ZB7Q2TTzPZUtzy0M5M3MeRV?=
- =?us-ascii?Q?VtYmPso6+UmiqFGdhZZhZIh9zyxmFTkCVuliT6/jmwaIBs3JBwPYUa0eIBp0?=
- =?us-ascii?Q?cdJ3bFkHFn1TNL75fP8C7uBMWmVtcsHaZWWrJbiE4BK1fn/lBVS7qtxGUMYv?=
- =?us-ascii?Q?+FiAGM6yOTPxwj+yjBnY5FQURLkFf+Nu0uw6CEjCt/UL3gqZN5tT2yX0ml8W?=
- =?us-ascii?Q?L1+Wfpu9OWvU9ULiT7VUKiaNytHhN0nxcReU21Eb272W6Px1/7yj/jDasOpw?=
- =?us-ascii?Q?7FUK0Ru0Fwm8KEyK7DZQ0adlgtEpZ/2UJXSwhlXj3+RXSW12aT289zs8/BrF?=
- =?us-ascii?Q?XsQkE5/mI+bGAltF9wi1hd/9U5kMt88RwZ+CUFDdDMl4MYxW2+ytlhaB46nU?=
- =?us-ascii?Q?VJm+//3rc3lDn4XUhq7538Q1fiLt1G3lMcpvxevfRG8LexCJkIXddLOhpWL8?=
- =?us-ascii?Q?ebwxnUPIia+38fYCIujARAi+97wUHlD4QepJVEJYEiWF3mkJFsQp9unrP011?=
- =?us-ascii?Q?6AJkfgI58DFy6LTvU4dtJkNjSfKgyf4l7R0+VTvaKGFrElzU2m3ZzRGyjI3O?=
- =?us-ascii?Q?U+Lewy4XyA33GCPOf8diU05pWoVQb47w0FjxAGDKGMP0wpcTO68q3OAYLlEM?=
- =?us-ascii?Q?h0FG060rQwZ/ryhMFpptVmTpOTm1aBKt5DYrmNKtaBA8Fk44reDm+XW+09Eg?=
- =?us-ascii?Q?UgI09vTKxDRL1HunyKEyaFNS3VO5oeIf7HPLg4hmA//Id68fKAQmw/aby0Dy?=
- =?us-ascii?Q?pioqLuLhAHmyQFnQu6i6Od2l5WRMkq061PmAA+oXgT0fbcBV8dYLVY7rXXqR?=
- =?us-ascii?Q?hLh1qATWURNdVsno/6KPWkWucNLKpeZUqSJ5mbDWpfJTZkDsT8QTDPbrVXev?=
- =?us-ascii?Q?OUsKQ3P6iPI2YyMoFv3CPhAiDomrtNN0fXR117yfBMwU4m4tcIkj5F7CxBrI?=
- =?us-ascii?Q?vyICP1YJ4M2uCYOLxmN0EWU1LtrQ2dG2a3S8cvQfd5hIoqogp454+9+FUcmM?=
- =?us-ascii?Q?vLd1AM0mRjlI2rQiRru/aj9vahGDP08DaJpit2yaP1LDfpETxXo+pyOCZhLQ?=
- =?us-ascii?Q?c2eUKNztmeBONbe2yk+xy/t+lNvCaNAyM8bp6OBk3IJ9uN08M6yZhQiK3vUY?=
- =?us-ascii?Q?cQRqkTxwIK//ASkA1t6czfzvXx+NBTgfMpoCs3v1y+qlneHy8VoxfluMwjBA?=
- =?us-ascii?Q?Pe/izE4RePaJ53wecCcTVyRaeJIgHVgnZbLkukZsy3CQWDFPiw=3D=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ZSgFy57aU31YAE4YjuonHLTOTN+opVUhkqzU115GN7k=;
+        b=Jaa0OsO5LQdH8WgOyS9ndwRvK8LzNxLKzCQoMWW6XcZkBiYeJoAsZqI4uhrbQmfyBb
+         1gyGuoYu36w+LLJPzuYuGER6fPiukf9lX3652XliU4BgS6pdB4uMZ8SSQSBuhvqOkhNi
+         loKrzcQOF0ovGL/c3TKgyb/fkDaXzwvjSSXMs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ZSgFy57aU31YAE4YjuonHLTOTN+opVUhkqzU115GN7k=;
+        b=lrw7I3O17owYDifHOq9mtHlyvD98LC4HXaZfZnaSbEJ0/hPaM8rVbSQ+RHwlPa1pmK
+         vSGgF2UXVgPpMH2bSC2k1OGHAwzzpi34DnKXQT1KS2p0itpr6h9SfwRBhM7Qk18OX5u+
+         jE6rq3BOKCAzlkjGCtxIrcukvQVKoADeReSk+ek5w/yO4jEk8m5fdWXf0nuZvrajbd/F
+         4T9i/XblpyZ2mHzIxJBA8uzV9yXu7nXtSK/up+263/lUC5UZi0ejegY8mN19nceBhYJt
+         QgGuTHcOFfhVGzKpHtC88kIILsNaZdbyRiGNhJn0/neRE2/Q4riZGtYo88JnfkVHpiyA
+         qH9A==
+X-Gm-Message-State: AOAM532ZPdHKFK7clXYAgV5ueXndR96Ws9eEghGYOpTZn0j7aIk6eI6l
+        C7EAkc/00eqD+pzr4swYYlRxKA==
+X-Google-Smtp-Source: ABdhPJzy/JVpclWJVBZkyMc2AYkafS208omc/rL11mcaFm6dDiRxDbzEwPOwn80ykhIFOgT5FPGJ3A==
+X-Received: by 2002:a63:ed50:: with SMTP id m16mr1716378pgk.231.1629954303366;
+        Wed, 25 Aug 2021 22:05:03 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g14sm1330326pfr.31.2021.08.25.22.05.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Aug 2021 22:05:00 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Mordechay Goodstein <mordechay.goodstein@intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+        linux-crypto@vger.kernel.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-can@vger.kernel.org,
+        bpf@vger.kernel.org, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Keith Packard <keithp@keithp.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
+Subject: [PATCH v2 2/5] treewide: Replace open-coded flex arrays in unions
+Date:   Wed, 25 Aug 2021 22:04:55 -0700
+Message-Id: <20210826050458.1540622-3-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210826050458.1540622-1-keescook@chromium.org>
+References: <20210826050458.1540622-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB7081.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e410375-895a-444f-6fab-08d968449d1d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2021 03:50:15.1696
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vZmzSacmNf4E1M26HUpUza1qyEPYE5AKpNl2E9jWS2CzybGqYdI7OHPX2AACtXy7NBXyD3e82+6glrPd1R9LVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB0443
+X-Developer-Signature: v=1; a=openpgp-sha256; l=12175; h=from:subject; bh=8yrZikuHYRUCJy7aFbsFeoitUA6PG80HcXIsUEETpA0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhJyD5HYHBqTFRtgMP92ux+bJ3ZZ3k5eNX2+Qj2FAM kHlY8AqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYScg+QAKCRCJcvTf3G3AJjuQEA CtEauy4ZDh80JsPAya4mLNjdFzLZWYCR9RimW/Z8oniFQ9T8iG+nLmrYdtIzut03o6dJFTEyPIrw9J gerKm0uFi5AS1HPVoldFywhjEpjE/X+RXg6Fa5F1aFkzPKD+2TzbEHAA9YyZJEHfQbgkSOg+ldQhxA 5omNx7q/Eho7+bXC5DNYQXo3u/lf1xoxy7YbtEZSJP3JQeS7zTi2e+5acYDyb8ZarRLPAVcXEeGSo2 Y2RH2r8nw1l87B/Bomi7buM+WWs5ng6xk3/zDFNvei6ZHjxSpzhlg2aoYuZ2BTUEY8A3abrtOqVe4g z5oIQfcjXDekjtrD6Uw9n66iIwkl2FXQ9mY1hp/0Cqh7Ma0gcFZKSUtx6LjGxbnXekgx2Ub8l8RRRt b4IIsYHhzgKV8Y12zdD12tY7KInEVRqJ1DRQep8j43qEq/LFuIIAg8TIBueMiEvnRUWUYm1MfOJePv GfAQvTNhr8lK+U0GHkdWEN4qscV4M99BJ6lR8ogbi7Yxzyk7PQCLqnuN9e/oeptt/NuuE0iBmB5Sqq 3+VVfB+JFQayZq5yatctWiKohRhU0GSHBzFLkx8WZezSYcamJmnl4OAiC4qu8hfyGC3BHGmhNIOFc9 Q0WjeM7VmIZxZCE06me6i5wXlJBAkk+E1Ce4Os0AUkssDmYdWi4hS4F96KGg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2021/08/26 12:43, Martin K. Petersen wrote:=0A=
-> =0A=
-> Damien,=0A=
-> =0A=
->> I am not super happy with the name either. I used this one as the=0A=
->> least worst of possibilities I thought of.  seek_range/srange ? ->=0A=
->> that is very HDD centric and as we can reuse this for things like=0A=
->> dm-linear on top of SSDs, that does not really work.  I would prefer=0A=
->> something that convey the idea of "parallel command execution", since=0A=
->> this is the main point of the interface. prange ? cdm_range ?=0A=
->> req_range ?=0A=
-> =0A=
-> How about independent_access_range? That doesn't imply head positioning=
-=0A=
-> and can also be used to describe a fault domain. And it is less=0A=
-> disk-centric than concurrent_positioning_range.=0A=
-=0A=
-I like it, but a bit long-ish. Do you think shortening to access_range woul=
-d be=0A=
-acceptable ?=0A=
-=0A=
-we would have:=0A=
-=0A=
-/sys/block/XYZ/queue/access_ranges/...=0A=
-=0A=
-and=0A=
-=0A=
-struct blk_access_range {=0A=
-	...=0A=
-	sector_t sector;=0A=
-	sector_t nr_sectors;=0A=
-}=0A=
-=0A=
-struct blk_access_range *arange;=0A=
-=0A=
-Adding independent does make everything even more obvious, but names become=
-=0A=
-rather long. Not an issue for the sysfs directory I think, but=0A=
-=0A=
-struct blk_independent_access_range {=0A=
-	...=0A=
-	sector_t sector;=0A=
-	sector_t nr_sectors;=0A=
-}=0A=
-=0A=
-is rather a long struct name. Shortening independent to "ind" could very ea=
-sily=0A=
-be confused with "indirection", so that is not an option. And "iaccess" is=
-=0A=
-obscure...=0A=
-=0A=
-> =0A=
-> I concur that those names are a bit unwieldy but at least they are=0A=
-> somewhat descriptive.=0A=
-> =0A=
-> I consulted the thesaurus and didn't really like the other options=0A=
-> (discrete, disjoint, separate, etc.). I think 'independent' is more=0A=
-> accurate for this and better than 'concurrent' and 'parallel'.=0A=
-> =0A=
-=0A=
-=0A=
--- =0A=
-Damien Le Moal=0A=
-Western Digital Research=0A=
+In support of enabling -Warray-bounds and -Wzero-length-bounds and
+correctly handling run-time memcpy() bounds checking, replace all
+open-coded flexible arrays (i.e. 0-element arrays) in unions with the
+flex_array() helper macro.
+
+This fixes warnings such as:
+
+fs/hpfs/anode.c: In function 'hpfs_add_sector_to_btree':
+fs/hpfs/anode.c:209:27: warning: array subscript 0 is outside the bounds of an interior zero-length array 'struct bplus_internal_node[0]' [-Wzero-length-bounds]
+  209 |    anode->btree.u.internal[0].down = cpu_to_le32(a);
+      |    ~~~~~~~~~~~~~~~~~~~~~~~^~~
+In file included from fs/hpfs/hpfs_fn.h:26,
+                 from fs/hpfs/anode.c:10:
+fs/hpfs/hpfs.h:412:32: note: while referencing 'internal'
+  412 |     struct bplus_internal_node internal[0]; /* (internal) 2-word entries giving
+      |                                ^~~~~~~~
+
+drivers/net/can/usb/etas_es58x/es58x_fd.c: In function 'es58x_fd_tx_can_msg':
+drivers/net/can/usb/etas_es58x/es58x_fd.c:360:35: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[]'} [-Wzero-length-bounds]
+  360 |  tx_can_msg = (typeof(tx_can_msg))&es58x_fd_urb_cmd->raw_msg[msg_len];
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:22,
+                 from drivers/net/can/usb/etas_es58x/es58x_fd.c:17:
+drivers/net/can/usb/etas_es58x/es58x_fd.h:231:6: note: while referencing 'raw_msg'
+  231 |   u8 raw_msg[0];
+      |      ^~~~~~~
+
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Ayush Sawal <ayush.sawal@chelsio.com>
+Cc: Vinay Kumar Yadav <vinay.yadav@chelsio.com>
+Cc: Rohit Maheshwari <rohitm@chelsio.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Kalle Valo <kvalo@codeaurora.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Stanislaw Gruszka <stf_xl@wp.pl>
+Cc: Luca Coelho <luciano.coelho@intel.com>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Johannes Berg <johannes.berg@intel.com>
+Cc: Mordechay Goodstein <mordechay.goodstein@intel.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
+Cc: linux-crypto@vger.kernel.org
+Cc: ath10k@lists.infradead.org
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-can@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/crypto/chelsio/chcr_crypto.h              | 14 +++++++++-----
+ drivers/net/can/usb/etas_es58x/es581_4.h          |  2 +-
+ drivers/net/can/usb/etas_es58x/es58x_fd.h         |  2 +-
+ drivers/net/wireless/ath/ath10k/htt.h             |  7 +++++--
+ drivers/net/wireless/intel/iwlegacy/commands.h    |  6 ++++--
+ drivers/net/wireless/intel/iwlwifi/dvm/commands.h |  6 ++++--
+ drivers/net/wireless/intel/iwlwifi/fw/api/tx.h    |  6 ++++--
+ drivers/scsi/aic94xx/aic94xx_sds.c                |  6 ++++--
+ fs/hpfs/hpfs.h                                    |  8 ++++----
+ include/linux/filter.h                            |  6 ++++--
+ include/scsi/sas.h                                | 12 ++++++++----
+ include/uapi/rdma/rdma_user_rxe.h                 |  4 ++--
+ include/uapi/sound/asoc.h                         |  4 ++--
+ 13 files changed, 52 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/crypto/chelsio/chcr_crypto.h b/drivers/crypto/chelsio/chcr_crypto.h
+index e89f9e0094b4..c7816c83e324 100644
+--- a/drivers/crypto/chelsio/chcr_crypto.h
++++ b/drivers/crypto/chelsio/chcr_crypto.h
+@@ -222,8 +222,10 @@ struct chcr_authenc_ctx {
+ };
+ 
+ struct __aead_ctx {
+-	struct chcr_gcm_ctx gcm[0];
+-	struct chcr_authenc_ctx authenc[];
++	union {
++		DECLARE_FLEX_ARRAY(struct chcr_gcm_ctx, gcm);
++		DECLARE_FLEX_ARRAY(struct chcr_authenc_ctx, authenc);
++	};
+ };
+ 
+ struct chcr_aead_ctx {
+@@ -245,9 +247,11 @@ struct hmac_ctx {
+ };
+ 
+ struct __crypto_ctx {
+-	struct hmac_ctx hmacctx[0];
+-	struct ablk_ctx ablkctx[0];
+-	struct chcr_aead_ctx aeadctx[];
++	union {
++		DECLARE_FLEX_ARRAY(struct hmac_ctx, hmacctx);
++		DECLARE_FLEX_ARRAY(struct ablk_ctx, ablkctx);
++		DECLARE_FLEX_ARRAY(struct chcr_aead_ctx, aeadctx);
++	};
+ };
+ 
+ struct chcr_context {
+diff --git a/drivers/net/can/usb/etas_es58x/es581_4.h b/drivers/net/can/usb/etas_es58x/es581_4.h
+index 4bc60a6df697..667ecb77168c 100644
+--- a/drivers/net/can/usb/etas_es58x/es581_4.h
++++ b/drivers/net/can/usb/etas_es58x/es581_4.h
+@@ -192,7 +192,7 @@ struct es581_4_urb_cmd {
+ 		struct es581_4_rx_cmd_ret rx_cmd_ret;
+ 		__le64 timestamp;
+ 		u8 rx_cmd_ret_u8;
+-		u8 raw_msg[0];
++		DECLARE_FLEX_ARRAY(u8, raw_msg);
+ 	} __packed;
+ 
+ 	__le16 reserved_for_crc16_do_not_use;
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.h b/drivers/net/can/usb/etas_es58x/es58x_fd.h
+index ee18a87e40c0..e33003f96e5e 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_fd.h
++++ b/drivers/net/can/usb/etas_es58x/es58x_fd.h
+@@ -228,7 +228,7 @@ struct es58x_fd_urb_cmd {
+ 		struct es58x_fd_tx_ack_msg tx_ack_msg;
+ 		__le64 timestamp;
+ 		__le32 rx_cmd_ret_le32;
+-		u8 raw_msg[0];
++		DECLARE_FLEX_ARRAY(u8, raw_msg);
+ 	} __packed;
+ 
+ 	__le16 reserved_for_crc16_do_not_use;
+diff --git a/drivers/net/wireless/ath/ath10k/htt.h b/drivers/net/wireless/ath/ath10k/htt.h
+index ec689e3ce48a..a6de08d3bf4a 100644
+--- a/drivers/net/wireless/ath/ath10k/htt.h
++++ b/drivers/net/wireless/ath/ath10k/htt.h
+@@ -1674,8 +1674,11 @@ struct htt_tx_fetch_ind {
+ 	__le32 token;
+ 	__le16 num_resp_ids;
+ 	__le16 num_records;
+-	__le32 resp_ids[0]; /* ath10k_htt_get_tx_fetch_ind_resp_ids() */
+-	struct htt_tx_fetch_record records[];
++	union {
++		/* ath10k_htt_get_tx_fetch_ind_resp_ids() */
++		DECLARE_FLEX_ARRAY(__le32, resp_ids);
++		DECLARE_FLEX_ARRAY(struct htt_tx_fetch_record, records);
++	};
+ } __packed;
+ 
+ static inline void *
+diff --git a/drivers/net/wireless/intel/iwlegacy/commands.h b/drivers/net/wireless/intel/iwlegacy/commands.h
+index 89c6671b32bc..4a97310f8fee 100644
+--- a/drivers/net/wireless/intel/iwlegacy/commands.h
++++ b/drivers/net/wireless/intel/iwlegacy/commands.h
+@@ -1408,8 +1408,10 @@ struct il3945_tx_cmd {
+ 	 * MAC header goes here, followed by 2 bytes padding if MAC header
+ 	 * length is 26 or 30 bytes, followed by payload data
+ 	 */
+-	u8 payload[0];
+-	struct ieee80211_hdr hdr[];
++	union {
++		DECLARE_FLEX_ARRAY(u8, payload);
++		DECLARE_FLEX_ARRAY(struct ieee80211_hdr, hdr);
++	};
+ } __packed;
+ 
+ /*
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/commands.h b/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
+index 235c7a2e3483..75a4b8e26232 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
+@@ -1251,8 +1251,10 @@ struct iwl_tx_cmd {
+ 	 * MAC header goes here, followed by 2 bytes padding if MAC header
+ 	 * length is 26 or 30 bytes, followed by payload data
+ 	 */
+-	u8 payload[0];
+-	struct ieee80211_hdr hdr[];
++	union {
++		DECLARE_FLEX_ARRAY(u8, payload);
++		DECLARE_FLEX_ARRAY(struct ieee80211_hdr, hdr);
++	};
+ } __packed;
+ 
+ /*
+diff --git a/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h b/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
+index 24e4a82a55da..66c5487e857e 100644
+--- a/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
++++ b/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
+@@ -713,8 +713,10 @@ struct iwl_mvm_compressed_ba_notif {
+ 	__le32 tx_rate;
+ 	__le16 tfd_cnt;
+ 	__le16 ra_tid_cnt;
+-	struct iwl_mvm_compressed_ba_ratid ra_tid[0];
+-	struct iwl_mvm_compressed_ba_tfd tfd[];
++	union {
++		DECLARE_FLEX_ARRAY(struct iwl_mvm_compressed_ba_ratid, ra_tid);
++		DECLARE_FLEX_ARRAY(struct iwl_mvm_compressed_ba_tfd, tfd);
++	};
+ } __packed; /* COMPRESSED_BA_RES_API_S_VER_4 */
+ 
+ /**
+diff --git a/drivers/scsi/aic94xx/aic94xx_sds.c b/drivers/scsi/aic94xx/aic94xx_sds.c
+index 46815e65f7a4..5def83c88f13 100644
+--- a/drivers/scsi/aic94xx/aic94xx_sds.c
++++ b/drivers/scsi/aic94xx/aic94xx_sds.c
+@@ -517,8 +517,10 @@ struct asd_ms_conn_map {
+ 	u8    num_nodes;
+ 	u8    usage_model_id;
+ 	u32   _resvd;
+-	struct asd_ms_conn_desc conn_desc[0];
+-	struct asd_ms_node_desc node_desc[];
++	union {
++		DECLARE_FLEX_ARRAY(struct asd_ms_conn_desc, conn_desc);
++		DECLARE_FLEX_ARRAY(struct asd_ms_node_desc, node_desc);
++	};
+ } __attribute__ ((packed));
+ 
+ struct asd_ctrla_phy_entry {
+diff --git a/fs/hpfs/hpfs.h b/fs/hpfs/hpfs.h
+index d92c4af3e1b4..281dec8f636b 100644
+--- a/fs/hpfs/hpfs.h
++++ b/fs/hpfs/hpfs.h
+@@ -409,10 +409,10 @@ struct bplus_header
+   __le16 first_free;			/* offset from start of header to
+ 					   first free node in array */
+   union {
+-    struct bplus_internal_node internal[0]; /* (internal) 2-word entries giving
+-					       subtree pointers */
+-    struct bplus_leaf_node external[0];	    /* (external) 3-word entries giving
+-					       sector runs */
++	/* (internal) 2-word entries giving subtree pointers */
++	DECLARE_FLEX_ARRAY(struct bplus_internal_node, internal);
++	/* (external) 3-word entries giving sector runs */
++	DECLARE_FLEX_ARRAY(struct bplus_leaf_node, external);
+   } u;
+ };
+ 
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 472f97074da0..5ca52bfa5868 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -572,8 +572,10 @@ struct bpf_prog {
+ 	struct bpf_prog_aux	*aux;		/* Auxiliary fields */
+ 	struct sock_fprog_kern	*orig_prog;	/* Original BPF program */
+ 	/* Instructions for interpreter */
+-	struct sock_filter	insns[0];
+-	struct bpf_insn		insnsi[];
++	union {
++		DECLARE_FLEX_ARRAY(struct sock_filter, insns);
++		DECLARE_FLEX_ARRAY(struct bpf_insn, insnsi);
++	};
+ };
+ 
+ struct sk_filter {
+diff --git a/include/scsi/sas.h b/include/scsi/sas.h
+index 4726c1bbec65..64154c1fed02 100644
+--- a/include/scsi/sas.h
++++ b/include/scsi/sas.h
+@@ -323,8 +323,10 @@ struct ssp_response_iu {
+ 	__be32 sense_data_len;
+ 	__be32 response_data_len;
+ 
+-	u8     resp_data[0];
+-	u8     sense_data[];
++	union {
++		DECLARE_FLEX_ARRAY(u8, resp_data);
++		DECLARE_FLEX_ARRAY(u8, sense_data);
++	};
+ } __attribute__ ((packed));
+ 
+ struct ssp_command_iu {
+@@ -554,8 +556,10 @@ struct ssp_response_iu {
+ 	__be32 sense_data_len;
+ 	__be32 response_data_len;
+ 
+-	u8     resp_data[0];
+-	u8     sense_data[];
++	union {
++		DECLARE_FLEX_ARRAY(u8, resp_data);
++		DECLARE_FLEX_ARRAY(u8, sense_data);
++	};
+ } __attribute__ ((packed));
+ 
+ struct ssp_command_iu {
+diff --git a/include/uapi/rdma/rdma_user_rxe.h b/include/uapi/rdma/rdma_user_rxe.h
+index e283c2220aba..040752c99ec9 100644
+--- a/include/uapi/rdma/rdma_user_rxe.h
++++ b/include/uapi/rdma/rdma_user_rxe.h
+@@ -141,8 +141,8 @@ struct rxe_dma_info {
+ 	__u32			sge_offset;
+ 	__u32			reserved;
+ 	union {
+-		__u8		inline_data[0];
+-		struct rxe_sge	sge[0];
++		__DECLARE_FLEX_ARRAY(u8, inline_data);
++		__DECLARE_FLEX_ARRAY(struct rxe_sge, sge);
+ 	};
+ };
+ 
+diff --git a/include/uapi/sound/asoc.h b/include/uapi/sound/asoc.h
+index da61398b1f8f..053949287ce8 100644
+--- a/include/uapi/sound/asoc.h
++++ b/include/uapi/sound/asoc.h
+@@ -240,8 +240,8 @@ struct snd_soc_tplg_vendor_array {
+ struct snd_soc_tplg_private {
+ 	__le32 size;	/* in bytes of private data */
+ 	union {
+-		char data[0];
+-		struct snd_soc_tplg_vendor_array array[0];
++		__DECLARE_FLEX_ARRAY(char, data);
++		__DECLARE_FLEX_ARRAY(struct snd_soc_tplg_vendor_array, array);
+ 	};
+ } __attribute__((packed));
+ 
+-- 
+2.30.2
+
