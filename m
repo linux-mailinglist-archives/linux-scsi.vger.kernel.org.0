@@ -2,52 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D9D3F8C34
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Aug 2021 18:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5093F8E29
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Aug 2021 20:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242049AbhHZQcg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Aug 2021 12:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbhHZQcf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Aug 2021 12:32:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEEDC061757;
-        Thu, 26 Aug 2021 09:31:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vwCaRlHdeFqTGdftXcHYxGmcrUpfebbr5m9LF/gvgDk=; b=bykCvx5QsfuXXmjZrcaoBhSpUt
-        3dJb1z9QCYjDp2rreZvtVBhlWluqU3zc53DGBC6f7D5zMjjZDzjf/tWpFvLXZGIqwaIQizs/AMfFl
-        q7t/qq3NMK5DT1OPqWnpFZq6dPvTFVhtwRuE+vyos0mGT3XV5i25QKy1c9w8FeHXnxFnuQaqbmLa/
-        ohTjq/ktLWuiGjHz4UGxjDOumjISMERe509C11ppLyNfy2uokv0Fe/GbOyVJQUgjyDGzvclt4Azoy
-        AhalNIBiSQfcQytfZP+dQLgnLluue+hr8kkGW9vo/v4jYLhr6cj9G6E38Daj2PK7vy5r/dsX4a9Bq
-        /mtQaopw==;
-Received: from hch by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mJIHK-00DTRX-Vh; Thu, 26 Aug 2021 16:31:17 +0000
-Date:   Thu, 26 Aug 2021 17:30:58 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
-Cc:     linux-next <linux-next@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Brian King <brking@linux.vnet.ibm.com>
-Subject: Re: [next-20210820][ppc][nvme/raid] pci unbind WARNS at
- fs/kernfs/dir.c:1524 kernfs_remove_by_name_ns+
-Message-ID: <YSfBwj1zo/w2GCH4@infradead.org>
-References: <063e6cf0-94ab-26f2-4fed-aebf1499127c@linux.vnet.ibm.com>
+        id S243340AbhHZSwB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Aug 2021 14:52:01 -0400
+Received: from smtprelay0159.hostedemail.com ([216.40.44.159]:36636 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231453AbhHZSwA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 26 Aug 2021 14:52:00 -0400
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave04.hostedemail.com (Postfix) with ESMTP id 10FE01813E3DB
+        for <linux-scsi@vger.kernel.org>; Thu, 26 Aug 2021 18:43:12 +0000 (UTC)
+Received: from omf02.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay05.hostedemail.com (Postfix) with ESMTP id B1AA818043DA1;
+        Thu, 26 Aug 2021 18:43:10 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id 9E4991D42F9;
+        Thu, 26 Aug 2021 18:43:09 +0000 (UTC)
+From:   Joe Perches <joe@perches.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-scsi@vger.kernel.org, storagedev@microchip.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH 0/5] vsprintf and uses: Add upper case output to %*ph extension
+Date:   Thu, 26 Aug 2021 11:43:00 -0700
+Message-Id: <cover.1630003183.git.joe@perches.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <063e6cf0-94ab-26f2-4fed-aebf1499127c@linux.vnet.ibm.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=4.85
+X-Stat-Signature: 5qo1ggz7qwszc1wst9d448dq13egb5nf
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 9E4991D42F9
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18tDOuVkOskG6mYbV8tAOcLCqBs2xKzHBg=
+X-HE-Tag: 1630003389-741109
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Are you sure this is the very latest linux-next?  This should hav been
-fixed by:
+Several sysfs uses that could use %*ph are upper case hex output.
+Add a flag to the short hex formatting routine in vsprintf to support them.
+Add documentation too.
 
-    "block: add back the bd_holder_dir reference in bd_link_disk_holder"
+Joe Perches (5):
+  vsprintf/Documentation: Add X to %*ph extension to output upper case hex
+  scsi: aacraid: Use vsprintf %phNX extension
+  scsi: hpsa: Use vsprintf %phNX extension
+  scsi: smartpqi: Use vsprintf %phNX extension
+  staging: r8188eu: Use vsprintf extension %phCX to format a copy_to_user string
+
+ Documentation/core-api/printk-formats.rst    |  6 +++
+ drivers/scsi/aacraid/linit.c                 |  7 +---
+ drivers/scsi/hpsa.c                          |  8 +---
+ drivers/scsi/smartpqi/smartpqi_init.c        |  8 +---
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c |  9 ++---
+ lib/vsprintf.c                               | 42 ++++++++++++--------
+ 6 files changed, 37 insertions(+), 43 deletions(-)
+
+-- 
+2.30.0
+
