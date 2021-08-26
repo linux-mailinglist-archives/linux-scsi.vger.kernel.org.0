@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 562163F8E31
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Aug 2021 20:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F6C3F8E28
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Aug 2021 20:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243300AbhHZSwY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Aug 2021 14:52:24 -0400
-Received: from smtprelay0071.hostedemail.com ([216.40.44.71]:57374 "EHLO
+        id S243330AbhHZSvy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Aug 2021 14:51:54 -0400
+Received: from smtprelay0025.hostedemail.com ([216.40.44.25]:32848 "EHLO
         smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231453AbhHZSwY (ORCPT
+        by vger.kernel.org with ESMTP id S231453AbhHZSvy (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 26 Aug 2021 14:52:24 -0400
+        Thu, 26 Aug 2021 14:51:54 -0400
 Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave06.hostedemail.com (Postfix) with ESMTP id 8139D812368C
-        for <linux-scsi@vger.kernel.org>; Thu, 26 Aug 2021 18:43:17 +0000 (UTC)
+        by smtpgrave02.hostedemail.com (Postfix) with ESMTP id 525D6181424B6
+        for <linux-scsi@vger.kernel.org>; Thu, 26 Aug 2021 18:43:19 +0000 (UTC)
 Received: from omf02.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 47CFF182CED2A;
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 008ED837F27E;
+        Thu, 26 Aug 2021 18:43:17 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id 054AB1D42F7;
         Thu, 26 Aug 2021 18:43:16 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id 412B91D42F9;
-        Thu, 26 Aug 2021 18:43:15 +0000 (UTC)
 From:   Joe Perches <joe@perches.com>
-To:     Don Brace <don.brace@microchip.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     storagedev@microchip.com, linux-scsi@vger.kernel.org,
+To:     Don Brace <don.brace@microchip.com>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        storagedev@microchip.com, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] scsi: hpsa: Use vsprintf %phNX extension
-Date:   Thu, 26 Aug 2021 11:43:03 -0700
-Message-Id: <adef530c3e1f5acbbdc89cefcc21bb82e3b7bfbf.1630003183.git.joe@perches.com>
+Subject: [PATCH 4/5] scsi: smartpqi: Use vsprintf %phNX extension
+Date:   Thu, 26 Aug 2021 11:43:04 -0700
+Message-Id: <31db4db01d24e5178188f48adc5acba6c8047316.1630003183.git.joe@perches.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <cover.1630003183.git.joe@perches.com>
 References: <cover.1630003183.git.joe@perches.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=4.71
-X-Stat-Signature: 1dp4t7h5ed5sruzop8r3hbifn7ysaibg
+X-Spam-Status: No, score=4.61
+X-Stat-Signature: dkghw7fcxo96pwthgsbw3xud47jefwut
 X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 412B91D42F9
+X-Rspamd-Queue-Id: 054AB1D42F7
 X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/HRp/Bw4bZ2IiTshRMV6FJJeAVTLa57dw=
-X-HE-Tag: 1630003395-496730
+X-Session-ID: U2FsdGVkX18aJ2uDYrib1nqIWyemTIPTjkSl3+EHeeo=
+X-HE-Tag: 1630003396-209518
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
@@ -48,37 +48,37 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 Reduce object size by using the %phNX extension to format a sysfs output
 buffer with identical output.
 
-compiled x86-64 defconfig w/ hpsa and gcc 10.3.0
+compiled x86-64 defconfig w/ smartpqi and gcc 10.3.0
 
-$ size drivers/scsi/hpsa.o*
+$ size drivers/scsi/smartpqi/smartpqi_init.o*
    text	   data	    bss	    dec	    hex	filename
-  84041	   2181	     20	  86242	  150e2	drivers/scsi/hpsa.o.new
-  84226	   2181	     20	  86427	  1519b	drivers/scsi/hpsa.o.old
+  69791	   2205	     48	  72044	  1196c	drivers/scsi/smartpqi/smartpqi_init.o.new
+  69950	   2205	     48	  72203	  11a0b	drivers/scsi/smartpqi/smartpqi_init.o.old
 
 Signed-off-by: Joe Perches <joe@perches.com>
 ---
- drivers/scsi/hpsa.c | 8 +-------
+ drivers/scsi/smartpqi/smartpqi_init.c | 8 +-------
  1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index 3faa87fa296a2..c56871e8ce1b7 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -743,13 +743,7 @@ static ssize_t unique_id_show(struct device *dev,
- 	}
- 	memcpy(sn, hdev->device_id, sizeof(sn));
- 	spin_unlock_irqrestore(&h->lock, flags);
--	return snprintf(buf, 16 * 2 + 2,
--			"%02X%02X%02X%02X%02X%02X%02X%02X"
--			"%02X%02X%02X%02X%02X%02X%02X%02X\n",
--			sn[0], sn[1], sn[2], sn[3],
--			sn[4], sn[5], sn[6], sn[7],
--			sn[8], sn[9], sn[10], sn[11],
--			sn[12], sn[13], sn[14], sn[15]);
-+	return snprintf(buf, 16 * 2 + 2, "%16phNX\n", sn);
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index ecb2af3f43ca3..eb39490b196cc 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -6674,13 +6674,7 @@ static ssize_t pqi_unique_id_show(struct device *dev,
+ 
+ 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+-	return scnprintf(buffer, PAGE_SIZE,
+-		"%02X%02X%02X%02X%02X%02X%02X%02X"
+-		"%02X%02X%02X%02X%02X%02X%02X%02X\n",
+-		unique_id[0], unique_id[1], unique_id[2], unique_id[3],
+-		unique_id[4], unique_id[5], unique_id[6], unique_id[7],
+-		unique_id[8], unique_id[9], unique_id[10], unique_id[11],
+-		unique_id[12], unique_id[13], unique_id[14], unique_id[15]);
++	return scnprintf(buffer, PAGE_SIZE, "%16phNX\n", unique_id);
  }
  
- static ssize_t sas_address_show(struct device *dev,
+ static ssize_t pqi_lunid_show(struct device *dev,
 -- 
 2.30.0
 
