@@ -2,71 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8FD3F90FB
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Aug 2021 01:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58E43F9272
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Aug 2021 04:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243722AbhHZXgo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Aug 2021 19:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S244075AbhH0CmM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Aug 2021 22:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbhHZXgn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Aug 2021 19:36:43 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA60BC061757
-        for <linux-scsi@vger.kernel.org>; Thu, 26 Aug 2021 16:35:55 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id q11so7551266wrr.9
-        for <linux-scsi@vger.kernel.org>; Thu, 26 Aug 2021 16:35:55 -0700 (PDT)
+        with ESMTP id S244055AbhH0CmK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Aug 2021 22:42:10 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A5EC061292
+        for <linux-scsi@vger.kernel.org>; Thu, 26 Aug 2021 19:41:22 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id a15so6632916iot.2
+        for <linux-scsi@vger.kernel.org>; Thu, 26 Aug 2021 19:41:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=ARNGsdh18aTDUf5LQl8EpRH6zfMP8KoRGSsMRfX79lU=;
-        b=M+CRbGjPZ86DTn1ZUaToXrpieI2+ksonmJpvqW8WzRFrVU7yIpVKNt0ql+EfwjNhpp
-         npmadmc0h5obipoG+d8hnVEUED4RdgUACRjVxsW5MUGYDUx2lcVVhlkhQEAj4YctrzT1
-         jxTFEinMDK4ZsO3hmRYS3yll9gutrnhE01vIxuHatKrbfrE1ah7hLoDAV9wCJB2Wmyto
-         Lsx8Jt2qeuZ1lZQhllCSK1b1M6NktBRFAB/To+68rs3hL1TFjD9RGXl44PUMk1ntLFIa
-         euLwLeZsleKMwT8M46r5ea0WUve/BN05xbxiysSRweSJRWuaQBuXtQjkeEH6vmhIWktF
-         HWGQ==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
+        b=hePZR6l3xkStPPzaZuEEI5aAsDiq5dQtzNWNyjWzrepGL3zDg5RRM5jmzv3hA8Qe8s
+         U5eUSbP2BQ7A45zN3gKzMQbxc2I7TBQ+WGjJw07Ca+N4SD7OgsCT4ZKEmx6x2fsD6OqX
+         sDvMxBGlSNKZbvz0OZuVA0WFxvTs+J+u862pdllDKBdFdGgib9ZiPj9FP+K5yMejz9W4
+         OuAlWF0fiIbSrR3GjuzqKB/+JO2AcrVVCdco4KgUAztF/I1ojRBAGLgKYgf3zRYK3mCq
+         atYBVOANeHK8VXipDb5RywYKh0b5pA6B9IAIIuUon7ytDHQT/+sb7hMNDgkjIhtqobzS
+         9yGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=ARNGsdh18aTDUf5LQl8EpRH6zfMP8KoRGSsMRfX79lU=;
-        b=jJmdlm4zypgj5rY9skE574utLPtRrH8YyM2+JBlPBFm+HxJLKDXqogTvlrDMOty2V1
-         C7X1TdSQ4mnOh0E7BCV915C3iHr8Om46JNJcA1Rrn0AlbztqAdRBTI4mDuwjTQxAGqgN
-         NcaLD7suxbemZSQjWyP92zodiZcgUxTcr+tmxixDXN2PXgjRUFkTyAkHdOcN6MwKVqdD
-         xqOT1qZtUEM9SxxWksbmD13cQm6K1je9K267MAZPGBUuBVx9QubSe1Nvx6h03eLwsFvJ
-         yqO/JeWetIowJfkudy7WtpWUCxTAD24u4Chnx2zNq33F7aVZl3LmR3nGAsRKH+YGLESp
-         yhUw==
-X-Gm-Message-State: AOAM5303w/1S0XClSfc5sapsnT+Q5n/zfwL8sQQe9dQBI+tYbVns950y
-        2XKEjmRRl393OYcbMAnGI/CiJJkCCQc/niXY02k=
-X-Google-Smtp-Source: ABdhPJwqDgrktbw2mtPvxHviQoGU6lkrV1W1sF+MdQy275y1yHxSiaANYmcV3rSaG820srM8RZojoTEOnl6VKtT2Cxk=
-X-Received: by 2002:a5d:464c:: with SMTP id j12mr6661521wrs.27.1630020954356;
- Thu, 26 Aug 2021 16:35:54 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
+        b=n/1jFEfzTwqkL7Qd7MIybt+QJ62GAoHAR87sgP3sqCXUlF0YA1U/BevKyjqS/N6jUq
+         oy2t+ZOisRN2NQNDdV262qJiUGP1R1iMnAK5mR52N61tetZF19QhOZdiykKsVqOlAqgv
+         kezqAJ9IsHaRH72zX3d5E50j8TNdvoxzu98Z68KNUPnBYrpz7qbYsqF+NcPAxqayx4I2
+         fHQt12AZnFDVr1ylhIE8hbBo8x/UZAdtsC7J4kKYRYU3XN7ssOJfdhwkqqEugARTiJwF
+         tXM6Yl16+WxFPHafjPv8YoMsEfARS+dT6bROXNlfudKJLndh7jT/5HxNN0fQ0by242hk
+         WYTQ==
+X-Gm-Message-State: AOAM530NwGf/eQyAxIoJ2FvTH6c3yWf8OoWMu4oHm5OHiJNrgMJX/PLx
+        JiRSlUMkIdroCXiJ1uXFuth43HzZtQhKYsIY+1o=
+X-Google-Smtp-Source: ABdhPJy2KvQ1y9lDWFCt4tUkVLyCqygzMboFgevi6gaXvHUugKzDyPWXP8Dr7Y84OXabbw7jN7/E9JfzCpuZS4GffJY=
+X-Received: by 2002:a05:6602:26cb:: with SMTP id g11mr5610199ioo.110.1630032081852;
+ Thu, 26 Aug 2021 19:41:21 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a5d:5989:0:0:0:0:0 with HTTP; Thu, 26 Aug 2021 16:35:53
+Received: by 2002:a02:c6bc:0:0:0:0:0 with HTTP; Thu, 26 Aug 2021 19:41:21
  -0700 (PDT)
-Reply-To: IncCEisabit@gmail.com
-From:   SABIT INCE <alfaroukkhadija@gmail.com>
-Date:   Fri, 27 Aug 2021 00:35:53 +0100
-Message-ID: <CAF1Q0Jnfk89vAiQAp61JfWAxfENvjm39XCOMTD=fexi88iw85A@mail.gmail.com>
-Subject: 
+From:   john williams <jw626521@gmail.com>
+Date:   Thu, 26 Aug 2021 14:41:21 -1200
+Message-ID: <CAA3cKDMLeZp=ywZ5d2MXfHebbUuYzsTJ67QeWGpBio58+vGPUA@mail.gmail.com>
+Subject: CONFIRM YOUR DETAILS TO ENABLE US START,
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Cze=C5=9B=C4=87, jak si=C4=99 masz?
+Dear Beneficiary,
 
-Czy mia=C5=82e=C5=9B okazj=C4=99 przejrze=C4=87 m=C3=B3j poprzedni e-mail?
+Following your pending fund for years and the delay you imposed in
+receiving it,We have called back your fund to this office as directed
+by the Finance Office and we will be paying you directly through the
+BANK OF AMERICA.(BOA) NEW YORK BRANCH AND ALL YOU NEED NOW IS TO
+RE-CONFIRM YOUR BANKING DETAILS FOR THE TRANSFER IMMEDIATELY WITHOUT
+ANY FURTHER DELAY.
 
-Rozumiem tw=C3=B3j napi=C4=99ty harmonogram, wi=C4=99c nie martw si=C4=99.
+NOTE THAT WE WILL PAY ALL THE EXPENSES INVOLVED FOR YOU TO RECEIVE
+THIS FUND AND ALL WE NEED FROM YOU IS YOUR CO-OPERATION.
 
-Odpowiedz jak najszybciej.
+Send your full details with Banking details to enable us commence the
+transfer process immediately through the BOA BANK IN NEW YORK,USA OR
+DO YOU WANT TO RECEIVE THIS FUND VIA ATM CARD ????????.
 
-
-Dzi=C4=99kuj=C4=99 i pozdrawiam,
-
-Sabit Ince
+John O.Williams.
