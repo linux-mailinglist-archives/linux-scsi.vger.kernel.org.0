@@ -2,71 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 207FC3FAD49
-	for <lists+linux-scsi@lfdr.de>; Sun, 29 Aug 2021 18:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FB03FAEBE
+	for <lists+linux-scsi@lfdr.de>; Sun, 29 Aug 2021 23:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbhH2Q6H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 29 Aug 2021 12:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235765AbhH2Q6G (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 Aug 2021 12:58:06 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0ECAC061575
-        for <linux-scsi@vger.kernel.org>; Sun, 29 Aug 2021 09:57:14 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id n1-20020a4ac7010000b0290262f3c22a63so3820986ooq.9
-        for <linux-scsi@vger.kernel.org>; Sun, 29 Aug 2021 09:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=XUOatBCS7KXMQIRek9BuQ4CNFHjXdIKefBYCv6RPNRY=;
-        b=XGxY52+NF2/w/zK/epC56qLafpIVSgixVn/8kFgCf/uO14jUv4ZfiZHW1hw///uF09
-         MGqHv+0ofkf4UmZaW2Md/JTwWaNq6H+Nv3+/Wc79yM7RKH97f7QWX88aCnmMI5BUgf5r
-         VsGYXu0sVM9LdBKBUMoZdwLr/CwuiZknW3s6t07bXY81ccNjTtcPAxRrrV6GiswKKMgI
-         GjBiO1BCc5JkvVWkQA3y9N1nBmlAXmAwVk0yM5oHYREch8D0xi47fjO9ctAR0n6bqtuT
-         ssm7uGdiq1QpcuW8NQMJQPUGSZntNBSJgLCYz+NxkjvTallDpn08YH3YIgZy1ETmRZN8
-         ODcA==
+        id S235991AbhH2Vem (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 29 Aug 2021 17:34:42 -0400
+Received: from mail-pf1-f175.google.com ([209.85.210.175]:35532 "EHLO
+        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235483AbhH2Vem (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 Aug 2021 17:34:42 -0400
+Received: by mail-pf1-f175.google.com with SMTP id x16so10634850pfh.2
+        for <linux-scsi@vger.kernel.org>; Sun, 29 Aug 2021 14:33:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=XUOatBCS7KXMQIRek9BuQ4CNFHjXdIKefBYCv6RPNRY=;
-        b=b6DGEI2Q4/UqZ7ZcOFuE735Co3Z8AnvJrESViNgmy5eBHGVy2rDQah/qgWVXUZWW3U
-         fVthyGnCbImlmPb0YfsNRphAhw+MhSb3feitQEzQxu7tH2GripKdrJgoWHLDXpEU5sFg
-         xLtbl6h7IQ4lLgfj2qKLSRK4KJZS3Bt2snJ8zYR3moHxCbP+VurmV69BppR+5wX9X5Mz
-         blYkSfe/n6NkU1iSIMsonmYO/3innmk2c8ConiEUthSc13o2QJFpF0eyNRV6Au8dPItc
-         jB/7+7TP1jIb4KhAJKmno+ms4NxMf4oKpWjHYmWI+rzeBc8QXhj43lhItcp0oMH3K/Cc
-         mo/A==
-X-Gm-Message-State: AOAM5312X56kcnyhy04VQAdXJHYPI+OQv9Sx4zqwlL+xqD4f82wAXDB7
-        n1UX5Ofrh1HgdRhZaFqbUXrdF9VsldLNgZ7IUFE=
-X-Google-Smtp-Source: ABdhPJzPdyqe5N7zbKdTXG6AlHkr6i1F4ww60dZ6p6lAD3Ug4lpBUPI/do0nxNFFIlBAO7wA88X/Q/E+voSKSFqlPzc=
-X-Received: by 2002:a4a:b64b:: with SMTP id f11mr7253550ooo.18.1630256233429;
- Sun, 29 Aug 2021 09:57:13 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=N54X4t4SFFkekc0QrQp/rLphDNw2U0JyF2INc4UrItw=;
+        b=U6W+aVrurDCw2GqRcDjVc4JfsU1CYfYKUf8Hxba8QY0g+zQ4DiPayXtA/qCW6R8V1a
+         r+cw3sOS+fVyTB0+Z3K60S6hejxv7yODWt/rwzVKy8T8GD6kiI1E/fZRzChUwuy3zV3o
+         +1zYbaeZmn8jXanSWV4zlIxvOZU2EXAEDji4DCphYzMgY7b+xIYri9NPjx0kfnDl86aW
+         YMgEeYtgqKbNrAviMQsLawawsbhTAEMLRA9SHXgFjkzRHyzc65UzXfkN/JpeieZfAviy
+         4a9V64JtjUe27ol8vCYd2gZg8TZE304QxRse97f1dZ7PMLsrH6JtJF/4mJkf4AjDEl/z
+         fURQ==
+X-Gm-Message-State: AOAM532QhfhLaEf9yfUDQ1G3yWgyIOo8D7Yt2iqulV4Fg1uZRpOe/3QN
+        ZPbK8Z+shwDuRBTm1Vz54aWugUb963I=
+X-Google-Smtp-Source: ABdhPJwMw9HeSj79u4jWu45XtptCspfmuUaze6YJaau7S4REmk0v4FgJIam6/uLfZyAe23kwWX1c1g==
+X-Received: by 2002:a63:ef57:: with SMTP id c23mr18452907pgk.60.1630272829438;
+        Sun, 29 Aug 2021 14:33:49 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:3a42:154:b70e:7868? ([2601:647:4000:d7:3a42:154:b70e:7868])
+        by smtp.gmail.com with UTF8SMTPSA id 17sm18895844pjd.3.2021.08.29.14.33.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Aug 2021 14:33:48 -0700 (PDT)
+Message-ID: <d3c4d5e8-12fd-57ca-6835-a370cadea809@acm.org>
+Date:   Sun, 29 Aug 2021 14:33:45 -0700
 MIME-Version: 1.0
-Received: by 2002:a4a:b201:0:0:0:0:0 with HTTP; Sun, 29 Aug 2021 09:57:13
- -0700 (PDT)
-Reply-To: sroomf70@gmail.com
-From:   "Mr. Ali Moses" <alimoses07@gmail.com>
-Date:   Sun, 29 Aug 2021 09:57:13 -0700
-Message-ID: <CADWzZe5T8dVHy5qvvDtxLgWSgu07xhSf3Crp1c_uLoxprVfxzA@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.0.1
+From:   Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH v3 16/18] scsi: ufs: Synchronize SCSI and UFS error
+ handling
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Keoseong Park <keosung.park@samsung.com>
+References: <20210722033439.26550-1-bvanassche@acm.org>
+ <20210722033439.26550-17-bvanassche@acm.org>
+ <88e0dc4c-34ff-6d87-fa9f-2fc924f50369@intel.com>
+ <DM6PR04MB6575F35FE07904EB50ECDB4FFCCA9@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Language: en-US
+In-Reply-To: <DM6PR04MB6575F35FE07904EB50ECDB4FFCCA9@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Greetings,
-From Mr. Ali Moses, please a huge amount of payment was made into your
-account. as soon as your respond is noted the payment confirmation
-slip will immediately send to you.  please do not hesitate to reply as
-soon as you receive this message. awaiting your urgent reply please.
+On 8/29/21 00:17, Avri Altman wrote:
+> Shouldn't a transport template ops be used only for scsi_transport modules?
 
-Thanks
-Mr. Ali Moses,
-Foreign Remittance
+If a transport template is used by multiple SCSI LLD drivers then the 
+transport implementation should be implemented as a kernel module of its 
+own. Since the transport template introduced by this patch is not used 
+by any other kernel module I think it's fine to define this transport 
+template in the UFS driver.
 
-Best regards
-Prof. Dr Diane
-Head of Foreign Operation
+Bart.
