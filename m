@@ -2,73 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7219F3FBDD2
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 Aug 2021 23:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987873FBE35
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 Aug 2021 23:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235846AbhH3VCW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 Aug 2021 17:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S238662AbhH3V1m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 Aug 2021 17:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbhH3VCW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Aug 2021 17:02:22 -0400
+        with ESMTP id S237685AbhH3V1I (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Aug 2021 17:27:08 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18734C061575;
-        Mon, 30 Aug 2021 14:01:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C43C061796;
+        Mon, 30 Aug 2021 14:26:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YLeyIh36W9KZ0EdnGoneLXaI1P2Sf43R5mGsowkdW0g=; b=rHUGs8PC9SNCLr8+68pmjJ6j+O
-        LtaWTZh9Q5B1+nQ2hrTGPF1fcfbSR3Bc4MaZvFu5VphNn3uzQki+n35xkL0bVrh1LapvtJXCTf9x2
-        aX8wRYUgYbB46/sh+IyauBD/d0v+EUJxIYc5tPiQ59XAdDbtIw4Bl5TuloVoTzanjLZH6B4zEyu9Z
-        cJfxaSEUPDqzy73KINJtfXG3JQEC+OVcdV8NY+mlstsLgVUnda0SZf0UpWRWmmrSNYHh6ccI4qX6Q
-        jujgcYNbGhmMrYwBPve3x8mENOXlAOUdzlGIdtNTAxg2GKSXah81G/vdsWSHpKSkvVupm5BhcGwQl
-        0RhmffIA==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=1YUk7uUX188ex4Qeqb2q2FbA+vqSeistafw96wSb9q8=; b=lEZUf7GgHMbX1+8gRrsrsvmyDn
+        I+l8qrzbBpIWozAGTLTsWh0ax350SK798hajnAmKrtIYwcj70N+TaMp/HanMyyRUp054bd1I72PoR
+        tx8Hq7NMaNET0LOlyYCx0TsGyJCTqk6w1OvYvpXbRKuuMRQd2pUNw7KlIMpg2IIjBZ+zvhlvLDIXl
+        uJ3BiUfzRZCBBpNJqKtyJRWmGjjAIWHZWiJAynl3xGzd17VZHRg2LRBXRyRNRBZ7p564JgTHzY+67
+        cukqYn6bVuTsu0iduaOcSEpdZaD/+3zQZbDczNcUC1Z4qd2F8DLoqpMTdUu6EcUbL56xrdqtLrnTN
+        YcfMXpzQ==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mKoOo-000ZII-6j; Mon, 30 Aug 2021 21:00:58 +0000
-Date:   Mon, 30 Aug 2021 14:00:58 -0700
+        id 1mKomk-000ci4-DU; Mon, 30 Aug 2021 21:25:42 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     axboe@kernel.dk, martin.petersen@oracle.com, jejb@linux.ibm.com,
+To:     axboe@kernel.dk, martin.petersen@oracle.com, jejb@linux.ibm.com,
         kbusch@kernel.org, sagi@grimberg.me, adrian.hunter@intel.com,
         beanhuo@micron.com, ulf.hansson@linaro.org, avri.altman@wdc.com,
         swboyd@chromium.org, agk@redhat.com, snitzer@redhat.com,
-        josef@toxicpanda.com, hare@suse.de, bvanassche@acm.org,
+        josef@toxicpanda.com
+Cc:     hch@infradead.org, hare@suse.de, bvanassche@acm.org,
         ming.lei@redhat.com, linux-scsi@vger.kernel.org,
         linux-nvme@lists.infradead.org, linux-mmc@vger.kernel.org,
         dm-devel@redhat.com, nbd@other.debian.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/10] dm: add add_disk() error handling
-Message-ID: <YS1HCgP/XdWmMtFN@bombadil.infradead.org>
-References: <20210823202930.137278-1-mcgrof@kernel.org>
- <20210823202930.137278-9-mcgrof@kernel.org>
- <YSSP6ujNQttGN2sZ@infradead.org>
- <YSk1EhUIr9OjIoVv@bombadil.infradead.org>
- <YSnnXdKLvxEY8yay@infradead.org>
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH v3 0/8] block: first batch of add_disk() error handling conversions
+Date:   Mon, 30 Aug 2021 14:25:30 -0700
+Message-Id: <20210830212538.148729-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YSnnXdKLvxEY8yay@infradead.org>
+Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, Aug 28, 2021 at 08:35:57AM +0100, Christoph Hellwig wrote:
-> On Fri, Aug 27, 2021 at 11:55:14AM -0700, Luis Chamberlain wrote:
-> > > I think the add_disk should just return r.  If you look at the
-> > > callers they eventualy end up in dm_table_destroy, which does
-> > > this cleanup.
-> > 
-> > I don't see it. What part of dm_table_destroy() does this?
-> 
-> Sorry, dm_destroy, not dm_table_destroy.  For dm_early_create it's
-> trivial as that calls both dm_table_destroy and dm_destroy in the error
-> path.  The normal table_load case is a separate ioctl, but if that
-> fails userspace needs to call the DM_DEV_REMOVE_CMD to cleanup
-> the state - similar to any other failure.
+Jens,
 
-I see, ok sure I'll document this on the commit log as its not so
-obvious.
+I think this first set is ready, but pending review of just two patches:
 
-  Luis
+  * mmc/core/block
+  * dm
+
+All other patches have a respective Reviewed-by tag. The above two
+patches were integrated back into the series once I understood
+Christoph's concerns, and adjusted the patch as such.
+
+This goes rebased onto your for-next as of today. If anyone wants to
+explore the pending full set this is up on my linux-next branch
+20210830-for-axboe-add-disk-error-handling-next [0].
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20210830-for-axboe-add-disk-error-handling-next
+
+Luis Chamberlain (8):
+  scsi/sd: add error handling support for add_disk()
+  scsi/sr: add error handling support for add_disk()
+  nvme: add error handling support for add_disk()
+  mmc/core/block: add error handling support for add_disk()
+  md: add error handling support for add_disk()
+  dm: add add_disk() error handling
+  loop: add error handling support for add_disk()
+  nbd: add error handling support for add_disk()
+
+ drivers/block/loop.c     | 9 ++++++++-
+ drivers/block/nbd.c      | 6 +++++-
+ drivers/md/dm.c          | 4 +++-
+ drivers/md/md.c          | 7 ++++++-
+ drivers/mmc/core/block.c | 7 ++++++-
+ drivers/nvme/host/core.c | 9 ++++++++-
+ drivers/scsi/sd.c        | 6 +++++-
+ drivers/scsi/sr.c        | 5 ++++-
+ 8 files changed, 45 insertions(+), 8 deletions(-)
+
+-- 
+2.30.2
+
