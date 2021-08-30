@@ -2,71 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6003FBCF8
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 Aug 2021 21:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69CF3FBD84
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 Aug 2021 22:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234111AbhH3Tfd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 Aug 2021 15:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
+        id S235337AbhH3Unh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 Aug 2021 16:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbhH3Tfb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Aug 2021 15:35:31 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3357C06179A
-        for <linux-scsi@vger.kernel.org>; Mon, 30 Aug 2021 12:34:36 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id r7so7266320edd.6
-        for <linux-scsi@vger.kernel.org>; Mon, 30 Aug 2021 12:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=SaQJaLQJV1tXeTErb3iEo2Jt85n+Ln12ULE3k7m2zSU=;
-        b=WDtEyS2wvh99Wx+Q21ww0DSSgBLyCbnnSQNweNJpRFey81KMh6Bpztk03Z3J87+reP
-         cCJnjxiJ9OX0fNWhY06vydcfEGuJRha220GR7cKRZ+7m3J2d5fp1XKsnvtTP/84/lqL6
-         bgAGqYQtD5qNtdzCFhIFlYKp9RRFW5h6pwJ11Zval7cpkEamElPvOCIndvSIvUOTY3IR
-         13SqL5XKLgKjJN3qifk0qgbGr3qqKalsxdUoMQQOt4FoQi3sdulFCaheecaa+9iCFIjW
-         CVlx9IbpEcmKJnGCMyLmHF0diyKFMvClhURhF60OTHIdzJTfMyuuOc2MXaHJmoTCEL+f
-         BS+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=SaQJaLQJV1tXeTErb3iEo2Jt85n+Ln12ULE3k7m2zSU=;
-        b=pojbxS0gBPaIbuCMQdUrRjQzJhhjs8trlEZtN3JsTpdGiY9FktVwnwmEIhmVXdyY8n
-         vv7kVSmFtIL42ku2kmMX0M+lHjAFwz8tdQ8N0qqWP+pxWaAy02w2Vwq8cvAFPArFLZz8
-         oLDEJef3yH3f7Me+nhMwmlNtPTYPZR2AB4PnTCz3xVZUsR45VPbzVO6K4nu9cty2ao2n
-         8V1fvD9QduvYvyk4RqnBUp6RDlosNrf9emcLhAo9Jcp5jKF2rVjG1NrgC+E5VBKo62YS
-         HeLVjjUta2drXazaUVpPAlLU6b+GKaz3BiFJBYhOuAf24y5PLPHoqGmGxwxWG6u8Nym2
-         2bqw==
-X-Gm-Message-State: AOAM530LS/gL9t+DqSD1+h+L8fUZ94VGtwhYs/qu/zDCudOmn8xJgviJ
-        OgKEFaT0Jr+cBDVhQ/y9SC7S5ifWTsfbo73v0r4=
-X-Google-Smtp-Source: ABdhPJxJF19FK5F/woLmwx+qHR8HyLASRpqAlqfwaa/oFHxH20WRXtknUAIpZgrD8uhFYodYUQoEBVdBP3Czz/aDiY4=
-X-Received: by 2002:a05:6402:c9:: with SMTP id i9mr25108272edu.76.1630352074023;
- Mon, 30 Aug 2021 12:34:34 -0700 (PDT)
+        with ESMTP id S235057AbhH3Ung (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Aug 2021 16:43:36 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B8DC061575;
+        Mon, 30 Aug 2021 13:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=s8sN/nm91BxBuEePx1oK1Ip0xK3fNhEwWe4+zuk6ceg=; b=4v7ISjCjGyaDn8TkXmebdJ4hKv
+        PYx8skNRQRgbxfe4rRQMsvdVqvz6VsOfG9X+ROPMHVGQ4OJA5hAo5lE2j0lBIGhBMuJO1IOmg+FTW
+        Baz+6nCnSYe3ZmhnuxdkpAmokYK10l/Ya7AG5MqiR+lD1nmC8JOlQ969ZzIpbc1fur6demSAe5MMr
+        C2BQu/AgInu/iK6+i6nB3CZiOREMoI+7P48WwQrSYGGvuhP+V5R6VnsWpAN/CQqgW38xrJ61oM8JV
+        aPng4azQlAs9WpIqkFSGrCtxrK/b3zVILCxHQ9PBfuLp0BPIxBCinyxszKB9hpiE2mepEls2HYCFQ
+        4ovZX2pA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mKo6Z-000Wv2-7h; Mon, 30 Aug 2021 20:42:07 +0000
+Date:   Mon, 30 Aug 2021 13:42:07 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     axboe@kernel.dk, martin.petersen@oracle.com, jejb@linux.ibm.com,
+        kbusch@kernel.org, sagi@grimberg.me, adrian.hunter@intel.com,
+        beanhuo@micron.com, ulf.hansson@linaro.org, avri.altman@wdc.com,
+        swboyd@chromium.org, agk@redhat.com, snitzer@redhat.com,
+        josef@toxicpanda.com, hare@suse.de, bvanassche@acm.org,
+        ming.lei@redhat.com, linux-scsi@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-mmc@vger.kernel.org,
+        dm-devel@redhat.com, nbd@other.debian.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/10] mmc/core/block: add error handling support for
+ add_disk()
+Message-ID: <YS1Cn6yMbpQGFOYe@bombadil.infradead.org>
+References: <20210823202930.137278-1-mcgrof@kernel.org>
+ <20210823202930.137278-7-mcgrof@kernel.org>
+ <YSSN+eac2aCFXTAA@infradead.org>
+ <YSkyHINtV/djFEej@bombadil.infradead.org>
+ <YSnme1mfHS/HCguW@infradead.org>
 MIME-Version: 1.0
-Received: by 2002:a54:2dcc:0:0:0:0:0 with HTTP; Mon, 30 Aug 2021 12:34:33
- -0700 (PDT)
-Reply-To: mrschantelhermans@gmail.com
-From:   Mrs Chantel Hermans <bellomhd922@gmail.com>
-Date:   Mon, 30 Aug 2021 12:34:33 -0700
-Message-ID: <CAB4DdoqHS0TExutFSvtWcu9zuDzHhV7yFW+mxpsbnqCErVzvTQ@mail.gmail.com>
-Subject: ATTENTION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YSnme1mfHS/HCguW@infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-ATTENTION
+On Sat, Aug 28, 2021 at 08:32:11AM +0100, Christoph Hellwig wrote:
+> On Fri, Aug 27, 2021 at 11:42:36AM -0700, Luis Chamberlain wrote:
+> > > >  	if (area_type == MMC_BLK_DATA_AREA_MAIN)
+> > > >  		dev_set_drvdata(&card->dev, md);
+> > > > -	device_add_disk(md->parent, md->disk, mmc_disk_attr_groups);
+> > > > +	ret = device_add_disk(md->parent, md->disk, mmc_disk_attr_groups);
+> > > > +	if (ret)
+> > > > +		goto out;
+> > > 
+> > > This needs to do a blk_cleanup_queue and also te kfree of md.
+> > 
+> > If mmc_blk_alloc_parts() fails mmc_blk_remove_req() is called which
+> > does both for us?
+> 
+> Yes, but only for the main gendisk, and those parts already added to
+> the list which happens after device_add_disk succeeded.
 
+Ah yes I see that now. Will fix up. The tag also needs to be cleaned up.
 
-You have been compensated with the sum of 6.9 million dollars in this
-United Nation the payment will be issue into ATM Visa Card,
-
-
-and send to you from the Santander Bank of Spain we need your
-Address,Passport and your whatsapp number.
-
-
-THANKS
-Mrs Chantel Hermans
+  Luis
