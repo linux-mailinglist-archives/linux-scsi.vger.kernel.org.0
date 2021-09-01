@@ -2,90 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F5A3FD4CE
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Sep 2021 09:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C14ED3FD5F4
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Sep 2021 10:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242842AbhIAIAh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Sep 2021 04:00:37 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3711 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242827AbhIAIAg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Sep 2021 04:00:36 -0400
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4GzxHy6cjKz67ZbW;
-        Wed,  1 Sep 2021 15:58:06 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Wed, 1 Sep 2021 09:59:37 +0200
-Received: from [10.47.95.192] (10.47.95.192) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.8; Wed, 1 Sep 2021
- 08:59:37 +0100
-Subject: Re: arm scsi drivers
-To:     Hannes Reinecke <hare@suse.de>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        id S242916AbhIAIxN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Sep 2021 04:53:13 -0400
+Received: from mx20.baidu.com ([111.202.115.85]:44186 "EHLO baidu.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241376AbhIAIxM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 1 Sep 2021 04:53:12 -0400
+Received: from Bc-Mail-Ex13.internal.baidu.com (unknown [172.31.51.53])
+        by Forcepoint Email with ESMTPS id ED7E28EA7C4F09A36F08;
+        Wed,  1 Sep 2021 16:52:13 +0800 (CST)
+Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
+ Bc-Mail-Ex13.internal.baidu.com (172.31.51.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2242.12; Wed, 1 Sep 2021 16:52:13 +0800
+Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Wed, 1 Sep 2021 16:52:13 +0800
+From:   Cai Huoqing <caihuoqing@baidu.com>
+To:     <caihuoqing@baidu.com>
+CC:     John Garry <john.garry@huawei.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hannes Reinecke <hare@suse.com>,
-        "Christoph Hellwig" <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <5a72842f-99db-8787-120b-6d85e7884e2d@huawei.com>
- <9552a506-e53a-3fd3-b38e-3cec81e713a6@huawei.com>
- <20210827150938.GU22278@shell.armlinux.org.uk>
- <087d1fa0-8796-5b97-36fc-379498f53380@suse.de>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <cbd7991e-0634-83c1-0a6a-c834324ec72d@huawei.com>
-Date:   Wed, 1 Sep 2021 09:03:28 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] scsi: hisi_sas: Make use of the helper function devm_platform_ioremap_resource()
+Date:   Wed, 1 Sep 2021 16:52:07 +0800
+Message-ID: <20210901085207.31254-1-caihuoqing@baidu.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <087d1fa0-8796-5b97-36fc-379498f53380@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.95.192]
-X-ClientProxiedBy: lhreml709-chm.china.huawei.com (10.201.108.58) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
+X-Originating-IP: [172.31.63.8]
+X-ClientProxiedBy: BC-Mail-Ex21.internal.baidu.com (172.31.51.15) To
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 27/08/2021 16:23, Hannes Reinecke wrote:
-> On 8/27/21 5:09 PM, Russell King (Oracle) wrote:
->> I haven't, sorry.
->>
->> I have run 5.x kernels on the hardware, and do have a set of patches
->> kicking around for the SCSI drivers that do some cleanups. It looks
->> like the fixup is pretty simple from the links you've sent - using
->> scsi_cmd_to_rq() to get the tag.
+Use the devm_platform_ioremap_resource() helper instead of
+calling platform_get_resource() and devm_ioremap_resource()
+separately
 
-I'm not sure. The SCSI midlayer does nothing with that tag field, apart 
-from set it to the block layer request tag, and it seems that these 
-drivers reuse that field for their own tag management. But Hannes is 
-confident that we may just use scsi_cmd_to_rq().
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+---
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
->>
->> That said, I think I may only had one SCSI drive that came anywhere
->> close to supported tagged queuing, so I never put much effort into
->> tagged command support. Both acornscsi and fas216 have it disabled
->> for this reason, so it's probably easier just to rip the tag code
->> out of these drivers.
->>
-> That's what I figured, too.
-> And that's what my patches do, killing the tag support from arm drivers 
-> which had them disabled since the dawn of git history.
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index 9515c45affa5..0c2309c951ab 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -2649,12 +2649,9 @@ static struct Scsi_Host *hisi_sas_shost_alloc(struct platform_device *pdev,
+ 	if (IS_ERR(hisi_hba->regs))
+ 		goto err_out;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-	if (res) {
+-		hisi_hba->sgpio_regs = devm_ioremap_resource(dev, res);
+-		if (IS_ERR(hisi_hba->sgpio_regs))
+-			goto err_out;
+-	}
++	hisi_hba->sgpio_regs = devm_platform_ioremap_resource(pdev, 1);
++	if (IS_ERR(hisi_hba->sgpio_regs))
++		goto err_out;
+ 
+ 	if (hisi_sas_alloc(hisi_hba)) {
+ 		hisi_sas_free(hisi_hba);
+-- 
+2.25.1
 
-These are the patches:
-https://lore.kernel.org/linux-scsi/20210819084007.79233-1-hare@suse.de/T/#t
-
-Hannes, please consider resending, cc'ing Russell.
-
-Thanks,
-John
