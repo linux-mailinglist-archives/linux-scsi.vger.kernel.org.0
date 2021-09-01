@@ -2,194 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA433FDF0A
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Sep 2021 17:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 639BB3FDF41
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Sep 2021 18:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343879AbhIAPww (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Sep 2021 11:52:52 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:59312 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244935AbhIAPwu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 1 Sep 2021 11:52:50 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1630511514; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=DJPKLCjknE7MNkfUkV2JvIF1pJAJ2fVxt2U+Ra9y/r0=; b=uwWIYeiNx27aAqax5YX3W4dLa0bkahRguVDFtaGtUIBgSq1hllPgD5dgCOuGhY/yAh/NasGD
- 5L7u2GcXJb4cfh0j0iJ3kmqELLsRVV+tHPmBENoRny5M0SgMDCMCldppjBwOX3zkkw0nOKfL
- T8OmbZdFI/LRC7H1wfTMbVLTqxk=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 612fa193825e13c54a159083 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 01 Sep 2021 15:51:47
- GMT
-Sender: asutoshd=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E2B5CC43619; Wed,  1 Sep 2021 15:51:46 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.0
-Received: from [192.168.1.8] (cpe-66-27-70-157.san.res.rr.com [66.27.70.157])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: asutoshd)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2B976C4338F;
-        Wed,  1 Sep 2021 15:51:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 2B976C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH 2/3] scsi: ufs: Add temperature notification exception
- handling
-To:     Avri Altman <avri.altman@wdc.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bean Huo <beanhuo@micron.com>
-References: <20210901123707.5014-1-avri.altman@wdc.com>
- <20210901123707.5014-3-avri.altman@wdc.com>
-From:   "Asutosh Das (asd)" <asutoshd@codeaurora.org>
-Message-ID: <c00af2a5-63f0-e38d-a209-952b11db2b51@codeaurora.org>
-Date:   Wed, 1 Sep 2021 08:51:44 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S232662AbhIAQCB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Sep 2021 12:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230129AbhIAQCA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Sep 2021 12:02:00 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08DFC061575
+        for <linux-scsi@vger.kernel.org>; Wed,  1 Sep 2021 09:01:03 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id k24so3208850pgh.8
+        for <linux-scsi@vger.kernel.org>; Wed, 01 Sep 2021 09:01:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=kasiO7P5C39sTonjUrt1oQkAPblAm/+HfXttvx77r+s=;
+        b=K6mt5PCDqoayf2GZUVIJdQFKilb0f/ozV21dR8EaBa1nfflypcPNKo4ozih8kSVF7F
+         HGDZXVV4Eg4NRXMCl8c73LuAYHUHDrL2P69MJ5vgmHE/6DK0q3h9vPJMu/EpUOEqropd
+         YcSFu5Od4HETjdoFFDrb2u7s8DhkCJnSl+r0Jnuf0tVfCukka2v3Rm4FzMcxwH4Moszi
+         d6iHq9MWpuK3K3AiCrk0vFvR6a/25EhdRiyLyDJNhO6cgHRbWqJu8PEFste+uI7U4XXS
+         s5EHI5JRlHMA50n0DGYgnDN3RRB07fz1gC68MFwJ4aafXT2xOhgGKV9chUeToyvZp0G0
+         7Htg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=kasiO7P5C39sTonjUrt1oQkAPblAm/+HfXttvx77r+s=;
+        b=eZV4No3nZTq+VAHVmaeXFcSt89d8IlGCG69d2AGVZ1vykZ1DlhtqqQEeFO6RVALWQT
+         Wtri3YvBBiNJHrdqTLjPVSRvX0htdN6/bt0De0TqcoxiQow42nm2j1bmZTamgfi4QQYM
+         K/1GrW5GzNUWJztlsdY3OlyeaHlu5ve+bOSDdvAIOeixJpeUgkuPxH1q1/XBT8HbAIP4
+         gmYAqDS92at9Rn2ypATHRgh3+71Y/KRKhdfNJCFs+a2rzzOTyu1f3foDbsFk7Fl4deuO
+         AsnI3w3YZo9SXHucfHTLkrDPgiuE1JfEEZqEh+pnFkmSuKzCMHHqi2ENSeIlWvV4BNsy
+         X3pg==
+X-Gm-Message-State: AOAM533P+0PYFcQd5IEmxmMkNc62htyZEDy192ARRkiXICe64PH4aJJJ
+        /tdxi4UmVQ3OzRJpcUtYl2rtFwPxwE6t6AoWy4o=
+X-Google-Smtp-Source: ABdhPJzAxWY12P1rkvk5STO2qLVeIxsVTHrdYXz2xNke6UCnRD3zemy9j7mlmYZC8GmhvCbLGkaQ3t2LBuacg155rRQ=
+X-Received: by 2002:a62:a513:0:b0:3f1:e19c:a23 with SMTP id
+ v19-20020a62a513000000b003f1e19c0a23mr171563pfm.43.1630512063444; Wed, 01 Sep
+ 2021 09:01:03 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210901123707.5014-3-avri.altman@wdc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:7300:7309:b0:38:2de4:eabb with HTTP; Wed, 1 Sep 2021
+ 09:01:03 -0700 (PDT)
+Reply-To: caixabank@seznam.cz
+From:   CAIXABANK <cliffordw852@gmail.com>
+Date:   Wed, 1 Sep 2021 09:01:03 -0700
+Message-ID: <CAK_wXHpJdADFVzg3f6JKT5yoAdmTop0nGLtDQjjTz5+H7anx=A@mail.gmail.com>
+Subject: URGENT RESPONSE
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/1/2021 5:37 AM, Avri Altman wrote:
-> The device may notify the host of an extreme temperature by using the
-> exception event mechanism. The exception can be raised when the device’s
-> Tcase temperature is either too high or too low.
-> 
-> It is essentially up to the platform to decide what further actions need
-> to be taken. So add a designated vop for that.  Each chipset vendor can
-> decide if it wants to use the thermal subsystem, hw monitor, or some
-> Privet implementation.
-The sensors of thermal subsystem would essentially get the skin 
-temperature and invoke the registered handlers to throttle, if possible.
-
-I'm not sure how the vendor drivers can use thermal subsystem now if the 
-ufs device doesn't inform the thermal subsystem about its increase in 
-temperature.
-
-Meaning, (FWIU):
-  -> ufs device senses an increase in temperature
-     -> informs thermal subsystem
-       -> registered vendor driver cb() is invoked by thermal subsystem.
-
-Please let me know if I'm missing something.
-
-> 
-> Signed-off-by: Avri Altman <avri.altman@wdc.com>
-> ---
->   drivers/scsi/ufs/ufs.h    |  2 ++
->   drivers/scsi/ufs/ufshcd.c | 18 ++++++++++++++++++
->   drivers/scsi/ufs/ufshcd.h |  7 +++++++
->   3 files changed, 27 insertions(+)
-> 
-> diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
-> index dee897ef9631..4f2a2fe0c84a 100644
-> --- a/drivers/scsi/ufs/ufs.h
-> +++ b/drivers/scsi/ufs/ufs.h
-> @@ -374,6 +374,8 @@ enum {
->   	MASK_EE_PERFORMANCE_THROTTLING	= BIT(6),
->   };
->   
-> +#define MASK_EE_URGENT_TEMP (MASK_EE_TOO_HIGH_TEMP | MASK_EE_TOO_LOW_TEMP)
-> +
->   /* Background operation status */
->   enum bkops_status {
->   	BKOPS_STATUS_NO_OP               = 0x0,
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 6ad51ae764c5..5f1fce21b655 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -5642,6 +5642,11 @@ static void ufshcd_bkops_exception_event_handler(struct ufs_hba *hba)
->   				__func__, err);
->   }
->   
-> +static void ufshcd_temp_exception_event_handler(struct ufs_hba *hba, u16 status)
-> +{
-> +	ufshcd_vops_temp_notify(hba, status);
-> +}
-> +
->   static int __ufshcd_wb_toggle(struct ufs_hba *hba, bool set, enum flag_idn idn)
->   {
->   	u8 index;
-> @@ -5821,6 +5826,9 @@ static void ufshcd_exception_event_handler(struct work_struct *work)
->   	if (status & hba->ee_drv_mask & MASK_EE_URGENT_BKOPS)
->   		ufshcd_bkops_exception_event_handler(hba);
->   
-> +	if (status & hba->ee_drv_mask & MASK_EE_URGENT_TEMP)
-> +		ufshcd_temp_exception_event_handler(hba, status);
-> +
->   	ufs_debugfs_exception_event(hba, status);
->   out:
->   	ufshcd_scsi_unblock_requests(hba);
-> @@ -7473,6 +7481,7 @@ static void ufshcd_temp_notif_probe(struct ufs_hba *hba, u8 *desc_buf)
->   {
->   	struct ufs_dev_info *dev_info = &hba->dev_info;
->   	u32 ext_ufs_feature;
-> +	u16 mask = 0;
->   
->   	if (!(hba->caps & UFSHCD_CAP_TEMP_NOTIF) ||
->   	    dev_info->wspecversion < 0x300)
-> @@ -7483,6 +7492,15 @@ static void ufshcd_temp_notif_probe(struct ufs_hba *hba, u8 *desc_buf)
->   
->   	dev_info->low_temp_notif = ext_ufs_feature & UFS_DEV_LOW_TEMP_NOTIF;
->   	dev_info->high_temp_notif = ext_ufs_feature & UFS_DEV_HIGH_TEMP_NOTIF;
-> +
-> +	if (dev_info->low_temp_notif)
-> +		mask |= MASK_EE_TOO_LOW_TEMP;
-> +
-> +	if (dev_info->high_temp_notif)
-> +		mask |= MASK_EE_TOO_HIGH_TEMP;
-> +
-> +	if (mask)
-> +		ufshcd_enable_ee(hba, mask);
->   }
->   
->   void ufshcd_fixup_dev_quirks(struct ufs_hba *hba, struct ufs_dev_fix *fixups)
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index 467affbaec80..98ac7e7c8ec3 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -356,6 +356,7 @@ struct ufs_hba_variant_ops {
->   			       const union ufs_crypto_cfg_entry *cfg, int slot);
->   	void	(*event_notify)(struct ufs_hba *hba,
->   				enum ufs_event_type evt, void *data);
-> +	void	(*temp_notify)(struct ufs_hba *hba, u16 status);
->   };
->   
->   /* clock gating state  */
-> @@ -1355,6 +1356,12 @@ static inline void ufshcd_vops_config_scaling_param(struct ufs_hba *hba,
->   		hba->vops->config_scaling_param(hba, profile, data);
->   }
->   
-> +static inline void ufshcd_vops_temp_notify(struct ufs_hba *hba, u16 status)
-> +{
-> +	if (hba->vops && hba->vops->temp_notify)
-> +		hba->vops->temp_notify(hba, status);
-> +}
-> +
->   extern struct ufs_pm_lvl_states ufs_pm_lvl_states[];
->   
->   /*
-> 
-
-
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-Linux Foundation Collaborative Project
+ Dear Friend
+
+You have been compensated with the sum of  6 million dollars  with
+united nation through the help of the newly elected president due to
+covid 19 that has cause global economic hazard to so many lives. The
+swiss world bank has endorse the payment in collaboration with
+caixabank in spain.
+The payment will be issue into atm visa card and send to you via
+caixabank through dhl courier service and other courier services
+company close to you in your country.  We need your home
+address,country, your phone number and your passport.
+
+Contact our email id: ( caixabank@seznam.cz ) for your payment
+
+Kind
+
+Regard
+
+CAIXABANK MANAGEMENT
