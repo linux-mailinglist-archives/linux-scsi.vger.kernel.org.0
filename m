@@ -2,122 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4E53FE068
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Sep 2021 18:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BAD3FE1F1
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Sep 2021 20:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344545AbhIAQxx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Sep 2021 12:53:53 -0400
-Received: from mail-pg1-f177.google.com ([209.85.215.177]:46897 "EHLO
-        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344563AbhIAQxr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Sep 2021 12:53:47 -0400
-Received: by mail-pg1-f177.google.com with SMTP id w7so4662pgk.13;
-        Wed, 01 Sep 2021 09:52:50 -0700 (PDT)
+        id S1346813AbhIASM0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Sep 2021 14:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346831AbhIASMW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Sep 2021 14:12:22 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D915C0611F9
+        for <linux-scsi@vger.kernel.org>; Wed,  1 Sep 2021 11:11:23 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 28-20020a17090a031cb0290178dcd8a4d1so249152pje.0
+        for <linux-scsi@vger.kernel.org>; Wed, 01 Sep 2021 11:11:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=LD3mpzy1s09M3e/Eheelu/QMtbN6lrYJQ+S1BsYhmG4zP9OQuKOeD1zHV2lZaK7Hdt
+         vXoBMumPRACuZhnwd8TYAFIvdImPe0Zn4DA41GnzHGsnpDZPE0wUFWVFNzgpxF6bh6D8
+         CVxTiiIN7w8BVpPirFLytZKK2cFqqV6q9qR8cw4XmdYYgGZs+MdnDeP+neEr/SbnLI2h
+         mwT6gqJ8+HvNCQei5Zu6b3U+/YcUOepEDfVn6t0IkNG5YzxTV8mH8IqZ4zEsqBchdgxI
+         E/zGH3KCiuS7UdfEMBVKPbpzhhPyh4quLRALvE4iCHtswqSZDgWUuzksodIw8OWwGR1Z
+         0RlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ftQGABx0xufp8pThD84BAjAZBtnCC/TxEXzAl+Vzi9Q=;
-        b=shAMK2u16f4hcOJhYDI0awv1NERXJtXNYmyzL+arz5x2r4curs+dZMIQyIHf1owcqZ
-         J4tqRxqpBHu3fRtQv8FzH4leMwiw+qoITCCxl+b19occSuw3dv4ifZ5TtNloxOd33Y80
-         fHkKx8lqFvXriCaEAd9CAZVTDb6PDhuOyqzI7DE5QYuV2MW0VUZv+rY5tjTa2VVV0wtJ
-         jjXmtovz4k44IICwi9IpUpw4H0opyvwX8HgtahQU4eyPV6BjatcT7o2o9rfrvAGYqyha
-         X35TxK6bK56bIJj/zewBILRNwepVgXnWFP9NHPQTNnHIIg0hZ89CJwOR/xhdDICzy8pR
-         ayMg==
-X-Gm-Message-State: AOAM530iQwchUX3PihpLPXy3HNfxtEi7FYhGhyYCpe8/Sh+ApjWr/oa3
-        VNETwfbpyQd6IBVe8wy0BVFtduUZIfc=
-X-Google-Smtp-Source: ABdhPJzTfATfDDP/9qrgWEdZJ+lfSK8CaykloWTE7YOyjPj+JC9x6ZVGc334DH4bP9a+JEH7pcihkQ==
-X-Received: by 2002:a63:2047:: with SMTP id r7mr59288pgm.398.1630515170171;
-        Wed, 01 Sep 2021 09:52:50 -0700 (PDT)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:8a3b:44ab:b62:3ce2])
-        by smtp.gmail.com with ESMTPSA id z17sm54375pfa.125.2021.09.01.09.52.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Sep 2021 09:52:49 -0700 (PDT)
-Subject: Re: [PATCH 3/3] scsi: ufs-sysfs: Add sysfs entries for temperature
- notification
-To:     Avri Altman <avri.altman@wdc.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bean Huo <beanhuo@micron.com>
-References: <20210901123707.5014-1-avri.altman@wdc.com>
- <20210901123707.5014-4-avri.altman@wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <0c547d74-481f-0c5e-9f7a-8c29218a0d3a@acm.org>
-Date:   Wed, 1 Sep 2021 09:52:48 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
+        b=FsfyNWIdlgnYvhniuIQnshHl9Iw0CBfAGG2weF5nQrrQefmW3KGgl5h64wNebxFGlO
+         NTQd8A1+a4HDPR9Bl3ndoixB3aSQzBf0SDnUSfOOvBzL2HowskRgojRHzvODDGWib1WK
+         TWT/YnqaO629+xfbmIVAYBIsImCQkIBlOtA8OsiZyaTdjfBWoVtmwlQvLzTlN03rSEvx
+         Dgxvtq0SeX5L8H2N0wOLl+NZFZ1KCW59mTTU+VsV3MImlaPE/YFFATG9mb5AYgCFuMgT
+         I0P69xIgKe9TCh5g14c3saSwktjyjUCtYYAhuY2HU+Ofm1tA88bzziL9tpa2K6Icz21r
+         q8Ag==
+X-Gm-Message-State: AOAM531H2BKkxDIBgFDfitm1FgkP+Kqk3ENl+mONeeBbeUU5EYw69/13
+        UWq6JdqmTHwIyKhlrz+QrsUFb0BieT+sf6v4Tg13vUDhAS43tA==
+X-Google-Smtp-Source: ABdhPJwbbBYGjUEQSS3Bb7EfYk34O3AVuG22pVIF78fkATQG8c+PQmeHgcc35+YrriS74Wl5STB8JbzOasp+8kCVBlk=
+X-Received: by 2002:a67:8c5:: with SMTP id 188mr1017695vsi.4.1630519870726;
+ Wed, 01 Sep 2021 11:11:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210901123707.5014-4-avri.altman@wdc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ab0:740d:0:0:0:0:0 with HTTP; Wed, 1 Sep 2021 11:11:10 -0700 (PDT)
+From:   CorisBank International <corisbankintlbf@gmail.com>
+Date:   Wed, 1 Sep 2021 11:11:10 -0700
+Message-ID: <CA+25hwzjLgVdtDXYWeuqFBTvAbpc4oxK0dW54s7tjGNyU_m0ow@mail.gmail.com>
+Subject: CORISBANK INTERNATIONAL OFFICIAL NOTIFICATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/1/21 5:37 AM, Avri Altman wrote:
-> +What:		/sys/bus/platform/drivers/ufshcd/*/attributes/case_rough_temp
-> +Date:		September 2021
-> +Contact:	Avri Altman <avri.altman@wdc.com>
-> +Description:	The device case rough temperature (bDeviceCaseRoughTemperature
-> +		attribute). It is termed "rough" due to the inherent inaccuracy
-> +		of the temperature sensor inside a semiconductor device,
-> +		e.g. +- 10 degrees centigrade error range.
+Att: Client
 
-My understanding is that the word Celsius is more common than centigrade 
-so please use Celsius instead of centigrade. See also 
-https://www.brannan.co.uk/celsius-centigrade-and-fahrenheit/
 
-> +		allowable range is [-79..170].
-> +		The temperature readings are in decimal degrees Celsius.
-> +
-> +		Please note that the Tcase validity depends on the state of the
-> +		wExceptionEventControl attribute: it is up to the user to
-> +		verify that the applicable mask (TOO_HIGH_TEMP_EN, and / or
-> +		TOO_LOW_TEMP_EN) is set for the exception handling control.
-> +		This can be either done by ufs-bsg or ufs-debugfs.
+CORISBANK INTERNATIONAL URGENT NOTIFICATION
 
-Instead of making the user verify whether case_rough_temp is valid, 
-please modify the kernel code such that case_rough_temp only reports a 
-value if that value is valid. One possible approach is to make the show 
-method return an error code if case_rough_temp is not valid. Another and 
-probably better approach is to define a sysfs attribute group and to 
-make case_rough_temp visible only if it is valid.
+Notification / Notification/ Notification
 
-> diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-> index 5c405ff7b6ea..a9abe33c40e4 100644
-> --- a/drivers/scsi/ufs/ufs-sysfs.c
-> +++ b/drivers/scsi/ufs/ufs-sysfs.c
-> @@ -1047,6 +1047,86 @@ static inline bool ufshcd_is_wb_attrs(enum attr_idn idn)
->   		idn <= QUERY_ATTR_IDN_CURR_WB_BUFF_SIZE;
->   }
->   
-> +static inline bool ufshcd_is_temp_attrs(enum attr_idn idn)
-> +{
-> +	return idn >= QUERY_ATTR_IDN_CASE_ROUGH_TEMP &&
-> +	       idn <= QUERY_ATTR_IDN_LOW_TEMP_BOUND;
-> +}
+Note, We are writing to inform you officially that Finally the Central
+Bank Financial Authority have approved to transfer your $8.2Million
+which was signed by late Mrs Rose Banneth the COVID.19 victim to
+transfer to you, Late Mrs Rose Banneth the France Lady contacted us to
+transfer her fund in our bank to you for Orphanage work before she
+died by the COVID.19
+and as it is now, you will receive your fund through our corresponding
+bank in Dubai [Emirate Investment Bank ] for security reason. Please
+you should reconfirm your details to receive the $8.2Million.
 
-Modern compilers are good at deciding when to inline a function so 
-please leave out the 'inline' keyword from the above function.
+Name, Country, Address, occupations, Age, Telephone number, account
+Details so that we can immediately forward to the World Bank to
+transfer the fund.
+You are advised to comply on timely manner to permit this esteem bank
+transfer your fund as scheduled.
 
-> +static bool ufshcd_case_temp_legal(struct ufs_hba *hba)\
+We look forward to serving you better
+Your Financial Comfort Is A Priority
+Thank you for choosing Corisbank International.
 
-Please use another word than "legal" since the primary meaning of 
-"legal" is "of or relating to law".
+Sincerely,
 
-> +	ufshcd_rpm_get_sync(hba);
-> +	ret = ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR,
-> +				QUERY_ATTR_IDN_EE_CONTROL, 0, 0, &ee_mask);
-> +	ufshcd_rpm_put_sync(hba);
+----
 
-Are there any ufshcd_query_attr() calls that are not surrounded by 
-ufshcd_rpm_{get,put}_sync()? If not, please move the 
-ufshcd_rpm_{get,put}_sync() calls into ufshcd_query_attr().
-
-Thanks,
-
-Bart.
+Mr Diakarya Ouattara
+Managing Director
+Bank Coris
+Burkina Faso
++226 556 163 37
+financial_bf_info@accountant.com
