@@ -2,78 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 639BB3FDF41
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Sep 2021 18:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79CAD3FE004
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Sep 2021 18:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbhIAQCB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Sep 2021 12:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbhIAQCA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Sep 2021 12:02:00 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08DFC061575
-        for <linux-scsi@vger.kernel.org>; Wed,  1 Sep 2021 09:01:03 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id k24so3208850pgh.8
-        for <linux-scsi@vger.kernel.org>; Wed, 01 Sep 2021 09:01:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=kasiO7P5C39sTonjUrt1oQkAPblAm/+HfXttvx77r+s=;
-        b=K6mt5PCDqoayf2GZUVIJdQFKilb0f/ozV21dR8EaBa1nfflypcPNKo4ozih8kSVF7F
-         HGDZXVV4Eg4NRXMCl8c73LuAYHUHDrL2P69MJ5vgmHE/6DK0q3h9vPJMu/EpUOEqropd
-         YcSFu5Od4HETjdoFFDrb2u7s8DhkCJnSl+r0Jnuf0tVfCukka2v3Rm4FzMcxwH4Moszi
-         d6iHq9MWpuK3K3AiCrk0vFvR6a/25EhdRiyLyDJNhO6cgHRbWqJu8PEFste+uI7U4XXS
-         s5EHI5JRlHMA50n0DGYgnDN3RRB07fz1gC68MFwJ4aafXT2xOhgGKV9chUeToyvZp0G0
-         7Htg==
+        id S236453AbhIAQgV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Sep 2021 12:36:21 -0400
+Received: from mail-pf1-f176.google.com ([209.85.210.176]:37833 "EHLO
+        mail-pf1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234766AbhIAQgT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Sep 2021 12:36:19 -0400
+Received: by mail-pf1-f176.google.com with SMTP id x19so255335pfu.4;
+        Wed, 01 Sep 2021 09:35:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=kasiO7P5C39sTonjUrt1oQkAPblAm/+HfXttvx77r+s=;
-        b=eZV4No3nZTq+VAHVmaeXFcSt89d8IlGCG69d2AGVZ1vykZ1DlhtqqQEeFO6RVALWQT
-         Wtri3YvBBiNJHrdqTLjPVSRvX0htdN6/bt0De0TqcoxiQow42nm2j1bmZTamgfi4QQYM
-         K/1GrW5GzNUWJztlsdY3OlyeaHlu5ve+bOSDdvAIOeixJpeUgkuPxH1q1/XBT8HbAIP4
-         gmYAqDS92at9Rn2ypATHRgh3+71Y/KRKhdfNJCFs+a2rzzOTyu1f3foDbsFk7Fl4deuO
-         AsnI3w3YZo9SXHucfHTLkrDPgiuE1JfEEZqEh+pnFkmSuKzCMHHqi2ENSeIlWvV4BNsy
-         X3pg==
-X-Gm-Message-State: AOAM533P+0PYFcQd5IEmxmMkNc62htyZEDy192ARRkiXICe64PH4aJJJ
-        /tdxi4UmVQ3OzRJpcUtYl2rtFwPxwE6t6AoWy4o=
-X-Google-Smtp-Source: ABdhPJzAxWY12P1rkvk5STO2qLVeIxsVTHrdYXz2xNke6UCnRD3zemy9j7mlmYZC8GmhvCbLGkaQ3t2LBuacg155rRQ=
-X-Received: by 2002:a62:a513:0:b0:3f1:e19c:a23 with SMTP id
- v19-20020a62a513000000b003f1e19c0a23mr171563pfm.43.1630512063444; Wed, 01 Sep
- 2021 09:01:03 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=L4cp4spbjMOWms2EMsEDHOEtmv1pugtKNYnVTnJEoIo=;
+        b=UsArGU2RKA3mJQTxEqCAPhjGkw8eL2xpURNXLA+lAXf5II9ejOU0xYFqzNy48BO3hI
+         FFLAZNMakrcOXqONpI9bxLdIYbFmzL8nK+KMDFtujPpQqlKID6xKuXUPQS9uf+aWx8vY
+         pRbFS3WA3tSmW4ID8Qaxa3vhU2Gwknl7ihQvXmxTgQQAdl9t3fo7IrZivqMI0kY9bK/5
+         pdHhBlj59/CBIyYxqYNC0NFVac95m+3igcbX2brauYAEIBNuUjIdXdpI5AC+ughw0cnm
+         OSwfi0ylECoiSePOfuXeHAyzxcY5XUj6v3anle9TG/aYKcphRNN9DB+MrmJL9Lz9YhqN
+         4rxA==
+X-Gm-Message-State: AOAM530KCZLYHLZ1hZZjc7PypPHdVOXHWLnXxZ4RNJsxSmXOY7I7xJzZ
+        4ZQv1JPI4Qxqg9sBhMzpIvw=
+X-Google-Smtp-Source: ABdhPJyZiUXTip33BIXPUZOE0OpZTw0c93Sy93oD2TXCrTiWfwJaqQXZLLaVI2OjyR34cGKa9Zhslg==
+X-Received: by 2002:a62:1c96:0:b0:3f5:e01a:e47 with SMTP id c144-20020a621c96000000b003f5e01a0e47mr269695pfc.76.1630514122348;
+        Wed, 01 Sep 2021 09:35:22 -0700 (PDT)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:8a3b:44ab:b62:3ce2])
+        by smtp.gmail.com with ESMTPSA id y9sm20555pfc.193.2021.09.01.09.35.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Sep 2021 09:35:21 -0700 (PDT)
+Subject: Re: [PATCH 1/3] scsi: ufs: Probe for temperature notification support
+To:     Avri Altman <avri.altman@wdc.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bean Huo <beanhuo@micron.com>
+References: <20210901123707.5014-1-avri.altman@wdc.com>
+ <20210901123707.5014-2-avri.altman@wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <035fad25-1b0d-c8ba-896f-eae2bd2144e3@acm.org>
+Date:   Wed, 1 Sep 2021 09:35:18 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Received: by 2002:a05:7300:7309:b0:38:2de4:eabb with HTTP; Wed, 1 Sep 2021
- 09:01:03 -0700 (PDT)
-Reply-To: caixabank@seznam.cz
-From:   CAIXABANK <cliffordw852@gmail.com>
-Date:   Wed, 1 Sep 2021 09:01:03 -0700
-Message-ID: <CAK_wXHpJdADFVzg3f6JKT5yoAdmTop0nGLtDQjjTz5+H7anx=A@mail.gmail.com>
-Subject: URGENT RESPONSE
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210901123707.5014-2-avri.altman@wdc.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
- Dear Friend
+On 9/1/21 5:37 AM, Avri Altman wrote:
+> +static inline bool ufshcd_is_high_temp_notif_allowed(struct ufs_hba *hba)
+> +{
+> +	return hba->dev_info.high_temp_notif;
+> +}
+> +
+> +static inline bool ufshcd_is_low_temp_notif_allowed(struct ufs_hba *hba)
+> +{
+> +	return hba->dev_info.low_temp_notif;
+> +}
 
-You have been compensated with the sum of  6 million dollars  with
-united nation through the help of the newly elected president due to
-covid 19 that has cause global economic hazard to so many lives. The
-swiss world bank has endorse the payment in collaboration with
-caixabank in spain.
-The payment will be issue into atm visa card and send to you via
-caixabank through dhl courier service and other courier services
-company close to you in your country.  We need your home
-address,country, your phone number and your passport.
+Please do not introduce single line inline functions.
 
-Contact our email id: ( caixabank@seznam.cz ) for your payment
+> +static inline bool ufshcd_is_temp_notif_allowed(struct ufs_hba *hba)
+> +{
+> +	return ufshcd_is_high_temp_notif_allowed(hba) ||
+> +	       ufshcd_is_high_temp_notif_allowed(hba);
+> +}
 
-Kind
+Since this function is not in any hot path (command processing), 
+shouldn't it be moved into ufshcd.c?
 
-Regard
+Thanks,
 
-CAIXABANK MANAGEMENT
+Bart.
