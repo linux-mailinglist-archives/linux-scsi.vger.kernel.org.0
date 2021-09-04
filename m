@@ -2,102 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6375540092A
-	for <lists+linux-scsi@lfdr.de>; Sat,  4 Sep 2021 03:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B957D400981
+	for <lists+linux-scsi@lfdr.de>; Sat,  4 Sep 2021 06:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351088AbhIDBkq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Sep 2021 21:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
+        id S234862AbhIDDZA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Sep 2021 23:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351057AbhIDBko (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Sep 2021 21:40:44 -0400
-Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4EBC061575;
-        Fri,  3 Sep 2021 18:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=U7qsjNpZBkuuNQ3f0wVuSbAq2dxl5cyjOFVGEywo1xo=; b=RPNeY5S553G86UCtACRRsuReWA
-        Pf7d8IkN00oqTTx3vsnZiaK2pyXsMjqkQ/QhL6BzprrfTQEe42gLBIb59YZADPtuV9Tn8BuYUQpTB
-        N+u3oumOvhPHYeNzsFKK86V6ZEz96h7HT7Vn4+rCxdV53DFo4onHN+6/eNu9zzyNxravRpzP9C+gC
-        19/flcXayVqI8laB77OfwS8mF83K9UuV3xA9mw7+l3L7V1oH0yatBvcyhiYnrUW84ZGMzdovHPofb
-        Ra/b5dENtOvSiMXA8Z6v2niqRYzqW0j41STDDxLuQFc45jgRHHt3BJB0yM/wRLJ1c2MSxEewEFtTc
-        F6qEPVsw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mMKeb-00DLzv-7F; Sat, 04 Sep 2021 01:39:33 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     axboe@kernel.dk, hch@lst.de, efremov@linux.com, song@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        viro@zeniv.linux.org.uk, hare@suse.de, jack@suse.cz,
-        ming.lei@redhat.com, tj@kernel.org
-Cc:     linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 2/2] block: add __must_check for *add_disk*() callers
-Date:   Fri,  3 Sep 2021 18:39:32 -0700
-Message-Id: <20210904013932.3182778-3-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210904013932.3182778-1-mcgrof@kernel.org>
-References: <20210904013932.3182778-1-mcgrof@kernel.org>
+        with ESMTP id S231243AbhIDDZA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Sep 2021 23:25:00 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742D9C061575
+        for <linux-scsi@vger.kernel.org>; Fri,  3 Sep 2021 20:23:59 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id g22so1439599edy.12
+        for <linux-scsi@vger.kernel.org>; Fri, 03 Sep 2021 20:23:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Rgpyp4oLlU6/06F2IHbT6CnbznDn2dgiPZQn2J3Aot4=;
+        b=Mn/mWmJxLV/95bicq+lQgmBQKbDmUBJM/USBAnV/40jeNyBOi9hdcCMAQaNr6v8PYA
+         PVNHz+M5mUB3HouC6cgSHR197fDICeI7NbOmlF8Neot3m8lo8fzhS3vJ2Ez2xf7bmVvd
+         YwzaWPMxtmo1ZJE5eB9YDQabfhcniRmYedcLpD/0hU3G7W3+PoB6iNDzYi8FEqs6ps1F
+         HmPgRTXnoNcJvNZLZt+TyApd63as9Sp8MrEzZRBiFlfp0GEBZdV1ejw21n/sHBCa/t3y
+         9BiSO63w17X/3llRf9ndkXiA8ilLWJ0IIRjwCmSMv1Hq6dWZxxM31JUwofN/TizR0fem
+         SsiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=Rgpyp4oLlU6/06F2IHbT6CnbznDn2dgiPZQn2J3Aot4=;
+        b=GBTrurTSBMP6I1LrUn495Hb2iQNJqHNGHAPUJ0YX17usfqM6ylxyG2ndpne71Luihr
+         LV56X3cX59+CXDVW7nP/vPHtOPvnpuOB2lSZYY/D+Cb09gR4pcIx9sFLnhhAzAYGpKfr
+         PPaokMEmTprdlu7HgsE69seTXF3sz2FDGrPq4DxCDrDU7SlMg4TG/urMaoRT4UP70Pj8
+         FHbRzgj+Wtho0++/tiyW7ch+SPX39OwV0k8wuRyMyFsczg+EPChJF1qyQ+SWwNbTnbBv
+         4K9W7xzTxTHkEz2gy3ts1ujTwfENq64YzTGmpid1/y9/3WEJUWMNfsu573oV2L6+7Ocj
+         vmGw==
+X-Gm-Message-State: AOAM5303nRlQS5rHPlaESn/Y7bZ0gDEG8whdv5CyXkYPfsfV8SS/Y6QF
+        eXSY9d+SSe6hCBhP+qJhha7eTgzkc6WZ9nMaaLY=
+X-Google-Smtp-Source: ABdhPJzT+7LanU1NPFxcZQdnmGPgH6R5bGlq5C/qdlV5QMyyVeRaENVt2gguC4D7VwBe5LS9vzkTOf5SXq3nQyRQmR8=
+X-Received: by 2002:aa7:de92:: with SMTP id j18mr2201945edv.141.1630725837762;
+ Fri, 03 Sep 2021 20:23:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Sender: goodmircle30@gmail.com
+Received: by 2002:a50:6ccd:0:0:0:0:0 with HTTP; Fri, 3 Sep 2021 20:23:57 -0700 (PDT)
+From:   "Mrs. Shahinaz Zuthimalin" <mrsshahinazzuthimalin9@gmail.com>
+Date:   Sat, 4 Sep 2021 03:23:57 +0000
+X-Google-Sender-Auth: mLoO3RkXwEAGT0e_OlTlUhSmFK0
+Message-ID: <CAPsWReSfJXMWGKHZ=hGTQ31HecoaSkaADKs57EoYJM5y8B14oA@mail.gmail.com>
+Subject: HELLO!!!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that we have done a spring cleaning on all drivers and added
-error checking / handling, let's keep it that way and ensure
-no new drivers fail to stick with it.
+Hello my dear
+It's my pleasure to contact you, based on the critical condition Mrs.
+Shahinaz Zuthimalin find herself, though, it's not financial problem,
+but health problem, you might have know that cancer is not what to
+talk home about, I am her nurse who was taking care of her in the
+hospital here in Burkina Faso, her mission here was to claim her
+husband=E2=80=99s fund which was registered in her name as the beneficiary,
+she brought your name as the family name of her late husband business
+partner to transfer the inheritance fund to you, that is why you were
+contacted since her condition is not trustable,. Sum $9.2million USD.
+Please your urgent reply is needed.
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- block/genhd.c         | 6 +++---
- include/linux/genhd.h | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/block/genhd.c b/block/genhd.c
-index c4836296a974..4c80e6c3d8dd 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -383,8 +383,8 @@ static void disk_scan_partitions(struct gendisk *disk)
-  * This function registers the partitioning information in @disk
-  * with the kernel.
-  */
--int device_add_disk(struct device *parent, struct gendisk *disk,
--		     const struct attribute_group **groups)
-+int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
-+				 const struct attribute_group **groups)
- 
- {
- 	struct device *ddev = disk_to_dev(disk);
-@@ -529,7 +529,7 @@ int device_add_disk(struct device *parent, struct gendisk *disk,
- out_free_ext_minor:
- 	if (disk->major == BLOCK_EXT_MAJOR)
- 		blk_free_ext_minor(disk->first_minor);
--	return WARN_ON_ONCE(ret); /* keep until all callers handle errors */
-+	return ret;
- }
- EXPORT_SYMBOL(device_add_disk);
- 
-diff --git a/include/linux/genhd.h b/include/linux/genhd.h
-index 5828ecda5c49..8d78d36c424e 100644
---- a/include/linux/genhd.h
-+++ b/include/linux/genhd.h
-@@ -214,9 +214,9 @@ static inline dev_t disk_devt(struct gendisk *disk)
- void disk_uevent(struct gendisk *disk, enum kobject_action action);
- 
- /* block/genhd.c */
--int device_add_disk(struct device *parent, struct gendisk *disk,
--		const struct attribute_group **groups);
--static inline int add_disk(struct gendisk *disk)
-+int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
-+				 const struct attribute_group **groups);
-+static inline int __must_check add_disk(struct gendisk *disk)
- {
- 	return device_add_disk(NULL, disk, NULL);
- }
--- 
-2.30.2
-
+Thanks
+Nurse on behalf of Mrs. Shahinaz Zuthimalin.
