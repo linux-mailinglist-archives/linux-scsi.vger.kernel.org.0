@@ -2,92 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D378C4006A0
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Sep 2021 22:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8EF400923
+	for <lists+linux-scsi@lfdr.de>; Sat,  4 Sep 2021 03:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350542AbhICUaf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Sep 2021 16:30:35 -0400
-Received: from mail-pl1-f174.google.com ([209.85.214.174]:46751 "EHLO
-        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350396AbhICUad (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Sep 2021 16:30:33 -0400
-Received: by mail-pl1-f174.google.com with SMTP id bg1so209178plb.13
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Sep 2021 13:29:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WHVe5QKRn8e72gL5q0fia930zEjwUOodz5r80hSn+M4=;
-        b=o3dM6C6j8rgP87aUwKkP0g0od7xWPT7uDmhU86er943E5Q6zXXkXvWHFaAC8csVW+U
-         1fJUTO26w33caFxFU60yrCxiGJKIq6Mqypa62n65Emz2Sa6ZyeXIeJ/7qi7mzS0li5Y1
-         wAHJWAO/neD1QcJgRUIJt09XZr24vPwSNimQjuIW8ZAQS4XFQYkEGVlIDtQgzLuZTLfa
-         4mF29mMyDfwtw3ZrhMsdy5fHXsStV3b047oUE/+q2HtZU/sPXI8cq07FaaJckGFMD6Qd
-         PWdrf8wHpH0prh3F4ljVsmlcZqs5sLR5nI3g+w/tCAilYnKTjfi02l+LqlJP6MXtlMzk
-         0feA==
-X-Gm-Message-State: AOAM531cn94hM6/F65bKtWgqjOijYwyh6ifX15BlcgMbNbf16eFCgDMq
-        8z49eLdiAog6Y5RM5K3oxKhL+xRQ3AY=
-X-Google-Smtp-Source: ABdhPJxmMtrvjfVExSInOdTp9QiD2xN0uQTra00SZV66Nt68x8xLz6OtCH7IZdNjBcJdiIyx61ThWw==
-X-Received: by 2002:a17:902:7b98:b0:138:c171:c1af with SMTP id w24-20020a1709027b9800b00138c171c1afmr529097pll.70.1630700972389;
-        Fri, 03 Sep 2021 13:29:32 -0700 (PDT)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:3f54:6487:f0e0:810e])
-        by smtp.gmail.com with ESMTPSA id i7sm131346pjm.55.2021.09.03.13.29.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Sep 2021 13:29:31 -0700 (PDT)
-Subject: Re: [PATCH V2 1/3] scsi: ufs: Fix error handler clear ua deadlock
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <huobean@gmail.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Wei Li <liwei213@huawei.com>, linux-scsi@vger.kernel.org
-References: <20210903095609.16201-1-adrian.hunter@intel.com>
- <20210903095609.16201-2-adrian.hunter@intel.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <56b1a7b3-90b7-e208-2486-20421d32d2e7@acm.org>
-Date:   Fri, 3 Sep 2021 13:29:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S1351029AbhIDBkn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Sep 2021 21:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351014AbhIDBkm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Sep 2021 21:40:42 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4B1C061575;
+        Fri,  3 Sep 2021 18:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=TQ80OKAWeIbCJBkkv2wko3z0JghBDWZldcKGy2+/JtU=; b=YVIKUi+7CrVfLqKI9PLwSgdSev
+        JNLbK12ZAtZ96F7k3Dst6M0nucVGxz9HnoUVmByGsxtH2TSA+xKUDTCEggs7lTG9sPfBfHJfDQ3kV
+        iXt56Oc3YUrHM8lSudbyOpbNt/vMZYprGyVKrNsZVYt26lAh4JTZKTCUwXR9ezdoqiZPeZ+/tvGPP
+        1qkknba3VlFkhoUa7CYCiHKjq17V3BcfUVTiu9j4myKPJogUeyo1EzIzfdJJC4HoU4QBHArsyAAwy
+        +bJozZrXbIhmagg6/rh4IkZRGyuSnp+HpYoEERg+Oi/aY5b2sHBj1OZl+DKv3KijxBv8EB91o2E66
+        /oHRwPVQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mMKeb-00DLzr-2J; Sat, 04 Sep 2021 01:39:33 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     axboe@kernel.dk, hch@lst.de, efremov@linux.com, song@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        viro@zeniv.linux.org.uk, hare@suse.de, jack@suse.cz,
+        ming.lei@redhat.com, tj@kernel.org
+Cc:     linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH 0/2] block: 7th -- last batch of add_disk() error handling conversions
+Date:   Fri,  3 Sep 2021 18:39:30 -0700
+Message-Id: <20210904013932.3182778-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210903095609.16201-2-adrian.hunter@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/3/21 2:56 AM, Adrian Hunter wrote:
-> There is no guarantee to be able to enter the queue if requests are
-> blocked. That is because freezing the queue will block entry to the
-> queue, but freezing also waits for outstanding requests which can make
-> no progress while the queue is blocked.
-> 
-> That situation can happen when the error handler issues requests to
-> clear unit attention condition. The deadlock is very unlikely, so the
-> error handler can be expected to clear ua at some point anyway, so the
-> simple solution is not to wait to enter the queue.
-> 
-> Additionally, note that the RPMB queue might be not be entered because
-> it is runtime suspended, but in that case ua will be cleared at RPMB
-> runtime resume.
+This is the 7th and final set of changes to convert all drivers over to
+use and finally enforce add_disk() error handling. This set deals with
+those old drivers using __register_blkdev() which in turn have a
+respective add_disk() call made. The last patch ensures we won't
+add new drivers without a check for the add_disk() call.
 
-The only ufshcd_clear_ua_wluns() call that I am aware of and that is 
-related to error handling is the call in 
-ufshcd_err_handling_unprepare(). That call happens after 
-ufshcd_scsi_unblock_requests() has been called so how can it be involved 
-in a deadlock?
+You can find the full set of patches on my kernel.org linux
+20210901-for-axboe-add-disk-error-handling branch [0] which is now based
+on axboe/master.
 
-Additionally, the ufshcd_scsi_block_requests() and 
-ufshcd_scsi_unblock_requests() calls can be removed from 
-ufshcd_err_handling_prepare() and ufshcd_err_handling_unprepare(). These 
-calls are no longer necessary since patch "scsi: ufs: Synchronize SCSI 
-and UFS error handling".
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/log/?h=20210901-for-axboe-add-disk-error-handling
 
-Thanks,
+Luis Chamberlain (2):
+  block: make __register_blkdev() return an error
+  block: add __must_check for *add_disk*() callers
 
-Bart.
+ block/genhd.c           | 21 ++++++++++++---------
+ drivers/block/ataflop.c | 20 +++++++++++++++-----
+ drivers/block/brd.c     |  7 +++++--
+ drivers/block/floppy.c  | 14 ++++++++++----
+ drivers/block/loop.c    |  6 +++---
+ drivers/md/md.c         | 10 +++++++---
+ drivers/scsi/sd.c       |  3 ++-
+ fs/block_dev.c          |  5 ++++-
+ include/linux/genhd.h   | 10 +++++-----
+ 9 files changed, 63 insertions(+), 33 deletions(-)
+
+-- 
+2.30.2
+
