@@ -2,101 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B42EF401DB9
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Sep 2021 17:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09877401E7C
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Sep 2021 18:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbhIFPpo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Sep 2021 11:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
+        id S244355AbhIFQeG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Sep 2021 12:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbhIFPpn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Sep 2021 11:45:43 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A7CC061575;
-        Mon,  6 Sep 2021 08:44:38 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id s25so10102255edw.0;
-        Mon, 06 Sep 2021 08:44:38 -0700 (PDT)
+        with ESMTP id S244372AbhIFQeB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Sep 2021 12:34:01 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD73C061292
+        for <linux-scsi@vger.kernel.org>; Mon,  6 Sep 2021 09:32:53 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id r6so7309973ilt.13
+        for <linux-scsi@vger.kernel.org>; Mon, 06 Sep 2021 09:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CP/L6trNtJt+zRzY7oBdWtRfg7ANZZU7xhOLZ2L8JmY=;
-        b=gUQBCzDQ97o56gLhNc6jwxfhKc5bkrEd4u3/Y/yZLiELUy++Em9ldHLXhlh2veqTwO
-         aKchPqZpcQrTRaD1LVQXAkrAH6cdTbaPuHOFR7afWx6gSxqYbuWkb5hd8RnpBx1lBcN0
-         kSKlW0EpTbicAybupq0RPwcXQHryOPe8JE1jOEtBMEjttWkly1OFksBJSJ3Gi0+8h81l
-         siLvuZDpP0UnZVhphU28d0GQv7SnGWjAXW+5sRc1QpBK5I1eY3V9b4g1ISVUvttQdHIZ
-         L9rjbRuqw7R+Ke5xQoDf8UF2Zk8CVH8u2Pyg7FlQtmgj2aTwGvtHOcRX26D8vEHA+U9Y
-         ZCgw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Hi0ERA05Hh6q+34+Ou3AtyiRWoG/jVLdZcB+Ekv+M3g=;
+        b=AQXQzDCQYveoXX8TzTwuiAk/FEyR3wCuvC9VFUOgylxIOdg1EFZyjuPsYQnAcX6J45
+         hGQ/TLw/xoIRE4dR4duos/11L9nUC9pcUBl/RXv6WkJZOj9GF3K+dFgRBHNvOmD3hg/2
+         8aWexR+OCBkLd9FzUsmw6Mf2hXMKPJJYu5JOjAjvp1WIk7xCdh9mnYnLj+26R+tY7rgo
+         HJPLbs6wPd+nl87UvFskxFfDoXbe22pxgW1zf9L/3TdM0lyau7vB+LmM0EAyEmYoeoMO
+         ZhwZDLJwTAD2meT4nF7FnViJ3hJIW4496YAschcWJBrRRFI5yQJjoNMRwEQgQiqRwsUz
+         E0sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CP/L6trNtJt+zRzY7oBdWtRfg7ANZZU7xhOLZ2L8JmY=;
-        b=flQLFgrD65fk4jdTo3jmWtCJ+I3X3bgRHXFuQ61bYk2jmmf4bU2LOGjwEtDsv/gYoR
-         KXl1Vw2LI/eWVaGd5heJJtaoipf4JbrXnbeq7Z3j5VpGqs40Cum6KhiIRiX11z5rtR+N
-         cLmp9qa7nLHvR/VtYU9Ww67cDz+atEhumb+d6S2P4e0mXB9YUihLC3CTmTE923/Jy0eh
-         qmQyDwnF2iepb9+YwAM2siCZBUfVnVIQri7PDDGkQL21z4sOwSZxHR4O6kp/kcGHLafo
-         wLgUeSTZyBF+RvJqZEvET1UKTYiG4ldPFW/s51ujvob5RV2YCAhiF90cOUtnjmaoBZSy
-         TnZQ==
-X-Gm-Message-State: AOAM53063hI6LJDkpZk6vUVuWFHZNJeDHEaHsDDINOwtChwTv7Vk2+et
-        4xDrEqDJr9O+7sxBVW31OA2ksMRu4DY=
-X-Google-Smtp-Source: ABdhPJw3Ii0S5QxMcuNImn6egZB0qYvqvWBqe9rBgUFdJz2b3DgbWxm5tfeJWNW4tDknH1UQsICNCg==
-X-Received: by 2002:a05:6402:1249:: with SMTP id l9mr14273738edw.177.1630943077297;
-        Mon, 06 Sep 2021 08:44:37 -0700 (PDT)
-Received: from [192.168.178.40] (ipbcc061e7.dynamic.kabel-deutschland.de. [188.192.97.231])
-        by smtp.gmail.com with ESMTPSA id qq16sm4109255ejb.120.2021.09.06.08.44.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Sep 2021 08:44:37 -0700 (PDT)
-Subject: Re: [PATCH V2] target: fix the pgr/alua_support_store functions
-To:     Maurizio Lombardi <mlombard@redhat.com>, martin.petersen@oracle.com
-Cc:     michael.christie@oracle.com, target-devel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-References: <20210906151809.52811-1-mlombard@redhat.com>
-From:   Bodo Stroesser <bostroesser@gmail.com>
-Message-ID: <b1a05684-92a5-f209-a81f-96a1cfc4ea49@gmail.com>
-Date:   Mon, 6 Sep 2021 17:44:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Hi0ERA05Hh6q+34+Ou3AtyiRWoG/jVLdZcB+Ekv+M3g=;
+        b=fqBDqMAZqCJqixt7URYmq2DHa+D6tyZjDcHpRsFWhydN4Q8zU66MJHXFtBzM3Gnpru
+         cS5CoZeLOAymBWO38WoE1IA0wB/oWdDEve9m+xrKrl/qLXflI46iSda5xMY1xAHZu076
+         jlOSygKhps27GVsLcMhTqhmZfU77RjmtydivVRB/H8JgZSOGd8EJfnI6XRsNzmJj/47T
+         wYSkWSGfNBI2bR2fqOiXINuQE7hUPHNO2UduJyLvbzEoQeeNMT18ZYbrXqtQXQyqeDK8
+         DNJNsRVqlZYe636+Bjl94fDvVJkc7/UC7y0IHtqSTsONmOUFn7C8rXW5AxzxgkLxS6Y8
+         RZVQ==
+X-Gm-Message-State: AOAM5320xX0U7622iIzTxKcuT1Vv0+qONoHy5P1PU5TFGTQmXj84xbY7
+        iBXrAiTE6MGGMyzXLseU3NKY8pLIELtJc6Iues9ifwH+V9c=
+X-Google-Smtp-Source: ABdhPJyNYLbPp58BcQ7mI7j8eL1xi4DRM/CVSKmP+XLlKZnpaM0c4B2zxnkjBdrMYYyKOgNolLHbsclwr0lft4or1UU=
+X-Received: by 2002:a05:6e02:1ca6:: with SMTP id x6mr8854675ill.86.1630945961991;
+ Mon, 06 Sep 2021 09:32:41 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210906151809.52811-1-mlombard@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6e02:1d86:0:0:0:0 with HTTP; Mon, 6 Sep 2021 09:32:41
+ -0700 (PDT)
+Reply-To: suzara.wans2021@gmail.com
+From:   Mrs Suzara Maling Wan <mr.brueshands4world@gmail.com>
+Date:   Mon, 6 Sep 2021 09:32:41 -0700
+Message-ID: <CABvx5tpkSnzTGw2hd3awtMaYZ6SrrR=GwA3X22LN=2t5+bDtOw@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 06.09.21 17:18, Maurizio Lombardi wrote:
-> Commit 356ba2a8bc8d ("scsi: target: tcmu: Make pgr_support and
-> alua_support attributes writable")
-> introduced support for changeable alua_support and pgr_support
-> target attributes. They can only be changed
-> if the backstore is user-backed, otherwise the kernel returns -EINVAL.
-> 
-> This triggers a warning in the targetcli/rtslib code when performing
-> a target restore that includes non-userbacked backstores:
-> 
-> #targetctl restore
-> Storage Object block/storage1: Cannot set attribute alua_support:
-> [Errno 22] Invalid argument, skipped
-> Storage Object block/storage1: Cannot set attribute pgr_support:
-> [Errno 22] Invalid argument, skipped
-> 
-> Fix this warning by returning an error code only if we are really
-> going to flip the PGR/ALUA bit in the transport_flags field,
-> otherwise we'll do nothing and return success.
-> 
-> Return ENOSYS instead of EINVAL if the pgr/alua attributes
-> can't be changed, this way it'll be possible for userspace to understand
-> if the operation failed because an invalid value has been passed
-> to strtobool() or because the attributes are fixed.
-> 
-> Fixes: 356ba2a8bc8d ("scsi: target: tcmu: Make pgr_support and alua_support attributes writable")
-> 
-> v2: replace EOPNOTSUPP with ENOSYS
-> 
-> Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
-> ---
+-- 
+My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
+of the Philippine presently base in West Africa B/F, dealing with
+exportation of Gold, I was diagnose of blood Causal decease, and my
+doctor have announce to me that I have few days to leave due to the
+condition of my sickness.
 
-Reviewed-by: Bodo Stroesser <bostroesser@gmail.com>
+I have a desire to build an orphanage home in your country of which i
+cannot execute the project myself due to my present health condition,
+I am willing to hand over the project under your care for you to help
+me fulfill my dreams and desire of building an orphanage home in your
+country.
+
+Reply in you are will to help so that I can direct you to my bank for
+the urgent transfer of the fund/money require for the project to your
+account as I have already made the fund/money available.
+
+With kind regards
+Mrs Suzara Maling Wan
