@@ -2,86 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4E84043AA
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Sep 2021 04:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F98A404405
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Sep 2021 05:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348203AbhIIChL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Sep 2021 22:37:11 -0400
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:42529 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236247AbhIIChC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Sep 2021 22:37:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1631154954; x=1662690954;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=3JeErjhCOeicdhDxDeTDah+4oAV2vjbhTuPsGM0V3P0=;
-  b=MtitKjQxrqFuhpNYgm87CQNuLvdcxNrnV9J3vovzO1mKEtTH3SiVjxud
-   YhML5HG/Lch3xd4I/vwbcZTKkpcpd8+nDXteGR4ph1hhPQexyPaBcut8D
-   RhM/xCmHpl0fltahJkJfWQdMqBkFJPDRv4XrRyLnQ29L1RCsPtaGQ6jAO
-   htOfDVHbtOFIBnATj+QXc9RXdmewG82+mT3zLqCDeuqC6g+fMtyRDd8Jl
-   kB6+aMHtrjCyZGKmv3nvrZggxJ/2qBm7twSIytT7zBQjXUvb2ifCXiRkt
-   yinoqpWXW4NFLWcvt27ybeIytXcfEdEAdN8/QOvGbGGNcl77ZtidpW8p7
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.85,279,1624291200"; 
-   d="scan'208";a="180062219"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 09 Sep 2021 10:35:53 +0800
-IronPort-SDR: EXYvubKZgZJpPiq+j2YPIuOWpFkDl3SZ2tazwzFMyGRQUt4CdP+BiAOaGUIlG9JDnjA9QuNny3
- ztbqfJ5Qk51xjmtNweUJzhETollwpMU8o+nkU8uie36XK/5giFXoLrhTMFSJywFg2wdJQRgeDK
- 4ct0haURdnG0dtIm7hGGnzH33c3Ca/ie0nadN9GVQTH9vQPKLDEBVO7GIfvJCZlSRRjiRvZpng
- t3zIOMNEGHyeqYn+GiSHBtVKH40To3KFxlpLUCJzQnxmUf2oiOh7R4M/0FM6C+0a2ndsLq5ceO
- WVFsaHXbgDgrgLdkQKf1udMe
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2021 19:12:28 -0700
-IronPort-SDR: mR7H0Nr8Gkjfb5QWSVCaYbWG5kQ/0nkzNG0jw7yK8YkHxz9HsSGaX5s4FEeoLrhzKNQiIt7027
- HEjcghKhYl0bSNyxZr/4Ppw2EnGn+mzUwVVUsahQwhB7ySpkwrgkG69X6RbfckKGp+qER3GyMa
- KLcjiFlEQ//rI2h+qYM+n5ai0mD1lb75+cImfHLIJpN5sXQbRjx6m9rcG/Ng+OWNyUtuQUmhl1
- 3QtE4K1b6tHZZWY8BJ9ZPU3SRTdSy1cUiOTFk7Huc4MRXb3lMAQ1Kysh7yN/reVvF+dKqzt83B
- AVY=
-WDCIronportException: Internal
-Received: from washi.fujisawa.hgst.com ([10.149.53.254])
-  by uls-op-cesaip02.wdc.com with ESMTP; 08 Sep 2021 19:35:52 -0700
-From:   Damien Le Moal <damien.lemoal@wdc.com>
-To:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-ide@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH v8 5/5] doc: Fix typo in request queue sysfs documentation
-Date:   Thu,  9 Sep 2021 11:35:45 +0900
-Message-Id: <20210909023545.1101672-6-damien.lemoal@wdc.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210909023545.1101672-1-damien.lemoal@wdc.com>
-References: <20210909023545.1101672-1-damien.lemoal@wdc.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1350182AbhIIDmf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Sep 2021 23:42:35 -0400
+Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:45377 "EHLO
+        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230153AbhIIDmf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Sep 2021 23:42:35 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.west.internal (Postfix) with ESMTP id 64D1F2B00A33;
+        Wed,  8 Sep 2021 23:41:25 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 08 Sep 2021 23:41:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:date:from:message-id:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; bh=0iHpfybu+k8g/sNOBSyHwGQalkKV65EYj9rHzeXx+ow=; b=BCvo56Sx
+        UrJ3W8KC+mKIdDhUxQ/z1PZT5RlCmQM5D6w24P5nouSYC9rH6oRYUJVfhE3X9uML
+        +8tS0mZyuE0WRdG4g/Fm6w3aVmcXSxPw73DJtpOo7C70rPocQnoTPDbJwq5itSfy
+        tfHTogjNSboyIvHM8OA93LPZNv4dLizPJqkVr9lKAOE28k29T9GUmwXUs+3Zdnyx
+        p5Mt53lNGo0Qcy/uRQLVVrT1q47b/bR5D0EG0uN4dkJgw+DNLCZQGS8ai19wcvZY
+        ZT3md1sjZkYLR8uc7xz+ID4yUE1MO2MyhKjcFCS52Fq/L85Ndtg4gt6XyntMo2ZL
+        Popbx7iMQuo7SQ==
+X-ME-Sender: <xms:Y4I5YW42G_b0zOzTbXuFP6r1O8-nJG3jJcHzdF3N81EqQjrhcjTxMg>
+    <xme:Y4I5Yf4c2xXUIlk42mKG9Cm32HOwBizi_JKo_xK7Gj-_ZavyAKfKD65Ajl_oa9QV6
+    IA2jus4PINaoqKtNHw>
+X-ME-Received: <xmr:Y4I5YVfk3x-qPpDGvNNELQVvWGApuO9UhCEWhLxjoDPnFYa4Mx-RZCD9MnxzQOyupMyFLtGhEiyZb85O2SAcLzyInD3-wQe8ce54ZQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudefkedgjeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gohfhorhgsihguuggvnhfjughrucdlhedttddmnecujfgurhepvffkhffuffestddtredt
+    tddtnecuhfhrohhmpefhihhnnhcuvfhhrghinhcuoehfthhhrghinheslhhinhhugidqmh
+    eikehkrdhorhhgqeenucfhohhrsghiugguvghnjfgurhepvffkhffuffestddtredttddt
+    pdfvkffhufffsedttdertddttdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
+X-ME-Proxy: <xmx:Y4I5YTLPkfALfKhX0Rk-ASVbGSkS7UOj0SxtJ4RGBF5MHExBWba-Kw>
+    <xmx:Y4I5YaLolwgVxEFW0OsO0uAWLwp5G9g__G1Xg9CCaNlyKY3X38g7cA>
+    <xmx:Y4I5YUw17pUAQOYgAT0WdA4OG0THUUPjMS5ot_D7AIg66DgCbSgpQg>
+    <xmx:ZYI5YW14cxST_-o05vSgzdo80uRdZe-m86Ar3pL3V-ngbUUHUfqhjUv324s>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 8 Sep 2021 23:41:22 -0400 (EDT)
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Ali Akcaagac" <aliakc@web.de>,
+        "Jamie Lenehan" <lenehan@twibble.org>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <c9168d8e5595bdaa3a18d596f781b55e052af3fc.1631158421.git.fthain@linux-m68k.org>
+From:   Finn Thain <fthain@linux-m68k.org>
+Subject: [PATCH] MAINTAINERS: Remove obsolete e-mail addresses
+Date:   Thu, 09 Sep 2021 13:33:41 +1000
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix a typo (are -> as) in the introduction paragraph of
-Documentation/block/queue-sysfs.rst.
+These e-mail addresses bounced.
 
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Finn Thain <fthain@linux-m68k.org>
 ---
- Documentation/block/queue-sysfs.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ MAINTAINERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/Documentation/block/queue-sysfs.rst b/Documentation/block/queue-sysfs.rst
-index b6e8983d8eda..e8c74306f70a 100644
---- a/Documentation/block/queue-sysfs.rst
-+++ b/Documentation/block/queue-sysfs.rst
-@@ -4,7 +4,7 @@ Queue sysfs files
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d7b4f32875a9..690539b2705c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5138,10 +5138,8 @@ S:	Maintained
+ F:	drivers/scsi/am53c974.c
  
- This text file will detail the queue files that are located in the sysfs tree
- for each block device. Note that stacked devices typically do not export
--any settings, since their queue merely functions are a remapping target.
-+any settings, since their queue merely functions as a remapping target.
- These files are the ones found in the /sys/block/xxx/queue/ directory.
+ DC395x SCSI driver
+-M:	Oliver Neukum <oliver@neukum.org>
+ M:	Ali Akcaagac <aliakc@web.de>
+ M:	Jamie Lenehan <lenehan@twibble.org>
+-L:	dc395x@twibble.org
+ S:	Maintained
+ W:	http://twibble.org/dist/dc395x/
+ W:	http://lists.twibble.org/mailman/listinfo/dc395x/
  
- Files denoted with a RO postfix are readonly and the RW postfix means
 -- 
-2.31.1
+2.26.3
 
