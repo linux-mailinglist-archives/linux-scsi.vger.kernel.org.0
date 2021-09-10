@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CCB4073EA
-	for <lists+linux-scsi@lfdr.de>; Sat, 11 Sep 2021 01:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC7B4073F1
+	for <lists+linux-scsi@lfdr.de>; Sat, 11 Sep 2021 01:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234859AbhIJXdo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Sep 2021 19:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        id S234913AbhIJXeG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Sep 2021 19:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234894AbhIJXdb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Sep 2021 19:33:31 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAA9C061764
-        for <linux-scsi@vger.kernel.org>; Fri, 10 Sep 2021 16:32:16 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id dw14so1492602pjb.1
-        for <linux-scsi@vger.kernel.org>; Fri, 10 Sep 2021 16:32:16 -0700 (PDT)
+        with ESMTP id S234871AbhIJXdf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Sep 2021 19:33:35 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9B8C061766;
+        Fri, 10 Sep 2021 16:32:17 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id lb1-20020a17090b4a4100b001993f863df2so1679151pjb.5;
+        Fri, 10 Sep 2021 16:32:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XgCnLh+b92yUjOifde23K95AaE4qX1Fd7kkLemky5Ds=;
-        b=npYErKmsnd74EXjwqIoO4uIwhNZWrIkrsbwWbou8dNs7J0JpHYG3TqSP4n671UsqbL
-         rmS6ng8HkyBYEfwBYpI9eiPZnGnrG29/rjTlOCpPr6aM8sVlX5tfL6HzBKF8KUCFZcYU
-         sJsBvKJWpJ+00y0XcWkAAj+mAc07roV2f0cwbwHDqVx5m+OnC+D5PDgKlhuNd6baTi71
-         55h2enbge60T0KwzrtKb0RPeKQdclHkBLPeZJabMfkA7Al7DebEa17oSsj3WXrKGlNMY
-         QsJPMGsXro9s+OBLDivcxx9uENJzrihEFKN57zC737j4ScD9KKwOuZQkYw7ADPj0n3XC
-         PFnA==
+        bh=jGFBDzZt1XuvT2/PvJsUxCaDuknPpPW8lQxF7Hh+uUw=;
+        b=RpJzfrTNh4n7ZEJlgqdUkes6N0sKw2lBi8YI3Df+atU0jAkKhbx0X5ffgmS9DR40Dg
+         nbg9Vv9mOHXfNKRpeRX5IDVMrVNbWs7rJPmIxMSa9L3pSkfmx7kc38/uHmBGSYzm9fUZ
+         MKvn7JTVrPhdbnkpzbWJE8w2f5kggRL03jC/r6KrdZ5MswKlOP7/yGabliBzQa8p9ng6
+         CCN+OXDGj/Q1TsZ3yzT26xXCGCaH8SmP5GHZAon+FREBSvLHWgo7fhV3Whd6fZm43/b/
+         BdlHGtFjSwLCozI+xaPhd94PB6n18O5Pg4K+Q3SkQWLNeS/nguurtB/3B91k8xxOmD/v
+         xThA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XgCnLh+b92yUjOifde23K95AaE4qX1Fd7kkLemky5Ds=;
-        b=nP519KG4dRsKa5kO+rAo5rqFbUgwwr4F8bi7szP8AvWQmqHeIScS8YWRh0lMFvzFL0
-         //VHzEEJN7VlGdlnZtoKM0CjqsEa3RWO2asS/HQ3wMHwNnH4vT+yVCi0z8/9yhuS1e/b
-         pBbUrepfgWluwzQuLb6oVspgoOXQ/ZDpMS46UyTYYL8cNu472fOKRKbttRJ1pz2TdVRc
-         JodGEsZKOtinVR1wMB6bPmU9LXI3i6U85xupUfCtm0OBDyWOTLz/plwhgNUTDXzZvwFd
-         uyu2gEjD/1vZkrLGCvmf8BfF3c9zh/u4v1XOP7eKQEMCouz1EKTprnq3Lm6ZnSWl0hHS
-         YTSQ==
-X-Gm-Message-State: AOAM533zJjYfWqvvHWfLIPqdEEv8mQcMcSJe2Ire2DVcG+oB+l/54tIv
-        q7mhNiZ0B5F5EjwzKvSSzPNxy4DQvUUfn+UF
-X-Google-Smtp-Source: ABdhPJyfS7Qj1wq79DkZS2pEQgx/foCGmvK1MVqgh0yzQrLKpXzWQJxXJFvr/+pmD4KJD0XPiGxPoA==
-X-Received: by 2002:a17:90a:e7c8:: with SMTP id kb8mr140912pjb.19.1631316735680;
-        Fri, 10 Sep 2021 16:32:15 -0700 (PDT)
+        bh=jGFBDzZt1XuvT2/PvJsUxCaDuknPpPW8lQxF7Hh+uUw=;
+        b=D0SRwUZcRK3OotWsHqw3gonWWoO4DWhC9p4y5G/1UHusWa1y1R9Pj7VZILmB2VuWcn
+         Qc0z8X32WQVhRCpmTusQuv78MjnGFgLQj1+HpFnqjWSU/w/M1A3c3prK+I/JggbUkEZW
+         ehIxfE6M8eVE1vuAaO+xAfGvMZY4R6R8buaCaJt81pbK+waLTH8hSHuyV8ESKgovkOLv
+         uC/bSdESVg2onXZrko87k12gbvzzsmiTgK3V96pmXTwCTjFuJX0wNkpYsN5UpkyJlvOw
+         oGT/HK/vezT2pgDRfVG5NBRIPflhtInBDf+Zu1iv5y3O0R1hZmhigJIj30IjrjCO7dgE
+         NRBg==
+X-Gm-Message-State: AOAM530BZK6XE5b6JtCwisCENTuL0nrHodRe1C0AaCvQFn1eEqKXl8lF
+        O4HPj94LDr43kfoR46VFvZosz0BbMapf2bNu
+X-Google-Smtp-Source: ABdhPJxVLxbsQRUxOWJJfi+w0XUCXlK8gBWSIa6H9llvPoBSuXjVdfxF85vTk9U4zgolO4deKoAPvQ==
+X-Received: by 2002:a17:902:bcc8:b0:13a:8c8:92b8 with SMTP id o8-20020a170902bcc800b0013a08c892b8mr181703pls.88.1631316736343;
+        Fri, 10 Sep 2021 16:32:16 -0700 (PDT)
 Received: from mail-ash-it-01.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id o15sm11325pfk.143.2021.09.10.16.32.14
+        by smtp.gmail.com with ESMTPSA id o15sm11325pfk.143.2021.09.10.16.32.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Sep 2021 16:32:15 -0700 (PDT)
+        Fri, 10 Sep 2021 16:32:16 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
+Cc:     James Smart <jsmart2021@gmail.com>, stable@vger.kernel.org,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 07/14] lpfc: Fix NVME I/O failover to non-optimized path
-Date:   Fri, 10 Sep 2021 16:31:52 -0700
-Message-Id: <20210910233159.115896-8-jsmart2021@gmail.com>
+Subject: [PATCH 08/14] lpfc: Fix FCP I/O flush functionality for TMF routines
+Date:   Fri, 10 Sep 2021 16:31:53 -0700
+Message-Id: <20210910233159.115896-9-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210910233159.115896-1-jsmart2021@gmail.com>
 References: <20210910233159.115896-1-jsmart2021@gmail.com>
@@ -63,36 +63,210 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Currently, we hold off unregistering with NVME transport layer until
-GID_FT or ADISC completes upon receipt of RSCN. In the ADISC discovery
-routine, for nodes not found in the GID_FT response, the nodes are
-unregistered from the scsi transport but not UNREG_RPI'd. Meaning
-outstanding WQEs continue to be outstanding and were not failed back to
-the OS. If an NVMe device, this mean there wasn't initial termination of
-the I/O's so they could be issued on a different NVME path.
+A prior patch inadvertently caused lpfc_sli_sum_iocb to exclude
+counting of outstanding aborted I/Os and ABORT iocbs.  Thus,
+lpfc_reset_flush_io_context called from any TMF routine does not
+properly wait to flush all outstanding FCP iocbs leading to a
+block layer crash on an invalid scsi_cmnd->request pointer.
+  kernel BUG at ../block/blk-core.c:1489!
+  RIP: 0010:blk_requeue_request+0xaf/0xc0
+  ...
+  Call Trace:
+  <IRQ>
+  __scsi_queue_insert+0x90/0xe0 [scsi_mod]
+  blk_done_softirq+0x7e/0x90
+  __do_softirq+0xd2/0x280
+  irq_exit+0xd5/0xe0
+  do_IRQ+0x4c/0xd0
+  common_interrupt+0x87/0x87
+  </IRQ>
 
-Fix by unregistering the RPI so that I/O is cancelled.
+Fix by separating out the LPFC_IO_FCP, LPFC_IO_ON_TXCMPLQ,
+LPFC_DRIVER_ABORTED, and CMD_ABORT_XRI_CN || CMD_CLOSE_XRI_CN checks
+into a new lpfc_sli_validate_fcp_iocb_for_abort routine when determining
+to build an ABORT iocb.
 
-Fixes: 0614568361b0 ("scsi: lpfc: Delay unregistering from transport until GIDFT or ADISC completes")
+Restore lpfc_reset_flush_io_context functionality by including
+counting of outstanding aborted iocbs and ABORT iocbs in lpfc_sli_sum_iocb.
+
+Fixes: e1364711359f ("scsi: lpfc: Fix illegal memory access on Abort IOCBs")
+Cc: <stable@vger.kernel.org> # v5.12+
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/scsi/lpfc/lpfc_sli.c | 101 +++++++++++++++++++++++++++--------
+ 1 file changed, 78 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index c6eae545aabf..40d166aeb466 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -6224,6 +6224,7 @@ lpfc_els_disc_adisc(struct lpfc_vport *vport)
- 			 * from backend
- 			 */
- 			lpfc_nlp_unreg_node(vport, ndlp);
-+			lpfc_unreg_rpi(vport, ndlp);
- 			continue;
- 		}
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index 546c851938bc..e8f6ad484768 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -12485,15 +12485,54 @@ lpfc_sli_hba_iocb_abort(struct lpfc_hba *phba)
+ }
  
+ /**
+- * lpfc_sli_validate_fcp_iocb - find commands associated with a vport or LUN
++ * lpfc_sli_validate_fcp_iocb_for_abort - filter iocbs appropriate for FCP aborts
++ * @iocbq: Pointer to iocb object.
++ * @vport: Pointer to driver virtual port object.
++ *
++ * This function acts as an iocb filter for functions which abort FCP iocbs.
++ *
++ * Return values
++ * -ENODEV, if a null iocb or vport ptr is encountered
++ * -EINVAL, if the iocb is not an FCP I/O, not on the TX cmpl queue, premarked as
++ *          driver already started the abort process, or is an abort iocb itself
++ * 0, passes criteria for aborting the FCP I/O iocb
++ **/
++static int
++lpfc_sli_validate_fcp_iocb_for_abort(struct lpfc_iocbq *iocbq,
++				     struct lpfc_vport *vport)
++{
++	IOCB_t *icmd = NULL;
++
++	/* No null ptr vports */
++	if (!iocbq || iocbq->vport != vport)
++		return -ENODEV;
++
++	/* iocb must be for FCP IO, already exists on the TX cmpl queue,
++	 * can't be premarked as driver aborted, nor be an ABORT iocb itself
++	 */
++	icmd = &iocbq->iocb;
++	if (!(iocbq->iocb_flag & LPFC_IO_FCP) ||
++	    !(iocbq->iocb_flag & LPFC_IO_ON_TXCMPLQ) ||
++	    (iocbq->iocb_flag & LPFC_DRIVER_ABORTED) ||
++	    (icmd->ulpCommand == CMD_ABORT_XRI_CN ||
++	     icmd->ulpCommand == CMD_CLOSE_XRI_CN))
++		return -EINVAL;
++
++	return 0;
++}
++
++/**
++ * lpfc_sli_validate_fcp_iocb - validate commands associated with a SCSI target
+  * @iocbq: Pointer to driver iocb object.
+  * @vport: Pointer to driver virtual port object.
+  * @tgt_id: SCSI ID of the target.
+  * @lun_id: LUN ID of the scsi device.
+  * @ctx_cmd: LPFC_CTX_LUN/LPFC_CTX_TGT/LPFC_CTX_HOST
+  *
+- * This function acts as an iocb filter for functions which abort or count
+- * all FCP iocbs pending on a lun/SCSI target/SCSI host. It will return
++ * This function acts as an iocb filter for validating a lun/SCSI target/SCSI
++ * host.
++ *
++ * It will return
+  * 0 if the filtering criteria is met for the given iocb and will return
+  * 1 if the filtering criteria is not met.
+  * If ctx_cmd == LPFC_CTX_LUN, the function returns 0 only if the
+@@ -12512,22 +12551,8 @@ lpfc_sli_validate_fcp_iocb(struct lpfc_iocbq *iocbq, struct lpfc_vport *vport,
+ 			   lpfc_ctx_cmd ctx_cmd)
+ {
+ 	struct lpfc_io_buf *lpfc_cmd;
+-	IOCB_t *icmd = NULL;
+ 	int rc = 1;
+ 
+-	if (!iocbq || iocbq->vport != vport)
+-		return rc;
+-
+-	if (!(iocbq->iocb_flag & LPFC_IO_FCP) ||
+-	    !(iocbq->iocb_flag & LPFC_IO_ON_TXCMPLQ) ||
+-	      iocbq->iocb_flag & LPFC_DRIVER_ABORTED)
+-		return rc;
+-
+-	icmd = &iocbq->iocb;
+-	if (icmd->ulpCommand == CMD_ABORT_XRI_CN ||
+-	    icmd->ulpCommand == CMD_CLOSE_XRI_CN)
+-		return rc;
+-
+ 	lpfc_cmd = container_of(iocbq, struct lpfc_io_buf, cur_iocbq);
+ 
+ 	if (lpfc_cmd->pCmd == NULL)
+@@ -12582,17 +12607,33 @@ lpfc_sli_sum_iocb(struct lpfc_vport *vport, uint16_t tgt_id, uint64_t lun_id,
+ {
+ 	struct lpfc_hba *phba = vport->phba;
+ 	struct lpfc_iocbq *iocbq;
++	IOCB_t *icmd = NULL;
+ 	int sum, i;
++	unsigned long iflags;
+ 
+-	spin_lock_irq(&phba->hbalock);
++	spin_lock_irqsave(&phba->hbalock, iflags);
+ 	for (i = 1, sum = 0; i <= phba->sli.last_iotag; i++) {
+ 		iocbq = phba->sli.iocbq_lookup[i];
+ 
+-		if (lpfc_sli_validate_fcp_iocb (iocbq, vport, tgt_id, lun_id,
+-						ctx_cmd) == 0)
++		if (!iocbq || iocbq->vport != vport)
++			continue;
++		if (!(iocbq->iocb_flag & LPFC_IO_FCP) ||
++		    !(iocbq->iocb_flag & LPFC_IO_ON_TXCMPLQ))
++			continue;
++
++		/* Include counting outstanding aborts */
++		icmd = &iocbq->iocb;
++		if (icmd->ulpCommand == CMD_ABORT_XRI_CN ||
++		    icmd->ulpCommand == CMD_CLOSE_XRI_CN) {
++			sum++;
++			continue;
++		}
++
++		if (lpfc_sli_validate_fcp_iocb(iocbq, vport, tgt_id, lun_id,
++					       ctx_cmd) == 0)
+ 			sum++;
+ 	}
+-	spin_unlock_irq(&phba->hbalock);
++	spin_unlock_irqrestore(&phba->hbalock, iflags);
+ 
+ 	return sum;
+ }
+@@ -12659,7 +12700,11 @@ lpfc_sli_abort_fcp_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+  *
+  * This function sends an abort command for every SCSI command
+  * associated with the given virtual port pending on the ring
+- * filtered by lpfc_sli_validate_fcp_iocb function.
++ * filtered by lpfc_sli_validate_fcp_iocb_for_abort and then
++ * lpfc_sli_validate_fcp_iocb function.  The ordering for validation before
++ * submitting abort iocbs must be lpfc_sli_validate_fcp_iocb_for_abort
++ * followed by lpfc_sli_validate_fcp_iocb.
++ *
+  * When abort_cmd == LPFC_CTX_LUN, the function sends abort only to the
+  * FCP iocbs associated with lun specified by tgt_id and lun_id
+  * parameters
+@@ -12691,6 +12736,9 @@ lpfc_sli_abort_iocb(struct lpfc_vport *vport, u16 tgt_id, u64 lun_id,
+ 	for (i = 1; i <= phba->sli.last_iotag; i++) {
+ 		iocbq = phba->sli.iocbq_lookup[i];
+ 
++		if (lpfc_sli_validate_fcp_iocb_for_abort(iocbq, vport))
++			continue;
++
+ 		if (lpfc_sli_validate_fcp_iocb(iocbq, vport, tgt_id, lun_id,
+ 					       abort_cmd) != 0)
+ 			continue;
+@@ -12723,7 +12771,11 @@ lpfc_sli_abort_iocb(struct lpfc_vport *vport, u16 tgt_id, u64 lun_id,
+  *
+  * This function sends an abort command for every SCSI command
+  * associated with the given virtual port pending on the ring
+- * filtered by lpfc_sli_validate_fcp_iocb function.
++ * filtered by lpfc_sli_validate_fcp_iocb_for_abort and then
++ * lpfc_sli_validate_fcp_iocb function.  The ordering for validation before
++ * submitting abort iocbs must be lpfc_sli_validate_fcp_iocb_for_abort
++ * followed by lpfc_sli_validate_fcp_iocb.
++ *
+  * When taskmgmt_cmd == LPFC_CTX_LUN, the function sends abort only to the
+  * FCP iocbs associated with lun specified by tgt_id and lun_id
+  * parameters
+@@ -12761,6 +12813,9 @@ lpfc_sli_abort_taskmgmt(struct lpfc_vport *vport, struct lpfc_sli_ring *pring,
+ 	for (i = 1; i <= phba->sli.last_iotag; i++) {
+ 		iocbq = phba->sli.iocbq_lookup[i];
+ 
++		if (lpfc_sli_validate_fcp_iocb_for_abort(iocbq, vport))
++			continue;
++
+ 		if (lpfc_sli_validate_fcp_iocb(iocbq, vport, tgt_id, lun_id,
+ 					       cmd) != 0)
+ 			continue;
 -- 
 2.26.2
 
