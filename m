@@ -2,35 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 862344061B4
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Sep 2021 02:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E05C74061A5
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Sep 2021 02:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbhIJAnU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Sep 2021 20:43:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46898 "EHLO mail.kernel.org"
+        id S232262AbhIJAnV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Sep 2021 20:43:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46924 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233722AbhIJAUv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 9 Sep 2021 20:20:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E810361101;
-        Fri, 10 Sep 2021 00:19:40 +0000 (UTC)
+        id S230405AbhIJAUy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 9 Sep 2021 20:20:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6E8E9610E9;
+        Fri, 10 Sep 2021 00:19:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631233181;
-        bh=A/AnbNddid2vyzWeQFxcra6w65DjLrWw8xgpgBE+bpM=;
+        s=k20201202; t=1631233184;
+        bh=XyH2l67V36Il5T/GuHJW1uKzhlCEXhp/Ee6URnRKdz4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ldB1m3hRucxOB2EhuHsXEYeQOfHlgG+DYcUNeP3s1wmx4gQkF9PVH15pTSdZ2E84+
-         khKS/Ybk1C6UQj5pg9inK3QLVvYxKYji14t8K+k6CX8q/Y1523vA8YDZWYQ+irgx9V
-         xzLBWKfFd45KvsMDely+nxF3UGdpdmmwzTeL/ZvFFu0TZR1JgOgF9q5eOv+cx46ZFA
-         yOq8xSNe9g1PU3JaSP82SIO9M0j1TfKvpxOrVYDZSqoTmBPaGDbcOmWa7BMc1oX5+f
-         aZuYuenwNfglR78AVmP+mJCVE8pHOlXuOY2XgIf01tPAcNc06Z8WBUTWpuqPR/ilnr
-         1+LjxzuJJuQZQ==
+        b=hMrcpC087kudkf1OtJ7IoJhrdKk9cBVVF4zSQW3kG6/7I+zjPlMOd8bQ/EBTUAoQT
+         5QA/dJ/eExfxjsH2MLxg33PvbBlzvthV8ToL2YIFYzKNBCVjwP4PXeaNcNXgxhWNeD
+         PUBN6gIEtIGvCzfP6qNx8yHBACc4U+3mcJwP3axwjswgDnXOPSMf+y1LCLA8TrW0oG
+         8i6QMoagR1OAq7BVx3NDzxqLy7UccpXtmoaycEYc+m4/qEtau5L2pMtWXc30vJTI3Y
+         Xi3sSNZXTm8t4AfQJLG0l0o11USQDhXar6L5dW/qNs0LJGYxhkSXPWt0SDHWT1ZDnz
+         bpPXwwL0/hGUw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 57/88] scsi: core: Fix missing FORCE for scsi_devinfo_tbl.c build rule
-Date:   Thu,  9 Sep 2021 20:17:49 -0400
-Message-Id: <20210910001820.174272-57-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 59/88] scsi: ufs: Fix ufshcd_request_sense_async() for Samsung KLUFG8RHDA-B2D1
+Date:   Thu,  9 Sep 2021 20:17:51 -0400
+Message-Id: <20210910001820.174272-59-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210910001820.174272-1-sashal@kernel.org>
 References: <20210910001820.174272-1-sashal@kernel.org>
@@ -42,47 +42,92 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-[ Upstream commit 98079418c53fff5f9e2d4087f08eaff2a9ce7714 ]
+[ Upstream commit 9b5ac8ab4e8bf5636d1d425aee68ddf45af12057 ]
 
-Add FORCE so that if_changed can detect the command line change.
-scsi_devinfo_tbl.c must be added to 'targets' too.
+Samsung KLUFG8RHDA-B2D1 does not clear the unit attention condition if the
+length is zero. So go back to requesting all the sense data, as it was
+before patch "scsi: ufs: Request sense data asynchronously". That is
+simpler than creating and maintaining a quirk for affected devices.
 
-Link: https://lore.kernel.org/r/20210819012339.709409-1-masahiroy@kernel.org
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Link: https://lore.kernel.org/r/20210824114150.2105-1-adrian.hunter@intel.com
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/Makefile | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 36 +++++++++++++++++++++++++++++-------
+ 1 file changed, 29 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/Makefile b/drivers/scsi/Makefile
-index bc3882f5cc69..b4ef1779713d 100644
---- a/drivers/scsi/Makefile
-+++ b/drivers/scsi/Makefile
-@@ -181,7 +181,7 @@ CFLAGS_ncr53c8xx.o	:= $(ncr53c8xx-flags-y) $(ncr53c8xx-flags-m)
- zalon7xx-objs	:= zalon.o ncr53c8xx.o
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 1f0980a70e3f..dcd1eeb2b0e0 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -7787,7 +7787,8 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
+ static void ufshcd_request_sense_done(struct request *rq, blk_status_t error)
+ {
+ 	if (error != BLK_STS_OK)
+-		pr_err("%s: REQUEST SENSE failed (%d)", __func__, error);
++		pr_err("%s: REQUEST SENSE failed (%d)\n", __func__, error);
++	kfree(rq->end_io_data);
+ 	blk_put_request(rq);
+ }
  
- # Files generated that shall be removed upon make clean
--clean-files :=	53c700_d.h 53c700_u.h scsi_devinfo_tbl.c
-+clean-files :=	53c700_d.h 53c700_u.h
+@@ -7795,16 +7796,30 @@ static int
+ ufshcd_request_sense_async(struct ufs_hba *hba, struct scsi_device *sdev)
+ {
+ 	/*
+-	 * From SPC-6: the REQUEST SENSE command with any allocation length
+-	 * clears the sense data.
++	 * Some UFS devices clear unit attention condition only if the sense
++	 * size used (UFS_SENSE_SIZE in this case) is non-zero.
+ 	 */
+-	static const u8 cmd[6] = {REQUEST_SENSE, 0, 0, 0, 0, 0};
++	static const u8 cmd[6] = {REQUEST_SENSE, 0, 0, 0, UFS_SENSE_SIZE, 0};
+ 	struct scsi_request *rq;
+ 	struct request *req;
++	char *buffer;
++	int ret;
  
- $(obj)/53c700.o: $(obj)/53c700_d.h
- 
-@@ -190,9 +190,11 @@ $(obj)/scsi_sysfs.o: $(obj)/scsi_devinfo_tbl.c
- quiet_cmd_bflags = GEN     $@
- 	cmd_bflags = sed -n 's/.*define *BLIST_\([A-Z0-9_]*\) *.*/BLIST_FLAG_NAME(\1),/p' $< > $@
- 
--$(obj)/scsi_devinfo_tbl.c: include/scsi/scsi_devinfo.h
-+$(obj)/scsi_devinfo_tbl.c: include/scsi/scsi_devinfo.h FORCE
- 	$(call if_changed,bflags)
- 
-+targets +=  scsi_devinfo_tbl.c
+-	req = blk_get_request(sdev->request_queue, REQ_OP_DRV_IN, /*flags=*/0);
+-	if (IS_ERR(req))
+-		return PTR_ERR(req);
++	buffer = kzalloc(UFS_SENSE_SIZE, GFP_KERNEL);
++	if (!buffer)
++		return -ENOMEM;
 +
- # If you want to play with the firmware, uncomment
- # GENERATE_FIRMWARE := 1
++	req = blk_get_request(sdev->request_queue, REQ_OP_DRV_IN,
++			      /*flags=*/BLK_MQ_REQ_PM);
++	if (IS_ERR(req)) {
++		ret = PTR_ERR(req);
++		goto out_free;
++	}
++
++	ret = blk_rq_map_kern(sdev->request_queue, req,
++			      buffer, UFS_SENSE_SIZE, GFP_NOIO);
++	if (ret)
++		goto out_put;
  
+ 	rq = scsi_req(req);
+ 	rq->cmd_len = ARRAY_SIZE(cmd);
+@@ -7812,10 +7827,17 @@ ufshcd_request_sense_async(struct ufs_hba *hba, struct scsi_device *sdev)
+ 	rq->retries = 3;
+ 	req->timeout = 1 * HZ;
+ 	req->rq_flags |= RQF_PM | RQF_QUIET;
++	req->end_io_data = buffer;
+ 
+ 	blk_execute_rq_nowait(/*bd_disk=*/NULL, req, /*at_head=*/true,
+ 			      ufshcd_request_sense_done);
+ 	return 0;
++
++out_put:
++	blk_put_request(req);
++out_free:
++	kfree(buffer);
++	return ret;
+ }
+ 
+ static int ufshcd_clear_ua_wlun(struct ufs_hba *hba, u8 wlun)
 -- 
 2.30.2
 
