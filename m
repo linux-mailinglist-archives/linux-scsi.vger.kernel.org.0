@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8851240617D
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Sep 2021 02:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA88406188
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Sep 2021 02:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbhIJAnA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Sep 2021 20:43:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46124 "EHLO mail.kernel.org"
+        id S240795AbhIJAnF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Sep 2021 20:43:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46208 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232810AbhIJATz (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 9 Sep 2021 20:19:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2B597611BD;
-        Fri, 10 Sep 2021 00:18:44 +0000 (UTC)
+        id S233493AbhIJAUS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 9 Sep 2021 20:20:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0AF23610E9;
+        Fri, 10 Sep 2021 00:18:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631233125;
-        bh=llGQfHUJf9wbBAkwnSjGXKp3Gz0mt66NEPEa/XyLQ+w=;
+        s=k20201202; t=1631233130;
+        bh=TGw4njp5IaZc78R/uUB/LijXLUHq5fkfuYINOfxXf0g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=obRpcoPK6/exJJqYAh0xWiMlsXF9SLfaTRo7y4w15h8CLbgbfVo8KUttj2+76U8rV
-         lDDLumzsIzvmgnMjB/kkhgCoqU9R3EkQnZ1Q/+df69+MDq/cWcV5dDYrLSNxJAlzut
-         4tyOjRZpNq6El7SajmInrTo77dOUsI+vDgUakcK2vx9V48CtBpWNIsTnHXfkIFQSUI
-         nknwSMu8tRu2yBc7gm/Q9EIbXBX/RqEmD2Ofk9i78W3SfZS8qMgjRLfpzk5Ugvk/WY
-         staOyYS9soHWtvr2zEo9UL/HtTYan3d7mHweP9Kzzrk2Kl/m9kzwYy987jKg3myC8r
-         8Sd14TSLACVKA==
+        b=je9ABs+d34/+nTU+2qmEXsRDwpNyB2fBpZ7d/drnUFMeBWHvmCBzOlGQ20m7OoOko
+         PtwuuodxCzT4hgUIumgrjehaM1+FVPkrNT5e6ZqjErMRfvKDwkvZ51cqfPwPNKfoL0
+         xDBb8+f0gHUKIM1y1bFAwuhNbPo41MyLTQ0I/fypUGDWxWcYKiVlflAnJExs/RRGE0
+         o3NVPfvWWdFW2wxGWxC/9WNTtuEd94HUEXG1SSSE2q/A0HXykRW4ujh/HpGUBRq+mi
+         TcC9PIfz1X09ES1uiVX41roCKL3lBKTxOFhWRhXDiqzay0da0xUqhbDiVe1jUFPm5O
+         s3oC8kvaJxRHg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 17/88] scsi: lpfc: Fix cq_id truncation in rq create
-Date:   Thu,  9 Sep 2021 20:17:09 -0400
-Message-Id: <20210910001820.174272-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 21/88] scsi: lpfc: Fix possible ABBA deadlock in nvmet_xri_aborted()
+Date:   Thu,  9 Sep 2021 20:17:13 -0400
+Message-Id: <20210910001820.174272-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210910001820.174272-1-sashal@kernel.org>
 References: <20210910001820.174272-1-sashal@kernel.org>
@@ -45,38 +45,60 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: James Smart <jsmart2021@gmail.com>
 
-[ Upstream commit df3d78c3eb4eba13b3ef9740a8c664508ee644ae ]
+[ Upstream commit 7740b615b6665e47f162e261d805f1bbbac15876 ]
 
-On the newer hardware, CQ_ID values can be larger than seen on previous
-generations. This exposed an issue in the driver where its definition of
-cq_id in the RQ Create mailbox cmd was too small, thus the cq_id was
-truncated, causing the command to fail.
+The lpfc_sli4_nvmet_xri_aborted() routine takes out the abts_buf_list_lock
+and traverses the buffer contexts to match the xri. Upon match, it then
+takes the context lock before potentially removing the context from the
+associated buffer list. This violates the lock hierarchy used elsewhere in
+the driver of locking context, then the abts_buf_list_lock - thus a
+possible deadlock.
 
-Revise the RQ_CREATE CQ_ID field to its proper size (16 bits).
+Resolve by: after matching, release the abts_buf_list_lock, then take the
+context lock, and if to be deleted from the list, retake the
+abts_buf_list_lock, maintaining lock hierarchy. This matches same list lock
+hierarchy as elsewhere in the driver
 
-Link: https://lore.kernel.org/r/20210722221721.74388-3-jsmart2021@gmail.com
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Link: https://lore.kernel.org/r/20210730163309.25809-1-jsmart2021@gmail.com
+Reported-by: Jia-Ju Bai <baijiaju1990@gmail.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_hw4.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_nvmet.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_hw4.h b/drivers/scsi/lpfc/lpfc_hw4.h
-index f77e71e6dbbd..3be78d22d9c3 100644
---- a/drivers/scsi/lpfc/lpfc_hw4.h
-+++ b/drivers/scsi/lpfc/lpfc_hw4.h
-@@ -1552,7 +1552,7 @@ struct rq_context {
- #define lpfc_rq_context_hdr_size_WORD	word1
- 	uint32_t word2;
- #define lpfc_rq_context_cq_id_SHIFT	16
--#define lpfc_rq_context_cq_id_MASK	0x000003FF
-+#define lpfc_rq_context_cq_id_MASK	0x0000FFFF
- #define lpfc_rq_context_cq_id_WORD	word2
- #define lpfc_rq_context_buf_size_SHIFT	0
- #define lpfc_rq_context_buf_size_MASK	0x0000FFFF
+diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
+index f2d9a3580887..6e3dd0b9bcfa 100644
+--- a/drivers/scsi/lpfc/lpfc_nvmet.c
++++ b/drivers/scsi/lpfc/lpfc_nvmet.c
+@@ -1797,19 +1797,22 @@ lpfc_sli4_nvmet_xri_aborted(struct lpfc_hba *phba,
+ 		if (ctxp->ctxbuf->sglq->sli4_xritag != xri)
+ 			continue;
+ 
+-		spin_lock(&ctxp->ctxlock);
++		spin_unlock_irqrestore(&phba->sli4_hba.abts_nvmet_buf_list_lock,
++				       iflag);
++
++		spin_lock_irqsave(&ctxp->ctxlock, iflag);
+ 		/* Check if we already received a free context call
+ 		 * and we have completed processing an abort situation.
+ 		 */
+ 		if (ctxp->flag & LPFC_NVME_CTX_RLS &&
+ 		    !(ctxp->flag & LPFC_NVME_ABORT_OP)) {
++			spin_lock(&phba->sli4_hba.abts_nvmet_buf_list_lock);
+ 			list_del_init(&ctxp->list);
++			spin_unlock(&phba->sli4_hba.abts_nvmet_buf_list_lock);
+ 			released = true;
+ 		}
+ 		ctxp->flag &= ~LPFC_NVME_XBUSY;
+-		spin_unlock(&ctxp->ctxlock);
+-		spin_unlock_irqrestore(&phba->sli4_hba.abts_nvmet_buf_list_lock,
+-				       iflag);
++		spin_unlock_irqrestore(&ctxp->ctxlock, iflag);
+ 
+ 		rrq_empty = list_empty(&phba->active_rrq_list);
+ 		ndlp = lpfc_findnode_did(phba->pport, ctxp->sid);
 -- 
 2.30.2
 
