@@ -2,36 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A41AE4061CF
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Sep 2021 02:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21404061D1
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Sep 2021 02:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241274AbhIJAnz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Sep 2021 20:43:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48534 "EHLO mail.kernel.org"
+        id S241297AbhIJAn4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Sep 2021 20:43:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48566 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234155AbhIJAW6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 9 Sep 2021 20:22:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0EE5F60F6D;
-        Fri, 10 Sep 2021 00:21:46 +0000 (UTC)
+        id S234190AbhIJAXA (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 9 Sep 2021 20:23:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 848EA60F24;
+        Fri, 10 Sep 2021 00:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631233307;
-        bh=VgrjoEzRRisM1bUHZg6uZpuh7YFXRDzOHlDnw8mSGt4=;
+        s=k20201202; t=1631233310;
+        bh=zE/zs8pjurMpZbAT0rpUZiaXHYIwRvJkegYn8d7RSJs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a8kRhRQCsO++Dt6Jp//aroCgDB412EuH79A9xWsX92+gsXpiSyqkZS/BmWn4D++bn
-         g08nFpxEVEwHJQKS4DiDEvjaxyk0pynt7o+GnRQBNk8kSh0E1p0b1wEssdYT4VJqGH
-         FHdjd+aFJse3s0Onf0Uc6um4ugtCdcHjq6jr9jnq+VoVPNagll8NYiVFmGtHnNdiYZ
-         E1RTMpKKqxZy1oVqZOSh+iAetgxHO7uPKt6f73uJVxokIMGz7adoQCYR+N0U/A95mP
-         kFLjVBdupjvioS4UO0IUel9c+zyksZQkVeqfmE856ILpFtaSHDQ9BwF2ztnqgq5ZYW
-         gIMXAZyHVLwlg==
+        b=PfEC84bDNihD2EuYDZThl7bY5QzrIRvK++N5DiXsrNymql+Kj/eBmlJccnin5Zer3
+         REK1dpuId5x47wqwez/gTdLNe7Zxw7M2nixVbdtxY+q3zw20H/5iwjjmg1CrAurAAL
+         0xj9PLUWG/x+BczNRw1gPj4SZXtoIQcOhow8/6YKNTdrYnIDViKCTwwk2gq4EVJ+CE
+         ORA6KgcyGbAI6hIaxZ0Raw9eDroOQmYsv4IqbwVhiEdwNJ2DtdcpINqkqwIZgXBGgo
+         /Mzjfuf25UtNl3uSGS5cdnl4wkUA4kSQIv8jrqMwce9pLweS+Ya8mRsOYyhR4z64DM
+         aU63THRLR9LXQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>,
+Cc:     Mike McGowen <mike.mcgowen@microchip.com>,
+        Kevin Barnett <kevin.barnett@microchip.com>,
+        Scott Benesh <scott.benesh@microchip.com>,
+        Scott Teel <scott.teel@microchip.com>,
+        Don Brace <don.brace@microchip.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 03/37] scsi: lpfc: Fix NVMe support reporting in log message
-Date:   Thu,  9 Sep 2021 20:21:08 -0400
-Message-Id: <20210910002143.175731-3-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, storagedev@microchip.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 05/37] scsi: smartpqi: Fix ISR accessing uninitialized data
+Date:   Thu,  9 Sep 2021 20:21:10 -0400
+Message-Id: <20210910002143.175731-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210910002143.175731-1-sashal@kernel.org>
 References: <20210910002143.175731-1-sashal@kernel.org>
@@ -43,60 +47,47 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Mike McGowen <mike.mcgowen@microchip.com>
 
-[ Upstream commit ae463b60235e7a5decffbb0bd7209952ccda78eb ]
+[ Upstream commit 0777a3fb98f0ea546561d04db4fd325248c39961 ]
 
-The NVMe support indicator in log message 6422 is displaying a field that
-was initialized but never set to indicate NVMe support.  Remove obsolete
-nvme_support element from the lpfc_hba structure and change log message to
-display NVMe support status as reported in SLI4 Config Parameters mailbox
-command.
+Correct driver's ISR accessing a data structure member that has not been
+fully initialized during driver initialization.
 
-Link: https://lore.kernel.org/r/20210707184351.67872-2-jsmart2021@gmail.com
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
+The pqi queue groups can have uninitialized members when an interrupt
+fires. This has not resulted in any driver crashes. This was found during
+our own internal testing. No bugs were ever filed.
+
+Link: https://lore.kernel.org/r/20210714182847.50360-9-don.brace@microchip.com
+Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
+Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
+Reviewed-by: Scott Teel <scott.teel@microchip.com>
+Signed-off-by: Mike McGowen <mike.mcgowen@microchip.com>
+Signed-off-by: Don Brace <don.brace@microchip.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc.h      | 1 -
- drivers/scsi/lpfc/lpfc_init.c | 3 +--
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
-index 8943d42fc406..767dbc4a5276 100644
---- a/drivers/scsi/lpfc/lpfc.h
-+++ b/drivers/scsi/lpfc/lpfc.h
-@@ -791,7 +791,6 @@ struct lpfc_hba {
- 	uint8_t  wwpn[8];
- 	uint32_t RandomData[7];
- 	uint8_t  fcp_embed_io;
--	uint8_t  nvme_support;	/* Firmware supports NVME */
- 	uint8_t  nvmet_support;	/* driver supports NVMET */
- #define LPFC_NVMET_MAX_PORTS	32
- 	uint8_t  mds_diags_support;
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index b5cee2a2ac66..393909a71c59 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -11653,7 +11653,6 @@ lpfc_get_sli4_parameters(struct lpfc_hba *phba, LPFC_MBOXQ_t *mboxq)
- 					bf_get(cfg_xib, mbx_sli4_parameters),
- 					phba->cfg_enable_fc4_type);
- fcponly:
--			phba->nvme_support = 0;
- 			phba->nvmet_support = 0;
- 			phba->cfg_nvmet_mrq = 0;
- 			phba->cfg_nvme_seg_cnt = 0;
-@@ -11714,7 +11713,7 @@ lpfc_get_sli4_parameters(struct lpfc_hba *phba, LPFC_MBOXQ_t *mboxq)
- 			"6422 XIB %d PBDE %d: FCP %d NVME %d %d %d\n",
- 			bf_get(cfg_xib, mbx_sli4_parameters),
- 			phba->cfg_enable_pbde,
--			phba->fcp_embed_io, phba->nvme_support,
-+			phba->fcp_embed_io, sli4_params->nvme,
- 			phba->cfg_nvme_embed_cmd, phba->cfg_suppress_rsp);
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 9bc451004184..824f19475b27 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -7208,11 +7208,11 @@ static int pqi_ctrl_init(struct pqi_ctrl_info *ctrl_info)
  
- 	if ((bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) ==
+ 	pqi_init_operational_queues(ctrl_info);
+ 
+-	rc = pqi_request_irqs(ctrl_info);
++	rc = pqi_create_queues(ctrl_info);
+ 	if (rc)
+ 		return rc;
+ 
+-	rc = pqi_create_queues(ctrl_info);
++	rc = pqi_request_irqs(ctrl_info);
+ 	if (rc)
+ 		return rc;
+ 
 -- 
 2.30.2
 
