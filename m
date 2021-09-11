@@ -2,58 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3175340785A
-	for <lists+linux-scsi@lfdr.de>; Sat, 11 Sep 2021 15:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59417407873
+	for <lists+linux-scsi@lfdr.de>; Sat, 11 Sep 2021 15:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235933AbhIKNcm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 11 Sep 2021 09:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235809AbhIKNcm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Sep 2021 09:32:42 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D094C061574
-        for <linux-scsi@vger.kernel.org>; Sat, 11 Sep 2021 06:31:29 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id f6so6049537iox.0
-        for <linux-scsi@vger.kernel.org>; Sat, 11 Sep 2021 06:31:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=wLwU2RMsaoxCtNPTnRbKPbretu8LRibpMTqg+kTqxHs=;
-        b=NgHWAwnRo5wlcZfW1D4RVrg6wmL44nLXhFplF41hCCA9vLdNwVTX3kDm0S5THx4n8+
-         VmZt64BAjbC/pla0eBhbcVGa6DTbTrmpf/Gt67U1VtZ5xKhL4FWl2TtK/uBp3VgFT3Xp
-         ybHBESfuGI76SxiMeIIGVu1DmXklMqoBqacOrkGHUh7FkJzNHCU0jBnOKbY/ijlcNdwU
-         BzjxEbO5ah+NrwpI7DpFZi/ue0/5Zn7UBtLziGhS7galFf6trxrpfYolKSRNIBrxUozT
-         uM4YXrAB4BY/fhDWYvtblwbkMYbut4n9pexFcsZuKtp8T4vb933D1eEO6677iASG8eA5
-         oFag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=wLwU2RMsaoxCtNPTnRbKPbretu8LRibpMTqg+kTqxHs=;
-        b=onbO+oizCdvyzbZfRPO08cWDfcv2a1zPB38UJZIj3bxgSbCsr5OUZplcx65ttpyqP6
-         MvALBYyCD/i+oj/PGkE1LFuQtOy/qrE86oFFypyGouG8E1hnHBUcq2zpI1HFG8ePVcXZ
-         11sgnLRR8/gNhKE3nrt9HWyjhWp4kECYLd3lFGaF71LNOUXTmzvhy0Mq6EoXKrSj2N6F
-         jrvlC3u3XKgIAxofWwGnW9TT5GmusHe6CQLz18XEPc65vigTrFPUEkt7fGJL8Kgy4wH6
-         B1YsZi/PhMDUhp1mFUjDjRTupVImbUsfK3CSFRQiFQfbWz93k15cISegzu47mFyPQN7+
-         gFKg==
-X-Gm-Message-State: AOAM530OdwVCIAHGdvNZCODCzmoQhyTDLgQGA27AeVXXzm307NOb/LH1
-        ejxJCJ+TypZSPpJ3rMral4ym+SKQUbwFXUSOwjw=
-X-Google-Smtp-Source: ABdhPJzDv5gacgiXcDphx3wKGMJitYKWQ2zbZMc5DrJFOFDuQNPR1CpahPiPw2UhVXReDM4II9ncWEndOR7NTN3/AmE=
-X-Received: by 2002:a05:6638:5aa:: with SMTP id b10mr2203830jar.76.1631367088995;
- Sat, 11 Sep 2021 06:31:28 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a4f:b91c:0:0:0:0:0 with HTTP; Sat, 11 Sep 2021 06:31:28
- -0700 (PDT)
-From:   Daniels Alexander <danielsalexander222@gmail.com>
-Date:   Sat, 11 Sep 2021 21:31:28 +0800
-Message-ID: <CANV_nGobjFr5jR6eafNJKgSviLD=XhGRjzXQerS455pYfy-SQA@mail.gmail.com>
-Subject: Hello, how are you doing?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S235934AbhIKN4e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 11 Sep 2021 09:56:34 -0400
+Received: from mail-m17642.qiye.163.com ([59.111.176.42]:37164 "EHLO
+        mail-m17642.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230249AbhIKN4d (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Sep 2021 09:56:33 -0400
+Received: from localhost.localdomain (unknown [113.116.176.115])
+        by mail-m17642.qiye.163.com (Hmail) with ESMTPA id 42E20220148;
+        Sat, 11 Sep 2021 21:55:19 +0800 (CST)
+From:   Ding Hui <dinghui@sangfor.com.cn>
+To:     lduncan@suse.com, cleech@redhat.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, michael.christie@oracle.com,
+        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ding Hui <dinghui@sangfor.com.cn>
+Subject: [PATCH v2] scsi: libiscsi: move init ehwait to iscsi_session_setup()
+Date:   Sat, 11 Sep 2021 21:51:59 +0800
+Message-Id: <20210911135159.20543-1-dinghui@sangfor.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRlJTRlWH00YQkhCGRhDGh
+        lKVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Mkk6FQw5MD4XDhxCQxcpMRIp
+        NTkwCTVVSlVKTUhKSE1DTkpCQ0pJVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlKSkhVSkpNVUpMTVVKSk5ZV1kIAVlBSUhMTzcG
+X-HM-Tid: 0a7bd5241f57d998kuws42e20220148
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I haven't heard from you, did you receive my previous email? if not
-kindly get back to me on my private email
-abdulla.abdulrahman222@gmail.com
+The commit ec29d0ac29be ("scsi: iscsi: Fix conn use after free during
+resets") move member ehwait from conn to session, but left init ehwait
+in iscsi_conn_setup().
+
+Although a session can only have 1 conn currently, it is better to
+do init ehwait in iscsi_session_setup() to prevent reinit by mistake,
+also in case we can handle multiple conns in the future.
+
+Fixes: ec29d0ac29be ("scsi: iscsi: Fix conn use after free during resets")
+Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+---
+v2:
+  update commit log
+ 
+ drivers/scsi/libiscsi.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index 4683c183e9d4..712a45368385 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -2947,6 +2947,7 @@ iscsi_session_setup(struct iscsi_transport *iscsit, struct Scsi_Host *shost,
+ 	session->tmf_state = TMF_INITIAL;
+ 	timer_setup(&session->tmf_timer, iscsi_tmf_timedout, 0);
+ 	mutex_init(&session->eh_mutex);
++	init_waitqueue_head(&session->ehwait);
+ 
+ 	spin_lock_init(&session->frwd_lock);
+ 	spin_lock_init(&session->back_lock);
+@@ -3074,8 +3075,6 @@ iscsi_conn_setup(struct iscsi_cls_session *cls_session, int dd_size,
+ 		goto login_task_data_alloc_fail;
+ 	conn->login_task->data = conn->data = data;
+ 
+-	init_waitqueue_head(&session->ehwait);
+-
+ 	return cls_conn;
+ 
+ login_task_data_alloc_fail:
+-- 
+2.17.1
+
