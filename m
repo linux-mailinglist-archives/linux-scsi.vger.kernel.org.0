@@ -2,110 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C15407665
-	for <lists+linux-scsi@lfdr.de>; Sat, 11 Sep 2021 14:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3175340785A
+	for <lists+linux-scsi@lfdr.de>; Sat, 11 Sep 2021 15:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233559AbhIKMN1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 11 Sep 2021 08:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
+        id S235933AbhIKNcm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 11 Sep 2021 09:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbhIKMN0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Sep 2021 08:13:26 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C773C061574
-        for <linux-scsi@vger.kernel.org>; Sat, 11 Sep 2021 05:12:14 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id q26so6642530wrc.7
-        for <linux-scsi@vger.kernel.org>; Sat, 11 Sep 2021 05:12:14 -0700 (PDT)
+        with ESMTP id S235809AbhIKNcm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Sep 2021 09:32:42 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D094C061574
+        for <linux-scsi@vger.kernel.org>; Sat, 11 Sep 2021 06:31:29 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id f6so6049537iox.0
+        for <linux-scsi@vger.kernel.org>; Sat, 11 Sep 2021 06:31:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=Soof2tC2ARGD1C8223fBJWGXQzh92gv3cAXXLMMpflM=;
-        b=XWNLc9xBT2Oqmhrgc4Y+g+20bVrK9VSlI92FeHt8mNIdI/eao2DM8BalJUhlQ1K/W+
-         xBkdIBLnWNX2+QmrbNOuc4IO2mVqJf/jdHz4aetJahzxW013ok1TAnF5M7XXfgmVAtnq
-         7zjCBI7ZGMu1qsw4f8pn96ftcxbozEkNfAp76ehmzZKwh3X08F7IqueUl2ECe48d0tO/
-         0/C6ge7RdZjndTby+ex2/PyUYekDcJ63Rf9cEWgFEduxdqJ4QWuXWiXrVmRjWzeAha4N
-         Wn99QBh1HbYT81cS4E9fnY2pqZ/7aWwvwAY9aRXhNQXe0InmCu2JXUIvMmsxhjlAW/pN
-         N1mw==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=wLwU2RMsaoxCtNPTnRbKPbretu8LRibpMTqg+kTqxHs=;
+        b=NgHWAwnRo5wlcZfW1D4RVrg6wmL44nLXhFplF41hCCA9vLdNwVTX3kDm0S5THx4n8+
+         VmZt64BAjbC/pla0eBhbcVGa6DTbTrmpf/Gt67U1VtZ5xKhL4FWl2TtK/uBp3VgFT3Xp
+         ybHBESfuGI76SxiMeIIGVu1DmXklMqoBqacOrkGHUh7FkJzNHCU0jBnOKbY/ijlcNdwU
+         BzjxEbO5ah+NrwpI7DpFZi/ue0/5Zn7UBtLziGhS7galFf6trxrpfYolKSRNIBrxUozT
+         uM4YXrAB4BY/fhDWYvtblwbkMYbut4n9pexFcsZuKtp8T4vb933D1eEO6677iASG8eA5
+         oFag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=Soof2tC2ARGD1C8223fBJWGXQzh92gv3cAXXLMMpflM=;
-        b=6ePtpdRdjsyGQsuA/xPUMaXv3FmdFOmAKj0x1LZk9uWSt++v1TklRP4ycfBEM6UFBp
-         ORGX4F7uHPShiSFzoxR0J0RZCs+2kokriHxuzmFUdFG1grVe6pNDVdQDmYkhDp9zI1kv
-         V27D03wSCKwIM3K+Yy6AgxYhWMCm9nNSMeL5fyiczGEKVV2d9zRy0C8J8UkCZHVE3QEO
-         dz0ms3Lnq/cnVwq6NULHaIbgkOOnpGf+K2fSgXPDfBOpSMGu2OVPOn03VySkJ7VPfzmL
-         1uB+7Pj5qWiQ+p8WVTnL/u1c68ptvDpunFvf44QhJl+Te0jKfKRh32iKGuhXq3p3qceL
-         GpDQ==
-X-Gm-Message-State: AOAM532/T2DUlcD8HwfUt0YuC/LXkio9ZDNs+mCilgchRjNjIJ/8F3f7
-        5HGTtfjB+wRzOSLkNhqG1uQ=
-X-Google-Smtp-Source: ABdhPJzeIXX9TO6wZCjo5wYgj8gl8yWJCMKxXph8uscwSSPMEIdzzoevRQPJFJOxJwcQ6+a5r9ijrQ==
-X-Received: by 2002:adf:f1c4:: with SMTP id z4mr2925034wro.418.1631362332716;
-        Sat, 11 Sep 2021 05:12:12 -0700 (PDT)
-Received: from ?IPv6:2003:ea:8f08:4500:397f:e269:90:7644? (p200300ea8f084500397fe26900907644.dip0.t-ipconnect.de. [2003:ea:8f08:4500:397f:e269:90:7644])
-        by smtp.googlemail.com with ESMTPSA id r26sm1442501wmh.27.2021.09.11.05.12.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Sep 2021 05:12:12 -0700 (PDT)
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc:     SCSI development list <linux-scsi@vger.kernel.org>,
-        Christian Loehle <cloehle@hyperstone.com>
-Subject: [PATCH] scsi: sd: Make sd_spinup_disk less noisy
-Message-ID: <a2d0a249-6035-9697-626a-e14ec50ef6ee@gmail.com>
-Date:   Sat, 11 Sep 2021 14:11:59 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=wLwU2RMsaoxCtNPTnRbKPbretu8LRibpMTqg+kTqxHs=;
+        b=onbO+oizCdvyzbZfRPO08cWDfcv2a1zPB38UJZIj3bxgSbCsr5OUZplcx65ttpyqP6
+         MvALBYyCD/i+oj/PGkE1LFuQtOy/qrE86oFFypyGouG8E1hnHBUcq2zpI1HFG8ePVcXZ
+         11sgnLRR8/gNhKE3nrt9HWyjhWp4kECYLd3lFGaF71LNOUXTmzvhy0Mq6EoXKrSj2N6F
+         jrvlC3u3XKgIAxofWwGnW9TT5GmusHe6CQLz18XEPc65vigTrFPUEkt7fGJL8Kgy4wH6
+         B1YsZi/PhMDUhp1mFUjDjRTupVImbUsfK3CSFRQiFQfbWz93k15cISegzu47mFyPQN7+
+         gFKg==
+X-Gm-Message-State: AOAM530OdwVCIAHGdvNZCODCzmoQhyTDLgQGA27AeVXXzm307NOb/LH1
+        ejxJCJ+TypZSPpJ3rMral4ym+SKQUbwFXUSOwjw=
+X-Google-Smtp-Source: ABdhPJzDv5gacgiXcDphx3wKGMJitYKWQ2zbZMc5DrJFOFDuQNPR1CpahPiPw2UhVXReDM4II9ncWEndOR7NTN3/AmE=
+X-Received: by 2002:a05:6638:5aa:: with SMTP id b10mr2203830jar.76.1631367088995;
+ Sat, 11 Sep 2021 06:31:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a4f:b91c:0:0:0:0:0 with HTTP; Sat, 11 Sep 2021 06:31:28
+ -0700 (PDT)
+From:   Daniels Alexander <danielsalexander222@gmail.com>
+Date:   Sat, 11 Sep 2021 21:31:28 +0800
+Message-ID: <CANV_nGobjFr5jR6eafNJKgSviLD=XhGRjzXQerS455pYfy-SQA@mail.gmail.com>
+Subject: Hello, how are you doing?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-For my personal taste sd_spinup_disk() is a little bit noisy after
-848ade90ba9c ("scsi: sd: Do not exit sd_spinup_disk() quietly").
-
-scsi 0:0:0:0: Direct-Access     Multiple Card  Reader     1.00 PQ: 0 ANSI: 0
-sd 0:0:0:0: Attached scsi generic sg0 type 0
-sd 0:0:0:0: [sda] Media removed, stopped polling
-sd 0:0:0:0: [sda] Media removed, stopped polling
-sd 0:0:0:0: [sda] Attached SCSI removable disk
-sd 0:0:0:0: [sda] Media removed, stopped polling
-
-There's not really a benefit in printing the same message multiple
-times. Therefore print it only if media_present was set before.
-
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/scsi/sd.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index cbd9999f9..af7e7b0da 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -2124,6 +2124,8 @@ sd_spinup_disk(struct scsi_disk *sdkp)
- 		retries = 0;
- 
- 		do {
-+			bool media_was_present = sdkp->media_present;
-+
- 			cmd[0] = TEST_UNIT_READY;
- 			memset((void *) &cmd[1], 0, 9);
- 
-@@ -2138,7 +2140,8 @@ sd_spinup_disk(struct scsi_disk *sdkp)
- 			 * with any more polling.
- 			 */
- 			if (media_not_present(sdkp, &sshdr)) {
--				sd_printk(KERN_NOTICE, sdkp, "Media removed, stopped polling\n");
-+				if (media_was_present)
-+					sd_printk(KERN_NOTICE, sdkp, "Media removed, stopped polling\n");
- 				return;
- 			}
- 
--- 
-2.33.0
-
+I haven't heard from you, did you receive my previous email? if not
+kindly get back to me on my private email
+abdulla.abdulrahman222@gmail.com
