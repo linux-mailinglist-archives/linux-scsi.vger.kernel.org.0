@@ -2,158 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF95E408ECE
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 15:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C82840973C
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 17:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242416AbhIMNhA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Sep 2021 09:37:00 -0400
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:31738 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243118AbhIMNe6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Sep 2021 09:34:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1631540021; x=1663076021;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=I+mbTA+03+CBI4ATMHCqjrQ510CBb/AiF9vYJKHKDoQ=;
-  b=ZIzO5mPiLkuG8PaOvjIwOh9edaWSwoRyWvNWMaOTHJl3JoA5EZeyxrkZ
-   RPWG3E/9lO2fl7qZCwN9LOY8Mawxuc+UodO4INKLXJYmYIUj31r9Z0ht4
-   UnJT/k2i0ZhurNvR2PakD63yP/g7BPrHMvmkxjdm73J82FAXkDTnOuq8n
-   UW5ceCb5QNN3l6y/yQxKBt5WNiglbtLnm83qyNjnucSmwGMt+vRRCQRS+
-   bGIhz/5nJRhoQf33VI55TVMC/mZldaMO1urCqdgpFidTZw7qX4IifmBpa
-   UjAR9VJ3F0XpNnR0vEyCIGPkKPZ1OepPJfWCU/eaVP+kup6/4kiP9f1gD
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.85,288,1624291200"; 
-   d="scan'208";a="179856628"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 13 Sep 2021 21:33:41 +0800
-IronPort-SDR: ygBL6sAAvZmOwfxINZIZ4p4q4tzSjki6WlObJgyfOdnYqXyhwYozlnFg5Px5qSCEpEm5RUnWE0
- NX02XFNHrfI5m2k2oReD57frQaebGAslEvOA35dpC2ZMk9vS6ukRKmBu+0Wp5TcqkbHcSob9Al
- BSBm94Q9wqFZFJ9JDRP8zUU6GWfAjSmtkd3PqQaxNVWUjRwwMSELhOMjk2IqRRglBYQA79BLfP
- /w8M8Fii3FSnDhMGNKphC6f18/qFjk0RqBUg1gB7nM8V616tdFUzmXcsPwkq6hUCA7Tg2SrvkV
- 8yraaRtrIKSoW9/UyskW7Ias
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 06:10:07 -0700
-IronPort-SDR: 8NsLXAoR9SUGC+xAWtOIOs+cflEltCQAn3ygfA3P9Z9UznjU47sGgqRHWznC7NOM9ncL3WTzKL
- HVD9BpnF2L6M0SEfEhvKjnIGyzsU0zK/l3Tvi5Q1tk5eoCSV/2Er7Ed43GCJUiwg4UtQkaFTCX
- qVgKRRXJCSxeYFeVKS7EM7f92VcEk6xAjRFVofev8xCsdM5pyfaX7R0UknuA6GaN/SONbL+uTA
- rDkAuTHHQ3cOJ0ryigMngF6C5+4O1nwcfw+hY1krJ+4p6qY3/kn04jK5U62VB9VlvAstNM2PUT
- VWc=
-WDCIronportException: Internal
-Received: from bxygm33.sdcorp.global.sandisk.com (HELO BXYGM33.ad.shared) ([10.0.231.247])
-  by uls-op-cesaip01.wdc.com with ESMTP; 13 Sep 2021 06:33:39 -0700
-From:   Avri Altman <avri.altman@wdc.com>
-To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        id S245009AbhIMP1g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Sep 2021 11:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245118AbhIMP13 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Sep 2021 11:27:29 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803B1C0F976B;
+        Mon, 13 Sep 2021 07:24:32 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id a20-20020a0568300b9400b0051b8ca82dfcso13524078otv.3;
+        Mon, 13 Sep 2021 07:24:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Cc3rfqH5qwQXfY+9743ExBqMLbOukLsqMfSk7T1TjH8=;
+        b=ctacHN8t8zTfoxyXUZTopSmEK0Jayf7mBV/9AielDiwbwEv+8uoLJOsK1D6E5P/R8y
+         LwItjjhdJ/cLEF3jYMzxsTKo9BwSYs23FV+bDh8egrKd8RIKFj153I/m0tIa0qvwWwbS
+         4AMc0+yr2y/qSVXrwWcCJED7v7U/ICrFzOPK99OpJEc9dCMKO6g6zmJhRHIwRvL/c/Nh
+         6CKJL4H553g6s5f/UW4LutcrgJc9KJRPKMqR+p4jntw9tV9QJPVOfaHQH30ztfPPQjw7
+         dGGEBxCUZIWFZg9AZ4JGF7eDdsESzEn1mnSjnXP5n9sO4J1Eytb8fCm68Hly2k9pDjwf
+         N96g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Cc3rfqH5qwQXfY+9743ExBqMLbOukLsqMfSk7T1TjH8=;
+        b=So6BYJTiUlHlbQ6pdsfdfkq6zBsEQ/2ZPalgb1etXkFxdYwskx0sysXWCog5z8VvZz
+         SDnVj7Y0g++OnMUPcevZaJEW7FACtCmNRi4MOGiUmOhUuYfTYE3jWpNpR0YtaIgTi0D+
+         5nLEOzcqoTAtSxy44FcR7j0iWyR940Jq8oZQCyQsX7KLiQRX4K1Ipt9DCzT/jwgwBaRT
+         2j22RiISiTlStY1YauHydqma7E7ClXoM96wK68X/vzIZ3vuVoANC0fwDvGTQ00p6O3+U
+         1+lJIPYs2cY98GEasOALz+iGWdXXRdesztgIrNHGcairXl51KXdzcCPu71UCevmQQ/YJ
+         rt0g==
+X-Gm-Message-State: AOAM532ms7Sa5ZCRyOzGy0hOoRRpCEf7A/hU8ocbMgrROIlV5j1QDolT
+        PIjjcjz6/thgrO1jT/tsfqU=
+X-Google-Smtp-Source: ABdhPJwb69CpSnJYBsHnp6aF1xDUvHRgwn45BpM3beAg0GbsMNcq0qqyENIqW8Ea8BXRSR5zE8/Qtw==
+X-Received: by 2002:a9d:63cf:: with SMTP id e15mr9946401otl.172.1631543071900;
+        Mon, 13 Sep 2021 07:24:31 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v5sm1869559oos.17.2021.09.13.07.24.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Sep 2021 07:24:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v3 1/2] scsi: ufs: Probe for temperature notification
+ support
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Bart Van Assche <bvanassche@acm.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH v4 2/2] scsi: ufs: Add temperature notification exception handling
-Date:   Mon, 13 Sep 2021 16:33:03 +0300
-Message-Id: <20210913133303.10154-3-avri.altman@wdc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210913133303.10154-1-avri.altman@wdc.com>
-References: <20210913133303.10154-1-avri.altman@wdc.com>
+        Bean Huo <beanhuo@micron.com>
+References: <20210912131919.12962-1-avri.altman@wdc.com>
+ <20210912131919.12962-2-avri.altman@wdc.com>
+ <8abe6364-9240-bcaf-c17f-1703243170cb@roeck-us.net>
+ <DM6PR04MB65754D1CF6B4769E6CECDB5DFCD99@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <d28e37db-44bb-75f8-d479-dcb106fe146d@roeck-us.net>
+ <DM6PR04MB657565612A342272B2160A72FCD99@DM6PR04MB6575.namprd04.prod.outlook.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <bbe45ecf-853f-77f7-9094-ded8c59075f4@roeck-us.net>
+Date:   Mon, 13 Sep 2021 07:24:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <DM6PR04MB657565612A342272B2160A72FCD99@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The device may notify the host of an extreme temperature by using the
-exception event mechanism. The exception can be raised when the device’s
-Tcase temperature is either too high or too low.
+On 9/13/21 12:49 AM, Avri Altman wrote:
+>>>> The "enable" attribute only makes sense if it can be used to actually
+>>>> enable or disable a specific sensor, and is not tied to limit
+>>>> attributes but to the actual sensor values.
+>>> See explanation above.
+>>>    Will make it writable as well.
+>>>
+>>
+>> That only makes sense if the information is passed to the chip. What is going to
+>> happen if the user writes 0 into the attribute ?
+> Will turn off the temperature exception bits, so that Tcase is no longer valid,
+> and the device will always return Tcase = 0.
+> 
 
-It is essentially up to the platform to decide what further actions need
-to be taken. leave a placeholder for a designated vop for that.
+Ok. Then attempts to read the temperature should return -ENODATA, not -EINVAL,
+if Tcase == 0.
 
-Signed-off-by: Avri Altman <avri.altman@wdc.com>
----
- drivers/scsi/ufs/ufs-hwmon.c | 12 ++++++++++++
- drivers/scsi/ufs/ufshcd.c    | 21 +++++++++++++++++++++
- drivers/scsi/ufs/ufshcd.h    |  2 ++
- 3 files changed, 35 insertions(+)
-
-diff --git a/drivers/scsi/ufs/ufs-hwmon.c b/drivers/scsi/ufs/ufs-hwmon.c
-index 390748a9d547..2fd100e92f81 100644
---- a/drivers/scsi/ufs/ufs-hwmon.c
-+++ b/drivers/scsi/ufs/ufs-hwmon.c
-@@ -192,3 +192,15 @@ void ufs_hwmon_remove(struct ufs_hba *hba)
- 	hba->hwmon_device = NULL;
- 	kfree(data);
- }
-+
-+void ufs_hwmon_notify_event(struct ufs_hba *hba, u8 ee_mask)
-+{
-+	if (!hba->hwmon_device)
-+		return;
-+
-+	if (ee_mask & MASK_EE_TOO_HIGH_TEMP)
-+		hwmon_notify_event(hba->hwmon_device, hwmon_temp, hwmon_temp_max_alarm, 0);
-+
-+	if (ee_mask & MASK_EE_TOO_LOW_TEMP)
-+		hwmon_notify_event(hba->hwmon_device, hwmon_temp, hwmon_temp_min_alarm, 0);
-+}
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index cb20720c5deb..3f9b56800e5b 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -5642,6 +5642,24 @@ static void ufshcd_bkops_exception_event_handler(struct ufs_hba *hba)
- 				__func__, err);
- }
- 
-+static void ufshcd_temp_exception_event_handler(struct ufs_hba *hba, u16 status)
-+{
-+	u32 value;
-+
-+	if (ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_READ_ATTR,
-+				QUERY_ATTR_IDN_CASE_ROUGH_TEMP, 0, 0, &value))
-+		return;
-+
-+	dev_info(hba->dev, "exception Tcase %d\n", value - 80);
-+
-+	ufs_hwmon_notify_event(hba, status & MASK_EE_URGENT_TEMP);
-+
-+	/*
-+	 * A placeholder for the platform vendors to add whatever additional
-+	 * steps required
-+	 */
-+}
-+
- static int __ufshcd_wb_toggle(struct ufs_hba *hba, bool set, enum flag_idn idn)
- {
- 	u8 index;
-@@ -5821,6 +5839,9 @@ static void ufshcd_exception_event_handler(struct work_struct *work)
- 	if (status & hba->ee_drv_mask & MASK_EE_URGENT_BKOPS)
- 		ufshcd_bkops_exception_event_handler(hba);
- 
-+	if (status & hba->ee_drv_mask & MASK_EE_URGENT_TEMP)
-+		ufshcd_temp_exception_event_handler(hba, status);
-+
- 	ufs_debugfs_exception_event(hba, status);
- out:
- 	ufshcd_scsi_unblock_requests(hba);
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 798a408d71e5..d811fe079e04 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -1063,9 +1063,11 @@ static inline u8 ufshcd_wb_get_query_index(struct ufs_hba *hba)
- #ifdef CONFIG_SCSI_UFS_HWMON
- void ufs_hwmon_probe(struct ufs_hba *hba, u8 mask);
- void ufs_hwmon_remove(struct ufs_hba *hba);
-+void ufs_hwmon_notify_event(struct ufs_hba *hba, u8 ee_mask);
- #else
- static inline void ufs_hwmon_probe(struct ufs_hba *hba, u8 mask) {}
- static inline void ufs_hwmon_remove(struct ufs_hba *hba) {}
-+static inline void ufs_hwmon_notify_event(struct ufs_hba *hba, u8 ee_mask) {}
- #endif
- 
- #ifdef CONFIG_PM
--- 
-2.17.1
-
+Guenter
