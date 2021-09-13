@@ -2,198 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C612F408996
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 12:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F707408EC4
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 15:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239002AbhIMK5j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Sep 2021 06:57:39 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3771 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238366AbhIMK5i (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Sep 2021 06:57:38 -0400
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H7NdQ73Yvz6H6kW;
-        Mon, 13 Sep 2021 18:54:02 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Mon, 13 Sep 2021 12:56:20 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Mon, 13 Sep 2021 11:56:18 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH v2] scsi: libsas: co-locate exports with symbols
-Date:   Mon, 13 Sep 2021 18:51:36 +0800
-Message-ID: <1631530296-32358-1-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
+        id S242562AbhIMNgu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Sep 2021 09:36:50 -0400
+Received: from esa1.hgst.iphmx.com ([68.232.141.245]:47565 "EHLO
+        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242988AbhIMNeo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Sep 2021 09:34:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1631540008; x=1663076008;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pGp6s8OXSV13dUq3hfMuAIW/HNTvZVlyt23W1OpT7yo=;
+  b=NUetyUEx0JUtBW5EqoJkH0BFFVHksDn49NflRlaPy41byL40uovyZ5Td
+   jkklnxncPEIOsOADZaefNv62etEAz92rG48y+S+1qoiWKMHaBkQiMuBHY
+   ih7rxwGvZpx150IUa47WwBHLg4ZCaqMdETDHUts7VvV9adJFwFDqLzW+g
+   T3YDziIVOk4X4dhExpOlARhuUU2ROUEsm9cXZDNJ4n7ES7f/yN2i747Eh
+   5HMTiIZuqndqIS3XvFpt+CZUekn42begDrqOXll91kStp8wc6maTOzOim
+   ZmTiyFzqkN9E3C9w9w5+FHCsfWXlRIvPplo67+CYuPLfIg1Qf6Y5pmWsH
+   w==;
+X-IronPort-AV: E=Sophos;i="5.85,290,1624291200"; 
+   d="scan'208";a="291474599"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 13 Sep 2021 21:33:25 +0800
+IronPort-SDR: UgFTwvG7eCnjZZi2UvMbOvFgL1UUNfGyi5lHekcA5Onmzjq+jMDdFw7FJhO0W0R6fSDEeb/s55
+ wB8fXRyBo+EdIZKPqoLyc+iDjLOHfFFYWmr92n/54OY5GbVehh1vHcycehEmMVMWeg72mBe/X3
+ DU6FnZpltkPPcTfcd6Lb8ibk+xQRpGy89L91lkCOOnOrFpOWM29PteQGrxLzsyIIctZzA+eKXp
+ 6VYl2rFs4zb+PWlGI/jiDP7rzp4RQdtthABcMMvgzwFPUmqF64yKl2kjtoFzdil2eEI2zTyp3G
+ zayqnLJFhgoCkfbGjmlJTVYC
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 06:08:16 -0700
+IronPort-SDR: J9P/tHWteB5xzEXTLb4/izfiWw7nZKWqyy7qJA9Ku2ZTYM5pJriYCU0O92k2ZgSfU8OsI9Gorv
+ VqQ+kdZsQ+z8CUtt/XdPC8FxxwMEPSA1A9bgbckiitxjP3i09jcsy7YgfY8iYrge7RrIC41Xwe
+ N+OlbJY6JuPsPyDTrd0+wEFl0s1L3Ewzsq5rUSNnH+d4abZ7NufiqXgQDDEteZqOkSObbOkn7V
+ wzQBm5Hn2lfPpG2DuQBediOaUGt7hVcRF4rb97G2hfGm0/+kvtEGMt09/s3ZGOOkje7xYrznRt
+ cdc=
+WDCIronportException: Internal
+Received: from bxygm33.sdcorp.global.sandisk.com (HELO BXYGM33.ad.shared) ([10.0.231.247])
+  by uls-op-cesaip01.wdc.com with ESMTP; 13 Sep 2021 06:33:23 -0700
+From:   Avri Altman <avri.altman@wdc.com>
+To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Avri Altman <avri.altman@wdc.com>
+Subject: [PATCH v4 0/2] Add temperature notification support
+Date:   Mon, 13 Sep 2021 16:33:01 +0300
+Message-Id: <20210913133303.10154-1-avri.altman@wdc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-It is standard practice to co-locate export declarations with the symbol
-which is being exported. Or at least in the same file - see
-sas_phy_reset().
+v3 -> v4:
+ - Attend Guenter's comments
 
-Modify libsas to follow this practice consistently.
+v2 -> v3:
+ - Attend Bart's & Guenter's comments
 
-Signed-off-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Jason Yan <yanaijie@huawei.com>
----
-Changes since v1:
-- Add RB tag from Jason (thanks!)
+v1 -> v2:
+ - Add a hw monitor device if both the platform & the device support it
+ - Remove the sysfs patch: no need to duplicate /sys/class/hwmon
 
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index 80592f53017a..37cc92837fdf 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -147,6 +147,7 @@ int sas_register_ha(struct sas_ha_struct *sas_ha)
- 
- 	return error;
- }
-+EXPORT_SYMBOL_GPL(sas_register_ha);
- 
- static void sas_disable_events(struct sas_ha_struct *sas_ha)
- {
-@@ -176,6 +177,7 @@ int sas_unregister_ha(struct sas_ha_struct *sas_ha)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(sas_unregister_ha);
- 
- static int sas_get_linkerrors(struct sas_phy *phy)
- {
-@@ -313,6 +315,7 @@ int sas_phy_reset(struct sas_phy *phy, int hard_reset)
- 	}
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(sas_phy_reset);
- 
- int sas_set_phy_speed(struct sas_phy *phy,
- 		      struct sas_phy_linkrates *rates)
-@@ -659,5 +662,3 @@ MODULE_LICENSE("GPL v2");
- module_init(sas_class_init);
- module_exit(sas_class_exit);
- 
--EXPORT_SYMBOL_GPL(sas_register_ha);
--EXPORT_SYMBOL_GPL(sas_unregister_ha);
-diff --git a/drivers/scsi/libsas/sas_scsi_host.c b/drivers/scsi/libsas/sas_scsi_host.c
-index 08ffb8788290..2bf37151623e 100644
---- a/drivers/scsi/libsas/sas_scsi_host.c
-+++ b/drivers/scsi/libsas/sas_scsi_host.c
-@@ -201,6 +201,7 @@ int sas_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 	cmd->scsi_done(cmd);
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(sas_queuecommand);
- 
- static void sas_eh_finish_cmd(struct scsi_cmnd *cmd)
- {
-@@ -511,6 +512,7 @@ int sas_eh_device_reset_handler(struct scsi_cmnd *cmd)
- 
- 	return FAILED;
- }
-+EXPORT_SYMBOL_GPL(sas_eh_device_reset_handler);
- 
- int sas_eh_target_reset_handler(struct scsi_cmnd *cmd)
- {
-@@ -532,6 +534,7 @@ int sas_eh_target_reset_handler(struct scsi_cmnd *cmd)
- 
- 	return FAILED;
- }
-+EXPORT_SYMBOL_GPL(sas_eh_target_reset_handler);
- 
- /* Try to reset a device */
- static int try_to_reset_cmd_device(struct scsi_cmnd *cmd)
-@@ -790,6 +793,7 @@ int sas_ioctl(struct scsi_device *sdev, unsigned int cmd, void __user *arg)
- 
- 	return -EINVAL;
- }
-+EXPORT_SYMBOL_GPL(sas_ioctl);
- 
- struct domain_device *sas_find_dev_by_rphy(struct sas_rphy *rphy)
- {
-@@ -832,6 +836,7 @@ int sas_target_alloc(struct scsi_target *starget)
- 	starget->hostdata = found_dev;
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(sas_target_alloc);
- 
- #define SAS_DEF_QD 256
- 
-@@ -860,6 +865,7 @@ int sas_slave_configure(struct scsi_device *scsi_dev)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(sas_slave_configure);
- 
- int sas_change_queue_depth(struct scsi_device *sdev, int depth)
- {
-@@ -872,6 +878,7 @@ int sas_change_queue_depth(struct scsi_device *sdev, int depth)
- 		depth = 1;
- 	return scsi_change_queue_depth(sdev, depth);
- }
-+EXPORT_SYMBOL_GPL(sas_change_queue_depth);
- 
- int sas_bios_param(struct scsi_device *scsi_dev,
- 			  struct block_device *bdev,
-@@ -884,6 +891,7 @@ int sas_bios_param(struct scsi_device *scsi_dev,
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(sas_bios_param);
- 
- /*
-  * Tell an upper layer that it needs to initiate an abort for a given task.
-@@ -910,6 +918,7 @@ void sas_task_abort(struct sas_task *task)
- 	else
- 		blk_abort_request(scsi_cmd_to_rq(sc));
- }
-+EXPORT_SYMBOL_GPL(sas_task_abort);
- 
- int sas_slave_alloc(struct scsi_device *sdev)
- {
-@@ -918,6 +927,7 @@ int sas_slave_alloc(struct scsi_device *sdev)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(sas_slave_alloc);
- 
- void sas_target_destroy(struct scsi_target *starget)
- {
-@@ -929,6 +939,7 @@ void sas_target_destroy(struct scsi_target *starget)
- 	starget->hostdata = NULL;
- 	sas_put_device(found_dev);
- }
-+EXPORT_SYMBOL_GPL(sas_target_destroy);
- 
- #define SAS_STRING_ADDR_SIZE	16
- 
-@@ -956,15 +967,3 @@ int sas_request_addr(struct Scsi_Host *shost, u8 *addr)
- }
- EXPORT_SYMBOL_GPL(sas_request_addr);
- 
--EXPORT_SYMBOL_GPL(sas_queuecommand);
--EXPORT_SYMBOL_GPL(sas_target_alloc);
--EXPORT_SYMBOL_GPL(sas_slave_configure);
--EXPORT_SYMBOL_GPL(sas_change_queue_depth);
--EXPORT_SYMBOL_GPL(sas_bios_param);
--EXPORT_SYMBOL_GPL(sas_task_abort);
--EXPORT_SYMBOL_GPL(sas_phy_reset);
--EXPORT_SYMBOL_GPL(sas_eh_device_reset_handler);
--EXPORT_SYMBOL_GPL(sas_eh_target_reset_handler);
--EXPORT_SYMBOL_GPL(sas_slave_alloc);
--EXPORT_SYMBOL_GPL(sas_target_destroy);
--EXPORT_SYMBOL_GPL(sas_ioctl);
+UFS3.0 allows using the ufs device as a temperature sensor. The purpose
+of this optional feature is to provide notification to the host of the
+UFS device case temperature. It allows reading of a rough estimate
+(+-10 degrees centigrade) of the current case temperature, and setting a
+lower and upper temperature bounds, in which the device will trigger an
+applicable exception event.
+
+A previous attempt [1] tried a comprehensive approach.  Still, it was
+unsuccessful. Here is a more modest approach that introduces just the
+bare minimum to support temperature notification.
+
+Thanks,
+Avri
+
+[1] https://lore.kernel.org/lkml/1582450522-13256-1-git-send-email-avi.shchislowski@wdc.com/
+
+Avri Altman (2):
+  scsi: ufs: Probe for temperature notification support
+  scsi: ufs: Add temperature notification exception handling
+
+ drivers/scsi/ufs/Kconfig     |   9 ++
+ drivers/scsi/ufs/Makefile    |   1 +
+ drivers/scsi/ufs/ufs-hwmon.c | 206 +++++++++++++++++++++++++++++++++++
+ drivers/scsi/ufs/ufs.h       |   7 ++
+ drivers/scsi/ufs/ufshcd.c    |  47 ++++++++
+ drivers/scsi/ufs/ufshcd.h    |  20 ++++
+ 6 files changed, 290 insertions(+)
+ create mode 100644 drivers/scsi/ufs/ufs-hwmon.c
+
 -- 
-2.26.2
+2.17.1
 
