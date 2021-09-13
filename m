@@ -2,355 +2,197 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E61CB409704
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 17:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D25409735
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 17:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346336AbhIMPTg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Sep 2021 11:19:36 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3785 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345724AbhIMPTD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Sep 2021 11:19:03 -0400
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4H7VR86Sfsz67y8L;
-        Mon, 13 Sep 2021 23:15:32 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Mon, 13 Sep 2021 17:17:45 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Mon, 13 Sep 2021 16:17:43 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <axboe@kernel.dk>
-CC:     <linux-kernel@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <ming.lei@redhat.com>, <linux-scsi@vger.kernel.org>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH RESEND v3 13/13] blk-mq: Stop using pointers for blk_mq_tags bitmap tags
-Date:   Mon, 13 Sep 2021 23:12:30 +0800
-Message-ID: <1631545950-56586-14-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1631545950-56586-1-git-send-email-john.garry@huawei.com>
-References: <1631545950-56586-1-git-send-email-john.garry@huawei.com>
+        id S245131AbhIMPZ7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Sep 2021 11:25:59 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:49134 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347161AbhIMPZA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 13 Sep 2021 11:25:00 -0400
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18DESqbn024407;
+        Mon, 13 Sep 2021 15:23:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=VTdvDUr760htrBUmVJZ5QnWh9QhjP6Hg1OhLAYaxzIc=;
+ b=Zz3yutatCNOxy96sHASxav2YjLZFolPT1sP71IFV9GROzOhOWHuOHFubq0NE7RQbOBt5
+ 4zB3dknhyI1y2sv094XSaxHJlQi1urbAxfLsBfIfmlaPMEnA3gOeVqM3oiM1Ulc+JkdW
+ LVZcsMkhCspuU4H2EC81OnHKpq9dn9yfwZPX8Oo3mmfn+9JN9vOur1piCxma/DQf5D1d
+ mlLi4MGBestPS73urLhEffFEd4oq7GyjpjBqGEoN3slOvJlYttem+r9M+HoMW3NHqL/M
+ v0Ykp5LBmzabkTZA5GVnnZggCn03Sto91XeGYd3wT4g2Do9d9/06UYVo0Dany/5qyza+ Jw== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2020-01-29;
+ bh=VTdvDUr760htrBUmVJZ5QnWh9QhjP6Hg1OhLAYaxzIc=;
+ b=sfkjgTQtXWCyR82lxeTjHszhwYhMj/lua2Fzgrbz/8njSW0yqaHFNhPRFxxVSaBxK5ly
+ 50vTaJwHKGx14jNwVyHjoYmgkrQ5UzmrMjyoWxpSzVKp9/21POg55PSKKk1zuqtkTaHZ
+ ke0p1eqzIbvjnSo5tjVGVrvPpcPjQutAL+8S823oZAu95UCuE6WemPJAe+CjvLDr7dGt
+ HG7D7hhrpLmZ5K4LgOJWp4hYcgxWNEE35pJyli3xMtnxX7uGVkGT/mC7zjE3QTl2Sffo
+ D4rfpNrTiZZCKDDeUak77upRNVodesAGZg16AYwWCz4mbyBGDmlBJ2BBv5BmMtefpCQu wg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3b1h45k62e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Sep 2021 15:23:34 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 18DFF5PN004952;
+        Mon, 13 Sep 2021 15:23:33 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2108.outbound.protection.outlook.com [104.47.55.108])
+        by userp3030.oracle.com with ESMTP id 3b0hjtnd1j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Sep 2021 15:23:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I6ABGKnsUq606Oicyord5TGepfUdQKhEs73vL7DIB5gDOZjHYF/UpUSH4nDhx+I546hH2xiajz4j2U0vzXa1zLyF+QOeKXMd93s+/m5VPyM40QCyHCZhcrV3Xdsv3ORN/k8Log/AXkSQz9H+eB/+ONkxZ6iserMs+DZqual1SN54I8qqQ4LUJkAREPYOoGWCFJk05M5POvlFmX2LX3VhrNRoRXyJn2oYO0vt9g/8A4Py0eWJgp3LkP7hfdeTJhbls59Dy3vrN4F0pzii8QetOM+4VtrHL/GZ9et1fs4Rd4czjywWkIggHZ3hV94/NK8e5vmrv3+PIWV0FJkuIRFc7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=VTdvDUr760htrBUmVJZ5QnWh9QhjP6Hg1OhLAYaxzIc=;
+ b=JeW9Z7+hLvxsHPBAU3+quYnABcprayMI8aVJg/KP9cjNb8Dl/oV9EziWHlxJM7Jgt9JUmel8vJv2FvH2KJiyKgIFdsVV9ovDHhV7a2kw94Si3RzQQX+uwuIbUs8BMxfoDFSV8UW86ziybQkcWLzZM8zn999KI2IYNs87Nuj45WXzpE/7y/VQaaNteS3v+K4P4dpNNZwEeXfXTxOgf9LjmuXb5YGd21J5gJqP6S8fKInrWdY58ZJ4sCHX7QzODc/itdBPNpN4kjGR5Y71u1s+LGeCSL52zXPznBFRGX54gfBUINZ1q03vhdQJSdFpg0PetosGKA3+tz/yfRl+yXn+AA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VTdvDUr760htrBUmVJZ5QnWh9QhjP6Hg1OhLAYaxzIc=;
+ b=eJpt2JMXB7jo7ay0ZuN9mUUU5XXIA2YGgSzXbFDAzdooak4YzjW7eqH3ML/WGSylGEPQbSHxVf3c7dwMyHbw1Z/Q4NInm0FdzyBbt71tqZtgN2mdOCjTD6zubqrqg4XSl2H0RetMeumo9w0GQ4YlQAE+1uAj71BihVpNHdGT4F0=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=oracle.com;
+Received: from BYAPR10MB3573.namprd10.prod.outlook.com (2603:10b6:a03:11e::32)
+ by BYAPR10MB2423.namprd10.prod.outlook.com (2603:10b6:a02:af::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.25; Mon, 13 Sep
+ 2021 15:23:30 +0000
+Received: from BYAPR10MB3573.namprd10.prod.outlook.com
+ ([fe80::5881:380c:7098:5701]) by BYAPR10MB3573.namprd10.prod.outlook.com
+ ([fe80::5881:380c:7098:5701%6]) with mapi id 15.20.4500.019; Mon, 13 Sep 2021
+ 15:23:30 +0000
+Subject: Re: [PATCH v2] scsi: libiscsi: move init ehwait to
+ iscsi_session_setup()
+To:     Ding Hui <dinghui@sangfor.com.cn>, lduncan@suse.com,
+        cleech@redhat.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210911135159.20543-1-dinghui@sangfor.com.cn>
+From:   Mike Christie <michael.christie@oracle.com>
+Message-ID: <3c40a1af-5f13-0e93-67ad-f1ccd4f1480c@oracle.com>
+Date:   Mon, 13 Sep 2021 10:23:27 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+In-Reply-To: <20210911135159.20543-1-dinghui@sangfor.com.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR03CA0038.namprd03.prod.outlook.com
+ (2603:10b6:5:100::15) To BYAPR10MB3573.namprd10.prod.outlook.com
+ (2603:10b6:a03:11e::32)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Received: from [20.15.0.204] (73.88.28.6) by DM6PR03CA0038.namprd03.prod.outlook.com (2603:10b6:5:100::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Mon, 13 Sep 2021 15:23:29 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2c383514-ea79-428f-f6fa-08d976ca7138
+X-MS-TrafficTypeDiagnostic: BYAPR10MB2423:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR10MB2423D579A48C614D5A286B16F1D99@BYAPR10MB2423.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:241;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: grFLuwUuK4ENo67f2ebj2GE/0WVQDTuSZ0JY4soswuWeKJYQBFv21MWUsqAyIUi1rtes4LJAknbvsUt6Jau9/HfsEK9ZwZnfGfY12oZt2LlPiuScyxEJoEMCb79mqWx67V4POrOxS0sCeMzHB8NE7rdv1rnJPa5s/dxFKq0+x1KufocSQjRM4pLBUdCLw5dNvfzJl3c+vDQBYTBXZI7hvu6hm+oOyjhfdc7R+q9/aLUpPjhEP7PAyYE9vfMgN4AYViuUijCbgQdHj7XA9yegosV+VShuP0DOvFau+WK+hrMmSMe9YlcWreCFpOuMi8SXJxYQlywAnpQHUCaYuINvleV3RJ7cWqb5dPc3hVWoCX7k28dKLVLQl9jy7mqTbNUDIBzbUX3b7dXbduZexflx0OLFVe6qeY9QqXquCuXK8FUS1fQuzHlPMMl8gUohBdfIlSk4JS8mC6X+tcF0ndry8TMHuqoNkV5lE9WUTcpzJx/qtPwmgZjtgJwX4Gg9G8WsbypZ7N9xefG7LmxJGssPJluXagdIpc4pvpw14QHAwn/3OxH0+45pH9RxAWv1iS2BT0ykPKrff2hUXXykItPRJ9smJRBZVV3Y9BrOeKnoQ8K0H86xSbLh8yfHeEwDe7yIlbCtxjg0c/6Ynx1KxrAoY8bzJW0jTEV/iiF1bFk18fKKjJ1B8DbBKZOumVQG4PaHEbPxrCoTUZ1i9gachoP6QLQf5+GwO3cF3hMNOix2MRA3BDI8d5L1AcCqbVeJit95
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3573.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(376002)(366004)(136003)(346002)(39860400002)(956004)(2616005)(2906002)(53546011)(66946007)(66476007)(66556008)(186003)(38100700002)(86362001)(83380400001)(8676002)(16576012)(478600001)(316002)(6486002)(5660300002)(36756003)(31686004)(31696002)(8936002)(6706004)(26005)(78286007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q1F4SFpPZ2V3cEMvWjFXSmdkdkdOdWtqbUsrMElTQVcwdFFkN3RFTFJFQlVi?=
+ =?utf-8?B?MC9BS3NWdjMrS3VsNk4wWUR0UG1ZbjVrWHFWdS9tSVhqTDYvQnViUVBvRjFR?=
+ =?utf-8?B?SEF0QzRBQkdOYlMzZmZmMHhCWTZzeWk1aEMxOC81YUhDRHpGeVRpT2FtYzJ1?=
+ =?utf-8?B?K0U1Ylh5cXN3Q1VXelV6NmlCODl2RzJpMFIrbXhFbUhtZnJUMWx5WU9wMklP?=
+ =?utf-8?B?Mk1mTWhDQW0xZFUwbE9iVnFQMFk1UmRicFlKTXVJN2ZKUG1lT01WU0FxQ0N5?=
+ =?utf-8?B?dXZqNndzT3h5eDB4TTlPVVZTSnAvUzVvV3hRVkpOZFVIZTk1NnpPUkthWG4w?=
+ =?utf-8?B?K3dvNmJIRDBWTkl2M2VEcG9HMWVKSDU4WFdDZUNxbnNzV0tkV0FNL0ZXeDZG?=
+ =?utf-8?B?VnU1clZrRUFFemlUNWhLRW1HaTArVjl5M3lIdXJTTEk1WVBuaGRvLzNKbmph?=
+ =?utf-8?B?UnZzNTAzWXlvdzdmN2l1OGZJcFYrSUY0YzZwOVBsS2ZIZ0NFU2Eza3I1eTUz?=
+ =?utf-8?B?N1Yyem1FZEF3MkNyeC9XYVhzVjdDQ0RpL3NiMlFhWnNGTDF4bGU2aEpiK0Rw?=
+ =?utf-8?B?eGZZMlI4Q0l5YkplUzRrbHhla0Y5NG5YYzdrMlI3VnpUUUxLMXlKZmgrR0lT?=
+ =?utf-8?B?YU9PdUpxVDNqRXZXOTVSVm9QdTNCeG0xK09XNjRYU0JoNG9MSGN0d2F0bjVE?=
+ =?utf-8?B?V1h6VE45RkNPU0JId3RBMzRqcE1EUzJsc3BCSElpelJXbzNFQmEvSDdYSGpq?=
+ =?utf-8?B?V3UrYTdpVDFNRWdrSDAwY0I0SlI3dzIwWUhNTU92bm0xL2ZhM0dvaCtIMjZF?=
+ =?utf-8?B?dExxREJKMUhBYmkrMnhZYi9CRlJYckNKWDdqclZFN1huQ1lNb2hObmltMC9L?=
+ =?utf-8?B?UFhmSmZTSzdCRStzc3dBNTR5ZVFxb0FqVFRlWjlkQnZEcHdSYXROZ3lzczhu?=
+ =?utf-8?B?aWtnWGprRjk0VGUzeUFzejhTNzZGWENXWnJaWi8rMUNBVWpPMksyd0hEZHVE?=
+ =?utf-8?B?Z3AycU50di9JMXRsK3dYOU95SGdwSTI5ZisxRzdzVE4raE5nZGFUY3ExLzJJ?=
+ =?utf-8?B?T2xaWW0rYmZCR09Jb0dUV054T3FxYVpmZmk0UFl3T3Y2ZWRiRUtOVnRkQ3VM?=
+ =?utf-8?B?aXVGaG5MTzhuWlRhckwrU2lPQ1NzZWI1ZVk2ZEJjTUNjSEtzWTNPMWIzbkNL?=
+ =?utf-8?B?bEdJMlBtcFdwMUFmWUFEajVJUFovU2QzT1oxYUUrM0dLaEEzc1d0aVljbVRr?=
+ =?utf-8?B?dmtnSjJnblhYU0VuT3ZsS3RxM2E0RVdLbTNXbFMzN2JWM2JZcUxRbWx2cXpT?=
+ =?utf-8?B?NkN4bUxBaCtFVW5KMmhJVzAvTXNIYWlwd1pIZ25ld1dIQnBESExQRGVCdVFI?=
+ =?utf-8?B?YVluVm9KUExNRGlYcHhZRjRTRG1waHpWZGQ0T1BabVlGcWIzWDB3SEZTa2Ez?=
+ =?utf-8?B?TjhxRWczZTd0TXorcldLOUhKbEFLaERvRXlmRnBXZ0RRSTZvLzdLN0dVY3J5?=
+ =?utf-8?B?TnQ4WTJhMTBuMC94VVhrTnVFY2traDZESmxBMmJmRWs1Zm5PSEpQd2FoT28r?=
+ =?utf-8?B?cFliWWNEVWMyU2xFZGZCa2hkOTdDdnI2MzRzVjRRc0piMG9HQk9wVzhyWlVp?=
+ =?utf-8?B?ZEVNVlNBbUdhalJFNFBCKzk3Mnc5ckdDd0wwWDhFYkdCemVMNThJdkVkcXNK?=
+ =?utf-8?B?T3JFRGZOdU9ZODUrbEsyM2cvTVVBcHJydlMyak1yZnlnYjlKTE5KcGNicm5x?=
+ =?utf-8?Q?32juf8FwLoiiaYpBWjA1IYKyUQZiDr+YJQ4XKsc?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c383514-ea79-428f-f6fa-08d976ca7138
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3573.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2021 15:23:30.6165
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UWaQvQTLKvxsGQpQ5UsDq3nMHHNzBqW7Wa8xhZy5B99uFZ6to1kfTTAt2R7W+y+mruq1cBB67/LxRNNK9ivVplYsSnxF1YpCbSjwlTOZr5o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB2423
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10105 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 phishscore=0
+ mlxlogscore=999 suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2109030001
+ definitions=main-2109130102
+X-Proofpoint-ORIG-GUID: 3oJTlwv_M4XRxEHGBuzILVLY2WoISl5n
+X-Proofpoint-GUID: 3oJTlwv_M4XRxEHGBuzILVLY2WoISl5n
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that we use shared tags for shared sbitmap support, we don't require
-the tags sbitmap pointers, so drop them.
+On 9/11/21 8:51 AM, Ding Hui wrote:
+> The commit ec29d0ac29be ("scsi: iscsi: Fix conn use after free during
+> resets") move member ehwait from conn to session, but left init ehwait
+> in iscsi_conn_setup().
+> 
+> Although a session can only have 1 conn currently, it is better to
+> do init ehwait in iscsi_session_setup() to prevent reinit by mistake,
+> also in case we can handle multiple conns in the future.
+> 
+> Fixes: ec29d0ac29be ("scsi: iscsi: Fix conn use after free during resets")
+> Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+> ---
+> v2:
+>   update commit log
+>  
+>  drivers/scsi/libiscsi.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+> index 4683c183e9d4..712a45368385 100644
+> --- a/drivers/scsi/libiscsi.c
+> +++ b/drivers/scsi/libiscsi.c
+> @@ -2947,6 +2947,7 @@ iscsi_session_setup(struct iscsi_transport *iscsit, struct Scsi_Host *shost,
+>  	session->tmf_state = TMF_INITIAL;
+>  	timer_setup(&session->tmf_timer, iscsi_tmf_timedout, 0);
+>  	mutex_init(&session->eh_mutex);
+> +	init_waitqueue_head(&session->ehwait);
+>  
+>  	spin_lock_init(&session->frwd_lock);
+>  	spin_lock_init(&session->back_lock);
+> @@ -3074,8 +3075,6 @@ iscsi_conn_setup(struct iscsi_cls_session *cls_session, int dd_size,
+>  		goto login_task_data_alloc_fail;
+>  	conn->login_task->data = conn->data = data;
+>  
+> -	init_waitqueue_head(&session->ehwait);
+> -
+>  	return cls_conn;
+>  
+>  login_task_data_alloc_fail:
+> 
 
-This essentially reverts commit 222a5ae03cdd ("blk-mq: Use pointers for
-blk_mq_tags bitmap tags").
-
-Function blk_mq_init_bitmap_tags() is removed also, since it would be only
-a wrappper for blk_mq_init_bitmaps().
-
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- block/bfq-iosched.c    |  4 +--
- block/blk-mq-debugfs.c |  8 +++---
- block/blk-mq-tag.c     | 56 +++++++++++++++---------------------------
- block/blk-mq-tag.h     |  7 ++----
- block/blk-mq.c         |  8 +++---
- block/kyber-iosched.c  |  4 +--
- block/mq-deadline.c    |  2 +-
- 7 files changed, 35 insertions(+), 54 deletions(-)
-
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index dd13c2bbc29c..4674f85d7df0 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -6894,8 +6894,8 @@ static void bfq_depth_updated(struct blk_mq_hw_ctx *hctx)
- 	struct blk_mq_tags *tags = hctx->sched_tags;
- 	unsigned int min_shallow;
- 
--	min_shallow = bfq_update_depths(bfqd, tags->bitmap_tags);
--	sbitmap_queue_min_shallow_depth(tags->bitmap_tags, min_shallow);
-+	min_shallow = bfq_update_depths(bfqd, &tags->bitmap_tags);
-+	sbitmap_queue_min_shallow_depth(&tags->bitmap_tags, min_shallow);
- }
- 
- static int bfq_init_hctx(struct blk_mq_hw_ctx *hctx, unsigned int index)
-diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
-index 4b66d2776eda..4000376330c9 100644
---- a/block/blk-mq-debugfs.c
-+++ b/block/blk-mq-debugfs.c
-@@ -452,11 +452,11 @@ static void blk_mq_debugfs_tags_show(struct seq_file *m,
- 		   atomic_read(&tags->active_queues));
- 
- 	seq_puts(m, "\nbitmap_tags:\n");
--	sbitmap_queue_show(tags->bitmap_tags, m);
-+	sbitmap_queue_show(&tags->bitmap_tags, m);
- 
- 	if (tags->nr_reserved_tags) {
- 		seq_puts(m, "\nbreserved_tags:\n");
--		sbitmap_queue_show(tags->breserved_tags, m);
-+		sbitmap_queue_show(&tags->breserved_tags, m);
- 	}
- }
- 
-@@ -487,7 +487,7 @@ static int hctx_tags_bitmap_show(void *data, struct seq_file *m)
- 	if (res)
- 		goto out;
- 	if (hctx->tags)
--		sbitmap_bitmap_show(&hctx->tags->bitmap_tags->sb, m);
-+		sbitmap_bitmap_show(&hctx->tags->bitmap_tags.sb, m);
- 	mutex_unlock(&q->sysfs_lock);
- 
- out:
-@@ -521,7 +521,7 @@ static int hctx_sched_tags_bitmap_show(void *data, struct seq_file *m)
- 	if (res)
- 		goto out;
- 	if (hctx->sched_tags)
--		sbitmap_bitmap_show(&hctx->sched_tags->bitmap_tags->sb, m);
-+		sbitmap_bitmap_show(&hctx->sched_tags->bitmap_tags.sb, m);
- 	mutex_unlock(&q->sysfs_lock);
- 
- out:
-diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-index 29b93ea0ea27..a313e6869639 100644
---- a/block/blk-mq-tag.c
-+++ b/block/blk-mq-tag.c
-@@ -46,9 +46,9 @@ bool __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
-  */
- void blk_mq_tag_wakeup_all(struct blk_mq_tags *tags, bool include_reserve)
- {
--	sbitmap_queue_wake_all(tags->bitmap_tags);
-+	sbitmap_queue_wake_all(&tags->bitmap_tags);
- 	if (include_reserve)
--		sbitmap_queue_wake_all(tags->breserved_tags);
-+		sbitmap_queue_wake_all(&tags->breserved_tags);
- }
- 
- /*
-@@ -104,10 +104,10 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
- 			WARN_ON_ONCE(1);
- 			return BLK_MQ_NO_TAG;
- 		}
--		bt = tags->breserved_tags;
-+		bt = &tags->breserved_tags;
- 		tag_offset = 0;
- 	} else {
--		bt = tags->bitmap_tags;
-+		bt = &tags->bitmap_tags;
- 		tag_offset = tags->nr_reserved_tags;
- 	}
- 
-@@ -153,9 +153,9 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
- 						data->ctx);
- 		tags = blk_mq_tags_from_data(data);
- 		if (data->flags & BLK_MQ_REQ_RESERVED)
--			bt = tags->breserved_tags;
-+			bt = &tags->breserved_tags;
- 		else
--			bt = tags->bitmap_tags;
-+			bt = &tags->bitmap_tags;
- 
- 		/*
- 		 * If destination hw queue is changed, fake wake up on
-@@ -189,10 +189,10 @@ void blk_mq_put_tag(struct blk_mq_tags *tags, struct blk_mq_ctx *ctx,
- 		const int real_tag = tag - tags->nr_reserved_tags;
- 
- 		BUG_ON(real_tag >= tags->nr_tags);
--		sbitmap_queue_clear(tags->bitmap_tags, real_tag, ctx->cpu);
-+		sbitmap_queue_clear(&tags->bitmap_tags, real_tag, ctx->cpu);
- 	} else {
- 		BUG_ON(tag >= tags->nr_reserved_tags);
--		sbitmap_queue_clear(tags->breserved_tags, tag, ctx->cpu);
-+		sbitmap_queue_clear(&tags->breserved_tags, tag, ctx->cpu);
- 	}
- }
- 
-@@ -343,9 +343,9 @@ static void __blk_mq_all_tag_iter(struct blk_mq_tags *tags,
- 	WARN_ON_ONCE(flags & BT_TAG_ITER_RESERVED);
- 
- 	if (tags->nr_reserved_tags)
--		bt_tags_for_each(tags, tags->breserved_tags, fn, priv,
-+		bt_tags_for_each(tags, &tags->breserved_tags, fn, priv,
- 				 flags | BT_TAG_ITER_RESERVED);
--	bt_tags_for_each(tags, tags->bitmap_tags, fn, priv, flags);
-+	bt_tags_for_each(tags, &tags->bitmap_tags, fn, priv, flags);
- }
- 
- /**
-@@ -462,8 +462,8 @@ void blk_mq_queue_tag_busy_iter(struct request_queue *q, busy_iter_fn *fn,
- 			continue;
- 
- 		if (tags->nr_reserved_tags)
--			bt_for_each(hctx, tags->breserved_tags, fn, priv, true);
--		bt_for_each(hctx, tags->bitmap_tags, fn, priv, false);
-+			bt_for_each(hctx, &tags->breserved_tags, fn, priv, true);
-+		bt_for_each(hctx, &tags->bitmap_tags, fn, priv, false);
- 	}
- 	blk_queue_exit(q);
- }
-@@ -495,24 +495,6 @@ int blk_mq_init_bitmaps(struct sbitmap_queue *bitmap_tags,
- 	return -ENOMEM;
- }
- 
--static int blk_mq_init_bitmap_tags(struct blk_mq_tags *tags,
--				   int node, int alloc_policy)
--{
--	int ret;
--
--	ret = blk_mq_init_bitmaps(&tags->__bitmap_tags,
--				  &tags->__breserved_tags,
--				  tags->nr_tags, tags->nr_reserved_tags,
--				  node, alloc_policy);
--	if (ret)
--		return ret;
--
--	tags->bitmap_tags = &tags->__bitmap_tags;
--	tags->breserved_tags = &tags->__breserved_tags;
--
--	return 0;
--}
--
- struct blk_mq_tags *blk_mq_init_tags(unsigned int total_tags,
- 				     unsigned int reserved_tags,
- 				     int node, int alloc_policy)
-@@ -532,7 +514,9 @@ struct blk_mq_tags *blk_mq_init_tags(unsigned int total_tags,
- 	tags->nr_reserved_tags = reserved_tags;
- 	spin_lock_init(&tags->lock);
- 
--	if (blk_mq_init_bitmap_tags(tags, node, alloc_policy) < 0) {
-+	if (blk_mq_init_bitmaps(&tags->bitmap_tags, &tags->breserved_tags,
-+				total_tags, reserved_tags, node,
-+				alloc_policy) < 0) {
- 		kfree(tags);
- 		return NULL;
- 	}
-@@ -541,8 +525,8 @@ struct blk_mq_tags *blk_mq_init_tags(unsigned int total_tags,
- 
- void blk_mq_free_tags(struct blk_mq_tags *tags)
- {
--	sbitmap_queue_free(tags->bitmap_tags);
--	sbitmap_queue_free(tags->breserved_tags);
-+	sbitmap_queue_free(&tags->bitmap_tags);
-+	sbitmap_queue_free(&tags->breserved_tags);
- 	kfree(tags);
- }
- 
-@@ -591,7 +575,7 @@ int blk_mq_tag_update_depth(struct blk_mq_hw_ctx *hctx,
- 		 * Don't need (or can't) update reserved tags here, they
- 		 * remain static and should never need resizing.
- 		 */
--		sbitmap_queue_resize(tags->bitmap_tags,
-+		sbitmap_queue_resize(&tags->bitmap_tags,
- 				tdepth - tags->nr_reserved_tags);
- 	}
- 
-@@ -602,12 +586,12 @@ void blk_mq_tag_resize_shared_sbitmap(struct blk_mq_tag_set *set, unsigned int s
- {
- 	struct blk_mq_tags *tags = set->shared_sbitmap_tags;
- 
--	sbitmap_queue_resize(&tags->__bitmap_tags, size - set->reserved_tags);
-+	sbitmap_queue_resize(&tags->bitmap_tags, size - set->reserved_tags);
- }
- 
- void blk_mq_tag_update_sched_shared_sbitmap(struct request_queue *q)
- {
--	sbitmap_queue_resize(q->shared_sbitmap_tags->bitmap_tags,
-+	sbitmap_queue_resize(&q->shared_sbitmap_tags->bitmap_tags,
- 			     q->nr_requests - q->tag_set->reserved_tags);
- }
- 
-diff --git a/block/blk-mq-tag.h b/block/blk-mq-tag.h
-index e433e39a9cfa..23747ea2bb53 100644
---- a/block/blk-mq-tag.h
-+++ b/block/blk-mq-tag.h
-@@ -11,11 +11,8 @@ struct blk_mq_tags {
- 
- 	atomic_t active_queues;
- 
--	struct sbitmap_queue *bitmap_tags;
--	struct sbitmap_queue *breserved_tags;
--
--	struct sbitmap_queue __bitmap_tags;
--	struct sbitmap_queue __breserved_tags;
-+	struct sbitmap_queue bitmap_tags;
-+	struct sbitmap_queue breserved_tags;
- 
- 	struct request **rqs;
- 	struct request **static_rqs;
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 1bb33a402294..13812b64ed99 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -1062,14 +1062,14 @@ static inline unsigned int queued_to_index(unsigned int queued)
- 
- static bool __blk_mq_get_driver_tag(struct request *rq)
- {
--	struct sbitmap_queue *bt = rq->mq_hctx->tags->bitmap_tags;
-+	struct sbitmap_queue *bt = &rq->mq_hctx->tags->bitmap_tags;
- 	unsigned int tag_offset = rq->mq_hctx->tags->nr_reserved_tags;
- 	int tag;
- 
- 	blk_mq_tag_busy(rq->mq_hctx);
- 
- 	if (blk_mq_tag_is_reserved(rq->mq_hctx->sched_tags, rq->internal_tag)) {
--		bt = rq->mq_hctx->tags->breserved_tags;
-+		bt = &rq->mq_hctx->tags->breserved_tags;
- 		tag_offset = 0;
- 	} else {
- 		if (!hctx_may_queue(rq->mq_hctx, bt))
-@@ -1112,7 +1112,7 @@ static int blk_mq_dispatch_wake(wait_queue_entry_t *wait, unsigned mode,
- 		struct sbitmap_queue *sbq;
- 
- 		list_del_init(&wait->entry);
--		sbq = hctx->tags->bitmap_tags;
-+		sbq = &hctx->tags->bitmap_tags;
- 		atomic_dec(&sbq->ws_active);
- 	}
- 	spin_unlock(&hctx->dispatch_wait_lock);
-@@ -1130,7 +1130,7 @@ static int blk_mq_dispatch_wake(wait_queue_entry_t *wait, unsigned mode,
- static bool blk_mq_mark_tag_wait(struct blk_mq_hw_ctx *hctx,
- 				 struct request *rq)
- {
--	struct sbitmap_queue *sbq = hctx->tags->bitmap_tags;
-+	struct sbitmap_queue *sbq = &hctx->tags->bitmap_tags;
- 	struct wait_queue_head *wq;
- 	wait_queue_entry_t *wait;
- 	bool ret;
-diff --git a/block/kyber-iosched.c b/block/kyber-iosched.c
-index 15a8be57203d..9fb735bf1134 100644
---- a/block/kyber-iosched.c
-+++ b/block/kyber-iosched.c
-@@ -451,11 +451,11 @@ static void kyber_depth_updated(struct blk_mq_hw_ctx *hctx)
- {
- 	struct kyber_queue_data *kqd = hctx->queue->elevator->elevator_data;
- 	struct blk_mq_tags *tags = hctx->sched_tags;
--	unsigned int shift = tags->bitmap_tags->sb.shift;
-+	unsigned int shift = tags->bitmap_tags.sb.shift;
- 
- 	kqd->async_depth = (1U << shift) * KYBER_ASYNC_PERCENT / 100U;
- 
--	sbitmap_queue_min_shallow_depth(tags->bitmap_tags, kqd->async_depth);
-+	sbitmap_queue_min_shallow_depth(&tags->bitmap_tags, kqd->async_depth);
- }
- 
- static int kyber_init_hctx(struct blk_mq_hw_ctx *hctx, unsigned int hctx_idx)
-diff --git a/block/mq-deadline.c b/block/mq-deadline.c
-index 7f3c3932b723..7fd07d00838e 100644
---- a/block/mq-deadline.c
-+++ b/block/mq-deadline.c
-@@ -519,7 +519,7 @@ static void dd_depth_updated(struct blk_mq_hw_ctx *hctx)
- 
- 	dd->async_depth = max(1UL, 3 * q->nr_requests / 4);
- 
--	sbitmap_queue_min_shallow_depth(tags->bitmap_tags, dd->async_depth);
-+	sbitmap_queue_min_shallow_depth(&tags->bitmap_tags, dd->async_depth);
- }
- 
- /* Called by blk_mq_init_hctx() and blk_mq_init_sched(). */
--- 
-2.26.2
-
+Reviewed-by: Mike Christie <michael.christie@oracle.com>
