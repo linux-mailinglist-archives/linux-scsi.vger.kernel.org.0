@@ -2,462 +2,224 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA60409760
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 17:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B57D34096A4
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 16:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242065AbhIMPfG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Sep 2021 11:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241430AbhIMPfC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Sep 2021 11:35:02 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8C3C12511B;
-        Mon, 13 Sep 2021 07:44:53 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id s20so14338110oiw.3;
-        Mon, 13 Sep 2021 07:44:53 -0700 (PDT)
+        id S244143AbhIMPAW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Sep 2021 11:00:22 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:55108 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346943AbhIMO6O (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 13 Sep 2021 10:58:14 -0400
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18DESqOq024407;
+        Mon, 13 Sep 2021 14:56:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=f6RL8a8tukuzwUa+3WGH6W0xO7B8RYXO0O0G2sLhYOE=;
+ b=oWrp8q8ftzlGY1n4Zw4qNre+N5H3Cx1536RunkEZWsPmJ5DrWr+Ujg/FmKvhQziII0LS
+ ugWM2TCpUF3QKt8Vo2zaGnWF0qLm6TWu3jx0E68Gk/0UeruiEiZxY0F+t02i2e/g38qz
+ ZUQ4IiYH+5HQSfLgKsTQCzAhGhoG0jJwNC2ADStdIv1ahfTx4CW9mOHG4zfjVjSRiC55
+ cungu6SVtPmlhqhz7FyPvXi+xboevK434nT/JQ+P2MTBTYaK/8iaTKKrXavGg5qyGspW
+ CbLch9jRsuwrwaF6Ae7cVsCexuMSYyqut3vK8RZG/WYCRI6iz+gCGCBtRXj+BQ2e2xCc dQ== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2020-01-29;
+ bh=f6RL8a8tukuzwUa+3WGH6W0xO7B8RYXO0O0G2sLhYOE=;
+ b=fX19a7J8a6c6buJpZQVyxcdTX1TIh75sW1t+TG/rv+bNiYx+kwAiyEoVAFDF1drSHOAu
+ 0uDJnHw6/t2DCki+91KrvF389Cy4/6tBt0TT36StFzPFxU4w6EQV1r6pJwGFdSMczniz
+ 6haTWiBTjF13+DTjelYqBY0URvjl3CNtHA2tz30nYDeccO/KS4atMRl2VSdGvl+2LxWN
+ dtg81OHHVi2wXyOugVMAmIIjZNNb/Kx7JMPDN0BcuBVdHBzR9tM6MsdHPVVECNL9AY1k
+ 2z0nq7jA6nDdP0wfptmanQWfEH97tz5JB+vABGpAgRrnwF5Tg564BFElkf7elEocqb6s 6A== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3b1h45k27u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Sep 2021 14:56:57 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 18DEuLP0010175;
+        Mon, 13 Sep 2021 14:56:56 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2040.outbound.protection.outlook.com [104.47.57.40])
+        by aserp3020.oracle.com with ESMTP id 3b0m94tthg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Sep 2021 14:56:56 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JWXlyj6yzTQb0dGQl7Wpgs7wa82h2Wy+SoMHY1oX/8cF9JfKMcM0eFdK+rxyx5Z0OZEMBZQAEq7iulF5+hJ5z4LG3w4D3yx7WlNIxYOlHd4KZJ2MMBdeYl77UPGC+ZUG1H/s/e0xu/TFwNm07/rLZCHdhDtmxp1w+Vh/dJ5H/txtvyUPjgI8m6ZgKdFumG+WCEu+TVK1dMv2HiL2HFnwAJJaeiTiC632zVz4lVJea4xevK44jERJDBVJr6ZL92roYaaXKyShE+HL/UfPPqsK1wFW1XgO4j/dS7HoScKqRfYRVIHVeSr5Fart5lQzRfhmDCC9q0vrxGyle4oGEYvVbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=f6RL8a8tukuzwUa+3WGH6W0xO7B8RYXO0O0G2sLhYOE=;
+ b=JKGZYpqJqbH6SPZGZxoHyK1e5qnF9ssPskaAhN4CeoB0yylRMggBMvgKbxj0sBXUkb4z/ZNN6cuPODErd9OuaRIbD+0NniU+0sTX+2bSvRPENsCLs/nWISbPengLg+Zk5dk09tOHWPFjQxzx5JAlqjti+tmpuZbCEjJpbm6S3bvUuNqUc0cfHBiddQigkZGYEcFCCv9Zz7XUaNFcz2MArhbMT1Pbb01hJ8vp1jCkSVXiign3cpfLj17jrkPRQfm2nl9wKF5sIo0sPr6BOexv9KXdcyhyFdVLtG/xDKJrR3kFDjow78ZsKE/BDpzMuyBuNmS6yQ6r+yH/3ej/d6w8Og==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4ZssE+vUwIyYjE+ZXbzCj4JrjaTZeTUUlRj5147I5xM=;
-        b=e2o4rMNjSCp6fvy+9YqISMlqWyzTX9Qco/Js1nfF/s6yKk0bhCp59YYxPF8nLR88ZY
-         yv4oCfciKUaC25RBEwRF2nnvYn8W5w7tKF4Q3JRCI22CfIrH7vhZa01JWoqBgUlKNS9j
-         wu6WO/4fcLcky9zfba3hEmGivYxNaFow23gSwrOb4seLRRw4gIDjNWHg2NsbBNgw+Ry2
-         dls1fPWdyRZP3oTs6Ho7jRV5Ai0wZL8FURmS4tzHaJ0Yo6XYzzzbGhMH6WvpRIyfY6KZ
-         tZHRB0j49Y9NqY0FzcLqQYtrjuZpefM57M3WIj+8m4eyPyVW8loI2JyLnGAIdr/hm+HV
-         4plw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4ZssE+vUwIyYjE+ZXbzCj4JrjaTZeTUUlRj5147I5xM=;
-        b=ahiemSTdsNAvELHQhqoPfhV4Q42o/b34qlxFccEnqqBR0np8swfph/VhMASrl5KmkU
-         xYxWyhnZQxgGwWoX4kS1HlOCD5MRMG+kp5Mzmf0d3xscxtmz52GLSiwRuUnFFZLBEIn5
-         2NJSa8gKFEBbofSN03cLxpWpuqY9dkn5In18BMXHy8NqXIRz/NFBELDBh4YlrfN1h4jd
-         AwGJ6rbDb/Vl22kdNMT7rOlBw+fVL+PBUtjbx1FzlgB9aMQeAvg/B298q9Mcr063zHZa
-         nwJsUWCo+eFt24w5kzwiXgjj1FucyxmGKcfxxusXjADqKQnnC6eMxBTumFmZIVC+cCpU
-         RxqA==
-X-Gm-Message-State: AOAM530dYqwwEDPhoK+ak74E1d/9K74BUgBKwHZsoJ3PK80U0EvemZJo
-        16RIc6YjI5BnYb+IbqpNuF4iUTYMnHI=
-X-Google-Smtp-Source: ABdhPJz0K/fxn1SmbgTkPrTLrWU9W95Uz8xNeQwi+xJTvsODeHK2o0klkAqmErerOoA5lB/2IdRbHw==
-X-Received: by 2002:a54:4389:: with SMTP id u9mr7981663oiv.132.1631544292585;
-        Mon, 13 Sep 2021 07:44:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w9sm1886690oti.35.2021.09.13.07.44.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Sep 2021 07:44:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Avri Altman <avri.altman@wdc.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bean Huo <beanhuo@micron.com>
-References: <20210913133303.10154-1-avri.altman@wdc.com>
- <20210913133303.10154-2-avri.altman@wdc.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v4 1/2] scsi: ufs: Probe for temperature notification
- support
-Message-ID: <e6b6d94a-9399-89e7-d9da-810fb9e179d7@roeck-us.net>
-Date:   Mon, 13 Sep 2021 07:44:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <20210913133303.10154-2-avri.altman@wdc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f6RL8a8tukuzwUa+3WGH6W0xO7B8RYXO0O0G2sLhYOE=;
+ b=LC0en7mHlWv1SW5Uh+QpzQ9cCQHcAMa2dHg4pd/qcc/scf0/IIyor6b0/ICxBrh4Tw6f7O4a57HuT/YS7sZl9Vv6ypwYPJYnjQ8UtPffKYU7ctZYWafbuOfX8v2xg3PyhnIAshCiU2F+xCQhLKBYvLDg2Gngwp7VRE10cBtU/ZE=
+Received: from BL0PR10MB2932.namprd10.prod.outlook.com (2603:10b6:208:30::16)
+ by MN2PR10MB4096.namprd10.prod.outlook.com (2603:10b6:208:115::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.17; Mon, 13 Sep
+ 2021 14:56:54 +0000
+Received: from BL0PR10MB2932.namprd10.prod.outlook.com
+ ([fe80::f5e3:a62d:908c:e976]) by BL0PR10MB2932.namprd10.prod.outlook.com
+ ([fe80::f5e3:a62d:908c:e976%7]) with mapi id 15.20.4500.016; Mon, 13 Sep 2021
+ 14:56:54 +0000
+From:   Himanshu Madhani <himanshu.madhani@oracle.com>
+To:     Li Feng <fengli@smartx.com>
+CC:     Martin Petersen <martin.petersen@oracle.com>,
+        "open list:SCSI TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        "open list:SCSI TARGET SUBSYSTEM" <target-devel@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] scsi: target: Remove unused argument of some functions
+Thread-Topic: [PATCH] scsi: target: Remove unused argument of some functions
+Thread-Index: AQHXqHm1T22SJlgZ4UujJ/ItcGPz8quiDjmA
+Date:   Mon, 13 Sep 2021 14:56:54 +0000
+Message-ID: <A621E579-9D72-4C26-9F40-BB132CCD5A90@oracle.com>
+References: <20210913083045.3670648-1-fengli@smartx.com>
+In-Reply-To: <20210913083045.3670648-1-fengli@smartx.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3608.120.23.2.7)
+authentication-results: smartx.com; dkim=none (message not signed)
+ header.d=none;smartx.com; dmarc=none action=none header.from=oracle.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 78b8a672-d91f-43d7-208e-08d976c6b9d5
+x-ms-traffictypediagnostic: MN2PR10MB4096:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MN2PR10MB40966E986135D40B9A47F622E6D99@MN2PR10MB4096.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:983;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QtL45w2zIhWRZ726VDx2Qdl7T24Fz8W/WdlXBEBZb3k5eBd4HbeTT0f4N0ynhoUb9XcqJf/+Hg0G0/MUzdTGZHW0cAUj06QbD+4dZpCqwdnE4Rj1HtlpDLPsNDYUqz4FTJEEIIKsiC06hNQryV0zQ3pzSnXCSUxyjSuwdr6hh22J2jV+08LUiV4oc4tLxt1PXKWuaCnJnZJTplAycz/4e/EuJPChhtFIwJ5cGnzdeWaFtKVi9Dgb1gevmg2CVqi103Rs0OtDd26bUEgZVVtiy3hmO2KSYR6YQuCGa0+F/LwgPf5nPDIJCP+fect71dVUXNOvDRJx6JSwm8uGuDjQuCrUKf2nnH3Sm0bxcIgrrGVrbN8Vfdm+Tfj+eWw0k3MwGVehszxtEpO7EbftwmuezuClX1B2DAL7ztp9ay2gnZHdju3+jxIePvZ2vAgl6KvmClBk4LPD/tNRD5Ngq62ukq2hexGn5hse4Jd+tij4FAMsTE13+K1URiHz/2xTchMVdpeGLDXj/6WkxG+xpJ7npqIO7f/Mvl9hqKD7rwxn6JDv95Zjn9ptPkIcoLsJJ2LzelahTlXdJEXHw1H6gegt6zONst45ROk2X3+hIxBhW5yf+40lKhFFvM5FTB6AiT20m21XsoiXzXrS0222CabyeK0yg1j9fqv+WJprQBa0TPx+TO5/Yz904sCAaoGWFKrMqyEV8kzuErrFtowdxEtuLO/vVGJ30UD6oNuT53ma9B/5urN6sQsrzwRgXsmYz2ct
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR10MB2932.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(136003)(396003)(346002)(376002)(39860400002)(2906002)(4326008)(316002)(54906003)(86362001)(33656002)(36756003)(6512007)(6486002)(66446008)(64756008)(66946007)(76116006)(91956017)(66556008)(66476007)(44832011)(71200400001)(122000001)(38100700002)(38070700005)(2616005)(478600001)(8936002)(26005)(83380400001)(186003)(6506007)(8676002)(6916009)(53546011)(5660300002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9pw6YTGPeDV1dMaihhpyaP8/JpOh7OLuoNZ9Pdq/2Nw73PuPjUiiNI9WAa/F?=
+ =?us-ascii?Q?QfZfv5amtSG6JIYXa4EDB4c2Ha6CnkcWi7wek5eNgW7rY2iYH5wP4fCdWTJ1?=
+ =?us-ascii?Q?yEoOlI+m4q5/cQ52ecg9PrUAa/tcWziqa6fYlUDTr1zBmhTRuTK0ORDxPuLd?=
+ =?us-ascii?Q?HRGj5caLEhmKu9DSFoayuMs5qhPIjnGP2wsyzHMFjrZ2jWK8tMrTgth5QqBA?=
+ =?us-ascii?Q?bWpgRT+yyIuIA/5siIUdcG6CgZuYJsSWaB+NbLahnGaoyxGH1NV4LF/JP5Ha?=
+ =?us-ascii?Q?AAmw0POdOLE8j0wuq8MUUAEMWLs1Fawyo2QjP89BEqhAGvlw5swaq3jvkUfB?=
+ =?us-ascii?Q?rzNWodDIWNGW4iTEKK7fxQhpwYGzCtl1ZimNlpQf+uiOJpLoGSa1//DXAXEQ?=
+ =?us-ascii?Q?9yKBML/YEiD9HSdl8G7hwH2vlyPlDfSbi6+2uTkuU8TbT1k1j4D39hWaEK2x?=
+ =?us-ascii?Q?diFRrO/Wv7gBBhXjRM028FWCgCOrgfMVtT5Qb5P4sb1DJfgpDQ13Zi8MFXZf?=
+ =?us-ascii?Q?SmBOELr5qStD4PHjuaygfmtGH6IbF6X03OsIyX9o5aMjE88Ih9NNGKUIeI8j?=
+ =?us-ascii?Q?6D48SRnapHLjO7h9+VV63cdw6LXTLvWsiBchYM/TEzBwFAg6+mAPiuSazSdv?=
+ =?us-ascii?Q?oJWP8a/fB7xECJI3qshNY8Jx04LC8nJixVcVdSFqEwklQcvGuFvJCznftmoV?=
+ =?us-ascii?Q?Upwttyl7uDeoTGAFPf2xavyhuVmRDNXGsAC+xDx9FEyLcYS6rJT1M7lyRAlV?=
+ =?us-ascii?Q?MmO45ELZwZCSEF1oRnpBkqGRkoCBpv5pimgbUQzAeMeya4f6KBGu0Q5cFJzZ?=
+ =?us-ascii?Q?zVe1QALgUuT5nQtbvjXTIfN40+MzIgHyCCC6pQNjRvEhc2v4rCbvKbiV6gva?=
+ =?us-ascii?Q?nYoLJyVwYRNG977elw80lhAq6UO8tUW3nYyglBNJ/Y5QcVRHuYz9K2+Q1aCp?=
+ =?us-ascii?Q?9lTUO4S+Cm9CBAc1mbO8bF86mzfGvS3hjITWDCkKUITnyN4pIwZyGnVzkzeT?=
+ =?us-ascii?Q?49Ib/2+MRTicJhoQZ9R+LZ6Std7BuuVchtbaDTe3cPG/o5shFxa5SIp51/0k?=
+ =?us-ascii?Q?UuyfIm07SjlcwG7VTNQtF2dg2dPf8B3nxnQ0Q5mT85yvTJB8MHJe9nprkcJD?=
+ =?us-ascii?Q?OZ4AtYHVR/JQMRJZdxswFOOBuugSK2GfJS/fQ+X0BzL/fJ1J1GgkHrvugqnM?=
+ =?us-ascii?Q?I95RaNMAmC/T5TwClQ1r1VyZuuyNw+tob3mox/PnfhGWr6BnyP5OQJ0jp477?=
+ =?us-ascii?Q?aXw/ohC6TW8pwL+EeSWFKUvML/rd9HMKdW9qDrSTOua53Ktkyl90u1Nx1CdE?=
+ =?us-ascii?Q?1YKR8z9fpjadHXSF+M1sU4rn8UxUr49iFHTcjianVG8kGw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1ABD278BE3566747AFC48D1964CF7AAE@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR10MB2932.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78b8a672-d91f-43d7-208e-08d976c6b9d5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2021 14:56:54.1571
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fBtalyEdMPoUU/qC1PIX4hPvRG4R7m+JXhpsDz+2LaUfwbUy/whlE2nbMvKQ3qsY+xy4MFsEzhgeLki/DnPYHH+9hTt0Wy4LBpY1J85Btpo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4096
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10105 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 malwarescore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2109030001
+ definitions=main-2109130099
+X-Proofpoint-ORIG-GUID: i6gXFZsgwUaFxK5abRL90Vg6cUCmL57Q
+X-Proofpoint-GUID: i6gXFZsgwUaFxK5abRL90Vg6cUCmL57Q
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/13/21 6:33 AM, Avri Altman wrote:
-> Probe the dExtendedUFSFeaturesSupport register for the device's
-> temperature notification support, and if supported, add a hw monitor
-> device.
-> 
-> Signed-off-by: Avri Altman <avri.altman@wdc.com>
+
+
+> On Sep 13, 2021, at 3:30 AM, Li Feng <fengli@smartx.com> wrote:
+>=20
+> The se_cmd is unused in these functions, just remove it.
+> Signed-off-by: Li Feng <fengli@smartx.com>
 > ---
->   drivers/scsi/ufs/Kconfig     |   9 ++
->   drivers/scsi/ufs/Makefile    |   1 +
->   drivers/scsi/ufs/ufs-hwmon.c | 194 +++++++++++++++++++++++++++++++++++
->   drivers/scsi/ufs/ufs.h       |   7 ++
->   drivers/scsi/ufs/ufshcd.c    |  26 +++++
->   drivers/scsi/ufs/ufshcd.h    |  18 ++++
->   6 files changed, 255 insertions(+)
->   create mode 100644 drivers/scsi/ufs/ufs-hwmon.c
-> 
-> diff --git a/drivers/scsi/ufs/Kconfig b/drivers/scsi/ufs/Kconfig
-> index 432df76e6318..565e8aa6319d 100644
-> --- a/drivers/scsi/ufs/Kconfig
-> +++ b/drivers/scsi/ufs/Kconfig
-> @@ -199,3 +199,12 @@ config SCSI_UFS_FAULT_INJECTION
->   	help
->   	  Enable fault injection support in the UFS driver. This makes it easier
->   	  to test the UFS error handler and abort handler.
-> +
-> +config SCSI_UFS_HWMON
-> +	bool "UFS  Temperature Notification"
-> +	depends on SCSI_UFSHCD && HWMON
-> +	help
-> +	  This provides support for UFS hardware monitoring. If enabled,
-> +	  a hardware monitoring device will be created for the UFS device.
-> +
-> +	  If unsure, say N.
-> diff --git a/drivers/scsi/ufs/Makefile b/drivers/scsi/ufs/Makefile
-> index c407da9b5171..966048875b50 100644
-> --- a/drivers/scsi/ufs/Makefile
-> +++ b/drivers/scsi/ufs/Makefile
-> @@ -10,6 +10,7 @@ ufshcd-core-$(CONFIG_SCSI_UFS_BSG)	+= ufs_bsg.o
->   ufshcd-core-$(CONFIG_SCSI_UFS_CRYPTO)	+= ufshcd-crypto.o
->   ufshcd-core-$(CONFIG_SCSI_UFS_HPB)	+= ufshpb.o
->   ufshcd-core-$(CONFIG_SCSI_UFS_FAULT_INJECTION) += ufs-fault-injection.o
-> +ufshcd-core-$(CONFIG_SCSI_UFS_HWMON) += ufs-hwmon.o
->   
->   obj-$(CONFIG_SCSI_UFS_DWC_TC_PCI) += tc-dwc-g210-pci.o ufshcd-dwc.o tc-dwc-g210.o
->   obj-$(CONFIG_SCSI_UFS_DWC_TC_PLATFORM) += tc-dwc-g210-pltfrm.o ufshcd-dwc.o tc-dwc-g210.o
-> diff --git a/drivers/scsi/ufs/ufs-hwmon.c b/drivers/scsi/ufs/ufs-hwmon.c
-> new file mode 100644
-> index 000000000000..390748a9d547
-> --- /dev/null
-> +++ b/drivers/scsi/ufs/ufs-hwmon.c
-> @@ -0,0 +1,194 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * UFS hardware monitoring support
-> + * Copyright (c) 2021, Western Digital Corporation
-> + */
-> +
-> +#include <linux/hwmon.h>
-> +#include <linux/units.h>
-> +
-> +#include "ufshcd.h"
-> +
-> +struct ufs_hwmon_data {
-> +	struct ufs_hba *hba;
-> +	u8 mask;
-> +};
-> +
-> +static bool ufs_read_temp_enable(struct ufs_hba *hba, u8 mask)
-> +{
-> +	u32 ee_mask;
-> +
-> +	if (ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR, QUERY_ATTR_IDN_EE_CONTROL, 0, 0,
-> +			      &ee_mask))
-> +		return false;
+> drivers/target/target_core_xcopy.c | 14 ++++++--------
+> 1 file changed, 6 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_c=
+ore_xcopy.c
+> index d4fe7cb2bd00..6bb20aa9c5bc 100644
+> --- a/drivers/target/target_core_xcopy.c
+> +++ b/drivers/target/target_core_xcopy.c
+> @@ -295,8 +295,7 @@ static int target_xcopy_parse_target_descriptors(stru=
+ct se_cmd *se_cmd,
+> 	return -EINVAL;
+> }
+>=20
+> -static int target_xcopy_parse_segdesc_02(struct se_cmd *se_cmd, struct x=
+copy_op *xop,
+> -					unsigned char *p)
+> +static int target_xcopy_parse_segdesc_02(struct xcopy_op *xop, unsigned =
+char *p)
+> {
+> 	unsigned char *desc =3D p;
+> 	int dc =3D (desc[1] & 0x02);
+> @@ -332,9 +331,9 @@ static int target_xcopy_parse_segdesc_02(struct se_cm=
+d *se_cmd, struct xcopy_op
+> 	return 0;
+> }
+>=20
+> -static int target_xcopy_parse_segment_descriptors(struct se_cmd *se_cmd,
+> -				struct xcopy_op *xop, unsigned char *p,
+> -				unsigned int sdll, sense_reason_t *sense_ret)
+> +static int target_xcopy_parse_segment_descriptors(struct xcopy_op *xop,
+> +				unsigned char *p, unsigned int sdll,
+> +				sense_reason_t *sense_ret)
+> {
+> 	unsigned char *desc =3D p;
+> 	unsigned int start =3D 0;
+> @@ -362,7 +361,7 @@ static int target_xcopy_parse_segment_descriptors(str=
+uct se_cmd *se_cmd,
+> 		 */
+> 		switch (desc[0]) {
+> 		case 0x02:
+> -			rc =3D target_xcopy_parse_segdesc_02(se_cmd, xop, desc);
+> +			rc =3D target_xcopy_parse_segdesc_02(xop, desc);
+> 			if (rc < 0)
+> 				goto out;
+>=20
+> @@ -840,8 +839,7 @@ static sense_reason_t target_parse_xcopy_cmd(struct x=
+copy_op *xop)
+> 	 */
+> 	seg_desc =3D &p[16] + tdll;
+>=20
+> -	rc =3D target_xcopy_parse_segment_descriptors(se_cmd, xop, seg_desc,
+> -						    sdll, &ret);
+> +	rc =3D target_xcopy_parse_segment_descriptors(xop, seg_desc, sdll, &ret=
+);
+> 	if (rc <=3D 0)
+> 		goto out;
+>=20
+> --=20
+> 2.31.1
+>=20
 
-That should probably return the error code from ufshcd_query_attr(). I don't see a good reason
-to ignore it.
+Looks fine.=20
 
-> +
-> +	return (mask & ee_mask & MASK_EE_TOO_HIGH_TEMP) || (mask & ee_mask & MASK_EE_TOO_LOW_TEMP);
-> +}
-> +
-> +static int ufs_get_temp(struct ufs_hba *hba, enum attr_idn idn, long *val)
-> +{
-> +	u32 value;
-> +
-> +	if (ufshcd_query_attr(hba, UPIU_QUERY_OPCODE_READ_ATTR, idn, 0, 0, &value))
-> +		return -EINVAL;
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 
-ufshcd_query_attr() already returns a valid Linux error code. It should be returned
-and not be overwritten. Besides, -EINVAL is wrong in most cases. It is only an acceptable
-error code if parameters passed to ufshcd_query_attr() are wrong, which is surely not
-the case here.
-
-> +
-> +	if (value == 0)
-> +		return -EINVAL;
-
-As mentioned in my other response, this is expected if the sensor is disabled, and thus
-should return -ENODATA.
-
-> +
-> +	*val = ((long)value - 80) * MILLIDEGREE_PER_DEGREE;
-> +	return 0;
-> +}
-> +
-> +static int ufs_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
-> +			  long *val)
-> +{
-> +	struct ufs_hwmon_data *data = dev_get_drvdata(dev);
-> +	struct ufs_hba *hba = data->hba;
-> +	int err = 0;
-> +
-> +	if (type != hwmon_temp)
-> +		return 0;
-> +
-> +	down(&hba->host_sem);
-> +
-> +	if (!ufshcd_is_user_access_allowed(hba)) {
-> +		up(&hba->host_sem);
-> +		return -EBUSY;
-> +	}
-> +
-> +	ufshcd_rpm_get_sync(hba);
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_enable:
-> +		*val = ufs_read_temp_enable(hba, data->mask);
-> +
-> +		break;
-> +	case hwmon_temp_crit:
-> +		err = ufs_get_temp(hba, QUERY_ATTR_IDN_HIGH_TEMP_BOUND, val);
-> +
-> +		break;
-> +	case hwmon_temp_lcrit:
-> +		err = ufs_get_temp(hba, QUERY_ATTR_IDN_LOW_TEMP_BOUND, val);
-> +
-> +		break;
-> +	case hwmon_temp_input:
-> +		err = ufs_get_temp(hba, QUERY_ATTR_IDN_CASE_ROUGH_TEMP, val);
-> +
-> +		break;
-> +	default:
-> +		err = -EOPNOTSUPP;
-> +
-> +		break;
-> +	}
-> +
-> +	ufshcd_rpm_put_sync(hba);
-> +
-> +	up(&hba->host_sem);
-> +
-> +	return err;
-> +}
-> +
-> +static int ufs_hwmon_write(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
-> +			   long val)
-> +{
-> +	struct ufs_hwmon_data *data = dev_get_drvdata(dev);
-> +	struct ufs_hba *hba = data->hba;
-> +	int err = 0;
-> +
-> +	if (attr != hwmon_temp_enable)
-> +		return -EINVAL;
-> +
-> +	if (val != 0 && val != 1)
-> +		return -EINVAL;
-> +
-> +	down(&hba->host_sem);
-> +
-> +	if (!ufshcd_is_user_access_allowed(hba)) {
-> +		up(&hba->host_sem);
-> +		return -EBUSY;
-> +	}
-> +
-> +	ufshcd_rpm_get_sync(hba);
-> +
-> +	if (val == 1)
-> +		err = ufshcd_update_ee_usr_mask(hba, MASK_EE_URGENT_TEMP, 0);
-> +	else
-> +		err = ufshcd_update_ee_usr_mask(hba, 0, MASK_EE_URGENT_TEMP);
-> +
-> +	ufshcd_rpm_put_sync(hba);
-> +
-> +	up(&hba->host_sem);
-> +
-> +	return err;
-> +}
-> +
-> +static umode_t ufs_hwmon_is_visible(const void *_data, enum hwmon_sensor_types type, u32 attr,
-> +				    int channel)
-> +{
-> +	if (type != hwmon_temp)
-> +		return 0;
-> +
-> +	switch (attr) {
-> +	case hwmon_temp_enable:
-> +		return 0644;
-> +	case hwmon_temp_crit:
-> +	case hwmon_temp_lcrit:
-> +	case hwmon_temp_input:
-> +		return 0444;
-> +	default:
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_channel_info *ufs_hwmon_info[] = {
-> +	HWMON_CHANNEL_INFO(temp, HWMON_T_ENABLE | HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_LCRIT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops ufs_hwmon_ops = {
-> +	.is_visible	= ufs_hwmon_is_visible,
-> +	.read		= ufs_hwmon_read,
-> +	.write		= ufs_hwmon_write,
-> +};
-> +
-> +static const struct hwmon_chip_info ufs_hwmon_hba_info = {
-> +	.ops	= &ufs_hwmon_ops,
-> +	.info	= ufs_hwmon_info,
-> +};
-> +
-> +void ufs_hwmon_probe(struct ufs_hba *hba, u8 mask)
-> +{
-> +	struct device *dev = hba->dev;
-> +	struct ufs_hwmon_data *data;
-> +	struct device *hwmon;
-> +
-> +	data = kzalloc(sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return;
-> +
-> +	data->hba = hba;
-> +	data->mask = mask;
-> +
-> +	hwmon = hwmon_device_register_with_info(dev, "ufs", data, &ufs_hwmon_hba_info, NULL);
-> +	if (IS_ERR(hwmon)) {
-> +		dev_warn(dev, "Failed to instantiate hwmon device\n");
-> +		kfree(data);
-> +		return;
-> +	}
-> +
-> +	hba->hwmon_device = hwmon;
-> +}
-> +
-> +void ufs_hwmon_remove(struct ufs_hba *hba)
-> +{
-> +	struct ufs_hwmon_data *data;
-> +
-> +	if (!hba->hwmon_device)
-> +		return;
-> +
-> +	data = dev_get_drvdata(hba->hwmon_device);
-> +	hwmon_device_unregister(hba->hwmon_device);
-> +	hba->hwmon_device = NULL;
-> +	kfree(data);
-> +}
-> diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
-> index 8c6b38b1b142..0bfdca3e648e 100644
-> --- a/drivers/scsi/ufs/ufs.h
-> +++ b/drivers/scsi/ufs/ufs.h
-> @@ -152,6 +152,9 @@ enum attr_idn {
->   	QUERY_ATTR_IDN_PSA_STATE		= 0x15,
->   	QUERY_ATTR_IDN_PSA_DATA_SIZE		= 0x16,
->   	QUERY_ATTR_IDN_REF_CLK_GATING_WAIT_TIME	= 0x17,
-> +	QUERY_ATTR_IDN_CASE_ROUGH_TEMP          = 0x18,
-> +	QUERY_ATTR_IDN_HIGH_TEMP_BOUND          = 0x19,
-> +	QUERY_ATTR_IDN_LOW_TEMP_BOUND           = 0x1A,
->   	QUERY_ATTR_IDN_WB_FLUSH_STATUS	        = 0x1C,
->   	QUERY_ATTR_IDN_AVAIL_WB_BUFF_SIZE       = 0x1D,
->   	QUERY_ATTR_IDN_WB_BUFF_LIFE_TIME_EST    = 0x1E,
-> @@ -338,6 +341,9 @@ enum {
->   
->   /* Possible values for dExtendedUFSFeaturesSupport */
->   enum {
-> +	UFS_DEV_LOW_TEMP_NOTIF		= BIT(4),
-> +	UFS_DEV_HIGH_TEMP_NOTIF		= BIT(5),
-> +	UFS_DEV_EXT_TEMP_NOTIF		= BIT(6),
->   	UFS_DEV_HPB_SUPPORT		= BIT(7),
->   	UFS_DEV_WRITE_BOOSTER_SUP	= BIT(8),
->   };
-> @@ -370,6 +376,7 @@ enum {
->   	MASK_EE_WRITEBOOSTER_EVENT	= BIT(5),
->   	MASK_EE_PERFORMANCE_THROTTLING	= BIT(6),
->   };
-> +#define MASK_EE_URGENT_TEMP (MASK_EE_TOO_HIGH_TEMP | MASK_EE_TOO_LOW_TEMP)
->   
->   /* Background operation status */
->   enum bkops_status {
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 67889d74761c..cb20720c5deb 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -7469,6 +7469,29 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, u8 *desc_buf)
->   	hba->caps &= ~UFSHCD_CAP_WB_EN;
->   }
->   
-> +static void ufshcd_temp_notif_probe(struct ufs_hba *hba, u8 *desc_buf)
-> +{
-> +	struct ufs_dev_info *dev_info = &hba->dev_info;
-> +	u32 ext_ufs_feature;
-> +	u8 mask = 0;
-> +
-> +	if (!(hba->caps & UFSHCD_CAP_TEMP_NOTIF) || dev_info->wspecversion < 0x300)
-> +		return;
-> +
-> +	ext_ufs_feature = get_unaligned_be32(desc_buf + DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
-> +
-> +	if (ext_ufs_feature & UFS_DEV_LOW_TEMP_NOTIF)
-> +		mask |= MASK_EE_TOO_LOW_TEMP;
-> +
-> +	if (ext_ufs_feature & UFS_DEV_HIGH_TEMP_NOTIF)
-> +		mask |= MASK_EE_TOO_HIGH_TEMP;
-> +
-> +	if (mask) {
-> +		ufshcd_enable_ee(hba, mask);
-> +		ufs_hwmon_probe(hba, mask);
-> +	}
-> +}
-> +
->   void ufshcd_fixup_dev_quirks(struct ufs_hba *hba, struct ufs_dev_fix *fixups)
->   {
->   	struct ufs_dev_fix *f;
-> @@ -7564,6 +7587,8 @@ static int ufs_get_device_desc(struct ufs_hba *hba)
->   
->   	ufshcd_wb_probe(hba, desc_buf);
->   
-> +	ufshcd_temp_notif_probe(hba, desc_buf);
-> +
->   	/*
->   	 * ufshcd_read_string_desc returns size of the string
->   	 * reset the error value
-> @@ -9408,6 +9433,7 @@ void ufshcd_remove(struct ufs_hba *hba)
->   {
->   	if (hba->sdev_ufs_device)
->   		ufshcd_rpm_get_sync(hba);
-> +	ufs_hwmon_remove(hba);
->   	ufs_bsg_remove(hba);
->   	ufshpb_remove(hba);
->   	ufs_sysfs_remove_nodes(hba->dev);
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index 4723f27a55d1..798a408d71e5 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -653,6 +653,12 @@ enum ufshcd_caps {
->   	 * in order to exit DeepSleep state.
->   	 */
->   	UFSHCD_CAP_DEEPSLEEP				= 1 << 10,
-> +
-> +	/*
-> +	 * This capability allows the host controller driver to use temperature
-> +	 * notification if it is supported by the UFS device.
-> +	 */
-> +	UFSHCD_CAP_TEMP_NOTIF				= 1 << 11,
->   };
->   
->   struct ufs_hba_variant_params {
-> @@ -789,6 +795,10 @@ struct ufs_hba {
->   	struct scsi_device *sdev_ufs_device;
->   	struct scsi_device *sdev_rpmb;
->   
-> +#ifdef CONFIG_SCSI_UFS_HWMON
-> +	struct device *hwmon_device;
-> +#endif
-> +
->   	enum ufs_dev_pwr_mode curr_dev_pwr_mode;
->   	enum uic_link_state uic_link_state;
->   	/* Desired UFS power management level during runtime PM */
-> @@ -1050,6 +1060,14 @@ static inline u8 ufshcd_wb_get_query_index(struct ufs_hba *hba)
->   	return 0;
->   }
->   
-> +#ifdef CONFIG_SCSI_UFS_HWMON
-> +void ufs_hwmon_probe(struct ufs_hba *hba, u8 mask);
-> +void ufs_hwmon_remove(struct ufs_hba *hba);
-> +#else
-> +static inline void ufs_hwmon_probe(struct ufs_hba *hba, u8 mask) {}
-> +static inline void ufs_hwmon_remove(struct ufs_hba *hba) {}
-> +#endif
-> +
->   #ifdef CONFIG_PM
->   extern int ufshcd_runtime_suspend(struct device *dev);
->   extern int ufshcd_runtime_resume(struct device *dev);
-> 
+--
+Himanshu Madhani	 Oracle Linux Engineering
 
