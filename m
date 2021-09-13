@@ -2,119 +2,147 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A2B408686
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 10:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1191E408792
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 10:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237979AbhIMIcR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Sep 2021 04:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238000AbhIMIcQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Sep 2021 04:32:16 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C133C061766
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Sep 2021 01:31:01 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id n4so5299320plh.9
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Sep 2021 01:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=smartx-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k6I3d4QKUMqIFCVSWNnfeEYQvKn1IjGnWO5CPP3tbKc=;
-        b=TvuLbeIwW1YvhiX08c0wNlQ21TsxKVuLLI+ovDMvnsmMbWjEy+la+dJz6hf6qyDPvE
-         J98VmubaRWJ6pG5ga+bAnNRrOjdxCXTtes+2bMtOvH1itxiNccyH/JERcYEjnvasUEoR
-         3xBKmSbNldjQ0XYpvDaWzTl/lfw2bH8iBNCZziuM3UzrniKEpbtwOgmKF/GOc3/xp+7c
-         bwbrOy9AxhonYgYnfgNkiWVjyYC57Psd38bPR3gVm8t9nHMHA1Y5aBpGTfgY0eikAyxf
-         H5ALMNEzg7OJwFOZC9jtKJzR5CjeSm8vKm9XubyFMa9324CmB8GxNnV1CWmNmJn25Rdv
-         KQNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k6I3d4QKUMqIFCVSWNnfeEYQvKn1IjGnWO5CPP3tbKc=;
-        b=n/z2AOOlJuWBJam2D84yJpYreH+WacNKWisxIp+LKFVechEGpXuFFejUhVIpgNiQI3
-         t5c/J/xfcpvUdeuwGJmIZO+I2K4ZTnKvW3h5P6TOTM4WR8r5y03kpBnzO7E3SiqKKcdN
-         JvzFVsErBO5gHS8GLXzF7lv0VJO4EQ00iP5dk5oCUXg2SVH4JoG3IByXIPGGt/U/uwE3
-         IhX1AWddQjkjsWLGOTl7wJG2myvUMdz+BjBd/8AULgBcEII5MLSf5ui/+f30BxNs5fEy
-         AMxJAkn9XLwIeCHRtCB/D7XcWhQC/MY6mj55sqbqxFXlTeJik4+ngzuMn9ULpJha2vqH
-         VYnw==
-X-Gm-Message-State: AOAM530RSVPJqmpKuN/XcSZO1h4Y5vKHqbS5O7jgeLYBx9bJV9BL7HJy
-        3MEvygZ/8bGDwZvhni4nf23YmaUyhAMNlA==
-X-Google-Smtp-Source: ABdhPJy708a65NoXpk1Fs8oKCw+Q6uhx47rfcqy2ceY930ZlJs+8vq0HJDkCkvNjC2upMmcZbr48Hw==
-X-Received: by 2002:a17:902:b095:b029:12c:de88:7d3b with SMTP id p21-20020a170902b095b029012cde887d3bmr9560829plr.15.1631521860434;
-        Mon, 13 Sep 2021 01:31:00 -0700 (PDT)
-Received: from 64-217.. ([103.97.201.33])
-        by smtp.gmail.com with ESMTPSA id mv1sm5873493pjb.29.2021.09.13.01.30.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Sep 2021 01:30:59 -0700 (PDT)
-From:   Li Feng <fengli@smartx.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org (open list:SCSI TARGET SUBSYSTEM),
-        target-devel@vger.kernel.org (open list:SCSI TARGET SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     Li Feng <fengli@smartx.com>
-Subject: [PATCH] scsi: target: Remove unused argument of some functions
-Date:   Mon, 13 Sep 2021 16:30:45 +0800
-Message-Id: <20210913083045.3670648-1-fengli@smartx.com>
-X-Mailer: git-send-email 2.31.1
+        id S238079AbhIMIyU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Sep 2021 04:54:20 -0400
+Received: from mga05.intel.com ([192.55.52.43]:64327 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238310AbhIMIyT (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 13 Sep 2021 04:54:19 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10105"; a="307164359"
+X-IronPort-AV: E=Sophos;i="5.85,288,1624345200"; 
+   d="scan'208";a="307164359"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2021 01:53:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,288,1624345200"; 
+   d="scan'208";a="543069217"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.174]) ([10.237.72.174])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Sep 2021 01:52:56 -0700
+Subject: Re: [PATCH V3 1/3] scsi: ufs: Fix error handler clear ua deadlock
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <huobean@gmail.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Wei Li <liwei213@huawei.com>, linux-scsi@vger.kernel.org
+References: <20210905095153.6217-1-adrian.hunter@intel.com>
+ <20210905095153.6217-2-adrian.hunter@intel.com>
+ <a12d88b3-8402-34bb-fe97-90b7aa2c2c39@acm.org>
+ <835c5eab-5a7b-269d-7483-227978b80cd7@intel.com>
+ <d9656961-4abb-aff0-e34d-d8082a1f4eaa@acm.org>
+ <e5307bbe-1cda-fdd2-a666-ae57cd90de07@acm.org>
+ <36245674-b179-d25e-84c3-417ef2d85620@intel.com>
+ <9220f68e-dc5e-9520-6e55-2a4d86809b44@acm.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <fae15188-2c1d-b953-f6e4-6e5ac1902b24@intel.com>
+Date:   Mon, 13 Sep 2021 11:53:21 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <9220f68e-dc5e-9520-6e55-2a4d86809b44@acm.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The se_cmd is unused in these functions, just remove it.
-Signed-off-by: Li Feng <fengli@smartx.com>
----
- drivers/target/target_core_xcopy.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+On 13/09/21 6:17 am, Bart Van Assche wrote:
+> On 9/11/21 09:47, Adrian Hunter wrote:
+>> On 8/09/21 1:36 am, Bart Van Assche wrote:
+>>> --- a/drivers/scsi/ufs/ufshcd.c +++ b/drivers/scsi/ufs/ufshcd.c 
+>>> @@ -2707,6 +2707,14 @@ static int ufshcd_queuecommand(struct
+>>> Scsi_Host *host, struct scsi_cmnd *cmd) } fallthrough; case
+>>> UFSHCD_STATE_RESET: +        /* +         * The SCSI error
+>>> handler only starts after all pending commands +         * have
+>>> failed or timed out. Complete commands with +         *
+>>> DID_IMM_RETRY to allow the error handler to start +         * if
+>>> it has been scheduled. +         */ +        set_host_byte(cmd,
+>>> DID_IMM_RETRY); +        cmd->scsi_done(cmd);
+>> 
+>> Setting non-zero return value, in this case "err =
+>> SCSI_MLQUEUE_HOST_BUSY" will anyway cause scsi_dec_host_busy(), so
+>> does this make any difference?
+> 
+> The return value should be changed into 0 since returning
+> SCSI_MLQUEUE_HOST_BUSY is only allowed if cmd->scsi_done(cmd) has not
+> yet been called.
+> 
+> I expect that setting the host byte to DID_IMM_RETRY and calling
+> scsi_done will make a difference, otherwise I wouldn't have suggested
+> this. As explained in my previous email doing that triggers the SCSI> command completion and resubmission paths. Resubmission only happens
+> if the SCSI error handler has not yet been scheduled. The SCSI error
+> handler is scheduled after for all pending commands scsi_done() has
+> been called or a timeout occurred. In other words, setting the host
+> byte to DID_IMM_RETRY and calling scsi_done() makes it possible for
+> the error handler to be scheduled, something that won't happen if
+> ufshcd_queuecommand() systematically returns SCSI_MLQUEUE_HOST_BUSY.
 
-diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
-index d4fe7cb2bd00..6bb20aa9c5bc 100644
---- a/drivers/target/target_core_xcopy.c
-+++ b/drivers/target/target_core_xcopy.c
-@@ -295,8 +295,7 @@ static int target_xcopy_parse_target_descriptors(struct se_cmd *se_cmd,
- 	return -EINVAL;
- }
- 
--static int target_xcopy_parse_segdesc_02(struct se_cmd *se_cmd, struct xcopy_op *xop,
--					unsigned char *p)
-+static int target_xcopy_parse_segdesc_02(struct xcopy_op *xop, unsigned char *p)
- {
- 	unsigned char *desc = p;
- 	int dc = (desc[1] & 0x02);
-@@ -332,9 +331,9 @@ static int target_xcopy_parse_segdesc_02(struct se_cmd *se_cmd, struct xcopy_op
- 	return 0;
- }
- 
--static int target_xcopy_parse_segment_descriptors(struct se_cmd *se_cmd,
--				struct xcopy_op *xop, unsigned char *p,
--				unsigned int sdll, sense_reason_t *sense_ret)
-+static int target_xcopy_parse_segment_descriptors(struct xcopy_op *xop,
-+				unsigned char *p, unsigned int sdll,
-+				sense_reason_t *sense_ret)
- {
- 	unsigned char *desc = p;
- 	unsigned int start = 0;
-@@ -362,7 +361,7 @@ static int target_xcopy_parse_segment_descriptors(struct se_cmd *se_cmd,
- 		 */
- 		switch (desc[0]) {
- 		case 0x02:
--			rc = target_xcopy_parse_segdesc_02(se_cmd, xop, desc);
-+			rc = target_xcopy_parse_segdesc_02(xop, desc);
- 			if (rc < 0)
- 				goto out;
- 
-@@ -840,8 +839,7 @@ static sense_reason_t target_parse_xcopy_cmd(struct xcopy_op *xop)
- 	 */
- 	seg_desc = &p[16] + tdll;
- 
--	rc = target_xcopy_parse_segment_descriptors(se_cmd, xop, seg_desc,
--						    sdll, &ret);
-+	rc = target_xcopy_parse_segment_descriptors(xop, seg_desc, sdll, &ret);
- 	if (rc <= 0)
- 		goto out;
- 
--- 
-2.31.1
+Not getting it, sorry. :-(
+
+The error handler sets UFSHCD_STATE_RESET and never leaves the state
+as UFSHCD_STATE_RESET, so that case does not need to start the error
+handler because it is already running.
+
+The error handler is always scheduled after setting 
+UFSHCD_STATE_EH_SCHEDULED_FATAL.
+
+scsi_dec_host_busy() is called for any non-zero return value like
+SCSI_MLQUEUE_HOST_BUSY:
+
+i.e.
+	reason = scsi_dispatch_cmd(cmd);
+	if (reason) {
+		scsi_set_blocked(cmd, reason);
+		ret = BLK_STS_RESOURCE;
+		goto out_dec_host_busy;
+	}
+
+	return BLK_STS_OK;
+
+out_dec_host_busy:
+	scsi_dec_host_busy(shost, cmd);
+
+And that will wake the error handler:
+
+static void scsi_dec_host_busy(struct Scsi_Host *shost, struct scsi_cmnd *cmd)
+{
+	unsigned long flags;
+
+	rcu_read_lock();
+	__clear_bit(SCMD_STATE_INFLIGHT, &cmd->state);
+	if (unlikely(scsi_host_in_recovery(shost))) {
+		spin_lock_irqsave(shost->host_lock, flags);
+		if (shost->host_failed || shost->host_eh_scheduled)
+			scsi_eh_wakeup(shost);
+		spin_unlock_irqrestore(shost->host_lock, flags);
+	}
+	rcu_read_unlock();
+}
+
+Note that scsi_host_queue_ready() won't let any requests through
+when scsi_host_in_recovery(), so the potential problem is with
+requests that have already been successfully submitted to the
+UFS driver but have not completed. The change you suggest
+does not help with that.
+
+That seems like another problem with the patch 
+"scsi: ufs: Synchronize SCSI and UFS error handling".
+
+
+> In the latter case the block layer timer is reset over and over
+> again. See also the blk_mq_start_request() in scsi_queue_rq(). One
+> could wonder whether this is really what the SCSI core should do if a
+> SCSI LLD keeps returning the SCSI_MLQUEUE_HOST_BUSY status code ...
+> 
+> Bart.
 
