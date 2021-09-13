@@ -2,105 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D64840828F
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 03:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D50408316
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 05:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236850AbhIMBdK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 12 Sep 2021 21:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236696AbhIMBdJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 12 Sep 2021 21:33:09 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FED7C06175F
-        for <linux-scsi@vger.kernel.org>; Sun, 12 Sep 2021 18:31:55 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id m11so10017003ioo.6
-        for <linux-scsi@vger.kernel.org>; Sun, 12 Sep 2021 18:31:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+kyp/8+7o4cYohhCh7JybYvQipvAXNJ+txtYiR7pHBo=;
-        b=sCG70fbmksVvNRK7g/FauezlzXfFxzghiGUp33z8JtPX4kKEAEh0fgRjFKToM80pRP
-         Bfy3JupfiT+nWntm0dvoQ7BPrNmIFZiIewFQOIL/XBRTldv1SjGygAjKwKhWQEbaTpmw
-         kHG0Z+vqSWndhfBRZOnSj1rtfd74Kif8jRCUwI7Pk3fC28wqEXm29J1TH+heEGHunQJG
-         CAtkyr3jVNgxMCYrMKRyk5SOhvazUpKxJkhzNN/XgoXnDc+7AksPFoqlmGg6BHtgphNX
-         w4tewQ80faljVmkxFjlqx2Bzq74sDw38I12H2KmMxRXguWmhgmElt83/g//DwHJwlk0f
-         kmvQ==
+        id S238150AbhIMDS3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 12 Sep 2021 23:18:29 -0400
+Received: from mail-pj1-f48.google.com ([209.85.216.48]:38431 "EHLO
+        mail-pj1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237966AbhIMDS2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 12 Sep 2021 23:18:28 -0400
+Received: by mail-pj1-f48.google.com with SMTP id g13-20020a17090a3c8d00b00196286963b9so5545920pjc.3
+        for <linux-scsi@vger.kernel.org>; Sun, 12 Sep 2021 20:17:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=+kyp/8+7o4cYohhCh7JybYvQipvAXNJ+txtYiR7pHBo=;
-        b=wnKMsuDPYXROVWjAVpmdYGB72UZh6rHR3RgKaxQMRiGy46jR/g88e554XkK2cQvFLk
-         sXkdxQ1RtbumXj9x2WQtHoQolQ0qzTQLwHNieYzOBVyTWlcjeyJrV+j6onbEFhJWcGG+
-         oRxG9JQjkdCFJ83U2dv5yyDaVYfAMwLZrzAMetABF8qiuqS0JoAeVHR7nDAIH8qVZrZM
-         v0Sx9Uk6nMkgtifAsBOqNtwcXYNTt53GxoA+A8RALtUklTgSFu58VwPEoRpMgZeL+quM
-         vVhkJV2e1eqOvUR04evhjc4P7LKFLC0zWWPIUr+6emXqUjCpnwwEQkIpBLyY7ea3G7Ec
-         UqDA==
-X-Gm-Message-State: AOAM531mGXPgVXRPgINARchOQZFcFBpQNCB6q56ZGoLTog6+mqZlkQGz
-        d73Phhw4u0SKW0NM0eIXmQTIhA==
-X-Google-Smtp-Source: ABdhPJxDePcclxUCP9q85rRO9Sr/7jL4B6ykhXiVvjNRch9X9FGhgaPz27H5hxnRzgksTMhlZl7N2w==
-X-Received: by 2002:a05:6638:4195:: with SMTP id az21mr7516413jab.40.1631496714435;
-        Sun, 12 Sep 2021 18:31:54 -0700 (PDT)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id x16sm1393590ile.63.2021.09.12.18.31.53
+        bh=c1ikd4edlpq2QwCDJTRRbeN3HGkVl/2mT+PegDQRok4=;
+        b=wu6hJxilz4DomQ6ojxX57GmswRTP8GEF0wwE4mUdVZEqTflk8uooFNhJfHRCf6CE6a
+         OUSzDvkLXhp6c7K2eij3qSrE/QbZXvZXqDx0UBF5r4ayaj1uQWPQO3fYPb6ug9nMXQvK
+         rM1JfCEwhJKOlPaai6c5VWtIPPN7M6wzrQ3muUJVgq2rzheuXNAOuyTvinL5q55ArJHe
+         Lwv1ycJDEN2FfyqRdGBePFB4BOCaBmwwHJMwA9yB/c4eI7AqOHEEoNZ0FCm03Q+7bIC6
+         OukLBDkMVV/tvBTRllKVzoo5U63kEQrjqbKAMcwqas9IPS+ZoufhjNMiJMx6IHp98ahQ
+         6+7g==
+X-Gm-Message-State: AOAM531OJn/gd5S1j4td0eHGVKNa4U5VNQTnqZKZykPArfzF54FLHJUJ
+        hu/M7VUyOYB/faVkB3DwHok=
+X-Google-Smtp-Source: ABdhPJzsCuDe37pEPhkbP0CC764mij9sIFAfOmqYGw5HZ7bDFOURHmaeywr5SxJofN0pis/wDOaLXg==
+X-Received: by 2002:a17:90a:c58b:: with SMTP id l11mr10339252pjt.134.1631503033438;
+        Sun, 12 Sep 2021 20:17:13 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:559e:5ce1:19a:4ed6? ([2601:647:4000:d7:559e:5ce1:19a:4ed6])
+        by smtp.gmail.com with UTF8SMTPSA id fr17sm4823221pjb.17.2021.09.12.20.17.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Sep 2021 18:31:54 -0700 (PDT)
-Subject: Re: [PATCH] blk-mq: avoid to iterate over stale request
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        luojiaxing <luojiaxing@huawei.com>
-References: <20210906065003.439019-1-ming.lei@redhat.com>
- <YT6o3Lt8II2ZIOlf@T590>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <63550f2f-a6d2-f74f-d637-9b4d1d8a0fc8@kernel.dk>
-Date:   Sun, 12 Sep 2021 19:31:51 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 12 Sep 2021 20:17:12 -0700 (PDT)
+Message-ID: <9220f68e-dc5e-9520-6e55-2a4d86809b44@acm.org>
+Date:   Sun, 12 Sep 2021 20:17:10 -0700
 MIME-Version: 1.0
-In-Reply-To: <YT6o3Lt8II2ZIOlf@T590>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.0.1
+Subject: Re: [PATCH V3 1/3] scsi: ufs: Fix error handler clear ua deadlock
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <huobean@gmail.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Wei Li <liwei213@huawei.com>, linux-scsi@vger.kernel.org
+References: <20210905095153.6217-1-adrian.hunter@intel.com>
+ <20210905095153.6217-2-adrian.hunter@intel.com>
+ <a12d88b3-8402-34bb-fe97-90b7aa2c2c39@acm.org>
+ <835c5eab-5a7b-269d-7483-227978b80cd7@intel.com>
+ <d9656961-4abb-aff0-e34d-d8082a1f4eaa@acm.org>
+ <e5307bbe-1cda-fdd2-a666-ae57cd90de07@acm.org>
+ <36245674-b179-d25e-84c3-417ef2d85620@intel.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <36245674-b179-d25e-84c3-417ef2d85620@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/12/21 7:26 PM, Ming Lei wrote:
-> On Mon, Sep 06, 2021 at 02:50:03PM +0800, Ming Lei wrote:
->> blk-mq can't run allocating driver tag and updating ->rqs[tag]
->> atomically, meantime blk-mq doesn't clear ->rqs[tag] after the driver
->> tag is released.
->>
->> So there is chance to iterating over one stale request just after the
->> tag is allocated and before updating ->rqs[tag].
->>
->> scsi_host_busy_iter() calls scsi_host_check_in_flight() to count scsi
->> in-flight requests after scsi host is blocked, so no new scsi command can
->> be marked as SCMD_STATE_INFLIGHT. However, driver tag allocation still can
->> be run by blk-mq core. One request is marked as SCMD_STATE_INFLIGHT,
->> but this request may have been kept in another slot of ->rqs[], meantime
->> the slot can be allocated out but ->rqs[] isn't updated yet. Then this
->> in-flight request is counted twice as SCMD_STATE_INFLIGHT. This way causes
->> trouble in handling scsi error.
->>
->> Fixes the issue by not iterating over stale request.
->>
->> Cc: linux-scsi@vger.kernel.org
->> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
->> Reported-by: luojiaxing <luojiaxing@huawei.com>
->> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+On 9/11/21 09:47, Adrian Hunter wrote:
+> On 8/09/21 1:36 am, Bart Van Assche wrote:
+>> --- a/drivers/scsi/ufs/ufshcd.c
+>> +++ b/drivers/scsi/ufs/ufshcd.c
+>> @@ -2707,6 +2707,14 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+>>           }
+>>           fallthrough;
+>>       case UFSHCD_STATE_RESET:
+>> +        /*
+>> +         * The SCSI error handler only starts after all pending commands
+>> +         * have failed or timed out. Complete commands with
+>> +         * DID_IMM_RETRY to allow the error handler to start
+>> +         * if it has been scheduled.
+>> +         */
+>> +        set_host_byte(cmd, DID_IMM_RETRY);
+>> +        cmd->scsi_done(cmd);
 > 
-> Hello Jens,
-> 
-> luojiaxiang has verified that this patch fixes his issue, any chance to
-> merge it?
+> Setting non-zero return value, in this case "err = SCSI_MLQUEUE_HOST_BUSY"
+> will anyway cause scsi_dec_host_busy(), so does this make any difference?
 
-I'll queue it up for 5.15-rc2, thanks.
+The return value should be changed into 0 since returning 
+SCSI_MLQUEUE_HOST_BUSY is only allowed if cmd->scsi_done(cmd) has not 
+yet been called.
 
--- 
-Jens Axboe
+I expect that setting the host byte to DID_IMM_RETRY and calling 
+scsi_done will make a difference, otherwise I wouldn't have suggested 
+this. As explained in my previous email doing that triggers the SCSI 
+command completion and resubmission paths. Resubmission only happens if 
+the SCSI error handler has not yet been scheduled. The SCSI error 
+handler is scheduled after for all pending commands scsi_done() has been 
+called or a timeout occurred. In other words, setting the host byte to 
+DID_IMM_RETRY and calling scsi_done() makes it possible for the error 
+handler to be scheduled, something that won't happen if 
+ufshcd_queuecommand() systematically returns SCSI_MLQUEUE_HOST_BUSY. In 
+the latter case the block layer timer is reset over and over again. See 
+also the blk_mq_start_request() in scsi_queue_rq(). One could wonder 
+whether this is really what the SCSI core should do if a SCSI LLD keeps 
+returning the SCSI_MLQUEUE_HOST_BUSY status code ...
 
+Bart.
