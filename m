@@ -2,98 +2,152 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C82840973C
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 17:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A21409519
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 16:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245009AbhIMP1g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Sep 2021 11:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245118AbhIMP13 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Sep 2021 11:27:29 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803B1C0F976B;
-        Mon, 13 Sep 2021 07:24:32 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id a20-20020a0568300b9400b0051b8ca82dfcso13524078otv.3;
-        Mon, 13 Sep 2021 07:24:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Cc3rfqH5qwQXfY+9743ExBqMLbOukLsqMfSk7T1TjH8=;
-        b=ctacHN8t8zTfoxyXUZTopSmEK0Jayf7mBV/9AielDiwbwEv+8uoLJOsK1D6E5P/R8y
-         LwItjjhdJ/cLEF3jYMzxsTKo9BwSYs23FV+bDh8egrKd8RIKFj153I/m0tIa0qvwWwbS
-         4AMc0+yr2y/qSVXrwWcCJED7v7U/ICrFzOPK99OpJEc9dCMKO6g6zmJhRHIwRvL/c/Nh
-         6CKJL4H553g6s5f/UW4LutcrgJc9KJRPKMqR+p4jntw9tV9QJPVOfaHQH30ztfPPQjw7
-         dGGEBxCUZIWFZg9AZ4JGF7eDdsESzEn1mnSjnXP5n9sO4J1Eytb8fCm68Hly2k9pDjwf
-         N96g==
+        id S1346125AbhIMOhd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Sep 2021 10:37:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53652 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347851AbhIMOff (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 13 Sep 2021 10:35:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1631543658;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZfryJxpK5ypx39qR3xTFVVXtpOzhn2v4T4s5MYbdHC0=;
+        b=dvNIRC3523oN5Xffx5GXLuVd6k/tEiEOAKVmgi/3ggmSnDnSeRVVWWQs9VUUX1DmvuZzKk
+        KyMuzwNQe03PGrySqT7hj7LFVhZXIjyEJ/1Zl6VZ66iOxU1t8mwrSp5boUqv4qnbNkNou5
+        5hlpijiIzYp6M5krBlCs7LGW+h7VeKQ=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-486-y2uUXr-SNACKcS0j0YQC8g-1; Mon, 13 Sep 2021 10:34:18 -0400
+X-MC-Unique: y2uUXr-SNACKcS0j0YQC8g-1
+Received: by mail-lf1-f70.google.com with SMTP id g9-20020a0565123b8900b003f33a027130so1091709lfv.18
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Sep 2021 07:34:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Cc3rfqH5qwQXfY+9743ExBqMLbOukLsqMfSk7T1TjH8=;
-        b=So6BYJTiUlHlbQ6pdsfdfkq6zBsEQ/2ZPalgb1etXkFxdYwskx0sysXWCog5z8VvZz
-         SDnVj7Y0g++OnMUPcevZaJEW7FACtCmNRi4MOGiUmOhUuYfTYE3jWpNpR0YtaIgTi0D+
-         5nLEOzcqoTAtSxy44FcR7j0iWyR940Jq8oZQCyQsX7KLiQRX4K1Ipt9DCzT/jwgwBaRT
-         2j22RiISiTlStY1YauHydqma7E7ClXoM96wK68X/vzIZ3vuVoANC0fwDvGTQ00p6O3+U
-         1+lJIPYs2cY98GEasOALz+iGWdXXRdesztgIrNHGcairXl51KXdzcCPu71UCevmQQ/YJ
-         rt0g==
-X-Gm-Message-State: AOAM532ms7Sa5ZCRyOzGy0hOoRRpCEf7A/hU8ocbMgrROIlV5j1QDolT
-        PIjjcjz6/thgrO1jT/tsfqU=
-X-Google-Smtp-Source: ABdhPJwb69CpSnJYBsHnp6aF1xDUvHRgwn45BpM3beAg0GbsMNcq0qqyENIqW8Ea8BXRSR5zE8/Qtw==
-X-Received: by 2002:a9d:63cf:: with SMTP id e15mr9946401otl.172.1631543071900;
-        Mon, 13 Sep 2021 07:24:31 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v5sm1869559oos.17.2021.09.13.07.24.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Sep 2021 07:24:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3 1/2] scsi: ufs: Probe for temperature notification
- support
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bean Huo <beanhuo@micron.com>
-References: <20210912131919.12962-1-avri.altman@wdc.com>
- <20210912131919.12962-2-avri.altman@wdc.com>
- <8abe6364-9240-bcaf-c17f-1703243170cb@roeck-us.net>
- <DM6PR04MB65754D1CF6B4769E6CECDB5DFCD99@DM6PR04MB6575.namprd04.prod.outlook.com>
- <d28e37db-44bb-75f8-d479-dcb106fe146d@roeck-us.net>
- <DM6PR04MB657565612A342272B2160A72FCD99@DM6PR04MB6575.namprd04.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <bbe45ecf-853f-77f7-9094-ded8c59075f4@roeck-us.net>
-Date:   Mon, 13 Sep 2021 07:24:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZfryJxpK5ypx39qR3xTFVVXtpOzhn2v4T4s5MYbdHC0=;
+        b=Ir9TMY+SELEU7SJGnJOqMCK6NWGYBHIKhn/LYaZuRxZTP8G09Fa1FbdGt2kB5tDAYq
+         5EPfvPrnf2qiui7fZbwqBAgiKnn+CVVABD/K7VRLz6pHe7/QbAtuMPdOCfXDTcLLMvyx
+         tnQRrOuYVh1/NcV9+63970nYiBGSctZHKxtiOhWxPKz8l85LWwDj/Xu0S4wW8sMX/J+O
+         XIQzDYwt/3dQvvRj3n35A8I6J9kKx2adzyBi3YXpeyZ3i4l8ywrc27iya7qwZfQMIaG5
+         rmt+R3Yj1NpMD7UszlcHGDJJwsJZfHev7UnpLtGc3pnPsCArITgZUgMfc44JP9MjSAOo
+         eYfg==
+X-Gm-Message-State: AOAM5325ZAwMz4w6phweKh+Wyp2Og9OKBR/paWWp34CneXjOIi6za6Rk
+        Fw7LM4qXeZY7xiM7BsIM0q/u2S4r0ypzWGyxi5VeYyu9Ydggd63PyatZPPlqivVmXemC7uhut4H
+        KWpClQFiZMPaeioY3zOcy/S9+RzC5+s+FMC/Rdw==
+X-Received: by 2002:a2e:8496:: with SMTP id b22mr10580072ljh.496.1631543655364;
+        Mon, 13 Sep 2021 07:34:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx5SXCQw8y9VkHHfq5++HMmDEHwpKWfarOYoyKiBkbH/mHk7DKQN7bm1Klq5kHtrFKCMkY+wbutOm0v72aYRO0=
+X-Received: by 2002:a2e:8496:: with SMTP id b22mr10580054ljh.496.1631543655145;
+ Mon, 13 Sep 2021 07:34:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <DM6PR04MB657565612A342272B2160A72FCD99@DM6PR04MB6575.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210903152430.244937-1-nitesh@redhat.com>
+In-Reply-To: <20210903152430.244937-1-nitesh@redhat.com>
+From:   Nitesh Lal <nilal@redhat.com>
+Date:   Mon, 13 Sep 2021 10:34:03 -0400
+Message-ID: <CAFki+L=9Hw-2EONFEX6b7k6iRX_yLx1zcS+NmWsDSuBWg8w-Qw@mail.gmail.com>
+Subject: Re: [PATCH v6 00/14] genirq: Cleanup the abuse of irq_set_affinity_hint()
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, ajit.khaparde@broadcom.com,
+        sriharsha.basavapatna@broadcom.com, somnath.kotur@broadcom.com,
+        huangguangbin2@huawei.com, huangdaode@huawei.com,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Alex Belits <abelits@marvell.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, rostedt@goodmis.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ingo Molnar <mingo@kernel.org>, jbrandeb@kernel.org,
+        akpm@linuxfoundation.org, sfr@canb.auug.org.au,
+        stephen@networkplumber.org, rppt@linux.vnet.ibm.com,
+        chris.friesen@windriver.com, Marc Zyngier <maz@kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>, pjwaskiewicz@gmail.com,
+        Stefan Assmann <sassmann@redhat.com>,
+        Tomas Henzl <thenzl@redhat.com>, james.smart@broadcom.com,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        Ken Cox <jkc@redhat.com>, faisal.latif@intel.com,
+        shiraz.saleem@intel.com, tariqt@nvidia.com,
+        Alaa Hleihel <ahleihel@redhat.com>,
+        Kamal Heib <kheib@redhat.com>, borisp@nvidia.com,
+        saeedm@nvidia.com,
+        "Nikolova, Tatyana E" <tatyana.e.nikolova@intel.com>,
+        "Ismail, Mustafa" <mustafa.ismail@intel.com>,
+        Al Stone <ahs3@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
+        bjorn.andersson@linaro.org, chunkuang.hu@kernel.org,
+        yongqiang.niu@mediatek.com, baolin.wang7@gmail.com,
+        Petr Oros <poros@redhat.com>, Ming Lei <minlei@redhat.com>,
+        Ewan Milne <emilne@redhat.com>, jejb@linux.ibm.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        kabel@kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>, kashyap.desai@broadcom.com,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        shivasharan.srikanteshwara@broadcom.com,
+        sathya.prakash@broadcom.com,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        suganath-prabu.subramani@broadcom.com, ley.foon.tan@intel.com,
+        jbrunet@baylibre.com, johannes@sipsolutions.net,
+        snelson@pensando.io, lewis.hanly@microchip.com, benve@cisco.com,
+        _govind@gmx.com, jassisinghbrar@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/13/21 12:49 AM, Avri Altman wrote:
->>>> The "enable" attribute only makes sense if it can be used to actually
->>>> enable or disable a specific sensor, and is not tied to limit
->>>> attributes but to the actual sensor values.
->>> See explanation above.
->>>    Will make it writable as well.
->>>
->>
->> That only makes sense if the information is passed to the chip. What is going to
->> happen if the user writes 0 into the attribute ?
-> Will turn off the temperature exception bits, so that Tcase is no longer valid,
-> and the device will always return Tcase = 0.
-> 
+On Fri, Sep 3, 2021 at 11:25 AM Nitesh Narayan Lal <nitesh@redhat.com> wrote:
+>
+> The drivers currently rely on irq_set_affinity_hint() to either set the
+> affinity_hint that is consumed by the userspace and/or to enforce a custom
+> affinity.
+>
+> irq_set_affinity_hint() as the name suggests is originally introduced to
+> only set the affinity_hint to help the userspace in guiding the interrupts
+> and not the affinity itself. However, since the commit
+>
+>         e2e64a932556 "genirq: Set initial affinity in irq_set_affinity_hint()"
 
-Ok. Then attempts to read the temperature should return -ENODATA, not -EINVAL,
-if Tcase == 0.
+[...]
 
-Guenter
+>
+> Nitesh Narayan Lal (13):
+>   iavf: Use irq_update_affinity_hint
+>   i40e: Use irq_update_affinity_hint
+>   scsi: megaraid_sas: Use irq_set_affinity_and_hint
+>   scsi: mpt3sas: Use irq_set_affinity_and_hint
+>   RDMA/irdma: Use irq_update_affinity_hint
+>   enic: Use irq_update_affinity_hint
+>   be2net: Use irq_update_affinity_hint
+>   ixgbe: Use irq_update_affinity_hint
+>   mailbox: Use irq_update_affinity_hint
+>   scsi: lpfc: Use irq_set_affinity
+>   hinic: Use irq_set_affinity_and_hint
+>   net/mlx5: Use irq_set_affinity_and_hint
+>   net/mlx4: Use irq_update_affinity_hint
+>
+> Thomas Gleixner (1):
+>   genirq: Provide new interfaces for affinity hints
+>
+
+Any suggestions on what should be the next steps here? Unfortunately, I haven't
+been able to get any reviews on the following two patches:
+  be2net: Use irq_update_affinity_hint
+  hinic: Use irq_set_affinity_and_hint
+
+One option would be to proceed with the remaining patches and I can try
+posting these two again when I post patches for the remaining drivers?
+
+-- 
+Thanks
+Nitesh
+
