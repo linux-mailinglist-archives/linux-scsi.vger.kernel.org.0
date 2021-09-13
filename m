@@ -2,81 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 078B6409BA4
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 20:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8347D409DF8
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Sep 2021 22:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346154AbhIMSDI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Sep 2021 14:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238698AbhIMSDH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Sep 2021 14:03:07 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAA2C061574
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Sep 2021 11:01:52 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id b7so13279760iob.4
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Sep 2021 11:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=PQU0nmNX+F18a0ek2xsOeDnbjwCpDM8C7D7Yd5t88ZQ=;
-        b=e/vAliEgRFTjqn05/nxf8a+tVz7kDd2lPA/BZ00Fvx02sH7UqF1dC8I1e53yHwfZa2
-         RkB6xz1lmad5gwIEW3ZeludvkJKk1gFkWw+MTOJAH3upbEJ/tILhqvjd6LwqqeHwocyj
-         k6TliHtU7eQNKLOzzw4i+I0042zSsc30CzxhRq1Sl+znGmLTWOcJ5r7EIv3fULRba7hx
-         MTF2vzq6RsRl/6pAN8VBZKNEAmjs+a6jFlAu7f2IcbaZUPUbUbRJk5tKy4D1H57v3/Uv
-         LC1OVkaK3zDO5YBYSIKhGL/MyUFggKOWuJqERd8WWDUzdMghMdkJ6fmrOEtVpoZRolAh
-         oa0Q==
+        id S242829AbhIMUM5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Sep 2021 16:12:57 -0400
+Received: from mail-pg1-f172.google.com ([209.85.215.172]:44867 "EHLO
+        mail-pg1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236133AbhIMUM4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Sep 2021 16:12:56 -0400
+Received: by mail-pg1-f172.google.com with SMTP id s11so10484074pgr.11
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Sep 2021 13:11:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=PQU0nmNX+F18a0ek2xsOeDnbjwCpDM8C7D7Yd5t88ZQ=;
-        b=a2mIqSbBJjBjPQR48eyTJeyCHjCt0QbCVQHhQAFMIyviIcvmZQ6ZC+Tc4h8e5l/cLp
-         ecXfGbEPvEYqr1JSXNdXLHf9J+goqfCLCwcM20GYPHXW3mYhSZ3Q+E08AaS4YMu6rUOL
-         scG5lpc5sG51DcYdKG7EKirM06YJIIivXBtx1H+N/XXL2NZmCnVMEtgW8AYfondISYSG
-         vmC8Oq77tcjpDC6goen/u76KtHVLm20Hth6pJpHkxbf8lSK5dQ0lUCw59JmTvG7kZALA
-         hrKou8ETaiB91MpkEXxqXMMpeMZw8yfnG2HYY+hJNtCWAVEi2DPsy/54xMvjIeEzK17D
-         p0YQ==
-X-Gm-Message-State: AOAM533bA5YRTu5pcctlw0vrH7xFE9UMP4Bw2kLMLmBMHSVnkdrotFhT
-        l/EzqpJXITPCsIG3OaCSZRkM1ypqVcjKBvwBLgU=
-X-Google-Smtp-Source: ABdhPJx+0ZFODP4Ne8heKy3otYOxE1nxL3swgyZFKeXUAtqWx/KHbL36QmF5MuNG0zF736ZdYuOZngfcc+zT3MvKCEs=
-X-Received: by 2002:a6b:24d:: with SMTP id 74mr10315457ioc.134.1631556111375;
- Mon, 13 Sep 2021 11:01:51 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=a/tDI3p0kw7mfaWCLDqmsc+iw42KOmO2CcWEJs4JPpo=;
+        b=1B12bHhotadqOaizrcigW6PSBOE+FA/rJ/HFU4mVJmBwEiT6h5abjGhPGXl139dYRY
+         7jX7lhqa6FUtg1QwWdboCyk0XaJPvuwYCTaqpaWY4ZUgqWWM3Mq5xij5ubqXMPnZrOed
+         A0w8wZYLw53Ny7df2MIfI1Uaa+IiBJgyU/8oGfwk/zdAKuFoyguyWQHYZDPmfTY1FjRH
+         dgx7juSWWLfHkhWOES1imMHfRo39O1EAoqkSbLEDJEPxhDGFR28hG87guyDZW63gP2hC
+         5XaGCmzEvPzsmuaVnxWsVblcA4l/8UR9r8K8XwshwL086YP+eQjz5v8vn+QFMHwMo4eW
+         JsHg==
+X-Gm-Message-State: AOAM532OQW8Lm47WnUYZ41uo5WkudZCYWdx7UuKigzdqizJIdXmY7/K+
+        Fhln9LBOHGuyP2qow1Jw1oVB9NNwgPU=
+X-Google-Smtp-Source: ABdhPJz1Y/2mSla3J07pjf6blcS9E/4dqu1+t65VBeYd9mqOW2c+eW7rDfZfQdhGWioBZXnbZtxJjw==
+X-Received: by 2002:a63:b218:: with SMTP id x24mr12498053pge.335.1631563899737;
+        Mon, 13 Sep 2021 13:11:39 -0700 (PDT)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:6765:113f:d2d7:def9])
+        by smtp.gmail.com with ESMTPSA id j5sm7582598pjv.56.2021.09.13.13.11.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Sep 2021 13:11:39 -0700 (PDT)
+Subject: Re: [PATCH V3 1/3] scsi: ufs: Fix error handler clear ua deadlock
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <huobean@gmail.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Wei Li <liwei213@huawei.com>, linux-scsi@vger.kernel.org
+References: <20210905095153.6217-1-adrian.hunter@intel.com>
+ <20210905095153.6217-2-adrian.hunter@intel.com>
+ <a12d88b3-8402-34bb-fe97-90b7aa2c2c39@acm.org>
+ <835c5eab-5a7b-269d-7483-227978b80cd7@intel.com>
+ <d9656961-4abb-aff0-e34d-d8082a1f4eaa@acm.org>
+ <e5307bbe-1cda-fdd2-a666-ae57cd90de07@acm.org>
+ <36245674-b179-d25e-84c3-417ef2d85620@intel.com>
+ <9220f68e-dc5e-9520-6e55-2a4d86809b44@acm.org>
+ <fae15188-2c1d-b953-f6e4-6e5ac1902b24@intel.com>
+ <2997f7f9-d136-4bad-6490-5e19abccba00@acm.org>
+ <cad73161-f124-e764-964f-3c205aaca2d9@intel.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <2a43c750-ec15-2ac9-b899-00ed911addd8@acm.org>
+Date:   Mon, 13 Sep 2021 13:11:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Received: by 2002:a6b:f818:0:0:0:0:0 with HTTP; Mon, 13 Sep 2021 11:01:50
- -0700 (PDT)
-Reply-To: barristerdesmondwilliams971@gmail.com
-From:   Barrister Desmond William <heeryooo123@gmail.com>
-Date:   Mon, 13 Sep 2021 11:01:50 -0700
-Message-ID: <CAHT1wpuV64v6Xs56BHxdu8HXUYeCiZp76+f70_MDTEryM5sT8g@mail.gmail.com>
-Subject: HOW ARE YOU?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <cad73161-f124-e764-964f-3c205aaca2d9@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings,
+On 9/13/21 10:13 AM, Adrian Hunter wrote:
+> SCSI_MLQUEUE_HOST_BUSY causes scsi_host_busy() to decrement by calling
+> scsi_dec_host_busy() as described above, so the request is not being
+> counted in that condition anymore.
 
- Please do accept my apologies if my mail does not meet your personal
-ethics, I want to introduce myself and this business opportunity to
-you. My name is Hon Barrister   Desmond  Williams   , a personal
-attorney to my late client. I wish to know if we can work together.
+Let's take a step back. My understanding is that the deadlock is caused by
+the combination of:
+* SCSI command processing being blocked because of the state
+   UFSHCD_STATE_EH_SCHEDULED_FATAL.
+* The sdev_ufs_device and/or sdev_rpmb request queues are frozen
+   (blk_mq_freeze_queue() has started).
+* A REQUEST SENSE command being scheduled from inside the error handler
+   (ufshcd_clear_ua_wlun()).
 
-I would like you to stand as the next of kin to my late client who has
-an account valued 4.5million United States dollars deposited with the
-bank, he died without any registered next of kin and as such the funds
-now have an open beneficiary mandate. The board of directors of his
-Bank adopted a resolution and I was mandated to provide his  next of
-kin for the payment of this money or forfeit the money to the Bank as
-an abandoned property.
+Is this a theoretical concern or something that has been observed on a test
+setup?
 
-Fortunately, It's very easy for me, even as I am able to certify an
-attestation certification on your name to make you become his official
-next of kin. If you are interested, do let me know so that I can give
-you comprehensive details on what we are to do.
+If this has been observed on a test setup, was the error handler scheduled
+(ufshcd_err_handler())?
 
-I urgently hope to get your response as soon as possible.  Reply back
-to my email . barristerdesmondwilliams971@gmail.com  for  more details
-Thanks
-Barrister
+I don't see how SCSI command processing could get stuck indefinitely since
+it is guaranteed that the UFS error handler will get scheduled and also that
+the UFS error handler will change ufshcd_state from
+UFSHCD_STATE_EH_SCHEDULED_FATAL into another state?
+
+What am I missing?
+
+Thanks,
+
+Bart.
