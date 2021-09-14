@@ -2,34 +2,34 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2BD40AC13
+	by mail.lfdr.de (Postfix) with ESMTP id ACEBD40AC14
 	for <lists+linux-scsi@lfdr.de>; Tue, 14 Sep 2021 12:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbhINK5K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Sep 2021 06:57:10 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:42330 "EHLO mta-01.yadro.com"
+        id S231963AbhINK5L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Sep 2021 06:57:11 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:42346 "EHLO mta-01.yadro.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231667AbhINK5G (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 14 Sep 2021 06:57:06 -0400
+        id S231732AbhINK5H (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 14 Sep 2021 06:57:07 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id B725B41EC6;
+        by mta-01.yadro.com (Postfix) with ESMTP id C85A941E83;
         Tue, 14 Sep 2021 10:55:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
-        :x-mailer:message-id:date:date:subject:subject:from:from
-        :received:received:received; s=mta-01; t=1631616947; x=
-        1633431348; bh=dzF86nFJKr+WsWfK/sjWMAEgztPwEFGz6YY3um8OFYg=; b=A
-        VU+lDXMSdOCTxSlVMLqfi02Xt/WBenpw4bXso4y5nIl+VmutC8poX5TYRO/gNw15
-        JlU1rsONOPD9ehd6R8CTxp4qYgdnkLrOiUCeZucX92Wn6bcAd+TukaaZsHcMneTe
-        hPe+7OkRiF0qAM01BG1CDNT1N0N24hhZH3FudPO5FI=
+        :references:in-reply-to:x-mailer:message-id:date:date:subject
+        :subject:from:from:received:received:received; s=mta-01; t=
+        1631616947; x=1633431348; bh=3uof/WYmN8pkogEl14wt0VHVbH++rlYsqbL
+        vT+pPh+U=; b=EshRlj22/tXAXW+WiQz3zdpYbykbbips2HgoRt+UzF9m2bAfTn2
+        YtAqGFIyWOZYu5e87Q0iP7O/vQmUzIHm6mI5XSgoIwCouZ2U0HZhoRNAeg0Oq4P/
+        TfjwaIYdHgKwMyy+l9ngvEuV2G0xTnUgP8R+PYgBYG7gHN8qw9DDT/uI=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id i_MqmQepmaCx; Tue, 14 Sep 2021 13:55:47 +0300 (MSK)
+        with ESMTP id qytEVc-o97Xg; Tue, 14 Sep 2021 13:55:47 +0300 (MSK)
 Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id A06FE41E83;
+        by mta-01.yadro.com (Postfix) with ESMTPS id DD93141E95;
         Tue, 14 Sep 2021 13:55:47 +0300 (MSK)
 Received: from NB-591.corp.yadro.com (10.199.0.9) by T-EXCH-04.corp.yadro.com
  (172.17.100.104) with Microsoft SMTP Server (version=TLS1_2,
@@ -41,10 +41,12 @@ To:     Martin Petersen <martin.petersen@oracle.com>,
 CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
         James Smart <james.smart@broadcom.com>,
         Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [PATCH 0/3] efct fixes & improvements
-Date:   Tue, 14 Sep 2021 13:55:36 +0300
-Message-ID: <20210914105539.6942-1-d.bogdanov@yadro.com>
+Subject: [PATCH 1/3] scsi: efct: add state in nport sm trace printout
+Date:   Tue, 14 Sep 2021 13:55:37 +0300
+Message-ID: <20210914105539.6942-2-d.bogdanov@yadro.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210914105539.6942-1-d.bogdanov@yadro.com>
+References: <20210914105539.6942-1-d.bogdanov@yadro.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -55,22 +57,26 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patchset contains fixes of some isues that were found during
-evaluation of Emulex HBA as a target.
+Similar to other state machine traces and to make debug easier add the
+state name to nport sm trace printout.
 
-This patchset is intended for scsi-queue.
+Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
+---
+ drivers/scsi/elx/libefc/efc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Dmitry Bogdanov (3):
-  scsi: efct: add state in nport sm trace printout
-  scsi: efct: fix nport free
-  scsi: efct: decrease area under spinlock
-
- drivers/scsi/elx/efct/efct_scsi.c  | 3 +--
- drivers/scsi/elx/libefc/efc.h      | 2 +-
- drivers/scsi/elx/libefc/efc_cmds.c | 7 ++++++-
- drivers/scsi/elx/libefc/efclib.h   | 1 +
- 4 files changed, 9 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/scsi/elx/libefc/efc.h b/drivers/scsi/elx/libefc/efc.h
+index 927016283f41..468ff3cc9c00 100644
+--- a/drivers/scsi/elx/libefc/efc.h
++++ b/drivers/scsi/elx/libefc/efc.h
+@@ -47,6 +47,6 @@ enum efc_scsi_del_target_reason {
+ 
+ #define nport_sm_trace(nport) \
+ 	efc_log_debug(nport->efc, \
+-		"[%s] %-20s\n", nport->display_name, efc_sm_event_name(evt)) \
++		"[%s]  %-20s %-20s\n", nport->display_name, __func__, efc_sm_event_name(evt)) \
+ 
+ #endif /* __EFC_H__ */
 -- 
 2.25.1
 
