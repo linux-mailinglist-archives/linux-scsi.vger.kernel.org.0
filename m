@@ -2,212 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9F440C732
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Sep 2021 16:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9380A40C7A5
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Sep 2021 16:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234460AbhIOOSy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 15 Sep 2021 10:18:54 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:54282 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233745AbhIOOSy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 15 Sep 2021 10:18:54 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 0BBFB42BCC;
-        Wed, 15 Sep 2021 14:17:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-type:content-type:content-transfer-encoding:mime-version
-        :x-mailer:message-id:date:date:subject:subject:from:from
-        :received:received:received; s=mta-01; t=1631715452; x=
-        1633529853; bh=HdCsj2c6KqBs5fy8A/SX5DI/OrxZcXjAFA5mTXct77M=; b=q
-        y1rGt8Bpi7g2Cq4BwJo/lJZgYM/Y3RHNqk4OTyR1W088dNwzHnfi54DFE+HKRQvD
-        L4zH+uSD2BBR3rdUU8NdWmQ/t9TmsJrEczHQfbBLimDgaHaG7WhO3igcRppl53LI
-        B+QiK8xqbU+Ikd2cjnK0WtO9jiMk6oNMsVW0bUvnzE=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Vw_SsP0I9kEw; Wed, 15 Sep 2021 17:17:32 +0300 (MSK)
-Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 8552442AD7;
-        Wed, 15 Sep 2021 17:17:32 +0300 (MSK)
-Received: from NB-591.corp.yadro.com (10.199.0.185) by
- T-EXCH-04.corp.yadro.com (172.17.100.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Wed, 15 Sep 2021 17:17:31 +0300
-From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
-To:     Martin Petersen <martin.petersen@oracle.com>,
-        <target-devel@vger.kernel.org>
-CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
-        Konstantin Shelekhin <k.shelekhin@yadro.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>
-Subject: [PATCH v3] target: core: remove from tmr_list at lun unlink
-Date:   Wed, 15 Sep 2021 17:17:19 +0300
-Message-ID: <20210915141719.1484-1-d.bogdanov@yadro.com>
-X-Mailer: git-send-email 2.25.1
+        id S237929AbhIOOpS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 15 Sep 2021 10:45:18 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25320 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233745AbhIOOpR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 15 Sep 2021 10:45:17 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 18FE5HbC004203;
+        Wed, 15 Sep 2021 10:43:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=l+meP3L7Ql8c7cvN0ZfGxY0u5WK20CC0RpmhP7EEcKg=;
+ b=VDOoq8tA3RPP0GvXh1SpOYq2DBmu5CvHtD2FAW86QQ0Xg+z22Rb88ZJWQl9hk8/EJI4X
+ 5bikarRpemDfV+WUShgznvoNX9hzerI0CO9gBR0GIXw9pD3KzFrfXnzyCb2mUGOV3zab
+ zEpMssHF6vtu9I5tRx8+EuyuIkwr8CxoFN0KutHq0Q5I7W2YN4IAzVMMdrKFitbfw1SW
+ bnLNlnG1eHXSrtQFoXfurIXwJEUvIKrI2iGXU1GBBTm50jRZjc/uuHEWplg1r1Lkx4U7
+ 2Rlc6kOv3axSBFI3O+egbXnq4q7v+FFya191KNOd0rlIF5TaCjTufa5SMMtMSof59OAm nA== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3b3j9p1706-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Sep 2021 10:43:56 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18FEXnLW013088;
+        Wed, 15 Sep 2021 14:43:55 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma03dal.us.ibm.com with ESMTP id 3b0m3c01f0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Sep 2021 14:43:55 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18FEhsja40698316
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Sep 2021 14:43:54 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 70D937806E;
+        Wed, 15 Sep 2021 14:43:54 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B44527805F;
+        Wed, 15 Sep 2021 14:43:53 +0000 (GMT)
+Received: from jarvis.lan (unknown [9.211.54.195])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 15 Sep 2021 14:43:53 +0000 (GMT)
+Message-ID: <0912982133a254770a27b780cd2c5771739ced3b.camel@linux.ibm.com>
+Subject: Re: [PATCH V3 1/1] scsi/ses: Saw "Failed to get diagnostic page 0x1"
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     wenxiong@linux.vnet.ibm.com
+Cc:     linux-scsi@vger.kernel.org, brking1@linux.vnet.ibm.com,
+        martin.petersen@oracle.com, wenxiong@us.ibm.com
+Date:   Wed, 15 Sep 2021 10:43:52 -0400
+In-Reply-To: <1631711048-6177-1-git-send-email-wenxiong@linux.vnet.ibm.com>
+References: <1631711048-6177-1-git-send-email-wenxiong@linux.vnet.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.199.0.185]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-04.corp.yadro.com (172.17.100.104)
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: P4c8GCf1shIcklWC6Oz-K4EdfeHHREP-
+X-Proofpoint-ORIG-GUID: P4c8GCf1shIcklWC6Oz-K4EdfeHHREP-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.687,Hydra:6.0.235,FMLib:17.0.607.475
+ definitions=2020-10-13_15,2020-10-13_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 spamscore=0
+ adultscore=0 impostorscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109150087
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Currently TMF commands are removed from de_device.dev_tmf_list at
-the very end of se_cmd lifecycle. But se_lun unlinks from se_cmd
-up on a command status (response) is queued in transport layer.
-It means that LUN and backend device can be deleted meantime and at
-the moment of repsonse completion a panic is occured:
+On Wed, 2021-09-15 at 08:04 -0500, wenxiong@linux.vnet.ibm.com wrote:
+> From: Wen Xiong <wenxiong@linux.vnet.ibm.com>
+> 
+> Setting scsi logging level with error=3, we saw some errors from
+> enclosues:
+> 
+> [108017.360833] ses 0:0:9:0: tag#641 Done: NEEDS_RETRY Result:
+> hostbyte=DID_ERROR driverbyte=DRIVER_OK cmd_age=0s
+> [108017.360838] ses 0:0:9:0: tag#641 CDB: Receive Diagnostic 1c 01 01
+> 00 20 00
+> [108017.427778] ses 0:0:9:0: Power-on or device reset occurred
+> [108017.427784] ses 0:0:9:0: tag#641 Done: SUCCESS Result:
+> hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
+> [108017.427788] ses 0:0:9:0: tag#641 CDB: Receive Diagnostic 1c 01 01
+> 00 20 00
+> [108017.427791] ses 0:0:9:0: tag#641 Sense Key : Unit Attention
+> [current]
+> [108017.427793] ses 0:0:9:0: tag#641 Add. Sense: Bus device reset
+> function occurred
+> [108017.427801] ses 0:0:9:0: Failed to get diagnostic page 0x1
+> [108017.427804] ses 0:0:9:0: Failed to bind enclosure -19
+> [108017.427895] ses 0:0:10:0: Attached Enclosure device
+> [108017.427942] ses 0:0:10:0: Attached scsi generic sg18 type 13
+> 
+> As Martin's suggestion, the patch checks to retry on NOT_READY as
+> well as
+> UNIT_ATTENTION with ASC 0x29.
 
-target_tmr_work()
-	cmd->se_tfo->queue_tm_rsp(cmd); // send abort_rsp to a wire
-	transport_lun_remove_cmd(cmd) // unlink se_cmd from se_lun
-- // - // - // -
-<<<--- lun remove
-<<<--- core backend device remove
-- // - // - // -
-qlt_handle_abts_completion()
-  tfo->free_mcmd()
-    transport_generic_free_cmd()
-      target_put_sess_cmd()
-        core_tmr_release_req() {
-          if (dev) { // backend device, can not be null
-            spin_lock_irqsave(&dev->se_tmr_lock, flags); //<<<--- CRASH
+This looks fine to me.  I think the reason expecting_cc_ua doesn't work
+for you is that you're getting > 1 reset per command.  expecting_cc_ua
+automatically resets after eating the first unit attention.
 
-Call Trace:
-NIP [c000000000e1683c] _raw_spin_lock_irqsave+0x2c/0xc0
-LR [c00800000e433338] core_tmr_release_req+0x40/0xa0 [target_core_mod]
-Call Trace:
-(unreliable)
-0x0
-target_put_sess_cmd+0x2a0/0x370 [target_core_mod]
-transport_generic_free_cmd+0x6c/0x1b0 [target_core_mod]
-tcm_qla2xxx_complete_mcmd+0x28/0x50 [tcm_qla2xxx]
-process_one_work+0x2c4/0x5c0
-worker_thread+0x88/0x690
+Reviewed-by: James Bottomley <jejb@linux.ibm.com>
 
-For FC protocol it is a race condition, but for iSCSI protocol it is
-easyly reproduced by manual sending iSCSI commands:
-- Send some SCSI sommand
-- Send Abort of that command over iSCSI
-- Remove LUN on target
-- Send next iSCSI command to acknowledge the Abort_Response
-- target panics
+James
 
-There is no sense to keep the command in tmr_list until response
-completion, so move the removal from tmr_list from the response
-completion to the response queueing when lun is unlinked.
-Move the removal from state list too as it is a subject to the same
-race condition.
-
-Fixes: c66ac9db8d4a ("[SCSI] target: Add LIO target core v4.0.0-rc6")
-Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
-Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
-
----
-v3:
- remove iscsi fix as not related to the issue
- avoid double removal from tmr_list
-v2:
- fix stuck in tmr list in error case
-
-The issue exists from the very begining.
-I uploaded a scapy script that helps to reproduce the issue at
-https://gist.github.com/logost/cb93df41dd2432454324449b390403c4
----
- drivers/target/target_core_tmr.c       | 10 +--------
- drivers/target/target_core_transport.c | 30 ++++++++++++++++++++------
- 2 files changed, 24 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/target/target_core_tmr.c b/drivers/target/target_core_tmr.c
-index e7fcbc09f9db..84ae2fe456ec 100644
---- a/drivers/target/target_core_tmr.c
-+++ b/drivers/target/target_core_tmr.c
-@@ -50,15 +50,6 @@ EXPORT_SYMBOL(core_tmr_alloc_req);
- 
- void core_tmr_release_req(struct se_tmr_req *tmr)
- {
--	struct se_device *dev = tmr->tmr_dev;
--	unsigned long flags;
--
--	if (dev) {
--		spin_lock_irqsave(&dev->se_tmr_lock, flags);
--		list_del_init(&tmr->tmr_list);
--		spin_unlock_irqrestore(&dev->se_tmr_lock, flags);
--	}
--
- 	kfree(tmr);
- }
- 
-@@ -234,6 +225,7 @@ static void core_tmr_drain_tmr_list(
- 		}
- 
- 		list_move_tail(&tmr_p->tmr_list, &drain_tmr_list);
-+		tmr_p->tmr_dev = NULL;
- 	}
- 	spin_unlock_irqrestore(&dev->se_tmr_lock, flags);
- 
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index 14c6f2bb1b01..e60abd230e90 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -676,6 +676,21 @@ static void target_remove_from_state_list(struct se_cmd *cmd)
- 	spin_unlock_irqrestore(&dev->queues[cmd->cpuid].lock, flags);
- }
- 
-+static void target_remove_from_tmr_list(struct se_cmd *cmd)
-+{
-+	struct se_device *dev = NULL;
-+	unsigned long flags;
-+
-+	if (cmd->se_cmd_flags & SCF_SCSI_TMR_CDB)
-+		dev = cmd->se_tmr_req->tmr_dev;
-+
-+	if (dev) {
-+		spin_lock_irqsave(&dev->se_tmr_lock, flags);
-+		if (cmd->se_tmr_req->tmr_dev)
-+			list_del_init(&cmd->se_tmr_req->tmr_list);
-+		spin_unlock_irqrestore(&dev->se_tmr_lock, flags);
-+	}
-+}
- /*
-  * This function is called by the target core after the target core has
-  * finished processing a SCSI command or SCSI TMF. Both the regular command
-@@ -687,13 +702,6 @@ static int transport_cmd_check_stop_to_fabric(struct se_cmd *cmd)
- {
- 	unsigned long flags;
- 
--	target_remove_from_state_list(cmd);
--
--	/*
--	 * Clear struct se_cmd->se_lun before the handoff to FE.
--	 */
--	cmd->se_lun = NULL;
--
- 	spin_lock_irqsave(&cmd->t_state_lock, flags);
- 	/*
- 	 * Determine if frontend context caller is requesting the stopping of
-@@ -728,8 +736,16 @@ static void transport_lun_remove_cmd(struct se_cmd *cmd)
- 	if (!lun)
- 		return;
- 
-+	target_remove_from_state_list(cmd);
-+	target_remove_from_tmr_list(cmd);
-+
- 	if (cmpxchg(&cmd->lun_ref_active, true, false))
- 		percpu_ref_put(&lun->lun_ref);
-+
-+	/*
-+	 * Clear struct se_cmd->se_lun before the handoff to FE.
-+	 */
-+	cmd->se_lun = NULL;
- }
- 
- static void target_complete_failure_work(struct work_struct *work)
--- 
-2.25.1
 
