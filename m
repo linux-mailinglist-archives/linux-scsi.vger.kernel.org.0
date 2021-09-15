@@ -2,152 +2,176 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 457CB40CC3A
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Sep 2021 20:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7326440CF91
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Sep 2021 00:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbhIOSBh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 15 Sep 2021 14:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbhIOSB1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Sep 2021 14:01:27 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93EB9C061793;
-        Wed, 15 Sep 2021 11:00:06 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id d207-20020a1c1dd8000000b00307e2d1ec1aso2647782wmd.5;
-        Wed, 15 Sep 2021 11:00:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=edZuonNncjeUnTwsHSKjKHYwLFmD/HrFs5tvhk4V4a4=;
-        b=XBkl/47M1CLbqUV3veXEzxntT+w3FS90QYKEFSktpDBPaGTfj4t21XMhVz+VJLLS/d
-         JlqVfeLQ2J57gRu0vsGqg/NvNH7MPUQ5tgxk1IoWtLiO6MYaKuhNIT2bUYw0noCgR3vm
-         BcSukQhLkc20Oxajv4ipfGZO5AS6OZI5p4HyMaJXqnoEaNSdG5pswHvNGmNk0k96Drwq
-         NqI6KSdXs0YBgC/iUk36UFGomTrdcXaCLqgxNhYqcIUw2SF3n4qGLCSIRIqjOXqHKPUF
-         yjYWWngZg1DOgI+nkBnQk1luXISVx/AQdpvBl4Zg3Vds6uucU6keeX8eCZ8o6QNww8fy
-         G01A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=edZuonNncjeUnTwsHSKjKHYwLFmD/HrFs5tvhk4V4a4=;
-        b=RpHFecgS0LTyqkV9peHTrVDH0vbuSREoNBM1pOuteF3uPq8rCa3IKTIDieMxr4VqPQ
-         jDAa4mqDljCzCV+juw286oqMc9cbGUuAjdJJgXg2SQlHXWc0kEkWwS5tiRNGSnyr0zCV
-         jtgg14Pd558Ggt8moRoTzTBWcT23dyeWanVPi44SqTtWbxY/sZcxICR8d565uUq9kwKI
-         nyndLO8uw7jKOdCgJLqRZVh9/OL/H/DfOy3rBOoTbV+qaNDBym4YFmkcKMtVqk5W74mx
-         rPHDFOhaiXLKt9EFjTeJLyvlbNtSf+4HxLtm0SnenaWr/o0bqSkStyk7KTNR76TXabSi
-         2LrA==
-X-Gm-Message-State: AOAM532ffAv0TBgCczvHJkdWyR14oBgLqBUWDPcuVFl/KnCiMFOCrn3/
-        eEqaPSx6xo7ovx21oicjVz4=
-X-Google-Smtp-Source: ABdhPJzoZPUq2AAXcCDIHR7t8gydOaL3wnFf30sEzAWPXgsPw8amZ1d+SzbJbsy6347cQrlcnZ+FeA==
-X-Received: by 2002:a1c:2541:: with SMTP id l62mr1029570wml.1.1631728805195;
-        Wed, 15 Sep 2021 11:00:05 -0700 (PDT)
-Received: from [192.168.178.40] (ipbcc061e7.dynamic.kabel-deutschland.de. [188.192.97.231])
-        by smtp.gmail.com with ESMTPSA id v191sm598726wme.36.2021.09.15.11.00.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Sep 2021 11:00:04 -0700 (PDT)
-Subject: Re: [PATCH v5 1/7] target: core: add common tpg/enable attribute
-To:     Dmitry Bogdanov <d.bogdanov@yadro.com>,
-        Martin Petersen <martin.petersen@oracle.com>,
-        target-devel@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org, linux@yadro.com,
-        Nilesh Javali <njavali@marvell.com>,
-        Chris Boot <bootc@bootc.net>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Michael Cyr <mikecyr@linux.ibm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Roman Bolshakov <r.bolshakov@yadro.com>
-References: <20210910084133.17956-1-d.bogdanov@yadro.com>
- <20210910084133.17956-2-d.bogdanov@yadro.com>
-From:   Bodo Stroesser <bostroesser@gmail.com>
-Message-ID: <39eadb0e-6f25-6a72-e69d-64d55328f6f7@gmail.com>
-Date:   Wed, 15 Sep 2021 20:00:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S233067AbhIOWmg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 15 Sep 2021 18:42:36 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:36528 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232890AbhIOWma (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 15 Sep 2021 18:42:30 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 4918A2041CE;
+        Thu, 16 Sep 2021 00:33:06 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VDm9bNcAv3Dr; Thu, 16 Sep 2021 00:32:58 +0200 (CEST)
+Received: from xtwo70.bingwo.ca (host-45-78-207-107.dyn.295.ca [45.78.207.107])
+        by smtp.infotech.no (Postfix) with ESMTPA id 8599B204143;
+        Thu, 16 Sep 2021 00:32:57 +0200 (CEST)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
+        Damien.LeMoal@wdc.com
+Subject: [PATCH v20 00/46] sg: add v4 interface
+Date:   Wed, 15 Sep 2021 18:32:19 -0400
+Message-Id: <20210915223305.256429-1-dgilbert@interlog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210910084133.17956-2-d.bogdanov@yadro.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10.09.21 10:41, Dmitry Bogdanov wrote:
-> Many fabric modules provide their own implementation of enable
-> attribute in tpg.
-> The change provides a way to remove code duplication in the fabric
-> modules and automatically add "enable" attribute if a fabric module has
-> an implementation of fabric_enable_tpg() ops.
-> 
-> Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
-> Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
-> ---
->   drivers/target/target_core_configfs.c        |  1 +
->   drivers/target/target_core_fabric_configfs.c | 78 +++++++++++++++++++-
->   include/target/target_core_base.h            |  1 +
->   include/target/target_core_fabric.h          |  1 +
->   4 files changed, 79 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
-> index 102ec644bc8a..3b9e50c1ccef 100644
-> --- a/drivers/target/target_core_configfs.c
-> +++ b/drivers/target/target_core_configfs.c
-> @@ -490,6 +490,7 @@ void target_unregister_template(const struct target_core_fabric_ops *fo)
->   			 * fabric driver unload of TFO->module to proceed.
->   			 */
->   			rcu_barrier();
-> +			kfree(t->tf_tpg_base_cit.ct_attrs);
->   			kfree(t);
->   			return;
->   		}
-> diff --git a/drivers/target/target_core_fabric_configfs.c b/drivers/target/target_core_fabric_configfs.c
-> index fc7edc04ee09..0b65de9f2df1 100644
-> --- a/drivers/target/target_core_fabric_configfs.c
-> +++ b/drivers/target/target_core_fabric_configfs.c
-> @@ -815,8 +815,76 @@ static struct configfs_item_operations target_fabric_tpg_base_item_ops = {
->   	.release		= target_fabric_tpg_release,
->   };
->   
-> -TF_CIT_SETUP_DRV(tpg_base, &target_fabric_tpg_base_item_ops, NULL);
-> +static ssize_t target_fabric_tpg_base_enable_show(struct config_item *item,
-> +						  char *page)
-> +{
-> +	return sysfs_emit(page, "%d\n", to_tpg(item)->enabled);
-> +}
-> +
-> +static ssize_t target_fabric_tpg_base_enable_store(struct config_item *item,
-> +						   const char *page,
-> +						   size_t count)
-> +{
-> +	struct se_portal_group *se_tpg = to_tpg(item);
-> +	int ret;
-> +	bool op;
-> +
-> +	ret = strtobool(page, &op);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (se_tpg->enabled == op)
-> +		return count;
+This patchset is the first stage of a two stage rewrite of the scsi
+generic (sg) driver. The main goal of the first stage is to introduce
+the sg v4 interface that uses 'struct sg_io_v4' as well as keeping and
+modernizing the sg v3 interface (based on 'struct sg_io_hdr'). The
+async interface formerly requiring the use of write() and read()
+system calls now have ioctl(SG_IOSUBMIT) and ioctl(SG_IORECEIVE)
+replacements. The sg v4 interface is not new, it has been used by
+the bsg driver since it was introduced to the kernel around 15
+years ago.
 
-Sorry for jumping in lately.
+For documentation see either url:
+    https://sg.danny.cz/sg/sg_v40.html
+    https://doug-gilbert.github.io/sg_v40.html
 
-Just one nit:
-In case someone tries to enable or disable the same tpg a second time,
-with the change we always do nothing and return count (--> OK).
+This driver has been tested with utilities found at:
+    https://github.com/doug-gilbert/sg3_utils
+specifically sgh_dd found under the testing directory. The new
+statistics gathering facility can be tested with either sgstat
+or 'tapestat -g' using the author's clone of the sysstat package:
+    https://github.com/doug-gilbert/sysstat
 
-I just checked iscsi and qla2xxx. AFAICS iscsi before the patch rejected
-the second enable or disable with -EINVAL, while qla2xxx accepts the
-second disable and rejects the second enable with -EEXIST.
+This patchset is against Martin Petersen's 5.16/scsi-queue branch.
 
-Of course it sounds good to unify the behavior of existing enable
-attributes. OTOH: even if enabling/disabling the same tpg twice can be
-seen as suspicious behavior, are we sure to not confuse existing user 
-space tools by changing the result?
 
-Bodo
+Changes since v19 (sent to linux-scsi list on 20210523)
+  - add statistics gathering similar to that found in st driver.
+    The tapestat utility in the sysstat package can be used to
+    display those statistics; similar arrangement for the sg
+    driver. Make changes suggested by Damien Le Moal.
+  - rebase on 5.16/scsi-queue branch [lk 5.15.0-rc1]
+    - gendisk dependency removed
+    - various other Christoph Hellwig cleanups
 
+Changes since v18 (sent to linux-scsi list on 20210407)
+  - a request queue's QUEUE_FLAG_POLL flag can be cleared via
+    sysfs, overriding the ability to use blk_poll() even when the
+    associated LLD allows it. Check that flag and, only when it
+    is set and the sg user gives SGV4_FLAG_HIPRI, set REQ_HIPRI
+    on a request.
+  - simplify the functions supporting ioctl(SG_SET_RESERVED_SIZE)
+  - replace blk_rq_append_bio() calls with the simpler
+    blk_rq_bio_prep() calls
+    [see lk: a4fe2d3afe3ce77edeadb567c0d0a8d102c6b159]
+  - rebase on 5.14/scsi-queue branch [lk 5.13.0-rc1]
+    - unchecked_isa_dma removed
+    - BIO_MAX_PAGES renamed to BIO_MAX_VECS
+
+Changes since v17 (sent to linux-scsi list on 20210407)
+  - make clearer distinction between user pollable (i.e. async)
+    requests and (user) non-pollable requests (e.g. those injected
+    with ioctl(SG_IO), IOWs sync requests)
+  - fix crash is sg_start_req() when blk_get_request() yields an
+    error (e.g. -EAGAIN when low on resources)
+  - sg_finish_scsi_blk_rq(): remove now_zero variable as suggested
+    by Hannes R.
+  - change deprecation warning url reference from http to https
+
+Changes since v16 (sent to linux-scsi list on 20210208)
+  - sg_start_req() fix double free on error path [KASAN]
+  - sg_rq_map_kern() fix uninitialized variable [coverity]
+  - sg_add_sfp() fix use after free [coverity]
+  - sg_remove_sfp_usercontext(): remove pointless NULL check [coverity]
+  - fix misuse of WARN_ONCE in sg_rq_end_io_usercontext() [D. Carpenter]
+  - remove unused error checks: tracking blk_put_request() calls and
+    multiple SG_XA_RQ_FREE calls
+  - hipri: as blk_poll() can return > 0 for requests other than the one
+    that is being checked for, need to re-check that request is ready
+  - rebased on MKP's 5.13/scsi-queue
+
+Changes since v15 (sent to linux-scsi list on 20210125)
+  - tweak state machine which sets INFLIGHT state _before_
+    blk_execute_rq_nowait() is called. Add a bit flag that indicates
+    the logic flow has returned from that call. This guards against
+    blk_poll() being called before the block layer has really
+    launched the request.
+  - fix bug clearing SG_FFD_HIPRI_SEEN bit as
+    atomic_dec_and_test() returns true when the post-decrement value
+    is zero, the opposite of what a C conditional does.
+
+Changes since v14 and earlier
+ - see: the v18 patchset sent to linux-scsi on 20210427
+
+
+Douglas Gilbert (46):
+  sg: move functions around
+  sg: remove typedefs, type+formatting cleanup
+  sg: sg_log and is_enabled
+  sg: rework sg_poll(), minor changes
+  sg: bitops in sg_device
+  sg: make open count an atomic
+  sg: move header to uapi section
+  sg: speed sg_poll and sg_get_num_waiting
+  sg: sg_allow_if_err_recovery and renames
+  sg: improve naming
+  sg: change rwlock to spinlock
+  sg: ioctl handling
+  sg: split sg_read
+  sg: sg_common_write add structure for arguments
+  sg: rework sg_vma_fault
+  sg: rework sg_mmap
+  sg: replace sg_allow_access
+  sg: rework scatter gather handling
+  sg: introduce request state machine
+  sg: sg_find_srp_by_id
+  sg: sg_fill_request_element
+  sg: printk change %p to %pK
+  sg: xarray for fds in device
+  sg: xarray for reqs in fd
+  sg: replace rq array with xarray
+  sg: sense buffer rework
+  sg: add sg v4 interface support
+  sg: rework debug info
+  sg: add 8 byte SCSI LUN to sg_scsi_id
+  sg: expand sg_comm_wr_t
+  sg: add sg_iosubmit_v3 and sg_ioreceive_v3 ioctls
+  sg: add some __must_hold macros
+  sg: move procfs objects to avoid forward decls
+  sg: protect multiple receivers
+  sg: first debugfs support
+  sg: rework mmap support
+  sg: defang allow_dio
+  sg: warn v3 write system call users
+  sg: add mmap_sz tracking
+  sg: remove rcv_done request state
+  sg: track lowest inactive and await indexes
+  sg: remove unit attention check for device changed
+  sg: no_dxfer: move to/from kernel buffers
+  sg: add blk_poll support
+  sg: add statistics similar to st
+  sg: bump version to 4.0.12
+
+ drivers/scsi/sg.c      | 5533 ++++++++++++++++++++++++++++------------
+ include/scsi/sg.h      |  306 +--
+ include/uapi/scsi/sg.h |  409 +++
+ 3 files changed, 4288 insertions(+), 1960 deletions(-)
+ create mode 100644 include/uapi/scsi/sg.h
+
+-- 
+2.25.1
 
