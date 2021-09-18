@@ -2,98 +2,161 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FA741074B
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Sep 2021 17:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA99641081E
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 Sep 2021 20:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236670AbhIRPM4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 18 Sep 2021 11:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbhIRPMy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 18 Sep 2021 11:12:54 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C82C061574
-        for <linux-scsi@vger.kernel.org>; Sat, 18 Sep 2021 08:11:30 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id m4so13545093ilj.9
-        for <linux-scsi@vger.kernel.org>; Sat, 18 Sep 2021 08:11:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=GE6cCY/0hnI+CqkRsz34r3mZcz58ATQdIipjSK1xhAQ=;
-        b=mr7RQXNyygreXwDc/oSrHTqxVWQHEbmqRZy4efar+MM2JaFCNtXtStDbtQ8N3LHA3f
-         avu5RZiU14ZA3QQJqonz3yzkcWQNmk+EoMt5wKusOD78PuZgSmcrB0jp+g12iL+Fsp2V
-         z9PY9Ce2Jkh3I0ZzdnVKR4+Z5p7Ao+zmxD7p5qdDweofvWbhq4vgtjvjuOSfv6T97tnS
-         YVxuLE5XkWvYGd0OOafJgqTvBqd6NLPvDDaG1onOv6RHMc4GrqXH5cxd0YSspKHWZKnb
-         EbFJaFvF/0N6+Me26M26Ggn58a1cNqWV72YpGLBaaIMN8e9oMKSCKKvzl/2WPwMnRKIn
-         vjOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=GE6cCY/0hnI+CqkRsz34r3mZcz58ATQdIipjSK1xhAQ=;
-        b=h3viV8ikAkdb7AW+WrXhpZJ4306R3JdVng9nQsWsEDhoiTwnGAqSJS0LzvevapRDgB
-         KTiXcYAb3bET0tJRt8kO8ziP6b2+6tny6OTBOGNXq5eAMiTUhPrZopwhawQVx59WzHet
-         cP67vDYNDrvpXtfIhyOhKU3NOoJAe+NQQrDNIQBEPxhbiWa2uOck9+mBdP27M+nAss8h
-         KxNXxmH+6ps6HXZbOImSLynoDJybfxraSuKHHj3PX9wVNjOyCD2E3POlybYRWUxXCzd0
-         OXTuKG7HtvGkDGT6tUWhDM4o+eAdMdgVgRXtiA89pkJk0hVv9OiQ0A+WFt8JcWEZqhG3
-         z1FA==
-X-Gm-Message-State: AOAM5338sY9dl6eoY6kzkgISmYzNx30wa5kIcIvxe9HqQ1OKnFqKXYCe
-        hnAPah7hHBq/BNH4KIK135ckB/48EaRoryt8f2w=
-X-Google-Smtp-Source: ABdhPJwKS5++4XcQlkpjG/GYi6Uksl+6mcWAZhvQjS6Du+TUNtd4ggpIZeL++cDl9n3NtiMosrvVZmJqtLwf7Jw+sMM=
-X-Received: by 2002:a92:b109:: with SMTP id t9mr11569133ilh.176.1631977890254;
- Sat, 18 Sep 2021 08:11:30 -0700 (PDT)
+        id S231743AbhIRSgR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 18 Sep 2021 14:36:17 -0400
+Received: from de-smtp-delivery-102.mimecast.com ([194.104.111.102]:38702 "EHLO
+        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231128AbhIRSgP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 18 Sep 2021 14:36:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1631990090;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GG41YiMhGOwqi/CUJa+uIwdClMcXxiDj/RRJVZU6cHU=;
+        b=ML9OQ+ickEq1wq0mpw3A44vNuDBfWp4q8s0jo2qh5suDfGjxEinKnmfVgvcNgZmbEdReK0
+        WC6icajU+uwfHG4XpNnP1gtTwZKHu/BRHqopcvq155UduXkjju55nPEpNboNhtOY9amywd
+        69wT+Ja93mOrzT8gzspPcsnKAlF1A7U=
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com
+ (mail-vi1eur05lp2172.outbound.protection.outlook.com [104.47.17.172])
+ (Using TLS) by relay.mimecast.com with ESMTP id
+ de-mta-14-HjC2x_nkPZ-sn0a_ZBN5aA-1; Sat, 18 Sep 2021 20:34:48 +0200
+X-MC-Unique: HjC2x_nkPZ-sn0a_ZBN5aA-1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SGE+KWRblERDuc+3iZn14JFdXk7up8SDPPnBbdvImMYflZ7UrW1d7UHn8lHNGsNjaXQ+A/6SneUzPk95SY4pdPSHiPAZVIGbuFQo3AEkKfYWqXb80e1EGs7swDnlI9wOB84QjUZ0KGs2evgZz1UKXpL0bhBPFj5R3u6w4JECC31ysrKkCzhYvWFn3ctef+H4Y8GoKL/tZgUHmZbdgokqjo9nKDSbpaAmQkU8wFg7NC3twXZ6sGAijAM7prX6Oy989E4uFF38QC+7GjiQReciKrY2isaKkhxinreQBbVcaHdPtAj09gJf5AojpmDmAzoRCSPXM59ECGAWKPiUdp/yeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=GG41YiMhGOwqi/CUJa+uIwdClMcXxiDj/RRJVZU6cHU=;
+ b=kscQ8VMt4e2d0bzdptlZcsY5vi1FhpClYW65AvbQnFnkLm47myuUyZ7b4Pq0pgMbyz4j7ou5uFTZ3Enoe9+4v7k/QvHpfGlcyKC6NPQ2Usu9jqrhOplKKtlXJu+vcgpKNP+5Je/04xrCH38v8JWLbwEcPlPu1Up/ofK79liJpfv2DDmNu8S54HrtZmbelQR2kEaGN5oQcvHEXsSb1vJ3+IKZamDkjt2hRpnIDuxVPexKumTE2OFYcooGG1OqvRA76gVp7P7V9JwVKWdO7Pa5STf8Blh0NLU81jRMct6T0H6jqCWW5jO6z4V6NYNxxIX5vKrPtjyxSa0r9BRMMoOwRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Authentication-Results: linux.ibm.com; dkim=none (message not signed)
+ header.d=none;linux.ibm.com; dmarc=none action=none header.from=suse.com;
+Received: from AM5PR04MB3089.eurprd04.prod.outlook.com (2603:10a6:206:b::28)
+ by AM7PR04MB6933.eurprd04.prod.outlook.com (2603:10a6:20b:10d::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.18; Sat, 18 Sep
+ 2021 18:34:47 +0000
+Received: from AM5PR04MB3089.eurprd04.prod.outlook.com
+ ([fe80::4dce:478:1ef4:7a85]) by AM5PR04MB3089.eurprd04.prod.outlook.com
+ ([fe80::4dce:478:1ef4:7a85%3]) with mapi id 15.20.4500.021; Sat, 18 Sep 2021
+ 18:34:47 +0000
+Subject: Re: [PATCH 44/84] libiscsi: Call scsi_done() directly
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Chris Leech <cleech@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+References: <20210918000607.450448-1-bvanassche@acm.org>
+ <20210918000607.450448-45-bvanassche@acm.org>
+From:   Lee Duncan <lduncan@suse.com>
+Message-ID: <7b003352-89d3-3c1d-c12c-038f8a1a36b3@suse.com>
+Date:   Sat, 18 Sep 2021 11:34:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
+In-Reply-To: <20210918000607.450448-45-bvanassche@acm.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PR3P193CA0036.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:102:51::11) To AM5PR04MB3089.eurprd04.prod.outlook.com
+ (2603:10a6:206:b::28)
 MIME-Version: 1.0
-Received: by 2002:ac0:db49:0:0:0:0:0 with HTTP; Sat, 18 Sep 2021 08:11:29
- -0700 (PDT)
-Reply-To: drabrarzebadiyah@gmail.com
-From:   "dr.Abrar Zebadiyah" <mrssuzaramaling2@gmail.com>
-Date:   Sat, 18 Sep 2021 08:11:29 -0700
-Message-ID: <CAJ=rZJp8Vsn97o3a=Dh1rL=T_YcvuTfGToUPGVU79oPcjcXpRA@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.20.3] (73.25.22.216) by PR3P193CA0036.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:51::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend Transport; Sat, 18 Sep 2021 18:34:45 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cff84363-9bfe-4f20-988e-08d97ad2fdbf
+X-MS-TrafficTypeDiagnostic: AM7PR04MB6933:
+X-Microsoft-Antispam-PRVS: <AM7PR04MB6933BE921781A26B7BEF1007DADE9@AM7PR04MB6933.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:425;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ccwSBMsB/ozsYkrdjBxkbb4i9xJMrIuN8B1sU5PfZ3jCDuaL3wWvElKQQLoVJZSk02zhnMXc1uG11eRVaFYOAmWUHMyG0hMuN+qFtxXf3q2P2zfqrf9gmoFg2QWaTnKlZJMUsm+/S5LZ1vXXQu+M0i2hE60a2VoKiPlA9PsDnN6l9NaX9lPT1qFXoqcAuPea6xE0O6hWGg2oPwlFzzxpsT5gty/MuPhr9nE+iwprULMMuXFbJ3Y5G6sfCfWF3hP0Llczb4wpjthkxHZGwhaTnCaz6/f+frbZcnnZZLTOzO2dc9+ARi8G6Wo5gu/DdaiMuurZSAmOas4E+3GJejqkbCDhQlc50+SZKOZvBjGRT9A1/T5Cxb+W18R+VaRO9sFlQUIG3typDJxw9TvMppy9AGrgqWsLJzOn76/ZnzjcGbm3/b2DwWb6lZvn5qY7e28RQxvwLo8HjJ5pkCxGxqPb8rgHwPVHBUhjX2uiaKGKuoVajaf4pUxw4fmbB8OOXc6dfg6c55KACFR9MaF1UBtC7UkLeOqmXYR5LaJce9j8aT4BNr6OWPHdz4fmay8mCv1yuHaOI09h9WFimN+F9IhL9KC3bsiVyy1CFcxgOYgcFLhqYyxOEW0SZEWXnDcmnY3P+WU6JJzoJDS1UJVnwcNyEou21L9uPHrtvoxyRlmPjVZMkfgWEYMAoaHJMdeuxIKx3h1oF+iPLV4ty4WywFAM23FOIemaEp7hZFKsPLBQHoc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3089.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(86362001)(4326008)(54906003)(5660300002)(8676002)(31686004)(31696002)(186003)(53546011)(2616005)(26005)(38100700002)(66556008)(2906002)(36756003)(66476007)(66946007)(508600001)(110136005)(83380400001)(8936002)(6486002)(956004)(6666004)(316002)(16576012)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L1M2UVArYXRvMmFzNjV3bTE2WTdnS1NMOTlnOWZmQ0pHSi9ma01YMTRQSVgx?=
+ =?utf-8?B?ZCtqaWZoakZubUZidCtzM2lHN25Ja2dTNmh2LzNJRVR0MkkxSjUzWGJvOFpl?=
+ =?utf-8?B?b0pPRU91c3c3RFFWVTM2enhyanhpQWQwVDE5QlZJak12VVhmQnFmcXp2U0ti?=
+ =?utf-8?B?dWdKSG1QNmNzY1JiYmJ5TmxZdmo1K2lZR1daNGNsMEdKc2JVNFpnZHNYa1JN?=
+ =?utf-8?B?NkVaN2VsOGgrK3o4cUVZcTFYY1JSVExPMVg5cGcva1ltcnJKWXplbzlWaERI?=
+ =?utf-8?B?QnFTTDlKV3RiSWRxSUdLZ3M5ZmhXdzZjeUhiZHBCUlFRU0hCSlYxTFlTWkxy?=
+ =?utf-8?B?OERDNWFFc1ZrQnpGYjVSUXRmY3g5Ly8wWWdZcEVBQng3WkoyZjBDZTNyTEcr?=
+ =?utf-8?B?cVdtazNxaG9jQUg5NGFHUkg1dFRZRFJINXUyMnY0VmFJOU9jOWhBSjNSQm1z?=
+ =?utf-8?B?ekk1Q3FwM3lmYWtZUVljeXNnWGVqSW43T1RFcXFza056TlFTWW5MTzl1VDRI?=
+ =?utf-8?B?dGxOalRmajNVQnlNOW8yTXZCWVJPL2dqU0tNdnllTjcrR0xibWlzcTJDbjRa?=
+ =?utf-8?B?RHRjWlFEaDB6bDNVT1pCcGVjWFJkN2xDQWlnVVNzTXVxN0ZqclI3N00zdkpm?=
+ =?utf-8?B?UFR3Q0t2bUZNU1JaYkhFS3U2Um1rbzZBR2l4SU5lUGJ2SlRXeWxzVkZRUlVL?=
+ =?utf-8?B?T0hYSlVpaDI1MWRpenVndGlHd3cyRVNpemZkYm93ZFBINmNKY253cVVBUmRY?=
+ =?utf-8?B?cW5WcUxzU1lseXdhQ0tKdTdpU1dZSE1ab3FWU0ZwSTNrVDQvOVg4ZDBaZ0xr?=
+ =?utf-8?B?N0JqRENmUElWcHl6MVdNMTdDWGNVR3l0ZHVQNU1sdW9xRnd0bnByU0RyTloy?=
+ =?utf-8?B?bXh5bUZHbUdsNDdxMGtCaHVHcmRzYnlURzUwakRzT0FZNE5zSDZtY1RWQStW?=
+ =?utf-8?B?SmY3YXJ2RURjeVVVSUdRa1ZKNXJlazV1ektiNGhMaW1IZWJ0VVVzNklwVkF6?=
+ =?utf-8?B?QXYwa0swd0s2dlJ0clpjTm9jUE5aeGlkZnB0UWluZ091SEdoUUw1azlhTWxs?=
+ =?utf-8?B?TmVFWUxiWEVwMTYvKy9SOGxNRHl1U3dyQmZ2d2pYcHpsZHpPQllQWmNXc0g1?=
+ =?utf-8?B?TXFTYnM1TWIvcGJwR1FjS3BxYTBqdkZQUWJkMUxSanNnYXFTeldCd1lERW5Y?=
+ =?utf-8?B?aE42UFA2ZmtmVHNQWHhjZHJJeXBQQ3RyVDVOeGV5YUljRERtWlVaQldPb2ZV?=
+ =?utf-8?B?Q292RkszaEpwbEZsU252YWgyeW9vU0YzQUQwaFYwUEozbXpadWtoVDQzZkR5?=
+ =?utf-8?B?VmxtUlRJUG5CNlcvaGkyNExWeU5UZnJjb1JGd1Q2VnA1MTJRclh2VEVYRnB4?=
+ =?utf-8?B?YVM5MzY0aENBZXpsL2NtdDFJVkwwWGlvdW1KZFVEcFk2c0k2RVJkcHptMVN3?=
+ =?utf-8?B?NXNrZHNNM3p0cG9uUzAzeURDNWxmd3E5MmpueUw1YjJMSndQREFsRFJrY1Iv?=
+ =?utf-8?B?YnRVN2VYa2V0T2I3SzNmRzdZYytmMzVLdmgrYnlpem9hS3FUc2laNldyN2Rk?=
+ =?utf-8?B?YjA2YS8zbU9UQTIwY2xnV3pLNlRCSFg2NC9iUmZ0QThaams5Nkk3bkgxTXRL?=
+ =?utf-8?B?azJjb2xCeFFsakN6SzVXM2RyZko2OWt2RG8rQ1M2MjY2ZFhYd2RkNUdSNnFS?=
+ =?utf-8?B?WVRNNExubC9PRWJaSzloZTRCamZwZmJEMGVvRFhhS1RqZzlZYlg4ckZpelYz?=
+ =?utf-8?Q?RbnpZjM/EVcqBa4szB25W/paLWBJ+lzD0v/06Fn?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cff84363-9bfe-4f20-988e-08d97ad2fdbf
+X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3089.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2021 18:34:46.9358
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: F1ZpvL+WNMR0uyiLNQ3H2QCCbI4Y2onjplgMM2koyAqmeRFBl0BU9vDf9hEY/cK0wwg7HWwo8BZO5XlGzxjfXQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6933
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-My Dear Friend.
+On 9/17/21 5:05 PM, Bart Van Assche wrote:
+> Conditional statements are faster than indirect calls. Hence call
+> scsi_done() directly.
+> 
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+>  drivers/scsi/libiscsi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+> index 712a45368385..7beedc59d0c6 100644
+> --- a/drivers/scsi/libiscsi.c
+> +++ b/drivers/scsi/libiscsi.c
+> @@ -468,7 +468,7 @@ static void iscsi_free_task(struct iscsi_task *task)
+>  		 * it will decide how to return sc to scsi-ml.
+>  		 */
+>  		if (oldstate != ISCSI_TASK_REQUEUE_SCSIQ)
+> -			sc->scsi_done(sc);
+> +			scsi_done(sc);
+>  	}
+>  }
+>  
+> @@ -1807,7 +1807,7 @@ int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
+>  	ISCSI_DBG_SESSION(session, "iscsi: cmd 0x%x is not queued (%d)\n",
+>  			  sc->cmnd[0], reason);
+>  	scsi_set_resid(sc, scsi_bufflen(sc));
+> -	sc->scsi_done(sc);
+> +	scsi_done(sc);
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(iscsi_queuecommand);
+> 
 
-How are you and your family Today? I hope all is well, and I am happy
-to share this transaction with you ,but you must keep everything as
-secret and very confidential.
+Reviewed-by: Lee Duncan <lduncanb@suse.com>
 
-I have a very lucrative business transaction which requires your
-utmost discretion. Please understand that you and me, are to work as
-one team to inherit this fund, hence I am your insider in the bank as
-the transaction commence. I advise you to feel free with me for all is
-going to be well with us. This business is 100% risk free.
-
-Though, I know it would come to you at uttermost surprise unbelief
-because it is virtually impossible to know who is trustworthy and who
-to believed I am dr.Abrar Zebadiyah sum of $10.5 million is lying in
-our bank without claim i want you to help me to claim and receive it
-to your account in your country for our benefit.
-
-I am aware of the unsafe nature of the internet, and was compelled to
-use this medium due to the nature of this project.I have access to
-every vital information that can be used to transfer this huge amount
-of money, which may culminate into the investment of the said funds
-into your account or any lucrative company in your country.
-
-If you will like to assist me as a partner then indicate your
-interest, after which we shall both discuss the modalities and the
-sharing percentage. Upon receipt of your reply on your expression of
-interest, I will give you full details on how the business will be
-executed. I am open for negotiation,
-
-Thanks for your anticipated cooperation.Note you might receive this
-message in your inbox or spam folder, depends on your web host or
-server network
-
-Contact my private email only if you are interested (drabrarzebadiyah@gmail.com)
-
-Compliment of the day,
-Regards,
-
-dr.Abrar Zebadiyah
