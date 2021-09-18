@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34888410231
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Sep 2021 02:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE0E410235
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 Sep 2021 02:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344464AbhIRAJG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 17 Sep 2021 20:09:06 -0400
-Received: from mail-pg1-f174.google.com ([209.85.215.174]:33734 "EHLO
-        mail-pg1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344983AbhIRAIy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 Sep 2021 20:08:54 -0400
-Received: by mail-pg1-f174.google.com with SMTP id u18so11194144pgf.0
-        for <linux-scsi@vger.kernel.org>; Fri, 17 Sep 2021 17:07:32 -0700 (PDT)
+        id S1344955AbhIRAJI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 17 Sep 2021 20:09:08 -0400
+Received: from mail-pj1-f44.google.com ([209.85.216.44]:44864 "EHLO
+        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345012AbhIRAI4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 Sep 2021 20:08:56 -0400
+Received: by mail-pj1-f44.google.com with SMTP id nn5-20020a17090b38c500b0019af1c4b31fso8526135pjb.3
+        for <linux-scsi@vger.kernel.org>; Fri, 17 Sep 2021 17:07:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=txLAJwLYhTryQgGnGEr6eB9vbHzMYtYNm6oiDJR1cFU=;
-        b=z5kC51IWQQ1K2whUlQKhqKDHjfsB87nXCvLF/B3S6paVHySSyMdkulQqoFey2g9sbs
-         MNDvKaRC+f7p1gbXv6RCJuqso0M3CoOEAx9xtF5DIWVffCJpB0xO16O8/U3qNhWFI41Z
-         9qUoI9ZY4l7BnjP1Nk5IbF3iZGp1wcpetxRQbXlbVx30cUSCYlOMk/RIktrl+M2EBqyj
-         0yuflmee7AvjSkoPhx4HSa8VcgWvh6ptPmmY9YVjWbHjRf6j1q1u7uiCc+dQWn5FXU9L
-         00uae5krPrqYsv961sOZ8o6b9R/GyPWFdODEtABsUQ8cLv4ZOZfMXgJENIqdmmqfKbB6
-         Xr9A==
-X-Gm-Message-State: AOAM5336ie5o83xAsuQ6WGgy8jjytemW4i9inkIiIzo3Cxks81o/iNA8
-        smWlTixR38W5GWqTRLbfKwU=
-X-Google-Smtp-Source: ABdhPJyZVAjFnHNgpUE9zbVm+hna4Ompwz2mZogSQFTuVNyehu10utwCsqN09t/Li0fZc8PooCeQIg==
-X-Received: by 2002:a62:e70c:0:b0:43e:2de6:b09d with SMTP id s12-20020a62e70c000000b0043e2de6b09dmr13458435pfh.9.1631923651707;
-        Fri, 17 Sep 2021 17:07:31 -0700 (PDT)
+        bh=ZB60LWHAfkiS/kmf0g0evgkoAU3LFMVjB0yLlO/psCo=;
+        b=KtZ9YjDmsHT67x2s2lrwSXzewLY9lDwuLlRXPChf7ktiFXDpYBZtvO0x9LgrkNfVg2
+         PeQBgeOxftLuPzc+ZrX9EpWPlfn/ilu8fLcf06T5SerWJofLQrmIBM7N5z5OSKEHXEzH
+         p19syr7HD0Ixct8lRhXXKJzKOQ4KTSWmcD3n3XAxZgY1EbTPMHwHjiVF4x89IrHkIQOY
+         imy3GlpVv+dnGNgW2c7TmG3UUzktjpO9J9Pt+ptV/caa/lr5uKTWWGsgdlO8AKKv4wNb
+         4U69oUAdPdolBKzReWLYQ2YMuvSV5MLidXEI2ijA85dWJ+tvezPNnCp4L8g71P+UgLX3
+         H9PA==
+X-Gm-Message-State: AOAM533AuTS0XD9z4K5ji8KISn8qW618SudayOSLdmAj25bZ+VbtEUN0
+        Ljb4OZaI183p8GLdX3rWNg0=
+X-Google-Smtp-Source: ABdhPJzJB/Assmo3hkrDViZQl8oE5XzG0DLCkl4EJUjgZxMz2SXLrgW3UfDinxP9pTKZWFMRGcs+AA==
+X-Received: by 2002:a17:90b:1c09:: with SMTP id oc9mr8799049pjb.128.1631923653169;
+        Fri, 17 Sep 2021 17:07:33 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:4c45:d635:d2d2:93])
-        by smtp.gmail.com with ESMTPSA id bv16sm6403129pjb.12.2021.09.17.17.07.30
+        by smtp.gmail.com with ESMTPSA id bv16sm6403129pjb.12.2021.09.17.17.07.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 17:07:31 -0700 (PDT)
+        Fri, 17 Sep 2021 17:07:32 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        John Garry <john.garry@huawei.com>,
-        Jason Yan <yanaijie@huawei.com>, Yufen Yu <yuyufen@huawei.com>
-Subject: [PATCH 45/84] libsas: Call scsi_done() directly
-Date:   Fri, 17 Sep 2021 17:05:28 -0700
-Message-Id: <20210918000607.450448-46-bvanassche@acm.org>
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: [PATCH 46/84] lpfc: Call scsi_done() directly
+Date:   Fri, 17 Sep 2021 17:05:29 -0700
+Message-Id: <20210918000607.450448-47-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
 In-Reply-To: <20210918000607.450448-1-bvanassche@acm.org>
 References: <20210918000607.450448-1-bvanassche@acm.org>
@@ -56,28 +56,46 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/libsas/sas_scsi_host.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_scsi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_scsi_host.c b/drivers/scsi/libsas/sas_scsi_host.c
-index 2bf37151623e..d337fdf1b9ca 100644
---- a/drivers/scsi/libsas/sas_scsi_host.c
-+++ b/drivers/scsi/libsas/sas_scsi_host.c
-@@ -125,7 +125,7 @@ static void sas_scsi_task_done(struct sas_task *task)
- 	}
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index 078fbea3f436..ca604ae166c6 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -564,7 +564,7 @@ lpfc_sli4_io_xri_aborted(struct lpfc_hba *phba,
+ 				 * scsi_done upcall.
+ 				 */
+ 				if (cmd)
+-					cmd->scsi_done(cmd);
++					scsi_done(cmd);
  
- 	sas_end_task(sc, task);
--	sc->scsi_done(sc);
-+	scsi_done(sc);
- }
+ 				/*
+ 				 * We expect there is an abort thread waiting
+@@ -4502,7 +4502,7 @@ lpfc_fcp_io_cmd_wqe_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *pwqeIn,
+ 		goto out;
  
- static struct sas_task *sas_create_task(struct scsi_cmnd *cmd,
-@@ -198,7 +198,7 @@ int sas_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 	else
- 		cmd->result = DID_ERROR << 16;
- out_done:
+ 	/* The sdev is not guaranteed to be valid post scsi_done upcall. */
 -	cmd->scsi_done(cmd);
 +	scsi_done(cmd);
+ 
+ 	/*
+ 	 * If there is an abort thread waiting for command completion
+@@ -4771,7 +4771,7 @@ lpfc_scsi_cmd_iocb_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *pIocbIn,
+ #endif
+ 
+ 	/* The sdev is not guaranteed to be valid post scsi_done upcall. */
+-	cmd->scsi_done(cmd);
++	scsi_done(cmd);
+ 
+ 	/*
+ 	 * If there is an abort thread waiting for command completion
+@@ -5847,7 +5847,7 @@ lpfc_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *cmnd)
+ 			     shost);
+ 
+  out_fail_command:
+-	cmnd->scsi_done(cmnd);
++	scsi_done(cmnd);
  	return 0;
  }
- EXPORT_SYMBOL_GPL(sas_queuecommand);
+ 
