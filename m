@@ -2,45 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C68141021F
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Sep 2021 02:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D0A410221
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 Sep 2021 02:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343922AbhIRAIc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 17 Sep 2021 20:08:32 -0400
-Received: from mail-pf1-f173.google.com ([209.85.210.173]:43770 "EHLO
+        id S1344004AbhIRAIf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 17 Sep 2021 20:08:35 -0400
+Received: from mail-pf1-f173.google.com ([209.85.210.173]:43772 "EHLO
         mail-pf1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344048AbhIRAIb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 Sep 2021 20:08:31 -0400
-Received: by mail-pf1-f173.google.com with SMTP id c1so7728226pfp.10
-        for <linux-scsi@vger.kernel.org>; Fri, 17 Sep 2021 17:07:08 -0700 (PDT)
+        with ESMTP id S236753AbhIRAIc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 Sep 2021 20:08:32 -0400
+Received: by mail-pf1-f173.google.com with SMTP id c1so7728296pfp.10
+        for <linux-scsi@vger.kernel.org>; Fri, 17 Sep 2021 17:07:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FrjaDQynpsanZ6aSkHdGiM11iP+I2iU8QPoNUiJ3poU=;
-        b=PJJAcMGcFH4SjgDKAZyHYw1BZeVLrJ+BTI9ThDYOz9B5ef6jxKMzMsIJPcwOmnQrb+
-         X43hw5eNLXlsQ/BgkOXFJyeY0o5hkdVYtuuekfigzVKCO0hBZNdG4Gz1kvIE41fRBhqk
-         OjgGwUPch8XBZV+m0V7ziShx+CBQO0eJOZTQQDJ4+JMSvU35yWfVFAYZT/8DDbKxsqVV
-         ir3EmPwxjvq6wNpbYAZrv1/Hcv838g6q8pWfCOWwLL6ybg5ApSgc6dhRGQqIhMODBELQ
-         dAULoV4plUSYg9kqaYKDp93gQYd0S5SQFjGWqcGv1uTmM+2+G6HBQqA2AdzngT968SmF
-         oJIQ==
-X-Gm-Message-State: AOAM532++gqYw49kRRmtpcs6p2AN1R0z8MwcnoBZrMtE4lCFh2XWWMZe
-        e1z9GzI0Yg8DC6x0Ar8aVKxkPilxMkA=
-X-Google-Smtp-Source: ABdhPJwP2kApZYY6ANr2VSG8wP596UpjpVECmLv4wDlybL7VRwEX4AMjkQc+OaeCS7J4IYnNIjmqNA==
-X-Received: by 2002:a63:cd48:: with SMTP id a8mr12354392pgj.180.1631923628135;
-        Fri, 17 Sep 2021 17:07:08 -0700 (PDT)
+        bh=Gf/FCAlG1Su8RpHpomw7brVDwwgZ3/XgilRVi9Fgunc=;
+        b=dlY5B2Wz8+LQIkmkps6/K8BPdNJTRs7BAgjbpvImR+TzhZ3YKiBQWP+wj/RFWWHmHc
+         Ued+iP6MXZop1f5O77WNGDkVL3ZYxBUr/biw19KII2vvOdIEMwD2jqnkpsfW7qc2+z6L
+         Id3vC5GT5frELA73srFBa3eIjrit6MwyP5Fv+uty0sgI0rO4wqB2s6jA2vaDSzKCUFqD
+         5V9/jeQE1heUm3lZhXMkoKZv3ZYbIIZgrU2HrZ2JlHO5TvTDsTmE3gi5v9umJhTrr3H/
+         H+6beNc49bRT1HP+enQUGodYRg3xuAP1jswi4zgDCXcKYXDDQuuVhLgNGjaTBYaqRNuq
+         ByeA==
+X-Gm-Message-State: AOAM533LWf9OibfyBTVO/c9nG/HhjGdSvsoCukvmajdtYISIpgthjwlk
+        Ia7+mu1vlNAkrcsMOC89R6AhD5Vp/jI=
+X-Google-Smtp-Source: ABdhPJzcp229+/wchp7QzVYbo6YIKO8DDolIU3JECH1odS7N2RSb7IspnbcIi7CLnpUehcK5w9jPbg==
+X-Received: by 2002:a63:2b03:: with SMTP id r3mr4548225pgr.188.1631923629507;
+        Fri, 17 Sep 2021 17:07:09 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:4c45:d635:d2d2:93])
-        by smtp.gmail.com with ESMTPSA id bv16sm6403129pjb.12.2021.09.17.17.07.07
+        by smtp.gmail.com with ESMTPSA id bv16sm6403129pjb.12.2021.09.17.17.07.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 17:07:07 -0700 (PDT)
+        Fri, 17 Sep 2021 17:07:08 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Bradley Grove <linuxdrivers@attotech.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH 31/84] esas2r: Call scsi_done() directly
-Date:   Fri, 17 Sep 2021 17:05:14 -0700
-Message-Id: <20210918000607.450448-32-bvanassche@acm.org>
+Subject: [PATCH 32/84] esp_scsi: Call scsi_done() directly
+Date:   Fri, 17 Sep 2021 17:05:15 -0700
+Message-Id: <20210918000607.450448-33-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
 In-Reply-To: <20210918000607.450448-1-bvanassche@acm.org>
 References: <20210918000607.450448-1-bvanassche@acm.org>
@@ -55,46 +54,55 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/esas2r/esas2r_main.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/scsi/esp_scsi.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/esas2r/esas2r_main.c b/drivers/scsi/esas2r/esas2r_main.c
-index 647f82898b6e..7a4eadad23d7 100644
---- a/drivers/scsi/esas2r/esas2r_main.c
-+++ b/drivers/scsi/esas2r/esas2r_main.c
-@@ -828,7 +828,7 @@ int esas2r_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 
- 	if (unlikely(test_bit(AF_DEGRADED_MODE, &a->flags))) {
- 		cmd->result = DID_NO_CONNECT << 16;
--		cmd->scsi_done(cmd);
-+		scsi_done(cmd);
- 		return 0;
+diff --git a/drivers/scsi/esp_scsi.c b/drivers/scsi/esp_scsi.c
+index 9a8c037a2f21..f7c2d64f1cef 100644
+--- a/drivers/scsi/esp_scsi.c
++++ b/drivers/scsi/esp_scsi.c
+@@ -936,7 +936,7 @@ static void esp_cmd_is_done(struct esp *esp, struct esp_cmd_entry *ent,
+ 		}
  	}
- 
-@@ -988,7 +988,7 @@ int esas2r_eh_abort(struct scsi_cmnd *cmd)
- 
- 		scsi_set_resid(cmd, 0);
- 
--		cmd->scsi_done(cmd);
-+		scsi_done(cmd);
- 
- 		return SUCCESS;
- 	}
-@@ -1054,7 +1054,7 @@ int esas2r_eh_abort(struct scsi_cmnd *cmd)
- 
- 	scsi_set_resid(cmd, 0);
  
 -	cmd->scsi_done(cmd);
 +	scsi_done(cmd);
  
- 	return SUCCESS;
+ 	list_del(&ent->list);
+ 	esp_put_ent(esp, ent);
+@@ -965,8 +965,6 @@ static int esp_queuecommand_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_
+ 
+ 	ent->cmd = cmd;
+ 
+-	cmd->scsi_done = done;
+-
+ 	spriv = ESP_CMD_PRIV(cmd);
+ 	spriv->num_sg = 0;
+ 
+@@ -2038,7 +2036,7 @@ static void esp_reset_cleanup_one(struct esp *esp, struct esp_cmd_entry *ent)
+ 	if (ent->flags & ESP_CMD_FLAG_AUTOSENSE)
+ 		esp_unmap_sense(esp, ent);
+ 
+-	cmd->scsi_done(cmd);
++	scsi_done(cmd);
+ 	list_del(&ent->list);
+ 	esp_put_ent(esp, ent);
  }
-@@ -1535,7 +1535,7 @@ void esas2r_complete_request_cb(struct esas2r_adapter *a,
- 			scsi_set_resid(rq->cmd, 0);
+@@ -2061,7 +2059,7 @@ static void esp_reset_cleanup(struct esp *esp)
+ 
+ 		list_del(&ent->list);
+ 		cmd->result = DID_RESET << 16;
+-		cmd->scsi_done(cmd);
++		scsi_done(cmd);
+ 		esp_put_ent(esp, ent);
  	}
  
--	rq->cmd->scsi_done(rq->cmd);
-+	scsi_done(rq->cmd);
+@@ -2535,7 +2533,7 @@ static int esp_eh_abort_handler(struct scsi_cmnd *cmd)
+ 		list_del(&ent->list);
  
- 	esas2r_free_request(a, rq);
- }
+ 		cmd->result = DID_ABORT << 16;
+-		cmd->scsi_done(cmd);
++		scsi_done(cmd);
+ 
+ 		esp_put_ent(esp, ent);
+ 
