@@ -2,44 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C60410251
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD4C410252
 	for <lists+linux-scsi@lfdr.de>; Sat, 18 Sep 2021 02:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345044AbhIRAKk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 17 Sep 2021 20:10:40 -0400
-Received: from mail-pj1-f43.google.com ([209.85.216.43]:54013 "EHLO
-        mail-pj1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345129AbhIRAJr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 Sep 2021 20:09:47 -0400
-Received: by mail-pj1-f43.google.com with SMTP id j1so7998858pjv.3
-        for <linux-scsi@vger.kernel.org>; Fri, 17 Sep 2021 17:08:25 -0700 (PDT)
+        id S1343596AbhIRAKn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 17 Sep 2021 20:10:43 -0400
+Received: from mail-pj1-f44.google.com ([209.85.216.44]:37532 "EHLO
+        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345133AbhIRAJt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 Sep 2021 20:09:49 -0400
+Received: by mail-pj1-f44.google.com with SMTP id me5-20020a17090b17c500b0019af76b7bb4so10463174pjb.2
+        for <linux-scsi@vger.kernel.org>; Fri, 17 Sep 2021 17:08:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KCk1KbuFpkV7cq/guiqDKEKPoQ6wJbY/OnjdIU+o1lM=;
-        b=G5vJ3el+BZ2ioEDANSpIhSJ89w/b62apRCtKLKr1ZdHutAVtih9vggq/GsyBXpibkq
-         65BH8TRyR89ovtWYZ7gwQjbxcNAwOwLlirSm6Z2u0JhJ5g4YKZnxa9Qtp9d9BQnPNMZf
-         W5E8UK++nreOgVYZEwaSTsYCVG3f4bhq0emxRVEjJYRTjH3/2AWeGMHgdm6ELsl9sXwK
-         uYsRfK2WZDoJWk1FokjXqiba0AlMYqJH0strzNFiU3R6PnzoTRKEoJL+0tvOu0rFUEAT
-         gxDFzonj6t8B7Y0rK2WE3ksx+FsxgZGZj2Sg+wbfE7UeWEsP+wj7OB3wNjxJMhTOGshh
-         f4pg==
-X-Gm-Message-State: AOAM530y8y/JdvEq2UOyVdagMuZPlrty29A9s1xRu4kdiQIrBSMOaZRF
-        kXyQRdc+d4bGwgK7OGLSGq7sJFAX+os=
-X-Google-Smtp-Source: ABdhPJwWZaK1t/ap9JRA+pMRWSWdUfQcgWf8pRK9ADk91ciIf5S/4fSguwafoZVq+DhoCN437WnqEg==
-X-Received: by 2002:a17:90a:ef0b:: with SMTP id k11mr24292895pjz.209.1631923704803;
-        Fri, 17 Sep 2021 17:08:24 -0700 (PDT)
+        bh=ZLjrkUrDGjiUH0yp0QEebobu1TDlTcuEBk039zm4Bj8=;
+        b=LMt20obShGApzR5a7wnp5oF4soka1+YT4zCJ9A0MHRPMB6lmkHAV2F/SN4wWvvzkjL
+         oQsohiHp/P7NRMbKMzlRD2nlnjHSVLc7iQeOkrNaLQnh7a3yiXPjr4v+eggrG6JR+ew6
+         couN8amTFPd70/b0AqiGwA4ZY6BtVt3W4VUrtsa5NwDjbmd3x31Zcppd6j3dxXujl8mk
+         aAfJ8wsKa0YbahR14QmCRUVdGW68Zln+V7r5stVDkc9pM6urzqUvJYaS9QJZiUx11pfc
+         xoXl4TyaUNkkWlv366PgoFXT3pQm8WJeHCAj7xPlUFZkGhnLPEQ049M3hJ3vCIGrluvH
+         18fw==
+X-Gm-Message-State: AOAM533N/wl10S06IIlgUqpKfsQM2ksvh0JV2Q8VssDXV3TfwIWugFUp
+        bp2b/mBRw0EQCz9h+NCdlbI=
+X-Google-Smtp-Source: ABdhPJysCuqaFqKduoI3X96tQMFt8KiFpKJSHs04qGN4Ca0N3QZd//ZL5+2eXLyetO1R/VGPwML51g==
+X-Received: by 2002:a17:90a:de0b:: with SMTP id m11mr24297358pjv.39.1631923706116;
+        Fri, 17 Sep 2021 17:08:26 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:4c45:d635:d2d2:93])
-        by smtp.gmail.com with ESMTPSA id bv16sm6403129pjb.12.2021.09.17.17.08.23
+        by smtp.gmail.com with ESMTPSA id bv16sm6403129pjb.12.2021.09.17.17.08.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 17:08:24 -0700 (PDT)
+        Fri, 17 Sep 2021 17:08:25 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH 77/84] wd33c93: Call scsi_done() directly
-Date:   Fri, 17 Sep 2021 17:06:00 -0700
-Message-Id: <20210918000607.450448-78-bvanassche@acm.org>
+Subject: [PATCH 78/84] wd719x: Call scsi_done() directly
+Date:   Fri, 17 Sep 2021 17:06:01 -0700
+Message-Id: <20210918000607.450448-79-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
 In-Reply-To: <20210918000607.450448-1-bvanassche@acm.org>
 References: <20210918000607.450448-1-bvanassche@acm.org>
@@ -54,76 +54,28 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/wd33c93.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/scsi/wd719x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/wd33c93.c b/drivers/scsi/wd33c93.c
-index 4468bc45aaa4..fe28d21c7e93 100644
---- a/drivers/scsi/wd33c93.c
-+++ b/drivers/scsi/wd33c93.c
-@@ -376,11 +376,9 @@ wd33c93_queuecommand_lck(struct scsi_cmnd *cmd,
+diff --git a/drivers/scsi/wd719x.c b/drivers/scsi/wd719x.c
+index 6f10a43510fb..1a7947554581 100644
+--- a/drivers/scsi/wd719x.c
++++ b/drivers/scsi/wd719x.c
+@@ -200,7 +200,7 @@ static void wd719x_finish_cmd(struct wd719x_scb *scb, int result)
+ 			 SCSI_SENSE_BUFFERSIZE, DMA_FROM_DEVICE);
  
- /* Set up a few fields in the scsi_cmnd structure for our own use:
-  *  - host_scribble is the pointer to the next cmd in the input queue
-- *  - scsi_done points to the routine we call when a cmd is finished
-  *  - result is what you'd expect
-  */
- 	cmd->host_scribble = NULL;
--	cmd->scsi_done = done;
- 	cmd->result = 0;
+ 	cmd->result = result << 16;
+-	cmd->scsi_done(cmd);
++	scsi_done(cmd);
+ }
  
- /* We use the Scsi_Pointer structure that's included with each command
-@@ -856,7 +854,7 @@ wd33c93_intr(struct Scsi_Host *instance)
- 		cmd->result = DID_NO_CONNECT << 16;
- 		hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
- 		hostdata->state = S_UNCONNECTED;
--		cmd->scsi_done(cmd);
-+		scsi_done(cmd);
- 
- 		/* From esp.c:
- 		 * There is a window of time within the scsi_done() path
-@@ -1183,7 +1181,7 @@ wd33c93_intr(struct Scsi_Host *instance)
- 				scsi_msg_to_host_byte(cmd, cmd->SCp.Message);
- 				set_status_byte(cmd, cmd->SCp.Status);
- 			}
--			cmd->scsi_done(cmd);
-+			scsi_done(cmd);
- 
- /* We are no longer  connected to a target - check to see if
-  * there are commands waiting to be executed.
-@@ -1270,7 +1268,7 @@ wd33c93_intr(struct Scsi_Host *instance)
- 			scsi_msg_to_host_byte(cmd, cmd->SCp.Message);
- 			set_status_byte(cmd, cmd->SCp.Status);
- 		}
--		cmd->scsi_done(cmd);
-+		scsi_done(cmd);
- 
- /* We are no longer connected to a target - check to see if
-  * there are commands waiting to be executed.
-@@ -1306,7 +1304,7 @@ wd33c93_intr(struct Scsi_Host *instance)
- 				scsi_msg_to_host_byte(cmd, cmd->SCp.Message);
- 				set_status_byte(cmd, cmd->SCp.Status);
- 			}
--			cmd->scsi_done(cmd);
-+			scsi_done(cmd);
- 			break;
- 		case S_PRE_TMP_DISC:
- 		case S_RUNNING_LEVEL2:
-@@ -1636,7 +1634,7 @@ wd33c93_abort(struct scsi_cmnd * cmd)
- 			    ("scsi%d: Abort - removing command from input_Q. ",
- 			     instance->host_no);
- 			enable_irq(cmd->device->host->irq);
--			cmd->scsi_done(cmd);
-+			scsi_done(cmd);
- 			return SUCCESS;
- 		}
- 		prev = tmp;
-@@ -1711,7 +1709,7 @@ wd33c93_abort(struct scsi_cmnd * cmd)
- 		wd33c93_execute(instance);
- 
- 		enable_irq(cmd->device->host->irq);
--		cmd->scsi_done(cmd);
-+		scsi_done(cmd);
- 		return SUCCESS;
- 	}
+ /* Build a SCB and send it to the card */
+@@ -295,7 +295,7 @@ static int wd719x_queuecommand(struct Scsi_Host *sh, struct scsi_cmnd *cmd)
+ 			 DMA_BIDIRECTIONAL);
+ out_error:
+ 	cmd->result = DID_ERROR << 16;
+-	cmd->scsi_done(cmd);
++	scsi_done(cmd);
+ 	return 0;
+ }
  
