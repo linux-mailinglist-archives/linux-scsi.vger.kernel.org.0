@@ -2,44 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F27B441023B
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Sep 2021 02:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EA641023D
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 Sep 2021 02:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345038AbhIRAJV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 17 Sep 2021 20:09:21 -0400
-Received: from mail-pg1-f179.google.com ([209.85.215.179]:38740 "EHLO
-        mail-pg1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344976AbhIRAJK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 Sep 2021 20:09:10 -0400
-Received: by mail-pg1-f179.google.com with SMTP id w8so11117028pgf.5
-        for <linux-scsi@vger.kernel.org>; Fri, 17 Sep 2021 17:07:47 -0700 (PDT)
+        id S1344969AbhIRAJW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 17 Sep 2021 20:09:22 -0400
+Received: from mail-pf1-f174.google.com ([209.85.210.174]:36470 "EHLO
+        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345015AbhIRAJL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 Sep 2021 20:09:11 -0400
+Received: by mail-pf1-f174.google.com with SMTP id m26so10677047pff.3
+        for <linux-scsi@vger.kernel.org>; Fri, 17 Sep 2021 17:07:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Bc2hHq3UHgHOKwsd4O7CY40azxenFfvLTOrXTmqo+58=;
-        b=dY7ZcKdi/zNw/M3XG0f82e/YHMQOl0fqxvHI5qyJfHJV6bZzA49C3oWst/87mpVQ4r
-         Cj0rVATApIFNhessxH4cglcITUY6nhqhbA6Y1w36l0ocx67a3aELbCR5d7M5Z+rTXYgh
-         7bWyOvmmFaOu4PbJpvcBWOKt2YnEd4EMevzjpLDiQdFcw2LKXdb/CrnqHUAWILdun8l3
-         vVmBZf3nv65mIkph0w4+HrQij8MJ5OZorvSN18VDRFW0XZ5NdZ+j2G3ZETIT5SRej4Pf
-         wdyPgquSKgC/7I3ZiNlyTgl6jEBwVi6/RLF79m7W296MLFJtEAw8TKe41SlpCd2VgtvK
-         SWXw==
-X-Gm-Message-State: AOAM532dNMKvAR5dBerR2YleZ9yLOGrm5Zr9E7uLTlDSx51f2oz4XorY
-        uVm8B+GBqpLvrwK4jzlbLY8=
-X-Google-Smtp-Source: ABdhPJzHakc3t3j6/Mk5+6WD6Dm6GFSr1Q8pm1IpMXo3YNm93yrUH1xFHw2wzpSCUHfAx6qoB2QyAg==
-X-Received: by 2002:a62:bd15:0:b029:31c:a584:5f97 with SMTP id a21-20020a62bd150000b029031ca5845f97mr13468425pff.33.1631923667576;
-        Fri, 17 Sep 2021 17:07:47 -0700 (PDT)
+        bh=jT07YcNAYpM/yjLcB8hRpPTWU3XSM5z6Yr+Nf87OGNE=;
+        b=GC8WsFJJsI/9AE38fXkpZSeDXr3HPBuXxKC9h8VTzHfNbaizocmFah74h14nSAZOZB
+         kZEkSQM8rihYp3VFbUZ78CqcpqUzxxm2fkWfPEWuxknY5ElGw4rAOAXxpGYBltuD+OIk
+         Hi7v2QKX+bYVb6IqKJl08uUfCn1TDy0K2ahJgwU2mmZvzZgPlyaxrJolBcEqIZ8aLiRL
+         llXX6v4v6JRxFjM6e5VA6T0zLL+1KZ9Xsp25U3qlrY84DV3ujKvWJTOaH1vtkyrpqofq
+         4o8hZTwKweSlhowIwbc+0UQiHmZEnEopAJQXnOBPsKOqBeyc1kFetTk888tkupSy7At6
+         96bA==
+X-Gm-Message-State: AOAM530sNwBwgePkrRMyO8dgbQrbtBvKcVYrHeED0OazfojpERo0jVF0
+        xK2XV5UoSiVG4QjAzza/8hE=
+X-Google-Smtp-Source: ABdhPJyPCewwkbV7062nKZcfxXemvHKzYpM6iSfr61TK6eyC3NbyP5hNHhDaDsdULWqGryZgr9LCBA==
+X-Received: by 2002:aa7:9ac2:0:b0:443:a477:6684 with SMTP id x2-20020aa79ac2000000b00443a4776684mr9623731pfp.25.1631923668969;
+        Fri, 17 Sep 2021 17:07:48 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:4c45:d635:d2d2:93])
-        by smtp.gmail.com with ESMTPSA id bv16sm6403129pjb.12.2021.09.17.17.07.46
+        by smtp.gmail.com with ESMTPSA id bv16sm6403129pjb.12.2021.09.17.17.07.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 17:07:47 -0700 (PDT)
+        Fri, 17 Sep 2021 17:07:48 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        GOTO Masanori <gotom@debian.or.jp>,
+        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH 56/84] ncr53c8xx: Call scsi_done() directly
-Date:   Fri, 17 Sep 2021 17:05:39 -0700
-Message-Id: <20210918000607.450448-57-bvanassche@acm.org>
+Subject: [PATCH 57/84] nsp32: Call scsi_done() directly
+Date:   Fri, 17 Sep 2021 17:05:40 -0700
+Message-Id: <20210918000607.450448-58-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
 In-Reply-To: <20210918000607.450448-1-bvanassche@acm.org>
 References: <20210918000607.450448-1-bvanassche@acm.org>
@@ -54,27 +56,27 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ncr53c8xx.c | 3 +--
+ drivers/scsi/nsp32.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/ncr53c8xx.c b/drivers/scsi/ncr53c8xx.c
-index 7a4f5d4dd670..6c6cf111be5f 100644
---- a/drivers/scsi/ncr53c8xx.c
-+++ b/drivers/scsi/ncr53c8xx.c
-@@ -4006,7 +4006,7 @@ static inline void ncr_flush_done_cmds(struct scsi_cmnd *lcmd)
- 	while (lcmd) {
- 		cmd = lcmd;
- 		lcmd = (struct scsi_cmnd *) cmd->host_scribble;
--		cmd->scsi_done(cmd);
-+		scsi_done(cmd);
- 	}
- }
+diff --git a/drivers/scsi/nsp32.c b/drivers/scsi/nsp32.c
+index bc9d29e5fdba..1057b6fd7569 100644
+--- a/drivers/scsi/nsp32.c
++++ b/drivers/scsi/nsp32.c
+@@ -945,7 +945,6 @@ static int nsp32_queuecommand_lck(struct scsi_cmnd *SCpnt,
  
-@@ -7865,7 +7865,6 @@ static int ncr53c8xx_queue_command_lck (struct scsi_cmnd *cmd, void (*done)(stru
- printk("ncr53c8xx_queue_command\n");
- #endif
+ 	show_command(SCpnt);
  
--     cmd->scsi_done     = done;
-      cmd->host_scribble = NULL;
-      cmd->__data_mapped = 0;
-      cmd->__data_mapping = 0;
+-	SCpnt->scsi_done     = done;
+ 	data->CurrentSC      = SCpnt;
+ 	SCpnt->SCp.Status    = SAM_STAT_CHECK_CONDITION;
+ 	scsi_set_resid(SCpnt, scsi_bufflen(SCpnt));
+@@ -1546,7 +1545,7 @@ static void nsp32_scsi_done(struct scsi_cmnd *SCpnt)
+ 	/*
+ 	 * call scsi_done
+ 	 */
+-	(*SCpnt->scsi_done)(SCpnt);
++	scsi_done(SCpnt);
+ 
+ 	/*
+ 	 * reset parameters
