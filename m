@@ -2,112 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43ED3410608
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Sep 2021 13:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FA741074B
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 Sep 2021 17:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239022AbhIRLUU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 18 Sep 2021 07:20:20 -0400
-Received: from mout.gmx.net ([212.227.17.21]:48133 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230313AbhIRLUS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 18 Sep 2021 07:20:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1631963904;
-        bh=kSd6PjAeNeaTRnAPtJhlmElKGDj3xQowRv0TDrStuVI=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=Vvo5aPPriRaxkFFGLbemLtPKLzpWQB6FY+uoDECZGTYL5QhOszcymqrv7eQgiuIOn
-         +pcYp0zCscDyNSjnU3yBV+feNchAPdrJWwJmfEtHBK2uR9CV7XYi96pTFbO2y41i8q
-         AnIy0p2alJSKtljTFcqe94m85p3vzi9UZZV/Vl8g=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([79.150.72.99]) by mail.gmx.net
- (mrgmx104 [212.227.17.174]) with ESMTPSA (Nemesis) id
- 1MWRVb-1mPbFj0t6h-00XspB; Sat, 18 Sep 2021 13:18:24 +0200
-From:   Len Baker <len.baker@gmx.com>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Hannes Reinecke <hare@suse.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Len Baker <len.baker@gmx.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: advansys: Prefer struct_size over open coded arithmetic
-Date:   Sat, 18 Sep 2021 13:18:05 +0200
-Message-Id: <20210918111805.15471-1-len.baker@gmx.com>
-X-Mailer: git-send-email 2.25.1
+        id S236670AbhIRPM4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 18 Sep 2021 11:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230338AbhIRPMy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 18 Sep 2021 11:12:54 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C82C061574
+        for <linux-scsi@vger.kernel.org>; Sat, 18 Sep 2021 08:11:30 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id m4so13545093ilj.9
+        for <linux-scsi@vger.kernel.org>; Sat, 18 Sep 2021 08:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=GE6cCY/0hnI+CqkRsz34r3mZcz58ATQdIipjSK1xhAQ=;
+        b=mr7RQXNyygreXwDc/oSrHTqxVWQHEbmqRZy4efar+MM2JaFCNtXtStDbtQ8N3LHA3f
+         avu5RZiU14ZA3QQJqonz3yzkcWQNmk+EoMt5wKusOD78PuZgSmcrB0jp+g12iL+Fsp2V
+         z9PY9Ce2Jkh3I0ZzdnVKR4+Z5p7Ao+zmxD7p5qdDweofvWbhq4vgtjvjuOSfv6T97tnS
+         YVxuLE5XkWvYGd0OOafJgqTvBqd6NLPvDDaG1onOv6RHMc4GrqXH5cxd0YSspKHWZKnb
+         EbFJaFvF/0N6+Me26M26Ggn58a1cNqWV72YpGLBaaIMN8e9oMKSCKKvzl/2WPwMnRKIn
+         vjOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=GE6cCY/0hnI+CqkRsz34r3mZcz58ATQdIipjSK1xhAQ=;
+        b=h3viV8ikAkdb7AW+WrXhpZJ4306R3JdVng9nQsWsEDhoiTwnGAqSJS0LzvevapRDgB
+         KTiXcYAb3bET0tJRt8kO8ziP6b2+6tny6OTBOGNXq5eAMiTUhPrZopwhawQVx59WzHet
+         cP67vDYNDrvpXtfIhyOhKU3NOoJAe+NQQrDNIQBEPxhbiWa2uOck9+mBdP27M+nAss8h
+         KxNXxmH+6ps6HXZbOImSLynoDJybfxraSuKHHj3PX9wVNjOyCD2E3POlybYRWUxXCzd0
+         OXTuKG7HtvGkDGT6tUWhDM4o+eAdMdgVgRXtiA89pkJk0hVv9OiQ0A+WFt8JcWEZqhG3
+         z1FA==
+X-Gm-Message-State: AOAM5338sY9dl6eoY6kzkgISmYzNx30wa5kIcIvxe9HqQ1OKnFqKXYCe
+        hnAPah7hHBq/BNH4KIK135ckB/48EaRoryt8f2w=
+X-Google-Smtp-Source: ABdhPJwKS5++4XcQlkpjG/GYi6Uksl+6mcWAZhvQjS6Du+TUNtd4ggpIZeL++cDl9n3NtiMosrvVZmJqtLwf7Jw+sMM=
+X-Received: by 2002:a92:b109:: with SMTP id t9mr11569133ilh.176.1631977890254;
+ Sat, 18 Sep 2021 08:11:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:/oD9QjKU+EVW2qc7N/g++w8kBj0WN/GOhqBZGr9qi/Zr+BUlNVS
- MYRqpyTQECxjX7rg7HSQGKicD4GEq95vvqyJDZ0HHTIIitpuCjCYgxXkHFJkl7f/fyM8inX
- 4YfPtcbf3F28x9LWoxfWqOnw+T/hmXjsdj1r8qDbfE3o6a+42RyEQcRC9NkwKHLBFxNi5Ga
- cwKMat6M8qMZEzBsyxwIQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:EiIkyuEQyHg=:281aC23z+/pedZ478ytxHH
- +PUAm2VgUuJN1JD3KvpHH757/v9AyDC3H5WMhLVGUkB5G6vUIE+1VSBcjhwfHlFJ3CbrU2t2g
- ZTcSk4iDS7LG36GmrDNb/QkACrP92y4fuxrpp6LsoR0rRleYrjk/ElR/kFCXghfsxG9m8lRfj
- 43d/tlAFmI2QXFOo5hvQq2G3hoC/9j1ZHOxn45zUzvwgUumlDUiKOMPmxFJ4Gp0buhmSCLLJ0
- MeecWQv9kKuJMoIYyvmNsZ88rmvhRArtNRDby7QKrfP/A+gl2PNg9qqAVsP3GJf7AKyu+1Eea
- E4iTtS1Uv3ZTXifHu2SG85M2RRV90pqSuLJuDceObmMYakmEFE9Z5Jzn8i3r+ssKDrVTTVh3M
- J+kVPqcxfGqJMIvlvS/83Qo4X65D2aumYekY5cOgfw5aW4iNv4wBD/Mq4x9DVi00i5bGD5Zw6
- xZ79wkbs52imX8HGE7sAamxl6EqhgvWYOerZH3/YLDFOUm59saygqIBYfFKrhWerCX44Y7obI
- sADp5LtNvIIGQKoL4+hKUafswr3zfvNacpdDUcYGumVU8+1FlFwcxV5vo9wqc3dXyUtliQ296
- aZFP0DD8qCGTwCKSlyJbww+IMxYzSZzMaDw6zRos1oQtOAUVoERBZVzE3WhmKR9hDmG7ZsBSu
- p68X2ui9q6rzZdRxbcGHPgem6nRcR+cpnIkPYA0jtrFvcwN+PCLkiyDvH9IAxDqB6TwhC97LP
- BSulhEtR99Gu1cPz5kVzRkPrXTnaM+FkpCz7YPQpSwkoclQGdmYKGKJred/VJ9hDosFyBwOBQ
- 2xuA5BvOniOlAJpRuUn6jc6yqLqqHJ6w7/PAIQLUSGY0nTdv5hdYdoMtJr+82X4+l9k7G3cEE
- fVIceAiW8G1MV9PVoAT7RZ9jsNZQoFbdOaamtTqmn8u9VIBeJlaeauEb+SxBN66ZQiId7999O
- 2Q2IFGPXw0OHvrK0a7eRWhn7iahstpZO2uknqvzj8Zob4jgCZYa61YUyyWV9khyxSbiQo3jDy
- XBdFjW62j6/V83gs4UsJMMIc1I/o08aC985EMrJdtYXDc66t/XM7QW8rHdLLeSwd8uQmsz4Ek
- 3NVuTlew12xAiw=
+Received: by 2002:ac0:db49:0:0:0:0:0 with HTTP; Sat, 18 Sep 2021 08:11:29
+ -0700 (PDT)
+Reply-To: drabrarzebadiyah@gmail.com
+From:   "dr.Abrar Zebadiyah" <mrssuzaramaling2@gmail.com>
+Date:   Sat, 18 Sep 2021 08:11:29 -0700
+Message-ID: <CAJ=rZJp8Vsn97o3a=Dh1rL=T_YcvuTfGToUPGVU79oPcjcXpRA@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-As noted in the "Deprecated Interfaces, Language Features, Attributes,
-and Conventions" documentation [1], size calculations (especially
-multiplication) should not be performed in memory allocator (or similar)
-function arguments due to the risk of them overflowing. This could lead
-to values wrapping around and a smaller allocation being made than the
-caller was expecting. Using those allocations could lead to linear
-overflows of heap memory and other misbehaviors.
+-- 
+My Dear Friend.
 
-So, refactor the code a bit to use the struct_size() helper instead of
-the argument "size + count * size" in the kzalloc() function.
+How are you and your family Today? I hope all is well, and I am happy
+to share this transaction with you ,but you must keep everything as
+secret and very confidential.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#open-co=
-ded-arithmetic-in-allocator-arguments
+I have a very lucrative business transaction which requires your
+utmost discretion. Please understand that you and me, are to work as
+one team to inherit this fund, hence I am your insider in the bank as
+the transaction commence. I advise you to feel free with me for all is
+going to be well with us. This business is 100% risk free.
 
-Signed-off-by: Len Baker <len.baker@gmx.com>
-=2D--
- drivers/scsi/advansys.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Though, I know it would come to you at uttermost surprise unbelief
+because it is virtually impossible to know who is trustworthy and who
+to believed I am dr.Abrar Zebadiyah sum of $10.5 million is lying in
+our bank without claim i want you to help me to claim and receive it
+to your account in your country for our benefit.
 
-diff --git a/drivers/scsi/advansys.c b/drivers/scsi/advansys.c
-index ffb391967573..fe882502e7bf 100644
-=2D-- a/drivers/scsi/advansys.c
-+++ b/drivers/scsi/advansys.c
-@@ -7465,6 +7465,7 @@ static int asc_build_req(struct asc_board *boardp, s=
-truct scsi_cmnd *scp,
- 		return ASC_BUSY;
- 	} else if (use_sg > 0) {
- 		int sgcnt;
-+		size_t size;
- 		struct scatterlist *slp;
- 		struct asc_sg_head *asc_sg_head;
+I am aware of the unsafe nature of the internet, and was compelled to
+use this medium due to the nature of this project.I have access to
+every vital information that can be used to transfer this huge amount
+of money, which may culminate into the investment of the said funds
+into your account or any lucrative company in your country.
 
-@@ -7477,8 +7478,8 @@ static int asc_build_req(struct asc_board *boardp, s=
-truct scsi_cmnd *scp,
- 			return ASC_ERROR;
- 		}
+If you will like to assist me as a partner then indicate your
+interest, after which we shall both discuss the modalities and the
+sharing percentage. Upon receipt of your reply on your expression of
+interest, I will give you full details on how the business will be
+executed. I am open for negotiation,
 
--		asc_sg_head =3D kzalloc(sizeof(asc_scsi_q->sg_head) +
--			use_sg * sizeof(struct asc_sg_list), GFP_ATOMIC);
-+		size =3D struct_size(asc_scsi_q->sg_head, sg_list, use_sg);
-+		asc_sg_head =3D kzalloc(size, GFP_ATOMIC);
- 		if (!asc_sg_head) {
- 			scsi_dma_unmap(scp);
- 			set_host_byte(scp, DID_SOFT_ERROR);
-=2D-
-2.25.1
+Thanks for your anticipated cooperation.Note you might receive this
+message in your inbox or spam folder, depends on your web host or
+server network
 
+Contact my private email only if you are interested (drabrarzebadiyah@gmail.com)
+
+Compliment of the day,
+Regards,
+
+dr.Abrar Zebadiyah
