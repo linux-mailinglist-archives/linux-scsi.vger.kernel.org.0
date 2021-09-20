@@ -2,113 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC96A410ABB
-	for <lists+linux-scsi@lfdr.de>; Sun, 19 Sep 2021 10:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADDB0410DFA
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Sep 2021 02:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237027AbhISIPr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 19 Sep 2021 04:15:47 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:40378 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbhISIPr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Sep 2021 04:15:47 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 49C721FFE6;
-        Sun, 19 Sep 2021 08:14:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1632039261; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NpgLEnzLN/DUVWck5mKN9UgUoDGNKkPNaxWySDFuBD4=;
-        b=sQmcBr10sIrID5hQfECHJILipaIfD+p73pWR3EGV1HR/91p//2coxg/57iuCKGIX0ifAhV
-        BtJjmB9uKOY9Rx2MScY2zrO3z0TdHKeEe+qN01KHNYP7EuvBWYP8mgXigQC7A8SueXV20b
-        3WJst3H6S7kZPivZKxVQKy0RB833v7k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1632039261;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NpgLEnzLN/DUVWck5mKN9UgUoDGNKkPNaxWySDFuBD4=;
-        b=5rwqeGE5yTdWTGYBCgtDjV+ILUFfGiZ1QLDizuQeR4giVqpTLsl+7nq1kuw3O25R+tK4uP
-        VO89hAWqDZ4uZlCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 15C2213A6C;
-        Sun, 19 Sep 2021 08:14:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gjjuA13xRmGpTgAAMHmgww
-        (envelope-from <hare@suse.de>); Sun, 19 Sep 2021 08:14:21 +0000
-Subject: Re: [PATCH] scsi: sd_zbc: Support disks with more than 2**32 logical
- blocks
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>
-References: <20210917212314.2362324-1-bvanassche@acm.org>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <4a91c052-3d60-6fe4-bf4c-50487ef562b7@suse.de>
-Date:   Sun, 19 Sep 2021 10:14:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S230239AbhITAMG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 19 Sep 2021 20:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229933AbhITAMF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Sep 2021 20:12:05 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B44C061764
+        for <linux-scsi@vger.kernel.org>; Sun, 19 Sep 2021 17:10:39 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id j14so2762656plx.4
+        for <linux-scsi@vger.kernel.org>; Sun, 19 Sep 2021 17:10:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=EmTuuBkgfu7PIcF+07HUiBDImoAebJFY6j2NyWamoP0=;
+        b=buSllOw0K2eKiv4B8E/+WiLU22fYFX8Z7pIhDd2XjqjYmudTx2w9oP45QsSEz16btQ
+         YzMngXfy5iO4G4e4iGTG1v91yplCA4S2mhwrd9Monkafyj6Wa7rhb/p+kukokAyLzn37
+         cBpxzWqXNkt3uJCISMNPrNNifuDRn4bck64YnQPFpJtpCrxw3p7vQmYDPGXH+FN9NkRs
+         GDhMDhQanG+tm9/SdvraIjEAOb5EbCYEBoo4EPD9QcLKGfAA5iaYG1vA5JOhgpm+BQUh
+         XoZGrrVaQFzXToFEpj7riLfi5Hja61hrt3bsQyuW2iegtAk/P3OTIvoZhxq8iZBfjy2H
+         zj+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=EmTuuBkgfu7PIcF+07HUiBDImoAebJFY6j2NyWamoP0=;
+        b=YlCdrXboJFOqfI6SoXkuFUNdJvND64fGnUFAlc6ZX7MKbR4bY80/Ngy4lMWQsx7O03
+         Kk3gKCMxt1/EI7ZTWyXT/cJK3eDcRIpvr0zRA14SITLVL6Ny2lY2b9K+o1PVjQzUwdju
+         CsiGnarBYysmb7ZL2wTSl6XfpOErQQxmfF0FZGvvXvarJTYX9uju/jtSxTB62+k8xe9Y
+         LVwt2aDK/1GFgee7EIeuTkNU0ZCqR7OKxEP6AfkXx1iBltUWeiytquVtuPTwDSpyPv5B
+         ddh1C2m2g1yyemNxvor1ipqM3C1PDq+DGI9IdMdWy7Yi0pN9qQUJEV6cpdOPp9zkIu+g
+         dT2Q==
+X-Gm-Message-State: AOAM532/M2AT8KCgiDXJCkKVi1AGeVJDt7bIzhUEwQkrJzLI4QmcH9Ha
+        n9ULL6d8dlSjHw8RJrAlWfvzRiu1GNH8gNNbBL4=
+X-Google-Smtp-Source: ABdhPJzg3lJmdciQsUfDNRY83cvSy2NKeWQNlYCH6iDhArBDVPjJn+zCBm6ypYInrcInwAplsviVdRsm9kvx2BZqMVM=
+X-Received: by 2002:a17:90a:f411:: with SMTP id ch17mr25993483pjb.182.1632096639244;
+ Sun, 19 Sep 2021 17:10:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210917212314.2362324-1-bvanassche@acm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:e20d:0:0:0:0 with HTTP; Sun, 19 Sep 2021 17:10:38
+ -0700 (PDT)
+Reply-To: johnsonk100@gmail.com
+From:   Raphael John Diko <mohamedalabbar10@gmail.com>
+Date:   Sun, 19 Sep 2021 17:10:38 -0700
+Message-ID: <CAOB23ShUZVXMZ=Q5nQNhv3vN8p_6XrJ__YFSw79_9rSO59Bj-A@mail.gmail.com>
+Subject: CONFIRM IF YOU DID RECEIVE MY MAIL
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/17/21 11:23 PM, Bart Van Assche wrote:
-> This patch addresses the following Coverity report about the
-> zno * sdkp->zone_blocks expression:
-> 
-> CID 1475514 (#1 of 1): Unintentional integer overflow (OVERFLOW_BEFORE_WIDEN)
-> overflow_before_widen: Potentially overflowing expression zno *
-> sdkp->zone_blocks with type unsigned int (32 bits, unsigned) is evaluated
-> using 32-bit arithmetic, and then used in a context that expects an
-> expression of type sector_t (64 bits, unsigned).
-> 
-> Cc: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-> Cc: Damien Le Moal <Damien.LeMoal@wdc.com>
-> Cc: Hannes Reinecke <hare@suse.de>
-> Fixes: 5795eb443060 ("scsi: sd_zbc: emulate ZONE_APPEND commands")
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->   drivers/scsi/sd_zbc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/sd_zbc.c b/drivers/scsi/sd_zbc.c
-> index b9757f24b0d6..ded4d7a070a0 100644
-> --- a/drivers/scsi/sd_zbc.c
-> +++ b/drivers/scsi/sd_zbc.c
-> @@ -280,7 +280,7 @@ static void sd_zbc_update_wp_offset_workfn(struct work_struct *work)
->   {
->   	struct scsi_disk *sdkp;
->   	unsigned long flags;
-> -	unsigned int zno;
-> +	sector_t zno;
->   	int ret;
->   
->   	sdkp = container_of(work, struct scsi_disk, zone_wp_offset_work);
-> 
-Of course.
+Hello Dear
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+I am Raphael.K.John Diko,
 
-Cheers,
+I want to confirm from you if you are able to handle a transaction
+project valued at $7.5 million dollars only, that  will benefit both
+of us.
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+Let me know your willingness.
+
+You should get back to me on this email address:  alexptt56@gmail.com
+
+Thanks
+
+Raphael.K.John Diko
