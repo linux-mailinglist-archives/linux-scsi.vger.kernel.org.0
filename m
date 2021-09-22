@@ -2,32 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E75441424E
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Sep 2021 09:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D469041425A
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Sep 2021 09:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbhIVHI4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Sep 2021 03:08:56 -0400
-Received: from [185.61.187.140] ([185.61.187.140]:50024 "EHLO
+        id S233095AbhIVHM2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Sep 2021 03:12:28 -0400
+Received: from [185.61.187.140] ([185.61.187.140]:55984 "EHLO
         server8.equinoxes.fr" rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S232946AbhIVHIx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Sep 2021 03:08:53 -0400
-X-Greylist: delayed 441 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Sep 2021 03:08:52 EDT
+        with ESMTP id S233101AbhIVHMZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Sep 2021 03:12:25 -0400
 Received: from localhost (localhost.localdomain [127.0.0.1])
-        by server8.equinoxes.fr (Postfix) with ESMTP id BCEC74A7881
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 08:59:06 +0200 (CEST)
+        by server8.equinoxes.fr (Postfix) with ESMTP id B4CA14A7847
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 09:10:00 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at server8.equinoxes.fr
 Received: from server8.equinoxes.fr ([127.0.0.1])
         by localhost (server8.equinoxes.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id 1XZ3b5V-fuHr for <linux-scsi@vger.kernel.org>;
-        Wed, 22 Sep 2021 08:59:06 +0200 (CEST)
+        with LMTP id IcgbRqvCqpFc for <linux-scsi@vger.kernel.org>;
+        Wed, 22 Sep 2021 09:10:00 +0200 (CEST)
 Received: by server8.equinoxes.fr (Postfix, from userid 5023)
-        id 46CB44A7D6C; Wed, 22 Sep 2021 08:54:32 +0200 (CEST)
+        id E73D54A80DA; Wed, 22 Sep 2021 09:06:01 +0200 (CEST)
 To:     linux-scsi@vger.kernel.org
 Subject: General Sales Enquiries
-Date:   Wed, 22 Sep 2021 08:54:32 +0200
+Date:   Wed, 22 Sep 2021 09:06:01 +0200
 From:   Robert Bounds <robert.bounds@mailfence.com>
 Reply-To: purchasing@tamu-edu.com
-Message-ID: <849eeb184a7025f36f2908441bab2fba@choquenet.com>
+Message-ID: <9954ca3ae61b22bbf392e4d2d6aa42e3@choquenet.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
