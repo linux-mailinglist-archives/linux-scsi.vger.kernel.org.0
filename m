@@ -2,89 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2F44141E7
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Sep 2021 08:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E75441424E
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Sep 2021 09:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbhIVGce (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Sep 2021 02:32:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52286 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232901AbhIVGca (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 22 Sep 2021 02:32:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AA57D60EE5;
-        Wed, 22 Sep 2021 06:31:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1632292261;
-        bh=R05G1LkRjKACd0Q5ZkbhqNbR9cYqqnC8UbsO3hB4EJI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pqsOSg/6XvST3im/QB4oe7h2xcZBfoYnDSjxa0XiTyi3f1Cso8IAwVySxnXCzsLe/
-         ZBINx4VfEGH3VIn4mnWMY1/qaxFvALHXi17uLqpm3HlvKqMcHblqVn/rhf2t//sOv+
-         AmS74wxBMHOQ9KqB1IyOWeqe6WcFQgn3yBwOLYUI=
-Date:   Wed, 22 Sep 2021 08:30:58 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     20210918000607.450448-1-bvanassche@acm.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: Re: [PATCH 80/84] staging: rts5208: Call scsi_done() directly
-Message-ID: <YUrNok3NhgRygKbn@kroah.com>
-References: <20210921173436.3533078-1-bvanassche@acm.org>
- <20210921173436.3533078-2-bvanassche@acm.org>
+        id S233005AbhIVHI4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Sep 2021 03:08:56 -0400
+Received: from [185.61.187.140] ([185.61.187.140]:50024 "EHLO
+        server8.equinoxes.fr" rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S232946AbhIVHIx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Sep 2021 03:08:53 -0400
+X-Greylist: delayed 441 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Sep 2021 03:08:52 EDT
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by server8.equinoxes.fr (Postfix) with ESMTP id BCEC74A7881
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 08:59:06 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at server8.equinoxes.fr
+Received: from server8.equinoxes.fr ([127.0.0.1])
+        by localhost (server8.equinoxes.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id 1XZ3b5V-fuHr for <linux-scsi@vger.kernel.org>;
+        Wed, 22 Sep 2021 08:59:06 +0200 (CEST)
+Received: by server8.equinoxes.fr (Postfix, from userid 5023)
+        id 46CB44A7D6C; Wed, 22 Sep 2021 08:54:32 +0200 (CEST)
+To:     linux-scsi@vger.kernel.org
+Subject: General Sales Enquiries
+Date:   Wed, 22 Sep 2021 08:54:32 +0200
+From:   Robert Bounds <robert.bounds@mailfence.com>
+Reply-To: purchasing@tamu-edu.com
+Message-ID: <849eeb184a7025f36f2908441bab2fba@choquenet.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210921173436.3533078-2-bvanassche@acm.org>
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Sep 21, 2021 at 10:34:32AM -0700, Bart Van Assche wrote:
-> Conditional statements are faster than indirect calls. Hence call
-> scsi_done() directly.
-> 
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/staging/rts5208/rtsx.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/staging/rts5208/rtsx.c b/drivers/staging/rts5208/rtsx.c
-> index 898add4d1fc8..f1136f6bcee2 100644
-> --- a/drivers/staging/rts5208/rtsx.c
-> +++ b/drivers/staging/rts5208/rtsx.c
-> @@ -140,7 +140,6 @@ static int queuecommand_lck(struct scsi_cmnd *srb,
->  	}
->  
->  	/* enqueue the command and wake up the control thread */
-> -	srb->scsi_done = done;
->  	chip->srb = srb;
->  	complete(&dev->cmnd_ready);
->  
-> @@ -423,7 +422,7 @@ static int rtsx_control_thread(void *__dev)
->  
->  		/* indicate that the command is done */
->  		else if (chip->srb->result != DID_ABORT << 16) {
-> -			chip->srb->scsi_done(chip->srb);
-> +			scsi_done(chip->srb);
->  		} else {
->  skip_for_abort:
->  			dev_err(&dev->pci->dev, "scsi command aborted\n");
-> @@ -635,7 +634,7 @@ static void quiesce_and_remove_host(struct rtsx_dev *dev)
->  	if (chip->srb) {
->  		chip->srb->result = DID_NO_CONNECT << 16;
->  		scsi_lock(host);
-> -		chip->srb->scsi_done(dev->chip->srb);
-> +		scsi_done(dev->chip->srb);
->  		chip->srb = NULL;
->  		scsi_unlock(host);
->  	}
+Dear Sir/Madam,
+ We would like to request a quote for the below products:
 
-I do not see the whole thread of this series on any mailing list (or
-lore.kernel.org), so I do not know if you are wanting these to go
-through the individual subsystem trees, or if they have to go through
-the scsi tree as one large series due to dependancies.
+UNITS                                DESCRIPTION
+5                                    Ubiquiti airFiber AF24HD - wireless bridge
+50                                   Seagate ST6000VXA01 Skyhawk 3.5 Hard Drive, 6TB, SATA 6Gb/s 
+50                                   Seagate ST4000VXA07 Skyhawk 3.5 Hard Drive, 4TB, SATA 6Gb/s 
+5                                    Microsoft 15" Multi-Touch Surface Book  3, Intel Core i7, 32 GB RAM - 1 TB SSD - En
 
-thanks,
+We would also need to know if they are all in stock and if not, please advise on when products will be available to ship to us.
+Payment per University Policy is net 30 days from date of invoice , payment terms should be clearly stated on your official quotation to know you accept our terms.
+Looking forward to hearing back from you.
+Cordially
+Robert Bounds - Director Of Purchasing
+Texas A&M University
+purchasing@tamu-edu.com
+robert.bounds@mailfence.com
+Tel/Fax:  (979) 272-5815
 
-greg k-h
