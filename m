@@ -2,82 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 531DF4150D6
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Sep 2021 21:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 978074152FE
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Sep 2021 23:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237286AbhIVT7f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Sep 2021 15:59:35 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:45616 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbhIVT7e (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Sep 2021 15:59:34 -0400
-Received: by mail-ot1-f45.google.com with SMTP id l7-20020a0568302b0700b0051c0181deebso5127096otv.12;
-        Wed, 22 Sep 2021 12:58:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iaPd+QHHmiMvOvCvDzF4J+PjNGw7QzM9uEOdU0ijBx0=;
-        b=lmSUzZwKLoJbi3rV8b14ueTzvSARIS4af4soLPNuuJhDc27EYAF4AQCEwxM9qG4Ldh
-         SNblY3E+Ti5x5q51TdLKUvqQI0QJJm2QI5dEG3h6sLV1pRn1FfIBfmH1dQnExZkjNaWy
-         EyK1kNhtZk8C3U3APKnabrQCrmpQBaD7IXZOVfnLZwUJtwjktLZPVCZGIRqn06lJ9jw0
-         ZRYKwZgjFp0JKPUHctXJldMcUq65m/H4988xC2qM5PjKqTwrMci6CKtIl53xUltQ6iki
-         c9xd1xgB1hIgaKTw4/4rx0dj1YHIIRI/XzN3Uxq42D42uZwLk6t9THC87ZttVLIL55J3
-         moxw==
-X-Gm-Message-State: AOAM530WnV3Nb1xYiEUoSZc0iRzm3zsRmEi/QfJOsLdjYfhWCKyev3cM
-        AJaDvQSv73T9JUfsmQWRVQ==
-X-Google-Smtp-Source: ABdhPJxYtpvzhIoY0PLePCkbi+/RqQbnPjHxc6x38GmKt2lT/UdKaSb/wKAdy90Adwnkh1e3vG2yCw==
-X-Received: by 2002:a9d:6092:: with SMTP id m18mr817222otj.215.1632340684146;
-        Wed, 22 Sep 2021 12:58:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id q133sm244494oia.55.2021.09.22.12.58.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Sep 2021 12:58:03 -0700 (PDT)
-Received: (nullmailer pid 1191863 invoked by uid 1000);
-        Wed, 22 Sep 2021 19:58:02 -0000
-Date:   Wed, 22 Sep 2021 14:58:02 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chanho Park <chanho61.park@samsung.com>
-Cc:     devicetree@vger.kernel.org, Bean Huo <beanhuo@micron.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Gyunghoon Kwon <goodjob.kwon@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-scsi@vger.kernel.org, Can Guo <cang@codeaurora.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-samsung-soc@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v3 17/17] dt-bindings: ufs: exynos-ufs: add exynosautov9
- compatible
-Message-ID: <YUuKysgLBtB5jQv1@robh.at.kernel.org>
-References: <20210917065436.145629-1-chanho61.park@samsung.com>
- <CGME20210917065524epcas2p455b2900227b6a20994bec4816248f2bf@epcas2p4.samsung.com>
- <20210917065436.145629-18-chanho61.park@samsung.com>
+        id S238207AbhIVVme (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Sep 2021 17:42:34 -0400
+Received: from server.cloudhousebd.com ([144.91.92.227]:46196 "EHLO
+        server.cloudhousebd.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238142AbhIVVmc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Sep 2021 17:42:32 -0400
+X-Greylist: delayed 30249 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Sep 2021 17:42:32 EDT
+Received: by server.cloudhousebd.com (Postfix, from userid 1069)
+        id EC42871C188; Wed, 22 Sep 2021 12:56:11 +0600 (+06)
+To:     linux-scsi@vger.kernel.org
+Subject: Sales Enquiry
+Date:   Wed, 22 Sep 2021 06:56:11 +0000
+From:   Robert Bounds <robert.bounds@mailfence.com>
+Reply-To: purchasing@tamu-edu.com
+Message-ID: <a0c7790746e9b8b3c9bf1009297dabb9@autodiscover.blog.berabo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210917065436.145629-18-chanho61.park@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 17 Sep 2021 15:54:36 +0900, Chanho Park wrote:
-> Below two compatibles can be used for exynosautov9 SoC UFS controller.
-> 
-> - samsung,exynosautov9-ufs: ExynosAutov9 UFS Physical Host
-> - samsung,exynosautov9-ufs-vh: ExynosAutov9 UFS Virtual Host
-> 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Chanho Park <chanho61.park@samsung.com>
-> ---
->  Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+Dear Sir/Madam,
+ We would like to request a quote for the below products:
 
-Acked-by: Rob Herring <robh@kernel.org>
+UNITS                                DESCRIPTION
+5                                    Ubiquiti airFiber AF24HD - wireless bridge
+50                                   Seagate ST6000VXA01 Skyhawk 3.5 Hard Drive, 6TB, SATA 6Gb/s 
+50                                   Seagate ST4000VXA07 Skyhawk 3.5 Hard Drive, 4TB, SATA 6Gb/s 
+5                                    Microsoft 15" Multi-Touch Surface Book  3, Intel Core i7, 32 GB RAM - 1 TB SSD - En
+
+We would also need to know if they are all in stock and if not, please advise on when products will be available to ship to us.
+Payment per University Policy is net 30 days from date of invoice , payment terms should be clearly stated on your official quotation to know you accept our terms.
+Looking forward to hearing back from you.
+Cordially
+Robert Bounds - Director Of Purchasing
+Texas A&M University
+purchasing@tamu-edu.com
+robert.bounds@mailfence.com
+Tel/Fax:  (979) 272-5815
+
