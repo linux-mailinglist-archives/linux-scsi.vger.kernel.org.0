@@ -2,99 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1850415196
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Sep 2021 22:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E6D4151CE
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Sep 2021 22:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237684AbhIVUth (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Sep 2021 16:49:37 -0400
-Received: from mail-pj1-f41.google.com ([209.85.216.41]:37818 "EHLO
-        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237592AbhIVUtg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Sep 2021 16:49:36 -0400
-Received: by mail-pj1-f41.google.com with SMTP id me5-20020a17090b17c500b0019af76b7bb4so5399568pjb.2
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 13:48:06 -0700 (PDT)
+        id S237740AbhIVU4f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Sep 2021 16:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237830AbhIVU4e (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Sep 2021 16:56:34 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652D1C0613C1
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 13:55:03 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id bk29so14436693qkb.8
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 13:55:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
+        b=KdXnhe/3zkHeZgixn9BpXiRXniwMgDmhauf6YTuxP0wgB5yzxGI3euReyxhx9TVrxq
+         3Od5gARvk08SiaQHEdbK80uTPJiKvZD1mvaXmFEi2OlRGGLVxi9qjTdQEJHDNx6GrhQf
+         +YDVSfcVXX6hJ9tzkOuxVlwY0IK/v4ECFsMgPN0YbEUFjdWw7wtLO6HU7k0GlwYOwBU7
+         g0u5ZrnjkFj9bDNBfxTJ+EZszn5R+MIWkE1noseX+tMOjLt3VKfnAtHOf7zGnzUi7/Ss
+         4zORj2FhCL6VBd/6ui6VhZsTJDlTQFr3MO12bpjTdn18irITsVHBfbJQd5ezVh5SqLsC
+         4EBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3AFQqXZmo4K+7iWw+BjmjwCMVEBuW2c+N//wcEqcQOA=;
-        b=pumEp/EgcJa+qBC2yo01Sd0onMwLxTSQZXuVvgECBoy7BbML+VHBOpEnZHFvO29hG6
-         SWjX0ug7tqOUrnng/gbDGP6AXWosWUqMsd8kUyD4ZjNw6U1DSwGEWtoENqG20YLTUEGo
-         a61bF1O+5ZUGIK4ruSy8g/l4lyGMAymfLEZSDDoIAAzC1jSlQ2flJSPsVlt9BLu/FN+j
-         NrlI26U/Z42b89kTHYjksbMBjLMHQSKgD+qSarjmdhAX/vs9FoklTfk4G6wqbxpIP83o
-         /nNofqcXse2VRmFNWV95eLghNyqMq9qXsudAAT6Wz8eFcDdkdkt2UALsqsQtt1MQD0pm
-         WZzQ==
-X-Gm-Message-State: AOAM532igN/0U1K8noEbYPio44BHbiHDCgkhq8yHDEtZcHB7fMLPzm2F
-        NX6Ki0f4EpQAelgniGXldQqovtwEGkQ=
-X-Google-Smtp-Source: ABdhPJy6tnpnpkINl+teTV4KHuxO7+fUlmZK+YUg7WEhiJS4zeYI2/3ytTrYRrxPWUr4d+ShakK/Iw==
-X-Received: by 2002:a17:90a:cb8e:: with SMTP id a14mr13558594pju.227.1632343685151;
-        Wed, 22 Sep 2021 13:48:05 -0700 (PDT)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:f3b9:da7d:f0c0:c71c])
-        by smtp.gmail.com with ESMTPSA id e7sm3274974pfc.114.2021.09.22.13.48.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Sep 2021 13:48:04 -0700 (PDT)
-Subject: Re: [PATCH] scsi: ufs: Fix task management completion
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>, linux-scsi@vger.kernel.org
-References: <20210922091059.4040-1-adrian.hunter@intel.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <88b64fec-4034-3e0d-d15e-46dcfaad5863@acm.org>
-Date:   Wed, 22 Sep 2021 13:48:02 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
+        b=nezG/R+1h36Tiz7Uv4PxC4BiGumJ+eL4/FWE0IeSn9+NdrWeXoK/MzwHsB5GVCZW9K
+         ELXJHQc2m0p2JXca3HjgONpgGjfWlyrTJhMVXIZyToGysoAaUp/I6RX5Va4gSd8O3qXe
+         UMlWqV2m75+EB2OPVQHSf7PJBTjx00+wj60NgxtnaXrxl57veDrAo3Z0TOxgmkmw49Hr
+         MJkBRbKaVr+JZEuPOAhhe0AF/o6qu05dvVNbCrtNKbnGWFv2Ihf9af523QUsHxnrnSdc
+         mj9QVH+uXCRH2TLvqkux32sgHjR2YzPU5kTAf8UizjB5Y/jo8E2LKz0g7iwl3PR1gZcw
+         hElQ==
+X-Gm-Message-State: AOAM531Wi2nb5aSlMtmGVCAwmdQVQIy2TkpI8D4SSUTmVUF2C1RjYA0D
+        iO6mVLJ7H11v2uPL7V44XctzkTZ+2PqhQImYgS4=
+X-Google-Smtp-Source: ABdhPJwsLqRgkk9jb+wC1ECBTFJXrEEB4mmlIo/Kaul20LfIYdlAYLv9tmwaB5Pxv0AmysZSk6ZePRs2dvYCH/qVqH0=
+X-Received: by 2002:a05:6902:150a:: with SMTP id q10mr1344586ybu.515.1632344102557;
+ Wed, 22 Sep 2021 13:55:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210922091059.4040-1-adrian.hunter@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Sender: pablogboy98@gmail.com
+Received: by 2002:a05:7000:1903:0:0:0:0 with HTTP; Wed, 22 Sep 2021 13:55:02
+ -0700 (PDT)
+From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
+Date:   Wed, 22 Sep 2021 21:55:02 +0100
+X-Google-Sender-Auth: EgWN-7KeHIzBWxs5WISil-9jI9s
+Message-ID: <CAFZ0LQG=HorOEh0B82pMRaOtrfukA2tHOBoX92F9fX48+pG2cA@mail.gmail.com>
+Subject: My Dear Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/22/21 2:10 AM, Adrian Hunter wrote:
-> The UFS driver uses blk_mq_tagset_busy_iter() when identifying task
-> management requests to complete, however blk_mq_tagset_busy_iter()
-> doesn't work.
-> 
-> blk_mq_tagset_busy_iter() only iterates requests dispatched by the block
-> layer. That appears as if it might have started since commit 37f4a24c2469a1
-> ("blk-mq: centralise related handling into blk_mq_get_driver_tag") which
-> removed 'data->hctx->tags->rqs[rq->tag] = rq' from blk_mq_rq_ctx_init()
-> which gets called:
-> 
-> 	blk_get_request
-> 		blk_mq_alloc_request
-> 			__blk_mq_alloc_request
-> 				blk_mq_rq_ctx_init
-> 
-> Since UFS task management requests are not dispatched by the block
-> layer, hctx->tags->rqs[rq->tag] remains NULL,  and since
-> blk_mq_tagset_busy_iter() relies on finding requests using
-> hctx->tags->rqs[rq->tag], UFS task management requests are never found by
-> blk_mq_tagset_busy_iter().
-> 
-> By using blk_mq_tagset_busy_iter(), the UFS driver was relying on internal
-> details of the block layer, which was fragile and subsequently got
-> broken. Fix by removing the use of blk_mq_tagset_busy_iter() and having
-> the driver keep track of task management requests.
-
-Thanks for the detailed analysis. I agree that using blk_mq_tagset_busy_iter()
-no longer works due to recent changes in the block layer. Has it been
-considered to export blk_mq_all_tag_iter() and to use that function instead of
-blk_mq_tagset_busy_iter()?
-
-Thanks,
-
-Bart.
-
-
+Assalamu alaikum,
+I came across your e-mail contact prior to a private search while in
+need of your assistance. I am Aisha Al-Qaddafi, the only biological,
+Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
+single Mother and a Widow with three Children. I have investment funds
+worth Twenty Seven Million Five Hundred Thousand United State Dollar
+($27.500.000.00 ) and i need a trusted  investment Manager/Partner
+because of my current refugee status, however, I am interested in you
+for investment project assistance in your country. If you are willing
+to handle this project on my behalf kindly reply urgently to enable me
+to provide you more information about the investment
+funds.
+Best Regards
