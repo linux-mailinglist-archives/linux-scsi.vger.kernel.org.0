@@ -2,70 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F57414FDE
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Sep 2021 20:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1209541509B
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Sep 2021 21:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237062AbhIVS3X (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Sep 2021 14:29:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50052 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236973AbhIVS3W (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 22 Sep 2021 14:29:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9107861350
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 18:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632335272;
-        bh=qJoiU/Vs2AwJPxaFSCmOKzq+p/k8NRBTXsABlsQD8kg=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=rwQa7Vtllv1X/JM2Kc/Hn1E727HvjwDUXqcVkqAjXEtYqkEhH11Ke4BtAm/CcJ6DR
-         22LjiO4aAtMmwlEO08WYz1HhhZcpjhhrBX/UMr0Ldi9YIScyAY/oQkuJh/CdtIHSfw
-         N660spNZNDPnRmh2mVngeg0XgGWQdKzquIhGzLHD/bC8UVxI4h/ja4m/L0DXBl8BdO
-         01e+waUjfzLENqXAkhB9LRJJDDCnaSoYmWfNMOueE+N+erMK86xV7pvILZpe1/AYVs
-         OaSDQAgw1rr8e/dwW7Db/d09DSL99VbT76gz3sHx1Apo3vdwIMmJv9VZzmHpQMJ6Py
-         yCuo2kO9BG84w==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 8BFDA60F6B; Wed, 22 Sep 2021 18:27:52 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-scsi@vger.kernel.org
-Subject: [Bug 213759] CD tray ejected on hibernate resume
-Date:   Wed, 22 Sep 2021 18:27:51 +0000
-X-Bugzilla-Reason: CC
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Product: SCSI Drivers
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jetlag0515@yahoo.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: CODE_FIX
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-213759-11613-Z3NAq6EKll@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213759-11613@https.bugzilla.kernel.org/>
-References: <bug-213759-11613@https.bugzilla.kernel.org/>
+        id S237231AbhIVTpO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Sep 2021 15:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230431AbhIVTpM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Sep 2021 15:45:12 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F676C061574
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 12:43:42 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id x124so6127713oix.9
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 12:43:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=NdfOI4pLAZV9M1l1OIkcn0omvnM6YyDLp+ahHmCFaKQ=;
+        b=EK13E1LMKQXDOSrWwiQlV6RXcKUCr0OiIk3fMqxovr8WN7ZCT0unxHinFV8/z7660P
+         DVFspN6xL1MRaaxzhYNYmKfBqUcAxP5Isd4q4wnpU9uYrVEOtV/kkLq0LAfykgo32v97
+         Ru+99ghTmTyauq73Zti1b50+bLQIdTwFY+i3sPpGz6IDLNeyVc+Yg8hj8HVTH0+oa3Pd
+         RROiYotHydbYUO9ynee4RQjKaRAmYYK+HLBp2kyJFigWCfgUNRGRyfUd2hUksT38cLJ0
+         BjJGHhjcSSF+hyie99uZXEJYeUFKZusLPOVtPDPaxGV0ZmHrxs8kZfEx+7Xcu9VW6Dro
+         U2yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=NdfOI4pLAZV9M1l1OIkcn0omvnM6YyDLp+ahHmCFaKQ=;
+        b=iBORW3TU885donoOpdPQaQmMdVeZCu3auxdMtPl3e6JOQSjyoBbz1Y0F1WFs5BJAna
+         OBJOcSWwFC3A0A9I+Xy+XXqpHwl2XarhoEDCCEVaX4oqlL2hbZN0ShPlLc/arpbGrHzv
+         73CfnHYBdTmRbh/TVHab8fRec8Cemqy6kTKVOQp4UHWQ2rIj6XNaq5mTzqT+2edmnlxi
+         hFN5qg3986u6Ofa0pt8y6u2G8ngNmSfZR+7fz80ROww+E1at1njcGkED4/usrE0Jt0gi
+         C8LLG5aP8pXGGMACDcHQ2N0E0vYEzPHyuKWc3LQUUYJP6MqjCMlbPy1WPrdUWW+4MkHX
+         +jzA==
+X-Gm-Message-State: AOAM530TLCjEz7EC5/LMdXeXS4/6fQ1SjP4OB7JGPfvU/MQhWHAUwrZI
+        UymZ3/jXNqH8kRcKhejrQZHxvZaaNJXqKz4Bhsw=
+X-Google-Smtp-Source: ABdhPJxzTj9QWxaH6Oqy08RShfm9ElKcmlS+rPpTiHk8TNJZosbokoXF9QzDp9XR3imgfc7L93WLh9YFfyJjvJgpcSY=
+X-Received: by 2002:aca:6108:: with SMTP id v8mr7319148oib.139.1632339821999;
+ Wed, 22 Sep 2021 12:43:41 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6838:d038:0:0:0:0 with HTTP; Wed, 22 Sep 2021 12:43:41
+ -0700 (PDT)
+Reply-To: ahilhim@yandex.com
+From:   Kirinec Zlatko <marrylynnwanne1@gmail.com>
+Date:   Wed, 22 Sep 2021 12:43:41 -0700
+Message-ID: <CAFk1P4SOiuKRszF7joVy=Ba41PzsfNGpaAvvopcgM7SvsDPwGg@mail.gmail.com>
+Subject: Von Kirinec Zlatko
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213759
-
---- Comment #12 from jeffro (jetlag0515@yahoo.com) ---
-After today's Ubuntu 18.04 LTS kernel update to 4.15.0.158-generic the CD t=
-ray
-eject problem still persists.
-
 --=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are on the CC list for the bug.
-You are watching the assignee of the bug.=
+Bitte entschuldigen Sie, dass ich nicht Ihre Erlaubnis eingeholt habe,
+bevor Sie diese Mail an Sie senden. Ich bin Aahil Madrigal, wie geht
+es dir bitte, es gibt ein sehr wichtiges Thema, das ich sehr dringend
+mit dir teilen m=C3=B6chte
+Dankesch=C3=B6n.
