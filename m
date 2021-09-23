@@ -2,71 +2,139 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E6D4151CE
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Sep 2021 22:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A62B4154C0
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Sep 2021 02:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237740AbhIVU4f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Sep 2021 16:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237830AbhIVU4e (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Sep 2021 16:56:34 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652D1C0613C1
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 13:55:03 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id bk29so14436693qkb.8
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 13:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=KdXnhe/3zkHeZgixn9BpXiRXniwMgDmhauf6YTuxP0wgB5yzxGI3euReyxhx9TVrxq
-         3Od5gARvk08SiaQHEdbK80uTPJiKvZD1mvaXmFEi2OlRGGLVxi9qjTdQEJHDNx6GrhQf
-         +YDVSfcVXX6hJ9tzkOuxVlwY0IK/v4ECFsMgPN0YbEUFjdWw7wtLO6HU7k0GlwYOwBU7
-         g0u5ZrnjkFj9bDNBfxTJ+EZszn5R+MIWkE1noseX+tMOjLt3VKfnAtHOf7zGnzUi7/Ss
-         4zORj2FhCL6VBd/6ui6VhZsTJDlTQFr3MO12bpjTdn18irITsVHBfbJQd5ezVh5SqLsC
-         4EBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=nezG/R+1h36Tiz7Uv4PxC4BiGumJ+eL4/FWE0IeSn9+NdrWeXoK/MzwHsB5GVCZW9K
-         ELXJHQc2m0p2JXca3HjgONpgGjfWlyrTJhMVXIZyToGysoAaUp/I6RX5Va4gSd8O3qXe
-         UMlWqV2m75+EB2OPVQHSf7PJBTjx00+wj60NgxtnaXrxl57veDrAo3Z0TOxgmkmw49Hr
-         MJkBRbKaVr+JZEuPOAhhe0AF/o6qu05dvVNbCrtNKbnGWFv2Ihf9af523QUsHxnrnSdc
-         mj9QVH+uXCRH2TLvqkux32sgHjR2YzPU5kTAf8UizjB5Y/jo8E2LKz0g7iwl3PR1gZcw
-         hElQ==
-X-Gm-Message-State: AOAM531Wi2nb5aSlMtmGVCAwmdQVQIy2TkpI8D4SSUTmVUF2C1RjYA0D
-        iO6mVLJ7H11v2uPL7V44XctzkTZ+2PqhQImYgS4=
-X-Google-Smtp-Source: ABdhPJwsLqRgkk9jb+wC1ECBTFJXrEEB4mmlIo/Kaul20LfIYdlAYLv9tmwaB5Pxv0AmysZSk6ZePRs2dvYCH/qVqH0=
-X-Received: by 2002:a05:6902:150a:: with SMTP id q10mr1344586ybu.515.1632344102557;
- Wed, 22 Sep 2021 13:55:02 -0700 (PDT)
+        id S238741AbhIWAlX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Sep 2021 20:41:23 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:34259 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238738AbhIWAlX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Sep 2021 20:41:23 -0400
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20210923003951epoutp04f2d4a3ffbd58c2f8ca075a5ab471bd35~nTJShzOUw2276222762epoutp04A
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Sep 2021 00:39:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20210923003951epoutp04f2d4a3ffbd58c2f8ca075a5ab471bd35~nTJShzOUw2276222762epoutp04A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1632357591;
+        bh=lHPuX5SyFqAHpJoNRX+Q2q7lA+c+sD6gENGVKvKID9I=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=FsA8DCrBeT/gAbDTHQoOBIePoLJzZEcM/8le1Tr1vQ86f9hYaO7EsS6szyzFyVtJS
+         ynAukQ1Ce/EA4KtQ8MYC7WPq+ePm5gotaEw9zPr/DTtG91iR7R5sGI6UWpr/8a6rFd
+         7c4Qny1khhEnc3N0e+NEpGt0kTmmg5zxgtLRbk44=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20210923003950epcas2p271a26dee2fe321661cceeca9801b1ea1~nTJRlU70w1859318593epcas2p2c;
+        Thu, 23 Sep 2021 00:39:50 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.40.191]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4HFGX45wh8z4x9Q0; Thu, 23 Sep
+        2021 00:39:48 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        85.B3.09816.3DCCB416; Thu, 23 Sep 2021 09:39:47 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20210923003947epcas2p34cb7861f13845a4d2534bed6b548c3b9~nTJO3TiRj0741007410epcas2p3d;
+        Thu, 23 Sep 2021 00:39:47 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20210923003947epsmtrp1c2bda833e8b2547f2adb0cef7a23ebed~nTJOyTpzb0432704327epsmtrp12;
+        Thu, 23 Sep 2021 00:39:47 +0000 (GMT)
+X-AuditID: b6c32a46-625ff70000002658-24-614bccd3f6e0
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        EA.EA.09091.2DCCB416; Thu, 23 Sep 2021 09:39:46 +0900 (KST)
+Received: from KORCO039056 (unknown [10.229.8.156]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20210923003946epsmtip15d9ba3a7890288e217e135911ba2b7f4~nTJOf2RjC1784617846epsmtip1j;
+        Thu, 23 Sep 2021 00:39:46 +0000 (GMT)
+From:   "Chanho Park" <chanho61.park@samsung.com>
+To:     "'Rob Herring'" <robh@kernel.org>
+Cc:     "'Alim Akhtar'" <alim.akhtar@samsung.com>,
+        "'Avri Altman'" <avri.altman@wdc.com>,
+        "'James E . J . Bottomley'" <jejb@linux.ibm.com>,
+        "'Martin K . Petersen'" <martin.petersen@oracle.com>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        "'Bean Huo'" <beanhuo@micron.com>,
+        "'Bart Van Assche'" <bvanassche@acm.org>,
+        "'Adrian Hunter'" <adrian.hunter@intel.com>,
+        "'Christoph Hellwig'" <hch@infradead.org>,
+        "'Can Guo'" <cang@codeaurora.org>,
+        "'Jaegeuk Kim'" <jaegeuk@kernel.org>,
+        "'Gyunghoon Kwon'" <goodjob.kwon@samsung.com>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        "'Kiwoong Kim'" <kwmad.kim@samsung.com>
+In-Reply-To: <YUuKJj7+wmJd7DSe@robh.at.kernel.org>
+Subject: RE: [PATCH v3 06/17] scsi: ufs: ufs-exynos: get sysreg regmap for
+ io-coherency
+Date:   Thu, 23 Sep 2021 09:39:46 +0900
+Message-ID: <000701d7b013$8237ef50$86a7cdf0$@samsung.com>
 MIME-Version: 1.0
-Sender: pablogboy98@gmail.com
-Received: by 2002:a05:7000:1903:0:0:0:0 with HTTP; Wed, 22 Sep 2021 13:55:02
- -0700 (PDT)
-From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
-Date:   Wed, 22 Sep 2021 21:55:02 +0100
-X-Google-Sender-Auth: EgWN-7KeHIzBWxs5WISil-9jI9s
-Message-ID: <CAFZ0LQG=HorOEh0B82pMRaOtrfukA2tHOBoX92F9fX48+pG2cA@mail.gmail.com>
-Subject: My Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: ko
+Thread-Index: AQKr0ifVbQZWZSl2xwEUfL3y5isNhQIApKS6Ans9QPYBmW2HKKnX1z7Q
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0wTdxznd3e9tk7cWR77rQGtp84AA9rO4pXIZoDgZTDXTBfjtggXuAFa
+        rl2vMNkyBZbxWId0hqgU6pCJMjRreITHBoaCG2PMLQsOEDdkGwxrUuRhHBiQlV7N+O/zfXzy
+        +Xx+Dwkqm8blkmzOzJo4Rk/iG7C2vrCYyKGfkhmlq2EPNTB5DacmLrThlGvpN5xy/lmGUWdn
+        l1Bq3nFZRH3WmUANWusQatJhQ6m60TaEanIvItTt1u8w6vwv1xHKMtKBU1f6nyDUaleHeB9B
+        D91Kpm0F5Tg9dLocoVsawukvu1wI3dxYhtPWuh5A/+soxem5qTGMPt3aCOiF5i10SY8F0W18
+        S783i2UyWJOC5dINGdlcZhyZfDA1IVUTo1RFqrTUHlLBMTlsHJmYootMytZ7MpGKPEaf62np
+        GJ4no1/eazLkmllFloE3x5GsMUNvVKmMUTyTw+dymVHphpxYlVKp1ng20/RZVx+1osYB5MSD
+        hXviAlCEfAqkEkjshp3Ljz14g0RGdAA42LIqEop5ALvnxnCheASge96NPaX80zfno3QD6Fxu
+        8VHuAbh8swdf28KJaOgqbROt4UBiJyyyTWBrSyhRKYJn7jjB2kBKqOHFDrvXSQBxBP6xUOPF
+        mIdw3vmxd8ef0MKvrDO4gDfDgapJrw2U2Arb3TWoYEkBl6Yui4R+IKwuK0YF4SQ4Ud/kzQCJ
+        EikcnbmDC4REWGRx+PIEwPv9rWIBy6GrolgsECwAfvLXqm9wFcCywhQBvwIfn2v1qEk8amHQ
+        8U30GoTEdnhjzOdtEyztWxELbX9YWiwTiLtgT/s5n2ootNQsiKyAtK1LZluXzLYuje1/rVqA
+        NYJg1sjnZLK82qhef93NwPviw5M6QKV7NqoXIBLQC6AEJQP9F0ZfZWT+GUz+B6zJkGrK1bN8
+        L9B4zvpzVB6UbvB8Gc6cqtKoY2KUWg2liVFT5HP+9ifxjIzIZMzscZY1sqanPEQilRcgh1qu
+        a9wh+RWJxy6ErTZ17twRoMvTSg5zW/uPdu8gHH6vH0x0bhtn9p9UHlX6/XgprarlI3tl/odB
+        hZu6Ck+FfHs2XF2yOvw3VfX1+8eOz/z6QDphT3hGfH823o+TtZfUYFsuDdAPsera9Ihu4DoV
+        uXLki3f8Muqnu4JfMqenhPeeVBtGHpa/EHq3XWS3DFfUD1gOLJbyOil/S7sNz027/YZ9OET7
+        Q9Ouze+dyG/rlNfe2B6VMzg+/lpSfN3G+Ni3NRHRd0esiy+uTFbPdV+brhsPSAt8N5brrJJN
+        BT3b8LP48Pdv+jndV4LzdBGW/Yg89HfnoZshgbuNWvGZfe7C5+0KrpbE+CxGFY6aeOY/dNQn
+        /noEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPIsWRmVeSWpSXmKPExsWy7bCSnO6lM96JBucOalucfLKGzeLBvG1s
+        Fi9/XmWzOPiwk8Vi2oefzBaf1i9jtejZ6WxxesIiJosn62cxWyy6sY3JYuPbH0wWN7ccZbGY
+        cX4fk0X39R1sFsuP/2Oy+L9nB7uDgMflK94esxp62Twu9/UyeWxeoeWxeM9LJo9NqzrZPCYs
+        OsDo8X19B5vHx6e3WDz6tqxi9Pi8Sc6j/UA3UwBPFJdNSmpOZllqkb5dAlfG6m9bmAtOMlW8
+        //yCvYGxiamLkZNDQsBE4tnhj0A2F4eQwG5GiZ9f3zNDJGQlnr3bwQ5hC0vcbznCClH0jFHi
+        15l5LCAJNgF9iZcd21hBbBEBVYmmWQ9YQIqYBeaxSuw+u44RouM1o8SH02fBqjgFjCQW7pgL
+        tI+DQ1ggXKJhIdggFqDmGQebGUFsXgFLiZUT3rFB2IISJ2c+YQEpZxbQk2jbCFbCLCAvsf3t
+        HKhDFSR+Pl3GChEXkZjd2cYMcY+bxIOlG9kmMArPQjJpFsKkWUgmzULSvYCRZRWjZGpBcW56
+        brFhgWFearlecWJucWleul5yfu4mRnCca2nuYNy+6oPeIUYmDsZDjBIczEoivJ9veCUK8aYk
+        VlalFuXHF5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1ILUIJsvEwSnVwLTNli1ni6PwtA/z
+        e6cqTLmXIHP+SJtY1JnCLPEb7u5Kikx2d7sWnF1Uee7asshTs/o6461KOn75Rqp/WJPJNeXz
+        7zVrzdeyR3BtWj9Fa4mFR8LRqN4So6rdpvkBzZEND8+0VZoX/j+yP9Odw+LKi5fLnde4cii8
+        5Vjf/T5n575Ff9sLDaKVPvdfsTQN2bk49V74i0esVesVXXhmmSU9S/rQ5N4zO9mmbuq/mtLS
+        8CtB4m2vy9c9Wv7kvUdvZID0k8idonuCH1kxSJyNmNF9tibVMmpF4tNj+kXffs6f+tXn82mu
+        VrUbXVqTWWcvcb1ZunLPa1HZmxkZr4Nsz3yX6OZQS76ecPsiv4FGBnd/qRJLcUaioRZzUXEi
+        AMjUmIdiAwAA
+X-CMS-MailID: 20210923003947epcas2p34cb7861f13845a4d2534bed6b548c3b9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210917065523epcas2p477a63b06cbb9f5588aa2c149c9d1db10
+References: <20210917065436.145629-1-chanho61.park@samsung.com>
+        <CGME20210917065523epcas2p477a63b06cbb9f5588aa2c149c9d1db10@epcas2p4.samsung.com>
+        <20210917065436.145629-7-chanho61.park@samsung.com>
+        <YUuKJj7+wmJd7DSe@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Assalamu alaikum,
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological,
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children. I have investment funds
-worth Twenty Seven Million Five Hundred Thousand United State Dollar
-($27.500.000.00 ) and i need a trusted  investment Manager/Partner
-because of my current refugee status, however, I am interested in you
-for investment project assistance in your country. If you are willing
-to handle this project on my behalf kindly reply urgently to enable me
-to provide you more information about the investment
-funds.
-Best Regards
+> >  drivers/scsi/ufs/ufs-exynos.c | 5 +++++
+> > drivers/scsi/ufs/ufs-exynos.h | 1 +
+> >  2 files changed, 6 insertions(+)
+> 
+> This patch is a nop... Fold it into the patch using sysreg.
+
+I separated them to be reviewed easily by different maintainers. I'll squash
+them on next patchset.
+
+Best Regards,
+Chanho Park
+
