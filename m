@@ -2,67 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEBC4157CE
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Sep 2021 07:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4154157ED
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Sep 2021 07:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbhIWFUA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 Sep 2021 01:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbhIWFT7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Sep 2021 01:19:59 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BBAC061574
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 22:18:28 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id i4so21586346lfv.4
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Sep 2021 22:18:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=MhaWH0xm/odULRUgpRN30Lg5qdDn6Ee/GPJGPBWoxIc=;
-        b=bASyftgyzwNYyNsBGNBq/DULqt5F0TKxGXsK8kSjJaun62Y/Dlahdw7DOGOOpqW50/
-         EKfk7/jwiCQo8T8XZ5UDBPmmOgFJ6GTc+wBtHLeuLPAzvMTrF2lfLF0Rnz4eVN7wE26Z
-         Wa5ob8GBWXhdBlw06hYwtKAwcRqUUEOsqoys2tIylbhlmzdqOcKcBq8sE6CpHxycJP/l
-         WtBHuMYBiGQOswC2P/iPNWcIGPHL6NEBPzt+lFvU4wOw+soqERFVaNzcHqbqlXR8FuHX
-         seidlgM5dyDnqy371UQdu42RCThvRh/zf6QJP5/yTUODK2ItWFyYHletedH7+cfy5rZP
-         i//A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=MhaWH0xm/odULRUgpRN30Lg5qdDn6Ee/GPJGPBWoxIc=;
-        b=c9CQJlnEg786mMGyQeq7xrqkMli0GjcTLeNtVYdeHOhqM9h3X3kOKSMl3PCB71pZVk
-         LWEr6XffVp2DpvgWIfoeCT+CQgHqN/Hz468EwotAI5OVPeEeJOyKEos/Qc+31ucQ2/QE
-         mngAUU8XYEZOcLiUBgBKT/e5dp04ym5wSu8hpvkjfDmqrpv+cMQmzjsp8glmck44nBQl
-         3wxXbV5uqerDnxPRL2a7NBNHRtSDMkltX082s90pQGPfashV3asSRfF8MqSAe0nhJ15U
-         HA3qjvHONmcROWRf6tVTuN5sf0UiCvLgMqqcnejPmzI3/AOupAGezAreWNqefOfwNKIP
-         qHGQ==
-X-Gm-Message-State: AOAM532IaoYsFwSuh8bW9TNRsNvky/GDutcgtNr9bLOiktlWGI6+knPf
-        Ro8OHDKtKoxHu2Qg+PyhX9Bz+xtK8IDGFihueA8=
-X-Google-Smtp-Source: ABdhPJxyp2MD5QunRNykckGYi0/QOCsPcakCP0Rt7+0B18j7/irVvvRbXhPVfoaol1pJACRBHU9/WEMxdozNGoPvSfo=
-X-Received: by 2002:a2e:96d8:: with SMTP id d24mr3291007ljj.376.1632374306733;
- Wed, 22 Sep 2021 22:18:26 -0700 (PDT)
+        id S239185AbhIWFpO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 Sep 2021 01:45:14 -0400
+Received: from mga03.intel.com ([134.134.136.65]:7010 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229890AbhIWFpN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 23 Sep 2021 01:45:13 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10115"; a="223810413"
+X-IronPort-AV: E=Sophos;i="5.85,316,1624345200"; 
+   d="scan'208";a="223810413"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2021 22:43:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,316,1624345200"; 
+   d="scan'208";a="550663458"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.84]) ([10.237.72.84])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Sep 2021 22:43:38 -0700
+Subject: Re: [PATCH] scsi: ufs: Fix task management completion
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>, linux-scsi@vger.kernel.org
+References: <20210922091059.4040-1-adrian.hunter@intel.com>
+ <88b64fec-4034-3e0d-d15e-46dcfaad5863@acm.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <3a9a6c89-089c-bf7a-bc32-8f83a0209e29@intel.com>
+Date:   Thu, 23 Sep 2021 08:44:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Received: by 2002:a2e:8297:0:0:0:0:0 with HTTP; Wed, 22 Sep 2021 22:18:25
- -0700 (PDT)
-Reply-To: isabella.ferreira@yandex.com
-From:   "Isabella.Ferreira" <dribrahimaziz00@gmail.com>
-Date:   Thu, 23 Sep 2021 06:18:25 +0100
-Message-ID: <CAAJnOwDb7DRiKAdOYg6eFkx7kp_ptXmwutdiZmyt2HXfj6TRCw@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <88b64fec-4034-3e0d-d15e-46dcfaad5863@acm.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings,
+On 22/09/21 11:48 pm, Bart Van Assche wrote:
+> On 9/22/21 2:10 AM, Adrian Hunter wrote:
+>> The UFS driver uses blk_mq_tagset_busy_iter() when identifying task
+>> management requests to complete, however blk_mq_tagset_busy_iter()
+>> doesn't work.
+>>
+>> blk_mq_tagset_busy_iter() only iterates requests dispatched by the block
+>> layer. That appears as if it might have started since commit 37f4a24c2469a1
+>> ("blk-mq: centralise related handling into blk_mq_get_driver_tag") which
+>> removed 'data->hctx->tags->rqs[rq->tag] = rq' from blk_mq_rq_ctx_init()
+>> which gets called:
+>>
+>>     blk_get_request
+>>         blk_mq_alloc_request
+>>             __blk_mq_alloc_request
+>>                 blk_mq_rq_ctx_init
+>>
+>> Since UFS task management requests are not dispatched by the block
+>> layer, hctx->tags->rqs[rq->tag] remains NULL,  and since
+>> blk_mq_tagset_busy_iter() relies on finding requests using
+>> hctx->tags->rqs[rq->tag], UFS task management requests are never found by
+>> blk_mq_tagset_busy_iter().
+>>
+>> By using blk_mq_tagset_busy_iter(), the UFS driver was relying on internal
+>> details of the block layer, which was fragile and subsequently got
+>> broken. Fix by removing the use of blk_mq_tagset_busy_iter() and having
+>> the driver keep track of task management requests.
+> 
+> Thanks for the detailed analysis. I agree that using blk_mq_tagset_busy_iter()
+> no longer works due to recent changes in the block layer. Has it been
+> considered to export blk_mq_all_tag_iter() and to use that function instead of
+> blk_mq_tagset_busy_iter()?
 
-I wonder why you continue neglecting my emails. Please, acknowledge
-the receipt of this message in reference to the subject above as I
-intend to send to you the details of the mail. Sometimes, try to check
-your spam box because most of these correspondences fall out sometimes
-in SPAM folder.
-
-Best regards,
-Isabella
+It seemed better not to be the only driver using the block layer in a
+different way.  Having the UFS driver self-contained in this regard
+seemed more robust.  If anything, the code without blk_mq_tagset_busy_iter()
+is slightly shorter, so using a block layer iterator doesn't help much.
