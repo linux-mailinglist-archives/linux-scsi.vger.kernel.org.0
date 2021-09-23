@@ -2,122 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4754F4164F4
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Sep 2021 20:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AAC416577
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Sep 2021 20:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242853AbhIWSPC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 Sep 2021 14:15:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39428 "EHLO mail.kernel.org"
+        id S240547AbhIWS6W (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 Sep 2021 14:58:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35722 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242807AbhIWSOr (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 23 Sep 2021 14:14:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 29F4560F43;
-        Thu, 23 Sep 2021 18:13:15 +0000 (UTC)
+        id S237009AbhIWS6W (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 23 Sep 2021 14:58:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C717961038;
+        Thu, 23 Sep 2021 18:56:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632420796;
-        bh=pJhaA0qw+tHxdURheOHj0z2IzCKBecFnWm0GNA5bbeE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hr251mLslci+HiCYqTS4C9w0scjBN8ggWi8fnxO2gMBOZmeEvJu+w1sHzscsy2JOX
-         wVurErB3bUIfnn5XJrqPbPM7fdx0pL2/haxOibKmVH2b/BxzjiHcYrVVv/ecy6/JP8
-         U9ySQGbJOI3t7TCCfYZGHxPqRG+B8vCxZy18xLXAtm54+6OGrFDleAJ7qZOgFA2oXX
-         Akx6xGBd5SNSMXEb8w5n3pI7gQEnBQQGS1fUWWhs7oUc0earEuqAbiKTGQ7TKrQ7TF
-         q9v4ODYqOk+53LqJsIh3Rm/7NiR6pa8otjW3JDgrv0sboVdeoxIGQjQtqQ876ZtpHg
-         2T1xsuSULFTnA==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Leon Romanovsky <leonro@nvidia.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
-        Ariel Elior <aelior@marvell.com>,
-        GR-everest-linux-l2@marvell.com,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Igor Russkikh <irusskikh@marvell.com>,
-        intel-wired-lan@lists.osuosl.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Javed Hasan <jhasan@marvell.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jiri Pirko <jiri@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Michal Kalderon <michal.kalderon@marvell.com>,
-        netdev@vger.kernel.org, Sathya Perla <sathya.perla@broadcom.com>,
-        Saurav Kashyap <skashyap@marvell.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Vasundhara Volam <vasundhara-v.volam@broadcom.com>
-Subject: [PATCH net-next 6/6] qed: Don't ignore devlink allocation failures
-Date:   Thu, 23 Sep 2021 21:12:53 +0300
-Message-Id: <c6acd223945669c3c0229afc62b1890810da8145.1632420431.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1632420430.git.leonro@nvidia.com>
-References: <cover.1632420430.git.leonro@nvidia.com>
+        s=k20201202; t=1632423409;
+        bh=oA9cN/OvRa/NHNZMtxn/7VPYWlgZX4G8M4XX5+D2XwQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JDK4mMgboMSDvX6LRP+ZOdAMvYjGRwi2DRbADwL3B0JyOIMZ8ZacEZAnF71wnICIF
+         qDQWFtjvQJe+xw9mA1ElX09HDcwx3CCwj61fUboLvBxG6dsEDHz1+Cfce5cBrB2KM7
+         AHTe1cd7zyqxkJCqSJraKnhyj3al9/GoiJmshdyUXUjVezUl/+2ZZcUX4CrQubpbSH
+         lZ6MnEtX28LR7i7yKRNpETZG4uRRc4O2bPjyfY5Y/eHqNzxw3SZ5z+/GMIdDVA32yR
+         R3uKSkJBNUYR6gxR4NZDFablfDcH+iXM5+6hilEpI1m8JysiFqu6TlfAMtiw6xq7xY
+         iTQxk4ChMF3kg==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Cc:     Satya Tangirala <satyaprateek2357@gmail.com>, dm-devel@redhat.com,
+        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: [PATCH v3 0/4] blk-crypto cleanups
+Date:   Thu, 23 Sep 2021 11:56:25 -0700
+Message-Id: <20210923185629.54823-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+This series renames struct blk_keyslot_manager to struct
+blk_crypto_profile, as it is misnamed; it doesn't always manage
+keyslots.  It's much more logical to think of it as the
+"blk-crypto profile" of a device, similar to blk_integrity_profile.
 
-devlink is a software interface that doesn't depend on any hardware
-capabilities. The failure in SW means memory issues, wrong parameters,
-programmer error e.t.c.
+This series also improves the inline-encryption.rst documentation file,
+and cleans up blk-crypto-fallback a bit.
 
-Like any other such interface in the kernel, the returned status of
-devlink APIs should be checked and propagated further and not ignored.
+This series applies to v5.15-rc2.
 
-Fixes: 755f982bb1ff ("qed/qede: make devlink survive recovery")
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/net/ethernet/qlogic/qede/qede_main.c | 12 +++++-------
- drivers/scsi/qedf/qedf_main.c                |  2 ++
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Changed v2 => v3:
+  - Made some minor tweaks to patches 3 and 4, mostly comments and
+    documentation.
+  - Clarified a commit message to mention no change in behavior.
+  - Added a Reviewed-by tag.
 
-diff --git a/drivers/net/ethernet/qlogic/qede/qede_main.c b/drivers/net/ethernet/qlogic/qede/qede_main.c
-index 9837bdb89cd4..ee4c3bd28a93 100644
---- a/drivers/net/ethernet/qlogic/qede/qede_main.c
-+++ b/drivers/net/ethernet/qlogic/qede/qede_main.c
-@@ -1176,19 +1176,17 @@ static int __qede_probe(struct pci_dev *pdev, u32 dp_module, u8 dp_level,
- 		edev->devlink = qed_ops->common->devlink_register(cdev);
- 		if (IS_ERR(edev->devlink)) {
- 			DP_NOTICE(edev, "Cannot register devlink\n");
-+			rc = PTR_ERR(edev->devlink);
- 			edev->devlink = NULL;
--			/* Go on, we can live without devlink */
-+			goto err3;
- 		}
- 	} else {
- 		struct net_device *ndev = pci_get_drvdata(pdev);
-+		struct qed_devlink *qdl;
- 
- 		edev = netdev_priv(ndev);
--
--		if (edev->devlink) {
--			struct qed_devlink *qdl = devlink_priv(edev->devlink);
--
--			qdl->cdev = cdev;
--		}
-+		qdl = devlink_priv(edev->devlink);
-+		qdl->cdev = cdev;
- 		edev->cdev = cdev;
- 		memset(&edev->stats, 0, sizeof(edev->stats));
- 		memcpy(&edev->dev_info, &dev_info, sizeof(dev_info));
-diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
-index 42d0d941dba5..94ee08fab46a 100644
---- a/drivers/scsi/qedf/qedf_main.c
-+++ b/drivers/scsi/qedf/qedf_main.c
-@@ -3416,7 +3416,9 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
- 		qedf->devlink = qed_ops->common->devlink_register(qedf->cdev);
- 		if (IS_ERR(qedf->devlink)) {
- 			QEDF_ERR(&qedf->dbg_ctx, "Cannot register devlink\n");
-+			rc = PTR_ERR(qedf->devlink);
- 			qedf->devlink = NULL;
-+			goto err2;
- 		}
- 	}
- 
+Changed v1 => v2:
+  - Fixed a build error in blk-integrity.c.
+  - Removed a mention of "ksm" from a comment.
+  - Dropped the patch "blk-crypto-fallback: consolidate static variables".
+  - Added Acked-by and Reviewed-by tags.
+
+Eric Biggers (4):
+  blk-crypto-fallback: properly prefix function and struct names
+  blk-crypto: rename keyslot-manager files to blk-crypto-profile
+  blk-crypto: rename blk_keyslot_manager to blk_crypto_profile
+  blk-crypto: update inline encryption documentation
+
+ Documentation/block/inline-encryption.rst | 451 +++++++++--------
+ block/Makefile                            |   2 +-
+ block/blk-crypto-fallback.c               | 118 ++---
+ block/blk-crypto-profile.c                | 564 +++++++++++++++++++++
+ block/blk-crypto.c                        |  29 +-
+ block/blk-integrity.c                     |   4 +-
+ block/keyslot-manager.c                   | 578 ----------------------
+ drivers/md/dm-core.h                      |   4 +-
+ drivers/md/dm-table.c                     | 168 +++----
+ drivers/md/dm.c                           |  10 +-
+ drivers/mmc/core/crypto.c                 |  11 +-
+ drivers/mmc/host/cqhci-crypto.c           |  33 +-
+ drivers/scsi/ufs/ufshcd-crypto.c          |  32 +-
+ drivers/scsi/ufs/ufshcd-crypto.h          |   9 +-
+ drivers/scsi/ufs/ufshcd.c                 |   2 +-
+ drivers/scsi/ufs/ufshcd.h                 |   6 +-
+ include/linux/blk-crypto-profile.h        | 166 +++++++
+ include/linux/blkdev.h                    |  18 +-
+ include/linux/device-mapper.h             |   4 +-
+ include/linux/keyslot-manager.h           | 120 -----
+ include/linux/mmc/host.h                  |   4 +-
+ 21 files changed, 1203 insertions(+), 1130 deletions(-)
+ create mode 100644 block/blk-crypto-profile.c
+ delete mode 100644 block/keyslot-manager.c
+ create mode 100644 include/linux/blk-crypto-profile.h
+ delete mode 100644 include/linux/keyslot-manager.h
+
 -- 
-2.31.1
+2.33.0
 
