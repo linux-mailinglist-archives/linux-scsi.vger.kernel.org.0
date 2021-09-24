@@ -2,28 +2,28 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF99416E28
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Sep 2021 10:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19F7416E65
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Sep 2021 10:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244778AbhIXIqU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Sep 2021 04:46:20 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:41718 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S244835AbhIXIqT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Sep 2021 04:46:19 -0400
-X-UUID: 7f76c4bf5f27469bbfe0b7ce4e57737c-20210924
-X-UUID: 7f76c4bf5f27469bbfe0b7ce4e57737c-20210924
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        id S245032AbhIXJAm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Sep 2021 05:00:42 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:48806 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S245096AbhIXJA3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Sep 2021 05:00:29 -0400
+X-UUID: b89ee123fed844ddb2d43ed7ee5b865a-20210924
+X-UUID: b89ee123fed844ddb2d43ed7ee5b865a-20210924
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <jonathan.hsu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 822232204; Fri, 24 Sep 2021 16:44:43 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+        with ESMTP id 987139265; Fri, 24 Sep 2021 16:58:54 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 24 Sep 2021 16:44:42 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ Fri, 24 Sep 2021 16:58:53 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 24 Sep 2021 16:44:41 +0800
+ Transport; Fri, 24 Sep 2021 16:58:53 +0800
 From:   Jonathan Hsu <jonathan.hsu@mediatek.com>
 To:     <stanley.chu@mediatek.com>, <linux-scsi@vger.kernel.org>,
         <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
@@ -33,9 +33,9 @@ CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
         <powen.kao@mediatek.com>, <cc.chou@mediatek.com>,
         <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
         <wsd_upstream@mediatek.com>, <stable@vger.kernel.org>
-Subject: [PATCH v3 1/1] scsi: ufs: Fix illegal address reading in upiu event trace
-Date:   Fri, 24 Sep 2021 16:43:39 +0800
-Message-ID: <20210924084339.12915-1-jonathan.hsu@mediatek.com>
+Subject: [PATCH v4 1/1] scsi: ufs: Fix illegal address reading in upiu event trace
+Date:   Fri, 24 Sep 2021 16:58:48 +0800
+Message-ID: <20210924085848.25500-1-jonathan.hsu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -47,8 +47,8 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 Fix incorrect index for UTMRD reference in ufshcd_add_tm_upiu_trace().
 
 Fixes: 4b42d557a8ad ("scsi: ufs: core: Fix wrong Task Tag used in task management request UPIUs")
-Signed-off-by: Jonathan Hsu <jonathan.hsu@mediatek.com>
 Cc: stable@vger.kernel.org
+Signed-off-by: Jonathan Hsu <jonathan.hsu@mediatek.com>
 ---
  drivers/scsi/ufs/ufshcd.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
