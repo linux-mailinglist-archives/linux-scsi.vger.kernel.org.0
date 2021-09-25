@@ -2,74 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D0B4180B8
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Sep 2021 11:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04544180EA
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Sep 2021 12:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237469AbhIYJIH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 25 Sep 2021 05:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234779AbhIYJIG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 25 Sep 2021 05:08:06 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C434BC061769
-        for <linux-scsi@vger.kernel.org>; Sat, 25 Sep 2021 02:06:28 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id eg28so46082255edb.1
-        for <linux-scsi@vger.kernel.org>; Sat, 25 Sep 2021 02:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=2CaMT67JGvjj6NGe2S2VjY6oPmovcyKsp2PXXZFQz1M=;
-        b=fWMbBIROLrV8+0l34qk/EIq42mnvNn6x8tJ4jmxfup6+tKWE7qGS8eJ49Ebf7uDpmi
-         itSY/A3BujM33IPkI+0pnu60pJgTaSxV3nCEX9lJl+cljTsnhJvzNRK6pCxB9lEN/I1H
-         ndEEjcH0/X5RHKfwdTPSz7hA1y4La3GxaHA9mlCtuGuOpeaFqL+du/S0w4fwHFQZF212
-         dWNJX0NIr2AJm6SQiTj56sXfVp9/Uojk5Pd6v7HD7ztZ4kD/7DKzff+6qIKjPQpJbL0N
-         Xg2OUNWa+2sRND0vi6XyfTgVFYhyaQaK0OpKIG2gcMAbUw1HA1u/kbWtnZZeabWouELm
-         tLVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=2CaMT67JGvjj6NGe2S2VjY6oPmovcyKsp2PXXZFQz1M=;
-        b=fMVx3ezhq124LAMJgWo0+VCB3lHCJyBbHdoj3kC0p27Qat+QLoHs2j8KHVpITFMhDA
-         +TW8PlTALu0s/jEWmO66Lgp7EnBmtdUDXSVJ2TeXb030CqqfQ3RioFDbyOy6hFlTixw2
-         kwz1uuYbzKrSlCUsNe9tNpsSNHp82FyaOq8ra5vgcGpLr/TxI/pj9i6NWsXheFB8v6JR
-         Qw++lQK17ljqh42TidpvkOsSt6CHnUado1vyYojqj9TEp5ta5AUwlgXtJ+1KabkP8crr
-         y14NmFCHnpLK7XetLnv31Y3F60NTZuDxUKUH/P3UNuK6knubuwUKxBGpFu8ueYFzqHDL
-         L5pQ==
-X-Gm-Message-State: AOAM5306rzl+yKaq26lVsvbkDtojRtXIOGZ5kWcWOF5sOTVAdVsLTTTz
-        YuXgz2mxCiFWEwDM5P3/4nQrXY4MiXMxf2+uEII=
-X-Google-Smtp-Source: ABdhPJxTt+LzU6a7s39EjHiZpzT/J6sGyHOCy23G0BDDkFNM5lEg+FzSVL7pAUBslQ35uAQebNAlp93T/tTg3f9i/ZY=
-X-Received: by 2002:a17:907:9602:: with SMTP id gb2mr15319919ejc.354.1632560787140;
- Sat, 25 Sep 2021 02:06:27 -0700 (PDT)
+        id S242199AbhIYKDJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 25 Sep 2021 06:03:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32862 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234958AbhIYKDH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 25 Sep 2021 06:03:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A581610C7;
+        Sat, 25 Sep 2021 10:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632564093;
+        bh=vUQvWAePLzdLRZc+ChBxFiJ4phqK0Y1Dzy6kDhpJQjQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D0RfZDMUicf0Nrzi/I154oj+a7L6krXbMFxL6f7OAeo8Z04aUeN1Hx0PsYmQj/rhd
+         JU4tYtwi9tTNK7v4dxzx0tns/ms73lEwQhhWWb8TPCMXPSjXjl3RE+6mheH6ORhiIY
+         exH7Mhs4jo2IWpb2FgIbU9j5E0vf6zlwGKSJarVLrxpJ5jpuQhQeCKoFstG1MrxkWy
+         wuvhA56lJq/ntXQfDpjKsrb1LcA52GxnQGFmFLSHAoIiCSCUkhMLD3675/Av/t+N2q
+         5UFJR6wtk3Q+HYEssMyA1zsvkPZW3eS2KBqQp+rE7h0mhFCeMlD7obG50wFu5gsBBh
+         FuSDkIKvRepsg==
+Date:   Sat, 25 Sep 2021 13:01:29 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Edwin Peer <edwin.peer@broadcom.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
+        Ariel Elior <aelior@marvell.com>,
+        GR-everest-linux-l2@marvell.com,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Igor Russkikh <irusskikh@marvell.com>,
+        intel-wired-lan@lists.osuosl.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Javed Hasan <jhasan@marvell.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-scsi@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Michal Kalderon <michal.kalderon@marvell.com>,
+        netdev <netdev@vger.kernel.org>,
+        Sathya Perla <sathya.perla@broadcom.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Vasundhara Volam <vasundhara-v.volam@broadcom.com>
+Subject: Re: [PATCH net-next 1/6] bnxt_en: Check devlink allocation and
+ registration status
+Message-ID: <YU7zeca8AsJwQTsD@unreal>
+References: <cover.1632420430.git.leonro@nvidia.com>
+ <e7708737fadf4fe6f152afc76145c728c201adad.1632420430.git.leonro@nvidia.com>
+ <CAKOOJTz4A2ER8MQE1dW27Spocds09SYafjeuLcFDJ0nL6mKyOw@mail.gmail.com>
+ <YU0JlzFOa7kpKgnd@unreal>
+ <20210923183956.506bfde2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAKOOJTwh6TnNM4uSM2rbaij=xO92UzF2hs11pgOFUniOb3HAkA@mail.gmail.com>
 MIME-Version: 1.0
-Sender: bankform3@gmail.com
-Received: by 2002:a50:3585:0:0:0:0:0 with HTTP; Sat, 25 Sep 2021 02:06:26
- -0700 (PDT)
-From:   Mrs Aisha Al-Qaddafi <mrsaishag6555@gmail.com>
-Date:   Sat, 25 Sep 2021 02:06:26 -0700
-X-Google-Sender-Auth: 2UimrWr4mNZXK_bVn7Xp8VPSEk8
-Message-ID: <CAO=+CVQsf7wtPgpLfZRN=dRfn8ypCma8A_uDTn1G95H3vN1VHA@mail.gmail.com>
-Subject: hello dear friend please can i trust you
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKOOJTwh6TnNM4uSM2rbaij=xO92UzF2hs11pgOFUniOb3HAkA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
-I came across your e-mail contact prior a private search while in need
-of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children.
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
-If you are willing to handle this project on my behalf kindly reply
-urgent to enable me provide you more information about the investment
-funds.
-Your Urgent Reply Will Be Appreciated
-Mrs Aisha Al-Qaddafi
+On Fri, Sep 24, 2021 at 10:20:32AM -0700, Edwin Peer wrote:
+> On Thu, Sep 23, 2021 at 6:39 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> 
+> > On Fri, 24 Sep 2021 02:11:19 +0300 Leon Romanovsky wrote:
+> > > > minor nit: There's obviously nothing incorrect about doing this (and
+> > > > adding the additional error label in the cleanup code above), but bnxt
+> > > > has generally adopted a style of having cleanup functions being
+> > > > idempotent. It generally makes error handling simpler and less error
+> > > > prone.
+> > >
+> > > I would argue that opposite is true. Such "impossible" checks hide unwind
+> > > flow errors, missing releases e.t.c.
+> >
+> > +1, fwiw
+> 
+> I appreciate that being more explicit can improve visibility, but it
+> does not make error handling inherently less error prone, nor is it
+> simpler (ie. the opposite isn't true). Idempotency is orthogonal to
+> unwind flow or the presence or not of a particular unwind handler (one
+> can still enforce either in review). But, if release handlers are
+> independent (most in bnxt are), then permitting other orderings can be
+> perfectly valid and places less burden on achieving the canonical form
+> for correctness (ie. usage is simpler and less error prone). That's
+> not to say we should throw caution to the wind and allow arbitrary
+> unwind flows, but it does mean certain mistakes don't result in actual
+> bugs. There are other flexibility benefits too. A single, unwind
+> everything, handler can be reused in more than one context.
+
+And this is where the fun begins. Different context means different
+lifetime expectations, maybe need of locking and unpredictable flows
+from reader perspective.
+
+For example, in this devlink case, it took me time to check all driver
+to see that pf can't be null. 
+
+The idea that adding code that maybe will be used can be seen as
+anti-pattern.
+
+Thanks
