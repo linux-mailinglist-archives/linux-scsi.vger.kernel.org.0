@@ -2,155 +2,167 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0916E419F9A
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Sep 2021 21:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDCF41A06B
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Sep 2021 22:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbhI0T5k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Sep 2021 15:57:40 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:2710 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236171AbhI0T5j (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 27 Sep 2021 15:57:39 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18RIndUR036247;
-        Mon, 27 Sep 2021 15:55:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to : sender :
- content-transfer-encoding : mime-version; s=pp1;
- bh=53ya4otM9qkN9qZkwFR8H60BlG0301DfeZhufp3WRC8=;
- b=TD9/DdjfNyYaMpCwqjgh/JfsRqs2cvkB75bx08eVpP1KFn9ninwK6g5zzVv95MQEGO4x
- CvACCWb/r8TtWX7MzCcy9R2Oc4Hj6im1m3dZJfhzd6R4AIpxBl4NvE+QBEYbJ++qXbg7
- Y8s/n6tn8yx9TtAi1yZIL8vlaGD5du3X4+yl4PU0E09GaCbn973+0OHKwOd+AkCARTIC
- bMleXjqSNSehAcoSennVHtfD89CKrbjXVxfrmGQ3+ZyOlJwmuA5EsRQEzQm5utJn0mDs
- bGTve540pMGJeY0sjovtL5vtoGFaSsEaCOmSjCa2ELyj4NG9WwtmV0mBpn8wFjqzdD2C kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3bah7yv3qj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Sep 2021 15:55:53 -0400
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 18RJm4hP015014;
-        Mon, 27 Sep 2021 15:55:53 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3bah7yv3q7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Sep 2021 15:55:53 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18RJlxDA029581;
-        Mon, 27 Sep 2021 19:55:51 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3b9ud96m7f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Sep 2021 19:55:51 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18RJtlqh60293466
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Sep 2021 19:55:47 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 90B1C52063;
-        Mon, 27 Sep 2021 19:55:47 +0000 (GMT)
-Received: from t480-pf1aa2c2 (unknown [9.145.83.160])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 876275205A;
-        Mon, 27 Sep 2021 19:55:47 +0000 (GMT)
-Received: from bblock by t480-pf1aa2c2 with local (Exim 4.94.2)
-        (envelope-from <bblock@linux.ibm.com>)
-        id 1mUwj5-0030b5-18; Mon, 27 Sep 2021 21:55:47 +0200
-Date:   Mon, 27 Sep 2021 21:55:46 +0200
-From:   Benjamin Block <bblock@linux.ibm.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>,
-        Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: Re: [PATCH 01/84] scsi: core: Use a member variable to track the
- SCSI command submitter
-Message-ID: <YVIhwlZq5K3yQzVM@t480-pf1aa2c2.linux.ibm.com>
-References: <20210918000607.450448-1-bvanassche@acm.org>
- <20210918000607.450448-2-bvanassche@acm.org>
- <YU2cN5H7CqVFOzTQ@t480-pf1aa2c2.linux.ibm.com>
- <4bc6bf9c-a6bd-13c7-988b-9756bb5dd480@acm.org>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <4bc6bf9c-a6bd-13c7-988b-9756bb5dd480@acm.org>
-Sender: Benjamin Block <bblock@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uNSmFPGRJfjsyvm109-UliwDkdHdFKIk
-X-Proofpoint-ORIG-GUID: Q-PKiEuv4SSH7IE3h7fDVPbbmgT1fHzP
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S237002AbhI0Uqo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Sep 2021 16:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236955AbhI0Uqm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Sep 2021 16:46:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7CAC061769
+        for <linux-scsi@vger.kernel.org>; Mon, 27 Sep 2021 13:45:04 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mUxTe-0001jl-FQ; Mon, 27 Sep 2021 22:43:54 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mUxTX-0001YL-VH; Mon, 27 Sep 2021 22:43:47 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mUxTX-0001Li-Pk; Mon, 27 Sep 2021 22:43:47 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-pci@vger.kernel.org,
+        kernel@pengutronix.de, Alexander Duyck <alexanderduyck@fb.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Fiona Trahe <fiona.trahe@intel.com>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ido Schimmel <idosch@nvidia.com>,
+        Ingo Molnar <mingo@redhat.com>, Jack Xu <jack.xu@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>, Jiri Pirko <jiri@nvidia.com>,
+        Juergen Gross <jgross@suse.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Marco Chiappero <marco.chiappero@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Michael Buesch <m@bues.ch>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tomaszx Kowalik <tomaszx.kowalik@intel.com>,
+        Vadym Kochan <vkochan@marvell.com>,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        netdev@vger.kernel.org, oss-drivers@corigine.com,
+        qat-linux@intel.com, x86@kernel.org, xen-devel@lists.xenproject.org
+Subject: [PATCH v4 0/8] PCI: Drop duplicated tracking of a pci_dev's bound driver
+Date:   Mon, 27 Sep 2021 22:43:18 +0200
+Message-Id: <20210927204326.612555-1-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-27_07,2021-09-24_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- mlxscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 phishscore=0
- lowpriorityscore=0 priorityscore=1501 adultscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2109270132
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-scsi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 08:38:42PM -0700, Bart Van Assche wrote:
-> On 9/24/21 02:36, Benjamin Block wrote:
-> > On Fri, Sep 17, 2021 at 05:04:44PM -0700, Bart Van Assche wrote:
-> > > Conditional statements are faster than indirect calls. Use a member variable
-> > > to track the SCSI command submitter such that later patches can call
-> > > scsi_done(scmd) instead of scmd->scsi_done(scmd).
-> > > 
-> > > The asymmetric behavior that scsi_send_eh_cmnd() sets the submission
-> > > context to the SCSI error handler and that it does not restore the
-> > > submission context to the SCSI core is retained.
-> > > 
-> > > Cc: Hannes Reinecke <hare@suse.com>
-> > > Cc: Ming Lei <ming.lei@redhat.com>
-> > > Cc: Christoph Hellwig <hch@lst.de>
-> > > Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> > > ---
-> > >   drivers/scsi/scsi_error.c | 18 +++++++-----------
-> > >   drivers/scsi/scsi_lib.c   |  9 +++++++++
-> > >   drivers/scsi/scsi_priv.h  |  1 +
-> > >   include/scsi/scsi_cmnd.h  |  7 +++++++
-> > >   4 files changed, 24 insertions(+), 11 deletions(-)
-> > > 
-> > > diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> > > index 572673873ddf..ba6d748a0246 100644
-> > > --- a/drivers/scsi/scsi_lib.c
-> > > +++ b/drivers/scsi/scsi_lib.c
-> > > @@ -1577,6 +1577,15 @@ static blk_status_t scsi_prepare_cmd(struct request *req)
-> > >   static void scsi_mq_done(struct scsi_cmnd *cmd)
-> > >   {
-> > > +	switch (cmd->submitter) {
-> > > +	case BLOCK_LAYER:
-> > > +		break;
-> > > +	case SCSI_ERROR_HANDLER:
-> > > +		return scsi_eh_done(cmd);
-> > > +	case SCSI_RESET_IOCTL:
-> > > +		return;
-> > > +	}
-> > > +
-> > 
-> > Hmm, I'm confused, you replace one kind of branch with different one. Why
-> > would that increase IOPS by 5%?
-> > 
-> > Maybe its because the new `submitter` field in `struct scsi_cmnd` is now
-> > on a hot cache line, whereas `*scsi_done` is not?
-> 
-> Hi Benjamin,
-> 
-> To be honest, the 5% improvement is more than I had expected. This is what I
-> know about indirect function calls vs. branches:
-> - The target of an indirect branch is predicted by the indirect branch
->   predictor. For direct branches the Branch Target Buffer (BTB) is used.
-> - The performance of indirect calls is negatively affected by security
->   mitigations (CONFIG_RETPOLINE) but not the performance of direct branches
->   My measurement was run with CONFIG_RETPOLINE off. I expect a larger
->   difference with CONFIG_RETPOLINE enabled.
+From: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
 
-Ah ok, yeah, that sounds reasonable. Thanks.
+Hello,
 
+this is v4 of the quest to drop the "driver" member from struct pci_dev
+which tracks the same data (apart from a constant offset) as dev.driver.
+
+Changes since v3:
+ - Add some Reviewed-by and Acked-by tags
+ - Rebase to v5.15-rc3 (no conflicts)
+ - Changes in patch #4 addressing review comments by Christoph Hellwig
+
+I didn't do extensive build tests, so I might have missed a build
+problem. I have some builds running, but want to get some feedback on
+the changes suggested by Christoph.
+
+Best regards
+Uwe
+
+Uwe Kleine-KÃ¶nig (8):
+  PCI: Simplify pci_device_remove()
+  PCI: Drop useless check from pci_device_probe()
+  xen/pci: Drop some checks that are always true
+  PCI: replace pci_dev::driver usage that gets the driver name
+  scsi: message: fusion: Remove unused parameter of mpt_pci driver's
+    probe()
+  crypto: qat - simplify adf_enable_aer()
+  PCI: Replace pci_dev::driver usage by pci_dev::dev.driver
+  PCI: Drop duplicated tracking of a pci_dev's bound driver
+
+ arch/powerpc/include/asm/ppc-pci.h            |  9 ++-
+ arch/powerpc/kernel/eeh_driver.c              | 10 +--
+ arch/x86/events/intel/uncore.c                |  2 +-
+ arch/x86/kernel/probe_roms.c                  |  2 +-
+ drivers/bcma/host_pci.c                       |  7 ++-
+ drivers/crypto/hisilicon/qm.c                 |  2 +-
+ drivers/crypto/qat/qat_4xxx/adf_drv.c         |  7 +--
+ drivers/crypto/qat/qat_c3xxx/adf_drv.c        |  7 +--
+ drivers/crypto/qat/qat_c62x/adf_drv.c         |  7 +--
+ drivers/crypto/qat/qat_common/adf_aer.c       | 10 +--
+ .../crypto/qat/qat_common/adf_common_drv.h    |  2 +-
+ drivers/crypto/qat/qat_dh895xcc/adf_drv.c     |  7 +--
+ drivers/message/fusion/mptbase.c              |  7 +--
+ drivers/message/fusion/mptbase.h              |  2 +-
+ drivers/message/fusion/mptctl.c               |  4 +-
+ drivers/message/fusion/mptlan.c               |  2 +-
+ drivers/misc/cxl/guest.c                      | 24 ++++---
+ drivers/misc/cxl/pci.c                        | 30 +++++----
+ .../ethernet/hisilicon/hns3/hns3_ethtool.c    |  2 +-
+ .../ethernet/marvell/prestera/prestera_pci.c  |  2 +-
+ drivers/net/ethernet/mellanox/mlxsw/pci.c     |  2 +-
+ .../ethernet/netronome/nfp/nfp_net_ethtool.c  |  2 +-
+ drivers/pci/iov.c                             | 25 +++++---
+ drivers/pci/pci-driver.c                      | 45 ++++++-------
+ drivers/pci/pci.c                             |  4 +-
+ drivers/pci/pcie/err.c                        | 36 ++++++-----
+ drivers/pci/xen-pcifront.c                    | 63 +++++++++----------
+ drivers/ssb/pcihost_wrapper.c                 |  8 ++-
+ drivers/usb/host/xhci-pci.c                   |  2 +-
+ include/linux/pci.h                           |  1 -
+ 30 files changed, 166 insertions(+), 167 deletions(-)
+
+
+base-commit: 5816b3e6577eaa676ceb00a848f0fd65fe2adc29
 -- 
-Best Regards, Benjamin Block  / Linux on IBM Z Kernel Development / IBM Systems
-IBM Deutschland Research & Development GmbH    /    https://www.ibm.com/privacy
-Vorsitz. AufsR.: Gregor Pillen         /        Geschäftsführung: Dirk Wittkopp
-Sitz der Gesellschaft: Böblingen / Registergericht: AmtsG Stuttgart, HRB 243294
+2.30.2
+
