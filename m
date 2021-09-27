@@ -2,102 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 208F441A2B1
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Sep 2021 00:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9D041A2E7
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Sep 2021 00:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238017AbhI0WKB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Sep 2021 18:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
+        id S237645AbhI0Wa0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Sep 2021 18:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237739AbhI0WJ4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Sep 2021 18:09:56 -0400
-Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1DCC08E870;
-        Mon, 27 Sep 2021 15:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=NSa3Hc3QelnUxQ+cXABVnHVUgnn9TSfKMH79tpEpz9k=; b=olC0Eh+a79EwdFLpg94sReES7g
-        zIIWqlDYfSX+JEAD7km/lvvUItHvyCJKk3lCoeSUW/FTenHdat9NwotAFsMRFOYGpmnhgBpAWkH0S
-        xk+Tb/3sJw2mxnq1PPZNxGNhvdZ9+l0UwndhCCDTCj2i6YjLqdgmJSoJq0/nnX2F4yhvy4VEC9oWT
-        H6pCoRve7NNVs2t9Ao8PPlgwMTXqCeYPmhaoXuKX+/iV3Btc2+GDu8+RW56yNcM8CyZVxSIAfnqCl
-        Z4DfzsGRc87G7D+k+foRo2hrwIaHX4MbDg0ACVzgFwvFqMqf8cOhYkpkR2HerDu4ol/xdiBshE8q6
-        DEsXnGrA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mUyij-004Vab-84; Mon, 27 Sep 2021 22:03:33 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     axboe@kernel.dk, hch@lst.de, efremov@linux.com, song@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        viro@zeniv.linux.org.uk, hare@suse.de, jack@suse.cz,
-        ming.lei@redhat.com, tj@kernel.org
-Cc:     linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH v2 2/2] block: add __must_check for *add_disk*() callers
-Date:   Mon, 27 Sep 2021 15:03:32 -0700
-Message-Id: <20210927220332.1074647-3-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210927220332.1074647-1-mcgrof@kernel.org>
-References: <20210927220332.1074647-1-mcgrof@kernel.org>
+        with ESMTP id S237544AbhI0WaZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Sep 2021 18:30:25 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEB8C061740
+        for <linux-scsi@vger.kernel.org>; Mon, 27 Sep 2021 15:28:46 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id b10so24768815ioq.9
+        for <linux-scsi@vger.kernel.org>; Mon, 27 Sep 2021 15:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=w9ezsQ1UkQZeC53NkFhy7B+1aNQW9TNDf1kl1c4M4R4=;
+        b=Ah7jkIIctR0HcnVgB5sWbeUdZwsGT2EehBK4lb+q32xOVavNWfD82zKlDGRJA1B4PM
+         /2U90/0SvcC9l1r+IDSlahEN/NC+QMNdf8OLk/ooOlydqwz6QGg8wDViFrkfEGikp/c3
+         /Q8A/XGE1SZVGZ1hcLnLB6Er8MX1tmX3kUoUHTd8fZUIlpDxvC5pwUQYipgCc7oJVSI+
+         rkiNvqR6Uh37Z5l+Gj9S3tYzBLrJ2DlUD27NmkKUe2vWKFh1TgA7VLVoziOPGtTGPqo8
+         dcSrTDLSWV/lT8K2aextSKUoXJ59tNYXOpE1Usf4pH7xnmSPdZY6piFtoxoW38lIHPW7
+         +BBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=w9ezsQ1UkQZeC53NkFhy7B+1aNQW9TNDf1kl1c4M4R4=;
+        b=P1FUA5dVQryzvI93F6NA1jxgEp8hSvyYN/wgosVqgWnk8FQAkqC5FxPA8JZWXP3nV+
+         JAJOf4pYiECVwGtTO1nZvOHPy/zr4QuE627TxOe0tS13sTtViFQSI5fvPbTkPvhcDlzl
+         X95uM9p+dBpzQU0rnPLIeUETXFEwhi+8Zn+YC9NGSMspNLjygi+t9M+Mbgx9g742UBbv
+         eF1TXxXP6yxGMcyIW+ZQPwmRtL3aBF9DMBYTYouNz9hUmtaw0fh2LPvBGj84zolNugQu
+         mgNY1sHGP9BKStfLTJ6IZW9Ug5h8E1ijZCpEl9s8X9/JKM1IUkdXW/ELcWDlwbIMhqYr
+         angA==
+X-Gm-Message-State: AOAM530VfnrIBrnOW8IAIy+BGw1aBbZAovLipesdo5OAd+b4919E6bYN
+        lDL6Ovh6XpkHWbubpwyxM1FQgg==
+X-Google-Smtp-Source: ABdhPJztY3mK3ksoDQMf3OrQ8dUSONHNyLP4EfHo/dO6kIiAhPp9t/W2Pe9f9RD+PJfpbL6A6UQe4w==
+X-Received: by 2002:a02:22cf:: with SMTP id o198mr1814887jao.37.1632781726231;
+        Mon, 27 Sep 2021 15:28:46 -0700 (PDT)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id e13sm9446741iod.36.2021.09.27.15.28.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Sep 2021 15:28:45 -0700 (PDT)
+Subject: Re: [PATCH v4 5/6] loop: add error handling support for add_disk()
+To:     Luis Chamberlain <mcgrof@kernel.org>, martin.petersen@oracle.com,
+        jejb@linux.ibm.com, kbusch@kernel.org, sagi@grimberg.me,
+        adrian.hunter@intel.com, beanhuo@micron.com,
+        ulf.hansson@linaro.org, avri.altman@wdc.com, swboyd@chromium.org,
+        agk@redhat.com, snitzer@redhat.com, josef@toxicpanda.com
+Cc:     hch@infradead.org, hare@suse.de, bvanassche@acm.org,
+        ming.lei@redhat.com, linux-scsi@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-mmc@vger.kernel.org,
+        dm-devel@redhat.com, nbd@other.debian.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+References: <20210927215958.1062466-1-mcgrof@kernel.org>
+ <20210927215958.1062466-6-mcgrof@kernel.org>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <1cd6103b-1251-cc22-93ad-da7f207147b4@kernel.dk>
+Date:   Mon, 27 Sep 2021 16:28:43 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <20210927215958.1062466-6-mcgrof@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that we have done a spring cleaning on all drivers and added
-error checking / handling, let's keep it that way and ensure
-no new drivers fail to stick with it.
+On 9/27/21 3:59 PM, Luis Chamberlain wrote:
+> We never checked for errors on add_disk() as this function
+> returned void. Now that this is fixed, use the shiny new
+> error handling.
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- block/genhd.c         | 6 +++---
- include/linux/genhd.h | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Applied, thanks.
 
-diff --git a/block/genhd.c b/block/genhd.c
-index a5a41628aa59..44c630e3377a 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -394,8 +394,8 @@ static void disk_scan_partitions(struct gendisk *disk)
-  * This function registers the partitioning information in @disk
-  * with the kernel.
-  */
--int device_add_disk(struct device *parent, struct gendisk *disk,
--		     const struct attribute_group **groups)
-+int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
-+				 const struct attribute_group **groups)
- 
- {
- 	struct device *ddev = disk_to_dev(disk);
-@@ -540,7 +540,7 @@ int device_add_disk(struct device *parent, struct gendisk *disk,
- out_free_ext_minor:
- 	if (disk->major == BLOCK_EXT_MAJOR)
- 		blk_free_ext_minor(disk->first_minor);
--	return WARN_ON_ONCE(ret); /* keep until all callers handle errors */
-+	return ret;
- }
- EXPORT_SYMBOL(device_add_disk);
- 
-diff --git a/include/linux/genhd.h b/include/linux/genhd.h
-index 5828ecda5c49..8d78d36c424e 100644
---- a/include/linux/genhd.h
-+++ b/include/linux/genhd.h
-@@ -214,9 +214,9 @@ static inline dev_t disk_devt(struct gendisk *disk)
- void disk_uevent(struct gendisk *disk, enum kobject_action action);
- 
- /* block/genhd.c */
--int device_add_disk(struct device *parent, struct gendisk *disk,
--		const struct attribute_group **groups);
--static inline int add_disk(struct gendisk *disk)
-+int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
-+				 const struct attribute_group **groups);
-+static inline int __must_check add_disk(struct gendisk *disk)
- {
- 	return device_add_disk(NULL, disk, NULL);
- }
 -- 
-2.30.2
+Jens Axboe
 
