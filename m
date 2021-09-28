@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C459341B682
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Sep 2021 20:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D93241B685
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Sep 2021 20:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242215AbhI1SrF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 28 Sep 2021 14:47:05 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:35722 "EHLO
+        id S237753AbhI1SrJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 28 Sep 2021 14:47:09 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:18654 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242153AbhI1SrC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 Sep 2021 14:47:02 -0400
+        with ESMTP id S242214AbhI1SrI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 Sep 2021 14:47:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1632854722; x=1664390722;
+  t=1632854728; x=1664390728;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
   bh=frcCV1k9oG9oKj3dpUqdJg1PxRT2RSN/XKdLCPjaYaY=;
-  b=PDhfMCRL7GgDDx8de7xTi+lX8vg1/0xL05ubEKP+V9s/SszPMtaqGww/
-   pYV8IzZjoFI0fSutWJT8OtMk3V10Ga+7acFGtGKhol0MrHF/i20GRElvY
-   7KN+oD9D2/eNFU9eRBR3/SbWgzQVrrUaTK1lmsniSMHunjj/tNbjcSAPB
-   /cUOMYBiiG7z+m2DYRjVzGWB18I60avn8xFl5gWPgplc51oVvK4FfRt65
-   372ppTHYJJpxS2KqzrTtpnpoGiUeV65s/OI+r8ed46p0Wp03Yjk8rux1V
-   JSm7DKb/eV+gAMcKYdnq1dLIZaUk+eOU6KoDGj+VvHhLso+dwQ+IB0M1o
-   A==;
-IronPort-SDR: wGBs+TwHBH2b2OzJkmV06wEytpTAfmP3nzWSFgHeIXc9XJwoLAkGiwSmfqgZR36+HLxnT5TveE
- g5azmJEw7Z684VkgsFf2pm5s0aPIzghRCtG+6qRTQ6yIK7cdINE97gge1XbYdXengbRBjoJEIu
- ccb88enr8LAbcqATNeh2FdA8hJVZcwKGQ1fS8ZVXdAFUPsmF4oM5V08PnH02rp3HF7GPAnGwc/
- McSbXPKk1tW1TXlnB1hMvUd0sYMfmbvJ2acxYunexPue/Pq/9FBeRNtdDsoYwxUQxCKXDTbtIn
- 8dW+j+k5CywriRN4Og2bseNy
+  b=0kkvET6HOG6ZvcfwAyZar78nBitA0+402HGaSs2Vu7U6uUfDq2khusC9
+   Izsj9Q99G4JNSaBN8CFulrkZ2hhHk2qfC9FakT8RL5zlDSVDC7NGUDb3z
+   VjzjBVBFv/b69HV6kV/74RhEYdiHIAHqVzqxoJBlaUOidB0EvMpiMCQ+3
+   okRtIS8Zv0ye+UT6sC2OCx+daQVxQZzGFTNmmspyPWFz5uFxnd5lIeIjf
+   ADPHaTiCo0j2yQRPV5SLcdQSLN0iOXpp4vDDLtA+1JRCT0NR43sXOPE5I
+   vuAbq6v/8u/deEZegskm/k4l3KupL3+LX481OnnKQykxww933FM6Mtibt
+   w==;
+IronPort-SDR: cP8sNeTEooUtlueoBsX/G7AtQeCFNkUAeCIHKrN8mJ9WK1AiGVYUKZkafdeV6nNfvmG3NAft1+
+ enSOQVgA3uJmUA3ooFQpneZU8rHqa0/rl0Ua5+rucWzpOPvGWONPCxtSQ+sh2Wq6I4scDvb+uy
+ J24zGhkmRSQr3b3bWOACBNvT7UlePSBaw4ZFKGYtXUwcJKc/LI0Ii41i/OMq7h39R8wQFlMoYw
+ 7WM4dI/7aUoWJ3m4f7TMyzywcHFfctNqcupEnnMm6tR8eUmC22jKE9FRZriFsuHg5PgsNXs+S7
+ Q2uJ3FsvCuoxhmqB1tNs1FtF
 X-IronPort-AV: E=Sophos;i="5.85,330,1624345200"; 
-   d="scan'208";a="137712568"
+   d="scan'208";a="130992482"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2021 11:45:22 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2021 11:45:28 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 28 Sep 2021 11:45:21 -0700
-Received: from brunhilda.pdev.net (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Tue, 28 Sep 2021 11:45:21 -0700
-Subject: [PATCH 08/11] smartpqi: fix boot failure during lun rebuild
+ 15.1.2176.14; Tue, 28 Sep 2021 11:45:27 -0700
+Received: from brunhilda.pdev.net (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Tue, 28 Sep 2021 11:45:27 -0700
+Subject: [PATCH 09/11] smartpqi: fix duplicate device nodes for tape changers
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -49,8 +49,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
         <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Tue, 28 Sep 2021 13:45:21 -0500
-Message-ID: <163285472129.194893.10066078196474026373.stgit@brunhilda.pdev.net>
+Date:   Tue, 28 Sep 2021 13:45:27 -0500
+Message-ID: <163285472713.194893.6797736399721227028.stgit@brunhilda.pdev.net>
 In-Reply-To: <163285461769.194893.178408874562704189.stgit@brunhilda.pdev.net>
 References: <163285461769.194893.178408874562704189.stgit@brunhilda.pdev.net>
 User-Agent: StGit/1.1+40.g1b20.dirty
