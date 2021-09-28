@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5B041BB1F
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 01:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E41E41BB20
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 01:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243353AbhI1X41 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 28 Sep 2021 19:56:27 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:25123 "EHLO
+        id S243361AbhI1X42 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 28 Sep 2021 19:56:28 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:42065 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243306AbhI1X4X (ORCPT
+        with ESMTP id S242094AbhI1X4X (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 Sep 2021 19:56:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
   t=1632873283; x=1664409283;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=td7o23GskVfiSY0dO8r9w3EBWzbiNIzAQelElBU1Ij0=;
-  b=harIJ4EKEoEETp/hZNYpbTwMzaR7jqCkcb8QONNBW5/t2u3B8LuEb7J9
-   XWRq1z9cefFDKZ2NxaaI/PPsRaUls7taK7n4nHIE0/DmXDSFnkMV43nIp
-   Akh7T4jFql9rumgg+hTqW8WhyzLvHKggzXUdEiPC4lNlfFd0UAR8FRBC5
-   1qLCBGyiEZojH6llHue8Ng5sXVFQfaVo6pASwrnMsOF/88sJG1PlbLk/u
-   sDLwv9CecJWX5WxWB6Ot48saH+9fNQjIVvWkOKam8wEP3Ex/gK/J7I5+G
-   nnyrOrZDvuPt81QVrAoIPftQPEbv11FLohtd/MKVOZcnn+Rof/ZBdxTsY
-   w==;
-IronPort-SDR: h3YmqRhU/uBus11I1DSIozoVQA/sQgRTJcKKY4NSO9BtvAr+qUTAhOJwqDA3xctAbsS9HTaJgC
- F3KBMx+D1cmRrx/8HTePjOS0Th2TxL/X9fBQLqetWXWEeC1H621u/PNoZKkFQpXdhbvpeedVqn
- uVH1Yr3pIs9t3bLR/Ey+rveb3mz9pP7Dqt++0E1bsZQMgoW4R0OHe/O1Om8dnUyATXbuQZnTMs
- AZigl/EROpE+RDxn+nuBUqXU1Atf/rnRXdTQquu9f5qE4qyZjYneCbXqG+uSt3EBV4c/gImU53
- f8LoWnDQd+m3a69PmgmEkGdZ
+  bh=iF/4kuXzDkAVd+mWksaBB0pGLBAirFLXL2EWFVqRT4Q=;
+  b=vZrfoOyKDqtGwp+4c6QvJNdgTwwbk+o6Bzf4zxer+wn/49FwMjt0eoQf
+   54EVv9vYSpXDPsTdKtgV2MgKexuAvy150RhWcbE3m6aZyEw/MoBNK6SZh
+   V2Df7zhmnbsxJGuYXPmAteekHdThKYOnRCdXn9N3aoK4Taxl910n3iOxH
+   mO2gfTsFICAzwdI/4NeVNDG0LG9UAGlxAL7ce1kS53/aTlgHV9tVYUteL
+   w2k3LBRnDqSaylKmrIpTGX5dUkGQBzmEynGRZdxeARMpb9vTRg8R0FVXs
+   CenhDedqDUtfyYpG2jRHgUkgX2gvDeIEq8fs051jzm9kofYQxhQZryC6x
+   A==;
+IronPort-SDR: wg5R2EDbIiXfarGzsYlVYj4xaceK2eVRiyWmxFmXwPOnUPnPQod9DpklenoCH2JeNo2+uHWaCP
+ FxQVo2SVxmH2tthhfR9jBeV7b6q4gttAXwJaVWy5EtF1UycrvwMVFFCUhU0Gu07uDP0icMj4fM
+ AwiUi68zD8ARxd0kEa4mBJPmOGSxdDqiOVtVvEjQOYOgUQQNMcZHAph0CqM4Jmnk/T1ae+jjIH
+ KemH5t8xmDg3FseOug56qqQAa6tU9oqfumaafuZG71KC6mlZ2og6r+OzwDYmnr3zmhBVKiPzeD
+ VUwsuQ1NJNNQNbzHzFWi24Np
 X-IronPort-AV: E=Sophos;i="5.85,330,1624345200"; 
-   d="scan'208";a="131019745"
+   d="scan'208";a="146019803"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2021 16:54:42 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Sep 2021 16:54:42 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2176.14; Tue, 28 Sep 2021 16:54:42 -0700
 Received: from brunhilda.pdev.net (10.10.115.15) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
  Transport; Tue, 28 Sep 2021 16:54:42 -0700
 Received: by brunhilda.pdev.net (Postfix, from userid 1467)
-        id 5CC7470284F; Tue, 28 Sep 2021 18:54:42 -0500 (CDT)
+        id 63F51702853; Tue, 28 Sep 2021 18:54:42 -0500 (CDT)
 From:   Don Brace <don.brace@microchip.com>
 To:     <hch@infradead.org>, <martin.petersen@oracle.com>,
         <jejb@linux.vnet.ibm.com>, <linux-scsi@vger.kernel.org>
@@ -53,9 +53,9 @@ CC:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <jeff@canonical.com>, <POSWALD@suse.com>,
         <john.p.donnelly@oracle.com>, <mwilck@suse.com>,
         <pmenzel@molgen.mpg.de>, <linux-kernel@vger.kernel.org>
-Subject: [smartpqi updates PATCH V2 01/11] smartpqi: update device removal management
-Date:   Tue, 28 Sep 2021 18:54:32 -0500
-Message-ID: <20210928235442.201875-2-don.brace@microchip.com>
+Subject: [smartpqi updates PATCH V2 02/11] smartpqi: add controller handshake during kdump
+Date:   Tue, 28 Sep 2021 18:54:33 -0500
+Message-ID: <20210928235442.201875-3-don.brace@microchip.com>
 X-Mailer: git-send-email 2.28.0.rc1.9.ge7ae437ac1
 In-Reply-To: <20210928235442.201875-1-don.brace@microchip.com>
 References: <20210928235442.201875-1-don.brace@microchip.com>
@@ -66,148 +66,210 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update device removal path to handle issues for:
-  rmmod - Correct stack trace when removing devices.
-  rmmod - Synchronize SCSI cache.
-  Update handling for removing devices using sysfs.
+From: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
 
-This patch also aligns the device removal code with
-our out-of-box driver.
+Correct kdump hangs when controller is locked up.
+
+There are occasions when a controller reboot
+(controller soft reset) is issued when a controller
+firmware crash dump is in progress.
+
+This leads to incomplete controller firmware crash dump.
+ - When the controller crash dump is in progress,
+   and a kdump is initiated, the driver issues
+   inbound doorbell reset to bring back the
+   controller in SIS mode.
+ - If the controller is in locked up state,
+   the inbound doorbell reset does not work causing
+   controller initialization failures. This results
+   in the driver hanging waiting for SIS mode.
+
+To avoid an incomplete controller crash dump, add in
+a controller crash dump handshake.
+ - Controller will indicate start and end of the controller
+   crash dump by setting some register bits.
+ - Driver will look these bits when a kdump is initiated.
+   If a controller crash dump is in progress, the driver will
+   wait for the controller crash dump to complete
+   before issuing the controller soft reset then complete
+   driver initialization.
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
 Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
+Signed-off-by: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c | 64 ++++++++++++---------------
- 1 file changed, 28 insertions(+), 36 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 41 +++++++++++++++++++--
+ drivers/scsi/smartpqi/smartpqi_sis.c  | 51 +++++++++++++++++++++++++++
+ drivers/scsi/smartpqi/smartpqi_sis.h  |  1 +
+ 3 files changed, 91 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index ecb2af3f43ca..97027574eb1f 100644
+index 97027574eb1f..5655d240f7a7 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -1693,8 +1693,6 @@ static inline void pqi_remove_device(struct pqi_ctrl_info *ctrl_info, struct pqi
+@@ -234,15 +234,46 @@ static inline bool pqi_is_hba_lunid(u8 *scsi3addr)
+ 	return pqi_scsi3addr_equal(scsi3addr, RAID_CTLR_LUNID);
+ }
+ 
++#define PQI_DRIVER_SCRATCH_PQI_MODE			0x1
++#define PQI_DRIVER_SCRATCH_FW_TRIAGE_SUPPORTED		0x2
++
+ static inline enum pqi_ctrl_mode pqi_get_ctrl_mode(struct pqi_ctrl_info *ctrl_info)
  {
- 	int rc;
- 
--	pqi_device_remove_start(device);
--
- 	rc = pqi_device_wait_for_pending_io(ctrl_info, device,
- 		PQI_REMOVE_DEVICE_PENDING_IO_TIMEOUT_MSECS);
- 	if (rc)
-@@ -1708,6 +1706,8 @@ static inline void pqi_remove_device(struct pqi_ctrl_info *ctrl_info, struct pqi
- 		scsi_remove_device(device->sdev);
- 	else
- 		pqi_remove_sas_device(device);
-+
-+	pqi_device_remove_start(device);
+-	return sis_read_driver_scratch(ctrl_info);
++	return sis_read_driver_scratch(ctrl_info) & PQI_DRIVER_SCRATCH_PQI_MODE ? PQI_MODE : SIS_MODE;
  }
  
- /* Assumes the SCSI device list lock is held. */
-@@ -1986,7 +1986,7 @@ static void pqi_update_device_list(struct pqi_ctrl_info *ctrl_info,
- 	list_for_each_entry_safe(device, next, &ctrl_info->scsi_device_list,
- 		scsi_device_list_entry) {
- 		if (device->device_gone) {
--			list_del_init(&device->scsi_device_list_entry);
-+			list_del(&device->scsi_device_list_entry);
- 			list_add_tail(&device->delete_list_entry, &delete_list);
- 		}
- 	}
-@@ -2025,15 +2025,13 @@ static void pqi_update_device_list(struct pqi_ctrl_info *ctrl_info,
- 		if (device->volume_offline) {
- 			pqi_dev_info(ctrl_info, "offline", device);
- 			pqi_show_volume_status(ctrl_info, device);
--		}
--		list_del(&device->delete_list_entry);
--		if (pqi_is_device_added(device)) {
--			pqi_remove_device(ctrl_info, device);
- 		} else {
--			if (!device->volume_offline)
--				pqi_dev_info(ctrl_info, "removed", device);
--			pqi_free_device(device);
-+			pqi_dev_info(ctrl_info, "removed", device);
- 		}
-+		if (pqi_is_device_added(device))
-+			pqi_remove_device(ctrl_info, device);
-+		list_del(&device->delete_list_entry);
-+		pqi_free_device(device);
- 	}
- 
- 	/*
-@@ -2328,6 +2326,25 @@ static int pqi_update_scsi_devices(struct pqi_ctrl_info *ctrl_info)
- 	return rc;
- }
- 
-+static void pqi_remove_all_scsi_devices(struct pqi_ctrl_info *ctrl_info)
-+{
-+	unsigned long flags;
-+	struct pqi_scsi_dev *device;
-+	struct pqi_scsi_dev *next;
+ static inline void pqi_save_ctrl_mode(struct pqi_ctrl_info *ctrl_info,
+ 	enum pqi_ctrl_mode mode)
+ {
+-	sis_write_driver_scratch(ctrl_info, mode);
++	u32 driver_scratch;
 +
-+	spin_lock_irqsave(&ctrl_info->scsi_device_list_lock, flags);
++	driver_scratch = sis_read_driver_scratch(ctrl_info);
 +
-+	list_for_each_entry_safe(device, next, &ctrl_info->scsi_device_list,
-+		scsi_device_list_entry) {
-+		if (pqi_is_device_added(device))
-+			pqi_remove_device(ctrl_info, device);
-+		list_del(&device->scsi_device_list_entry);
-+		pqi_free_device(device);
-+	}
++	if (mode == PQI_MODE)
++		driver_scratch |= PQI_DRIVER_SCRATCH_PQI_MODE;
++	else
++		driver_scratch &= ~PQI_DRIVER_SCRATCH_PQI_MODE;
 +
-+	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
++	sis_write_driver_scratch(ctrl_info, driver_scratch);
 +}
 +
- static int pqi_scan_scsi_devices(struct pqi_ctrl_info *ctrl_info)
- {
- 	int rc;
-@@ -6120,31 +6137,6 @@ static int pqi_slave_configure(struct scsi_device *sdev)
- 	return 0;
++static inline bool pqi_is_fw_triage_supported(struct pqi_ctrl_info *ctrl_info)
++{
++	return (sis_read_driver_scratch(ctrl_info) & PQI_DRIVER_SCRATCH_FW_TRIAGE_SUPPORTED) != 0;
++}
++
++static inline void pqi_save_fw_triage_setting(struct pqi_ctrl_info *ctrl_info, bool is_supported)
++{
++	u32 driver_scratch;
++
++	driver_scratch = sis_read_driver_scratch(ctrl_info);
++
++	if (is_supported)
++		driver_scratch |= PQI_DRIVER_SCRATCH_FW_TRIAGE_SUPPORTED;
++	else
++		driver_scratch &= ~PQI_DRIVER_SCRATCH_FW_TRIAGE_SUPPORTED;
++
++	sis_write_driver_scratch(ctrl_info, driver_scratch);
  }
  
--static void pqi_slave_destroy(struct scsi_device *sdev)
--{
--	unsigned long flags;
--	struct pqi_scsi_dev *device;
--	struct pqi_ctrl_info *ctrl_info;
--
--	ctrl_info = shost_to_hba(sdev->host);
--
--	spin_lock_irqsave(&ctrl_info->scsi_device_list_lock, flags);
--
--	device = sdev->hostdata;
--	if (device) {
--		sdev->hostdata = NULL;
--		if (!list_empty(&device->scsi_device_list_entry))
--			list_del(&device->scsi_device_list_entry);
--	}
--
--	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
--
--	if (device) {
--		pqi_dev_info(ctrl_info, "removed", device);
--		pqi_free_device(device);
--	}
--}
--
- static int pqi_getpciinfo_ioctl(struct pqi_ctrl_info *ctrl_info, void __user *arg)
+ static inline void pqi_ctrl_block_scan(struct pqi_ctrl_info *ctrl_info)
+@@ -7292,6 +7323,7 @@ static void pqi_ctrl_update_feature_flags(struct pqi_ctrl_info *ctrl_info,
+ 		ctrl_info->unique_wwid_in_report_phys_lun_supported =
+ 			firmware_feature->enabled;
+ 		break;
++		pqi_save_fw_triage_setting(ctrl_info, firmware_feature->enabled);
+ 	}
+ 
+ 	pqi_firmware_feature_status(ctrl_info, firmware_feature);
+@@ -7618,6 +7650,11 @@ static int pqi_ctrl_init(struct pqi_ctrl_info *ctrl_info)
+ 	u32 product_id;
+ 
+ 	if (reset_devices) {
++		if (pqi_is_fw_triage_supported(ctrl_info)) {
++			rc = sis_wait_for_fw_triage_completion(ctrl_info);
++			if (rc)
++				return rc;
++		}
+ 		sis_soft_reset(ctrl_info);
+ 		msleep(PQI_POST_RESET_DELAY_SECS * PQI_HZ);
+ 	} else {
+diff --git a/drivers/scsi/smartpqi/smartpqi_sis.c b/drivers/scsi/smartpqi/smartpqi_sis.c
+index d63c46a8e38b..8acd3a80f582 100644
+--- a/drivers/scsi/smartpqi/smartpqi_sis.c
++++ b/drivers/scsi/smartpqi/smartpqi_sis.c
+@@ -51,12 +51,20 @@
+ #define SIS_BASE_STRUCT_REVISION		9
+ #define SIS_BASE_STRUCT_ALIGNMENT		16
+ 
++#define SIS_CTRL_KERNEL_FW_TRIAGE		0x3
+ #define SIS_CTRL_KERNEL_UP			0x80
+ #define SIS_CTRL_KERNEL_PANIC			0x100
+ #define SIS_CTRL_READY_TIMEOUT_SECS		180
+ #define SIS_CTRL_READY_RESUME_TIMEOUT_SECS	90
+ #define SIS_CTRL_READY_POLL_INTERVAL_MSECS	10
+ 
++enum sis_fw_triage_status {
++	FW_TRIAGE_NOT_STARTED = 0,
++	FW_TRIAGE_STARTED,
++	FW_TRIAGE_COND_INVALID,
++	FW_TRIAGE_COMPLETED
++};
++
+ #pragma pack(1)
+ 
+ /* for use with SIS_CMD_INIT_BASE_STRUCT_ADDRESS command */
+@@ -419,12 +427,55 @@ u32 sis_read_driver_scratch(struct pqi_ctrl_info *ctrl_info)
+ 	return readl(&ctrl_info->registers->sis_driver_scratch);
+ }
+ 
++static inline enum sis_fw_triage_status
++	sis_read_firmware_triage_status(struct pqi_ctrl_info *ctrl_info)
++{
++	return ((enum sis_fw_triage_status)(readl(&ctrl_info->registers->sis_firmware_status) &
++		SIS_CTRL_KERNEL_FW_TRIAGE));
++}
++
+ void sis_soft_reset(struct pqi_ctrl_info *ctrl_info)
  {
- 	struct pci_dev *pci_dev;
-@@ -6938,7 +6930,6 @@ static struct scsi_host_template pqi_driver_template = {
- 	.ioctl = pqi_ioctl,
- 	.slave_alloc = pqi_slave_alloc,
- 	.slave_configure = pqi_slave_configure,
--	.slave_destroy = pqi_slave_destroy,
- 	.map_queues = pqi_map_queues,
- 	.sdev_attrs = pqi_sdev_attrs,
- 	.shost_attrs = pqi_shost_attrs,
-@@ -8169,6 +8160,7 @@ static void pqi_remove_ctrl(struct pqi_ctrl_info *ctrl_info)
+ 	writel(SIS_SOFT_RESET,
+ 		&ctrl_info->registers->sis_host_to_ctrl_doorbell);
+ }
+ 
++#define SIS_FW_TRIAGE_STATUS_TIMEOUT_SECS		300
++#define SIS_FW_TRIAGE_STATUS_POLL_INTERVAL_SECS		1
++
++int sis_wait_for_fw_triage_completion(struct pqi_ctrl_info *ctrl_info)
++{
++	int rc;
++	enum sis_fw_triage_status status;
++	unsigned long timeout;
++
++	timeout = (SIS_FW_TRIAGE_STATUS_TIMEOUT_SECS * PQI_HZ) + jiffies;
++	while (1) {
++		status = sis_read_firmware_triage_status(ctrl_info);
++		if (status == FW_TRIAGE_COND_INVALID) {
++			dev_err(&ctrl_info->pci_dev->dev,
++				"firmware triage condition invalid\n");
++			rc = -EINVAL;
++			break;
++		} else if (status == FW_TRIAGE_NOT_STARTED ||
++			status == FW_TRIAGE_COMPLETED) {
++			rc = 0;
++			break;
++		}
++
++		if (time_after(jiffies, timeout)) {
++			dev_err(&ctrl_info->pci_dev->dev,
++				"timed out waiting for firmware triage status\n");
++			rc = -ETIMEDOUT;
++			break;
++		}
++
++		ssleep(SIS_FW_TRIAGE_STATUS_POLL_INTERVAL_SECS);
++	}
++
++	return rc;
++}
++
+ static void __attribute__((unused)) verify_structures(void)
  {
- 	pqi_cancel_rescan_worker(ctrl_info);
- 	pqi_cancel_update_time_worker(ctrl_info);
-+	pqi_remove_all_scsi_devices(ctrl_info);
- 	pqi_unregister_scsi(ctrl_info);
- 	if (ctrl_info->pqi_mode_enabled)
- 		pqi_revert_to_sis_mode(ctrl_info);
+ 	BUILD_BUG_ON(offsetof(struct sis_base_struct,
+diff --git a/drivers/scsi/smartpqi/smartpqi_sis.h b/drivers/scsi/smartpqi/smartpqi_sis.h
+index d29c1352a826..c1db93054c86 100644
+--- a/drivers/scsi/smartpqi/smartpqi_sis.h
++++ b/drivers/scsi/smartpqi/smartpqi_sis.h
+@@ -28,5 +28,6 @@ void sis_write_driver_scratch(struct pqi_ctrl_info *ctrl_info, u32 value);
+ u32 sis_read_driver_scratch(struct pqi_ctrl_info *ctrl_info);
+ void sis_soft_reset(struct pqi_ctrl_info *ctrl_info);
+ u32 sis_get_product_id(struct pqi_ctrl_info *ctrl_info);
++int sis_wait_for_fw_triage_completion(struct pqi_ctrl_info *ctrl_info);
+ 
+ #endif	/* _SMARTPQI_SIS_H */
 -- 
 2.28.0.rc1.9.ge7ae437ac1
 
