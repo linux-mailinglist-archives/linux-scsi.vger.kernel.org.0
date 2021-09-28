@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D064F41A86D
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Sep 2021 08:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE84141A85F
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Sep 2021 08:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239725AbhI1GEh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 28 Sep 2021 02:04:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48778 "EHLO mail.kernel.org"
+        id S239666AbhI1GE0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 28 Sep 2021 02:04:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49598 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239870AbhI1GCs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 28 Sep 2021 02:02:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 77507613B1;
-        Tue, 28 Sep 2021 05:57:38 +0000 (UTC)
+        id S239300AbhI1GCv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 28 Sep 2021 02:02:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 29C61613D2;
+        Tue, 28 Sep 2021 05:57:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632808658;
-        bh=ot6VfK65sg2Y7YZeriZdOjctKXKEZ76qidoh2h4/l4I=;
+        s=k20201202; t=1632808665;
+        bh=WKW1KA04Qea8MHu2U1L/YYp0sBKmvQ7+kwJfHbNnSPA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g38b9t556pbM5JjkBPS32eSeoy+HUQSbzQfaYx5RhmBygKuVrat8TC+VDoe0UI17p
-         Q2ZNrJRpr3oXWyOA03lsp5VjyvknlTn5cc7vWwjHfvVnGmN+jNkwJOSpFkdsdeJ0ie
-         Tgmtrq1TG8Gz22xaaeoh4nDfTmNnySFYbfmVtR4NxRTw//YeNP4eX15+6JpgtLEaWr
-         OvNnRoEweAUjnJliL+b0tgnylpGhORtvNM5TRfF8qamytO3hCqrJCX7kD+cCvRnxEH
-         cFeSe/5eQzEAAgDhn26HNv3Aw9/urVzq5eseNf0nDXl2Qr0aAI0hkv9jPonrMWgQCA
-         3wlttxkWvLCdw==
+        b=Fa5ZLiJ+1hy8F8Mss/UIg+C9xin9GZw8xcObE7o7wKAH+2hkE9lbbdrA07qdGm89i
+         Lds1qtkW3Y29754CK8Bk8vrGJ1o4c12wEl8m86ra78B7XcK4yyj2lgQQ5LWyB7gyGV
+         DFVN7VcQz6XCbjlfLmC5G820RP+Jk0JJML/u77aTkqEctv7jYZZxnE117GM4XDB7zR
+         3ZHCth/bC7KF4Bl58XK89f9o2ggKKJ+bDAHEZgpQ+6Y6bqiA4Ko8F/Sj7fYsC6Ks7D
+         jH7l3nmgyfDxzW0SaIdcqO7R930BE/alkF61+0c8geiL0OdLFCEDA9hsi/+Ldf3PYK
+         fdsLx7eNpxdPw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ming Lei <ming.lei@redhat.com>,
@@ -31,12 +31,12 @@ Cc:     Ming Lei <ming.lei@redhat.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 5/6] scsi: sd: Free scsi_disk device via put_device()
-Date:   Tue, 28 Sep 2021 01:57:33 -0400
-Message-Id: <20210928055734.173182-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 4/5] scsi: sd: Free scsi_disk device via put_device()
+Date:   Tue, 28 Sep 2021 01:57:40 -0400
+Message-Id: <20210928055741.173265-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210928055734.173182-1-sashal@kernel.org>
-References: <20210928055734.173182-1-sashal@kernel.org>
+In-Reply-To: <20210928055741.173265-1-sashal@kernel.org>
+References: <20210928055741.173265-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -63,10 +63,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 671bf1e03ee1..426f1b3aa15e 100644
+index 9176fb1b1615..935add4d6f83 100644
 --- a/drivers/scsi/sd.c
 +++ b/drivers/scsi/sd.c
-@@ -3179,15 +3179,16 @@ static int sd_probe(struct device *dev)
+@@ -3146,15 +3146,16 @@ static int sd_probe(struct device *dev)
  	}
  
  	device_initialize(&sdkp->dev);
