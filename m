@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C872B41A855
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Sep 2021 08:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC8441A880
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Sep 2021 08:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239517AbhI1GES (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 28 Sep 2021 02:04:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48756 "EHLO mail.kernel.org"
+        id S239647AbhI1GFS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 28 Sep 2021 02:05:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49596 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239860AbhI1GCr (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 28 Sep 2021 02:02:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B2B34613AB;
-        Tue, 28 Sep 2021 05:57:33 +0000 (UTC)
+        id S239643AbhI1GA4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 28 Sep 2021 02:00:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 814386138B;
+        Tue, 28 Sep 2021 05:57:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632808653;
-        bh=0X5Ea7nPNvK/wJmXAKq3SaM+LBzZhvucnf6K7T70JZA=;
+        s=k20201202; t=1632808643;
+        bh=g1PLHlXTJN7zOvvg4l4JZe0CAIIOBh8AiBjhAxP9lPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k5nGUq72rUBIyWq9e+YyvU4XLZCrbmU8GXhm5+JnNbqyy5Fdb+tH/uNs7FXPoKRqe
-         S9So1HIxmc5B6db6RNgBMTcRhoCtlq8F41lnT+psjudU0MdtQNqCxzsB8BMYups4xD
-         c0TREvxoKouKe/tADOHNK/jzsLLCnQNdP7xBsMClbBlACD3grYocG5hlQFoTQRJ3y6
-         fp7mHfGF9oIgAoMBQADC6Zw5LW/hoRo3eIu/2fUCcpChzpECqfHBoM7kHNwk39xw6J
-         3qvSKwta/tFE/7bFLOOleqfORJuF7qe8+YwBA5jXijd8ojxjO+ltse/90FUdR6dDcD
-         nxoOyIESisplQ==
+        b=D1nLFIBoEAN32uG7mDpQb0L2fSFL73eWBxISHtPh0d4pBkFNFYWIL1zTyivmGWk08
+         k2tcLhyPB3I1YsgvVWu2I0MddgHo0PW0AMZunlcrvO91G0HIrnF1rKPAQ9xV2kXcJE
+         MI6+iQF2Rdxcl4dRCdTOFhZNgFFIdZNq1eTWnPR1vQB+8qxuSEUxKBw0l12yE3YfX0
+         xDLgRxNLs2ts/UgW5ulZ0YhbPFFEsDLubP5+Lko0ovafVZAdzokbm5nRuBFrfOF4LR
+         kJhq20lphRjBrQhEX4jWfB0ofU+t0b6EzVb2VHaVg30Vqf5NlHAY8mMwofbJp6hrH4
+         05Swuxvdg7/mw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Wen Xiong <wenxiong@linux.ibm.com>,
@@ -30,12 +30,12 @@ Cc:     Wen Xiong <wenxiong@linux.ibm.com>,
         James Bottomley <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 8/8] scsi: ses: Retry failed Send/Receive Diagnostic commands
-Date:   Tue, 28 Sep 2021 01:57:26 -0400
-Message-Id: <20210928055727.173078-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 09/10] scsi: ses: Retry failed Send/Receive Diagnostic commands
+Date:   Tue, 28 Sep 2021 01:57:15 -0400
+Message-Id: <20210928055716.172951-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210928055727.173078-1-sashal@kernel.org>
-References: <20210928055727.173078-1-sashal@kernel.org>
+In-Reply-To: <20210928055716.172951-1-sashal@kernel.org>
+References: <20210928055716.172951-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -76,7 +76,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 18 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
-index 62f04c0511cf..4b993607887c 100644
+index 0fc39224ce1e..caf35ca577ce 100644
 --- a/drivers/scsi/ses.c
 +++ b/drivers/scsi/ses.c
 @@ -103,9 +103,16 @@ static int ses_recv_diag(struct scsi_device *sdev, int page_code,
