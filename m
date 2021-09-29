@@ -2,88 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B50B741C21B
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 11:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3ED241C3C3
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 13:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245216AbhI2J6A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Sep 2021 05:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245185AbhI2J6A (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 05:58:00 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76ACC06161C
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 02:56:19 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id ce20-20020a17090aff1400b0019f13f6a749so3545989pjb.4
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 02:56:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=1klujDVqzj2UNz6zM5ZuCnQRkUZg5KHlPZdC71yGlKs=;
-        b=L5t9L5LErWjA4MGGQuI38U35DRcnyJ+uZpAC6+WtjBdSLcr6y09hRAuNP6fgHhytcU
-         Au4S45MJVkT7DVw0Uju5vu7b/k+3KYlziWdYUkfqPDUkI6IOGiRkcuEWRtxRON7ccVVN
-         91sYVwG0ms+iHYoerRA+jKL7XqY0pfGUwCemubciykDXhvdcazCMuxLMYP3CXOmW7hwF
-         xlXKAfPVkSeNdO84LpDlIHuuWEfRvUWshviKLxiqzDpHEqru5n4Bq/KtTaz2dz4RkcHw
-         CYMk/7c/hcfmybTDNvMNg9UIFbha+uLYo/w+egJZxDU4FrD44lCXjwiv4HHhBuTmRxHn
-         nuUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=1klujDVqzj2UNz6zM5ZuCnQRkUZg5KHlPZdC71yGlKs=;
-        b=XA6QGWTZkbhATCoWkIxk8Xc40Lxjp2Dk9BjvevoYO23M5RhXE0MTbw7ucKuRZfU4DQ
-         DXAztVPusDCHTO0ku0+0Gya8Q98kGQb7uaCSLn3A2z9WCyYE6LLyUPPxfqzZTAQpIQnA
-         qNSPvJr5/6L3kTxpYZ860d9AqqTg1qIxhBGZruR3Ow54arQxlF1v76qvSXqI6GOpi5xs
-         i3j1WtlwzmoccdsZw3BbXaLnvlpKi5k4Av9zFjqw1hlz1XMxdziVx3sTUoSTC4nrhSFf
-         HONicJ1Ep0DgKd3cxWEWaT7GZmu1omonINqyh5r4uzJRE1bJQRz5or0tSDemvDiWE64F
-         6jPQ==
-X-Gm-Message-State: AOAM530zCf2TTfJCuJ4/c6FY7bVreipErMVSAX+Umxw6a/p8mGUuTPM6
-        wseOHWc3cblwQ3NuJq4YIONgtZg0x1CAPvM0Y58=
-X-Google-Smtp-Source: ABdhPJxI9zGjDLXonWY4XZMuiraxZ4qsq1MJHvDc3bOgPY4JrRLjNDUr8L9SQJi5BqtkWLprCz0C4DafIj7ptpIfnL8=
-X-Received: by 2002:a17:90a:e7ca:: with SMTP id kb10mr5437385pjb.33.1632909378842;
- Wed, 29 Sep 2021 02:56:18 -0700 (PDT)
+        id S244316AbhI2Lw0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Sep 2021 07:52:26 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:34484 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240310AbhI2LwV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 Sep 2021 07:52:21 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 76AFB43DAA;
+        Wed, 29 Sep 2021 11:50:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received; s=mta-01; t=1632916238; x=
+        1634730639; bh=eCbuluwhdBl5PGqQkbmadL6bY6rhma2+bSCODGA4v7Q=; b=B
+        MU2e8lWEvGMLriwiF10q4uqd70aXOlok/IJyy3tUM59qPPDvSdc4VDdWPFh2NwBq
+        VP3NfD8rZ0Q+/7lyVjgNi5hi1D5bHM8lcNtJBFRPX5TzOi5LjMY1VWV/kjCGgIZ9
+        KbjEkGfkBjtUDuJZHKMGoQ0rcIK+eAy7hC8QEJxNk8=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id KdCxkYeqDjct; Wed, 29 Sep 2021 14:50:38 +0300 (MSK)
+Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 66F0C4177A;
+        Wed, 29 Sep 2021 14:50:38 +0300 (MSK)
+Received: from yadro.com (10.178.21.26) by T-EXCH-04.corp.yadro.com
+ (172.17.100.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Wed, 29
+ Sep 2021 14:50:37 +0300
+From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
+To:     Martin Petersen <martin.petersen@oracle.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        <target-devel@vger.kernel.org>
+CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
+        Konstantin Shelekhin <k.shelekhin@yadro.com>,
+        Roman Bolshakov <r.bolshakov@yadro.com>
+Subject: [PATCH] scsi: target: core: Make logs less verbose
+Date:   Wed, 29 Sep 2021 14:50:00 +0300
+Message-ID: <20210929114959.705852-1-k.shelekhin@yadro.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Received: by 2002:a05:7300:3042:b0:3f:d947:4248 with HTTP; Wed, 29 Sep 2021
- 02:56:18 -0700 (PDT)
-Reply-To: dynamicfunds900@gmail.com
-From:   Dynamic Funds Inc <robertadolf6532@gmail.com>
-Date:   Wed, 29 Sep 2021 05:56:18 -0400
-Message-ID: <CANA04OoQRiWEySirZcqPcE=FHZNFr6u-_OKvjcXyV=0=7=8Mdw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.178.21.26]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-04.corp.yadro.com (172.17.100.104)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---=20
-Gr=C3=BC=C3=9Fe.
+Change the log level of the following message to debug:
 
-Ich bin Noah Blackstein, Kreditvermittler bei Dynamic Funds Inc, einem
-registrierten Finanzunternehmen. Wir vergeben Darlehen in H=C3=B6he von 3%
-aus dem Bereich von 5.000 - 15 Millionen Dollar, Pfund und Euro.
-(Keine Sozialversicherung und keine Bonit=C3=A4tspr=C3=BCfung, 100% garanti=
-ert!)
-Ich freue mich auf die Zusammenarbeit mit Ihnen.
+	Unsupported SCSI Opcode 0xXX, sending CHECK_CONDITION.
 
-Die erbrachten Dienstleistungen umfassen; Privatkredit,
-Refinanzierung, Heimwerkerbedarf, Investitionskredit, Autokredit,
-Studentenkredit, Schuldenkonsolidierung, Kreditlinie, Zweithypothek,
-Unternehmenskredit. Bei Interesse kontaktieren Sie uns bitte mit den
-untenstehenden Informationen.
+This message is mostly helpful during debugging sessions in order to
+understand errors on the initiator side. But most of the time it's just
+useless and makes reading logs much harder.
 
-DATENFORMULAR DES KREDITERS, AUSF=C3=9CLLEN UND R=C3=9CCKSENDEN
-Vollst=C3=A4ndiger Name :.
-Kontakt Anschrift:.
-Telefon :.
-Land :.
-Erforderlicher Betrag als Darlehen :.
-Kreditlaufzeit:.
-Zweck des Darlehens:.
-Geschlecht :.
+It gets particularly annoying if there are many initiators that come and
+go or if an initiator runs a program that does not care whether the
+command is supported and just keeps sending it.
 
-Gr=C3=BC=C3=9Fe,
-Dynamic Funds Inc.
-dynamicfunds900@gmail.com
+Signed-off-by: Konstantin Shelekhin <k.shelekhin@yadro.com>
+Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
+---
+ drivers/target/target_core_transport.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
+index 14c6f2bb1b01..4a0055ab9151 100644
+--- a/drivers/target/target_core_transport.c
++++ b/drivers/target/target_core_transport.c
+@@ -1511,10 +1511,10 @@ target_cmd_parse_cdb(struct se_cmd *cmd)
+ 
+ 	ret = dev->transport->parse_cdb(cmd);
+ 	if (ret == TCM_UNSUPPORTED_SCSI_OPCODE)
+-		pr_warn_ratelimited("%s/%s: Unsupported SCSI Opcode 0x%02x, sending CHECK_CONDITION.\n",
+-				    cmd->se_tfo->fabric_name,
+-				    cmd->se_sess->se_node_acl->initiatorname,
+-				    cmd->t_task_cdb[0]);
++		pr_debug_ratelimited("%s/%s: Unsupported SCSI Opcode 0x%02x, sending CHECK_CONDITION.\n",
++				     cmd->se_tfo->fabric_name,
++				     cmd->se_sess->se_node_acl->initiatorname,
++				     cmd->t_task_cdb[0]);
+ 	if (ret)
+ 		return ret;
+ 
+-- 
+2.33.0
+
