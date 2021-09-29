@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7BC41CEE5
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Sep 2021 00:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EFA41CEE6
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Sep 2021 00:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347121AbhI2WJL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Sep 2021 18:09:11 -0400
-Received: from mail-pf1-f171.google.com ([209.85.210.171]:36389 "EHLO
-        mail-pf1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347142AbhI2WJD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 18:09:03 -0400
-Received: by mail-pf1-f171.google.com with SMTP id m26so3172444pff.3
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 15:07:21 -0700 (PDT)
+        id S1347141AbhI2WJM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Sep 2021 18:09:12 -0400
+Received: from mail-pj1-f54.google.com ([209.85.216.54]:45569 "EHLO
+        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347146AbhI2WJE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 18:09:04 -0400
+Received: by mail-pj1-f54.google.com with SMTP id om12-20020a17090b3a8c00b0019eff43daf5so3130659pjb.4
+        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 15:07:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MQERA3T4j1mewJlnCoSDIbhMa8LyGqwprFKISLrkUiY=;
-        b=ER9p6miRgtOjT/Y2Hkh2oa4oFrNmtJBnrce+7/eLGEoADGFGK809OXC91/gme/B+7E
-         0sd2pLNab7W5+4XG4fVYfZHpaWvk7UbWcuj1v/Isc5A2f1gh4h+NQUIgTNkoEGRA6PCz
-         gnysZ7rwB5B3d7M20uBzwbLn6k5TQeNon2asmIdFWnCxGd5NuNrZtE0d04E2koWeKxAj
-         cEq4nwxmwNqdbowIiYyNUPYstc5YH4B3YZJ8OnzFr5SfrL03f1NSNQge9ahLduQV2Q+f
-         sXDAkFtejJk9IMOJm06KarJ5dGoOLhdRILEYwvQL3Mrem20HbUVvQnvkEXyYVKSCuwMV
-         F/Qg==
-X-Gm-Message-State: AOAM5312BaLSneB4krl2W5cojiIO+UXRPFk5sBvMRLapKzwsJ1RQFLe4
-        U1R/XDOb8BXjtmm263KxZZouqaVR7n0=
-X-Google-Smtp-Source: ABdhPJydbBGCvoNcoJsaF+RSb//tdpDW8cLvq4u1bkew1wO2bCjU3Fw2aNPl1IGbGHPMJ3Rqo/ZxSA==
-X-Received: by 2002:aa7:9ac2:0:b0:443:a477:6684 with SMTP id x2-20020aa79ac2000000b00443a4776684mr2113160pfp.25.1632953241466;
-        Wed, 29 Sep 2021 15:07:21 -0700 (PDT)
+        bh=voPB9MyaX+yuJZJpJFu6Wk8N5p4rk7uB2b08YZfpq04=;
+        b=zoxYSigtBTUqESXWnCe54OEUsO+Xjuk+alC+VJfFzun/080c6Oh5kVwcjuqaswqphr
+         3CVod49/lBmBmU/REVKdU+PG1a9cePZAFe01hLQvTyh1tJmLVw5lo+/xZtiyCf3RJI2t
+         hAsoS+tepNDjaH+LqWdMzlhQVNifVPtq2qLTTsqWi3xMM2pzV665od0hgp6r3DXMPUCZ
+         izI4oTRNW5M2/tqNHOX1+IhqhITvtcUtE6BBtPKwiyINGGdRwNLR9OKbuUe61PRQu43f
+         0ClWulDGSGkLyeqGdP2vBaJPdu0c08EVsXrLGlhUXuA4Jl34j7G8akD4rI6TV/hSjTrB
+         iHwQ==
+X-Gm-Message-State: AOAM5316KgdtLE+VMWBgZhOoSPKZ/aXRyrYx+rw2oS7Z5cZC+RrK9VkC
+        neGkF88DwJ2Iu9SPVMdyxmSEUNE9xzE=
+X-Google-Smtp-Source: ABdhPJwyebh9Ryd64YPj/VzI5+T5zKSUPZxsQy1T5saTmsF8CwP5YDLZCdQCeMrQQIWWagVMccYzHA==
+X-Received: by 2002:a17:90a:428e:: with SMTP id p14mr9109259pjg.229.1632953242818;
+        Wed, 29 Sep 2021 15:07:22 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:5c11:c4f:db56:119])
-        by smtp.gmail.com with ESMTPSA id gk14sm2785585pjb.35.2021.09.29.15.07.20
+        by smtp.gmail.com with ESMTPSA id gk14sm2785585pjb.35.2021.09.29.15.07.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 15:07:20 -0700 (PDT)
+        Wed, 29 Sep 2021 15:07:22 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Brian King <brking@us.ibm.com>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 41/84] ipr: Call scsi_done() directly
-Date:   Wed, 29 Sep 2021 15:05:17 -0700
-Message-Id: <20210929220600.3509089-42-bvanassche@acm.org>
+Subject: [PATCH v2 42/84] ips: Call scsi_done() directly
+Date:   Wed, 29 Sep 2021 15:05:18 -0700
+Message-Id: <20210929220600.3509089-43-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
 In-Reply-To: <20210929220600.3509089-1-bvanassche@acm.org>
 References: <20210929220600.3509089-1-bvanassche@acm.org>
@@ -55,55 +55,136 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ipr.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/ips.c | 28 +++++++++++++---------------
+ 1 file changed, 13 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
-index 5d78f7e939a3..aa44216dcf9a 100644
---- a/drivers/scsi/ipr.c
-+++ b/drivers/scsi/ipr.c
-@@ -866,7 +866,7 @@ static void __ipr_scsi_eh_done(struct ipr_cmnd *ipr_cmd)
- 	scsi_cmd->result |= (DID_ERROR << 16);
+diff --git a/drivers/scsi/ips.c b/drivers/scsi/ips.c
+index cdd94fb2aab7..0c93ec359e9b 100644
+--- a/drivers/scsi/ips.c
++++ b/drivers/scsi/ips.c
+@@ -936,7 +936,7 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
  
- 	scsi_dma_unmap(ipr_cmd->scsi_cmd);
--	scsi_cmd->scsi_done(scsi_cmd);
-+	scsi_done(scsi_cmd);
- 	if (ipr_cmd->eh_comp)
- 		complete(ipr_cmd->eh_comp);
- 	list_add_tail(&ipr_cmd->queue, &ipr_cmd->hrrq->hrrq_free_q);
-@@ -6065,7 +6065,7 @@ static void __ipr_erp_done(struct ipr_cmnd *ipr_cmd)
- 		res->in_erp = 0;
+ 		while ((scb = ips_removeq_scb_head(&ha->scb_activelist))) {
+ 			scb->scsi_cmd->result = DID_ERROR << 16;
+-			scb->scsi_cmd->scsi_done(scb->scsi_cmd);
++			scsi_done(scb->scsi_cmd);
+ 			ips_freescb(ha, scb);
+ 		}
+ 
+@@ -946,7 +946,7 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
+ 
+ 		while ((scsi_cmd = ips_removeq_wait_head(&ha->scb_waitlist))) {
+ 			scsi_cmd->result = DID_ERROR;
+-			scsi_cmd->scsi_done(scsi_cmd);
++			scsi_done(scsi_cmd);
+ 		}
+ 
+ 		ha->active = FALSE;
+@@ -965,7 +965,7 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
+ 
+ 		while ((scb = ips_removeq_scb_head(&ha->scb_activelist))) {
+ 			scb->scsi_cmd->result = DID_ERROR << 16;
+-			scb->scsi_cmd->scsi_done(scb->scsi_cmd);
++			scsi_done(scb->scsi_cmd);
+ 			ips_freescb(ha, scb);
+ 		}
+ 
+@@ -975,7 +975,7 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
+ 
+ 		while ((scsi_cmd = ips_removeq_wait_head(&ha->scb_waitlist))) {
+ 			scsi_cmd->result = DID_ERROR << 16;
+-			scsi_cmd->scsi_done(scsi_cmd);
++			scsi_done(scsi_cmd);
+ 		}
+ 
+ 		ha->active = FALSE;
+@@ -994,7 +994,7 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
+ 
+ 	while ((scb = ips_removeq_scb_head(&ha->scb_activelist))) {
+ 		scb->scsi_cmd->result = DID_RESET << 16;
+-		scb->scsi_cmd->scsi_done(scb->scsi_cmd);
++		scsi_done(scb->scsi_cmd);
+ 		ips_freescb(ha, scb);
  	}
- 	scsi_dma_unmap(ipr_cmd->scsi_cmd);
--	scsi_cmd->scsi_done(scsi_cmd);
-+	scsi_done(scsi_cmd);
- 	if (ipr_cmd->eh_comp)
- 		complete(ipr_cmd->eh_comp);
- 	list_add_tail(&ipr_cmd->queue, &ipr_cmd->hrrq->hrrq_free_q);
-@@ -6502,7 +6502,7 @@ static void ipr_erp_start(struct ipr_ioa_cfg *ioa_cfg,
+ 
+@@ -1064,8 +1064,6 @@ static int ips_queue_lck(struct scsi_cmnd *SC, void (*done) (struct scsi_cmnd *)
+ 		return (0);
  	}
  
- 	scsi_dma_unmap(ipr_cmd->scsi_cmd);
--	scsi_cmd->scsi_done(scsi_cmd);
-+	scsi_done(scsi_cmd);
- 	if (ipr_cmd->eh_comp)
- 		complete(ipr_cmd->eh_comp);
- 	list_add_tail(&ipr_cmd->queue, &ipr_cmd->hrrq->hrrq_free_q);
-@@ -6531,7 +6531,7 @@ static void ipr_scsi_done(struct ipr_cmnd *ipr_cmd)
- 		scsi_dma_unmap(scsi_cmd);
+-	SC->scsi_done = done;
+-
+ 	DEBUG_VAR(2, "(%s%d): ips_queue: cmd 0x%X (%d %d %d)",
+ 		  ips_name,
+ 		  ha->host_num,
+@@ -1099,7 +1097,7 @@ static int ips_queue_lck(struct scsi_cmnd *SC, void (*done) (struct scsi_cmnd *)
+ 			ha->ioctl_reset = 1;	/* This reset request is from an IOCTL */
+ 			__ips_eh_reset(SC);
+ 			SC->result = DID_OK << 16;
+-			SC->scsi_done(SC);
++			scsi_done(SC);
+ 			return (0);
+ 		}
  
- 		spin_lock_irqsave(ipr_cmd->hrrq->lock, lock_flags);
--		scsi_cmd->scsi_done(scsi_cmd);
-+		scsi_done(scsi_cmd);
- 		if (ipr_cmd->eh_comp)
- 			complete(ipr_cmd->eh_comp);
- 		list_add_tail(&ipr_cmd->queue, &ipr_cmd->hrrq->hrrq_free_q);
-@@ -6685,7 +6685,7 @@ static int ipr_queuecommand(struct Scsi_Host *shost,
- 	spin_lock_irqsave(hrrq->lock, hrrq_flags);
- 	memset(scsi_cmd->sense_buffer, 0, SCSI_SENSE_BUFFERSIZE);
- 	scsi_cmd->result = (DID_NO_CONNECT << 16);
--	scsi_cmd->scsi_done(scsi_cmd);
-+	scsi_done(scsi_cmd);
- 	spin_unlock_irqrestore(hrrq->lock, hrrq_flags);
- 	return 0;
+@@ -2579,7 +2577,7 @@ ips_next(ips_ha_t * ha, int intr)
+ 		case IPS_FAILURE:
+ 			if (scb->scsi_cmd) {
+ 				scb->scsi_cmd->result = DID_ERROR << 16;
+-				scb->scsi_cmd->scsi_done(scb->scsi_cmd);
++				scsi_done(scb->scsi_cmd);
+ 			}
+ 
+ 			ips_freescb(ha, scb);
+@@ -2587,7 +2585,7 @@ ips_next(ips_ha_t * ha, int intr)
+ 		case IPS_SUCCESS_IMM:
+ 			if (scb->scsi_cmd) {
+ 				scb->scsi_cmd->result = DID_OK << 16;
+-				scb->scsi_cmd->scsi_done(scb->scsi_cmd);
++				scsi_done(scb->scsi_cmd);
+ 			}
+ 
+ 			ips_freescb(ha, scb);
+@@ -2712,7 +2710,7 @@ ips_next(ips_ha_t * ha, int intr)
+ 		case IPS_FAILURE:
+ 			if (scb->scsi_cmd) {
+ 				scb->scsi_cmd->result = DID_ERROR << 16;
+-				scb->scsi_cmd->scsi_done(scb->scsi_cmd);
++				scsi_done(scb->scsi_cmd);
+ 			}
+ 
+ 			if (scb->bus)
+@@ -2723,7 +2721,7 @@ ips_next(ips_ha_t * ha, int intr)
+ 			break;
+ 		case IPS_SUCCESS_IMM:
+ 			if (scb->scsi_cmd)
+-				scb->scsi_cmd->scsi_done(scb->scsi_cmd);
++				scsi_done(scb->scsi_cmd);
+ 
+ 			if (scb->bus)
+ 				ha->dcdb_active[scb->bus - 1] &=
+@@ -3206,7 +3204,7 @@ ips_done(ips_ha_t * ha, ips_scb_t * scb)
+ 			case IPS_FAILURE:
+ 				if (scb->scsi_cmd) {
+ 					scb->scsi_cmd->result = DID_ERROR << 16;
+-					scb->scsi_cmd->scsi_done(scb->scsi_cmd);
++					scsi_done(scb->scsi_cmd);
+ 				}
+ 
+ 				ips_freescb(ha, scb);
+@@ -3214,7 +3212,7 @@ ips_done(ips_ha_t * ha, ips_scb_t * scb)
+ 			case IPS_SUCCESS_IMM:
+ 				if (scb->scsi_cmd) {
+ 					scb->scsi_cmd->result = DID_ERROR << 16;
+-					scb->scsi_cmd->scsi_done(scb->scsi_cmd);
++					scsi_done(scb->scsi_cmd);
+ 				}
+ 
+ 				ips_freescb(ha, scb);
+@@ -3231,7 +3229,7 @@ ips_done(ips_ha_t * ha, ips_scb_t * scb)
+ 		ha->dcdb_active[scb->bus - 1] &= ~(1 << scb->target_id);
+ 	}
+ 
+-	scb->scsi_cmd->scsi_done(scb->scsi_cmd);
++	scsi_done(scb->scsi_cmd);
+ 
+ 	ips_freescb(ha, scb);
  }
