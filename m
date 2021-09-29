@@ -2,44 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6F541CEF8
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Sep 2021 00:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE7E41CEF9
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Sep 2021 00:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347168AbhI2WJj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Sep 2021 18:09:39 -0400
-Received: from mail-pj1-f41.google.com ([209.85.216.41]:36408 "EHLO
-        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347147AbhI2WJf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 18:09:35 -0400
-Received: by mail-pj1-f41.google.com with SMTP id u1-20020a17090ae00100b0019ec31d3ba2so5220892pjy.1
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 15:07:53 -0700 (PDT)
+        id S1347180AbhI2WJk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Sep 2021 18:09:40 -0400
+Received: from mail-pj1-f51.google.com ([209.85.216.51]:36419 "EHLO
+        mail-pj1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347053AbhI2WJg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 18:09:36 -0400
+Received: by mail-pj1-f51.google.com with SMTP id u1-20020a17090ae00100b0019ec31d3ba2so5220930pjy.1
+        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 15:07:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zfxVhZCFvk45D3OUj/xVsg8PqFWL9WcofwLGfuG8Jpw=;
-        b=nYSu5jNPo5S7BVZu/qBqSJ8TiM8LlAXGjP4FoCPEfSNh2ITDvY9iv7mvxaZ9ekEsXJ
-         a8Pv3kj+7gggRP0NT4E71QBcVVCqtb2VmyS5vQTWaYeMxjGydjTuWCemQy8o+tlYY/lK
-         P1IhLBU3Ou6Eql+EyMzXx35BMjy2khA7Io8NdGQ3Wk4L1AIjOjUf8c5Z74/5171KepOu
-         xCAufv3oB49OzrXpDhBFN0WFyQMNFbxuKxeHwvNzr9EQj2RCHqeSfBG2NNdZMOvFa3tR
-         byfe+m1i9sqiATyWCUiMVjH0ZLRB2t9UbVQqJC/W+2ILCet8Hip1MxsZaUfrVHR52LJP
-         GN8g==
-X-Gm-Message-State: AOAM533ohAjYQZVozeT69cfIfb4+xhAd4v8D2dcjbH1cP61oNgsv6Ead
-        bjj8GGN4/CmgeFg2P+VjmYU=
-X-Google-Smtp-Source: ABdhPJxcWRN5qcMnZni+FLT+rzES8h3rJ1848rxTtdSmIRDrbI+6Jlp9Mu4wOgxIb+UHy4XN+4nsEQ==
-X-Received: by 2002:a17:90a:9908:: with SMTP id b8mr9017455pjp.203.1632953273447;
-        Wed, 29 Sep 2021 15:07:53 -0700 (PDT)
+        bh=dKE9o/+g4929dyCq2nGwYGFLUetIkYpKTXBeXH0/mTc=;
+        b=LOeuVDN7YGAOBn7Pz48IYQROsnfIyUGEmiCrhQtYzGL+WCNb/L/wIOr4+NBSQGTFKY
+         +BDI6LK2DVnDLg+bYjpLwqYBxM0NBmf3V5nVPzNOEYSslXTX3pZygs755fFKkCKXe0ty
+         MesJUA+gFxHrFNr+Mv2RSiSahf1LsEe4P57Er4Rwp5SmGAMMWonx/bxnNOImtpSCauIN
+         Dk8K4m77FLjTvUgoJM300lhnvck/io1dGf9pGAJ1yWCAq3NcQxp9DQH2/vmAteeUklFY
+         DsqDlyWAOa4fc7CQcq13rJVD2m/dFdNY3S/r8Cl4KHN3dNbIZL42bUBn4v118jVsyHQK
+         8xDA==
+X-Gm-Message-State: AOAM533PPbUwBguMmiYMlXXKObBMjQkq3bZiY/fTND+gvIuZOUt1nZFW
+        FlgLN20DjcQHpeqr7AmLK7cOpeZPOq4=
+X-Google-Smtp-Source: ABdhPJypnXFvhd/hZyiXvZ+hOOMniGIFbY4Jxuksc79RnlkOgwILea/CjC64slxIRAR/cJwdnxrYLw==
+X-Received: by 2002:a17:902:b286:b0:13e:1a30:ebc6 with SMTP id u6-20020a170902b28600b0013e1a30ebc6mr936731plr.72.1632953274811;
+        Wed, 29 Sep 2021 15:07:54 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:5c11:c4f:db56:119])
-        by smtp.gmail.com with ESMTPSA id gk14sm2785585pjb.35.2021.09.29.15.07.52
+        by smtp.gmail.com with ESMTPSA id gk14sm2785585pjb.35.2021.09.29.15.07.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 15:07:52 -0700 (PDT)
+        Wed, 29 Sep 2021 15:07:54 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 60/84] ppa: Call scsi_done() directly
-Date:   Wed, 29 Sep 2021 15:05:36 -0700
-Message-Id: <20210929220600.3509089-61-bvanassche@acm.org>
+        Geoff Levand <geoff@infradead.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH v2 61/84] ps3rom: Call scsi_done() directly
+Date:   Wed, 29 Sep 2021 15:05:37 -0700
+Message-Id: <20210929220600.3509089-62-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
 In-Reply-To: <20210929220600.3509089-1-bvanassche@acm.org>
 References: <20210929220600.3509089-1-bvanassche@acm.org>
@@ -54,27 +56,36 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ppa.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/ps3rom.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/ppa.c b/drivers/scsi/ppa.c
-index 977315fdc254..799ad8562e24 100644
---- a/drivers/scsi/ppa.c
-+++ b/drivers/scsi/ppa.c
-@@ -665,7 +665,7 @@ static void ppa_interrupt(struct work_struct *work)
+diff --git a/drivers/scsi/ps3rom.c b/drivers/scsi/ps3rom.c
+index 0f4b99d92f12..08e970300b3f 100644
+--- a/drivers/scsi/ps3rom.c
++++ b/drivers/scsi/ps3rom.c
+@@ -209,7 +209,6 @@ static int ps3rom_queuecommand_lck(struct scsi_cmnd *cmd,
+ 	int res;
  
- 	dev->cur_cmd = NULL;
+ 	priv->curr_cmd = cmd;
+-	cmd->scsi_done = done;
  
+ 	opcode = cmd->cmnd[0];
+ 	/*
+@@ -237,7 +236,7 @@ static int ps3rom_queuecommand_lck(struct scsi_cmnd *cmd,
+ 		scsi_build_sense(cmd, 0, ILLEGAL_REQUEST, 0, 0);
+ 		cmd->result = res;
+ 		priv->curr_cmd = NULL;
+-		cmd->scsi_done(cmd);
++		scsi_done(cmd);
+ 	}
+ 
+ 	return 0;
+@@ -321,7 +320,7 @@ static irqreturn_t ps3rom_interrupt(int irq, void *data)
+ 
+ done:
+ 	priv->curr_cmd = NULL;
 -	cmd->scsi_done(cmd);
 +	scsi_done(cmd);
+ 	return IRQ_HANDLED;
  }
- 
- static int ppa_engine(ppa_struct *dev, struct scsi_cmnd *cmd)
-@@ -798,7 +798,6 @@ static int ppa_queuecommand_lck(struct scsi_cmnd *cmd,
- 	dev->failed = 0;
- 	dev->jstart = jiffies;
- 	dev->cur_cmd = cmd;
--	cmd->scsi_done = done;
- 	cmd->result = DID_ERROR << 16;	/* default return code */
- 	cmd->SCp.phase = 0;	/* bus free */
  
