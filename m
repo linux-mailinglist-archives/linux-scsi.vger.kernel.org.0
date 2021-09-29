@@ -2,47 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2AB41CEC2
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Sep 2021 00:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1F741CEC3
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Sep 2021 00:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347070AbhI2WIL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Sep 2021 18:08:11 -0400
-Received: from mail-pg1-f173.google.com ([209.85.215.173]:36816 "EHLO
-        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347063AbhI2WIG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 18:08:06 -0400
-Received: by mail-pg1-f173.google.com with SMTP id 75so4159640pga.3
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 15:06:25 -0700 (PDT)
+        id S1347076AbhI2WIM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Sep 2021 18:08:12 -0400
+Received: from mail-pg1-f181.google.com ([209.85.215.181]:45011 "EHLO
+        mail-pg1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347064AbhI2WII (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 18:08:08 -0400
+Received: by mail-pg1-f181.google.com with SMTP id s11so4127557pgr.11
+        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 15:06:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+6ZGNI+XMycnAMLbDue6xTWxM3zEGm/8Al4sgJdh2T8=;
-        b=czaMuk4CB+wKbegANmmFWQnTcal2+blBTLy6Tv+k0TssMXB5f1jG/R9sLUObXsWNXz
-         kLIsURLQ7QsLKhdE0tsKtjWO3EcgeqEjqg1E9rreDk8edIlNJXv4BsKv1MbkDZ+M08R9
-         bLpCJV1vg2CDIwaNHGc1xAcnQQd8W4+7737ywtbHphEkt2zP3ky+yRoD3vcsGPudzC3x
-         c8qna+RNwT0zXQUMa3G9oxPj1/mIZEJfzbZwR+evmqVEtN3/9231OF8VL3o8QnNrYY7q
-         BOxZZlKshJ61ejlunDyUbrLWM4CSxgP2xPBWS9Gnix03zeQEkJl9e/Si8/gK3xTVrdXh
-         g4OA==
-X-Gm-Message-State: AOAM533THkYK8/+49T11cjuqvl5QTByzBFrGlG31eSQKMHVrZNWpVPlg
-        GPYxnccr0i+++fov69y2wrQ=
-X-Google-Smtp-Source: ABdhPJw10YnxdVi8VAdl7eKtpFITDwuO6w1T2wmI+PyFIUHUfZKhoILZISwCjycl7RbH5mDQaU4oQA==
-X-Received: by 2002:a05:6a00:1901:b0:44b:e041:f07f with SMTP id y1-20020a056a00190100b0044be041f07fmr794543pfi.52.1632953185089;
-        Wed, 29 Sep 2021 15:06:25 -0700 (PDT)
+        bh=2Zvejwbxr0RoImsBn1iUhSjlzaoSFnI22+3R9qJ6IfA=;
+        b=Fko3SEsOv5lNey0XgM+bjk4Pd69CqBsX0O2ebOxNV1+UAJkuhFw+kxZXW+KPjjfmbr
+         cWx1tEy3LH+cC/tYzzg3Vcu4hSb3vyBhFSYZ43GUh33B0AvscM8JfZYb/NQ9OMB4Gkha
+         OH/Axmb2f9OajF+ffiNKxAoO74SI0NRK5DheK98XenvA2RIPIoIx7Lj+co2CB8Z0Stf1
+         4e9gelxad0ChtmKkK1bE2iZn3k7LkHoV7f3GM0gq1ilzAVJYAvJ6DYNumd9XgCVI8V5x
+         XfaPyFuP22QOdc22+RLyzoI8dZzohzCsK73t4zKsj6DUVXPwGG5LeSym+ZQtDSdf1uuK
+         dAcg==
+X-Gm-Message-State: AOAM533dfQb5UGFIRTT4kn7fE6bwG/KFdVL25+tNseRhXHfHNndE5nFB
+        i2s0XOvBM4K7lYQGoJOupSM=
+X-Google-Smtp-Source: ABdhPJyiX+B7W3lU5MGG6rVd4outdabN3m+Hu8pPAs69PG2sZTiszZr+YBRK4fLtpjaHw4DcWfNJxA==
+X-Received: by 2002:a62:5b45:0:b0:44b:e0f2:4fba with SMTP id p66-20020a625b45000000b0044be0f24fbamr787318pfb.54.1632953186588;
+        Wed, 29 Sep 2021 15:06:26 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:5c11:c4f:db56:119])
-        by smtp.gmail.com with ESMTPSA id gk14sm2785585pjb.35.2021.09.29.15.06.24
+        by smtp.gmail.com with ESMTPSA id gk14sm2785585pjb.35.2021.09.29.15.06.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 15:06:24 -0700 (PDT)
+        Wed, 29 Sep 2021 15:06:26 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>
-Subject: [PATCH v2 06/84] message: fusion: Call scsi_done() directly
-Date:   Wed, 29 Sep 2021 15:04:42 -0700
-Message-Id: <20210929220600.3509089-7-bvanassche@acm.org>
+        Benjamin Block <bblock@linux.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: [PATCH v2 07/84] zfcp_scsi: Call scsi_done() directly
+Date:   Wed, 29 Sep 2021 15:04:43 -0700
+Message-Id: <20210929220600.3509089-8-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
 In-Reply-To: <20210929220600.3509089-1-bvanassche@acm.org>
 References: <20210929220600.3509089-1-bvanassche@acm.org>
@@ -55,124 +56,45 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 Conditional statements are faster than indirect calls. Hence call
 scsi_done() directly.
 
+Acked-by: Benjamin Block <bblock@linux.ibm.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/message/fusion/mptfc.c    |  6 +++---
- drivers/message/fusion/mptsas.c   |  2 +-
- drivers/message/fusion/mptscsih.c | 10 +++++-----
- drivers/message/fusion/mptspi.c   |  4 ++--
- 4 files changed, 11 insertions(+), 11 deletions(-)
+ drivers/s390/scsi/zfcp_fsf.c  | 2 +-
+ drivers/s390/scsi/zfcp_scsi.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/message/fusion/mptfc.c b/drivers/message/fusion/mptfc.c
-index 572333fadd68..7a6278ae71d2 100644
---- a/drivers/message/fusion/mptfc.c
-+++ b/drivers/message/fusion/mptfc.c
-@@ -649,14 +649,14 @@ mptfc_qcmd(struct Scsi_Host *shost, struct scsi_cmnd *SCpnt)
+diff --git a/drivers/s390/scsi/zfcp_fsf.c b/drivers/s390/scsi/zfcp_fsf.c
+index c1f979296c1a..4f1e4385ce58 100644
+--- a/drivers/s390/scsi/zfcp_fsf.c
++++ b/drivers/s390/scsi/zfcp_fsf.c
+@@ -2501,7 +2501,7 @@ static void zfcp_fsf_fcp_cmnd_handler(struct zfcp_fsf_req *req)
+ 	zfcp_dbf_scsi_result(scpnt, req);
  
- 	if (!vdevice || !vdevice->vtarget) {
- 		SCpnt->result = DID_NO_CONNECT << 16;
--		SCpnt->scsi_done(SCpnt);
-+		scsi_done(SCpnt);
- 		return 0;
- 	}
- 
- 	err = fc_remote_port_chkready(rport);
- 	if (unlikely(err)) {
- 		SCpnt->result = err;
--		SCpnt->scsi_done(SCpnt);
-+		scsi_done(SCpnt);
- 		return 0;
- 	}
- 
-@@ -664,7 +664,7 @@ mptfc_qcmd(struct Scsi_Host *shost, struct scsi_cmnd *SCpnt)
- 	ri = *((struct mptfc_rport_info **)rport->dd_data);
- 	if (unlikely(!ri)) {
- 		SCpnt->result = DID_IMM_RETRY << 16;
--		SCpnt->scsi_done(SCpnt);
-+		scsi_done(SCpnt);
- 		return 0;
- 	}
- 
-diff --git a/drivers/message/fusion/mptsas.c b/drivers/message/fusion/mptsas.c
-index 85285ba8e817..38a7cb0a3ecc 100644
---- a/drivers/message/fusion/mptsas.c
-+++ b/drivers/message/fusion/mptsas.c
-@@ -1929,7 +1929,7 @@ mptsas_qcmd(struct Scsi_Host *shost, struct scsi_cmnd *SCpnt)
- 
- 	if (!vdevice || !vdevice->vtarget || vdevice->vtarget->deleted) {
- 		SCpnt->result = DID_NO_CONNECT << 16;
--		SCpnt->scsi_done(SCpnt);
-+		scsi_done(SCpnt);
- 		return 0;
- 	}
- 
-diff --git a/drivers/message/fusion/mptscsih.c b/drivers/message/fusion/mptscsih.c
-index ce2e5b21978e..ab9611e775d3 100644
---- a/drivers/message/fusion/mptscsih.c
-+++ b/drivers/message/fusion/mptscsih.c
-@@ -1009,7 +1009,7 @@ mptscsih_io_done(MPT_ADAPTER *ioc, MPT_FRAME_HDR *mf, MPT_FRAME_HDR *mr)
- 	/* Unmap the DMA buffers, if any. */
- 	scsi_dma_unmap(sc);
- 
--	sc->scsi_done(sc);		/* Issue the command callback */
-+	scsi_done(sc);			/* Issue the command callback */
- 
- 	/* Free Chain buffers */
- 	mptscsih_freeChainBuffers(ioc, req_idx);
-@@ -1054,7 +1054,7 @@ mptscsih_flush_running_cmds(MPT_SCSI_HOST *hd)
- 		dtmprintk(ioc, sdev_printk(KERN_INFO, sc->device, MYIOC_s_FMT
- 		    "completing cmds: fw_channel %d, fw_id %d, sc=%p, mf = %p, "
- 		    "idx=%x\n", ioc->name, channel, id, sc, mf, ii));
--		sc->scsi_done(sc);
-+		scsi_done(sc);
- 	}
+ 	scpnt->host_scribble = NULL;
+-	(scpnt->scsi_done) (scpnt);
++	scsi_done(scpnt);
+ 	/*
+ 	 * We must hold this lock until scsi_done has been called.
+ 	 * Otherwise we may call scsi_done after abort regarding this
+diff --git a/drivers/s390/scsi/zfcp_scsi.c b/drivers/s390/scsi/zfcp_scsi.c
+index 9da9b2b2a580..e0a6d8c1f198 100644
+--- a/drivers/s390/scsi/zfcp_scsi.c
++++ b/drivers/s390/scsi/zfcp_scsi.c
+@@ -60,7 +60,7 @@ static void zfcp_scsi_command_fail(struct scsi_cmnd *scpnt, int result)
+ {
+ 	set_host_byte(scpnt, result);
+ 	zfcp_dbf_scsi_fail_send(scpnt);
+-	scpnt->scsi_done(scpnt);
++	scsi_done(scpnt);
  }
- EXPORT_SYMBOL(mptscsih_flush_running_cmds);
-@@ -1118,7 +1118,7 @@ mptscsih_search_running_cmds(MPT_SCSI_HOST *hd, VirtDevice *vdevice)
- 			   "fw_id %d, sc=%p, mf = %p, idx=%x\n", ioc->name,
- 			   vdevice->vtarget->channel, vdevice->vtarget->id,
- 			   sc, mf, ii));
--			sc->scsi_done(sc);
-+			scsi_done(sc);
- 			spin_lock_irqsave(&ioc->scsi_lookup_lock, flags);
- 		}
- 	}
-@@ -1693,7 +1693,7 @@ mptscsih_abort(struct scsi_cmnd * SCpnt)
- 	 */
- 	if ((hd = shost_priv(SCpnt->device->host)) == NULL) {
- 		SCpnt->result = DID_RESET << 16;
--		SCpnt->scsi_done(SCpnt);
-+		scsi_done(SCpnt);
- 		printk(KERN_ERR MYNAM ": task abort: "
- 		    "can't locate host! (sc=%p)\n", SCpnt);
- 		return FAILED;
-@@ -1710,7 +1710,7 @@ mptscsih_abort(struct scsi_cmnd * SCpnt)
- 		    "task abort: device has been deleted (sc=%p)\n",
- 		    ioc->name, SCpnt));
- 		SCpnt->result = DID_NO_CONNECT << 16;
--		SCpnt->scsi_done(SCpnt);
-+		scsi_done(SCpnt);
- 		retval = SUCCESS;
- 		goto out;
- 	}
-diff --git a/drivers/message/fusion/mptspi.c b/drivers/message/fusion/mptspi.c
-index af0ce5611e4a..44b7ce124ae1 100644
---- a/drivers/message/fusion/mptspi.c
-+++ b/drivers/message/fusion/mptspi.c
-@@ -782,14 +782,14 @@ mptspi_qcmd(struct Scsi_Host *shost, struct scsi_cmnd *SCpnt)
  
- 	if (!vdevice || !vdevice->vtarget) {
- 		SCpnt->result = DID_NO_CONNECT << 16;
--		SCpnt->scsi_done(SCpnt);
-+		scsi_done(SCpnt);
- 		return 0;
- 	}
- 
- 	if (SCpnt->device->channel == 1 &&
- 		mptscsih_is_phys_disk(ioc, 0, SCpnt->device->id) == 0) {
- 		SCpnt->result = DID_NO_CONNECT << 16;
--		SCpnt->scsi_done(SCpnt);
-+		scsi_done(SCpnt);
+ static
+@@ -78,7 +78,7 @@ int zfcp_scsi_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *scpnt)
+ 	if (unlikely(scsi_result)) {
+ 		scpnt->result = scsi_result;
+ 		zfcp_dbf_scsi_fail_send(scpnt);
+-		scpnt->scsi_done(scpnt);
++		scsi_done(scpnt);
  		return 0;
  	}
  
