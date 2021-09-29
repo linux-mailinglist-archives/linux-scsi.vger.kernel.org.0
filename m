@@ -2,139 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBFA41C5B4
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 15:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1273B41C605
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 15:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344216AbhI2Ne5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Sep 2021 09:34:57 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:3889 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344184AbhI2Nez (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 09:34:55 -0400
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HKHL31CWlz67mcQ;
-        Wed, 29 Sep 2021 21:30:03 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Wed, 29 Sep 2021 15:33:11 +0200
-Received: from [10.47.26.77] (10.47.26.77) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Wed, 29 Sep
- 2021 14:33:10 +0100
-Subject: Re: [PATCH v4 12/13] blk-mq: Use shared tags for shared sbitmap
- support
-From:   John Garry <john.garry@huawei.com>
-To:     Hannes Reinecke <hare@suse.de>, <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <ming.lei@redhat.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>
-References: <1632472110-244938-1-git-send-email-john.garry@huawei.com>
- <1632472110-244938-13-git-send-email-john.garry@huawei.com>
- <9dd771bb-9e45-ecd2-d8e4-93c6e9cb9b59@suse.de>
- <49947654-591f-c686-5908-7938ab653e6d@huawei.com>
-Message-ID: <202668f9-8cf8-1ad7-414f-463353115eda@huawei.com>
-Date:   Wed, 29 Sep 2021 14:36:07 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S1344271AbhI2NuM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Sep 2021 09:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244987AbhI2NuL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 09:50:11 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08166C06161C
+        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 06:48:31 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id e66-20020a9d2ac8000000b0054da8bdf2aeso694831otb.12
+        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 06:48:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D0Oc7XLkL1a5rG+g4cEPln6FVEfUnfUyvrff+87caWk=;
+        b=gqj/R53O5DxBkCqQ+LhR7uc3Q9gCrX4AiA+QdVOVcXLisRTtn18dhdFjXkgC7KaRU+
+         kbmUCfc+EwEQCBzmeGvTAZ935Nt9pL/EgtGvgszrhEUM7MSlu3xpFhpRlTJ92EP1kgKh
+         UNw3vm3Pm8M08M6jZ2N62F4d4P7oOVnq9JXKDs1XIABJj9R3GXVQ0Q8YjApr19ttuAQ8
+         SJCSLJRzY4jSVC0IoHinTPXJVGeQbO+VFJo3hXwYMLZudPftyPhQnrBB1YSeol8Dbq6/
+         +z654AziWdHX2M5S65dsnWK4vFR/1LVA82NjI/ETu9Pg6LCOaP7reExcMGAbP7Bmy3ps
+         3d5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D0Oc7XLkL1a5rG+g4cEPln6FVEfUnfUyvrff+87caWk=;
+        b=7HAdzRjuslVyUu3xVG52hbKiBhFkX9wETNyZ9RvWlgv5KRiFRc73UbGFmQZDE9+zbg
+         RRAzmFNMgWuf+FgzTSQdr3sg95fmte/yVi4k0yfUtP0YL7QirT7rWwbF3OMja6HYnQsi
+         lW4HqYqDzd5YBJfAQGIlRFAojhwEu1ELfVDqLIZWgP80Yi7KmJEW+UkPyQawcptnpRj3
+         X2quKDZtYmjWbk6xJWsISbM5sY0Ek7VUwGoh1uonajgvbgY3WAfSNMdPJ0wlhJAXuJAb
+         ZAP8VTlcs0YPCJXX7i7hR9J5rlXvOV+l/0J6wZ+ZdOIJJnZLKBm9xZ3N1Un/NcJ+nRMh
+         Sv0Q==
+X-Gm-Message-State: AOAM530wrFozqRN6DKfriZFAB9HsH+zXbROMrxf6VfO/xh8EXC1zDdht
+        63JIMbEcsJaEhheI705P9T86sucIMMuFr3FV4H4=
+X-Google-Smtp-Source: ABdhPJwBdRsriHsB2afmcvY+zviEyyjb/fbqr36gKHIH26DP3LTbwDCo978ml/bLQCimL8bV+Lgh/TwVb2sruKwe4A0=
+X-Received: by 2002:a9d:6483:: with SMTP id g3mr77493otl.105.1632923310343;
+ Wed, 29 Sep 2021 06:48:30 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <49947654-591f-c686-5908-7938ab653e6d@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.47.26.77]
-X-ClientProxiedBy: lhreml714-chm.china.huawei.com (10.201.108.65) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Received: by 2002:a05:6838:c66a:0:0:0:0 with HTTP; Wed, 29 Sep 2021 06:48:30
+ -0700 (PDT)
+Reply-To: michellegoodman035@gmail.com
+From:   Shayma <shaymamarwan07@gmail.com>
+Date:   Wed, 29 Sep 2021 14:48:30 +0100
+Message-ID: <CAAgEbk=qHK=yB9L5goN4BoOERQL4yf+KQ8YEdUD=VFebcVZ5fw@mail.gmail.com>
+Subject: From Michelle
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 24/09/2021 11:39, John Garry wrote:
-> + Kashyap
-> 
-> On 24/09/2021 11:23, Hannes Reinecke wrote:
->> On 9/24/21 10:28 AM, John Garry wrote:
->>> Currently we use separate sbitmap pairs and active_queues atomic_t for
->>> shared sbitmap support.
->>>
->>> However a full sets of static requests are used per HW queue, which is
->>> quite wasteful, considering that the total number of requests usable at
->>> any given time across all HW queues is limited by the shared sbitmap 
->>> depth.
->>>
->>> As such, it is considerably more memory efficient in the case of shared
->>> sbitmap to allocate a set of static rqs per tag set or request queue, 
->>> and
->>> not per HW queue.
->>>
->>> So replace the sbitmap pairs and active_queues atomic_t with a shared
->>> tags per tagset and request queue, which will hold a set of shared 
->>> static
->>> rqs.
->>>
->>> Since there is now no valid HW queue index to be passed to the 
->>> blk_mq_ops
->>> .init and .exit_request callbacks, pass an invalid index token. This
->>> changes the semantics of the APIs, such that the callback would need to
->>> validate the HW queue index before using it. Currently no user of shared
->>> sbitmap actually uses the HW queue index (as would be expected).
->>>
->>> Continue to use term "shared sbitmap" for now, as the meaning is known.
->>>
->>> Signed-off-by: John Garry <john.garry@huawei.com>
->>> ---
->>>   block/blk-mq-sched.c   | 82 ++++++++++++++++++-------------------
->>>   block/blk-mq-tag.c     | 61 ++++++++++------------------
->>>   block/blk-mq-tag.h     |  6 +--
->>>   block/blk-mq.c         | 91 +++++++++++++++++++++++-------------------
->>>   block/blk-mq.h         |  5 ++-
->>>   include/linux/blk-mq.h | 15 ++++---
->>>   include/linux/blkdev.h |  3 +-
->>>   7 files changed, 125 insertions(+), 138 deletions(-)
->>>
->> The overall idea to keep the full request allocation per queue was to 
->> ensure memory locality for the requests themselves.
->> When moving to a shared request structure we obviously loose that 
->> feature.
->>
->> But I'm not sure if that matters here; the performance impact might be 
->> too small to be measurable, seeing that we'll be most likely bound by 
->> hardware latencies anyway.
->>
->> Nevertheless: have you tested for performance regressions with this 
->> patchset?
-> 
-> I have tested relatively lower rates, like ~450K IOPS, without any 
-> noticeable regression.
-> 
->> I'm especially thinking of Kashyaps high-IOPS megaraid setup; if there 
->> is a performance impact that'll be likely scenario where we can 
->> measure it.
->>
-> 
-> I can test higher rates, like 2M IOPS, when I get access to the HW.
-> 
-> @Kashyap, Any chance you can help test performance here?
-> 
->> But even if there is a performance impact this patchset might be 
->> worthwhile, seeing that it'll reduce the memory footprint massively.
-> 
-> Sure, I don't think that minor performance improvements can justify the 
-> excessive memory.
-> 
-
-JFYI, with 6x SAS SSDs on my arm64 board, I see:
-
-Before (5.15-rc2 baseline):
-none: 445K IOPs, mq-deadline: 418K IOPs (fio read)
-
-After:
-none: 442K IOPs, mq-deadline: 407K IOPs (fio read)
-
-So only a marginal drop there for mq-deadline.
-
-I'll try my 12x SAS SSD setup when I get a chance. Kashyap is kindly 
-also testing.
-
-Thanks
+Hallo, ich hoffe du hast meine Nachricht bekommen.
+Ich brauche schnelle Antworten
+viele
+Vielen Dank.
+Michelle
