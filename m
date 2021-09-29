@@ -2,44 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 087DD41CEBF
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Sep 2021 00:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95C541CEC1
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Sep 2021 00:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347065AbhI2WIJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Sep 2021 18:08:09 -0400
-Received: from mail-pj1-f53.google.com ([209.85.216.53]:40908 "EHLO
-        mail-pj1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347024AbhI2WIE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 18:08:04 -0400
-Received: by mail-pj1-f53.google.com with SMTP id d4-20020a17090ad98400b0019ece228690so5203315pjv.5
+        id S1347068AbhI2WIL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Sep 2021 18:08:11 -0400
+Received: from mail-pg1-f175.google.com ([209.85.215.175]:35618 "EHLO
+        mail-pg1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347056AbhI2WIF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 18:08:05 -0400
+Received: by mail-pg1-f175.google.com with SMTP id e7so4162722pgk.2
         for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 15:06:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kYLCJrelhZyfUbYgWeKzwy/9UHYa6/H2nyik2Rb13cQ=;
-        b=F/U9Hu1SxgqX+8oMo1CqcpOX+sZ4nQVS7E8Hx8PGm/0CScpOOeRsGLHnLdQgW/4emR
-         i///KYoKJnhf84MfEEpq1wJ5+NnejU5CDooVWM2KiuzWJHCITFWzvpiJefsd6Bp/FgpP
-         mCtDRDPBin7CeO+gGFmA7mhdybHZxvymqQsWR1ukWxjIWC6/9zB1p0fJyXAZ7NlSiinm
-         YJsEBFOPvETSFhvCOVl47PIxoBsu7bh5gqHAFj9FJmMewWNNa//IIQOtoGmdSISDnzKQ
-         Rh6azZnygGf7lfBIr0Y7/pjAlhMladqjHx8zPLidKVDQ1CIN30ejH2Q6No1akzzx/5BO
-         +PbA==
-X-Gm-Message-State: AOAM531NqNnP+VZ1dASWZtDH8W/DAiwCKg76MP/AX5pEXUIvwFC24DVF
-        l1QuW+BtylLbELyBLKYYyjg=
-X-Google-Smtp-Source: ABdhPJzBwSDggDFTyNm20kBYxKMXzgPwqQWg7Dl0QC2WKgtU+m8bJvtJklhDYxLD8kvA2u4/NV757w==
-X-Received: by 2002:a17:90a:d802:: with SMTP id a2mr8977472pjv.194.1632953182230;
-        Wed, 29 Sep 2021 15:06:22 -0700 (PDT)
+        bh=+Mg3T+99vJDGFQS38jEjRvUdcAMlxVj1hvtWz+HZhgU=;
+        b=UJqNojznnGl5qBxn3cPVT86pgAtdfW6S7/PK5bui7oOd3HWbqCvM24eJGohxRCFmNP
+         SB0e48y1zGXljXQxNep9sAt1z0nbk57HG8i853Gr/jvOjcJLqzxofJjGoEz2ItkYIL2O
+         Uzjd9DFNjTwGkBiCSQbqTlfuPhbY1/AzzCl3tFoVscmRRTtKKCg3K85VlDas1/3lgHmf
+         I7mWxTTLT/wo3ZZfi7vmS6Oa/1Dk8pLKL7ZfCIteCyFASDMLOlpN4xDJqJgOCA99IBRZ
+         qgTRBmB3lZHALencWeULiGvlUppW4PN1ejxrfHtJ1nS785dRNhVcccLJ59ejp2ZfanZ2
+         +eTQ==
+X-Gm-Message-State: AOAM530c2RZqannEPtDA6m4EVo3ObgU1WXZCbyZw9AK7m8DX1fpJ2eY4
+        mlKikEnWHxj8JMdHY4oeIE/H5tKlnms=
+X-Google-Smtp-Source: ABdhPJwZEn7F8labz1y3nHgsplwkzBxKmO7WDGJUNmokYUxNwE4w23UnCGptVo1e05DXusJtpZYnJw==
+X-Received: by 2002:aa7:9ac2:0:b0:443:a477:6684 with SMTP id x2-20020aa79ac2000000b00443a4776684mr2109487pfp.25.1632953183581;
+        Wed, 29 Sep 2021 15:06:23 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:5c11:c4f:db56:119])
-        by smtp.gmail.com with ESMTPSA id gk14sm2785585pjb.35.2021.09.29.15.06.21
+        by smtp.gmail.com with ESMTPSA id gk14sm2785585pjb.35.2021.09.29.15.06.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 15:06:21 -0700 (PDT)
+        Wed, 29 Sep 2021 15:06:23 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>
-Subject: [PATCH v2 04/84] firewire: sbp2: Call scsi_done() directly
-Date:   Wed, 29 Sep 2021 15:04:40 -0700
-Message-Id: <20210929220600.3509089-5-bvanassche@acm.org>
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Subject: [PATCH v2 05/84] ib_srp: Call scsi_done() directly
+Date:   Wed, 29 Sep 2021 15:04:41 -0700
+Message-Id: <20210929220600.3509089-6-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
 In-Reply-To: <20210929220600.3509089-1-bvanassche@acm.org>
 References: <20210929220600.3509089-1-bvanassche@acm.org>
@@ -54,19 +55,46 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/firewire/sbp2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/infiniband/ulp/srp/ib_srp.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/firewire/sbp2.c b/drivers/firewire/sbp2.c
-index 4d5054211550..aeed3f2273e8 100644
---- a/drivers/firewire/sbp2.c
-+++ b/drivers/firewire/sbp2.c
-@@ -1375,7 +1375,7 @@ static void complete_command_orb(struct sbp2_orb *base_orb,
- 	sbp2_unmap_scatterlist(device->card->device, orb);
- 
- 	orb->cmd->result = result;
--	orb->cmd->scsi_done(orb->cmd);
-+	scsi_done(orb->cmd);
+diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
+index 71eda91e810c..f8765f96ec1e 100644
+--- a/drivers/infiniband/ulp/srp/ib_srp.c
++++ b/drivers/infiniband/ulp/srp/ib_srp.c
+@@ -1266,7 +1266,7 @@ static void srp_finish_req(struct srp_rdma_ch *ch, struct srp_request *req,
+ 	if (scmnd) {
+ 		srp_free_req(ch, req, scmnd, 0);
+ 		scmnd->result = result;
+-		scmnd->scsi_done(scmnd);
++		scsi_done(scmnd);
+ 	}
  }
  
- static int sbp2_map_scatterlist(struct sbp2_command_orb *orb,
+@@ -1987,7 +1987,7 @@ static void srp_process_rsp(struct srp_rdma_ch *ch, struct srp_rsp *rsp)
+ 		srp_free_req(ch, req, scmnd,
+ 			     be32_to_cpu(rsp->req_lim_delta));
+ 
+-		scmnd->scsi_done(scmnd);
++		scsi_done(scmnd);
+ 	}
+ }
+ 
+@@ -2239,7 +2239,7 @@ static int srp_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *scmnd)
+ 
+ err:
+ 	if (scmnd->result) {
+-		scmnd->scsi_done(scmnd);
++		scsi_done(scmnd);
+ 		ret = 0;
+ 	} else {
+ 		ret = SCSI_MLQUEUE_HOST_BUSY;
+@@ -2811,7 +2811,7 @@ static int srp_abort(struct scsi_cmnd *scmnd)
+ 	if (ret == SUCCESS) {
+ 		srp_free_req(ch, req, scmnd, 0);
+ 		scmnd->result = DID_ABORT << 16;
+-		scmnd->scsi_done(scmnd);
++		scsi_done(scmnd);
+ 	}
+ 
+ 	return ret;
