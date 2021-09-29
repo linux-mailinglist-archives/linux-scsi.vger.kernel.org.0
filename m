@@ -2,199 +2,150 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A72A641BD56
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 05:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD8041BD4F
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 05:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243973AbhI2D0P (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 28 Sep 2021 23:26:15 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:41056 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243950AbhI2D0N (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 Sep 2021 23:26:13 -0400
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20210929032429epoutp01f00fee221d1e736d31a0cf0547b57c06~pLQwFSpvx2228122281epoutp01d
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 03:24:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20210929032429epoutp01f00fee221d1e736d31a0cf0547b57c06~pLQwFSpvx2228122281epoutp01d
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1632885869;
-        bh=WrNCUbpSw207ejXs3q+o/xLoyNlILDn60SbqLv/Idhg=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=EAMQcV/O3AfeAouqlia8w1Pe/PoAsBOVK6vawTofneAbUG7cu+oum7nD44hujJnJl
-         7vkpEuqAWiRTkYkJcBrrrPVulQrKrlN/9v6dbFGfG5cLTUglw6lRjYk51iD1KtEywX
-         BH8fdksLfJ5JVge5WTg+j3rfe/pVippR7f7N069Q=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20210929032428epcas5p2dba1e2bad56e314b58ef07665cf79130~pLQvUGj4v1274512745epcas5p2W;
-        Wed, 29 Sep 2021 03:24:28 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.181]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4HK1vC42Jnz4x9Q2; Wed, 29 Sep
-        2021 03:24:23 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A2.F1.59762.45CD3516; Wed, 29 Sep 2021 12:24:05 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20210929031607epcas5p21aa4f12860d68a6db8ae2df0df35d776~pLJcwbhCh2437324373epcas5p28;
-        Wed, 29 Sep 2021 03:16:07 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210929031607epsmtrp1be665762c79eadf7a7168cc9d9d700df~pLJcvpw4x2768827688epsmtrp1W;
-        Wed, 29 Sep 2021 03:16:07 +0000 (GMT)
-X-AuditID: b6c32a49-125ff7000000e972-02-6153dc54e7e7
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3F.96.08750.77AD3516; Wed, 29 Sep 2021 12:16:07 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20210929031605epsmtip1c5bf0f3d77ea563326d70442d813fbbd~pLJbF4Sua1283012830epsmtip1U;
-        Wed, 29 Sep 2021 03:16:05 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Bao D. Nguyen'" <nguyenb@codeaurora.org>, <cang@codeaurora.org>,
-        <asutoshd@codeaurora.org>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-Cc:     <linux-arm-msm@vger.kernel.org>,
-        "'Andy Gross'" <agross@kernel.org>,
-        "'Bjorn Andersson'" <bjorn.andersson@linaro.org>,
-        "'Avri Altman'" <avri.altman@wdc.com>,
-        "'James E.J. Bottomley'" <jejb@linux.ibm.com>,
-        "'open list'" <linux-kernel@vger.kernel.org>
-In-Reply-To: <212b7aaf6d834c4a8c682fdac4a59b84013ed573.1632818942.git.nguyenb@codeaurora.org>
-Subject: RE: [PATCH v2 2/2] scsi: ufs-qcom: enter and exit hibern8 during
- clock scaling
-Date:   Wed, 29 Sep 2021 08:46:04 +0530
-Message-ID: <00f901d7b4e0$581ae2f0$0850a8d0$@samsung.com>
+        id S243834AbhI2DXk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 28 Sep 2021 23:23:40 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:31822 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243857AbhI2DXh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 28 Sep 2021 23:23:37 -0400
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18T2JN6n007974;
+        Wed, 29 Sep 2021 03:21:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=HJbja9wqwPecdRYoV+W5Ze8C+Y0+Ha2seM4f89yMh7E=;
+ b=snwTeCRYw2/vJF/mbNpoUi1bjQbOo05xIbwNmqQkhJVE6Xl2v98nO+yMjA1zCqTMJVWw
+ murGiRrAMn0/Z3x6hBjgmgjOj9mnyGbIVHXRvALY+N3+ePw/OkOhJf7Q5m9jALIlUnod
+ RV5ppPqJ3fgmbVMeOqwWxYCpXoCp78ZjSVbAz2UzHI22+IHHyt54rPLD7iL5GFuBL/t1
+ fcnmzWUE6P6qmgln/vOU6rdc4eKHVtrzcBP5s73s/zmqxb94zICb+m/RwNQt8zZ4a5ss
+ 3mllweNtrGeg2h8CmSCetRM/RzYsvNLbP73kKeZ3aw2cYmK6vn1qrIk7Eca8kiyJdnbl jg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3bcdcvrmn1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Sep 2021 03:21:53 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 18T3G8bv099665;
+        Wed, 29 Sep 2021 03:21:52 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2048.outbound.protection.outlook.com [104.47.66.48])
+        by userp3020.oracle.com with ESMTP id 3bc3cdhxf6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Sep 2021 03:21:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GOc5WMS6Jl0DuUrEJX9nq/R+c61IXJgiepfRhTzpPjwAqSqEqQvKhlUwnXqUKjYQAYoK1NLQK/6rZp1wWjmo2ev3I/Dv0R4fDvUISk6ixElk1h1gf+FQU57jbup5Deg5TINPL9bztS7ZMbTMHuxYAPucwx1swkIlE02F9LJkcVEu6r9ArllZnQuAMu6TcjJ+5gtil553FFmTpJ+6LraqqmrbKRHpWDmzwQia+j6KjmvcSjpBuyqfPD33aA2Bbkmfyvvnqp1wzXMdaVkwTMNpm/wGpS+LJwB7a5VJqnXAGt/6oXU2fxeddEdLEOE3EI+WjYatAIWxvA003UBegnNwFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=HJbja9wqwPecdRYoV+W5Ze8C+Y0+Ha2seM4f89yMh7E=;
+ b=LTVPJbMsdVWg/okCJZd7Euck1NK5T5GoKecUr8TumSBrMwV+XANB19w27Y7H2+EudT1rHLYyUapTg+gxlQWRas03QHOq92N6DwVAR8AXnoDK6zuoMtnpcG7DDJqSv5Ft4XEo1oApGtyBygLisAAdivQEnfjUO6anebBXG+rf3su8jsydZspRVuLwFBQZ7jdoTWNM5R8wW1Z2lQ1XkYCemgA3AteFCzjMm5dzl9suXI0QE92xRhZ5rL0/pYsg0dPTVh5Ujuas/aVkQHP7gWKmiufr0ufebFcpf54DKwzLRG0xCri1xqV7AuuCr5H6uNgtRwdqNLBWCxQZ0GWZRWal2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HJbja9wqwPecdRYoV+W5Ze8C+Y0+Ha2seM4f89yMh7E=;
+ b=p7HhER+RzP6VDZeTyfSvByqD0IX6gzs2UK7brzMtbD0pO4Hc5y9VfAzjmRytt2qJHC9vezfrY6lCjPq+ETTWRHqPTJ7aXUUhFNaooc78ttb0R7ZHobEmLEvqHLXXBFBbc44Q0YchxflbVt1f2THeC3YSx3LxcBiVr075nz+GU2o=
+Authentication-Results: canonical.com; dkim=none (message not signed)
+ header.d=none;canonical.com; dmarc=none action=none header.from=oracle.com;
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by PH0PR10MB5643.namprd10.prod.outlook.com (2603:10b6:510:fa::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.17; Wed, 29 Sep
+ 2021 03:21:50 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c0ed:36a0:7bc8:f2dc]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c0ed:36a0:7bc8:f2dc%8]) with mapi id 15.20.4566.014; Wed, 29 Sep 2021
+ 03:21:50 +0000
+To:     Colin King <colin.king@canonical.com>
+Cc:     James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: lpfc: return NULL rather than a plain 0 integer
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1ee98f4n0.fsf@ca-mkp.ca.oracle.com>
+References: <20210925224113.183040-1-colin.king@canonical.com>
+Date:   Tue, 28 Sep 2021 23:21:48 -0400
+In-Reply-To: <20210925224113.183040-1-colin.king@canonical.com> (Colin King's
+        message of "Sat, 25 Sep 2021 23:41:13 +0100")
+Content-Type: text/plain
+X-ClientProxiedBy: SN4PR0401CA0034.namprd04.prod.outlook.com
+ (2603:10b6:803:2a::20) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJbPZpAqiweWuut4hQb/UQ8HpO3kgL954syAtigKhaqhJCvIA==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBJsWRmVeSWpSXmKPExsWy7bCmpm7oneBEgxsbGC3OPf7NYrG37QS7
-        xcufV9ksTu9/x2Lxaf0yVotFN7YxWUzcf5bd4vKuOWwW3dd3sFksP/6PyeJj12xGB26Py329
-        TB6bVnWyedy5tofNY8KiA4weH5/eYvH4vEnOo/1AN1MAe1S2TUZqYkpqkUJqXnJ+SmZeuq2S
-        d3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QkUoKZYk5pUChgMTiYiV9O5ui/NKSVIWM
-        /OISW6XUgpScApMCveLE3OLSvHS9vNQSK0MDAyNToMKE7Ixfq34xF3QJV0x49Zu1gfEpfxcj
-        J4eEgInE9z/vWUFsIYHdjBJXz8p1MXIB2Z8YJXpfNrBDOJ8ZJVpuN7LBdKx7/5IdomMXo8ST
-        g/EQRS8ZJZb+/coEkmAT0JXYsbiNDSQhIrCAUaLzwjlWEIdZoJlJ4tWxT2DtnAKxEhdebQBb
-        LiwQKXFh/z1mEJtFQFXi7/adjCA2r4ClxI9zZ5kgbEGJkzOfsIDYzALyEtvfzmGGOElB4ufT
-        ZWBzRAScJB7emcMIUSMu8fLoEbAfJAROcEg87ToLdBIHkOMisX2TIkSvsMSr41vYIWwpiZf9
-        bewQJdkSPbuMIcI1EkvnHWOBsO0lDlyZwwJSwiygKbF+lz5EWFZi6ql1TBBb+SR6fz9hgojz
-        SuyYB2OrSjS/uwo1RlpiYnc36wRGpVlIHpuF5LFZSB6YhbBtASPLKkbJ1ILi3PTUYtMCw7zU
-        cnh8J+fnbmIEJ2Etzx2Mdx980DvEyMTBeIhRgoNZSYT3h3hwohBvSmJlVWpRfnxRaU5q8SFG
-        U2BoT2SWEk3OB+aBvJJ4QxNLAxMzMzMTS2MzQyVx3o+vLROFBNITS1KzU1MLUotg+pg4OKUa
-        mJbOma135sbDB8eVb4ssvWu1v3pt92nOt76Hnu2W7pjdGa2bfWk9R9YXyW25/1qaCrh6d14O
-        fCd9uOlxjKKmixVvqW3TDDPztvLE30tv1DvdXfbt8M+NKcd9/v2YqrHI78jJ1+6bBV/EMIUc
-        2BOVU/BhmuKBb4UG3/aJfNeZ7tXTzVUqZhXGx7tf4lVDcURrvYnNctbJ7z82M2yYctFl3dYf
-        /UZ7/hcEvrEWXcnD+f3RlK4Uk6wXXy+nLfopPdVFy7jt8xPJHu9jdxdvMF5WoXAhI7hdWOYS
-        +5pP/fFanInrfnnwfFY/erpy2opKNlvBj73Gv4q13Gy3+YRtqBJgk8jX9rb6EJ6UbJjjkxNT
-        qcRSnJFoqMVcVJwIAKy73idLBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEIsWRmVeSWpSXmKPExsWy7bCSnG75reBEgz1/VC3OPf7NYrG37QS7
-        xcufV9ksTu9/x2Lxaf0yVotFN7YxWUzcf5bd4vKuOWwW3dd3sFksP/6PyeJj12xGB26Py329
-        TB6bVnWyedy5tofNY8KiA4weH5/eYvH4vEnOo/1AN1MAexSXTUpqTmZZapG+XQJXxq9Vv5gL
-        uoQrJrz6zdrA+JS/i5GTQ0LARGLd+5fsXYxcHEICOxglNjRvYYNISEtc3ziBHcIWllj57zlU
-        0XNGid9PzzKCJNgEdCV2LG5jA0mICCxhlHi0/jITiMMs0M4k0XvnKRNEyx1Gid2XnrCAtHAK
-        xEpceLWBFcQWFgiXaJ06gQnEZhFQlfi7fSfYWF4BS4kf584yQdiCEidngvRyAE3Vk2jbCFbC
-        LCAvsf3tHGaI8xQkfj5dBjZSRMBJ4uGdOVA14hIvjx5hn8AoPAvJpFkIk2YhmTQLSccCRpZV
-        jJKpBcW56bnFhgVGeanlesWJucWleel6yfm5mxjB0ailtYNxz6oPeocYmTgYDzFKcDArifD+
-        EA9OFOJNSaysSi3Kjy8qzUktPsQozcGiJM57oetkvJBAemJJanZqakFqEUyWiYNTqoGJi+fF
-        e6HaoqgHhc8LP6a8Mdgs+CHrzFfvU1PPH6+5WBGgt7RTr9f46bvXP9h+Wql9mdl15La/W1rK
-        3dKEtyFnuZouahtXJkoo1xSozY8pZLiv+vrR5xtNT34HMj2Xk5O+7b/7nuKGoIdP+p7+tHiS
-        az4hU27Sal8n7nQbvVeTq4saZt/6mT//ytyvGrM95ht0f/d8zn5hx/xS887CkPOGaeszujnb
-        NVijebeG3tV8tlKAbRtb3fO7Xt+OLev1CijplNN8z3r457XFCuULerUXLfOs0lz2vcajslPr
-        nN5On5wp9ldnPyg2r5lxsClXucWS4eCFP+V9gR8PlZSxMFUbluzabFrVZNzjr5n4nk2JpTgj
-        0VCLuag4EQAB0L99NQMAAA==
-X-CMS-MailID: 20210929031607epcas5p21aa4f12860d68a6db8ae2df0df35d776
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20210928090645epcas5p497488b7f231454f99e91d1a56e9bd219
-References: <cover.1632818942.git.nguyenb@codeaurora.org>
-        <CGME20210928090645epcas5p497488b7f231454f99e91d1a56e9bd219@epcas5p4.samsung.com>
-        <212b7aaf6d834c4a8c682fdac4a59b84013ed573.1632818942.git.nguyenb@codeaurora.org>
+Received: from ca-mkp.ca.oracle.com (138.3.201.46) by SN4PR0401CA0034.namprd04.prod.outlook.com (2603:10b6:803:2a::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15 via Frontend Transport; Wed, 29 Sep 2021 03:21:50 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5789645f-a299-4a93-1595-08d982f84702
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5643:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <PH0PR10MB5643EDB60E1148F7B5482E408EA99@PH0PR10MB5643.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2089;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gb1OBmtOp0F+L6tk7rqd1Z4hnkS/SuukUAI8ZkTnYGe44glS8XRrXPisd0B+x3W4bCE+fxbbsZQWGauiQd7LYaSbj3/agn27bgbN8owm1xDYTr1qNUCmgyn1uMae+FzGH+idcjzFgFspBFB1hoasTBorCdRUkvtVHj/fR/rWcx2U+hD77UudqEJ8j6QNK1c/Uoi8X3xvDAwhWNZo9PT4USQ9d1vgQ5WnGumFNs7wlTAtSusT/kdVxTqAM1ApeHcPwOMR1uvt1GXoiPIXNBusceeH7bX+ySdWH9lHRndPcy5FaIwNETGBJBuqThAmlZlU5a1ozg9Un9tCNsgBMx+9bbsIrwnQ995Yb6sLPluPJFushILD24eJn7/ePIxEPut0mylSycC3rRMgxXRA/8vDv6rNEk0FIU00Wf8fFlsFY7pkxnKXebbaM9cjqnEb2sLDJM9eUuaQvhTSCcAu71No1Y5A1nJBt1Z8xHKSGWzjFgTpD7Ysdi645EupNgjlpZ9sXYou1EsOLcW8sYO9+LYJg5auUUW4ndqNVdvBIdfRFSndrBJGeRMssIWiBZ8S4cCS34yFUFCVaoCdomBvlngRCV1dhf6DcIJU18uOf+3RCLx8G1KnIQXUfCXPjl5tDJCtPFGfTWJxqoN8X33SDFBTPkJ6nEsHmbaHsguuxY6bOSZ1BfsEiG9a9BURQADZFiq8
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2906002)(508600001)(52116002)(38350700002)(38100700002)(316002)(66556008)(55016002)(26005)(66476007)(36916002)(54906003)(66946007)(7696005)(558084003)(86362001)(8676002)(5660300002)(8936002)(956004)(4326008)(6916009)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZtVn2SJgJBdaeSAuawqSIr5KQdM36hKZMZI7dwb2ynx7dSq3dfnlaZVwUSdU?=
+ =?us-ascii?Q?KHFx9SludxqWP/lI8Dzzk8b7dg4mJn/3jqw1K1xON+hj+0Vxgl+AvO1uiU6I?=
+ =?us-ascii?Q?OPc3b5oZVs+o27NbZ+3FPFS2jjxmbwk5uw4djQ/k40tR+aKnCO1URqDOwQmy?=
+ =?us-ascii?Q?w34TgXFc8faGNGnOMysT0we5vW/pZPV08dtPiPtOmPAF1JPUyn5SdEFlCbca?=
+ =?us-ascii?Q?OXDw1rK20vhr80CWmhnyy1ZutWU4kE86cc1lpFvxR3IMsfLM3YNvmo+tgplA?=
+ =?us-ascii?Q?T3EUeZQK+kstpzGoM9LbqjvDI1F8rzPVcsdgCmyRmW/NTmh31CSMZpepnARQ?=
+ =?us-ascii?Q?raVrzmGV14yeIb+mxifQhhQxe2eYaPhQWK0+Usukka9nZdnQU9FEScf4cStc?=
+ =?us-ascii?Q?q0s0Yoy+rwwzjqm6cmgtCc9ye4wl2mQg2e/sMY0nmt9tYOkZg1bW0rDoPKZg?=
+ =?us-ascii?Q?2px1M84Yq/U2+JZiXkSiWz4Dj6D4fkLXadEb/Voo3cuo6XMWm1QoqZetLo48?=
+ =?us-ascii?Q?inY36sR79Sn7rrcIIcOW6t9yJWdEHS6TuVkt5tK2ut5EVjZEpI9ZX7UvyqPf?=
+ =?us-ascii?Q?8b0ZWfKPhM2eN4lDKblvTz0bvQqq2tT10Qj1UiSjyFy1PCUnPICJvgESNvuz?=
+ =?us-ascii?Q?9k4S6/SgA8e/8wicN3g1wiNerBxUqEdowxfE2n3upIHwiS0BLhq99fRSBpt9?=
+ =?us-ascii?Q?giFd2jjOrLK9igtHJyoq6BmCMYonTKuUopUW2rRAG9C8webkit6dE0B6ICa8?=
+ =?us-ascii?Q?pNQCHcHRZpsfkH5G2TG0PU8hkUH/siiNk8n5zvxxNA8SxLou0wOX1Kg7nhLf?=
+ =?us-ascii?Q?lzmJP9lNcPoa58BHklKEUmDmwqxRrqi9irRbqUKtyQHHMv0i7Yx8NqqEIt0+?=
+ =?us-ascii?Q?FTgE5g1i2xCSGCEz2SYcKRCbRnJ5axxXj9NlcrZqf+B/PABfC++qVINHyF9Q?=
+ =?us-ascii?Q?MjlWXBmxFODbAMgaN7UqcTqmjqg27QoTLnI6M2dCtgOlQQ9fcOW7bsZ4aU7m?=
+ =?us-ascii?Q?WzXAeFkL3AxZrBdIFSckgxBf4FZTnjd35d2TJXikfUagnXSs9G65bycq6RCw?=
+ =?us-ascii?Q?AiLBsls+Al7btjCL51hD0CBWQI0J/ufMKOxrfjhL667KXfmoUJ8PqTcWB3lM?=
+ =?us-ascii?Q?3fTtSDPhrCu4uwHkonGQSu573W4UM+p8RUcVJ2ufGx2TGnt7JosWvWN1Y/jJ?=
+ =?us-ascii?Q?Vnt+Yh26/yD+Ylz7awyCrT36G1F9Kk9prIoH3kLha4rl6yGJ6O4tZ1oNr5yV?=
+ =?us-ascii?Q?UM5oM2cPwBJ6dcv5A30lDzZK+7QGWD6UYo5T44V0/iRnkI7XZuDSRas8Hz81?=
+ =?us-ascii?Q?7FQ96xUXejPj54soV79UxoOK?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5789645f-a299-4a93-1595-08d982f84702
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2021 03:21:50.5221
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vfxWVzpfk/pGIL1Eu48CmZmCzaEwd92rCdelZrVQRHKBUQ0ovEo8OplgytlglD5xTpOwy/ws4l/OUpyO5Y6IX4pVMi8psits5XSV+4qFq0A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5643
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10121 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 mlxlogscore=974
+ phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2109230001
+ definitions=main-2109290018
+X-Proofpoint-GUID: ol_F5VbCLW0VtTqtBSa1bfLerV5ZyogF
+X-Proofpoint-ORIG-GUID: ol_F5VbCLW0VtTqtBSa1bfLerV5ZyogF
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello,
 
->-----Original Message-----
->From: nguyenb=codeaurora.org@mg.codeaurora.org
->[mailto:nguyenb=codeaurora.org@mg.codeaurora.org] On Behalf Of Bao D.
->Nguyen
->Sent: Tuesday, September 28, 2021 2:36 PM
->To: cang@codeaurora.org; asutoshd@codeaurora.org;
->martin.petersen@oracle.com; linux-scsi@vger.kernel.org
->Cc: linux-arm-msm@vger.kernel.org; Bao D . Nguyen
-><nguyenb@codeaurora.org>; Andy Gross <agross@kernel.org>; Bjorn Andersson
-><bjorn.andersson@linaro.org>; Alim Akhtar <alim.akhtar@samsung.com>; Avri
->Altman <avri.altman@wdc.com>; James E.J. Bottomley <jejb@linux.ibm.com>;
->open list <linux-kernel@vger.kernel.org>
->Subject: [PATCH v2 2/2] scsi: ufs-qcom: enter and exit hibern8 during clock
-scaling
->
->From: Asutosh Das <asutoshd@codeaurora.org>
->
->Qualcomm controller needs to be in hibern8 before scaling clocks.
->This change puts the controller in hibern8 state before scaling and brings
-it out
->after scaling of clocks.
->
->Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
->Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
->---
+Colin,
 
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+> Function lpfc_sli4_perform_vport_cvl returns a pointer to struct
+> lpfc_nodelist so returning a plain 0 integer isn't good practice.  Fix
+> this by returning a NULL instead.
 
-> drivers/scsi/ufs/ufs-qcom.c | 12 +++++++++++-
-> 1 file changed, 11 insertions(+), 1 deletion(-)
->
->diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index
->92d4c61..92f5bb4 100644
->--- a/drivers/scsi/ufs/ufs-qcom.c
->+++ b/drivers/scsi/ufs/ufs-qcom.c
->@@ -1212,24 +1212,34 @@ static int ufs_qcom_clk_scale_notify(struct ufs_hba
->*hba,
-> 	int err = 0;
->
-> 	if (status == PRE_CHANGE) {
->+		err = ufshcd_uic_hibern8_enter(hba);
->+		if (err)
->+			return err;
-> 		if (scale_up)
-> 			err = ufs_qcom_clk_scale_up_pre_change(hba);
-> 		else
-> 			err = ufs_qcom_clk_scale_down_pre_change(hba);
->+		if (err)
->+			ufshcd_uic_hibern8_exit(hba);
->+
-> 	} else {
-> 		if (scale_up)
-> 			err = ufs_qcom_clk_scale_up_post_change(hba);
-> 		else
-> 			err = ufs_qcom_clk_scale_down_post_change(hba);
->
->-		if (err || !dev_req_params)
->+
->+		if (err || !dev_req_params) {
->+			ufshcd_uic_hibern8_exit(hba);
-> 			goto out;
->+		}
->
-> 		ufs_qcom_cfg_timers(hba,
-> 				    dev_req_params->gear_rx,
-> 				    dev_req_params->pwr_rx,
-> 				    dev_req_params->hs_rate,
-> 				    false);
->+		ufshcd_uic_hibern8_exit(hba);
-> 	}
->
-> out:
->--
->The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a
->Linux Foundation Collaborative Project
+Applied to 5.16/scsi-staging, thanks!
 
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
