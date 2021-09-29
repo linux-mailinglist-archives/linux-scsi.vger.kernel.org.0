@@ -2,170 +2,245 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2695141C4E5
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 14:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156D741C5BA
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 15:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343883AbhI2MnV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Sep 2021 08:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343839AbhI2MnU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 08:43:20 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED145C06161C
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 05:41:39 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id j14so1426731plx.4
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 05:41:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=mQ4UYYOsfqwBJrW8iCKt4AU2d51AgPy2K+z+UC9XvIw=;
-        b=FHpyzXFDiK7zVe0uwQ/LzwF3MtJFYisJ1q06izRernNA1cYXszneobZ6NnmDnUZN5U
-         geQPauKgOLEJ6LTmxxm8tdApwRn0tYmWt6IlM60ObnKxNBa65vHAsF2xdvvgPtPUX052
-         3cNUD/yv8E1qKC8z7/69AN4Y47Oww22oLR0Kg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=mQ4UYYOsfqwBJrW8iCKt4AU2d51AgPy2K+z+UC9XvIw=;
-        b=IT9HHrGKkLwTvs55LVuUJqSoNWv9YZ8AG24U+gTe5hV4xY8x5JFRzCe9YmVqyuO0Px
-         W7swFmb45hmeUKflgIi6Zi3c1u7dB0eW2RT2pmeKFKMCUhtqS98587RhkzTITciL7dSP
-         +IdBMiIS9jVHAoMbfJwyzvt2vLcMId5rDY7gIohlzpLqNolJQ36diE1xzhCkHG1Eccug
-         tTyjBwqed8HDb+eTofSOwvU+IWOx068WsM5IVmxOH7wg0CEBz4otrcaL5K95lBOmipTo
-         xVCZp3ddJZWdTXUsRMrTXDsHFa82vWl9RtXWy2ZHCaY9Xg7OnFty4ZrLfbT8dJ7FCQK4
-         MeOQ==
-X-Gm-Message-State: AOAM533OtUjW2ZhPAEAdTogAoZWOtn5PHN+ETvQj2nMi3QnHwESqNh/O
-        eJyph4EBPuXJi9hWs4w5biUf1s2DpQruQjmVTcAdCNGCkrOLIS7iDkMDPzoFRExWlOJsLxRwR73
-        uwBDveymjqqHr4NBOJlG2XLEiAMdhtGweF3uqiZwKzX1ze1H7ecWOupUir3xCedxxipASCZ0idp
-        OZL3PaAVE=
-X-Google-Smtp-Source: ABdhPJwJ5AVlpdxjgC0XX6kYnv3b1PVleaIHcQtGnvo+6uyDAx/4n1475LC9+jBcdoNFsiwiTB+/YQ==
-X-Received: by 2002:a17:90a:4e43:: with SMTP id t3mr6244817pjl.163.1632919299015;
-        Wed, 29 Sep 2021 05:41:39 -0700 (PDT)
-Received: from dhcp-10-123-20-83.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id g9sm2528080pfh.13.2021.09.29.05.41.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 05:41:38 -0700 (PDT)
-From:   Sumit Saxena <sumit.saxena@broadcom.com>
-To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        jejb@linux.vnet.ibm.com
-Cc:     chandrakanth.patil@broadcom.com, kashyap.desai@broadcom.com,
-        Sumit Saxena <sumit.saxena@broadcom.com>
-Subject: [PATCH 3/3] megaraid_sas: Driver version update to 07.719.03.00-rc1
-Date:   Wed, 29 Sep 2021 18:10:22 +0530
-Message-Id: <20210929124022.24605-4-sumit.saxena@broadcom.com>
-X-Mailer: git-send-email 2.18.1
-In-Reply-To: <20210929124022.24605-1-sumit.saxena@broadcom.com>
-References: <20210929124022.24605-1-sumit.saxena@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000cb4f4c05cd21a6d9"
+        id S1344160AbhI2Nfv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Sep 2021 09:35:51 -0400
+Received: from mail-oln040093003011.outbound.protection.outlook.com ([40.93.3.11]:61575
+        "EHLO na01-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1344244AbhI2Nfh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 Sep 2021 09:35:37 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W3od254AYQDYzYN+MPwM5X9Gp1nS4yIiKPN1VQdC+yHYs9VgnoV4drVr0FE7fXu8McPGRjDoD+EkZmg6wQ2mpMx2vPiBe2F1LjrapVWJ5ThI7ZlXT1hiV7aS/BJWqUWKVqRuCKbPS+LJKr/ZNp+FM+co2NF3uqU1g5uIBFfwtj2y1jnNvkUab9Pn4EC1n0nAsVI1+9oGNNZI5ep9MMW0bMCT6yTmmhobEYE5qaHEnPqmUzRTSYzwmWSjaP7p4p1gm7awjItyZZTFs2+JxXI6QLWb4XXUljvyTYsF8yZpARk6NdG0j1J7xse8GjvsEv87ULWXuntqev/zI8P3NHkNvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=061t1QCWU6kX5EV10oScntuWq4z8Of9cq5CQ0ei0khk=;
+ b=c8EFp6hrQKyP7LpfAyqLOAZmld4vv0fEtpFmcc//sJiGdxJYMlfBNMSRAtpPWsas8QL3dnd0XkfDGbGCElTg3otHSRwOmmMLBAKhon4dNIaGBQvnIlK0k/IaGArUcxbMhO5j40OVkjSUP5F6JX840u+g6b1YmqaE3jHyZx/hSyVHSI1HwYRAplRKNYLFJu/OeijusszZho7c8zkfl2hmUVxaZ6P4V34d8m6PCjo6tRYFrKObQjh9rPb8hnLniIjgmNjoVHEL1DE/i5V1lvEVnsf7fQqvd+5hBXiBZxHKRFeJszx3SKrBsmNF2SvNykIC5aZqVxo6J0DTE4a86LMNfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=061t1QCWU6kX5EV10oScntuWq4z8Of9cq5CQ0ei0khk=;
+ b=R6n388Dl4QtDZ4mizbjPlbpVs7HF8N8fujAxfvtSz5PTJE2DIQpefKQ5kCZ+hdyq3zz4epaKLMzV9fTtLgvfTC6I3oFvLVH9iQyJXeDTtAGD6pEkSADHvDlAmimkoYNmT++hDHF1eFBUkpbv/gCGEWpyZrIlW4TAYLyHiwXfX00=
+Received: from BN8PR21MB1284.namprd21.prod.outlook.com (2603:10b6:408:a2::22)
+ by BN6PR21MB0834.namprd21.prod.outlook.com (2603:10b6:404:9e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.7; Wed, 29 Sep
+ 2021 13:33:50 +0000
+Received: from BN8PR21MB1284.namprd21.prod.outlook.com
+ ([fe80::f8ac:5395:a706:f38f]) by BN8PR21MB1284.namprd21.prod.outlook.com
+ ([fe80::f8ac:5395:a706:f38f%3]) with mapi id 15.20.4566.009; Wed, 29 Sep 2021
+ 13:33:50 +0000
+From:   Haiyang Zhang <haiyangz@microsoft.com>
+To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+CC:     KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>
+Subject: RE: [RFC PATCH] scsi: storvsc: Fix validation for unsolicited
+ incoming packets
+Thread-Topic: [RFC PATCH] scsi: storvsc: Fix validation for unsolicited
+ incoming packets
+Thread-Index: AQHXtIcuKpq91BhekkSiLD0Hct+0mau5/I/wgAEG9bA=
+Date:   Wed, 29 Sep 2021 13:33:50 +0000
+Message-ID: <BN8PR21MB1284DC9279AC61FE0C267C5ACAA99@BN8PR21MB1284.namprd21.prod.outlook.com>
+References: <20210928163732.5908-1-parri.andrea@gmail.com>
+ <BN8PR21MB128430486E2F07EA71A7FCBDCAA89@BN8PR21MB1284.namprd21.prod.outlook.com>
+In-Reply-To: <BN8PR21MB128430486E2F07EA71A7FCBDCAA89@BN8PR21MB1284.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=0ecfc4cb-be64-458c-937b-af3fb0c39c05;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-09-28T21:50:09Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3a239535-45a4-4dee-c1c8-08d9834dc5f3
+x-ms-traffictypediagnostic: BN6PR21MB0834:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BN6PR21MB08345BAF2301F4BA66B18835CAA99@BN6PR21MB0834.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Vl3oKdaXhij0RpuMV+giCJrPVeNDozOZPYvcpRxd8cvjZ58fsJ+JHsAbwRoWVW8/CNcEC3fVWUPZsMqMl9XQLASGG6LiwCTvvvPFs5XKCE8HB1krcJpLMEgilKv7kHHl+hyF1rBUOvU2sdz5Ms7Sk5kUa5Yc+D1C+AfqxFyMD8vbPLAcTzjrKHiBg7Bro9sAN93Rs3lyEBRAAaue3xiz/n0Pt4spT1SvNIBC0tz6/LdNLnn36dS41bu6lQl3ql6KmXg/LhHeyBwQKfRdpcuE2CHqTzzMUyps5VeHmqe3BYw2arHGLKnZpgqpLkERY/CYfLbzB/RVNT4EyUdCFIpUvh6Y2Ii6A7oXTwB2eo8JtbOCvwQGil1HYq42ioLHVKPY+GqHc3A5na3kKFpulvcmrw4jVz5dx4djzjAediE+X1nka+T0RZOa1vnGCJDujg4oZFxbKU01gcDKXDsdkrfK0tiU/ctBIXiK4ria73U7qw+zEAjzZ2f4U8TbV0fmGjsOdl9kreQt0GtKv5pa8jY/ztVBDsD9f61D9rqGExy8I7CMU+50CbsOTGygXpMuIkrB7I+32XiDi42E6tg2uGUOqvax743IysNjDIARinVry3Q3vgj36O2MGWo290Iy6O2hYDOzNv5nkvo+lyZS30SlX465HrwLB4XwACJlHSPSKF5hXHJnuH5JSXFsffe3KHyJD/aeenPNBQdcE5VJV5HkhA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR21MB1284.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(55016002)(82960400001)(10290500003)(71200400001)(5660300002)(508600001)(2906002)(38100700002)(8936002)(76116006)(64756008)(8676002)(7696005)(52536014)(38070700005)(86362001)(53546011)(186003)(316002)(33656002)(26005)(8990500004)(110136005)(66556008)(66476007)(4326008)(66946007)(122000001)(6506007)(107886003)(9686003)(54906003)(82950400001)(66446008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1ukX0gG+6/wHZEpXIW1B8v6c1p4hV3kkTgKkFsphdosUMWIJXvZQlbIU4QLR?=
+ =?us-ascii?Q?FbpaRimBO+ZLVwVOROStkLpB4pLIyvC0rIpyY8La36FE99LADRGoQGT2Ej0p?=
+ =?us-ascii?Q?rssu3t+phW3NdkQHEA5ELgX5Wh+e5ANJeaaksQ8Bd2uB9xCJBOuX5gdJRUcv?=
+ =?us-ascii?Q?B97Ln2w/4ES9NnWkcNzeCE+PXwBtVBGBGjgFDBdsO6sqtJR4WhkZ8YVGsJYX?=
+ =?us-ascii?Q?eAQCxziqjhffr5LaGdXYbHxlJDUBqqQvI33lHlcLjt4iuh6q1es2HX/1gftD?=
+ =?us-ascii?Q?06DsIWw/2RHaJMltnBiZnkw89A469/MQ5TS0qjgPWT3et6MOOPSzPTpJAdrA?=
+ =?us-ascii?Q?E+i7+i1RYmZJOz4JOe4PljMIcLxSFLfDIDhSnPejChK2qA2zwV386RtkSL8r?=
+ =?us-ascii?Q?e+PNcxvcfZYsHKxLrhM/EuLfYRGQtRXrQ4GAGdefsvc+bB2UHC3TePoFUok2?=
+ =?us-ascii?Q?qXlKoyUHR/3h6RIqTBaTwDqXji2DnHLMlRfn9fHhq29TAZqB5Hpvidy0h0Kr?=
+ =?us-ascii?Q?XKBdgJFV5J7tqlD1JPOXCwffAtSUClim1gdJflTZ6QqGZdg+cG57XT6zgMrJ?=
+ =?us-ascii?Q?v9rWlijGF0fqjuxZbD7QI+SkkrAwB8yttK63BB971uqP6lvrWDzlnI5DP4iS?=
+ =?us-ascii?Q?9SD29/n04XlqcNvpLiz6i5T6tfn2Sd0HRLTfy9o5MCU3TJ/4oOxqjjTwj3sN?=
+ =?us-ascii?Q?zB2LE4Tpu3Hkjvpta6zHphRfQ/dTFBanR7J+oL/wvJpkL8L3OqL8gQ0jcL71?=
+ =?us-ascii?Q?hfCqb49SF9dOwM05/5G+D12PcBYxRXOITuF0Qjgk9Edd4zTCclHFnI6ZxHPO?=
+ =?us-ascii?Q?A1dpWzQiBb/HmwuLhhCH315LLAKIaI+t9PexblWOqU3N/10RY4l+JRlAyBAH?=
+ =?us-ascii?Q?RjTR/DdSJ/mepxq/OgKoB5dFAwLg+qQd+HTfXOfuTvV7P80Og9ASwRDAL8OR?=
+ =?us-ascii?Q?XPDicdUnQIvwbvWgAETNLggpT+NvmIKGG/ajNF5r+1hnzUiUpE+tL7DIrKEn?=
+ =?us-ascii?Q?LT/N9TZrQMmufwr0k82Mbes6jBclx0w2nfy9JcVtHgihVRklhVquYUwzdKsJ?=
+ =?us-ascii?Q?k3W0vmWd+EvZspPW8mnEg8h5exsN/NhLbkphgTogsMMFzSSYlgAr12z0BiVH?=
+ =?us-ascii?Q?VTIRqbmC3gjvG+anN+tn/Hc2MiayUVVHfn5nF4PW+tuHeBNiuPuGBMEhwkDb?=
+ =?us-ascii?Q?686ZGnnPcSVReEBwi2VypC+hyMk6Noa4PiZu7MBlperc3mIsmRaxpS5sLnKx?=
+ =?us-ascii?Q?l1ySXizwgDvgG5IRagbh+A92g3zbsne8iD7qO0plqADP41y/jOpLsPXIseQ0?=
+ =?us-ascii?Q?dFK2XrQb86bQPNKU2BoUfZH4?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR21MB1284.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a239535-45a4-4dee-c1c8-08d9834dc5f3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Sep 2021 13:33:50.5243
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: v8qir1mvlqVf7TQcOp6mEBU3YTCYPVNH8CkocO+cynjDcTynpQVHibKAFAd3JM5MlJaF+218pgvy5tMS/BNi0Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR21MB0834
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000cb4f4c05cd21a6d9
-
-Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
----
- drivers/scsi/megaraid/megaraid_sas.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
-index 7af2c23652b0..2c9d1b796475 100644
---- a/drivers/scsi/megaraid/megaraid_sas.h
-+++ b/drivers/scsi/megaraid/megaraid_sas.h
-@@ -21,8 +21,8 @@
- /*
-  * MegaRAID SAS Driver meta data
-  */
--#define MEGASAS_VERSION				"07.717.02.00-rc1"
--#define MEGASAS_RELDATE				"May 19, 2021"
-+#define MEGASAS_VERSION				"07.719.03.00-rc1"
-+#define MEGASAS_RELDATE				"Sep 29, 2021"
- 
- #define MEGASAS_MSIX_NAME_LEN			32
- 
--- 
-2.18.1
 
 
---000000000000cb4f4c05cd21a6d9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> -----Original Message-----
+> From: Haiyang Zhang
+> Sent: Tuesday, September 28, 2021 6:06 PM
+> To: Andrea Parri (Microsoft) <parri.andrea@gmail.com>; linux-
+> kernel@vger.kernel.org; linux-hyperv@vger.kernel.org; linux-
+> scsi@vger.kernel.org
+> Cc: KY Srinivasan <kys@microsoft.com>; Stephen Hemminger
+> <sthemmin@microsoft.com>; Wei Liu <wei.liu@kernel.org>; James E . J .
+> Bottomley <jejb@linux.ibm.com>; Martin K . Petersen
+> <martin.petersen@oracle.com>; Michael Kelley <mikelley@microsoft.com>;
+> Dexuan Cui <decui@microsoft.com>
+> Subject: RE: [RFC PATCH] scsi: storvsc: Fix validation for unsolicited
+> incoming packets
+>=20
+>=20
+>=20
+> > -----Original Message-----
+> > From: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+> > Sent: Tuesday, September 28, 2021 12:38 PM
+> > To: linux-kernel@vger.kernel.org; linux-hyperv@vger.kernel.org; linux-
+> > scsi@vger.kernel.org
+> > Cc: KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
+> > <haiyangz@microsoft.com>; Stephen Hemminger <sthemmin@microsoft.com>;
+> > Wei Liu <wei.liu@kernel.org>; James E . J . Bottomley
+> > <jejb@linux.ibm.com>; Martin K . Petersen
+> > <martin.petersen@oracle.com>; Michael Kelley <mikelley@microsoft.com>;
+> > Andrea Parri (Microsoft) <parri.andrea@gmail.com>; Dexuan Cui
+> > <decui@microsoft.com>
+> > Subject: [RFC PATCH] scsi: storvsc: Fix validation for unsolicited
+> > incoming packets
+> >
+> > The validation on the length of incoming packets performed in
+> > storvsc_on_channel_callback() does not apply to "unsolicited"
+> > packets with ID of 0 sent by Hyper-V.  Adjust the validation by
+> > handling such unsolicited packets separately.
+> >
+> > Fixes: 91b1b640b834b2 ("scsi: storvsc: Validate length of incoming
+> > packet in storvsc_on_channel_callback()")
+> > Reported-by: Dexuan Cui <decui@microsoft.com>
+> > Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+> > ---
+> > The (new) bound, VSTOR_MIN_UNSOL_PKT_SIZE, was "empirically derived"
+> > based on testing and code auditing.  This explains the RFC tag...
+> >
+> >  drivers/scsi/storvsc_drv.c | 17 ++++++++++++++---
+> >  1 file changed, 14 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+> > index ebbbc1299c625..a9bbcbbfb54ee 100644
+> > --- a/drivers/scsi/storvsc_drv.c
+> > +++ b/drivers/scsi/storvsc_drv.c
+> > @@ -292,6 +292,9 @@ struct vmstorage_protocol_version {
+> >  #define STORAGE_CHANNEL_REMOVABLE_FLAG		0x1
+> >  #define STORAGE_CHANNEL_EMULATED_IDE_FLAG	0x2
+> >
+> > +/* Lower bound on the size of unsolicited packets with ID of 0 */
+> > +#define VSTOR_MIN_UNSOL_PKT_SIZE		48
+> > +
+> >  struct vstor_packet {
+> >  	/* Requested operation type */
+> >  	enum vstor_packet_operation operation; @@ -1285,11 +1288,13 @@
+> > static void storvsc_on_channel_callback(void
+> > *context)
+> >  	foreach_vmbus_pkt(desc, channel) {
+> >  		struct vstor_packet *packet =3D hv_pkt_data(desc);
+> >  		struct storvsc_cmd_request *request =3D NULL;
+> > +		u32 pktlen =3D hv_pkt_datalen(desc);
+> >  		u64 rqst_id =3D desc->trans_id;
+> >
+> > -		if (hv_pkt_datalen(desc) < sizeof(struct vstor_packet) -
+> > +		/* Unsolicited packets with ID of 0 are validated separately
+> > below */
+> > +		if (rqst_id !=3D 0 && pktlen < sizeof(struct vstor_packet) -
+> >  				stor_device->vmscsi_size_delta) {
+> > -			dev_err(&device->device, "Invalid packet len\n");
+> > +			dev_err(&device->device, "Invalid packet: length=3D%u\n",
+> > pktlen);
+> >  			continue;
+> >  		}
+> >
+> > @@ -1298,8 +1303,14 @@ static void storvsc_on_channel_callback(void
+> > *context)
+> >  		} else if (rqst_id =3D=3D VMBUS_RQST_RESET) {
+> >  			request =3D &stor_device->reset_request;
+> >  		} else {
+> > -			/* Hyper-V can send an unsolicited message with ID of 0
+> > */
+> >  			if (rqst_id =3D=3D 0) {
+> > +				if (pktlen < VSTOR_MIN_UNSOL_PKT_SIZE) {
+> > +					dev_err(&device->device,
+> > +						"Invalid packet with ID of 0:
+> > length=3D%u\n",
+> > +						pktlen);
+> > +					continue;
+> > +				}
+> > +
+> >  				/*
+> >  				 * storvsc_on_receive() looks at the vstor_packet
+> in the message
+> >  				 * from the ring buffer.  If the operation in the
+> vstor_packet is
+>=20
+> The patch looks good. But for readability, I'd suggested put the length
+> checks together like this:
+>=20
+> 	u32 minlen =3D rqst_id ? sizeof(struct vstor_packet) -
+> 		stor_device->vmscsi_size_delta : VSTOR_MIN_UNSOL_PKT_SIZE;
+>=20
+> 	if (pktlen < minlen) {
+> 		dev_err(&device->device,
+> 			   "Invalid pkt: id=3D%llu, len=3D%u, minlen=3D%u\n",
+> 			   rqst_id, pktlen, minlen);
+> 		continue;
+> 	}
+>=20
+> Thanks.
+>=20
+> Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
+The tag was meant to be:
+Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
 
-MIIQbQYJKoZIhvcNAQcCoIIQXjCCEFoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg3EMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
-MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
-rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
-aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
-e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
-cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
-MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
-KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
-/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
-TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
-YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
-b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
-CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
-BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
-jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
-9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
-/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
-jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
-AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
-dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
-MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
-IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
-SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
-XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
-J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
-nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBUwwggQ0oAMCAQICDChBOkGaEPGP0mg3WjANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMTAyMjIxMzAxMzJaFw0yMjA5MTUxMTUxMTRaMIGO
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xFTATBgNVBAMTDFN1bWl0IFNheGVuYTEoMCYGCSqGSIb3DQEJ
-ARYZc3VtaXQuc2F4ZW5hQGJyb2FkY29tLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
-ggEBAOF5aZbhKAGhO2KcMnxG7J5OqnrzKx30t4wT0WY/866w1NOgOCYXWCq6tm3cBUYkGV+47kUL
-uSdVPhzDNe/yMoEuqDK9c7h2/xwLHYj8VInnXa5m9xvuldXZYQBiJx2goa6RRRmTNKesy+u5W/CN
-hhy3/qf36UTobP4BfBsV7cnRZyGN2TYljb0nU60przTERky6gYtJ7LeUe00UNOduEeGcXFLAC+//
-GmgWG68YahkDuVSTTt2beZdyMeDwq/KifJFo18EkhcL3e7rmDAh8SniUI/0o3HX6hrgdmUI1wSdz
-uIVL/m6Ok9mIl2U5kvguitOSC0bVaQPfNzlj+7PCKBECAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZc3VtaXQuc2F4ZW5hQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUNz+JSIXEXl2uQ4Utcnx7FnFi
-hhowDQYJKoZIhvcNAQELBQADggEBAL0HLbxgPSW4BFbbIMN3A/ifBg4Lzaph8ARJOnZpGQivo9jG
-kQOd95knQi9Lm95JlBAJZCqXXj7QS+dnE71tsFeHWcHNNxHrTSwn4Xi5EqaRjLC6g4IEPyZHWDrD
-zzJidgfwQvfZONkf4IXnnrIEFle+26/gPs2kOjCeLMo6XGkNC4HNla1ol1htToQaNN8974pCqwIC
-rTXcWqD03VkqSOo+oPP/NAgFAZVfpeuBoK2Xv8zYlrF49Q4hxgFpWhaiDsZUSdWIS7vg1ak1n+6L
-3aHRY/lheSkOn/uJWXsqsTDp613hVtOTEDsHSQK32yTGr8jN/oRQgJASuUqQFdD4VzAxggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwoQTpBmhDxj9JoN1ow
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIY83gMftQpUG4cU3FzdXWuv2q1/UUAY
-cxysOokTp+ApMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIxMDky
-OTEyNDEzOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAO2AKFZX2RClUD3m0uVJxCAuJ4l4URFNQkk2DTNeXGU8Chkbbe
-wzSaugwRs30o0el93fGPviAYhEGeWre4/9+NgLYyxW0XiNyyJ7e9wmsSC0lQYv7TiUeCFXnh4RE/
-jSVuG+QDkNCNLL4IlAcMARTD99msgrltqjiWKY8UhPk652D+kHgDxnh60AwIWdHVDlfF3iZSh0+W
-yyr893CTo47s3Uaegq2VuZDXTnaP8brfTnGXlp71eP8ItNhwBot6DE6LSRgT8fR5RGrf++VYfrwP
-UfQ98tkEh7PJ3F3ZLkZc0S/pqs2j63FoElBCA9YwlhfmgX5Jen0Zi1qEzoTxnBIO
---000000000000cb4f4c05cd21a6d9--
+Thanks.
+
+
