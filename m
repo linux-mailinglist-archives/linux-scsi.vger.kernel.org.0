@@ -2,62 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1273B41C605
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 15:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E90D41C626
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Sep 2021 15:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344271AbhI2NuM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Sep 2021 09:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
+        id S1344372AbhI2N5x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Sep 2021 09:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244987AbhI2NuL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 09:50:11 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08166C06161C
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 06:48:31 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id e66-20020a9d2ac8000000b0054da8bdf2aeso694831otb.12
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 06:48:31 -0700 (PDT)
+        with ESMTP id S244589AbhI2N5t (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 09:57:49 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5152AC061768;
+        Wed, 29 Sep 2021 06:56:03 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id bd28so8968561edb.9;
+        Wed, 29 Sep 2021 06:56:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=D0Oc7XLkL1a5rG+g4cEPln6FVEfUnfUyvrff+87caWk=;
-        b=gqj/R53O5DxBkCqQ+LhR7uc3Q9gCrX4AiA+QdVOVcXLisRTtn18dhdFjXkgC7KaRU+
-         kbmUCfc+EwEQCBzmeGvTAZ935Nt9pL/EgtGvgszrhEUM7MSlu3xpFhpRlTJ92EP1kgKh
-         UNw3vm3Pm8M08M6jZ2N62F4d4P7oOVnq9JXKDs1XIABJj9R3GXVQ0Q8YjApr19ttuAQ8
-         SJCSLJRzY4jSVC0IoHinTPXJVGeQbO+VFJo3hXwYMLZudPftyPhQnrBB1YSeol8Dbq6/
-         +z654AziWdHX2M5S65dsnWK4vFR/1LVA82NjI/ETu9Pg6LCOaP7reExcMGAbP7Bmy3ps
-         3d5w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Sxcdm4+gr+uFVFw9+vfSgdTzx/pDv0j7O/Mzf1AStEw=;
+        b=FvFox01IyLQ/CP6zWAocb6ZVnsjejgL4SFAuP7CM4+SDbFKJJF9t6Tzg8A3I7FVnF7
+         Qb1MlTfkqOAw+JWVTXXGruMbbTZ3o3YYuIFwQ5UdTrh8yRXGBQKP16evuCLti6ibW6+t
+         XDuA0evO7X7Eh9VZ6D6oADz41SYEjEtNJtHssROd4ZWYkGqI95Zqb6YrXGe1P26s6PXn
+         WH4R1y8MD7Onj2njbhnvstgJbGfEGo5jj0Vt8lw3SHevvgnI/EWf/jmdHULAhXYiE1ad
+         CxwUqtjwCaOR+Dk7tFbjP6T9PYeHdUyhhlNsIX3laMQ9tSp8zH8QxeKLeGoKuFmABijF
+         XMqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=D0Oc7XLkL1a5rG+g4cEPln6FVEfUnfUyvrff+87caWk=;
-        b=7HAdzRjuslVyUu3xVG52hbKiBhFkX9wETNyZ9RvWlgv5KRiFRc73UbGFmQZDE9+zbg
-         RRAzmFNMgWuf+FgzTSQdr3sg95fmte/yVi4k0yfUtP0YL7QirT7rWwbF3OMja6HYnQsi
-         lW4HqYqDzd5YBJfAQGIlRFAojhwEu1ELfVDqLIZWgP80Yi7KmJEW+UkPyQawcptnpRj3
-         X2quKDZtYmjWbk6xJWsISbM5sY0Ek7VUwGoh1uonajgvbgY3WAfSNMdPJ0wlhJAXuJAb
-         ZAP8VTlcs0YPCJXX7i7hR9J5rlXvOV+l/0J6wZ+ZdOIJJnZLKBm9xZ3N1Un/NcJ+nRMh
-         Sv0Q==
-X-Gm-Message-State: AOAM530wrFozqRN6DKfriZFAB9HsH+zXbROMrxf6VfO/xh8EXC1zDdht
-        63JIMbEcsJaEhheI705P9T86sucIMMuFr3FV4H4=
-X-Google-Smtp-Source: ABdhPJwBdRsriHsB2afmcvY+zviEyyjb/fbqr36gKHIH26DP3LTbwDCo978ml/bLQCimL8bV+Lgh/TwVb2sruKwe4A0=
-X-Received: by 2002:a9d:6483:: with SMTP id g3mr77493otl.105.1632923310343;
- Wed, 29 Sep 2021 06:48:30 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Sxcdm4+gr+uFVFw9+vfSgdTzx/pDv0j7O/Mzf1AStEw=;
+        b=DoqDzBzs4CJYtTn2F4IOuXhZDDOLhmIZ+Tt3N+jHt7Z7IGtef37DrR3FN0ZIrJ4HJ+
+         OLDaXy2vlLagsQWqI9HReGEPZjwEmOk68HwTVW5LzD+KDyDW1yDOj+RSeJ9N3pWJ+gBg
+         p/f3tEkVVWcBGYyHLiSktE0FQpLCH1nVauryyNE26QkhAgNNkdEM3qwJQd2nAinVKR1O
+         szWcw1DS//A/iNcpoIW/EChcUoxCdahTsQMikejGoN/WWI0/2mtjBUF7sV/YCfVePt+i
+         XNqErfpn/1D+NqO+5JhMB66sjUHxmzYLIKTgt3KXcZjiLEqFFyhX1gETxEyfKoIM83Rc
+         YAkA==
+X-Gm-Message-State: AOAM53004p0V2/h9trl5G7PJBzlojjHfv3syQ8R/KrHRCVLUZI3AMOVv
+        Dx1R78pQ8ZfYSf9Bx/TfHex/ZhmSbk2EMg==
+X-Google-Smtp-Source: ABdhPJyHRpbjQJBh+TdNwmm7dPCq8vMsaSopyGbXuk9BvP4vT/SsUAOKXoKX0BMTjADKl88UvVo+Og==
+X-Received: by 2002:a17:906:4310:: with SMTP id j16mr13967048ejm.48.1632923756586;
+        Wed, 29 Sep 2021 06:55:56 -0700 (PDT)
+Received: from anparri (host-79-49-65-228.retail.telecomitalia.it. [79.49.65.228])
+        by smtp.gmail.com with ESMTPSA id l10sm1618024edr.14.2021.09.29.06.55.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Sep 2021 06:55:56 -0700 (PDT)
+Date:   Wed, 29 Sep 2021 15:55:48 +0200
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     Haiyang Zhang <haiyangz@microsoft.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>
+Subject: Re: [RFC PATCH] scsi: storvsc: Fix validation for unsolicited
+ incoming packets
+Message-ID: <20210929135508.GA3258@anparri>
+References: <20210928163732.5908-1-parri.andrea@gmail.com>
+ <BN8PR21MB128430486E2F07EA71A7FCBDCAA89@BN8PR21MB1284.namprd21.prod.outlook.com>
+ <BN8PR21MB1284DC9279AC61FE0C267C5ACAA99@BN8PR21MB1284.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6838:c66a:0:0:0:0 with HTTP; Wed, 29 Sep 2021 06:48:30
- -0700 (PDT)
-Reply-To: michellegoodman035@gmail.com
-From:   Shayma <shaymamarwan07@gmail.com>
-Date:   Wed, 29 Sep 2021 14:48:30 +0100
-Message-ID: <CAAgEbk=qHK=yB9L5goN4BoOERQL4yf+KQ8YEdUD=VFebcVZ5fw@mail.gmail.com>
-Subject: From Michelle
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN8PR21MB1284DC9279AC61FE0C267C5ACAA99@BN8PR21MB1284.namprd21.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hallo, ich hoffe du hast meine Nachricht bekommen.
-Ich brauche schnelle Antworten
-viele
-Vielen Dank.
-Michelle
+> > The patch looks good. But for readability, I'd suggested put the length
+> > checks together like this:
+> > 
+> > 	u32 minlen = rqst_id ? sizeof(struct vstor_packet) -
+> > 		stor_device->vmscsi_size_delta : VSTOR_MIN_UNSOL_PKT_SIZE;
+> > 
+> > 	if (pktlen < minlen) {
+> > 		dev_err(&device->device,
+> > 			   "Invalid pkt: id=%llu, len=%u, minlen=%u\n",
+> > 			   rqst_id, pktlen, minlen);
+> > 		continue;
+> > 	}
+> > 
+> > Thanks.
+> > 
+> > Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
+> The tag was meant to be:
+> Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+
+Thank you, Haiyang.  I'll update as suggested.
+
+  Andrea
