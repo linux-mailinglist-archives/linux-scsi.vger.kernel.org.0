@@ -2,45 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2CFC41CEF6
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Sep 2021 00:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F1741CEF7
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Sep 2021 00:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347163AbhI2WJh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Sep 2021 18:09:37 -0400
-Received: from mail-pl1-f173.google.com ([209.85.214.173]:42706 "EHLO
-        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347184AbhI2WJc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 18:09:32 -0400
-Received: by mail-pl1-f173.google.com with SMTP id l6so2519322plh.9
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 15:07:51 -0700 (PDT)
+        id S1347175AbhI2WJi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Sep 2021 18:09:38 -0400
+Received: from mail-pg1-f181.google.com ([209.85.215.181]:35768 "EHLO
+        mail-pg1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347159AbhI2WJd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Sep 2021 18:09:33 -0400
+Received: by mail-pg1-f181.google.com with SMTP id e7so4167030pgk.2
+        for <linux-scsi@vger.kernel.org>; Wed, 29 Sep 2021 15:07:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RgGlM8P/QQlRdlbgU8H0YeA1POp4/CiTfwOXkTtPbSg=;
-        b=m1+b3TtqONUGDQ5JxtfutMd27oSA4z+UKmKqSgx6ZGAx23jC4W5lUFSSiz4DBVRZI9
-         zZAJYPF8efXy+qIV9+I/IztMIs3SRisLdk7xfLRs+qIuOCwEt3sKmKn9EHAPtMmlYX5Q
-         MW2q9hH3HKaVBmyBC5fd8jdmU34/dbdFBuNjzq3VrGZ0y3c5K7fMMLESglJOFhFhSdSv
-         4J8+BeDJZB2dY0DV1vG+dJnw5zBi/OW2nPhnfY1rh+D7PIsL18Meq5AA1YM3s1faWmfl
-         6UR3uCusNEFwpVu1oeU9t8S8H28j8xmI30bFfE0CxFnXhcEnKlED0ZYE+iJUUdmvj5Yw
-         E+5A==
-X-Gm-Message-State: AOAM530RNsjS60idyEJrrNk6LkrV9/8nWfg3hEs/URAzaeBdN+hw68F2
-        1TfPM8dLCvtl+KjPlC7HMgc=
-X-Google-Smtp-Source: ABdhPJxgGPut767qbUOqKF8E1adhi8poPACYiTWrwP2kVYWIQeS7iudmpBc6vLj3Bv04rQdLMkp4mA==
-X-Received: by 2002:a17:902:a3c1:b0:13a:47a:1c5a with SMTP id q1-20020a170902a3c100b0013a047a1c5amr779392plb.13.1632953270860;
-        Wed, 29 Sep 2021 15:07:50 -0700 (PDT)
+        bh=sSrM2Z9Mg4h89R9uYoLr4hjxm8pWMZLJ41n8sRkf/Tc=;
+        b=KN9DuIseZyfrHx9P2jcyt5jhCvVOhD7WUI0nX7PgW9d0Uv0udWUq1m0lvwtUMfj3cp
+         noqVnDhi6TL3BeB14ZgpPnamvpl+WeS79J6CwegB5bUqucpxbMqK2CuVWxQL4ufuVyKp
+         NppTjBoZlwQBJo8uSF2AU9GhHKw43ui1ofyisPg3Kt1xp1W2Pzx5GZY7FBUE2WncLdxW
+         uMJmVCB7m9JzHl6KLohhS1Wk1jYb6EUXWLsnwgmiuZypPUBgI6t3EH8dLPOiAXSLc+EZ
+         dqtiauK6SGBZNoh+Mi6JynHfysQH20bTRg6ImJzrAXybySzvM43r0hsI1LhTNOfkcX3f
+         sd6g==
+X-Gm-Message-State: AOAM532VtVvMdqnK6+bWdeighrKyg/H1kC0dVJ93uO82Vay72EX5eWqi
+        NqXIL+dfff4WUhaIPy6ssrg=
+X-Google-Smtp-Source: ABdhPJywypQonGZsiJnHE6HMBQE0ccwnyTl7Bdp4Ko3VcC1NluyVXx9urcV1g1U9FCDPL0lf55AUgQ==
+X-Received: by 2002:a05:6a00:1819:b0:44b:bd19:b029 with SMTP id y25-20020a056a00181900b0044bbd19b029mr787619pfa.80.1632953272181;
+        Wed, 29 Sep 2021 15:07:52 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:5c11:c4f:db56:119])
-        by smtp.gmail.com with ESMTPSA id gk14sm2785585pjb.35.2021.09.29.15.07.49
+        by smtp.gmail.com with ESMTPSA id gk14sm2785585pjb.35.2021.09.29.15.07.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 15:07:50 -0700 (PDT)
+        Wed, 29 Sep 2021 15:07:51 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 58/84] pcmcia: Call scsi_done() directly
-Date:   Wed, 29 Sep 2021 15:05:34 -0700
-Message-Id: <20210929220600.3509089-59-bvanassche@acm.org>
+Subject: [PATCH v2 59/84] pmcraid: Call scsi_done() directly
+Date:   Wed, 29 Sep 2021 15:05:35 -0700
+Message-Id: <20210929220600.3509089-60-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
 In-Reply-To: <20210929220600.3509089-1-bvanassche@acm.org>
 References: <20210929220600.3509089-1-bvanassche@acm.org>
@@ -55,50 +54,63 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/pcmcia/nsp_cs.c       | 4 +---
- drivers/scsi/pcmcia/sym53c500_cs.c | 3 +--
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ drivers/scsi/pmcraid.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/pcmcia/nsp_cs.c b/drivers/scsi/pcmcia/nsp_cs.c
-index 7c0f931e55e8..0271d534133a 100644
---- a/drivers/scsi/pcmcia/nsp_cs.c
-+++ b/drivers/scsi/pcmcia/nsp_cs.c
-@@ -178,7 +178,7 @@ static void nsp_scsi_done(struct scsi_cmnd *SCpnt)
+diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
+index bffd9a9349e7..11f36fd4e62f 100644
+--- a/drivers/scsi/pmcraid.c
++++ b/drivers/scsi/pmcraid.c
+@@ -837,7 +837,7 @@ static void pmcraid_erp_done(struct pmcraid_cmd *cmd)
  
- 	data->CurrentSC = NULL;
- 
--	SCpnt->scsi_done(SCpnt);
-+	scsi_done(SCpnt);
+ 	scsi_dma_unmap(scsi_cmd);
+ 	pmcraid_return_cmd(cmd);
+-	scsi_cmd->scsi_done(scsi_cmd);
++	scsi_done(scsi_cmd);
  }
  
- static int nsp_queuecommand_lck(struct scsi_cmnd *SCpnt,
-@@ -197,8 +197,6 @@ static int nsp_queuecommand_lck(struct scsi_cmnd *SCpnt,
- 		scsi_bufflen(SCpnt), scsi_sg_count(SCpnt));
- 	//nsp_dbg(NSP_DEBUG_QUEUECOMMAND, "before CurrentSC=0x%p", data->CurrentSC);
+ /**
+@@ -2017,7 +2017,7 @@ static void pmcraid_fail_outstanding_cmds(struct pmcraid_instance *pinstance)
+ 				     le32_to_cpu(resp) >> 2,
+ 				     cmd->ioa_cb->ioarcb.cdb[0],
+ 				     scsi_cmd->result);
+-			scsi_cmd->scsi_done(scsi_cmd);
++			scsi_done(scsi_cmd);
+ 		} else if (cmd->cmd_done == pmcraid_internal_done ||
+ 			   cmd->cmd_done == pmcraid_erp_done) {
+ 			cmd->cmd_done(cmd);
+@@ -2814,7 +2814,7 @@ static int _pmcraid_io_done(struct pmcraid_cmd *cmd, int reslen, int ioasc)
  
--	SCpnt->scsi_done	= done;
--
- 	if (data->CurrentSC != NULL) {
- 		nsp_msg(KERN_DEBUG, "CurrentSC!=NULL this can't be happen");
- 		SCpnt->result   = DID_BAD_TARGET << 16;
-diff --git a/drivers/scsi/pcmcia/sym53c500_cs.c b/drivers/scsi/pcmcia/sym53c500_cs.c
-index a366ff1a3959..d2adda815d7b 100644
---- a/drivers/scsi/pcmcia/sym53c500_cs.c
-+++ b/drivers/scsi/pcmcia/sym53c500_cs.c
-@@ -492,7 +492,7 @@ SYM53C500_intr(int irq, void *dev_id)
+ 	if (rc == 0) {
+ 		scsi_dma_unmap(scsi_cmd);
+-		scsi_cmd->scsi_done(scsi_cmd);
++		scsi_done(scsi_cmd);
+ 	}
  
- idle_out:
- 	curSC->SCp.phase = idle;
--	curSC->scsi_done(curSC);
-+	scsi_done(curSC);
- 	goto out;
- }
+ 	return rc;
+@@ -3328,7 +3328,6 @@ static int pmcraid_queuecommand_lck(
+ 	pinstance =
+ 		(struct pmcraid_instance *)scsi_cmd->device->host->hostdata;
+ 	fw_version = be16_to_cpu(pinstance->inq_data->fw_version);
+-	scsi_cmd->scsi_done = done;
+ 	res = scsi_cmd->device->hostdata;
+ 	scsi_cmd->result = (DID_OK << 16);
  
-@@ -556,7 +556,6 @@ SYM53C500_queue_lck(struct scsi_cmnd *SCpnt, void (*done)(struct scsi_cmnd *))
- 	VDEB(printk("\n"));
+@@ -3338,7 +3337,7 @@ static int pmcraid_queuecommand_lck(
+ 	if (pinstance->ioa_state == IOA_STATE_DEAD) {
+ 		pmcraid_info("IOA is dead, but queuecommand is scheduled\n");
+ 		scsi_cmd->result = (DID_NO_CONNECT << 16);
+-		scsi_cmd->scsi_done(scsi_cmd);
++		scsi_done(scsi_cmd);
+ 		return 0;
+ 	}
  
- 	data->current_SC = SCpnt;
--	data->current_SC->scsi_done = done;
- 	data->current_SC->SCp.phase = command_ph;
- 	data->current_SC->SCp.Status = 0;
- 	data->current_SC->SCp.Message = 0;
+@@ -3351,7 +3350,7 @@ static int pmcraid_queuecommand_lck(
+ 	 */
+ 	if (scsi_cmd->cmnd[0] == SYNCHRONIZE_CACHE) {
+ 		pmcraid_info("SYNC_CACHE(0x35), completing in driver itself\n");
+-		scsi_cmd->scsi_done(scsi_cmd);
++		scsi_done(scsi_cmd);
+ 		return 0;
+ 	}
+ 
