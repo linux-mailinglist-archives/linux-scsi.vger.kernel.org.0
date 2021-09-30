@@ -2,93 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A676841E3A9
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Oct 2021 00:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AF941E42F
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Oct 2021 00:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344384AbhI3WLx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Sep 2021 18:11:53 -0400
-Received: from mail-pg1-f171.google.com ([209.85.215.171]:39634 "EHLO
-        mail-pg1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbhI3WLx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Sep 2021 18:11:53 -0400
-Received: by mail-pg1-f171.google.com with SMTP id g184so7608682pgc.6
-        for <linux-scsi@vger.kernel.org>; Thu, 30 Sep 2021 15:10:10 -0700 (PDT)
+        id S1348834AbhI3W7Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Sep 2021 18:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348689AbhI3W7Y (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Sep 2021 18:59:24 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76821C06176C
+        for <linux-scsi@vger.kernel.org>; Thu, 30 Sep 2021 15:57:41 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id k7so12410706wrd.13
+        for <linux-scsi@vger.kernel.org>; Thu, 30 Sep 2021 15:57:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
+        b=NbyMdHEZeBs3sGq/yDHhFme6/Fat2fIEs1FbuecL1VGVLNPFVKU5MMEzqqtmtv3lrT
+         LyW5uhTxAor2u02W/ObGaIVKkso13EmNkPeqEKWvp/MUMhviRWbZ8nckHCYJ556NudOp
+         CVsQD4dF9ZylhNVdYAbBqX0A0zUyE0K2pGMLE76ziizR4sORoxcFl/sLgtHo3wxalxgg
+         zVWop8qYFvchibQzEbMROBdDHjlzHZVZJ1FRfybhb6wrSwetzJb9THEFmdLn6gkHaAVz
+         dFyBj/yMHcUaz8lAQTBNC3OUOyaayX15aeEcmR3hIb43fnzJKw76ohBZCKh7LDPECDvY
+         Mt4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lPlU6kky2n0HxrX6mr8iuU24AHsH1p7eqRHVEikZDfQ=;
-        b=bA0OBUlRyDyND3yrD2N8Nu9gSphzed1IQmkdKg05Px5ZVgut2ukGwqyk+WYyF3RWBf
-         CrZZRAQI9l9aNBU5aI82hgCfRDPzxMMbQKhqY68rIoTMRpYrG0RiYTTKhJPJwbNqqRVz
-         FAtq+BSNTveNL1tjjikdStxgHfLoVfovHUy2eA+KMGSCLBfKx51bYLmiNI26rUH20MRU
-         zG7TOpz3w72V7BMe1y2PuYtSfiXeq/TSZzm6nUNIsEqMrmNIbUz+GU4mw8FJBM+oJtol
-         h7AlZnwJ/+ejPpNOHA1GOB10CFuxE6vr8IC16YZRjjOlGt2mwT4Z2G5Jv+9KZDQe13iC
-         Gvyg==
-X-Gm-Message-State: AOAM530YfQGtNMcE+cKeY/pueGGO5lsJWv4vz+0RtdctlTLSAAAyBpxW
-        RIUONkAe/oRwoS+zuEAZF0k=
-X-Google-Smtp-Source: ABdhPJzXNT8oaAYW5Kmw33A9/scqFf78v/m86MWbj3rWZfUSviddU3YMnJJvwveX5Q+Pfc9SfPQyIA==
-X-Received: by 2002:a63:1d58:: with SMTP id d24mr6958625pgm.316.1633039809716;
-        Thu, 30 Sep 2021 15:10:09 -0700 (PDT)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:82b7:f0a2:c63d:c44e])
-        by smtp.gmail.com with ESMTPSA id x9sm4123975pfo.172.2021.09.30.15.10.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Sep 2021 15:10:09 -0700 (PDT)
-Subject: Re: [PATCH V6 1/3] scsi: ufs: Fix error handler clear ua deadlock
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <huobean@gmail.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Wei Li <liwei213@huawei.com>, linux-scsi@vger.kernel.org,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-References: <20210930124224.114031-1-adrian.hunter@intel.com>
- <20210930124224.114031-2-adrian.hunter@intel.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <9e8ecb60-dc1b-2fd7-3ae4-bfa720f98769@acm.org>
-Date:   Thu, 30 Sep 2021 15:10:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
+        b=cEKd+OTKTq8Qpmcu6H67yxS53v9yWHKXXJXMPckX6mLGBvyGUL0l9Lf3wHR0VlC0LZ
+         xO1GbD2UEFVJce8Gkulm1w06SiDjLYvDUW1BSNM3mR8yhHlfNhnSbzgcISh8An6N/W23
+         gV2tiF+xIObq5YgFFIUtw1W+OxpnN4HSk0JRlLaFAt01KWHMkAc0Sdl3WwUqesL5Nqxl
+         DhXORaM8JIOLgtK0nAJqxP+hJVjA1bKYIQupfCZZ0Z3FkFVv2tVVfe5aBxbmDk2YKibz
+         uVlX10stNpsn6Q/lZq1B+tTRBGf/MmnxpflID2o/4MHnjVBJTIIn0saANlb/rmN2PqLB
+         DIMg==
+X-Gm-Message-State: AOAM533arhgVMKQiflCF5ZF1/elZJgNideTFbTA/Z9DMs+fJUMdfrW8Y
+        oWcpCy4uNQx+ffu4s2ReReiAfZmn40UYjqH4of5hqZrjTcR17PFL
+X-Google-Smtp-Source: ABdhPJwtAjakrk22PhsocMynsw1dcpQi8Yyjww/qtw286RJir5/Sf5h95h400OE8CslcguyIOaDpjCBWapvMI27/7k0=
+X-Received: by 2002:a2e:5705:: with SMTP id l5mr8854699ljb.456.1633042649694;
+ Thu, 30 Sep 2021 15:57:29 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210930124224.114031-2-adrian.hunter@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6512:5d8:0:0:0:0 with HTTP; Thu, 30 Sep 2021 15:57:29
+ -0700 (PDT)
+Reply-To: southwestloanco59@gmail.com
+From:   SOUTHWESTLOANCO <saniabdullahinng2020@gmail.com>
+Date:   Thu, 30 Sep 2021 15:57:29 -0700
+Message-ID: <CA+3X9TxSf18dxD51aJOg_UrukfudS2Vv1PZk=HxC5aHG_Y0JQg@mail.gmail.com>
+Subject: Dear owner,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/30/21 5:42 AM, Adrian Hunter wrote:
-> There is no guarantee to be able to enter the queue if requests are
-> blocked. That is because freezing the queue will block entry to the
-> queue, but freezing also waits for outstanding requests which can make
-> no progress while the queue is blocked.
-> 
-> That situation can happen when the error handler issues requests to
-> clear unit attention condition. Requests are blocked if the ufshcd_state is
-> UFSHCD_STATE_EH_SCHEDULED_FATAL, which can happen as a result of
-> prior error handler activity. Requests cannot make progress when
-> ufshcd_state is UFSHCD_STATE_EH_SCHEDULED_FATAL, and only the error
-> handler can change that, so if the error handler is waiting to enter
-> the queue and blk_mq_freeze_queue() is waiting for outstanding requests,
-> they will deadlock.
-> 
-> Fix by issuing REQUEST_SENSE directly avoiding the SCSI queues, in
-> a similar fashion as other device commands.
+-- 
+Good day,
+          Do you need a loan ? We offer any kind of loan to repay in
+6months with just 2% interest
 
-Hi Adrian,
+Kindly Reply with below information
 
-Although I appreciate all the work that you have done on this patch, there
-is at least one application (the Android Trusty software) that needs the
-RPMB unit attention information to work correctly. Hence my request to drop
-this patch and to integrate the following patch series in the upstream kernel:
-https://lore.kernel.org/linux-scsi/aacbec00-34e8-f082-51a5-15391bf99710@acm.org/T/#t
+NAME...............
+ADDRESS..........
+OCCUPATION....
+AGE...................
+PHONE..............
+AMOUNT NEEDED......
 
-Thanks,
+Regards
 
-Bart.
+Contact  Mr Gary Edward +13182955380
+
+Remittance Department southwestloanco59@gmail.com
