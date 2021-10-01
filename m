@@ -2,76 +2,133 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AF941E42F
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Oct 2021 00:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BE541E5A6
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Oct 2021 03:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348834AbhI3W7Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Sep 2021 18:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348689AbhI3W7Y (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Sep 2021 18:59:24 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76821C06176C
-        for <linux-scsi@vger.kernel.org>; Thu, 30 Sep 2021 15:57:41 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id k7so12410706wrd.13
-        for <linux-scsi@vger.kernel.org>; Thu, 30 Sep 2021 15:57:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
-        b=NbyMdHEZeBs3sGq/yDHhFme6/Fat2fIEs1FbuecL1VGVLNPFVKU5MMEzqqtmtv3lrT
-         LyW5uhTxAor2u02W/ObGaIVKkso13EmNkPeqEKWvp/MUMhviRWbZ8nckHCYJ556NudOp
-         CVsQD4dF9ZylhNVdYAbBqX0A0zUyE0K2pGMLE76ziizR4sORoxcFl/sLgtHo3wxalxgg
-         zVWop8qYFvchibQzEbMROBdDHjlzHZVZJ1FRfybhb6wrSwetzJb9THEFmdLn6gkHaAVz
-         dFyBj/yMHcUaz8lAQTBNC3OUOyaayX15aeEcmR3hIb43fnzJKw76ohBZCKh7LDPECDvY
-         Mt4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
-        b=cEKd+OTKTq8Qpmcu6H67yxS53v9yWHKXXJXMPckX6mLGBvyGUL0l9Lf3wHR0VlC0LZ
-         xO1GbD2UEFVJce8Gkulm1w06SiDjLYvDUW1BSNM3mR8yhHlfNhnSbzgcISh8An6N/W23
-         gV2tiF+xIObq5YgFFIUtw1W+OxpnN4HSk0JRlLaFAt01KWHMkAc0Sdl3WwUqesL5Nqxl
-         DhXORaM8JIOLgtK0nAJqxP+hJVjA1bKYIQupfCZZ0Z3FkFVv2tVVfe5aBxbmDk2YKibz
-         uVlX10stNpsn6Q/lZq1B+tTRBGf/MmnxpflID2o/4MHnjVBJTIIn0saANlb/rmN2PqLB
-         DIMg==
-X-Gm-Message-State: AOAM533arhgVMKQiflCF5ZF1/elZJgNideTFbTA/Z9DMs+fJUMdfrW8Y
-        oWcpCy4uNQx+ffu4s2ReReiAfZmn40UYjqH4of5hqZrjTcR17PFL
-X-Google-Smtp-Source: ABdhPJwtAjakrk22PhsocMynsw1dcpQi8Yyjww/qtw286RJir5/Sf5h95h400OE8CslcguyIOaDpjCBWapvMI27/7k0=
-X-Received: by 2002:a2e:5705:: with SMTP id l5mr8854699ljb.456.1633042649694;
- Thu, 30 Sep 2021 15:57:29 -0700 (PDT)
+        id S1351003AbhJABF6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Sep 2021 21:05:58 -0400
+Received: from email.unionmem.com ([221.4.138.186]:54972 "EHLO
+        VLXDG1SPAM1.ramaxel.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1350887AbhJABF6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Sep 2021 21:05:58 -0400
+Received: from V12DG1MBS03.ramaxel.local (v12dg1mbs03.ramaxel.local [172.26.18.33])
+        by VLXDG1SPAM1.ramaxel.com with ESMTPS id 19113lKR072180
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 1 Oct 2021 09:03:47 +0800 (GMT-8)
+        (envelope-from songyl@ramaxel.com)
+Received: from songyl (10.64.10.54) by V12DG1MBS03.ramaxel.local
+ (172.26.18.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1531.3; Fri, 1 Oct
+ 2021 09:03:46 +0800
+Date:   Fri, 1 Oct 2021 01:03:46 +0000
+From:   Yanling Song <songyl@ramaxel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+CC:     <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH] spraid: initial commit of Ramaxel spraid driver
+Message-ID: <20211001010346.2478a8af@songyl>
+In-Reply-To: <481d8f10-f755-29f0-58f3-9838890b0dc6@infradead.org>
+References: <20210930034752.248781-1-songyl@ramaxel.com>
+ <481d8f10-f755-29f0-58f3-9838890b0dc6@infradead.org>
+X-Mailer: Claws Mail 3.16.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Received: by 2002:a05:6512:5d8:0:0:0:0 with HTTP; Thu, 30 Sep 2021 15:57:29
- -0700 (PDT)
-Reply-To: southwestloanco59@gmail.com
-From:   SOUTHWESTLOANCO <saniabdullahinng2020@gmail.com>
-Date:   Thu, 30 Sep 2021 15:57:29 -0700
-Message-ID: <CA+3X9TxSf18dxD51aJOg_UrukfudS2Vv1PZk=HxC5aHG_Y0JQg@mail.gmail.com>
-Subject: Dear owner,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.64.10.54]
+X-ClientProxiedBy: V12DG1MBS03.ramaxel.local (172.26.18.33) To
+ V12DG1MBS03.ramaxel.local (172.26.18.33)
+X-DNSRBL: 
+X-MAIL: VLXDG1SPAM1.ramaxel.com 19113lKR072180
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Good day,
-          Do you need a loan ? We offer any kind of loan to repay in
-6months with just 2% interest
 
-Kindly Reply with below information
+Hi Randy,
+Thanks for your comments. 
+It is National Holiday since today and I'm on a 7-day vacation. My
+response may be delayed, Sorry.
+ 
 
-NAME...............
-ADDRESS..........
-OCCUPATION....
-AGE...................
-PHONE..............
-AMOUNT NEEDED......
 
-Regards
+On Wed, 29 Sep 2021 22:36:14 -0700
+Randy Dunlap <rdunlap@infradead.org> wrote:
+> Hi,
+> 
+> On 9/29/21 8:47 PM, Yanling Song wrote:
+> > This initial commit contains Ramaxel's spraid module.
+> >   
+> 
+> Does "spraid" mean anything?  <something>  RAID ?
 
-Contact  Mr Gary Edward +13182955380
+yes, it means Super RAID.
 
-Remittance Department southwestloanco59@gmail.com
+> 
+> > Signed-off-by: Yanling Song <songyl@ramaxel.com>
+> > ---
+> >   Documentation/scsi/spraid.rst                 |   28 +
+> >   .../userspace-api/ioctl/ioctl-number.rst      |    2 +
+> >   MAINTAINERS                                   |    7 +
+> >   drivers/scsi/Kconfig                          |    1 +
+> >   drivers/scsi/Makefile                         |    1 +
+> >   drivers/scsi/spraid/Kconfig                   |   11 +
+> >   drivers/scsi/spraid/Makefile                  |    7 +
+> >   drivers/scsi/spraid/spraid.h                  |  656 +++
+> >   drivers/scsi/spraid/spraid_main.c             | 3617
+> > +++++++++++++++++ 9 files changed, 4330 insertions(+)
+> >   create mode 100644 Documentation/scsi/spraid.rst
+> >   create mode 100644 drivers/scsi/spraid/Kconfig
+> >   create mode 100644 drivers/scsi/spraid/Makefile
+> >   create mode 100644 drivers/scsi/spraid/spraid.h
+> >   create mode 100644 drivers/scsi/spraid/spraid_main.c
+> >   
+> 
+> > diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst
+> > b/Documentation/userspace-api/ioctl/ioctl-number.rst index
+> > 2e8134059c87..d93dbb680b16 100644 ---
+> > a/Documentation/userspace-api/ioctl/ioctl-number.rst +++
+> > b/Documentation/userspace-api/ioctl/ioctl-number.rst @@ -169,6
+> > +169,8 @@ Code  Seq#    Include
+> > File                                           Comments 'M'
+> > 00-0F  drivers/video/fsl-diu-fb.h
+> > conflict! 'N'   00-1F  drivers/usb/scanner.h 'N'   40-7F
+> > drivers/block/nvme.c +'N'   41-42
+> > drivers/scsi/spraid_main.c
+> > conflict! +'N'   80     drivers/scsi/spraid_main.c 'O'   00-06
+> > mtd/ubi-user.h                                          UBI 'P'
+> > all    linux/soundcard.h
+> > conflict! 'P'   60-6F
+> > sound/sscape_ioctl.h                                    conflict!  
+> 
+> It looks like the above won't apply cleanly: the surrounding lines
+> should not be indented any.
+
+Will be fixed in the next version. 
+
+> 
+> > diff --git a/drivers/scsi/spraid/Kconfig
+> > b/drivers/scsi/spraid/Kconfig new file mode 100644
+> > index 000000000000..83962efaab07
+> > --- /dev/null
+> > +++ b/drivers/scsi/spraid/Kconfig
+> > @@ -0,0 +1,11 @@
+> > +#
+> > +# Ramaxel driver configuration
+> > +#
+> > +
+> > +config RAMAXEL_SPRAID
+> > +	tristate "Ramaxel spraid Adapter"
+> > +	depends on PCI && SCSI
+> > +	depends on ARM64 || X86_64
+> > +	default m  
+> 
+> Not "default m" unless it is needed to boot a system.
+
+This line will be deleted in next version.
+
+> 
+> > +	help
+> > +	  This driver supports Ramaxel spraid driver.  
+> 
+> 
+> thanks.
+
