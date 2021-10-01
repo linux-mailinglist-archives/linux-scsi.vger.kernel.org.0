@@ -2,72 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EC441E999
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Oct 2021 11:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECC841EC10
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Oct 2021 13:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbhJAJag (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Oct 2021 05:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
+        id S1353972AbhJALg2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Oct 2021 07:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbhJAJaf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Oct 2021 05:30:35 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231C7C061775
-        for <linux-scsi@vger.kernel.org>; Fri,  1 Oct 2021 02:28:52 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id v10so19174582ybq.7
-        for <linux-scsi@vger.kernel.org>; Fri, 01 Oct 2021 02:28:52 -0700 (PDT)
+        with ESMTP id S1353976AbhJALg1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Oct 2021 07:36:27 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFDFC0613E8
+        for <linux-scsi@vger.kernel.org>; Fri,  1 Oct 2021 04:34:42 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id dn26so33506802edb.13
+        for <linux-scsi@vger.kernel.org>; Fri, 01 Oct 2021 04:34:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=avoZoh0DwmEwTPmUogoEy+oahv6vgVaqmCf2KZPV9wQ=;
-        b=AAFjil2P55K2pmZUWMRgOgQpijnlJNnHdKknd+KiGGu3NQ9gcDQryCDPf2R0Rflbsg
-         M+648TmOK4BhJ+c7oK5rHDuNx9p0IaYxFgKtTVDTgce2OgwArQ7XIDaknN/NgHiR92SP
-         AT6tcM/3iSH8+AIHBQy8xcvxtu9iHVsv8eMcDHRbgnMrXm6ObuTA5B8zOv8zOXvOvjV3
-         GU/dFyTN4W06X7Tpk8SApKuifNGBgMSB+jfZdUVwJxU+ehfs6UBPquPXt1QxhhTbi8tx
-         wxo+nRNsm+YyokfXBXIx6nwmsFJmMHr+S0fqgYEGsMxYzRKc5ni5N3V8Ljscxb9Pweur
-         t6Lg==
+        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
+        b=UOLbJNv/PHcWOU6Z4rzzgus9xotes2ecLAW3m0Y6kDPTOjFVwFz4/NRCuiUc/AjV39
+         70shoNLlGtW2zJKiJK8gWF1ZVghHqNU0FYvYoPopWEQ+fHy4PMJvg/rPa7XOjHzx5+I8
+         Xe7YeiWNQ2x44H4dPlVOE6Ah0lUroynwj/qWhWvYMyQ5kBZOuJhQVhc3aP+Fl6qaCTTC
+         uMrRxUPJ3wsFo+uvtThbmIiq0+6yFUOE4prZ7QcU8rJP7m7ajkacKs1kWI1OpkOo3grw
+         EL6Sbr67jUVUBegOHPesQ5yrtjLicwMzSf4ZTlJn80mKLZXzPrStel0YHAEyxcF5xL+2
+         tHhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=avoZoh0DwmEwTPmUogoEy+oahv6vgVaqmCf2KZPV9wQ=;
-        b=ggCuda9JFNL4AeBiTb0KvBwiNaewfe1f18XVv+YKNVA9K61cacp37nuwIhTdRE1XR3
-         uaQK75AOJFFQT8Apl7RsW8N4Etfte0ggGIZLKj+c0Bb4GPhg3bme1K3bF7Wr4c6r8lT4
-         Lz5AVIkgq5i8BNy3flkVYoUf1HziLeD/Vx4lJ0c9vIFJnIdinMS1kjvdp1Qlc07/mMd6
-         uwxX/A0BgOz9pUMM7AaMidNJDxEs97VzDjIz09UqwW5cRhi1KqqzFWm8UtHX8WzUVfyN
-         Ny92NorqA87aJWGRfnXx7iYS2LOsBPaAvLzAHF4YR76Rx5EIeGuKW0PteqPH8e+whdUe
-         cNug==
-X-Gm-Message-State: AOAM533kOafi0YTdfT/PYscgTwvD+FpUyVkLu+90GWXjn9qA/KYosxNn
-        R952gFubRp9StH/G+nNgdXhV1Ead3dt1rwOvmwQ=
-X-Google-Smtp-Source: ABdhPJwfB3lffuLoZ6kKeTkjePkrkjdz/Lq2SvBcQD1X4AKQsp0Cdyd7gfVucAlTs5snP5asQpFHNlUDEt2sMFzxfio=
-X-Received: by 2002:a25:8711:: with SMTP id a17mr4279036ybl.358.1633080531183;
- Fri, 01 Oct 2021 02:28:51 -0700 (PDT)
+        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
+        b=w3/dcr3a+cf/kSKRtOug6tFo36ASv7dEk/Ckp/vnjjlIeWiLrz/+925pZs7mLP521g
+         fOc2/ncEgDaqdd8yxRkc7N3Ez/HTFqWzXpZ/8khDluvDEkF1+U8K315FbEw95gvdx638
+         I8hqJp6UCFw5SnPFDVAa1z+cKvFLMUK33CpkTHqH9bvvqHIzTpOrF8sZXIX3qdQyYTDS
+         LI0Wb3PbHh3tNcEugQcRNTXELumdq+tKiq9un3LzFRWuzDnaWfEeUwJPd++NVB4LB361
+         VxdTS0jLVI/NwGzzp2CfxcAvnCDruCGfQsGBsJFBgP27exRCviApakJ8qsfhaIeHzX7D
+         HqXg==
+X-Gm-Message-State: AOAM530V7SvVXnu6m62Z2L796KeQa68sc5IbsBMPbccNeYBXUKdNyeK7
+        arLRCsLkz3dkzPbSmNNegEqgFi1RXdiqs3OBvyQ=
+X-Google-Smtp-Source: ABdhPJzk33LSFp+PeISm+eJBQbbjD4Um0GnvAV/blvchXzlEurQQitZPK5UL59BP+L6PnQP4Ag8ozt5qB2PABb7m0KY=
+X-Received: by 2002:a17:906:1749:: with SMTP id d9mr5442671eje.178.1633088080796;
+ Fri, 01 Oct 2021 04:34:40 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7000:7595:0:0:0:0 with HTTP; Fri, 1 Oct 2021 02:28:50
+Received: by 2002:a17:906:724a:0:0:0:0 with HTTP; Fri, 1 Oct 2021 04:34:39
  -0700 (PDT)
-Reply-To: keree.casmiree@gmail.com
-From:   casmire kere <zerbodomba11@gmail.com>
-Date:   Fri, 1 Oct 2021 09:28:50 +0000
-Message-ID: <CALEcNBTn45a=sALR2aU2kJNrg8BeEr3Rb0rppg-rqLZykHBT3w@mail.gmail.com>
-Subject: Your swift reply for more details!!
+Reply-To: joymat52@gmail.com
+From:   Joyce Thomas <tjoyc1234@gmail.com>
+Date:   Fri, 1 Oct 2021 04:34:39 -0700
+Message-ID: <CAF-RpUgaUkMbj2QzyBnkOuwEe=PmUv5qivCYUGKtEUkg1Z6r2w@mail.gmail.com>
+Subject: ATTN:
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Good morning,
-
-I am Mr.Kere Casmire   I Have a Business Proposal of $5.3 million For You.
-
-Upon receipt of your reply; I will give you full details
-on how the business  will be executed.
-
-You should forward your reply to this private Email ID
-(keree.casmiree@gmail.com)
-
-I am waiting for your reply.
-
-Best regards,
-Mr.Kere Casmire
+Hello Dear
+My Name is Mr. Joyce Thomas. Contact me for more information on the
+transfer of ($7.9 million dollars) left by my late client from your
+Country. I want to present you as a business partner and next of kin
+of the fund. I will give you the details of this transaction, as soon
+as I hear from you. I need the information below:
+Full Name:
+Address:
+Occupation:
+Age:
+Personal Email:
+Personal Telephone:
+Best Regards,
+Mr.Joyce  Thomas
