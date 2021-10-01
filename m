@@ -2,71 +2,125 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECC841EC10
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Oct 2021 13:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43EEF41F1A1
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Oct 2021 17:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353972AbhJALg2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Oct 2021 07:36:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353976AbhJALg1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Oct 2021 07:36:27 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFDFC0613E8
-        for <linux-scsi@vger.kernel.org>; Fri,  1 Oct 2021 04:34:42 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id dn26so33506802edb.13
-        for <linux-scsi@vger.kernel.org>; Fri, 01 Oct 2021 04:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=UOLbJNv/PHcWOU6Z4rzzgus9xotes2ecLAW3m0Y6kDPTOjFVwFz4/NRCuiUc/AjV39
-         70shoNLlGtW2zJKiJK8gWF1ZVghHqNU0FYvYoPopWEQ+fHy4PMJvg/rPa7XOjHzx5+I8
-         Xe7YeiWNQ2x44H4dPlVOE6Ah0lUroynwj/qWhWvYMyQ5kBZOuJhQVhc3aP+Fl6qaCTTC
-         uMrRxUPJ3wsFo+uvtThbmIiq0+6yFUOE4prZ7QcU8rJP7m7ajkacKs1kWI1OpkOo3grw
-         EL6Sbr67jUVUBegOHPesQ5yrtjLicwMzSf4ZTlJn80mKLZXzPrStel0YHAEyxcF5xL+2
-         tHhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=w3/dcr3a+cf/kSKRtOug6tFo36ASv7dEk/Ckp/vnjjlIeWiLrz/+925pZs7mLP521g
-         fOc2/ncEgDaqdd8yxRkc7N3Ez/HTFqWzXpZ/8khDluvDEkF1+U8K315FbEw95gvdx638
-         I8hqJp6UCFw5SnPFDVAa1z+cKvFLMUK33CpkTHqH9bvvqHIzTpOrF8sZXIX3qdQyYTDS
-         LI0Wb3PbHh3tNcEugQcRNTXELumdq+tKiq9un3LzFRWuzDnaWfEeUwJPd++NVB4LB361
-         VxdTS0jLVI/NwGzzp2CfxcAvnCDruCGfQsGBsJFBgP27exRCviApakJ8qsfhaIeHzX7D
-         HqXg==
-X-Gm-Message-State: AOAM530V7SvVXnu6m62Z2L796KeQa68sc5IbsBMPbccNeYBXUKdNyeK7
-        arLRCsLkz3dkzPbSmNNegEqgFi1RXdiqs3OBvyQ=
-X-Google-Smtp-Source: ABdhPJzk33LSFp+PeISm+eJBQbbjD4Um0GnvAV/blvchXzlEurQQitZPK5UL59BP+L6PnQP4Ag8ozt5qB2PABb7m0KY=
-X-Received: by 2002:a17:906:1749:: with SMTP id d9mr5442671eje.178.1633088080796;
- Fri, 01 Oct 2021 04:34:40 -0700 (PDT)
+        id S1354173AbhJAP7g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Oct 2021 11:59:36 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54358 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231768AbhJAP7g (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Oct 2021 11:59:36 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 191FmC2e021023;
+        Fri, 1 Oct 2021 11:57:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to : sender :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=6SuAMrM04un2y1zV0UhHi9U3qSP3NwAXN/aRMAvxK4E=;
+ b=FYWHI7UNMQhy7KypAO0ErsOfje/WRk4aHujPSPZtwY21A+Gt8DB4b4tOF5Ut1j957s40
+ L9tNLXMamarudRBBVeS1r23NbAfkZmaHE/JvoxsTi1p1NCiwncUdDKSvMkjCaqhRuj/o
+ vTHdldJUVu0Y/EDIRHt3/WVKgNROSZoHQG7q9mhVUVe3lzpzQfkcmVZ8gCodxntG5MET
+ ydtoHRrmImpnlQq1mdbEFb/qONnePuXFrZt8ack31KKP3E9h7NIP/XrNtyQvfoJc7LY+
+ JVOO3ZBlLpTEsjfqHjlZ9M1BAgHM0I3+9TvCiJqqKsDivDuTdlf19w6MbpQH3SXjaZHB pg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3be59j04ud-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Oct 2021 11:57:38 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 191FsbCl010262;
+        Fri, 1 Oct 2021 11:57:37 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3be59j04tq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Oct 2021 11:57:37 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 191Fqcvl021386;
+        Fri, 1 Oct 2021 15:57:35 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3b9udar2xf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 01 Oct 2021 15:57:34 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 191FvVUi5767758
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 1 Oct 2021 15:57:31 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A62B42041;
+        Fri,  1 Oct 2021 15:57:31 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 665A34203F;
+        Fri,  1 Oct 2021 15:57:31 +0000 (GMT)
+Received: from t480-pf1aa2c2 (unknown [9.145.62.191])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri,  1 Oct 2021 15:57:31 +0000 (GMT)
+Received: from bblock by t480-pf1aa2c2 with local (Exim 4.94.2)
+        (envelope-from <bblock@linux.ibm.com>)
+        id 1mWKug-001Aol-Qb; Fri, 01 Oct 2021 17:57:30 +0200
+Date:   Fri, 1 Oct 2021 17:57:30 +0200
+From:   Benjamin Block <bblock@linux.ibm.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: Re: [PATCH v2 01/84] scsi: core: Use a member variable to track the
+ SCSI command submitter
+Message-ID: <YVcv6vRhSHoaLD+z@t480-pf1aa2c2.linux.ibm.com>
+References: <20210929220600.3509089-1-bvanassche@acm.org>
+ <20210929220600.3509089-2-bvanassche@acm.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20210929220600.3509089-2-bvanassche@acm.org>
+Sender: Benjamin Block <bblock@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pjuyiMDdUY1zmQfuT__PdksjdIP0cBBn
+X-Proofpoint-ORIG-GUID: qeJ8KrdqQxA6zHwgFDASBEfgmx-ck20q
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Received: by 2002:a17:906:724a:0:0:0:0 with HTTP; Fri, 1 Oct 2021 04:34:39
- -0700 (PDT)
-Reply-To: joymat52@gmail.com
-From:   Joyce Thomas <tjoyc1234@gmail.com>
-Date:   Fri, 1 Oct 2021 04:34:39 -0700
-Message-ID: <CAF-RpUgaUkMbj2QzyBnkOuwEe=PmUv5qivCYUGKtEUkg1Z6r2w@mail.gmail.com>
-Subject: ATTN:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-10-01_03,2021-10-01_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 malwarescore=0 clxscore=1015 bulkscore=0 mlxscore=0
+ priorityscore=1501 suspectscore=0 adultscore=0 impostorscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2110010108
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Dear
-My Name is Mr. Joyce Thomas. Contact me for more information on the
-transfer of ($7.9 million dollars) left by my late client from your
-Country. I want to present you as a business partner and next of kin
-of the fund. I will give you the details of this transaction, as soon
-as I hear from you. I need the information below:
-Full Name:
-Address:
-Occupation:
-Age:
-Personal Email:
-Personal Telephone:
-Best Regards,
-Mr.Joyce  Thomas
+Hey Bart,
+
+On Wed, Sep 29, 2021 at 03:04:37PM -0700, Bart Van Assche wrote:
+> Conditional statements are faster than indirect calls. Use a member variable
+> to track the SCSI command submitter such that later patches can call
+> scsi_done(scmd) instead of scmd->scsi_done(scmd).
+> 
+> The asymmetric behavior that scsi_send_eh_cmnd() sets the submission
+> context to the SCSI error handler and that it does not restore the
+> submission context to the SCSI core is retained.
+> 
+> Cc: Hannes Reinecke <hare@suse.com>
+> Cc: Ming Lei <ming.lei@redhat.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+>  drivers/scsi/scsi_error.c | 18 +++++++-----------
+>  drivers/scsi/scsi_lib.c   | 10 ++++++++++
+>  drivers/scsi/scsi_priv.h  |  1 +
+>  include/scsi/scsi_cmnd.h  |  7 +++++++
+>  4 files changed, 25 insertions(+), 11 deletions(-)
+> 
+
+I think its good!
+
+Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
+
+
+-- 
+Best Regards, Benjamin Block  / Linux on IBM Z Kernel Development / IBM Systems
+IBM Deutschland Research & Development GmbH    /    https://www.ibm.com/privacy
+Vorsitz. AufsR.: Gregor Pillen         /        Geschäftsführung: Dirk Wittkopp
+Sitz der Gesellschaft: Böblingen / Registergericht: AmtsG Stuttgart, HRB 243294
