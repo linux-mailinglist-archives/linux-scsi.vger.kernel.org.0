@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 478AD420621
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Oct 2021 08:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD1242062D
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Oct 2021 08:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbhJDHBB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Oct 2021 03:01:01 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:57718 "EHLO
+        id S232983AbhJDHBY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Oct 2021 03:01:24 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:47286 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232579AbhJDHBA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Oct 2021 03:01:00 -0400
+        by vger.kernel.org with ESMTP id S232978AbhJDHBJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Oct 2021 03:01:09 -0400
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 193Msask002324;
-        Sun, 3 Oct 2021 23:59:05 -0700
+        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 193MVINR029991;
+        Sun, 3 Oct 2021 23:59:16 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=qhEtSRoQo00KrzQr+YZLwGTiDcLARpPWmJq+7pSgcSI=;
- b=gLmmimMoeeb968P0CJ0uMcaqvS/KsQgaG/hj8T7E9GP5qbgz3GVqIN3MOK7wgBuMDxg/
- f46YO0/3M+UmgvPSBvAqaHrhVpAQuwDY5n8cS9C63jQp1GdwEAozca8Zc28D7W4nZ0hE
- yKlN8I+67eWrVFzns/xcuLSJwUyUBiSE74snzqOyS8DKQqGbmJzq9PVPmaJ6jBatCUFG
- 1xvOn4xsKmBtkCrlxSRBELglKSOi9mTGx6gl4LteV7hX2MsdM1BgdKyGD2+Ekscup2XV
- dWGMvYz/gJ+9ZGk/yvJAEfEgqF+i1HJUAPl6/w0Xca4OtiGxyxe9Cfg4sQVpxgaC9TwR +A== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com with ESMTP id 3bfc9y9uh8-2
+ content-type; s=pfpt0220; bh=ytRGoR4U9FGBVR7Y4nAkC+MpQEQDSpDrFQCiYqT0vDU=;
+ b=O26kep0qff0Wn2Z0EV2XUkLr59KVs+QVWfSL/pMLg5fUsbxg8Jh/5Y1wZ5m9p9q1qnvP
+ 27wtmfuNCF+0UGlz2WD8LKFcV7IF9la40sguEOpp5//dWXGoJKbBiA7NCCTkY/DVSaAj
+ isTc+PGRva4dH7KbAHGTCBgfvCOVP+v8rl1s5E78L0TG9TldEJ1g1+gqu6NCs+TaUNoK
+ mbElfbTJi7PlNJM9beDHbOAfRiZUPZwYzBzGeY+TiEqJNAReFG2AVLbrvIQT/EniAAYd
+ NU/xFtNsBjDf4J5Dnd76xoQllIWn5bY3/X4inXKjbRxgm2Sw5/CrB1GUC5O13lP1LlhQ oA== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com with ESMTP id 3bfc9y9uj5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Sun, 03 Oct 2021 23:59:04 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sun, 3 Oct
- 2021 23:59:02 -0700
+        Sun, 03 Oct 2021 23:59:14 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sun, 3 Oct
+ 2021 23:59:11 -0700
 Received: from lbtlvb-pcie154.il.qlogic.org (10.69.176.80) by
  DC5-EXCH02.marvell.com (10.69.176.39) with Microsoft SMTP Server id
- 15.0.1497.18 via Frontend Transport; Sun, 3 Oct 2021 23:58:59 -0700
+ 15.0.1497.18 via Frontend Transport; Sun, 3 Oct 2021 23:59:08 -0700
 From:   Prabhakar Kushwaha <pkushwaha@marvell.com>
 To:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>
 CC:     <linux-rdma@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
@@ -40,16 +40,16 @@ CC:     <linux-rdma@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
         <mrangankar@marvell.com>, <pkushwaha@marvell.com>,
         <prabhakar.pkin@gmail.com>, <malin1024@gmail.com>,
         Omkar Kulkarni <okulkarni@marvell.com>
-Subject: [PATCH v2 01/13] qed: Fix kernel-doc warnings
-Date:   Mon, 4 Oct 2021 09:58:39 +0300
-Message-ID: <20211004065851.1903-2-pkushwaha@marvell.com>
+Subject: [PATCH v2 03/13] qed: Split huge qed_hsi.h header file
+Date:   Mon, 4 Oct 2021 09:58:41 +0300
+Message-ID: <20211004065851.1903-4-pkushwaha@marvell.com>
 X-Mailer: git-send-email 2.16.6
 In-Reply-To: <20211004065851.1903-1-pkushwaha@marvell.com>
 References: <20211004065851.1903-1-pkushwaha@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: xo-yESl0chsmQ7EJMWIKwem-bVmsE4Ic
-X-Proofpoint-ORIG-GUID: xo-yESl0chsmQ7EJMWIKwem-bVmsE4Ic
+X-Proofpoint-GUID: 4sJzlSiHojbhZ9OqXu_OrumnyszesZKa
+X-Proofpoint-ORIG-GUID: 4sJzlSiHojbhZ9OqXu_OrumnyszesZKa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-10-04_02,2021-10-01_02,2020-04-07_01
@@ -57,920 +57,865 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch fixes all the qed and qede kernel-doc warnings
-according to the guidelines that are described in
-Documentation/doc-guide/kernel-doc.rst.
+From: Omkar Kulkarni <okulkarni@marvell.com>
+
+The qed_hsi.h is a huge header file containing HSI (Hardware Software
+Interface) definitions of storm memory access, debug related, general
+and management firmware specific. In order to have a better
+code-organization HSI definition, this patch split the code across
+multiple files, i.e.
+- storm memory access HSI : qed_iro_hsi.h
+- debug related HSI       : qed_dbg_hsi.h
+- Management firmware HSI : qed_mfg_hsi.h
+- General HSI             : qed_hsi.h
+
+In addition, this patch also fixes existing checkpatch warnings and
+few important checks.
 
 Signed-off-by: Ariel Elior <aelior@marvell.com>
-Signed-off-by: Omkar Kulkarni <okulkarni@marvell.com>
 Signed-off-by: Shai Malin <smalin@marvell.com>
+Signed-off-by: Omkar Kulkarni <okulkarni@marvell.com>
 Signed-off-by: Prabhakar Kushwaha <pkushwaha@marvell.com>
 ---
- drivers/net/ethernet/qlogic/qed/qed.h         |   9 +-
- drivers/net/ethernet/qlogic/qed/qed_cxt.h     | 138 +--
- drivers/net/ethernet/qlogic/qed/qed_dev_api.h | 343 ++++---
- drivers/net/ethernet/qlogic/qed/qed_hsi.h     | 956 +++++++++---------
- drivers/net/ethernet/qlogic/qed/qed_hw.h      | 222 ++--
- .../net/ethernet/qlogic/qed/qed_init_ops.h    |  58 +-
- drivers/net/ethernet/qlogic/qed/qed_int.h     | 284 +++---
- drivers/net/ethernet/qlogic/qed/qed_iscsi.h   |   9 +-
- drivers/net/ethernet/qlogic/qed/qed_l2.h      | 134 +--
- drivers/net/ethernet/qlogic/qed/qed_ll2.h     | 130 +--
- drivers/net/ethernet/qlogic/qed/qed_mcp.h     | 757 +++++++-------
- .../net/ethernet/qlogic/qed/qed_selftest.h    |  30 +-
- drivers/net/ethernet/qlogic/qed/qed_sp.h      | 215 ++--
- drivers/net/ethernet/qlogic/qed/qed_sriov.h   |  99 +-
- drivers/net/ethernet/qlogic/qed/qed_vf.h      | 301 +++---
- drivers/net/ethernet/qlogic/qede/qede_main.c  |   5 +-
- include/linux/qed/qed_chain.h                 |  97 +-
- include/linux/qed/qed_if.h                    | 255 ++---
- include/linux/qed/qed_iscsi_if.h              |   2 +-
- include/linux/qed/qed_ll2_if.h                |  42 +-
- include/linux/qed/qed_nvmetcp_if.h            |  17 +
- 21 files changed, 2186 insertions(+), 1917 deletions(-)
+ drivers/net/ethernet/qlogic/qed/qed.h         |    2 +
+ drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h | 1491 +++++++
+ drivers/net/ethernet/qlogic/qed/qed_dcbx.h    |   11 +-
+ drivers/net/ethernet/qlogic/qed/qed_debug.c   |    1 +
+ drivers/net/ethernet/qlogic/qed/qed_dev.c     |    1 +
+ drivers/net/ethernet/qlogic/qed/qed_dev_api.h |    2 -
+ drivers/net/ethernet/qlogic/qed/qed_fcoe.c    |    1 +
+ drivers/net/ethernet/qlogic/qed/qed_hsi.h     | 3723 -----------------
+ .../ethernet/qlogic/qed/qed_init_fw_funcs.c   |    1 +
+ drivers/net/ethernet/qlogic/qed/qed_iro_hsi.h |  339 ++
+ drivers/net/ethernet/qlogic/qed/qed_iscsi.c   |    1 +
+ drivers/net/ethernet/qlogic/qed/qed_l2.c      |    1 +
+ drivers/net/ethernet/qlogic/qed/qed_ll2.c     |    7 +-
+ drivers/net/ethernet/qlogic/qed/qed_ll2.h     |    1 -
+ drivers/net/ethernet/qlogic/qed/qed_mcp.c     |    1 +
+ drivers/net/ethernet/qlogic/qed/qed_mfw_hsi.h | 1928 +++++++++
+ drivers/net/ethernet/qlogic/qed/qed_rdma.c    |    3 +-
+ drivers/net/ethernet/qlogic/qed/qed_rdma.h    |    7 +-
+ drivers/net/ethernet/qlogic/qed/qed_roce.c    |    1 -
+ drivers/net/ethernet/qlogic/qed/qed_spq.c     |    1 +
+ drivers/net/ethernet/qlogic/qed/qed_sriov.c   |    1 +
+ drivers/net/ethernet/qlogic/qed/qed_vf.c      |   11 +-
+ drivers/net/ethernet/qlogic/qed/qed_vf.h      |    6 +-
+ 23 files changed, 3794 insertions(+), 3747 deletions(-)
+ create mode 100644 drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h
+ create mode 100644 drivers/net/ethernet/qlogic/qed/qed_iro_hsi.h
+ create mode 100644 drivers/net/ethernet/qlogic/qed/qed_mfw_hsi.h
 
 diff --git a/drivers/net/ethernet/qlogic/qed/qed.h b/drivers/net/ethernet/qlogic/qed/qed.h
-index d58e021614cd..b656408b9d70 100644
+index cd1537bf5392..344039125b8e 100644
 --- a/drivers/net/ethernet/qlogic/qed/qed.h
 +++ b/drivers/net/ethernet/qlogic/qed/qed.h
-@@ -877,12 +877,13 @@ u32 qed_get_hsi_def_val(struct qed_dev *cdev, enum qed_hsi_def_type type);
+@@ -23,6 +23,8 @@
+ #include <linux/qed/qed_if.h>
+ #include "qed_debug.h"
+ #include "qed_hsi.h"
++#include "qed_dbg_hsi.h"
++#include "qed_mfw_hsi.h"
  
+ extern const struct qed_common_ops qed_common_ops_pass;
  
- /**
-- * @brief qed_concrete_to_sw_fid - get the sw function id from
-- *        the concrete value.
-+ * qed_concrete_to_sw_fid(): Get the sw function id from
-+ *                           the concrete value.
-  *
-- * @param concrete_fid
-+ * @cdev: Qed dev pointer.
-+ * @concrete_fid: Concrete fid.
-  *
-- * @return inline u8
-+ * Return: inline u8.
-  */
- static inline u8 qed_concrete_to_sw_fid(struct qed_dev *cdev,
- 					u32 concrete_fid)
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_cxt.h b/drivers/net/ethernet/qlogic/qed/qed_cxt.h
-index 8adb7ed0c12d..d31196db7bdd 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_cxt.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_cxt.h
-@@ -28,24 +28,23 @@ struct qed_tid_mem {
- };
- 
- /**
-- * @brief qedo_cid_get_cxt_info - Returns the context info for a specific cid
-+ * qed_cxt_get_cid_info(): Returns the context info for a specific cidi.
-  *
-+ * @p_hwfn: HW device data.
-+ * @p_info: In/out.
-  *
-- * @param p_hwfn
-- * @param p_info in/out
-- *
-- * @return int
-+ * Return: Int.
-  */
- int qed_cxt_get_cid_info(struct qed_hwfn *p_hwfn,
- 			 struct qed_cxt_info *p_info);
- 
- /**
-- * @brief qed_cxt_get_tid_mem_info
-+ * qed_cxt_get_tid_mem_info(): Returns the tid mem info.
-  *
-- * @param p_hwfn
-- * @param p_info
-+ * @p_hwfn: HW device data.
-+ * @p_info: in/out.
-  *
-- * @return int
-+ * Return: int.
-  */
- int qed_cxt_get_tid_mem_info(struct qed_hwfn *p_hwfn,
- 			     struct qed_tid_mem *p_info);
-@@ -64,142 +63,155 @@ u32 qed_cxt_get_proto_cid_count(struct qed_hwfn *p_hwfn,
- 				enum protocol_type type, u32 *vf_cid);
- 
- /**
-- * @brief qed_cxt_set_pf_params - Set the PF params for cxt init
-+ * qed_cxt_set_pf_params(): Set the PF params for cxt init.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @rdma_tasks: Requested maximum.
-  *
-- * @param p_hwfn
-- * @param rdma_tasks - requested maximum
-- * @return int
-+ * Return: int.
-  */
- int qed_cxt_set_pf_params(struct qed_hwfn *p_hwfn, u32 rdma_tasks);
- 
- /**
-- * @brief qed_cxt_cfg_ilt_compute - compute ILT init parameters
-+ * qed_cxt_cfg_ilt_compute(): Compute ILT init parameters.
-  *
-- * @param p_hwfn
-- * @param last_line
-+ * @p_hwfn: HW device data.
-+ * @last_line: Last_line.
-  *
-- * @return int
-+ * Return: Int
-  */
- int qed_cxt_cfg_ilt_compute(struct qed_hwfn *p_hwfn, u32 *last_line);
- 
- /**
-- * @brief qed_cxt_cfg_ilt_compute_excess - how many lines can be decreased
-+ * qed_cxt_cfg_ilt_compute_excess(): How many lines can be decreased.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @used_lines: Used lines.
-  *
-- * @param p_hwfn
-- * @param used_lines
-+ * Return: Int.
-  */
- u32 qed_cxt_cfg_ilt_compute_excess(struct qed_hwfn *p_hwfn, u32 used_lines);
- 
- /**
-- * @brief qed_cxt_mngr_alloc - Allocate and init the context manager struct
-+ * qed_cxt_mngr_alloc(): Allocate and init the context manager struct.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_cxt_mngr_alloc(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_cxt_mngr_free
-+ * qed_cxt_mngr_free() - Context manager free.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-+ *
-+ * Return: Void.
-  */
- void qed_cxt_mngr_free(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_cxt_tables_alloc - Allocate ILT shadow, Searcher T2, acquired map
-+ * qed_cxt_tables_alloc(): Allocate ILT shadow, Searcher T2, acquired map.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_cxt_tables_alloc(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_cxt_mngr_setup - Reset the acquired CIDs
-+ * qed_cxt_mngr_setup(): Reset the acquired CIDs.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  */
- void qed_cxt_mngr_setup(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_cxt_hw_init_common - Initailze ILT and DQ, common phase, per path.
-- *
-+ * qed_cxt_hw_init_common(): Initailze ILT and DQ, common phase, per path.
-  *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Void.
-  */
- void qed_cxt_hw_init_common(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_cxt_hw_init_pf - Initailze ILT and DQ, PF phase, per path.
-+ * qed_cxt_hw_init_pf(): Initailze ILT and DQ, PF phase, per path.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ *
-+ * Return: Void.
-  */
- void qed_cxt_hw_init_pf(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief qed_qm_init_pf - Initailze the QM PF phase, per path
-+ * qed_qm_init_pf(): Initailze the QM PF phase, per path.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @is_pf_loading: Is pf pending.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param is_pf_loading
-+ * Return: Void.
-  */
- void qed_qm_init_pf(struct qed_hwfn *p_hwfn,
- 		    struct qed_ptt *p_ptt, bool is_pf_loading);
- 
- /**
-- * @brief Reconfigures QM pf on the fly
-+ * qed_qm_reconf(): Reconfigures QM pf on the fly.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_qm_reconf(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- #define QED_CXT_PF_CID (0xff)
- 
- /**
-- * @brief qed_cxt_release - Release a cid
-+ * qed_cxt_release_cid(): Release a cid.
-  *
-- * @param p_hwfn
-- * @param cid
-+ * @p_hwfn: HW device data.
-+ * @cid: Cid.
-+ *
-+ * Return: Void.
-  */
- void qed_cxt_release_cid(struct qed_hwfn *p_hwfn, u32 cid);
- 
- /**
-- * @brief qed_cxt_release - Release a cid belonging to a vf-queue
-+ * _qed_cxt_release_cid(): Release a cid belonging to a vf-queue.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @cid: Cid.
-+ * @vfid: Engine relative index. QED_CXT_PF_CID if belongs to PF.
-  *
-- * @param p_hwfn
-- * @param cid
-- * @param vfid - engine relative index. QED_CXT_PF_CID if belongs to PF
-+ * Return: Void.
-  */
- void _qed_cxt_release_cid(struct qed_hwfn *p_hwfn, u32 cid, u8 vfid);
- 
- /**
-- * @brief qed_cxt_acquire - Acquire a new cid of a specific protocol type
-+ * qed_cxt_acquire_cid(): Acquire a new cid of a specific protocol type.
-  *
-- * @param p_hwfn
-- * @param type
-- * @param p_cid
-+ * @p_hwfn: HW device data.
-+ * @type: Type.
-+ * @p_cid: Pointer cid.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_cxt_acquire_cid(struct qed_hwfn *p_hwfn,
- 			enum protocol_type type, u32 *p_cid);
- 
- /**
-- * @brief _qed_cxt_acquire - Acquire a new cid of a specific protocol type
-- *                           for a vf-queue
-+ * _qed_cxt_acquire_cid(): Acquire a new cid of a specific protocol type
-+ *                         for a vf-queue.
-  *
-- * @param p_hwfn
-- * @param type
-- * @param p_cid
-- * @param vfid - engine relative index. QED_CXT_PF_CID if belongs to PF
-+ * @p_hwfn: HW device data.
-+ * @type: Type.
-+ * @p_cid: Pointer cid.
-+ * @vfid: Engine relative index. QED_CXT_PF_CID if belongs to PF.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int _qed_cxt_acquire_cid(struct qed_hwfn *p_hwfn,
- 			 enum protocol_type type, u32 *p_cid, u8 vfid);
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_dev_api.h b/drivers/net/ethernet/qlogic/qed/qed_dev_api.h
-index d3c1f3879be8..f0a825b985a4 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_dev_api.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_dev_api.h
-@@ -15,44 +15,52 @@
- #include "qed_int.h"
- 
- /**
-- * @brief qed_init_dp - initialize the debug level
-+ * qed_init_dp(): Initialize the debug level.
-  *
-- * @param cdev
-- * @param dp_module
-- * @param dp_level
-+ * @cdev: Qed dev pointer.
-+ * @dp_module: Module debug parameter.
-+ * @dp_level: Module debug level.
-+ *
-+ * Return: Void.
-  */
- void qed_init_dp(struct qed_dev *cdev,
- 		 u32 dp_module,
- 		 u8 dp_level);
- 
- /**
-- * @brief qed_init_struct - initialize the device structure to
-- *        its defaults
-+ * qed_init_struct(): Initialize the device structure to
-+ *                    its defaults.
-+ *
-+ * @cdev: Qed dev pointer.
-  *
-- * @param cdev
-+ * Return: Void.
-  */
- void qed_init_struct(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_resc_free -
-+ * qed_resc_free: Free device resources.
-+ *
-+ * @cdev: Qed dev pointer.
-  *
-- * @param cdev
-+ * Return: Void.
-  */
- void qed_resc_free(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_resc_alloc -
-+ * qed_resc_alloc(): Alloc device resources.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_resc_alloc(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_resc_setup -
-+ * qed_resc_setup(): Setup device resources.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-+ *
-+ * Return: Void.
-  */
- void qed_resc_setup(struct qed_dev *cdev);
- 
-@@ -105,94 +113,97 @@ struct qed_hw_init_params {
- };
- 
- /**
-- * @brief qed_hw_init -
-+ * qed_hw_init(): Init Qed hardware.
-  *
-- * @param cdev
-- * @param p_params
-+ * @cdev: Qed dev pointer.
-+ * @p_params: Pointers to params.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_hw_init(struct qed_dev *cdev, struct qed_hw_init_params *p_params);
- 
- /**
-- * @brief qed_hw_timers_stop_all - stop the timers HW block
-+ * qed_hw_timers_stop_all(): Stop the timers HW block.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return void
-+ * Return: void.
-  */
- void qed_hw_timers_stop_all(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_hw_stop -
-+ * qed_hw_stop(): Stop Qed hardware.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return int
-+ * Return: int.
-  */
- int qed_hw_stop(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_hw_stop_fastpath -should be called incase
-- *		slowpath is still required for the device,
-- *		but fastpath is not.
-+ * qed_hw_stop_fastpath(): Should be called incase
-+ *		           slowpath is still required for the device,
-+ *		           but fastpath is not.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_hw_stop_fastpath(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_hw_start_fastpath -restart fastpath traffic,
-- *		only if hw_stop_fastpath was called
-+ * qed_hw_start_fastpath(): Restart fastpath traffic,
-+ *		            only if hw_stop_fastpath was called.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_hw_start_fastpath(struct qed_hwfn *p_hwfn);
- 
- 
- /**
-- * @brief qed_hw_prepare -
-+ * qed_hw_prepare(): Prepare Qed hardware.
-  *
-- * @param cdev
-- * @param personality - personality to initialize
-+ * @cdev: Qed dev pointer.
-+ * @personality: Personality to initialize.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_hw_prepare(struct qed_dev *cdev,
- 		   int personality);
- 
- /**
-- * @brief qed_hw_remove -
-+ * qed_hw_remove(): Remove Qed hardware.
-+ *
-+ * @cdev: Qed dev pointer.
-  *
-- * @param cdev
-+ * Return: Void.
-  */
- void qed_hw_remove(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_ptt_acquire - Allocate a PTT window
-+ * qed_ptt_acquire(): Allocate a PTT window.
-  *
-- * Should be called at the entry point to the driver (at the beginning of an
-- * exported function)
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: struct qed_ptt.
-  *
-- * @return struct qed_ptt
-+ * Should be called at the entry point to the driver (at the beginning of an
-+ * exported function).
-  */
- struct qed_ptt *qed_ptt_acquire(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_ptt_release - Release PTT Window
-+ * qed_ptt_release(): Release PTT Window.
-  *
-- * Should be called at the end of a flow - at the end of the function that
-- * acquired the PTT.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-+ * Return: Void.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * Should be called at the end of a flow - at the end of the function that
-+ * acquired the PTT.
-  */
- void qed_ptt_release(struct qed_hwfn *p_hwfn,
- 		     struct qed_ptt *p_ptt);
-@@ -205,15 +216,17 @@ enum qed_dmae_address_type_t {
- };
- 
- /**
-- * @brief qed_dmae_host2grc - copy data from source addr to
-- * dmae registers using the given ptt
-+ * qed_dmae_host2grc(): Copy data from source addr to
-+ *                      dmae registers using the given ptt.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @source_addr: Source address.
-+ * @grc_addr: GRC address (dmae_data_offset).
-+ * @size_in_dwords: Size.
-+ * @p_params: (default parameters will be used in case of NULL).
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param source_addr
-- * @param grc_addr (dmae_data_offset)
-- * @param size_in_dwords
-- * @param p_params (default parameters will be used in case of NULL)
-+ * Return: Int.
-  */
- int
- qed_dmae_host2grc(struct qed_hwfn *p_hwfn,
-@@ -224,29 +237,34 @@ qed_dmae_host2grc(struct qed_hwfn *p_hwfn,
- 		  struct qed_dmae_params *p_params);
- 
-  /**
-- * @brief qed_dmae_grc2host - Read data from dmae data offset
-- * to source address using the given ptt
-+ * qed_dmae_grc2host(): Read data from dmae data offset
-+ *                      to source address using the given ptt.
-+ *
-+ * @p_ptt: P_ptt.
-+ * @grc_addr: GRC address (dmae_data_offset).
-+ * @dest_addr: Destination Address.
-+ * @size_in_dwords: Size.
-+ * @p_params: (default parameters will be used in case of NULL).
-  *
-- * @param p_ptt
-- * @param grc_addr (dmae_data_offset)
-- * @param dest_addr
-- * @param size_in_dwords
-- * @param p_params (default parameters will be used in case of NULL)
-+ * Return: Int.
-  */
- int qed_dmae_grc2host(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt,
- 		      u32 grc_addr, dma_addr_t dest_addr, u32 size_in_dwords,
- 		      struct qed_dmae_params *p_params);
- 
- /**
-- * @brief qed_dmae_host2host - copy data from to source address
-- * to a destination adress (for SRIOV) using the given ptt
-+ * qed_dmae_host2host(): Copy data from to source address
-+ *                       to a destination adrress (for SRIOV) using the given
-+ *                       ptt.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param source_addr
-- * @param dest_addr
-- * @param size_in_dwords
-- * @param p_params (default parameters will be used in case of NULL)
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @source_addr: Source address.
-+ * @dest_addr: Destination address.
-+ * @size_in_dwords: size.
-+ * @p_params: (default parameters will be used in case of NULL).
-+ *
-+ * Return: Int.
-  */
- int qed_dmae_host2host(struct qed_hwfn *p_hwfn,
- 		       struct qed_ptt *p_ptt,
-@@ -259,51 +277,51 @@ int qed_chain_alloc(struct qed_dev *cdev, struct qed_chain *chain,
- void qed_chain_free(struct qed_dev *cdev, struct qed_chain *chain);
- 
- /**
-- * @@brief qed_fw_l2_queue - Get absolute L2 queue ID
-+ * qed_fw_l2_queue(): Get absolute L2 queue ID.
-  *
-- *  @param p_hwfn
-- *  @param src_id - relative to p_hwfn
-- *  @param dst_id - absolute per engine
-+ * @p_hwfn: HW device data.
-+ * @src_id: Relative to p_hwfn.
-+ * @dst_id: Absolute per engine.
-  *
-- *  @return int
-+ * Return: Int.
-  */
- int qed_fw_l2_queue(struct qed_hwfn *p_hwfn,
- 		    u16 src_id,
- 		    u16 *dst_id);
- 
- /**
-- * @@brief qed_fw_vport - Get absolute vport ID
-+ * qed_fw_vport(): Get absolute vport ID.
-  *
-- *  @param p_hwfn
-- *  @param src_id - relative to p_hwfn
-- *  @param dst_id - absolute per engine
-+ * @p_hwfn: HW device data.
-+ * @src_id: Relative to p_hwfn.
-+ * @dst_id: Absolute per engine.
-  *
-- *  @return int
-+ * Return: Int.
-  */
- int qed_fw_vport(struct qed_hwfn *p_hwfn,
- 		 u8 src_id,
- 		 u8 *dst_id);
- 
- /**
-- * @@brief qed_fw_rss_eng - Get absolute RSS engine ID
-+ * qed_fw_rss_eng(): Get absolute RSS engine ID.
-  *
-- *  @param p_hwfn
-- *  @param src_id - relative to p_hwfn
-- *  @param dst_id - absolute per engine
-+ * @p_hwfn: HW device data.
-+ * @src_id: Relative to p_hwfn.
-+ * @dst_id: Absolute per engine.
-  *
-- *  @return int
-+ * Return: Int.
-  */
- int qed_fw_rss_eng(struct qed_hwfn *p_hwfn,
- 		   u8 src_id,
- 		   u8 *dst_id);
- 
- /**
-- * @brief qed_llh_get_num_ppfid - Return the allocated number of LLH filter
-- *	banks that are allocated to the PF.
-+ * qed_llh_get_num_ppfid(): Return the allocated number of LLH filter
-+ *	                    banks that are allocated to the PF.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return u8 - Number of LLH filter banks
-+ * Return: u8 Number of LLH filter banks.
-  */
- u8 qed_llh_get_num_ppfid(struct qed_dev *cdev);
- 
-@@ -314,45 +332,50 @@ enum qed_eng {
- };
- 
- /**
-- * @brief qed_llh_set_ppfid_affinity - Set the engine affinity for the given
-- *	LLH filter bank.
-+ * qed_llh_set_ppfid_affinity(): Set the engine affinity for the given
-+ *	                         LLH filter bank.
-  *
-- * @param cdev
-- * @param ppfid - relative within the allocated ppfids ('0' is the default one).
-- * @param eng
-+ * @cdev: Qed dev pointer.
-+ * @ppfid: Relative within the allocated ppfids ('0' is the default one).
-+ * @eng: Engine.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_llh_set_ppfid_affinity(struct qed_dev *cdev,
- 			       u8 ppfid, enum qed_eng eng);
- 
- /**
-- * @brief qed_llh_set_roce_affinity - Set the RoCE engine affinity
-+ * qed_llh_set_roce_affinity(): Set the RoCE engine affinity.
-  *
-- * @param cdev
-- * @param eng
-+ * @cdev: Qed dev pointer.
-+ * @eng: Engine.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_llh_set_roce_affinity(struct qed_dev *cdev, enum qed_eng eng);
- 
- /**
-- * @brief qed_llh_add_mac_filter - Add a LLH MAC filter into the given filter
-- *	bank.
-+ * qed_llh_add_mac_filter(): Add a LLH MAC filter into the given filter
-+ *	                     bank.
-+ *
-+ * @cdev: Qed dev pointer.
-+ * @ppfid: Relative within the allocated ppfids ('0' is the default one).
-+ * @mac_addr: MAC to add.
-  *
-- * @param cdev
-- * @param ppfid - relative within the allocated ppfids ('0' is the default one).
-- * @param mac_addr - MAC to add
-+ * Return: Int.
-  */
- int qed_llh_add_mac_filter(struct qed_dev *cdev,
- 			   u8 ppfid, u8 mac_addr[ETH_ALEN]);
- 
- /**
-- * @brief qed_llh_remove_mac_filter - Remove a LLH MAC filter from the given
-- *	filter bank.
-+ * qed_llh_remove_mac_filter(): Remove a LLH MAC filter from the given
-+ *	                        filter bank.
-  *
-- * @param p_ptt
-- * @param p_filter - MAC to remove
-+ * @cdev: Qed dev pointer.
-+ * @ppfid: Ppfid.
-+ * @mac_addr: MAC to remove
-+ *
-+ * Return: Void.
-  */
- void qed_llh_remove_mac_filter(struct qed_dev *cdev,
- 			       u8 ppfid, u8 mac_addr[ETH_ALEN]);
-@@ -368,15 +391,16 @@ enum qed_llh_prot_filter_type_t {
- };
- 
- /**
-- * @brief qed_llh_add_protocol_filter - Add a LLH protocol filter into the
-- *	given filter bank.
-+ * qed_llh_add_protocol_filter(): Add a LLH protocol filter into the
-+ *	                          given filter bank.
-+ *
-+ * @cdev: Qed dev pointer.
-+ * @ppfid: Relative within the allocated ppfids ('0' is the default one).
-+ * @type: Type of filters and comparing.
-+ * @source_port_or_eth_type: Source port or ethertype to add.
-+ * @dest_port: Destination port to add.
-  *
-- * @param cdev
-- * @param ppfid - relative within the allocated ppfids ('0' is the default one).
-- * @param type - type of filters and comparing
-- * @param source_port_or_eth_type - source port or ethertype to add
-- * @param dest_port - destination port to add
-- * @param type - type of filters and comparing
-+ * Return: Int.
-  */
- int
- qed_llh_add_protocol_filter(struct qed_dev *cdev,
-@@ -385,14 +409,14 @@ qed_llh_add_protocol_filter(struct qed_dev *cdev,
- 			    u16 source_port_or_eth_type, u16 dest_port);
- 
- /**
-- * @brief qed_llh_remove_protocol_filter - Remove a LLH protocol filter from
-- *	the given filter bank.
-+ * qed_llh_remove_protocol_filter(): Remove a LLH protocol filter from
-+ *	                             the given filter bank.
-  *
-- * @param cdev
-- * @param ppfid - relative within the allocated ppfids ('0' is the default one).
-- * @param type - type of filters and comparing
-- * @param source_port_or_eth_type - source port or ethertype to add
-- * @param dest_port - destination port to add
-+ * @cdev: Qed dev pointer.
-+ * @ppfid: Relative within the allocated ppfids ('0' is the default one).
-+ * @type: Type of filters and comparing.
-+ * @source_port_or_eth_type: Source port or ethertype to add.
-+ * @dest_port: Destination port to add.
-  */
- void
- qed_llh_remove_protocol_filter(struct qed_dev *cdev,
-@@ -401,31 +425,31 @@ qed_llh_remove_protocol_filter(struct qed_dev *cdev,
- 			       u16 source_port_or_eth_type, u16 dest_port);
- 
- /**
-- * *@brief Cleanup of previous driver remains prior to load
-+ * qed_final_cleanup(): Cleanup of previous driver remains prior to load.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param id - For PF, engine-relative. For VF, PF-relative.
-- * @param is_vf - true iff cleanup is made for a VF.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @id: For PF, engine-relative. For VF, PF-relative.
-+ * @is_vf: True iff cleanup is made for a VF.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_final_cleanup(struct qed_hwfn *p_hwfn,
- 		      struct qed_ptt *p_ptt, u16 id, bool is_vf);
- 
- /**
-- * @brief qed_get_queue_coalesce - Retrieve coalesce value for a given queue.
-+ * qed_get_queue_coalesce(): Retrieve coalesce value for a given queue.
-  *
-- * @param p_hwfn
-- * @param p_coal - store coalesce value read from the hardware.
-- * @param p_handle
-+ * @p_hwfn: HW device data.
-+ * @coal: Store coalesce value read from the hardware.
-+ * @handle: P_handle.
-  *
-- * @return int
-+ * Return: Int.
-  **/
- int qed_get_queue_coalesce(struct qed_hwfn *p_hwfn, u16 *coal, void *handle);
- 
- /**
-- * @brief qed_set_queue_coalesce - Configure coalesce parameters for Rx and
-+ * qed_set_queue_coalesce(): Configure coalesce parameters for Rx and
-  *    Tx queue. The fact that we can configure coalescing to up to 511, but on
-  *    varying accuracy [the bigger the value the less accurate] up to a mistake
-  *    of 3usec for the highest values.
-@@ -433,37 +457,38 @@ int qed_get_queue_coalesce(struct qed_hwfn *p_hwfn, u16 *coal, void *handle);
-  *    should be in same range [i.e., either 0-0x7f, 0x80-0xff or 0x100-0x1ff]
-  *    otherwise configuration would break.
-  *
-+ * @rx_coal: Rx Coalesce value in micro seconds.
-+ * @tx_coal: TX Coalesce value in micro seconds.
-+ * @p_handle: P_handle.
-  *
-- * @param rx_coal - Rx Coalesce value in micro seconds.
-- * @param tx_coal - TX Coalesce value in micro seconds.
-- * @param p_handle
-- *
-- * @return int
-+ * Return: Int.
-  **/
- int
- qed_set_queue_coalesce(u16 rx_coal, u16 tx_coal, void *p_handle);
- 
- /**
-- * @brief qed_pglueb_set_pfid_enable - Enable or disable PCI BUS MASTER
-+ * qed_pglueb_set_pfid_enable(): Enable or disable PCI BUS MASTER.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param b_enable - true/false
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @b_enable: True/False.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_pglueb_set_pfid_enable(struct qed_hwfn *p_hwfn,
- 			       struct qed_ptt *p_ptt, bool b_enable);
- 
- /**
-- * @brief db_recovery_add - add doorbell information to the doorbell
-- * recovery mechanism.
-+ * qed_db_recovery_add(): add doorbell information to the doorbell
-+ *                    recovery mechanism.
-  *
-- * @param cdev
-- * @param db_addr - doorbell address
-- * @param db_data - address of where db_data is stored
-- * @param db_width - doorbell is 32b pr 64b
-- * @param db_space - doorbell recovery addresses are user or kernel space
-+ * @cdev: Qed dev pointer.
-+ * @db_addr: Doorbell address.
-+ * @db_data: Address of where db_data is stored.
-+ * @db_width: Doorbell is 32b pr 64b.
-+ * @db_space: Doorbell recovery addresses are user or kernel space.
-+ *
-+ * Return: Int.
-  */
- int qed_db_recovery_add(struct qed_dev *cdev,
- 			void __iomem *db_addr,
-@@ -472,13 +497,15 @@ int qed_db_recovery_add(struct qed_dev *cdev,
- 			enum qed_db_rec_space db_space);
- 
- /**
-- * @brief db_recovery_del - remove doorbell information from the doorbell
-+ * qed_db_recovery_del() - remove doorbell information from the doorbell
-  * recovery mechanism. db_data serves as key (db_addr is not unique).
-  *
-- * @param cdev
-- * @param db_addr - doorbell address
-- * @param db_data - address where db_data is stored. Serves as key for the
-+ * @cdev: Qed dev pointer.
-+ * @db_addr: doorbell address.
-+ * @db_data: address where db_data is stored. Serves as key for the
-  *                  entry to delete.
-+ *
-+ * Return: Int.
-  */
- int qed_db_recovery_del(struct qed_dev *cdev,
- 			void __iomem *db_addr, void *db_data);
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_hsi.h b/drivers/net/ethernet/qlogic/qed/qed_hsi.h
-index fb1baa2da2d0..744c82a10875 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_hsi.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_hsi.h
-@@ -3012,96 +3012,102 @@ struct iro {
- /***************************** Public Functions *******************************/
- 
- /**
-- * @brief qed_dbg_set_bin_ptr - Sets a pointer to the binary data with debug
-- *	arrays.
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h b/drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h
+new file mode 100644
+index 000000000000..9d5a0c9e1ca0
+--- /dev/null
++++ b/drivers/net/ethernet/qlogic/qed/qed_dbg_hsi.h
+@@ -0,0 +1,1491 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
++/* QLogic qed NIC Driver
++ * Copyright (c) 2019-2021 Marvell International Ltd.
++ */
++#ifndef _QED_DBG_HSI_H
++#define _QED_DBG_HSI_H
++
++#include <linux/types.h>
++#include <linux/io.h>
++#include <linux/bitops.h>
++#include <linux/delay.h>
++#include <linux/kernel.h>
++#include <linux/list.h>
++#include <linux/slab.h>
++
++/****************************************/
++/* Debug Tools HSI constants and macros */
++/****************************************/
++
++enum block_id {
++	BLOCK_GRC,
++	BLOCK_MISCS,
++	BLOCK_MISC,
++	BLOCK_DBU,
++	BLOCK_PGLUE_B,
++	BLOCK_CNIG,
++	BLOCK_CPMU,
++	BLOCK_NCSI,
++	BLOCK_OPTE,
++	BLOCK_BMB,
++	BLOCK_PCIE,
++	BLOCK_MCP,
++	BLOCK_MCP2,
++	BLOCK_PSWHST,
++	BLOCK_PSWHST2,
++	BLOCK_PSWRD,
++	BLOCK_PSWRD2,
++	BLOCK_PSWWR,
++	BLOCK_PSWWR2,
++	BLOCK_PSWRQ,
++	BLOCK_PSWRQ2,
++	BLOCK_PGLCS,
++	BLOCK_DMAE,
++	BLOCK_PTU,
++	BLOCK_TCM,
++	BLOCK_MCM,
++	BLOCK_UCM,
++	BLOCK_XCM,
++	BLOCK_YCM,
++	BLOCK_PCM,
++	BLOCK_QM,
++	BLOCK_TM,
++	BLOCK_DORQ,
++	BLOCK_BRB,
++	BLOCK_SRC,
++	BLOCK_PRS,
++	BLOCK_TSDM,
++	BLOCK_MSDM,
++	BLOCK_USDM,
++	BLOCK_XSDM,
++	BLOCK_YSDM,
++	BLOCK_PSDM,
++	BLOCK_TSEM,
++	BLOCK_MSEM,
++	BLOCK_USEM,
++	BLOCK_XSEM,
++	BLOCK_YSEM,
++	BLOCK_PSEM,
++	BLOCK_RSS,
++	BLOCK_TMLD,
++	BLOCK_MULD,
++	BLOCK_YULD,
++	BLOCK_XYLD,
++	BLOCK_PRM,
++	BLOCK_PBF_PB1,
++	BLOCK_PBF_PB2,
++	BLOCK_RPB,
++	BLOCK_BTB,
++	BLOCK_PBF,
++	BLOCK_RDIF,
++	BLOCK_TDIF,
++	BLOCK_CDU,
++	BLOCK_CCFC,
++	BLOCK_TCFC,
++	BLOCK_IGU,
++	BLOCK_CAU,
++	BLOCK_UMAC,
++	BLOCK_XMAC,
++	BLOCK_MSTAT,
++	BLOCK_DBG,
++	BLOCK_NIG,
++	BLOCK_WOL,
++	BLOCK_BMBN,
++	BLOCK_IPC,
++	BLOCK_NWM,
++	BLOCK_NWS,
++	BLOCK_MS,
++	BLOCK_PHY_PCIE,
++	BLOCK_LED,
++	BLOCK_AVS_WRAP,
++	BLOCK_PXPREQBUS,
++	BLOCK_BAR0_MAP,
++	BLOCK_MCP_FIO,
++	BLOCK_LAST_INIT,
++	BLOCK_PRS_FC,
++	BLOCK_PBF_FC,
++	BLOCK_NIG_LB_FC,
++	BLOCK_NIG_LB_FC_PLLH,
++	BLOCK_NIG_TX_FC_PLLH,
++	BLOCK_NIG_TX_FC,
++	BLOCK_NIG_RX_FC_PLLH,
++	BLOCK_NIG_RX_FC,
++	MAX_BLOCK_ID
++};
++
++/* binary debug buffer types */
++enum bin_dbg_buffer_type {
++	BIN_BUF_DBG_MODE_TREE,
++	BIN_BUF_DBG_DUMP_REG,
++	BIN_BUF_DBG_DUMP_MEM,
++	BIN_BUF_DBG_IDLE_CHK_REGS,
++	BIN_BUF_DBG_IDLE_CHK_IMMS,
++	BIN_BUF_DBG_IDLE_CHK_RULES,
++	BIN_BUF_DBG_IDLE_CHK_PARSING_DATA,
++	BIN_BUF_DBG_ATTN_BLOCKS,
++	BIN_BUF_DBG_ATTN_REGS,
++	BIN_BUF_DBG_ATTN_INDEXES,
++	BIN_BUF_DBG_ATTN_NAME_OFFSETS,
++	BIN_BUF_DBG_BLOCKS,
++	BIN_BUF_DBG_BLOCKS_CHIP_DATA,
++	BIN_BUF_DBG_BUS_LINES,
++	BIN_BUF_DBG_BLOCKS_USER_DATA,
++	BIN_BUF_DBG_BLOCKS_CHIP_USER_DATA,
++	BIN_BUF_DBG_BUS_LINE_NAME_OFFSETS,
++	BIN_BUF_DBG_RESET_REGS,
++	BIN_BUF_DBG_PARSING_STRINGS,
++	MAX_BIN_DBG_BUFFER_TYPE
++};
++
++/* Attention bit mapping */
++struct dbg_attn_bit_mapping {
++	u16 data;
++#define DBG_ATTN_BIT_MAPPING_VAL_MASK			0x7FFF
++#define DBG_ATTN_BIT_MAPPING_VAL_SHIFT			0
++#define DBG_ATTN_BIT_MAPPING_IS_UNUSED_BIT_CNT_MASK	0x1
++#define DBG_ATTN_BIT_MAPPING_IS_UNUSED_BIT_CNT_SHIFT	15
++};
++
++/* Attention block per-type data */
++struct dbg_attn_block_type_data {
++	u16 names_offset;
++	u16 reserved1;
++	u8 num_regs;
++	u8 reserved2;
++	u16 regs_offset;
++
++};
++
++/* Block attentions */
++struct dbg_attn_block {
++	struct dbg_attn_block_type_data per_type_data[2];
++};
++
++/* Attention register result */
++struct dbg_attn_reg_result {
++	u32 data;
++#define DBG_ATTN_REG_RESULT_STS_ADDRESS_MASK	0xFFFFFF
++#define DBG_ATTN_REG_RESULT_STS_ADDRESS_SHIFT	0
++#define DBG_ATTN_REG_RESULT_NUM_REG_ATTN_MASK	0xFF
++#define DBG_ATTN_REG_RESULT_NUM_REG_ATTN_SHIFT	24
++	u16 block_attn_offset;
++	u16 reserved;
++	u32 sts_val;
++	u32 mask_val;
++};
++
++/* Attention block result */
++struct dbg_attn_block_result {
++	u8 block_id;
++	u8 data;
++#define DBG_ATTN_BLOCK_RESULT_ATTN_TYPE_MASK	0x3
++#define DBG_ATTN_BLOCK_RESULT_ATTN_TYPE_SHIFT	0
++#define DBG_ATTN_BLOCK_RESULT_NUM_REGS_MASK	0x3F
++#define DBG_ATTN_BLOCK_RESULT_NUM_REGS_SHIFT	2
++	u16 names_offset;
++	struct dbg_attn_reg_result reg_results[15];
++};
++
++/* Mode header */
++struct dbg_mode_hdr {
++	u16 data;
++#define DBG_MODE_HDR_EVAL_MODE_MASK		0x1
++#define DBG_MODE_HDR_EVAL_MODE_SHIFT		0
++#define DBG_MODE_HDR_MODES_BUF_OFFSET_MASK	0x7FFF
++#define DBG_MODE_HDR_MODES_BUF_OFFSET_SHIFT	1
++};
++
++/* Attention register */
++struct dbg_attn_reg {
++	struct dbg_mode_hdr mode;
++	u16 block_attn_offset;
++	u32 data;
++#define DBG_ATTN_REG_STS_ADDRESS_MASK	0xFFFFFF
++#define DBG_ATTN_REG_STS_ADDRESS_SHIFT	0
++#define DBG_ATTN_REG_NUM_REG_ATTN_MASK	0xFF
++#define DBG_ATTN_REG_NUM_REG_ATTN_SHIFT 24
++	u32 sts_clr_address;
++	u32 mask_address;
++};
++
++/* Attention types */
++enum dbg_attn_type {
++	ATTN_TYPE_INTERRUPT,
++	ATTN_TYPE_PARITY,
++	MAX_DBG_ATTN_TYPE
++};
++
++/* Block debug data */
++struct dbg_block {
++	u8 name[15];
++	u8 associated_storm_letter;
++};
++
++/* Chip-specific block debug data */
++struct dbg_block_chip {
++	u8 flags;
++#define DBG_BLOCK_CHIP_IS_REMOVED_MASK		 0x1
++#define DBG_BLOCK_CHIP_IS_REMOVED_SHIFT		 0
++#define DBG_BLOCK_CHIP_HAS_RESET_REG_MASK	 0x1
++#define DBG_BLOCK_CHIP_HAS_RESET_REG_SHIFT	 1
++#define DBG_BLOCK_CHIP_UNRESET_BEFORE_DUMP_MASK  0x1
++#define DBG_BLOCK_CHIP_UNRESET_BEFORE_DUMP_SHIFT 2
++#define DBG_BLOCK_CHIP_HAS_DBG_BUS_MASK		 0x1
++#define DBG_BLOCK_CHIP_HAS_DBG_BUS_SHIFT	 3
++#define DBG_BLOCK_CHIP_HAS_LATENCY_EVENTS_MASK	 0x1
++#define DBG_BLOCK_CHIP_HAS_LATENCY_EVENTS_SHIFT  4
++#define DBG_BLOCK_CHIP_RESERVED0_MASK		 0x7
++#define DBG_BLOCK_CHIP_RESERVED0_SHIFT		 5
++	u8 dbg_client_id;
++	u8 reset_reg_id;
++	u8 reset_reg_bit_offset;
++	struct dbg_mode_hdr dbg_bus_mode;
++	u16 reserved1;
++	u8 reserved2;
++	u8 num_of_dbg_bus_lines;
++	u16 dbg_bus_lines_offset;
++	u32 dbg_select_reg_addr;
++	u32 dbg_dword_enable_reg_addr;
++	u32 dbg_shift_reg_addr;
++	u32 dbg_force_valid_reg_addr;
++	u32 dbg_force_frame_reg_addr;
++};
++
++/* Chip-specific block user debug data */
++struct dbg_block_chip_user {
++	u8 num_of_dbg_bus_lines;
++	u8 has_latency_events;
++	u16 names_offset;
++};
++
++/* Block user debug data */
++struct dbg_block_user {
++	u8 name[16];
++};
++
++/* Block Debug line data */
++struct dbg_bus_line {
++	u8 data;
++#define DBG_BUS_LINE_NUM_OF_GROUPS_MASK		0xF
++#define DBG_BUS_LINE_NUM_OF_GROUPS_SHIFT	0
++#define DBG_BUS_LINE_IS_256B_MASK		0x1
++#define DBG_BUS_LINE_IS_256B_SHIFT		4
++#define DBG_BUS_LINE_RESERVED_MASK		0x7
++#define DBG_BUS_LINE_RESERVED_SHIFT		5
++	u8 group_sizes;
++};
++
++/* Condition header for registers dump */
++struct dbg_dump_cond_hdr {
++	struct dbg_mode_hdr mode; /* Mode header */
++	u8 block_id; /* block ID */
++	u8 data_size; /* size in dwords of the data following this header */
++};
++
++/* Memory data for registers dump */
++struct dbg_dump_mem {
++	u32 dword0;
++#define DBG_DUMP_MEM_ADDRESS_MASK	0xFFFFFF
++#define DBG_DUMP_MEM_ADDRESS_SHIFT	0
++#define DBG_DUMP_MEM_MEM_GROUP_ID_MASK	0xFF
++#define DBG_DUMP_MEM_MEM_GROUP_ID_SHIFT	24
++	u32 dword1;
++#define DBG_DUMP_MEM_LENGTH_MASK	0xFFFFFF
++#define DBG_DUMP_MEM_LENGTH_SHIFT	0
++#define DBG_DUMP_MEM_WIDE_BUS_MASK	0x1
++#define DBG_DUMP_MEM_WIDE_BUS_SHIFT	24
++#define DBG_DUMP_MEM_RESERVED_MASK	0x7F
++#define DBG_DUMP_MEM_RESERVED_SHIFT	25
++};
++
++/* Register data for registers dump */
++struct dbg_dump_reg {
++	u32 data;
++#define DBG_DUMP_REG_ADDRESS_MASK	0x7FFFFF
++#define DBG_DUMP_REG_ADDRESS_SHIFT	0
++#define DBG_DUMP_REG_WIDE_BUS_MASK	0x1
++#define DBG_DUMP_REG_WIDE_BUS_SHIFT	23
++#define DBG_DUMP_REG_LENGTH_MASK	0xFF
++#define DBG_DUMP_REG_LENGTH_SHIFT	24
++};
++
++/* Split header for registers dump */
++struct dbg_dump_split_hdr {
++	u32 hdr;
++#define DBG_DUMP_SPLIT_HDR_DATA_SIZE_MASK	0xFFFFFF
++#define DBG_DUMP_SPLIT_HDR_DATA_SIZE_SHIFT	0
++#define DBG_DUMP_SPLIT_HDR_SPLIT_TYPE_ID_MASK	0xFF
++#define DBG_DUMP_SPLIT_HDR_SPLIT_TYPE_ID_SHIFT	24
++};
++
++/* Condition header for idle check */
++struct dbg_idle_chk_cond_hdr {
++	struct dbg_mode_hdr mode; /* Mode header */
++	u16 data_size; /* size in dwords of the data following this header */
++};
++
++/* Idle Check condition register */
++struct dbg_idle_chk_cond_reg {
++	u32 data;
++#define DBG_IDLE_CHK_COND_REG_ADDRESS_MASK	0x7FFFFF
++#define DBG_IDLE_CHK_COND_REG_ADDRESS_SHIFT	0
++#define DBG_IDLE_CHK_COND_REG_WIDE_BUS_MASK	0x1
++#define DBG_IDLE_CHK_COND_REG_WIDE_BUS_SHIFT	23
++#define DBG_IDLE_CHK_COND_REG_BLOCK_ID_MASK	0xFF
++#define DBG_IDLE_CHK_COND_REG_BLOCK_ID_SHIFT	24
++	u16 num_entries;
++	u8 entry_size;
++	u8 start_entry;
++};
++
++/* Idle Check info register */
++struct dbg_idle_chk_info_reg {
++	u32 data;
++#define DBG_IDLE_CHK_INFO_REG_ADDRESS_MASK	0x7FFFFF
++#define DBG_IDLE_CHK_INFO_REG_ADDRESS_SHIFT	0
++#define DBG_IDLE_CHK_INFO_REG_WIDE_BUS_MASK	0x1
++#define DBG_IDLE_CHK_INFO_REG_WIDE_BUS_SHIFT	23
++#define DBG_IDLE_CHK_INFO_REG_BLOCK_ID_MASK	0xFF
++#define DBG_IDLE_CHK_INFO_REG_BLOCK_ID_SHIFT	24
++	u16 size; /* register size in dwords */
++	struct dbg_mode_hdr mode; /* Mode header */
++};
++
++/* Idle Check register */
++union dbg_idle_chk_reg {
++	struct dbg_idle_chk_cond_reg cond_reg; /* condition register */
++	struct dbg_idle_chk_info_reg info_reg; /* info register */
++};
++
++/* Idle Check result header */
++struct dbg_idle_chk_result_hdr {
++	u16 rule_id; /* Failing rule index */
++	u16 mem_entry_id; /* Failing memory entry index */
++	u8 num_dumped_cond_regs; /* number of dumped condition registers */
++	u8 num_dumped_info_regs; /* number of dumped condition registers */
++	u8 severity; /* from dbg_idle_chk_severity_types enum */
++	u8 reserved;
++};
++
++/* Idle Check result register header */
++struct dbg_idle_chk_result_reg_hdr {
++	u8 data;
++#define DBG_IDLE_CHK_RESULT_REG_HDR_IS_MEM_MASK  0x1
++#define DBG_IDLE_CHK_RESULT_REG_HDR_IS_MEM_SHIFT 0
++#define DBG_IDLE_CHK_RESULT_REG_HDR_REG_ID_MASK  0x7F
++#define DBG_IDLE_CHK_RESULT_REG_HDR_REG_ID_SHIFT 1
++	u8 start_entry; /* index of the first checked entry */
++	u16 size; /* register size in dwords */
++};
++
++/* Idle Check rule */
++struct dbg_idle_chk_rule {
++	u16 rule_id; /* Idle Check rule ID */
++	u8 severity; /* value from dbg_idle_chk_severity_types enum */
++	u8 cond_id; /* Condition ID */
++	u8 num_cond_regs; /* number of condition registers */
++	u8 num_info_regs; /* number of info registers */
++	u8 num_imms; /* number of immediates in the condition */
++	u8 reserved1;
++	u16 reg_offset; /* offset of this rules registers in the idle check
++			 * register array (in dbg_idle_chk_reg units).
++			 */
++	u16 imm_offset; /* offset of this rules immediate values in the
++			 * immediate values array (in dwords).
++			 */
++};
++
++/* Idle Check rule parsing data */
++struct dbg_idle_chk_rule_parsing_data {
++	u32 data;
++#define DBG_IDLE_CHK_RULE_PARSING_DATA_HAS_FW_MSG_MASK	0x1
++#define DBG_IDLE_CHK_RULE_PARSING_DATA_HAS_FW_MSG_SHIFT	0
++#define DBG_IDLE_CHK_RULE_PARSING_DATA_STR_OFFSET_MASK	0x7FFFFFFF
++#define DBG_IDLE_CHK_RULE_PARSING_DATA_STR_OFFSET_SHIFT	1
++};
++
++/* Idle check severity types */
++enum dbg_idle_chk_severity_types {
++	/* idle check failure should cause an error */
++	IDLE_CHK_SEVERITY_ERROR,
++	/* idle check failure should cause an error only if theres no traffic */
++	IDLE_CHK_SEVERITY_ERROR_NO_TRAFFIC,
++	/* idle check failure should cause a warning */
++	IDLE_CHK_SEVERITY_WARNING,
++	MAX_DBG_IDLE_CHK_SEVERITY_TYPES
++};
++
++/* Reset register */
++struct dbg_reset_reg {
++	u32 data;
++#define DBG_RESET_REG_ADDR_MASK        0xFFFFFF
++#define DBG_RESET_REG_ADDR_SHIFT       0
++#define DBG_RESET_REG_IS_REMOVED_MASK  0x1
++#define DBG_RESET_REG_IS_REMOVED_SHIFT 24
++#define DBG_RESET_REG_RESERVED_MASK    0x7F
++#define DBG_RESET_REG_RESERVED_SHIFT   25
++};
++
++/* Debug Bus block data */
++struct dbg_bus_block_data {
++	u8 enable_mask;
++	u8 right_shift;
++	u8 force_valid_mask;
++	u8 force_frame_mask;
++	u8 dword_mask;
++	u8 line_num;
++	u8 hw_id;
++	u8 flags;
++#define DBG_BUS_BLOCK_DATA_IS_256B_LINE_MASK  0x1
++#define DBG_BUS_BLOCK_DATA_IS_256B_LINE_SHIFT 0
++#define DBG_BUS_BLOCK_DATA_RESERVED_MASK      0x7F
++#define DBG_BUS_BLOCK_DATA_RESERVED_SHIFT     1
++};
++
++enum dbg_bus_clients {
++	DBG_BUS_CLIENT_RBCN,
++	DBG_BUS_CLIENT_RBCP,
++	DBG_BUS_CLIENT_RBCR,
++	DBG_BUS_CLIENT_RBCT,
++	DBG_BUS_CLIENT_RBCU,
++	DBG_BUS_CLIENT_RBCF,
++	DBG_BUS_CLIENT_RBCX,
++	DBG_BUS_CLIENT_RBCS,
++	DBG_BUS_CLIENT_RBCH,
++	DBG_BUS_CLIENT_RBCZ,
++	DBG_BUS_CLIENT_OTHER_ENGINE,
++	DBG_BUS_CLIENT_TIMESTAMP,
++	DBG_BUS_CLIENT_CPU,
++	DBG_BUS_CLIENT_RBCY,
++	DBG_BUS_CLIENT_RBCQ,
++	DBG_BUS_CLIENT_RBCM,
++	DBG_BUS_CLIENT_RBCB,
++	DBG_BUS_CLIENT_RBCW,
++	DBG_BUS_CLIENT_RBCV,
++	MAX_DBG_BUS_CLIENTS
++};
++
++/* Debug Bus constraint operation types */
++enum dbg_bus_constraint_ops {
++	DBG_BUS_CONSTRAINT_OP_EQ,
++	DBG_BUS_CONSTRAINT_OP_NE,
++	DBG_BUS_CONSTRAINT_OP_LT,
++	DBG_BUS_CONSTRAINT_OP_LTC,
++	DBG_BUS_CONSTRAINT_OP_LE,
++	DBG_BUS_CONSTRAINT_OP_LEC,
++	DBG_BUS_CONSTRAINT_OP_GT,
++	DBG_BUS_CONSTRAINT_OP_GTC,
++	DBG_BUS_CONSTRAINT_OP_GE,
++	DBG_BUS_CONSTRAINT_OP_GEC,
++	MAX_DBG_BUS_CONSTRAINT_OPS
++};
++
++/* Debug Bus trigger state data */
++struct dbg_bus_trigger_state_data {
++	u8 msg_len;
++	u8 constraint_dword_mask;
++	u8 storm_id;
++	u8 reserved;
++};
++
++/* Debug Bus memory address */
++struct dbg_bus_mem_addr {
++	u32 lo;
++	u32 hi;
++};
++
++/* Debug Bus PCI buffer data */
++struct dbg_bus_pci_buf_data {
++	struct dbg_bus_mem_addr phys_addr; /* PCI buffer physical address */
++	struct dbg_bus_mem_addr virt_addr; /* PCI buffer virtual address */
++	u32 size; /* PCI buffer size in bytes */
++};
++
++/* Debug Bus Storm EID range filter params */
++struct dbg_bus_storm_eid_range_params {
++	u8 min; /* Minimal event ID to filter on */
++	u8 max; /* Maximal event ID to filter on */
++};
++
++/* Debug Bus Storm EID mask filter params */
++struct dbg_bus_storm_eid_mask_params {
++	u8 val; /* Event ID value */
++	u8 mask; /* Event ID mask. 1s in the mask = dont care bits. */
++};
++
++/* Debug Bus Storm EID filter params */
++union dbg_bus_storm_eid_params {
++	struct dbg_bus_storm_eid_range_params range;
++	struct dbg_bus_storm_eid_mask_params mask;
++};
++
++/* Debug Bus Storm data */
++struct dbg_bus_storm_data {
++	u8 enabled;
++	u8 mode;
++	u8 hw_id;
++	u8 eid_filter_en;
++	u8 eid_range_not_mask;
++	u8 cid_filter_en;
++	union dbg_bus_storm_eid_params eid_filter_params;
++	u32 cid;
++};
++
++/* Debug Bus data */
++struct dbg_bus_data {
++	u32 app_version;
++	u8 state;
++	u8 mode_256b_en;
++	u8 num_enabled_blocks;
++	u8 num_enabled_storms;
++	u8 target;
++	u8 one_shot_en;
++	u8 grc_input_en;
++	u8 timestamp_input_en;
++	u8 filter_en;
++	u8 adding_filter;
++	u8 filter_pre_trigger;
++	u8 filter_post_trigger;
++	u8 trigger_en;
++	u8 filter_constraint_dword_mask;
++	u8 next_trigger_state;
++	u8 next_constraint_id;
++	struct dbg_bus_trigger_state_data trigger_states[3];
++	u8 filter_msg_len;
++	u8 rcv_from_other_engine;
++	u8 blocks_dword_mask;
++	u8 blocks_dword_overlap;
++	u32 hw_id_mask;
++	struct dbg_bus_pci_buf_data pci_buf;
++	struct dbg_bus_block_data blocks[132];
++	struct dbg_bus_storm_data storms[6];
++};
++
++/* Debug bus states */
++enum dbg_bus_states {
++	DBG_BUS_STATE_IDLE,
++	DBG_BUS_STATE_READY,
++	DBG_BUS_STATE_RECORDING,
++	DBG_BUS_STATE_STOPPED,
++	MAX_DBG_BUS_STATES
++};
++
++/* Debug Bus Storm modes */
++enum dbg_bus_storm_modes {
++	DBG_BUS_STORM_MODE_PRINTF,
++	DBG_BUS_STORM_MODE_PRAM_ADDR,
++	DBG_BUS_STORM_MODE_DRA_RW,
++	DBG_BUS_STORM_MODE_DRA_W,
++	DBG_BUS_STORM_MODE_LD_ST_ADDR,
++	DBG_BUS_STORM_MODE_DRA_FSM,
++	DBG_BUS_STORM_MODE_FAST_DBGMUX,
++	DBG_BUS_STORM_MODE_RH,
++	DBG_BUS_STORM_MODE_RH_WITH_STORE,
++	DBG_BUS_STORM_MODE_FOC,
++	DBG_BUS_STORM_MODE_EXT_STORE,
++	MAX_DBG_BUS_STORM_MODES
++};
++
++/* Debug bus target IDs */
++enum dbg_bus_targets {
++	DBG_BUS_TARGET_ID_INT_BUF,
++	DBG_BUS_TARGET_ID_NIG,
++	DBG_BUS_TARGET_ID_PCI,
++	MAX_DBG_BUS_TARGETS
++};
++
++/* GRC Dump data */
++struct dbg_grc_data {
++	u8 params_initialized;
++	u8 reserved1;
++	u16 reserved2;
++	u32 param_val[48];
++};
++
++/* Debug GRC params */
++enum dbg_grc_params {
++	DBG_GRC_PARAM_DUMP_TSTORM,
++	DBG_GRC_PARAM_DUMP_MSTORM,
++	DBG_GRC_PARAM_DUMP_USTORM,
++	DBG_GRC_PARAM_DUMP_XSTORM,
++	DBG_GRC_PARAM_DUMP_YSTORM,
++	DBG_GRC_PARAM_DUMP_PSTORM,
++	DBG_GRC_PARAM_DUMP_REGS,
++	DBG_GRC_PARAM_DUMP_RAM,
++	DBG_GRC_PARAM_DUMP_PBUF,
++	DBG_GRC_PARAM_DUMP_IOR,
++	DBG_GRC_PARAM_DUMP_VFC,
++	DBG_GRC_PARAM_DUMP_CM_CTX,
++	DBG_GRC_PARAM_DUMP_PXP,
++	DBG_GRC_PARAM_DUMP_RSS,
++	DBG_GRC_PARAM_DUMP_CAU,
++	DBG_GRC_PARAM_DUMP_QM,
++	DBG_GRC_PARAM_DUMP_MCP,
++	DBG_GRC_PARAM_DUMP_DORQ,
++	DBG_GRC_PARAM_DUMP_CFC,
++	DBG_GRC_PARAM_DUMP_IGU,
++	DBG_GRC_PARAM_DUMP_BRB,
++	DBG_GRC_PARAM_DUMP_BTB,
++	DBG_GRC_PARAM_DUMP_BMB,
++	DBG_GRC_PARAM_RESERVD1,
++	DBG_GRC_PARAM_DUMP_MULD,
++	DBG_GRC_PARAM_DUMP_PRS,
++	DBG_GRC_PARAM_DUMP_DMAE,
++	DBG_GRC_PARAM_DUMP_TM,
++	DBG_GRC_PARAM_DUMP_SDM,
++	DBG_GRC_PARAM_DUMP_DIF,
++	DBG_GRC_PARAM_DUMP_STATIC,
++	DBG_GRC_PARAM_UNSTALL,
++	DBG_GRC_PARAM_RESERVED2,
++	DBG_GRC_PARAM_MCP_TRACE_META_SIZE,
++	DBG_GRC_PARAM_EXCLUDE_ALL,
++	DBG_GRC_PARAM_CRASH,
++	DBG_GRC_PARAM_PARITY_SAFE,
++	DBG_GRC_PARAM_DUMP_CM,
++	DBG_GRC_PARAM_DUMP_PHY,
++	DBG_GRC_PARAM_NO_MCP,
++	DBG_GRC_PARAM_NO_FW_VER,
++	DBG_GRC_PARAM_RESERVED3,
++	DBG_GRC_PARAM_DUMP_MCP_HW_DUMP,
++	DBG_GRC_PARAM_DUMP_ILT_CDUC,
++	DBG_GRC_PARAM_DUMP_ILT_CDUT,
++	DBG_GRC_PARAM_DUMP_CAU_EXT,
++	MAX_DBG_GRC_PARAMS
++};
++
++/* Debug status codes */
++enum dbg_status {
++	DBG_STATUS_OK,
++	DBG_STATUS_APP_VERSION_NOT_SET,
++	DBG_STATUS_UNSUPPORTED_APP_VERSION,
++	DBG_STATUS_DBG_BLOCK_NOT_RESET,
++	DBG_STATUS_INVALID_ARGS,
++	DBG_STATUS_OUTPUT_ALREADY_SET,
++	DBG_STATUS_INVALID_PCI_BUF_SIZE,
++	DBG_STATUS_PCI_BUF_ALLOC_FAILED,
++	DBG_STATUS_PCI_BUF_NOT_ALLOCATED,
++	DBG_STATUS_INVALID_FILTER_TRIGGER_DWORDS,
++	DBG_STATUS_NO_MATCHING_FRAMING_MODE,
++	DBG_STATUS_VFC_READ_ERROR,
++	DBG_STATUS_STORM_ALREADY_ENABLED,
++	DBG_STATUS_STORM_NOT_ENABLED,
++	DBG_STATUS_BLOCK_ALREADY_ENABLED,
++	DBG_STATUS_BLOCK_NOT_ENABLED,
++	DBG_STATUS_NO_INPUT_ENABLED,
++	DBG_STATUS_NO_FILTER_TRIGGER_256B,
++	DBG_STATUS_FILTER_ALREADY_ENABLED,
++	DBG_STATUS_TRIGGER_ALREADY_ENABLED,
++	DBG_STATUS_TRIGGER_NOT_ENABLED,
++	DBG_STATUS_CANT_ADD_CONSTRAINT,
++	DBG_STATUS_TOO_MANY_TRIGGER_STATES,
++	DBG_STATUS_TOO_MANY_CONSTRAINTS,
++	DBG_STATUS_RECORDING_NOT_STARTED,
++	DBG_STATUS_DATA_DIDNT_TRIGGER,
++	DBG_STATUS_NO_DATA_RECORDED,
++	DBG_STATUS_DUMP_BUF_TOO_SMALL,
++	DBG_STATUS_DUMP_NOT_CHUNK_ALIGNED,
++	DBG_STATUS_UNKNOWN_CHIP,
++	DBG_STATUS_VIRT_MEM_ALLOC_FAILED,
++	DBG_STATUS_BLOCK_IN_RESET,
++	DBG_STATUS_INVALID_TRACE_SIGNATURE,
++	DBG_STATUS_INVALID_NVRAM_BUNDLE,
++	DBG_STATUS_NVRAM_GET_IMAGE_FAILED,
++	DBG_STATUS_NON_ALIGNED_NVRAM_IMAGE,
++	DBG_STATUS_NVRAM_READ_FAILED,
++	DBG_STATUS_IDLE_CHK_PARSE_FAILED,
++	DBG_STATUS_MCP_TRACE_BAD_DATA,
++	DBG_STATUS_MCP_TRACE_NO_META,
++	DBG_STATUS_MCP_COULD_NOT_HALT,
++	DBG_STATUS_MCP_COULD_NOT_RESUME,
++	DBG_STATUS_RESERVED0,
++	DBG_STATUS_SEMI_FIFO_NOT_EMPTY,
++	DBG_STATUS_IGU_FIFO_BAD_DATA,
++	DBG_STATUS_MCP_COULD_NOT_MASK_PRTY,
++	DBG_STATUS_FW_ASSERTS_PARSE_FAILED,
++	DBG_STATUS_REG_FIFO_BAD_DATA,
++	DBG_STATUS_PROTECTION_OVERRIDE_BAD_DATA,
++	DBG_STATUS_DBG_ARRAY_NOT_SET,
++	DBG_STATUS_RESERVED1,
++	DBG_STATUS_NON_MATCHING_LINES,
++	DBG_STATUS_INSUFFICIENT_HW_IDS,
++	DBG_STATUS_DBG_BUS_IN_USE,
++	DBG_STATUS_INVALID_STORM_DBG_MODE,
++	DBG_STATUS_OTHER_ENGINE_BB_ONLY,
++	DBG_STATUS_FILTER_SINGLE_HW_ID,
++	DBG_STATUS_TRIGGER_SINGLE_HW_ID,
++	DBG_STATUS_MISSING_TRIGGER_STATE_STORM,
++	MAX_DBG_STATUS
++};
++
++/* Debug Storms IDs */
++enum dbg_storms {
++	DBG_TSTORM_ID,
++	DBG_MSTORM_ID,
++	DBG_USTORM_ID,
++	DBG_XSTORM_ID,
++	DBG_YSTORM_ID,
++	DBG_PSTORM_ID,
++	MAX_DBG_STORMS
++};
++
++/* Idle Check data */
++struct idle_chk_data {
++	u32 buf_size;
++	u8 buf_size_set;
++	u8 reserved1;
++	u16 reserved2;
++};
++
++struct pretend_params {
++	u8 split_type;
++	u8 reserved;
++	u16 split_id;
++};
++
++/* Debug Tools data (per HW function)
++ */
++struct dbg_tools_data {
++	struct dbg_grc_data grc;
++	struct dbg_bus_data bus;
++	struct idle_chk_data idle_chk;
++	u8 mode_enable[40];
++	u8 block_in_reset[132];
++	u8 chip_id;
++	u8 hw_type;
++	u8 num_ports;
++	u8 num_pfs_per_port;
++	u8 num_vfs;
++	u8 initialized;
++	u8 use_dmae;
++	u8 reserved;
++	struct pretend_params pretend;
++	u32 num_regs_read;
++};
++
++/* ILT Clients */
++enum ilt_clients {
++	ILT_CLI_CDUC,
++	ILT_CLI_CDUT,
++	ILT_CLI_QM,
++	ILT_CLI_TM,
++	ILT_CLI_SRC,
++	ILT_CLI_TSDM,
++	ILT_CLI_RGFS,
++	ILT_CLI_TGFS,
++	MAX_ILT_CLIENTS
++};
++
++/***************************** Public Functions *******************************/
++
++/**
 + * qed_dbg_set_bin_ptr(): Sets a pointer to the binary data with debug
 + *                        arrays.
-  *
-- * @param p_hwfn -	    HW device data
-- * @param bin_ptr - a pointer to the binary data with debug arrays.
++ *
 + * @p_hwfn: HW device data.
 + * @bin_ptr: A pointer to the binary data with debug arrays.
 + *
 + * Return: enum dbg status.
-  */
- enum dbg_status qed_dbg_set_bin_ptr(struct qed_hwfn *p_hwfn,
- 				    const u8 * const bin_ptr);
- 
- /**
-- * @brief qed_read_regs - Reads registers into a buffer (using GRC).
++ */
++enum dbg_status qed_dbg_set_bin_ptr(struct qed_hwfn *p_hwfn,
++				    const u8 * const bin_ptr);
++
++/**
 + * qed_read_regs(): Reads registers into a buffer (using GRC).
 + *
 + * @p_hwfn: HW device data.
@@ -978,19 +923,13 @@ index fb1baa2da2d0..744c82a10875 100644
 + * @buf: Destination buffer.
 + * @addr: Source GRC address in dwords.
 + * @len: Number of registers to read.
-  *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param buf - Destination buffer.
-- * @param addr - Source GRC address in dwords.
-- * @param len - Number of registers to read.
++ *
 + * Return: Void.
-  */
- void qed_read_regs(struct qed_hwfn *p_hwfn,
- 		   struct qed_ptt *p_ptt, u32 *buf, u32 addr, u32 len);
- 
- /**
-- * @brief qed_read_fw_info - Reads FW info from the chip.
++ */
++void qed_read_regs(struct qed_hwfn *p_hwfn,
++		   struct qed_ptt *p_ptt, u32 *buf, u32 addr, u32 len);
++
++/**
 + * qed_read_fw_info(): Reads FW info from the chip.
 + *
 + * @p_hwfn: HW device data.
@@ -999,95 +938,56 @@ index fb1baa2da2d0..744c82a10875 100644
 + *
 + * Return: True if the FW info was read successfully from one of the Storms,
 + * or false if all Storms are in reset.
-  *
-  * The FW info contains FW-related information, such as the FW version,
-  * FW image (main/L2B/kuku), FW timestamp, etc.
-  * The FW info is read from the internal RAM of the first Storm that is not in
-  * reset.
-- *
-- * @param p_hwfn -	    HW device data
-- * @param p_ptt -	    Ptt window used for writing the registers.
-- * @param fw_info -	Out: a pointer to write the FW info into.
-- *
-- * @return true if the FW info was read successfully from one of the Storms,
-- * or false if all Storms are in reset.
-  */
- bool qed_read_fw_info(struct qed_hwfn *p_hwfn,
- 		      struct qed_ptt *p_ptt, struct fw_info *fw_info);
- /**
-- * @brief qed_dbg_grc_config - Sets the value of a GRC parameter.
++ *
++ * The FW info contains FW-related information, such as the FW version,
++ * FW image (main/L2B/kuku), FW timestamp, etc.
++ * The FW info is read from the internal RAM of the first Storm that is not in
++ * reset.
++ */
++bool qed_read_fw_info(struct qed_hwfn *p_hwfn,
++		      struct qed_ptt *p_ptt, struct fw_info *fw_info);
++/**
 + * qed_dbg_grc_config(): Sets the value of a GRC parameter.
-  *
-- * @param p_hwfn -	HW device data
-- * @param grc_param -	GRC parameter
-- * @param val -		Value to set.
++ *
 + * @p_hwfn: HW device data.
 + * @grc_param: GRC parameter.
 + * @val: Value to set.
-  *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- *	- grc_param is invalid
-- *	- val is outside the allowed boundaries
++ *
 + * Return: Error if one of the following holds:
 + *         - The version wasn't set.
 + *         - Grc_param is invalid.
 + *         - Val is outside the allowed boundaries.
-  */
- enum dbg_status qed_dbg_grc_config(struct qed_hwfn *p_hwfn,
- 				   enum dbg_grc_params grc_param, u32 val);
- 
- /**
-- * @brief qed_dbg_grc_set_params_default - Reverts all GRC parameters to their
-- *	default value.
++ */
++enum dbg_status qed_dbg_grc_config(struct qed_hwfn *p_hwfn,
++				   enum dbg_grc_params grc_param, u32 val);
++
++/**
 + * qed_dbg_grc_set_params_default(): Reverts all GRC parameters to their
 + *                                   default value.
 + *
 + * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn		- HW device data
++ *
 + * Return: Void.
-  */
- void qed_dbg_grc_set_params_default(struct qed_hwfn *p_hwfn);
- /**
-- * @brief qed_dbg_grc_get_dump_buf_size - Returns the required buffer size for
-- *	GRC Dump.
++ */
++void qed_dbg_grc_set_params_default(struct qed_hwfn *p_hwfn);
++/**
 + * qed_dbg_grc_get_dump_buf_size(): Returns the required buffer size for
 + *                                  GRC Dump.
-  *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param buf_size - OUT: required buffer size (in dwords) for the GRC Dump
-- *	data.
++ *
 + * @p_hwfn: HW device data.
 + * @p_ptt: Ptt window used for writing the registers.
 + * @buf_size: (OUT) required buffer size (in dwords) for the GRC Dump
 + *             data.
-  *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- * Otherwise, returns ok.
++ *
 + * Return: Error if one of the following holds:
 + *         - The version wasn't set
 + *           Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_grc_get_dump_buf_size(struct qed_hwfn *p_hwfn,
- 					      struct qed_ptt *p_ptt,
- 					      u32 *buf_size);
- 
- /**
-- * @brief qed_dbg_grc_dump - Dumps GRC data into the specified buffer.
-- *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param dump_buf - Pointer to write the collected GRC data into.
-- * @param buf_size_in_dwords - Size of the specified buffer in dwords.
-- * @param num_dumped_dwords - OUT: number of dumped dwords.
-- *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- *	- the specified dump buffer is too small
-- * Otherwise, returns ok.
++ */
++enum dbg_status qed_dbg_grc_get_dump_buf_size(struct qed_hwfn *p_hwfn,
++					      struct qed_ptt *p_ptt,
++					      u32 *buf_size);
++
++/**
 + * qed_dbg_grc_dump(): Dumps GRC data into the specified buffer.
 + *
 + * @p_hwfn: HW device data.
@@ -1100,52 +1000,31 @@ index fb1baa2da2d0..744c82a10875 100644
 + *        - The version wasn't set.
 + *        - The specified dump buffer is too small.
 + *          Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_grc_dump(struct qed_hwfn *p_hwfn,
- 				 struct qed_ptt *p_ptt,
-@@ -3110,36 +3116,36 @@ enum dbg_status qed_dbg_grc_dump(struct qed_hwfn *p_hwfn,
- 				 u32 *num_dumped_dwords);
- 
- /**
-- * @brief qed_dbg_idle_chk_get_dump_buf_size - Returns the required buffer size
-- *	for idle check results.
++ */
++enum dbg_status qed_dbg_grc_dump(struct qed_hwfn *p_hwfn,
++				 struct qed_ptt *p_ptt,
++				 u32 *dump_buf,
++				 u32 buf_size_in_dwords,
++				 u32 *num_dumped_dwords);
++
++/**
 + * qed_dbg_idle_chk_get_dump_buf_size(): Returns the required buffer size
 + *                                       for idle check results.
-  *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param buf_size - OUT: required buffer size (in dwords) for the idle check
-- *	data.
++ *
 + * @p_hwfn: HW device data.
 + * @p_ptt: Ptt window used for writing the registers.
 + * @buf_size: (OUT) required buffer size (in dwords) for the idle check
 + *             data.
-  *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- * Otherwise, returns ok.
++ *
 + * return: Error if one of the following holds:
 + *        - The version wasn't set.
 + *          Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_idle_chk_get_dump_buf_size(struct qed_hwfn *p_hwfn,
- 						   struct qed_ptt *p_ptt,
- 						   u32 *buf_size);
- 
- /**
-- * @brief qed_dbg_idle_chk_dump - Performs idle check and writes the results
-- *	into the specified buffer.
-- *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param dump_buf - Pointer to write the idle check data into.
-- * @param buf_size_in_dwords - Size of the specified buffer in dwords.
-- * @param num_dumped_dwords - OUT: number of dumped dwords.
-- *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- *	- the specified buffer is too small
-- * Otherwise, returns ok.
++ */
++enum dbg_status qed_dbg_idle_chk_get_dump_buf_size(struct qed_hwfn *p_hwfn,
++						   struct qed_ptt *p_ptt,
++						   u32 *buf_size);
++
++/**
 + * qed_dbg_idle_chk_dump: Performs idle check and writes the results
 + *                        into the specified buffer.
 + *
@@ -1159,26 +1038,14 @@ index fb1baa2da2d0..744c82a10875 100644
 + *         - The version wasn't set.
 + *         - The specified buffer is too small.
 + *           Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_idle_chk_dump(struct qed_hwfn *p_hwfn,
- 				      struct qed_ptt *p_ptt,
-@@ -3148,42 +3154,42 @@ enum dbg_status qed_dbg_idle_chk_dump(struct qed_hwfn *p_hwfn,
- 				      u32 *num_dumped_dwords);
- 
- /**
-- * @brief qed_dbg_mcp_trace_get_dump_buf_size - Returns the required buffer size
-- *	for mcp trace results.
-- *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param buf_size - OUT: required buffer size (in dwords) for mcp trace data.
-- *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- *	- the trace data in MCP scratchpad contain an invalid signature
-- *	- the bundle ID in NVRAM is invalid
-- *	- the trace meta data cannot be found (in NVRAM or image file)
-- * Otherwise, returns ok.
++ */
++enum dbg_status qed_dbg_idle_chk_dump(struct qed_hwfn *p_hwfn,
++				      struct qed_ptt *p_ptt,
++				      u32 *dump_buf,
++				      u32 buf_size_in_dwords,
++				      u32 *num_dumped_dwords);
++
++/**
 + * qed_dbg_mcp_trace_get_dump_buf_size(): Returns the required buffer size
 + *                                        for mcp trace results.
 + *
@@ -1192,29 +1059,12 @@ index fb1baa2da2d0..744c82a10875 100644
 + *         - The bundle ID in NVRAM is invalid.
 + *         - The trace meta data cannot be found (in NVRAM or image file).
 + *           Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_mcp_trace_get_dump_buf_size(struct qed_hwfn *p_hwfn,
- 						    struct qed_ptt *p_ptt,
- 						    u32 *buf_size);
- 
- /**
-- * @brief qed_dbg_mcp_trace_dump - Performs mcp trace and writes the results
-- *	into the specified buffer.
-- *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param dump_buf - Pointer to write the mcp trace data into.
-- * @param buf_size_in_dwords - Size of the specified buffer in dwords.
-- * @param num_dumped_dwords - OUT: number of dumped dwords.
-- *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- *	- the specified buffer is too small
-- *	- the trace data in MCP scratchpad contain an invalid signature
-- *	- the bundle ID in NVRAM is invalid
-- *	- the trace meta data cannot be found (in NVRAM or image file)
-- *	- the trace meta data cannot be read (from NVRAM or image file)
-- * Otherwise, returns ok.
++ */
++enum dbg_status qed_dbg_mcp_trace_get_dump_buf_size(struct qed_hwfn *p_hwfn,
++						    struct qed_ptt *p_ptt,
++						    u32 *buf_size);
++
++/**
 + * qed_dbg_mcp_trace_dump(): Performs mcp trace and writes the results
 + *                           into the specified buffer.
 + *
@@ -1232,51 +1082,30 @@ index fb1baa2da2d0..744c82a10875 100644
 + *        - The trace meta data cannot be found (in NVRAM or image file).
 + *        - The trace meta data cannot be read (from NVRAM or image file).
 + *          Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_mcp_trace_dump(struct qed_hwfn *p_hwfn,
- 				       struct qed_ptt *p_ptt,
-@@ -3192,36 +3198,36 @@ enum dbg_status qed_dbg_mcp_trace_dump(struct qed_hwfn *p_hwfn,
- 				       u32 *num_dumped_dwords);
- 
- /**
-- * @brief qed_dbg_reg_fifo_get_dump_buf_size - Returns the required buffer size
-- *	for grc trace fifo results.
++ */
++enum dbg_status qed_dbg_mcp_trace_dump(struct qed_hwfn *p_hwfn,
++				       struct qed_ptt *p_ptt,
++				       u32 *dump_buf,
++				       u32 buf_size_in_dwords,
++				       u32 *num_dumped_dwords);
++
++/**
 + * qed_dbg_reg_fifo_get_dump_buf_size(): Returns the required buffer size
 + *                                       for grc trace fifo results.
-  *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param buf_size - OUT: required buffer size (in dwords) for reg fifo data.
++ *
 + * @p_hwfn: HW device data.
 + * @p_ptt: Ptt window used for writing the registers.
 + * @buf_size: (OUT) Required buffer size (in dwords) for reg fifo data.
-  *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- * Otherwise, returns ok.
++ *
 + * Return: Error if one of the following holds:
 + *         - The version wasn't set
 + *           Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_reg_fifo_get_dump_buf_size(struct qed_hwfn *p_hwfn,
- 						   struct qed_ptt *p_ptt,
- 						   u32 *buf_size);
- 
- /**
-- * @brief qed_dbg_reg_fifo_dump - Reads the reg fifo and writes the results into
-- *	the specified buffer.
-- *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param dump_buf - Pointer to write the reg fifo data into.
-- * @param buf_size_in_dwords - Size of the specified buffer in dwords.
-- * @param num_dumped_dwords - OUT: number of dumped dwords.
-- *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- *	- the specified buffer is too small
-- *	- DMAE transaction failed
-- * Otherwise, returns ok.
++ */
++enum dbg_status qed_dbg_reg_fifo_get_dump_buf_size(struct qed_hwfn *p_hwfn,
++						   struct qed_ptt *p_ptt,
++						   u32 *buf_size);
++
++/**
 + * qed_dbg_reg_fifo_dump(): Reads the reg fifo and writes the results into
 + *                          the specified buffer.
 + *
@@ -1291,53 +1120,31 @@ index fb1baa2da2d0..744c82a10875 100644
 + *        - The specified buffer is too small.
 + *        - DMAE transaction failed.
 + *           Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_reg_fifo_dump(struct qed_hwfn *p_hwfn,
- 				      struct qed_ptt *p_ptt,
-@@ -3230,37 +3236,37 @@ enum dbg_status qed_dbg_reg_fifo_dump(struct qed_hwfn *p_hwfn,
- 				      u32 *num_dumped_dwords);
- 
- /**
-- * @brief qed_dbg_igu_fifo_get_dump_buf_size - Returns the required buffer size
-- *	for the IGU fifo results.
++ */
++enum dbg_status qed_dbg_reg_fifo_dump(struct qed_hwfn *p_hwfn,
++				      struct qed_ptt *p_ptt,
++				      u32 *dump_buf,
++				      u32 buf_size_in_dwords,
++				      u32 *num_dumped_dwords);
++
++/**
 + * qed_dbg_igu_fifo_get_dump_buf_size(): Returns the required buffer size
 + *                                       for the IGU fifo results.
-  *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param buf_size - OUT: required buffer size (in dwords) for the IGU fifo
-- *	data.
++ *
 + * @p_hwfn: HW device data.
 + * @p_ptt: Ptt window used for writing the registers.
 + * @buf_size: (OUT) Required buffer size (in dwords) for the IGU fifo
 + *            data.
-  *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- * Otherwise, returns ok.
++ *
 + * Return: Error if one of the following holds:
 + *         - The version wasn't set.
 + *           Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_igu_fifo_get_dump_buf_size(struct qed_hwfn *p_hwfn,
- 						   struct qed_ptt *p_ptt,
- 						   u32 *buf_size);
- 
- /**
-- * @brief qed_dbg_igu_fifo_dump - Reads the IGU fifo and writes the results into
-- *	the specified buffer.
-- *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param dump_buf - Pointer to write the IGU fifo data into.
-- * @param buf_size_in_dwords - Size of the specified buffer in dwords.
-- * @param num_dumped_dwords - OUT: number of dumped dwords.
-- *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- *	- the specified buffer is too small
-- *	- DMAE transaction failed
-- * Otherwise, returns ok.
++ */
++enum dbg_status qed_dbg_igu_fifo_get_dump_buf_size(struct qed_hwfn *p_hwfn,
++						   struct qed_ptt *p_ptt,
++						   u32 *buf_size);
++
++/**
 + * qed_dbg_igu_fifo_dump(): Reads the IGU fifo and writes the results into
 + *                          the specified buffer.
 + *
@@ -1352,53 +1159,31 @@ index fb1baa2da2d0..744c82a10875 100644
 + *         - The specified buffer is too small
 + *         - DMAE transaction failed
 + *           Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_igu_fifo_dump(struct qed_hwfn *p_hwfn,
- 				      struct qed_ptt *p_ptt,
-@@ -3269,37 +3275,37 @@ enum dbg_status qed_dbg_igu_fifo_dump(struct qed_hwfn *p_hwfn,
- 				      u32 *num_dumped_dwords);
- 
- /**
-- * @brief qed_dbg_protection_override_get_dump_buf_size - Returns the required
-- *	buffer size for protection override window results.
++ */
++enum dbg_status qed_dbg_igu_fifo_dump(struct qed_hwfn *p_hwfn,
++				      struct qed_ptt *p_ptt,
++				      u32 *dump_buf,
++				      u32 buf_size_in_dwords,
++				      u32 *num_dumped_dwords);
++
++/**
 + * qed_dbg_protection_override_get_dump_buf_size(): Returns the required
 + *        buffer size for protection override window results.
-  *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param buf_size - OUT: required buffer size (in dwords) for protection
-- *	override data.
++ *
 + * @p_hwfn: HW device data.
 + * @p_ptt: Ptt window used for writing the registers.
 + * @buf_size: (OUT) Required buffer size (in dwords) for protection
 + *             override data.
-  *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- * Otherwise, returns ok.
++ *
 + * Return: Error if one of the following holds:
 + *         - The version wasn't set
 + *           Otherwise, returns ok.
-  */
- enum dbg_status
- qed_dbg_protection_override_get_dump_buf_size(struct qed_hwfn *p_hwfn,
- 					      struct qed_ptt *p_ptt,
- 					      u32 *buf_size);
- /**
-- * @brief qed_dbg_protection_override_dump - Reads protection override window
-- *	entries and writes the results into the specified buffer.
-- *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param dump_buf - Pointer to write the protection override data into.
-- * @param buf_size_in_dwords - Size of the specified buffer in dwords.
-- * @param num_dumped_dwords - OUT: number of dumped dwords.
-- *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- *	- the specified buffer is too small
-- *	- DMAE transaction failed
-- * Otherwise, returns ok.
++ */
++enum dbg_status
++qed_dbg_protection_override_get_dump_buf_size(struct qed_hwfn *p_hwfn,
++					      struct qed_ptt *p_ptt,
++					      u32 *buf_size);
++/**
 + * qed_dbg_protection_override_dump(): Reads protection override window
 + *       entries and writes the results into the specified buffer.
 + *
@@ -1413,49 +1198,28 @@ index fb1baa2da2d0..744c82a10875 100644
 + *          - The specified buffer is too small.
 + *          - DMAE transaction failed.
 + *             Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_protection_override_dump(struct qed_hwfn *p_hwfn,
- 						 struct qed_ptt *p_ptt,
-@@ -3307,34 +3313,34 @@ enum dbg_status qed_dbg_protection_override_dump(struct qed_hwfn *p_hwfn,
- 						 u32 buf_size_in_dwords,
- 						 u32 *num_dumped_dwords);
- /**
-- * @brief qed_dbg_fw_asserts_get_dump_buf_size - Returns the required buffer
-- *	size for FW Asserts results.
++ */
++enum dbg_status qed_dbg_protection_override_dump(struct qed_hwfn *p_hwfn,
++						 struct qed_ptt *p_ptt,
++						 u32 *dump_buf,
++						 u32 buf_size_in_dwords,
++						 u32 *num_dumped_dwords);
++/**
 + * qed_dbg_fw_asserts_get_dump_buf_size(): Returns the required buffer
 + *                                         size for FW Asserts results.
-  *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param buf_size - OUT: required buffer size (in dwords) for FW Asserts data.
++ *
 + * @p_hwfn: HW device data.
 + * @p_ptt: Ptt window used for writing the registers.
 + * @buf_size: (OUT) Required buffer size (in dwords) for FW Asserts data.
-  *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- * Otherwise, returns ok.
++ *
 + * Return: Error if one of the following holds:
 + *         - The version wasn't set.
 + *           Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_fw_asserts_get_dump_buf_size(struct qed_hwfn *p_hwfn,
- 						     struct qed_ptt *p_ptt,
- 						     u32 *buf_size);
- /**
-- * @brief qed_dbg_fw_asserts_dump - Reads the FW Asserts and writes the results
-- *	into the specified buffer.
-- *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - Ptt window used for writing the registers.
-- * @param dump_buf - Pointer to write the FW Asserts data into.
-- * @param buf_size_in_dwords - Size of the specified buffer in dwords.
-- * @param num_dumped_dwords - OUT: number of dumped dwords.
-- *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- *	- the specified buffer is too small
-- * Otherwise, returns ok.
++ */
++enum dbg_status qed_dbg_fw_asserts_get_dump_buf_size(struct qed_hwfn *p_hwfn,
++						     struct qed_ptt *p_ptt,
++						     u32 *buf_size);
++/**
 + * qed_dbg_fw_asserts_dump(): Reads the FW Asserts and writes the results
 + *                            into the specified buffer.
 + *
@@ -1469,5480 +1233,6772 @@ index fb1baa2da2d0..744c82a10875 100644
 + *         - The version wasn't set.
 + *         - The specified buffer is too small.
 + *           Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_fw_asserts_dump(struct qed_hwfn *p_hwfn,
- 					struct qed_ptt *p_ptt,
-@@ -3343,19 +3349,19 @@ enum dbg_status qed_dbg_fw_asserts_dump(struct qed_hwfn *p_hwfn,
- 					u32 *num_dumped_dwords);
- 
- /**
-- * @brief qed_dbg_read_attn - Reads the attention registers of the specified
++ */
++enum dbg_status qed_dbg_fw_asserts_dump(struct qed_hwfn *p_hwfn,
++					struct qed_ptt *p_ptt,
++					u32 *dump_buf,
++					u32 buf_size_in_dwords,
++					u32 *num_dumped_dwords);
++
++/**
 + * qed_dbg_read_attn(): Reads the attention registers of the specified
-  * block and type, and writes the results into the specified buffer.
-  *
-- * @param p_hwfn -	 HW device data
-- * @param p_ptt -	 Ptt window used for writing the registers.
-- * @param block -	 Block ID.
-- * @param attn_type -	 Attention type.
-- * @param clear_status - Indicates if the attention status should be cleared.
-- * @param results -	 OUT: Pointer to write the read results into
++ * block and type, and writes the results into the specified buffer.
++ *
 + * @p_hwfn: HW device data.
 + * @p_ptt: Ptt window used for writing the registers.
 + * @block: Block ID.
 + * @attn_type: Attention type.
 + * @clear_status: Indicates if the attention status should be cleared.
 + * @results:  (OUT) Pointer to write the read results into.
-  *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- * Otherwise, returns ok.
++ *
 + * Return: Error if one of the following holds:
 + *         - The version wasn't set
 + *          Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_read_attn(struct qed_hwfn *p_hwfn,
- 				  struct qed_ptt *p_ptt,
-@@ -3365,15 +3371,15 @@ enum dbg_status qed_dbg_read_attn(struct qed_hwfn *p_hwfn,
- 				  struct dbg_attn_block_result *results);
- 
- /**
-- * @brief qed_dbg_print_attn - Prints attention registers values in the
-- *	specified results struct.
++ */
++enum dbg_status qed_dbg_read_attn(struct qed_hwfn *p_hwfn,
++				  struct qed_ptt *p_ptt,
++				  enum block_id block,
++				  enum dbg_attn_type attn_type,
++				  bool clear_status,
++				  struct dbg_attn_block_result *results);
++
++/**
 + * qed_dbg_print_attn(): Prints attention registers values in the
 + *                       specified results struct.
-  *
-- * @param p_hwfn
-- * @param results - Pointer to the attention read results
++ *
 + * @p_hwfn: HW device data.
 + * @results: Pointer to the attention read results
-  *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- * Otherwise, returns ok.
++ *
 + * Return: Error if one of the following holds:
 + *        - The version wasn't set
 + *          Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_print_attn(struct qed_hwfn *p_hwfn,
- 				   struct dbg_attn_block_result *results);
-@@ -3420,60 +3426,64 @@ struct dbg_tools_user_data {
- /***************************** Public Functions *******************************/
- 
- /**
-- * @brief qed_dbg_user_set_bin_ptr - Sets a pointer to the binary data with
-- *	debug arrays.
++ */
++enum dbg_status qed_dbg_print_attn(struct qed_hwfn *p_hwfn,
++				   struct dbg_attn_block_result *results);
++
++/******************************* Data Types **********************************/
++
++struct mcp_trace_format {
++	u32 data;
++#define MCP_TRACE_FORMAT_MODULE_MASK	0x0000ffff
++#define MCP_TRACE_FORMAT_MODULE_OFFSET	0
++#define MCP_TRACE_FORMAT_LEVEL_MASK	0x00030000
++#define MCP_TRACE_FORMAT_LEVEL_OFFSET	16
++#define MCP_TRACE_FORMAT_P1_SIZE_MASK	0x000c0000
++#define MCP_TRACE_FORMAT_P1_SIZE_OFFSET 18
++#define MCP_TRACE_FORMAT_P2_SIZE_MASK	0x00300000
++#define MCP_TRACE_FORMAT_P2_SIZE_OFFSET 20
++#define MCP_TRACE_FORMAT_P3_SIZE_MASK	0x00c00000
++#define MCP_TRACE_FORMAT_P3_SIZE_OFFSET 22
++#define MCP_TRACE_FORMAT_LEN_MASK	0xff000000
++#define MCP_TRACE_FORMAT_LEN_OFFSET	24
++
++	char *format_str;
++};
++
++/* MCP Trace Meta data structure */
++struct mcp_trace_meta {
++	u32 modules_num;
++	char **modules;
++	u32 formats_num;
++	struct mcp_trace_format *formats;
++	bool is_allocated;
++};
++
++/* Debug Tools user data */
++struct dbg_tools_user_data {
++	struct mcp_trace_meta mcp_trace_meta;
++	const u32 *mcp_trace_user_meta_buf;
++};
++
++/******************************** Constants **********************************/
++
++#define MAX_NAME_LEN	16
++
++/***************************** Public Functions *******************************/
++
++/**
 + * qed_dbg_user_set_bin_ptr(): Sets a pointer to the binary data with
 + *                             debug arrays.
-  *
-- * @param p_hwfn - HW device data
-- * @param bin_ptr - a pointer to the binary data with debug arrays.
++ *
 + * @p_hwfn: HW device data.
 + * @bin_ptr: a pointer to the binary data with debug arrays.
 + *
 + * Return: dbg_status.
-  */
- enum dbg_status qed_dbg_user_set_bin_ptr(struct qed_hwfn *p_hwfn,
- 					 const u8 * const bin_ptr);
- 
- /**
-- * @brief qed_dbg_alloc_user_data - Allocates user debug data.
++ */
++enum dbg_status qed_dbg_user_set_bin_ptr(struct qed_hwfn *p_hwfn,
++					 const u8 * const bin_ptr);
++
++/**
 + * qed_dbg_alloc_user_data(): Allocates user debug data.
 + *
 + * @p_hwfn: HW device data.
 + * @user_data_ptr: (OUT) a pointer to the allocated memory.
-  *
-- * @param p_hwfn -		 HW device data
-- * @param user_data_ptr - OUT: a pointer to the allocated memory.
++ *
 + * Return: dbg_status.
-  */
- enum dbg_status qed_dbg_alloc_user_data(struct qed_hwfn *p_hwfn,
- 					void **user_data_ptr);
- 
- /**
-- * @brief qed_dbg_get_status_str - Returns a string for the specified status.
++ */
++enum dbg_status qed_dbg_alloc_user_data(struct qed_hwfn *p_hwfn,
++					void **user_data_ptr);
++
++/**
 + * qed_dbg_get_status_str(): Returns a string for the specified status.
-  *
-- * @param status - a debug status code.
++ *
 + * @status: A debug status code.
-  *
-- * @return a string for the specified status
++ *
 + * Return: A string for the specified status.
-  */
- const char *qed_dbg_get_status_str(enum dbg_status status);
- 
- /**
-- * @brief qed_get_idle_chk_results_buf_size - Returns the required buffer size
-- *	for idle check results (in bytes).
++ */
++const char *qed_dbg_get_status_str(enum dbg_status status);
++
++/**
 + * qed_get_idle_chk_results_buf_size(): Returns the required buffer size
 + *                                      for idle check results (in bytes).
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - idle check dump buffer.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf_size - OUT: required buffer size (in bytes) for the parsed
-- *	results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: idle check dump buffer.
 + * @num_dumped_dwords: number of dwords that were dumped.
 + * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
 + *                    results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_get_idle_chk_results_buf_size(struct qed_hwfn *p_hwfn,
- 						  u32 *dump_buf,
- 						  u32  num_dumped_dwords,
- 						  u32 *results_buf_size);
- /**
-- * @brief qed_print_idle_chk_results - Prints idle check results
++ */
++enum dbg_status qed_get_idle_chk_results_buf_size(struct qed_hwfn *p_hwfn,
++						  u32 *dump_buf,
++						  u32  num_dumped_dwords,
++						  u32 *results_buf_size);
++/**
 + * qed_print_idle_chk_results(): Prints idle check results
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - idle check dump buffer.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf - buffer for printing the idle check results.
-- * @param num_errors - OUT: number of errors found in idle check.
-- * @param num_warnings - OUT: number of warnings found in idle check.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: idle check dump buffer.
 + * @num_dumped_dwords: number of dwords that were dumped.
 + * @results_buf: buffer for printing the idle check results.
 + * @num_errors: (OUT) number of errors found in idle check.
 + * @num_warnings: (OUT) number of warnings found in idle check.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_print_idle_chk_results(struct qed_hwfn *p_hwfn,
- 					   u32 *dump_buf,
-@@ -3483,28 +3493,30 @@ enum dbg_status qed_print_idle_chk_results(struct qed_hwfn *p_hwfn,
- 					   u32 *num_warnings);
- 
- /**
-- * @brief qed_dbg_mcp_trace_set_meta_data - Sets the MCP Trace meta data.
++ */
++enum dbg_status qed_print_idle_chk_results(struct qed_hwfn *p_hwfn,
++					   u32 *dump_buf,
++					   u32 num_dumped_dwords,
++					   char *results_buf,
++					   u32 *num_errors,
++					   u32 *num_warnings);
++
++/**
 + * qed_dbg_mcp_trace_set_meta_data(): Sets the MCP Trace meta data.
 + *
 + * @p_hwfn: HW device data.
 + * @meta_buf: Meta buffer.
 + *
 + * Return: Void.
-  *
-  * Needed in case the MCP Trace dump doesn't contain the meta data (e.g. due to
-  * no NVRAM access).
-- *
-- * @param data - pointer to MCP Trace meta data
-- * @param size - size of MCP Trace meta data in dwords
-  */
- void qed_dbg_mcp_trace_set_meta_data(struct qed_hwfn *p_hwfn,
- 				     const u32 *meta_buf);
- 
- /**
-- * @brief qed_get_mcp_trace_results_buf_size - Returns the required buffer size
-- *	for MCP Trace results (in bytes).
++ *
++ * Needed in case the MCP Trace dump doesn't contain the meta data (e.g. due to
++ * no NVRAM access).
++ */
++void qed_dbg_mcp_trace_set_meta_data(struct qed_hwfn *p_hwfn,
++				     const u32 *meta_buf);
++
++/**
 + * qed_get_mcp_trace_results_buf_size(): Returns the required buffer size
 + *                                       for MCP Trace results (in bytes).
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - MCP Trace dump buffer.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf_size - OUT: required buffer size (in bytes) for the parsed
-- *	results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: MCP Trace dump buffer.
 + * @num_dumped_dwords: number of dwords that were dumped.
 + * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
 + *                    results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Rrror if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_get_mcp_trace_results_buf_size(struct qed_hwfn *p_hwfn,
- 						   u32 *dump_buf,
-@@ -3512,14 +3524,14 @@ enum dbg_status qed_get_mcp_trace_results_buf_size(struct qed_hwfn *p_hwfn,
- 						   u32 *results_buf_size);
- 
- /**
-- * @brief qed_print_mcp_trace_results - Prints MCP Trace results
++ */
++enum dbg_status qed_get_mcp_trace_results_buf_size(struct qed_hwfn *p_hwfn,
++						   u32 *dump_buf,
++						   u32 num_dumped_dwords,
++						   u32 *results_buf_size);
++
++/**
 + * qed_print_mcp_trace_results(): Prints MCP Trace results
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - mcp trace dump buffer, starting from the header.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf - buffer for printing the mcp trace results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: MCP trace dump buffer, starting from the header.
 + * @num_dumped_dwords: Member of dwords that were dumped.
 + * @results_buf: Buffer for printing the mcp trace results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_print_mcp_trace_results(struct qed_hwfn *p_hwfn,
- 					    u32 *dump_buf,
-@@ -3527,30 +3539,30 @@ enum dbg_status qed_print_mcp_trace_results(struct qed_hwfn *p_hwfn,
- 					    char *results_buf);
- 
- /**
-- * @brief qed_print_mcp_trace_results_cont - Prints MCP Trace results, and
++ */
++enum dbg_status qed_print_mcp_trace_results(struct qed_hwfn *p_hwfn,
++					    u32 *dump_buf,
++					    u32 num_dumped_dwords,
++					    char *results_buf);
++
++/**
 + * qed_print_mcp_trace_results_cont(): Prints MCP Trace results, and
-  * keeps the MCP trace meta data allocated, to support continuous MCP Trace
-  * parsing. After the continuous parsing ends, mcp_trace_free_meta_data should
-  * be called to free the meta data.
-  *
-- * @param p_hwfn -	      HW device data
-- * @param dump_buf -	      mcp trace dump buffer, starting from the header.
-- * @param results_buf -	      buffer for printing the mcp trace results.
++ * keeps the MCP trace meta data allocated, to support continuous MCP Trace
++ * parsing. After the continuous parsing ends, mcp_trace_free_meta_data should
++ * be called to free the meta data.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: MVP trace dump buffer, starting from the header.
 + * @results_buf: Buffer for printing the mcp trace results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_print_mcp_trace_results_cont(struct qed_hwfn *p_hwfn,
- 						 u32 *dump_buf,
- 						 char *results_buf);
- 
- /**
-- * @brief print_mcp_trace_line - Prints MCP Trace results for a single line
++ */
++enum dbg_status qed_print_mcp_trace_results_cont(struct qed_hwfn *p_hwfn,
++						 u32 *dump_buf,
++						 char *results_buf);
++
++/**
 + * qed_print_mcp_trace_line(): Prints MCP Trace results for a single line
-  *
-- * @param p_hwfn -	      HW device data
-- * @param dump_buf -	      mcp trace dump buffer, starting from the header.
-- * @param num_dumped_bytes -  number of bytes that were dumped.
-- * @param results_buf -	      buffer for printing the mcp trace results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: MCP trace dump buffer, starting from the header.
 + * @num_dumped_bytes: Number of bytes that were dumped.
 + * @results_buf: Buffer for printing the mcp trace results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_print_mcp_trace_line(struct qed_hwfn *p_hwfn,
- 					 u8 *dump_buf,
-@@ -3558,24 +3570,26 @@ enum dbg_status qed_print_mcp_trace_line(struct qed_hwfn *p_hwfn,
- 					 char *results_buf);
- 
- /**
-- * @brief mcp_trace_free_meta_data - Frees the MCP Trace meta data.
++ */
++enum dbg_status qed_print_mcp_trace_line(struct qed_hwfn *p_hwfn,
++					 u8 *dump_buf,
++					 u32 num_dumped_bytes,
++					 char *results_buf);
++
++/**
 + * qed_mcp_trace_free_meta_data(): Frees the MCP Trace meta data.
-  * Should be called after continuous MCP Trace parsing.
-  *
-- * @param p_hwfn - HW device data
++ * Should be called after continuous MCP Trace parsing.
++ *
 + * @p_hwfn: HW device data.
 + *
 + * Return: Void.
-  */
- void qed_mcp_trace_free_meta_data(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_get_reg_fifo_results_buf_size - Returns the required buffer size
-- *	for reg_fifo results (in bytes).
++ */
++void qed_mcp_trace_free_meta_data(struct qed_hwfn *p_hwfn);
++
++/**
 + * qed_get_reg_fifo_results_buf_size(): Returns the required buffer size
 + *                                      for reg_fifo results (in bytes).
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - reg fifo dump buffer.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf_size - OUT: required buffer size (in bytes) for the parsed
-- *	results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: Reg fifo dump buffer.
 + * @num_dumped_dwords: Number of dwords that were dumped.
 + * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
 + *                     results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_get_reg_fifo_results_buf_size(struct qed_hwfn *p_hwfn,
- 						  u32 *dump_buf,
-@@ -3583,14 +3597,14 @@ enum dbg_status qed_get_reg_fifo_results_buf_size(struct qed_hwfn *p_hwfn,
- 						  u32 *results_buf_size);
- 
- /**
-- * @brief qed_print_reg_fifo_results - Prints reg fifo results
++ */
++enum dbg_status qed_get_reg_fifo_results_buf_size(struct qed_hwfn *p_hwfn,
++						  u32 *dump_buf,
++						  u32 num_dumped_dwords,
++						  u32 *results_buf_size);
++
++/**
 + * qed_print_reg_fifo_results(): Prints reg fifo results.
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - reg fifo dump buffer, starting from the header.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf - buffer for printing the reg fifo results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: Reg fifo dump buffer, starting from the header.
 + * @num_dumped_dwords: Number of dwords that were dumped.
 + * @results_buf: Buffer for printing the reg fifo results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_print_reg_fifo_results(struct qed_hwfn *p_hwfn,
- 					   u32 *dump_buf,
-@@ -3598,16 +3612,16 @@ enum dbg_status qed_print_reg_fifo_results(struct qed_hwfn *p_hwfn,
- 					   char *results_buf);
- 
- /**
-- * @brief qed_get_igu_fifo_results_buf_size - Returns the required buffer size
-- *	for igu_fifo results (in bytes).
++ */
++enum dbg_status qed_print_reg_fifo_results(struct qed_hwfn *p_hwfn,
++					   u32 *dump_buf,
++					   u32 num_dumped_dwords,
++					   char *results_buf);
++
++/**
 + * qed_get_igu_fifo_results_buf_size(): Returns the required buffer size
 + *                                      for igu_fifo results (in bytes).
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - IGU fifo dump buffer.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf_size - OUT: required buffer size (in bytes) for the parsed
-- *	results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: IGU fifo dump buffer.
 + * @num_dumped_dwords: number of dwords that were dumped.
 + * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
 + *                    results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_get_igu_fifo_results_buf_size(struct qed_hwfn *p_hwfn,
- 						  u32 *dump_buf,
-@@ -3615,14 +3629,14 @@ enum dbg_status qed_get_igu_fifo_results_buf_size(struct qed_hwfn *p_hwfn,
- 						  u32 *results_buf_size);
- 
- /**
-- * @brief qed_print_igu_fifo_results - Prints IGU fifo results
++ */
++enum dbg_status qed_get_igu_fifo_results_buf_size(struct qed_hwfn *p_hwfn,
++						  u32 *dump_buf,
++						  u32 num_dumped_dwords,
++						  u32 *results_buf_size);
++
++/**
 + * qed_print_igu_fifo_results(): Prints IGU fifo results
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - IGU fifo dump buffer, starting from the header.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf - buffer for printing the IGU fifo results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: IGU fifo dump buffer, starting from the header.
 + * @num_dumped_dwords: Number of dwords that were dumped.
 + * @results_buf: Buffer for printing the IGU fifo results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_print_igu_fifo_results(struct qed_hwfn *p_hwfn,
- 					   u32 *dump_buf,
-@@ -3630,16 +3644,16 @@ enum dbg_status qed_print_igu_fifo_results(struct qed_hwfn *p_hwfn,
- 					   char *results_buf);
- 
- /**
-- * @brief qed_get_protection_override_results_buf_size - Returns the required
-- *	buffer size for protection override results (in bytes).
++ */
++enum dbg_status qed_print_igu_fifo_results(struct qed_hwfn *p_hwfn,
++					   u32 *dump_buf,
++					   u32 num_dumped_dwords,
++					   char *results_buf);
++
++/**
 + * qed_get_protection_override_results_buf_size(): Returns the required
 + *         buffer size for protection override results (in bytes).
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - protection override dump buffer.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf_size - OUT: required buffer size (in bytes) for the parsed
-- *	results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: Protection override dump buffer.
 + * @num_dumped_dwords: Number of dwords that were dumped.
 + * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
 + *                    results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status
- qed_get_protection_override_results_buf_size(struct qed_hwfn *p_hwfn,
-@@ -3648,15 +3662,15 @@ qed_get_protection_override_results_buf_size(struct qed_hwfn *p_hwfn,
- 					     u32 *results_buf_size);
- 
- /**
-- * @brief qed_print_protection_override_results - Prints protection override
-- *	results.
++ */
++enum dbg_status
++qed_get_protection_override_results_buf_size(struct qed_hwfn *p_hwfn,
++					     u32 *dump_buf,
++					     u32 num_dumped_dwords,
++					     u32 *results_buf_size);
++
++/**
 + * qed_print_protection_override_results(): Prints protection override
 + *                                          results.
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - protection override dump buffer, starting from the header.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf - buffer for printing the reg fifo results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: Protection override dump buffer, starting from the header.
 + * @num_dumped_dwords: Number of dwords that were dumped.
 + * @results_buf: Buffer for printing the reg fifo results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_print_protection_override_results(struct qed_hwfn *p_hwfn,
- 						      u32 *dump_buf,
-@@ -3664,16 +3678,16 @@ enum dbg_status qed_print_protection_override_results(struct qed_hwfn *p_hwfn,
- 						      char *results_buf);
- 
- /**
-- * @brief qed_get_fw_asserts_results_buf_size - Returns the required buffer size
-- *	for FW Asserts results (in bytes).
++ */
++enum dbg_status qed_print_protection_override_results(struct qed_hwfn *p_hwfn,
++						      u32 *dump_buf,
++						      u32 num_dumped_dwords,
++						      char *results_buf);
++
++/**
 + * qed_get_fw_asserts_results_buf_size(): Returns the required buffer size
 + *                                        for FW Asserts results (in bytes).
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - FW Asserts dump buffer.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf_size - OUT: required buffer size (in bytes) for the parsed
-- *	results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: FW Asserts dump buffer.
 + * @num_dumped_dwords: number of dwords that were dumped.
 + * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
 + *                    results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_get_fw_asserts_results_buf_size(struct qed_hwfn *p_hwfn,
- 						    u32 *dump_buf,
-@@ -3681,14 +3695,14 @@ enum dbg_status qed_get_fw_asserts_results_buf_size(struct qed_hwfn *p_hwfn,
- 						    u32 *results_buf_size);
- 
- /**
-- * @brief qed_print_fw_asserts_results - Prints FW Asserts results
++ */
++enum dbg_status qed_get_fw_asserts_results_buf_size(struct qed_hwfn *p_hwfn,
++						    u32 *dump_buf,
++						    u32 num_dumped_dwords,
++						    u32 *results_buf_size);
++
++/**
 + * qed_print_fw_asserts_results(): Prints FW Asserts results.
-  *
-- * @param p_hwfn - HW device data
-- * @param dump_buf - FW Asserts dump buffer, starting from the header.
-- * @param num_dumped_dwords - number of dwords that were dumped.
-- * @param results_buf - buffer for printing the FW Asserts results.
++ *
 + * @p_hwfn: HW device data.
 + * @dump_buf: FW Asserts dump buffer, starting from the header.
 + * @num_dumped_dwords: number of dwords that were dumped.
 + * @results_buf: buffer for printing the FW Asserts results.
-  *
-- * @return error if the parsing fails, ok otherwise.
++ *
 + * Return: Error if the parsing fails, ok otherwise.
-  */
- enum dbg_status qed_print_fw_asserts_results(struct qed_hwfn *p_hwfn,
- 					     u32 *dump_buf,
-@@ -3696,15 +3710,15 @@ enum dbg_status qed_print_fw_asserts_results(struct qed_hwfn *p_hwfn,
- 					     char *results_buf);
- 
- /**
-- * @brief qed_dbg_parse_attn - Parses and prints attention registers values in
-- * the specified results struct.
++ */
++enum dbg_status qed_print_fw_asserts_results(struct qed_hwfn *p_hwfn,
++					     u32 *dump_buf,
++					     u32 num_dumped_dwords,
++					     char *results_buf);
++
++/**
 + * qed_dbg_parse_attn(): Parses and prints attention registers values in
 + *                      the specified results struct.
-  *
-- * @param p_hwfn -  HW device data
-- * @param results - Pointer to the attention read results
++ *
 + * @p_hwfn: HW device data.
 + * @results: Pointer to the attention read results
-  *
-- * @return error if one of the following holds:
-- *	- the version wasn't set
-- * Otherwise, returns ok.
++ *
 + * Return: Error if one of the following holds:
 + *         - The version wasn't set.
 + *           Otherwise, returns ok.
-  */
- enum dbg_status qed_dbg_parse_attn(struct qed_hwfn *p_hwfn,
- 				   struct dbg_attn_block_result *results);
-@@ -3746,18 +3760,18 @@ enum dbg_status qed_dbg_parse_attn(struct qed_hwfn *p_hwfn,
- #define GTT_BAR0_MAP_REG_PSDM_RAM	0x01a000UL
++ */
++enum dbg_status qed_dbg_parse_attn(struct qed_hwfn *p_hwfn,
++				   struct dbg_attn_block_result *results);
++#endif
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_dcbx.h b/drivers/net/ethernet/qlogic/qed/qed_dcbx.h
+index e1798925b444..ea839e605577 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_dcbx.h
++++ b/drivers/net/ethernet/qlogic/qed/qed_dcbx.h
+@@ -84,16 +84,17 @@ struct qed_dcbx_mib_meta_data {
+ extern const struct qed_eth_dcbnl_ops qed_dcbnl_ops_pass;
  
- /**
-- * @brief qed_qm_pf_mem_size - prepare QM ILT sizes
-+ * qed_qm_pf_mem_size(): Prepare QM ILT sizes.
-  *
-- * Returns the required host memory size in 4KB units.
-- * Must be called before all QM init HSI functions.
-+ * @num_pf_cids: Number of connections used by this PF.
-+ * @num_vf_cids: Number of connections used by VFs of this PF.
-+ * @num_tids: Number of tasks used by this PF.
-+ * @num_pf_pqs: Number of PQs used by this PF.
-+ * @num_vf_pqs: Number of PQs used by VFs of this PF.
-  *
-- * @param num_pf_cids - number of connections used by this PF
-- * @param num_vf_cids - number of connections used by VFs of this PF
-- * @param num_tids - number of tasks used by this PF
-- * @param num_pf_pqs - number of PQs used by this PF
-- * @param num_vf_pqs - number of PQs used by VFs of this PF
-+ * Return: The required host memory size in 4KB units.
-  *
-- * @return The required host memory size in 4KB units.
-+ * Returns the required host memory size in 4KB units.
-+ * Must be called before all QM init HSI functions.
-  */
- u32 qed_qm_pf_mem_size(u32 num_pf_cids,
- 		       u32 num_vf_cids,
-@@ -3800,74 +3814,74 @@ int qed_qm_pf_rt_init(struct qed_hwfn *p_hwfn,
- 	struct qed_qm_pf_rt_init_params *p_params);
+ #ifdef CONFIG_DCB
+-int qed_dcbx_get_config_params(struct qed_hwfn *, struct qed_dcbx_set *);
++int qed_dcbx_get_config_params(struct qed_hwfn *p_hwfn,
++			       struct qed_dcbx_set *params);
  
- /**
-- * @brief qed_init_pf_wfq - Initializes the WFQ weight of the specified PF
-+ * qed_init_pf_wfq(): Initializes the WFQ weight of the specified PF.
-  *
-- * @param p_hwfn
-- * @param p_ptt - ptt window used for writing the registers
-- * @param pf_id - PF ID
-- * @param pf_wfq - WFQ weight. Must be non-zero.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers
-+ * @pf_id: PF ID
-+ * @pf_wfq: WFQ weight. Must be non-zero.
-  *
-- * @return 0 on success, -1 on error.
-+ * Return: 0 on success, -1 on error.
-  */
- int qed_init_pf_wfq(struct qed_hwfn *p_hwfn,
- 		    struct qed_ptt *p_ptt, u8 pf_id, u16 pf_wfq);
+-int qed_dcbx_config_params(struct qed_hwfn *,
+-			   struct qed_ptt *, struct qed_dcbx_set *, bool);
++int qed_dcbx_config_params(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt,
++			   struct qed_dcbx_set *params, bool hw_commit);
+ #endif
  
- /**
-- * @brief qed_init_pf_rl - Initializes the rate limit of the specified PF
-+ * qed_init_pf_rl(): Initializes the rate limit of the specified PF
-  *
-- * @param p_hwfn
-- * @param p_ptt - ptt window used for writing the registers
-- * @param pf_id - PF ID
-- * @param pf_rl - rate limit in Mb/sec units
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @pf_id: PF ID.
-+ * @pf_rl: rate limit in Mb/sec units
-  *
-- * @return 0 on success, -1 on error.
-+ * Return: 0 on success, -1 on error.
-  */
- int qed_init_pf_rl(struct qed_hwfn *p_hwfn,
- 		   struct qed_ptt *p_ptt, u8 pf_id, u32 pf_rl);
+ /* QED local interface routines */
+ int
+-qed_dcbx_mib_update_event(struct qed_hwfn *,
+-			  struct qed_ptt *, enum qed_mib_read_type);
++qed_dcbx_mib_update_event(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt,
++			  enum qed_mib_read_type type);
  
- /**
-- * @brief qed_init_vport_wfq Initializes the WFQ weight of the specified VPORT
-+ * qed_init_vport_wfq(): Initializes the WFQ weight of the specified VPORT
-  *
-- * @param p_hwfn
-- * @param p_ptt - ptt window used for writing the registers
-- * @param first_tx_pq_id- An array containing the first Tx PQ ID associated
-- *	  with the VPORT for each TC. This array is filled by
-- *	  qed_qm_pf_rt_init
-- * @param vport_wfq - WFQ weight. Must be non-zero.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers
-+ * @first_tx_pq_id: An array containing the first Tx PQ ID associated
-+ *                  with the VPORT for each TC. This array is filled by
-+ *                  qed_qm_pf_rt_init
-+ * @wfq: WFQ weight. Must be non-zero.
-  *
-- * @return 0 on success, -1 on error.
-+ * Return: 0 on success, -1 on error.
+ int qed_dcbx_info_alloc(struct qed_hwfn *p_hwfn);
+ void qed_dcbx_info_free(struct qed_hwfn *p_hwfn);
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_debug.c b/drivers/net/ethernet/qlogic/qed/qed_debug.c
+index 380cf4963cbb..e6e5c7721701 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_debug.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_debug.c
+@@ -10,6 +10,7 @@
+ #include "qed.h"
+ #include "qed_cxt.h"
+ #include "qed_hsi.h"
++#include "qed_dbg_hsi.h"
+ #include "qed_hw.h"
+ #include "qed_mcp.h"
+ #include "qed_reg_addr.h"
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_dev.c b/drivers/net/ethernet/qlogic/qed/qed_dev.c
+index 0410c3604abd..3db1a5512b9b 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_dev.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_dev.c
+@@ -25,6 +25,7 @@
+ #include "qed_dev_api.h"
+ #include "qed_fcoe.h"
+ #include "qed_hsi.h"
++#include "qed_iro_hsi.h"
+ #include "qed_hw.h"
+ #include "qed_init_ops.h"
+ #include "qed_int.h"
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_dev_api.h b/drivers/net/ethernet/qlogic/qed/qed_dev_api.h
+index f0a825b985a4..6582bfc1b4a9 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_dev_api.h
++++ b/drivers/net/ethernet/qlogic/qed/qed_dev_api.h
+@@ -161,7 +161,6 @@ int qed_hw_stop_fastpath(struct qed_dev *cdev);
   */
- int qed_init_vport_wfq(struct qed_hwfn *p_hwfn,
- 		       struct qed_ptt *p_ptt,
- 		       u16 first_tx_pq_id[NUM_OF_TCS], u16 wfq);
+ int qed_hw_start_fastpath(struct qed_hwfn *p_hwfn);
  
+-
  /**
-- * @brief qed_init_global_rl - Initializes the rate limit of the specified
-- * rate limiter
-+ * qed_init_global_rl():  Initializes the rate limit of the specified
-+ * rate limiter.
+  * qed_hw_prepare(): Prepare Qed hardware.
   *
-- * @param p_hwfn
-- * @param p_ptt - ptt window used for writing the registers
-- * @param rl_id - RL ID
-- * @param rate_limit - rate limit in Mb/sec units
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @rl_id: RL ID.
-+ * @rate_limit: Rate limit in Mb/sec units
-  *
-- * @return 0 on success, -1 on error.
-+ * Return: 0 on success, -1 on error.
-  */
- int qed_init_global_rl(struct qed_hwfn *p_hwfn,
- 		       struct qed_ptt *p_ptt,
- 		       u16 rl_id, u32 rate_limit);
+@@ -510,6 +509,5 @@ int qed_db_recovery_add(struct qed_dev *cdev,
+ int qed_db_recovery_del(struct qed_dev *cdev,
+ 			void __iomem *db_addr, void *db_data);
  
- /**
-- * @brief qed_send_qm_stop_cmd  Sends a stop command to the QM
-+ * qed_send_qm_stop_cmd(): Sends a stop command to the QM.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param is_release_cmd - true for release, false for stop.
-- * @param is_tx_pq - true for Tx PQs, false for Other PQs.
-- * @param start_pq - first PQ ID to stop
-- * @param num_pqs - Number of PQs to stop, starting from start_pq.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @is_release_cmd: true for release, false for stop.
-+ * @is_tx_pq: true for Tx PQs, false for Other PQs.
-+ * @start_pq: first PQ ID to stop
-+ * @num_pqs: Number of PQs to stop, starting from start_pq.
-  *
-- * @return bool, true if successful, false if timeout occurred while waiting for
-- *	QM command done.
-+ * Return: Bool, true if successful, false if timeout occurred while waiting
-+ *         for QM command done.
-  */
- bool qed_send_qm_stop_cmd(struct qed_hwfn *p_hwfn,
- 			  struct qed_ptt *p_ptt,
-@@ -3875,53 +3889,64 @@ bool qed_send_qm_stop_cmd(struct qed_hwfn *p_hwfn,
- 			  bool is_tx_pq, u16 start_pq, u16 num_pqs);
+-
+ const char *qed_hw_get_resc_name(enum qed_resources res_id);
+ #endif
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_fcoe.c b/drivers/net/ethernet/qlogic/qed/qed_fcoe.c
+index ba246d90344a..c46d809040bd 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_fcoe.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_fcoe.c
+@@ -30,6 +30,7 @@
+ #include "qed_hsi.h"
+ #include "qed_hw.h"
+ #include "qed_int.h"
++#include "qed_iro_hsi.h"
+ #include "qed_ll2.h"
+ #include "qed_mcp.h"
+ #include "qed_reg_addr.h"
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_hsi.h b/drivers/net/ethernet/qlogic/qed/qed_hsi.h
+index a17baa98baa4..987b086811b7 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_hsi.h
++++ b/drivers/net/ethernet/qlogic/qed/qed_hsi.h
+@@ -1831,769 +1831,6 @@ struct virt_mem_desc {
+ 	u32 size;		/* In bytes */
+ };
  
- /**
-- * @brief qed_set_vxlan_dest_port - initializes vxlan tunnel destination udp port
-+ * qed_set_vxlan_dest_port(): Initializes vxlan tunnel destination udp port.
-  *
-- * @param p_hwfn
-- * @param p_ptt - ptt window used for writing the registers.
-- * @param dest_port - vxlan destination udp port.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @dest_port: vxlan destination udp port.
-+ *
-+ * Return: Void.
-  */
- void qed_set_vxlan_dest_port(struct qed_hwfn *p_hwfn,
- 			     struct qed_ptt *p_ptt, u16 dest_port);
+-/****************************************/
+-/* Debug Tools HSI constants and macros */
+-/****************************************/
+-
+-enum block_id {
+-	BLOCK_GRC,
+-	BLOCK_MISCS,
+-	BLOCK_MISC,
+-	BLOCK_DBU,
+-	BLOCK_PGLUE_B,
+-	BLOCK_CNIG,
+-	BLOCK_CPMU,
+-	BLOCK_NCSI,
+-	BLOCK_OPTE,
+-	BLOCK_BMB,
+-	BLOCK_PCIE,
+-	BLOCK_MCP,
+-	BLOCK_MCP2,
+-	BLOCK_PSWHST,
+-	BLOCK_PSWHST2,
+-	BLOCK_PSWRD,
+-	BLOCK_PSWRD2,
+-	BLOCK_PSWWR,
+-	BLOCK_PSWWR2,
+-	BLOCK_PSWRQ,
+-	BLOCK_PSWRQ2,
+-	BLOCK_PGLCS,
+-	BLOCK_DMAE,
+-	BLOCK_PTU,
+-	BLOCK_TCM,
+-	BLOCK_MCM,
+-	BLOCK_UCM,
+-	BLOCK_XCM,
+-	BLOCK_YCM,
+-	BLOCK_PCM,
+-	BLOCK_QM,
+-	BLOCK_TM,
+-	BLOCK_DORQ,
+-	BLOCK_BRB,
+-	BLOCK_SRC,
+-	BLOCK_PRS,
+-	BLOCK_TSDM,
+-	BLOCK_MSDM,
+-	BLOCK_USDM,
+-	BLOCK_XSDM,
+-	BLOCK_YSDM,
+-	BLOCK_PSDM,
+-	BLOCK_TSEM,
+-	BLOCK_MSEM,
+-	BLOCK_USEM,
+-	BLOCK_XSEM,
+-	BLOCK_YSEM,
+-	BLOCK_PSEM,
+-	BLOCK_RSS,
+-	BLOCK_TMLD,
+-	BLOCK_MULD,
+-	BLOCK_YULD,
+-	BLOCK_XYLD,
+-	BLOCK_PRM,
+-	BLOCK_PBF_PB1,
+-	BLOCK_PBF_PB2,
+-	BLOCK_RPB,
+-	BLOCK_BTB,
+-	BLOCK_PBF,
+-	BLOCK_RDIF,
+-	BLOCK_TDIF,
+-	BLOCK_CDU,
+-	BLOCK_CCFC,
+-	BLOCK_TCFC,
+-	BLOCK_IGU,
+-	BLOCK_CAU,
+-	BLOCK_UMAC,
+-	BLOCK_XMAC,
+-	BLOCK_MSTAT,
+-	BLOCK_DBG,
+-	BLOCK_NIG,
+-	BLOCK_WOL,
+-	BLOCK_BMBN,
+-	BLOCK_IPC,
+-	BLOCK_NWM,
+-	BLOCK_NWS,
+-	BLOCK_MS,
+-	BLOCK_PHY_PCIE,
+-	BLOCK_LED,
+-	BLOCK_AVS_WRAP,
+-	BLOCK_PXPREQBUS,
+-	BLOCK_BAR0_MAP,
+-	BLOCK_MCP_FIO,
+-	BLOCK_LAST_INIT,
+-	BLOCK_PRS_FC,
+-	BLOCK_PBF_FC,
+-	BLOCK_NIG_LB_FC,
+-	BLOCK_NIG_LB_FC_PLLH,
+-	BLOCK_NIG_TX_FC_PLLH,
+-	BLOCK_NIG_TX_FC,
+-	BLOCK_NIG_RX_FC_PLLH,
+-	BLOCK_NIG_RX_FC,
+-	MAX_BLOCK_ID
+-};
+-
+-/* binary debug buffer types */
+-enum bin_dbg_buffer_type {
+-	BIN_BUF_DBG_MODE_TREE,
+-	BIN_BUF_DBG_DUMP_REG,
+-	BIN_BUF_DBG_DUMP_MEM,
+-	BIN_BUF_DBG_IDLE_CHK_REGS,
+-	BIN_BUF_DBG_IDLE_CHK_IMMS,
+-	BIN_BUF_DBG_IDLE_CHK_RULES,
+-	BIN_BUF_DBG_IDLE_CHK_PARSING_DATA,
+-	BIN_BUF_DBG_ATTN_BLOCKS,
+-	BIN_BUF_DBG_ATTN_REGS,
+-	BIN_BUF_DBG_ATTN_INDEXES,
+-	BIN_BUF_DBG_ATTN_NAME_OFFSETS,
+-	BIN_BUF_DBG_BLOCKS,
+-	BIN_BUF_DBG_BLOCKS_CHIP_DATA,
+-	BIN_BUF_DBG_BUS_LINES,
+-	BIN_BUF_DBG_BLOCKS_USER_DATA,
+-	BIN_BUF_DBG_BLOCKS_CHIP_USER_DATA,
+-	BIN_BUF_DBG_BUS_LINE_NAME_OFFSETS,
+-	BIN_BUF_DBG_RESET_REGS,
+-	BIN_BUF_DBG_PARSING_STRINGS,
+-	MAX_BIN_DBG_BUFFER_TYPE
+-};
+-
+-
+-/* Attention bit mapping */
+-struct dbg_attn_bit_mapping {
+-	u16 data;
+-#define DBG_ATTN_BIT_MAPPING_VAL_MASK			0x7FFF
+-#define DBG_ATTN_BIT_MAPPING_VAL_SHIFT			0
+-#define DBG_ATTN_BIT_MAPPING_IS_UNUSED_BIT_CNT_MASK	0x1
+-#define DBG_ATTN_BIT_MAPPING_IS_UNUSED_BIT_CNT_SHIFT	15
+-};
+-
+-/* Attention block per-type data */
+-struct dbg_attn_block_type_data {
+-	u16 names_offset;
+-	u16 reserved1;
+-	u8 num_regs;
+-	u8 reserved2;
+-	u16 regs_offset;
+-
+-};
+-
+-/* Block attentions */
+-struct dbg_attn_block {
+-	struct dbg_attn_block_type_data per_type_data[2];
+-};
+-
+-/* Attention register result */
+-struct dbg_attn_reg_result {
+-	u32 data;
+-#define DBG_ATTN_REG_RESULT_STS_ADDRESS_MASK	0xFFFFFF
+-#define DBG_ATTN_REG_RESULT_STS_ADDRESS_SHIFT	0
+-#define DBG_ATTN_REG_RESULT_NUM_REG_ATTN_MASK	0xFF
+-#define DBG_ATTN_REG_RESULT_NUM_REG_ATTN_SHIFT	24
+-	u16 block_attn_offset;
+-	u16 reserved;
+-	u32 sts_val;
+-	u32 mask_val;
+-};
+-
+-/* Attention block result */
+-struct dbg_attn_block_result {
+-	u8 block_id;
+-	u8 data;
+-#define DBG_ATTN_BLOCK_RESULT_ATTN_TYPE_MASK	0x3
+-#define DBG_ATTN_BLOCK_RESULT_ATTN_TYPE_SHIFT	0
+-#define DBG_ATTN_BLOCK_RESULT_NUM_REGS_MASK	0x3F
+-#define DBG_ATTN_BLOCK_RESULT_NUM_REGS_SHIFT	2
+-	u16 names_offset;
+-	struct dbg_attn_reg_result reg_results[15];
+-};
+-
+-/* Mode header */
+-struct dbg_mode_hdr {
+-	u16 data;
+-#define DBG_MODE_HDR_EVAL_MODE_MASK		0x1
+-#define DBG_MODE_HDR_EVAL_MODE_SHIFT		0
+-#define DBG_MODE_HDR_MODES_BUF_OFFSET_MASK	0x7FFF
+-#define DBG_MODE_HDR_MODES_BUF_OFFSET_SHIFT	1
+-};
+-
+-/* Attention register */
+-struct dbg_attn_reg {
+-	struct dbg_mode_hdr mode;
+-	u16 block_attn_offset;
+-	u32 data;
+-#define DBG_ATTN_REG_STS_ADDRESS_MASK	0xFFFFFF
+-#define DBG_ATTN_REG_STS_ADDRESS_SHIFT	0
+-#define DBG_ATTN_REG_NUM_REG_ATTN_MASK	0xFF
+-#define DBG_ATTN_REG_NUM_REG_ATTN_SHIFT 24
+-	u32 sts_clr_address;
+-	u32 mask_address;
+-};
+-
+-/* Attention types */
+-enum dbg_attn_type {
+-	ATTN_TYPE_INTERRUPT,
+-	ATTN_TYPE_PARITY,
+-	MAX_DBG_ATTN_TYPE
+-};
+-
+-/* Block debug data */
+-struct dbg_block {
+-	u8 name[15];
+-	u8 associated_storm_letter;
+-};
+-
+-/* Chip-specific block debug data */
+-struct dbg_block_chip {
+-	u8 flags;
+-#define DBG_BLOCK_CHIP_IS_REMOVED_MASK		 0x1
+-#define DBG_BLOCK_CHIP_IS_REMOVED_SHIFT		 0
+-#define DBG_BLOCK_CHIP_HAS_RESET_REG_MASK	 0x1
+-#define DBG_BLOCK_CHIP_HAS_RESET_REG_SHIFT	 1
+-#define DBG_BLOCK_CHIP_UNRESET_BEFORE_DUMP_MASK  0x1
+-#define DBG_BLOCK_CHIP_UNRESET_BEFORE_DUMP_SHIFT 2
+-#define DBG_BLOCK_CHIP_HAS_DBG_BUS_MASK		 0x1
+-#define DBG_BLOCK_CHIP_HAS_DBG_BUS_SHIFT	 3
+-#define DBG_BLOCK_CHIP_HAS_LATENCY_EVENTS_MASK	 0x1
+-#define DBG_BLOCK_CHIP_HAS_LATENCY_EVENTS_SHIFT  4
+-#define DBG_BLOCK_CHIP_RESERVED0_MASK		 0x7
+-#define DBG_BLOCK_CHIP_RESERVED0_SHIFT		 5
+-	u8 dbg_client_id;
+-	u8 reset_reg_id;
+-	u8 reset_reg_bit_offset;
+-	struct dbg_mode_hdr dbg_bus_mode;
+-	u16 reserved1;
+-	u8 reserved2;
+-	u8 num_of_dbg_bus_lines;
+-	u16 dbg_bus_lines_offset;
+-	u32 dbg_select_reg_addr;
+-	u32 dbg_dword_enable_reg_addr;
+-	u32 dbg_shift_reg_addr;
+-	u32 dbg_force_valid_reg_addr;
+-	u32 dbg_force_frame_reg_addr;
+-};
+-
+-/* Chip-specific block user debug data */
+-struct dbg_block_chip_user {
+-	u8 num_of_dbg_bus_lines;
+-	u8 has_latency_events;
+-	u16 names_offset;
+-};
+-
+-/* Block user debug data */
+-struct dbg_block_user {
+-	u8 name[16];
+-};
+-
+-/* Block Debug line data */
+-struct dbg_bus_line {
+-	u8 data;
+-#define DBG_BUS_LINE_NUM_OF_GROUPS_MASK		0xF
+-#define DBG_BUS_LINE_NUM_OF_GROUPS_SHIFT	0
+-#define DBG_BUS_LINE_IS_256B_MASK		0x1
+-#define DBG_BUS_LINE_IS_256B_SHIFT		4
+-#define DBG_BUS_LINE_RESERVED_MASK		0x7
+-#define DBG_BUS_LINE_RESERVED_SHIFT		5
+-	u8 group_sizes;
+-};
+-
+-/* Condition header for registers dump */
+-struct dbg_dump_cond_hdr {
+-	struct dbg_mode_hdr mode; /* Mode header */
+-	u8 block_id; /* block ID */
+-	u8 data_size; /* size in dwords of the data following this header */
+-};
+-
+-/* Memory data for registers dump */
+-struct dbg_dump_mem {
+-	u32 dword0;
+-#define DBG_DUMP_MEM_ADDRESS_MASK	0xFFFFFF
+-#define DBG_DUMP_MEM_ADDRESS_SHIFT	0
+-#define DBG_DUMP_MEM_MEM_GROUP_ID_MASK	0xFF
+-#define DBG_DUMP_MEM_MEM_GROUP_ID_SHIFT	24
+-	u32 dword1;
+-#define DBG_DUMP_MEM_LENGTH_MASK	0xFFFFFF
+-#define DBG_DUMP_MEM_LENGTH_SHIFT	0
+-#define DBG_DUMP_MEM_WIDE_BUS_MASK	0x1
+-#define DBG_DUMP_MEM_WIDE_BUS_SHIFT	24
+-#define DBG_DUMP_MEM_RESERVED_MASK	0x7F
+-#define DBG_DUMP_MEM_RESERVED_SHIFT	25
+-};
+-
+-/* Register data for registers dump */
+-struct dbg_dump_reg {
+-	u32 data;
+-#define DBG_DUMP_REG_ADDRESS_MASK	0x7FFFFF
+-#define DBG_DUMP_REG_ADDRESS_SHIFT	0
+-#define DBG_DUMP_REG_WIDE_BUS_MASK	0x1
+-#define DBG_DUMP_REG_WIDE_BUS_SHIFT	23
+-#define DBG_DUMP_REG_LENGTH_MASK	0xFF
+-#define DBG_DUMP_REG_LENGTH_SHIFT	24
+-};
+-
+-/* Split header for registers dump */
+-struct dbg_dump_split_hdr {
+-	u32 hdr;
+-#define DBG_DUMP_SPLIT_HDR_DATA_SIZE_MASK	0xFFFFFF
+-#define DBG_DUMP_SPLIT_HDR_DATA_SIZE_SHIFT	0
+-#define DBG_DUMP_SPLIT_HDR_SPLIT_TYPE_ID_MASK	0xFF
+-#define DBG_DUMP_SPLIT_HDR_SPLIT_TYPE_ID_SHIFT	24
+-};
+-
+-/* Condition header for idle check */
+-struct dbg_idle_chk_cond_hdr {
+-	struct dbg_mode_hdr mode; /* Mode header */
+-	u16 data_size; /* size in dwords of the data following this header */
+-};
+-
+-/* Idle Check condition register */
+-struct dbg_idle_chk_cond_reg {
+-	u32 data;
+-#define DBG_IDLE_CHK_COND_REG_ADDRESS_MASK	0x7FFFFF
+-#define DBG_IDLE_CHK_COND_REG_ADDRESS_SHIFT	0
+-#define DBG_IDLE_CHK_COND_REG_WIDE_BUS_MASK	0x1
+-#define DBG_IDLE_CHK_COND_REG_WIDE_BUS_SHIFT	23
+-#define DBG_IDLE_CHK_COND_REG_BLOCK_ID_MASK	0xFF
+-#define DBG_IDLE_CHK_COND_REG_BLOCK_ID_SHIFT	24
+-	u16 num_entries;
+-	u8 entry_size;
+-	u8 start_entry;
+-};
+-
+-/* Idle Check info register */
+-struct dbg_idle_chk_info_reg {
+-	u32 data;
+-#define DBG_IDLE_CHK_INFO_REG_ADDRESS_MASK	0x7FFFFF
+-#define DBG_IDLE_CHK_INFO_REG_ADDRESS_SHIFT	0
+-#define DBG_IDLE_CHK_INFO_REG_WIDE_BUS_MASK	0x1
+-#define DBG_IDLE_CHK_INFO_REG_WIDE_BUS_SHIFT	23
+-#define DBG_IDLE_CHK_INFO_REG_BLOCK_ID_MASK	0xFF
+-#define DBG_IDLE_CHK_INFO_REG_BLOCK_ID_SHIFT	24
+-	u16 size; /* register size in dwords */
+-	struct dbg_mode_hdr mode; /* Mode header */
+-};
+-
+-/* Idle Check register */
+-union dbg_idle_chk_reg {
+-	struct dbg_idle_chk_cond_reg cond_reg; /* condition register */
+-	struct dbg_idle_chk_info_reg info_reg; /* info register */
+-};
+-
+-/* Idle Check result header */
+-struct dbg_idle_chk_result_hdr {
+-	u16 rule_id; /* Failing rule index */
+-	u16 mem_entry_id; /* Failing memory entry index */
+-	u8 num_dumped_cond_regs; /* number of dumped condition registers */
+-	u8 num_dumped_info_regs; /* number of dumped condition registers */
+-	u8 severity; /* from dbg_idle_chk_severity_types enum */
+-	u8 reserved;
+-};
+-
+-/* Idle Check result register header */
+-struct dbg_idle_chk_result_reg_hdr {
+-	u8 data;
+-#define DBG_IDLE_CHK_RESULT_REG_HDR_IS_MEM_MASK  0x1
+-#define DBG_IDLE_CHK_RESULT_REG_HDR_IS_MEM_SHIFT 0
+-#define DBG_IDLE_CHK_RESULT_REG_HDR_REG_ID_MASK  0x7F
+-#define DBG_IDLE_CHK_RESULT_REG_HDR_REG_ID_SHIFT 1
+-	u8 start_entry; /* index of the first checked entry */
+-	u16 size; /* register size in dwords */
+-};
+-
+-/* Idle Check rule */
+-struct dbg_idle_chk_rule {
+-	u16 rule_id; /* Idle Check rule ID */
+-	u8 severity; /* value from dbg_idle_chk_severity_types enum */
+-	u8 cond_id; /* Condition ID */
+-	u8 num_cond_regs; /* number of condition registers */
+-	u8 num_info_regs; /* number of info registers */
+-	u8 num_imms; /* number of immediates in the condition */
+-	u8 reserved1;
+-	u16 reg_offset; /* offset of this rules registers in the idle check
+-			 * register array (in dbg_idle_chk_reg units).
+-			 */
+-	u16 imm_offset; /* offset of this rules immediate values in the
+-			 * immediate values array (in dwords).
+-			 */
+-};
+-
+-/* Idle Check rule parsing data */
+-struct dbg_idle_chk_rule_parsing_data {
+-	u32 data;
+-#define DBG_IDLE_CHK_RULE_PARSING_DATA_HAS_FW_MSG_MASK	0x1
+-#define DBG_IDLE_CHK_RULE_PARSING_DATA_HAS_FW_MSG_SHIFT	0
+-#define DBG_IDLE_CHK_RULE_PARSING_DATA_STR_OFFSET_MASK	0x7FFFFFFF
+-#define DBG_IDLE_CHK_RULE_PARSING_DATA_STR_OFFSET_SHIFT	1
+-};
+-
+-/* Idle check severity types */
+-enum dbg_idle_chk_severity_types {
+-	/* idle check failure should cause an error */
+-	IDLE_CHK_SEVERITY_ERROR,
+-	/* idle check failure should cause an error only if theres no traffic */
+-	IDLE_CHK_SEVERITY_ERROR_NO_TRAFFIC,
+-	/* idle check failure should cause a warning */
+-	IDLE_CHK_SEVERITY_WARNING,
+-	MAX_DBG_IDLE_CHK_SEVERITY_TYPES
+-};
+-
+-/* Reset register */
+-struct dbg_reset_reg {
+-	u32 data;
+-#define DBG_RESET_REG_ADDR_MASK        0xFFFFFF
+-#define DBG_RESET_REG_ADDR_SHIFT       0
+-#define DBG_RESET_REG_IS_REMOVED_MASK  0x1
+-#define DBG_RESET_REG_IS_REMOVED_SHIFT 24
+-#define DBG_RESET_REG_RESERVED_MASK    0x7F
+-#define DBG_RESET_REG_RESERVED_SHIFT   25
+-};
+-
+-/* Debug Bus block data */
+-struct dbg_bus_block_data {
+-	u8 enable_mask;
+-	u8 right_shift;
+-	u8 force_valid_mask;
+-	u8 force_frame_mask;
+-	u8 dword_mask;
+-	u8 line_num;
+-	u8 hw_id;
+-	u8 flags;
+-#define DBG_BUS_BLOCK_DATA_IS_256B_LINE_MASK  0x1
+-#define DBG_BUS_BLOCK_DATA_IS_256B_LINE_SHIFT 0
+-#define DBG_BUS_BLOCK_DATA_RESERVED_MASK      0x7F
+-#define DBG_BUS_BLOCK_DATA_RESERVED_SHIFT     1
+-};
+-
+-enum dbg_bus_clients {
+-	DBG_BUS_CLIENT_RBCN,
+-	DBG_BUS_CLIENT_RBCP,
+-	DBG_BUS_CLIENT_RBCR,
+-	DBG_BUS_CLIENT_RBCT,
+-	DBG_BUS_CLIENT_RBCU,
+-	DBG_BUS_CLIENT_RBCF,
+-	DBG_BUS_CLIENT_RBCX,
+-	DBG_BUS_CLIENT_RBCS,
+-	DBG_BUS_CLIENT_RBCH,
+-	DBG_BUS_CLIENT_RBCZ,
+-	DBG_BUS_CLIENT_OTHER_ENGINE,
+-	DBG_BUS_CLIENT_TIMESTAMP,
+-	DBG_BUS_CLIENT_CPU,
+-	DBG_BUS_CLIENT_RBCY,
+-	DBG_BUS_CLIENT_RBCQ,
+-	DBG_BUS_CLIENT_RBCM,
+-	DBG_BUS_CLIENT_RBCB,
+-	DBG_BUS_CLIENT_RBCW,
+-	DBG_BUS_CLIENT_RBCV,
+-	MAX_DBG_BUS_CLIENTS
+-};
+-
+-/* Debug Bus constraint operation types */
+-enum dbg_bus_constraint_ops {
+-	DBG_BUS_CONSTRAINT_OP_EQ,
+-	DBG_BUS_CONSTRAINT_OP_NE,
+-	DBG_BUS_CONSTRAINT_OP_LT,
+-	DBG_BUS_CONSTRAINT_OP_LTC,
+-	DBG_BUS_CONSTRAINT_OP_LE,
+-	DBG_BUS_CONSTRAINT_OP_LEC,
+-	DBG_BUS_CONSTRAINT_OP_GT,
+-	DBG_BUS_CONSTRAINT_OP_GTC,
+-	DBG_BUS_CONSTRAINT_OP_GE,
+-	DBG_BUS_CONSTRAINT_OP_GEC,
+-	MAX_DBG_BUS_CONSTRAINT_OPS
+-};
+-
+-/* Debug Bus trigger state data */
+-struct dbg_bus_trigger_state_data {
+-	u8 msg_len;
+-	u8 constraint_dword_mask;
+-	u8 storm_id;
+-	u8 reserved;
+-};
+-
+-/* Debug Bus memory address */
+-struct dbg_bus_mem_addr {
+-	u32 lo;
+-	u32 hi;
+-};
+-
+-/* Debug Bus PCI buffer data */
+-struct dbg_bus_pci_buf_data {
+-	struct dbg_bus_mem_addr phys_addr; /* PCI buffer physical address */
+-	struct dbg_bus_mem_addr virt_addr; /* PCI buffer virtual address */
+-	u32 size; /* PCI buffer size in bytes */
+-};
+-
+-/* Debug Bus Storm EID range filter params */
+-struct dbg_bus_storm_eid_range_params {
+-	u8 min; /* Minimal event ID to filter on */
+-	u8 max; /* Maximal event ID to filter on */
+-};
+-
+-/* Debug Bus Storm EID mask filter params */
+-struct dbg_bus_storm_eid_mask_params {
+-	u8 val; /* Event ID value */
+-	u8 mask; /* Event ID mask. 1s in the mask = dont care bits. */
+-};
+-
+-/* Debug Bus Storm EID filter params */
+-union dbg_bus_storm_eid_params {
+-	struct dbg_bus_storm_eid_range_params range;
+-	struct dbg_bus_storm_eid_mask_params mask;
+-};
+-
+-/* Debug Bus Storm data */
+-struct dbg_bus_storm_data {
+-	u8 enabled;
+-	u8 mode;
+-	u8 hw_id;
+-	u8 eid_filter_en;
+-	u8 eid_range_not_mask;
+-	u8 cid_filter_en;
+-	union dbg_bus_storm_eid_params eid_filter_params;
+-	u32 cid;
+-};
+-
+-/* Debug Bus data */
+-struct dbg_bus_data {
+-	u32 app_version;
+-	u8 state;
+-	u8 mode_256b_en;
+-	u8 num_enabled_blocks;
+-	u8 num_enabled_storms;
+-	u8 target;
+-	u8 one_shot_en;
+-	u8 grc_input_en;
+-	u8 timestamp_input_en;
+-	u8 filter_en;
+-	u8 adding_filter;
+-	u8 filter_pre_trigger;
+-	u8 filter_post_trigger;
+-	u8 trigger_en;
+-	u8 filter_constraint_dword_mask;
+-	u8 next_trigger_state;
+-	u8 next_constraint_id;
+-	struct dbg_bus_trigger_state_data trigger_states[3];
+-	u8 filter_msg_len;
+-	u8 rcv_from_other_engine;
+-	u8 blocks_dword_mask;
+-	u8 blocks_dword_overlap;
+-	u32 hw_id_mask;
+-	struct dbg_bus_pci_buf_data pci_buf;
+-	struct dbg_bus_block_data blocks[132];
+-	struct dbg_bus_storm_data storms[6];
+-};
+-
+-/* Debug bus states */
+-enum dbg_bus_states {
+-	DBG_BUS_STATE_IDLE,
+-	DBG_BUS_STATE_READY,
+-	DBG_BUS_STATE_RECORDING,
+-	DBG_BUS_STATE_STOPPED,
+-	MAX_DBG_BUS_STATES
+-};
+-
+-/* Debug Bus Storm modes */
+-enum dbg_bus_storm_modes {
+-	DBG_BUS_STORM_MODE_PRINTF,
+-	DBG_BUS_STORM_MODE_PRAM_ADDR,
+-	DBG_BUS_STORM_MODE_DRA_RW,
+-	DBG_BUS_STORM_MODE_DRA_W,
+-	DBG_BUS_STORM_MODE_LD_ST_ADDR,
+-	DBG_BUS_STORM_MODE_DRA_FSM,
+-	DBG_BUS_STORM_MODE_FAST_DBGMUX,
+-	DBG_BUS_STORM_MODE_RH,
+-	DBG_BUS_STORM_MODE_RH_WITH_STORE,
+-	DBG_BUS_STORM_MODE_FOC,
+-	DBG_BUS_STORM_MODE_EXT_STORE,
+-	MAX_DBG_BUS_STORM_MODES
+-};
+-
+-/* Debug bus target IDs */
+-enum dbg_bus_targets {
+-	DBG_BUS_TARGET_ID_INT_BUF,
+-	DBG_BUS_TARGET_ID_NIG,
+-	DBG_BUS_TARGET_ID_PCI,
+-	MAX_DBG_BUS_TARGETS
+-};
+-
+-/* GRC Dump data */
+-struct dbg_grc_data {
+-	u8 params_initialized;
+-	u8 reserved1;
+-	u16 reserved2;
+-	u32 param_val[48];
+-};
+-
+-/* Debug GRC params */
+-enum dbg_grc_params {
+-	DBG_GRC_PARAM_DUMP_TSTORM,
+-	DBG_GRC_PARAM_DUMP_MSTORM,
+-	DBG_GRC_PARAM_DUMP_USTORM,
+-	DBG_GRC_PARAM_DUMP_XSTORM,
+-	DBG_GRC_PARAM_DUMP_YSTORM,
+-	DBG_GRC_PARAM_DUMP_PSTORM,
+-	DBG_GRC_PARAM_DUMP_REGS,
+-	DBG_GRC_PARAM_DUMP_RAM,
+-	DBG_GRC_PARAM_DUMP_PBUF,
+-	DBG_GRC_PARAM_DUMP_IOR,
+-	DBG_GRC_PARAM_DUMP_VFC,
+-	DBG_GRC_PARAM_DUMP_CM_CTX,
+-	DBG_GRC_PARAM_DUMP_PXP,
+-	DBG_GRC_PARAM_DUMP_RSS,
+-	DBG_GRC_PARAM_DUMP_CAU,
+-	DBG_GRC_PARAM_DUMP_QM,
+-	DBG_GRC_PARAM_DUMP_MCP,
+-	DBG_GRC_PARAM_DUMP_DORQ,
+-	DBG_GRC_PARAM_DUMP_CFC,
+-	DBG_GRC_PARAM_DUMP_IGU,
+-	DBG_GRC_PARAM_DUMP_BRB,
+-	DBG_GRC_PARAM_DUMP_BTB,
+-	DBG_GRC_PARAM_DUMP_BMB,
+-	DBG_GRC_PARAM_RESERVD1,
+-	DBG_GRC_PARAM_DUMP_MULD,
+-	DBG_GRC_PARAM_DUMP_PRS,
+-	DBG_GRC_PARAM_DUMP_DMAE,
+-	DBG_GRC_PARAM_DUMP_TM,
+-	DBG_GRC_PARAM_DUMP_SDM,
+-	DBG_GRC_PARAM_DUMP_DIF,
+-	DBG_GRC_PARAM_DUMP_STATIC,
+-	DBG_GRC_PARAM_UNSTALL,
+-	DBG_GRC_PARAM_RESERVED2,
+-	DBG_GRC_PARAM_MCP_TRACE_META_SIZE,
+-	DBG_GRC_PARAM_EXCLUDE_ALL,
+-	DBG_GRC_PARAM_CRASH,
+-	DBG_GRC_PARAM_PARITY_SAFE,
+-	DBG_GRC_PARAM_DUMP_CM,
+-	DBG_GRC_PARAM_DUMP_PHY,
+-	DBG_GRC_PARAM_NO_MCP,
+-	DBG_GRC_PARAM_NO_FW_VER,
+-	DBG_GRC_PARAM_RESERVED3,
+-	DBG_GRC_PARAM_DUMP_MCP_HW_DUMP,
+-	DBG_GRC_PARAM_DUMP_ILT_CDUC,
+-	DBG_GRC_PARAM_DUMP_ILT_CDUT,
+-	DBG_GRC_PARAM_DUMP_CAU_EXT,
+-	MAX_DBG_GRC_PARAMS
+-};
+-
+-/* Debug status codes */
+-enum dbg_status {
+-	DBG_STATUS_OK,
+-	DBG_STATUS_APP_VERSION_NOT_SET,
+-	DBG_STATUS_UNSUPPORTED_APP_VERSION,
+-	DBG_STATUS_DBG_BLOCK_NOT_RESET,
+-	DBG_STATUS_INVALID_ARGS,
+-	DBG_STATUS_OUTPUT_ALREADY_SET,
+-	DBG_STATUS_INVALID_PCI_BUF_SIZE,
+-	DBG_STATUS_PCI_BUF_ALLOC_FAILED,
+-	DBG_STATUS_PCI_BUF_NOT_ALLOCATED,
+-	DBG_STATUS_INVALID_FILTER_TRIGGER_DWORDS,
+-	DBG_STATUS_NO_MATCHING_FRAMING_MODE,
+-	DBG_STATUS_VFC_READ_ERROR,
+-	DBG_STATUS_STORM_ALREADY_ENABLED,
+-	DBG_STATUS_STORM_NOT_ENABLED,
+-	DBG_STATUS_BLOCK_ALREADY_ENABLED,
+-	DBG_STATUS_BLOCK_NOT_ENABLED,
+-	DBG_STATUS_NO_INPUT_ENABLED,
+-	DBG_STATUS_NO_FILTER_TRIGGER_256B,
+-	DBG_STATUS_FILTER_ALREADY_ENABLED,
+-	DBG_STATUS_TRIGGER_ALREADY_ENABLED,
+-	DBG_STATUS_TRIGGER_NOT_ENABLED,
+-	DBG_STATUS_CANT_ADD_CONSTRAINT,
+-	DBG_STATUS_TOO_MANY_TRIGGER_STATES,
+-	DBG_STATUS_TOO_MANY_CONSTRAINTS,
+-	DBG_STATUS_RECORDING_NOT_STARTED,
+-	DBG_STATUS_DATA_DIDNT_TRIGGER,
+-	DBG_STATUS_NO_DATA_RECORDED,
+-	DBG_STATUS_DUMP_BUF_TOO_SMALL,
+-	DBG_STATUS_DUMP_NOT_CHUNK_ALIGNED,
+-	DBG_STATUS_UNKNOWN_CHIP,
+-	DBG_STATUS_VIRT_MEM_ALLOC_FAILED,
+-	DBG_STATUS_BLOCK_IN_RESET,
+-	DBG_STATUS_INVALID_TRACE_SIGNATURE,
+-	DBG_STATUS_INVALID_NVRAM_BUNDLE,
+-	DBG_STATUS_NVRAM_GET_IMAGE_FAILED,
+-	DBG_STATUS_NON_ALIGNED_NVRAM_IMAGE,
+-	DBG_STATUS_NVRAM_READ_FAILED,
+-	DBG_STATUS_IDLE_CHK_PARSE_FAILED,
+-	DBG_STATUS_MCP_TRACE_BAD_DATA,
+-	DBG_STATUS_MCP_TRACE_NO_META,
+-	DBG_STATUS_MCP_COULD_NOT_HALT,
+-	DBG_STATUS_MCP_COULD_NOT_RESUME,
+-	DBG_STATUS_RESERVED0,
+-	DBG_STATUS_SEMI_FIFO_NOT_EMPTY,
+-	DBG_STATUS_IGU_FIFO_BAD_DATA,
+-	DBG_STATUS_MCP_COULD_NOT_MASK_PRTY,
+-	DBG_STATUS_FW_ASSERTS_PARSE_FAILED,
+-	DBG_STATUS_REG_FIFO_BAD_DATA,
+-	DBG_STATUS_PROTECTION_OVERRIDE_BAD_DATA,
+-	DBG_STATUS_DBG_ARRAY_NOT_SET,
+-	DBG_STATUS_RESERVED1,
+-	DBG_STATUS_NON_MATCHING_LINES,
+-	DBG_STATUS_INSUFFICIENT_HW_IDS,
+-	DBG_STATUS_DBG_BUS_IN_USE,
+-	DBG_STATUS_INVALID_STORM_DBG_MODE,
+-	DBG_STATUS_OTHER_ENGINE_BB_ONLY,
+-	DBG_STATUS_FILTER_SINGLE_HW_ID,
+-	DBG_STATUS_TRIGGER_SINGLE_HW_ID,
+-	DBG_STATUS_MISSING_TRIGGER_STATE_STORM,
+-	MAX_DBG_STATUS
+-};
+-
+-/* Debug Storms IDs */
+-enum dbg_storms {
+-	DBG_TSTORM_ID,
+-	DBG_MSTORM_ID,
+-	DBG_USTORM_ID,
+-	DBG_XSTORM_ID,
+-	DBG_YSTORM_ID,
+-	DBG_PSTORM_ID,
+-	MAX_DBG_STORMS
+-};
+-
+-/* Idle Check data */
+-struct idle_chk_data {
+-	u32 buf_size;
+-	u8 buf_size_set;
+-	u8 reserved1;
+-	u16 reserved2;
+-};
+-
+-struct pretend_params {
+-	u8 split_type;
+-	u8 reserved;
+-	u16 split_id;
+-};
+-
+-/* Debug Tools data (per HW function)
+- */
+-struct dbg_tools_data {
+-	struct dbg_grc_data grc;
+-	struct dbg_bus_data bus;
+-	struct idle_chk_data idle_chk;
+-	u8 mode_enable[40];
+-	u8 block_in_reset[132];
+-	u8 chip_id;
+-	u8 hw_type;
+-	u8 num_ports;
+-	u8 num_pfs_per_port;
+-	u8 num_vfs;
+-	u8 initialized;
+-	u8 use_dmae;
+-	u8 reserved;
+-	struct pretend_params pretend;
+-	u32 num_regs_read;
+-};
+-
+-/* ILT Clients */
+-enum ilt_clients {
+-	ILT_CLI_CDUC,
+-	ILT_CLI_CDUT,
+-	ILT_CLI_QM,
+-	ILT_CLI_TM,
+-	ILT_CLI_SRC,
+-	ILT_CLI_TSDM,
+-	ILT_CLI_RGFS,
+-	ILT_CLI_TGFS,
+-	MAX_ILT_CLIENTS
+-};
+-
+ /********************************/
+ /* HSI Init Functions constants */
+ /********************************/
+@@ -3009,720 +2246,6 @@ struct iro {
+ 	u16 size;
+ };
  
- /**
-- * @brief qed_set_vxlan_enable - enable or disable VXLAN tunnel in HW
-+ * qed_set_vxlan_enable(): Enable or disable VXLAN tunnel in HW.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @vxlan_enable: vxlan enable flag.
-  *
-- * @param p_hwfn
-- * @param p_ptt - ptt window used for writing the registers.
-- * @param vxlan_enable - vxlan enable flag.
-+ * Return: Void.
-  */
- void qed_set_vxlan_enable(struct qed_hwfn *p_hwfn,
- 			  struct qed_ptt *p_ptt, bool vxlan_enable);
- 
- /**
-- * @brief qed_set_gre_enable - enable or disable GRE tunnel in HW
-+ * qed_set_gre_enable(): Enable or disable GRE tunnel in HW.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @eth_gre_enable: Eth GRE enable flag.
-+ * @ip_gre_enable: IP GRE enable flag.
-  *
-- * @param p_hwfn
-- * @param p_ptt - ptt window used for writing the registers.
-- * @param eth_gre_enable - eth GRE enable enable flag.
-- * @param ip_gre_enable - IP GRE enable enable flag.
-+ * Return: Void.
-  */
- void qed_set_gre_enable(struct qed_hwfn *p_hwfn,
- 			struct qed_ptt *p_ptt,
- 			bool eth_gre_enable, bool ip_gre_enable);
- 
- /**
-- * @brief qed_set_geneve_dest_port - initializes geneve tunnel destination udp port
-+ * qed_set_geneve_dest_port(): Initializes geneve tunnel destination udp port
-  *
-- * @param p_hwfn
-- * @param p_ptt - ptt window used for writing the registers.
-- * @param dest_port - geneve destination udp port.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @dest_port: Geneve destination udp port.
-+ *
-+ * Retur: Void.
-  */
- void qed_set_geneve_dest_port(struct qed_hwfn *p_hwfn,
- 			      struct qed_ptt *p_ptt, u16 dest_port);
- 
- /**
-- * @brief qed_set_gre_enable - enable or disable GRE tunnel in HW
-+ * qed_set_geneve_enable(): Enable or disable GRE tunnel in HW.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @eth_geneve_enable: Eth GENEVE enable flag.
-+ * @ip_geneve_enable: IP GENEVE enable flag.
-  *
-- * @param p_ptt - ptt window used for writing the registers.
-- * @param eth_geneve_enable - eth GENEVE enable enable flag.
-- * @param ip_geneve_enable - IP GENEVE enable enable flag.
-+ * Return: Void.
-  */
- void qed_set_geneve_enable(struct qed_hwfn *p_hwfn,
- 			   struct qed_ptt *p_ptt,
-@@ -3931,25 +3956,29 @@ void qed_set_vxlan_no_l2_enable(struct qed_hwfn *p_hwfn,
- 				struct qed_ptt *p_ptt, bool enable);
- 
- /**
-- * @brief qed_gft_disable - Disable GFT
-+ * qed_gft_disable(): Disable GFT.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @pf_id: PF on which to disable GFT.
-  *
-- * @param p_hwfn
-- * @param p_ptt - ptt window used for writing the registers.
-- * @param pf_id - pf on which to disable GFT.
-+ * Return: Void.
-  */
- void qed_gft_disable(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt, u16 pf_id);
- 
- /**
-- * @brief qed_gft_config - Enable and configure HW for GFT
+-/***************************** Public Functions *******************************/
+-
+-/**
+- * qed_dbg_set_bin_ptr(): Sets a pointer to the binary data with debug
+- *                        arrays.
 - *
-- * @param p_hwfn - HW device data
-- * @param p_ptt - ptt window used for writing the registers.
-- * @param pf_id - pf on which to enable GFT.
-- * @param tcp - set profile tcp packets.
-- * @param udp - set profile udp  packet.
-- * @param ipv4 - set profile ipv4 packet.
-- * @param ipv6 - set profile ipv6 packet.
-- * @param profile_type - define packet same fields. Use enum gft_profile_type.
-+ * qed_gft_config(): Enable and configure HW for GFT.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @pf_id: PF on which to enable GFT.
-+ * @tcp: Set profile tcp packets.
-+ * @udp: Set profile udp  packet.
-+ * @ipv4: Set profile ipv4 packet.
-+ * @ipv6: Set profile ipv6 packet.
-+ * @profile_type: Define packet same fields. Use enum gft_profile_type.
-+ *
-+ * Return: Void.
-  */
- void qed_gft_config(struct qed_hwfn *p_hwfn,
- 		    struct qed_ptt *p_ptt,
-@@ -3959,107 +3988,120 @@ void qed_gft_config(struct qed_hwfn *p_hwfn,
- 		    bool ipv4, bool ipv6, enum gft_profile_type profile_type);
+- * @p_hwfn: HW device data.
+- * @bin_ptr: A pointer to the binary data with debug arrays.
+- *
+- * Return: enum dbg status.
+- */
+-enum dbg_status qed_dbg_set_bin_ptr(struct qed_hwfn *p_hwfn,
+-				    const u8 * const bin_ptr);
+-
+-/**
+- * qed_read_regs(): Reads registers into a buffer (using GRC).
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @buf: Destination buffer.
+- * @addr: Source GRC address in dwords.
+- * @len: Number of registers to read.
+- *
+- * Return: Void.
+- */
+-void qed_read_regs(struct qed_hwfn *p_hwfn,
+-		   struct qed_ptt *p_ptt, u32 *buf, u32 addr, u32 len);
+-
+-/**
+- * qed_read_fw_info(): Reads FW info from the chip.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @fw_info: (Out) a pointer to write the FW info into.
+- *
+- * Return: True if the FW info was read successfully from one of the Storms,
+- * or false if all Storms are in reset.
+- *
+- * The FW info contains FW-related information, such as the FW version,
+- * FW image (main/L2B/kuku), FW timestamp, etc.
+- * The FW info is read from the internal RAM of the first Storm that is not in
+- * reset.
+- */
+-bool qed_read_fw_info(struct qed_hwfn *p_hwfn,
+-		      struct qed_ptt *p_ptt, struct fw_info *fw_info);
+-/**
+- * qed_dbg_grc_config(): Sets the value of a GRC parameter.
+- *
+- * @p_hwfn: HW device data.
+- * @grc_param: GRC parameter.
+- * @val: Value to set.
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set.
+- *         - Grc_param is invalid.
+- *         - Val is outside the allowed boundaries.
+- */
+-enum dbg_status qed_dbg_grc_config(struct qed_hwfn *p_hwfn,
+-				   enum dbg_grc_params grc_param, u32 val);
+-
+-/**
+- * qed_dbg_grc_set_params_default(): Reverts all GRC parameters to their
+- *                                   default value.
+- *
+- * @p_hwfn: HW device data.
+- *
+- * Return: Void.
+- */
+-void qed_dbg_grc_set_params_default(struct qed_hwfn *p_hwfn);
+-/**
+- * qed_dbg_grc_get_dump_buf_size(): Returns the required buffer size for
+- *                                  GRC Dump.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @buf_size: (OUT) required buffer size (in dwords) for the GRC Dump
+- *             data.
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set
+- *           Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_grc_get_dump_buf_size(struct qed_hwfn *p_hwfn,
+-					      struct qed_ptt *p_ptt,
+-					      u32 *buf_size);
+-
+-/**
+- * qed_dbg_grc_dump(): Dumps GRC data into the specified buffer.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @dump_buf: Pointer to write the collected GRC data into.
+- * @buf_size_in_dwords:Size of the specified buffer in dwords.
+- * @num_dumped_dwords: (OUT) number of dumped dwords.
+- *
+- * Return: Error if one of the following holds:
+- *        - The version wasn't set.
+- *        - The specified dump buffer is too small.
+- *          Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_grc_dump(struct qed_hwfn *p_hwfn,
+-				 struct qed_ptt *p_ptt,
+-				 u32 *dump_buf,
+-				 u32 buf_size_in_dwords,
+-				 u32 *num_dumped_dwords);
+-
+-/**
+- * qed_dbg_idle_chk_get_dump_buf_size(): Returns the required buffer size
+- *                                       for idle check results.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @buf_size: (OUT) required buffer size (in dwords) for the idle check
+- *             data.
+- *
+- * return: Error if one of the following holds:
+- *        - The version wasn't set.
+- *          Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_idle_chk_get_dump_buf_size(struct qed_hwfn *p_hwfn,
+-						   struct qed_ptt *p_ptt,
+-						   u32 *buf_size);
+-
+-/**
+- * qed_dbg_idle_chk_dump: Performs idle check and writes the results
+- *                        into the specified buffer.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @dump_buf: Pointer to write the idle check data into.
+- * @buf_size_in_dwords: Size of the specified buffer in dwords.
+- * @num_dumped_dwords: (OUT) number of dumped dwords.
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set.
+- *         - The specified buffer is too small.
+- *           Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_idle_chk_dump(struct qed_hwfn *p_hwfn,
+-				      struct qed_ptt *p_ptt,
+-				      u32 *dump_buf,
+-				      u32 buf_size_in_dwords,
+-				      u32 *num_dumped_dwords);
+-
+-/**
+- * qed_dbg_mcp_trace_get_dump_buf_size(): Returns the required buffer size
+- *                                        for mcp trace results.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @buf_size: (OUT) Required buffer size (in dwords) for mcp trace data.
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set.
+- *         - The trace data in MCP scratchpad contain an invalid signature.
+- *         - The bundle ID in NVRAM is invalid.
+- *         - The trace meta data cannot be found (in NVRAM or image file).
+- *           Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_mcp_trace_get_dump_buf_size(struct qed_hwfn *p_hwfn,
+-						    struct qed_ptt *p_ptt,
+-						    u32 *buf_size);
+-
+-/**
+- * qed_dbg_mcp_trace_dump(): Performs mcp trace and writes the results
+- *                           into the specified buffer.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @dump_buf: Pointer to write the mcp trace data into.
+- * @buf_size_in_dwords: Size of the specified buffer in dwords.
+- * @num_dumped_dwords: (OUT) number of dumped dwords.
+- *
+- * Return: Error if one of the following holds:
+- *        - The version wasn't set.
+- *        - The specified buffer is too small.
+- *        - The trace data in MCP scratchpad contain an invalid signature.
+- *        - The bundle ID in NVRAM is invalid.
+- *        - The trace meta data cannot be found (in NVRAM or image file).
+- *        - The trace meta data cannot be read (from NVRAM or image file).
+- *          Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_mcp_trace_dump(struct qed_hwfn *p_hwfn,
+-				       struct qed_ptt *p_ptt,
+-				       u32 *dump_buf,
+-				       u32 buf_size_in_dwords,
+-				       u32 *num_dumped_dwords);
+-
+-/**
+- * qed_dbg_reg_fifo_get_dump_buf_size(): Returns the required buffer size
+- *                                       for grc trace fifo results.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @buf_size: (OUT) Required buffer size (in dwords) for reg fifo data.
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set
+- *           Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_reg_fifo_get_dump_buf_size(struct qed_hwfn *p_hwfn,
+-						   struct qed_ptt *p_ptt,
+-						   u32 *buf_size);
+-
+-/**
+- * qed_dbg_reg_fifo_dump(): Reads the reg fifo and writes the results into
+- *                          the specified buffer.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @dump_buf: Pointer to write the reg fifo data into.
+- * @buf_size_in_dwords: Size of the specified buffer in dwords.
+- * @num_dumped_dwords: (OUT) number of dumped dwords.
+- *
+- * Return: Error if one of the following holds:
+- *        - The version wasn't set.
+- *        - The specified buffer is too small.
+- *        - DMAE transaction failed.
+- *           Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_reg_fifo_dump(struct qed_hwfn *p_hwfn,
+-				      struct qed_ptt *p_ptt,
+-				      u32 *dump_buf,
+-				      u32 buf_size_in_dwords,
+-				      u32 *num_dumped_dwords);
+-
+-/**
+- * qed_dbg_igu_fifo_get_dump_buf_size(): Returns the required buffer size
+- *                                       for the IGU fifo results.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @buf_size: (OUT) Required buffer size (in dwords) for the IGU fifo
+- *            data.
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set.
+- *           Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_igu_fifo_get_dump_buf_size(struct qed_hwfn *p_hwfn,
+-						   struct qed_ptt *p_ptt,
+-						   u32 *buf_size);
+-
+-/**
+- * qed_dbg_igu_fifo_dump(): Reads the IGU fifo and writes the results into
+- *                          the specified buffer.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @dump_buf: Pointer to write the IGU fifo data into.
+- * @buf_size_in_dwords: Size of the specified buffer in dwords.
+- * @num_dumped_dwords: (OUT) number of dumped dwords.
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set
+- *         - The specified buffer is too small
+- *         - DMAE transaction failed
+- *           Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_igu_fifo_dump(struct qed_hwfn *p_hwfn,
+-				      struct qed_ptt *p_ptt,
+-				      u32 *dump_buf,
+-				      u32 buf_size_in_dwords,
+-				      u32 *num_dumped_dwords);
+-
+-/**
+- * qed_dbg_protection_override_get_dump_buf_size(): Returns the required
+- *        buffer size for protection override window results.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @buf_size: (OUT) Required buffer size (in dwords) for protection
+- *             override data.
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set
+- *           Otherwise, returns ok.
+- */
+-enum dbg_status
+-qed_dbg_protection_override_get_dump_buf_size(struct qed_hwfn *p_hwfn,
+-					      struct qed_ptt *p_ptt,
+-					      u32 *buf_size);
+-/**
+- * qed_dbg_protection_override_dump(): Reads protection override window
+- *       entries and writes the results into the specified buffer.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @dump_buf: Pointer to write the protection override data into.
+- * @buf_size_in_dwords: Size of the specified buffer in dwords.
+- * @num_dumped_dwords: (OUT) number of dumped dwords.
+- *
+- * @return: Error if one of the following holds:
+- *          - The version wasn't set.
+- *          - The specified buffer is too small.
+- *          - DMAE transaction failed.
+- *             Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_protection_override_dump(struct qed_hwfn *p_hwfn,
+-						 struct qed_ptt *p_ptt,
+-						 u32 *dump_buf,
+-						 u32 buf_size_in_dwords,
+-						 u32 *num_dumped_dwords);
+-/**
+- * qed_dbg_fw_asserts_get_dump_buf_size(): Returns the required buffer
+- *                                         size for FW Asserts results.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @buf_size: (OUT) Required buffer size (in dwords) for FW Asserts data.
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set.
+- *           Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_fw_asserts_get_dump_buf_size(struct qed_hwfn *p_hwfn,
+-						     struct qed_ptt *p_ptt,
+-						     u32 *buf_size);
+-/**
+- * qed_dbg_fw_asserts_dump(): Reads the FW Asserts and writes the results
+- *                            into the specified buffer.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @dump_buf: Pointer to write the FW Asserts data into.
+- * @buf_size_in_dwords: Size of the specified buffer in dwords.
+- * @num_dumped_dwords: (OUT) number of dumped dwords.
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set.
+- *         - The specified buffer is too small.
+- *           Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_fw_asserts_dump(struct qed_hwfn *p_hwfn,
+-					struct qed_ptt *p_ptt,
+-					u32 *dump_buf,
+-					u32 buf_size_in_dwords,
+-					u32 *num_dumped_dwords);
+-
+-/**
+- * qed_dbg_read_attn(): Reads the attention registers of the specified
+- * block and type, and writes the results into the specified buffer.
+- *
+- * @p_hwfn: HW device data.
+- * @p_ptt: Ptt window used for writing the registers.
+- * @block: Block ID.
+- * @attn_type: Attention type.
+- * @clear_status: Indicates if the attention status should be cleared.
+- * @results:  (OUT) Pointer to write the read results into.
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set
+- *          Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_read_attn(struct qed_hwfn *p_hwfn,
+-				  struct qed_ptt *p_ptt,
+-				  enum block_id block,
+-				  enum dbg_attn_type attn_type,
+-				  bool clear_status,
+-				  struct dbg_attn_block_result *results);
+-
+-/**
+- * qed_dbg_print_attn(): Prints attention registers values in the
+- *                       specified results struct.
+- *
+- * @p_hwfn: HW device data.
+- * @results: Pointer to the attention read results
+- *
+- * Return: Error if one of the following holds:
+- *        - The version wasn't set
+- *          Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_print_attn(struct qed_hwfn *p_hwfn,
+-				   struct dbg_attn_block_result *results);
+-
+-/******************************* Data Types **********************************/
+-
+-struct mcp_trace_format {
+-	u32 data;
+-#define MCP_TRACE_FORMAT_MODULE_MASK	0x0000ffff
+-#define MCP_TRACE_FORMAT_MODULE_OFFSET	0
+-#define MCP_TRACE_FORMAT_LEVEL_MASK	0x00030000
+-#define MCP_TRACE_FORMAT_LEVEL_OFFSET	16
+-#define MCP_TRACE_FORMAT_P1_SIZE_MASK	0x000c0000
+-#define MCP_TRACE_FORMAT_P1_SIZE_OFFSET 18
+-#define MCP_TRACE_FORMAT_P2_SIZE_MASK	0x00300000
+-#define MCP_TRACE_FORMAT_P2_SIZE_OFFSET 20
+-#define MCP_TRACE_FORMAT_P3_SIZE_MASK	0x00c00000
+-#define MCP_TRACE_FORMAT_P3_SIZE_OFFSET 22
+-#define MCP_TRACE_FORMAT_LEN_MASK	0xff000000
+-#define MCP_TRACE_FORMAT_LEN_OFFSET	24
+-
+-	char *format_str;
+-};
+-
+-/* MCP Trace Meta data structure */
+-struct mcp_trace_meta {
+-	u32 modules_num;
+-	char **modules;
+-	u32 formats_num;
+-	struct mcp_trace_format *formats;
+-	bool is_allocated;
+-};
+-
+-/* Debug Tools user data */
+-struct dbg_tools_user_data {
+-	struct mcp_trace_meta mcp_trace_meta;
+-	const u32 *mcp_trace_user_meta_buf;
+-};
+-
+-/******************************** Constants **********************************/
+-
+-#define MAX_NAME_LEN	16
+-
+-/***************************** Public Functions *******************************/
+-
+-/**
+- * qed_dbg_user_set_bin_ptr(): Sets a pointer to the binary data with
+- *                             debug arrays.
+- *
+- * @p_hwfn: HW device data.
+- * @bin_ptr: a pointer to the binary data with debug arrays.
+- *
+- * Return: dbg_status.
+- */
+-enum dbg_status qed_dbg_user_set_bin_ptr(struct qed_hwfn *p_hwfn,
+-					 const u8 * const bin_ptr);
+-
+-/**
+- * qed_dbg_alloc_user_data(): Allocates user debug data.
+- *
+- * @p_hwfn: HW device data.
+- * @user_data_ptr: (OUT) a pointer to the allocated memory.
+- *
+- * Return: dbg_status.
+- */
+-enum dbg_status qed_dbg_alloc_user_data(struct qed_hwfn *p_hwfn,
+-					void **user_data_ptr);
+-
+-/**
+- * qed_dbg_get_status_str(): Returns a string for the specified status.
+- *
+- * @status: A debug status code.
+- *
+- * Return: A string for the specified status.
+- */
+-const char *qed_dbg_get_status_str(enum dbg_status status);
+-
+-/**
+- * qed_get_idle_chk_results_buf_size(): Returns the required buffer size
+- *                                      for idle check results (in bytes).
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: idle check dump buffer.
+- * @num_dumped_dwords: number of dwords that were dumped.
+- * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
+- *                    results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_get_idle_chk_results_buf_size(struct qed_hwfn *p_hwfn,
+-						  u32 *dump_buf,
+-						  u32  num_dumped_dwords,
+-						  u32 *results_buf_size);
+-/**
+- * qed_print_idle_chk_results(): Prints idle check results
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: idle check dump buffer.
+- * @num_dumped_dwords: number of dwords that were dumped.
+- * @results_buf: buffer for printing the idle check results.
+- * @num_errors: (OUT) number of errors found in idle check.
+- * @num_warnings: (OUT) number of warnings found in idle check.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_print_idle_chk_results(struct qed_hwfn *p_hwfn,
+-					   u32 *dump_buf,
+-					   u32 num_dumped_dwords,
+-					   char *results_buf,
+-					   u32 *num_errors,
+-					   u32 *num_warnings);
+-
+-/**
+- * qed_dbg_mcp_trace_set_meta_data(): Sets the MCP Trace meta data.
+- *
+- * @p_hwfn: HW device data.
+- * @meta_buf: Meta buffer.
+- *
+- * Return: Void.
+- *
+- * Needed in case the MCP Trace dump doesn't contain the meta data (e.g. due to
+- * no NVRAM access).
+- */
+-void qed_dbg_mcp_trace_set_meta_data(struct qed_hwfn *p_hwfn,
+-				     const u32 *meta_buf);
+-
+-/**
+- * qed_get_mcp_trace_results_buf_size(): Returns the required buffer size
+- *                                       for MCP Trace results (in bytes).
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: MCP Trace dump buffer.
+- * @num_dumped_dwords: number of dwords that were dumped.
+- * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
+- *                    results.
+- *
+- * Return: Rrror if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_get_mcp_trace_results_buf_size(struct qed_hwfn *p_hwfn,
+-						   u32 *dump_buf,
+-						   u32 num_dumped_dwords,
+-						   u32 *results_buf_size);
+-
+-/**
+- * qed_print_mcp_trace_results(): Prints MCP Trace results
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: MCP trace dump buffer, starting from the header.
+- * @num_dumped_dwords: Member of dwords that were dumped.
+- * @results_buf: Buffer for printing the mcp trace results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_print_mcp_trace_results(struct qed_hwfn *p_hwfn,
+-					    u32 *dump_buf,
+-					    u32 num_dumped_dwords,
+-					    char *results_buf);
+-
+-/**
+- * qed_print_mcp_trace_results_cont(): Prints MCP Trace results, and
+- * keeps the MCP trace meta data allocated, to support continuous MCP Trace
+- * parsing. After the continuous parsing ends, mcp_trace_free_meta_data should
+- * be called to free the meta data.
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: MVP trace dump buffer, starting from the header.
+- * @results_buf: Buffer for printing the mcp trace results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_print_mcp_trace_results_cont(struct qed_hwfn *p_hwfn,
+-						 u32 *dump_buf,
+-						 char *results_buf);
+-
+-/**
+- * qed_print_mcp_trace_line(): Prints MCP Trace results for a single line
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: MCP trace dump buffer, starting from the header.
+- * @num_dumped_bytes: Number of bytes that were dumped.
+- * @results_buf: Buffer for printing the mcp trace results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_print_mcp_trace_line(struct qed_hwfn *p_hwfn,
+-					 u8 *dump_buf,
+-					 u32 num_dumped_bytes,
+-					 char *results_buf);
+-
+-/**
+- * qed_mcp_trace_free_meta_data(): Frees the MCP Trace meta data.
+- * Should be called after continuous MCP Trace parsing.
+- *
+- * @p_hwfn: HW device data.
+- *
+- * Return: Void.
+- */
+-void qed_mcp_trace_free_meta_data(struct qed_hwfn *p_hwfn);
+-
+-/**
+- * qed_get_reg_fifo_results_buf_size(): Returns the required buffer size
+- *                                      for reg_fifo results (in bytes).
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: Reg fifo dump buffer.
+- * @num_dumped_dwords: Number of dwords that were dumped.
+- * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
+- *                     results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_get_reg_fifo_results_buf_size(struct qed_hwfn *p_hwfn,
+-						  u32 *dump_buf,
+-						  u32 num_dumped_dwords,
+-						  u32 *results_buf_size);
+-
+-/**
+- * qed_print_reg_fifo_results(): Prints reg fifo results.
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: Reg fifo dump buffer, starting from the header.
+- * @num_dumped_dwords: Number of dwords that were dumped.
+- * @results_buf: Buffer for printing the reg fifo results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_print_reg_fifo_results(struct qed_hwfn *p_hwfn,
+-					   u32 *dump_buf,
+-					   u32 num_dumped_dwords,
+-					   char *results_buf);
+-
+-/**
+- * qed_get_igu_fifo_results_buf_size(): Returns the required buffer size
+- *                                      for igu_fifo results (in bytes).
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: IGU fifo dump buffer.
+- * @num_dumped_dwords: number of dwords that were dumped.
+- * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
+- *                    results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_get_igu_fifo_results_buf_size(struct qed_hwfn *p_hwfn,
+-						  u32 *dump_buf,
+-						  u32 num_dumped_dwords,
+-						  u32 *results_buf_size);
+-
+-/**
+- * qed_print_igu_fifo_results(): Prints IGU fifo results
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: IGU fifo dump buffer, starting from the header.
+- * @num_dumped_dwords: Number of dwords that were dumped.
+- * @results_buf: Buffer for printing the IGU fifo results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_print_igu_fifo_results(struct qed_hwfn *p_hwfn,
+-					   u32 *dump_buf,
+-					   u32 num_dumped_dwords,
+-					   char *results_buf);
+-
+-/**
+- * qed_get_protection_override_results_buf_size(): Returns the required
+- *         buffer size for protection override results (in bytes).
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: Protection override dump buffer.
+- * @num_dumped_dwords: Number of dwords that were dumped.
+- * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
+- *                    results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status
+-qed_get_protection_override_results_buf_size(struct qed_hwfn *p_hwfn,
+-					     u32 *dump_buf,
+-					     u32 num_dumped_dwords,
+-					     u32 *results_buf_size);
+-
+-/**
+- * qed_print_protection_override_results(): Prints protection override
+- *                                          results.
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: Protection override dump buffer, starting from the header.
+- * @num_dumped_dwords: Number of dwords that were dumped.
+- * @results_buf: Buffer for printing the reg fifo results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_print_protection_override_results(struct qed_hwfn *p_hwfn,
+-						      u32 *dump_buf,
+-						      u32 num_dumped_dwords,
+-						      char *results_buf);
+-
+-/**
+- * qed_get_fw_asserts_results_buf_size(): Returns the required buffer size
+- *                                        for FW Asserts results (in bytes).
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: FW Asserts dump buffer.
+- * @num_dumped_dwords: number of dwords that were dumped.
+- * @results_buf_size: (OUT) required buffer size (in bytes) for the parsed
+- *                    results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_get_fw_asserts_results_buf_size(struct qed_hwfn *p_hwfn,
+-						    u32 *dump_buf,
+-						    u32 num_dumped_dwords,
+-						    u32 *results_buf_size);
+-
+-/**
+- * qed_print_fw_asserts_results(): Prints FW Asserts results.
+- *
+- * @p_hwfn: HW device data.
+- * @dump_buf: FW Asserts dump buffer, starting from the header.
+- * @num_dumped_dwords: number of dwords that were dumped.
+- * @results_buf: buffer for printing the FW Asserts results.
+- *
+- * Return: Error if the parsing fails, ok otherwise.
+- */
+-enum dbg_status qed_print_fw_asserts_results(struct qed_hwfn *p_hwfn,
+-					     u32 *dump_buf,
+-					     u32 num_dumped_dwords,
+-					     char *results_buf);
+-
+-/**
+- * qed_dbg_parse_attn(): Parses and prints attention registers values in
+- *                      the specified results struct.
+- *
+- * @p_hwfn: HW device data.
+- * @results: Pointer to the attention read results
+- *
+- * Return: Error if one of the following holds:
+- *         - The version wasn't set.
+- *           Otherwise, returns ok.
+- */
+-enum dbg_status qed_dbg_parse_attn(struct qed_hwfn *p_hwfn,
+-				   struct dbg_attn_block_result *results);
+-
+ /* Win 2 */
+ #define GTT_BAR0_MAP_REG_IGU_CMD	0x00f000UL
  
- /**
-- * @brief qed_enable_context_validation - Enable and configure context
-- *	validation.
-+ * qed_enable_context_validation(): Enable and configure context
-+ *                                  validation.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-  *
-- * @param p_hwfn
-- * @param p_ptt - ptt window used for writing the registers.
-+ * Return: Void.
-  */
- void qed_enable_context_validation(struct qed_hwfn *p_hwfn,
- 				   struct qed_ptt *p_ptt);
- 
- /**
-- * @brief qed_calc_session_ctx_validation - Calcualte validation byte for
-- *	session context.
-+ * qed_calc_session_ctx_validation(): Calcualte validation byte for
-+ *                                    session context.
-  *
-- * @param p_ctx_mem - pointer to context memory.
-- * @param ctx_size - context size.
-- * @param ctx_type - context type.
-- * @param cid - context cid.
-+ * @p_ctx_mem: Pointer to context memory.
-+ * @ctx_size: Context size.
-+ * @ctx_type: Context type.
-+ * @cid: Context cid.
-+ *
-+ * Return: Void.
-  */
- void qed_calc_session_ctx_validation(void *p_ctx_mem,
- 				     u16 ctx_size, u8 ctx_type, u32 cid);
- 
- /**
-- * @brief qed_calc_task_ctx_validation - Calcualte validation byte for task
-- *	context.
-+ * qed_calc_task_ctx_validation(): Calcualte validation byte for task
-+ *                                 context.
-+ *
-+ * @p_ctx_mem: Pointer to context memory.
-+ * @ctx_size: Context size.
-+ * @ctx_type: Context type.
-+ * @tid: Context tid.
-  *
-- * @param p_ctx_mem - pointer to context memory.
-- * @param ctx_size - context size.
-- * @param ctx_type - context type.
-- * @param tid - context tid.
-+ * Return: Void.
-  */
- void qed_calc_task_ctx_validation(void *p_ctx_mem,
- 				  u16 ctx_size, u8 ctx_type, u32 tid);
- 
- /**
-- * @brief qed_memset_session_ctx - Memset session context to 0 while
-- *	preserving validation bytes.
-+ * qed_memset_session_ctx(): Memset session context to 0 while
-+ *                            preserving validation bytes.
-+ *
-+ * @p_ctx_mem: Pointer to context memory.
-+ * @ctx_size: Size to initialzie.
-+ * @ctx_type: Context type.
-  *
-- * @param p_hwfn -
-- * @param p_ctx_mem - pointer to context memory.
-- * @param ctx_size - size to initialzie.
-- * @param ctx_type - context type.
-+ * Return: Void.
-  */
- void qed_memset_session_ctx(void *p_ctx_mem, u32 ctx_size, u8 ctx_type);
- 
- /**
-- * @brief qed_memset_task_ctx - Memset task context to 0 while preserving
-- *	validation bytes.
-+ * qed_memset_task_ctx(): Memset task context to 0 while preserving
-+ *                        validation bytes.
-  *
-- * @param p_ctx_mem - pointer to context memory.
-- * @param ctx_size - size to initialzie.
-- * @param ctx_type - context type.
-+ * @p_ctx_mem: Pointer to context memory.
-+ * @ctx_size: size to initialzie.
-+ * @ctx_type: context type.
-+ *
-+ * Return: Void.
-  */
- void qed_memset_task_ctx(void *p_ctx_mem, u32 ctx_size, u8 ctx_type);
- 
- #define NUM_STORMS 6
- 
- /**
-- * @brief qed_set_rdma_error_level - Sets the RDMA assert level.
-- *                                   If the severity of the error will be
-- *                                   above the level, the FW will assert.
-- * @param p_hwfn - HW device data
-- * @param p_ptt - ptt window used for writing the registers
-- * @param assert_level - An array of assert levels for each storm.
-+ * qed_set_rdma_error_level(): Sets the RDMA assert level.
-+ *                             If the severity of the error will be
-+ *                             above the level, the FW will assert.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @assert_level: An array of assert levels for each storm.
-  *
-+ * Return: Void.
-  */
- void qed_set_rdma_error_level(struct qed_hwfn *p_hwfn,
- 			      struct qed_ptt *p_ptt,
- 			      u8 assert_level[NUM_STORMS]);
- /**
-- * @brief qed_fw_overlay_mem_alloc - Allocates and fills the FW overlay memory.
-+ * qed_fw_overlay_mem_alloc(): Allocates and fills the FW overlay memory.
-  *
-- * @param p_hwfn - HW device data
-- * @param fw_overlay_in_buf - the input FW overlay buffer.
-- * @param buf_size - the size of the input FW overlay buffer in bytes.
-- *		     must be aligned to dwords.
-- * @param fw_overlay_out_mem - OUT: a pointer to the allocated overlays memory.
-+ * @p_hwfn: HW device data.
-+ * @fw_overlay_in_buf: The input FW overlay buffer.
-+ * @buf_size_in_bytes: The size of the input FW overlay buffer in bytes.
-+ *		        must be aligned to dwords.
-  *
-- * @return a pointer to the allocated overlays memory,
-+ * Return: A pointer to the allocated overlays memory,
-  * or NULL in case of failures.
-  */
- struct phys_mem_desc *
- qed_fw_overlay_mem_alloc(struct qed_hwfn *p_hwfn,
--			 const u32 * const fw_overlay_in_buf,
-+			 const u32 *const fw_overlay_in_buf,
- 			 u32 buf_size_in_bytes);
- 
- /**
-- * @brief qed_fw_overlay_init_ram - Initializes the FW overlay RAM.
-+ * qed_fw_overlay_init_ram(): Initializes the FW overlay RAM.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: Ptt window used for writing the registers.
-+ * @fw_overlay_mem: the allocated FW overlay memory.
-  *
-- * @param p_hwfn - HW device data.
-- * @param p_ptt - ptt window used for writing the registers.
-- * @param fw_overlay_mem - the allocated FW overlay memory.
-+ * Return: Void.
-  */
- void qed_fw_overlay_init_ram(struct qed_hwfn *p_hwfn,
- 			     struct qed_ptt *p_ptt,
- 			     struct phys_mem_desc *fw_overlay_mem);
- 
- /**
-- * @brief qed_fw_overlay_mem_free - Frees the FW overlay memory.
-+ * qed_fw_overlay_mem_free(): Frees the FW overlay memory.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @fw_overlay_mem: The allocated FW overlay memory to free.
-  *
-- * @param p_hwfn - HW device data.
-- * @param fw_overlay_mem - the allocated FW overlay memory to free.
-+ * Return: Void.
-  */
+@@ -4106,334 +2629,6 @@ void qed_fw_overlay_init_ram(struct qed_hwfn *p_hwfn,
  void qed_fw_overlay_mem_free(struct qed_hwfn *p_hwfn,
  			     struct phys_mem_desc *fw_overlay_mem);
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_hw.h b/drivers/net/ethernet/qlogic/qed/qed_hw.h
-index 2734f49956f7..e535983ce21b 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_hw.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_hw.h
-@@ -53,85 +53,94 @@ enum _dmae_cmd_crc_mask {
- #define DMAE_MAX_CLIENTS        32
  
- /**
-- * @brief qed_gtt_init - Initialize GTT windows
-+ * qed_gtt_init(): Initialize GTT windows.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-+ *
-+ * Return: Void.
-  */
- void qed_gtt_init(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_ptt_invalidate - Forces all ptt entries to be re-configured
-+ * qed_ptt_invalidate(): Forces all ptt entries to be re-configured
-+ *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Void.
-  */
- void qed_ptt_invalidate(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_ptt_pool_alloc - Allocate and initialize PTT pool
-+ * qed_ptt_pool_alloc(): Allocate and initialize PTT pool.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return struct _qed_status - success (0), negative - error.
-+ * Return: struct _qed_status - success (0), negative - error.
-  */
- int qed_ptt_pool_alloc(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_ptt_pool_free -
-+ * qed_ptt_pool_free(): Free PTT pool.
-+ *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Void.
-  */
- void qed_ptt_pool_free(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_ptt_get_hw_addr - Get PTT's GRC/HW address
-+ * qed_ptt_get_hw_addr(): Get PTT's GRC/HW address.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt
-  *
-- * @return u32
-+ * Return: u32.
-  */
- u32 qed_ptt_get_hw_addr(struct qed_hwfn *p_hwfn,
- 			struct qed_ptt *p_ptt);
- 
- /**
-- * @brief qed_ptt_get_bar_addr - Get PPT's external BAR address
-+ * qed_ptt_get_bar_addr(): Get PPT's external BAR address.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_ptt: P_ptt
-  *
-- * @return u32
-+ * Return: u32.
-  */
- u32 qed_ptt_get_bar_addr(struct qed_ptt *p_ptt);
- 
- /**
-- * @brief qed_ptt_set_win - Set PTT Window's GRC BAR address
-+ * qed_ptt_set_win(): Set PTT Window's GRC BAR address
-  *
-- * @param p_hwfn
-- * @param new_hw_addr
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @new_hw_addr: New HW address.
-+ * @p_ptt: P_Ptt
-+ *
-+ * Return: Void.
-  */
- void qed_ptt_set_win(struct qed_hwfn *p_hwfn,
- 		     struct qed_ptt *p_ptt,
- 		     u32 new_hw_addr);
- 
- /**
-- * @brief qed_get_reserved_ptt - Get a specific reserved PTT
-+ * qed_get_reserved_ptt(): Get a specific reserved PTT.
-  *
-- * @param p_hwfn
-- * @param ptt_idx
-+ * @p_hwfn: HW device data.
-+ * @ptt_idx: Ptt Index.
-  *
-- * @return struct qed_ptt *
-+ * Return: struct qed_ptt *.
-  */
- struct qed_ptt *qed_get_reserved_ptt(struct qed_hwfn *p_hwfn,
- 				     enum reserved_ptts ptt_idx);
- 
- /**
-- * @brief qed_wr - Write value to BAR using the given ptt
-+ * qed_wr(): Write value to BAR using the given ptt.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @val: Val.
-+ * @hw_addr: HW address
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param val
-- * @param hw_addr
-+ * Return: Void.
-  */
- void qed_wr(struct qed_hwfn *p_hwfn,
- 	    struct qed_ptt *p_ptt,
-@@ -139,26 +148,28 @@ void qed_wr(struct qed_hwfn *p_hwfn,
- 	    u32 val);
- 
- /**
-- * @brief qed_rd - Read value from BAR using the given ptt
-+ * qed_rd(): Read value from BAR using the given ptt.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @hw_addr: HW address
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param val
-- * @param hw_addr
-+ * Return: Void.
-  */
- u32 qed_rd(struct qed_hwfn *p_hwfn,
- 	   struct qed_ptt *p_ptt,
- 	   u32 hw_addr);
- 
- /**
-- * @brief qed_memcpy_from - copy n bytes from BAR using the given
-- *        ptt
-- *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param dest
-- * @param hw_addr
-- * @param n
-+ * qed_memcpy_from(): Copy n bytes from BAR using the given ptt.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @dest: Destination.
-+ * @hw_addr: HW address.
-+ * @n: N
-+ *
-+ * Return: Void.
-  */
- void qed_memcpy_from(struct qed_hwfn *p_hwfn,
- 		     struct qed_ptt *p_ptt,
-@@ -167,14 +178,15 @@ void qed_memcpy_from(struct qed_hwfn *p_hwfn,
- 		     size_t n);
- 
- /**
-- * @brief qed_memcpy_to - copy n bytes to BAR using the given
-- *        ptt
-- *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param hw_addr
-- * @param src
-- * @param n
-+ * qed_memcpy_to(): Copy n bytes to BAR using the given  ptt
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @hw_addr: HW address.
-+ * @src: Source.
-+ * @n: N
-+ *
-+ * Return: Void.
-  */
- void qed_memcpy_to(struct qed_hwfn *p_hwfn,
- 		   struct qed_ptt *p_ptt,
-@@ -182,83 +194,97 @@ void qed_memcpy_to(struct qed_hwfn *p_hwfn,
- 		   void *src,
- 		   size_t n);
- /**
-- * @brief qed_fid_pretend - pretend to another function when
-- *        accessing the ptt window. There is no way to unpretend
-- *        a function. The only way to cancel a pretend is to
-- *        pretend back to the original function.
-- *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param fid - fid field of pxp_pretend structure. Can contain
-- *            either pf / vf, port/path fields are don't care.
-+ * qed_fid_pretend(): pretend to another function when
-+ *                    accessing the ptt window. There is no way to unpretend
-+ *                    a function. The only way to cancel a pretend is to
-+ *                    pretend back to the original function.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @fid: fid field of pxp_pretend structure. Can contain
-+ *        either pf / vf, port/path fields are don't care.
-+ *
-+ * Return: Void.
-  */
- void qed_fid_pretend(struct qed_hwfn *p_hwfn,
- 		     struct qed_ptt *p_ptt,
- 		     u16 fid);
- 
- /**
-- * @brief qed_port_pretend - pretend to another port when
-- *        accessing the ptt window
-+ * qed_port_pretend(): Pretend to another port when accessing the ptt window
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param port_id - the port to pretend to
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @port_id: The port to pretend to
-+ *
-+ * Return: Void.
-  */
- void qed_port_pretend(struct qed_hwfn *p_hwfn,
- 		      struct qed_ptt *p_ptt,
- 		      u8 port_id);
- 
- /**
-- * @brief qed_port_unpretend - cancel any previously set port
-- *        pretend
-+ * qed_port_unpretend(): Cancel any previously set port pretend
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * Return: Void.
-  */
- void qed_port_unpretend(struct qed_hwfn *p_hwfn,
- 			struct qed_ptt *p_ptt);
- 
- /**
-- * @brief qed_port_fid_pretend - pretend to another port and another function
-- *        when accessing the ptt window
-+ * qed_port_fid_pretend(): Pretend to another port and another function
-+ *                         when accessing the ptt window
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @port_id: The port to pretend to
-+ * @fid: fid field of pxp_pretend structure. Can contain either pf / vf.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param port_id - the port to pretend to
-- * @param fid - fid field of pxp_pretend structure. Can contain either pf / vf.
-+ * Return: Void.
-  */
- void qed_port_fid_pretend(struct qed_hwfn *p_hwfn,
- 			  struct qed_ptt *p_ptt, u8 port_id, u16 fid);
- 
- /**
-- * @brief qed_vfid_to_concrete - build a concrete FID for a
-- *        given VF ID
-+ * qed_vfid_to_concrete(): Build a concrete FID for a given VF ID
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param vfid
-+ * @p_hwfn: HW device data.
-+ * @vfid: VFID.
-+ *
-+ * Return: Void.
-  */
- u32 qed_vfid_to_concrete(struct qed_hwfn *p_hwfn, u8 vfid);
- 
- /**
-- * @brief qed_dmae_idx_to_go_cmd - map the idx to dmae cmd
-- * this is declared here since other files will require it.
-- * @param idx
-+ * qed_dmae_idx_to_go_cmd(): Map the idx to dmae cmd
-+ *    this is declared here since other files will require it.
-+ *
-+ * @idx: Index
-+ *
-+ * Return: Void.
-  */
- u32 qed_dmae_idx_to_go_cmd(u8 idx);
- 
- /**
-- * @brief qed_dmae_info_alloc - Init the dmae_info structure
-- * which is part of p_hwfn.
-- * @param p_hwfn
-+ * qed_dmae_info_alloc(): Init the dmae_info structure
-+ *                        which is part of p_hwfn.
-+ *
-+ * @p_hwfn: HW device data.
-+ *
-+ * Return: Int.
-  */
- int qed_dmae_info_alloc(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_dmae_info_free - Free the dmae_info structure
-- * which is part of p_hwfn
-+ * qed_dmae_info_free(): Free the dmae_info structure
-+ *                       which is part of p_hwfn.
-+ *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Void.
-  */
- void qed_dmae_info_free(struct qed_hwfn *p_hwfn);
- 
-@@ -292,14 +318,16 @@ int qed_dmae_sanity(struct qed_hwfn *p_hwfn,
- #define QED_HW_ERR_MAX_STR_SIZE 256
- 
- /**
-- * @brief qed_hw_err_notify - Notify upper layer driver and management FW
-- *	about a HW error.
-- *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param err_type
-- * @param fmt - debug data buffer to send to the MFW
-- * @param ... - buffer format args
-+ * qed_hw_err_notify(): Notify upper layer driver and management FW
-+ *                      about a HW error.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @err_type: Err Type.
-+ * @fmt: Debug data buffer to send to the MFW
-+ * @...: buffer format args
-+ *
-+ * Return void.
-  */
- void __printf(4, 5) __cold qed_hw_err_notify(struct qed_hwfn *p_hwfn,
- 					     struct qed_ptt *p_ptt,
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_init_ops.h b/drivers/net/ethernet/qlogic/qed/qed_init_ops.h
-index a573c8921982..1dbc460c9eec 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_init_ops.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_init_ops.h
-@@ -12,23 +12,24 @@
- #include "qed.h"
- 
- /**
-- * @brief qed_init_iro_array - init iro_arr.
-+ * qed_init_iro_array(): init iro_arr.
-  *
-+ * @cdev: Qed dev pointer.
-  *
-- * @param cdev
-+ * Return: Void.
-  */
- void qed_init_iro_array(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_init_run - Run the init-sequence.
-+ * qed_init_run(): Run the init-sequence.
-  *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @phase: Phase.
-+ * @phase_id: Phase ID.
-+ * @modes: Mode.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param phase
-- * @param phase_id
-- * @param modes
-- * @return _qed_status_t
-+ * Return: _qed_status_t
-  */
- int qed_init_run(struct qed_hwfn *p_hwfn,
- 		 struct qed_ptt *p_ptt,
-@@ -37,30 +38,31 @@ int qed_init_run(struct qed_hwfn *p_hwfn,
- 		 int modes);
- 
- /**
-- * @brief qed_init_hwfn_allocate - Allocate RT array, Store 'values' ptrs.
-+ * qed_init_alloc(): Allocate RT array, Store 'values' ptrs.
-  *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-- *
-- * @return _qed_status_t
-+ * Return: _qed_status_t.
-  */
- int qed_init_alloc(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_init_hwfn_deallocate
-+ * qed_init_free(): Init HW function deallocate.
-  *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Void.
-  */
- void qed_init_free(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_init_store_rt_reg - Store a configuration value in the RT array.
-+ * qed_init_store_rt_reg(): Store a configuration value in the RT array.
-  *
-+ * @p_hwfn: HW device data.
-+ * @rt_offset: RT offset.
-+ * @val: Val.
-  *
-- * @param p_hwfn
-- * @param rt_offset
-- * @param val
-+ * Return: Void.
-  */
- void qed_init_store_rt_reg(struct qed_hwfn *p_hwfn,
- 			   u32 rt_offset,
-@@ -72,15 +74,6 @@ void qed_init_store_rt_reg(struct qed_hwfn *p_hwfn,
- #define OVERWRITE_RT_REG(hwfn, offset, val) \
- 	qed_init_store_rt_reg(hwfn, offset, val)
- 
--/**
-- * @brief
-- *
-- *
-- * @param p_hwfn
-- * @param rt_offset
-- * @param val
-- * @param size
+-/* Ystorm flow control mode. Use enum fw_flow_ctrl_mode */
+-#define YSTORM_FLOW_CONTROL_MODE_OFFSET			(IRO[0].base)
+-#define YSTORM_FLOW_CONTROL_MODE_SIZE			(IRO[0].size)
+-
+-/* Tstorm port statistics */
+-#define TSTORM_PORT_STAT_OFFSET(port_id) \
+-	(IRO[1].base + ((port_id) * IRO[1].m1))
+-#define TSTORM_PORT_STAT_SIZE				(IRO[1].size)
+-
+-/* Tstorm ll2 port statistics */
+-#define TSTORM_LL2_PORT_STAT_OFFSET(port_id) \
+-	(IRO[2].base + ((port_id) * IRO[2].m1))
+-#define TSTORM_LL2_PORT_STAT_SIZE			(IRO[2].size)
+-
+-/* Ustorm VF-PF Channel ready flag */
+-#define USTORM_VF_PF_CHANNEL_READY_OFFSET(vf_id) \
+-	(IRO[3].base + ((vf_id) * IRO[3].m1))
+-#define USTORM_VF_PF_CHANNEL_READY_SIZE			(IRO[3].size)
+-
+-/* Ustorm Final flr cleanup ack */
+-#define USTORM_FLR_FINAL_ACK_OFFSET(pf_id) \
+-	(IRO[4].base + ((pf_id) * IRO[4].m1))
+-#define USTORM_FLR_FINAL_ACK_SIZE			(IRO[4].size)
+-
+-/* Ustorm Event ring consumer */
+-#define USTORM_EQE_CONS_OFFSET(pf_id) \
+-	(IRO[5].base + ((pf_id) * IRO[5].m1))
+-#define USTORM_EQE_CONS_SIZE				(IRO[5].size)
+-
+-/* Ustorm eth queue zone */
+-#define USTORM_ETH_QUEUE_ZONE_OFFSET(queue_zone_id) \
+-	(IRO[6].base + ((queue_zone_id) * IRO[6].m1))
+-#define USTORM_ETH_QUEUE_ZONE_SIZE			(IRO[6].size)
+-
+-/* Ustorm Common Queue ring consumer */
+-#define USTORM_COMMON_QUEUE_CONS_OFFSET(queue_zone_id) \
+-	(IRO[7].base + ((queue_zone_id) * IRO[7].m1))
+-#define USTORM_COMMON_QUEUE_CONS_SIZE			(IRO[7].size)
+-
+-/* Xstorm common PQ info */
+-#define XSTORM_PQ_INFO_OFFSET(pq_id) \
+-	(IRO[8].base + ((pq_id) * IRO[8].m1))
+-#define XSTORM_PQ_INFO_SIZE				(IRO[8].size)
+-
+-/* Xstorm Integration Test Data */
+-#define XSTORM_INTEG_TEST_DATA_OFFSET			(IRO[9].base)
+-#define XSTORM_INTEG_TEST_DATA_SIZE			(IRO[9].size)
+-
+-/* Ystorm Integration Test Data */
+-#define YSTORM_INTEG_TEST_DATA_OFFSET			(IRO[10].base)
+-#define YSTORM_INTEG_TEST_DATA_SIZE			(IRO[10].size)
+-
+-/* Pstorm Integration Test Data */
+-#define PSTORM_INTEG_TEST_DATA_OFFSET			(IRO[11].base)
+-#define PSTORM_INTEG_TEST_DATA_SIZE			(IRO[11].size)
+-
+-/* Tstorm Integration Test Data */
+-#define TSTORM_INTEG_TEST_DATA_OFFSET			(IRO[12].base)
+-#define TSTORM_INTEG_TEST_DATA_SIZE			(IRO[12].size)
+-
+-/* Mstorm Integration Test Data */
+-#define MSTORM_INTEG_TEST_DATA_OFFSET			(IRO[13].base)
+-#define MSTORM_INTEG_TEST_DATA_SIZE			(IRO[13].size)
+-
+-/* Ustorm Integration Test Data */
+-#define USTORM_INTEG_TEST_DATA_OFFSET			(IRO[14].base)
+-#define USTORM_INTEG_TEST_DATA_SIZE			(IRO[14].size)
+-
+-/* Xstorm overlay buffer host address */
+-#define XSTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[15].base)
+-#define XSTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[15].size)
+-
+-/* Ystorm overlay buffer host address */
+-#define YSTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[16].base)
+-#define YSTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[16].size)
+-
+-/* Pstorm overlay buffer host address */
+-#define PSTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[17].base)
+-#define PSTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[17].size)
+-
+-/* Tstorm overlay buffer host address */
+-#define TSTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[18].base)
+-#define TSTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[18].size)
+-
+-/* Mstorm overlay buffer host address */
+-#define MSTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[19].base)
+-#define MSTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[19].size)
+-
+-/* Ustorm overlay buffer host address */
+-#define USTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[20].base)
+-#define USTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[20].size)
+-
+-/* Tstorm producers */
+-#define TSTORM_LL2_RX_PRODS_OFFSET(core_rx_queue_id) \
+-	(IRO[21].base + ((core_rx_queue_id) * IRO[21].m1))
+-#define TSTORM_LL2_RX_PRODS_SIZE			(IRO[21].size)
+-
+-/* Tstorm LightL2 queue statistics */
+-#define CORE_LL2_TSTORM_PER_QUEUE_STAT_OFFSET(core_rx_queue_id) \
+-	(IRO[22].base + ((core_rx_queue_id) * IRO[22].m1))
+-#define CORE_LL2_TSTORM_PER_QUEUE_STAT_SIZE		(IRO[22].size)
+-
+-/* Ustorm LiteL2 queue statistics */
+-#define CORE_LL2_USTORM_PER_QUEUE_STAT_OFFSET(core_rx_queue_id) \
+-	(IRO[23].base + ((core_rx_queue_id) * IRO[23].m1))
+-#define CORE_LL2_USTORM_PER_QUEUE_STAT_SIZE		(IRO[23].size)
+-
+-/* Pstorm LiteL2 queue statistics */
+-#define CORE_LL2_PSTORM_PER_QUEUE_STAT_OFFSET(core_tx_stats_id) \
+-	(IRO[24].base + ((core_tx_stats_id) * IRO[24].m1))
+-#define CORE_LL2_PSTORM_PER_QUEUE_STAT_SIZE		(IRO[24].size)
+-
+-/* Mstorm queue statistics */
+-#define MSTORM_QUEUE_STAT_OFFSET(stat_counter_id) \
+-	(IRO[25].base + ((stat_counter_id) * IRO[25].m1))
+-#define MSTORM_QUEUE_STAT_SIZE				(IRO[25].size)
+-
+-/* TPA agregation timeout in us resolution (on ASIC) */
+-#define MSTORM_TPA_TIMEOUT_US_OFFSET			(IRO[26].base)
+-#define MSTORM_TPA_TIMEOUT_US_SIZE			(IRO[26].size)
+-
+-/* Mstorm ETH VF queues producers offset in RAM. Used in default VF zone size
+- * mode
 - */
- void qed_init_store_rt_agg(struct qed_hwfn *p_hwfn,
- 			   u32 rt_offset,
- 			   u32 *val,
-@@ -90,11 +83,12 @@ void qed_init_store_rt_agg(struct qed_hwfn *p_hwfn,
- 	qed_init_store_rt_agg(hwfn, offset, (u32 *)&val, sizeof(val))
+-#define MSTORM_ETH_VF_PRODS_OFFSET(vf_id, vf_queue_id) \
+-	(IRO[27].base + ((vf_id) * IRO[27].m1) + ((vf_queue_id) * IRO[27].m2))
+-#define MSTORM_ETH_VF_PRODS_SIZE			(IRO[27].size)
+-
+-/* Mstorm ETH PF queues producers */
+-#define MSTORM_ETH_PF_PRODS_OFFSET(queue_id) \
+-	(IRO[28].base + ((queue_id) * IRO[28].m1))
+-#define MSTORM_ETH_PF_PRODS_SIZE			(IRO[28].size)
+-
+-/* Mstorm pf statistics */
+-#define MSTORM_ETH_PF_STAT_OFFSET(pf_id) \
+-	(IRO[29].base + ((pf_id) * IRO[29].m1))
+-#define MSTORM_ETH_PF_STAT_SIZE				(IRO[29].size)
+-
+-/* Ustorm queue statistics */
+-#define USTORM_QUEUE_STAT_OFFSET(stat_counter_id) \
+-	(IRO[30].base + ((stat_counter_id) * IRO[30].m1))
+-#define USTORM_QUEUE_STAT_SIZE				(IRO[30].size)
+-
+-/* Ustorm pf statistics */
+-#define USTORM_ETH_PF_STAT_OFFSET(pf_id) \
+-	(IRO[31].base + ((pf_id) * IRO[31].m1))
+-#define USTORM_ETH_PF_STAT_SIZE				(IRO[31].size)
+-
+-/* Pstorm queue statistics */
+-#define PSTORM_QUEUE_STAT_OFFSET(stat_counter_id)	\
+-	(IRO[32].base + ((stat_counter_id) * IRO[32].m1))
+-#define PSTORM_QUEUE_STAT_SIZE				(IRO[32].size)
+-
+-/* Pstorm pf statistics */
+-#define PSTORM_ETH_PF_STAT_OFFSET(pf_id) \
+-	(IRO[33].base + ((pf_id) * IRO[33].m1))
+-#define PSTORM_ETH_PF_STAT_SIZE				(IRO[33].size)
+-
+-/* Control frame's EthType configuration for TX control frame security */
+-#define PSTORM_CTL_FRAME_ETHTYPE_OFFSET(eth_type_id)	\
+-	(IRO[34].base + ((eth_type_id) * IRO[34].m1))
+-#define PSTORM_CTL_FRAME_ETHTYPE_SIZE			(IRO[34].size)
+-
+-/* Tstorm last parser message */
+-#define TSTORM_ETH_PRS_INPUT_OFFSET			(IRO[35].base)
+-#define TSTORM_ETH_PRS_INPUT_SIZE			(IRO[35].size)
+-
+-/* Tstorm Eth limit Rx rate */
+-#define ETH_RX_RATE_LIMIT_OFFSET(pf_id)	\
+-	(IRO[36].base + ((pf_id) * IRO[36].m1))
+-#define ETH_RX_RATE_LIMIT_SIZE				(IRO[36].size)
+-
+-/* RSS indirection table entry update command per PF offset in TSTORM PF BAR0.
+- * Use eth_tstorm_rss_update_data for update
+- */
+-#define TSTORM_ETH_RSS_UPDATE_OFFSET(pf_id) \
+-	(IRO[37].base + ((pf_id) * IRO[37].m1))
+-#define TSTORM_ETH_RSS_UPDATE_SIZE			(IRO[37].size)
+-
+-/* Xstorm queue zone */
+-#define XSTORM_ETH_QUEUE_ZONE_OFFSET(queue_id) \
+-	(IRO[38].base + ((queue_id) * IRO[38].m1))
+-#define XSTORM_ETH_QUEUE_ZONE_SIZE			(IRO[38].size)
+-
+-/* Ystorm cqe producer */
+-#define YSTORM_TOE_CQ_PROD_OFFSET(rss_id) \
+-	(IRO[39].base + ((rss_id) * IRO[39].m1))
+-#define YSTORM_TOE_CQ_PROD_SIZE				(IRO[39].size)
+-
+-/* Ustorm cqe producer */
+-#define USTORM_TOE_CQ_PROD_OFFSET(rss_id) \
+-	(IRO[40].base + ((rss_id) * IRO[40].m1))
+-#define USTORM_TOE_CQ_PROD_SIZE				(IRO[40].size)
+-
+-/* Ustorm grq producer */
+-#define USTORM_TOE_GRQ_PROD_OFFSET(pf_id) \
+-	(IRO[41].base + ((pf_id) * IRO[41].m1))
+-#define USTORM_TOE_GRQ_PROD_SIZE			(IRO[41].size)
+-
+-/* Tstorm cmdq-cons of given command queue-id */
+-#define TSTORM_SCSI_CMDQ_CONS_OFFSET(cmdq_queue_id) \
+-	(IRO[42].base + ((cmdq_queue_id) * IRO[42].m1))
+-#define TSTORM_SCSI_CMDQ_CONS_SIZE			(IRO[42].size)
+-
+-/* Tstorm (reflects M-Storm) bdq-external-producer of given function ID,
+- * BDqueue-id
+- */
+-#define TSTORM_SCSI_BDQ_EXT_PROD_OFFSET(storage_func_id, bdq_id) \
+-	(IRO[43].base + ((storage_func_id) * IRO[43].m1) + \
+-	 ((bdq_id) * IRO[43].m2))
+-#define TSTORM_SCSI_BDQ_EXT_PROD_SIZE			(IRO[43].size)
+-
+-/* Mstorm bdq-external-producer of given BDQ resource ID, BDqueue-id */
+-#define MSTORM_SCSI_BDQ_EXT_PROD_OFFSET(storage_func_id, bdq_id) \
+-	(IRO[44].base + ((storage_func_id) * IRO[44].m1) + \
+-	 ((bdq_id) * IRO[44].m2))
+-#define MSTORM_SCSI_BDQ_EXT_PROD_SIZE			(IRO[44].size)
+-
+-/* Tstorm iSCSI RX stats */
+-#define TSTORM_ISCSI_RX_STATS_OFFSET(storage_func_id) \
+-	(IRO[45].base + ((storage_func_id) * IRO[45].m1))
+-#define TSTORM_ISCSI_RX_STATS_SIZE			(IRO[45].size)
+-
+-/* Mstorm iSCSI RX stats */
+-#define MSTORM_ISCSI_RX_STATS_OFFSET(storage_func_id) \
+-	(IRO[46].base + ((storage_func_id) * IRO[46].m1))
+-#define MSTORM_ISCSI_RX_STATS_SIZE			(IRO[46].size)
+-
+-/* Ustorm iSCSI RX stats */
+-#define USTORM_ISCSI_RX_STATS_OFFSET(storage_func_id) \
+-	(IRO[47].base + ((storage_func_id) * IRO[47].m1))
+-#define USTORM_ISCSI_RX_STATS_SIZE			(IRO[47].size)
+-
+-/* Xstorm iSCSI TX stats */
+-#define XSTORM_ISCSI_TX_STATS_OFFSET(storage_func_id) \
+-	(IRO[48].base + ((storage_func_id) * IRO[48].m1))
+-#define XSTORM_ISCSI_TX_STATS_SIZE			(IRO[48].size)
+-
+-/* Ystorm iSCSI TX stats */
+-#define YSTORM_ISCSI_TX_STATS_OFFSET(storage_func_id) \
+-	(IRO[49].base + ((storage_func_id) * IRO[49].m1))
+-#define YSTORM_ISCSI_TX_STATS_SIZE			(IRO[49].size)
+-
+-/* Pstorm iSCSI TX stats */
+-#define PSTORM_ISCSI_TX_STATS_OFFSET(storage_func_id) \
+-	(IRO[50].base + ((storage_func_id) * IRO[50].m1))
+-#define PSTORM_ISCSI_TX_STATS_SIZE			(IRO[50].size)
+-
+-/* Tstorm FCoE RX stats */
+-#define TSTORM_FCOE_RX_STATS_OFFSET(pf_id) \
+-	(IRO[51].base + ((pf_id) * IRO[51].m1))
+-#define TSTORM_FCOE_RX_STATS_SIZE			(IRO[51].size)
+-
+-/* Pstorm FCoE TX stats */
+-#define PSTORM_FCOE_TX_STATS_OFFSET(pf_id) \
+-	(IRO[52].base + ((pf_id) * IRO[52].m1))
+-#define PSTORM_FCOE_TX_STATS_SIZE			(IRO[52].size)
+-
+-/* Pstorm RDMA queue statistics */
+-#define PSTORM_RDMA_QUEUE_STAT_OFFSET(rdma_stat_counter_id) \
+-	(IRO[53].base + ((rdma_stat_counter_id) * IRO[53].m1))
+-#define PSTORM_RDMA_QUEUE_STAT_SIZE			(IRO[53].size)
+-
+-/* Tstorm RDMA queue statistics */
+-#define TSTORM_RDMA_QUEUE_STAT_OFFSET(rdma_stat_counter_id) \
+-	(IRO[54].base + ((rdma_stat_counter_id) * IRO[54].m1))
+-#define TSTORM_RDMA_QUEUE_STAT_SIZE			(IRO[54].size)
+-
+-/* Xstorm error level for assert */
+-#define XSTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
+-	(IRO[55].base + ((pf_id) * IRO[55].m1))
+-#define XSTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[55].size)
+-
+-/* Ystorm error level for assert */
+-#define YSTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
+-	(IRO[56].base + ((pf_id) * IRO[56].m1))
+-#define YSTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[56].size)
+-
+-/* Pstorm error level for assert */
+-#define PSTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
+-	(IRO[57].base + ((pf_id) * IRO[57].m1))
+-#define PSTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[57].size)
+-
+-/* Tstorm error level for assert */
+-#define TSTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
+-	(IRO[58].base + ((pf_id) * IRO[58].m1))
+-#define TSTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[58].size)
+-
+-/* Mstorm error level for assert */
+-#define MSTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
+-	(IRO[59].base + ((pf_id) * IRO[59].m1))
+-#define MSTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[59].size)
+-
+-/* Ustorm error level for assert */
+-#define USTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
+-	(IRO[60].base + ((pf_id) * IRO[60].m1))
+-#define USTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[60].size)
+-
+-/* Xstorm iWARP rxmit stats */
+-#define XSTORM_IWARP_RXMIT_STATS_OFFSET(pf_id) \
+-	(IRO[61].base + ((pf_id) * IRO[61].m1))
+-#define XSTORM_IWARP_RXMIT_STATS_SIZE			(IRO[61].size)
+-
+-/* Tstorm RoCE Event Statistics */
+-#define TSTORM_ROCE_EVENTS_STAT_OFFSET(roce_pf_id)	\
+-	(IRO[62].base + ((roce_pf_id) * IRO[62].m1))
+-#define TSTORM_ROCE_EVENTS_STAT_SIZE			(IRO[62].size)
+-
+-/* DCQCN Received Statistics */
+-#define YSTORM_ROCE_DCQCN_RECEIVED_STATS_OFFSET(roce_pf_id)\
+-	(IRO[63].base + ((roce_pf_id) * IRO[63].m1))
+-#define YSTORM_ROCE_DCQCN_RECEIVED_STATS_SIZE		(IRO[63].size)
+-
+-/* RoCE Error Statistics */
+-#define YSTORM_ROCE_ERROR_STATS_OFFSET(roce_pf_id)	\
+-	(IRO[64].base + ((roce_pf_id) * IRO[64].m1))
+-#define YSTORM_ROCE_ERROR_STATS_SIZE			(IRO[64].size)
+-
+-/* DCQCN Sent Statistics */
+-#define PSTORM_ROCE_DCQCN_SENT_STATS_OFFSET(roce_pf_id)	\
+-	(IRO[65].base + ((roce_pf_id) * IRO[65].m1))
+-#define PSTORM_ROCE_DCQCN_SENT_STATS_SIZE		(IRO[65].size)
+-
+-/* RoCE CQEs Statistics */
+-#define USTORM_ROCE_CQE_STATS_OFFSET(roce_pf_id)	\
+-	(IRO[66].base + ((roce_pf_id) * IRO[66].m1))
+-#define USTORM_ROCE_CQE_STATS_SIZE			(IRO[66].size)
+-
+ /* Runtime array offsets */
+ #define DORQ_REG_PF_MAX_ICID_0_RT_OFFSET				0
+ #define DORQ_REG_PF_MAX_ICID_1_RT_OFFSET				1
+@@ -11519,1922 +9714,4 @@ struct ystorm_iscsi_conn_ag_ctx {
+ 	__le32 reg3;
+ };
  
- /**
-- * @brief
-- *      Initialize GTT global windows and set admin window
-- *      related params of GTT/PTT to default values.
-+ * qed_gtt_init(): Initialize GTT global windows and set admin window
-+ *                 related params of GTT/PTT to default values.
-+ *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return Void.
-  */
- void qed_gtt_init(struct qed_hwfn *p_hwfn);
+-#define MFW_TRACE_SIGNATURE     0x25071946
+-
+-/* The trace in the buffer */
+-#define MFW_TRACE_EVENTID_MASK          0x00ffff
+-#define MFW_TRACE_PRM_SIZE_MASK         0x0f0000
+-#define MFW_TRACE_PRM_SIZE_OFFSET	16
+-#define MFW_TRACE_ENTRY_SIZE            3
+-
+-struct mcp_trace {
+-	u32 signature;		/* Help to identify that the trace is valid */
+-	u32 size;		/* the size of the trace buffer in bytes */
+-	u32 curr_level;		/* 2 - all will be written to the buffer
+-				 * 1 - debug trace will not be written
+-				 * 0 - just errors will be written to the buffer
+-				 */
+-	u32 modules_mask[2];	/* a bit per module, 1 means write it, 0 means
+-				 * mask it.
+-				 */
+-
+-	/* Warning: the following pointers are assumed to be 32bits as they are
+-	 * used only in the MFW.
+-	 */
+-	u32 trace_prod; /* The next trace will be written to this offset */
+-	u32 trace_oldest; /* The oldest valid trace starts at this offset
+-			   * (usually very close after the current producer).
+-			   */
+-};
+-
+-#define VF_MAX_STATIC 192
+-
+-#define MCP_GLOB_PATH_MAX	2
+-#define MCP_PORT_MAX		2
+-#define MCP_GLOB_PORT_MAX	4
+-#define MCP_GLOB_FUNC_MAX	16
+-
+-typedef u32 offsize_t;		/* In DWORDS !!! */
+-/* Offset from the beginning of the MCP scratchpad */
+-#define OFFSIZE_OFFSET_SHIFT	0
+-#define OFFSIZE_OFFSET_MASK	0x0000ffff
+-/* Size of specific element (not the whole array if any) */
+-#define OFFSIZE_SIZE_SHIFT	16
+-#define OFFSIZE_SIZE_MASK	0xffff0000
+-
+-#define SECTION_OFFSET(_offsize) ((((_offsize &			\
+-				     OFFSIZE_OFFSET_MASK) >>	\
+-				    OFFSIZE_OFFSET_SHIFT) << 2))
+-
+-#define QED_SECTION_SIZE(_offsize) (((_offsize &		\
+-				      OFFSIZE_SIZE_MASK) >>	\
+-				     OFFSIZE_SIZE_SHIFT) << 2)
+-
+-#define SECTION_ADDR(_offsize, idx) (MCP_REG_SCRATCH +			\
+-				     SECTION_OFFSET(_offsize) +		\
+-				     (QED_SECTION_SIZE(_offsize) * idx))
+-
+-#define SECTION_OFFSIZE_ADDR(_pub_base, _section)	\
+-	(_pub_base + offsetof(struct mcp_public_data, sections[_section]))
+-
+-/* PHY configuration */
+-struct eth_phy_cfg {
+-	u32					speed;
+-#define ETH_SPEED_AUTONEG			0x0
+-#define ETH_SPEED_SMARTLINQ			0x8
+-
+-	u32					pause;
+-#define ETH_PAUSE_NONE				0x0
+-#define ETH_PAUSE_AUTONEG			0x1
+-#define ETH_PAUSE_RX				0x2
+-#define ETH_PAUSE_TX				0x4
+-
+-	u32					adv_speed;
+-
+-	u32					loopback_mode;
+-#define ETH_LOOPBACK_NONE			0x0
+-#define ETH_LOOPBACK_INT_PHY			0x1
+-#define ETH_LOOPBACK_EXT_PHY			0x2
+-#define ETH_LOOPBACK_EXT			0x3
+-#define ETH_LOOPBACK_MAC			0x4
+-#define ETH_LOOPBACK_CNIG_AH_ONLY_0123		0x5
+-#define ETH_LOOPBACK_CNIG_AH_ONLY_2301		0x6
+-#define ETH_LOOPBACK_PCS_AH_ONLY		0x7
+-#define ETH_LOOPBACK_REVERSE_MAC_AH_ONLY	0x8
+-#define ETH_LOOPBACK_INT_PHY_FEA_AH_ONLY	0x9
+-
+-	u32					eee_cfg;
+-#define EEE_CFG_EEE_ENABLED			BIT(0)
+-#define EEE_CFG_TX_LPI				BIT(1)
+-#define EEE_CFG_ADV_SPEED_1G			BIT(2)
+-#define EEE_CFG_ADV_SPEED_10G			BIT(3)
+-#define EEE_TX_TIMER_USEC_MASK			0xfffffff0
+-#define EEE_TX_TIMER_USEC_OFFSET		4
+-#define EEE_TX_TIMER_USEC_BALANCED_TIME		0xa00
+-#define EEE_TX_TIMER_USEC_AGGRESSIVE_TIME	0x100
+-#define EEE_TX_TIMER_USEC_LATENCY_TIME		0x6000
+-
+-	u32					deprecated;
+-
+-	u32					fec_mode;
+-#define FEC_FORCE_MODE_MASK			0x000000ff
+-#define FEC_FORCE_MODE_OFFSET			0
+-#define FEC_FORCE_MODE_NONE			0x00
+-#define FEC_FORCE_MODE_FIRECODE			0x01
+-#define FEC_FORCE_MODE_RS			0x02
+-#define FEC_FORCE_MODE_AUTO			0x07
+-#define FEC_EXTENDED_MODE_MASK			0xffffff00
+-#define FEC_EXTENDED_MODE_OFFSET		8
+-#define ETH_EXT_FEC_NONE			0x00000100
+-#define ETH_EXT_FEC_10G_NONE			0x00000200
+-#define ETH_EXT_FEC_10G_BASE_R			0x00000400
+-#define ETH_EXT_FEC_20G_NONE			0x00000800
+-#define ETH_EXT_FEC_20G_BASE_R			0x00001000
+-#define ETH_EXT_FEC_25G_NONE			0x00002000
+-#define ETH_EXT_FEC_25G_BASE_R			0x00004000
+-#define ETH_EXT_FEC_25G_RS528			0x00008000
+-#define ETH_EXT_FEC_40G_NONE			0x00010000
+-#define ETH_EXT_FEC_40G_BASE_R			0x00020000
+-#define ETH_EXT_FEC_50G_NONE			0x00040000
+-#define ETH_EXT_FEC_50G_BASE_R			0x00080000
+-#define ETH_EXT_FEC_50G_RS528			0x00100000
+-#define ETH_EXT_FEC_50G_RS544			0x00200000
+-#define ETH_EXT_FEC_100G_NONE			0x00400000
+-#define ETH_EXT_FEC_100G_BASE_R			0x00800000
+-#define ETH_EXT_FEC_100G_RS528			0x01000000
+-#define ETH_EXT_FEC_100G_RS544			0x02000000
+-
+-	u32					extended_speed;
+-#define ETH_EXT_SPEED_MASK			0x0000ffff
+-#define ETH_EXT_SPEED_OFFSET			0
+-#define ETH_EXT_SPEED_AN			0x00000001
+-#define ETH_EXT_SPEED_1G			0x00000002
+-#define ETH_EXT_SPEED_10G			0x00000004
+-#define ETH_EXT_SPEED_20G			0x00000008
+-#define ETH_EXT_SPEED_25G			0x00000010
+-#define ETH_EXT_SPEED_40G			0x00000020
+-#define ETH_EXT_SPEED_50G_BASE_R		0x00000040
+-#define ETH_EXT_SPEED_50G_BASE_R2		0x00000080
+-#define ETH_EXT_SPEED_100G_BASE_R2		0x00000100
+-#define ETH_EXT_SPEED_100G_BASE_R4		0x00000200
+-#define ETH_EXT_SPEED_100G_BASE_P4		0x00000400
+-#define ETH_EXT_ADV_SPEED_MASK			0xffff0000
+-#define ETH_EXT_ADV_SPEED_OFFSET		16
+-#define ETH_EXT_ADV_SPEED_RESERVED		0x00010000
+-#define ETH_EXT_ADV_SPEED_1G			0x00020000
+-#define ETH_EXT_ADV_SPEED_10G			0x00040000
+-#define ETH_EXT_ADV_SPEED_20G			0x00080000
+-#define ETH_EXT_ADV_SPEED_25G			0x00100000
+-#define ETH_EXT_ADV_SPEED_40G			0x00200000
+-#define ETH_EXT_ADV_SPEED_50G_BASE_R		0x00400000
+-#define ETH_EXT_ADV_SPEED_50G_BASE_R2		0x00800000
+-#define ETH_EXT_ADV_SPEED_100G_BASE_R2		0x01000000
+-#define ETH_EXT_ADV_SPEED_100G_BASE_R4		0x02000000
+-#define ETH_EXT_ADV_SPEED_100G_BASE_P4		0x04000000
+-};
+-
+-struct port_mf_cfg {
+-	u32 dynamic_cfg;
+-#define PORT_MF_CFG_OV_TAG_MASK		0x0000ffff
+-#define PORT_MF_CFG_OV_TAG_SHIFT	0
+-#define PORT_MF_CFG_OV_TAG_DEFAULT	PORT_MF_CFG_OV_TAG_MASK
+-
+-	u32 reserved[1];
+-};
+-
+-struct eth_stats {
+-	u64 r64;
+-	u64 r127;
+-	u64 r255;
+-	u64 r511;
+-	u64 r1023;
+-	u64 r1518;
+-
+-	union {
+-		struct {
+-			u64 r1522;
+-			u64 r2047;
+-			u64 r4095;
+-			u64 r9216;
+-			u64 r16383;
+-		} bb0;
+-		struct {
+-			u64 unused1;
+-			u64 r1519_to_max;
+-			u64 unused2;
+-			u64 unused3;
+-			u64 unused4;
+-		} ah0;
+-	} u0;
+-
+-	u64 rfcs;
+-	u64 rxcf;
+-	u64 rxpf;
+-	u64 rxpp;
+-	u64 raln;
+-	u64 rfcr;
+-	u64 rovr;
+-	u64 rjbr;
+-	u64 rund;
+-	u64 rfrg;
+-	u64 t64;
+-	u64 t127;
+-	u64 t255;
+-	u64 t511;
+-	u64 t1023;
+-	u64 t1518;
+-
+-	union {
+-		struct {
+-			u64 t2047;
+-			u64 t4095;
+-			u64 t9216;
+-			u64 t16383;
+-		} bb1;
+-		struct {
+-			u64 t1519_to_max;
+-			u64 unused6;
+-			u64 unused7;
+-			u64 unused8;
+-		} ah1;
+-	} u1;
+-
+-	u64 txpf;
+-	u64 txpp;
+-
+-	union {
+-		struct {
+-			u64 tlpiec;
+-			u64 tncl;
+-		} bb2;
+-		struct {
+-			u64 unused9;
+-			u64 unused10;
+-		} ah2;
+-	} u2;
+-
+-	u64 rbyte;
+-	u64 rxuca;
+-	u64 rxmca;
+-	u64 rxbca;
+-	u64 rxpok;
+-	u64 tbyte;
+-	u64 txuca;
+-	u64 txmca;
+-	u64 txbca;
+-	u64 txcf;
+-};
+-
+-struct brb_stats {
+-	u64 brb_truncate[8];
+-	u64 brb_discard[8];
+-};
+-
+-struct port_stats {
+-	struct brb_stats brb;
+-	struct eth_stats eth;
+-};
+-
+-struct couple_mode_teaming {
+-	u8 port_cmt[MCP_GLOB_PORT_MAX];
+-#define PORT_CMT_IN_TEAM	(1 << 0)
+-
+-#define PORT_CMT_PORT_ROLE	(1 << 1)
+-#define PORT_CMT_PORT_INACTIVE	(0 << 1)
+-#define PORT_CMT_PORT_ACTIVE	(1 << 1)
+-
+-#define PORT_CMT_TEAM_MASK	(1 << 2)
+-#define PORT_CMT_TEAM0		(0 << 2)
+-#define PORT_CMT_TEAM1		(1 << 2)
+-};
+-
+-#define LLDP_CHASSIS_ID_STAT_LEN	4
+-#define LLDP_PORT_ID_STAT_LEN		4
+-#define DCBX_MAX_APP_PROTOCOL		32
+-#define MAX_SYSTEM_LLDP_TLV_DATA	32
+-
+-enum _lldp_agent {
+-	LLDP_NEAREST_BRIDGE = 0,
+-	LLDP_NEAREST_NON_TPMR_BRIDGE,
+-	LLDP_NEAREST_CUSTOMER_BRIDGE,
+-	LLDP_MAX_LLDP_AGENTS
+-};
+-
+-struct lldp_config_params_s {
+-	u32 config;
+-#define LLDP_CONFIG_TX_INTERVAL_MASK	0x000000ff
+-#define LLDP_CONFIG_TX_INTERVAL_SHIFT	0
+-#define LLDP_CONFIG_HOLD_MASK		0x00000f00
+-#define LLDP_CONFIG_HOLD_SHIFT		8
+-#define LLDP_CONFIG_MAX_CREDIT_MASK	0x0000f000
+-#define LLDP_CONFIG_MAX_CREDIT_SHIFT	12
+-#define LLDP_CONFIG_ENABLE_RX_MASK	0x40000000
+-#define LLDP_CONFIG_ENABLE_RX_SHIFT	30
+-#define LLDP_CONFIG_ENABLE_TX_MASK	0x80000000
+-#define LLDP_CONFIG_ENABLE_TX_SHIFT	31
+-	u32 local_chassis_id[LLDP_CHASSIS_ID_STAT_LEN];
+-	u32 local_port_id[LLDP_PORT_ID_STAT_LEN];
+-};
+-
+-struct lldp_status_params_s {
+-	u32 prefix_seq_num;
+-	u32 status;
+-	u32 peer_chassis_id[LLDP_CHASSIS_ID_STAT_LEN];
+-	u32 peer_port_id[LLDP_PORT_ID_STAT_LEN];
+-	u32 suffix_seq_num;
+-};
+-
+-struct dcbx_ets_feature {
+-	u32 flags;
+-#define DCBX_ETS_ENABLED_MASK	0x00000001
+-#define DCBX_ETS_ENABLED_SHIFT	0
+-#define DCBX_ETS_WILLING_MASK	0x00000002
+-#define DCBX_ETS_WILLING_SHIFT	1
+-#define DCBX_ETS_ERROR_MASK	0x00000004
+-#define DCBX_ETS_ERROR_SHIFT	2
+-#define DCBX_ETS_CBS_MASK	0x00000008
+-#define DCBX_ETS_CBS_SHIFT	3
+-#define DCBX_ETS_MAX_TCS_MASK	0x000000f0
+-#define DCBX_ETS_MAX_TCS_SHIFT	4
+-#define DCBX_OOO_TC_MASK	0x00000f00
+-#define DCBX_OOO_TC_SHIFT	8
+-	u32 pri_tc_tbl[1];
+-#define DCBX_TCP_OOO_TC		(4)
+-
+-#define NIG_ETS_ISCSI_OOO_CLIENT_OFFSET	(DCBX_TCP_OOO_TC + 1)
+-#define DCBX_CEE_STRICT_PRIORITY	0xf
+-	u32 tc_bw_tbl[2];
+-	u32 tc_tsa_tbl[2];
+-#define DCBX_ETS_TSA_STRICT	0
+-#define DCBX_ETS_TSA_CBS	1
+-#define DCBX_ETS_TSA_ETS	2
+-};
+-
+-#define DCBX_TCP_OOO_TC			(4)
+-#define DCBX_TCP_OOO_K2_4PORT_TC	(3)
+-
+-struct dcbx_app_priority_entry {
+-	u32 entry;
+-#define DCBX_APP_PRI_MAP_MASK		0x000000ff
+-#define DCBX_APP_PRI_MAP_SHIFT		0
+-#define DCBX_APP_PRI_0			0x01
+-#define DCBX_APP_PRI_1			0x02
+-#define DCBX_APP_PRI_2			0x04
+-#define DCBX_APP_PRI_3			0x08
+-#define DCBX_APP_PRI_4			0x10
+-#define DCBX_APP_PRI_5			0x20
+-#define DCBX_APP_PRI_6			0x40
+-#define DCBX_APP_PRI_7			0x80
+-#define DCBX_APP_SF_MASK		0x00000300
+-#define DCBX_APP_SF_SHIFT		8
+-#define DCBX_APP_SF_ETHTYPE		0
+-#define DCBX_APP_SF_PORT		1
+-#define DCBX_APP_SF_IEEE_MASK		0x0000f000
+-#define DCBX_APP_SF_IEEE_SHIFT		12
+-#define DCBX_APP_SF_IEEE_RESERVED	0
+-#define DCBX_APP_SF_IEEE_ETHTYPE	1
+-#define DCBX_APP_SF_IEEE_TCP_PORT	2
+-#define DCBX_APP_SF_IEEE_UDP_PORT	3
+-#define DCBX_APP_SF_IEEE_TCP_UDP_PORT	4
+-
+-#define DCBX_APP_PROTOCOL_ID_MASK	0xffff0000
+-#define DCBX_APP_PROTOCOL_ID_SHIFT	16
+-};
+-
+-struct dcbx_app_priority_feature {
+-	u32 flags;
+-#define DCBX_APP_ENABLED_MASK		0x00000001
+-#define DCBX_APP_ENABLED_SHIFT		0
+-#define DCBX_APP_WILLING_MASK		0x00000002
+-#define DCBX_APP_WILLING_SHIFT		1
+-#define DCBX_APP_ERROR_MASK		0x00000004
+-#define DCBX_APP_ERROR_SHIFT		2
+-#define DCBX_APP_MAX_TCS_MASK		0x0000f000
+-#define DCBX_APP_MAX_TCS_SHIFT		12
+-#define DCBX_APP_NUM_ENTRIES_MASK	0x00ff0000
+-#define DCBX_APP_NUM_ENTRIES_SHIFT	16
+-	struct dcbx_app_priority_entry app_pri_tbl[DCBX_MAX_APP_PROTOCOL];
+-};
+-
+-struct dcbx_features {
+-	struct dcbx_ets_feature ets;
+-	u32 pfc;
+-#define DCBX_PFC_PRI_EN_BITMAP_MASK	0x000000ff
+-#define DCBX_PFC_PRI_EN_BITMAP_SHIFT	0
+-#define DCBX_PFC_PRI_EN_BITMAP_PRI_0	0x01
+-#define DCBX_PFC_PRI_EN_BITMAP_PRI_1	0x02
+-#define DCBX_PFC_PRI_EN_BITMAP_PRI_2	0x04
+-#define DCBX_PFC_PRI_EN_BITMAP_PRI_3	0x08
+-#define DCBX_PFC_PRI_EN_BITMAP_PRI_4	0x10
+-#define DCBX_PFC_PRI_EN_BITMAP_PRI_5	0x20
+-#define DCBX_PFC_PRI_EN_BITMAP_PRI_6	0x40
+-#define DCBX_PFC_PRI_EN_BITMAP_PRI_7	0x80
+-
+-#define DCBX_PFC_FLAGS_MASK		0x0000ff00
+-#define DCBX_PFC_FLAGS_SHIFT		8
+-#define DCBX_PFC_CAPS_MASK		0x00000f00
+-#define DCBX_PFC_CAPS_SHIFT		8
+-#define DCBX_PFC_MBC_MASK		0x00004000
+-#define DCBX_PFC_MBC_SHIFT		14
+-#define DCBX_PFC_WILLING_MASK		0x00008000
+-#define DCBX_PFC_WILLING_SHIFT		15
+-#define DCBX_PFC_ENABLED_MASK		0x00010000
+-#define DCBX_PFC_ENABLED_SHIFT		16
+-#define DCBX_PFC_ERROR_MASK		0x00020000
+-#define DCBX_PFC_ERROR_SHIFT		17
+-
+-	struct dcbx_app_priority_feature app;
+-};
+-
+-struct dcbx_local_params {
+-	u32 config;
+-#define DCBX_CONFIG_VERSION_MASK	0x00000007
+-#define DCBX_CONFIG_VERSION_SHIFT	0
+-#define DCBX_CONFIG_VERSION_DISABLED	0
+-#define DCBX_CONFIG_VERSION_IEEE	1
+-#define DCBX_CONFIG_VERSION_CEE		2
+-#define DCBX_CONFIG_VERSION_STATIC	4
+-
+-	u32 flags;
+-	struct dcbx_features features;
+-};
+-
+-struct dcbx_mib {
+-	u32 prefix_seq_num;
+-	u32 flags;
+-	struct dcbx_features features;
+-	u32 suffix_seq_num;
+-};
+-
+-struct lldp_system_tlvs_buffer_s {
+-	u16 valid;
+-	u16 length;
+-	u32 data[MAX_SYSTEM_LLDP_TLV_DATA];
+-};
+-
+-struct dcb_dscp_map {
+-	u32 flags;
+-#define DCB_DSCP_ENABLE_MASK	0x1
+-#define DCB_DSCP_ENABLE_SHIFT	0
+-#define DCB_DSCP_ENABLE	1
+-	u32 dscp_pri_map[8];
+-};
+-
+-struct public_global {
+-	u32 max_path;
+-	u32 max_ports;
+-#define MODE_1P 1
+-#define MODE_2P 2
+-#define MODE_3P 3
+-#define MODE_4P 4
+-	u32 debug_mb_offset;
+-	u32 phymod_dbg_mb_offset;
+-	struct couple_mode_teaming cmt;
+-	s32 internal_temperature;
+-	u32 mfw_ver;
+-	u32 running_bundle_id;
+-	s32 external_temperature;
+-	u32 mdump_reason;
+-	u64 reserved;
+-	u32 data_ptr;
+-	u32 data_size;
+-};
+-
+-struct fw_flr_mb {
+-	u32 aggint;
+-	u32 opgen_addr;
+-	u32 accum_ack;
+-};
+-
+-struct public_path {
+-	struct fw_flr_mb flr_mb;
+-	u32 mcp_vf_disabled[VF_MAX_STATIC / 32];
+-
+-	u32 process_kill;
+-#define PROCESS_KILL_COUNTER_MASK	0x0000ffff
+-#define PROCESS_KILL_COUNTER_SHIFT	0
+-#define PROCESS_KILL_GLOB_AEU_BIT_MASK	0xffff0000
+-#define PROCESS_KILL_GLOB_AEU_BIT_SHIFT	16
+-#define GLOBAL_AEU_BIT(aeu_reg_id, aeu_bit) (aeu_reg_id * 32 + aeu_bit)
+-};
+-
+-struct public_port {
+-	u32						validity_map;
+-
+-	u32						link_status;
+-#define LINK_STATUS_LINK_UP				0x00000001
+-#define LINK_STATUS_SPEED_AND_DUPLEX_MASK		0x0000001e
+-#define LINK_STATUS_SPEED_AND_DUPLEX_1000THD		(1 << 1)
+-#define LINK_STATUS_SPEED_AND_DUPLEX_1000TFD		(2 << 1)
+-#define LINK_STATUS_SPEED_AND_DUPLEX_10G		(3 << 1)
+-#define LINK_STATUS_SPEED_AND_DUPLEX_20G		(4 << 1)
+-#define LINK_STATUS_SPEED_AND_DUPLEX_40G		(5 << 1)
+-#define LINK_STATUS_SPEED_AND_DUPLEX_50G		(6 << 1)
+-#define LINK_STATUS_SPEED_AND_DUPLEX_100G		(7 << 1)
+-#define LINK_STATUS_SPEED_AND_DUPLEX_25G		(8 << 1)
+-#define LINK_STATUS_AUTO_NEGOTIATE_ENABLED		0x00000020
+-#define LINK_STATUS_AUTO_NEGOTIATE_COMPLETE		0x00000040
+-#define LINK_STATUS_PARALLEL_DETECTION_USED		0x00000080
+-#define LINK_STATUS_PFC_ENABLED				0x00000100
+-#define LINK_STATUS_LINK_PARTNER_1000TFD_CAPABLE	0x00000200
+-#define LINK_STATUS_LINK_PARTNER_1000THD_CAPABLE	0x00000400
+-#define LINK_STATUS_LINK_PARTNER_10G_CAPABLE		0x00000800
+-#define LINK_STATUS_LINK_PARTNER_20G_CAPABLE		0x00001000
+-#define LINK_STATUS_LINK_PARTNER_40G_CAPABLE		0x00002000
+-#define LINK_STATUS_LINK_PARTNER_50G_CAPABLE		0x00004000
+-#define LINK_STATUS_LINK_PARTNER_100G_CAPABLE		0x00008000
+-#define LINK_STATUS_LINK_PARTNER_25G_CAPABLE		0x00010000
+-#define LINK_STATUS_LINK_PARTNER_FLOW_CONTROL_MASK	0x000c0000
+-#define LINK_STATUS_LINK_PARTNER_NOT_PAUSE_CAPABLE	(0 << 18)
+-#define LINK_STATUS_LINK_PARTNER_SYMMETRIC_PAUSE	(1 << 18)
+-#define LINK_STATUS_LINK_PARTNER_ASYMMETRIC_PAUSE	(2 << 18)
+-#define LINK_STATUS_LINK_PARTNER_BOTH_PAUSE		(3 << 18)
+-#define LINK_STATUS_SFP_TX_FAULT			0x00100000
+-#define LINK_STATUS_TX_FLOW_CONTROL_ENABLED		0x00200000
+-#define LINK_STATUS_RX_FLOW_CONTROL_ENABLED		0x00400000
+-#define LINK_STATUS_RX_SIGNAL_PRESENT			0x00800000
+-#define LINK_STATUS_MAC_LOCAL_FAULT			0x01000000
+-#define LINK_STATUS_MAC_REMOTE_FAULT			0x02000000
+-#define LINK_STATUS_UNSUPPORTED_SPD_REQ			0x04000000
+-
+-#define LINK_STATUS_FEC_MODE_MASK			0x38000000
+-#define LINK_STATUS_FEC_MODE_NONE			(0 << 27)
+-#define LINK_STATUS_FEC_MODE_FIRECODE_CL74		(1 << 27)
+-#define LINK_STATUS_FEC_MODE_RS_CL91			(2 << 27)
+-
+-	u32 link_status1;
+-	u32 ext_phy_fw_version;
+-	u32 drv_phy_cfg_addr;
+-
+-	u32 port_stx;
+-
+-	u32 stat_nig_timer;
+-
+-	struct port_mf_cfg port_mf_config;
+-	struct port_stats stats;
+-
+-	u32 media_type;
+-#define MEDIA_UNSPECIFIED	0x0
+-#define MEDIA_SFPP_10G_FIBER	0x1
+-#define MEDIA_XFP_FIBER		0x2
+-#define MEDIA_DA_TWINAX		0x3
+-#define MEDIA_BASE_T		0x4
+-#define MEDIA_SFP_1G_FIBER	0x5
+-#define MEDIA_MODULE_FIBER	0x6
+-#define MEDIA_KR		0xf0
+-#define MEDIA_NOT_PRESENT	0xff
+-
+-	u32 lfa_status;
+-	u32 link_change_count;
+-
+-	struct lldp_config_params_s lldp_config_params[LLDP_MAX_LLDP_AGENTS];
+-	struct lldp_status_params_s lldp_status_params[LLDP_MAX_LLDP_AGENTS];
+-	struct lldp_system_tlvs_buffer_s system_lldp_tlvs_buf;
+-
+-	/* DCBX related MIB */
+-	struct dcbx_local_params local_admin_dcbx_mib;
+-	struct dcbx_mib remote_dcbx_mib;
+-	struct dcbx_mib operational_dcbx_mib;
+-
+-	u32 reserved[2];
+-
+-	u32						transceiver_data;
+-#define ETH_TRANSCEIVER_STATE_MASK			0x000000ff
+-#define ETH_TRANSCEIVER_STATE_SHIFT			0x00000000
+-#define ETH_TRANSCEIVER_STATE_OFFSET			0x00000000
+-#define ETH_TRANSCEIVER_STATE_UNPLUGGED			0x00000000
+-#define ETH_TRANSCEIVER_STATE_PRESENT			0x00000001
+-#define ETH_TRANSCEIVER_STATE_VALID			0x00000003
+-#define ETH_TRANSCEIVER_STATE_UPDATING			0x00000008
+-#define ETH_TRANSCEIVER_TYPE_MASK			0x0000ff00
+-#define ETH_TRANSCEIVER_TYPE_OFFSET			0x8
+-#define ETH_TRANSCEIVER_TYPE_NONE			0x00
+-#define ETH_TRANSCEIVER_TYPE_UNKNOWN			0xff
+-#define ETH_TRANSCEIVER_TYPE_1G_PCC			0x01
+-#define ETH_TRANSCEIVER_TYPE_1G_ACC			0x02
+-#define ETH_TRANSCEIVER_TYPE_1G_LX			0x03
+-#define ETH_TRANSCEIVER_TYPE_1G_SX			0x04
+-#define ETH_TRANSCEIVER_TYPE_10G_SR			0x05
+-#define ETH_TRANSCEIVER_TYPE_10G_LR			0x06
+-#define ETH_TRANSCEIVER_TYPE_10G_LRM			0x07
+-#define ETH_TRANSCEIVER_TYPE_10G_ER			0x08
+-#define ETH_TRANSCEIVER_TYPE_10G_PCC			0x09
+-#define ETH_TRANSCEIVER_TYPE_10G_ACC			0x0a
+-#define ETH_TRANSCEIVER_TYPE_XLPPI			0x0b
+-#define ETH_TRANSCEIVER_TYPE_40G_LR4			0x0c
+-#define ETH_TRANSCEIVER_TYPE_40G_SR4			0x0d
+-#define ETH_TRANSCEIVER_TYPE_40G_CR4			0x0e
+-#define ETH_TRANSCEIVER_TYPE_100G_AOC			0x0f
+-#define ETH_TRANSCEIVER_TYPE_100G_SR4			0x10
+-#define ETH_TRANSCEIVER_TYPE_100G_LR4			0x11
+-#define ETH_TRANSCEIVER_TYPE_100G_ER4			0x12
+-#define ETH_TRANSCEIVER_TYPE_100G_ACC			0x13
+-#define ETH_TRANSCEIVER_TYPE_100G_CR4			0x14
+-#define ETH_TRANSCEIVER_TYPE_4x10G_SR			0x15
+-#define ETH_TRANSCEIVER_TYPE_25G_CA_N			0x16
+-#define ETH_TRANSCEIVER_TYPE_25G_ACC_S			0x17
+-#define ETH_TRANSCEIVER_TYPE_25G_CA_S			0x18
+-#define ETH_TRANSCEIVER_TYPE_25G_ACC_M			0x19
+-#define ETH_TRANSCEIVER_TYPE_25G_CA_L			0x1a
+-#define ETH_TRANSCEIVER_TYPE_25G_ACC_L			0x1b
+-#define ETH_TRANSCEIVER_TYPE_25G_SR			0x1c
+-#define ETH_TRANSCEIVER_TYPE_25G_LR			0x1d
+-#define ETH_TRANSCEIVER_TYPE_25G_AOC			0x1e
+-#define ETH_TRANSCEIVER_TYPE_4x10G			0x1f
+-#define ETH_TRANSCEIVER_TYPE_4x25G_CR			0x20
+-#define ETH_TRANSCEIVER_TYPE_1000BASET			0x21
+-#define ETH_TRANSCEIVER_TYPE_10G_BASET			0x22
+-#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_10G_40G_SR	0x30
+-#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_10G_40G_CR	0x31
+-#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_10G_40G_LR	0x32
+-#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_40G_100G_SR	0x33
+-#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_40G_100G_CR	0x34
+-#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_40G_100G_LR	0x35
+-#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_40G_100G_AOC	0x36
+-#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_10G_25G_SR	0x37
+-#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_10G_25G_LR	0x38
+-#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_1G_10G_SR	0x39
+-#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_1G_10G_LR	0x3a
+-
+-	u32 wol_info;
+-	u32 wol_pkt_len;
+-	u32 wol_pkt_details;
+-	struct dcb_dscp_map dcb_dscp_map;
+-
+-	u32 eee_status;
+-#define EEE_ACTIVE_BIT			BIT(0)
+-#define EEE_LD_ADV_STATUS_MASK		0x000000f0
+-#define EEE_LD_ADV_STATUS_OFFSET	4
+-#define EEE_1G_ADV			BIT(1)
+-#define EEE_10G_ADV			BIT(2)
+-#define EEE_LP_ADV_STATUS_MASK		0x00000f00
+-#define EEE_LP_ADV_STATUS_OFFSET	8
+-#define EEE_SUPPORTED_SPEED_MASK	0x0000f000
+-#define EEE_SUPPORTED_SPEED_OFFSET	12
+-#define EEE_1G_SUPPORTED		BIT(1)
+-#define EEE_10G_SUPPORTED		BIT(2)
+-
+-	u32 eee_remote;
+-#define EEE_REMOTE_TW_TX_MASK   0x0000ffff
+-#define EEE_REMOTE_TW_TX_OFFSET 0
+-#define EEE_REMOTE_TW_RX_MASK   0xffff0000
+-#define EEE_REMOTE_TW_RX_OFFSET 16
+-
+-	u32 reserved1;
+-	u32 oem_cfg_port;
+-#define OEM_CFG_CHANNEL_TYPE_MASK                       0x00000003
+-#define OEM_CFG_CHANNEL_TYPE_OFFSET                     0
+-#define OEM_CFG_CHANNEL_TYPE_VLAN_PARTITION             0x1
+-#define OEM_CFG_CHANNEL_TYPE_STAGGED                    0x2
+-#define OEM_CFG_SCHED_TYPE_MASK                         0x0000000C
+-#define OEM_CFG_SCHED_TYPE_OFFSET                       2
+-#define OEM_CFG_SCHED_TYPE_ETS                          0x1
+-#define OEM_CFG_SCHED_TYPE_VNIC_BW                      0x2
+-};
+-
+-struct public_func {
+-	u32 reserved0[2];
+-
+-	u32 mtu_size;
+-
+-	u32 reserved[7];
+-
+-	u32 config;
+-#define FUNC_MF_CFG_FUNC_HIDE			0x00000001
+-#define FUNC_MF_CFG_PAUSE_ON_HOST_RING		0x00000002
+-#define FUNC_MF_CFG_PAUSE_ON_HOST_RING_SHIFT	0x00000001
+-
+-#define FUNC_MF_CFG_PROTOCOL_MASK	0x000000f0
+-#define FUNC_MF_CFG_PROTOCOL_SHIFT	4
+-#define FUNC_MF_CFG_PROTOCOL_ETHERNET	0x00000000
+-#define FUNC_MF_CFG_PROTOCOL_ISCSI              0x00000010
+-#define FUNC_MF_CFG_PROTOCOL_FCOE               0x00000020
+-#define FUNC_MF_CFG_PROTOCOL_ROCE               0x00000030
+-#define FUNC_MF_CFG_PROTOCOL_NVMETCP    0x00000040
+-#define FUNC_MF_CFG_PROTOCOL_MAX	0x00000040
+-
+-#define FUNC_MF_CFG_MIN_BW_MASK		0x0000ff00
+-#define FUNC_MF_CFG_MIN_BW_SHIFT	8
+-#define FUNC_MF_CFG_MIN_BW_DEFAULT	0x00000000
+-#define FUNC_MF_CFG_MAX_BW_MASK		0x00ff0000
+-#define FUNC_MF_CFG_MAX_BW_SHIFT	16
+-#define FUNC_MF_CFG_MAX_BW_DEFAULT	0x00640000
+-
+-	u32 status;
+-#define FUNC_STATUS_VIRTUAL_LINK_UP	0x00000001
+-
+-	u32 mac_upper;
+-#define FUNC_MF_CFG_UPPERMAC_MASK	0x0000ffff
+-#define FUNC_MF_CFG_UPPERMAC_SHIFT	0
+-#define FUNC_MF_CFG_UPPERMAC_DEFAULT	FUNC_MF_CFG_UPPERMAC_MASK
+-	u32 mac_lower;
+-#define FUNC_MF_CFG_LOWERMAC_DEFAULT	0xffffffff
+-
+-	u32 fcoe_wwn_port_name_upper;
+-	u32 fcoe_wwn_port_name_lower;
+-
+-	u32 fcoe_wwn_node_name_upper;
+-	u32 fcoe_wwn_node_name_lower;
+-
+-	u32 ovlan_stag;
+-#define FUNC_MF_CFG_OV_STAG_MASK	0x0000ffff
+-#define FUNC_MF_CFG_OV_STAG_SHIFT	0
+-#define FUNC_MF_CFG_OV_STAG_DEFAULT	FUNC_MF_CFG_OV_STAG_MASK
+-
+-	u32 pf_allocation;
+-
+-	u32 preserve_data;
+-
+-	u32 driver_last_activity_ts;
+-
+-	u32 drv_ack_vf_disabled[VF_MAX_STATIC / 32];
+-
+-	u32 drv_id;
+-#define DRV_ID_PDA_COMP_VER_MASK	0x0000ffff
+-#define DRV_ID_PDA_COMP_VER_SHIFT	0
+-
+-#define LOAD_REQ_HSI_VERSION		2
+-#define DRV_ID_MCP_HSI_VER_MASK		0x00ff0000
+-#define DRV_ID_MCP_HSI_VER_SHIFT	16
+-#define DRV_ID_MCP_HSI_VER_CURRENT	(LOAD_REQ_HSI_VERSION << \
+-					 DRV_ID_MCP_HSI_VER_SHIFT)
+-
+-#define DRV_ID_DRV_TYPE_MASK		0x7f000000
+-#define DRV_ID_DRV_TYPE_SHIFT		24
+-#define DRV_ID_DRV_TYPE_UNKNOWN		(0 << DRV_ID_DRV_TYPE_SHIFT)
+-#define DRV_ID_DRV_TYPE_LINUX		(1 << DRV_ID_DRV_TYPE_SHIFT)
+-
+-#define DRV_ID_DRV_INIT_HW_MASK		0x80000000
+-#define DRV_ID_DRV_INIT_HW_SHIFT	31
+-#define DRV_ID_DRV_INIT_HW_FLAG		(1 << DRV_ID_DRV_INIT_HW_SHIFT)
+-
+-	u32 oem_cfg_func;
+-#define OEM_CFG_FUNC_TC_MASK                    0x0000000F
+-#define OEM_CFG_FUNC_TC_OFFSET                  0
+-#define OEM_CFG_FUNC_TC_0                       0x0
+-#define OEM_CFG_FUNC_TC_1                       0x1
+-#define OEM_CFG_FUNC_TC_2                       0x2
+-#define OEM_CFG_FUNC_TC_3                       0x3
+-#define OEM_CFG_FUNC_TC_4                       0x4
+-#define OEM_CFG_FUNC_TC_5                       0x5
+-#define OEM_CFG_FUNC_TC_6                       0x6
+-#define OEM_CFG_FUNC_TC_7                       0x7
+-
+-#define OEM_CFG_FUNC_HOST_PRI_CTRL_MASK         0x00000030
+-#define OEM_CFG_FUNC_HOST_PRI_CTRL_OFFSET       4
+-#define OEM_CFG_FUNC_HOST_PRI_CTRL_VNIC         0x1
+-#define OEM_CFG_FUNC_HOST_PRI_CTRL_OS           0x2
+-};
+-
+-struct mcp_mac {
+-	u32 mac_upper;
+-	u32 mac_lower;
+-};
+-
+-struct mcp_val64 {
+-	u32 lo;
+-	u32 hi;
+-};
+-
+-struct mcp_file_att {
+-	u32 nvm_start_addr;
+-	u32 len;
+-};
+-
+-struct bist_nvm_image_att {
+-	u32 return_code;
+-	u32 image_type;
+-	u32 nvm_start_addr;
+-	u32 len;
+-};
+-
+-#define MCP_DRV_VER_STR_SIZE 16
+-#define MCP_DRV_VER_STR_SIZE_DWORD (MCP_DRV_VER_STR_SIZE / sizeof(u32))
+-#define MCP_DRV_NVM_BUF_LEN 32
+-struct drv_version_stc {
+-	u32 version;
+-	u8 name[MCP_DRV_VER_STR_SIZE - 4];
+-};
+-
+-struct lan_stats_stc {
+-	u64 ucast_rx_pkts;
+-	u64 ucast_tx_pkts;
+-	u32 fcs_err;
+-	u32 rserved;
+-};
+-
+-struct fcoe_stats_stc {
+-	u64 rx_pkts;
+-	u64 tx_pkts;
+-	u32 fcs_err;
+-	u32 login_failure;
+-};
+-
+-struct ocbb_data_stc {
+-	u32 ocbb_host_addr;
+-	u32 ocsd_host_addr;
+-	u32 ocsd_req_update_interval;
+-};
+-
+-#define MAX_NUM_OF_SENSORS 7
+-struct temperature_status_stc {
+-	u32 num_of_sensors;
+-	u32 sensor[MAX_NUM_OF_SENSORS];
+-};
+-
+-/* crash dump configuration header */
+-struct mdump_config_stc {
+-	u32 version;
+-	u32 config;
+-	u32 epoc;
+-	u32 num_of_logs;
+-	u32 valid_logs;
+-};
+-
+-enum resource_id_enum {
+-	RESOURCE_NUM_SB_E = 0,
+-	RESOURCE_NUM_L2_QUEUE_E = 1,
+-	RESOURCE_NUM_VPORT_E = 2,
+-	RESOURCE_NUM_VMQ_E = 3,
+-	RESOURCE_FACTOR_NUM_RSS_PF_E = 4,
+-	RESOURCE_FACTOR_RSS_PER_VF_E = 5,
+-	RESOURCE_NUM_RL_E = 6,
+-	RESOURCE_NUM_PQ_E = 7,
+-	RESOURCE_NUM_VF_E = 8,
+-	RESOURCE_VFC_FILTER_E = 9,
+-	RESOURCE_ILT_E = 10,
+-	RESOURCE_CQS_E = 11,
+-	RESOURCE_GFT_PROFILES_E = 12,
+-	RESOURCE_NUM_TC_E = 13,
+-	RESOURCE_NUM_RSS_ENGINES_E = 14,
+-	RESOURCE_LL2_QUEUE_E = 15,
+-	RESOURCE_RDMA_STATS_QUEUE_E = 16,
+-	RESOURCE_BDQ_E = 17,
+-	RESOURCE_QCN_E = 18,
+-	RESOURCE_LLH_FILTER_E = 19,
+-	RESOURCE_VF_MAC_ADDR = 20,
+-	RESOURCE_LL2_CQS_E = 21,
+-	RESOURCE_VF_CNQS = 22,
+-	RESOURCE_MAX_NUM,
+-	RESOURCE_NUM_INVALID = 0xFFFFFFFF
+-};
+-
+-/* Resource ID is to be filled by the driver in the MB request
+- * Size, offset & flags to be filled by the MFW in the MB response
+- */
+-struct resource_info {
+-	enum resource_id_enum res_id;
+-	u32 size;		/* number of allocated resources */
+-	u32 offset;		/* Offset of the 1st resource */
+-	u32 vf_size;
+-	u32 vf_offset;
+-	u32 flags;
+-#define RESOURCE_ELEMENT_STRICT (1 << 0)
+-};
+-
+-#define DRV_ROLE_NONE           0
+-#define DRV_ROLE_PREBOOT        1
+-#define DRV_ROLE_OS             2
+-#define DRV_ROLE_KDUMP          3
+-
+-struct load_req_stc {
+-	u32 drv_ver_0;
+-	u32 drv_ver_1;
+-	u32 fw_ver;
+-	u32 misc0;
+-#define LOAD_REQ_ROLE_MASK              0x000000FF
+-#define LOAD_REQ_ROLE_SHIFT             0
+-#define LOAD_REQ_LOCK_TO_MASK           0x0000FF00
+-#define LOAD_REQ_LOCK_TO_SHIFT          8
+-#define LOAD_REQ_LOCK_TO_DEFAULT        0
+-#define LOAD_REQ_LOCK_TO_NONE           255
+-#define LOAD_REQ_FORCE_MASK             0x000F0000
+-#define LOAD_REQ_FORCE_SHIFT            16
+-#define LOAD_REQ_FORCE_NONE             0
+-#define LOAD_REQ_FORCE_PF               1
+-#define LOAD_REQ_FORCE_ALL              2
+-#define LOAD_REQ_FLAGS0_MASK            0x00F00000
+-#define LOAD_REQ_FLAGS0_SHIFT           20
+-#define LOAD_REQ_FLAGS0_AVOID_RESET     (0x1 << 0)
+-};
+-
+-struct load_rsp_stc {
+-	u32 drv_ver_0;
+-	u32 drv_ver_1;
+-	u32 fw_ver;
+-	u32 misc0;
+-#define LOAD_RSP_ROLE_MASK              0x000000FF
+-#define LOAD_RSP_ROLE_SHIFT             0
+-#define LOAD_RSP_HSI_MASK               0x0000FF00
+-#define LOAD_RSP_HSI_SHIFT              8
+-#define LOAD_RSP_FLAGS0_MASK            0x000F0000
+-#define LOAD_RSP_FLAGS0_SHIFT           16
+-#define LOAD_RSP_FLAGS0_DRV_EXISTS      (0x1 << 0)
+-};
+-
+-struct mdump_retain_data_stc {
+-	u32 valid;
+-	u32 epoch;
+-	u32 pf;
+-	u32 status;
+-};
+-
+-union drv_union_data {
+-	u32 ver_str[MCP_DRV_VER_STR_SIZE_DWORD];
+-	struct mcp_mac wol_mac;
+-
+-	struct eth_phy_cfg drv_phy_cfg;
+-
+-	struct mcp_val64 val64;
+-
+-	u8 raw_data[MCP_DRV_NVM_BUF_LEN];
+-
+-	struct mcp_file_att file_att;
+-
+-	u32 ack_vf_disabled[VF_MAX_STATIC / 32];
+-
+-	struct drv_version_stc drv_version;
+-
+-	struct lan_stats_stc lan_stats;
+-	struct fcoe_stats_stc fcoe_stats;
+-	struct ocbb_data_stc ocbb_info;
+-	struct temperature_status_stc temp_info;
+-	struct resource_info resource;
+-	struct bist_nvm_image_att nvm_image_att;
+-	struct mdump_config_stc mdump_config;
+-};
+-
+-struct public_drv_mb {
+-	u32 drv_mb_header;
+-#define DRV_MSG_CODE_MASK			0xffff0000
+-#define DRV_MSG_CODE_LOAD_REQ			0x10000000
+-#define DRV_MSG_CODE_LOAD_DONE			0x11000000
+-#define DRV_MSG_CODE_INIT_HW			0x12000000
+-#define DRV_MSG_CODE_CANCEL_LOAD_REQ            0x13000000
+-#define DRV_MSG_CODE_UNLOAD_REQ			0x20000000
+-#define DRV_MSG_CODE_UNLOAD_DONE		0x21000000
+-#define DRV_MSG_CODE_INIT_PHY			0x22000000
+-#define DRV_MSG_CODE_LINK_RESET			0x23000000
+-#define DRV_MSG_CODE_SET_DCBX			0x25000000
+-#define DRV_MSG_CODE_OV_UPDATE_CURR_CFG         0x26000000
+-#define DRV_MSG_CODE_OV_UPDATE_BUS_NUM          0x27000000
+-#define DRV_MSG_CODE_OV_UPDATE_BOOT_PROGRESS    0x28000000
+-#define DRV_MSG_CODE_OV_UPDATE_STORM_FW_VER     0x29000000
+-#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE     0x31000000
+-#define DRV_MSG_CODE_BW_UPDATE_ACK              0x32000000
+-#define DRV_MSG_CODE_OV_UPDATE_MTU              0x33000000
+-#define DRV_MSG_GET_RESOURCE_ALLOC_MSG		0x34000000
+-#define DRV_MSG_SET_RESOURCE_VALUE_MSG		0x35000000
+-#define DRV_MSG_CODE_OV_UPDATE_WOL              0x38000000
+-#define DRV_MSG_CODE_OV_UPDATE_ESWITCH_MODE     0x39000000
+-#define DRV_MSG_CODE_GET_OEM_UPDATES            0x41000000
+-
+-#define DRV_MSG_CODE_BW_UPDATE_ACK		0x32000000
+-#define DRV_MSG_CODE_NIG_DRAIN			0x30000000
+-#define DRV_MSG_CODE_S_TAG_UPDATE_ACK		0x3b000000
+-#define DRV_MSG_CODE_GET_NVM_CFG_OPTION		0x003e0000
+-#define DRV_MSG_CODE_SET_NVM_CFG_OPTION		0x003f0000
+-#define DRV_MSG_CODE_INITIATE_PF_FLR            0x02010000
+-#define DRV_MSG_CODE_VF_DISABLED_DONE		0xc0000000
+-#define DRV_MSG_CODE_CFG_VF_MSIX		0xc0010000
+-#define DRV_MSG_CODE_CFG_PF_VFS_MSIX		0xc0020000
+-#define DRV_MSG_CODE_NVM_PUT_FILE_BEGIN		0x00010000
+-#define DRV_MSG_CODE_NVM_PUT_FILE_DATA		0x00020000
+-#define DRV_MSG_CODE_NVM_GET_FILE_ATT		0x00030000
+-#define DRV_MSG_CODE_NVM_READ_NVRAM		0x00050000
+-#define DRV_MSG_CODE_NVM_WRITE_NVRAM		0x00060000
+-#define DRV_MSG_CODE_MCP_RESET			0x00090000
+-#define DRV_MSG_CODE_SET_VERSION		0x000f0000
+-#define DRV_MSG_CODE_MCP_HALT                   0x00100000
+-#define DRV_MSG_CODE_SET_VMAC                   0x00110000
+-#define DRV_MSG_CODE_GET_VMAC                   0x00120000
+-#define DRV_MSG_CODE_VMAC_TYPE_SHIFT            4
+-#define DRV_MSG_CODE_VMAC_TYPE_MASK             0x30
+-#define DRV_MSG_CODE_VMAC_TYPE_MAC              1
+-#define DRV_MSG_CODE_VMAC_TYPE_WWNN             2
+-#define DRV_MSG_CODE_VMAC_TYPE_WWPN             3
+-
+-#define DRV_MSG_CODE_GET_STATS                  0x00130000
+-#define DRV_MSG_CODE_STATS_TYPE_LAN             1
+-#define DRV_MSG_CODE_STATS_TYPE_FCOE            2
+-#define DRV_MSG_CODE_STATS_TYPE_ISCSI           3
+-#define DRV_MSG_CODE_STATS_TYPE_RDMA            4
+-
+-#define DRV_MSG_CODE_TRANSCEIVER_READ           0x00160000
+-
+-#define DRV_MSG_CODE_MASK_PARITIES              0x001a0000
+-
+-#define DRV_MSG_CODE_BIST_TEST			0x001e0000
+-#define DRV_MSG_CODE_SET_LED_MODE		0x00200000
+-#define DRV_MSG_CODE_RESOURCE_CMD		0x00230000
+-/* Send crash dump commands with param[3:0] - opcode */
+-#define DRV_MSG_CODE_MDUMP_CMD			0x00250000
+-#define DRV_MSG_CODE_GET_TLV_DONE		0x002f0000
+-#define DRV_MSG_CODE_GET_ENGINE_CONFIG		0x00370000
+-#define DRV_MSG_CODE_GET_PPFID_BITMAP		0x43000000
+-
+-#define DRV_MSG_CODE_DEBUG_DATA_SEND		0xc0040000
+-
+-#define RESOURCE_CMD_REQ_RESC_MASK		0x0000001F
+-#define RESOURCE_CMD_REQ_RESC_SHIFT		0
+-#define RESOURCE_CMD_REQ_OPCODE_MASK		0x000000E0
+-#define RESOURCE_CMD_REQ_OPCODE_SHIFT		5
+-#define RESOURCE_OPCODE_REQ			1
+-#define RESOURCE_OPCODE_REQ_WO_AGING		2
+-#define RESOURCE_OPCODE_REQ_W_AGING		3
+-#define RESOURCE_OPCODE_RELEASE			4
+-#define RESOURCE_OPCODE_FORCE_RELEASE		5
+-#define RESOURCE_CMD_REQ_AGE_MASK		0x0000FF00
+-#define RESOURCE_CMD_REQ_AGE_SHIFT		8
+-
+-#define RESOURCE_CMD_RSP_OWNER_MASK		0x000000FF
+-#define RESOURCE_CMD_RSP_OWNER_SHIFT		0
+-#define RESOURCE_CMD_RSP_OPCODE_MASK		0x00000700
+-#define RESOURCE_CMD_RSP_OPCODE_SHIFT		8
+-#define RESOURCE_OPCODE_GNT			1
+-#define RESOURCE_OPCODE_BUSY			2
+-#define RESOURCE_OPCODE_RELEASED		3
+-#define RESOURCE_OPCODE_RELEASED_PREVIOUS	4
+-#define RESOURCE_OPCODE_WRONG_OWNER		5
+-#define RESOURCE_OPCODE_UNKNOWN_CMD		255
+-
+-#define RESOURCE_DUMP				0
+-
+-/* DRV_MSG_CODE_MDUMP_CMD parameters */
+-#define MDUMP_DRV_PARAM_OPCODE_MASK             0x0000000f
+-#define DRV_MSG_CODE_MDUMP_ACK                  0x01
+-#define DRV_MSG_CODE_MDUMP_SET_VALUES           0x02
+-#define DRV_MSG_CODE_MDUMP_TRIGGER              0x03
+-#define DRV_MSG_CODE_MDUMP_GET_CONFIG           0x04
+-#define DRV_MSG_CODE_MDUMP_SET_ENABLE           0x05
+-#define DRV_MSG_CODE_MDUMP_CLEAR_LOGS           0x06
+-#define DRV_MSG_CODE_MDUMP_GET_RETAIN           0x07
+-#define DRV_MSG_CODE_MDUMP_CLR_RETAIN           0x08
+-
+-#define DRV_MSG_CODE_HW_DUMP_TRIGGER            0x0a
+-#define DRV_MSG_CODE_MDUMP_GEN_MDUMP2           0x0b
+-#define DRV_MSG_CODE_MDUMP_FREE_MDUMP2          0x0c
+-
+-#define DRV_MSG_CODE_GET_PF_RDMA_PROTOCOL	0x002b0000
+-#define DRV_MSG_CODE_OS_WOL			0x002e0000
+-
+-#define DRV_MSG_CODE_FEATURE_SUPPORT		0x00300000
+-#define DRV_MSG_CODE_GET_MFW_FEATURE_SUPPORT	0x00310000
+-#define DRV_MSG_SEQ_NUMBER_MASK			0x0000ffff
+-
+-	u32 drv_mb_param;
+-#define DRV_MB_PARAM_UNLOAD_WOL_UNKNOWN         0x00000000
+-#define DRV_MB_PARAM_UNLOAD_WOL_MCP             0x00000001
+-#define DRV_MB_PARAM_UNLOAD_WOL_DISABLED        0x00000002
+-#define DRV_MB_PARAM_UNLOAD_WOL_ENABLED         0x00000003
+-#define DRV_MB_PARAM_DCBX_NOTIFY_MASK		0x000000FF
+-#define DRV_MB_PARAM_DCBX_NOTIFY_SHIFT		3
+-
+-#define DRV_MB_PARAM_NVM_PUT_FILE_BEGIN_MBI     0x3
+-#define DRV_MB_PARAM_NVM_OFFSET_OFFSET          0
+-#define DRV_MB_PARAM_NVM_OFFSET_MASK            0x00FFFFFF
+-#define DRV_MB_PARAM_NVM_LEN_OFFSET		24
+-#define DRV_MB_PARAM_NVM_LEN_MASK               0xFF000000
+-
+-#define DRV_MB_PARAM_CFG_VF_MSIX_VF_ID_SHIFT	0
+-#define DRV_MB_PARAM_CFG_VF_MSIX_VF_ID_MASK	0x000000FF
+-#define DRV_MB_PARAM_CFG_VF_MSIX_SB_NUM_SHIFT	8
+-#define DRV_MB_PARAM_CFG_VF_MSIX_SB_NUM_MASK	0x0000FF00
+-#define DRV_MB_PARAM_LLDP_SEND_MASK		0x00000001
+-#define DRV_MB_PARAM_LLDP_SEND_SHIFT		0
+-
+-#define DRV_MB_PARAM_OV_CURR_CFG_SHIFT		0
+-#define DRV_MB_PARAM_OV_CURR_CFG_MASK		0x0000000F
+-#define DRV_MB_PARAM_OV_CURR_CFG_NONE		0
+-#define DRV_MB_PARAM_OV_CURR_CFG_OS		1
+-#define DRV_MB_PARAM_OV_CURR_CFG_VENDOR_SPEC	2
+-#define DRV_MB_PARAM_OV_CURR_CFG_OTHER		3
+-
+-#define DRV_MB_PARAM_OV_STORM_FW_VER_SHIFT	0
+-#define DRV_MB_PARAM_OV_STORM_FW_VER_MASK	0xFFFFFFFF
+-#define DRV_MB_PARAM_OV_STORM_FW_VER_MAJOR_MASK	0xFF000000
+-#define DRV_MB_PARAM_OV_STORM_FW_VER_MINOR_MASK	0x00FF0000
+-#define DRV_MB_PARAM_OV_STORM_FW_VER_BUILD_MASK	0x0000FF00
+-#define DRV_MB_PARAM_OV_STORM_FW_VER_DROP_MASK	0x000000FF
+-
+-#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_SHIFT	0
+-#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_MASK	0xF
+-#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_UNKNOWN	0x1
+-#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_NOT_LOADED	0x2
+-#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_LOADING	0x3
+-#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_DISABLED	0x4
+-#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_ACTIVE	0x5
+-
+-#define DRV_MB_PARAM_OV_MTU_SIZE_SHIFT	0
+-#define DRV_MB_PARAM_OV_MTU_SIZE_MASK	0xFFFFFFFF
+-
+-#define DRV_MB_PARAM_WOL_MASK	(DRV_MB_PARAM_WOL_DEFAULT | \
+-				 DRV_MB_PARAM_WOL_DISABLED | \
+-				 DRV_MB_PARAM_WOL_ENABLED)
+-#define DRV_MB_PARAM_WOL_DEFAULT	DRV_MB_PARAM_UNLOAD_WOL_MCP
+-#define DRV_MB_PARAM_WOL_DISABLED	DRV_MB_PARAM_UNLOAD_WOL_DISABLED
+-#define DRV_MB_PARAM_WOL_ENABLED	DRV_MB_PARAM_UNLOAD_WOL_ENABLED
+-
+-#define DRV_MB_PARAM_ESWITCH_MODE_MASK	(DRV_MB_PARAM_ESWITCH_MODE_NONE | \
+-					 DRV_MB_PARAM_ESWITCH_MODE_VEB | \
+-					 DRV_MB_PARAM_ESWITCH_MODE_VEPA)
+-#define DRV_MB_PARAM_ESWITCH_MODE_NONE	0x0
+-#define DRV_MB_PARAM_ESWITCH_MODE_VEB	0x1
+-#define DRV_MB_PARAM_ESWITCH_MODE_VEPA	0x2
+-
+-#define DRV_MB_PARAM_DUMMY_OEM_UPDATES_MASK	0x1
+-#define DRV_MB_PARAM_DUMMY_OEM_UPDATES_OFFSET	0
+-
+-#define DRV_MB_PARAM_SET_LED_MODE_OPER		0x0
+-#define DRV_MB_PARAM_SET_LED_MODE_ON		0x1
+-#define DRV_MB_PARAM_SET_LED_MODE_OFF		0x2
+-
+-#define DRV_MB_PARAM_TRANSCEIVER_PORT_OFFSET			0
+-#define DRV_MB_PARAM_TRANSCEIVER_PORT_MASK			0x00000003
+-#define DRV_MB_PARAM_TRANSCEIVER_SIZE_OFFSET			2
+-#define DRV_MB_PARAM_TRANSCEIVER_SIZE_MASK			0x000000fc
+-#define DRV_MB_PARAM_TRANSCEIVER_I2C_ADDRESS_OFFSET		8
+-#define DRV_MB_PARAM_TRANSCEIVER_I2C_ADDRESS_MASK		0x0000ff00
+-#define DRV_MB_PARAM_TRANSCEIVER_OFFSET_OFFSET			16
+-#define DRV_MB_PARAM_TRANSCEIVER_OFFSET_MASK			0xffff0000
+-
+-	/* Resource Allocation params - Driver version support */
+-#define DRV_MB_PARAM_RESOURCE_ALLOC_VERSION_MAJOR_MASK		0xffff0000
+-#define DRV_MB_PARAM_RESOURCE_ALLOC_VERSION_MAJOR_SHIFT		16
+-#define DRV_MB_PARAM_RESOURCE_ALLOC_VERSION_MINOR_MASK		0x0000ffff
+-#define DRV_MB_PARAM_RESOURCE_ALLOC_VERSION_MINOR_SHIFT		0
+-
+-#define DRV_MB_PARAM_BIST_REGISTER_TEST				1
+-#define DRV_MB_PARAM_BIST_CLOCK_TEST				2
+-#define DRV_MB_PARAM_BIST_NVM_TEST_NUM_IMAGES			3
+-#define DRV_MB_PARAM_BIST_NVM_TEST_IMAGE_BY_INDEX		4
+-
+-#define DRV_MB_PARAM_BIST_RC_UNKNOWN				0
+-#define DRV_MB_PARAM_BIST_RC_PASSED				1
+-#define DRV_MB_PARAM_BIST_RC_FAILED				2
+-#define DRV_MB_PARAM_BIST_RC_INVALID_PARAMETER			3
+-
+-#define DRV_MB_PARAM_BIST_TEST_INDEX_SHIFT			0
+-#define DRV_MB_PARAM_BIST_TEST_INDEX_MASK			0x000000ff
+-#define DRV_MB_PARAM_BIST_TEST_IMAGE_INDEX_SHIFT		8
+-#define DRV_MB_PARAM_BIST_TEST_IMAGE_INDEX_MASK			0x0000ff00
+-
+-#define DRV_MB_PARAM_FEATURE_SUPPORT_PORT_MASK			0x0000ffff
+-#define DRV_MB_PARAM_FEATURE_SUPPORT_PORT_OFFSET		0
+-#define DRV_MB_PARAM_FEATURE_SUPPORT_PORT_EEE			0x00000002
+-#define DRV_MB_PARAM_FEATURE_SUPPORT_PORT_FEC_CONTROL		0x00000004
+-#define DRV_MB_PARAM_FEATURE_SUPPORT_PORT_EXT_SPEED_FEC_CONTROL	0x00000008
+-#define DRV_MB_PARAM_FEATURE_SUPPORT_FUNC_VLINK			0x00010000
+-
+-/* DRV_MSG_CODE_DEBUG_DATA_SEND parameters */
+-#define DRV_MSG_CODE_DEBUG_DATA_SEND_SIZE_OFFSET		0
+-#define DRV_MSG_CODE_DEBUG_DATA_SEND_SIZE_MASK			0xff
+-
+-/* Driver attributes params */
+-#define DRV_MB_PARAM_ATTRIBUTE_KEY_OFFSET			0
+-#define DRV_MB_PARAM_ATTRIBUTE_KEY_MASK				0x00ffffff
+-#define DRV_MB_PARAM_ATTRIBUTE_CMD_OFFSET			24
+-#define DRV_MB_PARAM_ATTRIBUTE_CMD_MASK				0xff000000
+-
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_ID_OFFSET			0
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_ID_SHIFT			0
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_ID_MASK			0x0000ffff
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_ALL_SHIFT			16
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_ALL_MASK			0x00010000
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_INIT_SHIFT			17
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_INIT_MASK			0x00020000
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_COMMIT_SHIFT		18
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_COMMIT_MASK			0x00040000
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_FREE_SHIFT			19
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_FREE_MASK			0x00080000
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_ENTITY_SEL_SHIFT		20
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_ENTITY_SEL_MASK		0x00100000
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_ENTITY_ID_SHIFT		24
+-#define DRV_MB_PARAM_NVM_CFG_OPTION_ENTITY_ID_MASK		0x0f000000
+-
+-	u32 fw_mb_header;
+-#define FW_MSG_CODE_MASK			0xffff0000
+-#define FW_MSG_CODE_UNSUPPORTED                 0x00000000
+-#define FW_MSG_CODE_DRV_LOAD_ENGINE		0x10100000
+-#define FW_MSG_CODE_DRV_LOAD_PORT		0x10110000
+-#define FW_MSG_CODE_DRV_LOAD_FUNCTION		0x10120000
+-#define FW_MSG_CODE_DRV_LOAD_REFUSED_PDA	0x10200000
+-#define FW_MSG_CODE_DRV_LOAD_REFUSED_HSI_1	0x10210000
+-#define FW_MSG_CODE_DRV_LOAD_REFUSED_DIAG	0x10220000
+-#define FW_MSG_CODE_DRV_LOAD_REFUSED_HSI        0x10230000
+-#define FW_MSG_CODE_DRV_LOAD_REFUSED_REQUIRES_FORCE 0x10300000
+-#define FW_MSG_CODE_DRV_LOAD_REFUSED_REJECT     0x10310000
+-#define FW_MSG_CODE_DRV_LOAD_DONE		0x11100000
+-#define FW_MSG_CODE_DRV_UNLOAD_ENGINE		0x20110000
+-#define FW_MSG_CODE_DRV_UNLOAD_PORT		0x20120000
+-#define FW_MSG_CODE_DRV_UNLOAD_FUNCTION		0x20130000
+-#define FW_MSG_CODE_DRV_UNLOAD_DONE		0x21100000
+-#define FW_MSG_CODE_RESOURCE_ALLOC_OK           0x34000000
+-#define FW_MSG_CODE_RESOURCE_ALLOC_UNKNOWN      0x35000000
+-#define FW_MSG_CODE_RESOURCE_ALLOC_DEPRECATED   0x36000000
+-#define FW_MSG_CODE_S_TAG_UPDATE_ACK_DONE	0x3b000000
+-#define FW_MSG_CODE_DRV_CFG_VF_MSIX_DONE	0xb0010000
+-
+-#define FW_MSG_CODE_NVM_OK			0x00010000
+-#define FW_MSG_CODE_NVM_PUT_FILE_FINISH_OK	0x00400000
+-#define FW_MSG_CODE_PHY_OK			0x00110000
+-#define FW_MSG_CODE_OK				0x00160000
+-#define FW_MSG_CODE_ERROR			0x00170000
+-#define FW_MSG_CODE_TRANSCEIVER_DIAG_OK		0x00160000
+-#define FW_MSG_CODE_TRANSCEIVER_DIAG_ERROR	0x00170000
+-#define FW_MSG_CODE_TRANSCEIVER_NOT_PRESENT	0x00020000
+-
+-#define FW_MSG_CODE_OS_WOL_SUPPORTED            0x00800000
+-#define FW_MSG_CODE_OS_WOL_NOT_SUPPORTED        0x00810000
+-#define FW_MSG_CODE_DRV_CFG_PF_VFS_MSIX_DONE	0x00870000
+-#define FW_MSG_SEQ_NUMBER_MASK			0x0000ffff
+-
+-#define FW_MSG_CODE_DEBUG_DATA_SEND_INV_ARG	0xb0070000
+-#define FW_MSG_CODE_DEBUG_DATA_SEND_BUF_FULL	0xb0080000
+-#define FW_MSG_CODE_DEBUG_DATA_SEND_NO_BUF	0xb0090000
+-#define FW_MSG_CODE_DEBUG_NOT_ENABLED		0xb00a0000
+-#define FW_MSG_CODE_DEBUG_DATA_SEND_OK		0xb00b0000
+-
+-#define FW_MSG_CODE_MDUMP_INVALID_CMD		0x00030000
+-
+-	u32							fw_mb_param;
+-#define FW_MB_PARAM_RESOURCE_ALLOC_VERSION_MAJOR_MASK		0xffff0000
+-#define FW_MB_PARAM_RESOURCE_ALLOC_VERSION_MAJOR_SHIFT		16
+-#define FW_MB_PARAM_RESOURCE_ALLOC_VERSION_MINOR_MASK		0x0000ffff
+-#define FW_MB_PARAM_RESOURCE_ALLOC_VERSION_MINOR_SHIFT		0
+-
+-	/* Get PF RDMA protocol command response */
+-#define FW_MB_PARAM_GET_PF_RDMA_NONE				0x0
+-#define FW_MB_PARAM_GET_PF_RDMA_ROCE				0x1
+-#define FW_MB_PARAM_GET_PF_RDMA_IWARP				0x2
+-#define FW_MB_PARAM_GET_PF_RDMA_BOTH				0x3
+-
+-	/* Get MFW feature support response */
+-#define FW_MB_PARAM_FEATURE_SUPPORT_SMARTLINQ			BIT(0)
+-#define FW_MB_PARAM_FEATURE_SUPPORT_EEE				BIT(1)
+-#define FW_MB_PARAM_FEATURE_SUPPORT_FEC_CONTROL			BIT(5)
+-#define FW_MB_PARAM_FEATURE_SUPPORT_EXT_SPEED_FEC_CONTROL	BIT(6)
+-#define FW_MB_PARAM_FEATURE_SUPPORT_VLINK			BIT(16)
+-
+-#define FW_MB_PARAM_LOAD_DONE_DID_EFUSE_ERROR			BIT(0)
+-
+-#define FW_MB_PARAM_ENG_CFG_FIR_AFFIN_VALID_MASK		0x00000001
+-#define FW_MB_PARAM_ENG_CFG_FIR_AFFIN_VALID_SHIFT		0
+-#define FW_MB_PARAM_ENG_CFG_FIR_AFFIN_VALUE_MASK		0x00000002
+-#define FW_MB_PARAM_ENG_CFG_FIR_AFFIN_VALUE_SHIFT		1
+-#define FW_MB_PARAM_ENG_CFG_L2_AFFIN_VALID_MASK			0x00000004
+-#define FW_MB_PARAM_ENG_CFG_L2_AFFIN_VALID_SHIFT		2
+-#define FW_MB_PARAM_ENG_CFG_L2_AFFIN_VALUE_MASK			0x00000008
+-#define FW_MB_PARAM_ENG_CFG_L2_AFFIN_VALUE_SHIFT		3
+-
+-#define FW_MB_PARAM_PPFID_BITMAP_MASK				0xff
+-#define FW_MB_PARAM_PPFID_BITMAP_SHIFT				0
+-
+-	u32							drv_pulse_mb;
+-#define DRV_PULSE_SEQ_MASK					0x00007fff
+-#define DRV_PULSE_SYSTEM_TIME_MASK				0xffff0000
+-#define DRV_PULSE_ALWAYS_ALIVE					0x00008000
+-
+-	u32							mcp_pulse_mb;
+-#define MCP_PULSE_SEQ_MASK					0x00007fff
+-#define MCP_PULSE_ALWAYS_ALIVE					0x00008000
+-#define MCP_EVENT_MASK						0xffff0000
+-#define MCP_EVENT_OTHER_DRIVER_RESET_REQ			0x00010000
+-
+-	union drv_union_data					union_data;
+-};
+-
+-#define FW_MB_PARAM_NVM_PUT_FILE_REQ_OFFSET_MASK		0x00ffffff
+-#define FW_MB_PARAM_NVM_PUT_FILE_REQ_OFFSET_SHIFT		0
+-#define FW_MB_PARAM_NVM_PUT_FILE_REQ_SIZE_MASK			0xff000000
+-#define FW_MB_PARAM_NVM_PUT_FILE_REQ_SIZE_SHIFT			24
+-
+-enum MFW_DRV_MSG_TYPE {
+-	MFW_DRV_MSG_LINK_CHANGE,
+-	MFW_DRV_MSG_FLR_FW_ACK_FAILED,
+-	MFW_DRV_MSG_VF_DISABLED,
+-	MFW_DRV_MSG_LLDP_DATA_UPDATED,
+-	MFW_DRV_MSG_DCBX_REMOTE_MIB_UPDATED,
+-	MFW_DRV_MSG_DCBX_OPERATIONAL_MIB_UPDATED,
+-	MFW_DRV_MSG_ERROR_RECOVERY,
+-	MFW_DRV_MSG_BW_UPDATE,
+-	MFW_DRV_MSG_S_TAG_UPDATE,
+-	MFW_DRV_MSG_GET_LAN_STATS,
+-	MFW_DRV_MSG_GET_FCOE_STATS,
+-	MFW_DRV_MSG_GET_ISCSI_STATS,
+-	MFW_DRV_MSG_GET_RDMA_STATS,
+-	MFW_DRV_MSG_FAILURE_DETECTED,
+-	MFW_DRV_MSG_TRANSCEIVER_STATE_CHANGE,
+-	MFW_DRV_MSG_CRITICAL_ERROR_OCCURRED,
+-	MFW_DRV_MSG_RESERVED,
+-	MFW_DRV_MSG_GET_TLV_REQ,
+-	MFW_DRV_MSG_OEM_CFG_UPDATE,
+-	MFW_DRV_MSG_MAX
+-};
+-
+-#define MFW_DRV_MSG_MAX_DWORDS(msgs)	(((msgs - 1) >> 2) + 1)
+-#define MFW_DRV_MSG_DWORD(msg_id)	(msg_id >> 2)
+-#define MFW_DRV_MSG_OFFSET(msg_id)	((msg_id & 0x3) << 3)
+-#define MFW_DRV_MSG_MASK(msg_id)	(0xff << MFW_DRV_MSG_OFFSET(msg_id))
+-
+-struct public_mfw_mb {
+-	u32 sup_msgs;
+-	u32 msg[MFW_DRV_MSG_MAX_DWORDS(MFW_DRV_MSG_MAX)];
+-	u32 ack[MFW_DRV_MSG_MAX_DWORDS(MFW_DRV_MSG_MAX)];
+-};
+-
+-enum public_sections {
+-	PUBLIC_DRV_MB,
+-	PUBLIC_MFW_MB,
+-	PUBLIC_GLOBAL,
+-	PUBLIC_PATH,
+-	PUBLIC_PORT,
+-	PUBLIC_FUNC,
+-	PUBLIC_MAX_SECTIONS
+-};
+-
+-struct mcp_public_data {
+-	u32 num_sections;
+-	u32 sections[PUBLIC_MAX_SECTIONS];
+-	struct public_drv_mb drv_mb[MCP_GLOB_FUNC_MAX];
+-	struct public_mfw_mb mfw_mb[MCP_GLOB_FUNC_MAX];
+-	struct public_global global;
+-	struct public_path path[MCP_GLOB_PATH_MAX];
+-	struct public_port port[MCP_GLOB_PORT_MAX];
+-	struct public_func func[MCP_GLOB_FUNC_MAX];
+-};
+-
+-#define MAX_I2C_TRANSACTION_SIZE	16
+-
+-/* OCBB definitions */
+-enum tlvs {
+-	/* Category 1: Device Properties */
+-	DRV_TLV_CLP_STR,
+-	DRV_TLV_CLP_STR_CTD,
+-	/* Category 6: Device Configuration */
+-	DRV_TLV_SCSI_TO,
+-	DRV_TLV_R_T_TOV,
+-	DRV_TLV_R_A_TOV,
+-	DRV_TLV_E_D_TOV,
+-	DRV_TLV_CR_TOV,
+-	DRV_TLV_BOOT_TYPE,
+-	/* Category 8: Port Configuration */
+-	DRV_TLV_NPIV_ENABLED,
+-	/* Category 10: Function Configuration */
+-	DRV_TLV_FEATURE_FLAGS,
+-	DRV_TLV_LOCAL_ADMIN_ADDR,
+-	DRV_TLV_ADDITIONAL_MAC_ADDR_1,
+-	DRV_TLV_ADDITIONAL_MAC_ADDR_2,
+-	DRV_TLV_LSO_MAX_OFFLOAD_SIZE,
+-	DRV_TLV_LSO_MIN_SEGMENT_COUNT,
+-	DRV_TLV_PROMISCUOUS_MODE,
+-	DRV_TLV_TX_DESCRIPTORS_QUEUE_SIZE,
+-	DRV_TLV_RX_DESCRIPTORS_QUEUE_SIZE,
+-	DRV_TLV_NUM_OF_NET_QUEUE_VMQ_CFG,
+-	DRV_TLV_FLEX_NIC_OUTER_VLAN_ID,
+-	DRV_TLV_OS_DRIVER_STATES,
+-	DRV_TLV_PXE_BOOT_PROGRESS,
+-	/* Category 12: FC/FCoE Configuration */
+-	DRV_TLV_NPIV_STATE,
+-	DRV_TLV_NUM_OF_NPIV_IDS,
+-	DRV_TLV_SWITCH_NAME,
+-	DRV_TLV_SWITCH_PORT_NUM,
+-	DRV_TLV_SWITCH_PORT_ID,
+-	DRV_TLV_VENDOR_NAME,
+-	DRV_TLV_SWITCH_MODEL,
+-	DRV_TLV_SWITCH_FW_VER,
+-	DRV_TLV_QOS_PRIORITY_PER_802_1P,
+-	DRV_TLV_PORT_ALIAS,
+-	DRV_TLV_PORT_STATE,
+-	DRV_TLV_FIP_TX_DESCRIPTORS_QUEUE_SIZE,
+-	DRV_TLV_FCOE_RX_DESCRIPTORS_QUEUE_SIZE,
+-	DRV_TLV_LINK_FAILURE_COUNT,
+-	DRV_TLV_FCOE_BOOT_PROGRESS,
+-	/* Category 13: iSCSI Configuration */
+-	DRV_TLV_TARGET_LLMNR_ENABLED,
+-	DRV_TLV_HEADER_DIGEST_FLAG_ENABLED,
+-	DRV_TLV_DATA_DIGEST_FLAG_ENABLED,
+-	DRV_TLV_AUTHENTICATION_METHOD,
+-	DRV_TLV_ISCSI_BOOT_TARGET_PORTAL,
+-	DRV_TLV_MAX_FRAME_SIZE,
+-	DRV_TLV_PDU_TX_DESCRIPTORS_QUEUE_SIZE,
+-	DRV_TLV_PDU_RX_DESCRIPTORS_QUEUE_SIZE,
+-	DRV_TLV_ISCSI_BOOT_PROGRESS,
+-	/* Category 20: Device Data */
+-	DRV_TLV_PCIE_BUS_RX_UTILIZATION,
+-	DRV_TLV_PCIE_BUS_TX_UTILIZATION,
+-	DRV_TLV_DEVICE_CPU_CORES_UTILIZATION,
+-	DRV_TLV_LAST_VALID_DCC_TLV_RECEIVED,
+-	DRV_TLV_NCSI_RX_BYTES_RECEIVED,
+-	DRV_TLV_NCSI_TX_BYTES_SENT,
+-	/* Category 22: Base Port Data */
+-	DRV_TLV_RX_DISCARDS,
+-	DRV_TLV_RX_ERRORS,
+-	DRV_TLV_TX_ERRORS,
+-	DRV_TLV_TX_DISCARDS,
+-	DRV_TLV_RX_FRAMES_RECEIVED,
+-	DRV_TLV_TX_FRAMES_SENT,
+-	/* Category 23: FC/FCoE Port Data */
+-	DRV_TLV_RX_BROADCAST_PACKETS,
+-	DRV_TLV_TX_BROADCAST_PACKETS,
+-	/* Category 28: Base Function Data */
+-	DRV_TLV_NUM_OFFLOADED_CONNECTIONS_TCP_IPV4,
+-	DRV_TLV_NUM_OFFLOADED_CONNECTIONS_TCP_IPV6,
+-	DRV_TLV_TX_DESCRIPTOR_QUEUE_AVG_DEPTH,
+-	DRV_TLV_RX_DESCRIPTORS_QUEUE_AVG_DEPTH,
+-	DRV_TLV_PF_RX_FRAMES_RECEIVED,
+-	DRV_TLV_RX_BYTES_RECEIVED,
+-	DRV_TLV_PF_TX_FRAMES_SENT,
+-	DRV_TLV_TX_BYTES_SENT,
+-	DRV_TLV_IOV_OFFLOAD,
+-	DRV_TLV_PCI_ERRORS_CAP_ID,
+-	DRV_TLV_UNCORRECTABLE_ERROR_STATUS,
+-	DRV_TLV_UNCORRECTABLE_ERROR_MASK,
+-	DRV_TLV_CORRECTABLE_ERROR_STATUS,
+-	DRV_TLV_CORRECTABLE_ERROR_MASK,
+-	DRV_TLV_PCI_ERRORS_AECC_REGISTER,
+-	DRV_TLV_TX_QUEUES_EMPTY,
+-	DRV_TLV_RX_QUEUES_EMPTY,
+-	DRV_TLV_TX_QUEUES_FULL,
+-	DRV_TLV_RX_QUEUES_FULL,
+-	/* Category 29: FC/FCoE Function Data */
+-	DRV_TLV_FCOE_TX_DESCRIPTOR_QUEUE_AVG_DEPTH,
+-	DRV_TLV_FCOE_RX_DESCRIPTORS_QUEUE_AVG_DEPTH,
+-	DRV_TLV_FCOE_RX_FRAMES_RECEIVED,
+-	DRV_TLV_FCOE_RX_BYTES_RECEIVED,
+-	DRV_TLV_FCOE_TX_FRAMES_SENT,
+-	DRV_TLV_FCOE_TX_BYTES_SENT,
+-	DRV_TLV_CRC_ERROR_COUNT,
+-	DRV_TLV_CRC_ERROR_1_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_CRC_ERROR_1_TIMESTAMP,
+-	DRV_TLV_CRC_ERROR_2_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_CRC_ERROR_2_TIMESTAMP,
+-	DRV_TLV_CRC_ERROR_3_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_CRC_ERROR_3_TIMESTAMP,
+-	DRV_TLV_CRC_ERROR_4_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_CRC_ERROR_4_TIMESTAMP,
+-	DRV_TLV_CRC_ERROR_5_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_CRC_ERROR_5_TIMESTAMP,
+-	DRV_TLV_LOSS_OF_SYNC_ERROR_COUNT,
+-	DRV_TLV_LOSS_OF_SIGNAL_ERRORS,
+-	DRV_TLV_PRIMITIVE_SEQUENCE_PROTOCOL_ERROR_COUNT,
+-	DRV_TLV_DISPARITY_ERROR_COUNT,
+-	DRV_TLV_CODE_VIOLATION_ERROR_COUNT,
+-	DRV_TLV_LAST_FLOGI_ISSUED_COMMON_PARAMETERS_WORD_1,
+-	DRV_TLV_LAST_FLOGI_ISSUED_COMMON_PARAMETERS_WORD_2,
+-	DRV_TLV_LAST_FLOGI_ISSUED_COMMON_PARAMETERS_WORD_3,
+-	DRV_TLV_LAST_FLOGI_ISSUED_COMMON_PARAMETERS_WORD_4,
+-	DRV_TLV_LAST_FLOGI_TIMESTAMP,
+-	DRV_TLV_LAST_FLOGI_ACC_COMMON_PARAMETERS_WORD_1,
+-	DRV_TLV_LAST_FLOGI_ACC_COMMON_PARAMETERS_WORD_2,
+-	DRV_TLV_LAST_FLOGI_ACC_COMMON_PARAMETERS_WORD_3,
+-	DRV_TLV_LAST_FLOGI_ACC_COMMON_PARAMETERS_WORD_4,
+-	DRV_TLV_LAST_FLOGI_ACC_TIMESTAMP,
+-	DRV_TLV_LAST_FLOGI_RJT,
+-	DRV_TLV_LAST_FLOGI_RJT_TIMESTAMP,
+-	DRV_TLV_FDISCS_SENT_COUNT,
+-	DRV_TLV_FDISC_ACCS_RECEIVED,
+-	DRV_TLV_FDISC_RJTS_RECEIVED,
+-	DRV_TLV_PLOGI_SENT_COUNT,
+-	DRV_TLV_PLOGI_ACCS_RECEIVED,
+-	DRV_TLV_PLOGI_RJTS_RECEIVED,
+-	DRV_TLV_PLOGI_1_SENT_DESTINATION_FC_ID,
+-	DRV_TLV_PLOGI_1_TIMESTAMP,
+-	DRV_TLV_PLOGI_2_SENT_DESTINATION_FC_ID,
+-	DRV_TLV_PLOGI_2_TIMESTAMP,
+-	DRV_TLV_PLOGI_3_SENT_DESTINATION_FC_ID,
+-	DRV_TLV_PLOGI_3_TIMESTAMP,
+-	DRV_TLV_PLOGI_4_SENT_DESTINATION_FC_ID,
+-	DRV_TLV_PLOGI_4_TIMESTAMP,
+-	DRV_TLV_PLOGI_5_SENT_DESTINATION_FC_ID,
+-	DRV_TLV_PLOGI_5_TIMESTAMP,
+-	DRV_TLV_PLOGI_1_ACC_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_PLOGI_1_ACC_TIMESTAMP,
+-	DRV_TLV_PLOGI_2_ACC_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_PLOGI_2_ACC_TIMESTAMP,
+-	DRV_TLV_PLOGI_3_ACC_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_PLOGI_3_ACC_TIMESTAMP,
+-	DRV_TLV_PLOGI_4_ACC_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_PLOGI_4_ACC_TIMESTAMP,
+-	DRV_TLV_PLOGI_5_ACC_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_PLOGI_5_ACC_TIMESTAMP,
+-	DRV_TLV_LOGOS_ISSUED,
+-	DRV_TLV_LOGO_ACCS_RECEIVED,
+-	DRV_TLV_LOGO_RJTS_RECEIVED,
+-	DRV_TLV_LOGO_1_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_LOGO_1_TIMESTAMP,
+-	DRV_TLV_LOGO_2_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_LOGO_2_TIMESTAMP,
+-	DRV_TLV_LOGO_3_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_LOGO_3_TIMESTAMP,
+-	DRV_TLV_LOGO_4_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_LOGO_4_TIMESTAMP,
+-	DRV_TLV_LOGO_5_RECEIVED_SOURCE_FC_ID,
+-	DRV_TLV_LOGO_5_TIMESTAMP,
+-	DRV_TLV_LOGOS_RECEIVED,
+-	DRV_TLV_ACCS_ISSUED,
+-	DRV_TLV_PRLIS_ISSUED,
+-	DRV_TLV_ACCS_RECEIVED,
+-	DRV_TLV_ABTS_SENT_COUNT,
+-	DRV_TLV_ABTS_ACCS_RECEIVED,
+-	DRV_TLV_ABTS_RJTS_RECEIVED,
+-	DRV_TLV_ABTS_1_SENT_DESTINATION_FC_ID,
+-	DRV_TLV_ABTS_1_TIMESTAMP,
+-	DRV_TLV_ABTS_2_SENT_DESTINATION_FC_ID,
+-	DRV_TLV_ABTS_2_TIMESTAMP,
+-	DRV_TLV_ABTS_3_SENT_DESTINATION_FC_ID,
+-	DRV_TLV_ABTS_3_TIMESTAMP,
+-	DRV_TLV_ABTS_4_SENT_DESTINATION_FC_ID,
+-	DRV_TLV_ABTS_4_TIMESTAMP,
+-	DRV_TLV_ABTS_5_SENT_DESTINATION_FC_ID,
+-	DRV_TLV_ABTS_5_TIMESTAMP,
+-	DRV_TLV_RSCNS_RECEIVED,
+-	DRV_TLV_LAST_RSCN_RECEIVED_N_PORT_1,
+-	DRV_TLV_LAST_RSCN_RECEIVED_N_PORT_2,
+-	DRV_TLV_LAST_RSCN_RECEIVED_N_PORT_3,
+-	DRV_TLV_LAST_RSCN_RECEIVED_N_PORT_4,
+-	DRV_TLV_LUN_RESETS_ISSUED,
+-	DRV_TLV_ABORT_TASK_SETS_ISSUED,
+-	DRV_TLV_TPRLOS_SENT,
+-	DRV_TLV_NOS_SENT_COUNT,
+-	DRV_TLV_NOS_RECEIVED_COUNT,
+-	DRV_TLV_OLS_COUNT,
+-	DRV_TLV_LR_COUNT,
+-	DRV_TLV_LRR_COUNT,
+-	DRV_TLV_LIP_SENT_COUNT,
+-	DRV_TLV_LIP_RECEIVED_COUNT,
+-	DRV_TLV_EOFA_COUNT,
+-	DRV_TLV_EOFNI_COUNT,
+-	DRV_TLV_SCSI_STATUS_CHECK_CONDITION_COUNT,
+-	DRV_TLV_SCSI_STATUS_CONDITION_MET_COUNT,
+-	DRV_TLV_SCSI_STATUS_BUSY_COUNT,
+-	DRV_TLV_SCSI_STATUS_INTERMEDIATE_COUNT,
+-	DRV_TLV_SCSI_STATUS_INTERMEDIATE_CONDITION_MET_COUNT,
+-	DRV_TLV_SCSI_STATUS_RESERVATION_CONFLICT_COUNT,
+-	DRV_TLV_SCSI_STATUS_TASK_SET_FULL_COUNT,
+-	DRV_TLV_SCSI_STATUS_ACA_ACTIVE_COUNT,
+-	DRV_TLV_SCSI_STATUS_TASK_ABORTED_COUNT,
+-	DRV_TLV_SCSI_CHECK_CONDITION_1_RECEIVED_SK_ASC_ASCQ,
+-	DRV_TLV_SCSI_CHECK_1_TIMESTAMP,
+-	DRV_TLV_SCSI_CHECK_CONDITION_2_RECEIVED_SK_ASC_ASCQ,
+-	DRV_TLV_SCSI_CHECK_2_TIMESTAMP,
+-	DRV_TLV_SCSI_CHECK_CONDITION_3_RECEIVED_SK_ASC_ASCQ,
+-	DRV_TLV_SCSI_CHECK_3_TIMESTAMP,
+-	DRV_TLV_SCSI_CHECK_CONDITION_4_RECEIVED_SK_ASC_ASCQ,
+-	DRV_TLV_SCSI_CHECK_4_TIMESTAMP,
+-	DRV_TLV_SCSI_CHECK_CONDITION_5_RECEIVED_SK_ASC_ASCQ,
+-	DRV_TLV_SCSI_CHECK_5_TIMESTAMP,
+-	/* Category 30: iSCSI Function Data */
+-	DRV_TLV_PDU_TX_DESCRIPTOR_QUEUE_AVG_DEPTH,
+-	DRV_TLV_PDU_RX_DESCRIPTORS_QUEUE_AVG_DEPTH,
+-	DRV_TLV_ISCSI_PDU_RX_FRAMES_RECEIVED,
+-	DRV_TLV_ISCSI_PDU_RX_BYTES_RECEIVED,
+-	DRV_TLV_ISCSI_PDU_TX_FRAMES_SENT,
+-	DRV_TLV_ISCSI_PDU_TX_BYTES_SENT
+-};
+-
+-struct nvm_cfg_mac_address {
+-	u32							mac_addr_hi;
+-#define NVM_CFG_MAC_ADDRESS_HI_MASK				0x0000ffff
+-#define NVM_CFG_MAC_ADDRESS_HI_OFFSET				0
+-
+-	u32							mac_addr_lo;
+-};
+-
+-struct nvm_cfg1_glob {
+-	u32							generic_cont0;
+-#define NVM_CFG1_GLOB_MF_MODE_MASK				0x00000ff0
+-#define NVM_CFG1_GLOB_MF_MODE_OFFSET				4
+-#define NVM_CFG1_GLOB_MF_MODE_MF_ALLOWED			0x0
+-#define NVM_CFG1_GLOB_MF_MODE_DEFAULT				0x1
+-#define NVM_CFG1_GLOB_MF_MODE_SPIO4				0x2
+-#define NVM_CFG1_GLOB_MF_MODE_NPAR1_0				0x3
+-#define NVM_CFG1_GLOB_MF_MODE_NPAR1_5				0x4
+-#define NVM_CFG1_GLOB_MF_MODE_NPAR2_0				0x5
+-#define NVM_CFG1_GLOB_MF_MODE_BD				0x6
+-#define NVM_CFG1_GLOB_MF_MODE_UFP				0x7
+-
+-	u32							engineering_change[3];
+-	u32							manufacturing_id;
+-	u32							serial_number[4];
+-	u32							pcie_cfg;
+-	u32							mgmt_traffic;
+-
+-	u32							core_cfg;
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_MASK			0x000000ff
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_OFFSET			0
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_BB_2X40G		0x0
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_2X50G			0x1
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_BB_1X100G		0x2
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_4X10G_F			0x3
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_BB_4X10G_E		0x4
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_BB_4X20G		0x5
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_1X40G			0xb
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_2X25G			0xc
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_1X25G			0xd
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_4X25G			0xe
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_2X10G			0xf
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_2X50G_R1		0x11
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_4X50G_R1		0x12
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_1X100G_R2		0x13
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_2X100G_R2		0x14
+-#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_1X100G_R4		0x15
+-
+-	u32							e_lane_cfg1;
+-	u32							e_lane_cfg2;
+-	u32							f_lane_cfg1;
+-	u32							f_lane_cfg2;
+-	u32							mps10_preemphasis;
+-	u32							mps10_driver_current;
+-	u32							mps25_preemphasis;
+-	u32							mps25_driver_current;
+-	u32							pci_id;
+-	u32							pci_subsys_id;
+-	u32							bar;
+-	u32							mps10_txfir_main;
+-	u32							mps10_txfir_post;
+-	u32							mps25_txfir_main;
+-	u32							mps25_txfir_post;
+-	u32							manufacture_ver;
+-	u32							manufacture_time;
+-	u32							led_global_settings;
+-	u32							generic_cont1;
+-
+-	u32							mbi_version;
+-#define NVM_CFG1_GLOB_MBI_VERSION_0_MASK			0x000000ff
+-#define NVM_CFG1_GLOB_MBI_VERSION_0_OFFSET			0
+-#define NVM_CFG1_GLOB_MBI_VERSION_1_MASK			0x0000ff00
+-#define NVM_CFG1_GLOB_MBI_VERSION_1_OFFSET			8
+-#define NVM_CFG1_GLOB_MBI_VERSION_2_MASK			0x00ff0000
+-#define NVM_CFG1_GLOB_MBI_VERSION_2_OFFSET			16
+-
+-	u32							mbi_date;
+-	u32							misc_sig;
+-
+-	u32							device_capabilities;
+-#define NVM_CFG1_GLOB_DEVICE_CAPABILITIES_ETHERNET		0x1
+-#define NVM_CFG1_GLOB_DEVICE_CAPABILITIES_FCOE			0x2
+-#define NVM_CFG1_GLOB_DEVICE_CAPABILITIES_ISCSI			0x4
+-#define NVM_CFG1_GLOB_DEVICE_CAPABILITIES_ROCE			0x8
+-
+-	u32							power_dissipated;
+-	u32							power_consumed;
+-	u32							efi_version;
+-	u32							multi_net_modes_cap;
+-	u32							reserved[41];
+-};
+-
+-struct nvm_cfg1_path {
+-	u32							reserved[30];
+-};
+-
+-struct nvm_cfg1_port {
+-	u32							rel_to_opt123;
+-	u32							rel_to_opt124;
+-
+-	u32							generic_cont0;
+-#define NVM_CFG1_PORT_DCBX_MODE_MASK				0x000f0000
+-#define NVM_CFG1_PORT_DCBX_MODE_OFFSET				16
+-#define NVM_CFG1_PORT_DCBX_MODE_DISABLED			0x0
+-#define NVM_CFG1_PORT_DCBX_MODE_IEEE				0x1
+-#define NVM_CFG1_PORT_DCBX_MODE_CEE				0x2
+-#define NVM_CFG1_PORT_DCBX_MODE_DYNAMIC				0x3
+-#define NVM_CFG1_PORT_DEFAULT_ENABLED_PROTOCOLS_MASK		0x00f00000
+-#define NVM_CFG1_PORT_DEFAULT_ENABLED_PROTOCOLS_OFFSET		20
+-#define NVM_CFG1_PORT_DEFAULT_ENABLED_PROTOCOLS_ETHERNET	0x1
+-#define NVM_CFG1_PORT_DEFAULT_ENABLED_PROTOCOLS_FCOE		0x2
+-#define NVM_CFG1_PORT_DEFAULT_ENABLED_PROTOCOLS_ISCSI		0x4
+-
+-	u32							pcie_cfg;
+-	u32							features;
+-
+-	u32							speed_cap_mask;
+-#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_MASK		0x0000ffff
+-#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_OFFSET		0
+-#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_1G		0x1
+-#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_10G		0x2
+-#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_20G		0x4
+-#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_25G		0x8
+-#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_40G		0x10
+-#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_50G		0x20
+-#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_BB_100G		0x40
+-
+-	u32							link_settings;
+-#define NVM_CFG1_PORT_DRV_LINK_SPEED_MASK			0x0000000f
+-#define NVM_CFG1_PORT_DRV_LINK_SPEED_OFFSET			0
+-#define NVM_CFG1_PORT_DRV_LINK_SPEED_AUTONEG			0x0
+-#define NVM_CFG1_PORT_DRV_LINK_SPEED_1G				0x1
+-#define NVM_CFG1_PORT_DRV_LINK_SPEED_10G			0x2
+-#define NVM_CFG1_PORT_DRV_LINK_SPEED_20G			0x3
+-#define NVM_CFG1_PORT_DRV_LINK_SPEED_25G			0x4
+-#define NVM_CFG1_PORT_DRV_LINK_SPEED_40G			0x5
+-#define NVM_CFG1_PORT_DRV_LINK_SPEED_50G			0x6
+-#define NVM_CFG1_PORT_DRV_LINK_SPEED_BB_100G			0x7
+-#define NVM_CFG1_PORT_DRV_LINK_SPEED_SMARTLINQ			0x8
+-#define NVM_CFG1_PORT_DRV_FLOW_CONTROL_MASK			0x00000070
+-#define NVM_CFG1_PORT_DRV_FLOW_CONTROL_OFFSET			4
+-#define NVM_CFG1_PORT_DRV_FLOW_CONTROL_AUTONEG			0x1
+-#define NVM_CFG1_PORT_DRV_FLOW_CONTROL_RX			0x2
+-#define NVM_CFG1_PORT_DRV_FLOW_CONTROL_TX			0x4
+-#define NVM_CFG1_PORT_FEC_FORCE_MODE_MASK			0x000e0000
+-#define NVM_CFG1_PORT_FEC_FORCE_MODE_OFFSET			17
+-#define NVM_CFG1_PORT_FEC_FORCE_MODE_NONE			0x0
+-#define NVM_CFG1_PORT_FEC_FORCE_MODE_FIRECODE			0x1
+-#define NVM_CFG1_PORT_FEC_FORCE_MODE_RS				0x2
+-#define NVM_CFG1_PORT_FEC_FORCE_MODE_AUTO			0x7
+-
+-	u32							phy_cfg;
+-	u32							mgmt_traffic;
+-
+-	u32							ext_phy;
+-	/* EEE power saving mode */
+-#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_MASK		0x00ff0000
+-#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_OFFSET		16
+-#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_DISABLED		0x0
+-#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_BALANCED		0x1
+-#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_AGGRESSIVE		0x2
+-#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_LOW_LATENCY		0x3
+-
+-	u32							mba_cfg1;
+-	u32							mba_cfg2;
+-	u32							vf_cfg;
+-	struct nvm_cfg_mac_address				lldp_mac_address;
+-	u32							led_port_settings;
+-	u32							transceiver_00;
+-	u32							device_ids;
+-
+-	u32							board_cfg;
+-#define NVM_CFG1_PORT_PORT_TYPE_MASK				0x000000ff
+-#define NVM_CFG1_PORT_PORT_TYPE_OFFSET				0
+-#define NVM_CFG1_PORT_PORT_TYPE_UNDEFINED			0x0
+-#define NVM_CFG1_PORT_PORT_TYPE_MODULE				0x1
+-#define NVM_CFG1_PORT_PORT_TYPE_BACKPLANE			0x2
+-#define NVM_CFG1_PORT_PORT_TYPE_EXT_PHY				0x3
+-#define NVM_CFG1_PORT_PORT_TYPE_MODULE_SLAVE			0x4
+-
+-	u32							mnm_10g_cap;
+-	u32							mnm_10g_ctrl;
+-	u32							mnm_10g_misc;
+-	u32							mnm_25g_cap;
+-	u32							mnm_25g_ctrl;
+-	u32							mnm_25g_misc;
+-	u32							mnm_40g_cap;
+-	u32							mnm_40g_ctrl;
+-	u32							mnm_40g_misc;
+-	u32							mnm_50g_cap;
+-	u32							mnm_50g_ctrl;
+-	u32							mnm_50g_misc;
+-	u32							mnm_100g_cap;
+-	u32							mnm_100g_ctrl;
+-	u32							mnm_100g_misc;
+-
+-	u32							temperature;
+-	u32							ext_phy_cfg1;
+-
+-	u32							extended_speed;
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_MASK			0x0000ffff
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_OFFSET			0
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_AN		0x1
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_1G		0x2
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_10G		0x4
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_20G		0x8
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_25G		0x10
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_40G		0x20
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_50G_R		0x40
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_50G_R2		0x80
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_100G_R2		0x100
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_100G_R4		0x200
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_100G_P4		0x400
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_MASK			0xffff0000
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_OFFSET			16
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_RESERVED	0x1
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_1G		0x2
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_10G		0x4
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_20G		0x8
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_25G		0x10
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_40G		0x20
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_50G_R	0x40
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_50G_R2	0x80
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_100G_R2	0x100
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_100G_R4	0x200
+-#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_100G_P4	0x400
+-
+-	u32							extended_fec_mode;
+-
+-	u32							reserved[112];
+-};
+-
+-struct nvm_cfg1_func {
+-	struct nvm_cfg_mac_address mac_address;
+-	u32 rsrv1;
+-	u32 rsrv2;
+-	u32 device_id;
+-	u32 cmn_cfg;
+-	u32 pci_cfg;
+-	struct nvm_cfg_mac_address fcoe_node_wwn_mac_addr;
+-	struct nvm_cfg_mac_address fcoe_port_wwn_mac_addr;
+-	u32 preboot_generic_cfg;
+-	u32 reserved[8];
+-};
+-
+-struct nvm_cfg1 {
+-	struct nvm_cfg1_glob glob;
+-	struct nvm_cfg1_path path[MCP_GLOB_PATH_MAX];
+-	struct nvm_cfg1_port port[MCP_GLOB_PORT_MAX];
+-	struct nvm_cfg1_func func[MCP_GLOB_FUNC_MAX];
+-};
+-
+-enum spad_sections {
+-	SPAD_SECTION_TRACE,
+-	SPAD_SECTION_NVM_CFG,
+-	SPAD_SECTION_PUBLIC,
+-	SPAD_SECTION_PRIVATE,
+-	SPAD_SECTION_MAX
+-};
+-
+-#define MCP_TRACE_SIZE          2048	/* 2kb */
+-
+-/* This section is located at a fixed location in the beginning of the
+- * scratchpad, to ensure that the MCP trace is not run over during MFW upgrade.
+- * All the rest of data has a floating location which differs from version to
+- * version, and is pointed by the mcp_meta_data below.
+- * Moreover, the spad_layout section is part of the MFW firmware, and is loaded
+- * with it from nvram in order to clear this portion.
+- */
+-struct static_init {
+-	u32 num_sections;
+-	offsize_t sections[SPAD_SECTION_MAX];
+-#define SECTION(_sec_) (*((offsize_t *)(STRUCT_OFFSET(sections[_sec_]))))
+-
+-	struct mcp_trace trace;
+-#define MCP_TRACE_P ((struct mcp_trace *)(STRUCT_OFFSET(trace)))
+-	u8 trace_buffer[MCP_TRACE_SIZE];
+-#define MCP_TRACE_BUF ((u8 *)(STRUCT_OFFSET(trace_buffer)))
+-	/* running_mfw has the same definition as in nvm_map.h.
+-	 * This bit indicate both the running dir, and the running bundle.
+-	 * It is set once when the LIM is loaded.
+-	 */
+-	u32 running_mfw;
+-#define RUNNING_MFW (*((u32 *)(STRUCT_OFFSET(running_mfw))))
+-	u32 build_time;
+-#define MFW_BUILD_TIME (*((u32 *)(STRUCT_OFFSET(build_time))))
+-	u32 reset_type;
+-#define RESET_TYPE (*((u32 *)(STRUCT_OFFSET(reset_type))))
+-	u32 mfw_secure_mode;
+-#define MFW_SECURE_MODE (*((u32 *)(STRUCT_OFFSET(mfw_secure_mode))))
+-	u16 pme_status_pf_bitmap;
+-#define PME_STATUS_PF_BITMAP (*((u16 *)(STRUCT_OFFSET(pme_status_pf_bitmap))))
+-	u16 pme_enable_pf_bitmap;
+-#define PME_ENABLE_PF_BITMAP (*((u16 *)(STRUCT_OFFSET(pme_enable_pf_bitmap))))
+-	u32 mim_nvm_addr;
+-	u32 mim_start_addr;
+-	u32 ah_pcie_link_params;
+-#define AH_PCIE_LINK_PARAMS_LINK_SPEED_MASK     (0x000000ff)
+-#define AH_PCIE_LINK_PARAMS_LINK_SPEED_SHIFT    (0)
+-#define AH_PCIE_LINK_PARAMS_LINK_WIDTH_MASK     (0x0000ff00)
+-#define AH_PCIE_LINK_PARAMS_LINK_WIDTH_SHIFT    (8)
+-#define AH_PCIE_LINK_PARAMS_ASPM_MODE_MASK      (0x00ff0000)
+-#define AH_PCIE_LINK_PARAMS_ASPM_MODE_SHIFT     (16)
+-#define AH_PCIE_LINK_PARAMS_ASPM_CAP_MASK       (0xff000000)
+-#define AH_PCIE_LINK_PARAMS_ASPM_CAP_SHIFT      (24)
+-#define AH_PCIE_LINK_PARAMS (*((u32 *)(STRUCT_OFFSET(ah_pcie_link_params))))
+-
+-	u32 rsrv_persist[5];	/* Persist reserved for MFW upgrades */
+-};
+-
+-#define NVM_MAGIC_VALUE		0x669955aa
+-
+-enum nvm_image_type {
+-	NVM_TYPE_TIM1 = 0x01,
+-	NVM_TYPE_TIM2 = 0x02,
+-	NVM_TYPE_MIM1 = 0x03,
+-	NVM_TYPE_MIM2 = 0x04,
+-	NVM_TYPE_MBA = 0x05,
+-	NVM_TYPE_MODULES_PN = 0x06,
+-	NVM_TYPE_VPD = 0x07,
+-	NVM_TYPE_MFW_TRACE1 = 0x08,
+-	NVM_TYPE_MFW_TRACE2 = 0x09,
+-	NVM_TYPE_NVM_CFG1 = 0x0a,
+-	NVM_TYPE_L2B = 0x0b,
+-	NVM_TYPE_DIR1 = 0x0c,
+-	NVM_TYPE_EAGLE_FW1 = 0x0d,
+-	NVM_TYPE_FALCON_FW1 = 0x0e,
+-	NVM_TYPE_PCIE_FW1 = 0x0f,
+-	NVM_TYPE_HW_SET = 0x10,
+-	NVM_TYPE_LIM = 0x11,
+-	NVM_TYPE_AVS_FW1 = 0x12,
+-	NVM_TYPE_DIR2 = 0x13,
+-	NVM_TYPE_CCM = 0x14,
+-	NVM_TYPE_EAGLE_FW2 = 0x15,
+-	NVM_TYPE_FALCON_FW2 = 0x16,
+-	NVM_TYPE_PCIE_FW2 = 0x17,
+-	NVM_TYPE_AVS_FW2 = 0x18,
+-	NVM_TYPE_INIT_HW = 0x19,
+-	NVM_TYPE_DEFAULT_CFG = 0x1a,
+-	NVM_TYPE_MDUMP = 0x1b,
+-	NVM_TYPE_META = 0x1c,
+-	NVM_TYPE_ISCSI_CFG = 0x1d,
+-	NVM_TYPE_FCOE_CFG = 0x1f,
+-	NVM_TYPE_ETH_PHY_FW1 = 0x20,
+-	NVM_TYPE_ETH_PHY_FW2 = 0x21,
+-	NVM_TYPE_BDN = 0x22,
+-	NVM_TYPE_8485X_PHY_FW = 0x23,
+-	NVM_TYPE_PUB_KEY = 0x24,
+-	NVM_TYPE_RECOVERY = 0x25,
+-	NVM_TYPE_PLDM = 0x26,
+-	NVM_TYPE_UPK1 = 0x27,
+-	NVM_TYPE_UPK2 = 0x28,
+-	NVM_TYPE_MASTER_KC = 0x29,
+-	NVM_TYPE_BACKUP_KC = 0x2a,
+-	NVM_TYPE_HW_DUMP = 0x2b,
+-	NVM_TYPE_HW_DUMP_OUT = 0x2c,
+-	NVM_TYPE_BIN_NVM_META = 0x30,
+-	NVM_TYPE_ROM_TEST = 0xf0,
+-	NVM_TYPE_88X33X0_PHY_FW = 0x31,
+-	NVM_TYPE_88X33X0_PHY_SLAVE_FW = 0x32,
+-	NVM_TYPE_MAX,
+-};
+-
+-#define DIR_ID_1    (0)
+-
  #endif
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_int.h b/drivers/net/ethernet/qlogic/qed/qed_int.h
-index c5550e96bbe1..eb8e0f4242d7 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_int.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_int.h
-@@ -53,51 +53,54 @@ enum qed_coalescing_fsm {
- };
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_init_fw_funcs.c b/drivers/net/ethernet/qlogic/qed/qed_init_fw_funcs.c
+index 30c0b5502670..7dad91049cc0 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_init_fw_funcs.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_init_fw_funcs.c
+@@ -13,6 +13,7 @@
+ #include "qed_hsi.h"
+ #include "qed_hw.h"
+ #include "qed_init_ops.h"
++#include "qed_iro_hsi.h"
+ #include "qed_reg_addr.h"
  
- /**
-- * @brief qed_int_igu_enable_int - enable device interrupts
-+ * qed_int_igu_enable_int(): Enable device interrupts.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param int_mode - interrupt mode to use
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @int_mode: Interrupt mode to use.
-+ *
-+ * Return: Void.
-  */
- void qed_int_igu_enable_int(struct qed_hwfn *p_hwfn,
- 			    struct qed_ptt *p_ptt,
- 			    enum qed_int_mode int_mode);
+ #define CDU_VALIDATION_DEFAULT_CFG	61
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_iro_hsi.h b/drivers/net/ethernet/qlogic/qed/qed_iro_hsi.h
+new file mode 100644
+index 000000000000..4999d524930f
+--- /dev/null
++++ b/drivers/net/ethernet/qlogic/qed/qed_iro_hsi.h
+@@ -0,0 +1,339 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
++/* QLogic qed NIC Driver
++ * Copyright (c) 2019-2021 Marvell International Ltd.
++ */
++
++#ifndef _QED_IRO_HSI_H
++#define _QED_IRO_HSI_H
++
++#include <linux/types.h>
++
++/* Ystorm flow control mode. Use enum fw_flow_ctrl_mode */
++#define YSTORM_FLOW_CONTROL_MODE_OFFSET			(IRO[0].base)
++#define YSTORM_FLOW_CONTROL_MODE_SIZE			(IRO[0].size)
++
++/* Tstorm port statistics */
++#define TSTORM_PORT_STAT_OFFSET(port_id) \
++	(IRO[1].base + ((port_id) * IRO[1].m1))
++#define TSTORM_PORT_STAT_SIZE				(IRO[1].size)
++
++/* Tstorm ll2 port statistics */
++#define TSTORM_LL2_PORT_STAT_OFFSET(port_id) \
++	(IRO[2].base + ((port_id) * IRO[2].m1))
++#define TSTORM_LL2_PORT_STAT_SIZE			(IRO[2].size)
++
++/* Ustorm VF-PF Channel ready flag */
++#define USTORM_VF_PF_CHANNEL_READY_OFFSET(vf_id) \
++	(IRO[3].base + ((vf_id) * IRO[3].m1))
++#define USTORM_VF_PF_CHANNEL_READY_SIZE			(IRO[3].size)
++
++/* Ustorm Final flr cleanup ack */
++#define USTORM_FLR_FINAL_ACK_OFFSET(pf_id) \
++	(IRO[4].base + ((pf_id) * IRO[4].m1))
++#define USTORM_FLR_FINAL_ACK_SIZE			(IRO[4].size)
++
++/* Ustorm Event ring consumer */
++#define USTORM_EQE_CONS_OFFSET(pf_id) \
++	(IRO[5].base + ((pf_id) * IRO[5].m1))
++#define USTORM_EQE_CONS_SIZE				(IRO[5].size)
++
++/* Ustorm eth queue zone */
++#define USTORM_ETH_QUEUE_ZONE_OFFSET(queue_zone_id) \
++	(IRO[6].base + ((queue_zone_id) * IRO[6].m1))
++#define USTORM_ETH_QUEUE_ZONE_SIZE			(IRO[6].size)
++
++/* Ustorm Common Queue ring consumer */
++#define USTORM_COMMON_QUEUE_CONS_OFFSET(queue_zone_id) \
++	(IRO[7].base + ((queue_zone_id) * IRO[7].m1))
++#define USTORM_COMMON_QUEUE_CONS_SIZE			(IRO[7].size)
++
++/* Xstorm common PQ info */
++#define XSTORM_PQ_INFO_OFFSET(pq_id) \
++	(IRO[8].base + ((pq_id) * IRO[8].m1))
++#define XSTORM_PQ_INFO_SIZE				(IRO[8].size)
++
++/* Xstorm Integration Test Data */
++#define XSTORM_INTEG_TEST_DATA_OFFSET			(IRO[9].base)
++#define XSTORM_INTEG_TEST_DATA_SIZE			(IRO[9].size)
++
++/* Ystorm Integration Test Data */
++#define YSTORM_INTEG_TEST_DATA_OFFSET			(IRO[10].base)
++#define YSTORM_INTEG_TEST_DATA_SIZE			(IRO[10].size)
++
++/* Pstorm Integration Test Data */
++#define PSTORM_INTEG_TEST_DATA_OFFSET			(IRO[11].base)
++#define PSTORM_INTEG_TEST_DATA_SIZE			(IRO[11].size)
++
++/* Tstorm Integration Test Data */
++#define TSTORM_INTEG_TEST_DATA_OFFSET			(IRO[12].base)
++#define TSTORM_INTEG_TEST_DATA_SIZE			(IRO[12].size)
++
++/* Mstorm Integration Test Data */
++#define MSTORM_INTEG_TEST_DATA_OFFSET			(IRO[13].base)
++#define MSTORM_INTEG_TEST_DATA_SIZE			(IRO[13].size)
++
++/* Ustorm Integration Test Data */
++#define USTORM_INTEG_TEST_DATA_OFFSET			(IRO[14].base)
++#define USTORM_INTEG_TEST_DATA_SIZE			(IRO[14].size)
++
++/* Xstorm overlay buffer host address */
++#define XSTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[15].base)
++#define XSTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[15].size)
++
++/* Ystorm overlay buffer host address */
++#define YSTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[16].base)
++#define YSTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[16].size)
++
++/* Pstorm overlay buffer host address */
++#define PSTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[17].base)
++#define PSTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[17].size)
++
++/* Tstorm overlay buffer host address */
++#define TSTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[18].base)
++#define TSTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[18].size)
++
++/* Mstorm overlay buffer host address */
++#define MSTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[19].base)
++#define MSTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[19].size)
++
++/* Ustorm overlay buffer host address */
++#define USTORM_OVERLAY_BUF_ADDR_OFFSET			(IRO[20].base)
++#define USTORM_OVERLAY_BUF_ADDR_SIZE			(IRO[20].size)
++
++/* Tstorm producers */
++#define TSTORM_LL2_RX_PRODS_OFFSET(core_rx_queue_id) \
++	(IRO[21].base + ((core_rx_queue_id) * IRO[21].m1))
++#define TSTORM_LL2_RX_PRODS_SIZE			(IRO[21].size)
++
++/* Tstorm LightL2 queue statistics */
++#define CORE_LL2_TSTORM_PER_QUEUE_STAT_OFFSET(core_rx_queue_id) \
++	(IRO[22].base + ((core_rx_queue_id) * IRO[22].m1))
++#define CORE_LL2_TSTORM_PER_QUEUE_STAT_SIZE		(IRO[22].size)
++
++/* Ustorm LiteL2 queue statistics */
++#define CORE_LL2_USTORM_PER_QUEUE_STAT_OFFSET(core_rx_queue_id) \
++	(IRO[23].base + ((core_rx_queue_id) * IRO[23].m1))
++#define CORE_LL2_USTORM_PER_QUEUE_STAT_SIZE		(IRO[23].size)
++
++/* Pstorm LiteL2 queue statistics */
++#define CORE_LL2_PSTORM_PER_QUEUE_STAT_OFFSET(core_tx_stats_id) \
++	(IRO[24].base + ((core_tx_stats_id) * IRO[24].m1))
++#define CORE_LL2_PSTORM_PER_QUEUE_STAT_SIZE		(IRO[24].size)
++
++/* Mstorm queue statistics */
++#define MSTORM_QUEUE_STAT_OFFSET(stat_counter_id) \
++	(IRO[25].base + ((stat_counter_id) * IRO[25].m1))
++#define MSTORM_QUEUE_STAT_SIZE				(IRO[25].size)
++
++/* TPA agregation timeout in us resolution (on ASIC) */
++#define MSTORM_TPA_TIMEOUT_US_OFFSET			(IRO[26].base)
++#define MSTORM_TPA_TIMEOUT_US_SIZE			(IRO[26].size)
++
++/* Mstorm ETH VF queues producers offset in RAM. Used in default VF zone size
++ * mode
++ */
++#define MSTORM_ETH_VF_PRODS_OFFSET(vf_id, vf_queue_id) \
++	(IRO[27].base + ((vf_id) * IRO[27].m1) + ((vf_queue_id) * IRO[27].m2))
++#define MSTORM_ETH_VF_PRODS_SIZE			(IRO[27].size)
++
++/* Mstorm ETH PF queues producers */
++#define MSTORM_ETH_PF_PRODS_OFFSET(queue_id) \
++	(IRO[28].base + ((queue_id) * IRO[28].m1))
++#define MSTORM_ETH_PF_PRODS_SIZE			(IRO[28].size)
++
++/* Mstorm pf statistics */
++#define MSTORM_ETH_PF_STAT_OFFSET(pf_id) \
++	(IRO[29].base + ((pf_id) * IRO[29].m1))
++#define MSTORM_ETH_PF_STAT_SIZE				(IRO[29].size)
++
++/* Ustorm queue statistics */
++#define USTORM_QUEUE_STAT_OFFSET(stat_counter_id) \
++	(IRO[30].base + ((stat_counter_id) * IRO[30].m1))
++#define USTORM_QUEUE_STAT_SIZE				(IRO[30].size)
++
++/* Ustorm pf statistics */
++#define USTORM_ETH_PF_STAT_OFFSET(pf_id) \
++	(IRO[31].base + ((pf_id) * IRO[31].m1))
++#define USTORM_ETH_PF_STAT_SIZE				(IRO[31].size)
++
++/* Pstorm queue statistics */
++#define PSTORM_QUEUE_STAT_OFFSET(stat_counter_id)	\
++	(IRO[32].base + ((stat_counter_id) * IRO[32].m1))
++#define PSTORM_QUEUE_STAT_SIZE				(IRO[32].size)
++
++/* Pstorm pf statistics */
++#define PSTORM_ETH_PF_STAT_OFFSET(pf_id) \
++	(IRO[33].base + ((pf_id) * IRO[33].m1))
++#define PSTORM_ETH_PF_STAT_SIZE				(IRO[33].size)
++
++/* Control frame's EthType configuration for TX control frame security */
++#define PSTORM_CTL_FRAME_ETHTYPE_OFFSET(eth_type_id)	\
++	(IRO[34].base + ((eth_type_id) * IRO[34].m1))
++#define PSTORM_CTL_FRAME_ETHTYPE_SIZE			(IRO[34].size)
++
++/* Tstorm last parser message */
++#define TSTORM_ETH_PRS_INPUT_OFFSET			(IRO[35].base)
++#define TSTORM_ETH_PRS_INPUT_SIZE			(IRO[35].size)
++
++/* Tstorm Eth limit Rx rate */
++#define ETH_RX_RATE_LIMIT_OFFSET(pf_id)	\
++	(IRO[36].base + ((pf_id) * IRO[36].m1))
++#define ETH_RX_RATE_LIMIT_SIZE				(IRO[36].size)
++
++/* RSS indirection table entry update command per PF offset in TSTORM PF BAR0.
++ * Use eth_tstorm_rss_update_data for update
++ */
++#define TSTORM_ETH_RSS_UPDATE_OFFSET(pf_id) \
++	(IRO[37].base + ((pf_id) * IRO[37].m1))
++#define TSTORM_ETH_RSS_UPDATE_SIZE			(IRO[37].size)
++
++/* Xstorm queue zone */
++#define XSTORM_ETH_QUEUE_ZONE_OFFSET(queue_id) \
++	(IRO[38].base + ((queue_id) * IRO[38].m1))
++#define XSTORM_ETH_QUEUE_ZONE_SIZE			(IRO[38].size)
++
++/* Ystorm cqe producer */
++#define YSTORM_TOE_CQ_PROD_OFFSET(rss_id) \
++	(IRO[39].base + ((rss_id) * IRO[39].m1))
++#define YSTORM_TOE_CQ_PROD_SIZE				(IRO[39].size)
++
++/* Ustorm cqe producer */
++#define USTORM_TOE_CQ_PROD_OFFSET(rss_id) \
++	(IRO[40].base + ((rss_id) * IRO[40].m1))
++#define USTORM_TOE_CQ_PROD_SIZE				(IRO[40].size)
++
++/* Ustorm grq producer */
++#define USTORM_TOE_GRQ_PROD_OFFSET(pf_id) \
++	(IRO[41].base + ((pf_id) * IRO[41].m1))
++#define USTORM_TOE_GRQ_PROD_SIZE			(IRO[41].size)
++
++/* Tstorm cmdq-cons of given command queue-id */
++#define TSTORM_SCSI_CMDQ_CONS_OFFSET(cmdq_queue_id) \
++	(IRO[42].base + ((cmdq_queue_id) * IRO[42].m1))
++#define TSTORM_SCSI_CMDQ_CONS_SIZE			(IRO[42].size)
++
++/* Tstorm (reflects M-Storm) bdq-external-producer of given function ID,
++ * BDqueue-id
++ */
++#define TSTORM_SCSI_BDQ_EXT_PROD_OFFSET(storage_func_id, bdq_id) \
++	(IRO[43].base + ((storage_func_id) * IRO[43].m1) + \
++	 ((bdq_id) * IRO[43].m2))
++#define TSTORM_SCSI_BDQ_EXT_PROD_SIZE			(IRO[43].size)
++
++/* Mstorm bdq-external-producer of given BDQ resource ID, BDqueue-id */
++#define MSTORM_SCSI_BDQ_EXT_PROD_OFFSET(storage_func_id, bdq_id) \
++	(IRO[44].base + ((storage_func_id) * IRO[44].m1) + \
++	 ((bdq_id) * IRO[44].m2))
++#define MSTORM_SCSI_BDQ_EXT_PROD_SIZE			(IRO[44].size)
++
++/* Tstorm iSCSI RX stats */
++#define TSTORM_ISCSI_RX_STATS_OFFSET(storage_func_id) \
++	(IRO[45].base + ((storage_func_id) * IRO[45].m1))
++#define TSTORM_ISCSI_RX_STATS_SIZE			(IRO[45].size)
++
++/* Mstorm iSCSI RX stats */
++#define MSTORM_ISCSI_RX_STATS_OFFSET(storage_func_id) \
++	(IRO[46].base + ((storage_func_id) * IRO[46].m1))
++#define MSTORM_ISCSI_RX_STATS_SIZE			(IRO[46].size)
++
++/* Ustorm iSCSI RX stats */
++#define USTORM_ISCSI_RX_STATS_OFFSET(storage_func_id) \
++	(IRO[47].base + ((storage_func_id) * IRO[47].m1))
++#define USTORM_ISCSI_RX_STATS_SIZE			(IRO[47].size)
++
++/* Xstorm iSCSI TX stats */
++#define XSTORM_ISCSI_TX_STATS_OFFSET(storage_func_id) \
++	(IRO[48].base + ((storage_func_id) * IRO[48].m1))
++#define XSTORM_ISCSI_TX_STATS_SIZE			(IRO[48].size)
++
++/* Ystorm iSCSI TX stats */
++#define YSTORM_ISCSI_TX_STATS_OFFSET(storage_func_id) \
++	(IRO[49].base + ((storage_func_id) * IRO[49].m1))
++#define YSTORM_ISCSI_TX_STATS_SIZE			(IRO[49].size)
++
++/* Pstorm iSCSI TX stats */
++#define PSTORM_ISCSI_TX_STATS_OFFSET(storage_func_id) \
++	(IRO[50].base + ((storage_func_id) * IRO[50].m1))
++#define PSTORM_ISCSI_TX_STATS_SIZE			(IRO[50].size)
++
++/* Tstorm FCoE RX stats */
++#define TSTORM_FCOE_RX_STATS_OFFSET(pf_id) \
++	(IRO[51].base + ((pf_id) * IRO[51].m1))
++#define TSTORM_FCOE_RX_STATS_SIZE			(IRO[51].size)
++
++/* Pstorm FCoE TX stats */
++#define PSTORM_FCOE_TX_STATS_OFFSET(pf_id) \
++	(IRO[52].base + ((pf_id) * IRO[52].m1))
++#define PSTORM_FCOE_TX_STATS_SIZE			(IRO[52].size)
++
++/* Pstorm RDMA queue statistics */
++#define PSTORM_RDMA_QUEUE_STAT_OFFSET(rdma_stat_counter_id) \
++	(IRO[53].base + ((rdma_stat_counter_id) * IRO[53].m1))
++#define PSTORM_RDMA_QUEUE_STAT_SIZE			(IRO[53].size)
++
++/* Tstorm RDMA queue statistics */
++#define TSTORM_RDMA_QUEUE_STAT_OFFSET(rdma_stat_counter_id) \
++	(IRO[54].base + ((rdma_stat_counter_id) * IRO[54].m1))
++#define TSTORM_RDMA_QUEUE_STAT_SIZE			(IRO[54].size)
++
++/* Xstorm error level for assert */
++#define XSTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
++	(IRO[55].base + ((pf_id) * IRO[55].m1))
++#define XSTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[55].size)
++
++/* Ystorm error level for assert */
++#define YSTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
++	(IRO[56].base + ((pf_id) * IRO[56].m1))
++#define YSTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[56].size)
++
++/* Pstorm error level for assert */
++#define PSTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
++	(IRO[57].base + ((pf_id) * IRO[57].m1))
++#define PSTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[57].size)
++
++/* Tstorm error level for assert */
++#define TSTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
++	(IRO[58].base + ((pf_id) * IRO[58].m1))
++#define TSTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[58].size)
++
++/* Mstorm error level for assert */
++#define MSTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
++	(IRO[59].base + ((pf_id) * IRO[59].m1))
++#define MSTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[59].size)
++
++/* Ustorm error level for assert */
++#define USTORM_RDMA_ASSERT_LEVEL_OFFSET(pf_id) \
++	(IRO[60].base + ((pf_id) * IRO[60].m1))
++#define USTORM_RDMA_ASSERT_LEVEL_SIZE			(IRO[60].size)
++
++/* Xstorm iWARP rxmit stats */
++#define XSTORM_IWARP_RXMIT_STATS_OFFSET(pf_id) \
++	(IRO[61].base + ((pf_id) * IRO[61].m1))
++#define XSTORM_IWARP_RXMIT_STATS_SIZE			(IRO[61].size)
++
++/* Tstorm RoCE Event Statistics */
++#define TSTORM_ROCE_EVENTS_STAT_OFFSET(roce_pf_id)	\
++	(IRO[62].base + ((roce_pf_id) * IRO[62].m1))
++#define TSTORM_ROCE_EVENTS_STAT_SIZE			(IRO[62].size)
++
++/* DCQCN Received Statistics */
++#define YSTORM_ROCE_DCQCN_RECEIVED_STATS_OFFSET(roce_pf_id)\
++	(IRO[63].base + ((roce_pf_id) * IRO[63].m1))
++#define YSTORM_ROCE_DCQCN_RECEIVED_STATS_SIZE		(IRO[63].size)
++
++/* RoCE Error Statistics */
++#define YSTORM_ROCE_ERROR_STATS_OFFSET(roce_pf_id)	\
++	(IRO[64].base + ((roce_pf_id) * IRO[64].m1))
++#define YSTORM_ROCE_ERROR_STATS_SIZE			(IRO[64].size)
++
++/* DCQCN Sent Statistics */
++#define PSTORM_ROCE_DCQCN_SENT_STATS_OFFSET(roce_pf_id)	\
++	(IRO[65].base + ((roce_pf_id) * IRO[65].m1))
++#define PSTORM_ROCE_DCQCN_SENT_STATS_SIZE		(IRO[65].size)
++
++/* RoCE CQEs Statistics */
++#define USTORM_ROCE_CQE_STATS_OFFSET(roce_pf_id)	\
++	(IRO[66].base + ((roce_pf_id) * IRO[66].m1))
++#define USTORM_ROCE_CQE_STATS_SIZE			(IRO[66].size)
++
++#endif
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_iscsi.c b/drivers/net/ethernet/qlogic/qed/qed_iscsi.c
+index db926d8b3033..b116b3183939 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_iscsi.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_iscsi.c
+@@ -29,6 +29,7 @@
+ #include "qed_hsi.h"
+ #include "qed_hw.h"
+ #include "qed_int.h"
++#include "qed_iro_hsi.h"
+ #include "qed_iscsi.h"
+ #include "qed_ll2.h"
+ #include "qed_mcp.h"
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_l2.c b/drivers/net/ethernet/qlogic/qed/qed_l2.c
+index ba8c7a31cce1..991bf4313da6 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_l2.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_l2.c
+@@ -28,6 +28,7 @@
+ #include "qed_dev_api.h"
+ #include <linux/qed/qed_eth_if.h>
+ #include "qed_hsi.h"
++#include "qed_iro_hsi.h"
+ #include "qed_hw.h"
+ #include "qed_int.h"
+ #include "qed_l2.h"
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_ll2.c b/drivers/net/ethernet/qlogic/qed/qed_ll2.c
+index bf48a66704bd..5e586a1cf4aa 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_ll2.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_ll2.c
+@@ -28,6 +28,7 @@
+ #include "qed_cxt.h"
+ #include "qed_dev_api.h"
+ #include "qed_hsi.h"
++#include "qed_iro_hsi.h"
+ #include "qed_hw.h"
+ #include "qed_int.h"
+ #include "qed_ll2.h"
+@@ -106,7 +107,7 @@ static int qed_ll2_alloc_buffer(struct qed_dev *cdev,
+ }
  
- /**
-- * @brief qed_int_igu_disable_int - disable device interrupts
-+ * qed_int_igu_disable_int():  Disable device interrupts.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * Return: Void.
-  */
- void qed_int_igu_disable_int(struct qed_hwfn *p_hwfn,
- 			     struct qed_ptt *p_ptt);
+ static int qed_ll2_dealloc_buffer(struct qed_dev *cdev,
+-				 struct qed_ll2_buffer *buffer)
++				  struct qed_ll2_buffer *buffer)
+ {
+ 	spin_lock_bh(&cdev->ll2->lock);
  
- /**
-- * @brief qed_int_igu_read_sisr_reg - Reads the single isr multiple dpc
-- *        register from igu.
-+ * qed_int_igu_read_sisr_reg(): Reads the single isr multiple dpc
-+ *                             register from igu.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return u64
-+ * Return: u64.
-  */
- u64 qed_int_igu_read_sisr_reg(struct qed_hwfn *p_hwfn);
+@@ -1124,6 +1125,7 @@ static int qed_sp_ll2_tx_queue_stop(struct qed_hwfn *p_hwfn,
+ 	struct qed_spq_entry *p_ent = NULL;
+ 	struct qed_sp_init_data init_data;
+ 	int rc = -EINVAL;
++
+ 	qed_db_recovery_del(p_hwfn->cdev, p_tx->doorbell_addr, &p_tx->db_msg);
  
- #define QED_SP_SB_ID 0xffff
- /**
-- * @brief qed_int_sb_init - Initializes the sb_info structure.
-+ * qed_int_sb_init(): Initializes the sb_info structure.
-  *
-- * once the structure is initialized it can be passed to sb related functions.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @sb_info: points to an uninitialized (but allocated) sb_info structure
-+ * @sb_virt_addr: SB Virtual address.
-+ * @sb_phy_addr: SB Physial address.
-+ * @sb_id: the sb_id to be used (zero based in driver)
-+ *           should use QED_SP_SB_ID for SP Status block
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param sb_info	points to an uninitialized (but
-- *			allocated) sb_info structure
-- * @param sb_virt_addr
-- * @param sb_phy_addr
-- * @param sb_id	the sb_id to be used (zero based in driver)
-- *			should use QED_SP_SB_ID for SP Status block
-+ * Return: int.
-  *
-- * @return int
-+ * Once the structure is initialized it can be passed to sb related functions.
-  */
- int qed_int_sb_init(struct qed_hwfn *p_hwfn,
- 		    struct qed_ptt *p_ptt,
-@@ -106,82 +109,91 @@ int qed_int_sb_init(struct qed_hwfn *p_hwfn,
- 		    dma_addr_t sb_phy_addr,
- 		    u16 sb_id);
- /**
-- * @brief qed_int_sb_setup - Setup the sb.
-+ * qed_int_sb_setup(): Setup the sb.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @sb_info: Initialized sb_info structure.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param sb_info	initialized sb_info structure
-+ * Return: Void.
-  */
- void qed_int_sb_setup(struct qed_hwfn *p_hwfn,
- 		      struct qed_ptt *p_ptt,
- 		      struct qed_sb_info *sb_info);
+ 	/* Get SPQ entry */
+@@ -1762,7 +1764,7 @@ int qed_ll2_post_rx_buffer(void *cxt,
+ 		}
+ 	}
  
- /**
-- * @brief qed_int_sb_release - releases the sb_info structure.
-+ * qed_int_sb_release(): Releases the sb_info structure.
-  *
-- * once the structure is released, it's memory can be freed
-+ * @p_hwfn: HW device data.
-+ * @sb_info: Points to an allocated sb_info structure.
-+ * @sb_id: The sb_id to be used (zero based in driver)
-+ *         should never be equal to QED_SP_SB_ID
-+ *         (SP Status block).
-  *
-- * @param p_hwfn
-- * @param sb_info	points to an allocated sb_info structure
-- * @param sb_id		the sb_id to be used (zero based in driver)
-- *			should never be equal to QED_SP_SB_ID
-- *			(SP Status block)
-+ * Return: int.
-  *
-- * @return int
-+ * Once the structure is released, it's memory can be freed.
-  */
- int qed_int_sb_release(struct qed_hwfn *p_hwfn,
- 		       struct qed_sb_info *sb_info,
- 		       u16 sb_id);
+-	/* If we're lacking entires, let's try to flush buffers to FW */
++	/* If we're lacking entries, let's try to flush buffers to FW */
+ 	if (!p_curp || !p_curb) {
+ 		rc = -EBUSY;
+ 		p_curp = NULL;
+@@ -2609,7 +2611,6 @@ static int qed_ll2_start(struct qed_dev *cdev, struct qed_ll2_params *params)
+ 			DP_NOTICE(cdev, "Failed to add an LLH filter\n");
+ 			goto err3;
+ 		}
+-
+ 	}
  
- /**
-- * @brief qed_int_sp_dpc - To be called when an interrupt is received on the
-- *        default status block.
-+ * qed_int_sp_dpc(): To be called when an interrupt is received on the
-+ *                   default status block.
-  *
-- * @param p_hwfn - pointer to hwfn
-+ * @t: Tasklet.
-+ *
-+ * Return: Void.
-  *
-  */
- void qed_int_sp_dpc(struct tasklet_struct *t);
- 
- /**
-- * @brief qed_int_get_num_sbs - get the number of status
-- *        blocks configured for this funciton in the igu.
-+ * qed_int_get_num_sbs(): Get the number of status blocks configured
-+ *                        for this funciton in the igu.
-  *
-- * @param p_hwfn
-- * @param p_sb_cnt_info
-+ * @p_hwfn: HW device data.
-+ * @p_sb_cnt_info: Pointer to SB count info.
-  *
-- * @return int - number of status blocks configured
-+ * Return: Void.
-  */
- void qed_int_get_num_sbs(struct qed_hwfn	*p_hwfn,
- 			 struct qed_sb_cnt_info *p_sb_cnt_info);
- 
- /**
-- * @brief qed_int_disable_post_isr_release - performs the cleanup post ISR
-+ * qed_int_disable_post_isr_release(): Performs the cleanup post ISR
-  *        release. The API need to be called after releasing all slowpath IRQs
-  *        of the device.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-+ * Return: Void.
-  */
- void qed_int_disable_post_isr_release(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_int_attn_clr_enable - sets whether the general behavior is
-+ * qed_int_attn_clr_enable: Sets whether the general behavior is
-  *        preventing attentions from being reasserted, or following the
-  *        attributes of the specific attention.
-  *
-- * @param cdev
-- * @param clr_enable
-+ * @cdev: Qed dev pointer.
-+ * @clr_enable: Clear enable
-+ *
-+ * Return: Void.
-  *
-  */
- void qed_int_attn_clr_enable(struct qed_dev *cdev, bool clr_enable);
- 
- /**
-- * @brief - Doorbell Recovery handler.
-+ * qed_db_rec_handler(): Doorbell Recovery handler.
-  *          Run doorbell recovery in case of PF overflow (and flush DORQ if
-  *          needed).
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ *
-+ * Return: Int.
-  */
- int qed_db_rec_handler(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
-@@ -223,30 +235,34 @@ struct qed_igu_info {
- };
- 
- /**
-- * @brief - Make sure the IGU CAM reflects the resources provided by MFW
-+ * qed_int_igu_reset_cam(): Make sure the IGU CAM reflects the resources
-+ *                          provided by MFW.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * Return: Void.
-  */
- int qed_int_igu_reset_cam(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Translate the weakly-defined client sb-id into an IGU sb-id
-+ * qed_get_igu_sb_id(): Translate the weakly-defined client sb-id into
-+ *                      an IGU sb-id
-  *
-- * @param p_hwfn
-- * @param sb_id - user provided sb_id
-+ * @p_hwfn: HW device data.
-+ * @sb_id: user provided sb_id.
-  *
-- * @return an index inside IGU CAM where the SB resides
-+ * Return: An index inside IGU CAM where the SB resides.
-  */
- u16 qed_get_igu_sb_id(struct qed_hwfn *p_hwfn, u16 sb_id);
- 
- /**
-- * @brief return a pointer to an unused valid SB
-+ * qed_get_igu_free_sb(): Return a pointer to an unused valid SB
-  *
-- * @param p_hwfn
-- * @param b_is_pf - true iff we want a SB belonging to a PF
-+ * @p_hwfn: HW device data.
-+ * @b_is_pf: True iff we want a SB belonging to a PF.
-  *
-- * @return point to an igu_block, NULL if none is available
-+ * Return: Point to an igu_block, NULL if none is available.
-  */
- struct qed_igu_block *qed_get_igu_free_sb(struct qed_hwfn *p_hwfn,
- 					  bool b_is_pf);
-@@ -259,15 +275,15 @@ void qed_int_igu_init_pure_rt(struct qed_hwfn *p_hwfn,
- void qed_int_igu_init_rt(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_int_igu_read_cam - Reads the IGU CAM.
-+ * qed_int_igu_read_cam():  Reads the IGU CAM.
-  *	This function needs to be called during hardware
-  *	prepare. It reads the info from igu cam to know which
-  *	status block is the default / base status block etc.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_int_igu_read_cam(struct qed_hwfn *p_hwfn,
- 			 struct qed_ptt *p_ptt);
-@@ -275,24 +291,22 @@ int qed_int_igu_read_cam(struct qed_hwfn *p_hwfn,
- typedef int (*qed_int_comp_cb_t)(struct qed_hwfn *p_hwfn,
- 				 void *cookie);
- /**
-- * @brief qed_int_register_cb - Register callback func for
-- *      slowhwfn statusblock.
-- *
-- *	Every protocol that uses the slowhwfn status block
-- *	should register a callback function that will be called
-- *	once there is an update of the sp status block.
-- *
-- * @param p_hwfn
-- * @param comp_cb - function to be called when there is an
-- *                  interrupt on the sp sb
-- *
-- * @param cookie  - passed to the callback function
-- * @param sb_idx  - OUT parameter which gives the chosen index
-- *                  for this protocol.
-- * @param p_fw_cons  - pointer to the actual address of the
-- *                     consumer for this protocol.
-- *
-- * @return int
-+ * qed_int_register_cb(): Register callback func for slowhwfn statusblock.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @comp_cb: Function to be called when there is an
-+ *           interrupt on the sp sb
-+ * @cookie: Passed to the callback function
-+ * @sb_idx: (OUT) parameter which gives the chosen index
-+ *           for this protocol.
-+ * @p_fw_cons: Pointer to the actual address of the
-+ *             consumer for this protocol.
-+ *
-+ * Return: Int.
-+ *
-+ * Every protocol that uses the slowhwfn status block
-+ * should register a callback function that will be called
-+ * once there is an update of the sp status block.
-  */
- int qed_int_register_cb(struct qed_hwfn *p_hwfn,
- 			qed_int_comp_cb_t comp_cb,
-@@ -301,37 +315,40 @@ int qed_int_register_cb(struct qed_hwfn *p_hwfn,
- 			__le16 **p_fw_cons);
- 
- /**
-- * @brief qed_int_unregister_cb - Unregisters callback
-- *      function from sp sb.
-- *      Partner of qed_int_register_cb -> should be called
-- *      when no longer required.
-+ * qed_int_unregister_cb(): Unregisters callback function from sp sb.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @pi: Producer Index.
-  *
-- * @param p_hwfn
-- * @param pi
-+ * Return: Int.
-  *
-- * @return int
-+ * Partner of qed_int_register_cb -> should be called
-+ * when no longer required.
-  */
- int qed_int_unregister_cb(struct qed_hwfn *p_hwfn,
- 			  u8 pi);
- 
- /**
-- * @brief qed_int_get_sp_sb_id - Get the slowhwfn sb id.
-+ * qed_int_get_sp_sb_id(): Get the slowhwfn sb id.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return u16
-+ * Return: u16.
-  */
- u16 qed_int_get_sp_sb_id(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief Status block cleanup. Should be called for each status
-- *        block that will be used -> both PF / VF
-- *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param igu_sb_id	- igu status block id
-- * @param opaque	- opaque fid of the sb owner.
-- * @param b_set		- set(1) / clear(0)
-+ * qed_int_igu_init_pure_rt_single(): Status block cleanup.
-+ *                                    Should be called for each status
-+ *                                    block that will be used -> both PF / VF.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @igu_sb_id: IGU status block id.
-+ * @opaque: Opaque fid of the sb owner.
-+ * @b_set: Set(1) / Clear(0).
-+ *
-+ * Return: Void.
-  */
- void qed_int_igu_init_pure_rt_single(struct qed_hwfn *p_hwfn,
- 				     struct qed_ptt *p_ptt,
-@@ -340,15 +357,16 @@ void qed_int_igu_init_pure_rt_single(struct qed_hwfn *p_hwfn,
- 				     bool b_set);
- 
- /**
-- * @brief qed_int_cau_conf - configure cau for a given status
-- *        block
-- *
-- * @param p_hwfn
-- * @param ptt
-- * @param sb_phys
-- * @param igu_sb_id
-- * @param vf_number
-- * @param vf_valid
-+ * qed_int_cau_conf_sb(): Configure cau for a given status block.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @sb_phys: SB Physical.
-+ * @igu_sb_id: IGU status block id.
-+ * @vf_number: VF number
-+ * @vf_valid: VF valid or not.
-+ *
-+ * Return: Void.
-  */
- void qed_int_cau_conf_sb(struct qed_hwfn *p_hwfn,
- 			 struct qed_ptt *p_ptt,
-@@ -358,52 +376,58 @@ void qed_int_cau_conf_sb(struct qed_hwfn *p_hwfn,
- 			 u8 vf_valid);
- 
- /**
-- * @brief qed_int_alloc
-+ * qed_int_alloc(): QED interrupt alloc.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_int_alloc(struct qed_hwfn *p_hwfn,
- 		  struct qed_ptt *p_ptt);
- 
- /**
-- * @brief qed_int_free
-+ * qed_int_free(): QED interrupt free.
-+ *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Void.
-  */
- void qed_int_free(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_int_setup
-+ * qed_int_setup(): QED interrupt setup.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ *
-+ * Return: Void.
-  */
- void qed_int_setup(struct qed_hwfn *p_hwfn,
- 		   struct qed_ptt *p_ptt);
- 
- /**
-- * @brief - Enable Interrupt & Attention for hw function
-+ * qed_int_igu_enable(): Enable Interrupt & Attention for hw function.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param int_mode
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @int_mode: Interrut mode
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_int_igu_enable(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt,
- 		       enum qed_int_mode int_mode);
- 
- /**
-- * @brief - Initialize CAU status block entry
-+ * qed_init_cau_sb_entry(): Initialize CAU status block entry.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_sb_entry: Pointer SB entry.
-+ * @pf_id: PF number
-+ * @vf_number: VF number
-+ * @vf_valid: VF valid or not.
-  *
-- * @param p_hwfn
-- * @param p_sb_entry
-- * @param pf_id
-- * @param vf_number
-- * @param vf_valid
-+ * Return: Void.
-  */
- void qed_init_cau_sb_entry(struct qed_hwfn *p_hwfn,
- 			   struct cau_sb_entry *p_sb_entry,
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_iscsi.h b/drivers/net/ethernet/qlogic/qed/qed_iscsi.h
-index dab7a5d09f87..dec2b00259d4 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_iscsi.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_iscsi.h
-@@ -34,10 +34,13 @@ void qed_iscsi_setup(struct qed_hwfn *p_hwfn);
- void qed_iscsi_free(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief - Fills provided statistics struct with statistics.
-+ * qed_get_protocol_stats_iscsi(): Fills provided statistics
-+ *                                 struct with statistics.
-  *
-- * @param cdev
-- * @param stats - points to struct that will be filled with statistics.
-+ * @cdev: Qed dev pointer.
-+ * @stats: Points to struct that will be filled with statistics.
-+ *
-+ * Return: Void.
-  */
- void qed_get_protocol_stats_iscsi(struct qed_dev *cdev,
- 				  struct qed_mcp_iscsi_stats *stats);
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_l2.h b/drivers/net/ethernet/qlogic/qed/qed_l2.h
-index 8eceeebb1a7b..2ab7f3f0cf6c 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_l2.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_l2.h
-@@ -92,18 +92,18 @@ struct qed_filter_mcast {
- };
- 
- /**
-- * @brief qed_eth_rx_queue_stop - This ramrod closes an Rx queue
-+ * qed_eth_rx_queue_stop(): This ramrod closes an Rx queue.
-  *
-- * @param p_hwfn
-- * @param p_rxq			Handler of queue to close
-- * @param eq_completion_only	If True completion will be on
-- *				EQe, if False completion will be
-- *				on EQe if p_hwfn opaque
-- *				different from the RXQ opaque
-- *				otherwise on CQe.
-- * @param cqe_completion	If True completion will be
-- *				receive on CQe.
-- * @return int
-+ * @p_hwfn: HW device data.
-+ * @p_rxq: Handler of queue to close
-+ * @eq_completion_only: If True completion will be on
-+ *                      EQe, if False completion will be
-+ *                      on EQe if p_hwfn opaque
-+ *                      different from the RXQ opaque
-+ *                      otherwise on CQe.
-+ * @cqe_completion: If True completion will be receive on CQe.
-+ *
-+ * Return: Int.
-  */
- int
- qed_eth_rx_queue_stop(struct qed_hwfn *p_hwfn,
-@@ -111,12 +111,12 @@ qed_eth_rx_queue_stop(struct qed_hwfn *p_hwfn,
- 		      bool eq_completion_only, bool cqe_completion);
- 
- /**
-- * @brief qed_eth_tx_queue_stop - closes a Tx queue
-+ * qed_eth_tx_queue_stop(): Closes a Tx queue.
-  *
-- * @param p_hwfn
-- * @param p_txq - handle to Tx queue needed to be closed
-+ * @p_hwfn: HW device data.
-+ * @p_txq: handle to Tx queue needed to be closed.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_eth_tx_queue_stop(struct qed_hwfn *p_hwfn, void *p_txq);
- 
-@@ -205,16 +205,15 @@ int qed_sp_vport_update(struct qed_hwfn *p_hwfn,
- 			struct qed_spq_comp_cb *p_comp_data);
- 
- /**
-- * @brief qed_sp_vport_stop -
-- *
-- * This ramrod closes a VPort after all its RX and TX queues are terminated.
-- * An Assert is generated if any queues are left open.
-+ * qed_sp_vport_stop: This ramrod closes a VPort after all its
-+ *                    RX and TX queues are terminated.
-+ *                    An Assert is generated if any queues are left open.
-  *
-- * @param p_hwfn
-- * @param opaque_fid
-- * @param vport_id VPort ID
-+ * @p_hwfn: HW device data.
-+ * @opaque_fid: Opaque FID
-+ * @vport_id: VPort ID.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_sp_vport_stop(struct qed_hwfn *p_hwfn, u16 opaque_fid, u8 vport_id);
- 
-@@ -225,22 +224,21 @@ int qed_sp_eth_filter_ucast(struct qed_hwfn *p_hwfn,
- 			    struct qed_spq_comp_cb *p_comp_data);
- 
- /**
-- * @brief qed_sp_rx_eth_queues_update -
-- *
-- * This ramrod updates an RX queue. It is used for setting the active state
-- * of the queue and updating the TPA and SGE parameters.
-+ * qed_sp_eth_rx_queues_update(): This ramrod updates an RX queue.
-+ *                                It is used for setting the active state
-+ *                                of the queue and updating the TPA and
-+ *                                SGE parameters.
-+ * @p_hwfn: HW device data.
-+ * @pp_rxq_handlers: An array of queue handlers to be updated.
-+ * @num_rxqs: number of queues to update.
-+ * @complete_cqe_flg: Post completion to the CQE Ring if set.
-+ * @complete_event_flg: Post completion to the Event Ring if set.
-+ * @comp_mode: Comp mode.
-+ * @p_comp_data: Pointer Comp data.
-  *
-- * @note At the moment - only used by non-linux VFs.
-+ * Return: Int.
-  *
-- * @param p_hwfn
-- * @param pp_rxq_handlers	An array of queue handlers to be updated.
-- * @param num_rxqs              number of queues to update.
-- * @param complete_cqe_flg	Post completion to the CQE Ring if set
-- * @param complete_event_flg	Post completion to the Event Ring if set
-- * @param comp_mode
-- * @param p_comp_data
-- *
-- * @return int
-+ * Note At the moment - only used by non-linux VFs.
-  */
- 
- int
-@@ -257,30 +255,32 @@ void qed_get_vport_stats(struct qed_dev *cdev, struct qed_eth_stats *stats);
- void qed_reset_vport_stats(struct qed_dev *cdev);
- 
- /**
-- * *@brief qed_arfs_mode_configure -
-- *
-- **Enable or disable rfs mode. It must accept atleast one of tcp or udp true
-- **and atleast one of ipv4 or ipv6 true to enable rfs mode.
-+ * qed_arfs_mode_configure(): Enable or disable rfs mode.
-+ *                            It must accept at least one of tcp or udp true
-+ *                            and at least one of ipv4 or ipv6 true to enable
-+ *                            rfs mode.
-  *
-- **@param p_hwfn
-- **@param p_ptt
-- **@param p_cfg_params - arfs mode configuration parameters.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_cfg_params: arfs mode configuration parameters.
-  *
-+ * Return. Void.
-  */
- void qed_arfs_mode_configure(struct qed_hwfn *p_hwfn,
- 			     struct qed_ptt *p_ptt,
- 			     struct qed_arfs_config_params *p_cfg_params);
- 
- /**
-- * @brief - qed_configure_rfs_ntuple_filter
-+ * qed_configure_rfs_ntuple_filter(): This ramrod should be used to add
-+ *                                     or remove arfs hw filter
-  *
-- * This ramrod should be used to add or remove arfs hw filter
-+ * @p_hwfn: HW device data.
-+ * @p_cb: Used for QED_SPQ_MODE_CB,where client would initialize
-+ *        it with cookie and callback function address, if not
-+ *        using this mode then client must pass NULL.
-+ * @p_params: Pointer to params.
-  *
-- * @params p_hwfn
-- * @params p_cb - Used for QED_SPQ_MODE_CB,where client would initialize
-- *		  it with cookie and callback function address, if not
-- *		  using this mode then client must pass NULL.
-- * @params p_params
-+ * Return: Void.
-  */
- int
- qed_configure_rfs_ntuple_filter(struct qed_hwfn *p_hwfn,
-@@ -374,16 +374,17 @@ qed_sp_eth_vport_start(struct qed_hwfn *p_hwfn,
- 		       struct qed_sp_vport_start_params *p_params);
- 
- /**
-- * @brief - Starts an Rx queue, when queue_cid is already prepared
-+ * qed_eth_rxq_start_ramrod(): Starts an Rx queue, when queue_cid is
-+ *                             already prepared
-  *
-- * @param p_hwfn
-- * @param p_cid
-- * @param bd_max_bytes
-- * @param bd_chain_phys_addr
-- * @param cqe_pbl_addr
-- * @param cqe_pbl_size
-+ * @p_hwfn: HW device data.
-+ * @p_cid: Pointer CID.
-+ * @bd_max_bytes: Max bytes.
-+ * @bd_chain_phys_addr: Chain physcial address.
-+ * @cqe_pbl_addr: PBL address.
-+ * @cqe_pbl_size: PBL size.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int
- qed_eth_rxq_start_ramrod(struct qed_hwfn *p_hwfn,
-@@ -393,15 +394,16 @@ qed_eth_rxq_start_ramrod(struct qed_hwfn *p_hwfn,
- 			 dma_addr_t cqe_pbl_addr, u16 cqe_pbl_size);
- 
- /**
-- * @brief - Starts a Tx queue, where queue_cid is already prepared
-+ * qed_eth_txq_start_ramrod(): Starts a Tx queue, where queue_cid is
-+ *                             already prepared
-  *
-- * @param p_hwfn
-- * @param p_cid
-- * @param pbl_addr
-- * @param pbl_size
-- * @param p_pq_params - parameters for choosing the PQ for this Tx queue
-+ * @p_hwfn: HW device data.
-+ * @p_cid: Pointer CID.
-+ * @pbl_addr: PBL address.
-+ * @pbl_size: PBL size.
-+ * @pq_id: Parameters for choosing the PQ for this Tx queue.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int
- qed_eth_txq_start_ramrod(struct qed_hwfn *p_hwfn,
+ 	ether_addr_copy(cdev->ll2_mac_address, params->ll2_mac_address);
 diff --git a/drivers/net/ethernet/qlogic/qed/qed_ll2.h b/drivers/net/ethernet/qlogic/qed/qed_ll2.h
-index df88d00053a2..f80f7739ff8d 100644
+index f80f7739ff8d..0bfc375161ed 100644
 --- a/drivers/net/ethernet/qlogic/qed/qed_ll2.h
 +++ b/drivers/net/ethernet/qlogic/qed/qed_ll2.h
-@@ -119,41 +119,41 @@ struct qed_ll2_info {
- extern const struct qed_ll2_ops qed_ll2_ops_pass;
+@@ -32,7 +32,6 @@
+ #define QED_LL2_LEGACY_CONN_BASE_PF     0
+ #define QED_LL2_CTX_CONN_BASE_PF        QED_MAX_NUM_OF_LEGACY_LL2_CONNS_PF
  
- /**
-- * @brief qed_ll2_acquire_connection - allocate resources,
-- *        starts rx & tx (if relevant) queues pair. Provides
-- *        connecion handler as output parameter.
-+ * qed_ll2_acquire_connection(): Allocate resources,
-+ *                               starts rx & tx (if relevant) queues pair.
-+ *                               Provides connecion handler as output
-+ *                               parameter.
-  *
-+ * @cxt: Pointer to the hw-function [opaque to some].
-+ * @data: Describes connection parameters.
-  *
-- * @param cxt - pointer to the hw-function [opaque to some]
-- * @param data - describes connection parameters
-- * @return int
-+ * Return: Int.
-  */
- int qed_ll2_acquire_connection(void *cxt, struct qed_ll2_acquire_data *data);
+-
+ struct qed_ll2_rx_packet {
+ 	struct list_head list_entry;
+ 	struct core_rx_bd_with_buff_len *rxq_bd;
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_mcp.c b/drivers/net/ethernet/qlogic/qed/qed_mcp.c
+index 2b39fa294d32..24582977f2d4 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_mcp.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_mcp.c
+@@ -17,6 +17,7 @@
+ #include "qed_cxt.h"
+ #include "qed_dcbx.h"
+ #include "qed_hsi.h"
++#include "qed_mfw_hsi.h"
+ #include "qed_hw.h"
+ #include "qed_mcp.h"
+ #include "qed_reg_addr.h"
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_mfw_hsi.h b/drivers/net/ethernet/qlogic/qed/qed_mfw_hsi.h
+new file mode 100644
+index 000000000000..e419d1577d5c
+--- /dev/null
++++ b/drivers/net/ethernet/qlogic/qed/qed_mfw_hsi.h
+@@ -0,0 +1,1928 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
++/* QLogic qed NIC Driver
++ * Copyright (c) 2019-2021 Marvell International Ltd.
++ */
++
++#ifndef _QED_MFW_HSI_H
++#define _QED_MFW_HSI_H
++
++#define MFW_TRACE_SIGNATURE     0x25071946
++
++/* The trace in the buffer */
++#define MFW_TRACE_EVENTID_MASK          0x00ffff
++#define MFW_TRACE_PRM_SIZE_MASK         0x0f0000
++#define MFW_TRACE_PRM_SIZE_OFFSET	16
++#define MFW_TRACE_ENTRY_SIZE            3
++
++struct mcp_trace {
++	u32 signature;		/* Help to identify that the trace is valid */
++	u32 size;		/* the size of the trace buffer in bytes */
++	u32 curr_level;		/* 2 - all will be written to the buffer
++				 * 1 - debug trace will not be written
++				 * 0 - just errors will be written to the buffer
++				 */
++	u32 modules_mask[2];	/* a bit per module, 1 means write it, 0 means
++				 * mask it.
++				 */
++
++	/* Warning: the following pointers are assumed to be 32bits as they are
++	 * used only in the MFW.
++	 */
++	u32 trace_prod; /* The next trace will be written to this offset */
++	u32 trace_oldest; /* The oldest valid trace starts at this offset
++			   * (usually very close after the current producer).
++			   */
++};
++
++#define VF_MAX_STATIC 192
++
++#define MCP_GLOB_PATH_MAX	2
++#define MCP_PORT_MAX		2
++#define MCP_GLOB_PORT_MAX	4
++#define MCP_GLOB_FUNC_MAX	16
++
++typedef u32 offsize_t;		/* In DWORDS !!! */
++/* Offset from the beginning of the MCP scratchpad */
++#define OFFSIZE_OFFSET_SHIFT	0
++#define OFFSIZE_OFFSET_MASK	0x0000ffff
++/* Size of specific element (not the whole array if any) */
++#define OFFSIZE_SIZE_SHIFT	16
++#define OFFSIZE_SIZE_MASK	0xffff0000
++
++#define SECTION_OFFSET(_offsize) (((((_offsize) &			\
++				     OFFSIZE_OFFSET_MASK) >>	\
++				    OFFSIZE_OFFSET_SHIFT) << 2))
++
++#define QED_SECTION_SIZE(_offsize) ((((_offsize) &		\
++				      OFFSIZE_SIZE_MASK) >>	\
++				     OFFSIZE_SIZE_SHIFT) << 2)
++
++#define SECTION_ADDR(_offsize, idx) (MCP_REG_SCRATCH +			\
++				     SECTION_OFFSET((_offsize)) +	\
++				     (QED_SECTION_SIZE((_offsize)) * (idx)))
++
++#define SECTION_OFFSIZE_ADDR(_pub_base, _section)	\
++	((_pub_base) + offsetof(struct mcp_public_data, sections[_section]))
++
++/* PHY configuration */
++struct eth_phy_cfg {
++	u32					speed;
++#define ETH_SPEED_AUTONEG			0x0
++#define ETH_SPEED_SMARTLINQ			0x8
++
++	u32					pause;
++#define ETH_PAUSE_NONE				0x0
++#define ETH_PAUSE_AUTONEG			0x1
++#define ETH_PAUSE_RX				0x2
++#define ETH_PAUSE_TX				0x4
++
++	u32					adv_speed;
++
++	u32					loopback_mode;
++#define ETH_LOOPBACK_NONE			0x0
++#define ETH_LOOPBACK_INT_PHY			0x1
++#define ETH_LOOPBACK_EXT_PHY			0x2
++#define ETH_LOOPBACK_EXT			0x3
++#define ETH_LOOPBACK_MAC			0x4
++#define ETH_LOOPBACK_CNIG_AH_ONLY_0123		0x5
++#define ETH_LOOPBACK_CNIG_AH_ONLY_2301		0x6
++#define ETH_LOOPBACK_PCS_AH_ONLY		0x7
++#define ETH_LOOPBACK_REVERSE_MAC_AH_ONLY	0x8
++#define ETH_LOOPBACK_INT_PHY_FEA_AH_ONLY	0x9
++
++	u32					eee_cfg;
++#define EEE_CFG_EEE_ENABLED			BIT(0)
++#define EEE_CFG_TX_LPI				BIT(1)
++#define EEE_CFG_ADV_SPEED_1G			BIT(2)
++#define EEE_CFG_ADV_SPEED_10G			BIT(3)
++#define EEE_TX_TIMER_USEC_MASK			0xfffffff0
++#define EEE_TX_TIMER_USEC_OFFSET		4
++#define EEE_TX_TIMER_USEC_BALANCED_TIME		0xa00
++#define EEE_TX_TIMER_USEC_AGGRESSIVE_TIME	0x100
++#define EEE_TX_TIMER_USEC_LATENCY_TIME		0x6000
++
++	u32					deprecated;
++
++	u32					fec_mode;
++#define FEC_FORCE_MODE_MASK			0x000000ff
++#define FEC_FORCE_MODE_OFFSET			0
++#define FEC_FORCE_MODE_NONE			0x00
++#define FEC_FORCE_MODE_FIRECODE			0x01
++#define FEC_FORCE_MODE_RS			0x02
++#define FEC_FORCE_MODE_AUTO			0x07
++#define FEC_EXTENDED_MODE_MASK			0xffffff00
++#define FEC_EXTENDED_MODE_OFFSET		8
++#define ETH_EXT_FEC_NONE			0x00000100
++#define ETH_EXT_FEC_10G_NONE			0x00000200
++#define ETH_EXT_FEC_10G_BASE_R			0x00000400
++#define ETH_EXT_FEC_20G_NONE			0x00000800
++#define ETH_EXT_FEC_20G_BASE_R			0x00001000
++#define ETH_EXT_FEC_25G_NONE			0x00002000
++#define ETH_EXT_FEC_25G_BASE_R			0x00004000
++#define ETH_EXT_FEC_25G_RS528			0x00008000
++#define ETH_EXT_FEC_40G_NONE			0x00010000
++#define ETH_EXT_FEC_40G_BASE_R			0x00020000
++#define ETH_EXT_FEC_50G_NONE			0x00040000
++#define ETH_EXT_FEC_50G_BASE_R			0x00080000
++#define ETH_EXT_FEC_50G_RS528			0x00100000
++#define ETH_EXT_FEC_50G_RS544			0x00200000
++#define ETH_EXT_FEC_100G_NONE			0x00400000
++#define ETH_EXT_FEC_100G_BASE_R			0x00800000
++#define ETH_EXT_FEC_100G_RS528			0x01000000
++#define ETH_EXT_FEC_100G_RS544			0x02000000
++
++	u32					extended_speed;
++#define ETH_EXT_SPEED_MASK			0x0000ffff
++#define ETH_EXT_SPEED_OFFSET			0
++#define ETH_EXT_SPEED_AN			0x00000001
++#define ETH_EXT_SPEED_1G			0x00000002
++#define ETH_EXT_SPEED_10G			0x00000004
++#define ETH_EXT_SPEED_20G			0x00000008
++#define ETH_EXT_SPEED_25G			0x00000010
++#define ETH_EXT_SPEED_40G			0x00000020
++#define ETH_EXT_SPEED_50G_BASE_R		0x00000040
++#define ETH_EXT_SPEED_50G_BASE_R2		0x00000080
++#define ETH_EXT_SPEED_100G_BASE_R2		0x00000100
++#define ETH_EXT_SPEED_100G_BASE_R4		0x00000200
++#define ETH_EXT_SPEED_100G_BASE_P4		0x00000400
++#define ETH_EXT_ADV_SPEED_MASK			0xffff0000
++#define ETH_EXT_ADV_SPEED_OFFSET		16
++#define ETH_EXT_ADV_SPEED_RESERVED		0x00010000
++#define ETH_EXT_ADV_SPEED_1G			0x00020000
++#define ETH_EXT_ADV_SPEED_10G			0x00040000
++#define ETH_EXT_ADV_SPEED_20G			0x00080000
++#define ETH_EXT_ADV_SPEED_25G			0x00100000
++#define ETH_EXT_ADV_SPEED_40G			0x00200000
++#define ETH_EXT_ADV_SPEED_50G_BASE_R		0x00400000
++#define ETH_EXT_ADV_SPEED_50G_BASE_R2		0x00800000
++#define ETH_EXT_ADV_SPEED_100G_BASE_R2		0x01000000
++#define ETH_EXT_ADV_SPEED_100G_BASE_R4		0x02000000
++#define ETH_EXT_ADV_SPEED_100G_BASE_P4		0x04000000
++};
++
++struct port_mf_cfg {
++	u32 dynamic_cfg;
++#define PORT_MF_CFG_OV_TAG_MASK		0x0000ffff
++#define PORT_MF_CFG_OV_TAG_SHIFT	0
++#define PORT_MF_CFG_OV_TAG_DEFAULT	PORT_MF_CFG_OV_TAG_MASK
++
++	u32 reserved[1];
++};
++
++struct eth_stats {
++	u64 r64;
++	u64 r127;
++	u64 r255;
++	u64 r511;
++	u64 r1023;
++	u64 r1518;
++
++	union {
++		struct {
++			u64 r1522;
++			u64 r2047;
++			u64 r4095;
++			u64 r9216;
++			u64 r16383;
++		} bb0;
++		struct {
++			u64 unused1;
++			u64 r1519_to_max;
++			u64 unused2;
++			u64 unused3;
++			u64 unused4;
++		} ah0;
++	} u0;
++
++	u64 rfcs;
++	u64 rxcf;
++	u64 rxpf;
++	u64 rxpp;
++	u64 raln;
++	u64 rfcr;
++	u64 rovr;
++	u64 rjbr;
++	u64 rund;
++	u64 rfrg;
++	u64 t64;
++	u64 t127;
++	u64 t255;
++	u64 t511;
++	u64 t1023;
++	u64 t1518;
++
++	union {
++		struct {
++			u64 t2047;
++			u64 t4095;
++			u64 t9216;
++			u64 t16383;
++		} bb1;
++		struct {
++			u64 t1519_to_max;
++			u64 unused6;
++			u64 unused7;
++			u64 unused8;
++		} ah1;
++	} u1;
++
++	u64 txpf;
++	u64 txpp;
++
++	union {
++		struct {
++			u64 tlpiec;
++			u64 tncl;
++		} bb2;
++		struct {
++			u64 unused9;
++			u64 unused10;
++		} ah2;
++	} u2;
++
++	u64 rbyte;
++	u64 rxuca;
++	u64 rxmca;
++	u64 rxbca;
++	u64 rxpok;
++	u64 tbyte;
++	u64 txuca;
++	u64 txmca;
++	u64 txbca;
++	u64 txcf;
++};
++
++struct brb_stats {
++	u64 brb_truncate[8];
++	u64 brb_discard[8];
++};
++
++struct port_stats {
++	struct brb_stats brb;
++	struct eth_stats eth;
++};
++
++struct couple_mode_teaming {
++	u8 port_cmt[MCP_GLOB_PORT_MAX];
++#define PORT_CMT_IN_TEAM	BIT(0)
++
++#define PORT_CMT_PORT_ROLE	BIT(1)
++#define PORT_CMT_PORT_INACTIVE	(0 << 1)
++#define PORT_CMT_PORT_ACTIVE	BIT(1)
++
++#define PORT_CMT_TEAM_MASK	BIT(2)
++#define PORT_CMT_TEAM0		(0 << 2)
++#define PORT_CMT_TEAM1		BIT(2)
++};
++
++#define LLDP_CHASSIS_ID_STAT_LEN	4
++#define LLDP_PORT_ID_STAT_LEN		4
++#define DCBX_MAX_APP_PROTOCOL		32
++#define MAX_SYSTEM_LLDP_TLV_DATA	32
++
++enum _lldp_agent {
++	LLDP_NEAREST_BRIDGE = 0,
++	LLDP_NEAREST_NON_TPMR_BRIDGE,
++	LLDP_NEAREST_CUSTOMER_BRIDGE,
++	LLDP_MAX_LLDP_AGENTS
++};
++
++struct lldp_config_params_s {
++	u32 config;
++#define LLDP_CONFIG_TX_INTERVAL_MASK	0x000000ff
++#define LLDP_CONFIG_TX_INTERVAL_SHIFT	0
++#define LLDP_CONFIG_HOLD_MASK		0x00000f00
++#define LLDP_CONFIG_HOLD_SHIFT		8
++#define LLDP_CONFIG_MAX_CREDIT_MASK	0x0000f000
++#define LLDP_CONFIG_MAX_CREDIT_SHIFT	12
++#define LLDP_CONFIG_ENABLE_RX_MASK	0x40000000
++#define LLDP_CONFIG_ENABLE_RX_SHIFT	30
++#define LLDP_CONFIG_ENABLE_TX_MASK	0x80000000
++#define LLDP_CONFIG_ENABLE_TX_SHIFT	31
++	u32 local_chassis_id[LLDP_CHASSIS_ID_STAT_LEN];
++	u32 local_port_id[LLDP_PORT_ID_STAT_LEN];
++};
++
++struct lldp_status_params_s {
++	u32 prefix_seq_num;
++	u32 status;
++	u32 peer_chassis_id[LLDP_CHASSIS_ID_STAT_LEN];
++	u32 peer_port_id[LLDP_PORT_ID_STAT_LEN];
++	u32 suffix_seq_num;
++};
++
++struct dcbx_ets_feature {
++	u32 flags;
++#define DCBX_ETS_ENABLED_MASK	0x00000001
++#define DCBX_ETS_ENABLED_SHIFT	0
++#define DCBX_ETS_WILLING_MASK	0x00000002
++#define DCBX_ETS_WILLING_SHIFT	1
++#define DCBX_ETS_ERROR_MASK	0x00000004
++#define DCBX_ETS_ERROR_SHIFT	2
++#define DCBX_ETS_CBS_MASK	0x00000008
++#define DCBX_ETS_CBS_SHIFT	3
++#define DCBX_ETS_MAX_TCS_MASK	0x000000f0
++#define DCBX_ETS_MAX_TCS_SHIFT	4
++#define DCBX_OOO_TC_MASK	0x00000f00
++#define DCBX_OOO_TC_SHIFT	8
++	u32 pri_tc_tbl[1];
++#define DCBX_TCP_OOO_TC		(4)
++
++#define NIG_ETS_ISCSI_OOO_CLIENT_OFFSET	(DCBX_TCP_OOO_TC + 1)
++#define DCBX_CEE_STRICT_PRIORITY	0xf
++	u32 tc_bw_tbl[2];
++	u32 tc_tsa_tbl[2];
++#define DCBX_ETS_TSA_STRICT	0
++#define DCBX_ETS_TSA_CBS	1
++#define DCBX_ETS_TSA_ETS	2
++};
++
++#define DCBX_TCP_OOO_TC			(4)
++#define DCBX_TCP_OOO_K2_4PORT_TC	(3)
++
++struct dcbx_app_priority_entry {
++	u32 entry;
++#define DCBX_APP_PRI_MAP_MASK		0x000000ff
++#define DCBX_APP_PRI_MAP_SHIFT		0
++#define DCBX_APP_PRI_0			0x01
++#define DCBX_APP_PRI_1			0x02
++#define DCBX_APP_PRI_2			0x04
++#define DCBX_APP_PRI_3			0x08
++#define DCBX_APP_PRI_4			0x10
++#define DCBX_APP_PRI_5			0x20
++#define DCBX_APP_PRI_6			0x40
++#define DCBX_APP_PRI_7			0x80
++#define DCBX_APP_SF_MASK		0x00000300
++#define DCBX_APP_SF_SHIFT		8
++#define DCBX_APP_SF_ETHTYPE		0
++#define DCBX_APP_SF_PORT		1
++#define DCBX_APP_SF_IEEE_MASK		0x0000f000
++#define DCBX_APP_SF_IEEE_SHIFT		12
++#define DCBX_APP_SF_IEEE_RESERVED	0
++#define DCBX_APP_SF_IEEE_ETHTYPE	1
++#define DCBX_APP_SF_IEEE_TCP_PORT	2
++#define DCBX_APP_SF_IEEE_UDP_PORT	3
++#define DCBX_APP_SF_IEEE_TCP_UDP_PORT	4
++
++#define DCBX_APP_PROTOCOL_ID_MASK	0xffff0000
++#define DCBX_APP_PROTOCOL_ID_SHIFT	16
++};
++
++struct dcbx_app_priority_feature {
++	u32 flags;
++#define DCBX_APP_ENABLED_MASK		0x00000001
++#define DCBX_APP_ENABLED_SHIFT		0
++#define DCBX_APP_WILLING_MASK		0x00000002
++#define DCBX_APP_WILLING_SHIFT		1
++#define DCBX_APP_ERROR_MASK		0x00000004
++#define DCBX_APP_ERROR_SHIFT		2
++#define DCBX_APP_MAX_TCS_MASK		0x0000f000
++#define DCBX_APP_MAX_TCS_SHIFT		12
++#define DCBX_APP_NUM_ENTRIES_MASK	0x00ff0000
++#define DCBX_APP_NUM_ENTRIES_SHIFT	16
++	struct dcbx_app_priority_entry app_pri_tbl[DCBX_MAX_APP_PROTOCOL];
++};
++
++struct dcbx_features {
++	struct dcbx_ets_feature ets;
++	u32 pfc;
++#define DCBX_PFC_PRI_EN_BITMAP_MASK	0x000000ff
++#define DCBX_PFC_PRI_EN_BITMAP_SHIFT	0
++#define DCBX_PFC_PRI_EN_BITMAP_PRI_0	0x01
++#define DCBX_PFC_PRI_EN_BITMAP_PRI_1	0x02
++#define DCBX_PFC_PRI_EN_BITMAP_PRI_2	0x04
++#define DCBX_PFC_PRI_EN_BITMAP_PRI_3	0x08
++#define DCBX_PFC_PRI_EN_BITMAP_PRI_4	0x10
++#define DCBX_PFC_PRI_EN_BITMAP_PRI_5	0x20
++#define DCBX_PFC_PRI_EN_BITMAP_PRI_6	0x40
++#define DCBX_PFC_PRI_EN_BITMAP_PRI_7	0x80
++
++#define DCBX_PFC_FLAGS_MASK		0x0000ff00
++#define DCBX_PFC_FLAGS_SHIFT		8
++#define DCBX_PFC_CAPS_MASK		0x00000f00
++#define DCBX_PFC_CAPS_SHIFT		8
++#define DCBX_PFC_MBC_MASK		0x00004000
++#define DCBX_PFC_MBC_SHIFT		14
++#define DCBX_PFC_WILLING_MASK		0x00008000
++#define DCBX_PFC_WILLING_SHIFT		15
++#define DCBX_PFC_ENABLED_MASK		0x00010000
++#define DCBX_PFC_ENABLED_SHIFT		16
++#define DCBX_PFC_ERROR_MASK		0x00020000
++#define DCBX_PFC_ERROR_SHIFT		17
++
++	struct dcbx_app_priority_feature app;
++};
++
++struct dcbx_local_params {
++	u32 config;
++#define DCBX_CONFIG_VERSION_MASK	0x00000007
++#define DCBX_CONFIG_VERSION_SHIFT	0
++#define DCBX_CONFIG_VERSION_DISABLED	0
++#define DCBX_CONFIG_VERSION_IEEE	1
++#define DCBX_CONFIG_VERSION_CEE		2
++#define DCBX_CONFIG_VERSION_STATIC	4
++
++	u32 flags;
++	struct dcbx_features features;
++};
++
++struct dcbx_mib {
++	u32 prefix_seq_num;
++	u32 flags;
++	struct dcbx_features features;
++	u32 suffix_seq_num;
++};
++
++struct lldp_system_tlvs_buffer_s {
++	u16 valid;
++	u16 length;
++	u32 data[MAX_SYSTEM_LLDP_TLV_DATA];
++};
++
++struct dcb_dscp_map {
++	u32 flags;
++#define DCB_DSCP_ENABLE_MASK	0x1
++#define DCB_DSCP_ENABLE_SHIFT	0
++#define DCB_DSCP_ENABLE	1
++	u32 dscp_pri_map[8];
++};
++
++struct public_global {
++	u32 max_path;
++	u32 max_ports;
++#define MODE_1P 1
++#define MODE_2P 2
++#define MODE_3P 3
++#define MODE_4P 4
++	u32 debug_mb_offset;
++	u32 phymod_dbg_mb_offset;
++	struct couple_mode_teaming cmt;
++	s32 internal_temperature;
++	u32 mfw_ver;
++	u32 running_bundle_id;
++	s32 external_temperature;
++	u32 mdump_reason;
++	u64 reserved;
++	u32 data_ptr;
++	u32 data_size;
++};
++
++struct fw_flr_mb {
++	u32 aggint;
++	u32 opgen_addr;
++	u32 accum_ack;
++};
++
++struct public_path {
++	struct fw_flr_mb flr_mb;
++	u32 mcp_vf_disabled[VF_MAX_STATIC / 32];
++
++	u32 process_kill;
++#define PROCESS_KILL_COUNTER_MASK	0x0000ffff
++#define PROCESS_KILL_COUNTER_SHIFT	0
++#define PROCESS_KILL_GLOB_AEU_BIT_MASK	0xffff0000
++#define PROCESS_KILL_GLOB_AEU_BIT_SHIFT	16
++#define GLOBAL_AEU_BIT(aeu_reg_id, aeu_bit) ((aeu_reg_id) * 32 + (aeu_bit))
++};
++
++struct public_port {
++	u32						validity_map;
++
++	u32						link_status;
++#define LINK_STATUS_LINK_UP				0x00000001
++#define LINK_STATUS_SPEED_AND_DUPLEX_MASK		0x0000001e
++#define LINK_STATUS_SPEED_AND_DUPLEX_1000THD		BIT(1)
++#define LINK_STATUS_SPEED_AND_DUPLEX_1000TFD		(2 << 1)
++#define LINK_STATUS_SPEED_AND_DUPLEX_10G		(3 << 1)
++#define LINK_STATUS_SPEED_AND_DUPLEX_20G		(4 << 1)
++#define LINK_STATUS_SPEED_AND_DUPLEX_40G		(5 << 1)
++#define LINK_STATUS_SPEED_AND_DUPLEX_50G		(6 << 1)
++#define LINK_STATUS_SPEED_AND_DUPLEX_100G		(7 << 1)
++#define LINK_STATUS_SPEED_AND_DUPLEX_25G		(8 << 1)
++#define LINK_STATUS_AUTO_NEGOTIATE_ENABLED		0x00000020
++#define LINK_STATUS_AUTO_NEGOTIATE_COMPLETE		0x00000040
++#define LINK_STATUS_PARALLEL_DETECTION_USED		0x00000080
++#define LINK_STATUS_PFC_ENABLED				0x00000100
++#define LINK_STATUS_LINK_PARTNER_1000TFD_CAPABLE	0x00000200
++#define LINK_STATUS_LINK_PARTNER_1000THD_CAPABLE	0x00000400
++#define LINK_STATUS_LINK_PARTNER_10G_CAPABLE		0x00000800
++#define LINK_STATUS_LINK_PARTNER_20G_CAPABLE		0x00001000
++#define LINK_STATUS_LINK_PARTNER_40G_CAPABLE		0x00002000
++#define LINK_STATUS_LINK_PARTNER_50G_CAPABLE		0x00004000
++#define LINK_STATUS_LINK_PARTNER_100G_CAPABLE		0x00008000
++#define LINK_STATUS_LINK_PARTNER_25G_CAPABLE		0x00010000
++#define LINK_STATUS_LINK_PARTNER_FLOW_CONTROL_MASK	0x000c0000
++#define LINK_STATUS_LINK_PARTNER_NOT_PAUSE_CAPABLE	(0 << 18)
++#define LINK_STATUS_LINK_PARTNER_SYMMETRIC_PAUSE	BIT(18)
++#define LINK_STATUS_LINK_PARTNER_ASYMMETRIC_PAUSE	(2 << 18)
++#define LINK_STATUS_LINK_PARTNER_BOTH_PAUSE		(3 << 18)
++#define LINK_STATUS_SFP_TX_FAULT			0x00100000
++#define LINK_STATUS_TX_FLOW_CONTROL_ENABLED		0x00200000
++#define LINK_STATUS_RX_FLOW_CONTROL_ENABLED		0x00400000
++#define LINK_STATUS_RX_SIGNAL_PRESENT			0x00800000
++#define LINK_STATUS_MAC_LOCAL_FAULT			0x01000000
++#define LINK_STATUS_MAC_REMOTE_FAULT			0x02000000
++#define LINK_STATUS_UNSUPPORTED_SPD_REQ			0x04000000
++
++#define LINK_STATUS_FEC_MODE_MASK			0x38000000
++#define LINK_STATUS_FEC_MODE_NONE			(0 << 27)
++#define LINK_STATUS_FEC_MODE_FIRECODE_CL74		BIT(27)
++#define LINK_STATUS_FEC_MODE_RS_CL91			(2 << 27)
++
++	u32 link_status1;
++	u32 ext_phy_fw_version;
++	u32 drv_phy_cfg_addr;
++
++	u32 port_stx;
++
++	u32 stat_nig_timer;
++
++	struct port_mf_cfg port_mf_config;
++	struct port_stats stats;
++
++	u32 media_type;
++#define MEDIA_UNSPECIFIED	0x0
++#define MEDIA_SFPP_10G_FIBER	0x1
++#define MEDIA_XFP_FIBER		0x2
++#define MEDIA_DA_TWINAX		0x3
++#define MEDIA_BASE_T		0x4
++#define MEDIA_SFP_1G_FIBER	0x5
++#define MEDIA_MODULE_FIBER	0x6
++#define MEDIA_KR		0xf0
++#define MEDIA_NOT_PRESENT	0xff
++
++	u32 lfa_status;
++	u32 link_change_count;
++
++	struct lldp_config_params_s lldp_config_params[LLDP_MAX_LLDP_AGENTS];
++	struct lldp_status_params_s lldp_status_params[LLDP_MAX_LLDP_AGENTS];
++	struct lldp_system_tlvs_buffer_s system_lldp_tlvs_buf;
++
++	/* DCBX related MIB */
++	struct dcbx_local_params local_admin_dcbx_mib;
++	struct dcbx_mib remote_dcbx_mib;
++	struct dcbx_mib operational_dcbx_mib;
++
++	u32 reserved[2];
++
++	u32						transceiver_data;
++#define ETH_TRANSCEIVER_STATE_MASK			0x000000ff
++#define ETH_TRANSCEIVER_STATE_SHIFT			0x00000000
++#define ETH_TRANSCEIVER_STATE_OFFSET			0x00000000
++#define ETH_TRANSCEIVER_STATE_UNPLUGGED			0x00000000
++#define ETH_TRANSCEIVER_STATE_PRESENT			0x00000001
++#define ETH_TRANSCEIVER_STATE_VALID			0x00000003
++#define ETH_TRANSCEIVER_STATE_UPDATING			0x00000008
++#define ETH_TRANSCEIVER_TYPE_MASK			0x0000ff00
++#define ETH_TRANSCEIVER_TYPE_OFFSET			0x8
++#define ETH_TRANSCEIVER_TYPE_NONE			0x00
++#define ETH_TRANSCEIVER_TYPE_UNKNOWN			0xff
++#define ETH_TRANSCEIVER_TYPE_1G_PCC			0x01
++#define ETH_TRANSCEIVER_TYPE_1G_ACC			0x02
++#define ETH_TRANSCEIVER_TYPE_1G_LX			0x03
++#define ETH_TRANSCEIVER_TYPE_1G_SX			0x04
++#define ETH_TRANSCEIVER_TYPE_10G_SR			0x05
++#define ETH_TRANSCEIVER_TYPE_10G_LR			0x06
++#define ETH_TRANSCEIVER_TYPE_10G_LRM			0x07
++#define ETH_TRANSCEIVER_TYPE_10G_ER			0x08
++#define ETH_TRANSCEIVER_TYPE_10G_PCC			0x09
++#define ETH_TRANSCEIVER_TYPE_10G_ACC			0x0a
++#define ETH_TRANSCEIVER_TYPE_XLPPI			0x0b
++#define ETH_TRANSCEIVER_TYPE_40G_LR4			0x0c
++#define ETH_TRANSCEIVER_TYPE_40G_SR4			0x0d
++#define ETH_TRANSCEIVER_TYPE_40G_CR4			0x0e
++#define ETH_TRANSCEIVER_TYPE_100G_AOC			0x0f
++#define ETH_TRANSCEIVER_TYPE_100G_SR4			0x10
++#define ETH_TRANSCEIVER_TYPE_100G_LR4			0x11
++#define ETH_TRANSCEIVER_TYPE_100G_ER4			0x12
++#define ETH_TRANSCEIVER_TYPE_100G_ACC			0x13
++#define ETH_TRANSCEIVER_TYPE_100G_CR4			0x14
++#define ETH_TRANSCEIVER_TYPE_4x10G_SR			0x15
++#define ETH_TRANSCEIVER_TYPE_25G_CA_N			0x16
++#define ETH_TRANSCEIVER_TYPE_25G_ACC_S			0x17
++#define ETH_TRANSCEIVER_TYPE_25G_CA_S			0x18
++#define ETH_TRANSCEIVER_TYPE_25G_ACC_M			0x19
++#define ETH_TRANSCEIVER_TYPE_25G_CA_L			0x1a
++#define ETH_TRANSCEIVER_TYPE_25G_ACC_L			0x1b
++#define ETH_TRANSCEIVER_TYPE_25G_SR			0x1c
++#define ETH_TRANSCEIVER_TYPE_25G_LR			0x1d
++#define ETH_TRANSCEIVER_TYPE_25G_AOC			0x1e
++#define ETH_TRANSCEIVER_TYPE_4x10G			0x1f
++#define ETH_TRANSCEIVER_TYPE_4x25G_CR			0x20
++#define ETH_TRANSCEIVER_TYPE_1000BASET			0x21
++#define ETH_TRANSCEIVER_TYPE_10G_BASET			0x22
++#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_10G_40G_SR	0x30
++#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_10G_40G_CR	0x31
++#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_10G_40G_LR	0x32
++#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_40G_100G_SR	0x33
++#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_40G_100G_CR	0x34
++#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_40G_100G_LR	0x35
++#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_40G_100G_AOC	0x36
++#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_10G_25G_SR	0x37
++#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_10G_25G_LR	0x38
++#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_1G_10G_SR	0x39
++#define ETH_TRANSCEIVER_TYPE_MULTI_RATE_1G_10G_LR	0x3a
++
++	u32 wol_info;
++	u32 wol_pkt_len;
++	u32 wol_pkt_details;
++	struct dcb_dscp_map dcb_dscp_map;
++
++	u32 eee_status;
++#define EEE_ACTIVE_BIT			BIT(0)
++#define EEE_LD_ADV_STATUS_MASK		0x000000f0
++#define EEE_LD_ADV_STATUS_OFFSET	4
++#define EEE_1G_ADV			BIT(1)
++#define EEE_10G_ADV			BIT(2)
++#define EEE_LP_ADV_STATUS_MASK		0x00000f00
++#define EEE_LP_ADV_STATUS_OFFSET	8
++#define EEE_SUPPORTED_SPEED_MASK	0x0000f000
++#define EEE_SUPPORTED_SPEED_OFFSET	12
++#define EEE_1G_SUPPORTED		BIT(1)
++#define EEE_10G_SUPPORTED		BIT(2)
++
++	u32 eee_remote;
++#define EEE_REMOTE_TW_TX_MASK   0x0000ffff
++#define EEE_REMOTE_TW_TX_OFFSET 0
++#define EEE_REMOTE_TW_RX_MASK   0xffff0000
++#define EEE_REMOTE_TW_RX_OFFSET 16
++
++	u32 reserved1;
++	u32 oem_cfg_port;
++#define OEM_CFG_CHANNEL_TYPE_MASK                       0x00000003
++#define OEM_CFG_CHANNEL_TYPE_OFFSET                     0
++#define OEM_CFG_CHANNEL_TYPE_VLAN_PARTITION             0x1
++#define OEM_CFG_CHANNEL_TYPE_STAGGED                    0x2
++#define OEM_CFG_SCHED_TYPE_MASK                         0x0000000C
++#define OEM_CFG_SCHED_TYPE_OFFSET                       2
++#define OEM_CFG_SCHED_TYPE_ETS                          0x1
++#define OEM_CFG_SCHED_TYPE_VNIC_BW                      0x2
++};
++
++struct public_func {
++	u32 reserved0[2];
++
++	u32 mtu_size;
++
++	u32 reserved[7];
++
++	u32 config;
++#define FUNC_MF_CFG_FUNC_HIDE			0x00000001
++#define FUNC_MF_CFG_PAUSE_ON_HOST_RING		0x00000002
++#define FUNC_MF_CFG_PAUSE_ON_HOST_RING_SHIFT	0x00000001
++
++#define FUNC_MF_CFG_PROTOCOL_MASK	0x000000f0
++#define FUNC_MF_CFG_PROTOCOL_SHIFT	4
++#define FUNC_MF_CFG_PROTOCOL_ETHERNET	0x00000000
++#define FUNC_MF_CFG_PROTOCOL_ISCSI              0x00000010
++#define FUNC_MF_CFG_PROTOCOL_FCOE               0x00000020
++#define FUNC_MF_CFG_PROTOCOL_ROCE               0x00000030
++#define FUNC_MF_CFG_PROTOCOL_NVMETCP    0x00000040
++#define FUNC_MF_CFG_PROTOCOL_MAX	0x00000040
++
++#define FUNC_MF_CFG_MIN_BW_MASK		0x0000ff00
++#define FUNC_MF_CFG_MIN_BW_SHIFT	8
++#define FUNC_MF_CFG_MIN_BW_DEFAULT	0x00000000
++#define FUNC_MF_CFG_MAX_BW_MASK		0x00ff0000
++#define FUNC_MF_CFG_MAX_BW_SHIFT	16
++#define FUNC_MF_CFG_MAX_BW_DEFAULT	0x00640000
++
++	u32 status;
++#define FUNC_STATUS_VIRTUAL_LINK_UP	0x00000001
++
++	u32 mac_upper;
++#define FUNC_MF_CFG_UPPERMAC_MASK	0x0000ffff
++#define FUNC_MF_CFG_UPPERMAC_SHIFT	0
++#define FUNC_MF_CFG_UPPERMAC_DEFAULT	FUNC_MF_CFG_UPPERMAC_MASK
++	u32 mac_lower;
++#define FUNC_MF_CFG_LOWERMAC_DEFAULT	0xffffffff
++
++	u32 fcoe_wwn_port_name_upper;
++	u32 fcoe_wwn_port_name_lower;
++
++	u32 fcoe_wwn_node_name_upper;
++	u32 fcoe_wwn_node_name_lower;
++
++	u32 ovlan_stag;
++#define FUNC_MF_CFG_OV_STAG_MASK	0x0000ffff
++#define FUNC_MF_CFG_OV_STAG_SHIFT	0
++#define FUNC_MF_CFG_OV_STAG_DEFAULT	FUNC_MF_CFG_OV_STAG_MASK
++
++	u32 pf_allocation;
++
++	u32 preserve_data;
++
++	u32 driver_last_activity_ts;
++
++	u32 drv_ack_vf_disabled[VF_MAX_STATIC / 32];
++
++	u32 drv_id;
++#define DRV_ID_PDA_COMP_VER_MASK	0x0000ffff
++#define DRV_ID_PDA_COMP_VER_SHIFT	0
++
++#define LOAD_REQ_HSI_VERSION		2
++#define DRV_ID_MCP_HSI_VER_MASK		0x00ff0000
++#define DRV_ID_MCP_HSI_VER_SHIFT	16
++#define DRV_ID_MCP_HSI_VER_CURRENT	(LOAD_REQ_HSI_VERSION << \
++					 DRV_ID_MCP_HSI_VER_SHIFT)
++
++#define DRV_ID_DRV_TYPE_MASK		0x7f000000
++#define DRV_ID_DRV_TYPE_SHIFT		24
++#define DRV_ID_DRV_TYPE_UNKNOWN		(0 << DRV_ID_DRV_TYPE_SHIFT)
++#define DRV_ID_DRV_TYPE_LINUX		BIT(DRV_ID_DRV_TYPE_SHIFT)
++
++#define DRV_ID_DRV_INIT_HW_MASK		0x80000000
++#define DRV_ID_DRV_INIT_HW_SHIFT	31
++#define DRV_ID_DRV_INIT_HW_FLAG		BIT(DRV_ID_DRV_INIT_HW_SHIFT)
++
++	u32 oem_cfg_func;
++#define OEM_CFG_FUNC_TC_MASK                    0x0000000F
++#define OEM_CFG_FUNC_TC_OFFSET                  0
++#define OEM_CFG_FUNC_TC_0                       0x0
++#define OEM_CFG_FUNC_TC_1                       0x1
++#define OEM_CFG_FUNC_TC_2                       0x2
++#define OEM_CFG_FUNC_TC_3                       0x3
++#define OEM_CFG_FUNC_TC_4                       0x4
++#define OEM_CFG_FUNC_TC_5                       0x5
++#define OEM_CFG_FUNC_TC_6                       0x6
++#define OEM_CFG_FUNC_TC_7                       0x7
++
++#define OEM_CFG_FUNC_HOST_PRI_CTRL_MASK         0x00000030
++#define OEM_CFG_FUNC_HOST_PRI_CTRL_OFFSET       4
++#define OEM_CFG_FUNC_HOST_PRI_CTRL_VNIC         0x1
++#define OEM_CFG_FUNC_HOST_PRI_CTRL_OS           0x2
++};
++
++struct mcp_mac {
++	u32 mac_upper;
++	u32 mac_lower;
++};
++
++struct mcp_val64 {
++	u32 lo;
++	u32 hi;
++};
++
++struct mcp_file_att {
++	u32 nvm_start_addr;
++	u32 len;
++};
++
++struct bist_nvm_image_att {
++	u32 return_code;
++	u32 image_type;
++	u32 nvm_start_addr;
++	u32 len;
++};
++
++#define MCP_DRV_VER_STR_SIZE 16
++#define MCP_DRV_VER_STR_SIZE_DWORD (MCP_DRV_VER_STR_SIZE / sizeof(u32))
++#define MCP_DRV_NVM_BUF_LEN 32
++struct drv_version_stc {
++	u32 version;
++	u8 name[MCP_DRV_VER_STR_SIZE - 4];
++};
++
++struct lan_stats_stc {
++	u64 ucast_rx_pkts;
++	u64 ucast_tx_pkts;
++	u32 fcs_err;
++	u32 rserved;
++};
++
++struct fcoe_stats_stc {
++	u64 rx_pkts;
++	u64 tx_pkts;
++	u32 fcs_err;
++	u32 login_failure;
++};
++
++struct ocbb_data_stc {
++	u32 ocbb_host_addr;
++	u32 ocsd_host_addr;
++	u32 ocsd_req_update_interval;
++};
++
++#define MAX_NUM_OF_SENSORS 7
++struct temperature_status_stc {
++	u32 num_of_sensors;
++	u32 sensor[MAX_NUM_OF_SENSORS];
++};
++
++/* crash dump configuration header */
++struct mdump_config_stc {
++	u32 version;
++	u32 config;
++	u32 epoc;
++	u32 num_of_logs;
++	u32 valid_logs;
++};
++
++enum resource_id_enum {
++	RESOURCE_NUM_SB_E = 0,
++	RESOURCE_NUM_L2_QUEUE_E = 1,
++	RESOURCE_NUM_VPORT_E = 2,
++	RESOURCE_NUM_VMQ_E = 3,
++	RESOURCE_FACTOR_NUM_RSS_PF_E = 4,
++	RESOURCE_FACTOR_RSS_PER_VF_E = 5,
++	RESOURCE_NUM_RL_E = 6,
++	RESOURCE_NUM_PQ_E = 7,
++	RESOURCE_NUM_VF_E = 8,
++	RESOURCE_VFC_FILTER_E = 9,
++	RESOURCE_ILT_E = 10,
++	RESOURCE_CQS_E = 11,
++	RESOURCE_GFT_PROFILES_E = 12,
++	RESOURCE_NUM_TC_E = 13,
++	RESOURCE_NUM_RSS_ENGINES_E = 14,
++	RESOURCE_LL2_QUEUE_E = 15,
++	RESOURCE_RDMA_STATS_QUEUE_E = 16,
++	RESOURCE_BDQ_E = 17,
++	RESOURCE_QCN_E = 18,
++	RESOURCE_LLH_FILTER_E = 19,
++	RESOURCE_VF_MAC_ADDR = 20,
++	RESOURCE_LL2_CQS_E = 21,
++	RESOURCE_VF_CNQS = 22,
++	RESOURCE_MAX_NUM,
++	RESOURCE_NUM_INVALID = 0xFFFFFFFF
++};
++
++/* Resource ID is to be filled by the driver in the MB request
++ * Size, offset & flags to be filled by the MFW in the MB response
++ */
++struct resource_info {
++	enum resource_id_enum res_id;
++	u32 size;		/* number of allocated resources */
++	u32 offset;		/* Offset of the 1st resource */
++	u32 vf_size;
++	u32 vf_offset;
++	u32 flags;
++#define RESOURCE_ELEMENT_STRICT BIT(0)
++};
++
++#define DRV_ROLE_NONE           0
++#define DRV_ROLE_PREBOOT        1
++#define DRV_ROLE_OS             2
++#define DRV_ROLE_KDUMP          3
++
++struct load_req_stc {
++	u32 drv_ver_0;
++	u32 drv_ver_1;
++	u32 fw_ver;
++	u32 misc0;
++#define LOAD_REQ_ROLE_MASK              0x000000FF
++#define LOAD_REQ_ROLE_SHIFT             0
++#define LOAD_REQ_LOCK_TO_MASK           0x0000FF00
++#define LOAD_REQ_LOCK_TO_SHIFT          8
++#define LOAD_REQ_LOCK_TO_DEFAULT        0
++#define LOAD_REQ_LOCK_TO_NONE           255
++#define LOAD_REQ_FORCE_MASK             0x000F0000
++#define LOAD_REQ_FORCE_SHIFT            16
++#define LOAD_REQ_FORCE_NONE             0
++#define LOAD_REQ_FORCE_PF               1
++#define LOAD_REQ_FORCE_ALL              2
++#define LOAD_REQ_FLAGS0_MASK            0x00F00000
++#define LOAD_REQ_FLAGS0_SHIFT           20
++#define LOAD_REQ_FLAGS0_AVOID_RESET     (0x1 << 0)
++};
++
++struct load_rsp_stc {
++	u32 drv_ver_0;
++	u32 drv_ver_1;
++	u32 fw_ver;
++	u32 misc0;
++#define LOAD_RSP_ROLE_MASK              0x000000FF
++#define LOAD_RSP_ROLE_SHIFT             0
++#define LOAD_RSP_HSI_MASK               0x0000FF00
++#define LOAD_RSP_HSI_SHIFT              8
++#define LOAD_RSP_FLAGS0_MASK            0x000F0000
++#define LOAD_RSP_FLAGS0_SHIFT           16
++#define LOAD_RSP_FLAGS0_DRV_EXISTS      (0x1 << 0)
++};
++
++struct mdump_retain_data_stc {
++	u32 valid;
++	u32 epoch;
++	u32 pf;
++	u32 status;
++};
++
++union drv_union_data {
++	u32 ver_str[MCP_DRV_VER_STR_SIZE_DWORD];
++	struct mcp_mac wol_mac;
++
++	struct eth_phy_cfg drv_phy_cfg;
++
++	struct mcp_val64 val64;
++
++	u8 raw_data[MCP_DRV_NVM_BUF_LEN];
++
++	struct mcp_file_att file_att;
++
++	u32 ack_vf_disabled[VF_MAX_STATIC / 32];
++
++	struct drv_version_stc drv_version;
++
++	struct lan_stats_stc lan_stats;
++	struct fcoe_stats_stc fcoe_stats;
++	struct ocbb_data_stc ocbb_info;
++	struct temperature_status_stc temp_info;
++	struct resource_info resource;
++	struct bist_nvm_image_att nvm_image_att;
++	struct mdump_config_stc mdump_config;
++};
++
++struct public_drv_mb {
++	u32 drv_mb_header;
++#define DRV_MSG_CODE_MASK			0xffff0000
++#define DRV_MSG_CODE_LOAD_REQ			0x10000000
++#define DRV_MSG_CODE_LOAD_DONE			0x11000000
++#define DRV_MSG_CODE_INIT_HW			0x12000000
++#define DRV_MSG_CODE_CANCEL_LOAD_REQ            0x13000000
++#define DRV_MSG_CODE_UNLOAD_REQ			0x20000000
++#define DRV_MSG_CODE_UNLOAD_DONE		0x21000000
++#define DRV_MSG_CODE_INIT_PHY			0x22000000
++#define DRV_MSG_CODE_LINK_RESET			0x23000000
++#define DRV_MSG_CODE_SET_DCBX			0x25000000
++#define DRV_MSG_CODE_OV_UPDATE_CURR_CFG         0x26000000
++#define DRV_MSG_CODE_OV_UPDATE_BUS_NUM          0x27000000
++#define DRV_MSG_CODE_OV_UPDATE_BOOT_PROGRESS    0x28000000
++#define DRV_MSG_CODE_OV_UPDATE_STORM_FW_VER     0x29000000
++#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE     0x31000000
++#define DRV_MSG_CODE_BW_UPDATE_ACK              0x32000000
++#define DRV_MSG_CODE_OV_UPDATE_MTU              0x33000000
++#define DRV_MSG_GET_RESOURCE_ALLOC_MSG		0x34000000
++#define DRV_MSG_SET_RESOURCE_VALUE_MSG		0x35000000
++#define DRV_MSG_CODE_OV_UPDATE_WOL              0x38000000
++#define DRV_MSG_CODE_OV_UPDATE_ESWITCH_MODE     0x39000000
++#define DRV_MSG_CODE_GET_OEM_UPDATES            0x41000000
++
++#define DRV_MSG_CODE_BW_UPDATE_ACK		0x32000000
++#define DRV_MSG_CODE_NIG_DRAIN			0x30000000
++#define DRV_MSG_CODE_S_TAG_UPDATE_ACK		0x3b000000
++#define DRV_MSG_CODE_GET_NVM_CFG_OPTION		0x003e0000
++#define DRV_MSG_CODE_SET_NVM_CFG_OPTION		0x003f0000
++#define DRV_MSG_CODE_INITIATE_PF_FLR            0x02010000
++#define DRV_MSG_CODE_VF_DISABLED_DONE		0xc0000000
++#define DRV_MSG_CODE_CFG_VF_MSIX		0xc0010000
++#define DRV_MSG_CODE_CFG_PF_VFS_MSIX		0xc0020000
++#define DRV_MSG_CODE_NVM_PUT_FILE_BEGIN		0x00010000
++#define DRV_MSG_CODE_NVM_PUT_FILE_DATA		0x00020000
++#define DRV_MSG_CODE_NVM_GET_FILE_ATT		0x00030000
++#define DRV_MSG_CODE_NVM_READ_NVRAM		0x00050000
++#define DRV_MSG_CODE_NVM_WRITE_NVRAM		0x00060000
++#define DRV_MSG_CODE_MCP_RESET			0x00090000
++#define DRV_MSG_CODE_SET_VERSION		0x000f0000
++#define DRV_MSG_CODE_MCP_HALT                   0x00100000
++#define DRV_MSG_CODE_SET_VMAC                   0x00110000
++#define DRV_MSG_CODE_GET_VMAC                   0x00120000
++#define DRV_MSG_CODE_VMAC_TYPE_SHIFT            4
++#define DRV_MSG_CODE_VMAC_TYPE_MASK             0x30
++#define DRV_MSG_CODE_VMAC_TYPE_MAC              1
++#define DRV_MSG_CODE_VMAC_TYPE_WWNN             2
++#define DRV_MSG_CODE_VMAC_TYPE_WWPN             3
++
++#define DRV_MSG_CODE_GET_STATS                  0x00130000
++#define DRV_MSG_CODE_STATS_TYPE_LAN             1
++#define DRV_MSG_CODE_STATS_TYPE_FCOE            2
++#define DRV_MSG_CODE_STATS_TYPE_ISCSI           3
++#define DRV_MSG_CODE_STATS_TYPE_RDMA            4
++
++#define DRV_MSG_CODE_TRANSCEIVER_READ           0x00160000
++
++#define DRV_MSG_CODE_MASK_PARITIES              0x001a0000
++
++#define DRV_MSG_CODE_BIST_TEST			0x001e0000
++#define DRV_MSG_CODE_SET_LED_MODE		0x00200000
++#define DRV_MSG_CODE_RESOURCE_CMD		0x00230000
++/* Send crash dump commands with param[3:0] - opcode */
++#define DRV_MSG_CODE_MDUMP_CMD			0x00250000
++#define DRV_MSG_CODE_GET_TLV_DONE		0x002f0000
++#define DRV_MSG_CODE_GET_ENGINE_CONFIG		0x00370000
++#define DRV_MSG_CODE_GET_PPFID_BITMAP		0x43000000
++
++#define DRV_MSG_CODE_DEBUG_DATA_SEND		0xc0040000
++
++#define RESOURCE_CMD_REQ_RESC_MASK		0x0000001F
++#define RESOURCE_CMD_REQ_RESC_SHIFT		0
++#define RESOURCE_CMD_REQ_OPCODE_MASK		0x000000E0
++#define RESOURCE_CMD_REQ_OPCODE_SHIFT		5
++#define RESOURCE_OPCODE_REQ			1
++#define RESOURCE_OPCODE_REQ_WO_AGING		2
++#define RESOURCE_OPCODE_REQ_W_AGING		3
++#define RESOURCE_OPCODE_RELEASE			4
++#define RESOURCE_OPCODE_FORCE_RELEASE		5
++#define RESOURCE_CMD_REQ_AGE_MASK		0x0000FF00
++#define RESOURCE_CMD_REQ_AGE_SHIFT		8
++
++#define RESOURCE_CMD_RSP_OWNER_MASK		0x000000FF
++#define RESOURCE_CMD_RSP_OWNER_SHIFT		0
++#define RESOURCE_CMD_RSP_OPCODE_MASK		0x00000700
++#define RESOURCE_CMD_RSP_OPCODE_SHIFT		8
++#define RESOURCE_OPCODE_GNT			1
++#define RESOURCE_OPCODE_BUSY			2
++#define RESOURCE_OPCODE_RELEASED		3
++#define RESOURCE_OPCODE_RELEASED_PREVIOUS	4
++#define RESOURCE_OPCODE_WRONG_OWNER		5
++#define RESOURCE_OPCODE_UNKNOWN_CMD		255
++
++#define RESOURCE_DUMP				0
++
++/* DRV_MSG_CODE_MDUMP_CMD parameters */
++#define MDUMP_DRV_PARAM_OPCODE_MASK             0x0000000f
++#define DRV_MSG_CODE_MDUMP_ACK                  0x01
++#define DRV_MSG_CODE_MDUMP_SET_VALUES           0x02
++#define DRV_MSG_CODE_MDUMP_TRIGGER              0x03
++#define DRV_MSG_CODE_MDUMP_GET_CONFIG           0x04
++#define DRV_MSG_CODE_MDUMP_SET_ENABLE           0x05
++#define DRV_MSG_CODE_MDUMP_CLEAR_LOGS           0x06
++#define DRV_MSG_CODE_MDUMP_GET_RETAIN           0x07
++#define DRV_MSG_CODE_MDUMP_CLR_RETAIN           0x08
++
++#define DRV_MSG_CODE_HW_DUMP_TRIGGER            0x0a
++#define DRV_MSG_CODE_MDUMP_GEN_MDUMP2           0x0b
++#define DRV_MSG_CODE_MDUMP_FREE_MDUMP2          0x0c
++
++#define DRV_MSG_CODE_GET_PF_RDMA_PROTOCOL	0x002b0000
++#define DRV_MSG_CODE_OS_WOL			0x002e0000
++
++#define DRV_MSG_CODE_FEATURE_SUPPORT		0x00300000
++#define DRV_MSG_CODE_GET_MFW_FEATURE_SUPPORT	0x00310000
++#define DRV_MSG_SEQ_NUMBER_MASK			0x0000ffff
++
++	u32 drv_mb_param;
++#define DRV_MB_PARAM_UNLOAD_WOL_UNKNOWN         0x00000000
++#define DRV_MB_PARAM_UNLOAD_WOL_MCP             0x00000001
++#define DRV_MB_PARAM_UNLOAD_WOL_DISABLED        0x00000002
++#define DRV_MB_PARAM_UNLOAD_WOL_ENABLED         0x00000003
++#define DRV_MB_PARAM_DCBX_NOTIFY_MASK		0x000000FF
++#define DRV_MB_PARAM_DCBX_NOTIFY_SHIFT		3
++
++#define DRV_MB_PARAM_NVM_PUT_FILE_BEGIN_MBI     0x3
++#define DRV_MB_PARAM_NVM_OFFSET_OFFSET          0
++#define DRV_MB_PARAM_NVM_OFFSET_MASK            0x00FFFFFF
++#define DRV_MB_PARAM_NVM_LEN_OFFSET		24
++#define DRV_MB_PARAM_NVM_LEN_MASK               0xFF000000
++
++#define DRV_MB_PARAM_CFG_VF_MSIX_VF_ID_SHIFT	0
++#define DRV_MB_PARAM_CFG_VF_MSIX_VF_ID_MASK	0x000000FF
++#define DRV_MB_PARAM_CFG_VF_MSIX_SB_NUM_SHIFT	8
++#define DRV_MB_PARAM_CFG_VF_MSIX_SB_NUM_MASK	0x0000FF00
++#define DRV_MB_PARAM_LLDP_SEND_MASK		0x00000001
++#define DRV_MB_PARAM_LLDP_SEND_SHIFT		0
++
++#define DRV_MB_PARAM_OV_CURR_CFG_SHIFT		0
++#define DRV_MB_PARAM_OV_CURR_CFG_MASK		0x0000000F
++#define DRV_MB_PARAM_OV_CURR_CFG_NONE		0
++#define DRV_MB_PARAM_OV_CURR_CFG_OS		1
++#define DRV_MB_PARAM_OV_CURR_CFG_VENDOR_SPEC	2
++#define DRV_MB_PARAM_OV_CURR_CFG_OTHER		3
++
++#define DRV_MB_PARAM_OV_STORM_FW_VER_SHIFT	0
++#define DRV_MB_PARAM_OV_STORM_FW_VER_MASK	0xFFFFFFFF
++#define DRV_MB_PARAM_OV_STORM_FW_VER_MAJOR_MASK	0xFF000000
++#define DRV_MB_PARAM_OV_STORM_FW_VER_MINOR_MASK	0x00FF0000
++#define DRV_MB_PARAM_OV_STORM_FW_VER_BUILD_MASK	0x0000FF00
++#define DRV_MB_PARAM_OV_STORM_FW_VER_DROP_MASK	0x000000FF
++
++#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_SHIFT	0
++#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_MASK	0xF
++#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_UNKNOWN	0x1
++#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_NOT_LOADED	0x2
++#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_LOADING	0x3
++#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_DISABLED	0x4
++#define DRV_MSG_CODE_OV_UPDATE_DRIVER_STATE_ACTIVE	0x5
++
++#define DRV_MB_PARAM_OV_MTU_SIZE_SHIFT	0
++#define DRV_MB_PARAM_OV_MTU_SIZE_MASK	0xFFFFFFFF
++
++#define DRV_MB_PARAM_WOL_MASK	(DRV_MB_PARAM_WOL_DEFAULT | \
++				 DRV_MB_PARAM_WOL_DISABLED | \
++				 DRV_MB_PARAM_WOL_ENABLED)
++#define DRV_MB_PARAM_WOL_DEFAULT	DRV_MB_PARAM_UNLOAD_WOL_MCP
++#define DRV_MB_PARAM_WOL_DISABLED	DRV_MB_PARAM_UNLOAD_WOL_DISABLED
++#define DRV_MB_PARAM_WOL_ENABLED	DRV_MB_PARAM_UNLOAD_WOL_ENABLED
++
++#define DRV_MB_PARAM_ESWITCH_MODE_MASK	(DRV_MB_PARAM_ESWITCH_MODE_NONE | \
++					 DRV_MB_PARAM_ESWITCH_MODE_VEB | \
++					 DRV_MB_PARAM_ESWITCH_MODE_VEPA)
++#define DRV_MB_PARAM_ESWITCH_MODE_NONE	0x0
++#define DRV_MB_PARAM_ESWITCH_MODE_VEB	0x1
++#define DRV_MB_PARAM_ESWITCH_MODE_VEPA	0x2
++
++#define DRV_MB_PARAM_DUMMY_OEM_UPDATES_MASK	0x1
++#define DRV_MB_PARAM_DUMMY_OEM_UPDATES_OFFSET	0
++
++#define DRV_MB_PARAM_SET_LED_MODE_OPER		0x0
++#define DRV_MB_PARAM_SET_LED_MODE_ON		0x1
++#define DRV_MB_PARAM_SET_LED_MODE_OFF		0x2
++
++#define DRV_MB_PARAM_TRANSCEIVER_PORT_OFFSET			0
++#define DRV_MB_PARAM_TRANSCEIVER_PORT_MASK			0x00000003
++#define DRV_MB_PARAM_TRANSCEIVER_SIZE_OFFSET			2
++#define DRV_MB_PARAM_TRANSCEIVER_SIZE_MASK			0x000000fc
++#define DRV_MB_PARAM_TRANSCEIVER_I2C_ADDRESS_OFFSET		8
++#define DRV_MB_PARAM_TRANSCEIVER_I2C_ADDRESS_MASK		0x0000ff00
++#define DRV_MB_PARAM_TRANSCEIVER_OFFSET_OFFSET			16
++#define DRV_MB_PARAM_TRANSCEIVER_OFFSET_MASK			0xffff0000
++
++	/* Resource Allocation params - Driver version support */
++#define DRV_MB_PARAM_RESOURCE_ALLOC_VERSION_MAJOR_MASK		0xffff0000
++#define DRV_MB_PARAM_RESOURCE_ALLOC_VERSION_MAJOR_SHIFT		16
++#define DRV_MB_PARAM_RESOURCE_ALLOC_VERSION_MINOR_MASK		0x0000ffff
++#define DRV_MB_PARAM_RESOURCE_ALLOC_VERSION_MINOR_SHIFT		0
++
++#define DRV_MB_PARAM_BIST_REGISTER_TEST				1
++#define DRV_MB_PARAM_BIST_CLOCK_TEST				2
++#define DRV_MB_PARAM_BIST_NVM_TEST_NUM_IMAGES			3
++#define DRV_MB_PARAM_BIST_NVM_TEST_IMAGE_BY_INDEX		4
++
++#define DRV_MB_PARAM_BIST_RC_UNKNOWN				0
++#define DRV_MB_PARAM_BIST_RC_PASSED				1
++#define DRV_MB_PARAM_BIST_RC_FAILED				2
++#define DRV_MB_PARAM_BIST_RC_INVALID_PARAMETER			3
++
++#define DRV_MB_PARAM_BIST_TEST_INDEX_SHIFT			0
++#define DRV_MB_PARAM_BIST_TEST_INDEX_MASK			0x000000ff
++#define DRV_MB_PARAM_BIST_TEST_IMAGE_INDEX_SHIFT		8
++#define DRV_MB_PARAM_BIST_TEST_IMAGE_INDEX_MASK			0x0000ff00
++
++#define DRV_MB_PARAM_FEATURE_SUPPORT_PORT_MASK			0x0000ffff
++#define DRV_MB_PARAM_FEATURE_SUPPORT_PORT_OFFSET		0
++#define DRV_MB_PARAM_FEATURE_SUPPORT_PORT_EEE			0x00000002
++#define DRV_MB_PARAM_FEATURE_SUPPORT_PORT_FEC_CONTROL		0x00000004
++#define DRV_MB_PARAM_FEATURE_SUPPORT_PORT_EXT_SPEED_FEC_CONTROL	0x00000008
++#define DRV_MB_PARAM_FEATURE_SUPPORT_FUNC_VLINK			0x00010000
++
++/* DRV_MSG_CODE_DEBUG_DATA_SEND parameters */
++#define DRV_MSG_CODE_DEBUG_DATA_SEND_SIZE_OFFSET		0
++#define DRV_MSG_CODE_DEBUG_DATA_SEND_SIZE_MASK			0xff
++
++/* Driver attributes params */
++#define DRV_MB_PARAM_ATTRIBUTE_KEY_OFFSET			0
++#define DRV_MB_PARAM_ATTRIBUTE_KEY_MASK				0x00ffffff
++#define DRV_MB_PARAM_ATTRIBUTE_CMD_OFFSET			24
++#define DRV_MB_PARAM_ATTRIBUTE_CMD_MASK				0xff000000
++
++#define DRV_MB_PARAM_NVM_CFG_OPTION_ID_OFFSET			0
++#define DRV_MB_PARAM_NVM_CFG_OPTION_ID_SHIFT			0
++#define DRV_MB_PARAM_NVM_CFG_OPTION_ID_MASK			0x0000ffff
++#define DRV_MB_PARAM_NVM_CFG_OPTION_ALL_SHIFT			16
++#define DRV_MB_PARAM_NVM_CFG_OPTION_ALL_MASK			0x00010000
++#define DRV_MB_PARAM_NVM_CFG_OPTION_INIT_SHIFT			17
++#define DRV_MB_PARAM_NVM_CFG_OPTION_INIT_MASK			0x00020000
++#define DRV_MB_PARAM_NVM_CFG_OPTION_COMMIT_SHIFT		18
++#define DRV_MB_PARAM_NVM_CFG_OPTION_COMMIT_MASK			0x00040000
++#define DRV_MB_PARAM_NVM_CFG_OPTION_FREE_SHIFT			19
++#define DRV_MB_PARAM_NVM_CFG_OPTION_FREE_MASK			0x00080000
++#define DRV_MB_PARAM_NVM_CFG_OPTION_ENTITY_SEL_SHIFT		20
++#define DRV_MB_PARAM_NVM_CFG_OPTION_ENTITY_SEL_MASK		0x00100000
++#define DRV_MB_PARAM_NVM_CFG_OPTION_ENTITY_ID_SHIFT		24
++#define DRV_MB_PARAM_NVM_CFG_OPTION_ENTITY_ID_MASK		0x0f000000
++
++	u32 fw_mb_header;
++#define FW_MSG_CODE_MASK			0xffff0000
++#define FW_MSG_CODE_UNSUPPORTED                 0x00000000
++#define FW_MSG_CODE_DRV_LOAD_ENGINE		0x10100000
++#define FW_MSG_CODE_DRV_LOAD_PORT		0x10110000
++#define FW_MSG_CODE_DRV_LOAD_FUNCTION		0x10120000
++#define FW_MSG_CODE_DRV_LOAD_REFUSED_PDA	0x10200000
++#define FW_MSG_CODE_DRV_LOAD_REFUSED_HSI_1	0x10210000
++#define FW_MSG_CODE_DRV_LOAD_REFUSED_DIAG	0x10220000
++#define FW_MSG_CODE_DRV_LOAD_REFUSED_HSI        0x10230000
++#define FW_MSG_CODE_DRV_LOAD_REFUSED_REQUIRES_FORCE 0x10300000
++#define FW_MSG_CODE_DRV_LOAD_REFUSED_REJECT     0x10310000
++#define FW_MSG_CODE_DRV_LOAD_DONE		0x11100000
++#define FW_MSG_CODE_DRV_UNLOAD_ENGINE		0x20110000
++#define FW_MSG_CODE_DRV_UNLOAD_PORT		0x20120000
++#define FW_MSG_CODE_DRV_UNLOAD_FUNCTION		0x20130000
++#define FW_MSG_CODE_DRV_UNLOAD_DONE		0x21100000
++#define FW_MSG_CODE_RESOURCE_ALLOC_OK           0x34000000
++#define FW_MSG_CODE_RESOURCE_ALLOC_UNKNOWN      0x35000000
++#define FW_MSG_CODE_RESOURCE_ALLOC_DEPRECATED   0x36000000
++#define FW_MSG_CODE_S_TAG_UPDATE_ACK_DONE	0x3b000000
++#define FW_MSG_CODE_DRV_CFG_VF_MSIX_DONE	0xb0010000
++
++#define FW_MSG_CODE_NVM_OK			0x00010000
++#define FW_MSG_CODE_NVM_PUT_FILE_FINISH_OK	0x00400000
++#define FW_MSG_CODE_PHY_OK			0x00110000
++#define FW_MSG_CODE_OK				0x00160000
++#define FW_MSG_CODE_ERROR			0x00170000
++#define FW_MSG_CODE_TRANSCEIVER_DIAG_OK		0x00160000
++#define FW_MSG_CODE_TRANSCEIVER_DIAG_ERROR	0x00170000
++#define FW_MSG_CODE_TRANSCEIVER_NOT_PRESENT	0x00020000
++
++#define FW_MSG_CODE_OS_WOL_SUPPORTED            0x00800000
++#define FW_MSG_CODE_OS_WOL_NOT_SUPPORTED        0x00810000
++#define FW_MSG_CODE_DRV_CFG_PF_VFS_MSIX_DONE	0x00870000
++#define FW_MSG_SEQ_NUMBER_MASK			0x0000ffff
++
++#define FW_MSG_CODE_DEBUG_DATA_SEND_INV_ARG	0xb0070000
++#define FW_MSG_CODE_DEBUG_DATA_SEND_BUF_FULL	0xb0080000
++#define FW_MSG_CODE_DEBUG_DATA_SEND_NO_BUF	0xb0090000
++#define FW_MSG_CODE_DEBUG_NOT_ENABLED		0xb00a0000
++#define FW_MSG_CODE_DEBUG_DATA_SEND_OK		0xb00b0000
++
++#define FW_MSG_CODE_MDUMP_INVALID_CMD		0x00030000
++
++	u32							fw_mb_param;
++#define FW_MB_PARAM_RESOURCE_ALLOC_VERSION_MAJOR_MASK		0xffff0000
++#define FW_MB_PARAM_RESOURCE_ALLOC_VERSION_MAJOR_SHIFT		16
++#define FW_MB_PARAM_RESOURCE_ALLOC_VERSION_MINOR_MASK		0x0000ffff
++#define FW_MB_PARAM_RESOURCE_ALLOC_VERSION_MINOR_SHIFT		0
++
++	/* Get PF RDMA protocol command response */
++#define FW_MB_PARAM_GET_PF_RDMA_NONE				0x0
++#define FW_MB_PARAM_GET_PF_RDMA_ROCE				0x1
++#define FW_MB_PARAM_GET_PF_RDMA_IWARP				0x2
++#define FW_MB_PARAM_GET_PF_RDMA_BOTH				0x3
++
++	/* Get MFW feature support response */
++#define FW_MB_PARAM_FEATURE_SUPPORT_SMARTLINQ			BIT(0)
++#define FW_MB_PARAM_FEATURE_SUPPORT_EEE				BIT(1)
++#define FW_MB_PARAM_FEATURE_SUPPORT_FEC_CONTROL			BIT(5)
++#define FW_MB_PARAM_FEATURE_SUPPORT_EXT_SPEED_FEC_CONTROL	BIT(6)
++#define FW_MB_PARAM_FEATURE_SUPPORT_VLINK			BIT(16)
++
++#define FW_MB_PARAM_LOAD_DONE_DID_EFUSE_ERROR			BIT(0)
++
++#define FW_MB_PARAM_ENG_CFG_FIR_AFFIN_VALID_MASK		0x00000001
++#define FW_MB_PARAM_ENG_CFG_FIR_AFFIN_VALID_SHIFT		0
++#define FW_MB_PARAM_ENG_CFG_FIR_AFFIN_VALUE_MASK		0x00000002
++#define FW_MB_PARAM_ENG_CFG_FIR_AFFIN_VALUE_SHIFT		1
++#define FW_MB_PARAM_ENG_CFG_L2_AFFIN_VALID_MASK			0x00000004
++#define FW_MB_PARAM_ENG_CFG_L2_AFFIN_VALID_SHIFT		2
++#define FW_MB_PARAM_ENG_CFG_L2_AFFIN_VALUE_MASK			0x00000008
++#define FW_MB_PARAM_ENG_CFG_L2_AFFIN_VALUE_SHIFT		3
++
++#define FW_MB_PARAM_PPFID_BITMAP_MASK				0xff
++#define FW_MB_PARAM_PPFID_BITMAP_SHIFT				0
++
++	u32							drv_pulse_mb;
++#define DRV_PULSE_SEQ_MASK					0x00007fff
++#define DRV_PULSE_SYSTEM_TIME_MASK				0xffff0000
++#define DRV_PULSE_ALWAYS_ALIVE					0x00008000
++
++	u32							mcp_pulse_mb;
++#define MCP_PULSE_SEQ_MASK					0x00007fff
++#define MCP_PULSE_ALWAYS_ALIVE					0x00008000
++#define MCP_EVENT_MASK						0xffff0000
++#define MCP_EVENT_OTHER_DRIVER_RESET_REQ			0x00010000
++
++	union drv_union_data					union_data;
++};
++
++#define FW_MB_PARAM_NVM_PUT_FILE_REQ_OFFSET_MASK		0x00ffffff
++#define FW_MB_PARAM_NVM_PUT_FILE_REQ_OFFSET_SHIFT		0
++#define FW_MB_PARAM_NVM_PUT_FILE_REQ_SIZE_MASK			0xff000000
++#define FW_MB_PARAM_NVM_PUT_FILE_REQ_SIZE_SHIFT			24
++
++enum MFW_DRV_MSG_TYPE {
++	MFW_DRV_MSG_LINK_CHANGE,
++	MFW_DRV_MSG_FLR_FW_ACK_FAILED,
++	MFW_DRV_MSG_VF_DISABLED,
++	MFW_DRV_MSG_LLDP_DATA_UPDATED,
++	MFW_DRV_MSG_DCBX_REMOTE_MIB_UPDATED,
++	MFW_DRV_MSG_DCBX_OPERATIONAL_MIB_UPDATED,
++	MFW_DRV_MSG_ERROR_RECOVERY,
++	MFW_DRV_MSG_BW_UPDATE,
++	MFW_DRV_MSG_S_TAG_UPDATE,
++	MFW_DRV_MSG_GET_LAN_STATS,
++	MFW_DRV_MSG_GET_FCOE_STATS,
++	MFW_DRV_MSG_GET_ISCSI_STATS,
++	MFW_DRV_MSG_GET_RDMA_STATS,
++	MFW_DRV_MSG_FAILURE_DETECTED,
++	MFW_DRV_MSG_TRANSCEIVER_STATE_CHANGE,
++	MFW_DRV_MSG_CRITICAL_ERROR_OCCURRED,
++	MFW_DRV_MSG_RESERVED,
++	MFW_DRV_MSG_GET_TLV_REQ,
++	MFW_DRV_MSG_OEM_CFG_UPDATE,
++	MFW_DRV_MSG_MAX
++};
++
++#define MFW_DRV_MSG_MAX_DWORDS(msgs)	((((msgs) - 1) >> 2) + 1)
++#define MFW_DRV_MSG_DWORD(msg_id)	((msg_id) >> 2)
++#define MFW_DRV_MSG_OFFSET(msg_id)	(((msg_id) & 0x3) << 3)
++#define MFW_DRV_MSG_MASK(msg_id)	(0xff << MFW_DRV_MSG_OFFSET(msg_id))
++
++struct public_mfw_mb {
++	u32 sup_msgs;
++	u32 msg[MFW_DRV_MSG_MAX_DWORDS(MFW_DRV_MSG_MAX)];
++	u32 ack[MFW_DRV_MSG_MAX_DWORDS(MFW_DRV_MSG_MAX)];
++};
++
++enum public_sections {
++	PUBLIC_DRV_MB,
++	PUBLIC_MFW_MB,
++	PUBLIC_GLOBAL,
++	PUBLIC_PATH,
++	PUBLIC_PORT,
++	PUBLIC_FUNC,
++	PUBLIC_MAX_SECTIONS
++};
++
++struct mcp_public_data {
++	u32 num_sections;
++	u32 sections[PUBLIC_MAX_SECTIONS];
++	struct public_drv_mb drv_mb[MCP_GLOB_FUNC_MAX];
++	struct public_mfw_mb mfw_mb[MCP_GLOB_FUNC_MAX];
++	struct public_global global;
++	struct public_path path[MCP_GLOB_PATH_MAX];
++	struct public_port port[MCP_GLOB_PORT_MAX];
++	struct public_func func[MCP_GLOB_FUNC_MAX];
++};
++
++#define MAX_I2C_TRANSACTION_SIZE	16
++
++/* OCBB definitions */
++enum tlvs {
++	/* Category 1: Device Properties */
++	DRV_TLV_CLP_STR,
++	DRV_TLV_CLP_STR_CTD,
++	/* Category 6: Device Configuration */
++	DRV_TLV_SCSI_TO,
++	DRV_TLV_R_T_TOV,
++	DRV_TLV_R_A_TOV,
++	DRV_TLV_E_D_TOV,
++	DRV_TLV_CR_TOV,
++	DRV_TLV_BOOT_TYPE,
++	/* Category 8: Port Configuration */
++	DRV_TLV_NPIV_ENABLED,
++	/* Category 10: Function Configuration */
++	DRV_TLV_FEATURE_FLAGS,
++	DRV_TLV_LOCAL_ADMIN_ADDR,
++	DRV_TLV_ADDITIONAL_MAC_ADDR_1,
++	DRV_TLV_ADDITIONAL_MAC_ADDR_2,
++	DRV_TLV_LSO_MAX_OFFLOAD_SIZE,
++	DRV_TLV_LSO_MIN_SEGMENT_COUNT,
++	DRV_TLV_PROMISCUOUS_MODE,
++	DRV_TLV_TX_DESCRIPTORS_QUEUE_SIZE,
++	DRV_TLV_RX_DESCRIPTORS_QUEUE_SIZE,
++	DRV_TLV_NUM_OF_NET_QUEUE_VMQ_CFG,
++	DRV_TLV_FLEX_NIC_OUTER_VLAN_ID,
++	DRV_TLV_OS_DRIVER_STATES,
++	DRV_TLV_PXE_BOOT_PROGRESS,
++	/* Category 12: FC/FCoE Configuration */
++	DRV_TLV_NPIV_STATE,
++	DRV_TLV_NUM_OF_NPIV_IDS,
++	DRV_TLV_SWITCH_NAME,
++	DRV_TLV_SWITCH_PORT_NUM,
++	DRV_TLV_SWITCH_PORT_ID,
++	DRV_TLV_VENDOR_NAME,
++	DRV_TLV_SWITCH_MODEL,
++	DRV_TLV_SWITCH_FW_VER,
++	DRV_TLV_QOS_PRIORITY_PER_802_1P,
++	DRV_TLV_PORT_ALIAS,
++	DRV_TLV_PORT_STATE,
++	DRV_TLV_FIP_TX_DESCRIPTORS_QUEUE_SIZE,
++	DRV_TLV_FCOE_RX_DESCRIPTORS_QUEUE_SIZE,
++	DRV_TLV_LINK_FAILURE_COUNT,
++	DRV_TLV_FCOE_BOOT_PROGRESS,
++	/* Category 13: iSCSI Configuration */
++	DRV_TLV_TARGET_LLMNR_ENABLED,
++	DRV_TLV_HEADER_DIGEST_FLAG_ENABLED,
++	DRV_TLV_DATA_DIGEST_FLAG_ENABLED,
++	DRV_TLV_AUTHENTICATION_METHOD,
++	DRV_TLV_ISCSI_BOOT_TARGET_PORTAL,
++	DRV_TLV_MAX_FRAME_SIZE,
++	DRV_TLV_PDU_TX_DESCRIPTORS_QUEUE_SIZE,
++	DRV_TLV_PDU_RX_DESCRIPTORS_QUEUE_SIZE,
++	DRV_TLV_ISCSI_BOOT_PROGRESS,
++	/* Category 20: Device Data */
++	DRV_TLV_PCIE_BUS_RX_UTILIZATION,
++	DRV_TLV_PCIE_BUS_TX_UTILIZATION,
++	DRV_TLV_DEVICE_CPU_CORES_UTILIZATION,
++	DRV_TLV_LAST_VALID_DCC_TLV_RECEIVED,
++	DRV_TLV_NCSI_RX_BYTES_RECEIVED,
++	DRV_TLV_NCSI_TX_BYTES_SENT,
++	/* Category 22: Base Port Data */
++	DRV_TLV_RX_DISCARDS,
++	DRV_TLV_RX_ERRORS,
++	DRV_TLV_TX_ERRORS,
++	DRV_TLV_TX_DISCARDS,
++	DRV_TLV_RX_FRAMES_RECEIVED,
++	DRV_TLV_TX_FRAMES_SENT,
++	/* Category 23: FC/FCoE Port Data */
++	DRV_TLV_RX_BROADCAST_PACKETS,
++	DRV_TLV_TX_BROADCAST_PACKETS,
++	/* Category 28: Base Function Data */
++	DRV_TLV_NUM_OFFLOADED_CONNECTIONS_TCP_IPV4,
++	DRV_TLV_NUM_OFFLOADED_CONNECTIONS_TCP_IPV6,
++	DRV_TLV_TX_DESCRIPTOR_QUEUE_AVG_DEPTH,
++	DRV_TLV_RX_DESCRIPTORS_QUEUE_AVG_DEPTH,
++	DRV_TLV_PF_RX_FRAMES_RECEIVED,
++	DRV_TLV_RX_BYTES_RECEIVED,
++	DRV_TLV_PF_TX_FRAMES_SENT,
++	DRV_TLV_TX_BYTES_SENT,
++	DRV_TLV_IOV_OFFLOAD,
++	DRV_TLV_PCI_ERRORS_CAP_ID,
++	DRV_TLV_UNCORRECTABLE_ERROR_STATUS,
++	DRV_TLV_UNCORRECTABLE_ERROR_MASK,
++	DRV_TLV_CORRECTABLE_ERROR_STATUS,
++	DRV_TLV_CORRECTABLE_ERROR_MASK,
++	DRV_TLV_PCI_ERRORS_AECC_REGISTER,
++	DRV_TLV_TX_QUEUES_EMPTY,
++	DRV_TLV_RX_QUEUES_EMPTY,
++	DRV_TLV_TX_QUEUES_FULL,
++	DRV_TLV_RX_QUEUES_FULL,
++	/* Category 29: FC/FCoE Function Data */
++	DRV_TLV_FCOE_TX_DESCRIPTOR_QUEUE_AVG_DEPTH,
++	DRV_TLV_FCOE_RX_DESCRIPTORS_QUEUE_AVG_DEPTH,
++	DRV_TLV_FCOE_RX_FRAMES_RECEIVED,
++	DRV_TLV_FCOE_RX_BYTES_RECEIVED,
++	DRV_TLV_FCOE_TX_FRAMES_SENT,
++	DRV_TLV_FCOE_TX_BYTES_SENT,
++	DRV_TLV_CRC_ERROR_COUNT,
++	DRV_TLV_CRC_ERROR_1_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_CRC_ERROR_1_TIMESTAMP,
++	DRV_TLV_CRC_ERROR_2_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_CRC_ERROR_2_TIMESTAMP,
++	DRV_TLV_CRC_ERROR_3_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_CRC_ERROR_3_TIMESTAMP,
++	DRV_TLV_CRC_ERROR_4_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_CRC_ERROR_4_TIMESTAMP,
++	DRV_TLV_CRC_ERROR_5_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_CRC_ERROR_5_TIMESTAMP,
++	DRV_TLV_LOSS_OF_SYNC_ERROR_COUNT,
++	DRV_TLV_LOSS_OF_SIGNAL_ERRORS,
++	DRV_TLV_PRIMITIVE_SEQUENCE_PROTOCOL_ERROR_COUNT,
++	DRV_TLV_DISPARITY_ERROR_COUNT,
++	DRV_TLV_CODE_VIOLATION_ERROR_COUNT,
++	DRV_TLV_LAST_FLOGI_ISSUED_COMMON_PARAMETERS_WORD_1,
++	DRV_TLV_LAST_FLOGI_ISSUED_COMMON_PARAMETERS_WORD_2,
++	DRV_TLV_LAST_FLOGI_ISSUED_COMMON_PARAMETERS_WORD_3,
++	DRV_TLV_LAST_FLOGI_ISSUED_COMMON_PARAMETERS_WORD_4,
++	DRV_TLV_LAST_FLOGI_TIMESTAMP,
++	DRV_TLV_LAST_FLOGI_ACC_COMMON_PARAMETERS_WORD_1,
++	DRV_TLV_LAST_FLOGI_ACC_COMMON_PARAMETERS_WORD_2,
++	DRV_TLV_LAST_FLOGI_ACC_COMMON_PARAMETERS_WORD_3,
++	DRV_TLV_LAST_FLOGI_ACC_COMMON_PARAMETERS_WORD_4,
++	DRV_TLV_LAST_FLOGI_ACC_TIMESTAMP,
++	DRV_TLV_LAST_FLOGI_RJT,
++	DRV_TLV_LAST_FLOGI_RJT_TIMESTAMP,
++	DRV_TLV_FDISCS_SENT_COUNT,
++	DRV_TLV_FDISC_ACCS_RECEIVED,
++	DRV_TLV_FDISC_RJTS_RECEIVED,
++	DRV_TLV_PLOGI_SENT_COUNT,
++	DRV_TLV_PLOGI_ACCS_RECEIVED,
++	DRV_TLV_PLOGI_RJTS_RECEIVED,
++	DRV_TLV_PLOGI_1_SENT_DESTINATION_FC_ID,
++	DRV_TLV_PLOGI_1_TIMESTAMP,
++	DRV_TLV_PLOGI_2_SENT_DESTINATION_FC_ID,
++	DRV_TLV_PLOGI_2_TIMESTAMP,
++	DRV_TLV_PLOGI_3_SENT_DESTINATION_FC_ID,
++	DRV_TLV_PLOGI_3_TIMESTAMP,
++	DRV_TLV_PLOGI_4_SENT_DESTINATION_FC_ID,
++	DRV_TLV_PLOGI_4_TIMESTAMP,
++	DRV_TLV_PLOGI_5_SENT_DESTINATION_FC_ID,
++	DRV_TLV_PLOGI_5_TIMESTAMP,
++	DRV_TLV_PLOGI_1_ACC_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_PLOGI_1_ACC_TIMESTAMP,
++	DRV_TLV_PLOGI_2_ACC_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_PLOGI_2_ACC_TIMESTAMP,
++	DRV_TLV_PLOGI_3_ACC_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_PLOGI_3_ACC_TIMESTAMP,
++	DRV_TLV_PLOGI_4_ACC_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_PLOGI_4_ACC_TIMESTAMP,
++	DRV_TLV_PLOGI_5_ACC_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_PLOGI_5_ACC_TIMESTAMP,
++	DRV_TLV_LOGOS_ISSUED,
++	DRV_TLV_LOGO_ACCS_RECEIVED,
++	DRV_TLV_LOGO_RJTS_RECEIVED,
++	DRV_TLV_LOGO_1_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_LOGO_1_TIMESTAMP,
++	DRV_TLV_LOGO_2_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_LOGO_2_TIMESTAMP,
++	DRV_TLV_LOGO_3_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_LOGO_3_TIMESTAMP,
++	DRV_TLV_LOGO_4_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_LOGO_4_TIMESTAMP,
++	DRV_TLV_LOGO_5_RECEIVED_SOURCE_FC_ID,
++	DRV_TLV_LOGO_5_TIMESTAMP,
++	DRV_TLV_LOGOS_RECEIVED,
++	DRV_TLV_ACCS_ISSUED,
++	DRV_TLV_PRLIS_ISSUED,
++	DRV_TLV_ACCS_RECEIVED,
++	DRV_TLV_ABTS_SENT_COUNT,
++	DRV_TLV_ABTS_ACCS_RECEIVED,
++	DRV_TLV_ABTS_RJTS_RECEIVED,
++	DRV_TLV_ABTS_1_SENT_DESTINATION_FC_ID,
++	DRV_TLV_ABTS_1_TIMESTAMP,
++	DRV_TLV_ABTS_2_SENT_DESTINATION_FC_ID,
++	DRV_TLV_ABTS_2_TIMESTAMP,
++	DRV_TLV_ABTS_3_SENT_DESTINATION_FC_ID,
++	DRV_TLV_ABTS_3_TIMESTAMP,
++	DRV_TLV_ABTS_4_SENT_DESTINATION_FC_ID,
++	DRV_TLV_ABTS_4_TIMESTAMP,
++	DRV_TLV_ABTS_5_SENT_DESTINATION_FC_ID,
++	DRV_TLV_ABTS_5_TIMESTAMP,
++	DRV_TLV_RSCNS_RECEIVED,
++	DRV_TLV_LAST_RSCN_RECEIVED_N_PORT_1,
++	DRV_TLV_LAST_RSCN_RECEIVED_N_PORT_2,
++	DRV_TLV_LAST_RSCN_RECEIVED_N_PORT_3,
++	DRV_TLV_LAST_RSCN_RECEIVED_N_PORT_4,
++	DRV_TLV_LUN_RESETS_ISSUED,
++	DRV_TLV_ABORT_TASK_SETS_ISSUED,
++	DRV_TLV_TPRLOS_SENT,
++	DRV_TLV_NOS_SENT_COUNT,
++	DRV_TLV_NOS_RECEIVED_COUNT,
++	DRV_TLV_OLS_COUNT,
++	DRV_TLV_LR_COUNT,
++	DRV_TLV_LRR_COUNT,
++	DRV_TLV_LIP_SENT_COUNT,
++	DRV_TLV_LIP_RECEIVED_COUNT,
++	DRV_TLV_EOFA_COUNT,
++	DRV_TLV_EOFNI_COUNT,
++	DRV_TLV_SCSI_STATUS_CHECK_CONDITION_COUNT,
++	DRV_TLV_SCSI_STATUS_CONDITION_MET_COUNT,
++	DRV_TLV_SCSI_STATUS_BUSY_COUNT,
++	DRV_TLV_SCSI_STATUS_INTERMEDIATE_COUNT,
++	DRV_TLV_SCSI_STATUS_INTERMEDIATE_CONDITION_MET_COUNT,
++	DRV_TLV_SCSI_STATUS_RESERVATION_CONFLICT_COUNT,
++	DRV_TLV_SCSI_STATUS_TASK_SET_FULL_COUNT,
++	DRV_TLV_SCSI_STATUS_ACA_ACTIVE_COUNT,
++	DRV_TLV_SCSI_STATUS_TASK_ABORTED_COUNT,
++	DRV_TLV_SCSI_CHECK_CONDITION_1_RECEIVED_SK_ASC_ASCQ,
++	DRV_TLV_SCSI_CHECK_1_TIMESTAMP,
++	DRV_TLV_SCSI_CHECK_CONDITION_2_RECEIVED_SK_ASC_ASCQ,
++	DRV_TLV_SCSI_CHECK_2_TIMESTAMP,
++	DRV_TLV_SCSI_CHECK_CONDITION_3_RECEIVED_SK_ASC_ASCQ,
++	DRV_TLV_SCSI_CHECK_3_TIMESTAMP,
++	DRV_TLV_SCSI_CHECK_CONDITION_4_RECEIVED_SK_ASC_ASCQ,
++	DRV_TLV_SCSI_CHECK_4_TIMESTAMP,
++	DRV_TLV_SCSI_CHECK_CONDITION_5_RECEIVED_SK_ASC_ASCQ,
++	DRV_TLV_SCSI_CHECK_5_TIMESTAMP,
++	/* Category 30: iSCSI Function Data */
++	DRV_TLV_PDU_TX_DESCRIPTOR_QUEUE_AVG_DEPTH,
++	DRV_TLV_PDU_RX_DESCRIPTORS_QUEUE_AVG_DEPTH,
++	DRV_TLV_ISCSI_PDU_RX_FRAMES_RECEIVED,
++	DRV_TLV_ISCSI_PDU_RX_BYTES_RECEIVED,
++	DRV_TLV_ISCSI_PDU_TX_FRAMES_SENT,
++	DRV_TLV_ISCSI_PDU_TX_BYTES_SENT
++};
++
++struct nvm_cfg_mac_address {
++	u32 mac_addr_hi;
++#define NVM_CFG_MAC_ADDRESS_HI_MASK 0x0000ffff
++#define NVM_CFG_MAC_ADDRESS_HI_OFFSET 0
++
++	u32 mac_addr_lo;
++};
++
++struct nvm_cfg1_glob {
++	u32 generic_cont0;
++#define NVM_CFG1_GLOB_MF_MODE_MASK 0x00000ff0
++#define NVM_CFG1_GLOB_MF_MODE_OFFSET 4
++#define NVM_CFG1_GLOB_MF_MODE_MF_ALLOWED 0x0
++#define NVM_CFG1_GLOB_MF_MODE_DEFAULT 0x1
++#define NVM_CFG1_GLOB_MF_MODE_SPIO4 0x2
++#define NVM_CFG1_GLOB_MF_MODE_NPAR1_0 0x3
++#define NVM_CFG1_GLOB_MF_MODE_NPAR1_5 0x4
++#define NVM_CFG1_GLOB_MF_MODE_NPAR2_0 0x5
++#define NVM_CFG1_GLOB_MF_MODE_BD 0x6
++#define NVM_CFG1_GLOB_MF_MODE_UFP 0x7
++
++	u32 engineering_change[3];
++	u32 manufacturing_id;
++	u32 serial_number[4];
++	u32 pcie_cfg;
++	u32 mgmt_traffic;
++
++	u32 core_cfg;
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_MASK 0x000000ff
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_OFFSET 0
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_BB_2X40G 0x0
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_2X50G 0x1
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_BB_1X100G 0x2
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_4X10G_F 0x3
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_BB_4X10G_E 0x4
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_BB_4X20G 0x5
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_1X40G 0xb
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_2X25G 0xc
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_1X25G 0xd
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_4X25G 0xe
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_2X10G 0xf
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_2X50G_R1 0x11
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_4X50G_R1 0x12
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_1X100G_R2 0x13
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_2X100G_R2 0x14
++#define NVM_CFG1_GLOB_NETWORK_PORT_MODE_AHP_1X100G_R4 0x15
++
++	u32 e_lane_cfg1;
++	u32 e_lane_cfg2;
++	u32 f_lane_cfg1;
++	u32 f_lane_cfg2;
++	u32 mps10_preemphasis;
++	u32 mps10_driver_current;
++	u32 mps25_preemphasis;
++	u32 mps25_driver_current;
++	u32 pci_id;
++	u32 pci_subsys_id;
++	u32 bar;
++	u32 mps10_txfir_main;
++	u32 mps10_txfir_post;
++	u32 mps25_txfir_main;
++	u32 mps25_txfir_post;
++	u32 manufacture_ver;
++	u32 manufacture_time;
++	u32 led_global_settings;
++	u32 generic_cont1;
++
++	u32 mbi_version;
++#define NVM_CFG1_GLOB_MBI_VERSION_0_MASK 0x000000ff
++#define NVM_CFG1_GLOB_MBI_VERSION_0_OFFSET 0
++#define NVM_CFG1_GLOB_MBI_VERSION_1_MASK 0x0000ff00
++#define NVM_CFG1_GLOB_MBI_VERSION_1_OFFSET 8
++#define NVM_CFG1_GLOB_MBI_VERSION_2_MASK 0x00ff0000
++#define NVM_CFG1_GLOB_MBI_VERSION_2_OFFSET 16
++
++	u32 mbi_date;
++	u32 misc_sig;
++
++	u32 device_capabilities;
++#define NVM_CFG1_GLOB_DEVICE_CAPABILITIES_ETHERNET 0x1
++#define NVM_CFG1_GLOB_DEVICE_CAPABILITIES_FCOE 0x2
++#define NVM_CFG1_GLOB_DEVICE_CAPABILITIES_ISCSI 0x4
++#define NVM_CFG1_GLOB_DEVICE_CAPABILITIES_ROCE 0x8
++#define NVM_CFG1_GLOB_DEVICE_CAPABILITIES_IWARP 0x10
++
++	u32 power_dissipated;
++	u32 power_consumed;
++	u32 efi_version;
++	u32 multi_network_modes_capability;
++	u32 reserved[41];
++};
++
++struct nvm_cfg1_path {
++	u32 reserved[30];
++};
++
++struct nvm_cfg1_port {
++	u32 rel_to_opt123;
++	u32 rel_to_opt124;
++
++	u32 generic_cont0;
++#define NVM_CFG1_PORT_DCBX_MODE_MASK 0x000f0000
++#define NVM_CFG1_PORT_DCBX_MODE_OFFSET 16
++#define NVM_CFG1_PORT_DCBX_MODE_DISABLED 0x0
++#define NVM_CFG1_PORT_DCBX_MODE_IEEE 0x1
++#define NVM_CFG1_PORT_DCBX_MODE_CEE 0x2
++#define NVM_CFG1_PORT_DCBX_MODE_DYNAMIC 0x3
++#define NVM_CFG1_PORT_DEFAULT_ENABLED_PROTOCOLS_MASK 0x00f00000
++#define NVM_CFG1_PORT_DEFAULT_ENABLED_PROTOCOLS_OFFSET 20
++#define NVM_CFG1_PORT_DEFAULT_ENABLED_PROTOCOLS_ETHERNET 0x1
++#define NVM_CFG1_PORT_DEFAULT_ENABLED_PROTOCOLS_FCOE 0x2
++#define NVM_CFG1_PORT_DEFAULT_ENABLED_PROTOCOLS_ISCSI 0x4
++
++	u32 pcie_cfg;
++	u32 features;
++
++	u32 speed_cap_mask;
++#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_MASK 0x0000ffff
++#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_OFFSET 0
++#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_1G 0x1
++#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_10G 0x2
++#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_20G 0x4
++#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_25G 0x8
++#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_40G 0x10
++#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_50G 0x20
++#define NVM_CFG1_PORT_DRV_SPEED_CAPABILITY_MASK_BB_100G 0x40
++
++	u32 link_settings;
++#define NVM_CFG1_PORT_DRV_LINK_SPEED_MASK 0x0000000f
++#define NVM_CFG1_PORT_DRV_LINK_SPEED_OFFSET 0
++#define NVM_CFG1_PORT_DRV_LINK_SPEED_AUTONEG 0x0
++#define NVM_CFG1_PORT_DRV_LINK_SPEED_1G 0x1
++#define NVM_CFG1_PORT_DRV_LINK_SPEED_10G 0x2
++#define NVM_CFG1_PORT_DRV_LINK_SPEED_20G 0x3
++#define NVM_CFG1_PORT_DRV_LINK_SPEED_25G 0x4
++#define NVM_CFG1_PORT_DRV_LINK_SPEED_40G 0x5
++#define NVM_CFG1_PORT_DRV_LINK_SPEED_50G 0x6
++#define NVM_CFG1_PORT_DRV_LINK_SPEED_BB_100G 0x7
++#define NVM_CFG1_PORT_DRV_LINK_SPEED_SMARTLINQ 0x8
++#define NVM_CFG1_PORT_DRV_FLOW_CONTROL_MASK 0x00000070
++#define NVM_CFG1_PORT_DRV_FLOW_CONTROL_OFFSET 4
++#define NVM_CFG1_PORT_DRV_FLOW_CONTROL_AUTONEG 0x1
++#define NVM_CFG1_PORT_DRV_FLOW_CONTROL_RX 0x2
++#define NVM_CFG1_PORT_DRV_FLOW_CONTROL_TX 0x4
++#define NVM_CFG1_PORT_FEC_FORCE_MODE_MASK 0x000e0000
++#define NVM_CFG1_PORT_FEC_FORCE_MODE_OFFSET 17
++#define NVM_CFG1_PORT_FEC_FORCE_MODE_NONE 0x0
++#define NVM_CFG1_PORT_FEC_FORCE_MODE_FIRECODE 0x1
++#define NVM_CFG1_PORT_FEC_FORCE_MODE_RS 0x2
++#define NVM_CFG1_PORT_FEC_FORCE_MODE_AUTO 0x7
++
++	u32 phy_cfg;
++	u32 mgmt_traffic;
++
++	u32 ext_phy;
++	/* EEE power saving mode */
++#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_MASK 0x00ff0000
++#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_OFFSET 16
++#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_DISABLED 0x0
++#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_BALANCED 0x1
++#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_AGGRESSIVE 0x2
++#define NVM_CFG1_PORT_EEE_POWER_SAVING_MODE_LOW_LATENCY 0x3
++
++	u32 mba_cfg1;
++	u32 mba_cfg2;
++	u32							vf_cfg;
++	struct nvm_cfg_mac_address lldp_mac_address;
++	u32 led_port_settings;
++	u32 transceiver_00;
++	u32 device_ids;
++
++	u32 board_cfg;
++#define NVM_CFG1_PORT_PORT_TYPE_MASK 0x000000ff
++#define NVM_CFG1_PORT_PORT_TYPE_OFFSET 0
++#define NVM_CFG1_PORT_PORT_TYPE_UNDEFINED 0x0
++#define NVM_CFG1_PORT_PORT_TYPE_MODULE 0x1
++#define NVM_CFG1_PORT_PORT_TYPE_BACKPLANE 0x2
++#define NVM_CFG1_PORT_PORT_TYPE_EXT_PHY 0x3
++#define NVM_CFG1_PORT_PORT_TYPE_MODULE_SLAVE 0x4
++
++	u32 mnm_10g_cap;
++	u32 mnm_10g_ctrl;
++	u32 mnm_10g_misc;
++	u32 mnm_25g_cap;
++	u32 mnm_25g_ctrl;
++	u32 mnm_25g_misc;
++	u32 mnm_40g_cap;
++	u32 mnm_40g_ctrl;
++	u32 mnm_40g_misc;
++	u32 mnm_50g_cap;
++	u32 mnm_50g_ctrl;
++	u32 mnm_50g_misc;
++	u32 mnm_100g_cap;
++	u32 mnm_100g_ctrl;
++	u32 mnm_100g_misc;
++
++	u32 temperature;
++	u32 ext_phy_cfg1;
++
++	u32 extended_speed;
++#define NVM_CFG1_PORT_EXTENDED_SPEED_MASK 0x0000ffff
++#define NVM_CFG1_PORT_EXTENDED_SPEED_OFFSET 0
++#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_AN 0x1
++#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_1G 0x2
++#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_10G 0x4
++#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_20G 0x8
++#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_25G 0x10
++#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_40G 0x20
++#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_50G_R 0x40
++#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_50G_R2 0x80
++#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_100G_R2 0x100
++#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_100G_R4 0x200
++#define NVM_CFG1_PORT_EXTENDED_SPEED_EXTND_SPD_100G_P4 0x400
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_MASK 0xffff0000
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_OFFSET 16
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_RESERVED 0x1
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_1G 0x2
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_10G 0x4
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_20G 0x8
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_25G 0x10
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_40G 0x20
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_50G_R 0x40
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_50G_R2 0x80
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_100G_R2 0x100
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_100G_R4 0x200
++#define NVM_CFG1_PORT_EXTENDED_SPEED_CAP_EXTND_SPD_100G_P4 0x400
++
++	u32 extended_fec_mode;
++
++	u32 reserved[112];
++};
++
++struct nvm_cfg1_func {
++	struct nvm_cfg_mac_address mac_address;
++	u32 rsrv1;
++	u32 rsrv2;
++	u32 device_id;
++	u32 cmn_cfg;
++	u32 pci_cfg;
++	struct nvm_cfg_mac_address fcoe_node_wwn_mac_addr;
++	struct nvm_cfg_mac_address fcoe_port_wwn_mac_addr;
++	u32 preboot_generic_cfg;
++	u32 reserved[8];
++};
++
++struct nvm_cfg1 {
++	struct nvm_cfg1_glob glob;
++	struct nvm_cfg1_path path[MCP_GLOB_PATH_MAX];
++	struct nvm_cfg1_port port[MCP_GLOB_PORT_MAX];
++	struct nvm_cfg1_func func[MCP_GLOB_FUNC_MAX];
++};
++
++enum spad_sections {
++	SPAD_SECTION_TRACE,
++	SPAD_SECTION_NVM_CFG,
++	SPAD_SECTION_PUBLIC,
++	SPAD_SECTION_PRIVATE,
++	SPAD_SECTION_MAX
++};
++
++#define MCP_TRACE_SIZE          2048	/* 2kb */
++
++/* This section is located at a fixed location in the beginning of the
++ * scratchpad, to ensure that the MCP trace is not run over during MFW upgrade.
++ * All the rest of data has a floating location which differs from version to
++ * version, and is pointed by the mcp_meta_data below.
++ * Moreover, the spad_layout section is part of the MFW firmware, and is loaded
++ * with it from nvram in order to clear this portion.
++ */
++struct static_init {
++	u32 num_sections;
++	offsize_t sections[SPAD_SECTION_MAX];
++#define SECTION(_sec_) (*((offsize_t *)(STRUCT_OFFSET(sections[_sec_]))))
++
++	struct mcp_trace trace;
++#define MCP_TRACE_P ((struct mcp_trace *)(STRUCT_OFFSET(trace)))
++	u8 trace_buffer[MCP_TRACE_SIZE];
++#define MCP_TRACE_BUF ((u8 *)(STRUCT_OFFSET(trace_buffer)))
++	/* running_mfw has the same definition as in nvm_map.h.
++	 * This bit indicate both the running dir, and the running bundle.
++	 * It is set once when the LIM is loaded.
++	 */
++	u32 running_mfw;
++#define RUNNING_MFW (*((u32 *)(STRUCT_OFFSET(running_mfw))))
++	u32 build_time;
++#define MFW_BUILD_TIME (*((u32 *)(STRUCT_OFFSET(build_time))))
++	u32 reset_type;
++#define RESET_TYPE (*((u32 *)(STRUCT_OFFSET(reset_type))))
++	u32 mfw_secure_mode;
++#define MFW_SECURE_MODE (*((u32 *)(STRUCT_OFFSET(mfw_secure_mode))))
++	u16 pme_status_pf_bitmap;
++#define PME_STATUS_PF_BITMAP (*((u16 *)(STRUCT_OFFSET(pme_status_pf_bitmap))))
++	u16 pme_enable_pf_bitmap;
++#define PME_ENABLE_PF_BITMAP (*((u16 *)(STRUCT_OFFSET(pme_enable_pf_bitmap))))
++	u32 mim_nvm_addr;
++	u32 mim_start_addr;
++	u32 ah_pcie_link_params;
++#define AH_PCIE_LINK_PARAMS_LINK_SPEED_MASK     (0x000000ff)
++#define AH_PCIE_LINK_PARAMS_LINK_SPEED_SHIFT    (0)
++#define AH_PCIE_LINK_PARAMS_LINK_WIDTH_MASK     (0x0000ff00)
++#define AH_PCIE_LINK_PARAMS_LINK_WIDTH_SHIFT    (8)
++#define AH_PCIE_LINK_PARAMS_ASPM_MODE_MASK      (0x00ff0000)
++#define AH_PCIE_LINK_PARAMS_ASPM_MODE_SHIFT     (16)
++#define AH_PCIE_LINK_PARAMS_ASPM_CAP_MASK       (0xff000000)
++#define AH_PCIE_LINK_PARAMS_ASPM_CAP_SHIFT      (24)
++#define AH_PCIE_LINK_PARAMS (*((u32 *)(STRUCT_OFFSET(ah_pcie_link_params))))
++
++	u32 rsrv_persist[5];	/* Persist reserved for MFW upgrades */
++};
++
++#define NVM_MAGIC_VALUE		0x669955aa
++
++enum nvm_image_type {
++	NVM_TYPE_TIM1 = 0x01,
++	NVM_TYPE_TIM2 = 0x02,
++	NVM_TYPE_MIM1 = 0x03,
++	NVM_TYPE_MIM2 = 0x04,
++	NVM_TYPE_MBA = 0x05,
++	NVM_TYPE_MODULES_PN = 0x06,
++	NVM_TYPE_VPD = 0x07,
++	NVM_TYPE_MFW_TRACE1 = 0x08,
++	NVM_TYPE_MFW_TRACE2 = 0x09,
++	NVM_TYPE_NVM_CFG1 = 0x0a,
++	NVM_TYPE_L2B = 0x0b,
++	NVM_TYPE_DIR1 = 0x0c,
++	NVM_TYPE_EAGLE_FW1 = 0x0d,
++	NVM_TYPE_FALCON_FW1 = 0x0e,
++	NVM_TYPE_PCIE_FW1 = 0x0f,
++	NVM_TYPE_HW_SET = 0x10,
++	NVM_TYPE_LIM = 0x11,
++	NVM_TYPE_AVS_FW1 = 0x12,
++	NVM_TYPE_DIR2 = 0x13,
++	NVM_TYPE_CCM = 0x14,
++	NVM_TYPE_EAGLE_FW2 = 0x15,
++	NVM_TYPE_FALCON_FW2 = 0x16,
++	NVM_TYPE_PCIE_FW2 = 0x17,
++	NVM_TYPE_AVS_FW2 = 0x18,
++	NVM_TYPE_INIT_HW = 0x19,
++	NVM_TYPE_DEFAULT_CFG = 0x1a,
++	NVM_TYPE_MDUMP = 0x1b,
++	NVM_TYPE_META = 0x1c,
++	NVM_TYPE_ISCSI_CFG = 0x1d,
++	NVM_TYPE_FCOE_CFG = 0x1f,
++	NVM_TYPE_ETH_PHY_FW1 = 0x20,
++	NVM_TYPE_ETH_PHY_FW2 = 0x21,
++	NVM_TYPE_BDN = 0x22,
++	NVM_TYPE_8485X_PHY_FW = 0x23,
++	NVM_TYPE_PUB_KEY = 0x24,
++	NVM_TYPE_RECOVERY = 0x25,
++	NVM_TYPE_PLDM = 0x26,
++	NVM_TYPE_UPK1 = 0x27,
++	NVM_TYPE_UPK2 = 0x28,
++	NVM_TYPE_MASTER_KC = 0x29,
++	NVM_TYPE_BACKUP_KC = 0x2a,
++	NVM_TYPE_HW_DUMP = 0x2b,
++	NVM_TYPE_HW_DUMP_OUT = 0x2c,
++	NVM_TYPE_BIN_NVM_META = 0x30,
++	NVM_TYPE_ROM_TEST = 0xf0,
++	NVM_TYPE_88X33X0_PHY_FW = 0x31,
++	NVM_TYPE_88X33X0_PHY_SLAVE_FW = 0x32,
++	NVM_TYPE_MAX,
++};
++
++#define DIR_ID_1    (0)
++
++#endif
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_rdma.c b/drivers/net/ethernet/qlogic/qed/qed_rdma.c
+index 4f4b79250a2b..05658e66a20b 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_rdma.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_rdma.c
+@@ -22,6 +22,7 @@
+ #include "qed.h"
+ #include "qed_cxt.h"
+ #include "qed_hsi.h"
++#include "qed_iro_hsi.h"
+ #include "qed_hw.h"
+ #include "qed_init_ops.h"
+ #include "qed_int.h"
+@@ -33,7 +34,6 @@
+ #include "qed_roce.h"
+ #include "qed_sp.h"
  
- /**
-- * @brief qed_ll2_establish_connection - start previously
-- *        allocated LL2 queues pair
-+ * qed_ll2_establish_connection(): start previously allocated LL2 queues pair
-  *
-- * @param cxt - pointer to the hw-function [opaque to some]
-- * @param p_ptt
-- * @param connection_handle	LL2 connection's handle obtained from
-- *                              qed_ll2_require_connection
-+ * @cxt: Pointer to the hw-function [opaque to some].
-+ * @connection_handle: LL2 connection's handle obtained from
-+ *                     qed_ll2_require_connection.
-  *
-- * @return 0 on success, failure otherwise
-+ * Return: 0 on success, failure otherwise.
-  */
- int qed_ll2_establish_connection(void *cxt, u8 connection_handle);
- 
- /**
-- * @brief qed_ll2_post_rx_buffers - submit buffers to LL2 Rx queue.
-+ * qed_ll2_post_rx_buffer(): Submit buffers to LL2 Rx queue.
-  *
-- * @param cxt - pointer to the hw-function [opaque to some]
-- * @param connection_handle	LL2 connection's handle obtained from
-- *				qed_ll2_require_connection
-- * @param addr			rx (physical address) buffers to submit
-- * @param cookie
-- * @param notify_fw		produce corresponding Rx BD immediately
-+ * @cxt: Pointer to the hw-function [opaque to some].
-+ * @connection_handle: LL2 connection's handle obtained from
-+ *                     qed_ll2_require_connection.
-+ * @addr: RX (physical address) buffers to submit.
-+ * @buf_len: Buffer Len.
-+ * @cookie: Cookie.
-+ * @notify_fw: Produce corresponding Rx BD immediately.
-  *
-- * @return 0 on success, failure otherwise
-+ * Return: 0 on success, failure otherwise.
-  */
- int qed_ll2_post_rx_buffer(void *cxt,
- 			   u8 connection_handle,
-@@ -161,15 +161,15 @@ int qed_ll2_post_rx_buffer(void *cxt,
- 			   u16 buf_len, void *cookie, u8 notify_fw);
- 
- /**
-- * @brief qed_ll2_prepare_tx_packet - request for start Tx BD
-- *				      to prepare Tx packet submission to FW.
-+ * qed_ll2_prepare_tx_packet(): Request for start Tx BD
-+ *				to prepare Tx packet submission to FW.
-  *
-- * @param cxt - pointer to the hw-function [opaque to some]
-- * @param connection_handle
-- * @param pkt - info regarding the tx packet
-- * @param notify_fw - issue doorbell to fw for this packet
-+ * @cxt: Pointer to the hw-function [opaque to some].
-+ * @connection_handle: Connection handle.
-+ * @pkt: Info regarding the tx packet.
-+ * @notify_fw: Issue doorbell to fw for this packet.
-  *
-- * @return 0 on success, failure otherwise
-+ * Return: 0 on success, failure otherwise.
-  */
- int qed_ll2_prepare_tx_packet(void *cxt,
- 			      u8 connection_handle,
-@@ -177,81 +177,83 @@ int qed_ll2_prepare_tx_packet(void *cxt,
- 			      bool notify_fw);
- 
- /**
-- * @brief qed_ll2_release_connection -	releases resources
-- *					allocated for LL2 connection
-+ * qed_ll2_release_connection(): Releases resources allocated for LL2
-+ *                               connection.
-  *
-- * @param cxt - pointer to the hw-function [opaque to some]
-- * @param connection_handle		LL2 connection's handle obtained from
-- *					qed_ll2_require_connection
-+ * @cxt: Pointer to the hw-function [opaque to some].
-+ * @connection_handle: LL2 connection's handle obtained from
-+ *                     qed_ll2_require_connection.
-+ *
-+ * Return: Void.
-  */
- void qed_ll2_release_connection(void *cxt, u8 connection_handle);
- 
- /**
-- * @brief qed_ll2_set_fragment_of_tx_packet -	provides fragments to fill
-- *						Tx BD of BDs requested by
-- *						qed_ll2_prepare_tx_packet
-+ * qed_ll2_set_fragment_of_tx_packet(): Provides fragments to fill
-+ *                                      Tx BD of BDs requested by
-+ *                                      qed_ll2_prepare_tx_packet
-  *
-- * @param cxt - pointer to the hw-function [opaque to some]
-- * @param connection_handle			LL2 connection's handle
-- *						obtained from
-- *						qed_ll2_require_connection
-- * @param addr
-- * @param nbytes
-+ * @cxt: Pointer to the hw-function [opaque to some].
-+ * @connection_handle: LL2 connection's handle obtained from
-+ *                     qed_ll2_require_connection.
-+ * @addr: Address.
-+ * @nbytes: Number of bytes.
-  *
-- * @return 0 on success, failure otherwise
-+ * Return: 0 on success, failure otherwise.
-  */
- int qed_ll2_set_fragment_of_tx_packet(void *cxt,
- 				      u8 connection_handle,
- 				      dma_addr_t addr, u16 nbytes);
- 
- /**
-- * @brief qed_ll2_terminate_connection -	stops Tx/Rx queues
-- *
-+ * qed_ll2_terminate_connection(): Stops Tx/Rx queues
-  *
-- * @param cxt - pointer to the hw-function [opaque to some]
-- * @param connection_handle			LL2 connection's handle
-- *						obtained from
-- *						qed_ll2_require_connection
-+ * @cxt: Pointer to the hw-function [opaque to some].
-+ * @connection_handle: LL2 connection's handle obtained from
-+ *                    qed_ll2_require_connection.
-  *
-- * @return 0 on success, failure otherwise
-+ * Return: 0 on success, failure otherwise.
-  */
- int qed_ll2_terminate_connection(void *cxt, u8 connection_handle);
- 
- /**
-- * @brief qed_ll2_get_stats -	get LL2 queue's statistics
-- *
-+ * qed_ll2_get_stats(): Get LL2 queue's statistics
-  *
-- * @param cxt - pointer to the hw-function [opaque to some]
-- * @param connection_handle	LL2 connection's handle obtained from
-- *				qed_ll2_require_connection
-- * @param p_stats
-+ * @cxt: Pointer to the hw-function [opaque to some].
-+ * @connection_handle: LL2 connection's handle obtained from
-+ *                    qed_ll2_require_connection.
-+ * @p_stats: Pointer Status.
-  *
-- * @return 0 on success, failure otherwise
-+ * Return: 0 on success, failure otherwise.
-  */
- int qed_ll2_get_stats(void *cxt,
- 		      u8 connection_handle, struct qed_ll2_stats *p_stats);
- 
- /**
-- * @brief qed_ll2_alloc - Allocates LL2 connections set
-+ * qed_ll2_alloc(): Allocates LL2 connections set.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_ll2_alloc(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_ll2_setup - Inits LL2 connections set
-+ * qed_ll2_setup(): Inits LL2 connections set.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-+ *
-+ * Return: Void.
-  *
-  */
- void qed_ll2_setup(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_ll2_free - Releases LL2 connections set
-+ * qed_ll2_free(): Releases LL2 connections set
-+ *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Void.
-  *
-  */
- void qed_ll2_free(struct qed_hwfn *p_hwfn);
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_mcp.h b/drivers/net/ethernet/qlogic/qed/qed_mcp.h
-index 8edb450d0abf..352b757183e8 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_mcp.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_mcp.h
-@@ -266,97 +266,97 @@ union qed_mfw_tlv_data {
- #define QED_NVM_CFG_OPTION_ENTITY_SEL	BIT(4)
- 
- /**
-- * @brief - returns the link params of the hw function
-+ * qed_mcp_get_link_params(): Returns the link params of the hw function.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @returns pointer to link params
-+ * Returns: Pointer to link params.
-  */
--struct qed_mcp_link_params *qed_mcp_get_link_params(struct qed_hwfn *);
-+struct qed_mcp_link_params *qed_mcp_get_link_params(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief - return the link state of the hw function
-+ * qed_mcp_get_link_state(): Return the link state of the hw function.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @returns pointer to link state
-+ * Returns: Pointer to link state.
-  */
--struct qed_mcp_link_state *qed_mcp_get_link_state(struct qed_hwfn *);
-+struct qed_mcp_link_state *qed_mcp_get_link_state(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief - return the link capabilities of the hw function
-+ * qed_mcp_get_link_capabilities(): Return the link capabilities of the
-+ *                                  hw function.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @returns pointer to link capabilities
-+ * Returns: Pointer to link capabilities.
-  */
- struct qed_mcp_link_capabilities
- 	*qed_mcp_get_link_capabilities(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief Request the MFW to set the the link according to 'link_input'.
-+ * qed_mcp_set_link(): Request the MFW to set the link according
-+ *                     to 'link_input'.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param b_up - raise link if `true'. Reset link if `false'.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @b_up: Raise link if `true'. Reset link if `false'.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_mcp_set_link(struct qed_hwfn   *p_hwfn,
- 		     struct qed_ptt     *p_ptt,
- 		     bool               b_up);
- 
- /**
-- * @brief Get the management firmware version value
-+ * qed_mcp_get_mfw_ver(): Get the management firmware version value.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param p_mfw_ver    - mfw version value
-- * @param p_running_bundle_id	- image id in nvram; Optional.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_mfw_ver: MFW version value.
-+ * @p_running_bundle_id: Image id in nvram; Optional.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - operation was successful.
-  */
- int qed_mcp_get_mfw_ver(struct qed_hwfn *p_hwfn,
- 			struct qed_ptt *p_ptt,
- 			u32 *p_mfw_ver, u32 *p_running_bundle_id);
- 
- /**
-- * @brief Get the MBI version value
-+ * qed_mcp_get_mbi_ver(): Get the MBI version value.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param p_mbi_ver - A pointer to a variable to be filled with the MBI version.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_mbi_ver: A pointer to a variable to be filled with the MBI version.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - operation was successful.
-  */
- int qed_mcp_get_mbi_ver(struct qed_hwfn *p_hwfn,
- 			struct qed_ptt *p_ptt, u32 *p_mbi_ver);
- 
- /**
-- * @brief Get media type value of the port.
-+ * qed_mcp_get_media_type(): Get media type value of the port.
-  *
-- * @param cdev      - qed dev pointer
-- * @param p_ptt
-- * @param mfw_ver    - media type value
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @media_type: Media type value
-  *
-- * @return int -
-- *      0 - Operation was successul.
-- *      -EBUSY - Operation failed
-+ * Return: Int - 0 - Operation was successul.
-+ *              -EBUSY - Operation failed
-  */
- int qed_mcp_get_media_type(struct qed_hwfn *p_hwfn,
- 			   struct qed_ptt *p_ptt, u32 *media_type);
- 
- /**
-- * @brief Get transceiver data of the port.
-+ * qed_mcp_get_transceiver_data(): Get transceiver data of the port.
-  *
-- * @param cdev      - qed dev pointer
-- * @param p_ptt
-- * @param p_transceiver_state - transceiver state.
-- * @param p_transceiver_type - media type value
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_transceiver_state: Transceiver state.
-+ * @p_tranceiver_type: Media type value.
-  *
-- * @return int -
-- *      0 - Operation was successful.
-- *      -EBUSY - Operation failed
-+ * Return: Int - 0 - Operation was successul.
-+ *              -EBUSY - Operation failed
-  */
- int qed_mcp_get_transceiver_data(struct qed_hwfn *p_hwfn,
- 				 struct qed_ptt *p_ptt,
-@@ -364,50 +364,48 @@ int qed_mcp_get_transceiver_data(struct qed_hwfn *p_hwfn,
- 				 u32 *p_tranceiver_type);
- 
- /**
-- * @brief Get transceiver supported speed mask.
-+ * qed_mcp_trans_speed_mask(): Get transceiver supported speed mask.
-  *
-- * @param cdev      - qed dev pointer
-- * @param p_ptt
-- * @param p_speed_mask - Bit mask of all supported speeds.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_speed_mask: Bit mask of all supported speeds.
-  *
-- * @return int -
-- *      0 - Operation was successful.
-- *      -EBUSY - Operation failed
-+ * Return: Int - 0 - Operation was successul.
-+ *              -EBUSY - Operation failed
-  */
- 
- int qed_mcp_trans_speed_mask(struct qed_hwfn *p_hwfn,
- 			     struct qed_ptt *p_ptt, u32 *p_speed_mask);
- 
- /**
-- * @brief Get board configuration.
-+ * qed_mcp_get_board_config(): Get board configuration.
-  *
-- * @param cdev      - qed dev pointer
-- * @param p_ptt
-- * @param p_board_config - Board config.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_board_config: Board config.
-  *
-- * @return int -
-- *      0 - Operation was successful.
-- *      -EBUSY - Operation failed
-+ * Return: Int - 0 - Operation was successul.
-+ *              -EBUSY - Operation failed
-  */
- int qed_mcp_get_board_config(struct qed_hwfn *p_hwfn,
- 			     struct qed_ptt *p_ptt, u32 *p_board_config);
- 
- /**
-- * @brief General function for sending commands to the MCP
-- *        mailbox. It acquire mutex lock for the entire
-- *        operation, from sending the request until the MCP
-- *        response. Waiting for MCP response will be checked up
-- *        to 5 seconds every 5ms.
-+ * qed_mcp_cmd(): General function for sending commands to the MCP
-+ *                mailbox. It acquire mutex lock for the entire
-+ *                operation, from sending the request until the MCP
-+ *                response. Waiting for MCP response will be checked up
-+ *                to 5 seconds every 5ms.
-  *
-- * @param p_hwfn     - hw function
-- * @param p_ptt      - PTT required for register access
-- * @param cmd        - command to be sent to the MCP.
-- * @param param      - Optional param
-- * @param o_mcp_resp - The MCP response code (exclude sequence).
-- * @param o_mcp_param- Optional parameter provided by the MCP
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-+ * @cmd: command to be sent to the MCP.
-+ * @param: Optional param
-+ * @o_mcp_resp: The MCP response code (exclude sequence).
-+ * @o_mcp_param: Optional parameter provided by the MCP
-  *                     response
-- * @return int - 0 - operation
-- * was successul.
-+ *
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_cmd(struct qed_hwfn *p_hwfn,
- 		struct qed_ptt *p_ptt,
-@@ -417,37 +415,39 @@ int qed_mcp_cmd(struct qed_hwfn *p_hwfn,
- 		u32 *o_mcp_param);
- 
- /**
-- * @brief - drains the nig, allowing completion to pass in case of pauses.
-- *          (Should be called only from sleepable context)
-+ * qed_mcp_drain(): drains the nig, allowing completion to pass in
-+ *                  case of pauses.
-+ *                  (Should be called only from sleepable context)
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-+ *
-+ * Return: Int.
-  */
- int qed_mcp_drain(struct qed_hwfn *p_hwfn,
- 		  struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Get the flash size value
-+ * qed_mcp_get_flash_size(): Get the flash size value.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param p_flash_size  - flash size in bytes to be filled.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-+ * @p_flash_size: Flash size in bytes to be filled.
-  *
-- * @return int - 0 - operation was successul.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_get_flash_size(struct qed_hwfn     *p_hwfn,
- 			   struct qed_ptt       *p_ptt,
- 			   u32 *p_flash_size);
- 
- /**
-- * @brief Send driver version to MFW
-+ * qed_mcp_send_drv_version(): Send driver version to MFW.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param version - Version value
-- * @param name - Protocol driver name
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-+ * @p_ver: Version value.
-  *
-- * @return int - 0 - operation was successul.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int
- qed_mcp_send_drv_version(struct qed_hwfn *p_hwfn,
-@@ -455,146 +455,148 @@ qed_mcp_send_drv_version(struct qed_hwfn *p_hwfn,
- 			 struct qed_mcp_drv_version *p_ver);
- 
- /**
-- * @brief Read the MFW process kill counter
-+ * qed_get_process_kill_counter(): Read the MFW process kill counter.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-  *
-- * @return u32
-+ * Return: u32.
-  */
- u32 qed_get_process_kill_counter(struct qed_hwfn *p_hwfn,
- 				 struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Trigger a recovery process
-+ * qed_start_recovery_process(): Trigger a recovery process.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_start_recovery_process(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief A recovery handler must call this function as its first step.
-- *        It is assumed that the handler is not run from an interrupt context.
-+ * qed_recovery_prolog(): A recovery handler must call this function
-+ *                        as its first step.
-+ *                        It is assumed that the handler is not run from
-+ *                        an interrupt context.
-  *
-- *  @param cdev
-- *  @param p_ptt
-+ * @cdev: Qed dev pointer.
-  *
-- * @return int
-+ * Return: int.
-  */
- int qed_recovery_prolog(struct qed_dev *cdev);
- 
- /**
-- * @brief Notify MFW about the change in base device properties
-+ * qed_mcp_ov_update_current_config(): Notify MFW about the change in base
-+ *                                    device properties
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-- *  @param client - qed client type
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @client: Qed client type.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_ov_update_current_config(struct qed_hwfn *p_hwfn,
- 				     struct qed_ptt *p_ptt,
- 				     enum qed_ov_client client);
- 
- /**
-- * @brief Notify MFW about the driver state
-+ * qed_mcp_ov_update_driver_state(): Notify MFW about the driver state.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-- *  @param drv_state - Driver state
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @drv_state: Driver state.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_ov_update_driver_state(struct qed_hwfn *p_hwfn,
- 				   struct qed_ptt *p_ptt,
- 				   enum qed_ov_driver_state drv_state);
- 
- /**
-- * @brief Send MTU size to MFW
-+ * qed_mcp_ov_update_mtu(): Send MTU size to MFW.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-- *  @param mtu - MTU size
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @mtu: MTU size.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_ov_update_mtu(struct qed_hwfn *p_hwfn,
- 			  struct qed_ptt *p_ptt, u16 mtu);
- 
- /**
-- * @brief Send MAC address to MFW
-+ * qed_mcp_ov_update_mac(): Send MAC address to MFW.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-- *  @param mac - MAC address
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @mac: MAC address.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_ov_update_mac(struct qed_hwfn *p_hwfn,
- 			  struct qed_ptt *p_ptt, u8 *mac);
- 
- /**
-- * @brief Send WOL mode to MFW
-+ * qed_mcp_ov_update_wol(): Send WOL mode to MFW.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-- *  @param wol - WOL mode
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @wol: WOL mode.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_ov_update_wol(struct qed_hwfn *p_hwfn,
- 			  struct qed_ptt *p_ptt,
- 			  enum qed_ov_wol wol);
- 
- /**
-- * @brief Set LED status
-+ * qed_mcp_set_led(): Set LED status.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-- *  @param mode - LED mode
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @mode: LED mode.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_set_led(struct qed_hwfn *p_hwfn,
- 		    struct qed_ptt *p_ptt,
- 		    enum qed_led_mode mode);
- 
- /**
-- * @brief Read from nvm
-+ * qed_mcp_nvm_read(): Read from NVM.
-  *
-- *  @param cdev
-- *  @param addr - nvm offset
-- *  @param p_buf - nvm read buffer
-- *  @param len - buffer len
-+ * @cdev: Qed dev pointer.
-+ * @addr: NVM offset.
-+ * @p_buf: NVM read buffer.
-+ * @len: Buffer len.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_nvm_read(struct qed_dev *cdev, u32 addr, u8 *p_buf, u32 len);
- 
- /**
-- * @brief Write to nvm
-+ * qed_mcp_nvm_write(): Write to NVM.
-  *
-- *  @param cdev
-- *  @param addr - nvm offset
-- *  @param cmd - nvm command
-- *  @param p_buf - nvm write buffer
-- *  @param len - buffer len
-+ * @cdev: Qed dev pointer.
-+ * @addr: NVM offset.
-+ * @cmd: NVM command.
-+ * @p_buf: NVM write buffer.
-+ * @len: Buffer len.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_nvm_write(struct qed_dev *cdev,
- 		      u32 cmd, u32 addr, u8 *p_buf, u32 len);
- 
- /**
-- * @brief Check latest response
-+ * qed_mcp_nvm_resp(): Check latest response.
-  *
-- *  @param cdev
-- *  @param p_buf - nvm write buffer
-+ * @cdev: Qed dev pointer.
-+ * @p_buf: NVM write buffer.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_nvm_resp(struct qed_dev *cdev, u8 *p_buf);
- 
-@@ -604,13 +606,13 @@ struct qed_nvm_image_att {
- };
- 
- /**
-- * @brief Allows reading a whole nvram image
-+ * qed_mcp_get_nvm_image_att(): Allows reading a whole nvram image.
-  *
-- * @param p_hwfn
-- * @param image_id - image to get attributes for
-- * @param p_image_att - image attributes structure into which to fill data
-+ * @p_hwfn: HW device data.
-+ * @image_id: Image to get attributes for.
-+ * @p_image_att: Image attributes structure into which to fill data.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int
- qed_mcp_get_nvm_image_att(struct qed_hwfn *p_hwfn,
-@@ -618,64 +620,65 @@ qed_mcp_get_nvm_image_att(struct qed_hwfn *p_hwfn,
- 			  struct qed_nvm_image_att *p_image_att);
- 
- /**
-- * @brief Allows reading a whole nvram image
-+ * qed_mcp_get_nvm_image(): Allows reading a whole nvram image.
-  *
-- * @param p_hwfn
-- * @param image_id - image requested for reading
-- * @param p_buffer - allocated buffer into which to fill data
-- * @param buffer_len - length of the allocated buffer.
-+ * @p_hwfn: HW device data.
-+ * @image_id: image requested for reading.
-+ * @p_buffer: allocated buffer into which to fill data.
-+ * @buffer_len: length of the allocated buffer.
-  *
-- * @return 0 iff p_buffer now contains the nvram image.
-+ * Return: 0 if p_buffer now contains the nvram image.
-  */
- int qed_mcp_get_nvm_image(struct qed_hwfn *p_hwfn,
- 			  enum qed_nvm_images image_id,
- 			  u8 *p_buffer, u32 buffer_len);
- 
- /**
-- * @brief Bist register test
-+ * qed_mcp_bist_register_test(): Bist register test.
-  *
-- *  @param p_hwfn    - hw function
-- *  @param p_ptt     - PTT required for register access
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_bist_register_test(struct qed_hwfn *p_hwfn,
- 			       struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Bist clock test
-+ * qed_mcp_bist_clock_test(): Bist clock test.
-  *
-- *  @param p_hwfn    - hw function
-- *  @param p_ptt     - PTT required for register access
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_bist_clock_test(struct qed_hwfn *p_hwfn,
- 			    struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Bist nvm test - get number of images
-+ * qed_mcp_bist_nvm_get_num_images(): Bist nvm test - get number of images.
-  *
-- *  @param p_hwfn       - hw function
-- *  @param p_ptt        - PTT required for register access
-- *  @param num_images   - number of images if operation was
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-+ * @num_images: number of images if operation was
-  *			  successful. 0 if not.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_bist_nvm_get_num_images(struct qed_hwfn *p_hwfn,
- 				    struct qed_ptt *p_ptt,
- 				    u32 *num_images);
- 
- /**
-- * @brief Bist nvm test - get image attributes by index
-+ * qed_mcp_bist_nvm_get_image_att(): Bist nvm test - get image attributes
-+ *                                   by index.
-  *
-- *  @param p_hwfn      - hw function
-- *  @param p_ptt       - PTT required for register access
-- *  @param p_image_att - Attributes of image
-- *  @param image_index - Index of image to get information for
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-+ * @p_image_att: Attributes of image.
-+ * @image_index: Index of image to get information for.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_bist_nvm_get_image_att(struct qed_hwfn *p_hwfn,
- 				   struct qed_ptt *p_ptt,
-@@ -683,23 +686,26 @@ int qed_mcp_bist_nvm_get_image_att(struct qed_hwfn *p_hwfn,
- 				   u32 image_index);
- 
- /**
-- * @brief - Processes the TLV request from MFW i.e., get the required TLV info
-- *          from the qed client and send it to the MFW.
-+ * qed_mfw_process_tlv_req(): Processes the TLV request from MFW i.e.,
-+ *                            get the required TLV info
-+ *                            from the qed client and send it to the MFW.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @param return 0 upon success.
-+ * Return: 0 upon success.
-  */
- int qed_mfw_process_tlv_req(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Send raw debug data to the MFW
-+ * qed_mcp_send_raw_debug_data(): Send raw debug data to the MFW
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_buf: raw debug data buffer.
-+ * @size: Buffer size.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param p_buf - raw debug data buffer
-- * @param size - buffer size
-+ * Return : Int.
-  */
- int
- qed_mcp_send_raw_debug_data(struct qed_hwfn *p_hwfn,
-@@ -796,47 +802,49 @@ qed_mcp_is_ext_speed_supported(const struct qed_hwfn *p_hwfn)
+-
+ int qed_rdma_bmap_alloc(struct qed_hwfn *p_hwfn,
+ 			struct qed_bmap *bmap, u32 max_count, char *name)
+ {
+@@ -1903,7 +1903,6 @@ void qed_rdma_dpm_conf(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt)
+ 		   val, p_hwfn->dcbx_no_edpm, p_hwfn->db_bar_no_edpm);
  }
  
- /**
-- * @brief Initialize the interface with the MCP
-+ * qed_mcp_cmd_init(): Initialize the interface with the MCP.
-  *
-- * @param p_hwfn - HW func
-- * @param p_ptt - PTT required for register access
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_mcp_cmd_init(struct qed_hwfn *p_hwfn,
- 		     struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Initialize the port interface with the MCP
-+ * qed_mcp_cmd_port_init(): Initialize the port interface with the MCP
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ *
-+ * Return: Void.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-  * Can only be called after `num_ports_in_engines' is set
-  */
- void qed_mcp_cmd_port_init(struct qed_hwfn *p_hwfn,
- 			   struct qed_ptt *p_ptt);
- /**
-- * @brief Releases resources allocated during the init process.
-+ * qed_mcp_free(): Releases resources allocated during the init process.
-  *
-- * @param p_hwfn - HW func
-- * @param p_ptt - PTT required for register access
-+ * @p_hwfn: HW function.
-  *
-- * @return int
-+ * Return: Int.
-  */
- 
- int qed_mcp_free(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief This function is called from the DPC context. After
-- * pointing PTT to the mfw mb, check for events sent by the MCP
-- * to the driver and ack them. In case a critical event
-- * detected, it will be handled here, otherwise the work will be
-- * queued to a sleepable work-queue.
-+ * qed_mcp_handle_events(): This function is called from the DPC context.
-+ *           After pointing PTT to the mfw mb, check for events sent by
-+ *           the MCP to the driver and ack them. In case a critical event
-+ *           detected, it will be handled here, otherwise the work will be
-+ *            queued to a sleepable work-queue.
-+ *
-+ * @p_hwfn: HW function.
-+ * @p_ptt: PTT required for register access.
-  *
-- * @param p_hwfn - HW function
-- * @param p_ptt - PTT required for register access
-- * @return int - 0 - operation
-- * was successul.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_handle_events(struct qed_hwfn *p_hwfn,
- 			  struct qed_ptt *p_ptt);
-@@ -858,106 +866,111 @@ struct qed_load_req_params {
- };
- 
- /**
-- * @brief Sends a LOAD_REQ to the MFW, and in case the operation succeeds,
-- *        returns whether this PF is the first on the engine/port or function.
-+ * qed_mcp_load_req(): Sends a LOAD_REQ to the MFW, and in case the
-+ *                     operation succeeds, returns whether this PF is
-+ *                     the first on the engine/port or function.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param p_params
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_params: Params.
-  *
-- * @return int - 0 - Operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_load_req(struct qed_hwfn *p_hwfn,
- 		     struct qed_ptt *p_ptt,
- 		     struct qed_load_req_params *p_params);
- 
- /**
-- * @brief Sends a LOAD_DONE message to the MFW
-+ * qed_mcp_load_done(): Sends a LOAD_DONE message to the MFW.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @return int - 0 - Operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_load_done(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Sends a UNLOAD_REQ message to the MFW
-+ * qed_mcp_unload_req(): Sends a UNLOAD_REQ message to the MFW.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @return int - 0 - Operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_unload_req(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Sends a UNLOAD_DONE message to the MFW
-+ * qed_mcp_unload_done(): Sends a UNLOAD_DONE message to the MFW
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @return int - 0 - Operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_unload_done(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Read the MFW mailbox into Current buffer.
-+ * qed_mcp_read_mb(): Read the MFW mailbox into Current buffer.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ *
-+ * Return: Void.
-  */
- void qed_mcp_read_mb(struct qed_hwfn *p_hwfn,
- 		     struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Ack to mfw that driver finished FLR process for VFs
-+ * qed_mcp_ack_vf_flr(): Ack to mfw that driver finished FLR process for VFs
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param vfs_to_ack - bit mask of all engine VFs for which the PF acks.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @vfs_to_ack: bit mask of all engine VFs for which the PF acks.
-  *
-- * @param return int - 0 upon success.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_ack_vf_flr(struct qed_hwfn *p_hwfn,
- 		       struct qed_ptt *p_ptt, u32 *vfs_to_ack);
- 
- /**
-- * @brief - calls during init to read shmem of all function-related info.
-+ * qed_mcp_fill_shmem_func_info(): Calls during init to read shmem of
-+ *                                 all function-related info.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @param return 0 upon success.
-+ * Return: 0 upon success.
-  */
- int qed_mcp_fill_shmem_func_info(struct qed_hwfn *p_hwfn,
- 				 struct qed_ptt *p_ptt);
- 
- /**
-- * @brief - Reset the MCP using mailbox command.
-+ * qed_mcp_reset(): Reset the MCP using mailbox command.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @param return 0 upon success.
-+ * Return: 0 upon success.
-  */
- int qed_mcp_reset(struct qed_hwfn *p_hwfn,
- 		  struct qed_ptt *p_ptt);
- 
- /**
-- * @brief - Sends an NVM read command request to the MFW to get
-- *        a buffer.
-+ * qed_mcp_nvm_rd_cmd(): Sends an NVM read command request to the MFW to get
-+ *                       a buffer.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param cmd - Command: DRV_MSG_CODE_NVM_GET_FILE_DATA or
-- *            DRV_MSG_CODE_NVM_READ_NVRAM commands
-- * @param param - [0:23] - Offset [24:31] - Size
-- * @param o_mcp_resp - MCP response
-- * @param o_mcp_param - MCP response param
-- * @param o_txn_size -  Buffer size output
-- * @param o_buf - Pointer to the buffer returned by the MFW.
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @cmd: (Command) DRV_MSG_CODE_NVM_GET_FILE_DATA or
-+ *            DRV_MSG_CODE_NVM_READ_NVRAM commands.
-+ * @param: [0:23] - Offset [24:31] - Size.
-+ * @o_mcp_resp: MCP response.
-+ * @o_mcp_param: MCP response param.
-+ * @o_txn_size: Buffer size output.
-+ * @o_buf: Pointer to the buffer returned by the MFW.
-  *
-- * @param return 0 upon success.
-+ * Return: 0 upon success.
-  */
- int qed_mcp_nvm_rd_cmd(struct qed_hwfn *p_hwfn,
- 		       struct qed_ptt *p_ptt,
-@@ -967,60 +980,61 @@ int qed_mcp_nvm_rd_cmd(struct qed_hwfn *p_hwfn,
- 		       u32 *o_mcp_param, u32 *o_txn_size, u32 *o_buf);
- 
- /**
-- * @brief Read from sfp
-+ * qed_mcp_phy_sfp_read(): Read from sfp.
-  *
-- *  @param p_hwfn - hw function
-- *  @param p_ptt  - PTT required for register access
-- *  @param port   - transceiver port
-- *  @param addr   - I2C address
-- *  @param offset - offset in sfp
-- *  @param len    - buffer length
-- *  @param p_buf  - buffer to read into
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: PTT required for register access.
-+ * @port: transceiver port.
-+ * @addr: I2C address.
-+ * @offset: offset in sfp.
-+ * @len: buffer length.
-+ * @p_buf: buffer to read into.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_phy_sfp_read(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt,
- 			 u32 port, u32 addr, u32 offset, u32 len, u8 *p_buf);
- 
- /**
-- * @brief indicates whether the MFW objects [under mcp_info] are accessible
-+ * qed_mcp_is_init(): indicates whether the MFW objects [under mcp_info]
-+ *                    are accessible
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return true iff MFW is running and mcp_info is initialized
-+ * Return: true if MFW is running and mcp_info is initialized.
-  */
- bool qed_mcp_is_init(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief request MFW to configure MSI-X for a VF
-+ * qed_mcp_config_vf_msix(): Request MFW to configure MSI-X for a VF.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param vf_id - absolute inside engine
-- * @param num_sbs - number of entries to request
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @vf_id: absolute inside engine.
-+ * @num: number of entries to request.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_mcp_config_vf_msix(struct qed_hwfn *p_hwfn,
- 			   struct qed_ptt *p_ptt, u8 vf_id, u8 num);
- 
- /**
-- * @brief - Halt the MCP.
-+ * qed_mcp_halt(): Halt the MCP.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @param return 0 upon success.
-+ * Return: 0 upon success.
-  */
- int qed_mcp_halt(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief - Wake up the MCP.
-+ * qed_mcp_resume: Wake up the MCP.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @param return 0 upon success.
-+ * Return: 0 upon success.
-  */
- int qed_mcp_resume(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
-@@ -1038,13 +1052,13 @@ int __qed_configure_pf_min_bandwidth(struct qed_hwfn *p_hwfn,
- int qed_mcp_mask_parities(struct qed_hwfn *p_hwfn,
- 			  struct qed_ptt *p_ptt, u32 mask_parities);
- 
--/* @brief - Gets the mdump retained data from the MFW.
-+/* qed_mcp_mdump_get_retain(): Gets the mdump retained data from the MFW.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param p_mdump_retain
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_mdump_retain: mdump retain.
-  *
-- * @param return 0 upon success.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int
- qed_mcp_mdump_get_retain(struct qed_hwfn *p_hwfn,
-@@ -1052,15 +1066,15 @@ qed_mcp_mdump_get_retain(struct qed_hwfn *p_hwfn,
- 			 struct mdump_retain_data_stc *p_mdump_retain);
- 
- /**
-- * @brief - Sets the MFW's max value for the given resource
-+ * qed_mcp_set_resc_max_val(): Sets the MFW's max value for the given resource.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-- *  @param res_id
-- *  @param resc_max_val
-- *  @param p_mcp_resp
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @res_id: RES ID.
-+ * @resc_max_val: Resec max val.
-+ * @p_mcp_resp: MCP Resp
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int
- qed_mcp_set_resc_max_val(struct qed_hwfn *p_hwfn,
-@@ -1069,16 +1083,17 @@ qed_mcp_set_resc_max_val(struct qed_hwfn *p_hwfn,
- 			 u32 resc_max_val, u32 *p_mcp_resp);
- 
- /**
-- * @brief - Gets the MFW allocation info for the given resource
-+ * qed_mcp_get_resc_info(): Gets the MFW allocation info for the given
-+ *                          resource.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-- *  @param res_id
-- *  @param p_mcp_resp
-- *  @param p_resc_num
-- *  @param p_resc_start
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @res_id: Res ID.
-+ * @p_mcp_resp: MCP resp.
-+ * @p_resc_num: Resc num.
-+ * @p_resc_start: Resc start.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int
- qed_mcp_get_resc_info(struct qed_hwfn *p_hwfn,
-@@ -1087,13 +1102,13 @@ qed_mcp_get_resc_info(struct qed_hwfn *p_hwfn,
- 		      u32 *p_mcp_resp, u32 *p_resc_num, u32 *p_resc_start);
- 
- /**
-- * @brief Send eswitch mode to MFW
-+ * qed_mcp_ov_update_eswitch(): Send eswitch mode to MFW.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-- *  @param eswitch - eswitch mode
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @eswitch: eswitch mode.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_ov_update_eswitch(struct qed_hwfn *p_hwfn,
- 			      struct qed_ptt *p_ptt,
-@@ -1113,12 +1128,12 @@ enum qed_resc_lock {
- };
- 
- /**
-- * @brief - Initiates PF FLR
-+ * qed_mcp_initiate_pf_flr(): Initiates PF FLR.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int qed_mcp_initiate_pf_flr(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- struct qed_resc_lock_params {
-@@ -1151,13 +1166,13 @@ struct qed_resc_lock_params {
- };
- 
- /**
-- * @brief Acquires MFW generic resource lock
-+ * qed_mcp_resc_lock(): Acquires MFW generic resource lock.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-- *  @param p_params
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_params: Params.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int
- qed_mcp_resc_lock(struct qed_hwfn *p_hwfn,
-@@ -1175,13 +1190,13 @@ struct qed_resc_unlock_params {
- };
- 
- /**
-- * @brief Releases MFW generic resource lock
-+ * qed_mcp_resc_unlock(): Releases MFW generic resource lock.
-  *
-- *  @param p_hwfn
-- *  @param p_ptt
-- *  @param p_params
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_params: Params.
-  *
-- * @return int - 0 - operation was successful.
-+ * Return: Int - 0 - Operation was successul.
-  */
- int
- qed_mcp_resc_unlock(struct qed_hwfn *p_hwfn,
-@@ -1189,12 +1204,15 @@ qed_mcp_resc_unlock(struct qed_hwfn *p_hwfn,
- 		    struct qed_resc_unlock_params *p_params);
- 
- /**
-- * @brief - default initialization for lock/unlock resource structs
-+ * qed_mcp_resc_lock_default_init(): Default initialization for
-+ *                                   lock/unlock resource structs.
-  *
-- * @param p_lock - lock params struct to be initialized; Can be NULL
-- * @param p_unlock - unlock params struct to be initialized; Can be NULL
-- * @param resource - the requested resource
-- * @paral b_is_permanent - disable retries & aging when set
-+ * @p_lock: lock params struct to be initialized; Can be NULL.
-+ * @p_unlock: unlock params struct to be initialized; Can be NULL.
-+ * @resource: the requested resource.
-+ * @b_is_permanent: disable retries & aging when set.
-+ *
-+ * Return: Void.
-  */
- void qed_mcp_resc_lock_default_init(struct qed_resc_lock_params *p_lock,
- 				    struct qed_resc_unlock_params *p_unlock,
-@@ -1202,94 +1220,117 @@ void qed_mcp_resc_lock_default_init(struct qed_resc_lock_params *p_lock,
- 				    resource, bool b_is_permanent);
- 
- /**
-- * @brief - Return whether management firmware support smart AN
-+ * qed_mcp_is_smart_an_supported(): Return whether management firmware
-+ *                                  support smart AN
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return bool - true if feature is supported.
-+ * Return: bool true if feature is supported.
-  */
- bool qed_mcp_is_smart_an_supported(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief Learn of supported MFW features; To be done during early init
-+ * qed_mcp_get_capabilities(): Learn of supported MFW features;
-+ *                             To be done during early init.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ *
-+ * Return: Int.
-  */
- int qed_mcp_get_capabilities(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Inform MFW of set of features supported by driver. Should be done
-- * inside the content of the LOAD_REQ.
-+ * qed_mcp_set_capabilities(): Inform MFW of set of features supported
-+ *                             by driver. Should be done inside the content
-+ *                             of the LOAD_REQ.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * Return: Int.
-  */
- int qed_mcp_set_capabilities(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Read ufp config from the shared memory.
-+ * qed_mcp_read_ufp_config(): Read ufp config from the shared memory.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * Return: Void.
-  */
- void qed_mcp_read_ufp_config(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Populate the nvm info shadow in the given hardware function
-+ * qed_mcp_nvm_info_populate(): Populate the nvm info shadow in the given
-+ *                              hardware function.
-+ *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Int.
-  */
- int qed_mcp_nvm_info_populate(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief Delete nvm info shadow in the given hardware function
-+ * qed_mcp_nvm_info_free(): Delete nvm info shadow in the given
-+ *                          hardware function.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-+ *
-+ * Return: Void.
-  */
- void qed_mcp_nvm_info_free(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief Get the engine affinity configuration.
-+ * qed_mcp_get_engine_config(): Get the engine affinity configuration.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ *
-+ * Return: Int.
-  */
- int qed_mcp_get_engine_config(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Get the PPFID bitmap.
-+ * qed_mcp_get_ppfid_bitmap(): Get the PPFID bitmap.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ *
-+ * Return: Int.
-  */
- int qed_mcp_get_ppfid_bitmap(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
- 
- /**
-- * @brief Get NVM config attribute value.
-+ * qed_mcp_nvm_get_cfg(): Get NVM config attribute value.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @option_id: Option ID.
-+ * @entity_id: Entity ID.
-+ * @flags: Flags.
-+ * @p_buf: Buf.
-+ * @p_len: Len.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param option_id
-- * @param entity_id
-- * @param flags
-- * @param p_buf
-- * @param p_len
-+ * Return: Int.
-  */
- int qed_mcp_nvm_get_cfg(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt,
- 			u16 option_id, u8 entity_id, u16 flags, u8 *p_buf,
- 			u32 *p_len);
- 
- /**
-- * @brief Set NVM config attribute value.
-+ * qed_mcp_nvm_set_cfg(): Set NVM config attribute value.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param option_id
-- * @param entity_id
-- * @param flags
-- * @param p_buf
-- * @param len
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @option_id: Option ID.
-+ * @entity_id: Entity ID.
-+ * @flags: Flags.
-+ * @p_buf: Buf.
-+ * @len: Len.
-+ *
-+ * Return: Int.
-  */
- int qed_mcp_nvm_set_cfg(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt,
- 			u16 option_id, u8 entity_id, u16 flags, u8 *p_buf,
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_selftest.h b/drivers/net/ethernet/qlogic/qed/qed_selftest.h
-index e27dd9a4547e..7a3bd749e1e4 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_selftest.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_selftest.h
-@@ -6,47 +6,47 @@
- #include <linux/types.h>
- 
- /**
-- * @brief qed_selftest_memory - Perform memory test
-+ * qed_selftest_memory(): Perform memory test.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_selftest_memory(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_selftest_interrupt - Perform interrupt test
-+ * qed_selftest_interrupt(): Perform interrupt test.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_selftest_interrupt(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_selftest_register - Perform register test
-+ * qed_selftest_register(): Perform register test.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_selftest_register(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_selftest_clock - Perform clock test
-+ * qed_selftest_clock(): Perform clock test.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_selftest_clock(struct qed_dev *cdev);
- 
- /**
-- * @brief qed_selftest_nvram - Perform nvram test
-+ * qed_selftest_nvram(): Perform nvram test.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_selftest_nvram(struct qed_dev *cdev);
- 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_sp.h b/drivers/net/ethernet/qlogic/qed/qed_sp.h
-index 60ff3222bf55..c5a38f3c92b0 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_sp.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_sp.h
-@@ -31,23 +31,18 @@ struct qed_spq_comp_cb {
- };
- 
- /**
-- * @brief qed_eth_cqe_completion - handles the completion of a
-- *        ramrod on the cqe ring
-+ * qed_eth_cqe_completion(): handles the completion of a
-+ *                           ramrod on the cqe ring.
-  *
-- * @param p_hwfn
-- * @param cqe
-+ * @p_hwfn: HW device data.
-+ * @cqe: CQE.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_eth_cqe_completion(struct qed_hwfn *p_hwfn,
- 			   struct eth_slow_path_rx_cqe *cqe);
- 
--/**
-- *  @file
-- *
-- *  QED Slow-hwfn queue interface
-- */
 -
-+ /*  QED Slow-hwfn queue interface */
- union ramrod_data {
- 	struct pf_start_ramrod_data pf_start;
- 	struct pf_update_ramrod_data pf_update;
-@@ -207,117 +202,128 @@ struct qed_spq {
- };
+ void qed_rdma_dpm_bar(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt)
+ {
+ 	p_hwfn->db_bar_no_edpm = true;
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_rdma.h b/drivers/net/ethernet/qlogic/qed/qed_rdma.h
+index 6a1de3a25257..2753723011dd 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_rdma.h
++++ b/drivers/net/ethernet/qlogic/qed/qed_rdma.h
+@@ -168,16 +168,19 @@ static inline bool qed_rdma_is_xrc_qp(struct qed_rdma_qp *qp)
  
- /**
-- * @brief qed_spq_post - Posts a Slow hwfn request to FW, or lacking that
-- *        Pends it to the future list.
-+ * qed_spq_post(): Posts a Slow hwfn request to FW, or lacking that
-+ *                 Pends it to the future list.
-  *
-- * @param p_hwfn
-- * @param p_req
-+ * @p_hwfn: HW device data.
-+ * @p_ent: Ent.
-+ * @fw_return_code: Return code from firmware.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_spq_post(struct qed_hwfn *p_hwfn,
- 		 struct qed_spq_entry *p_ent,
- 		 u8 *fw_return_code);
+ 	return false;
+ }
++
+ #if IS_ENABLED(CONFIG_QED_RDMA)
+ void qed_rdma_dpm_bar(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
+ void qed_rdma_dpm_conf(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt);
+ int qed_rdma_info_alloc(struct qed_hwfn *p_hwfn);
+ void qed_rdma_info_free(struct qed_hwfn *p_hwfn);
+ #else
+-static inline void qed_rdma_dpm_conf(struct qed_hwfn *p_hwfn, struct qed_ptt *p_ptt) {}
++static inline void qed_rdma_dpm_conf(struct qed_hwfn *p_hwfn,
++				     struct qed_ptt *p_ptt) {}
+ static inline void qed_rdma_dpm_bar(struct qed_hwfn *p_hwfn,
+ 				    struct qed_ptt *p_ptt) {}
+-static inline int qed_rdma_info_alloc(struct qed_hwfn *p_hwfn) {return -EINVAL;}
++static inline int qed_rdma_info_alloc(struct qed_hwfn *p_hwfn)
++				      {return -EINVAL; }
+ static inline void qed_rdma_info_free(struct qed_hwfn *p_hwfn) {}
+ #endif
  
- /**
-- * @brief qed_spq_allocate - Alloocates & initializes the SPQ and EQ.
-+ * qed_spq_alloc(): Alloocates & initializes the SPQ and EQ.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_spq_alloc(struct qed_hwfn *p_hwfn);
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_roce.c b/drivers/net/ethernet/qlogic/qed/qed_roce.c
+index cf5baa5e59bc..071b4aeaddf2 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_roce.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_roce.c
+@@ -792,7 +792,6 @@ static int qed_roce_sp_destroy_qp_requester(struct qed_hwfn *p_hwfn,
+ 	if (rc)
+ 		goto err;
  
- /**
-- * @brief qed_spq_setup - Reset the SPQ to its start state.
-+ * qed_spq_setup(): Reset the SPQ to its start state.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-+ *
-+ * Return: Void.
-  */
- void qed_spq_setup(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_spq_deallocate - Deallocates the given SPQ struct.
-+ * qed_spq_free(): Deallocates the given SPQ struct.
-+ *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Void.
-  */
- void qed_spq_free(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_spq_get_entry - Obtain an entrry from the spq
-- *        free pool list.
-- *
-- *
-+ * qed_spq_get_entry(): Obtain an entrry from the spq
-+ *                      free pool list.
-  *
-- * @param p_hwfn
-- * @param pp_ent
-+ * @p_hwfn: HW device data.
-+ * @pp_ent: PP ENT.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int
- qed_spq_get_entry(struct qed_hwfn *p_hwfn,
- 		  struct qed_spq_entry **pp_ent);
- 
- /**
-- * @brief qed_spq_return_entry - Return an entry to spq free
-- *                                 pool list
-+ * qed_spq_return_entry(): Return an entry to spq free pool list.
-  *
-- * @param p_hwfn
-- * @param p_ent
-+ * @p_hwfn: HW device data.
-+ * @p_ent: P ENT.
-+ *
-+ * Return: Void.
-  */
- void qed_spq_return_entry(struct qed_hwfn *p_hwfn,
- 			  struct qed_spq_entry *p_ent);
- /**
-- * @brief qed_eq_allocate - Allocates & initializes an EQ struct
-+ * qed_eq_alloc(): Allocates & initializes an EQ struct.
-  *
-- * @param p_hwfn
-- * @param num_elem number of elements in the eq
-+ * @p_hwfn: HW device data.
-+ * @num_elem: number of elements in the eq.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_eq_alloc(struct qed_hwfn *p_hwfn, u16 num_elem);
- 
- /**
-- * @brief qed_eq_setup - Reset the EQ to its start state.
-+ * qed_eq_setup(): Reset the EQ to its start state.
-+ *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Void.
-  */
- void qed_eq_setup(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_eq_free - deallocates the given EQ struct.
-+ * qed_eq_free(): deallocates the given EQ struct.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-+ *
-+ * Return: Void.
-  */
- void qed_eq_free(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_eq_prod_update - update the FW with default EQ producer
-+ * qed_eq_prod_update(): update the FW with default EQ producer.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @prod: Prod.
-  *
-- * @param p_hwfn
-- * @param prod
-+ * Return: Void.
-  */
- void qed_eq_prod_update(struct qed_hwfn *p_hwfn,
- 			u16 prod);
- 
- /**
-- * @brief qed_eq_completion - Completes currently pending EQ elements
-+ * qed_eq_completion(): Completes currently pending EQ elements.
-  *
-- * @param p_hwfn
-- * @param cookie
-+ * @p_hwfn: HW device data.
-+ * @cookie: Cookie.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_eq_completion(struct qed_hwfn *p_hwfn,
- 		      void *cookie);
- 
- /**
-- * @brief qed_spq_completion - Completes a single event
-+ * qed_spq_completion(): Completes a single event.
-  *
-- * @param p_hwfn
-- * @param echo - echo value from cookie (used for determining completion)
-- * @param p_data - data from cookie (used in callback function if applicable)
-+ * @p_hwfn: HW device data.
-+ * @echo: echo value from cookie (used for determining completion).
-+ * @fw_return_code: FW return code.
-+ * @p_data: data from cookie (used in callback function if applicable).
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_spq_completion(struct qed_hwfn *p_hwfn,
- 		       __le16 echo,
-@@ -325,44 +331,43 @@ int qed_spq_completion(struct qed_hwfn *p_hwfn,
- 		       union event_ring_data *p_data);
- 
- /**
-- * @brief qed_spq_get_cid - Given p_hwfn, return cid for the hwfn's SPQ
-+ * qed_spq_get_cid(): Given p_hwfn, return cid for the hwfn's SPQ.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return u32 - SPQ CID
-+ * Return: u32 - SPQ CID.
-  */
- u32 qed_spq_get_cid(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_consq_alloc - Allocates & initializes an ConsQ
-- *        struct
-+ * qed_consq_alloc(): Allocates & initializes an ConsQ struct.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_consq_alloc(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_consq_setup - Reset the ConsQ to its start state.
-+ * qed_consq_setup(): Reset the ConsQ to its start state.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-+ *
-+ * Return Void.
-  */
- void qed_consq_setup(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_consq_free - deallocates the given ConsQ struct.
-+ * qed_consq_free(): deallocates the given ConsQ struct.
-+ *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return Void.
-  */
- void qed_consq_free(struct qed_hwfn *p_hwfn);
- int qed_spq_pend_post(struct qed_hwfn *p_hwfn);
- 
--/**
-- * @file
-- *
-- * @brief Slow-hwfn low-level commands (Ramrods) function definitions.
-- */
-+/* Slow-hwfn low-level commands (Ramrods) function definitions. */
- 
- #define QED_SP_EQ_COMPLETION  0x01
- #define QED_SP_CQE_COMPLETION 0x02
-@@ -377,12 +382,15 @@ struct qed_sp_init_data {
- };
- 
- /**
-- * @brief Returns a SPQ entry to the pool / frees the entry if allocated.
-- *        Should be called on in error flows after initializing the SPQ entry
-- *        and before posting it.
-+ * qed_sp_destroy_request(): Returns a SPQ entry to the pool / frees the
-+ *                           entry if allocated. Should be called on in error
-+ *                           flows after initializing the SPQ entry
-+ *                           and before posting it.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ent: Ent.
-  *
-- * @param p_hwfn
-- * @param p_ent
-+ * Return: Void.
-  */
- void qed_sp_destroy_request(struct qed_hwfn *p_hwfn,
- 			    struct qed_spq_entry *p_ent);
-@@ -394,7 +402,14 @@ int qed_sp_init_request(struct qed_hwfn *p_hwfn,
- 			struct qed_sp_init_data *p_data);
- 
- /**
-- * @brief qed_sp_pf_start - PF Function Start Ramrod
-+ * qed_sp_pf_start(): PF Function Start Ramrod.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_ptt: P_ptt.
-+ * @p_tunn: P_tunn.
-+ * @allow_npar_tx_switch: Allow NPAR TX Switch.
-+ *
-+ * Return: Int.
-  *
-  * This ramrod is sent to initialize a physical function (PF). It will
-  * configure the function related parameters and write its completion to the
-@@ -404,12 +419,6 @@ int qed_sp_init_request(struct qed_hwfn *p_hwfn,
-  * allocated by the driver on host memory and its parameters are written
-  * to the internal RAM of the UStorm by the Function Start Ramrod.
-  *
-- * @param p_hwfn
-- * @param p_ptt
-- * @param p_tunn
-- * @param allow_npar_tx_switch
-- *
-- * @return int
-  */
- 
- int qed_sp_pf_start(struct qed_hwfn *p_hwfn,
-@@ -418,47 +427,33 @@ int qed_sp_pf_start(struct qed_hwfn *p_hwfn,
- 		    bool allow_npar_tx_switch);
- 
- /**
-- * @brief qed_sp_pf_update - PF Function Update Ramrod
-+ * qed_sp_pf_update(): PF Function Update Ramrod.
-  *
-- * This ramrod updates function-related parameters. Every parameter can be
-- * updated independently, according to configuration flags.
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Int.
-  *
-- * @return int
-+ * This ramrod updates function-related parameters. Every parameter can be
-+ * updated independently, according to configuration flags.
-  */
- 
- int qed_sp_pf_update(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_sp_pf_update_stag - Update firmware of new outer tag
-+ * qed_sp_pf_update_stag(): Update firmware of new outer tag.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_sp_pf_update_stag(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_sp_pf_stop - PF Function Stop Ramrod
-- *
-- * This ramrod is sent to close a Physical Function (PF). It is the last ramrod
-- * sent and the last completion written to the PFs Event Ring. This ramrod also
-- * deletes the context for the Slowhwfn connection on this PF.
-- *
-- * @note Not required for first packet.
-- *
-- * @param p_hwfn
-- *
-- * @return int
-- */
 -
--/**
-- * @brief qed_sp_pf_update_ufp - PF ufp update Ramrod
-+ * qed_sp_pf_update_ufp(): PF ufp update Ramrod.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_sp_pf_update_ufp(struct qed_hwfn *p_hwfn);
+ 	/* Free ORQ - only if ramrod succeeded, in case FW is still using it */
+ 	dma_free_coherent(&p_hwfn->cdev->pdev->dev,
+ 			  qp->orq_num_pages * RDMA_RING_PAGE_SIZE,
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_spq.c b/drivers/net/ethernet/qlogic/qed/qed_spq.c
+index fa8385178538..8bef53ca7597 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_spq.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_spq.c
+@@ -20,6 +20,7 @@
+ #include "qed_cxt.h"
+ #include "qed_dev_api.h"
+ #include "qed_hsi.h"
++#include "qed_iro_hsi.h"
+ #include "qed_hw.h"
+ #include "qed_int.h"
+ #include "qed_iscsi.h"
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_sriov.c b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+index 08d92711c7a2..2a67b1308fe0 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_sriov.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+@@ -11,6 +11,7 @@
+ #include <linux/qed/qed_iov_if.h>
+ #include "qed_cxt.h"
+ #include "qed_hsi.h"
++#include "qed_iro_hsi.h"
+ #include "qed_hw.h"
+ #include "qed_init_ops.h"
+ #include "qed_int.h"
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_vf.c b/drivers/net/ethernet/qlogic/qed/qed_vf.c
+index 72a38d53d33f..220a95fa96e1 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_vf.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_vf.c
+@@ -27,7 +27,7 @@ static void *qed_vf_pf_prep(struct qed_hwfn *p_hwfn, u16 type, u16 length)
+ 		   "preparing to send 0x%04x tlv over vf pf channel\n",
+ 		   type);
  
-@@ -470,11 +465,11 @@ int qed_sp_pf_update_tunn_cfg(struct qed_hwfn *p_hwfn,
- 			      enum spq_mode comp_mode,
- 			      struct qed_spq_comp_cb *p_comp_data);
- /**
-- * @brief qed_sp_heartbeat_ramrod - Send empty Ramrod
-+ * qed_sp_heartbeat_ramrod(): Send empty Ramrod.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
+-	/* Reset Requst offset */
++	/* Reset Request offset */
+ 	p_iov->offset = (u8 *)p_iov->vf2pf_request;
  
- int qed_sp_heartbeat_ramrod(struct qed_hwfn *p_hwfn);
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_sriov.h b/drivers/net/ethernet/qlogic/qed/qed_sriov.h
-index eacd6457f195..9f81295c6f45 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_sriov.h
-+++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.h
-@@ -250,29 +250,31 @@ extern const struct qed_iov_hv_ops qed_iov_ops_pass;
+ 	/* Clear mailbox - both request and reply */
+@@ -444,7 +444,7 @@ int qed_vf_hw_prepare(struct qed_hwfn *p_hwfn)
+ 	u32 reg;
+ 	int rc;
  
- #ifdef CONFIG_QED_SRIOV
- /**
-- * @brief Check if given VF ID @vfid is valid
-- *        w.r.t. @b_enabled_only value
-- *        if b_enabled_only = true - only enabled VF id is valid
-- *        else any VF id less than max_vfs is valid
-+ * qed_iov_is_valid_vfid(): Check if given VF ID @vfid is valid
-+ *                          w.r.t. @b_enabled_only value
-+ *                          if b_enabled_only = true - only enabled
-+ *                          VF id is valid.
-+ *                          else any VF id less than max_vfs is valid.
-  *
-- * @param p_hwfn
-- * @param rel_vf_id - Relative VF ID
-- * @param b_enabled_only - consider only enabled VF
-- * @param b_non_malicious - true iff we want to validate vf isn't malicious.
-+ * @p_hwfn: HW device data.
-+ * @rel_vf_id: Relative VF ID.
-+ * @b_enabled_only: consider only enabled VF.
-+ * @b_non_malicious: true iff we want to validate vf isn't malicious.
-  *
-- * @return bool - true for valid VF ID
-+ * Return: bool - true for valid VF ID
-  */
- bool qed_iov_is_valid_vfid(struct qed_hwfn *p_hwfn,
- 			   int rel_vf_id,
- 			   bool b_enabled_only, bool b_non_malicious);
+-	/* Set number of hwfns - might be overriden once leading hwfn learns
++	/* Set number of hwfns - might be overridden once leading hwfn learns
+ 	 * actual configuration from PF.
+ 	 */
+ 	if (IS_LEAD_HWFN(p_hwfn))
+@@ -504,7 +504,7 @@ int qed_vf_hw_prepare(struct qed_hwfn *p_hwfn)
+ 		   QED_MSG_IOV,
+ 		   "VF's Request mailbox [%p virt 0x%llx phys], Response mailbox [%p virt 0x%llx phys]\n",
+ 		   p_iov->vf2pf_request,
+-		   (u64) p_iov->vf2pf_request_phys,
++		   (u64)p_iov->vf2pf_request_phys,
+ 		   p_iov->pf2vf_reply, (u64)p_iov->pf2vf_reply_phys);
  
- /**
-- * @brief - Given a VF index, return index of next [including that] active VF.
-+ * qed_iov_get_next_active_vf(): Given a VF index, return index of
-+ *                               next [including that] active VF.
-  *
-- * @param p_hwfn
-- * @param rel_vf_id
-+ * @p_hwfn: HW device data.
-+ * @rel_vf_id: VF ID.
-  *
-- * @return MAX_NUM_VFS in case no further active VFs, otherwise index.
-+ * Return: MAX_NUM_VFS in case no further active VFs, otherwise index.
-  */
- u16 qed_iov_get_next_active_vf(struct qed_hwfn *p_hwfn, u16 rel_vf_id);
+ 	/* Allocate Bulletin board */
+@@ -561,6 +561,7 @@ int qed_vf_hw_prepare(struct qed_hwfn *p_hwfn)
  
-@@ -280,83 +282,92 @@ void qed_iov_bulletin_set_udp_ports(struct qed_hwfn *p_hwfn,
- 				    int vfid, u16 vxlan_port, u16 geneve_port);
+ 	return -ENOMEM;
+ }
++
+ #define TSTORM_QZONE_START   PXP_VF_BAR0_START_SDM_ZONE_A
+ #define MSTORM_QZONE_START(dev)   (TSTORM_QZONE_START +	\
+ 				   (TSTORM_QZONE_SIZE * NUM_OF_L2_QUEUES(dev)))
+@@ -1285,8 +1286,8 @@ int qed_vf_pf_filter_ucast(struct qed_hwfn *p_hwfn,
  
- /**
-- * @brief Read sriov related information and allocated resources
-- *  reads from configuration space, shmem, etc.
-+ * qed_iov_hw_info(): Read sriov related information and allocated resources
-+ *                    reads from configuration space, shmem, etc.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_iov_hw_info(struct qed_hwfn *p_hwfn);
+ 	/* clear mailbox and prep first tlv */
+ 	req = qed_vf_pf_prep(p_hwfn, CHANNEL_TLV_UCAST_FILTER, sizeof(*req));
+-	req->opcode = (u8) p_ucast->opcode;
+-	req->type = (u8) p_ucast->type;
++	req->opcode = (u8)p_ucast->opcode;
++	req->type = (u8)p_ucast->type;
+ 	memcpy(req->mac, p_ucast->mac, ETH_ALEN);
+ 	req->vlan = p_ucast->vlan;
  
- /**
-- * @brief qed_add_tlv - place a given tlv on the tlv buffer at next offset
-+ * qed_add_tlv(): place a given tlv on the tlv buffer at next offset
-  *
-- * @param p_hwfn
-- * @param p_iov
-- * @param type
-- * @param length
-+ * @p_hwfn: HW device data.
-+ * @offset: offset.
-+ * @type: Type
-+ * @length: Length.
-  *
-- * @return pointer to the newly placed tlv
-+ * Return: pointer to the newly placed tlv
-  */
- void *qed_add_tlv(struct qed_hwfn *p_hwfn, u8 **offset, u16 type, u16 length);
- 
- /**
-- * @brief list the types and lengths of the tlvs on the buffer
-+ * qed_dp_tlv_list(): list the types and lengths of the tlvs on the buffer
-  *
-- * @param p_hwfn
-- * @param tlvs_list
-+ * @p_hwfn: HW device data.
-+ * @tlvs_list: Tlvs_list.
-+ *
-+ * Return: Void.
-  */
- void qed_dp_tlv_list(struct qed_hwfn *p_hwfn, void *tlvs_list);
- 
- /**
-- * @brief qed_iov_alloc - allocate sriov related resources
-+ * qed_iov_alloc(): allocate sriov related resources
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_iov_alloc(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_iov_setup - setup sriov related resources
-+ * qed_iov_setup(): setup sriov related resources
-+ *
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-+ * Return: Void.
-  */
- void qed_iov_setup(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_iov_free - free sriov related resources
-+ * qed_iov_free(): free sriov related resources
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-+ *
-+ * Return: Void.
-  */
- void qed_iov_free(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief free sriov related memory that was allocated during hw_prepare
-+ * qed_iov_free_hw_info(): free sriov related memory that was
-+ *                          allocated during hw_prepare
-+ *
-+ * @cdev: Qed dev pointer.
-  *
-- * @param cdev
-+ * Return: Void.
-  */
- void qed_iov_free_hw_info(struct qed_dev *cdev);
- 
- /**
-- * @brief Mark structs of vfs that have been FLR-ed.
-+ * qed_iov_mark_vf_flr(): Mark structs of vfs that have been FLR-ed.
-  *
-- * @param p_hwfn
-- * @param disabled_vfs - bitmask of all VFs on path that were FLRed
-+ * @p_hwfn: HW device data.
-+ * @disabled_vfs: bitmask of all VFs on path that were FLRed
-  *
-- * @return true iff one of the PF's vfs got FLRed. false otherwise.
-+ * Return: true iff one of the PF's vfs got FLRed. false otherwise.
-  */
- bool qed_iov_mark_vf_flr(struct qed_hwfn *p_hwfn, u32 *disabled_vfs);
- 
- /**
-- * @brief Search extended TLVs in request/reply buffer.
-+ * qed_iov_search_list_tlvs(): Search extended TLVs in request/reply buffer.
-  *
-- * @param p_hwfn
-- * @param p_tlvs_list - Pointer to tlvs list
-- * @param req_type - Type of TLV
-+ * @p_hwfn: HW device data.
-+ * @p_tlvs_list: Pointer to tlvs list
-+ * @req_type: Type of TLV
-  *
-- * @return pointer to tlv type if found, otherwise returns NULL.
-+ * Return: pointer to tlv type if found, otherwise returns NULL.
-  */
- void *qed_iov_search_list_tlvs(struct qed_hwfn *p_hwfn,
- 			       void *p_tlvs_list, u16 req_type);
 diff --git a/drivers/net/ethernet/qlogic/qed/qed_vf.h b/drivers/net/ethernet/qlogic/qed/qed_vf.h
-index 60d2bb64e65f..976201fc7d4a 100644
+index 976201fc7d4a..8718760443be 100644
 --- a/drivers/net/ethernet/qlogic/qed/qed_vf.h
 +++ b/drivers/net/ethernet/qlogic/qed/qed_vf.h
-@@ -688,13 +688,16 @@ struct qed_vf_iov {
+@@ -48,7 +48,7 @@ struct channel_tlv {
+ 	u16 length;
  };
  
- /**
-- * @brief VF - Set Rx/Tx coalesce per VF's relative queue.
-- *             Coalesce value '0' will omit the configuration.
-+ * qed_vf_pf_set_coalesce(): VF - Set Rx/Tx coalesce per VF's relative queue.
-+ *                                Coalesce value '0' will omit the
-+ *                                configuration.
-  *
-- * @param p_hwfn
-- * @param rx_coal - coalesce value in micro second for rx queue
-- * @param tx_coal - coalesce value in micro second for tx queue
-- * @param p_cid   - queue cid
-+ * @p_hwfn: HW device data.
-+ * @rx_coal: coalesce value in micro second for rx queue.
-+ * @tx_coal: coalesce value in micro second for tx queue.
-+ * @p_cid: queue cid.
-+ *
-+ * Return: Int.
-  *
-  **/
- int qed_vf_pf_set_coalesce(struct qed_hwfn *p_hwfn,
-@@ -702,148 +705,172 @@ int qed_vf_pf_set_coalesce(struct qed_hwfn *p_hwfn,
- 			   u16 tx_coal, struct qed_queue_cid *p_cid);
- 
- /**
-- * @brief VF - Get coalesce per VF's relative queue.
-+ * qed_vf_pf_get_coalesce(): VF - Get coalesce per VF's relative queue.
-  *
-- * @param p_hwfn
-- * @param p_coal - coalesce value in micro second for VF queues.
-- * @param p_cid  - queue cid
-+ * @p_hwfn: HW device data.
-+ * @p_coal: coalesce value in micro second for VF queues.
-+ * @p_cid: queue cid.
-  *
-+ * Return: Int.
-  **/
- int qed_vf_pf_get_coalesce(struct qed_hwfn *p_hwfn,
- 			   u16 *p_coal, struct qed_queue_cid *p_cid);
- 
- #ifdef CONFIG_QED_SRIOV
- /**
-- * @brief Read the VF bulletin and act on it if needed
-+ * qed_vf_read_bulletin(): Read the VF bulletin and act on it if needed.
-  *
-- * @param p_hwfn
-- * @param p_change - qed fills 1 iff bulletin board has changed, 0 otherwise.
-+ * @p_hwfn: HW device data.
-+ * @p_change: qed fills 1 iff bulletin board has changed, 0 otherwise.
-  *
-- * @return enum _qed_status
-+ * Return: enum _qed_status.
-  */
- int qed_vf_read_bulletin(struct qed_hwfn *p_hwfn, u8 *p_change);
- 
- /**
-- * @brief Get link paramters for VF from qed
-+ * qed_vf_get_link_params(): Get link parameters for VF from qed
-+ *
-+ * @p_hwfn: HW device data.
-+ * @params: the link params structure to be filled for the VF.
-  *
-- * @param p_hwfn
-- * @param params - the link params structure to be filled for the VF
-+ * Return: Void.
-  */
- void qed_vf_get_link_params(struct qed_hwfn *p_hwfn,
- 			    struct qed_mcp_link_params *params);
- 
- /**
-- * @brief Get link state for VF from qed
-+ * qed_vf_get_link_state(): Get link state for VF from qed.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @link: the link state structure to be filled for the VF
-  *
-- * @param p_hwfn
-- * @param link - the link state structure to be filled for the VF
-+ * Return: Void.
-  */
- void qed_vf_get_link_state(struct qed_hwfn *p_hwfn,
- 			   struct qed_mcp_link_state *link);
- 
- /**
-- * @brief Get link capabilities for VF from qed
-+ * qed_vf_get_link_caps(): Get link capabilities for VF from qed.
-  *
-- * @param p_hwfn
-- * @param p_link_caps - the link capabilities structure to be filled for the VF
-+ * @p_hwfn: HW device data.
-+ * @p_link_caps: the link capabilities structure to be filled for the VF
-+ *
-+ * Return: Void.
-  */
- void qed_vf_get_link_caps(struct qed_hwfn *p_hwfn,
- 			  struct qed_mcp_link_capabilities *p_link_caps);
- 
- /**
-- * @brief Get number of Rx queues allocated for VF by qed
-+ * qed_vf_get_num_rxqs(): Get number of Rx queues allocated for VF by qed
-+ *
-+ * @p_hwfn: HW device data.
-+ * @num_rxqs: allocated RX queues
-  *
-- *  @param p_hwfn
-- *  @param num_rxqs - allocated RX queues
-+ * Return: Void.
-  */
- void qed_vf_get_num_rxqs(struct qed_hwfn *p_hwfn, u8 *num_rxqs);
- 
- /**
-- * @brief Get number of Rx queues allocated for VF by qed
-+ * qed_vf_get_num_txqs(): Get number of Rx queues allocated for VF by qed
-  *
-- *  @param p_hwfn
-- *  @param num_txqs - allocated RX queues
-+ * @p_hwfn: HW device data.
-+ * @num_txqs: allocated RX queues
-+ *
-+ * Return: Void.
-  */
- void qed_vf_get_num_txqs(struct qed_hwfn *p_hwfn, u8 *num_txqs);
- 
- /**
-- * @brief Get number of available connections [both Rx and Tx] for VF
-+ * qed_vf_get_num_cids(): Get number of available connections
-+ *                        [both Rx and Tx] for VF
-+ *
-+ * @p_hwfn: HW device data.
-+ * @num_cids: allocated number of connections
-  *
-- * @param p_hwfn
-- * @param num_cids - allocated number of connections
-+ * Return: Void.
-  */
- void qed_vf_get_num_cids(struct qed_hwfn *p_hwfn, u8 *num_cids);
- 
- /**
-- * @brief Get port mac address for VF
-+ * qed_vf_get_port_mac(): Get port mac address for VF.
-  *
-- * @param p_hwfn
-- * @param port_mac - destination location for port mac
-+ * @p_hwfn: HW device data.
-+ * @port_mac: destination location for port mac
-+ *
-+ * Return: Void.
-  */
- void qed_vf_get_port_mac(struct qed_hwfn *p_hwfn, u8 *port_mac);
- 
- /**
-- * @brief Get number of VLAN filters allocated for VF by qed
-+ * qed_vf_get_num_vlan_filters(): Get number of VLAN filters allocated
-+ *                                for VF by qed.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @num_vlan_filters: allocated VLAN filters
-  *
-- *  @param p_hwfn
-- *  @param num_rxqs - allocated VLAN filters
-+ * Return: Void.
-  */
- void qed_vf_get_num_vlan_filters(struct qed_hwfn *p_hwfn,
- 				 u8 *num_vlan_filters);
- 
- /**
-- * @brief Get number of MAC filters allocated for VF by qed
-+ * qed_vf_get_num_mac_filters(): Get number of MAC filters allocated
-+ *                               for VF by qed
-  *
-- *  @param p_hwfn
-- *  @param num_rxqs - allocated MAC filters
-+ * @p_hwfn: HW device data.
-+ * @num_mac_filters: allocated MAC filters
-+ *
-+ * Return: Void.
-  */
- void qed_vf_get_num_mac_filters(struct qed_hwfn *p_hwfn, u8 *num_mac_filters);
- 
- /**
-- * @brief Check if VF can set a MAC address
-+ * qed_vf_check_mac(): Check if VF can set a MAC address
-  *
-- * @param p_hwfn
-- * @param mac
-+ * @p_hwfn: HW device data.
-+ * @mac: Mac.
-  *
-- * @return bool
-+ * Return: bool.
-  */
- bool qed_vf_check_mac(struct qed_hwfn *p_hwfn, u8 *mac);
- 
- /**
-- * @brief Set firmware version information in dev_info from VFs acquire response tlv
-+ * qed_vf_get_fw_version(): Set firmware version information
-+ *                          in dev_info from VFs acquire response tlv
-+ *
-+ * @p_hwfn: HW device data.
-+ * @fw_major: FW major.
-+ * @fw_minor: FW minor.
-+ * @fw_rev: FW rev.
-+ * @fw_eng: FW eng.
-  *
-- * @param p_hwfn
-- * @param fw_major
-- * @param fw_minor
-- * @param fw_rev
-- * @param fw_eng
-+ * Return: Void.
-  */
- void qed_vf_get_fw_version(struct qed_hwfn *p_hwfn,
- 			   u16 *fw_major, u16 *fw_minor,
- 			   u16 *fw_rev, u16 *fw_eng);
- 
- /**
-- * @brief hw preparation for VF
-- *      sends ACQUIRE message
-+ * qed_vf_hw_prepare(): hw preparation for VF  sends ACQUIRE message
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_vf_hw_prepare(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief VF - start the RX Queue by sending a message to the PF
-- * @param p_hwfn
-- * @param p_cid			- Only relative fields are relevant
-- * @param bd_max_bytes          - maximum number of bytes per bd
-- * @param bd_chain_phys_addr    - physical address of bd chain
-- * @param cqe_pbl_addr          - physical address of pbl
-- * @param cqe_pbl_size          - pbl size
-- * @param pp_prod               - pointer to the producer to be
-- *				  used in fastpath
-+ * qed_vf_pf_rxq_start(): start the RX Queue by sending a message to the PF
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_cid: Only relative fields are relevant
-+ * @bd_max_bytes: maximum number of bytes per bd
-+ * @bd_chain_phys_addr: physical address of bd chain
-+ * @cqe_pbl_addr: physical address of pbl
-+ * @cqe_pbl_size: pbl size
-+ * @pp_prod: pointer to the producer to be used in fastpath
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_vf_pf_rxq_start(struct qed_hwfn *p_hwfn,
- 			struct qed_queue_cid *p_cid,
-@@ -853,18 +880,16 @@ int qed_vf_pf_rxq_start(struct qed_hwfn *p_hwfn,
- 			u16 cqe_pbl_size, void __iomem **pp_prod);
- 
- /**
-- * @brief VF - start the TX queue by sending a message to the
-- *        PF.
-+ * qed_vf_pf_txq_start(): VF - start the TX queue by sending a message to the
-+ *                        PF.
-  *
-- * @param p_hwfn
-- * @param tx_queue_id           - zero based within the VF
-- * @param sb                    - status block for this queue
-- * @param sb_index              - index within the status block
-- * @param bd_chain_phys_addr    - physical address of tx chain
-- * @param pp_doorbell           - pointer to address to which to
-- *                      write the doorbell too..
-+ * @p_hwfn: HW device data.
-+ * @p_cid: CID.
-+ * @pbl_addr: PBL address.
-+ * @pbl_size: PBL Size.
-+ * @pp_doorbell: pointer to address to which to write the doorbell too.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int
- qed_vf_pf_txq_start(struct qed_hwfn *p_hwfn,
-@@ -873,90 +898,91 @@ qed_vf_pf_txq_start(struct qed_hwfn *p_hwfn,
- 		    u16 pbl_size, void __iomem **pp_doorbell);
- 
- /**
-- * @brief VF - stop the RX queue by sending a message to the PF
-+ * qed_vf_pf_rxq_stop(): VF - stop the RX queue by sending a message to the PF.
-  *
-- * @param p_hwfn
-- * @param p_cid
-- * @param cqe_completion
-+ * @p_hwfn: HW device data.
-+ * @p_cid: CID.
-+ * @cqe_completion: CQE Completion.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_vf_pf_rxq_stop(struct qed_hwfn *p_hwfn,
- 		       struct qed_queue_cid *p_cid, bool cqe_completion);
- 
- /**
-- * @brief VF - stop the TX queue by sending a message to the PF
-+ * qed_vf_pf_txq_stop(): VF - stop the TX queue by sending a message to the PF.
-  *
-- * @param p_hwfn
-- * @param tx_qid
-+ * @p_hwfn: HW device data.
-+ * @p_cid: CID.
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_vf_pf_txq_stop(struct qed_hwfn *p_hwfn, struct qed_queue_cid *p_cid);
- 
- /**
-- * @brief VF - send a vport update command
-+ * qed_vf_pf_vport_update(): VF - send a vport update command.
-  *
-- * @param p_hwfn
-- * @param params
-+ * @p_hwfn: HW device data.
-+ * @p_params: Params
-  *
-- * @return int
-+ * Return: Int.
-  */
- int qed_vf_pf_vport_update(struct qed_hwfn *p_hwfn,
- 			   struct qed_sp_vport_update_params *p_params);
- 
- /**
-+ * qed_vf_pf_reset(): VF - send a close message to PF.
-  *
-- * @brief VF - send a close message to PF
-+ * @p_hwfn: HW device data.
-  *
-- * @param p_hwfn
-- *
-- * @return enum _qed_status
-+ * Return: enum _qed_status
-  */
- int qed_vf_pf_reset(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief VF - free vf`s memories
-+ * qed_vf_pf_release(): VF - free vf`s memories.
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return enum _qed_status
-+ * Return: enum _qed_status
-  */
- int qed_vf_pf_release(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief qed_vf_get_igu_sb_id - Get the IGU SB ID for a given
-+ * qed_vf_get_igu_sb_id(): Get the IGU SB ID for a given
-  *        sb_id. For VFs igu sbs don't have to be contiguous
-  *
-- * @param p_hwfn
-- * @param sb_id
-+ * @p_hwfn: HW device data.
-+ * @sb_id: SB ID.
-  *
-- * @return INLINE u16
-+ * Return: INLINE u16
-  */
- u16 qed_vf_get_igu_sb_id(struct qed_hwfn *p_hwfn, u16 sb_id);
- 
- /**
-- * @brief Stores [or removes] a configured sb_info.
-+ * qed_vf_set_sb_info(): Stores [or removes] a configured sb_info.
-+ *
-+ * @p_hwfn: HW device data.
-+ * @sb_id: zero-based SB index [for fastpath]
-+ * @p_sb:  may be NULL [during removal].
-  *
-- * @param p_hwfn
-- * @param sb_id - zero-based SB index [for fastpath]
-- * @param sb_info - may be NULL [during removal].
-+ * Return: Void.
-  */
- void qed_vf_set_sb_info(struct qed_hwfn *p_hwfn,
- 			u16 sb_id, struct qed_sb_info *p_sb);
- 
- /**
-- * @brief qed_vf_pf_vport_start - perform vport start for VF.
-+ * qed_vf_pf_vport_start(): perform vport start for VF.
-  *
-- * @param p_hwfn
-- * @param vport_id
-- * @param mtu
-- * @param inner_vlan_removal
-- * @param tpa_mode
-- * @param max_buffers_per_cqe,
-- * @param only_untagged - default behavior regarding vlan acceptance
-+ * @p_hwfn: HW device data.
-+ * @vport_id: Vport ID.
-+ * @mtu: MTU.
-+ * @inner_vlan_removal: Innter VLAN removal.
-+ * @tpa_mode: TPA mode
-+ * @max_buffers_per_cqe: Max buffer pre CQE.
-+ * @only_untagged: default behavior regarding vlan acceptance
-  *
-- * @return enum _qed_status
-+ * Return: enum _qed_status
-  */
- int qed_vf_pf_vport_start(struct qed_hwfn *p_hwfn,
- 			  u8 vport_id,
-@@ -966,11 +992,11 @@ int qed_vf_pf_vport_start(struct qed_hwfn *p_hwfn,
- 			  u8 max_buffers_per_cqe, u8 only_untagged);
- 
- /**
-- * @brief qed_vf_pf_vport_stop - stop the VF's vport
-+ * qed_vf_pf_vport_stop(): stop the VF's vport
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return enum _qed_status
-+ * Return: enum _qed_status
-  */
- int qed_vf_pf_vport_stop(struct qed_hwfn *p_hwfn);
- 
-@@ -981,42 +1007,49 @@ void qed_vf_pf_filter_mcast(struct qed_hwfn *p_hwfn,
- 			    struct qed_filter_mcast *p_filter_cmd);
- 
- /**
-- * @brief qed_vf_pf_int_cleanup - clean the SB of the VF
-+ * qed_vf_pf_int_cleanup(): clean the SB of the VF
-  *
-- * @param p_hwfn
-+ * @p_hwfn: HW device data.
-  *
-- * @return enum _qed_status
-+ * Return: enum _qed_status
-  */
- int qed_vf_pf_int_cleanup(struct qed_hwfn *p_hwfn);
- 
- /**
-- * @brief - return the link params in a given bulletin board
-+ * __qed_vf_get_link_params(): return the link params in a given bulletin board
-  *
-- * @param p_hwfn
-- * @param p_params - pointer to a struct to fill with link params
-- * @param p_bulletin
-+ * @p_hwfn: HW device data.
-+ * @p_params: pointer to a struct to fill with link params
-+ * @p_bulletin: Bulletin.
-+ *
-+ * Return: Void.
-  */
- void __qed_vf_get_link_params(struct qed_hwfn *p_hwfn,
- 			      struct qed_mcp_link_params *p_params,
- 			      struct qed_bulletin_content *p_bulletin);
- 
- /**
-- * @brief - return the link state in a given bulletin board
-+ * __qed_vf_get_link_state(): return the link state in a given bulletin board
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_link: pointer to a struct to fill with link state
-+ * @p_bulletin: Bulletin.
-  *
-- * @param p_hwfn
-- * @param p_link - pointer to a struct to fill with link state
-- * @param p_bulletin
-+ * Return: Void.
-  */
- void __qed_vf_get_link_state(struct qed_hwfn *p_hwfn,
- 			     struct qed_mcp_link_state *p_link,
- 			     struct qed_bulletin_content *p_bulletin);
- 
- /**
-- * @brief - return the link capabilities in a given bulletin board
-+ * __qed_vf_get_link_caps(): return the link capabilities in a given
-+ *                           bulletin board
-  *
-- * @param p_hwfn
-- * @param p_link - pointer to a struct to fill with link capabilities
-- * @param p_bulletin
-+ * @p_hwfn: HW device data.
-+ * @p_link_caps: pointer to a struct to fill with link capabilities
-+ * @p_bulletin: Bulletin.
-+ *
-+ * Return: Void.
-  */
- void __qed_vf_get_link_caps(struct qed_hwfn *p_hwfn,
- 			    struct qed_mcp_link_capabilities *p_link_caps,
-@@ -1029,9 +1062,13 @@ int qed_vf_pf_tunnel_param_update(struct qed_hwfn *p_hwfn,
- 
- u32 qed_vf_hw_bar_size(struct qed_hwfn *p_hwfn, enum BAR_ID bar_id);
- /**
-- * @brief - Ask PF to update the MAC address in it's bulletin board
-+ * qed_vf_pf_bulletin_update_mac(): Ask PF to update the MAC address in
-+ *                                  it's bulletin board
-+ *
-+ * @p_hwfn: HW device data.
-+ * @p_mac: mac address to be updated in bulletin board
-  *
-- * @param p_mac - mac address to be updated in bulletin board
-+ * Return: Int.
-  */
- int qed_vf_pf_bulletin_update_mac(struct qed_hwfn *p_hwfn, u8 *p_mac);
- 
-diff --git a/drivers/net/ethernet/qlogic/qede/qede_main.c b/drivers/net/ethernet/qlogic/qede/qede_main.c
-index 75adb71adf18..be33bde0f731 100644
---- a/drivers/net/ethernet/qlogic/qede/qede_main.c
-+++ b/drivers/net/ethernet/qlogic/qede/qede_main.c
-@@ -2800,10 +2800,13 @@ static void qede_get_eth_tlv_data(void *dev, void *data)
- }
- 
- /**
-- * qede_io_error_detected - called when PCI error is detected
-+ * qede_io_error_detected(): Called when PCI error is detected
-+ *
-  * @pdev: Pointer to PCI device
-  * @state: The current pci connection state
-  *
-+ *Return: pci_ers_result_t.
-+ *
-  * This function is called after a PCI bus error affecting
-  * this device has been detected.
-  */
-diff --git a/include/linux/qed/qed_chain.h b/include/linux/qed/qed_chain.h
-index f34dbd0db795..a84063492c71 100644
---- a/include/linux/qed/qed_chain.h
-+++ b/include/linux/qed/qed_chain.h
-@@ -268,14 +268,15 @@ static inline dma_addr_t qed_chain_get_pbl_phys(const struct qed_chain *chain)
- }
- 
- /**
-- * @brief qed_chain_advance_page -
-+ * qed_chain_advance_page(): Advance the next element across pages for a
-+ *                           linked chain.
-  *
-- * Advance the next element across pages for a linked chain
-+ * @p_chain: P_chain.
-+ * @p_next_elem: P_next_elem.
-+ * @idx_to_inc: Idx_to_inc.
-+ * @page_to_inc: page_to_inc.
-  *
-- * @param p_chain
-- * @param p_next_elem
-- * @param idx_to_inc
-- * @param page_to_inc
-+ * Return: Void.
-  */
- static inline void
- qed_chain_advance_page(struct qed_chain *p_chain,
-@@ -336,12 +337,14 @@ qed_chain_advance_page(struct qed_chain *p_chain,
- 	} while (0)
- 
- /**
-- * @brief qed_chain_return_produced -
-+ * qed_chain_return_produced(): A chain in which the driver "Produces"
-+ *                              elements should use this API
-+ *                              to indicate previous produced elements
-+ *                              are now consumed.
-  *
-- * A chain in which the driver "Produces" elements should use this API
-- * to indicate previous produced elements are now consumed.
-+ * @p_chain: Chain.
-  *
-- * @param p_chain
-+ * Return: Void.
-  */
- static inline void qed_chain_return_produced(struct qed_chain *p_chain)
- {
-@@ -353,15 +356,15 @@ static inline void qed_chain_return_produced(struct qed_chain *p_chain)
- }
- 
- /**
-- * @brief qed_chain_produce -
-+ * qed_chain_produce(): A chain in which the driver "Produces"
-+ *                      elements should use this to get a pointer to
-+ *                      the next element which can be "Produced". It's driver
-+ *                      responsibility to validate that the chain has room for
-+ *                      new element.
-  *
-- * A chain in which the driver "Produces" elements should use this to get
-- * a pointer to the next element which can be "Produced". It's driver
-- * responsibility to validate that the chain has room for new element.
-+ * @p_chain: Chain.
-  *
-- * @param p_chain
-- *
-- * @return void*, a pointer to next element
-+ * Return: void*, a pointer to next element.
-  */
- static inline void *qed_chain_produce(struct qed_chain *p_chain)
- {
-@@ -395,14 +398,11 @@ static inline void *qed_chain_produce(struct qed_chain *p_chain)
- }
- 
- /**
-- * @brief qed_chain_get_capacity -
-- *
-- * Get the maximum number of BDs in chain
-+ * qed_chain_get_capacity(): Get the maximum number of BDs in chain
-  *
-- * @param p_chain
-- * @param num
-+ * @p_chain: Chain.
-  *
-- * @return number of unusable BDs
-+ * Return: number of unusable BDs.
-  */
- static inline u32 qed_chain_get_capacity(struct qed_chain *p_chain)
- {
-@@ -410,12 +410,14 @@ static inline u32 qed_chain_get_capacity(struct qed_chain *p_chain)
- }
- 
- /**
-- * @brief qed_chain_recycle_consumed -
-+ * qed_chain_recycle_consumed(): Returns an element which was
-+ *                               previously consumed;
-+ *                               Increments producers so they could
-+ *                               be written to FW.
-  *
-- * Returns an element which was previously consumed;
-- * Increments producers so they could be written to FW.
-+ * @p_chain: Chain.
-  *
-- * @param p_chain
-+ * Return: Void.
-  */
- static inline void qed_chain_recycle_consumed(struct qed_chain *p_chain)
- {
-@@ -427,14 +429,13 @@ static inline void qed_chain_recycle_consumed(struct qed_chain *p_chain)
- }
- 
- /**
-- * @brief qed_chain_consume -
-+ * qed_chain_consume(): A Chain in which the driver utilizes data written
-+ *                      by a different source (i.e., FW) should use this to
-+ *                      access passed buffers.
-  *
-- * A Chain in which the driver utilizes data written by a different source
-- * (i.e., FW) should use this to access passed buffers.
-+ * @p_chain: Chain.
-  *
-- * @param p_chain
-- *
-- * @return void*, a pointer to the next buffer written
-+ * Return: void*, a pointer to the next buffer written.
-  */
- static inline void *qed_chain_consume(struct qed_chain *p_chain)
- {
-@@ -468,9 +469,11 @@ static inline void *qed_chain_consume(struct qed_chain *p_chain)
- }
- 
- /**
-- * @brief qed_chain_reset - Resets the chain to its start state
-+ * qed_chain_reset(): Resets the chain to its start state.
-+ *
-+ * @p_chain: pointer to a previously allocated chain.
-  *
-- * @param p_chain pointer to a previously allocated chain
-+ * Return Void.
-  */
- static inline void qed_chain_reset(struct qed_chain *p_chain)
- {
-@@ -519,13 +522,12 @@ static inline void qed_chain_reset(struct qed_chain *p_chain)
- }
- 
- /**
-- * @brief qed_chain_get_last_elem -
-+ * qed_chain_get_last_elem(): Returns a pointer to the last element of the
-+ *                            chain.
-  *
-- * Returns a pointer to the last element of the chain
-+ * @p_chain: Chain.
-  *
-- * @param p_chain
-- *
-- * @return void*
-+ * Return: void*.
-  */
- static inline void *qed_chain_get_last_elem(struct qed_chain *p_chain)
- {
-@@ -563,10 +565,13 @@ static inline void *qed_chain_get_last_elem(struct qed_chain *p_chain)
- }
- 
- /**
-- * @brief qed_chain_set_prod - sets the prod to the given value
-+ * qed_chain_set_prod(): sets the prod to the given value.
-+ *
-+ * @p_chain: Chain.
-+ * @prod_idx: Prod Idx.
-+ * @p_prod_elem: Prod elem.
-  *
-- * @param prod_idx
-- * @param p_prod_elem
-+ * Return Void.
-  */
- static inline void qed_chain_set_prod(struct qed_chain *p_chain,
- 				      u32 prod_idx, void *p_prod_elem)
-@@ -610,9 +615,11 @@ static inline void qed_chain_set_prod(struct qed_chain *p_chain,
- }
- 
- /**
-- * @brief qed_chain_pbl_zero_mem - set chain memory to 0
-+ * qed_chain_pbl_zero_mem(): set chain memory to 0.
-+ *
-+ * @p_chain: Chain.
-  *
-- * @param p_chain
-+ * Return: Void.
-  */
- static inline void qed_chain_pbl_zero_mem(struct qed_chain *p_chain)
- {
-diff --git a/include/linux/qed/qed_if.h b/include/linux/qed/qed_if.h
-index 850b98991670..f39451aaaeec 100644
---- a/include/linux/qed/qed_if.h
-+++ b/include/linux/qed/qed_if.h
-@@ -819,47 +819,47 @@ struct qed_common_cb_ops {
- 
- struct qed_selftest_ops {
- /**
-- * @brief selftest_interrupt - Perform interrupt test
-+ * selftest_interrupt(): Perform interrupt test.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*selftest_interrupt)(struct qed_dev *cdev);
- 
- /**
-- * @brief selftest_memory - Perform memory test
-+ * selftest_memory(): Perform memory test.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*selftest_memory)(struct qed_dev *cdev);
- 
- /**
-- * @brief selftest_register - Perform register test
-+ * selftest_register(): Perform register test.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*selftest_register)(struct qed_dev *cdev);
- 
- /**
-- * @brief selftest_clock - Perform clock test
-+ * selftest_clock(): Perform clock test.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*selftest_clock)(struct qed_dev *cdev);
- 
- /**
-- * @brief selftest_nvram - Perform nvram test
-+ * selftest_nvram(): Perform nvram test.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*selftest_nvram) (struct qed_dev *cdev);
- };
-@@ -927,47 +927,53 @@ struct qed_common_ops {
- 				  enum qed_hw_err_type err_type);
- 
- /**
-- * @brief can_link_change - can the instance change the link or not
-+ * can_link_change(): can the instance change the link or not.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return true if link-change is allowed, false otherwise.
-+ * Return: true if link-change is allowed, false otherwise.
-  */
- 	bool (*can_link_change)(struct qed_dev *cdev);
- 
- /**
-- * @brief set_link - set links according to params
-+ * set_link(): set links according to params.
-  *
-- * @param cdev
-- * @param params - values used to override the default link configuration
-+ * @cdev: Qed dev pointer.
-+ * @params: values used to override the default link configuration.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int		(*set_link)(struct qed_dev *cdev,
- 				    struct qed_link_params *params);
- 
- /**
-- * @brief get_link - returns the current link state.
-+ * get_link(): returns the current link state.
-  *
-- * @param cdev
-- * @param if_link - structure to be filled with current link configuration.
-+ * @cdev: Qed dev pointer.
-+ * @if_link: structure to be filled with current link configuration.
-+ *
-+ * Return: Void.
-  */
- 	void		(*get_link)(struct qed_dev *cdev,
- 				    struct qed_link_output *if_link);
- 
- /**
-- * @brief - drains chip in case Tx completions fail to arrive due to pause.
-+ * drain(): drains chip in case Tx completions fail to arrive due to pause.
-+ *
-+ * @cdev: Qed dev pointer.
-  *
-- * @param cdev
-+ * Return: Int.
-  */
- 	int		(*drain)(struct qed_dev *cdev);
- 
- /**
-- * @brief update_msglvl - update module debug level
-+ * update_msglvl(): update module debug level.
-  *
-- * @param cdev
-- * @param dp_module
-- * @param dp_level
-+ * @cdev: Qed dev pointer.
-+ * @dp_module: Debug module.
-+ * @dp_level: Debug level.
-+ *
-+ * Return: Void.
-  */
- 	void		(*update_msglvl)(struct qed_dev *cdev,
- 					 u32 dp_module,
-@@ -981,70 +987,73 @@ struct qed_common_ops {
- 				      struct qed_chain *p_chain);
- 
- /**
-- * @brief nvm_flash - Flash nvm data.
-+ * nvm_flash(): Flash nvm data.
-  *
-- * @param cdev
-- * @param name - file containing the data
-+ * @cdev: Qed dev pointer.
-+ * @name: file containing the data.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*nvm_flash)(struct qed_dev *cdev, const char *name);
- 
- /**
-- * @brief nvm_get_image - reads an entire image from nvram
-+ * nvm_get_image(): reads an entire image from nvram.
-  *
-- * @param cdev
-- * @param type - type of the request nvram image
-- * @param buf - preallocated buffer to fill with the image
-- * @param len - length of the allocated buffer
-+ * @cdev: Qed dev pointer.
-+ * @type: type of the request nvram image.
-+ * @buf: preallocated buffer to fill with the image.
-+ * @len: length of the allocated buffer.
-  *
-- * @return 0 on success, error otherwise
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*nvm_get_image)(struct qed_dev *cdev,
- 			     enum qed_nvm_images type, u8 *buf, u16 len);
- 
- /**
-- * @brief set_coalesce - Configure Rx coalesce value in usec
-+ * set_coalesce(): Configure Rx coalesce value in usec.
-  *
-- * @param cdev
-- * @param rx_coal - Rx coalesce value in usec
-- * @param tx_coal - Tx coalesce value in usec
-- * @param qid - Queue index
-- * @param sb_id - Status Block Id
-+ * @cdev: Qed dev pointer.
-+ * @rx_coal: Rx coalesce value in usec.
-+ * @tx_coal: Tx coalesce value in usec.
-+ * @handle: Handle.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*set_coalesce)(struct qed_dev *cdev,
- 			    u16 rx_coal, u16 tx_coal, void *handle);
- 
- /**
-- * @brief set_led - Configure LED mode
-+ * set_led() - Configure LED mode.
-  *
-- * @param cdev
-- * @param mode - LED mode
-+ * @cdev: Qed dev pointer.
-+ * @mode: LED mode.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*set_led)(struct qed_dev *cdev,
- 		       enum qed_led_mode mode);
- 
- /**
-- * @brief attn_clr_enable - Prevent attentions from being reasserted
-+ * attn_clr_enable(): Prevent attentions from being reasserted.
-+ *
-+ * @cdev: Qed dev pointer.
-+ * @clr_enable: Clear enable.
-  *
-- * @param cdev
-- * @param clr_enable
-+ * Return: Void.
-  */
- 	void (*attn_clr_enable)(struct qed_dev *cdev, bool clr_enable);
- 
- /**
-- * @brief db_recovery_add - add doorbell information to the doorbell
-- * recovery mechanism.
-+ * db_recovery_add(): add doorbell information to the doorbell
-+ *                    recovery mechanism.
-  *
-- * @param cdev
-- * @param db_addr - doorbell address
-- * @param db_data - address of where db_data is stored
-- * @param db_is_32b - doorbell is 32b pr 64b
-- * @param db_is_user - doorbell recovery addresses are user or kernel space
-+ * @cdev: Qed dev pointer.
-+ * @db_addr: Doorbell address.
-+ * @db_data: Dddress of where db_data is stored.
-+ * @db_width: Doorbell is 32b or 64b.
-+ * @db_space: Doorbell recovery addresses are user or kernel space.
-+ *
-+ * Return: Int.
-  */
- 	int (*db_recovery_add)(struct qed_dev *cdev,
- 			       void __iomem *db_addr,
-@@ -1053,114 +1062,130 @@ struct qed_common_ops {
- 			       enum qed_db_rec_space db_space);
- 
- /**
-- * @brief db_recovery_del - remove doorbell information from the doorbell
-+ * db_recovery_del(): remove doorbell information from the doorbell
-  * recovery mechanism. db_data serves as key (db_addr is not unique).
-  *
-- * @param cdev
-- * @param db_addr - doorbell address
-- * @param db_data - address where db_data is stored. Serves as key for the
-- *		    entry to delete.
-+ * @cdev: Qed dev pointer.
-+ * @db_addr: Doorbell address.
-+ * @db_data: Address where db_data is stored. Serves as key for the
-+ *           entry to delete.
-+ *
-+ * Return: Int.
-  */
- 	int (*db_recovery_del)(struct qed_dev *cdev,
- 			       void __iomem *db_addr, void *db_data);
- 
- /**
-- * @brief recovery_process - Trigger a recovery process
-+ * recovery_process(): Trigger a recovery process.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*recovery_process)(struct qed_dev *cdev);
- 
- /**
-- * @brief recovery_prolog - Execute the prolog operations of a recovery process
-+ * recovery_prolog(): Execute the prolog operations of a recovery process.
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*recovery_prolog)(struct qed_dev *cdev);
- 
- /**
-- * @brief update_drv_state - API to inform the change in the driver state.
-+ * update_drv_state(): API to inform the change in the driver state.
-  *
-- * @param cdev
-- * @param active
-+ * @cdev: Qed dev pointer.
-+ * @active: Active
-  *
-+ * Return: Int.
-  */
- 	int (*update_drv_state)(struct qed_dev *cdev, bool active);
- 
- /**
-- * @brief update_mac - API to inform the change in the mac address
-+ * update_mac(): API to inform the change in the mac address.
-  *
-- * @param cdev
-- * @param mac
-+ * @cdev: Qed dev pointer.
-+ * @mac: MAC.
-  *
-+ * Return: Int.
-  */
- 	int (*update_mac)(struct qed_dev *cdev, u8 *mac);
- 
- /**
-- * @brief update_mtu - API to inform the change in the mtu
-+ * update_mtu(): API to inform the change in the mtu.
-  *
-- * @param cdev
-- * @param mtu
-+ * @cdev: Qed dev pointer.
-+ * @mtu: MTU.
-  *
-+ * Return: Int.
-  */
- 	int (*update_mtu)(struct qed_dev *cdev, u16 mtu);
- 
- /**
-- * @brief update_wol - update of changes in the WoL configuration
-+ * update_wol(): Update of changes in the WoL configuration.
-+ *
-+ * @cdev: Qed dev pointer.
-+ * @enabled: true iff WoL should be enabled.
-  *
-- * @param cdev
-- * @param enabled - true iff WoL should be enabled.
-+ * Return: Int.
-  */
- 	int (*update_wol) (struct qed_dev *cdev, bool enabled);
- 
- /**
-- * @brief read_module_eeprom
-+ * read_module_eeprom(): Read EEPROM.
-  *
-- * @param cdev
-- * @param buf - buffer
-- * @param dev_addr - PHY device memory region
-- * @param offset - offset into eeprom contents to be read
-- * @param len - buffer length, i.e., max bytes to be read
-+ * @cdev: Qed dev pointer.
-+ * @buf: buffer.
-+ * @dev_addr: PHY device memory region.
-+ * @offset: offset into eeprom contents to be read.
-+ * @len: buffer length, i.e., max bytes to be read.
-+ *
-+ * Return: Int.
-  */
- 	int (*read_module_eeprom)(struct qed_dev *cdev,
- 				  char *buf, u8 dev_addr, u32 offset, u32 len);
- 
- /**
-- * @brief get_affin_hwfn_idx
-+ * get_affin_hwfn_idx(): Get affine HW function.
-+ *
-+ * @cdev: Qed dev pointer.
-  *
-- * @param cdev
-+ * Return: u8.
-  */
- 	u8 (*get_affin_hwfn_idx)(struct qed_dev *cdev);
- 
- /**
-- * @brief read_nvm_cfg - Read NVM config attribute value.
-- * @param cdev
-- * @param buf - buffer
-- * @param cmd - NVM CFG command id
-- * @param entity_id - Entity id
-+ * read_nvm_cfg(): Read NVM config attribute value.
-+ *
-+ * @cdev: Qed dev pointer.
-+ * @buf: Buffer.
-+ * @cmd: NVM CFG command id.
-+ * @entity_id: Entity id.
-  *
-+ * Return: Int.
-  */
- 	int (*read_nvm_cfg)(struct qed_dev *cdev, u8 **buf, u32 cmd,
- 			    u32 entity_id);
- /**
-- * @brief read_nvm_cfg - Read NVM config attribute value.
-- * @param cdev
-- * @param cmd - NVM CFG command id
-+ * read_nvm_cfg_len(): Read NVM config attribute value.
-  *
-- * @return config id length, 0 on error.
-+ * @cdev: Qed dev pointer.
-+ * @cmd: NVM CFG command id.
-+ *
-+ * Return: config id length, 0 on error.
-  */
- 	int (*read_nvm_cfg_len)(struct qed_dev *cdev, u32 cmd);
- 
- /**
-- * @brief set_grc_config - Configure value for grc config id.
-- * @param cdev
-- * @param cfg_id - grc config id
-- * @param val - grc config value
-+ * set_grc_config(): Configure value for grc config id.
-+ *
-+ * @cdev: Qed dev pointer.
-+ * @cfg_id: grc config id
-+ * @val: grc config value
-  *
-+ * Return: Int.
-  */
- 	int (*set_grc_config)(struct qed_dev *cdev, u32 cfg_id, u32 val);
- 
-@@ -1397,18 +1422,16 @@ static inline u16 qed_sb_update_sb_idx(struct qed_sb_info *sb_info)
- }
- 
- /**
-+ * qed_sb_ack(): This function creates an update command for interrupts
-+ *               that is  written to the IGU.
-  *
-- * @brief This function creates an update command for interrupts that is
-- *        written to the IGU.
-- *
-- * @param sb_info       - This is the structure allocated and
-- *                 initialized per status block. Assumption is
-- *                 that it was initialized using qed_sb_init
-- * @param int_cmd       - Enable/Disable/Nop
-- * @param upd_flg       - whether igu consumer should be
-- *                 updated.
-+ * @sb_info: This is the structure allocated and
-+ *           initialized per status block. Assumption is
-+ *           that it was initialized using qed_sb_init
-+ * @int_cmd: Enable/Disable/Nop
-+ * @upd_flg: Whether igu consumer should be updated.
-  *
-- * @return inline void
-+ * Return: inline void.
-  */
- static inline void qed_sb_ack(struct qed_sb_info *sb_info,
- 			      enum igu_int_cmd int_cmd,
-diff --git a/include/linux/qed/qed_iscsi_if.h b/include/linux/qed/qed_iscsi_if.h
-index 04180d9af560..494cdc3cd840 100644
---- a/include/linux/qed/qed_iscsi_if.h
-+++ b/include/linux/qed/qed_iscsi_if.h
-@@ -182,7 +182,7 @@ struct qed_iscsi_cb_ops {
-  *			@param stats - pointer to struck that would be filled
-  *				we stats
-  *			@return 0 on success, error otherwise.
-- * @change_mac		Change MAC of interface
-+ * @change_mac:		Change MAC of interface
-  *			@param cdev
-  *			@param handle - the connection handle.
-  *			@param mac - new MAC to configure.
-diff --git a/include/linux/qed/qed_ll2_if.h b/include/linux/qed/qed_ll2_if.h
-index ff808d248883..5b67cd03276e 100644
---- a/include/linux/qed/qed_ll2_if.h
-+++ b/include/linux/qed/qed_ll2_if.h
-@@ -208,57 +208,57 @@ enum qed_ll2_xmit_flags {
- 
- struct qed_ll2_ops {
- /**
-- * @brief start - initializes ll2
-+ * start(): Initializes ll2.
-  *
-- * @param cdev
-- * @param params - protocol driver configuration for the ll2.
-+ * @cdev: Qed dev pointer.
-+ * @params: Protocol driver configuration for the ll2.
-  *
-- * @return 0 on success, otherwise error value.
-+ * Return: 0 on success, otherwise error value.
-  */
- 	int (*start)(struct qed_dev *cdev, struct qed_ll2_params *params);
- 
- /**
-- * @brief stop - stops the ll2
-+ * stop(): Stops the ll2
-  *
-- * @param cdev
-+ * @cdev: Qed dev pointer.
-  *
-- * @return 0 on success, otherwise error value.
-+ * Return: 0 on success, otherwise error value.
-  */
- 	int (*stop)(struct qed_dev *cdev);
- 
- /**
-- * @brief start_xmit - transmits an skb over the ll2 interface
-+ * start_xmit(): Transmits an skb over the ll2 interface
-  *
-- * @param cdev
-- * @param skb
-- * @param xmit_flags - Transmit options defined by the enum qed_ll2_xmit_flags.
-+ * @cdev: Qed dev pointer.
-+ * @skb: SKB.
-+ * @xmit_flags: Transmit options defined by the enum qed_ll2_xmit_flags.
-  *
-- * @return 0 on success, otherwise error value.
-+ * Return: 0 on success, otherwise error value.
-  */
- 	int (*start_xmit)(struct qed_dev *cdev, struct sk_buff *skb,
- 			  unsigned long xmit_flags);
- 
- /**
-- * @brief register_cb_ops - protocol driver register the callback for Rx/Tx
-+ * register_cb_ops(): Protocol driver register the callback for Rx/Tx
-  * packets. Should be called before `start'.
-  *
-- * @param cdev
-- * @param cookie - to be passed to the callback functions.
-- * @param ops - the callback functions to register for Rx / Tx.
-+ * @cdev: Qed dev pointer.
-+ * @cookie: to be passed to the callback functions.
-+ * @ops: the callback functions to register for Rx / Tx.
-  *
-- * @return 0 on success, otherwise error value.
-+ * Return: 0 on success, otherwise error value.
-  */
- 	void (*register_cb_ops)(struct qed_dev *cdev,
- 				const struct qed_ll2_cb_ops *ops,
- 				void *cookie);
- 
- /**
-- * @brief get LL2 related statistics
-+ * get_stats(): Get LL2 related statistics.
-  *
-- * @param cdev
-- * @param stats - pointer to struct that would be filled with stats
-+ * @cdev: Qed dev pointer.
-+ * @stats: Pointer to struct that would be filled with stats.
-  *
-- * @return 0 on success, error otherwise.
-+ * Return: 0 on success, error otherwise.
-  */
- 	int (*get_stats)(struct qed_dev *cdev, struct qed_ll2_stats *stats);
- };
-diff --git a/include/linux/qed/qed_nvmetcp_if.h b/include/linux/qed/qed_nvmetcp_if.h
-index 14671bc19ed1..1d51df347560 100644
---- a/include/linux/qed/qed_nvmetcp_if.h
-+++ b/include/linux/qed/qed_nvmetcp_if.h
-@@ -171,6 +171,23 @@ struct nvmetcp_task_params {
-  *			@param dest_port
-  * @clear_all_filters: Clear all filters.
-  *			@param cdev
-+ * @init_read_io: Init read IO.
-+ *			@task_params
-+ *			@cmd_pdu_header
-+ *			@nvme_cmd
-+ *			@sgl_task_params
-+ * @init_write_io: Init write IO.
-+ *			@task_params
-+ *			@cmd_pdu_header
-+ *			@nvme_cmd
-+ *			@sgl_task_params
-+ * @init_icreq_exchange: Exchange ICReq.
-+ *			@task_params
-+ *			@init_conn_req_pdu_hdr
-+ *			@tx_sgl_task_params
-+ *			@rx_sgl_task_params
-+ * @init_task_cleanup: Init task cleanup.
-+ *			@task_params
-  */
- struct qed_nvmetcp_ops {
- 	const struct qed_common_ops *common;
+-/* header of first vf->pf tlv carries the offset used to calculate reponse
++/* header of first vf->pf tlv carries the offset used to calculate response
+  * buffer address
+  */
+ struct vfpf_first_tlv {
+@@ -85,8 +85,8 @@ struct vfpf_acquire_tlv {
+ 	struct vfpf_first_tlv first_tlv;
+ 
+ 	struct vf_pf_vfdev_info {
+-#define VFPF_ACQUIRE_CAP_PRE_FP_HSI     (1 << 0) /* VF pre-FP hsi version */
+-#define VFPF_ACQUIRE_CAP_100G		(1 << 1) /* VF can support 100g */
++#define VFPF_ACQUIRE_CAP_PRE_FP_HSI     BIT(0) /* VF pre-FP hsi version */
++#define VFPF_ACQUIRE_CAP_100G		BIT(1) /* VF can support 100g */
+ 	/* A requirement for supporting multi-Tx queues on a single queue-zone,
+ 	 * VF would pass qids as additional information whenever passing queue
+ 	 * references.
 -- 
 2.24.1
 
