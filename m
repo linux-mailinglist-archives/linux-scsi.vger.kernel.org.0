@@ -2,146 +2,363 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F119D420B18
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Oct 2021 14:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B39B42106C
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Oct 2021 15:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbhJDMof (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Oct 2021 08:44:35 -0400
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:45740 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbhJDMof (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Oct 2021 08:44:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1633351366; x=1664887366;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=v3IzaXtdoDNJHxMDwuQ5MCAt45ZQ4fcxs0GHkurERXo=;
-  b=Of2xDaXnHeRMIPUiGwRc6zO546BwTgNwfzhjfnwDB55e4YCKCK+byjz+
-   2Hm2JXCdD7fR8vp/iSS0mad2miENIs07uvCFqYd9JFVk0phMUrexIyE8h
-   NOrF/j2tayWFC0+31ff1J71sJ770sMWMvaHHMZQBW29gggo9GVOO2fw+G
-   P42oqOaWvyRVZjUk9k0FDAtqe3GExkWmX2nBkQuRSg6eCCSzQ4oRoCCfS
-   rdcbP1cH3F4/B+RTF3rH7q1DG642798UL9jtgeGbJhq6YYul+JdjhsJuz
-   Od602kFRemf3HBc/m9XkigUFcLw+dPk4bxtmqQLukXZTyS73jN2rENva5
-   g==;
-X-IronPort-AV: E=Sophos;i="5.85,345,1624291200"; 
-   d="scan'208";a="180826544"
-Received: from mail-bn8nam12lp2170.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) ([104.47.55.170])
-  by ob1.hgst.iphmx.com with ESMTP; 04 Oct 2021 20:42:44 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FT2/6mZ8yXT366cFcyk7vFPICJfpQxRhazbqJhDg+wsRHNo2YAdXTjZ2AU3xr4H/6LdeD9vjzLMP3nZZW0QkiAcfpcf7jruW4Ynu2vUT/sVG3qq+D99284RnvZALLEYDqbhzIYObkzVFQmegbtDgIXqlkp3wIar6GeUuUVNDa5MCWM58tuPq96D5fWjh4cDm/gpl45lAK5+bRq67Y4+pTbdtdMHbAIgxFtwBohLuG8m1VSJMNg4jH3OK44xO7Zrzy7fBsd3if9nziGpcblLZYdHkzVChL34H9S1YwiYPNdUR/aexwGlUJuvu2pRq5LAA0VyTivUQ/uKRW0Cpof+FAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v3IzaXtdoDNJHxMDwuQ5MCAt45ZQ4fcxs0GHkurERXo=;
- b=JUizX+XRJ8+4gcP2O+PBrr7MKHM1EIb+FT8FMhg93S+8bM26bGdTPtawJIxaXR2OCRufTslEpFBbRlHLD73wOT3uQd/1gUD3ZLUn/NsB/xxPWW1yvnlC0OdtYVq8k535wXufwzP/pmpRuITATenCAHWcQ29IKK+jBWu+1vCfiQiOWs1XhdLEfdoOb+xIBa465bhnJJt3xFlrAW+yD/gBC+lzLQjuy80CppcJshI9VFp/5gfjEpaYpSGPCjJsoCALlwMCd0NZZHT58/B6+1idn+oD/Erx0wYif+LVFjuvtdyrGlIonZTEW6VcWkMVZ+ZZ+T29T/cxe3p9/W89PR2yqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v3IzaXtdoDNJHxMDwuQ5MCAt45ZQ4fcxs0GHkurERXo=;
- b=g7sV4UXPO8rQPjDFvZXlCpLZe4I6xeh6eSrxf+uXKPoe2XD8oTnW+T1FLVWaAC6wyj/bbHjNzfFuV6+4pzIEqZIMVPbeV7bVZntO/F88OG81Jyw396g4+hxJ1BMCp/PVVZg4FqS7c0vqWefG3YCy06sQBIw68007wRNk1fokvng=
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
- DM6PR04MB7004.namprd04.prod.outlook.com (2603:10b6:5:245::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4566.15; Mon, 4 Oct 2021 12:42:41 +0000
-Received: from DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::edbe:4c5:6ee8:fc59]) by DM6PR04MB6575.namprd04.prod.outlook.com
- ([fe80::edbe:4c5:6ee8:fc59%3]) with mapi id 15.20.4566.022; Mon, 4 Oct 2021
- 12:42:41 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-CC:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <huobean@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Subject: RE: [PATCH RFC 0/6] scsi: ufs: Start to make driver synchronization
- easier to understand
-Thread-Topic: [PATCH RFC 0/6] scsi: ufs: Start to make driver synchronization
- easier to understand
-Thread-Index: AQHXuRhrakVUUbjAJk2JE/Po9HRjw6vCx6mA
-Date:   Mon, 4 Oct 2021 12:42:41 +0000
-Message-ID: <DM6PR04MB6575172F68B25EA1E4A258F1FCAE9@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <20211004120650.153218-1-adrian.hunter@intel.com>
-In-Reply-To: <20211004120650.153218-1-adrian.hunter@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6344eece-e47b-4f05-c9c3-08d9873474c9
-x-ms-traffictypediagnostic: DM6PR04MB7004:
-x-microsoft-antispam-prvs: <DM6PR04MB700477A1E1E0C6B62DBD25A5FCAE9@DM6PR04MB7004.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HBVxOKg9AUW7jpSHWaJ8YCEyLllWhnqCDWlv6IF2e5jzFXe21w8ar/xNxCqTmeAmBKbC3oX+uN9XuC66Wm6bzoxHL9zMeJxrnMRO9FDiDQWNpKMzb6VKtyF1dBALzHvJVAguquzMcImfyZfDJOLRS2TIJ/hsgLO3rJsUoyqda0nBO9+jwWFsxTZyQst2Y8jhbbpvF/2L25VPFR4labIilfDkxTdGGgLqrqbqq/QbPHjD9GC5VwrWRf96QEOxSVxgpC4lPbbi9d0lR8sVGUetmfr6llpD6ZzuJog78pHlULkqIzbGVjoaNrixFaupKdAJBbSqy8ozY0IuzaJAYH+jubBM4WIeSVqF2S2ltidFEUKXGJOPWZ7FT1Z88zyZPqK9beMKI/DaUhjk/Ye4WIJEDgCSfClw/RSjxFdS4EQQrY/G0Pv/8DOvb2MqxiPjfo1TOsKsuTpkpnCIYleGcUza/8SHnabQo2A8lhhh1UynB07+I7v0DNSYLW4RTj1J/3+KRQ6/7pNE+xxccUctRSFXQQeIMe8tm0dPKgiEG60V7RhY4iVWMGlwb7M4wrMifHF80m+E/ODt+VxlxX+ObPFpB/W9uXRfehtlD0jdv4RzDcgBipx+tqtO+Dv5FFGEdHQWoO/uB+Jpx9Xkee/0AMdYRK7zVwqlgh3z4F9aL72mL25jA2+oUie+hwn5YAM3AJJCA3IFNyJzljLJGaOkm5/PvQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(55016002)(33656002)(38070700005)(38100700002)(86362001)(508600001)(9686003)(122000001)(2906002)(76116006)(4744005)(4326008)(8676002)(8936002)(6506007)(5660300002)(7696005)(71200400001)(186003)(26005)(52536014)(54906003)(316002)(83380400001)(66946007)(110136005)(66476007)(66556008)(66446008)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pKFXqvuBsrGQuqikoVSutdjE4lAZ7rqDYOPtQ4uzXGset4sVJRsdMXrU7gVt?=
- =?us-ascii?Q?aalPF/sLR3TN7XEI5VO1PyATXovebnUr0WfymWyOq4xqwluhfs2N3PKxeLzP?=
- =?us-ascii?Q?mLCOzOhRjXl3zEPdpDXlc+GuPpYqvSKEJNzP7206EVrFcm2SWbMexnqcXrmS?=
- =?us-ascii?Q?b67eJgTfpZmbV37Lnd7jVavQ5Af7iUuedMvO2rkBnmNEtEnG32uiQckczwGv?=
- =?us-ascii?Q?M1iXSrXIivF3p7GxXO7ZobzTz6S596E0vr+olag3eSkMw+tlBGVrjPlbx74U?=
- =?us-ascii?Q?Hd/F+h8Tpihz3eKn6fLR5TT1/yQl9hksCWueAc0D8RjRv2i66g31Ghj4/MwK?=
- =?us-ascii?Q?zXrYl75N8COwxbu4GX8W3Xa1+skD+dFISZ99Zb7mdA6YaV9vXfMLxrtGZ7a4?=
- =?us-ascii?Q?88G/8CH4avYSDgSsacCn2WHA5szVR9IVQva1ghA8hDoeg7hsTF2a7Ipu+pEE?=
- =?us-ascii?Q?yZlI5h63smtMSLhMelEVw6GOtXbC05nkAcf959JYQ3iw3B/CUmMOWvGZ2eIz?=
- =?us-ascii?Q?UpJ6njdIH4F+wGSJqpV9hfKhetAJuhljYdicDj2Sdar+s8jB0jD9L1Ush63D?=
- =?us-ascii?Q?zD5Fra8zDaViP3GyOyUFAeKp7UAIai5gCrfpicB9yzSffhPAc15hdhJhl5r5?=
- =?us-ascii?Q?UWp9qTerv3fPtEWhkbYXbNA3k6JqNDRVRPpHrVYCwLn1u4yXRQxIZcluKQfI?=
- =?us-ascii?Q?vcIa5bsbe6q7U9syk66CG81NJPRR0JQCi31nrJiNvzWSg3CMhQSKRk8XrIcK?=
- =?us-ascii?Q?DDKIrJSmOAJFiclnr/qmIRzAAwEsOCiw9nYCF/ADW7s7uD88YCaLNuuxCeT6?=
- =?us-ascii?Q?eUi/zfVNvJv1pXRKuWWKTHDFDbzTN0q3To2JAGCtCHSwasApAEPDuc4QWzTl?=
- =?us-ascii?Q?xct20z/ppbDcVXmTYC/r1UUlSZXa+sLk4gobllEkYReIRmAc0k99oe4hGc1N?=
- =?us-ascii?Q?6U5p2T/N67NlBAXJhIOjZK9ZhkXam0PVlgsTDFLdIJkAEp2/uU+oJlk3NYGd?=
- =?us-ascii?Q?KwbjIIFgSSrkVzH0UFJQt8wlljVpKOr92+CMkm8cna7uLkBXV0MUXU48elfU?=
- =?us-ascii?Q?ey5iDhee//yyoGSm2+On66AMwFHSscCUCpUQZlzPU18q2oPA/lzdxBhsyuWK?=
- =?us-ascii?Q?Vxt2G46E8e9heViuKF36Q4a2lLConrzjYL0H7EZijBSVJelDjXDWjCuTMuzG?=
- =?us-ascii?Q?3e3QrIbv/6P2z+V7tCUi2QrpJcG26xONwNH3n2rH99ZigV2SeEVyyT+gDeLI?=
- =?us-ascii?Q?cxsVgyv7YSGkwm+iydLQfwSQibfc1aPHW3C0SKLvnLozd3Suj8QGjdTR48FF?=
- =?us-ascii?Q?81YzAaQ+yOp9bD0HM0pdfAuz?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S238114AbhJDNn6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Oct 2021 09:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238387AbhJDNmF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Oct 2021 09:42:05 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28E7C028C2E
+        for <linux-scsi@vger.kernel.org>; Mon,  4 Oct 2021 06:00:46 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mXNZO-00054e-PH; Mon, 04 Oct 2021 14:59:50 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mXNZF-0000Kt-4h; Mon, 04 Oct 2021 14:59:41 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mXNZE-0000ay-Vr; Mon, 04 Oct 2021 14:59:40 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, kernel@pengutronix.de,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Fiona Trahe <fiona.trahe@intel.com>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ido Schimmel <idosch@nvidia.com>,
+        Ingo Molnar <mingo@redhat.com>, Jack Xu <jack.xu@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>, Jiri Pirko <jiri@nvidia.com>,
+        Juergen Gross <jgross@suse.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Marco Chiappero <marco.chiappero@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Michael Buesch <m@bues.ch>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tomaszx Kowalik <tomaszx.kowalik@intel.com>,
+        Vadym Kochan <vkochan@marvell.com>,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        netdev@vger.kernel.org, oss-drivers@corigine.com,
+        qat-linux@intel.com, x86@kernel.org, xen-devel@lists.xenproject.org
+Subject: [PATCH v6 00/11] PCI: Drop duplicated tracking of a pci_dev's bound driver
+Date:   Mon,  4 Oct 2021 14:59:24 +0200
+Message-Id: <20211004125935.2300113-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6344eece-e47b-4f05-c9c3-08d9873474c9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Oct 2021 12:42:41.6409
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xXDd815BOcXburJE/HD56ZUNHUxJcbkr2dTh+fZWyvTVwm3DTyfyEBHqgfst7GSATgue11IuHN2XEUA0Vtdp9Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB7004
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-scsi@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-=20
-> Driver synchronization would be easier to understand if we used the
-> clk_scaling_lock as the only lock to provide either shared (down/up_read)
-> or exclusive (down/up_write) access to the host.
->=20
-> These patches make changes with that in mind, finally resulting in being
-> able to hold the down_write() lock for the entire error handler duration.
->=20
-> If this approach is acceptable, it could be extended to simplify the
-> the synchronization of PM vs error handler and Shutdown vs sysfs.
-Given that UFSHCD_CAP_CLK_SCALING is only set for ufs-qcom:
-If extending its use, wouldn't that become a source of contention for them?
+Hello,
 
-Thanks,
-Avri
+this is v6 of the quest to drop the "driver" member from struct pci_dev
+which tracks the same data (apart from a constant offset) as dev.driver.
+
+Changes since v5:
+ - Some Acks added
+ - Some fixes in "PCI: Replace pci_dev::driver usage by
+   pci_dev::dev.driver" to properly handle that
+   to_pci_driver(X) is wrong if X is NULL.
+   This should fix the problem reported by Ido Schimmel.
+
+Full range diff below.
+
+This patch stack survived an allmodconfig build on arm64, m68k, powerpc,
+riscv, s390, sparc64 and x86_64 on top of v5.15-rc3.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (11):
+  PCI: Simplify pci_device_remove()
+  PCI: Drop useless check from pci_device_probe()
+  xen/pci: Drop some checks that are always true
+  bcma: simplify reference to the driver's name
+  powerpc/eeh: Don't use driver member of struct pci_dev and further
+    cleanups
+  ssb: Simplify determination of driver name
+  PCI: Replace pci_dev::driver usage that gets the driver name
+  scsi: message: fusion: Remove unused parameter of mpt_pci driver's
+    probe()
+  crypto: qat - simplify adf_enable_aer()
+  PCI: Replace pci_dev::driver usage by pci_dev::dev.driver
+  PCI: Drop duplicated tracking of a pci_dev's bound driver
+
+ arch/powerpc/include/asm/ppc-pci.h            |  5 -
+ arch/powerpc/kernel/eeh.c                     |  8 ++
+ arch/powerpc/kernel/eeh_driver.c              | 10 +-
+ arch/x86/events/intel/uncore.c                |  2 +-
+ arch/x86/kernel/probe_roms.c                  | 10 +-
+ drivers/bcma/host_pci.c                       |  6 +-
+ drivers/crypto/hisilicon/qm.c                 |  2 +-
+ drivers/crypto/qat/qat_4xxx/adf_drv.c         |  7 +-
+ drivers/crypto/qat/qat_c3xxx/adf_drv.c        |  7 +-
+ drivers/crypto/qat/qat_c62x/adf_drv.c         |  7 +-
+ drivers/crypto/qat/qat_common/adf_aer.c       | 10 +-
+ .../crypto/qat/qat_common/adf_common_drv.h    |  3 +-
+ drivers/crypto/qat/qat_dh895xcc/adf_drv.c     |  7 +-
+ drivers/message/fusion/mptbase.c              |  7 +-
+ drivers/message/fusion/mptbase.h              |  2 +-
+ drivers/message/fusion/mptctl.c               |  4 +-
+ drivers/message/fusion/mptlan.c               |  2 +-
+ drivers/misc/cxl/guest.c                      | 24 +++--
+ drivers/misc/cxl/pci.c                        | 30 +++---
+ .../ethernet/hisilicon/hns3/hns3_ethtool.c    |  2 +-
+ .../ethernet/marvell/prestera/prestera_pci.c  |  2 +-
+ drivers/net/ethernet/mellanox/mlxsw/pci.c     |  2 +-
+ .../ethernet/netronome/nfp/nfp_net_ethtool.c  |  3 +-
+ drivers/pci/iov.c                             | 33 +++++--
+ drivers/pci/pci-driver.c                      | 96 ++++++++++---------
+ drivers/pci/pci.c                             |  4 +-
+ drivers/pci/pcie/err.c                        | 36 +++----
+ drivers/pci/xen-pcifront.c                    | 63 ++++++------
+ drivers/ssb/pcihost_wrapper.c                 |  6 +-
+ drivers/usb/host/xhci-pci.c                   |  2 +-
+ include/linux/pci.h                           |  1 -
+ 31 files changed, 208 insertions(+), 195 deletions(-)
+
+Range-diff against v5:
+ -:  ------------ >  1:  c2b53ab26a6b PCI: Simplify pci_device_remove()
+ -:  ------------ >  2:  2c733e1d5186 PCI: Drop useless check from pci_device_probe()
+ -:  ------------ >  3:  547ca5a7aa16 xen/pci: Drop some checks that are always true
+ -:  ------------ >  4:  40eb07353844 bcma: simplify reference to the driver's name
+ -:  ------------ >  5:  bab59c1dff6d powerpc/eeh: Don't use driver member of struct pci_dev and further cleanups
+ 1:  abd70de9782d !  6:  92f4d61bbac3 ssb: Simplify determination of driver name
+    @@ Commit message
+         This has the upside of not requiring the driver member of struct pci_dev
+         which is about to be removed and being simpler.
+     
+    +    Acked-by: Michael Büsch <m@bues.ch>
+         Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+     
+      ## drivers/ssb/pcihost_wrapper.c ##
+ 2:  735845bd26b9 !  7:  6303f03ab2aa PCI: Replace pci_dev::driver usage that gets the driver name
+    @@ Commit message
+         driver name by dev_driver_string() which implicitly makes use of struct
+         pci_dev::dev->driver.
+     
+    +    Acked-by: Simon Horman <simon.horman@corigine.com> (for NFP)
+         Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+     
+      ## drivers/crypto/hisilicon/qm.c ##
+ 3:  1e58019165b9 =  8:  658a6c00ec96 scsi: message: fusion: Remove unused parameter of mpt_pci driver's probe()
+ 4:  dea72a470141 =  9:  aceaf5321603 crypto: qat - simplify adf_enable_aer()
+ 5:  b4165dda38ea ! 10:  80648d999985 PCI: Replace pci_dev::driver usage by pci_dev::dev.driver
+    @@ arch/x86/kernel/probe_roms.c: static struct resource video_rom_resource = {
+      static bool match_id(struct pci_dev *pdev, unsigned short vendor, unsigned short device)
+      {
+     -	struct pci_driver *drv = pdev->driver;
+    -+	struct pci_driver *drv = to_pci_driver(pdev->dev.driver);
+      	const struct pci_device_id *id;
+      
+      	if (pdev->vendor == vendor && pdev->device == device)
+    + 		return true;
+    + 
+    +-	for (id = drv ? drv->id_table : NULL; id && id->vendor; id++)
+    +-		if (id->vendor == vendor && id->device == device)
+    +-			break;
+    ++	if (pdev->dev.driver) {
+    ++		struct pci_driver *drv = to_pci_driver(pdev->dev.driver);
+    ++		for (id = drv->id_table; id && id->vendor; id++)
+    ++			if (id->vendor == vendor && id->device == device)
+    ++				break;
+    ++	}
+    + 
+    + 	return id && id->vendor;
+    + }
+     
+      ## drivers/misc/cxl/guest.c ##
+     @@ drivers/misc/cxl/guest.c: static void pci_error_handlers(struct cxl_afu *afu,
+    @@ drivers/pci/iov.c: static ssize_t sriov_vf_total_msix_show(struct device *dev,
+      
+      	device_lock(dev);
+     -	if (!pdev->driver || !pdev->driver->sriov_get_vf_total_msix)
+    -+	pdrv = to_pci_driver(dev->driver);
+    -+	if (!pdrv || !pdrv->sriov_get_vf_total_msix)
+    ++	if (!dev->driver)
+      		goto unlock;
+      
+     -	vf_total_msix = pdev->driver->sriov_get_vf_total_msix(pdev);
+    ++	pdrv = to_pci_driver(dev->driver);
+    ++	if (!pdrv->sriov_get_vf_total_msix)
+    ++		goto unlock;
+    ++
+     +	vf_total_msix = pdrv->sriov_get_vf_total_msix(pdev);
+      unlock:
+      	device_unlock(dev);
+    @@ drivers/pci/iov.c: static ssize_t sriov_vf_msix_count_store(struct device *dev,
+      
+      	device_lock(&pdev->dev);
+     -	if (!pdev->driver || !pdev->driver->sriov_set_msix_vec_count) {
+    ++	if (!pdev->dev.driver) {
+    ++		ret = -EOPNOTSUPP;
+    ++		goto err_pdev;
+    ++	}
+    ++
+     +	pdrv = to_pci_driver(pdev->dev.driver);
+    -+	if (!pdrv || !pdrv->sriov_set_msix_vec_count) {
+    ++	if (!pdrv->sriov_set_msix_vec_count) {
+      		ret = -EOPNOTSUPP;
+      		goto err_pdev;
+      	}
+    @@ drivers/pci/pci-driver.c: static void pci_device_remove(struct device *dev)
+      {
+      	struct pci_dev *pci_dev = to_pci_dev(dev);
+     -	struct pci_driver *drv = pci_dev->driver;
+    -+	struct pci_driver *drv = to_pci_driver(pci_dev->dev.driver);
+      
+      	pm_runtime_resume(dev);
+      
+    +-	if (drv && drv->shutdown)
+    +-		drv->shutdown(pci_dev);
+    ++	if (pci_dev->dev.driver) {
+    ++		struct pci_driver *drv = to_pci_driver(pci_dev->dev.driver);
+    ++
+    ++		if (drv->shutdown)
+    ++			drv->shutdown(pci_dev);
+    ++	}
+    + 
+    + 	/*
+    + 	 * If this is a kexec reboot, turn off Bus Master bit on the
+     @@ drivers/pci/pci-driver.c: static int pci_pm_reenable_device(struct pci_dev *pci_dev)
+      static int pci_legacy_suspend(struct device *dev, pm_message_t state)
+      {
+      	struct pci_dev *pci_dev = to_pci_dev(dev);
+     -	struct pci_driver *drv = pci_dev->driver;
+    -+	struct pci_driver *drv = to_pci_driver(dev->driver);
+      
+    - 	if (drv && drv->suspend) {
+    - 		pci_power_t prev = pci_dev->current_state;
+    +-	if (drv && drv->suspend) {
+    +-		pci_power_t prev = pci_dev->current_state;
+    +-		int error;
+    ++	if (dev->driver) {
+    ++		struct pci_driver *drv = to_pci_driver(dev->driver);
+    + 
+    +-		error = drv->suspend(pci_dev, state);
+    +-		suspend_report_result(drv->suspend, error);
+    +-		if (error)
+    +-			return error;
+    ++		if (drv->suspend) {
+    ++			pci_power_t prev = pci_dev->current_state;
+    ++			int error;
+    + 
+    +-		if (!pci_dev->state_saved && pci_dev->current_state != PCI_D0
+    +-		    && pci_dev->current_state != PCI_UNKNOWN) {
+    +-			pci_WARN_ONCE(pci_dev, pci_dev->current_state != prev,
+    +-				      "PCI PM: Device state not saved by %pS\n",
+    +-				      drv->suspend);
+    ++			error = drv->suspend(pci_dev, state);
+    ++			suspend_report_result(drv->suspend, error);
+    ++			if (error)
+    ++				return error;
+    ++
+    ++			if (!pci_dev->state_saved && pci_dev->current_state != PCI_D0
+    ++			    && pci_dev->current_state != PCI_UNKNOWN) {
+    ++				pci_WARN_ONCE(pci_dev, pci_dev->current_state != prev,
+    ++					      "PCI PM: Device state not saved by %pS\n",
+    ++					      drv->suspend);
+    ++			}
+    + 		}
+    + 	}
+    + 
+     @@ drivers/pci/pci-driver.c: static int pci_legacy_suspend_late(struct device *dev, pm_message_t state)
+      static int pci_legacy_resume(struct device *dev)
+      {
+      	struct pci_dev *pci_dev = to_pci_dev(dev);
+     -	struct pci_driver *drv = pci_dev->driver;
+    -+	struct pci_driver *drv = to_pci_driver(pci_dev->dev.driver);
+      
+      	pci_fixup_device(pci_fixup_resume, pci_dev);
+      
+    +-	return drv && drv->resume ?
+    +-			drv->resume(pci_dev) : pci_pm_reenable_device(pci_dev);
+    ++	if (pci_dev->dev.driver) {
+    ++		struct pci_driver *drv = to_pci_driver(pci_dev->dev.driver);
+    ++
+    ++		if (drv->resume)
+    ++			return drv->resume(pci_dev);
+    ++	}
+    ++
+    ++	return pci_pm_reenable_device(pci_dev);
+    + }
+    + 
+    + /* Auxiliary functions used by the new power management framework */
+     @@ drivers/pci/pci-driver.c: static void pci_pm_default_suspend(struct pci_dev *pci_dev)
+      
+      static bool pci_has_legacy_pm_support(struct pci_dev *pci_dev)
+      {
+     -	struct pci_driver *drv = pci_dev->driver;
+    -+	struct pci_driver *drv = to_pci_driver(pci_dev->dev.driver);
+    - 	bool ret = drv && (drv->suspend || drv->resume);
+    +-	bool ret = drv && (drv->suspend || drv->resume);
+    ++	struct pci_driver *drv;
+    ++	bool ret;
+    ++
+    ++	if (!pci_dev->dev.driver)
+    ++		return false;
+    ++
+    ++	drv = to_pci_driver(pci_dev->dev.driver);
+    ++	ret = drv && (drv->suspend || drv->resume);
+      
+      	/*
+    + 	 * Legacy PM support is used by default, so warn if the new framework is
+     @@ drivers/pci/pci-driver.c: static int pci_pm_runtime_suspend(struct device *dev)
+      	int error;
+      
+ 6:  d93a138bd7ab = 11:  2686d69bca17 PCI: Drop duplicated tracking of a pci_dev's bound driver
+
+base-commit: 5816b3e6577eaa676ceb00a848f0fd65fe2adc29
+-- 
+2.30.2
+
