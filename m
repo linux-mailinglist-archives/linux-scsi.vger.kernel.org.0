@@ -2,111 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C83DA4206DF
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Oct 2021 09:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C40742083E
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Oct 2021 11:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbhJDH6N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Oct 2021 03:58:13 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:54060 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229574AbhJDH6M (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 4 Oct 2021 03:58:12 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 9977643EA4;
-        Mon,  4 Oct 2021 07:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        mime-version:content-transfer-encoding:content-type:content-type
-        :content-language:accept-language:in-reply-to:references
-        :message-id:date:date:subject:subject:from:from:received
-        :received:received:received; s=mta-01; t=1633334181; x=
-        1635148582; bh=A2bJ+PgE3j8Ms0rTKjxH/Pn6zKjtiHRnYiE+Wrr1KRQ=; b=g
-        OS4YotgHX1DKbhSNQNpzFMjPreoZGyYaNsrYoSI6TKSl24vJFTiZB8SRw0PE+6eo
-        SwolOOPoHkVeQXg2my3Tz+lyJrjw5/t6KOJ/3TJMSLdhgjzSjJkDPrzUiOdClhoz
-        QoObW6qruHeOnHYN48CLoQM1WHJQVW4x8w4uZBgCFU=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FALbSYxImDuN; Mon,  4 Oct 2021 10:56:21 +0300 (MSK)
-Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 8AA3E43E62;
-        Mon,  4 Oct 2021 10:56:21 +0300 (MSK)
-Received: from T-EXCH-04.corp.yadro.com (172.17.100.104) by
- T-EXCH-04.corp.yadro.com (172.17.100.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Mon, 4 Oct 2021 10:56:20 +0300
-Received: from T-EXCH-04.corp.yadro.com ([fe80::d8c5:6f0a:3d48:18df]) by
- T-EXCH-04.corp.yadro.com ([fe80::d8c5:6f0a:3d48:18df%15]) with mapi id
- 15.01.0669.032; Mon, 4 Oct 2021 10:56:20 +0300
-From:   Dmitriy Bogdanov <d.bogdanov@yadro.com>
-To:     Mike Christie <michael.christie@oracle.com>,
-        Martin Petersen <martin.petersen@oracle.com>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux@yadro.com" <linux@yadro.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>,
-        Konstantin Shelekhin <k.shelekhin@yadro.com>
-Subject: RE: [PATCH 3/3] target: iscsi: control authentication per ACL
-Thread-Topic: [PATCH 3/3] target: iscsi: control authentication per ACL
-Thread-Index: AQHXqU/Pfb0jjhKJh0CWot0YJKeYQqu808MAgAXAwGA=
-Date:   Mon, 4 Oct 2021 07:56:20 +0000
-Message-ID: <380d7926b0b6401fbf6c8e3dac4eb9b3@yadro.com>
-References: <20210914100314.492-1-d.bogdanov@yadro.com>
- <20210914100314.492-4-d.bogdanov@yadro.com>
- <2f65a5a4-6296-cd72-b143-1053665fd4b3@oracle.com>
-In-Reply-To: <2f65a5a4-6296-cd72-b143-1053665fd4b3@oracle.com>
-Accept-Language: ru-RU, en-US
-Content-Language: ru-RU
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.199.0.152]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S229659AbhJDJ3S (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Oct 2021 05:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229685AbhJDJ3S (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Oct 2021 05:29:18 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D64C061745
+        for <linux-scsi@vger.kernel.org>; Mon,  4 Oct 2021 02:27:29 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id f2so17822886vsj.4
+        for <linux-scsi@vger.kernel.org>; Mon, 04 Oct 2021 02:27:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=x0pWExGBmrIq729IIlvOahOD2dMzv6RJizC7Zlt0vBc=;
+        b=Gx5xEvocZTu6U4pwn3n5ifZQrBUv4KIaxncopdSI7EW/5n7WFFZifjQTi3k6LXXYeU
+         KF8sempFYC05aN9vH8M95gIJ+eM7QLaUSS1UalXCyIsGO+urPX5Uu+4nmhStYwNyBep+
+         hXGfrl/MDDJpD8qMNBVSWIp6ozY3XboiRm7HIVIQQ8+hZ67DyKM5jvGR0rv30sLDkmrz
+         GFbQYqXAXVTNXGLCM+JsULHvKNjxISudD1wgg+slKG3Jh7aygCo50UoYwJAm9QP6hnFZ
+         MmYVx8Vd5APRY5JNWYS847hUCuHgn62YVXbmbJ/QDOtHw+4fTq+RRTuiQxVhH1TrQ5I5
+         mU1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=x0pWExGBmrIq729IIlvOahOD2dMzv6RJizC7Zlt0vBc=;
+        b=cy2YXwMH9GgWrHYZqUS7V/NP6J0gs4UQ0Gj3Eg6uRiuwuB+xwD+crMnZmaipUQmhZR
+         BOpmnqEuI+mV24eeErw+I85tD29J43YBUE1/fAf5IDggL0Ogv59b+tAoPGk8nRearK3m
+         1ecRxeV13SQBBeulIADe5UDPbhbRgp+Pv2kBjOeLh/spXBSINZ3/BTqpvHmYInPM7f9F
+         /ztDqZwm7Z3AVGH86vy/EAty4liBlxCXAVk3rleiS+p6GGLXpYixiQNY0jtLU/ENClfh
+         6lCs1ZSQBXxXPQqZpWK5xYz+JZdfnR9WLEOjA5cn3ZnBBuI+DkPXk5VJweR/8nITXuh6
+         Cd9w==
+X-Gm-Message-State: AOAM530Jo0ZM59rp6vh5F04/TtdEJe98TRjHhNOZ0Udl6vLO0a/Ua9C7
+        GCw7PlhlnvDolavevTEQDYlYz3CwyWMbhYjtogc=
+X-Google-Smtp-Source: ABdhPJxWTgCQfv2a88LT5BkVLQJ7iyv4nfXArKvfHSKOwYPRAS3Cggi7IEoN7d9tS/SRr0CJkjhLfvkrA+UQgoVLj6A=
+X-Received: by 2002:a67:e1cd:: with SMTP id p13mr2751159vsl.29.1633339648595;
+ Mon, 04 Oct 2021 02:27:28 -0700 (PDT)
 MIME-Version: 1.0
+Received: by 2002:a59:c48c:0:b0:22d:8d31:b57e with HTTP; Mon, 4 Oct 2021
+ 02:27:28 -0700 (PDT)
+Reply-To: ms.lisahugh000@gmail.com
+From:   Ms Lisa Hugh <lisahugh531@gmail.com>
+Date:   Mon, 4 Oct 2021 11:27:28 +0200
+Message-ID: <CAFnQ+S604S0un+B=xgUrCWtX47tXxpS=VFwn=XuzhAMTXKuZGQ@mail.gmail.com>
+Subject: THE DETAILS LATER. >>MS LISA HUGH.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgTWlrZSwNCg0KPiA+IEFkZCBhY2xzL3tBQ0x9L2F0dHJpYi9hdXRoZW50aWNhdGlvbiBhdHRy
-aWJ1dGUgdGhhdCBjb250cm9scyBhdXRoZW50aWNhdGlvbg0KPiA+IGZvciB0aGUgcGFydGljdWxh
-ciBBQ0wuIEJ5IGRlZmF1bHQsIHRoaXMgYXR0cmlidXRlIGluaGVyaXRzIGEgdmFsdWUgb2YNCj4g
-PiBhdXRoZW50aWNhdGlvbiBhdHRyaWJ1dGUgb2YgdGhlIHRhcmdldCBwb3J0IGdyb3VwIHRvIGtl
-ZXAgYmFja3dhcmQNCj4gPiBjb21wYXRpYmlsaXR5Lg0KPiA+IA0KPiA+IGF1dGhlbnRpY2F0aW9u
-IGF0dHJpYnV0ZSBoYXMgMyBzdGF0ZXM6DQo+ID4gICIwIiAtIGF1dGhlbnRpY2F0aW9uIGlzIHR1
-cm5lZCBvZmYgZm9yIHRoaXMgQUNMDQo+ID4gICIxIiAtIGF1dGhlbnRpY2F0aW9uIGlzIHJlcXVp
-cmVkIGZvciB0aGlzIEFDTA0KPiA+ICAiIiAtIGF1dGhlbnRpY2F0aW9uIGlzIGluaGVyaXRlZCBm
-cm9tIFRQRw0KPg0KPg0KPiBXaHkgdGhlIGVtcHR5IHN0cmluZyBmb3IgdGhpcyB2YWx1ZT8gTWF5
-YmUgMiBvciAtMT8NClRoYXQgd2FzIGRlc2lnbiBkZWNpc2lvbiBieSBsb2dpYyB0aGF0IHNpbmNl
-IHRoYXQgYXR0cmlidXRlIGhhcyBhIHByZWNlZGVuY2UgDQp0byBjbGVhciB0aGF0IHByZWNlZGVu
-Y2Ugd2UgbXVzdCBjbGVhciB0aGUgYXR0cmlidXRlLCBpLmUuIHNldCB0byB0aGUgZW1wdHkgdmFs
-dWUuDQoNCj4gPiANCj4gPiBSZXZpZXdlZC1ieTogUm9tYW4gQm9sc2hha292IDxyLmJvbHNoYWtv
-dkB5YWRyby5jb20+DQo+ID4gUmV2aWV3ZWQtYnk6IEtvbnN0YW50aW4gU2hlbGVraGluIDxrLnNo
-ZWxla2hpbkB5YWRyby5jb20+DQo+ID4gU2lnbmVkLW9mZi1ieTogRG1pdHJ5IEJvZ2Rhbm92IDxk
-LmJvZ2Rhbm92QHlhZHJvLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy90YXJnZXQvaXNjc2kv
-aXNjc2lfdGFyZ2V0X2NvbmZpZ2ZzLmMgIHwgNDEgKysrKysrKysrKysrKysrKysrKw0KPiA+ICBk
-cml2ZXJzL3RhcmdldC9pc2NzaS9pc2NzaV90YXJnZXRfbmVnby5jICAgICAgfCAgOCArKystDQo+
-ID4gIC4uLi90YXJnZXQvaXNjc2kvaXNjc2lfdGFyZ2V0X25vZGVhdHRyaWIuYyAgICB8ICAxICsN
-Cj4gPiAgaW5jbHVkZS90YXJnZXQvaXNjc2kvaXNjc2lfdGFyZ2V0X2NvcmUuaCAgICAgIHwgIDIg
-Kw0KPiA+ICA0IGZpbGVzIGNoYW5nZWQsIDUxIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkN
-Cj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90YXJnZXQvaXNjc2kvaXNjc2lfdGFyZ2V0
-X2NvbmZpZ2ZzLmMgYi9kcml2ZXJzL3RhcmdldC9pc2NzaS9pc2NzaV90YXJnZXRfY29uZmlnZnMu
-Yw0KPiA+IGluZGV4IGUzNzUwYjY0Y2MwYy4uMmQ3MGRlMzQyNDA4IDEwMDY0NA0KPiA+IC0tLSBh
-L2RyaXZlcnMvdGFyZ2V0L2lzY3NpL2lzY3NpX3RhcmdldF9jb25maWdmcy5jDQo+ID4gKysrIGIv
-ZHJpdmVycy90YXJnZXQvaXNjc2kvaXNjc2lfdGFyZ2V0X2NvbmZpZ2ZzLmMNCj4gPiBAQCAtMzE0
-LDYgKzMxNCw0NiBAQCBJU0NTSV9OQUNMX0FUVFIocmFuZG9tX2RhdGFpbl9wZHVfb2Zmc2V0cyk7
-DQo+ID4gIElTQ1NJX05BQ0xfQVRUUihyYW5kb21fZGF0YWluX3NlcV9vZmZzZXRzKTsNCj4gPiAg
-SVNDU0lfTkFDTF9BVFRSKHJhbmRvbV9yMnRfb2Zmc2V0cyk7DQo+ID4gIA0KPiA+ICtzdGF0aWMg
-c3NpemVfdCBpc2NzaV9uYWNsX2F0dHJpYl9hdXRoZW50aWNhdGlvbl9zaG93KHN0cnVjdCBjb25m
-aWdfaXRlbSAqaXRlbSwNCj4gPiArCQljaGFyICpwYWdlKQ0KPiA+ICt7DQo+ID4gKwlzdHJ1Y3Qg
-c2Vfbm9kZV9hY2wgKnNlX25hY2wgPSBhdHRyaWJfdG9fbmFjbChpdGVtKTsNCj4gPiArCXN0cnVj
-dCBpc2NzaV9ub2RlX2FjbCAqbmFjbCA9IHRvX2lzY3NpX25hY2woc2VfbmFjbCk7DQo+ID4gKw0K
-PiA+ICsJaWYgKG5hY2wtPm5vZGVfYXR0cmliLmF1dGhlbnRpY2F0aW9uID09IE5BX0FVVEhFTlRJ
-Q0FUSU9OX0lOSEVSSVRFRCkgew0KPiA+ICsJCXN0cnVjdCBpc2NzaV9wb3J0YWxfZ3JvdXAgKnRw
-ZyA9IHRvX2lzY3NpX3RwZyhzZV9uYWNsLT5zZV90cGcpOw0KPiA+ICsNCj4gPiArCQlyZXR1cm4g
-c3ByaW50ZihwYWdlLCAiJXUgKGluaGVyaXRlZClcbiIsDQo+ID4gKwkJCQl0cGctPnRwZ19hdHRy
-aWIuYXV0aGVudGljYXRpb24pOw0KPg0KPg0KPiBJIHRoaW5rIHdlIHdhbnQgYSB2YWx1ZSBvZiAt
-MSBvciAyIGZvciBpbmhlcml0ZWQgdGhlbiBoZXJlIGl0IHNob3VsZCBwcmludA0KPiB0aGF0IHZh
-bHVlLg0KDQpXZSBkZWNpZGVkIHRvIGhpZGUgdGhlIGludGVybmFsIHZhbHVlIGZyb20gdXNlcnNw
-YWNlIGFuZCByZXByZXNlbnQgaXQgc2ltaWxhciB0bw0KdHBnLmF1dGhlbnRpY2F0aW9uIHRvIGhh
-dmUgdGhlIHNhbWUgaGFuZGxpbmcgdGhlcmUuDQoNCkJSLA0KIERtaXRyeQ0K
+Dear Friend,
+
+I am Ms Lisa Hugh accountant and files keeping with with the bank.
+
+I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
+bank account with your co-operation for both of us benefit.
+
+Please send the follow below,
+1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
+Thanks.
+Ms Lisa Hugh
