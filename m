@@ -2,101 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1935B4226E2
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Oct 2021 14:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781834226FD
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Oct 2021 14:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234461AbhJEMiH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Oct 2021 08:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234459AbhJEMhq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Oct 2021 08:37:46 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A9EC06174E
-        for <linux-scsi@vger.kernel.org>; Tue,  5 Oct 2021 05:35:55 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id e144so24109007iof.3
-        for <linux-scsi@vger.kernel.org>; Tue, 05 Oct 2021 05:35:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nd2ejrVn1IrBzoTnNUOEIyw1dA744hB3m7HTfczVCYw=;
-        b=xmvqwh+kxSPa9x9HeEtsBRyEMZbiwmF9kmT2OvILc5pg90cUkpuaMZ5OvHxKqkDYU/
-         1fpVksM05Rf0fxzEAil/CPpgNnKkpCNejmW21owoiE3aWLED7++R8k81uvojfVvqc7ci
-         HHXXOXOa9lBEMqLOMKVKNocxqsF+0fQcu+AQ08kIFpjn5xBRAdKSlfOYM9Apu+9R1+eY
-         SHsfuYhDY6L8gqWWZaKmVr3FcM7xqLEmeo/ExEEu7PQfnMv9yRp+FF0GUJngHr9mvWDX
-         kTsCNcRsjwP+pp6QAXebSf40N/OR4D2lHP2fsAz5ikvIPfnSdkdPZWCCpOhP/G2e1N4n
-         RT+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=nd2ejrVn1IrBzoTnNUOEIyw1dA744hB3m7HTfczVCYw=;
-        b=q7GsLbx59aFaR0cMUyb89gx7xeHBvb2rviQPBdOO0E83s4xSPxV/W7HRnd8edoPohe
-         tOHrqHZMfmqtw88kceBFZsHqfN0k1HDhMy1lyMZoqwzAZqE7pqe+eTsKueU6B/tfcAEd
-         ulLUmtXFm1OvKpEyu2KjuyYOpYQssSyEOoQohq89cNyJ4ZSxDBZQvdFO9oDnyC6x+RSH
-         ZTSrMRK8RNMAQElEd6K5KknMQm7bQgbDZ2UmyumwoAXMhxyUbtaH41/D/oJIYKoM34zz
-         RhRmNnX6B/B60vALiWnPGH+xHgXRCZmRpon0Kz/Z9rXqlmbtLce2yfPzodbgZncRMkHh
-         xqeA==
-X-Gm-Message-State: AOAM530VHYkM539EDDBjTdctTKYB3KkMHbTS60vrU0hADvwS85lT48YB
-        f00od6O3LY6t7edDWqhgT6/oDA==
-X-Google-Smtp-Source: ABdhPJwRiZXSHS0qUfot1WPJLc5czmuF+55CPQgpqu62Bytbnh3tfhH63y5zGznVaUNcr7o0Yrnpfg==
-X-Received: by 2002:a02:7006:: with SMTP id f6mr136991jac.113.1633437354591;
-        Tue, 05 Oct 2021 05:35:54 -0700 (PDT)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id a4sm8961525ild.52.2021.10.05.05.35.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Oct 2021 05:35:54 -0700 (PDT)
-Subject: Re: [PATCH v5 00/14] blk-mq: Reduce static requests memory footprint
- for shared sbitmap
-To:     John Garry <john.garry@huawei.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ming.lei@redhat.com, hare@suse.de, linux-scsi@vger.kernel.org,
-        kashyap.desai@broadcom.com
-References: <1633429419-228500-1-git-send-email-john.garry@huawei.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <ae33dde8-96e8-2978-5f32-c7e0a6136e8e@kernel.dk>
-Date:   Tue, 5 Oct 2021 06:35:52 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S234275AbhJEMrD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Oct 2021 08:47:03 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:50080 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234230AbhJEMrB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Oct 2021 08:47:01 -0400
+X-UUID: 09e814a012f84cce9dfe9a56d52b7d9a-20211005
+X-UUID: 09e814a012f84cce9dfe9a56d52b7d9a-20211005
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <peter.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1508946922; Tue, 05 Oct 2021 20:45:07 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 5 Oct 2021 20:45:05 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 5 Oct 2021 20:45:05 +0800
+From:   <peter.wang@mediatek.com>
+To:     <stanley.chu@mediatek.com>, <linux-scsi@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
+CC:     <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <powen.kao@mediatek.com>, <jonathan.hsu@mediatek.com>,
+        <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
+        <mikebi@micron.com>
+Subject: [PATCH v1 1/2] scsi: ufs: support vops pre suspend
+Date:   Tue, 5 Oct 2021 20:45:02 +0800
+Message-ID: <20211005124503.14449-1-peter.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <1633429419-228500-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/5/21 4:23 AM, John Garry wrote:
-> Currently a full set of static requests are allocated per hw queue per
-> tagset when shared sbitmap is used.
-> 
-> However, only tagset->queue_depth number of requests may be active at
-> any given time. As such, only tagset->queue_depth number of static
-> requests are required.
-> 
-> The same goes for using an IO scheduler, which allocates a full set of
-> static requests per hw queue per request queue.
-> 
-> This series changes shared sbitmap support by using a shared tags per
-> tagset and request queue. Ming suggested something along those lines in
-> v1 review. In using a shared tags, the static rqs also become shared,
-> reducing the number of sets of static rqs, reducing memory usage.
-> 
-> Patch "blk-mq: Use shared tags for shared sbitmap support" is a bit big,
-> and could potentially be broken down. But then maintaining ability to
-> bisect becomes harder and each sub-patch would get more convoluted.
-> 
-> For megaraid sas driver on my 128-CPU arm64 system with 1x SATA disk, we
-> save approx. 300MB(!) [370MB -> 60MB]
-> 
-> Baseline is 1b2d1439fc25 (block/for-next) Merge branch 'for-5.16/io_uring'
-> into for-next
+From: Peter Wang <peter.wang@mediatek.com>
 
-Let's get this queued up for testing, thanks John.
+This patch introduce an solution to do pre suspned before SSU
+(sleep) command.
 
+Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 9 +++++++--
+ drivers/scsi/ufs/ufshcd.h | 8 +++++---
+ 2 files changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 188de6f91050..73eb626fa88f 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -8897,6 +8897,10 @@ static int __ufshcd_wl_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 
+ 	flush_work(&hba->eeh_work);
+ 
++	ret = ufshcd_vops_suspend(hba, pm_op, PRE_CHANGE);
++	if (ret)
++		goto enable_scaling;
++
+ 	if (req_dev_pwr_mode != hba->curr_dev_pwr_mode) {
+ 		if (pm_op != UFS_RUNTIME_PM)
+ 			/* ensure that bkops is disabled */
+@@ -8924,7 +8928,7 @@ static int __ufshcd_wl_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 	 * vendor specific host controller register space call them before the
+ 	 * host clocks are ON.
+ 	 */
+-	ret = ufshcd_vops_suspend(hba, pm_op);
++	ret = ufshcd_vops_suspend(hba, pm_op, POST_CHANGE);
+ 	if (ret)
+ 		goto set_link_active;
+ 	goto out;
+@@ -9052,7 +9056,8 @@ static int __ufshcd_wl_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ set_old_link_state:
+ 	ufshcd_link_state_transition(hba, old_link_state, 0);
+ vendor_suspend:
+-	ufshcd_vops_suspend(hba, pm_op);
++	ufshcd_vops_suspend(hba, pm_op, PRE_CHANGE);
++	ufshcd_vops_suspend(hba, pm_op, POST_CHANGE);
+ out:
+ 	if (ret)
+ 		ufshcd_update_evt_hist(hba, UFS_EVT_WL_RES_ERR, (u32)ret);
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index f0da5d3db1fa..e90320253d96 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -344,7 +344,8 @@ struct ufs_hba_variant_ops {
+ 					enum ufs_notify_change_status);
+ 	int	(*apply_dev_quirks)(struct ufs_hba *hba);
+ 	void	(*fixup_dev_quirks)(struct ufs_hba *hba);
+-	int     (*suspend)(struct ufs_hba *, enum ufs_pm_op);
++	int     (*suspend)(struct ufs_hba *, enum ufs_pm_op,
++					enum ufs_notify_change_status);
+ 	int     (*resume)(struct ufs_hba *, enum ufs_pm_op);
+ 	void	(*dbg_register_dump)(struct ufs_hba *hba);
+ 	int	(*phy_initialization)(struct ufs_hba *);
+@@ -1300,10 +1301,11 @@ static inline void ufshcd_vops_fixup_dev_quirks(struct ufs_hba *hba)
+ 		hba->vops->fixup_dev_quirks(hba);
+ }
+ 
+-static inline int ufshcd_vops_suspend(struct ufs_hba *hba, enum ufs_pm_op op)
++static inline int ufshcd_vops_suspend(struct ufs_hba *hba, enum ufs_pm_op op,
++				enum ufs_notify_change_status status)
+ {
+ 	if (hba->vops && hba->vops->suspend)
+-		return hba->vops->suspend(hba, op);
++		return hba->vops->suspend(hba, op, status);
+ 
+ 	return 0;
+ }
 -- 
-Jens Axboe
+2.18.0
 
