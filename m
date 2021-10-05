@@ -2,100 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD0A422809
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Oct 2021 15:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B52864228D5
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Oct 2021 15:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235002AbhJENhd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Oct 2021 09:37:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53932 "EHLO mail.kernel.org"
+        id S236229AbhJENyf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Oct 2021 09:54:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60716 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234170AbhJENhc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 5 Oct 2021 09:37:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C7A3461373;
-        Tue,  5 Oct 2021 13:35:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633440942;
-        bh=rmiNW24/FYEIfXM5I6t4acvrWgnU8hlztAf4CfxGHdw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QvX/svW3718K8DxSSqNursVFPuWYzbbpBOhvWl1fm03YrqXamEV9oI6/3q7lSf7WJ
-         lfmljhkzMWRNND5DXr3JVdPWMW0Nf+P35ScDeGdXvJTpj5/J3LMtedczUqSknj1nja
-         fFAEKrWiFFM8PrjQWvapq8cKe0Uidg0ouI8W+xp4=
-Date:   Tue, 5 Oct 2021 15:35:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Changhui Zhong <czhong@redhat.com>,
-        Yi Zhang <yi.zhang@redhat.com>
-Subject: Re: [PATCH V3] scsi: core: put LLD module refcnt after SCSI device
- is released
-Message-ID: <YVxUrIQw7ACcmSx2@kroah.com>
-References: <20210930124415.1160754-1-ming.lei@redhat.com>
+        id S235185AbhJENxS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 5 Oct 2021 09:53:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A9EEA615E3;
+        Tue,  5 Oct 2021 13:51:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633441887;
+        bh=IrqeVLXJRZKyB/ZBKpBviLDofZGUINKKSezgTapA/UI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OmvdwBLm4spccishN1oP0k1NboTJ9xFB17xvvM86BLx5fgak9RRq7hxW2CNj7M4LC
+         Ax/wZ5dnMfITvm7y46nTZrOwR6Pfr9KP1EFxQ1XDqj+ZibjyvPjjaKsbb7Ki4cAPst
+         yFCgnU5r4rrFO+jFrDbwR4shDMNKHf16kmL/7ZWHTxsKFuJYIdqwlgjXXWGElynwfZ
+         O+5Q3lt+BtzlNqTjNOYiXaKMVqlaLfBCe3+k7wFZCQID68ofKsfPPrKJ14wYq2j8+1
+         mrcyHLE7F9cUK3a4DENJbsyr8YTn3jD/WweWTYf6la4MrbvRcursy9CgTlU1hPHpDv
+         zWHmJesbdDqnw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 33/40] scsi: ses: Fix unsigned comparison with less than zero
+Date:   Tue,  5 Oct 2021 09:50:12 -0400
+Message-Id: <20211005135020.214291-33-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211005135020.214291-1-sashal@kernel.org>
+References: <20211005135020.214291-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210930124415.1160754-1-ming.lei@redhat.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 08:44:15PM +0800, Ming Lei wrote:
-> SCSI host release is triggered when SCSI device is freed, and we have to
-> make sure that LLD module won't be unloaded before SCSI host instance is
-> released because shost->hostt is required in host release handler.
-> 
-> So make sure to put LLD module refcnt after SCSI device is released.
+From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-What is a "LLD"?
+[ Upstream commit dd689ed5aa905daf4ba4c99319a52aad6ea0a796 ]
 
-> Fix one kernel panic of 'BUG: unable to handle page fault for address'
-> reported by Changhui and Yi.
-> 
-> Reported-by: Changhui Zhong <czhong@redhat.com>
-> Reported-by: Yi Zhang <yi.zhang@redhat.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->  drivers/scsi/scsi.c        |  4 +++-
->  drivers/scsi/scsi_sysfs.c  | 12 ++++++++++++
->  include/scsi/scsi_device.h |  1 +
->  3 files changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-> index b241f9e3885c..291ecc33b1fe 100644
-> --- a/drivers/scsi/scsi.c
-> +++ b/drivers/scsi/scsi.c
-> @@ -553,8 +553,10 @@ EXPORT_SYMBOL(scsi_device_get);
->   */
->  void scsi_device_put(struct scsi_device *sdev)
->  {
-> -	module_put(sdev->host->hostt->module);
-> +	struct module *mod = sdev->host->hostt->module;
-> +
->  	put_device(&sdev->sdev_gendev);
-> +	module_put(mod);
->  }
->  EXPORT_SYMBOL(scsi_device_put);
->  
-> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-> index 86793259e541..9ada26814011 100644
-> --- a/drivers/scsi/scsi_sysfs.c
-> +++ b/drivers/scsi/scsi_sysfs.c
-> @@ -449,9 +449,16 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
->  	struct scsi_vpd *vpd_pg80 = NULL, *vpd_pg83 = NULL;
->  	struct scsi_vpd *vpd_pg0 = NULL, *vpd_pg89 = NULL;
->  	unsigned long flags;
-> +	struct module *mod;
-> +	bool put_mod = false;
->  
->  	sdev = container_of(work, struct scsi_device, ew.work);
->  
-> +	if (sdev->put_lld_mod_ref) {
+Fix the following coccicheck warning:
 
-Why do you need this flag at all?
+./drivers/scsi/ses.c:137:10-16: WARNING: Unsigned expression compared
+with zero: result > 0.
 
-Shouldn't you just always grab/release the module?  Why would you not
-want to?
+Link: https://lore.kernel.org/r/1632477113-90378-1-git-send-email-jiapeng.chong@linux.alibaba.com
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/ses.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thanks,
+diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
+index c2afba2a5414..d155a7329b07 100644
+--- a/drivers/scsi/ses.c
++++ b/drivers/scsi/ses.c
+@@ -111,7 +111,7 @@ static int ses_recv_diag(struct scsi_device *sdev, int page_code,
+ static int ses_send_diag(struct scsi_device *sdev, int page_code,
+ 			 void *buf, int bufflen)
+ {
+-	u32 result;
++	int result;
+ 
+ 	unsigned char cmd[] = {
+ 		SEND_DIAGNOSTIC,
+-- 
+2.33.0
 
-greg k-h
