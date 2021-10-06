@@ -2,247 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E24442363D
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Oct 2021 05:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1090F4236D6
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Oct 2021 06:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237255AbhJFDL5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Oct 2021 23:11:57 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:41708 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237168AbhJFDL5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Oct 2021 23:11:57 -0400
-X-UUID: 89c5f900381e4fb0b061b0f52fead3c3-20211006
-X-UUID: 89c5f900381e4fb0b061b0f52fead3c3-20211006
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <peter.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1052495989; Wed, 06 Oct 2021 11:10:02 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 6 Oct 2021 11:10:01 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 6 Oct 2021 11:10:01 +0800
-From:   <peter.wang@mediatek.com>
-To:     <stanley.chu@mediatek.com>, <linux-scsi@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
-CC:     <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <powen.kao@mediatek.com>, <jonathan.hsu@mediatek.com>,
-        <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
-        <mikebi@micron.com>
-Subject: [PATCH v3 2/2] scsi: ufs: ufs-mediatek: disable auto-hibern8 before suspend
-Date:   Wed, 6 Oct 2021 11:09:59 +0800
-Message-ID: <20211006030959.20533-3-peter.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20211006030959.20533-1-peter.wang@mediatek.com>
-References: <20211006030959.20533-1-peter.wang@mediatek.com>
+        id S229793AbhJFEEX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 6 Oct 2021 00:04:23 -0400
+Received: from mail-pj1-f49.google.com ([209.85.216.49]:33620 "EHLO
+        mail-pj1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229554AbhJFEEW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Oct 2021 00:04:22 -0400
+Received: by mail-pj1-f49.google.com with SMTP id cs11-20020a17090af50b00b0019fe3df3dddso3023717pjb.0
+        for <linux-scsi@vger.kernel.org>; Tue, 05 Oct 2021 21:02:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3NfoG0nr7eSD+yHE0ezo9tSXYQJCxUvQ/OrkDl2bbRk=;
+        b=l8hFsQZk5I984CWFZFvdpFGHp5ur423uJPj1Uh/pJsTuG0onBLuRJAuxcJCn974T+z
+         wW+6pcONImtafm2rLRZVTZU0XvLzougg7nltuBfHgfHnaxYNdoAKYKjdtg4fPRBj8d2r
+         kSZCXxaWuNUKiGTjQ/aCeZQ+iAAqnH+c2g2e9OUt0Dfap1R7tmrbGgIbwIBz5wfaL6rp
+         1ux5WnYytkhu/9VmpUVOLU1JjxGfyXbMhknX4Vyu2e0JCuMi7B6+zDpugEWAtQKoq7pf
+         UUR7CH8VuHVjLIEaQTbi+4Gy8tJLCwQOTtjARMGuWZphCVBQDmwNQzIbofb9ngX7MVbz
+         I1YA==
+X-Gm-Message-State: AOAM530fc1nVpJfP+WOXv6VcxHgUuR5vMVRToKE4DfUun08MU2ac8nT/
+        WvrTaquB7ujz3TMQwzHv5Jw=
+X-Google-Smtp-Source: ABdhPJzyRpXeaLEkfzzWcQs7Lcw2V0Vjjs09M6WjoMo9OaBPP1q/IvZEI06q+C0CR3zMT69a9lgwAw==
+X-Received: by 2002:a17:903:208b:b0:13e:d2b9:f2e8 with SMTP id d11-20020a170903208b00b0013ed2b9f2e8mr8780482plc.66.1633492950494;
+        Tue, 05 Oct 2021 21:02:30 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:4a11:5a1c:6c65:8b55? ([2601:647:4000:d7:4a11:5a1c:6c65:8b55])
+        by smtp.gmail.com with ESMTPSA id i125sm18993666pfc.36.2021.10.05.21.02.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Oct 2021 21:02:29 -0700 (PDT)
+Message-ID: <fda69919-44d3-1150-7141-a71e5900bb20@acm.org>
+Date:   Tue, 5 Oct 2021 21:02:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [PATCH v3 0/2] scsi: ufs: support vops pre suspend for mediatek
+ to disable auto-hibern8
+Content-Language: en-US
+To:     peter.wang@mediatek.com, stanley.chu@mediatek.com,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com
+Cc:     wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
+        jiajie.hao@mediatek.com, powen.kao@mediatek.com,
+        jonathan.hsu@mediatek.com, qilin.tan@mediatek.com,
+        lin.gui@mediatek.com, mikebi@micron.com
+References: <20211006030959.20533-1-peter.wang@mediatek.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20211006030959.20533-1-peter.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Peter Wang <peter.wang@mediatek.com>
+On 10/5/21 20:09, peter.wang@mediatek.com wrote:
+> Mediatek UFS design need disable auto-hibern8 before suspend.
+> This patch introduce an solution to do pre suspned before SSU
+> (sleep) command.
+> 
+> Peter Wang (2):
+>    scsi: ufs: support vops pre suspend
+>    scsi: ufs: ufs-mediatek: disable auto-hibern8 before suspend
 
-Mediatek UFS design need disable auto-hibern8 before suspend.
+Please always include a changelog when posting a new version of a patch
+series.
 
-Signed-off-by: Peter Wang <peter.wang@mediatek.com>
----
- drivers/scsi/ufs/ufs-exynos.c   |  6 ++-
- drivers/scsi/ufs/ufs-hisi.c     |  6 ++-
- drivers/scsi/ufs/ufs-mediatek.c | 68 ++++++++++++++++++++++++++++++++-
- drivers/scsi/ufs/ufs-mediatek.h | 20 ++++++++++
- drivers/scsi/ufs/ufs-qcom.c     |  6 ++-
- 5 files changed, 102 insertions(+), 4 deletions(-)
+I have the same comment about v3 as for v2: I don't think that this
+series is bisectable so please combine the two patches into one patch
+or add "if (status == PRE_CHANGE) return" in ufshcd_vops_suspend() in
+patch 1/2 and remove this again in patch 2/2.
 
-diff --git a/drivers/scsi/ufs/ufs-exynos.c b/drivers/scsi/ufs/ufs-exynos.c
-index a14dd8ce56d4..b2ec9e20b14d 100644
---- a/drivers/scsi/ufs/ufs-exynos.c
-+++ b/drivers/scsi/ufs/ufs-exynos.c
-@@ -1176,10 +1176,14 @@ static void exynos_ufs_hibern8_notify(struct ufs_hba *hba,
- 	}
- }
- 
--static int exynos_ufs_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
-+static int exynos_ufs_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
-+	enum ufs_notify_change_status status)
- {
- 	struct exynos_ufs *ufs = ufshcd_get_variant(hba);
- 
-+	if (status == PRE_CHANGE)
-+		return 0;
-+
- 	if (!ufshcd_is_link_active(hba))
- 		phy_power_off(ufs->phy);
- 
-diff --git a/drivers/scsi/ufs/ufs-hisi.c b/drivers/scsi/ufs/ufs-hisi.c
-index 6b706de8354b..8c7e8d321746 100644
---- a/drivers/scsi/ufs/ufs-hisi.c
-+++ b/drivers/scsi/ufs/ufs-hisi.c
-@@ -396,10 +396,14 @@ static int ufs_hisi_pwr_change_notify(struct ufs_hba *hba,
- 	return ret;
- }
- 
--static int ufs_hisi_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
-+static int ufs_hisi_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
-+	enum ufs_notify_change_status status)
- {
- 	struct ufs_hisi_host *host = ufshcd_get_variant(hba);
- 
-+	if (status == PRE_CHANGE)
-+		return 0;
-+
- 	if (pm_op == UFS_RUNTIME_PM)
- 		return 0;
- 
-diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
-index d2d7e76c5ec8..d1696db70ce8 100644
---- a/drivers/scsi/ufs/ufs-mediatek.c
-+++ b/drivers/scsi/ufs/ufs-mediatek.c
-@@ -311,6 +311,46 @@ static void ufs_mtk_dbg_sel(struct ufs_hba *hba)
- 	}
- }
- 
-+static void ufs_mtk_wait_idle_state(struct ufs_hba *hba,
-+			    unsigned long retry_ms)
-+{
-+	u64 timeout, time_checked;
-+	u32 val, sm;
-+	bool wait_idle;
-+
-+	timeout = sched_clock() + retry_ms * 1000000UL;
-+
-+
-+	/* wait a specific time after check base */
-+	udelay(10);
-+	wait_idle = false;
-+
-+	do {
-+		time_checked = sched_clock();
-+		ufs_mtk_dbg_sel(hba);
-+		val = ufshcd_readl(hba, REG_UFS_PROBE);
-+
-+		sm = val & 0x1f;
-+
-+		/*
-+		 * if state is in H8 enter and H8 enter confirm
-+		 * wait until return to idle state.
-+		 */
-+		if ((sm >= VS_HIB_ENTER) && (sm <= VS_HIB_EXIT)) {
-+			wait_idle = true;
-+			udelay(50);
-+			continue;
-+		} else if (!wait_idle)
-+			break;
-+
-+		if (wait_idle && (sm == VS_HCE_BASE))
-+			break;
-+	} while (time_checked < timeout);
-+
-+	if (wait_idle && sm != VS_HCE_BASE)
-+		dev_info(hba->dev, "wait idle tmo: 0x%x\n", val);
-+}
-+
- static int ufs_mtk_wait_link_state(struct ufs_hba *hba, u32 state,
- 				   unsigned long max_wait_ms)
- {
-@@ -949,11 +989,37 @@ static void ufs_mtk_vreg_set_lpm(struct ufs_hba *hba, bool lpm)
- 				   REGULATOR_MODE_NORMAL);
- }
- 
--static int ufs_mtk_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
-+static void ufs_mtk_auto_hibern8_disable(struct ufs_hba *hba)
-+{
-+	unsigned long flags;
-+	int ret;
-+
-+	/* disable auto-hibern8 */
-+	spin_lock_irqsave(hba->host->host_lock, flags);
-+	ufshcd_writel(hba, 0, REG_AUTO_HIBERNATE_IDLE_TIMER);
-+	spin_unlock_irqrestore(hba->host->host_lock, flags);
-+
-+	/* wait host return to idle state when auto-hibern8 off */
-+	ufs_mtk_wait_idle_state(hba, 5);
-+
-+	ret = ufs_mtk_wait_link_state(hba, VS_LINK_UP, 100);
-+	if (ret)
-+		dev_warn(hba->dev, "exit h8 state fail, ret=%d\n", ret);
-+}
-+
-+static int ufs_mtk_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
-+	enum ufs_notify_change_status status)
- {
- 	int err;
- 	struct arm_smccc_res res;
- 
-+	if (status == PRE_CHANGE) {
-+		if (!ufshcd_is_auto_hibern8_supported(hba))
-+			return 0;
-+		ufs_mtk_auto_hibern8_disable(hba);
-+		return 0;
-+	}
-+
- 	if (ufshcd_is_link_hibern8(hba)) {
- 		err = ufs_mtk_link_set_lpm(hba);
- 		if (err)
-diff --git a/drivers/scsi/ufs/ufs-mediatek.h b/drivers/scsi/ufs/ufs-mediatek.h
-index 524c8e2c1e6f..c96b9b529ee2 100644
---- a/drivers/scsi/ufs/ufs-mediatek.h
-+++ b/drivers/scsi/ufs/ufs-mediatek.h
-@@ -54,6 +54,26 @@ enum {
- 	VS_LINK_CFG                 = 5,
- };
- 
-+/*
-+ * Vendor specific host controller state
-+ */
-+enum {
-+	VS_HCE_RESET                = 0,
-+	VS_HCE_BASE                 = 1,
-+	VS_HCE_OOCPR_WAIT           = 2,
-+	VS_HCE_DME_RESET            = 3,
-+	VS_HCE_MIDDLE               = 4,
-+	VS_HCE_DME_ENABLE           = 5,
-+	VS_HCE_DEFAULTS             = 6,
-+	VS_HIB_IDLEEN               = 7,
-+	VS_HIB_ENTER                = 8,
-+	VS_HIB_ENTER_CONF           = 9,
-+	VS_HIB_MIDDLE               = 10,
-+	VS_HIB_WAITTIMER            = 11,
-+	VS_HIB_EXIT_CONF            = 12,
-+	VS_HIB_EXIT                 = 13,
-+};
-+
- /*
-  * SiP commands
-  */
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index 9d9770f1db4f..82cc55744afc 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -589,11 +589,15 @@ static void ufs_qcom_device_reset_ctrl(struct ufs_hba *hba, bool asserted)
- 	gpiod_set_value_cansleep(host->device_reset, asserted);
- }
- 
--static int ufs_qcom_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
-+static int ufs_qcom_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
-+	enum ufs_notify_change_status status)
- {
- 	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
- 	struct phy *phy = host->generic_phy;
- 
-+	if (status == PRE_CHANGE)
-+		return 0;
-+
- 	if (ufs_qcom_is_link_off(hba)) {
- 		/*
- 		 * Disable the tx/rx lane symbol clocks before PHY is
--- 
-2.18.0
+Thanks,
 
+Bart.
