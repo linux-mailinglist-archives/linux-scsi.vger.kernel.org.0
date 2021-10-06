@@ -2,84 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7A84238B1
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Oct 2021 09:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3194238D6
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Oct 2021 09:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237313AbhJFHTv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 6 Oct 2021 03:19:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37580 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229861AbhJFHTv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 6 Oct 2021 03:19:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 225C561100;
-        Wed,  6 Oct 2021 07:17:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1633504679;
-        bh=9c9T1NGU8XxsuwplXdklZBi0suFm3I3jQ61YqsqEbz4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LH4MydASCkGCd3Y9kMEZErEdyS0bAcPL6F24YoRHXicSBJOlghCv8CTInvsPSFVAz
-         uKeWzf2sbeDDbyw3/ycr5QOGhMjKn6yKIBdL6/eW81GPtb6VlPJhoKSWFVnCeR6/YU
-         ZNp/ctyuHYFid4+JoRfFHvRYWz4vnx7CF9I8o9TA=
-Date:   Wed, 6 Oct 2021 09:17:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     kys@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        haiyangz@microsoft.com, ming.lei@redhat.com, bvanassche@acm.org,
-        john.garry@huawei.com, linux-scsi@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] scsi: storvsc: Cap scsi_driver.can_queue to fix a hang
- issue during boot
-Message-ID: <YV1NpdaVYJFHPml7@kroah.com>
-References: <20211006070345.51713-1-decui@microsoft.com>
+        id S237435AbhJFH3L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 6 Oct 2021 03:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237458AbhJFH3K (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Oct 2021 03:29:10 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D0CC061753
+        for <linux-scsi@vger.kernel.org>; Wed,  6 Oct 2021 00:27:18 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id q189so3314519ybq.1
+        for <linux-scsi@vger.kernel.org>; Wed, 06 Oct 2021 00:27:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=nrfs9o7i0LYm9sR6611pkoOObdcvNwRhPvrSmqY7lo8=;
+        b=mBXezEGMJzxcnyVbqR6S9fWwoVrqsE83iW9y82237xCv3UUyhpZhh/yMLotRnmWHM7
+         qcCrIzKDqe3DDyM87nNoyo4ySNyDvNGtt1WNcqpV5/O4eDAfOwoEw0rKSUn9i7SDrAxc
+         EVpcuO0S+vRPQlBQiOkpIBFi28+94dmT5HoDlaasbpq6shaQRdilOyt2fK8vfwDaGu3F
+         8c09HOMAD+CY6K+k/TzQS6i4cWFTf7LykUNYqQELuctqIeOjdB+p8Uhs3lkSA7K46swk
+         YpM2hRJcWMS7O+p1PZFV0I8b643oWqHTG6v7GP7RwX4R+swR13CFiuB30k0oXxKSlJ+7
+         7n/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=nrfs9o7i0LYm9sR6611pkoOObdcvNwRhPvrSmqY7lo8=;
+        b=6xwGnMq6kqjTP1YhzvVpXHIBgvDrZdiumqGzu78BxMExLhwKDV9vwTtINrmDNnhxeb
+         Pzf2bOANLhhNs/kE0p3EEi55hH5S1WdtknayBIDMfMTMZgiAOlxvcD14uLOf9fHVWKWv
+         5u2uPLHfoKsY+HW/0Cn9FOIE3uM2g08jmjFDRQkrpD3Ld4i8hoD295F0mlstYVOf20Jg
+         mzGyswZKTrL4v84xIOdeyrMNFORfTARnrv8RykT2RnVA8Mft4Sbjy3wQo+Cllw2m2Bon
+         U8N3/tvg+B4DGc7gx9r1rxuAGLpY1EyOGpiKTwqcLM6bboMdpp3gyNxJBQayAwYkvxMw
+         IJKw==
+X-Gm-Message-State: AOAM533GdGunX/AuVw6XPsolSNYDxJUIDTYhUpp+0Qn5ODH9qVW8vbHr
+        QAhS+5mcw23Le+NpK1ZD1okFas0MUcYDtU/5xQQ=
+X-Google-Smtp-Source: ABdhPJxOcYkgXVzR9/fb4frnv3YWvTicwwW9hZ+9lt60EWXzLy92AeNL597TAENaG7pnemu+J8VQlW47VBBADjraQ/A=
+X-Received: by 2002:a5b:385:: with SMTP id k5mr27083772ybp.65.1633505237900;
+ Wed, 06 Oct 2021 00:27:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211006070345.51713-1-decui@microsoft.com>
+Received: by 2002:a05:7000:97c5:0:0:0:0 with HTTP; Wed, 6 Oct 2021 00:27:17
+ -0700 (PDT)
+Reply-To: mohamedkasim794@yahoo.com
+From:   "Mr.Kasim Mohamed" <mr.alinmusah03@gmail.com>
+Date:   Wed, 6 Oct 2021 00:27:17 -0700
+Message-ID: <CAK9pk2GadZwH-10kfgJwRZt9RzjD5Zw=mkxpmNcHpHL15hNgMg@mail.gmail.com>
+Subject: GOOD DAY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Oct 06, 2021 at 12:03:45AM -0700, Dexuan Cui wrote:
-> After commit ea2f0f77538c, a 416-CPU VM running on Hyper-V hangs during
-> boot because scsi_add_host_with_dma() sets shost->cmd_per_lun to a
-> negative number:
-> 	'max_outstanding_req_per_channel' is 352,
-> 	'max_sub_channels' is (416 - 1) / 4 = 103, so in storvsc_probe(),
-> scsi_driver.can_queue = 352 * (103 + 1) * (100 - 10) / 100 = 32947, which
-> is bigger than SHRT_MAX (i.e. 32767).
-> 
-> Fix the hang issue by capping scsi_driver.can_queue.
-> 
-> Add the below Fixed tag though ea2f0f77538c itself is good.
-> 
-> Fixes: ea2f0f77538c ("scsi: core: Cap scsi_host cmd_per_lun at can_queue")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> ---
->  drivers/scsi/storvsc_drv.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-> index ebbbc1299c62..ba374908aec2 100644
-> --- a/drivers/scsi/storvsc_drv.c
-> +++ b/drivers/scsi/storvsc_drv.c
-> @@ -1976,6 +1976,16 @@ static int storvsc_probe(struct hv_device *device,
->  				(max_sub_channels + 1) *
->  				(100 - ring_avail_percent_lowater) / 100;
->  
-> +	/*
-> +	 * v5.14 (see commit ea2f0f77538c) implicitly requires that
+--=20
+Dear Friend,
 
-No need to put a version number in a comment, they do not track well
-when people backport changes all over the place in other kernel trees.
+Greetings.
 
-If you want to refer to a commit, please do so in the documented way.
+How are you doing today i hope fine?
 
-For this case, that would be:
-	ea2f0f77538c ("scsi: core: Cap scsi_host cmd_per_lun at can_queue")
+I came across your e-mail contact prior a private search while in need
+of your assistance. My name Mr.Kasim Mohamed =E2=80=99 I work with the
+department of Audit and accounting manager here in UBA Bank of Africa,
+There is this fund that was keep in my custody years ago and I need
+your assistance for the transferring of this fund to your bank account
+for both of us benefit for life time investment and the amount is (US
+$27,500. Million Dollars).
 
-thanks,
+I have every inquiry details to make the bank believe you and release
+the fund to your bank account in within 7 banking working days with
+your full co-operation with me after success Note 50% for you while
+50% for me after success of the transfer of the funds to your bank
+account okay.
 
-greg k-h
+WAITING TO HEAR FROM YOU.
+THANKS.
+
+ Mr.Kasim Mohamed
