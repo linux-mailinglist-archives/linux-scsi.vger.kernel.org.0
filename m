@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C52BF424EDB
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Oct 2021 10:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4789F424EE9
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Oct 2021 10:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240690AbhJGIOH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Oct 2021 04:14:07 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:42939 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240634AbhJGIOB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Oct 2021 04:14:01 -0400
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20211007081206epoutp015b3c0fa2aa782609deff83fc2f4ddb21~rsWKfzWRa1989419894epoutp01F
-        for <linux-scsi@vger.kernel.org>; Thu,  7 Oct 2021 08:12:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20211007081206epoutp015b3c0fa2aa782609deff83fc2f4ddb21~rsWKfzWRa1989419894epoutp01F
+        id S240687AbhJGIOX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Oct 2021 04:14:23 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:44224 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240681AbhJGIOG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Oct 2021 04:14:06 -0400
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20211007081212epoutp02fbd16c0afcf8f76305926d3c2a2b692f~rsWPO6PDI0453504535epoutp029
+        for <linux-scsi@vger.kernel.org>; Thu,  7 Oct 2021 08:12:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20211007081212epoutp02fbd16c0afcf8f76305926d3c2a2b692f~rsWPO6PDI0453504535epoutp029
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1633594327;
-        bh=b89H/KFQElrNIzeUUmTjG5KZK98QmFXSuwoXff9249M=;
+        s=mail20170921; t=1633594332;
+        bh=dJMndszYd3O+KUdzXACVnu14r4a+S9UetNP1Oa/HmVc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rJ8XrSALcG8QaAn0jMHP1hHbqo+xlV7VhDQg/ihN8xCKSnSZyCAQFM5H/ASGj76LT
-         khCA/Vw4k6/Ga7ZjYbxt9MfOkhXXUcfiAN2Ox0xf5yMWFGlnAK3tK2TEefKurwukdD
-         YBQGuxwXjxy7HGsbgtkKNL4oe3xxkDbcU3SUsW64=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20211007081146epcas2p4d085c688bc8e47b21a4a89710b96d1fd~rsV3l7F1o2863928639epcas2p4a;
-        Thu,  7 Oct 2021 08:11:46 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.90]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4HQ3v03Gcrz4x9RX; Thu,  7 Oct
-        2021 08:11:40 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        b=Yf/cUqmTZMeRRs8VJIa4qIWS+Uvwz3ytx+Qty0QIha/3AkMxTSWf32wemybqIrr0f
+         TM3zerJroOfifKyiQ2ikk6n2QrdLh0illIf1BAC+qwOAR+YBDzIMQlqZKipGa+8bV8
+         kcL+eTuI1hw2xXIRdfZtuq6PCoDShqdu6SjysDKo=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20211007081154epcas2p236c718d975f21edfe94cd2f02f7297b3~rsV_li5u80847008470epcas2p2d;
+        Thu,  7 Oct 2021 08:11:54 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.89]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4HQ3v43lv9z4x9Py; Thu,  7 Oct
+        2021 08:11:44 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
         epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        18.F7.09472.8BBAE516; Thu,  7 Oct 2021 17:11:36 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20211007081135epcas2p410e67850fdd25fc762b0bfa49c6e24f1~rsVtJN22O3097830978epcas2p4a;
+        25.08.09472.FBBAE516; Thu,  7 Oct 2021 17:11:43 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20211007081135epcas2p372f122a0f601f0108bdd593ca0105f3c~rsVtPDBbc1913819138epcas2p3k;
         Thu,  7 Oct 2021 08:11:35 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20211007081135epsmtrp135057cd4219fd16f4e5f5eabcbd3eb3c~rsVtILx5S2192321923epsmtrp1r;
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20211007081135epsmtrp2034b7b90a1ef89dd41163fe5b85eb782~rsVtOS4Gk2686626866epsmtrp2B;
         Thu,  7 Oct 2021 08:11:35 +0000 (GMT)
-X-AuditID: b6c32a48-d5fff70000002500-b6-615eabb8d37b
+X-AuditID: b6c32a48-d75ff70000002500-cf-615eabbfa666
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        44.B7.08750.7BBAE516; Thu,  7 Oct 2021 17:11:35 +0900 (KST)
+        85.B7.08750.7BBAE516; Thu,  7 Oct 2021 17:11:35 +0900 (KST)
 Received: from localhost.localdomain (unknown [10.229.9.51]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20211007081135epsmtip252cbb5496e99ef25d95867a65b577a39~rsVs1idkI0776407764epsmtip2U;
+        20211007081135epsmtip2d62bce60f62ec5f6bca0ca6bea460d16~rsVs-tHkf0566205662epsmtip2A;
         Thu,  7 Oct 2021 08:11:35 +0000 (GMT)
 From:   Chanho Park <chanho61.park@samsung.com>
 To:     Alim Akhtar <alim.akhtar@samsung.com>,
@@ -65,196 +65,203 @@ Cc:     Bean Huo <beanhuo@micron.com>,
         Sowon Na <sowon.na@samsung.com>,
         linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
         Chanho Park <chanho61.park@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Inki Dae <inki.dae@samsung.com>
-Subject: [PATCH v4 14/16] scsi: ufs: ufs-exynos: multi-host configuration
- for exynosauto
-Date:   Thu,  7 Oct 2021 17:09:32 +0900
-Message-Id: <20211007080934.108804-15-chanho61.park@samsung.com>
+        Kiwoong Kim <kwmad.kim@samsung.com>
+Subject: [PATCH v4 15/16] scsi: ufs: ufs-exynos: introduce exynosauto v9
+ virtual host
+Date:   Thu,  7 Oct 2021 17:09:33 +0900
+Message-Id: <20211007080934.108804-16-chanho61.park@samsung.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211007080934.108804-1-chanho61.park@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TbUxbVRj23FtuC1q8KyjHLnP1qiGghZZQelBwE1CvDiO6yGaTiTf0Bjro
-        R/qxbGqyVkNt19GBg42VgQwQCeA6ELAwGJ/LwmbcD0bG2BImwyAs3dg6xKKiLe10/573Pc9z
-        nvM+5xweLlgghDyVxsjqNUwpRURxescS5OK+9o8ZyXkBmpjvINDN+l4CLfqnCDTyi52Dji37
-        cXTf3RKBJodeQof7stGlikYMfT1bwUHzbheOGqd7MTS9Zo1And4/MHSt+zwH1Vw+hyHHVQ+B
-        vruwjqE//aPY9hh68soO2mUuJ+hJZzlG/9CaSDcNLGJ0V5udoCsahwG96rYR9L1fZzi0s7sN
-        0L6uZ+mvhh1Y3hOKkoxillGyehGrKdQqVZqiTGrHzoLsAlmaRCqWpiM5JdIwajaTysnNE7+p
-        Kg0MSIn2MaWmQCuPMRio5Ncy9FqTkRUVaw3GTIrVKUt1cl2SgVEbTJqiJA1rfEUqkaTIAsRP
-        Soqnm82E7mr8fldnDWEGlc8dAjweJFOhvSPpEIjiCUgPgIvzXixU3AfwZN9lTqjwAThnqQsU
-        kRuK1dnZMKsfwK7KTiK4ICDvAXh9JjuICVIMuxeWQJAUS94FcP5WFTdY4KSNA811Vm6QFUMq
-        4E8/n9jAHPJFWFbetLETn9wOXTUdIGS3FY6v2fEgjgz0B/q/D3M2wYkT8xtHwgOcL3tq8aAB
-        JJd5cM3/DzckzoHmlqnwuWPg0oXucF8IF49YuSGBA8CyuYeCdgDtltwQ3gbXjndHBGPCyQTo
-        7k8OJfY8HJ8J+0ZD29jf3FCbD21WQUgYD4d/PB523QIdJ30RIUzDY9U3wpEeDYQ9cTSiAohc
-        j4zjemQc1//GDQBvA0+zOoO6iDWk6FL/u+JCrboLbLz4RNoDar3LSaMA44FRAHk4FcvXbtvD
-        CPhK5sCnrF5boDeVsoZRIAuEXYkLnyrUBr6MxlggTU2XpKalSeUpMomciuPXrWcxArKIMbIl
-        LKtj9Q91GC9SaMaiZG8L3jE1ff56Sdu+A48NjsQltKbHi8WOBn0DX4sa/Jdq1IQYZWVbDp79
-        pnF3Fj+/6WCrMF+1qq23lCmrttgnuqhXH+/cv3JxzGM/fX3829uV6c4VtWd62Zmm3KsG7+3d
-        fMq86YbvGds5B39u/JTMu1nRXE23OfPeuFO1omCvxF4cs4B8UW3r0ocvqG96H/QNxq2ryu82
-        130UTxd6ewYiHT1mZ96sx7ZrSnXGc/ZOXUL5tZy/Dn/ARL9vfcv/+7vu2Ba7+0nfOMcojzZz
-        fdTu08LP5B23ds3+pnB5Xn4QtbV+pHMQv62rXtmjF+5sbxwSOzJcyUOKL8BCfG4+c4biGIoZ
-        aSKuNzD/AmbCuPN6BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIIsWRmVeSWpSXmKPExsWy7bCSvO721XGJBndPClmcfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Vi2oefzBaf1i9jtbi8X9uiZ6ezxekJi5gsJt2fwGLxZP0sZotFN7YxWdz4
-        1cZqsfHtDyaLm1uOsljMOL+PyaL7+g42i+XH/zFZ/P55iMlB2OPyFW+PWQ29bB6X+3qZPDav
-        0PJYvOclk8emVZ1sHhMWHWD0+L6+g83j49NbLB59W1YxenzeJOfRfqCbKYAnissmJTUnsyy1
-        SN8ugSvjxpIGtoLr6hWzNs5ga2CcqNjFyMkhIWAi8f3+faYuRi4OIYEdjBKrG7+wQyRkJZ69
-        2wFlC0vcbznCClH0nlHi8fZXLCAJNgFdiS3PXzGC2CICHxkl5nzTAiliFpjCInHjaTPQWA4O
-        YYEIiZP/CkBqWARUJVp7F7OB2LwCDhKzZqxhhFggL3HkVycziM0JFN+zay0bSKuQgL1E199I
-        iHJBiZMzn4CtZQYqb946m3kCo8AsJKlZSFILGJlWMUqmFhTnpucWGxYY5aWW6xUn5haX5qXr
-        JefnbmIEx6KW1g7GPas+6B1iZOJgPMQowcGsJMKbbx+bKMSbklhZlVqUH19UmpNafIhRmoNF
-        SZz3QtfJeCGB9MSS1OzU1ILUIpgsEwenVAOT+z61xl7VIjarw7fi12Zy9sXcOXKwUkreLW9Z
-        v9yj8LM1D33jZr09dVqZP8PDViPphcib4Gs3L+xJ+vVv247zevPY+NtDOoMmCWj1WahZvr1z
-        2eubbplv26fLPmdWvbxZos8tGn5Y5MiWX2raacf9JTWrt7JHZPOI7G5v51ac8VBl59WvufGX
-        P87ZPH3KhagVq65uW15xNCM1Z3/T46M2NV0+1Xzuz9yY1KMnpCW7Bm3cPK+X9/q8uTNfpr4+
-        XfZQ425IbveWzgl75sdeK44WzRG32NW4pkLES/DehVb12rOFzxNd72/R/PLeQPT1KoOSgFU2
-        BuVbO293xnls2bGn9sJW3fB/D1unKfv+EDqhxFKckWioxVxUnAgAC6Hk3TQDAAA=
-X-CMS-MailID: 20211007081135epcas2p410e67850fdd25fc762b0bfa49c6e24f1
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Tf1CTZRz3ed/x8mLOezcgn8ZV4yVTKGCjwV5JxIS69067KK5Iu6I39saQ
+        8W5tgyAvj+KUAeKhkNgQpMkp8aPBmoCkCYPiwMpydqCnpDYVvEORH8FAoY0Xy/++n8/z+Tyf
+        7/f5gaNiFybBMzgjq+cYDYmtFLT1hMaEn238gJFdtUVQ/a4mjLpW04ZRo+4/Mar7epGAOjTu
+        RqkJ63Efynn2BWrfqQTqXJkFoVxWM0pZhtoQamhurw/VOjaLUJfsPwmow+d/RKiSwQ6MOtG3
+        gFDzbgeyWUw7L26lzfmlGO3cX4rQ39eH0cdOjyK0raEIo8ssXYCesZow+v7NywJ6v70B0JO2
+        Z+jCrhIkadWOzI1qllGxeinLpWlVGVx6HLk1OTUhNTpGJg+Xb6CUpJRjstg4MnFbUvhrGRrP
+        cKQ0h9Fke6gkxmAgIzdt1GuzjaxUrTUY40hWp9LolLoIA5NlyObSIzjWGCuXyaKiPcIPM9W/
+        FVpR3XBw7uKXt9F84AwqBn44JBSw2XLepxisxMVEB4BlFwoRHkwAuDj0B+DBJIBN8xb0kaWo
+        vX9Z1Qlgd5MF48F9AKcvnUS8KowIh/bbd5bsAcQ9AF1/V/h6AUrcRGHNbCnmVfkTKbBtn9Oj
+        wnEBsRZ2Vyi8tJDYDMd66gV83LOwd65oKdrPw5/ubMZ4jQj2f+1a0qAeTcHJKtS7PyRGcOg+
+        fBTw5kR4/edxH772h3f67L58LYGTd89gvKEEwD03FpcXGgEs+mIbX8fDuUq7j7c5lAiF1s5I
+        bwmJENh7eTl3NTT1PPTlaSE07RXzxnWwq71yuf2nYcmRyeUOaNi6MCbgD6scwIKyH7AyIDU/
+        No75sXHM/wfXArQBPMnqDFnprCFKp/jvjtO0WTaw9NzD6A5QNTYe4QAIDhwA4igZINTGv8+I
+        hSom7zNWr03VZ2tYgwNEe876ACoJTNN6/gtnTJUrNsgUMTFyZVS0TEmuEVYvbGHERDpjZDNZ
+        VsfqH/kQ3E+Sj6iDH+w6gdkCys8N5H9TZ/q08XUybfca96s5eaH9/aJNTx0dLhR9khfpdIgI
+        y62Lq07d2zEz39IasqJi+q/nR3PWlXx1pfrggwZX+suzIs6cW1OeO2V6pf5YznuxTPzq5L7s
+        qZH1Ix0pu75TTr3j++3He5pmg0YSKpOlLbcqVMUXrjQ+4d5ZbA7FufVb/vno95jtN557U1Ld
+        MRM4nVVuaclrKgiKrT1uu7p9QP62Y2DRLpqYf2hS5gT6J/7yolslGcIi11Z+3j69O0VSlZex
+        Qlz3a9/d5oNjoe6F3mQbeEujdg5Ovzt/SPhSiMKqmNzJvTHcdaY3uDY8Smt2Me4jg8prdSPs
+        AVJgUDPyMFRvYP4FZDbKdncEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFIsWRmVeSWpSXmKPExsWy7bCSvO721XGJBjOapCxOPlnDZvFg3jY2
+        i5c/r7JZHHzYyWIx7cNPZotP65exWlzer23Rs9PZ4vSERUwWT9bPYrZYdGMbk8WNX22sFhvf
+        /mCyuLnlKIvFjPP7mCy6r+9gs1h+/B+Txe+fh5gchDwuX/H2mNXQy+Zxua+XyWPzCi2PxXte
+        MnlsWtXJ5jFh0QFGj+/rO9g8Pj69xeLRt2UVo8fnTXIe7Qe6mQJ4orhsUlJzMstSi/TtErgy
+        zrWvZy64p1jxv+k5cwPjZekuRk4OCQETic7tJ5lAbCGBHYwSa9uUIeKyEs/e7WCHsIUl7rcc
+        Ye1i5AKqec8ocWv/LGaQBJuArsSW568YQWwRgY+MEnO+aYEUMQt8ZJa4s3IJSxcjB4ewQKjE
+        gYsWICaLgKrEwSkmIOW8Ag4Sbw+vYIGYLy9x5Fcn2EhOoPieXWvZQMqFBOwluv5GQpQLSpyc
+        +QSsnBmovHnrbOYJjAKzkKRmIUktYGRaxSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kR
+        HH1aWjsY96z6oHeIkYmD8RCjBAezkghvvn1sohBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeC10n
+        44UE0hNLUrNTUwtSi2CyTBycUg1MCq3xUvf5LnKtbmaY+TJ16+u43U4f7xeLvU3ZO6mwKHNn
+        2CN9A8UjvWG7Xji+yWq4p2aWVrFP5ol83HeD7AOiYcs6JXZ+UpNUVa5+ciXow7RdX41/G35l
+        4zzItvLbfOG3ai+SFnYvYY68KqNwk+lDiY2XfeRTvVPdk22emkhzixeWTt55O2GJE//K3BUt
+        V/2O3ChiOCb/Nohly7abBnP5V9yKsOVKCd0jPrX661MHCaVZuuteWaQ+CND/IhP01ep6dAHj
+        vh17p+Q2uiovZ/oUVh+YVe4qq27DOSlg1hsF9pLKez9sOmoU9z89mb7g6R6rcyrLNseXXEie
+        ILdi2o67mbm7Gp/l6M39dn1pSbupEktxRqKhFnNRcSIAq59Udi0DAAA=
+X-CMS-MailID: 20211007081135epcas2p372f122a0f601f0108bdd593ca0105f3c
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211007081135epcas2p410e67850fdd25fc762b0bfa49c6e24f1
+X-CMS-RootMailID: 20211007081135epcas2p372f122a0f601f0108bdd593ca0105f3c
 References: <20211007080934.108804-1-chanho61.park@samsung.com>
-        <CGME20211007081135epcas2p410e67850fdd25fc762b0bfa49c6e24f1@epcas2p4.samsung.com>
+        <CGME20211007081135epcas2p372f122a0f601f0108bdd593ca0105f3c@epcas2p3.samsung.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-UFS controller of ExynosAuto v9 SoC supports multi-host interface for I/O
-virtualization. In general, we're using para-virtualized driver to
-support a block device by several virtual machines. However, it should
-be relayed by backend driver. Multi-host functionality extends the host
-controller by providing register interfaces that can be used by each
-VM's ufs drivers respectively. By this, we can provide direct access to
-the UFS device for multiple VMs. It's similar with SR-IOV of PCIe.
-
-We divide this M-HCI as PH(Physical Host) and VHs(Virtual Host). The PH
-supports all UFSHCI functions(all SAPs) same as conventional UFSHCI but
-the VH only supports data transfer function. Thus, except UTP_CMD_SAP and
-UTP_TMPSAP, the PH should handle all the physical features.
-
-This patch provides an initial implementation of PH part. M-HCI can
-support up to four interfaces but this patch initially supports only 1
-PH and 1 VH. For this, we uses TASK_TAG[7:5] field so TASK_TAG[4:0] for
-32 doorbel will be supported. After the PH is initiated, this will send
-a ready message to VHs through a mailbox register. The message handler
-is not fully implemented yet such as supporting reset / abort cases.
+This patch introduces virtual host driver of exynosauto v9 ufs mHCI.
+VH(Virtual Host) only supports data transfer functions. So, most of
+physical features are broken. So, we need to set below quirks.
+- UFSHCD_QUIRK_BROKEN_UIC_CMD
+- UFSHCD_QUIRK_SKIP_PH_CONFIGURATION
+Before initialization, the VH is necessary to wait until PH is ready.
+It's implemented as polling at the moment.
 
 Cc: Alim Akhtar <alim.akhtar@samsung.com>
 Cc: Kiwoong Kim <kwmad.kim@samsung.com>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc: Inki Dae <inki.dae@samsung.com>
 Signed-off-by: Chanho Park <chanho61.park@samsung.com>
 ---
- drivers/scsi/ufs/ufs-exynos.c | 68 +++++++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ drivers/scsi/ufs/ufs-exynos.c | 84 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
 diff --git a/drivers/scsi/ufs/ufs-exynos.c b/drivers/scsi/ufs/ufs-exynos.c
-index 9d32f19395b8..32f73c906018 100644
+index 32f73c906018..c2b654027b0f 100644
 --- a/drivers/scsi/ufs/ufs-exynos.c
 +++ b/drivers/scsi/ufs/ufs-exynos.c
-@@ -83,6 +83,44 @@
- #define UFS_SHARABLE		(UFS_WR_SHARABLE | UFS_RD_SHARABLE)
- #define UFS_SHAREABILITY_OFFSET	0x710
+@@ -121,6 +121,8 @@
+ #define HCI_MH_ALLOWABLE_TRAN_OF_VH		0x30C
+ #define HCI_MH_IID_IN_TASK_TAG			0X308
  
-+/* Multi-host registers */
-+#define MHCTRL			0xC4
-+#define MHCTRL_EN_VH_MASK	(0xE)
-+#define MHCTRL_EN_VH(vh)	(vh << 1)
-+#define PH2VH_MBOX		0xD8
-+
-+#define MH_MSG_MASK		(0xFF)
-+
-+#define MH_MSG(id, msg)		((id << 8) | (msg & 0xFF))
-+#define MH_MSG_PH_READY		0x1
-+#define MH_MSG_VH_READY		0x2
-+
-+#define ALLOW_INQUIRY		BIT(25)
-+#define ALLOW_MODE_SELECT	BIT(24)
-+#define ALLOW_MODE_SENSE	BIT(23)
-+#define ALLOW_PRE_FETCH		GENMASK(22, 21)
-+#define ALLOW_READ_CMD_ALL	GENMASK(20, 18)	/* read_6/10/16 */
-+#define ALLOW_READ_BUFFER	BIT(17)
-+#define ALLOW_READ_CAPACITY	GENMASK(16, 15)
-+#define ALLOW_REPORT_LUNS	BIT(14)
-+#define ALLOW_REQUEST_SENSE	BIT(13)
-+#define ALLOW_SYNCHRONIZE_CACHE	GENMASK(8, 7)
-+#define ALLOW_TEST_UNIT_READY	BIT(6)
-+#define ALLOW_UNMAP		BIT(5)
-+#define ALLOW_VERIFY		BIT(4)
-+#define ALLOW_WRITE_CMD_ALL	GENMASK(3, 1)	/* write_6/10/16 */
-+
-+#define ALLOW_TRANS_VH_DEFAULT	(ALLOW_INQUIRY | ALLOW_MODE_SELECT | \
-+				 ALLOW_MODE_SENSE | ALLOW_PRE_FETCH | \
-+				 ALLOW_READ_CMD_ALL | ALLOW_READ_BUFFER | \
-+				 ALLOW_READ_CAPACITY | ALLOW_REPORT_LUNS | \
-+				 ALLOW_REQUEST_SENSE | ALLOW_SYNCHRONIZE_CACHE | \
-+				 ALLOW_TEST_UNIT_READY | ALLOW_UNMAP | \
-+				 ALLOW_VERIFY | ALLOW_WRITE_CMD_ALL)
-+
-+#define HCI_MH_ALLOWABLE_TRAN_OF_VH		0x30C
-+#define HCI_MH_IID_IN_TASK_TAG			0X308
++#define PH_READY_TIMEOUT_MS			(5 * MSEC_PER_SEC)
 +
  enum {
  	UNIPRO_L1_5 = 0,/* PHY Adapter */
  	UNIPRO_L2,	/* Data Link */
-@@ -174,6 +212,20 @@ static int exynosauto_ufs_drv_init(struct device *dev, struct exynos_ufs *ufs)
+@@ -1403,6 +1405,68 @@ static int exynos_ufs_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
  	return 0;
  }
  
-+static int exynosauto_ufs_post_hce_enable(struct exynos_ufs *ufs)
++static int exynosauto_ufs_vh_link_startup_notify(struct ufs_hba *hba,
++						 enum ufs_notify_change_status status)
 +{
-+	struct ufs_hba *hba = ufs->hba;
-+
-+	/* Enable Virtual Host #1 */
-+	ufshcd_rmwl(hba, MHCTRL_EN_VH_MASK, MHCTRL_EN_VH(1), MHCTRL);
-+	/* Default VH Transfer permissions */
-+	hci_writel(ufs, ALLOW_TRANS_VH_DEFAULT, HCI_MH_ALLOWABLE_TRAN_OF_VH);
-+	/* IID information is replaced in TASKTAG[7:5] instead of IID in UCD */
-+	hci_writel(ufs, 0x1, HCI_MH_IID_IN_TASK_TAG);
++	if (status == POST_CHANGE) {
++		ufshcd_set_link_active(hba);
++		ufshcd_set_ufs_dev_active(hba);
++		hba->wlun_dev_clr_ua = true;
++	}
 +
 +	return 0;
 +}
 +
- static int exynosauto_ufs_pre_link(struct exynos_ufs *ufs)
- {
- 	struct ufs_hba *hba = ufs->hba;
-@@ -241,6 +293,20 @@ static int exynosauto_ufs_pre_pwr_change(struct exynos_ufs *ufs,
- 	return 0;
- }
- 
-+static int exynosauto_ufs_post_pwr_change(struct exynos_ufs *ufs,
-+					  struct ufs_pa_layer_attr *pwr)
++static int exynosauto_ufs_vh_wait_ph_ready(struct ufs_hba *hba)
 +{
-+	struct ufs_hba *hba = ufs->hba;
-+	u32 enabled_vh;
++	u32 mbox;
++	ktime_t start, stop;
 +
-+	enabled_vh = ufshcd_readl(hba, MHCTRL) & MHCTRL_EN_VH_MASK;
++	start = ktime_get();
++	stop = ktime_add(start, ms_to_ktime(PH_READY_TIMEOUT_MS));
 +
-+	/* Send physical host ready message to virtual hosts */
-+	ufshcd_writel(hba, MH_MSG(enabled_vh, MH_MSG_PH_READY), PH2VH_MBOX);
++	do {
++		mbox = ufshcd_readl(hba, PH2VH_MBOX);
++		if ((mbox & MH_MSG_MASK) == MH_MSG_PH_READY)
++			return 0;
++
++		usleep_range(40, 50);
++	} while (ktime_before(ktime_get(), stop));
++
++	return -ETIME;
++}
++
++static int exynosauto_ufs_vh_init(struct ufs_hba *hba)
++{
++	struct device *dev = hba->dev;
++	struct platform_device *pdev = to_platform_device(dev);
++	struct exynos_ufs *ufs;
++	int ret;
++
++	ufs = devm_kzalloc(dev, sizeof(*ufs), GFP_KERNEL);
++	if (!ufs)
++		return -ENOMEM;
++
++	/* exynos-specific hci */
++	ufs->reg_hci = devm_platform_ioremap_resource_byname(pdev, "vs_hci");
++	if (IS_ERR(ufs->reg_hci)) {
++		dev_err(dev, "cannot ioremap for hci vendor register\n");
++		return PTR_ERR(ufs->reg_hci);
++	}
++
++	ret = exynosauto_ufs_vh_wait_ph_ready(hba);
++	if (ret)
++		return ret;
++
++	ufs->drv_data = device_get_match_data(dev);
++	if (!ufs->drv_data)
++		return -ENODEV;
++
++	exynos_ufs_priv_init(hba, ufs);
 +
 +	return 0;
 +}
 +
- static int exynos7_ufs_pre_link(struct exynos_ufs *ufs)
- {
- 	struct ufs_hba *hba = ufs->hba;
-@@ -1413,8 +1479,10 @@ static struct exynos_ufs_drv_data exynosauto_ufs_drvs = {
- 				  EXYNOS_UFS_OPT_SKIP_CONFIG_PHY_ATTR |
- 				  EXYNOS_UFS_OPT_BROKEN_RX_SEL_IDX,
- 	.drv_init		= exynosauto_ufs_drv_init,
-+	.post_hce_enable	= exynosauto_ufs_post_hce_enable,
- 	.pre_link		= exynosauto_ufs_pre_link,
- 	.pre_pwr_change		= exynosauto_ufs_pre_pwr_change,
-+	.post_pwr_change	= exynosauto_ufs_post_pwr_change,
+ static struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
+ 	.name				= "exynos_ufs",
+ 	.init				= exynos_ufs_init,
+@@ -1417,6 +1481,12 @@ static struct ufs_hba_variant_ops ufs_hba_exynos_ops = {
+ 	.resume				= exynos_ufs_resume,
  };
  
++static struct ufs_hba_variant_ops ufs_hba_exynosauto_vh_ops = {
++	.name				= "exynosauto_ufs_vh",
++	.init				= exynosauto_ufs_vh_init,
++	.link_startup_notify		= exynosauto_ufs_vh_link_startup_notify,
++};
++
+ static int exynos_ufs_probe(struct platform_device *pdev)
+ {
+ 	int err;
+@@ -1485,6 +1555,18 @@ static struct exynos_ufs_drv_data exynosauto_ufs_drvs = {
+ 	.post_pwr_change	= exynosauto_ufs_post_pwr_change,
+ };
+ 
++static struct exynos_ufs_drv_data exynosauto_ufs_vh_drvs = {
++	.vops			= &ufs_hba_exynosauto_vh_ops,
++	.quirks			= UFSHCD_QUIRK_PRDT_BYTE_GRAN |
++				  UFSHCI_QUIRK_SKIP_RESET_INTR_AGGR |
++				  UFSHCD_QUIRK_BROKEN_OCS_FATAL_ERROR |
++				  UFSHCI_QUIRK_BROKEN_HCE |
++				  UFSHCD_QUIRK_BROKEN_UIC_CMD |
++				  UFSHCD_QUIRK_SKIP_PH_CONFIGURATION |
++				  UFSHCD_QUIRK_SKIP_DEF_UNIPRO_TIMEOUT_SETTING,
++	.opts			= EXYNOS_UFS_OPT_BROKEN_RX_SEL_IDX,
++};
++
  static struct exynos_ufs_drv_data exynos_ufs_drvs = {
+ 	.uic_attr		= &exynos7_uic_attr,
+ 	.quirks			= UFSHCD_QUIRK_PRDT_BYTE_GRAN |
+@@ -1512,6 +1594,8 @@ static const struct of_device_id exynos_ufs_of_match[] = {
+ 	  .data	      = &exynos_ufs_drvs },
+ 	{ .compatible = "samsung,exynosautov9-ufs",
+ 	  .data	      = &exynosauto_ufs_drvs },
++	{ .compatible = "samsung,exynosautov9-ufs-vh",
++	  .data	      = &exynosauto_ufs_vh_drvs },
+ 	{},
+ };
+ 
 -- 
 2.33.0
 
