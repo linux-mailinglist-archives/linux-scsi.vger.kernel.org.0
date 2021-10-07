@@ -2,145 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 024FD425035
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Oct 2021 11:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B944251AE
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Oct 2021 13:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240592AbhJGJkO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Oct 2021 05:40:14 -0400
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:52659 "EHLO mx1.molgen.mpg.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232678AbhJGJkN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 7 Oct 2021 05:40:13 -0400
-Received: from [192.168.0.2] (ip5f5aef71.dynamic.kabel-deutschland.de [95.90.239.113])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id ECEA561E64784;
-        Thu,  7 Oct 2021 11:38:17 +0200 (CEST)
-Subject: Re: [smartpqi updates PATCH V2 09/11] smartpqi: fix duplicate device
- nodes for tape changers
-To:     Don Brace <Don.Brace@microchip.com>
-Cc:     Kevin.Barnett@microchip.com, Scott.Teel@microchip.com,
-        Justin.Lindley@microchip.com, Scott.Benesh@microchip.com,
-        Gerry.Morong@microchip.com, Mahesh.Rajashekhara@microchip.com,
-        Mike.McGowen@microchip.com, Murthy.Bhat@microchip.com,
-        Balsundar.P@microchip.com, joseph.szczypek@hpe.com,
-        jeff@canonical.com, POSWALD@suse.com, john.p.donnelly@oracle.com,
-        mwilck@suse.com, linux-kernel@vger.kernel.org, hch@infradead.org,
-        martin.petersen@oracle.com, jejb@linux.vnet.ibm.com,
-        linux-scsi@vger.kernel.org
-References: <20210928235442.201875-1-don.brace@microchip.com>
- <20210928235442.201875-10-don.brace@microchip.com>
- <1351a25f-5310-cae3-ae47-01c842e0a185@molgen.mpg.de>
- <SN6PR11MB2848E6A6F6824C55641FB6FEE1AF9@SN6PR11MB2848.namprd11.prod.outlook.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-Message-ID: <3d4832bd-9781-9194-2b33-a0e20a9ff913@molgen.mpg.de>
-Date:   Thu, 7 Oct 2021 11:38:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S240800AbhJGLHE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Oct 2021 07:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232459AbhJGLHC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Oct 2021 07:07:02 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CDBC061746
+        for <linux-scsi@vger.kernel.org>; Thu,  7 Oct 2021 04:05:08 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id i84so12414915ybc.12
+        for <linux-scsi@vger.kernel.org>; Thu, 07 Oct 2021 04:05:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=yl79lOcWxFMFA8BCGecYiE6dwIHNzfeqenv4Qbz9ZyM=;
+        b=myikagGian9Kr8yyBq6Ddk6tSc8LlkDep7tq782nM5SKblHR9GAAzB8v6pa2wB8O4G
+         6KYORaSetAm7HjQvUwPEyyEvbZSwZzqNmzw9whro/GvgGCBkhXHF6+BhR4q7YSGLVrPO
+         V/o2mV2nBdzHOHyUWZjQLjTq270JpYQGVebGz7D7TnyKhzySpft2Xxt0bQpwuH6Cs9wU
+         pen1RykpUlNiGQqPc1dZUmV8FCfe0EvAPhpWJFSyp47M7EeSh1nVYFH3/2dfdZ0KDCF/
+         xbR/KbqFOj4444xLXDxRScn1UBDGoBJiTpPOupuNcqTqXk8SWl9pAP3xXG5j2OUxf7hn
+         W5ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=yl79lOcWxFMFA8BCGecYiE6dwIHNzfeqenv4Qbz9ZyM=;
+        b=iMpRIUgd7VvWGkV8eM/ASGRST5ehXiqpEUjExKCb51+UBAhDw/bBH7UmpK8WMwywjF
+         scUTCZtxhGxAgg/01Ug3jqDEPpJ43+OzIsYb5NR2xakYpgF5A9or9aLEtS3iPKc+b1o5
+         VrVUvcgb0KEMlXG0oj0LKjNbr3YNetZbX6VVfyCQPc9YtT4liFY8YpTr2lS9Ek3g9Fi0
+         3AaSFe0zdVSLl8d5O9SHrjFOeIz/47ydq/ASJhmluvaetgC2m6E6gzORgt+4mcokjr4a
+         E0MJNdo8S6Acx+xCbQxSfpwr+Eob+zp1Jmt4UWMw9ohQyn1+PvlJNfGVLeJ0MF5QnFtI
+         QimQ==
+X-Gm-Message-State: AOAM531sgn+ehf0eaZHWzTEC2ShnT877FO/YaO/kfkLIbqHFT/Av4GUH
+        xl/lropzZXwHhJMNwtaydnYFXjhlSDiAfVZW4pA=
+X-Google-Smtp-Source: ABdhPJzyBy24UuU+8rqO9tJ1iSyJfdys2h4jCVMsdCPuL194y4MAamXMdM/LXyWpWUrcZvHtnutkKGs7Z9ERvwqx2HE=
+X-Received: by 2002:a25:cc1:: with SMTP id 184mr3830965ybm.363.1633604707934;
+ Thu, 07 Oct 2021 04:05:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <SN6PR11MB2848E6A6F6824C55641FB6FEE1AF9@SN6PR11MB2848.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a81:30ca:0:0:0:0:0 with HTTP; Thu, 7 Oct 2021 04:05:07 -0700 (PDT)
+Reply-To: mrsvaldezannem@gmail.com
+From:   valdez anne <koukourasisi@gmail.com>
+Date:   Thu, 7 Oct 2021 11:05:07 +0000
+Message-ID: <CALg=kHHSDSm42271uYnTrE7Kmna0v3oSoE1876Nr+SAv4KgwVA@mail.gmail.com>
+Subject: hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Don,
-
-
-Am 05.10.21 um 22:23 schrieb Don.Brace@microchip.com:
-
->> Our controller FW lists both LUNs in the RPL results.
-> 
-> Please document the firmware version (and controller) you tested with in the commit message.
-> 
-> DON: Done in V3, thanks for your review.
-
-When I understood Martin correctly, he already pulled the patches in. 
-It’d be great if you added it in an answer then.
-
-> Shortly describing the implementation (new struct member ignore_device) would be nice.
-> DON: Don in V3, thanks for your review.
-> 
->>        u8      rescan : 1;
->> +     u8      ignore_device : 1;
-> 
-> Why not type bool?
-> Don: They both take the same amount of memory and since the other members are also u8, the new member was also u8 for consistency.
-
-Well, the below struct members are declared as bool.
-
-         u8      volume_offline : 1;
-         u8      rescan : 1;
-         bool    aio_enabled;            /* only valid for physical disks */
-
-It’d be great, if you could clean that up in the future.
-
->> -                     device->lun = sdev->lun;
->> -                     device->target_lun_valid = true;
-> 
-> Off topic, with `u8 target_lun_valid : 1`, why is `true` used.
-> Don: Has the same behavior, and carried forward from other member fields.
-
-In my opinion, if bool is used, true/false should be used too.
-
->> +                     if (device->target_lun_valid) {
->> +                             device->ignore_device = true;
->> +                     } else {
->> +                             device->target = sdev_id(sdev);
->> +                             device->lun = sdev->lun;
->> +                             device->target_lun_valid = true;
->> +                     }
-> 
-> If the LUN should be ignored, is it actually valid? Why not extend target_lun_valid and add a third option (enums?) to ignore it?
-> 
-> Don: The reason is that it takes advantage of the order the devices are added and how slave_alloc and slave_configure fit into this order.
-
-Ok. My answer should have also been to use a bitfield. Sorry about that. 
-It does not look nice to me to add new attributes to work around 
-firmware isuses.
-
->> +     return device->devtype == TYPE_TAPE || device->devtype ==
->> +TYPE_MEDIUM_CHANGER;
-> 
-> Why also check for TYPE_TAPE? The function name should be updated then?
-> Don: Because our tape changer consisted of the changer and one or more tape units and both were duplicated.
-
-Yes, I figured. But the function name is still incorrect/misleading then?
-
->>    static int pqi_slave_configure(struct scsi_device *sdev)
->> +     if (pqi_is_tape_changer_device(device) && device->ignore_device) {
->> +             rc = -ENXIO;
->> +             device->ignore_device = false;
-> 
-> I’d add a `return -ENXIO` here, and remove the variable.
-> Don: This works in conjunction with slave_alloc and is needed.
-
-Instead of
-
-+	if (pqi_is_tape_changer_device(device) && device->ignore_device) {
-+		rc = -ENXIO;
-+		device->ignore_device = false;
-+	}
-+
-+	return rc;
-
-I meant
-
-+	if (pqi_is_tape_changer_device(device) && device->ignore_device) {
-+		device->ignore_device = false;
-+		return -ENXIO;
-+	}
-+
-+	return 0;
-
-Lastly, some (debug) log messages would always be helpful in my opinion, 
-if stuff is worked around.
-
-
-Kind regards,
-
-Paul
+_Can you reply to my previous email, do I need your reply? I am
+Waiting for reading from you.
