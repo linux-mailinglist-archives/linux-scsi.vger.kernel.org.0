@@ -2,45 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC8B425D6E
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Oct 2021 22:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3A6425D6D
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Oct 2021 22:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242320AbhJGUch (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S242355AbhJGUch (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Thu, 7 Oct 2021 16:32:37 -0400
-Received: from mail-pj1-f46.google.com ([209.85.216.46]:39661 "EHLO
-        mail-pj1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242363AbhJGUcc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Oct 2021 16:32:32 -0400
-Received: by mail-pj1-f46.google.com with SMTP id ls18-20020a17090b351200b001a00250584aso7327165pjb.4
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Oct 2021 13:30:38 -0700 (PDT)
+Received: from mail-pl1-f170.google.com ([209.85.214.170]:42897 "EHLO
+        mail-pl1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242408AbhJGUcd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Oct 2021 16:32:33 -0400
+Received: by mail-pl1-f170.google.com with SMTP id l6so4648149plh.9
+        for <linux-scsi@vger.kernel.org>; Thu, 07 Oct 2021 13:30:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=G/U5AT0JdS1JPpSLRlnz336WYbeTNuEagu7XBIhXTCc=;
-        b=ZmCk1XwikE9mFC0tRypzIOdg9mVhY1KFNOcjGZLk2+2dZ/Tk+CHzBZeJRZi9Jmu5ok
-         6kK0hGY3BTMVB9iHxgYS+kFo79zfD3sZ/iawmqVUz7gO+azup4gLi6tW0cIqOQ8+NThl
-         FLMQ4wal4WWNk15iKC61+72A1DOO4Rbvf3dHWa43/4PMIcyFhB8IViKEa1L8rYsFxqFO
-         w3tNirmiC4PlbDTi9mXvRUOSs4Sd1ztfLCWQGWlal6da/Ol1z5VNiXkwBbVISXlUTz6j
-         6AXG+WOMnykDnp4BSOLUKH8wxAa+NhVRRyeBkQM5tJWDNLIVo9eZQyztmjQbL8V9MFWZ
-         tqhQ==
-X-Gm-Message-State: AOAM5327HyPo/8Upu/D8bztNFO/uhi2CL5eyNRFJ3zxQ34jpZcttyFXg
-        0loyVM7BPw0zNQtX2EpFQZU=
-X-Google-Smtp-Source: ABdhPJyBTxeR5c3oqe+3+nSnQW12M7YGEUWv+xOQ4xXLuyeL+n0g/w9WWX9lAMCxTI4H1y2r2TN9Yw==
-X-Received: by 2002:a17:90b:4f4b:: with SMTP id pj11mr7304552pjb.4.1633638637611;
-        Thu, 07 Oct 2021 13:30:37 -0700 (PDT)
+        bh=E5fkFkSHyFWPVXob8UZiLA1Jol6Iml3b/JDVx1APD6c=;
+        b=w7ehtGVzxo3981y9Rn6xzBIdGka334KaXFtfKt+32MTVeN+t7BRaIKA6hqJcwA6uNs
+         KvXDimO7Ei19amCPmGDTT1jBw4QXZMh/ELcQigcIsMri1gp8FTeuWiBORNbAEpWZaibU
+         j/2Pb818I6WLK5FYK2D14I0sGL5PIE6l28COiuQQH7G9fkW3ktY46L5cdWPnbnIxyd39
+         C2tekXbv3ZBy1e3lovnlepN3Fq3hb3r4U2oMPKZBgv/Ks6quCYOdGEn6n2nICbZiALpV
+         6s/hBlZ/6eB32VjfH7g2QvGUvkLL/dkkmkYDzC2V4fzOnEBLXGlfYxRV6r53KiCgbXmX
+         jOew==
+X-Gm-Message-State: AOAM532Rx+g69F2rec9Uj89S2QRZGkYiQLieDICNBiEU9Tkj0a+cKt//
+        GyRiQcSk/YiiM9FGk6dMbmjyTY5Itqk=
+X-Google-Smtp-Source: ABdhPJyfe6G5pvfUqy1nRNQmDWQMN83ps/GPzERkXj/UBe7MiAAb6hGGypd10T575ErxWgUDlO8PnA==
+X-Received: by 2002:a17:902:d50d:b0:13e:a44e:2d2a with SMTP id b13-20020a170902d50d00b0013ea44e2d2amr5591552plg.89.1633638639061;
+        Thu, 07 Oct 2021 13:30:39 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:ae88:8f16:b90b:5f1d])
-        by smtp.gmail.com with ESMTPSA id x35sm303499pfh.52.2021.10.07.13.30.36
+        by smtp.gmail.com with ESMTPSA id x35sm303499pfh.52.2021.10.07.13.30.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 13:30:37 -0700 (PDT)
+        Thu, 07 Oct 2021 13:30:38 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        HighPoint Linux Team <linux@highpoint-tech.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v3 37/88] hptiop: Call scsi_done() directly
-Date:   Thu,  7 Oct 2021 13:28:32 -0700
-Message-Id: <20211007202923.2174984-38-bvanassche@acm.org>
+Subject: [PATCH v3 38/88] ibmvscsi: Call scsi_done() directly
+Date:   Thu,  7 Oct 2021 13:28:33 -0700
+Message-Id: <20211007202923.2174984-39-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
 In-Reply-To: <20211007202923.2174984-1-bvanassche@acm.org>
 References: <20211007202923.2174984-1-bvanassche@acm.org>
@@ -55,38 +56,46 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/hptiop.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/scsi/ibmvscsi/ibmvfc.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/hptiop.c b/drivers/scsi/hptiop.c
-index 61cda7b7624f..f18f6a677c1b 100644
---- a/drivers/scsi/hptiop.c
-+++ b/drivers/scsi/hptiop.c
-@@ -769,7 +769,7 @@ static void hptiop_finish_scsi_req(struct hptiop_hba *hba, u32 tag,
+diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
+index 1f1586ad48fe..63f42eebe0ba 100644
+--- a/drivers/scsi/ibmvscsi/ibmvfc.c
++++ b/drivers/scsi/ibmvscsi/ibmvfc.c
+@@ -1046,7 +1046,7 @@ static void ibmvfc_scsi_eh_done(struct ibmvfc_event *evt)
  
- skip_resid:
- 	dprintk("scsi_done(%p)\n", scp);
--	scp->scsi_done(scp);
-+	scsi_done(scp);
- 	free_req(hba, &hba->reqs[tag]);
- }
+ 	if (cmnd) {
+ 		scsi_dma_unmap(cmnd);
+-		cmnd->scsi_done(cmnd);
++		scsi_done(cmnd);
+ 	}
  
-@@ -1002,9 +1002,6 @@ static int hptiop_queuecommand_lck(struct scsi_cmnd *scp,
- 	int sg_count = 0;
- 	struct hptiop_request *_req;
+ 	ibmvfc_free_event(evt);
+@@ -1848,7 +1848,7 @@ static void ibmvfc_scsi_done(struct ibmvfc_event *evt)
+ 			cmnd->result = (DID_ERROR << 16);
  
--	BUG_ON(!done);
--	scp->scsi_done = done;
--
- 	_req = get_req(hba);
- 	if (_req == NULL) {
- 		dprintk("hptiop_queuecmd : no free req\n");
-@@ -1059,7 +1056,7 @@ static int hptiop_queuecommand_lck(struct scsi_cmnd *scp,
+ 		scsi_dma_unmap(cmnd);
+-		cmnd->scsi_done(cmnd);
++		scsi_done(cmnd);
+ 	}
  
- cmd_done:
- 	dprintk("scsi_done(scp=%p)\n", scp);
--	scp->scsi_done(scp);
-+	scsi_done(scp);
+ 	ibmvfc_free_event(evt);
+@@ -1934,7 +1934,7 @@ static int ibmvfc_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *cmnd)
+ 	if (unlikely((rc = fc_remote_port_chkready(rport))) ||
+ 	    unlikely((rc = ibmvfc_host_chkready(vhost)))) {
+ 		cmnd->result = rc;
+-		cmnd->scsi_done(cmnd);
++		scsi_done(cmnd);
+ 		return 0;
+ 	}
+ 
+@@ -1974,7 +1974,7 @@ static int ibmvfc_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *cmnd)
+ 			    "Failed to map DMA buffer for command. rc=%d\n", rc);
+ 
+ 	cmnd->result = DID_ERROR << 16;
+-	cmnd->scsi_done(cmnd);
++	scsi_done(cmnd);
  	return 0;
  }
  
