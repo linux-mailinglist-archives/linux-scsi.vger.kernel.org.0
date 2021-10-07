@@ -2,44 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D1C425D70
+	by mail.lfdr.de (Postfix) with ESMTP id F2D91425D71
 	for <lists+linux-scsi@lfdr.de>; Thu,  7 Oct 2021 22:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242324AbhJGUci (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Oct 2021 16:32:38 -0400
-Received: from mail-pj1-f53.google.com ([209.85.216.53]:52959 "EHLO
-        mail-pj1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242220AbhJGUce (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Oct 2021 16:32:34 -0400
-Received: by mail-pj1-f53.google.com with SMTP id oa4so5095186pjb.2
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Oct 2021 13:30:40 -0700 (PDT)
+        id S242370AbhJGUcj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Oct 2021 16:32:39 -0400
+Received: from mail-pf1-f176.google.com ([209.85.210.176]:44545 "EHLO
+        mail-pf1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242390AbhJGUcg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Oct 2021 16:32:36 -0400
+Received: by mail-pf1-f176.google.com with SMTP id 145so6282080pfz.11
+        for <linux-scsi@vger.kernel.org>; Thu, 07 Oct 2021 13:30:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=asTCRK8UCuP9cf3jAjV+qpw0oMPn5K4gL3nWXJ5ZJ6g=;
-        b=UE9oOL/pVnqZDEstYSe1n+GUzfK7fbzxxZsoiWvGeDUPUIB0kI/MiywTdCAkuaKIwS
-         teFZfNRbwBtmUFwR9pMjPSBpJXgWzfyofAfuxN3GfeJEaqvrLgFP8SQsSAC831d5+SNz
-         1wu0trLy7I0f5VE2SCXmVxMhMcy4k+PM0BO91R+dyTTOJzsWd4ovA3q3D5A4JC9zy9U0
-         HjAyNfgCBxTjo6FDHKk5Q0dqFfjldIgPR0LCQfXuzbluBiAsR5rJUw16Knf5Q45T+VjB
-         vc7zB63Pjp0MjYbu7NmRGdSih2DpXNAy11gD/GtcoSoyPwGwBBfaF+YaYQrhZYOJPm5B
-         IYUw==
-X-Gm-Message-State: AOAM530b4WrgzkT5AfK3KDBvbTuge4NLRi269KOL0FmI2G7o/2lyQKD2
-        2tjGq8eNZ8waAPXZXVPRhxo=
-X-Google-Smtp-Source: ABdhPJwhV+w2xh0AYQuQ27zsMLkLrXLJ7ZrIp7Rbf7KYqELoPG6iAWA6JKRSplojiFZtKrUGpwlQuQ==
-X-Received: by 2002:a17:903:1c6:b0:13f:2b8:afe8 with SMTP id e6-20020a17090301c600b0013f02b8afe8mr5740755plh.81.1633638640364;
-        Thu, 07 Oct 2021 13:30:40 -0700 (PDT)
+        bh=ZKOwJEfK2W3RLsiewHHTr3TAHecYRQgSmAIibHOLf7o=;
+        b=YcVdB69leAg3E24nz5FbMXpmxBe72kQRurOxo74sH5O4AygQ4TK0V6N1NXPXDKu4oG
+         XUecefjRbgi4kDxopei2kwuWlyWFGqMcq8OAFClHGg+K6MpGHCNuo9J1rkOPsmNLBgBB
+         KPA5EFLZUWiBXK6sb4yjywq/IYYR24Od8Bqy2JhWc9ZU+q6hfpBHx7KK4HH35tGigDA+
+         /X9H4IepmOps+lPtAMbM75eHZDdnEOg1m22AvTasQwF901/+0wHZnYj79nH3iSdVpcJS
+         OUUPm4RcXJT593w6LCGujadA09ByQHZKSCDtDi5QPnGqjCD6HfNbBuNv2k+wY7ax5oOJ
+         vFIQ==
+X-Gm-Message-State: AOAM5331riDqePltvFEE/dd/e7RYP9EDTyHzMGfduE4qccVY97uuEA08
+        yRl1JJe4ll5MWNw0uqjxhZg=
+X-Google-Smtp-Source: ABdhPJzw5222d2sxBCpy+0JH63dCC7jr9vCdAzxvxI6YoDSpJUFT4zfgGztv8LxX4Haf6lgZ7IGsPA==
+X-Received: by 2002:a63:c045:: with SMTP id z5mr1352874pgi.374.1633638641702;
+        Thu, 07 Oct 2021 13:30:41 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:ae88:8f16:b90b:5f1d])
-        by smtp.gmail.com with ESMTPSA id x35sm303499pfh.52.2021.10.07.13.30.39
+        by smtp.gmail.com with ESMTPSA id x35sm303499pfh.52.2021.10.07.13.30.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 13:30:39 -0700 (PDT)
+        Thu, 07 Oct 2021 13:30:41 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v3 39/88] imm: Call scsi_done() directly
-Date:   Thu,  7 Oct 2021 13:28:34 -0700
-Message-Id: <20211007202923.2174984-40-bvanassche@acm.org>
+Subject: [PATCH v3 40/88] initio: Call scsi_done() directly
+Date:   Thu,  7 Oct 2021 13:28:35 -0700
+Message-Id: <20211007202923.2174984-41-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
 In-Reply-To: <20211007202923.2174984-1-bvanassche@acm.org>
 References: <20211007202923.2174984-1-bvanassche@acm.org>
@@ -54,27 +54,28 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/imm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/initio.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/imm.c b/drivers/scsi/imm.c
-index 943c9102a7eb..be8edcff0177 100644
---- a/drivers/scsi/imm.c
-+++ b/drivers/scsi/imm.c
-@@ -769,7 +769,7 @@ static void imm_interrupt(struct work_struct *work)
+diff --git a/drivers/scsi/initio.c b/drivers/scsi/initio.c
+index 9b75e19a9bab..183f95758636 100644
+--- a/drivers/scsi/initio.c
++++ b/drivers/scsi/initio.c
+@@ -2615,8 +2615,6 @@ static int i91u_queuecommand_lck(struct scsi_cmnd *cmd,
+ 	struct initio_host *host = (struct initio_host *) cmd->device->host->hostdata;
+ 	struct scsi_ctrl_blk *cmnd;
  
- 	spin_lock_irqsave(host->host_lock, flags);
- 	dev->cur_cmd = NULL;
--	cmd->scsi_done(cmd);
-+	scsi_done(cmd);
- 	spin_unlock_irqrestore(host->host_lock, flags);
- 	return;
- }
-@@ -922,7 +922,6 @@ static int imm_queuecommand_lck(struct scsi_cmnd *cmd,
- 	dev->failed = 0;
- 	dev->jstart = jiffies;
- 	dev->cur_cmd = cmd;
 -	cmd->scsi_done = done;
- 	cmd->result = DID_ERROR << 16;	/* default return code */
- 	cmd->SCp.phase = 0;	/* bus free */
+-
+ 	cmnd = initio_alloc_scb(host);
+ 	if (!cmnd)
+ 		return SCSI_MLQUEUE_HOST_BUSY;
+@@ -2788,7 +2786,7 @@ static void i91uSCBPost(u8 * host_mem, u8 * cblk_mem)
+ 
+ 	cmnd->result = cblk->tastat | (cblk->hastat << 16);
+ 	i91u_unmap_scb(host->pci_dev, cmnd);
+-	cmnd->scsi_done(cmnd);	/* Notify system DONE           */
++	scsi_done(cmnd);	/* Notify system DONE           */
+ 	initio_release_scb(host, cblk);	/* Release SCB for current channel */
+ }
  
