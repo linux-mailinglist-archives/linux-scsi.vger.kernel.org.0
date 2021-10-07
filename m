@@ -2,46 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8498F425D88
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Oct 2021 22:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F6F425D89
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Oct 2021 22:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242545AbhJGUd2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Oct 2021 16:33:28 -0400
-Received: from mail-pf1-f174.google.com ([209.85.210.174]:41775 "EHLO
-        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242673AbhJGUdR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Oct 2021 16:33:17 -0400
-Received: by mail-pf1-f174.google.com with SMTP id p1so6290921pfh.8
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Oct 2021 13:31:23 -0700 (PDT)
+        id S233992AbhJGUda (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Oct 2021 16:33:30 -0400
+Received: from mail-pf1-f180.google.com ([209.85.210.180]:39926 "EHLO
+        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242700AbhJGUdT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Oct 2021 16:33:19 -0400
+Received: by mail-pf1-f180.google.com with SMTP id g2so6311455pfc.6
+        for <linux-scsi@vger.kernel.org>; Thu, 07 Oct 2021 13:31:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=skrAmBmXdhbbtXPNDmsGk4Mh42e48xm20jYpMF7O6uY=;
-        b=Hzhhx+BS1g4hlDHIfF/0r8OiwausXxU+3Hv1PNU53BzMCxf2sJZycdtw3t+LJUQxMg
-         gsrhLClEYB67SI526sCn0wVEJilBqNVjk6A9/dy6tXQOzSVJ0EM0y99LZmPgwQYHWF0e
-         CWGvwb3u+VUVe4Ne25EIvnXab5Df3P/mk/EvLc0wZMePFJLyPWFo25euLl25qqq25fPs
-         7aKLiasSsEEJC2eCrX7/7C0Xml8PmuldTvQSMcDeR29Bl4bPkVF6ZqlGE5e7ZFeVupkc
-         rQc+/wLFIJwzzOxA6IQo22I+6dtYVTKSMsMPTViiKXqOxb9EDPaRxKIeDuXLwLutPG3t
-         iq0A==
-X-Gm-Message-State: AOAM531vK6ij33IGHDCLNWsx0/DCyvKe5xOiEC1PqIUjvAlX+/Joie0G
-        PQfplx9yF5RQJ2HmBEJh8/Q6ZH3aEyU=
-X-Google-Smtp-Source: ABdhPJyr15dfsnNCU80xpSFfrUw/tS9htBr/Zn51x17+qnfmHrrJ5hMsGlp26LizY4cNPt8tR+ws4A==
-X-Received: by 2002:a63:d017:: with SMTP id z23mr1377993pgf.108.1633638683313;
-        Thu, 07 Oct 2021 13:31:23 -0700 (PDT)
+        bh=DyB+fddyW5gcgcAEXD5s3JCSHTBobhm9JdLXpErbHD4=;
+        b=L5xVIqo5RQIHAyyXGoJZEsG66RfJlEo7Juu+UdEJuMB5N93d4bAi1Vp0apzmhza8Rd
+         QlfXsL0xtNXH7+/iEk6GD34rY2oGftxsCPrARYlKMF5i1jPnro4ZxiX8BIB7/QBunSbg
+         dfrxgt135XU67DzZxDpLDW61vEFo67BG0xCyWH2UxB6oZN7d4rCmNktrAicJjafv6SSf
+         hqDBSUQsE2StX8HJafL3ySAaq25OuK0S7SPsy0Rg3LwhnCwRrFmJ2fYCNSXP5h3JOh4o
+         5kmmNbHkFSvvrtkBU4/ztRdCvdCFaeM7pBwzoazsz2mMM6CrhyeY1kFbA4XLppmdzEZP
+         C0eQ==
+X-Gm-Message-State: AOAM532rehwr4WWdK5pQsIlcwxvUh8UFCdPsRTbEIOBHaXs4WjbvCD6E
+        BtEDJWj8gOfzefQErU8tdkM=
+X-Google-Smtp-Source: ABdhPJw4ddohH2Pnc/FcLOF3OLbfIn5loWLrhim40UC2Lm+SD6q75IxpM4Cwwxa65RjvM/okUMuV2Q==
+X-Received: by 2002:a65:5382:: with SMTP id x2mr1380003pgq.176.1633638684846;
+        Thu, 07 Oct 2021 13:31:24 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:ae88:8f16:b90b:5f1d])
-        by smtp.gmail.com with ESMTPSA id x35sm303499pfh.52.2021.10.07.13.31.22
+        by smtp.gmail.com with ESMTPSA id x35sm303499pfh.52.2021.10.07.13.31.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 13:31:22 -0700 (PDT)
+        Thu, 07 Oct 2021 13:31:24 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Nilesh Javali <njavali@marvell.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
         GR-QLogic-Storage-Upstream@marvell.com,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v3 65/88] qla2xxx: Call scsi_done() directly
-Date:   Thu,  7 Oct 2021 13:29:00 -0700
-Message-Id: <20211007202923.2174984-66-bvanassche@acm.org>
+Subject: [PATCH v3 66/88] qla4xxx: Call scsi_done() directly
+Date:   Thu,  7 Oct 2021 13:29:01 -0700
+Message-Id: <20211007202923.2174984-67-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
 In-Reply-To: <20211007202923.2174984-1-bvanassche@acm.org>
 References: <20211007202923.2174984-1-bvanassche@acm.org>
@@ -56,44 +57,26 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_os.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/scsi/qla4xxx/ql4_os.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 03ff2596715b..5d576a3ba14f 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -737,7 +737,7 @@ void qla2x00_sp_compl(srb_t *sp, int res)
- 	sp->free(sp);
- 	cmd->result = res;
- 	CMD_SP(cmd) = NULL;
+diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
+index f1ea65c6e5f5..76d0b59a9982 100644
+--- a/drivers/scsi/qla4xxx/ql4_os.c
++++ b/drivers/scsi/qla4xxx/ql4_os.c
+@@ -4080,7 +4080,7 @@ void qla4xxx_srb_compl(struct kref *ref)
+ 
+ 	mempool_free(srb, ha->srb_mempool);
+ 
 -	cmd->scsi_done(cmd);
 +	scsi_done(cmd);
- 	if (comp)
- 		complete(comp);
  }
-@@ -828,7 +828,7 @@ void qla2xxx_qpair_sp_compl(srb_t *sp, int res)
- 	sp->free(sp);
- 	cmd->result = res;
- 	CMD_SP(cmd) = NULL;
--	cmd->scsi_done(cmd);
-+	scsi_done(cmd);
- 	if (comp)
- 		complete(comp);
- }
-@@ -950,7 +950,7 @@ qla2xxx_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 	return SCSI_MLQUEUE_TARGET_BUSY;
  
- qc24_fail_command:
--	cmd->scsi_done(cmd);
-+	scsi_done(cmd);
+ /**
+@@ -4154,7 +4154,7 @@ static int qla4xxx_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+ 	return SCSI_MLQUEUE_HOST_BUSY;
  
- 	return 0;
- }
-@@ -1038,7 +1038,7 @@ qla2xxx_mqueuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd,
- 	return SCSI_MLQUEUE_TARGET_BUSY;
- 
- qc24_fail_command:
+ qc_fail_command:
 -	cmd->scsi_done(cmd);
 +	scsi_done(cmd);
  
