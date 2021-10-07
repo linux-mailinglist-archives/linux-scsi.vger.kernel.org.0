@@ -2,44 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A06B425D59
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Oct 2021 22:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A8B425D5C
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Oct 2021 22:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242220AbhJGUb6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Oct 2021 16:31:58 -0400
-Received: from mail-pf1-f179.google.com ([209.85.210.179]:38408 "EHLO
-        mail-pf1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242143AbhJGUb5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Oct 2021 16:31:57 -0400
-Received: by mail-pf1-f179.google.com with SMTP id k26so6315658pfi.5
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Oct 2021 13:30:03 -0700 (PDT)
+        id S242250AbhJGUcA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Oct 2021 16:32:00 -0400
+Received: from mail-pg1-f180.google.com ([209.85.215.180]:39769 "EHLO
+        mail-pg1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241841AbhJGUb6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Oct 2021 16:31:58 -0400
+Received: by mail-pg1-f180.google.com with SMTP id g184so912489pgc.6
+        for <linux-scsi@vger.kernel.org>; Thu, 07 Oct 2021 13:30:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wte0rr/12tr1I1LwzqWVoRGtH/EjJ9NDxokW1M+2JS4=;
-        b=YEfNgHgkQzoA6N1uiKjdZREyiU62/0zH0QgiGw8oYvEsnEA95EulNh3bKbRFWXySDF
-         053DvYsPmWgVz8K8dXrkk2o/Q313c1ZLW5k7XSkqdxXEWbSiMNrrRHiSinebyg505Wxv
-         9gSO9C1WnIaJ/JRIik4ZZRMZjp1ftOTLV7TYIeOummtuXEYk3l1UwhI6LETCIPCysgN5
-         A7/tcI9F4sJbsMkdwxKGU7OX4T6eFbi7SMGm7SNmXoIWTlx54YvfTtBwp983WbWw5nBL
-         vYM1PaZJhEWcZ4o1F5wNjijqbzrflBykcO7c9aYGRYhZUvlwSpLsZOGGX4LcwRRs4i7Y
-         ez1A==
-X-Gm-Message-State: AOAM530iFNbTHpfVidT+84+5wOs14VmbWSMjb+NBW6NVTvCmjYzSspgd
-        CVmRw8TpbGnMGf0aDvyhVZOfVC6RXeo=
-X-Google-Smtp-Source: ABdhPJx6vSqrJQbEgwj0lyqJfm3fHhXLh6sbZZgT1Xd8w0tsTMmHHDZJn8itr3e7EGqpfKZ9AlXIoA==
-X-Received: by 2002:a63:f62:: with SMTP id 34mr1319997pgp.159.1633638602672;
-        Thu, 07 Oct 2021 13:30:02 -0700 (PDT)
+        bh=k6NUsYAaALq9TsTWyA1j2V3MIAW6p3hWUP9skEIvRvs=;
+        b=6Psq59n+YbUW2Rg4gbDUOyw+ZNR6hQFIgJE0YbZkH5WNN3BZriDJNj+ByxziJUuB6p
+         TXqU0fG9jRcISQ2ZZ7PeH626Jht6qFjy+MJ/3ecJufqskB85Xpzp+YV9xy8krFX2ohWR
+         YNsSuXV++noN2JVnLEShpdYIqSK7eI2c0VZHCaT7eqWbqdw1e2pVLyd39EQM5KW8wLbc
+         ASbWCqXzWYxtQO9WF259GPD6tV6iOrVr0AOzKKYhRIbPwkFZPTluinvg7Y6ZoeueXt5n
+         MWLno8rvVHEBYO1YRMA5iagSmGjRvLmtWTV3GF7Mlx1IxuxZdBuP66Zm9rUCspwGcckP
+         szQA==
+X-Gm-Message-State: AOAM531MHXDVUYQqTThG1c20LHmNXkm5cNgB5yb4MzOXA6D8vAhdAJX7
+        A3Lu6e2jnJCGsqQPuZvlt3Q=
+X-Google-Smtp-Source: ABdhPJzHz2IlxBTLCJxJUo95NhFKTaICabDz+HTO7BDf2Uglbv4pyD1Z2JgJCM2YjeMFzG3V2WPUSQ==
+X-Received: by 2002:a63:4d20:: with SMTP id a32mr1350428pgb.247.1633638604055;
+        Thu, 07 Oct 2021 13:30:04 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:ae88:8f16:b90b:5f1d])
-        by smtp.gmail.com with ESMTPSA id x35sm303499pfh.52.2021.10.07.13.30.01
+        by smtp.gmail.com with ESMTPSA id x35sm303499pfh.52.2021.10.07.13.30.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 13:30:02 -0700 (PDT)
+        Thu, 07 Oct 2021 13:30:03 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v3 20/88] aha1542: Call scsi_done() directly
-Date:   Thu,  7 Oct 2021 13:28:15 -0700
-Message-Id: <20211007202923.2174984-21-bvanassche@acm.org>
+Subject: [PATCH v3 21/88] aic7xxx: Call scsi_done() directly
+Date:   Thu,  7 Oct 2021 13:28:16 -0700
+Message-Id: <20211007202923.2174984-22-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
 In-Reply-To: <20211007202923.2174984-1-bvanassche@acm.org>
 References: <20211007202923.2174984-1-bvanassche@acm.org>
@@ -54,61 +55,49 @@ scsi_done() directly.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/aha1542.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/scsi/aic7xxx/aic79xx_osm.c | 3 +--
+ drivers/scsi/aic7xxx/aic7xxx_osm.c | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/aha1542.c b/drivers/scsi/aha1542.c
-index 584a59522038..8697f4720946 100644
---- a/drivers/scsi/aha1542.c
-+++ b/drivers/scsi/aha1542.c
-@@ -281,7 +281,6 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
- {
- 	struct Scsi_Host *sh = dev_id;
- 	struct aha1542_hostdata *aha1542 = shost_priv(sh);
--	void (*my_done)(struct scsi_cmnd *) = NULL;
- 	int errstatus, mbi, mbo, mbistatus;
- 	int number_serviced;
- 	unsigned long flags;
-@@ -369,14 +368,13 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
+diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic79xx_osm.c
+index 92ea24a075b8..af49c32cfaf7 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_osm.c
++++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
+@@ -581,7 +581,6 @@ ahd_linux_queue_lck(struct scsi_cmnd * cmd, void (*scsi_done) (struct scsi_cmnd
  
- 		tmp_cmd = aha1542->int_cmds[mbo];
+ 	ahd = *(struct ahd_softc **)cmd->device->host->hostdata;
  
--		if (!tmp_cmd || !tmp_cmd->scsi_done) {
-+		if (!tmp_cmd) {
- 			spin_unlock_irqrestore(sh->host_lock, flags);
- 			shost_printk(KERN_WARNING, sh, "Unexpected interrupt\n");
- 			shost_printk(KERN_WARNING, sh, "tarstat=%x, hastat=%x idlun=%x ccb#=%d\n", ccb[mbo].tarstat,
- 			       ccb[mbo].hastat, ccb[mbo].idlun, mbo);
- 			return IRQ_HANDLED;
- 		}
--		my_done = tmp_cmd->scsi_done;
- 		aha1542_free_cmd(tmp_cmd);
- 		/*
- 		 * Fetch the sense data, and tuck it away, in the required slot.  The
-@@ -410,7 +408,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
- 		aha1542->int_cmds[mbo] = NULL;	/* This effectively frees up the mailbox slot, as
- 						 * far as queuecommand is concerned
- 						 */
--		my_done(tmp_cmd);
-+		scsi_done(tmp_cmd);
- 		number_serviced++;
- 	};
+-	cmd->scsi_done = scsi_done;
+ 	cmd->result = CAM_REQ_INPROG << 16;
+ 	rtn = ahd_linux_run_command(ahd, dev, cmd);
+ 
+@@ -2111,7 +2110,7 @@ ahd_linux_queue_cmd_complete(struct ahd_softc *ahd, struct scsi_cmnd *cmd)
+ 
+ 	ahd_cmd_set_transaction_status(cmd, new_status);
+ 
+-	cmd->scsi_done(cmd);
++	scsi_done(cmd);
  }
-@@ -431,7 +429,7 @@ static int aha1542_queuecommand(struct Scsi_Host *sh, struct scsi_cmnd *cmd)
- 	if (*cmd->cmnd == REQUEST_SENSE) {
- 		/* Don't do the command - we have the sense data already */
- 		cmd->result = 0;
--		cmd->scsi_done(cmd);
-+		scsi_done(cmd);
- 		return 0;
+ 
+ static void
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm.c b/drivers/scsi/aic7xxx/aic7xxx_osm.c
+index 8b3d472aa3cc..f2daca41f3f2 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_osm.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_osm.c
+@@ -530,7 +530,6 @@ ahc_linux_queue_lck(struct scsi_cmnd * cmd, void (*scsi_done) (struct scsi_cmnd
+ 
+ 	ahc_lock(ahc, &flags);
+ 	if (ahc->platform_data->qfrozen == 0) {
+-		cmd->scsi_done = scsi_done;
+ 		cmd->result = CAM_REQ_INPROG << 16;
+ 		rtn = ahc_linux_run_command(ahc, dev, cmd);
  	}
- #ifdef DEBUG
-@@ -488,7 +486,7 @@ static int aha1542_queuecommand(struct Scsi_Host *sh, struct scsi_cmnd *cmd)
- 	aha1542->aha1542_last_mbo_used = mbo;
+@@ -1986,7 +1985,7 @@ ahc_linux_queue_cmd_complete(struct ahc_softc *ahc, struct scsi_cmnd *cmd)
+ 		ahc_cmd_set_transaction_status(cmd, new_status);
+ 	}
  
- #ifdef DEBUG
--	shost_printk(KERN_DEBUG, sh, "Sending command (%d %p)...", mbo, cmd->scsi_done);
-+	shost_printk(KERN_DEBUG, sh, "Sending command (%d)...", mbo);
- #endif
+-	cmd->scsi_done(cmd);
++	scsi_done(cmd);
+ }
  
- 	/* This gets trashed for some reason */
+ static void
