@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE22427207
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Oct 2021 22:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7E8427208
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Oct 2021 22:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242537AbhJHU0J (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Oct 2021 16:26:09 -0400
-Received: from mail-pj1-f53.google.com ([209.85.216.53]:33721 "EHLO
-        mail-pj1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242366AbhJHU0H (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Oct 2021 16:26:07 -0400
-Received: by mail-pj1-f53.google.com with SMTP id cs11-20020a17090af50b00b0019fe3df3dddso7747757pjb.0
-        for <linux-scsi@vger.kernel.org>; Fri, 08 Oct 2021 13:24:12 -0700 (PDT)
+        id S242366AbhJHU0N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Oct 2021 16:26:13 -0400
+Received: from mail-pf1-f171.google.com ([209.85.210.171]:41872 "EHLO
+        mail-pf1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242416AbhJHU0J (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Oct 2021 16:26:09 -0400
+Received: by mail-pf1-f171.google.com with SMTP id p1so9099187pfh.8
+        for <linux-scsi@vger.kernel.org>; Fri, 08 Oct 2021 13:24:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MjKCG2T1ZRnPvoHNzt683A74Q4/xP4EPAort/dG+Q+Y=;
-        b=QUvXsxbnupKNY1xut5WDei4YCpk0N2DM1Fk9sBa6TAmZRzZ5P0dd6eGfV6DHMf/ham
-         gS9X5xTn/mmNCPwSN8ahZk0SAqyvga1ojbMK0ShVHVe9RsG5Q1CmpWE5QfEK1Ndn0imK
-         0PnDsuRtviqINhlu2CwX4Y6FTyVPqND2C3zAOYG/jIu/7RexOdThjZ4RGfKd5DQIUAE9
-         s2LmkOifVLUqQ12HQ9kitu/GCuQNI+1roj+PLxQ3HQ3sA40yViLfvnN63vMXt11nl9d5
-         x7JWu2xTfPB06oWH4fdIq6/T8D1rx1nZ/bdsrRGMqNXnRo0g1X5fs4h8YuSjEMf9Y8kS
-         cLVg==
-X-Gm-Message-State: AOAM530vr39jFyPBWkUkjHbEAZcCY6o4QA0gIzWF1Dh6f9pL6dcyZ43c
-        McJ9VEIBxq9gDFyMCK66wi0=
-X-Google-Smtp-Source: ABdhPJwYHzDyQmIazIyvyoRJcGdfgI3IFFgu37GEAT6mR7qbYfepI4W5DME56EzKE5cK4KZurdB7Ug==
-X-Received: by 2002:a17:903:283:b0:13e:f38c:2282 with SMTP id j3-20020a170903028300b0013ef38c2282mr10973087plr.82.1633724651872;
-        Fri, 08 Oct 2021 13:24:11 -0700 (PDT)
+        bh=kSy9HxHylqv2QQOMeguWwGRixQQsbcPSN7ac2lLyVBI=;
+        b=MxbfGKW9LZadR2FNXcFPk/ro7GkqK2bbhjrwS0wtk36wtOtwB0+fitqDM+9fsAVsIV
+         lk1t5v0mqx481XTgGSkZ9IKbEFQtcaXFoSze2HBl6TC7heWMxe5IV6PCIsb2gKohdHP2
+         rGCdSpD2Voe+ZBJGhPsA4FewwK0TaHWJP80fEsSyKnEf0r+6JkPunTKbz1pQDguRAwIC
+         wvxQDFXppar8M9+hUbGwaMz5jvf/hNOqcMZRWY1IkFnSv4df20qiv7Fm+Yjkfw9XrzPy
+         dDYIL2/DlvcRutIRyGGdRmkESCKGowp1tbzurmdy6lFWrUTcWSr2Ffcoty6sZkcAQIXi
+         4nLA==
+X-Gm-Message-State: AOAM531XTI5YI0ash36IcxmMQ6zZXpMJCluX+konqe5lE+rGc5j85tym
+        Ne9WSwkyLwTA+S4lfiRFiK4=
+X-Google-Smtp-Source: ABdhPJwemukT8rNfwgcjAid6+aQghtzxa5Dt7Q5pAjxmQ0Z+/QEby/UTBe2GKCwrwu0UOjwe5G3alw==
+X-Received: by 2002:a63:3301:: with SMTP id z1mr6436264pgz.120.1633724653219;
+        Fri, 08 Oct 2021 13:24:13 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:a8e9:7950:57f8:970])
-        by smtp.gmail.com with ESMTPSA id x21sm170858pfa.186.2021.10.08.13.24.10
+        by smtp.gmail.com with ESMTPSA id x21sm170858pfa.186.2021.10.08.13.24.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 13:24:11 -0700 (PDT)
+        Fri, 08 Oct 2021 13:24:12 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Adam Radford <aradford@gmail.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v3 08/46] scsi: 3w-sas: Switch to attribute groups
-Date:   Fri,  8 Oct 2021 13:23:15 -0700
-Message-Id: <20211008202353.1448570-9-bvanassche@acm.org>
+Subject: [PATCH v3 09/46] scsi: 3w-xxxx: Switch to attribute groups
+Date:   Fri,  8 Oct 2021 13:23:16 -0700
+Message-Id: <20211008202353.1448570-10-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
 In-Reply-To: <20211008202353.1448570-1-bvanassche@acm.org>
 References: <20211008202353.1448570-1-bvanassche@acm.org>
@@ -55,35 +55,35 @@ struct device_attribute directly. Hence switch to attribute groups.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/3w-sas.c | 8 +++++---
+ drivers/scsi/3w-xxxx.c | 8 +++++---
  1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/3w-sas.c b/drivers/scsi/3w-sas.c
-index 4fde39da54e4..42414a58f368 100644
---- a/drivers/scsi/3w-sas.c
-+++ b/drivers/scsi/3w-sas.c
-@@ -198,11 +198,13 @@ static struct device_attribute twl_host_stats_attr = {
+diff --git a/drivers/scsi/3w-xxxx.c b/drivers/scsi/3w-xxxx.c
+index 4ee485ab2714..db4e5449d516 100644
+--- a/drivers/scsi/3w-xxxx.c
++++ b/drivers/scsi/3w-xxxx.c
+@@ -532,11 +532,13 @@ static struct device_attribute tw_host_stats_attr = {
  };
  
  /* Host attributes initializer */
--static struct device_attribute *twl_host_attrs[] = {
--	&twl_host_stats_attr,
-+static struct attribute *twl_host_attrs[] = {
-+	&twl_host_stats_attr.attr,
+-static struct device_attribute *tw_host_attrs[] = {
+-	&tw_host_stats_attr,
++static struct attribute *tw_host_attrs[] = {
++	&tw_host_stats_attr.attr,
  	NULL,
  };
  
-+ATTRIBUTE_GROUPS(twl_host);
++ATTRIBUTE_GROUPS(tw_host);
 +
- /* This function will look up an AEN severity string */
- static char *twl_aen_severity_lookup(unsigned char severity_code)
+ /* This function will read the aen queue from the isr */
+ static int tw_aen_read_queue(TW_Device_Extension *tw_dev, int request_id)
  {
-@@ -1544,7 +1546,7 @@ static struct scsi_host_template driver_template = {
- 	.sg_tablesize		= TW_LIBERATOR_MAX_SGL_LENGTH,
+@@ -2242,7 +2244,7 @@ static struct scsi_host_template driver_template = {
+ 	.sg_tablesize		= TW_MAX_SGL_LENGTH,
  	.max_sectors		= TW_MAX_SECTORS,
  	.cmd_per_lun		= TW_MAX_CMDS_PER_LUN,
--	.shost_attrs		= twl_host_attrs,
-+	.shost_groups		= twl_host_groups,
+-	.shost_attrs		= tw_host_attrs,
++	.shost_groups		= tw_host_groups,
  	.emulated		= 1,
  	.no_write_same		= 1,
  };
