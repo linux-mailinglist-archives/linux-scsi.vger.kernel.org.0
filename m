@@ -2,114 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD434277E4
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 Oct 2021 09:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A78C427827
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Oct 2021 10:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbhJIHlu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 9 Oct 2021 03:41:50 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:28902 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbhJIHlt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Oct 2021 03:41:49 -0400
-Received: from dggeme754-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HRH0G1SvKzbmkP;
-        Sat,  9 Oct 2021 15:35:26 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggeme754-chm.china.huawei.com
- (10.3.19.100) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.8; Sat, 9 Oct
- 2021 15:39:50 +0800
-From:   Ye Bin <yebin10@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Ye Bin <yebin10@huawei.com>
-Subject: [PATCH v2 2/2] scsi:scsi_debug:Fix out-of-bound read in resp_report_tgtpgs
-Date:   Sat, 9 Oct 2021 15:52:31 +0800
-Message-ID: <20211009075231.2489878-3-yebin10@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211009075231.2489878-1-yebin10@huawei.com>
-References: <20211009075231.2489878-1-yebin10@huawei.com>
+        id S231410AbhJIIhF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 9 Oct 2021 04:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229950AbhJIIhD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Oct 2021 04:37:03 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DE4C061755
+        for <linux-scsi@vger.kernel.org>; Sat,  9 Oct 2021 01:35:06 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id 66so13042500vsd.11
+        for <linux-scsi@vger.kernel.org>; Sat, 09 Oct 2021 01:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=np6HrMDcAFwis2cYpDy+/tBnw3K71VKDf7IhfEw7fa4=;
+        b=cbsHYvyXeQ9sv9OQPPRSoENVcJdnF3puIDG5myEf6EIneLhZH8gSf6aq2JUIogcPYT
+         zD/DEAPVEJe1DZgFQ5j3L1BJQDlXgw6HmE2HPOYvu/kT0wWViOsKt7l5keSj7JzFwpKL
+         XjYcURNz6IlCk/ozIXPrlOMcB9updjjYJPuE6pM6ZDNLqPnVLn1sgBqwxqqV49OYh0qU
+         gIp76L0Eg6Yye9eFHgodqhDSg86dxmJHwtblJB6weHlp03SPiDsySHJL6n59alBVGRhy
+         Wq7Z0GG1GTFNm6OWQ/0NdQsr2pM4WoFovrdHbbWwHTEJsQ5kbBjPb/vRdFrNTLZATiQ1
+         4W0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=np6HrMDcAFwis2cYpDy+/tBnw3K71VKDf7IhfEw7fa4=;
+        b=GEpLLTnSnTlldcVbmg1inOQ5UEf1YhzB+G3E5RZ7tUI2VD35gddQI3T/DpmraIqxUO
+         Lt1cFWtMSrd0mj88soBDAhWsGj0bBfqZp05OoApe7AVdHHpFm/1XHXOQ2gBavVN3bC/U
+         /VRttxXQA1nCo8Go/dSrjOQfxAfxIgrD5TUyZLpBZJ7ZiKRYEcnc8G0VG1gsqBFgDu6S
+         +FEJtVFjztlUU7LaKcjT7rlbi25OC2qjhg1gbccyNoBPfEAA0fl+8r9WNOlopn64qlqb
+         znXQMGLdx6LTvi0TGZlZoOi3pX3iTPxTt7DALAE1iawRWl2o+x6ZY+gvUM92tWR7pbX4
+         8haw==
+X-Gm-Message-State: AOAM532zuCTUwOPKD450d4sku10SnNHfcHqJOTUYacxxwcF1S572Ul6m
+        RSZO2N7N+mBSfy9WNqagCDPB4HuquthJfxef6iQ=
+X-Google-Smtp-Source: ABdhPJzO3TX6JKvr2zaqbtA4Wl9hv09ioURHvIsT0BiT9fiQar17APDLDdEZiowf0FfEhv5zVblJzNl/jfgY+y7LCvo=
+X-Received: by 2002:a67:2e16:: with SMTP id u22mr15261154vsu.61.1633768505201;
+ Sat, 09 Oct 2021 01:35:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggeme754-chm.china.huawei.com (10.3.19.100)
-X-CFilter-Loop: Reflected
+Received: by 2002:a05:6102:3673:0:0:0:0 with HTTP; Sat, 9 Oct 2021 01:35:04
+ -0700 (PDT)
+Reply-To: fatimabanneth54@gmail.com
+From:   Mrs Fatima Banneth <mrsaloeo@gmail.com>
+Date:   Sat, 9 Oct 2021 08:35:04 +0000
+Message-ID: <CAKhqLd2QR6QDrBgkhZQrh0vWMrueAPGR0YsG61UqpNwU_xxEmw@mail.gmail.com>
+Subject: Dear friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We got follow issue when run syzkaller:
-BUG: KASAN: slab-out-of-bounds in memcpy include/linux/string.h:377 [inline]
-BUG: KASAN: slab-out-of-bounds in sg_copy_buffer+0x150/0x1c0 lib/scatterlist.c:831
-Read of size 2132 at addr ffff8880aea95dc8 by task syz-executor.0/9815
+Dear friend,
 
-CPU: 0 PID: 9815 Comm: syz-executor.0 Not tainted 4.19.202-00874-gfc0fe04215a9 #2
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1ubuntu1 04/01/2014
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xe4/0x14a lib/dump_stack.c:118
- print_address_description+0x73/0x280 mm/kasan/report.c:253
- kasan_report_error mm/kasan/report.c:352 [inline]
- kasan_report+0x272/0x370 mm/kasan/report.c:410
- memcpy+0x1f/0x50 mm/kasan/kasan.c:302
- memcpy include/linux/string.h:377 [inline]
- sg_copy_buffer+0x150/0x1c0 lib/scatterlist.c:831
- fill_from_dev_buffer+0x14f/0x340 drivers/scsi/scsi_debug.c:1021
- resp_report_tgtpgs+0x5aa/0x770 drivers/scsi/scsi_debug.c:1772
- schedule_resp+0x464/0x12f0 drivers/scsi/scsi_debug.c:4429
- scsi_debug_queuecommand+0x467/0x1390 drivers/scsi/scsi_debug.c:5835
- scsi_dispatch_cmd+0x3fc/0x9b0 drivers/scsi/scsi_lib.c:1896
- scsi_request_fn+0x1042/0x1810 drivers/scsi/scsi_lib.c:2034
- __blk_run_queue_uncond block/blk-core.c:464 [inline]
- __blk_run_queue+0x1a4/0x380 block/blk-core.c:484
- blk_execute_rq_nowait+0x1c2/0x2d0 block/blk-exec.c:78
- sg_common_write.isra.19+0xd74/0x1dc0 drivers/scsi/sg.c:847
- sg_write.part.23+0x6e0/0xd00 drivers/scsi/sg.c:716
- sg_write+0x64/0xa0 drivers/scsi/sg.c:622
- __vfs_write+0xed/0x690 fs/read_write.c:485
-kill_bdev:block_device:00000000e138492c
- vfs_write+0x184/0x4c0 fs/read_write.c:549
- ksys_write+0x107/0x240 fs/read_write.c:599
- do_syscall_64+0xc2/0x560 arch/x86/entry/common.c:293
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
+It's my pleasure to have contact with you, based on the critical
+condition I find myself, though, it's not financial problem, but my
+health, you might have know that cancer is not what to talk  about at
+home I have been in the hospital for 5 months now I am married to Mr.
+Abaulkarim Banneth who worked with Tunisia embassy in Burkina Faso for
+nine years before he died in the year 2008.We were married for eleven
+years without a child. He died after a brief illness that lasted for
+five days.
 
- As with previous patch, we get 'alen' from command, and 'alen''s type is
- int, If userspace pass large length we will get negative 'alen'.
- So just set 'n'/'alen'/'rlen' with u32 type.
+Since his death I decided not to remarry because of the attitude of
+his younger Brother who is just after properties. When my late husband
+was alive he deposited the sum of US$ 8.2million ( Eight million two
+hundred thousand dollars) in a bank in Burkina Faso for me, Presently
+this money is still in bank.
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- drivers/scsi/scsi_debug.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+And My Doctors told me that I don't have much time to live because of
+the cancer problem and i dont want to live this money in the bank for
+Government instead I decided to use it for Old people who cannot work
+again and Orphans who have nothing to eat because my Husband family
+people are very wicked, Having known my condition I decided to hand
+over this fund to a responsible person that have fear of God to take
+care of less-privileged people with this fund , please utilize this
+money the way I am going to instruct here I want you to take 30%
+Percent of the total money for yourself While 70% of the money will go
+to charity works and helping the Old people who have nothing to eat.
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index be0440545744..ead65cdfb522 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -1896,8 +1896,9 @@ static int resp_report_tgtpgs(struct scsi_cmnd *scp,
- 	unsigned char *cmd = scp->cmnd;
- 	unsigned char *arr;
- 	int host_no = devip->sdbg_host->shost->host_no;
--	int n, ret, alen, rlen;
- 	int port_group_a, port_group_b, port_a, port_b;
-+	u32 alen, n, rlen;
-+	int ret;
- 
- 	alen = get_unaligned_be32(cmd + 6);
- 	arr = kzalloc(SDEBUG_MAX_TGTPGS_ARR_SZ, GFP_ATOMIC);
-@@ -1959,9 +1960,9 @@ static int resp_report_tgtpgs(struct scsi_cmnd *scp,
- 	 * - The constructed command length
- 	 * - The maximum array size
- 	 */
--	rlen = min_t(int, alen, n);
-+	rlen = min(alen, n);
- 	ret = fill_from_dev_buffer(scp, arr,
--			   min_t(int, rlen, SDEBUG_MAX_TGTPGS_ARR_SZ));
-+			   min_t(u32, rlen, SDEBUG_MAX_TGTPGS_ARR_SZ));
- 	kfree(arr);
- 	return ret;
- }
--- 
-2.31.1
+I don't want my husband's efforts to be used by the Government and I
+dont want my Husband people to know about this money. I grew up as an
+Orphan and I don't have anybody as my family member, if you are really
+interested to help me please do not hesitate to indicate your interest
+to me. I will be very happy if you can write me through my private
+email addre(fatimabanneth54@gmail.com) for easy communication
 
+
+I wait for your response.
+My regards,
+Mrs Fatima Banneth
+written from Hospital
