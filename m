@@ -2,97 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A78C427827
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 Oct 2021 10:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBE1427832
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Oct 2021 10:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbhJIIhF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 9 Oct 2021 04:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
+        id S230498AbhJIIzU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 9 Oct 2021 04:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbhJIIhD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Oct 2021 04:37:03 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DE4C061755
-        for <linux-scsi@vger.kernel.org>; Sat,  9 Oct 2021 01:35:06 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id 66so13042500vsd.11
-        for <linux-scsi@vger.kernel.org>; Sat, 09 Oct 2021 01:35:06 -0700 (PDT)
+        with ESMTP id S229799AbhJIIzT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 9 Oct 2021 04:55:19 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B95C061570;
+        Sat,  9 Oct 2021 01:53:23 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y7so624743pfg.8;
+        Sat, 09 Oct 2021 01:53:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=np6HrMDcAFwis2cYpDy+/tBnw3K71VKDf7IhfEw7fa4=;
-        b=cbsHYvyXeQ9sv9OQPPRSoENVcJdnF3puIDG5myEf6EIneLhZH8gSf6aq2JUIogcPYT
-         zD/DEAPVEJe1DZgFQ5j3L1BJQDlXgw6HmE2HPOYvu/kT0wWViOsKt7l5keSj7JzFwpKL
-         XjYcURNz6IlCk/ozIXPrlOMcB9updjjYJPuE6pM6ZDNLqPnVLn1sgBqwxqqV49OYh0qU
-         gIp76L0Eg6Yye9eFHgodqhDSg86dxmJHwtblJB6weHlp03SPiDsySHJL6n59alBVGRhy
-         Wq7Z0GG1GTFNm6OWQ/0NdQsr2pM4WoFovrdHbbWwHTEJsQ5kbBjPb/vRdFrNTLZATiQ1
-         4W0Q==
+        h=from:to:cc:subject:date:message-id;
+        bh=cyxKiaN8F6IYwIVrU5ZS38VsZWDL+7em/5KS+qZepfE=;
+        b=jF7MQSabdruuLP5KMT52cY0YiCB6M62vcbOxJcN2m+n3Zpjg5LB4oQjnqTmP4jw8z4
+         ZAiS8NBddhwkimiqXB3MLa9sBGxuFSkfiS549Q0ymTj4EVrOkr0E6XrfvwSrDtgkJq54
+         njRlRn9P6dlue9b+60OE24z/E5wAOgUuKA0BARH4XCx18jk+liljIsl9f1XQ7F2B1h/A
+         bxZAAOcPkBfaNb9o1zvmeaEWkIUqh1Tt38ltKIgx0FYyuQWCkYj+msYqqM/tuxPuMFwm
+         j05TQTi8yPYcHvj13559tnOCphhLqZsfaVTYDO7awykke9lHedQF25Jx3so/TxjBV31Y
+         Dmug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=np6HrMDcAFwis2cYpDy+/tBnw3K71VKDf7IhfEw7fa4=;
-        b=GEpLLTnSnTlldcVbmg1inOQ5UEf1YhzB+G3E5RZ7tUI2VD35gddQI3T/DpmraIqxUO
-         Lt1cFWtMSrd0mj88soBDAhWsGj0bBfqZp05OoApe7AVdHHpFm/1XHXOQ2gBavVN3bC/U
-         /VRttxXQA1nCo8Go/dSrjOQfxAfxIgrD5TUyZLpBZJ7ZiKRYEcnc8G0VG1gsqBFgDu6S
-         +FEJtVFjztlUU7LaKcjT7rlbi25OC2qjhg1gbccyNoBPfEAA0fl+8r9WNOlopn64qlqb
-         znXQMGLdx6LTvi0TGZlZoOi3pX3iTPxTt7DALAE1iawRWl2o+x6ZY+gvUM92tWR7pbX4
-         8haw==
-X-Gm-Message-State: AOAM532zuCTUwOPKD450d4sku10SnNHfcHqJOTUYacxxwcF1S572Ul6m
-        RSZO2N7N+mBSfy9WNqagCDPB4HuquthJfxef6iQ=
-X-Google-Smtp-Source: ABdhPJzO3TX6JKvr2zaqbtA4Wl9hv09ioURHvIsT0BiT9fiQar17APDLDdEZiowf0FfEhv5zVblJzNl/jfgY+y7LCvo=
-X-Received: by 2002:a67:2e16:: with SMTP id u22mr15261154vsu.61.1633768505201;
- Sat, 09 Oct 2021 01:35:05 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6102:3673:0:0:0:0 with HTTP; Sat, 9 Oct 2021 01:35:04
- -0700 (PDT)
-Reply-To: fatimabanneth54@gmail.com
-From:   Mrs Fatima Banneth <mrsaloeo@gmail.com>
-Date:   Sat, 9 Oct 2021 08:35:04 +0000
-Message-ID: <CAKhqLd2QR6QDrBgkhZQrh0vWMrueAPGR0YsG61UqpNwU_xxEmw@mail.gmail.com>
-Subject: Dear friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=cyxKiaN8F6IYwIVrU5ZS38VsZWDL+7em/5KS+qZepfE=;
+        b=4DPXoEtknXlwypxu336jHD1jZO0Bq1zY0x8djYyW8/yO7VnSE1Ph3jkQF76rEg636q
+         rzwuuqLcj63g6oFn3TSvHpc98dwVqBm5EAUPr1BVx/iCU4eACzfcNI15rjSCfvPpTJf7
+         2utAOqvuUT8lMiCvizE0tgHNuB4ayvrSg6Nk+NbpPF/3Vnwj2i+B03hZ3g6U3ExHuIos
+         ct3HM6/kqMXP++XBtJetABq4gfYsgdOEQaE8dJqs7G28VNMXCPACrrpFk4MnXSA9BquX
+         c9LhGOsUEeGuS2BVznIhRkz9JN3GvRwUVvVLbEE6f+POPURIXtXSwi3UrlI98nrW0NQ3
+         g0sg==
+X-Gm-Message-State: AOAM530lC+YH4WLk3kqHp3AOOwbqnY7/1b0q+BSjzZ24xeCXFhSzqCtw
+        D0oEBc7hb0rsbtNqOJXkjcOXY7Kkx8yuWw==
+X-Google-Smtp-Source: ABdhPJy0UHL4FTZzfKQH8tXbqqFKkIc7hb/n+12F5G4XfhSHzHGM841WiUyiQO9oL2HG8FzrzE7g4Q==
+X-Received: by 2002:a63:d19:: with SMTP id c25mr8524925pgl.393.1633769602799;
+        Sat, 09 Oct 2021 01:53:22 -0700 (PDT)
+Received: from VM-0-3-centos.localdomain ([101.32.213.191])
+        by smtp.gmail.com with ESMTPSA id m186sm1579251pfb.165.2021.10.09.01.53.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 09 Oct 2021 01:53:22 -0700 (PDT)
+From:   brookxu <brookxu.cn@gmail.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: core: use eh_timeout to timeout start_unit command
+Date:   Sat,  9 Oct 2021 16:53:19 +0800
+Message-Id: <1633769599-19764-1-git-send-email-brookxu.cn@gmail.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear friend,
+From: Chunguang Xu <brookxu@tencent.com>
 
-It's my pleasure to have contact with you, based on the critical
-condition I find myself, though, it's not financial problem, but my
-health, you might have know that cancer is not what to talk  about at
-home I have been in the hospital for 5 months now I am married to Mr.
-Abaulkarim Banneth who worked with Tunisia embassy in Burkina Faso for
-nine years before he died in the year 2008.We were married for eleven
-years without a child. He died after a brief illness that lasted for
-five days.
+In some abnormal scenarios, STU may timeout. The recovery time
+of 30 seconds is relatively long. Now we need to adjusting
+rq_timeout to adjust STU timeout value, but it will affect the
+actual IO.
 
-Since his death I decided not to remarry because of the attitude of
-his younger Brother who is just after properties. When my late husband
-was alive he deposited the sum of US$ 8.2million ( Eight million two
-hundred thousand dollars) in a bank in Burkina Faso for me, Presently
-this money is still in bank.
+ptach 9728c081(make scsi_eh_try_stu use block timeout) uses
+rq_timeout to timeout the STU command, but after pathc 0816c92(
+Allow error handling timeout to be specified) eh_timeout will
+init to SCSI_DEFAULT_EH_TIMEOUT, so it is more reasonable to
+use eh_timeout as the timeout value of STU command. In this way,
+we can uniformly control the recovery time through eh_timeout.
 
-And My Doctors told me that I don't have much time to live because of
-the cancer problem and i dont want to live this money in the bank for
-Government instead I decided to use it for Old people who cannot work
-again and Orphans who have nothing to eat because my Husband family
-people are very wicked, Having known my condition I decided to hand
-over this fund to a responsible person that have fear of God to take
-care of less-privileged people with this fund , please utilize this
-money the way I am going to instruct here I want you to take 30%
-Percent of the total money for yourself While 70% of the money will go
-to charity works and helping the Old people who have nothing to eat.
+Signed-off-by: Chunguang Xu <brookxu@tencent.com>
+---
+ drivers/scsi/scsi_error.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I don't want my husband's efforts to be used by the Government and I
-dont want my Husband people to know about this money. I grew up as an
-Orphan and I don't have anybody as my family member, if you are really
-interested to help me please do not hesitate to indicate your interest
-to me. I will be very happy if you can write me through my private
-email addre(fatimabanneth54@gmail.com) for easy communication
+diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+index b6c86cc..ec864d1 100644
+--- a/drivers/scsi/scsi_error.c
++++ b/drivers/scsi/scsi_error.c
+@@ -1404,7 +1404,7 @@ static int scsi_eh_try_stu(struct scsi_cmnd *scmd)
+ 		enum scsi_disposition rtn = NEEDS_RETRY;
+ 
+ 		for (i = 0; rtn == NEEDS_RETRY && i < 2; i++)
+-			rtn = scsi_send_eh_cmnd(scmd, stu_command, 6, scmd->device->request_queue->rq_timeout, 0);
++			rtn = scsi_send_eh_cmnd(scmd, stu_command, 6, scmd->device->eh_timeout, 0);
+ 
+ 		if (rtn == SUCCESS)
+ 			return 0;
+-- 
+1.8.3.1
 
-
-I wait for your response.
-My regards,
-Mrs Fatima Banneth
-written from Hospital
