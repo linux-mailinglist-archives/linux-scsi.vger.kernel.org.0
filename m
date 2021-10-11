@@ -2,86 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D92A4288E2
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 Oct 2021 10:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619CB428B3C
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Oct 2021 12:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235114AbhJKIhS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Oct 2021 04:37:18 -0400
-Received: from email.unionmem.com ([221.4.138.186]:48785 "EHLO
-        VLXDG1SPAM1.ramaxel.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235146AbhJKIhJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Oct 2021 04:37:09 -0400
-Received: from V12DG1MBS01.ramaxel.local (v12dg1mbs01.ramaxel.local [172.26.18.31])
-        by VLXDG1SPAM1.ramaxel.com with ESMTPS id 19B8Ya11060730
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 11 Oct 2021 16:34:36 +0800 (GMT-8)
-        (envelope-from songyl@ramaxel.com)
-Received: from songyl (10.64.10.54) by V12DG1MBS01.ramaxel.local
- (172.26.18.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 11
- Oct 2021 16:34:36 +0800
-Date:   Mon, 11 Oct 2021 08:34:35 +0000
-From:   Yanling Song <songyl@ramaxel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-CC:     <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
-        <songyl@ramaxel.com>
-Subject: Re: [PATCH] spraid: initial commit of Ramaxel spraid driver
-Message-ID: <20211011083435.6e24a2e8@songyl>
-In-Reply-To: <52ee4617-93ba-919f-b990-f04f64a13d4b@acm.org>
-References: <20210930034752.248781-1-songyl@ramaxel.com>
-        <526271c5-a745-7666-6b18-9eb61898f1db@acm.org>
-        <20211009133207.789ad116@songyl>
-        <52ee4617-93ba-919f-b990-f04f64a13d4b@acm.org>
-X-Mailer: Claws Mail 3.16.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S236079AbhJKKzG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Oct 2021 06:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236064AbhJKKyp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Oct 2021 06:54:45 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DC8C061778
+        for <linux-scsi@vger.kernel.org>; Mon, 11 Oct 2021 03:52:21 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id r18so66181778edv.12
+        for <linux-scsi@vger.kernel.org>; Mon, 11 Oct 2021 03:52:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=DOxN63QWnl4dBNWQl+LufsBrewR+8VuPJnGph7ijSeE=;
+        b=AOwGJPRzreY174rbkYBENqDohFuS97wCy60jVSdUYNPvEhybdL2c3BcOeGHfafS8qn
+         uli8WfEZJzoNSATFu7DBFWZM5wABtXSV1fVUNkqBG+wI3EdLjqFjRGvGLPDsXQD4j8ti
+         JdKJOvfhiPWLhIdXxcZs7yEtyw7uhQsNkQbVb/JxSGMRe/N7DhEqEKRxFVAhJqYVr6ip
+         luxhwneuxQj/LqEVquYWqA1ElmxbF28So8sZzLv8Aq0heCWPmvwVFbMZiqnZY0gUleVY
+         srMWfgZ4YU41fQPU+nXlKo2suPYWVFr3mwjljaEytb5oh4cOqW2uYqGIU/2pgk6wVBCS
+         OkkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=DOxN63QWnl4dBNWQl+LufsBrewR+8VuPJnGph7ijSeE=;
+        b=J5QygJM1mhs2WHrQNsEs8Rt9KSoDPmYNc4NxlPTsSqzSQsTJuIyPisgG3YMqsGCm/g
+         76BgMBPivT9uvIEPmZSOjJ17zN+LigYDDRZxvy0kmpZM4DBPDXyoS6+pMTeHTG0HHA1F
+         wmMrGiIKJt1+8bUOSx0BKXSTVtrU45165ESv7SuCc+Qy+lyV4NZfSv4PVus2yp0+x2B6
+         eGQWr8zQX/5KuSg2o5UvYIVphNA+uwBCBWCQdd7E7DcbCFbbQqXNyVvR5VOEBTiiRoAM
+         k8W8pJTQ0XEoIB/2gM4jWLFgCVBc9GugLe0bk6FVSmB2JPYCv5OoBBWPk7giC1Xy/pfM
+         5BtA==
+X-Gm-Message-State: AOAM531T/9NMHZQTqGYVsUT/PfadlmclLotAJHT7CZ6Q8j7cxmZc+AMI
+        iWoKDbpOkB9QfQSGXOgJIIF81tQWtirVx9REdPMIksD0hmQ1fQ==
+X-Google-Smtp-Source: ABdhPJyfJGEDNJnYy+rVU5F2kp5CR0JNqric22BUxuwjRQiA96y3Nmwroy+PAkdet7/Z+lAMJSMDUb21JjG1eJ5mxBo=
+X-Received: by 2002:adf:a550:: with SMTP id j16mr24209932wrb.180.1633949528442;
+ Mon, 11 Oct 2021 03:52:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.64.10.54]
-X-ClientProxiedBy: V12DG1MBS03.ramaxel.local (172.26.18.33) To
- V12DG1MBS01.ramaxel.local (172.26.18.31)
-X-DNSRBL: 
-X-MAIL: VLXDG1SPAM1.ramaxel.com 19B8Ya11060730
+Received: by 2002:adf:dd8c:0:0:0:0:0 with HTTP; Mon, 11 Oct 2021 03:52:07
+ -0700 (PDT)
+Reply-To: ramcharan9910@outlook.com
+From:   "Cr.David Ramcharan" <convy0101@gmail.com>
+Date:   Mon, 11 Oct 2021 03:52:07 -0700
+Message-ID: <CADDRs97R=WZOwhBkw75zF4TtQ=idFbd5TWX3jbTc8zsFJ+4qNw@mail.gmail.com>
+Subject: Thank You
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, 9 Oct 2021 20:52:13 -0700
-Bart Van Assche <bvanassche@acm.org> wrote:
+Please I am writing to notify you again on my intention to list your
+name as a beneficiary to the total sum of GBP6.350 million (Six
+million, Three hundred and fifty thousand British Pounds Sterlings) in
+the intent of the deceased (name now withheld since this is my second
+letter to you).
 
-> On 10/9/21 06:32, Yanling Song wrote:
-> > op_is_write() does not meet our requirement: Both read and write
-> > commands have to be checked, not just write command.  
-> 
-> Right, I should have proposed to compare the operation type with 
-> REQ_OP_READ / REQ_OP_WRITE. However, that approach only works for
-> SCSI commands that come from the block layer and not for SG_IO 
-> (REQ_OP_DRV_IN/OUT).
-> 
-> >> Please remove all of the above code and use blk_rq_pos(),
-> >> blk_rq_sectors() and rq->cmd_flags & REQ_FUA instead.  
-> > 
-> > I did not quite get your point. The above is commonly used in many
-> > similar use cases. For example: megasas_build_ldio() in
-> > megaraid_sas_base.c.
-> > What's the benefit to switch to another way: use
-> > blk_rq_pos(),blk_rq_sectors()?  
-> 
-> I expect that using blk_rq_pos() and blk_rq_sectors() will result in 
-> faster code. However, these functions only work for SCSI commands
-> that come from the block layer and not for SG_IO. If you want a
-> common code path for SG_IO and block layer requests, please take a
-> look at how get_unaligned_be*() is used in drivers/scsi/scsi_trace.c.
+I contacted you because you bear the surname identity and therefore
+can present you as the beneficiary to inherit the account proceeds of
+the deceased since there is no written "WILL" or trace to the deceased
+family relatives. My aim is to present you to my Bank Authorities as
+the Next of Kin to our deceased client. I will guide you all through
+the Claim procedure by providing all relevant Information and guiding
+you in your decisions and response to the Bank Management. All the
+papers will be processed after your acceptance.
 
-get_unaligned_be*() is an inline which has the same function as our
-current code and there is no difference on performance.  
-But current code is better when supporting old kernels since it is
-implemented on SCSI spec and there is no dependency on
-get_unaligned_be*(), which means the code can work on any version
-of kernel. 
-So I prefer to keep current implementation. What's your opinion?
- 
-> 
-> Thanks,
-> 
-> Bart.
+In your acceptance of this deal, I request that you kindly forward to
+me your letter of acceptance; your current telephone and fax numbers
+,age, occupational status and a forwarding address to enable me submit
+to the Bank Management the details as the Next of Kin to their
+deceased customer. Reply strictly through: ramcharancrdavid@gmail.com
 
+Yours faithfully,
+Cr.David Ramcharan
