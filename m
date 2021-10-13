@@ -2,88 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6E842BD63
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Oct 2021 12:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FAA42BD6A
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Oct 2021 12:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbhJMKof (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Oct 2021 06:44:35 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:33666 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbhJMKod (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Oct 2021 06:44:33 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 93ED8201DF;
-        Wed, 13 Oct 2021 10:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1634121747; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N0GvhK4+pf78+YayVDkGIffFnkCb2fz2sREfm5d2qF8=;
-        b=H24phU547XirHse7Nci4ET0LH9jNf/Q+T4ZusqCWao+YzmwL+VGT3gHA3cdzoickGxjMaa
-        kqC6Iw8fnsenRTDSukxgrNL8nHrlo2izz7ocIMMb1MImbr8T1yY6qVZdNNI8ScbznCiAGa
-        bK06jVDdk3xEQJMf/tu1JN9PEbNq4Ec=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1634121747;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N0GvhK4+pf78+YayVDkGIffFnkCb2fz2sREfm5d2qF8=;
-        b=KoHGcWYpTWpMUms1s91oVAh3J20gdF15BUjE8rR9iMGx06Ifqq61fgHN+kYv6/2hTAU9qd
-        NTHMh16pB+U8Z4DA==
-Received: from quack2.suse.cz (unknown [10.100.224.230])
-        by relay2.suse.de (Postfix) with ESMTP id 7BD8CA3B89;
-        Wed, 13 Oct 2021 10:42:27 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 5DCC91E11B6; Wed, 13 Oct 2021 12:42:27 +0200 (CEST)
-Date:   Wed, 13 Oct 2021 12:42:27 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>, Coly Li <colyli@suse.de>,
-        Mike Snitzer <snitzer@redhat.com>, Song Liu <song@kernel.org>,
-        David Sterba <dsterba@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Dave Kleikamp <shaggy@kernel.org>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Kees Cook <keescook@chromium.org>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        Jan Kara <jack@suse.com>, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, drbd-dev@lists.linbit.com,
-        linux-bcache@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, jfs-discussion@lists.sourceforge.net,
-        linux-nfs@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net, ntfs3@lists.linux.dev,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: [PATCH 08/29] fs: use bdev_nr_sectors instead of open coding it
- in blkdev_max_block
-Message-ID: <20211013104227.GE19200@quack2.suse.cz>
-References: <20211013051042.1065752-1-hch@lst.de>
- <20211013051042.1065752-9-hch@lst.de>
+        id S229580AbhJMKps (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Oct 2021 06:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229495AbhJMKps (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Oct 2021 06:45:48 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68683C061570
+        for <linux-scsi@vger.kernel.org>; Wed, 13 Oct 2021 03:43:45 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id u32so5229186ybd.9
+        for <linux-scsi@vger.kernel.org>; Wed, 13 Oct 2021 03:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Up0euE0T7PDAvcflpiaUZY3A6bcvHprIyA15lwDbsnE=;
+        b=jFRz//OIBuUxr3vrAvXKr3Gd2WmqdZZMTJQTWunrPEQhux0xucEmIaBzlQMuDgi1y/
+         6A9ktrkZGzCirnGtDO8yxjpIMgAZgf/CxW771fW9Uc2g8rBi9QCAHXvTiBbp26bLeNxW
+         kTZRMkoaIItJokjxx/A2QoHgBZeH/itkCT1hPhcBkA1LK08QMflwzI84NU9RNteyZzuJ
+         q8PnSRFI3cDW3/nyU1eoDg75e5EWd6pQsDT/gQAWZogmXQ656kBcU51aaBxVW+yIcr9R
+         1sQ6T2OGTq0DEKm4n8+1JqHRrRPv+UEVQWOr+fxZsfyA0lnSS9EaTPH7EHEhBKTjwdvr
+         ++rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Up0euE0T7PDAvcflpiaUZY3A6bcvHprIyA15lwDbsnE=;
+        b=FVofTvCgfAmiJDk7pTC+MfhXx5+zVu5EhSpWRi1WylUzv6QJudT/n2rJWDHG+mNOKP
+         P1jspfd93JCcPYVMeXdsWgljVaXJAJoaelpR2atzdj3ve4+Yifad6p5cQBG7P0Yl76Ce
+         rpUfiBqkmjh178cOmQtUfwdYNozRVata9tZqKidVpgXuaZUqhV4V5vXcOqLbhuYWSEX0
+         aQl98kxcqD08jl29Ti+ZEMmp5EmtmZS+eZFqWG5vY+XWQ5OwmllxK4MhJ8ylg7cFIZO5
+         eUwQACXtAtaXiyAN/nwJk6rskaDUnfhaOoNI3LhGZWFhCxz2GWpKoY/z/ILrMJ2V0RHJ
+         DJnA==
+X-Gm-Message-State: AOAM530zPNYiKkaXqkMXkTz0RU9JU2jLhNC3aNWMs2QFlvwgGaoA8dgT
+        FlJsjUK17VOZwmCo3g3wq+o0Vw9Z0zVLS70s9Zo=
+X-Google-Smtp-Source: ABdhPJzN/ZzCAspSStUgdx01JYrf8SGvC1E5Elcru4Vsw31eiRWGhTPhvnVVIre6QqVaqN6/MVO/JrwS71BE3HbtliA=
+X-Received: by 2002:a25:4507:: with SMTP id s7mr35427516yba.445.1634121824593;
+ Wed, 13 Oct 2021 03:43:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211013051042.1065752-9-hch@lst.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:7000:6642:0:0:0:0 with HTTP; Wed, 13 Oct 2021 03:43:43
+ -0700 (PDT)
+Reply-To: lydiawright836@gmail.com
+From:   LYDIA WRIGHT <jacobbarney32@gmail.com>
+Date:   Wed, 13 Oct 2021 13:43:43 +0300
+Message-ID: <CAO1RZwOq2u8r_5VXPc+4bTBn+xxFhK+80KPjjRm8Re_d3sLesQ@mail.gmail.com>
+Subject: Greetings to You
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed 13-10-21 07:10:21, Christoph Hellwig wrote:
-> Use the proper helper to read the block device size.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-
-Looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Greetings dear,
+I intend to donate funds to a charity in your country with your
+help... Please respond for additional information here.
+(lydiawright836@gmail.com),if you are interested.
+regards
+Mrs. Lydia A. Wright
+Akron, Ohio, U.S.A
