@@ -2,60 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B2F42C076
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Oct 2021 14:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD0442C074
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Oct 2021 14:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234452AbhJMMr3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Oct 2021 08:47:29 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:43028 "EHLO
+        id S234056AbhJMMrU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Oct 2021 08:47:20 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:3416 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233964AbhJMMrR (ORCPT
+        by vger.kernel.org with ESMTP id S234118AbhJMMrQ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 13 Oct 2021 08:47:17 -0400
+        Wed, 13 Oct 2021 08:47:16 -0400
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19DAVHvk016935
-        for <linux-scsi@vger.kernel.org>; Wed, 13 Oct 2021 05:45:14 -0700
+        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19DAVHve016935
+        for <linux-scsi@vger.kernel.org>; Wed, 13 Oct 2021 05:45:13 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=fdcc34qMuPoYFlnb4b4OvaopPp6IjtMvZR24JDTDa24=;
- b=BzAuLjqXgt11djihzDpXNJR39RB0zWDcuae3YAmFf9wLezasyikKrz4it0V7/RTjBtjP
- wsW3fM0jLzIWnqH7kocWZto+uXNJGXH9s5HoYs1NQXMZ3yDaEQKgriWdznGhuxpw/6iY
- igey6+iCa5sDuNpjqHDs/Kw6p3a4Rt2l4rV0/Yu6YrQ30IjBYIgxRT4jYVourGSMa2sB
- cSsejmrhQVoSyslwjJrFXzjDA+NgasILVK5XtjKyRpRQWHDzs0RNzBUreycfsv0ENpwH
- IlhZ68PWHU16pbssFmcUdQkAajZ7Mq9ooa5mheg+WcEzBuuOKBp0mZQ8gdDdoYXUwmpF Dg== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com with ESMTP id 3bnwrxghgv-8
+ content-type; s=pfpt0220; bh=2hom7P3rI9M0Oo58EDymgFn3nX3eXSNJYZ263gT85sM=;
+ b=TaSL6hLSViDFtCXylUVeal+f6oPSGw60IyXuSXUdcdQhL57fxhus8efkg8m/5+oq76L/
+ QTCan+wv7RdYjHaGG2HKbFWOy0xavYLkL5nsz176hVuSnSpQaDGgK6A2eFVgkCGKInmB
+ ZSvhXu0dK8tj3cEXz1SdgQU2iown2PyJ05Ph0qD5J36sWUf7KTG55LkCjW184dDH0t3h
+ gfenhYnUOJqI8JpNOz/jMadvSRqluYjmFUAsAQQoU27OtjlV96txyeS/+GXAgVdSK9XK
+ vdTjbpvZonudOqEofJZMUi9SLK9ZkOWjfIFBB7syDCm1ZCaNjzNVfEp9BUkjoDqjhelQ ow== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com with ESMTP id 3bnwrxghgw-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Wed, 13 Oct 2021 05:45:14 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 13 Oct
+        for <linux-scsi@vger.kernel.org>; Wed, 13 Oct 2021 05:45:13 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 13 Oct
  2021 05:45:11 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
  Transport; Wed, 13 Oct 2021 05:45:11 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id C822B3F7054;
+        by maili.marvell.com (Postfix) with ESMTP id DC6733F7055;
         Wed, 13 Oct 2021 05:45:11 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 19DCjBqn017242;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 19DCjBDa017246;
         Wed, 13 Oct 2021 05:45:11 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 19DCjBGj017241;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 19DCjBaZ017245;
         Wed, 13 Oct 2021 05:45:11 -0700
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH 12/13] qla2xxx: edif: fix edif bsg
-Date:   Wed, 13 Oct 2021 05:44:21 -0700
-Message-ID: <20211013124422.17151-13-njavali@marvell.com>
+Subject: [PATCH 13/13] qla2xxx: Update version to 10.02.07.200-k
+Date:   Wed, 13 Oct 2021 05:44:22 -0700
+Message-ID: <20211013124422.17151-14-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20211013124422.17151-1-njavali@marvell.com>
 References: <20211013124422.17151-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 5eaEAOPNuw9JBCyt7UC1_raL6MSWFHYN
-X-Proofpoint-GUID: 5eaEAOPNuw9JBCyt7UC1_raL6MSWFHYN
+X-Proofpoint-ORIG-GUID: ifbN_KYoFXikFGi3PDfseGIyNk9bgBTl
+X-Proofpoint-GUID: ifbN_KYoFXikFGi3PDfseGIyNk9bgBTl
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-10-13_05,2021-10-13_02,2020-04-07_01
@@ -63,153 +63,27 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
-
-Various EDIF bsg's did not properly fill out the reply_payload_rcv_len
-field. This cause app to parse empty data in the return payload.
-
-Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_edif.c | 49 ++++++++++++++++-----------------
- 1 file changed, 23 insertions(+), 26 deletions(-)
+ drivers/scsi/qla2xxx/qla_version.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_edif.c b/drivers/scsi/qla2xxx/qla_edif.c
-index 440a3caa28f9..68ae7ab43d0c 100644
---- a/drivers/scsi/qla2xxx/qla_edif.c
-+++ b/drivers/scsi/qla2xxx/qla_edif.c
-@@ -546,14 +546,14 @@ qla_edif_app_start(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 	appreply.edif_enode_active = vha->pur_cinfo.enode_flags;
- 	appreply.edif_edb_active = vha->e_dbell.db_flags;
+diff --git a/drivers/scsi/qla2xxx/qla_version.h b/drivers/scsi/qla2xxx/qla_version.h
+index 4b117165bf8b..27e440f8a702 100644
+--- a/drivers/scsi/qla2xxx/qla_version.h
++++ b/drivers/scsi/qla2xxx/qla_version.h
+@@ -6,9 +6,9 @@
+ /*
+  * Driver version
+  */
+-#define QLA2XXX_VERSION      "10.02.07.100-k"
++#define QLA2XXX_VERSION      "10.02.07.200-k"
  
--	bsg_job->reply_len = sizeof(struct fc_bsg_reply) +
--	    sizeof(struct app_start_reply);
-+	bsg_job->reply_len = sizeof(struct fc_bsg_reply);
- 
- 	SET_DID_STATUS(bsg_reply->result, DID_OK);
- 
--	sg_copy_from_buffer(bsg_job->reply_payload.sg_list,
--	    bsg_job->reply_payload.sg_cnt, &appreply,
--	    sizeof(struct app_start_reply));
-+	bsg_reply->reply_payload_rcv_len = sg_copy_from_buffer(bsg_job->reply_payload.sg_list,
-+							       bsg_job->reply_payload.sg_cnt,
-+							       &appreply,
-+							       sizeof(struct app_start_reply));
- 
- 	ql_dbg(ql_dbg_edif, vha, 0x911d,
- 	    "%s app start completed with 0x%x\n",
-@@ -750,9 +750,10 @@ qla_edif_app_authok(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 
- errstate_exit:
- 	bsg_job->reply_len = sizeof(struct fc_bsg_reply);
--	sg_copy_from_buffer(bsg_job->reply_payload.sg_list,
--	    bsg_job->reply_payload.sg_cnt, &appplogireply,
--	    sizeof(struct app_plogi_reply));
-+	bsg_reply->reply_payload_rcv_len = sg_copy_from_buffer(bsg_job->reply_payload.sg_list,
-+							       bsg_job->reply_payload.sg_cnt,
-+							       &appplogireply,
-+							       sizeof(struct app_plogi_reply));
- 
- 	return rval;
- }
-@@ -835,7 +836,7 @@ static int
- qla_edif_app_getfcinfo(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- {
- 	int32_t			rval = 0;
--	int32_t			num_cnt;
-+	int32_t			pcnt = 0;
- 	struct fc_bsg_reply	*bsg_reply = bsg_job->reply;
- 	struct app_pinfo_req	app_req;
- 	struct app_pinfo_reply	*app_reply;
-@@ -847,16 +848,14 @@ qla_edif_app_getfcinfo(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 	    bsg_job->request_payload.sg_cnt, &app_req,
- 	    sizeof(struct app_pinfo_req));
- 
--	num_cnt = app_req.num_ports;	/* num of ports alloc'd by app */
--
- 	app_reply = kzalloc((sizeof(struct app_pinfo_reply) +
--	    sizeof(struct app_pinfo) * num_cnt), GFP_KERNEL);
-+	    sizeof(struct app_pinfo) * app_req.num_ports), GFP_KERNEL);
-+
- 	if (!app_reply) {
- 		SET_DID_STATUS(bsg_reply->result, DID_ERROR);
- 		rval = -1;
- 	} else {
- 		struct fc_port	*fcport = NULL, *tf;
--		uint32_t	pcnt = 0;
- 
- 		list_for_each_entry_safe(fcport, tf, &vha->vp_fcports, list) {
- 			if (!(fcport->flags & FCF_FCSP_DEVICE))
-@@ -925,9 +924,11 @@ qla_edif_app_getfcinfo(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 		SET_DID_STATUS(bsg_reply->result, DID_OK);
- 	}
- 
--	sg_copy_from_buffer(bsg_job->reply_payload.sg_list,
--	    bsg_job->reply_payload.sg_cnt, app_reply,
--	    sizeof(struct app_pinfo_reply) + sizeof(struct app_pinfo) * num_cnt);
-+	bsg_job->reply_len = sizeof(struct fc_bsg_reply);
-+	bsg_reply->reply_payload_rcv_len = sg_copy_from_buffer(bsg_job->reply_payload.sg_list,
-+							       bsg_job->reply_payload.sg_cnt,
-+							       app_reply,
-+							       sizeof(struct app_pinfo_reply) + sizeof(struct app_pinfo) * pcnt);
- 
- 	kfree(app_reply);
- 
-@@ -944,10 +945,11 @@ qla_edif_app_getstats(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- {
- 	int32_t			rval = 0;
- 	struct fc_bsg_reply	*bsg_reply = bsg_job->reply;
--	uint32_t ret_size, size;
-+	uint32_t size;
- 
- 	struct app_sinfo_req	app_req;
- 	struct app_stats_reply	*app_reply;
-+	uint32_t pcnt = 0;
- 
- 	sg_copy_to_buffer(bsg_job->request_payload.sg_list,
- 	    bsg_job->request_payload.sg_cnt, &app_req,
-@@ -963,18 +965,12 @@ qla_edif_app_getstats(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 	size = sizeof(struct app_stats_reply) +
- 	    (sizeof(struct app_sinfo) * app_req.num_ports);
- 
--	if (size > bsg_job->reply_payload.payload_len)
--		ret_size = bsg_job->reply_payload.payload_len;
--	else
--		ret_size = size;
--
- 	app_reply = kzalloc(size, GFP_KERNEL);
- 	if (!app_reply) {
- 		SET_DID_STATUS(bsg_reply->result, DID_ERROR);
- 		rval = -1;
- 	} else {
- 		struct fc_port	*fcport = NULL, *tf;
--		uint32_t	pcnt = 0;
- 
- 		list_for_each_entry_safe(fcport, tf, &vha->vp_fcports, list) {
- 			if (fcport->edif.enable) {
-@@ -998,9 +994,11 @@ qla_edif_app_getstats(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 		SET_DID_STATUS(bsg_reply->result, DID_OK);
- 	}
- 
-+	bsg_job->reply_len = sizeof(struct fc_bsg_reply);
- 	bsg_reply->reply_payload_rcv_len =
- 	    sg_copy_from_buffer(bsg_job->reply_payload.sg_list,
--	       bsg_job->reply_payload.sg_cnt, app_reply, ret_size);
-+	       bsg_job->reply_payload.sg_cnt, app_reply,
-+	       sizeof(struct app_stats_reply) + (sizeof(struct app_sinfo) * pcnt));
- 
- 	kfree(app_reply);
- 
-@@ -1074,8 +1072,7 @@ qla_edif_app_mgmt(struct bsg_job *bsg_job)
- 		    __func__,
- 		    bsg_request->rqst_data.h_vendor.vendor_cmd[1]);
- 		rval = EXT_STATUS_INVALID_PARAM;
--		bsg_job->reply_len = sizeof(struct fc_bsg_reply);
--		SET_DID_STATUS(bsg_reply->result, DID_ERROR);
-+		done = false;
- 		break;
- 	}
- 
+ #define QLA_DRIVER_MAJOR_VER	10
+ #define QLA_DRIVER_MINOR_VER	2
+ #define QLA_DRIVER_PATCH_VER	7
+-#define QLA_DRIVER_BETA_VER	100
++#define QLA_DRIVER_BETA_VER	200
 -- 
 2.19.0.rc0
 
