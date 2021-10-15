@@ -2,49 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF73042F92E
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Oct 2021 18:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4D942F93F
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Oct 2021 18:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237526AbhJOQ64 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 15 Oct 2021 12:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
+        id S241846AbhJOQ7N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 Oct 2021 12:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237830AbhJOQ6z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Oct 2021 12:58:55 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16050C061570
-        for <linux-scsi@vger.kernel.org>; Fri, 15 Oct 2021 09:56:49 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id y4so6799734plb.0
-        for <linux-scsi@vger.kernel.org>; Fri, 15 Oct 2021 09:56:49 -0700 (PDT)
+        with ESMTP id S232683AbhJOQ7L (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Oct 2021 12:59:11 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDB9C061766
+        for <linux-scsi@vger.kernel.org>; Fri, 15 Oct 2021 09:57:04 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id e7so9145484pgk.2
+        for <linux-scsi@vger.kernel.org>; Fri, 15 Oct 2021 09:57:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=vfh8ldDPWodO2+NAKgs+77i4cirGVTrsvlhR7sq6n14=;
-        b=MF0yf140gbDAdW4BxnOXdsQIbZ1Zs20bgZWJgGQJccJRdMKWf0Z7qJMeg/xUZ/rSs6
-         VG3QCkdC2Gak2gGrkvLjpOyqG7g5cIFwioohIVF4DnPVlIrbB81BnizHen6OonQjrvMj
-         EAa7kecUI8Ha/nnI/LS4mNOBQr2yiVBjBbg4U=
+        bh=K+6isvwekOgtvopkqE4I0h7AgNguipVYqeEY21w12Mo=;
+        b=XiV2alQ2bCUhPKCRDy35L10uw/QVL0RMTX2wcoCawcZP+N544npMKl6qJHVNuREVMJ
+         /3k+gOTpyuD9GvBFRwBhJkrM/MdxCBPLCnVY/0SS1G/dQv3yvOXHSbjERi1b1HJ8bt6c
+         zWuPktMOT2lWvGeRm1bA9Ib7yGAG3xwtDOTDs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=vfh8ldDPWodO2+NAKgs+77i4cirGVTrsvlhR7sq6n14=;
-        b=Usa5WMMzKrmEICfn7HAD/5ZyFxQEfx42FGyq7Ch/mV3OsEf20hJ6asmo96PHmMwSI2
-         W6K84ARmmp1K59yRHhTiHDFnBH4iTvo/6mpdoKhEZ/FMdMpc5PqlkXyrNOMMDICfcoli
-         48Ohfr8rSJn/NJuNgocuDx9rG1SZs1lIpDMEcF1IvmKmkZ1BWPVsbouY/tNJ0Yax0nyV
-         7lpOmoX4iqcrer4fIV24S9lYv0e8vvKfnOOOFjXTR8sdMxV0hAiZouzZ2diKO8fPi7lJ
-         o9h+n1aHNICT+yN/WLcwggpkuOL6NXCtGpZ8Y9fonI5g89HP/GJ/rN6knRwiGuHrUnFH
-         qiaw==
-X-Gm-Message-State: AOAM532gZbq2zyUMBawW7WxznLj+Tg7JkqKDnAmoSTU5pdPM/QcaK3PU
-        B9axfxvvtISufT67vc15pOT4GA==
-X-Google-Smtp-Source: ABdhPJwnnQ3ulrXVGFg4s+UA3ddGM8HwmAEnk5XYfNq6HtGw+i5b3OvChqf29ta/Idk60aluKwm2lg==
-X-Received: by 2002:a17:903:18d:b0:13e:f1ef:d80c with SMTP id z13-20020a170903018d00b0013ef1efd80cmr11974419plg.63.1634317008672;
-        Fri, 15 Oct 2021 09:56:48 -0700 (PDT)
+        bh=K+6isvwekOgtvopkqE4I0h7AgNguipVYqeEY21w12Mo=;
+        b=NaMSWl7f/Cf6ZE7fSjzGLLHQyXtBnB/x/dUVSHA/q5/1bqKAs1VuYizyAwGBdFXPCy
+         CPiMzppFFnFnNRTbtopTeugNjd/oKyIAeBYqieMwK4k4+hOjoIkTLmYsZSzUVDdMRbz4
+         ksr4jGhRA3UK/6M6D9RUgYSvs2r8d1DBc4ViagxMNoj5CBoCQgelX8wHwV86exmr4cAi
+         zqUu3YMPoVLscyKkNPZDVnfxhQxSctEkYj9nWiiKUvWSWBBJN5DN0jAe3z2Mg1idGk5V
+         wu40dryPO23meMLAOACUuG187kiYCqle/QAgUGUvmGCzNpA4Cr1omwMX+KlWbHk3Clsy
+         kTfQ==
+X-Gm-Message-State: AOAM532uGlOOKJPkNcwfKLYrFCXTIeBgTbc8bSUBC2cFFWKUP8u1dvjc
+        37PpTIFEe3f6skkz+u6fVHESUw==
+X-Google-Smtp-Source: ABdhPJy+YUT6npY/fZ/G9URvGOZpt9eamOIJH1D5JMCGxtLxyzdwQfs5MmBQFVKQI/Zn2W8hW6yLYA==
+X-Received: by 2002:a05:6a00:1309:b0:44d:4d1e:c930 with SMTP id j9-20020a056a00130900b0044d4d1ec930mr12851663pfu.65.1634317024412;
+        Fri, 15 Oct 2021 09:57:04 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t125sm5518370pfc.119.2021.10.15.09.56.48
+        by smtp.gmail.com with ESMTPSA id b16sm5793589pfm.58.2021.10.15.09.57.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Oct 2021 09:56:48 -0700 (PDT)
-Date:   Fri, 15 Oct 2021 09:56:47 -0700
+        Fri, 15 Oct 2021 09:57:04 -0700 (PDT)
+Date:   Fri, 15 Oct 2021 09:57:03 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Jens Axboe <axboe@kernel.dk>, Coly Li <colyli@suse.de>,
@@ -66,24 +66,22 @@ Cc:     Jens Axboe <axboe@kernel.dk>, Coly Li <colyli@suse.de>,
         linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
         jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
         linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ntfs3@lists.linux.dev, reiserfs-devel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH 22/30] reiserfs: use bdev_nr_bytes instead of open coding
+        ntfs3@lists.linux.dev, reiserfs-devel@vger.kernel.org
+Subject: Re: [PATCH 23/30] squashfs: use bdev_nr_bytes instead of open coding
  it
-Message-ID: <202110150956.A0360E2D01@keescook>
+Message-ID: <202110150957.38CBB0C08@keescook>
 References: <20211015132643.1621913-1-hch@lst.de>
- <20211015132643.1621913-23-hch@lst.de>
+ <20211015132643.1621913-24-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211015132643.1621913-23-hch@lst.de>
+In-Reply-To: <20211015132643.1621913-24-hch@lst.de>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 03:26:35PM +0200, Christoph Hellwig wrote:
-> Use the proper helper to read the block device size and remove two
-> cargo culted checks that can't be false.
+On Fri, Oct 15, 2021 at 03:26:36PM +0200, Christoph Hellwig wrote:
+> Use the proper helper to read the block device size.
 > 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 
