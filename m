@@ -2,122 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4CA42F98E
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Oct 2021 19:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2500D42FA77
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Oct 2021 19:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241934AbhJORFg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 15 Oct 2021 13:05:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23256 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241905AbhJORFf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 15 Oct 2021 13:05:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634317408;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4dN0h5lrPhvnBjfapbewXwM2oI6C3bfdTUY0cpFI420=;
-        b=ZB3BlE0CXg+MTcMaXvhJcUXezFYZdtX5KsKpEEWoXceJFdgKkKWgNlQ7I5xz5aOFkUVp/9
-        yl8h2Uz58dCcVLdZm5fNpSLAtSii+yH7PG4ohQLPRH0M+Xb/IcOd+KFwSKAweZu80eVu49
-        Nh/siCmSXCU16x9Jzmsvpl0mFiTrDmY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-592-KyxP1k_TORO6U4izZN7L5g-1; Fri, 15 Oct 2021 13:03:27 -0400
-X-MC-Unique: KyxP1k_TORO6U4izZN7L5g-1
-Received: by mail-wm1-f71.google.com with SMTP id m1-20020a7bca41000000b00322ee09ca1aso355087wml.9
-        for <linux-scsi@vger.kernel.org>; Fri, 15 Oct 2021 10:03:26 -0700 (PDT)
+        id S241649AbhJORrP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 Oct 2021 13:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241591AbhJORrO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Oct 2021 13:47:14 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3424C061570
+        for <linux-scsi@vger.kernel.org>; Fri, 15 Oct 2021 10:45:07 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id a25so41079224edx.8
+        for <linux-scsi@vger.kernel.org>; Fri, 15 Oct 2021 10:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
+        b=NnbMFvzzxb2NFCCtXcgd1zsfVFRW3sZ/yNHOqN3jdCJ5R0zMOAnNA98zwz9jytX4Qw
+         WcSF994kJeOm2gUFbIU9NkqBEIjgwd0JBvYhuOVs5yWCwG/vnviAFysFRMztztGIXr6G
+         /3BYQBi03IGgOlSi4QPwsz2P0UVzBXt5qF0CLdgBUZBr4d4UrvnYu4W3fFl6x92K8TsC
+         JCGJR2wdYJm4T5O5uub2l3QYrHwdApup2bNLirYmRKRvIR1E7E39mgwP/1gFcCIBPA58
+         svAShuXkm2bBzzLGyNV8Vw8Bh+A7SuUaoD+Yh2aTri+5ZgsX7J2SSd6lvMPtYY8Vi//Y
+         z/Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4dN0h5lrPhvnBjfapbewXwM2oI6C3bfdTUY0cpFI420=;
-        b=Tq69ZMRUvTrCt49K+DNRslUiJ9/jEi28rCBV3FLn4QCUozCfqqJ+ib0Xi/2AZnJ/fh
-         5qrNyWN1ThumSFX3yRCwagZtHWoTYjh34XQIQcvgKlMzIxHSxrKl8F1kh1u9gvxDzYNb
-         98QJIcUZWGMB2vrlLnjmV5VL22ufXTiIXK/voQeooKQXJyY0XP8FirTDC6tpbXXRUhWu
-         guYvo6mqpWqUQNTLJKHjSC5eFqt9AYUPjcUpWQnzUpWXfIvudtkrDw/OgOKg5WIaXhyi
-         VwgNpKRxlYvD4eQoKLC0ULxjRhwN9VXcZ8IGOahC6MikP4N0OCmmgotDj4CTjs9a537l
-         rB6w==
-X-Gm-Message-State: AOAM531PwvyCm0eCkqI52w6klv2XigSv7SwbhRoGjMtWviTa1PL5+kxc
-        sDNYsdkBjPZJgnSB0ka09vPSGRSd63VDZmsAlSE0z+Ol17kkZqZVOGyPT6zQf5ymEJ8VrLwpabh
-        N69uHIiFPtZBWTVTh1ahD8XUkRk2nQq+tuNiFhg==
-X-Received: by 2002:adf:ab02:: with SMTP id q2mr15557752wrc.263.1634317405767;
-        Fri, 15 Oct 2021 10:03:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxuITPOE/K90c/SbO06sQj8xZQDKAWVzRhH1M2nwElKhxcOuDwq0V7UNRKWNgSvAODtWO0Um5tIncG3lJ74Y3w=
-X-Received: by 2002:adf:ab02:: with SMTP id q2mr15557737wrc.263.1634317405624;
- Fri, 15 Oct 2021 10:03:25 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
+        b=pFLnLxWbUnFilIVQLNVqVeA568MMgER6HadhJsiHCDLWDnnGO+NgEBzbGqCqiUsPQ4
+         o2kRvirwwLowIPhOVnoaddaiLYmbbXzckb3LBvkfDm0lZiqyoHVlFQX/4oWfvBIb4GJn
+         YBOAYCXAgmnH67GyFG6SOK7czr5oOU5+oI5hFuecVeMmVlFYE68/VuSP18y+S+uEvjDI
+         +u12PgMkfXl1Nu1mMGDPcQUCgDculHwsaCwNkD7NYlQt78UsnpaXA0B02YRO/qz7oX1j
+         gSHZu90OaMzo0QwC0Pn4/dBpwYG74gQ0PAuaoJxHenSr2xB/2txSjjYLIsaHXJ5NNZ01
+         1qjQ==
+X-Gm-Message-State: AOAM533XVFXaCpj/elFJYa8Q5ArRXOdTzzBDsp1caKm67uwfzXWOiPux
+        MV2nevCSFE/BZG35EUwaCbu+Kc8O7SHWMqVj2cU=
+X-Google-Smtp-Source: ABdhPJxkfNIDf9clANCoChG9XfcviKTHcAm0X6CCy6+N7KlsACDJcLLQkv5+qorNiUBi7FyM/UhZL0VFmwSzU0DKw3g=
+X-Received: by 2002:a17:907:1199:: with SMTP id uz25mr8435733ejb.470.1634319906312;
+ Fri, 15 Oct 2021 10:45:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211015131115.12720-1-vegard.nossum@oracle.com>
- <20211015133635.GA26418@gondor.apana.org.au> <3bba3fed-b8f8-b7ce-f26f-8d1ed221144a@oracle.com>
-In-Reply-To: <3bba3fed-b8f8-b7ce-f26f-8d1ed221144a@oracle.com>
-From:   Chris Leech <cleech@redhat.com>
-Date:   Fri, 15 Oct 2021 10:03:14 -0700
-Message-ID: <CAPnfmXJPQTcZmPkYVDL4feDH7_P742N1H885suQzJc6u2A9QYQ@mail.gmail.com>
-Subject: Re: [PATCH] scsi: libiscsi: select CRYPTO_HASH for ISCSI_TCP
-To:     Vegard Nossum <vegard.nossum@oracle.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Lee Duncan <lduncan@suse.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Received: by 2002:a17:906:da01:0:0:0:0 with HTTP; Fri, 15 Oct 2021 10:45:05
+ -0700 (PDT)
+Reply-To: ms.lisahugh000@gmail.com
+From:   MS LISA HUGH <safi.kabore360@gmail.com>
+Date:   Fri, 15 Oct 2021 19:45:05 +0200
+Message-ID: <CAAoJS39Cuk5NORWTP6+XFNv=Y-A5Z7ge7byhS=0y8U5uEMQXfg@mail.gmail.com>
+Subject: BUSINESS AND DETAILS LATER. >>MS LISA HUGH.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 6:54 AM Vegard Nossum <vegard.nossum@oracle.com> wrote:
->
->
-> On 10/15/21 3:36 PM, Herbert Xu wrote:
-> > On Fri, Oct 15, 2021 at 03:11:15PM +0200, Vegard Nossum wrote:
-> >> Fix the following build/link error by adding a dependency on CRYPTO_HASH:
-> >>
-> >>   ld: drivers/scsi/libiscsi_tcp.o: in function `iscsi_tcp_dgst_header':
-> >>   libiscsi_tcp.c:(.text+0x237): undefined reference to `crypto_ahash_digest'
-> >>   ld: drivers/scsi/libiscsi_tcp.o: in function `iscsi_tcp_segment_done':
-> >>   libiscsi_tcp.c:(.text+0x1325): undefined reference to `crypto_ahash_final'
-> >>
-> >> Fixes: 5d6ac29b9ebf2 ("iscsi_tcp: Use ahash")
-> >> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> >> Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
-> >> ---
-> >>  drivers/scsi/Kconfig | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-> >> index 6e3a04107bb65..09764f3c42447 100644
-> >> --- a/drivers/scsi/Kconfig
-> >> +++ b/drivers/scsi/Kconfig
-> >> @@ -290,6 +290,7 @@ config ISCSI_TCP
-> >>      tristate "iSCSI Initiator over TCP/IP"
-> >>      depends on SCSI && INET
-> >>      select CRYPTO
-> >> +    select CRYPTO_HASH
-> >>      select CRYPTO_MD5
-> >>      select CRYPTO_CRC32C
-> >>      select SCSI_ISCSI_ATTRS
-> >
-> > CRYPTO_MD5 already selects CRYPTO_HASH so this shouldn't be needed.
->
-> You're right, my apologies.
->
-> libiscsi_tcp.o is built for CONFIG_ISCSI_TCP, but it's _also_ built for
-> CONFIG_SCSI_CXGB3_ISCSI and CONFIG_SCSI_CXGB4_ISCSI. I missed that when
-> I looked at the Makefile and wrongly assumed that CONFIG_ISCSI_TCP was
-> missing the select.
->
-> I'm not sure what the right fix here would be -- should
-> CONFIG_SCSI_CXGB[34]_ISCSI depend on CONFIG_ISCSI_TCP..? Or should we
-> add those CRYPTO* selects in there as well?
+Dear Friend,
 
-(apologies for the HTML reply that got rejected by the lists, and the
-double reply to those directly addressed)
+I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
 
-Are  Kconfig entries for libiscsi and libiscsi_tcp needed to handle
-this properly?  Currently they're added to the object lists with each
-configured driver that requires them.  I'm not even sure what happens
-if you manage to configure them into both obj-y and obj-m.
+I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
+bank account with your co-operation for both of us benefit.
 
-- Chris Leech
-
+Please send the follow below,
+1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
+Thanks.
+Ms Lisa Hugh
