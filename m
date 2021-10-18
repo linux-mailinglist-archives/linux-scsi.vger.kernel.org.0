@@ -2,81 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D977431A02
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Oct 2021 14:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125BF431A87
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Oct 2021 15:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbhJRMvh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Oct 2021 08:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbhJRMvf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Oct 2021 08:51:35 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D85C061768
-        for <linux-scsi@vger.kernel.org>; Mon, 18 Oct 2021 05:49:24 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id w14so70537159edv.11
-        for <linux-scsi@vger.kernel.org>; Mon, 18 Oct 2021 05:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Zxmlmcl2lFuiR0DGPZ71QqAckQHzxejuBprpG6HgtDc=;
-        b=dpN+kGjTQUOMWDOjvmpF8y/AngTO/VsnANBB1NmxdxXxE8fgWIdYv2nGX5ANokXmFy
-         ItmkLItwF0+MEvASbN9mFv7YFGytA16qlwBSPi1XJ8d/kCawcymLy409wzYWi0YhgWqS
-         HOX5RLSMSLrvj1lvQQ6zasRPfrU9sRg7ZVD9Vjs6K3F+kZlfJooTRkhVh3/XHBTQ9+2C
-         PWfJ5lA5eYN1m2+JE1qFjllPppuuK4fpaTLMgAfuNiRILIjMmfY19qbrtC8w7uvFsvG9
-         e4qwT4DEIQtJe6en1aus4DAcSAs9qpkuJGQKuO255BOsieUKgERp/E9gPJkarBEllVW0
-         Pg8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Zxmlmcl2lFuiR0DGPZ71QqAckQHzxejuBprpG6HgtDc=;
-        b=z+yKglfc1glyTgGSGVn2KSj4wKZtEwjyTe4ATLzW41lPV0714LS5Kt7hPTvIMBXoRe
-         Yt5pmsVpiuAKXoMCGnvGpDec4urH+Drf2TikqCNgDiPCj4hDXXElbfB3b0EMGpM2F62R
-         /Ol7kB4aNXUwVFDS+ee0vDqyGUUnlMf2O1d3QafOXK0cb2ebcbnweuqQLj0LT5fVgMjS
-         jtuJfsmz8v1Sq1BXFqhuu75qpCkk8363DMtbq9D0IiohDUz9KC5nLPtB0tMpmjEj+wej
-         7HGQdKH7IWAkYr1znadWxabx0kXvgVpH/3cCqw2GWoBEilycxfLWZs793CJsEKJUQytI
-         1aFQ==
-X-Gm-Message-State: AOAM533uIQTLdwDazQVF2ud6wOLQqE6KQsCi34/GaMJX52FGc3BYBX/n
-        Cjjv5VJBi6M+fnUrR/w6Oq4NEGzUq26YPvlv1ZY=
-X-Google-Smtp-Source: ABdhPJzQCjqGcuPnjRlVotwwk4hqZIg2l2PCwzr2gtgiwqjSO349tAYeFFFLKmUAiR6GHvcsNLqcwBHS8ym4xBJjrz0=
-X-Received: by 2002:a17:907:7f01:: with SMTP id qf1mr28821788ejc.190.1634561355128;
- Mon, 18 Oct 2021 05:49:15 -0700 (PDT)
+        id S231834AbhJRNSw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Oct 2021 09:18:52 -0400
+Received: from mx22.baidu.com ([220.181.50.185]:59876 "EHLO baidu.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231167AbhJRNSv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 18 Oct 2021 09:18:51 -0400
+Received: from BJHW-Mail-Ex07.internal.baidu.com (unknown [10.127.64.17])
+        by Forcepoint Email with ESMTPS id 5633A34E8BD8722DFF6C;
+        Mon, 18 Oct 2021 21:16:39 +0800 (CST)
+Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
+ BJHW-Mail-Ex07.internal.baidu.com (10.127.64.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Mon, 18 Oct 2021 21:16:39 +0800
+Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Mon, 18 Oct 2021 21:16:38 +0800
+From:   Cai Huoqing <caihuoqing@baidu.com>
+To:     <caihuoqing@baidu.com>
+CC:     Satish Kharat <satishkh@cisco.com>,
+        Sesidhar Baddela <sebaddel@cisco.com>,
+        Karan Tilak Kumar <kartilak@cisco.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] scsi: fnic: Make use of vzalloc() instead of vmalloc/memset()
+Date:   Mon, 18 Oct 2021 21:16:37 +0800
+Message-ID: <20211018131637.381-1-caihuoqing@baidu.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:a17:906:3085:0:0:0:0 with HTTP; Mon, 18 Oct 2021 05:49:14
- -0700 (PDT)
-Reply-To: mrs.mariaelisabeth.schaeffler77@hotmail.com
-From:   Maria Elisabeth Schaeffler <gregloren.loanfirm2@gmail.com>
-Date:   Mon, 18 Oct 2021 05:49:14 -0700
-Message-ID: <CAKW1hTeu=M+Cw3WDV0L8hEDErY+BKiGcJUy0pMsBiP4B1b=ggw@mail.gmail.com>
-Subject: Spende von Maria Elisabeth
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [172.31.63.8]
+X-ClientProxiedBy: BC-Mail-EX02.internal.baidu.com (172.31.51.42) To
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
+X-Baidu-BdMsfe-DateCheck: 1_BJHW-Mail-Ex07_2021-10-18 21:16:39:314
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---=20
-Hallo,
+Replacing vmalloc()/memset() with vzalloc() to simplify the code.
 
-Ich bin Frau Maria Elisabeth Schaeffler, ein deutscher
-Wirtschaftsmagnat, Investor und Philanthrop. Ich bin der Vorsitzende
-von Wipro Limited. Ich habe 25 Prozent meines pers=C3=B6nlichen Verm=C3=B6g=
-ens
-f=C3=BCr wohlt=C3=A4tige Zwecke ausgegeben. Und ich habe auch versprochen, =
-die
-restlichen 25% dieses Jahr 2021 an Einzelpersonen zu verschenken. Ich
-habe mich entschlossen, 1.000.000,00 Euro an Sie zu spenden. Wenn Sie
-an meiner Spende interessiert sind, kontaktieren Sie mich =C3=BCber  f=C3=
-=BCr
-weitere Informationen.
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+---
+ drivers/scsi/fnic/fnic_debugfs.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Sie k=C3=B6nnen auch =C3=BCber den folgenden Link mehr =C3=BCber mich lesen
+diff --git a/drivers/scsi/fnic/fnic_debugfs.c b/drivers/scsi/fnic/fnic_debugfs.c
+index e7326505cabb..e2fea5b574c3 100644
+--- a/drivers/scsi/fnic/fnic_debugfs.c
++++ b/drivers/scsi/fnic/fnic_debugfs.c
+@@ -216,25 +216,21 @@ static int fnic_trace_debugfs_open(struct inode *inode,
+ 		return -ENOMEM;
+ 
+ 	if (*rdata_ptr == fc_trc_flag->fnic_trace) {
+-		fnic_dbg_prt->buffer = vmalloc(array3_size(3, trace_max_pages,
++		fnic_dbg_prt->buffer = vzalloc(array3_size(3, trace_max_pages,
+ 							   PAGE_SIZE));
+ 		if (!fnic_dbg_prt->buffer) {
+ 			kfree(fnic_dbg_prt);
+ 			return -ENOMEM;
+ 		}
+-		memset((void *)fnic_dbg_prt->buffer, 0,
+-		3 * (trace_max_pages * PAGE_SIZE));
+ 		fnic_dbg_prt->buffer_len = fnic_get_trace_data(fnic_dbg_prt);
+ 	} else {
+ 		fnic_dbg_prt->buffer =
+-			vmalloc(array3_size(3, fnic_fc_trace_max_pages,
++			vzalloc(array3_size(3, fnic_fc_trace_max_pages,
+ 					    PAGE_SIZE));
+ 		if (!fnic_dbg_prt->buffer) {
+ 			kfree(fnic_dbg_prt);
+ 			return -ENOMEM;
+ 		}
+-		memset((void *)fnic_dbg_prt->buffer, 0,
+-			3 * (fnic_fc_trace_max_pages * PAGE_SIZE));
+ 		fnic_dbg_prt->buffer_len =
+ 			fnic_fc_trace_get_data(fnic_dbg_prt, *rdata_ptr);
+ 	}
+-- 
+2.25.1
 
-https://en.wikipedia.org/wiki/Maria-Elisabeth_Schaeffler
-
-Gr=C3=BC=C3=9Fe
-Gesch=C3=A4ftsf=C3=BChrer Wipro Limited
-Maria-Elisabeth_Schaeffler
