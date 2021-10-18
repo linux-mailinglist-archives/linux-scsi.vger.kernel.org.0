@@ -2,193 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 846A943266A
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Oct 2021 20:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64306432878
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Oct 2021 22:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbhJRSeP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Oct 2021 14:34:15 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:37022 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231590AbhJRSeL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 18 Oct 2021 14:34:11 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id E49E54126D;
-        Mon, 18 Oct 2021 18:31:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-type:content-type:content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:date:subject
-        :subject:from:from:received:received:received; s=mta-01; t=
-        1634581917; x=1636396318; bh=YqYbkC88dF676PyZBZ1ljbTdfQ/l9pDvtIB
-        65CVp5oY=; b=cD5jIOzDdUoCsF4Kvk4H2pA5xYQHxk2hILe/ecq0F5T6o91dg/Y
-        cz2G4F58HzaYgWVt4d9Ro0asDW1Ne1RxF7m8PaPrtWGoGrxV001zk69AMIu5trHh
-        REStTdGqygBGgxiUCdSNzSBldRUw9FwumJdZ13/pFP2ykXxhiToMot8M=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BW9Rvp7edrvT; Mon, 18 Oct 2021 21:31:57 +0300 (MSK)
-Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id B71AD4125E;
-        Mon, 18 Oct 2021 21:31:57 +0300 (MSK)
-Received: from NB-591.corp.yadro.com (10.178.120.180) by
- T-EXCH-04.corp.yadro.com (172.17.100.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Mon, 18 Oct 2021 21:31:56 +0300
-From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
-To:     Martin Petersen <martin.petersen@oracle.com>,
-        <target-devel@vger.kernel.org>
-CC:     Mike Christie <michael.christie@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>,
-        Konstantin Shelekhin <k.shelekhin@yadro.com>
-Subject: [PATCH v2 3/3] target: iscsi: control authentication per ACL
-Date:   Mon, 18 Oct 2021 21:31:44 +0300
-Message-ID: <20211018183144.8428-4-d.bogdanov@yadro.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211018183144.8428-1-d.bogdanov@yadro.com>
-References: <20211018183144.8428-1-d.bogdanov@yadro.com>
+        id S232908AbhJRUeb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Oct 2021 16:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229674AbhJRUeb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Oct 2021 16:34:31 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D981DC06161C;
+        Mon, 18 Oct 2021 13:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OBMvbiCZ3mmK4xvpOD56mvuToBpo4s4ONuPdaMpMXso=; b=TIkzxO1O7vQd0T1PMQ31eP873s
+        pPHNaKNwfjx7mTwD9RmpK0u2Dr52r7UfxNzSSDXj8Ur4f/57iSBP9syn65/BRLw+Qf0YqEROqC1+F
+        /VG4vFcKrZ4lPNCkYzTKj7o2L7DwvWpMe/Cj9lb6MSKQzaI23JMePqdIEZskz+65OByIz865kTj2M
+        S7C7JWy6K7A2w9h6miRNVROzQSV0cHn3nsz/ISMK8rBY/sbh7syYv+06of00RqsVQ7L8TnPZCsvnm
+        bLR1p6dai2RCCksWMX0lknKUYeC/2U9k2JV7oYNMmdKjgqpOgr1yAHVsYweFfh4DDrfwCTLAV00Ez
+        KwZhXR7g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mcZIX-00HDlV-C4; Mon, 18 Oct 2021 20:31:53 +0000
+Date:   Mon, 18 Oct 2021 13:31:53 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>, axboe@kernel.dk
+Cc:     jejb@linux.ibm.com, agk@redhat.com, snitzer@redhat.com,
+        colyli@suse.de, kent.overstreet@gmail.com,
+        boris.ostrovsky@oracle.com, jgross@suse.com,
+        sstabellini@kernel.org, roger.pau@citrix.com, geert@linux-m68k.org,
+        ulf.hansson@linaro.org, tj@kernel.org, hare@suse.de,
+        jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes.berg@intel.com, krisman@collabora.com,
+        chris.obbard@collabora.com, thehajime@gmail.com,
+        zhuyifei1999@gmail.com, haris.iqbal@ionos.com,
+        jinpu.wang@ionos.com, miquel.raynal@bootlin.com, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-scsi@vger.kernel.org,
+        dm-devel@redhat.com, linux-bcache@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-m68k@lists.linux-m68k.org,
+        linux-um@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH 1/9] scsi/sd: add error handling support for add_disk()
+Message-ID: <YW3ZuQv1qpIXkd5b@bombadil.infradead.org>
+References: <20211015233028.2167651-1-mcgrof@kernel.org>
+ <20211015233028.2167651-2-mcgrof@kernel.org>
+ <yq1bl3ofjo5.fsf@ca-mkp.ca.oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.178.120.180]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-04.corp.yadro.com (172.17.100.104)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yq1bl3ofjo5.fsf@ca-mkp.ca.oracle.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add acls/{ACL}/attrib/authentication attribute that controls authentication
-for particular ACL. By default, this attribute inherits a value of the
-authentication attribute of the target port group to keep backward
-compatibility.
+On Sat, Oct 16, 2021 at 10:51:48PM -0400, Martin K. Petersen wrote:
+> 
+> Luis,
+> 
+> > We never checked for errors on add_disk() as this function returned
+> > void. Now that this is fixed, use the shiny new error handling.
+> >
+> > As with the error handling for device_add() we follow the same logic
+> > and just put the device so that cleanup is done via the
+> > scsi_disk_release().
+> 
+> Acked-by: Martin K. Petersen <martin.petersen@oracle.com>
 
-authentication attribute has 3 states:
- "0" - authentication is turned off for this ACL
- "1" - authentication is required for this ACL
- "-1" - authentication is inherited from TPG
+Thanks, would you like Jens to pick this up and the other scsi/sr patch
+or are you taking it through your tree?
 
-Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
-Reviewed-by: Konstantin Shelekhin <k.shelekhin@yadro.com>
-Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
----
-v2:
- show effective value (-1) for inherited mode
----
- drivers/target/iscsi/iscsi_target_configfs.c  | 31 +++++++++++++++++++
- drivers/target/iscsi/iscsi_target_nego.c      |  8 ++++-
- .../target/iscsi/iscsi_target_nodeattrib.c    |  1 +
- include/target/iscsi/iscsi_target_core.h      |  2 ++
- 4 files changed, 41 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/target/iscsi/iscsi_target_configfs.c b/drivers/target/iscsi/iscsi_target_configfs.c
-index e3750b64cc0c..6f204f0cedf9 100644
---- a/drivers/target/iscsi/iscsi_target_configfs.c
-+++ b/drivers/target/iscsi/iscsi_target_configfs.c
-@@ -314,6 +314,36 @@ ISCSI_NACL_ATTR(random_datain_pdu_offsets);
- ISCSI_NACL_ATTR(random_datain_seq_offsets);
- ISCSI_NACL_ATTR(random_r2t_offsets);
- 
-+static ssize_t iscsi_nacl_attrib_authentication_show(struct config_item *item,
-+		char *page)
-+{
-+	struct se_node_acl *se_nacl = attrib_to_nacl(item);
-+	struct iscsi_node_acl *nacl = to_iscsi_nacl(se_nacl);
-+
-+	return sprintf(page, "%d\n", nacl->node_attrib.authentication);
-+}
-+
-+static ssize_t iscsi_nacl_attrib_authentication_store(struct config_item *item,
-+		const char *page, size_t count)
-+{
-+	struct se_node_acl *se_nacl = attrib_to_nacl(item);
-+	struct iscsi_node_acl *nacl = to_iscsi_nacl(se_nacl);
-+	s32 val;
-+	int ret;
-+
-+	ret = kstrtos32(page, 0, &val);
-+	if (ret)
-+		return ret;
-+	if (val != 0 && val != 1 && val != NA_AUTHENTICATION_INHERITED)
-+		return -EINVAL;
-+
-+	nacl->node_attrib.authentication = val;
-+
-+	return count;
-+}
-+
-+CONFIGFS_ATTR(iscsi_nacl_attrib_, authentication);
-+
- static struct configfs_attribute *lio_target_nacl_attrib_attrs[] = {
- 	&iscsi_nacl_attrib_attr_dataout_timeout,
- 	&iscsi_nacl_attrib_attr_dataout_timeout_retries,
-@@ -323,6 +353,7 @@ static struct configfs_attribute *lio_target_nacl_attrib_attrs[] = {
- 	&iscsi_nacl_attrib_attr_random_datain_pdu_offsets,
- 	&iscsi_nacl_attrib_attr_random_datain_seq_offsets,
- 	&iscsi_nacl_attrib_attr_random_r2t_offsets,
-+	&iscsi_nacl_attrib_attr_authentication,
- 	NULL,
- };
- 
-diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
-index 006fa679517a..9873c5e34206 100644
---- a/drivers/target/iscsi/iscsi_target_nego.c
-+++ b/drivers/target/iscsi/iscsi_target_nego.c
-@@ -813,6 +813,7 @@ static int iscsi_target_do_authentication(
- 
- bool iscsi_conn_auth_required(struct iscsi_conn *conn)
- {
-+	struct iscsi_node_acl *nacl;
- 	struct se_node_acl *se_nacl;
- 
- 	if (conn->sess->sess_ops->SessionType) {
-@@ -839,7 +840,12 @@ bool iscsi_conn_auth_required(struct iscsi_conn *conn)
- 
- 	pr_debug("Known ACL %s is trying to connect\n",
- 		 se_nacl->initiatorname);
--	return conn->tpg->tpg_attrib.authentication;
-+
-+	nacl = to_iscsi_nacl(se_nacl);
-+	if (nacl->node_attrib.authentication == NA_AUTHENTICATION_INHERITED)
-+		return conn->tpg->tpg_attrib.authentication;
-+
-+	return nacl->node_attrib.authentication;
- }
- 
- static int iscsi_target_handle_csg_zero(
-diff --git a/drivers/target/iscsi/iscsi_target_nodeattrib.c b/drivers/target/iscsi/iscsi_target_nodeattrib.c
-index e3ac247bffe8..baf1c93fa1e3 100644
---- a/drivers/target/iscsi/iscsi_target_nodeattrib.c
-+++ b/drivers/target/iscsi/iscsi_target_nodeattrib.c
-@@ -30,6 +30,7 @@ void iscsit_set_default_node_attribues(
- {
- 	struct iscsi_node_attrib *a = &acl->node_attrib;
- 
-+	a->authentication = NA_AUTHENTICATION_INHERITED;
- 	a->dataout_timeout = NA_DATAOUT_TIMEOUT;
- 	a->dataout_timeout_retries = NA_DATAOUT_TIMEOUT_RETRIES;
- 	a->nopin_timeout = NA_NOPIN_TIMEOUT;
-diff --git a/include/target/iscsi/iscsi_target_core.h b/include/target/iscsi/iscsi_target_core.h
-index 21c1aaa6dae2..0913909fa765 100644
---- a/include/target/iscsi/iscsi_target_core.h
-+++ b/include/target/iscsi/iscsi_target_core.h
-@@ -26,6 +26,7 @@ struct sock;
- #define ISCSI_RX_THREAD_NAME		"iscsi_trx"
- #define ISCSI_TX_THREAD_NAME		"iscsi_ttx"
- #define ISCSI_IQN_LEN			224
-+#define NA_AUTHENTICATION_INHERITED	-1
- 
- /* struct iscsi_node_attrib sanity values */
- #define NA_DATAOUT_TIMEOUT		3
-@@ -714,6 +715,7 @@ struct iscsi_login {
- } ____cacheline_aligned;
- 
- struct iscsi_node_attrib {
-+	s32			authentication;
- 	u32			dataout_timeout;
- 	u32			dataout_timeout_retries;
- 	u32			default_erl;
--- 
-2.25.1
-
+  Luis
