@@ -2,136 +2,243 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C2743190A
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Oct 2021 14:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862F24319B3
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Oct 2021 14:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbhJRM3O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Oct 2021 08:29:14 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:40186 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229843AbhJRM3N (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 18 Oct 2021 08:29:13 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 7F48141206;
-        Mon, 18 Oct 2021 12:27:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-type:content-type:content-transfer-encoding:mime-version
-        :x-mailer:message-id:date:date:subject:subject:from:from
-        :received:received:received; s=mta-01; t=1634560020; x=
-        1636374421; bh=SPDSUZyQ+LkQQv0yTHGMYMcsB0vdKmmmorWkm9qTSjI=; b=c
-        Bs0N10m/jNemmZOFMaunnythey9+QJNYvipj58VYaLYIBZhqzFY4MN5m1V4ArNh3
-        bn9o5BgZgFM5on/dAc6QpNLnTz0/zqHuiv1Ik+V8EUC+pMdzqaz883GWtzuGAwXT
-        MhWYqdCfsQoZswzxaVQh0MjP4aPUv9cG84Pw9hIb0Q=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 0PAGD45EFvas; Mon, 18 Oct 2021 15:27:00 +0300 (MSK)
-Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id C6588400F6;
-        Mon, 18 Oct 2021 15:26:59 +0300 (MSK)
-Received: from NB-591.corp.yadro.com (10.199.10.157) by
- T-EXCH-04.corp.yadro.com (172.17.100.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Mon, 18 Oct 2021 15:26:58 +0300
-From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
-To:     Martin Petersen <martin.petersen@oracle.com>,
-        <target-devel@vger.kernel.org>
-CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [PATCH RESEND] scsi: qla2xxx: fix unmap already freed sgl
-Date:   Mon, 18 Oct 2021 15:26:50 +0300
-Message-ID: <20211018122650.11846-1-d.bogdanov@yadro.com>
-X-Mailer: git-send-email 2.25.1
+        id S231774AbhJRMrk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Oct 2021 08:47:40 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:18669 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231755AbhJRMr1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Oct 2021 08:47:27 -0400
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20211018124513epoutp01798b159239cb36071b79d655c15e8183~vIKw1GFUO2805928059epoutp01h
+        for <linux-scsi@vger.kernel.org>; Mon, 18 Oct 2021 12:45:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20211018124513epoutp01798b159239cb36071b79d655c15e8183~vIKw1GFUO2805928059epoutp01h
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1634561113;
+        bh=uO1g0rsg2UjAUXqyw5+dlCMZbA/ISIyC5E4IaaBUgGc=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=ihbrMRmIv06eR8Oq68SZvfHFxinpDfVIPP8skXzAR/wbvMGhsKhDstq2f9dzwlxFj
+         KLr9j1FjIt6U025MiP6N6nD4RUWbihjtjZQ9GzJ5pgS9/tHBMQk7aQ1DTwUspSD9Zd
+         Rb43saf7u9ppZcXas8yeTsSINUoQRdqSHW3FFN/s=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20211018124513epcas2p10b24ba2590e858d75e45db60250bd761~vIKwSpI6a3164231642epcas2p1e;
+        Mon, 18 Oct 2021 12:45:13 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.98]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4HXxRP4XBVz4x9Q2; Mon, 18 Oct
+        2021 12:45:05 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        28.D9.09823.15C6D616; Mon, 18 Oct 2021 21:45:05 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20211018124505epcas2p31437a0fae6711edeb9db5b49eb420e56~vIKow1njE0244402444epcas2p3G;
+        Mon, 18 Oct 2021 12:45:05 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20211018124505epsmtrp17a9ae7dbff1db1ce9764baa40aaa12eb~vIKotF9G11580315803epsmtrp1L;
+        Mon, 18 Oct 2021 12:45:05 +0000 (GMT)
+X-AuditID: b6c32a48-13dff7000000265f-15-616d6c511acc
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        72.50.08902.05C6D616; Mon, 18 Oct 2021 21:45:04 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.51]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20211018124504epsmtip2bd0fc0036f71309dbff15093c05ec06e~vIKocD1l-0377703777epsmtip2b;
+        Mon, 18 Oct 2021 12:45:04 +0000 (GMT)
+From:   Chanho Park <chanho61.park@samsung.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Can Guo <cang@codeaurora.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Gyunghoon Kwon <goodjob.kwon@samsung.com>,
+        Sowon Na <sowon.na@samsung.com>,
+        linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: [PATCH v5 00/15] introduce exynosauto v9 ufs driver
+Date:   Mon, 18 Oct 2021 21:42:01 +0900
+Message-Id: <20211018124216.153072-1-chanho61.park@samsung.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.199.10.157]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-04.corp.yadro.com (172.17.100.104)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02TfUwTdxjH87trj8pWd1aQ38gc7Awx4MAWCz0WmCMwcwuMQNiWjYzBWW6U
+        0bf0yoJbTNDFjtLJi+CgBYktoAaMdR0CGsEOmAzZ9A/AYU0WERyWiCIvIjDKWg43//s8r9/n
+        +b0IUNEtLFhQoNYzOjWtJDB/XkdfeGxkhlJFi/9a20kOTp7HyHuNHRjpXh7FyF/GjTzyx9ll
+        lJyzn+GTw9f2kD9cTiKHKm0IOWm3oKRtrAMhx1YMfPKnmecIWXerByFNf3Zh5NkBD0KuLvci
+        722jhkdSKEvJcYwaLj+OUD+fi6CarroRytFqxKhKmxNQS/ZSjHr6wMWjyttbATXveJP63mlC
+        0l/NKoxXMHQeowtl1HJNXoE6P4FIycxJyomJFUsiJXGkjAhV0yomgUhOTY88UKD07kWEfk0r
+        i7yudJplib3vxus0RXomVKFh9QkEo81TamXaKJZWsUXq/Cg1o39HIhZHx3gTcwsVtitfaAf3
+        FNd2Wv1KQC9RBrYIIC6F16YugjLgLxDhXQA6Wx7xOGMOwJnVPzDOeAZgVVUf9qJkYfwInwt0
+        A2hrOrUREOFPAZy4962PMTwStk9Nb/QNwJ8AODlR4+czUNyJwonLy3xf1nY8Hk67qxEf8/Aw
+        OPpgaqOTEN8PjVfNfE4uBPavGFHOvw0Omid5Pka9/u8u1aNcTr8A/uOhOE6Gi+ujgOPtcHqg
+        3Y/jYOiuMGwMAXETgMfur28G2gA0HknleD9cqW33Cgu8AuHQfmWvDyG+C/a7NmW3wtK+NT/O
+        LYSlBhFXuBs6O2t5HO+Epob5zekpeMFZDXzpIjwbGheDKkGI5aVdLC/tYvlf9jRAW8EORsuq
+        8hk2Wiv9707lGpUDbLzsCKoL1M/MRvUCRAB6ARSgRIDw4PsqWiTMow99w+g0OboiJcP2ghjv
+        6VahwYFyjfdrqPU5EmmcWBobK5FFx4hlRJAwLrCQFuH5tJ4pZBgto3tRhwi2BJcgln0X37gJ
+        4gwn2agnY7mne4ji26abhuGZmi93eNytEip3qOJ5gSnMldYdZOUHr341rD1x99dz5x8iK2+X
+        91QLk9tr0p0H78x4ktcy52M/zk4MwW7IE0/4KTOyKrLzwksPH637pHAlrfGjXYGfBlYvK8wt
+        B25s7Wk4ZB9J6F5KaW3LLB8NcD3OSKYfzY4o1ptXXSEL+t/E5tebZw2/j6c5ZIv1cutnKXeK
+        k5Drh1OPfWBPNDvCw+63dQaojs456kobnyma5J7F14Yi9fvA3yPNHQ9LVGj4pSRrWhLqUT1u
+        ybq9tLZw1zzr9L9e5x7fPUBQr7yFfFg2csqacsEl/byhsovgsQpaEoHqWPpfuETt0WIEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgkeLIzCtJLcpLzFFi42LZdlhJXjcgJzfRoPGPqcXJJ2vYLB7M28Zm
+        8fLnVTaLgw87WSymffjJbPFp/TJWi8v7tS16djpbnJ6wiMniyfpZzBaLbmxjsrjxq43VYuPb
+        H0wWM87vY7Lovr6DzWL58X9MFr9/HmJyEPS4fMXbY1ZDL5vH5b5eJo/NK7Q8Fu95yeSxaVUn
+        m8eERQcYPb6v72Dz+Pj0FotH35ZVjB6fN8l5tB/oZgrgieKySUnNySxLLdK3S+DKWLQrruCk
+        dsX07QvZGxgPKXUxcnJICJhIfHnYyNrFyMUhJLCbUWLhgl3sEAlZiWfvdkDZwhL3W45AFb1n
+        lLjypBcswSagK7Hl+StGEFtE4COjxJxvWiBFzAKnmCXWrtvEApIQFrCRePVyMhOIzSKgKnH1
+        6XM2EJtXwF6ic89MVogN8hJHfnUyQ8QFJU7OfALWywwUb946m3kCI98sJKlZSFILGJlWMUqm
+        FhTnpucWGxYY5qWW6xUn5haX5qXrJefnbmIER5KW5g7G7as+6B1iZOJgPMQowcGsJMKb5Jqb
+        KMSbklhZlVqUH19UmpNafIhRmoNFSZz3QtfJeCGB9MSS1OzU1ILUIpgsEwenVAPTxtMHRAtl
+        GLXrzYvrrl/4etDr+ac/u54GWs/MVjq955FE7Kk9b2+YnjhXwXLd0+l4wAbT0iumcZrmP5NL
+        Ti6Sij5yQvH/m8aL9zImpG6LbDlg+0HELP/k6bi0j8a1B09pJK2cmnk688mRwrW50ttCdTPt
+        jB5tf8X4wDLw4FUttq8sraYxeo1R/FxrevUZzhVrLrzSv0g29J9qSfHV/4fdIhy2fjt+1l3o
+        0VUb8wiJfuuUg0X9yxn5rdbun7c4VVlRJvzxccVH7ubsj+/41Ny6/i/uwhaFL+ZLzyouWch2
+        8vmkuS5Bl1sDGDd/4ndcn9nBPOVOyvRNTm57a70vhL0qCXra/+7eAievc/rnegrnK7EUZyQa
+        ajEXFScCAOL/754TAwAA
+X-CMS-MailID: 20211018124505epcas2p31437a0fae6711edeb9db5b49eb420e56
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20211018124505epcas2p31437a0fae6711edeb9db5b49eb420e56
+References: <CGME20211018124505epcas2p31437a0fae6711edeb9db5b49eb420e56@epcas2p3.samsung.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-sgl is freed in the target stack in target_release_cmd_kref before
-calling qlt_free_cmd, but there is an unmap of sgl in qlt_free_cmd that
-causes such a panic if sgl is not yet DMA unmapped:
+In ExynosAuto(variant of the Exynos for automotive), the UFS Storage needs
+to be accessed from multiple VMs. Traditional virtualization solution
+provides para-virtualized block driver such as virtio-blk. However, they
+can be highly depends on the Dom0 where the backend of the PV is
+located. When the system gets high cpu pressure, the performance of
+guest VMs are also affected. To overcome this, the SoC implements the
+virtualization concept as the H/W controller level.
 
-NIP dma_direct_unmap_sg+0xdc/0x180
-LR  dma_direct_unmap_sg+0xc8/0x180
-Call Trace:
- ql_dbg_prefix+0x68/0xc0 [qla2xxx] (unreliable)
- dma_unmap_sg_attrs+0x54/0xf0
- qlt_unmap_sg.part.19+0x54/0x1c0 [qla2xxx]
- qlt_free_cmd+0x124/0x1d0 [qla2xxx]
- tcm_qla2xxx_release_cmd+0x4c/0xa0 [tcm_qla2xxx]
- target_put_sess_cmd+0x198/0x370 [target_core_mod]
- transport_generic_free_cmd+0x6c/0x1b0 [target_core_mod]
- tcm_qla2xxx_complete_free+0x6c/0x90 [tcm_qla2xxx]
+Below figure is a conceptual design of the UFS Multi Host architecture.
 
-SGL may be left unmapped in error cases of response sending.
-For instance, qlt_rdy_to_xfer maps sgl and exits when sesssion is being
-deleted keeping sgl mapped.
+    +------+          +------+
+    | OS#1 |          | OS#2 |
+    +------+          +------+
+       |                 |
+ +------------+     +------------+
+ |  Physical  |     |   Virtual  |
+ |    Host    |     |    Host    |
+ +------------+     +------------+
+   |      |              | <-- UTP_CMD_SAP, UTP_TM_SAP
+   |   +-------------------------+
+   |   |    Function Arbiter     |
+   |   +-------------------------+
+ +-------------------------------+
+ |           UTP Layer           |
+ +-------------------------------+
+ +-------------------------------+
+ |           UIC Layer           |
+ +-------------------------------+
 
-This patch removes use-after-free of sgl, and ensures that sgl is
-unmapped for the cmd that was not send to FW.
+There are two types of host controllers of the UFS host controller
+that we designed. The controller has a Function Arbiter that arranges
+commands of each hosts. It will arrange the doorbells among the PH and
+VHs as Round-Robin. When each host transmits a command to the Arbiter,
+the Arbiter transmits it to the UTP layer. Physical Host(PH) support all
+UFSHCI functions(all SAPs) same as conventional UFSHCI.
+Virtual Hosts(VHs) support only data transfer function(UTP_CMD_SAP and
+UTP_TM_SAP).
 
-Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
----
-This patchset is intended for scsi-fix.
----
- drivers/scsi/qla2xxx/qla_target.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+In an environment where multiple VMs are used, the OS that has the
+leadership of the system is called System OS(Dom0). This system OS will
+own the PH and has a responsibility to handle UIC errors.
 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index b3478ed9b12e..7d8242c120fc 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -3319,8 +3319,7 @@ int qlt_xmit_response(struct qla_tgt_cmd *cmd, int xmit_type,
- 			"RESET-RSP online/active/old-count/new-count = %d/%d/%d/%d.\n",
- 			vha->flags.online, qla2x00_reset_active(vha),
- 			cmd->reset_count, qpair->chip_reset);
--		spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
--		return 0;
-+		goto out_unmap_unlock;
- 	}
- 
- 	/* Does F/W have an IOCBs for this request */
-@@ -3445,10 +3444,6 @@ int qlt_rdy_to_xfer(struct qla_tgt_cmd *cmd)
- 	prm.sg = NULL;
- 	prm.req_cnt = 1;
- 
--	/* Calculate number of entries and segments required */
--	if (qlt_pci_map_calc_cnt(&prm) != 0)
--		return -EAGAIN;
--
- 	if (!qpair->fw_started || (cmd->reset_count != qpair->chip_reset) ||
- 	    (cmd->sess && cmd->sess->deleted)) {
- 		/*
-@@ -3466,6 +3461,10 @@ int qlt_rdy_to_xfer(struct qla_tgt_cmd *cmd)
- 		return 0;
- 	}
- 
-+	/* Calculate number of entries and segments required */
-+	if (qlt_pci_map_calc_cnt(&prm) != 0)
-+		return -EAGAIN;
-+
- 	spin_lock_irqsave(qpair->qp_lock_ptr, flags);
- 	/* Does F/W have an IOCBs for this request */
- 	res = qlt_check_reserve_free_req(qpair, prm.req_cnt);
-@@ -3870,9 +3869,6 @@ void qlt_free_cmd(struct qla_tgt_cmd *cmd)
- 
- 	BUG_ON(cmd->cmd_in_wq);
- 
--	if (cmd->sg_mapped)
--		qlt_unmap_sg(cmd->vha, cmd);
--
- 	if (!cmd->q_full)
- 		qlt_decr_num_pend_cmds(cmd->vha);
- 
+VHs can only supports data transfer functions compared with the PH,
+they're necessary to send a request to the PH for error handling of VHs.
+To interface among the PH and VHs, the UFSHCI controller supports mailbox.
+The mailbox register has 8 bit fields and they can be used as
+arguments of the mailbox protocol. In this initial patchset, the PH
+ready message is supported and they will be implemented to the next
+steps.
+
+To support this virtual host type controller which only supports data
+transfer function (TP_CMD_SAP and UTP_TM_SAP), we need to add below two
+quirks.
+- UFSHCD_QUIRK_BROKEN_UIC_CMD
+- UFSHCD_QUIRK_SKIP_PH_CONFIGURATION
+
+First two patches, I picked them up from Jonmin's patchset[1] and the third
+patch has been dropped because it's not necessary anymore.
+
+[1]: https://lore.kernel.org/linux-scsi/20210527030901.88403-1-jjmin.jeong@samsung.com/
+
+Patch 0003 ~ 0010, they are changes of exynos7 ufs driver to apply
+exynosauto v9 variant and PH/VH capabilities.
+Patch 0011 ~ 0015, the patches introduce the exynosauto v9 ufs MHCI which
+includes the PH and VHs.
+
+Changes from v4:
+- s/Arbitor/Arbiter/g of cover-letter.
+- Rephrase descriptions of cover letter from original patchset.
+- Except 0007-scsi-ufs-ufs-exynos-correct-timeout-value-setting-re.patch
+  from this patchset and sent it independently
+- Patch11/12: Consolidate sysreg and samsung,ufs-shareability-reg-offset
+  property.
+- Patch14:
+  Drop wlun_dev_clr_ua configuration
+  Add TODO: tag for further implementations
+
+Changes from v3:
+- Drop "[PATCH v3 06/17] scsi: ufs: ufs-exynos: get sysreg regmap for
+  io-coherency" and squash it to Patch12
+- Patch12: Use macro to avoid raw value usage and describe the value of M-Phy setting
+- Patch13: Add dma-coherent property
+- Patch14: Use macro to avoid raw value and describe the value of HCI_MH_ALLOWABLE_TRAN_OF_VH
+
+Changes from v2:
+- Separate dt-binding patches on top of
+  https://lore.kernel.org/linux-devicetree/YUNdqnZ2kYefxFUC@robh.at.kernel.org/
+
+Changes from v1:
+- Change quirk name from UFSHCD_QUIRK_SKIP_INTERFACE_CONFIGURATION to
+  UFSHCD_QUIRK_SKIP_PH_CONFIGURATION
+- Add compatibles to Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
+  on top of https://lore.kernel.org/linux-scsi/20200613024706.27975-9-alim.akhtar@samsung.com/
+
+Chanho Park (13):
+  scsi: ufs: ufs-exynos: change pclk available max value
+  scsi: ufs: ufs-exynos: simplify drv_data retrieval
+  scsi: ufs: ufs-exynos: add refclkout_stop control
+  scsi: ufs: ufs-exynos: add setup_clocks callback
+  scsi: ufs: ufs-exynos: support custom version of ufs_hba_variant_ops
+  scsi: ufs: ufs-exynos: add EXYNOS_UFS_OPT_SKIP_CONFIG_PHY_ATTR option
+  scsi: ufs: ufs-exynos: factor out priv data init
+  scsi: ufs: ufs-exynos: add pre/post_hce_enable drv callbacks
+  scsi: ufs: ufs-exynos: support exynosauto v9 ufs driver
+  dt-bindings: ufs: exynos-ufs: add io-coherency property
+  scsi: ufs: ufs-exynos: multi-host configuration for exynosauto
+  scsi: ufs: ufs-exynos: introduce exynosauto v9 virtual host
+  dt-bindings: ufs: exynos-ufs: add exynosautov9 compatible
+
+jongmin jeong (2):
+  scsi: ufs: add quirk to handle broken UIC command
+  scsi: ufs: add quirk to enable host controller without ph
+    configuration
+
+ .../bindings/ufs/samsung,exynos-ufs.yaml      |  10 +
+ drivers/scsi/ufs/ufs-exynos.c                 | 354 +++++++++++++++++-
+ drivers/scsi/ufs/ufs-exynos.h                 |  27 +-
+ drivers/scsi/ufs/ufshcd.c                     |   6 +
+ drivers/scsi/ufs/ufshcd.h                     |  12 +
+ 5 files changed, 386 insertions(+), 23 deletions(-)
+
 -- 
-2.25.1
+2.33.0
 
