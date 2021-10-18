@@ -2,159 +2,140 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E4A431358
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Oct 2021 11:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC9843143B
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Oct 2021 12:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbhJRJ0b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Oct 2021 05:26:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43557 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231496AbhJRJ02 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 18 Oct 2021 05:26:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634549057;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tcERYHsACD8OiG9LERSlpQxmHuHdSGg0GMtHO86OE84=;
-        b=AyGrhM8i9mDj3QLHcrg+gTGbyI6PHy3rsEeHVq8VDXGYGu8MKhRpG6G4e1za8iIahRJSem
-        WZmylplqll/25D0gmJhQS0Y2i2mkaAL1YV71IMKQo2F3fi0MVrkyLsHjuswYn6C8NVbQj/
-        LN7ep9+EZV6FqsxRENUTaW6PrU91h+U=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-330-rfoB8C3CPLGgDGtrzbL-vw-1; Mon, 18 Oct 2021 05:24:15 -0400
-X-MC-Unique: rfoB8C3CPLGgDGtrzbL-vw-1
-Received: by mail-ed1-f72.google.com with SMTP id e14-20020a056402088e00b003db6ebb9526so13714556edy.22
-        for <linux-scsi@vger.kernel.org>; Mon, 18 Oct 2021 02:24:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tcERYHsACD8OiG9LERSlpQxmHuHdSGg0GMtHO86OE84=;
-        b=ywWv+l1z8xJCGq1JhrW4usY1u9LY9e3blMkF3WuX79jWTAuSu8O77e6dW16AGSXRx3
-         SPw1mZct9NsXEARGsVnhaQ/UyQuuNobGkIZsYFdTyA1pTofjS5RcEqt+Qq/HRUHULVld
-         5aXOUICpJdLQH78KcMVnYwoNMzh4JVXvKMmJAfb5Dd67vtTI61RgSMn04AS7XmUasiI9
-         znUJtSwROZBvpT+6pxWzblQsY9UlLrdu9Uw5cRdAkGrGg7ffMSG+btTC8Od5GFYWo4AE
-         5egAg4VRPZhBkwALcCDJTp3GIewwpfK0hH0akjS+I4BEI5j0FN4O4ffU6GMroW5xFaHi
-         YYkA==
-X-Gm-Message-State: AOAM532oL+Rpl9covceHc4ZVwn7+X+1pxxenE54l0gTV4ha/Ng9QFY4C
-        XKXhJ/pKzn9WO/KrCto9H/4imsJzMbNmGuccNXDBL25Kybcb6OAC/6g8Vqs0g/zZgun49dQPT9i
-        OFhxb4zTol6B/codxGrjjvg==
-X-Received: by 2002:a50:9d8e:: with SMTP id w14mr42193497ede.74.1634549054551;
-        Mon, 18 Oct 2021 02:24:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxUJYrHxvUXjdPELjIDpPtrZ181C1I4vTJbRWD4jS3vqGv74zCzzGw5AmjDAdcPLpxevcG2mg==
-X-Received: by 2002:a50:9d8e:: with SMTP id w14mr42193472ede.74.1634549054384;
-        Mon, 18 Oct 2021 02:24:14 -0700 (PDT)
-Received: from steredhat (host-79-34-250-211.business.telecomitalia.it. [79.34.250.211])
-        by smtp.gmail.com with ESMTPSA id lm14sm8629911ejb.24.2021.10.18.02.24.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Oct 2021 02:24:13 -0700 (PDT)
-Date:   Mon, 18 Oct 2021 11:24:10 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gonglei <arei.gonglei@huawei.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jie Deng <jie.deng@intel.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Anton Yakovlev <anton.yakovlev@opensynergy.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-um@lists.infradead.org,
-        virtualization@lists.linux-foundation.org,
-        linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-i2c@vger.kernel.org, iommu@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-remoteproc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, kvm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH RFC] virtio: wrap config->reset calls
-Message-ID: <20211018092410.t5hilzz7kbto2mhy@steredhat>
-References: <20211013105226.20225-1-mst@redhat.com>
+        id S231131AbhJRKOH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Oct 2021 06:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229581AbhJRKOD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Oct 2021 06:14:03 -0400
+Received: from bombadil.infradead.org (unknown [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3396BC061714;
+        Mon, 18 Oct 2021 03:11:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=XEauwBeyle229Q9YGjw8X73gVoQGpNTHUdJ6d3ufcSY=; b=OPyMmGmlhYqRTyBq1xysZRbGz+
+        4FdOau0hna6c1i4ag1CGi2DKKpsXddty9p0sFjlrqRziwmbkNyV7e7UOi9BElxioDEozNZ+pQBXP5
+        s6bIy3U2NhCphJhPcL1sYOi0up1FJ4SmKjnMiv8+6awRaPgIW6gjimONq4E2b+uLeXVG70W5jjudH
+        NEaekXB87lL4qQpQMAaXI+J7xErv1an4Is7hU4Ea34/FNhsGWy64rpszdidrWAdzhx6MJL34xcMOa
+        j6hOszoE3Evw74AMK55enAdcSU9yDd/sGcJguy6adxGflR+1TbLqRDN48cGsnBHeqR7rT5F7A3RZA
+        iorHKJlg==;
+Received: from [2001:4bb8:199:73c5:c70:4a89:bc61:2] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mcPcD-00EtyD-1s; Mon, 18 Oct 2021 10:11:33 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Coly Li <colyli@suse.de>, Mike Snitzer <snitzer@redhat.com>,
+        Song Liu <song@kernel.org>, David Sterba <dsterba@suse.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Dave Kleikamp <shaggy@kernel.org>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Kees Cook <keescook@chromium.org>,
+        Phillip Lougher <phillip@squashfs.org.uk>,
+        Jan Kara <jack@suse.com>, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, drbd-dev@lists.linbit.com,
+        linux-bcache@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ntfs3@lists.linux.dev, reiserfs-devel@vger.kernel.org
+Subject: don't use ->bd_inode to access the block device size v3
+Date:   Mon, 18 Oct 2021 12:11:00 +0200
+Message-Id: <20211018101130.1838532-1-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20211013105226.20225-1-mst@redhat.com>
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 06:55:31AM -0400, Michael S. Tsirkin wrote:
->This will enable cleanups down the road.
->The idea is to disable cbs, then add "flush_queued_cbs" callback
->as a parameter, this way drivers can flush any work
->queued after callbacks have been disabled.
->
->Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
->---
-> arch/um/drivers/virt-pci.c                 | 2 +-
-> drivers/block/virtio_blk.c                 | 4 ++--
-> drivers/bluetooth/virtio_bt.c              | 2 +-
-> drivers/char/hw_random/virtio-rng.c        | 2 +-
-> drivers/char/virtio_console.c              | 4 ++--
-> drivers/crypto/virtio/virtio_crypto_core.c | 8 ++++----
-> drivers/firmware/arm_scmi/virtio.c         | 2 +-
-> drivers/gpio/gpio-virtio.c                 | 2 +-
-> drivers/gpu/drm/virtio/virtgpu_kms.c       | 2 +-
-> drivers/i2c/busses/i2c-virtio.c            | 2 +-
-> drivers/iommu/virtio-iommu.c               | 2 +-
-> drivers/net/caif/caif_virtio.c             | 2 +-
-> drivers/net/virtio_net.c                   | 4 ++--
-> drivers/net/wireless/mac80211_hwsim.c      | 2 +-
-> drivers/nvdimm/virtio_pmem.c               | 2 +-
-> drivers/rpmsg/virtio_rpmsg_bus.c           | 2 +-
-> drivers/scsi/virtio_scsi.c                 | 2 +-
-> drivers/virtio/virtio.c                    | 5 +++++
-> drivers/virtio/virtio_balloon.c            | 2 +-
-> drivers/virtio/virtio_input.c              | 2 +-
-> drivers/virtio/virtio_mem.c                | 2 +-
-> fs/fuse/virtio_fs.c                        | 4 ++--
-> include/linux/virtio.h                     | 1 +
-> net/9p/trans_virtio.c                      | 2 +-
-> net/vmw_vsock/virtio_transport.c           | 4 ++--
+Hi Jens,
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+various drivers currently poke directy at the block device inode, which
+is a bit of a mess.  This series cleans up the places that read the
+block device size to use the proper helpers.  I have separate patches
+for many of the other bd_inode uses, but this series is already big
+enough as-is,
 
+Changes since v2:
+ - bdev_nr_bytes should return loff_t
+ - fix a commit message typo
+ - drop a redundant note in a commit message
+
+Changes since v1:
+ - move SECTOR_SIZE & co
+ - use SECTOR_SHIFT in sb_bdev_nr_blocks
+ - add a bdev_nr_bytes helper
+ - reuse a variable in the SCSI target code
+ - drop the block2mtd patch, a bigger rewrite for that code is pending
+
+Diffstat:
+ block/fops.c                        |    2 +-
+ drivers/block/drbd/drbd_int.h       |    3 +--
+ drivers/md/bcache/super.c           |    2 +-
+ drivers/md/bcache/util.h            |    4 ----
+ drivers/md/bcache/writeback.c       |    2 +-
+ drivers/md/dm-bufio.c               |    2 +-
+ drivers/md/dm-cache-metadata.c      |    2 +-
+ drivers/md/dm-cache-target.c        |    2 +-
+ drivers/md/dm-clone-target.c        |    2 +-
+ drivers/md/dm-dust.c                |    5 ++---
+ drivers/md/dm-ebs-target.c          |    2 +-
+ drivers/md/dm-era-target.c          |    2 +-
+ drivers/md/dm-exception-store.h     |    2 +-
+ drivers/md/dm-flakey.c              |    3 +--
+ drivers/md/dm-integrity.c           |    6 +++---
+ drivers/md/dm-linear.c              |    3 +--
+ drivers/md/dm-log-writes.c          |    4 ++--
+ drivers/md/dm-log.c                 |    2 +-
+ drivers/md/dm-mpath.c               |    2 +-
+ drivers/md/dm-raid.c                |    6 +++---
+ drivers/md/dm-switch.c              |    2 +-
+ drivers/md/dm-table.c               |    3 +--
+ drivers/md/dm-thin-metadata.c       |    2 +-
+ drivers/md/dm-thin.c                |    2 +-
+ drivers/md/dm-verity-target.c       |    3 +--
+ drivers/md/dm-writecache.c          |    2 +-
+ drivers/md/dm-zoned-target.c        |    2 +-
+ drivers/md/md.c                     |   26 +++++++++++---------------
+ drivers/nvme/target/io-cmd-bdev.c   |    4 ++--
+ drivers/target/target_core_iblock.c |    4 ++--
+ fs/affs/super.c                     |    2 +-
+ fs/btrfs/dev-replace.c              |    3 +--
+ fs/btrfs/disk-io.c                  |    2 +-
+ fs/btrfs/ioctl.c                    |    4 ++--
+ fs/btrfs/volumes.c                  |    8 ++++----
+ fs/buffer.c                         |    4 ++--
+ fs/cramfs/inode.c                   |    2 +-
+ fs/ext4/super.c                     |    2 +-
+ fs/fat/inode.c                      |    5 +----
+ fs/hfs/mdb.c                        |    2 +-
+ fs/hfsplus/wrapper.c                |    2 +-
+ fs/jfs/resize.c                     |    5 ++---
+ fs/jfs/super.c                      |    5 ++---
+ fs/nfs/blocklayout/dev.c            |    4 ++--
+ fs/nilfs2/ioctl.c                   |    2 +-
+ fs/nilfs2/super.c                   |    2 +-
+ fs/nilfs2/the_nilfs.c               |    2 +-
+ fs/ntfs/super.c                     |    8 +++-----
+ fs/ntfs3/super.c                    |    3 +--
+ fs/pstore/blk.c                     |    8 +++-----
+ fs/reiserfs/super.c                 |    8 ++------
+ fs/squashfs/super.c                 |    5 +++--
+ fs/udf/lowlevel.c                   |    5 ++---
+ fs/udf/super.c                      |    9 +++------
+ include/linux/blk_types.h           |   17 +++++++++++++++++
+ include/linux/blkdev.h              |   17 -----------------
+ include/linux/genhd.h               |   13 ++++++++++++-
+ 57 files changed, 118 insertions(+), 139 deletions(-)
