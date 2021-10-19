@@ -2,88 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 023A3432C67
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Oct 2021 05:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D17432C63
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Oct 2021 05:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232654AbhJSDqS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Oct 2021 23:46:18 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:40542 "EHLO
+        id S232025AbhJSDqD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Oct 2021 23:46:03 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:23392 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229692AbhJSDqR (ORCPT
+        by vger.kernel.org with ESMTP id S229692AbhJSDqD (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 18 Oct 2021 23:46:17 -0400
+        Mon, 18 Oct 2021 23:46:03 -0400
 Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19J349Re015244;
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19J2wvMO015245;
         Tue, 19 Oct 2021 03:43:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=KJiWubGMNyWOQmJE10qT2Q36ZJt5GUJhKqw9DNxgJQ4=;
- b=ZB4zg4rdRs0Vcc+913MwHxrfk5sAq15IHJFAjX9nyws0eep02QnntyJV5phXiBuX1z03
- a7I+hsyjPiAUCvHuAt3R+/FR1nITZy4MOHjyeWBH+Is7f7ZfUJvMDkcGGShg0Otl+4KL
- GMlZ9NCRo2cNyLeO+GpU4T44xEAEiMdBc4pPNjBi4DkP9XSWxM4gxT7qhzlk7JRBfmEk
- 5BifvxWs+63m9FqRc3de5xhrTL5pTIueC4zEYaiJLP3vCADTW8GyewZ6NRK9cWdt6eC/
- SRs8hGvV9iyHDMCHF9ZDrots3VKAjZMVQEUI61FNHo6xISYVn0K4/o8ygViwpRnYy2sQ NA== 
+ bh=Zq1PD1e4FCwlXZoMPR+nLKMAkWRmz+TdEWFb+ef6plQ=;
+ b=oRBXqc3/HwT/TxqSYZQ8MtUjH9UVG+wLUkGNZaWlHSjjY1rrKcT3j7KkJ8uMnTqBv9ZH
+ jncmzQgHUu/19+cmUeEMKKDpa420KAQneE7LKN7eNqnyziPIHXnFCig6G3nWFPj9exKV
+ TpTTLa3tuMC3oSQkyflEwmMt7+1sCSAeSJSTuB/H0rK55l9uxZSfWFEp+j/HEeXeOTqu
+ dNmxzS2Ou4ljATKso2lsLfss+bU5ANfoL7F0TI+caEV8rECjlgh0QtIFEh4Lj+5J2P8u
+ /ZfkEFaIiR+HSHfdW0Vug4ayxY43gwbMdY+U2Rpc1cG8arElhPkTHkBtQhSygLvHIcZ1 Cg== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3brnfhqskj-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3brnfhqskk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 19 Oct 2021 03:43:48 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19J3ZT3a077053;
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19J3ZT88077083;
         Tue, 19 Oct 2021 03:43:47 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3br8grmmtg-1
+        by userp3020.oracle.com with ESMTP id 3br8grmmtv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 19 Oct 2021 03:43:47 +0000
 Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19J3hhHf101685;
-        Tue, 19 Oct 2021 03:43:46 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19J3hhHh101685;
+        Tue, 19 Oct 2021 03:43:47 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3020.oracle.com with ESMTP id 3br8grmmrp-4;
-        Tue, 19 Oct 2021 03:43:46 +0000
+        by userp3020.oracle.com with ESMTP id 3br8grmmrp-5;
+        Tue, 19 Oct 2021 03:43:47 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Martin Kepplinger <martink@posteo.de>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>
+To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        linux-scsi@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wsd_upstream@mediatek.com,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] scsi: sd: fix crashes in sd_resume_runtime
-Date:   Mon, 18 Oct 2021 23:43:40 -0400
-Message-Id: <163461411521.13664.305092538440750987.b4-ty@oracle.com>
+        sathya.prakash@broadcom.com, thenzl@redhat.com
+Subject: Re: [PATCH RESEND] mpi3mr:Fix duplicate device entries when scan through sysfs
+Date:   Mon, 18 Oct 2021 23:43:41 -0400
+Message-Id: <163461411520.13664.5517769413519204966.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211015074654.19615-1-miles.chen@mediatek.com>
-References: <20211015074654.19615-1-miles.chen@mediatek.com>
+In-Reply-To: <20211014055425.30719-1-sreekanth.reddy@broadcom.com>
+References: <20211014055425.30719-1-sreekanth.reddy@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: gKb9G-3VbOOMGIm4I_ziIPWhbKimffoM
-X-Proofpoint-GUID: gKb9G-3VbOOMGIm4I_ziIPWhbKimffoM
+X-Proofpoint-ORIG-GUID: axi3l8bIGFimL7SlAXeDItF00d4bYDgh
+X-Proofpoint-GUID: axi3l8bIGFimL7SlAXeDItF00d4bYDgh
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 15 Oct 2021 15:46:54 +0800, Miles Chen wrote:
+On Thu, 14 Oct 2021 11:24:25 +0530, Sreekanth Reddy wrote:
 
-> After merging commit ed4246d37f3b ("scsi: sd: REQUEST SENSE for
-> BLIST_IGN_MEDIA_CHANGE devices in runtime_resume()"), I hit the
-> following crash on my device.
+> When the user scans the devices through 'scan' sysfs using below
+> command then the user will observe duplicate device entries
+> in lsscsi command output.
+> echo "- - -" > /sys/class/scsi_host/host0/scan
 > 
-> static int sd_resume_runtime(struct device *dev)
-> {
->         struct scsi_disk *sdkp = dev_get_drvdata(dev);
->         struct scsi_device *sdp = sdkp->device; // sdkp == NULL and crash
+> Fix is to set the shost's max_channel to zero.
 > 
 > [...]
 
 Applied to 5.15/scsi-fixes, thanks!
 
-[1/1] scsi: sd: fix crashes in sd_resume_runtime
-      https://git.kernel.org/mkp/scsi/c/85374b639229
+[1/1] mpi3mr:Fix duplicate device entries when scan through sysfs
+      https://git.kernel.org/mkp/scsi/c/97e6ea6d7806
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
