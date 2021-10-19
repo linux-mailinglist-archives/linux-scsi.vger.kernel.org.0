@@ -2,80 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D17432C63
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Oct 2021 05:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9679A432C65
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Oct 2021 05:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbhJSDqD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Oct 2021 23:46:03 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:23392 "EHLO
+        id S232488AbhJSDqG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Oct 2021 23:46:06 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:25844 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229692AbhJSDqD (ORCPT
+        by vger.kernel.org with ESMTP id S229692AbhJSDqF (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 18 Oct 2021 23:46:03 -0400
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19J2wvMO015245;
-        Tue, 19 Oct 2021 03:43:48 GMT
+        Mon, 18 Oct 2021 23:46:05 -0400
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19J32Rhc004569;
+        Tue, 19 Oct 2021 03:43:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=Zq1PD1e4FCwlXZoMPR+nLKMAkWRmz+TdEWFb+ef6plQ=;
- b=oRBXqc3/HwT/TxqSYZQ8MtUjH9UVG+wLUkGNZaWlHSjjY1rrKcT3j7KkJ8uMnTqBv9ZH
- jncmzQgHUu/19+cmUeEMKKDpa420KAQneE7LKN7eNqnyziPIHXnFCig6G3nWFPj9exKV
- TpTTLa3tuMC3oSQkyflEwmMt7+1sCSAeSJSTuB/H0rK55l9uxZSfWFEp+j/HEeXeOTqu
- dNmxzS2Ou4ljATKso2lsLfss+bU5ANfoL7F0TI+caEV8rECjlgh0QtIFEh4Lj+5J2P8u
- /ZfkEFaIiR+HSHfdW0Vug4ayxY43gwbMdY+U2Rpc1cG8arElhPkTHkBtQhSygLvHIcZ1 Cg== 
+ bh=9C+Cre8liTdptm7yIUvhie+B5csAwt91gqsC/5ram8E=;
+ b=jAGlALXLMMIzFawdu1tjwW+T1lyzY9wm06LVUB6nJzy7oeyt2lGfLsBeToxrTPZGBa6s
+ PUNHpPXrTB+90HTKVGHwuvl5NGztUZ1XrhnkzjBeWzsKBzZnJucmT+mbkQdPQDXovnmw
+ gn+7kdMDYi1tDd/8BKTtpKBNtNCyUYbb9+9pObw+2+1DCq91rXqwz3hhmYIAGy/yAxvM
+ ADVwIQqnZi3synaB2GYZ1iLSq1N7bcFcKoZqcMC97ikLtMNjd0qIHvxe57g4/W3iPagf
+ /Yp8rRZq0q+K8ej+TD+cSXXnMGef/KrNu8BZ42AVdXdZU6JyJA9cnLHPiGaIHUuW6WBZ uA== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3brnfhqskk-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3brnnnftte-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 Oct 2021 03:43:51 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19J3ZTrr077032;
+        Tue, 19 Oct 2021 03:43:48 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 3br8grmmu9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 19 Oct 2021 03:43:48 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19J3ZT88077083;
-        Tue, 19 Oct 2021 03:43:47 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3br8grmmtv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Oct 2021 03:43:47 +0000
 Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19J3hhHh101685;
-        Tue, 19 Oct 2021 03:43:47 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19J3hhHj101685;
+        Tue, 19 Oct 2021 03:43:48 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3020.oracle.com with ESMTP id 3br8grmmrp-5;
+        by userp3020.oracle.com with ESMTP id 3br8grmmrp-6;
         Tue, 19 Oct 2021 03:43:47 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        linux-scsi@vger.kernel.org
+To:     Zheyu Ma <zheyuma97@gmail.com>, jejb@linux.ibm.com,
+        njavali@marvell.com, GR-QLogic-Storage-Upstream@marvell.com
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        sathya.prakash@broadcom.com, thenzl@redhat.com
-Subject: Re: [PATCH RESEND] mpi3mr:Fix duplicate device entries when scan through sysfs
-Date:   Mon, 18 Oct 2021 23:43:41 -0400
-Message-Id: <163461411520.13664.5517769413519204966.b4-ty@oracle.com>
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: qla2xxx: Return -ENOMEM if kzalloc() fails
+Date:   Mon, 18 Oct 2021 23:43:42 -0400
+Message-Id: <163461411521.13664.874914944959947071.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211014055425.30719-1-sreekanth.reddy@broadcom.com>
-References: <20211014055425.30719-1-sreekanth.reddy@broadcom.com>
+In-Reply-To: <1634522181-31166-1-git-send-email-zheyuma97@gmail.com>
+References: <1634522181-31166-1-git-send-email-zheyuma97@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: axi3l8bIGFimL7SlAXeDItF00d4bYDgh
-X-Proofpoint-GUID: axi3l8bIGFimL7SlAXeDItF00d4bYDgh
+X-Proofpoint-ORIG-GUID: clds8nxCnZTRmncAJHIQjcdBUtl2_J73
+X-Proofpoint-GUID: clds8nxCnZTRmncAJHIQjcdBUtl2_J73
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 14 Oct 2021 11:24:25 +0530, Sreekanth Reddy wrote:
+On Mon, 18 Oct 2021 01:56:21 +0000, Zheyu Ma wrote:
 
-> When the user scans the devices through 'scan' sysfs using below
-> command then the user will observe duplicate device entries
-> in lsscsi command output.
-> echo "- - -" > /sys/class/scsi_host/host0/scan
+> During the process of driver probing, probe function should return < 0
+> for failure, otherwise kernel will treat value > 0 as success.
 > 
-> Fix is to set the shost's max_channel to zero.
 > 
-> [...]
 
 Applied to 5.15/scsi-fixes, thanks!
 
-[1/1] mpi3mr:Fix duplicate device entries when scan through sysfs
-      https://git.kernel.org/mkp/scsi/c/97e6ea6d7806
+[1/1] scsi: qla2xxx: Return -ENOMEM if kzalloc() fails
+      https://git.kernel.org/mkp/scsi/c/06634d5b6e92
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
