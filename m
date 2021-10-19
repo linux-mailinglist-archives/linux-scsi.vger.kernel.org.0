@@ -2,86 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB653432C64
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Oct 2021 05:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023A3432C67
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Oct 2021 05:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbhJSDqG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Oct 2021 23:46:06 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:25490 "EHLO
+        id S232654AbhJSDqS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Oct 2021 23:46:18 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:40542 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232126AbhJSDqF (ORCPT
+        by vger.kernel.org with ESMTP id S229692AbhJSDqR (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 18 Oct 2021 23:46:05 -0400
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19J32c3n004576;
-        Tue, 19 Oct 2021 03:43:46 GMT
+        Mon, 18 Oct 2021 23:46:17 -0400
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19J349Re015244;
+        Tue, 19 Oct 2021 03:43:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=QNtqsw/iYvePm6QmzwvTX3bi//bhxeELnZhsV4gAUiI=;
- b=LHbcAtDRm9JEyBJMcVmiNJEKR6HxbH7vDzr/pMD9yb5dkmPwOJjsUJh7SElARzMk0o7s
- ByIyHDAiUGqhevYB+4N1zLpdyHG+3I5yJzsnlBrimX3uZxGyVMcTdtM1/E+6NNorS6oi
- lSR6iPWSpwlDC6iPLRn/oIR1X1stpVonfDqmMra1C70w+1a13EBLEeyQsGGNzZK7ZJG9
- nYWnjG0z6ZEBAUS3qrPgmDMtvAit+HS+8pTV262HXYG1x2Rbo+mmnUmS7PLnKPs9jzWL
- LjIhBpZuiGsNsJyEBfW5tHVcOk/h74bOMOejtNaaCXlPJPirJUZsXfMM6gPTD8RzMNi1 Gw== 
+ bh=KJiWubGMNyWOQmJE10qT2Q36ZJt5GUJhKqw9DNxgJQ4=;
+ b=ZB4zg4rdRs0Vcc+913MwHxrfk5sAq15IHJFAjX9nyws0eep02QnntyJV5phXiBuX1z03
+ a7I+hsyjPiAUCvHuAt3R+/FR1nITZy4MOHjyeWBH+Is7f7ZfUJvMDkcGGShg0Otl+4KL
+ GMlZ9NCRo2cNyLeO+GpU4T44xEAEiMdBc4pPNjBi4DkP9XSWxM4gxT7qhzlk7JRBfmEk
+ 5BifvxWs+63m9FqRc3de5xhrTL5pTIueC4zEYaiJLP3vCADTW8GyewZ6NRK9cWdt6eC/
+ SRs8hGvV9iyHDMCHF9ZDrots3VKAjZMVQEUI61FNHo6xISYVn0K4/o8ygViwpRnYy2sQ NA== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3brnnnftt8-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3brnfhqskj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Oct 2021 03:43:46 +0000
+        Tue, 19 Oct 2021 03:43:48 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19J3ZUfh077135;
-        Tue, 19 Oct 2021 03:43:45 GMT
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19J3ZT3a077053;
+        Tue, 19 Oct 2021 03:43:47 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3br8grmmt2-1
+        by userp3020.oracle.com with ESMTP id 3br8grmmtg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Oct 2021 03:43:45 +0000
+        Tue, 19 Oct 2021 03:43:47 +0000
 Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19J3hhHd101685;
-        Tue, 19 Oct 2021 03:43:45 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19J3hhHf101685;
+        Tue, 19 Oct 2021 03:43:46 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3020.oracle.com with ESMTP id 3br8grmmrp-3;
-        Tue, 19 Oct 2021 03:43:45 +0000
+        by userp3020.oracle.com with ESMTP id 3br8grmmrp-4;
+        Tue, 19 Oct 2021 03:43:46 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Joy Gu <jgu@purestorage.com>, linux-scsi@vger.kernel.org
+To:     Martin Kepplinger <martink@posteo.de>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        bvanassche@acm.org, GR-QLogic-Storage-Upstream@marvell.com,
-        njavali@marvell.com
-Subject: Re: [PATCH 0/2] scsi: qla2xxx: Fix bugs found by CodeSonar
-Date:   Mon, 18 Oct 2021 23:43:39 -0400
-Message-Id: <163461411521.13664.9885886658227492668.b4-ty@oracle.com>
+        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wsd_upstream@mediatek.com,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] scsi: sd: fix crashes in sd_resume_runtime
+Date:   Mon, 18 Oct 2021 23:43:40 -0400
+Message-Id: <163461411521.13664.305092538440750987.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211012191834.90306-1-jgu@purestorage.com>
-References: <20211012191834.90306-1-jgu@purestorage.com>
+In-Reply-To: <20211015074654.19615-1-miles.chen@mediatek.com>
+References: <20211015074654.19615-1-miles.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: yeVqjjwOVd1Hm-37Xq1ODgdO5oGef9C-
-X-Proofpoint-GUID: yeVqjjwOVd1Hm-37Xq1ODgdO5oGef9C-
+X-Proofpoint-ORIG-GUID: gKb9G-3VbOOMGIm4I_ziIPWhbKimffoM
+X-Proofpoint-GUID: gKb9G-3VbOOMGIm4I_ziIPWhbKimffoM
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 12 Oct 2021 12:18:32 -0700, Joy Gu wrote:
+On Fri, 15 Oct 2021 15:46:54 +0800, Miles Chen wrote:
 
-> Joy Gu (2):
->   scsi: qla2xxx: Fix a memory leak in an error path of
->     qla2x00_process_els()
->   scsi: qla2xxx: Initialize uninitialized variables
+> After merging commit ed4246d37f3b ("scsi: sd: REQUEST SENSE for
+> BLIST_IGN_MEDIA_CHANGE devices in runtime_resume()"), I hit the
+> following crash on my device.
 > 
-> drivers/scsi/qla2xxx/qla_attr.c | 2 +-
->  drivers/scsi/qla2xxx/qla_bsg.c  | 2 +-
->  drivers/scsi/qla2xxx/qla_init.c | 6 +++---
->  drivers/scsi/qla2xxx/qla_mbx.c  | 6 +++---
->  drivers/scsi/qla2xxx/qla_nx2.c  | 2 +-
->  drivers/scsi/qla2xxx/qla_os.c   | 8 ++++----
->  6 files changed, 13 insertions(+), 13 deletions(-)
+> static int sd_resume_runtime(struct device *dev)
+> {
+>         struct scsi_disk *sdkp = dev_get_drvdata(dev);
+>         struct scsi_device *sdp = sdkp->device; // sdkp == NULL and crash
 > 
 > [...]
 
 Applied to 5.15/scsi-fixes, thanks!
 
-[1/2] scsi: qla2xxx: Fix a memory leak in an error path of qla2x00_process_els()
-      https://git.kernel.org/mkp/scsi/c/7fb223d0ad80
+[1/1] scsi: sd: fix crashes in sd_resume_runtime
+      https://git.kernel.org/mkp/scsi/c/85374b639229
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
