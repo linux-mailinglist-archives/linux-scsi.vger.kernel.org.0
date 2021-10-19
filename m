@@ -2,97 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 613014332A6
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Oct 2021 11:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4620B43337A
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Oct 2021 12:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235138AbhJSJlh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Oct 2021 05:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235121AbhJSJlZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Oct 2021 05:41:25 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7B8C061777
-        for <linux-scsi@vger.kernel.org>; Tue, 19 Oct 2021 02:39:02 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id c28so17671709qtv.11
-        for <linux-scsi@vger.kernel.org>; Tue, 19 Oct 2021 02:39:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=h7Ka/8DlpkXEXF23rPgOfJJ3SyquA2FhD5HYDsybiG4=;
-        b=TOvN/3L74NxJ8jkZLAwc1HWcAigE5PqgL50bgmFqgfF5N3Ni/F/hFF6HKKLKTN31yN
-         HevaAXYbPfypt8hhKvSPyehT5ALdXqczNk+5xUwtC+i5sgHXh2uIQwAecZjfCaWU8ix6
-         IP3iNNDeKzM9Rarn67S7Y6Q5meavaw7Mpk+sez5Jm9gTXVkS2K7rH0HxN0wGBD1vTEZW
-         SlZ7Ohjm5TDffwxVe9psHKkZrw9F8ewS3UJdvRp48BugnVC9N6o6tGt7kOuD9dBL9WOI
-         l1dbXlU20FuuDCR1G9eGV6dpPzPq/obtSd+vSUmjw4dvgQ3M4KndmuUgzevCd5/KLP2j
-         AvJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=h7Ka/8DlpkXEXF23rPgOfJJ3SyquA2FhD5HYDsybiG4=;
-        b=iI7l5/yBk71IfGAv1uiyETm2s/AQg7N71O5UawJ4dnOBizgRflkXwP4FkIQlhE8gGU
-         av+jfcl/wmEfqwgiLMLCgXy28uBgWJC6nx+oFce+bVCSz6zl7ZBz3uKB1eeRbknVubz5
-         lCBXMYVlqJZqhFEYqZ5yoc8gDtA/ZVvba5WfF8QmO9nntpfUnkfW+powsEWOhYmn8KDE
-         9vs+x8PMUemw1Wt7SsQrIDD08/rSAf5yp/v9KiExTwwh5jrjP8xSqu6MOspT7NBRtnEu
-         KWhi58/J+mgjAJ2fsyqvgp4v9s8a3PW+mV9X6pZFCNhW+I1mqCoNWp9Xn6RdGGerSh5z
-         vL0w==
-X-Gm-Message-State: AOAM532PWybVf9tlrgj/JmZhPGS6fk9QZHtVs4lsjlcGBE1r1qhNU8lh
-        azx0NcPxASfX8VjYojO7IELrJiqjmqNO+KV7JfjHoQ2QYcY=
-X-Google-Smtp-Source: ABdhPJzMH7/Viv+gmOFi/wRxRbcc549EbhNxq1WBmFuuCl5Y1sIaNw3hPc5P9A8SHm6QnP1HNGNAvecvirmJS/oiL6w=
-X-Received: by 2002:a02:6f5d:: with SMTP id b29mr3319085jae.113.1634636331013;
- Tue, 19 Oct 2021 02:38:51 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a92:c7c6:0:0:0:0:0 with HTTP; Tue, 19 Oct 2021 02:38:50
- -0700 (PDT)
-Reply-To: megaritalouisdrayfu199@yahoo.com
-From:   "Mrs. Margarita Louis-Dreyfus." <anniewei112@gmail.com>
-Date:   Mon, 18 Oct 2021 21:38:50 -1200
-Message-ID: <CAGT4pMkzKn8mfeY05OAG04CCAxodKEVDUk46D=O7cfK8+n1=tA@mail.gmail.com>
-Subject: Charitable funds to help the less privilege!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S235204AbhJSK3m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Oct 2021 06:29:42 -0400
+Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:48426 "EHLO
+        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235085AbhJSK3m (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 19 Oct 2021 06:29:42 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0UsueaBN_1634639242;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UsueaBN_1634639242)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 19 Oct 2021 18:27:28 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     sathya.prakash@broadcom.com
+Cc:     sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chongjiapeng <jiapeng.chong@linux.alibaba.com>
+Subject: [PATCH] scsi: mpt3sas: make mpt3sas_dev_attrs static
+Date:   Tue, 19 Oct 2021 18:27:19 +0800
+Message-Id: <1634639239-2892-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---=20
-Hello,
+From: chongjiapeng <jiapeng.chong@linux.alibaba.com>
 
-I am sorry to encroach into your privacy in this manner, my name
-Margarita Louis-Dreyfus , I find it pleasurable to offer you my
-partnership in business, i only pray at this time that your email
-address is still valid. I want to solicit your attention to receive
-money on my behalf for humanitarian project to help the less
-priviledge.
+This symbol is not used outside of mpt3sas_ctl.c, so marks it static.
 
-The purpose of my contacting you is because my status would not permit
-me to do this alone. Given my current state of health, I have decided
-to donate Ninety -Eight Million United State Dollars to establish a
-foundation with your help to reach out to the less privilege, orphans,
-sick and homeless people in your country who will receive their
-blessings as i promised my God before i leave this earth.
+Fixes the following sparse warning:
 
-I got your contact through my personal search, you were revealed as
-being quite astute in private entrepreneurship, and i have no doubt
-that you can handle this huge financial transaction. Please contact my
-executor for more information:
+drivers/scsi/mpt3sas/mpt3sas_ctl.c:3988:18: warning: symbol
+'mpt3sas_dev_attrs' was not declared. Should it be static?
 
-Mr. Ford Spencer(Attorney at Law).
-For: Mrs. Margarita Louis-Dreyfus
-LEGAL DEPARTMENT LAWSON & ASSOCIATES
-(JUSTICE, FAIRPLAY & EQUITY)
-Email: fordspencer828@yahoo.com, fordspencereqs828@gmail.com
-Office: +1-970-414-1400
-+1-702-714-3422
-Mobile: +1 916 269 2733
-Fax: +1-970-414-1433
-=C2=AE Property of Steven C Spence PA.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Fixes: 1bb3ca27d2ca ("scsi: mpt3sas: Switch to attribute groups")
+Signed-off-by: chongjiapeng <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/scsi/mpt3sas/mpt3sas_ctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Your earliest response to this letter will be appreciated.
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+index 0aabc9761be1..05b6c6a073c3 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+@@ -3985,7 +3985,7 @@ sas_ncq_prio_enable_store(struct device *dev,
+ }
+ static DEVICE_ATTR_RW(sas_ncq_prio_enable);
+ 
+-struct attribute *mpt3sas_dev_attrs[] = {
++static struct attribute *mpt3sas_dev_attrs[] = {
+ 	&dev_attr_sas_address.attr,
+ 	&dev_attr_sas_device_handle.attr,
+ 	&dev_attr_sas_ncq_prio_supported.attr,
+-- 
+2.19.1.6.gb485710b
 
-Kind Regards,
-
-Mrs. Margarita Louis-Dreyfus.
