@@ -2,162 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF884352DF
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Oct 2021 20:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABF3435514
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Oct 2021 23:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbhJTSpw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Oct 2021 14:45:52 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:36748 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230487AbhJTSpv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 20 Oct 2021 14:45:51 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id BE7FE42B33;
-        Wed, 20 Oct 2021 18:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-type:content-type:content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:date:subject
-        :subject:from:from:received:received:received; s=mta-01; t=
-        1634755414; x=1636569815; bh=EQ/DfBxRZzoAavKJuG89Mkbv+nuEzCs37r8
-        97dMJ9VU=; b=BU3qJJ6q4hkUJTSWw24UnoD45blAgtHTjPcwZlBd8RO3b8ny5F7
-        Nd+m6+OEKvs5GPggLXgYgrvtZ/W9FJ+MJxezUdt3JKxuOBOgCpos/2+TOZBkzJ/t
-        QoOTNy4NnKINKrWlYQ6f8E0O/hmYcsLwgzcNyLu1GkBGeEzE1dMed7OM=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Bw5q7IXKruwV; Wed, 20 Oct 2021 21:43:34 +0300 (MSK)
-Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id BCF2042B34;
-        Wed, 20 Oct 2021 21:43:33 +0300 (MSK)
-Received: from yadro.com (10.199.9.171) by T-EXCH-04.corp.yadro.com
- (172.17.100.104) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Wed, 20
- Oct 2021 21:43:32 +0300
-From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
-To:     Martin Petersen <martin.petersen@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        <target-devel@vger.kernel.org>
-CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
-        Konstantin Shelekhin <k.shelekhin@yadro.com>,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [PATCH 2/2] scsi: target: iblock: Report space allocation errors
-Date:   Wed, 20 Oct 2021 21:43:19 +0300
-Message-ID: <20211020184319.588002-3-k.shelekhin@yadro.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211020184319.588002-1-k.shelekhin@yadro.com>
-References: <20211020184319.588002-1-k.shelekhin@yadro.com>
+        id S230288AbhJTVQj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Oct 2021 17:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229842AbhJTVQj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Oct 2021 17:16:39 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8682BC06161C
+        for <linux-scsi@vger.kernel.org>; Wed, 20 Oct 2021 14:14:24 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id a15-20020a17090a688f00b001a132a1679bso1533511pjd.0
+        for <linux-scsi@vger.kernel.org>; Wed, 20 Oct 2021 14:14:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n+Se+NjRWYgMKDNizSBH7tF4p1VanbZSJClwZPymAG8=;
+        b=nRkqN66lMXX0SzEBjqjbGHfQy5HVaCaLa5HUL2tkWLvbSvIx83MMjy4/28nZWw35nm
+         H30E3ezCJqSrgKlbgq+JlSgX53HcxdSOYzpWPLwhyZBTk4yc4GaioTE9vXz333saoZDe
+         X73s+RIYXFbNQ51hY0uJQt/Fp7MY6hzHCmvD0TRxNvhe/7y/7Z6m4Ku0ZLI+ZUi0jXc1
+         so9zO1HXJ5mDeTsWl2Q10rxckcsAas+km/aQpEX3DISWZ4qf4tW4TY5tgMYisiiEczmZ
+         b7f1Tk4qTUXMdRm84ZO5HX//SesHppHJeUxLXdsNTuf7mu0pyiHzD5VUIiPU+NE3X/dd
+         x3+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n+Se+NjRWYgMKDNizSBH7tF4p1VanbZSJClwZPymAG8=;
+        b=4sWSWfaL4B1aKI6WPGhy3rqEoSVL5EQPBQfGFUAWnio5erjzyq/iVJg3wfAh6DcKZX
+         hdNZa7bAHvkn96rAuPySzuh4PqXnmidHyTdNjDrxbSv9vXxNAZKMxvF0WhNb92smpnjz
+         on07CR/3/GIYVOLx3fRwhtuSZ/4PXijUBKSzXAd0cy8lqfL/LDDPbuk23uVV0FZePSDb
+         fqwxxZPLJ6lhkSvyhPNE9Q7lbdcxQQBpouiX4u/s9g+udcuMUmzOe0aHnu84v7bB1Hla
+         ElGWbVipN6f32Pp2luw3qZDnaswWPdTduay3ips7P2J1/Y43zMOyPKYiuBBLTWDRLetn
+         pBRQ==
+X-Gm-Message-State: AOAM532ln/5Z4fJz6pHJwQg6j3FKLk+s4FOi9SyPHTerpT5W2MaEukEF
+        VpxlNrUxIVhB3M0GxGZpPn0MhKECpTA=
+X-Google-Smtp-Source: ABdhPJwI+ZwvLagyqgg4YrzOsT7mkm6SpV/kFzojdOtOhkDW5X8oBa56HyE8fqITsHy0On3ybPmj8Q==
+X-Received: by 2002:a17:90a:7d11:: with SMTP id g17mr1470468pjl.19.1634764464020;
+        Wed, 20 Oct 2021 14:14:24 -0700 (PDT)
+Received: from mail-lvn-it-01.broadcom.com ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id pi9sm3700689pjb.31.2021.10.20.14.14.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Oct 2021 14:14:23 -0700 (PDT)
+From:   James Smart <jsmart2021@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     James Smart <jsmart2021@gmail.com>
+Subject: [PATCH 0/8] lpfc: Update lpfc to revision 14.0.0.3
+Date:   Wed, 20 Oct 2021 14:14:09 -0700
+Message-Id: <20211020211417.88754-1-jsmart2021@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.199.9.171]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-04.corp.yadro.com (172.17.100.104)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When a thin provisioned block device lacks free LBA it ends bio requests
-with BLK_STS_NOSPC. Currently iblock treats bio status as a boolean and
-terminates failed requests with LOGICAL UNIT COMMUNICATION FAILURE if
-the status is non-zero. Thus, initiators see space allocation errors as
-I/O errors.
+Update lpfc to revision 14.0.0.3
 
-This commit modifies the iblock_req structure to store the status of the
-first failed bio instead of the total number of failed bios. The status
-is then used to set the specific sense reason.
+This patch set contains several bug fixes.
 
-For BLK_STS_NOSPC the sense reason is set to TCM_SPACE_ALLOCATION_FAILED
-as per SBC-3 4.7.3.6.
+The patches were cut against Martin's 5.16/scsi-queue tree
 
-On Linux initiators:
 
-old:
+James Smart (8):
+  lpfc: Revert LOG_TRACE_EVENT back to LOG_INIT prior to
+    driver_resource_setup
+  lpfc: Wait for successful restart of SLI3 adapter during host sg_reset
+  lpfc: Correct sysfs reporting of loop support after SFP status change
+  lpfc: Fix use-after-free in lpfc_unreg_rpi() routine
+  lpfc: Allow PLOGI retry if previous PLOGI was aborted
+  lpfc: Fix link down processing to address NULL pointer dereference
+  lpfc: Allow fabric node recovery if recovery is in progress before
+    devloss
+  lpfc: Update lpfc version to 14.0.0.3
 
-  $ dd if=/dev/zero of=/dev/sda oflag=direct bs=4k count=1
-  dd: error writing '/dev/sda': I/O error
+ drivers/scsi/lpfc/lpfc_crtn.h    |   3 +
+ drivers/scsi/lpfc/lpfc_disc.h    |  12 +++-
+ drivers/scsi/lpfc/lpfc_els.c     |  20 +++++-
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 112 ++++++++++++++++++++++++++++++-
+ drivers/scsi/lpfc/lpfc_init.c    |  68 +++++++++++++++++--
+ drivers/scsi/lpfc/lpfc_scsi.c    |  19 ++++--
+ drivers/scsi/lpfc/lpfc_sli.c     |  43 ++++--------
+ drivers/scsi/lpfc/lpfc_version.h |   2 +-
+ 8 files changed, 229 insertions(+), 50 deletions(-)
 
-new:
-
-  $ dd if=/dev/zero of=/dev/sda oflag=direct bs=4k count=1
-  dd: error writing '/dev/sda': No space left on device
-
-Signed-off-by: Konstantin Shelekhin <k.shelekhin@yadro.com>
-Reviewed-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
----
- drivers/target/target_core_iblock.c | 24 ++++++++++++++++++++----
- drivers/target/target_core_iblock.h |  2 +-
- 2 files changed, 21 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
-index 4069a1edcfa3..b4c12584906b 100644
---- a/drivers/target/target_core_iblock.c
-+++ b/drivers/target/target_core_iblock.c
-@@ -305,20 +305,35 @@ static unsigned long long iblock_emulate_read_cap_with_block_size(
- 	return blocks_long;
- }
- 
-+static sense_reason_t iblock_blk_status_to_reason(blk_status_t status)
-+{
-+       switch (status) {
-+       case BLK_STS_OK:
-+               return TCM_NO_SENSE;
-+       case BLK_STS_NOSPC:
-+               return TCM_SPACE_ALLOCATION_FAILED;
-+       default:
-+               return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
-+       }
-+}
-+
- static void iblock_complete_cmd(struct se_cmd *cmd)
- {
- 	struct iblock_req *ibr = cmd->priv;
- 	u8 status;
-+	sense_reason_t reason;
- 
- 	if (!refcount_dec_and_test(&ibr->pending))
- 		return;
- 
--	if (atomic_read(&ibr->ib_bio_err_cnt))
-+	reason = iblock_blk_status_to_reason(atomic_read(&ibr->status));
-+
-+	if (reason != TCM_NO_SENSE)
- 		status = SAM_STAT_CHECK_CONDITION;
- 	else
- 		status = SAM_STAT_GOOD;
- 
--	target_complete_cmd(cmd, status);
-+	target_complete_cmd_with_sense(cmd, status, reason);
- 	kfree(ibr);
- }
- 
-@@ -330,9 +345,10 @@ static void iblock_bio_done(struct bio *bio)
- 	if (bio->bi_status) {
- 		pr_err("bio error: %p,  err: %d\n", bio, bio->bi_status);
- 		/*
--		 * Bump the ib_bio_err_cnt and release bio.
-+		 * Set the error status of the iblock request to the error
-+		 * status of the first failed bio.
- 		 */
--		atomic_inc(&ibr->ib_bio_err_cnt);
-+		atomic_cmpxchg(&ibr->status, BLK_STS_OK, bio->bi_status);
- 		smp_mb__after_atomic();
- 	}
- 
-diff --git a/drivers/target/target_core_iblock.h b/drivers/target/target_core_iblock.h
-index 8c55375d2f75..fda2e41b2e74 100644
---- a/drivers/target/target_core_iblock.h
-+++ b/drivers/target/target_core_iblock.h
-@@ -13,7 +13,7 @@
- 
- struct iblock_req {
- 	refcount_t pending;
--	atomic_t ib_bio_err_cnt;
-+	atomic_t status;
- } ____cacheline_aligned;
- 
- #define IBDF_HAS_UDEV_PATH		0x01
 -- 
-2.33.0
+2.26.2
 
