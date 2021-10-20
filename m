@@ -2,89 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9826E43551B
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Oct 2021 23:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A1743555E
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Oct 2021 23:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbhJTVQx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Oct 2021 17:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbhJTVQp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Oct 2021 17:16:45 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CE8C061753
-        for <linux-scsi@vger.kernel.org>; Wed, 20 Oct 2021 14:14:30 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id nn3-20020a17090b38c300b001a03bb6c4ebso3366187pjb.1
-        for <linux-scsi@vger.kernel.org>; Wed, 20 Oct 2021 14:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0260eTtRLt2mt0F000DRQ8xDB09XLz0Zy3FRehQG09s=;
-        b=e+4a53C2/HwJYGIOpYoq7uW8SEpngZZAbUe9zPNmogZhHSn1ZcMM9BJc8zu3uf3nnW
-         KpSqRpqAe6YK4ndb7J5rqyG0xE10x0VOqpvvr6W9OkeRVPmlVvXg0H/2byiq4JViw6Jp
-         B3vzhcfkpU3wXN5nlRVshfIjIqyddxJzJYhAH6FaqqXSJOxrJNQFcsX628n0wydlZQfE
-         lThFUHc2mn6/Z8529qyFR+Cmj322tukUg8fQ35nVzcF9/BiqKjvubm8PAth3e5eenOcB
-         tIX1oUE75hkzHeM8hAnuCZwFYQKrc5kIaBcNJ+8tUEIex356rfsL6Wq5bgkboNArOaYP
-         bE7Q==
+        id S230420AbhJTVmt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Oct 2021 17:42:49 -0400
+Received: from mail-pl1-f169.google.com ([209.85.214.169]:36693 "EHLO
+        mail-pl1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229695AbhJTVmr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Oct 2021 17:42:47 -0400
+Received: by mail-pl1-f169.google.com with SMTP id f21so17077828plb.3
+        for <linux-scsi@vger.kernel.org>; Wed, 20 Oct 2021 14:40:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0260eTtRLt2mt0F000DRQ8xDB09XLz0Zy3FRehQG09s=;
-        b=ls/mBDF4SUFdJzJb21nCIhepj5MD3GDCb85DUrYfoThkhbsv7g+tXpqVUBb6KJqDlV
-         XHc+KseAdiBOUHJtHADvCzCTyQoGGm+eG/e/l9Zkld4oLVhcnADHRYz25+ekTSocFaYr
-         kV996CaC/efPRP4ZCDGDRXwjmOjR+jjdn8MzTT/J2IbKrQDF9WQpIsBpT3LZF6wOm9cC
-         OY0z36Zc09J7xmYDTfdsb69nuHb8PhfdJoS7Qx3F4Tg2BQzTX4QLE7/SLYBpFxw6eUhu
-         UcFVdjn38qh3PA2lXBTszAPR7OsBAL43SJcSCSOgf1lF5+hWJ+7HjJZVryNxRhyuFBdG
-         8yNQ==
-X-Gm-Message-State: AOAM532H192CD3Becm6/X0A2ecUZ9SdH4J/9E1qnIa7ge+PZBHLMCehm
-        iAFprklvkJ+W9hVDoFRAfrJB1O747yU=
-X-Google-Smtp-Source: ABdhPJz7PD/kRCggKSFpvx8n/N5xYr3bX8+Z+M0PGPMj7/cqJwwW6nKV3kRvDnbyxoTyGiiRp8Gy/g==
-X-Received: by 2002:a17:902:ab17:b0:13e:b2e0:58b with SMTP id ik23-20020a170902ab1700b0013eb2e0058bmr1371920plb.9.1634764469732;
-        Wed, 20 Oct 2021 14:14:29 -0700 (PDT)
-Received: from mail-lvn-it-01.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id pi9sm3700689pjb.31.2021.10.20.14.14.29
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZUQWfjykAY3JQ8y9CvyOa/4SVMWOHiFCRctFJWrLTWM=;
+        b=GQmFNVMibVhGFGLr1f/Yl50AuMPHmFA2ZyqY7syz4wy/gBnPyGwxD9MgbFEPYPfduQ
+         iSDZk+vM5uHG/BRvdABUaFWHQJDCPBQH5OtUwLbZW+PUrM6cE8B7SASWbyfiZU+DxAHd
+         W84YcIsi76bDGUiRuH3vPDiggcua0qIvKzqq64S6bEFL3Gc2nWCqfz+ThHo9SkmUte2r
+         m33D6BnKEqsoj0+nms6BFTZOfncwkWRkebsQBcNkmGKfCQykmgpnnEZbqcDOEjmZh3Zn
+         lvYeXQ10QW7twyUKS+HL6jmx6yebB6hBvpshXYRfj2TrPav5a70bQ3Fb/VsXU7fBcAvi
+         Mv1A==
+X-Gm-Message-State: AOAM532fAe5c375np/HhgUMRA09Qp+H33NlIPF6Z42sNXndR3J2vvW9n
+        FbG7Oytd9SMbfipWHJmHytDZDQYR36E=
+X-Google-Smtp-Source: ABdhPJzUt4coDFs3hiZxueWYA8gBShBa6EfHYnVqREwxZDxmnoEvjg+EuflN143JKWW4QJhpYiICRQ==
+X-Received: by 2002:a17:90a:49:: with SMTP id 9mr1794974pjb.80.1634766032710;
+        Wed, 20 Oct 2021 14:40:32 -0700 (PDT)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:200d:62ea:db33:9047])
+        by smtp.gmail.com with ESMTPSA id 21sm6707694pjg.57.2021.10.20.14.40.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Oct 2021 14:14:29 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 8/8] lpfc: Update lpfc version to 14.0.0.3
-Date:   Wed, 20 Oct 2021 14:14:17 -0700
-Message-Id: <20211020211417.88754-9-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20211020211417.88754-1-jsmart2021@gmail.com>
-References: <20211020211417.88754-1-jsmart2021@gmail.com>
+        Wed, 20 Oct 2021 14:40:31 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v2 00/10] UFS patches for kernel v5.16
+Date:   Wed, 20 Oct 2021 14:40:14 -0700
+Message-Id: <20211020214024.2007615-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update lpfc version to 14.0.0.3
+Hi Martin,
 
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
----
- drivers/scsi/lpfc/lpfc_version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch series includes the UFS driver kernel patches I would like to see
+included kernel v5.16. Please consider these patches for kernel v5.16.
 
-diff --git a/drivers/scsi/lpfc/lpfc_version.h b/drivers/scsi/lpfc/lpfc_version.h
-index dec71775f677..5a4d3b24fbce 100644
---- a/drivers/scsi/lpfc/lpfc_version.h
-+++ b/drivers/scsi/lpfc/lpfc_version.h
-@@ -20,7 +20,7 @@
-  * included with this package.                                     *
-  *******************************************************************/
- 
--#define LPFC_DRIVER_VERSION "14.0.0.2"
-+#define LPFC_DRIVER_VERSION "14.0.0.3"
- #define LPFC_DRIVER_NAME		"lpfc"
- 
- /* Used for SLI 2/3 */
--- 
-2.26.2
+Thank you,
+
+Bart.
+
+Changes compared to v1:
+- Converted the sysfs attribute for triggering the error handler into two
+  debugfs attributes.
+- Use ufshcd_schedule_eh_work(hba) instead of scsi_schedule_eh(hba->host) to
+  trigger the error handler.
+- Added three patches that implement a small performance optimization.
+
+Bart Van Assche (10):
+  scsi: ufs: Revert "Retry aborted SCSI commands instead of completing
+    these successfully"
+  scsi: ufs: Improve source code comments
+  scsi: ufs: Improve static type checking
+  scsi: ufs: Log error handler activity
+  scsi: ufs: Export ufshcd_schedule_eh_work()
+  scsi: ufs: Make it easier to add new debugfs attributes
+  scsi: ufs: Add debugfs attributes for triggering the UFS EH
+  scsi: ufs: Remove three superfluous casts
+  scsi: ufs: Add a compile-time structure size check
+  scsi: ufs: Micro-optimize ufshcd_map_sg()
+
+ drivers/scsi/ufs/ufs-debugfs.c |  98 ++++++++++++++++++++++++++++++-
+ drivers/scsi/ufs/ufshcd.c      | 102 +++++++++++++++++++++------------
+ drivers/scsi/ufs/ufshcd.h      |   1 +
+ drivers/scsi/ufs/ufshci.h      |  15 ++---
+ 4 files changed, 168 insertions(+), 48 deletions(-)
 
