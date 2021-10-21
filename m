@@ -2,188 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E00435A01
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Oct 2021 06:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74277435A9A
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Oct 2021 08:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbhJUE36 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Oct 2021 00:29:58 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:23178 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229452AbhJUE35 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 21 Oct 2021 00:29:57 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19KLUUPZ008628;
-        Wed, 20 Oct 2021 21:27:39 -0700
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-0016f401.pphosted.com with ESMTP id 3btu389jhp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Oct 2021 21:27:38 -0700
-Received: from m0045849.ppops.net (m0045849.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19L4LwmJ011850;
-        Wed, 20 Oct 2021 21:27:38 -0700
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2170.outbound.protection.outlook.com [104.47.55.170])
-        by mx0a-0016f401.pphosted.com with ESMTP id 3btu389jhk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 20 Oct 2021 21:27:38 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PH1W8djYFPMZrdntW5t6RV4DREogqW3Xii2QchyC7tTey9wpUzK5dZnZQMXARuHij9qjUIzMIncXb04c0LcKrz7wJJFpwgt7MYFcJll8mSfQe9RVEYumlmbxqD86rIzXA/veI2Vu1fnNgAOikral0ELziHoDMGpPqWdM8nLXmGrDIvN3MBo+pBxpqeLxlPi7nM+4IeJX+9ekmxU5ECEqBfUiN+4UIEYDgLNzy8O8afb0iGkmKEtO3tbyN5eOBs28fQJhmnY4u77DukZ0V5GxFba3epSaKTQjFGC7ofuJqsL1x+INxNHd10YeMO76xaT8390XmDPXKoD6BtYxQ5K33A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6z698OAcAk6uS76r1Va7eFcrgC3ISL2KW1oykeUW2fU=;
- b=Aw6dpwovYB1fQQN3h0djR4aqa9NmRsLWzwskY0F0SU5HYw0o0qDlQ1ni0K3iskazuGLOHg9BcPX5WMTFWhMG7pcm79a9KVFzZ3LE37m+Iqk80ZLdFGCjkYtFTFTeTP4qFyz28QDxVzJwdrXP+64xpKpTZ6+254AzC8wNoSMwk+5qPYCsidYmrjl6O/tGlK21+4x0YibUsnTyD1uZk86L070LsxxwrN4ubKIgg72RhADFG/CRRKti2tY2GE26lEpEjDztaP391DAi7yh/ZGB7Y5YORYIm/z8ZUAtCDbif+8xu4PHKOGryBu6Zqa42KcBALRobxxJwlVeVx+igQfFW9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6z698OAcAk6uS76r1Va7eFcrgC3ISL2KW1oykeUW2fU=;
- b=hkMhe4edLaK475781+1t6+RHQXjuk55B3YtwRfY8PH4EbdHHtUYgIueWQJrBS012T2ctGt1eOWuN9RKdEOqY0ygLIWBI9i2EbS3WAzn9CtD+9r1EaSdga9ASq9wjBDzyM8rdRSFuTR8mPZuLoozLbQHF8KKtUelSJzwTgZB2094=
-Received: from DM6PR18MB3034.namprd18.prod.outlook.com (2603:10b6:5:18c::32)
- by DM5PR18MB2135.namprd18.prod.outlook.com (2603:10b6:4:b8::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.16; Thu, 21 Oct
- 2021 04:27:36 +0000
-Received: from DM6PR18MB3034.namprd18.prod.outlook.com
- ([fe80::75c2:4fd:a07e:fe18]) by DM6PR18MB3034.namprd18.prod.outlook.com
- ([fe80::75c2:4fd:a07e:fe18%4]) with mapi id 15.20.4608.018; Thu, 21 Oct 2021
- 04:27:36 +0000
-From:   Saurav Kashyap <skashyap@marvell.com>
-To:     Zheyu Ma <zheyuma97@gmail.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        Javed Hasan <jhasan@marvell.com>,
-        GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] [PATCH] scsi: qedf: Fix return values of the probe function
-Thread-Topic: [EXT] [PATCH] scsi: qedf: Fix return values of the probe
- function
-Thread-Index: AQHXxb9uuNMPn5nJGkKEM22Ji9UpcKvc3CLQ
-Date:   Thu, 21 Oct 2021 04:27:36 +0000
-Message-ID: <DM6PR18MB3034F4D2FF41DA6D60674E27D2BF9@DM6PR18MB3034.namprd18.prod.outlook.com>
-References: <1634740388-27238-1-git-send-email-zheyuma97@gmail.com>
-In-Reply-To: <1634740388-27238-1-git-send-email-zheyuma97@gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1bc427b5-9c7a-40f0-fa11-08d9944b1c21
-x-ms-traffictypediagnostic: DM5PR18MB2135:
-x-microsoft-antispam-prvs: <DM5PR18MB21350EBA2B23B92A565E393AD2BF9@DM5PR18MB2135.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OeA+7+CEcI8EvLW0K55YPcSRZ/FU2ISqUfmM14d8YTdF0+S3N7Yz+7NGcqd2FTTi2yJZmffL7z7UjaTOCJWTJiog5DfQCz0m53zbviS0b/SWLghAomyI9QOso8nOCbTBoMZs2Qwr3ywrMOyL0fczt/OozcnTdRQubRgU4h4iRVRk3CQu4acWv4azRhOJ0HQ++eaU9+Hy4gTjc5KmQcCeS2heD326E9hhYAtbdIrgxLst6QvT6fmn9rJnP4sUXmbzWTgepM/Y1nmJeWkOH11aXnULgUcfftOkqlQFZtuMBuloOxhWx2pECbhmYZlvjPvie3NLvfhMYdw9cP84SnYXJljRDrIcUpj1UasfoeBo57ZR647uSeU4pVnHAHGlEOzOZ1enTMRypG2UOU2wMVAnLpQbfJCjjoZvwHSDTv1yOafWA/eTl3gkQs+KrGp58tIIIlJXWDK1cAUEl+0OQzKO9Ec5U2puvDbcfYpL1716rfahDIhbtAfwFU0rhRQkYsVITCNtzcxSr7kOf6fGmhh92BZmCEZUUfrY59K1x949ts5j7i+oRafYsUx2XskOog2FiT5e/GRte9IGRiizLmo/SZ+7Cw68IImwCfwDa2L97S3dM2W09680J/ynB2ouKPThkA7GOLPB76YuP0TGrY/lQpo92ymNyS73Cag0MvOUqZhTQVoK3c10PO3TCf5NrLC3ySxwZsPjD14lDxkYyCvN2g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR18MB3034.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(83380400001)(186003)(66476007)(66946007)(9686003)(5660300002)(66446008)(38070700005)(6636002)(8676002)(2906002)(52536014)(55016002)(508600001)(86362001)(66556008)(76116006)(64756008)(7696005)(122000001)(38100700002)(316002)(8936002)(33656002)(54906003)(110136005)(53546011)(6506007)(4326008)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?T1g208ttCz2hSOae9d0n2d+t4x36lHqnFh+H7zU99Z9MKuZ1AvLLzcD/9z6W?=
- =?us-ascii?Q?UlStWs0tw/zFKSkHrsGNwW395sFXgSyyemmggjTWG6M/n+VgLDc/WDqHox12?=
- =?us-ascii?Q?Y/83VblC4eGYfMYAO0r5WvrqoLKLBaaV4qOhxZWbiV+6mSEyoxQPW/+5T4dI?=
- =?us-ascii?Q?wU8W9JYJcvvW/CyUVNXBFybGTzRY0iNPWAFtxVVgiQ6oDl9y2u7KQx0LPTMI?=
- =?us-ascii?Q?5i9UweAxSaCA2UQr5Vi7Xp1u0CUbCgWulNqMaYSMaIFigq3H4dbs8ON1KPRv?=
- =?us-ascii?Q?zGkYm4tcL7hFRLYOa9ddMvJqMYHZUbxrpTJhBQh7ykuzNNVT0zEJfUOxf9kg?=
- =?us-ascii?Q?+DyMfFaJoxZfqMEsY1/XDNenQtetVE2HZ7W+BL40t4YI5QEKJe267osGeANH?=
- =?us-ascii?Q?yN2CBpTw4ZMvOCtMo0maOI62hGFXp17VIhkd449eMHuJO+7cVU2rby4j5cH3?=
- =?us-ascii?Q?AkiIUpT/Yp9qsenJglsCTu2hKa/VFmzqhLS0nXTp594xxRTjDAaGuY5B8BUu?=
- =?us-ascii?Q?8BfXbzGYh/i99daTH7iNv1C/Ufe5Kf1PaH+YK+u2h8VaUN0qQkQNiNNgMOXU?=
- =?us-ascii?Q?nX4bw4QWa2m7iWx82YrxXrpJZcvxY8snG7mYXDyf9461FWCUZqoJNIciTEEW?=
- =?us-ascii?Q?NTxQRtfY/2E3sjiVX04Mvhknc54jSb04Jc8Kq0Jabjauh//DGU5f5TjjBG69?=
- =?us-ascii?Q?rD7/tAhsxBdY29HJwIxm95jk8CqYvYsmoVDp+RfioOb3KKST9L9ICLZhJoW4?=
- =?us-ascii?Q?SA7CjW/ieMc8wLblDCtOkXhGITv03H/Ay4bKk+pqYk7pGKWl1VIpFxD66U1e?=
- =?us-ascii?Q?KJ6ezPzWV9m/poG3LfVZ6qCdFijRSKezd6jXa3Ox7izuSBcM+XPOrSzWmF+k?=
- =?us-ascii?Q?vrI5pLuOqnMIusNAlNjtcjJ1Zh+wkQmX8b3AkyQZ2I/hvcC4enfqfvVoWuoG?=
- =?us-ascii?Q?NI5CJkoPEnNZrGKeMjyZqKc6qgOqIGh4hkOTPTvCIeR5DWm9YXAdxK36UTHN?=
- =?us-ascii?Q?4a79MXXNPcsHWOrDxiks5ic51dXkqi68tWHkbFojdJfT2qRGtSC5tv3/ncG3?=
- =?us-ascii?Q?/QZ/A7JIvdxo3ucwCMYQVXRy1uGGrbjfEttHexLHgEgQxH+sPZabhFxc1ztb?=
- =?us-ascii?Q?nfvUb2muiAC+dPOHMMkKmcr292qHONxQwGcY7uhJ+m5OzXH7smXulCej16Cj?=
- =?us-ascii?Q?jm5UV5mcy5t2XwRDafeEWzKSWBTyVhiHK2UEKal7omK5Pv5o3DYsxZr76snB?=
- =?us-ascii?Q?XKI9LdrwXKPXqNU0G1BxwWD22R3Burm520jL/LPdijDCbgiEeqvr5faBR/Z+?=
- =?us-ascii?Q?TL9lt5rIwkSjVNRQcQ7NUKxu0OmGjB4R5C5HuWCPZ/MqJW2JHbG5qL6YKB2U?=
- =?us-ascii?Q?vI+XBkC0VbYPa3n1xjNBMid4pFzU?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S230515AbhJUGIe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Oct 2021 02:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229499AbhJUGIc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Oct 2021 02:08:32 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72883C06161C;
+        Wed, 20 Oct 2021 23:06:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=mwm/ZOmtYGRRyWr/2SOza/GvMW5RB48APrJrzM9W7CI=; b=OWyYVxMNFVphebNZQcMAwa3hX+
+        bwdjFj/SQ/c5MwarxVDeENQfnD6RsUhnAK69XEynDW8iJKXGwww5NVTOGQiKLBRxjvtZhEMjg6oyW
+        M5xPmsVrVFz0ij+NpGKzaJFso9ZOcNGKLnK3mJ6mf2cLuRPRiWQFNnz2U2E3d+K88a1mB6/a3Anga
+        dEuxOlEoJ7BWJM1ak8yPFrvXUKxmOPDXW4Hw7i983+pZwUl+XFv9MBX3fADLOH0COFaURz0fofOOn
+        oso0CKmGo5VPHRzWUjVwA23fyZb1mH05hWPwWWe8/BlgGMORVEcKt29ofcJAsZG7kWxR5tks5e27Z
+        w/5pZ97Q==;
+Received: from [2001:4bb8:180:8777:7df0:a8d8:40cc:3310] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mdRDO-006U4C-OJ; Thu, 21 Oct 2021 06:06:11 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     "J. Bruce Fields" <bfields@fieldses.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-nfs@vger.kernel.org
+Subject: remove QUEUE_FLAG_SCSI_PASSTHROUGH v3
+Date:   Thu, 21 Oct 2021 08:06:00 +0200
+Message-Id: <20211021060607.264371-1-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR18MB3034.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bc427b5-9c7a-40f0-fa11-08d9944b1c21
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2021 04:27:36.3963
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: skashyap@marvell.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR18MB2135
-X-Proofpoint-ORIG-GUID: cnqadCe0JVBzc68zw-Q42oGrYotIa6N8
-X-Proofpoint-GUID: 9NelQdZ98YTI_1mFFSQoS4gNJ17EcmDQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-21_01,2021-10-20_02,2020-04-07_01
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Zheyu,
-Thanks for the patch.
+Hi all,
 
-> -----Original Message-----
-> From: Zheyu Ma <zheyuma97@gmail.com>
-> Sent: Wednesday, October 20, 2021 8:03 PM
-> To: jejb@linux.ibm.com; martin.petersen@oracle.com; Saurav Kashyap
-> <skashyap@marvell.com>; Javed Hasan <jhasan@marvell.com>; GR-QLogic-
-> Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>
-> Cc: linux-scsi@vger.kernel.org; linux-kernel@vger.kernel.org; Zheyu Ma
-> <zheyuma97@gmail.com>
-> Subject: [EXT] [PATCH] scsi: qedf: Fix return values of the probe functio=
-n
->=20
-> External Email
->=20
-> ----------------------------------------------------------------------
-> qedf_set_fcoe_pf_param() propagates the return value to the probe
-> function __qedf_probe() and then hits local_pci_probe().
->=20
-> During the process of driver probing, the probe function should return < =
-0
-> for failure, otherwise, the kernel will treat value > 0 as success.
->=20
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> ---
->  drivers/scsi/qedf/qedf_main.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.=
-c
-> index 42d0d941dba5..52f2a52bea2c 100644
-> --- a/drivers/scsi/qedf/qedf_main.c
-> +++ b/drivers/scsi/qedf/qedf_main.c
-> @@ -3161,14 +3161,14 @@ static int qedf_set_fcoe_pf_param(struct qedf_ctx
-> *qedf)
->=20
->  	if (!qedf->p_cpuq) {
->  		QEDF_ERR(&(qedf->dbg_ctx), "dma_alloc_coherent failed.\n");
-> -		return 1;
-> +		return -ENOMEM;
->  	}
->=20
->  	rval =3D qedf_alloc_global_queues(qedf);
->  	if (rval) {
->  		QEDF_ERR(&(qedf->dbg_ctx), "Global queue allocation "
->  			  "failed.\n");
-> -		return 1;
-> +		return rval;
->  	}
->=20
->  	/* Calculate SQ PBL size in the same manner as in qedf_sq_alloc() */
-> --
-> 2.17.6
+this series removes the QUEUE_FLAG_SCSI_PASSTHROUGH and thus the last
+remaining SCSI passthrough concept from the block layer.
 
-Acked-by: Saurav Kashyap <skashyap@marvell.com>
+The changes to support pktcdvd are a bit ugly, but I can't think of
+anything better (except for removing the driver entirely).
+If we'd want to support packet writing today it would probably live
+entirely inside the sr driver.
 
-Thanks,
-~Saurav
+Changes since v2:
+ - s/blk_uniqueue_id/blk_unique_id/g
+
+Changes since v1:
+ - use an extra local variable in sd_get_unique_id to make sure we
+   always return the right length
+ - add an enum and a comment to better document ->get_unique_id
+ - spelling fixes
+
+Diffstat:
+ block/blk-core.c                   |    9 --
+ block/blk-mq-debugfs.c             |    1 
+ block/bsg-lib.c                    |   32 +++----
+ drivers/block/Kconfig              |    2 
+ drivers/block/pktcdvd.c            |    7 +
+ drivers/scsi/scsi_bsg.c            |    4 
+ drivers/scsi/scsi_error.c          |    2 
+ drivers/scsi/scsi_ioctl.c          |    4 
+ drivers/scsi/scsi_lib.c            |   27 ++++--
+ drivers/scsi/scsi_scan.c           |    1 
+ drivers/scsi/sd.c                  |   39 +++++++++
+ drivers/scsi/sg.c                  |    4 
+ drivers/scsi/sr.c                  |    2 
+ drivers/scsi/st.c                  |    2 
+ drivers/target/target_core_pscsi.c |    3 
+ fs/nfsd/Kconfig                    |    1 
+ fs/nfsd/blocklayout.c              |  158 +++++++++----------------------------
+ fs/nfsd/nfs4layouts.c              |    5 -
+ include/linux/blk-mq.h             |    5 -
+ include/linux/blkdev.h             |   14 ++-
+ include/scsi/scsi_cmnd.h           |    3 
+ 21 files changed, 148 insertions(+), 177 deletions(-)
