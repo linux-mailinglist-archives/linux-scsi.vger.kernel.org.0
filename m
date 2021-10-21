@@ -2,83 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2243F43590E
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Oct 2021 05:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B13B43591B
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Oct 2021 05:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbhJUDpd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Oct 2021 23:45:33 -0400
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:43870 "EHLO
+        id S231430AbhJUDpr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Oct 2021 23:45:47 -0400
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:46730 "EHLO
         mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230103AbhJUDpP (ORCPT
+        by vger.kernel.org with ESMTP id S230385AbhJUDpR (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 20 Oct 2021 23:45:15 -0400
+        Wed, 20 Oct 2021 23:45:17 -0400
 Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19L2C5nv019145;
-        Thu, 21 Oct 2021 03:42:58 GMT
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19L2DQr6019148;
+        Thu, 21 Oct 2021 03:42:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=/8YsToP6j1aQC1eqi7PX08taVbr2nxYHJARNqDEe5PQ=;
- b=P2lK6VXXcpxe8J6TH6EfF1XEQ1675ZE4z2Zg5ZxqkhTBPcwcFOl+RzYZfSd5fRDQZImN
- yLqCJ5uI9p+nbwIAwLM8KmxB4AxzEN7a0553B5kJA1ObGBrh1O9KcKhiML4IEUJdk/tM
- b9xxt6HZII07H7Jt4MBg0kOurPeQPqgS++p4V3rpiyiMZ4LACYKtcf/wJPhHeHNKXWKK
- 6PAJjJ77IMlnUIMIxa/5En1TpRNTYibwaj/CyX6bJeaQJTHO34R8KTp6+w4n29x///d3
- oJ/lUJy4++2OHetgLSpISe19ycgEYH7xUb1+LAigzaasda74jGMb3DhWjYqsBT5LMhdX Yw== 
+ bh=fjNmhOg8qZQSFuLEA/RFnSzsPz2Vr1nz1A8TUEHcZIY=;
+ b=ED1rQRxh1JXpDxXtUTEdW/7oGtT5WdJg7KV9U9IczzRJ/kYsXcxRUSNDrpy61+Ss5rYv
+ 0bAUzbmPUYS2NuYe0Br3LRSXRIv4hNLb0+sVFSPfjbsQ0kvvxUsgtBz77J2NNqjDLvI1
+ 1O8hHB0MfZsuinkiN+R/AtADkaC7Aw2rv9/K5gevH3PsmzQ3oxXyTo+d9cTmrr4MAwvW
+ 6OLArQ+xF75J11W9Lt41DKPdky7YkeDKjcOAiVIRjXjJboM3PYMced5fffAOBiQheu2W
+ RoZwJAxAyvxbojeMZq9tZjzCMcbNf9nJ9L1uw/1u87r4xokSLHWWZ9dEOdMRQgcHIvnX OA== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3btqypjhtg-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3btqypjhth-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Oct 2021 03:42:58 +0000
+        Thu, 21 Oct 2021 03:42:59 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19L3esix078017;
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19L3esj0078017;
         Thu, 21 Oct 2021 03:42:57 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3030.oracle.com with ESMTP id 3bqmshem0p-1
+        by aserp3030.oracle.com with ESMTP id 3bqmshem0y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 21 Oct 2021 03:42:57 +0000
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19L3gu7m082116;
-        Thu, 21 Oct 2021 03:42:56 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19L3gu7o082116;
+        Thu, 21 Oct 2021 03:42:57 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by aserp3030.oracle.com with ESMTP id 3bqmshekyd-2;
-        Thu, 21 Oct 2021 03:42:56 +0000
+        by aserp3030.oracle.com with ESMTP id 3bqmshekyd-3;
+        Thu, 21 Oct 2021 03:42:57 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Bodo Stroesser <bostroesser@gmail.com>,
-        Mike Christie <michael.christie@oracle.com>
+To:     Bart Van Assche <bvanassche@acm.org>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        target-devel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: target: tcmu: allocate zeroed pages for data area
-Date:   Wed, 20 Oct 2021 23:42:33 -0400
-Message-Id: <163478764104.7011.12641078538939220636.b4-ty@oracle.com>
+        Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 0/3] Rework SCSI runtime power management support
+Date:   Wed, 20 Oct 2021 23:42:34 -0400
+Message-Id: <163478764102.7011.16371251494754061812.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211013171606.25197-1-bostroesser@gmail.com>
-References: <20211013171606.25197-1-bostroesser@gmail.com>
+In-Reply-To: <20211006215453.3318929-1-bvanassche@acm.org>
+References: <20211006215453.3318929-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: Dp7yJoexljGRXYB6WNeXPSnlc61GxdtD
-X-Proofpoint-GUID: Dp7yJoexljGRXYB6WNeXPSnlc61GxdtD
+X-Proofpoint-ORIG-GUID: c8ZkQjj32Xo_aWR0zhnYWbYBqQ8joDB3
+X-Proofpoint-GUID: c8ZkQjj32Xo_aWR0zhnYWbYBqQ8joDB3
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 13 Oct 2021 19:16:06 +0200, Bodo Stroesser wrote:
+On Wed, 6 Oct 2021 14:54:50 -0700, Bart Van Assche wrote:
 
-> Tcmu populates the data area (used for communication with
-> userspace) with pages that are allocated by calling
-> alloc_page(GFP_NOIO).
-> Therefore previous content of the allocated pages is exposed
-> to user space. Avoid this by adding __GFP_ZERO flag.
+> For the UFS driver it is undesired that the SCSI power management core
+> activates runtime suspended devices during system resume. This patch
+> series leaves SCSI devices runtime suspended during system resume if
+> these were runtime suspended before the system was suspended. Please
+> consider this patch series for Linux kernel v5.16.
 > 
-> Zeroing the pages does (nearly) not affect tcmu throughput,
-> because allocated pages are re-used for the data transfers of
-> later SCSI cmds.
+> Thanks,
 > 
 > [...]
 
 Applied to 5.16/scsi-queue, thanks!
 
-[1/1] scsi: target: tcmu: allocate zeroed pages for data area
-      https://git.kernel.org/mkp/scsi/c/1d2ac7b69d6a
+[1/3] scsi: pm: Rely on the device driver core for async power management
+      https://git.kernel.org/mkp/scsi/c/a19a93e4c6a9
+[2/3] scsi: sd: Rename sd_resume() into sd_resume_system()
+      https://git.kernel.org/mkp/scsi/c/1c9575326a4a
+[3/3] scsi: pm: Only runtime resume if necessary
+      https://git.kernel.org/mkp/scsi/c/9131bff6a9f1
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
