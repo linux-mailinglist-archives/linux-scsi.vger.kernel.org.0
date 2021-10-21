@@ -2,116 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE544435FEE
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Oct 2021 13:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E60436193
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Oct 2021 14:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbhJULIQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Oct 2021 07:08:16 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:58255 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbhJULIP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Oct 2021 07:08:15 -0400
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20211021110558epoutp04fa346261639c01721d69c335434fe39b~wBv9JxoKi0238702387epoutp04i
-        for <linux-scsi@vger.kernel.org>; Thu, 21 Oct 2021 11:05:58 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20211021110558epoutp04fa346261639c01721d69c335434fe39b~wBv9JxoKi0238702387epoutp04i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1634814358;
-        bh=E81I91Ly+sN/ik9HuuzBvPWDk+tYRb4B5ab2DliGbXE=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=rzKoUcCSqI+jYZJn6Z4wwQxbdGe/JfwLmRhJ4hrVrMLgwbnQQIT41hRFzzIPHQZXX
-         ZHSQLl3UkWR98f8SBO8uyrlBgZ6/Zk+S7/autmKgl3RjL8B+BRQs7k+O5BcLF8oCIW
-         juAfPcAGoEH3Kybno5FiTmHNeSYXXRRPzvGCJ1wk=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20211021110558epcas2p3400a85f63255fb0fb50afd47f70e096e~wBv86i1e60617306173epcas2p34;
-        Thu, 21 Oct 2021 11:05:58 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4HZl5Y6CDmz4x9Px; Thu, 21 Oct
-        2021 11:05:53 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        77.B5.12141.A8941716; Thu, 21 Oct 2021 20:05:46 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20211021110545epcas2p4ced30b773a1e4656b9aff50f1deef46d~wBvw4RePl2997629976epcas2p4K;
-        Thu, 21 Oct 2021 11:05:45 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20211021110545epsmtrp1ae238363a662c944fc3d213c0c9b06b6~wBvw8MydK1989319893epsmtrp1v;
-        Thu, 21 Oct 2021 11:05:45 +0000 (GMT)
-X-AuditID: b6c32a48-d73ff70000002f6d-29-6171498aed81
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        02.FA.08738.88941716; Thu, 21 Oct 2021 20:05:44 +0900 (KST)
-Received: from KORCO011456 (unknown [12.36.185.54]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20211021110544epsmtip224910037d630bf77bfe0ac314bff32a5~wBvwoMuQs0341403414epsmtip2K;
-        Thu, 21 Oct 2021 11:05:44 +0000 (GMT)
-From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
-To:     "'Can Guo'" <cang@codeaurora.org>
-Cc:     <linux-scsi@vger.kernel.org>
-In-Reply-To: <ce88a8c47d46acd43b3645a3b97ab956@codeaurora.org>
-Subject: RE: [PATCH RESEND v2] scsi: ufs: clear doorbell for hibern8 errors
- when using ah8
-Date:   Thu, 21 Oct 2021 20:05:44 +0900
-Message-ID: <029f01d7c66b$9838f970$c8aaec50$@samsung.com>
+        id S231452AbhJUM3Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Oct 2021 08:29:24 -0400
+Received: from outbound1a.eu.mailhop.org ([52.58.109.202]:27650 "EHLO
+        outbound1a.eu.mailhop.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230231AbhJUM3X (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Oct 2021 08:29:23 -0400
+X-Greylist: delayed 24369 seconds by postgrey-1.27 at vger.kernel.org; Thu, 21 Oct 2021 08:29:23 EDT
+ARC-Seal: i=1; a=rsa-sha256; t=1634794858; cv=none;
+        d=outbound.mailhop.org; s=arc-outbound20181012;
+        b=dsJmQp3NCgxK/Dh2WpfvQMZ+0y9BBku3hh5uMADqoHCkgMXIlfy7SA+oJ5yVNbsRBBfGM7zbZOwI6
+         NM61uT2SODckcRyOwAvIlxrWd6vcsELB79+2R+ILJIZ8L3sc8pzCcoxum3aASyuRBn5S7JkMjHWscE
+         X8lqK9YjJXknkd9CST/M+XyeEdP6aoY+Vm91Nq7UnGGPQZWjgdJZeShv6LVo+hJD0bbNyOcp8HECS4
+         cRvnykvhD8fqyd/kKKWb0Td66q9svF85yujRgv27iHaWMQu/0I9D8yj1CbN6Weg8KjxmmsFmemDQsT
+         uNSniLbJkzBTrFj06gGIkkIzQOYl7JA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=outbound.mailhop.org; s=arc-outbound20181012;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:dkim-signature:dkim-signature:from;
+        bh=Wm/mSyAdMli/ns/hpQBzw2lo4egn1yDdmLFSKKT5H1M=;
+        b=FwNiyh8t+K45ZlWRKbLcU61Jy87bReswffEbCh7SjporVJvGnunFlk2/8nN5fSIwQe7erup3yommv
+         /RgV5rhIzDSyuIGnECrFyN3f64c4ALgxMe/GOPhKiOMsIaLj7AASMtgCu9BJgPPNYd3bAjbyClokRA
+         HTHTbhDPrRajvFguF72M5VJT8kCjSAEXCTa9dw7tOf/NX9IyVlZTruoCxvgHiNg3MDvnCzwhOmjnWL
+         FT13vuGv99kdtJxB85u45ZQXYBfXSew5T4BAPKUmzhteeevRMlLH8ODlqDCgvhygjDExKkVPQQf7Jx
+         akhbHM0XRJCyTut7fIH+AoHFaHamB2g==
+ARC-Authentication-Results: i=1; outbound2.eu.mailhop.org;
+        spf=pass smtp.mailfrom=stackframe.org smtp.remote-ip=91.207.61.48;
+        dmarc=none header.from=stackframe.org;
+        arc=none header.oldest-pass=0;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=stackframe.org; s=duo-1634547266507-560c42ae;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=Wm/mSyAdMli/ns/hpQBzw2lo4egn1yDdmLFSKKT5H1M=;
+        b=mrCwtjMM51QDLXmfQjqPnavnc7GL9yQqJFce7hTYiDmw2ex4asb+hur2oZ49VapM/YetifJIiUyjd
+         AjTFCQiHAux1IsgQfg/u8gEJlzXCR0+soJNysABFeKnSTKwJm/oYlqJxv/nmif5aTneTRQiCkoF5ko
+         d1E9HaAlOlSKGJVA=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=outbound.mailhop.org; s=dkim-high;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=Wm/mSyAdMli/ns/hpQBzw2lo4egn1yDdmLFSKKT5H1M=;
+        b=BcroR4RtALfzRZFC1PHfP5+BKiAUT3SQQ+1Q0zUoFhFUKw6htQL5vB/YFBS3Vlk24hgI9hZP61Sm6
+         MYa10tDkev1nUb4PCtYZWwuN6nqqNa7l/1841tjL+t/3PIvjaUPFN9Jj+Jqwfegcacr4NiiBp329WW
+         66NagK1wslaLeHitJI98/d3WpjKMlGVAGkcWHdKt7ySN7jsDVp7o0v/wUQv3XpuT1/dBWZ6mxudUs/
+         t7DdcpwKmZn5uctILiVEUddTMbQhIgPKRTmetsZQU6buPcmh9AVTbkHb0JvpuopX/K7oSG6EbbVyNp
+         ESvEWK6pr4U7HuhUN7tzI5EvyG1dcNA==
+X-Originating-IP: 91.207.61.48
+X-MHO-RoutePath: dG9ta2lzdG5lcm51
+X-MHO-User: 7372ed69-3231-11ec-a070-973b52397bcb
+X-Report-Abuse-To: https://support.duocircle.com/support/solutions/articles/5000540958-duocircle-standard-smtp-abuse-information
+X-Mail-Handler: DuoCircle Outbound SMTP
+Received: from mail.duncanthrax.net (propper.duncanthrax.net [91.207.61.48])
+        by outbound2.eu.mailhop.org (Halon) with ESMTPSA
+        id 7372ed69-3231-11ec-a070-973b52397bcb;
+        Thu, 21 Oct 2021 05:40:53 +0000 (UTC)
+Received: from hsi-kbw-109-193-149-228.hsi7.kabel-badenwuerttemberg.de ([109.193.149.228] helo=x1.stackframe.org.stackframe.org)
+        by mail.duncanthrax.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <svens@stackframe.org>)
+        id 1mdQos-00BsFc-Je; Thu, 21 Oct 2021 08:40:50 +0300
+From:   Sven Schnelle <svens@stackframe.org>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH] mpt3sas: add NULL check in _base_fault_reset_work()
+References: <20211019191208.6546-1-svens@stackframe.org>
+        <yq11r4f84er.fsf@ca-mkp.ca.oracle.com>
+Date:   Thu, 21 Oct 2021 07:40:48 +0200
+In-Reply-To: <yq11r4f84er.fsf@ca-mkp.ca.oracle.com> (Martin K. Petersen's
+        message of "Wed, 20 Oct 2021 23:08:29 -0400")
+Message-ID: <87zgr30wbj.fsf@x1.stackframe.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIPpLk+GfI6SjvCnzedxKlglX7R9QIy3PWBAupkR36rRKNzgA==
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAKsWRmVeSWpSXmKPExsWy7bCmuW6XZ2GiwfNb7Baf1i9jtei+voPN
-        gcnjcl8vk8fnTXIBTFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2
-        Si4+AbpumTlA45UUyhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BeYFesWJucWleel6
-        eaklVoYGBkamQIUJ2RmfL19kLfjCWLHt1AfGBsZjjF2MHBwSAiYSvw4WdjFycQgJ7GCUWPjq
-        PyOE84lRYtn+VlYI5zOjxImZv4EynGAdz3ovQVXtYpQ48riBGcJ5wSgxqfMrG0gVm4C2xLSH
-        u1lBbBEBVYl3refB4swCChJvv+1lAtnNKWAnsfZvBEhYWCBGYsmPVmYQmwWo/OLBi+wgNq+A
-        pcTiR9uYIGxBiZMzn7BAjDGQeH9uPjOELS+x/e0cZojjFCR+Pl0GtdZJomXyGVaIGhGJ2Z1t
-        YHdKCFxjlziwdidUg4vErN+voD4Tlnh1fAs7hC0l8bK/Dcqul9g3tYEVormHUeLpvn9QDcYS
-        s561QwNSWeLILajj+CQ6Dv9lhwjzSnS0CUFUK0v8mjQZqlNSYubNO+wTGJVmIXltFpLXZiF5
-        bRaSFxYwsqxiFEstKM5NTy02KjCBx3Zyfu4mRnDS0/LYwTj77Qe9Q4xMHIyHGCU4mJVEeHdX
-        5CcK8aYkVlalFuXHF5XmpBYfYjQFhvZEZinR5Hxg2s0riTc0sTQwMTMzNDcyNTBXEue1FM1O
-        FBJITyxJzU5NLUgtgulj4uCUamDa9Vtf6GRHWGyT76ndbnOu+cgemirDukzraqVr3LRD/WF1
-        ZzYcmfq9NNGKsXL9occJj/iCrjJ/vnsyv+5U1qPFDruvPVHlNVB72uw5Y23TG8M7FvXNG/1X
-        HLrLuMc56s7FNUtvN63X4Fn7dtbPPzYXnZP+cjT6aPXUrjiZunFD0JEJNmr1XmysodwHHC4e
-        rXjwSnq//eU5ClY+gkdDmzb/kPkv3PX46ZSEzFPBcQwbOqY5CO7wefQ2Td2rgLPIeSvL2te7
-        Nj4TtTg45cXi+ccbOBTdP23bVSbhrHTq+83/H+z1QxarlevNN27g8GzVSan5Eq4ikMMct8zu
-        /o3VTtmNvVejqudaezEmcYVJSacpsRRnJBpqMRcVJwIAIfmDkAMEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFLMWRmVeSWpSXmKPExsWy7bCSvG6HZ2Giwe9jFhaf1i9jtei+voPN
-        gcnjcl8vk8fnTXIBTFFcNimpOZllqUX6dglcGZ8vX2Qt+MJYse3UB8YGxmOMXYycHBICJhLP
-        ei+B2UICOxglrkxJgYhLSpzY+RyqRljifssR1i5GLqCaZ4wS65Z9ZAdJsAloS0x7uJsVxBYR
-        UJV413qeDcRmFlCQePttLxNEwylGia9fO1i6GDk4OAXsJNb+jQCpERaIklhxpBVsAQtQ78WD
-        F8Fm8gpYSix+tI0JwhaUODnzCQvETCOJc4f2Q82Xl9j+dg4zxHEKEj+fLoO6wUmiZfIZVoga
-        EYnZnW3MExiFZyEZNQvJqFlIRs1C0rKAkWUVo2RqQXFuem6xYYFRXmq5XnFibnFpXrpecn7u
-        JkZw8Gtp7WDcs+qD3iFGJg7GQ4wSHMxKIry7K/IThXhTEiurUovy44tKc1KLDzFKc7AoifNe
-        6DoZLySQnliSmp2aWpBaBJNl4uCUamBSX+qs0Htd4MKWKk5nZdmpvP+TtkxOtPK/VJrV1Cv/
-        Zs+9BVVhFUzsW0RbJO2z2Y9dDDixulnv1JfJnGJl6/0n1e//8Hfd5puNit82c12Y3P6pZc40
-        G0ZHk5Vnctrt177WWffEdeEazhfemz15HnyUWV90/Xa39g7v6NIcMabADzOul74+f/HtT/Y5
-        PzyjlkXeYfGzLfo65VDauXf5h2VLH/Y+afDbLO/XdCo3UNYxeaHltGWL7k1Jjq7sj/j04Zm8
-        Vbja7IOWEopzjO70lpi0vv68Y2ru1i0K+mkBDnNMC29kfv6/ru7Jtp9zX0/gMzacF5e8ZUHW
-        rqCoe6lT34lWFT6aoOTaEH/3wbx3wWc6lViKMxINtZiLihMBpfUxJO0CAAA=
-X-CMS-MailID: 20211021110545epcas2p4ced30b773a1e4656b9aff50f1deef46d
-X-Msg-Generator: CA
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20211019051346epcas2p132d3b9c6a1c812f3132e913525235b83
-References: <CGME20211019051346epcas2p132d3b9c6a1c812f3132e913525235b83@epcas2p1.samsung.com>
-        <1634619427-171880-1-git-send-email-kwmad.kim@samsung.com>
-        <ce88a8c47d46acd43b3645a3b97ab956@codeaurora.org>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> Same ask as Adrian did, ufshcd_hba_stop() should clear all doorbell bits
-> as it disables UFS host controller, then ufshcd_complete_requests()
-> completes any pending requests, no?
+Hi Martin,
 
-I replied Adrian's feedback.
+"Martin K. Petersen" <martin.petersen@oracle.com> writes:
 
-Thanks.
-Kiwoong Kim
+>> My HP C8000 (an PA-RISC based system) crashed with an HPMC. That
+>> triggered the HPMC handler in the kernel, and i got a crash in
+>> _base_fault_reset_work() from mpt3sas. It looks like this function
+>> calls ioc->schedule_dead_ioc_flush_running_cmds() without checking
+>> whether there's actually a function set, so it dereferences a NULL
+>> pointer on that system. The c8000 actually uses the mptspi driver
+>> instead of mpt3sas which doesn't seem to set this handler.
+>
+> I'm not sure how you end up in the mpt3sas driver if your system uses
+> mptspi!?
+>
+> Can you please send us the HPMC and the output of lspci?
 
+It doesn't end up in mpt3sas, i was just confused because
+schedule_dead_ioc_flush_running_cmds() exist also there. If you look at
+the diff, you see that i patched the mptspi driver. So the description
+is just wrong, sorry.
+
+I'll try to see whether i can reproduce it once more, but the question
+still is whether the if () check is okay, or whether that needs more
+work (i.e., a handler for that)
+
+Regards
+Sven
