@@ -2,76 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8294243592A
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Oct 2021 05:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CEEB435921
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Oct 2021 05:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbhJUDqH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Oct 2021 23:46:07 -0400
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:58452 "EHLO
+        id S231473AbhJUDpy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Oct 2021 23:45:54 -0400
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:62900 "EHLO
         mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231295AbhJUDpa (ORCPT
+        by vger.kernel.org with ESMTP id S231354AbhJUDpg (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 20 Oct 2021 23:45:30 -0400
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19L2w9EO029734;
-        Thu, 21 Oct 2021 03:43:14 GMT
+        Wed, 20 Oct 2021 23:45:36 -0400
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19L2C5o5019145;
+        Thu, 21 Oct 2021 03:43:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=ag6T5J3HY6IIW6RYjctJ302gjD18+S0+kq0Dbz3f2hM=;
- b=a9N52byG4v+MnA+lmVhpXVtEmZq9sEgUXkh8L9MQ0lAehQDELLbFpnBos/+0VIV2UES5
- 0NUCSp3rWkFx6+UWEW9fgGCxm8JbIEM+9RzDYz2zL/AVZ4Rj3yuBbROSyEJ47WLzl4gK
- lzefFoLIC4F27hwp0+xsKBgpZnNRYajrlte+2ypLmVL+Y+9ExFVvICfuQ2RRjupPPWTC
- 63RS96lxD13mucP6I+w0PJPOPFN4nnevVZQmwKDBiEBSxUR2nbjRGQu8uMSauj6bbVTh
- 0TKkZzBVYjS5zJ4j9fFadnj9oIHrNR48HcXlcHIoM7sbe0Whbdg9vdISftoWt9tCYNlD aA== 
+ bh=GKAa4PD1iXEx8fyyM+wyPuWDC8BXPH3PI/t2Zz0nrck=;
+ b=LGPGjf+1gmtNvltpacu3PgMRd6XtFjUZKakEemRNqPrDoxrBTAuDf5mLvVk8W0gMD63u
+ WidZuAhA48NlPcC+UiYWPSRRArXuQ/bkMZuDT8RPnsTTJ0xURQY6ne0UAmobCXTCep5T
+ XNI5PJrhG/vc/3qtxXs78/3oDO1ik1fjfFNTDxLyBGek1yui9ADru4r/sDs7wp9xa+t6
+ nUDYoCBwMLeW5fospx9rY4/tT/epp0SkaHHj20Ml8ZVLVu10rMlOEH9c/OscZeshm2Ry
+ FBZQm7uPvdK2kfL51sxyis0CQILPT+NJoHPetWbGl42ASBIAu9D6xD8AyEHZ3OyX2jkX GA== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3btkwj3ww6-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3btqypjhup-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 Oct 2021 03:43:15 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19L3esRm078107;
+        Thu, 21 Oct 2021 03:43:14 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3030.oracle.com with ESMTP id 3bqmshema6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 21 Oct 2021 03:43:14 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19L3esRl078107;
-        Thu, 21 Oct 2021 03:43:12 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3030.oracle.com with ESMTP id 3bqmshem9m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Oct 2021 03:43:12 +0000
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19L3gu8K082116;
-        Thu, 21 Oct 2021 03:43:12 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19L3gu8M082116;
+        Thu, 21 Oct 2021 03:43:13 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by aserp3030.oracle.com with ESMTP id 3bqmshekyd-18;
-        Thu, 21 Oct 2021 03:43:12 +0000
+        by aserp3030.oracle.com with ESMTP id 3bqmshekyd-19;
+        Thu, 21 Oct 2021 03:43:13 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+To:     jejb@linux.ibm.com, avri.altman@wdc.com, alim.akhtar@samsung.com,
+        Stanley Chu <stanley.chu@mediatek.com>,
         linux-scsi@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        sathya.prakash@broadcom.com
-Subject: Re: [PATCH] scsi_transport_sas: Add 22.5 link rate definitions
-Date:   Wed, 20 Oct 2021 23:42:49 -0400
-Message-Id: <163478764105.7011.3152020973935984145.b4-ty@oracle.com>
+        jonathan.hsu@mediatek.com, qilin.tan@mediatek.com,
+        alice.chao@mediatek.com, cc.chou@mediatek.com,
+        gray.jia@mediatek.com, tun-yu.yu@mediatek.com,
+        peter.wang@mediatek.com, lin.gui@mediatek.com,
+        chaotian.jing@mediatek.com, eddie.huang@mediatek.com,
+        powen.kao@mediatek.com
+Subject: Re: [PATCH v2 0/3] scsi: ufs-mediatek: Fix some defects in MediaTek UFS driver
+Date:   Wed, 20 Oct 2021 23:42:50 -0400
+Message-Id: <163478764104.7011.6113348192247417134.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211018070611.26428-1-sreekanth.reddy@broadcom.com>
-References: <20211018070611.26428-1-sreekanth.reddy@broadcom.com>
+In-Reply-To: <20211016005802.7729-1-stanley.chu@mediatek.com>
+References: <20211016005802.7729-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: gnk3RuVpEwOIm1loqX6rEzBAG1ZuOMQK
-X-Proofpoint-GUID: gnk3RuVpEwOIm1loqX6rEzBAG1ZuOMQK
+X-Proofpoint-ORIG-GUID: RTt1DOY23xfbv19yAGm1qSUkA1ttRei7
+X-Proofpoint-GUID: RTt1DOY23xfbv19yAGm1qSUkA1ttRei7
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 18 Oct 2021 12:36:11 +0530, Sreekanth Reddy wrote:
+On Sat, 16 Oct 2021 08:57:59 +0800, Stanley Chu wrote:
 
-> Adding 22.5GBPS link rate definitions,
-> which are needed for mpi3mr driver.
+> This series fixes some defects in MediaTek UFS drivers.
 > 
+> Change since v1:
+> - Add patch [3/3] scsi: ufs-mediatek: Fix wrong place of ref-clk delay
 > 
+> Peter Wang (1):
+>   scsi: ufs-mediatek: Fix wrong place of ref-clk delay
+> 
+> [...]
 
 Applied to 5.16/scsi-queue, thanks!
 
-[1/1] scsi_transport_sas: Add 22.5 link rate definitions
-      https://git.kernel.org/mkp/scsi/c/3d8fa78ebd61
+[1/3] scsi: ufs-mediatek: Introduce default delay for reference clock
+      https://git.kernel.org/mkp/scsi/c/fc65e933fbcc
+[2/3] scsi: ufs-mediatek: Fix build error of using sched_clock()
+      https://git.kernel.org/mkp/scsi/c/1eaff502a8f1
+[3/3] scsi: ufs-mediatek: Fix wrong place of ref-clk delay
+      https://git.kernel.org/mkp/scsi/c/25d542a85374
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
