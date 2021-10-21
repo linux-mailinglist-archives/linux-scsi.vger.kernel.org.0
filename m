@@ -2,88 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DB2435BC0
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Oct 2021 09:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70478435D23
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Oct 2021 10:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbhJUHey (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Oct 2021 03:34:54 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:48284 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230385AbhJUHer (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 21 Oct 2021 03:34:47 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19KMsQa8002523
-        for <linux-scsi@vger.kernel.org>; Thu, 21 Oct 2021 00:32:32 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=2hom7P3rI9M0Oo58EDymgFn3nX3eXSNJYZ263gT85sM=;
- b=FYeEs2Ym8hzvjYWGVLkTJyOwfF7ymZBUVfLOpAJCIY2wglxwIcHdJ+5dviKonsfJHoIB
- y8Hz9+dBtACDcMtQfhNuCbs6QWqoqDOw4D/tJb9MdUE/9l+8QotIKcbGIKpOU5Dt8SMV
- +D4O8L4zKSo47OM8zZV29Q/yhZDnajJWMHh3tRmnJnVaT/uUvBDT2Rn24ROv9aJLPijs
- mGJnr66QKzwM/1Hs9FRaV6FUT50llXan50xQogR0spFRD3NzyedoDFMU2SzDgqOH8/hX
- pKYqyGK7HPWcmGIftslR8ajc/DP6AgRgpzVwWq09U/KPisws+3M2Ve8JrcbU2h4W9eHl Ww== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com with ESMTP id 3btjwdmrxn-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Thu, 21 Oct 2021 00:32:31 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 21 Oct
- 2021 00:32:27 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Thu, 21 Oct 2021 00:32:27 -0700
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id CAF913F708E;
-        Thu, 21 Oct 2021 00:32:27 -0700 (PDT)
-Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 19L7WRti027669;
-        Thu, 21 Oct 2021 00:32:27 -0700
-Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 19L7WRbG027668;
-        Thu, 21 Oct 2021 00:32:27 -0700
-From:   Nilesh Javali <njavali@marvell.com>
-To:     <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH v2 13/13] qla2xxx: Update version to 10.02.07.200-k
-Date:   Thu, 21 Oct 2021 00:32:08 -0700
-Message-ID: <20211021073208.27582-14-njavali@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20211021073208.27582-1-njavali@marvell.com>
-References: <20211021073208.27582-1-njavali@marvell.com>
+        id S231515AbhJUIon (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Oct 2021 04:44:43 -0400
+Received: from mx24.baidu.com ([111.206.215.185]:46104 "EHLO baidu.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231510AbhJUIol (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 21 Oct 2021 04:44:41 -0400
+Received: from BC-Mail-Ex06.internal.baidu.com (unknown [172.31.51.46])
+        by Forcepoint Email with ESMTPS id 2F7E191CE7CE3491C185;
+        Thu, 21 Oct 2021 16:42:24 +0800 (CST)
+Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
+ BC-Mail-Ex06.internal.baidu.com (172.31.51.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2242.12; Thu, 21 Oct 2021 16:42:23 +0800
+Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Thu, 21 Oct 2021 16:42:23 +0800
+From:   Cai Huoqing <caihuoqing@baidu.com>
+To:     <caihuoqing@baidu.com>
+CC:     Saurav Kashyap <skashyap@marvell.com>,
+        Javed Hasan <jhasan@marvell.com>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] scsi: bnx2fc: Make use of the helper macro kthread_run()
+Date:   Thu, 21 Oct 2021 16:42:21 +0800
+Message-ID: <20211021084221.2342-1-caihuoqing@baidu.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: sh7LBKUI43W1_VzOFyVRI-L-ziJ0QLUF
-X-Proofpoint-ORIG-GUID: sh7LBKUI43W1_VzOFyVRI-L-ziJ0QLUF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-21_02,2021-10-20_02,2020-04-07_01
+X-Originating-IP: [172.31.63.8]
+X-ClientProxiedBy: BC-Mail-EX02.internal.baidu.com (172.31.51.42) To
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
----
- drivers/scsi/qla2xxx/qla_version.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Repalce kthread_create/wake_up_process() with kthread_run()
+to simplify the code.
 
-diff --git a/drivers/scsi/qla2xxx/qla_version.h b/drivers/scsi/qla2xxx/qla_version.h
-index 4b117165bf8b..27e440f8a702 100644
---- a/drivers/scsi/qla2xxx/qla_version.h
-+++ b/drivers/scsi/qla2xxx/qla_version.h
-@@ -6,9 +6,9 @@
- /*
-  * Driver version
-  */
--#define QLA2XXX_VERSION      "10.02.07.100-k"
-+#define QLA2XXX_VERSION      "10.02.07.200-k"
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+---
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+index 71fa62bd3083..975512511a60 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+@@ -2723,9 +2723,8 @@ static int __init bnx2fc_mod_init(void)
  
- #define QLA_DRIVER_MAJOR_VER	10
- #define QLA_DRIVER_MINOR_VER	2
- #define QLA_DRIVER_PATCH_VER	7
--#define QLA_DRIVER_BETA_VER	100
-+#define QLA_DRIVER_BETA_VER	200
+ 	bg = &bnx2fc_global;
+ 	skb_queue_head_init(&bg->fcoe_rx_list);
+-	l2_thread = kthread_create(bnx2fc_l2_rcv_thread,
+-				   (void *)bg,
+-				   "bnx2fc_l2_thread");
++	l2_thread = kthread_run(bnx2fc_l2_rcv_thread,
++				(void *)bg, "bnx2fc_l2_thread");
+ 	if (IS_ERR(l2_thread)) {
+ 		rc = PTR_ERR(l2_thread);
+ 		goto free_wq;
 -- 
-2.19.0.rc0
+2.25.1
 
