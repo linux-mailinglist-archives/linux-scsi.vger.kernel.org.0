@@ -2,83 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C54C54375B3
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Oct 2021 12:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727FB4376F4
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Oct 2021 14:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbhJVKva (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 Oct 2021 06:51:30 -0400
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4021 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbhJVKv3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 Oct 2021 06:51:29 -0400
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HbLbG36lSz67mY7;
-        Fri, 22 Oct 2021 18:45:14 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Fri, 22 Oct 2021 12:49:09 +0200
-Received: from [10.202.227.179] (10.202.227.179) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Fri, 22 Oct 2021 11:49:08 +0100
-Subject: Re: [PATCH] scsi: bnx2fc: Make use of the helper macro kthread_run()
-To:     Cai Huoqing <caihuoqing@baidu.com>
-CC:     Saurav Kashyap <skashyap@marvell.com>,
-        Javed Hasan <jhasan@marvell.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211021084221.2342-1-caihuoqing@baidu.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <834fa2cc-8a4a-b632-93bb-43d2dfdc4713@huawei.com>
-Date:   Fri, 22 Oct 2021 11:49:08 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S232721AbhJVMYc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 22 Oct 2021 08:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232564AbhJVMY1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 Oct 2021 08:24:27 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E110FC079784
+        for <linux-scsi@vger.kernel.org>; Fri, 22 Oct 2021 05:22:02 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id w14so2276997edv.11
+        for <linux-scsi@vger.kernel.org>; Fri, 22 Oct 2021 05:22:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=EabbjzyBCsHP1Pqryzjhoy0dM3xlyxLmmpO8ACgMTo8=;
+        b=opUIgqVWyZcHOIldu+LgQVfQLu2JLSm4eq0yRYoR8X3EkJ0jJdtgK1LJrEC4fAYG/u
+         x5QndCavFk6KrgrLKL2M04eWhmo9Ht5gsCUOTzm6BFmYlOhPKCnfQmAWRcGWJ3Kgd+Po
+         dxnzE1GzD0Fe/zdoRYGanqsnNZ7HZwcDd5jvb2P53Z7ySB2eUUW5eKcCwJjvHcLwQW3D
+         hmZMQ0WQ67mADARNZlQPTMDFACAa1pT2f55C5E+z5xU/0SGGI05AA1ys/nk/8Z7QRecx
+         rbFLK51ODld/urTp+hjZ3tCNNEiv03NL8R5n8H4ZVv1sIR3Pcfr4FSd/aUugOrtvCJBK
+         4QUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=EabbjzyBCsHP1Pqryzjhoy0dM3xlyxLmmpO8ACgMTo8=;
+        b=B5BOTqfisnSrmmWpP2tpGM7IkbhY9IEESncc52HtOdC7J20Hibw/MU4cl/NfXX6jNk
+         EShGFg/Q77zmWLnS6gFAnSLPEiNpLu96kS6rXWPVe57mg8dfZSWAy+3fAZiWcx/89/yl
+         LCm/OsW/Ne/n7nIBm3mxTioxl15fh6dO6ktWvCxy3lttSgI+O8CvQIcO4YBmtR4cnNqk
+         ccMk+cUvfHpclrDIqVISrPeBYqJbncvPQZYVh4fGjxGfT9Tg0hoybLm9rrBxM+Lu84IK
+         MKdEecaqfMxoi7erja9l5/RJ2Xpo1iIQ1FkzMfj0G1nQh6ip4g6vH6io7llQqv4YIhuV
+         BAkA==
+X-Gm-Message-State: AOAM530K0Bs6wUDzevzZ/WyCkD0Y/t5mcS8gK/f6v9k738PViqmNZHdf
+        rsUULmebsK5Iuvs1gTmbMsnSJolMlIT9xWjDQCQpqYx1guzaQC5h
+X-Google-Smtp-Source: ABdhPJy2Z+mCK6UsBedDHfuHLqHjOelryE6bx9xZ/OavTEghlxY+bPID2uQBe/oD5nVNF4jHf9BZTkpf3h9vpVXzB08=
+X-Received: by 2002:a17:907:1b0a:: with SMTP id mp10mr15488909ejc.29.1634905309828;
+ Fri, 22 Oct 2021 05:21:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211021084221.2342-1-caihuoqing@baidu.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.179]
-X-ClientProxiedBy: lhreml731-chm.china.huawei.com (10.201.108.82) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Received: by 2002:a17:907:7fa7:0:0:0:0 with HTTP; Fri, 22 Oct 2021 05:21:48
+ -0700 (PDT)
+Reply-To: bahadur.rayanby@gmail.com
+From:   Ryan Bahadur <dr.philposman7@gmail.com>
+Date:   Fri, 22 Oct 2021 05:21:48 -0700
+Message-ID: <CAMOT=VQ19xGMh1Soq8rNHNKaBCqZh03d0u+Nrf_Ou9bAtd-seQ@mail.gmail.com>
+Subject: CAN I TRUST YOU
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 21/10/2021 09:42, Cai Huoqing wrote:
-> Repalce kthread_create/wake_up_process() with kthread_run()
+-- 
+Greetings,
 
-Replace
+Firstly, I apologize for encroaching into your privacy in this manner
+as it may seem unethical though it is a matter of great importance.
 
-> to simplify the code.
-> 
-> Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
-> ---
->   drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-> index 71fa62bd3083..975512511a60 100644
-> --- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-> +++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-> @@ -2723,9 +2723,8 @@ static int __init bnx2fc_mod_init(void)
->   
->   	bg = &bnx2fc_global;
->   	skb_queue_head_init(&bg->fcoe_rx_list);
-> -	l2_thread = kthread_create(bnx2fc_l2_rcv_thread,
-> -				   (void *)bg,
-> -				   "bnx2fc_l2_thread");
-> +	l2_thread = kthread_run(bnx2fc_l2_rcv_thread,
-> +				(void *)bg, "bnx2fc_l2_thread");
->   	if (IS_ERR(l2_thread)) {
->   		rc = PTR_ERR(l2_thread);
->   		goto free_wq;
+I am Mr.Ryan Bahadur, I work with Cayman National Bank (Cayman Islands).
 
-Are you then supposed to remove the wake_up_process() call also (not shown)?
+I am contacting you because my status would not permit me to do this
+alone as it is concerning our customer and an investment placed under
+our bank's management over 5 years ago.
 
-> 
+I have a proposal I would love to discuss with you which will be very
+beneficial to both of us. It's regarding my late client who has a huge
+deposit with my bank.
 
+He is from your country and shares the same last name with you.
+
+I want to seek your consent to present you as the next of kin to my
+late client who died and left a huge deposit with my bank.
+
+I would respectfully request that you keep the contents of this mail
+confidential and respect the integrity of the information you come by
+as a result of this mail.
+
+Please kindly get back to me for more details if I can TRUST YOU.{
+bahadur.rayanby@gmail.com}
+
+Regards
+Mr.Ryan Bahadur
+Treasury and Deposit Management,
+Cayman National Bank Cayman Islands.
