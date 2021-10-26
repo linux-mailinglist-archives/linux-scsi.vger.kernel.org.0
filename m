@@ -2,89 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6128443B1A6
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Oct 2021 13:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D34E43B2DC
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Oct 2021 15:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235645AbhJZL5I (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Oct 2021 07:57:08 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:41494 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234937AbhJZL45 (ORCPT
+        id S236128AbhJZNGn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Oct 2021 09:06:43 -0400
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:51254 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236129AbhJZNGn (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 26 Oct 2021 07:56:57 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19QAMggZ014676
-        for <linux-scsi@vger.kernel.org>; Tue, 26 Oct 2021 04:54:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=/ErDWsWuYCORnLsKAGJNR7zJlGDuxh92dYXtZLXPlL0=;
- b=XNffPtan5cOoQtkzVwm3CJLAdbDrtIDcWNXXXFTtZ7VNnT6M0DiKiMLkEKNm4mVZsJbg
- +AOkBUSsTdYUkeEpBvxCwj/bQgpEeHa0ha7xnErSSEdq77tTh33xwJ1CBzUE6FMNVkl1
- 9zUvOsD2L2pMEuKAGHjLnRKHZZGJpTE/096f0QsldC1DMpPswJHsJWhsuOyZo7vSqdOj
- Yu+2WE/PixCjM5zCGFEksRIViBfrfxdyPw6IGBHaryEG1HCBIMnfmL5RU4P/V+WF8TVq
- fWHvJjjl2uRl+S0TOBAqkUZiwAiIctUd54ZJel8aAOTKbtJnRl2cL3UYO7UO2uXaYi4z wg== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com with ESMTP id 3bxfv8gc0q-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Tue, 26 Oct 2021 04:54:33 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 26 Oct
- 2021 04:54:31 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Tue, 26 Oct 2021 04:54:31 -0700
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id F0C4F3F7082;
-        Tue, 26 Oct 2021 04:54:31 -0700 (PDT)
-Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 19QBsVNJ027787;
-        Tue, 26 Oct 2021 04:54:31 -0700
-Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 19QBsVHt027786;
-        Tue, 26 Oct 2021 04:54:31 -0700
-From:   Nilesh Javali <njavali@marvell.com>
-To:     <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH v3 13/13] qla2xxx: Update version to 10.02.07.200-k
-Date:   Tue, 26 Oct 2021 04:54:12 -0700
-Message-ID: <20211026115412.27691-14-njavali@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20211026115412.27691-1-njavali@marvell.com>
-References: <20211026115412.27691-1-njavali@marvell.com>
+        Tue, 26 Oct 2021 09:06:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1635253459;
+        bh=VNpiwuvlu3wcbtCV3obWrd1KExtIuUa1np0HXZKsSbo=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=LCCCLK7Y2sQIDHsKyUGC/35Ajst1wXD/4mLKAJNo9jb6Qg2CS9AwaB3m3GaCEW8NK
+         q05VbeQ/vA4zH1LHkj8bnrUViZMqj/bmg6g/oJyZlpyV67bwa+hQcqP1tlIE/XpbqC
+         UR/mtBtK8fPtmO4kUGhkPbZ1ldDGkZy9XTzk8Tnc=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3F1DF128049B;
+        Tue, 26 Oct 2021 09:04:19 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id BvZh_1pq-bvr; Tue, 26 Oct 2021 09:04:19 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1635253459;
+        bh=VNpiwuvlu3wcbtCV3obWrd1KExtIuUa1np0HXZKsSbo=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=LCCCLK7Y2sQIDHsKyUGC/35Ajst1wXD/4mLKAJNo9jb6Qg2CS9AwaB3m3GaCEW8NK
+         q05VbeQ/vA4zH1LHkj8bnrUViZMqj/bmg6g/oJyZlpyV67bwa+hQcqP1tlIE/XpbqC
+         UR/mtBtK8fPtmO4kUGhkPbZ1ldDGkZy9XTzk8Tnc=
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 64A60128045F;
+        Tue, 26 Oct 2021 09:04:18 -0400 (EDT)
+Message-ID: <0ea55be8c300f098b17e21d185a49e24b81b9c2b.camel@HansenPartnership.com>
+Subject: Re: [PATCH] scsi: ufs: mark HPB support as BROKEN
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Christoph Hellwig <hch@lst.de>, martin.petersen@oracle.com
+Cc:     axboe@kernel.dk, alim.akhtar@samsung.com, avri.altman@wdc.com,
+        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org
+Date:   Tue, 26 Oct 2021 09:04:16 -0400
+In-Reply-To: <3088804d-16f0-8f19-590e-8651bb5ef949@opensource.wdc.com>
+References: <20211026071204.1709318-1-hch@lst.de>
+         <3088804d-16f0-8f19-590e-8651bb5ef949@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: iNaGyw3TUXzp8u9wX6g6N3GBRF5PGLFH
-X-Proofpoint-ORIG-GUID: iNaGyw3TUXzp8u9wX6g6N3GBRF5PGLFH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-26_02,2021-10-26_01,2020-04-07_01
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
----
- drivers/scsi/qla2xxx/qla_version.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Tue, 2021-10-26 at 16:24 +0900, Damien Le Moal wrote:
+> On 2021/10/26 16:12, Christoph Hellwig wrote:
+> > The HPB support added this merge window is fundanetally
 
-diff --git a/drivers/scsi/qla2xxx/qla_version.h b/drivers/scsi/qla2xxx/qla_version.h
-index 4b117165bf8b..27e440f8a702 100644
---- a/drivers/scsi/qla2xxx/qla_version.h
-+++ b/drivers/scsi/qla2xxx/qla_version.h
-@@ -6,9 +6,9 @@
- /*
-  * Driver version
-  */
--#define QLA2XXX_VERSION      "10.02.07.100-k"
-+#define QLA2XXX_VERSION      "10.02.07.200-k"
- 
- #define QLA_DRIVER_MAJOR_VER	10
- #define QLA_DRIVER_MINOR_VER	2
- #define QLA_DRIVER_PATCH_VER	7
--#define QLA_DRIVER_BETA_VER	100
-+#define QLA_DRIVER_BETA_VER	200
--- 
-2.19.0.rc0
+And s/n/m/ while you're at it: fundamentally
+
+Otherwise:
+
+Reviewed-by: James E.J. Bottomley <jejb@linux.ibm.com>
+
+James
+
+> >  flawed as it uses blk_insert_cloned_request to insert a cloned
+> > request onto the same queue as the one that the original request
+> > came from, leading to all kinds of issues in blk-mq accounting (in
+> > addition to this API being a special case for dm-mpath that should
+> > not see other users).
+> > 
+> > Mark is as BROKEN as the non-intrusive alternative to a last minute
+> 
+> s/Mark is/Mark it
+> 
+> > large scale revert.
+> > 
+> > Fixes: f02bc9754a68 ("scsi: ufs: ufshpb: Introduce Host Performance
+> > Buffer
+> > feature")
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > ---
+> >  drivers/scsi/ufs/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/scsi/ufs/Kconfig b/drivers/scsi/ufs/Kconfig
+> > index 432df76e6318a..7835d9082aae4 100644
+> > --- a/drivers/scsi/ufs/Kconfig
+> > +++ b/drivers/scsi/ufs/Kconfig
+> > @@ -186,7 +186,7 @@ config SCSI_UFS_CRYPTO
+> >  
+> >  config SCSI_UFS_HPB
+> >  	bool "Support UFS Host Performance Booster"
+> > -	depends on SCSI_UFSHCD
+> > +	depends on SCSI_UFSHCD && BROKEN
+> >  	help
+> >  	  The UFS HPB feature improves random read performance. It
+> > caches
+> >  	  L2P (logical to physical) map of UFS to host DRAM. The driver
+> > uses HPB
+> > 
+> 
+> Otherwise, looks good to me.
+> 
+> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> 
+
 
