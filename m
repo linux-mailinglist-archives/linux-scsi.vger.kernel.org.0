@@ -2,60 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE6B43C72E
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Oct 2021 12:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59C143C732
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Oct 2021 12:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241119AbhJ0KCm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Oct 2021 06:02:42 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:22434 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241319AbhJ0KCH (ORCPT
+        id S241407AbhJ0KCp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Oct 2021 06:02:45 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:6404 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241512AbhJ0KCJ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 27 Oct 2021 06:02:07 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19R6HcLk008428
-        for <linux-scsi@vger.kernel.org>; Wed, 27 Oct 2021 02:59:42 -0700
+        Wed, 27 Oct 2021 06:02:09 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19R6I99E032380
+        for <linux-scsi@vger.kernel.org>; Wed, 27 Oct 2021 02:59:43 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=zTWfrTP5dILr7P1nMdBXMDwo9c5h2MlMI5GPFH+DgAA=;
- b=iYX9DErheTMv90+zPxxYjmB6Oub3G4NkEHbTetdrrDJXMCJkYlCuFdkFP84bpZCo8lN+
- MCP852MJMwOc5XyUTDLzlKt0VBkMy3jJNeC+0AerxUF1tDZPDvcYZYZ2xH2kzOFG4/po
- JnSpbZb2RJlJuOj68peYbVt7B1wmUU5JWLqZI3AMyJLT6nPuzAAV/45eAuU7K18AJbvi
- kwg4TwVshnlOvTK4eBpu76xkKCvAS8mjhMUBxFX3lQb1PlkGDzXt8fePnHCmB1g6u/IZ
- aNujGWSFW5m6LwKAXbfPvzj0UDk5cCqJNNmDrFdRLmQudrmQvclqbf6gq3AsjKk/k3R7 Sw== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com with ESMTP id 3bxuhpj1gw-1
+ content-type; s=pfpt0220; bh=CDzKC6ESY3zMjjP5OVgBvA2ndNJUfEVdENfI1eAqlyg=;
+ b=hmW/6TTkqExqE0RJxnnBxNvUP25WoD+3JiOrN6BA6gIp9RgLFDOiejHCHoZs/5vpQgiQ
+ 35qapt4vGMFGRVFTXSeNeqCD0Z1VvRqa7K4bk8amLBU5TUI9FzVOmvyG5elVBCYAl0xb
+ ljmHgX2gLO4U+z4jhskZisBM5Usn+37r179Ky3dH4XzNU6mwboOEaUlKF/+/N24X8Wxs
+ 1lxOIkUthW3akV2ef4oPcuFlshd9putxaJmJmu5HeHx1qCtm7LbeNKDyqQCnTy1CFrpW
+ GRHErxxPgqma86hr5NXHghiVTiUdjc2Epug7yTpAZXAPw5A5W3+jL5Ta4mXUj6ydfbnq cA== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com with ESMTP id 3by1ca8tjs-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
         for <linux-scsi@vger.kernel.org>; Wed, 27 Oct 2021 02:59:42 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 27 Oct
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 27 Oct
  2021 02:59:40 -0700
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
  (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
  Transport; Wed, 27 Oct 2021 02:59:40 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 843713F7070;
+        by maili.marvell.com (Postfix) with ESMTP id 99DCA3F7071;
         Wed, 27 Oct 2021 02:59:40 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 19R9xeat016413;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 19R9xev4016417;
         Wed, 27 Oct 2021 02:59:40 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 19R9xeYw016412;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 19R9xerE016416;
         Wed, 27 Oct 2021 02:59:40 -0700
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH v4 04/13] qla2xxx: edif: fix app start fail
-Date:   Wed, 27 Oct 2021 02:58:42 -0700
-Message-ID: <20211027095851.16362-5-njavali@marvell.com>
+Subject: [PATCH v4 05/13] qla2xxx: edif: fix app start delay
+Date:   Wed, 27 Oct 2021 02:58:43 -0700
+Message-ID: <20211027095851.16362-6-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20211027095851.16362-1-njavali@marvell.com>
 References: <20211027095851.16362-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: _DVUEKCUM6c5pmiOBvu5Uk5dp9_F-o-1
-X-Proofpoint-GUID: _DVUEKCUM6c5pmiOBvu5Uk5dp9_F-o-1
+X-Proofpoint-GUID: 6o_HbA5ieTaF_IaLu4lQ-ymbyibcP9LU
+X-Proofpoint-ORIG-GUID: 6o_HbA5ieTaF_IaLu4lQ-ymbyibcP9LU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-10-27_03,2021-10-26_01,2020-04-07_01
@@ -65,91 +65,119 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-On app start, all sessions need to be reset to see
-if secure connection can be made. Fix the
-broken check which prevents that process.
+Current driver does unnecessary pause for each session to
+get to certain state before allowing the app start call to
+return. In larger environment, this introduce long delay.
+Previously, the delay is meant to synchronize app and driver.
+In today's driver, the 2 side uses various events to synchronize
+the state.
+
+The same is applied to authentication failure call.
 
 Fixes: 4de067e5df12 ("scsi: qla2xxx: edif: Add N2N support for EDIF")
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 ---
- drivers/scsi/qla2xxx/qla_edif.c | 49 ++++++++++++++++-----------------
- 1 file changed, 23 insertions(+), 26 deletions(-)
+ drivers/scsi/qla2xxx/qla_edif.c | 64 ++-------------------------------
+ 1 file changed, 3 insertions(+), 61 deletions(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_edif.c b/drivers/scsi/qla2xxx/qla_edif.c
-index ad746c62f0d4..15ca7930d932 100644
+index 15ca7930d932..e97666700b8a 100644
 --- a/drivers/scsi/qla2xxx/qla_edif.c
 +++ b/drivers/scsi/qla2xxx/qla_edif.c
-@@ -529,7 +529,8 @@ qla_edif_app_start(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 	struct app_start_reply	appreply;
- 	struct fc_port  *fcport, *tf;
+@@ -290,63 +290,6 @@ qla_edif_app_check(scsi_qla_host_t *vha, struct app_id appid)
+ 	return false;
+ }
  
--	ql_dbg(ql_dbg_edif, vha, 0x911d, "%s app start\n", __func__);
-+	ql_log(ql_log_info, vha, 0x1313,
-+	       "EDIF application registration with driver, FC device connections will be re-established.\n");
- 
- 	sg_copy_to_buffer(bsg_job->request_payload.sg_list,
- 	    bsg_job->request_payload.sg_cnt, &appstart,
-@@ -554,37 +555,33 @@ qla_edif_app_start(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 		qla2xxx_wake_dpc(vha);
- 	} else {
- 		list_for_each_entry_safe(fcport, tf, &vha->vp_fcports, list) {
-+			ql_dbg(ql_dbg_edif, vha, 0x2058,
-+			       "FCSP - nn %8phN pn %8phN portid=%06x.\n",
-+			       fcport->node_name, fcport->port_name,
-+			       fcport->d_id.b24);
- 			ql_dbg(ql_dbg_edif, vha, 0xf084,
--			       "%s: sess %p %8phC lid %#04x s_id %06x logout %d\n",
--			       __func__, fcport, fcport->port_name,
--			       fcport->loop_id, fcport->d_id.b24,
--			       fcport->logout_on_delete);
+-static void qla_edif_reset_auth_wait(struct fc_port *fcport, int state,
+-		int waitonly)
+-{
+-	int cnt, max_cnt = 200;
+-	bool traced = false;
 -
--			ql_dbg(ql_dbg_edif, vha, 0xf084,
--			       "keep %d els_logo %d disc state %d auth state %d stop state %d\n",
--			       fcport->keep_nport_handle,
--			       fcport->send_els_logo, fcport->disc_state,
--			       fcport->edif.auth_state, fcport->edif.app_stop);
-+			       "%s: se_sess %p / sess %p from port %8phC loop_id %#04x s_id %06x logout %d keep %d els_logo %d disc state %d auth state %d stop state %d\n",
-+			       __func__, fcport->se_sess, fcport,
-+			       fcport->port_name, fcport->loop_id,
-+			       fcport->d_id.b24, fcport->logout_on_delete,
-+			       fcport->keep_nport_handle, fcport->send_els_logo,
-+			       fcport->disc_state, fcport->edif.auth_state,
-+			       fcport->edif.app_stop);
- 
- 			if (atomic_read(&vha->loop_state) == LOOP_DOWN)
- 				break;
--			if (!(fcport->flags & FCF_FCSP_DEVICE))
--				continue;
- 
- 			fcport->edif.app_started = 1;
--			if (fcport->edif.app_stop ||
--			    (fcport->disc_state != DSC_LOGIN_COMPLETE &&
--			     fcport->disc_state != DSC_LOGIN_PEND &&
--			     fcport->disc_state != DSC_DELETED)) {
--				/* no activity */
--				fcport->edif.app_stop = 0;
+-	fcport->keep_nport_handle = 1;
 -
--				ql_dbg(ql_dbg_edif, vha, 0x911e,
--				       "%s wwpn %8phC calling qla_edif_reset_auth_wait\n",
--				       __func__, fcport->port_name);
--				fcport->edif.app_sess_online = 1;
--				qla_edif_reset_auth_wait(fcport, DSC_LOGIN_PEND, 0);
--			}
-+			fcport->login_retry = vha->hw->login_retry_count;
-+
-+			/* no activity */
-+			fcport->edif.app_stop = 0;
-+
-+			ql_dbg(ql_dbg_edif, vha, 0x911e,
-+			       "%s wwpn %8phC calling qla_edif_reset_auth_wait\n",
-+			       __func__, fcport->port_name);
-+			fcport->edif.app_sess_online = 1;
-+			qla_edif_reset_auth_wait(fcport, DSC_LOGIN_PEND, 0);
+-	if (!waitonly) {
+-		qla2x00_set_fcport_disc_state(fcport, state);
+-		qlt_schedule_sess_for_deletion(fcport);
+-	} else {
+-		qla2x00_set_fcport_disc_state(fcport, state);
+-	}
+-
+-	ql_dbg(ql_dbg_edif, fcport->vha, 0xf086,
+-		"%s: waiting for session, max_cnt=%u\n",
+-		__func__, max_cnt);
+-
+-	cnt = 0;
+-
+-	if (waitonly) {
+-		/* Marker wait min 10 msecs. */
+-		msleep(50);
+-		cnt += 50;
+-	}
+-	while (1) {
+-		if (!traced) {
+-			ql_dbg(ql_dbg_edif, fcport->vha, 0xf086,
+-			    "%s: session sleep.\n",
+-			    __func__);
+-			traced = true;
+-		}
+-		msleep(20);
+-		cnt++;
+-		if (waitonly && (fcport->disc_state == state ||
+-			fcport->disc_state == DSC_LOGIN_COMPLETE))
+-			break;
+-		if (fcport->disc_state == DSC_LOGIN_AUTH_PEND)
+-			break;
+-		if (cnt > max_cnt)
+-			break;
+-	}
+-
+-	if (!waitonly) {
+-		ql_dbg(ql_dbg_edif, fcport->vha, 0xf086,
+-		    "%s: waited for session - %8phC, loopid=%x portid=%06x fcport=%p state=%u, cnt=%u\n",
+-		    __func__, fcport->port_name, fcport->loop_id,
+-		    fcport->d_id.b24, fcport, fcport->disc_state, cnt);
+-	} else {
+-		ql_dbg(ql_dbg_edif, fcport->vha, 0xf086,
+-		    "%s: waited ONLY for session - %8phC, loopid=%x portid=%06x fcport=%p state=%u, cnt=%u\n",
+-		    __func__, fcport->port_name, fcport->loop_id,
+-		    fcport->d_id.b24, fcport, fcport->disc_state, cnt);
+-	}
+-}
+-
+ static void
+ qla_edif_free_sa_ctl(fc_port_t *fcport, struct edif_sa_ctl *sa_ctl,
+ 	int index)
+@@ -580,8 +523,8 @@ qla_edif_app_start(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
+ 			ql_dbg(ql_dbg_edif, vha, 0x911e,
+ 			       "%s wwpn %8phC calling qla_edif_reset_auth_wait\n",
+ 			       __func__, fcport->port_name);
+-			fcport->edif.app_sess_online = 1;
+-			qla_edif_reset_auth_wait(fcport, DSC_LOGIN_PEND, 0);
++			fcport->edif.app_sess_online = 0;
++			qlt_schedule_sess_for_deletion(fcport);
  			qla_edif_sa_ctl_init(vha, fcport);
  		}
  	}
+@@ -797,7 +740,6 @@ qla_edif_app_authok(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
+ 		ql_dbg(ql_dbg_edif, vha, 0x911e,
+ 		    "%s AUTH complete - RESUME with prli for wwpn %8phC\n",
+ 		    __func__, fcport->port_name);
+-		qla_edif_reset_auth_wait(fcport, DSC_LOGIN_PEND, 1);
+ 		qla24xx_post_prli_work(vha, fcport);
+ 	}
+ 
+@@ -870,7 +812,7 @@ qla_edif_app_authfail(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
+ 
+ 		if (qla_ini_mode_enabled(fcport->vha)) {
+ 			fcport->send_els_logo = 1;
+-			qla_edif_reset_auth_wait(fcport, DSC_LOGIN_PEND, 0);
++			qlt_schedule_sess_for_deletion(fcport);
+ 		}
+ 	}
+ 
 -- 
 2.19.0.rc0
 
