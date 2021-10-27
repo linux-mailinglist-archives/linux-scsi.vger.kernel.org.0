@@ -2,140 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2352C43C0E6
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Oct 2021 05:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8DF43C113
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Oct 2021 06:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237691AbhJ0Dom (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Oct 2021 23:44:42 -0400
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:34938 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236344AbhJ0Dol (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Oct 2021 23:44:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1635306137; x=1666842137;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=xPGvWc/CDKA9F05lC6rPfMyvBm5J0XVlHTqQNKB5Uag=;
-  b=f2einf0JUNU13vVc/+L0JHdm6mk2oM7C4/BW5m+v1HNm6fON2HUF9744
-   cBC97Oqql/0biwD+RwdxZOjt4+KWdz4kgvKPsvaKW5Dpeo8bn3b/11lIc
-   fg5mGyCsvUPpERG9+EmBdAnYaiRaBC6oMqy/fFvTlncHlo7D0rjEzyF77
-   HyQR5HZLnX0z3AP/wjDnQPstWiOyFRzXOvf0THefMfHABYWPRm7jhMDey
-   QvaYZKHLiHdJzPfUnxVWjuqrlfsRspfxJEXNDFg//Kye7SyFnPidRUjcR
-   54431W+AjEOG6I5SnWS91o9rpFjxDjWLiCdbN3uQGKyzY9SLxrm5VO4DT
-   A==;
-X-IronPort-AV: E=Sophos;i="5.87,184,1631548800"; 
-   d="scan'208";a="182940835"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Oct 2021 11:42:16 +0800
-IronPort-SDR: rM0Nwg3XRqlqkjqacSzMeVGurlxc1g3+/Up4YncVXXZXyzsx64ShuKalEm0sDgV8HXsd5J/ll1
- WeBm3oPWSgHyzGQqWMiKsEl21w132h3ohgI+hsutQ4daIKIPjPBMKLU/E3ldR0B/zKWnqD1nE4
- Evea0ghbTHqkfi4rGzZIVTtrIrhVGC6Xll5B/XkUqc0Refy1MBvqWbHr4D/yLYOiJP0wTj0ZXz
- 4+s5/GjJvi9p+w223sQ+rEnW3XRapKTAwimvijnWLWeRC+gK1IoQkgJEGhlHOaqETv8ZCziHk+
- KPqwPOzPIiCD5J5s2PGYWE9V
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 20:17:45 -0700
-IronPort-SDR: 2kFBiw6XUrxOxKhRR9BGiWHOVHdXP60P4VV2uR/NRZqiBgSZ+UcJb3HU6XOOrjPxsnSA2WRGdd
- cVcIQh6r3wp3RjploYoQmBAcgPoW76dM6ScSWP5UuVP3IxU4yod1VRpRiD8iq2yQ7ZN8d96EN2
- tpf8yHr8kstpXswOS75HMhpaP2bGtwzHPb1cPpwGlkvbVUm2WKNlmeC4F8Aj+0WadwRQ5XeMWw
- 348I+77CxCxz1knFdVWtvUjQiDuT1ENXT8GR/V7gUdioLstLBO8c9dzdL8DeixX30WOUZZr2gx
- B00=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 20:42:17 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4HfDyw0v5gz1RtVp
-        for <linux-scsi@vger.kernel.org>; Tue, 26 Oct 2021 20:42:16 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1635306135; x=1637898136; bh=xPGvWc/CDKA9F05lC6rPfMyvBm5J0XVlHTq
-        QNKB5Uag=; b=DmhuyViXMiYIEWLuaxh6z1VVq0f1tqJFvt6cDm4t7Ofp6g9zYlq
-        DPOmrYNRsCc1Y4Tawz3Yu7iPKL80/21IZ+RUpCT7EXnAtcHB9swQW+Bia1H9gYqp
-        d2XkmccjmWBFcsNtiuTopvTOy/WwWMt9oQ467MJQJ6Pj6giLdBOlvgtkCxngjYf6
-        7HLmhrqp4q3v4B36iF6L+F+lL6aI4tH5fpHK6wJjuZ2LpCa3LRvkUq+59szTxJwu
-        rcnZRy1EQ5fWXeEq38mIJM9dJM4anq8IsEndSzyNOLBcErJMPsjN61mQcBu01oSi
-        LDvMhk546pXCQnnms+53Eu5ujQkooxPtjeQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id o_Oxfz7lfR7b for <linux-scsi@vger.kernel.org>;
-        Tue, 26 Oct 2021 20:42:15 -0700 (PDT)
-Received: from [10.89.86.157] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.86.157])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4HfDyt4RM1z1RtVl;
-        Tue, 26 Oct 2021 20:42:14 -0700 (PDT)
-Message-ID: <c47af2f2-2d33-fc54-efe3-f20b286e80c5@opensource.wdc.com>
-Date:   Wed, 27 Oct 2021 12:42:10 +0900
+        id S229744AbhJ0EDS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Oct 2021 00:03:18 -0400
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:61102 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229885AbhJ0EDK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 27 Oct 2021 00:03:10 -0400
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19R0n0C0015474;
+        Wed, 27 Oct 2021 04:00:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=+4BgIZY4lR/vnCmrk0RUztBT8gXJqQuyjlRcNq3Iq/A=;
+ b=ZKY4weGxKtTxJlztsUYMbvHGn5ahrKFmfYe5beyTkWs9G2Z6EXk8krTslC0xihftzaBW
+ uu06Yfw8TJVu7ntgFnu9EgqAqFRy/r8dwN7cMheD34M1TK3/5pCnfobv2uzDWOEhcLSz
+ wtz+xjOuj9J+zIbhRHRAakjseLsX/JmWTVxx+FJuqpwV2tCgoHb+nQvXGW84kqNAShQ9
+ Bbcqu4UZY7A0vka2XMHwuFEyvkgVZ04jvho40z50Blv/A/ii5y6KEWWJzNysK17PdCiP
+ Hc7wmYDOfF3DY7bSvUICVg+0RojewKQ5of6LRGIBvrET1CIgwQUnqenBqQel9CkrD//J kg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3bx4fj0tb8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 27 Oct 2021 04:00:26 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 19R400wR068907;
+        Wed, 27 Oct 2021 04:00:25 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 3bx4gqcn9b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 27 Oct 2021 04:00:25 +0000
+Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 19R40O5C070915;
+        Wed, 27 Oct 2021 04:00:24 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by userp3020.oracle.com with ESMTP id 3bx4gqcn88-1;
+        Wed, 27 Oct 2021 04:00:24 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-scsi@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Peter Wang <peter.wang@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>
+Subject: Re: [PATCH] scsi: ufs: mediatek: avoid sched_clock() misuse
+Date:   Wed, 27 Oct 2021 00:00:19 -0400
+Message-Id: <163530706457.10775.2217918948361073974.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211018132022.2281589-1-arnd@kernel.org>
+References: <20211018132022.2281589-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [PATCH v9 0/5] Initial support for multi-actuator HDDs
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-References: <20211027022223.183838-1-damien.lemoal@wdc.com>
- <cea34b2a-6835-d090-4f0c-3bf456a6ed00@kernel.dk>
- <CH2PR04MB70782D5877F24ECC9A0F644AE7859@CH2PR04MB7078.namprd04.prod.outlook.com>
- <64a81be7-ef62-8f8c-bfdc-759e04530366@kernel.dk>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <64a81be7-ef62-8f8c-bfdc-759e04530366@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: IxSGowgx6TWOB-i5UsoImQPLxaD-JNJd
+X-Proofpoint-GUID: IxSGowgx6TWOB-i5UsoImQPLxaD-JNJd
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2021/10/27 12:03, Jens Axboe wrote:
-> On 10/26/21 8:49 PM, Damien Le Moal wrote:
->> On 2021/10/27 11:38, Jens Axboe wrote:
->>> On 10/26/21 8:22 PM, Damien Le Moal wrote:
->>>> From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
->>>>
->>>> Single LUN multi-actuator hard-disks are cappable to seek and execute
->>>> multiple commands in parallel. This capability is exposed to the host
->>>> using the Concurrent Positioning Ranges VPD page (SCSI) and Log (ATA).
->>>> Each positioning range describes the contiguous set of LBAs that an
->>>> actuator serves.
->>>>
->>>> This series adds support to the scsi disk driver to retreive this
->>>> information and advertize it to user space through sysfs. libata is
->>>> also modified to handle ATA drives.
->>>>
->>>> The first patch adds the block layer plumbing to expose concurrent
->>>> sector ranges of the device through sysfs as a sub-directory of the
->>>> device sysfs queue directory. Patch 2 and 3 add support to sd and
->>>> libata. Finally patch 4 documents the sysfs queue attributed changes.
->>>> Patch 5 fixes a typo in the document file (strictly speaking, not
->>>> related to this series).
->>>>
->>>> This series does not attempt in any way to optimize accesses to
->>>> multi-actuator devices (e.g. block IO schedulers or filesystems). This
->>>> initial support only exposes the independent access ranges information
->>>> to user space through sysfs.
->>>
->>> I've applied 1/9 for now, as that clearly belongs in the block tree.
->>> Might be the cleanest if SCSI does a post tree that depends on
->>> for-5.16/block. Or I can apply it all as they are reviewed. Let me
->>> know.
->>
->> Forgot: They are all reviewed, including Martin who sent a Reviewed-by for the
->> series, but not an Acked-by for patch 2. As for libata patch 3, obviously, this
->> is Acked-by me.
-> 
-> Queued up 2-5 in the for-5.16/scsi-ma branch.
-> 
+On Mon, 18 Oct 2021 15:20:01 +0200, Arnd Bergmann wrote:
 
-Thanks !
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> sched_clock() is not meant to be used in portable driver code,
+> and assuming a particular clock frequency is not how this is
+> meant to be used. It also causes a build failure because of
+> a missing header inclusion:
+> 
+> [...]
+
+Applied to 5.16/scsi-queue, thanks!
+
+[1/1] scsi: ufs: mediatek: avoid sched_clock() misuse
+      https://git.kernel.org/mkp/scsi/c/bb4a8dcb4e94
 
 -- 
-Damien Le Moal
-Western Digital Research
+Martin K. Petersen	Oracle Linux Engineering
