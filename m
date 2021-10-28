@@ -2,65 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B345A43E6DA
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 Oct 2021 19:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C70143E757
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 Oct 2021 19:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbhJ1RM5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 28 Oct 2021 13:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S230407AbhJ1R3Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 28 Oct 2021 13:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbhJ1RM4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Oct 2021 13:12:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC91C061570;
-        Thu, 28 Oct 2021 10:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QZ+Ok3QSmenqeVI6Z1A7VRMrFdlOCkIcageNVExYylc=; b=b2hbSrdSC0kGmPAhfihD5iFS0Q
-        xz/h1wVwG3l0wjyGPDn4YAAtuKOtQ9x+bQ3wVFvZiDGH3o8HlSOHP+gz3WCTmIn/69AA8Vyqpy+fN
-        Iu+62AgQfjLPPG0K2D3BOaJynv5YvbD37iTiOlaWWJO2TXVNJE6IUmbpj/Zepisz82jJEuIUBOz8h
-        mXZpPq45AYhp1cwsiMTGEmeloKiBcbj2IIx4BmqeqG+iYWzdEbeoSntsjTvD+XS8mnl9aApe+QncE
-        SClPthXIkFRJr1xViXlPWTER1itjHWNMZGNpFCb0oRlXCkVAVvlVivwk8eQ2yLbJT4Snd3d+ylmTH
-        u72ZVHtA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mg8v2-008gjq-Fp; Thu, 28 Oct 2021 17:10:24 +0000
-Date:   Thu, 28 Oct 2021 10:10:24 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        James Bottomley <jejb@linux.ibm.com>, daejun7.park@samsung.com,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "huobean@gmail.com" <huobean@gmail.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] scsi: ufs: Fix proper API to send HPB pre-request
-Message-ID: <YXrZgC7mYVQS+CE6@infradead.org>
-References: <CGME20211027223619epcms2p60bbc74c9ba9757c58709a99acd0892ff@epcms2p6>
- <20211027223619epcms2p60bbc74c9ba9757c58709a99acd0892ff@epcms2p6>
- <0f9229c3c4c7859524411a47db96a3b53ac89c90.camel@linux.ibm.com>
- <YXrBTHmu/fiAaZH5@infradead.org>
- <54b45df9-9339-c69d-73b5-9c293449b849@acm.org>
+        with ESMTP id S229610AbhJ1R3Z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Oct 2021 13:29:25 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13782C061570
+        for <linux-scsi@vger.kernel.org>; Thu, 28 Oct 2021 10:26:58 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id a132so5515405qkg.0
+        for <linux-scsi@vger.kernel.org>; Thu, 28 Oct 2021 10:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
+        b=MH0mvsAe9XMU/FSnMVfiEGeToVww9/pPdHPdxpBBfP8vk4x3lVtOE3zJiPkJI7vfVi
+         Xo0Ta9CpMDdAF5+hU/LSFN/NswFrlR4xRUkEpTtzShilHr/BCVNl2+Z5HIy0Sv7moE+q
+         PtYJVjB6ZMUiLEDqiq1r6Nl6GvgxiCpSFagYVMq6/u4lR5ODVSkDHyjpjgtRr3/HQKTN
+         Dpg583htlzGSUgtp4KFOXlQueyInhbhQhCaJq5uxxrrbU9y+9zWoV/L2cCDo+rLN0jSn
+         hpyTg0TwW7NMnzToey6qiHxbFRcfvWK5gQv0NORM8O1B/g3QUojVWS0DD578ldNPCjMo
+         yRDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
+        b=U9rjATMkSJjGsQek7eubmBpbLUZeX/kQNJgYY+fHqcz1X4umx0/GfVLaloVtyDo9Af
+         0QmXsIC3/yxZ3mj52dmEuqa7dAi5ycakxX3H0GTH7DzcNHmy1lPVaEJX1kcI00DI7IHe
+         Seu8FcPXIZV/p0QrbNoEJKkTZJkR1BRn8GbAJP+5qp2FQ6+f71+ZOPWTRFOAys/rk1sp
+         390DL9UXjQ/pLswbcVa0ITQabeLWkaXBQ7ojNRStgEHyJ143/9M8T/mAtdjax9ZLBgna
+         PBKtv6y0mM5maj007B5wXS1aZ1VBwxV24F+orMz0mI3/Hy4XqHTBbaZtev+lqPi+jeGt
+         HA3Q==
+X-Gm-Message-State: AOAM530bFWMYQLUbAvWpCiytJuWkTu5M5Qbw/Pl8WI5ze1Ff9b4C6evN
+        pmhATQ4yD8ySv2Ixn0zsmsoMqAecsBnzVopdKL4=
+X-Google-Smtp-Source: ABdhPJzwAC/rI0fc8sWFK9moWD4LtgFLaLvhFyvmhTMeHpVNmCtthai3I95eCsQ/acYfoXRP03DCq6H7YKUg5dWif1Y=
+X-Received: by 2002:a05:620a:2403:: with SMTP id d3mr4792294qkn.119.1635442017091;
+ Thu, 28 Oct 2021 10:26:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54b45df9-9339-c69d-73b5-9c293449b849@acm.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Received: by 2002:a05:6214:186a:0:0:0:0 with HTTP; Thu, 28 Oct 2021 10:26:56
+ -0700 (PDT)
+Reply-To: ms.lisahugh000@gmail.com
+From:   MS LISA HUGH <xavier.gbesse2@gmail.com>
+Date:   Thu, 28 Oct 2021 19:26:56 +0200
+Message-ID: <CALCvb1OjEVbGsGpLYGmM90_HAqiCVEuz6qMLMsjqkeSGXzsHrg@mail.gmail.com>
+Subject: QUICK REPLY AND DETAILS >>MS LISA HUGH.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Oct 28, 2021 at 10:07:52AM -0700, Bart Van Assche wrote:
-> I spent some time looking around for other examples of allocating and
-> inserting a request from inside block layer callbacks. I only found one
-> such example, namely in the NVMe core. nvme_timeout() calls
-> nvme_alloc_request() and blk_execute_rq_nowait(). The difference between
-> what the UFS HPB code is doing and what nvme_timeout() does doesn't seem
-> that big to me.
+Dear Friend,
 
-The difference is that nvme_timeout allocates a request on the
-admin queue, and only does so for commands on the I/O queues.
+I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
+
+I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
+bank account with your co-operation for both of us benefit.
+
+Please send the follow below,
+1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
+Thanks.
+Ms Lisa Hugh
