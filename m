@@ -2,135 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9DB43DE91
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 Oct 2021 12:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECE943DF79
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 Oct 2021 12:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbhJ1KVN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 28 Oct 2021 06:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
+        id S230369AbhJ1KzA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 28 Oct 2021 06:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbhJ1KVM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Oct 2021 06:21:12 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8801AC061570;
-        Thu, 28 Oct 2021 03:18:41 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id ls14-20020a17090b350e00b001a00e2251c8so4292172pjb.4;
-        Thu, 28 Oct 2021 03:18:41 -0700 (PDT)
+        with ESMTP id S230195AbhJ1Kyv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Oct 2021 06:54:51 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD112C079787
+        for <linux-scsi@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id f8so1417277edy.4
+        for <linux-scsi@vger.kernel.org>; Thu, 28 Oct 2021 03:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AtRMwbZy5HFLEPgyWN1+wEtHlSPg79vWQXM45h0t10c=;
-        b=oxgzxeTrN+TYAcnoVkWvO74cRWoGFvMFKYQDZ8W6fMJQeyG7t4p+JZkYdbKNn43Fs8
-         ezL2e29zimjGZ9gGRseCM3rLlNAM4ozEZKEzpxVJ6K6TF/s6DcrJ2COcVz0QsAgqHGxb
-         pNk2hj7W3wdZkMtQJj3zxNBtmSO2sWz02V4br3wRzpjtmV/5cQzOTQrFOXPmM4r0ys46
-         rrTtLNzJAXNr+ixnmyitix+R/PbtCBGsSBm2YBsq6Z4QaQ+lhdTNzTNl7jDzUtQfub01
-         aIT6YZJsDLaPmR5JITYPAcgfwbkXHvHWkgIlWY0jtOG7GjuX0j/ARb2i3WNUD9y64elM
-         3YGA==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
+        b=MqgQiMnth4O6zLvpsYbAhVLW1BorpgoCleWwfkY0/i+i6OSDuXRZO1jIKzpTTrmehO
+         XtsLWdXiTcL+XCe4naFtf2tTUJnbwwmDpuUkpvRhLd+LEnuxY7nNr11hmTRUVX1WOHsO
+         bN0u1arCg4gm9LHdXRMZFcXOD22U5gDGuBOuhPo6qvWbt6nA2j/p/5IZ88XFHrEsiSW3
+         12hentYJMlWeUfa2lUQkLm+5/fvMSizrI7wGoF2taOa3dgGUV5HKZWb0yAAH7nAXVevJ
+         tDC/xbHNLzSn310XeD3Gkoobjl6MPBQzT5DSLzerNBdTKOdmyp3xvfvOyo80qVUTZIED
+         gaRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AtRMwbZy5HFLEPgyWN1+wEtHlSPg79vWQXM45h0t10c=;
-        b=EGWmaTRAfrdHcb39D/TkPGw0Tl26zlbmUxU+fQjpqyMYJxaLqhMa8WSCqIyC7Wex6f
-         wcbNBpasPF/k6llh2yyiFwE7SAoGXdKbul5D11AfwjysH9HDvqvKAkN2nB8PuDoqeWO2
-         I1aROVXRw4IcYz5yoQajLqjo4Z42ewNTyUkAHfkJuraWv32+gtqk3TKl2VsC9twQey41
-         XnBdeGHt1adTmZQal0Ky+QUYHXF23BplAsB7K+kYogo87qHilfW+WVPXXF4CCE5OgqMf
-         c5fmQ+3FKLOQqZLbkcrjtdkq36g6FxR1dL9XMeFWUgIywvvgTQztA/Zxl9taroIjQciZ
-         xzdw==
-X-Gm-Message-State: AOAM530B4Z4UTc9uPXcRZ9OXfjgO8A63mV5/31gcWNbF8aNz2kpxdHCJ
-        tCwyHlZopxAxdabyJLmSrc0=
-X-Google-Smtp-Source: ABdhPJz7xIwmNa3Y3CFRxLmGY5vvdUVSMta4nlpfTYIzMnKDtZuK8/U1rVWjSsZ+c9d0o4i9zUx6WQ==
-X-Received: by 2002:a17:90a:7a81:: with SMTP id q1mr33172pjf.1.1635416321121;
-        Thu, 28 Oct 2021 03:18:41 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id g13sm3167115pfv.20.2021.10.28.03.18.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 03:18:40 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: yao.jing2@zte.com.cn
-To:     tyreld@linux.ibm.com
-Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Jing Yao <yao.jing2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] drivers: scsi: replace snprintf in show functions with sysfs_emit
-Date:   Thu, 28 Oct 2021 10:18:22 +0000
-Message-Id: <20211028101822.14278-1-yao.jing2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
+        b=8G5U71lWLGzmS94Sw1CCGdAE346X1uzzisnnfJXnRBZdZ47rQGCjzqt4kCBCuOC61s
+         xjMlvHJAI1T46iAztLdqZXRQ9187baBTWXOZA+xBoQKp/XPoT+gbeM3O2G8VrzekgqwE
+         2k/DRZL3xmUlDL1+CbpBi9cJrGywvL+FXNiIBwoaYuWzuErTjvWR9uhceRG7H5YG1vze
+         nNmxH/Fm3qiacRnIuJAUoysEfmBkTNgzm6OpCYTBYe4SSpgowUSXPX94LDLOE6NQ9yAj
+         BZyUMDHXSBjS4VxSwvwDP0pWjZtv7mL1hBGbRNP4RqrX57bhrPXP+JQCA1NP7zd9w6pY
+         AZLg==
+X-Gm-Message-State: AOAM533XiH/Ub2P32J6+IqXBosW550Qvzp6RqYp0mfVLFiVHUjHda1w7
+        TtYRCj2zkmlZEp4cfi3+K2aXfNV4jDj3pjNrWOaoz11//+hPuxzh
+X-Google-Smtp-Source: ABdhPJw39EF9dJlXS9lAFrZ3adXxB8DVzXcygVzA3uRLiZxWlggxaB9ElCxkEB0P82xisoA6G442GD5iqMe2hCgLIt8=
+X-Received: by 2002:a2e:9a83:: with SMTP id p3mr3750290lji.145.1635418330269;
+ Thu, 28 Oct 2021 03:52:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab3:6f89:0:0:0:0:0 with HTTP; Thu, 28 Oct 2021 03:52:09
+ -0700 (PDT)
+Reply-To: aabdulwalialhashmi@gmail.com
+From:   Abdulwali Alhashmi <husamalsayed.hs@gmail.com>
+Date:   Thu, 28 Oct 2021 03:52:09 -0700
+Message-ID: <CAF6yYCeS=rm8=_71-kMjVo4oaVK57w9X52R_yv1HDrBe7vh-sA@mail.gmail.com>
+Subject: PLEASE GET BACK TO ME IF I CAN I TRUST YOU
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Jing Yao <yao.jing2@zte.com.cn>
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
----
- drivers/scsi/ibmvscsi/ibmvfc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index d0eab5700dc5..9f20fefc2c02 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -3403,7 +3403,7 @@ static ssize_t ibmvfc_show_host_partition_name(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, PAGE_SIZE, "%s\n",
- 			vhost->login_buf->resp.partition_name);
- }
- 
-@@ -3413,7 +3413,7 @@ static ssize_t ibmvfc_show_host_device_name(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, PAGE_SIZE, "%s\n",
- 			vhost->login_buf->resp.device_name);
- }
- 
-@@ -3423,7 +3423,7 @@ static ssize_t ibmvfc_show_host_loc_code(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, PAGE_SIZE, "%s\n",
- 			vhost->login_buf->resp.port_loc_code);
- }
- 
-@@ -3433,7 +3433,7 @@ static ssize_t ibmvfc_show_host_drc_name(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, PAGE_SIZE, "%s\n",
- 			vhost->login_buf->resp.drc_name);
- }
- 
-@@ -3442,7 +3442,7 @@ static ssize_t ibmvfc_show_host_npiv_version(struct device *dev,
- {
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
--	return snprintf(buf, PAGE_SIZE, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
-+	return sysfs_emit(buf, PAGE_SIZE, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
- }
- 
- static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
-@@ -3450,7 +3450,7 @@ static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
- {
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
--	return snprintf(buf, PAGE_SIZE, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
-+	return sysfs_emit(buf, PAGE_SIZE, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
- }
- 
- /**
 -- 
-2.25.1
+Greetings,
 
+Firstly, I apologize for encroaching into your privacy in this manner
+as it may seem unethical though it is a matter of great importance.
+
+I am Abdulwali Alhashmi, I work with Cayman National Bank (Cayman Islands).
+
+I am contacting you because my status would not permit me to do this
+alone as it is concerning our customer and an investment placed under
+our bank's management over 5 years ago.
+
+I have a proposal I would love to discuss with you which will be very
+beneficial to both of us. It's regarding my late client who has a huge
+deposit with my bank.
+
+He is from your country and shares the same last name with you.
+
+I want to seek your consent to present you as the next of kin to my
+late client who died and left a huge deposit with my bank.
+
+I would respectfully request that you keep the contents of this mail
+confidential and respect the integrity of the information you come by
+as a result of this mail.
+
+Please kindly get back to me for more details if I can TRUST YOU.{
+aabdulwalialhashmi@gmail.com }
+
+Regards
+Abdulwali Alhashmi
+Treasury and Deposit Management,
+Cayman National Bank Cayman Islands
