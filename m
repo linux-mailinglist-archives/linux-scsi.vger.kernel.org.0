@@ -2,81 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D84FE4414D6
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Nov 2021 09:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 528044415AB
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Nov 2021 09:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbhKAIIj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 1 Nov 2021 04:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbhKAIIf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Nov 2021 04:08:35 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A630FC06120B
-        for <linux-scsi@vger.kernel.org>; Mon,  1 Nov 2021 01:06:01 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id y26so34709979lfa.11
-        for <linux-scsi@vger.kernel.org>; Mon, 01 Nov 2021 01:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
-        b=jTwGY7UqyQ8YIhJUDjrqZPtk3LzrWCAUOAMDPLz5M7CqLBHqNsFTo9C861qV1B25Xf
-         r5L553Wxmro5Ww3I0Kz3a52AwkmZqFToii6+0ZOhpUkOfcb53PnNGE9m6Sqik3zmhZwo
-         n/R9HTp53zn5NI3DbL08muEwIh9gH7g9lDe2tstM5tUGQD80ibC8oJ7RZsh0jabUj80l
-         TjW7jDszyj0LgBKofuNs3yAxUhi8ze1MSxaF3AEB8qSt1N3bygNegk5wBFiWacOIsTYm
-         giGQNkRW+M+En5ZqEkyuSVwtFALtbKc66CUkcVFPmwMgTZmFkWlfrtrQ91sQ12FB43ir
-         IgcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
-        b=qem/Xnq4ZcgVTH4x5d8++lwAHs4xujBBG95rl4XIOG/ehaGJWCl2NCTpSjFPiGj9Oj
-         KACI60xfjnosGWqhd+BSyHXS+xRHKQlA7TsWOwJVJ0oBmIaY07Op1CceYfK4aHUOeNKf
-         6soc8q2Qy4KKp1yccc5VuLuh7GVuCiVNxzQSYckoT102tBc6PuuzobEZH51gsI/sR+Y7
-         zOFWvDtGgs/2WE7yrPUDAiNcaP4EYAARfb8kc49mBRb/lhI0IVtBGVo/UyVVu8S8lK5+
-         bUXH7xyq0VpRbytkhRpUaZFgOl7BJtTaGpUJsDIgyXeBc03NearluPW2bcv9Xkw3Yz6c
-         ymHw==
-X-Gm-Message-State: AOAM530bvL0Shhp7vkEK9sv/abmu/aZzBFbWsmiwTR/XOXGOKV53fo41
-        HqAu1iIyapFsxaWX6dGacEvoQXEzCbxZ4zBR4kM=
-X-Google-Smtp-Source: ABdhPJxmqEVdpxtX6Hrcfxe4l+hmj7ibNqiYjCRoHEGQmkHQsxyv4j0y0ocCVsmwYp4ABnpO0ho1EyHAGzTI8DbI2zw=
-X-Received: by 2002:a05:6512:3696:: with SMTP id d22mr7627111lfs.659.1635753959932;
- Mon, 01 Nov 2021 01:05:59 -0700 (PDT)
+        id S231485AbhKAIzu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 1 Nov 2021 04:55:50 -0400
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4042 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230520AbhKAIzu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Nov 2021 04:55:50 -0400
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HjRXM6CpYz67kSQ;
+        Mon,  1 Nov 2021 16:48:51 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.15; Mon, 1 Nov 2021 09:53:14 +0100
+Received: from [10.202.227.179] (10.202.227.179) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Mon, 1 Nov 2021 08:53:14 +0000
+Subject: Re: kernel 5.15 does not boot with 3ware card (never had this issue
+ <= 5.14) - scsi 0:0:0:0: WARNING: (0x06:0x002C) : Command (0x12) timed out,
+ resetting card
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Justin Piszcz <jpiszcz@lucidpixels.com>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
+References: <006a01d7cead$b9262d70$2b728850$@lucidpixels.com>
+ <a4a88807-8f52-ef9a-c58e-0ff454da5ade@acm.org>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <0d9db49d-84c2-4fda-3c7d-0286cdff8cf6@huawei.com>
+Date:   Mon, 1 Nov 2021 08:53:13 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Received: by 2002:a05:6512:304b:0:0:0:0 with HTTP; Mon, 1 Nov 2021 01:05:59
- -0700 (PDT)
-Reply-To: aisha.7d@yahoo.com
-From:   Aisha AG <rbx17058@gmail.com>
-Date:   Mon, 1 Nov 2021 00:05:59 -0800
-Message-ID: <CA+KbyychNgycp0rGBpdptJEdAFJQQCku4iDOhYe4CxitYXaueA@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <a4a88807-8f52-ef9a-c58e-0ff454da5ade@acm.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.179]
+X-ClientProxiedBy: lhreml719-chm.china.huawei.com (10.201.108.70) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
+On 31/10/2021 23:52, Bart Van Assche wrote:
+> On 10/31/21 16:19, Justin Piszcz wrote:
+>> Diff between 5.14 and 5.15 .config files-- could it be something to do 
+>> with
+>> CONFIG_IOMMU_DEFAULT_DMA_LAZY=y?
 
-Hello Dear,
+On x86 (intel or amd) iommu we were using lazy mode previously, but just 
+did not have a config option, so should not make a difference.
 
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col.Muammar Al-Qaddafi.
-Am a Widow and a single Mother with three Children.
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar $27.500.000.00, and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country,may be from there,we can build business relationship
-in the nearest future.
+> 
+> That's hard to say. Is CONFIG_MAGIC_SYSRQ enabled? If not, please enable 
+> it and hit Alt-Printscreen-t (dump task list; see also 
+> Documentation/admin-guide/sysrq.rst) and share the contents of the 
+> kernel log. If that would not be convenient, please try to bisect this 
+> issue.
 
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits.
-
-If you are willing to handle this project on my behalf kindly reply
-urgently to enable me to provide you more information about the
-investment funds.
-Best Regards
-Mrs Aisha Al-Qaddafi.
