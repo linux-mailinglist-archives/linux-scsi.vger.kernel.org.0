@@ -2,90 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8A744211E
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Nov 2021 20:54:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAC6442121
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Nov 2021 20:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbhKAT4s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 1 Nov 2021 15:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        id S229692AbhKAT6S (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 1 Nov 2021 15:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbhKAT4r (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Nov 2021 15:56:47 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9BFC061714
-        for <linux-scsi@vger.kernel.org>; Mon,  1 Nov 2021 12:54:13 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id w15so13576414ill.2
-        for <linux-scsi@vger.kernel.org>; Mon, 01 Nov 2021 12:54:13 -0700 (PDT)
+        with ESMTP id S229560AbhKAT6O (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Nov 2021 15:58:14 -0400
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2D0C061714
+        for <linux-scsi@vger.kernel.org>; Mon,  1 Nov 2021 12:55:40 -0700 (PDT)
+Received: by mail-oo1-xc30.google.com with SMTP id x135-20020a4a418d000000b002b961605657so5949057ooa.10
+        for <linux-scsi@vger.kernel.org>; Mon, 01 Nov 2021 12:55:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=koQbBQ21p1fsQdBlT5oLumJMTocgWXeZsx4RpVzAmQY=;
-        b=XnM6Ww1xAQ4aJAntWmx/aW6fEB3s9w9ALEa1XdlQXpgI819xGeGCnMWiLcvoQX33dd
-         D7BSLvA2/wXUDFmEIGAPnBRlHzmebowZAOS6qqTbgLyHyN1JGeUO1YwXcdP00kFSPKTV
-         +HtxkrwnQcjhih+8t2e30Rk2ZvuzfciWz9EF2pL0dLPAer/y3psjbe6/Il0RsGa0HUrM
-         jyhH3vJ8AtNvd/o5N0EVRqwnpqwcCxCuXjMxD3hdxL/Ytw9jxluTRp5DoWHn8bhmoka2
-         0uJ07IuLEylCjtLg8i99QDwsVhFEti7bB0w9fWk5l4GiXFkod8uWQD02VkJGzGn0Z3z3
-         O3gw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
+        b=bkWyYq0hleQc5kv8wqwS7ZQ3n0Ys1wFkbdCqD6k8A7fst4HR7AKculO7EQYJs9iNAX
+         3ZmCe2CzSZWDoPsQc6pzpipfuTCU+uECKtR77wWVdyHKZwo/uBoHTQu+eV184pqM1ZFo
+         NWBXFMIr6wtqMREmgMC0srQdHey18ni4QDxnUvhngxujI11HQmbnehVu4oP8dqSqCPw5
+         U6PlgkVJlhu4R60yF1dOYkDH+KWiNkEecyyIg822+fvzVxvdD7U067O5ouhV4qAV8tzR
+         5WOh/QYrEpKPX8N73qI95CbvU0SK0HtN35RWSrQsU9hph3tsOEj8UNwlYiIsMZ3Z7ZwJ
+         wNCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=koQbBQ21p1fsQdBlT5oLumJMTocgWXeZsx4RpVzAmQY=;
-        b=bzQfxkW4300NjCmFOJNv2suF6s3pDfTwHubZqGkX5uvQ/8DGIzioQTHcto24H+JHWo
-         Y5ECFN2uo78AsB7d4QGhbKId7sjVxoUb8YLNpsbBL2zPWB1odPsmqS8gGYybbLkfcVLQ
-         jD5+mTwGlVyYeXYeWnjCK1DbiioCf1O5gsj720WzAirlSoCDiaBXffT/ErJD0c3Cy6Et
-         j7McpGkZkE7GRHmTknR72Se+X549TjtyRa4QmHqg7T+4C19esG+uWKpNtXs+uiR/LqAa
-         WSXJ4ghfLXkMD2Nk4d1IyVu8ROEYNaiIqLmH6e32gsA19vqUseYFuhI8MqvQJFGZpYVA
-         wgQQ==
-X-Gm-Message-State: AOAM531cpogLJs+fCB6v3nxUW2757ReSZjj/g+8UqNjv5xfJ1STd+ziD
-        d5O12X6Wxj+9NEVsRu86RLr7+w==
-X-Google-Smtp-Source: ABdhPJy/9YCvWsy4CcYhHnrFyE0rT2z+RApGafmCg/y4Tz/3v9B8FSsOihEyIPkQmLe0tOe8OerETw==
-X-Received: by 2002:a05:6e02:1e02:: with SMTP id g2mr21957731ila.67.1635796452720;
-        Mon, 01 Nov 2021 12:54:12 -0700 (PDT)
-Received: from [127.0.1.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id h14sm8440390ils.75.2021.11.01.12.54.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Nov 2021 12:54:12 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     dm-devel@redhat.com, Yi Zhang <yi.zhang@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org
-In-Reply-To: <20211021145918.2691762-1-ming.lei@redhat.com>
-References: <20211021145918.2691762-1-ming.lei@redhat.com>
-Subject: Re: [PATCH 0/3] block: keep quiesce & unquiesce balanced for scsi/dm
-Message-Id: <163579645206.169811.345176407474716806.b4-ty@kernel.dk>
-Date:   Mon, 01 Nov 2021 13:54:12 -0600
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
+        b=utAuOmeNDgO2XMJk7S+TygRTxj2wIAWDFJIaPr9zvNlPPYM9iXuGHLznty0RrH/MHX
+         evaU97UOOqxb9iV6BTO4huik6MT+T+21lUjYTHL4qPUOKbhRS2rWYF9fhfpG4bf4PcbS
+         Cl8YHA8DqZwYnvGVIiNBzpbYfrA+kXrlcDRvPRT4/ip+ptOs6Cl5VqX108WD8HoQFeUj
+         T3X+7Dq1uGoH60VKyn6gZMEC2T6SW5TjGnF4WvcS6tD8GVftuGvge8z1Itp2SIMw7RmY
+         F9IIEYKdsh10a+1220dsbr4jc5EgId4TuQgp1Rs7V97P/T12znHgLTdS2DIAj/23Yvqo
+         Ge2w==
+X-Gm-Message-State: AOAM530a+OW9HlSu14LjS5zTuqNKNgL/bpEoxapNsE4zj83gswnHdqL5
+        QslFnsnlPFa6nmwNCyVAwRYnZdVwASusT9pCoYM=
+X-Google-Smtp-Source: ABdhPJz88I1ZyCcQlH1oNeBvzTzM5ElGFUb+NvhYd0i4p3a8qCh+GbWD+U2T8Y+yUI6zAtmx22NdREK2tpizGgCM21s=
+X-Received: by 2002:a4a:d48c:: with SMTP id o12mr20968035oos.55.1635796539789;
+ Mon, 01 Nov 2021 12:55:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6830:8d:0:0:0:0 with HTTP; Mon, 1 Nov 2021 12:55:39
+ -0700 (PDT)
+Reply-To: ms.lisahugh000@gmail.com
+From:   Ms Lisa Hugh <safi.kabore000@gmail.com>
+Date:   Mon, 1 Nov 2021 20:55:39 +0100
+Message-ID: <CAN7WVKNCJCcD5JYiX-euJFir+MAVKcOea1E4sqMgptL6uxAN-w@mail.gmail.com>
+Subject: YOU UNDERSTAND ? DETAILS LATER >>MS LISA HUGH.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 21 Oct 2021 22:59:15 +0800, Ming Lei wrote:
-> Recently we merge the patch of e70feb8b3e68 ("blk-mq: support concurrent queue
-> quiesce/unquiesce") for fixing race between driver and block layer wrt.
-> queue quiesce.
-> 
-> Yi reported that srp/002 is broken with this patch, turns out scsi and
-> dm don't keep the two balanced actually.
-> 
-> [...]
+Dear Friend,
 
-Applied, thanks!
+I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
 
-[1/3] scsi: avoid to quiesce sdev->request_queue two times
-      commit: 256117fb3b4f8832d6b29485d49d37ccc4c314d5
-[2/3] scsi: make sure that request queue queiesce and unquiesce balanced
-      commit: fba9539fc2109740e70e77c303dec50d1411e11f
-[3/3] dm: don't stop request queue after the dm device is suspended
-      commit: e719593760c34fbf346fc6e348113e042feb5f63
+I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
+bank account with your co-operation for both of us benefit.
 
-Best regards,
--- 
-Jens Axboe
-
-
+Please send the follow below,
+1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
+Thanks.
+Ms Lisa Hugh
