@@ -2,109 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE23445C69
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Nov 2021 23:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D92E445C5D
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Nov 2021 23:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbhKDWwn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 4 Nov 2021 18:52:43 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:26118 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbhKDWwm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 Nov 2021 18:52:42 -0400
-Received: from epcas3p4.samsung.com (unknown [182.195.41.22])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20211104225002epoutp02d22dfaa6ea93d70c008454dcb30abe44~0eYsUR66p0347503475epoutp02m
-        for <linux-scsi@vger.kernel.org>; Thu,  4 Nov 2021 22:50:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20211104225002epoutp02d22dfaa6ea93d70c008454dcb30abe44~0eYsUR66p0347503475epoutp02m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1636066202;
-        bh=2cYJzWfARjbXZ8J9wEAW74zKQBm59iKLTRa/kNxHvzc=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=HIb5Z4CabTAKiMMrThM7P1hMn+5GFP6LP2TjKCrCQJMJvWZNkr/+kScvU4wtdBEfW
-         kqfMX6oXMcyhF1x5hgNmP3qf/CWGRamhra9XrQRciJSpsAJRKS7XqEx6nUWgEr4OFP
-         THAsJt5ACPnMZZgJnCWYSVb+SHDwXSuD46/8vW/A=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas3p2.samsung.com (KnoxPortal) with ESMTP id
-        20211104225002epcas3p2aa5550e1cda006a5894a634f8cb53eb8~0eYrpNRXE1424214242epcas3p22;
-        Thu,  4 Nov 2021 22:50:02 +0000 (GMT)
-Received: from epcpadp3 (unknown [182.195.40.17]) by epsnrtp2.localdomain
-        (Postfix) with ESMTP id 4Hlf3Z0qjwz4x9Q4; Thu,  4 Nov 2021 22:50:02 +0000
-        (GMT)
-Mime-Version: 1.0
-Subject: [PATCH] scsi: ufs: Improve SCSI abort handling
-Reply-To: daejun7.park@samsung.com
-Sender: Daejun Park <daejun7.park@samsung.com>
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-CC:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Can Guo <cang@codeaurora.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Vinayak Holikatti <vinholikatti@gmail.com>,
-        VISHAK G <vishak.g@samsung.com>,
-        Girish K S <girish.shivananjappa@linaro.org>,
-        Santosh Yaraganavi <santoshsy@gmail.com>,
-        "huobean@gmail.com" <huobean@gmail.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20211104181059.4129537-1-bvanassche@acm.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <1891546521.01636066202065.JavaMail.epsvc@epcpadp3>
-Date:   Fri, 05 Nov 2021 07:39:06 +0900
-X-CMS-MailID: 20211104223906epcms2p2d25c5bf3001403de904317a3d675b5c5
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20211104181111epcas2p2965ba25c905be783c39f098210cc4c61
-References: <20211104181059.4129537-1-bvanassche@acm.org>
-        <CGME20211104181111epcas2p2965ba25c905be783c39f098210cc4c61@epcms2p2>
+        id S232133AbhKDWrn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 4 Nov 2021 18:47:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42874 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230436AbhKDWrm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 4 Nov 2021 18:47:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 34F0561220;
+        Thu,  4 Nov 2021 22:45:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636065903;
+        bh=ULRO/b21e2jF5Il9UheXH6nsdKwZYueNSl7SVt5O9zM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZUlP9UzxX3fkNEDMeQgJtLu4w9c+qEK9huvXYqqHBTEkI3uCuqX0tLz5RVvdLWyh/
+         hZ8PhEBO4htT2iwl68hfYDFMT0oyEA9gelhnZ4O4FxB+iv3cAPiOIZr8G3sshzoooj
+         Df8MZwd+A2ohPEGqD8UoQcly2xD1WL9Wyp4vXPhDmviwFLLDhqb68g1n9gqXVHMizl
+         dpwXmmfrHcKHvT3m3c8DH0lW0s4UTfcbIw75uZFJSLVW6Y3erFMaBpiAyjTvKeuWhs
+         rHGgvZikJbnsNW9oovgkNlETNpgHvyVU3jrmTV6/dRMoC2wTI6ORrvKvxCBKcr888g
+         8tVcvq2G9A3rQ==
+Date:   Thu, 4 Nov 2021 15:44:59 -0700
+From:   Keith Busch <kbusch@kernel.org>
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Cc:     linux-block@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, dm-devel@redhat.com, axboe@kernel.dk,
+        agk@redhat.com, snitzer@redhat.com, song@kernel.org,
+        djwong@kernel.org, hch@lst.de, sagi@grimberg.me,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        viro@zeniv.linux.org.uk, javier@javigon.com,
+        johannes.thumshirn@wdc.com, bvanassche@acm.org,
+        dongli.zhang@oracle.com, ming.lei@redhat.com, osandov@fb.com,
+        willy@infradead.org, jefflexu@linux.alibaba.com,
+        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, jack@suse.com,
+        tytso@mit.edu, adilger.kernel@dilger.ca, jlayton@kernel.org,
+        idryomov@gmail.com, danil.kipnis@cloud.ionos.com,
+        ebiggers@google.com, jinpu.wang@cloud.ionos.com,
+        Chaitanya Kulkarni <kch@nvidia.com>
+Subject: Re: [RFC PATCH 3/8] nvme: add support for the Verify command
+Message-ID: <20211104224459.GB2655721@dhcp-10-100-145-180.wdc.com>
+References: <20211104064634.4481-1-chaitanyak@nvidia.com>
+ <20211104064634.4481-4-chaitanyak@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211104064634.4481-4-chaitanyak@nvidia.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Bart,
+On Wed, Nov 03, 2021 at 11:46:29PM -0700, Chaitanya Kulkarni wrote:
+> +static inline blk_status_t nvme_setup_verify(struct nvme_ns *ns,
+> +		struct request *req, struct nvme_command *cmnd)
+> +{
 
+Due to recent driver changes, you need a "memset(cmnd, 0, sizeof(*cmnd))"
+prior to setting up the rest of the command, or you need to set each
+command dword individually.
 
->diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
->index 3b4a714e2f68..d8a59258b1dc 100644
->--- a/drivers/scsi/ufs/ufshcd.c
->+++ b/drivers/scsi/ufs/ufshcd.c
->@@ -7069,6 +7069,7 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
->                 goto release;
->         }
-> 
->+        lrbp->cmd = NULL;
->         err = SUCCESS;
-> 
-> release:
+> +	cmnd->verify.opcode = nvme_cmd_verify;
+> +	cmnd->verify.nsid = cpu_to_le32(ns->head->ns_id);
+> +	cmnd->verify.slba =
+> +		cpu_to_le64(nvme_sect_to_lba(ns, blk_rq_pos(req)));
+> +	cmnd->verify.length =
+> +		cpu_to_le16((blk_rq_bytes(req) >> ns->lba_shift) - 1);
+> +	cmnd->verify.control = 0;
+> +	return BLK_STS_OK;
+> +}
 
-I found similar code in the ufshcd_err_handler(). I think the following
-patch will required to fix another warning.
+> +static void nvme_config_verify(struct gendisk *disk, struct nvme_ns *ns)
+> +{
+> +	u64 max_blocks;
+> +
+> +	if (!(ns->ctrl->oncs & NVME_CTRL_ONCS_VERIFY))
+> +		return;
+> +
+> +	if (ns->ctrl->max_hw_sectors == UINT_MAX)
+> +		max_blocks = (u64)USHRT_MAX + 1;
+> +	else
+> +		max_blocks = ns->ctrl->max_hw_sectors + 1;
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index f5ba8f953b87..cce9abc6b879 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -6190,6 +6190,7 @@ static void ufshcd_err_handler(struct work_struct *work)
-                }
-                dev_err(hba->dev, "Aborted tag %d / CDB %#02x\n", tag,
-                        hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1);
-+               hba->lrb[tag].cmd = NULL;
-        }
+If supported by the controller, this maximum is defined in the non-mdts
+command limits in NVM command set specific Identify Controller VSL field.
 
-        /* Clear pending task management requests */
-
-
-Thanks,
-Daejun
+> +
+> +	/* keep same as discard */
+> +	if (blk_queue_flag_test_and_set(QUEUE_FLAG_VERIFY, disk->queue))
+> +		return;
+> +
+> +	blk_queue_max_verify_sectors(disk->queue,
+> +				     nvme_lba_to_sect(ns, max_blocks));
+> +
+> +}
