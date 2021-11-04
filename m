@@ -2,91 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50133445C2C
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Nov 2021 23:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE23445C69
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Nov 2021 23:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbhKDWkU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 4 Nov 2021 18:40:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41180 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229587AbhKDWkU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 4 Nov 2021 18:40:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B13666112E;
-        Thu,  4 Nov 2021 22:37:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636065461;
-        bh=d0SlTjW092+hNldgcKqMvjRj8A4fH3dQeSYxjCXIE+c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p2Z1NXGFJcrDHRSJ4YsljTKXDwTIDfXjPxjuw4cAkJqfDVc7cASUlgwflC88tOweV
-         JFP5arOcXbccjl5/V+EMbowyZTqn0MQ4afVsp5xV3ebPz89zxsZB5eQJoiOoRAUyM3
-         vuWV/QVVj/EJhT6iJoToF4AGQnqZIXLhmWwXYe+0wuAmdxpFNjA+HlW8qMhcs90gRl
-         XhCLuHp8KdWMvBLiFUBTKBvwZgadkK57w6drNa6+5g6puakjnWhz/GhxocC1DYtZh0
-         IicrB7Jg7pWPnaBNvAuE6xBflXcJyk8Y1t2dmz+iFrFE+plPRYZ2Ly3cgts6eM5evQ
-         uI+hx3W5popiw==
-Date:   Thu, 4 Nov 2021 15:37:36 -0700
-From:   Keith Busch <kbusch@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-raid@vger.kernel.org" <linux-raid@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        id S232167AbhKDWwn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 4 Nov 2021 18:52:43 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:26118 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230000AbhKDWwm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 Nov 2021 18:52:42 -0400
+Received: from epcas3p4.samsung.com (unknown [182.195.41.22])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20211104225002epoutp02d22dfaa6ea93d70c008454dcb30abe44~0eYsUR66p0347503475epoutp02m
+        for <linux-scsi@vger.kernel.org>; Thu,  4 Nov 2021 22:50:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20211104225002epoutp02d22dfaa6ea93d70c008454dcb30abe44~0eYsUR66p0347503475epoutp02m
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1636066202;
+        bh=2cYJzWfARjbXZ8J9wEAW74zKQBm59iKLTRa/kNxHvzc=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=HIb5Z4CabTAKiMMrThM7P1hMn+5GFP6LP2TjKCrCQJMJvWZNkr/+kScvU4wtdBEfW
+         kqfMX6oXMcyhF1x5hgNmP3qf/CWGRamhra9XrQRciJSpsAJRKS7XqEx6nUWgEr4OFP
+         THAsJt5ACPnMZZgJnCWYSVb+SHDwXSuD46/8vW/A=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas3p2.samsung.com (KnoxPortal) with ESMTP id
+        20211104225002epcas3p2aa5550e1cda006a5894a634f8cb53eb8~0eYrpNRXE1424214242epcas3p22;
+        Thu,  4 Nov 2021 22:50:02 +0000 (GMT)
+Received: from epcpadp3 (unknown [182.195.40.17]) by epsnrtp2.localdomain
+        (Postfix) with ESMTP id 4Hlf3Z0qjwz4x9Q4; Thu,  4 Nov 2021 22:50:02 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: [PATCH] scsi: ufs: Improve SCSI abort handling
+Reply-To: daejun7.park@samsung.com
+Sender: Daejun Park <daejun7.park@samsung.com>
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>,
-        "song@kernel.org" <song@kernel.org>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "javier@javigon.com" <javier@javigon.com>,
-        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "dongli.zhang@oracle.com" <dongli.zhang@oracle.com>,
-        "ming.lei@redhat.com" <ming.lei@redhat.com>,
-        "osandov@fb.com" <osandov@fb.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "jefflexu@linux.alibaba.com" <jefflexu@linux.alibaba.com>,
-        "josef@toxicpanda.com" <josef@toxicpanda.com>,
-        "clm@fb.com" <clm@fb.com>, "dsterba@suse.com" <dsterba@suse.com>,
-        "jack@suse.com" <jack@suse.com>, "tytso@mit.edu" <tytso@mit.edu>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "jlayton@kernel.org" <jlayton@kernel.org>,
-        "idryomov@gmail.com" <idryomov@gmail.com>,
-        "danil.kipnis@cloud.ionos.com" <danil.kipnis@cloud.ionos.com>,
-        "ebiggers@google.com" <ebiggers@google.com>,
-        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>
-Subject: Re: [RFC PATCH 0/8] block: add support for REQ_OP_VERIFY
-Message-ID: <20211104223736.GA2655721@dhcp-10-100-145-180.wdc.com>
-References: <20211104064634.4481-1-chaitanyak@nvidia.com>
- <20211104071439.GA21927@lst.de>
- <661bcadd-a030-4a72-81ae-ef15080f0241@nvidia.com>
- <20211104173235.GI2237511@magnolia>
- <20211104173431.GA31740@lst.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211104173431.GA31740@lst.de>
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Can Guo <cang@codeaurora.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Vinayak Holikatti <vinholikatti@gmail.com>,
+        VISHAK G <vishak.g@samsung.com>,
+        Girish K S <girish.shivananjappa@linaro.org>,
+        Santosh Yaraganavi <santoshsy@gmail.com>,
+        "huobean@gmail.com" <huobean@gmail.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20211104181059.4129537-1-bvanassche@acm.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1891546521.01636066202065.JavaMail.epsvc@epcpadp3>
+Date:   Fri, 05 Nov 2021 07:39:06 +0900
+X-CMS-MailID: 20211104223906epcms2p2d25c5bf3001403de904317a3d675b5c5
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20211104181111epcas2p2965ba25c905be783c39f098210cc4c61
+References: <20211104181059.4129537-1-bvanassche@acm.org>
+        <CGME20211104181111epcas2p2965ba25c905be783c39f098210cc4c61@epcms2p2>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Nov 04, 2021 at 06:34:31PM +0100, Christoph Hellwig wrote:
-> On Thu, Nov 04, 2021 at 10:32:35AM -0700, Darrick J. Wong wrote:
-> > I also wonder if it would be useful (since we're already having a
-> > discussion elsewhere about data integrity syscalls for pmem) to be able
-> > to call this sort of thing against files?  In which case we'd want
-> > another preadv2 flag or something, and then plumb all that through the
-> > vfs/iomap as needed?
-> 
-> IFF we do this (can't answer if there is a need) we should not
-> overload read with it.  It is an operation that does not return
-> data but just a status, so let's not get into that mess.
+Hi Bart,
 
-If there is a need for this, a new io_uring opcode seems like the
-appropirate user facing interface for it.
+
+>diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>index 3b4a714e2f68..d8a59258b1dc 100644
+>--- a/drivers/scsi/ufs/ufshcd.c
+>+++ b/drivers/scsi/ufs/ufshcd.c
+>@@ -7069,6 +7069,7 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
+>                 goto release;
+>         }
+> 
+>+        lrbp->cmd = NULL;
+>         err = SUCCESS;
+> 
+> release:
+
+I found similar code in the ufshcd_err_handler(). I think the following
+patch will required to fix another warning.
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index f5ba8f953b87..cce9abc6b879 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -6190,6 +6190,7 @@ static void ufshcd_err_handler(struct work_struct *work)
+                }
+                dev_err(hba->dev, "Aborted tag %d / CDB %#02x\n", tag,
+                        hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1);
++               hba->lrb[tag].cmd = NULL;
+        }
+
+        /* Clear pending task management requests */
+
+
+Thanks,
+Daejun
