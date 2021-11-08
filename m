@@ -2,58 +2,142 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D2144785C
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Nov 2021 02:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F61447863
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Nov 2021 02:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbhKHBrM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 7 Nov 2021 20:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbhKHBrJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Nov 2021 20:47:09 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9A7C061570
-        for <linux-scsi@vger.kernel.org>; Sun,  7 Nov 2021 17:44:25 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id i12so15347068ila.12
-        for <linux-scsi@vger.kernel.org>; Sun, 07 Nov 2021 17:44:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ub-ac-id.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=HsKe1irRV6kznvVT/stxg/OFNC2sWNjMK4OPxul8fCI=;
-        b=fKMb1jTC3GGXMPqzAztEBDV/nH+dGYW8RE1H/nYqaefJMdvt5ql5kORRGMIow+5q+X
-         sOX9mfkCCwGxy/RtzHByZmrYPMRaFvnQ9ed0qO6a8hwUXRrXF9QrhcOiGWSr9Ev1s9Eh
-         q1KDT8rxRxOcVwcCWSE6yxqpIP4KI3JXaxShCHQw+A4tyEkvrMumXUfEvFdE7Yay2N4E
-         M4ZFzUrwSuRHYzZyHnUzp20YZU7ujMFE4Pu6wogOO3capPqOZTLZ+qmw/JV9PJEpYURi
-         yuB76wSkRgZjwaUE1PWDwzo5afapT9dKC5t8JP0CLcLo0UozhsubPPBGESjUCtpMKWXP
-         i8tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=HsKe1irRV6kznvVT/stxg/OFNC2sWNjMK4OPxul8fCI=;
-        b=zoHEu2HPPobEt4kFCfkQ8EerMeqrRh6RQsNgmzReptKdIICoFM0dUifwEbl5nPRjRv
-         ClfKelWjetKiBeTHSIZrZFi3iWVrLf6dHoejYIkl2odCfPAx1JBzNcMzUaXqj5MqzFvH
-         hhIXvdXjlvhOxcp6TBDXY4yC93mF4AVlQvaffQ3ERHlAdAOuvbPXQC1I8hftyj2+ZorM
-         L//dvlVGILlYwt/F9vi8xX7+YiIiPoWk8kMNLBgpUZLuY6nX7BkU+FWGn/BAjfmi3Z2l
-         alJaO+m5azeKk2tlcpidWIkjrfgs75X14p04XMJsyEpIvZy25sM1uecIOVMJZkBmhE6V
-         nE6A==
-X-Gm-Message-State: AOAM5338MaZIzXRQfSCSNBKQxnLh5S4X5E0wKAN9Z/VZaCdrGuN01V5f
-        HUO/xeNj6zoZp5cYFnFzUfDBmnXsAuKmr2VynP8K1Q==
-X-Google-Smtp-Source: ABdhPJyjiGg6vL5Z6c3wcic+1TAnm8hirW+b3UmtCrSFrBf1oyhMBjl4syAFTwbQaXMdsXbT43VetL80K2NnR+v8mkc=
-X-Received: by 2002:a05:6e02:1846:: with SMTP id b6mr27704548ilv.164.1636335864931;
- Sun, 07 Nov 2021 17:44:24 -0800 (PST)
+        id S236140AbhKHBxs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 7 Nov 2021 20:53:48 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:26295 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236113AbhKHBxr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Nov 2021 20:53:47 -0500
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HnYqT11b9zbhjw;
+        Mon,  8 Nov 2021 09:46:13 +0800 (CST)
+Received: from dggpeml500019.china.huawei.com (7.185.36.137) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Mon, 8 Nov 2021 09:51:00 +0800
+Received: from [10.174.179.189] (10.174.179.189) by
+ dggpeml500019.china.huawei.com (7.185.36.137) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Mon, 8 Nov 2021 09:51:00 +0800
+Subject: Re: [PATCH 2/2] scsi: Fix hang when device state is set via sysfs
+To:     Mike Christie <michael.christie@oracle.com>, <lduncan@suse.com>,
+        <cleech@redhat.com>, <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <jejb@linux.ibm.com>
+CC:     Bart Van Assche <bvanassche@acm.org>,
+        lijinlin <lijinlin3@huawei.com>
+References: <20211105221048.6541-1-michael.christie@oracle.com>
+ <20211105221048.6541-3-michael.christie@oracle.com>
+From:   Wu Bo <wubo40@huawei.com>
+Message-ID: <dbc41361-3370-e51d-6fb4-e8059fdc918d@huawei.com>
+Date:   Mon, 8 Nov 2021 09:50:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.2
 MIME-Version: 1.0
-Received: by 2002:a5d:924b:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 17:44:24 -0800 (PST)
-Reply-To: loveth12347@gmail.com
-From:   "Setyoadi ." <setyoadi@ub.ac.id>
-Date:   Mon, 8 Nov 2021 01:44:24 +0000
-Message-ID: <CANSBrzztmdrAvOzGeaX3jr__ugnXNZx28Frvx-=y0ieb4Gab7w@mail.gmail.com>
-Subject: hii
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211105221048.6541-3-michael.christie@oracle.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.189]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500019.china.huawei.com (7.185.36.137)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On two occasions, I have sent an email to you which you have not
-responded to. Can you find time to respond to me now?
+On 2021/11/6 6:10, Mike Christie wrote:
+> This fixes a regression added with:
+> 
+> commit f0f82e2476f6 ("scsi: core: Fix capacity set to zero after
+> offlinining device")
+> 
+> The problem is that after iSCSI recovery, iscsid will call into the kernel
+> to set the dev's state to running, and with that patch we now call
+> scsi_rescan_device with the state_mutex held. If the scsi error handler
+> thread is just starting to test the device in scsi_send_eh_cmnd then it's
+> going to try to grab the state_mutex.
+> 
+> We are then stuck, because when scsi_rescan_device tries to send its IO
+> scsi_queue_rq calls -> scsi_host_queue_ready -> scsi_host_in_recovery
+> which will return true (the host state is still in recovery) and IO will
+> just be requeued. scsi_send_eh_cmnd will then never be able to grab the
+> state_mutex to finish error handling.
+> 
+> To prevent the deadlock this moves the rescan related code to after we
+> drop the state_mutex.
+> 
+> This also adds a check for if we are already in the running state. This
+> prevents extra scans and helps the iscsid case where if the transport
+> class has already onlined the device during it's recovery process then we
+> don't need userspace to do it again plus possibly block that daemon.
+> 
+> Fixes: f0f82e2476f6 ("scsi: core: Fix capacity set to zero after
+> offlinining device")
+> Cc: Bart Van Assche <bvanassche@acm.org>
+> Cc: lijinlin <lijinlin3@huawei.com>
+> Cc: Wu Bo <wubo40@huawei.com>
+> Signed-off-by: Mike Christie <michael.christie@oracle.com>
+> ---
+>   drivers/scsi/scsi_sysfs.c | 30 +++++++++++++++++++-----------
+>   1 file changed, 19 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+> index a35841b34bfd..53e23a7bc0d3 100644
+> --- a/drivers/scsi/scsi_sysfs.c
+> +++ b/drivers/scsi/scsi_sysfs.c
+> @@ -797,6 +797,7 @@ store_state_field(struct device *dev, struct device_attribute *attr,
+>   	int i, ret;
+>   	struct scsi_device *sdev = to_scsi_device(dev);
+>   	enum scsi_device_state state = 0;
+> +	bool rescan_dev = false;
+>   
+>   	for (i = 0; i < ARRAY_SIZE(sdev_states); i++) {
+>   		const int len = strlen(sdev_states[i].name);
+> @@ -815,20 +816,27 @@ store_state_field(struct device *dev, struct device_attribute *attr,
+>   	}
+>   
+>   	mutex_lock(&sdev->state_mutex);
+> -	ret = scsi_device_set_state(sdev, state);
+> -	/*
+> -	 * If the device state changes to SDEV_RUNNING, we need to
+> -	 * run the queue to avoid I/O hang, and rescan the device
+> -	 * to revalidate it. Running the queue first is necessary
+> -	 * because another thread may be waiting inside
+> -	 * blk_mq_freeze_queue_wait() and because that call may be
+> -	 * waiting for pending I/O to finish.
+> -	 */
+> -	if (ret == 0 && state == SDEV_RUNNING) {
+> +	if (sdev->sdev_state == SDEV_RUNNING && state == SDEV_RUNNING) {
+> +		ret = count;
+> +	} else {
+> +		ret = scsi_device_set_state(sdev, state);
+> +		if (ret == 0 && state == SDEV_RUNNING)
+> +			rescan_dev = true;
+> +	}
+> +	mutex_unlock(&sdev->state_mutex);
+> +
+> +	if (rescan_dev) {
+> +		/*
+> +		 * If the device state changes to SDEV_RUNNING, we need to
+> +		 * run the queue to avoid I/O hang, and rescan the device
+> +		 * to revalidate it. Running the queue first is necessary
+> +		 * because another thread may be waiting inside
+> +		 * blk_mq_freeze_queue_wait() and because that call may be
+> +		 * waiting for pending I/O to finish.
+> +		 */
+>   		blk_mq_run_hw_queues(sdev->request_queue, true);
+>   		scsi_rescan_device(dev);
+>   	}
+> -	mutex_unlock(&sdev->state_mutex);
+>   
+>   	return ret == 0 ? count : -EINVAL;
+>   }
+> 
+
+Reviewed-by: Wu Bo <wubo40@huawei.com>
+
+-- 
+Wu Bo
