@@ -2,77 +2,143 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7763D449BA5
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Nov 2021 19:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EA1449D35
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Nov 2021 21:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235792AbhKHSdX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 8 Nov 2021 13:33:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33861 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229558AbhKHSdQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 Nov 2021 13:33:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1636396231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=J7zHPC1Uvz98lt8Q4KZHHsPhYbhlJHhHtX19XXiFYag=;
-        b=dGRlH1sjbjFu4O1nb8k2+QojUBgNQbTXUZhErm6HwukyqPRvpLmpcz/NB7gEyEQjHIbPtb
-        AsV0WBiIHzleOd0OA9Ph71KI6dg3LyUC1nhhRBbTHyFRqrLmfjUXqJH/F7s49/f4A+8cYU
-        TJe8nHCcnTjpTKX2tXXXWKKQWz4bJD8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-25-DZjNaKfENKi766IF2MoeKA-1; Mon, 08 Nov 2021 13:30:29 -0500
-X-MC-Unique: DZjNaKfENKi766IF2MoeKA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6A06315720;
-        Mon,  8 Nov 2021 18:30:28 +0000 (UTC)
-Received: from emilne.bos.redhat.com (unknown [10.18.25.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 86FF01007605;
-        Mon,  8 Nov 2021 18:30:12 +0000 (UTC)
-From:   "Ewan D. Milne" <emilne@redhat.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     stable@vger.kernel.org, njavali@marvell.com, aeasi@marvell.com
-Subject: [PATCH] scsi: qla2xxx: fix mailbox direction flags in qla2xxx_get_adapter_id()
-Date:   Mon,  8 Nov 2021 13:30:12 -0500
-Message-Id: <20211108183012.13895-1-emilne@redhat.com>
+        id S238526AbhKHUrw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 8 Nov 2021 15:47:52 -0500
+Received: from outgoing-stata.csail.mit.edu ([128.30.2.210]:51205 "EHLO
+        outgoing-stata.csail.mit.edu" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237467AbhKHUrv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 Nov 2021 15:47:51 -0500
+X-Greylist: delayed 1086 seconds by postgrey-1.27 at vger.kernel.org; Mon, 08 Nov 2021 15:47:49 EST
+Received: from [128.177.79.46] (helo=[10.118.101.22])
+        by outgoing-stata.csail.mit.edu with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.82)
+        (envelope-from <srivatsa@csail.mit.edu>)
+        id 1mkBEE-000DLY-2j; Mon, 08 Nov 2021 15:26:54 -0500
+Subject: [PATCH 2/2] MAINTAINERS: Mark VMware mailing list entries as private
+From:   "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
+To:     jgross@suse.com, x86@kernel.org, pv-drivers@vmware.com
+Cc:     Nadav Amit <namit@vmware.com>, Vivek Thampi <vithampi@vmware.com>,
+        Vishal Bhakta <vbhakta@vmware.com>,
+        Ronak Doshi <doshir@vmware.com>,
+        linux-graphics-maintainer@vmware.com,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        linux-input@vger.kernel.org, Zack Rusin <zackr@vmware.com>,
+        srivatsa@csail.mit.edu, sdeep@vmware.com, amakhalov@vmware.com,
+        virtualization@lists.linux-foundation.org, keerthanak@vmware.com,
+        srivatsab@vmware.com, anishs@vmware.com, vithampi@vmware.com,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 08 Nov 2021 12:30:07 -0800
+Message-ID: <163640339370.62866.3435211389009241865.stgit@srivatsa-dev>
+In-Reply-To: <163640336232.62866.489924062999332446.stgit@srivatsa-dev>
+References: <163640336232.62866.489924062999332446.stgit@srivatsa-dev>
+User-Agent: StGit/0.21
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The SCM changes set the flags in mcp->out_mb instead of mcp->in_mb
-so the data was not actually being read into the mcp->mb[] array from
-the adapter.
+From: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
 
-Fixes: 9f2475fe7406 ("scsi: qla2xxx: SAN congestion management implementation")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ewan D. Milne <emilne@redhat.com>
+VMware mailing lists in the MAINTAINERS file are private lists meant
+for VMware-internal review/notification for patches to the respective
+subsystems. So, in an earlier discussion [1][2], it was recommended to
+mark them as such. Update all the remaining VMware mailing list
+references to use that format -- "L: list@address (private)".
+
+[1]. https://lore.kernel.org/r/YPfp0Ff6KuyPlyrc@kroah.com
+[2]. https://lore.kernel.org/r/1626861766-11115-1-git-send-email-jhansen@vmware.com
+
+Signed-off-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
+Cc: Nadav Amit <namit@vmware.com>
+Cc: Vivek Thampi <vithampi@vmware.com>
+Cc: Vishal Bhakta <vbhakta@vmware.com>
+Cc: Ronak Doshi <doshir@vmware.com>
+Cc: pv-drivers@vmware.com
+Cc: linux-graphics-maintainer@vmware.com
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-rdma@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-input@vger.kernel.org
+Acked-by: Zack Rusin <zackr@vmware.com>
 ---
- drivers/scsi/qla2xxx/qla_mbx.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 7811c4952035..a6debeea3079 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -1695,10 +1695,8 @@ qla2x00_get_adapter_id(scsi_qla_host_t *vha, uint16_t *id, uint8_t *al_pa,
- 		mcp->in_mb |= MBX_13|MBX_12|MBX_11|MBX_10;
- 	if (IS_FWI2_CAPABLE(vha->hw))
- 		mcp->in_mb |= MBX_19|MBX_18|MBX_17|MBX_16;
--	if (IS_QLA27XX(vha->hw) || IS_QLA28XX(vha->hw)) {
--		mcp->in_mb |= MBX_15;
--		mcp->out_mb |= MBX_7|MBX_21|MBX_22|MBX_23;
--	}
-+	if (IS_QLA27XX(vha->hw) || IS_QLA28XX(vha->hw))
-+		mcp->in_mb |= MBX_15|MBX_21|MBX_22|MBX_23;
+ MAINTAINERS |   16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 118cf8170d02..3e92176e68fb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6134,8 +6134,8 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
+ F:	drivers/gpu/drm/vboxvideo/
  
- 	mcp->tov = MBX_TOV_SECONDS;
- 	mcp->flags = 0;
--- 
-2.31.1
+ DRM DRIVER FOR VMWARE VIRTUAL GPU
+-M:	"VMware Graphics" <linux-graphics-maintainer@vmware.com>
+ M:	Zack Rusin <zackr@vmware.com>
++L:	linux-graphics-maintainer@vmware.com (private)
+ L:	dri-devel@lists.freedesktop.org
+ S:	Supported
+ T:	git git://anongit.freedesktop.org/drm/drm-misc
+@@ -20032,7 +20032,7 @@ F:	tools/testing/vsock/
+ 
+ VMWARE BALLOON DRIVER
+ M:	Nadav Amit <namit@vmware.com>
+-M:	"VMware, Inc." <pv-drivers@vmware.com>
++L:	pv-drivers@vmware.com (private)
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ F:	drivers/misc/vmw_balloon.c
+@@ -20050,14 +20050,14 @@ F:	arch/x86/kernel/cpu/vmware.c
+ 
+ VMWARE PVRDMA DRIVER
+ M:	Adit Ranadive <aditr@vmware.com>
+-M:	VMware PV-Drivers <pv-drivers@vmware.com>
++L:	pv-drivers@vmware.com (private)
+ L:	linux-rdma@vger.kernel.org
+ S:	Maintained
+ F:	drivers/infiniband/hw/vmw_pvrdma/
+ 
+ VMware PVSCSI driver
+ M:	Vishal Bhakta <vbhakta@vmware.com>
+-M:	VMware PV-Drivers <pv-drivers@vmware.com>
++L:	pv-drivers@vmware.com (private)
+ L:	linux-scsi@vger.kernel.org
+ S:	Maintained
+ F:	drivers/scsi/vmw_pvscsi.c
+@@ -20065,7 +20065,7 @@ F:	drivers/scsi/vmw_pvscsi.h
+ 
+ VMWARE VIRTUAL PTP CLOCK DRIVER
+ M:	Vivek Thampi <vithampi@vmware.com>
+-M:	"VMware, Inc." <pv-drivers@vmware.com>
++L:	pv-drivers@vmware.com (private)
+ L:	netdev@vger.kernel.org
+ S:	Supported
+ F:	drivers/ptp/ptp_vmw.c
+@@ -20079,8 +20079,8 @@ S:	Maintained
+ F:	drivers/misc/vmw_vmci/
+ 
+ VMWARE VMMOUSE SUBDRIVER
+-M:	"VMware Graphics" <linux-graphics-maintainer@vmware.com>
+-M:	"VMware, Inc." <pv-drivers@vmware.com>
++L:	linux-graphics-maintainer@vmware.com (private)
++L:	pv-drivers@vmware.com (private)
+ L:	linux-input@vger.kernel.org
+ S:	Maintained
+ F:	drivers/input/mouse/vmmouse.c
+@@ -20088,7 +20088,7 @@ F:	drivers/input/mouse/vmmouse.h
+ 
+ VMWARE VMXNET3 ETHERNET DRIVER
+ M:	Ronak Doshi <doshir@vmware.com>
+-M:	pv-drivers@vmware.com
++L:	pv-drivers@vmware.com (private)
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	drivers/net/vmxnet3/
 
