@@ -2,80 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F25F447A9C
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Nov 2021 07:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030EC447AD7
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Nov 2021 08:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235454AbhKHGvg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 8 Nov 2021 01:51:36 -0500
-Received: from mga05.intel.com ([192.55.52.43]:52846 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236168AbhKHGvc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 8 Nov 2021 01:51:32 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10161"; a="318373243"
-X-IronPort-AV: E=Sophos;i="5.87,217,1631602800"; 
-   d="scan'208";a="318373243"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2021 22:48:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,217,1631602800"; 
-   d="scan'208";a="451358994"
-Received: from ahunter-desktop.fi.intel.com ([10.237.72.76])
-  by orsmga006.jf.intel.com with ESMTP; 07 Nov 2021 22:48:22 -0800
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <huobean@gmail.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH V2 2/2] scsi: ufs: core: Fix another task management completion race
-Date:   Mon,  8 Nov 2021 08:48:15 +0200
-Message-Id: <20211108064815.569494-3-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211108064815.569494-1-adrian.hunter@intel.com>
-References: <20211108064815.569494-1-adrian.hunter@intel.com>
+        id S235503AbhKHH3n (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 8 Nov 2021 02:29:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235673AbhKHH3l (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 Nov 2021 02:29:41 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE31C061224
+        for <linux-scsi@vger.kernel.org>; Sun,  7 Nov 2021 23:26:56 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id w1so58923901edd.10
+        for <linux-scsi@vger.kernel.org>; Sun, 07 Nov 2021 23:26:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=PnTjqCg/4dLlfwZvkIw5TCFiXXqI7eQL3D+17+RauQ+gPkf2k9hY9S+Ii/M5IA0uoj
+         tcY9XkBE8UoWnMFVRIdA+q744Hmx7Z0JsFaVREssmf6KamM5Bd6A03cMP5bTAvPf1/y/
+         DwxXsJaTEuCfFdzSQFJTUHpZB56hO6UBVJPo7/S7fIQbraF2JB9fnNx0H/YOCyXyn5Fv
+         TpIbuoc9MhMDHEy5d5ztUWIHQVhdvbVN+KOKXsEiQg7QzXSruhiqF9yWAy+A70V6Qa0U
+         ve8aiam44Pcv5P2919T2rRvgnVW0nPh2s7GY8MWiotEmFwjxJpYnpgBFa5LZ/bTsndTX
+         N0eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=aBoxEfy/cY9H1vobd+SuPl+XCQszh7EMpp3lwRMKi39HxEhqCth7TfkNbFn1bR39ol
+         4XSA3Oq0xLPbg65RZBWYonx7zQk870C7V7XHYvZmzVNhTZPRjZlYxoP7F9byRXrCIRs6
+         PbxU2BacIiaRhBobSY/IrharFoIwD6CAUfWDLZsqEEWmIL21/U5szDqmFox+X3z1p9hL
+         i2bAVCD0op53pJucy+agrhhSKkSBERknScqbE7hdoHogoeLzr2zavXhfIqVyMX8X6XgE
+         bDoAQhdCR6XjoTvHVzuLr0+Jg/yBD5QPS92oa3OoBxqRMz42C4KvCdicJlKsxYALoIkF
+         ot4w==
+X-Gm-Message-State: AOAM531TuGYUsyre9ch/wiJdzk9PqnJ2rSjuFRwA9wbEpQvEk+WgzBxA
+        90XAJFc3xQBHG3ljCCk27Azys9fTVIexgTERNQA=
+X-Google-Smtp-Source: ABdhPJz9Akl6xfGwwFGOOyIMXLWznjij6kDDSEQ53AjVdYeVh/nfgX+la012XOuUHhNctlqPhGJ9oR9znvMO/9Cv6/o=
+X-Received: by 2002:a50:930b:: with SMTP id m11mr83450378eda.133.1636356414537;
+ Sun, 07 Nov 2021 23:26:54 -0800 (PST)
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:26:54 -0800 (PST)
+Reply-To: mariaschaefler@gmx.com
+From:   Maria Schaefler <ziskoraa@gmail.com>
+Date:   Mon, 8 Nov 2021 07:26:54 +0000
+Message-ID: <CAJh0FjiDs5_oQE4K3AME-kH_RMPNXEEapYKvrR9As+S+Dzwh5Q@mail.gmail.com>
+Subject: MY HEART CHOOSE YOU.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-hba->outstanding_tasks, which is read under host_lock spinlock, tells
-the interrupt handler what task management tags are in use by the driver.
-The doorbell register bits indicate which tags are in use by the hardware.
-A doorbell bit that is 0 is because the bit has yet to be set by the
-driver, or because the task is complete. It is only possible to
-disambiguate the 2 cases, if reading/writing the doorbell register is
-synchronized with reading/writing hba->outstanding_tasks.
-
-For that reason, reading REG_UTP_TASK_REQ_DOOR_BELL must be done under
-spinlock.
-
-Fixes: f5ef336fd2e4c3 ("scsi: ufs: core: Fix task management completion")
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- drivers/scsi/ufs/ufshcd.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index a904531ba528..a1519b2b6cfe 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -6453,9 +6453,8 @@ static irqreturn_t ufshcd_tmc_handler(struct ufs_hba *hba)
- 	irqreturn_t ret = IRQ_NONE;
- 	int tag;
- 
--	pending = ufshcd_readl(hba, REG_UTP_TASK_REQ_DOOR_BELL);
--
- 	spin_lock_irqsave(hba->host->host_lock, flags);
-+	pending = ufshcd_readl(hba, REG_UTP_TASK_REQ_DOOR_BELL);
- 	issued = hba->outstanding_tasks & ~pending;
- 	for_each_set_bit(tag, &issued, hba->nutmrs) {
- 		struct request *req = hba->tmf_rqs[tag];
--- 
-2.25.1
-
+Given my current state of health, I have decided to donate what I
+inherited from my late husband to you to help the poor and needy. I am
+Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
+cancer about 2 years ago and I have few months to live according to
+medical experts. Email me for my directives
