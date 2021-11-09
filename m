@@ -2,36 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8224444B70F
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Nov 2021 23:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F341144B71C
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Nov 2021 23:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343704AbhKIWcG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 9 Nov 2021 17:32:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50284 "EHLO mail.kernel.org"
+        id S1344350AbhKIWc1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 9 Nov 2021 17:32:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50846 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344543AbhKIWaM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:30:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 02DD161A7A;
-        Tue,  9 Nov 2021 22:20:40 +0000 (UTC)
+        id S1344596AbhKIWa3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 9 Nov 2021 17:30:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CE6BE61406;
+        Tue,  9 Nov 2021 22:20:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636496441;
-        bh=0i/dt9SXHFlPpdZxbJZ7t2pzOSXUtRPVQ3Ou4zXpaNU=;
+        s=k20201202; t=1636496445;
+        bh=dJT6x0oNL0AHDJyVSeahQxj7UWsBu4auVfxdjzi0iZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QGdUGUWNfnmkgxvPc1cN4OHXP34ZOgoQUQU1uLKaA7jnBkanrNY7BZEQ/w+ek8k3o
-         x24NZwvtiVlA+KJP43V4lur+isEz0xFWV+yTjLUVlj24WIpd0nJHeHP2iMHPmBaogl
-         bsnLlsw5A0TOWYvfUP3bAkE3hJoWFgNCfprvWyknjbQMZU4VQLn+1lm+T+ivDorbh7
-         CLN70gGo/W15gEZZFZNXocalcjOzaCLdhtWoUOI2PZZek6BP8C2PC0piQkOqb84Ks1
-         R6vsWxWZGDcMetugSi1QKpFA/fk2UNow/FILkmHOSppvMcTz9X4GVSnkPFijsn2L8J
-         +qMOuLQidYDrw==
+        b=AytkZQpMRODlJkpilVQqUquY/ZJAzxq5qygaRv1RDM6pxTaQZ5fxDfo7bsn9XHK+i
+         Xz1eSvCOnCtDV/fKPXnVQ1805rX0rOuyKVnT+MEdTMsD2L+HGdj2WbalBYi4c0RnSf
+         l2loCmXTwqWck7Pynl3KhBv9Kj2Vw3aS+AxyTX1iODJd5+G5YZUjoXVbSiX6ebrWuu
+         tEbn2iDUioPVJhkriq20HjYrn74JHop0MBRdSEo3GjH2cE0gi5Yj7WzLPotWhmQG7J
+         3rwSQtmrvIcfXbTguHrsRh2uza6s0LGEpK1kWcba4YK5oQ+odYDLr5UsV/MXEi5x2H
+         5EPrC3azfU0Iw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mike Christie <michael.christie@oracle.com>,
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Justin Tee <justin.tee@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, nab@linux-iscsi.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 61/75] scsi: target: Fix alua_tg_pt_gps_count tracking
-Date:   Tue,  9 Nov 2021 17:18:51 -0500
-Message-Id: <20211109221905.1234094-61-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, james.smart@avagotech.com,
+        dick.kennedy@avagotech.com, JBottomley@odin.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 64/75] scsi: lpfc: Fix use-after-free in lpfc_unreg_rpi() routine
+Date:   Tue,  9 Nov 2021 17:18:54 -0500
+Message-Id: <20211109221905.1234094-64-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211109221905.1234094-1-sashal@kernel.org>
 References: <20211109221905.1234094-1-sashal@kernel.org>
@@ -43,43 +45,45 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: James Smart <jsmart2021@gmail.com>
 
-[ Upstream commit 1283c0d1a32bb924324481586b5d6e8e76f676ba ]
+[ Upstream commit 79b20beccea3a3938a8500acef4e6b9d7c66142f ]
 
-We can't free the tg_pt_gp in core_alua_set_tg_pt_gp_id() because it's
-still accessed via configfs. Its release must go through the normal
-configfs/refcount process.
+An error is detected with the following report when unloading the driver:
+  "KASAN: use-after-free in lpfc_unreg_rpi+0x1b1b"
 
-The max alua_tg_pt_gps_count check should probably have been done in
-core_alua_allocate_tg_pt_gp(), but with the current code userspace could
-have created 0x0000ffff + 1 groups, but only set the id for 0x0000ffff.
-Then it could have deleted a group with an ID set, and then set the ID for
-that extra group and it would work ok.
+The NLP_REG_LOGIN_SEND nlp_flag is set in lpfc_reg_fab_ctrl_node(), but the
+flag is not cleared upon completion of the login.
 
-It's unlikely, but just in case this patch continues to allow that type of
-behavior, and just fixes the kfree() while in use bug.
+This allows a second call to lpfc_unreg_rpi() to proceed with nlp_rpi set
+to LPFC_RPI_ALLOW_ERROR.  This results in a use after free access when used
+as an rpi_ids array index.
 
-Link: https://lore.kernel.org/r/20210930020422.92578-4-michael.christie@oracle.com
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Fix by clearing the NLP_REG_LOGIN_SEND nlp_flag in
+lpfc_mbx_cmpl_fc_reg_login().
+
+Link: https://lore.kernel.org/r/20211020211417.88754-5-jsmart2021@gmail.com
+Co-developed-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/target/target_core_alua.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/target/target_core_alua.c b/drivers/target/target_core_alua.c
-index 3bb921345bce3..69dc6038ad110 100644
---- a/drivers/target/target_core_alua.c
-+++ b/drivers/target/target_core_alua.c
-@@ -1700,7 +1700,6 @@ int core_alua_set_tg_pt_gp_id(
- 		pr_err("Maximum ALUA alua_tg_pt_gps_count:"
- 			" 0x0000ffff reached\n");
- 		spin_unlock(&dev->t10_alua.tg_pt_gps_lock);
--		kmem_cache_free(t10_alua_tg_pt_gp_cache, tg_pt_gp);
- 		return -ENOSPC;
- 	}
- again:
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 7cc5920979f8a..6a7754105ce3a 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -4340,6 +4340,7 @@ lpfc_mbx_cmpl_fc_reg_login(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
+ 			 ndlp->nlp_state);
+ 
+ 	ndlp->nlp_flag |= NLP_RPI_REGISTERED;
++	ndlp->nlp_flag &= ~NLP_REG_LOGIN_SEND;
+ 	ndlp->nlp_type |= NLP_FABRIC;
+ 	lpfc_nlp_set_state(vport, ndlp, NLP_STE_UNMAPPED_NODE);
+ 
 -- 
 2.33.0
 
