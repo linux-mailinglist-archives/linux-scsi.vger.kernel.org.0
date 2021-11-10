@@ -2,90 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8010F44C302
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Nov 2021 15:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C3944C373
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Nov 2021 15:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232131AbhKJOfs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Nov 2021 09:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbhKJOfr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Nov 2021 09:35:47 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281E9C061764
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Nov 2021 06:33:00 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id ee33so11329742edb.8
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Nov 2021 06:33:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=tZGBi8SzUs+nTCkXAkbEXeB8WapfDAJ2ywqTs87TVro=;
-        b=B2ApFHTFapiGbt8lmVMc4dHsKaau6gk208gcIWTU5HjTNIhGFuMY87DS3kN+RJkYyO
-         5q8Br4pxxYVKNEHUFo5hZMiBZDxsA3cq2ZQLOKkw0iJlNZvHr4cfaLYUKhUaWw5PoK4Y
-         nVWDOoaNhc/Al7x67Sy3GUshKu7Y67ehxIIGMXTQR7cacbELvUD3qmu8GZP5qilwpB+K
-         zXNOftadYgc3/HE41IVvhbnD8OLpJZ25mYra+OzKHV7w/36UIr6HBwTw7oEUkjigUH7j
-         v/X6eVQbeq+tpFSNaKKwHa3H1J91MPHJSd33Oso4BPVwi52K5V1mhUdxIXx0avfKwxWu
-         dUfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=tZGBi8SzUs+nTCkXAkbEXeB8WapfDAJ2ywqTs87TVro=;
-        b=Ebji/Rpx/jiMmsrK/ipAXC66jVU2S//9jA9ma92CODdhOs3cn/Wyr8tY3qbsgKH75f
-         J2+U+ovqRUayHbBRXQy4CQ0Z9rt7KTgKHUKUe89CNZGUfANJdakF5waU6A7wr+HujkRb
-         fke47rBHl1u6hkWvdQDvBQV/vSNSFNObw4QjdcB5D1j6PZmNM7h86MYH33TKzandOvAA
-         EFNWyJPwQ4jHM2ELiS9JLbPwMLp67rit5qEm2nWoG4cwTk2ILANw+3BXTzuRctZCUl34
-         jeW5XdbFNqE4oJBf4aW7KQjEv2Ag8L1FgmEsxCRD/05ee8sX5egeNkJ7gT2fC2U/ECLx
-         yYCA==
-X-Gm-Message-State: AOAM531L8msEj9b2lJ/IF0PWYSM8/h7rxYK58rk92b5moeEeMgxO7f9X
-        KJxdFt6ff2z6oBa6diCYqraMwfrIsA==
-X-Google-Smtp-Source: ABdhPJxCaladc0dHBAiiTp7Cu5nHgZxLjvojGLpWke3aEj3XMOzzDJdANWezPtd2gGNZep0gS9GlXg==
-X-Received: by 2002:a05:6402:430a:: with SMTP id m10mr21570119edc.273.1636554778724;
-        Wed, 10 Nov 2021 06:32:58 -0800 (PST)
-Received: from localhost.localdomain ([46.53.254.6])
-        by smtp.gmail.com with ESMTPSA id b11sm13634649ede.52.2021.11.10.06.32.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 06:32:58 -0800 (PST)
-Date:   Wed, 10 Nov 2021 17:32:56 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com
-Cc:     linux-scsi@vger.kernel.org
-Subject: ufs: setting "hba" private pointer too late -- oops in
- ufshcd_devfreq_get_dev_status()
-Message-ID: <YYvYGBuzZzAuNzxp@localhost.localdomain>
+        id S232312AbhKJO7h (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 10 Nov 2021 09:59:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23409 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232280AbhKJO7e (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 10 Nov 2021 09:59:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1636556207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W7cJ877Sjjq5oc7jJvg2EQRkkagoEG/3Etdis5neQYc=;
+        b=HXsytoZ8d+cVbHs2pc9qn7eC1qBOc19caALFQvR/TC2VtBYYTQbVRsXv411+yWXDOWYmDC
+        sndEN2REMF0HLiMrFlToi7wys7RJlgo9+qQcARMt3uHdr2OfNbn1uSeqGLixnvNnN3GY6W
+        pJAhMFCJc9MW65qYq5242WFCKIbXWQ4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-158-7TusmjS5M6qoNkhw4LdjIQ-1; Wed, 10 Nov 2021 09:56:44 -0500
+X-MC-Unique: 7TusmjS5M6qoNkhw4LdjIQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D544F100D680;
+        Wed, 10 Nov 2021 14:56:42 +0000 (UTC)
+Received: from T590 (ovpn-8-19.pek2.redhat.com [10.72.8.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7CF0460843;
+        Wed, 10 Nov 2021 14:56:26 +0000 (UTC)
+Date:   Wed, 10 Nov 2021 22:56:21 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: Re: sorting out the freeze / quiesce mess
+Message-ID: <YYvdlcHeWOxPACrK@T590>
+References: <20211110091407.GA8396@lst.de>
+ <YYuQ9mhHtDNDVFQ3@T590>
+ <20211110125856.GA25614@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20211110125856.GA25614@lst.de>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I've stumbled into a race while working on an earlier kernel,
-but it looks like mainline is affected as well.
+On Wed, Nov 10, 2021 at 01:58:56PM +0100, Christoph Hellwig wrote:
+> On Wed, Nov 10, 2021 at 05:29:26PM +0800, Ming Lei wrote:
+> > On Wed, Nov 10, 2021 at 10:14:07AM +0100, Christoph Hellwig wrote:
+> > > Hi Jens and Ming,
+> > > 
+> > > I've been looking into properly supporting queue freezing for bio based
+> > > drivers (that is only release q_usage_counter on bio completion for them).
+> > > And the deeper I look into the code the more I'm confused by us having
+> > > the blk_mq_quiesce* interface in addition to blk_freeze_queue.  What
+> > > is a good reason to do a quiesce separately from a freeze?
+> > 
+> > freeze can make sure that all requests are done, quiesce can make sure that
+> > dispatch critical area(covered by hctx lock/unlock) is done.
+> 
+> Yeah, but why do we need to still call quiesce after we just did a
+> freeze, which is about half of the users?
 
-        err = ufshcd_init(hba, mmio_base, irq);
-		async_schedule(ufshcd_async_scan, hba);
-		ufshcd_add_lus(hba);
-		if (ufshcd_is_clkscaling_supported(hba)) {
-			[enable devfreq]
+Because the caller need to make sure that dispatch critical area is
+gone, otherwise dispatch code path may see intermediate state of the
+change, such as switching elevator, and __blk_mq_update_nr_hw_queues()
+may need quiesce too, I remember that there was kernel panic log in
+some test.
 
-        platform_set_drvdata(pdev, hba);
-
-Device's private pointer is set too late, as devfreq hook get HBA
-pointer from private data and uses it:
-
-	static int ufshcd_devfreq_get_dev_status(struct device *dev, struct devfreq_dev_status *stat)
-	{
-	        struct ufs_hba *hba = dev_get_drvdata(dev);
-		if (!ufshcd_is_clkscaling_supported(hba))
-			return -EINVAL;
-
-Unable to handle kernel NULL pointer dereference at virtual address ...0f10
-pc :	ufshcd_devfreq_get_dev_status
-lr :	devfreq_simple_ondemand_func
-	update_devfreq
-	devfreq_monitor
+Please see the point in commit 662156641bc4 ("block: don't drain
+in-progress dispatch in blk_cleanup_queue()").
 
 
-I reproduced it by turning async LU scan into sync, so it is easier to
-trigger.
+Thanks,
+Ming
+
