@@ -2,66 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E58C244CF07
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Nov 2021 02:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1C844CF17
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Nov 2021 02:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233703AbhKKBjR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Nov 2021 20:39:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233200AbhKKBjE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Nov 2021 20:39:04 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73063C0432C4
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Nov 2021 17:35:53 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id v30-20020a4a315e000000b002c52d555875so357527oog.12
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Nov 2021 17:35:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/yJJ1eLjVEBxlbbxBTFqS43d212h+YIqOC0povopvFQ=;
-        b=e1saD3h8ZTiJz1WPc393lhDIWAvFZtOWzP/1iIN1KdicX4+NrvRlvNT+3PrCl1GqMN
-         hcyRC8y01agFcLW5+tsWKem8XisbU3NfgOVZTXj+yM8hm783rPU/i/YuMOt9WJM1GE4/
-         JRXGoJXzKJizIUuyrjE1Imm5mvbvZzUfUnW1ilSzedfFOByO23CsotOGz9ho9UMOpmPB
-         I35hgpS1ccJyAsx8SK8mX+7lwpZDhh/s7p2JF/JACrgRoEUXPKCti/8Mke+cScvETWuN
-         /H3UoZ8xmLIIfMcXfhtyxis8wgN5U5+dx/bvbJ1ofktMXKhL3cY0XXO1GPMja8d0F/uW
-         PaWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/yJJ1eLjVEBxlbbxBTFqS43d212h+YIqOC0povopvFQ=;
-        b=LINe+qTQD/AByCwsivN52SGSx0QOPoCcp/gphdYBJGc3GnRJwlIBIofLRgxrE3PEua
-         zcdS4Mekm0+j8IEd26u/ZzG6v5QEdFLk+hP1s0E/2mD+vlJasgCZatTrovD8K9hI/WOL
-         pt/9SPkgoo/tYi06CjWf64/g924fGPc3PxZBMznakXMO3RZUIgbPP2jeyV0QBb8SQJ0M
-         zeRdOvXvPi871i6ba7fr8889HarLkHq46AvJXQuK+7zvWSRI4ZqvRKFZg3djqaSnCuWo
-         1YF0Fd9sgCGXNp2WMe1qJnbSlZ0X454hWBbfKUM2JZ4qoF/MEUBP6knCZr7h6SqD1WEy
-         EVog==
-X-Gm-Message-State: AOAM533uqvb+eiL7AGKEbbsm/f5VGRq00YUD+WkTarVDjdkKSE0E3w1f
-        4bh4AsiBy8YrsUR1kjgB86l72TQJ/dGU68Nj9e+1xMQKoXM=
-X-Google-Smtp-Source: ABdhPJwSvDsl6dRjntKMicOLsqdOi/dG2sfAv7B/U6vR9uOw26VAk/4zCWUkhL/n3HO29hhdK1BtX8sl0L4QCQV/QNc=
-X-Received: by 2002:a25:b20f:: with SMTP id i15mr3989503ybj.539.1636594542572;
- Wed, 10 Nov 2021 17:35:42 -0800 (PST)
+        id S233037AbhKKBm0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 10 Nov 2021 20:42:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49158 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231312AbhKKBmZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 10 Nov 2021 20:42:25 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 50B8460EE4;
+        Thu, 11 Nov 2021 01:39:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636594777;
+        bh=cf5yOhrezRaS3az4I+5LjwvWmGyLUDhsfildHNI2s2M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TERuJy+0mBTSaXjUPuv97W88N9bqw45z6KMJt40R91eXi2cwfbpZ7DLMiCURoVFrO
+         HY9VrAJuvI9zgAUhl5FuPKJD2/ge4X7H873CCkdRjsl02PFlJqerhjL2WDBSYM5kG4
+         cdb1WmUVdcOQ56pMUz1UT8zzIhHEsZGAtdIwx0V7uGt32eZaPpQ+ITPB0AnPbcIgj1
+         oNUyFGVR0OLShASmRN1xqk0EfJ5LzhEgKOIwdUKjsGqQVzRq2pafRu4O9bpjEAO5SU
+         q1PE6zavYqmU8KskvjXGGWbMBRSfoR6gHkykTHNPZwNiOxinnB1ZmXajrtCMf7zUmd
+         uP+X+V8iXixqw==
+Date:   Wed, 10 Nov 2021 17:39:35 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
+Cc:     jgross@suse.com, x86@kernel.org, pv-drivers@vmware.com,
+        Zack Rusin <zackr@vmware.com>, Nadav Amit <namit@vmware.com>,
+        Vivek Thampi <vithampi@vmware.com>,
+        Vishal Bhakta <vbhakta@vmware.com>,
+        Ronak Doshi <doshir@vmware.com>,
+        linux-graphics-maintainer@vmware.com,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        linux-input@vger.kernel.org, amakhalov@vmware.com,
+        sdeep@vmware.com, virtualization@lists.linux-foundation.org,
+        keerthanak@vmware.com, srivatsab@vmware.com, anishs@vmware.com,
+        linux-kernel@vger.kernel.org, joe@perches.com, rostedt@goodmis.org
+Subject: Re: [PATCH v3 3/3] MAINTAINERS: Mark VMware mailing list entries as
+ email aliases
+Message-ID: <20211110173935.45a9f495@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <163657493334.84207.11063282485812745766.stgit@srivatsa-dev>
+References: <163657479269.84207.13658789048079672839.stgit@srivatsa-dev>
+        <163657493334.84207.11063282485812745766.stgit@srivatsa-dev>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:5d89:b0:1df:17ca:e9e5 with HTTP; Wed, 10 Nov 2021
- 17:35:42 -0800 (PST)
-Reply-To: mrsambamalick@gmail.com
-From:   MR MALICK <aiolaras@gmail.com>
-Date:   Thu, 11 Nov 2021 02:35:42 +0100
-Message-ID: <CAKPiy1pxkL9E+t6fr2OcMGeiHjuYbwx6xEB+HwOuJAUpiUddcw@mail.gmail.com>
-Subject: NOTIFICATION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-LOTTO WINNING AWARD,;,
+On Wed, 10 Nov 2021 12:09:06 -0800 Srivatsa S. Bhat wrote:
+>  DRM DRIVER FOR VMWARE VIRTUAL GPU
+> -M:	"VMware Graphics" <linux-graphics-maintainer@vmware.com>
+>  M:	Zack Rusin <zackr@vmware.com>
+> +R:	VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>
+>  L:	dri-devel@lists.freedesktop.org
+>  S:	Supported
+>  T:	git git://anongit.freedesktop.org/drm/drm-misc
 
-Your email won 2.6 million dollars, Contact Barrister Marcel Cremer
-through his email here ( cremerrsolicitors@gmail.com) to claim your
-winning fund with your details as follows, your full name, your
-country, your home address and your phone number.
+It'd be preferable for these corporate entries to be marked or
+otherwise distinguishable so that we can ignore them when we try 
+to purge MAINTAINERS from developers who stopped participating.
 
-Regards,,
-Mr.  Malick Samba.
+These addresses will never show up in a commit tag which is normally
+sign of inactivity.
