@@ -2,175 +2,185 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8826C44D35A
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Nov 2021 09:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F7B44D3E1
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Nov 2021 10:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbhKKItd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Nov 2021 03:49:33 -0500
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:14822 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbhKKItc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Nov 2021 03:49:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1636620403; x=1668156403;
-  h=message-id:date:mime-version:subject:from:to:references:
-   in-reply-to:content-transfer-encoding;
-  bh=l5f5zXplHfiHuRi1/EJSqjOCUsrwCfAUsYxTaAypXGo=;
-  b=hXx5b7EvAv7k5+Vc82RMdjIfgBx4fCoc1yiPgvD4qBpSoG8ahu9um+WD
-   YUQSTHPYuMuwcNbA+/EGEi7CgUA+Iv9N9mOrM7LS7nis0zXEa7xnPmuxQ
-   xxB9a+Mqvz1Z4OEn2vaNVetUeDgdBKat9MFwbhBArrGEEfB3QKmex65ps
-   e2E5M9g33i6S85HePlX07jfHSmOE6kmjpSBej7Lk2Gi3lurPRNmDSROsK
-   2N+unVWRcI03c7eOZmi34CQCvDDm/Z7SOddq4YNBFuAHn3vjpSJSQk/F9
-   jTTrSvoj11noOAh3gIQCEGE8YGevF1A/IHo3SQrD84C64Q2TMJHSZIs6i
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.87,225,1631548800"; 
-   d="scan'208";a="185324835"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 11 Nov 2021 16:46:42 +0800
-IronPort-SDR: ij0jO6R1zK8ktCVgF6u150fKtbKMuL7G0CRPjZP31f0KqORX/lL7kWIhEcab9KmrPaU7Z/JKHP
- A9VZ2UoiIYCNZR19ckQCx60llb8mjuYzh1PVSJW2pCxyl7zPyWKkW4UUpxyW09QmGMDFQUJDpl
- d9PJl0KHAMru831Ne9CHhYOaM6S0utFAQVtX/lseS7nULyC4Xk/SqkpB4hKfX3nKq6IuP5MFFt
- wLHdj71ZlnJI+dzB/aNn1WtA2P8B4QsBD0lH0vA8a/GUGHeVUN8PWVIX6WUqFS4QuY/fWM4yFh
- 1zfaGDxshCbD6ZNat85c2ol2
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 00:21:53 -0800
-IronPort-SDR: MKFRxn8JydonwFR+8CHY/idcUgylkrQmnRPf3UgivA2ZFc4KEj0ONCNuOueYN69t93IFMtlz2Q
- P3L5/CVeWbhJk6qSXuTq9uxA+L+QvMze3ANqFmZ2yMbWdpeYI6OnxPQH7o27z2SXQ9+pwLiwQs
- b201fLY3tSUIoIG5FPMaFuFz4c0cpu5pNjFn1hqCYanco9RJBCUQdRM1jb3rj/BZ9zo9geIDux
- JmAgixwDcnGER/NXnklLuffFn6IwG0I3RJBXFIaSRial8XE3l2GjTeNxApRGmdn7C/e34SSAyy
- zCE=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2021 00:46:43 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Hqb1H0HkMz1RtVn
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Nov 2021 00:46:43 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:references:to:from:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1636620402; x=1639212403; bh=l5f5zXplHfiHuRi1/EJSqjOCUsrwCfAUsYx
-        TaAypXGo=; b=sgZWpyJXALAgVy+P7GHsWyMYyuYt6SbomBsRzmCCM1Ubei6M/ZU
-        HSi1WIYVv9DyV4bv+ZOSgB9IHGrGZhTE8N7t2XvZ9RgZi8x4s6QSrW/nQXd8ca4S
-        ASS1lEcTA9D6q8GmjL4TEpUulvSkArEe81aOvNXK7E55uy4aqtJ/NsUF6mNiihz4
-        poTNTF4daPS8+MW0aOj1MKG5UYTxoqnMDS6zWcFQIOz3QljOt8mKdqgm7qLFeCIt
-        0PAFQeWyFcrYttq6sFvlnuoL0YU7teGYeEPpUJg9DGZyxeeiOfuN7mi1DjviwCYm
-        80dwZKdKRkqCfYwn/HYzYovKoTK7SGBNkaQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Es-tyAJ5aKzU for <linux-scsi@vger.kernel.org>;
-        Thu, 11 Nov 2021 00:46:42 -0800 (PST)
-Received: from [10.225.163.91] (unknown [10.225.163.91])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Hqb1F66zVz1RtVl;
-        Thu, 11 Nov 2021 00:46:41 -0800 (PST)
-Message-ID: <9c20c383-90fe-186c-86d4-e2b381dfbd8c@opensource.wdc.com>
-Date:   Thu, 11 Nov 2021 17:46:40 +0900
+        id S231928AbhKKJUp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Nov 2021 04:20:45 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:63488 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229649AbhKKJUo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 11 Nov 2021 04:20:44 -0500
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AB7UGsk026259;
+        Thu, 11 Nov 2021 09:17:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=9gYjcwTziqBcLuHVuveaiRLkzOeQ9Q/dFRbZNr+talQ=;
+ b=WuokzFQqP3FxQrgbcgWLseGaxWadxL4pJvWtHTprVRHS37U/tGeE01wM8XEWJKF6L8LS
+ xbl8GpeQlsSlvcFkbIofMsZ5Q5GgJ/XR5dQR8lNV3NeYOzvK7/d8UsQyXRTrbyitloS9
+ NTHb5L7NOwX5qq7Zoy4kYwW4iOkhUfDoXGaytb4D0aJqN6iZ61qLg5eAniyfpfXjhVSD
+ 0RqDpj+igbQ67xz5Dh57cl7WXJCsN+BMPoTpeGpCYGOc+KoT2D7xx4nzLS/azXB4i4sE
+ kISuUo0VfcwyczP73c8OS6aXSx34JMxcYJI9w/lyCn4cyxXZTL+9JOYIJ+wtB46WIoby bg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3c85nshcsv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 11 Nov 2021 09:17:37 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AB9GM5M001703;
+        Thu, 11 Nov 2021 09:17:36 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
+        by aserp3020.oracle.com with ESMTP id 3c5hh6jydp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 11 Nov 2021 09:17:35 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S+FA8gKGllkKvYDNW+trKDLQzwRZBP/FZ9gsgfLM/JHbVLKSC3LJNAfdWKiqWje4GRX0wFTmnKsOHymWPb6tF/82Nb455NDJDr8tpRG8y2gxANnVYBBAbNqvqlmi4dlFFcJbEUuJCbujXe1znZt7sds3Wu6UmV1iXnLyRzNjpsLX/kXOZL3m69vvfVffckkmPkyeg5LkjvvyNM+MhGO40coVu/YQRCoaH+eBCmv0J9x04/zR6qma+b2vk4uces4DiQiAXF9BRopjFoxHgI2ah3lHWExObc90fN/s6O6oU03hdhIBiNcNURiNsaMDr0b+T2xAIP2v/S2DmWAcQY9yFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9gYjcwTziqBcLuHVuveaiRLkzOeQ9Q/dFRbZNr+talQ=;
+ b=EIVbH4ljSQiFfK/uolSfFXFGzuB8Q+8iT4fvIw+W+5qzmgBYLun8P3tVIfrw8jYzMp1rDsdzIOyiENXvSH35BnodGMK3V6UeZdac+qqIo3nx+iZ2LCBWuKb5G5AWo2SrhGDwkBn+GHR1G22iJ5LnPcmBTsWT91F4gQ8MmqTQ2XjRJERB/TmVIDF6Uvczo3uWOeZ2sA0L7blQcRgaeulk3E3095gBRdk+1dVUAfYjfyt6JYH+RUI2cNx0fxUvsjNSlYJaN0WIIE/i5Jl8MnUjbjErKODgpTUySpkqFzyXiHrUm+JwDGXUsebK/ZcZChYDWtOnC7D6YI7ZqY91lG5Lhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9gYjcwTziqBcLuHVuveaiRLkzOeQ9Q/dFRbZNr+talQ=;
+ b=Z1rT9ebwhIqoXP5XH0jtj7n7A9ofUE6KmVWX7UQI1bgE/92ZguX4oitefPDqq7Q3s05JxomdMM1Ok90MPc+QLNqJmQ05Iltd7adXRYuFJmAbkeZldpCNPycE7dpFvyGPN74CVavoEKc+zT02AyCcpx0SwEqhaklrWBYRB8charE=
+Authentication-Results: wanadoo.fr; dkim=none (message not signed)
+ header.d=none;wanadoo.fr; dmarc=none action=none header.from=oracle.com;
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CO6PR10MB5570.namprd10.prod.outlook.com
+ (2603:10b6:303:145::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15; Thu, 11 Nov
+ 2021 09:17:33 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d409:11b5:5eb2:6be9]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::d409:11b5:5eb2:6be9%5]) with mapi id 15.20.4690.016; Thu, 11 Nov 2021
+ 09:17:33 +0000
+Date:   Thu, 11 Nov 2021 12:17:12 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     njavali@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        gmalavali@marvell.com, hmadhani@marvell.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] scsi: qla2xxx: Fix memory leaks in the error handling
+ path of 'qla2x00_mem_alloc()'
+Message-ID: <20211111091711.GO2001@kadam>
+References: <cc2fe0148944cfac5e58339bf98e76fd5c3a54b8.1636578573.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc2fe0148944cfac5e58339bf98e76fd5c3a54b8.1636578573.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JN2P275CA0043.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:2::31)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: Problem with scsi device sysfs attributes
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "linux-scsi @ vger . kernel . org" <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>
-References: <4b3e8a72-0b48-95e3-6617-a685d42c08fb@opensource.wdc.com>
- <93498302-c4c6-de7f-f177-e55de2828db0@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <93498302-c4c6-de7f-f177-e55de2828db0@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Received: from kadam (102.222.70.114) by JN2P275CA0043.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:2::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.16 via Frontend Transport; Thu, 11 Nov 2021 09:17:26 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1f53b72c-7279-4ff6-acdc-08d9a4f41816
+X-MS-TrafficTypeDiagnostic: CO6PR10MB5570:
+X-Microsoft-Antispam-PRVS: <CO6PR10MB557061E3E0D708FB188FE5FD8E949@CO6PR10MB5570.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9ZRV1cd4KLsBFHH6yLxbCz58srwqoae6AqvMxg27n/hpAwCNXjPM0CA7lu4z3tHD8J6rhOcXSFwXyAbEf72a7YUpXKFjZ8JsTJ+/grCv8Bldw5jAvtkHp1zttfeLS+o17xGKJSOeppcumNUHl550MBZvKZoY+HzMbSVfENwg0eDVPR6rRJv1d8wDslaV+ykySlLiguPzFYh86YglLAhU6g+HQ8xgXNj9hJHeUNJXh2ZVMEhG4SA5Sid6Md5AKDGA5Hi5zPw0yi97yfox5Mi2TPNI7batPVX0k+2QQBxK/uarT+BT8abn4++MLkxHFIdNhtIRinYCABSO+F9Gjr/nPQPM+q+TXSnniT9f+WcnPiaaPFvGjPPuQz7QvtrTTtAU0cpZudtpnfsqcQBdQJCXawijZ5/aB/UnxVCnP/Rkxqi2rHWWCTWeFLUMRk7RehfiVGlWNL7tsHHZBDGo1Fd8f4E7csGlGheDNm58RuhJaqae7u8BRJBvYiC9FBZwtIZoxqRvOG9l1fkFWIIFbMYt/HAkv+SLBQvu9Jgcko879oTk76f/hS+dJUtPLdfAifFUHnhjokXRSfLidu14xO4rXyG9n9NWypZa7NTuELc7B76B812kEfiKwDD7pN0n1eIhPrbfL3jL1ti4ry4iDWgtEedXRzjNxirHu1V3TtoYTZ+QLe0wItXGwcYxosns0ekdzRFYiN5pejp+UvXuF0bCNw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(38350700002)(26005)(38100700002)(66556008)(66476007)(33656002)(66946007)(44832011)(33716001)(52116002)(6666004)(186003)(86362001)(508600001)(6496006)(8676002)(83380400001)(8936002)(55016002)(316002)(9576002)(4326008)(2906002)(956004)(6916009)(1076003)(5660300002)(9686003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xi3t129GmfK11y4Vn7wT87ArEhCE552MAlzykxN1/fGi5+5c5RgqC7mkrcv4?=
+ =?us-ascii?Q?DCoq65A31DPDYqsX0hzDEVdyx4FMCLRSiYYlhrQGw6QK4wbZs3j7xhkxzxuo?=
+ =?us-ascii?Q?4W+LH/eGc5gTOUC0c2Ha+Bymywd1mH1f7iZiExTYOmduE3b+bmkpRxz21sLO?=
+ =?us-ascii?Q?2MuhlZeNVYQq4+NuQNTrrhRqu5bGuApcgOH/iUK+xA9Hn26BQ74aTQH7W3vq?=
+ =?us-ascii?Q?NThz9c5TeAXr+I346uKSNo+pJdEcuv35RilfuAC3HS0LauE82SR5f5lJ3v2z?=
+ =?us-ascii?Q?ss2ENqLp/sRQISUqZoXgydWa1YVlPpFnw/ZCTe8XssmKM4c578FGKhsfR6sT?=
+ =?us-ascii?Q?vYjpw+CSwnkBJhv4CaKICULUqg/hG+9TzdjyEtpvCZO7Nd9pkqI+UpwDXeC/?=
+ =?us-ascii?Q?ZLhQnezLaxG4D8+6di4jiNraCVRrLLObJ6WbGw4Lg/k0Mwd5mFrFNGbeXej6?=
+ =?us-ascii?Q?HdldfOo5MqHJthPI9KqvJfmwGpNZ6cKqjPlxVo33YJyNjf5k7s9YbpJ4a5di?=
+ =?us-ascii?Q?pu144Cvc/mTfDkhxjmlXXT8YLyyqQnwnYXzw3eItUnLy+VuP8FXGwOqxMaz+?=
+ =?us-ascii?Q?DSHcjpMXEu42YJGyNlTqdCOVgD+XJataQp7m/7QvEIX2JgyNl7eDZDYOiiZ0?=
+ =?us-ascii?Q?lSqzAjK/FdqJq2v3HlYYes8tsV8+bGCnHWr2Ti8R3EDaT2MaXW3b1QEg1at5?=
+ =?us-ascii?Q?AON7ZsZ34KCHCj/LXeC3ZSqkWIoTc3CZbk3wzbFMFUl35GvVk61Ls+aEZQ9y?=
+ =?us-ascii?Q?vZQ0EcCCYLF7a58Hu4gMGd2CtVUDgNmQ0C8rwoul3kCPafq2/XcFv/0lKiQi?=
+ =?us-ascii?Q?hDcuDZpkm0/FwAXKQeimvLf5qAjpFz/K+R8eUQBMIJmdTcKW7e/BSrQo+7fZ?=
+ =?us-ascii?Q?oIi0oUeJqFI7rV+S+tKCFrAtRxKc/kBR9/Wpctu5Ud2C5e5EyuhNa4qMEfOA?=
+ =?us-ascii?Q?tPzwbxWkpFWaF75kJIr6zKS+D4FLCSeOPFNsfVDHFBUjsqohudppDmG186W2?=
+ =?us-ascii?Q?S90piVS5nFJXaQDXKu9sxTD27utjWn4VjTyG3UyWIXiqFscS1h+8jAsfv2LK?=
+ =?us-ascii?Q?z0lDi5yet2Da83h/gM44hUBIljwwp865Dr/UzOreurOlxL+UvKAZNfBx6DJX?=
+ =?us-ascii?Q?wImwY7MpmknlzZWu7+eWe7fGtfq38AQ/29LH+ZMMXDdn2zq4qTRdv8txY3nK?=
+ =?us-ascii?Q?w3SH6yQgZUNacRlkIR2aNtp2Aq6G7UL0g1cAFHAWOYrPm0dvEHaVsiru6CJy?=
+ =?us-ascii?Q?TfKn7q9ITie3xEFstJt4QwdLzhzBfp5MWKzvka2WYrp4pxl9f71FMcpMAZvD?=
+ =?us-ascii?Q?bc37BFl6ZEhfdyddgiwqhw/I8y3OuYkTpPwf3qkBqHJinjqK0l9l5g+0kiUC?=
+ =?us-ascii?Q?mbSLxQp8Ny382jdcFvGzWo7IJy0jPpGCARlaqgDRykpen8Rx6Y5QuMU9sA9L?=
+ =?us-ascii?Q?Z0rl2sQVfE6j8+7K+5PZ87LRXLcqpz94W/xoFtCkB8inldhCLGXGMJnVQZen?=
+ =?us-ascii?Q?wMZnmzR5D2VrdGmuvHU6cNaGYGrKsaj+RnECctBfY4iNBo2F1WW2ZqukZg2C?=
+ =?us-ascii?Q?sYFdcMXHX5bLGQXN7GgvMb6SSa7iAwJobUb4x8IpAqGS38a8fvt57D+7BtvO?=
+ =?us-ascii?Q?oZR1vW+L+WKbWpux0pf1k8AJHA/dO6QuQIQ+dstBMnLShHUDJlj8maoZoLU3?=
+ =?us-ascii?Q?jpGXPTDUq8fKPmYEeX+++H42A4g=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1f53b72c-7279-4ff6-acdc-08d9a4f41816
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2021 09:17:33.8427
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Tnf9BJAPK6gbWKKB8u2uS0oGuv3JSn93tV4XVVLF7dU9mZy+XD0je35t8UyTpeaG6mRgFNTLe62T3pR+0A9gczv6Bapkur0KbmvUApH/chU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR10MB5570
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10164 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 mlxscore=0
+ malwarescore=0 spamscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111110055
+X-Proofpoint-GUID: WIlsYQ0-3tHxNpGuBXKq32YkRp5hXhQa
+X-Proofpoint-ORIG-GUID: WIlsYQ0-3tHxNpGuBXKq32YkRp5hXhQa
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/11/21 14:27, Damien Le Moal wrote:
-> On 11/11/21 12:31, Damien Le Moal wrote:
->> Bart,
->>
->> Your patch 92c4b58b15c5 ("scsi: core: Register sysfs attributes earlier")
->> modified the scsi device sysfs attributes initialization to use the scsi
->> template shost_groups and sdev_groups for adding attributes using groups instead
->> of arrays of attrs. However, this patch completely removed the
->> sysfs_create_groups() call to actually create the attributes listed in the groups.
->>
->> As a result, I see many missing sysfs device attributes for at least ahci (e.g.
->> ncq_prio_enavle, ncq_prio_supported), but I suspect other device types may have
->> similar problems.
->>
->> I do not see where the attribute groups in the arrray sdev->gendev_attr_groups
->> are registered with sysfs. In fact, it looks like sdev->gendev_attr_groups is
->> referenced only in scsi_sysfs.c but only for initializing it. It is never used
->> to actually register the attr groups... Am I missing something ?
->>
->> This is at least breaking NCQ priority support right now. Did your patch
->> 92c4b58b15c5 remove too much code ? Shouldn't we have a call to
->> sysfs_create_groups() somewhere ? I think that should be in
->> scsi_sysfs_device_initialize() but I am not 100% sure.
+On Wed, Nov 10, 2021 at 10:11:34PM +0100, Christophe JAILLET wrote:
+> In case of memory allocation failure, we should release many things and
+> should not return directly.
 > 
-> Adding this:
+> The tricky part here, is that some (kzalloc + dma_pool_alloc) resources
+> are allocated and stored in 'unusable' and a 'good' list.
+> The 'good' list is then freed and only the 'unusable' list remains
+> allocated.
+> So, only this 'unusable' list is then freed in the error handling path of
+> the function.
 > 
-> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-> index d3d362289ecc..a1a30af96e17 100644
-> --- a/drivers/scsi/scsi_sysfs.c
-> +++ b/drivers/scsi/scsi_sysfs.c
-> @@ -1339,6 +1339,8 @@ int scsi_sysfs_add_sdev(struct scsi_device *sdev)
->  {
->         int error;
->         struct scsi_target *starget = sdev->sdev_target;
-> +       struct Scsi_Host *shost = sdev->host;
-> +       struct scsi_host_template *hostt = shost->hostt;
+> So, instead of adding even more code in this already huge function, just
+> 'continue' (as already done if dma_pool_alloc() fails) instead of
+> returning directly.
 > 
->         error = scsi_target_add(starget);
->         if (error)
-> @@ -1365,6 +1367,17 @@ int scsi_sysfs_add_sdev(struct scsi_device *sdev)
->                 return error;
->         }
+> After the 'for' loop, we will then branch to the correct place of the
+> error handling path when another memory allocation will (likely) fail
+> afterward.
 > 
-> +       if (hostt->sdev_groups) {
-> +               error = sysfs_create_groups(&sdev->sdev_gendev.kobj,
-> +                                           hostt->sdev_groups);
-> +               if (error) {
-> +                       sdev_printk(KERN_INFO, sdev,
-> +                                   "failed to create device attributes:
-> %d\n",
-> +                                   error);
-> +                       return error;
-> +               }
-> +       }
-> +
->         device_enable_async_suspend(&sdev->sdev_dev);
->         error = device_add(&sdev->sdev_dev);
->         if (error) {
-> 
-> I can see the AHCI NCQ attributes are visible under
-> /sysfs/block/sdX/device/.
-> 
-> So it looks like the LLD attribute groups added to
-> sdev->gendev_attr_groups by scsi_sysfs_device_initialize() using
-> hostt->sdev_groups are never registered with sysfs, but the default
-> common scsi attributes defined by scsi_sdev_attr_group are registered...
-> This is very weird.
-> 
-> I do not understand why. I cannot find where sdev->gendev_attr_groups is
-> used to create the attributes in sysfs...
+> Fixes: 50b812755e97 ("scsi: qla2xxx: Fix DMA error when the DIF sg buffer crosses 4GB boundary")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Certainly not the best solution, but look 'safe' to me.
 
-I figured it out: scsi_sdev_attr_groups is set in scsi_dev_type (struct
-device_type) and so the attributes defined in this group are created in
-sysfs when the scis device sdev_gendev is added. However, the additional
-attribute groups in sdev->gendev_attr_groups added by the LLD are never
-processed since scsi_dev_type->groups is scsi_sdev_attr_groups and not
-sdev->gendev_attr_groups.
+Your analysis seems correct, but this is deeply weird.  It sort of looks
+like this was debug code that was committed accidentally.  Neither
+the "good" list nor the "unusable" are used except to print some debug
+info:
 
-I sent a patch. Please let me know what you think.
+                       ql_dbg_pci(ql_dbg_init, ha->pdev, 0x0024,
+                           "%s: dif dma pool (good=%u unusable=%u)\n",
+                           __func__, ha->pool.good.count,
+                           ha->pool.unusable.count);
 
+The good list is freed immediately, and then there is a no-op free in
+qla2x00_mem_free().  The unusable list is preserved until qla2x00_mem_free()
+but not used anywhere.
 
--- 
-Damien Le Moal
-Western Digital Research
+regards,
+dan carpenter
+
