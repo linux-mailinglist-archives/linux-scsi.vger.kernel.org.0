@@ -2,97 +2,133 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF7F44EB5B
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Nov 2021 17:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8C044EB82
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Nov 2021 17:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235326AbhKLQci (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Nov 2021 11:32:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235209AbhKLQcg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Nov 2021 11:32:36 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FD9C061767
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Nov 2021 08:29:45 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id v3so19882821uam.10
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Nov 2021 08:29:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=MjC/A+rsvWGUoFt9t6urvdMncFBk7aRr9YPhr/7FhlA=;
-        b=ALe6xK2N0oW2uNlHDt/616D4P+4bVUlHq94Mbi3coMsxDE2JqfAxzT65UoH9069yek
-         ZNbrdKYSLmb/MI2MXuuSkmHUwFIAUYrT1bLi3q0CW9YyZ0cnKRHfdbUBFE8io6Xpvvgb
-         Pc9lBnDcXdujwh4K1CtstKBLGzfDJpAcU/p399kxH+2VPtVegYA0C3uqgmUk46R3O8lc
-         u7UuCUM56wJvQbtKrTI/xxZUTy47tl2inyFymvEFmi5sOx12MDwuDfz6ilNUf0YFm9jA
-         scfN7cE/RP2cRA3rjJFOclAsM+71le1KckDvlf1Xmi+hGejXsHAiGA6TlmfMM+hzNuUj
-         QZjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=MjC/A+rsvWGUoFt9t6urvdMncFBk7aRr9YPhr/7FhlA=;
-        b=U8L1ClyF0llpzU6mGOkSAB60+E9tqvIJe+TjxJGgH+Jft80p7cpXNKVuAVL5EOeEa1
-         l1F+Hc1yw2pSrExOink30aFrxSwnMUPeCueZr/6kYHBqrlcokT1J7JPrzoHOB1+O+C+x
-         XRDIfaR/GI4NLBtMrNvOSmRxd8it04wxt1de4+PQ88WlgbCgjDmXjevtAo8dUkgO0wMB
-         1Ppkga49qZhKjBXEj2J68mwzpH2ojmVEnhoNrjSMTvmY9T/GuCcBqT2P0u+YDDqbo5PH
-         j16ZpLjjiv8H/FoD+nW3hco5Ur/1Lo3m8szLHEV5DlWnRwjbGYjylXypjCMJlDJAZpC+
-         qB9w==
-X-Gm-Message-State: AOAM530FWQvTYG2e70PeXk0SBePRaJFbhZZ2YeP8DpK+0KhKdC7b/vFw
-        6RCCVXLczp1PASOVzGh9cLaZ7lfHES+XCQBCqiE=
-X-Google-Smtp-Source: ABdhPJyyyDxb8OpqqXk51FykAl+dNgmq6TOTfom4LEUg43g8q1xAiRFza5+E9LjVk1qUdZBgZGmUZnQbFvis9Zf/dME=
-X-Received: by 2002:ab0:14a7:: with SMTP id d36mr23689444uae.96.1636734584583;
- Fri, 12 Nov 2021 08:29:44 -0800 (PST)
+        id S235432AbhKLQma (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Nov 2021 11:42:30 -0500
+Received: from smtp01.smtpout.orange.fr ([80.12.242.123]:60706 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235421AbhKLQm3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Nov 2021 11:42:29 -0500
+Received: from pop-os.home ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id lZaQmTkjd1UGBlZaQmGHpS; Fri, 12 Nov 2021 17:39:37 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 12 Nov 2021 17:39:37 +0100
+X-ME-IP: 86.243.171.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     anil.gurumurthy@qlogic.com, sudarsana.kalluru@qlogic.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, satishkh@cisco.com,
+        sebaddel@cisco.com, kartilak@cisco.com, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, njavali@marvell.com,
+        mrangankar@marvell.com
+Cc:     GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] scsi: Remove redundant 'flush_workqueue()' calls
+Date:   Fri, 12 Nov 2021 17:39:33 +0100
+Message-Id: <feb3511c02b9df0848c9cac8af3daf87d9ea5821.1636734915.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a67:4342:0:0:0:0:0 with HTTP; Fri, 12 Nov 2021 08:29:44
- -0800 (PST)
-Reply-To: mrsaishag45@gmail.com
-From:   Mrs Aisha Al-Qaddafi <faridafarah924@gmail.com>
-Date:   Fri, 12 Nov 2021 08:29:44 -0800
-Message-ID: <CAJAEg+t3HsAWf57wsspFE0CMG=uZ5P_khYfGj0WxOzXiGOGisA@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello My Beloved One, i need your assistance,
+'destroy_workqueue()' already drains the queue before destroying it, so
+there is no need to flush it explicitly.
 
-Please bear with me. I am writing this letter to you with tears and sorrow
-from my heart.
+Remove the redundant 'flush_workqueue()' calls.
 
-I am Aisha Muammar Gaddafi, the only daughter of the embattled president of
-Libya, Hon. Muammar Gaddafi. I know my mail might come to you as a surprise
-because you don=E2=80=99t know me, but due to the unsolicited nature of my
-situation here in Refugee camp Ouagadougou Burkina Faso i decided to
-contact you for help. I have passed through pains and sorrowful moments
-since the death of my father. At the same time, my family is the target of
-Western nations led by Nato who want to destroy my father at all costs. Our
-investments and bank accounts in several countries are their targets to
-freeze.
+This was generated with coccinelle:
 
-My Father of blessed memory deposited the sum of $27.5M (Twenty Seven
-Million Five Hundred Thousand Dollars) in a Bank at Burkina Faso which he
-used my name as the next of kin. I have been commissioned by the (BOA) bank
-to present an interested foreign investor/partner who can stand as my
-trustee and receive the fund in his account for a possible investment in
-his country due to my refugee status here in Burkina Faso.
+@@
+expression E;
+@@
+- 	flush_workqueue(E);
+	destroy_workqueue(E);
 
-I am in search of an honest and reliable person who will help me and stand
-as my trustee so that I will present him to the Bank for the transfer of
-the fund to his bank account overseas. I have chosen to contact you after
-my prayers and I believe that you will not betray my trust but rather take
-me as your own sister or daughter. If this transaction interests you, you
-don't have to disclose it to anybody because of what is going on with my
-entire family, if the United nation happens to know this account, they will
-freeze it as they freeze others, so please keep this transaction only to
-yourself until we finalize it.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/scsi/bfa/bfad_im.c    | 1 -
+ drivers/scsi/fnic/fnic_main.c | 4 +---
+ drivers/scsi/lpfc/lpfc_init.c | 1 -
+ drivers/scsi/qedi/qedi_main.c | 2 --
+ drivers/scsi/qla2xxx/qla_os.c | 1 -
+ 5 files changed, 1 insertion(+), 8 deletions(-)
 
-Sorry for my pictures. I will enclose it in my next mail and more about me
-when I hear from you okay.
+diff --git a/drivers/scsi/bfa/bfad_im.c b/drivers/scsi/bfa/bfad_im.c
+index 759d2bb1ecdd..b5c1729974ac 100644
+--- a/drivers/scsi/bfa/bfad_im.c
++++ b/drivers/scsi/bfa/bfad_im.c
+@@ -756,7 +756,6 @@ void
+ bfad_destroy_workq(struct bfad_im_s *im)
+ {
+ 	if (im && im->drv_workq) {
+-		flush_workqueue(im->drv_workq);
+ 		destroy_workqueue(im->drv_workq);
+ 		im->drv_workq = NULL;
+ 	}
+diff --git a/drivers/scsi/fnic/fnic_main.c b/drivers/scsi/fnic/fnic_main.c
+index 44dbaa662d94..806aaf411d10 100644
+--- a/drivers/scsi/fnic/fnic_main.c
++++ b/drivers/scsi/fnic/fnic_main.c
+@@ -1145,10 +1145,8 @@ static void __exit fnic_cleanup_module(void)
+ {
+ 	pci_unregister_driver(&fnic_driver);
+ 	destroy_workqueue(fnic_event_queue);
+-	if (fnic_fip_queue) {
+-		flush_workqueue(fnic_fip_queue);
++	if (fnic_fip_queue)
+ 		destroy_workqueue(fnic_fip_queue);
+-	}
+ 	kmem_cache_destroy(fnic_sgl_cache[FNIC_SGL_CACHE_MAX]);
+ 	kmem_cache_destroy(fnic_sgl_cache[FNIC_SGL_CACHE_DFLT]);
+ 	kmem_cache_destroy(fnic_io_req_cache);
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index ba17a8f740a9..93decd6c7ab1 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -8529,7 +8529,6 @@ static void
+ lpfc_unset_driver_resource_phase2(struct lpfc_hba *phba)
+ {
+ 	if (phba->wq) {
+-		flush_workqueue(phba->wq);
+ 		destroy_workqueue(phba->wq);
+ 		phba->wq = NULL;
+ 	}
+diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.c
+index 1dec814d8788..542dde3a1cfd 100644
+--- a/drivers/scsi/qedi/qedi_main.c
++++ b/drivers/scsi/qedi/qedi_main.c
+@@ -2422,13 +2422,11 @@ static void __qedi_remove(struct pci_dev *pdev, int mode)
+ 		iscsi_host_remove(qedi->shost);
+ 
+ 		if (qedi->tmf_thread) {
+-			flush_workqueue(qedi->tmf_thread);
+ 			destroy_workqueue(qedi->tmf_thread);
+ 			qedi->tmf_thread = NULL;
+ 		}
+ 
+ 		if (qedi->offload_thread) {
+-			flush_workqueue(qedi->offload_thread);
+ 			destroy_workqueue(qedi->offload_thread);
+ 			qedi->offload_thread = NULL;
+ 		}
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index abcd30917263..9f9d2f075bbe 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -3922,7 +3922,6 @@ qla2x00_free_device(scsi_qla_host_t *vha)
+ 
+ 	/* Flush the work queue and remove it */
+ 	if (ha->wq) {
+-		flush_workqueue(ha->wq);
+ 		destroy_workqueue(ha->wq);
+ 		ha->wq = NULL;
+ 	}
+-- 
+2.30.2
 
-Yours Sincerely
-Best Regard,
-Aisha Gaddafi
