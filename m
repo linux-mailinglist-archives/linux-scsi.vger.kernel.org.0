@@ -2,68 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C2344EEE9
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Nov 2021 22:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DB244EEFF
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Nov 2021 23:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbhKLV42 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Nov 2021 16:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbhKLV41 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Nov 2021 16:56:27 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A125FC061766
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Nov 2021 13:53:36 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id l8so10339019ilv.3
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Nov 2021 13:53:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
-        b=T2z2g+Fc8WES5zxkQwEphsRI3qkLgsyBkZfR7Fw1cKPAaewtmKI1c9euZlSHQzP80i
-         Uk6xluDvZXZJFbZvhWqRtdgi/qCmIbR2VwbhAW+zkrv+nH/DkkYy3Qkpm7qvFfqiWLVQ
-         1HbG1N3a+a9/2EFj7CHUI7i5Ytg/r2zuQAqS1E5vH7gU7BHyCdYyN+EorqXJNbDPNy8b
-         DfkvxaEBHAlMBqpfBzDkbDnK9X/a6AKS/x/c+2Vnq/nTpjjWMt4FYN9bdF9yJHCgJFeo
-         yDTN5/+Yye2qbrnto8lCO3GZeKzeHcLEIdrs/+UrtPLuTjgUsu/IrxMgDyWSHZhjcUXv
-         UItQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
-        b=r1L7BBijzhvktYcxgP2emnl3wKRkytnrSYoPQo+svnVbv1LiobQhhMbn9DlC6gg1lI
-         lBPkPy6hkZ1gQLUoV5SUgDf6yfFwdU5okuGmRfI86RQVlm4uVIb7OVJGKq0uutVB4QEB
-         cki52SS9Job3wtNTtSlO5nH3TajKGQI6OW+uGHYVWSkSVWaOpnf/RteG8AqWrWcwWKNm
-         e8RfjQqzrCQt3GeC+pAgVpDUfHTHBCDkGt0+s7c3o1Qiedx1b4Dw2LNUK/av6jY37cQf
-         cjwPVmrl25GrbMkZYfZ0m3cCXFTcJP3nLxTzON5uMhozT6spvEmexHlwLTlyzUueMK8f
-         SsLw==
-X-Gm-Message-State: AOAM532Fer9zX8mVMOPc97j+4nPkOGtTsVKxaGVCcyMLcGYEt7KmUezo
-        lLTP7KYQxp9Hcx+8bHpIlyn6gEk5kSUmRYrIPAg=
-X-Google-Smtp-Source: ABdhPJxUF854IIfErEQE2FAYtNiqt0NmiojsNQckr0oAKJDBTYfKUgwNpyAVGZvrrY82D/dZMx9yjRE3HQJv/y8V1Sw=
-X-Received: by 2002:a05:6e02:ea9:: with SMTP id u9mr10794506ilj.1.1636754016099;
- Fri, 12 Nov 2021 13:53:36 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6638:12:0:0:0:0 with HTTP; Fri, 12 Nov 2021 13:53:35
- -0800 (PST)
-Reply-To: lisshuuu1@gmail.com
-From:   LISA HUGH <mrssafi.kabore2@gmail.com>
-Date:   Fri, 12 Nov 2021 22:53:35 +0100
-Message-ID: <CACP6L_j8scJRMw0Lt2JopW0jUgQA3LYbL5GL4BosB4Wmc=B5rQ@mail.gmail.com>
-Subject: YOU UNDERSTAND MY EMAIL ?.($4.5M.US.D)
-To:     undisclosed-recipients:;
+        id S234227AbhKLWGI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Nov 2021 17:06:08 -0500
+Received: from bedivere.hansenpartnership.com ([96.44.175.130]:34586 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233932AbhKLWGH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 12 Nov 2021 17:06:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1636754596;
+        bh=/9QwVcTLua6z+d1c/3wGd8Od7TGrEfK0gk0sAioZaBo=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=StL9FWBe/XxvyDm7w/4OTLSkUrPSqVjSnD+t+t591W4tW1L+onSVYqRqSys0QmTDL
+         wcx7rzZdibfzH8QcsNnHrajCDm8eJqqrfQpSYYcoiz9bTeRSu66VSWvCqaK+T7spXe
+         YxfHZ7eMZp40K3nN167pQgRndkRz6BZa9+LLscOA=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 8F3111280910;
+        Fri, 12 Nov 2021 17:03:16 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id arEcRqOXOer5; Fri, 12 Nov 2021 17:03:16 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1636754596;
+        bh=/9QwVcTLua6z+d1c/3wGd8Od7TGrEfK0gk0sAioZaBo=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=StL9FWBe/XxvyDm7w/4OTLSkUrPSqVjSnD+t+t591W4tW1L+onSVYqRqSys0QmTDL
+         wcx7rzZdibfzH8QcsNnHrajCDm8eJqqrfQpSYYcoiz9bTeRSu66VSWvCqaK+T7spXe
+         YxfHZ7eMZp40K3nN167pQgRndkRz6BZa9+LLscOA=
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 0848512808DB;
+        Fri, 12 Nov 2021 17:03:15 -0500 (EST)
+Message-ID: <2dcf1dcf98216096c52cbd69553ce71edf62a3c5.camel@HansenPartnership.com>
+Subject: Re: [GIT PULL] final round of SCSI updates for the 5.15+ merge
+ window
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 12 Nov 2021 17:03:14 -0500
+In-Reply-To: <CAHk-=wgJz2-KgygzF6s4D80=ib0AmP99TGd3Wgc_GqyKg1=pHA@mail.gmail.com>
+References: <d9405d786496756564b31540cc73a9d22cc97730.camel@HansenPartnership.com>
+         <CAHk-=wgJz2-KgygzF6s4D80=ib0AmP99TGd3Wgc_GqyKg1=pHA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+On Fri, 2021-11-12 at 12:34 -0800, Linus Torvalds wrote:
+> On Fri, Nov 12, 2021 at 5:43 AM James Bottomley
+> <James.Bottomley@hansenpartnership.com> wrote:
+> > This series is all the stragglers that didn't quite make the first
+> > merge window pull.  It's mostly minor updates and bug fixes of
+> > merge window code but it also has two driver updates: ufs and
+> > qla2xxx.
+> 
+> Hmm? No diffstat?
+> 
+> I suspect it's because there's a merge in there, and thus multiple
+> merge base commits, and the autogenerated diffstat ends up being
+> worthless.
 
-I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
+Um, no, it's because I forgot, sorry.
 
-I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
-bank account with your co-operation for both of us benefit.
+> In that situation, the nice thing to do is to at least tell me why
+> there's no diffstat, but optimally you can do a temporary throw-away
+> merge in a temporary branch just to get the diffstat.
+> 
+> And yes, "git request-pull" could do that, automating this all and
+> reporting any conflicts at the same time.
+> 
+> But git historically did *not* do that just because it requires a
+> working tree and can be messy, and because the "just do the diff from
+> the merge base" works fine for maintainers that don't do merges
+> themselves, and so the only maintainers that can hit this issue are
+> the maintainers that also should be able to do that temporary merge
+> thing on their own.
+> 
+> Anyway, I don't require that temporary merge, but I _do_ really want
+> to get notified of "look, I did the diffstat, and it was useless
+> garbage, so I'm not including it here".
+> 
+> Because as-is, this just looks like an incomplete pull request.
+> 
+> I've done the pull, verified the shortlog, and checked that the
+> (proper) diffstat all looks sane. But I am writing this email just to
+> say "you could have done so much better".
 
-Please send the follow below,
-1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
-Thanks.
-Ms Lisa Hugh
+Will do next time, sorry.
+
+James
+
+
