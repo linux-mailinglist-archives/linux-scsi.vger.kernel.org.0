@@ -2,82 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 972D844F2C7
-	for <lists+linux-scsi@lfdr.de>; Sat, 13 Nov 2021 12:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC48744F3D1
+	for <lists+linux-scsi@lfdr.de>; Sat, 13 Nov 2021 16:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235645AbhKMLcw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 13 Nov 2021 06:32:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48850 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235377AbhKMLcv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 13 Nov 2021 06:32:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2A9B7610A1;
-        Sat, 13 Nov 2021 11:29:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1636802999;
-        bh=4t4C5M9a84MkDb+tGoXF7AaK6vfmBvpn5F+aRzl4JOY=;
-        h=Subject:To:Cc:From:Date:From;
-        b=OVSfjMjijHCs0/lSPzreKJq0bUtPMsZQgiVMFW/uyWeKUiMSn6rgabSS4K57plp+a
-         4WVyFjHHHuHS3gpggl6UxD956Zbjh61qVrQPSzunxD6gamQ7f48Pm5bdRZ7AI1NQ+c
-         5SURbYyxjhm4vx6UTZZik9cNgh10W/rkgEkkQZ3A=
-Subject: FAILED: patch "[PATCH] scsi: scsi_ioctl: Validate command size" failed to apply to 5.14-stable tree
-To:     tadeusz.struk@linaro.org, bvanassche@acm.org, hch@lst.de,
-        jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        stable@vger.kernel.org
-Cc:     <stable@vger.kernel.org>
-From:   <gregkh@linuxfoundation.org>
-Date:   Sat, 13 Nov 2021 12:29:49 +0100
-Message-ID: <1636802989232252@kroah.com>
+        id S235914AbhKMPJQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 13 Nov 2021 10:09:16 -0500
+Received: from [152.32.141.60] ([152.32.141.60]:54572 "EHLO mail.opaydev.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S229668AbhKMPJP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 13 Nov 2021 10:09:15 -0500
+X-Greylist: delayed 14222 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Nov 2021 10:09:12 EST
+Received: from localhost (localhost [127.0.0.1])
+        by mail.opaydev.com (Postfix) with ESMTP id 830F7E2EE9A;
+        Sat, 13 Nov 2021 10:25:43 +0100 (WAT)
+Received: from mail.opaydev.com ([127.0.0.1])
+        by localhost (mail.opaydev.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id tw-QaPNPsxxz; Sat, 13 Nov 2021 10:25:43 +0100 (WAT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.opaydev.com (Postfix) with ESMTP id C33E3E2EE9B;
+        Sat, 13 Nov 2021 10:25:41 +0100 (WAT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.opaydev.com C33E3E2EE9B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=opay-ctr.com;
+        s=13A7165E-7DCA-11EB-8D5D-9907FFCED0F4; t=1636795541;
+        bh=9Ya5S5WqJTLJFZUenk8zTzUfa/tlY7tIAXu8D0pRS5I=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=MAr0ysOf0Cn77Mcv7dgQbWAPWFngICFcyW9p1DItMfcgecRIRfAUHcYh+2CYnLzsJ
+         fRKSks+ijR1jjSviFjgmOAYOu0l7bScUjw4R6S+SKQw7TF1bLjENYXMHVY0UFnwxdE
+         SbehhGsA5VnyzejzT9F0FuEjQpvEnx5PwzcCBDLEaEJa1+xXOJhcU2Tp7o6g7grGvj
+         A9pCAVsqbfj0I01Q4EyaRxNrVtFW8D65ZsQOTLLy4HOY2lm/V2dJropeGQxS6wtURi
+         sBnS5KiORj7mSIRjAZvux3+B25HElpuxFuQIqQvdkgmEiN+EuJ6PNebmKKqDfIj52g
+         EnFwJ+otQr3og==
+X-Virus-Scanned: amavisd-new at opaydev.com
+Received: from mail.opaydev.com ([127.0.0.1])
+        by localhost (mail.opaydev.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id mIjrXjcXOjRH; Sat, 13 Nov 2021 10:25:41 +0100 (WAT)
+Received: from [85.62.55.37] (unknown [85.62.55.37])
+        by mail.opaydev.com (Postfix) with ESMTPSA id 182BEE2EE83;
+        Sat, 13 Nov 2021 10:25:37 +0100 (WAT)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: NOTIFICATION OF PAYMENT.>
+To:     Recipients <user01@opay-ctr.com>
+From:   "Mr. BENJAMIN TARIQ" <user01@opay-ctr.com>
+Date:   Sat, 13 Nov 2021 10:21:16 +0100
+Reply-To: lentmelvin@gmail.com
+Message-Id: <20211113092538.182BEE2EE83@mail.opaydev.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+FEDERAL RESERVE BANK OF NEW YORK
+33 LIBERTY ST, NEW YORK
+NY 10045, UNITED STATES
 
-The patch below does not apply to the 5.14-stable tree.
-If someone wants it applied there, or to any other stable or longterm
-tree, then please email the backport, including the original git commit
-id to <stable@vger.kernel.org>.
+ATTENTION FUND OWNER:
 
-thanks,
+THE FEDERAL RESERVE BANK OF NEW YORK WRITES TO INFORM YOU THAT SOME FUND HA=
+S BEEN APPROVED BY THE WORLD BANK ORGANIZATION AND PRESIDENCY UNION TO BE R=
+ECEIVED BY YOU AS A FORM OF COMPENSATION FOR BEING A SCAM VICTIM IN THE PAS=
+T YEARS OR THE WORLD PANDEMIC AFFECTED.
 
-greg k-h
+NOTE: YOU ARE REQUESTED TO CONFIRM YOUR VALID INFORMATION SO AS TO ENABLE T=
+HE BANK TO REACH OUT TO  YOU AND BE SURE WE ARE DEALING WITH THE AFFECTED P=
+ERSON OR THE FAMILY.
 
------------------- original commit in Linus's tree ------------------
+CONFIRM THE BELOW INFORMATION;
 
-From 20aaef52eb08f1d987d46ad26edb8f142f74d83a Mon Sep 17 00:00:00 2001
-From: Tadeusz Struk <tadeusz.struk@linaro.org>
-Date: Wed, 3 Nov 2021 10:06:58 -0700
-Subject: [PATCH] scsi: scsi_ioctl: Validate command size
+1) COMPLETE NAME AS STATED ON YOUR ID CARD:
+2) PHONE NUMBER:
+3) ADDRESS:
+4) ID CARD FOR VERIFICATION :
 
-Need to make sure the command size is valid before copying the command from
-user space.
+YOUR URGENT RESPONSE IS WELCOMED AS WE ARE OPEN TO RECEIVE ANY QUESTION THA=
+T MAY DISTURB YOU.
 
-Link: https://lore.kernel.org/r/20211103170659.22151-1-tadeusz.struk@linaro.org
-Cc: Bart Van Assche <bvanassche@acm.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: James E.J. Bottomley <jejb@linux.ibm.com>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
-Cc: <linux-scsi@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
-Cc: <stable@vger.kernel.org> # 5.15, 5.14, 5.10
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-
-diff --git a/drivers/scsi/scsi_ioctl.c b/drivers/scsi/scsi_ioctl.c
-index 6ff2207bd45a..a06c61f22742 100644
---- a/drivers/scsi/scsi_ioctl.c
-+++ b/drivers/scsi/scsi_ioctl.c
-@@ -347,6 +347,8 @@ static int scsi_fill_sghdr_rq(struct scsi_device *sdev, struct request *rq,
- {
- 	struct scsi_request *req = scsi_req(rq);
- 
-+	if (hdr->cmd_len < 6)
-+		return -EMSGSIZE;
- 	if (copy_from_user(req->cmd, hdr->cmdp, hdr->cmd_len))
- 		return -EFAULT;
- 	if (!scsi_cmd_allowed(req->cmd, mode))
-
+REGARDS
+BENJAMIN TARIQ
