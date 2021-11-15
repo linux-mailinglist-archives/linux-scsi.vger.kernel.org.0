@@ -2,79 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA6B45168B
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Nov 2021 22:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6814F451814
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Nov 2021 23:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350296AbhKOVaz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Nov 2021 16:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        id S233690AbhKOWyg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Nov 2021 17:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353235AbhKOUza (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Nov 2021 15:55:30 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B27CC0613B9
-        for <linux-scsi@vger.kernel.org>; Mon, 15 Nov 2021 12:40:37 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id k2so30675297lji.4
-        for <linux-scsi@vger.kernel.org>; Mon, 15 Nov 2021 12:40:37 -0800 (PST)
+        with ESMTP id S1353653AbhKOWpF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Nov 2021 17:45:05 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D2EC034018
+        for <linux-scsi@vger.kernel.org>; Mon, 15 Nov 2021 13:57:54 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id l7-20020a622507000000b00494608c84a4so10644373pfl.6
+        for <linux-scsi@vger.kernel.org>; Mon, 15 Nov 2021 13:57:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lucidpixels.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uNjovAaYEwEX+9pEiPHL3nyMOKYDJCekov5XCnVxgSM=;
-        b=K9LARW9f0PVDjm+kSpfLEsn7QhEtjlOxiiT/vf4RvIztYbfjRBWnViIhK8FBmQZpfF
-         139J6qLOAOOwndotjONQjKTcg5TgqflwSq+q56EpdajW1paaUd6B00yH8mfAN4exUPDh
-         UQ8d5XxuZo5YrXejK6lvLKfS3jerO5bXuxU1g=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=YsZ4KXChLC2bUyDKJS2V3W28EBYy33HBmNk1vhM7ndI=;
+        b=aSRJKMLHc3cI8ZL+CvOSUurM8LRCt8tXGgxYIv0pE2+/T9r/vALk1q6Bqagd8YY5r1
+         9g1IR6g4muicYfbchQowKcmxoYCtS8kP6S2eN7FcbMkkFea90Lr76YvvmHRpgg3nDIzE
+         mzcwFAaEriCur0N8Be2UuHwLJkG7TUtwuLWxEYWK7WFtTlWnjl6iEtTjSgHzIHT4hX/t
+         sVk/sRIXc2+XmZmFmzQiQk33Fij+F39rGaC586Ag05ruwahowI9osuvrUWjhArex0CmH
+         Ie86l+qHLqZk/vS4n91QBUpVVY8QmS2ric6THgl9HPISGj0W+4u+lqgaoA4Qm5L1JnjO
+         nr1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uNjovAaYEwEX+9pEiPHL3nyMOKYDJCekov5XCnVxgSM=;
-        b=Rg5e8fHzE5MOZvnIT57HOo99blV7kd1T5+lsv0HrW6aJeAB7t1I19YpdHGb+d3XOY8
-         dOwYoWEtw2E8YFEvvPiJWOaTh3JRnHkEOkr+cbCiMyY3wez6QNjKvxRiagq5eF2uap5B
-         UW1by29TrsijT5INafXsDAj6xephL1jZWfiGWSVCshsyrntAxo2d4SfUtRQjUpjapoeL
-         vFWlZBylxVfsZ5VB5F9AgNUcrsTEPJq9b0MLX2mAeK24lyc4Ml4JqqVB9Bb2ewygvevA
-         zPHSTtQkdW4IUpiZtO2Het0i6oI+8MXdQvIDaDPXv0I1DmVVLvhc3C2Ue0aI2Rfz9tSl
-         aoVw==
-X-Gm-Message-State: AOAM532aVTBgqGW5G0gYkJGsgSD2NuqckB+t+qyr7zWHwHVlI/ecXvYV
-        +AboLpEVJePWwcaweue1lsGX9bwOAik8cfkWX/jW0Q==
-X-Google-Smtp-Source: ABdhPJy46/oA5NQEOvwBsbpyFAKV6VUxSr2NwSGUgy9eBRPnDjHeAl/tOF30YpAfDqsQbO8zFhO+aDFgD1tgvDWeExY=
-X-Received: by 2002:a2e:530b:: with SMTP id h11mr1404687ljb.95.1637008835332;
- Mon, 15 Nov 2021 12:40:35 -0800 (PST)
-MIME-Version: 1.0
-References: <006a01d7cead$b9262d70$2b728850$@lucidpixels.com>
- <a4a88807-8f52-ef9a-c58e-0ff454da5ade@acm.org> <CAO9zADxiobgwDE5dtvo98EL0djdgQyrGJA_w4Oxb+pZ9pvOEjQ@mail.gmail.com>
- <CAO9zADycForyq9cmh=epw9r-Wzz=xt32vL3mePuBAPehCgUTjw@mail.gmail.com>
- <50a16ee2-dfa4-d009-17c5-1984cf0a6161@linux.vnet.ibm.com> <CAO9zADwVnuKU-tfZxm4USjf76yJhTZqWfZw4yspv8sc93RuBbQ@mail.gmail.com>
- <e0c2935d-d961-11a0-1b4c-580b55dc6b59@acm.org> <002401d7d305$082971b0$187c5510$@lucidpixels.com>
- <CAO9zADzWcpwZkfJ5VZGZZJT39KQEUr9yGqqCnP18mk7ZAZxbBw@mail.gmail.com> <3bca3296-d998-98a5-bf8f-53b0720869d3@linux.vnet.ibm.com>
-In-Reply-To: <3bca3296-d998-98a5-bf8f-53b0720869d3@linux.vnet.ibm.com>
-From:   Justin Piszcz <jpiszcz@lucidpixels.com>
-Date:   Mon, 15 Nov 2021 15:40:22 -0500
-Message-ID: <CAO9zADzTO+ArYgbUkvAPVD0Ay2+iwmaMpQsysnsBL509oCnsYA@mail.gmail.com>
-Subject: Re: kernel 5.15 does not boot with 3ware card (never had this issue
- <= 5.14) - scsi 0:0:0:0: WARNING: (0x06:0x002C) : Command (0x12) timed out,
- resetting card
-To:     Douglas Miller <dougmill@linux.vnet.ibm.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-scsi@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=YsZ4KXChLC2bUyDKJS2V3W28EBYy33HBmNk1vhM7ndI=;
+        b=ROiCX3XAz81Z5ZZCh2ixRL+YZRGl84lZPykoCbxZE8Edm9cH7rZZr3asL1pP8dTbyP
+         iV72ivmrmSWxODyGWV6sT+BkuoRjzKsslJNp76xEqWzmhUwSyTtI/ajQgGnhYQtg8VV2
+         xbFyHhMCTXAgzmzQD11WUVU8N769oJPtlC14Zhp47lNRmijp2yOtQuQgl50eH8pztXHR
+         3L+J16Ix/eEzfuTJzwcvOSbYaxbfj8bvLr2e98VG3Y2amb0U4Gv7JBo/D0qHosTnYlUT
+         2UsknqwRSDzCUQVCr/UBVIJo3D0L22XMuZQQX6h9smsKjGwjgr1NCwx/STbtebd+t5nX
+         vvHQ==
+X-Gm-Message-State: AOAM531qYmo4Xt8sxP7c2uX8IOE8eJpU7pIGx8ZnrGBgoSI4lJOZzFft
+        TvhC2vD2jNjtCVfCHQBmBPENEfz8cPvhAxJ3
+X-Google-Smtp-Source: ABdhPJzMwB1g00OkBWgE4lJYP+k7rXA4EB+LKxhm3cIyVNDNwH389eriVb+ECb+EksL0WG2zJQ/Mv+4d1dHgdpnX
+X-Received: from changyuanl-desktop.svl.corp.google.com ([2620:15c:2c5:13:f30c:72b6:c6d5:9b63])
+ (user=changyuanl job=sendgmr) by 2002:a17:90b:2389:: with SMTP id
+ mr9mr69500533pjb.152.1637013473984; Mon, 15 Nov 2021 13:57:53 -0800 (PST)
+Date:   Mon, 15 Nov 2021 13:57:48 -0800
+Message-Id: <20211115215750.131696-1-changyuanl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.0.rc1.387.gb447b232ab-goog
+Subject: [PATCH v2 0/2] This patchset adds tracepoints to pm80xx
+From:   Changyuan Lyu <changyuanl@google.com>
+To:     Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org,
+        Vishakha Channapattan <vishakhavc@google.com>,
+        Akshat Jain <akshatzen@google.com>,
+        Igor Pylypiv <ipylypiv@google.com>,
+        Changyuan Lyu <changyuanl@google.com>,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Nov 8, 2021 at 9:16 AM Douglas Miller
-<dougmill@linux.vnet.ibm.com> wrote:
->
-> The commit I referenced earlier does point back to the commit that
-> caused the problem (that I saw). There was a series of commits related
-> to IRQ domains, this one seems to have actually caused the problem I saw:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a5f3d2c17b07
+v2: added le32_to_cpu() when calling trace_pm80xx_mpi_build_cmd()
+to eliminate the incorrect type error in patch `scsi: pm80xx: Add 
+pm80xx_mpi_build_cmd tracepoint`.
+Reported-by: kernel test robot <lkp@intel.com>
 
-Incase anyone runs into this issue, it appears to be fixed in
-5.16.0-rc1, no more freezing at boot:
+Changyuan Lyu (2):
+  scsi: pm80xx: Add tracepoints
+  scsi: pm80xx: Add pm80xx_mpi_build_cmd tracepoint
 
-$ uname -a
-Linux atom 5.16.0-rc1 #2 SMP Mon Nov 15 15:37:25 EST 2021 x86_64 GNU/Linux
+ drivers/scsi/pm8001/Makefile             |   7 +-
+ drivers/scsi/pm8001/pm8001_hwi.c         |   5 +
+ drivers/scsi/pm8001/pm8001_sas.c         |  16 ++++
+ drivers/scsi/pm8001/pm80xx_hwi.c         |   7 ++
+ drivers/scsi/pm8001/pm80xx_tracepoints.c |  10 ++
+ drivers/scsi/pm8001/pm80xx_tracepoints.h | 113 +++++++++++++++++++++++
+ 6 files changed, 156 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/scsi/pm8001/pm80xx_tracepoints.c
+ create mode 100644 drivers/scsi/pm8001/pm80xx_tracepoints.h
 
-Justin.
+-- 
+2.34.0.rc1.387.gb447b232ab-goog
+
