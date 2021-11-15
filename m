@@ -2,97 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA5D451588
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Nov 2021 21:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC30945158F
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Nov 2021 21:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242145AbhKOUkY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Nov 2021 15:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344281AbhKOTYX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Nov 2021 14:24:23 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D936C04A190
-        for <linux-scsi@vger.kernel.org>; Mon, 15 Nov 2021 10:32:41 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id g18so15776144pfk.5
-        for <linux-scsi@vger.kernel.org>; Mon, 15 Nov 2021 10:32:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5PG6sJZZOAhklRWq8XWd5solPtqMOwcN4ocpP/2rOgo=;
-        b=c0ugunSMVvj/7NWkNPRmlZauTvMBW5Ew04+LO78zKp5Wf/vWGVmU9Ead+SlqLCKzh7
-         MafHouCZR65vh9x2jl+joX95OYkKC/f2bvBH4ciHBC2hmlKL71bgQqN2gcAQNLHOsoXs
-         QRJyRJJZmhT4bbR/kcigHVYOKlgKCJj5O6sy3McyMSV1XIAFcXOPqNHP970te1q0H8td
-         lYmSWtO/BB/lo4r/4PRubwvMc8EhmCOCmEEkV1deJW+aC680/4mdfF5oYwF5v1RPt5Ei
-         +/bcRcf3apsLhpT53bzIzT00mN/lG8+R9s6MDBW0kFdZaNC+I3TshFwuQ8s+dl4Ppdql
-         gmBg==
+        id S231224AbhKOUmm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Nov 2021 15:42:42 -0500
+Received: from mail-pj1-f41.google.com ([209.85.216.41]:34731 "EHLO
+        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348431AbhKOTwk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Nov 2021 14:52:40 -0500
+Received: by mail-pj1-f41.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so490495pjb.1
+        for <linux-scsi@vger.kernel.org>; Mon, 15 Nov 2021 11:49:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=5PG6sJZZOAhklRWq8XWd5solPtqMOwcN4ocpP/2rOgo=;
-        b=vYP/Pm3wa2EBD7WV5W61Ms3fom3Ir9WaE7Gu5QyBNJ8b/bDiRpolloyRul0fhqqaqM
-         M4xatzfI8eX4WuGhIqYfFwPto3+0wybmeqTtH+y8YBnIObnj9+p1vqTauMGxKpQn95Im
-         ryXcKHm30UOQjQHjqXp+21Gysjph0pjzfJth4I/ZuepnWQwzbyhrG9Zi5dKL4NXNIA3P
-         67w7ElDKO10Aeacw6fI25u9amAHnwXLRR3y+5Jn1kWDtE7fLj+AHXB1o/7aJzTiiXxPc
-         45J976iEQZHM2ZVZsI3r3X7lZF5JmU50aerTGjFvrWMcxeQaBAGbLegCQJFrAvU9xokO
-         nPOQ==
-X-Gm-Message-State: AOAM530ldu0z5yf7j2lDvwiFQ7Y9fnqacmNJONO5TneIS0HGZ/z61FpT
-        TjF44/GOj93hGf0TxOYglEl8NHFSp4UOnkoI
-X-Google-Smtp-Source: ABdhPJy2IaPVOSbtMr7GPsVcsLYjo+Qs6gh3P/TfN9wxgzx8aAoH98fxe4o84CeDNxN1VA9qVYJ1sA==
-X-Received: by 2002:a63:1d21:: with SMTP id d33mr632920pgd.101.1637001161172;
-        Mon, 15 Nov 2021 10:32:41 -0800 (PST)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id f5sm69667pju.15.2021.11.15.10.32.40
+        bh=vFKzuQlU2ExoKG36bibN1FnGyNO3yT/Oc3goa7vHiN8=;
+        b=khZJZgyOz/bwBvfJVPO80hCX9/LRLBb/gtJKFy6sfs1izxrD2DXFfvabQG/wKjRDQz
+         6jluGzZvPkCCRuy6dzrVwcU1o4xwtm5d00WLQP1XkWtwZQaxUFG/X3HscOrQ4QTShTaI
+         ZutMYixKunD32yy1fYbb314XfNCRfyYl6qh6pCjtgg4NBBccL5E7FGZ49/BqFryaaw3U
+         Asc7IczUwlvJNhMdx7kpdT0lPgL/nAZQJ3mRrn2JBBlvtyCEQ3lhr7yCyk0xPQd5yez/
+         2iZrGJzqsxFSNIvr2UG2PP5uY2lwLH6EZ/Vbm8uUnaTb1mVux8HFsR4495tc3XmSJ1+I
+         KhLg==
+X-Gm-Message-State: AOAM530EIav/Wffy52NUePbApgDglRGAEjFksoXSo4Zl4hvxHJXzHTEt
+        eqaP53w48g6P4uWS43SaaiM=
+X-Google-Smtp-Source: ABdhPJymuIuJ56AkZaBpJS6NC3I8OklnJtNhtbZ1ojRWxKu86YizEaReWhp5MoEduuANO2WXrV9hvA==
+X-Received: by 2002:a17:90b:33cf:: with SMTP id lk15mr1360061pjb.85.1637005784020;
+        Mon, 15 Nov 2021 11:49:44 -0800 (PST)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:c779:caf7:7b7f:3ecd])
+        by smtp.gmail.com with ESMTPSA id m184sm12250356pga.61.2021.11.15.11.49.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Nov 2021 10:32:40 -0800 (PST)
-Message-ID: <1563f090-2217-959e-cc80-30a7a804c567@linaro.org>
-Date:   Mon, 15 Nov 2021 10:32:40 -0800
+        Mon, 15 Nov 2021 11:49:43 -0800 (PST)
+Subject: Re: [PATCH v1] scsi: ufs: fix tm cmd timeout/ISR racing issue
+To:     peter.wang@mediatek.com, stanley.chu@mediatek.com,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com
+Cc:     wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
+        jiajie.hao@mediatek.com, powen.kao@mediatek.com,
+        jonathan.hsu@mediatek.com, qilin.tan@mediatek.com,
+        lin.gui@mediatek.com, mikebi@micron.com
+References: <20211111094939.14991-1-peter.wang@mediatek.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <08cff383-d944-56f3-e61e-ad6fdf4bb885@acm.org>
+Date:   Mon, 15 Nov 2021 11:49:42 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 5.10 011/575] scsi: core: Remove command size deduction
- from scsi_setup_scsi_cmnd()
+In-Reply-To: <20211111094939.14991-1-peter.wang@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org,
-        syzbot+5516b30f5401d4dcbcae@syzkaller.appspotmail.com
-References: <20211115165343.579890274@linuxfoundation.org>
- <20211115165343.996963128@linuxfoundation.org>
- <7ed36c27-a150-39a6-d8e3-483c76bbedc5@acm.org>
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-In-Reply-To: <7ed36c27-a150-39a6-d8e3-483c76bbedc5@acm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/15/21 09:58, Bart Van Assche wrote:
-> Hi Greg,
+On 11/11/21 1:49 AM, peter.wang@mediatek.com wrote:
+> From: Peter Wang <peter.wang@mediatek.com>
 > 
-> Thanks for having queued this patch for the 5.10 stable branch.
+> When tmc 100 ms timeout and recevied tmc complete ISR concurrently,
+> Bug happen because complete NULL poiner and KE.
+> Fix this racing issue by check NULL and use host_lock protect.
 > 
-> Do you plan to also include commit 20aaef52eb08 ("scsi: scsi_ioctl: Validate 
-> command size")? That patch prevents that the bug in the commit mentioned above 
-> can be triggered.
+> Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+> ---
+>   drivers/scsi/ufs/ufshcd.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> Thanks,
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 5c6a58a666d2..6821ceb6783e 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -6442,7 +6442,8 @@ static irqreturn_t ufshcd_tmc_handler(struct ufs_hba *hba)
+>   		struct request *req = hba->tmf_rqs[tag];
+>   		struct completion *c = req->end_io_data;
+>   
+> -		complete(c);
+> +		if (c)
+> +			complete(c);
+>   		ret = IRQ_HANDLED;
+>   	}
+>   	spin_unlock_irqrestore(hba->host->host_lock, flags);
+> @@ -6597,7 +6598,10 @@ static int __ufshcd_issue_tm_cmd(struct ufs_hba *hba,
+>   		 * Make sure that ufshcd_compl_tm() does not trigger a
+>   		 * use-after-free.
+>   		 */
+> +		spin_lock_irqsave(hba->host->host_lock, flags);
+>   		req->end_io_data = NULL;
+> +		spin_unlock_irqrestore(hba->host->host_lock, flags);
+> +
+>   		ufshcd_add_tm_upiu_trace(hba, task_tag, UFS_TM_ERR);
+>   		dev_err(hba->dev, "%s: task management cmd 0x%.2x timed-out\n",
+>   				__func__, tm_function);
 
-Hi Brad,
-The "scsi_ioctl: Validate command size" patch is not needed for either 5.10 nor
-5.14 as the it is set directly from COMMAND_SIZE(opcode). See:
+Isn't this already addressed by Adrian Hunter's patches? See also
+https://lore.kernel.org/linux-scsi/20211108064815.569494-1-adrian.hunter@intel.com/
 
-https://elixir.bootlin.com/linux/v5.14.18/source/block/scsi_ioctl.c#L445
-https://elixir.bootlin.com/linux/v5.10.79/source/block/scsi_ioctl.c#L447
-
--- 
 Thanks,
-Tadeusz
+
+Bart.
+
+
