@@ -2,67 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2157745308A
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Nov 2021 12:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 926384531B5
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Nov 2021 13:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234991AbhKPLba (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Nov 2021 06:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235015AbhKPLa4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Nov 2021 06:30:56 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7BEC061A0E
-        for <linux-scsi@vger.kernel.org>; Tue, 16 Nov 2021 03:26:59 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id t30so36800986wra.10
-        for <linux-scsi@vger.kernel.org>; Tue, 16 Nov 2021 03:26:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=49VN2EPgYHrEXK97OpQX0CxGM5w7EiGtxSfN5GFh/XE=;
-        b=VPSdTQPJ5hxea0d4B/OGzopTdVjRnbFmJz+O0tAMBIW+kVpQPKiYwfvCdPxAiu9RO7
-         oe9kEcogTcLI4iYVrS1eOtN05ZsYHexXSFFQpbbx9c1Ayow9QIMNNWeK3yqQOqbV6uta
-         lYm4w6zcQWO4dqR/GNjN0aurI02r6lW3XO4xQxM/13UYVUY6ET4f0O8Iq4IG8IZUtkwp
-         NHbrha8XPUVMG3Xu1I5WAylPedohg9BtJHXmX/E5I/oVcL5vEd+kv9L+n5IA0SK5OUNr
-         Wzfz9JBOv9okjRvaOWABxHrvDpiLS87CruKZfKxQJvud8svtNp7BgBXzyICxaDFUC026
-         9ZZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=49VN2EPgYHrEXK97OpQX0CxGM5w7EiGtxSfN5GFh/XE=;
-        b=y4zZBwdUFrZVuZA6W1UxOhIOmwmwoLm6F4OypLM+enL45Gc9HJiD50A4L7DnMLh8y9
-         HbgxE8ftGJR00X1qQfw2TKekcNLEBM9xa2W6kD03kvsCgINnilzuA7PwuRMrt0GcRFGD
-         0YS3YioSPWZiPH/whGYSuduBkQojrOC6USJaj1BVQnTuOw/0Lb+QLatsLMU55nsXs3vh
-         QHTSr1dzTU1sU87FSsKOP3v16T0dluVu2FdiBGZIFMLRy5FmlHIbqMmQP1U3VK3lptOz
-         OHEbcCdbz4zWH8PiNR3spgnEM/biSu3xSrUp+E3QwPWrjezz/rEPgh8jBQt+VKr/mmaV
-         wKmA==
-X-Gm-Message-State: AOAM532jYtIPyuV1uQ9OLMhtsbFKiKqvZPkfuU3ah6Xyl8wLvvzR/GiC
-        dJw5B5NTblqAyJ7iNWZ8pYLJk7FlYVjsNT1OmAY=
-X-Google-Smtp-Source: ABdhPJx7V7Pzab1iLpC1tLfl5XTeFedl5ZB5PcVwW8xnRDThhRI1kD0wWb7jxJL13vcYZKWR942PRdG0Y0xdZFQs61A=
-X-Received: by 2002:a5d:4107:: with SMTP id l7mr8132229wrp.209.1637062018294;
- Tue, 16 Nov 2021 03:26:58 -0800 (PST)
+        id S235922AbhKPMHM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 16 Nov 2021 07:07:12 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:26318 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235938AbhKPMFD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Nov 2021 07:05:03 -0500
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Htl0d64YMzbhrv;
+        Tue, 16 Nov 2021 19:57:05 +0800 (CST)
+Received: from dggpeml500019.china.huawei.com (7.185.36.137) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 16 Nov 2021 20:02:00 +0800
+Received: from [10.174.179.189] (10.174.179.189) by
+ dggpeml500019.china.huawei.com (7.185.36.137) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Tue, 16 Nov 2021 20:01:59 +0800
+Subject: Re: [PATCH v2] scsi: core: use eh_timeout to timeout start_unit
+ command
+To:     brookxu <brookxu.cn@gmail.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <hch@infradead.org>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1636507412-21678-1-git-send-email-brookxu.cn@gmail.com>
+From:   Wu Bo <wubo40@huawei.com>
+Message-ID: <34b23c4f-65b0-4c01-4148-d536732b3aeb@huawei.com>
+Date:   Tue, 16 Nov 2021 20:01:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.2
 MIME-Version: 1.0
-Received: by 2002:a05:600c:3b97:0:0:0:0 with HTTP; Tue, 16 Nov 2021 03:26:57
- -0800 (PST)
-Reply-To: ebodrdickson1020@gmail.com
-From:   "Dr.Dickson Ebo" <drdicksonelo1023@gmail.com>
-Date:   Tue, 16 Nov 2021 03:26:57 -0800
-Message-ID: <CABq-xD7ZFmUMjZ9aWbbAm9nEKVBK1nOq1MtQg6NNJHmUXBtxzg@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1636507412-21678-1-git-send-email-brookxu.cn@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.189]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500019.china.huawei.com (7.185.36.137)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Finance and Audit Department, Zenith Bank Plc.
+On 2021/11/10 9:23, brookxu wrote:
+> From: Chunguang Xu <brookxu@tencent.com>
+> 
+> In some abnormal scenarios, STU may timeout. The recovery
+> time of 30 seconds is relatively large. Now we need to modify
+> rq_timeout to adjust STU timeout value, but it will affect the
+> actual IO.
+> 
+> commit 9728c0814ecb ("[SCSI] make scsi_eh_try_stu use block
+> timeout") use rq_timeout to timeout the STU command, but after
+> commit 0816c9251a71 ("[SCSI] Allow error handling timeout to
+> be specified") eh_timeout will init to SCSI_DEFAULT_EH_TIMEOUT,
+> so it is more reasonable to use eh_timeout as the timeout value
+> of STU command. In this way, we can uniformly control recovery
+> time through eh_timeout.
+> 
+> Signed-off-by: Chunguang Xu <brookxu@tencent.com>
+> ---
+> v2: Update commit log and fix some format issues.
+> 
+>   drivers/scsi/scsi_error.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+> index a531336..a665318 100644
+> --- a/drivers/scsi/scsi_error.c
+> +++ b/drivers/scsi/scsi_error.c
+> @@ -1404,7 +1404,8 @@ static int scsi_eh_try_stu(struct scsi_cmnd *scmd)
+>   		enum scsi_disposition rtn = NEEDS_RETRY;
+>   
+>   		for (i = 0; rtn == NEEDS_RETRY && i < 2; i++)
+> -			rtn = scsi_send_eh_cmnd(scmd, stu_command, 6, scmd->device->request_queue->rq_timeout, 0);
+> +			rtn = scsi_send_eh_cmnd(scmd, stu_command, 6,
+> +						scmd->device->eh_timeout, 0);
+>   
+>   		if (rtn == SUCCESS)
+>   			return 0;
+> 
 
-The President of the Federal Republic of Nigeria through the Zenith
-International Bank Nigeria PLC has released your
-Contract/Inheritance/Compensation Fund.
+Reviewed-by: Wu Bo <wubo40@huawei.com>
 
-Kindly get back to us as soon as possible.
-
-Yours faithfully,
-Dr. Dickson Ebo.
+-- 
+Wu Bo
