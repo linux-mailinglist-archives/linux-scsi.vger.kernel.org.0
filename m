@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BEF453EA1
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Nov 2021 03:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6969453EA4
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Nov 2021 03:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbhKQCxS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Nov 2021 21:53:18 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:27140 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbhKQCxK (ORCPT
+        id S232803AbhKQCxU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 16 Nov 2021 21:53:20 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:15831 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232699AbhKQCxK (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Nov 2021 21:53:10 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Hv6mN4m79z1DJRj;
-        Wed, 17 Nov 2021 10:47:48 +0800 (CST)
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Hv6pk5wW8z918L;
+        Wed, 17 Nov 2021 10:49:50 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
@@ -22,9 +22,9 @@ From:   chenxiang <chenxiang66@hisilicon.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
         <john.garry@huawei.com>, Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [PATCH 10/15] scsi: libsas: Add a flag SAS_HA_RESUMING of sas_ha
-Date:   Wed, 17 Nov 2021 10:45:03 +0800
-Message-ID: <1637117108-230103-11-git-send-email-chenxiang66@hisilicon.com>
+Subject: [PATCH 11/15] scsi: libsas: Refactor out sas_queue_deferred_work()
+Date:   Wed, 17 Nov 2021 10:45:04 +0800
+Message-ID: <1637117108-230103-12-git-send-email-chenxiang66@hisilicon.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1637117108-230103-1-git-send-email-chenxiang66@hisilicon.com>
 References: <1637117108-230103-1-git-send-email-chenxiang66@hisilicon.com>
@@ -40,48 +40,76 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Xiang Chen <chenxiang66@hisilicon.com>
 
-Add a flag SAS_HA_RESUMING and use it to indicate the process of resuming
-sas_ha.
+In the 2rd part of function __sas_drain_work, it queues defer work. And it
+will be used in other places, so refactor out sas_queue_deferred_work().
 
 Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
 Reviewed-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/libsas/sas_init.c | 2 ++
- include/scsi/libsas.h          | 1 +
- 2 files changed, 3 insertions(+)
+ drivers/scsi/libsas/sas_event.c    | 25 ++++++++++++++-----------
+ drivers/scsi/libsas/sas_internal.h |  1 +
+ 2 files changed, 15 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index 974c4a305ece..069e40fc8411 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -362,6 +362,7 @@ void sas_prep_resume_ha(struct sas_ha_struct *ha)
- 	int i;
+diff --git a/drivers/scsi/libsas/sas_event.c b/drivers/scsi/libsas/sas_event.c
+index af605620ea13..01e544ca518a 100644
+--- a/drivers/scsi/libsas/sas_event.c
++++ b/drivers/scsi/libsas/sas_event.c
+@@ -41,12 +41,23 @@ static int sas_queue_event(int event, struct sas_work *work,
+ 	return rc;
+ }
  
- 	set_bit(SAS_HA_REGISTERED, &ha->state);
-+	set_bit(SAS_HA_RESUMING, &ha->state);
+-
+-void __sas_drain_work(struct sas_ha_struct *ha)
++void sas_queue_deferred_work(struct sas_ha_struct *ha)
+ {
+ 	struct sas_work *sw, *_sw;
+ 	int ret;
  
- 	/* clear out any stale link events/data from the suspension path */
- 	for (i = 0; i < ha->num_phys; i++) {
-@@ -443,6 +444,7 @@ static void _sas_resume_ha(struct sas_ha_struct *ha, bool drain)
- 	scsi_unblock_requests(ha->core.shost);
- 	if (drain)
- 		sas_drain_work(ha);
-+	clear_bit(SAS_HA_RESUMING, &ha->state);
++	spin_lock_irq(&ha->lock);
++	list_for_each_entry_safe(sw, _sw, &ha->defer_q, drain_node) {
++		list_del_init(&sw->drain_node);
++		ret = sas_queue_work(ha, sw);
++		if (ret != 1)
++			sas_free_event(to_asd_sas_event(&sw->work));
++	}
++	spin_unlock_irq(&ha->lock);
++}
++
++void __sas_drain_work(struct sas_ha_struct *ha)
++{
+ 	set_bit(SAS_HA_DRAINING, &ha->state);
+ 	/* flush submitters */
+ 	spin_lock_irq(&ha->lock);
+@@ -55,16 +66,8 @@ void __sas_drain_work(struct sas_ha_struct *ha)
+ 	drain_workqueue(ha->event_q);
+ 	drain_workqueue(ha->disco_q);
  
- 	/* send event PORTE_BROADCAST_RCVD to identify some new inserted
- 	 * disks for expander
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index a795a2d9e5b1..698f2032807b 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -356,6 +356,7 @@ enum sas_ha_state {
- 	SAS_HA_DRAINING,
- 	SAS_HA_ATA_EH_ACTIVE,
- 	SAS_HA_FROZEN,
-+	SAS_HA_RESUMING,
- };
+-	spin_lock_irq(&ha->lock);
+ 	clear_bit(SAS_HA_DRAINING, &ha->state);
+-	list_for_each_entry_safe(sw, _sw, &ha->defer_q, drain_node) {
+-		list_del_init(&sw->drain_node);
+-		ret = sas_queue_work(ha, sw);
+-		if (ret != 1)
+-			sas_free_event(to_asd_sas_event(&sw->work));
+-
+-	}
+-	spin_unlock_irq(&ha->lock);
++	sas_queue_deferred_work(ha);
+ }
  
- struct sas_ha_struct {
+ int sas_drain_work(struct sas_ha_struct *ha)
+diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
+index ad9764a976c3..acd515c01861 100644
+--- a/drivers/scsi/libsas/sas_internal.h
++++ b/drivers/scsi/libsas/sas_internal.h
+@@ -57,6 +57,7 @@ void sas_unregister_ports(struct sas_ha_struct *sas_ha);
+ 
+ void sas_disable_revalidation(struct sas_ha_struct *ha);
+ void sas_enable_revalidation(struct sas_ha_struct *ha);
++void sas_queue_deferred_work(struct sas_ha_struct *ha);
+ void __sas_drain_work(struct sas_ha_struct *ha);
+ 
+ void sas_deform_port(struct asd_sas_phy *phy, int gone);
 -- 
 2.33.0
 
