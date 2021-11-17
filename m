@@ -2,55 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284C2589042
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Aug 2022 18:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF671589072
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Aug 2022 18:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236097AbiHCQ3j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Aug 2022 12:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S238600AbiHCQa6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Aug 2022 12:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238261AbiHCQ3X (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Aug 2022 12:29:23 -0400
+        with ESMTP id S238475AbiHCQ37 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Aug 2022 12:29:59 -0400
 Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5407541D32;
-        Wed,  3 Aug 2022 09:29:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9737A48E8A;
+        Wed,  3 Aug 2022 09:29:53 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id B9E44412DD;
-        Wed,  3 Aug 2022 16:29:18 +0000 (UTC)
+        by mta-01.yadro.com (Postfix) with ESMTP id 10BE64131D;
+        Wed,  3 Aug 2022 16:29:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received:received; s=
-        mta-01; t=1659544157; x=1661358558; bh=F8zwbwFQerInqTJkM47gn2DFi
-        lWIUw9B3wyqG8xTPDM=; b=HES+aTLitYbxxoXdsh206sV6bg2cjkXlOoFQO0ZA8
-        lrmBe0LOAk1/d53IgC9VCJtHNqe6c1h61GMCF0fOA2wSpR0zVLAyXRE/whdkfFKO
-        pht+TL+aNLp9YX3t5Koi0F5T+2dwEcZqAr0967V4bqpLicAO5oAm/OyBaJfyFnDu
-        SM=
+        mta-01; t=1659544189; x=1661358590; bh=1/lLGStKju420GDKs/ya8qKkM
+        bEQG4z1qGKFPfh/mR4=; b=TKX4M9Beo0i6jkWkGtjBbsMSP5c42IvwVW+D//+ES
+        NM71mAWzoX3NIUkhl49ArInMZ97z/CfchUNqaVi/SK5xQfkKEMeShwcEoHpK0dbO
+        pPfuF+5T9i47bf//8c74y4zfAtA6RGzTFAyw8uHZmiI/bu9CwrXt+qVJXNWhIJV3
+        7I=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id L-f30nbTlgaw; Wed,  3 Aug 2022 19:29:17 +0300 (MSK)
-Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
+        with ESMTP id j2pcoCGPdKTC; Wed,  3 Aug 2022 19:29:49 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id E625341239;
-        Wed,  3 Aug 2022 19:29:13 +0300 (MSK)
+        by mta-01.yadro.com (Postfix) with ESMTPS id AB8A5412ED;
+        Wed,  3 Aug 2022 19:29:22 +0300 (MSK)
 Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
- T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Wed, 3 Aug 2022 19:29:14 +0300
+ 15.1.669.32; Wed, 3 Aug 2022 19:29:22 +0300
 Received: from NB-591.corp.yadro.com (10.199.18.20) by
  T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.9; Wed, 3 Aug 2022 19:29:12 +0300
+ 15.2.1118.9; Wed, 3 Aug 2022 19:29:21 +0300
 From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
 To:     Martin Petersen <martin.petersen@oracle.com>,
         <target-devel@vger.kernel.org>
 CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
         Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [RFC PATCH 09/48] target: core: check RTPI uniquity for enabled TPG
-Date:   Thu, 25 Feb 2021 15:18:00 +0300
-Message-ID: <20220803162857.27770-10-d.bogdanov@yadro.com>
+Subject: [RFC PATCH 36/48] target: cluster: introduce cluster ops
+Date:   Wed, 17 Nov 2021 14:12:29 +0300
+Message-ID: <20220803162857.27770-37-d.bogdanov@yadro.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220803162857.27770-1-d.bogdanov@yadro.com>
 References: <20220803162857.27770-1-d.bogdanov@yadro.com>
@@ -70,176 +70,441 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Garantee uniquity of RTPI only for enabled target port groups.
-Allow any RPTI for disabled tpg until it is enabled.
+Introduce cluster ops common for all backend devices. Those ops
+will implement cluster level locks, store clusterwide data (like
+persistent reservations) and provide clusterwide notifications.
+That ops could be registered dynamically. Ops have own configfs folder
+in .../target/cluster/<cluster_impl_name>
+
+Create default non-cluster ops implementation.
+
+Use cluster ops for CAW lock.
 
 Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
 ---
- drivers/target/target_core_fabric_configfs.c | 29 +++++++++++++-
- drivers/target/target_core_internal.h        |  2 +
- drivers/target/target_core_tpg.c             | 40 +++++++++++++-------
- 3 files changed, 56 insertions(+), 15 deletions(-)
+ drivers/target/target_core_configfs.c |  63 +++++++++++-
+ drivers/target/target_core_device.c   | 139 +++++++++++++++++++++++++-
+ drivers/target/target_core_internal.h |   8 ++
+ drivers/target/target_core_sbc.c      |  12 +--
+ include/target/target_core_base.h     |  18 ++++
+ 5 files changed, 232 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/target/target_core_fabric_configfs.c b/drivers/target/target_core_fabric_configfs.c
-index a34b5db4eec5..fc1b8f54fb54 100644
---- a/drivers/target/target_core_fabric_configfs.c
-+++ b/drivers/target/target_core_fabric_configfs.c
-@@ -857,6 +857,7 @@ static ssize_t target_fabric_tpg_base_enable_store(struct config_item *item,
- 						   size_t count)
- {
- 	struct se_portal_group *se_tpg = to_tpg(item);
-+	struct se_portal_group *tpg;
- 	int ret;
- 	bool op;
+diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
+index f63c37344104..6c36b1f4bd92 100644
+--- a/drivers/target/target_core_configfs.c
++++ b/drivers/target/target_core_configfs.c
+@@ -69,6 +69,7 @@ static LIST_HEAD(g_tf_list);
+ static DEFINE_MUTEX(g_tf_lock);
  
-@@ -867,11 +868,37 @@ static ssize_t target_fabric_tpg_base_enable_store(struct config_item *item,
- 	if (se_tpg->enabled == op)
- 		return count;
+ static struct config_group target_core_hbagroup;
++static struct config_group *target_core_cluster_group;
+ static struct config_group alua_group;
+ static struct config_group alua_lu_gps_group;
  
-+	spin_lock(&g_tpg_lock);
+@@ -1193,6 +1194,32 @@ static ssize_t pgr_support_store(struct config_item *item,
+ 	return count;
+ }
+ 
++static ssize_t cluster_impl_show(struct config_item *item, char *page)
++{
++	return snprintf(page, PAGE_SIZE, "%s\n",
++			to_attrib(item)->da_dev->cl_ops->name);
++}
 +
-+	if (op) {
-+		tpg = core_get_tpg_by_rtpi(se_tpg->tpg_rtpi);
-+		if (tpg) {
-+			spin_unlock(&g_tpg_lock);
++static ssize_t cluster_impl_store(struct config_item *item,
++				  const char *page, size_t count)
++{
++	struct se_dev_attrib *da = to_attrib(item);
++	struct se_device *dev = da->da_dev;
++	char cluster_impl[16];
++	int res;
 +
-+			pr_err("TARGET_CORE[%s]->TPG[%u] - RTPI %#x conflicts with TARGET_CORE[%s]->TPG[%u]\n",
-+			       se_tpg->se_tpg_tfo->fabric_name,
-+			       se_tpg->se_tpg_tfo->tpg_get_tag(tpg),
-+			       se_tpg->tpg_rtpi,
-+			       tpg->se_tpg_tfo->fabric_name,
-+			       tpg->se_tpg_tfo->tpg_get_tag(tpg));
-+			return -EINVAL;
++	strscpy(cluster_impl, page, 16);
++	if (cluster_impl[strlen(cluster_impl) - 1] == '\n')
++		cluster_impl[strlen(cluster_impl) - 1] = 0;
++
++	res = core_dev_set_cluster_mode(dev, cluster_impl);
++	if (res)
++		return res;
++
++	return count;
++}
++CONFIGFS_ATTR(, cluster_impl);
++
+ CONFIGFS_ATTR(, emulate_model_alias);
+ CONFIGFS_ATTR(, emulate_dpo);
+ CONFIGFS_ATTR(, emulate_fua_write);
+@@ -1268,6 +1295,7 @@ struct configfs_attribute *sbc_attrib_attrs[] = {
+ 	&attr_max_write_same_len,
+ 	&attr_alua_support,
+ 	&attr_pgr_support,
++	&attr_cluster_impl,
+ 	NULL,
+ };
+ EXPORT_SYMBOL(sbc_attrib_attrs);
+@@ -3615,6 +3643,38 @@ static const struct config_item_type target_core_cit = {
+ 
+ /* Stop functions for struct config_item_type target_core_hba_cit */
+ 
++static const struct config_item_type target_core_cluster_cit = {
++	.ct_owner	= THIS_MODULE,
++};
++
++int target_core_register_cluster_configfs(struct target_cluster_impl *tci)
++{
++	int ret = 0;
++
++	if (!target_core_cluster_group) {
++		target_core_cluster_group = configfs_register_default_group(
++					&target_core_fabrics.su_group,
++					"cluster",
++					&target_core_cluster_cit);
++		if (IS_ERR(target_core_cluster_group)) {
++			ret = PTR_ERR(target_core_cluster_group);
++			pr_err("Error %d while registering cluster group\n", ret);
++			goto err;
 +		}
 +	}
 +
-+	se_tpg->enabled |= 0x10; /* transient state */
-+	spin_unlock(&g_tpg_lock);
++	ret = configfs_register_group(target_core_cluster_group,
++				      tci->ops->cg_group);
 +
- 	ret = se_tpg->se_tpg_tfo->fabric_enable_tpg(se_tpg, op);
--	if (ret)
-+
-+	spin_lock(&g_tpg_lock);
-+	if (ret < 0) {
-+		se_tpg->enabled	&= ~0x10; /* clear transient state */
-+		spin_unlock(&g_tpg_lock);
- 		return ret;
-+	}
- 
- 	se_tpg->enabled = op;
-+	spin_unlock(&g_tpg_lock);
- 
- 	return count;
- }
-diff --git a/drivers/target/target_core_internal.h b/drivers/target/target_core_internal.h
-index d662cdc9a04c..d4ace697edb0 100644
---- a/drivers/target/target_core_internal.h
-+++ b/drivers/target/target_core_internal.h
-@@ -116,6 +116,7 @@ int	core_tmr_lun_reset(struct se_device *, struct se_tmr_req *,
- 		struct list_head *, struct se_cmd *);
- 
- /* target_core_tpg.c */
-+extern struct spinlock g_tpg_lock;
- extern struct se_device *g_lun0_dev;
- extern struct configfs_attribute *core_tpg_attrib_attrs[];
- 
-@@ -131,6 +132,7 @@ void core_tpg_remove_lun(struct se_portal_group *, struct se_lun *);
- struct se_node_acl *core_tpg_add_initiator_node_acl(struct se_portal_group *tpg,
- 		const char *initiatorname);
- void core_tpg_del_initiator_node_acl(struct se_node_acl *acl);
-+struct se_portal_group *core_get_tpg_by_rtpi(u16 rtpi);
- 
- /* target_core_transport.c */
- extern struct kmem_cache *se_tmr_req_cache;
-diff --git a/drivers/target/target_core_tpg.c b/drivers/target/target_core_tpg.c
-index a409cf1c4ca0..5a81d592530f 100644
---- a/drivers/target/target_core_tpg.c
-+++ b/drivers/target/target_core_tpg.c
-@@ -34,7 +34,7 @@ extern struct se_device *g_lun0_dev;
- static u16 g_tpg_count;
- static u16 g_tpg_rtpi_counter = 1;
- static LIST_HEAD(g_tpg_list);
--static DEFINE_SPINLOCK(g_tpg_lock);
-+DEFINE_SPINLOCK(g_tpg_lock);
- 
- /*	__core_tpg_get_initiator_node_acl():
-  *
-@@ -476,7 +476,7 @@ static int core_tpg_register_rtpi(struct se_portal_group *se_tpg)
- 		 * Make sure RELATIVE TARGET PORT IDENTIFIER is unique
- 		 * for 16-bit wrap..
- 		 */
--		if (se_tpg->tpg_rtpi == tpg->tpg_rtpi)
-+		if (tpg->enabled && se_tpg->tpg_rtpi == tpg->tpg_rtpi)
- 			goto again;
- 	}
- 	list_add(&se_tpg->tpg_list, &g_tpg_list);
-@@ -738,12 +738,26 @@ static ssize_t core_tpg_rtpi_show(struct config_item *item, char *page)
- 	return sprintf(page, "%#x\n", se_tpg->tpg_rtpi);
- }
- 
-+struct se_portal_group *
-+core_get_tpg_by_rtpi(u16 rtpi)
-+{
-+	struct se_portal_group *tpg;
-+
-+	lockdep_assert_held(&g_tpg_lock);
-+
-+	list_for_each_entry(tpg, &g_tpg_list, tpg_list) {
-+		if (tpg->enabled && rtpi == tpg->tpg_rtpi)
-+			return tpg;
-+	}
-+
-+	return NULL;
++err:
++	return ret;
 +}
 +
- static ssize_t core_tpg_rtpi_store(struct config_item *item,
- 				   const char *page, size_t count)
- {
- 	struct se_portal_group *se_tpg = attrib_to_tpg(item);
- 	struct se_portal_group *tpg;
--	bool rtpi_changed = false;
- 	u16 val;
- 	int ret;
- 
-@@ -753,11 +767,14 @@ static ssize_t core_tpg_rtpi_store(struct config_item *item,
- 	if (val == 0)
- 		return -EINVAL;
- 
--	/* RTPI shouldn't conflict with values of existing ports */
-+	if (se_tpg->tpg_rtpi == val)
-+		return count;
++void target_core_unregister_cluster_configfs(struct target_cluster_impl *tci)
++{
++	configfs_unregister_group(tci->ops->cg_group);
++}
 +
- 	spin_lock(&g_tpg_lock);
+ void target_setup_backend_cits(struct target_backend *tb)
+ {
+ 	target_core_setup_dev_cit(tb);
+@@ -3749,7 +3809,8 @@ static void __exit target_core_exit_configfs(void)
+ 	configfs_remove_default_groups(&alua_lu_gps_group);
+ 	configfs_remove_default_groups(&alua_group);
+ 	configfs_remove_default_groups(&target_core_hbagroup);
+-
++	if (target_core_cluster_group)
++		configfs_remove_default_groups(target_core_cluster_group);
+ 	/*
+ 	 * We expect subsys->su_group.default_groups to be released
+ 	 * by configfs subsystem provider logic..
+diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
+index 7c887792bb88..9c7f4dc1b85d 100644
+--- a/drivers/target/target_core_device.c
++++ b/drivers/target/target_core_device.c
+@@ -44,6 +44,77 @@ static struct se_hba *lun0_hba;
+ /* not static, needed by tpg.c */
+ struct se_device *g_lun0_dev;
  
--	list_for_each_entry(tpg, &g_tpg_list, tpg_list) {
--		if (se_tpg != tpg && val == tpg->tpg_rtpi) {
-+	if (se_tpg->enabled) {
-+		tpg = core_get_tpg_by_rtpi(val);
-+		if (tpg) {
- 			spin_unlock(&g_tpg_lock);
- 			pr_err("TARGET_CORE[%s]->TPG[%u] - RTPI %#x conflicts with TARGET_CORE[%s]->TPG[%u]\n",
- 			       se_tpg->se_tpg_tfo->fabric_name,
-@@ -769,17 +786,12 @@ static ssize_t core_tpg_rtpi_store(struct config_item *item,
- 		}
- 	}
- 
--	if (se_tpg->tpg_rtpi != val) {
--		se_tpg->tpg_rtpi = val;
--		rtpi_changed = true;
--	}
-+	se_tpg->tpg_rtpi = val;
- 	spin_unlock(&g_tpg_lock);
- 
--	if (rtpi_changed)
--		core_tpg_ua(se_tpg, 0x3f, ASCQ_3FH_INQUIRY_DATA_HAS_CHANGED);
--	ret = count;
-+	core_tpg_ua(se_tpg, 0x3f, ASCQ_3FH_INQUIRY_DATA_HAS_CHANGED);
- 
--	return ret;
-+	return count;
++static LIST_HEAD(cluster_impl_list);
++static DEFINE_MUTEX(cluster_impl_mutex);
++
++int target_cluster_impl_register(const struct target_cluster_ops *ops)
++{
++	struct target_cluster_impl *tci, *old;
++
++	tci = kzalloc(sizeof(*tci), GFP_KERNEL);
++	if (!tci)
++		return -ENOMEM;
++	tci->ops = ops;
++
++	mutex_lock(&cluster_impl_mutex);
++	list_for_each_entry(old, &cluster_impl_list, list) {
++		if (!strcmp(old->ops->name, ops->name)) {
++			pr_err("Target cluster implementation %s already registered.\n",
++			       ops->name);
++			mutex_unlock(&cluster_impl_mutex);
++			kfree(tci);
++			return -EEXIST;
++		}
++	}
++
++	target_core_register_cluster_configfs(tci);
++
++	list_add_tail(&tci->list, &cluster_impl_list);
++	mutex_unlock(&cluster_impl_mutex);
++
++	pr_debug("TCM: Registered cluster plugin: %s struct module: %p\n",
++			ops->name, ops->owner);
++	return 0;
++}
++EXPORT_SYMBOL(target_cluster_impl_register);
++
++void target_cluster_impl_unregister(const struct target_cluster_ops *ops)
++{
++	struct target_cluster_impl *tci;
++
++	mutex_lock(&cluster_impl_mutex);
++	list_for_each_entry(tci, &cluster_impl_list, list) {
++		if (tci->ops == ops) {
++			list_del(&tci->list);
++			target_core_unregister_cluster_configfs(tci);
++			mutex_unlock(&cluster_impl_mutex);
++			kfree(tci);
++			return;
++		}
++	}
++	mutex_unlock(&cluster_impl_mutex);
++}
++EXPORT_SYMBOL(target_cluster_impl_unregister);
++
++static struct target_cluster_impl *core_get_cluster_impl(const char *name)
++{
++	struct target_cluster_impl *tci;
++
++	mutex_lock(&cluster_impl_mutex);
++	list_for_each_entry(tci, &cluster_impl_list, list) {
++		if (!strcmp(tci->ops->name, name))
++			goto found;
++	}
++	mutex_unlock(&cluster_impl_mutex);
++	return NULL;
++found:
++	if (tci->ops->owner && !try_module_get(tci->ops->owner))
++		tci = NULL;
++	mutex_unlock(&cluster_impl_mutex);
++	return tci;
++}
++
++
+ sense_reason_t
+ transport_lookup_cmd_lun(struct se_cmd *se_cmd)
+ {
+@@ -686,6 +757,40 @@ static void scsi_dump_inquiry(struct se_device *dev)
+ 	pr_debug("  Type:   %s ", scsi_device_type(device_type));
  }
  
- CONFIGFS_ATTR(core_tpg_, rtpi);
++static int target_init_nodlm(struct se_device *dev)
++{
++	sema_init(&dev->caw_sem, 1);
++
++	return 0;
++}
++
++static int target_cleanup_nodlm(struct se_device *dev)
++{
++	return 0;
++}
++
++static void *target_caw_lock_nodlm(struct se_device *dev, u64 lba)
++{
++	if (down_interruptible(&dev->caw_sem))
++		return NULL;
++	return &dev->caw_sem;
++}
++
++static int target_caw_unlock_nodlm(struct se_device *dev, void *lock)
++{
++	up(&dev->caw_sem);
++	return 0;
++}
++
++const struct target_cluster_ops nodlm_cluster_ops = {
++	.name = "single",
++	.owner = NULL,
++	.init = target_init_nodlm,
++	.cleanup = target_cleanup_nodlm,
++	.caw_lock = target_caw_lock_nodlm,
++	.caw_unlock = target_caw_unlock_nodlm,
++};
++
+ struct se_device *target_alloc_device(struct se_hba *hba, const char *name)
+ {
+ 	struct se_device *dev;
+@@ -729,7 +834,6 @@ struct se_device *target_alloc_device(struct se_hba *hba, const char *name)
+ 	spin_lock_init(&dev->se_port_lock);
+ 	spin_lock_init(&dev->se_tmr_lock);
+ 	spin_lock_init(&dev->qf_cmd_lock);
+-	sema_init(&dev->caw_sem, 1);
+ 	INIT_LIST_HEAD(&dev->t10_wwn.t10_vpd_list);
+ 	spin_lock_init(&dev->t10_wwn.t10_vpd_lock);
+ 	INIT_LIST_HEAD(&dev->t10_pr.registration_list);
+@@ -779,6 +883,9 @@ struct se_device *target_alloc_device(struct se_hba *hba, const char *name)
+ 				DA_UNMAP_ZEROES_DATA_DEFAULT;
+ 	dev->dev_attrib.max_write_same_len = DA_MAX_WRITE_SAME_LEN;
+ 
++	dev->cl_ops = &nodlm_cluster_ops;
++	dev->cl_ops->init(dev);
++
+ 	xcopy_lun = &dev->xcopy_lun;
+ 	rcu_assign_pointer(xcopy_lun->lun_se_dev, dev);
+ 	init_completion(&xcopy_lun->lun_shutdown_comp);
+@@ -987,6 +1094,9 @@ void target_free_device(struct se_device *dev)
+ 
+ 	WARN_ON(!list_empty(&dev->dev_sep_list));
+ 
++	dev->cl_ops->cleanup(dev);
++	module_put(dev->cl_ops->owner);
++
+ 	if (target_dev_configured(dev)) {
+ 		dev->transport->destroy_device(dev);
+ 
+@@ -1058,6 +1168,33 @@ void core_dev_release_virtual_lun0(void)
+ 	core_delete_hba(hba);
+ }
+ 
++int core_dev_set_cluster_mode(struct se_device *dev, const char *cluster_impl)
++{
++	int ret = 0;
++
++	struct target_cluster_impl *tci = core_get_cluster_impl(cluster_impl);
++
++	if (!tci)
++		return -EINVAL;
++
++	if (dev->cl_ops != tci->ops) {
++		ret = dev->cl_ops->cleanup(dev);
++		if (ret)
++			pr_err("cluster cleanup failed with %d\n", ret);
++
++		ret = tci->ops->init(dev);
++		if (ret)
++			pr_err("cluster init failed with %d\n", ret);
++
++		module_put(dev->cl_ops->owner);
++		dev->cl_ops = tci->ops;
++	} else {
++		module_put(tci->ops->owner);
++	}
++
++	return ret;
++}
++
+ /*
+  * Common CDB parsing for kernel and user passthrough.
+  */
+diff --git a/drivers/target/target_core_internal.h b/drivers/target/target_core_internal.h
+index b0d29c30ab1e..58261c716776 100644
+--- a/drivers/target/target_core_internal.h
++++ b/drivers/target/target_core_internal.h
+@@ -55,6 +55,11 @@ struct target_fabric_configfs {
+ 	struct config_item_type tf_tpg_mappedlun_stat_cit;
+ };
+ 
++struct target_cluster_impl {
++	const struct target_cluster_ops *ops;
++	struct list_head list;
++};
++
+ /* target_core_alua.c */
+ extern struct t10_alua_lu_gp *default_lu_gp;
+ 
+@@ -83,6 +88,7 @@ void	core_dev_free_initiator_node_lun_acl(struct se_portal_group *,
+ 		struct se_lun_acl *lacl);
+ int	core_dev_setup_virtual_lun0(void);
+ void	core_dev_release_virtual_lun0(void);
++int	core_dev_set_cluster_mode(struct se_device *dev, const char *cluster_impl);
+ struct se_device *target_alloc_device(struct se_hba *hba, const char *name);
+ int	target_configure_device(struct se_device *dev);
+ void	target_free_device(struct se_device *);
+@@ -93,6 +99,8 @@ void	target_dev_ua_allocate(struct se_device *dev, u8 asc, u8 ascq);
+ /* target_core_configfs.c */
+ extern struct configfs_item_operations target_core_dev_item_ops;
+ void	target_setup_backend_cits(struct target_backend *);
++int	target_core_register_cluster_configfs(struct target_cluster_impl *tci);
++void	target_core_unregister_cluster_configfs(struct target_cluster_impl *tci);
+ 
+ /* target_core_fabric_configfs.c */
+ int	target_fabric_setup_cits(struct target_fabric_configfs *);
+diff --git a/drivers/target/target_core_sbc.c b/drivers/target/target_core_sbc.c
+index 786ca58008b0..ab2038a510c0 100644
+--- a/drivers/target/target_core_sbc.c
++++ b/drivers/target/target_core_sbc.c
+@@ -367,7 +367,7 @@ static sense_reason_t compare_and_write_post(struct se_cmd *cmd, bool success,
+ 	 * Unlock ->caw_sem originally obtained during sbc_compare_and_write()
+ 	 * before the original READ I/O submission.
+ 	 */
+-	up(&dev->caw_sem);
++	dev->cl_ops->caw_unlock(dev, cmd->cawlock);
+ 
+ 	return ret;
+ }
+@@ -550,7 +550,7 @@ static sense_reason_t compare_and_write_callback(struct se_cmd *cmd, bool succes
+ 	 * In the MISCOMPARE or failure case, unlock ->caw_sem obtained in
+ 	 * sbc_compare_and_write() before the original READ I/O submission.
+ 	 */
+-	up(&dev->caw_sem);
++	dev->cl_ops->caw_unlock(dev, cmd->cawlock);
+ 	sg_free_table(&write_tbl);
+ 	return ret;
+ }
+@@ -561,13 +561,13 @@ sbc_compare_and_write(struct se_cmd *cmd)
+ 	struct sbc_ops *ops = cmd->protocol_data;
+ 	struct se_device *dev = cmd->se_dev;
+ 	sense_reason_t ret;
+-	int rc;
++
+ 	/*
+ 	 * Submit the READ first for COMPARE_AND_WRITE to perform the
+ 	 * comparision using SGLs at cmd->t_bidi_data_sg..
+ 	 */
+-	rc = down_interruptible(&dev->caw_sem);
+-	if (rc != 0) {
++	cmd->cawlock = dev->cl_ops->caw_lock(dev, cmd->t_task_lba);
++	if (!cmd->cawlock) {
+ 		cmd->transport_complete_callback = NULL;
+ 		return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
+ 	}
+@@ -582,7 +582,7 @@ sbc_compare_and_write(struct se_cmd *cmd)
+ 			      DMA_FROM_DEVICE);
+ 	if (ret) {
+ 		cmd->transport_complete_callback = NULL;
+-		up(&dev->caw_sem);
++		dev->cl_ops->caw_unlock(dev, cmd->cawlock);
+ 		return ret;
+ 	}
+ 	/*
+diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
+index 5378e2d3825f..fbeb4777654b 100644
+--- a/include/target/target_core_base.h
++++ b/include/target/target_core_base.h
+@@ -546,6 +546,7 @@ struct se_cmd {
+ 	 * initialized on. Drivers can override.
+ 	 */
+ 	int			cpuid;
++	void			*cawlock;
+ };
+ 
+ struct se_ua {
+@@ -777,6 +778,17 @@ struct se_device_queue {
+ 	struct se_cmd_queue	sq;
+ };
+ 
++struct target_cluster_ops {
++	char name[16];
++	struct module *owner;
++	struct config_group *cg_group;
++
++	int (*init)(struct se_device *dev);
++	int (*cleanup)(struct se_device *dev);
++	void *(*caw_lock)(struct se_device *dev, u64 lba);
++	int (*caw_unlock)(struct se_device *dev, void *lock);
++};
++
+ struct se_device {
+ 	/* Used for SAM Task Attribute ordering */
+ 	u32			dev_cur_ordered_id;
+@@ -847,6 +859,9 @@ struct se_device {
+ 	unsigned char		udev_path[SE_UDEV_PATH_LEN];
+ 	/* Pointer to template of function pointers for transport */
+ 	const struct target_backend_ops *transport;
++	/* Pointer to template of function pointers for cluster mode */
++	const struct target_cluster_ops *cl_ops;
++	void			*cluster_data;
+ 	struct se_lun		xcopy_lun;
+ 	/* Protection Information */
+ 	int			prot_length;
+@@ -981,4 +996,7 @@ static inline void target_free_tag(struct se_session *sess, struct se_cmd *cmd)
+ 	sbitmap_queue_clear(&sess->sess_tag_pool, cmd->map_tag, cmd->map_cpu);
+ }
+ 
++int target_cluster_impl_register(const struct target_cluster_ops *ops);
++void target_cluster_impl_unregister(const struct target_cluster_ops *ops);
++
+ #endif /* TARGET_CORE_BASE_H */
 -- 
 2.25.1
 
