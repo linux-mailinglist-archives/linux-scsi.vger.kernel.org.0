@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4D5453E98
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Nov 2021 03:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1B7453E9F
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Nov 2021 03:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbhKQCxK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Nov 2021 21:53:10 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:15829 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbhKQCxJ (ORCPT
+        id S232769AbhKQCxP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 16 Nov 2021 21:53:15 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:27136 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232690AbhKQCxJ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Nov 2021 21:53:09 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Hv6pj4qWpz8skL;
-        Wed, 17 Nov 2021 10:49:49 +0800 (CST)
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Hv6mM6lRVz1DJRB;
+        Wed, 17 Nov 2021 10:47:47 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
@@ -22,9 +22,9 @@ From:   chenxiang <chenxiang66@hisilicon.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
         <john.garry@huawei.com>, Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [PATCH 04/15] scsi: libsas: Add spin_lock/unlock() to protect asd_sas_port->phy_list
-Date:   Wed, 17 Nov 2021 10:44:57 +0800
-Message-ID: <1637117108-230103-5-git-send-email-chenxiang66@hisilicon.com>
+Subject: [PATCH 05/15] scsi: hisi_sas: Fix some issues related to asd_sas_port->phy_list
+Date:   Wed, 17 Nov 2021 10:44:58 +0800
+Message-ID: <1637117108-230103-6-git-send-email-chenxiang66@hisilicon.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1637117108-230103-1-git-send-email-chenxiang66@hisilicon.com>
 References: <1637117108-230103-1-git-send-email-chenxiang66@hisilicon.com>
@@ -40,37 +40,67 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Xiang Chen <chenxiang66@hisilicon.com>
 
-Most places that use asd_sas_port->phy_list in libsas are protected by
-spinlock asd_sas_port->phy_list_lock, but there are still some places
-which lack of it. So add it in those places.
+Most places that use asd_sas_port->phy_list are protected by spinlock
+asd_sas_port->phy_list_lock, but there are some places which lack of it
+in hisi_sas driver, so add it in function hisi_sas_refresh_port_id() when
+accessing asd_sas_port->phy_list. But it has a risk that list mutates while
+dropping the lock at the same time in function
+hisi_sas_send_ata_reset_each_phy(), so read asd_sas_port->phy_mask
+instead of accessing asd_sas_port->phy_list to avoid the risk.
 
 Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-Reviewed-by: John Garry <john.garry@huawei.com>
+Acked-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/libsas/sas_event.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_event.c b/drivers/scsi/libsas/sas_event.c
-index f703115e7a25..af605620ea13 100644
---- a/drivers/scsi/libsas/sas_event.c
-+++ b/drivers/scsi/libsas/sas_event.c
-@@ -104,11 +104,15 @@ void sas_enable_revalidation(struct sas_ha_struct *ha)
- 		if (!test_and_clear_bit(ev, &d->pending))
- 			continue;
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index 305d6282845a..44c888e0afd7 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -1427,11 +1427,13 @@ static void hisi_sas_refresh_port_id(struct hisi_hba *hisi_hba)
+ 		sas_port = device->port;
+ 		port = to_hisi_sas_port(sas_port);
  
--		if (list_empty(&port->phy_list))
-+		spin_lock(&port->phy_list_lock);
-+		if (list_empty(&port->phy_list)) {
-+			spin_unlock(&port->phy_list_lock);
- 			continue;
-+		}
++		spin_lock(&sas_port->phy_list_lock);
+ 		list_for_each_entry(sas_phy, &sas_port->phy_list, port_phy_el)
+ 			if (state & BIT(sas_phy->id)) {
+ 				phy = sas_phy->lldd_phy;
+ 				break;
+ 			}
++		spin_unlock(&sas_port->phy_list_lock);
  
- 		sas_phy = container_of(port->phy_list.next, struct asd_sas_phy,
- 				port_phy_el);
-+		spin_unlock(&port->phy_list_lock);
- 		sas_notify_port_event(sas_phy,
- 				PORTE_BROADCAST_RCVD, GFP_KERNEL);
- 	}
+ 		if (phy) {
+ 			port->id = phy->port_id;
+@@ -1508,22 +1510,25 @@ static void hisi_sas_send_ata_reset_each_phy(struct hisi_hba *hisi_hba,
+ 	struct ata_link *link;
+ 	u8 fis[20] = {0};
+ 	u32 state;
++	int i;
+ 
+ 	state = hisi_hba->hw->get_phys_state(hisi_hba);
+-	list_for_each_entry(sas_phy, &sas_port->phy_list, port_phy_el) {
++	for (i = 0; i < hisi_hba->n_phy; i++) {
+ 		if (!(state & BIT(sas_phy->id)))
+ 			continue;
++		if (!(sas_port->phy_mask & BIT(i)))
++			continue;
+ 
+ 		ata_for_each_link(link, ap, EDGE) {
+ 			int pmp = sata_srst_pmp(link);
+ 
+-			tmf_task.phy_id = sas_phy->id;
++			tmf_task.phy_id = i;
+ 			hisi_sas_fill_ata_reset_cmd(link->device, 1, pmp, fis);
+ 			rc = hisi_sas_exec_internal_tmf_task(device, fis, s,
+ 							     &tmf_task);
+ 			if (rc != TMF_RESP_FUNC_COMPLETE) {
+ 				dev_err(dev, "phy%d ata reset failed rc=%d\n",
+-					sas_phy->id, rc);
++					i, rc);
+ 				break;
+ 			}
+ 		}
 -- 
 2.33.0
 
