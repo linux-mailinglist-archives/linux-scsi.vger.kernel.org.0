@@ -2,29 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6510453E9E
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Nov 2021 03:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A796E453EA0
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Nov 2021 03:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232768AbhKQCxO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Nov 2021 21:53:14 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:15830 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232696AbhKQCxJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Nov 2021 21:53:09 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Hv6pk2MxXz915f;
-        Wed, 17 Nov 2021 10:49:50 +0800 (CST)
+        id S232781AbhKQCxP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 16 Nov 2021 21:53:15 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:27139 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229889AbhKQCxK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Nov 2021 21:53:10 -0500
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Hv6mN3W1Mz1DJQm;
+        Wed, 17 Nov 2021 10:47:48 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Wed, 17 Nov 2021 10:50:10 +0800
+ 15.1.2308.20; Wed, 17 Nov 2021 10:50:11 +0800
 From:   chenxiang <chenxiang66@hisilicon.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
         <john.garry@huawei.com>, Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [PATCH 08/15] scsi: hisi_sas: Add more prink for runtime suspend/resume
-Date:   Wed, 17 Nov 2021 10:45:01 +0800
-Message-ID: <1637117108-230103-9-git-send-email-chenxiang66@hisilicon.com>
+Subject: [PATCH 09/15] scsi: libsas: Resume sas host before sending SMP IOs
+Date:   Wed, 17 Nov 2021 10:45:02 +0800
+Message-ID: <1637117108-230103-10-git-send-email-chenxiang66@hisilicon.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1637117108-230103-1-git-send-email-chenxiang66@hisilicon.com>
 References: <1637117108-230103-1-git-send-email-chenxiang66@hisilicon.com>
@@ -40,50 +40,50 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Xiang Chen <chenxiang66@hisilicon.com>
 
-Add some prink at the beginning and end of suspend/resume.
+Need to resume sas host before sending SMP IOs to ensure that
+SMP IOs are sent sucessfully.
 
 Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
+Reviewed-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/scsi/libsas/sas_expander.c | 3 +++
+ drivers/scsi/libsas/sas_internal.h | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 5a83373ac0b1..4e9dfdb69757 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -4896,6 +4896,8 @@ static int _suspend_v3_hw(struct device *device)
- 	if (test_and_set_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags))
- 		return -1;
+diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
+index c2150a818423..6abce9dfc17b 100644
+--- a/drivers/scsi/libsas/sas_expander.c
++++ b/drivers/scsi/libsas/sas_expander.c
+@@ -58,7 +58,9 @@ static int smp_execute_task_sg(struct domain_device *dev,
+ 	struct sas_task *task = NULL;
+ 	struct sas_internal *i =
+ 		to_sas_internal(dev->port->ha->core.shost->transportt);
++	struct sas_ha_struct *ha = dev->port->ha;
  
-+	dev_warn(dev, "entering suspend state\n");
-+
- 	scsi_block_requests(shost);
- 	set_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
- 	flush_workqueue(hisi_hba->wq);
-@@ -4911,11 +4913,11 @@ static int _suspend_v3_hw(struct device *device)
++	pm_runtime_get_sync(ha->dev);
+ 	mutex_lock(&dev->ex_dev.cmd_mutex);
+ 	for (retry = 0; retry < 3; retry++) {
+ 		if (test_bit(SAS_DEV_GONE, &dev->state)) {
+@@ -131,6 +133,7 @@ static int smp_execute_task_sg(struct domain_device *dev,
+ 		}
+ 	}
+ 	mutex_unlock(&dev->ex_dev.cmd_mutex);
++	pm_runtime_put_sync(ha->dev);
  
- 	hisi_sas_init_mem(hisi_hba);
+ 	BUG_ON(retry == 3 && task != NULL);
+ 	sas_free_task(task);
+diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
+index d7a1fb5c10c6..ad9764a976c3 100644
+--- a/drivers/scsi/libsas/sas_internal.h
++++ b/drivers/scsi/libsas/sas_internal.h
+@@ -14,6 +14,7 @@
+ #include <scsi/scsi_transport_sas.h>
+ #include <scsi/libsas.h>
+ #include <scsi/sas_ata.h>
++#include <linux/pm_runtime.h>
  
--	dev_warn(dev, "entering suspend state\n");
--
- 	hisi_sas_release_tasks(hisi_hba);
- 
- 	sas_suspend_ha(sha);
-+
-+	dev_warn(dev, "end of suspending controller\n");
- 	return 0;
- }
- 
-@@ -4953,6 +4955,8 @@ static int _resume_v3_hw(struct device *device)
- 	sas_resume_ha_no_sync(sha);
- 	clear_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags);
- 
-+	dev_warn(dev, "end of resuming controller\n");
-+
- 	return 0;
- }
- 
+ #ifdef pr_fmt
+ #undef pr_fmt
 -- 
 2.33.0
 
