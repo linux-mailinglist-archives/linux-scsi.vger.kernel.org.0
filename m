@@ -2,296 +2,158 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FD2454523
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Nov 2021 11:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F11454662
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Nov 2021 13:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbhKQKqF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Nov 2021 05:46:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbhKQKqF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Nov 2021 05:46:05 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2698AC061570
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Nov 2021 02:43:07 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id b11so1744465pld.12
-        for <linux-scsi@vger.kernel.org>; Wed, 17 Nov 2021 02:43:07 -0800 (PST)
+        id S229733AbhKQM2G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Nov 2021 07:28:06 -0500
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:7459 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229563AbhKQM2G (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Nov 2021 07:28:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1637151906; x=1668687906;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=ejq9MXjBWY7SSYbExQZ7pBCqQimIUap4x+NA3qm5Ea4=;
+  b=TdzpXF65g3IcNO5UZKepFcYpvrKv50hSTMmgOQZ6GEE2FW6tnpI4w67X
+   7tryIGFdtRh18d6rXliaE0M4tJbPTXudTrL18vAIzDH3Mcu9rxQZJou6t
+   cwK5jRkOm/VP4YXu85nrL0gmwwSuPmdClJ7qfddkVYWckFbSrnM56FA6v
+   vCVU10cObX4skZl4GLpjodksistt+ZP6RueB8G3egVMBzBXNJWrET8BZN
+   wFYfabO5Lm8uHd8rKzL7KvnD/Q4ucI9egT+Jay9n1QHgl7ybSQ5gGaMCj
+   CwV5WVKNnPmRTjPCUSVKUpBpTmsekYy5vaGpt2daYhLekPQF9aSR4vrTc
+   w==;
+X-IronPort-AV: E=Sophos;i="5.87,241,1631548800"; 
+   d="scan'208";a="185843618"
+Received: from mail-bn8nam11lp2171.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.171])
+  by ob1.hgst.iphmx.com with ESMTP; 17 Nov 2021 20:25:05 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SLtS3e6P65buN8f7713ImgVrfrveuf40q+3eXODcK9wjn4LCd6+jJNppDoxZqDHABUJZRDEAGgBuWaVPXS0J6gdpVNVNRZ/EM6eRKsGy85TPdq3WWx25OL+6DtLwlmMZvjOGsi6bi75EhKs3ShAsPdQMt+2cteXZOUsslB4pdknZHRejwIKRmEKa8uwCRqToXJBzyXSr/JxwbOaR0+Kdn/LVG00PjudnEnbQBtWJ00BiCMGJSCmNe7rFB08p1YaMYU4Vj6KfJF4t6iVusnaIJcXoIfGcfPNzHM8nuHopDuLQf7CDlBQtuKMvKGW8UoLPJD/rjEaQm/kYUYUyCHlGbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wXiPvRJ+wmKCVGbBuapU/V+EH1q2Get2vbubfKE3sTw=;
+ b=EYoNuNxA5ZTp/qjonbuEb1QFPlVIf2XCZjE3ZV3ay+rspE4ViR7baZl2qLFLYrIeuCdq/rZTE43plUYO83qidsK8TEeQWG4knlVSk2kkYA3HxdQ7IiNq7V/rksm5EHvhEIaikLiGfcIJcyNv9DyrD9YFPWwBHAe3DhZEQVw8BrVjFXGGy/9epk0c8RKCGhZv6xWq1EXH2FEhC2p1/G9tBVZSuBSBvx178YmpkroSLHJM86p6I/6rXSqUMTYmhPD0ReGENcVo2DoYVYUyuKZGUqGyAIko2TZjRILVyrPfAocADTAXQ/SLYn0JnmgUDla3GGVlj3ZRyfjtDcP3UixUbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=T54WfLJKrVRvLZ1LMuisO39598TAhuMzh2M+iNDr5Ms=;
-        b=hJZw53UGdTsLLFNbsXG70vbZYSz8bOFvQN7Y7KrwuXSeJl9r1p1D2A70rEHGAqEf2w
-         uZkC1V0Q35mjAAX8BYM422j4rJqc5bWq1wkVTKtSGbN8Y0vKjrkrOU1nWLi0x2tc9sVa
-         6q8itPt8FD1cAGSRm/L/uRaXjMo43YdeB88ig=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=T54WfLJKrVRvLZ1LMuisO39598TAhuMzh2M+iNDr5Ms=;
-        b=ZdpfCMUL1EC0phiLQtn8rkd3MjlUO3h9Rphstn+tkuc8onj7JdW2oZtY9oHHriX6Y6
-         lA0M/D+bY5Z+m3NWbRs8GhJS8vR4bTooTiUbyLbUnQpoPhCoYCt1jFRb3nikrwmSZoiN
-         ll5qgYwGML7FX8Hrnsn5iWvuLc7Fy1xM4M2o4IQScFa8v63ler+0Xqf3kWh2cJ7Ytkny
-         tyiCWpO7ka/Ct0Vz9m3iD5VdXFdaFCZm/eTBC2b3AE5DQLFGQ22moO7ijqcqLSurdixZ
-         4damjKcu8/v2aqPFzeH0wHVC4evu+7+bzAV96Md97ybw+fCWP7JXBicLOlmZOFxY9/TE
-         B48g==
-X-Gm-Message-State: AOAM532lBJnHxlMOQTkntOisMG/3iZHs/JWHHzgM5fe+xDtNK1v/+fae
-        IHyj94ZmdY5cuc4/1jDOXYcGs2f28opCQV6vOOoAUFPpSsvrhy32hwTc4oabZwuET+tLByQQqJc
-        1aZ4PhSbMMmfUZXzW1UZfhIbs7fKwjAvzQKFuADn3dvHkWqdXKSRP3gK7dfOhdzNr1G5Vo9lKC2
-        bFyeAhPwoK
-X-Google-Smtp-Source: ABdhPJw1Imp0YoKyxzTQVGjuNjbIsGvVx6HaRyCVWIqxUJ6SP9SWEAwO8KTFkr4IAMtvnVhb3WRJ+g==
-X-Received: by 2002:a17:90b:4c8c:: with SMTP id my12mr8292504pjb.157.1637145786272;
-        Wed, 17 Nov 2021 02:43:06 -0800 (PST)
-Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id om8sm5392708pjb.12.2021.11.17.02.43.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Nov 2021 02:43:05 -0800 (PST)
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com
-Cc:     suganath-prabu.subramani@broadcom.com,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH] mpt3sas: Fix system falling into readonly mode
-Date:   Wed, 17 Nov 2021 16:20:58 +0530
-Message-Id: <20211117105058.3505-1-sreekanth.reddy@broadcom.com>
-X-Mailer: git-send-email 2.27.0
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wXiPvRJ+wmKCVGbBuapU/V+EH1q2Get2vbubfKE3sTw=;
+ b=DslZuHqj0s2t2M9xe9BaKhg6E/HeW9iqJVA+DqThU1otcWtE9KLyzp8ENaCRBeYKGmRHs99KzguJZ1i160hGIHXiusmVtsxHakeFn//6D4uyH09Dr1MDBGxt8xZ1EJTO8z5Dl7CA7Z2FKu8pPmvFPHn4z91Wt48ws8NKNjaEpq4=
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com (2603:10b6:510:12::17)
+ by PH0PR04MB7430.namprd04.prod.outlook.com (2603:10b6:510:18::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.19; Wed, 17 Nov
+ 2021 12:25:05 +0000
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::3418:fa40:16a4:6e0c]) by PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::3418:fa40:16a4:6e0c%4]) with mapi id 15.20.4713.021; Wed, 17 Nov 2021
+ 12:25:05 +0000
+From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+CC:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>
+Subject: Re: move all struct request releated code out of blk-core.c (rebased)
+Thread-Topic: move all struct request releated code out of blk-core.c
+ (rebased)
+Thread-Index: AQHX23puPh6a94QiwkyaOhO/0f5NoA==
+Date:   Wed, 17 Nov 2021 12:25:04 +0000
+Message-ID: <PH0PR04MB741623EA8A7D0BCA67EED1F79B9A9@PH0PR04MB7416.namprd04.prod.outlook.com>
+References: <20211117061404.331732-1-hch@lst.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0cd94c2e-30f8-49a0-a3e0-08d9a9c5492b
+x-ms-traffictypediagnostic: PH0PR04MB7430:
+x-microsoft-antispam-prvs: <PH0PR04MB743017B6923148D7DC98BC509B9A9@PH0PR04MB7430.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: S1nK7DN4hpPV7HMADDuUeP6I0IUjhFfF2xJ4uogJDE+EG/HVv5jrbOu6HDz0eHrkWlK2uL8sdqAETqxuOjdWi/me6A7KHI/WQDNOHbPRAh9W4CHJ7fbHpg6zmyThRiZkAyGuESJpdAkBvJvLavnguJXGBt8zrwPOOg1rkyesRiNdhmfG21izfQKUTscRIdvT4/rLB58lFG+tm23M+5ivQvCGm/eCV1OBRDVwJ8PGMwngRW6XPQx/CmeQkETM34cuzOYsjQEUFHFTIKgz0hwQwn/JG3Rr5MTKQEY0MqbBnI8LSywHrKv6NGSKV3p61sm4WsSfqvPv1cMqBAWh+Dv0Ea2lO8hZT3nMzOwpQY82RBEy4zAok3aAz78099BrvQO9V83r7qVQSIngaeFXYkS+4NvjgPbzv/+f7rtsM9aCL13ZxHqEJbSI9N7ipkGLW4rLZpc129ItTEHvMgJKP2Cr+Q3E2AnxzK/4F0ggVaicC5kUq1IgqDDq41HUgbkyRuolyr7mhMvHcIqtGOFSP+/+wzgUivg4uyyt12oxdX/92taKzAak83EACqtXH4PeSHslitbgfXzj+VotEIgSkcb5OHxpVIaB/SnfKeud5wlqyIlF765AKU2M6K+nG+87wSkY7tB3DXLcAQl/4rYjpm5VPXzAsgakqV3/NpcyvufPMwrCHZ4Rr01hGmuk03N5OsM/heDgehRUF57WywOwgHRetg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR04MB7416.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66476007)(66446008)(66556008)(83380400001)(52536014)(71200400001)(508600001)(64756008)(38100700002)(82960400001)(5660300002)(86362001)(8676002)(76116006)(66946007)(91956017)(316002)(26005)(53546011)(7696005)(110136005)(55016002)(8936002)(38070700005)(6506007)(4326008)(33656002)(4744005)(186003)(54906003)(2906002)(122000001)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pPFh0FUu9jj0eaYAogI1rTrlEBJ9ysfjjr6ozOxb2z4+tOjt+uNvvWoHVscy?=
+ =?us-ascii?Q?ME/uX4IKc0mwDVXF02AmnycvmvvM28qpb/QT3paeR0+zAaBk6wIJGHFMyxGc?=
+ =?us-ascii?Q?hSl5NRIFb/Yw1NQb3Io/u1hwDRu8cbohKvp+obF7EOE68azefTa6ofPUv7JM?=
+ =?us-ascii?Q?H7IG6WBmmGdHJdCp6Ynot+da5FvwojsTq9wOn4X6mVUWpeLbcyrJQL4ungNo?=
+ =?us-ascii?Q?Uypy80lN7LFqeOTsolE4mwsuroLjlaqDI4/tXWZ6MBam5wZ8+D9vGMwXjCN4?=
+ =?us-ascii?Q?zpTcCayNWjvdh+YkLdIaGSQLu4QyrJySFqdti2HurUsGsMj5VgtF5fh2x4vm?=
+ =?us-ascii?Q?z2NyALy2Bma2FWXAjRH9h3i9mq+WyKsBU6cxLyorOVN8pVEOIo86rCFvjDKh?=
+ =?us-ascii?Q?33Nh4GNjgPlrvkDLBQynaMQEQIAkX4Y3KFL2n6oC2NlDXmkGlM5++FvJ1eZS?=
+ =?us-ascii?Q?YkSc7lXn52CeefVJ7M4zAGoACElDrTZ9AdPyL5cA0RjSjEJwbOls/6R/XJ76?=
+ =?us-ascii?Q?sTuRdYAa8J/+GpIu8ahgTPxzRiErS8r8MWofyTHpfCXzNSyWcpT9DA/m/3yu?=
+ =?us-ascii?Q?31CAF4tt48TN6Uj2VxVY8816gzGYkt7UIg6DJNQIQMhA/l2DB2Q2h13B2MmY?=
+ =?us-ascii?Q?gnsUajKGJkkjdNK9GRJghZle0NmMWzu/h6rZvoE0gJes2zJ0GVsQR5JxXbLI?=
+ =?us-ascii?Q?wJLj7iVNEmC4qDfQt4U/yg1AZKK343KTAFtwZYQ1hcKnO9APkbXIZcjMsX74?=
+ =?us-ascii?Q?HnAUsEqC3eGB7cINgjMK8FbcWVdr02xrcWLoYbNrLmAhbowz27j3+VnMHt0r?=
+ =?us-ascii?Q?2P0c1xaP0zFc613ExPkeLxGXR2kkVZp89emFHQoJ9UoQDAfp37TXFwztRoG4?=
+ =?us-ascii?Q?V2QHaHpLE7ENAnryna4vG+I/1PTeJ/BjA3cysWWBnnq9GtDQGtM+ODeaws6g?=
+ =?us-ascii?Q?53f+1E7lhQ3TU60cb1Pzy25ofDFpJ9w3TGc7W5WPCHLC0XaUdj0VL1xJ9qQx?=
+ =?us-ascii?Q?nlc2u62TFaKCJ7eHjMY+9OXX4tGnnRIlo0PqfFmRZFl2TOXgTG0qtnu/4bxh?=
+ =?us-ascii?Q?HVbnXAuB3DFNec0ZaQ0ZW+Ib5gsX+i61KzN/bBmFc+awPAiajONLwUj98GVy?=
+ =?us-ascii?Q?+RSJdnBlOIBT6k+LTRB8vNVeS8YHVYUK7NPYDLONsltpA7ByJZJCDcBZ04Xj?=
+ =?us-ascii?Q?cED7G58PGEpWLUCy6+cqyXyqup//mZzcSclrcMidVxz5/+5pvsLxs2l+bt8+?=
+ =?us-ascii?Q?CtKEquHm3xeYWLNVNeLGlOz75BwK4qtwoRdOV2WfKa/RfQVtx3X2NbxdZG+V?=
+ =?us-ascii?Q?8lo9jDDQZeBS5YJDDvEy7hAEfKQ2yfs+1ZkeJsN2nH/FQM5gSDozawgRs+LN?=
+ =?us-ascii?Q?r0K6Wc6Z59Eg/4M60gLKT1T4KrD47KwwJojfYB2OkSmL5tKIOLucX+40bUaa?=
+ =?us-ascii?Q?SYXCpeIxTjCgApkAMtARbpJrEKMCasZfI3HID/JS+ckVPBbiLr9LhU30en5U?=
+ =?us-ascii?Q?wqvQU4qUQH+W1uvbJHicNzc/duwMgbWjt7I4jRwFoVx7drRM2wJ9xXsNfPrP?=
+ =?us-ascii?Q?Mcr2Iflt1wXdKSFpsxRtXFqNgF42PqVi1kmJFHqugj35WqKkBSCJt0H4QAEk?=
+ =?us-ascii?Q?3uzsTdTC3davTjh1re3UhObPeYP8PoCamKkGeOIHCoo30hLzVPnDaNjxiWcd?=
+ =?us-ascii?Q?1E9kq29r0aVpQJwJD21SkOa27Pc=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001065bd05d0f9b547"
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7416.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0cd94c2e-30f8-49a0-a3e0-08d9a9c5492b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2021 12:25:04.9350
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Oi94vUqmfndjSQEgLwBNGyeihLDvjk1i+mTVXyQzdES3JWmWwHhCTlDuY7RLZ6pSUPNIKOf5ryFaNByyKAXoMhb1Z6ZqQEHBjEnBkP9whMk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR04MB7430
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---0000000000001065bd05d0f9b547
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-While determining the SAS address of a drive, the driver checks whether
-the handle number is less than the HBA phys count or not.
-If the handle number is less than the HBA phy’s count then driver
-assumes that this handle belongs to HBA and hence it assigns the
-HBA SAS address.
-During IOC firmware downgrade operation, if the number of HBA phys got
-reduced and the OS drive’s device handle falls below start of the day
-HBA phys count then while determining the OS drive’s SAS address
-driver uses the HBA SAS address. This leads to a mismatch of drive’s
-SAS address and hence the driver unregisters the OS drive and the
-system falls into read only mode.
-
-Updated the IOC's num_phys to HBA phy’s count provided by actual
-loaded firmware. So that while determining the SAS address driver
-uses updated HBA phy’s count value instead of using a
-start of the day’s HBA phy’s count.
-
-Fixes: a5e99fda0172("mpt3sas: Update hba_port objects after host reset")
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
----
- drivers/scsi/mpt3sas/mpt3sas_base.h  |  4 ++
- drivers/scsi/mpt3sas/mpt3sas_scsih.c | 57 +++++++++++++++++++++++++++-
- 2 files changed, 60 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
-index db6a759de1e9..a0af986633d2 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.h
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
-@@ -142,6 +142,8 @@
- 
- #define MPT_MAX_CALLBACKS		32
- 
-+#define MPT_MAX_HBA_NUM_PHYS		32
-+
- #define INTERNAL_CMDS_COUNT		10	/* reserved cmds */
- /* reserved for issuing internally framed scsi io cmds */
- #define INTERNAL_SCSIIO_CMDS_COUNT	3
-@@ -798,6 +800,7 @@ struct _sas_phy {
-  * @enclosure_handle: handle for this a member of an enclosure
-  * @device_info: bitwise defining capabilities of this sas_host/expander
-  * @responding: used in _scsih_expander_device_mark_responding
-+ * @nr_phys_allocated: Allocated memory for this many count phys
-  * @phy: a list of phys that make up this sas_host/expander
-  * @sas_port_list: list of ports attached to this sas_host/expander
-  * @port: hba port entry containing node's port number info
-@@ -813,6 +816,7 @@ struct _sas_node {
- 	u16	enclosure_handle;
- 	u64	enclosure_logical_id;
- 	u8	responding;
-+	u8	nr_phys_allocated;
- 	struct hba_port *port;
- 	struct	_sas_phy *phy;
- 	struct list_head sas_port_list;
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-index bb0036b41825..589d0515a00c 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -6406,11 +6406,26 @@ _scsih_sas_port_refresh(struct MPT3SAS_ADAPTER *ioc)
- 	int i, j, count = 0, lcount = 0;
- 	int ret;
- 	u64 sas_addr;
-+	u8 num_phys;
- 
- 	drsprintk(ioc, ioc_info(ioc,
- 	    "updating ports for sas_host(0x%016llx)\n",
- 	    (unsigned long long)ioc->sas_hba.sas_address));
- 
-+	mpt3sas_config_get_number_hba_phys(ioc, &num_phys);
-+	if (!num_phys) {
-+		ioc_err(ioc, "failure at %s:%d/%s()!\n",
-+		    __FILE__, __LINE__, __func__);
-+		return;
-+	}
-+
-+	if (num_phys > ioc->sas_hba.nr_phys_allocated) {
-+		ioc_err(ioc, "failure at %s:%d/%s()!\n",
-+		   __FILE__, __LINE__, __func__);
-+		return;
-+	}
-+	ioc->sas_hba.num_phys = num_phys;
-+
- 	port_table = kcalloc(ioc->sas_hba.num_phys,
- 	    sizeof(struct hba_port), GFP_KERNEL);
- 	if (!port_table)
-@@ -6611,6 +6626,30 @@ _scsih_sas_host_refresh(struct MPT3SAS_ADAPTER *ioc)
- 			ioc->sas_hba.phy[i].hba_vphy = 1;
- 		}
- 
-+		/*
-+		 * Add new HBA phys to STL if these new phys got added as part
-+		 * of HBA Firmware upgrade/downgrade operation.
-+		 */
-+		if (!ioc->sas_hba.phy[i].phy) {
-+			if ((mpt3sas_config_get_phy_pg0(ioc, &mpi_reply,
-+			    &phy_pg0, i))) {
-+				ioc_err(ioc, "failure at %s:%d/%s()!\n",
-+				    __FILE__, __LINE__, __func__);
-+				continue;
-+			}
-+			ioc_status = le16_to_cpu(mpi_reply.IOCStatus) &
-+			    MPI2_IOCSTATUS_MASK;
-+			if (ioc_status != MPI2_IOCSTATUS_SUCCESS) {
-+				ioc_err(ioc, "failure at %s:%d/%s()!\n",
-+				    __FILE__, __LINE__, __func__);
-+				continue;
-+			}
-+			ioc->sas_hba.phy[i].phy_id = i;
-+			mpt3sas_transport_add_host_phy(ioc,
-+			    &ioc->sas_hba.phy[i], phy_pg0,
-+			    ioc->sas_hba.parent_dev);
-+			continue;
-+		}
- 		ioc->sas_hba.phy[i].handle = ioc->sas_hba.handle;
- 		attached_handle = le16_to_cpu(sas_iounit_pg0->PhyData[i].
- 		    AttachedDevHandle);
-@@ -6622,6 +6661,19 @@ _scsih_sas_host_refresh(struct MPT3SAS_ADAPTER *ioc)
- 		    attached_handle, i, link_rate,
- 		    ioc->sas_hba.phy[i].port);
- 	}
-+	/*
-+	 * Clear the phy details if this phy got disabled as part of
-+	 * HBA Firmware upgrade/downgrade operation.
-+	 */
-+	for (i = ioc->sas_hba.num_phys;
-+	    i < ioc->sas_hba.nr_phys_allocated; i++) {
-+		if (ioc->sas_hba.phy[i].phy &&
-+		    ioc->sas_hba.phy[i].phy->negotiated_linkrate >=
-+		    SAS_LINK_RATE_1_5_GBPS)
-+			mpt3sas_transport_update_links(ioc,
-+			    ioc->sas_hba.sas_address, 0, i,
-+			    MPI2_SAS_NEG_LINK_RATE_PHY_DISABLED, NULL);
-+	}
-  out:
- 	kfree(sas_iounit_pg0);
- }
-@@ -6654,7 +6706,10 @@ _scsih_sas_host_add(struct MPT3SAS_ADAPTER *ioc)
- 			__FILE__, __LINE__, __func__);
- 		return;
- 	}
--	ioc->sas_hba.phy = kcalloc(num_phys,
-+
-+	ioc->sas_hba.nr_phys_allocated = max_t(u8,
-+	    MPT_MAX_HBA_NUM_PHYS, num_phys);
-+	ioc->sas_hba.phy = kcalloc(ioc->sas_hba.nr_phys_allocated,
- 	    sizeof(struct _sas_phy), GFP_KERNEL);
- 	if (!ioc->sas_hba.phy) {
- 		ioc_err(ioc, "failure at %s:%d/%s()!\n",
--- 
-2.27.0
-
-
---0000000000001065bd05d0f9b547
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-5AGo2E3pe+2yEgkxKvM2fnniZHUiSjbrfKk6nl9RIXPOKUP5HntZFdA5XuNYXWM+HPs3O0AJwBm/
-VCZsZtkjVjxeBmTXiXDnxytdsHdGrHGymPfjJYatDu6d1KRVDlMCAwEAAaOCAd0wggHZMA4GA1Ud
-DwEB/wQEAwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUu
-Z2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggr
-BgEFBQcwAYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
-YTIwMjAwTQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3
-Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4
-aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmww
-JwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUClVHbAvhzGT8
-s2/6xOf58NkGMQ8wDQYJKoZIhvcNAQELBQADggEBAENRsP1H3calKC2Sstg/8li8byKiqljCFkfi
-IhcJsjPOOR9UZnMFxAoH/s2AlM7mQDR7rZ2MxRuUnIa6Cp5W5w1lUJHktjCUHnQq5nIAZ9GH5SDY
-pgzbFsoYX8U2QCmkAC023FF++ZDJuc9aj0R/nhABxmUYErIze2jV/VO8Pj7TnCrBONZ/Qvf8G5CQ
-X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
-eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
-Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOn+zbhNwhBr8FfPOYMN
-z5LhKrAz44FTphz6L7kusnLZMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIxMTExNzEwNDMwNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
-BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBIivLSVi/cjXgphAFBWM12aPTw+FzfQIRsvd4r
-MHKR8oCjEHx0ZTZVUsSJQp2xk2rxTaFqmBKnzg9aL8PaGwg8lQMDyvtVecXUTHFryx0djuSHewSN
-F6Ze2un915Ji6VAwXfJu1cYVWnUm/LyRz3pXnsIsjY2/Z69mMFDZ3oLTyY23fWy0/IO52DNlOU9E
-ZxgCYe+7+51g7IeSkVuRcQTSct6OzQoFp9Py3kRU5XU/d8Txtxtyho+ARTnJndSw3dC8ExcWuRXT
-qB6mIXB6iCXqjf/mLPL+5ooLcV9dVyXlVad2x9YS0rFDzKgnJ8FweiovMrQhk0zEVinE9NVP8X1m
---0000000000001065bd05d0f9b547--
+On 17/11/2021 07:14, Christoph Hellwig wrote:=0A=
+> Hi Jens,=0A=
+> =0A=
+> this series (against the for-5.16/passthrough-flag branch) removes the=0A=
+> remaining struct request related code from blk-core.c and cleans up a=0A=
+> few related bits around that.=0A=
+> =0A=
+> Diffstat:=0A=
+>  b/block/Makefile            |    2 =0A=
+>  b/block/blk-core.c          |  341 --------------------------=0A=
+>  b/block/blk-mq.c            |  573 ++++++++++++++++++++++++++++++++++++-=
+-------=0A=
+>  b/block/blk-mq.h            |    3 =0A=
+>  b/block/blk.h               |   33 --=0A=
+>  b/drivers/mtd/mtd_blkdevs.c |   10 =0A=
+>  b/drivers/mtd/ubi/block.c   |    6 =0A=
+>  b/drivers/scsi/scsi_lib.c   |   42 +++=0A=
+>  b/include/linux/blk-mq.h    |   13 =0A=
+>  block/blk-exec.c            |  116 --------=0A=
+>  10 files changed, 552 insertions(+), 587 deletions(-)=0A=
+> =0A=
+=0A=
+Looks good, for the whole series:=0A=
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>=0A=
