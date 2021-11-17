@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F1A453EA6
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3F1453EA5
 	for <lists+linux-scsi@lfdr.de>; Wed, 17 Nov 2021 03:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232675AbhKQCxW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Nov 2021 21:53:22 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:31878 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232723AbhKQCxL (ORCPT
+        id S232812AbhKQCxV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 16 Nov 2021 21:53:21 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:15832 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232716AbhKQCxL (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Nov 2021 21:53:11 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Hv6jS6px9zcbLB;
-        Wed, 17 Nov 2021 10:45:16 +0800 (CST)
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Hv6pl1t78z915N;
+        Wed, 17 Nov 2021 10:49:51 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
@@ -22,9 +22,9 @@ From:   chenxiang <chenxiang66@hisilicon.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
         <john.garry@huawei.com>, Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [PATCH 13/15] scsi: hisi_sas: Keep controller active between ISR of phyup and the event being processed
-Date:   Wed, 17 Nov 2021 10:45:06 +0800
-Message-ID: <1637117108-230103-14-git-send-email-chenxiang66@hisilicon.com>
+Subject: [PATCH 14/15] scsi: libsas: Keep sas host active until finished some work
+Date:   Wed, 17 Nov 2021 10:45:07 +0800
+Message-ID: <1637117108-230103-15-git-send-email-chenxiang66@hisilicon.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1637117108-230103-1-git-send-email-chenxiang66@hisilicon.com>
 References: <1637117108-230103-1-git-send-email-chenxiang66@hisilicon.com>
@@ -40,102 +40,105 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Xiang Chen <chenxiang66@hisilicon.com>
 
-It is possible that controller may be suspended between ISR of phyup
-and the event being processed, then it can't ensure controller is
-active when processing the phyup event which will cause issues.
-To avoid the issue, add pm_runtime_get_noresume() in ISR of phyup
-and pm_runtime_put_sync() in the work handler exit of a new event
-HISI_PHYE_PHY_UP_PM which is called in v3 hw as runtime PM is
-only supported for v3 hw.
+For those works from event queue, if executing them such as
+PORTE_BROADCAST_RCVD when sas host is suspended, it will resume sas host
+firstly as SMP IOs are sent in the process. So phyup will occur and it
+will call work PORTE_BYTES_DMAED. But the original work (such as
+PORTE_BROADCAST_RCVD) and the work PORTE_BYTES_DMAED are in the same
+singlethread workqueue, so the complete of original work waits for
+the complete of work PORTE_BYTES_DMAED while the complete of work
+PORTE_BYTES_DMAED wait for the complete of original and it is blocked.
+
+So call pm_runtime_get_noresume() to keep sas host active until
+finished those works.
 
 Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-Acked-by: John Garry <john.garry@huawei.com>
+Reviewed-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas.h       |  1 +
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 22 ++++++++++++++++++++--
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  5 ++++-
- 3 files changed, 25 insertions(+), 3 deletions(-)
+ drivers/scsi/libsas/sas_event.c | 24 +++++++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
-index 2213a91923a5..8269703b978d 100644
---- a/drivers/scsi/hisi_sas/hisi_sas.h
-+++ b/drivers/scsi/hisi_sas/hisi_sas.h
-@@ -154,6 +154,7 @@ enum hisi_sas_bit_err_type {
- enum hisi_sas_phy_event {
- 	HISI_PHYE_PHY_UP   = 0U,
- 	HISI_PHYE_LINK_RESET,
-+	HISI_PHYE_PHY_UP_PM,
- 	HISI_PHYES_NUM,
- };
- 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 44c888e0afd7..9255790a8568 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -854,10 +854,11 @@ int hisi_sas_scan_finished(struct Scsi_Host *shost, unsigned long time)
+diff --git a/drivers/scsi/libsas/sas_event.c b/drivers/scsi/libsas/sas_event.c
+index 626ef96b9348..3613b9b315bc 100644
+--- a/drivers/scsi/libsas/sas_event.c
++++ b/drivers/scsi/libsas/sas_event.c
+@@ -50,8 +50,10 @@ void sas_queue_deferred_work(struct sas_ha_struct *ha)
+ 	list_for_each_entry_safe(sw, _sw, &ha->defer_q, drain_node) {
+ 		list_del_init(&sw->drain_node);
+ 		ret = sas_queue_work(ha, sw);
+-		if (ret != 1)
++		if (ret != 1) {
++			pm_runtime_put(ha->dev);
+ 			sas_free_event(to_asd_sas_event(&sw->work));
++		}
+ 	}
+ 	spin_unlock_irq(&ha->lock);
  }
- EXPORT_SYMBOL_GPL(hisi_sas_scan_finished);
- 
--static void hisi_sas_phyup_work(struct work_struct *work)
-+static void hisi_sas_phyup_work_common(struct work_struct *work,
-+		enum hisi_sas_phy_event event)
+@@ -126,16 +128,22 @@ void sas_enable_revalidation(struct sas_ha_struct *ha)
+ static void sas_port_event_worker(struct work_struct *work)
  {
- 	struct hisi_sas_phy *phy =
--		container_of(work, typeof(*phy), works[HISI_PHYE_PHY_UP]);
-+		container_of(work, typeof(*phy), works[event]);
- 	struct hisi_hba *hisi_hba = phy->hisi_hba;
- 	struct asd_sas_phy *sas_phy = &phy->sas_phy;
- 	int phy_no = sas_phy->id;
-@@ -868,6 +869,11 @@ static void hisi_sas_phyup_work(struct work_struct *work)
- 	hisi_sas_bytes_dmaed(hisi_hba, phy_no, GFP_KERNEL);
+ 	struct asd_sas_event *ev = to_asd_sas_event(work);
++	struct asd_sas_phy *phy = ev->phy;
++	struct sas_ha_struct *ha = phy->ha;
+ 
+ 	sas_port_event_fns[ev->event](work);
++	pm_runtime_put(ha->dev);
+ 	sas_free_event(ev);
  }
  
-+static void hisi_sas_phyup_work(struct work_struct *work)
-+{
-+	hisi_sas_phyup_work_common(work, HISI_PHYE_PHY_UP);
-+}
-+
- static void hisi_sas_linkreset_work(struct work_struct *work)
+ static void sas_phy_event_worker(struct work_struct *work)
  {
- 	struct hisi_sas_phy *phy =
-@@ -877,9 +883,21 @@ static void hisi_sas_linkreset_work(struct work_struct *work)
- 	hisi_sas_control_phy(sas_phy, PHY_FUNC_LINK_RESET, NULL);
+ 	struct asd_sas_event *ev = to_asd_sas_event(work);
++	struct asd_sas_phy *phy = ev->phy;
++	struct sas_ha_struct *ha = phy->ha;
+ 
+ 	sas_phy_event_fns[ev->event](work);
++	pm_runtime_put(ha->dev);
+ 	sas_free_event(ev);
  }
  
-+static void hisi_sas_phyup_pm_work(struct work_struct *work)
-+{
-+	struct hisi_sas_phy *phy =
-+		container_of(work, typeof(*phy), works[HISI_PHYE_PHY_UP_PM]);
-+	struct hisi_hba *hisi_hba = phy->hisi_hba;
-+	struct device *dev = hisi_hba->dev;
-+
-+	hisi_sas_phyup_work_common(work, HISI_PHYE_PHY_UP_PM);
-+	pm_runtime_put_sync(dev);
-+}
-+
- static const work_func_t hisi_sas_phye_fns[HISI_PHYES_NUM] = {
- 	[HISI_PHYE_PHY_UP] = hisi_sas_phyup_work,
- 	[HISI_PHYE_LINK_RESET] = hisi_sas_linkreset_work,
-+	[HISI_PHYE_PHY_UP_PM] = hisi_sas_phyup_pm_work,
- };
+@@ -170,14 +178,19 @@ int sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
+ 	if (!ev)
+ 		return -ENOMEM;
  
- bool hisi_sas_notify_phy_event(struct hisi_sas_phy *phy,
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 4e9dfdb69757..a5695ae8b73b 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -1561,7 +1561,10 @@ static irqreturn_t phy_up_v3_hw(int phy_no, struct hisi_hba *hisi_hba)
- 
- 	phy->port_id = port_id;
- 	phy->phy_attached = 1;
--	hisi_sas_notify_phy_event(phy, HISI_PHYE_PHY_UP);
++	/* Call pm_runtime_put() with pairs in sas_port_event_worker() */
++	pm_runtime_get_noresume(ha->dev);
 +
-+	/* Call pm_runtime_put_sync() with pairs in hisi_sas_phyup_pm_work() */
-+	pm_runtime_get_noresume(dev);
-+	hisi_sas_notify_phy_event(phy, HISI_PHYE_PHY_UP_PM);
- 	res = IRQ_HANDLED;
- end:
- 	if (phy->reset_completion)
+ 	INIT_SAS_EVENT(ev, sas_port_event_worker, phy, event);
+ 
+ 	if (sas_defer_event(phy, ev))
+ 		return 0;
+ 
+ 	ret = sas_queue_event(event, &ev->work, ha);
+-	if (ret != 1)
++	if (ret != 1) {
++		pm_runtime_put(ha->dev);
+ 		sas_free_event(ev);
++	}
+ 
+ 	return ret;
+ }
+@@ -196,14 +209,19 @@ int sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
+ 	if (!ev)
+ 		return -ENOMEM;
+ 
++	/* Call pm_runtime_put() with pairs in sas_phy_event_worker() */
++	pm_runtime_get_noresume(ha->dev);
++
+ 	INIT_SAS_EVENT(ev, sas_phy_event_worker, phy, event);
+ 
+ 	if (sas_defer_event(phy, ev))
+ 		return 0;
+ 
+ 	ret = sas_queue_event(event, &ev->work, ha);
+-	if (ret != 1)
++	if (ret != 1) {
++		pm_runtime_put(ha->dev);
+ 		sas_free_event(ev);
++	}
+ 
+ 	return ret;
+ }
 -- 
 2.33.0
 
