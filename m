@@ -2,79 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FCF455843
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Nov 2021 10:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5CA455CED
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Nov 2021 14:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245258AbhKRJww (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Nov 2021 04:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245282AbhKRJwj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Nov 2021 04:52:39 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BBEC061764
-        for <linux-scsi@vger.kernel.org>; Thu, 18 Nov 2021 01:49:39 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id c4so10315034wrd.9
-        for <linux-scsi@vger.kernel.org>; Thu, 18 Nov 2021 01:49:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=dqKuLci8Qef2J+Rynx0CZL26PdJ/aaDfa6ANCVCpppo=;
-        b=lvUA0Syi6/6klXn+yVRCTUrmn0cvqyAODY/54U2xnIaZT0bfBQfPQL9SaHPmxpAO1h
-         ji1BEjLZbZHvpVALd7UoXYLNVy+L8YuifpWM2LFDY70jPKjwo4eseAEkYPduCsukzf29
-         nGHJhaETPBYZ7eW4o0SG7yXrz3jbZXTRHODlg5EOgGwvqUKgT88aNikqWWObdwV1luHp
-         vsYNbvWBZMdoqlgW4oOUSTiqCSswk9Yms6hrvafk5zL3guZAgUL/VP8gjdxcY9ov99yf
-         AINJ+11qs4geSBGdttRi1iRByMNYlvtRtW30Xw6f2pVPcF2DQ5PXw6WIcjyolc2pfDEP
-         WKNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=dqKuLci8Qef2J+Rynx0CZL26PdJ/aaDfa6ANCVCpppo=;
-        b=goGien3GIIIe6JSgC6UmHHeZ+yPg6dLi1JddjL2D6lzsA9E5nyRaUywWmAjgw9v+bB
-         xV8W9KT2s6skAE28x54GuC4DDymd9LUvVD3emIRXs5RgPlZIsjPBVvJ73ZfJy3EklFTS
-         Mu4MGv5KkTA+B192EeIKEzeowY5CWt3bM1SvHJr6+EkwN47wo3+LCJneGsLfEBA4L7Tp
-         27Op6juZYNuGtbuqOZkx55m1C3caqHw4ck+vUmo57xSSvQxhyditoiW7SlpdO/BVS6ct
-         y3MzDCdmkoEVM5liXZ1KjB0JSyK7PPp9zDrlF2zfTa2d6WWLwM+z4lspO6xXwP/ltmtk
-         h7AA==
-X-Gm-Message-State: AOAM530tEbww+2sXWNcf60Rdx9WBus4KkJGrY3SrLDwi0H/Y+oGGzsbw
-        2WyGOW6NEA6ltS+Hfp5XOh+ZQssHLrRWNAg1jgc=
-X-Google-Smtp-Source: ABdhPJwefmiu7ahkr+8TQNxJHG2Lk9twVVuy+80rI23fzgCfwFW2RCVttdWecuiqTspcN1AuOvvAz7iG81yi4H1a13A=
-X-Received: by 2002:adf:f787:: with SMTP id q7mr29352684wrp.1.1637228978208;
- Thu, 18 Nov 2021 01:49:38 -0800 (PST)
+        id S231645AbhKRNsT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Nov 2021 08:48:19 -0500
+Received: from mail-m17671.qiye.163.com ([59.111.176.71]:36544 "EHLO
+        mail-m17671.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231314AbhKRNsF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Nov 2021 08:48:05 -0500
+X-Greylist: delayed 663 seconds by postgrey-1.27 at vger.kernel.org; Thu, 18 Nov 2021 08:48:03 EST
+Received: from localhost.localdomain (unknown [14.18.236.70])
+        by mail-m17671.qiye.163.com (Hmail) with ESMTPA id AA7522E0062;
+        Thu, 18 Nov 2021 21:33:58 +0800 (CST)
+From:   Yi Li <yili@winhong.com>
+To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Cc:     yilikernel@gmail.com, yili@winhong.com, axboe@kernel.dk,
+        martin.petersen@oracle.com
+Subject: [PATCH] use blk_queue_fua() to check QUEUE_FLAG_FUA
+Date:   Thu, 18 Nov 2021 21:33:50 +0800
+Message-Id: <20211118133350.2716698-1-yili@winhong.com>
+X-Mailer: git-send-email 2.25.3
 MIME-Version: 1.0
-Received: by 2002:adf:ea83:0:0:0:0:0 with HTTP; Thu, 18 Nov 2021 01:49:37
- -0800 (PST)
-Reply-To: lisshuuu1@gmail.com
-From:   MS LISA HUGH <felly.newton1@gmail.com>
-Date:   Thu, 18 Nov 2021 10:49:37 +0100
-Message-ID: <CAJwqh3vqkHmcqKbsoOO0N687FfFP-OZzuikYCwKMCjiN8nLR7Q@mail.gmail.com>
-Subject: HOPE YOU UNDERSTAND MY EMAIL?( Ms Lisa)
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRkaHkxWSRkdGU9MGUJOTh
+        lIVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PzI6Ehw*MD4CNiIxNzkWQw0Z
+        Th1PCylVSlVKTUhMSU9JT0hCSkxPVTMWGhIXVQISFxI7DBIVExQVHFUYFBZFWVdZEgtZQVlKT1VK
+        Q1VJSE1VTEtZV1kIAVlBSUhJTTcG
+X-HM-Tid: 0a7d3341051ada56kuwsaa7522e0062
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+We alreday has the interface blk_queue_fua() to check QUEUE_FLAG_FUA flag,
+so use it.
 
-I am Ms Lisa Hugh, work in the department of Audit and accounting
-manager here in the Bank.
+Signed-off-by: Yi Li <yili@winhong.com>
+---
+ block/blk-sysfs.c                   | 2 +-
+ drivers/target/target_core_iblock.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Please i need your assistance for the transferring of this fund to
-your bank account for both of us benefit for life time investment,
+diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+index cef1f713370b..6a5135b216de 100644
+--- a/block/blk-sysfs.c
++++ b/block/blk-sysfs.c
+@@ -544,7 +544,7 @@ static ssize_t queue_wc_store(struct request_queue *q, const char *page,
+ 
+ static ssize_t queue_fua_show(struct request_queue *q, char *page)
+ {
+-	return sprintf(page, "%u\n", test_bit(QUEUE_FLAG_FUA, &q->queue_flags));
++	return sprintf(page, "%u\n", blk_queue_fua(q));
+ }
+ 
+ static ssize_t queue_dax_show(struct request_queue *q, char *page)
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index bf8ae4825a06..683374ddd24d 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -738,7 +738,7 @@ iblock_execute_rw(struct se_cmd *cmd, struct scatterlist *sgl, u32 sgl_nents,
+ 		 */
+ 		opf = REQ_OP_WRITE;
+ 		miter_dir = SG_MITER_TO_SG;
+-		if (test_bit(QUEUE_FLAG_FUA, &q->queue_flags)) {
++		if (blk_queue_fua(q)) {
+ 			if (cmd->se_cmd_flags & SCF_FUA)
+ 				opf |= REQ_FUA;
+ 			else if (!test_bit(QUEUE_FLAG_WC, &q->queue_flags))
+-- 
+2.25.3
 
-I have every inquiry details to make the bank believe you and release
-the fund in within 5 banking working days with your full co-operation
-with me for success.
-
-Below information is what i need from you so will can be reaching each other
-
-1)Private telephone number for communication............
-2)Age.............
-3)Country..........
-4)Occupation........
-
-Thanks.
-
-Ms Lisa Hugh,
