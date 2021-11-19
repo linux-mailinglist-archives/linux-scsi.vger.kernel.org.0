@@ -2,79 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45340456916
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Nov 2021 05:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F95945692A
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Nov 2021 05:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbhKSE03 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Nov 2021 23:26:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbhKSE02 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Nov 2021 23:26:28 -0500
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48516C061757
-        for <linux-scsi@vger.kernel.org>; Thu, 18 Nov 2021 20:23:27 -0800 (PST)
-Received: by mail-io1-xd43.google.com with SMTP id z18so11194580iof.5
-        for <linux-scsi@vger.kernel.org>; Thu, 18 Nov 2021 20:23:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=eTS1GK69RCI4oJxzikNG+dG1kEXvzkq40C70DiSwh3g=;
-        b=cQL4g+H2gJMJP3xWFQe/KzoyGqIo0AawlIVz6HOmgj7H+oswWn1JndJ03Ybadqh/iG
-         GFezuribER5iOwOrdhcpaLRDpEBug17B9goO8697VSiSH7/hueTiocUUiYuEl0npDX+N
-         7dyH4NYh7rX0U9rKSBeHM3T0tr/VTmzWLqZb6dR+9h3OxCcYEbSP6A9trr03z0AdHvvI
-         ahSumHf41Gk0/WiflEL2tp00pjSmNcuzmCnCLHtvda8y92IYt7+31MLaTkWsbzEryIp/
-         PD6PRbns5nLepTYC8LZKXr6gjYxNXB3IFy8QgwmShmHo9WUyNgKaHeXs5AvuxibzX411
-         sWzA==
+        id S233406AbhKSEdy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Nov 2021 23:33:54 -0500
+Received: from mail-pj1-f50.google.com ([209.85.216.50]:34335 "EHLO
+        mail-pj1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229754AbhKSEdx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Nov 2021 23:33:53 -0500
+Received: by mail-pj1-f50.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so8090894pjb.1;
+        Thu, 18 Nov 2021 20:30:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=eTS1GK69RCI4oJxzikNG+dG1kEXvzkq40C70DiSwh3g=;
-        b=2OiNcdxQNbBX+Dry/xcQs5LkINheupazWz9Kw6HATGkpjnoNhar5E9892GeRi57SeD
-         f1y+rjlndou0RxK+OGLIlSLFksZvmQcG0s2UYdtvGqfmRhCME4Q5E4VCk/nrBcSAdvBo
-         7Zf+I5y+hGYS7WX80aMq9Dob8u2/IwBqyUG0xuDrWYXjpZNfZ7MSzvlkWzxIb1c0+2HB
-         psExXlw2vB5y4rhhW7+vI3zO1t34rNhMPZhFZk433kmFhUzBG+JKmXSUcGIwB+Ps01+9
-         Ob3rqMSYRfq3LiqSUrDVHLWx4Bs0E6elNOPyzWzUYPSOaCMMlFLh33gCZSQRBPc87xQ9
-         9xeQ==
-X-Gm-Message-State: AOAM533VYU2Nx2WH41+oT/T4njneGGt3utJh0jqIcsYm7paTtUikVSWQ
-        LlP43x5pz7Qk+KibuRocn54s1em6aAVlZo2iMrE=
-X-Google-Smtp-Source: ABdhPJyoJdpS7Kf9B+KrNKG19mDCqtighLiNuAqL2cgDQj7eZ+/CBh/r4yLZu32slWVXs7TOdIJDzf3XHUtHh6UYg8Y=
-X-Received: by 2002:a05:6602:164a:: with SMTP id y10mr3074210iow.123.1637295806431;
- Thu, 18 Nov 2021 20:23:26 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=jKkpEgqy21F+6MHgAKXtL1mfPkm3IkM1lMAPVxq134I=;
+        b=r6p1nv4Et4N+wSjg/zHds8RVEnAx4KFGgeWtkWLZhf6C074FxchZYI9yNGKENHxhTo
+         dNoIwpB8aFLVXcc3ZVM+S0KE0brR+s5TmDUDDsZo+odxJgLmrnimkrAJP9XLCBrNkjFi
+         FYjecgA0qkJHuGk2a/zmnK6Ej1tQR0D9TmjoSGIIrYU/K5wE9aZZhs4LEFhop1yAFhFe
+         seXFj6q/Amh22wzOS6280wW0ZQuZeIfWRaYKHfoP2Hq2Vf9klFGamV0vXcTJcOmj1OP4
+         8RWSH3DHnmHWBADuyGeVmZanZZTMoMb2EwDpM6XSP4FrOSLln8Yk1WxzqdSW7PfxNrRm
+         yfUA==
+X-Gm-Message-State: AOAM5314C0/LJWIeAm1zyvIQdhC2i/r7/T+iIYuSGHiUQQqOeIgDaeyD
+        gOiTivvzhKYDxl+bzx6DQY4=
+X-Google-Smtp-Source: ABdhPJxeWkmCq0jJll1lI7VBTooLeihaoBCi0Kb4+SXOXNeC/pbSeIT5DrNT2lOoVc6HsGT3Bn/pHQ==
+X-Received: by 2002:a17:90b:1812:: with SMTP id lw18mr1051673pjb.96.1637296252254;
+        Thu, 18 Nov 2021 20:30:52 -0800 (PST)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id m127sm892396pgm.64.2021.11.18.20.30.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Nov 2021 20:30:51 -0800 (PST)
+Message-ID: <a3192b20-fa76-0b64-a2a9-c0c337741156@acm.org>
+Date:   Thu, 18 Nov 2021 20:30:49 -0800
 MIME-Version: 1.0
-Received: by 2002:a05:6602:2f03:0:0:0:0 with HTTP; Thu, 18 Nov 2021 20:23:25
- -0800 (PST)
-Reply-To: anthonyrrobson@gmail.com
-From:   "Mr. Anthony Robson" <abcudday@gmail.com>
-Date:   Thu, 18 Nov 2021 20:23:25 -0800
-Message-ID: <CADXsGJFbR1Q52ZiBs8f3ijChf5RKGDYxHiXANAhCVcHdcbSS1A@mail.gmail.com>
-Subject: I look forward to hearing from you SOONEST!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+From:   Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH 1/5] blk-mq: move srcu from blk_mq_hw_ctx to request_queue
+To:     Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Sagi Grimberg <sagi@grimberg.me>, linux-block@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>
+References: <20211119021849.2259254-1-ming.lei@redhat.com>
+ <20211119021849.2259254-2-ming.lei@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20211119021849.2259254-2-ming.lei@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Friend,
+On 11/18/21 18:18, Ming Lei wrote:
+> +	bool			alloc_srcu;
 
-Below is the email i sent to you.
+I found the following statement multiple times in this patch:
 
-I am so sorry for sending you this unsolicited and unexpected email.
+WARN_ON_ONCE(q->alloc_srcu != !!(q->tag_set->flags & BLK_MQ_F_BLOCKING));
 
-I actually got your contact from your country website and i decided to
-contact you directly about this business venture.
+Does this mean that the new q->alloc_srcu member variable can be left out
+and that it can be replaced with the following test?
 
-I am contacting you in good faith and this business investment
-proposal will be of mutual benefit for us. I have a business proposal
-in huge sum amount of US$800,000 000 00 (Eight Hundred  Million United
-state dollars only} to be transferred to any safe account with your
-assistance.
+q->tag_set->flags & BLK_MQ_F_BLOCKING
 
-Contact me back via my email if you are interested in this business
-investment proposal and if you can be trusted for further briefing and
-details.
-I look forward to hearing from you SOONEST!
+Please note that I'm not concerned about the memory occupied by this
+variable but only about avoiding redundancy.
 
-Kind Regards.
-Mr. Anthony Robson.
+If this variable is retained it probably should be renamed, e.g. "has_srcu"
+instead of "alloc_srcu".
+
+Thanks,
+
+Bart.
