@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 786C7457776
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Nov 2021 20:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA4945777D
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Nov 2021 20:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234843AbhKSUBp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 19 Nov 2021 15:01:45 -0500
-Received: from mail-pl1-f178.google.com ([209.85.214.178]:41889 "EHLO
-        mail-pl1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233856AbhKSUBd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Nov 2021 15:01:33 -0500
-Received: by mail-pl1-f178.google.com with SMTP id k4so8904268plx.8
-        for <linux-scsi@vger.kernel.org>; Fri, 19 Nov 2021 11:58:31 -0800 (PST)
+        id S236448AbhKSUBv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 19 Nov 2021 15:01:51 -0500
+Received: from mail-pj1-f46.google.com ([209.85.216.46]:40723 "EHLO
+        mail-pj1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235044AbhKSUBg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Nov 2021 15:01:36 -0500
+Received: by mail-pj1-f46.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so11747583pjb.5
+        for <linux-scsi@vger.kernel.org>; Fri, 19 Nov 2021 11:58:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Gr9lk7OLlGH/9s2+Hsph1AE6NAJoOz+DZ7zixmjW1pY=;
-        b=08PMgqIWe6kHkXEPVKgyGIslMoIAWahLZNssIjlU9C3avVBHp0RdgBVT5LKdLG7uae
-         ttbqMS4fwB1JCyBqBDnj14ZYVraR4wz+YMgq5A0Jm1EFD3DGIdyj1qX1M6DGPuKO9YA2
-         A+TX4xlBMN2uzhmeDHmBtFKoBHN5Nzci76su+hiEGdU7YIijlRgMf95bKgGzQu2L2LHl
-         cbqMYtlychB26IXHlLsuNrXUof2S/HXxPTX+JKYWUBkZNHg0eNmle+E/NVlTsl9PfQjd
-         ZQ5ZmQz064zJy6kKxjNltMols4LNaMRHuWX/SBFqaq4GlM8AKH+s/cOj1V2N6cKBLuZ0
-         /qAg==
-X-Gm-Message-State: AOAM531P6X0yoq+HMVT50ZmFlNWtcuSu+pDL+Bnvb74aL5G/QkGaAjhN
-        NlOw0H+UoQQiYKDC/ilyuzs=
-X-Google-Smtp-Source: ABdhPJxUILoNmZe1ggAiCmcpRhASHIGBwnOILtmM2sQoKxsjfCdIjyzJmKGdDOFLz2ElmfcMe8wZdw==
-X-Received: by 2002:a17:903:41c1:b0:141:f28f:729e with SMTP id u1-20020a17090341c100b00141f28f729emr79180673ple.34.1637351910757;
-        Fri, 19 Nov 2021 11:58:30 -0800 (PST)
+        bh=a5y/pM+72J2v5l3yKPW6l2Alr7eEsDtI3z2EnZT4JkY=;
+        b=EAdrG2uI9W0mwmufhzNEq74qRxiM1KZaQTTkbpm0O2RMe4ECUUoqELj2+V0Y6xmd0s
+         jWgYAEn5Aix/s/P6139xQaLU+TziYbl9ymuve07KVMH8o7Ju5xtF6017nFmffrLeIXTF
+         wVoxoS+th4RuaBGuXs5FCNRsq2CKzsOJfqT8TzR2b99H5yYCODAlJJxJIg2WW5y3uQoQ
+         5fotGtwYifeCYK20pRcApz+Kon3qJHVdQSq3OsprVRUy6e3Vn2GxAMjCvo4auX/7a4Z5
+         mEmtZb8LmShRp/SIGeB2SyPUZY0F6BAWcwcaNHoMyx8pJ/1ZxA+uepFmwD0YXP9BVXQs
+         x3+Q==
+X-Gm-Message-State: AOAM532wiVVqpGirbRSFVQlolZFeNJdx7wwge1Ovoc7DSAuFwiI92Ctv
+        1Wud78PEaLRqqS5mk4pbDIY=
+X-Google-Smtp-Source: ABdhPJyfRed8mryKKoX0GmXsKQa0PrUfYoFgARX7KU3uxOCge+OfHA2LOyFqm5KP0544jXcAJ8MTpg==
+X-Received: by 2002:a17:902:e5ce:b0:142:780:78db with SMTP id u14-20020a170902e5ce00b00142078078dbmr78375074plf.12.1637351914548;
+        Fri, 19 Nov 2021 11:58:34 -0800 (PST)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id g11sm379010pgn.41.2021.11.19.11.58.29
+        by smtp.gmail.com with ESMTPSA id g11sm379010pgn.41.2021.11.19.11.58.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Nov 2021 11:58:30 -0800 (PST)
+        Fri, 19 Nov 2021 11:58:33 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
@@ -42,10 +42,14 @@ Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
         Bean Huo <beanhuo@micron.com>, Can Guo <cang@codeaurora.org>,
         Avri Altman <avri.altman@wdc.com>,
         Stanley Chu <stanley.chu@mediatek.com>,
-        Asutosh Das <asutoshd@codeaurora.org>
-Subject: [PATCH v2 14/20] scsi: ufs: Introduce ufshcd_release_scsi_cmd()
-Date:   Fri, 19 Nov 2021 11:57:37 -0800
-Message-Id: <20211119195743.2817-15-bvanassche@acm.org>
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Namjae Jeon <linkinjeon@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Santosh Yaraganavi <santoshsy@gmail.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: [PATCH v2 15/20] scsi: ufs: Improve SCSI abort handling
+Date:   Fri, 19 Nov 2021 11:57:38 -0800
+Message-Id: <20211119195743.2817-16-bvanassche@acm.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211119195743.2817-1-bvanassche@acm.org>
 References: <20211119195743.2817-1-bvanassche@acm.org>
@@ -55,77 +59,49 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The only functional change in this patch is that scsi_done() is now called
-after ufshcd_release() and ufshcd_clk_scaling_update_busy().
+Release resources when aborting a command. Make sure that aborted commands
+are completed once by clearing the corresponding tag bit from
+hba->outstanding_reqs.
 
-The next patch in this series will introduce a call to
-ufshcd_release_scsi_cmd() in the abort handler.
-
+Fixes: 7a3e97b0dc4b ("[SCSI] ufshcd: UFS Host controller driver")
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ufs/ufshcd.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 03f4772fc2e2..39dcf997a638 100644
+index 39dcf997a638..7e27d6436889 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -5248,6 +5248,18 @@ static irqreturn_t ufshcd_uic_cmd_compl(struct ufs_hba *hba, u32 intr_status)
- 	return retval;
- }
+@@ -7042,8 +7042,12 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
  
-+/* Release the resources allocated for processing a SCSI command. */
-+static void ufshcd_release_scsi_cmd(struct ufs_hba *hba,
-+				    struct ufshcd_lrb *lrbp)
-+{
-+	struct scsi_cmnd *cmd = lrbp->cmd;
-+
-+	scsi_dma_unmap(cmd);
-+	lrbp->cmd = NULL;	/* Mark the command as completed. */
-+	ufshcd_release(hba);
-+	ufshcd_clk_scaling_update_busy(hba);
-+}
-+
- /**
-  * __ufshcd_transfer_req_compl - handle SCSI and query command completion
-  * @hba: per adapter instance
-@@ -5258,9 +5270,7 @@ static void __ufshcd_transfer_req_compl(struct ufs_hba *hba,
- {
- 	struct ufshcd_lrb *lrbp;
- 	struct scsi_cmnd *cmd;
--	int result;
- 	int index;
--	bool update_scaling = false;
- 
- 	for_each_set_bit(index, &completed_reqs, hba->nutrs) {
- 		lrbp = &hba->lrb[index];
-@@ -5270,26 +5280,19 @@ static void __ufshcd_transfer_req_compl(struct ufs_hba *hba,
- 			if (unlikely(ufshcd_should_inform_monitor(hba, lrbp)))
- 				ufshcd_update_monitor(hba, lrbp);
- 			ufshcd_add_command_trace(hba, index, UFS_CMD_COMP);
--			result = ufshcd_transfer_rsp_status(hba, lrbp);
--			scsi_dma_unmap(cmd);
--			cmd->result = result;
--			/* Mark completed command as NULL in LRB */
--			lrbp->cmd = NULL;
-+			cmd->result = ufshcd_transfer_rsp_status(hba, lrbp);
-+			ufshcd_release_scsi_cmd(hba, lrbp);
- 			/* Do not touch lrbp after scsi done */
- 			scsi_done(cmd);
--			ufshcd_release(hba);
--			update_scaling = true;
- 		} else if (lrbp->command_type == UTP_CMD_TYPE_DEV_MANAGE ||
- 			lrbp->command_type == UTP_CMD_TYPE_UFS_STORAGE) {
- 			if (hba->dev_cmd.complete) {
- 				ufshcd_add_command_trace(hba, index,
- 							 UFS_DEV_COMP);
- 				complete(hba->dev_cmd.complete);
--				update_scaling = true;
-+				ufshcd_clk_scaling_update_busy(hba);
- 			}
- 		}
--		if (update_scaling)
--			ufshcd_clk_scaling_update_busy(hba);
+ 	ufshcd_hold(hba, false);
+ 	reg = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
+-	/* If command is already aborted/completed, return FAILED. */
+-	if (!(test_bit(tag, &hba->outstanding_reqs))) {
++	/*
++	 * If the command is already aborted/completed, return FAILED. This
++	 * should never happen since the SCSI core serializes error handling
++	 * and scsi_done() calls.
++	 */
++	if (WARN_ON_ONCE(!(test_bit(tag, &hba->outstanding_reqs)))) {
+ 		dev_err(hba->dev,
+ 			"%s: cmd at tag %d already completed, outstanding=0x%lx, doorbell=0x%x\n",
+ 			__func__, tag, hba->outstanding_reqs, reg);
+@@ -7113,6 +7117,16 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
+ 		goto release;
  	}
- }
  
++	/*
++	 * Clear the corresponding bit from outstanding_reqs since the command
++	 * has been aborted successfully.
++	 */
++	spin_lock_irqsave(&hba->outstanding_lock, flags);
++	__clear_bit(tag, &hba->outstanding_reqs);
++	spin_unlock_irqrestore(&hba->outstanding_lock, flags);
++
++	ufshcd_release_scsi_cmd(hba, lrbp);
++
+ 	err = SUCCESS;
+ 
+ release:
