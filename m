@@ -2,83 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B2D456908
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Nov 2021 05:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EACEF45690D
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Nov 2021 05:17:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbhKSET6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Nov 2021 23:19:58 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:14412 "EHLO
+        id S233565AbhKSEUD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Nov 2021 23:20:03 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:17662 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233817AbhKSET5 (ORCPT
+        by vger.kernel.org with ESMTP id S233958AbhKSEUA (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 18 Nov 2021 23:19:57 -0500
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AJ2eTNS000713;
+        Thu, 18 Nov 2021 23:20:00 -0500
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AJ1jgjY019269;
         Fri, 19 Nov 2021 04:16:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=9lOWH7dro7SD39ZLoBgnZ4Awgb9eK1eQbBtyDxRMCUY=;
- b=Pl4wfyHV67BJ2bHFiOKeeOo2N0Vow9dOKlb3/bsDMy01kxGPiUFZMOY5mbZFZLs5DjjQ
- Rq5IgKx6xWULpaTZdtWXM1o/srXdMaRKFaO027XEss7PplhpFD0z72OGK1cA4IHSMeGE
- OUsxABgvcJlQojvTHxUN6dj9hC45u3GvlBz0oZ3wuXaemyxKByqwgkwuXu7xVAg9hC/m
- 4tpTFhiNoqbfmMDzEt7tnsHSgcppb/1GMB8Q55khOCTsGZOGCsTkKjXg0rXdfzz0q4+2
- 4ztyCZVa8JJrAadk0YfdFZb54/yZy1dvjE1waVkoxw5UDev2b2p3waYCqW8uskQ5pfjE 8w== 
+ bh=2hPKR/yQAwymMrY4ZyHZlkyqZBdcPI8DN8f+qfc06D0=;
+ b=SWN40jEQEQLQhUlzCo/s6aR0oFoXYu455ojSv6dWLsP2hgkWJVrFHXUUsh9B38EfI3C6
+ hVcwbdG3GzCbZlKcOvxkY6bWcH9D+zsT6NgGLCSJ3MdVUwr36brO7qzGsiZ9+U7o38No
+ JRyZdL0xa6KWZRv93His0v6vJgMVlzZfhRA4qLyYzQMN1uN8Ci586pVAp7eUqh8tiAvZ
+ 26KyinFUMDaI69Yq7gj/okvsU9rEUwGeUMZT7h5tJ2bbuE7XykWBosd612vB7SzglmBi
+ MFYAdcH2700DEqeeLCAawU6i690Zj95VRrsLFVKUb87EEloygcxrosDDqajnQv9qHsgx Lw== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cd205mjq0-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cd2w93kbk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 19 Nov 2021 04:16:54 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AJ4FBQH020345;
-        Fri, 19 Nov 2021 04:16:52 GMT
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AJ4FC5f020463;
+        Fri, 19 Nov 2021 04:16:53 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3caq4x7c2m-1
+        by userp3020.oracle.com with ESMTP id 3caq4x7c2u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 Nov 2021 04:16:52 +0000
+        Fri, 19 Nov 2021 04:16:53 +0000
 Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1AJ4GiwW024731;
-        Fri, 19 Nov 2021 04:16:52 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1AJ4GiwY024731;
+        Fri, 19 Nov 2021 04:16:53 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3020.oracle.com with ESMTP id 3caq4x7bx2-9;
-        Fri, 19 Nov 2021 04:16:52 +0000
+        by userp3020.oracle.com with ESMTP id 3caq4x7bx2-10;
+        Fri, 19 Nov 2021 04:16:53 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org,
-        Mike Christie <michael.christie@oracle.com>,
-        target-devel@vger.kernel.org, james.bottomley@hansenpartnership.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 1/1] target: Use RCU helpers for INQUIRY t10_alua_tg_pt_gp use
-Date:   Thu, 18 Nov 2021 23:16:38 -0500
-Message-Id: <163729506338.21244.4965472814117566098.b4-ty@oracle.com>
+To:     cleech@redhat.com, Mike Christie <michael.christie@oracle.com>,
+        jejb@linux.ibm.com, lduncan@suse.com, linux-scsi@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH 1/2] iscsi: Unblock session then wake up error handler
+Date:   Thu, 18 Nov 2021 23:16:39 -0500
+Message-Id: <163729506335.21244.12011833253029564693.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211117213928.8634-1-michael.christie@oracle.com>
-References: <20211117213928.8634-1-michael.christie@oracle.com>
+In-Reply-To: <20211105221048.6541-2-michael.christie@oracle.com>
+References: <20211105221048.6541-1-michael.christie@oracle.com> <20211105221048.6541-2-michael.christie@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: KxamcgaLuuf5LFjSwIFdx6GdmgNosqvz
-X-Proofpoint-GUID: KxamcgaLuuf5LFjSwIFdx6GdmgNosqvz
+X-Proofpoint-GUID: mYm_upf4ccsmV4FnJ6jQZGzzOm8P8Ogd
+X-Proofpoint-ORIG-GUID: mYm_upf4ccsmV4FnJ6jQZGzzOm8P8Ogd
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 17 Nov 2021 15:39:28 -0600, Mike Christie wrote:
+On Fri, 5 Nov 2021 17:10:47 -0500, Mike Christie wrote:
 
-> This fixes the sparse warnings about t10_alua_tg_pt_gp accesses in
-> target_core_spc.c from:
+> We can race where iscsi_session_recovery_timedout has woken up the error
+> handler thread and it's now setting the devices to offline, and
+> session_recovery_timedout's call to scsi_target_unblock is also trying to
+> set the device's state to transport-offline. We can then get a mix of
+> states.
 > 
-> commit 7324f47d4293 ("scsi: target: Replace lun_tg_pt_gp_lock with rcu in
-> I/O path")
-> 
-> That patch replaced the lun_tg_pt_gp_lock use in the IO path, but didn't
-> update the INQUIRY code.
+> For the case where we can't relogin we want the devices to be in
+> transport-offline so when we have repaired the connection
+> __iscsi_unblock_session can set the state back to running. So this patch
+> has us set the device state then call into libiscsi to wake up the error
+> handler.
 > 
 > [...]
 
 Applied to 5.16/scsi-fixes, thanks!
 
-[1/1] target: Use RCU helpers for INQUIRY t10_alua_tg_pt_gp use
-      https://git.kernel.org/mkp/scsi/c/e2a49a95b571
+[1/2] iscsi: Unblock session then wake up error handler
+      https://git.kernel.org/mkp/scsi/c/a0c2f8b6709a
+[2/2] scsi: Fix hang when device state is set via sysfs
+      https://git.kernel.org/mkp/scsi/c/4edd8cd4e86d
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
