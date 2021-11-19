@@ -2,84 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D27345690E
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Nov 2021 05:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56676456900
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Nov 2021 05:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234389AbhKSEUE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Nov 2021 23:20:04 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:19594 "EHLO
+        id S233565AbhKSETy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Nov 2021 23:19:54 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:10024 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233983AbhKSEUC (ORCPT
+        by vger.kernel.org with ESMTP id S229812AbhKSETx (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 18 Nov 2021 23:20:02 -0500
+        Thu, 18 Nov 2021 23:19:53 -0500
 Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AJ4C20U020979;
-        Fri, 19 Nov 2021 04:16:48 GMT
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AJ1ti89020985;
+        Fri, 19 Nov 2021 04:16:49 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=Y69FHpOAx57lLd3f+zNs2LCJmaW7F6iBzQxq4zJsLj4=;
- b=MsDg0vDN151NCtw+7aIdmzfl7kGhUZhHGIpOQJevjGwmLeAHPtpSgIoRSvX9ubQki5fN
- jBpQvg6c3DpMBY66itM7k+ygdXY45uZ+EHJczbjCrCU2wzAIT61EIua9nmkH7wmSoQvz
- gXNJyPPC4labbaRzvUr9vpYFMZhJwZeQA2872kUmATxkh8vTSIYlHO03WTc/ql8Pa1B4
- q1hijT/Ldp3vfMGSq7pYV7t9Z2aF8mTuK15xoPLTfU6Qb7dTSPebqwWVRWnUxEd/oEX8
- qPPaV4fOnQp/jMQ/P6kwGi7sbvC5m3FDQqa/hkAQL64rNvajne6vdSrRto9Ad5HMcVjC tw== 
+ bh=9Eu44hnETw+Fqcy1GlNFLqt/UYZxFr1YDuew9+fEO8s=;
+ b=vZY1ir8bKIb6Lnfc23BPwA6QHoV+QW9BpOXyTHCTI2qBwJEv3RvxvIspXcK9UaMK347U
+ wv8V7tCV/XmHwgaSeq7qruLW/Fmq7E3fCHHJLOJhIILO1Fb9bQOqlUZx3ihPeILCefa8
+ JqQhDp4D6dokmkmTSBzqB7xiy9jrXCkt7iJDrl4fYuaciF0AnlCXOljsRKZ3/3ExHbpd
+ jqqnf2OYmoS6sejdezGdpXdQnpW5F/t7px/5kTMYvOdCjxXyC/dgIKaRQgVLoA4a8/fZ
+ maYcxdJAhnkB1Ztwjf/EqqVuV4i5lwIPSvEGYOBNUjsW9rUwklWiJLK4Jjc1Z2Pwj2Ig 6g== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cd4qyucj2-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cd4qyucj4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Nov 2021 04:16:49 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AJ4FBBI020315;
+        Fri, 19 Nov 2021 04:16:48 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 3caq4x7c0e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 19 Nov 2021 04:16:48 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AJ4FBOf020402;
-        Fri, 19 Nov 2021 04:16:47 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3caq4x7c00-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 Nov 2021 04:16:47 +0000
 Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1AJ4GiwK024731;
-        Fri, 19 Nov 2021 04:16:46 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1AJ4GiwM024731;
+        Fri, 19 Nov 2021 04:16:47 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3020.oracle.com with ESMTP id 3caq4x7bx2-3;
-        Fri, 19 Nov 2021 04:16:46 +0000
+        by userp3020.oracle.com with ESMTP id 3caq4x7bx2-4;
+        Fri, 19 Nov 2021 04:16:47 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     cgel.zte@gmail.com, stanley.chu@mediatek.com
+To:     Quinn Tran <qutran@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Ye Guojin <ye.guojin@zte.com.cn>,
-        linux-mediatek@lists.infradead.org, alim.akhtar@samsung.com,
-        jejb@linux.ibm.com, matthias.bgg@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        Zeal Robot <zealci@zte.com.cn>, avri.altman@wdc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: ufs: ufs-mediatek: add put_device() after of_find_device_by_node()
-Date:   Thu, 18 Nov 2021 23:16:32 -0500
-Message-Id: <163729506337.21244.16117956445573879495.b4-ty@oracle.com>
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        kernel-janitors@vger.kernel.org,
+        Larry Wisneski <Larry.Wisneski@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: qla2xxx: edif: fix off by one bug in qla_edif_app_getfcinfo()
+Date:   Thu, 18 Nov 2021 23:16:33 -0500
+Message-Id: <163729506337.21244.1075922687448615071.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211110105133.150171-1-ye.guojin@zte.com.cn>
-References: <20211110105133.150171-1-ye.guojin@zte.com.cn>
+In-Reply-To: <20211109115219.GE16587@kili>
+References: <20211109115219.GE16587@kili>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: _y2LW0XTb1knUXYDye0z3F6PA7Vd0Tid
-X-Proofpoint-GUID: _y2LW0XTb1knUXYDye0z3F6PA7Vd0Tid
+X-Proofpoint-ORIG-GUID: InXFH-9KKTK-CwkeyVOF-swlzDILyET4
+X-Proofpoint-GUID: InXFH-9KKTK-CwkeyVOF-swlzDILyET4
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 10 Nov 2021 10:51:33 +0000, cgel.zte@gmail.com wrote:
+On Tue, 9 Nov 2021 14:52:19 +0300, Dan Carpenter wrote:
 
-> From: Ye Guojin <ye.guojin@zte.com.cn>
+> The > comparison needs to be >= to prevent accessing one element beyond
+> the end of the app_reply->ports[] array.
 > 
-> This was found by coccicheck:
-> ./drivers/scsi/ufs/ufs-mediatek.c, 211, 1-7, ERROR missing put_device;
-> call of_find_device_by_node on line 1185, but without a corresponding
-> object release within this function.
 > 
-> [...]
 
 Applied to 5.16/scsi-fixes, thanks!
 
-[1/1] scsi: ufs: ufs-mediatek: add put_device() after of_find_device_by_node()
-      https://git.kernel.org/mkp/scsi/c/cc03facb1c42
+[1/1] scsi: qla2xxx: edif: fix off by one bug in qla_edif_app_getfcinfo()
+      https://git.kernel.org/mkp/scsi/c/e11e285b9cd1
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
