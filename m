@@ -2,91 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1005A459410
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Nov 2021 18:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A70459430
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Nov 2021 18:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239972AbhKVRlu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Nov 2021 12:41:50 -0500
-Received: from mail-pj1-f45.google.com ([209.85.216.45]:45985 "EHLO
-        mail-pj1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232963AbhKVRlt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Nov 2021 12:41:49 -0500
-Received: by mail-pj1-f45.google.com with SMTP id gb13-20020a17090b060d00b001a674e2c4a8so507605pjb.4
-        for <linux-scsi@vger.kernel.org>; Mon, 22 Nov 2021 09:38:43 -0800 (PST)
+        id S240331AbhKVRsh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Nov 2021 12:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240508AbhKVRs3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Nov 2021 12:48:29 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00662C061574
+        for <linux-scsi@vger.kernel.org>; Mon, 22 Nov 2021 09:45:21 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id g14so80618271edb.8
+        for <linux-scsi@vger.kernel.org>; Mon, 22 Nov 2021 09:45:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=dcw+Rz/hUeKmQgOK5oiXMwiGgX0oy7PQUINQwMOxCY8=;
+        b=BlgvDQH69bLeIDNLp3CJ9+gkLC1KFeaCn8kRENAkbp8fLA5GIZsDI2piwmFZGkXoux
+         02M6TVZHkh4JbQGtButkeOdM5SAtxVohViSYF7MFJVwqYJu8swpenyLDhuRGgAwXb7mC
+         0FSHM7TuQtpKLajFiK6YEXq8GIEybOQziIHDO/lIVpvFhKRuILd6J6mw48TVKB6Ysupw
+         QloDGBAEDtwA52Ya7nI4ONqhxivaH4sVDU8ysTaP4YUyyhpUViwtFP4AR7faWj4uZJlW
+         OzZNoyigCH01/Y1aB5safJSC4nFvAfNyYycTL2TCb3KQIGjF7w1+Q93EaHKN5wDJTKS9
+         PjIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yZh1YYYEzZ+KpjHgtkVKRS202CaMlzmdEZ7ABaH7YiU=;
-        b=dDWyqx/Dc31tMZRpEhSLQehA4o80cI2c11YV1Gb9aqk4FvWLYIyz+t2cBJ7QoNKn5p
-         Alk4vdDGZptqmL0FPz6wTZ0Hix79H93DdxSpHzCW2OjyNRsAQgKdGnLF9BH2btiT66Hj
-         JLp80C/uhzPCaInnVZxCPOMXTXzBi3FrxR5WArQUjmlMPRMvra0avd7ZmlWHdufh8NU/
-         buYcyGdX9QP6RF/7Dk2hYaFp296ogwqbdVgpSDWIp/M3z6l8ym+mOT4UB1iD42/uoU5u
-         0XKxqGEZtHX2CtsJbGwS3FLIgQScRSe21L0rJaD9nb+AgdmD91806ULxfpuv/Mcj5vgO
-         CGcg==
-X-Gm-Message-State: AOAM533rvjUyOsiVf12c8c79KEq5RmvCK30pZ9dDp0G8tzwMlvI8R97U
-        JIvEmDQcDw5VKOIjZBDUMOE=
-X-Google-Smtp-Source: ABdhPJzASrTRuLE4vP628ovwAV3PlIkzDz6mjV0GUu/i639BT11Wfxkl80543NYRrKiHIZ/0qsv7VQ==
-X-Received: by 2002:a17:90b:3b43:: with SMTP id ot3mr33827804pjb.205.1637602723005;
-        Mon, 22 Nov 2021 09:38:43 -0800 (PST)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:3432:c377:2744:1125])
-        by smtp.gmail.com with ESMTPSA id j8sm9930778pfc.8.2021.11.22.09.38.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Nov 2021 09:38:42 -0800 (PST)
-Subject: Re: [PATCH v2 01/20] block: Add a flag for internal commands
-To:     John Garry <john.garry@huawei.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Ming Lei <ming.lei@redhat.com>
-References: <20211119195743.2817-1-bvanassche@acm.org>
- <20211119195743.2817-2-bvanassche@acm.org>
- <c2f48945-6e6f-d610-9e56-1546fee07b49@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <cb0fbbaf-9ad5-ceb8-dbed-942f36ea943f@acm.org>
-Date:   Mon, 22 Nov 2021 09:38:41 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=dcw+Rz/hUeKmQgOK5oiXMwiGgX0oy7PQUINQwMOxCY8=;
+        b=xxIH06b1s0Hs8YiwNGQ/eRmGqVzgJueBvGKTc2R5xFVOGFyh1DPDugtbGHb48Wya4u
+         MKFiU6LoNmNQHVItrdhmYssNKhC1se1BdXzNXyRIrHORhxXcIOab7+PIJVG8qtDlXNZW
+         9ywfqrNw5pDW13iq3MupJKC0M9QACpPAGwVRNTUp3iB+2E3if9AuxCC67q1xVjg+2+As
+         s9i4HobixWBJg/mTSrd5SezkFWUCaN1oVx4n3sRs7qzgGM/Yp5zgkyD1NhFoQ+aZG9yR
+         HbCwtLwOLJA3xfVr3XLkp2vpnT302E4ak4wDfOQMTjwFroZDSmecv6J4cCYuF2V0LhIF
+         oe1Q==
+X-Gm-Message-State: AOAM530QfkA/wP7MUWnzv6QOJBvBIsLombcEUETvhg1hn6CSwsWQ5Mk6
+        khG5xWnpHLl0bVGIjFQyICqggOgX5UKnUQa0l6Y=
+X-Google-Smtp-Source: ABdhPJwQEGwr2CeQkVn/dgb5EoJ8AD/RCcgLChenbMrxtz51gmW2fThdxO1a+YwU0SlCzSqEH/ZxI6vNWDKnu2M2CLQ=
+X-Received: by 2002:a17:906:a041:: with SMTP id bg1mr41928822ejb.470.1637603120443;
+ Mon, 22 Nov 2021 09:45:20 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <c2f48945-6e6f-d610-9e56-1546fee07b49@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a17:906:4fd1:0:0:0:0 with HTTP; Mon, 22 Nov 2021 09:45:19
+ -0800 (PST)
+Reply-To: lisshuuu1@gmail.com
+From:   MS LISA HUGH <safi.kabore360@gmail.com>
+Date:   Mon, 22 Nov 2021 18:45:19 +0100
+Message-ID: <CAAoJS395zL7n+fTwqHogLq44oohT16dK78e9y2OVx6kCP-eZ3Q@mail.gmail.com>
+Subject: HOPE YOU UNDERSTAND MY EMAIL?( Ms Lisa)
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/22/21 12:46 AM, John Garry wrote:
-> On 19/11/2021 19:57, Bart Van Assche wrote:
->> From: Hannes Reinecke <hare@suse.de> >
->> Some drivers use a single tag space for requests submitted by the block
->> layer and driver-internal requests. Driver-internal requests will never
->> pass through the block layer but require a valid tag. This patch adds a
->> new request flag REQ_INTERNAL.
-> 
-> I'm not sure on the name. Don't we already use term "internal" for 
-> elevator request tag?
+Dear Friend,
 
-I don't see how any confusion could arise between "internal_tag" and 
-"REQ_INTERNAL" since in both cases the context is made clear - either 
-the request tag or the request in its entirety.
+I am Ms Lisa Hugh, work in the department of Audit and accounting
+manager here in the Bank.
 
->> to mark such requests and a terminates any
->> such commands in blk_execute_rq_nowait() with a WARN_ON_ONCE() to signal
->> such an invalid usage.
- >
-> FYI, I have been working on a different stream, that allows us to send 
-> the reserved request through the block layer, as we need it for poll 
-> mode support. The reason is that we need to send reserved requests on 
-> specific HW queues, which may be polling. However poll mode support only 
-> allows us to poll requests with bios, so that's a problem ATM.
+Please i need your assistance for the transferring of this fund to
+your bank account for both  of us benefit for life time investment,
 
-Please use REQ_OP_DRV_* without REQ_INTERNAL for requests that need to 
-be sent through the block layer.
+I have every inquiry details to make the bank believe you and release
+the fund in within 5
 
-Thanks,
+banking working days with your full co-operation with me for success.
 
-Bart.
+Below information is what i need from you so will can be reaching each other
+
+1)Private telephone number for communication............
+2)Age.............
+3)Country..........
+4)Occupation........
+
+Thanks.
+
+Ms Lisa Hugh,
