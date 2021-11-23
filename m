@@ -2,78 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F663459AB6
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Nov 2021 04:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825F6459ABA
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Nov 2021 04:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbhKWDwX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Nov 2021 22:52:23 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:28286 "EHLO
+        id S233109AbhKWDw3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Nov 2021 22:52:29 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:32096 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231819AbhKWDwW (ORCPT
+        by vger.kernel.org with ESMTP id S232724AbhKWDw0 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 22 Nov 2021 22:52:22 -0500
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AN1unHj013598;
-        Tue, 23 Nov 2021 03:49:09 GMT
+        Mon, 22 Nov 2021 22:52:26 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AN1mGmM015381;
+        Tue, 23 Nov 2021 03:49:10 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=BgHrdj1DiKSY/8OAHoPvNY6ppS7Ql/1Xxe5wlW/6JJU=;
- b=ZPyylL1zMgpBxnu4/2GiwMqxg3ZacYd7uQ2KzN3lEH1ZtjBZZ8JO808sNASYRxtuT0FC
- 9YTZFsvl2aW4ydOR7eDo2bHXpr/xsf0fL585tSYs9KinFPbPkbAC+xgolu/6TLJH3v+q
- GQiE508pPub1cF12MpbDJ9dXYt5EJbVFbz6IRUkdZMGu/uTAG0SAzCn2ecmAMuAXDewH
- ql562TnB90ZVzxMNr8qC5ksRsqi8ZVDRSRK91I/7sZXdCF13SRYDWgTvAkBuBPboi/OL
- 7c1JyYH/oi1P2wNDnZ32d/2HXulWZoRHCcOi0Y0IMbNyb50f1Z/olGynBgnBZW83CyBM yA== 
+ bh=71yF8cF8+NytRLvxni4D99sEMQZ/LyKM30Fk+C7roy4=;
+ b=wZ8I1XFl4NyfRtQb/fZruI3rKQuDkRg+pQCnui4jEIPUsujE4Neaks4LTnx63fn4U20z
+ 33iGbDpr2XMKZUWnS4BCbrXy0ew13GZ4+dI4605ZNUO3FfIO3EDlo/ErDhd6CcUToX8T
+ fJEJmj9AEFb5+BmtbEpxzhv9ew3yhDb6XBH/UvU22zxl2STsaYxAFKx34pbnZlVdJO6c
+ tKRNYiynoVG3vuvpKLqh8mTKUatmjUchOUSc3kGRhuJ9akUFg6DeFZ1OMoCyn8iSOMC8
+ i7veWFCcSFDRNJ5dBTRSGY1wGbPKJBT4Y3Q0MZg4p/gfCnIyBHfDujhthQUFN8Jz7LH6 vw== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cg69medtk-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cg46f6sj4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Nov 2021 03:49:10 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AN3l03s162085;
+        Tue, 23 Nov 2021 03:49:09 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3020.oracle.com with ESMTP id 3ceru4g6m8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 23 Nov 2021 03:49:09 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1AN3l2GR162355;
-        Tue, 23 Nov 2021 03:49:08 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 3ceru4g6kb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 Nov 2021 03:49:08 +0000
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1AN3l19o162141;
-        Tue, 23 Nov 2021 03:49:08 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1AN3l19q162141;
+        Tue, 23 Nov 2021 03:49:09 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by aserp3020.oracle.com with ESMTP id 3ceru4g6hc-4;
-        Tue, 23 Nov 2021 03:49:08 +0000
+        by aserp3020.oracle.com with ESMTP id 3ceru4g6hc-5;
+        Tue, 23 Nov 2021 03:49:09 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     Avri Altman <avri.altman@wdc.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>
+        Anders Roxell <anders.roxell@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: ufs: Fix double space in SCSI_UFS_HWMON description
-Date:   Mon, 22 Nov 2021 22:49:02 -0500
-Message-Id: <163763931254.19362.542551491549735127.b4-ty@oracle.com>
+Subject: Re: [PATCH] scsi: ufs: Wrap Universal Flash Storage drivers in SCSI_UFSHCD
+Date:   Mon, 22 Nov 2021 22:49:03 -0500
+Message-Id: <163763931254.19362.13195258684777232140.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211106164741.1571206-1-geert@linux-m68k.org>
-References: <20211106164741.1571206-1-geert@linux-m68k.org>
+In-Reply-To: <20211106164650.1571068-1-geert@linux-m68k.org>
+References: <20211106164650.1571068-1-geert@linux-m68k.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: m3-9AipTTyhMMxaMJJ1BBgFK7gPfJQa8
-X-Proofpoint-ORIG-GUID: m3-9AipTTyhMMxaMJJ1BBgFK7gPfJQa8
+X-Proofpoint-GUID: M0uRRB7CRSdXRebIyLl8_jLJw_DMi5b5
+X-Proofpoint-ORIG-GUID: M0uRRB7CRSdXRebIyLl8_jLJw_DMi5b5
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, 6 Nov 2021 17:47:41 +0100, Geert Uytterhoeven wrote:
+On Sat, 6 Nov 2021 17:46:50 +0100, Geert Uytterhoeven wrote:
 
-> There's no reason to have a double space between "UFS" and
-> "Temperature", hence drop it.
+> The build only descends into drivers/scsi/ufs/ if SCSI_UFSHCD is
+> enabled.  Hence all later config symbols should depend on SCSI_UFSHCD,
+> to prevent asking the user about config symbols for driver code that
+> won't be build anyway.  Unfortunately not all symbols have that
+> dependency.
 > 
+> Fix this by wrapping them all into a big if/endif block.  Remove the now
+> superfluous explicit dependencies on SCSI_UFSHCD from all symbols that
+> already had it.
 > 
+> [...]
 
 Applied to 5.17/scsi-queue, thanks!
 
-[1/1] scsi: ufs: Fix double space in SCSI_UFS_HWMON description
-      https://git.kernel.org/mkp/scsi/c/659109a45c6c
+[1/1] scsi: ufs: Wrap Universal Flash Storage drivers in SCSI_UFSHCD
+      https://git.kernel.org/mkp/scsi/c/d28a78537d1d
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
