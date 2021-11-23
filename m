@@ -2,111 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CB945A95E
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Nov 2021 17:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBEC45A96B
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Nov 2021 17:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233536AbhKWRAF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Nov 2021 12:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        id S231298AbhKWRCP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Nov 2021 12:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbhKWRAE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Nov 2021 12:00:04 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4B0C061574;
-        Tue, 23 Nov 2021 08:56:56 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id u11so17601502plf.3;
-        Tue, 23 Nov 2021 08:56:56 -0800 (PST)
+        with ESMTP id S229814AbhKWRCP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Nov 2021 12:02:15 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A8DC061574
+        for <linux-scsi@vger.kernel.org>; Tue, 23 Nov 2021 08:59:07 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so2589972pjb.2
+        for <linux-scsi@vger.kernel.org>; Tue, 23 Nov 2021 08:59:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4jfREHhQfHfchkJQh8IIRAP+3wdyDF5UxUF7zmYQcvo=;
-        b=hxcNcX3zdG4UiEkjZgIM7QQItefQNLSewahYth75HBYiEZ39lZPQ9TEQqIZAvr2wkh
-         Qhi6lQ6bd/H2e/gbL6p1TgKIepC6OGbD3HCM9uJ4Xg2j99VQ5LObzUzA9Poae0+hjolI
-         g/BZFTR06McgHEonxa7oeV8p13VpK1HZEBhwLqheDvPfzRDzM2EIpCs+2uNia1no5t1T
-         3e7KK3jGgb0p2cyI4K8/j3edLjX9Akco6eAfUZ4/t71usI9o0eCobnd7+fki8cFuA2I7
-         s8HP4oYTi3NxDoaObvm5aeSYwMtJfQVUKPfa3CUOxo/wNeGLwsCDKlvhTc70m/mhVIAx
-         V8hw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7JGyB07y7ZByxWxdqdB4x0U4uTVlvMSKnrd7b8IAjS4=;
+        b=ddLp+iCDzEk+aGsw0rrSGX1R+qocWKPiiuj+fBNBhqUuKZZTDVnt+az6oiumfVmACV
+         xlTefGB7Nr0l/V/uv61EpWAibR8azFb4pJZ5LBWVqd2J+raHUf7ckpkqhqNLUKt8bQtc
+         T2mh26UeYVxlJEl2X95SOskPJsU6vBbCyFaagNeLWYClg7QtlJVuw7BHYYVQRImUqL2B
+         eZminJ2+d0zyWvVYCTZmJ0NqKoxO0aDMVTgiMtes/WB28N0HtBm4h55hII9aaef9zsbx
+         LiottnYi2Uy44YsUDuY14+jvsmoMkvqwU+6T3Xv6IX+lY/3f+n9bEJfurI3EUH6nT29p
+         RAuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4jfREHhQfHfchkJQh8IIRAP+3wdyDF5UxUF7zmYQcvo=;
-        b=3l40d3Rlk1bEJojtJKWk4SXLcxzps+1S2gJIyYC2D1JCVm16W48KjFvFq36zjYTKl2
-         0DnpRvjIza9D9p/CZjZHDDvwTu2+4zIph32KyKimkejVbgITnausJlPHxvXDnCi2MD+z
-         RePZQfFkvs7IywyFs31C5kCOneiZxTijsmJ+K1yBwtDRbMPEWS/F017y9e78U/khUYyd
-         onLhfgYW285ZVBXFtSODQU+wQYQlWaf9s9FdvRqSFMTt+Z46FRxiIP6NWsbkF7w9lxDx
-         +gmLhMdu7Rys4QdW38HniPKfX4ntO5iNZPgaHdQ0QqWQ23ILD77o4sy4lZSEwdLDSJfo
-         lTKA==
-X-Gm-Message-State: AOAM5331Vye8YNntTHZ3I7D1K0jo2knFmIdZRN5QB/QVS0gJNDE3e9RV
-        ekSg8wNQ0x012ty1ZfOs9I93M63XT7k=
-X-Google-Smtp-Source: ABdhPJzSEZAqv/XoTgmp00/yYPUY9k4Ie3dEiKTCgNvCbj5dWc4H6hbkemNj/ADGpkFLw2XqAMLkDg==
-X-Received: by 2002:a17:902:8e85:b0:142:7621:e3b3 with SMTP id bg5-20020a1709028e8500b001427621e3b3mr8096849plb.84.1637686615948;
-        Tue, 23 Nov 2021 08:56:55 -0800 (PST)
-Received: from mail-ash-it-01.broadcom.com ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id b23sm9359197pgg.73.2021.11.23.08.56.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Nov 2021 08:56:55 -0800 (PST)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>, stable@vger.kernel.org,
-        Paul Ely <paul.ely@broadcom.com>
-Subject: [PATCH] lpfc: Fix nonrecovery of remote ports following an unsolicited LOGO
-Date:   Tue, 23 Nov 2021 08:56:46 -0800
-Message-Id: <20211123165646.62740-1-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7JGyB07y7ZByxWxdqdB4x0U4uTVlvMSKnrd7b8IAjS4=;
+        b=GZ93hq1lSbOLFpaqd/Ch4Uhtcrcm38Luh166CFfw1EKOmTHzCQixdN8phSzVkg9VJZ
+         xoZc4LtKs5tnN+UD/d3nJhUP7TGLtgrDSISk3CPCMvjkxoW4U3y0rZk3JVZGl0vd6Z08
+         q5Tgp5vTS8Mp+VF6czK3UbJCZz1ER19BbGQjEPrEuFMCdMjFQT/qBz/bzkfP+KGaaMGK
+         j0gtfCmP1ofPKTHI836gtfaIC24rzT1mDjuJ51WwNi9QQV5CEtM1VdA18a223FdpmUQK
+         Vtk1KbgUL78+OAcNWX313OpqwZSaJDyTWRFEVVPOZForTnOKSohr76wILrlHo0s78W1L
+         Akgw==
+X-Gm-Message-State: AOAM530BoaleclAAXOB3NyaUP/v2J1ZdXgQfcbFLyjHrbltHSXR7Mdym
+        cSHUdWafQOmc2jxgJczalGcTnerkUbKLbZV3Y6U=
+X-Google-Smtp-Source: ABdhPJyPWoK5aNTpxlfgRQBUlLbWqGav57vkxuhrRrjzLqnuaTRRZo4rjFDiGzaQGiJ+dM0IaFPE+NC4jSunMLsmiwk=
+X-Received: by 2002:a17:902:9303:b0:143:d6c7:babc with SMTP id
+ bc3-20020a170902930300b00143d6c7babcmr8748886plb.58.1637686746855; Tue, 23
+ Nov 2021 08:59:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:680b:0:0:0:0 with HTTP; Tue, 23 Nov 2021 08:59:06
+ -0800 (PST)
+Reply-To: fionahill.usa@hotmail.com
+From:   Fiona Hill <grace.desmond2021@gmail.com>
+Date:   Tue, 23 Nov 2021 08:59:06 -0800
+Message-ID: <CAOW9D1tfKteNfK3bBCgg+KanBU1Zjzjq76S1xaz7VhoaMdh4VA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-A commit introduced formal regstration of all Fabric nodes to the SCSI
-transport as well as REG/UNREG RPI mailbox requests. The commit
-introduced the NLP_RELEASE_RPI flag for rports  set in the
-lpfc_cmpl_els_logo_acc() routine to help clean up the RPIs. This new
-code caused the driver to release the RPI value used for the remote port
-and marked the RPI invalid.  When the driver later attempted to re-login,
-it would use the invalid RPI and the adapter rejected the PLOGI request.
-As no login occurred, the devloss timer on the rport expired and
-connectivity was lost.
-
-This patch corrects the code by removing the snippet that requests the
-rpi to be unregistered. This change only occurs on a node that is already
-marked to be rediscovered. This puts the code back to its original
-behavior, preserving the already-assigned rpi value (registered or not)
-which can be used on the re-login attempts.
-
-Fixes: fe83e3b9b422 ("scsi: lpfc: Fix node handling for Fabric Controller and Domain Controller")
-Cc: <stable@vger.kernel.org> # v5.14+
-Co-developed-by: Paul Ely <paul.ely@broadcom.com>
-Signed-off-by: Paul Ely <paul.ely@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
----
- drivers/scsi/lpfc/lpfc_els.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index b940e0268f96..e83453bea2ae 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -5095,14 +5095,9 @@ lpfc_cmpl_els_logo_acc(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 		/* NPort Recovery mode or node is just allocated */
- 		if (!lpfc_nlp_not_used(ndlp)) {
- 			/* A LOGO is completing and the node is in NPR state.
--			 * If this a fabric node that cleared its transport
--			 * registration, release the rpi.
-+			 * Just unregister the RPI because the node is still
-+			 * required.
- 			 */
--			spin_lock_irq(&ndlp->lock);
--			ndlp->nlp_flag &= ~NLP_NPR_2B_DISC;
--			if (phba->sli_rev == LPFC_SLI_REV4)
--				ndlp->nlp_flag |= NLP_RELEASE_RPI;
--			spin_unlock_irq(&ndlp->lock);
- 			lpfc_unreg_rpi(vport, ndlp);
- 		} else {
- 			/* Indicate the node has already released, should
 -- 
-2.26.2
 
+
+I expect a letter from you i don't know if you receive  my message?
