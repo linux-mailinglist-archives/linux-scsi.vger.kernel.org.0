@@ -2,80 +2,133 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9142F45CCA1
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Nov 2021 19:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E261045CD34
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Nov 2021 20:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350900AbhKXTCi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 24 Nov 2021 14:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S1350837AbhKXTdY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Nov 2021 14:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350997AbhKXTCc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Nov 2021 14:02:32 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1350C061746
-        for <linux-scsi@vger.kernel.org>; Wed, 24 Nov 2021 10:59:22 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id j3so6126462wrp.1
-        for <linux-scsi@vger.kernel.org>; Wed, 24 Nov 2021 10:59:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=dcw+Rz/hUeKmQgOK5oiXMwiGgX0oy7PQUINQwMOxCY8=;
-        b=XbgmamVgOOaLQRkK3XjQ8XAzKd5gybJ93JknoY+wfZXXbBLCoEnil9PJjM/MmUFXOX
-         FomW3kB8L3d5ZHNIpQuSSEn3DXuISlswa3qtyIchUwDTaMLHCLiFVQKotriLKBSfGIoQ
-         jJq4IgAwD9gPE/FutSNgTvtCJWkuKouj8yJoYG2cFjA5oJk3hzqE3vb73fnvtNah2D2V
-         1wZ0dm0UO86dG4MUv+PD+WQ3QH4TVAqGPdqYWJsG7FieZwaDuGMrJMxkhkF3+Y060Q2a
-         TroJWI8QiXwL1LEVLMQmtoGmGijdNIsr3GgW2X2o3LgXchgkzd+IitE+26S98Qad4HzM
-         3kWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=dcw+Rz/hUeKmQgOK5oiXMwiGgX0oy7PQUINQwMOxCY8=;
-        b=deuC9KVnrXrBaX1EO1PsG6BmqGQg+nSg99cBjURsvAb7q70oxPfuZmPNlS+sWcKjTt
-         fLkv/uHD1GTIUP5PZ6PNpeouSBzg46YjqsAcOSLH/WwEDSN9ST7/n7FvkMXIxG+roLcE
-         FX9k5IyV8kbI0DcocMtfBYWH5R0z26uyE9vnMNP7jfFkikp5dIsXBozHUcF/+SpZGFaI
-         xrNXm6bHNi0KAs40Edok/LCVnrV4FdbHQCZM9xbxi+yyRQrp42RFN9HudAUafwkKAWyD
-         +dzycj9HR24DUOi8SzdeK1w3CunIKGNr2i09yyg6amJddxycZN6IsqGGIqecwTOggaE/
-         mAuw==
-X-Gm-Message-State: AOAM5338zNebcRjtzlXj3SMyuhikSJexU/phjkW2eRAfHx3SqcmUlnaA
-        xBuHPi6hbMUJNmW5ltrJ6LOmJ0oW13Umr8kFa5E=
-X-Google-Smtp-Source: ABdhPJwsj6wVnlbBC6pXP2UphrRYQ6OQEuFTCM636jT6hGTG/Mqe9vVjWBHrBCjWcw3TK+V1UmVnZm7Cn6ax9lcPAv4=
-X-Received: by 2002:a5d:47aa:: with SMTP id 10mr22848021wrb.50.1637780361277;
- Wed, 24 Nov 2021 10:59:21 -0800 (PST)
+        with ESMTP id S1351000AbhKXTdO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Nov 2021 14:33:14 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88983C061574;
+        Wed, 24 Nov 2021 11:30:04 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1637782202;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LYogUZz5SCgK/KWX9KT7zTNAuMHBvkv1vFcTH7JmwzE=;
+        b=iFHR8vN0YSSvuY+/FEqOWS04ELNvnlIINtGmzBvpgvoW0RJXJNsuHQmBfMj2iA4ZMko4H2
+        60BmO1srcUsxSyxf3b8VwniTwrU4MW5HYIXnO89hYIS7P1Dv+dfsCPnYU7rnP5wpbTitY0
+        d+Uog0bcMrja6eQpc+n+YlkcbsQy9imG2hGFjxPQyYFnX6EtIaVaRi/GO9kEUtQ+z/u24q
+        yeZsZgvknnYSXbkPASptJlMOrvr5vdukN69zMmHhXuYOWPC8Bsq0PCSq9rs+XpnYsjoU08
+        2MExB79kFbRR0fbL2JT4UdNRaQEHAcI3vik+kIMHnW4vn3C+t3gOgV0PnSzSIA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1637782202;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LYogUZz5SCgK/KWX9KT7zTNAuMHBvkv1vFcTH7JmwzE=;
+        b=ZIXqIBgjBL4jcz44alU7iuZQZux6E74834ms00khTW9kWpyR41Bmv11e6hQ6i28s8f1em7
+        dHuN95+5/LDPrhBg==
+To:     Nitesh Lal <nilal@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, ajit.khaparde@broadcom.com,
+        sriharsha.basavapatna@broadcom.com, somnath.kotur@broadcom.com,
+        huangguangbin2@huawei.com, huangdaode@huawei.com,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Alex Belits <abelits@marvell.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, rostedt@goodmis.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ingo Molnar <mingo@kernel.org>, jbrandeb@kernel.org,
+        akpm@linuxfoundation.org, sfr@canb.auug.org.au,
+        stephen@networkplumber.org, rppt@linux.vnet.ibm.com,
+        chris.friesen@windriver.com, Marc Zyngier <maz@kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>, pjwaskiewicz@gmail.com,
+        Stefan Assmann <sassmann@redhat.com>,
+        Tomas Henzl <thenzl@redhat.com>, james.smart@broadcom.com,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        Ken Cox <jkc@redhat.com>, faisal.latif@intel.com,
+        shiraz.saleem@intel.com, tariqt@nvidia.com,
+        Alaa Hleihel <ahleihel@redhat.com>,
+        Kamal Heib <kheib@redhat.com>, borisp@nvidia.com,
+        saeedm@nvidia.com,
+        "Nikolova, Tatyana E" <tatyana.e.nikolova@intel.com>,
+        "Ismail, Mustafa" <mustafa.ismail@intel.com>,
+        Al Stone <ahs3@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
+        bjorn.andersson@linaro.org, chunkuang.hu@kernel.org,
+        yongqiang.niu@mediatek.com, baolin.wang7@gmail.com,
+        Petr Oros <poros@redhat.com>, Ming Lei <minlei@redhat.com>,
+        Ewan Milne <emilne@redhat.com>, jejb@linux.ibm.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        kabel@kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>, kashyap.desai@broadcom.com,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        shivasharan.srikanteshwara@broadcom.com,
+        sathya.prakash@broadcom.com,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        suganath-prabu.subramani@broadcom.com, ley.foon.tan@intel.com,
+        jbrunet@baylibre.com, johannes@sipsolutions.net,
+        snelson@pensando.io, lewis.hanly@microchip.com, benve@cisco.com,
+        _govind@gmx.com, jassisinghbrar@gmail.com
+Subject: Re: [PATCH v6 00/14] genirq: Cleanup the abuse of
+ irq_set_affinity_hint()
+In-Reply-To: <CAFki+L=9Hw-2EONFEX6b7k6iRX_yLx1zcS+NmWsDSuBWg8w-Qw@mail.gmail.com>
+References: <20210903152430.244937-1-nitesh@redhat.com>
+ <CAFki+L=9Hw-2EONFEX6b7k6iRX_yLx1zcS+NmWsDSuBWg8w-Qw@mail.gmail.com>
+Date:   Wed, 24 Nov 2021 20:30:01 +0100
+Message-ID: <87bl29l5c6.ffs@tglx>
 MIME-Version: 1.0
-Received: by 2002:a5d:4289:0:0:0:0:0 with HTTP; Wed, 24 Nov 2021 10:59:20
- -0800 (PST)
-Reply-To: lisshuuu1@gmail.com
-From:   MS LISA HUGH <felly.newton1@gmail.com>
-Date:   Wed, 24 Nov 2021 19:59:20 +0100
-Message-ID: <CAJwqh3uGMKVzb_7+Tp_ZUVVTo5A2U7nrKUuPreL5yyRSMxAGdg@mail.gmail.com>
-Subject: HOPE YOU UNDERSTAND MY EMAIL?( Ms L.Hugh).
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+Nitesh,
 
-I am Ms Lisa Hugh, work in the department of Audit and accounting
-manager here in the Bank.
+On Mon, Sep 13 2021 at 10:34, Nitesh Lal wrote:
+> On Fri, Sep 3, 2021 at 11:25 AM Nitesh Narayan Lal <nitesh@redhat.com> wrote:
+>>
+>> The drivers currently rely on irq_set_affinity_hint() to either set the
+>> affinity_hint that is consumed by the userspace and/or to enforce a custom
+>> affinity.
+>>
+>> irq_set_affinity_hint() as the name suggests is originally introduced to
+>> only set the affinity_hint to help the userspace in guiding the interrupts
+>> and not the affinity itself. However, since the commit
+>>
+>>         e2e64a932556 "genirq: Set initial affinity in irq_set_affinity_hint()"
 
-Please i need your assistance for the transferring of this fund to
-your bank account for both  of us benefit for life time investment,
+sorry for ignoring this. It fell through the cracks.
 
-I have every inquiry details to make the bank believe you and release
-the fund in within 5
+>> Thomas Gleixner (1):
+>>   genirq: Provide new interfaces for affinity hints
 
-banking working days with your full co-operation with me for success.
+Did I actually write this?
 
-Below information is what i need from you so will can be reaching each other
+> Any suggestions on what should be the next steps here? Unfortunately, I haven't
+> been able to get any reviews on the following two patches:
+>   be2net: Use irq_update_affinity_hint
+>   hinic: Use irq_set_affinity_and_hint
+>
+> One option would be to proceed with the remaining patches and I can try
+> posting these two again when I post patches for the remaining drivers?
 
-1)Private telephone number for communication............
-2)Age.............
-3)Country..........
-4)Occupation........
+The more general question is whether I should queue all the others or
+whether some subsystem would prefer to pull in a tagged commit on top of
+rc1. I'm happy to carry them all of course.
 
-Thanks.
+Thanks,
 
-Ms Lisa Hugh,
+        tglx
+
+
