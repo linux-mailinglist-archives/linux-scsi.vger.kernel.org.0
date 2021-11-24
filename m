@@ -2,229 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EEC45B8C2
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Nov 2021 12:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B295545B8EF
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Nov 2021 12:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241659AbhKXLGN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 24 Nov 2021 06:06:13 -0500
-Received: from mga01.intel.com ([192.55.52.88]:47724 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236994AbhKXLGM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 24 Nov 2021 06:06:12 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10177"; a="259141985"
-X-IronPort-AV: E=Sophos;i="5.87,260,1631602800"; 
-   d="scan'208";a="259141985"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 03:03:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,260,1631602800"; 
-   d="scan'208";a="740954830"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Nov 2021 03:03:00 -0800
-Subject: Re: [PATCH v2 11/20] scsi: ufs: Switch to
- scsi_(get|put)_internal_cmd()
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <beanhuo@micron.com>, Can Guo <cang@codeaurora.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Asutosh Das <asutoshd@codeaurora.org>
-References: <20211119195743.2817-1-bvanassche@acm.org>
- <20211119195743.2817-12-bvanassche@acm.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <6bfb59ef-4f00-3918-59e6-3c9569f6adc6@intel.com>
-Date:   Wed, 24 Nov 2021 13:02:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.13.0
+        id S240774AbhKXLO5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Nov 2021 06:14:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236160AbhKXLO4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Nov 2021 06:14:56 -0500
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475B4C061574
+        for <linux-scsi@vger.kernel.org>; Wed, 24 Nov 2021 03:11:47 -0800 (PST)
+Received: by mail-yb1-xb43.google.com with SMTP id f186so6228793ybg.2
+        for <linux-scsi@vger.kernel.org>; Wed, 24 Nov 2021 03:11:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zdkYmxB9znBgVJAl4+odHO8qB9fczXhqskn6pnD58SQ=;
+        b=pOyAWUAWT6xY398eEpG4jpCOdhN+JUAuSdIGDqb8dPCYPG5xSGucbQ7Znfb11YrN+a
+         3n0T2mgwIHXbUOfm+TpIK5RxmrS3cO4TMDHEEDLE7hAtp+qEa4WPefiatwDLi+hpqZNH
+         eC54kL/k/QRvAHpJ9rEZkKKlOz3xATTeywIHRjFBOAKiF8ZZxycsydrbJKQu2fpyCYcy
+         WBioWgInGDGnGptFh34r8vMo3SzrCDwYloTpL1zrfaPJUiRYQW6VeUiNjAqrgKNs+4kY
+         3649nXV4DqlJhnw0jwMqioAVpEkIVVpbEN9IoyXsV+KUuSt3eNV1gtgm7o1t2Yum+wd4
+         3Efw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zdkYmxB9znBgVJAl4+odHO8qB9fczXhqskn6pnD58SQ=;
+        b=1Nu4THsaIMVwtdGJtt+wyM9dFa5xjB+NSFJlSHI4TONXyZIM94HI7wPaZxpz5D5JMZ
+         aLnmkdqh3g8IvkJz7E7Iw67v6jsC0tLJcrOOcs+ureWfMILyxygf5ap+DlNrU3iSkKmQ
+         dxeAhiLUUu4HAjVddarRh2QfKxGAixicOWDhVS5/1dFocbOwWMyTVgvKMGcU26t2VhQT
+         2JLehXaa34N3c6fniuFvBesj2i+jyla4k/+Y1e7g7/HrdmLVW15n9I36VQpFv3NIqC/2
+         JQ7or9Xn7jHIpGwWbQg8V3xI8TFaKeoFC+o6JtCYfJogf6Io4Y21qfgBolFEoUOjGQTj
+         ZQJw==
+X-Gm-Message-State: AOAM533a+41lUisPeKsU4w+3mBLSuYOWZzpNyL1EXwQtRuwMXdhg4aX4
+        atO1C2tT0D3j/8V3NQfnOOj9CaxQA+N1TXNqdILP0xg+RIHrpw==
+X-Google-Smtp-Source: ABdhPJxsx30ae+0Pui5XxG2jH8hbsFeC53RbmWFKGSriYjzFogfifBXBHZytBn9pXTuFodK5t+aq+fB/Tja6hJe8QpU=
+X-Received: by 2002:a25:37ce:: with SMTP id e197mr15880079yba.36.1637752294874;
+ Wed, 24 Nov 2021 03:11:34 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211119195743.2817-12-bvanassche@acm.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:7010:123d:b0:1e1:46d0:a9e6 with HTTP; Wed, 24 Nov 2021
+ 03:11:34 -0800 (PST)
+Reply-To: cardoso.almeida1@outlook.com
+From:   Cardoso Almeida <ibranancy@gmail.com>
+Date:   Wed, 24 Nov 2021 03:11:34 -0800
+Message-ID: <CAFZDcwKtkzv2ka-HDgN=a_=PCTwmkThAYvnKq_DJCCBMW2f6Og@mail.gmail.com>
+Subject: Hi;
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 19/11/2021 21:57, Bart Van Assche wrote:
-> The only functional change in this patch is the addition of a
-> blk_mq_start_request() call in ufshcd_issue_devman_upiu_cmd().
-> 
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/ufs/ufshcd.c | 46 +++++++++++++++++++++++++--------------
->  1 file changed, 30 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index fced4528ee90..dfa5f127342b 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -2933,6 +2933,7 @@ static int ufshcd_exec_dev_cmd(struct ufs_hba *hba,
->  {
->  	struct request_queue *q = hba->cmd_queue;
->  	DECLARE_COMPLETION_ONSTACK(wait);
-> +	struct scsi_cmnd *scmd;
->  	struct request *req;
->  	struct ufshcd_lrb *lrbp;
->  	int err;
-> @@ -2945,15 +2946,18 @@ static int ufshcd_exec_dev_cmd(struct ufs_hba *hba,
->  	 * Even though we use wait_event() which sleeps indefinitely,
->  	 * the maximum wait time is bounded by SCSI request timeout.
->  	 */
-> -	req = blk_mq_alloc_request(q, REQ_OP_DRV_OUT, 0);
-> -	if (IS_ERR(req)) {
-> -		err = PTR_ERR(req);
-> +	scmd = scsi_get_internal_cmd(q, DMA_TO_DEVICE, 0);
+ Greetings my dear,
 
-We do not need the block layer, nor SCSI commands which begs the question,
-why involve them at all?
+How are you?
 
-For example, the following is much simpler and seems to work:
+My name is Cardoso Almeida. I am a Procurement Officer with the
+Angolan National Petroleum and Gas Agency (ANPG). I am writing to
+extend a business request for you to stand as an agent or middle-man
+in a crude oil supply contract.
 
+I am assuring you that good profits will be earned from the commission
+that will be paid to middle-persons. I will provide exclusive details
+to you upon your acceptance.
 
- drivers/scsi/ufs/ufshcd.c | 52 +++++++--------------------------------
- drivers/scsi/ufs/ufshcd.h |  1 +
- 2 files changed, 10 insertions(+), 43 deletions(-)
+Sincerely,
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index d125d8792ace5..bdfac3e9991ee 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -128,8 +128,9 @@ EXPORT_SYMBOL_GPL(ufshcd_dump_regs);
- enum {
- 	UFSHCD_MAX_CHANNEL	= 0,
- 	UFSHCD_MAX_ID		= 1,
--	UFSHCD_CMD_PER_LUN	= 32,
--	UFSHCD_CAN_QUEUE	= 32,
-+	UFSHCD_NUM_RESERVED	= 1,
-+	UFSHCD_CMD_PER_LUN	= 32 - UFSHCD_NUM_RESERVED,
-+	UFSHCD_CAN_QUEUE	= 32 - UFSHCD_NUM_RESERVED,
- };
- 
- static const char *const ufshcd_state_name[] = {
-@@ -2189,6 +2190,7 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
- 	hba->nutrs = (hba->capabilities & MASK_TRANSFER_REQUESTS_SLOTS) + 1;
- 	hba->nutmrs =
- 	((hba->capabilities & MASK_TASK_MANAGEMENT_REQUEST_SLOTS) >> 16) + 1;
-+	hba->reserved_slot = hba->nutrs - 1;
- 
- 	/* Read crypto capabilities */
- 	err = ufshcd_hba_init_crypto_capabilities(hba);
-@@ -2931,31 +2933,13 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
- static int ufshcd_exec_dev_cmd(struct ufs_hba *hba,
- 		enum dev_cmd_type cmd_type, int timeout)
- {
--	struct request_queue *q = hba->cmd_queue;
- 	DECLARE_COMPLETION_ONSTACK(wait);
--	struct request *req;
- 	struct ufshcd_lrb *lrbp;
- 	int err;
--	int tag;
-+	int tag = hba->reserved_slot;
- 
- 	down_read(&hba->clk_scaling_lock);
- 
--	/*
--	 * Get free slot, sleep if slots are unavailable.
--	 * Even though we use wait_event() which sleeps indefinitely,
--	 * the maximum wait time is bounded by SCSI request timeout.
--	 */
--	req = blk_mq_alloc_request(q, REQ_OP_DRV_OUT, 0);
--	if (IS_ERR(req)) {
--		err = PTR_ERR(req);
--		goto out_unlock;
--	}
--	tag = req->tag;
--	WARN_ONCE(tag < 0, "Invalid tag %d\n", tag);
--	/* Set the timeout such that the SCSI error handler is not activated. */
--	req->timeout = msecs_to_jiffies(2 * timeout);
--	blk_mq_start_request(req);
--
- 	lrbp = &hba->lrb[tag];
- 	WARN_ON(lrbp->cmd);
- 	err = ufshcd_compose_dev_cmd(hba, lrbp, cmd_type, tag);
-@@ -2970,10 +2954,7 @@ static int ufshcd_exec_dev_cmd(struct ufs_hba *hba,
- 	err = ufshcd_wait_for_dev_cmd(hba, lrbp, timeout);
- 	ufshcd_add_query_upiu_trace(hba, err ? UFS_QUERY_ERR : UFS_QUERY_COMP,
- 				    (struct utp_upiu_req *)lrbp->ucd_rsp_ptr);
--
- out:
--	blk_mq_free_request(req);
--out_unlock:
- 	up_read(&hba->clk_scaling_lock);
- 	return err;
- }
-@@ -4955,11 +4936,7 @@ static int ufshcd_slave_alloc(struct scsi_device *sdev)
-  */
- static int ufshcd_change_queue_depth(struct scsi_device *sdev, int depth)
- {
--	struct ufs_hba *hba = shost_priv(sdev->host);
--
--	if (depth > hba->nutrs)
--		depth = hba->nutrs;
--	return scsi_change_queue_depth(sdev, depth);
-+	return scsi_change_queue_depth(sdev, min(depth, sdev->host->can_queue));
- }
- 
- static void ufshcd_hpb_destroy(struct ufs_hba *hba, struct scsi_device *sdev)
-@@ -6706,24 +6683,14 @@ static int ufshcd_issue_devman_upiu_cmd(struct ufs_hba *hba,
- 					enum dev_cmd_type cmd_type,
- 					enum query_opcode desc_op)
- {
--	struct request_queue *q = hba->cmd_queue;
- 	DECLARE_COMPLETION_ONSTACK(wait);
--	struct request *req;
- 	struct ufshcd_lrb *lrbp;
- 	int err = 0;
--	int tag;
-+	int tag = hba->reserved_slot;
- 	u8 upiu_flags;
- 
- 	down_read(&hba->clk_scaling_lock);
- 
--	req = blk_mq_alloc_request(q, REQ_OP_DRV_OUT, 0);
--	if (IS_ERR(req)) {
--		err = PTR_ERR(req);
--		goto out_unlock;
--	}
--	tag = req->tag;
--	WARN_ONCE(tag < 0, "Invalid tag %d\n", tag);
--
- 	lrbp = &hba->lrb[tag];
- 	WARN_ON(lrbp->cmd);
- 	lrbp->cmd = NULL;
-@@ -6791,7 +6758,6 @@ static int ufshcd_issue_devman_upiu_cmd(struct ufs_hba *hba,
- 	ufshcd_add_query_upiu_trace(hba, err ? UFS_QUERY_ERR : UFS_QUERY_COMP,
- 				    (struct utp_upiu_req *)lrbp->ucd_rsp_ptr);
- 
--out_unlock:
- 	up_read(&hba->clk_scaling_lock);
- 	return err;
- }
-@@ -9516,8 +9482,8 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
- 	/* Configure LRB */
- 	ufshcd_host_memory_configure(hba);
- 
--	host->can_queue = hba->nutrs;
--	host->cmd_per_lun = hba->nutrs;
-+	host->can_queue = hba->nutrs - UFSHCD_NUM_RESERVED;
-+	host->cmd_per_lun = hba->nutrs - UFSHCD_NUM_RESERVED;
- 	host->max_id = UFSHCD_MAX_ID;
- 	host->max_lun = UFS_MAX_LUNS;
- 	host->max_channel = UFSHCD_MAX_CHANNEL;
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index e9bc07c69a801..1addb2c906bae 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -836,6 +836,7 @@ struct ufs_hba {
- 	u32 capabilities;
- 	int nutrs;
- 	int nutmrs;
-+	int reserved_slot; /* Protected by dev_cmd.lock */
- 	u32 ufs_version;
- 	const struct ufs_hba_variant_ops *vops;
- 	struct ufs_hba_variant_params *vps;
+Cardoso Almeida
+Procurement Officer.
 
+ANPG - AG=C3=8ANCIA  NACIONAL DE PETR=C3=93LEO,
+G=C3=81S E  BIO-COMBUST=C3=8DVEIS
+
+Edif=C3=ADcio Torres do Carmo
+Tor-re 2, Rua Lopes de Lima,
+Dis-trito Urbano da Ingombota,
+Luanda - Rep=C3=BAblica de Angola
+Website: www.anpg.co.ao
+anpg@contractor.net
