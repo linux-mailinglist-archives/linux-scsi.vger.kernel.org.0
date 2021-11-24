@@ -2,165 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCFC45CFEF
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Nov 2021 23:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BED45D0F6
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Nov 2021 00:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245314AbhKXWTn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 24 Nov 2021 17:19:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38050 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244993AbhKXWTl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 24 Nov 2021 17:19:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637792190;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EEVhKDq1EhBHdoS7pTs0RLbzDWey60atk3W5DA5v0B4=;
-        b=OSyF49HBsRBesjnwLpONI2KlKEDOWpy69mX8OXVZYMSAD5PwrVyygjSVVr+H2RaPXoIRW6
-        WGqHU7BcTZQPx26kJ4loOyXZdQ44kfYnyS9W0hEmdAZmTqISWgbb7cnjJFShFTucchodyT
-        lwvgvkcdp+nHjbvMCRQOZOif6JrjtQo=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-318-XywWK9eqPzq-4jAHTjw3VA-1; Wed, 24 Nov 2021 17:16:29 -0500
-X-MC-Unique: XywWK9eqPzq-4jAHTjw3VA-1
-Received: by mail-lf1-f70.google.com with SMTP id g38-20020a0565123ba600b004036147023bso2074374lfv.10
-        for <linux-scsi@vger.kernel.org>; Wed, 24 Nov 2021 14:16:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EEVhKDq1EhBHdoS7pTs0RLbzDWey60atk3W5DA5v0B4=;
-        b=43PJnLuWY0B5UppoIc+GpDGm9p1s75pa7v5Cho9uPoBoDXkilh1Bc/qdodLb3JYjrl
-         ed2ZqHJbip6kS+Vv4SAYwVeg/2cOOwrjAdEGWlEab/KdhOr/ewsaKtckbBfsYgcRxAUI
-         Yp3NJmJid3YaUYF+eq0LXRsARUlvoqaufGJ5fv5W7FNOJYjpzpwcFT0xaN7r+Oub+Kmm
-         23futf1F9g6Pd35m9WtrC285KkHmESOLBoWdA4A3vT7XNUahytTnvUVOJ1AgmXGakquF
-         q034SEWag/MioLDsA8g+vBsHnr9iMLIMNCS/Tm6zUT52qtlezzSIYx/39iQvz8gEDXRO
-         HvYQ==
-X-Gm-Message-State: AOAM530jJYSfvnPfRc1utw6KpS4+f/RoNIfH20nt4LCtySCgXL75BfFE
-        4zuVPd9C26Gxblw4VGijnRlf8DLyz+uyFQZ8bpo1QzuENdLA659gHI7809+q+onWr6YtAzusDJG
-        eTp+Dkr7lL8Xlu0b4F7f1N2g7N1O2cO+g1aqpNg==
-X-Received: by 2002:a05:6512:3096:: with SMTP id z22mr18777555lfd.124.1637792187792;
-        Wed, 24 Nov 2021 14:16:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy3HKmtNAafBBlI7bMVT3RazivdW2g2TUcEskctZmuEaRpOF7Jx2bvW50+8WUNSPiqnQC6nZn8f0zY2CSibUtA=
-X-Received: by 2002:a05:6512:3096:: with SMTP id z22mr18777505lfd.124.1637792187488;
- Wed, 24 Nov 2021 14:16:27 -0800 (PST)
+        id S1352574AbhKXXS1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Nov 2021 18:18:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343885AbhKXXSW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Nov 2021 18:18:22 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13D1C061746;
+        Wed, 24 Nov 2021 15:15:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=Fxmt17Vrui7KwJx26k3w18jjiyXBLFeliPHkymEoIEo=; b=z2cPFa8Obs3Z8C5CUvYgGEvLoB
+        CoNe8+DhHGI4qxNT0FzlIiP/n75Oc5wQOFFSDcM8KoSWm0lJTzj+OPcR9u2CfVgXXdZSe/9Y2UaiG
+        XJemiPtZLn9ZxOpc/boRZnWbE7huYqrbYD6hbiv9LVy+8ibF5sUgjHfyQjKwxgxDlbXSA8aPRIZAa
+        2WoBYDsKItzOyyLtBye6FCSCqx6RFsC6bTISllZYNKB/sOqYpnSq3Ea0kJu7e5TdsFKZ/1iNSsPhq
+        K3G0JlEuitR16U/exCq+QppEsm11EsWJwNMOzAhpjQD/6WGwsnRfHEx+6t4k3ZzlH4rb9p8rVcsfY
+        Lu5lVLPA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mq1TI-0063yv-Ie; Wed, 24 Nov 2021 23:14:36 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     akpm@linux-foundation.org, keescook@chromium.org,
+        yzaikin@google.com, nixiaoming@huawei.com, ebiederm@xmission.com,
+        steve@sk2.org, gregkh@linuxfoundation.org, rafael@kernel.org,
+        tytso@mit.edu, viro@zeniv.linux.org.uk, pmladek@suse.com,
+        senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, dgilbert@interlog.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        mcgrof@bombadil.infradead.org, mcgrof@kernel.org,
+        linux-scsi@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/8] sysctl: 3rd set of kernel/sysctl cleanups
+Date:   Wed, 24 Nov 2021 15:14:27 -0800
+Message-Id: <20211124231435.1445213-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20210903152430.244937-1-nitesh@redhat.com> <CAFki+L=9Hw-2EONFEX6b7k6iRX_yLx1zcS+NmWsDSuBWg8w-Qw@mail.gmail.com>
- <87bl29l5c6.ffs@tglx>
-In-Reply-To: <87bl29l5c6.ffs@tglx>
-From:   Nitesh Lal <nilal@redhat.com>
-Date:   Wed, 24 Nov 2021 17:16:16 -0500
-Message-ID: <CAFki+Lmrv-UjZpuTQWr9c-Rymfm-tuCw9WpwmHgyfjVhJgp--g@mail.gmail.com>
-Subject: Re: [PATCH v6 00/14] genirq: Cleanup the abuse of irq_set_affinity_hint()
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, ajit.khaparde@broadcom.com,
-        sriharsha.basavapatna@broadcom.com, somnath.kotur@broadcom.com,
-        huangguangbin2@huawei.com, huangdaode@huawei.com,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Alex Belits <abelits@marvell.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, rostedt@goodmis.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Ingo Molnar <mingo@kernel.org>, jbrandeb@kernel.org,
-        akpm@linuxfoundation.org, sfr@canb.auug.org.au,
-        stephen@networkplumber.org, rppt@linux.vnet.ibm.com,
-        chris.friesen@windriver.com, Marc Zyngier <maz@kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>, pjwaskiewicz@gmail.com,
-        Stefan Assmann <sassmann@redhat.com>,
-        Tomas Henzl <thenzl@redhat.com>, james.smart@broadcom.com,
-        Ken Cox <jkc@redhat.com>, faisal.latif@intel.com,
-        shiraz.saleem@intel.com, tariqt@nvidia.com,
-        Alaa Hleihel <ahleihel@redhat.com>,
-        Kamal Heib <kheib@redhat.com>, borisp@nvidia.com,
-        saeedm@nvidia.com,
-        "Nikolova, Tatyana E" <tatyana.e.nikolova@intel.com>,
-        "Ismail, Mustafa" <mustafa.ismail@intel.com>,
-        Al Stone <ahs3@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
-        bjorn.andersson@linaro.org, chunkuang.hu@kernel.org,
-        yongqiang.niu@mediatek.com, baolin.wang7@gmail.com,
-        Petr Oros <poros@redhat.com>, Ming Lei <minlei@redhat.com>,
-        Ewan Milne <emilne@redhat.com>, jejb@linux.ibm.com,
-        kabel@kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>, kashyap.desai@broadcom.com,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        shivasharan.srikanteshwara@broadcom.com,
-        sathya.prakash@broadcom.com,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        suganath-prabu.subramani@broadcom.com, ley.foon.tan@intel.com,
-        jbrunet@baylibre.com, johannes@sipsolutions.net,
-        snelson@pensando.io, lewis.hanly@microchip.com, benve@cisco.com,
-        _govind@gmx.com, jassisinghbrar@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 2:30 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> Nitesh,
->
-> On Mon, Sep 13 2021 at 10:34, Nitesh Lal wrote:
-> > On Fri, Sep 3, 2021 at 11:25 AM Nitesh Narayan Lal <nitesh@redhat.com> wrote:
-> >>
-> >> The drivers currently rely on irq_set_affinity_hint() to either set the
-> >> affinity_hint that is consumed by the userspace and/or to enforce a custom
-> >> affinity.
-> >>
-> >> irq_set_affinity_hint() as the name suggests is originally introduced to
-> >> only set the affinity_hint to help the userspace in guiding the interrupts
-> >> and not the affinity itself. However, since the commit
-> >>
-> >>         e2e64a932556 "genirq: Set initial affinity in irq_set_affinity_hint()"
->
-> sorry for ignoring this. It fell through the cracks.
+This is the third set of patches to help address cleaning the kitchen
+seink in kernel/sysctl.c and to move sysctls away to where they are
+actually implemented / used.
 
+Note that Andrew Morton is staging these to get visibility into changes
+in the various trees which might conflict. He already grabbed the
+first two sets of patch sets, and so I think these changes are probably
+best to be eventually considered to be merged through his tree, to
+avoid conflicts.
 
-No worries, thank you for reviewing.
+On this v2 series since last year's v1 series has these changes:
 
->
->
-> >> Thomas Gleixner (1):
-> >>   genirq: Provide new interfaces for affinity hints
->
-> Did I actually write this?
+  * extended commit log to clarify that in these cases, while we
+    are not producing less lines of code we justify the move
+    because otherwise the file kernel/sysctl.c gets way out of hand
+    to maintain.
 
+  * addressed 0-day complaints
 
-Yeap, the idea and the initial patch came from you. :)
+  * the firmware loader changes requested by Greg KH were adopted
 
->
->
-> > Any suggestions on what should be the next steps here? Unfortunately, I haven't
-> > been able to get any reviews on the following two patches:
-> >   be2net: Use irq_update_affinity_hint
-> >   hinic: Use irq_set_affinity_and_hint
-> >
-> > One option would be to proceed with the remaining patches and I can try
-> > posting these two again when I post patches for the remaining drivers?
->
-> The more general question is whether I should queue all the others or
-> whether some subsystem would prefer to pull in a tagged commit on top of
-> rc1. I'm happy to carry them all of course.
->
+  * added the new sysctl mount point helper as suggested by
+    Eric W. Biederman
 
-I am fine either way.
-In the past, while I was asking for more testing help I was asked if the
-SCSI changes are part of Martins's scsi-fixes tree as that's something
-Broadcom folks test to check for regression.
-So, maybe Martin can pull this up?
+Luis Chamberlain (3):
+  sysctl: add helper to register a sysctl mount point
+  fs: move binfmt_misc sysctl to its own file
+  sysctl: share unsigned long const values
+
+Xiaoming Ni (5):
+  firmware_loader: move firmware sysctl to its own files
+  random: move the random sysctl declarations to its own file
+  printk: move printk sysctl to printk/sysctl.c
+  scsi/sg: move sg-big-buff sysctl to scsi/sg.c
+  stackleak: move stack_erasing sysctl to stackleak.c
+
+ drivers/base/firmware_loader/fallback.c       |   7 +-
+ drivers/base/firmware_loader/fallback.h       |  11 ++
+ drivers/base/firmware_loader/fallback_table.c |  21 ++-
+ drivers/char/random.c                         |  14 +-
+ drivers/scsi/sg.c                             |  35 ++++-
+ fs/binfmt_misc.c                              |   6 +-
+ fs/proc/proc_sysctl.c                         |  16 +++
+ include/linux/stackleak.h                     |   5 -
+ include/linux/sysctl.h                        |  15 ++-
+ include/scsi/sg.h                             |   4 -
+ kernel/printk/Makefile                        |   5 +-
+ kernel/printk/internal.h                      |   6 +
+ kernel/printk/printk.c                        |   1 +
+ kernel/printk/sysctl.c                        |  85 ++++++++++++
+ kernel/stackleak.c                            |  26 +++-
+ kernel/sysctl.c                               | 122 +-----------------
+ 16 files changed, 239 insertions(+), 140 deletions(-)
+ create mode 100644 kernel/printk/sysctl.c
 
 -- 
-Thanks
-Nitesh
+2.33.0
 
