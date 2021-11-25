@@ -2,41 +2,41 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBB845DD0B
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Nov 2021 16:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C385745DD16
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Nov 2021 16:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355972AbhKYPQS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 25 Nov 2021 10:16:18 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:35606 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353315AbhKYPOO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 Nov 2021 10:14:14 -0500
+        id S1350808AbhKYPSR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 25 Nov 2021 10:18:17 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:47318 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355945AbhKYPQP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 Nov 2021 10:16:15 -0500
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2040A21B36;
+        by smtp-out2.suse.de (Postfix) with ESMTP id 2A7001FDF4;
         Thu, 25 Nov 2021 15:11:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1637853062; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6UI9GunQsBtnUmKnGQMS+6Dg+8spqijiZfuVVc7sY/w=;
-        b=12rHIiCha+oplSCdK5CI2Zs0bZpVkkForrXqkF5i4c0jC1SMaHfvGm9huDAgPxbpA0O3gK
-        E/FHNnwOfmxynXTuu/nC+VvGqHSh6FLOUiTPzNw1KA/t5fjC81ISFPMultBIHRqjGpbzf8
-        GgVCDiLjMRQ3izNXxtM1tHhY5tXYkOA=
+        bh=7Y4QC8NdLscdxdXjELaPL6sQtF3cFb+QoZPqBUKZt58=;
+        b=mmxOBxrm+U+tbA7CmsvWbjVYF4F+8z5LkryZCrzoiae60hvp8EzpCOCf4O97mbxpi1KziK
+        1ygKcWkbSHMYgTXwlFRoV/LnP1E4yZkGMTcL+Zta9JYrXSoRBpfNLC/YxO2pikZtMqD1tM
+        pcW74aLL0UDWbf2lWy9vT8TDdXvZXao=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1637853062;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6UI9GunQsBtnUmKnGQMS+6Dg+8spqijiZfuVVc7sY/w=;
-        b=YMw6rS6G7wbWSk8+FPHB9xH9jnbncuQB/RBzcurSGV9GFEDOUFT747zzNC50Zjt7JklVpZ
-        CuNmnQqehCkdUMCw==
+        bh=7Y4QC8NdLscdxdXjELaPL6sQtF3cFb+QoZPqBUKZt58=;
+        b=1CtTMZ4URue2CAtpdd5x8sQB6znkGcaKSf4b16X0SZPQowbCOaCvOfMAZbtfnT31gRrLZZ
+        L4COjaE/ODdqj0BA==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 1800FA3B93;
+        by relay2.suse.de (Postfix) with ESMTP id 228BBA3B97;
         Thu, 25 Nov 2021 15:11:02 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id BFC485191A02; Thu, 25 Nov 2021 16:11:01 +0100 (CET)
+        id C31965191A04; Thu, 25 Nov 2021 16:11:01 +0100 (CET)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
@@ -44,9 +44,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         linux-scsi@vger.kernel.org, John Garry <john.garry@huawei.com>,
         Bart van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 11/15] aacraid: move container ID into struct fib
-Date:   Thu, 25 Nov 2021 16:10:44 +0100
-Message-Id: <20211125151048.103910-12-hare@suse.de>
+Subject: [PATCH 12/15] aacraid: fsa_dev pointer is always valid
+Date:   Thu, 25 Nov 2021 16:10:45 +0100
+Message-Id: <20211125151048.103910-13-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20211125151048.103910-1-hare@suse.de>
 References: <20211125151048.103910-1-hare@suse.de>
@@ -56,125 +56,129 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add a new field 'cid' to struct fib to hold the container ID this
-I/O is destined for.
+All call sites to aac_probe_container() already check for a valid
+fsa_dev pointer, so we don't need to do that during probing.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/aacraid/aachba.c  | 19 +++++++++++--------
- drivers/scsi/aacraid/aacraid.h |  6 +++++-
- 2 files changed, 16 insertions(+), 9 deletions(-)
+ drivers/scsi/aacraid/aachba.c | 79 ++++++++++++++++-------------------
+ 1 file changed, 36 insertions(+), 43 deletions(-)
 
 diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
-index 289c4968a92e..2cc9f79c75ff 100644
+index 2cc9f79c75ff..580d74b2ee14 100644
 --- a/drivers/scsi/aacraid/aachba.c
 +++ b/drivers/scsi/aacraid/aachba.c
-@@ -646,7 +646,7 @@ static void _aac_probe_container2(void * context, struct fib * fibptr)
- 		struct aac_mount * dresp = (struct aac_mount *) fib_data(fibptr);
- 		__le32 sup_options2;
+@@ -636,49 +636,44 @@ static void _aac_probe_container2(void * context, struct fib * fibptr)
+ 	int (*callback)(struct scsi_cmnd *);
+ 	struct scsi_cmnd * scsicmd = (struct scsi_cmnd *)context;
+ 	int i;
++	struct aac_mount * dresp = (struct aac_mount *) fib_data(fibptr);
++	__le32 sup_options2;
  
--		fsa_dev_ptr += scmd_id(scsicmd);
-+		fsa_dev_ptr += fibptr->cid;
- 		sup_options2 =
- 			fibptr->dev->supplement_adapter_info.supported_options2;
  
-@@ -718,7 +718,7 @@ static void _aac_probe_container1(void * context, struct fib * fibptr)
- 	else
- 		dinfo->command = cpu_to_le32(VM_NameServe64);
+ 	if (!aac_valid_context(scsicmd, fibptr))
+ 		return;
  
--	dinfo->count = cpu_to_le32(scmd_id(scsicmd));
-+	dinfo->count = cpu_to_le32(fibptr->cid);
- 	dinfo->type = cpu_to_le32(FT_FILESYS);
- 	scsicmd->SCp.phase = AAC_OWNER_FIRMWARE;
+-	fsa_dev_ptr = fibptr->dev->fsa_dev;
+-	if (fsa_dev_ptr) {
+-		struct aac_mount * dresp = (struct aac_mount *) fib_data(fibptr);
+-		__le32 sup_options2;
++	fsa_dev_ptr = &fibptr->dev->fsa_dev[fibptr->cid];
++	sup_options2 = fibptr->dev->supplement_adapter_info.supported_options2;
  
-@@ -739,7 +739,8 @@ static void _aac_probe_container1(void * context, struct fib * fibptr)
+-		fsa_dev_ptr += fibptr->cid;
+-		sup_options2 =
+-			fibptr->dev->supplement_adapter_info.supported_options2;
+-
+-		if ((le32_to_cpu(dresp->status) == ST_OK) &&
+-		    (le32_to_cpu(dresp->mnt[0].vol) != CT_NONE) &&
+-		    (le32_to_cpu(dresp->mnt[0].state) != FSCS_HIDDEN)) {
+-			if (!(sup_options2 & AAC_OPTION_VARIABLE_BLOCK_SIZE)) {
+-				dresp->mnt[0].fileinfo.bdevinfo.block_size = 0x200;
+-				fsa_dev_ptr->block_size = 0x200;
+-			} else {
+-				fsa_dev_ptr->block_size =
+-					le32_to_cpu(dresp->mnt[0].fileinfo.bdevinfo.block_size);
+-			}
+-			for (i = 0; i < 16; i++)
+-				fsa_dev_ptr->identifier[i] =
+-					dresp->mnt[0].fileinfo.bdevinfo
+-								.identifier[i];
+-			fsa_dev_ptr->valid = 1;
+-			/* sense_key holds the current state of the spin-up */
+-			if (dresp->mnt[0].state & cpu_to_le32(FSCS_NOT_READY))
+-				fsa_dev_ptr->sense_data.sense_key = NOT_READY;
+-			else if (fsa_dev_ptr->sense_data.sense_key == NOT_READY)
+-				fsa_dev_ptr->sense_data.sense_key = NO_SENSE;
+-			fsa_dev_ptr->type = le32_to_cpu(dresp->mnt[0].vol);
+-			fsa_dev_ptr->size
+-			  = ((u64)le32_to_cpu(dresp->mnt[0].capacity)) +
+-			    (((u64)le32_to_cpu(dresp->mnt[0].capacityhigh)) << 32);
+-			fsa_dev_ptr->ro = ((le32_to_cpu(dresp->mnt[0].state) & FSCS_READONLY) != 0);
++	if ((le32_to_cpu(dresp->status) == ST_OK) &&
++	    (le32_to_cpu(dresp->mnt[0].vol) != CT_NONE) &&
++	    (le32_to_cpu(dresp->mnt[0].state) != FSCS_HIDDEN)) {
++		if (!(sup_options2 & AAC_OPTION_VARIABLE_BLOCK_SIZE)) {
++			dresp->mnt[0].fileinfo.bdevinfo.block_size = 0x200;
++			fsa_dev_ptr->block_size = 0x200;
++		} else {
++			fsa_dev_ptr->block_size =
++				le32_to_cpu(dresp->mnt[0].fileinfo.bdevinfo.block_size);
+ 		}
+-		if ((fsa_dev_ptr->valid & 1) == 0)
+-			fsa_dev_ptr->valid = 0;
++		for (i = 0; i < 16; i++)
++			fsa_dev_ptr->identifier[i] =
++				dresp->mnt[0].fileinfo.bdevinfo.identifier[i];
++		fsa_dev_ptr->valid = 1;
++		/* sense_key holds the current state of the spin-up */
++		if (dresp->mnt[0].state & cpu_to_le32(FSCS_NOT_READY))
++			fsa_dev_ptr->sense_data.sense_key = NOT_READY;
++		else if (fsa_dev_ptr->sense_data.sense_key == NOT_READY)
++			fsa_dev_ptr->sense_data.sense_key = NO_SENSE;
++		fsa_dev_ptr->type = le32_to_cpu(dresp->mnt[0].vol);
++		fsa_dev_ptr->size
++			= ((u64)le32_to_cpu(dresp->mnt[0].capacity)) +
++			(((u64)le32_to_cpu(dresp->mnt[0].capacityhigh)) << 32);
++		fsa_dev_ptr->ro = ((le32_to_cpu(dresp->mnt[0].state) & FSCS_READONLY) != 0);
  	}
- }
- 
--static int _aac_probe_container(struct scsi_cmnd * scsicmd, int (*callback)(struct scsi_cmnd *))
-+static int _aac_probe_container(struct scsi_cmnd * scsicmd, unsigned int cid,
-+				int (*callback)(struct scsi_cmnd *))
++	if ((fsa_dev_ptr->valid & 1) == 0)
++		fsa_dev_ptr->valid = 0;
++
+ 	aac_fib_complete(fibptr);
+ 	aac_fib_free(fibptr);
+ 	callback = (int (*)(struct scsi_cmnd *))(scsicmd->SCp.ptr);
+@@ -742,10 +737,12 @@ static void _aac_probe_container1(void * context, struct fib * fibptr)
+ static int _aac_probe_container(struct scsi_cmnd * scsicmd, unsigned int cid,
+ 				int (*callback)(struct scsi_cmnd *))
  {
++	struct aac_dev * dev =
++		(struct aac_dev *)scsicmd->device->host->hostdata;
  	struct fib * fibptr;
  	int status = -ENOMEM;
-@@ -748,6 +749,7 @@ static int _aac_probe_container(struct scsi_cmnd * scsicmd, int (*callback)(stru
+ 
+-	if ((fibptr = aac_fib_alloc((struct aac_dev *)scsicmd->device->host->hostdata))) {
++	if ((fibptr = aac_fib_alloc(dev))) {
  		struct aac_query_mount *dinfo;
  
  		aac_fib_init(fibptr);
-+		fibptr->cid = cid;
- 
- 		dinfo = (struct aac_query_mount *)fib_data(fibptr);
- 
-@@ -757,7 +759,7 @@ static int _aac_probe_container(struct scsi_cmnd * scsicmd, int (*callback)(stru
- 		else
- 			dinfo->command = cpu_to_le32(VM_NameServe);
- 
--		dinfo->count = cpu_to_le32(scmd_id(scsicmd));
-+		dinfo->count = cpu_to_le32(fibptr->cid);
- 		dinfo->type = cpu_to_le32(FT_FILESYS);
- 		scsicmd->SCp.ptr = (char *)callback;
- 		scsicmd->SCp.phase = AAC_OWNER_FIRMWARE;
-@@ -784,7 +786,7 @@ static int _aac_probe_container(struct scsi_cmnd * scsicmd, int (*callback)(stru
+@@ -784,13 +781,9 @@ static int _aac_probe_container(struct scsi_cmnd * scsicmd, unsigned int cid,
+ 		}
+ 	}
  	if (status < 0) {
- 		struct fsa_dev_info *fsa_dev_ptr = ((struct aac_dev *)(scsicmd->device->host->hostdata))->fsa_dev;
- 		if (fsa_dev_ptr) {
--			fsa_dev_ptr += scmd_id(scsicmd);
-+			fsa_dev_ptr += cid;
- 			if ((fsa_dev_ptr->valid & 1) == 0) {
- 				fsa_dev_ptr->valid = 0;
- 				return (*callback)(scsicmd);
-@@ -812,7 +814,7 @@ static void aac_probe_container_scsi_done(struct scsi_cmnd *scsi_cmnd)
- 	aac_probe_container_callback1(scsi_cmnd);
- }
- 
--int aac_probe_container(struct aac_dev *dev, int cid)
-+int aac_probe_container(struct aac_dev *dev, unsigned int cid)
- {
- 	struct scsi_cmnd *scsicmd = kzalloc(sizeof(*scsicmd), GFP_KERNEL);
- 	struct scsi_device *scsidev = kzalloc(sizeof(*scsidev), GFP_KERNEL);
-@@ -829,7 +831,8 @@ int aac_probe_container(struct aac_dev *dev, int cid)
- 	scsidev->id = cid;
- 	scsidev->host = dev->scsi_host_ptr;
- 
--	status = _aac_probe_container(scsicmd, aac_probe_container_callback1);
-+	status = _aac_probe_container(scsicmd, cid,
-+				      aac_probe_container_callback1);
- 	if (status == 0)
- 		while (scsicmd->device == scsidev)
- 			schedule();
-@@ -2811,7 +2814,7 @@ int aac_scsi_cmd(struct scsi_cmnd * scsicmd)
- 				case TEST_UNIT_READY:
- 					if (dev->in_reset)
- 						return SCSI_MLQUEUE_DEVICE_BUSY;
--					return _aac_probe_container(scsicmd,
-+					return _aac_probe_container(scsicmd, cid,
- 							aac_probe_container_callback2);
- 				default:
- 					break;
-diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
-index 3733df77bc65..90705c4f8ec8 100644
---- a/drivers/scsi/aacraid/aacraid.h
-+++ b/drivers/scsi/aacraid/aacraid.h
-@@ -1298,6 +1298,10 @@ struct fib {
- 	 *	The Adapter that this I/O is destined for.
- 	 */
- 	struct aac_dev		*dev;
-+	/*
-+	 *	The Container that this I/O is destined for.
-+	 */
-+	u32			cid;
- 	/*
- 	 *	This is the event the sendfib routine will wait on if the
- 	 *	caller did not pass one and this is synch io.
-@@ -2734,7 +2738,7 @@ int aac_fib_adapter_complete(struct fib * fibptr, unsigned short size);
- struct aac_driver_ident* aac_get_driver_ident(int devtype);
- int aac_get_adapter_info(struct aac_dev* dev);
- int aac_send_shutdown(struct aac_dev *dev);
--int aac_probe_container(struct aac_dev *dev, int cid);
-+int aac_probe_container(struct aac_dev *dev, unsigned int cid);
- int _aac_rx_init(struct aac_dev *dev);
- int aac_rx_select_comm(struct aac_dev *dev, int comm);
- int aac_rx_deliver_producer(struct fib * fib);
+-		struct fsa_dev_info *fsa_dev_ptr = ((struct aac_dev *)(scsicmd->device->host->hostdata))->fsa_dev;
+-		if (fsa_dev_ptr) {
+-			fsa_dev_ptr += cid;
+-			if ((fsa_dev_ptr->valid & 1) == 0) {
+-				fsa_dev_ptr->valid = 0;
+-				return (*callback)(scsicmd);
+-			}
++		if ((dev->fsa_dev[cid].valid & 1) == 0) {
++			dev->fsa_dev[cid].valid = 0;
++			return (*callback)(scsicmd);
+ 		}
+ 	}
+ 	return status;
 -- 
 2.29.2
 
