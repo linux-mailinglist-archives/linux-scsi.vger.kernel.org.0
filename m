@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C15545DD0E
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Nov 2021 16:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 029A845DD0D
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Nov 2021 16:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355982AbhKYPQV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 25 Nov 2021 10:16:21 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:47110 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353986AbhKYPOO (ORCPT
+        id S1355975AbhKYPQT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 25 Nov 2021 10:16:19 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:35628 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354002AbhKYPOO (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 Nov 2021 10:14:14 -0500
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1C9201FD40;
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2322021B37;
         Thu, 25 Nov 2021 15:11:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1637853062; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vG1NsW9Ym2IChL7Z2Nlxo8rK9NdubQtAdZTF8Jc0FeU=;
-        b=AMA9WyPWYvkD+hKCcIy0DdVT6El9MqS2LT0nta+cwKn7+kQqdUXh0JT3Rm6Eryt9ILwww9
-        KIZ8qmI3ST7NH7qQIVfFHZ8KwN64uupVPlLSOGc80J2R/UlsmsZvOCr+ZJ239DCMK7CoHT
-        PutgYzyXf9el0o9mNncw/ZXQCz2DC1o=
+        bh=AixfXiIGH2bhLD5l9eshfBQ/VT0uzH9fb4WosDxbBno=;
+        b=uNw8zuYBXHcoCDBcKpyYAnSAlKujsaqXJNdFY7+Vy/qRIiJfD9y7feH62Yq6Boz7vtzi5D
+        lKPMWkjQbnDpWGooIxj1/bjG0d2oXRWsNT9OtUF62gqeVC3oJcHbEWhj+s4UyAKjRNaxjC
+        Gbly8Ic0gxC05nYqXXlgSfEQ5EVpOCQ=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1637853062;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vG1NsW9Ym2IChL7Z2Nlxo8rK9NdubQtAdZTF8Jc0FeU=;
-        b=GkKzHA+MjSQTWDzz0SS8FoxOg1vetQFKno0nyfA02I/UD2XaVLOD58OlVbwV+yVxqwBcZG
-        t08Jg1ZKu36igoCg==
+        bh=AixfXiIGH2bhLD5l9eshfBQ/VT0uzH9fb4WosDxbBno=;
+        b=Bc7Yx95wXnkdyOtxCUHpvvNKmcPF6wh9GfspHh1PkbE4EBugOVpnJBYWvS1nX/Ew7w+8+E
+        Js2LpPT72ySCvdAg==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 14744A3B91;
+        by relay2.suse.de (Postfix) with ESMTP id 174A4A3B92;
         Thu, 25 Nov 2021 15:11:02 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id B8D0251919FE; Thu, 25 Nov 2021 16:11:01 +0100 (CET)
+        id BC56B5191A00; Thu, 25 Nov 2021 16:11:01 +0100 (CET)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, John Garry <john.garry@huawei.com>,
         Bart van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 09/15] aacraid: don't bother with setting SCp.Status
-Date:   Thu, 25 Nov 2021 16:10:42 +0100
-Message-Id: <20211125151048.103910-10-hare@suse.de>
+        Hannes Reinecke <hare@suse.de>, Hannes Reinecke <hare@suse.com>
+Subject: [PATCH 10/15] aacraid: move scsi_add_host()
+Date:   Thu, 25 Nov 2021 16:10:43 +0100
+Message-Id: <20211125151048.103910-11-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20211125151048.103910-1-hare@suse.de>
 References: <20211125151048.103910-1-hare@suse.de>
@@ -56,53 +56,98 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SCp.Status is only ever evaluated to set the return code of
-aac_probe_container(), and all callers only check for negative
-values here. The callbacks set it to the value of aac_mount.count,
-which is an unsigned int; as such it should never become negative
-here, and so we only need to return an error from aac_probe_container()
-if we can't send the initial fib. But once that's done we can return
-'0' and don't need to set SCp.Status at all.
+Move the call to scsi_add_host() so that the Scsi_Host structure
+is initialized before any I/O is sent.
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/aacraid/aachba.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/scsi/aacraid/linit.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
-index 5b309a8beab8..289c4968a92e 100644
---- a/drivers/scsi/aacraid/aachba.c
-+++ b/drivers/scsi/aacraid/aachba.c
-@@ -641,7 +641,6 @@ static void _aac_probe_container2(void * context, struct fib * fibptr)
- 	if (!aac_valid_context(scsicmd, fibptr))
- 		return;
+diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
+index a911252075a6..b92a6595358e 100644
+--- a/drivers/scsi/aacraid/linit.c
++++ b/drivers/scsi/aacraid/linit.c
+@@ -1643,6 +1643,9 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	shost->irq = pdev->irq;
+ 	shost->unique_id = unique_id;
+ 	shost->max_cmd_len = 16;
++	shost->max_id = MAXIMUM_NUM_CONTAINERS;
++	shost->max_lun = AAC_MAX_LUN;
++	shost->sg_tablesize = HBA_MAX_SG_SEPARATE;
  
--	scsicmd->SCp.Status = 0;
- 	fsa_dev_ptr = fibptr->dev->fsa_dev;
- 	if (fsa_dev_ptr) {
- 		struct aac_mount * dresp = (struct aac_mount *) fib_data(fibptr);
-@@ -679,7 +678,6 @@ static void _aac_probe_container2(void * context, struct fib * fibptr)
- 		}
- 		if ((fsa_dev_ptr->valid & 1) == 0)
- 			fsa_dev_ptr->valid = 0;
--		scsicmd->SCp.Status = le32_to_cpu(dresp->count);
+ 	if (aac_cfg_major == AAC_CHARDEV_NEEDS_REINIT)
+ 		aac_init_char();
+@@ -1681,7 +1684,7 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	aac->base_size = AAC_MIN_FOOTPRINT_SIZE;
+ 	if ((*aac_drivers[index].init)(aac)) {
+ 		error = -ENODEV;
+-		goto out_unmap;
++		goto out_free_fibs;
  	}
- 	aac_fib_complete(fibptr);
- 	aac_fib_free(fibptr);
-@@ -831,11 +829,11 @@ int aac_probe_container(struct aac_dev *dev, int cid)
- 	scsidev->id = cid;
- 	scsidev->host = dev->scsi_host_ptr;
  
--	if (_aac_probe_container(scsicmd, aac_probe_container_callback1) == 0)
-+	status = _aac_probe_container(scsicmd, aac_probe_container_callback1);
-+	if (status == 0)
- 		while (scsicmd->device == scsidev)
- 			schedule();
- 	kfree(scsidev);
--	status = scsicmd->SCp.Status;
- 	kfree(scsicmd);
- 	return status;
- }
+ 	if (aac->sync_mode) {
+@@ -1707,9 +1710,15 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		printk(KERN_ERR "aacraid: Unable to create command thread.\n");
+ 		error = PTR_ERR(aac->thread);
+ 		aac->thread = NULL;
+-		goto out_deinit;
++		goto out_unmap;
+ 	}
+ 
++	pci_set_drvdata(pdev, shost);
++
++	error = scsi_add_host(shost, &pdev->dev);
++	if (error)
++		goto out_deinit;
++
+ 	aac->maximum_num_channels = aac_drivers[index].channels;
+ 	error = aac_get_adapter_info(aac);
+ 	if (error < 0)
+@@ -1768,18 +1777,6 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (!aac->sa_firmware && aac_drivers[index].quirks & AAC_QUIRK_SRC)
+ 		aac_intr_normal(aac, 0, 2, 0, NULL);
+ 
+-	/*
+-	 * dmb - we may need to move the setting of these parms somewhere else once
+-	 * we get a fib that can report the actual numbers
+-	 */
+-	shost->max_lun = AAC_MAX_LUN;
+-
+-	pci_set_drvdata(pdev, shost);
+-
+-	error = scsi_add_host(shost, &pdev->dev);
+-	if (error)
+-		goto out_deinit;
+-
+ 	aac_scan_host(aac);
+ 
+ 	pci_enable_pcie_error_reporting(pdev);
+@@ -1796,10 +1793,12 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 				  aac->comm_addr, aac->comm_phys);
+ 	kfree(aac->queues);
+ 	aac_adapter_ioremap(aac, 0);
+-	kfree(aac->fibs);
+ 	kfree(aac->fsa_dev);
++ out_free_fibs:
++	kfree(aac->fibs);
+  out_free_host:
+ 	scsi_host_put(shost);
++	pci_set_drvdata(pdev, NULL);
+  out_disable_pdev:
+ 	pci_disable_device(pdev);
+  out:
+@@ -1907,9 +1906,9 @@ static void aac_remove_one(struct pci_dev *pdev)
+ 	struct aac_dev *aac = (struct aac_dev *)shost->hostdata;
+ 
+ 	aac_cancel_rescan_worker(aac);
+-	scsi_remove_host(shost);
+ 
+ 	__aac_shutdown(aac);
++	scsi_remove_host(shost);
+ 	aac_fib_map_free(aac);
+ 	dma_free_coherent(&aac->pdev->dev, aac->comm_size, aac->comm_addr,
+ 			  aac->comm_phys);
 -- 
 2.29.2
 
