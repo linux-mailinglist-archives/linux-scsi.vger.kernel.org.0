@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A86145DD0A
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Nov 2021 16:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C0D45DD14
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Nov 2021 16:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355970AbhKYPQQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 25 Nov 2021 10:16:16 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:35594 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352737AbhKYPOO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 Nov 2021 10:14:14 -0500
+        id S1349951AbhKYPSQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 25 Nov 2021 10:18:16 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:47314 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355934AbhKYPQP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 Nov 2021 10:16:15 -0500
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1FCE421958;
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1EC0E1FDF1;
         Thu, 25 Nov 2021 15:11:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1637853062; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KNJ+5EKwl8ip9Irsdt0s9rcAwv+gUoSSmRF9tpHxDjc=;
-        b=j2rYBPLPvP2AvVT5h9oOT23bQeWndF9KT+b2jUegt13Q86V+SSFgMnSdOgRjDxEaQg/asH
-        vi3AIOm4TrPTaxmiIefNTl7RGO33SytaASVvpUzRRUW2y+BN7eH/11u/CGb1jswnAufp8l
-        S0u7+Xx6Eg1/OSst7ziTpIgTEuQ5/7w=
+        bh=W1iiLtv7xN/hVkIOxGQ3FKUObDTQbP+0SPmvUzVX3Cw=;
+        b=m/n6gI11e2lvuguvgpfYf3ua6LI7/0vZMW8ChGspq1VMQ138wKdKmRv0EhuT/w0HJA9d1P
+        QPJFqgSAfBozZksipwoLx8ZLe15C9ryVu9FhCKJCKA2dpYMyPYjhJdFOVueflWq68EOmg5
+        vbFnGkN5qlZPIpvnKi+/lWFn4gdkD1k=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1637853062;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KNJ+5EKwl8ip9Irsdt0s9rcAwv+gUoSSmRF9tpHxDjc=;
-        b=8M4Uin3Vs4pNYi3z1UBgZwUiIirOt9qRanzXV6kmPy5/dUb5WY44X2MI4EjqI/DITLo6xg
-        YA6bAtByyx7tV1Aw==
+        bh=W1iiLtv7xN/hVkIOxGQ3FKUObDTQbP+0SPmvUzVX3Cw=;
+        b=zmvmWgvJmu/QTW+bPqZ95x4WZ/5tcoKQJH8AJz/mxlcMhzOwhym3GHffZwIFR8lE8ix+x8
+        Wx6Kere13TACL1AA==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 13475A3B90;
+        by relay2.suse.de (Postfix) with ESMTP id 10D8AA3B8D;
         Thu, 25 Nov 2021 15:11:02 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id B139A51919FA; Thu, 25 Nov 2021 16:11:01 +0100 (CET)
+        id B558951919FC; Thu, 25 Nov 2021 16:11:01 +0100 (CET)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, John Garry <john.garry@huawei.com>,
         Bart van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.de>, Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 07/15] hpsa: drop refcount field from CommandList
-Date:   Thu, 25 Nov 2021 16:10:40 +0100
-Message-Id: <20211125151048.103910-8-hare@suse.de>
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCH 08/15] aacraid: return valid status from aac_scsi_cmd()
+Date:   Thu, 25 Nov 2021 16:10:41 +0100
+Message-Id: <20211125151048.103910-9-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20211125151048.103910-1-hare@suse.de>
 References: <20211125151048.103910-1-hare@suse.de>
@@ -56,80 +56,83 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Field is now unused, so drop it.
+aac_scsi_cmd() is called directly from .queuecommand(), and should
+to return valid SCSI_MLQUEUE_XXX status codes.
 
-Signed-off-by: Hannes Reinecke <hare@suse.com>
+Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/hpsa.c     | 11 ++---------
- drivers/scsi/hpsa_cmd.h | 10 ----------
- 2 files changed, 2 insertions(+), 19 deletions(-)
+ drivers/scsi/aacraid/aachba.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index 23babe177f5d..08cf9f570c1e 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -5537,8 +5537,8 @@ static void hpsa_cmd_init(struct ctlr_info *h, int index,
- {
- 	dma_addr_t cmd_dma_handle, err_dma_handle;
+diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
+index 59f6b7b2a70a..5b309a8beab8 100644
+--- a/drivers/scsi/aacraid/aachba.c
++++ b/drivers/scsi/aacraid/aachba.c
+@@ -2775,8 +2775,11 @@ int aac_scsi_cmd(struct scsi_cmnd * scsicmd)
+ 	struct aac_dev *dev = (struct aac_dev *)host->hostdata;
+ 	struct fsa_dev_info *fsa_dev_ptr = dev->fsa_dev;
  
--	/* Zero out all of commandlist except the last field, refcount */
--	memset(c, 0, offsetof(struct CommandList, refcount));
-+	/* Zero out all of commandlist */
-+	memset(c, 0, sizeof(struct CommandList));
- 	c->Header.tag = cpu_to_le64((u64) (index << DIRECT_LOOKUP_SHIFT));
- 	cmd_dma_handle = h->cmd_pool_dhandle + index * sizeof(*c);
- 	c->err_info = h->errinfo_pool + index;
-@@ -5560,7 +5560,6 @@ static void hpsa_preinitialize_commands(struct ctlr_info *h)
- 		struct CommandList *c = h->cmd_pool + i;
- 
- 		hpsa_cmd_init(h, i, c);
--		atomic_set(&c->refcount, 0);
- 	}
- }
- 
-@@ -6171,7 +6170,6 @@ static struct CommandList *cmd_tagged_alloc(struct ctlr_info *h,
- 		return NULL;
- 	}
- 
--	atomic_inc(&c->refcount);
- 	hpsa_cmd_partial_init(h, idx, c);
- 
+-	if (fsa_dev_ptr == NULL)
+-		return -1;
++	if (fsa_dev_ptr == NULL) {
++		scsicmd->result = DID_NO_CONNECT << 16;
++		goto scsi_done_ret;
++	}
++
  	/*
-@@ -6185,11 +6183,6 @@ static struct CommandList *cmd_tagged_alloc(struct ctlr_info *h,
+ 	 *	If the bus, id or lun is out of range, return fail
+ 	 *	Test does not apply to ID 16, the pseudo id for the controller
+@@ -2809,7 +2812,7 @@ int aac_scsi_cmd(struct scsi_cmnd * scsicmd)
+ 				case READ_CAPACITY:
+ 				case TEST_UNIT_READY:
+ 					if (dev->in_reset)
+-						return -1;
++						return SCSI_MLQUEUE_DEVICE_BUSY;
+ 					return _aac_probe_container(scsicmd,
+ 							aac_probe_container_callback2);
+ 				default:
+@@ -2823,12 +2826,12 @@ int aac_scsi_cmd(struct scsi_cmnd * scsicmd)
+ 				dev->hba_map[bus][cid].devtype
+ 					== AAC_DEVTYPE_NATIVE_RAW) {
+ 				if (dev->in_reset)
+-					return -1;
++					return SCSI_MLQUEUE_DEVICE_BUSY;
+ 				return aac_send_hba_fib(scsicmd);
+ 			} else if (dev->nondasd_support || expose_physicals ||
+ 				dev->jbod) {
+ 				if (dev->in_reset)
+-					return -1;
++					return SCSI_MLQUEUE_DEVICE_BUSY;
+ 				return aac_send_srb_fib(scsicmd);
+ 			} else {
+ 				scsicmd->result = DID_NO_CONNECT << 16;
+@@ -2859,7 +2862,7 @@ int aac_scsi_cmd(struct scsi_cmnd * scsicmd)
+ 	case READ_12:
+ 	case READ_16:
+ 		if (dev->in_reset)
+-			return -1;
++			return SCSI_MLQUEUE_DEVICE_BUSY;
+ 		return aac_read(scsicmd);
  
- static void cmd_tagged_free(struct ctlr_info *h, struct CommandList *c)
- {
--	/*
--	 * Release our reference to the block.  We don't need to do anything
--	 * else to free it, because it is accessed by index.
--	 */
--	(void)atomic_dec(&c->refcount);
- 	c->scsi_cmd = NULL;
- }
+ 	case WRITE_6:
+@@ -2867,7 +2870,7 @@ int aac_scsi_cmd(struct scsi_cmnd * scsicmd)
+ 	case WRITE_12:
+ 	case WRITE_16:
+ 		if (dev->in_reset)
+-			return -1;
++			return SCSI_MLQUEUE_DEVICE_BUSY;
+ 		return aac_write(scsicmd);
  
-diff --git a/drivers/scsi/hpsa_cmd.h b/drivers/scsi/hpsa_cmd.h
-index ba6a3aa8d954..04c92c94cc6c 100644
---- a/drivers/scsi/hpsa_cmd.h
-+++ b/drivers/scsi/hpsa_cmd.h
-@@ -454,18 +454,8 @@ struct CommandList {
- 
- 	bool retry_pending;
- 	struct hpsa_scsi_dev_t *device;
--	atomic_t refcount; /* Must be last to avoid memset in hpsa_cmd_init() */
- } __aligned(COMMANDLIST_ALIGNMENT);
- 
--/*
-- * Make sure our embedded atomic variable is aligned. Otherwise we break atomic
-- * operations on architectures that don't support unaligned atomics like IA64.
-- *
-- * The assert guards against reintroductin against unwanted __packed to
-- * the struct CommandList.
-- */
--static_assert(offsetof(struct CommandList, refcount) % __alignof__(atomic_t) == 0);
--
- /* Max S/G elements in I/O accelerator command */
- #define IOACCEL1_MAXSGENTRIES           24
- #define IOACCEL2_MAXSGENTRIES		28
+ 	case SYNCHRONIZE_CACHE:
+@@ -2954,7 +2957,7 @@ int aac_scsi_cmd(struct scsi_cmnd * scsicmd)
+ 			break;
+ 		}
+ 		if (dev->in_reset)
+-			return -1;
++			return SCSI_MLQUEUE_DEVICE_BUSY;
+ 		setinqstr(dev, (void *) (inq_data.inqd_vid), fsa_dev_ptr[cid].type);
+ 		inq_data.inqd_pdt = INQD_PDT_DA;	/* Direct/random access device */
+ 		scsi_sg_copy_from_buffer(scsicmd, &inq_data, sizeof(inq_data));
 -- 
 2.29.2
 
