@@ -2,129 +2,175 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA8745D576
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 Nov 2021 08:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3CD45DD0C
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 Nov 2021 16:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236064AbhKYHck (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 25 Nov 2021 02:32:40 -0500
-Received: from mga04.intel.com ([192.55.52.120]:29119 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234057AbhKYHaj (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 25 Nov 2021 02:30:39 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10178"; a="234192255"
-X-IronPort-AV: E=Sophos;i="5.87,262,1631602800"; 
-   d="scan'208";a="234192255"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2021 23:27:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,262,1631602800"; 
-   d="scan'208";a="675142606"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 24 Nov 2021 23:27:26 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mq9AD-0005xm-Cq; Thu, 25 Nov 2021 07:27:25 +0000
-Date:   Thu, 25 Nov 2021 15:26:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Konstantin Shelekhin <k.shelekhin@yadro.com>,
-        Martin Petersen <martin.petersen@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        target-devel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linux-scsi@vger.kernel.org,
-        linux@yadro.com, Konstantin Shelekhin <k.shelekhin@yadro.com>,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: Re: [PATCH 2/2] scsi: target: iblock: Report space allocation errors
-Message-ID: <202111251517.Xys8GZym-lkp@intel.com>
-References: <20211020184319.588002-3-k.shelekhin@yadro.com>
+        id S1355971AbhKYPQQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 25 Nov 2021 10:16:16 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:47086 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353289AbhKYPOO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 Nov 2021 10:14:14 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 11E511FD3D;
+        Thu, 25 Nov 2021 15:11:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1637853062; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=dA7Dmc4olRP0G4ydFs7HGuiiT5FgmeXvV+AOkou6stw=;
+        b=LF6Jz52+PDJ17/hSFmm7fmSQDfj/DOahO8bSOdd43VLMA+hTN8WVAMXbK5oRWspsL1a4cY
+        ixw177oow8jzt7NHHZUHgnjtIF7Alos8CE2hws6NWbSEt9n5o6qvHMl0/AaCYrBlY82uJy
+        MupB/h9hz9nbVG+GV/QToR4OVaeqKy4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1637853062;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=dA7Dmc4olRP0G4ydFs7HGuiiT5FgmeXvV+AOkou6stw=;
+        b=c1Zg8FDWe+31Z7abjnt9WiOYQBZ4oGDP7yhd/1II09WiGSzu7AUdUIQYns9UVwOEbehFlU
+        cfQ7WdAfNzI++eAg==
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id 9DEEEA3B85;
+        Thu, 25 Nov 2021 15:11:01 +0000 (UTC)
+Received: by adalid.arch.suse.de (Postfix, from userid 16045)
+        id 8F53551919EC; Thu, 25 Nov 2021 16:11:01 +0100 (CET)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Bart van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCHv9 00/15] scsi: enabled reserved commands for LLDDs
+Date:   Thu, 25 Nov 2021 16:10:33 +0100
+Message-Id: <20211125151048.103910-1-hare@suse.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211020184319.588002-3-k.shelekhin@yadro.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Konstantin,
+Hi all,
 
-Thank you for the patch! Perhaps something to improve:
+quite some drivers use internal commands for various purposes, most
+commonly sending TMFs or querying the HBA status.
+While these commands use the same submission mechanism than normal
+I/O commands, they will not be counted as outstanding commands,
+requiring those drivers to implement their own mechanism to figure
+out outstanding commands.
+The block layer already has the concept of 'reserved' tags for
+precisely this purpose, namely non-I/O tags which live off a separate
+tag pool. That guarantees that these commands can always be sent,
+and won't be influenced by tag starvation from the I/O tag pool.
+This patchset enables the use of reserved tags for the SCSI midlayer
+by allocating a virtual LUN for the HBA itself which just serves
+as a resource to allocate valid tags from.
 
-[auto build test WARNING on mkp-scsi/for-next]
-[also build test WARNING on v5.16-rc2 next-20211125]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Command allocation currently ignores the hardware queues, as none
+of the modified drivers is mq-capable.
 
-url:    https://github.com/0day-ci/linux/commits/Konstantin-Shelekhin/scsi-target-iblock-Report-space-allocation-errors/20211021-024526
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-config: i386-randconfig-s001-20211021 (https://download.01.org/0day-ci/archive/20211125/202111251517.Xys8GZym-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/15d4d8f9601b04ee21f8f6042481828c4c34f6b7
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Konstantin-Shelekhin/scsi-target-iblock-Report-space-allocation-errors/20211021-024526
-        git checkout 15d4d8f9601b04ee21f8f6042481828c4c34f6b7
-        # save the config file to linux build tree
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=i386 
+This patchset is being sent out as a base for the current discussion
+for enabling reserved commands for the UFS driver; idea is to
+base those patches on top of this one if we are agree that this
+is the way forward.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The entire patchset can be found at
 
+git://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+reserved-tags.v9
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/target/target_core_iblock.c:329:57: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted blk_status_t [usertype] status @@     got int @@
-   drivers/target/target_core_iblock.c:329:57: sparse:     expected restricted blk_status_t [usertype] status
-   drivers/target/target_core_iblock.c:329:57: sparse:     got int
->> drivers/target/target_core_iblock.c:351:61: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected int new @@     got restricted blk_status_t [usertype] bi_status @@
-   drivers/target/target_core_iblock.c:351:61: sparse:     expected int new
-   drivers/target/target_core_iblock.c:351:61: sparse:     got restricted blk_status_t [usertype] bi_status
+As usual, comments and reviews are welcome.
 
-vim +329 drivers/target/target_core_iblock.c
+Changes to v8:
+- Drop changes to fnic and snic
+- Rebase after scsi_get_host_dev() removal
+- Rework aacraid to store callback pointer in host_scribble
 
-   319	
-   320	static void iblock_complete_cmd(struct se_cmd *cmd)
-   321	{
-   322		struct iblock_req *ibr = cmd->priv;
-   323		u8 status;
-   324		sense_reason_t reason;
-   325	
-   326		if (!refcount_dec_and_test(&ibr->pending))
-   327			return;
-   328	
- > 329		reason = iblock_blk_status_to_reason(atomic_read(&ibr->status));
-   330	
-   331		if (reason != TCM_NO_SENSE)
-   332			status = SAM_STAT_CHECK_CONDITION;
-   333		else
-   334			status = SAM_STAT_GOOD;
-   335	
-   336		target_complete_cmd_with_sense(cmd, status, reason);
-   337		kfree(ibr);
-   338	}
-   339	
-   340	static void iblock_bio_done(struct bio *bio)
-   341	{
-   342		struct se_cmd *cmd = bio->bi_private;
-   343		struct iblock_req *ibr = cmd->priv;
-   344	
-   345		if (bio->bi_status) {
-   346			pr_err("bio error: %p,  err: %d\n", bio, bio->bi_status);
-   347			/*
-   348			 * Set the error status of the iblock request to the error
-   349			 * status of the first failed bio.
-   350			 */
- > 351			atomic_cmpxchg(&ibr->status, BLK_STS_OK, bio->bi_status);
-   352			smp_mb__after_atomic();
-   353		}
-   354	
-   355		bio_put(bio);
-   356	
-   357		iblock_complete_cmd(cmd);
-   358	}
-   359	
+Changes to v7:
+- Drop changes to hisi_sas, pm8001, and mv_sas
+- Drop patch to introduce REQ_INTERNAL flag
+- Include reviews from John Garry
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changes to v6:
+- Remove patch to drop gdth
+- Rework libsas to use a tag per slow task
+- Update hisi_sas, pm8001, and mv_sas
+
+Changes to v5:
+- Remove patch for csiostor
+- Warn on normal commands in scsi_put_reserved_cmd()
+- Fixup aacraid to not only scsi_put_internal_cmd() for
+  reserved commands
+- Add 'nr_reserved_cmds' field to host template
+- Reshuffle patches
+
+Changes to v4:
+- Fixup kbuild warning
+- Include reviews from Bart
+
+Changes to v3:
+- Kill gdth
+- Only convert fnic, snic, hpsa, and aacraid
+- Drop command emulation for pseudo host device
+- make 'can_queue' exclude the number or reserved tags
+- Drop persistent commands proposal
+- Sanitize host device handling
+
+Changes to v2:
+- Update patches from John Garry
+- Use virtual LUN as suggested by Christoph
+- Improve SCSI Host device to present a real SCSI device
+- Implement 'persistent' commands for AENs
+- Convert Megaraid SAS
+
+Changes to v1:
+- Make scsi_{get, put}_reserved_cmd() for Scsi host
+- Previously we separate scsi_{get, put}_reserved_cmd() for sdev
+  and scsi_host_get_reserved_cmd() for the host
+- Fix how Scsi_Host.can_queue is set in the virtio-scsi change
+- Drop Scsi_Host.use_reserved_cmd_q
+- Drop scsi_is_reserved_cmd()
+- Add support in libsas and associated HBA drivers
+- Allocate reserved command in slow task
+- Switch hisi_sas to use reserved Scsi command
+- Reorder the series a little
+- Some tidying
+
+Hannes Reinecke (15):
+  scsi: allocate host device
+  scsi: add scsi_{get,put}_internal_cmd() helper
+  scsi: implement reserved command handling
+  hpsa: move hpsa_hba_inquiry after scsi_add_host()
+  hpsa: use reserved commands
+  hpsa: use scsi_host_busy_iter() to traverse outstanding commands
+  hpsa: drop refcount field from CommandList
+  aacraid: return valid status from aac_scsi_cmd()
+  aacraid: don't bother with setting SCp.Status
+  aacraid: move scsi_add_host()
+  aacraid: move container ID into struct fib
+  aacraid: fsa_dev pointer is always valid
+  aacraid: store callback in scsi_cmnd.host_scribble
+  aacraid: use scsi_get_internal_cmd()
+  aacraid: use scsi_host_busy_iter() to traverse outstanding commands
+
+ drivers/scsi/aacraid/aachba.c   | 208 +++++++++---------
+ drivers/scsi/aacraid/aacraid.h  |  15 +-
+ drivers/scsi/aacraid/commctrl.c |  25 ++-
+ drivers/scsi/aacraid/comminit.c |   2 +-
+ drivers/scsi/aacraid/commsup.c  | 115 +++++-----
+ drivers/scsi/aacraid/dpcsup.c   |   2 +-
+ drivers/scsi/aacraid/linit.c    | 170 +++++++--------
+ drivers/scsi/hosts.c            |  11 +
+ drivers/scsi/hpsa.c             | 364 ++++++++++++++------------------
+ drivers/scsi/hpsa.h             |   1 -
+ drivers/scsi/hpsa_cmd.h         |  10 -
+ drivers/scsi/scsi_lib.c         |  53 ++++-
+ drivers/scsi/scsi_scan.c        |  67 +++++-
+ drivers/scsi/scsi_sysfs.c       |   3 +-
+ include/scsi/scsi_device.h      |   5 +-
+ include/scsi/scsi_host.h        |  43 +++-
+ 16 files changed, 595 insertions(+), 499 deletions(-)
+
+-- 
+2.29.2
+
