@@ -2,15 +2,15 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 085A845F6F5
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Nov 2021 23:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2405C45F6C9
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Nov 2021 23:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233555AbhKZWvt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Nov 2021 17:51:49 -0500
-Received: from email.unionmem.com ([221.4.138.186]:21231 "EHLO
+        id S229575AbhKZWVk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Nov 2021 17:21:40 -0500
+Received: from email.unionmem.com ([221.4.138.186]:35559 "EHLO
         VLXDG1SPAM1.ramaxel.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234191AbhKZWts (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Nov 2021 17:49:48 -0500
+        with ESMTP id S234943AbhKZWTj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Nov 2021 17:19:39 -0500
 Received: from VLXDG1SPAM1.ramaxel.com (localhost [127.0.0.2] (may be forged))
         by VLXDG1SPAM1.ramaxel.com with ESMTP id 1AQ7rqwC023264
         for <linux-scsi@vger.kernel.org>; Fri, 26 Nov 2021 15:53:52 +0800 (GMT-8)
