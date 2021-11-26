@@ -2,74 +2,233 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A35E45E852
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Nov 2021 08:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF4B45E87E
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Nov 2021 08:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352744AbhKZHSo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Nov 2021 02:18:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352823AbhKZHQn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Nov 2021 02:16:43 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711B4C06173E
-        for <linux-scsi@vger.kernel.org>; Thu, 25 Nov 2021 23:11:31 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so12747206otl.3
-        for <linux-scsi@vger.kernel.org>; Thu, 25 Nov 2021 23:11:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=z0cb0bV016cblBzniHRfveJVZQnRfl4xk7fgQH1MP8M=;
-        b=ImpbojefOC4u+FL00Jblbw47KFfq0uJ4psheSyaIqTlDuWcX7qENAkokyPA2YJOmrF
-         2+U1VgMvpO1vIHAdKtlY8WmjeJzl3jEih+XYh82HrvER6xwLZZcnNBKM/DlWJeYYtLfj
-         LhjiObNRdq5EmhvWlY7qY0KCqyvZYbQ2NGNeaf9BEk4Gb9ssUaqMOnjIiJxlxIioVQDO
-         NgcGTJsS51zAFozzH7IL3oY8kzI8KDMLCmfdytCtbry/pWs+bQuT9QDghTn/DFeiPCBF
-         PmTAMtnBKGuBXfMMK6TXTLNZBXIR8sspb/BQSi/HxB462m5DiimnmO9xPqlcuM1Hsjwg
-         o8hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=z0cb0bV016cblBzniHRfveJVZQnRfl4xk7fgQH1MP8M=;
-        b=TYs1BDmQQSVh9CbbpbcL3m7kbr0ubuUsdYaEkWVwnva6JeOHmYYfmlxVP/iV4Drlsd
-         pJfn00ShlLvYg7DeMsKSUQQenVbEoYKDKXjUoFrmY0Zj3dS2AU1RoSZlNcz6wTUzIkU8
-         W1ILt57wrhBU9y/rIO4PB+s6bqBbU1uAjPzVTJNu8fyPCv+hwPvczkbUa57EYePQGJkM
-         MM52913jgg9M7t8p5Wbt3ycbxe7zrvd+a2St+IzmekizVc6SuyisQGIZ1SXQcYtvsgSK
-         w2SPufZCDy8kiNkHNraqpmGXKARWAMyNEoV0ht5IGgnOZ7U1GB781+DSA1LqUTIe1euH
-         mG6A==
-X-Gm-Message-State: AOAM532LcedH9BXqEAoEgrRsRO3io+d/RWEw5Mxa+TRO846egFzJdaZ5
-        b7jVTQMAPoEEBW1Xjf1y8vkLrc1rOzlxxVyVQ/w=
-X-Google-Smtp-Source: ABdhPJxeo2D2oedNRpAQSBpRO2Bc6X6RYAYshJxduHdULmOgoUAVbxJzfEc6wFlH/7i7/J25q0xYAnEGmHm+SRx5VV0=
-X-Received: by 2002:a05:6830:1514:: with SMTP id k20mr25755509otp.147.1637910690744;
- Thu, 25 Nov 2021 23:11:30 -0800 (PST)
+        id S244870AbhKZHfT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Nov 2021 02:35:19 -0500
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:6622 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1359212AbhKZHdS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 26 Nov 2021 02:33:18 -0500
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AQ3DUk0011859;
+        Thu, 25 Nov 2021 23:30:01 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=fS1hKbeC5ifa5DbCgnP7oymAb9aOHO58LwjbS9wXQME=;
+ b=L7zEtpSFb+EUbQ7Rq/3aVjIKRY2vJekCHxnS5vhfoQpmH9QmxVeDvOHbwgK5f2qjazbf
+ nW858+JeAEjAel9LDbXwPlkNaA920XzHtdwoWS0/SYHrRaX17T9k7pt8Ax7RxFYw0Yyq
+ WvGmeaTqLp35U6TC+bYCE6xe2wZwoNnOpTehQc/KfONFG1dJHtSd0ZwMYvtE9FIlfK+h
+ jki7pv5e+b0qgjN+g7r/uijNeAyDYGRiknS6BU4/hshpC/GsaJOoOtikzTW1DT7vIQIT
+ F382SiT4SHg723lB3XGSbeEd0EF9R0FcVrrpc/l79lXuCemxg2R7RrfU/JHfeapdTdyf gQ== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3cj5vt4buc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 25 Nov 2021 23:30:01 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 25 Nov
+ 2021 23:29:59 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 25 Nov 2021 23:29:59 -0800
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id 847033F706A;
+        Thu, 25 Nov 2021 23:29:59 -0800 (PST)
+Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 1AQ7TTq8007905;
+        Thu, 25 Nov 2021 23:29:29 -0800
+Received: (from root@localhost)
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 1AQ7SrIg007896;
+        Thu, 25 Nov 2021 23:28:53 -0800
+From:   Manish Rangankar <mrangankar@marvell.com>
+To:     <martin.petersen@oracle.com>, <lduncan@suse.com>,
+        <cleech@redhat.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>
+Subject: [PATCH v2] qedi: Fix cmd_cleanup_cmpl counter mismatch issue.
+Date:   Thu, 25 Nov 2021 23:28:53 -0800
+Message-ID: <20211126072853.7862-1-mrangankar@marvell.com>
+X-Mailer: git-send-email 2.12.0
 MIME-Version: 1.0
-Received: by 2002:a4a:c289:0:0:0:0:0 with HTTP; Thu, 25 Nov 2021 23:11:30
- -0800 (PST)
-Reply-To: azimpremji777@gmail.com
-From:   =?UTF-8?Q?SPENDE_F=C3=9CR_DICH?= <walmarasmussenjack@gmail.com>
-Date:   Fri, 26 Nov 2021 10:11:30 +0300
-Message-ID: <CAPPHXC2bUOUvJU+hmS5kMnGUr5OFeE4VgSikws_-bpPMSRkGOg@mail.gmail.com>
-Subject: COVID 19 DONATION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Proofpoint-GUID: PJjFJS06dBjSQLVANl7X7UCvB3Iz3MGs
+X-Proofpoint-ORIG-GUID: PJjFJS06dBjSQLVANl7X7UCvB3Iz3MGs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-26_02,2021-11-25_02,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---=20
-Ich bin * Azim Hashim Premji *, ein indisches Wirtschaftsmagazin,
-Investor und Philanthrop. Ich bin Vorsitzender von Wipro Limited. Ich
-habe 25 Prozent meiner pers=C3=B6nlichen Verm=C3=B6gensantr=C3=A4ge. Und ic=
-h habe
-auch versprochen, die restlichen 25% im Jahr 2021 zu verschenken. Ich
-habe mich entschlossen, Ihnen 1,000,000 Euro* zu spenden. Wenn Sie an
-meiner Spende interessiert sind, kontaktieren Sie mich f=C3=BCr weitere
-Informationen. Ich will es auch Du bist Teil meiner gemeinn=C3=BCtzigen
-Stiftung, sobald du das Geld bekommst, damit wir die Armen vers=C3=B6hnen
-k=C3=B6nnen
-Kontaktieren Sie sie per E-Mail f=C3=BCr weitere Informationen zur
-Reklamation: azimpremji777@gmail.com
-     Ihre
-CEO Wipro Limited
+When issued LUN reset under heavy i/o, we hit the qedi WARN_ON
+because of a mismatch in firmware i/o cmd cleanup request count
+and i/o cmd cleanup response count received. The mismatch is
+because of the race caused by the postfix increment of
+cmd_cleanup_cmpl.
+
+[qedi_clearsq:1295]:18: fatal error, need hard reset, cid=0x0
+WARNING: CPU: 48 PID: 110963 at drivers/scsi/qedi/qedi_fw.c:1296 qedi_clearsq+0xa5/0xd0 [qedi]
+CPU: 48 PID: 110963 Comm: kworker/u130:0 Kdump: loaded Tainted: G        W
+Hardware name: HPE ProLiant DL385 Gen10/ProLiant DL385 Gen10, BIOS A40 04/15/2020
+Workqueue: iscsi_conn_cleanup iscsi_cleanup_conn_work_fn [scsi_transport_iscsi]
+RIP: 0010:qedi_clearsq+0xa5/0xd0 [qedi]
+ RSP: 0018:ffffac2162c7fd98 EFLAGS: 00010246
+ RAX: 0000000000000000 RBX: ffff975213c40ab8 RCX: 0000000000000000
+ RDX: 0000000000000000 RSI: ffff9761bf816858 RDI: ffff9761bf816858
+ RBP: ffff975247018628 R08: 000000000000522c R09: 000000000000005b
+ R10: 0000000000000000 R11: ffffac2162c7fbd8 R12: ffff97522e1b2be8
+ R13: 0000000000000000 R14: ffff97522e1b2800 R15: 0000000000000001
+ FS:  0000000000000000(0000) GS:ffff9761bf800000(0000) knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 00007f1a34e3e1a0 CR3: 0000000108bb2000 CR4: 0000000000350ee0
+ Call Trace:
+  qedi_ep_disconnect+0x533/0x550 [qedi]
+  ? iscsi_dbg_trace+0x63/0x80 [scsi_transport_iscsi]
+  ? _cond_resched+0x15/0x30
+  ? iscsi_suspend_queue+0x19/0x40 [libiscsi]
+  iscsi_ep_disconnect+0xb0/0x130 [scsi_transport_iscsi]
+  iscsi_cleanup_conn_work_fn+0x82/0x130 [scsi_transport_iscsi]
+  process_one_work+0x1a7/0x360
+  ? create_worker+0x1a0/0x1a0
+  worker_thread+0x30/0x390
+  ? create_worker+0x1a0/0x1a0
+  kthread+0x116/0x130
+  ? kthread_flush_work_fn+0x10/0x10
+  ret_from_fork+0x22/0x40
+ ---[ end trace 5f1441f59082235c ]---
+
+Signed-off-by: Manish Rangankar <mrangankar@marvell.com>
+---
+ drivers/scsi/qedi/qedi_fw.c    | 37 ++++++++++++++--------------------
+ drivers/scsi/qedi/qedi_iscsi.c |  2 +-
+ drivers/scsi/qedi/qedi_iscsi.h |  2 +-
+ 3 files changed, 17 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/scsi/qedi/qedi_fw.c b/drivers/scsi/qedi/qedi_fw.c
+index 84a4204a2cb4..5916ed7662d5 100644
+--- a/drivers/scsi/qedi/qedi_fw.c
++++ b/drivers/scsi/qedi/qedi_fw.c
+@@ -732,7 +732,6 @@ static void qedi_process_cmd_cleanup_resp(struct qedi_ctx *qedi,
+ {
+ 	struct qedi_work_map *work, *work_tmp;
+ 	u32 proto_itt = cqe->itid;
+-	itt_t protoitt = 0;
+ 	int found = 0;
+ 	struct qedi_cmd *qedi_cmd = NULL;
+ 	u32 iscsi_cid;
+@@ -812,16 +811,12 @@ static void qedi_process_cmd_cleanup_resp(struct qedi_ctx *qedi,
+ 	return;
+ 
+ check_cleanup_reqs:
+-	if (qedi_conn->cmd_cleanup_req > 0) {
+-		QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_TID,
++	if (atomic_inc_return(&qedi_conn->cmd_cleanup_cmpl) ==
++	    qedi_conn->cmd_cleanup_req) {
++		QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_SCSI_TM,
+ 			  "Freeing tid=0x%x for cid=0x%x\n",
+ 			  cqe->itid, qedi_conn->iscsi_conn_id);
+-		qedi_conn->cmd_cleanup_cmpl++;
+ 		wake_up(&qedi_conn->wait_queue);
+-	} else {
+-		QEDI_ERR(&qedi->dbg_ctx,
+-			 "Delayed or untracked cleanup response, itt=0x%x, tid=0x%x, cid=0x%x\n",
+-			 protoitt, cqe->itid, qedi_conn->iscsi_conn_id);
+ 	}
+ }
+ 
+@@ -1163,7 +1158,7 @@ int qedi_cleanup_all_io(struct qedi_ctx *qedi, struct qedi_conn *qedi_conn,
+ 	}
+ 
+ 	qedi_conn->cmd_cleanup_req = 0;
+-	qedi_conn->cmd_cleanup_cmpl = 0;
++	atomic_set(&qedi_conn->cmd_cleanup_cmpl, 0);
+ 
+ 	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_SCSI_TM,
+ 		  "active_cmd_count=%d, cid=0x%x, in_recovery=%d, lun_reset=%d\n",
+@@ -1215,16 +1210,15 @@ int qedi_cleanup_all_io(struct qedi_ctx *qedi, struct qedi_conn *qedi_conn,
+ 		  qedi_conn->iscsi_conn_id);
+ 
+ 	rval  = wait_event_interruptible_timeout(qedi_conn->wait_queue,
+-						 ((qedi_conn->cmd_cleanup_req ==
+-						 qedi_conn->cmd_cleanup_cmpl) ||
+-						 test_bit(QEDI_IN_RECOVERY,
+-							  &qedi->flags)),
+-						 5 * HZ);
++				(qedi_conn->cmd_cleanup_req ==
++				 atomic_read(&qedi_conn->cmd_cleanup_cmpl)) ||
++				test_bit(QEDI_IN_RECOVERY, &qedi->flags),
++				5 * HZ);
+ 	if (rval) {
+ 		QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_SCSI_TM,
+ 			  "i/o cmd_cleanup_req=%d, equal to cmd_cleanup_cmpl=%d, cid=0x%x\n",
+ 			  qedi_conn->cmd_cleanup_req,
+-			  qedi_conn->cmd_cleanup_cmpl,
++			  atomic_read(&qedi_conn->cmd_cleanup_cmpl),
+ 			  qedi_conn->iscsi_conn_id);
+ 
+ 		return 0;
+@@ -1233,7 +1227,7 @@ int qedi_cleanup_all_io(struct qedi_ctx *qedi, struct qedi_conn *qedi_conn,
+ 	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_SCSI_TM,
+ 		  "i/o cmd_cleanup_req=%d, not equal to cmd_cleanup_cmpl=%d, cid=0x%x\n",
+ 		  qedi_conn->cmd_cleanup_req,
+-		  qedi_conn->cmd_cleanup_cmpl,
++		  atomic_read(&qedi_conn->cmd_cleanup_cmpl),
+ 		  qedi_conn->iscsi_conn_id);
+ 
+ 	iscsi_host_for_each_session(qedi->shost,
+@@ -1242,11 +1236,10 @@ int qedi_cleanup_all_io(struct qedi_ctx *qedi, struct qedi_conn *qedi_conn,
+ 
+ 	/* Enable IOs for all other sessions except current.*/
+ 	if (!wait_event_interruptible_timeout(qedi_conn->wait_queue,
+-					      (qedi_conn->cmd_cleanup_req ==
+-					       qedi_conn->cmd_cleanup_cmpl) ||
+-					       test_bit(QEDI_IN_RECOVERY,
+-							&qedi->flags),
+-					      5 * HZ)) {
++				(qedi_conn->cmd_cleanup_req ==
++				 atomic_read(&qedi_conn->cmd_cleanup_cmpl)) ||
++				test_bit(QEDI_IN_RECOVERY, &qedi->flags),
++				5 * HZ)) {
+ 		iscsi_host_for_each_session(qedi->shost,
+ 					    qedi_mark_device_available);
+ 		return -1;
+@@ -1266,7 +1259,7 @@ void qedi_clearsq(struct qedi_ctx *qedi, struct qedi_conn *qedi_conn,
+ 
+ 	qedi_ep = qedi_conn->ep;
+ 	qedi_conn->cmd_cleanup_req = 0;
+-	qedi_conn->cmd_cleanup_cmpl = 0;
++	atomic_set(&qedi_conn->cmd_cleanup_cmpl, 0);
+ 
+ 	if (!qedi_ep) {
+ 		QEDI_WARN(&qedi->dbg_ctx,
+diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
+index 88aa7d8b11c9..282ecb4e39bb 100644
+--- a/drivers/scsi/qedi/qedi_iscsi.c
++++ b/drivers/scsi/qedi/qedi_iscsi.c
+@@ -412,7 +412,7 @@ static int qedi_conn_bind(struct iscsi_cls_session *cls_session,
+ 	qedi_conn->iscsi_conn_id = qedi_ep->iscsi_cid;
+ 	qedi_conn->fw_cid = qedi_ep->fw_cid;
+ 	qedi_conn->cmd_cleanup_req = 0;
+-	qedi_conn->cmd_cleanup_cmpl = 0;
++	atomic_set(&qedi_conn->cmd_cleanup_cmpl, 0);
+ 
+ 	if (qedi_bind_conn_to_iscsi_cid(qedi, qedi_conn)) {
+ 		rc = -EINVAL;
+diff --git a/drivers/scsi/qedi/qedi_iscsi.h b/drivers/scsi/qedi/qedi_iscsi.h
+index a282860da0aa..9b9f2e44fdde 100644
+--- a/drivers/scsi/qedi/qedi_iscsi.h
++++ b/drivers/scsi/qedi/qedi_iscsi.h
+@@ -155,7 +155,7 @@ struct qedi_conn {
+ 	spinlock_t list_lock;		/* internal conn lock */
+ 	u32 active_cmd_count;
+ 	u32 cmd_cleanup_req;
+-	u32 cmd_cleanup_cmpl;
++	atomic_t cmd_cleanup_cmpl;
+ 
+ 	u32 iscsi_conn_id;
+ 	int itt;
+-- 
+2.18.2
+
