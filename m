@@ -2,82 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B69145F654
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Nov 2021 22:24:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37AC345F66A
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Nov 2021 22:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237037AbhKZV1h (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Nov 2021 16:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243757AbhKZVZh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Nov 2021 16:25:37 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1648C061746
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Nov 2021 13:21:45 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id l7so21071531lja.2
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Nov 2021 13:21:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=3LgDgmI1KFeqdtNiPTp3gFaVqYYsZqJfj9EoNDk9bTA=;
-        b=Xndf0DzjSqm/4emyF93TLGzL2Y4grTI3Ie6l4pDV3cxt4RWlA0/vZ38yXjpytEWp5X
-         fu4rtfgwThkT1ZaWTvD9jm6QZtHLrFcmNVXrIYYPxOxB7mV3OfkP8Zz1jJ3vD1TL1HQr
-         vpNsORLHBeDp2hiZMCzgddEN52L2g3g73z1yGSAdqRPgZ5xR4TTzPP3NRkLdvBZ3ybqN
-         1r9e+VLoNJ3aBPUjBodIpx5gepEU1e/zt0RDevZiCHoiLGvrWCUAd0wahBN5jAmTd9rj
-         l7WPSftes5wY1jlCBS5tG1jXe3WUdg/dx6wLd0dwkXtGPrseVOUxpg+a+j5p3mj/MxLd
-         JRTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=3LgDgmI1KFeqdtNiPTp3gFaVqYYsZqJfj9EoNDk9bTA=;
-        b=FzEfD0hxgZPLD2nSu5j0Rxv/DQzlJNrsiSZyyBWOKfRwJoerQdNUqA+7q5Ie4mF/Pr
-         1tF8Qe2qRa64AwPXAQbQKbggL9dKqjr0DB0KozQIf9dfvI54ohYUFF8TgyZPJ9vrOXWl
-         oJEmDT7VoxMLryoqlW8s3lAMO4Z+pYDLGwq5uD57DiOhDzrYsMQKlYHu/KZL5NT0Tjlh
-         c6dy2/VRyILHM/3z1gdpo5Dlt/LsOybllWt1yOJAfl7ZoDoMGSxCbMyCmCv/xv9mZXpo
-         ZQaCLG0QjoSb2ZI78cBLQ6z3JP8OSE/c7W7nhYIKtMHdrRjB5iKOaPvMNqNLC8Jkk/Rv
-         af4w==
-X-Gm-Message-State: AOAM531XuWfczKWQKJ1OuOjSKsqQ+C95GRAO6bIDSWUXTrNq127An6oZ
-        gc+adV/ohGFgUoomToXzh69d19srDbT9vfLzYsJdQu3bexs=
-X-Google-Smtp-Source: ABdhPJz4ZodUreeVZe1s7et6truSX/wjtPccL9u7oaQ+j5DjEOeH7VmDxNprlOA/rdewNt3HpQ3pY2T3OUZELze5UrI=
-X-Received: by 2002:a2e:9718:: with SMTP id r24mr33840349lji.406.1637961704124;
- Fri, 26 Nov 2021 13:21:44 -0800 (PST)
+        id S244211AbhKZVbx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Nov 2021 16:31:53 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54162 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237037AbhKZV3u (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Nov 2021 16:29:50 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED9E2B82808;
+        Fri, 26 Nov 2021 21:26:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49323C004E1;
+        Fri, 26 Nov 2021 21:26:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637961994;
+        bh=ZQkH4mGansjnXBo02i2YweNtoWlzieOlKca4U14fVNk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MwZ09k7IgJ6L2Lry0RXCndm8k0dD6y7AcsBY05RhNtRYhjUGL/iVDIMHvcf+qg7vl
+         eebwDiEmjkUa7aqnsx3152FtIf9tsV4mzSntiu7gKamW5vT/5L5LpbtRUeBWFbFHxm
+         cTOPWnN73B7n9GcM3Pe6nb11OjihRuDAqCEYnURWPL5BesfGaKXCGoFcObQM0hBPFp
+         7mb8mzVLlJoQclX333NCTBIDFDm1ejKBufqvSanqYlgsQYUNnd4QWMJ8616dJ7jKPm
+         POHoPh4zIMmeYbdfFK9MzxLr73XReYGOb0nqR07wAsWSmVwSRhQyI2rb8c21Y2/dVt
+         n4ohlXIMwa9aQ==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-block@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mmc@vger.kernel.org
+Subject: [PATCH 0/3] block: show crypto capabilities in sysfs
+Date:   Fri, 26 Nov 2021 13:25:11 -0800
+Message-Id: <20211126212514.173334-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CAGnHSE=uOEiLUS=Sx5xhSVrx-7kvdriC=RZxuRasZaM2cLmDeQ@mail.gmail.com>
-In-Reply-To: <CAGnHSE=uOEiLUS=Sx5xhSVrx-7kvdriC=RZxuRasZaM2cLmDeQ@mail.gmail.com>
-From:   Tom Yan <tom.ty89@gmail.com>
-Date:   Sat, 27 Nov 2021 05:21:33 +0800
-Message-ID: <CAGnHSEmFoAS-ZY6u=ar=O0UU=FPgEuOx5KLcBWkboEVdeFXbGg@mail.gmail.com>
-Subject: Re: [Regression][Stable] sd use scsi_mode_sense with invalid param
-To:     linux-scsi@vger.kernel.org, damien.lemoal@wdc.com,
-        martin.petersen@oracle.com, sashal@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Ahh, looks like the required change to sd
-(c749301ebee82eb5e97dec14b6ab31a4aabe37a6) has been added to upstream
-but somehow got missed when 17b49bcbf8351d3dbe57204468ac34f033ed60bc
-was pulled into stable...
+This series adds sysfs files that expose the inline encryption
+capabilities of request queues.
 
-On Sat, 27 Nov 2021 at 05:11, Tom Yan <tom.ty89@gmail.com> wrote:
->
-> Hi,
->
-> So with 17b49bcbf8351d3dbe57204468ac34f033ed60bc (upstream),
-> scsi_mode_sense now returns -EINVAL if len < 8, yet in sd, the first mode
-> sense attempted by sd_read_cache_type() is done with (first_)len being
-> 4, which results in the failure of the attempt.
->
-> Since the commit is merged into stable, my SATA drive (that has
-> volatile write cache) is assumed to be a "write through" drive after I
-> upgraded from 5.15.4 to 5.15.5, as libata sets use_10_for_ms to 1.
->
-> Since sd does not (get to) determine which mode sense command to use,
-> should scsi_mode_sense at least accept a special value 0 (which
-> first_len would be set to), which is use to refers to the minimum len
-> to use for mode sense 6 and 10 respectively (i.e. 4 or 8)?
->
-> Regards,
-> Tom
+Patches 1 and 2 are some related cleanups for existing blk-sysfs code.
+Patch 3 is the real change; see there for more details.
+
+This applies to linux-block/for-next.
+
+Eric Biggers (3):
+  block: simplify calling convention of elv_unregister_queue()
+  block: don't delete queue kobject before its children
+  blk-crypto: show crypto capabilities in sysfs
+
+ Documentation/block/queue-sysfs.rst |  30 +++++
+ block/Makefile                      |   3 +-
+ block/blk-crypto-internal.h         |  12 ++
+ block/blk-crypto-sysfs.c            | 177 ++++++++++++++++++++++++++++
+ block/blk-crypto.c                  |   3 +
+ block/blk-sysfs.c                   |  17 ++-
+ block/elevator.c                    |   8 +-
+ include/linux/blkdev.h              |   1 +
+ 8 files changed, 241 insertions(+), 10 deletions(-)
+ create mode 100644 block/blk-crypto-sysfs.c
+
+base-commit: 4d162e24e9979dcb3d7825229982c172ca4bde54
+-- 
+2.34.1
+
