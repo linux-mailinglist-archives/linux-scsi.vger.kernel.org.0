@@ -2,99 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 452B845E71D
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Nov 2021 06:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A35E45E852
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Nov 2021 08:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245475AbhKZFUz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Nov 2021 00:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        id S1352744AbhKZHSo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Nov 2021 02:18:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235611AbhKZFSy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Nov 2021 00:18:54 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6140CC061746;
-        Thu, 25 Nov 2021 21:15:42 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 200so7158933pga.1;
-        Thu, 25 Nov 2021 21:15:42 -0800 (PST)
+        with ESMTP id S1352823AbhKZHQn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Nov 2021 02:16:43 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711B4C06173E
+        for <linux-scsi@vger.kernel.org>; Thu, 25 Nov 2021 23:11:31 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so12747206otl.3
+        for <linux-scsi@vger.kernel.org>; Thu, 25 Nov 2021 23:11:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EKzwqlZ/U7YNENuKROdSQMpO6S/HGCWA7OjlBzmX4w8=;
-        b=nCitiwdZTOKTdPmNQN+JLWqnGE2y31yMpK4Aco0Jja8dVpzQTGdHh15fFQ0CSGbr0s
-         bVV3umujDDvLzJ0IlTMM7T0Na9kQpIs7OgW/pWaZU0SrtYbb5HNsxBB4+GceOhBQdlu2
-         jVvclEdKTO6+c7ZVQ9CvrKsfja9GWkh25nE5CDi/DXgWktAaalIF3mRKxBWig8vB/5m8
-         UbqnxrVkPRAbKhip/E8Oc4vIKb4XtD5AQ+Vqyv2+8zIUP1w5EtUs0TfDwVwfr8MYp+Ar
-         Cby3aOeFr4wiBaYXaBqCAw6a14TxEb5o3XNe/M3YOFje2fJfRZRI5OMQ+IkxPK9eQTJL
-         CrLQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=z0cb0bV016cblBzniHRfveJVZQnRfl4xk7fgQH1MP8M=;
+        b=ImpbojefOC4u+FL00Jblbw47KFfq0uJ4psheSyaIqTlDuWcX7qENAkokyPA2YJOmrF
+         2+U1VgMvpO1vIHAdKtlY8WmjeJzl3jEih+XYh82HrvER6xwLZZcnNBKM/DlWJeYYtLfj
+         LhjiObNRdq5EmhvWlY7qY0KCqyvZYbQ2NGNeaf9BEk4Gb9ssUaqMOnjIiJxlxIioVQDO
+         NgcGTJsS51zAFozzH7IL3oY8kzI8KDMLCmfdytCtbry/pWs+bQuT9QDghTn/DFeiPCBF
+         PmTAMtnBKGuBXfMMK6TXTLNZBXIR8sspb/BQSi/HxB462m5DiimnmO9xPqlcuM1Hsjwg
+         o8hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EKzwqlZ/U7YNENuKROdSQMpO6S/HGCWA7OjlBzmX4w8=;
-        b=vlyer2uUeRQeqwhQSly6h75BV2wKuyWxdFCnww+4JeIfDkdJXezKMQSbqziCiwbECF
-         EmZaqldZ7taYhlSAhF8+gvM4dQiWJ8o0ZFUEQj3Nk+bouztuQe4NeAOFLXMFUfDOkd4H
-         y23IBVmeW2L4kXMj5AHkleOORlP917wsV4sa2WV2dlgZTLAqtnnOTt7QOjBoeap8yxYh
-         V5gQ4fcoloEz9ZrOJ+PpAEidb2gx02h1kms7BkKn6BkVkSLtvp7rHmpsKrzjSlA0KhwS
-         6rgwFMEGaWR0bh15hT/PT1a4SNXK6aN6qdv9jeaCUQESvD5mhOH7XcRU4umnwa2OZIng
-         yDeg==
-X-Gm-Message-State: AOAM532ju2ZUEPGErOuhjrFsDBK06iC59vYg2DqDNYH1f34XJk0PaU8z
-        dw6sVrKVNaL8inwI5NynJUslzWaNJMApWg==
-X-Google-Smtp-Source: ABdhPJwkIZdrdhIx9N9dz4aWGWTIxkxMngbh5VYC21Q+XBeRdsOhoXYwxVOD+/xW7OgWABSw1bV0kw==
-X-Received: by 2002:a63:88c1:: with SMTP id l184mr5672741pgd.521.1637903741509;
-        Thu, 25 Nov 2021 21:15:41 -0800 (PST)
-Received: from 7YHHR73.igp.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id lb4sm10326377pjb.18.2021.11.25.21.15.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Nov 2021 21:15:41 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com (supporter:QLOGIC QL41xxx ISCSI
-        DRIVER), "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org (open list:QLOGIC QL41xxx ISCSI DRIVER)
-Subject: [PATCH 2/2] scsi: qedi: Fix SYSFS_FLAG_FW_SEL_BOOT formatting
-Date:   Thu, 25 Nov 2021 21:15:29 -0800
-Message-Id: <20211126051529.5380-3-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211126051529.5380-1-f.fainelli@gmail.com>
-References: <20211126051529.5380-1-f.fainelli@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=z0cb0bV016cblBzniHRfveJVZQnRfl4xk7fgQH1MP8M=;
+        b=TYs1BDmQQSVh9CbbpbcL3m7kbr0ubuUsdYaEkWVwnva6JeOHmYYfmlxVP/iV4Drlsd
+         pJfn00ShlLvYg7DeMsKSUQQenVbEoYKDKXjUoFrmY0Zj3dS2AU1RoSZlNcz6wTUzIkU8
+         W1ILt57wrhBU9y/rIO4PB+s6bqBbU1uAjPzVTJNu8fyPCv+hwPvczkbUa57EYePQGJkM
+         MM52913jgg9M7t8p5Wbt3ycbxe7zrvd+a2St+IzmekizVc6SuyisQGIZ1SXQcYtvsgSK
+         w2SPufZCDy8kiNkHNraqpmGXKARWAMyNEoV0ht5IGgnOZ7U1GB781+DSA1LqUTIe1euH
+         mG6A==
+X-Gm-Message-State: AOAM532LcedH9BXqEAoEgrRsRO3io+d/RWEw5Mxa+TRO846egFzJdaZ5
+        b7jVTQMAPoEEBW1Xjf1y8vkLrc1rOzlxxVyVQ/w=
+X-Google-Smtp-Source: ABdhPJxeo2D2oedNRpAQSBpRO2Bc6X6RYAYshJxduHdULmOgoUAVbxJzfEc6wFlH/7i7/J25q0xYAnEGmHm+SRx5VV0=
+X-Received: by 2002:a05:6830:1514:: with SMTP id k20mr25755509otp.147.1637910690744;
+ Thu, 25 Nov 2021 23:11:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a4a:c289:0:0:0:0:0 with HTTP; Thu, 25 Nov 2021 23:11:30
+ -0800 (PST)
+Reply-To: azimpremji777@gmail.com
+From:   =?UTF-8?Q?SPENDE_F=C3=9CR_DICH?= <walmarasmussenjack@gmail.com>
+Date:   Fri, 26 Nov 2021 10:11:30 +0300
+Message-ID: <CAPPHXC2bUOUvJU+hmS5kMnGUr5OFeE4VgSikws_-bpPMSRkGOg@mail.gmail.com>
+Subject: COVID 19 DONATION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The format used for formatting SYSFS_FLAG_FW_SEL_BOOT creates the
-following warning:
-
-drivers/scsi/qedi/qedi_main.c:2259:35: warning: format specifies type
-'char' but the argument has type 'int' [-Wformat]
-                   rc = snprintf(buf, 3, "%hhd\n", SYSFS_FLAG_FW_SEL_BOOT);
-
-Fix this to use %d since this is a plain integer.
-
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/scsi/qedi/qedi_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.c
-index f1c933070884..367a0337b53e 100644
---- a/drivers/scsi/qedi/qedi_main.c
-+++ b/drivers/scsi/qedi/qedi_main.c
-@@ -2254,7 +2254,7 @@ qedi_show_boot_tgt_info(struct qedi_ctx *qedi, int type,
- 			     mchap_secret);
- 		break;
- 	case ISCSI_BOOT_TGT_FLAGS:
--		rc = snprintf(buf, 3, "%hhd\n", SYSFS_FLAG_FW_SEL_BOOT);
-+		rc = snprintf(buf, 3, "%d\n", SYSFS_FLAG_FW_SEL_BOOT);
- 		break;
- 	case ISCSI_BOOT_TGT_NIC_ASSOC:
- 		rc = snprintf(buf, 3, "0\n");
--- 
-2.25.1
-
+--=20
+Ich bin * Azim Hashim Premji *, ein indisches Wirtschaftsmagazin,
+Investor und Philanthrop. Ich bin Vorsitzender von Wipro Limited. Ich
+habe 25 Prozent meiner pers=C3=B6nlichen Verm=C3=B6gensantr=C3=A4ge. Und ic=
+h habe
+auch versprochen, die restlichen 25% im Jahr 2021 zu verschenken. Ich
+habe mich entschlossen, Ihnen 1,000,000 Euro* zu spenden. Wenn Sie an
+meiner Spende interessiert sind, kontaktieren Sie mich f=C3=BCr weitere
+Informationen. Ich will es auch Du bist Teil meiner gemeinn=C3=BCtzigen
+Stiftung, sobald du das Geld bekommst, damit wir die Armen vers=C3=B6hnen
+k=C3=B6nnen
+Kontaktieren Sie sie per E-Mail f=C3=BCr weitere Informationen zur
+Reklamation: azimpremji777@gmail.com
+     Ihre
+CEO Wipro Limited
