@@ -2,15 +2,19 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6B045E888
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Nov 2021 08:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D926245E987
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Nov 2021 09:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359311AbhKZHjG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Nov 2021 02:39:06 -0500
-Received: from email.unionmem.com ([221.4.138.186]:53478 "EHLO
+        id S1353569AbhKZIm1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Nov 2021 03:42:27 -0500
+Received: from email.unionmem.com ([221.4.138.186]:27192 "EHLO
         VLXDG1SPAM1.ramaxel.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1353099AbhKZHhF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Nov 2021 02:37:05 -0500
+        with ESMTP id S1346313AbhKZIkZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Nov 2021 03:40:25 -0500
+Received: from VLXDG1SPAM1.ramaxel.com (localhost [127.0.0.2] (may be forged))
+        by VLXDG1SPAM1.ramaxel.com with ESMTP id 1AQ7rqwC023264
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Nov 2021 15:53:52 +0800 (GMT-8)
+        (envelope-from songyl@ramaxel.com)
 Received: from V12DG1MBS01.ramaxel.local (v12dg1mbs01.ramaxel.local [172.26.18.31])
         by VLXDG1SPAM1.ramaxel.com with ESMTPS id 1AQ7XF7m009870
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
@@ -34,7 +38,7 @@ X-Originating-IP: [10.64.9.47]
 X-ClientProxiedBy: V12DG1MBS01.ramaxel.local (172.26.18.31) To
  V12DG1MBS01.ramaxel.local (172.26.18.31)
 X-DNSRBL: 
-X-MAIL: VLXDG1SPAM1.ramaxel.com 1AQ7XF7m009870
+X-MAIL: VLXDG1SPAM1.ramaxel.com 1AQ7rqwC023264
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
