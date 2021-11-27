@@ -2,103 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6372846009C
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Nov 2021 18:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFD746005D
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Nov 2021 18:03:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355792AbhK0Rn5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 27 Nov 2021 12:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234533AbhK0Rl5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 27 Nov 2021 12:41:57 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90520C061746;
-        Sat, 27 Nov 2021 09:38:42 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so10334385pjb.1;
-        Sat, 27 Nov 2021 09:38:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=muEV41oGv4dCXu6T0pBAwtMsCi0zA6yAWl0ncN03ssw=;
-        b=ELNJTmDbhtdH+T48RrB+KCCm2X/Ky075szsYsS+ZAZv8JCLapZFv9iCiqsNRy/sQFZ
-         ghW1tvD9A4x50zkAPuWYfdJGsVnkz/CU6S8/IDpSYtYfIqWiUkHw5yS+aFdckm843CnV
-         Kstt4wXRdvvhR8Q9iaF9rsR3xKBY2viNw2QU/UPVHrE175KgEZ+MzK424N3Br+mMVx91
-         VpgWTn968HG35ery5EGB+JFYCd6EyHUtuzJz4pLH4Hlp43ZV5U1eWNtCsv3ZOhVS1wBT
-         fW4PrVijiUFiSc8m8RVm8lLre4g7m+MgfTuRb0b0gn6wmSEW6a9j10w50Eec30PZKjKg
-         zH7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=muEV41oGv4dCXu6T0pBAwtMsCi0zA6yAWl0ncN03ssw=;
-        b=kmi6Hzvr1qTh+ags570tjbVu8M73iIBuiaFSNyl5OnphtSGFTbAV8YxVHIF8lrOO4j
-         1IhAtwEwPIlTK+0oPbj8fLjkYZGFw/tVXBJIEMx5Uhpjfjs86lZF0Xvp2Ix1rm2jR/Ng
-         1HnVq0d7iuXkPnJ9hfK2NVqKg+Nm88ifnUJAu2xCMhE6/juYLYlsbiI/svtCEXZxzczx
-         R0EGi43Zt84Ahg5G96BRU91URIq07BUpYF+wAYUsvx7sU1YmCTsz3wt98YHxdN449c5Q
-         wCJT16BA14y8DDffTTFlKZzXuDElSe9OxKAuAGAz7XoEJtk2kDc9h/j/3kwwrBtlkSET
-         yWIQ==
-X-Gm-Message-State: AOAM531tss9DX1VGWQ6a09bAZmNJBy4akmZgW1CoYh23srMo5YNOK+sc
-        oJEQu/0zvpEc3QAnZKX0ndf9D+OctTTGJA==
-X-Google-Smtp-Source: ABdhPJzTLlK8vbWzwyWP4NjwL6Fds42LHIYpXygP2nvsOPHZkzR79c0EvoWrDhBvYexSBb8bkqdPOw==
-X-Received: by 2002:a17:90b:1bcb:: with SMTP id oa11mr24815160pjb.140.1638034721764;
-        Sat, 27 Nov 2021 09:38:41 -0800 (PST)
-Received: from 7YHHR73.igp.broadcom.net (70-36-60-214.dyn.novuscom.net. [70.36.60.214])
-        by smtp.gmail.com with ESMTPSA id t19sm8051776pgn.7.2021.11.27.09.38.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Nov 2021 09:38:41 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com (supporter:QLOGIC QL41xxx ISCSI
-        DRIVER), "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org (open list:QLOGIC QL41xxx ISCSI DRIVER)
-Subject: [PATCH v2 2/2] scsi: qedi: Fix SYSFS_FLAG_FW_SEL_BOOT formatting
-Date:   Fri, 26 Nov 2021 12:17:08 -0800
-Message-Id: <20211126201708.27140-3-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211126201708.27140-1-f.fainelli@gmail.com>
-References: <20211126201708.27140-1-f.fainelli@gmail.com>
+        id S239785AbhK0RGN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 27 Nov 2021 12:06:13 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:34502 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233676AbhK0REM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 27 Nov 2021 12:04:12 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6D1201FC9E;
+        Sat, 27 Nov 2021 17:00:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638032457; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uAVXfpaVcORSYxcezeW7xJSoWc7vFIUCVEMohiPSQGQ=;
+        b=A5EK4nxjrFo114mU6BK0TBF4tE4ltHlUGHZW9lzjgjzSdVNLpP4pzlmmxTo54oU62+DWKB
+        fazqI0rzLOhT2ver50AXo+BGelOhTLGhByhG+usgYTqJh6w+q/4TnMjwQ2cka0gb42tVOB
+        Mytjp9shbkNYj8abfyQWzAm3VsO6T9k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638032457;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uAVXfpaVcORSYxcezeW7xJSoWc7vFIUCVEMohiPSQGQ=;
+        b=tJiFYOHfMOw1os+cJeDvSsM5e+vPqdD7Pt2jqTknUW9RCY0XSgN7l08t9E0eyYlzuvQnuA
+        GXlMTX1AjeQSMAAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 429FC1344E;
+        Sat, 27 Nov 2021 17:00:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Gfz5DklkomGqMAAAMHmgww
+        (envelope-from <hare@suse.de>); Sat, 27 Nov 2021 17:00:57 +0000
+Subject: Re: [PATCH 06/15] hpsa: use scsi_host_busy_iter() to traverse
+ outstanding commands
+To:     John Garry <john.garry@huawei.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Bart van Assche <bvanassche@acm.org>
+References: <20211125151048.103910-1-hare@suse.de>
+ <20211125151048.103910-7-hare@suse.de>
+ <c65222e1-c489-e3f4-0688-c7ae7ac941e5@huawei.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <422ec120-e0fd-07d1-4e14-c369c655b013@suse.de>
+Date:   Sat, 27 Nov 2021 18:00:56 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
+In-Reply-To: <c65222e1-c489-e3f4-0688-c7ae7ac941e5@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The format used for formatting SYSFS_FLAG_FW_SEL_BOOT creates the
-following warning:
+On 11/26/21 10:33 AM, John Garry wrote:
+> On 25/11/2021 15:10, Hannes Reinecke wrote:
+>>   static void hpsa_drain_accel_commands(struct ctlr_info *h)
+>>   {
+>> -    struct CommandList *c = NULL;
+>> -    int i, accel_cmds_out;
+>> -    int refcount;
+>> +    struct hpsa_command_iter_data iter_data = {
+>> +        .h = h,
+>> +    };
+>>       do { /* wait for all outstanding ioaccel commands to drain out */
+>> -        accel_cmds_out = 0;
+>> -        for (i = 0; i < h->nr_cmds; i++) {
+>> -            c = h->cmd_pool + i;
+>> -            refcount = atomic_inc_return(&c->refcount);
+>> -            if (refcount > 1) /* Command is allocated */
+>> -                accel_cmds_out += is_accelerated_cmd(c);
+>> -            cmd_free(h, c);
+>> -        }
+>> -        if (accel_cmds_out <= 0)
+>> +        iter_data.count = 0;
+>> +        scsi_host_busy_iter(h->scsi_host,
+>> +                    hpsa_drain_accel_commands_iter,
+>> +                    &iter_data);
+> 
+> I haven't following this code exactly, but I assume that you want to 
+> iter the reserved requests as well (or in other places in others drivers 
+> in this series). For that to work we need to call 
+> blk_mq_start_request(), right? I could not see it called.
+> 
+Actually, no; this is iterating over 'accel' commands, ie fastpath 
+commands for RAID I/0. Which none of the reserved commands are.
 
-drivers/scsi/qedi/qedi_main.c:2259:35: warning: format specifies type
-'char' but the argument has type 'int' [-Wformat]
-                   rc = snprintf(buf, 3, "%hhd\n",
-SYSFS_FLAG_FW_SEL_BOOT);
+But that doesn't mean that your comment about reserved commands not 
+being started is invalid. Hmm.
 
-Fix this to cast the constant as an u8 since the intention is to print
-it via sysfs as a byte.
+Cheers,
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/scsi/qedi/qedi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/qedi/qedi.h b/drivers/scsi/qedi/qedi.h
-index ce199a7a16b8..421b3a69fd37 100644
---- a/drivers/scsi/qedi/qedi.h
-+++ b/drivers/scsi/qedi/qedi.h
-@@ -358,7 +358,7 @@ struct qedi_ctx {
- 	bool use_fast_sge;
- 
- 	atomic_t num_offloads;
--#define SYSFS_FLAG_FW_SEL_BOOT 2
-+#define SYSFS_FLAG_FW_SEL_BOOT (u8)2
- #define IPV6_LEN	41
- #define IPV4_LEN	17
- 	struct iscsi_boot_kset *boot_kset;
+Hannes
 -- 
-2.25.1
-
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
