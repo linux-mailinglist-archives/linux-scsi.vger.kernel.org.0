@@ -2,122 +2,119 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D935463910
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Nov 2021 16:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 737A9463A4A
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Nov 2021 16:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245261AbhK3PHJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Nov 2021 10:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
+        id S232761AbhK3Pn7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Nov 2021 10:43:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244533AbhK3PCS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Nov 2021 10:02:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1E1C08E9B0;
-        Tue, 30 Nov 2021 06:53:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C02F2B81A42;
-        Tue, 30 Nov 2021 14:53:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97483C53FD4;
-        Tue, 30 Nov 2021 14:53:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638284007;
-        bh=+bdkJpw7rUr12tUKrDuGOMciKAwiShJfxzBvwWb29IM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FBSckjBpU5sHVDok4UPWOxJj8rn00VZPi9GvJi4TOq6Vk+HhwaEhrQHHZfUUWyUo9
-         qed3O5yCyKGIKy9Emf/yrj3Io73bImv4c2vZFjw3g03Ax/dv4KQTpIWs6RRXY+pfmF
-         ZQ2ZrBXuiGYezKQgI8STvdrQFVBYKZTnkTYDwAoEY6bAegxDNDHfP51tp/jaLw9CzL
-         t/xksJuD1ClItrh3puxIpmiGtoHEPwCCp8xLstjVuXORV5nw3w3wRQ9EuYUWp42UXF
-         gfq0O2X4nd0gq/niCvZuLQ6XGX8Ye2Y/lYD7KjyGrfZOkkVE7yFU18vf4orcJK6aZw
-         U24izshqJuv4Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     George Kennedy <george.kennedy@oracle.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 06/14] scsi: scsi_debug: Sanity check block descriptor length in resp_mode_select()
-Date:   Tue, 30 Nov 2021 09:53:07 -0500
-Message-Id: <20211130145317.946676-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211130145317.946676-1-sashal@kernel.org>
-References: <20211130145317.946676-1-sashal@kernel.org>
+        with ESMTP id S234474AbhK3Pn5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Nov 2021 10:43:57 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8BFC06174A
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Nov 2021 07:40:38 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso19863216wms.3
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Nov 2021 07:40:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=nqhuFDsnKkXRDBD2VkYSTunv9kP+Et39ou1k8Mq4Y+8=;
+        b=NHYCWCLodTGiZBRXtkksO+9f1IGkfW+K/54xJTf4QHyMfaUQXmBq1eKy3Co9/MsCeg
+         M8eyQmrhlIZAps3ir9vh+Cs1W0ghawJ3N2asOO25/429B8gNsKZThr/qF1XXuwju337D
+         z4S2fkMOb5+KH1DLSy/1iXih3plROx4mFhwJfrhUffIx6QLz5Xx5jRnDx6jEnPqtrY7o
+         mfx6uKON0aFh01e95HlDREOsHa5nCUU3s59pgZpHOH3KuHkuzoVyIaoYH1brtP7FkLJ2
+         6DA8nAZaYmrh7BknicjuYTUweFj4a8nDXu477XykfdakxZqqgzBhD6Lx6zS2wBx6F2Yr
+         PaOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=nqhuFDsnKkXRDBD2VkYSTunv9kP+Et39ou1k8Mq4Y+8=;
+        b=kRXnv53O9i9Z6DzAESysQeDZcILyfB5YoK39hlFeNrbi2xLBxh2M8YStRQ295P/c9Z
+         w4jrCgnZa/Ex9Xe1PA1fc06syO8rkbW+LYONcsa9M+WIxW3d3m+YyotbhFCMw75d8HO6
+         xVdS18n78I1qr7UMQagkEPQHABxAK0E7eqH2F78qqUAaFWv5LG0tEawpocEERYvdsCVV
+         5iqPkCEc+iqvpPbCY+204CbPr8F5Qmj0STm8dEF73+QCUR5t00H3bsCZrr72HEqhyb1+
+         oJ/IJ+U4Ygx8vHL1f3dcdorhTOsCAZD7ePf5BfazMjey/ZDwt7QXRN45PBSKKclcoxZG
+         6P4w==
+X-Gm-Message-State: AOAM531+JRDCq6dpOBpqwTXnhyyYVwJH3z8U4aaT1++AYE+DwtIezYfK
+        eiaI+SPF78jE+pFy3M0x83I=
+X-Google-Smtp-Source: ABdhPJyP5t1DF+WoiL/if4a9sOp5XXpCttRBciHtZGWUzoPI3q1wdId8914BqmUlS7DtX6RP7YD1Sg==
+X-Received: by 2002:a1c:6a04:: with SMTP id f4mr242155wmc.56.1638286836777;
+        Tue, 30 Nov 2021 07:40:36 -0800 (PST)
+Received: from p200300e94719c91f05d9351815d7236e.dip0.t-ipconnect.de (p200300e94719c91f05d9351815d7236e.dip0.t-ipconnect.de. [2003:e9:4719:c91f:5d9:3518:15d7:236e])
+        by smtp.googlemail.com with ESMTPSA id c4sm16775520wrr.37.2021.11.30.07.40.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 07:40:36 -0800 (PST)
+Message-ID: <952443760df360b48a153c01b1dad957cd82fdea.camel@gmail.com>
+Subject: Re: [PATCH v2 19/20] scsi: ufs: Implement polling support
+From:   Bean Huo <huobean@gmail.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <beanhuo@micron.com>, Can Guo <cang@codeaurora.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Asutosh Das <asutoshd@codeaurora.org>
+Date:   Tue, 30 Nov 2021 16:40:34 +0100
+In-Reply-To: <deeb660e-d1ef-7a54-6221-45cfebd87881@acm.org>
+References: <20211119195743.2817-1-bvanassche@acm.org>
+         <20211119195743.2817-20-bvanassche@acm.org>
+         <e0dc15c742c2f626a7149c3c44d53493fe1a9a44.camel@gmail.com>
+         <deeb660e-d1ef-7a54-6221-45cfebd87881@acm.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: George Kennedy <george.kennedy@oracle.com>
+On Tue, 2021-11-30 at 06:26 -0800, Bart Van Assche wrote:
+> On 11/30/21 12:43 AM, Bean Huo wrote:
+> > On Fri, 2021-11-19 at 11:57 -0800, Bart Van Assche wrote:
+> > > On my test setup this patch increases IOPS from 2736 to 22000
+> > > (8x)
+> > > for the
+> > > following test:
+> > > 
+> > > for hipri in 0 1; do
+> > >      fio --ioengine=io_uring --iodepth=1 --rw=randread \
+> > >      --runtime=60 --time_based=1 --direct=1 --name=qd1 \
+> > >      --filename=/dev/block/sda --ioscheduler=none --gtod_reduce=1 
+> > > \
+> > >      --norandommap --hipri=$hipri
+> > > done
+> > 
+> > For 4KB random read, direct IO, and iodepth=1, we did not see an
+> > improvement in IOPS due to this patch. Maybe the test case above is
+> > not
+> > sufficient.
+> 
+> Hi Bean,
+> 
+> Which test has been run? Polling is only enabled if --hipri=1 is
+> specified
+> to fio and --ioengine=io_uring is the only I/O engine on Android that
+> supports
+> that flag.
+> 
+> Thanks,
+> 
+> Bart.
 
-[ Upstream commit e0a2c28da11e2c2b963fc01d50acbf03045ac732 ]
+Hi Bart,
 
-In resp_mode_select() sanity check the block descriptor len to avoid UAF.
+It is the test case in your commit message. If iodepth=1, there is no
+performance improvement. Increase the io-depth to multiple, for
+example, let iodepth= CPU core counter. I see that the interrupt
+overhead is significantly increased when the request is completed, so
+IO_polling will win compared to the interrupt mode.
 
-BUG: KASAN: use-after-free in resp_mode_select+0xa4c/0xb40 drivers/scsi/scsi_debug.c:2509
-Read of size 1 at addr ffff888026670f50 by task scsicmd/15032
-
-CPU: 1 PID: 15032 Comm: scsicmd Not tainted 5.15.0-01d0625 #15
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-Call Trace:
- <TASK>
- dump_stack_lvl+0x89/0xb5 lib/dump_stack.c:107
- print_address_description.constprop.9+0x28/0x160 mm/kasan/report.c:257
- kasan_report.cold.14+0x7d/0x117 mm/kasan/report.c:443
- __asan_report_load1_noabort+0x14/0x20 mm/kasan/report_generic.c:306
- resp_mode_select+0xa4c/0xb40 drivers/scsi/scsi_debug.c:2509
- schedule_resp+0x4af/0x1a10 drivers/scsi/scsi_debug.c:5483
- scsi_debug_queuecommand+0x8c9/0x1e70 drivers/scsi/scsi_debug.c:7537
- scsi_queue_rq+0x16b4/0x2d10 drivers/scsi/scsi_lib.c:1521
- blk_mq_dispatch_rq_list+0xb9b/0x2700 block/blk-mq.c:1640
- __blk_mq_sched_dispatch_requests+0x28f/0x590 block/blk-mq-sched.c:325
- blk_mq_sched_dispatch_requests+0x105/0x190 block/blk-mq-sched.c:358
- __blk_mq_run_hw_queue+0xe5/0x150 block/blk-mq.c:1762
- __blk_mq_delay_run_hw_queue+0x4f8/0x5c0 block/blk-mq.c:1839
- blk_mq_run_hw_queue+0x18d/0x350 block/blk-mq.c:1891
- blk_mq_sched_insert_request+0x3db/0x4e0 block/blk-mq-sched.c:474
- blk_execute_rq_nowait+0x16b/0x1c0 block/blk-exec.c:63
- sg_common_write.isra.18+0xeb3/0x2000 drivers/scsi/sg.c:837
- sg_new_write.isra.19+0x570/0x8c0 drivers/scsi/sg.c:775
- sg_ioctl_common+0x14d6/0x2710 drivers/scsi/sg.c:941
- sg_ioctl+0xa2/0x180 drivers/scsi/sg.c:1166
- __x64_sys_ioctl+0x19d/0x220 fs/ioctl.c:52
- do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:50
- entry_SYSCALL_64_after_hwframe+0x44/0xae arch/x86/entry/entry_64.S:113
-
-Link: https://lore.kernel.org/r/1637262208-28850-1-git-send-email-george.kennedy@oracle.com
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Acked-by: Douglas Gilbert <dgilbert@interlog.com>
-Signed-off-by: George Kennedy <george.kennedy@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/scsi_debug.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index aba1a3396890b..b553ae4a88635 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -2181,11 +2181,11 @@ static int resp_mode_select(struct scsi_cmnd *scp,
- 			    __func__, param_len, res);
- 	md_len = mselect6 ? (arr[0] + 1) : (get_unaligned_be16(arr + 0) + 2);
- 	bd_len = mselect6 ? arr[3] : get_unaligned_be16(arr + 6);
--	if (md_len > 2) {
-+	off = bd_len + (mselect6 ? 4 : 8);
-+	if (md_len > 2 || off >= res) {
- 		mk_sense_invalid_fld(scp, SDEB_IN_DATA, 0, -1);
- 		return check_condition_result;
- 	}
--	off = bd_len + (mselect6 ? 4 : 8);
- 	mpage = arr[off] & 0x3f;
- 	ps = !!(arr[off] & 0x80);
- 	if (ps) {
--- 
-2.33.0
+Kind regards,
+Bean
 
