@@ -2,73 +2,150 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BCF462FE7
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Nov 2021 10:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0CE4633A2
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Nov 2021 12:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240396AbhK3JpM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Nov 2021 04:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240387AbhK3JpK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Nov 2021 04:45:10 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5DAC06174A
-        for <linux-scsi@vger.kernel.org>; Tue, 30 Nov 2021 01:41:51 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id o20so83730176eds.10
-        for <linux-scsi@vger.kernel.org>; Tue, 30 Nov 2021 01:41:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=UcBPTmCi1X1jI8Y2VIsxUbt5jsE7eH++35qZosZ1HhM=;
-        b=e02SLb6rSBPLVf4AoNQdHAsonSSfbtu+27PkkPk9AYSFsYekzfRSa9XZ3TnQjYg+9K
-         KOAZKugVhBPn7FqrknZ9ZekhWrKHbsW27vUEniDmNj01OMzLRIBsiNU803wEwUxDd/7i
-         q4oTGadlImRGb1VRnmDDm/VnQ1c1oih+sO4Bbx8iB15wqivAjeysEFM3jkKh2PcpsSRw
-         HGYZqkkApcNJMiiSpDy+fAeT8+VclBS3TUSAwq23hlUEq9U5L8nAFGhMQ3VC7pIus71s
-         Xx5QpOHZAc/iyZphJ5S8/Iocz56XUsDWqvhtrUA1jLEFOJSrMrnJP+3Ch+UPkOf2QLZx
-         H8yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=UcBPTmCi1X1jI8Y2VIsxUbt5jsE7eH++35qZosZ1HhM=;
-        b=U1olHWv4YhqL5Qk1HFK2FURZ4R+6qWYwAfC4Homqd6KMiEHiA8wF2O/11s6vAixrLb
-         Czu4tN6pG860K6XLEf2BK9/hyI7AFWztyMI7+CI80BsrzV2jheJOdgLddMFcoPy/ghxz
-         1Gi3ZTLVcPB/X+J0K8M3vvHwFEuvhHednemjNAXdnnueXTBNgCYcb38AeEWEP7wLqYSr
-         o9qGC8sxGpp84oLULaYoLoEp1uiwBUGWecZPRQM+KowC8HRgxZnm/TjFa05xTC4YcQta
-         6fXK7e7YpHuU7Gf82mMq510ohBTVWh6BfnWScxDVLTSJzFkBkxnhIGWMExvB1CteNaRv
-         Hv8w==
-X-Gm-Message-State: AOAM531AyEr2iE4o2GPg/jPyHOAF7CtaiIaeK/qI7e9ECeb6lLJMzJAu
-        9DmPvvfsv89XzYOnhADZgvGJNtu8wKm7w+U4rUk=
-X-Google-Smtp-Source: ABdhPJwgTOxWlT7dMJ5Mq5cCcWMtbHhmk3X6l9r+Kfcjl5EV/euwBWckeNSqbgutDo8ZW6IkFCQkrh0ddLEtJesi6K4=
-X-Received: by 2002:a50:d710:: with SMTP id t16mr80944992edi.50.1638265309485;
- Tue, 30 Nov 2021 01:41:49 -0800 (PST)
+        id S241068AbhK3MAk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Nov 2021 07:00:40 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:60810 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233873AbhK3L7T (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Nov 2021 06:59:19 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 577EA1FD54;
+        Tue, 30 Nov 2021 11:55:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638273359; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h6oUH8GLbx+PmOC2wrA7txDkU2zL7G4wdMnHElZ3hwY=;
+        b=bA3P1hUFN64kBRaq3o+dOMvZI3M5GsosQhbxpi+gPgGQDMqq71U8jgEPULdSXGNFDJOLYJ
+        KeyoxXmvcmwsSs9uioLGA8KlJdKsoRxzBSdKOOZ05LfrBpiLCe9uwB1nFr+ELlTF71CIZx
+        k0LGrHZ7hDEr/BU+LrQDNzYG3iwf71w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638273359;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h6oUH8GLbx+PmOC2wrA7txDkU2zL7G4wdMnHElZ3hwY=;
+        b=k6p0sdYu/gP2KfQdtNv8lANYM/lQePa6MOL7xj/3TxHZ0QkNRw47sT/JzyomJfvuUayu8Z
+        d1AZ7DPAlosR53DQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 45C9B13C98;
+        Tue, 30 Nov 2021 11:55:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XCm9EE8RpmH3YwAAMHmgww
+        (envelope-from <hare@suse.de>); Tue, 30 Nov 2021 11:55:59 +0000
+Subject: Re: [PATCH V2] scsi:spraid: initial commit of Ramaxel spraid driver
+To:     Yanling Song <songyl@ramaxel.com>
+Cc:     martin.petersen@oracle.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, yujiang@ramaxel.com,
+        yanling.song@linux.dev
+References: <20211126073310.87683-1-songyl@ramaxel.com>
+ <99fb2d55-88c0-2911-3b71-7670d386ab1c@suse.de>
+ <20211130113836.1bb8e91c@songyl>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <69541d78-49cd-900a-21ca-b9f56e9dca00@suse.de>
+Date:   Tue, 30 Nov 2021 12:55:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Received: by 2002:ab4:9a02:0:0:0:0:0 with HTTP; Tue, 30 Nov 2021 01:41:48
- -0800 (PST)
-Reply-To: keree.casmiree@gmail.com
-From:   casmire kere <casmirekere7@gmail.com>
-Date:   Tue, 30 Nov 2021 09:41:48 +0000
-Message-ID: <CADBE2rVGh2x2PTGrwxM+puCKnEe7=HipN-sFecxNo2-Xg4Wv4g@mail.gmail.com>
-Subject: YOUR URGENT REPLY FOR MORE DETAILS!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211130113836.1bb8e91c@songyl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 11/30/21 12:38 PM, Yanling Song wrote:
+> On Mon, 29 Nov 2021 14:04:12 +0100
+> Hannes Reinecke <hare@suse.de> wrote:
+> 
+>> On 11/26/21 8:33 AM, Yanling Song wrote:
+>>> This initial commit contains Ramaxel's spraid module.
+>>>
+>>> Signed-off-by: Yanling Song <songyl@ramaxel.com>
+>>>
+>>> Changes from V1:
+>>> 1. Use BSG module to replace with ioctrl
+>>> 2. Use author's email as MODULE_AUTHOR
+>>> 3. Remove "default=m" in drivers/scsi/spraid/Kconfig
+>>> 4. To be changed in the next version:
+>>>     a. Use get_unaligned_be*() in spraid_setup_rw_cmd();
+>>>     b. Use pr_debug() instead of introducing dev_log_dbg().
+>>>
+>>> ---
+>>>   Documentation/scsi/spraid.rst     |   16 +
+>>>   MAINTAINERS                       |    7 +
+>>>   drivers/scsi/Kconfig              |    1 +
+>>>   drivers/scsi/Makefile             |    1 +
+>>>   drivers/scsi/spraid/Kconfig       |   10 +
+>>>   drivers/scsi/spraid/Makefile      |    7 +
+>>>   drivers/scsi/spraid/spraid.h      |  693 ++++++
+>>>   drivers/scsi/spraid/spraid_main.c | 3328
+>>> +++++++++++++++++++++++++++++ 8 files changed, 4063 insertions(+)
+>>>   create mode 100644 Documentation/scsi/spraid.rst
+>>>   create mode 100644 drivers/scsi/spraid/Kconfig
+>>>   create mode 100644 drivers/scsi/spraid/Makefile
+>>>   create mode 100644 drivers/scsi/spraid/spraid.h
+>>>   create mode 100644 drivers/scsi/spraid/spraid_main.c
+>>>   
+>> Hmm.
+>> This entire thing looks like an NVMe controller which is made to look 
+>> like a SCSI controller.
+>> It even uses most of the NVMe structures.
+>> And from what I've seen there is not much SCSI specific in here; I/O
+>> and queue setup is pretty much what every NVMe controller does.
+>> So why not make it a true NVMe controller?
+>> Yes, you would need to discuss with the NVMe folks on how a RAID 
+>> controller should look like in NVMe terms.
+>> But overall I guess the driver would be far smaller and possibly
+>> easier to maintain.
+>>
+>> So where's the benefit having it as a SCSI driver (apart from the
+>> fact that is allows you to side-step having to discuss the interface
+>> with NVMexpress.org ...)?
+>> Or, to put it the other way round: Is there anything SCSI specific
+>> which would prevent such an approach?
+>>
+> 
+> Actually it is a SCSI driver, and it does register a scsi_host_template
+> and host does send SCSI commands to our raid controller just like other
+> raid controllers. You are right "it looks a lot like NVMe" since we
+> believe the communication mechanism of NVME between host and the end
+> device is good and it was leveraged when we designed the raid
+> controller. That's why it looks like there are some code from NVME
+> because the mechanism is the same.
+> 
+Thank you, but that was precisely my question.
+
+Seeing that the driver is using the NVMe mechanism to communicate
+commands between the driver and the hardware, doesn't it make it a NVMe
+driver?
+Especially as you are sending NVMe commands and not SCSI commands, so
+you always will have to re-write the incoming SCSI commands into NVMe
+commands, and knowing from experience this is not a good fit.
+
+Hence my question: what exactly is SCSI specific on the hardware side?
+Wouldn't an implementation as a NVMe driver be a better fit, as then you
+could leverage all the existing code like setup prps, completion
+handling etc?
+
+Cheers,
+
+Hannes
 -- 
-Good morning,
-
-I am Mr. Kere Casmire  if you were marked safe from the covid-19
-epidemic, my prayers with you. i wish to offer you a business deal
-worth $5.3 million  dollars, if you are interested contact me
-privately Email:(keree.casmiree@gmail.com)
-
-Upon receipt of your reply; I will give you full details
-on how the business  will be executed.
-
-I am waiting for your reply.
-
-Best regards,
-
-Mr.Kere Casmire
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
