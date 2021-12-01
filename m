@@ -2,112 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4668F465880
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Dec 2021 22:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0EDA4659AA
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Dec 2021 00:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353100AbhLAVqm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Dec 2021 16:46:42 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34110 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243105AbhLAVqi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Dec 2021 16:46:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 21544CE2105
-        for <linux-scsi@vger.kernel.org>; Wed,  1 Dec 2021 21:43:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76143C53FCC;
-        Wed,  1 Dec 2021 21:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638394992;
-        bh=ELK584yFCwTITNDnujOCBwKtp8klCZc1fH1loQiZDpM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CAuubg191q6f/wKjgnUS4aaBd4O/7wks2mltK9VxSYJ9HwngkGq7ho0/EQesxZdpN
-         2nzdjh/UddmJ6D5IyBSBycE4t7IPxgfThlSLiH3ySrjnu3zNivwWA2jgADqG4OHlym
-         72+mXIJ90wxt7cK8cCJW5HL9gCEDAtYiIUgUyw2uV4FGDiNcmPU1Nf69u0Ly1JVAD9
-         nvN3vYKkyx+9FwK2Q0AfKU7PtUs2FynnOc+GyDmyyFh95D9W/TUNhseqS1A99hf25X
-         /OrCZMrZj/5GqA6ZoDlJPMmHpSsp8xaL6O0/Rey2jUsSWFhzhIaqqJ2oXz5i/FGGBj
-         EPDeqefZDRnWA==
-Date:   Wed, 1 Dec 2021 13:43:09 -0800
-From:   Keith Busch <kbusch@kernel.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH v3 02/17] scsi: core: Fix a race between scsi_done() and
- scsi_times_out()
-Message-ID: <20211201214309.GA3836713@dhcp-10-100-145-180.wdc.com>
-References: <20211130233324.1402448-1-bvanassche@acm.org>
- <20211130233324.1402448-3-bvanassche@acm.org>
+        id S244913AbhLAXQv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Dec 2021 18:16:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245055AbhLAXQt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Dec 2021 18:16:49 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56ECC061748
+        for <linux-scsi@vger.kernel.org>; Wed,  1 Dec 2021 15:13:27 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso37500625otj.1
+        for <linux-scsi@vger.kernel.org>; Wed, 01 Dec 2021 15:13:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
+        b=bkbX+seZT2fP0LD32WkxKE12OHE69C72LaInBW/c3h+e1XRZT6HQNkWcIslYsUcoy9
+         +z0zk/30PkSpn1wBeBbLCi4oCXq98KrLM8yfQF1whxDbCpbNmkYIvASEyM00k+tghZKk
+         WhBaL/GYWIq6IN9do8bA099tNhJ42npoANTY+o5OT3VIp1GBCaIgl6c91qxdTkK9q4cq
+         HEN0qwcupj2GTHor5aVMlZT0zL1cToFZXB0MnWl9TgffTIWxUt8N5lN1ppc7fXJC+ZoI
+         d3dMNwfgnBVcg2InLHGKnP2oN0F2NuwHKRVnNWw/JOJzbprRdKKngINAJTEvqSsEwcKx
+         m4TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
+        b=3toACmaaVXyX49Qrp46sKOwJj4jmrrCFi/tNFaWMWafWRAQfdm84ofxACW9ldE5y8y
+         kocZqVvhHV3kDd8JsX4NIYDVLmm/XgGftBDfUTEOBM/1wc4rgdPUrb5TYSjILOqx88+2
+         2fHaakpx3kHIz5dAWrkBzCH7MvRaLqk6zemdMeNXQavCO4SuHHRnm9x/0AV7i9jf3eRw
+         AfDgfF3Z3wkJ9PytTPy0J+rlz2pfFq+Iz2e6TR16TLFWTvwE9UKSb5sdELS0if+a0xoZ
+         lWgENBqaeLSlLjUbeKFExsxpuKHl5hvlKmM5sSYzcj3C826zBn58/zU+kGlU+Gam1m+C
+         265g==
+X-Gm-Message-State: AOAM531Tda2xxmd30i9jw2xMujldNvkcXLd6/25oaVcQWo0RtQcX3sqC
+        FdVRMSA4yiN/a562N8ZI/pkgNNf3p04IhEWuCCU=
+X-Google-Smtp-Source: ABdhPJxwFGrOr89a4YgQ9MLrKNvsTgAdwjZTK4DR84sKa/2wMchoYqm/acyMTPY3fzvGq7B1+rzNxR5oPraHdXUA/Q8=
+X-Received: by 2002:a9d:62d9:: with SMTP id z25mr8228327otk.330.1638400406894;
+ Wed, 01 Dec 2021 15:13:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130233324.1402448-3-bvanassche@acm.org>
+Received: by 2002:ac9:74d9:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 15:13:26 -0800 (PST)
+Reply-To: lisshuuu1@gmail.com
+From:   MS LISA HUGH <klein.marford1@gmail.com>
+Date:   Thu, 2 Dec 2021 00:13:26 +0100
+Message-ID: <CACFxMW8=rb-y0xQYJQ2suPKM5J5zSB_n3AwuVMvbFw7Fv+kdjQ@mail.gmail.com>
+Subject: YOU HAVE THE DETAILS AS SOON I HEAR FROM YOU(Ms Lisa Hugh)
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 03:33:09PM -0800, Bart Van Assche wrote:
-> This patch restores the behavior of the following algorithm from the legacy
-> block layer:
-> - Before completing a request, test-and-set REQ_ATOM_COMPLETE atomically.
->   Only call the block driver completion function if that flag was not yet
->   set.
-> - Before calling the block driver timeout function, test-and-set
->   REQ_ATOM_COMPLETE atomically. Only call the timeout handler if that flag
->   was not yet set. If that flag was already set, do not restart the timer.
-> 
-> Cc: Keith Busch <kbusch@kernel.org>
-> Reported-by: Adrian Hunter <adrian.hunter@intel.com>
-> Fixes: 065990bd198e ("scsi: set timed out out mq requests to complete")
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/scsi_error.c | 22 ++++++++--------------
->  1 file changed, 8 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-> index 9cb0f9df621a..cd05f2db3339 100644
-> --- a/drivers/scsi/scsi_error.c
-> +++ b/drivers/scsi/scsi_error.c
-> @@ -331,6 +331,14 @@ enum blk_eh_timer_return scsi_times_out(struct request *req)
->  	enum blk_eh_timer_return rtn = BLK_EH_DONE;
->  	struct Scsi_Host *host = scmd->device->host;
->  
-> +	/*
-> +	 * scsi_done() may be called concurrently with scsi_times_out(). Only
-> +	 * one of these two functions should proceed. Hence return early if
-> +	 * scsi_done() won the race.
-> +	 */
-> +	if (test_and_set_bit(SCMD_STATE_COMPLETE, &scmd->state))
-> +		return BLK_EH_DONE;
-> +
+Dear Friend,
 
-If the the timeout handler successfully sets the state to complete, and
-the lld returns BLK_EH_RESET_TIMER, who gets to complete this command?
+I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
 
->  	trace_scsi_dispatch_cmd_timeout(scmd);
->  	scsi_log_completion(scmd, TIMEOUT_ERROR);
->  
-> @@ -341,20 +349,6 @@ enum blk_eh_timer_return scsi_times_out(struct request *req)
->  		rtn = host->hostt->eh_timed_out(scmd);
->  
->  	if (rtn == BLK_EH_DONE) {
-> -		/*
-> -		 * Set the command to complete first in order to prevent a real
-> -		 * completion from releasing the command while error handling
-> -		 * is using it. If the command was already completed, then the
-> -		 * lower level driver beat the timeout handler, and it is safe
-> -		 * to return without escalating error recovery.
-> -		 *
-> -		 * If timeout handling lost the race to a real completion, the
-> -		 * block layer may ignore that due to a fake timeout injection,
-> -		 * so return RESET_TIMER to allow error handling another shot
-> -		 * at this command.
-> -		 */
-> -		if (test_and_set_bit(SCMD_STATE_COMPLETE, &scmd->state))
-> -			return BLK_EH_RESET_TIMER;
->  		if (scsi_abort_command(scmd) != SUCCESS) {
->  			set_host_byte(scmd, DID_TIME_OUT);
->  			scsi_eh_scmd_add(scmd);
+I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
+bank account with your co-operation for both of us benefit.
+
+Please send the follow below,
+1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
+Thanks.
+Ms Lisa Hugh
