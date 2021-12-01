@@ -2,68 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F2146479E
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Dec 2021 08:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8AD464CF5
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Dec 2021 12:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347097AbhLAHL2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Dec 2021 02:11:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
+        id S1349040AbhLALhv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Dec 2021 06:37:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbhLAHL1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Dec 2021 02:11:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE2BC061574;
-        Tue, 30 Nov 2021 23:08:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C9C0B81DD9;
-        Wed,  1 Dec 2021 07:08:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ABF3C53FAD;
-        Wed,  1 Dec 2021 07:08:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638342484;
-        bh=yfIMUIvts+TyrLXbtbjnXJs9LD9n68BaPAB4iOgy3qg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S7jJU9WIP9DMXDmam/SjhaiuzPS7Ra7/EYXmguLkxqGe5u7VGZnYbFpFWCikUX7KY
-         KUIFgXQJaW9plm8jIHkHRWg4gcFgqVwdTl5/SqAOgnoPIsUn/bsTJv8C754OltOW50
-         ME2+ljRebs92eTK/rzjKsahTiLe4BpPO4ueGoW3o=
-Date:   Wed, 1 Dec 2021 08:08:00 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     akpm@linux-foundation.org, keescook@chromium.org,
-        yzaikin@google.com, nixiaoming@huawei.com, ebiederm@xmission.com,
-        steve@sk2.org, rafael@kernel.org, tytso@mit.edu,
-        viro@zeniv.linux.org.uk, pmladek@suse.com,
-        senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, dgilbert@interlog.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        mcgrof@bombadil.infradead.org, linux-scsi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH] firmware_loader: export sysctl registration
-Message-ID: <YacfULGI1mhE/0iv@kroah.com>
-References: <20211130164525.1478009-1-mcgrof@kernel.org>
+        with ESMTP id S1349027AbhLALhl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Dec 2021 06:37:41 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7655AC06139A
+        for <linux-scsi@vger.kernel.org>; Wed,  1 Dec 2021 03:34:11 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id t13so48212072uad.9
+        for <linux-scsi@vger.kernel.org>; Wed, 01 Dec 2021 03:34:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
+         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
+         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
+         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
+         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
+         Af5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=eSjiiCAtLkIaEmYAWIKaIARS5fM9QbYilknYlOrO08xK/Nc7JdpWzwI+FsIi7+eZDn
+         uQSIIcAxDmkC2YRa7Y5syAPwGNbykSEagpxzYt8HWe/3lFbb/zxpgMG7yixQVdP8Oi4L
+         EiaiOmyLaTLVMkMzL613UvXHWy5Zl0uWF/5aF/XhZaG3RzCc1esJ1rwOhPvnpemPKliJ
+         xq7uIC7555fjhauA0Mf8fNhbuekrQgbrWyp16ScwXcRY1jJk3cIavtXQgDsGCuB5b+Z8
+         ck8pwih+CD4QIc8R8k3PGXuQx2UgZK5UobMTsM+JOICPTHdFznxLSFLnP09i9k4tlzJx
+         GNnA==
+X-Gm-Message-State: AOAM530+eu1JDVsXIxbvIPet8KOQnNmB9FyLrbbPVC712PVWpEPGCqz1
+        A5AyvdpTSsR7Te6TLhmHUJawpQU+hxEXMy7x9xHrH3kLClQ=
+X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
+X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
+ Wed, 01 Dec 2021 03:33:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130164525.1478009-1-mcgrof@kernel.org>
+Sender: unitednationawardwinner@gmail.com
+Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
+From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
+Date:   Wed, 1 Dec 2021 03:33:58 -0800
+X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
+Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
+Subject: Your long awaited part payment of $2.5.000.00Usd
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 08:45:25AM -0800, Luis Chamberlain wrote:
-> The firmware loader fallback sysctl table is always built-in,
-> but when FW_LOADER=m the build will fail. We need to export
-> the sysctl registration and de-registration. Use the private
-> symbol namespace so that only the firmware loader uses these
-> calls.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Fixes: firmware_loader: move firmware sysctl to its own files
+Attention: Beneficiary, Your long awaited part payment of
+$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
+Dollars) is ready for immediate release to you, and it was
+electronically credited into an ATM Visa Card for easy delivery.
 
-Have a git id for this?
+Your new Payment Reference No.- 6363836,
+Pin Code No: 1787
+Your Certificate of Merit Payment No: 05872,
 
-thanks,
+Your Names: |
+Address: |
 
-greg k-h
+Person to Contact:MR KELLY HALL the Director of the International
+Audit unit ATM Payment Center,
+
+Email: uba-bf@e-ubabf.com
+TELEPHONE: +226 64865611 You can whatsApp the bank
+
+Regards.
+Mrs ORGIL BAATAR
