@@ -2,67 +2,145 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0EDA4659AA
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Dec 2021 00:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C024659E1
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Dec 2021 00:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244913AbhLAXQv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Dec 2021 18:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245055AbhLAXQt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Dec 2021 18:16:49 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56ECC061748
-        for <linux-scsi@vger.kernel.org>; Wed,  1 Dec 2021 15:13:27 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso37500625otj.1
-        for <linux-scsi@vger.kernel.org>; Wed, 01 Dec 2021 15:13:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
-        b=bkbX+seZT2fP0LD32WkxKE12OHE69C72LaInBW/c3h+e1XRZT6HQNkWcIslYsUcoy9
-         +z0zk/30PkSpn1wBeBbLCi4oCXq98KrLM8yfQF1whxDbCpbNmkYIvASEyM00k+tghZKk
-         WhBaL/GYWIq6IN9do8bA099tNhJ42npoANTY+o5OT3VIp1GBCaIgl6c91qxdTkK9q4cq
-         HEN0qwcupj2GTHor5aVMlZT0zL1cToFZXB0MnWl9TgffTIWxUt8N5lN1ppc7fXJC+ZoI
-         d3dMNwfgnBVcg2InLHGKnP2oN0F2NuwHKRVnNWw/JOJzbprRdKKngINAJTEvqSsEwcKx
-         m4TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=11NI8rJSPz43D1gV7A+JL1F9+LdB46OYj4gEDUOX0Xg=;
-        b=3toACmaaVXyX49Qrp46sKOwJj4jmrrCFi/tNFaWMWafWRAQfdm84ofxACW9ldE5y8y
-         kocZqVvhHV3kDd8JsX4NIYDVLmm/XgGftBDfUTEOBM/1wc4rgdPUrb5TYSjILOqx88+2
-         2fHaakpx3kHIz5dAWrkBzCH7MvRaLqk6zemdMeNXQavCO4SuHHRnm9x/0AV7i9jf3eRw
-         AfDgfF3Z3wkJ9PytTPy0J+rlz2pfFq+Iz2e6TR16TLFWTvwE9UKSb5sdELS0if+a0xoZ
-         lWgENBqaeLSlLjUbeKFExsxpuKHl5hvlKmM5sSYzcj3C826zBn58/zU+kGlU+Gam1m+C
-         265g==
-X-Gm-Message-State: AOAM531Tda2xxmd30i9jw2xMujldNvkcXLd6/25oaVcQWo0RtQcX3sqC
-        FdVRMSA4yiN/a562N8ZI/pkgNNf3p04IhEWuCCU=
-X-Google-Smtp-Source: ABdhPJxwFGrOr89a4YgQ9MLrKNvsTgAdwjZTK4DR84sKa/2wMchoYqm/acyMTPY3fzvGq7B1+rzNxR5oPraHdXUA/Q8=
-X-Received: by 2002:a9d:62d9:: with SMTP id z25mr8228327otk.330.1638400406894;
- Wed, 01 Dec 2021 15:13:26 -0800 (PST)
+        id S1353795AbhLAXgl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Dec 2021 18:36:41 -0500
+Received: from so254-9.mailgun.net ([198.61.254.9]:17197 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343755AbhLAXgj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Dec 2021 18:36:39 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638401597; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: From: References: Cc: To: Subject: MIME-Version: Date:
+ Message-ID: Sender; bh=Y54jBmLO9M4LrIMP/clt2t2OC3TCLw7TUdgOAfIh+pE=; b=f1dAVi27K2bzPFEf6adoLYFn15EIlsnxLx7CSb57YZSLPY4cfNN5MAYxHb1d815enXY2R/Ot
+ D+vVhfV9ClBCJvOAELATiTovzV5Cck2lPHTcf4lKKORPgTiPRWppOjggAWZ2OYEUtHBjqWUu
+ cKnaROIecZbUP1vRKplPbyFN4sI=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 61a8063de7d68470afdb6798 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 01 Dec 2021 23:33:17
+ GMT
+Sender: asutoshd=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E4A66C43616; Wed,  1 Dec 2021 23:33:16 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.1 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+Received: from [192.168.1.3] (cpe-66-27-70-157.san.res.rr.com [66.27.70.157])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: asutoshd)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id AF634C4338F;
+        Wed,  1 Dec 2021 23:33:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org AF634C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Message-ID: <1be2859c-c698-7bfd-2ed1-ea17bbeedad7@codeaurora.org>
+Date:   Wed, 1 Dec 2021 15:33:13 -0800
 MIME-Version: 1.0
-Received: by 2002:ac9:74d9:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 15:13:26 -0800 (PST)
-Reply-To: lisshuuu1@gmail.com
-From:   MS LISA HUGH <klein.marford1@gmail.com>
-Date:   Thu, 2 Dec 2021 00:13:26 +0100
-Message-ID: <CACFxMW8=rb-y0xQYJQ2suPKM5J5zSB_n3AwuVMvbFw7Fv+kdjQ@mail.gmail.com>
-Subject: YOU HAVE THE DETAILS AS SOON I HEAR FROM YOU(Ms Lisa Hugh)
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH v3 16/17] scsi: ufs: Optimize the command queueing code
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Can Guo <cang@codeaurora.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Keoseong Park <keosung.park@samsung.com>
+References: <20211130233324.1402448-1-bvanassche@acm.org>
+ <20211130233324.1402448-17-bvanassche@acm.org>
+From:   "Asutosh Das (asd)" <asutoshd@codeaurora.org>
+In-Reply-To: <20211130233324.1402448-17-bvanassche@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+On 11/30/2021 3:33 PM, Bart Van Assche wrote:
+> Remove the clock scaling lock from ufshcd_queuecommand() since it is a
+> performance bottleneck. Instead, use synchronize_rcu_expedited() to wait
+> for ongoing ufshcd_queuecommand() calls.
+> 
+> Cc: Asutosh Das (asd) <asutoshd@codeaurora.org>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+>   drivers/scsi/ufs/ufshcd.c | 12 +++++++-----
+>   drivers/scsi/ufs/ufshcd.h |  1 +
+>   2 files changed, 8 insertions(+), 5 deletions(-)
+> 
+Hi Bart,
+Say an IO (req1) has crossed the scsi_host_queue_ready() check but 
+hasn't yet reached ufshcd_queuecommand() and DBR is 0.
+ufshcd_clock_scaling_prepare() is invoked and completes and scaling 
+proceeds to change the clocks and gear.
+I wonder if the IO (req1) would be issued while scaling is in progress.
+If so, do you think a check should be added in ufshcd_queuecommand() to 
+see if scaling is in progress or if host is blocked?
 
-I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index c4cf5c4b4893..3e4c62c6f9d2 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -1196,6 +1196,13 @@ static int ufshcd_clock_scaling_prepare(struct ufs_hba *hba)
+>   	/* let's not get into low power until clock scaling is completed */
+>   	ufshcd_hold(hba, false);
+>   
+> +	/*
+> +	 * Wait for ongoing ufshcd_queuecommand() calls. Calling
+> +	 * synchronize_rcu_expedited() instead of synchronize_rcu() reduces the
+> +	 * waiting time from milliseconds to microseconds.
+> +	 */
+> +	synchronize_rcu_expedited();
+> +
+>   out:
+>   	return ret;
+>   }
+> @@ -2681,9 +2688,6 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+>   
+>   	WARN_ONCE(tag < 0, "Invalid tag %d\n", tag);
+>   
+> -	if (!down_read_trylock(&hba->clk_scaling_lock))
+> -		return SCSI_MLQUEUE_HOST_BUSY;
+> - >   	/*
+>   	 * Allows the UFS error handler to wait for prior ufshcd_queuecommand()
+>   	 * calls.
+> @@ -2772,8 +2776,6 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+>   out:
+>   	rcu_read_unlock();
+>   
+> -	up_read(&hba->clk_scaling_lock);
+> -
+>   	if (ufs_trigger_eh()) {
+>   		unsigned long flags;
+>   
+> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+> index c3c2792f309f..411c6015bbfe 100644
+> --- a/drivers/scsi/ufs/ufshcd.h
+> +++ b/drivers/scsi/ufs/ufshcd.h
+> @@ -779,6 +779,7 @@ struct ufs_hba_monitor {
+>    * @clk_list_head: UFS host controller clocks list node head
+>    * @pwr_info: holds current power mode
+>    * @max_pwr_info: keeps the device max valid pwm
+> + * @clk_scaling_lock: used to serialize device commands and clock scaling
+>    * @desc_size: descriptor sizes reported by device
+>    * @urgent_bkops_lvl: keeps track of urgent bkops level for device
+>    * @is_urgent_bkops_lvl_checked: keeps track if the urgent bkops level for
+> 
 
-I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
-bank account with your co-operation for both of us benefit.
 
-Please send the follow below,
-1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
-Thanks.
-Ms Lisa Hugh
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+Linux Foundation Collaborative Project
