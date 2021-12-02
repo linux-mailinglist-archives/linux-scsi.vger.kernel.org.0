@@ -2,67 +2,164 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C733466A07
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Dec 2021 19:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 357D0466A62
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Dec 2021 20:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348436AbhLBSzM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 2 Dec 2021 13:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S1376838AbhLBT0z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 2 Dec 2021 14:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348352AbhLBSzL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Dec 2021 13:55:11 -0500
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E719C061758
-        for <linux-scsi@vger.kernel.org>; Thu,  2 Dec 2021 10:51:48 -0800 (PST)
-Received: by mail-vk1-xa29.google.com with SMTP id m19so218273vko.12
-        for <linux-scsi@vger.kernel.org>; Thu, 02 Dec 2021 10:51:48 -0800 (PST)
+        with ESMTP id S1376835AbhLBT0v (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Dec 2021 14:26:51 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B155C06175B
+        for <linux-scsi@vger.kernel.org>; Thu,  2 Dec 2021 11:23:28 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id 137so746867pgg.3
+        for <linux-scsi@vger.kernel.org>; Thu, 02 Dec 2021 11:23:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=fCUmv6AELrlJULps4blfFWEoxbKNz5CI35q37NTcvl0=;
-        b=IcIqGcxONteFTM+AWpw6Jvq0wWVsbEF0II0UPNH5si7KGCcB86aRB7XRwZ5lSLtbMA
-         lVOUJtfPnow8g0ROPM908JEoNw7IxE60m0xf0dPXaMWZaITVnD3XaJkVaG0dwC4DJFLe
-         /jk+Bnf+EW8GUR4K3Z9NSL7xephAQvQBIpJCt6wPU5+W5B+8GG+qDNOnxJ/L7cls7yhb
-         rKdZzWMu0Myr75zBu0rAMlwAyXwl4UfomExmoKrrZhK5mJOEFch5AhAU0gI4Pe7TMPDT
-         R+GYiGBCDrShAjbIiSMQcA8HZ8OfqkMJPFXUZ6/pKvtODcn4GvM9EJaHNX/HFJi/Y0nA
-         XsJg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wHXIIvuoYAHZrBVWauQEqPWbcxtgWE/NXQOKZMGBwXU=;
+        b=ngfmJbU+ZekCv1aLGMmEoKgODpS7TbPHwSiYGNktfucik37Qtr8kru//RXnU59lszW
+         3G9D0rJDetlaOfsxYkFrOeFdnJTiQLImHj2wyHMy5ViRpG+lYYPFcHmarAlUpH2lA9Il
+         kD5ElmOrab9qAOdqf9qmVRjqCdN03lmE8dqqo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=fCUmv6AELrlJULps4blfFWEoxbKNz5CI35q37NTcvl0=;
-        b=BLtEJfp81kuug8+TY4nRMK9rJ19E+NSU23cBc05AP9gXhvFEWoW25vIc45K4DPuqm0
-         8Vi2EVJu6Hipf+7UNZeK8mNWJOImLp/as5zxe1Bdx+EpguNnOtDKLRhgR7KtfpzIh3hp
-         15QbvLtzPN4JeNf0ClifAfvNLZuLvis2ljfssm+tOTgj6A9N0FBhW+EiELeKPwbyxbzA
-         WIH3GRIUJNpkZQ4r3oBj/suSu8NIy4uiSZ5YOjstQ8JC2sGO5NCQIV/U5/eWmtm8n9XK
-         fAAhqldyoezGXPNf1nrFe4FW0DDBoP8mO7u5GrIZIS5MPdK/W/+P0beN71hP12gQcws8
-         GY1w==
-X-Gm-Message-State: AOAM533xdzR5vByy0Ln/QhD4gxKsE0Q/rfYXc/A788FR6nhwDJrzDWp9
-        tN3OXoG2eGAsD5eNBJUZSu1FyX2acIDjcjfdObo=
-X-Google-Smtp-Source: ABdhPJxqfeRPvlCxTNb2c+S2Yh+t0AZBXbdrqR0ahjP9ofgkqW7n8haQ+xeh5UmeIQ5P/Z2sJO3tOmOlLrxg+49achA=
-X-Received: by 2002:a05:6122:732:: with SMTP id 50mr12773142vki.28.1638471107304;
- Thu, 02 Dec 2021 10:51:47 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wHXIIvuoYAHZrBVWauQEqPWbcxtgWE/NXQOKZMGBwXU=;
+        b=oZHQGNIgXe2y+7x7Zd1EHG5Pw/AWx1q5EH04uspociZw+FEWUly+F2jve00EH1oPOa
+         P5r+XnRQL85ZqfmbhLB6pVocFUqNTZBDACyc7D/We1kRvU9X7YQBxkIT3n4PdTUmZpXZ
+         n4V+qXBLUlrtm0Xjz8iSuRg8KWUn2YR3xs7EucPbnt+jFniQf0FvcP1xmHkZN83a29wt
+         KEIWZrxaTHRxsF4NmjFbe/UZ7VIzMTSvTrJoRN0f++F+7pAdFJxmRFBmIszsYcBO/L/N
+         +qkmV0hTblL9g2Gt+M40JqCxaDtM1pdWX5clBTeL7WAtGWYrAVReaK9rmcFDpgJh4Jwf
+         800g==
+X-Gm-Message-State: AOAM533inuZmv0g/ZC6OtH54rSGeutKL2X3Bl1y6dIPoiSQ0UcxIYCDR
+        Ak3hyB+hQQ0pjA7ZLX0moLwj7A==
+X-Google-Smtp-Source: ABdhPJyIkoe0j9eMC19m5ws5v8Pf44+FFaH/FvbVfneo2Zw9LO0Kc6ebuM3i6LkIHUQlqxR1VFOUIQ==
+X-Received: by 2002:a63:f43:: with SMTP id 3mr883306pgp.33.1638473007610;
+        Thu, 02 Dec 2021 11:23:27 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b14sm592254pfv.65.2021.12.02.11.23.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 11:23:27 -0800 (PST)
+Date:   Thu, 2 Dec 2021 11:23:26 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Steffen Maier <maier@linux.ibm.com>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Javed Hasan <jhasan@marvell.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Neerav Parikh <neerav.parikh@intel.com>,
+        Ross Brattain <ross.b.brattain@intel.com>,
+        Robert Love <robert.w.love@intel.com>
+Subject: Re: [PATCH][next] scsi: Replace one-element arrays with
+ flexible-array members
+Message-ID: <202112021113.D71F11B70@keescook>
+References: <20211105091102.GA126301@embeddedor>
+ <22139a80-3f64-1f21-6b5c-65d250bafe09@linux.ibm.com>
 MIME-Version: 1.0
-Received: by 2002:ab0:39c3:0:0:0:0:0 with HTTP; Thu, 2 Dec 2021 10:51:46 -0800 (PST)
-Reply-To: confianzayrentabilidad@gmail.com
-From:   "Mrs. Mimi Aminu" <mimiaminu319@gmail.com>
-Date:   Thu, 2 Dec 2021 10:51:46 -0800
-Message-ID: <CAD-C4f6cACcf_zysPKsksRi0MOBXg7FkzSMJAHTRg5RL+stLiw@mail.gmail.com>
-Subject: Greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <22139a80-3f64-1f21-6b5c-65d250bafe09@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Fri, Nov 05, 2021 at 12:24:13PM +0100, Steffen Maier wrote:
+> On 11/5/21 10:11, Gustavo A. R. Silva wrote:
+> > Use flexible-array members in struct fc_fdmi_attr_entry and
+> > fs_fdmi_attrs instead of one-element arrays, and refactor the
+> > code accordingly.
+> > 
+> > Also, turn the one-element array _port_ in struct fc_fdmi_rpl
+> > into a simple object of type struct fc_fdmi_port_name, as it
+> > seems there is no more than just one port expected:
+> > 
+> > $ git grep -nw numport drivers/scsi/
+> > drivers/scsi/csiostor/csio_lnode.c:447: reg_pl->numport = htonl(1);
+> > drivers/scsi/libfc/fc_encode.h:232:             put_unaligned_be32(1, &ct->payload.rhba.port.numport);
+> > 
+> > Also, this helps with the ongoing efforts to globally enable
+> > -Warray-bounds and get us closer to being able to tighten the
+> > FORTIFY_SOURCE routines on memcpy().
+> > 
+> > https://github.com/KSPP/linux/issues/79
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > ---
+> >   drivers/scsi/csiostor/csio_lnode.c | 2 +-
+> >   drivers/scsi/libfc/fc_encode.h     | 4 ++--
+> >   include/scsi/fc/fc_ms.h            | 6 +++---
+> >   3 files changed, 6 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/scsi/csiostor/csio_lnode.c b/drivers/scsi/csiostor/csio_lnode.c
+> > index d5ac93897023..cf9dd79ee488 100644
+> > --- a/drivers/scsi/csiostor/csio_lnode.c
+> > +++ b/drivers/scsi/csiostor/csio_lnode.c
+> > @@ -445,7 +445,7 @@ csio_ln_fdmi_dprt_cbfn(struct csio_hw *hw, struct csio_ioreq *fdmi_req)
+> >   	/* Register one port per hba */
+> >   	reg_pl = (struct fc_fdmi_rpl *)pld;
+> >   	reg_pl->numport = htonl(1);
+> > -	memcpy(&reg_pl->port[0].portname, csio_ln_wwpn(ln), 8);
+> > +	memcpy(&reg_pl->port.portname, csio_ln_wwpn(ln), 8);
+> >   	pld += sizeof(*reg_pl);
+> > 
+> >   	/* Start appending HBA attributes hba */
+> > diff --git a/drivers/scsi/libfc/fc_encode.h b/drivers/scsi/libfc/fc_encode.h
+> > index 74ae7fd15d8d..5806f99e4061 100644
+> > --- a/drivers/scsi/libfc/fc_encode.h
+> > +++ b/drivers/scsi/libfc/fc_encode.h
+> > @@ -232,7 +232,7 @@ static inline int fc_ct_ms_fill(struct fc_lport *lport,
+> >   		put_unaligned_be32(1, &ct->payload.rhba.port.numport);
+> >   		/* Port Name */
+> >   		put_unaligned_be64(lport->wwpn,
+> > -				   &ct->payload.rhba.port.port[0].portname);
+> > +				   &ct->payload.rhba.port.port.portname);
+> > 
+> >   		/* HBA Attributes */
+> >   		put_unaligned_be32(numattrs,
+> 
+> > diff --git a/include/scsi/fc/fc_ms.h b/include/scsi/fc/fc_ms.h
+> > index 00191695233a..44fbe84fa664 100644
+> > --- a/include/scsi/fc/fc_ms.h
+> > +++ b/include/scsi/fc/fc_ms.h
+> 
+> > @@ -174,7 +174,7 @@ struct fs_fdmi_attrs {
+> 
+> /*
+>  * Registered Port List
+> 
+> >    */
+> >   struct fc_fdmi_rpl {
+> >   	__be32				numport;
+> > -	struct fc_fdmi_port_name	port[1];
+> > +	struct fc_fdmi_port_name	port;
+> >   } __attribute__((__packed__));
+> 
+> While I'm not affected by the change, it feels to me as if these are
+> protocol definitions originating in a T11 Fibre Channel standard FC-GS. It's
+> a port *list*. Can you "modify" the standard here?
+> 
+> The fact, that currently existing code users only ever seem to use one
+> single port in the list, would be an independent thing to me.
+
+There are three changes made here, and I suspect it might make sense to
+split them up.
+
+In a quick look, I see "struct fc_fdmi_attr_entry" has a sizeof() call
+against it, so it's not clear if it's safe to switch it to a flexible
+array without other changes.
+
+The change to struct fs_fdmi_attrs looks okay, since it appears to be
+used only in casts, but it might make sense to use diffoscope on the
+changed .o files to validate nothing weird has happened.
+
+For struct fc_dmi_rpl, as long as "numport" is always set/validated to
+1, I think this change is fine.
+
 -- 
-I, Mrs. Mimi Aminu, please a huge amount of payment was made into your
-account. as soon as your respond is noted the payment confirmation
-slip will immediately send to you.  please do not hesitate to reply as
-soon as you receive this message. awaiting your urgent reply please.
-
-Thanks
-Mrs. Mimi Aminu,
-
-Best regards
-Prof. Dr Diane
+Kees Cook
