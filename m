@@ -2,87 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5DF467070
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Dec 2021 04:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B1F467079
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Dec 2021 04:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378339AbhLCDG4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 2 Dec 2021 22:06:56 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:47660 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239667AbhLCDGz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Dec 2021 22:06:55 -0500
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B30lctI008309;
-        Fri, 3 Dec 2021 03:03:26 GMT
+        id S1378362AbhLCDHu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 2 Dec 2021 22:07:50 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:12774 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350673AbhLCDHu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Dec 2021 22:07:50 -0500
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B31bvbn032215;
+        Fri, 3 Dec 2021 03:04:12 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=B7Wt9Jlgx+mmpm8Ls0ySZB7jPnH8vwPxknfqQqCUGJU=;
- b=TOQbqSGO1P+cYd48Y7k+63QTuAdG0uQqstgiojTaL3i/+tZOOCyP5skXarEX4HadUA7m
- WVACHiOqlHcdcF4IBqZEaSFiK8ck2RP+C/s5ksRxQz9nR35IUt9NjrVoVqsTVe/PfsNW
- v+HZJmhlIA8COoSxemlG1rQSGUsqMYIoaDQMwzl3Le5N6vP5gfN99ojliJX6ammjmn5G
- Ai5r9a/xmUzKu4j9SqH063aZvs00XnYWLCyJqdQu+rs1Gc4GuUOVdd2lF0y3fu+ZC+i/
- 6nbPE4jLj0UfjAIxWOsKYrwnE8SDs/crXSLKM8Ku45zkjDlvSRp61gW+mpRY3cmSSnb4 GQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cp7t1vshc-1
+ bh=BKnObZ7geocC49waErrE9GRryKp77DeqzWXTV2OBkVU=;
+ b=OdjCEGz/aH/cFvgUapWO7Kmlj5J9Ay7WYoc+yhzOr77Fix6xIoUnAqdhlvvqAoTAn44S
+ cNUH7jqnhgfkgRHRnFq78pilGqZ/qbz/+Qh+szyzBNrH0gE4R6r5tCSPH7yqDC9noraP
+ qs6EZOBswp6PKuVKZ+qtPQ4EEQHiV5kuVwRxqqJ3CX3+imQVtDFZUIrYM6oC/QifKVz4
+ irqNUZ/hP5tamdQsqnZdhlQ5FPE15SDjMR82hAMS6It382Jg1rJFWwu9H4zWmNj0UNDu
+ agCdXoGEVxVoUqlpq8PginK1rTswQ1NbUqL7o/3Z+VG0wm+hJiylzs/7EGvQf4+duu47 fw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cpb70d4ae-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 03 Dec 2021 03:03:20 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B332uFL005354;
-        Fri, 3 Dec 2021 03:03:13 GMT
+        Fri, 03 Dec 2021 03:04:11 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B331p2S188333;
+        Fri, 3 Dec 2021 03:04:01 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3030.oracle.com with ESMTP id 3ck9t5dswd-1
+        by aserp3020.oracle.com with ESMTP id 3cnhvht9gc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 03 Dec 2021 03:03:13 +0000
-Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1B333C7x006710;
-        Fri, 3 Dec 2021 03:03:12 GMT
+        Fri, 03 Dec 2021 03:04:01 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1B3340iW003616;
+        Fri, 3 Dec 2021 03:04:00 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3030.oracle.com with ESMTP id 3ck9t5dsvh-1;
-        Fri, 03 Dec 2021 03:03:12 +0000
+        by aserp3020.oracle.com with ESMTP id 3cnhvht9f3-1;
+        Fri, 03 Dec 2021 03:04:00 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Igor Pylypiv <ipylypiv@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Viswas G <Viswas.G@microchip.com>,
-        Changyuan Lyu <changyuanl@google.com>,
-        linux-scsi@vger.kernel.org,
-        Vishakha Channapattan <vishakhavc@google.com>,
-        Ruksar Devadi <Ruksar.devadi@microchip.com>
-Subject: Re: [PATCH] scsi: pm80xx: Do not call scsi_remove_host() in pm8001_alloc()
-Date:   Thu,  2 Dec 2021 22:03:11 -0500
-Message-Id: <163850057786.29121.3572131363494831341.b4-ty@oracle.com>
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Wei Li <liwei213@huawei.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Can Guo <cang@codeaurora.org>, linux-scsi@vger.kernel.org,
+        Bean Huo <huobean@gmail.com>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>
+Subject: Re: [PATCH V8 0/1] scsi: ufs: Let devices remain runtime suspended during system suspend
+Date:   Thu,  2 Dec 2021 22:03:57 -0500
+Message-Id: <163850060429.30297.10398480290681805623.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211201041627.1592487-1-ipylypiv@google.com>
-References: <20211201041627.1592487-1-ipylypiv@google.com>
+In-Reply-To: <20211027130614.406985-1-adrian.hunter@intel.com>
+References: <20211027130614.406985-1-adrian.hunter@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: qL39CsBmd2ZJPMsrR8Oyh07x7vy2hyHo
-X-Proofpoint-GUID: qL39CsBmd2ZJPMsrR8Oyh07x7vy2hyHo
+X-Proofpoint-ORIG-GUID: fVJ4rdjEsiVAd63L2vXX9WdXiyyh2ucV
+X-Proofpoint-GUID: fVJ4rdjEsiVAd63L2vXX9WdXiyyh2ucV
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 30 Nov 2021 20:16:27 -0800, Igor Pylypiv wrote:
+On Wed, 27 Oct 2021 16:06:13 +0300, Adrian Hunter wrote:
 
-> Calling scsi_remove_host() before scsi_add_host() results in a crash:
+> UFS devices can remain runtime suspended at system suspend time,
+> if the conditions are right.  Add support for that, first fixing
+> the impediments.
 > 
->  BUG: kernel NULL pointer dereference, address: 0000000000000108
->  RIP: 0010:device_del+0x63/0x440
->  Call Trace:
->   device_unregister+0x17/0x60
->   scsi_remove_host+0xee/0x2a0
->   pm8001_pci_probe+0x6ef/0x1b90 [pm80xx]
->   local_pci_probe+0x3f/0x90
+> 
+> Changes in V8:
 > 
 > [...]
 
-Applied to 5.16/scsi-fixes, thanks!
+Applied to 5.17/scsi-queue, thanks!
 
-[1/1] scsi: pm80xx: Do not call scsi_remove_host() in pm8001_alloc()
-      https://git.kernel.org/mkp/scsi/c/653926205741
+[1/1] scsi: ufs: Let devices remain runtime suspended during system suspend
+      https://git.kernel.org/mkp/scsi/c/ddba1cf7a506
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
