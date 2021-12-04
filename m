@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFDC468140
-	for <lists+linux-scsi@lfdr.de>; Sat,  4 Dec 2021 01:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFFB468141
+	for <lists+linux-scsi@lfdr.de>; Sat,  4 Dec 2021 01:27:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383717AbhLDAaY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1383726AbhLDAaY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Fri, 3 Dec 2021 19:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354494AbhLDAaS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Dec 2021 19:30:18 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE24C061353
+        with ESMTP id S1354508AbhLDAaT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Dec 2021 19:30:19 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000EBC061354
         for <linux-scsi@vger.kernel.org>; Fri,  3 Dec 2021 16:26:54 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id b68so4366391pfg.11
+Received: by mail-pg1-x52d.google.com with SMTP id m15so4603430pgu.11
         for <linux-scsi@vger.kernel.org>; Fri, 03 Dec 2021 16:26:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Xz8H6wq4pc21RvdktZiCAvkDGRjCb74RFrPYuwcPwJ0=;
-        b=mU0dE7nrT7yeNWWDV+cHKWglnzCKi7FVGWR5illHzQlD66fjswXFdQju/5NN7cblRj
-         UzuXTCsruqbyzx2LMQWfQyRBb1NfQZarf5O4wtIYSo3qdk69N0XkWnCQcBgN/sq22mVa
-         Zqgv2aKw+EjHwF0i7bI8sCAf7eS8q7XFcM0T8yh5mEgVzNfJO8XdeYgVA0+vWie3mg9j
-         bhCtnY5fFRcRlsmZBf6W7aR7xHGH6TFQfnLbZuk4FkmqpuJhgMCfHPs7WTPc95DYQJmR
-         K6cRffXZ6nDZHUW2GXYPoD63mfFaoPyZqWTfjsfdQz3zxij+MU3G0zGW0VnXrj6Anta7
-         4TgA==
+        bh=4+PRV9LosVlZ9ZDh93g4uetT+X/2Sswu6M+7eCceBt4=;
+        b=K6ZlelNPqwRYAwnnw73JEOdPZ6LKmSKejZI9Uck1RP4ei8hj/cHuzGFRwWTVv5tDpF
+         1OFGULEFB9e7i1UhQu3XxOmPtlthanwlt4XXZRHLR36ew9GRIMVE/osF2x2UtdEdUURq
+         Su9U4Dtg+lsmzFowYn62Ibsj6H3Ccyy5G8cokrMH4UfbrvM4q38MBGtj2IKlmZnQv+e2
+         O6KlYLs16XqZwdBhJOvM7SRU3Hl+REqaECXdHuJFkz2A7wrQJjMJ12mRPmzE1GviSxQy
+         UBVBAGQHUiT4VqaHr2CME9PM91TC2Kuq9Tym+A6yEUg0ZzUepIiKVQ3RiRq2XLPPLG7w
+         GNIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Xz8H6wq4pc21RvdktZiCAvkDGRjCb74RFrPYuwcPwJ0=;
-        b=LNM0Jp9oHSsGffJoTBa8ZZ6FlLtHmeFpmeqPbtVRa9z1MLzjw7+ptzaVXOZ2smvUw9
-         n1Gp+2YY7ZppJHOsoNbDC0g+4S+/gYXaNij5y1Ga1uawr4k1FcYBGq3R+Oo8KvzmBC9g
-         lAwx+m74qgY+prG/zElJ5FtzCjbol2sMLEid4GoGe0TzAMk/4VORbQBchol3WcXCAw8A
-         1GMdbs5o5VEQkVR+p1+19CEdlRpUkJqv+snCxYq8H1+P5DGCcQ1ixb8rTb72vT2A5Z3r
-         E1g24GRm3BmoOzRsw78S3aWCilhy/X4kRXchcz0PkipBLzdEOhmINXtxOf+DfGkC6nR7
-         aNdQ==
-X-Gm-Message-State: AOAM530Ky44g+kFsBjInJ1g3aCBx2MDWYUZjs0h+88J0XwhBkSDTkCa+
-        /4fKZ22J6HcdhXdej869CyzR9XabED0=
-X-Google-Smtp-Source: ABdhPJzPw5mVUKMc0biG4vQY2uYBY08sRCF68DRSZV9p3Q+d101CtzxDjp+YVFL3MexF+R96BW+Nfw==
-X-Received: by 2002:a05:6a00:2444:b0:4a3:239f:d58a with SMTP id d4-20020a056a00244400b004a3239fd58amr5950830pfj.85.1638577613675;
-        Fri, 03 Dec 2021 16:26:53 -0800 (PST)
+        bh=4+PRV9LosVlZ9ZDh93g4uetT+X/2Sswu6M+7eCceBt4=;
+        b=ecTcfpWm8/8gKKjpwgw87+AUPpKFLGXs76y/8B0BxfADh2cGjH8IGQDWm6BhtTxwoX
+         LKYYfNdFzfx+zOVe6IhSLVLC7FJqEf/hCULsQ6AnAte4KarXyHrwSyW1C/wsbgIMqKNv
+         8+NvXmzMQnRY+7Xz0n2J/6qg5thQ4o+32F8NjIEADVXfJPYBG2WvrdnoLFdl26ZDrpsE
+         YqaqRzNOrkJBA+O+MlFQBw8bO1KcDzXJsYRl4y69M6r1rKgzonI01cafabCOYwJ3s7dT
+         PKyPmerKhsm11sqZVxhTNaQdQztl/CC0w48HjIIG0sMoJhswYil5d/8UYKxWcRjfqlj1
+         XUSA==
+X-Gm-Message-State: AOAM532A/irBAsR3sk9e5SM9jXAkK7a8LSO6TlllZaL0Lvp+p32cO8Fg
+        6l1teZX9xwOJVIi31VR9jhlbIncaeMI=
+X-Google-Smtp-Source: ABdhPJwmvCTAGNbrG6ye+pX6OT4JqR05PdaX8ddmCCEdH0Ge9SzEmMtQ/DF7268+Bzox/vGtY4f09A==
+X-Received: by 2002:a05:6a00:2181:b0:4a7:ed1f:c5ba with SMTP id h1-20020a056a00218100b004a7ed1fc5bamr22512931pfi.2.1638577614347;
+        Fri, 03 Dec 2021 16:26:54 -0800 (PST)
 Received: from mail-lvn-it-01.broadcom.com ([192.19.223.252])
         by smtp.gmail.com with ESMTPSA id q17sm4970707pfu.117.2021.12.03.16.26.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Dec 2021 16:26:53 -0800 (PST)
+        Fri, 03 Dec 2021 16:26:54 -0800 (PST)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 5/9] lpfc: Trigger SLI4 firmware dump before doing driver cleanup
-Date:   Fri,  3 Dec 2021 16:26:40 -0800
-Message-Id: <20211204002644.116455-6-jsmart2021@gmail.com>
+Subject: [PATCH 6/9] lpfc: Adjust CMF total bytes and rxmonitor
+Date:   Fri,  3 Dec 2021 16:26:41 -0800
+Message-Id: <20211204002644.116455-7-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20211204002644.116455-1-jsmart2021@gmail.com>
 References: <20211204002644.116455-1-jsmart2021@gmail.com>
@@ -63,179 +63,134 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Extraneous teardown routines are present in the firmware dump path causing
-altered states in firmware captures.
+Calculate any extra bytes needed to account for timer accuracy. If we are
+less than LPFC_CMF_INTERVAL, then calculate the adjustment needed for total
+to reflect a full LPFC_CMF_INTERVAL.
 
-When a firmware dump is requested via sysfs, trigger the dump immediately
-without tearing down structures and changing adapter state.
-
-The driver shall rely on pre-existing firmware error state clean up
-handlers to restore the adapter.
+Add additional info to rxmonitor, and adjust some log formatting.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc.h         |  2 +-
- drivers/scsi/lpfc/lpfc_attr.c    | 62 ++++++++++++++++++++------------
- drivers/scsi/lpfc/lpfc_hbadisc.c |  8 ++++-
- drivers/scsi/lpfc/lpfc_sli.c     |  6 ----
- 4 files changed, 48 insertions(+), 30 deletions(-)
+ drivers/scsi/lpfc/lpfc.h         |  1 +
+ drivers/scsi/lpfc/lpfc_debugfs.c | 14 ++++++++------
+ drivers/scsi/lpfc/lpfc_debugfs.h |  2 +-
+ drivers/scsi/lpfc/lpfc_init.c    | 20 ++++++++++++--------
+ 4 files changed, 22 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
-index a04995832459..e652926fb47a 100644
+index e652926fb47a..49abbf132bee 100644
 --- a/drivers/scsi/lpfc/lpfc.h
 +++ b/drivers/scsi/lpfc/lpfc.h
-@@ -1021,7 +1021,6 @@ struct lpfc_hba {
- #define HBA_DEVLOSS_TMO         0x2000 /* HBA in devloss timeout */
- #define HBA_RRQ_ACTIVE		0x4000 /* process the rrq active list */
- #define HBA_IOQ_FLUSH		0x8000 /* FCP/NVME I/O queues being flushed */
--#define HBA_FW_DUMP_OP		0x10000 /* Skips fn reset before FW dump */
- #define HBA_RECOVERABLE_UE	0x20000 /* Firmware supports recoverable UE */
- #define HBA_FORCED_LINK_SPEED	0x40000 /*
- 					 * Firmware supports Forced Link Speed
-@@ -1038,6 +1037,7 @@ struct lpfc_hba {
- #define HBA_HBEAT_TMO		0x8000000 /* HBEAT initiated after timeout */
- #define HBA_FLOGI_OUTSTANDING	0x10000000 /* FLOGI is outstanding */
+@@ -1602,6 +1602,7 @@ struct lpfc_hba {
+ #define LPFC_MAX_RXMONITOR_ENTRY	800
+ #define LPFC_MAX_RXMONITOR_DUMP		32
+ struct rxtable_entry {
++	uint64_t cmf_bytes;	/* Total no of read bytes for CMF_SYNC_WQE */
+ 	uint64_t total_bytes;   /* Total no of read bytes requested */
+ 	uint64_t rcv_bytes;     /* Total no of read bytes completed */
+ 	uint64_t avg_io_size;
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index bd6d459afce5..ab2550ad0597 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -5561,22 +5561,24 @@ lpfc_rx_monitor_read(struct file *file, char __user *buf, size_t nbytes,
+ 	start = tail;
  
-+	struct completion *fw_dump_cmpl; /* cmpl event tracker for fw_dump */
- 	uint32_t fcp_ring_in_use; /* When polling test if intr-hndlr active*/
- 	struct lpfc_dmabuf slim2p;
+ 	len += scnprintf(buffer + len, MAX_DEBUGFS_RX_TABLE_SIZE - len,
+-			"        MaxBPI\t Total Data Cmd  Total Data Cmpl "
+-			"  Latency(us)    Avg IO Size\tMax IO Size   IO cnt "
+-			"Info BWutil(ms)\n");
++			"        MaxBPI    Tot_Data_CMF Tot_Data_Cmd "
++			"Tot_Data_Cmpl  Lat(us)  Avg_IO  Max_IO "
++			"Bsy IO_cnt Info BWutil(ms)\n");
+ get_table:
+ 	for (i = start; i < last; i++) {
+ 		entry = &phba->rxtable[i];
+ 		len += scnprintf(buffer + len, MAX_DEBUGFS_RX_TABLE_SIZE - len,
+-				"%3d:%12lld  %12lld\t%12lld\t"
+-				"%8lldus\t%8lld\t%10lld "
+-				"%8d   %2d %2d(%2d)\n",
++				"%3d:%12lld %12lld %12lld %12lld "
++				"%7lldus %8lld %7lld "
++				"%2d   %4d   %2d   %2d(%2d)\n",
+ 				i, entry->max_bytes_per_interval,
++				entry->cmf_bytes,
+ 				entry->total_bytes,
+ 				entry->rcv_bytes,
+ 				entry->avg_io_latency,
+ 				entry->avg_io_size,
+ 				entry->max_read_cnt,
++				entry->cmf_busy,
+ 				entry->io_cnt,
+ 				entry->cmf_info,
+ 				entry->timer_utilization,
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.h b/drivers/scsi/lpfc/lpfc_debugfs.h
+index a5bf71b34972..6dd361c1fd31 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.h
++++ b/drivers/scsi/lpfc/lpfc_debugfs.h
+@@ -282,7 +282,7 @@ struct lpfc_idiag {
+ 	void *ptr_private;
+ };
  
-diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-index dd4c51b6ef4e..7a7f17d71811 100644
---- a/drivers/scsi/lpfc/lpfc_attr.c
-+++ b/drivers/scsi/lpfc/lpfc_attr.c
-@@ -1709,25 +1709,25 @@ lpfc_sli4_pdev_reg_request(struct lpfc_hba *phba, uint32_t opcode)
- 	before_fc_flag = phba->pport->fc_flag;
- 	sriov_nr_virtfn = phba->cfg_sriov_nr_virtfn;
+-#define MAX_DEBUGFS_RX_TABLE_SIZE	(100 * LPFC_MAX_RXMONITOR_ENTRY)
++#define MAX_DEBUGFS_RX_TABLE_SIZE	(128 * LPFC_MAX_RXMONITOR_ENTRY)
+ struct lpfc_rx_monitor_debug {
+ 	char *i_private;
+ 	char *buffer;
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 7628b0634c57..132f2e60bdb4 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -5927,7 +5927,7 @@ lpfc_cmf_timer(struct hrtimer *timer)
+ 	uint32_t io_cnt;
+ 	uint32_t head, tail;
+ 	uint32_t busy, max_read;
+-	uint64_t total, rcv, lat, mbpi, extra;
++	uint64_t total, rcv, lat, mbpi, extra, cnt;
+ 	int timer_interval = LPFC_CMF_INTERVAL;
+ 	uint32_t ms;
+ 	struct lpfc_cgn_stat *cgs;
+@@ -5998,20 +5998,23 @@ lpfc_cmf_timer(struct hrtimer *timer)
  
--	/* Disable SR-IOV virtual functions if enabled */
--	if (phba->cfg_sriov_nr_virtfn) {
--		pci_disable_sriov(pdev);
--		phba->cfg_sriov_nr_virtfn = 0;
--	}
-+	if (opcode == LPFC_FW_DUMP) {
-+		init_completion(&online_compl);
-+		phba->fw_dump_cmpl = &online_compl;
-+	} else {
-+		/* Disable SR-IOV virtual functions if enabled */
-+		if (phba->cfg_sriov_nr_virtfn) {
-+			pci_disable_sriov(pdev);
-+			phba->cfg_sriov_nr_virtfn = 0;
+ 		/* Calculate any extra bytes needed to account for the
+ 		 * timer accuracy. If we are less than LPFC_CMF_INTERVAL
+-		 * add an extra 3% slop factor, equal to LPFC_CMF_INTERVAL
+-		 * add an extra 2%. The goal is to equalize total with a
+-		 * time > LPFC_CMF_INTERVAL or <= LPFC_CMF_INTERVAL + 1
++		 * calculate the adjustment needed for total to reflect
++		 * a full LPFC_CMF_INTERVAL.
+ 		 */
+-		if (ms == LPFC_CMF_INTERVAL)
+-			extra = div_u64(total, 50);
+-		else if (ms < LPFC_CMF_INTERVAL)
+-			extra = div_u64(total, 33);
++		if (ms && ms < LPFC_CMF_INTERVAL) {
++			cnt = div_u64(total, ms); /* bytes per ms */
++			cnt *= LPFC_CMF_INTERVAL; /* what total should be */
++			if (cnt > mbpi)
++				cnt = mbpi;
++			extra = cnt - total;
 +		}
- 
--	if (opcode == LPFC_FW_DUMP)
--		phba->hba_flag |= HBA_FW_DUMP_OP;
-+		status = lpfc_do_offline(phba, LPFC_EVT_OFFLINE);
- 
--	status = lpfc_do_offline(phba, LPFC_EVT_OFFLINE);
-+		if (status != 0)
-+			return status;
- 
--	if (status != 0) {
--		phba->hba_flag &= ~HBA_FW_DUMP_OP;
--		return status;
-+		/* wait for the device to be quiesced before firmware reset */
-+		msleep(100);
+ 		lpfc_issue_cmf_sync_wqe(phba, LPFC_CMF_INTERVAL, total + extra);
+ 	} else {
+ 		/* For Monitor mode or link down we want mbpi
+ 		 * to be the full link speed
+ 		 */
+ 		mbpi = phba->cmf_link_byte_count;
++		extra = 0;
  	}
+ 	phba->cmf_timer_cnt++;
  
--	/* wait for the device to be quiesced before firmware reset */
--	msleep(100);
--
- 	reg_val = readl(phba->sli4_hba.conf_regs_memmap_p +
- 			LPFC_CTL_PDEV_CTL_OFFSET);
- 
-@@ -1756,24 +1756,42 @@ lpfc_sli4_pdev_reg_request(struct lpfc_hba *phba, uint32_t opcode)
- 		lpfc_printf_log(phba, KERN_ERR, LOG_SLI,
- 				"3153 Fail to perform the requested "
- 				"access: x%x\n", reg_val);
-+		if (phba->fw_dump_cmpl)
-+			phba->fw_dump_cmpl = NULL;
- 		return rc;
- 	}
- 
- 	/* keep the original port state */
--	if (before_fc_flag & FC_OFFLINE_MODE)
--		goto out;
--
--	init_completion(&online_compl);
--	job_posted = lpfc_workq_post_event(phba, &status, &online_compl,
--					   LPFC_EVT_ONLINE);
--	if (!job_posted)
-+	if (before_fc_flag & FC_OFFLINE_MODE) {
-+		if (phba->fw_dump_cmpl)
-+			phba->fw_dump_cmpl = NULL;
- 		goto out;
-+	}
- 
--	wait_for_completion(&online_compl);
-+	/* Firmware dump will trigger an HA_ERATT event, and
-+	 * lpfc_handle_eratt_s4 routine already handles bringing the port back
-+	 * online.
-+	 */
-+	if (opcode == LPFC_FW_DUMP) {
-+		wait_for_completion(phba->fw_dump_cmpl);
-+	} else  {
-+		init_completion(&online_compl);
-+		job_posted = lpfc_workq_post_event(phba, &status, &online_compl,
-+						   LPFC_EVT_ONLINE);
-+		if (!job_posted)
-+			goto out;
- 
-+		wait_for_completion(&online_compl);
-+	}
- out:
- 	/* in any case, restore the virtual functions enabled as before */
- 	if (sriov_nr_virtfn) {
-+		/* If fw_dump was performed, first disable to clean up */
-+		if (opcode == LPFC_FW_DUMP) {
-+			pci_disable_sriov(pdev);
-+			phba->cfg_sriov_nr_virtfn = 0;
-+		}
-+
- 		sriov_err =
- 			lpfc_sli_probe_sriov_nr_virtfn(phba, sriov_nr_virtfn);
- 		if (!sriov_err)
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index 802fd30a9fb8..816fc406135b 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -869,10 +869,16 @@ lpfc_work_done(struct lpfc_hba *phba)
- 	if (phba->pci_dev_grp == LPFC_PCI_DEV_OC)
- 		lpfc_sli4_post_async_mbox(phba);
- 
--	if (ha_copy & HA_ERATT)
-+	if (ha_copy & HA_ERATT) {
- 		/* Handle the error attention event */
- 		lpfc_handle_eratt(phba);
- 
-+		if (phba->fw_dump_cmpl) {
-+			complete(phba->fw_dump_cmpl);
-+			phba->fw_dump_cmpl = NULL;
-+		}
-+	}
-+
- 	if (ha_copy & HA_MBATT)
- 		lpfc_sli_handle_mb_event(phba);
- 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 5dedb3de271d..513a78d08b1d 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -5046,12 +5046,6 @@ lpfc_sli4_brdreset(struct lpfc_hba *phba)
- 	phba->fcf.fcf_flag = 0;
- 	spin_unlock_irq(&phba->hbalock);
- 
--	/* SLI4 INTF 2: if FW dump is being taken skip INIT_PORT */
--	if (phba->hba_flag & HBA_FW_DUMP_OP) {
--		phba->hba_flag &= ~HBA_FW_DUMP_OP;
--		return rc;
--	}
--
- 	/* Now physically reset the device */
- 	lpfc_printf_log(phba, KERN_INFO, LOG_INIT,
- 			"0389 Performing PCI function reset!\n");
+@@ -6042,6 +6045,7 @@ lpfc_cmf_timer(struct hrtimer *timer)
+ 				   LPFC_RXMONITOR_TABLE_IN_USE);
+ 		entry = &phba->rxtable[head];
+ 		entry->total_bytes = total;
++		entry->cmf_bytes = total + extra;
+ 		entry->rcv_bytes = rcv;
+ 		entry->cmf_busy = busy;
+ 		entry->cmf_info = phba->cmf_active_info;
 -- 
 2.26.2
 
