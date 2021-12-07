@@ -2,71 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C0846BD01
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Dec 2021 14:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E17B746C0F2
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Dec 2021 17:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237372AbhLGN6P (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Dec 2021 08:58:15 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4225 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbhLGN6O (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Dec 2021 08:58:14 -0500
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J7hZf2C7Cz67jkw;
-        Tue,  7 Dec 2021 21:52:58 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 7 Dec 2021 14:54:42 +0100
-Received: from [10.47.82.161] (10.47.82.161) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 7 Dec
- 2021 13:54:41 +0000
-Subject: Re: [PATCH] scsi: pm8001: Fix phys_to_virt() usage on dma_addr_t
-To:     <Ajish.Koshy@microchip.com>
-CC:     <jinpu.wang@cloud.ionos.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <Viswas.G@microchip.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <damien.lemoal@opensource.wdc.com>, <Niklas.Cassel@wdc.com>,
-        <Vasanthalakshmi.Tharmarajan@microchip.com>
-References: <1637940933-107862-1-git-send-email-john.garry@huawei.com>
- <PH0PR11MB51123148E4932FE1C64F8052EC669@PH0PR11MB5112.namprd11.prod.outlook.com>
- <a60318ef-dc19-a146-5ac3-16eae38b8c37@huawei.com>
- <Ya4PAu4Xj8UGHEV7@x1-carbon>
- <PH0PR11MB5112E2E7D00D95F32C86677AEC6E9@PH0PR11MB5112.namprd11.prod.outlook.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <6ee6fe1b-e811-cada-0c18-78149c313358@huawei.com>
-Date:   Tue, 7 Dec 2021 13:54:24 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S239115AbhLGQxj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Dec 2021 11:53:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237018AbhLGQxi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Dec 2021 11:53:38 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59B2C061746
+        for <linux-scsi@vger.kernel.org>; Tue,  7 Dec 2021 08:50:07 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id v1so59451790edx.2
+        for <linux-scsi@vger.kernel.org>; Tue, 07 Dec 2021 08:50:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=l4M25RUeS9aCUtSGNgcSHv8fdxUXdgMD4+Gi24GzVRE=;
+        b=ksyCLPgC2Zavp91zXjaHct3YMqSd2wbHOqLONUIWCZLDI9KYwLSYpbT1YfWuB8NwNO
+         Y0NRjtB14+RHG+aQK3UiazssoUqEROtcHdFzd+CtWJPpMO+ZiC5+DTEDJKuG2XAtxs6Q
+         XNdxknntjm6nSSgdT4gxb6VnJI+FycxLWolzzG9a+GX7ytDTtxWZGIK3Opto3ShNfsg5
+         psr3FpIfIzzdebwLP3HF5d/IVe/R78eXXN6WQsYD1jVuKcvvBk5Y0agwoaAd2UHZEDoy
+         wBScI/nOoC1cidLwsR3o1tm40oLWz1Mmc9225mMA5kYcAv7G6h7t7BNp/ZCmSrxH9SJY
+         9kyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=l4M25RUeS9aCUtSGNgcSHv8fdxUXdgMD4+Gi24GzVRE=;
+        b=R7ZdyJfmqa8oSJeANLrwlwUzU+ccmmd5JUiOUmidGmoIJJY+A0ADOgECcUGEgUkKly
+         qh/bakWkXCmjWPGSAuMty7ezQ7wxcAppQFGxTRRKU19Fy3wTcja4y7kb/2r+7QJYP2Oc
+         vgtgYiKz2F9fw+pDwCUlPuZq6YZfFb/9oas2tJY/uPn6edI/xUMNKVcCpk2Lbl+tSHFn
+         W7yQ12ioErGHrFcIAllr3CICGx/p4wI+18Mi1bdMhE8hk1iMuUAWCw/5VCdeUF5HE/wT
+         fN4+YEOc1nLN/ClFyTGO7lnrU2Gqsn1G4WbpCkKPviImnoSIaBSUYr54KxR//njC97RW
+         DaBA==
+X-Gm-Message-State: AOAM530UCU/t2LZlSc3JyA6OqrM/44gafhEbZXc9CHtIt7d53ztK4pG0
+        G8E27XfK5hRXe8oTxEbny77CS9afwn+ZZItZ7nc=
+X-Google-Smtp-Source: ABdhPJz53LMgJDqLuRrlgwxoDrtPaK5BfVXwRWcekQWzp0xUf7lo9CgMxXABsKsQT/moToDXQ9V3y9lhmWCQ8Imtg+I=
+X-Received: by 2002:a17:907:3e8a:: with SMTP id hs10mr630047ejc.404.1638895806323;
+ Tue, 07 Dec 2021 08:50:06 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <PH0PR11MB5112E2E7D00D95F32C86677AEC6E9@PH0PR11MB5112.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.82.161]
-X-ClientProxiedBy: lhreml721-chm.china.huawei.com (10.201.108.72) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Received: by 2002:a54:2ecf:0:0:0:0:0 with HTTP; Tue, 7 Dec 2021 08:50:05 -0800 (PST)
+Reply-To: lisshuuu1@gmail.com
+From:   MS LISA HUGH <olivier.folly0@gmail.com>
+Date:   Tue, 7 Dec 2021 17:50:05 +0100
+Message-ID: <CAG_GOAuYcLA4EEBUokYkvfdjSPCM_=xwbrtP-Pn9B8WgvDDKUA@mail.gmail.com>
+Subject: YOU HAVE THE DETAILS AS SOON I HEAR FROM YOU(Ms Lisa Hugh)
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 07/12/2021 10:36, Ajish.Koshy@microchip.com wrote:
-> Well I could see this kernel panic [  126.843958] RIP: 0010:pm80xx_chip_smp_req+0x1d6/0x2e0 [pm80xx] with respect to existing driver on my current system x86 64bit after enabling the following 2 kernel boot arguments:
-> -intel_iommu=on
-> -iommu.passthrough=0
->
-OK, so it seems that it was the kernel which was just not enabling the 
-IOMMU previously, which would be consistent with what Niklas mentioned.
+Dear Friend,
 
-Anyway, please supply reviewed-by and/or tested-by tags so that the SCSI 
-maintainers can pick it up.
+I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
 
-I suppose that we should also have:
+I need Your help for the assistance transferring of ($4,500,000,00
+,U.S.DOLLARS)to your bank
 
-Fixes: f5860992db55 ("[SCSI] pm80xx: Added SPCv/ve specific hardware
-functionalities and relevant changes in common files")
+account with your co-operation for both of us benefit.
 
-Thanks for testing,
-John
+Please send the follow below,
+1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
+Thanks.
+Ms Lisa Hugh
