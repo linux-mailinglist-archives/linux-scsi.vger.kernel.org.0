@@ -2,55 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910FB589082
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Aug 2022 18:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9146589075
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Aug 2022 18:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236822AbiHCQb4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Aug 2022 12:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
+        id S238618AbiHCQbJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Aug 2022 12:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238548AbiHCQaj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Aug 2022 12:30:39 -0400
+        with ESMTP id S238472AbiHCQ37 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Aug 2022 12:29:59 -0400
 Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486084D80E;
-        Wed,  3 Aug 2022 09:30:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CF0459B6;
+        Wed,  3 Aug 2022 09:29:51 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id C8E144136D;
-        Wed,  3 Aug 2022 16:30:03 +0000 (UTC)
+        by mta-01.yadro.com (Postfix) with ESMTP id DB971412CD;
+        Wed,  3 Aug 2022 16:29:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received:received; s=
-        mta-01; t=1659544201; x=1661358602; bh=pOcEOZn7zbrsXU9QO0/YYkQvP
-        8Qm6scl2kk4JEHpRg4=; b=SWs8hly5oo4vgaiCMG/7lW462sYfhXNQ0wy/uOSTl
-        TTxslmXiXnLXLjabbiZYlt21MuQs5+oda2e1/q8nQ11t1FKos1NvZkY25WWwOVLH
-        LGRnexgOIp2Kgsfn0UOglmHji7DAXV0YU88ifNtf6B5AIvcTys21hwwtTlqT0pX9
-        qQ=
+        mta-01; t=1659544187; x=1661358588; bh=zlKycAt5dSClcXurbAZMX2Ti9
+        5ZJfsryd4YKniFhyfw=; b=qa6+B+fdHJX12/APRj98KXWiB8aDP33qJgAevbOGG
+        sHofBkdqydLzkuvxs/GSfQbTHfxpYBAG/3Or08joiXtOdHGrsAoljOhy5nct0Wyq
+        gSwHHtVht71yRuIJFYVHsex8mOXTGf6DRYxjN+mAB3PkezQjuLdhCKdsWsS/3J+S
+        58=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IgCiEk_zx9-V; Wed,  3 Aug 2022 19:30:01 +0300 (MSK)
+        with ESMTP id VP6PibY3Kz1V; Wed,  3 Aug 2022 19:29:47 +0300 (MSK)
 Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 75EC4412EE;
-        Wed,  3 Aug 2022 19:29:23 +0300 (MSK)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 656FA41287;
+        Wed,  3 Aug 2022 19:29:22 +0300 (MSK)
 Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
  T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Wed, 3 Aug 2022 19:29:23 +0300
+ 15.1.669.32; Wed, 3 Aug 2022 19:29:22 +0300
 Received: from NB-591.corp.yadro.com (10.199.18.20) by
  T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.9; Wed, 3 Aug 2022 19:29:22 +0300
+ 15.2.1118.9; Wed, 3 Aug 2022 19:29:21 +0300
 From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
 To:     Martin Petersen <martin.petersen@oracle.com>,
         <target-devel@vger.kernel.org>
 CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [RFC PATCH 39/48] target: cluster: read PR data from cluster
-Date:   Mon, 6 Dec 2021 16:39:54 +0300
-Message-ID: <20220803162857.27770-40-d.bogdanov@yadro.com>
+        Dmitry Bogdanov <d.bogdanov@yadro.com>,
+        Konstantin Shelekhin <k.shelekhin@yadro.com>
+Subject: [RFC PATCH 35/48] target: add virtual remote target
+Date:   Tue, 7 Dec 2021 12:47:12 +0300
+Message-ID: <20220803162857.27770-36-d.bogdanov@yadro.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220803162857.27770-1-d.bogdanov@yadro.com>
 References: <20220803162857.27770-1-d.bogdanov@yadro.com>
@@ -70,521 +71,515 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Notify other nodes in cluster that PR data updated.
-On notification do the following under PR cluster lock to read PR data:
-	Update an existing registrants.
-	Remove an outdated registrants (absent in cluster data).
-	Create new registrants.
-	Update Reservation status.
+Create virtual remote target module.
+It can be used to see a whole acl/lun/tpg configuration from all nodes in
+storage cluster.
 
+Suggested-by: Konstantin Shelekhin <k.shelekhin@yadro.com>
 Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
 ---
- drivers/target/target_cluster_dlm.c     | 304 ++++++++++++++++++++++++
- drivers/target/target_core_device.c     |   1 +
- drivers/target/target_core_fabric_lib.c |   3 +-
- drivers/target/target_core_internal.h   |   5 -
- drivers/target/target_core_pr.c         |   8 +-
- drivers/target/target_core_pr.h         |   1 +
- include/target/target_core_base.h       |   5 +
- 7 files changed, 320 insertions(+), 7 deletions(-)
+ drivers/target/Kconfig                 |   1 +
+ drivers/target/Makefile                |   1 +
+ drivers/target/tcm_remote/Kconfig      |   8 +
+ drivers/target/tcm_remote/Makefile     |   2 +
+ drivers/target/tcm_remote/tcm_remote.c | 405 +++++++++++++++++++++++++
+ drivers/target/tcm_remote/tcm_remote.h |  29 ++
+ 6 files changed, 446 insertions(+)
+ create mode 100644 drivers/target/tcm_remote/Kconfig
+ create mode 100644 drivers/target/tcm_remote/Makefile
+ create mode 100644 drivers/target/tcm_remote/tcm_remote.c
+ create mode 100644 drivers/target/tcm_remote/tcm_remote.h
 
-diff --git a/drivers/target/target_cluster_dlm.c b/drivers/target/target_cluster_dlm.c
-index 14465764eaaf..6b7cb3175e3a 100644
---- a/drivers/target/target_cluster_dlm.c
-+++ b/drivers/target/target_cluster_dlm.c
-@@ -17,6 +17,7 @@ struct target_cluster_data {
- 	struct mutex pr_lock_mutex;
- 	struct dlm_ckv_lock *pr_lock;
- 	struct dlm_ckv_kv *pr_data;
-+	struct dlm_ckv_notify *pr_sync_notify;
- 	int reserved_node_id;
- 	struct dlm_ckv_kv **pr_reg_kv;
- 	size_t pr_reg_kv_len;
-@@ -96,6 +97,7 @@ struct async_group {
- 	struct completion compl;
- };
+diff --git a/drivers/target/Kconfig b/drivers/target/Kconfig
+index 75d5e1d23a1c..5440c0e93e1e 100644
+--- a/drivers/target/Kconfig
++++ b/drivers/target/Kconfig
+@@ -53,5 +53,6 @@ source "drivers/target/loopback/Kconfig"
+ source "drivers/target/tcm_fc/Kconfig"
+ source "drivers/target/iscsi/Kconfig"
+ source "drivers/target/sbp/Kconfig"
++source "drivers/target/tcm_remote/Kconfig"
  
-+static void target_pr_sync_cb(void *arg);
- static int pr_reg_realloc(struct target_cluster_data *cluster_data,
- 			  size_t nr_registrants);
+ endif
+diff --git a/drivers/target/Makefile b/drivers/target/Makefile
+index 8bc9ac2bd629..be4d1bfcf79a 100644
+--- a/drivers/target/Makefile
++++ b/drivers/target/Makefile
+@@ -30,5 +30,6 @@ obj-$(CONFIG_LOOPBACK_TARGET)	+= loopback/
+ obj-$(CONFIG_TCM_FC)		+= tcm_fc/
+ obj-$(CONFIG_ISCSI_TARGET)	+= iscsi/
+ obj-$(CONFIG_SBP_TARGET)	+= sbp/
++obj-$(CONFIG_REMOTE_TARGET)	+= tcm_remote/
  
-@@ -143,10 +145,17 @@ static int target_init_dlm(struct se_device *dev)
- 	if (!cluster_data->pr_data)
- 		goto fail;
- 
-+	cluster_data->pr_sync_notify = dlm_ckv_create_notification(
-+		cluster_data->bucket, "pr_sync", target_pr_sync_cb);
-+	if (!cluster_data->pr_sync_notify)
-+		goto fail;
+ obj-$(CONFIG_DLM_CKV)			+= dlm_ckv.o
+diff --git a/drivers/target/tcm_remote/Kconfig b/drivers/target/tcm_remote/Kconfig
+new file mode 100644
+index 000000000000..e6bebb5fe6f1
+--- /dev/null
++++ b/drivers/target/tcm_remote/Kconfig
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0-only
++config REMOTE_TARGET
++	tristate "TCM Virtual Remote target"
++	depends on SCSI
++	help
++	  Say Y here to enable the TCM Virtual Remote fabric
++	  That fabric is a dummy fabric to tell TCM about configuration
++	  of TPG/ACL/LUN on peer nodes in a cluster.
+diff --git a/drivers/target/tcm_remote/Makefile b/drivers/target/tcm_remote/Makefile
+new file mode 100644
+index 000000000000..5818ffd0b0fa
+--- /dev/null
++++ b/drivers/target/tcm_remote/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_REMOTE_TARGET)	+= tcm_remote.o
+diff --git a/drivers/target/tcm_remote/tcm_remote.c b/drivers/target/tcm_remote/tcm_remote.c
+new file mode 100644
+index 000000000000..a2aaeb3fdbe3
+--- /dev/null
++++ b/drivers/target/tcm_remote/tcm_remote.c
+@@ -0,0 +1,405 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
 +
- 	dev->cluster_data = cluster_data;
- 
- 	return err;
- fail:
-+	if (cluster_data->pr_sync_notify)
-+		dlm_ckv_free_notification(cluster_data->pr_sync_notify);
- 	if (cluster_data->pr_lock)
- 		dlm_ckv_free_lock(cluster_data->pr_lock);
- 	if (cluster_data->pr_data)
-@@ -167,6 +176,7 @@ static int target_cleanup_dlm(struct se_device *dev)
- 			dlm_ckv_free_kv(cluster_data->pr_reg_kv[i]);
- 	kfree(cluster_data->pr_reg_kv);
- 
-+	dlm_ckv_free_notification(cluster_data->pr_sync_notify);
- 	dlm_ckv_free_lock(cluster_data->pr_lock);
- 	dlm_ckv_free_kv(cluster_data->pr_data);
- 	res = dlm_ckv_close_bucket(cluster_data->bucket);
-@@ -379,11 +389,305 @@ static int target_pr_sync_dlm(struct se_device *dev)
- 
- skip_pr_reg:
- 
-+	/* request to update PR data on other nodes in cluster */
-+	dlm_ckv_notify(cluster_data->pr_sync_notify);
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/init.h>
++#include <linux/slab.h>
++#include <linux/types.h>
++#include <linux/configfs.h>
++#include <scsi/scsi.h>
++#include <scsi/scsi_tcq.h>
++#include <scsi/scsi_host.h>
++#include <scsi/scsi_device.h>
++#include <scsi/scsi_cmnd.h>
 +
- done:
- 
- 	return res;
- }
- 
-+static int target_update_pr_reg(struct se_device *dev,
-+				struct t10_pr_registration *pr_reg,
-+				const struct pr_lvb *pr_data,
-+				const struct pr_reg_lvb *pr_reg_data,
-+				struct t10_pr_registration **pr_reg_res_holder)
++#include <target/target_core_base.h>
++#include <target/target_core_fabric.h>
++
++#include "tcm_remote.h"
++
++#define to_tcm_remote_hba(hba)	container_of(hba, struct tcm_remote_hba, dev)
++
++static int tcm_remote_hba_no_cnt;
++
++static inline struct tcm_remote_tpg *remote_tpg(struct se_portal_group *se_tpg)
 +{
-+	/* update existing registrant */
-+	pr_reg->pr_res_key = pr_reg_data->key;
-+	pr_reg->pr_reg_all_tg_pt = pr_reg_data->is_all_tg_pt;
++	return container_of(se_tpg, struct tcm_remote_tpg, remote_se_tpg);
++}
 +
-+	if (pr_reg_data->is_holder)
-+		*pr_reg_res_holder = pr_reg;
++static char *tcm_remote_get_endpoint_wwn(struct se_portal_group *se_tpg)
++{
++	/*
++	 * Return the passed NAA identifier for the Target Port
++	 */
++	return &remote_tpg(se_tpg)->remote_hba->remote_wwn_address[0];
++}
 +
++static u16 tcm_remote_get_tag(struct se_portal_group *se_tpg)
++{
++	/*
++	 * This Tag is used when forming SCSI Name identifier in EVPD=1 0x83
++	 * to represent the SCSI Target Port.
++	 */
++	return remote_tpg(se_tpg)->remote_tpgt;
++}
++
++/*
++ * Returning (1) here allows for target_core_mod struct se_node_acl to be generated
++ * based upon the incoming fabric dependent SCSI Initiator Port
++ */
++static int tcm_remote_check_demo_mode(struct se_portal_group *se_tpg)
++{
++	return 1;
++}
++
++static int tcm_remote_check_demo_mode_cache(struct se_portal_group *se_tpg)
++{
 +	return 0;
 +}
 +
-+static struct t10_pr_registration *
-+target_create_pr_reg(struct se_device *dev,
-+		     struct pr_lvb *pr_data,
-+		     struct pr_reg_lvb *pr_reg_data)
++/*
++ * Allow I_T Nexus full READ-WRITE access without explicit Initiator Node ACLs for
++ * local virtual Linux/SCSI LLD passthrough into VM hypervisor guest
++ */
++static int tcm_remote_check_demo_mode_write_protect(struct se_portal_group *se_tpg)
 +{
-+	struct t10_pr_registration *pr_reg = NULL;
-+	struct se_lun *lun, *lun_tmp;
-+	struct se_lun_acl *lacl_tmp;
-+	struct se_node_acl *nacl_tmp;
-+	struct se_dev_entry *deve;
-+	char i_buf[PR_REG_ISID_ID_LEN];
-+	u8 initiatorname[PR_REG_ISID_LEN];
-+	char *isid = NULL;
-+
-+	target_parse_pr_out_transport_id(pr_reg_data->tid, initiatorname, &isid);
-+
-+	spin_lock(&dev->se_port_lock);
-+	list_for_each_entry_safe(lun, lun_tmp, &dev->dev_sep_list, lun_dev_link) {
-+		if (!percpu_ref_tryget_live(&lun->lun_ref))
-+			continue;
-+
-+		if (lun->lun_tpg->tpg_rtpi != pr_reg_data->rtpi) {
-+			percpu_ref_put(&lun->lun_ref);
-+			continue;
-+		}
-+		spin_unlock(&dev->se_port_lock);
-+
-+		spin_lock(&lun->lun_deve_lock);
-+		list_for_each_entry(deve, &lun->lun_deve_list, lun_link) {
-+			if (!deve->se_lun_acl)
-+				continue;
-+
-+			lacl_tmp = deve->se_lun_acl;
-+			nacl_tmp = lacl_tmp->se_lun_nacl;
-+
-+			if (strcmp(nacl_tmp->initiatorname, initiatorname))
-+				continue;
-+
-+			kref_get(&deve->pr_kref);
-+			pr_reg = __core_scsi3_do_alloc_registration(
-+					dev, nacl_tmp,
-+					nacl_tmp->initiatorname, lun->unpacked_lun,
-+					pr_reg_data->rtpi,
-+					deve, lacl_tmp->mapped_lun,
-+					isid,
-+					pr_reg_data->key,
-+					pr_reg_data->is_all_tg_pt,
-+					pr_data->pr_aptpl);
-+
-+			percpu_ref_put(&lun->lun_ref);
-+			spin_unlock(&lun->lun_deve_lock);
-+			goto out;
-+		}
-+		percpu_ref_put(&lun->lun_ref);
-+		spin_unlock(&lun->lun_deve_lock);
-+		spin_lock(&dev->se_port_lock);
-+	}
-+	spin_unlock(&dev->se_port_lock);
-+out:
-+
-+	if (!pr_reg) {
-+		/* target not yet configured,
-+		 * allocate registration like for APTPL case
-+		 */
-+		pr_reg = __core_scsi3_do_alloc_registration(
-+				dev, NULL, initiatorname, 0,
-+				pr_reg_data->rtpi,
-+				NULL, 0,
-+				isid,
-+				pr_reg_data->key,
-+				pr_reg_data->is_all_tg_pt,
-+				pr_data->pr_aptpl);
-+	}
-+
-+	if (pr_reg) {
-+		spin_lock(&dev->t10_pr.registration_lock);
-+		memcpy(pr_reg->pr_tid, pr_reg_data->tid, PR_REG_TID_LEN);
-+		list_add_tail(&pr_reg->pr_reg_list,
-+				&dev->t10_pr.registration_list);
-+
-+		/*
-+		 * Drop deve->pr_kref obtained in __core_scsi3_do_alloc_registration()
-+		 */
-+		rcu_read_lock();
-+		deve = pr_reg->pr_reg_deve;
-+		if (deve) {
-+			set_bit(DEF_PR_REG_ACTIVE, &deve->deve_flags);
-+			kref_put(&deve->pr_kref, target_pr_kref_release);
-+			pr_reg->pr_reg_deve = NULL;
-+		}
-+		rcu_read_unlock();
-+
-+		memset(&i_buf[0], 0, PR_REG_ISID_ID_LEN);
-+		core_pr_dump_initiator_port(pr_reg, i_buf,
-+						PR_REG_ISID_ID_LEN);
-+		pr_debug("SPC-3 PR Service Action: REGISTER Initiator Node: %s%s\n",
-+			initiatorname, i_buf);
-+		pr_debug("SPC-3 PR registration on Target Port: %d\n",
-+			pr_reg->tg_pt_sep_rtpi);
-+		pr_debug("SPC-3 PR for %s TCM Subsystem %s Object Target Port(s)\n",
-+			(pr_reg->pr_reg_all_tg_pt) ? "ALL" : "SINGLE",
-+			dev->transport->name);
-+		pr_debug("SPC-3 PR SA Res Key: 0x%016llx PRgeneration: 0x%08x  APTPL: %d\n",
-+			pr_reg->pr_res_key,
-+			pr_reg->pr_res_generation,
-+			pr_reg->pr_reg_aptpl);
-+		spin_unlock(&dev->t10_pr.registration_lock);
-+		return pr_reg;
-+	}
-+
-+	pr_warn("TARGET_CORE[%d]: PR data from cluster is invalid: could not find local nacl/deve for Initiator %s - RTPI %d\n",
-+		dev->dev_index, initiatorname, pr_reg_data->rtpi);
-+
-+	return NULL;
++	return 0;
 +}
 +
-+static void target_pr_sync_cb(void *arg)
++/*
++ * It has been added here as a nop for target_fabric_tf_ops_check()
++ */
++static int tcm_remote_check_prod_mode_write_protect(struct se_portal_group *se_tpg)
 +{
-+	struct se_device *dev = arg;
-+	struct target_cluster_data *cluster_data = dev->cluster_data;
-+	struct t10_pr_registration *pr_reg, *pr_reg_tmp;
-+	struct t10_pr_registration *pr_reg_res_holder = NULL;
-+	struct t10_pr_registration *pr_prev_res_holder = NULL;
-+	struct pr_reg_lvb *pr_reg_data = NULL;
-+	LIST_HEAD(to_be_deleted_list);
-+	struct async_group grp;
-+	struct pr_lvb pr_data;
-+	bool res_to_delete = false;
-+	bool was_held;
-+	u8 was_type;
-+	u8 was_scope;
-+	bool found;
-+	int i = 0;
-+	int res;
++	return 0;
++}
 +
-+	res = dlm_ckv_get(cluster_data->pr_data, (char *)&pr_data, sizeof(pr_data));
-+	if (res)
-+		goto done;
++static int tcm_remote_check_prot_fabric_only(struct se_portal_group *se_tpg)
++{
++	struct tcm_remote_tpg *remote_tpg = container_of(se_tpg, struct tcm_remote_tpg,
++						   remote_se_tpg);
++	return remote_tpg->remote_fabric_prot_type;
++}
 +
-+	if (!pr_data.version) {
-+		pr_info("TARGET_CORE[%d]: PR data from cluster is invalid\n",
-+			dev->dev_index);
-+		goto done;
++static u32 tcm_remote_get_inst_index(struct se_portal_group *se_tpg)
++{
++	return 1;
++}
++
++static u32 tcm_remote_sess_get_index(struct se_session *se_sess)
++{
++	return 1;
++}
++
++static void tcm_remote_set_default_node_attributes(struct se_node_acl *se_acl)
++{
++
++}
++
++static int tcm_remote_dummy_cmd_fn(struct se_cmd *se_cmd)
++{
++	return 0;
++}
++
++static void tcm_remote_dummy_cmd_void_fn(struct se_cmd *se_cmd)
++{
++
++}
++
++
++static char *tcm_remote_dump_proto_id(struct tcm_remote_hba *remote_hba)
++{
++	switch (remote_hba->remote_proto_id) {
++	case SCSI_PROTOCOL_SAS:
++		return "SAS";
++	case SCSI_PROTOCOL_SRP:
++		return "SRP";
++	case SCSI_PROTOCOL_FCP:
++		return "FCP";
++	case SCSI_PROTOCOL_ISCSI:
++		return "iSCSI";
++	default:
++		break;
 +	}
 +
-+	pr_reg_data = kzalloc(sizeof(struct pr_reg_lvb) * pr_data.nr_registrants,
-+			    GFP_KERNEL);
-+	if (!pr_reg_data) {
-+		res = -ENOMEM;
-+		goto done;
++	return "Unknown";
++}
++
++/* Start items for tcm_remote_port_cit */
++
++static int tcm_remote_port_link(
++	struct se_portal_group *se_tpg,
++	struct se_lun *lun)
++{
++	pr_debug("TCM_Remote_ConfigFS: Port Link LUN %lld Successful\n",
++		  lun->unpacked_lun);
++	return 0;
++}
++
++static void tcm_remote_port_unlink(
++	struct se_portal_group *se_tpg,
++	struct se_lun *lun)
++{
++	pr_debug("TCM_Remote_ConfigFS: Port Unlink LUN %lld Successful\n",
++		  lun->unpacked_lun);
++}
++
++/* End items for tcm_remote_port_cit */
++
++static ssize_t tcm_remote_tpg_attrib_fabric_prot_type_show(
++		struct config_item *item, char *page)
++{
++	struct se_portal_group *se_tpg = attrib_to_tpg(item);
++	struct tcm_remote_tpg *remote_tpg = container_of(se_tpg, struct tcm_remote_tpg,
++						   remote_se_tpg);
++
++	return sprintf(page, "%d\n", remote_tpg->remote_fabric_prot_type);
++}
++
++static ssize_t tcm_remote_tpg_attrib_fabric_prot_type_store(
++		struct config_item *item, const char *page, size_t count)
++{
++	struct se_portal_group *se_tpg = attrib_to_tpg(item);
++	struct tcm_remote_tpg *remote_tpg = container_of(se_tpg, struct tcm_remote_tpg,
++						   remote_se_tpg);
++	unsigned long val;
++	int ret = kstrtoul(page, 0, &val);
++
++	if (ret) {
++		pr_err("kstrtoul() returned %d for fabric_prot_type\n", ret);
++		return ret;
 +	}
-+
-+	res = pr_reg_realloc(cluster_data, pr_data.nr_registrants);
-+	if (res)
-+		goto done;
-+
-+	if (pr_data.nr_registrants == 0)
-+		goto skip_pr_reg;
-+
-+	refcount_set(&grp.pending, 1); /* 1 for a loop */
-+	atomic_set(&grp.status, 0);
-+	init_completion(&grp.compl);
-+
-+	for (i = 0; i < pr_data.nr_registrants; ++i) {
-+		refcount_inc(&grp.pending);
-+		res = dlm_ckv_get_async(cluster_data->pr_reg_kv[i], (char *)(pr_reg_data + i),
-+				sizeof(struct pr_reg_lvb), group_compl_cb, &grp);
-+		if (res) {
-+			refcount_dec(&grp.pending);
-+			break;
-+		}
++	if (val != 0 && val != 1 && val != 3) {
++		pr_err("Invalid value of fabric_prot_type: %lu\n", val);
++		return -EINVAL;
 +	}
-+	group_compl_cb(&grp, 0);
-+	res = wait_for_completion_timeout(&grp.compl, 60 * HZ);
-+	if (!res) {
-+		pr_err("TARGET_CORE[%d]: timeout of waiting for dlm_ckv_get_async\n",
-+			dev->dev_index);
-+		goto done;
-+	}
-+	res = atomic_read(&grp.status);
-+	if (res) {
-+		pr_err("TARGET_CORE[%d]: fail of group for dlm_ckv_get_async %d\n",
-+			dev->dev_index, res);
-+		goto done;
-+	}
++	remote_tpg->remote_fabric_prot_type = val;
 +
-+skip_pr_reg:
++	return count;
++}
++
++CONFIGFS_ATTR(tcm_remote_tpg_attrib_, fabric_prot_type);
++
++static struct configfs_attribute *tcm_remote_tpg_attrib_attrs[] = {
++	&tcm_remote_tpg_attrib_attr_fabric_prot_type,
++	NULL,
++};
++
++static struct configfs_attribute *tcm_remote_tpg_attrs[] = {
++	NULL,
++};
++
++/* Start items for tcm_remote_naa_cit */
++
++static struct se_portal_group *tcm_remote_make_tpg(struct se_wwn *wwn,
++						     const char *name)
++{
++	struct tcm_remote_hba *remote_hba = container_of(wwn,
++			struct tcm_remote_hba, remote_hba_wwn);
++	struct tcm_remote_tpg *remote_tpg;
++	int ret;
++	unsigned long tpgt;
++
++	if (strstr(name, "tpgt_") != name) {
++		pr_err("Unable to locate \"tpgt_#\" directory group\n");
++		return ERR_PTR(-EINVAL);
++	}
++	if (kstrtoul(name+5, 10, &tpgt))
++		return ERR_PTR(-EINVAL);
++
++	if (tpgt >= TL_TPGS_PER_HBA) {
++		pr_err("Passed tpgt: %lu exceeds TL_TPGS_PER_HBA: %u\n",
++		       tpgt, TL_TPGS_PER_HBA);
++		return ERR_PTR(-EINVAL);
++	}
++	remote_tpg = &remote_hba->remote_hba_tpgs[tpgt];
++	remote_tpg->remote_hba = remote_hba;
++	remote_tpg->remote_tpgt = tpgt;
 +	/*
-+	 * Update existing registrations
++	 * Register the remote_tpg as a emulated TCM Target Endpoint
 +	 */
-+	spin_lock(&dev->t10_pr.registration_lock);
++	ret = core_tpg_register(wwn, &remote_tpg->remote_se_tpg, remote_hba->remote_proto_id);
++	if (ret < 0)
++		return ERR_PTR(-ENOMEM);
 +
-+	was_held = !!dev->dev_pr_res_holder;
-+	pr_prev_res_holder = dev->dev_pr_res_holder;
-+	if (was_held) {
-+		was_scope = pr_prev_res_holder->pr_res_scope;
-+		was_type = pr_prev_res_holder->pr_res_type;
-+	}
-+
-+	list_for_each_entry_safe(pr_reg, pr_reg_tmp, &dev->t10_pr.registration_list,
-+				 pr_reg_list) {
-+		found = false;
-+
-+		for (i = 0; i < pr_data.nr_registrants; ++i) {
-+			if (!pr_reg_data[i].version)
-+				continue;
-+
-+			if (pr_reg->tg_pt_sep_rtpi == pr_reg_data[i].rtpi &&
-+			   !target_cmp_pr_transport_id(pr_reg, pr_reg_data[i].tid)) {
-+				found = true;
-+				/* mark existing registrants */
-+				pr_reg_data[i].version = 0;
-+				target_update_pr_reg(dev, pr_reg, &pr_data,
-+						     &pr_reg_data[i],
-+						     &pr_reg_res_holder);
-+				break;
-+			}
-+		}
-+
-+		if (!found)
-+			list_move_tail(&pr_reg->pr_reg_list, &to_be_deleted_list);
-+	}
-+
-+	/* deregister obsolete entries */
-+	list_for_each_entry_safe(pr_reg, pr_reg_tmp, &to_be_deleted_list,
-+			pr_reg_list) {
-+		if (dev->dev_pr_res_holder != pr_reg)
-+			__core_scsi3_free_registration(dev, pr_reg, NULL, 0);
-+		else
-+			res_to_delete = true;
-+	}
-+	spin_unlock(&dev->t10_pr.registration_lock);
-+
-+	/* register new entries */
-+	for (i = 0; i < pr_data.nr_registrants; ++i) {
-+		/* skip existing registrants */
-+		if (!pr_reg_data[i].version)
-+			continue;
-+
-+		pr_reg = target_create_pr_reg(dev, &pr_data, &pr_reg_data[i]);
-+		if (!pr_reg)
-+			pr_err("TARGET_CORE[%d]: can not create new registration\n",
-+				dev->dev_index);
-+		else if (pr_reg_data[i].is_holder)
-+			pr_reg_res_holder = pr_reg;
-+	}
-+
-+	/* update general data */
-+	atomic_set(&dev->t10_pr.pr_generation, pr_data.pr_generation);
-+	dev->t10_pr.pr_aptpl_active = pr_data.pr_aptpl;
-+
-+	/* update reservation */
-+	spin_lock(&dev->dev_reservation_lock);
-+	if (pr_prev_res_holder &&
-+	    ((pr_reg_res_holder != pr_prev_res_holder) ||
-+	     (was_type != pr_reg_res_holder->pr_res_type)))
-+		__core_scsi3_complete_pro_release(dev, pr_prev_res_holder, 0, 0);
-+
-+	if (pr_reg_res_holder)
-+		__core_scsi3_set_reservation(dev, pr_reg_res_holder,
-+					pr_data.pr_scope, pr_data.pr_type);
-+	spin_unlock(&dev->dev_reservation_lock);
-+
-+	if (res_to_delete) {
-+		spin_lock(&dev->t10_pr.registration_lock);
-+		__core_scsi3_free_registration(dev, pr_prev_res_holder, NULL, 0);
-+		spin_unlock(&dev->t10_pr.registration_lock);
-+	}
-+
-+	core_scsi3_update_and_write_aptpl(dev, dev->t10_pr.pr_aptpl_active);
-+
-+done:
-+	kfree(pr_reg_data);
++	pr_debug("TCM_Remote_ConfigFS: Allocated Emulated %s Target Port %s,t,0x%04lx\n",
++		 tcm_remote_dump_proto_id(remote_hba),
++		 config_item_name(&wwn->wwn_group.cg_item), tpgt);
++	return &remote_tpg->remote_se_tpg;
 +}
 +
- const struct target_cluster_ops dlm_cluster_ops = {
- 	.name = "dlm",
- 	.owner = THIS_MODULE,
-diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
-index f5da3fc17ad1..297bf5985f48 100644
---- a/drivers/target/target_core_device.c
-+++ b/drivers/target/target_core_device.c
-@@ -355,6 +355,7 @@ void target_pr_kref_release(struct kref *kref)
- 						 pr_kref);
- 	complete(&deve->pr_comp);
- }
-+EXPORT_SYMBOL(target_pr_kref_release);
- 
- /*
-  * Establish UA condition on SCSI device - all LUNs
-diff --git a/drivers/target/target_core_fabric_lib.c b/drivers/target/target_core_fabric_lib.c
-index 8232d872db35..2937bf4f6865 100644
---- a/drivers/target/target_core_fabric_lib.c
-+++ b/drivers/target/target_core_fabric_lib.c
-@@ -396,7 +396,7 @@ int target_cmp_pr_transport_id(
- 
- 	return memcmp(pr_reg->pr_tid, tid, len1);
- }
--
-+EXPORT_SYMBOL(target_cmp_pr_transport_id);
- 
- int target_gen_pr_transport_id(
- 	struct t10_pr_registration *pr_reg,
-@@ -444,3 +444,4 @@ u32 target_parse_pr_out_transport_id(
- 	*port_nexus_ptr = NULL;
- 	return 24;
- }
-+EXPORT_SYMBOL(target_parse_pr_out_transport_id);
-diff --git a/drivers/target/target_core_internal.h b/drivers/target/target_core_internal.h
-index 8669ff6f48e9..89f0ddca35ed 100644
---- a/drivers/target/target_core_internal.h
-+++ b/drivers/target/target_core_internal.h
-@@ -65,7 +65,6 @@ extern struct t10_alua_lu_gp *default_lu_gp;
- 
- /* target_core_device.c */
- struct se_dev_entry *core_get_se_deve_from_rtpi(struct se_node_acl *, u16);
--void	target_pr_kref_release(struct kref *);
- void	core_free_device_list_for_node(struct se_node_acl *,
- 		struct se_portal_group *);
- void	core_update_device_list_access(u64, bool, struct se_node_acl *);
-@@ -107,14 +106,10 @@ int	target_fabric_setup_cits(struct target_fabric_configfs *);
- 
- /* target_core_fabric_lib.c */
- int	target_get_pr_transport_id_len(struct t10_pr_registration *pr_reg);
--int target_cmp_pr_transport_id(struct t10_pr_registration *pr_reg,
--			       unsigned char *tid);
- int target_gen_pr_transport_id(struct t10_pr_registration *pr_reg,
- 			       int proto_id,
- 			       const char *initiatorname,
- 			       unsigned char *isid);
--u32 target_parse_pr_out_transport_id(
--	const char *buf, char *initiatorname, char **port_nexus_ptr);
- 
- /* target_core_hba.c */
- struct se_hba *core_alloc_hba(const char *, u32, u32);
-diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
-index a9fe192f5fe4..fe2f64826e9e 100644
---- a/drivers/target/target_core_pr.c
-+++ b/drivers/target/target_core_pr.c
-@@ -52,6 +52,7 @@ void core_pr_dump_initiator_port(
- 
- 	snprintf(buf, size, ",i,0x%s", pr_reg->pr_reg_isid);
- }
-+EXPORT_SYMBOL(core_pr_dump_initiator_port);
- 
- enum register_type {
- 	REGISTER,
-@@ -677,6 +678,7 @@ struct t10_pr_registration *__core_scsi3_do_alloc_registration(
- 
- 	return pr_reg;
- }
-+EXPORT_SYMBOL(__core_scsi3_do_alloc_registration);
- 
- static int core_scsi3_lunacl_depend_item(struct se_dev_entry *);
- static void core_scsi3_lunacl_undepend_item(struct se_dev_entry *);
-@@ -1296,6 +1298,7 @@ void __core_scsi3_free_registration(
- 	 */
- 	list_add_tail(&pr_reg->pr_reg_abort_list, preempt_and_abort_list);
- }
-+EXPORT_SYMBOL(__core_scsi3_free_registration);
- 
- void core_scsi3_free_all_registrations(
- 	struct se_device *dev)
-@@ -1925,7 +1928,7 @@ static int __core_scsi3_write_aptpl_to_file(
-  * Clear the APTPL metadata if APTPL has been disabled, otherwise
-  * write out the updated metadata to struct file for this SCSI device.
-  */
--static sense_reason_t core_scsi3_update_and_write_aptpl(struct se_device *dev, bool aptpl)
-+sense_reason_t core_scsi3_update_and_write_aptpl(struct se_device *dev, bool aptpl)
- {
- 	unsigned char *buf;
- 	int rc, len = PR_APTPL_BUF_LEN;
-@@ -1965,6 +1968,7 @@ static sense_reason_t core_scsi3_update_and_write_aptpl(struct se_device *dev, b
- 	pr_debug("SPC-3 PR: Set APTPL Bit Activated\n");
- 	return 0;
- }
-+EXPORT_SYMBOL(core_scsi3_update_and_write_aptpl);
- 
- static sense_reason_t
- core_scsi3_emulate_pro_register(struct se_cmd *cmd, u64 res_key, u64 sa_res_key,
-@@ -2214,6 +2218,7 @@ void __core_scsi3_set_reservation(struct se_device *dev,
- 			pr_reg->pr_iport,
- 			i_buf);
- }
-+EXPORT_SYMBOL(__core_scsi3_set_reservation);
- 
- static sense_reason_t
- core_scsi3_pro_reserve(struct se_cmd *cmd, int type, int scope, u64 res_key)
-@@ -2430,6 +2435,7 @@ void __core_scsi3_complete_pro_release(
- 	 */
- 	pr_reg->pr_res_holder = pr_reg->pr_res_type = pr_reg->pr_res_scope = 0;
- }
-+EXPORT_SYMBOL(__core_scsi3_complete_pro_release);
- 
- static sense_reason_t
- core_scsi3_emulate_pro_release(struct se_cmd *cmd, int type, int scope,
-diff --git a/drivers/target/target_core_pr.h b/drivers/target/target_core_pr.h
-index 589fdac5470f..e7eff50a01f2 100644
---- a/drivers/target/target_core_pr.h
-+++ b/drivers/target/target_core_pr.h
-@@ -68,6 +68,7 @@ extern int core_scsi3_alloc_aptpl_registration(
- extern int core_scsi3_check_aptpl_registration(struct se_device *,
- 			struct se_portal_group *, struct se_lun *,
- 			struct se_node_acl *, u64);
-+sense_reason_t core_scsi3_update_and_write_aptpl(struct se_device *dev, bool aptpl);
- extern void core_scsi3_free_all_registrations(struct se_device *);
- extern unsigned char *core_scsi3_pr_dump_type(int);
- 
-diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
-index 9edf3c1ac204..b0f0a6b93f6e 100644
---- a/include/target/target_core_base.h
-+++ b/include/target/target_core_base.h
-@@ -1004,5 +1004,10 @@ void target_cluster_impl_unregister(const struct target_cluster_ops *ops);
- 
- int	target_get_pr_transport_id(struct t10_pr_registration *pr_reg,
- 				   unsigned char *buf);
-+u32 target_parse_pr_out_transport_id(
-+	const char *buf, char *initiatorname, char **port_nexus_ptr);
-+int target_cmp_pr_transport_id(struct t10_pr_registration *pr_reg,
-+			       unsigned char *tid);
-+void	target_pr_kref_release(struct kref *kref);
- 
- #endif /* TARGET_CORE_BASE_H */
++static void tcm_remote_drop_tpg(
++	struct se_portal_group *se_tpg)
++{
++	struct se_wwn *wwn = se_tpg->se_tpg_wwn;
++	struct tcm_remote_tpg *remote_tpg = container_of(se_tpg,
++				struct tcm_remote_tpg, remote_se_tpg);
++	struct tcm_remote_hba *remote_hba;
++	unsigned short tpgt;
++
++	remote_hba = remote_tpg->remote_hba;
++	tpgt = remote_tpg->remote_tpgt;
++
++	/*
++	 * Deregister the remote_tpg as a emulated TCM Target Endpoint
++	 */
++	core_tpg_deregister(se_tpg);
++
++	remote_tpg->remote_hba = NULL;
++	remote_tpg->remote_tpgt = 0;
++
++	pr_debug("TCM_Remote_ConfigFS: Deallocated Emulated %s Target Port %s,t,0x%04x\n",
++		 tcm_remote_dump_proto_id(remote_hba),
++		 config_item_name(&wwn->wwn_group.cg_item), tpgt);
++}
++
++/* End items for tcm_remote_naa_cit */
++
++/* Start items for tcm_remote_cit */
++
++static struct se_wwn *tcm_remote_make_wwn(
++	struct target_fabric_configfs *tf,
++	struct config_group *group,
++	const char *name)
++{
++	struct tcm_remote_hba *remote_hba;
++	char *ptr;
++	int ret, off = 0;
++
++	remote_hba = kzalloc(sizeof(*remote_hba), GFP_KERNEL);
++	if (!remote_hba)
++		return ERR_PTR(-ENOMEM);
++
++	/*
++	 * Determine the emulated Protocol Identifier and Target Port Name
++	 * based on the incoming configfs directory name.
++	 */
++	ptr = strstr(name, "naa.");
++	if (ptr) {
++		remote_hba->remote_proto_id = SCSI_PROTOCOL_SAS;
++		goto check_len;
++	}
++	ptr = strstr(name, "fc.");
++	if (ptr) {
++		remote_hba->remote_proto_id = SCSI_PROTOCOL_FCP;
++		off = 3; /* Skip over "fc." */
++		goto check_len;
++	}
++	ptr = strstr(name, "0x");
++	if (ptr) {
++		remote_hba->remote_proto_id = SCSI_PROTOCOL_SRP;
++		off = 2; /* Skip over "0x" */
++		goto check_len;
++	}
++	ptr = strstr(name, "iqn.");
++	if (!ptr) {
++		pr_err("Unable to locate prefix for emulated Target Port: %s\n",
++		       name);
++		ret = -EINVAL;
++		goto out;
++	}
++	remote_hba->remote_proto_id = SCSI_PROTOCOL_ISCSI;
++
++check_len:
++	if (strlen(name) >= TL_WWN_ADDR_LEN) {
++		pr_err("Emulated NAA %s Address: %s, exceeds max: %d\n",
++		       name, tcm_remote_dump_proto_id(remote_hba), TL_WWN_ADDR_LEN);
++		ret = -EINVAL;
++		goto out;
++	}
++	snprintf(&remote_hba->remote_wwn_address[0], TL_WWN_ADDR_LEN, "%s", &name[off]);
++
++	tcm_remote_hba_no_cnt++;
++	pr_debug("TCM_Remote_ConfigFS: Allocated emulated Target %s Address: %s\n",
++		 tcm_remote_dump_proto_id(remote_hba), name);
++	return &remote_hba->remote_hba_wwn;
++out:
++	kfree(remote_hba);
++	return ERR_PTR(ret);
++}
++
++static void tcm_remote_drop_wwn(
++	struct se_wwn *wwn)
++{
++	struct tcm_remote_hba *remote_hba = container_of(wwn,
++				struct tcm_remote_hba, remote_hba_wwn);
++
++	pr_debug("TCM_Remote_ConfigFS: Deallocating emulated Target %s Address: %s\n",
++		 tcm_remote_dump_proto_id(remote_hba),
++		 remote_hba->remote_wwn_address);
++
++}
++
++/* Start items for tcm_remote_cit */
++static ssize_t tcm_remote_wwn_version_show(struct config_item *item, char *page)
++{
++	return sprintf(page, "TCM Remote Fabric module %s\n", TCM_REMOTE_VERSION);
++}
++
++CONFIGFS_ATTR_RO(tcm_remote_wwn_, version);
++
++static struct configfs_attribute *tcm_remote_wwn_attrs[] = {
++	&tcm_remote_wwn_attr_version,
++	NULL,
++};
++
++/* End items for tcm_remote_cit */
++
++static const struct target_core_fabric_ops remote_ops = {
++	.module				= THIS_MODULE,
++	.fabric_name			= "remote",
++	.tpg_get_wwn			= tcm_remote_get_endpoint_wwn,
++	.tpg_get_tag			= tcm_remote_get_tag,
++	.tpg_check_demo_mode		= tcm_remote_check_demo_mode,
++	.tpg_check_demo_mode_cache	= tcm_remote_check_demo_mode_cache,
++	.tpg_check_demo_mode_write_protect =
++				tcm_remote_check_demo_mode_write_protect,
++	.tpg_check_prod_mode_write_protect =
++				tcm_remote_check_prod_mode_write_protect,
++	.tpg_check_prot_fabric_only	= tcm_remote_check_prot_fabric_only,
++	.tpg_get_inst_index		= tcm_remote_get_inst_index,
++	.check_stop_free		= tcm_remote_dummy_cmd_fn,
++	.release_cmd			= tcm_remote_dummy_cmd_void_fn,
++	.sess_get_index			= tcm_remote_sess_get_index,
++	.write_pending			= tcm_remote_dummy_cmd_fn,
++	.set_default_node_attributes	= tcm_remote_set_default_node_attributes,
++	.get_cmd_state			= tcm_remote_dummy_cmd_fn,
++	.queue_data_in			= tcm_remote_dummy_cmd_fn,
++	.queue_status			= tcm_remote_dummy_cmd_fn,
++	.queue_tm_rsp			= tcm_remote_dummy_cmd_void_fn,
++	.aborted_task			= tcm_remote_dummy_cmd_void_fn,
++	.fabric_make_wwn		= tcm_remote_make_wwn,
++	.fabric_drop_wwn		= tcm_remote_drop_wwn,
++	.fabric_make_tpg		= tcm_remote_make_tpg,
++	.fabric_drop_tpg		= tcm_remote_drop_tpg,
++	.fabric_post_link		= tcm_remote_port_link,
++	.fabric_pre_unlink		= tcm_remote_port_unlink,
++	.tfc_wwn_attrs			= tcm_remote_wwn_attrs,
++	.tfc_tpg_base_attrs		= tcm_remote_tpg_attrs,
++	.tfc_tpg_attrib_attrs		= tcm_remote_tpg_attrib_attrs,
++};
++
++static int __init tcm_remote_fabric_init(void)
++{
++	int ret = -ENOMEM;
++
++	ret = target_register_template(&remote_ops);
++	if (ret)
++		goto out;
++
++	return 0;
++
++out:
++	return ret;
++}
++
++static void __exit tcm_remote_fabric_exit(void)
++{
++	target_unregister_template(&remote_ops);
++}
++
++MODULE_DESCRIPTION("TCM virtual remote target");
++MODULE_AUTHOR("Dmitry Bogdanov <d.bogdanov@yadro.com>");
++MODULE_LICENSE("GPL");
++module_init(tcm_remote_fabric_init);
++module_exit(tcm_remote_fabric_exit);
+diff --git a/drivers/target/tcm_remote/tcm_remote.h b/drivers/target/tcm_remote/tcm_remote.h
+new file mode 100644
+index 000000000000..8d674c87989e
+--- /dev/null
++++ b/drivers/target/tcm_remote/tcm_remote.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <linux/types.h>
++#include <linux/device.h>
++
++#define TCM_REMOTE_VERSION		"v0.1"
++#define TL_WWN_ADDR_LEN			256
++#define TL_TPGS_PER_HBA			32
++
++
++#define TCM_TRANSPORT_ONLINE 0
++#define TCM_TRANSPORT_OFFLINE 1
++
++struct tcm_remote_tpg {
++	unsigned short remote_tpgt;
++	enum target_prot_type remote_fabric_prot_type;
++	atomic_t remote_tpg_port_count;
++	struct se_portal_group remote_se_tpg;
++	struct tcm_remote_hba *remote_hba;
++};
++
++struct tcm_remote_hba {
++	u8 remote_proto_id;
++	unsigned char remote_wwn_address[TL_WWN_ADDR_LEN];
++	struct se_hba_s *se_hba;
++	struct se_lun *remote_hba_lun;
++	struct se_port *remote_hba_lun_sep;
++	struct tcm_remote_tpg remote_hba_tpgs[TL_TPGS_PER_HBA];
++	struct se_wwn remote_hba_wwn;
++};
 -- 
 2.25.1
 
