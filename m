@@ -2,92 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A34946CC35
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Dec 2021 05:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A5646CC77
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Dec 2021 05:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244185AbhLHERU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Dec 2021 23:17:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244201AbhLHERS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Dec 2021 23:17:18 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCD1C061A32
-        for <linux-scsi@vger.kernel.org>; Tue,  7 Dec 2021 20:13:47 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id 137so982679pgg.3
-        for <linux-scsi@vger.kernel.org>; Tue, 07 Dec 2021 20:13:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=cGWxDwe8B66FlIrZtrergIqE5+JvdqJ48sEvPTrvhBJ9xEqZLGyWZmuSPdCEFce/7D
-         /sVR44uqtlb2dmBH+iwgt0kboAu4/HTy3OZt9J6nwOu1H5twbKwVBnMykOKrBLHcBBEb
-         cgMJ7/59oMUtMggaQ9x/N1xe+U0YzN1k+xfCXkO5L7YIW30RFDnvCB0PrD7sMExliX7S
-         joeNtgfdJmxv3l42BA4cQp1HveXj/LpauGoYMsZKrrlYurvW6FC9Nrn9v/z7yklCLUv+
-         2uZJGSHlx+O0Rg+LxyFVcXJ8erZC2O96QnEFLkA1QmSl94RBUxOevwSkF8rG8CDqN06m
-         KdcQ==
+        id S240067AbhLHE2D (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Dec 2021 23:28:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58410 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244192AbhLHE1s (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Dec 2021 23:27:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638937456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hnkeec58MbvU+mMJ3s+6/jmIYG3nDgFfteK0w/klgc8=;
+        b=I8ShHuJWecM0T6/Z6SckjNoXc8Rr6tA6QRdVUFGRQG6dHDbnXBNNAv26mvoxEjs117pIRT
+        KOF+wy86BCS1LzM6ocQJQ9+0QurSbdrw9sg6eO+7ErS76vk/1HaqdMEbDbGH+UoWO3bh+h
+        dSX1yuMSt5Bk80TzTwk0NUpi6UOVRwE=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-418-NTNgl__fMeygp-DCDVGJRA-1; Tue, 07 Dec 2021 23:24:15 -0500
+X-MC-Unique: NTNgl__fMeygp-DCDVGJRA-1
+Received: by mail-lf1-f72.google.com with SMTP id o11-20020a056512230b00b0041ca68ddf35so533246lfu.22
+        for <linux-scsi@vger.kernel.org>; Tue, 07 Dec 2021 20:24:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=ABaEOYWMyP2+nE6kci08oeCNzeIikvPI9Qqzay9GhF6/39b4B6lXDhBlxig4GffBYd
-         plFzCv1zbAU7Sg2WyC8z34i2hAdPiKIS+/h/uBfBcDvwr6fEO6cIa1kszoG9NwZIXhYT
-         L/XHbhmRJadABMx72m1MEhWjp95Zbro/1X8i+I8F3Arok/qtnSTX/lMhygHFjiTYFC3Q
-         X36oczLy5bcjvcxS7w9RV3m0qg6Jmg8QFALCy0T2HCSZCAi5kzgy6auxdMaCx309PAdP
-         CVch8Ldwg40UHl/oDn/b8KiuoVtAwrMSmmArvOtRvgT4WUzJXsruX/djROoN4zh+1gE8
-         SfWA==
-X-Gm-Message-State: AOAM533RxELDKDQBmRnjGsOBkgTHCBDpWSg8YxJA6HxG9FwGFQa6X0ka
-        X8M7gYf4FfRlYFVPDd2rjTJzzmsNRVV+nmb2iSTeoLYL+qI23g==
-X-Google-Smtp-Source: ABdhPJx498jQ3rDCAEAukf875uPMCUUvAAHHJyp/169nhahBv8dg1ZTt80/LmlBc7j967yPpWx87fZn4PQyrL4JX27A=
-X-Received: by 2002:a92:600f:: with SMTP id u15mr3954317ilb.292.1638936815828;
- Tue, 07 Dec 2021 20:13:35 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hnkeec58MbvU+mMJ3s+6/jmIYG3nDgFfteK0w/klgc8=;
+        b=xkd+WVnMJ42XOTx+oP+nqLcHCmbYfPCpfSrS5IlBSrcd8RSPDE5iK3xBOJoNYe5Utz
+         SHVfWveqQC7cIzMbCw+SXZhPPF192/o29jI/tAhm3GDp7Ut/vn30DA/T0fCcQ12O5JOG
+         MnI7wK39vklRTtH0OAlosQ4SAkJUQVOuA1/0eZceAEXQ+psIQz+uRBsEoyCyf2B/Kskd
+         wNMNuKseY3juPZfvelhBE7YMn38Gon+r30JXhZ6ftxxbf/JpVN3gSxnSMYQ2Wx2tYydi
+         DemWdev6/zP/gXpNlTOyWOhsNvnxsXjX16sGdxSKiBM8v7Jp5+/r8qdUhKWePOWjtlZK
+         lNSA==
+X-Gm-Message-State: AOAM532Dx7Hg9i+1ABwBm9JUGIqf/H6QMHUWMmEJlvRTzhVX9FVfFs7d
+        ky70yrPJLwtOK+4dgYop0UUOpgkzrvu5sqXyQgoma+2gJm9Ngaa+WQxGziIYnYqfgKoXXzg3W60
+        Gng95JQJH5p/nAgMfvJ1Aez7+iOSjLXxWk67mKg==
+X-Received: by 2002:a2e:b742:: with SMTP id k2mr47717007ljo.107.1638937453520;
+        Tue, 07 Dec 2021 20:24:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxXBQhZIWJ2mKjBeEXvEJ+Z6rREz17GcGHg85bnccKQVzrnxg0n0UvNDUoskUxyeTOvEpr4ldqQWQWb+dL+jYg=
+X-Received: by 2002:a2e:b742:: with SMTP id k2mr47716983ljo.107.1638937453292;
+ Tue, 07 Dec 2021 20:24:13 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:13:35
- -0800 (PST)
-Reply-To: dj0015639@gmail.com
-From:   David Jackson <enkenpaul@gmail.com>
-Date:   Wed, 8 Dec 2021 05:13:35 +0100
-Message-ID: <CAG7-cQ_JEx-8fDdxn0Ex314ViSE32kaUjoR=sUvV7wmCUiKRGw@mail.gmail.com>
-Subject: FEDERAL BUREAU OF INVESTIGATION
-To:     undisclosed-recipients:;
+References: <20211207025117.23551-1-michael.christie@oracle.com>
+In-Reply-To: <20211207025117.23551-1-michael.christie@oracle.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 8 Dec 2021 12:24:02 +0800
+Message-ID: <CACGkMEtHm-6pBAdc=ZuXggMwdZ9X1ysnZjUxQFzyBaWtyP5SHg@mail.gmail.com>
+Subject: Re: [PATCH V5 00/12] vhost: multiple worker support
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     target-devel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Stefan Hajnoczi <stefanha@redhat.com>, mst <mst@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Our Ref: RTB /SNT/STB
-To: Beneficiary
+On Tue, Dec 7, 2021 at 10:51 AM Mike Christie
+<michael.christie@oracle.com> wrote:
+>
+> The following patches apply over linus's tree and the user_worker
+> patchset here:
+>
+> https://lore.kernel.org/virtualization/20211129194707.5863-1-michael.christie@oracle.com/T/#t
 
-This is FBI special agents, David Jackson. I was delegated along side
-others by the United Nations to investigate scammers who has been in
-the business of swindling foreigners especially those that has one
-form of transaction/contracts and another. Please be informed that in
-the course of our investigation, we detected that your name and
-details in our Scammed Monitoring Network. We also found out that you
-were scammed of a huge sum of money by scammers via Western union and
-MoneyGram. Be informed here that in a bid to alleviate the suffering
-of scammed victims, the United Nations initiated this compensation
-program and therefore, you are entitled to the sum of Five Million Two
-Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
-victim.
+It looks to me it gets some acks, maybe we need to nudge the
+maintainer to merge that? This may simplify the review.
 
-Note that the said fund will be transfer to you via the Citibank being
-the paying bank mandated by the United Nations officials.
+Thanks
 
-However, we have to inform you that we have been able to arrest some
-of the swindlers who has been in this illicit business and will all be
-prosecuted accordingly. Be informed as well that we have limited time
-to stay back here, so we will advice that you urgently respond to this
-message ASAP. And do not inform any of the people that collected money
-from you before now about this new development to avoid jeopardizing
-our investigation. All you need to do is to follow our instruction and
-receive your compensation accordingly as directed by the United
-Nations.
-
-We urgently wait to receive your response.
-
-Regards,
-DAVID JACKSON
-FEDERAL BUREAU OF INVESTIGATION
-INVESTIGATION ON ALL ONLINE WIRE TRANSFER
