@@ -2,72 +2,117 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C5E4707C4
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Dec 2021 18:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F32A0470925
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Dec 2021 19:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244846AbhLJR5Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Dec 2021 12:57:24 -0500
-Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:60025 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241133AbhLJR5W (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Dec 2021 12:57:22 -0500
-Received: from ubuntu-CJ.passengers.t19.sncf ([109.190.253.13])
-        by smtp.orange.fr with ESMTPA
-        id vk5Vm4O22OvR0vk5WmaHTK; Fri, 10 Dec 2021 18:53:46 +0100
-X-ME-Helo: ubuntu-CJ.passengers.t19.sncf
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Fri, 10 Dec 2021 18:53:46 +0100
-X-ME-IP: 109.190.253.13
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     james.smart@broadcom.com, ram.vegesna@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, hare@suse.de,
-        dwagner@suse.de
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH v2] scsi: elx: efct: Avoid a useless memset
-Date:   Fri, 10 Dec 2021 18:53:35 +0100
-Message-Id: <9be7d5beb437583f8d975d168ac5c3e32fb6e465.1639158677.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        id S245523AbhLJSsP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Dec 2021 13:48:15 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:48292 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235951AbhLJSsO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Dec 2021 13:48:14 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639161877;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SscPtTd6NYlTuHsVGD4gIuaxOIVHkwKJUjrMqfCiVF4=;
+        b=TY8BF1JpkOaWtM2lrvFKTimTzat4EoRUHL+2eclOarFXkWGYNp3IyW2HQ5T8OWMWbhbfVq
+        VDI9t4KC4+9kr42qqtXe/zQkX9rgTt0OrLcbIC4lUUJnZcElcKe523A+3l80bmMdk2T6L5
+        d5Hu/EtGPMItJfm5OP7BSFdEbREqITVFviXcxUWECj7AtRzxskgM53w8GvswvRLjsPdB17
+        PVpuyE/35HcdVqIN7L14w6Qv8pd7aSo6oy2iBx3jCjdSZinbR7bP3gFDZcByUHgsRXRjFr
+        33QecEs2XK3Ltk39FZfGapRxuPnM89/MI/XPmnxKqZNooWA0jpNi3oGb1yrqlg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639161877;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SscPtTd6NYlTuHsVGD4gIuaxOIVHkwKJUjrMqfCiVF4=;
+        b=HHsBOye9UyITzMD4gKeP/m5EEeIczEVFtbEFxqB8YFUhZWJIQz4Lx7hjogYbp35pBy31KU
+        IuicCTDcUwWRSDBA==
+To:     Nitesh Lal <nilal@redhat.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, ajit.khaparde@broadcom.com,
+        sriharsha.basavapatna@broadcom.com, somnath.kotur@broadcom.com,
+        huangguangbin2@huawei.com, huangdaode@huawei.com,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Alex Belits <abelits@marvell.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, rostedt@goodmis.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Ingo Molnar <mingo@kernel.org>, jbrandeb@kernel.org,
+        akpm@linuxfoundation.org, sfr@canb.auug.org.au,
+        stephen@networkplumber.org, rppt@linux.vnet.ibm.com,
+        chris.friesen@windriver.com, Marc Zyngier <maz@kernel.org>,
+        Neil Horman <nhorman@tuxdriver.com>, pjwaskiewicz@gmail.com,
+        Stefan Assmann <sassmann@redhat.com>,
+        Tomas Henzl <thenzl@redhat.com>, james.smart@broadcom.com,
+        Ken Cox <jkc@redhat.com>, faisal.latif@intel.com,
+        shiraz.saleem@intel.com, tariqt@nvidia.com,
+        Alaa Hleihel <ahleihel@redhat.com>,
+        Kamal Heib <kheib@redhat.com>, borisp@nvidia.com,
+        saeedm@nvidia.com,
+        "Nikolova, Tatyana E" <tatyana.e.nikolova@intel.com>,
+        "Ismail, Mustafa" <mustafa.ismail@intel.com>,
+        Al Stone <ahs3@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
+        bjorn.andersson@linaro.org, chunkuang.hu@kernel.org,
+        yongqiang.niu@mediatek.com, baolin.wang7@gmail.com,
+        Petr Oros <poros@redhat.com>, Ming Lei <minlei@redhat.com>,
+        Ewan Milne <emilne@redhat.com>, jejb@linux.ibm.com,
+        kabel@kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>, kashyap.desai@broadcom.com,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        shivasharan.srikanteshwara@broadcom.com,
+        sathya.prakash@broadcom.com,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        suganath-prabu.subramani@broadcom.com, ley.foon.tan@intel.com,
+        jbrunet@baylibre.com, johannes@sipsolutions.net,
+        snelson@pensando.io, lewis.hanly@microchip.com, benve@cisco.com,
+        _govind@gmx.com, jassisinghbrar@gmail.com
+Subject: Re: [PATCH v6 00/14] genirq: Cleanup the abuse of
+ irq_set_affinity_hint()
+In-Reply-To: <CAFki+L=5sLN+nU+YpSSrQN0zkAOKrJorevm0nQ+KdwCpnOzf3w@mail.gmail.com>
+References: <20210903152430.244937-1-nitesh@redhat.com>
+ <CAFki+L=9Hw-2EONFEX6b7k6iRX_yLx1zcS+NmWsDSuBWg8w-Qw@mail.gmail.com>
+ <87bl29l5c6.ffs@tglx>
+ <CAFki+Lmrv-UjZpuTQWr9c-Rymfm-tuCw9WpwmHgyfjVhJgp--g@mail.gmail.com>
+ <CAFki+L=5sLN+nU+YpSSrQN0zkAOKrJorevm0nQ+KdwCpnOzf3w@mail.gmail.com>
+Date:   Fri, 10 Dec 2021 19:44:36 +0100
+Message-ID: <87ilvwxpt7.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-'io->sgl' is kzalloced just a few lines above. There is no need to memset
-it another time.
+On Fri, Dec 10 2021 at 08:51, Nitesh Lal wrote:
+> On Wed, Nov 24, 2021 at 5:16 PM Nitesh Lal <nilal@redhat.com> wrote:
+>> > The more general question is whether I should queue all the others or
+>> > whether some subsystem would prefer to pull in a tagged commit on top of
+>> > rc1. I'm happy to carry them all of course.
+>> >
+>>
+>> I am fine either way.
+>> In the past, while I was asking for more testing help I was asked if the
+>> SCSI changes are part of Martins's scsi-fixes tree as that's something
+>> Broadcom folks test to check for regression.
+>> So, maybe Martin can pull this up?
+>>
+>
+> Gentle ping.
+> Any thoughts on the above query?
 
-While at it change a kzalloc into an equivalent kcalloc to increase the
-semantic and avoid an open coded arithmetic in a memory allocation
-statement.
+As nobody cares, I'll pick it up.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-v1 --> v2: s/kzalloc/kcalloc/
+Thanks,
 
- drivers/scsi/elx/efct/efct_io.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/elx/efct/efct_io.c b/drivers/scsi/elx/efct/efct_io.c
-index 71e21655916a..109483f3e3df 100644
---- a/drivers/scsi/elx/efct/efct_io.c
-+++ b/drivers/scsi/elx/efct/efct_io.c
-@@ -56,13 +56,12 @@ efct_io_pool_create(struct efct *efct, u32 num_sgl)
- 		}
- 
- 		/* Allocate SGL */
--		io->sgl = kzalloc(sizeof(*io->sgl) * num_sgl, GFP_KERNEL);
-+		io->sgl = kcalloc(num_sgl, sizeof(*io->sgl), GFP_KERNEL);
- 		if (!io->sgl) {
- 			efct_io_pool_free(io_pool);
- 			return NULL;
- 		}
- 
--		memset(io->sgl, 0, sizeof(*io->sgl) * num_sgl);
- 		io->sgl_allocated = num_sgl;
- 		io->sgl_count = 0;
- 
--- 
-2.32.0
-
+        tglx
