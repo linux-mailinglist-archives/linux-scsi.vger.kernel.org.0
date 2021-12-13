@@ -2,69 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D77F4721B0
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Dec 2021 08:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD35472396
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Dec 2021 10:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbhLMHYO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Dec 2021 02:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbhLMHYK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Dec 2021 02:24:10 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CB3C0617A2
-        for <linux-scsi@vger.kernel.org>; Sun, 12 Dec 2021 23:24:09 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id x15so49728588edv.1
-        for <linux-scsi@vger.kernel.org>; Sun, 12 Dec 2021 23:24:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=HrSh1yTE/NkvYfVUKnJAAM8ZZfIKE4M+nhk1v4c1Vfs=;
-        b=NOXsB+Nw8h3xwxjXSMaFev+/mBnwgFRL0LFeMqsDXsDO+fxOY3lZkNjBijfkk36NXx
-         ifRJT4VZN6Xd8Wt0lvoUZ7kWjHIgHZDtQl/okd0pfnpR7cmHOBnEbJPGRS/2jtYE4X5E
-         gqkYKFFk2gbMGTxs913c3kM3qfwzfqfpbzT1FPl9pVgu25en81UGS63Jy+WMiPNU0KU3
-         E826GBgIQfipX5TyIyJk09cVnK70llv1sNy9RwRgugAu2nyBptBLmtWlpZqz7CRVNlex
-         ZOxk4srxQ3TS+03h5HMcKlhT1mr+dSlwZMCfnmlNL4GcPM53YeP1y+djqHH2FaIgjBUA
-         R5Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=HrSh1yTE/NkvYfVUKnJAAM8ZZfIKE4M+nhk1v4c1Vfs=;
-        b=ahCYnt1HqFPYl+v/Gn4CDCTRxPOMmVHMmA0pGMO115NQCKIvAX2ZKbefDv8DrzlwkT
-         W6OfACIpEbDgBtUx6CWsPY+CPlkKhTowHf9LDG/NYsD6EPcV32tpIp3lW/E6IYvyjYOL
-         xMaC9wLgwQtLP4x9opMCdRYWQseR+yh2o4GUcNw2lQM+1/9M3p+McNyLtcI2/J49PmXR
-         NxshJGa4RHmvO/cHunpr3DRjF+QEeD8tUELRfhTuOM9bYbUOcBRuT57dYn0KSfq3Z41+
-         asvuOx2QL13GceGNj8GLNVhKc+hT+LtJChIVADf7OCyGTiwxEHfWCncWD6GEKC9BlaLl
-         eq3g==
-X-Gm-Message-State: AOAM5301UM70aYK9atLop2xsJEKT6vwRfB79DX57Y7ox1IzPfSlDFlNy
-        yvlG9iUV8SnQvM11yVSaZcbDg5+JVJJi7+L88AU=
-X-Google-Smtp-Source: ABdhPJy9WokPNaEhjt5lEO1F2b79T2e9GqDG7TStTjP5Zz21Ty9Xacnm+c1+PBHqJBfG7agXafLU0quHRnf+04T4SNU=
-X-Received: by 2002:a17:906:9b82:: with SMTP id dd2mr34964289ejc.406.1639380247749;
- Sun, 12 Dec 2021 23:24:07 -0800 (PST)
+        id S233635AbhLMJQ0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Dec 2021 04:16:26 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4251 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233539AbhLMJQZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Dec 2021 04:16:25 -0500
+Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JCG781HrNz67v1F;
+        Mon, 13 Dec 2021 17:15:00 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 13 Dec 2021 10:16:23 +0100
+Received: from [10.47.83.94] (10.47.83.94) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 13 Dec
+ 2021 09:16:22 +0000
+Subject: Re: [PATCH v2] scsi: pm8001: Fix phys_to_virt() usage on dma_addr_t
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <jinpu.wang@cloud.ionos.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <Viswas.G@microchip.com>, <Ajish.Koshy@microchip.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1639158706-18446-1-git-send-email-john.garry@huawei.com>
+ <5d1b0c7c-90c6-8aba-3153-29df6eac865d@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <63cc50a5-b7ce-5930-68f1-039a71178b48@huawei.com>
+Date:   Mon, 13 Dec 2021 09:16:02 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Received: by 2002:a17:906:84e8:0:0:0:0 with HTTP; Sun, 12 Dec 2021 23:24:07
- -0800 (PST)
-Reply-To: lisshuuu1@gmail.com
-From:   MS LISA HUGH <safi.kabore360@gmail.com>
-Date:   Mon, 13 Dec 2021 08:24:07 +0100
-Message-ID: <CAAoJS39SO=+ZZOOhjUJ_2CeJv5OkmkXa-okdiXZEabn_nD36Wg@mail.gmail.com>
-Subject: READ AND REPLY FOR DETAILS (Ms Lisa Hugh).
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <5d1b0c7c-90c6-8aba-3153-29df6eac865d@opensource.wdc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.83.94]
+X-ClientProxiedBy: lhreml701-chm.china.huawei.com (10.201.108.50) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+On 11/12/2021 00:26, Damien Le Moal wrote:
+>> ss
+>> @@ -4320,20 +4324,20 @@ static int pm80xx_chip_smp_req(struct pm8001_hba_info *pm8001_ha,
+>>   		pm8001_dbg(pm8001_ha, IO, "SMP REQUEST DIRECT MODE\n");
+>>   		for (i = 0; i < length; i++)
+>>   			if (i < 16) {
+>> -				smp_cmd.smp_req16[i] = *(preq_dma_addr+i);
+>> +				smp_cmd.smp_req16[i] = *(payload+i);
+> Maybe add spacs around the "+" as you did above ?
 
-I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
+Yeah, right. I noticed now that only strict mode of checkpatch picks up 
+on this.
 
-I need Your help for the assistance transferring of ($4,500,000,00
-,U.S.DOLLARS)to your bank account with your co-operation for both of
-us benefit.
+> 
+>>   				pm8001_dbg(pm8001_ha, IO,
+>>   					   "Byte[%d]:%x (DMA data:%x)\n",
+>>   					   i, smp_cmd.smp_req16[i],
 
-Please send the follow below,
-1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
-Thanks.
-Ms Lisa Hugh
+...
+
+>>   	}
+>> -
+>> +	kunmap_atomic(to);
+>>   	build_smp_cmd(pm8001_dev->device_id, smp_cmd.tag,
+>>   				&smp_cmd, pm8001_ha->smp_exp_mode, length);
+>>   	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &smp_cmd,
+> Otherwise, looks OK to me.
+
+cheers
