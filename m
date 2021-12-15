@@ -2,85 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1972F475AE3
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Dec 2021 15:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B9B475BB2
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Dec 2021 16:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243533AbhLOOnX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 15 Dec 2021 09:43:23 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4293 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243487AbhLOOnU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Dec 2021 09:43:20 -0500
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JDdGY2Sgnz67vyR;
-        Wed, 15 Dec 2021 22:41:09 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 15:43:18 +0100
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 14:43:15 +0000
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH 8/8] scsi: libsas: Decode SAM status and host byte codes
-Date:   Wed, 15 Dec 2021 22:37:41 +0800
-Message-ID: <1639579061-179473-9-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1639579061-179473-1-git-send-email-john.garry@huawei.com>
-References: <1639579061-179473-1-git-send-email-john.garry@huawei.com>
+        id S243877AbhLOPSR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 15 Dec 2021 10:18:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237934AbhLOPSQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Dec 2021 10:18:16 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C21C061574
+        for <linux-scsi@vger.kernel.org>; Wed, 15 Dec 2021 07:18:16 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id o14so16688105plg.5
+        for <linux-scsi@vger.kernel.org>; Wed, 15 Dec 2021 07:18:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kiTE7qhns0rYxwGDuD6ie8wRzuMuUFUFmrIwiVfTSvE=;
+        b=P5CSOHUzOSqEuTCfYzAtu7efbt2rVYq9Ca/Y3eX2sXgBsiICcS9Sh7vaTF4BWXSX6M
+         LWYhRvhSNQZq02qMRy5nKSHnjwS23WIvEPfFa7JPFLviBw0g64nrN0i/Wj+xjhPcVbw6
+         DoNjCvx5sy2K0DF2CPA5UPAz1kdqyqhK192pCQ5J8aOZx4TTi1q2JxeC/9U26Z+Rlyig
+         CAOqzjpXgHgf97MzTinitvOAXMW9zV0U4y0AbRICRrhjJRNu4WhLoJEBZWKH+UfYJg+g
+         ItfZfXBjXnjOJXyTXZUXzZzVmpr4Q3mdnUpC0fCWI477WVns0rBWH7XMSZB8z7rXg5aw
+         r50g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kiTE7qhns0rYxwGDuD6ie8wRzuMuUFUFmrIwiVfTSvE=;
+        b=JOhKZEekGb6bDJFIOYGRzD1+eeVfpyRwlgiirmQ5UoPn6oGYrUpVNy+TasuUOhAVzy
+         jh7msn7ePDXjj69vRu9B9S0qgPMMz1n4YSpyPrs3Ti6fpK6GoYfwXN32MVEn7QBklNpT
+         tULFBuUZ7Gqs72sCGHNrDL+ACOUcXnpNhcdVMhzFzNF0ZSj7MBrL/z6e3odlSWZhrS4u
+         6cOTz1s5pa8i8ZDRTbqlwxJeXqtkFj21xVYwciLYnnEKjHnMEDai+nkytABA80E6KYTw
+         SCJGKAbQnhWWrnoKXOZ3O6KqUMgqawmXFgenVNypZC76wQBrV/fjPkDwka463iujdh1/
+         jdGg==
+X-Gm-Message-State: AOAM533CR7JfH1ghLNPI4hwXHxPpxwoK3aVcR2zi9r20ZQW5xebQGNx6
+        KWLBAxrxMLGMHuXkIUa8GE0=
+X-Google-Smtp-Source: ABdhPJykBSpxnlFTMsDP3GLraOUafLqSlxVeQd1G+7PUhM2dICrgcWSF3t7VH7O2LANvtiBWVHkTww==
+X-Received: by 2002:a17:902:b682:b0:143:7eb8:222 with SMTP id c2-20020a170902b68200b001437eb80222mr11760561pls.31.1639581495709;
+        Wed, 15 Dec 2021 07:18:15 -0800 (PST)
+Received: from [192.168.1.26] (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
+        by smtp.gmail.com with ESMTPSA id z13sm3263566pfj.7.2021.12.15.07.18.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 07:18:15 -0800 (PST)
+Message-ID: <b112f61b-5f5c-86ff-952e-8e62e500a5e4@gmail.com>
+Date:   Wed, 15 Dec 2021 07:18:14 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] efct: don't pass GFP_DMA to dma_alloc_coherent
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>, james.smart@broadcom.com,
+        ram.vegesna@broadcom.com
+Cc:     linux-scsi@vger.kernel.org
+References: <20211214163605.416288-1-hch@lst.de>
+From:   James Smart <jsmart2021@gmail.com>
+In-Reply-To: <20211214163605.416288-1-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Value 0 is used for SAM status and libsas exec_status bytes codes in
-sas_end_task() - use defined macros instead. In addition, change to
-proper enum types.
+On 12/14/2021 8:36 AM, Christoph Hellwig wrote:
+> dma_alloc_coherent ignores the zone specifiers, so this is pointless and
+> confusing.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>   drivers/scsi/elx/efct/efct_driver.c |  2 +-
+>   drivers/scsi/elx/efct/efct_hw.c     | 10 +++++-----
+>   drivers/scsi/elx/efct/efct_io.c     |  2 +-
+>   drivers/scsi/elx/libefc/efc_cmds.c  |  4 ++--
+>   drivers/scsi/elx/libefc/efc_els.c   |  4 ++--
+>   drivers/scsi/elx/libefc_sli/sli4.c  | 14 +++++++-------
+>   6 files changed, 18 insertions(+), 18 deletions(-)
+> 
 
-Also replace SAM_STAT_CHECK_CONDITION with SAS_SAM_STAT_CHECK_CONDITION,
-the former being a proper member of enum exec_status.
+Looks good. Thanks Christoph.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/libsas/sas_scsi_host.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Reviewed-by: James Smart <jsmart2021@gmail.com>
 
-diff --git a/drivers/scsi/libsas/sas_scsi_host.c b/drivers/scsi/libsas/sas_scsi_host.c
-index d337fdf1b9ca..fb19e739a39c 100644
---- a/drivers/scsi/libsas/sas_scsi_host.c
-+++ b/drivers/scsi/libsas/sas_scsi_host.c
-@@ -37,7 +37,8 @@
- static void sas_end_task(struct scsi_cmnd *sc, struct sas_task *task)
- {
- 	struct task_status_struct *ts = &task->task_status;
--	int hs = 0, stat = 0;
-+	enum scsi_host_status hs = DID_OK;
-+	enum exec_status stat = SAS_SAM_STAT_GOOD;
- 
- 	if (ts->resp == SAS_TASK_UNDELIVERED) {
- 		/* transport error */
-@@ -82,10 +83,10 @@ static void sas_end_task(struct scsi_cmnd *sc, struct sas_task *task)
- 		case SAS_ABORTED_TASK:
- 			hs = DID_ABORT;
- 			break;
--		case SAM_STAT_CHECK_CONDITION:
-+		case SAS_SAM_STAT_CHECK_CONDITION:
- 			memcpy(sc->sense_buffer, ts->buf,
- 			       min(SCSI_SENSE_BUFFERSIZE, ts->buf_valid_size));
--			stat = SAM_STAT_CHECK_CONDITION;
-+			stat = SAS_SAM_STAT_CHECK_CONDITION;
- 			break;
- 		default:
- 			stat = ts->stat;
--- 
-2.26.2
+-- james
 
