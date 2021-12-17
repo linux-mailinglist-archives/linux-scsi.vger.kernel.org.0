@@ -2,79 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E454783D7
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Dec 2021 05:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F824783DC
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Dec 2021 05:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbhLQEEy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Dec 2021 23:04:54 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:37494 "EHLO
+        id S232684AbhLQEFA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Dec 2021 23:05:00 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:40466 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232618AbhLQEEt (ORCPT
+        by vger.kernel.org with ESMTP id S232624AbhLQEEw (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 16 Dec 2021 23:04:49 -0500
+        Thu, 16 Dec 2021 23:04:52 -0500
 Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BH2Xq4j004108;
-        Fri, 17 Dec 2021 04:04:46 GMT
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BH2X4T8004122;
+        Fri, 17 Dec 2021 04:04:47 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=aXD2TQuu+MvQo6xdgMJWtTovEFO9lrrSGnIaTpWiZr4=;
- b=I6v5o/kTmdEVN8ry5X9VlgHk3+hXSIeikVdTtIOokWiw2ca9/COYTPO1pks4qL+weQYh
- bcLEYRSWOMDJD3keephYjOZd3BpldTB1cVyWRJ2h4ZC5CRTAIeU59SQPhl0VFpg+sX8k
- 0CMCoLAIba0X29nGGIGWgoNw5awdoWPTouwmTx6TVeiiRAnG1uvMqqB98vxTanh3P9z0
- mmnHbn5uXIucrJFuVBWJpiOfOr6cbFa5lC8jH5f7g9xVjZuCtQh31b9kBROfkwuOIJdb
- BtuvfM7vAhUWNKiN8duvScCg4vExHF3UkHiglb7QZzq8LwBLaH5LOQDeRs/DBC3qjBSG mQ== 
+ bh=47mkUn5AIE/gaIz5Xk8dghf/d3/VjCK/LqtvQA/k/gk=;
+ b=vBORmk6TUjVAe/N3VTkmAn1iUXC3E5PjTb/8pkip43+Fe4IRWclzawYLlu1X7HtsLZoB
+ 89Z9NetZghoKJsAJ7C+/6mxj6as5cIj2EeQDq32/VjF4j3fm18at3uaTVgIG+92eKr5b
+ cL89kCTyCpoPrlgRxBOJq7EnHwHYahOoVctAVY7107rjz5/m/mGOobd8eJb29XTtUHMM
+ rwKBjUkThPyUWxR05DMlszcGVtOwi/6uiIJq4UMNpPhAD7c5GHMqPkzs9i6fgLNq/y+v
+ NYUgzTFfVZrDR7I30/ybBqd2n0dtVutgBT8XuhdiVTnm6uR81Sb7oVgahsgyBe+hCmpR Pw== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cykmcmkge-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cykmcmkgf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Dec 2021 04:04:47 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BH40jfb154622;
+        Fri, 17 Dec 2021 04:04:46 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3030.oracle.com with ESMTP id 3cvh436dvk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 17 Dec 2021 04:04:46 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1BH40hVA154441;
-        Fri, 17 Dec 2021 04:04:45 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3030.oracle.com with ESMTP id 3cvh436duw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Dec 2021 04:04:45 +0000
 Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1BH44ici167096;
-        Fri, 17 Dec 2021 04:04:44 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1BH44icm167096;
+        Fri, 17 Dec 2021 04:04:46 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3030.oracle.com with ESMTP id 3cvh436duh-1;
-        Fri, 17 Dec 2021 04:04:44 +0000
+        by userp3030.oracle.com with ESMTP id 3cvh436duh-3;
+        Fri, 17 Dec 2021 04:04:46 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     don.brace@microchip.com, jejb@linux.ibm.com,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     James Smart <james.smart@broadcom.com>,
+        Kees Cook <keescook@chromium.org>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        storagedev@microchip.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: hpsa: Remove an unused variable in 'hpsa_update_scsi_devices()'
-Date:   Thu, 16 Dec 2021 23:04:40 -0500
-Message-Id: <163971367437.637.18022597359309025330.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-kernel@vger.kernel.org,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] scsi: lpfc: Use struct_group() to initialize struct lpfc_cgn_info
+Date:   Thu, 16 Dec 2021 23:04:42 -0500
+Message-Id: <163971367435.637.14441712327828336248.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <9f80ea569867b5f7ae1e0f99d656e5a8bacad34e.1639084205.git.christophe.jaillet@wanadoo.fr>
-References: <9f80ea569867b5f7ae1e0f99d656e5a8bacad34e.1639084205.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20211208195957.1603092-1-keescook@chromium.org>
+References: <20211208195957.1603092-1-keescook@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: QY48Zus_s-waqmI-H6srCMDwVt_ET--e
-X-Proofpoint-GUID: QY48Zus_s-waqmI-H6srCMDwVt_ET--e
+X-Proofpoint-ORIG-GUID: 6yjbvYlfNEKDGgBhzbA7FIUKZnHGi540
+X-Proofpoint-GUID: 6yjbvYlfNEKDGgBhzbA7FIUKZnHGi540
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 9 Dec 2021 22:11:56 +0100, Christophe JAILLET wrote:
+On Wed, 8 Dec 2021 11:59:57 -0800, Kees Cook wrote:
 
-> 'lunzerobits' is unused. Remove it.
+> In preparation for FORTIFY_SOURCE performing compile-time and run-time
+> field bounds checking for memset(), avoid intentionally writing across
+> neighboring fields.
 > 
-> This a left over of commit 2d62a33e05d4("hpsa: eliminate fake lun0
-> enclosures")
+> Add struct_group() to mark "stat" region of struct lpfc_cgn_info that
+> should be initialized to zero, and refactor the "data" region memset()
+> to wipe everything up to the cgn_stats region.
 > 
-> 
+> [...]
 
 Applied to 5.17/scsi-queue, thanks!
 
-[1/1] scsi: hpsa: Remove an unused variable in 'hpsa_update_scsi_devices()'
-      https://git.kernel.org/mkp/scsi/c/8c2d04551545
+[1/1] scsi: lpfc: Use struct_group() to initialize struct lpfc_cgn_info
+      https://git.kernel.org/mkp/scsi/c/532adda9f405
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
