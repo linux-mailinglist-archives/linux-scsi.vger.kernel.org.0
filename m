@@ -2,70 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 585B84780D2
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Dec 2021 00:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A20814783A4
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Dec 2021 04:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbhLPXpO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Dec 2021 18:45:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S232482AbhLQD3R (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Dec 2021 22:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbhLPXpO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Dec 2021 18:45:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD9BC061574
-        for <linux-scsi@vger.kernel.org>; Thu, 16 Dec 2021 15:45:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96FC6B82525
-        for <linux-scsi@vger.kernel.org>; Thu, 16 Dec 2021 23:45:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E076C36AE8;
-        Thu, 16 Dec 2021 23:45:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639698311;
-        bh=alHXPNlEWdP0KFNJyi/TBYdutp371O/bgnLqBKvrBBc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=OkNMuQefTVabql76Shkq16S61E3UJrd9+NOXLEIX8H9EoOX0tWjeJlEwIq5ClABCe
-         5zyciSTEqziUYA2H/rd5fgxm2pJ2m7PhvS3aYbMve5hIYBBXTsmsB86FdqXE3wK73X
-         Nf+WCT7V7q4nZYfug0WfadTCcSg/HA3IQh+PRe2fFbgaM75mYotnEvEu2Mg6JCNua7
-         njz/6LlVrrsMMAn0zKJsKI8kKYfZRL3YPWOeSkMtwOzxBCpNTpMrBamdU5Ejq1Yw7y
-         qJ87SLhQCSNYMkMAy20OY6ON5nYhbYHMnpNiBwyT1QKBu+lvqTvagNkEPFovbSXoOY
-         O83o8PjXme6zA==
-Date:   Thu, 16 Dec 2021 17:45:09 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kashyap Desai <kashyap.desai@broadcom.com>
-Cc:     linux-scsi@vger.kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, steve.hagan@broadcom.com,
-        mpi3mr-linuxdrv.pdl@broadcom.com, sathya.prakash@broadcom.com,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        linux-pci@vger.kernel.or
-Subject: Re: [PATCH v6 21/24] mpi3mr: add support of PM suspend and resume
-Message-ID: <20211216234509.GA804768@bhelgaas>
+        with ESMTP id S232444AbhLQD3Q (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Dec 2021 22:29:16 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F896C061401
+        for <linux-scsi@vger.kernel.org>; Thu, 16 Dec 2021 19:29:16 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id t5so2933668edd.0
+        for <linux-scsi@vger.kernel.org>; Thu, 16 Dec 2021 19:29:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/hHgBKaozpyohhRsiYLOj0WZK8ScsciyYJn+ZRKFKfo=;
+        b=G+rd1FRwzzuC0aM0gFY4NWK5EfyNPK8GtCllH7kNKG54dS7dWZY5w8rVraYU14x6qQ
+         TPaJ8LME3SpcBXg+mTAXBOFeqFwnGYNZ5Ofd8Wub/N+u5d6GsrnIIgfuANp31rgynVo4
+         bHbsnQOfnFWOAiVt3vZMeAU8UDaMo14YpALLTJr9TKL6EvOm7HU5KixgO5hi+8haeN9M
+         Sj4SxBSNeV6AJkQBYNWScl+VOfwUGCWahYKG0RpVMeFgvp/c7E6MlQP27G7qL7ZKSExg
+         sp3XfIkyF7b6A4sQHomAfhwivJys9baxtkBgDMLgo0SRyREsgNX4dLDqqLIN49Es93jG
+         GrKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/hHgBKaozpyohhRsiYLOj0WZK8ScsciyYJn+ZRKFKfo=;
+        b=NAAL3j6hEn9r0fS9xvAeO0J9WL4HDBzENukF+4hTt9azCeZ63Q6UFV5ZhzHtIL3BPD
+         v6EOe4gkgvjcddrP6n4cjTrhf6jg00F5rImB36GEXWHNdOUgcasP66Y++q46uKiu8Rrp
+         T8okxCG7zq3BFmiKklb9kR0PK/QxNZ+q1X4ZFLQ/WqA8wEu1sKPS+sy6w4DfF/WrHlNZ
+         Ge0ykB9XI45GD3bTPK8jQEw00eDb7ySpM12ewqVuM0bY8ZG9bf7L4uL5zYGkkhFyDo0H
+         fJrRZ+dxjUwBmV1z6/NlvwQ1dyb1CW///KTEliN2z+IuS99PIlWwrnqxBTT1rNDfZ7J5
+         EaRg==
+X-Gm-Message-State: AOAM5313FcsZrqxWgY0SuYgP3kI9KHhwzUN5gbPWzpdX5drUjJfTHX7f
+        LQOJyDwTw+u+YF8Sb3SSxD+wr6etIgCl/iXyx2o=
+X-Google-Smtp-Source: ABdhPJwdaOzFQ7D7UDEG9ad4P/gwEzu13pmOk5uB7YkOLnZkrQGnek/2FYkmctW+DZcgtdIK/P9yzJ122cnjmnRMpv4=
+X-Received: by 2002:a05:6402:41a:: with SMTP id q26mr958001edv.387.1639711754825;
+ Thu, 16 Dec 2021 19:29:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216233249.GA804561@bhelgaas>
+Received: by 2002:a54:2ecf:0:0:0:0:0 with HTTP; Thu, 16 Dec 2021 19:29:14
+ -0800 (PST)
+Reply-To: lisshuuu1@gmail.com
+From:   MS LISA HUGH <olivier.folly0@gmail.com>
+Date:   Thu, 16 Dec 2021 19:29:14 -0800
+Message-ID: <CAG_GOAuTFotjwi1bA1xvnVO5_y-zxkTu6RtckJ5C6CamT-0rVg@mail.gmail.com>
+Subject: REPLY TO HAVE THE FULL DETAILS >>MS LISA HUGH.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-[-cc Peter Rivera (bouncing)]
+Dear Friend,
 
-On Thu, Dec 16, 2021 at 05:32:51PM -0600, Bjorn Helgaas wrote:
-> On Thu, Dec 16, 2021 at 05:30:07PM -0600, Bjorn Helgaas wrote:
-> > On Thu, May 20, 2021 at 08:55:42PM +0530, Kashyap Desai wrote:
+I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
 
-> > > +static int mpi3mr_suspend(struct pci_dev *pdev, pm_message_t state)
-> > > +{
+I need your co-operation for the  transferring of ($4,500,000,00
+,U.S.DOLLARS)to your bank account for both of us benefit.
 
-> > > +	mpi3mr_cleanup_ioc(mrioc, 1);
-> > 
-> > This looks possibly wrong.  mpi3mr_cleanup_ioc() takes a "reason",
-> > which looks like it should be MPI3MR_COMPLETE_CLEANUP (0),
-> > MPI3MR_REINIT_FAILURE (1), or MPI3MR_SUSPEND (2).
-> > 
-> > This should at least use the enum, and it looks like it should use
-> > MPI3MR_SUSPEND instead of passing the MPI3MR_REINIT_FAILURE value.
-
-Sorry for the noise about this part, I see you fixed this later with
-0da66348c26f ("scsi: mpi3mr: Set up IRQs in resume path").
+Please send the follow below,
+1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
+Thanks.
+Ms Lisa Hugh
