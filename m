@@ -2,191 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D32B947AAEA
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Dec 2021 15:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4826B47AAEB
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Dec 2021 15:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbhLTOES (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 Dec 2021 09:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
+        id S233444AbhLTOET (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Dec 2021 09:04:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233442AbhLTOEP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Dec 2021 09:04:15 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D82C061401
-        for <linux-scsi@vger.kernel.org>; Mon, 20 Dec 2021 06:04:15 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id a23so9490221pgm.4
-        for <linux-scsi@vger.kernel.org>; Mon, 20 Dec 2021 06:04:15 -0800 (PST)
+        with ESMTP id S233424AbhLTOES (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Dec 2021 09:04:18 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5BDC061574
+        for <linux-scsi@vger.kernel.org>; Mon, 20 Dec 2021 06:04:17 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so10243183pjq.4
+        for <linux-scsi@vger.kernel.org>; Mon, 20 Dec 2021 06:04:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version;
-        bh=Li9ZzYgTscm9Nk8n6eURg7S43BpiKZ0rpUu8JuH19uE=;
-        b=cTklcMig4SVzV7jKszV7QDzPI32ZuaBEVdLV/s8+5YugY4yQZApKqLuJA7aO/n0gDH
-         X/hZjIl8IcSURp/OvaIw5xUT20SoXBQsruyuzXpt2Y3Esq2oMzRPXRufJeEnrjkLDEJg
-         WBY9Vh5oqeU0Vp1Pxi6DUmHkxdehMwMd4PmNI=
+        bh=puunVJnID0DLdjbEKd6m/mYP4H547Y4NwYbC5COE0Xc=;
+        b=MXvIQcEYk0eeyzaIRzagVMNmKE7JIGqDjWSWlbpWg34peruQTdMSAm0jpKPlZNuATs
+         amga6Or21AXJCm3L6ceP81sjYJDW0v9RXqE+8xwPqM5S9XJBCXGFIJ+9SLql7Z8iuLAS
+         PmeVtJoXdrmFQ27WVYWFTiB9632J7zZxj+KdM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version;
-        bh=Li9ZzYgTscm9Nk8n6eURg7S43BpiKZ0rpUu8JuH19uE=;
-        b=a7eqaaAqosIwSgNI4njhx/k8Xx68RoqNgIvDgngxu04yfw2bxlksfnTaAQblfQRtG6
-         ddv9aP1+MpF5+v1/tSwEtf/38Dq/5TXsjQkV+qv8dd70LCxbUJYL/OZKaZkugIsBiBEs
-         IXpfHheXaL8/gKmyPJ+9xYS7NipMmoc4CjF+ep9FQ1dIM+N7lNqRXMy51groUXsxa0Wg
-         UDUPh6vYXMPWJBx8zdGvSu3t2zwMOYFupsBGPZdiI1BCJapRMQMDYzvjBpobK0DSgMvh
-         be5GOvUEHN35VDaxTcV/0R1+6iM9nmwuZ+euqDr0iti/dJSVg+0cZ6Yg7OximTk7gCyB
-         JePw==
-X-Gm-Message-State: AOAM532P3OQguSHlor7HnElBOC0OfldXim1IuzTu9xDN0itSRiFUGarm
-        EBlaH+um5hAtqPpENc+2DOVmbMYD2/RjI0sWHO7kQQr6THDdw7PRf8EXw28drvHPz01PjFcR5yc
-        Rfh5s29nzXg92n0oeeYo+//7QFZfDzHHrYy/aNXvBqYEzRfCP97QVKxWGIDtXh2UWRMSLaD+dqe
-        xzc3opNhFm
-X-Google-Smtp-Source: ABdhPJx1MqniG1GTqb54ZPqOQAFm0hFVwlUKHW8pfWGmOFdn9AEgIBxai5JvkHPF3x5RaelHgsKwVg==
-X-Received: by 2002:a62:78d3:0:b0:4ba:7141:83e9 with SMTP id t202-20020a6278d3000000b004ba714183e9mr16360470pfc.83.1640009054671;
-        Mon, 20 Dec 2021 06:04:14 -0800 (PST)
+        bh=puunVJnID0DLdjbEKd6m/mYP4H547Y4NwYbC5COE0Xc=;
+        b=Bks37iJ0k8KQEHv1C8IPQiWVtKCZVmmejCL7OtoF85xlzjukpgtkP1oYTmhS7SgFpS
+         t0qfl0fTOJZrOeVpp0HV5EBANmUhR9iaC704NurLZuRa8d4BcGvvHlOtdfMuNQqrxQ91
+         +S7Z2+qDqrXvRgCKJv76HTr/SzkJuyQcekfuHLIcT/mvlqXZm3KJC/i6ulHZv5uoDvau
+         n1L/M+Vtl7l3ZTymvTh0Hv9i4LAoM7lEZTukW/lQvl2xCV0vFTF8Efeay79shNaSlBKC
+         sWfsDJsv+vom8GuaNWoaEbQMSVSgQ0DlBZe8T/fkZFnDUVDMgJSuHmtYTuKxjouHcGjp
+         nP+Q==
+X-Gm-Message-State: AOAM533dGnLhBsMSwByiL9afVBVyxPjBp3eWqPefDWdgusOySyTkwJt6
+        EjjuwkIoHNFhaRofebmD7pme2dwyepmg1CpP8l256PNOsF67/OybI2fsNM3Vn0gNImlxvHmKdVc
+        7f2FTLz9Sa8yF/raGompRxK63fdWXlj8enJUFVdRDAouQLFwLAihA6ysDi/u34glImfLaJtws65
+        0Xiqp7NSU1
+X-Google-Smtp-Source: ABdhPJwwWH37XIGFicHmwJ8OzQoIVyTfPs0l2XZBdsmazEyCI0gr+VS4vGdxwtXLoYg1VXPgpgFGQA==
+X-Received: by 2002:a17:902:c947:b0:149:92d:fc44 with SMTP id i7-20020a170902c94700b00149092dfc44mr6873013pla.139.1640009056744;
+        Mon, 20 Dec 2021 06:04:16 -0800 (PST)
 Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id b4sm5434180pjm.17.2021.12.20.06.04.12
+        by smtp.gmail.com with ESMTPSA id b4sm5434180pjm.17.2021.12.20.06.04.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 06:04:14 -0800 (PST)
+        Mon, 20 Dec 2021 06:04:16 -0800 (PST)
 From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, mpi3mr-linuxdrv.pdl@broadcom.com,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH 06/25] mpi3mr: Add support for PCIe Managed Switch SES device
-Date:   Mon, 20 Dec 2021 19:41:40 +0530
-Message-Id: <20211220141159.16117-7-sreekanth.reddy@broadcom.com>
+Subject: [PATCH 07/25] mpi3mr: Do access status validation before adding devices
+Date:   Mon, 20 Dec 2021 19:41:41 +0530
+Message-Id: <20211220141159.16117-8-sreekanth.reddy@broadcom.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211220141159.16117-1-sreekanth.reddy@broadcom.com>
 References: <20211220141159.16117-1-sreekanth.reddy@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002b57d205d3945d87"
+        boundary="0000000000004899f805d3945d3c"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---0000000000002b57d205d3945d87
+--0000000000004899f805d3945d3c
 Content-Transfer-Encoding: 8bit
 
-The SAS4 Controller firmware exposes the SES devices
-in Managed PCIe Switch as a PCIe Device Type SCSI Device
-(MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_SCSI_DEVICE).
-
-Driver is enhanced to handle this device type by
- - exposing the device to the upper layers and
- - not updating any hardware sectors & virtual boundary
-settings as these settings are needed only for
-NVMe devices.
+Added validation for various access statuses
+prior to exposing attached target device to
+the operating system.
 
 Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 ---
- drivers/scsi/mpi3mr/mpi3mr.h    |  3 +++
- drivers/scsi/mpi3mr/mpi3mr_os.c | 40 ++++++++++++++++++++++++---------
- 2 files changed, 32 insertions(+), 11 deletions(-)
+ drivers/scsi/mpi3mr/mpi3mr_os.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
-index cdbd1cb..fe3cfd5 100644
---- a/drivers/scsi/mpi3mr/mpi3mr.h
-+++ b/drivers/scsi/mpi3mr/mpi3mr.h
-@@ -147,6 +147,7 @@ extern int prot_mask;
- 			MPI3_SCSITASKMGMT_RSPCODE_IO_QUEUED_ON_IOC
- 
- #define MPI3MR_DEFAULT_MDTS	(128 * 1024)
-+#define MPI3MR_DEFAULT_PGSZEXP         (12)
- /* Command retry count definitions */
- #define MPI3MR_DEV_RMHS_RETRY_COUNT 3
- 
-@@ -389,6 +390,7 @@ struct tgt_dev_sas_sata {
-  * @pgsz: Device page size
-  * @abort_to: Timeout for abort TM
-  * @reset_to: Timeout for Target/LUN reset TM
-+ * @dev_info: Device information bits
-  */
- struct tgt_dev_pcie {
- 	u32 mdts;
-@@ -396,6 +398,7 @@ struct tgt_dev_pcie {
- 	u8 pgsz;
- 	u8 abort_to;
- 	u8 reset_to;
-+	u16 dev_info;
- };
- 
- /**
 diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index e887d31..14621dc 100644
+index 14621dc..2fe7fcb 100644
 --- a/drivers/scsi/mpi3mr/mpi3mr_os.c
 +++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -742,11 +742,18 @@ mpi3mr_update_sdev(struct scsi_device *sdev, void *data)
- 	switch (tgtdev->dev_type) {
- 	case MPI3_DEVICE_DEVFORM_PCIE:
- 		/*The block layer hw sector size = 512*/
--		blk_queue_max_hw_sectors(sdev->request_queue,
--		    tgtdev->dev_spec.pcie_inf.mdts / 512);
--		blk_queue_virt_boundary(sdev->request_queue,
--		    ((1 << tgtdev->dev_spec.pcie_inf.pgsz) - 1));
--
-+		if ((tgtdev->dev_spec.pcie_inf.dev_info &
-+		    MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_MASK) ==
-+		    MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_NVME_DEVICE) {
-+			blk_queue_max_hw_sectors(sdev->request_queue,
-+			    tgtdev->dev_spec.pcie_inf.mdts / 512);
-+			if (tgtdev->dev_spec.pcie_inf.pgsz == 0)
-+				blk_queue_virt_boundary(sdev->request_queue,
-+				    ((1 << MPI3MR_DEFAULT_PGSZEXP) - 1));
-+			else
-+				blk_queue_virt_boundary(sdev->request_queue,
-+				    ((1 << tgtdev->dev_spec.pcie_inf.pgsz) - 1));
-+		}
- 		break;
- 	default:
- 		break;
-@@ -848,6 +855,7 @@ static void mpi3mr_update_tgtdev(struct mpi3mr_ioc *mrioc,
- 		    &dev_pg0->device_specific.pcie_format;
- 		u16 dev_info = le16_to_cpu(pcieinf->device_info);
+@@ -831,6 +831,17 @@ static void mpi3mr_update_tgtdev(struct mpi3mr_ioc *mrioc,
+ 		scsi_tgt_priv_data->dev_type = tgtdev->dev_type;
+ 	}
  
-+		tgtdev->dev_spec.pcie_inf.dev_info = dev_info;
- 		tgtdev->dev_spec.pcie_inf.capb =
- 		    le32_to_cpu(pcieinf->capabilities);
- 		tgtdev->dev_spec.pcie_inf.mdts = MPI3MR_DEFAULT_MDTS;
-@@ -864,8 +872,10 @@ static void mpi3mr_update_tgtdev(struct mpi3mr_ioc *mrioc,
- 		}
- 		if (tgtdev->dev_spec.pcie_inf.mdts > (1024 * 1024))
- 			tgtdev->dev_spec.pcie_inf.mdts = (1024 * 1024);
--		if ((dev_info & MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_MASK) !=
--		    MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_NVME_DEVICE)
-+		if (((dev_info & MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_MASK) !=
-+		    MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_NVME_DEVICE) &&
-+		    ((dev_info & MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_MASK) !=
-+		    MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_SCSI_DEVICE))
- 			tgtdev->is_hidden = 1;
- 		if (!mrioc->shost)
- 			break;
-@@ -3190,10 +3200,18 @@ static int mpi3mr_slave_configure(struct scsi_device *sdev)
- 	switch (tgt_dev->dev_type) {
- 	case MPI3_DEVICE_DEVFORM_PCIE:
- 		/*The block layer hw sector size = 512*/
--		blk_queue_max_hw_sectors(sdev->request_queue,
--		    tgt_dev->dev_spec.pcie_inf.mdts / 512);
--		blk_queue_virt_boundary(sdev->request_queue,
--		    ((1 << tgt_dev->dev_spec.pcie_inf.pgsz) - 1));
-+		if ((tgt_dev->dev_spec.pcie_inf.dev_info &
-+		    MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_MASK) ==
-+		    MPI3_DEVICE0_PCIE_DEVICE_INFO_TYPE_NVME_DEVICE) {
-+			blk_queue_max_hw_sectors(sdev->request_queue,
-+			    tgt_dev->dev_spec.pcie_inf.mdts / 512);
-+			if (tgt_dev->dev_spec.pcie_inf.pgsz == 0)
-+				blk_queue_virt_boundary(sdev->request_queue,
-+				    ((1 << MPI3MR_DEFAULT_PGSZEXP) - 1));
-+			else
-+				blk_queue_virt_boundary(sdev->request_queue,
-+				    ((1 << tgt_dev->dev_spec.pcie_inf.pgsz) - 1));
-+		}
- 		break;
- 	default:
- 		break;
++	switch (dev_pg0->access_status) {
++	case MPI3_DEVICE0_ASTATUS_NO_ERRORS:
++	case MPI3_DEVICE0_ASTATUS_PREPARE:
++	case MPI3_DEVICE0_ASTATUS_NEEDS_INITIALIZATION:
++	case MPI3_DEVICE0_ASTATUS_DEVICE_MISSING_DELAY:
++		break;
++	default:
++		tgtdev->is_hidden = 1;
++		break;
++	}
++
+ 	switch (tgtdev->dev_type) {
+ 	case MPI3_DEVICE_DEVFORM_SAS_SATA:
+ 	{
 -- 
 2.27.0
 
 
---0000000000002b57d205d3945d87
+--0000000000004899f805d3945d3c
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -257,13 +172,13 @@ X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
 eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
 Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
 MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICnHgsysu2Px119BAAJ9
-iph46UXlEh6rWTdSkO9jg1u3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIxMTIyMDE0MDQxNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIAwEcbj3f0I3JBDhdle
+RFO2lKFbpy8gfov5t0k5paTjMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIxMTIyMDE0MDQxN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
 BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBX3s58ifGCZSgxiWxqvDpZEDFxT79hhgUR6W4m
-nvOIE1ZmMZy5CJB7Ibp5eFNfTokJi5oh3EYc2anc7Q9xssBYwuY9stLO7atR7Z9jFUVxYaaOrOly
-VoF0JrHYzAhBNXDJkhG0FtrDUHteBiam/Ve4IsVNGqMLNuMWwyDQiNY/RNRn70euZRMC/pdbVYmO
-8r7+AFhexW5qJ0w1y2RxGjJq3zTV/JA/BBaJsE85TZK1E0KepTh+bvHdjjcQQNkFiS2GAxX7pNqi
-6YmGMoeX/9Y8hRLZclsNuhDPf/prDZYwd6Ko5AHP42yPUfuFmyseI75uNVhhM5E9yS42WPuyk7Tb
---0000000000002b57d205d3945d87--
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQC/Qf9r/qVmOeOz3OxU8cySUhaoUeaJ03LokPNn
+jQW7iL7TfCZAVdfzQCqmMsQh0h5qlBhp7MOhwoPQ2lLynH/fcOZMIj6ISWikCRzvEa07TIZxnLV1
+JJghJryVjewOmEeM5fqk1u6hEBAnjsdusT0aIgS2/sXC8KDvrXOmaRTriHy3GBrXfakgGF1dDAks
+LxqprTifSH+Lk95mIvdgMQ6Gq21jGzo/FFrzde2PaVzOH0cXWP0DUR4CLuES4ZnCfpIlQsmZOHM2
+B/BuzSO6nWmXY/GJdI19HrNtXpnZXorPO/q5ttcwqQqMmvum4b02rfmzAQr//QK+/305XqwpPt10
+--0000000000004899f805d3945d3c--
