@@ -2,70 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EFC47A8A4
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Dec 2021 12:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC45647A8D9
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Dec 2021 12:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbhLTL1E (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 Dec 2021 06:27:04 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15947 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbhLTL0w (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Dec 2021 06:26:52 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JHcfS3lrQzZdjx;
-        Mon, 20 Dec 2021 19:23:44 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.20; Mon, 20 Dec 2021 19:26:50 +0800
-From:   chenxiang <chenxiang66@hisilicon.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
-        <john.garry@huawei.com>, Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [PATCH v2 15/15] scsi: hisi_sas: Use autosuspend for the host controller
-Date:   Mon, 20 Dec 2021 19:21:38 +0800
-Message-ID: <1639999298-244569-16-git-send-email-chenxiang66@hisilicon.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1639999298-244569-1-git-send-email-chenxiang66@hisilicon.com>
-References: <1639999298-244569-1-git-send-email-chenxiang66@hisilicon.com>
+        id S231260AbhLTLjJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Dec 2021 06:39:09 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:29266 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229626AbhLTLjI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Dec 2021 06:39:08 -0500
+Received: from kwepemi500003.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JHczn1tgkzbjQq;
+        Mon, 20 Dec 2021 19:38:45 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ kwepemi500003.china.huawei.com (7.221.188.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 20 Dec 2021 19:39:07 +0800
+Received: from [10.174.179.176] (10.174.179.176) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 20 Dec 2021 19:39:06 +0800
+To:     <lduncan@suse.com>, <cleech@redhat.com>,
+        <linux-scsi@vger.kernel.org>
+CC:     linfeilong <linfeilong@huawei.com>
+From:   lixiaokeng <lixiaokeng@huawei.com>
+Subject: [PATCH] libiscsi: fix UAF when iscsi_conn_get_param and
+ iscsi_conn_teardown concurrent
+Message-ID: <046ec8a0-ce95-d3fc-3235-666a7c65b224@huawei.com>
+Date:   Mon, 20 Dec 2021 19:39:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.176]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Xiang Chen <chenxiang66@hisilicon.com>
+|- iscsi_if_destroy_conn            |-dev_attr_show
+ |-iscsi_conn_teardown
+  |-spin_lock_bh                     |-iscsi_sw_tcp_conn_get_param
 
-The controller may frequently enter and exit suspend for each IO which we
-need to deal with. This is inefficient and may cause too much suspend and
-resume activity for the controller.
-To avoid this, use a default 5s autosuspend for the controller to stop
-frequently suspending and resuming. This value may still be modified via
-sysfs interfaces.
+  |-kfree(conn->persistent_address)   |-iscsi_conn_get_param
+  |-kfree(conn->local_ipaddr)
+                                       ==>|-read persistent_address
+                                       ==>|-read local_ipaddr
+  |-spin_unlock_bh
 
-Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-Acked-by: John Garry <john.garry@huawei.com>
+when iscsi_conn_teardown and iscsi_conn_get_param happen in parallel,
+may trigger UAF issues.
+
+Signed-off-by: Lixiaokeng<lixiaokeng@huawei.com>
+Signed-off-by: Linfeilong<linfeilong@huawei.com>
+Reported-by: Lu Tixiong<lutianxiong@huawei.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/libiscsi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 94eb48c93ab1..a45ef9a5e12e 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -4783,6 +4783,8 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 
- 	scsi_scan_host(shost);
- 
-+	pm_runtime_set_autosuspend_delay(dev, 5000);
-+	pm_runtime_use_autosuspend(dev);
- 	/*
- 	 * For the situation that there are ATA disks connected with SAS
- 	 * controller, it additionally creates ata_port which will affect the
+diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+index 284b939fb1ea..059dae8909ee 100644
+--- a/drivers/scsi/libiscsi.c
++++ b/drivers/scsi/libiscsi.c
+@@ -3100,6 +3100,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
+ {
+ 	struct iscsi_conn *conn = cls_conn->dd_data;
+ 	struct iscsi_session *session = conn->session;
++	char *tmp_persistent_address = conn->persistent_address;
++	char *tmp_local_ipaddr = conn->local_ipaddr;
+
+ 	del_timer_sync(&conn->transport_timer);
+
+@@ -3121,8 +3123,6 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
+ 	spin_lock_bh(&session->frwd_lock);
+ 	free_pages((unsigned long) conn->data,
+ 		   get_order(ISCSI_DEF_MAX_RECV_SEG_LEN));
+-	kfree(conn->persistent_address);
+-	kfree(conn->local_ipaddr);
+ 	/* regular RX path uses back_lock */
+ 	spin_lock_bh(&session->back_lock);
+ 	kfifo_in(&session->cmdpool.queue, (void*)&conn->login_task,
+@@ -3134,6 +3134,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
+ 	mutex_unlock(&session->eh_mutex);
+
+ 	iscsi_destroy_conn(cls_conn);
++	kfree(tmp_persistent_address);
++	kfree(tmp_local_ipaddr);
+ }
+ EXPORT_SYMBOL_GPL(iscsi_conn_teardown);
+
 -- 
-2.33.0
-
