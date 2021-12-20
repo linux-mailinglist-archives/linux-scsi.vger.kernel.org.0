@@ -2,161 +2,190 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA6947AAEE
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Dec 2021 15:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A424447AAF0
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Dec 2021 15:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbhLTOEZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 Dec 2021 09:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
+        id S233281AbhLTOEe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Dec 2021 09:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233452AbhLTOEX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Dec 2021 09:04:23 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D37C06173F
-        for <linux-scsi@vger.kernel.org>; Mon, 20 Dec 2021 06:04:22 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id k4so9489201pgb.8
-        for <linux-scsi@vger.kernel.org>; Mon, 20 Dec 2021 06:04:22 -0800 (PST)
+        with ESMTP id S233450AbhLTOE0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Dec 2021 09:04:26 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39510C061574
+        for <linux-scsi@vger.kernel.org>; Mon, 20 Dec 2021 06:04:26 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id m15so9467955pgu.11
+        for <linux-scsi@vger.kernel.org>; Mon, 20 Dec 2021 06:04:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version;
-        bh=54nQQal7gZO2EC6fSgoUKGMRJXZNVg+VcDigyuC9B0s=;
-        b=LX8GdRmXtwOaneEFf2aDNRKh2opwGaH6BRD977inDS9A1MsQEkOkUOCWZGwWeYaZSk
-         XWp54LM8xCP0yYbeYlEMoQ5GsAhXwCycyoXCbEf4QKTvyPbcKFjCo+hOisae591rzecX
-         vm1pDTvnUCeuf70LiEHFz6DCYhUBmHh35/2Gc=
+        bh=jmVeIOiXKynkJZkPAaqcacQXO/NuhSZDckmBkXP/NVY=;
+        b=WjPmqwFo8RYE2JN122BtkPRoWi2vQ7louBKVyurAFRoA6PEYi0JUB1M33kPxo3bjB2
+         r3cltludF8OirWDIu8sEWDiE0a9SHvdBRFUqK3AeNsdSQMNbmwgCT1kRBDv88H00EH65
+         xoNk4uLUtnlJHLKh2QSYcABW8mivnPt+pw0gw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version;
-        bh=54nQQal7gZO2EC6fSgoUKGMRJXZNVg+VcDigyuC9B0s=;
-        b=FgQCYYEMTiWwlN5AJzoAhorsXrCEXnYPw4dK97e2Aj4R6QzurEvmqq2/9jRa9rxBxC
-         bdy9J511dDR1mqwA7hlK+pxIt3zKvNC6gw+nYUFPCv2NUv7iqDG/r4S4ceOBHRAby05K
-         6oXJDP1+XCYX1aF06krUYczSQrvoIVlsEZJTMtc/o26DqpiEuoo3+koZzRABx+SLqJ/Y
-         xZKOA2a14JJmB69K1nIy82LjwHkVRRc4SaZ1jKpXKjXr2X1gzWngz6Uzbc5emrA72PDT
-         nOCEedjQYdzk4m0G7rx0kAkQhuVR6IB5wrWbqHLmaYDK7XSSoS/Bqm2YqZ68jzvREyJj
-         astw==
-X-Gm-Message-State: AOAM533Ux99LgpJ6eJ0CoV4hW+2Ickqx1R3yOlveDtvdn58M9JomKf9O
-        M1+DkpgACe/dzuonN/8nJgS1QgI0zoGCUOBYMylKeULpiviHAaJ2mfjWA8Gi52t9LuPe6HOB+aK
-        AlLNrM8mfVUtG7bFjclQN6Glkav1NrFjZsTnpCOTumrfvirrRAa9uKtbvt57mHQPEPa9bVZ2Bjd
-        MbynoRszqO
-X-Google-Smtp-Source: ABdhPJyq4Ci+cXOZijpmk66ihpOALfrZajIgaSoJhMplfSUMwMb23j/y/hAgHuKkZkAaZRGusEHU/A==
-X-Received: by 2002:a63:7981:: with SMTP id u123mr15089516pgc.360.1640009061869;
-        Mon, 20 Dec 2021 06:04:21 -0800 (PST)
+        bh=jmVeIOiXKynkJZkPAaqcacQXO/NuhSZDckmBkXP/NVY=;
+        b=4uF5pL/nnWV5uiAA2g6EzwSUL2HoP3f3ruIeVbSyABkcMbYIvq3jg9DoLm9FebRH11
+         HR4DYTn4QrdILQfquMsa5wTumq5CXJ70+6YdCooN/+aZu6k1uWwlZVphJQxsU640d85J
+         xBgp80iY+VLMIs7PRm6UjkwaDy/QOaSFylrCS6bXEEvvYT9zKBdMzA02hTt+ZtGzcyee
+         8APTVHNDG4pG0uLfiZaKF3jJxbDBq7Q/zCJhM/ToPBiuswnE6sycTEBoxnK+N8YvdUlV
+         sWfKPMB5QVm20XeR+uPidFgh4Tugq5wzpd9J/+2YzgRACLZARoJeeoTyGpc9INqd7sIg
+         6yDQ==
+X-Gm-Message-State: AOAM531ZIiSXJQEha900AhBYp4+BU5TyLhE1zcVPrQWq38GjF/768+sJ
+        2w5ASh/KQyykQ8irSEsLiXoJZa0rhDRqzR+z47VYfh+/Gpnli/LYP5fJqF6AKQIePcBQ+3BpTh2
+        FWuzYHwj93YRttEZBvkst0wvXpJxYKSe1g9hJFoIaKAHdFwVuufIqWVJGjc9Ip0Ry4R6SS4f3cE
+        l0d6mVR623
+X-Google-Smtp-Source: ABdhPJyAffZ++Ps0UDtblpY3mhRj12u6EwgaDPwB/2ns9SkljLr1oHBQbur3G6Dzavcp6UDQD/Qfwg==
+X-Received: by 2002:a63:115d:: with SMTP id 29mr15156971pgr.276.1640009064023;
+        Mon, 20 Dec 2021 06:04:24 -0800 (PST)
 Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id b4sm5434180pjm.17.2021.12.20.06.04.20
+        by smtp.gmail.com with ESMTPSA id b4sm5434180pjm.17.2021.12.20.06.04.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Dec 2021 06:04:21 -0800 (PST)
+        Mon, 20 Dec 2021 06:04:23 -0800 (PST)
 From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, mpi3mr-linuxdrv.pdl@broadcom.com,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH 09/25] mpi3mr: Handling unaligned PLL in unmap cmnds
-Date:   Mon, 20 Dec 2021 19:41:43 +0530
-Message-Id: <20211220141159.16117-10-sreekanth.reddy@broadcom.com>
+Subject: [PATCH 10/25] mpi3mr: Display IOC firmware package version
+Date:   Mon, 20 Dec 2021 19:41:44 +0530
+Message-Id: <20211220141159.16117-11-sreekanth.reddy@broadcom.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211220141159.16117-1-sreekanth.reddy@broadcom.com>
 References: <20211220141159.16117-1-sreekanth.reddy@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000097f03605d3945d2d"
+        boundary="000000000000ca20b905d3945d02"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000097f03605d3945d2d
+--000000000000ca20b905d3945d02
 Content-Transfer-Encoding: 8bit
 
-Below special handling is needed for UNMAP commands issued to
-NVMe drives,
-
-- On B0 boards, if the parameter list length is greater
-than 24 and not 16byte multiple then truncate the
-parameter list length to 16byte multiple.
-
-- on A0 boards, if the parameter list length is greater
-than block descriptor data length + 8 then truncate the
-parameter list length to block descriptor data length + 8
-value.
+Display IOC firmware package version by reading
+component image upload data.
 
 Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 ---
- drivers/scsi/mpi3mr/mpi3mr_os.c | 36 ++++++++++++++++++++++++---------
- 1 file changed, 26 insertions(+), 10 deletions(-)
+ drivers/scsi/mpi3mr/mpi3mr_fw.c | 89 +++++++++++++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index e961bb2..2a153df 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_os.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -3344,9 +3344,22 @@ static bool mpi3mr_check_return_unmap(struct mpi3mr_ioc *mrioc,
- 	struct scsi_cmnd *scmd)
- {
- 	unsigned char *buf;
--	u16 param_len, desc_len;
--
--	param_len = get_unaligned_be16(scmd->cmnd + 7);
-+	u16 param_len, desc_len, trunc_param_len;
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_fw.c b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+index 12d5106..6b534ed 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_fw.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+@@ -1971,6 +1971,89 @@ out:
+ 	return retval;
+ }
+ 
++/**
++ * mpi3mr_print_pkg_ver - display controller fw package version
++ * @mrioc: Adapter reference
++ *
++ * Retrieve firmware package version from the component image
++ * header of the controller flash and display it.
++ *
++ * Return: 0 on success and non-zero on failure.
++ */
++static int mpi3mr_print_pkg_ver(struct mpi3mr_ioc *mrioc)
++{
++	struct mpi3_ci_upload_request ci_upload;
++	int retval = -1;
++	void *data = NULL;
++	dma_addr_t data_dma;
++	struct mpi3_ci_manifest_mpi *manifest;
++	u32 data_len = sizeof(struct mpi3_ci_manifest_mpi);
++	u8 sgl_flags = MPI3MR_SGEFLAGS_SYSTEM_SIMPLE_END_OF_LIST;
 +
-+	trunc_param_len = param_len = get_unaligned_be16(scmd->cmnd + 7);
++	data = dma_alloc_coherent(&mrioc->pdev->dev, data_len, &data_dma,
++	    GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
 +
-+	if (mrioc->pdev->revision) {
-+		if ((param_len > 24) && ((param_len - 8) & 0xF)) {
-+			trunc_param_len -= (param_len - 8) & 0xF;
-+			dprint_scsi_command(mrioc, scmd, MPI3_DEBUG_SCSI_ERROR);
-+			dprint_scsi_err(mrioc,
-+			    "truncating param_len from (%d) to (%d)\n",
-+			    param_len, trunc_param_len);
-+			put_unaligned_be16(trunc_param_len, scmd->cmnd + 7);
-+			dprint_scsi_command(mrioc, scmd, MPI3_DEBUG_SCSI_ERROR);
-+		}
-+		return false;
++	memset(&ci_upload, 0, sizeof(ci_upload));
++	mutex_lock(&mrioc->init_cmds.mutex);
++	if (mrioc->init_cmds.state & MPI3MR_CMD_PENDING) {
++		ioc_err(mrioc, "sending get package version failed due to command in use\n");
++		mutex_unlock(&mrioc->init_cmds.mutex);
++		goto out;
 +	}
++	mrioc->init_cmds.state = MPI3MR_CMD_PENDING;
++	mrioc->init_cmds.is_waiting = 1;
++	mrioc->init_cmds.callback = NULL;
++	ci_upload.host_tag = cpu_to_le16(MPI3MR_HOSTTAG_INITCMDS);
++	ci_upload.function = MPI3_FUNCTION_CI_UPLOAD;
++	ci_upload.msg_flags = MPI3_CI_UPLOAD_MSGFLAGS_LOCATION_PRIMARY;
++	ci_upload.signature1 = cpu_to_le32(MPI3_IMAGE_HEADER_SIGNATURE1_MANIFEST);
++	ci_upload.image_offset = cpu_to_le32(MPI3_IMAGE_HEADER_SIZE);
++	ci_upload.segment_size = cpu_to_le32(data_len);
++
++	mpi3mr_add_sg_single(&ci_upload.sgl, sgl_flags, data_len,
++	    data_dma);
++	init_completion(&mrioc->init_cmds.done);
++	retval = mpi3mr_admin_request_post(mrioc, &ci_upload,
++	    sizeof(ci_upload), 1);
++	if (retval) {
++		ioc_err(mrioc, "posting get package version failed\n");
++		goto out_unlock;
++	}
++	wait_for_completion_timeout(&mrioc->init_cmds.done,
++	    (MPI3MR_INTADMCMD_TIMEOUT * HZ));
++	if (!(mrioc->init_cmds.state & MPI3MR_CMD_COMPLETE)) {
++		ioc_err(mrioc, "get package version timed out\n");
++		retval = -1;
++		goto out_unlock;
++	}
++	if ((mrioc->init_cmds.ioc_status & MPI3_IOCSTATUS_STATUS_MASK)
++	    == MPI3_IOCSTATUS_SUCCESS) {
++		manifest = (struct mpi3_ci_manifest_mpi *) data;
++		if (manifest->manifest_type == MPI3_CI_MANIFEST_TYPE_MPI) {
++			ioc_info(mrioc,
++			    "firmware package version(%d.%d.%d.%d.%05d-%05d)\n",
++			    manifest->package_version.gen_major,
++			    manifest->package_version.gen_minor,
++			    manifest->package_version.phase_major,
++			    manifest->package_version.phase_minor,
++			    manifest->package_version.customer_id,
++			    manifest->package_version.build_num);
++		}
++	}
++	retval = 0;
++out_unlock:
++	mrioc->init_cmds.state = MPI3MR_CMD_NOTUSED;
++	mutex_unlock(&mrioc->init_cmds.mutex);
++
++out:
++	if (data)
++		dma_free_coherent(&mrioc->pdev->dev, data_len, data,
++		    data_dma);
++	return retval;
++}
++
+ /**
+  * mpi3mr_watchdog_work - watchdog thread to monitor faults
+  * @work: work struct
+@@ -3362,6 +3445,12 @@ int mpi3mr_init_ioc(struct mpi3mr_ioc *mrioc, u8 init_type)
+ 	writel(mrioc->sbq_host_index,
+ 	    &mrioc->sysif_regs->sense_buffer_free_host_index);
  
- 	if (!param_len) {
- 		ioc_warn(mrioc,
-@@ -3406,12 +3419,12 @@ static bool mpi3mr_check_return_unmap(struct mpi3mr_ioc *mrioc,
- 	}
- 
- 	if (param_len > (desc_len + 8)) {
-+		trunc_param_len = desc_len + 8;
- 		scsi_print_command(scmd);
--		ioc_warn(mrioc,
--		    "%s: Truncating param_len(%d) to desc_len+8(%d)\n",
--		    __func__, param_len, (desc_len + 8));
--		param_len = desc_len + 8;
--		put_unaligned_be16(param_len, scmd->cmnd + 7);
-+		dprint_scsi_err(mrioc,
-+		    "truncating param_len(%d) to desc_len+8(%d)\n",
-+		    param_len, trunc_param_len);
-+		put_unaligned_be16(trunc_param_len, scmd->cmnd + 7);
- 		scsi_print_command(scmd);
- 	}
- 
-@@ -3466,6 +3479,7 @@ static int mpi3mr_qcmd(struct Scsi_Host *shost,
- 	u32 scsiio_flags = 0;
- 	struct request *rq = scsi_cmd_to_rq(scmd);
- 	int iprio_class;
-+	u8 is_pcie_dev = 0;
- 
- 	sdev_priv_data = scmd->device->hostdata;
- 	if (!sdev_priv_data || !sdev_priv_data->tgt_priv_data) {
-@@ -3510,8 +3524,10 @@ static int mpi3mr_qcmd(struct Scsi_Host *shost,
- 		goto out;
- 	}
- 
--	if ((scmd->cmnd[0] == UNMAP) &&
--	    (stgt_priv_data->dev_type == MPI3_DEVICE_DEVFORM_PCIE) &&
-+	if (stgt_priv_data->dev_type == MPI3_DEVICE_DEVFORM_PCIE)
-+		is_pcie_dev = 1;
-+	if ((scmd->cmnd[0] == UNMAP) && is_pcie_dev &&
-+	    (mrioc->pdev->device == MPI3_MFGPAGE_DEVID_SAS4116) &&
- 	    mpi3mr_check_return_unmap(mrioc, scmd))
- 		goto out;
- 
++	retval = mpi3mr_print_pkg_ver(mrioc);
++	if (retval) {
++		ioc_err(mrioc, "failed to get package version\n");
++		goto out_failed;
++	}
++
+ 	if (init_type != MPI3MR_IT_RESET) {
+ 		retval = mpi3mr_setup_isr(mrioc, 0);
+ 		if (retval) {
 -- 
 2.27.0
 
 
---00000000000097f03605d3945d2d
+--000000000000ca20b905d3945d02
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -227,13 +256,13 @@ X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
 eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
 Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
 MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIC1NGefkjaMOmUnHpS+d
-tYztR8oxZq8dIS8UqHsOgXBxMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIxMTIyMDE0MDQyMlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIKjjdXLaJZ94oQ/0STV
+DMedpHuH+g3ps7aqTnaEQJ+xMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIxMTIyMDE0MDQyNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
 BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCLcC8zhdPHhkx0KuoboikvbO6iQ2R3ad5xHPjk
-9QDIjC55cUJgHvEI6hdgkn/CR4Sw/5s8kONXu9phBdpWu8WE3rSbgBy4FcwqIRRbSoYYeZ3QuKW9
-f1MREAnsx3GeYLHF7iHZOLzG5scbBLkMZj/HxtQMX4C9gRHe71UFlvqWzuV5VGn6J4Os7q+ffsir
-ohTP1Cucc7UvQdYl0B+FByO14GhWHKokSKX+EK6dskIwBy8cVT72kQ+GWvjdQbe217/KUuvWLLP+
-bPSGaiJBlvD09JZGXwm2NcfwUQmwTdJeYD4m6YE1ZrsQ0pGzVfuFRc6ZAizVcp6tqkszln4+WPad
---00000000000097f03605d3945d2d--
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBO7a5h3V5AAFLZDxFJywFGf3t0YfB4uSst8Drq
+1IZYMcFUNf3RRb4fXNduCZNyDgEHIWo7DqwXVVrnXXMrMkZzfqUD2EmeoNLAetg7nMyw/MDuBhH3
+/nz1am/HfTG7uTOgZmYU1lPXOZiWfhaf2u5q81Yacq/iukXb1+KZ9qAcajNa7QD3tm1mqCBvW6sF
+7NzDOfyg8/K5N6fc7iRnL7kZabX+BToBH7hNgWTLuIoXNyL6agH4Ue2KhZJbVmW5fwMn197oM2ce
+UNrvkBA+zTdWmIj3D/FELn9TqecRcCi3wEVCCuez7BwwtN+5OSA2c6VLInTRaRt9fAFR+v9vfpiB
+--000000000000ca20b905d3945d02--
