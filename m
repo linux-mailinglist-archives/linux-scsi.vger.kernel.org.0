@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0293447A89D
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Dec 2021 12:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4E447A89C
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Dec 2021 12:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbhLTL05 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 Dec 2021 06:26:57 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15945 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbhLTL0v (ORCPT
+        id S231827AbhLTL04 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Dec 2021 06:26:56 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:28332 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231796AbhLTL0v (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Dec 2021 06:26:51 -0500
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JHcfR1YXgzZdjt;
-        Mon, 20 Dec 2021 19:23:43 +0800 (CST)
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JHcjb5xzczbjZg;
+        Mon, 20 Dec 2021 19:26:27 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
@@ -22,9 +22,9 @@ From:   chenxiang <chenxiang66@hisilicon.com>
 To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
         <john.garry@huawei.com>, Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [PATCH v2 07/15] scsi: libsas: Insert PORTE_BROADCAST_RCVD event for resuming host
-Date:   Mon, 20 Dec 2021 19:21:30 +0800
-Message-ID: <1639999298-244569-8-git-send-email-chenxiang66@hisilicon.com>
+Subject: [PATCH v2 08/15] scsi: hisi_sas: Add more logs for runtime suspend/resume
+Date:   Mon, 20 Dec 2021 19:21:31 +0800
+Message-ID: <1639999298-244569-9-git-send-email-chenxiang66@hisilicon.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1639999298-244569-1-git-send-email-chenxiang66@hisilicon.com>
 References: <1639999298-244569-1-git-send-email-chenxiang66@hisilicon.com>
@@ -40,66 +40,50 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Xiang Chen <chenxiang66@hisilicon.com>
 
-If a new disk is inserted through an expander when the host was suspended,
-they will not necessarily be detected as the topology is not re-scanned
-during resume.
-To detect possible changes in topology during suspension, insert a
-PORTE_BROADCAST_RCVD event per port when resuming to trigger a 
-revalidation.
+Add some logs at the beginning and end of suspend/resume.
 
 Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-Reviewed-by: John Garry <john.garry@huawei.com>
+Acked-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/libsas/sas_init.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index 43509d139241..974c4a305ece 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -387,6 +387,30 @@ static int phys_suspended(struct sas_ha_struct *ha)
- 	return rc;
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index 63059fb6d9ec..6d7fde38fe02 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -4904,6 +4904,8 @@ static int _suspend_v3_hw(struct device *device)
+ 	if (test_and_set_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags))
+ 		return -1;
+ 
++	dev_warn(dev, "entering suspend state\n");
++
+ 	scsi_block_requests(shost);
+ 	set_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
+ 	flush_workqueue(hisi_hba->wq);
+@@ -4919,11 +4921,11 @@ static int _suspend_v3_hw(struct device *device)
+ 
+ 	hisi_sas_init_mem(hisi_hba);
+ 
+-	dev_warn(dev, "entering suspend state\n");
+-
+ 	hisi_sas_release_tasks(hisi_hba);
+ 
+ 	sas_suspend_ha(sha);
++
++	dev_warn(dev, "end of suspending controller\n");
+ 	return 0;
  }
  
-+static void sas_resume_insert_broadcast_ha(struct sas_ha_struct *ha)
-+{
-+	int i;
+@@ -4961,6 +4963,8 @@ static int _resume_v3_hw(struct device *device)
+ 	sas_resume_ha_no_sync(sha);
+ 	clear_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags);
+ 
++	dev_warn(dev, "end of resuming controller\n");
 +
-+	for (i = 0; i < ha->num_phys; i++) {
-+		struct asd_sas_port *port = ha->sas_port[i];
-+		struct domain_device *dev = port->port_dev;
-+
-+		if (dev && dev_is_expander(dev->dev_type)) {
-+			struct asd_sas_phy *first_phy;
-+
-+			spin_lock(&port->phy_list_lock);
-+			first_phy = list_first_entry_or_null(
-+				&port->phy_list, struct asd_sas_phy,
-+				port_phy_el);
-+			spin_unlock(&port->phy_list_lock);
-+
-+			if (first_phy)
-+				sas_notify_port_event(first_phy,
-+					PORTE_BROADCAST_RCVD, GFP_KERNEL);
-+		}
-+	}
-+}
-+
- static void _sas_resume_ha(struct sas_ha_struct *ha, bool drain)
- {
- 	const unsigned long tmo = msecs_to_jiffies(25000);
-@@ -419,6 +443,11 @@ static void _sas_resume_ha(struct sas_ha_struct *ha, bool drain)
- 	scsi_unblock_requests(ha->core.shost);
- 	if (drain)
- 		sas_drain_work(ha);
-+
-+	/* send event PORTE_BROADCAST_RCVD to identify some new inserted
-+	 * disks for expander
-+	 */
-+	sas_resume_insert_broadcast_ha(ha);
+ 	return 0;
  }
  
- void sas_resume_ha(struct sas_ha_struct *ha)
 -- 
 2.33.0
 
