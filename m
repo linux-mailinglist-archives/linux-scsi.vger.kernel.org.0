@@ -2,115 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D15EC47D56F
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Dec 2021 17:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C75C47D58D
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Dec 2021 18:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344015AbhLVQyi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Dec 2021 11:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
+        id S1344144AbhLVRDb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Dec 2021 12:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235517AbhLVQyi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Dec 2021 11:54:38 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21224C061574
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Dec 2021 08:54:38 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id bk14so4826106oib.7
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Dec 2021 08:54:38 -0800 (PST)
+        with ESMTP id S230314AbhLVRDa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Dec 2021 12:03:30 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195D3C061574
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Dec 2021 09:03:30 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id iy13so2792247pjb.5
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Dec 2021 09:03:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9waGNOF9b9MfX69tWMxFziVtFTXb6uTb2kgFEro+iDg=;
-        b=eQIneav2otMK5jHoGSl0z/oYvNDoKwg2kVe0lxZSH+IK+jSajDSWui7PKg+YFeYlJB
-         Bqyn8xKfjVt0oO/AJc9InK1R5TBgFZXiPurmD/TvYeSeRN8jMDZ4dDlV45+6LyB8uq4z
-         IhFiiUMBzvrEUvo/4livWpBPg6Bs7O3s9lfiAyO/sxTHheXcFjXtM+7jATp/AEm5ijFL
-         A5gz22tk/SF1jcABj5zBMFcuTX00H72VbbvQNNuvDLSm2Vg9t/zmGuVY0lcpyOkscJgI
-         u8gVP1cSJQGaZH3mY2Lz85GwXgjrjLyBhRahJmADTO9DXxrMVW6ARl38euRVOgnoHNS9
-         a2rw==
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=PqeKwfGtry3Hm5mwkXDEHiRgHh6Y5S1ouypmzni3hLo=;
+        b=dLE66AI4nhr55icxQUolmzKVulEqrYinCLYYi7laWPzPOIC3EeSC0gT7FVuzzESjmq
+         hUVDbJChsqKr/0bvzKfqOgqjyRT6RjbRXSLbc4VRoSOpby5+2b/E9AwbC6aQHTZOuq6u
+         o1aeApQeJ0wJM7avjUs0Mlhdbzd8TNEJTrcx1KSBYkYmcq3OdSqaQI2vRjdxRVoESNxW
+         z5kSHCJInJQi2mzQVgLxydoCs3tj6maTUDZRsafnu7akReOjvPlBrudcdY4SCylc2J+G
+         FX19mgj3MQ7121afE1WA1fztclseLsrTHDA6+PiLvZeecQ3rDSnvd051ePx/xMCMfaWf
+         6CTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=9waGNOF9b9MfX69tWMxFziVtFTXb6uTb2kgFEro+iDg=;
-        b=1qC0r+uCo7urkufBRZ7Y0NRr01lVwaqfxoNxDTOkXizl/vtRRLDa49GJRcEt7NXPYw
-         C4yVB10FJ6poocVx9YGwKvuX7LD8dx9KfI7fEDoN9tYLNifBW24h4fYK+WmBql8zZj49
-         /Y+0Q+B/8GhkVllqWWNHg88bUl4j2pK8OAEJoCqekdS1wGyOX1mefdXYCntyZ+imxD7N
-         dcaWCX3Hboq4JtaIbTahnQSOQJYsNp2+zTVELoAsAZujRelQmm8DbfEdOCoMuDi9FHUQ
-         V3h3BxfsXGPoD+uIzcoxrbBTstQmsoJ/7VuCMD5UX7BFyE/YNjCESSD4ffFD4ooAnHXu
-         ucpg==
-X-Gm-Message-State: AOAM533EiCIhGRlTMX1eS1gLXAHzmy8+B9VsQADKV2o/PZ7eipKdOstE
-        PnX8nA7548Jaz5pC356GNV8=
-X-Google-Smtp-Source: ABdhPJyVX0OBkASSl8F4MJOsm1kX4uBjZrFNUxF1ncAGGJA/HqLL7Excql4Ur5uuN1r+MNdBNmFH2w==
-X-Received: by 2002:aca:c6cb:: with SMTP id w194mr1309157oif.2.1640192077312;
-        Wed, 22 Dec 2021 08:54:37 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o2sm485287oik.11.2021.12.22.08.54.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 08:54:36 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 22 Dec 2021 08:54:35 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jackie Liu <liu.yun@linux.dev>
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org, hch@lst.de,
-        axboe@kernel.dk
-Subject: Re: [PATCH v2] scsi: bsg: fix errno when scsi_bsg_register_queue
- fails
-Message-ID: <20211222165435.GA283263@roeck-us.net>
-References: <20211022010201.426746-1-liu.yun@linux.dev>
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=PqeKwfGtry3Hm5mwkXDEHiRgHh6Y5S1ouypmzni3hLo=;
+        b=lTDslwdglvbU6eYX79E4Jy/y5Qjg+NgcMi77vym/kPEDFeRekFgqvYalo/4TarGJ2Z
+         qda1nEYCf6lLmiPEMKGedArpbz31oi2rGWsYh0EiW083kkEP99nTOMLzGtZExeHkkOdF
+         HbNos2yg5EjDIsiHpNOG/EP56cKU2Hzfx+sdMTTEWSJnfX6mjOO8Q/s9guJ8F2rm4Vll
+         3jIENfHRWVJqKOVeJ4/jErP7tOk0elbGk0+VtzOQ9BXFQ/oueoy2uOvpRJBKR5WBpesq
+         I/OZW+la0k4TnU06TNhmnyWddKA7iKtNrFjh03kP33DFgLHHjTtJKr5wPdMP9tsvBXVo
+         RdCA==
+X-Gm-Message-State: AOAM530ISkyOhVRzr97k7GJBXqXMGZNupc3aEKec5kfw2dW823f/ABhs
+        1NIQL22+fZX07EDwo1U6bCMGtZ3AsSPDheFmtNIbtQ/XM3KBuQ==
+X-Google-Smtp-Source: ABdhPJx7grvE7lzc9HPub4hSP4JZVbNgz5qO4YnkAW0zKEVwdB+1i8KOxqifsIUeE4ogwgusoGEoZpF7MrhFtNma0gQ=
+X-Received: by 2002:a17:90b:164a:: with SMTP id il10mr2285712pjb.77.1640192609022;
+ Wed, 22 Dec 2021 09:03:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211022010201.426746-1-liu.yun@linux.dev>
+Sender: elisabethjohn415@gmail.com
+Received: by 2002:a05:6a10:281f:0:0:0:0 with HTTP; Wed, 22 Dec 2021 09:03:28
+ -0800 (PST)
+From:   Anderson Thereza <anderson.thereza24@gmail.com>
+Date:   Wed, 22 Dec 2021 09:03:28 -0800
+X-Google-Sender-Auth: M4KSzk77B2Mwbl7u3Gex8aFOUZw
+Message-ID: <CAOGA6VD65G-M4YzkRkdoUx+QgLdZ0pkDU+K-RwP_aau1VB_TBQ@mail.gmail.com>
+Subject: Re: Greetings My Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 09:02:01AM +0800, Jackie Liu wrote:
-> From: Jackie Liu <liuyun01@kylinos.cn>
-> 
-> When the value of error is printed, it will always be 0. Here, we should be
-> print the correct error code when scsi_bsg_register_queue fails.
-> 
+Greetings,
 
-The comment above the changed code says:
+I sent this mail praying it will find you in a good condition, since I
+myself am in a very critical health condition in which I sleep every
+night without knowing if I may be alive to see the next day. I am
+Mrs.Theresa Anderson, a widow suffering from a long time illness. I
+have some funds I inherited from my late husband, the sum of
+($11,000,000.00, Eleven Million Dollars) my Doctor told me recently
+that I have serious sickness which is a cancer problem. What disturbs
+me most is my stroke sickness. Having known my condition, I decided to
+donate this fund to a good person that will utilize it the way I am
+going to instruct herein. I need a very honest God.
 
-"
-We're treating error on bsg register as non-fatal, so pretend nothing went wrong.
-"
+fearing a person who can claim this money and use it for Charity
+works, for orphanages, widows and also build schools for less
+privileges that will be named after my late husband if possible and to
+promote the word of God and the effort that the house of God is
+maintained. I do not want a situation where this money will be used in
+an ungodly manner. That's why I' making this decision. I'm not afraid
+of death so I know where I'm going. I accept this decision because I
+do not have any child who will inherit this money after I die. Please
+I want your sincere and urgent answer to know if you will be able to
+execute this project, and I will give you more information on how the
+fund will be transferred to your bank account. I am waiting for your
+reply.
 
-With this patch in place, "error" is returned to the caller, and the code
-no longer pretends that nothing is wrong. Also, the message is a dev_info
-message, not dev_err, suggesting that ignoring the error was indeed on
-purpose. Assuming the comment is correct, this patch is plain wrong;
-the message should have printed PTR_ERR(sdev->bsg_dev) instead and not set
-the 'error' variable.
-
-Guenter
-
-> Fixes: ead09dd3aed5 ("scsi: bsg: Simplify device registration")
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
-> ---
->  v1->v2:
->  resend to linux-scsi mail list.
-> 
->  drivers/scsi/scsi_sysfs.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-> index 86793259e541..d8789f6cda62 100644
-> --- a/drivers/scsi/scsi_sysfs.c
-> +++ b/drivers/scsi/scsi_sysfs.c
-> @@ -1379,6 +1379,7 @@ int scsi_sysfs_add_sdev(struct scsi_device *sdev)
->  			 * We're treating error on bsg register as non-fatal, so
->  			 * pretend nothing went wrong.
->  			 */
-> +			error = PTR_ERR(sdev->bsg_dev);
->  			sdev_printk(KERN_INFO, sdev,
->  				    "Failed to register bsg queue, errno=%d\n",
->  				    error);
-> -- 
-> 2.25.1
-> 
+May God Bless you,
+Mrs.Theresa Anderson,
