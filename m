@@ -2,64 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B421847C8B7
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Dec 2021 22:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E547547CCF5
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Dec 2021 07:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236380AbhLUVRn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Dec 2021 16:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
+        id S242747AbhLVGYw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Dec 2021 01:24:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbhLUVRn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Dec 2021 16:17:43 -0500
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88E0C061574
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Dec 2021 13:17:42 -0800 (PST)
-Received: by mail-ot1-x342.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso138089otj.1
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Dec 2021 13:17:42 -0800 (PST)
+        with ESMTP id S233176AbhLVGYw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Dec 2021 01:24:52 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF311C061574;
+        Tue, 21 Dec 2021 22:24:51 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id q17so1107830plr.11;
+        Tue, 21 Dec 2021 22:24:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=NTcBwuzk26+IKQ5+xt8Urn6C2G1NoMBYPphkadq+W2I=;
-        b=m6VVGA4/QoPioDNz0Pjinx2ZhL1eliMlsKu2vLOb6R2OdZa/0q2S0QsGhar8frWBjA
-         qzeN6FTjWkVvU+M0SETFgTxXpNEx7RX/EfZQbzRkheq2WN/uux+h+KnfgyAih88zltqy
-         mPaOxGxRtg8zb/Zsm/6eyWZzWErIIXaadCTdDmEnrUSlL//58YBloTbuLEm4RfQ1kPqF
-         7MOmHo4hMj3ZyWOy53ZBlanJudl3eYMFlrSDPWScvpDAeEqwSB0fslkyY7HLgc25up51
-         GEeN97xgf5sDQd5R0uH5AGBfnfYS4Tkuy8OEmc4FemJdAC9dAz11XuVzry+LFPOArNXr
-         zvTg==
+        h=from:to:cc:subject:date:message-id;
+        bh=vP1LOViFn0+7V0Z8YFpxh/XwEIUum39ijaW3BebLLxI=;
+        b=fagiSX0TlmeVqPVl5MegpvdJMrKjEx47q+BE0Uo/MmVO64pFRvoE3+1lcwGvPDWaoc
+         /QeDAOQ9H+Sae1Yom3iXDYGAHBiO2SkkOK4PbA+owI7UBxwh0mouiwNJnKF4E0FYo+aL
+         niNCwmOvBEWDJ5cUk1VzGCyRWrQVpxZwW+HfARrnv0rzKtmg7y5fZnq1lGyOtBvGOQ2P
+         A75tHkBbFDLYUIihoTwALQD//WrtURNpY2TPJVwQVUgsVAmNnL/EQFd/SkvNPJNOemKf
+         GchWJmHPPF5qAMA/pgciCDbnVz52zgkbTvS5+YU9EohPOwCe8Ju7SpZBN1VMvbr2EAJi
+         RRqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=NTcBwuzk26+IKQ5+xt8Urn6C2G1NoMBYPphkadq+W2I=;
-        b=DzRYce7bGdRnRt9KqpIa+B7ObePOqYTcoBaa4qKQxoS31ApyKSgl2xgDD3VXKr+aG/
-         l47s7TlXRd5idZOJMPeQMskuet62txE8xcTtKNiEXClDYCTh6T5HurlbJ/YngJi4y6fs
-         MEhI9AUBJMwnuieUikPKPxzk6CwfzROEAFw6JHEv7G0RLrxyjPCFxPlkfdRvw/kcHfB8
-         BIFzre789vxg7rleBtA4sCnXF8kxOi+H3Fq+p6OysiMdzDEsJmfwL9MYSLR1hf4UFV3a
-         t17SNmTfAklunKv1C5DEmWKtzpqbz1kKxLyHCBGs6zyC88QtxP2DKUqWwAsPkVojab3R
-         KY5g==
-X-Gm-Message-State: AOAM533nSJXQBuBNm368WdOZxIzAPrb4uqd8hUw5lQTTpOEW8EeuO1nN
-        6zpfzx3tKq1nhgnXKvu+Y+Yd0JqMRb2CRU8kKfYd3wkiq9/PuQ==
-X-Google-Smtp-Source: ABdhPJyGPlkF+3QhjwMdGzuzI5aLYdD6w/goquBt1Z3lYRbT0B0X6ft3MwqOUtSe0Miv7xfjKRwVMRjD5FPduXuypB4=
-X-Received: by 2002:a05:6830:4391:: with SMTP id s17mr153518otv.118.1640121461965;
- Tue, 21 Dec 2021 13:17:41 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ac9:60d5:0:0:0:0:0 with HTTP; Tue, 21 Dec 2021 13:17:41
- -0800 (PST)
-Reply-To: fionahill.usa@hotmail.com
-From:   Fiona Hill <ivanroberti040@gmail.com>
-Date:   Tue, 21 Dec 2021 13:17:41 -0800
-Message-ID: <CAPTLEzTPmTx9qWsHubYcsrRqQmKE4yLFWZpU3P5ozAu04RCScA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=vP1LOViFn0+7V0Z8YFpxh/XwEIUum39ijaW3BebLLxI=;
+        b=3RXiDDYN+jiZnnHcSFJCFXz2vOWYdOmLwLqbXLRjYFXfiH2kcMGOlkHAt8SZzfq7NX
+         tzs8SvV4Wf8wlRYx85XpyetgSx7vC5O8VSHV6ZMBjMbpLLnz5mjkHVj1iA0nvevV4ceq
+         dFCiaKdFLgS4K70Il+JVqaYnZJdRcLLDZpGiAEiehnHcnNeKNLyDZnAekesOQVCkG5lF
+         To3lsgF9MqY7KDogKl7AwlLqSMqONPZDVqsOCLSotxvT5/pz7E0NSX2ERRU0Xrbl8ABY
+         /SJIeyXs+B/vuBKPNS4C5lbpIsS8pZdxCKSqKfvFUvNZ0H6yKt85ad2hrJvPKpipMDNe
+         aRlA==
+X-Gm-Message-State: AOAM533cuC/AKpXCw3694/Nsz1+dW9Uu5XGfYbe6w+CiqpqXxCHP+6MY
+        lnrTxUBDz31p2RreZfdNgJs=
+X-Google-Smtp-Source: ABdhPJzrFTfdWCZJJj7PQimEL7SGlhd9TvjzNv+9aMRbe+1PjRHxoh7SdCQwTik/GTySzujwK6NFaw==
+X-Received: by 2002:a17:90a:ab0f:: with SMTP id m15mr1881870pjq.91.1640154291500;
+        Tue, 21 Dec 2021 22:24:51 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id j20sm4109730pjl.3.2021.12.21.22.24.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 22:24:51 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Stanley Chu <stanley.chu@mediatek.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] scsi: ufs: ufs-mediatek : Fix NULL vs IS_ERR checking in ufs_mtk_init_va09_pwr_ctrl
+Date:   Wed, 22 Dec 2021 06:24:44 +0000
+Message-Id: <20211222062444.16144-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Hello,
-Merry Christmas to you . Please with honesty did you receive my
-message i send to you?
+The function regulator_get() return error pointer,
+use IS_ERR() to check if has error.
 
-Thank you!
-Fiona Hill
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/scsi/ufs/ufs-mediatek.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
+index 5393b5c9dd9c..86a938075f30 100644
+--- a/drivers/scsi/ufs/ufs-mediatek.c
++++ b/drivers/scsi/ufs/ufs-mediatek.c
+@@ -557,7 +557,7 @@ static void ufs_mtk_init_va09_pwr_ctrl(struct ufs_hba *hba)
+ 	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
+ 
+ 	host->reg_va09 = regulator_get(hba->dev, "va09");
+-	if (!host->reg_va09)
++	if (IS_ERR(host->reg_va09))
+ 		dev_info(hba->dev, "failed to get va09");
+ 	else
+ 		host->caps |= UFS_MTK_CAP_VA09_PWR_CTRL;
+-- 
+2.17.1
+
