@@ -2,86 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C75C47D58D
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Dec 2021 18:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F59747DC88
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Dec 2021 02:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344144AbhLVRDb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Dec 2021 12:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbhLVRDa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Dec 2021 12:03:30 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195D3C061574
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Dec 2021 09:03:30 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id iy13so2792247pjb.5
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Dec 2021 09:03:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=PqeKwfGtry3Hm5mwkXDEHiRgHh6Y5S1ouypmzni3hLo=;
-        b=dLE66AI4nhr55icxQUolmzKVulEqrYinCLYYi7laWPzPOIC3EeSC0gT7FVuzzESjmq
-         hUVDbJChsqKr/0bvzKfqOgqjyRT6RjbRXSLbc4VRoSOpby5+2b/E9AwbC6aQHTZOuq6u
-         o1aeApQeJ0wJM7avjUs0Mlhdbzd8TNEJTrcx1KSBYkYmcq3OdSqaQI2vRjdxRVoESNxW
-         z5kSHCJInJQi2mzQVgLxydoCs3tj6maTUDZRsafnu7akReOjvPlBrudcdY4SCylc2J+G
-         FX19mgj3MQ7121afE1WA1fztclseLsrTHDA6+PiLvZeecQ3rDSnvd051ePx/xMCMfaWf
-         6CTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=PqeKwfGtry3Hm5mwkXDEHiRgHh6Y5S1ouypmzni3hLo=;
-        b=lTDslwdglvbU6eYX79E4Jy/y5Qjg+NgcMi77vym/kPEDFeRekFgqvYalo/4TarGJ2Z
-         qda1nEYCf6lLmiPEMKGedArpbz31oi2rGWsYh0EiW083kkEP99nTOMLzGtZExeHkkOdF
-         HbNos2yg5EjDIsiHpNOG/EP56cKU2Hzfx+sdMTTEWSJnfX6mjOO8Q/s9guJ8F2rm4Vll
-         3jIENfHRWVJqKOVeJ4/jErP7tOk0elbGk0+VtzOQ9BXFQ/oueoy2uOvpRJBKR5WBpesq
-         I/OZW+la0k4TnU06TNhmnyWddKA7iKtNrFjh03kP33DFgLHHjTtJKr5wPdMP9tsvBXVo
-         RdCA==
-X-Gm-Message-State: AOAM530ISkyOhVRzr97k7GJBXqXMGZNupc3aEKec5kfw2dW823f/ABhs
-        1NIQL22+fZX07EDwo1U6bCMGtZ3AsSPDheFmtNIbtQ/XM3KBuQ==
-X-Google-Smtp-Source: ABdhPJx7grvE7lzc9HPub4hSP4JZVbNgz5qO4YnkAW0zKEVwdB+1i8KOxqifsIUeE4ogwgusoGEoZpF7MrhFtNma0gQ=
-X-Received: by 2002:a17:90b:164a:: with SMTP id il10mr2285712pjb.77.1640192609022;
- Wed, 22 Dec 2021 09:03:29 -0800 (PST)
+        id S240775AbhLWBHU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Dec 2021 20:07:20 -0500
+Received: from out2.migadu.com ([188.165.223.204]:53715 "EHLO out2.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240856AbhLWBHU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 22 Dec 2021 20:07:20 -0500
+Subject: Re: [PATCH v2] scsi: bsg: fix errno when scsi_bsg_register_queue
+ fails
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1640221638;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ro+egyUywDPyDinNUnKBlQYdGYEeD614Qtv/1Grm/io=;
+        b=M+XyjsXqwnhOoaD1pHFte6DsCrCW9s5hHcDyyoPbdbtbyVRQnQGtMN7hqIGapnw4FMp/Tv
+        uuXpeqZwkmachWMMoc6k/a4zlv8oraw0erKm2I7OaqwGG3/gcDqwyFHmVz4L56cbQDRRip
+        jW4ck8uFQKi4GWbAcJ9vewEqatrf8yw=
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org, hch@lst.de,
+        axboe@kernel.dk
+References: <20211022010201.426746-1-liu.yun@linux.dev>
+ <20211222165435.GA283263@roeck-us.net>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jackie Liu <liu.yun@linux.dev>
+Message-ID: <6671fc20-e543-71c5-c505-395e6ee7e744@linux.dev>
+Date:   Thu, 23 Dec 2021 09:07:08 +0800
 MIME-Version: 1.0
-Sender: elisabethjohn415@gmail.com
-Received: by 2002:a05:6a10:281f:0:0:0:0 with HTTP; Wed, 22 Dec 2021 09:03:28
- -0800 (PST)
-From:   Anderson Thereza <anderson.thereza24@gmail.com>
-Date:   Wed, 22 Dec 2021 09:03:28 -0800
-X-Google-Sender-Auth: M4KSzk77B2Mwbl7u3Gex8aFOUZw
-Message-ID: <CAOGA6VD65G-M4YzkRkdoUx+QgLdZ0pkDU+K-RwP_aau1VB_TBQ@mail.gmail.com>
-Subject: Re: Greetings My Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211222165435.GA283263@roeck-us.net>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings,
+Hi Guenter.
 
-I sent this mail praying it will find you in a good condition, since I
-myself am in a very critical health condition in which I sleep every
-night without knowing if I may be alive to see the next day. I am
-Mrs.Theresa Anderson, a widow suffering from a long time illness. I
-have some funds I inherited from my late husband, the sum of
-($11,000,000.00, Eleven Million Dollars) my Doctor told me recently
-that I have serious sickness which is a cancer problem. What disturbs
-me most is my stroke sickness. Having known my condition, I decided to
-donate this fund to a good person that will utilize it the way I am
-going to instruct herein. I need a very honest God.
+Before commit ead09dd3aed5c ("scsi: bsg: Simplify device registration", 
+the errno need return to the caller, I restore the old logic, and print
+this errno.
 
-fearing a person who can claim this money and use it for Charity
-works, for orphanages, widows and also build schools for less
-privileges that will be named after my late husband if possible and to
-promote the word of God and the effort that the house of God is
-maintained. I do not want a situation where this money will be used in
-an ungodly manner. That's why I' making this decision. I'm not afraid
-of death so I know where I'm going. I accept this decision because I
-do not have any child who will inherit this money after I die. Please
-I want your sincere and urgent answer to know if you will be able to
-execute this project, and I will give you more information on how the
-fund will be transferred to your bank account. I am waiting for your
-reply.
+--
+Jackie Liu
 
-May God Bless you,
-Mrs.Theresa Anderson,
+ÔÚ 2021/12/23 ÉÏÎç12:54, Guenter Roeck Ð´µÀ:
+> On Fri, Oct 22, 2021 at 09:02:01AM +0800, Jackie Liu wrote:
+>> From: Jackie Liu <liuyun01@kylinos.cn>
+>>
+>> When the value of error is printed, it will always be 0. Here, we should be
+>> print the correct error code when scsi_bsg_register_queue fails.
+>>
+> 
+> The comment above the changed code says:
+> 
+> "
+> We're treating error on bsg register as non-fatal, so pretend nothing went wrong.
+> "
+> 
+> With this patch in place, "error" is returned to the caller, and the code
+> no longer pretends that nothing is wrong. Also, the message is a dev_info
+> message, not dev_err, suggesting that ignoring the error was indeed on
+> purpose. Assuming the comment is correct, this patch is plain wrong;
+> the message should have printed PTR_ERR(sdev->bsg_dev) instead and not set
+> the 'error' variable.
+> 
+> Guenter
+> 
+>> Fixes: ead09dd3aed5 ("scsi: bsg: Simplify device registration")
+>> Cc: Jens Axboe <axboe@kernel.dk>
+>> Cc: Christoph Hellwig <hch@lst.de>
+>> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>> Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
+>> ---
+>>   v1->v2:
+>>   resend to linux-scsi mail list.
+>>
+>>   drivers/scsi/scsi_sysfs.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+>> index 86793259e541..d8789f6cda62 100644
+>> --- a/drivers/scsi/scsi_sysfs.c
+>> +++ b/drivers/scsi/scsi_sysfs.c
+>> @@ -1379,6 +1379,7 @@ int scsi_sysfs_add_sdev(struct scsi_device *sdev)
+>>   			 * We're treating error on bsg register as non-fatal, so
+>>   			 * pretend nothing went wrong.
+>>   			 */
+>> +			error = PTR_ERR(sdev->bsg_dev);
+>>   			sdev_printk(KERN_INFO, sdev,
+>>   				    "Failed to register bsg queue, errno=%d\n",
+>>   				    error);
+>> -- 
+>> 2.25.1
+>>
