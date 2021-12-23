@@ -2,80 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1E447E0C0
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Dec 2021 10:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F44D47E467
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Dec 2021 15:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347322AbhLWJQ1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 Dec 2021 04:16:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40672 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239245AbhLWJQ0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 23 Dec 2021 04:16:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640250985;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H3H+Pshbv7wPFLDR7QeUOyCcf8SkUa9Vqv2/m7raWkg=;
-        b=CuLRs8Qb9ZM3Zv+Lu+YdutCDQPv8CU1gB6t6XxirBjJxClh59EWqyu/rFL/GXbLW57Fn/3
-        nYgOBaJ2dxqJy6LvHk/piyNwNPY9gqdP/GokqqXcyeprQDcw3C2no/WFKQI2xj8fLmodIi
-        /XWAqf2c2yp1V7qo5VnPe4ISuCZLCHE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-kvgh8CWROwmND58y_h4EKQ-1; Thu, 23 Dec 2021 04:16:24 -0500
-X-MC-Unique: kvgh8CWROwmND58y_h4EKQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DA13F1006AA7;
-        Thu, 23 Dec 2021 09:16:22 +0000 (UTC)
-Received: from localhost (ovpn-13-77.pek2.redhat.com [10.72.13.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0703D67847;
-        Thu, 23 Dec 2021 09:16:17 +0000 (UTC)
-Date:   Thu, 23 Dec 2021 17:16:15 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2] sr: don't use GFP_DMA
-Message-ID: <20211223091615.GC10050@MiWiFi-R3L-srv>
-References: <20211222090842.920724-1-hch@lst.de>
- <20211222093707.GA23698@MiWiFi-R3L-srv>
- <20211222094216.GA28018@lst.de>
- <20211222104046.GB23698@MiWiFi-R3L-srv>
- <20211223090137.GB7555@lst.de>
+        id S1348760AbhLWOOZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 Dec 2021 09:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236801AbhLWOOZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Dec 2021 09:14:25 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1068CC061401
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Dec 2021 06:14:25 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id 30so10096794uag.13
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Dec 2021 06:14:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=ZUVKji3Do/P3J4cEGIS/Cm6Y/8n8p+cIcEmYJRPs71Q=;
+        b=VWyUuxCSzd9njdBAdH3pYjyJLbPk8KTDjE7GR3R7+Rk5wqlYXTg6mrwMvb1xwNqD5j
+         8vIftZCteMnM3PNWHC2G11RV1RG2JUVcdYdXOAH4GqtF777jEw3NFVbYnOpD2Raw+KJY
+         cQ3rn7iDGbm3R4cGKwK2ZyRZ9MEhgtmx9OFIACa9A3Jv8tOF/vxE2cCIwZPKXv8LP7Hs
+         ExpfD96c0aiyCYU5bvLWCw9lKHTZ29bUF8jKC9we63A0kXtWQpzx2xF5jP3QfARDoFrl
+         3EsxjH0ncg2eKQxDTTFrE4phWb1KIKP8180HZmoCW6xoYG+LEgdeBhx6IkzuZuojfzXV
+         /Ezw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=ZUVKji3Do/P3J4cEGIS/Cm6Y/8n8p+cIcEmYJRPs71Q=;
+        b=BuvhMjWWRODBXi00p3CIIZzpCxviBIrtqnmnfxRTTrHzhlRlFp8jmXsrnAonjVTCBv
+         ryNioWXGeq7JGF8XMyuxmVhR3uXXAFfLEdlaXMxtqHPuzH0MaHW9MqdPNsi/I51k5d5C
+         UmuUBW4Y6MJvUId0Ee9DeS7Dzrb71TO+Sf3NEHPSh24C8GZycZQzB7ZqMiVwfNdbjJve
+         HdGE5IlRN9kRqMPkpMI1Na3ccLlvpxCpolf/QyWZRqqC5Rce/Nre7k+uZ+18yMljOP62
+         S+JTD+Ujv89Ge5ndpzUIfWr4OpdoCH8n3G8FVkyACnshPJ+y9/CWiTPE6IfuXVELfjCe
+         lpwg==
+X-Gm-Message-State: AOAM530JmiAQDNfGcYWnuo3rfNano7w4UD+c120U+cVa7FztFNWmLhJV
+        Uj1GHwQegUGtEvVw/NtmfzM6gc3tapYVSbQtmsg=
+X-Google-Smtp-Source: ABdhPJxGFFuFkICkqU5kCY9vkFq5c2VCqCxpjYvHK3HuXqNgkI4OoirpGOeY3lDq/odI1szMlBOZg0rruXsQZzaC43U=
+X-Received: by 2002:a67:fa12:: with SMTP id i18mr802900vsq.2.1640268864123;
+ Thu, 23 Dec 2021 06:14:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211223090137.GB7555@lst.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Received: by 2002:a67:d50b:0:0:0:0:0 with HTTP; Thu, 23 Dec 2021 06:14:23
+ -0800 (PST)
+Reply-To: zdrabrar@gmail.com
+From:   "dr.Abrar Zebadiyah" <amelia.kipkalya3322@gmail.com>
+Date:   Thu, 23 Dec 2021 06:14:23 -0800
+Message-ID: <CABT2H0xzZ8r0bNWE1wrf-TW1LC1FWmHmLop=j90TNor6PxNzkQ@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 12/23/21 at 10:01am, Christoph Hellwig wrote:
-> On Wed, Dec 22, 2021 at 06:40:46PM +0800, Baoquan He wrote:
-> > Any thought or plan for those callsites in other places? Possibly we can
-> > skip those s390 related drivers since s390 only has DMA zone, no DMA32,
-> > it should be OK.
-> 
-> Yes, this needs a bit of an audit.  A lot of them might be best handled
-> by the subsysem maintainers, e.g. for crypto media and sound.
+-- 
+My Dear Friend.
 
-Yes, agree. I can send a mail to subsystem maintainers about this, ask
-them for help.
+How are you and your family Today? I hope all is well, and I am happy
+to share this transaction with you ,but you must keep everything as
+secret and very confidential.
 
-> 
-> > And could you please also add me to CC when send out these patches? We
-> > have this problem in our RHEL8 which is based on kernel4.18, if finally
-> > removing dma-kmalloc(), we need back port these driver fixes too. If
-> > not paying attention, these patches may scatter in different
-> > sub-components and unnoticable.
-> 
-> I already sent them out yesterday.  Just look for everything with
-> GFP_DMA in the subject line in the current scsi tree for 5.17.
+I have a very lucrative business transaction which requires your
+utmost discretion. Please understand that you and me, are to work as
+one team to inherit this fund, hence I am your insider in the bank as
+the transaction commence. I advise you to feel free with me for all is
+going to be well with us. This business is 100% risk free.
 
-Got, thx.
+Though, I know it would come to you at uttermost surprise unbelief
+because it is virtually impossible to know who is trustworthy and who
+to believed I am dr.Abrar Zebadiyah sum of $10.5 million is lying in
+our bank without claim i want you to help me to claim and receive it
+to your account in your country for our benefit.
 
+I am aware of the unsafe nature of the internet, and was compelled to
+use this medium due to the nature of this project.I have access to
+every vital information that can be used to transfer this huge amount
+of money, which may culminate into the investment of the said funds
+into your account or any lucrative company in your country.
+
+If you will like to assist me as a partner then indicate your
+interest, after which we shall both discuss the modalities and the
+sharing percentage. Upon receipt of your reply on your expression of
+interest, I will give you full details on how the business will be
+executed. I am open for negotiation,
+
+Thanks for your anticipated cooperation.Note you might receive this
+message in your inbox or spam folder, depends on your web host or
+server network
+
+Contact my private email only if you are interested (zdrabrar@gmail.com)
+
+Compliment of the day,
+Regards,
+
+dr.Abrar Zebadiyah
