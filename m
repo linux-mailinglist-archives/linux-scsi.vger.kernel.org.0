@@ -2,88 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FA547EC8C
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Dec 2021 08:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DE347EC75
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Dec 2021 08:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351819AbhLXHIV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Dec 2021 02:08:21 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:63588 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351771AbhLXHH4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 24 Dec 2021 02:07:56 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BO2o6Ah008389
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Dec 2021 23:07:55 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=g0t8M6jM1mJjKTZvZaC5JLIivnsvxnnwYg8bKHBVwCw=;
- b=Y26CPrkhNLu2lsKSmxPvjRHfQR/H43+e5p4CvvqO0RBKaQbB4Y9rIa/fzJf8z3jEvZjG
- WznBRwYEihztkp+3xizGWRhSDMXAn4NXgbOkX95QioYwLrokKPx2PfdFMBSypIPrrOX8
- JsvyIHv66fwZOoymIMzmYhKCBOhaCWqdjazajqJJaZtCIJIKqPOSJCHEOFKPTPzLxopP
- 3/PH+owAg6Tt7SQPIMHKpq0a93mDl9xthFeE4zJzdeLq0oefRrUriK4wjJ0Hr6QUWIdf
- IqQHiTyQt95cWAf6YWjKqGFZgtPN363v8RM0REj/vv3tvSYtopuJRm4eyQmxmTI2nbky bA== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3d4t6kjua3-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Dec 2021 23:07:55 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 23 Dec
- 2021 23:07:50 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 23 Dec 2021 23:07:50 -0800
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 447183F7079;
-        Thu, 23 Dec 2021 23:07:50 -0800 (PST)
-Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 1BO77ojT018012;
-        Thu, 23 Dec 2021 23:07:50 -0800
-Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 1BO77opo018011;
-        Thu, 23 Dec 2021 23:07:50 -0800
-From:   Nilesh Javali <njavali@marvell.com>
-To:     <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH 16/16] qla2xxx: Update version to 10.02.07.300-k
-Date:   Thu, 23 Dec 2021 23:07:12 -0800
-Message-ID: <20211224070712.17905-17-njavali@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20211224070712.17905-1-njavali@marvell.com>
-References: <20211224070712.17905-1-njavali@marvell.com>
+        id S1351733AbhLXHHU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Dec 2021 02:07:20 -0500
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:63254 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351723AbhLXHHT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Dec 2021 02:07:19 -0500
+Received: from pop-os.home ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id 0efen3FZU65jH0efenacKX; Fri, 24 Dec 2021 08:07:18 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 24 Dec 2021 08:07:18 +0100
+X-ME-IP: 86.243.171.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 1/2] scsi: lpfc: Use bitmap_zalloc() when applicable
+Date:   Fri, 24 Dec 2021 08:07:17 +0100
+Message-Id: <bf45160e2715b30ceacc83ab37b5310941b91629.1640328930.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <cover.1640328930.git.christophe.jaillet@wanadoo.fr>
+References: <cover.1640328930.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: zLD8lgyoz80iavQfr7JJ0Ttdb2NlCYG9
-X-Proofpoint-ORIG-GUID: zLD8lgyoz80iavQfr7JJ0Ttdb2NlCYG9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-24_02,2021-12-24_01,2021-12-02_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
----
- drivers/scsi/qla2xxx/qla_version.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+'phba->fcf.fcf_rr_bmask' is a bitmap. So use bitmap_zalloc() to simplify
+code, improve the semantic and avoid some open-coded arithmetic in
+allocator arguments.
 
-diff --git a/drivers/scsi/qla2xxx/qla_version.h b/drivers/scsi/qla2xxx/qla_version.h
-index 27e440f8a702..913d454f4949 100644
---- a/drivers/scsi/qla2xxx/qla_version.h
-+++ b/drivers/scsi/qla2xxx/qla_version.h
-@@ -6,9 +6,9 @@
- /*
-  * Driver version
-  */
--#define QLA2XXX_VERSION      "10.02.07.200-k"
-+#define QLA2XXX_VERSION      "10.02.07.300-k"
+Also change the corresponding kfree() into bitmap_free() to keep
+consistency.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/scsi/lpfc/lpfc_init.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index a56f01f659f8..39e6e53773ee 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -7858,7 +7858,6 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
+ 	LPFC_MBOXQ_t *mboxq;
+ 	MAILBOX_t *mb;
+ 	int rc, i, max_buf_size;
+-	int longs;
+ 	int extra;
+ 	uint64_t wwn;
+ 	u32 if_type;
+@@ -8286,9 +8285,8 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
+ 	}
  
- #define QLA_DRIVER_MAJOR_VER	10
- #define QLA_DRIVER_MINOR_VER	2
- #define QLA_DRIVER_PATCH_VER	7
--#define QLA_DRIVER_BETA_VER	200
-+#define QLA_DRIVER_BETA_VER	300
+ 	/* Allocate eligible FCF bmask memory for FCF roundrobin failover */
+-	longs = (LPFC_SLI4_FCF_TBL_INDX_MAX + BITS_PER_LONG - 1)/BITS_PER_LONG;
+-	phba->fcf.fcf_rr_bmask = kcalloc(longs, sizeof(unsigned long),
+-					 GFP_KERNEL);
++	phba->fcf.fcf_rr_bmask = bitmap_zalloc(LPFC_SLI4_FCF_TBL_INDX_MAX,
++					       GFP_KERNEL);
+ 	if (!phba->fcf.fcf_rr_bmask) {
+ 		lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
+ 				"2759 Failed allocate memory for FCF round "
+@@ -8387,7 +8385,7 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
+ out_free_hba_eq_hdl:
+ 	kfree(phba->sli4_hba.hba_eq_hdl);
+ out_free_fcf_rr_bmask:
+-	kfree(phba->fcf.fcf_rr_bmask);
++	bitmap_free(phba->fcf.fcf_rr_bmask);
+ out_remove_rpi_hdrs:
+ 	lpfc_sli4_remove_rpi_hdrs(phba);
+ out_free_active_sgl:
+@@ -8441,7 +8439,7 @@ lpfc_sli4_driver_resource_unset(struct lpfc_hba *phba)
+ 	lpfc_sli4_remove_rpis(phba);
+ 
+ 	/* Free eligible FCF index bmask */
+-	kfree(phba->fcf.fcf_rr_bmask);
++	bitmap_free(phba->fcf.fcf_rr_bmask);
+ 
+ 	/* Free the ELS sgl list */
+ 	lpfc_free_active_sgl(phba);
 -- 
-2.23.1
+2.32.0
 
