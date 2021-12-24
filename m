@@ -2,60 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1792F47EC7E
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Dec 2021 08:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E836B47EC81
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Dec 2021 08:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351758AbhLXHHx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Dec 2021 02:07:53 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:44404 "EHLO
+        id S1351778AbhLXHH6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Dec 2021 02:07:58 -0500
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:8666 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351733AbhLXHHw (ORCPT
+        by vger.kernel.org with ESMTP id S1351750AbhLXHHw (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
         Fri, 24 Dec 2021 02:07:52 -0500
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BO2o6Aa008389
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Dec 2021 23:07:51 -0800
+        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BO2WGJw008452
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Dec 2021 23:07:52 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=Oy4EmjzKEEsT4y5uAjoej5zZEr3PKVXTMWU08yxMXII=;
- b=hLwAQySLpf7wvjZUBoC+bCCtzEiN8TUuLDDegG365FwzSKnZXe2sFemc+qMxHr1pBsMS
- crCQHxNbd5gFKg2hq9cNIp7HdfzcXbwUCkBdZdfOEJ32vB4b89rei42PobWlzGBQMXxT
- g37hhyfRDgkvl5gB14MdoflHsc1Q3w+vGE3dnAVQVDuN+QoeVzdpZC2tuPZ0h9/1lVzH
- wcjUnhUa3U98L/Qx9OUPrwCHXvnDejhJO/iARcb4WMLxz8O+2Y98AxaAoiVt/qnfOj6N
- Z+5IrwftU9Lp++JSU5qQWkFRiP3B8Fkg2tsKTG9c+1FQgTXpi/YcjAHBFMuy6Nk7wAhs Sg== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3d4t6kjua3-1
+ content-type; s=pfpt0220; bh=eXIQXGhlsTSL2wylD+7eF0HmeCXQma4ljbqmDND2xBM=;
+ b=e4gEUl7ICpj46XNLBVfJ1De+2O0371mp4z2OsPEpgPI60P1ZG7G68yLW2Cjmvl6FS/31
+ V4/U89EScON4cUcTMFx4JQD61fTiFxePuTHRQBxhhLBS/kFcaoUuvoHrmSRtyO77sgC6
+ 5Udkt4rqsJYg0XN/NdguqiuoqT6x2RjK44aim4Ill59jZtHvwaQhAxzkjrV06qD6m3Xb
+ 2WTgC54qghj6J29kW5xRdWj5fAkPbv2JfMzc+db9iF2329RAqvPOdXIA0Zry1gHm7QtS
+ 35lXPecKBMyRBL8bcuusMReAHXsiznRlStWPYyGfzvonDkpr6a0vZQOKxXQvwoPJOrr4 UA== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3d4t6kjua2-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Dec 2021 23:07:50 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 23 Dec
- 2021 23:07:48 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 23 Dec 2021 23:07:48 -0800
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Dec 2021 23:07:52 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 23 Dec
+ 2021 23:07:50 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Thu, 23 Dec 2021 23:07:50 -0800
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 0E4983F7078;
+        by maili.marvell.com (Postfix) with ESMTP id 2C75E3F7079;
         Thu, 23 Dec 2021 23:07:49 -0800 (PST)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 1BO77mt0017964;
-        Thu, 23 Dec 2021 23:07:48 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 1BO77nFn017968;
+        Thu, 23 Dec 2021 23:07:49 -0800
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 1BO77mh7017963;
-        Thu, 23 Dec 2021 23:07:48 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 1BO77nfb017967;
+        Thu, 23 Dec 2021 23:07:49 -0800
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH 04/16] qla2xxx: Fix warning message due to adisc is being flush
-Date:   Thu, 23 Dec 2021 23:07:00 -0800
-Message-ID: <20211224070712.17905-5-njavali@marvell.com>
+Subject: [PATCH 05/16] qla2xxx: Fix premature hw access after pci error
+Date:   Thu, 23 Dec 2021 23:07:01 -0800
+Message-ID: <20211224070712.17905-6-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20211224070712.17905-1-njavali@marvell.com>
 References: <20211224070712.17905-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: -Qyiy37mXWzU4tsMS8fsbgVusg0Gi4XP
-X-Proofpoint-ORIG-GUID: -Qyiy37mXWzU4tsMS8fsbgVusg0Gi4XP
+X-Proofpoint-GUID: PkS2rGD4tskav33K-N2A-91Nnsa9KHfX
+X-Proofpoint-ORIG-GUID: PkS2rGD4tskav33K-N2A-91Nnsa9KHfX
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-24_02,2021-12-24_01,2021-12-02_01
@@ -65,79 +65,110 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-Fix warning message due to adisc is being flush.
-Linux kernel triggered a warning message where a different
-error code type is not matching up with the expected type. This
-patch adds additional translation of one error code type to another.
+Fix premature hw access after pci error.
+After a recoverable PCI error has been detected and recovered, qla driver
+needs to check to see if the error condition still persist and/or wait until
+the OS to give the resume signal.
 
-WARNING: CPU: 2 PID: 1131623 at drivers/scsi/qla2xxx/qla_init.c:498
-qla2x00_async_adisc_sp_done+0x294/0x2b0 [qla2xxx]
-CPU: 2 PID: 1131623 Comm: drmgr Not tainted 5.13.0-rc1-autotest #1
+Sep  8 22:26:03 localhost kernel: WARNING: CPU: 9 PID: 124606 at qla_tmpl.c:440
+qla27xx_fwdt_entry_t266+0x55/0x60 [qla2xxx]
+Sep  8 22:26:03 localhost kernel: RIP: 0010:qla27xx_fwdt_entry_t266+0x55/0x60
+[qla2xxx]
+Sep  8 22:26:03 localhost kernel: Call Trace:
+Sep  8 22:26:03 localhost kernel: ? qla27xx_walk_template+0xb1/0x1b0 [qla2xxx]
+Sep  8 22:26:03 localhost kernel: ? qla27xx_execute_fwdt_template+0x12a/0x160
+[qla2xxx]
+Sep  8 22:26:03 localhost kernel: ? qla27xx_fwdump+0xa0/0x1c0 [qla2xxx]
+Sep  8 22:26:03 localhost kernel: ? qla2xxx_pci_mmio_enabled+0xfb/0x120
+[qla2xxx]
+Sep  8 22:26:03 localhost kernel: ? report_mmio_enabled+0x44/0x80
+Sep  8 22:26:03 localhost kernel: ? report_slot_reset+0x80/0x80
+Sep  8 22:26:03 localhost kernel: ? pci_walk_bus+0x70/0x90
+Sep  8 22:26:03 localhost kernel: ? aer_dev_correctable_show+0xc0/0xc0
+Sep  8 22:26:03 localhost kernel: ? pcie_do_recovery+0x1bb/0x240
+Sep  8 22:26:03 localhost kernel: ? aer_recover_work_func+0xaa/0xd0
+Sep  8 22:26:03 localhost kernel: ? process_one_work+0x1a7/0x360
 ..
-GPR28: c000000aaa9c8890 c0080000079ab678 c00000140a104800 c00000002bd19000
-NIP [c00800000790857c] qla2x00_async_adisc_sp_done+0x294/0x2b0 [qla2xxx]
-LR [c008000007908578] qla2x00_async_adisc_sp_done+0x290/0x2b0 [qla2xxx]
-Call Trace:
-[c00000001cdc3620] [c008000007908578] qla2x00_async_adisc_sp_done+0x290/0x2b0 [qla2xxx] (unreliable)
-[c00000001cdc3710] [c0080000078f3080] __qla2x00_abort_all_cmds+0x1b8/0x580 [qla2xxx]
-[c00000001cdc3840] [c0080000078f589c] qla2x00_abort_all_cmds+0x34/0xd0 [qla2xxx]
-[c00000001cdc3880] [c0080000079153d8] qla2x00_abort_isp_cleanup+0x3f0/0x570 [qla2xxx]
-[c00000001cdc3920] [c0080000078fb7e8] qla2x00_remove_one+0x3d0/0x480 [qla2xxx]
-[c00000001cdc39b0] [c00000000071c274] pci_device_remove+0x64/0x120
-[c00000001cdc39f0] [c0000000007fb818] device_release_driver_internal+0x168/0x2a0
-[c00000001cdc3a30] [c00000000070e304] pci_stop_bus_device+0xb4/0x100
-[c00000001cdc3a70] [c00000000070e4f0] pci_stop_and_remove_bus_device+0x20/0x40
-[c00000001cdc3aa0] [c000000000073940] pci_hp_remove_devices+0x90/0x130
-[c00000001cdc3b30] [c0080000070704d0] disable_slot+0x38/0x90 [rpaphp] [
-c00000001cdc3b60] [c00000000073eb4c] power_write_file+0xcc/0x180
-[c00000001cdc3be0] [c0000000007354bc] pci_slot_attr_store+0x3c/0x60
-[c00000001cdc3c00] [c00000000055f820] sysfs_kf_write+0x60/0x80 [c00000001cdc3c20]
-[c00000000055df10] kernfs_fop_write_iter+0x1a0/0x290
-[c00000001cdc3c70] [c000000000447c4c] new_sync_write+0x14c/0x1d0
-[c00000001cdc3d10] [c00000000044b134] vfs_write+0x224/0x330
-[c00000001cdc3d60] [c00000000044b3f4] ksys_write+0x74/0x130
-[c00000001cdc3db0] [c00000000002df70] system_call_exception+0x150/0x2d0
-[c00000001cdc3e10] [c00000000000d45c] system_call_common+0xec/0x278
+Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-8041:22: detected PCI
+disconnect.
+Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-107ff:22:
+qla27xx_fwdt_entry_t262: dump ram MB failed. Area 5h start 198013h end 198013h
+Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-107ff:22: Unable to
+capture FW dump
+Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-1015:22: cmd=0x0,
+waited 5221 msecs
+Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-680d:22: mmio
+enabled returning.
+Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-d04c:22: MBX
+Command timeout for cmd 0, iocontrol=ffffffff jiffies=10140f2e5
+mb[0-3]=[0xffff 0xffff 0xffff 0xffff]
 
-Reported-by: Abdul Haleem <abdhalee@linux.vnet.ibm.com>
 Cc: stable@vger.kernel.org
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_init.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/scsi/qla2xxx/qla_os.c   | 10 +++++++++-
+ drivers/scsi/qla2xxx/qla_tmpl.c |  9 +++++++--
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 0b641a803f7c..e54c31296fab 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -295,6 +295,8 @@ static void qla2x00_async_login_sp_done(srb_t *sp, int res)
- 		ea.iop[0] = lio->u.logio.iop[0];
- 		ea.iop[1] = lio->u.logio.iop[1];
- 		ea.sp = sp;
-+		if (res)
-+			ea.data[0] = MBS_COMMAND_ERROR;
- 		qla24xx_handle_plogi_done_event(vha, &ea);
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 0a7b00d165c7..c4b4b4496399 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -7639,7 +7639,7 @@ qla2xxx_pci_error_detected(struct pci_dev *pdev, pci_channel_state_t state)
+ 
+ 	switch (state) {
+ 	case pci_channel_io_normal:
+-		ha->flags.eeh_busy = 0;
++		qla_pci_set_eeh_busy(vha);
+ 		if (ql2xmqsupport || ql2xnvmeenable) {
+ 			set_bit(QPAIR_ONLINE_CHECK_NEEDED, &vha->dpc_flags);
+ 			qla2xxx_wake_dpc(vha);
+@@ -7680,9 +7680,16 @@ qla2xxx_pci_mmio_enabled(struct pci_dev *pdev)
+ 	       "mmio enabled\n");
+ 
+ 	ha->pci_error_state = QLA_PCI_MMIO_ENABLED;
++
+ 	if (IS_QLA82XX(ha))
+ 		return PCI_ERS_RESULT_RECOVERED;
+ 
++	if (qla2x00_isp_reg_stat(ha)) {
++		ql_log(ql_log_info, base_vha, 0x803f,
++		    "During mmio enabled, PCI/Register disconnect still detected.\n");
++		goto out;
++	}
++
+ 	spin_lock_irqsave(&ha->hardware_lock, flags);
+ 	if (IS_QLA2100(ha) || IS_QLA2200(ha)){
+ 		stat = rd_reg_word(&reg->hccr);
+@@ -7704,6 +7711,7 @@ qla2xxx_pci_mmio_enabled(struct pci_dev *pdev)
+ 		    "RISC paused -- mmio_enabled, Dumping firmware.\n");
+ 		qla2xxx_dump_fw(base_vha);
  	}
++out:
+ 	/* set PCI_ERS_RESULT_NEED_RESET to trigger call to qla2xxx_pci_slot_reset */
+ 	ql_dbg(ql_dbg_aer, base_vha, 0x600d,
+ 	       "mmio enabled returning.\n");
+diff --git a/drivers/scsi/qla2xxx/qla_tmpl.c b/drivers/scsi/qla2xxx/qla_tmpl.c
+index 26c13a953b97..b0a74b036cf4 100644
+--- a/drivers/scsi/qla2xxx/qla_tmpl.c
++++ b/drivers/scsi/qla2xxx/qla_tmpl.c
+@@ -435,8 +435,13 @@ qla27xx_fwdt_entry_t266(struct scsi_qla_host *vha,
+ {
+ 	ql_dbg(ql_dbg_misc, vha, 0xd20a,
+ 	    "%s: reset risc [%lx]\n", __func__, *len);
+-	if (buf)
+-		WARN_ON_ONCE(qla24xx_soft_reset(vha->hw) != QLA_SUCCESS);
++	if (buf) {
++		if (qla24xx_soft_reset(vha->hw) != QLA_SUCCESS) {
++			ql_dbg(ql_dbg_async, vha, 0x5001,
++			    "%s: unable to soft reset\n", __func__);
++			return INVALID_ENTRY;
++		}
++	}
  
-@@ -557,6 +559,8 @@ static void qla2x00_async_adisc_sp_done(srb_t *sp, int res)
- 	ea.iop[1] = lio->u.logio.iop[1];
- 	ea.fcport = sp->fcport;
- 	ea.sp = sp;
-+	if (res)
-+		ea.data[0] = MBS_COMMAND_ERROR;
- 
- 	qla24xx_handle_adisc_event(vha, &ea);
- 	/* ref: INIT */
-@@ -1237,6 +1241,8 @@ static void qla2x00_async_prli_sp_done(srb_t *sp, int res)
- 		ea.sp = sp;
- 		if (res == QLA_OS_TIMER_EXPIRED)
- 			ea.data[0] = QLA_OS_TIMER_EXPIRED;
-+		else if (res)
-+			ea.data[0] = MBS_COMMAND_ERROR;
- 
- 		qla24xx_handle_prli_done_event(vha, &ea);
- 	}
+ 	return qla27xx_next_entry(ent);
+ }
 -- 
 2.23.1
 
