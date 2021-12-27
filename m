@@ -2,120 +2,143 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE60C4801E2
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Dec 2021 17:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64ED74802BF
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Dec 2021 18:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbhL0QoU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Dec 2021 11:44:20 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25220 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229987AbhL0QoH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 27 Dec 2021 11:44:07 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGfn4V012029;
-        Mon, 27 Dec 2021 16:43:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=wysGyfyOytZ4dciYMpTXclRPqLaPLhKNV4KnItMwjHk=;
- b=qnYmIDesE6CQB8R1ckIEPGWGwr9HDRn+N/Egu75yo+gO8bbtTO3CyWagmKWacmpB9xG+
- mxAFNh5KtNPjm7gv9Jt+QEmfsMNZ71LzF79LiNHZsXKtTvl7ls9k2MShBS6uCsBP1+jt
- NoMLVmp2+p1FfHrNamlijY1x8Slm2B+pZaHMYbI10xNboeFFSD+fA1W/PDEDzrcvWGCN
- jciSNvesVc9h73si09uOvpRmkZ2sBreL47/RiyD5aMbJVlQhdOwhcqP69kq227URRJOF
- jwtnRcU54m0S8sC07iMIS9tJpSMPfdsKukY6pfegn2zzMejnc5H/uIZPvozVxggooduF TQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d7h7ug115-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 16:43:52 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BRGg1Am012355;
-        Mon, 27 Dec 2021 16:43:52 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d7h7ug10n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 16:43:51 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGhash028701;
-        Mon, 27 Dec 2021 16:43:49 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 3d5tx92sqp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 16:43:49 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BRGhlIY22675908
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Dec 2021 16:43:47 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1CD82A405B;
-        Mon, 27 Dec 2021 16:43:47 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A451A405F;
-        Mon, 27 Dec 2021 16:43:46 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Dec 2021 16:43:46 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: [RFC 24/32] scsi: Kconfig: add HAS_IOPORT dependencies
-Date:   Mon, 27 Dec 2021 17:43:09 +0100
-Message-Id: <20211227164317.4146918-25-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211227164317.4146918-1-schnelle@linux.ibm.com>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+        id S229806AbhL0RZs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Dec 2021 12:25:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56012 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbhL0RZr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Dec 2021 12:25:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 512EF6112A
+        for <linux-scsi@vger.kernel.org>; Mon, 27 Dec 2021 17:25:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22B7CC36AEA;
+        Mon, 27 Dec 2021 17:25:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640625946;
+        bh=4iN0FX8tYwraxgWoiYyflN/g98ltq7WczqWNu5oyKd0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z0EhTraDUbeLoBrW4ulhg4TvAwZTTzr9VpOv4YMxV+PeowlT4dF8F5uLNgcnYM848
+         +2pY6CuIDMaWldtU7vGVA4Gl1h5Ic5JatadG54qnJoTRx6TN0d5m5Qn59I6SzwHTws
+         wdF2jAdjimCduCMZ4eJt55OF/Z4rSf3063HSYXC2VcCELymdH9yBoMG8K9DdIZzc4l
+         Jx9Hlt28HREPJAjhQz6xPEQrNOP7u/dl8z10kcHaiYDXXR04FgdLkNGHxO3bqTft+f
+         3QkioQ+/j007s0RRQXLANEkx0LpMy+wx3V82iTnN9BYTGqUpO1No5y0p/LvJK79Dve
+         8nHdii/ZP4zyg==
+Date:   Mon, 27 Dec 2021 10:25:42 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     chenxiang <chenxiang66@hisilicon.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linuxarm@huawei.com,
+        john.garry@huawei.com, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 05/15] scsi: hisi_sas: Fix some issues related to
+ asd_sas_port->phy_list
+Message-ID: <Ycn3FoW9eOZNFMiL@archlinux-ax161>
+References: <1639999298-244569-1-git-send-email-chenxiang66@hisilicon.com>
+ <1639999298-244569-6-git-send-email-chenxiang66@hisilicon.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iN3-UusYfjSfJNlzfdQ9MzNuS-yoozoN
-X-Proofpoint-ORIG-GUID: p9hwA4ssjToig-1DkgKUMbAfdOo-XRH7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-27_08,2021-12-24_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- phishscore=0 spamscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
- adultscore=0 mlxscore=0 mlxlogscore=920 lowpriorityscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112270080
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1639999298-244569-6-git-send-email-chenxiang66@hisilicon.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. We thus need to add HAS_IOPORT as dependency for
-those drivers using them.
+Hi Xiang,
 
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- drivers/scsi/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, Dec 20, 2021 at 07:21:28PM +0800, chenxiang wrote:
+> From: Xiang Chen <chenxiang66@hisilicon.com>
+> 
+> Most places that use asd_sas_port->phy_list are protected by spinlock
+> asd_sas_port->phy_list_lock, but there are some places which lack of it
+> in hisi_sas driver, so add it in function hisi_sas_refresh_port_id() when
+> accessing asd_sas_port->phy_list. But it has a risk that list mutates while
+> dropping the lock at the same time in function
+> hisi_sas_send_ata_reset_each_phy(), so read asd_sas_port->phy_mask
+> instead of accessing asd_sas_port->phy_list to avoid the risk.
+> 
+> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+> Acked-by: John Garry <john.garry@huawei.com>
+> ---
+>  drivers/scsi/hisi_sas/hisi_sas_main.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+> index ad64ccd41420..051092e294f7 100644
+> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
+> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+> @@ -1428,11 +1428,13 @@ static void hisi_sas_refresh_port_id(struct hisi_hba *hisi_hba)
+>  		sas_port = device->port;
+>  		port = to_hisi_sas_port(sas_port);
+>  
+> +		spin_lock(&sas_port->phy_list_lock);
+>  		list_for_each_entry(sas_phy, &sas_port->phy_list, port_phy_el)
+>  			if (state & BIT(sas_phy->id)) {
+>  				phy = sas_phy->lldd_phy;
+>  				break;
+>  			}
+> +		spin_unlock(&sas_port->phy_list_lock);
+>  
+>  		if (phy) {
+>  			port->id = phy->port_id;
+> @@ -1509,22 +1511,25 @@ static void hisi_sas_send_ata_reset_each_phy(struct hisi_hba *hisi_hba,
+>  	struct ata_link *link;
+>  	u8 fis[20] = {0};
+>  	u32 state;
+> +	int i;
+>  
+>  	state = hisi_hba->hw->get_phys_state(hisi_hba);
+> -	list_for_each_entry(sas_phy, &sas_port->phy_list, port_phy_el) {
+> +	for (i = 0; i < hisi_hba->n_phy; i++) {
+>  		if (!(state & BIT(sas_phy->id)))
+>  			continue;
+> +		if (!(sas_port->phy_mask & BIT(i)))
+> +			continue;
+>  
+>  		ata_for_each_link(link, ap, EDGE) {
+>  			int pmp = sata_srst_pmp(link);
+>  
+> -			tmf_task.phy_id = sas_phy->id;
+> +			tmf_task.phy_id = i;
+>  			hisi_sas_fill_ata_reset_cmd(link->device, 1, pmp, fis);
+>  			rc = hisi_sas_exec_internal_tmf_task(device, fis, s,
+>  							     &tmf_task);
+>  			if (rc != TMF_RESP_FUNC_COMPLETE) {
+>  				dev_err(dev, "phy%d ata reset failed rc=%d\n",
+> -					sas_phy->id, rc);
+> +					i, rc);
+>  				break;
+>  			}
+>  		}
+> -- 
+> 2.33.0
+> 
+> 
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 5436b2be2c73..c90c97485fce 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -793,6 +793,7 @@ config SCSI_INIA100
- config SCSI_PPA
- 	tristate "IOMEGA parallel port (ppa - older drives)"
- 	depends on SCSI && PARPORT_PC
-+	depends on HAS_IOPORT
- 	help
- 	  This driver supports older versions of IOMEGA's parallel port ZIP
- 	  drive (a 100 MB removable media device).
--- 
-2.32.0
+Please ignore this if it was already reported, I do not see any reports
+of it on lore.kernel.org nor a commit fixing it in Martin's tree.
 
+This commit as commit 29e2bac87421 ("scsi: hisi_sas: Fix some issues
+related to asd_sas_port->phy_list") in -next causes the following clang
+warning, which will break the build under -Werror:
+
+drivers/scsi/hisi_sas/hisi_sas_main.c:1536:21: error: variable 'sas_phy' is uninitialized when used here [-Werror,-Wuninitialized]
+                if (!(state & BIT(sas_phy->id)))
+                                  ^~~~~~~
+./include/vdso/bits.h:7:30: note: expanded from macro 'BIT'
+#define BIT(nr)                 (UL(1) << (nr))
+                                           ^~
+drivers/scsi/hisi_sas/hisi_sas_main.c:1528:29: note: initialize the variable 'sas_phy' to silence this warning
+        struct asd_sas_phy *sas_phy;
+                                   ^
+                                    = NULL
+1 error generated.
+
+It seems like this variable is entirely unused now, should it be removed
+along with this check?
+
+Cheers,
+Nathan
