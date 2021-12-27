@@ -2,186 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 722CB47FAD2
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Dec 2021 08:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0856A47FD20
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Dec 2021 13:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbhL0H4g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Dec 2021 02:56:36 -0500
-Received: from email.unionmem.com ([221.4.138.186]:22538 "EHLO
-        VLXDG1SPAM1.ramaxel.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231146AbhL0H4g (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Dec 2021 02:56:36 -0500
-Received: from V12DG1MBS01.ramaxel.local (v12dg1mbs01.ramaxel.local [172.26.18.31])
-        by VLXDG1SPAM1.ramaxel.com with ESMTPS id 1BR7tbEQ064860
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 27 Dec 2021 15:55:37 +0800 (GMT-8)
-        (envelope-from songyl@ramaxel.com)
-Received: from localhost (172.20.2.155) by V12DG1MBS01.ramaxel.local
- (172.26.18.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 27
- Dec 2021 15:55:36 +0800
-Date:   Mon, 27 Dec 2021 15:55:35 +0800
-From:   Yanling Song <songyl@ramaxel.com>
-To:     <yanling.song@linux.dev>
-CC:     Bart Van Assche <bvanassche@acm.org>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <yujiang@ramaxel.com>,
-        <xuyun@ramaxel.com>, <yanggan@ramaxel.com>
-Subject: Re: [PATCH V2] scsi:spraid: initial commit of Ramaxel spraid driver
-Message-ID: <20211227155535.0000119a@ramaxel.com>
-In-Reply-To: <52b05051cf00a9ad617c31f227654dcc@linux.dev>
-References: <399c013b-aaf9-1781-09a1-1acbc82b49ae@acm.org>
-        <20211126073310.87683-1-songyl@ramaxel.com>
-        <52b05051cf00a9ad617c31f227654dcc@linux.dev>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+        id S232241AbhL0M5H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Dec 2021 07:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230116AbhL0M5G (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Dec 2021 07:57:06 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33544C061401
+        for <linux-scsi@vger.kernel.org>; Mon, 27 Dec 2021 04:57:06 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id z29so61377035edl.7
+        for <linux-scsi@vger.kernel.org>; Mon, 27 Dec 2021 04:57:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=8eBQNbw3SO1e8ktAyegovyRlLVh2FOUz73o8lPmGdmQ=;
+        b=cED9aYJ9q9CwMWZ9nYgnyBlUyBJYbIV4ItarqehEM6E11y6yXZmKfzZ4VgJeo27ezZ
+         rpa8hDQGx1fDtc4zypjFHtBSTSGQyoYe0M8JdOvT+kI4258tuJ2I1Uy/8ajavx9HZjqu
+         bGL9uD2zv5NJDXCaJzHZqPdgrxnny4ynvzqPANLGf3i49QNdrtsxL4u3shtPMcNbgI1y
+         qNCBfHsYwA44PuCAqD3kmhnsg6bzwx9xZbOnT0PGsgoQ4WFyclMMwqal/hfxUdD2lxjB
+         GZLcDT5chdmtTE+nU2EGZCyOKGqPucD+6ALWE83/2/lahc2QGZ8sCL5oGzI6jv7IcvhT
+         loaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=8eBQNbw3SO1e8ktAyegovyRlLVh2FOUz73o8lPmGdmQ=;
+        b=llj2KNaUEhiFP7oJ5+a+jCBbGq+cwYTGDU+bB6LEH5fH9LtwjXAkpAr+cYg4kx9lbY
+         aYI53jiTGwii2jUAwFntJMvfgJU4P0WCMjeT9qpEO/pxRYtRwwGhXVR7QgiZUMkZanNo
+         UCJiecm93KasVckjf9wfnzAegORm1Rz/9PepNx3LWW5sI6bvsGyMr/i9Yec01fbx66g/
+         O4U3F0r6J5JVDqybfEnVuNyi9rhmf4fzDx5KzIp2/O9GZz9boD70GweKGsycxoRUwe5d
+         aw9UwDIqSkdBhk8PpmUUEqDyvJmYEk/CyCa6ZJrPqrRQXqGKCsSwCA4ZnkkFpk14oQAw
+         LpIw==
+X-Gm-Message-State: AOAM531sLO9PBL8YL8ny2qgTfLGnrBNDZTD0T1Tn96aKqp9Ikz0YUt3r
+        dqlVqjI9h1rGiRzKWCl3mqcswW13a34KwzH0JMc=
+X-Google-Smtp-Source: ABdhPJx2s2K5qT6fS8XlaXO75jfVhNQiPeeVtBmtKl7AJOnKTSrgjU5snSTmcObx2Mdwn5t2iwtHr6xNh3bV8B1XP6U=
+X-Received: by 2002:a17:907:1689:: with SMTP id hc9mr13801980ejc.228.1640609823411;
+ Mon, 27 Dec 2021 04:57:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.20.2.155]
-X-ClientProxiedBy: V12DG1MBS03.ramaxel.local (172.26.18.33) To
- V12DG1MBS01.ramaxel.local (172.26.18.31)
-X-DNSRBL: 
-X-MAIL: VLXDG1SPAM1.ramaxel.com 1BR7tbEQ064860
+Received: by 2002:a50:3f06:0:0:0:0:0 with HTTP; Mon, 27 Dec 2021 04:57:02
+ -0800 (PST)
+Reply-To: michaelb.gregory221@gmail.com
+From:   "Mr.Michael B.Gregory" <gzzhy0o3@gmail.com>
+Date:   Mon, 27 Dec 2021 14:57:02 +0200
+Message-ID: <CAKuEWRvNUedxkF3tjO6VHh5SMzp0=xatXevjO96KvciASHV=Cw@mail.gmail.com>
+Subject: Re: Seasons Greetings.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 12 Dec 2021 02:56:01 +0000
-yanling.song@linux.dev wrote:
+Good Day,
 
-> December 10, 2021 7:15 AM, "Bart Van Assche" <bvanassche@acm.org>
-> wrote:
-> 
-> > On 11/25/21 11:33 PM, Yanling Song wrote:
-> >   
-> >> +struct spraid_dev {
-> >> + struct pci_dev *pdev;  
-> > 
-> > Why a pointer to struct pci_dev instead of embedding struct pci_dev
-> > in this structure? The latter approach is more efficient.
-> >   
-> The pointer of pci_dev is from linux driver frame work probe()
-> function, spraid driver does not allocate memory for it, just save
-> the pointer.
-> 
-> >> + struct device *dev;  
-> > 
-> > What does this pointer represent? There is already a struct device
-> > inside struct pci_dev. Can this member be left out?
-> >   
-> The pointer of dev is from struct pci_dev. It is saved in struct
-> spraid_dev just for convenience: so that we do not need to get the
-> dev from pci_dev every time when using dev.
-> 
-> >> + struct spraid_cmd *adm_cmds;
-> >> + struct list_head adm_cmd_list;
-> >> + spinlock_t adm_cmd_lock; /* spinlock for lock handling */
-> >> +
-> >> + struct spraid_cmd *ioq_ptcmds;
-> >> + struct list_head ioq_pt_list;
-> >> + spinlock_t ioq_pt_lock; /* spinlock for lock handling */
-> >> +
-> >> + struct work_struct scan_work;
-> >> + struct work_struct timesyn_work;
-> >> + struct work_struct reset_work;
-> >> +
-> >> + enum spraid_state state;
-> >> + spinlock_t state_lock; /* spinlock for lock handling */
-> >> + struct request_queue *bsg_queue;  
-> > 
-> > The "spinlock for lock handling" comments are not useful. Please
-> > make these comments useful or remove these.
-> >   
-> Comments will be removed in the next version.
-> 
-> >> +#include <linux/version.h>  
-> > 
-> > Upstream drivers should not include this header file.
-> >  
-> Ok. Changes will be included in the next version.
-> 
-> >> +static u32 admin_tmout = 60;
-> >> +module_param(admin_tmout, uint, 0644);
-> >> +MODULE_PARM_DESC(admin_tmout, "admin commands timeout (seconds)");
-> >> +  
-> Will be changed to per SCSI host.
-> 
-> >> +static u32 scmd_tmout_pt = 30;
-> >> +module_param(scmd_tmout_pt, uint, 0644);
-> >> +MODULE_PARM_DESC(scmd_tmout_pt, "scsi commands timeout for
-> >> passthrough(seconds)");
-> >> +  
-> Will be deleted.
-> 
-> >> +static u32 scmd_tmout_nonpt = 180;
-> >> +module_param(scmd_tmout_nonpt, uint, 0644);
-> >> +MODULE_PARM_DESC(scmd_tmout_nonpt, "scsi commands timeout for
-> >> rawdisk&raid(seconds)");
-> >> +  
-> Will be splitted into two attributes of scsi host:scmd_tmout_rawdisk,
-> scmd_tmout_vd
-> 
+Compliments Of The Seasons To you. My Dear friend with great
+pleasure,I contact in or with trust and honesty i have a project that
+i want us to talk about.
 
-After the internal discussion, the two parameters will be removed for
-now.
+Here is my personal Email if you are interested (
+michaelb.gregory221@gmail.com ) . If you give me positive signals, I
+will initiate this process towards a conclusion.
 
-> >> +static u32 wait_abl_tmout = 3;
-> >> +module_param(wait_abl_tmout, uint, 0644);
-> >> +MODULE_PARM_DESC(wait_abl_tmout, "wait abnormal io
-> >> timeout(seconds)");
-> >> +  
-> Will be deleted.
-> 
-> >> +static bool use_sgl_force;
-> >> +module_param(use_sgl_force, bool, 0644);
-> >> +MODULE_PARM_DESC(use_sgl_force, "force IO use sgl format, default
-> >> false");  
-> >  
-> Will be deleted.
->  
-> > Consider leaving out all kernel module parameters. Kernel module
-> > parameters are easy to introduce but can't be removed. Is it really
-> > necessary that the above parameters can be configured? If so, most
-> > of the above parameters probably should be per SCSI host or SCSI
-> > device instead of module parameters. 
-> Comments as the above.
-> 
-> >> +static u32 io_queue_depth = 1024;
-> >> +module_param_cb(io_queue_depth, &ioq_depth_ops, &io_queue_depth,
-> >> 0644); +MODULE_PARM_DESC(io_queue_depth, "set io queue depth,
-> >> should >= 2");  
-> > 
-> > How does this differ from the SCSI sysfs attribute "can_queue"?
-> >  
-> Yes. it is the same as SCSI sysfs attribute "can_queue". 
-> The maximum queue depth supported by hardware is 1024.  
-> The parameter is to change the queue depth for different usages to
-> get the best performance.
-> 
->  
-> >> +static unsigned char log_debug_switch;
-> >> +module_param_cb(log_debug_switch, &log_debug_switch_ops,
-> >> &log_debug_switch, 0644); +MODULE_PARM_DESC(log_debug_switch, "set
-> >> log state, default non-zero for switch on");  
-> > 
-> > Can this parameter be left out by using pr_debug()?
-> >  
-> Ye. Will use pr_debug in the next version.
-> 
->  
-> >> +static unsigned char small_pool_num = 4;
-> >> +module_param_cb(small_pool_num, &small_pool_num_ops,
-> >> &small_pool_num, 0644); +MODULE_PARM_DESC(small_pool_num, "set prp
-> >> small pool num, default 4, MAX 16");  
-> > 
-> > The description of the above parameter is too cryptic.
-> >  
-> Will add more comments:
-> It was found that the spindlock of a single pool conflicts a lot with
-> multiple CPUs. So multiple pools are introduced to reduce the
-> conflictions. 
-> 
->  
-> > Thanks,
-> > 
-> > Bart.  
+Sincerely,
 
+Mr. Michael B. Greg.
