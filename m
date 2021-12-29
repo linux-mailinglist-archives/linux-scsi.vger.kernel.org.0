@@ -2,60 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DABD7480D9C
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Dec 2021 23:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C85480F62
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Dec 2021 04:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbhL1WLo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 28 Dec 2021 17:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbhL1WLn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 Dec 2021 17:11:43 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3E2C061574
-        for <linux-scsi@vger.kernel.org>; Tue, 28 Dec 2021 14:11:43 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id u16so14492849plg.9
-        for <linux-scsi@vger.kernel.org>; Tue, 28 Dec 2021 14:11:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Av10FJHZ16PNlaWBwLeHhLYMKvHi/4lm87heoggNDKA=;
-        b=qOXQGTHI/yqWQimFZKubKOgSY4HSdh2Qpf1CHiccd8LlleCY+Mz25xS5NL6Fz1gcST
-         A+ptPClmwSrXKinhrYXYPPsz2RAv4Gh8TlN1SCqqrtpEdgIOQl7OoMCLL8GE5oFdN33P
-         9iYR1lYs2vu0n7rM7dnbXqT1sLW0fGtJ+EnQa8B6tI3r6sJHi3WIxL4CkXPZ+YJlpbL8
-         B7tfuiKKRgYt0UNWijWZXUSMDd4Mbcub9FAj/PUeWxyosbSrvaqSaxlUA761Mbr8R3Py
-         Ayg5a3wWSW/rA+y1ugrxoqh2X4pHP/tnSdCHOeTdUu4vj17GAWurwV7dqZ0TLjMv5uqQ
-         ekwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Av10FJHZ16PNlaWBwLeHhLYMKvHi/4lm87heoggNDKA=;
-        b=RdhpUOLa6fBe9gtbCEjFdD6bFEiDAe1KuttVaPRTLMdzY77nu7restEP+Ep35SRPhA
-         NAToE461kjVsg5MeRqQ0a1AWnPrfIS/i+SPeOVv/+4XHUGggtOo6NSHYqe7Yv8qf9tah
-         f/O3NrAeqaKDEWR6hFfLL+rGhOXS4MYnjBjdaI0G1OlrZO1etCaWRUr8CJsrKKBqDUV3
-         3vo+a5FgdOCa2r7UHC2MQSupueTelc8ou0OTRRDE2pxNQJL9OJYVlewWq6GRXoxOcd69
-         2Of1ftmUIfRegYfiTm6d4FFPAjE7ESKY8fBCEUC2oAajRl+Z2nc11QnVo/Fs4aH1GHdO
-         OcYA==
-X-Gm-Message-State: AOAM533tnkuNOHF8k75xsj+0JmU5S5NDShJt9bDfE6kq1xRezKeGxvJu
-        cz0diFE6rNVnBIUPwLOZ/9teHyrYJRzzsFSfIO8=
-X-Google-Smtp-Source: ABdhPJxQsxi5XXYcBRsWz7SsyNI/6buR/yifyQT3mOtKY2vu/Ce5fDDVnf37DwhFd2gKF6duOF2aH8ivGX9kgVcL4PI=
-X-Received: by 2002:a17:903:1ce:b0:148:ca49:b017 with SMTP id
- e14-20020a17090301ce00b00148ca49b017mr23456719plh.18.1640729503216; Tue, 28
- Dec 2021 14:11:43 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6a10:4102:0:0:0:0 with HTTP; Tue, 28 Dec 2021 14:11:42
- -0800 (PST)
-Reply-To: fionahill.usa@hotmail.com
-From:   Fiona Hill <grace.desmond2021@gmail.com>
-Date:   Tue, 28 Dec 2021 14:11:42 -0800
-Message-ID: <CAOW9D1vGWSSWV8RtrdFbq+NqLNZdXhsnRbmtZgBuse-NB-RT3w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+        id S234199AbhL2DnO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 28 Dec 2021 22:43:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35432 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233725AbhL2DnO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 Dec 2021 22:43:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BC77B81744
+        for <linux-scsi@vger.kernel.org>; Wed, 29 Dec 2021 03:43:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CB6EAC36AED
+        for <linux-scsi@vger.kernel.org>; Wed, 29 Dec 2021 03:43:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640749391;
+        bh=pQh8TT7iAk4nA8/Cjj7N5hf6fBne5KQvJ+RX0ddPXyQ=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=tvhL/qTvc6Mpdwiuw38NBENuSbePlXilt1kGCbfbA1INo3zjB5miHXMHc7m4rY0W0
+         6MbFzDDfo6jvIgV0DHnBJDmdkceEuQYyr+mkoONYpc1HQlnKiOLRnQTS24o9L9+alo
+         ewVwf6nTNc8FpEJ9HVZeb0gH5XakG7jD1lLqBj/QpjRmaM+z5LaV18YcrPesCrC2Id
+         vO//1cMwDdM0wgWNhG/EKe5W4EzbP+XjoMV7P/LZYQ3vL8HKsLFxW8/+/OXreZDCop
+         Mzp24mG8b8rq797qM69T0MUkoc4tN1si5Ao2gyRNHECs2UM17in6pBw1lElaqbWMAT
+         4eaLUgQt/Bezg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id B8FBCC05FCA; Wed, 29 Dec 2021 03:43:11 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-scsi@vger.kernel.org
+Subject: [Bug 199887] Fibre login failure on older adapters
+Date:   Wed, 29 Dec 2021 03:43:11 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-qla2xxx@kernel-bugs.osdl.org
+X-Bugzilla-Product: SCSI Drivers
+X-Bugzilla-Component: QLOGIC QLA2XXX
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: jmetal88@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: scsi_drivers-qla2xxx@kernel-bugs.osdl.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-199887-11613-CSX4vdjKY8@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-199887-11613@https.bugzilla.kernel.org/>
+References: <bug-199887-11613@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Hi, did you receive my message  i send to you?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D199887
+
+Michael Graham (jmetal88@gmail.com) changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |jmetal88@gmail.com
+
+--- Comment #3 from Michael Graham (jmetal88@gmail.com) ---
+I think I ran into this today, trying to set up an ISP2100 based controller=
+ on
+the server in my basement.  No error messages as far as I could tell, but on
+the 5.X kernel I was using the adapter just would not communicate back any =
+info
+about the drives attached.  Tried out an old version of OpenSuse using kern=
+el
+4.4.104 and it worked with no special configuration on my part (I did try a
+current version of OpenSuse first, in which it was also broken).  I'm fine
+using an old version of Linux for how I'm using this server for the time be=
+ing,
+but it would be nice if there was a fix for newer kernels.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
