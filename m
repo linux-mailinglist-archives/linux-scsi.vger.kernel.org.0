@@ -2,57 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C36481844
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Dec 2021 02:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218A0481862
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Dec 2021 03:12:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234162AbhL3Bzs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Dec 2021 20:55:48 -0500
-Received: from ai109.secure.ne.jp ([150.60.158.226]:29701 "EHLO
-        mta.ai109.secure.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbhL3Bzs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Dec 2021 20:55:48 -0500
-X-Greylist: delayed 354 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Dec 2021 20:55:48 EST
-Received: by mta.ai109.secure.ne.jp (Postfix, from userid 10769)
-        id A67CB1E9E3F; Thu, 30 Dec 2021 10:49:53 +0900 (JST)
-To:     linux-scsi@vger.kernel.org
-Subject: =?UTF-8?B?44GK5ZWP44GE5ZCI44KP44Gb44GE44Gf44Gg44GN44GC44KK44GM44Go44GG?=  =?UTF-8?B?44GU44GW44GE44G+44GZ44CCW+iHquWLlemAgeS/oeODoeODvOODq10=?=
-X-PHP-Originating-Script: 10769:class-phpmailer.php
-Date:   Thu, 30 Dec 2021 01:49:53 +0000
-From:   =?UTF-8?B?44G/44KI44GX6Y2854G45pW06aqo6Zmi44GK5ZWP44GE5ZCI44KP44Gb44OV?=
-         =?UTF-8?B?44Kp44O844Og?= <miyoshi1014ym@yahoo.co.jp>
-Message-ID: <54f5821d86804436675cca4187e0ea2d@miyoshi-shinkyuseikotsuin.com>
-X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
+        id S234327AbhL3CMB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Dec 2021 21:12:01 -0500
+Received: from smtp23.cstnet.cn ([159.226.251.23]:50512 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232758AbhL3CMB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 Dec 2021 21:12:01 -0500
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowAA3UJJaFc1hMUHlBA--.8478S2;
+        Thu, 30 Dec 2021 10:11:39 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     yokota@netlab.is.tsukuba.ac.jp, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] scsi: nsp_cs: Check of ioremap return value
+Date:   Thu, 30 Dec 2021 10:11:37 +0800
+Message-Id: <20211230021137.1823352-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAA3UJJaFc1hMUHlBA--.8478S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF47JF1rZFyfJryDWF17Wrg_yoWDJrb_ua
+        yj9347JrZxWr10kw17Jr4SkryYyFZ8ZF1q9FyrKFyY939rZF1UCF18Xwn8Wwnru398Ja4D
+        WwsFqF1rAw13AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4U
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbYhF7UUUU
+        U==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-この度は、みよし鍼灸整骨院へ
-お問い合わせいただき誠にありがとうございます。
+As the possible failure of the ioremap(), the 'data->MmioAddress' could
+be NULL.
+Therefore it should be better to check it in order to transfer the
+error.
 
-下記の通りご入力いただいた内容を承りました。
-担当者が確認後ご連絡いたしますので、今しばらくお待ちくださいますようお願い申し上げます。
-お急ぎの場合は、お手数ですがお電話にてご連絡いただけますと幸いです。
+Fixes: 0e6f9d270840 ("pcmcia: use pcmcia_loop_config in scsi pcmcia drivers")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/scsi/pcmcia/nsp_cs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-
-■ご入力内容 ---------------------------------------------------------
-
-お名前：❤️ Regina is interested in your profile! Click Here: http://inx.lv/pIaX?iy6qy ❤️様
-電話番号：525853636295
-メールアドレス：linux-scsi@vger.kernel.org
-お問い合わせ内容：
-その他
-60dxdg
-
-----------------------------------------------------------------------
-
-　みよし鍼灸整骨院（神田橋バス停から徒歩3分）
-
-　〒752-0911 山口県下関市王司神田6-2-8
-　Tel：083-250-9649
-  E-mail：miyoshi1014ym@yahoo.co.jp
-
-----------------------------------------------------------------------
+diff --git a/drivers/scsi/pcmcia/nsp_cs.c b/drivers/scsi/pcmcia/nsp_cs.c
+index ac89002646a3..bcd61439ca3f 100644
+--- a/drivers/scsi/pcmcia/nsp_cs.c
++++ b/drivers/scsi/pcmcia/nsp_cs.c
+@@ -1560,6 +1560,9 @@ static int nsp_cs_config_check(struct pcmcia_device *p_dev, void *priv_data)
+ 		data->MmioAddress = (unsigned long)
+ 			ioremap(p_dev->resource[2]->start,
+ 					resource_size(p_dev->resource[2]));
++		if (!data->MmioAddress)
++			goto next_entry;
++
+ 		data->MmioLength  = resource_size(p_dev->resource[2]);
+ 	}
+ 	/* If we got this far, we're cool! */
+-- 
+2.25.1
 
