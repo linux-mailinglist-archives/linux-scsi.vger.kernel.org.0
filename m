@@ -2,32 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3EA483602
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jan 2022 18:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FE648362D
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jan 2022 18:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235646AbiACRbe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jan 2022 12:31:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38826 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbiACRao (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jan 2022 12:30:44 -0500
+        id S235716AbiACRcx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jan 2022 12:32:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235958AbiACRbg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jan 2022 12:31:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49034C061397;
+        Mon,  3 Jan 2022 09:31:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F5F3B81071;
-        Mon,  3 Jan 2022 17:30:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBAC8C36AED;
-        Mon,  3 Jan 2022 17:30:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD85561178;
+        Mon,  3 Jan 2022 17:31:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D37D4C36AEB;
+        Mon,  3 Jan 2022 17:30:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641231042;
-        bh=T5mVZxCsINiWAaVvpGFhIa51X5dboMG8f6te8Ga/uWw=;
+        s=k20201202; t=1641231060;
+        bh=SuaPqRIS/EoDXtFwglhRwh+gMYjrD0lXCeGpCJ9cAKU=;
         h=From:To:Cc:Subject:Date:From;
-        b=DAu6FA+uOBwtWM0u90FZ4q9gzxoKNB39evcOF40QwY9or+B5LS4la721VuvLkJj3g
-         9IqGlRzV+BPDMvEINPEzkPCO9C5zPLgRQVLiWBWfuG3z8hd7VirAa9ypFuUu8jszL7
-         cpFa8T5i/XusTsG68OeBGLObekvKxnWAkCHUu9LuF4ffKrBxRL+VKw9eOqqAJZZvRk
-         ndn7EvMsOZTK82aGjxy/o4PAxUlDDMElT1Z8WbkifDKZLfXEmxicCmaqb4TLuPGVkg
-         O6+liNBgVUVRE4157diUESP5DfTQ2M7uFiuhMPxD0N/7bxlaPv5uqT7dmDfPzH75hO
-         oTg6Ld6Yf2xqQ==
+        b=QxJFG8DSF6KEIXzSj20jRLpOrQvjBGe0zBHktcXfhJg9hRZSx2CYLnyb5c3UFRJds
+         7xyE3Q27yuhnAqiHKPzK1/Q6EqQq8zbpjdtSn6laQD5d/J7FSVq5Q5C/OUBqZ9Lrd2
+         jvp85/JDx+m4To6LZGnMUOMwCzX0qicQDS0CSziPOPxsFaRMavvze81IOwv4XHw+e+
+         TwD53M1NY5HV41erXmDMSY8wGOhW6F/xRBLfuXyZCo39mi1a+b4raFnnnC0CzV1SK4
+         r5fEO3O0nYz0VMw4BLGEq/k/Yj66KblUumhGDLcVJKVCa9y8nQDCVPong8QSdQx0lq
+         LPds64J8+IGVA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Lixiaokeng <lixiaokeng@huawei.com>,
@@ -39,9 +42,9 @@ Cc:     Lixiaokeng <lixiaokeng@huawei.com>,
         Sasha Levin <sashal@kernel.org>, cleech@redhat.com,
         jejb@linux.ibm.com, open-iscsi@googlegroups.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 1/4] scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown()
-Date:   Mon,  3 Jan 2022 12:30:36 -0500
-Message-Id: <20220103173039.1613564-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 1/4] scsi: libiscsi: Fix UAF in iscsi_conn_get_param()/iscsi_conn_teardown()
+Date:   Mon,  3 Jan 2022 12:30:43 -0500
+Message-Id: <20220103173047.1613630-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-stable: review
@@ -81,7 +84,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index f3dfec02abecc..ebf3a277d8bba 100644
+index 30e954bb6c81e..8d1a05d5eb4dd 100644
 --- a/drivers/scsi/libiscsi.c
 +++ b/drivers/scsi/libiscsi.c
 @@ -2991,6 +2991,8 @@ void iscsi_conn_teardown(struct iscsi_cls_conn *cls_conn)
