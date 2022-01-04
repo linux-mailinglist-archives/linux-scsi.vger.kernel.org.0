@@ -2,103 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C757E4847E3
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jan 2022 19:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9B648482F
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jan 2022 20:01:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236327AbiADScH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Jan 2022 13:32:07 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4333 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiADScG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jan 2022 13:32:06 -0500
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JT1N45Rwdz686rg;
-        Wed,  5 Jan 2022 02:28:52 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 4 Jan 2022 19:32:04 +0100
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 4 Jan 2022 18:32:01 +0000
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jinpu.wang@cloud.ionos.com>, <Ajish.Koshy@microchip.com>,
-        <Viswas.G@microchip.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <damien.lemoal@opensource.wdc.com>, <vishakhavc@google.com>,
-        <ipylypiv@google.com>, <Ruksar.devadi@microchip.com>,
-        <Vasanthalakshmi.Tharmarajan@microchip.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH RFT] scsi: pm8001: Fix FW crash for maxcpus=1
-Date:   Wed, 5 Jan 2022 02:26:20 +0800
-Message-ID: <1641320780-81620-1-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
+        id S236433AbiADTBu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Jan 2022 14:01:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234390AbiADTBt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jan 2022 14:01:49 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77960C061761
+        for <linux-scsi@vger.kernel.org>; Tue,  4 Jan 2022 11:01:49 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id bp39so34809746qtb.6
+        for <linux-scsi@vger.kernel.org>; Tue, 04 Jan 2022 11:01:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/hHgBKaozpyohhRsiYLOj0WZK8ScsciyYJn+ZRKFKfo=;
+        b=L97dFCZ12wAvSiuunwcG3i3rSTsXULx84YfHs3AaYiBKMLcpre4hDtRnWBQZrFGe9g
+         28XTByswIkM/jGDb9J9Qu1AYsCqJzQ0k6d8QEG2hX5REo4P9xRTFX+MiGG5WIrnpri2M
+         1ab+Zd/TRfjNrXNsCZMzbX9aoDgRRmN3LRpbd5srPPP+yvn1tJZmrCljV0R2aWyDV9YV
+         A2AUXTagunKI9w75K+rG/tqvZpht23loFsyD/CYExHK8yL43TIAhr5y1+WnIrc5KY2r9
+         dgs7lbtrMgdDVvs8Eg3tfEjmaRQOhu1XRWuo1qFmhZKqr8c9j/YPH/DKNuFCCBQUUYRM
+         IsXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/hHgBKaozpyohhRsiYLOj0WZK8ScsciyYJn+ZRKFKfo=;
+        b=iENgthAPEpJG7tfmRdVNkcU36ID3rb1VFiGDyaT7jbHiuv7uYh+o4qol3vvwODZ3XD
+         5eq/QBARorvMvi4TjtFSjEW0u5wclOSYKufDo67Q9gR1hq7tbi1f5svsPRZExiEnKG6T
+         3x6Lu/B0npZO3sw/yupHOgaFusUYrNFJEw3ZFaBCNpDWiy5xjfEDUd7bg9Lx7alBqW5S
+         53pYETez4fxAevSc6f0+JrrvJuomJWCGDkQUYQ+RjU0yIX16qME9rb+hj9Wc04xlFz8U
+         txAp9Rpad1XkQjU5vLejw40u5O3uMlARqrbS6OWLJwzjrVrtfwCUR16wCxM4nQkkZPa9
+         Wybg==
+X-Gm-Message-State: AOAM5304AAOIPli0lvN6d4OMoeWnAiqwjBW4/HAXmTnm8X3+9tA7SN1k
+        FspBLXX6cAwCUGCDKn5LULGp8UaZM8xcBFEYI44=
+X-Google-Smtp-Source: ABdhPJxcrCMdx0BdrsL6RaP+P3sLmP+8BnuFQUwEJBYT31eJ58/+Ur5DXl9fLl+MCuPWZZIJKXTsJD3hMHv7njtZ/I0=
+X-Received: by 2002:a05:622a:1790:: with SMTP id s16mr45431603qtk.625.1641322908630;
+ Tue, 04 Jan 2022 11:01:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Received: by 2002:a05:6214:2342:0:0:0:0 with HTTP; Tue, 4 Jan 2022 11:01:48
+ -0800 (PST)
+Reply-To: lisshuuu1@gmail.com
+From:   MS LISA HUGH <xavier.gbesse2@gmail.com>
+Date:   Tue, 4 Jan 2022 19:01:48 +0000
+Message-ID: <CALCvb1OjmS8jdurdcPwe3sEi0zB75oF3wM50617a0smLQTtnsg@mail.gmail.com>
+Subject: REPLY TO HAVE THE FULL DETAILS >>MS LISA HUGH.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-According to the comment in check_fw_ready() we should not check the
-IOP1_READY field in register SCRATCH_PAD_1 for 8008 or 8009 controllers.
+Dear Friend,
 
-However we check this very field in process_oq() for processing the highest
-index interrupt vector. Change that function to not check IOP1_READY for
-those mentioned controllers, but do check ILA_READY in both cases.
+I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
 
-The reason I assume that this was not hit earlier was because we always
-allocated 64 MSI(X), and just did not pass the vector index check in
-process_oq(), i.e.  the handler never ran for vector index 63.
+I need your co-operation for the  transferring of ($4,500,000,00
+,U.S.DOLLARS)to your bank account for both of us benefit.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
-
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 2101fc5761c3..77b8bb30615b 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -4162,9 +4162,16 @@ static int process_oq(struct pm8001_hba_info *pm8001_ha, u8 vec)
- 	u32 regval;
- 
- 	if (vec == (pm8001_ha->max_q_num - 1)) {
-+		u32 mipsall_ready;
-+
-+		if ((pm8001_ha->chip_id == chip_8008) ||
-+		    (pm8001_ha->chip_id == chip_8009))
-+			mipsall_ready = SCRATCH_PAD_MIPSALL_READY_8PORT;
-+		else
-+			mipsall_ready = SCRATCH_PAD_MIPSALL_READY_16PORT;
-+
- 		regval = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
--		if ((regval & SCRATCH_PAD_MIPSALL_READY) !=
--					SCRATCH_PAD_MIPSALL_READY) {
-+		if ((regval & mipsall_ready) != mipsall_ready) {
- 			pm8001_ha->controller_fatal_error = true;
- 			pm8001_dbg(pm8001_ha, FAIL,
- 				   "Firmware Fatal error! Regval:0x%x\n",
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.h b/drivers/scsi/pm8001/pm80xx_hwi.h
-index c7e5d93bea92..c41ed039c92a 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.h
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.h
-@@ -1405,8 +1405,12 @@ typedef struct SASProtocolTimerConfig SASProtocolTimerConfig_t;
- #define SCRATCH_PAD_BOOT_LOAD_SUCCESS	0x0
- #define SCRATCH_PAD_IOP0_READY		0xC00
- #define SCRATCH_PAD_IOP1_READY		0x3000
--#define SCRATCH_PAD_MIPSALL_READY	(SCRATCH_PAD_IOP1_READY | \
-+#define SCRATCH_PAD_MIPSALL_READY_16PORT	(SCRATCH_PAD_IOP1_READY | \
- 					SCRATCH_PAD_IOP0_READY | \
-+					SCRATCH_PAD_ILA_READY | \
-+					SCRATCH_PAD_RAAE_READY)
-+#define SCRATCH_PAD_MIPSALL_READY_8PORT	(SCRATCH_PAD_IOP0_READY | \
-+					SCRATCH_PAD_ILA_READY | \
- 					SCRATCH_PAD_RAAE_READY)
- 
- /* boot loader state */
--- 
-2.26.2
-
+Please send the follow below,
+1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
+Thanks.
+Ms Lisa Hugh
