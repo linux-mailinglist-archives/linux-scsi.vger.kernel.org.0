@@ -2,160 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B104875AF
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jan 2022 11:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F21D54875D5
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jan 2022 11:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346948AbiAGKg7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Jan 2022 05:36:59 -0500
-Received: from angie.orcam.me.uk ([78.133.224.34]:38658 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346805AbiAGKgu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jan 2022 05:36:50 -0500
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 02B749200B3; Fri,  7 Jan 2022 11:36:46 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id F2A7B92009D;
-        Fri,  7 Jan 2022 10:36:46 +0000 (GMT)
-Date:   Fri, 7 Jan 2022 10:36:46 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-cc:     Douglas Gilbert <dgilbert@interlog.com>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Christoph Hellwig <hch@lst.de>, Nix <nix@esperi.org.uk>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] scsi: Set allocation length to 255 for ATA
- Information VPD page
-In-Reply-To: <yq1lezty169.fsf@ca-mkp.ca.oracle.com>
-Message-ID: <alpine.DEB.2.21.2201070039040.56863@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2201020010540.56863@angie.orcam.me.uk> <alpine.DEB.2.21.2201020030130.56863@angie.orcam.me.uk> <d9eaa1f8-7abb-645b-d624-5069205c6983@interlog.com> <alpine.DEB.2.21.2201032017290.56863@angie.orcam.me.uk> <yq1tuek347m.fsf@ca-mkp.ca.oracle.com>
- <alpine.DEB.2.21.2201032324230.56863@angie.orcam.me.uk> <yq1tuej1j22.fsf@ca-mkp.ca.oracle.com> <yq1lezty169.fsf@ca-mkp.ca.oracle.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S237129AbiAGKpG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Jan 2022 05:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236787AbiAGKpG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jan 2022 05:45:06 -0500
+Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99564C061245
+        for <linux-scsi@vger.kernel.org>; Fri,  7 Jan 2022 02:45:05 -0800 (PST)
+Received: by mail-ua1-x942.google.com with SMTP id x33so8053807uad.12
+        for <linux-scsi@vger.kernel.org>; Fri, 07 Jan 2022 02:45:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=avOzz+s5zjOOJ9Z2Kb6BjAYu3bmaGVtVbqQU0g+1drQ=;
+        b=MHvALfZWbeGMW0CHUE61ffpR7+tC5tHm/ZXlRbpWuKypTopn4H1pq0fx++s4DYI+cQ
+         P0BbVDBSVebXf9CvF3WcwhP1u+JpmXtywGXiUzCRED6OL4yl9AIHafaVe1xXktRRXnPQ
+         WJ6UdxLpgAvfjqARu2Spc4ugvjC9zGRMlkr+93Y4zaivIakB9uBS8+Fqs/DlwqATg0Gg
+         pPKh/Isf4EavNsERWLfcATAx+1Se3MBe0EHwgBhmTHmSP94Vxe1rNO0PVUK01dHSp3g8
+         12avC7K2WElZrc2M+Zf/Q7gloDm8IOYL1hKAUNx6tlGp9vEUlL0GIyB8r0JVu6gMxJUk
+         0qsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=avOzz+s5zjOOJ9Z2Kb6BjAYu3bmaGVtVbqQU0g+1drQ=;
+        b=g+WPxVg1c8T6c0Sd30zvSFRsllWaJaej4nlKiGbJdVZuto1O9GOdjOnGl99LrYouwH
+         On/hla/QOGOJvLAhLuVuY1cIvh8zvdnl2VMJPbL9+L2mJhRIojmgsA4q9c1JeG4MRFZ+
+         YENSiBpBZth86sct0jpTXplT9RblDKS89jLBMiyZipcc5jqE3OlRw9KVm4SMRCgyxklC
+         lzpo1/nORVQO9xQMbjV6Tfra+gyoDw5+aBi09z6foWduEmimL7xonlMCo0CPGtG56T9K
+         bZm0C7RANVRWHq9hk+XytvXJV49RbrSjBDnlD4oP9aaRpgf6bc9iTnMTkN+7BRDhjEbQ
+         iePg==
+X-Gm-Message-State: AOAM531epuYa6YA4074LI3SZHPSTi2AT+3yjzdupuiWs+OXP/yTtfB3c
+        9FxCQyAI/ujtxcQs+dWIEndzblr80rUlg+pufSg=
+X-Google-Smtp-Source: ABdhPJzt47dBa+fSAPPN8cnod1SejW6ShTFB2A7mEWGGh8qYPTNUySe1N4iP2PUtwlVTAaw2Heqf7Vr5tIti8Q3n5EU=
+X-Received: by 2002:a67:6684:: with SMTP id a126mr21341554vsc.87.1641552304362;
+ Fri, 07 Jan 2022 02:45:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Reply-To: drdavidgilbert2@gmail.com
+Sender: mradamsphillips6@gmail.com
+Received: by 2002:a59:b2cf:0:b0:27a:3b42:f3ce with HTTP; Fri, 7 Jan 2022
+ 02:45:03 -0800 (PST)
+From:   Dr David Gilbert <drdavidgilberts2@gmail.com>
+Date:   Fri, 7 Jan 2022 02:45:03 -0800
+X-Google-Sender-Auth: 335GKRu-ldHB371wco-Wy91H_y4
+Message-ID: <CAJJi7pNVG10KUzVZC-BkT-h8+w2tHf4d0NPMg3XryKVV4xrX4g@mail.gmail.com>
+Subject: Its an urgent!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Martin,
+I am Dr. David Gilbert, the director of the accounts & auditing
+department at the ONLINE Banking Central Bank Of Burkina Faso
+Ouagadougou-west Africa, (CBB) With due respect, I have decided to
+contact you on a business transaction, I will like you to help me in
+receiving of this fund into your Bank Account through online banking,
+However; It's just my urgent need for foreign partner that made me to
+contact you for this transaction, In my department I discovered an
+abandoned sum of (US$10.5 Million dollars) in an account that belongs
+to one of our foreign Customer (MR. PAUL LOUIS from Paris, France )
+who died along time in 6th of December 2016 in car accident.
 
-> > Oh, you'll also need a follow-on patch that uses the cached ATA
-> > Information VPD page. I'll try to get my full series out today.
-> 
-> I would really appreciate it if you would be willing give this a whirl:
-> 
-> 	https://git.kernel.org/mkp/h/5.18/discovery
+I am afraid if this money stays in our bank without claim for long
+period of time, our government will step in because the Banking laws
+here does not allow such huge amount of money to stay dormant for more
+than (Seven) 7years, And you will receiving this money into your Bank
+account within 10 or 14 banking days.
 
- I have tried your tree and it does not clobber the HBA anymore, however 
-partitions (of the MS-DOS type) are not recognised with any of the disks 
-including one holding the root device, so the system fails to mount the 
-root filesystem and therefore does not complete booting:
+The Banking law and guideline here stipulates that if such money
+remained unclaimed after 6 or 7years and above, the money will be
+transferred into the Bank treasury as unclaimed fund, I agree that 40%
+of this money will be for you as foreign partner in respect to the
+provision of a foreign account, and while 50%would be for me, then 10%
+will map out for the expenses.
 
-VFS: Cannot open root device "802" or unknown-block(8,2): error -6
-Please append a correct "root=" boot option; here are the available partitions:
-0800        17921835 sda
- driver: sd
-0810        35843686 sdb
- driver: sd
-0830          239816 sdd
- driver: sd
-0b00         1048575 sr0
- driver: sr
-Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(8,2)
+If you agree to my business proposal, further details of the transfer
+will be forwarded to you as soon as I receive your return mail, Make
+sure you keep this transaction as your top secret and make it
+confidential till we receive the fund into your bank account that you
+will provide to the Bank, Don't disclose it to anybody, because the
+secrecy of this transaction is as well as the success of it.
 
--- is that expected?
+I quickly inform you because the new system of payment policy has been
+adopted and it will be very easy and short listed for payment via
+Online Banking, So immediately I receive your update; I will direct
+you on how to contact ONLINE Central Banking through their E-mail
+address, where the funds will be approved by Central Bank of Burkina
+Faso and transfer into your bank account through online Banking and
+make assure you follow their online payment instruction to enable the
+transaction goes successful.
 
- Here's the relevant part of the boot log:
-
-scsi host0: BusLogic BT-958
-scsi 0:0:0:0: Direct-Access     IBM      DDYS-T18350M     SA5A PQ: 0 ANSI: 3
-scsi 0:0:1:0: Direct-Access     SEAGATE  ST336607LW       0006 PQ: 0 ANSI: 3
-scsi 0:0:4:0: Sequential-Access HP       C5683A           C908 PQ: 0 ANSI: 2
-scsi 0:0:5:0: Direct-Access     IOMEGA   ZIP 100          E.08 PQ: 0 ANSI: 2
-st: Version 20160209, fixed bufsize 32768, s/g segs 256
-st 0:0:4:0: Attached scsi tape st0
-st 0:0:4:0: st0: try direct i/o: yes (alignment 4 B)
-sd 0:0:0:0: [sda] 35843670 512-byte logical blocks: (18.4 GB/17.1 GiB)
-sd 0:0:5:0: [sdc] Media removed, stopped polling
-sd 0:0:1:0: [sdb] 71687372 512-byte logical blocks: (36.7 GB/34.2 GiB)
-sd 0:0:5:0: [sdc] Attached SCSI removable disk
-sd 0:0:0:0: [sda] Write Protect is off
-sd 0:0:1:0: [sdb] Write Protect is off
-sd 0:0:0:0: [sda] Mode Sense: cb 00 00 08
-sd 0:0:1:0: [sdb] Mode Sense: ab 00 10 08
-sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-sda: detected capacity change from 0 to 35843670
-sd 0:0:0:0: [sda] Attached SCSI disk
-sd 0:0:1:0: [sdb] Write cache: enabled, read cache: enabled, supports DPO and FUA
-sdb: detected capacity change from 0 to 71687372
-sd 0:0:1:0: [sdb] Attached SCSI disk
-sd 0:0:0:0: Attached scsi generic sg0 type 0
-sd 0:0:1:0: Attached scsi generic sg1 type 0
-st 0:0:4:0: Attached scsi generic sg2 type 1
-sd 0:0:5:0: Attached scsi generic sg3 type 0
-
-while upon a succesful boot with the upstream kernel (and my patch(es) 
-applied) it looks like:
-
-scsi host0: BusLogic BT-958
-scsi 0:0:0:0: Direct-Access     IBM      DDYS-T18350M     SA5A PQ: 0 ANSI: 3
-scsi 0:0:1:0: Direct-Access     SEAGATE  ST336607LW       0006 PQ: 0 ANSI: 3
-scsi 0:0:4:0: Sequential-Access HP       C5683A           C908 PQ: 0 ANSI: 2
-scsi 0:0:5:0: Direct-Access     IOMEGA   ZIP 100          E.08 PQ: 0 ANSI: 2
-st: Version 20160209, fixed bufsize 32768, s/g segs 256
-st 0:0:4:0: Attached scsi tape st0
-st 0:0:4:0: st0: try direct i/o: yes (alignment 4 B)
-sd 0:0:0:0: [sda] 35843670 512-byte logical blocks: (18.4 GB/17.1 GiB)
-sd 0:0:5:0: [sdc] Media removed, stopped polling
-sd 0:0:1:0: [sdb] 71687372 512-byte logical blocks: (36.7 GB/34.2 GiB)
-sd 0:0:0:0: [sda] Write Protect is off
-sd 0:0:1:0: [sdb] Write Protect is off
-sd 0:0:0:0: [sda] Mode Sense: cb 00 00 08
-sd 0:0:1:0: [sdb] Mode Sense: ab 00 10 08
-sd 0:0:5:0: [sdc] Attached SCSI removable disk
-sd 0:0:1:0: [sdb] Write cache: enabled, read cache: enabled, supports DPO and FUA
-sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
- sdb: sdb1 sdb2
-sd 0:0:1:0: [sdb] Attached SCSI disk
- sda: sda1 sda2 sda3 sda4 < sda5 sda6 sda7 sda8 sda9 sda10 >
-sd 0:0:0:0: [sda] Attached SCSI disk
-sd 0:0:0:0: Attached scsi generic sg0 type 0
-sd 0:0:1:0: Attached scsi generic sg1 type 0
-st 0:0:4:0: Attached scsi generic sg2 type 1
-sd 0:0:5:0: Attached scsi generic sg3 type 0
-
-The failure is not specific to this HBA as `hdd' is a PATA device and it 
-doesn't get its partitions scanned either.
-
- There's no significant difference between the two .config files:
-
---- ../linux-macro/.config
-+++ .config
-@@ -1,6 +1,6 @@
- #
- # Automatically generated file; DO NOT EDIT.
--# Linux/i386 5.16.0-rc7 Kernel Configuration
-+# Linux/i386 5.16.0-rc1 Kernel Configuration
- #
- CONFIG_CC_VERSION_TEXT="i386-linux-gnu-gcc (GCC) 11.0.0 20200919 (experimental)"
- CONFIG_CC_IS_GCC=y
-@@ -518,7 +518,6 @@
- CONFIG_HAVE_ARCH_MMAP_RND_BITS=y
- CONFIG_HAVE_EXIT_THREAD=y
- CONFIG_ARCH_MMAP_RND_BITS=8
--CONFIG_PAGE_SIZE_LESS_THAN_64KB=y
- CONFIG_ISA_BUS_API=y
- CONFIG_CLONE_BACKWARDS=y
- CONFIG_OLD_SIGSUSPEND3=y
-@@ -1061,7 +1060,6 @@
- # CONFIG_SCSI_MPI3MR is not set
- # CONFIG_SCSI_SMARTPQI is not set
- # CONFIG_SCSI_UFSHCD is not set
--# CONFIG_SCSI_UFS_HWMON is not set
- # CONFIG_SCSI_HPTIOP is not set
- CONFIG_SCSI_BUSLOGIC=y
- # CONFIG_SCSI_FLASHPOINT is not set
-
- Shall I try anything else?
-
-  Maciej
+Yours Sincerely,
+Dr. David Gilbert.
+Central Bank.
