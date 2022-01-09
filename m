@@ -2,122 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D0D488743
-	for <lists+linux-scsi@lfdr.de>; Sun,  9 Jan 2022 02:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CF2488BDD
+	for <lists+linux-scsi@lfdr.de>; Sun,  9 Jan 2022 19:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235070AbiAIB3N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 8 Jan 2022 20:29:13 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:37852 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235076AbiAIB3L (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 8 Jan 2022 20:29:11 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id AAAD82041CF;
-        Sun,  9 Jan 2022 02:29:09 +0100 (CET)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Jt23+Bf0YnJR; Sun,  9 Jan 2022 02:29:09 +0100 (CET)
-Received: from xtwo70.bingwo.ca (unknown [10.16.20.11])
-        by smtp.infotech.no (Postfix) with ESMTPA id 831C220413E;
-        Sun,  9 Jan 2022 02:29:08 +0100 (CET)
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
-        bvanassche@acm.org
-Subject: [PATCH v2 9/9] scsi_debug: add environmental reporting log subpage
-Date:   Sat,  8 Jan 2022 20:28:53 -0500
-Message-Id: <20220109012853.301953-10-dgilbert@interlog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220109012853.301953-1-dgilbert@interlog.com>
-References: <20220109012853.301953-1-dgilbert@interlog.com>
+        id S234527AbiAIS5V (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 9 Jan 2022 13:57:21 -0500
+Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:58913 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229962AbiAIS5U (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 9 Jan 2022 13:57:20 -0500
+Received: from pop-os.home ([90.11.185.88])
+        by smtp.orange.fr with ESMTPA
+        id 6dNWnw2VWsoWh6dNWnw5jl; Sun, 09 Jan 2022 19:57:19 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 09 Jan 2022 19:57:19 +0100
+X-ME-IP: 90.11.185.88
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     James Smart <james.smart@broadcom.com>,
+        Ram Vegesna <ram.vegesna@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Subject: [PATCH] scsi: efct: Remove useless DMA-32 fallback configuration
+Date:   Sun,  9 Jan 2022 19:57:04 +0100
+Message-Id: <958bcb2a6e86344c14f38369e8e7079615a2b0e3.1641754613.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Log subpages are starting to appear in real devices (e.g. SSDs)
-so add support for one. Adopt approach where all "wild"
-sub-pages are themselves listed as long as there is at least
-one non-wild page or subpage for a given page number.
+As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+dev->dma_mask is non-NULL.
+So, if it fails, the 32 bits case will also fail for the same reason.
 
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+Simplify code and remove some dead code accordingly.
+
+While at it, return the error code returned by dma_set_mask_and_coherent()
+instead of -1.
+
+[1]: https://lkml.org/lkml/2021/6/7/398
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/scsi/scsi_debug.c | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+This patch was not part of the 1st serie I've sent. So there is no
+Reviewed-by tag.
+---
+ drivers/scsi/elx/efct/efct_driver.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 4f3703830347..a06ef7e8f66c 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -2800,6 +2800,18 @@ static int resp_ie_l_pg(unsigned char *arr)
- 	return sizeof(ie_l_pg);
- }
+diff --git a/drivers/scsi/elx/efct/efct_driver.c b/drivers/scsi/elx/efct/efct_driver.c
+index ae62fc3c9ee3..b08fc8839808 100644
+--- a/drivers/scsi/elx/efct/efct_driver.c
++++ b/drivers/scsi/elx/efct/efct_driver.c
+@@ -541,13 +541,10 @@ efct_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
  
-+static int resp_env_rep_l_spg(unsigned char *arr)
-+{
-+	unsigned char env_rep_l_spg[] = {0x0, 0x0, 0x23, 0x8,
-+					 0x0, 40, 72, 0xff, 45, 18, 0, 0,
-+					 0x1, 0x0, 0x23, 0x8,
-+					 0x0, 55, 72, 35, 55, 45, 0, 0,
-+		};
-+
-+	memcpy(arr, env_rep_l_spg, sizeof(env_rep_l_spg));
-+	return sizeof(env_rep_l_spg);
-+}
-+
- #define SDEBUG_MAX_LSENSE_SZ 512
+ 	pci_set_drvdata(pdev, efct);
  
- static int resp_log_sense(struct scsi_cmnd *scp,
-@@ -2852,26 +2864,47 @@ static int resp_log_sense(struct scsi_cmnd *scp,
- 			arr[n++] = 0xff;	/* this page */
- 			arr[n++] = 0xd;
- 			arr[n++] = 0x0;		/* Temperature */
-+			arr[n++] = 0xd;
-+			arr[n++] = 0x1;		/* Environment reporting */
-+			arr[n++] = 0xd;
-+			arr[n++] = 0xff;	/* all 0xd subpages */
- 			arr[n++] = 0x2f;
- 			arr[n++] = 0x0;	/* Informational exceptions */
-+			arr[n++] = 0x2f;
-+			arr[n++] = 0xff;	/* all 0x2f subpages */
- 			arr[3] = n - 4;
- 			break;
- 		case 0xd:	/* Temperature subpages */
- 			n = 4;
- 			arr[n++] = 0xd;
- 			arr[n++] = 0x0;		/* Temperature */
-+			arr[n++] = 0xd;
-+			arr[n++] = 0x1;		/* Environment reporting */
-+			arr[n++] = 0xd;
-+			arr[n++] = 0xff;	/* these subpages */
- 			arr[3] = n - 4;
- 			break;
- 		case 0x2f:	/* Informational exceptions subpages */
- 			n = 4;
- 			arr[n++] = 0x2f;
- 			arr[n++] = 0x0;		/* Informational exceptions */
-+			arr[n++] = 0x2f;
-+			arr[n++] = 0xff;	/* these subpages */
- 			arr[3] = n - 4;
- 			break;
- 		default:
- 			mk_sense_invalid_fld(scp, SDEB_IN_CDB, 2, 5);
- 			return check_condition_result;
- 		}
-+	} else if (subpcode > 0) {
-+		arr[0] |= 0x40;
-+		arr[1] = subpcode;
-+		if (pcode == 0xd && subpcode == 1)
-+			arr[3] = resp_env_rep_l_spg(arr + 4);
-+		else {
-+			mk_sense_invalid_fld(scp, SDEB_IN_CDB, 2, 5);
-+			return check_condition_result;
-+		}
- 	} else {
- 		mk_sense_invalid_fld(scp, SDEB_IN_CDB, 3, -1);
- 		return check_condition_result;
+-	if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64)) != 0) {
+-		dev_warn(&pdev->dev, "trying DMA_BIT_MASK(32)\n");
+-		if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32)) != 0) {
+-			dev_err(&pdev->dev, "setting DMA_BIT_MASK failed\n");
+-			rc = -1;
+-			goto dma_mask_out;
+-		}
++	rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
++	if (rc) {
++		dev_err(&pdev->dev, "setting DMA_BIT_MASK failed\n");
++		goto dma_mask_out;
+ 	}
+ 
+ 	num_interrupts = efct_device_interrupts_required(efct);
 -- 
-2.25.1
+2.32.0
 
