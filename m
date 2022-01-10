@@ -2,89 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AC848A24E
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Jan 2022 23:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E00348A252
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Jan 2022 23:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345172AbiAJWFA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 10 Jan 2022 17:05:00 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:23724 "EHLO
+        id S1345163AbiAJWFD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 10 Jan 2022 17:05:03 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:28940 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345138AbiAJWE4 (ORCPT
+        by vger.kernel.org with ESMTP id S1345157AbiAJWE6 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 10 Jan 2022 17:04:56 -0500
+        Mon, 10 Jan 2022 17:04:58 -0500
 Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AJlWkx020711;
-        Mon, 10 Jan 2022 22:04:53 GMT
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20AJlelZ021735;
+        Mon, 10 Jan 2022 22:04:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=N7Dxf+DcwX9/Y/Jtfs2m8P2aqSA45sl7OZmw324ZcVA=;
- b=E885sKdeaP/MrpylFeeO9IYgaE04mVwhv9KPEN6yflg9LGTC1+ntpkRfR5ZAlHr3IBMf
- 3Wl21UuOOfsBMqgen3Yfbyb3Y5XIRGOH8UkotK8PJmgOyKFbUJXwAkM4a6lHhlz397b+
- DVsvd9ARnJmelehoNHRdbNesb36QrQmDMhUuND6qlkgPEvwHNuaEJqnTQ1CTcrreuavY
- STT/A4RSqdi4dySsciu5w4I+9eywhpS4yHm76mWPfvt/mM8+Rtu7awbOMsoIOYO9rcZI
- Y7mr8MUC3dUJ6S8Dx6shBEdVWPMx9OLZu5FRfxfDHcGryRUgbyAtkOLXP78tEodaq3Qi cg== 
+ bh=FC/fHcE+YZOPK3IoUVnYLEpKAYyryx34fbjLUOzUG2E=;
+ b=oQZv82MgqlVR6HBatObO/pSmC5l3F8kwaPXzYQpY+jKvvtzulCPMJDjqeZfSJm9vRIfy
+ 0FP4eYTyuNOFjmEr8IgTY2iKjtnr3WQaIDCCji7uSQUmVgXO1KzOiRrJ+beomhhPlM4A
+ 3DdWyI0a6yRQOqL7iALoZOjnJ3I4SlW/UfOVwRxuHuqePURMEM4G9LY28RLPB8G0ecBJ
+ fPjTGqQKIYrEXFFY8IeO5S+DdRDGD5mxHm8CwXHn/WayzurQaYVY/3cajVUimgYpxi1x
+ uURQsLNsevxRyvhwN2cC4QE0HPrT+uj4DiwstquMypDoMQtJW/7LeqiccEpZIMdr14Ji SA== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dgmk99hhq-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dgmk99hhs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 10 Jan 2022 22:04:54 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20ALtvSD138985;
+        Mon, 10 Jan 2022 22:04:53 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3020.oracle.com with ESMTP id 3df2e3vqx5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Mon, 10 Jan 2022 22:04:53 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20ALtw6V139092;
-        Mon, 10 Jan 2022 22:04:52 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 3df2e3vqwd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Jan 2022 22:04:52 +0000
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20AM4iCA174082;
-        Mon, 10 Jan 2022 22:04:52 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20AM4iCC174082;
+        Mon, 10 Jan 2022 22:04:53 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by aserp3020.oracle.com with ESMTP id 3df2e3vqp8-7;
-        Mon, 10 Jan 2022 22:04:51 +0000
+        by aserp3020.oracle.com with ESMTP id 3df2e3vqp8-8;
+        Mon, 10 Jan 2022 22:04:52 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Kashyap Desai <kashyap.desai@broadcom.com>
+To:     linux-scsi@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-hardening@vger.kernel.org,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        megaraidlinux.pdl@broadcom.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][RESEND] scsi: megaraid: Avoid mismatched storage type sizes
-Date:   Mon, 10 Jan 2022 17:04:39 -0500
-Message-Id: <164182835586.13635.12443651708409705777.b4-ty@oracle.com>
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Subject: Re: [PATCH] scsi: aacraid: fix spelling of "its"
+Date:   Mon, 10 Jan 2022 17:04:40 -0500
+Message-Id: <164182835584.13635.17053434981605031244.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220105173633.2421129-1-keescook@chromium.org>
-References: <20220105173633.2421129-1-keescook@chromium.org>
+In-Reply-To: <20211223061119.18304-1-rdunlap@infradead.org>
+References: <20211223061119.18304-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: wYHm0wyjssySoI76BHzSt0AUqnoe7zVd
-X-Proofpoint-ORIG-GUID: wYHm0wyjssySoI76BHzSt0AUqnoe7zVd
+X-Proofpoint-GUID: z-mznXZxQhdifS1WHMgMAK6DwVpt1DSa
+X-Proofpoint-ORIG-GUID: z-mznXZxQhdifS1WHMgMAK6DwVpt1DSa
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 5 Jan 2022 09:36:33 -0800, Kees Cook wrote:
+On Wed, 22 Dec 2021 22:11:19 -0800, Randy Dunlap wrote:
 
-> Remove needless use of mbox_t, replacing with just struct
-> mbox_out. Silences compiler warnings under a -Warray-bounds build:
+> Use the possessive "its" instead of the contraction "it's" in
+> user messages.
 > 
-> drivers/scsi/megaraid.c: In function 'megaraid_probe_one':
-> drivers/scsi/megaraid.c:3615:30: error: array subscript 'mbox_t[0]' is partly outside array bounds of 'unsigned char[15]' [-Werror=array-bounds]
->  3615 |         mbox->m_out.xferaddr = (u32)adapter->buf_dma_handle;
->       |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/scsi/megaraid.c:3599:23: note: while referencing 'raw_mbox'
->  3599 |         unsigned char raw_mbox[sizeof(struct mbox_out)];
->       |                       ^~~~~~~~
 > 
-> [...]
 
 Applied to 5.17/scsi-queue, thanks!
 
-[1/1] scsi: megaraid: Avoid mismatched storage type sizes
-      https://git.kernel.org/mkp/scsi/c/315d049ad195
+[1/1] scsi: aacraid: fix spelling of "its"
+      https://git.kernel.org/mkp/scsi/c/4d516e495235
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
