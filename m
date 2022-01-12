@@ -2,105 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0968C48BF71
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jan 2022 09:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA5448C43F
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jan 2022 13:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351367AbiALIFF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Jan 2022 03:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
+        id S1353297AbiALMzL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Jan 2022 07:55:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237577AbiALIFF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jan 2022 03:05:05 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A774DC06173F;
-        Wed, 12 Jan 2022 00:05:04 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id y17so2131533qtx.9;
-        Wed, 12 Jan 2022 00:05:04 -0800 (PST)
+        with ESMTP id S1353300AbiALMzK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jan 2022 07:55:10 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F94DC061751
+        for <linux-scsi@vger.kernel.org>; Wed, 12 Jan 2022 04:55:10 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id br17so7759205lfb.6
+        for <linux-scsi@vger.kernel.org>; Wed, 12 Jan 2022 04:55:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mX58k7wGho97Y8qH2nxAgkm3miNmVOmu/qIE3BiGfD8=;
-        b=pVYyM7tn4EJ9mmnoSSYJUqh+HgkZToErbRTUapxwbADX0u4WL8CdKvGaDX7I9cgRur
-         fAfWEM1PazmPDwPxQipDkOlDHqm9sBLkpvUsdwSbnOZnSfTo4qqqYH/CMefQVNJb3CSi
-         j7Hi44/MtLxQh50UMwBN84/GFoRHSh5LTDdnmgElfrtj0z6cKruhMkK+PdFG1fLMbD/L
-         aAG+hkECI+SVgr7RnhvaTneNbDSLQiMi8q+eluRBoXI1zYk+gUsfdR3qkf1zxjwFd2I2
-         W8XqFHBsJGwla525sO09ACNtd2352DBy8ac/qxTwPAL4CKYbNGrOGfprtxn3HRmJWV+i
-         CEhw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=CMzdAZWvSREUxL9gyi7ZDNRKXhnPhof45SdOgpKoP4Q=;
+        b=Oz4elds2mD2GPvP1MrH0xFKH9E73s26SM10W/+R93H8TVqTR6IHxfXwToy8fH+9iRx
+         o0bh0/T+RY73OAxXvlxFf9gc5bFJfMCkl2WuCmqqO6z/Mn0zryxxVxNbwYT7PP2RQ//x
+         8y9YtOIlAzli5Ww3TXeuZZa+bma6/AQIHZsnP6VmIE8MX9KFDDGE1Ssl7GFlu8Y2rmD9
+         Tt7MepBmQG0lQ+UprvMNcLOm6jNV7A9cH1Vef+3k/0iBnCCaqmDAald0eRLx89/CP+4u
+         Ho74RDDJ4ug8NPAvaqoippyJyjif3VBvdmnI4TudF7ur6IC1T946ZGy018CMLP75biba
+         ORfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mX58k7wGho97Y8qH2nxAgkm3miNmVOmu/qIE3BiGfD8=;
-        b=4k/OwWiAWQhqm5ki+pq8M4I9L5MW8xg81D+eIQxouFsCwlWR1DTxyyF7DIym4DgQp1
-         PfOctol6bsvvluntoMo0/1BSfJEx7wfxF3rvrtiOh4aJTaR8OWQk7uPd252sbhULaTVC
-         Xfgsln0Ugti/NUjz4vRpksbudFGG8H8EHFJghvIo5RmprnUc4bXWz/1GPLkPKIavqe2U
-         X501c5D8Em2asFszQstL3jC9nNWGg4TFW9nCYaPL8mkYGzUQda2WKJmgwunETtlbk5O5
-         3eE/yiL/H1NvzEdYkYKniE2yDrSCt1DxeTVf3YVyYlkgb6hgmXclqTahqw/Sxtrz2+xf
-         ca5g==
-X-Gm-Message-State: AOAM530G0xSY2HyOg3jSRHqPzsT4r0LSqqYZbRSzJJOUSvYmXCNOxl9j
-        5/IKZuFNSPR3F4ntTNjVKdo=
-X-Google-Smtp-Source: ABdhPJxVnEJK5emKrDFsqI7mB9uRjjKSWfAoMptS80gvdL4Kc8qcxPPrrAFDosjbt9WvKK1jIizFSA==
-X-Received: by 2002:ac8:4e4f:: with SMTP id e15mr6654074qtw.168.1641974703918;
-        Wed, 12 Jan 2022 00:05:03 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id d11sm8035371qtj.4.2022.01.12.00.05.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 00:05:03 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     sathya.prakash@broadcom.com
-Cc:     sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] drivers/message/fusion: remove redundant rc variable
-Date:   Wed, 12 Jan 2022 08:04:57 +0000
-Message-Id: <20220112080457.667063-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=CMzdAZWvSREUxL9gyi7ZDNRKXhnPhof45SdOgpKoP4Q=;
+        b=78rYMGypFfL3MliqdgyMzM5WJKdJZUnHttgpwujh03sH9nzM94qSSW4ZTURa6WV0h6
+         ZB3JBOwPOp1OzUW+3mvodW8ACdS/+cUJN+YFmk8rmjVDCrslBvKrVz7/9WkLBGz9rzRR
+         XcYV9V1RyauBzKrsDP01z0ZqdGBQQdmSEjNLBRvS0VSnhi8JirCyLusoFYIHdsomSK/F
+         uhIxxYYdBc3rE0Cexm5lFfz+9vJAuctma/xo1Wi1VToUf3Dw9pUBTzAEslmI61tPfsQp
+         VgyZrB+znAxf/Pm350Ln9TO80FUdUJ5cPzZYBBSXfLupGhDHbiGAjLBGgGyLm3oSaYxQ
+         k13g==
+X-Gm-Message-State: AOAM53137NqqPaxe/RaVeYaPj/AzRxGiHonL64IDVpV4So/65FbIsEur
+        dKhO1vp5Dvh4WTlqSPo4mVyXRJi1hy6YBzC2W64=
+X-Google-Smtp-Source: ABdhPJwDGn64u6G2tHjhFF6O2H3gn7ak234X+ePQonkCR6x2UXgNTqMtsWus+0BgT3fuGdV0kdXV+ZhRbVsn6uy91CU=
+X-Received: by 2002:a05:651c:1546:: with SMTP id y6mr6288383ljp.344.1641992108680;
+ Wed, 12 Jan 2022 04:55:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a19:ad4c:0:0:0:0:0 with HTTP; Wed, 12 Jan 2022 04:55:08
+ -0800 (PST)
+Reply-To: lisahugh159@gmail.com
+From:   Ms Lisa Hugh <lisahugh531@gmail.com>
+Date:   Wed, 12 Jan 2022 04:55:08 -0800
+Message-ID: <CAFnQ+S5hjGnqwjekBkBbM48Z72hK8thGu98wdPx9u__EvGUfGQ@mail.gmail.com>
+Subject: REPLY TO HAVE THE FULL DETAILS >>MS LISA HUGH.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Dear Friend,
 
-Return value from mptctl_do_mpt_command() directly instead
-of taking this in another redundant variable.
+I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
----
- drivers/message/fusion/mptctl.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+I need your co-operation for the  transferring of
+($4,500,000,00,U.S.DOLLARS)to your bank account for both of us
+benefit.
 
-diff --git a/drivers/message/fusion/mptctl.c b/drivers/message/fusion/mptctl.c
-index ae433c150b37..dd1170cde5a8 100644
---- a/drivers/message/fusion/mptctl.c
-+++ b/drivers/message/fusion/mptctl.c
-@@ -1696,8 +1696,6 @@ mptctl_mpt_command (MPT_ADAPTER *ioc, unsigned long arg)
- {
- 	struct mpt_ioctl_command __user *uarg = (void __user *) arg;
- 	struct mpt_ioctl_command  karg;
--	int		rc;
--
- 
- 	if (copy_from_user(&karg, uarg, sizeof(struct mpt_ioctl_command))) {
- 		printk(KERN_ERR MYNAM "%s@%d::mptctl_mpt_command - "
-@@ -1706,9 +1704,7 @@ mptctl_mpt_command (MPT_ADAPTER *ioc, unsigned long arg)
- 		return -EFAULT;
- 	}
- 
--	rc = mptctl_do_mpt_command (ioc, karg, &uarg->MF);
--
--	return rc;
-+	return mptctl_do_mpt_command(ioc, karg, &uarg->MF);
- }
- 
- /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
--- 
-2.25.1
+Please send the follow below,
 
+1)AGE....
+2)TELEPHONE NUMBER,,,,,...
+3)COUNTRY.....
+4)OCCUPATION..
+....
+Thanks.
+
+Ms Lisa Hugh
