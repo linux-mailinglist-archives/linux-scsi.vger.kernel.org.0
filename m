@@ -2,75 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA5448C43F
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jan 2022 13:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A853548C566
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jan 2022 15:01:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353297AbiALMzL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Jan 2022 07:55:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353300AbiALMzK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jan 2022 07:55:10 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F94DC061751
-        for <linux-scsi@vger.kernel.org>; Wed, 12 Jan 2022 04:55:10 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id br17so7759205lfb.6
-        for <linux-scsi@vger.kernel.org>; Wed, 12 Jan 2022 04:55:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=CMzdAZWvSREUxL9gyi7ZDNRKXhnPhof45SdOgpKoP4Q=;
-        b=Oz4elds2mD2GPvP1MrH0xFKH9E73s26SM10W/+R93H8TVqTR6IHxfXwToy8fH+9iRx
-         o0bh0/T+RY73OAxXvlxFf9gc5bFJfMCkl2WuCmqqO6z/Mn0zryxxVxNbwYT7PP2RQ//x
-         8y9YtOIlAzli5Ww3TXeuZZa+bma6/AQIHZsnP6VmIE8MX9KFDDGE1Ssl7GFlu8Y2rmD9
-         Tt7MepBmQG0lQ+UprvMNcLOm6jNV7A9cH1Vef+3k/0iBnCCaqmDAald0eRLx89/CP+4u
-         Ho74RDDJ4ug8NPAvaqoippyJyjif3VBvdmnI4TudF7ur6IC1T946ZGy018CMLP75biba
-         ORfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=CMzdAZWvSREUxL9gyi7ZDNRKXhnPhof45SdOgpKoP4Q=;
-        b=78rYMGypFfL3MliqdgyMzM5WJKdJZUnHttgpwujh03sH9nzM94qSSW4ZTURa6WV0h6
-         ZB3JBOwPOp1OzUW+3mvodW8ACdS/+cUJN+YFmk8rmjVDCrslBvKrVz7/9WkLBGz9rzRR
-         XcYV9V1RyauBzKrsDP01z0ZqdGBQQdmSEjNLBRvS0VSnhi8JirCyLusoFYIHdsomSK/F
-         uhIxxYYdBc3rE0Cexm5lFfz+9vJAuctma/xo1Wi1VToUf3Dw9pUBTzAEslmI61tPfsQp
-         VgyZrB+znAxf/Pm350Ln9TO80FUdUJ5cPzZYBBSXfLupGhDHbiGAjLBGgGyLm3oSaYxQ
-         k13g==
-X-Gm-Message-State: AOAM53137NqqPaxe/RaVeYaPj/AzRxGiHonL64IDVpV4So/65FbIsEur
-        dKhO1vp5Dvh4WTlqSPo4mVyXRJi1hy6YBzC2W64=
-X-Google-Smtp-Source: ABdhPJwDGn64u6G2tHjhFF6O2H3gn7ak234X+ePQonkCR6x2UXgNTqMtsWus+0BgT3fuGdV0kdXV+ZhRbVsn6uy91CU=
-X-Received: by 2002:a05:651c:1546:: with SMTP id y6mr6288383ljp.344.1641992108680;
- Wed, 12 Jan 2022 04:55:08 -0800 (PST)
+        id S1353852AbiALOBY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Jan 2022 09:01:24 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:52642 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353851AbiALOBV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jan 2022 09:01:21 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 044F01F3BB;
+        Wed, 12 Jan 2022 14:01:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1641996080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=/i9uVuUZGTOuLja57DPzC6tRbTBoUugZkJuAdC9146Y=;
+        b=uCMwrEWItMtj900Dq2lfFuesUtHG3cG5ChFlb40VYWj4mbNloVFIeiEReoyFCk0i88awcs
+        mSYnn1jMhbYwS0wHBKrG7r9+rpWG4tuwRVwuUIJRa6hOlOK/ioBtGYSbS3AaB+vw019wn8
+        89udbCCgFocg1rn5AWuBQeUZrBoGBCA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A13731402B;
+        Wed, 12 Jan 2022 14:01:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eSQCJS/f3mHAbQAAMHmgww
+        (envelope-from <mwilck@suse.com>); Wed, 12 Jan 2022 14:01:19 +0000
+From:   mwilck@suse.com
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Martin Wilck <mwilck@suse.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com
+Subject: [PATCH] scsi: mpt3sas: avoid watchdog issue while releasing chain buffers
+Date:   Wed, 12 Jan 2022 15:01:13 +0100
+Message-Id: <20220112140113.26560-1-mwilck@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a19:ad4c:0:0:0:0:0 with HTTP; Wed, 12 Jan 2022 04:55:08
- -0800 (PST)
-Reply-To: lisahugh159@gmail.com
-From:   Ms Lisa Hugh <lisahugh531@gmail.com>
-Date:   Wed, 12 Jan 2022 04:55:08 -0800
-Message-ID: <CAFnQ+S5hjGnqwjekBkBbM48Z72hK8thGu98wdPx9u__EvGUfGQ@mail.gmail.com>
-Subject: REPLY TO HAVE THE FULL DETAILS >>MS LISA HUGH.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+From: Martin Wilck <mwilck@suse.com>
 
-I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
+I observe the watchdog timer being triggered while unloading the
+mpt3sas driver:
 
-I need your co-operation for the  transferring of
-($4,500,000,00,U.S.DOLLARS)to your bank account for both of us
-benefit.
+Jan 12 12:25:51 tegmen kernel: mpt2sas_cm0: mpt3sas_base_detach
+Jan 12 12:25:51 tegmen kernel: mpt2sas_cm0: mpt3sas_base_free_resources
+Jan 12 12:25:51 tegmen kernel: mpt2sas_cm0: mpt3sas_base_make_ioc_ready
+Jan 12 12:25:51 tegmen kernel: mpt2sas_cm0: sending message unit reset !!
+Jan 12 12:25:51 tegmen kernel: mpt2sas_cm0: message unit reset: SUCCESS
+Jan 12 12:25:51 tegmen kernel: mpt2sas_cm0: mpt3sas_base_unmap_resources
+Jan 12 12:25:51 tegmen kernel: mpt2sas_cm0: _base_release_memory_pools
+Jan 12 12:25:51 tegmen kernel: mpt2sas_cm0: request_pool(0x00000000144b1531): free
+Jan 12 12:25:51 tegmen kernel: mpt2sas_cm0: sense_pool(0x000000009665c238): free
+Jan 12 12:25:52 tegmen kernel: mpt2sas_cm0: reply_pool(0x000000005c5e0fa5): free
+Jan 12 12:25:52 tegmen kernel: mpt2sas_cm0: reply_free_pool(0x000000006f897f6c): free
+Jan 12 12:25:52 tegmen kernel: mpt2sas_cm0: reply_post_free_pool(0x00000000d1edc4aa): free
+Jan 12 12:25:52 tegmen kernel: mpt2sas_cm0: config_page(0x000000009f651842): free
+Jan 12 12:26:23 tegmen kernel: watchdog: BUG: soft lockup - CPU#27 stuck for 26s! [rmmod:2594]
+Jan 12 12:26:23 tegmen kernel: Hardware name: HP ProLiant DL560 Gen8, BIOS P77 05/24/2019
+Jan 12 12:26:23 tegmen kernel: RIP: 0010:_raw_spin_unlock_irqrestore+0x26/0x2e
+Jan 12 12:26:23 tegmen kernel: Code: 1f 44 00 00 0f 1f 44 00 00 c6 07 00 0f 1f 40 00 f7 c6 00 02 00 00 75 0b 65 ff 0d 05 ce a1 5f 74 0>
+Jan 12 12:26:23 tegmen kernel: RSP: 0018:ffffab1546bdfcc8 EFLAGS: 00000206
+Jan 12 12:26:23 tegmen kernel: RAX: 0000000000000c80 RBX: ffff8d82b0f16700 RCX: 0000000000000d00
+Jan 12 12:26:23 tegmen kernel: RDX: 0000000453642d00 RSI: 0000000000000282 RDI: ffff8d8292075f90
+Jan 12 12:26:23 tegmen kernel: RBP: ffff8d8292075f80 R08: 0000000000000000 R09: 0000000000000001
+Jan 12 12:26:23 tegmen kernel: R10: 0000000000000003 R11: ffff8d8284256a00 R12: ffff8d8293642d00
+Jan 12 12:26:23 tegmen kernel: R13: ffff8d8292075f90 R14: 0000000000000282 R15: 0000000000000d00
+Jan 12 12:26:23 tegmen kernel: FS:  00007fbd96388740(0000) GS:ffff8d8e7f6c0000(0000) knlGS:0000000000000000
+Jan 12 12:26:23 tegmen kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+Jan 12 12:26:23 tegmen kernel: CR2: 000055bbd50f9918 CR3: 0000000c80b0c001 CR4: 00000000000606e0
+Jan 12 12:26:23 tegmen kernel: Call Trace:
+Jan 12 12:26:23 tegmen kernel:  <TASK>
+Jan 12 12:26:23 tegmen kernel:  dma_pool_free+0xc1/0x100
+Jan 12 12:26:23 tegmen kernel:  _base_release_memory_pools+0x343/0x4c0 [mpt3sas 6ff0715b1f6f07c16051cb2772836069b2821b01]
+Jan 12 12:26:23 tegmen kernel:  mpt3sas_base_detach+0x2e/0x130 [mpt3sas 6ff0715b1f6f07c16051cb2772836069b2821b01]
 
-Please send the follow below,
+When the driver is unloaded during system shutdown, this may actually cause a
+kernel panic triggered by the watchdog.
 
-1)AGE....
-2)TELEPHONE NUMBER,,,,,...
-3)COUNTRY.....
-4)OCCUPATION..
-....
-Thanks.
+The problem is that with the hardware in question, the driver allocates a very
+large number of DMA buffers for chain lookup (scsiio_depth = 29868,
+chains_needed_per_io = 15, total number of buffers = 448020). The loop that
+frees all DMA buffers takes ~30s to execute. By adding a cond_resched() in the
+loop, the watchdog is avoided.
 
-Ms Lisa Hugh
+Note: This is the 2nd issue I saw with this controller and the reported can_queue
+value after https://lore.kernel.org/linux-scsi/Ydug9nWg4loEVkJw@T590/T/
+
+Fixes: 93204b782a88 ("scsi: mpt3sas: Lockless access for chain buffers.")
+Signed-off-by: Martin Wilck <mwilck@suse.com>
+CC: Sathya Prakash <sathya.prakash@broadcom.com>
+Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+Cc: MPT-FusionLinux.pdl@broadcom.com
+---
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index 81dab9b82f79..943ea7e0fef0 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -5715,6 +5715,7 @@ _base_release_memory_pools(struct MPT3SAS_ADAPTER *ioc)
+ 						ct->chain_buffer_dma);
+ 			}
+ 			kfree(ioc->chain_lookup[i].chains_per_smid);
++			cond_resched();
+ 		}
+ 		dma_pool_destroy(ioc->chain_dma_pool);
+ 		kfree(ioc->chain_lookup);
+-- 
+2.34.1
+
