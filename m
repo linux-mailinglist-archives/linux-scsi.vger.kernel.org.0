@@ -2,93 +2,43 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C738248FA70
-	for <lists+linux-scsi@lfdr.de>; Sun, 16 Jan 2022 04:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA70048FB6C
+	for <lists+linux-scsi@lfdr.de>; Sun, 16 Jan 2022 08:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbiAPDQh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 15 Jan 2022 22:16:37 -0500
-Received: from out162-62-57-252.mail.qq.com ([162.62.57.252]:35467 "EHLO
-        out162-62-57-252.mail.qq.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232540AbiAPDQg (ORCPT
+        id S234536AbiAPHgo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Sun, 16 Jan 2022 02:36:44 -0500
+Received: from ec2-13-115-114-132.ap-northeast-1.compute.amazonaws.com ([13.115.114.132]:51422
+        "EHLO mail.gunma-suigai-risk.jp" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234478AbiAPHgn (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 15 Jan 2022 22:16:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1642302993;
-        bh=GLJp57dCDK6ibqvasrE495fjl0V1+xRpfDN9ufn3Fqc=;
-        h=From:To:Cc:Subject:Date;
-        b=TVOktvkdnLOgZML5jdTCUZ1HbkVJsuC76+evGRXTiaCYeGwnj1oxQoLkKrFfCI+pR
-         Y//7pBAwB2BirR5t1QLM2kBXwMDJISm1SKSNEXfr0Hznv3nMaMQ83k+w9NssuTyCkG
-         DsQSqs4I1CM8XMFi6Rfp5BIHQmMhHsMk0q9RltaU=
-Received: from localhost.localdomain ([43.227.136.188])
-        by newxmesmtplogicsvrszc7.qq.com (NewEsmtp) with SMTP
-        id 240084EB; Sun, 16 Jan 2022 11:09:00 +0800
-X-QQ-mid: xmsmtpt1642302540tznzxu9hn
-Message-ID: <tencent_4257E15D4A94FF9020DDCC4BB9B21C041408@qq.com>
-X-QQ-XMAILINFO: NNCgUTg3ctKTkPwe6gHqR9GLm5fQLsdrG8odSOjYTBICwJJmFqXTpTHwPkLAV4
-         vpfs209xyPcShTd6BvKbfaxSPGZtELINzzo7hpU87YpCqTI8YxSNkde8nJiiZUlA4ElxGVpLYhAC
-         4Wi/xetfYtR4lvG3IE4iWg0aX0q3RFVscDeL+rcB5bwtg2x+T5GPCjWfG+k2HDR7hkDNT2SrlMQR
-         BTkM+qnC72NgEoXU8OlAiK6nAbdr7/Lgw77kkcrjpevEc/woIXRA4hP3m7ZurIg82zr3QmEGk7FE
-         ijuOJ7zPhwAuwUH1k1p0qCdEG3CxBCgPcPKbDWozUo23JsYCiDe+OuPDktTC+v6yV/4D4mX3QNpu
-         DM70G57b1hOQP3vOMa3UNoAymwOnSBCc7nriaiyhbF+x8ZIY/d19tsJRqEvkxu47yD23v2Ym/2Ma
-         G+4C2wtLBTZixaytc3qYMvRQZNZ1MGRYM2uj8LzqTF0D1qz9hCZERFDIAQ2vrPN3aJcrtlsGkbUI
-         LYDK/CKCfo+6gIdYsgcuVU6mj11QhsyKebfrAvfRAjBK4A5BejADko1w/izF98HEeNcF1S3NhOVX
-         HJOa4LZOF3zGJ7Uakp28BJgxd/+F1fhXmbvNsQ/M/LYinPvhmDS1SATUMD8lF3uxdubg17Na1LD5
-         xM+eP8VlZypLct/yEVcHTCQ43wvbw/Lmvwzd7RDBqvVU1myHBz+OVLA3kqUzlLsE2w5f1clHVKOA
-         KAa6b9IRsqi9UbXrHR5ZFOoDKNvEwrPRRnJg8/RQr5OjrpRjyb+5IP8dx8Fg/NKBhrYcEKmfClUx
-         Ax6HEbcnWTa2OBnbhT6EFyhxNtvH/OKjH2HyA8R82ow07uHLwrOMqCmMTQ35aY9JQNyO2VzqIWsG
-         I5wGABy7dopUuP+cAV5S9cb2IDUH3DuPJH/iPT4wELqboYVxBadKu5cQ6tTJO75cUMzCeKqsUU
-From:   xkernel.wang@foxmail.com
-To:     bvanassche@acm.org, jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH v2] scsi: ufs: ufshcd-pltfrm: check the return value of devm_kstrdup()
-Date:   Sun, 16 Jan 2022 11:06:49 +0800
-X-OQ-MSGID: <20220116030649.2083-1-xkernel.wang@foxmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        Sun, 16 Jan 2022 02:36:43 -0500
+Received: from Unknown (unknown [177.93.72.130])
+        by mail.gunma-suigai-risk.jp (Postfix) with ESMTPA id 2F74C23B303C;
+        Sun, 16 Jan 2022 02:23:20 +0000 (UTC)
+Message-ID: <D0D563303BEFC102DEDB922E2AF054CE@yxhgq>
+Reply-To: "Fredrik Elvebakk" <fcresswell9@gmail.com>
+From:   "Fredrik Elvebakk" <investment@dnb.no>
+Subject: Re:
+Date:   Sat, 15 Jan 2022 18:20:57 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        format=flowed;
+        charset="windows-1251";
+        reply-type=original
+Content-Transfer-Encoding: 8BIT
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Windows Live Mail 16.4.3528.331
+X-MimeOLE: Produced By Microsoft MimeOLE V16.4.3528.331
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+Hello
 
-devm_kstrdup() returns pointer to allocated string on success,
-NULL on failure. So it is better to check the return value of it.
+Kindly get back to me for an important 
+discussion
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
-Changelogs:
-1. Use my official name.
-2. Synchronize with the latest source code(kstrdup -> devm_kstrdup).
-3. Clear up useless code(devm_kfree).
- drivers/scsi/ufs/ufshcd-pltfrm.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-index d35b892..186540a 100644
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -92,6 +92,11 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
- 		clki->min_freq = clkfreq[i];
- 		clki->max_freq = clkfreq[i+1];
- 		clki->name = devm_kstrdup(dev, name, GFP_KERNEL);
-+		if (!clki->name) {
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+
- 		if (!strcmp(name, "ref_clk"))
- 			clki->keep_link_active = true;
- 		dev_dbg(dev, "%s: min %u max %u name %s\n", "freq-table-hz",
-@@ -127,6 +132,8 @@ static int ufshcd_populate_vreg(struct device *dev, const char *name,
- 		return -ENOMEM;
- 
- 	vreg->name = devm_kstrdup(dev, name, GFP_KERNEL);
-+	if (!vreg->name)
-+		return -ENOMEM;
- 
- 	snprintf(prop_name, MAX_PROP_SIZE, "%s-max-microamp", name);
- 	if (of_property_read_u32(np, prop_name, &vreg->max_uA)) {
--- 
+Best regards
+Fredrik Elvebakk
