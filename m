@@ -2,47 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86717490E93
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jan 2022 18:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A026490E4E
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jan 2022 18:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242164AbiAQRLS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jan 2022 12:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243474AbiAQRJu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jan 2022 12:09:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53999C0613AB;
-        Mon, 17 Jan 2022 09:05:44 -0800 (PST)
+        id S242470AbiAQRIb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jan 2022 12:08:31 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52218 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242835AbiAQRGc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jan 2022 12:06:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3586961277;
-        Mon, 17 Jan 2022 17:05:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD1AC36AE3;
-        Mon, 17 Jan 2022 17:05:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54885B81160;
+        Mon, 17 Jan 2022 17:06:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B6AAC36AF2;
+        Mon, 17 Jan 2022 17:06:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642439143;
-        bh=SO3cHiV5I28ThnTZPDoMcc4LPiomENv4E0MOcsvj+qg=;
+        s=k20201202; t=1642439190;
+        bh=dPECgQQvYcxOo2hldr1cbm6OU4xhatPfSlbAjSYEegw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sJcJIIEid/EfbanXpKggk1RfLS6WCNG3QHPJPvu5h0kksFHs7WLXae6R61PdkQvV4
-         h2n9lYsladeMdk8nMjPUcn0ZB/xEdUBUI3bSnwLqdEkpCbzONb1mTbzaKjBTdq+yx3
-         qznytfCbapKid+Td03P4qva5GUSDHjOBubUPenQstXohEwqgU2V4gcUgcB2ciTFFwj
-         fZgTK9VFt0E6zRirWtxuq9jOnEqSXNNLv+ERLJLevgdRzQJ2Ym/zrBiBli/H498ToU
-         mflEL16ilfrpxRA6cMMkYulTJA7XZDsIq+M9JdnitCOVf8YfoiBfUXhVRW1X6OnQTa
-         KC8AEUCoxnT2g==
+        b=sY3pSK2Rpq3fHz5KAYMUOHvj3oDhLyBu9SHaqpp/mlZSXMTmzMTXmuabXoLcoRhBm
+         Y6yYOp+r+/pkaQjtlhg42ty0/QB3T01GopJRMzis8/nlaFpPuS6mW5kqE+EHJI0O0y
+         yUnWraDqjihNmHV4t6KB4p4u3lpMiKLcbBvtWiIDzwC3cOUkfr3/wPBzwWJaGcYbmV
+         llqZkdLHygM+sqnOpET/Co37jf2jB2hEqlvZOUbkKMp2fjBb3oOM+D3andCP0YmvYP
+         JAge4y42VWKaEcODQAxEKsmD0H5aRIS3AyDKP4zco35vMlJH6HkXv2Pgchd8OiUd9+
+         kcAFolaNGEIUg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Christoph Hellwig <hch@lst.de>, Baoquan He <bhe@redhat.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 20/21] scsi: sr: Don't use GFP_DMA
-Date:   Mon, 17 Jan 2022 12:04:52 -0500
-Message-Id: <20220117170454.1472347-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 16/17] scsi: sr: Don't use GFP_DMA
+Date:   Mon, 17 Jan 2022 12:05:50 -0500
+Message-Id: <20220117170551.1472640-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220117170454.1472347-1-sashal@kernel.org>
-References: <20220117170454.1472347-1-sashal@kernel.org>
+In-Reply-To: <20220117170551.1472640-1-sashal@kernel.org>
+References: <20220117170551.1472640-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -70,10 +67,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index 279dea628620d..310da62cda263 100644
+index 84dd776d36c33..fdbd5c691d333 100644
 --- a/drivers/scsi/sr.c
 +++ b/drivers/scsi/sr.c
-@@ -887,7 +887,7 @@ static void get_capabilities(struct scsi_cd *cd)
+@@ -885,7 +885,7 @@ static void get_capabilities(struct scsi_cd *cd)
  
  
  	/* allocate transfer buffer */
