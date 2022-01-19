@@ -2,80 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB7A4933E1
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jan 2022 05:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD994933F5
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jan 2022 05:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351312AbiASECb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jan 2022 23:02:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351133AbiASECa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jan 2022 23:02:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30420C061574
-        for <linux-scsi@vger.kernel.org>; Tue, 18 Jan 2022 20:02:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCBC561581
-        for <linux-scsi@vger.kernel.org>; Wed, 19 Jan 2022 04:02:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B0B1C340E7
-        for <linux-scsi@vger.kernel.org>; Wed, 19 Jan 2022 04:02:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642564949;
-        bh=dESXpt713ZI9UgnaChumQl/wlRiUSIuteObq/9FDMsU=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=S2kyLfnO9VPE2jQEreQweaXTlpXxFbEbIO7N3y+HKRFm04yLPm+4i/ELHq5DBoubj
-         lx/MF/HyIhCsNjjQEQvAm5QqYF0LEovc/nLaf2EyoppvGV5RpKIcMQatGoXxCOEoAG
-         z+rQCIWhLu83Qhn1Y8c3BZxrf2EaZVjroF7mKQUhF7IJvJZAnqW+ID0x8XWdagi3Rw
-         XLKcw531/D1ZyOUBHXdnJ3/Rdl7eiuK+uFPRCF7U6SBR1J5InmFl1v5pbxidEI+oNw
-         7e8GeLsrd6YerVoZP4yQMY4hs1s74XfXMUyZib/+4JrLTRP/yU94EV1C7Z0YVreC3T
-         r1i93l4RPAGEw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 21526CC13B2; Wed, 19 Jan 2022 04:02:29 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-scsi@vger.kernel.org
-Subject: [Bug 215447] sr_mod scsi_mode_sense() failure -> "scsi-1 drive"
-Date:   Wed, 19 Jan 2022 04:02:28 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Product: SCSI Drivers
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: martin.petersen@oracle.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215447-11613-9Pf1xQibLB@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215447-11613@https.bugzilla.kernel.org/>
-References: <bug-215447-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1351520AbiASEH7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jan 2022 23:07:59 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:41312 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351481AbiASEHh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 18 Jan 2022 23:07:37 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20INx5iq012817;
+        Wed, 19 Jan 2022 04:06:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=bGCfCt6vCAi9RXyrfJqfylamdOtbNoBkaaat0IE/Mnw=;
+ b=lJnCGbChCBWiNCJ81/oD1H2AgQZqUQa5nCeYEKv3GgIDNnniyAqdpYR6Amtq5UVy85+S
+ bSf1F6fc782Zb3Hp+C/dNgfwXSix7WwLstwfNiw/46TSej1TijDQQYxcpVwee5QgPbXs
+ 7qRvvqYwp1E1ZgJdwTidvqkrmMa2mDn9jRoaeO55cbOsT0QqUIBAR9kF8p5ggelQCa3G
+ c12qT81DvBC9DrU2d50H1hksN5JKryq7e54/MdXUueGoXHOe0qsRXmf5/407TnolSx/k
+ mH6KSOS3qms9+4ReTKr2kzH+nGTE/NnAmFSQ7vRhRr/fL6whaOCHGPK4AnnXhPGdKH9a 5A== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dnc4q3wwt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 04:06:19 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20J42AEu091613;
+        Wed, 19 Jan 2022 04:06:18 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 3dkqqpnr7j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jan 2022 04:06:18 +0000
+Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20J46HPx110383;
+        Wed, 19 Jan 2022 04:06:17 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by userp3020.oracle.com with ESMTP id 3dkqqpnr68-1;
+        Wed, 19 Jan 2022 04:06:17 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     sreekanth.reddy@broadcom.com, mchehab@kernel.org, mdf@kernel.org,
+        mpe@ellerman.id.au, mporter@kernel.crashing.org, hch@infradead.org,
+        bhelgaas@google.com, airlied@linux.ie,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        benh@kernel.crashing.org, ink@jurassic.park.msu.ru,
+        davem@davemloft.net, akpm@linux-foundation.org, hao.wu@intel.com,
+        vkoul@kernel.org, sathya.prakash@broadcom.com, paulus@samba.org,
+        trix@redhat.com, arnd@arndb.de, yilun.xu@intel.com,
+        suganath-prabu.subramani@broadcom.com, alex.bou9@gmail.com,
+        awalls@md.metrocast.net, rth@twiddle.net, mattst88@gmail.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-alpha@vger.kernel.org, linux-fpga@vger.kernel.org,
+        MPT-FusionLinux.pdl@broadcom.com, linux-media@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-scsi@vger.kernel.org, dmaengine@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 00/16] Remove usage of the deprecated "pci-dma-compat.h" API
+Date:   Tue, 18 Jan 2022 23:06:09 -0500
+Message-Id: <164256513502.31841.5177778968152773786.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
+References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: kv-6XMqJc6gHKjMkAhgWOkvxgVt6FLHh
+X-Proofpoint-ORIG-GUID: kv-6XMqJc6gHKjMkAhgWOkvxgVt6FLHh
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215447
+On Thu, 6 Jan 2022 22:45:13 +0100, Christophe JAILLET wrote:
 
---- Comment #8 from Martin K. Petersen (martin.petersen@oracle.com) ---
-> is it risky to implement the fallback mechanism in both directions? is
-> there a chance of forever retry? (fail 6, fail 10, fail 6, fail 10...)
+> This serie axes all the remaining usages of the deprecated "pci-dma-compat.h"
+> API.
+> 
+> All these patches have already been posted.
+> 
+> They have been generated with a coccinelle script.
+> The tricky parts are patches that use dma_alloc_coherent() because the correct
+> GFP flag has to be used in place of the previous embedded GFP_ATOMIC.
+> 
+> [...]
 
-Just a heads-up that I am still working on a reasonable way to go about
-this. It is not entirely trivial to perform the transition from MODE
-SENSE(6) to (10) given how the SCSI disk driver works.
+Applied to 5.17/scsi-queue, thanks!
 
---=20
-You may reply to this email to add a comment.
+[10/16] scsi: message: fusion: Remove usage of the deprecated "pci-dma-compat.h" API
+        https://git.kernel.org/mkp/scsi/c/b114dda6f2f1
+[11/16] scsi: mptbase: Use dma_alloc_coherent() in 'mpt_alloc_fw_memory()'
+        https://git.kernel.org/mkp/scsi/c/2d50607260a6
+[12/16] scsi: mptbase: Use dma_alloc_coherent()
+        https://git.kernel.org/mkp/scsi/c/5c5e6b6f61e0
+[13/16] scsi: mptsas: Use dma_alloc_coherent() in mptsas_exp_repmanufacture_info()
+        https://git.kernel.org/mkp/scsi/c/7a960b3a5e37
+[14/16] scsi: mptsas: Use dma_alloc_coherent()
+        https://git.kernel.org/mkp/scsi/c/76a334d756c5
+[15/16] scsi: mptctl: Use dma_alloc_coherent()
+        https://git.kernel.org/mkp/scsi/c/706dc3b91989
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+Martin K. Petersen	Oracle Linux Engineering
