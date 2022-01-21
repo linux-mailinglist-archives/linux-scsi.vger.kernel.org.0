@@ -2,129 +2,138 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B3349597A
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Jan 2022 06:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EB6495983
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Jan 2022 06:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348615AbiAUFeS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 21 Jan 2022 00:34:18 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:25466 "EHLO
+        id S1378511AbiAUFju (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 21 Jan 2022 00:39:50 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:31232 "EHLO
         mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348580AbiAUFeS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Jan 2022 00:34:18 -0500
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220121053416epoutp0460e88cc3f48cc908954d762d954c840f~MMknWZe-I0581605816epoutp04d
-        for <linux-scsi@vger.kernel.org>; Fri, 21 Jan 2022 05:34:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220121053416epoutp0460e88cc3f48cc908954d762d954c840f~MMknWZe-I0581605816epoutp04d
+        with ESMTP id S1378474AbiAUFjt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Jan 2022 00:39:49 -0500
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220121053948epoutp04caa9e87379a78fc05dc7dd857a12dd08~MMpcly3251267612676epoutp04J
+        for <linux-scsi@vger.kernel.org>; Fri, 21 Jan 2022 05:39:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220121053948epoutp04caa9e87379a78fc05dc7dd857a12dd08~MMpcly3251267612676epoutp04J
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1642743256;
-        bh=Eeg6HqAJ+oBEx3jyvq2mnIkbW6NlswFD/O5NBc93PCI=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=ii3Aaakdz1GrVRGHGoDQE3dODgMZWVfneHQv2x4IkhlBNu3gfh+rioCt2L3h+D4nO
-         ef1iRyzMLFHh2oZWEhjyYbYEMf27TsUbyJadL7NEXvLZYWrYJUltEnAhR4+zegFNYL
-         anVziRkCmdngUHdYilp8mb6xezGG1XzVdLXDK58c=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20220121053416epcas2p4955e1517248d8493a6562e171bc9d1d2~MMkmwnBK22470724707epcas2p4E;
-        Fri, 21 Jan 2022 05:34:16 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.89]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Jg7NP4RTSz4x9QB; Fri, 21 Jan
-        2022 05:34:13 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BC.3D.51767.2D54AE16; Fri, 21 Jan 2022 14:34:10 +0900 (KST)
+        s=mail20170921; t=1642743588;
+        bh=XKeuICJKfFTAdoh3v+3Qbno4KZ8zHGwFwXcnqw+frjY=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=S6VsddJov8/xpkkV6R2x9GwJhpTjFNBxSZlm/MywkhguISMNg2d5LrbM0NpZaW6Gq
+         ACnXYC9cQ5EhBFEKrxsnLo0yd77il+4PkqvYAY2fzRegzjU/uBBa7eJERibzU96f7j
+         WXitIPCEaZiHBTPmHg/QEimcHDu8JpEVBSrKFA/c=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220121053948epcas2p1696de1dc7c00fb142c30c498877a3d7b~MMpcA0wce0931209312epcas2p1l;
+        Fri, 21 Jan 2022 05:39:48 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.70]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4Jg7Vp0RClz4x9QT; Fri, 21 Jan
+        2022 05:39:46 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B2.9B.10014.A564AE16; Fri, 21 Jan 2022 14:36:26 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220121053410epcas2p1f44c47d71604272824439cdfda4b5038~MMkh1Ek_O0185901859epcas2p1w;
-        Fri, 21 Jan 2022 05:34:10 +0000 (GMT)
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220121053945epcas2p386871d63f104de31d8fd0c123615b876~MMpZmjxQl0637506375epcas2p35;
+        Fri, 21 Jan 2022 05:39:45 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220121053410epsmtrp13bd7707000994a0706a7d904e5089a97~MMkh0Nv7l1944419444epsmtrp1K;
-        Fri, 21 Jan 2022 05:34:10 +0000 (GMT)
-X-AuditID: b6c32a45-447ff7000000ca37-03-61ea45d2da19
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        20220121053945epsmtrp10820fd05f3b1bcb598a7a645d0e1afcb~MMpZjUDXN2230722307epsmtrp1W;
+        Fri, 21 Jan 2022 05:39:45 +0000 (GMT)
+X-AuditID: b6c32a47-489ff7000000271e-16-61ea465a00f0
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        14.8A.08738.1D54AE16; Fri, 21 Jan 2022 14:34:09 +0900 (KST)
-Received: from KORCO011456 (unknown [12.36.185.54]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220121053410epsmtip2075877adbd8fac1c20c9f74d5b7b5ae8~MMkho07iu2969129691epsmtip2F;
-        Fri, 21 Jan 2022 05:34:10 +0000 (GMT)
-From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
-To:     "'Bart Van Assche'" <bvanassche@acm.org>,
-        <linux-scsi@vger.kernel.org>, <sc.suh@samsung.com>,
-        <hy50.seo@samsung.com>, <sh425.lee@samsung.com>,
-        <bhoon95.kim@samsung.com>, <vkumar.1997@samsung.com>
-In-Reply-To: <cbd41ae3-2b31-381a-6f07-58603a318961@acm.org>
-Subject: RE: [PATCH v1] scsi: ufs: use an generic error code in
- ufshcd_set_dev_pwr_mode
-Date:   Fri, 21 Jan 2022 14:34:07 +0900
-Message-ID: <010f01d80e88$83c422c0$8b4c6840$@samsung.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: ko
-Thread-Index: AQFcFW0MD/41ZuhWiwfo7q9IaGBfeAIxMRR3AZIYxmoBoB2QhALuwApJrSJUrSA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplk+LIzCtJLcpLzFFi42LZdljTQveS66tEg2c7zC2+Ln3GajHtw09m
-        i9WLH7BYdF/fwWbRdfcGo8XSf29ZLO7c/8jiwO5x+Yq3R9+WVYwenzfJBTBHZdtkpCampBYp
-        pOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAO1WUihLzCkFCgUkFhcr
-        6dvZFOWXlqQqZOQXl9gqpRak5BSYF+gVJ+YWl+al6+WlllgZGhgYmQIVJmRn9Oy+wFawjrni
-        ysFtzA2MF5i6GDk5JARMJOZv38zaxcjFISSwg1Fi87RPTBDOJ0aJhqZtbCBVQgKfGSV27faE
-        6Zh+aAI7RNEuRonmu2sYIZwXjBJv9q5gB6liE9CWmPZwN9hcEYHTjBK9C6+BJTgFrCV+3j8J
-        NlZYIFLi2ZPXQN0cHCwCqhL/ZwuDhHkFLCXOLXjHBmELSpyc+YQFxGYWkJfY/nYOM8QVChI/
-        ny5jhYiLSMzubAOLiwj4Sew4+o0NZK+EwE92ib8fu1khGlwk5rYcYYOwhSVeHd/CDmFLSbzs
-        b2OHaGhmlNi5u5EZwpnCKLFk/weoKmOJWc/awS5lFtCUWL9LH8SUEFCWOHIL6jg+iY7Df9kh
-        wrwSHW1CEI3KEr8mTWaEsCUlZt68AzXQQ+LUsnvsExgVZyF5cxaSN2cheW0Wwt4FjCyrGMVS
-        C4pz01OLjQoM4bGdnJ+7iRGcLrVcdzBOfvtB7xAjEwfjIUYJDmYlEV6p+meJQrwpiZVVqUX5
-        8UWlOanFhxhNgeE+kVlKNDkfmLDzSuINTSwNTMzMDM2NTA3MlcR5vVI2JAoJpCeWpGanphak
-        FsH0MXFwSjUw2UxyOitgKKqRlvBp8rJJGgvWHk7O25CQosJTavPY6ejz1nWvT3CszCm7Z9Ka
-        skTr7a/lPP57hfKs1m6f62Ek+2Up18XyXVs2HBVXNrrmVdLQPkdBqupK8beUEneZp47fszo7
-        JS/bVifYptmzaTpJ6zP8N06KK7mw8fr1xZ17IyTPze2ZP/GnuL2ju2m7YYZIRN42Vhb570+/
-        1DfrO8uf99gb/3bzjrW3xa9+mNOaceaIoNXGep7QGQKR7rc0m+oWhUgfOZRqffprzPU7zffK
-        1SK/Lps0Taswxf6EkUbHiTvO5wNWzBX/l+/Zo5VgePfYNwYWtvRtTpeOWGYoTK7KOrD4XPzL
-        1gV7N+goHJ6kxFKckWioxVxUnAgAvlOXLCAEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNLMWRmVeSWpSXmKPExsWy7bCSvO5F11eJBo/+qlt8XfqM1WLah5/M
-        FqsXP2Cx6L6+g82i6+4NRoul/96yWNy5/5HFgd3j8hVvj74tqxg9Pm+SC2CO4rJJSc3JLEst
-        0rdL4Mro2X2BrWAdc8WVg9uYGxgvMHUxcnJICJhITD80gb2LkYtDSGAHo8Sxn63MEAlJiRM7
-        nzNC2MIS91uOsILYQgLPGCVmQMTZBLQlpj3czQrSLCJwmVHidP8FqKIlTBIHe3hBbE4Ba4mf
-        90+ygdjCAuESO7+fArI5OFgEVCX+zxYGCfMKWEqcW/CODcIWlDg58wkLiM0MNL/3YSsjhC0v
-        sf3tHKjbFCR+Pl3GChEXkZjd2QYWFxHwk9hx9BvbBEahWUhGzUIyahaSUbOQtC9gZFnFKJla
-        UJybnltsWGCUl1quV5yYW1yal66XnJ+7iREcH1paOxj3rPqgd4iRiYPxEKMEB7OSCK9U/bNE
-        Id6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqemFqQWwWSZODilGpiO6OUkP/7j
-        PzdZQOGk4DtOluOfc16t7fF7P2v/XOFNbRcetnSw6ifkuzO8iptiEmZ6uWrWYuNLeyvm2Rnf
-        uRvOtdc0YaW41cSNOsUi3T/39hxU39w69/T5QEO3R1UHHmt9+aqzvGh6n9b5eJOfWc7pd+bP
-        cDrN5p+YO1G+Y+n1+av0JzwWOC52UUo71PnMJdFl1xl+tofu4FqcNe3bjZDcONW2M0cadfkF
-        s0TkWTas9zlVs/xT7bFVbqEyx9asLqpX05D4sozB/nDmXtuV7+7PvzLP9dvhniMud2x5n6Xc
-        Y4xTluZcrv0jOkF/aVib0fx7PLv/iJw23ei78oPVlcU7mrY+bNFcX9L/rT281/CYEktxRqKh
-        FnNRcSIAcyRkvv4CAAA=
-X-CMS-MailID: 20220121053410epcas2p1f44c47d71604272824439cdfda4b5038
+        CC.0B.08738.0274AE16; Fri, 21 Jan 2022 14:39:44 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220121053945epsmtip19972b73c2a30f16fa624a27318692e05~MMpZTWAFi2315723157epsmtip1V;
+        Fri, 21 Jan 2022 05:39:45 +0000 (GMT)
+From:   Kiwoong Kim <kwmad.kim@samsung.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        cang@codeaurora.org, adrian.hunter@intel.com, sc.suh@samsung.com,
+        hy50.seo@samsung.com, sh425.lee@samsung.com,
+        bhoon95.kim@samsung.com, vkumar.1997@samsung.com
+Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
+Subject: [PATCH v2] scsi: ufs: see link lost as fatal
+Date:   Fri, 21 Jan 2022 14:37:55 +0900
+Message-Id: <1642743475-54275-1-git-send-email-kwmad.kim@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplk+LIzCtJLcpLzFFi42LZdljTVDfK7VWiwcvDzBYnn6xhs3gwbxub
+        xcufV9ksDj7sZLH4uvQZq8Wn9ctYLVYvfsBisejGNiaLm1uOslhc3jWHzaL7+g42i+XH/zFZ
+        dN29wWix9N9bFos79z+yOPB7XO7rZfJYvOclk8eERQcYPb6v72Dz+Pj0FotH35ZVjB6fN8l5
+        tB/oZgrgiMq2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXL
+        zAG6XkmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYF6gV5yYW1yal66Xl1piZWhg
+        YGQKVJiQnfH30izmgkaOijnzPzE1MB5k62Lk5JAQMJHYvnYjSxcjF4eQwA5GiRW/fkM5nxgl
+        bu55DeV8ZpTY+O8vC0zLqfmP2SESuxglPq2bwAzh/GCUOD7jPNhgNgFNiac3pzKB2CIC15kk
+        5m3PALGZBdQldk04ARTn4BAWMJU4MqMcJMwioCqx/sJzRpAwr4CrRMNHSYhdchI3z3WCjZcQ
+        aOSQaDq1FuoIF4mNiz+wQ9jCEq+Ob4GypSRe9rexQzQ0M0rs3N0I1T2FUWLJfpgOY4lZz9rB
+        tjEDHbp+lz6IKSGgLHHkFgvEmXwSHYf/skOEeSU62oQgGpUlfk2azAhhS0rMvHkHqsRD4vZB
+        e5CwkECsxJWbi9gnMMrOQhi/gJFxFaNYakFxbnpqsVGBMTyOkvNzNzGC06OW+w7GGW8/6B1i
+        ZOJgPMQowcGsJMIrVf8sUYg3JbGyKrUoP76oNCe1+BCjKTC4JjJLiSbnAxN0Xkm8oYmlgYmZ
+        maG5kamBuZI4r1fKhkQhgfTEktTs1NSC1CKYPiYOTqkGpiDNw9s+t3ddnLTLsS370gvmFXtW
+        nWSUbDj/I/ltwKHZ8RdsNP9NiikWsVFk7jUxnq7+f0pS94EvS0W63pk2J9oGb9AOTd16K2x2
+        muKeT6srFn4XZ/VyYzjao/umssK79EnQIWfLL3eeXvlWvyIgQmmCz8p7Bvdiw1w5FxteiWtn
+        6OzxNBdR4ci6rC9ve8RC+4Xq8TbWA+rG7O2r/jA2HCy/YWd8NVxINuC3byy35/QpX9eElN/+
+        X6HI9Kv0pvcz/Y7JmfODJ97l3nrH133XNnWnKff7Ii4rvov8YqDPWPtNPosjam/zLpFX7vPr
+        9faENz2pF1+xWIQn6Kji8q2h6m5byrb46fnlnZywadd6JZbijERDLeai4kQAkiDoERgEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKLMWRmVeSWpSXmKPExsWy7bCSnK6C+6tEgwvtihYnn6xhs3gwbxub
+        xcufV9ksDj7sZLH4uvQZq8Wn9ctYLVYvfsBisejGNiaLm1uOslhc3jWHzaL7+g42i+XH/zFZ
+        dN29wWix9N9bFos79z+yOPB7XO7rZfJYvOclk8eERQcYPb6v72Dz+Pj0FotH35ZVjB6fN8l5
+        tB/oZgrgiOKySUnNySxLLdK3S+DK+HtpFnNBI0fFnPmfmBoYD7J1MXJySAiYSJya/5i9i5GL
+        Q0hgB6PE38v3mSESkhIndj5nhLCFJe63HGGFKPrGKDHn/zJWkASbgKbE05tTmUASIgIvmSRe
+        zFkDNpZZQF1i14QTQAkODmEBU4kjM8pBwiwCqhLrL4AM5eDgFXCVaPgoCTFfTuLmuU7mCYw8
+        CxgZVjFKphYU56bnFhsWGOWllusVJ+YWl+al6yXn525iBIesltYOxj2rPugdYmTiYDzEKMHB
+        rCTCK1X/LFGINyWxsiq1KD++qDQntfgQozQHi5I474Wuk/FCAumJJanZqakFqUUwWSYOTqkG
+        JtP7iza3btt5TnBj7NX2dpabtiJ5NnwmyWU2tbNb+hPWsBybe6V2C2dUkvacXVt7fXO/bezM
+        vWWbevP3hqOb5GMDzZ6bx205H1p05kvErrx3fhzrQ9cKiOcIm0qcdJ1xt69a4PC/EzKGk5vv
+        ss9u/tb96t+K+du5PHfLC3nXV9k8k0tNlep+IKPprB4RvmWB7YK8g8aMTPkFpvsWsgrIeucv
+        fHerUzBWf39J00vxOP0FajnBb/0Cuz12aj8oSZpvw3zjB8Muj9n1Zkqb1QOuKxVY+DHPnBjn
+        HLL/+VuV1Ylb+mOm/uKfeTr1lVD4Ho8TVmcffLl7fPqUdybsXGe5ZjvH7T6rvMvk4a+3sbMm
+        K7EUZyQaajEXFScCAERyQnvIAgAA
+X-CMS-MailID: 20220121053945epcas2p386871d63f104de31d8fd0c123615b876
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220117103107epcas2p3d7223ff63f6cb575316695cc8fb155a4
-References: <CGME20220117103107epcas2p3d7223ff63f6cb575316695cc8fb155a4@epcas2p3.samsung.com>
-        <1642415361-140388-1-git-send-email-kwmad.kim@samsung.com>
-        <3bb0f5ad-2cea-2509-a9e1-d8ed159bd875@acm.org>
-        <000001d80da8$9e987cd0$dbc97670$@samsung.com>
-        <cbd41ae3-2b31-381a-6f07-58603a318961@acm.org>
+X-CMS-RootMailID: 20220121053945epcas2p386871d63f104de31d8fd0c123615b876
+References: <CGME20220121053945epcas2p386871d63f104de31d8fd0c123615b876@epcas2p3.samsung.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> I think that scsi_execute() can return a negative value. From
-> __scsi_execute():
-> 
-> 	req = scsi_alloc_request(sdev->request_queue,
-> 			data_direction == DMA_TO_DEVICE ?
-> 			REQ_OP_DRV_OUT : REQ_OP_DRV_IN,
-> 			rq_flags & RQF_PM ? BLK_MQ_REQ_PM : 0);
-> 	if (IS_ERR(req))
-> 		return PTR_ERR(req);
-> 
-> As you probably know PTR_ERR() returns a negative error code if IS_ERR()
-> returns true.
+v1 -> v2: modify comment
 
-Right, Thanks.
+This event is raised when link is lost as specified
+in UFSHCI spec and that means communication is
+not possible. Thus initializing UFS interface needs to be done.
 
+This patch is to make UFS driver see Link Lost as fatal by using
+INT_FATAL_ERRORS. This lead to host reset whenever a link lost
+interrupt occurs.
+
+Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+---
+ drivers/scsi/ufs/ufshci.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/ufs/ufshci.h b/drivers/scsi/ufs/ufshci.h
+index 6a295c8..a7ff0e5 100644
+--- a/drivers/scsi/ufs/ufshci.h
++++ b/drivers/scsi/ufs/ufshci.h
+@@ -142,7 +142,8 @@ static inline u32 ufshci_version(u32 major, u32 minor)
+ #define INT_FATAL_ERRORS	(DEVICE_FATAL_ERROR |\
+ 				CONTROLLER_FATAL_ERROR |\
+ 				SYSTEM_BUS_FATAL_ERROR |\
+-				CRYPTO_ENGINE_FATAL_ERROR)
++				CRYPTO_ENGINE_FATAL_ERROR |\
++				UIC_LINK_LOST)
+ 
+ /* HCS - Host Controller Status 30h */
+ #define DEVICE_PRESENT				0x1
+-- 
+2.7.4
 
