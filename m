@@ -2,99 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F129E497633
-	for <lists+linux-scsi@lfdr.de>; Sun, 23 Jan 2022 23:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CAE349765B
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jan 2022 00:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240355AbiAWW53 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 23 Jan 2022 17:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
+        id S240470AbiAWXeV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 23 Jan 2022 18:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiAWW52 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 23 Jan 2022 17:57:28 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12863C06173B;
-        Sun, 23 Jan 2022 14:57:28 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id p37so14132381pfh.4;
-        Sun, 23 Jan 2022 14:57:28 -0800 (PST)
+        with ESMTP id S240468AbiAWXeU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 23 Jan 2022 18:34:20 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1FFC06173B
+        for <linux-scsi@vger.kernel.org>; Sun, 23 Jan 2022 15:34:20 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id h29so7763831wrb.5
+        for <linux-scsi@vger.kernel.org>; Sun, 23 Jan 2022 15:34:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9YpaDt/y2c3/dUeLfnG7ff++Dq8k/QrMoesYhtwfYz8=;
-        b=Jfeb4woSg0fNp15ri+VhTahx4p/I7+BmYJyNeRGYFOZj95O0pE1gVvRWV37IdkkIYe
-         jmuMkmRhYFCOD3Glzleex6r/2wUIuW5kSMZy+6QXteITDA6IRhwxpigS+GhREnjisD8l
-         RcQJGjjyoIfneXHi3ZrZ0kEiCJjhV3og9L6Bw9O+n+iXbrMDPqdSiYE2tY7Isyot1yd0
-         mfPAgcYMX9x+waOCI+La4lqNCU3n5Bm1afnSTFeZBh/d9Vz1LPG1D5SFgSxgpC/TChYJ
-         x2raLsi0iOZyIuIHHjO/PTzSA2+5Np6tbET2kAWJLAqaxOzPtuVBJK7PU7UnD6ZG8xnJ
-         jmvg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gFsgz4rTRFCYsWRHFdPMFpL1I+YddbFJykhKAoJDm/0=;
+        b=Wbyk2b+qHR8q4p65zNRfZ3EDX9da2RVOve09gQJ1zJdoW+DcHjJ2demzoe0r4zWyfn
+         G/uQJVYoLMe+z5u1ZFVhvApc7uMLWj36GSgj6Y1daNUBRkwdxr/BclhPbojJUH1Pkswr
+         zI7LZ27cnTAlfgZOS7kjvcbLhAbCKwCBC406NDS63Ls7UYSP+qN0Q0AIZ+jyEGLvDfGK
+         jzyyV5VyU7MaXo9w4QYNftPQapfemDXKUNpZwbUsiwKXw+KKw4yC2aw4cD1/mrvdAoFF
+         fyV/G8Jxwtvb52K2d4t+8E8Hg2eof2O0OyydGnsW3Dg7Wj2UClmlkQqKhcUxowehecEh
+         Jp7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9YpaDt/y2c3/dUeLfnG7ff++Dq8k/QrMoesYhtwfYz8=;
-        b=fLWvkuLGOyFHfPEG9uvQ7my4B25EWcT39KljBc5aJDvxj9WXvOuOFAe+fuUCXmfQgq
-         xSsFHOZUTUn3HxYHEaejmXh5DZBMZZCMuF22HXpiJJ8V2su/HX9/gRoTDaV3k3TEStCc
-         YsM5whmLfVY2AY+F1gYPSYRtwq5wdDe8yRXGQokBzBSufNvcf/T+0vdxy7Kl8aBm7xd4
-         7eyf+/+EhIKeTIYhbhLcgvEW2+74JSO8T0QCUJ0tY4yBAmI4o2MPolB2Uy3MjXPIrsWD
-         WyuGKEX8WJ3451W3hgPswbrGoMYBEOHKJrqlrg9kIoY3La5DC/CQvc11uIPLPhlFxSB8
-         GumA==
-X-Gm-Message-State: AOAM530k5k3GAZ+EAxz851o+9/8TgfJqvlrugtgC35DQ6oASaBFno19d
-        FwPmBl+gb6OtoOzi+cOCMw0=
-X-Google-Smtp-Source: ABdhPJxiWeo8n8WyuKjPy1UxzAv9V5Jbbx4IUyYLBfi0hHSzMZiEVOvgyaOaqn4JQPTyvpAi/jKoXA==
-X-Received: by 2002:a63:541a:: with SMTP id i26mr330814pgb.322.1642978647379;
-        Sun, 23 Jan 2022 14:57:27 -0800 (PST)
-Received: from tong-desktop.local (99-105-211-126.lightspeed.sntcca.sbcglobal.net. [99.105.211.126])
-        by smtp.googlemail.com with ESMTPSA id w1sm1826881pfg.162.2022.01.23.14.57.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 14:57:26 -0800 (PST)
-From:   Tong Zhang <ztong0001@gmail.com>
-To:     Hannes Reinecke <hare@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tong Zhang <ztong0001@gmail.com>
-Subject: [PATCH v1] scsi: myrs: fix crash on error case
-Date:   Sun, 23 Jan 2022 14:57:17 -0800
-Message-Id: <20220123225717.1069538-1-ztong0001@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gFsgz4rTRFCYsWRHFdPMFpL1I+YddbFJykhKAoJDm/0=;
+        b=U0B8kq2Q5kF1C8QKSe39O+NwxVAIrwrMPXvebsuld6S2h6ipNgQ8RuEz0aO+nnFvsV
+         DpE6pgsUvoLI5Iv0p1IvWHJAMUvp8+OdFgMEScdiQL37FWUoiWivJw59HmKBCv0tqrgM
+         fRHakjTPDQVcO8h26yoIUdb7VR4DwZHGHp+1NNRTkR30tk0CiWFK53i+OQxPP7UmbHVx
+         hiP7PTICT5E1xnref+q27A/+6G8HRTuKgRsUcwqa2L4eQAX5vSsBUk9D6QBb0I8XOycp
+         F4k4ctlRjv3bH3Fnu5lpM1rqUUT9HfiL+aaHrDhSduHlPbwJL/HWrHGr63K2hxQOM2k4
+         JoVg==
+X-Gm-Message-State: AOAM531f5KJf02WUv7FgZeCvPbo3klcqSaBd/R+fPz+72veLEUMSZI//
+        JDZx5r/l/QAjyy9gvdLj+TlImQJlp4HOWN+F0PM=
+X-Google-Smtp-Source: ABdhPJwN32+HgWZG86gj6DfRl05IWYvgEfH66Bx4oNHvoLqFk62hl4PUW89NVCRpY3XB4wDbt++7Oi8+ALyt9nV+/Fk=
+X-Received: by 2002:a05:6000:186b:: with SMTP id d11mr11889208wri.461.1642980858695;
+ Sun, 23 Jan 2022 15:34:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a1c:7c12:0:0:0:0:0 with HTTP; Sun, 23 Jan 2022 15:34:18
+ -0800 (PST)
+Reply-To: freewilldonation2021@gmail.com
+From:   BNP PARIBAS BANK <canadachurch58@gmail.com>
+Date:   Sun, 23 Jan 2022 15:34:18 -0800
+Message-ID: <CA+T6JEgwa6OeuEQ9dTovHRFk2dTdVisu-5aMSU9wj61v6vs=VA@mail.gmail.com>
+Subject: Freewill Donation
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In myrs_detect(), cs->disable_intr is NULL when privdata->hw_init() fail
-with non-zero. In this case, myrs_cleanup(cs) will call a NULL ptr and
-crash kernel.
-
-[    1.105606] myrs 0000:00:03.0: Unknown Initialization Error 5A
-[    1.105872] myrs 0000:00:03.0: Failed to initialize Controller
-[    1.106082] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[    1.110774] Call Trace:
-[    1.110950]  myrs_cleanup+0xe4/0x150 [myrs]
-[    1.111135]  myrs_probe.cold+0x91/0x56a [myrs]
-[    1.111302]  ? DAC960_GEM_intr_handler+0x1f0/0x1f0 [myrs]
-[    1.111500]  local_pci_probe+0x48/0x90
-
-Signed-off-by: Tong Zhang <ztong0001@gmail.com>
----
- drivers/scsi/myrs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/myrs.c b/drivers/scsi/myrs.c
-index 253ceca54a84..7eb8c39da366 100644
---- a/drivers/scsi/myrs.c
-+++ b/drivers/scsi/myrs.c
-@@ -2267,7 +2267,8 @@ static void myrs_cleanup(struct myrs_hba *cs)
- 	myrs_unmap(cs);
- 
- 	if (cs->mmio_base) {
--		cs->disable_intr(cs);
-+		if (cs->disable_intr)
-+			cs->disable_intr(cs);
- 		iounmap(cs->mmio_base);
- 		cs->mmio_base = NULL;
- 	}
 -- 
-2.25.1
+Hello Dear,
 
+Freewill Donation of $3.5 Million for charitable projects and help
+to humanity, e-mail me back for details now.
+below to you;
+
+Full Name:
+Home Address:
+Country AND City:
+Zip/postal code
+Occupation:
+Cell Phone Numbers
+Age AND Sex:
+A Scan Copy of your Identity:
+
+If you are interested contact me through this e-mail
+(freewilldonation2021@gmail.com ) to enable me
+furnish you with more details.
+
+Sincerely,
