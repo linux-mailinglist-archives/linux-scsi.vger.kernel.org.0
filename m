@@ -2,174 +2,147 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B460E49AC5A
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jan 2022 07:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2240249ABBE
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jan 2022 06:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244950AbiAYGZJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jan 2022 01:25:09 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:64407 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245601AbiAYGWg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jan 2022 01:22:36 -0500
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220125062202epoutp020fa5d979add02ffcdd0c5ddf68290833~NbzdgdcTh2899928999epoutp02a
-        for <linux-scsi@vger.kernel.org>; Tue, 25 Jan 2022 06:22:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220125062202epoutp020fa5d979add02ffcdd0c5ddf68290833~NbzdgdcTh2899928999epoutp02a
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1643091722;
-        bh=VrIee84DnP2DnNrkSz8/gaQX5VYVPQUHCj0/qVe8RV0=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=QSax2+K/kL/GVKUtYaXpOIehEOuTsjjDYLEzbLwNZYGKUOTd/KgNLd71Mra0B423o
-         XDgqbJdqi1E0Q3t7XFMKD72DbY5+nj8KpL01pPmM5rKVwL2z/WHHjIGBBv7zBFtchY
-         BwZlxdRrDW3Jl+Oy2KEjKS5bXXp5URZjRRYsmMoQ=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220125062201epcas2p2b095d12b61be0f2747d7fb854e817027~NbzchzFEU0193201932epcas2p2U;
-        Tue, 25 Jan 2022 06:22:01 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.89]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4JjcFd6qJ2z4x9Q1; Tue, 25 Jan
-        2022 06:21:57 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8D.9D.12141.4079FE16; Tue, 25 Jan 2022 15:21:56 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220125062155epcas2p15da28303164091b1bf5a00dcf99fe59b~NbzXC11Fw0864008640epcas2p15;
-        Tue, 25 Jan 2022 06:21:55 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220125062155epsmtrp128439ceb2d5120a899276c7e10c1b5a5~NbzXB6ryj1143011430epsmtrp1C;
-        Tue, 25 Jan 2022 06:21:55 +0000 (GMT)
-X-AuditID: b6c32a48-d73ff70000002f6d-8e-61ef9704d4c9
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D1.8C.29871.3079FE16; Tue, 25 Jan 2022 15:21:55 +0900 (KST)
-Received: from rack03.dsn.sec.samsung.com (unknown [12.36.155.109]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220125062155epsmtip2469de7d692f2cbb1364237bfe0143276~NbzWww-id2384623846epsmtip2N;
-        Tue, 25 Jan 2022 06:21:55 +0000 (GMT)
-From:   SEO HOYOUNG <hy50.seo@samsung.com>
-To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
-        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
-Cc:     SEO HOYOUNG <hy50.seo@samsung.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] scsi: ufs: disable auto hibern8 while entering suspend
-Date:   Tue, 25 Jan 2022 03:06:37 +0900
-Message-Id: <20220124180637.160524-1-hy50.seo@samsung.com>
-X-Mailer: git-send-email 2.26.0
+        id S1379235AbiAYFVN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jan 2022 00:21:13 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:11064 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237217AbiAYFA3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 25 Jan 2022 00:00:29 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20P2Bg3p001281;
+        Tue, 25 Jan 2022 05:00:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=zjSIx4e1CuuzjJBSVb6vMQWtjTLS/gn3NPKKt4HUpEY=;
+ b=S2EmWIzXpYyd/tqy/PMteRCX9VWGMHbSY8SmvGBHIlWSy7XJC0tPdhQvwPmzKdlnT8JA
+ hrvFQWNlIgjMf4ES7rlKiK0IDiKzhJrZ84uYCPQI3TptaISchaIu6IcUs7bulUAdcDm2
+ f1vtjtjKGNRmoiI9zogvY0utZE2YPcWGe1TIHdZqFOqjne5CWxCls09AWZPPU2a9ezyz
+ U2wjhFCVoJNaRQph6y210uxMM1HUGwatiIn6XoAzkx5w21xpaNAobo8yANsFWwb4SSA6
+ gIQaLyuCvjqXLkE/nsZQB7wCDTz0S5jmxk47p3/JYmnHaKiElzxKdCnEvcvkla8cxyIK VQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dsy9s1s9q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 05:00:12 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20P4ujeE160340;
+        Tue, 25 Jan 2022 05:00:11 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
+        by aserp3020.oracle.com with ESMTP id 3dr9r5at3t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 05:00:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OttK9al7iXixI7SeAuDj/BS2MymdyutL8hSiuuXNGRcehtvCGv900PexnbpfEpMzEPgPaB/g+bMVLaRF1sLIP/uNjb+27FREI+oArGaLBvRNv1t79TLQiMzPVyO//vf6Ja2UUVw1jqJGGmA9GxELxai4s4Xhho3ZZeGDmLoXd4UwuRC98p1zHM5trKMeSQI0puE90jq7uGybE27doN9O2jHvbj3mqs4dfPBOCTzGPkzmjDNiCq/4Ofc1vYU/vzUVuPZT+BViXQQM0fwnRHNIF3M4AvHtG6aF/p00x/L3BZwlJWRMFNBGix7WgH4qT3JQjrh/yfqMaPiWrLKlE3khOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zjSIx4e1CuuzjJBSVb6vMQWtjTLS/gn3NPKKt4HUpEY=;
+ b=JsYCbm63wAUpQAZNXcIL4KmIpXD30X452/tNv4yRd5NYz//qAe8JMo+YOK3ltom19/oJLrP+TGr7ZiqBP2xy8I6IRsvb9Y/u26JKl+hyVxy7dB241W2KFfXWijmx+K1pPQS4E2ZIDD0KKIVtT+XC+sciEsHTZRSBtVqWNT0KU4DjiuH1aTmem8UOxSPAp88Ze4+MIQwQw7Hs1KyrHje2a/zoXR7HCyyaqCb/PbkEGJ9X8r1NEg0NklRIpn4nTwk7/i+mUikPIBMXmrNF3aiMrEn6hGJ60gvWMCogLfcpaNbu4frLy3ZnZaCQdpeZp9z6YglXEbCzqhBgdJchG4sojA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zjSIx4e1CuuzjJBSVb6vMQWtjTLS/gn3NPKKt4HUpEY=;
+ b=M1+OF7MmNBQ32GGDy1Daw+NqdxkdqsAdgjXJr0/2jGEh43nQqwp2QUUC3WyppJog8xrbimxxKiJ92jHM4tSX3GCNwPplMIzOOKRy2Doq8V0z+XJM4gKZF/6rnKvhZzFYTLmBoPAhfUkcnsPAE/HpHgkTckPxKQuksknVhVWtvTo=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by CY4PR10MB1767.namprd10.prod.outlook.com (2603:10b6:910:a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.12; Tue, 25 Jan
+ 2022 05:00:09 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::1caa:b242:d255:65f3]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::1caa:b242:d255:65f3%6]) with mapi id 15.20.4909.017; Tue, 25 Jan 2022
+ 05:00:09 +0000
+To:     Nilesh Javali <njavali@marvell.com>
+Cc:     <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>
+Subject: Re: [PATCH v2 00/17] qla2xxx misc bug fixes and features
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1a6fkh0kz.fsf@ca-mkp.ca.oracle.com>
+References: <20220110050218.3958-1-njavali@marvell.com>
+Date:   Tue, 25 Jan 2022 00:00:07 -0500
+In-Reply-To: <20220110050218.3958-1-njavali@marvell.com> (Nilesh Javali's
+        message of "Sun, 9 Jan 2022 21:02:01 -0800")
+Content-Type: text/plain
+X-ClientProxiedBy: SA0PR11CA0101.namprd11.prod.outlook.com
+ (2603:10b6:806:d1::16) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmhS7L9PeJBtcfSVk8mLeNzWJv2wl2
-        i5c/r7JZHHzYyWLxdekzVotpH34yW3xav4zVYvXiBywWi25sY7K4ueUoi8XlXXPYLLqv72Cz
-        eNX8iM1i+fF/TA58HpeveHtc7utl8li85yWTx4RFBxg9vq/vYPP4+PQWi0ffllWMHp83yXm0
-        H+hmCuCMyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvM
-        ATpeSaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgXqBXnJhbXJqXrpeXWmJlaGBg
-        ZApUmJCd0XzApmC+cMXRq8/YGhjXCnQxcnJICJhI9K/tZ+9i5OIQEtjBKHG8by8rhPOJUeL0
-        rv9QmW+MEr+aTzJ2MXKAtfxYIQLSLSSwl1Fi9xMtiJofjBL3lh9gBEmwCWhIrDl2iAkkISKw
-        gkmiZ9MnJpAEs4CnRMu56cwgtrCAl8TXvx9ZQWwWAVWJs5//gtXwClhJrFm9mQniPnmJRQ2/
-        oeKCEidnPmGBmCMv0bx1NjPIAgmBuRwSH+feZIdocJE4MHk9K4QtLPHq+BaouJTEy/42doiG
-        ZkaJ9TPnMEE4Uxgl5j57CtVhLDHrWTvYn8wCmhLrd+lDvKwsceQW1GI+iY7Df9khwrwSHW1C
-        EI1KEmfm3oYKS0gcnJ0DEfaQWNewiwUSWLESVz7sZ53AKD8LyTezkHwzC2HtAkbmVYxiqQXF
-        uempxUYFJvA4Tc7P3cQITr5aHjsYZ7/9oHeIkYmD8RCjBAezkgjvf+/3iUK8KYmVValF+fFF
-        pTmpxYcYTYHhO5FZSjQ5H5j+80riDU0sDUzMzAzNjUwNzJXEeb1SNiQKCaQnlqRmp6YWpBbB
-        9DFxcEo1MHEd/NBqZxZj91N8m0nNH5aA6ENFOktsHsyZcI4/yNZlV+4aGf661mjdf2IKm/6/
-        XJnYzSr++nXvywtffbY/Y8mO7fy7Z/7bGbxKxwX/7OXS6L2h8bayVdrzfkSDjrd1VL8m26x3
-        IjP/ZL0Q1Ak3bS+Q89iYz7TyVd2yxrQbptHqxRwflvxzLvyatKLmYfazL5w/NSYmuovWsD37
-        rnBY2zXWfd/DxphnUxYd7PNbPvHIbI+/B5UsWP3rkp/PO8MivPamhtICg09rJZKuPnASnrO3
-        71qF7RG11q7+3vUFpUerTs0xL0mWkQvJWZbm9b53yva5fCkTGNc/WyhQ+G7n/2MPDjXn2Bus
-        9xFffPXzViWW4oxEQy3mouJEABhizSpHBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCLMWRmVeSWpSXmKPExsWy7bCSvC7z9PeJBlNOKFs8mLeNzWJv2wl2
-        i5c/r7JZHHzYyWLxdekzVotpH34yW3xav4zVYvXiBywWi25sY7K4ueUoi8XlXXPYLLqv72Cz
-        eNX8iM1i+fF/TA58HpeveHtc7utl8li85yWTx4RFBxg9vq/vYPP4+PQWi0ffllWMHp83yXm0
-        H+hmCuCM4rJJSc3JLEst0rdL4MpoPmBTMF+44ujVZ2wNjGsFuhg5OCQETCR+rBDpYuTiEBLY
-        zShx7N0tti5GTqC4hMT/xU1MELawxP2WI6wQRd8YJQ5+ucoMkmAT0JBYc+wQE0hCRGAbk8Td
-        DyfBupkFvCUuHLvMDmILC3hJfP37kRXEZhFQlTj7+S/YVF4BK4k1qzdDbZCXWNTwGyouKHFy
-        5hMWiDnyEs1bZzNPYOSbhSQ1C0lqASPTKkbJ1ILi3PTcYsMCw7zUcr3ixNzi0rx0veT83E2M
-        4IjQ0tzBuH3VB71DjEwcjIcYJTiYlUR4/3u/TxTiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6Hr
-        ZLyQQHpiSWp2ampBahFMlomDU6qBSfTZC6n+go8zujTObDzs/+OKgMPWrboJb3Qibj2OypB6
-        e/6WBYPm4kuPpv258t2DwYbvkmnb+UuFR6Z/iZl9LeJ3yT8+Ca7z8+xdmrqzZeNMapobY6zu
-        Gb/h/P/umZOp08Y3y7NdnzE5G4kVa0+UeHd4S4T5c9+wG3Y3OK7sZP967lO+iNYxh/BpH64w
-        nWPRP5Nzbl/d3F4zz/SuyxHrIj3yhN5b6z0SPTiLWYj/X612tcnb7EuTxdoCF2xnXzs3V6H2
-        XvDMecdurexZ5WOm1/l4ptT9kOgZdrZ8PPJJm8PtO9sc7OO05gTvuN6+JkfuqTqL4EIey5+N
-        5vd/F/I9KDFaL9RyznjWrLVy0ax3lFiKMxINtZiLihMB0tOcM/cCAAA=
-X-CMS-MailID: 20220125062155epcas2p15da28303164091b1bf5a00dcf99fe59b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220125062155epcas2p15da28303164091b1bf5a00dcf99fe59b
-References: <CGME20220125062155epcas2p15da28303164091b1bf5a00dcf99fe59b@epcas2p1.samsung.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9dac5a7f-69d0-4d90-21ff-08d9dfbf8f7e
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1767:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR10MB1767F7195AB0397D9A125C0B8E5F9@CY4PR10MB1767.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5YTNtJJTmtTIpGu7ceKZiGHpNSHPW8rFDEfClDIf+DjpX9kgRRWkjsxp6K/pP3KubOPZpJpTpc52rKUkwW4mXW8xbtIL/5X+OWEbDBLh4kRiUQOhI0Rq/SvVdZjEoRj9mEZTPxgD/upyvDXhnK4/5uVxcBrJePybZeKAopSy5SxJK/uBMH6UfjEbIBxg7e13LXwyY1lQY06Su2OF38p5HzXtg2Z+e/OGtTy55MzJ8vzwXLOnlIeCb+2K/nXCmQs0ahzhJUdPyRPmWixnnbMeyihKy/9zi0mxs2NbZhPODxcb5wA6aDdWitCUz6qqrN7Bf4/3YHEqtNhsiPbnUmJZU9KpEsa9QP0VhXLSXcE/Rt2snnseGBiGx7K+PotwsfT/ogW+Dk5pvpGnTzfwzB5zhjxDIa6Lo809G6N5zxR1T/qnIqa//uw03AqK63wy4CBA6NKfI5Hapqq0oazF4YYasOSwVpCJvNv2bx1GP37TJgxlM27BNAnKBZt2z/jsnrofTL88J99CmCbR19GRKhyz+JUByCtnmln7DxguamuD9gkx/Y9Ec81Dzk0w4cxok35HCO0grtk+sPUK7+RLkyoBU8/hG/f9IRi2vmAdp7YywIDyKyT0NyDsUM70So/0M9REjBAcAGDe17S4r2a1SkrTb04OHA7L02Y98uiRol7uahkHqy0KyXotSzZ9SiiBwYYzrBn0SKjZGG/YPMNyjWTwDQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66946007)(8676002)(186003)(316002)(5660300002)(26005)(66556008)(6512007)(6486002)(66476007)(2906002)(6916009)(54906003)(8936002)(52116002)(36916002)(508600001)(38350700002)(86362001)(558084003)(4326008)(6506007)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IEAILP0+ByMfnPH3jfo06U4fJmSoAbao7iDL4XgihF+Md6UzLXW/EjfUN5KY?=
+ =?us-ascii?Q?lbN6UxCL6/zwioikVKrvdhAhO1KjzboqknTcG2zdYJV+cEsycdzj9rpKaHNN?=
+ =?us-ascii?Q?viJGT7LKHBB1LKUVsJOb/UXOlsJmoOAWALl5/GwvoZPpa1upAzaSO90RmRyB?=
+ =?us-ascii?Q?M5T5r2L6LmiiMg2FGLhw66nEnZz5KVsqoc7C7ws5ExYM2jRSbTCxO9ANYgxn?=
+ =?us-ascii?Q?a5rF99QbrxZoSXkG/XqyrcNrJ5ZtU9kHPEwMHZfDwZOInnwP06cNOzSNURtt?=
+ =?us-ascii?Q?KgrZrMb17m0NBm+73ZSb0osqk3DG7KuLPKyqoVfgpCKiAopg3/vEgBryTz3J?=
+ =?us-ascii?Q?wYPg8t8p8/3BmmTeLm2im6YCAU26dOJCNlwmotFlPT45uwaeakO3ILFtryEZ?=
+ =?us-ascii?Q?ByTrO9BgDN0lK1ZjX19S6pxTYxM6UaY3yvl+/yi6ERZR5jDUMonrTa2dXUxW?=
+ =?us-ascii?Q?vZEs4PE2N+flIYkmu2NV2IeqAcyzNQBQXbQGjspQzogXHFqpvepH3q0NNbiQ?=
+ =?us-ascii?Q?rNImrzJetep8Q3TuyI/RSMyWPkiwTuY0vnl58qIoesKRpGHuKW84fvN1d+Im?=
+ =?us-ascii?Q?Doqc5q0GcRGkb6KfefQU9pwY5MZZzO+4TH/WgVN84IQfPqx8EGAYBK9LqaV3?=
+ =?us-ascii?Q?/u/UiGy67cQ5dNwNVWmf6EeKB75gcGs0WFcsWtxW2zlxXc4nTx+wkeTLRkiz?=
+ =?us-ascii?Q?P28I1NIfbGJfU9kEQ7YfixeECTiP3SrgWc98EblEBH4hsfrKVchNnjE3rZ0q?=
+ =?us-ascii?Q?rGP+y7aeM0ESqtq45EtyVw9wK6e8lLv3a12mBm2OFaptFatdgsno0TCvZ30X?=
+ =?us-ascii?Q?1J7dWMafTrQFsPgr/sw+1J5wZDVHXm6vJaNz5GePlK8sQGRRZoICFTKcZitV?=
+ =?us-ascii?Q?kT0OIm1buv1OBgVyY+ajIaq156oLMQAKO2qRAwQhdFtEGqpQ6FcHzOxCsamu?=
+ =?us-ascii?Q?4j38nEEHOzr/BWzn3LV9Opm06XJdhlUrf7LfpPBfCkHUwlhmUkhgglsWyzc3?=
+ =?us-ascii?Q?sGUFJ6MavWZq5ZfgLCsWO/7MMGUaM5tGsDGrunpv/Ongz+Vb9dcOBYM0rXt1?=
+ =?us-ascii?Q?NPNVxMZvcJSZom1idW2qLRd3qn5ssZBdNlJSEQ5k6SR8nHPXlXVaBBGvBmVq?=
+ =?us-ascii?Q?oeiJTz9cpM8CZIHzIClrnKDoySnz/zCVkd2mkoHGaEx7OcBQfVOZkEces/x8?=
+ =?us-ascii?Q?Z5iHqDJRjTupchVANi82GqScna8NiufmKNvCtEdJ8I4uOYqI00rmRUZKe3Q+?=
+ =?us-ascii?Q?1vT5VI7KYko79uo+U2tduz7EuQj0zjSzkr6Cj8I7jIlUTr0O21LKqc6OjZvh?=
+ =?us-ascii?Q?15uGstUAam2n7irNackYOQhPvnjqzl/6a3XMkz2SEuIBc6Mj4HwoSLO3+AP7?=
+ =?us-ascii?Q?1sFChTWsquQKIyWRzquAKNgEliSnj+GxWrBplsiiWTCSiaEbUFAeyvUuUfDo?=
+ =?us-ascii?Q?4U4MEo6i0Ji4YhPKg5aIt7wVDoaFteesF8SddJWTZ+MzBMnpfeLAxhinB4Oh?=
+ =?us-ascii?Q?TOHXgHUEVgTt2GTyCdrf7qUTzxYpx53e9ha1SWN6h+yiVotFnVDs34Iv4iKq?=
+ =?us-ascii?Q?hc5NOjeJqyPGzEFb6ymIl3NeQt3cra1q4FSUDV/xYzhRx1o88uS5aX2BQJPx?=
+ =?us-ascii?Q?XBc8xDNjyE+DnZJx1WROOTykhUMFMzoTWUJeo5w0j2m4wh1L2Apim80hy/Tg?=
+ =?us-ascii?Q?xYSuLA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9dac5a7f-69d0-4d90-21ff-08d9dfbf8f7e
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 05:00:09.0367
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: h2UmJ9M99OMZxySXgUckCAuZJghbwHXQ/jrA4QzrmhY0YaCqk5m9kh2EZ76YAKuY9livh6zJJLY2s40017eE6d/DaCE9ngOP9X+LhEW2z+8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1767
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10237 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=926
+ suspectscore=0 spamscore=0 adultscore=0 phishscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201250029
+X-Proofpoint-GUID: xP0sckX5lj6NU7PY5LEAbLXAod9CL9we
+X-Proofpoint-ORIG-GUID: xP0sckX5lj6NU7PY5LEAbLXAod9CL9we
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-v1-> v2: fixed no previous prototype warning
-Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
->> drivers/scsi/ufs/ufshcd.c:4207:6: warning: no previous prototype 
-for 'ufshcd_auto_hibern8_disable' [-Wmissing-prototypes]
-4207 | void ufshcd_auto_hibern8_disable(struct ufs_hba *hba)
+Nilesh,
 
-If using auto hibern8 mode, need to disable auto hibern8 while
-entering suspend.
-When using auto hibern8 mode, it does not seem right to send a uic command
-for entry into hibern8 in the next line(ufshcd_lik_state_transition(..))
-It seem right to send after disable auto hibern8.
+> Please apply the qla2xxx driver misc bug fixes and features to the
+> scsi tree at your earliest convenience.
 
-In addition, if the auto hibern8 mode supported, it is enabled in resume.
-So it seems that it will be paired only when auto hibern8 is disabled
-while entering suspend.
+Applied to 5.18/scsi-staging, thanks!
 
-Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
----
- drivers/scsi/ufs/ufshcd.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 460d2b440d2e..a6edbbd8ca2c 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -254,6 +254,7 @@ static void ufshcd_wb_toggle_flush_during_h8(struct ufs_hba *hba, bool set);
- static inline void ufshcd_wb_toggle_flush(struct ufs_hba *hba, bool enable);
- static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
- static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba);
-+static void ufshcd_auto_hibern8_disable(struct ufs_hba *hba);
- 
- static inline void ufshcd_enable_irq(struct ufs_hba *hba)
- {
-@@ -4204,6 +4205,18 @@ void ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit)
- }
- EXPORT_SYMBOL_GPL(ufshcd_auto_hibern8_update);
- 
-+static void ufshcd_auto_hibern8_disable(struct ufs_hba *hba)
-+{
-+	unsigned long flags;
-+
-+	if (!ufshcd_is_auto_hibern8_supported(hba))
-+		return;
-+
-+	spin_lock_irqsave(hba->host->host_lock, flags);
-+	ufshcd_writel(hba, 0, REG_AUTO_HIBERNATE_IDLE_TIMER);
-+	spin_unlock_irqrestore(hba->host->host_lock, flags);
-+}
-+
- void ufshcd_auto_hibern8_enable(struct ufs_hba *hba)
- {
- 	unsigned long flags;
-@@ -8925,6 +8938,7 @@ static int __ufshcd_wl_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 	 * with the link off, so do not check for bkops.
- 	 */
- 	check_for_bkops = !ufshcd_is_ufs_dev_deepsleep(hba);
-+	ufshcd_auto_hibern8_disable(hba);
- 	ret = ufshcd_link_state_transition(hba, req_link_state, check_for_bkops);
- 	if (ret)
- 		goto set_dev_active;
 -- 
-2.26.0
-
+Martin K. Petersen	Oracle Linux Engineering
