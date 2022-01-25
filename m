@@ -2,87 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC74949ABEB
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jan 2022 06:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 177AC49AC43
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jan 2022 07:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236207AbiAYFor (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jan 2022 00:44:47 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:16942 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235623AbiAYFlo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 25 Jan 2022 00:41:44 -0500
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20P4emRw005953;
-        Tue, 25 Jan 2022 05:41:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=Gb5xYRcTvDL82zLNU4ufie4IQp23BbDAPogYfnIbPr4=;
- b=pb3X0gbMnN7IPWbexRbiNt9UMrG+URe9PCrvQHKuEh69mijql+GcqbOTrWIY9iRPseIC
- 5F1fFf0uwefdJO/dxHfC8xQz+LD8zs91BZGNQPM1ENOs4DnmogSSc30U5b6+Nw0ZwJ/g
- T0VXEIOddKWKJYqkj4k+iHv1zVVkxhWkPxRGhk5+TamIHMrL7eDIMVkECcqpavobnHPr
- WVm4RR0WxX7R0zLP7D6Jwy1XnQ3jB0Y4A/HVHUdfi5j0CA/ehlR+M+dqN1N+TCk4q3eJ
- QmYrUothXDvyb3JO/281Vh5EK7GU7XD6oI26wMS799uv7pKPz7kSLFHjcGfKEyDaRJny HQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dsxaaa1bu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 05:41:39 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20P5ePUc145364;
-        Tue, 25 Jan 2022 05:41:38 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 3drbcn1sw4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 05:41:38 +0000
-Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20P5fW7D149214;
-        Tue, 25 Jan 2022 05:41:37 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3020.oracle.com with ESMTP id 3drbcn1ss0-4;
-        Tue, 25 Jan 2022 05:41:37 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Tong Zhang <ztong0001@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@kernel.org>,
-        linux-kernel@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v1] scsi: myrs: fix crash on error case
-Date:   Tue, 25 Jan 2022 00:41:31 -0500
-Message-Id: <164308927349.18787.5117723366670318865.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220123225717.1069538-1-ztong0001@gmail.com>
-References: <20220123225717.1069538-1-ztong0001@gmail.com>
+        id S244645AbiAYGTr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jan 2022 01:19:47 -0500
+Received: from verein.lst.de ([213.95.11.211]:34076 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229533AbiAYGQk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 25 Jan 2022 01:16:40 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 96C0868BFE; Tue, 25 Jan 2022 07:16:34 +0100 (CET)
+Date:   Tue, 25 Jan 2022 07:16:34 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH V2 05/13] block: only account passthrough IO from
+ userspace
+Message-ID: <20220125061634.GA26495@lst.de>
+References: <20220122111054.1126146-1-ming.lei@redhat.com> <20220122111054.1126146-6-ming.lei@redhat.com> <20220124130555.GD27269@lst.de> <Ye8xleeYZfmwA3D7@T590>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: NgnwCp9j4awYqYIU00erXzpt0ccGIzXr
-X-Proofpoint-ORIG-GUID: NgnwCp9j4awYqYIU00erXzpt0ccGIzXr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ye8xleeYZfmwA3D7@T590>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 23 Jan 2022 14:57:17 -0800, Tong Zhang wrote:
-
-> In myrs_detect(), cs->disable_intr is NULL when privdata->hw_init() fail
-> with non-zero. In this case, myrs_cleanup(cs) will call a NULL ptr and
-> crash kernel.
+On Tue, Jan 25, 2022 at 07:09:09AM +0800, Ming Lei wrote:
+> > Please explain why you want to change this.
 > 
-> [    1.105606] myrs 0000:00:03.0: Unknown Initialization Error 5A
-> [    1.105872] myrs 0000:00:03.0: Failed to initialize Controller
-> [    1.106082] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> [    1.110774] Call Trace:
-> [    1.110950]  myrs_cleanup+0xe4/0x150 [myrs]
-> [    1.111135]  myrs_probe.cold+0x91/0x56a [myrs]
-> [    1.111302]  ? DAC960_GEM_intr_handler+0x1f0/0x1f0 [myrs]
-> [    1.111500]  local_pci_probe+0x48/0x90
+> Please see the following code:
+
+This needs to go into the commit log.
+
 > 
-> [...]
+>         /* passthrough requests can hold bios that do not have ->bi_bdev set */
+>         if (rq->bio && rq->bio->bi_bdev)
+>                 rq->part = rq->bio->bi_bdev;
+>         else if (rq->q->disk)
+>                 rq->part = rq->q->disk->part0;
+> 
+> q->disk can be cleared by disk_release() just when referring the above line, then
+> NULL ptr reference is caused, and similar issue with any reference to rq->part for
+> passthrough request sent not from userspace.
 
-Applied to 5.17/scsi-fixes, thanks!
-
-[1/1] scsi: myrs: fix crash on error case
-      https://git.kernel.org/mkp/scsi/c/4db09593af0b
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+So why not key off accouning off "rq->bio && rq->bio->bi_bdev"
+and remove the need for the flag and the second half of the assignment
+above?  That is much less error probe and removes code size.
