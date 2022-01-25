@@ -2,84 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC8E49ABE6
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jan 2022 06:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 430B049ABDF
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jan 2022 06:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236143AbiAYFoZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jan 2022 00:44:25 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:51278 "EHLO
+        id S235962AbiAYFna (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jan 2022 00:43:30 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:43434 "EHLO
         mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235514AbiAYFlM (ORCPT
+        by vger.kernel.org with ESMTP id S235465AbiAYFlG (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 25 Jan 2022 00:41:12 -0500
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20P1i5Yf016125;
-        Tue, 25 Jan 2022 05:41:02 GMT
+        Tue, 25 Jan 2022 00:41:06 -0500
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20P3K9Br005517;
+        Tue, 25 Jan 2022 05:41:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=hn4alr1qgwLUbeh7Pc2bg7Lxe9jmoANUClkdYn0J8bg=;
- b=dXp4NYEw5xq8WJj6h5lJ3deGWtu8eHZCSwa6X2rHPbPQupuKcyEJVKXFw61rHlvQ1lhG
- fiXrr54iRSmLkLseStjWswNOZkfF1/SmedfI+SWw2z0arojvNSKMV/5isdcRUHVoccIS
- R+7DO60TmgjVpqgQ8mNgY268h/EMGxSScf6NZh1Tf47F6j4l8VF3vaxGzxjW1HhUr7cV
- Ad8FAbPCdqAnkBU883PWsQxR190yO/reLL+15AvpW0uJvXjotb+mjxNwjORWoXcqaIci
- ww+IOm1Uy3bza/r2mh/HBPmfRJHPBAnbZmqrOI2sLnUChswd6Z5xGnTED09mLuVt6+lq Qw== 
+ bh=xlHSmMMifEurCv+6d/bVV2vC8ZWoCeHFCgsfl586NDQ=;
+ b=RWyZtQrmI1U0xfuV6x8qze1/EJATCsjnkk4xlHHrGn6OUXSdl+RkelzCHTUqHh7+t0UI
+ V7sMstrDC3SwBvcexSsOow8HZ6pmctYEfke3QItLg7QKrDuFwAPker1OrCMXoAJytKLH
+ uFQNZSb7IqnMccdF771BJ2QgviXEAquIspZ6YkZMMb3IKWK4JKhM59a1l09a+dJ6jk20
+ 6ua+XgnO1neyBCu59V07q44BPxhumFqGs6qCGnqv/FmUk9voX0YPB0Kb8P7qUytLs1ZV
+ wb16bv5GcKWdmplPzk/RWCi5Bk927sG31/fhtlLkaghsZqrEpwDxwCPV+pxAW2rwPGrK TA== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dsxvfhw42-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dswh9j7u2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 05:41:03 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20P5evWR181750;
+        Tue, 25 Jan 2022 05:41:02 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3030.oracle.com with ESMTP id 3dr71x1srd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 25 Jan 2022 05:41:02 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20P5eu1i181678;
-        Tue, 25 Jan 2022 05:41:01 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3030.oracle.com with ESMTP id 3dr71x1sq3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 05:41:01 +0000
 Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20P5evOZ181790;
-        Tue, 25 Jan 2022 05:41:00 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20P5evOb181790;
+        Tue, 25 Jan 2022 05:41:02 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3030.oracle.com with ESMTP id 3dr71x1sgc-5;
-        Tue, 25 Jan 2022 05:41:00 +0000
+        by userp3030.oracle.com with ESMTP id 3dr71x1sgc-6;
+        Tue, 25 Jan 2022 05:41:01 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     jinpu.wang@cloud.ionos.com, Ajish.Koshy@microchip.com,
-        damien.lemoal@opensource.wdc.com, jejb@linux.ibm.com,
-        John Garry <john.garry@huawei.com>
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Ruksar.devadi@microchip.com, ipylypiv@google.com,
-        linux-kernel@vger.kernel.org, vishakhavc@google.com,
-        linux-scsi@vger.kernel.org, Viswas.G@microchip.com,
-        Vasanthalakshmi.Tharmarajan@microchip.com
-Subject: Re: [PATCH v2] scsi: pm8001: Fix bogus FW crash for maxcpus=1
-Date:   Tue, 25 Jan 2022 00:40:41 -0500
-Message-Id: <164308671270.32373.5920693563555904240.b4-ty@oracle.com>
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-scsi@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Benjamin Block <bblock@linux.ibm.com>
+Subject: Re: [PATCH] zfcp: fix failed recovery on gone remote port with non-NPIV FCP devices
+Date:   Tue, 25 Jan 2022 00:40:42 -0500
+Message-Id: <164308671271.32373.2878476881217752247.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1642508105-95432-1-git-send-email-john.garry@huawei.com>
-References: <1642508105-95432-1-git-send-email-john.garry@huawei.com>
+In-Reply-To: <20220118165803.3667947-1-maier@linux.ibm.com>
+References: <20220118165803.3667947-1-maier@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: X-sdo9Btk-_sfYVUqJKYHRyOfGgdwebL
-X-Proofpoint-ORIG-GUID: X-sdo9Btk-_sfYVUqJKYHRyOfGgdwebL
+X-Proofpoint-ORIG-GUID: 7-NFqmQqRlV11snyO832LM7Pz__SOQyo
+X-Proofpoint-GUID: 7-NFqmQqRlV11snyO832LM7Pz__SOQyo
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 18 Jan 2022 20:15:05 +0800, John Garry wrote:
+On Tue, 18 Jan 2022 17:58:03 +0100, Steffen Maier wrote:
 
-> According to the comment in check_fw_ready() we should not check the
-> IOP1_READY field in register SCRATCH_PAD_1 for 8008 or 8009 controllers.
-> 
-> However we check this very field in process_oq() for processing the highest
-> index interrupt vector. The highest interrupt vector is checked as the FW
-> is programmed to signal fatal errors through this irq.
+> Suppose we have an environment with a number of non-NPIV FCP devices
+> (virtual HBAs / FCP devices / zfcp "adapter"s) sharing the same physical
+> FCP channel (HBA port) and its I_T nexus. Plus a number of storage target
+> ports zoned to such shared channel. Now one target port logs out of the
+> fabric causing an RSCN. Zfcp reacts with an ADISC ELS and subsequent port
+> recovery depending on the ADISC result. This happens on all such FCP
+> devices (in different Linux images) concurrently as they all receive a copy
+> of this RSCN. In the following we look at one of those FCP devices.
 > 
 > [...]
 
 Applied to 5.17/scsi-fixes, thanks!
 
-[1/1] scsi: pm8001: Fix bogus FW crash for maxcpus=1
-      https://git.kernel.org/mkp/scsi/c/62afb379a0fe
+[1/1] zfcp: fix failed recovery on gone remote port with non-NPIV FCP devices
+      https://git.kernel.org/mkp/scsi/c/8c9db6679be4
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
