@@ -2,83 +2,202 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3352449ED37
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jan 2022 22:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 739C649EE24
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jan 2022 23:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344336AbiA0VLF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 27 Jan 2022 16:11:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344221AbiA0VK7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Jan 2022 16:10:59 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E996C061749
-        for <linux-scsi@vger.kernel.org>; Thu, 27 Jan 2022 13:10:59 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id b35so3294732qkp.6
-        for <linux-scsi@vger.kernel.org>; Thu, 27 Jan 2022 13:10:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
-        b=m0D8ivz9PDCDCKh/arptMpR3/ao+LhFd+WDbL0Ndw6mZAYZf1UgxGLzVj40s+AmZjb
-         DuEwjd7NT9LFwA9OjKx7vr7puLYpS6zkJNbh+1BfuQgx4db+dU06Jgc7C75K093Hwjn/
-         9mCc5rYI5j3y1VvMx9vpxL5dad+OafMT9QhIQgFRN9dvv+QgByQ7o1yzKGSP02L54Znm
-         q7FBXWGkelfiR3xpWnnkdKDqg2UlG70uCnsM1s4SP7cRlEb+IJNQAjeVKHpZy42mZonq
-         RnHAdJAaDrxUHvlQWr6CsD5rnkBvpJUkcJOYzRgUFr/Bb7DCHALpPY9Ux9K4Rjywr0lt
-         YgYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
-        b=27HmlOaQJNcTeTj6tX67F5FFQ17NqyiX31yuI+p6aFRdh5yGi0sC10ORs45ZR6sQJm
-         L0ExBQIgAdmET9e1oqfugJs+Q1IH/1yU42sPTyvd1+s2T8qBYIjFbFrFfTqo+k0v0U8Y
-         tZUXxD8hNQRfZyk2vpYAex0UrIyEs5Z4NfuFvfD63D50T0out4ivLM7otnBOLGJAUO9p
-         BSMgbJaJ33ts3yot6XOOGE1mGpfKCa7l91sEygNrvJ6ZVNtZTYr5FTKUaCFGuqWIRMrU
-         3ompALL0u7b1/5+AYnww1HCsHpiYCHvK27Ts/clXY2krLy6TXODchJeKhSrV54+uRyIw
-         Qu5Q==
-X-Gm-Message-State: AOAM532q3xF+U5Ju5+gOvZTu5ukr9/iE5V75e+Z4qx8laQzZxJx6tKWi
-        qV3pk5KYeEsNIiHdUBt4h8kMa7auLXAuC9BV20ICqw9VSXw=
-X-Google-Smtp-Source: ABdhPJxjfwa8g49rNfb5xQ4Dtq316EM5E6QepnaR+uvM+BcTaI+qmB/caHz8VslukXXXqzp0798ys0wp0mZ+YQ4gMH8=
-X-Received: by 2002:ac8:4e48:: with SMTP id e8mr4202203qtw.64.1643317847801;
- Thu, 27 Jan 2022 13:10:47 -0800 (PST)
+        id S235160AbiA0WiP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 27 Jan 2022 17:38:15 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:56987 "EHLO
+        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231520AbiA0WiP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 27 Jan 2022 17:38:15 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 9C4BA2B00384;
+        Thu, 27 Jan 2022 17:38:13 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 27 Jan 2022 17:38:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=wcr9somIvzZFXM+do
+        LeomZA5zif3KjUFitVyFvJeDYo=; b=Th8UCnAWUfFBauUeRu2r8tL4o/qjWFXUs
+        uJjCsIczCIR7m69lw4gcRi3cHWCHzzC1QQKuFLTFPv0YnqVi1xYyYAfnwhn06jqw
+        7uKcU+w3jzQMl+2YhuVYJzIBHGbtNFDDJF4Dt8MyuyWrjCUwAoUI86TxUlrljsu4
+        o2B3OC13bZ5JEqE02ZVHipmOwadF1NQwqu7oouT8kNj0nvKl24Ny3BVWOUBx8QkC
+        F7gGuSyN3QPZYT04TAQ3v8meFfDMy/GNhT0OmXbhk7FH7XLZgkCA5THYqNfDxvMG
+        Ntej5cBSoZJJKYvvigCUu1ZSuPm3/IDbkRZXYtpC+wGjpHgxzd+mA==
+X-ME-Sender: <xms:1B7zYYVxtd6YEbVnm-4_RCT2C4zKEKMnwFXqMfGOt1upUktoUa_mCA>
+    <xme:1B7zYcnv0Bs3WSo_nVJzSlt-NTiRd8gH3boPstx5drM1FCQAV8OuXZzJrl5OYu8hE
+    88uWCfqQ7AC64PHKgQ>
+X-ME-Received: <xmr:1B7zYcYGEeLRYRQS40-jvSKOLJhHEff8R-Jo-xZSr3-9h3WUOueXMAWjjO70k3K57TsUBN8BdSKd3qrbGxrxoOXz1P4YP9CDe40>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeefgdduieegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfv
+    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
+    htvghrnhepffduhfegfedvieetudfgleeugeehkeekfeevfffhieevteelvdfhtdevffet
+    uedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfh
+    hthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
+X-ME-Proxy: <xmx:1B7zYXUywcSuvw1OihWbbXsVHwS0F2KDJIYb0lYQxQ3JfPiwzQMIQw>
+    <xmx:1B7zYSlet4_9vf9KIwN0mL5LDMnM-LS3lc3mv8XtdMW-tEbPM_SQ7Q>
+    <xmx:1B7zYceJXsy-LSX_JAVQ4HiCZESHrHn1H1T3OIjooV6CuF4gImx8UQ>
+    <xmx:1R7zYXjai1E_HJPafK1KO4xThwjq_dU2IjnZ92Ve_7bG49kMyY4asU6_RMw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 27 Jan 2022 17:38:09 -0500 (EST)
+Date:   Fri, 28 Jan 2022 09:37:58 +1100 (AEDT)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Tom Rix <trix@redhat.com>
+cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, nathan@kernel.org,
+        ndesaulniers@google.com, megaraidlinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
+In-Reply-To: <20220127151945.1244439-1-trix@redhat.com>
+Message-ID: <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
+References: <20220127151945.1244439-1-trix@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6214:e4b:0:0:0:0 with HTTP; Thu, 27 Jan 2022 13:10:46
- -0800 (PST)
-Reply-To: eanna00111@gmail.com
-From:   Mrs Anna Edward <mussaaliooooo7@gmail.com>
-Date:   Thu, 27 Jan 2022 13:10:46 -0800
-Message-ID: <CAFbf-n2dj0f-EXo2OhZA4D_6QXVYoysuMB5_+AOQv9Sb_nGe0w@mail.gmail.com>
-Subject: Urgent Reply
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greeting to you,
-Please forgive me for stressing you with my predicaments and I sorry
-to approach you through this media because it serves the fastest means
-of communication. I came across your E-mail from my personal search
-and I decided to contact you believing you will be honest to fulfill
-my final wish before I die.
 
-I am Mrs Anna Edward, 63 years, from USA, I am childless and I am
-suffering from a pro-long critical cancer, my doctors confirmed I may
-not live beyond two months from now as my ill health has defiled all
-forms of medical treatment. Since my days are numbered, I have decided
-willingly to fulfill my long-time promise to donate you the sum
-($5.000.000.00) million dollars I inherited from my late husband Mr.
-Edward Herbart, foreign bank account over years. I need a very honest
-person who can assist in transfer of this money to his or her account
-and use the funds for charity work of God while you use 50% for
-yourself. I want you to know there is no risk involved; it is 100%
-hitch free & safe.
+On Thu, 27 Jan 2022, trix@redhat.com wrote:
 
-If you are interested in assisting in getting this fund into your
-account for a charity project to fulfill my promise before I die
-please let me know immediately.
+> From: Tom Rix <trix@redhat.com>
+> 
+> checkpatch reports several hundred formatting errors. Run these files 
+> through clang-format and knock off some of them.
+> 
 
-I will appreciate your utmost confidentiality as I wait for your reply.
-Best Regards,
-Mrs Anna Edward
+That method seems like a good recipe for endless churn unless checkpatch 
+and clang-format really agree about these style rules.
+
+Why use checkpatch to assess code style, if we could simply diff the 
+existing source with the output from clang-format... but it seems that 
+clang-format harms readability, makes indentation errors and uses 
+inconsistent style rules. Some examples:
+
+>  static unsigned short int max_sectors_per_io = MAX_SECTORS_PER_IO;
+>  module_param(max_sectors_per_io, ushort, 0);
+> -MODULE_PARM_DESC(max_sectors_per_io, "Maximum number of sectors per I/O request (default=MAX_SECTORS_PER_IO=128)");
+> -
+> +MODULE_PARM_DESC(
+> +	max_sectors_per_io,
+> +	"Maximum number of sectors per I/O request (default=MAX_SECTORS_PER_IO=128)");
+>  
+>  static unsigned short int max_mbox_busy_wait = MBOX_BUSY_WAIT;
+>  module_param(max_mbox_busy_wait, ushort, 0);
+> -MODULE_PARM_DESC(max_mbox_busy_wait, "Maximum wait for mailbox in microseconds if busy (default=MBOX_BUSY_WAIT=10)");
+> +MODULE_PARM_DESC(
+> +	max_mbox_busy_wait,
+> +	"Maximum wait for mailbox in microseconds if busy (default=MBOX_BUSY_WAIT=10)");
+>  
+
+This code is longer for no real improvement.
+
+>  
+>  /*
+>   * The File Operations structure for the serial/ioctl interface of the driver
+>   */
+>  static const struct file_operations megadev_fops = {
+> -	.owner		= THIS_MODULE,
+> -	.unlocked_ioctl	= megadev_unlocked_ioctl,
+> -	.open		= megadev_open,
+> -	.llseek		= noop_llseek,
+> +	.owner = THIS_MODULE,
+> +	.unlocked_ioctl = megadev_unlocked_ioctl,
+> +	.open = megadev_open,
+> +	.llseek = noop_llseek,
+>  };
+>  
+>  /*
+
+Readability loss.
+
+> -		prod_info_dma_handle = dma_map_single(&adapter->dev->dev,
+> -						      (void *)&adapter->product_info,
+> -						      sizeof(mega_product_info),
+> -						      DMA_FROM_DEVICE);
+> +		prod_info_dma_handle = dma_map_single(
+> +			&adapter->dev->dev, (void *)&adapter->product_info,
+> +			sizeof(mega_product_info), DMA_FROM_DEVICE);
+>  
+
+Note the orphaned first parameter and odd indentation.
+
+>  
+>  static DEF_SCSI_QCMD(megaraid_queue)
+>  
+> -/**
+> +	/**
+>   * mega_allocate_scb()
+>   * @adapter: pointer to our soft state
+>   * @cmd: scsi command from the mid-layer
+
+Indentation error.
+
+> @@ -418,15 +409,14 @@ static DEF_SCSI_QCMD(megaraid_queue)
+>   * Allocate a SCB structure. This is the central structure for controller
+>   * commands.
+>   */
+> -static inline scb_t *
+> -mega_allocate_scb(adapter_t *adapter, struct scsi_cmnd *cmd)
+> +	static inline scb_t *mega_allocate_scb(adapter_t *adapter,
+> +					       struct scsi_cmnd *cmd)
+>  {
+>  	struct list_head *head = &adapter->free_list;
+
+Same.
+
+> @@ -586,26 +568,25 @@ mega_build_cmd(adapter_t *adapter, struct scsi_cmnd *cmd, int *busy)
+>  
+>  		ldrv_num = mega_get_ldrv_num(adapter, cmd, channel);
+>  
+> -
+>  		max_ldrv_num = (adapter->flag & BOARD_40LD) ?
+> -			MAX_LOGICAL_DRIVES_40LD : MAX_LOGICAL_DRIVES_8LD;
+> +				       MAX_LOGICAL_DRIVES_40LD :
+> +					     MAX_LOGICAL_DRIVES_8LD;
+>  
+
+Churn, if not readability loss. Note the indentation change here is 
+inconsistent with the indentation change noted above.
+
+>  			 * 6-byte READ(0x08) or WRITE(0x0A) cdb
+>  			 */
+> -			if( cmd->cmd_len == 6 ) {
+> -				mbox->m_out.numsectors = (u32) cmd->cmnd[4];
+> -				mbox->m_out.lba =
+> -					((u32)cmd->cmnd[1] << 16) |
+> -					((u32)cmd->cmnd[2] << 8) |
+> -					(u32)cmd->cmnd[3];
+> +			if (cmd->cmd_len == 6) {
+> +				mbox->m_out.numsectors = (u32)cmd->cmnd[4];
+> +				mbox->m_out.lba = ((u32)cmd->cmnd[1] << 16) |
+> +						  ((u32)cmd->cmnd[2] << 8) |
+> +						  (u32)cmd->cmnd[3];
+>  
+>  				mbox->m_out.lba &= 0x1FFFFF;
+>  
+
+Here, the orphaned term is moved up, next to the =. And yet,
+
+>  
+>  			/* Calculate Scatter-Gather info */
+> -			mbox->m_out.numsgelements = mega_build_sglist(adapter, scb,
+> -					(u32 *)&mbox->m_out.xferaddr, &seg);
+> +			mbox->m_out.numsgelements =
+> +				mega_build_sglist(adapter, scb,
+> +						  (u32 *)&mbox->m_out.xferaddr,
+> +						  &seg);
+>  
+>  			return scb;
+>  
+
+... here the first term is moved down and orphaned, which is another 
+inconsistency.
