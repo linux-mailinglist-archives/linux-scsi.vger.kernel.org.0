@@ -2,94 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA08949EC6A
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jan 2022 21:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3352449ED37
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jan 2022 22:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244247AbiA0UXH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 27 Jan 2022 15:23:07 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:37802 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237950AbiA0UXF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Jan 2022 15:23:05 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DE93E21709;
-        Thu, 27 Jan 2022 20:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643314983; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SVm8997DjNMwDI21VCkNecCNpTNF5IPazMgfFtRBUT8=;
-        b=E7TI3Zg55si8VTjxEqYqZbAPyyTineyU3J2zTCoopUJvvOI+TzXxfJK50IvVjLhvrUU7Ut
-        LMVImsnq69G4AuYcZUiPtFCbAI5hPT7+r369bWflCYLUjXbFWhRAzbfQ0DgBAmNQzzKxVN
-        Z/0DVesUcPrTRsjs3pil1tTxMWb4CQo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9308C13C7C;
-        Thu, 27 Jan 2022 20:23:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Lc5mISf/8mEMZQAAMHmgww
-        (envelope-from <mwilck@suse.com>); Thu, 27 Jan 2022 20:23:03 +0000
-Message-ID: <d623c8be9062fd07fa9f5c1d8c9f921e2857ab37.camel@suse.com>
-Subject: Re: [RFC PATCH] scsi: make "access_state" sysfs attribute always
- visible
-From:   Martin Wilck <mwilck@suse.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>
-Cc:     linux-scsi@vger.kernel.org
-Date:   Thu, 27 Jan 2022 21:23:02 +0100
-In-Reply-To: <4aa8727e-a183-a1f9-8291-624ecb5e6d25@acm.org>
-References: <20220125162441.2226-1-mwilck@suse.com>
-         <4aa8727e-a183-a1f9-8291-624ecb5e6d25@acm.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.3 
+        id S1344336AbiA0VLF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 27 Jan 2022 16:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344221AbiA0VK7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Jan 2022 16:10:59 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E996C061749
+        for <linux-scsi@vger.kernel.org>; Thu, 27 Jan 2022 13:10:59 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id b35so3294732qkp.6
+        for <linux-scsi@vger.kernel.org>; Thu, 27 Jan 2022 13:10:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=m0D8ivz9PDCDCKh/arptMpR3/ao+LhFd+WDbL0Ndw6mZAYZf1UgxGLzVj40s+AmZjb
+         DuEwjd7NT9LFwA9OjKx7vr7puLYpS6zkJNbh+1BfuQgx4db+dU06Jgc7C75K093Hwjn/
+         9mCc5rYI5j3y1VvMx9vpxL5dad+OafMT9QhIQgFRN9dvv+QgByQ7o1yzKGSP02L54Znm
+         q7FBXWGkelfiR3xpWnnkdKDqg2UlG70uCnsM1s4SP7cRlEb+IJNQAjeVKHpZy42mZonq
+         RnHAdJAaDrxUHvlQWr6CsD5rnkBvpJUkcJOYzRgUFr/Bb7DCHALpPY9Ux9K4Rjywr0lt
+         YgYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=27HmlOaQJNcTeTj6tX67F5FFQ17NqyiX31yuI+p6aFRdh5yGi0sC10ORs45ZR6sQJm
+         L0ExBQIgAdmET9e1oqfugJs+Q1IH/1yU42sPTyvd1+s2T8qBYIjFbFrFfTqo+k0v0U8Y
+         tZUXxD8hNQRfZyk2vpYAex0UrIyEs5Z4NfuFvfD63D50T0out4ivLM7otnBOLGJAUO9p
+         BSMgbJaJ33ts3yot6XOOGE1mGpfKCa7l91sEygNrvJ6ZVNtZTYr5FTKUaCFGuqWIRMrU
+         3ompALL0u7b1/5+AYnww1HCsHpiYCHvK27Ts/clXY2krLy6TXODchJeKhSrV54+uRyIw
+         Qu5Q==
+X-Gm-Message-State: AOAM532q3xF+U5Ju5+gOvZTu5ukr9/iE5V75e+Z4qx8laQzZxJx6tKWi
+        qV3pk5KYeEsNIiHdUBt4h8kMa7auLXAuC9BV20ICqw9VSXw=
+X-Google-Smtp-Source: ABdhPJxjfwa8g49rNfb5xQ4Dtq316EM5E6QepnaR+uvM+BcTaI+qmB/caHz8VslukXXXqzp0798ys0wp0mZ+YQ4gMH8=
+X-Received: by 2002:ac8:4e48:: with SMTP id e8mr4202203qtw.64.1643317847801;
+ Thu, 27 Jan 2022 13:10:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6214:e4b:0:0:0:0 with HTTP; Thu, 27 Jan 2022 13:10:46
+ -0800 (PST)
+Reply-To: eanna00111@gmail.com
+From:   Mrs Anna Edward <mussaaliooooo7@gmail.com>
+Date:   Thu, 27 Jan 2022 13:10:46 -0800
+Message-ID: <CAFbf-n2dj0f-EXo2OhZA4D_6QXVYoysuMB5_+AOQv9Sb_nGe0w@mail.gmail.com>
+Subject: Urgent Reply
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2022-01-27 at 09:28 -0800, Bart Van Assche wrote:
-> On 1/25/22 08:24, mwilck@suse.com wrote:
-> > From: Martin Wilck <mwilck@suse.com>
-> > 
-> > If a SCSI device handler module is loaded after some SCSI devices
-> > have already been probed (e.g. via request_module() by dm-
-> > multipath),
-> > the "access_state" and "preferred_path" sysfs attributes remain
-> > invisible for
-> > these devices, although the handler is attached and live. The
-> > reason is
-> > that the visibility is only checked when the sysfs attribute group
-> > is
-> > first created. This results in an inconsistent user experience
-> > depending
-> > on the load order of SCSI low-level drivers vs. device handler
-> > modules.
-> 
-> Isn't this something that should be fixed in the sysfs code rather
-> than 
-> in the SCSI core? If this issue affects SCSI I assume that it will
-> also 
-> affect other sysfs users.
+Greeting to you,
+Please forgive me for stressing you with my predicaments and I sorry
+to approach you through this media because it serves the fastest means
+of communication. I came across your E-mail from my personal search
+and I decided to contact you believing you will be honest to fulfill
+my final wish before I die.
 
-Well, there's sysfs_update_groups() which could be used for this
-purpose in principle, I suppose. But there's no API for calling it in
-the driver core (there is no device_update_groups() or or
-device_update_attrs()), probably for good reason. 
-Making the attribute visible even if there's no device handler is
-simpler, and less error-prone.
+I am Mrs Anna Edward, 63 years, from USA, I am childless and I am
+suffering from a pro-long critical cancer, my doctors confirmed I may
+not live beyond two months from now as my ill health has defiled all
+forms of medical treatment. Since my days are numbered, I have decided
+willingly to fulfill my long-time promise to donate you the sum
+($5.000.000.00) million dollars I inherited from my late husband Mr.
+Edward Herbart, foreign bank account over years. I need a very honest
+person who can assist in transfer of this money to his or her account
+and use the funds for charity work of God while you use 50% for
+yourself. I want you to know there is no risk involved; it is 100%
+hitch free & safe.
 
-IOW, I agree with Hannes.
+If you are interested in assisting in getting this fund into your
+account for a charity project to fulfill my promise before I die
+please let me know immediately.
 
-Regards,
-Martin
-
-
+I will appreciate your utmost confidentiality as I wait for your reply.
+Best Regards,
+Mrs Anna Edward
