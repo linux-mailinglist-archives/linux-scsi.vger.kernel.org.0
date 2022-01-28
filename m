@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A5F4A0384
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Jan 2022 23:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C94EF4A0387
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Jan 2022 23:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351623AbiA1WWM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Jan 2022 17:22:12 -0500
-Received: from mail-pg1-f177.google.com ([209.85.215.177]:37418 "EHLO
-        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351647AbiA1WV5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Jan 2022 17:21:57 -0500
-Received: by mail-pg1-f177.google.com with SMTP id e16so6462309pgn.4
-        for <linux-scsi@vger.kernel.org>; Fri, 28 Jan 2022 14:21:57 -0800 (PST)
+        id S241332AbiA1WWP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Jan 2022 17:22:15 -0500
+Received: from mail-pf1-f169.google.com ([209.85.210.169]:33493 "EHLO
+        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351312AbiA1WV6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Jan 2022 17:21:58 -0500
+Received: by mail-pf1-f169.google.com with SMTP id i186so4979152pfe.0
+        for <linux-scsi@vger.kernel.org>; Fri, 28 Jan 2022 14:21:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CnqNmH4OwYN5k7j2DBSHf1rhiC3RkTmz93Z+tzE6eac=;
-        b=xgyjJdNWHuPuFM9gyr+6W4IMmgeovOb1ybjHAe57Ikn+ygECe9y4ijXX+L3kFUiNuM
-         fVfef3CP+pXSP5L+V/eU+8TBe9BAvvSyWBI2oMnQhufMtwI2/wSoENzJa5i9vpLsgGwG
-         1GxdMBbPCRSa+tzr6mTxGomJR1icmVkNNC//nnsU/K9aPVmg/YOeTQldRBJSOr0Yl2nD
-         JwE/UGcVpxLXfxYu0ldjv/uHmg/ItU43/r66QpEpCSUta1xekQfBWIJfOSYi3vvQOqQU
-         u3sjWK9vPnuDXm0Mgf8zlAoDIPi+DwXjRFKRr1FQkSJEIjbiDb3yvW8gUxZS2pMgiL3A
-         i/oA==
-X-Gm-Message-State: AOAM533nsdG+hho9e8De9QBiOj+3cIxPIWs3gg3LiK8Yt8LwiPsCK/iT
-        BaNWiBghJdyGTXWGuluUwAE=
-X-Google-Smtp-Source: ABdhPJwNHSyOTtktmiujTm1m5rFC1Iog0XKKyvRpS9VJAVfdnquyh1L2Rcwg8F4ZJE2NVAAsYEHdjA==
-X-Received: by 2002:a05:6a00:1a8d:: with SMTP id e13mr4656498pfv.10.1643408511444;
-        Fri, 28 Jan 2022 14:21:51 -0800 (PST)
+        bh=V4U1EP9jsO3JA6BfufPhwM36Q3/2B/GqbJd1cBitlJk=;
+        b=SjbVpoYeZcJaCMcgl+6ovSi2Fbp8eCZP/WAxQDOeqlWVUWt5C4YsOZLKobynW1rbu5
+         hdURjuc9Js42sSD5zu37gRQhLfK7zIgvMosI1bMPHrzsDY2tOqqCZzEEnyVGt2g3u5TR
+         3DtgLqrUbq5c/dx0I0XmHx5QrRL/OGlxTix1Ez/xsNJ4wBVZ/VrcB18/8+zQfQs+gSMe
+         445XObe3Ev1dlrLgDuImGViMvHkEmUvCEqXFLquyL8y9DonsM1dnXDi3d+WDvQLytMV4
+         s6Yjm3tVisxc1mWFhP2n/CZ3qursAro9cwDTcaFqzqj6f1K7P894jk+DTXbLBnteabcD
+         uBxA==
+X-Gm-Message-State: AOAM532EK3GN2n3oBOQEzWMf1dF5hsPjijJzuU+bRyaLob32fworNETg
+        GosMZJ7LMWlXdzBC01v51mk=
+X-Google-Smtp-Source: ABdhPJxdcS3v+EhP92efa8VCByz5FlMS4Fxre6ppiHeb/SqV10+Eqo3uDv+A7eAiDg6ak49CgBJvew==
+X-Received: by 2002:a05:6a00:21c9:: with SMTP id t9mr5616243pfj.48.1643408513008;
+        Fri, 28 Jan 2022 14:21:53 -0800 (PST)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id t2sm7787931pfg.207.2022.01.28.14.21.49
+        by smtp.gmail.com with ESMTPSA id t2sm7787931pfg.207.2022.01.28.14.21.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 14:21:50 -0800 (PST)
+        Fri, 28 Jan 2022 14:21:52 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Don Brace <don.brace@microchip.com>,
+        Matthew Wilcox <willy@infradead.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH 38/44] smartpqi: Stop using the SCSI pointer
-Date:   Fri, 28 Jan 2022 14:19:03 -0800
-Message-Id: <20220128221909.8141-39-bvanassche@acm.org>
+Subject: [PATCH 39/44] sym53c8xx_2: Move the SCSI pointer to private command data
+Date:   Fri, 28 Jan 2022 14:19:04 -0800
+Message-Id: <20220128221909.8141-40-bvanassche@acm.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220128221909.8141-1-bvanassche@acm.org>
 References: <20220128221909.8141-1-bvanassche@acm.org>
@@ -56,52 +56,29 @@ from struct scsi_cmnd.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/scsi/sym53c8xx_2/sym_glue.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index f0897d587454..74426974309f 100644
---- a/drivers/scsi/smartpqi/smartpqi_init.c
-+++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -54,6 +54,15 @@ MODULE_DESCRIPTION("Driver for Microchip Smart Family Controller version "
- MODULE_VERSION(DRIVER_VERSION);
- MODULE_LICENSE("GPL");
- 
-+struct pqi_cmd_priv {
-+	int this_residual;
-+};
-+
-+static struct pqi_cmd_priv *pqi_cmd_priv(struct scsi_cmnd *cmd)
-+{
-+	return scsi_cmd_priv(cmd);
-+}
-+
- static void pqi_take_ctrl_offline(struct pqi_ctrl_info *ctrl_info,
- 	enum pqi_ctrl_shutdown_reason ctrl_shutdown_reason);
- static void pqi_ctrl_offline_worker(struct work_struct *work);
-@@ -5555,7 +5564,7 @@ static void pqi_aio_io_complete(struct pqi_io_request *io_request,
- 	scsi_dma_unmap(scmd);
- 	if (io_request->status == -EAGAIN || pqi_raid_bypass_retry_needed(io_request)) {
- 		set_host_byte(scmd, DID_IMM_RETRY);
--		scmd->SCp.this_residual++;
-+		pqi_cmd_priv(scmd)->this_residual++;
- 	}
- 
- 	pqi_free_io_request(io_request);
-@@ -5779,7 +5788,7 @@ static inline bool pqi_is_bypass_eligible_request(struct scsi_cmnd *scmd)
- 	if (blk_rq_is_passthrough(scsi_cmd_to_rq(scmd)))
- 		return false;
- 
--	return scmd->SCp.this_residual == 0;
-+	return pqi_cmd_priv(scmd)->this_residual == 0;
- }
- 
- /*
-@@ -7159,6 +7168,7 @@ static struct scsi_host_template pqi_driver_template = {
- 	.map_queues = pqi_map_queues,
- 	.sdev_groups = pqi_sdev_groups,
- 	.shost_groups = pqi_shost_groups,
-+	.cmd_size = sizeof(struct pqi_cmd_priv),
+diff --git a/drivers/scsi/sym53c8xx_2/sym_glue.c b/drivers/scsi/sym53c8xx_2/sym_glue.c
+index b04bfde65e3f..da4ad1ae0401 100644
+--- a/drivers/scsi/sym53c8xx_2/sym_glue.c
++++ b/drivers/scsi/sym53c8xx_2/sym_glue.c
+@@ -118,7 +118,7 @@ struct sym_ucmd {		/* Override the SCSI pointer structure */
+ 	struct completion *eh_done;		/* SCSI error handling */
  };
  
- static int pqi_register_scsi(struct pqi_ctrl_info *ctrl_info)
+-#define SYM_UCMD_PTR(cmd)  ((struct sym_ucmd *)(&(cmd)->SCp))
++#define SYM_UCMD_PTR(cmd)  ((struct sym_ucmd *)scsi_cmd_priv(cmd))
+ #define SYM_SOFTC_PTR(cmd) sym_get_hcb(cmd->device->host)
+ 
+ /*
+@@ -1629,7 +1629,8 @@ static int sym_detach(struct Scsi_Host *shost, struct pci_dev *pdev)
+ static struct scsi_host_template sym2_template = {
+ 	.module			= THIS_MODULE,
+ 	.name			= "sym53c8xx",
+-	.info			= sym53c8xx_info, 
++	.info			= sym53c8xx_info,
++	.cmd_size		= sizeof(struct sym_ucmd),
+ 	.queuecommand		= sym53c8xx_queue_command,
+ 	.slave_alloc		= sym53c8xx_slave_alloc,
+ 	.slave_configure	= sym53c8xx_slave_configure,
