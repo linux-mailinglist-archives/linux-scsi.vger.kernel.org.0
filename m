@@ -2,96 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E766A4A0470
-	for <lists+linux-scsi@lfdr.de>; Sat, 29 Jan 2022 00:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5CB4A33F6
+	for <lists+linux-scsi@lfdr.de>; Sun, 30 Jan 2022 05:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243718AbiA1XqC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Jan 2022 18:46:02 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:47129 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230352AbiA1XqB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 28 Jan 2022 18:46:01 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A380D5803A7;
-        Fri, 28 Jan 2022 18:46:00 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 28 Jan 2022 18:46:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=xUwCqbFq5p1l8yHGU
-        oeM5CsdqnzYrFZbgfX57fO0sno=; b=EyZDGmMbZXj3HYgnEN8Ymbbo/jc2DIZ3Z
-        Qpu7CUUstdRFb/Dr2e1rD/Hr3ULWiTkOMRz83O9iN4j3RXRzQ8HATWtu7lgHKj/f
-        tQnVQ+tBhqrGFWKlzROuVq2hN2hC3Nj8anWpNHWJ8OYzUK9h1Yf4Um3CyhZkvtRS
-        iFb1sIDVYRwyxqythbFCiZuJrqLiQLK4KTo8Q/m3wKi3vnoiSUbFb7KMcXexnHEp
-        GEyskn3Y11I8Rg/HLXtgn95VNjJ+28TWTuElb5vDbYLJz9S8L0lL8KhSBXU5Guoq
-        3DPVHqMOga/H3flVKT7zht7E0svjaFKW8cblPLMDaetHuH2Eg6zHA==
-X-ME-Sender: <xms:OID0YdM1wA1GxHlUBm1HWAjxWL0c8sd4g5KNh2QpYtKOirvAy92VPQ>
-    <xme:OID0Yf-YrGvUUh9Eju41yuBlO0uePrxZAziWhbtv1wbL-hxYElY8s822dpd9tRy1V
-    4zz-X1u_rGUYFlLCNE>
-X-ME-Received: <xmr:OID0YcSWZg4nmwrn_xpTvFflBMYvX7VrMy8mGq15BXPw_MDIqym202Eg4lPO4EIWuV1VVW-jLsFF7RFe5yx4ndL_xBzsfEds4KQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfeeigddufecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcuvfhh
-    rghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtth
-    gvrhhnpeekveevtdekfedtfefhvdfgleelfefhtdefieetjeejvefghfdufeejkeehgfeu
-    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepfhhthhgrihhnsehlihhnuhigqdhmieekkhdr
-    ohhrgh
-X-ME-Proxy: <xmx:OID0YZu1tYar0MhX_v0vfzusxVV_OJPC956fqgPfooHR48_oBITJaA>
-    <xmx:OID0YVdZr61Jrf5Vn3OCclg7DJSpaeU1V7BCKqpEHNW5qcCE3RLZqQ>
-    <xmx:OID0YV3QB80lXtTxb8E1jvlkoU_4PiBwTORdLy9YvysgT3Whn8O49Q>
-    <xmx:OID0YV20Vqd8eJQSk_4w5hbMfRHLH4lYyGH4iG1MDjyz_KJlmN_8KQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 28 Jan 2022 18:45:57 -0500 (EST)
-Date:   Sat, 29 Jan 2022 10:45:53 +1100 (AEDT)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Tom Rix <trix@redhat.com>
-cc:     Joe Perches <joe@perches.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, nathan@kernel.org,
-        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-In-Reply-To: <0567fce4-256a-e1b1-dc66-221ba97153d5@redhat.com>
-Message-ID: <56b761a-6cf9-23ab-c849-eff27e5e831e@linux-m68k.org>
-References: <20220127151945.1244439-1-trix@redhat.com> <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org> <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com> <fb308f51-f16b-3d9b-80c2-180940236b00@redhat.com> <5554a75f65fddab4de60d61fd503fe73773dafbb.camel@perches.com>
- <c801989d-5f3e-84d2-24a0-7022be70da98@redhat.com> <7bff2de309384b7c9ee71ad90881d1e0bbe0a781.camel@perches.com> <0567fce4-256a-e1b1-dc66-221ba97153d5@redhat.com>
+        id S1354238AbiA3E26 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 29 Jan 2022 23:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354240AbiA3E2d (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 29 Jan 2022 23:28:33 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A5AC0613EE
+        for <linux-scsi@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id i62so30422390ybg.5
+        for <linux-scsi@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=QI2firgHOSt+2ZiRAEUqBnRqfCndbuygIyUz1kdYlPzS6AXkdk+mfMubksdM+6U8hJ
+         A4UbXdfo0bhasYFmsw5ceBBj4ub2bgaEqkI+Cp5foQd/M11l9HiEax3hX9+hB29fNDF1
+         4XtAbOKK0Jrn48roHo8mUNvKaz7FG0Csy4DWdnw8Q+/oXs7GbWFZBjN+ifwhy6Rfe8k0
+         Pzhs5uXUX+5v6iQyGpPCJWV84GisQUz+5cfOraMc3PalgV6vYI9t2Z4JMkhIMshepKV2
+         BM+Zj3o1QTUTRt1Kxwo+5vz+cvvR7n44irHUjPq0LbDCW52O0lwQK7qPtMHxw7vn0Id9
+         5U2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=Gj9LdvS/tCLFiqdmBopU0RhaiHlCGpSoNoX5u3ffHsom5jKDzL0uMVnKJG2xDXkS2Z
+         ajg6wFrASIMYZe8yM64hn2ff/t1KqW8b2ZcfPkjHWbFoBvtf4H445D4FJMraO+avskpE
+         Znd/88PBuS59JaoxTGuV3Mo/nf1MwNyAfghsPNbkLgvp+6K/ze+t7JufQCrojPczNYHO
+         amGeXP+uE2lqjGIy0cj3gSUKzFykkD/c+yYpgnOKHaBvizKXsuAcG2z5ncGu55eOD6C+
+         v5R/FoJUxhSBl46ey7mphhIVop+1SjjyLA0ifV6pGUEgI/EtF50mpEowkS1mWtesw2k8
+         hrBA==
+X-Gm-Message-State: AOAM5325vRCunkCEyl/6Abh/Tb/bQDeih7RZhI6SQoRZcKEBUcEiSnVr
+        5dI9W5YdcxshVZk0HBeidhYnIl57f76dX+wD3EKcFi626vc=
+X-Google-Smtp-Source: ABdhPJz3bgso8viJFkNwiW8XigzdjL6JZBPDE3NfxKOCgEqvWjdU/qagorQKM5joSRLXylFmq9/zlHP85rUYuZ5fTGQ=
+X-Received: by 2002:a25:6d45:: with SMTP id i66mr23246397ybc.352.1643516893721;
+ Sat, 29 Jan 2022 20:28:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Received: by 2002:a05:7010:2312:b0:201:cd76:102e with HTTP; Sat, 29 Jan 2022
+ 20:28:13 -0800 (PST)
+Reply-To: mrs.bill.chantalone01@gmail.com
+From:   "Mrs.Bill.Chantal" <grassroot309@gmail.com>
+Date:   Sun, 30 Jan 2022 05:28:13 +0100
+Message-ID: <CAO3iUMDzg_ZovNWXtuQhU6sDXk7LsNwvNc2pOb7zvX7pPCdMAw@mail.gmail.com>
+Subject: Hello....
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 28 Jan 2022, Tom Rix wrote:
+You have been compensated with the sum of 9.5 million dollars in this
+united nation the payment will be issue into atm visa  card and send
+to you from the santander bank we need your address and your
+Whatsapp number  + 1 6465853907  this my email.ID
+( mrs.bill.chantal.roland@gmail.com )  contact  me
 
-> A testsuite for the fixers may help with churn
-> 
-> Any interest or thought on organization ?
-> 
+Thanks my
 
-Here's one way:
-
-1. Identify some source files that are exemplary (i.e. good style).
-2. Run a new script to introduce style mistakes into those files.
-3. Run the Reformatter Under Test on those files.
-4. Compare the output with the original files.
-
-But that's not sufficient to prevent more style patches (churn). We still 
-need a way to avoid wasting everyone's time writing, submitting, reviewing 
-and merging the inevitably incomplete style patches that may contain 
-regressions and cause conflicts.
-
-The tooling I would like to see is not a script to introduce style 
-mistakes but an editor for binaries, such that C is not the "source" at 
-all but only an ephemeral representation to make it easier for humans to 
-effect changes to binaries (and debug info, commentary etc.)
-
-Nonetheless, perfecting the clang-format tool is a good step towards a 
-better workflow, which I described once before. 
-https://lore.kernel.org/r/alpine.LNX.2.23.453.2010281344120.31@nippy.intranet/
+mrs bill chantal
