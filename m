@@ -2,95 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 685014A4F21
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 Jan 2022 20:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5044A51C2
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 Jan 2022 22:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358996AbiAaTEB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 31 Jan 2022 14:04:01 -0500
-Received: from mail-pf1-f169.google.com ([209.85.210.169]:41980 "EHLO
-        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235245AbiAaTEA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Jan 2022 14:04:00 -0500
-Received: by mail-pf1-f169.google.com with SMTP id i30so13663403pfk.8;
-        Mon, 31 Jan 2022 11:04:00 -0800 (PST)
+        id S1351318AbiAaVlR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 31 Jan 2022 16:41:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381265AbiAaVjG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Jan 2022 16:39:06 -0500
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD1EC061778
+        for <linux-scsi@vger.kernel.org>; Mon, 31 Jan 2022 13:38:21 -0800 (PST)
+Received: by mail-oi1-x242.google.com with SMTP id m9so29339958oia.12
+        for <linux-scsi@vger.kernel.org>; Mon, 31 Jan 2022 13:38:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
+        b=dEuqzCa7Zlz6s4mRGbRbRWXXanD59qsT+xmKk7tBbCVL8shmNgt9pnuL3r3GZQALql
+         Y63DqHUGCnZO0yzAtzp7ZNS2CuC8pMKUMaMtNqE3s9gB45FDt9/C7CdeYDqwmv7HZJbj
+         h6fZit5aG7dGp8FvXKTscfcGshyIKAGZl/Y4NFvWe+GDkg5MDDBzPsbgzyvzZ7B1mfX4
+         ltlQ0tRJrdsWlCdvxMPpvS+PhwNDM1Zp7MYHnfnHzWMTP4bbhrhxbQSB0Xw9LPR0gSp/
+         L2Vas/DZH4ZiZyplfhihUfOHaOD2GjtH1tg3ZI6lVgxDcwRnl8d4U3qCI5tj+07J/ZXk
+         SzvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ba+ZTTm9dUGfaeSvRk+qlfqj/OlYP9s6XSq9bd25RTY=;
-        b=c1lrRwffkBFldJRuhrFNbGSVdR1YvhArvr+056enyutyu+ZW7d0HdBWeNnsroz3FpC
-         UUR8s3H1O93cqu4MJBWE5b0Skdnm1ylVSeoRk9n+cdbb8TwUepRN4AR0XgnQoPqY/COn
-         OL/n6MtC5Q138Ef350ayqbRSls0McGA0OcKSaB6FRwvKloz/6QHt+osS1Fevi5qU/jn0
-         ruxzvnWkrfPAucXOKfTdDhfAQEEVo4Nf9XejPp9qirqmCdbdNLi3rRmRALKLjT+P14oI
-         b2nwsVEQMCxwYIY0ZQbgXEOmXwI7XNcl75nkwkM+5DrCTmxUA5Fd/5WzHX4dxdFk/usZ
-         Gw8Q==
-X-Gm-Message-State: AOAM531BBInl47D25koYugw/AfWo84B7VP0FZ4+qZCY7gKQDTqpmVwHT
-        vmruOHexHnwVY7vYSRg9+IQ=
-X-Google-Smtp-Source: ABdhPJzQA22tXEk8X4OPms7oAF0wKkcs2v8eBD4LAyDqrpj0MnwPbwFxejGQ4ckny7zBvb+xVPqt/g==
-X-Received: by 2002:a63:343:: with SMTP id 64mr17733875pgd.463.1643655839828;
-        Mon, 31 Jan 2022 11:03:59 -0800 (PST)
-Received: from [192.168.51.110] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id e30sm5686912pge.34.2022.01.31.11.03.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 11:03:58 -0800 (PST)
-Message-ID: <59a907b6-596b-402c-b619-b0f5b6013dff@acm.org>
-Date:   Mon, 31 Jan 2022 11:03:55 -0800
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=RcCyF58LaRxi/j1nHAT0ApLeXmQ9s66f3iMVqhPacvY=;
+        b=l/+rG833AUYF6xVZA8bOmCTTlaJ154JcgzC6xRLEdZtq86VH5InWvBVRlYHXfgOjFk
+         W5fy98DIS7zxF1/RWpT3w4bPa+vcAczASOT3E1NSCHHZFzEEPgWo8s0p5CmtgL4cdytd
+         UBf67wHK/l7ZUQ4aa6TdGavWDQpyC2r1Hgupq9stK89VOOaXabVfBDeVJCIRBu+VSSKg
+         TexLeeVBo48kHJIpMFddvzBKt18DOgoHGmiD00tqdkUeZ4vIFa4IQ+9P3aN56ZNeARfY
+         iBPFvWHwC2gboliiJvgXU+aPh5fB8dL85RZLCNqMENxFRo8pkz72sui7JdqJNcMfAkcd
+         3ulw==
+X-Gm-Message-State: AOAM533LU2GJ1Q+Ph+FeczpCuDXtzmKLriWD8LMIi/jt2e9iBdc9qFWB
+        ztl/CzQqbO3MpJ7K7KNRS16htMp5p7iWyTl+czWVlPzr8WFFMQ==
+X-Google-Smtp-Source: ABdhPJzjG4nHBnpm1YeRsvfpKVsM6nmNJIeFJaztEJrNHMe+iyJctx1iGavTAT23A2IhS4j6LtYbunRiUquAn1xj08o=
+X-Received: by 2002:a54:4490:: with SMTP id v16mr14818764oiv.157.1643665089421;
+ Mon, 31 Jan 2022 13:38:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [LSF/MM/BFP ATTEND] [LSF/MM/BFP TOPIC] Storage: Copy Offload
-Content-Language: en-US
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "msnitzer@redhat.com >> msnitzer@redhat.com" <msnitzer@redhat.com>,
-        "martin.petersen@oracle.com >> Martin K. Petersen" 
-        <martin.petersen@oracle.com>,
-        "roland@purestorage.com" <roland@purestorage.com>,
-        "mpatocka@redhat.com" <mpatocka@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        "kbus >> Keith Busch" <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "Frederick.Knight@netapp.com" <Frederick.Knight@netapp.com>,
-        "zach.brown@ni.com" <zach.brown@ni.com>,
-        "osandov@fb.com" <osandov@fb.com>,
-        "lsf-pc@lists.linux-foundation.org" 
-        <lsf-pc@lists.linux-foundation.org>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "josef@toxicpanda.com" <josef@toxicpanda.com>,
-        "clm@fb.com" <clm@fb.com>, "dsterba@suse.com" <dsterba@suse.com>,
-        "tytso@mit.edu" <tytso@mit.edu>, "jack@suse.com" <jack@suse.com>
-References: <f0e19ae4-b37a-e9a3-2be7-a5afb334a5c3@nvidia.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <f0e19ae4-b37a-e9a3-2be7-a5afb334a5c3@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a4a:c30d:0:0:0:0:0 with HTTP; Mon, 31 Jan 2022 13:38:09
+ -0800 (PST)
+Reply-To: westerunion909@gmail.com
+From:   "Antonia Lloyd." <anthonylloydatmxxx04@gmail.com>
+Date:   Mon, 31 Jan 2022 13:38:09 -0800
+Message-ID: <CAExPwBBpihjV-rv_-+hYqb1WD3wpSWx81B_Q3ES15U3TXSPsyw@mail.gmail.com>
+Subject: Dear Email ID Owner.(USD$4000 IMF COMPENSATION FUND TO PICK UP TODAY).
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 1/26/22 23:14, Chaitanya Kulkarni wrote:
-> [1]https://content.riscv.org/wp-content/uploads/2018/12/A-New-Golden-Age-for-Computer-Architecture-History-Challenges-and-Opportunities-David-Patterson-.pdf
-> [2] https://www.snia.org/computational
-> https://www.napatech.com/support/resources/solution-descriptions/napatech-smartnic-solution-for-hardware-offload/
->         https://www.eideticom.com/products.html
-> https://www.xilinx.com/applications/data-center/computational-storage.html
-> [3] git://git.kernel.org/pub/scm/linux/kernel/git/mkp/linux.git xcopy
-> [4] https://www.spinics.net/lists/linux-block/msg00599.html
-> [5] https://lwn.net/Articles/793585/
-> [6] https://nvmexpress.org/new-nvmetm-specification-defines-zoned-
-> namespaces-zns-as-go-to-industry-technology/
-> [7] https://github.com/sbates130272/linux-p2pmem
-> [8] https://kernel.dk/io_uring.pdf
+Dear Email ID Owner.
 
-Please consider adding the following link to the above list:
-https://github.com/bvanassche/linux-kernel-copy-offload
+The IMF is compensating all the email address that was funds as one of
+the ward win Victims and your email address and your name is among the
+listed one of approved to pay the sum of $3.6 million U.S Dollars. We
+have concluded to effect your own payment through Western Union Money
+Transfer for easy pick-up of those funds in good condition,$4000 twice
+daily,till the $3.6 million is completely transferred to you.We now
+need your information where we will be sending the funds,such
+as;Receiver name(Your full Name)address and phone number.Contact
+Western Union agent with this Email: ( westerunion995@gmail.com  ) for
+your payment fund.
 
-Thanks,
+Ms.Maria Zatto
+E-mail:westerunion995@gmail.com
+Telephone: +229 682 97 169
 
-Bart.
+Contact Ms.Maria,immediately you get this mail through western union
+email address above to enable her speed-up.your payment and release
+the $4000 dollars MTCN today for you to pick up the payment OK.
+
+You are expected to provide us with the details as prescribed below to
+enable safe and easy release of your funds today.
+
+(1)Your Full name:
+(2)Your Phone number:
+(3)Your Country:
+(4)Your Age:
+
+Thank you,
+Dr.Antonia Lloyd.
+Contact Dir.Western Union Money Transfer,
+Cotonou-Benin Republic.
