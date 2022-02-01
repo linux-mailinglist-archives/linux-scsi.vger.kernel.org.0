@@ -2,78 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5E34A551C
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Feb 2022 03:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 584EE4A551F
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Feb 2022 03:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbiBACDp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 31 Jan 2022 21:03:45 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:5782 "EHLO
+        id S232663AbiBACDr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 31 Jan 2022 21:03:47 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:12322 "EHLO
         mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232255AbiBACDh (ORCPT
+        by vger.kernel.org with ESMTP id S232638AbiBACDn (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 31 Jan 2022 21:03:37 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VMWrRx008746;
-        Tue, 1 Feb 2022 02:03:31 GMT
+        Mon, 31 Jan 2022 21:03:43 -0500
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VLZf41010052;
+        Tue, 1 Feb 2022 02:03:32 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=pOGMqJJpokNe23I9w0DAGD5uDNxb9lYmNYzFb2yZcGw=;
- b=VwwNzDEh8R2WjxBxW2U1ZqXQXbEp27d1d8nOz1DoAC3xc5JVgF41J5VTyGpDAsE3PYv4
- zXFuO4InCy2J+GO+ve1bX5FPabPtvGlGcPho4yb6yPmckXVS7jV3A7+WHm+Vwb5mmAM/
- 1u1ijnRFPNjIUGKEtVCiIvZpQvfVuYT9YWMTYW89a0LNbCXviDiKu8csqZp5trHHFqw1
- VWMJwlfYjtoBoYCuYzPvcUI6bmp9lHVdem0Z7OOVEu8DEAwfvXXe0AVap6xphQ6cD6SY
- qRo45xnZnzasfJZBCA2eqtdh5iUv/bt9GeU+ysqwxz39yqIGHR8h0p1QuTfuEp148DBw sQ== 
+ bh=gFwJRQdW6nm7Z9ZaQxkW4RvJJfk5/CprNSDO1zbjJkY=;
+ b=OTdEXKNDEZCW24l4RvFqrjzJ1tMmXjA0JWUqckKIzcCTdx2ch1RgJKCNfmHzPnBe80aq
+ UoMzdRHWCIDIkAVFu83mH/g0RKnZP5pFy1k6dccEHDj9DDKG1r2dqki7YZf0/djKMWFN
+ yOgYXvJb079bpCMfzZJLClQNeePpbDYeigxJ0p+xfpANKFUCO2l9w1jeo7tg/FDUyHEC
+ N9vPT6Ssq6z4FYQZJHg47kvZMIepCGg9DxI1keDLEw1tb1ONperiLOjue3b1PN9IyHC0
+ KTzzIr9UmHR3wAsQ+fzAH4oHPktey21Li102mu9ydCHwipNHmguteQ6l3oFh8FbGY7w3 +w== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dxnk2gs7x-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dxjac1fg7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Feb 2022 02:03:31 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2111tR4K079128;
+        Tue, 1 Feb 2022 02:03:30 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3030.oracle.com with ESMTP id 3dvtpy6w9q-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 01 Feb 2022 02:03:30 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2111tKeN079022;
-        Tue, 1 Feb 2022 02:03:29 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3030.oracle.com with ESMTP id 3dvtpy6w8a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Feb 2022 02:03:29 +0000
 Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 21123EPh096319;
-        Tue, 1 Feb 2022 02:03:29 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 21123EPj096319;
+        Tue, 1 Feb 2022 02:03:30 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3030.oracle.com with ESMTP id 3dvtpy6w3w-4;
-        Tue, 01 Feb 2022 02:03:28 +0000
+        by userp3030.oracle.com with ESMTP id 3dvtpy6w3w-5;
+        Tue, 01 Feb 2022 02:03:30 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com
+To:     Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linuxarm@huawei.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: hisi_sas: Fix setting of hisi_sas_slot.is_internal
-Date:   Mon, 31 Jan 2022 21:03:22 -0500
-Message-Id: <164368097302.23346.15184270668603623540.b4-ty@oracle.com>
+        Bart Van Assche <bvanassche@acm.org>,
+        Martin Wilck <mwilck@suse.com>,
+        Martin Wilck <martin.wilck@suse.com>
+Subject: Re: [PATCH V2] scsi: core: reallocate scsi device's budget map if default queue depth is changed
+Date:   Mon, 31 Jan 2022 21:03:23 -0500
+Message-Id: <164368097301.23346.9140841739337251694.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1643627607-138785-1-git-send-email-john.garry@huawei.com>
-References: <1643627607-138785-1-git-send-email-john.garry@huawei.com>
+In-Reply-To: <20220127153733.409132-1-ming.lei@redhat.com>
+References: <20220127153733.409132-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: G-8oQKFLQxGxaDiehhlTBKPdy2wXNbjr
-X-Proofpoint-ORIG-GUID: G-8oQKFLQxGxaDiehhlTBKPdy2wXNbjr
+X-Proofpoint-GUID: t2V7EAVEtHB0kubWJ12eKsilXCwLaa6j
+X-Proofpoint-ORIG-GUID: t2V7EAVEtHB0kubWJ12eKsilXCwLaa6j
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 31 Jan 2022 19:13:27 +0800, John Garry wrote:
+On Thu, 27 Jan 2022 23:37:33 +0800, Ming Lei wrote:
 
-> The hisi_sas_slot.is_internal member is not set properly for ATA commands
-> which the driver sends directly. A TMF struct pointer is normally used as
-> a test to set this, but it is NULL for those commands. It's not ideal, but
-> pass an empty TMF struct to set that member properly.
+> Martin reported that sdev->queue_depth can often be changed in
+> ->slave_configure(), and now we uses ->cmd_per_lun as initial queue
+> depth for setting up sdev->budget_map. And some extreme ->cmd_per_lun
+> or ->can_queue won't be used at default actually, if they are used to
+> allocate sdev->budget_map, huge memory may be consumed just because
+> of bad ->cmd_per_lun.
 > 
-> 
+> [...]
 
 Applied to 5.17/scsi-fixes, thanks!
 
-[1/1] scsi: hisi_sas: Fix setting of hisi_sas_slot.is_internal
-      https://git.kernel.org/mkp/scsi/c/c763ec4c10f7
+[1/1] scsi: core: reallocate scsi device's budget map if default queue depth is changed
+      https://git.kernel.org/mkp/scsi/c/edb854a3680b
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
