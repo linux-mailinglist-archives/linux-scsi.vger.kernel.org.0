@@ -2,81 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 584EE4A551F
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Feb 2022 03:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949D04A5522
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Feb 2022 03:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbiBACDr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 31 Jan 2022 21:03:47 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:12322 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232638AbiBACDn (ORCPT
+        id S232255AbiBACEj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 31 Jan 2022 21:04:39 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:49094 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232093AbiBACEf (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 31 Jan 2022 21:03:43 -0500
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VLZf41010052;
-        Tue, 1 Feb 2022 02:03:32 GMT
+        Mon, 31 Jan 2022 21:04:35 -0500
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VMEbQL006220;
+        Tue, 1 Feb 2022 02:04:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=gFwJRQdW6nm7Z9ZaQxkW4RvJJfk5/CprNSDO1zbjJkY=;
- b=OTdEXKNDEZCW24l4RvFqrjzJ1tMmXjA0JWUqckKIzcCTdx2ch1RgJKCNfmHzPnBe80aq
- UoMzdRHWCIDIkAVFu83mH/g0RKnZP5pFy1k6dccEHDj9DDKG1r2dqki7YZf0/djKMWFN
- yOgYXvJb079bpCMfzZJLClQNeePpbDYeigxJ0p+xfpANKFUCO2l9w1jeo7tg/FDUyHEC
- N9vPT6Ssq6z4FYQZJHg47kvZMIepCGg9DxI1keDLEw1tb1ONperiLOjue3b1PN9IyHC0
- KTzzIr9UmHR3wAsQ+fzAH4oHPktey21Li102mu9ydCHwipNHmguteQ6l3oFh8FbGY7w3 +w== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dxjac1fg7-1
+ bh=LnxSuO7szA+umVWySgha5LXVAK4HX4HfEllPf1Lj9Zg=;
+ b=FlwiQPW2qBArzwbXIXNSmW9koSi9zibrRYZgGmUzKZODuH8Ln8EjVH+mxQEu+GWzK4LI
+ nrJslj6/JE9d31kyuCqPfjUZThSBK6piCoz6OoKPC5xAl0tjTeLbWtiG6tYQq4Xxs1tP
+ tIm83NPF2v+eniGjEkMv+HNgJCx5Pc6c0cleMlLdl+BhhYXcyncAlrVfxjVpz917CnVr
+ toZkT4Mtc7z+//lyCTt1I9vv2kGE28tjuAHZiwqLcIdu+meiQ5KnnBOKFMAuULhDbmBX
+ WTOIa3cPQ4LnrC6mCPGpqVO5aFNe4J8Ur+tgwoi6XJm4FWqTD2oG6VTUkaWABw7u7eWC GQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dxj9w9eqn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Feb 2022 02:03:31 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2111tR4K079128;
-        Tue, 1 Feb 2022 02:03:30 GMT
+        Tue, 01 Feb 2022 02:04:26 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2111t7dt098002;
+        Tue, 1 Feb 2022 02:04:25 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3030.oracle.com with ESMTP id 3dvtpy6w9q-1
+        by aserp3020.oracle.com with ESMTP id 3dvwd5a8cw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Feb 2022 02:03:30 +0000
-Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 21123EPj096319;
-        Tue, 1 Feb 2022 02:03:30 GMT
+        Tue, 01 Feb 2022 02:04:25 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 21124Pp1124522;
+        Tue, 1 Feb 2022 02:04:25 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3030.oracle.com with ESMTP id 3dvtpy6w3w-5;
-        Tue, 01 Feb 2022 02:03:30 +0000
+        by aserp3020.oracle.com with ESMTP id 3dvwd5a8ck-1;
+        Tue, 01 Feb 2022 02:04:24 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org
+To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Martin Wilck <mwilck@suse.com>,
-        Martin Wilck <martin.wilck@suse.com>
-Subject: Re: [PATCH V2] scsi: core: reallocate scsi device's budget map if default queue depth is changed
-Date:   Mon, 31 Jan 2022 21:03:23 -0500
-Message-Id: <164368097301.23346.9140841739337251694.b4-ty@oracle.com>
+        jejb@linux.vnet.ibm.com, bvanassche@acm.org, hare@suse.de
+Subject: Re: [PATCH v2 0/9] scsi_debug: collection of additions
+Date:   Mon, 31 Jan 2022 21:04:22 -0500
+Message-Id: <164368101885.23527.13122069878492597470.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220127153733.409132-1-ming.lei@redhat.com>
-References: <20220127153733.409132-1-ming.lei@redhat.com>
+In-Reply-To: <20220109012853.301953-1-dgilbert@interlog.com>
+References: <20220109012853.301953-1-dgilbert@interlog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: t2V7EAVEtHB0kubWJ12eKsilXCwLaa6j
-X-Proofpoint-ORIG-GUID: t2V7EAVEtHB0kubWJ12eKsilXCwLaa6j
+X-Proofpoint-ORIG-GUID: 8EiNHZSxFfvWlDw-18EFnztuRYD1kf1c
+X-Proofpoint-GUID: 8EiNHZSxFfvWlDw-18EFnztuRYD1kf1c
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 27 Jan 2022 23:37:33 +0800, Ming Lei wrote:
+On Sat, 8 Jan 2022 20:28:44 -0500, Douglas Gilbert wrote:
 
-> Martin reported that sdev->queue_depth can often be changed in
-> ->slave_configure(), and now we uses ->cmd_per_lun as initial queue
-> depth for setting up sdev->budget_map. And some extreme ->cmd_per_lun
-> or ->can_queue won't be used at default actually, if they are used to
-> allocate sdev->budget_map, huge memory may be consumed just because
-> of bad ->cmd_per_lun.
+> The first patch is to address possible modprobe rmmod races.
+> 
+> The second patch adds READ_ONCE and WRITE_ONCE on several
+> high frequency variables.
+> 
+> See the headers of patches 3 and 4.
 > 
 > [...]
 
-Applied to 5.17/scsi-fixes, thanks!
+Applied to 5.18/scsi-queue, thanks!
 
-[1/1] scsi: core: reallocate scsi device's budget map if default queue depth is changed
-      https://git.kernel.org/mkp/scsi/c/edb854a3680b
+[1/9] scsi_debug: address races following module load
+      https://git.kernel.org/mkp/scsi/c/2aad3cd85370
+[2/9] scsi_debug: strengthen defer_t accesses
+      https://git.kernel.org/mkp/scsi/c/d9d23a5a34bd
+[3/9] scsi_debug: use task set full more
+      https://git.kernel.org/mkp/scsi/c/7d5a129b86b3
+[4/9] scsi_debug: refine sdebug_blk_mq_poll
+      https://git.kernel.org/mkp/scsi/c/b05d4e481eff
+[5/9] scsi_debug: divide power on reset unit attention
+      https://git.kernel.org/mkp/scsi/c/500d0d248081
+[6/9] scsi_debug: add no_rwlock parameter
+      https://git.kernel.org/mkp/scsi/c/7109f3701a4a
+[9/9] scsi_debug: add environmental reporting log subpage
+      https://git.kernel.org/mkp/scsi/c/0790797aca03
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
