@@ -2,85 +2,142 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0E94A5972
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Feb 2022 10:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A89F4A59E1
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Feb 2022 11:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236126AbiBAJqZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Feb 2022 04:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
+        id S235596AbiBAKV0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Feb 2022 05:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235864AbiBAJqZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Feb 2022 04:46:25 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF7AC061714
-        for <linux-scsi@vger.kernel.org>; Tue,  1 Feb 2022 01:46:24 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id o9-20020a9d7189000000b0059ee49b4f0fso15663973otj.2
-        for <linux-scsi@vger.kernel.org>; Tue, 01 Feb 2022 01:46:24 -0800 (PST)
+        with ESMTP id S234827AbiBAKVZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Feb 2022 05:21:25 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74580C06173B
+        for <linux-scsi@vger.kernel.org>; Tue,  1 Feb 2022 02:21:25 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id k25so52232534ejp.5
+        for <linux-scsi@vger.kernel.org>; Tue, 01 Feb 2022 02:21:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5gp9PmRzu/IxyYft6SYlBpTpSszCTP5U4t3M+O26jr4=;
-        b=bJ0wvM+O6NiNhfM/TV9Lq6O3cTaQo/mPlC7kwq733962qqe8//gLlh2B59127BMIv7
-         PUm9oYaOCfLYEtknyahLqDYyVBunhFVzRHj4Bg/r+A6xyHnLY1bxfWTRLBsDqxNvJf/F
-         IfyNngf7UrvvLOZNjxp5ZbKX043fZb0q1qIM0rWRyUjix3p49tm6axJjLRzDHwbPmiEk
-         xu3IBvMmzDY9Z7ige4nX4ruLs97SG+9I/wENRL6Exw6FfiAFjCfjHRjSXuvdYvEINQMf
-         E9QivLW98ipM5AkrbVIrFFSFTrJ28ffZW8ZsxE7Wot3ITR0EGp5ybVY2XL3pz088o5df
-         O1HQ==
+        d=javigon-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eIOyvFawBB1yczxqwT9GD1wEUXr2GprPDkj97BLOhM8=;
+        b=pJgqMkadljh7RQEG1OifyORi8FTJ4yvtTfhp3Fv0W8KUnRAFhPQ4ydhJvfbXum++fP
+         3t7f7doYblsNgo7oMDTiOlmZxcYOiY37CgCvg8/RYn8T+Po8tgv7lvxp9CBGdStWf3sq
+         WwtEU3TOLf/MOIjXnUbZGNWUc0SaOZUQaiLRhguRevht8Ac2tVvAoukw0t2U0+1QzAhu
+         BEo/9KKub7Q2qd+N8AHo5ghjz9HneRcptN27Xs5gNExbv0R+eQ++gXKpGeAVamTqzYf9
+         GzqAZGpYgMj5ryA1ScCFdqG68fiEHF0J+CN6knWH805XRJi4UYxN58axR+bPXe0b2yhC
+         lyGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5gp9PmRzu/IxyYft6SYlBpTpSszCTP5U4t3M+O26jr4=;
-        b=4Y2rq9NYNgBeFr9vJJBYV/D0SBBlLZlZO9KpJRtkhQfFgvuXaB9XTD8HG4hRSn3neB
-         XRibx3VaCTpebI+LBK0+4VvXZRYat+dGMWKxW7uETgO+oMTo9/kUe+uqvEKXtnK4R6ES
-         h0mV6Jdnwsue1mC5yTV2l8r2M8tl2yaY+3dcNo7tRSXZN4SqdQPobgXXWsrn1svSpLMi
-         ExcKChsEX3W8MHeEE/bxVKnM/1/TJkOYxtSKW7UkOKhOVOqUcKu8JLqdUuDvzkeOd1ix
-         cKHz6L+5iaLQ9/mli3XYHK5GWgFq6VhUDB+OmN/K1BUOEJfEmuzPqHNEiCIVI+SMuJ03
-         0bxA==
-X-Gm-Message-State: AOAM531HHIlIGCb/FPPnXrDXaiyYmvqqNXq9C11d3RhV/Fb/QNeuqRaD
-        qpxZX8QYe9s838jv6tDX1q3wJ3JnBSz+nFsOAFA=
-X-Google-Smtp-Source: ABdhPJyClIb5kfIiotsudSBRhHcFQ1FoPERUVTWpxKvj3q+S3CDqnXW5j5cTVyWVkA2wrvNJ9ILRk/j7gHTlQCVKMlE=
-X-Received: by 2002:a9d:6a92:: with SMTP id l18mr13845307otq.47.1643708784096;
- Tue, 01 Feb 2022 01:46:24 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eIOyvFawBB1yczxqwT9GD1wEUXr2GprPDkj97BLOhM8=;
+        b=KHiFJZn0VgSdvg9UrCvoPBI71MBBK60jUiDG/UU/YcW1XWrL0E/AJAAfETSoEK0ckG
+         +ilepUm3GphMcHpDsbBqUeVNfQaVqn50X/72JuHfx1zhubVi0RC1GdQ6M3kz/ckorq0n
+         O6spnvPWwbsn9tcxFP9JrQy+D+9HJwwUiTTdezqb2k0nSEecAc/RsfW1c7fU+HXo9Rp/
+         1JNPIP6ZbcbBM2x7AON+nIh6+s1XxIcEgHCTbkEMxdu7ZJiUBC75Nfwfxd7w/xYfowFe
+         N3lpJL0IYyd/IxHLCXX643ON3KLF4YQbL2CPhXIEpu3eui6ANHqFmicv9Ua5GZatFhdI
+         iCqg==
+X-Gm-Message-State: AOAM530p3qB9nj7Lk1dMnJq6o2ucfxO3VcPzMfQ94qymudus7tiZLe+x
+        Uftgar2wWyHqoTM3uJsZccUldw==
+X-Google-Smtp-Source: ABdhPJx58nqEvb1Npa2CsMHZtPsUoqQzJ41tgdoNFsHrDBZEqyc2NUJcMe6tBJmOhT19Yval8hSzoA==
+X-Received: by 2002:a17:907:7f1a:: with SMTP id qf26mr14491120ejc.20.1643710883991;
+        Tue, 01 Feb 2022 02:21:23 -0800 (PST)
+Received: from localhost (5.186.121.195.cgn.fibianet.dk. [5.186.121.195])
+        by smtp.gmail.com with ESMTPSA id w24sm11634557edu.97.2022.02.01.02.21.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 02:21:23 -0800 (PST)
+Date:   Tue, 1 Feb 2022 11:21:22 +0100
+From:   Javier =?utf-8?B?R29uesOhbGV6?= <javier@javigon.com>
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "msnitzer@redhat.com >> msnitzer@redhat.com" <msnitzer@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "martin.petersen@oracle.com >> Martin K. Petersen" 
+        <martin.petersen@oracle.com>,
+        "roland@purestorage.com" <roland@purestorage.com>,
+        "mpatocka@redhat.com" <mpatocka@redhat.com>,
+        Hannes Reinecke <hare@suse.de>,
+        "kbus >> Keith Busch" <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "Frederick.Knight@netapp.com" <Frederick.Knight@netapp.com>,
+        "zach.brown@ni.com" <zach.brown@ni.com>,
+        "osandov@fb.com" <osandov@fb.com>,
+        "lsf-pc@lists.linux-foundation.org" 
+        <lsf-pc@lists.linux-foundation.org>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "clm@fb.com" <clm@fb.com>, "dsterba@suse.com" <dsterba@suse.com>,
+        "tytso@mit.edu" <tytso@mit.edu>, "jack@suse.com" <jack@suse.com>,
+        Kanchan Joshi <joshi.k@samsung.com>
+Subject: Re: [LSF/MM/BFP ATTEND] [LSF/MM/BFP TOPIC] Storage: Copy Offload
+Message-ID: <20220201102122.4okwj2gipjbvuyux@mpHalley-2>
+References: <f0e19ae4-b37a-e9a3-2be7-a5afb334a5c3@nvidia.com>
 MIME-Version: 1.0
-Received: by 2002:a4a:d812:0:0:0:0:0 with HTTP; Tue, 1 Feb 2022 01:46:23 -0800 (PST)
-Reply-To: pastor.johnvincent11@gmail.com
-From:   Mr Johnson Robert <senabubakark@gmail.com>
-Date:   Tue, 1 Feb 2022 01:46:23 -0800
-Message-ID: <CABST1=HsEBZJhdoKbwvMexFtyutqdP9gUEza9ebxUowtSEAeXA@mail.gmail.com>
-Subject: Contact my Secretary Pastor John
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+In-Reply-To: <f0e19ae4-b37a-e9a3-2be7-a5afb334a5c3@nvidia.com>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Dear Partner
+On 27.01.2022 07:14, Chaitanya Kulkarni wrote:
+>Hi,
+>
+>* Background :-
+>-----------------------------------------------------------------------
+>
+>Copy offload is a feature that allows file-systems or storage devices
+>to be instructed to copy files/logical blocks without requiring
+>involvement of the local CPU.
+>
+>With reference to the RISC-V summit keynote [1] single threaded
+>performance is limiting due to Denard scaling and multi-threaded
+>performance is slowing down due Moore's law limitations. With the rise
+>of SNIA Computation Technical Storage Working Group (TWG) [2],
+>offloading computations to the device or over the fabrics is becoming
+>popular as there are several solutions available [2]. One of the common
+>operation which is popular in the kernel and is not merged yet is Copy
+>offload over the fabrics or on to the device.
+>
+>* Problem :-
+>-----------------------------------------------------------------------
+>
+>The original work which is done by Martin is present here [3]. The
+>latest work which is posted by Mikulas [4] is not merged yet. These two
+>approaches are totally different from each other. Several storage
+>vendors discourage mixing copy offload requests with regular READ/WRITE
+>I/O. Also, the fact that the operation fails if a copy request ever
+>needs to be split as it traverses the stack it has the unfortunate
+>side-effect of preventing copy offload from working in pretty much
+>every common deployment configuration out there.
+>
+>* Current state of the work :-
+>-----------------------------------------------------------------------
+>
+>With [3] being hard to handle arbitrary DM/MD stacking without
+>splitting the command in two, one for copying IN and one for copying
+>OUT. Which is then demonstrated by the [4] why [3] it is not a suitable
+>candidate. Also, with [4] there is an unresolved problem with the
+>two-command approach about how to handle changes to the DM layout
+>between an IN and OUT operations.
+>
+>We have conducted a call with interested people late last year since
+>lack of LSFMMM and we would like to share the details with broader
+>community members.
 
-It is my pleasure to reach you after our unsuccessful attempt on our
-business transaction, Well i just want to use this medium to thank you
-very much for your earlier assistance to help me in receiving the
-funds without any positive outcome.
+Chaitanya,
 
-Contact Reverend Pastor John /e-mail: (  pastor.johnvincent11@gmail.com  )
-Call and What's App Phone Number: +229-53812455
+I would also like to join the F2F conversation as a follow up of the
+virtual one last year. We will have a first version of the patches
+posted in the next few weeks. This will hopefully serve as a good first
+step.
 
-I have kept the ATM VISA CARD  with Him at amount worth of US$ 1.5
-million for your compensation and you are expecting to send him your
-full address via mail to deliver your card to you. you are required to
-send him the following infromation as listed ,so that he will direct
-you how you Atm Visa Card can been deliver to your destination.
+Adding Kanchan to thread too.
 
-1. Your full name....................
-2. Your Occupation................
-3. Your address......................
-4. Your phone number...........
-5. Age:..................
-6. Nationality:.........
-7. whatsapp Number.......
-
-Kind Regards
-
-Yours Sincerely,
-
-Mr Johnson Robert
+Javier
