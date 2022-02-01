@@ -2,155 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C464A5C62
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Feb 2022 13:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BB44A5D41
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Feb 2022 14:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238159AbiBAMg6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Feb 2022 07:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
+        id S238558AbiBANKM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Feb 2022 08:10:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237946AbiBAMgz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Feb 2022 07:36:55 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0977AC06173B
-        for <linux-scsi@vger.kernel.org>; Tue,  1 Feb 2022 04:36:55 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id 13so14864607qkd.13
-        for <linux-scsi@vger.kernel.org>; Tue, 01 Feb 2022 04:36:55 -0800 (PST)
+        with ESMTP id S238526AbiBANJp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Feb 2022 08:09:45 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F73DC061763
+        for <linux-scsi@vger.kernel.org>; Tue,  1 Feb 2022 05:09:44 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id s5so53839704ejx.2
+        for <linux-scsi@vger.kernel.org>; Tue, 01 Feb 2022 05:09:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nskeSRiBDGoJdBUOhSRpII4ymRQB/RCZW6MS1+0kpvM=;
-        b=mDPlLjNErpVCtqtsADancFzkLBmw2S+bXBPoILSGxKLUJz63L0rtVX0E+uIJ1BQJPm
-         DIW4sRvonVCFjMNv7tIo0KxFmA4JIWX+ABxVtU7ZqLLWFK//4u162OThrMYofKmZmy9l
-         V2Nebp/Km4rhU1Db/RMAmSdEx77JIzmUH66hvegpy6x/gVRKcfFJG/z8FfLCvmKVLAhu
-         KNEA8/5zU06Vfj9WX4R7G7s9Gz6+WBE/QQp3VKlyjg0qHv54Y0mdPqSOg9VNeUxY3YxO
-         E+DbwtOd7I004ecGyetRUm2jOLjIkMRTL9SxchLuW1/3XM+Xl6r/FN63oYZqis3jpxNx
-         q4AA==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=CMzdAZWvSREUxL9gyi7ZDNRKXhnPhof45SdOgpKoP4Q=;
+        b=lI9Jmbuup3aTWITenXjzX9xDuHVe8UPpTHYDrZok/sN3tRm2Td+EQRuXxeskfP0mJ9
+         GNI7avi90d9ZNOOE7Dsj/u+Lzeby81VSWyc9shQ9/j4lc6cyAHqtLhDTBU2WY0Mm5+V/
+         TaWW/OkPLWRZgrYMjObe8D0XIVUjgQBr5GqESJoZzV2l9xcOXqhcP9BzIwQgsSZTH65f
+         494ANS0zbV7qN4bCPKmPxwSWP9OIqO30KaFMSXldufcSUAKWamWP79QdSiosm7q9QHvC
+         uaaaA5+KqOrmG8H5ILKqis6yB0h8qpNmrz63iJDIHv7cetvnn6eX+W+6JiunGKrn15zN
+         dhSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nskeSRiBDGoJdBUOhSRpII4ymRQB/RCZW6MS1+0kpvM=;
-        b=KNAQdBll7fuxV4qIZGPuJM1w5nm52ev7NOjV4Cv6bFuKIaGGVTpWzNjMJLPEPJx+09
-         YTjK2ATb3xZ+1dh0BKKMkwrwEhcdGbZVsTSlKuXOykhr/j0/Rtcu+EVHGsO5msr8WOEd
-         uN0H9MppNj/w3RcCf0Aac3rUrkbe2/xFmeHIsrS29XH45IVNi5smBp5zEK09S84rvGbF
-         10pqjw7ib3Vz7GuDrQosgcYy3wGWH3TtYgjJJVO3PKmdOO5uO8wvi3GSlFqwnXhIiiGL
-         lE1ph71R/BKwFMfvOmlMYw3ABJL4eEkMeNk8KzCZHwu6DBO0t0sHdy7UCKSby1MDSBV0
-         MqSw==
-X-Gm-Message-State: AOAM530xsUzWiPpy7ZNnyiBmzJeNCbGaGnAYVsGuHKfyqtsfA38al49p
-        BSBd/WpwYSwJVux3lZ5rpsEtW4/4JTFB8A==
-X-Google-Smtp-Source: ABdhPJy8a1by7jIsBADUNDKiXTVedVbFSBvgzztZ25yKMzc7Lw3UMCCBlQ3EYyDDmoD2PL87m7SIzg==
-X-Received: by 2002:a05:620a:40c5:: with SMTP id g5mr16227786qko.139.1643719014182;
-        Tue, 01 Feb 2022 04:36:54 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id 16sm3216564qty.86.2022.02.01.04.36.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 04:36:53 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nEsOy-00A73m-Vh; Tue, 01 Feb 2022 08:36:52 -0400
-Date:   Tue, 1 Feb 2022 08:36:52 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Douglas Gilbert <dgilbert@interlog.com>
-Cc:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
-        bvanassche@acm.org, Bodo Stroesser <bostroesser@gmail.com>
-Subject: Re: [PATCH v7 1/4] sgl_alloc_order: remove 4 GiB limit
-Message-ID: <20220201123652.GA8034@ziepe.ca>
-References: <20220201034915.183117-1-dgilbert@interlog.com>
- <20220201034915.183117-2-dgilbert@interlog.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=CMzdAZWvSREUxL9gyi7ZDNRKXhnPhof45SdOgpKoP4Q=;
+        b=0GEsuL5NWs/TmS1io4VcxJt+a/3tRaNut257uqofPUbga8PlamYyHdo3LIXvlUGqzO
+         PDkC3Qxb5qObCuqitAJml/VsWWZ5Qk6dUjSUQh8/9Fi0Bk5gPpXKPjAomqWVRL+OcFP9
+         AaXFrau8FHaBS0XU4Ub8vKrmCWcqFrdawQXSC/CmRYp8elzWsLMzQ+5vNe6eL0nTtivJ
+         5MpofAN4sYb3BuoHH3mo9mNxctf8QhcoX19yFSGJTecT7lD+IPHdQDpcCXun45KyVdg8
+         qbniENM34MM+HYNzWGk/69O1cp93YUMrEm/xEw6wFRAoq4OxQhlQ2ZhlxYO5B8Fjzf+o
+         63zA==
+X-Gm-Message-State: AOAM533FcoYv2KkNmvv4VIA+ovn6KO8rerBbn3WVEjPjzwowc7HsYsWh
+        ht+MA7WjKvsV2/Ir7YZ+7UsZvW40n9+TXMSoRag=
+X-Google-Smtp-Source: ABdhPJz6GI7dUsypgqwhst0kQha2r+tRDnfIE5rKQ36RMXn96nHLExEnUaiU4OuPQOyY9uWs8E3MdztN4iEtee4sGdo=
+X-Received: by 2002:a17:906:6a0f:: with SMTP id qw15mr21491179ejc.66.1643720983147;
+ Tue, 01 Feb 2022 05:09:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201034915.183117-2-dgilbert@interlog.com>
+Received: by 2002:a17:907:6d06:0:0:0:0 with HTTP; Tue, 1 Feb 2022 05:09:42
+ -0800 (PST)
+Reply-To: lisahugh159@gmail.com
+From:   MS LISA HUGH <dkoure73@gmail.com>
+Date:   Tue, 1 Feb 2022 14:09:42 +0100
+Message-ID: <CABn=45xvmrGOmWfGo3jz5qscrq=sbaUZSC3CWxL-3rBUO3q5kA@mail.gmail.com>
+Subject: FROM Ms Lisa Hugh.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 10:49:12PM -0500, Douglas Gilbert wrote:
-> This patch fixes a check done by sgl_alloc_order() before it starts
-> any allocations. The comment in the original said: "Check for integer
-> overflow" but the right hand side of the expression in the condition
-> is resolved as u32 so it can not exceed UINT32_MAX (4 GiB) which
-> means 'length' can not exceed that value.
-> 
-> This function may be used to replace vmalloc(unsigned long) for a
-> large allocation (e.g. a ramdisk). vmalloc has no limit at 4 GiB so
-> it seems unreasonable that sgl_alloc_order() whose length type is
-> unsigned long long should be limited to 4 GB.
-> 
-> In early 2021 there was discussion between Jason Gunthorpe
-> <jgg@ziepe.ca> and Bodo Stroesser <bostroesser@gmail.com> about the
-> way to check for overflow caused by order (an exponent) being
-> too large. Take the solution proposed by Bodo in post dated
-> 20210118 to the linux-scsi and linux-block lists.
-> 
-> An earlier patch fixed a memory leak in sg_alloc_order() due to the
-> misuse of sgl_free(). Take the opportunity to put a one line comment
-> above sgl_free()'s declaration warning that it is not suitable when
-> order > 0 .
-> 
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Reviewed-by: Bodo Stroesser <bostroesser@gmail.com>
-> Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
-> ---
->  include/linux/scatterlist.h |  1 +
->  lib/scatterlist.c           | 24 +++++++++++++-----------
->  2 files changed, 14 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/linux/scatterlist.h b/include/linux/scatterlist.h
-> index 7ff9d6386c12..03130be581bb 100644
-> --- a/include/linux/scatterlist.h
-> +++ b/include/linux/scatterlist.h
-> @@ -357,6 +357,7 @@ struct scatterlist *sgl_alloc(unsigned long long length, gfp_t gfp,
->  			      unsigned int *nent_p);
->  void sgl_free_n_order(struct scatterlist *sgl, int nents, int order);
->  void sgl_free_order(struct scatterlist *sgl, int order);
-> +/* Only use sgl_free() when order is 0 */
->  void sgl_free(struct scatterlist *sgl);
->  #endif /* CONFIG_SGL_ALLOC */
->  
-> diff --git a/lib/scatterlist.c b/lib/scatterlist.c
-> index d5e82e4a57ad..ed6d0465c78e 100644
-> --- a/lib/scatterlist.c
-> +++ b/lib/scatterlist.c
-> @@ -585,13 +585,16 @@ EXPORT_SYMBOL(sg_alloc_table_from_pages_segment);
->  #ifdef CONFIG_SGL_ALLOC
->  
->  /**
-> - * sgl_alloc_order - allocate a scatterlist and its pages
-> + * sgl_alloc_order - allocate a scatterlist with equally sized elements each
-> + *		     of which has 2^@order continuous pages
->   * @length: Length in bytes of the scatterlist. Must be at least one
-> - * @order: Second argument for alloc_pages()
-> + * @order:  Second argument for alloc_pages(). Each sgl element size will
-> + *	    be (PAGE_SIZE*2^@order) bytes. @order must not exceed 16.
->   * @chainable: Whether or not to allocate an extra element in the scatterlist
-> - *	for scatterlist chaining purposes
-> + *	       for scatterlist chaining purposes
->   * @gfp: Memory allocation flags
-> - * @nent_p: [out] Number of entries in the scatterlist that have pages
-> + * @nent_p: [out] Number of entries in the scatterlist that have pages.
-> + *		  Ignored if @nent_p is NULL.
->   *
->   * Returns: A pointer to an initialized scatterlist or %NULL upon failure.
->   */
-> @@ -604,16 +607,15 @@ struct scatterlist *sgl_alloc_order(unsigned long long length,
->  	unsigned int nent, nalloc;
->  	u32 elem_len;
->  
-> -	nent = round_up(length, PAGE_SIZE << order) >> (PAGE_SHIFT + order);
-> -	/* Check for integer overflow */
-> -	if (length > (nent << (PAGE_SHIFT + order)))
-> +	if (length >> (PAGE_SHIFT + order) >= UINT_MAX)
->  		return NULL;
-> -	nalloc = nent;
-> +	nent = DIV_ROUND_UP(length, PAGE_SIZE << order);
-> +
+Dear Friend,
 
-This would be clearer to make nent/etc an unsigned long long. Then
-check if nalloc is > SIZE_MAX before casting it to size_t for the
-allocation. Avoids the wonky if statement.
+I am Ms Lisa Hugh accountant and files keeping by profession with the bank.
 
-Kaspm
+I need your co-operation for the  transferring of
+($4,500,000,00,U.S.DOLLARS)to your bank account for both of us
+benefit.
+
+Please send the follow below,
+
+1)AGE....
+2)TELEPHONE NUMBER,,,,,...
+3)COUNTRY.....
+4)OCCUPATION..
+....
+Thanks.
+
+Ms Lisa Hugh
