@@ -2,88 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D4C4A6D7F
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Feb 2022 10:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 584B24A6DFC
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Feb 2022 10:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbiBBJG3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Feb 2022 04:06:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiBBJG2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Feb 2022 04:06:28 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922E3C061714
-        for <linux-scsi@vger.kernel.org>; Wed,  2 Feb 2022 01:06:28 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id d5so19651894pjk.5
-        for <linux-scsi@vger.kernel.org>; Wed, 02 Feb 2022 01:06:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=InG4VRM3/5bnDQT6suZ+b4O2uDnFb374QaBH8ZJOhTk=;
-        b=UkMCDoEv4s933s17+I3yWJ3tsa+wLDyrx5H6o/cI/hcsuY2aEk/N+mFS+x8QF1SSiU
-         bTbOXM8p861VjcsVYet7T8Q9Gwb9j9ZY6OGfh4G5aa2kxQUqq4VgOcVMnRWClVQXuXop
-         RsbAr8H/OXD2nlLOoAvlhCH2RetFULQylkmSq/+FSD8XvU6cGLtHziYZTcpOaO3mZeel
-         +KrNp5VgIgjHN2c3/G2sUrBC4RneaOKkSFkU8zb3hhqTsm7wJl5nMAFqMDjxCulkhbwV
-         FN+a75Is+Jh8fz/04seILLXxEMH0Ii3ZLbFs1K9iTB2YLw91vomLeKKJlxj7oK/rxXX4
-         4GOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=InG4VRM3/5bnDQT6suZ+b4O2uDnFb374QaBH8ZJOhTk=;
-        b=2+TeqvUjQJfdGrfGa8NEpF3X/KxEOG0rhPjckYaDwM9Dz17fBieaQkriu/nybtJ27v
-         V+rGYT3sEzmaSZlALexXMc3EHZy1ZqQnuJf5j9lHQV05EvrnjUePHQtkyL9pD0B8xo3i
-         MXwrlo6Zvz+/R8wnF13jDCUXnuRzmREl4X6sJKqF4+4CymW2YoBOwuinXSq4X77uxkxh
-         g8ThCe8+G+KzXgXkkUPQZcqJhnach0vueMcwBHYr6IyjfwraLmR9ptGN6Pi8hR6euRa+
-         kvE7XrdIRFYonnhFEUYKKXFZEfLr52kRUR4YQ5YgBmGUyxVTdC6/FZH0WLke0CJBCDbL
-         DNvQ==
-X-Gm-Message-State: AOAM532ROOXbmfO8Oqk/h5xPVQPYwEOgdgVVa9NYje4EuJzwyc89LY63
-        vMSrCDj0+JP3zJJCOf10F2t/YY8O4fYr60QdIQ==
-X-Google-Smtp-Source: ABdhPJzC09vekkPrPHEy9IAZ0mkDRmqVze5kOeFFX7E6MW6DhwDzI2D1Yyz7UWEnh7NJgVyTwaQxbMrUzH0AZBgScz4=
-X-Received: by 2002:a17:90b:4a12:: with SMTP id kk18mr7096896pjb.227.1643792787974;
- Wed, 02 Feb 2022 01:06:27 -0800 (PST)
+        id S244735AbiBBJlY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Feb 2022 04:41:24 -0500
+Received: from mail.trueanalyze24.com ([149.154.157.156]:39166 "EHLO
+        mail.trueanalyze24.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233720AbiBBJlX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Feb 2022 04:41:23 -0500
+Received: by mail.trueanalyze24.com (Postfix, from userid 1001)
+        id D9F8243411; Wed,  2 Feb 2022 10:33:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trueanalyze24.com;
+        s=mail; t=1643794836;
+        bh=EGenFkmmv/iHCwB4AbTzX8IXCMu1xRW+9eep7HJGZMM=;
+        h=Date:From:To:Subject:From;
+        b=RA9dKSjCNr+ZfiRfGe+EdZuDxKg0ygop7xOrBo9+gLzsdTsRVphG0/tZ9PhMflsGt
+         r+3t1/KhAz72KARjhQR/Oq8Xoy25XK0rP9fklGynyPNEJjJyAPfaV+j4knUmMwpvBG
+         1MQsYMSBHQ2zGrlsxIxPd7CpXDSAtJn490SknK166ZmsLO+CC5OioZdXjCHzLxXrNM
+         MphYBEvlpHsVIR9RJmvPp261V3FiGOwyaJ+IMIPNJE8bi0fa9e1oZV9Fwm7Gsi6LHI
+         cmnfZzdBiQxN+y2d+8NgHVytB4eSCwpXsyO7wsk2sHSwCWb2h+8IAVKp9StAiFPh3y
+         5mJlZ0pPn5znA==
+Received: by mail.trueanalyze24.com for <linux-scsi@vger.kernel.org>; Wed,  2 Feb 2022 09:32:10 GMT
+Message-ID: <20220202084511-0.1.1h.h5bl.0.608pja0sp9@trueanalyze24.com>
+Date:   Wed,  2 Feb 2022 09:32:10 GMT
+From:   "Mateusz Talaga" <mateusz.talaga@trueanalyze24.com>
+To:     <linux-scsi@vger.kernel.org>
+Subject: Prezentacja
+X-Mailer: mail.trueanalyze24.com
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:a4d1:0:0:0:0 with HTTP; Wed, 2 Feb 2022 01:06:27
- -0800 (PST)
-Reply-To: moneyramg036@gmail.com
-From:   Mr John Peter <mustaphajibrin88@gmail.com>
-Date:   Wed, 2 Feb 2022 10:06:27 +0100
-Message-ID: <CALD0jFW_nUp0zDkQhTHA9PxznYCFdM_TPQ+DNxRn4dhRpK2PZQ@mail.gmail.com>
-Subject: CONTACT MONEY GRAM PAYMENT
-To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ATTENTION BENEFICIARY
+Dzie=C5=84 dobry!
 
-It is my pleasure to inform you that your funds are deposited in Money
-Gram remitting office here and we hereby write to inform you that we
-have sent your full compensation payment of US4.8 through money gram
-and you will be receiving $5000 usd Per day and we have sent you the
-first payment. So, contact our manager Mr John Peter and ask him to give
-you the money gram payment information so that you can be able to pick
-up your First payment of your funds through money gram without any
-problem.
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
+=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
+zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
 
-Contact person Mr John Peter
-Email: moneyramg036@gmail.com
-Contact Phone +22967168545 Or +22962752050
+Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
+=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
+dostaw.
 
-AND CONTACT HIM WITH YOUR FULL INFORMATION SUCH AS
+Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
+nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
+ co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
 
-1. Full name .........
-2. Country............
-3. Contact Address....
-4. Telephone Number ..
-5. Marital Status ....
-6. Occupation ........
-7. Company ...........
-8. Age................
-9 You Photos Copy................
+Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
+=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
+zania w Pa=C5=84stwa firmie.
 
-Call:+22967168545 Or +22962752050 or email him now so that He can
-provide the money gram information
 
-Thanks and remainsns
+Z powa=C5=BCaniem,
+Mateusz Talaga
