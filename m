@@ -2,88 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4194A8EDF
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Feb 2022 21:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 193624A8F71
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Feb 2022 21:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355202AbiBCUjW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Feb 2022 15:39:22 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39050 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355084AbiBCUhG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Feb 2022 15:37:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S241306AbiBCU6i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Feb 2022 15:58:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54377 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232119AbiBCU6h (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Feb 2022 15:58:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643921916;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AYBprK6Yoe2/EUwuhU7qvIGmdVdAlaSjpJ2H1aJGkRk=;
+        b=IZBpOxT3841zYh9eBcygUXQTalr9CyPvuDfTlwVtCfbKIoAvnoMh7UdVsxBsCYHW6+291U
+        NtsNNQEi5LyQxkDL9dMLVLIgdZyNfbk57pyNOAm9J12WwiA2hVG2Gk9cXIL+SuUy/FHFM1
+        DwbzyfyKx2mmukRIg7Tkv1vSc8WLc/g=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-577-P1Eoj9VZNiO8RNAFIWFfjw-1; Thu, 03 Feb 2022 15:58:33 -0500
+X-MC-Unique: P1Eoj9VZNiO8RNAFIWFfjw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88526B835BE;
-        Thu,  3 Feb 2022 20:37:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 610A4C340E8;
-        Thu,  3 Feb 2022 20:37:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643920623;
-        bh=M+7Y0vn+BxRton0UAEjJx00c6EcBPBpbms0IRen0pFg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CKtd15nMNuRtXDSVw1TpyJbbjhnUrfU7Gl8R+050vLavekGBEiyGR9SSQ/8Op1IY5
-         VbtW5T86vd9SV85Kprg21aeNZZ5sx9CX5AMhVneZNPRpXspz5C7BaZoIOrUZvj0HsZ
-         1f9A7JUOCeHQO4kaKXfJNodnTF6nu6sFIeTxjimwje384wLYj1qZ+Kd9TrWzZTDlkm
-         SYM5ejlsvGq2iP8YcN84GMmGPSkCqEqVBDzRjFl/BLqVU9tK5THRSyKOTzcB/uEpdy
-         MMQK+FicRhNRMZ41yKy/0s6cTSE+oye0hTRDO0Hlg+NTB3C9CdD2FB/SLemnwUy0zh
-         7a4BtWuvhRw6A==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     ZouMingzhe <mingzhe.zou@easystack.cn>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 6/7] scsi: target: iscsi: Make sure the np under each tpg is unique
-Date:   Thu,  3 Feb 2022 15:36:50 -0500
-Message-Id: <20220203203651.5158-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220203203651.5158-1-sashal@kernel.org>
-References: <20220203203651.5158-1-sashal@kernel.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5F80F1091DA2;
+        Thu,  3 Feb 2022 20:58:30 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E196B61093;
+        Thu,  3 Feb 2022 20:57:56 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 213Kvu4n017456;
+        Thu, 3 Feb 2022 15:57:56 -0500
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 213KvtMP017452;
+        Thu, 3 Feb 2022 15:57:55 -0500
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Thu, 3 Feb 2022 15:57:55 -0500 (EST)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Luis Chamberlain <mcgrof@kernel.org>
+cc:     Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        Vincent Fu <vincent.fu@samsung.com>,
+        =?ISO-8859-15?Q?Javier_Gonz=E1lez?= <javier@javigon.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "msnitzer@redhat.com >> msnitzer@redhat.com" <msnitzer@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "martin.petersen@oracle.com >> Martin K. Petersen" 
+        <martin.petersen@oracle.com>,
+        "roland@purestorage.com" <roland@purestorage.com>,
+        Hannes Reinecke <hare@suse.de>,
+        "Frederick.Knight@netapp.com" <Frederick.Knight@netapp.com>,
+        "zach.brown@ni.com" <zach.brown@ni.com>,
+        "osandov@fb.com" <osandov@fb.com>,
+        "lsf-pc@lists.linux-foundation.org" 
+        <lsf-pc@lists.linux-foundation.org>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "clm@fb.com" <clm@fb.com>, "dsterba@suse.com" <dsterba@suse.com>,
+        "tytso@mit.edu" <tytso@mit.edu>, "jack@suse.com" <jack@suse.com>,
+        Kanchan Joshi <joshi.k@samsung.com>
+Subject: Re: [RFC PATCH 3/3] nvme: add the "debug" host driver
+In-Reply-To: <YfwuQxS79wl8l/a0@bombadil.infradead.org>
+Message-ID: <alpine.LRH.2.02.2202031532410.12071@file01.intranet.prod.int.rdu2.redhat.com>
+References: <f0e19ae4-b37a-e9a3-2be7-a5afb334a5c3@nvidia.com> <20220201102122.4okwj2gipjbvuyux@mpHalley-2> <alpine.LRH.2.02.2202011327350.22481@file01.intranet.prod.int.rdu2.redhat.com> <CGME20220201183359uscas1p2d7e48dc4cafed3df60c304a06f2323cd@uscas1p2.samsung.com>
+ <alpine.LRH.2.02.2202011333160.22481@file01.intranet.prod.int.rdu2.redhat.com> <20220202060154.GA120951@bgt-140510-bm01> <20220203160633.rdwovqoxlbr3nu5u@garbanzo> <20220203161534.GA15366@lst.de> <YfwuQxS79wl8l/a0@bombadil.infradead.org>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: ZouMingzhe <mingzhe.zou@easystack.cn>
 
-[ Upstream commit a861790afaa8b6369eee8a88c5d5d73f5799c0c6 ]
 
-iscsit_tpg_check_network_portal() has nested for_each loops and is supposed
-to return true when a match is found. However, the tpg loop will still
-continue after existing the tpg_np loop. If this tpg_np is not the last the
-match value will be changed.
+On Thu, 3 Feb 2022, Luis Chamberlain wrote:
 
-Break the outer loop after finding a match and make sure the np under each
-tpg is unique.
+> On Thu, Feb 03, 2022 at 05:15:34PM +0100, Christoph Hellwig wrote:
+> > On Thu, Feb 03, 2022 at 08:06:33AM -0800, Luis Chamberlain wrote:
+> > > On Wed, Feb 02, 2022 at 06:01:13AM +0000, Adam Manzanares wrote:
+> > > > BTW I think having the target code be able to implement simple copy without 
+> > > > moving data over the fabric would be a great way of showing off the command.
+> > > 
+> > > Do you mean this should be implemented instead as a fabrics backend
+> > > instead because fabrics already instantiates and creates a virtual
+> > > nvme device? And so this would mean less code?
+> > 
+> > It would be a lot less code.  In fact I don't think we need any new code
+> > at all.  Just using nvme-loop on top of null_blk or brd should be all
+> > that is needed.
+> 
+> Mikulas,
+> 
+> That begs the question why add this instead of using null_blk with
+> nvme-loop?
+> 
+>   Luis
 
-Link: https://lore.kernel.org/r/20220111054742.19582-1-mingzhe.zou@easystack.cn
-Signed-off-by: ZouMingzhe <mingzhe.zou@easystack.cn>
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/target/iscsi/iscsi_target_tpg.c | 3 +++
- 1 file changed, 3 insertions(+)
+I think that nvme-debug (the patch 3) doesn't have to be added to the 
+kernel.
 
-diff --git a/drivers/target/iscsi/iscsi_target_tpg.c b/drivers/target/iscsi/iscsi_target_tpg.c
-index 761b065a40bb3..b2a76ecb5789c 100644
---- a/drivers/target/iscsi/iscsi_target_tpg.c
-+++ b/drivers/target/iscsi/iscsi_target_tpg.c
-@@ -452,6 +452,9 @@ static bool iscsit_tpg_check_network_portal(
- 				break;
- 		}
- 		spin_unlock(&tpg->tpg_np_lock);
-+
-+		if (match)
-+			break;
- 	}
- 	spin_unlock(&tiqn->tiqn_tpg_lock);
- 
--- 
-2.34.1
+Nvme-debug was an old student project that was canceled. I used it because 
+it was very easy to add copy offload functionality to it - adding this 
+capability took just one function with 43 lines of code (nvme_debug_copy).
+
+I don't know if someone is interested in continuing the development of 
+nvme-debug. If yes, I can continue the development, if not, we can just 
+drop it.
+
+Mikulas
 
