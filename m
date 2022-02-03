@@ -2,98 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C07C4A8DA7
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Feb 2022 21:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D6F4A8D37
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Feb 2022 21:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354618AbiBCUcW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Feb 2022 15:32:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
+        id S244225AbiBCU33 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Feb 2022 15:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348713AbiBCUbc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Feb 2022 15:31:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB91C0613EB;
-        Thu,  3 Feb 2022 12:31:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C886AB835A3;
-        Thu,  3 Feb 2022 20:31:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F57C340E8;
-        Thu,  3 Feb 2022 20:31:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643920265;
-        bh=nDySB6UXuT3u6CrlRf1gGUS+olwtOzGHIaEFmYJVFJc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L7BKLUFf7gHZ4HIXDKB/J/UDXGPTzvwcS6Z3iIAhWEn9MkPU+UP/HHv+bbbz5Fr91
-         O4GX4aUn0dSsjLculfAT0XFTVCeRug3nawBV1pt13aS7CXh/bZbfn4LGRnTlAGwH8g
-         bKii/I9RbcwlrAQg/B1t+C+EAPEM9fLv9qEVmrB2ILKJnJrS0GxawoCGIFLxluMH5P
-         4iNrnvFl23m8se0qHx9DJ4P1DFZayM33T8a5+H8jop2OBOtwXA/T1EW8u7t+8WaOa4
-         yddQLnkg3vzhxMQ3abAganUPT1rBXdxX8DR6sISwHqXwU9nuMb3zX4kHxukW+4Ysm3
-         QWh3UD0WhO4IQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Saurav Kashyap <skashyap@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, jhasan@marvell.com,
-        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 30/52] scsi: qedf: Change context reset messages to ratelimited
-Date:   Thu,  3 Feb 2022 15:29:24 -0500
-Message-Id: <20220203202947.2304-30-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220203202947.2304-1-sashal@kernel.org>
-References: <20220203202947.2304-1-sashal@kernel.org>
+        with ESMTP id S232458AbiBCU32 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Feb 2022 15:29:28 -0500
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337FFC061714;
+        Thu,  3 Feb 2022 12:29:28 -0800 (PST)
+Received: from bigeasy by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <sebastian@breakpoint.cc>)
+        id 1nFijN-0003Hn-Ha; Thu, 03 Feb 2022 21:29:25 +0100
+Date:   Thu, 3 Feb 2022 21:29:25 +0100
+From:   Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v2 1/2] scsi: Add scsi_done_direct() for immediate completion.
+Message-ID: <Yfw7JaszshmfYa1d@flow>
+References: <20220201210954.570896-1-sebastian@breakpoint.cc>
+ <20220201210954.570896-2-sebastian@breakpoint.cc>
+ <c8402f76-7397-77c3-232c-c825c52ea826@acm.org>
+ <YfwxJPUFCo5/55yI@flow>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YfwxJPUFCo5/55yI@flow>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Saurav Kashyap <skashyap@marvell.com>
+Add scsi_done_direct() which behaves like scsi_done() except that it
+invokes blk_mq_complete_request_direct() in order to complete the
+request.
+Callers from process context can complete the request directly instead
+waking ksoftirqd.
 
-[ Upstream commit 64fd4af6274eb0f49d29772c228fffcf6bde1635 ]
-
-If FCoE is not configured, libfc/libfcoe keeps on retrying FLOGI and after
-3 retries driver does a context reset and tries fipvlan again.  This leads
-to context reset message flooding the logs. Hence ratelimit the message to
-prevent flooding the logs.
-
-Link: https://lore.kernel.org/r/20220117135311.6256-4-njavali@marvell.com
-Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
 ---
- drivers/scsi/qedf/qedf_main.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On 2022-02-03 20:46:44 [+0100], To Bart Van Assche wrote:
+> 
+> Let me see what I can do.
 
-diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
-index 6e367b40ecc96..e0e03443d7703 100644
---- a/drivers/scsi/qedf/qedf_main.c
-+++ b/drivers/scsi/qedf/qedf_main.c
-@@ -911,7 +911,7 @@ void qedf_ctx_soft_reset(struct fc_lport *lport)
- 	struct qed_link_output if_link;
- 
- 	if (lport->vport) {
--		QEDF_ERR(NULL, "Cannot issue host reset on NPIV port.\n");
-+		printk_ratelimited("Cannot issue host reset on NPIV port.\n");
- 		return;
- 	}
- 
-@@ -3979,7 +3979,9 @@ void qedf_stag_change_work(struct work_struct *work)
- 	struct qedf_ctx *qedf =
- 	    container_of(work, struct qedf_ctx, stag_work.work);
- 
--	QEDF_ERR(&qedf->dbg_ctx, "Performing software context reset.\n");
-+	printk_ratelimited("[%s]:[%s:%d]:%d: Performing software context reset.",
-+			dev_name(&qedf->pdev->dev), __func__, __LINE__,
-+			qedf->dbg_ctx.host_no);
- 	qedf_ctx_soft_reset(qedf->lport);
+Something like this perhaps? The compiler not inline
+scsi_done_internal() so we maybe provide scsi_done() / _direct() as
+static inlines?
+
+ drivers/scsi/scsi_lib.c  | 21 +++++++++++++++++++--
+ include/scsi/scsi_cmnd.h |  1 +
+ 2 files changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 0a70aa763a961..a1c18ba5e8d38 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1625,8 +1625,10 @@ static blk_status_t scsi_prepare_cmd(struct request *req)
+ 	return scsi_cmd_to_driver(cmd)->init_command(cmd);
  }
+ 
+-void scsi_done(struct scsi_cmnd *cmd)
++static void scsi_done_internal(struct scsi_cmnd *cmd, bool complete_directly)
+ {
++	struct request *req = scsi_cmd_to_rq(cmd);
++
+ 	switch (cmd->submitter) {
+ 	case SUBMITTED_BY_BLOCK_LAYER:
+ 		break;
+@@ -1641,10 +1643,25 @@ void scsi_done(struct scsi_cmnd *cmd)
+ 	if (unlikely(test_and_set_bit(SCMD_STATE_COMPLETE, &cmd->state)))
+ 		return;
+ 	trace_scsi_dispatch_cmd_done(cmd);
+-	blk_mq_complete_request(scsi_cmd_to_rq(cmd));
++
++	if (complete_directly)
++		blk_mq_complete_request_direct(req, scsi_complete);
++	else
++		blk_mq_complete_request(req);
++}
++
++void scsi_done(struct scsi_cmnd *cmd)
++{
++	scsi_done_internal(cmd, false);
+ }
+ EXPORT_SYMBOL(scsi_done);
+ 
++void scsi_done_direct(struct scsi_cmnd *cmd)
++{
++	scsi_done_internal(cmd, true);
++}
++EXPORT_SYMBOL(scsi_done_direct);
++
+ static void scsi_mq_put_budget(struct request_queue *q, int budget_token)
+ {
+ 	struct scsi_device *sdev = q->queuedata;
+diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
+index 6794d7322cbde..ff1c4b51f7aef 100644
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -168,6 +168,7 @@ static inline struct scsi_driver *scsi_cmd_to_driver(struct scsi_cmnd *cmd)
+ }
+ 
+ void scsi_done(struct scsi_cmnd *cmd);
++void scsi_done_direct(struct scsi_cmnd *cmd);
+ 
+ extern void scsi_finish_command(struct scsi_cmnd *cmd);
  
 -- 
 2.34.1
