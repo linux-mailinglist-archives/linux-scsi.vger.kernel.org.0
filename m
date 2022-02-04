@@ -2,138 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207EF4A9A08
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Feb 2022 14:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFED4A9A27
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Feb 2022 14:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234886AbiBDNeE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Feb 2022 08:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S1358949AbiBDNmm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Feb 2022 08:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbiBDNeE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Feb 2022 08:34:04 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C42C061714
-        for <linux-scsi@vger.kernel.org>; Fri,  4 Feb 2022 05:34:04 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id y17so5149175plg.7
-        for <linux-scsi@vger.kernel.org>; Fri, 04 Feb 2022 05:34:03 -0800 (PST)
+        with ESMTP id S229609AbiBDNml (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Feb 2022 08:42:41 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE121C061714
+        for <linux-scsi@vger.kernel.org>; Fri,  4 Feb 2022 05:42:40 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id e8so4811999ilm.13
+        for <linux-scsi@vger.kernel.org>; Fri, 04 Feb 2022 05:42:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KWj5VHbmtPCAG80WBX4yW0jMIjhI+i8MGje98xVpJ28=;
-        b=J0H1WlwC0P37XJGQ80pvU6MOXxkQhBt8I8jYBfMI4Ak4jZTB2jdXIyOEE9Kllnlosl
-         x9hSWRjBcJabIqRFmAa0jW6HQxN6K09LfSnx2stfcfoHwdOShgYR4VS9L68fEQryHmcI
-         o1oi+IOQjRfyeD34mj6H+wgZH5o8zcR1bHhXTsZTR3oxryEKBgD2/L9Ne08APK8zUMF7
-         W1cTkxcnoxIyNsDpKJkZ+Iq3r8wtZV9a4WDe+F7RXXyDrO6kc2ga0WrjZ62WMMZ3Ucna
-         bkc9AWj5Fv6K4yZk5HMlpeORWYohWortqx1DTQD5l4yq0v2of1uD5ZuntPINz58Pqcx0
-         JQwQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=moSzF7dfURmCJmNP85YndlFh8I2VPV409UQULFfQYwA=;
+        b=lxGo2CzXiHKahrW/27cgFs7YHQENYuDulBfhz8wMMocZYa02Gn1g/HwTp3R0J+yeAa
+         RLOH0P8gn/iwrfLzf6bdpnd28XEomF+uEocid64rFMZwGGD3AikqQOR72DhPA0vQqLVu
+         MxAXF8phvo1OTZf4p+wOnVnFrAUw+atGzWmptAWcsrL+WVlKTULkaOeaUmxr7v/FfE0d
+         ZxnK2i2Ychta/EnFsY3VDBW1al5kb13qb+YkvcAPCIFBQBPNCwCY8xOyoNDfG7rRve+V
+         +e0rRf2JiQNrMPRUyfG78sKHsZIgPSSNPmHhHS9XjM4NHiLfUilEVoF3FDMqJRbE1OYV
+         FQjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KWj5VHbmtPCAG80WBX4yW0jMIjhI+i8MGje98xVpJ28=;
-        b=Z5rY2p6koP5U0wO8yd6eRmuojNLaPfi1zQ4Y1hfYc3giMh13YSdireavFzHYGCg2+S
-         gAluC7vz6O8Kbbayscgr5tyYeSjU2q5GzgA+3Qo1qGoe9l7pU1FHGTbynZC6kqPq//yq
-         OikOKkYOTO9qijGQxqNGylb1PrbnsstDf+y3m1Jznm+6mW3GBf/E8NlGHNyGWZwKulPy
-         xD8PY9CauMY0Fk8C1R6HhWwwdLi5ZoECC4YRyDy6Xv5U9qZIFtl0AOMEEb5l5fqZDkp7
-         /3l7J2eO+r6QeBSX7etyF5rRPEDfyhuOIjsA9aL4YP85r2jAMZMcDFD6pt6UGhgUCOAU
-         DWRQ==
-X-Gm-Message-State: AOAM531KjfpHn1HUZclYqpUd5H2DajFVeAu3RG+QKiX3vV1frRSzAFfw
-        Xx7DSbFT6lOfMKQlSxzOyWKlY0yCr/1R8g==
-X-Google-Smtp-Source: ABdhPJxj+mWKk80hBHd+iZIf+Sws1xCuDe5XG9c0N/wSw4I51o6nz5iMnvsk4OFG8pEwrP+T/IACJA==
-X-Received: by 2002:a17:90b:3511:: with SMTP id ls17mr3138025pjb.241.1643981643450;
-        Fri, 04 Feb 2022 05:34:03 -0800 (PST)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id f8sm2818712pfv.24.2022.02.04.05.34.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 05:34:03 -0800 (PST)
-Subject: Re: [RFC PATCH 1/3] block: add copy offload support
-To:     Mikulas Patocka <mpatocka@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-References: <f0e19ae4-b37a-e9a3-2be7-a5afb334a5c3@nvidia.com>
- <20220201102122.4okwj2gipjbvuyux@mpHalley-2>
- <alpine.LRH.2.02.2202011327350.22481@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2202011331570.22481@file01.intranet.prod.int.rdu2.redhat.com>
- <efd2e976-4d2d-178e-890d-9bde1a89c47f@acm.org>
- <alpine.LRH.2.02.2202031310530.28604@file01.intranet.prod.int.rdu2.redhat.com>
- <a2ec9086-72d2-4a4e-c4fa-fe53bf5ba092@acm.org>
- <alpine.LRH.2.02.2202040657060.19134@file01.intranet.prod.int.rdu2.redhat.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <2c33ecab-7154-a476-8038-451e37785201@kernel.dk>
-Date:   Fri, 4 Feb 2022 06:34:02 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=moSzF7dfURmCJmNP85YndlFh8I2VPV409UQULFfQYwA=;
+        b=4w95D8m5eetkGUGyvTG76KuSNCpr+DSbR39z9qgatCsuW+YLdnLVQw+M43Rg1T8xD8
+         dpzwHyPDruAobPP6N20FHd4QF86brYCeDTfuH54aDMaPOcn9lmUDewRaMjK1W5vXLw2V
+         IBtHIEV6s0TjF4jmiWdxXRYdJLWpJn1jN27zCie76qXz5kIQ8bm6pZ7aecpkn1Atzz6g
+         gPAR68UKdA5a3jixhr4Ol89H7XETzdgagdSA8aFJ1Eygz7rsugTyyufXpowLgT8ao/vs
+         Sh4quN8dY9D0OiHQnuc6jneX0seM+5ojgoKHnuICvryHSh1THpD69hxI6rPjT5Ep0wx3
+         4dZw==
+X-Gm-Message-State: AOAM531UrtoSdgVCBvvPmc/04pnzioYZ2cclTi7Z2uLWXzj1ggHReuwp
+        DoWECykLDbC0JAMV49xkC/lZt4h2n+gsqZRVFrE=
+X-Google-Smtp-Source: ABdhPJxz+AFRoyv+e96YqSWZJlfukXUuquceVbFw+n33MuKMlztOj6lqFicVxY6m/TjCMe88VDdSPREy+4Org/lzOS8=
+X-Received: by 2002:a05:6e02:1a05:: with SMTP id s5mr1451580ild.231.1643982159973;
+ Fri, 04 Feb 2022 05:42:39 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <alpine.LRH.2.02.2202040657060.19134@file01.intranet.prod.int.rdu2.redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6e02:148d:0:0:0:0 with HTTP; Fri, 4 Feb 2022 05:42:39
+ -0800 (PST)
+Reply-To: mis.haleema.zamani1@gmail.com
+From:   Mis Haleema Zamani <mariamabdul523@gmail.com>
+Date:   Fri, 4 Feb 2022 05:42:39 -0800
+Message-ID: <CAM4KC+zfWZPHK0gL8_5xZKBokic_urUtHh1sCjSPsejc6Wb4zQ@mail.gmail.com>
+Subject: =?UTF-8?Q?GRUSS_AN_DICH_MEINE_LIEBE_BITTE_BEN=C3=96TIGE_ICH_DEINE_?=
+        =?UTF-8?Q?HILFE?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/4/22 5:09 AM, Mikulas Patocka wrote:
-> 
-> 
-> On Thu, 3 Feb 2022, Bart Van Assche wrote:
-> 
->> On 2/3/22 10:50, Mikulas Patocka wrote:
->>> On Tue, 1 Feb 2022, Bart Van Assche wrote:
->>>> On 2/1/22 10:32, Mikulas Patocka wrote:
->>>>>    /**
->>>>> + * blk_queue_max_copy_sectors - set maximum copy offload sectors for
->>>>> the
->>>>> queue
->>>>> + * @q:  the request queue for the device
->>>>> + * @size:  the maximum copy offload sectors
->>>>> + */
->>>>> +void blk_queue_max_copy_sectors(struct request_queue *q, unsigned int
->>>>> size)
->>>>> +{
->>>>> +	q->limits.max_copy_sectors = size;
->>>>> +}
->>>>> +EXPORT_SYMBOL_GPL(blk_queue_max_copy_sectors);
->>>>
->>>> Please either change the unit of 'size' into bytes or change its type into
->>>> sector_t.
->>>
->>> blk_queue_chunk_sectors, blk_queue_max_discard_sectors,
->>> blk_queue_max_write_same_sectors, blk_queue_max_write_zeroes_sectors,
->>> blk_queue_max_zone_append_sectors also have the unit of sectors and the
->>> argument is "unsigned int". Should blk_queue_max_copy_sectors be
->>> different?
->>
->> As far as I know using the type sector_t for variables that represent a number
->> of sectors is a widely followed convention:
->>
->> $ git grep -w sector_t | wc -l
->> 2575
->>
->> I would appreciate it if that convention would be used consistently, even if
->> that means modifying existing code.
->>
->> Thanks,
->>
->> Bart.
-> 
-> Changing the sector limit variables in struct queue_limits from
-> unsigned int to sector_t would increase the size of the structure and
-> its cache footprint.
-> 
-> And we can't send bios larger than 4GiB anyway because bi_size is
-> 32-bit.
-> 
-> Jens, what do you think about it? Should the sectors limits be
-> sector_t?
+Gr=C3=BC=C3=9Fe an dich mein lieber Freund,
 
-Why make it larger than it needs to?
+Mein Name ist Haleema Zamani, ich schreibe Ihnen diese Nachricht mit
+Tr=C3=A4nen in den Augen. Der anhaltende B=C3=BCrgerkrieg in meinem Land Sy=
+rien
+hat mein Leben so sehr beeinflusst. Ich habe letztes Jahr meine
+Familie verloren. Vor dem Tod meines Vaters hat er eine feste
+Einzahlungssumme von (VIER MILLIONEN F=C3=9CNFHUNDERTTAUSEND US-DOLLAR) auf
+einem Domizilkonto mit einem First Gulf Ban in den Vereinigten
+Arabischen Emiraten, mit dem ich der n=C3=A4chste Angeh=C3=B6rige bin.
 
--- 
-Jens Axboe
+Ich ben=C3=B6tige dem=C3=BCtig Ihre Unterst=C3=BCtzung bei der =C3=9Cberwei=
+sung dieses
+Fonds f=C3=BCr Investitionen in Ihrem Land. Ich bin bereit, Ihnen einen
+Prozentsatz f=C3=BCr Ihre Unterst=C3=BCtzung anzubieten.Bitte
 
+Lassen Sie mich wissen, ob Sie das f=C3=BCr mich tun k=C3=B6nnen, das ist m=
+eine
+wahre Geschichte, bitte brauche ich Ihre Hilfe. Sie kontaktieren mich
+per E-Mail
+
+(mis.haleema.zamani@gmail.com)
+
+Dein,
+
+Mis Haleema Zamani
