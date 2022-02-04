@@ -2,86 +2,152 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFED4A9A27
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Feb 2022 14:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BDC4A9AC2
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Feb 2022 15:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358949AbiBDNmm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 4 Feb 2022 08:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiBDNml (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Feb 2022 08:42:41 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE121C061714
-        for <linux-scsi@vger.kernel.org>; Fri,  4 Feb 2022 05:42:40 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id e8so4811999ilm.13
-        for <linux-scsi@vger.kernel.org>; Fri, 04 Feb 2022 05:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=moSzF7dfURmCJmNP85YndlFh8I2VPV409UQULFfQYwA=;
-        b=lxGo2CzXiHKahrW/27cgFs7YHQENYuDulBfhz8wMMocZYa02Gn1g/HwTp3R0J+yeAa
-         RLOH0P8gn/iwrfLzf6bdpnd28XEomF+uEocid64rFMZwGGD3AikqQOR72DhPA0vQqLVu
-         MxAXF8phvo1OTZf4p+wOnVnFrAUw+atGzWmptAWcsrL+WVlKTULkaOeaUmxr7v/FfE0d
-         ZxnK2i2Ychta/EnFsY3VDBW1al5kb13qb+YkvcAPCIFBQBPNCwCY8xOyoNDfG7rRve+V
-         +e0rRf2JiQNrMPRUyfG78sKHsZIgPSSNPmHhHS9XjM4NHiLfUilEVoF3FDMqJRbE1OYV
-         FQjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=moSzF7dfURmCJmNP85YndlFh8I2VPV409UQULFfQYwA=;
-        b=4w95D8m5eetkGUGyvTG76KuSNCpr+DSbR39z9qgatCsuW+YLdnLVQw+M43Rg1T8xD8
-         dpzwHyPDruAobPP6N20FHd4QF86brYCeDTfuH54aDMaPOcn9lmUDewRaMjK1W5vXLw2V
-         IBtHIEV6s0TjF4jmiWdxXRYdJLWpJn1jN27zCie76qXz5kIQ8bm6pZ7aecpkn1Atzz6g
-         gPAR68UKdA5a3jixhr4Ol89H7XETzdgagdSA8aFJ1Eygz7rsugTyyufXpowLgT8ao/vs
-         Sh4quN8dY9D0OiHQnuc6jneX0seM+5ojgoKHnuICvryHSh1THpD69hxI6rPjT5Ep0wx3
-         4dZw==
-X-Gm-Message-State: AOAM531UrtoSdgVCBvvPmc/04pnzioYZ2cclTi7Z2uLWXzj1ggHReuwp
-        DoWECykLDbC0JAMV49xkC/lZt4h2n+gsqZRVFrE=
-X-Google-Smtp-Source: ABdhPJxz+AFRoyv+e96YqSWZJlfukXUuquceVbFw+n33MuKMlztOj6lqFicVxY6m/TjCMe88VDdSPREy+4Org/lzOS8=
-X-Received: by 2002:a05:6e02:1a05:: with SMTP id s5mr1451580ild.231.1643982159973;
- Fri, 04 Feb 2022 05:42:39 -0800 (PST)
+        id S244159AbiBDOPF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 4 Feb 2022 09:15:05 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:58928 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240322AbiBDOPE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 4 Feb 2022 09:15:04 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 07F2D1F38F;
+        Fri,  4 Feb 2022 14:15:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643984103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x7Xef+LHLUOFJjJq2zLv1fwP3izEqk/6tFjtKVXKieo=;
+        b=d7Njk3prV8hRniilXg/s9deMKAnPYFs5GdS70Bmm+70rRO+ce6K48fI4rpFMhZZ6lDtbxb
+        ZJKCKTjLIvqpo41/2xP6jQUrmQnWomfOOWz4nxZh4VEpa5JMi3hKS9x1ufRYkQxx1KYF8R
+        X2KfxyuIlFXKhCENQvezESv5XTR/EC0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643984103;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x7Xef+LHLUOFJjJq2zLv1fwP3izEqk/6tFjtKVXKieo=;
+        b=+An9ufe0fv2coZRexo04U1M024Rg6ufMB1+/yhsOF1ytaTXPzfgX8IJsWFnIOkqEihajpN
+        BnNcKVaccT4T6SDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B8AFF13AE2;
+        Fri,  4 Feb 2022 14:15:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WXHDLOY0/WFfCQAAMHmgww
+        (envelope-from <hare@suse.de>); Fri, 04 Feb 2022 14:15:02 +0000
+Message-ID: <befa49b3-7606-a3ce-24f7-e184e3df41a3@suse.de>
+Date:   Fri, 4 Feb 2022 15:15:02 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:148d:0:0:0:0 with HTTP; Fri, 4 Feb 2022 05:42:39
- -0800 (PST)
-Reply-To: mis.haleema.zamani1@gmail.com
-From:   Mis Haleema Zamani <mariamabdul523@gmail.com>
-Date:   Fri, 4 Feb 2022 05:42:39 -0800
-Message-ID: <CAM4KC+zfWZPHK0gL8_5xZKBokic_urUtHh1sCjSPsejc6Wb4zQ@mail.gmail.com>
-Subject: =?UTF-8?Q?GRUSS_AN_DICH_MEINE_LIEBE_BITTE_BEN=C3=96TIGE_ICH_DEINE_?=
-        =?UTF-8?Q?HILFE?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        =?UTF-8?Q?Javier_Gonz=c3=a1lez?= <javier@javigon.com>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "msnitzer@redhat.com >> msnitzer@redhat.com" <msnitzer@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "martin.petersen@oracle.com >> Martin K. Petersen" 
+        <martin.petersen@oracle.com>,
+        "roland@purestorage.com" <roland@purestorage.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Frederick.Knight@netapp.com" <Frederick.Knight@netapp.com>,
+        "zach.brown@ni.com" <zach.brown@ni.com>,
+        "osandov@fb.com" <osandov@fb.com>,
+        "lsf-pc@lists.linux-foundation.org" 
+        <lsf-pc@lists.linux-foundation.org>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "clm@fb.com" <clm@fb.com>, "dsterba@suse.com" <dsterba@suse.com>,
+        "tytso@mit.edu" <tytso@mit.edu>, "jack@suse.com" <jack@suse.com>,
+        Kanchan Joshi <joshi.k@samsung.com>
+References: <alpine.LRH.2.02.2202011327350.22481@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2202011333160.22481@file01.intranet.prod.int.rdu2.redhat.com>
+ <270f30df-f14c-b9e4-253f-bff047d32ff0@nvidia.com>
+ <20220203153843.szbd4n65ru4fx5hx@garbanzo>
+ <CGME20220203165248uscas1p1f0459e548743e6be26d13d3ed8aa4902@uscas1p1.samsung.com>
+ <20220203165238.GA142129@dhcp-10-100-145-180.wdc.com>
+ <20220203195155.GB249665@bgt-140510-bm01>
+ <863d85e3-9a93-4d8c-cf04-88090eb4cc02@nvidia.com>
+ <2bbed027-b9a1-e5db-3a3d-90c40af49e09@opensource.wdc.com>
+ <9d5d0b50-2936-eac3-12d3-a309389e03bf@nvidia.com>
+ <20220204082445.hczdiy2uhxfi3x2g@ArmHalley.local>
+ <4d5410a5-93c3-d73c-6aeb-2c1c7f940963@nvidia.com>
+From:   Hannes Reinecke <hare@suse.de>
+Subject: Re: [RFC PATCH 3/3] nvme: add the "debug" host driver
+In-Reply-To: <4d5410a5-93c3-d73c-6aeb-2c1c7f940963@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Gr=C3=BC=C3=9Fe an dich mein lieber Freund,
+On 2/4/22 10:58, Chaitanya Kulkarni wrote:
+> On 2/4/22 12:24 AM, Javier González wrote:
+[ .. ]
+>> For a software-only solution, we have experimented with something
+>> similar to the nvme-debug code tha Mikulas is proposing. Adam pointed to
+>> the nvme-loop target as an alternative and this seems to work pretty
+>> nicely. I do not believe there should be many changes to support copy
+>> offload using this.
+>>
+> 
+> If QEMU is so incompetent then we need to add every big feature into
+> the NVMeOF test target so that we can test it better ? is that what
+> you are proposing ? since if we implement one feature, it will be
+> hard to nack any new features that ppl will come up with
+> same rationale "with QEMU being slow and hard to test race
+> conditions etc .."
+> 
 
-Mein Name ist Haleema Zamani, ich schreibe Ihnen diese Nachricht mit
-Tr=C3=A4nen in den Augen. Der anhaltende B=C3=BCrgerkrieg in meinem Land Sy=
-rien
-hat mein Leben so sehr beeinflusst. Ich habe letztes Jahr meine
-Familie verloren. Vor dem Tod meines Vaters hat er eine feste
-Einzahlungssumme von (VIER MILLIONEN F=C3=9CNFHUNDERTTAUSEND US-DOLLAR) auf
-einem Domizilkonto mit einem First Gulf Ban in den Vereinigten
-Arabischen Emiraten, mit dem ich der n=C3=A4chste Angeh=C3=B6rige bin.
+How would you use qemu for bare-metal testing?
 
-Ich ben=C3=B6tige dem=C3=BCtig Ihre Unterst=C3=BCtzung bei der =C3=9Cberwei=
-sung dieses
-Fonds f=C3=BCr Investitionen in Ihrem Land. Ich bin bereit, Ihnen einen
-Prozentsatz f=C3=BCr Ihre Unterst=C3=BCtzung anzubieten.Bitte
+> and if that is the case why we don't have ZNS NVMeOF target
+> memory backed emulation ? Isn't that a bigger and more
+> complicated feature than Simple Copy where controller states
+> are involved with AENs ?
+> 
+> ZNS kernel code testing is also done on QEMU, I've also fixed
+> bugs in the ZNS kernel code which are discovered on QEMU and I've not
+> seen any issues with that. Given that simple copy feature is way smaller
+> than ZNS it will less likely to suffer from slowness and etc (listed
+> above) in QEMU.
+> 
+> my point is if we allow one, we will be opening floodgates and we need
+> to be careful not to bloat the code unless it is _absolutely
+> necessary_ which I don't think it is based on the simple copy
+> specification.
+> 
 
-Lassen Sie mich wissen, ob Sie das f=C3=BCr mich tun k=C3=B6nnen, das ist m=
-eine
-wahre Geschichte, bitte brauche ich Ihre Hilfe. Sie kontaktieren mich
-per E-Mail
+I do have a slightly different view on the nvme target code; it should 
+provide the necessary means to test the nvme host code.
+And simple copy is on of these features, especially as it will operate 
+as an exploiter of the new functionality.
 
-(mis.haleema.zamani@gmail.com)
+Cheers,
 
-Dein,
-
-Mis Haleema Zamani
+Hannes
+-- 
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
