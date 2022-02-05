@@ -2,72 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F7E4AAC99
-	for <lists+linux-scsi@lfdr.de>; Sat,  5 Feb 2022 22:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C97FA4AACBB
+	for <lists+linux-scsi@lfdr.de>; Sat,  5 Feb 2022 22:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381364AbiBEVFI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 5 Feb 2022 16:05:08 -0500
-Received: from [194.99.46.237] ([194.99.46.237]:36360 "EHLO
-        slot0.bluewaterleisure.com" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1354918AbiBEVFG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 5 Feb 2022 16:05:06 -0500
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=bluewaterleisure.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ker.mon@bluewaterleisure.com;
- bh=XtlTNbDfVQ5UexMGojL2QgyTGEQ=;
- b=LJ32enxWp30enkrJaqj7B3wAQbU3dXvlnUFjK2xas1cmubc5NAk72YcrmD8Fxfxo4P/whChXLdGW
-   fFpKKT26QFJnC8xONonB8BKnnkKu8bvucrby0EotulzhShLZc0GKNfHrCabFXoJgfq4w42Mzdl5V
-   biDwV5L5pVo0l+O3V4iEx4ipTt9NhzTMQEfGWY8cHXUSrCfbhzHt/c/J3/RYbboUPgWA1OvMYpVm
-   G1j96d94PgHO54rKWX1p9HwvYbG+Bi++XjuAXYZRGAdVetCWT8CA7OLfsYg8/nKioeKYbvLeR8LI
-   bNF6CpdCaRtcLqWOwAuCvvujjhjriJjW21Ljqg==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=bluewaterleisure.com;
- b=Il4n7unHEFBw1wu4pKTphKGy5DCiB35hzY7KD9bZD4LclCZzOXOlPyg1eM+S/L3chJgW/orburdB
-   ONXaKu5dGsEtQRkbmXuzaHHt6gn/+FVQOJ7cJPbfszx0cCSahV+EIR64gAXAgpgAVU79C6OuUuqi
-   h3Ns2ETi5JwcPMvJ5+CEalpxZijhVnhqleK2hoce9T5QvTldoa1ADoar5MgY80zfHPuufD770shg
-   pkF/3WRygZnZvhb/lOwmkETepg7LFSDSK6ZCv0O9Z64qJzE9UhwVsRQNY6TAEhuditfswXzjhQNL
-   /5bQsg0KiCuLo4wzvGSIyZHFKqCQ33rtJ7Hcsw==;
-Reply-To: tomander231@gmail.com
-From:   "Barrister Mustafa" <ker.mon@bluewaterleisure.com>
-To:     linux-scsi@vger.kernel.org
-Subject: Aufmerksamkeit:
-Date:   5 Feb 2022 22:04:16 +0100
-Message-ID: <20220205220416.0C59A4663CA4A359@bluewaterleisure.com>
+        id S1377527AbiBEVdo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 5 Feb 2022 16:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237675AbiBEVdn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 5 Feb 2022 16:33:43 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE2EC061353
+        for <linux-scsi@vger.kernel.org>; Sat,  5 Feb 2022 13:33:42 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso11801535wmh.4
+        for <linux-scsi@vger.kernel.org>; Sat, 05 Feb 2022 13:33:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=4D2XO13bmKH6KEZ3rCIFVRJ29Rca69+/OJs6jQDOjGo=;
+        b=gYvmip7okyn/CUPiuGkGtwNastzNfrEtY7Ice8pj0uAN9OWYDgQNcGSctl1EymGBDy
+         HWm1/oKyNbW/X6pLs/mMPZiSFJ4fiwm5g5VAwHDBnc77/Zb1L4mtQWbcIVQG6xBf7fFT
+         WkLpbuy6feDNRmc2EBA4RZ8Wuevw9YTzsCXNyQQH5TSJqce5PO29gQadx9tk8r7/YmE7
+         jpHHdDIlQwcqiRwYHpKzCN21T/nNVcxnnhQz/FPIFdSLqsH4BX6u3OTty7F76RNGYejl
+         hAMz69kdJkyIBEQ/QRPEq3Y+RfZc6jLi0jgP+OWH+W6s95fcQI6a0V+UpTkI5LlRDBzV
+         t6vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=4D2XO13bmKH6KEZ3rCIFVRJ29Rca69+/OJs6jQDOjGo=;
+        b=fku3ifpkurejJfxJMle9BU3YDzWQ5x2AsxqdCPCr+uF91HqF7h27fokaaaCN3vsF1E
+         OwUwTO3xgyiobpTu4qYAKz9Cmjndo0z8NYqVM0CR1EJUq/IWmwxzoMczywhgLw0hmIww
+         FLZeEoYkhPC81fKPupLbuhb6BJq8yoPYzvI6EhS6/yhG5jBDTpUzJMTQh491oUkQhWBB
+         bdiZ0W5oq90/xWg7N9iANnJs8MDOgTh8y6pIyX17e56IZ3wHJcAlWEhwWeiXsBaK/Vvl
+         xG75PsIzAocOKVZY+AIPyiBe1pw/k8q38RnkzeAP57pVr/XhljZTnfNC1XSnqthLwAQV
+         0dpA==
+X-Gm-Message-State: AOAM530+0i1bxTUCRcANaQDW0uIwZ9NyqXKd1yN1dMoyVvCiz33zoHWQ
+        e4t7edIhoJyP10JjgW0xrydnL+uFLAMcxlVFhs0=
+X-Google-Smtp-Source: ABdhPJw7pJoqyRJY1Y/eKFjPdvs03zurSgRqpOaU0QE2lXbLJV4liTAP71Ouzf3AelpxVgkNmWkk5jbNv4n6SVI/4Xc=
+X-Received: by 2002:a05:600c:4f53:: with SMTP id m19mr8102883wmq.150.1644096820394;
+ Sat, 05 Feb 2022 13:33:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Received: by 2002:a5d:4ec8:0:0:0:0:0 with HTTP; Sat, 5 Feb 2022 13:33:39 -0800 (PST)
+Reply-To: mmd475644@gmail.com
+From:   "Dr. Irene Lam" <confianzayrentabilidad@gmail.com>
+Date:   Sat, 5 Feb 2022 13:33:39 -0800
+Message-ID: <CANrrfX6SVB4oux07RQS69RLW1w5xTU_fZR1vmtotC+YFOYgpcw@mail.gmail.com>
+Subject: Good Day,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Lieb linux-scsi,
+-- 
+I'm Dr. Irene Lam, how are you doing ope you are in good health, the
+Board director
+try to reach you on phone several times Meanwhile, your number was not
+connecting. before he ask me to send you an email to hear from you if
+you are fine. hoping to hear from you soonest.
 
-Ich bin Barrister Mustafa Ayvaz, hoffe, diese E-Mail findet Sie=20
-gut. Ich bin Anwalt des verstorbenen Herrn Robert, der aufgrund=20
-des Coronavirus sein Leben verlor, kontaktierte er w=C3=A4hrend seiner=20
-Gesch=C3=A4ftsreise in China. Ich kontaktiere Sie, um mit mir=20
-zusammenzuarbeiten, um die =C3=9Cberweisung eines Fonds von vier=20
-Millionen vierhundertzwanzigtausend Dollar zu sichern, verlie=C3=9F=20
-er.
-
-Ich habe nach dem n=C3=A4chsten Angeh=C3=B6rigen meines verstorbenen Kunden=
-=20
-gesucht, ohne Erfolg, da ich seinen aktuellen Wohnsitz und seine=20
-Kontaktdaten nicht habe. Als ich suchte, stie=C3=9F ich auf Ihr Profil=20
-mit dem gleichen Nachnamen und am selben Ort mit den N=C3=A4chsten=20
-Angeh=C3=B6rigen. Ich beschloss, dich zu kontaktieren und dich als=20
-Bonafide Next Of Kin zu benutzen.
-
-Ich bitte Sie um Ihre Zustimmung, Sie als Next Of Kin meines=20
-verstorbenen Kunden zu pr=C3=A4sentieren, da Sie beide den gleichen=20
-Nachnamen tragen. Die Gelder werden dann an Sie als Beg=C3=BCnstigten=20
-in Ihrem Land =C3=BCberwiesen und im Verh=C3=A4ltnis 60:40 geteilt, das=20
-sind 60% f=C3=BCr mich und 40% f=C3=BCr Sie. F=C3=BCr weitere Details=20
-kontaktieren Sie mich bitte sofort f=C3=BCr weitere Informationen =C3=BCber=
-=20
-diese meine E-Mail. 
-
-Danach sende ich Ihnen die Details, wie die Transaktion beginnen=20
-wird
-
-Gr=C3=BC=C3=9Fe
-Mustafa Ayvaz
+Sincerely
+Dr. Irene Lam
