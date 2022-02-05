@@ -2,77 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94324AAA4B
-	for <lists+linux-scsi@lfdr.de>; Sat,  5 Feb 2022 17:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F7E4AAC99
+	for <lists+linux-scsi@lfdr.de>; Sat,  5 Feb 2022 22:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355320AbiBEQ42 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 5 Feb 2022 11:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233471AbiBEQ42 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 5 Feb 2022 11:56:28 -0500
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252BCC061353
-        for <linux-scsi@vger.kernel.org>; Sat,  5 Feb 2022 08:56:25 -0800 (PST)
-Received: by mail-lf1-x143.google.com with SMTP id z4so3921134lfg.5
-        for <linux-scsi@vger.kernel.org>; Sat, 05 Feb 2022 08:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=5+T6LvvALsCqS8hwQIXtZ7PKoyb/aQqkyAFbfBNDrRo=;
-        b=lC72mreDxOaUCTaTMeuc1Gg2y+AeKqqYgFR0lRIrWAZh3tKq2xii2H6bdJ2JnSlthD
-         meCi3ah870+N23+CZSMv8IpS5HTS093chPUw8HKHGAGxwOSFbTdONP3kW4rIrjRLWz0o
-         0WsW5yv6rjD6uSyUVS40KV0YMoogMgDceni5NL+HMCQ303q9MztwEJMB6G7XDK8XzNKB
-         2TbNOfN1tKAIdXmDdZrtVwMioCVsxE87KdoWYMU2s7DWfjLQia6sy+XCvCTnKFclErX1
-         Hy6LMagx3+HBpgYHgU00kOtQMlpUssNR9Ii0aK8mzYgAzvzvJJaeaBoyuc/ozMbS7V9A
-         cICA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=5+T6LvvALsCqS8hwQIXtZ7PKoyb/aQqkyAFbfBNDrRo=;
-        b=d39a/0MpvkRHPs/wuI4+8+694OcnmfZPOCUhGDHzRJUi/sYjrrvG7GDAzAzOS9NIKS
-         EGOwlcuaa0Pv6VbbxT8xQshVSLcoVwZtkG2N5fpr/rLbkvEgjIBNqD4M33ZbDk6IiwRP
-         Rqq/zZYwMUzq8CPjgZfyu0f1Tb+puZCQWduABuk27SqHYTasPB7qv0x7964B187bc0sC
-         VPIkHjLK8XDP1lfiaQhy7yBwQEkipYebD/23VjGvpsWAkpmrK8AtZD28I423/9OryIZN
-         yeKd5XHZJEefUj1lMpEFx17GY07QXB7wkSgQMeN9hVTwqBSyNT6LpA04i2LlmzH/j0OT
-         7fzA==
-X-Gm-Message-State: AOAM532iuJjckFvnoGCVSnQNioNUVazWQw3EF9MuR3sJnSC6sUi43LJH
-        HqF0r9t3iTlObXaq24j7VWYXugNaIwa1epmyyhA=
-X-Google-Smtp-Source: ABdhPJzs4Q00n+1jv2FfzqnSkINu7We/v0FHcC53p25WfTMX57xMC3SgSLQYEPVXTkiEzoX4McXegm+hJ7umPvRvD+Q=
-X-Received: by 2002:a05:6512:228a:: with SMTP id f10mr3080048lfu.22.1644080182830;
- Sat, 05 Feb 2022 08:56:22 -0800 (PST)
+        id S1381364AbiBEVFI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 5 Feb 2022 16:05:08 -0500
+Received: from [194.99.46.237] ([194.99.46.237]:36360 "EHLO
+        slot0.bluewaterleisure.com" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1354918AbiBEVFG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 5 Feb 2022 16:05:06 -0500
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=bluewaterleisure.com;
+ h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ker.mon@bluewaterleisure.com;
+ bh=XtlTNbDfVQ5UexMGojL2QgyTGEQ=;
+ b=LJ32enxWp30enkrJaqj7B3wAQbU3dXvlnUFjK2xas1cmubc5NAk72YcrmD8Fxfxo4P/whChXLdGW
+   fFpKKT26QFJnC8xONonB8BKnnkKu8bvucrby0EotulzhShLZc0GKNfHrCabFXoJgfq4w42Mzdl5V
+   biDwV5L5pVo0l+O3V4iEx4ipTt9NhzTMQEfGWY8cHXUSrCfbhzHt/c/J3/RYbboUPgWA1OvMYpVm
+   G1j96d94PgHO54rKWX1p9HwvYbG+Bi++XjuAXYZRGAdVetCWT8CA7OLfsYg8/nKioeKYbvLeR8LI
+   bNF6CpdCaRtcLqWOwAuCvvujjhjriJjW21Ljqg==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=bluewaterleisure.com;
+ b=Il4n7unHEFBw1wu4pKTphKGy5DCiB35hzY7KD9bZD4LclCZzOXOlPyg1eM+S/L3chJgW/orburdB
+   ONXaKu5dGsEtQRkbmXuzaHHt6gn/+FVQOJ7cJPbfszx0cCSahV+EIR64gAXAgpgAVU79C6OuUuqi
+   h3Ns2ETi5JwcPMvJ5+CEalpxZijhVnhqleK2hoce9T5QvTldoa1ADoar5MgY80zfHPuufD770shg
+   pkF/3WRygZnZvhb/lOwmkETepg7LFSDSK6ZCv0O9Z64qJzE9UhwVsRQNY6TAEhuditfswXzjhQNL
+   /5bQsg0KiCuLo4wzvGSIyZHFKqCQ33rtJ7Hcsw==;
+Reply-To: tomander231@gmail.com
+From:   "Barrister Mustafa" <ker.mon@bluewaterleisure.com>
+To:     linux-scsi@vger.kernel.org
+Subject: Aufmerksamkeit:
+Date:   5 Feb 2022 22:04:16 +0100
+Message-ID: <20220205220416.0C59A4663CA4A359@bluewaterleisure.com>
 MIME-Version: 1.0
-Sender: uba250mirobe@gmail.com
-Received: by 2002:a05:6504:3241:0:0:0:0 with HTTP; Sat, 5 Feb 2022 08:56:22
- -0800 (PST)
-From:   Folson Terfah <terfahfol@gmail.com>
-Date:   Sat, 5 Feb 2022 16:56:22 +0000
-X-Google-Sender-Auth: 9VrrL0ACD6CfO6_TlRtS_fDoDl4
-Message-ID: <CADV0=y=WKhjCL+DiCc+RRumXSa=-R9W0CJs6pCfkE-1M1sg_fg@mail.gmail.com>
-Subject: Hej
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Mukava p=C3=A4iv=C3=A4,
-Miten sin=C3=A4 ja perheesi voit t=C3=A4n=C3=A4=C3=A4n? Toivottavasti olet =
-kunnossa!
-Yst=C3=A4v=C3=A4llisin terveisin, olen Folson Terfah. Ota minuun yhteytt=C3=
-=A4, koska
-minun on keskusteltava kanssasi t=C3=A4rke=C3=A4st=C3=A4 asiasta, joka kosk=
-ee
-lunastamatonta omaisuuttani
-(5,5 miljoonaa dollaria). Lis=C3=A4tietoja / selvennys asiaan
-Arvostamme nopeaa vastaustasi.
-Parhain terveisin
+Lieb linux-scsi,
+
+Ich bin Barrister Mustafa Ayvaz, hoffe, diese E-Mail findet Sie=20
+gut. Ich bin Anwalt des verstorbenen Herrn Robert, der aufgrund=20
+des Coronavirus sein Leben verlor, kontaktierte er w=C3=A4hrend seiner=20
+Gesch=C3=A4ftsreise in China. Ich kontaktiere Sie, um mit mir=20
+zusammenzuarbeiten, um die =C3=9Cberweisung eines Fonds von vier=20
+Millionen vierhundertzwanzigtausend Dollar zu sichern, verlie=C3=9F=20
+er.
+
+Ich habe nach dem n=C3=A4chsten Angeh=C3=B6rigen meines verstorbenen Kunden=
+=20
+gesucht, ohne Erfolg, da ich seinen aktuellen Wohnsitz und seine=20
+Kontaktdaten nicht habe. Als ich suchte, stie=C3=9F ich auf Ihr Profil=20
+mit dem gleichen Nachnamen und am selben Ort mit den N=C3=A4chsten=20
+Angeh=C3=B6rigen. Ich beschloss, dich zu kontaktieren und dich als=20
+Bonafide Next Of Kin zu benutzen.
+
+Ich bitte Sie um Ihre Zustimmung, Sie als Next Of Kin meines=20
+verstorbenen Kunden zu pr=C3=A4sentieren, da Sie beide den gleichen=20
+Nachnamen tragen. Die Gelder werden dann an Sie als Beg=C3=BCnstigten=20
+in Ihrem Land =C3=BCberwiesen und im Verh=C3=A4ltnis 60:40 geteilt, das=20
+sind 60% f=C3=BCr mich und 40% f=C3=BCr Sie. F=C3=BCr weitere Details=20
+kontaktieren Sie mich bitte sofort f=C3=BCr weitere Informationen =C3=BCber=
+=20
+diese meine E-Mail. 
+
+Danach sende ich Ihnen die Details, wie die Transaktion beginnen=20
+wird
+
+Gr=C3=BC=C3=9Fe
+Mustafa Ayvaz
