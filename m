@@ -2,152 +2,204 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E834AC006
-	for <lists+linux-scsi@lfdr.de>; Mon,  7 Feb 2022 14:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6924AC1F6
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Feb 2022 15:57:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbiBGNuL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Feb 2022 08:50:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
+        id S1382934AbiBGOxh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Feb 2022 09:53:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448795AbiBGNN2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Feb 2022 08:13:28 -0500
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54F5C0401ED
-        for <linux-scsi@vger.kernel.org>; Mon,  7 Feb 2022 05:13:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1644239601; x=1675775601;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+21Yyghs+bY9yok1fzjGL7GBXTYblCJPLUpgvVaqhd0=;
-  b=kutalAyAt5BXYUHXKUqJ/M1FoipuNdka+y2BDTtAc393VQ5wecqV4stf
-   cJfFXbSdnzm34ZztD2qUO6ydU/2z8jx96LmX+pubZFMXbvTvNVIPN3ji5
-   aVwMmz3HqrDpZ0YwlqNen633OtOb3y+6OCYJiUV1BuUmfyXzvhwoVfIDk
-   ManUFtS8L1fUaZ9AUWQydlPQVLU3efLeONUr6xdANPe0VzhqtwSorp8EW
-   +Kv3RZaf6pz3WEK7KUCxC8/QZyEEazs2YGh3Kv5nSpA0/4Zn52EGQBrSR
-   5CKQySyTUC6qx1CfCjyyBIZFkv8sZv0Cx75YZbF0CCLxrF7EgtweApySj
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,349,1635177600"; 
-   d="scan'208";a="197144057"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 07 Feb 2022 21:13:20 +0800
-IronPort-SDR: qq0IUDOJPWTW8l+Lm1FEyMrbvw1DqmStP/4ks0r31G4pJ/aRRnEhSVMHjZfFtL0NEpWhqpGFbM
- 8eEKSw/Vmv+AJ67XS5K9kQm+Ad3MFsvCU+0MBWf1CKqfl8BA52cDHWaUg5RSs9Bx47JFeoBmGa
- pawSeY3BfCyeewj7U6KvOe2YLLlfiimW8R0fP01DqwmyHpTSnXLCQwX9j4yd0hrVVm4KjiTynb
- FVYFHjA77Vamas4mTCW0Xkt/rNo92A0fwU8t0S1SRVh3Tg1FWLwg+3oAgNNyvuFW8f56StJIz5
- coFz/Q0AzyDEqj378Bylyeng
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 04:46:23 -0800
-IronPort-SDR: NxtZqTin+6mKHAt3XVDisJrLIRfdm7KqEeXhPdBV1OeDawZyTIW7v1jPZz7Na0dLxcrJBasTMb
- 5ytFV49MKQT6bUqnb7DNZAghzNrgs61LaTMQjw7WIByPqqnA4b7Lf+omvUclBuZ0Nuo2fvqrmb
- OXe/WPY3/L+vtlWq7AysOXlVNpLBSelEenfmW7cCMTS1eBXMs6I4EkVHBqyj5k7XzNnO/lYaNI
- qV6BKlZBecXxuVuw2G4Hq3U+G6r6uPT9ClZAVM45rpep9cZeBij+tOf6T2ZopWRwi3J1PsuHVF
- 6eY=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 05:13:22 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JsmmK5z8gz1SVp5
-        for <linux-scsi@vger.kernel.org>; Mon,  7 Feb 2022 05:13:21 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1644239600; x=1646831601; bh=+21Yyghs+bY9yok1fzjGL7GBXTYblCJPLUp
-        gvVaqhd0=; b=bT71PG1JnGgtpyzgL7ysLwH5cScwUnHimAea8aVkvrXak/d3FIh
-        nR0UIyV0lbhU841TImHZ6+cwvjXsnFHUcIL9B7JHhJ6BndQ/6r25/7pBzWfdsUMX
-        IEipyrvU7INZMPLGz1NGmF0gEB6XNFSwsZFbYcRucios52D3sc7sowhtcvfO8IwO
-        JYYlhSXJVKHInuXdzZus7x/lMCY6myhx7s+mG5m4eoWMVrJ8DM3WKArraKoe7PNF
-        c1gmANPKlp1izojLlvXz3/t54TeOWDcmVaaxHSSmWbuKa7dN814tytmrcB8U+sf0
-        RBIZ05hglZCyfUlPjsTfwfxMHAhQVWBiqYg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id EGUXtRBpnA1J for <linux-scsi@vger.kernel.org>;
-        Mon,  7 Feb 2022 05:13:20 -0800 (PST)
-Received: from [10.225.163.63] (unknown [10.225.163.63])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JsmmG5ddvz1Rwrw;
-        Mon,  7 Feb 2022 05:13:18 -0800 (PST)
-Message-ID: <071c0b1d-32fb-e02f-d4e9-1540701d837b@opensource.wdc.com>
-Date:   Mon, 7 Feb 2022 22:13:17 +0900
+        with ESMTP id S1392457AbiBGOam (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Feb 2022 09:30:42 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF5CC0401C3
+        for <linux-scsi@vger.kernel.org>; Mon,  7 Feb 2022 06:30:41 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220207142245epoutp0411cc1bc95410665177fa33ab1f39a8cc~Rhv5CCzT01974719747epoutp04H
+        for <linux-scsi@vger.kernel.org>; Mon,  7 Feb 2022 14:22:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220207142245epoutp0411cc1bc95410665177fa33ab1f39a8cc~Rhv5CCzT01974719747epoutp04H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1644243765;
+        bh=5QYzt4tRkBvcWsVz03kfAFVzKeqCoxXt7vtpSOslY8I=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YKcOYllGI2msbjFqFXwb+BX8tjaAyU/sA2LYi7LEKeNVDe9loChBLPtbHxgU0gO+V
+         NaMKuGmiovhpnuiS6/pugk6kYqS6myQ1tQg/7+hOOXP6d1lsmHW9OaHAVgV8CQsgNv
+         m1xTROQFvFaH2YHc3cWBeohy0y93FRkzDAqktPCc=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20220207142244epcas5p29a7306d5c7f8e54ea7a493ffcb0fa016~Rhv3nwPUf2954829548epcas5p2e;
+        Mon,  7 Feb 2022 14:22:44 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4JspJG57mjz4x9Pq; Mon,  7 Feb
+        2022 14:22:38 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        95.1E.46822.28A21026; Mon,  7 Feb 2022 23:19:46 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220207141901epcas5p162ec2387815be7a1fd67ce0ab7082119~Rhsn75jdi1498914989epcas5p16;
+        Mon,  7 Feb 2022 14:19:01 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220207141901epsmtrp1f9eeb35e5f80b47703f826b47335f7a2~Rhsn6oK7q0764707647epsmtrp1r;
+        Mon,  7 Feb 2022 14:19:01 +0000 (GMT)
+X-AuditID: b6c32a4a-de5ff7000000b6e6-28-62012a82045c
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8D.33.08738.45A21026; Mon,  7 Feb 2022 23:19:00 +0900 (KST)
+Received: from test-zns.sa.corp.samsungelectronics.net (unknown
+        [107.110.206.5]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220207141856epsmtip1abc84e3ece99ad466b43b11b462c0490~RhskKuvSp0284102841epsmtip1j;
+        Mon,  7 Feb 2022 14:18:56 +0000 (GMT)
+From:   Nitesh Shetty <nj.shetty@samsung.com>
+To:     mpatocka@redhat.com
+Cc:     javier@javigon.com, chaitanyak@nvidia.com,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, axboe@kernel.dk,
+        msnitzer@redhat.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, roland@purestorage.com, hare@suse.de,
+        kbusch@kernel.org, hch@lst.de, Frederick.Knight@netapp.com,
+        zach.brown@ni.com, osandov@fb.com,
+        lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
+        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
+        jack@suse.com, joshi.k@samsung.com, arnav.dawn@samsung.com,
+        nj.shetty@samsung.com
+Subject: [PATCH v2 00/10] Add Copy offload support
+Date:   Mon,  7 Feb 2022 19:43:38 +0530
+Message-Id: <20220207141348.4235-1-nj.shetty@samsung.com>
+X-Mailer: git-send-email 2.30.0-rc0
+In-Reply-To: <CAOSviJ0HmT9iwdHdNtuZ8vHETCosRMpR33NcYGVWOV0ki3EYgw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 00/16] scsi: libsas and users: Factor out LLDD TMF code
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, artur.paszkiewicz@intel.com,
-        jinpu.wang@cloud.ionos.com, chenxiang66@hisilicon.com,
-        Ajish.Koshy@microchip.com
-Cc:     yanaijie@huawei.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com, liuqi115@huawei.com, Viswas.G@microchip.com
-References: <1643110372-85470-1-git-send-email-john.garry@huawei.com>
- <1893d9ef-042b-af3b-74ea-dd4d0210c493@opensource.wdc.com>
- <14df160f-c0f2-cc9f-56d4-8eda67969e0b@huawei.com>
- <a8fae323-1877-058a-b03e-d175a725213f@opensource.wdc.com>
- <a2de1656-b1ec-2fb7-caab-657e27dacb48@huawei.com>
- <49da4d80-5cc3-35c3-ccaa-6def8165eb65@huawei.com>
- <59a198a8-1d87-bc09-d2d8-2d495ed74c16@opensource.wdc.com>
- <098f988e-1f12-c412-3111-60393dfe0f0b@huawei.com>
- <f3362c6f-b4b6-2914-0652-d786e19b6b03@opensource.wdc.com>
- <62e56609-7026-93a1-a446-a6fd68328653@opensource.wdc.com>
- <1114e27f-e6b3-e9b9-a892-f543f4636c4e@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1114e27f-e6b3-e9b9-a892-f543f4636c4e@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xbdRTH97u3vS3LileG4QeRjBQ18lzLKP46hpgIy3VjBiJmQpxY4AqE
+        0ta2uEk0wCp78JDCECtsg20MFJi48pBBYVBSAQuIIpThNuW1ORhsPNxAcLWloPvvcx7fc37n
+        /HLYuMMVlgs7SaKk5RKRmEtsZzR1eXj6HPcEsbxu4w6ku7HERDW38glU/HAVRw86J5moMF/D
+        QkNT9qhtvpSJBlcyMTSpNWNId7EQQ9/UGDB0t+oSQKeNgxhaH+cjg3mOQIX6EYDaxryQrq2X
+        gcoqp1kox9RMoPbZNhxVdT/BUMGpYQwNlKwTqGmtDEddt4cZqGYdoazcVRaauf7ea67U0K8H
+        qQLVPItSld9kUEP9qZS2+jRB1VekU2dGqwDVeiODoI73GXBKs7hMUKa+7zEqTzVPUAvTYwyq
+        aTyPRT1oHyaozxuqQbhjdPK+RFoUT8vdaEmcND5JkhDEPfhWzOsxggAe34cvRK9w3SSiFDqI
+        GxIW7rM/SWxZEtftI5E41eIKFykU3N2v7pNLU5W0W6JUoQzi0rJ4scxf5qsQpShSJQm+Elq5
+        l8/j+Qksie8nJ/aXLzJlasdjxdPPZIAp+2xgx4akP/xtZQxY2YFsBbBHH5cNtlt4EcCq3C+B
+        zVgCsOjOKLalGKhpZNoCLQB295gIm5GFwdK6a6xswGYTpBc0mtlWgSPpBNcHmzYq4eQSA46Y
+        SljWwE7SD/7dcW2jKoN8EdYabjGsWg4phI0jobZm7vDCeCfTynZkBDT3nsWtzCGfhb1fTTGs
+        jJO7oKqxFLfWh+QdO3jf1MqwiUPgOdVPm7wTznQ3sGzsAu/ln2DZBDkArvT9jtkMDYAqtYqw
+        ZQXDn3X/YNYX4aQHrGvZbXO7wi9+/BazdbaHeWtTm2vhwObzW+wOa+vKN8s4w5HHmZtMwZb6
+        JsK27AoAF/RH1MCt5KmBSp4aqOT/zuUArwbOtEyRkkArBDI/CX30v0+Ok6ZowcbdeB5oBuN/
+        PPTVA4wN9ACyca4j5/kcs8iBEy/6OI2WS2PkqWJaoQcCy8ILcJfn4qSWw5MoY/j+Qp5/QECA
+        v3BPAJ/rxDEmfCdyIBNESjqZpmW0fEuHse1cMrCs+nc1s7HbPkihL0c8OiTUpWuKfT6bULfx
+        Tt6c2VHuvd/Q7vnGJ2V1rgNeqooJgyv1UuQ7y38tDIah63O1ukCH5q5WY9Wcit/aEP0oInDy
+        annvgOP5ZoM62j8oKpRzjBIHV/odXuOFrom5wihzWthyiuBNXnHtnkuKl+/FuRxF5suclV8O
+        Tc6FCmZ7i4LVL5jPZg6fK9UuO/WduRJzPzI//c/FH+ojT7n2dybG7l0iGavTpo67zidM3le1
+        B3SHjScXnnBCJorc0wvql6Wj/etvezCT3bwrojxK4+UdF2szc46gcC+i54LsU+3jXdsk657c
+        QHr8w9t+aXFOXw/E51ZqYrkMRaKI74nLFaJ/AZLhC3bABAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBIsWRmVeSWpSXmKPExsWy7bCSnG6IFmOSwetT5hZ7bn5mtVh9t5/N
+        YtqHn8wW7w8+ZrWY1D+D3eLyEz6Lve9ms1pc+NHIZPF4038miz2LJjFZrFx9lMni+fLFjBad
+        py8wWfx5aGhx9P9bNotJh64xWuy9pW2xZ+9JFov5y56yW3Rf38Fmse/1XmaL5cf/MVlM7LjK
+        ZHFu1h82i22/5zNbHL53lcVi9R8Li9aen+wWr/bHOch6XL7i7TGx+R27R/OCOywel8+Wemxa
+        1cnmsXlJvcfkG8sZPXbfbGDzaDpzlNljxqcvbB7Xz2xn8uhtfsfm8fHpLRaPbQ972T3e77vK
+        5tG3ZRVjgEgUl01Kak5mWWqRvl0CV8bZBZ9YCyaIVEx7yt/A+ISvi5GTQ0LAROLc6q2sILaQ
+        wA5Gie1fFCDikhLL/h5hhrCFJVb+e87excgFVNPMJDFz+nGgBg4ONgFtidP/OUBqRATEJf5c
+        2MYIUsMsMJ1VouHUZSaQhLCAkcSvAzvBbBYBVYk1R++ygPTyClhKbL3mCjFfWWLhw4NgN3AK
+        BEr8PzmHGeKeAIk/3x6xg9i8AoISJ2c+AWtlFlCXWD9PCCTMLCAv0bx1NvMERsFZSKpmIVTN
+        QlK1gJF5FaNkakFxbnpusWGBUV5quV5xYm5xaV66XnJ+7iZGcOLQ0trBuGfVB71DjEwcjIcY
+        JTiYlUR4Zbr/JwrxpiRWVqUW5ccXleakFh9ilOZgURLnvdB1Ml5IID2xJDU7NbUgtQgmy8TB
+        KdXANCNoZuKXv03rd85RCvdddpDruUAuz8It5hJubhPTFmqnpWnELnFi/hlsduKkgJ6ka3xB
+        d97lt0wOJ5qleDQllZZ/vb9L+KCcfMHhcvelBs33hbfMMl1c+1dJLVw49FFVytWQ1AeiP51P
+        Jh5ece3bd6b0wtDzPlXJBZkyxznbH3JcjvfqCAnfqrZtR45BtFRv3M1j1veX5hdlBjwvMXHt
+        ZOhZ/cugIrhUq6vl++n1PKvuNPF9XHO3PcpxY1IY/1f5Vx8ta18G1U3sEgx6f2Vm5JUTi0xL
+        L7Vev3S089H2/tADPpNcN0uzuMgofOgOaw8/vJhzvXjDqq1Vp/5v1xZw53i+Ic+abb1Iyp9a
+        uXYlluKMREMt5qLiRACU4PdziwMAAA==
+X-CMS-MailID: 20220207141901epcas5p162ec2387815be7a1fd67ce0ab7082119
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220207141901epcas5p162ec2387815be7a1fd67ce0ab7082119
+References: <CAOSviJ0HmT9iwdHdNtuZ8vHETCosRMpR33NcYGVWOV0ki3EYgw@mail.gmail.com>
+        <CGME20220207141901epcas5p162ec2387815be7a1fd67ce0ab7082119@epcas5p1.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/7/22 22:09, John Garry wrote:
-> Hi Damien,
-> 
-> On 04/02/2022 03:02, Damien Le Moal wrote:
->> This is the submission path, not completion. The code is:
->>
->> (gdb) list *(pm8001_queue_command+0x842)
->> 0x3d42 is in pm8001_queue_command (drivers/scsi/pm8001/pm8001_sas.c:491).
->> 486				atomic_dec(&pm8001_dev->running_req);
->> 487				goto err_out_tag;
->> 488			}
->> 489			/* TODO: select normal or high priority */
->> 490			spin_lock(&t->task_state_lock);
->> 491			t->task_state_flags |= SAS_TASK_AT_INITIATOR;
->> 492			spin_unlock(&t->task_state_lock);
->> 493		} while (0);
->> 494		rc = 0;
->> 495		goto out_done;
->>
->> So the task is already completed when the submission path tries to set
->> the state flag ? Debugging...
-> 
-> JFYI, I am putting together a patch to drop SAS_TASK_AT_INITIATOR 
-> altogether. I just need to ensure that the logic in the isci code is 
-> correct.
-
-Great. Less dead code for the pm8001 driver :)
-
-I was busy with a nasty libata bug today so I did not continue my
-investigations. Will try tomorrow.
+The patch series covers the points discussed in November 2021 virtual call
+[LSF/MM/BFP TOPIC] Storage: Copy Offload[0].
+We have covered the Initial agreed requirements in this patchset.
+Patchset borrows Mikulas's token based approach for 2 bdev
+implementation.
 
 
-> 
-> Thanks,
-> John
+This is on top of our previous patchset v1[1].
+Overall series supports –
 
+1. Driver
+- NVMe Copy command (single NS), including support in nvme-target (for
+	block and file backend)
+
+2. Block layer
+- Block-generic copy (REQ_COPY flag), with interface accommodating
+	two block-devs, and multi-source/destination interface
+- Emulation, when offload is natively absent
+- dm-linear support (for cases not requiring split)
+
+3. User-interface
+- new ioctl
+
+4. In-kernel user
+- dm-kcopyd
+
+[0] https://lore.kernel.org/linux-nvme/CA+1E3rJ7BZ7LjQXXTdX+-0Edz=zT14mmPGMiVCzUgB33C60tbQ@mail.gmail.com/
+[1] https://lore.kernel.org/linux-block/20210817101423.12367-1-selvakuma.s1@samsung.com/
+
+Arnav Dawn (1):
+  nvmet: add copy command support for bdev and file ns
+
+Nitesh Shetty (6):
+  block: Introduce queue limits for copy-offload support
+  block: Add copy offload support infrastructure
+  block: Introduce a new ioctl for copy
+  block: add emulation for copy
+  dm: Add support for copy offload.
+  dm: Enable copy offload for dm-linear target
+
+SelvaKumar S (3):
+  block: make bio_map_kern() non static
+  nvme: add copy support
+  dm kcopyd: use copy offload support
+
+ block/blk-lib.c                   | 335 ++++++++++++++++++++++++++++++
+ block/blk-map.c                   |   2 +-
+ block/blk-settings.c              |   6 +
+ block/blk-sysfs.c                 |  51 +++++
+ block/blk.h                       |   2 +
+ block/ioctl.c                     |  37 ++++
+ drivers/md/dm-kcopyd.c            |  57 ++++-
+ drivers/md/dm-linear.c            |   1 +
+ drivers/md/dm-table.c             |  43 ++++
+ drivers/md/dm.c                   |   6 +
+ drivers/nvme/host/core.c          | 121 ++++++++++-
+ drivers/nvme/host/nvme.h          |   7 +
+ drivers/nvme/host/pci.c           |   9 +
+ drivers/nvme/host/trace.c         |  19 ++
+ drivers/nvme/target/admin-cmd.c   |   8 +-
+ drivers/nvme/target/io-cmd-bdev.c |  66 ++++++
+ drivers/nvme/target/io-cmd-file.c |  48 +++++
+ include/linux/blk_types.h         |  20 ++
+ include/linux/blkdev.h            |  17 ++
+ include/linux/device-mapper.h     |   5 +
+ include/linux/nvme.h              |  43 +++-
+ include/uapi/linux/fs.h           |  23 ++
+ 22 files changed, 912 insertions(+), 14 deletions(-)
 
 -- 
-Damien Le Moal
-Western Digital Research
+2.30.0-rc0
+
