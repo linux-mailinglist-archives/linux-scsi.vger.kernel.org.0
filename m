@@ -2,103 +2,203 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9534AB21D
-	for <lists+linux-scsi@lfdr.de>; Sun,  6 Feb 2022 21:32:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D1E4AB45B
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Feb 2022 07:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240989AbiBFUce (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 6 Feb 2022 15:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60002 "EHLO
+        id S234590AbiBGGDl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Feb 2022 01:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbiBFUcc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 6 Feb 2022 15:32:32 -0500
-X-Greylist: delayed 546 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 12:32:31 PST
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D53C06173B
-        for <linux-scsi@vger.kernel.org>; Sun,  6 Feb 2022 12:32:31 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9E21C210E4;
-        Sun,  6 Feb 2022 20:23:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644179004; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Pj2I0rsfuTgQ4bLw61zz9Pz4kkPloZvvSo9ZV3lV6og=;
-        b=QqZxUC3KoVjRNVX+LeMPeQAtLG6AIla4b4OlTH+e8D3ASbpnAM8ZAYV7I7dn//dG6FfVwK
-        sZQpzr0jLvP8oUrm5DlwN2hhGtPBfG4qRpSnaxNDagwj3eDki1OgjILiiN60jT9WXT93dl
-        CzWp+xsjeT6u17b8f9BfF6HdXQ/0YXA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644179004;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Pj2I0rsfuTgQ4bLw61zz9Pz4kkPloZvvSo9ZV3lV6og=;
-        b=A1bZeEG0cDALoMlWtSKIP3mjGvTxnORdD0ksGAm8IUUuP0g+YMqWlTw3K4PD7F8hU7b7Kc
-        c7hOzmEulIFbyVAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7E7A4139EF;
-        Sun,  6 Feb 2022 20:23:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5dYHHjwuAGL+MgAAMHmgww
-        (envelope-from <dmueller@suse.de>); Sun, 06 Feb 2022 20:23:24 +0000
-From:   =?UTF-8?q?Dirk=20M=C3=BCller?= <dmueller@suse.de>
-To:     linux-scsi@vger.kernel.org
-Cc:     GR-QLogic-Storage-Upstream@marvell.com,
-        Nilesh Javali <njavali@marvell.com>,
-        James Bottomley <James.Bottomley@SteelEye.com>,
-        =?UTF-8?q?Dirk=20M=C3=BCller?= <dmueller@suse.de>
-Subject: [PATCH v2] qla2xxx: fix error status checking in qla24xx_modify_vp_config()
-Date:   Sun,  6 Feb 2022 21:23:11 +0100
-Message-Id: <20220206202311.19392-1-dmueller@suse.de>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S1350299AbiBGD0N (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 6 Feb 2022 22:26:13 -0500
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 19:26:13 PST
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E25BC061A73
+        for <linux-scsi@vger.kernel.org>; Sun,  6 Feb 2022 19:26:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1644204372; x=1675740372;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+PGiUz6IVsXwuo4TQYZtEFmfxDiduE4w2R5euJoD4k0=;
+  b=UQZSNeNRIPNHMHgmFbFamqR822t0Zvhnidm1G94BaZH7Utl/QNdN/11S
+   YDZ5Wg/tPg3TaIPOj2jmDwiyIBWSbLyaqReylWNxNhS64sHYvZmEWgjcA
+   IMFsgpsshNG0E8kg3yBlcMsCg04yi5GmVYKk9TQSBZhB7iT5QYozR5nuB
+   gH/XxHdA+ZvuCdRC5Jv+Wg8O4NcbQfjtxrpqWeCCfPWjaaaq0lHE7WT52
+   qnhDj03CdFaTlzJF+xs3snoGJ7H3CjHt6sOoMuH6s6QZP5vUSbK66Xutv
+   g2cxQ9+FTNJ00CXHdMI6iMW6knGzc4Nj+s68DziEoGI2y3VTTOc9/vTBV
+   A==;
+X-IronPort-AV: E=Sophos;i="5.88,348,1635177600"; 
+   d="scan'208";a="296386955"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 07 Feb 2022 11:25:08 +0800
+IronPort-SDR: tdDtxMppDa5pGhLyG1VvUvlmQAAAzTU6JRzfy6igUFhvKhClMcM4xFiLUoTvxbYqOiSN4DwnJ2
+ VklOnBrNp7Rd+pJhi0XLbMNgl9p9XOHOtuOoEG0CDgQKTgc42stDLqIBsum5fR/Tmm6fBbzTgW
+ BQOSsAxUnbvyutGHz3v0dFu5NQTSHEXotjsCRlWXj0A1AfA9vcN4wuy/OZy0x2HRcnYpZTB5W+
+ W6a2jywsYfnKIJQ3CqRAgzemvkPeCOF8B1BIlmQb5pStHWXP1K/FYErvJRczHMsJxwsxRcpMmT
+ fiIDrYT5JnTBZk8b/puh1W1y
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 18:57:00 -0800
+IronPort-SDR: zTTp9B35JA+doSo5ghcaKAiagnCakFX5O5b4nHx3KgvrVZuTGUCM9Bnik4QxmBuyZfOdI0vWM4
+ Sb17YT+J5zeE82YH4JOey0MyD4jxtwavd2bTpqoX1tbHyo2CuWxuJtqCsMf3/K6fTVMvQmzKMh
+ 7CQ690DkkUmNtB9D727OK1lwh66z/O/OA1Z8B0kXkn2BOHwA7y4Eau/CiZAHU4pkt0BrVm0tWQ
+ tAGvhmpn4pu15u6/YW1WvKTjmr4WTn14H197+1UJtIO4UzUr0wAL6xfckrQMKx8Zxpdae9wZch
+ 6Mw=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2022 19:25:09 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JsWjc2CS0z1SVp0
+        for <linux-scsi@vger.kernel.org>; Sun,  6 Feb 2022 19:25:08 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1644204307; x=1646796308; bh=+PGiUz6IVsXwuo4TQYZtEFmfxDiduE4w2R5
+        euJoD4k0=; b=KrPzH5YM1F6suctFze3AmkR4PflP5imhrAbhjevbNmzolGAMOs+
+        SuqKb1bJhOQGsXk9IDhuoZPV5hhjzp7sdRmMsDHqbBl/jZD2UQEC1U2vXgWSn7uB
+        Ygfsvt09X8yGvCkL0x6gOexLt7HMFW/bdXNjwu4CqGZzyuoe9kc6RX6ZyDgU9IV6
+        V4Z55ZCvlsq7ghlBOc4GyGS8wurGNVBRrPzzSrYpAwepnzU+mijwYbh8JNwneyKA
+        2F9mHLCghIiiOJOjRkmlcY4hvprdRQOAv1u7JCbla8N1+xSJFl0oT9et1EDXMMM4
+        ghbr+dbmuts+8BAqXaQZw29rezcOxFbu+vQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Rif6cXUJvtl6 for <linux-scsi@vger.kernel.org>;
+        Sun,  6 Feb 2022 19:25:07 -0800 (PST)
+Received: from [10.225.163.63] (unknown [10.225.163.63])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JsWjZ3jBZz1Rwrw;
+        Sun,  6 Feb 2022 19:25:06 -0800 (PST)
+Message-ID: <281475cc-a159-8e25-f5e7-cde343bc50c4@opensource.wdc.com>
+Date:   Mon, 7 Feb 2022 12:25:04 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH -next] scsi: pm8001: clean up some inconsistent indenting
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, jejb@linux.ibm.com
+Cc:     martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220206125548.110945-1-yang.lee@linux.alibaba.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220206125548.110945-1-yang.lee@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The function was checking vpmod->comp_status and reported it as error
-status, which is however already checked a few lines below.
+On 2/6/22 21:55, Yang Li wrote:
+> Eliminate the follow smatch warning:
+> drivers/scsi/pm8001/pm8001_ctl.c:760 pm8001_update_flash() warn:
+> inconsistent indenting
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/scsi/pm8001/pm8001_ctl.c | 65 +++++++++++++++++---------------
+>  1 file changed, 35 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
+> index 41a63c9b719b..213ebf39261f 100644
+> --- a/drivers/scsi/pm8001/pm8001_ctl.c
+> +++ b/drivers/scsi/pm8001/pm8001_ctl.c
+> @@ -755,36 +755,41 @@ static int pm8001_update_flash(struct pm8001_hba_info *pm8001_ha)
+>  			fwControl->retcode = 0;/* OUT */
+>  			fwControl->offset = loopNumber * IOCTL_BUF_SIZE;/*OUT */
+>  
+> -		/* for the last chunk of data in case file size is not even with
+> -		4k, load only the rest*/
+> -		if (((loopcount-loopNumber) == 1) &&
+> -			((partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE)) {
+> -			fwControl->len =
+> -				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
+> -			memcpy((u8 *)fwControl->buffer,
+> -				(u8 *)pm8001_ha->fw_image->data + sizeRead,
+> -				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE);
+> -			sizeRead +=
+> -				(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE;
+> -		} else {
+> -			memcpy((u8 *)fwControl->buffer,
+> -				(u8 *)pm8001_ha->fw_image->data + sizeRead,
+> -				IOCTL_BUF_SIZE);
+> -			sizeRead += IOCTL_BUF_SIZE;
+> -		}
+> -
+> -		pm8001_ha->nvmd_completion = &completion;
+> -		ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha, payload);
+> -		if (ret) {
+> -			pm8001_ha->fw_status = FAIL_OUT_MEMORY;
+> -			goto out;
+> -		}
+> -		wait_for_completion(&completion);
+> -		if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
+> -			pm8001_ha->fw_status = fwControl->retcode;
+> -			ret = -EFAULT;
+> -			goto out;
+> -		}
+> +			/* for the last chunk of data in case file
+> +			 * size is not even with 4k, load only the rest
+> +			 */
 
-Guessing from other occurrences it was supposed to check entry_status
-instead.
+Please start multi-line comments with a line that has only "/*". It
+would be good to add a blnak line before that too, for readability.
 
-Fixes: 2c3dfe3f6ad8 ("[SCSI] qla2xxx: add support for NPIV")
-Signed-off-by: Dirk Müller <dmueller@suse.de>
----
- drivers/scsi/qla2xxx/qla_mbx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> +			if (((loopcount-loopNumber) == 1) &&
+> +				((partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE)) {
 
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 10d2655ef676..28fdd80e1e4d 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -4253,10 +4253,10 @@ qla24xx_modify_vp_config(scsi_qla_host_t *vha)
- 	if (rval != QLA_SUCCESS) {
- 		ql_dbg(ql_dbg_mbx, vha, 0x10bd,
- 		    "Failed to issue VP config IOCB (%x).\n", rval);
--	} else if (vpmod->comp_status != 0) {
-+	} else if (vpmod->entry_status != 0) {
- 		ql_dbg(ql_dbg_mbx, vha, 0x10be,
- 		    "Failed to complete IOCB -- error status (%x).\n",
--		    vpmod->comp_status);
-+		    vpmod->entry_status);
- 		rval = QLA_FUNCTION_FAILED;
- 	} else if (vpmod->comp_status != cpu_to_le16(CS_COMPLETE)) {
- 		ql_dbg(ql_dbg_mbx, vha, 0x10bf,
+While at it, align the conditions together to make this code more
+readable. As is, it is really unpleasant to read :)
+
+Also, "(partitionSize + HEADER_LEN) % IOCTL_BUF_SIZE" is calculated way
+too many times. Using a local variable for the value would be nice.
+
+> +				fwControl->len =
+> +					(partitionSize + HEADER_LEN) %
+> +					IOCTL_BUF_SIZE;
+> +				memcpy((u8 *)fwControl->buffer,
+> +					(u8 *)pm8001_ha->fw_image->data + sizeRead,
+> +					(partitionSize + HEADER_LEN) %
+> +					IOCTL_BUF_SIZE);
+> +				sizeRead +=
+> +					(partitionSize + HEADER_LEN) %
+> +					IOCTL_BUF_SIZE;
+> +			} else {
+> +				memcpy((u8 *)fwControl->buffer,
+> +					(u8 *)pm8001_ha->fw_image->data + sizeRead,
+> +					IOCTL_BUF_SIZE);
+> +				sizeRead += IOCTL_BUF_SIZE;
+> +			}
+> +
+> +			pm8001_ha->nvmd_completion = &completion;
+> +			ret = PM8001_CHIP_DISP->fw_flash_update_req(pm8001_ha,
+> +				payload);
+> +			if (ret) {
+> +				pm8001_ha->fw_status = FAIL_OUT_MEMORY;
+> +				goto out;
+> +			}
+> +			wait_for_completion(&completion);
+> +			if (fwControl->retcode > FLASH_UPDATE_IN_PROGRESS) {
+> +				pm8001_ha->fw_status = fwControl->retcode;
+> +				ret = -EFAULT;
+> +				goto out;
+> +			}
+>  		}
+>  	}
+>  out:
+
+
 -- 
-2.35.1
-
+Damien Le Moal
+Western Digital Research
