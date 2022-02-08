@@ -2,156 +2,152 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAD74AE22D
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Feb 2022 20:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 275CE4AE3A1
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Feb 2022 23:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386006AbiBHTXC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Feb 2022 14:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
+        id S1387347AbiBHWXI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Feb 2022 17:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385664AbiBHTXB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Feb 2022 14:23:01 -0500
+        with ESMTP id S1386238AbiBHTtV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Feb 2022 14:49:21 -0500
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB50C0613CB
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Feb 2022 11:23:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EF1C0613CB
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Feb 2022 11:49:20 -0800 (PST)
 Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 218J6vLG027133;
-        Tue, 8 Feb 2022 19:22:24 GMT
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 218JBBcR026745;
+        Tue, 8 Feb 2022 19:48:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : references : in-reply-to : content-type :
  content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=cl67RSYtVL55FsqilH6oYHGjB9keuG5Xq0Nq3syff2U=;
- b=JpEwmBUotcb5OFxMSjZNyr8pRzRasNVX67cLOxKfJEXTPmSm9pY0HTPgo3TzHTiOXmaB
- MLSkO/yJ+NWThzxkBs6ZZnt1aVwZp35ohzq18NiXahAeRNG1c/x+jFCEyPyxvxWne22t
- UG/c006tdYsbNSIe1KjtAvZoRt4mL8WfeG9Tn1cMnW13DEKFPHFpWuR1lVltQQa8ua5U
- I360C5vjAUY6WaIsW2a8t7Y94RJMXVUlMuvgkpVgnkZ+IE0lVHxQPHu5zp8ZHSrnw80T
- 1we8PV4h7rSjYGxd4wyCIJLhfKhUUx3rs+uwVt10tP88FFuKfPmINYGtNPCfbSOmq6ky kg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e3h28jbuc-1
+ bh=VBwm0bjQmROvYYYOKYOzZcbjspNpdDMm4CQ9oMOGbD4=;
+ b=0gM3t+so60VjhpOPhOKEoZAAAeNOwR5967PwdLgoltPPIaf4Vi3ikry1yGlERz61QjaC
+ sZtrVReCJZDsvy2OYTFcIUVGg1ZuH9JN4D+hpj9snJ1LUmdPxPU29um5GGTUdoHvFvMP
+ VqTuY3i+iSzHQ8KsWxDrGNSbfga3upKwRgP3u1gveDdRVZz1AkNKPshze9FRRXfED13s
+ /sbLYZXA0rfFM0P+SR4MqTj9nAtXIs0zdm417oX2+8p/qMd4Euiq0jM/OlfAoWysb8ND
+ m0k9rZoZpgS8oXWAtDtVEjNiORO1MyPPq7HWuje8MFymXHK4SvsLFKfcktQK4Gn3YLFu YQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e3h28jdw4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 08 Feb 2022 19:22:24 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 218JG7Z0024712;
-        Tue, 8 Feb 2022 19:22:23 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
-        by aserp3030.oracle.com with ESMTP id 3e1f9fwe69-1
+        Tue, 08 Feb 2022 19:48:45 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 218JjYaO195499;
+        Tue, 8 Feb 2022 19:48:44 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
+        by aserp3020.oracle.com with ESMTP id 3e1h26w377-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 08 Feb 2022 19:22:23 +0000
+        Tue, 08 Feb 2022 19:48:44 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JCxyd8EB3oCn4yuVTRWyWUdYxQQhQp99D7x9A2QRJs5q2mcxrePPpixCx9cv8d+oDQNXaYI6i+q7s3iBpkYD8CV0DpAPCVEgx1/8cVl0Ss61RVjmqrcD6p7yiPSnr3pKchJmlQzMhiL8jBBis1EV4Gkmd/CdxODKlE0dXDeOtw9zbrngU0cAU6AJ2LKeHAfsLSCehG2pfzXRdprki5mwA4FWb1/hNuZMuda2LK/kkwgqJ6zBW95bQ8QNwnIITFq3t8shR63/GcBcTgT9f6kPb7OnUA4MmXHYXSOx73NjKVZa/sJ9DDvwupx5kmuOQ8rIi0Vp9UQTzWlhR5l/BOulpQ==
+ b=MZJ8a0DFJdB7gyvNuFd85lZQ/Q3L5t+nvJXRJv4J6o4iBbTtp3dkseEqINtiXz0rmFapJjjm2fDJTCJG6rFb6I56wxzCNVqf60dfU6GbAf099sk8i2hBOkm5pt/DJO7KK0gNq7wK9YPAtJlj8VYv3pwmWPBPTRMOz6M40z/0nX9s/jtWcHF8cQUPlpZvUiy3vHNBRk1Qowcodb8O0cPn+68y7Rl/ntT9CLkKYE93vqssDyn3nH1me3g2JV0kW3d1ILyp6TKGBHBZiLUZ//KuC/ZO5bqknU/PXD7oX63p7V8eW3RB36ZP3Egv57/qZEzQrp6BZq2IPoOdluF22EQskg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cl67RSYtVL55FsqilH6oYHGjB9keuG5Xq0Nq3syff2U=;
- b=JhUeEbUUlguK4MzEy/z/YDuAL7Vtz4NOT+1UDBbdDs+U5c+jsR10/jChKKdcdEKAlT9D1Bhiho7oJeYlW0q9K6+WtAPsZ1wSP/ULNL+1OInyAz5DEbSMbzee1OA5hD+4kxPqhrR4WQQRWvku7Jiz/SH4nTzgSzzpSUWRdb76Eo1CLN0lkeWP13+9B1tjgcxVXWGfk+TpTKpLGo5wJWY0oVK+3GjCuGaGF5wzX03ytBhX129wof+BkHc/tM3yFOTeQGMLzREitTPlY60ktI0aWTzAM5WZK6kkhxkxKk/DTW2fAqwMTx67vT/Ot2boOQPeQVCAZn14vrcAKran2vPN+A==
+ bh=VBwm0bjQmROvYYYOKYOzZcbjspNpdDMm4CQ9oMOGbD4=;
+ b=W+I83ls+mb/OoSNfn2OqLhKuDU9Thw2lyjvBGxEmxrcAWoPfHmF2/DM3Ea5tJ0bQYp5/TNKczvdoRBXuoSRJHOV+t/jSqW/nOYnCjutQofMgoe2tOaAm98JzNsp07VwnttgXV4jJVTXHnq550PYhtLOpQTGmY0Ed7CARnK9FbCvCoMs/FClOjWGLqlbLZ/AsgG22wX/AVxwagSG9tDxA88ydM7GZZ9uALb2LqZ2mbafDcbrAdeeosYZGVIWUcraksQshkEJhnEmuoomv9+9kaGNSDT84LqbF7FxRyGd/+1jIKF8YENK88PU2lg85sgte6R2Ir/F1JHD9u0vSKq9vGg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cl67RSYtVL55FsqilH6oYHGjB9keuG5Xq0Nq3syff2U=;
- b=uYn4qI+pXcMxeFfBAxJ1+7kIOTajUb0Y9E9trvdARtwF3hKF5qAzXwSjmJ6QHJg1edrpIOgfcRkiSYWdLEV8cRCVbrbNQtTfyl/uFbjiy/vs/Wur1a5raV7VxeowDQ1IDpUBlZTPUReBhz5QRwZKT093te922FWzOT1ZNIVTKWs=
+ bh=VBwm0bjQmROvYYYOKYOzZcbjspNpdDMm4CQ9oMOGbD4=;
+ b=0JBHe+YSdFdvsGZKZsijDpw+ttfnNy95clf2lScUHoXccnRk3kuo/4U8IEV+KC1qjH+JKET192XD11Z8JJpFFTrcM/jFORI+Nn3DDFoNG9a5OsR0vFDOSVrKJgpVwg9Db0hciznEQVCZG/QpAwofS//SFnjwd9GC1neP2l8JVRg=
 Received: from SN6PR10MB2943.namprd10.prod.outlook.com (2603:10b6:805:d4::19)
- by DM6PR10MB2969.namprd10.prod.outlook.com (2603:10b6:5:6a::10) with
+ by DM6PR10MB3532.namprd10.prod.outlook.com (2603:10b6:5:17c::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.11; Tue, 8 Feb
- 2022 19:22:21 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.14; Tue, 8 Feb
+ 2022 19:48:41 +0000
 Received: from SN6PR10MB2943.namprd10.prod.outlook.com
  ([fe80::755b:8fbf:706a:858]) by SN6PR10MB2943.namprd10.prod.outlook.com
  ([fe80::755b:8fbf:706a:858%4]) with mapi id 15.20.4951.019; Tue, 8 Feb 2022
- 19:22:21 +0000
+ 19:48:41 +0000
 From:   Himanshu Madhani <himanshu.madhani@oracle.com>
 To:     Bart Van Assche <bvanassche@acm.org>
 CC:     Martin Petersen <martin.petersen@oracle.com>,
         linux-scsi <linux-scsi@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
         Hannes Reinecke <hare@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Juergen E. Fischer" <fischer@norbit.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Doug Gilbert <dgilbert@interlog.com>,
-        Oliver Neukum <oliver@neukum.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v2 03/44] scsi: Remove drivers/scsi/scsi.h
-Thread-Topic: [PATCH v2 03/44] scsi: Remove drivers/scsi/scsi.h
-Thread-Index: AQHYHREebvUIH2umRkWxmT5r4anjN6yKCD8A
-Date:   Tue, 8 Feb 2022 19:22:20 +0000
-Message-ID: <04F71D0B-DDFC-491A-B174-4DA49DAFA0D5@oracle.com>
+        Ondrej Zary <linux@rainbow-software.org>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Finn Thain <fthain@linux-m68k.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: Re: [PATCH v2 05/44] NCR5380: Move the SCSI pointer to private
+ command data
+Thread-Topic: [PATCH v2 05/44] NCR5380: Move the SCSI pointer to private
+ command data
+Thread-Index: AQHYHREheQaLWRo10EGCGgZrJy1SJqyKD5yA
+Date:   Tue, 8 Feb 2022 19:48:41 +0000
+Message-ID: <DA7E3B58-D79D-479C-8B1E-4103AA17902F@oracle.com>
 References: <20220208172514.3481-1-bvanassche@acm.org>
- <20220208172514.3481-4-bvanassche@acm.org>
-In-Reply-To: <20220208172514.3481-4-bvanassche@acm.org>
+ <20220208172514.3481-6-bvanassche@acm.org>
+In-Reply-To: <20220208172514.3481-6-bvanassche@acm.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-mailer: Apple Mail (2.3693.40.0.1.81)
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a8b6b728-b19d-42d1-6171-08d9eb385418
-x-ms-traffictypediagnostic: DM6PR10MB2969:EE_
-x-microsoft-antispam-prvs: <DM6PR10MB29690797AE091E3F37978E37E62D9@DM6PR10MB2969.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1775;
+x-ms-office365-filtering-correlation-id: b9b6d5ad-790a-4234-e7d0-08d9eb3c0252
+x-ms-traffictypediagnostic: DM6PR10MB3532:EE_
+x-microsoft-antispam-prvs: <DM6PR10MB3532C37FAC22B79218EDC0CFE62D9@DM6PR10MB3532.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:339;
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: t2y9mGnS74vskC0WxyLa8O5dhWxW+zkIG7VrGIjmrWkXK1nHubNLqx/NZ0CJ0P3sdxypO1T2Gj8vh00G89D7d7EZfEhz39nW7sbc7X9xTy3Rm4X5aF4Sc1RoWI8tIHf0C0d+kjP9fMO0uMJDB3eMHyBl2osWdco0HSjIoH8Gh8KvfpXKskD9X7h1fHI+Qtbq83QZb1xIWzQGrWWYd+gwU/wxMppY5T3EYp2ySf7xkorZ3JdS9NLIzKsNGdzPrOutub5DgWGDWAiowr++NUvRm2ZiMIDcWqQed6fKJ+gSdL9Aap2Qo/stdciuf9M/xK+dC8okmHo5ta8DI5Dpd7LEYmKDE3m9l2//W/3Fid+qhPVquOyqZkHWzbHDgDndUPyAzlEnqqr/uV0oRLVLH50NtioA2dr/jUKur83m/vZ5HCq/bBToweSoh/gyWsn0Z8VkpO0I+RJ0un2KDIiv1zARo7oIODboC4Pm6dKdHvMIJNk6spI/wkm4loBm1ZXhM9lHMIbaPXbFsvU45KiqGScp0v1LpMgxChH+R9ymYVAP7r1+3fauZqU+zoVfDmH6ibPrTRwZgyk/EGJFrQ50UB739mtM0n3h/A6m9Tx9Ic1YP2RB8CTxRZemNoonY5BIMZWfAblrz6mBey04UiR9amSGB/4N41YqY4WhTHSdNHrZcAagkAEEvzVRISKR4OhunB1HEhkUbj3rkVrXQWn/OqpqSOhj+U298S+ewOO5YYazVII=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2943.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(122000001)(86362001)(38070700005)(66556008)(4326008)(36756003)(91956017)(38100700002)(66946007)(76116006)(8936002)(66446008)(66476007)(54906003)(316002)(6916009)(64756008)(83380400001)(30864003)(44832011)(7416002)(6486002)(508600001)(71200400001)(6512007)(2906002)(6506007)(33656002)(2616005)(5660300002)(53546011)(8676002)(26005)(186003)(45980500001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: 4bp1nb6R3zvexdjIzlAA2v6y5jfykTpQ7GjkuAYNfOej9N21mg9K8l6jjhaEDuFqf8yIxZtJXnpxmtWKizVFdMBBaDyYM0sYOeHdfwmXLdY4sJZtBSzFc/qjBpb+JfDzdF1sj3DEXt4Suud7FVz7md5Z8LCeWAJSawQJpSS+B6ciW0eXH156SQMpo8wt1Qqvk9CvEz3KJRCHTdJDCJv9Z5/nLoj5P5g788UbHd/RYlfuJW7FKESgazVbxHnVD8g4xu7mCm74UMyGN5JiVDWDEygQNUu+Fm0n/WwkpLpk/dRjX0c3/9m3GlsaGCjpsiPS5d3lLYAu8bX8xTG9R0fh61J3lZS5WhkOX21I/KbywK/jYXTw2Jo3SaHxx7wLaeatMwP7jLW3BCZ5y9NPPhwnTG8Jal16It/0rout0XY3w0su+3TJ3P4SuUL9LWbVe3pqSMMs0yzeXgVhPeNFZ09EZqXD42Cohkke0Odm5ExRhWcydknm2MVHqYHS75kvbqscPIp6mxrIEoJ+0/GGRbaEKc5s1FKwSA5mdp2Mjdr6zuBpHU5JVLOhjk62lxl8Wc1ZUNWyPYHqOKEg6TdATahYWsFZRoiH5ksO+yzs/5fpNYRnF+nBT3N1Drp/ODOozQV/1rBOoWQtEoseJTXDsWjyKEBg82QFkhXOZyfgfDeLPfEiqrcFM+hMAzc0TMUAqN1ZZv4h2Ow9f3hKMoJDVTYg6/QHfjFEOlfpug/0wn76ndXtz4H1s6F7WykTdxoAPux/
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB2943.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(54906003)(6486002)(508600001)(38100700002)(53546011)(6512007)(4326008)(8936002)(38070700005)(36756003)(6506007)(2906002)(83380400001)(8676002)(44832011)(26005)(5660300002)(86362001)(122000001)(66946007)(91956017)(30864003)(2616005)(66556008)(71200400001)(33656002)(316002)(186003)(6916009)(66476007)(66446008)(64756008)(76116006)(45980500001);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0cz5DvuVJf64hCFIH4qx2vriD9M96IK4/n+gejzeftNDW2F//QsvgCjJgp8u?=
- =?us-ascii?Q?rQ26J9S+w6JMXgyCVxKw9k/GyWxPjFKV8UCf189si2DkHw+PqMJ3BTR7foJw?=
- =?us-ascii?Q?uZW2FJ2lvimdYZkRzLk7N/SveIHFHvo+TU4bCCeL+NAOy0hsjiXtSu69KWrq?=
- =?us-ascii?Q?MSAy8oAY9jaBR2YRnaJg9OpXvMyPM6IyeloLymhW1bFGhjFH08kuisYiqowj?=
- =?us-ascii?Q?hGWH37WbMZdnnMbJ0ozX2EoMfhX/EqtmXt5OfzflQLf3e5aaB/Fy4TNRJqje?=
- =?us-ascii?Q?iM51IxaNVOqqm14vhWao7ACObDj3Ui8TrjHpNc1aGmm8N4Qiz22JbP/rMDyJ?=
- =?us-ascii?Q?bPUmmbsn2clYfxx+MVUm8A73QhCvZWCzF/iwds7yG9F4LkLvpvx/CMLsm3Sz?=
- =?us-ascii?Q?nehX01ZQhVoLgKSLRe46sty2nbVVnUZ/bF6+h4K2cYSGF0NDRs6cr/ej+35d?=
- =?us-ascii?Q?IJby9X8VSvsW4avPqwBOf1dS9UTxRA+dn7F/U1dmww4uHD22p7xRqHusq3IF?=
- =?us-ascii?Q?6nhB43XA9nSKUAsHUn8W1BiGlNj2RAKhgr6RLFjaQWDTBLAcfz29F2HJznj+?=
- =?us-ascii?Q?fWISLcAYRQFklu1Qnm7vLo5mdzB4qGU0aCs6Z5u9DNOrHZewZkdjgqWmThGo?=
- =?us-ascii?Q?QO6D2K9B8lS2X1L7/Rt9cLQ8ba+cfaw1ZvOwsHWL0iAvfCSt5rggwfBOFYrM?=
- =?us-ascii?Q?qxwHNR2+7Gu2yM9wpp/ud1v75UWFLqs2z+kWf7xAisOEtQn5H4ILoQlaFxkk?=
- =?us-ascii?Q?TeKM5UbTksMuHMisxLHpHEpmZOwWrpgWosGLCUE5vDjCSBeI133KslRW/hdC?=
- =?us-ascii?Q?boiRs/3FaXjlltLo81Y1A9FpQeKeB11yEqsNSS7E0INBrC7M0dCWXIdILSsF?=
- =?us-ascii?Q?SON2dXCza88BMtu8V6kH0eSf6AgvbdNHmwX/MNJRGO9w3FLL0bpDzrvlVNs3?=
- =?us-ascii?Q?Je15mjEbU+6aMYyR7JM4c//UjLSQpay++QGEQlVg2krLL4JXt0pkFkQkJ15a?=
- =?us-ascii?Q?j58pyd9XymtiQyK8T641WN1C0pxGH7gCp3A9fdm2J/6vUlSTidckhqJgJHPY?=
- =?us-ascii?Q?0pF/DIADWlSVx6Q9K81ZA8EEOBFJCdKmUovFWlPqEcMxajW9F4jOSLK4AzeQ?=
- =?us-ascii?Q?VhCoIiQVpig+5hWFIUkvWgU3hYXMlECRWP7Wr5W8ytd/dlt42bgd6ahCfkJQ?=
- =?us-ascii?Q?cGinod3AdKpzlxySXNXsTBdTFkuXKmjDqSzwzdu+qw61RinGEohDtA150TeH?=
- =?us-ascii?Q?BEDJuQdhruyrC9waV6SZ18XmFSA0zdsIxBX3eWWFM6GlkRmdXXuRekD/VXar?=
- =?us-ascii?Q?KnB2zw/Em9ez6G3IDkJ3xLe6ef6emZjddE5GTZCs9vRJg1cM6vVn2l7O75UK?=
- =?us-ascii?Q?2kZo+0Em133LL9dNo9a+KmnPqlE4HcA66B/Xq3T/ZiR80VPyWCkicLSpswUs?=
- =?us-ascii?Q?ZbNpYQ5NbFrTTZQGfUF0lp76tCQzlkmV+b4u/WGMvt+zGVpGJhGPDm/aIHJo?=
- =?us-ascii?Q?ESv/rFzI+YZiOTRosuxgq+dT1Q4XNG6OXlPmk9zXih/Qd778mubSFgTsgeqI?=
- =?us-ascii?Q?4H+po3PfYRmpOueUT00FZB8btpfHO0QyzzFZKYj5VK/dv4+YcXXBfdH3hLKO?=
- =?us-ascii?Q?ZOTkO+3l0Mx9HwGmmYV8vzcmsH5msYwS5nGUBiGdFh2FTL7YEPTQ3C2PpDAz?=
- =?us-ascii?Q?BzANNxuwsr98Zw2POKgg/Xh8Qlc=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?KauDtVqaZxT0o9BaYq1E+CdAG4mIB4fPbubWzI3RMj2O8oQHiOQvKDmssYE2?=
+ =?us-ascii?Q?lFmlEanNlw+8oyEdMcHTN2aLV+GlLO+Fe4BUIYCDO60k0i5zrv2XU0sZ/HIO?=
+ =?us-ascii?Q?Nx1lgFUHdQbMw+pwl8LxYwTpJF6avQfQovgpAT/lwmAUb+z80jtuxuDBVMe8?=
+ =?us-ascii?Q?XlRO5dtb7UYYb6WrTMkVAaaZ76ueJ9WK+J7hCN59aOjUa5EUkbd7sTRKI0IG?=
+ =?us-ascii?Q?slckhiCe1rmi5mWKQeaosHGPIKaNdiqu0FEaCbm1ljG+T8miYP2jqLG/Upoi?=
+ =?us-ascii?Q?Gmejbl3PVcMPZ7oQ7VMjNE9mhzzccufnwp6OS6LFS6BtlhU1AU8EcqktvbHK?=
+ =?us-ascii?Q?T4vE6UDMKWAQsyS1w/IKmmAsL4m0g7mDfolwQJsqy8vKqGdb562NzsldnTGS?=
+ =?us-ascii?Q?eI8L8z04/+CZbByPejyYGYTbj5YYd8jkZt1l3Vb+jhO2JZLqXbmiLZLme1Qg?=
+ =?us-ascii?Q?Gv7OYmkYIBVTa+uFDdwivtfnjkotVgagLcvxZWDQpAoAWPbMB7jSNzY/oEnP?=
+ =?us-ascii?Q?5plmGPODI8EsjRHLxNrdKUMkwaR8vuBWDz9UbR3j5jZxMtE4pfI6d4ba/IZ9?=
+ =?us-ascii?Q?/C+0OJrO1h2NJIw2rQT567nkyHZTcPBILxKeWBllcYZtpZTgH68IIJRxRsjH?=
+ =?us-ascii?Q?GDZ0kJ0ajrz3h+JzNH+5+ChDMrenMO+0Zglc03gry/ArbU1JKAcEp4a5zRgt?=
+ =?us-ascii?Q?P7rj3dxcy8wpRR/PiMWXiwFoEef5HxrYyPP6oJqFT6YIVfnZRqIse4qnrYBN?=
+ =?us-ascii?Q?sZ/6k7hfLnmvJ2BU+QV6MRunYMPox8X7dbr+ZvXww8F9pNP4Tg2e4n3az9Xc?=
+ =?us-ascii?Q?ibPm3O5EBeUOCf23czwDlRyRqU37jGMb4sjcwDWHJOLLay/5RGO4MNxdAkDc?=
+ =?us-ascii?Q?yUDXcpRrEhAL0ccvSc9WkWb5sTAXSLhhQsRrcvl2wTaSloQRRgr7F8te8Jwr?=
+ =?us-ascii?Q?OUuK+UfEPrbbuC8i2DdqIyi37H3/J8ItxAIYfTl6wMd8GYQMxx1jocT7dkmG?=
+ =?us-ascii?Q?1lTvJFpUTzftBav9dkDsmvy/A6Ez6kKvZtwyfVW4OaRJcs1YOmtC0LaMdZg2?=
+ =?us-ascii?Q?0M93GrSKTeAVsPe+MTbjn+RXvjszBZhCajDxyva8U8i09E8y8ufQ5z8jByfG?=
+ =?us-ascii?Q?X8lz57A0cRYrTLoBwxKvgN/u5v7t/l/x3aLxCIpzw0v1VrwdzYY0PjH2ImA+?=
+ =?us-ascii?Q?XueiWIBWfhwhjuEbfhCcZE6w1XHxUQWt4owIZ1gqyibcRd0NeABBlGowr/Lu?=
+ =?us-ascii?Q?L2338FQF3Aupecnq8SkEFPcIqfUlM3Sjy7lnzqiF/G+ubUNE8yCvZcCuIwai?=
+ =?us-ascii?Q?byZ2jxyVWm8RInpRbE0nk6bTLYCHum94+D9GUIJH3CKIL+RUXL6YRNa/ta0j?=
+ =?us-ascii?Q?N0FF96wd6zpCfp/SnS1fRW9qKRepno4ITtVUDv++5VUuAdZzRN65F2CMe5rg?=
+ =?us-ascii?Q?bX9Fn4mxfatZol/PnVWQqtnPjD47/xWiQOWQVK4K+tqBrnq70Uq/M4vRUlWS?=
+ =?us-ascii?Q?h7QW+j2udBHJCV6tyouL5N5kZZzVsKzTHnv3R9tpX+M5khEB12h+qB98hPxq?=
+ =?us-ascii?Q?/f9nCoHbv4gmaEHUuWE0a9MQG3qOSAdWe6nqISpUxV0KoYMy9KuUicgV/wdj?=
+ =?us-ascii?Q?hvJOw1/QhCYKWrk38RT+aAEW/jDkowADXcHVgL5fLpbp7he5F3GTUrxPnKHP?=
+ =?us-ascii?Q?cqi5JwrcFpi8dXVSGyikJK5cJrA=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <7FDC2D4BB476EC46AB0B4E8EDA7552A7@namprd10.prod.outlook.com>
+Content-ID: <5C0C76694796424AB7D1795958A5CB5F@namprd10.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: oracle.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB2943.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8b6b728-b19d-42d1-6171-08d9eb385418
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 19:22:21.0122
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9b6d5ad-790a-4234-e7d0-08d9eb3c0252
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2022 19:48:41.7470
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Mp4RiKN/8xgkgFvAXMl2gzGLtc9vARCV8GKs0W8L/txZMrcyDlLfWrie8IzmbTa5WqLicrXVtJkUuwpsOo8lrWd4rWEMcxhfC7Tc87zfNhk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2969
+X-MS-Exchange-CrossTenant-userprincipalname: yRISVoAwW9lNCRQc4e8HpOZN5fSlKpbkTqywX4qKfYXlzNH5kptSSEWq2l6mc/XGcfINqCz317rIHJ7k3DC2aPuBs5jloOvSn6fHepgQ0AY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3532
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10252 signatures=673431
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 adultscore=0
- mlxlogscore=999 suspectscore=0 mlxscore=0 phishscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=999 adultscore=0 spamscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202080114
-X-Proofpoint-ORIG-GUID: NgoQv7su2BK94xhB3HXUDRO4hWvPe7QG
-X-Proofpoint-GUID: NgoQv7su2BK94xhB3HXUDRO4hWvPe7QG
+ definitions=main-2202080116
+X-Proofpoint-ORIG-GUID: QBz8EpO0DckPeQnynBL9vSzvrMBdNWTp
+X-Proofpoint-GUID: QBz8EpO0DckPeQnynBL9vSzvrMBdNWTp
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -166,563 +162,385 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 > On Feb 8, 2022, at 9:24 AM, Bart Van Assche <bvanassche@acm.org> wrote:
 >=20
-> The following two header files have the same file name: include/scsi/scsi=
-.h
-> and drivers/scsi/scsi.h. This is confusing. Remove the latter since the
-> following note was added in drivers/scsi/scsi.h in 2004:
+> Move the SCSI pointer into the NCR5380 private command data instead of
+> using the SCSI pointer from struct scsi_cmnd. This patch prepares for
+> removal of the SCSI pointer from struct scsi_cmnd.
 >=20
-> "NOTE: this file only contains compatibility glue for old drivers. All
-> these wrappers will be removed sooner or later. For new code please use
-> the interfaces declared in the headers in include/scsi/"
->=20
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Ming Lei <ming.lei@redhat.com>
+> Cc: Finn Thain <fthain@telegraphics.com.au>
 > Cc: Hannes Reinecke <hare@suse.com>
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Ondrej Zary <linux@rainbow-software.org>
+> Cc: Michael Schmitz <schmitzmic@gmail.com>
+> Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 > Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 > ---
-> drivers/scsi/a2091.c               |  6 +++-
-> drivers/scsi/a3000.c               |  6 +++-
-> drivers/scsi/aha152x.c             |  9 ++++--
-> drivers/scsi/aha1740.c             |  6 +++-
-> drivers/scsi/arm/acornscsi.c       |  6 +++-
-> drivers/scsi/arm/arxescsi.c        |  6 +++-
-> drivers/scsi/arm/cumana_2.c        |  6 +++-
-> drivers/scsi/arm/eesox.c           |  6 +++-
-> drivers/scsi/arm/fas216.c          |  6 +++-
-> drivers/scsi/arm/powertec.c        |  6 +++-
-> drivers/scsi/arm/queue.c           |  6 +++-
-> drivers/scsi/gvp11.c               |  6 +++-
-> drivers/scsi/ips.c                 |  8 ++++--
-> drivers/scsi/megaraid.c            |  8 ++++--
-> drivers/scsi/mvme147.c             |  6 +++-
-> drivers/scsi/pcmcia/aha152x_stub.c | 10 +++++--
-> drivers/scsi/pcmcia/nsp_cs.c       |  5 ++--
-> drivers/scsi/pcmcia/qlogic_stub.c  | 10 +++++--
-> drivers/scsi/qlogicfas.c           |  6 +++-
-> drivers/scsi/qlogicfas408.c        |  6 +++-
-> drivers/scsi/scsi.h                | 46 ------------------------------
-> drivers/scsi/sg.c                  |  8 ++++--
-> drivers/scsi/sgiwd93.c             |  6 +++-
-> drivers/usb/image/microtek.c       |  8 ++++--
-> drivers/usb/storage/debug.c        |  1 -
-> 25 files changed, 121 insertions(+), 82 deletions(-)
-> delete mode 100644 drivers/scsi/scsi.h
+> drivers/scsi/NCR5380.c    | 83 +++++++++++++++++++++++----------------
+> drivers/scsi/NCR5380.h    |  8 ++++
+> drivers/scsi/atari_scsi.c |  6 ++-
+> drivers/scsi/g_NCR5380.c  |  5 ++-
+> drivers/scsi/mac_scsi.c   |  6 ++-
+> drivers/scsi/sun3_scsi.c  |  3 +-
+> 6 files changed, 70 insertions(+), 41 deletions(-)
 >=20
-> diff --git a/drivers/scsi/a2091.c b/drivers/scsi/a2091.c
-> index 5853db36eceb..bcbce23478b8 100644
-> --- a/drivers/scsi/a2091.c
-> +++ b/drivers/scsi/a2091.c
-> @@ -12,7 +12,11 @@
-> #include <asm/amigaints.h>
-> #include <asm/amigahw.h>
+> diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
+> index 55af3e245a92..73c1b2ec6214 100644
+> --- a/drivers/scsi/NCR5380.c
+> +++ b/drivers/scsi/NCR5380.c
+> @@ -145,40 +145,44 @@ static void bus_reset_cleanup(struct Scsi_Host *);
 >=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "wd33c93.h"
-> #include "a2091.h"
->=20
-> diff --git a/drivers/scsi/a3000.c b/drivers/scsi/a3000.c
-> index 86f1da22aaa5..23f34411f7bf 100644
-> --- a/drivers/scsi/a3000.c
-> +++ b/drivers/scsi/a3000.c
-> @@ -13,7 +13,11 @@
-> #include <asm/amigaints.h>
-> #include <asm/amigahw.h>
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "wd33c93.h"
-> #include "a3000.h"
->=20
-> diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
-> index d17880b57d17..901b78e8ffe6 100644
-> --- a/drivers/scsi/aha152x.c
-> +++ b/drivers/scsi/aha152x.c
-> @@ -243,13 +243,16 @@
-> #include <linux/workqueue.h>
-> #include <linux/list.h>
-> #include <linux/slab.h>
-> -#include <scsi/scsicam.h>
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> #include <scsi/scsi_dbg.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> #include <scsi/scsi_transport_spi.h>
-> -#include <scsi/scsi_eh.h>
-> +#include <scsi/scsicam.h>
-> #include "aha152x.h"
->=20
-> static LIST_HEAD(aha152x_host_list);
-> diff --git a/drivers/scsi/aha1740.c b/drivers/scsi/aha1740.c
-> index 18eb4cfcef9a..134255751819 100644
-> --- a/drivers/scsi/aha1740.c
-> +++ b/drivers/scsi/aha1740.c
-> @@ -55,8 +55,12 @@
-> #include <asm/dma.h>
-> #include <asm/io.h>
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "aha1740.h"
->=20
-> /* IF YOU ARE HAVING PROBLEMS WITH THIS DRIVER, AND WANT TO WATCH
-> diff --git a/drivers/scsi/arm/acornscsi.c b/drivers/scsi/arm/acornscsi.c
-> index 81eb3bbdfc51..a8a72d822862 100644
-> --- a/drivers/scsi/arm/acornscsi.c
-> +++ b/drivers/scsi/arm/acornscsi.c
-> @@ -126,9 +126,13 @@
->=20
-> #include <asm/ecard.h>
->=20
-> -#include "../scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> #include <scsi/scsi_dbg.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> #include <scsi/scsi_transport_spi.h>
-> #include "acornscsi.h"
-> #include "msgqueue.h"
-> diff --git a/drivers/scsi/arm/arxescsi.c b/drivers/scsi/arm/arxescsi.c
-> index 7f667c198f6d..2527b542bcdd 100644
-> --- a/drivers/scsi/arm/arxescsi.c
-> +++ b/drivers/scsi/arm/arxescsi.c
-> @@ -35,8 +35,12 @@
-> #include <asm/io.h>
-> #include <asm/ecard.h>
->=20
-> -#include "../scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "fas216.h"
->=20
-> struct arxescsi_info {
-> diff --git a/drivers/scsi/arm/cumana_2.c b/drivers/scsi/arm/cumana_2.c
-> index 3c00d7773876..536d6646e40b 100644
-> --- a/drivers/scsi/arm/cumana_2.c
-> +++ b/drivers/scsi/arm/cumana_2.c
-> @@ -29,8 +29,12 @@
-> #include <asm/ecard.h>
-> #include <asm/io.h>
->=20
-> -#include "../scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "fas216.h"
-> #include "scsi.h"
->=20
-> diff --git a/drivers/scsi/arm/eesox.c b/drivers/scsi/arm/eesox.c
-> index 1394590eecea..ab0f6422a6a9 100644
-> --- a/drivers/scsi/arm/eesox.c
-> +++ b/drivers/scsi/arm/eesox.c
-> @@ -35,8 +35,12 @@
-> #include <asm/dma.h>
-> #include <asm/ecard.h>
->=20
-> -#include "../scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "fas216.h"
-> #include "scsi.h"
->=20
-> diff --git a/drivers/scsi/arm/fas216.c b/drivers/scsi/arm/fas216.c
-> index 7019b91f0ce6..0d6df5ebf934 100644
-> --- a/drivers/scsi/arm/fas216.c
-> +++ b/drivers/scsi/arm/fas216.c
-> @@ -47,9 +47,13 @@
-> #include <asm/irq.h>
-> #include <asm/ecard.h>
->=20
-> -#include "../scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> #include <scsi/scsi_dbg.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "fas216.h"
-> #include "scsi.h"
->=20
-> diff --git a/drivers/scsi/arm/powertec.c b/drivers/scsi/arm/powertec.c
-> index 8fec435cee18..797568b271e3 100644
-> --- a/drivers/scsi/arm/powertec.c
-> +++ b/drivers/scsi/arm/powertec.c
-> @@ -20,8 +20,12 @@
-> #include <asm/ecard.h>
-> #include <asm/io.h>
->=20
-> -#include "../scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "fas216.h"
-> #include "scsi.h"
->=20
-> diff --git a/drivers/scsi/arm/queue.c b/drivers/scsi/arm/queue.c
-> index c6f71a7d1b8e..978df23ce188 100644
-> --- a/drivers/scsi/arm/queue.c
-> +++ b/drivers/scsi/arm/queue.c
-> @@ -20,7 +20,11 @@
-> #include <linux/list.h>
-> #include <linux/init.h>
->=20
-> -#include "../scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> +#include <scsi/scsi_tcq.h>
->=20
-> #define DEBUG
->=20
-> diff --git a/drivers/scsi/gvp11.c b/drivers/scsi/gvp11.c
-> index 727f8c8f30b5..43754c2f36b3 100644
-> --- a/drivers/scsi/gvp11.c
-> +++ b/drivers/scsi/gvp11.c
-> @@ -12,7 +12,11 @@
-> #include <asm/amigaints.h>
-> #include <asm/amigahw.h>
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "wd33c93.h"
-> #include "gvp11.h"
->=20
-> diff --git a/drivers/scsi/ips.c b/drivers/scsi/ips.c
-> index b3532d290848..021143bdee5f 100644
-> --- a/drivers/scsi/ips.c
-> +++ b/drivers/scsi/ips.c
-> @@ -180,9 +180,13 @@
-> #include <linux/types.h>
-> #include <linux/dma-mapping.h>
->=20
-> -#include <scsi/sg.h>
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> +#include <scsi/sg.h>
->=20
-> #include "ips.h"
->=20
-> diff --git a/drivers/scsi/megaraid.c b/drivers/scsi/megaraid.c
-> index bf987f3a7f3f..2061e3fe9824 100644
-> --- a/drivers/scsi/megaraid.c
-> +++ b/drivers/scsi/megaraid.c
-> @@ -44,10 +44,14 @@
-> #include <linux/dma-mapping.h>
-> #include <linux/mutex.h>
-> #include <linux/slab.h>
-> -#include <scsi/scsicam.h>
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> +#include <scsi/scsicam.h>
->=20
-> #include "megaraid.h"
->=20
-> diff --git a/drivers/scsi/mvme147.c b/drivers/scsi/mvme147.c
-> index 869b8b058a43..0893d4c3a916 100644
-> --- a/drivers/scsi/mvme147.c
-> +++ b/drivers/scsi/mvme147.c
-> @@ -11,8 +11,12 @@
-> #include <asm/mvme147hw.h>
-> #include <asm/irq.h>
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "wd33c93.h"
-> #include "mvme147.h"
->=20
-> diff --git a/drivers/scsi/pcmcia/aha152x_stub.c b/drivers/scsi/pcmcia/aha=
-152x_stub.c
-> index df82a349e969..332c6d573904 100644
-> --- a/drivers/scsi/pcmcia/aha152x_stub.c
-> +++ b/drivers/scsi/pcmcia/aha152x_stub.c
-> @@ -40,13 +40,17 @@
-> #include <linux/slab.h>
-> #include <linux/string.h>
-> #include <linux/ioport.h>
-> -#include <scsi/scsi.h>
-> #include <linux/major.h>
-> #include <linux/blkdev.h>
-> -#include <scsi/scsi_ioctl.h>
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_ioctl.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "aha152x.h"
->=20
-> #include <pcmcia/cistpl.h>
-> diff --git a/drivers/scsi/pcmcia/nsp_cs.c b/drivers/scsi/pcmcia/nsp_cs.c
-> index a78a86511e94..dcffda384eaf 100644
-> --- a/drivers/scsi/pcmcia/nsp_cs.c
-> +++ b/drivers/scsi/pcmcia/nsp_cs.c
-> @@ -41,10 +41,9 @@
-> #include <asm/io.h>
-> #include <asm/irq.h>
->=20
-> -#include <../drivers/scsi/scsi.h>
-> -#include <scsi/scsi_host.h>
-> -
-> #include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_host.h>
-> #include <scsi/scsi_ioctl.h>
->=20
-> #include <pcmcia/cistpl.h>
-> diff --git a/drivers/scsi/pcmcia/qlogic_stub.c b/drivers/scsi/pcmcia/qlog=
-ic_stub.c
-> index 828d53faf09a..1c21d1b12988 100644
-> --- a/drivers/scsi/pcmcia/qlogic_stub.c
-> +++ b/drivers/scsi/pcmcia/qlogic_stub.c
-> @@ -38,14 +38,18 @@
-> #include <linux/string.h>
-> #include <linux/ioport.h>
-> #include <asm/io.h>
-> -#include <scsi/scsi.h>
-> #include <linux/major.h>
-> #include <linux/blkdev.h>
-> -#include <scsi/scsi_ioctl.h>
-> #include <linux/interrupt.h>
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_ioctl.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "../qlogicfas408.h"
->=20
-> #include <pcmcia/cistpl.h>
-> diff --git a/drivers/scsi/qlogicfas.c b/drivers/scsi/qlogicfas.c
-> index 8f709002f746..8f05e3707d69 100644
-> --- a/drivers/scsi/qlogicfas.c
-> +++ b/drivers/scsi/qlogicfas.c
-> @@ -31,8 +31,12 @@
-> #include <asm/irq.h>
-> #include <asm/dma.h>
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "qlogicfas408.h"
->=20
-> /* Set the following to 2 to use normal interrupt (active high/totempole-
-> diff --git a/drivers/scsi/qlogicfas408.c b/drivers/scsi/qlogicfas408.c
-> index 30a88849a626..3e065d5fc80c 100644
-> --- a/drivers/scsi/qlogicfas408.c
-> +++ b/drivers/scsi/qlogicfas408.c
-> @@ -55,8 +55,12 @@
-> #include <asm/irq.h>
-> #include <asm/dma.h>
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "qlogicfas408.h"
->=20
-> /*----------------------------------------------------------------*/
-> diff --git a/drivers/scsi/scsi.h b/drivers/scsi/scsi.h
-> deleted file mode 100644
-> index 4fd75a3aff66..000000000000
-> --- a/drivers/scsi/scsi.h
-> +++ /dev/null
-> @@ -1,46 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> -/*
-> - *  scsi.h Copyright (C) 1992 Drew Eckhardt=20
-> - *         Copyright (C) 1993, 1994, 1995, 1998, 1999 Eric Youngdale
-> - *  generic SCSI package header file by
-> - *      Initial versions: Drew Eckhardt
-> - *      Subsequent revisions: Eric Youngdale
-> - *
-> - *  <drew@colorado.edu>
-> - *
-> - *       Modified by Eric Youngdale eric@andante.org to
-> - *       add scatter-gather, multiple outstanding request, and other
-> - *       enhancements.
-> - */
-> -/*
-> - * NOTE:  this file only contains compatibility glue for old drivers.  A=
-ll
-> - * these wrappers will be removed sooner or later.  For new code please =
-use
-> - * the interfaces declared in the headers in include/scsi/
-> - */
-> -
-> -#ifndef _SCSI_H
-> -#define _SCSI_H
-> -
-> -#include <scsi/scsi_cmnd.h>
-> -#include <scsi/scsi_device.h>
-> -#include <scsi/scsi_eh.h>
-> -#include <scsi/scsi_tcq.h>
-> -#include <scsi/scsi.h>
-> -
-> -/*
-> - * Some defs, in case these are not defined elsewhere.
-> - */
-> -#ifndef TRUE
-> -#define TRUE 1
-> -#endif
-> -#ifndef FALSE
-> -#define FALSE 0
-> -#endif
-> -
-> -struct Scsi_Host;
-> -struct scsi_cmnd;
-> -struct scsi_device;
-> -struct scsi_target;
-> -struct scatterlist;
-> -
-> -#endif /* _SCSI_H */
-> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-> index 6b43e97bd417..bbd75026ec93 100644
-> --- a/drivers/scsi/sg.c
-> +++ b/drivers/scsi/sg.c
-> @@ -49,11 +49,15 @@ static int sg_version_num =3D 30536;	/* 2 digits for =
-each component */
-> #include <linux/uio.h>
-> #include <linux/cred.h> /* for sg_check_file_access() */
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> #include <scsi/scsi_dbg.h>
-> -#include <scsi/scsi_host.h>
-> +#include <scsi/scsi_device.h>
-> #include <scsi/scsi_driver.h>
-> +#include <scsi/scsi_eh.h>
-> +#include <scsi/scsi_host.h>
-> #include <scsi/scsi_ioctl.h>
-> +#include <scsi/scsi_tcq.h>
-> #include <scsi/sg.h>
->=20
-> #include "scsi_logging.h"
-> diff --git a/drivers/scsi/sgiwd93.c b/drivers/scsi/sgiwd93.c
-> index cf1030c9dda1..e797d89c873b 100644
-> --- a/drivers/scsi/sgiwd93.c
-> +++ b/drivers/scsi/sgiwd93.c
-> @@ -28,7 +28,11 @@
-> #include <asm/sgi/ip22.h>
-> #include <asm/sgi/wd.h>
->=20
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> +#include <scsi/scsi_tcq.h>
-> #include "wd33c93.h"
->=20
-> struct ip22_hostdata {
-> diff --git a/drivers/usb/image/microtek.c b/drivers/usb/image/microtek.c
-> index b8dc6fa6a5a3..874ea4b54ced 100644
-> --- a/drivers/usb/image/microtek.c
-> +++ b/drivers/usb/image/microtek.c
-> @@ -130,11 +130,15 @@
-> #include <linux/spinlock.h>
-> #include <linux/usb.h>
-> #include <linux/proc_fs.h>
-> -
-> #include <linux/atomic.h>
-> #include <linux/blkdev.h>
-> -#include "../../scsi/scsi.h"
+> static inline void initialize_SCp(struct scsi_cmnd *cmd)
+> {
+> +	struct scsi_pointer *scsi_pointer =3D NCR5380_scsi_pointer(cmd);
 > +
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
-> #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_tcq.h>
+> 	/*
+> 	 * Initialize the Scsi Pointer field so that all of the commands in the
+> 	 * various queues are valid.
+> 	 */
 >=20
-> #include "microtek.h"
+> 	if (scsi_bufflen(cmd)) {
+> -		cmd->SCp.buffer =3D scsi_sglist(cmd);
+> -		cmd->SCp.ptr =3D sg_virt(cmd->SCp.buffer);
+> -		cmd->SCp.this_residual =3D cmd->SCp.buffer->length;
+> +		scsi_pointer->buffer =3D scsi_sglist(cmd);
+> +		scsi_pointer->ptr =3D sg_virt(scsi_pointer->buffer);
+> +		scsi_pointer->this_residual =3D scsi_pointer->buffer->length;
+> 	} else {
+> -		cmd->SCp.buffer =3D NULL;
+> -		cmd->SCp.ptr =3D NULL;
+> -		cmd->SCp.this_residual =3D 0;
+> +		scsi_pointer->buffer =3D NULL;
+> +		scsi_pointer->ptr =3D NULL;
+> +		scsi_pointer->this_residual =3D 0;
+> 	}
 >=20
-> diff --git a/drivers/usb/storage/debug.c b/drivers/usb/storage/debug.c
-> index d7f50b7a079e..576be66ad962 100644
-> --- a/drivers/usb/storage/debug.c
-> +++ b/drivers/usb/storage/debug.c
-> @@ -36,7 +36,6 @@
+> -	cmd->SCp.Status =3D 0;
+> -	cmd->SCp.Message =3D 0;
+> +	scsi_pointer->Status =3D 0;
+> +	scsi_pointer->Message =3D 0;
+> }
 >=20
-> #include "usb.h"
-> #include "debug.h"
-> -#include "scsi.h"
+> static inline void advance_sg_buffer(struct scsi_cmnd *cmd)
+> {
+> -	struct scatterlist *s =3D cmd->SCp.buffer;
+> +	struct scsi_pointer *scsi_pointer =3D NCR5380_scsi_pointer(cmd);
+> +	struct scatterlist *s =3D scsi_pointer->buffer;
 >=20
+> -	if (!cmd->SCp.this_residual && s && !sg_is_last(s)) {
+> -		cmd->SCp.buffer =3D sg_next(s);
+> -		cmd->SCp.ptr =3D sg_virt(cmd->SCp.buffer);
+> -		cmd->SCp.this_residual =3D cmd->SCp.buffer->length;
+> +	if (!scsi_pointer->this_residual && s && !sg_is_last(s)) {
+> +		scsi_pointer->buffer =3D sg_next(s);
+> +		scsi_pointer->ptr =3D sg_virt(scsi_pointer->buffer);
+> +		scsi_pointer->this_residual =3D scsi_pointer->buffer->length;
+> 	}
+> }
 >=20
-> void usb_stor_show_command(const struct us_data *us, struct scsi_cmnd *sr=
-b)
+> static inline void set_resid_from_SCp(struct scsi_cmnd *cmd)
+> {
+> -	int resid =3D cmd->SCp.this_residual;
+> -	struct scatterlist *s =3D cmd->SCp.buffer;
+> +	struct scsi_pointer *scsi_pointer =3D NCR5380_scsi_pointer(cmd);
+> +	int resid =3D scsi_pointer->this_residual;
+> +	struct scatterlist *s =3D scsi_pointer->buffer;
+>=20
+> 	if (s)
+> 		while (!sg_is_last(s)) {
+> @@ -757,6 +761,7 @@ static void NCR5380_main(struct work_struct *work)
+> static void NCR5380_dma_complete(struct Scsi_Host *instance)
+> {
+> 	struct NCR5380_hostdata *hostdata =3D shost_priv(instance);
+> +	struct scsi_pointer *scsi_pointer;
+> 	int transferred;
+> 	unsigned char **data;
+> 	int *count;
+> @@ -764,7 +769,10 @@ static void NCR5380_dma_complete(struct Scsi_Host *i=
+nstance)
+> 	unsigned char p;
+>=20
+> 	if (hostdata->read_overruns) {
+> -		p =3D hostdata->connected->SCp.phase;
+> +		struct scsi_pointer *scsi_pointer =3D
+> +			NCR5380_scsi_pointer(hostdata->connected);
+> +
+> +		p =3D scsi_pointer->phase;
+> 		if (p & SR_IO) {
+> 			udelay(10);
+> 			if ((NCR5380_read(BUS_AND_STATUS_REG) &
+> @@ -801,8 +809,9 @@ static void NCR5380_dma_complete(struct Scsi_Host *in=
+stance)
+> 	transferred =3D hostdata->dma_len - NCR5380_dma_residual(hostdata);
+> 	hostdata->dma_len =3D 0;
+>=20
+> -	data =3D (unsigned char **)&hostdata->connected->SCp.ptr;
+> -	count =3D &hostdata->connected->SCp.this_residual;
+> +	scsi_pointer =3D NCR5380_scsi_pointer(hostdata->connected);
+> +	data =3D (unsigned char **)&scsi_pointer->ptr;
+> +	count =3D &scsi_pointer->this_residual;
+> 	*data +=3D transferred;
+> 	*count -=3D transferred;
+>=20
+> @@ -1487,6 +1496,8 @@ static int NCR5380_transfer_dma(struct Scsi_Host *i=
+nstance,
+> 				unsigned char **data)
+> {
+> 	struct NCR5380_hostdata *hostdata =3D shost_priv(instance);
+> +	struct scsi_pointer *scsi_pointer =3D
+> +		NCR5380_scsi_pointer(hostdata->connected);
+> 	int c =3D *count;
+> 	unsigned char p =3D *phase;
+> 	unsigned char *d =3D *data;
+> @@ -1498,7 +1509,7 @@ static int NCR5380_transfer_dma(struct Scsi_Host *i=
+nstance,
+> 		return -1;
+> 	}
+>=20
+> -	hostdata->connected->SCp.phase =3D p;
+> +	scsi_pointer->phase =3D p;
+>=20
+> 	if (p & SR_IO) {
+> 		if (hostdata->read_overruns)
+> @@ -1691,6 +1702,7 @@ static void NCR5380_information_transfer(struct Scs=
+i_Host *instance)
+>=20
+> 	while ((cmd =3D hostdata->connected)) {
+> 		struct NCR5380_cmd *ncmd =3D scsi_cmd_priv(cmd);
+> +		struct scsi_pointer *scsi_pointer =3D &ncmd->scsi_pointer;
+>=20
+> 		tmp =3D NCR5380_read(STATUS_REG);
+> 		/* We only have a valid SCSI phase when REQ is asserted */
+> @@ -1712,10 +1724,10 @@ static void NCR5380_information_transfer(struct S=
+csi_Host *instance)
+> 				if (count > 0) {
+> 					if (cmd->sc_data_direction =3D=3D DMA_TO_DEVICE)
+> 						sun3scsi_dma_send_setup(hostdata,
+> -						                        cmd->SCp.ptr, count);
+> +						                        scsi_pointer->ptr, count);
+> 					else
+> 						sun3scsi_dma_recv_setup(hostdata,
+> -						                        cmd->SCp.ptr, count);
+> +						                        scsi_pointer->ptr, count);
+> 					sun3_dma_setup_done =3D cmd;
+> 				}
+> #ifdef SUN3_SCSI_VME
+> @@ -1758,8 +1770,8 @@ static void NCR5380_information_transfer(struct Scs=
+i_Host *instance)
+> 				advance_sg_buffer(cmd);
+> 				dsprintk(NDEBUG_INFORMATION, instance,
+> 					"this residual %d, sg ents %d\n",
+> -					cmd->SCp.this_residual,
+> -					sg_nents(cmd->SCp.buffer));
+> +					scsi_pointer->this_residual,
+> +					sg_nents(scsi_pointer->buffer));
+>=20
+> 				/*
+> 				 * The preferred transfer method is going to be
+> @@ -1778,7 +1790,7 @@ static void NCR5380_information_transfer(struct Scs=
+i_Host *instance)
+> 				if (transfersize > 0) {
+> 					len =3D transfersize;
+> 					if (NCR5380_transfer_dma(instance, &phase,
+> -					    &len, (unsigned char **)&cmd->SCp.ptr)) {
+> +					    &len, (unsigned char **)&scsi_pointer->ptr)) {
+> 						/*
+> 						 * If the watchdog timer fires, all future
+> 						 * accesses to this device will use the
+> @@ -1794,13 +1806,13 @@ static void NCR5380_information_transfer(struct S=
+csi_Host *instance)
+> 					/* Transfer a small chunk so that the
+> 					 * irq mode lock is not held too long.
+> 					 */
+> -					transfersize =3D min(cmd->SCp.this_residual,
+> +					transfersize =3D min(scsi_pointer->this_residual,
+> 							   NCR5380_PIO_CHUNK_SIZE);
+> 					len =3D transfersize;
+> 					NCR5380_transfer_pio(instance, &phase, &len,
+> -					                     (unsigned char **)&cmd->SCp.ptr,
+> +					                     (unsigned char **)&scsi_pointer->ptr,
+> 							     0);
+> -					cmd->SCp.this_residual -=3D transfersize - len;
+> +					scsi_pointer->this_residual -=3D transfersize - len;
+> 				}
+> #ifdef CONFIG_SUN3
+> 				if (sun3_dma_setup_done =3D=3D cmd)
+> @@ -1811,7 +1823,7 @@ static void NCR5380_information_transfer(struct Scs=
+i_Host *instance)
+> 				len =3D 1;
+> 				data =3D &tmp;
+> 				NCR5380_transfer_pio(instance, &phase, &len, &data, 0);
+> -				cmd->SCp.Message =3D tmp;
+> +				scsi_pointer->Message =3D tmp;
+>=20
+> 				switch (tmp) {
+> 				case ABORT:
+> @@ -1828,15 +1840,15 @@ static void NCR5380_information_transfer(struct S=
+csi_Host *instance)
+> 					hostdata->connected =3D NULL;
+> 					hostdata->busy[scmd_id(cmd)] &=3D ~(1 << cmd->device->lun);
+>=20
+> -					set_status_byte(cmd, cmd->SCp.Status);
+> +					set_status_byte(cmd, scsi_pointer->Status);
+>=20
+> 					set_resid_from_SCp(cmd);
+>=20
+> 					if (cmd->cmnd[0] =3D=3D REQUEST_SENSE)
+> 						complete_cmd(instance, cmd);
+> 					else {
+> -						if (cmd->SCp.Status =3D=3D SAM_STAT_CHECK_CONDITION ||
+> -						    cmd->SCp.Status =3D=3D SAM_STAT_COMMAND_TERMINATED) {
+> +						if (scsi_pointer->Status =3D=3D SAM_STAT_CHECK_CONDITION ||
+> +						    scsi_pointer->Status =3D=3D SAM_STAT_COMMAND_TERMINATED) {
+> 							dsprintk(NDEBUG_QUEUES, instance, "autosense: adding cmd %p to tai=
+l of autosense queue\n",
+> 							         cmd);
+> 							list_add_tail(&ncmd->list,
+> @@ -2000,7 +2012,7 @@ static void NCR5380_information_transfer(struct Scs=
+i_Host *instance)
+> 				len =3D 1;
+> 				data =3D &tmp;
+> 				NCR5380_transfer_pio(instance, &phase, &len, &data, 0);
+> -				cmd->SCp.Status =3D tmp;
+> +				scsi_pointer->Status =3D tmp;
+> 				break;
+> 			default:
+> 				shost_printk(KERN_ERR, instance, "unknown phase\n");
+> @@ -2151,6 +2163,7 @@ static void NCR5380_reselect(struct Scsi_Host *inst=
+ance)
+>=20
+> #ifdef CONFIG_SUN3
+> 	if (sun3_dma_setup_done !=3D tmp) {
+> +		struct scsi_pointer *scsi_pointer =3D NCR5380_scsi_pointer(tmp);
+> 		int count;
+>=20
+> 		advance_sg_buffer(tmp);
+> @@ -2160,10 +2173,12 @@ static void NCR5380_reselect(struct Scsi_Host *in=
+stance)
+> 		if (count > 0) {
+> 			if (tmp->sc_data_direction =3D=3D DMA_TO_DEVICE)
+> 				sun3scsi_dma_send_setup(hostdata,
+> -				                        tmp->SCp.ptr, count);
+> +				                        scsi_pointer->ptr,
+> +							count);
+> 			else
+> 				sun3scsi_dma_recv_setup(hostdata,
+> -				                        tmp->SCp.ptr, count);
+> +				                        scsi_pointer->ptr,
+> +							count);
+> 			sun3_dma_setup_done =3D tmp;
+> 		}
+> 	}
+> diff --git a/drivers/scsi/NCR5380.h b/drivers/scsi/NCR5380.h
+> index 845bd2423e66..adaf131aea4d 100644
+> --- a/drivers/scsi/NCR5380.h
+> +++ b/drivers/scsi/NCR5380.h
+> @@ -227,9 +227,17 @@ struct NCR5380_hostdata {
+> };
+>=20
+> struct NCR5380_cmd {
+> +	struct scsi_pointer scsi_pointer;
+> 	struct list_head list;
+> };
+>=20
+> +static inline struct scsi_pointer *NCR5380_scsi_pointer(struct scsi_cmnd=
+ *cmd)
+> +{
+> +	struct NCR5380_cmd *ncmd =3D scsi_cmd_priv(cmd);
+> +
+> +	return &ncmd->scsi_pointer;
+> +}
+> +
+> #define NCR5380_PIO_CHUNK_SIZE		256
+>=20
+> /* Time limit (ms) to poll registers when IRQs are disabled, e.g. during =
+PDMA */
+> diff --git a/drivers/scsi/atari_scsi.c b/drivers/scsi/atari_scsi.c
+> index e9d0d99abc86..61fd3244a4ce 100644
+> --- a/drivers/scsi/atari_scsi.c
+> +++ b/drivers/scsi/atari_scsi.c
+> @@ -538,7 +538,8 @@ static int falcon_classify_cmd(struct scsi_cmnd *cmd)
+> static int atari_scsi_dma_xfer_len(struct NCR5380_hostdata *hostdata,
+>                                    struct scsi_cmnd *cmd)
+> {
+> -	int wanted_len =3D cmd->SCp.this_residual;
+> +	struct scsi_pointer *scsi_pointer =3D NCR5380_scsi_pointer(cmd);
+> +	int wanted_len =3D scsi_pointer->this_residual;
+> 	int possible_len, limit;
+>=20
+> 	if (wanted_len < DMA_MIN_SIZE)
+> @@ -610,7 +611,8 @@ static int atari_scsi_dma_xfer_len(struct NCR5380_hos=
+tdata *hostdata,
+> 	}
+>=20
+> 	/* Last step: apply the hard limit on DMA transfers */
+> -	limit =3D (atari_dma_buffer && !STRAM_ADDR(virt_to_phys(cmd->SCp.ptr)))=
+ ?
+> +	limit =3D (atari_dma_buffer &&
+> +		 !STRAM_ADDR(virt_to_phys(scsi_pointer->ptr))) ?
+> 		    STRAM_BUFFER_SIZE : 255*512;
+> 	if (possible_len > limit)
+> 		possible_len =3D limit;
+> diff --git a/drivers/scsi/g_NCR5380.c b/drivers/scsi/g_NCR5380.c
+> index 5923f86a384e..fb39a656fd15 100644
+> --- a/drivers/scsi/g_NCR5380.c
+> +++ b/drivers/scsi/g_NCR5380.c
+> @@ -663,7 +663,8 @@ static inline int generic_NCR5380_psend(struct NCR538=
+0_hostdata *hostdata,
+> static int generic_NCR5380_dma_xfer_len(struct NCR5380_hostdata *hostdata=
+,
+>                                         struct scsi_cmnd *cmd)
+> {
+> -	int transfersize =3D cmd->SCp.this_residual;
+> +	struct scsi_pointer *scsi_pointer =3D NCR5380_scsi_pointer(cmd);
+> +	int transfersize =3D scsi_pointer->this_residual;
+>=20
+> 	if (hostdata->flags & FLAG_NO_PSEUDO_DMA)
+> 		return 0;
+> @@ -675,7 +676,7 @@ static int generic_NCR5380_dma_xfer_len(struct NCR538=
+0_hostdata *hostdata,
+> 	/* Limit PDMA send to 512 B to avoid random corruption on DTC3181E */
+> 	if (hostdata->board =3D=3D BOARD_DTC3181E &&
+> 	    cmd->sc_data_direction =3D=3D DMA_TO_DEVICE)
+> -		transfersize =3D min(cmd->SCp.this_residual, 512);
+> +		transfersize =3D min(scsi_pointer->this_residual, 512);
+>=20
+> 	return min(transfersize, DMA_MAX_SIZE);
+> }
+> diff --git a/drivers/scsi/mac_scsi.c b/drivers/scsi/mac_scsi.c
+> index 71d493a0bb43..f31da6106b72 100644
+> --- a/drivers/scsi/mac_scsi.c
+> +++ b/drivers/scsi/mac_scsi.c
+> @@ -404,11 +404,13 @@ static inline int macscsi_pwrite(struct NCR5380_hos=
+tdata *hostdata,
+> static int macscsi_dma_xfer_len(struct NCR5380_hostdata *hostdata,
+>                                 struct scsi_cmnd *cmd)
+> {
+> +	struct scsi_pointer *scsi_pointer =3D NCR5380_scsi_pointer(cmd);
+> +
+> 	if (hostdata->flags & FLAG_NO_PSEUDO_DMA ||
+> -	    cmd->SCp.this_residual < setup_use_pdma)
+> +	    scsi_pointer->this_residual < setup_use_pdma)
+> 		return 0;
+>=20
+> -	return cmd->SCp.this_residual;
+> +	return scsi_pointer->this_residual;
+> }
+>=20
+> static int macscsi_dma_residual(struct NCR5380_hostdata *hostdata)
+> diff --git a/drivers/scsi/sun3_scsi.c b/drivers/scsi/sun3_scsi.c
+> index 82a253270c3b..50cbffbf2dd1 100644
+> --- a/drivers/scsi/sun3_scsi.c
+> +++ b/drivers/scsi/sun3_scsi.c
+> @@ -334,7 +334,8 @@ static int sun3scsi_dma_residual(struct NCR5380_hostd=
+ata *hostdata)
+> static int sun3scsi_dma_xfer_len(struct NCR5380_hostdata *hostdata,
+>                                  struct scsi_cmnd *cmd)
+> {
+> -	int wanted_len =3D cmd->SCp.this_residual;
+> +	struct scsi_pointer *scsi_pointer =3D NCR5380_scsi_pointer(cmd);
+> +	int wanted_len =3D scsi_pointer->this_residual;
+>=20
+> 	if (wanted_len < DMA_MIN_SIZE || blk_rq_is_passthrough(scsi_cmd_to_rq(cm=
+d)))
+> 		return 0;
 
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 
