@@ -2,56 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B259C4ADF88
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDF54ADF87
 	for <lists+linux-scsi@lfdr.de>; Tue,  8 Feb 2022 18:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384328AbiBHR0a (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Feb 2022 12:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        id S1384257AbiBHR02 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Feb 2022 12:26:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384315AbiBHR0X (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Feb 2022 12:26:23 -0500
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39FEC06174F
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Feb 2022 09:26:22 -0800 (PST)
-Received: by mail-pl1-f172.google.com with SMTP id w1so4841382plb.6
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Feb 2022 09:26:22 -0800 (PST)
+        with ESMTP id S1384320AbiBHR0Y (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Feb 2022 12:26:24 -0500
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4745DC061578
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Feb 2022 09:26:24 -0800 (PST)
+Received: by mail-pf1-f169.google.com with SMTP id b3so1555216pfg.7
+        for <linux-scsi@vger.kernel.org>; Tue, 08 Feb 2022 09:26:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xzD3KLKWe4KJb3/aMz15sgXEpd0TUJKAazzrYUWCaDE=;
-        b=Kr38qlyRYmKiFTzmb+SFvZXeNjQQpH+J0jLDfZjd168n/9Xw5Nei9CloOCr5RyrCvh
-         qBep5iqLX10FfJN2yRLbUL+2cjepE78AqUT1FoHib+vIbTIkXxxApQMcv0fRbmy/43kz
-         VV6BEKmj+Q49LrsQaF+PfHorlBXRCvoo3H8JSOQFmtDSq7Obp8n5GAEt3BOj///wfsBY
-         VXWPlIgnUsd9nujHEXWgY3BVtkx/rEZothSia6Oepm3Kavf3texTzxAnYwMt+836MvGR
-         bfwrhsalsb1f7OcHEF1x6dRgyaIhuwxiAgYAd58En1X97jv7iLPaL38IwJzKyJFGtltf
-         BsMw==
-X-Gm-Message-State: AOAM53093HF5E1RZlMEp8qPPg+D4YbaZU8OtPX/3By4qwyVuyWMrKGop
-        UiNYdHfPfmaSBKeeENRRlUk=
-X-Google-Smtp-Source: ABdhPJyGThyyTS58pmrUtwtC9yQrsxyHK5ehiWZIi5POpVBOT+jNGenEJBCY5HUjh6G0p0yw20b9SA==
-X-Received: by 2002:a17:902:eb8c:: with SMTP id q12mr2529565plg.131.1644341182051;
-        Tue, 08 Feb 2022 09:26:22 -0800 (PST)
+        bh=9fEis8oNULSoPzqZCmLsqz947RY/IWVM7TI0Dij2tEg=;
+        b=1UDiAPOiwITiazHGqMMOh4w//alvYillNdmZpe3ZyKTGtynSs3BEIec7YoLs6I7h63
+         igyV0WyDr9/Vqz29zhZM60YL2u4nWpVULn1dtq0TlIwK5H+6yTDtVHZOYbMCHN+o3sD/
+         Pa5ioIJR7UBAN5iFEeY9itYtlniSF/ILgy+g4hi4Ubm1zBeUn4FSGNfW2N5UpzsL5Jjt
+         yhhuVtaMMB/qW6VOaZWO55/7i/cg7i5oNEXYs2MyKWopKk2Wa6eRa9PUPZCQruBKFVYb
+         R1jIn07E4HF5PMaZ43/UHtlJ1x1vHrphvvj72MSzKSI1rSJIpKzLCqAKRCxFezQJhon7
+         eYEw==
+X-Gm-Message-State: AOAM530wnWqelSVKmwe88t1GuiV+6iWgOjhQ4wu6gD7JwXtJJTInBGP1
+        esD7QyUsED8Xr9k+kTZo1j0=
+X-Google-Smtp-Source: ABdhPJyUj2P89BVTc17152waGTjZKPjGGKQRqCOzqZGzQPvSDDWedw/Xjs4bXS2SisiGjYFAcRa7GQ==
+X-Received: by 2002:a65:6182:: with SMTP id c2mr4357098pgv.95.1644341183733;
+        Tue, 08 Feb 2022 09:26:23 -0800 (PST)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id q1sm335116pfs.112.2022.02.08.09.26.20
+        by smtp.gmail.com with ESMTPSA id q1sm335116pfs.112.2022.02.08.09.26.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 09:26:21 -0800 (PST)
+        Tue, 08 Feb 2022 09:26:23 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        Karen Xie <kxie@chelsio.com>,
-        Ketan Mukadam <ketan.mukadam@broadcom.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        GR-QLogic-Storage-Upstream@marvell.com
-Subject: [PATCH v2 22/44] iscsi: Stop using the SCSI pointer
-Date:   Tue,  8 Feb 2022 09:24:52 -0800
-Message-Id: <20220208172514.3481-23-bvanassche@acm.org>
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: [PATCH v2 23/44] initio: Stop using the SCSI pointer
+Date:   Tue,  8 Feb 2022 09:24:53 -0800
+Message-Id: <20220208172514.3481-24-bvanassche@acm.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220208172514.3481-1-bvanassche@acm.org>
 References: <20220208172514.3481-1-bvanassche@acm.org>
@@ -59,375 +51,92 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of storing the iSCSI task pointer and the session age in the SCSI
-pointer, use command-private variables. This patch prepares for removal of
-the SCSI pointer from struct scsi_cmnd.
+Set .cmd_size in the SCSI host template instead of using the SCSI pointer
+from struct scsi_cmnd. This patch prepares for removal of the SCSI pointer
+from struct scsi_cmnd.
 
-The list of iSCSI drivers has been obtained as follows:
-$ git grep -lw iscsi_host_alloc
-drivers/infiniband/ulp/iser/iscsi_iser.c
-drivers/scsi/be2iscsi/be_main.c
-drivers/scsi/bnx2i/bnx2i_iscsi.c
-drivers/scsi/cxgbi/libcxgbi.c
-drivers/scsi/iscsi_tcp.c
-drivers/scsi/libiscsi.c
-drivers/scsi/qedi/qedi_main.c
-drivers/scsi/qla4xxx/ql4_os.c
-include/scsi/libiscsi.h
-
-Note: it is not clear to me how the qla4xxx driver can work without this
-patch since it uses the scsi_cmnd::SCp.ptr member for two different
-purposes:
-- The qla4xxx driver uses this member to store a struct srb pointer.
-- libiscsi uses this member to store a struct iscsi_task pointer.
-
-Cc: Lee Duncan <lduncan@suse.com>
-Cc: Chris Leech <cleech@redhat.com>
-Cc: Sagi Grimberg <sagi@grimberg.me>
-Cc: Nilesh Javali <njavali@marvell.com>
-Cc: Manish Rangankar <mrangankar@marvell.com>
-Cc: Karen Xie <kxie@chelsio.com>
-Cc: Ketan Mukadam <ketan.mukadam@broadcom.com>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/infiniband/ulp/iser/iscsi_iser.c |  1 +
- drivers/scsi/be2iscsi/be_main.c          |  3 ++-
- drivers/scsi/bnx2i/bnx2i_iscsi.c         |  1 +
- drivers/scsi/cxgbi/cxgb3i/cxgb3i.c       |  1 +
- drivers/scsi/cxgbi/cxgb4i/cxgb4i.c       |  1 +
- drivers/scsi/iscsi_tcp.c                 |  1 +
- drivers/scsi/libiscsi.c                  | 22 ++++++++++++----------
- drivers/scsi/qedi/qedi_fw.c              |  2 +-
- drivers/scsi/qedi/qedi_iscsi.c           |  1 +
- drivers/scsi/qla4xxx/ql4_def.h           | 13 ++++++++++---
- drivers/scsi/qla4xxx/ql4_os.c            | 13 +++++++------
- include/scsi/libiscsi.h                  | 12 ++++++++++++
- 12 files changed, 50 insertions(+), 21 deletions(-)
+ drivers/scsi/initio.c | 14 ++++++++------
+ drivers/scsi/initio.h |  9 +++++++++
+ 2 files changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/infiniband/ulp/iser/iscsi_iser.c b/drivers/infiniband/ulp/iser/iscsi_iser.c
-index 07e47021a71f..f8d0bab4424c 100644
---- a/drivers/infiniband/ulp/iser/iscsi_iser.c
-+++ b/drivers/infiniband/ulp/iser/iscsi_iser.c
-@@ -971,6 +971,7 @@ static struct scsi_host_template iscsi_iser_sht = {
- 	.proc_name              = "iscsi_iser",
- 	.this_id                = -1,
- 	.track_queue_depth	= 1,
-+	.cmd_size		= sizeof(struct iscsi_cmd),
- };
+diff --git a/drivers/scsi/initio.c b/drivers/scsi/initio.c
+index 5f96ac47d7fd..f585d6e5fab9 100644
+--- a/drivers/scsi/initio.c
++++ b/drivers/scsi/initio.c
+@@ -2553,7 +2553,7 @@ static void initio_build_scb(struct initio_host * host, struct scsi_ctrl_blk * c
+ 				  SENSE_SIZE, DMA_FROM_DEVICE);
+ 	cblk->senseptr = (u32)dma_addr;
+ 	cblk->senselen = SENSE_SIZE;
+-	cmnd->SCp.ptr = (char *)(unsigned long)dma_addr;
++	initio_priv(cmnd)->sense_dma_addr = dma_addr;
+ 	cblk->cdblen = cmnd->cmd_len;
  
- static struct iscsi_transport iscsi_iser_transport = {
-diff --git a/drivers/scsi/be2iscsi/be_main.c b/drivers/scsi/be2iscsi/be_main.c
-index ab55681145f8..3bb0adefbe06 100644
---- a/drivers/scsi/be2iscsi/be_main.c
-+++ b/drivers/scsi/be2iscsi/be_main.c
-@@ -218,7 +218,7 @@ static char const *cqe_desc[] = {
+ 	/* Clear the returned status */
+@@ -2577,7 +2577,7 @@ static void initio_build_scb(struct initio_host * host, struct scsi_ctrl_blk * c
+ 					  sizeof(struct sg_entry) * TOTAL_SG_ENTRY,
+ 					  DMA_BIDIRECTIONAL);
+ 		cblk->bufptr = (u32)dma_addr;
+-		cmnd->SCp.dma_handle = dma_addr;
++		initio_priv(cmnd)->sglist_dma_addr = dma_addr;
  
- static int beiscsi_eh_abort(struct scsi_cmnd *sc)
+ 		cblk->sglen = nseg;
+ 
+@@ -2704,16 +2704,17 @@ static int i91u_biosparam(struct scsi_device *sdev, struct block_device *dev,
+ static void i91u_unmap_scb(struct pci_dev *pci_dev, struct scsi_cmnd *cmnd)
  {
--	struct iscsi_task *abrt_task = (struct iscsi_task *)sc->SCp.ptr;
-+	struct iscsi_task *abrt_task = iscsi_cmd(sc)->task;
- 	struct iscsi_cls_session *cls_session;
- 	struct beiscsi_io_task *abrt_io_task;
- 	struct beiscsi_conn *beiscsi_conn;
-@@ -403,6 +403,7 @@ static struct scsi_host_template beiscsi_sht = {
- 	.cmd_per_lun = BEISCSI_CMD_PER_LUN,
- 	.vendor_id = SCSI_NL_VID_TYPE_PCI | BE_VENDOR_ID,
- 	.track_queue_depth = 1,
-+	.cmd_size = sizeof(struct iscsi_cmd),
- };
- 
- static struct scsi_transport_template *beiscsi_scsi_transport;
-diff --git a/drivers/scsi/bnx2i/bnx2i_iscsi.c b/drivers/scsi/bnx2i/bnx2i_iscsi.c
-index e21b053b4f3e..fe86fd61a995 100644
---- a/drivers/scsi/bnx2i/bnx2i_iscsi.c
-+++ b/drivers/scsi/bnx2i/bnx2i_iscsi.c
-@@ -2268,6 +2268,7 @@ static struct scsi_host_template bnx2i_host_template = {
- 	.sg_tablesize		= ISCSI_MAX_BDS_PER_CMD,
- 	.shost_groups		= bnx2i_dev_groups,
- 	.track_queue_depth	= 1,
-+	.cmd_size		= sizeof(struct iscsi_cmd),
- };
- 
- struct iscsi_transport bnx2i_iscsi_transport = {
-diff --git a/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c b/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
-index f949a4e00783..ff9d4287937a 100644
---- a/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
-+++ b/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
-@@ -98,6 +98,7 @@ static struct scsi_host_template cxgb3i_host_template = {
- 	.dma_boundary	= PAGE_SIZE - 1,
- 	.this_id	= -1,
- 	.track_queue_depth = 1,
-+	.cmd_size	= sizeof(struct iscsi_cmd),
- };
- 
- static struct iscsi_transport cxgb3i_iscsi_transport = {
-diff --git a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
-index efb3e2b3398e..53d91bf9c12a 100644
---- a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
-+++ b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
-@@ -116,6 +116,7 @@ static struct scsi_host_template cxgb4i_host_template = {
- 	.dma_boundary	= PAGE_SIZE - 1,
- 	.this_id	= -1,
- 	.track_queue_depth = 1,
-+	.cmd_size	= sizeof(struct iscsi_cmd),
- };
- 
- static struct iscsi_transport cxgb4i_iscsi_transport = {
-diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-index 1bc37593c88f..9fee70d6434a 100644
---- a/drivers/scsi/iscsi_tcp.c
-+++ b/drivers/scsi/iscsi_tcp.c
-@@ -1007,6 +1007,7 @@ static struct scsi_host_template iscsi_sw_tcp_sht = {
- 	.proc_name		= "iscsi_tcp",
- 	.this_id		= -1,
- 	.track_queue_depth	= 1,
-+	.cmd_size		= sizeof(struct iscsi_cmd),
- };
- 
- static struct iscsi_transport iscsi_sw_tcp_transport = {
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 059dae8909ee..0337f7888ebe 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -462,7 +462,7 @@ static void iscsi_free_task(struct iscsi_task *task)
- 
- 	if (sc) {
- 		/* SCSI eh reuses commands to verify us */
--		sc->SCp.ptr = NULL;
-+		iscsi_cmd(sc)->task = NULL;
- 		/*
- 		 * queue command may call this to free the task, so
- 		 * it will decide how to return sc to scsi-ml.
-@@ -1344,10 +1344,10 @@ struct iscsi_task *iscsi_itt_to_ctask(struct iscsi_conn *conn, itt_t itt)
- 	if (!task || !task->sc)
- 		return NULL;
- 
--	if (task->sc->SCp.phase != conn->session->age) {
-+	if (iscsi_cmd(task->sc)->age != conn->session->age) {
- 		iscsi_session_printk(KERN_ERR, conn->session,
- 				  "task's session age %d, expected %d\n",
--				  task->sc->SCp.phase, conn->session->age);
-+				  iscsi_cmd(task->sc)->age, conn->session->age);
- 		return NULL;
+ 	/* auto sense buffer */
+-	if (cmnd->SCp.ptr) {
++	if (initio_priv(cmnd)->sense_dma_addr) {
+ 		dma_unmap_single(&pci_dev->dev,
+-				 (dma_addr_t)((unsigned long)cmnd->SCp.ptr),
++				 initio_priv(cmnd)->sense_dma_addr,
+ 				 SENSE_SIZE, DMA_FROM_DEVICE);
+-		cmnd->SCp.ptr = NULL;
++		initio_priv(cmnd)->sense_dma_addr = 0;
  	}
  
-@@ -1645,8 +1645,8 @@ static inline struct iscsi_task *iscsi_alloc_task(struct iscsi_conn *conn,
- 			 (void *) &task, sizeof(void *)))
- 		return NULL;
+ 	/* request buffer */
+ 	if (scsi_sg_count(cmnd)) {
+-		dma_unmap_single(&pci_dev->dev, cmnd->SCp.dma_handle,
++		dma_unmap_single(&pci_dev->dev,
++				 initio_priv(cmnd)->sglist_dma_addr,
+ 				 sizeof(struct sg_entry) * TOTAL_SG_ENTRY,
+ 				 DMA_BIDIRECTIONAL);
  
--	sc->SCp.phase = conn->session->age;
--	sc->SCp.ptr = (char *) task;
-+	iscsi_cmd(sc)->age = conn->session->age;
-+	iscsi_cmd(sc)->task = task;
- 
- 	refcount_set(&task->refcount, 1);
- 	task->state = ISCSI_TASK_PENDING;
-@@ -1683,7 +1683,7 @@ int iscsi_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *sc)
- 	struct iscsi_task *task = NULL;
- 
- 	sc->result = 0;
--	sc->SCp.ptr = NULL;
-+	iscsi_cmd(sc)->task = NULL;
- 
- 	ihost = shost_priv(host);
- 
-@@ -1997,7 +1997,7 @@ enum blk_eh_timer_return iscsi_eh_cmd_timed_out(struct scsi_cmnd *sc)
- 
- 	spin_lock_bh(&session->frwd_lock);
- 	spin_lock(&session->back_lock);
--	task = (struct iscsi_task *)sc->SCp.ptr;
-+	task = iscsi_cmd(sc)->task;
- 	if (!task) {
- 		/*
- 		 * Raced with completion. Blk layer has taken ownership
-@@ -2260,7 +2260,7 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
- 	 * if session was ISCSI_STATE_IN_RECOVERY then we may not have
- 	 * got the command.
- 	 */
--	if (!sc->SCp.ptr) {
-+	if (!iscsi_cmd(sc)->task) {
- 		ISCSI_DBG_EH(session, "sc never reached iscsi layer or "
- 				      "it completed.\n");
- 		spin_unlock_bh(&session->frwd_lock);
-@@ -2273,7 +2273,7 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
- 	 * then let the host reset code handle this
- 	 */
- 	if (!session->leadconn || session->state != ISCSI_STATE_LOGGED_IN ||
--	    sc->SCp.phase != session->age) {
-+	    iscsi_cmd(sc)->age != session->age) {
- 		spin_unlock_bh(&session->frwd_lock);
- 		mutex_unlock(&session->eh_mutex);
- 		ISCSI_DBG_EH(session, "failing abort due to dropped "
-@@ -2282,7 +2282,7 @@ int iscsi_eh_abort(struct scsi_cmnd *sc)
- 	}
- 
- 	spin_lock(&session->back_lock);
--	task = (struct iscsi_task *)sc->SCp.ptr;
-+	task = iscsi_cmd(sc)->task;
- 	if (!task || !task->sc) {
- 		/* task completed before time out */
- 		ISCSI_DBG_EH(session, "sc completed while abort in progress\n");
-@@ -2792,6 +2792,8 @@ struct Scsi_Host *iscsi_host_alloc(struct scsi_host_template *sht,
- 	struct Scsi_Host *shost;
- 	struct iscsi_host *ihost;
- 
-+	WARN_ON_ONCE(sht->cmd_size < sizeof(struct iscsi_cmd));
-+
- 	shost = scsi_host_alloc(sht, sizeof(struct iscsi_host) + dd_data_size);
- 	if (!shost)
- 		return NULL;
-diff --git a/drivers/scsi/qedi/qedi_fw.c b/drivers/scsi/qedi/qedi_fw.c
-index 5916ed7662d5..d3170f2d023b 100644
---- a/drivers/scsi/qedi/qedi_fw.c
-+++ b/drivers/scsi/qedi/qedi_fw.c
-@@ -603,7 +603,7 @@ static void qedi_scsi_completion(struct qedi_ctx *qedi,
- 		goto error;
- 	}
- 
--	if (!sc_cmd->SCp.ptr) {
-+	if (!iscsi_cmd(sc_cmd)->task) {
- 		QEDI_WARN(&qedi->dbg_ctx,
- 			  "SCp.ptr is NULL, returned in another context.\n");
- 		goto error;
-diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
-index 282ecb4e39bb..8196f89f404e 100644
---- a/drivers/scsi/qedi/qedi_iscsi.c
-+++ b/drivers/scsi/qedi/qedi_iscsi.c
-@@ -59,6 +59,7 @@ struct scsi_host_template qedi_host_template = {
- 	.dma_boundary = QEDI_HW_DMA_BOUNDARY,
- 	.cmd_per_lun = 128,
- 	.shost_groups = qedi_shost_groups,
-+	.cmd_size = sizeof(struct iscsi_cmd),
+@@ -2796,6 +2797,7 @@ static struct scsi_host_template initio_template = {
+ 	.can_queue		= MAX_TARGETS * i91u_MAXQUEUE,
+ 	.this_id		= 1,
+ 	.sg_tablesize		= SG_ALL,
++	.cmd_size		= sizeof(struct initio_cmd_priv),
  };
  
- static void qedi_conn_free_login_resources(struct qedi_ctx *qedi,
-diff --git a/drivers/scsi/qla4xxx/ql4_def.h b/drivers/scsi/qla4xxx/ql4_def.h
-index 69a590546bf9..a122909169ee 100644
---- a/drivers/scsi/qla4xxx/ql4_def.h
-+++ b/drivers/scsi/qla4xxx/ql4_def.h
-@@ -216,11 +216,18 @@
- #define IDC_COMP_TOV			5
- #define LINK_UP_COMP_TOV		30
+ static int initio_probe_one(struct pci_dev *pdev,
+diff --git a/drivers/scsi/initio.h b/drivers/scsi/initio.h
+index 9fd010cf1f8a..7c9741552654 100644
+--- a/drivers/scsi/initio.h
++++ b/drivers/scsi/initio.h
+@@ -640,3 +640,12 @@ typedef struct _NVRAM {
+ #define SCSI_RESET_HOST_RESET 0x200
+ #define SCSI_RESET_ACTION   0xff
  
--#define CMD_SP(Cmnd)			((Cmnd)->SCp.ptr)
-+struct qla4xxx_cmd_priv {
-+	struct iscsi_cmd iscsi_data; /* must be the first member */
-+	struct srb *srb;
++struct initio_cmd_priv {
++	dma_addr_t sense_dma_addr;
++	dma_addr_t sglist_dma_addr;
 +};
 +
-+static inline struct qla4xxx_cmd_priv *qla4xxx_cmd_priv(struct scsi_cmnd *cmd)
++static inline struct initio_cmd_priv *initio_priv(struct scsi_cmnd *cmd)
 +{
 +	return scsi_cmd_priv(cmd);
 +}
- 
- /*
-- * SCSI Request Block structure	 (srb)	that is placed
-- * on cmd->SCp location of every I/O	 [We have 22 bytes available]
-+ * SCSI Request Block structure (srb) that is associated with each scsi_cmnd.
-  */
- struct srb {
- 	struct list_head list;	/* (8)	 */
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index 0ae936d839f1..d64eda961412 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -226,6 +226,7 @@ static struct scsi_host_template qla4xxx_driver_template = {
- 	.name			= DRIVER_NAME,
- 	.proc_name		= DRIVER_NAME,
- 	.queuecommand		= qla4xxx_queuecommand,
-+	.cmd_size		= sizeof(struct qla4xxx_cmd_priv),
- 
- 	.eh_abort_handler	= qla4xxx_eh_abort,
- 	.eh_device_reset_handler = qla4xxx_eh_device_reset,
-@@ -4054,7 +4055,7 @@ static struct srb* qla4xxx_get_new_srb(struct scsi_qla_host *ha,
- 	srb->ddb = ddb_entry;
- 	srb->cmd = cmd;
- 	srb->flags = 0;
--	CMD_SP(cmd) = (void *)srb;
-+	qla4xxx_cmd_priv(cmd)->srb = srb;
- 
- 	return srb;
- }
-@@ -4067,7 +4068,7 @@ static void qla4xxx_srb_free_dma(struct scsi_qla_host *ha, struct srb *srb)
- 		scsi_dma_unmap(cmd);
- 		srb->flags &= ~SRB_DMA_VALID;
- 	}
--	CMD_SP(cmd) = NULL;
-+	qla4xxx_cmd_priv(cmd)->srb = NULL;
- }
- 
- void qla4xxx_srb_compl(struct kref *ref)
-@@ -4640,7 +4641,7 @@ static int qla4xxx_cmd_wait(struct scsi_qla_host *ha)
- 			 * the scsi/block layer is going to prevent
- 			 * the tag from being released.
- 			 */
--			if (cmd != NULL && CMD_SP(cmd))
-+			if (cmd != NULL && qla4xxx_cmd_priv(cmd)->srb)
- 				break;
- 		}
- 		spin_unlock_irqrestore(&ha->hardware_lock, flags);
-@@ -9079,7 +9080,7 @@ struct srb *qla4xxx_del_from_active_array(struct scsi_qla_host *ha,
- 	if (!cmd)
- 		return srb;
- 
--	srb = (struct srb *)CMD_SP(cmd);
-+	srb = qla4xxx_cmd_priv(cmd)->srb;
- 	if (!srb)
- 		return srb;
- 
-@@ -9121,7 +9122,7 @@ static int qla4xxx_eh_wait_on_command(struct scsi_qla_host *ha,
- 
- 	do {
- 		/* Checking to see if its returned to OS */
--		rp = (struct srb *) CMD_SP(cmd);
-+		rp = qla4xxx_cmd_priv(cmd)->srb;
- 		if (rp == NULL) {
- 			done++;
- 			break;
-@@ -9215,7 +9216,7 @@ static int qla4xxx_eh_abort(struct scsi_cmnd *cmd)
- 	}
- 
- 	spin_lock_irqsave(&ha->hardware_lock, flags);
--	srb = (struct srb *) CMD_SP(cmd);
-+	srb = qla4xxx_cmd_priv(cmd)->srb;
- 	if (!srb) {
- 		spin_unlock_irqrestore(&ha->hardware_lock, flags);
- 		ql4_printk(KERN_INFO, ha, "scsi%ld:%d:%llu: Specified command has already completed.\n",
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index 4ee233e5a6ff..cb805ed9cbf1 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -19,6 +19,7 @@
- #include <linux/refcount.h>
- #include <scsi/iscsi_proto.h>
- #include <scsi/iscsi_if.h>
-+#include <scsi/scsi_cmnd.h>
- #include <scsi/scsi_transport_iscsi.h>
- 
- struct scsi_transport_template;
-@@ -152,6 +153,17 @@ static inline bool iscsi_task_is_completed(struct iscsi_task *task)
- 	       task->state == ISCSI_TASK_ABRT_SESS_RECOV;
- }
- 
-+/* Private data associated with struct scsi_cmnd. */
-+struct iscsi_cmd {
-+	struct iscsi_task	*task;
-+	int			age;
-+};
-+
-+static inline struct iscsi_cmd *iscsi_cmd(struct scsi_cmnd *cmd)
-+{
-+	return scsi_cmd_priv(cmd);
-+}
-+
- /* Connection's states */
- enum {
- 	ISCSI_CONN_INITIAL_STAGE,
