@@ -2,52 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3774ADF99
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Feb 2022 18:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7CC4ADF9D
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Feb 2022 18:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384161AbiBHR1G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Feb 2022 12:27:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        id S1384181AbiBHR1R (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Feb 2022 12:27:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384339AbiBHR0y (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Feb 2022 12:26:54 -0500
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371A5C061266
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Feb 2022 09:26:52 -0800 (PST)
-Received: by mail-pj1-f45.google.com with SMTP id g15-20020a17090a67cf00b001b7d5b6bedaso3540972pjm.4
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Feb 2022 09:26:52 -0800 (PST)
+        with ESMTP id S1384346AbiBHR1D (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Feb 2022 12:27:03 -0500
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB21C0613CA
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Feb 2022 09:26:53 -0800 (PST)
+Received: by mail-pj1-f48.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so2337995pjm.2
+        for <linux-scsi@vger.kernel.org>; Tue, 08 Feb 2022 09:26:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EzWP2OcUmUpNS3okRoFAY0jR6PTP8SLWWhXRQKvrbzI=;
-        b=lgX9EKGEI0PHdMZ6U21fi9WnbR4PxR1CVorbR85ouBoirT6VpPGWmj1G/NPtqBmis8
-         yV8xZYCl9Z6xczDNKVRjIY4lA1OMI2FYXTozoWbHim/gqIp6nhlY76kRyhh7cZNxIUzs
-         /1Rm5n7zmH7vpvoxkd0h8w+1JB/SlFmRDQcZfbPKlHw+F6AIgJ14OqJuFSC1QKmF0E5G
-         eC5+KZldSOJtk1bbEH7OKetErP2UsNDZgC8t/JI7ZVfuXetCDInpaSWpd9RVZYriROS4
-         5fcKlIqWb6qAnXP14+OAqrrcNPMiZGir+ad4O2A5wvlkktjlhckjnfu0WrVac5GHYBUX
-         M6cA==
-X-Gm-Message-State: AOAM532L0obeppfOtI3M+ktkb1/Y6gWoov3pdjFDcNE9t3MDbLQN7Ehn
-        f8Ki6T5WqMB1tpA6BkrcUAM=
-X-Google-Smtp-Source: ABdhPJyROxNDcWhZ9rDvV0gW7ao2v31iIBOIlOEMhg7wt1ydu4PyJatwIdQwbP+5SrVI+2Hhtr6Zeg==
-X-Received: by 2002:a17:902:7606:: with SMTP id k6mr5422416pll.56.1644341211429;
-        Tue, 08 Feb 2022 09:26:51 -0800 (PST)
+        bh=DpXzEajf1/HzYDqhJk6BZQGeVVV4JY+OE9SEemuZfSg=;
+        b=zOMiIXSfp8pEcW/JRO8VoUDSMYwl0sDihLODt5FSZXw40PA9Esh01DBx5E5SZg2CaT
+         iOUaz2GqBWIu+CLzgSaRofVCXzt6Y3jqob+CXTL5FjddTK0noSBDaEznVjaUvOSFX/XU
+         gUACv2zA3ydw3GRKPZunDNwk7LXzo3cC3rzQg3ZMLu2rhGnTpLB6mFBv8uoXGwtufSvQ
+         CNp8eKpbvrSC0b+ULiJeA3prVjD16ba8WuZk+J8xy+8WshLiCzu5dD0hBx3V9LsnWtjo
+         9l2ahUV8nAjup3Y8tHmjXR0+Yn0ruR8jnStakCpFzAP1bhpR1BM2ca1fT88F7KGKcGb/
+         V8iw==
+X-Gm-Message-State: AOAM533Rc781407fmKG2BPu9gQonk/p+du2D/N6fSeuoXoUe4UyzuKYZ
+        Iq9Yb4TUOWhWhPT+EW4vPHA=
+X-Google-Smtp-Source: ABdhPJzeLECHWM5Laz3r/pBmMVG5MKx5yGDpgvGCj1h/ydpFN6mT1CtoHhWFVkqt3XSrGqSt3anLBg==
+X-Received: by 2002:a17:902:6b49:: with SMTP id g9mr5371151plt.111.1644341213258;
+        Tue, 08 Feb 2022 09:26:53 -0800 (PST)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id q1sm335116pfs.112.2022.02.08.09.26.49
+        by smtp.gmail.com with ESMTPSA id q1sm335116pfs.112.2022.02.08.09.26.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 09:26:50 -0800 (PST)
+        Tue, 08 Feb 2022 09:26:52 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Nilesh Javali <njavali@marvell.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Daniel Wagner <dwagner@suse.de>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Don Brace <don.brace@microchip.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 37/44] qla2xxx: Stop using the SCSI pointer
-Date:   Tue,  8 Feb 2022 09:25:07 -0800
-Message-Id: <20220208172514.3481-38-bvanassche@acm.org>
+Subject: [PATCH v2 38/44] smartpqi: Stop using the SCSI pointer
+Date:   Tue,  8 Feb 2022 09:25:08 -0800
+Message-Id: <20220208172514.3481-39-bvanassche@acm.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220208172514.3481-1-bvanassche@acm.org>
 References: <20220208172514.3481-1-bvanassche@acm.org>
@@ -64,93 +61,59 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of using the SCp.ptr field to track whether or not a command is
-in flight, use the sp->type field to track this information. sp->type
-must be set for proper operation of the qla2xxx driver. See e.g. the
-switch (sp->type) statement in qla2x00_ct_entry().
+Set .cmd_size in the SCSI host template instead of using the SCSI pointer
+from struct scsi_cmnd. This patch prepares for removal of the SCSI pointer
+from struct scsi_cmnd.
 
-This patch prepares for removal of the SCSI pointer from struct scsi_cmnd.
-
-Cc: Nilesh Javali <njavali@marvell.com>
-Cc: Himanshu Madhani <himanshu.madhani@oracle.com>
-Cc: Daniel Wagner <dwagner@suse.de>
-Cc: Ewan D. Milne <emilne@redhat.com>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h |  2 --
- drivers/scsi/qla2xxx/qla_os.c  | 13 +++++--------
- 2 files changed, 5 insertions(+), 10 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index 9ebf4a234d9a..064496f9eba3 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -5191,8 +5191,6 @@ struct secure_flash_update_block_pk {
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index f0897d587454..74426974309f 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -54,6 +54,15 @@ MODULE_DESCRIPTION("Driver for Microchip Smart Family Controller version "
+ MODULE_VERSION(DRIVER_VERSION);
+ MODULE_LICENSE("GPL");
  
- #define	QLA_DSDS_PER_IOCB	37
- 
--#define CMD_SP(Cmnd)		((Cmnd)->SCp.ptr)
--
- #define QLA_SG_ALL	1024
- 
- enum nexus_wait_type {
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index abcd30917263..6c45379a5306 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -730,7 +730,7 @@ void qla2x00_sp_compl(srb_t *sp, int res)
- 
- 	sp->free(sp);
- 	cmd->result = res;
--	CMD_SP(cmd) = NULL;
-+	sp->type = 0;
- 	scsi_done(cmd);
- 	if (comp)
- 		complete(comp);
-@@ -821,7 +821,7 @@ void qla2xxx_qpair_sp_compl(srb_t *sp, int res)
- 
- 	sp->free(sp);
- 	cmd->result = res;
--	CMD_SP(cmd) = NULL;
-+	sp->type = 0;
- 	scsi_done(cmd);
- 	if (comp)
- 		complete(comp);
-@@ -923,8 +923,6 @@ qla2xxx_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 
- 	sp->u.scmd.cmd = cmd;
- 	sp->type = SRB_SCSI_CMD;
--
--	CMD_SP(cmd) = (void *)sp;
- 	sp->free = qla2x00_sp_free_dma;
- 	sp->done = qla2x00_sp_compl;
- 
-@@ -1012,7 +1010,6 @@ qla2xxx_mqueuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd,
- 
- 	sp->u.scmd.cmd = cmd;
- 	sp->type = SRB_SCSI_CMD;
--	CMD_SP(cmd) = (void *)sp;
- 	sp->free = qla2xxx_qpair_sp_free_dma;
- 	sp->done = qla2xxx_qpair_sp_compl;
- 
-@@ -1057,6 +1054,7 @@ qla2x00_eh_wait_on_command(struct scsi_cmnd *cmd)
- 	unsigned long wait_iter = ABORT_WAIT_ITER;
- 	scsi_qla_host_t *vha = shost_priv(cmd->device->host);
- 	struct qla_hw_data *ha = vha->hw;
-+	srb_t *sp = scsi_cmd_priv(cmd);
- 	int ret = QLA_SUCCESS;
- 
- 	if (unlikely(pci_channel_offline(ha->pdev)) || ha->flags.eeh_busy) {
-@@ -1065,10 +1063,9 @@ qla2x00_eh_wait_on_command(struct scsi_cmnd *cmd)
- 		return ret;
++struct pqi_cmd_priv {
++	int this_residual;
++};
++
++static struct pqi_cmd_priv *pqi_cmd_priv(struct scsi_cmnd *cmd)
++{
++	return scsi_cmd_priv(cmd);
++}
++
+ static void pqi_take_ctrl_offline(struct pqi_ctrl_info *ctrl_info,
+ 	enum pqi_ctrl_shutdown_reason ctrl_shutdown_reason);
+ static void pqi_ctrl_offline_worker(struct work_struct *work);
+@@ -5555,7 +5564,7 @@ static void pqi_aio_io_complete(struct pqi_io_request *io_request,
+ 	scsi_dma_unmap(scmd);
+ 	if (io_request->status == -EAGAIN || pqi_raid_bypass_retry_needed(io_request)) {
+ 		set_host_byte(scmd, DID_IMM_RETRY);
+-		scmd->SCp.this_residual++;
++		pqi_cmd_priv(scmd)->this_residual++;
  	}
  
--	while (CMD_SP(cmd) && wait_iter--) {
-+	while (sp->type && wait_iter--)
- 		msleep(ABORT_POLLING_PERIOD);
--	}
--	if (CMD_SP(cmd))
-+	if (sp->type)
- 		ret = QLA_FUNCTION_FAILED;
+ 	pqi_free_io_request(io_request);
+@@ -5779,7 +5788,7 @@ static inline bool pqi_is_bypass_eligible_request(struct scsi_cmnd *scmd)
+ 	if (blk_rq_is_passthrough(scsi_cmd_to_rq(scmd)))
+ 		return false;
  
- 	return ret;
+-	return scmd->SCp.this_residual == 0;
++	return pqi_cmd_priv(scmd)->this_residual == 0;
+ }
+ 
+ /*
+@@ -7159,6 +7168,7 @@ static struct scsi_host_template pqi_driver_template = {
+ 	.map_queues = pqi_map_queues,
+ 	.sdev_groups = pqi_sdev_groups,
+ 	.shost_groups = pqi_shost_groups,
++	.cmd_size = sizeof(struct pqi_cmd_priv),
+ };
+ 
+ static int pqi_register_scsi(struct pqi_ctrl_info *ctrl_info)
