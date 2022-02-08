@@ -2,61 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D964A4AD0CF
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Feb 2022 06:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 943164AD0DB
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Feb 2022 06:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245224AbiBHFcp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Feb 2022 00:32:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        id S1347274AbiBHFc5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Feb 2022 00:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347031AbiBHEub (ORCPT
+        with ESMTP id S1346978AbiBHEub (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Feb 2022 23:50:31 -0500
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4318DC0401DC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88EACC0401E5
         for <linux-scsi@vger.kernel.org>; Mon,  7 Feb 2022 20:50:30 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2181aSc7020227;
-        Tue, 8 Feb 2022 04:50:28 GMT
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2182qw5k011806;
+        Tue, 8 Feb 2022 04:50:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=9K0CQzjVpgjOPliXeFP4BN+tK3/6Nl89AX+BckNu44Q=;
- b=ua9KXh1ZXsZHQnp2eTCW1xN5dbgrd9LeDesUJ67jaDpSxIY7LmtTbyt3RfOrvzBfmDIx
- KJHyrkFPZhP1Fx1R9df26illDE58GkKD/w7zAth9Y7OYnkR991NLeiBayRwOsEubh0vj
- p833bNMCtrZZmidIHi+9A4hEd7HIPZMOc83MVXFs+/dgS6P4s/qR/0HHOzBpFutvU3uX
- yzq8WJHQS2SjYkuu+QHCsd0ILqvaVRwa7kPMJgmJq977AcCoxcvyCFvLuHgzymq8gEtV
- LOMfQOj39lksna1rOFTjSyp5y2iLGxGLO/f7PXG0OJhUYKI7+kl7ZNx5lYBk3+aGwJGK yg== 
+ bh=pg+cdMyFAshmUSHSmPdRjzvMYnXuluUGKUDa87tRlws=;
+ b=zG+BD9qNzGHLwM7FkLzAdh+JNt355LdbxiublsnUa6o+gDYIRMjj/IhwwD0khpMlDwnO
+ q6G8Ftvh/TYNj8axDmiiR+PAwKo200r2sDF8yCJjKiW1L8P2oKVYBZCrXrkD/ndSPH/D
+ /5GyrFHfV5fSA0h1jM9IYqSovg430myfqOKtl8Ueh43SkqgM62MxKfFcabmWayLblcu9
+ 38FsgHjq3oemlNwC1Z2iE7XhHjLYaUngPMgOSIGOiL02odDRrGscOWh9cZ8sBKxzVag3
+ a/hd+bEHRXcM+IeGKCqdwtdIiYjiCAIMMJrCcirzt27/PWZ+HXvrqD2pegAj+KDrmz9R og== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e366wsn2m-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e345sj3yh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Feb 2022 04:50:29 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2184fjC4008303;
+        Tue, 8 Feb 2022 04:50:28 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3030.oracle.com with ESMTP id 3e1ebycs5y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 08 Feb 2022 04:50:28 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2184fvCa008686;
-        Tue, 8 Feb 2022 04:50:27 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3030.oracle.com with ESMTP id 3e1ebycs5p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 08 Feb 2022 04:50:27 +0000
 Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2184nxwY033941;
-        Tue, 8 Feb 2022 04:50:27 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2184nxwa033941;
+        Tue, 8 Feb 2022 04:50:28 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3030.oracle.com with ESMTP id 3e1ebycs5a-1;
+        by userp3030.oracle.com with ESMTP id 3e1ebycs5a-2;
         Tue, 08 Feb 2022 04:50:27 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     linux-scsi@vger.kernel.org, James Smart <jsmart2021@gmail.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] lpfc: Reduce log messages see after successful firmware download
-Date:   Mon,  7 Feb 2022 23:50:24 -0500
-Message-Id: <164429578052.16306.2376208895043727551.b4-ty@oracle.com>
+Subject: Re: [PATCH] lpfc: Remove NVME protocol support of kernel has NVME_FC support disabled
+Date:   Mon,  7 Feb 2022 23:50:25 -0500
+Message-Id: <164429578052.16306.10104984807930126973.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220207180442.72836-1-jsmart2021@gmail.com>
-References: <20220207180442.72836-1-jsmart2021@gmail.com>
+In-Reply-To: <20220207180516.73052-1-jsmart2021@gmail.com>
+References: <20220207180516.73052-1-jsmart2021@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: zGKjAgkuwFjyveDiF53O-V9BLRiO2pkZ
-X-Proofpoint-ORIG-GUID: zGKjAgkuwFjyveDiF53O-V9BLRiO2pkZ
+X-Proofpoint-GUID: ZGXoDtCkiUMxuhmSadMLyZ9JLMBxgrNZ
+X-Proofpoint-ORIG-GUID: ZGXoDtCkiUMxuhmSadMLyZ9JLMBxgrNZ
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -67,21 +67,21 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 7 Feb 2022 10:04:42 -0800, James Smart wrote:
+On Mon, 7 Feb 2022 10:05:16 -0800, James Smart wrote:
 
-> Messages around fw download were incorrectly tagged as being related to
-> discovery trace events. Thus, fw download status ended up dumping the
-> trace log as well as the fw update message. As there were a couple of
-> log messages in this state, the trace log was dumped multiple times.
+> The driver is intiating NVME PRLI's to determine NVME support to devices.
+> This should not be occurring if CONFIG_NVME_FC support is disabled.
 > 
-> Resolved by converting from trace events to sli events.
+> Corrected by changing the default value for FC4 support. Currently it
+> defaults to FCP and NVME. With change, when NVME_FC support is not enabled
+> in the kernel, the default value is just SCSI.
 > 
 > [...]
 
 Applied to 5.17/scsi-fixes, thanks!
 
-[1/1] lpfc: Reduce log messages see after successful firmware download
-      https://git.kernel.org/mkp/scsi/c/5852ed2a6a39
+[1/1] lpfc: Remove NVME protocol support of kernel has NVME_FC support disabled
+      https://git.kernel.org/mkp/scsi/c/c80b27cfd93b
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
