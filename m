@@ -2,49 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C144ADFA1
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Feb 2022 18:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F714ADFA2
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Feb 2022 18:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384336AbiBHR1f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Feb 2022 12:27:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S1384353AbiBHR1g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Feb 2022 12:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384354AbiBHR1P (ORCPT
+        with ESMTP id S1384361AbiBHR1P (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Feb 2022 12:27:15 -0500
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6BFC0611DA
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Feb 2022 09:27:03 -0800 (PST)
-Received: by mail-pj1-f49.google.com with SMTP id qe15so7504996pjb.3
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Feb 2022 09:27:03 -0800 (PST)
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6726C0610C5
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Feb 2022 09:27:05 -0800 (PST)
+Received: by mail-pj1-f43.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so3555642pjb.1
+        for <linux-scsi@vger.kernel.org>; Tue, 08 Feb 2022 09:27:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rdXrV+4PAdk1fuoDE001AXbnmsuyuzwRIr6D3mtjHiw=;
-        b=HXg6yB93nelMGLttu9g+i+H1ekRuL8jIigg0RisjtJZAExXvok77Q9NsmGjxyxOhoR
-         aNXEHPM/hfx4WmWAHjLe0w7PPVqw0yOc9xdnDi9p0L9ScnodPN4D4WsP1RAdPzdvLLBx
-         UXalTmnjDXyoUdSB7ZYH9wBoWiuMbvhC6dO0YChguhElgrUvQorv3PRLQ/dgTuq3WKq1
-         bIycPtS2ZDZgpOdDUdzoEsWnels9sJSSHKVibEAR9JWdOmeMGXXNt3/zVWTa65iN8Jx1
-         eNZfptgpLlluldGeY+NBma9WDuNpv5F+z6tMMLMBtDIf14v8ewyNadcAA94S7b34A63a
-         ZM+w==
-X-Gm-Message-State: AOAM5321JbYeSR08mmfVahNccLCfnLcM87k+mInaYy/ZAN999QjvIQQA
-        FZfrYhAZ4sQ/hBZnJ5z8W8A=
-X-Google-Smtp-Source: ABdhPJzNuP9mYzobOdNzClQKRPUVwJ92pI1m6AUiMABYQAhB4ytFgn2tjryvSWT2JBe6ZmXmG8UJuQ==
-X-Received: by 2002:a17:90b:3e81:: with SMTP id rj1mr2486419pjb.190.1644341223238;
-        Tue, 08 Feb 2022 09:27:03 -0800 (PST)
+        bh=fgWJexY5qEnjq1moYT5X5ysxoTOR9OXDlIkS2XzNX2g=;
+        b=bYy+g6wZfZGsm9Gga3o+ETk9OHKRcsNjvZOeXj/QsD2fBkCd8ZYLsGP5+ZP7Ny0mtI
+         GOk/7F2gb7kae/TR8l8NItFk9iESK0vHs17zJT6Uh/yazE8NBYpSLXWKUBDtSeuf7cBz
+         siSrik/g73DQlZ9MyQkL+6D4Co/ZPaloJNOZdFTw2jj5vQxRI/L27sIdirOug6caZcQQ
+         YNDoJ6LG0KGoi3wZhBK5w44B0Pqk5AJhfnRIIlCNHtI7rLOl5n7MlwRHBQuina7iCagg
+         IGansjfy/IUSJ+qkaK9V8k+2C5OWOVZ6q41AzU36RcCq3RDzp41uDQXJw68CoIFpJwgw
+         f5rg==
+X-Gm-Message-State: AOAM531w4p2/OnVc9YX6fwSptcbEJUxBZLJHHs2Cfx0gORn3a/dhgTrY
+        fZ6kdEnwthIUl8DSoPwzYFCiJ7S+04fl6lmu
+X-Google-Smtp-Source: ABdhPJyv8lnacgWYHh0WM/pNFXIy8D07YN+Zwqf3upQ45uIIen3UPoij2yRvw56ASUwOewa42ezUGA==
+X-Received: by 2002:a17:902:db01:: with SMTP id m1mr5413419plx.53.1644341225140;
+        Tue, 08 Feb 2022 09:27:05 -0800 (PST)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id q1sm335116pfs.112.2022.02.08.09.27.01
+        by smtp.gmail.com with ESMTPSA id q1sm335116pfs.112.2022.02.08.09.27.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 09:27:02 -0800 (PST)
+        Tue, 08 Feb 2022 09:27:04 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Helge Deller <deller@gmx.de>,
+        Ming Lei <ming.lei@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
         Johannes Thumshirn <johannes.thumshirn@wdc.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 43/44] zalon: Stop using the SCSI pointer
-Date:   Tue,  8 Feb 2022 09:25:13 -0800
-Message-Id: <20220208172514.3481-44-bvanassche@acm.org>
+Subject: [PATCH v2 44/44] scsi: core: Remove struct scsi_pointer from struct scsi_cmnd
+Date:   Tue,  8 Feb 2022 09:25:14 -0800
+Message-Id: <20220208172514.3481-45-bvanassche@acm.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220208172514.3481-1-bvanassche@acm.org>
 References: <20220208172514.3481-1-bvanassche@acm.org>
@@ -61,115 +63,51 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Set .cmd_size in the SCSI host template instead of using the SCSI pointer
-from struct scsi_cmnd. This patch prepares for removal of the SCSI pointer
-from struct scsi_cmnd.
+Remove struct scsi_pointer from struct scsi_cmnd since the previous patches
+removed all users of that member of struct scsi_cmnd. Additionally, reorder
+the members of struct scsi_cmnd such that the statement that the field
+below can be modified by the SCSI LLD is again correct.
 
-Cc: Helge Deller <deller@gmx.de>
+Cc: Ming Lei <ming.lei@redhat.com>
+Cc: Hannes Reinecke <hare@suse.com>
+Cc: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ncr53c8xx.c | 22 ++++++++++++----------
- drivers/scsi/ncr53c8xx.h |  6 ++++++
- drivers/scsi/zalon.c     |  1 +
- 3 files changed, 19 insertions(+), 10 deletions(-)
+ include/scsi/scsi_cmnd.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/ncr53c8xx.c b/drivers/scsi/ncr53c8xx.c
-index fc8abe05fa8f..4458449c960b 100644
---- a/drivers/scsi/ncr53c8xx.c
-+++ b/drivers/scsi/ncr53c8xx.c
-@@ -514,30 +514,29 @@ static m_addr_t __vtobus(m_bush_t bush, void *m)
-  *  Deal with DMA mapping/unmapping.
-  */
+diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
+index 6794d7322cbd..4fd2c522e914 100644
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -123,11 +123,15 @@ struct scsi_cmnd {
+ 				 * command (auto-sense). Length must be
+ 				 * SCSI_SENSE_BUFFERSIZE bytes. */
  
--/* To keep track of the dma mapping (sg/single) that has been set */
--#define __data_mapped	SCp.phase
--#define __data_mapping	SCp.have_data_in
++	int flags;		/* Command flags */
++	unsigned long state;	/* Command completion state */
++
++	unsigned int extra_len;	/* length of alignment and padding */
++
+ 	/*
+-	 * The following fields can be written to by the host specific code. 
+-	 * Everything else should be left alone. 
++	 * The fields below can be modified by the SCSI LLD but the fields
++	 * above not.
+ 	 */
+-	struct scsi_pointer SCp;	/* Scratchpad used by some host adapters */
+ 
+ 	unsigned char *host_scribble;	/* The host adapter is allowed to
+ 					 * call scsi_malloc and get some memory
+@@ -138,10 +142,6 @@ struct scsi_cmnd {
+ 					 * to be at an address < 16Mb). */
+ 
+ 	int result;		/* Status code from lower level driver */
+-	int flags;		/* Command flags */
+-	unsigned long state;	/* Command completion state */
 -
- static void __unmap_scsi_data(struct device *dev, struct scsi_cmnd *cmd)
- {
--	switch(cmd->__data_mapped) {
-+	struct ncr_cmd_priv *cmd_priv = scsi_cmd_priv(cmd);
-+
-+	switch(cmd_priv->data_mapped) {
- 	case 2:
- 		scsi_dma_unmap(cmd);
- 		break;
- 	}
--	cmd->__data_mapped = 0;
-+	cmd_priv->data_mapped = 0;
- }
- 
- static int __map_scsi_sg_data(struct device *dev, struct scsi_cmnd *cmd)
- {
-+	struct ncr_cmd_priv *cmd_priv = scsi_cmd_priv(cmd);
- 	int use_sg;
- 
- 	use_sg = scsi_dma_map(cmd);
- 	if (!use_sg)
- 		return 0;
- 
--	cmd->__data_mapped = 2;
--	cmd->__data_mapping = use_sg;
-+	cmd_priv->data_mapped = 2;
-+	cmd_priv->data_mapping = use_sg;
- 
- 	return use_sg;
- }
-@@ -7854,6 +7853,7 @@ static int ncr53c8xx_slave_configure(struct scsi_device *device)
- 
- static int ncr53c8xx_queue_command_lck(struct scsi_cmnd *cmd)
- {
-+     struct ncr_cmd_priv *cmd_priv = scsi_cmd_priv(cmd);
-      void (*done)(struct scsi_cmnd *) = scsi_done;
-      struct ncb *np = ((struct host_data *) cmd->device->host->hostdata)->ncb;
-      unsigned long flags;
-@@ -7864,8 +7864,8 @@ printk("ncr53c8xx_queue_command\n");
- #endif
- 
-      cmd->host_scribble = NULL;
--     cmd->__data_mapped = 0;
--     cmd->__data_mapping = 0;
-+     cmd_priv->data_mapped = 0;
-+     cmd_priv->data_mapping = 0;
- 
-      spin_lock_irqsave(&np->smp_lock, flags);
- 
-@@ -8085,6 +8085,8 @@ struct Scsi_Host * __init ncr_attach(struct scsi_host_template *tpnt,
- 	u_long flags = 0;
- 	int i;
- 
-+	WARN_ON_ONCE(tpnt->cmd_size < sizeof(struct ncr_cmd_priv));
-+
- 	if (!tpnt->name)
- 		tpnt->name	= SCSI_NCR_DRIVER_NAME;
- 	if (!tpnt->shost_groups)
-diff --git a/drivers/scsi/ncr53c8xx.h b/drivers/scsi/ncr53c8xx.h
-index fa14b5ca8783..be38c902859e 100644
---- a/drivers/scsi/ncr53c8xx.h
-+++ b/drivers/scsi/ncr53c8xx.h
-@@ -1288,6 +1288,12 @@ struct ncr_device {
- 	u8 differential;
+-	unsigned int extra_len;	/* length of alignment and padding */
  };
  
-+/* To keep track of the dma mapping (sg/single) that has been set */
-+struct ncr_cmd_priv {
-+	int	data_mapped;
-+	int	data_mapping;
-+};
-+
- extern struct Scsi_Host *ncr_attach(struct scsi_host_template *tpnt, int unit, struct ncr_device *device);
- extern void ncr53c8xx_release(struct Scsi_Host *host);
- irqreturn_t ncr53c8xx_intr(int irq, void *dev_id);
-diff --git a/drivers/scsi/zalon.c b/drivers/scsi/zalon.c
-index f1e5cf8a17d9..22d412cab91d 100644
---- a/drivers/scsi/zalon.c
-+++ b/drivers/scsi/zalon.c
-@@ -81,6 +81,7 @@ lasi_scsi_clock(void * hpa, int defaultclock)
- static struct scsi_host_template zalon7xx_template = {
- 	.module		= THIS_MODULE,
- 	.proc_name	= "zalon7xx",
-+	.cmd_size	= sizeof(struct ncr_cmd_priv),
- };
- 
- static int __init
+ /* Variant of blk_mq_rq_from_pdu() that verifies the type of its argument. */
