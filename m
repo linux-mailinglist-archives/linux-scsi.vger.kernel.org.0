@@ -2,48 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5964ADF90
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Feb 2022 18:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E90BC4ADF93
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Feb 2022 18:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384341AbiBHR0y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Feb 2022 12:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
+        id S1384338AbiBHR1B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Feb 2022 12:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243451AbiBHR0w (ORCPT
+        with ESMTP id S1384272AbiBHR0w (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Feb 2022 12:26:52 -0500
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE4BC0613C9
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Feb 2022 09:26:40 -0800 (PST)
-Received: by mail-pl1-f179.google.com with SMTP id c3so14407647pls.5
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Feb 2022 09:26:40 -0800 (PST)
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFF0C0613CA
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Feb 2022 09:26:42 -0800 (PST)
+Received: by mail-pl1-f169.google.com with SMTP id y17so14405194plg.7
+        for <linux-scsi@vger.kernel.org>; Tue, 08 Feb 2022 09:26:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Cg4Ov2kCvPOcNYccmzmYB6WBfgOawCf+kij7byZpP64=;
-        b=DQ0m2IJpXJRMK3UBGvHo+0i5Va5TJDcwc3nkYYYIrPGQEw6dlsrPEUf6YBAgup7/xd
-         ndEtJVGviK8BZZeT2BE2FrAOLpSTW05BVs9orpJCf9ePkuDd06IZtP8yg+R1JI9uSfSo
-         mAUaGGRIfvJtb5SzxGKkJ1rDz3MGiocMNqUNDwD14ONQClbFnFjdpHKL6L2CynVCp43K
-         PcZPRG92v5ChoHmludA+uoo/Pr3IAfm2CGPWkVrCfMs6VELaZ+W9riTLvUQ752dijDfb
-         mT5v+iONUN17rbOX0IQJXamwCz442zI1tp5KSeu1AY6oOz1iEfeF/SBfdfKOlRK9ZEya
-         B7wg==
-X-Gm-Message-State: AOAM530ZqolQnFrVdYB2PDDQtjCJlM47CO3MRtv1l4hwNrGplD3v/jWh
-        BOtPFUUnBvrZ8/u472ZYPy4=
-X-Google-Smtp-Source: ABdhPJy0DQ5SchUOcvva9rBIU3QMA3D2nGpn6nk5vcecmgZM1UgBMCLw15PHS3WBCrnjVt1sKIAYwQ==
-X-Received: by 2002:a17:90b:3810:: with SMTP id mq16mr1229147pjb.26.1644341199978;
-        Tue, 08 Feb 2022 09:26:39 -0800 (PST)
+        bh=/5EdyuTNVg6sZ157Rtveqt3McwZbam1y5igdSu8x4L8=;
+        b=gdXynD5nE4v5W94SIH1eaSfWFIiideSxxxpHzS525eqzLT+B5aNbgLCKzJ4ZUcMxKL
+         2l7DFJSVIFpXfm0sW2m22hmCRT/mLAP7cB1XFtRgWeh2SBwWjWEDQ26fzryyoQWPFBTX
+         yEYBlZURPYJLRednqJXmFQ+fJbpdYl8SYXe72GJoNA1sFdYzwXTDQQ8H5cu3oAYkPo7U
+         BItGPaeXXQRpJamj0sVptOl8DWknEnGy2zAdMXbHVKdmAAsyKXOerom74xrC5lAa3qgj
+         naluNz4QRH3Ixadxk+FCi23aZcWTXeXPn6vV3KHHMADmqhmIiwdEjTEK0rydD+qNgcdS
+         R1XA==
+X-Gm-Message-State: AOAM531LzXiLi5rJvSir+DnaGcLCv4duzOzQEmTXkysjeiRA9GWwJFOR
+        k7LaQ/lZmrfnZc26o353Fd4=
+X-Google-Smtp-Source: ABdhPJzkO4An21Z9U4AoXlDRKWHMF2DzOsRspxwe0GnJdF56Y4TjwNU+dK+DHYz1A2+nwTrOG8A+9g==
+X-Received: by 2002:a17:90a:6585:: with SMTP id k5mr2501211pjj.94.1644341201547;
+        Tue, 08 Feb 2022 09:26:41 -0800 (PST)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id q1sm335116pfs.112.2022.02.08.09.26.38
+        by smtp.gmail.com with ESMTPSA id q1sm335116pfs.112.2022.02.08.09.26.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 09:26:39 -0800 (PST)
+        Tue, 08 Feb 2022 09:26:40 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        GOTO Masanori <gotom@debian.or.jp>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 31/44] mvumi: Stop using the SCSI pointer
-Date:   Tue,  8 Feb 2022 09:25:01 -0800
-Message-Id: <20220208172514.3481-32-bvanassche@acm.org>
+Subject: [PATCH v2 32/44] nsp32: Stop using the SCSI pointer
+Date:   Tue,  8 Feb 2022 09:25:02 -0800
+Message-Id: <20220208172514.3481-33-bvanassche@acm.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220208172514.3481-1-bvanassche@acm.org>
 References: <20220208172514.3481-1-bvanassche@acm.org>
@@ -60,82 +60,104 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Set .cmd_size in the SCSI host template instead of using the SCSI pointer
-from struct scsi_cmnd. This patch prepares for removal of the SCSI pointer
-from struct scsi_cmnd.
+Move the SCSI status field to private data. Stop setting the .ptr,
+.this_residual, .buffer and .buffer_residual SCSI pointer members
+since no code in this driver reads these members.
 
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+This patch prepares for removal of the SCSI pointer from struct scsi_cmnd.
+
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/mvumi.c | 9 +++++----
- drivers/scsi/mvumi.h | 9 +++++++++
- 2 files changed, 14 insertions(+), 4 deletions(-)
+ drivers/scsi/nsp32.c | 20 +++++++-------------
+ drivers/scsi/nsp32.h |  9 +++++++++
+ 2 files changed, 16 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/scsi/mvumi.c b/drivers/scsi/mvumi.c
-index 904de62c974c..05d3ce9b72db 100644
---- a/drivers/scsi/mvumi.c
-+++ b/drivers/scsi/mvumi.c
-@@ -1302,7 +1302,7 @@ static void mvumi_complete_cmd(struct mvumi_hba *mhba, struct mvumi_cmd *cmd,
- {
- 	struct scsi_cmnd *scmd = cmd->scmd;
- 
--	cmd->scmd->SCp.ptr = NULL;
-+	mvumi_priv(cmd->scmd)->cmd_priv = NULL;
- 	scmd->result = ob_frame->req_status;
- 
- 	switch (ob_frame->req_status) {
-@@ -2097,7 +2097,7 @@ static int mvumi_queue_command(struct Scsi_Host *shost,
- 		goto out_return_cmd;
- 
- 	cmd->scmd = scmd;
--	scmd->SCp.ptr = (char *) cmd;
-+	mvumi_priv(scmd)->cmd_priv = cmd;
- 	mhba->instancet->fire_cmd(mhba, cmd);
- 	spin_unlock_irqrestore(shost->host_lock, irq_flags);
- 	return 0;
-@@ -2111,7 +2111,7 @@ static int mvumi_queue_command(struct Scsi_Host *shost,
- 
- static enum blk_eh_timer_return mvumi_timed_out(struct scsi_cmnd *scmd)
- {
--	struct mvumi_cmd *cmd = (struct mvumi_cmd *) scmd->SCp.ptr;
-+	struct mvumi_cmd *cmd = mvumi_priv(scmd)->cmd_priv;
- 	struct Scsi_Host *host = scmd->device->host;
- 	struct mvumi_hba *mhba = shost_priv(host);
- 	unsigned long flags;
-@@ -2128,7 +2128,7 @@ static enum blk_eh_timer_return mvumi_timed_out(struct scsi_cmnd *scmd)
- 		atomic_dec(&mhba->fw_outstanding);
- 
- 	scmd->result = (DID_ABORT << 16);
--	scmd->SCp.ptr = NULL;
-+	mvumi_priv(scmd)->cmd_priv = NULL;
- 	if (scsi_bufflen(scmd)) {
- 		dma_unmap_sg(&mhba->pdev->dev, scsi_sglist(scmd),
- 			     scsi_sg_count(scmd),
-@@ -2179,6 +2179,7 @@ static struct scsi_host_template mvumi_template = {
- 	.bios_param = mvumi_bios_param,
- 	.dma_boundary = PAGE_SIZE - 1,
- 	.this_id = -1,
-+	.cmd_size = sizeof(struct mvumi_cmd_priv),
+diff --git a/drivers/scsi/nsp32.c b/drivers/scsi/nsp32.c
+index bd3ee3bf08ee..75bb0028ed74 100644
+--- a/drivers/scsi/nsp32.c
++++ b/drivers/scsi/nsp32.c
+@@ -273,6 +273,7 @@ static struct scsi_host_template nsp32_template = {
+ 	.eh_abort_handler		= nsp32_eh_abort,
+ 	.eh_host_reset_handler		= nsp32_eh_host_reset,
+ /*	.highmem_io			= 1, */
++	.cmd_size			= sizeof(struct nsp32_cmd_priv),
  };
  
- static int mvumi_cfg_hw_reg(struct mvumi_hba *mhba)
-diff --git a/drivers/scsi/mvumi.h b/drivers/scsi/mvumi.h
-index 60d5691fc4ab..a88c58787b68 100644
---- a/drivers/scsi/mvumi.h
-+++ b/drivers/scsi/mvumi.h
-@@ -254,6 +254,15 @@ struct mvumi_cmd {
- 	unsigned char cmd_status;
- };
+ #include "nsp32_io.h"
+@@ -946,14 +947,9 @@ static int nsp32_queuecommand_lck(struct scsi_cmnd *SCpnt)
+ 	show_command(SCpnt);
  
-+struct mvumi_cmd_priv {
-+	struct mvumi_cmd *cmd_priv;
+ 	data->CurrentSC      = SCpnt;
+-	SCpnt->SCp.Status    = SAM_STAT_CHECK_CONDITION;
++	nsp32_priv(SCpnt)->status = SAM_STAT_CHECK_CONDITION;
+ 	scsi_set_resid(SCpnt, scsi_bufflen(SCpnt));
+ 
+-	SCpnt->SCp.ptr		    = (char *)scsi_sglist(SCpnt);
+-	SCpnt->SCp.this_residual    = scsi_bufflen(SCpnt);
+-	SCpnt->SCp.buffer	    = NULL;
+-	SCpnt->SCp.buffers_residual = 0;
+-
+ 	/* initialize data */
+ 	data->msgout_len	= 0;
+ 	data->msgin_len		= 0;
+@@ -1376,7 +1372,7 @@ static irqreturn_t do_nsp32_isr(int irq, void *dev_id)
+ 		case BUSPHASE_STATUS:
+ 			nsp32_dbg(NSP32_DEBUG_INTR, "fifo/status");
+ 
+-			SCpnt->SCp.Status = nsp32_read1(base, SCSI_CSB_IN);
++			nsp32_priv(SCpnt)->status = nsp32_read1(base, SCSI_CSB_IN);
+ 
+ 			break;
+ 		default:
+@@ -1687,18 +1683,18 @@ static int nsp32_busfree_occur(struct scsi_cmnd *SCpnt, unsigned short execph)
+ 		/* MsgIn 00: Command Complete */
+ 		nsp32_dbg(NSP32_DEBUG_BUSFREE, "command complete");
+ 
+-		SCpnt->SCp.Status  = nsp32_read1(base, SCSI_CSB_IN);
++		nsp32_priv(SCpnt)->status  = nsp32_read1(base, SCSI_CSB_IN);
+ 		nsp32_dbg(NSP32_DEBUG_BUSFREE,
+ 			  "normal end stat=0x%x resid=0x%x\n",
+-			  SCpnt->SCp.Status, scsi_get_resid(SCpnt));
++			  nsp32_priv(SCpnt)->status, scsi_get_resid(SCpnt));
+ 		SCpnt->result = (DID_OK << 16) |
+-			(SCpnt->SCp.Status << 0);
++			(nsp32_priv(SCpnt)->status << 0);
+ 		nsp32_scsi_done(SCpnt);
+ 		/* All operation is done */
+ 		return TRUE;
+ 	} else if (execph & MSGIN_04_VALID) {
+ 		/* MsgIn 04: Disconnect */
+-		SCpnt->SCp.Status  = nsp32_read1(base, SCSI_CSB_IN);
++		nsp32_priv(SCpnt)->status = nsp32_read1(base, SCSI_CSB_IN);
+ 
+ 		nsp32_dbg(NSP32_DEBUG_BUSFREE, "disconnect");
+ 		return TRUE;
+@@ -1706,8 +1702,6 @@ static int nsp32_busfree_occur(struct scsi_cmnd *SCpnt, unsigned short execph)
+ 		/* Unexpected bus free */
+ 		nsp32_msg(KERN_WARNING, "unexpected bus free occurred");
+ 
+-		/* DID_ERROR? */
+-		//SCpnt->result   = (DID_OK << 16) | (SCpnt->SCp.Status << 0);
+ 		SCpnt->result = DID_ERROR << 16;
+ 		nsp32_scsi_done(SCpnt);
+ 		return TRUE;
+diff --git a/drivers/scsi/nsp32.h b/drivers/scsi/nsp32.h
+index ab0726c070f7..924889f8bd37 100644
+--- a/drivers/scsi/nsp32.h
++++ b/drivers/scsi/nsp32.h
+@@ -534,6 +534,15 @@ typedef struct _nsp32_sync_table {
+       ---PERIOD-- ---OFFSET--   */
+ #define TO_SYNCREG(period, offset) (((period) & 0x0f) << 4 | ((offset) & 0x0f))
+ 
++struct nsp32_cmd_priv {
++	enum sam_status status;
 +};
 +
-+static inline struct mvumi_cmd_priv *mvumi_priv(struct scsi_cmnd *cmd)
++static inline struct nsp32_cmd_priv *nsp32_priv(struct scsi_cmnd *cmd)
 +{
 +	return scsi_cmd_priv(cmd);
 +}
 +
- /*
-  * the function type of the in bound frame
-  */
+ typedef struct _nsp32_target {
+ 	unsigned char	syncreg;	/* value for SYNCREG   */
+ 	unsigned char	ackwidth;	/* value for ACKWIDTH  */
