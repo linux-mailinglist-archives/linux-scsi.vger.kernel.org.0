@@ -2,103 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A21A4AEDA3
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Feb 2022 10:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB2C4AEF7D
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Feb 2022 11:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233717AbiBIJJ0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Feb 2022 04:09:26 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46842 "EHLO
+        id S229898AbiBIKpl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Feb 2022 05:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233419AbiBIJJS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Feb 2022 04:09:18 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D63E03B9D2
-        for <linux-scsi@vger.kernel.org>; Wed,  9 Feb 2022 01:09:14 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id k1so2814325wrd.8
-        for <linux-scsi@vger.kernel.org>; Wed, 09 Feb 2022 01:09:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=DUmHVshkvWp2RY/UyFIfNWg44HUvXNupx5/iL+mP6EE=;
-        b=cxBl8c4P1cvv7Tv6Dxk+62SeRqlxp783g9ffvZPcvj5SJRfu8Y6LIcGLX1P+PQUir1
-         JevDJ2yBQILmIxQKvle+oy2/AgeJcMxr7cQ5OnZlimYcAHwtKeDdZYZHMPb0EHmRwAnQ
-         bkY/luTPPSGkTJfJtM0KYEGCCZ0935BbQORU49iVDHsMazLlLZxx4ws6k7VsWiGbcHdO
-         2n9Kd73b/O9ADWc9TVL+e/6moIiwEvkDYLij9NO/G/zFrjdEosbXDFuCG0jL7w9PBWGq
-         PJTwvsglhwoyrTPIly6PKGuD8YvmdkxDU6mCB7U16I8Zo5FS7shj0XUiIBw1SA48GY9H
-         2tqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=DUmHVshkvWp2RY/UyFIfNWg44HUvXNupx5/iL+mP6EE=;
-        b=m6G1UJkEqfqanAraY4lVuNCIEmof+iXropydxgk2d/xx1KdFidpqIJjKUmQAzY1G30
-         QERR1jfdyh1nZwAS4iP5INTDouMVlzPzkHxcIvg6HWE0t6wQonddtR8IDZBuQENujYef
-         Lxt3iLbOdnWfCnCpv1gFkLUZltu0h/X+UXh2A20H5vt1DryjLM0X9Us66JTTUEquhAnb
-         AHgiEWFLnQ1n7nMm9Gyp2zuFUX3g+peU88pekGd9DVKXB/23BRWKfZYmtFHEQuZSTAD5
-         sMSnK1aO/MmCen9jyU0M7508kEWCcXCXCCO3iZNLdE/4/hBsNpbnhJl443Nk8Gzeb0fa
-         y3Mg==
-X-Gm-Message-State: AOAM533JMzATlLww7Wu1hLBpcFM0AdMJvhB5fXncvT72sDetHflPT4HY
-        h8hh2A+wW4pPBfNqSNbp5qXbvK7m8xg36dMbUU4=
-X-Google-Smtp-Source: ABdhPJz1eS/722hgBMJEKEmRQ3BeLd0T99TaFj3I8lpWO5ISQ3AZczjYElqtFC5T7e46PUbwMK5c/brZBkn+v75JiXM=
-X-Received: by 2002:a05:6000:1e15:: with SMTP id bj21mr1250622wrb.222.1644397749318;
- Wed, 09 Feb 2022 01:09:09 -0800 (PST)
+        with ESMTP id S229711AbiBIKpb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Feb 2022 05:45:31 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA518E0A24B4
+        for <linux-scsi@vger.kernel.org>; Wed,  9 Feb 2022 02:30:10 -0800 (PST)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JtvJV1QFGz687xN;
+        Wed,  9 Feb 2022 17:11:38 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Feb 2022 10:11:41 +0100
+Received: from [10.47.89.1] (10.47.89.1) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 9 Feb
+ 2022 09:11:37 +0000
+Message-ID: <79fbdb3d-0d0d-fb18-82e8-32e302297b97@huawei.com>
+Date:   Wed, 9 Feb 2022 09:11:32 +0000
 MIME-Version: 1.0
-Received: by 2002:a05:600c:3acd:0:0:0:0 with HTTP; Wed, 9 Feb 2022 01:09:08
- -0800 (PST)
-Reply-To: howardnewell923@gmail.com
-From:   Howard Newell <muhammed.gaba113@gmail.com>
-Date:   Wed, 9 Feb 2022 09:09:08 +0000
-Message-ID: <CAMz__ZafWt0s3=ymLud7o1xDCgoEomNd-D18xr=hh=hGJ1maCA@mail.gmail.com>
-Subject: re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_SCAM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:436 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4968]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [muhammed.gaba113[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [muhammed.gaba113[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [howardnewell923[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.1 HK_SCAM No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 02/44] nsp_cs: Use true and false instead of TRUE and
+ FALSE
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+References: <20220208172514.3481-1-bvanassche@acm.org>
+ <20220208172514.3481-3-bvanassche@acm.org>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220208172514.3481-3-bvanassche@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.89.1]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Hi
-I want to know from you if you received my message concerning your
-compensation file with United Nations Compensation Program. Please
-confirm
+On 08/02/2022 17:24, Bart Van Assche wrote:
+> Additionally, change the return type of the functions that always return
+> TRUE from 'int' into 'void'. This patch prepares for removal of the
+> drivers/scsi/scsi.h header file. That header file defines the 'TRUE' and
+> 'FALSE' constants.
+> 
+> Reviewed-by: Johannes Thumshirn<johannes.thumshirn@wdc.com>
+> Signed-off-by: Bart Van Assche<bvanassche@acm.org>
 
-Kind regards!
-Howard Newell
-London WC2N 4JS, UK
+
+FWIW,
+
+Reviewed-by: John Garry <john.garry@huawei.com>
