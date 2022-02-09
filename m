@@ -2,799 +2,151 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 855814AEC98
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Feb 2022 09:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB874AECF7
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Feb 2022 09:45:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241803AbiBIIgS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Feb 2022 03:36:18 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59240 "EHLO
+        id S231996AbiBIIot (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Feb 2022 03:44:49 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:41148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242550AbiBIIgP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Feb 2022 03:36:15 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65227C05CBA7
-        for <linux-scsi@vger.kernel.org>; Wed,  9 Feb 2022 00:36:17 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1EA751F383;
-        Wed,  9 Feb 2022 08:36:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644395776; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d35YeDqdqSXEfIsK0vOdVIy2re55zB1PfQuTUy7m2OQ=;
-        b=nTomQd4LU9j5hcj+aRaU4ohpXtv2X5LjIt0CnhVl5qjCf2clQTe1lbgM+f4Mg8aqVFV81a
-        hdZM0YH6JQs1Kx510xCxGQA/a5InSIX3sJsrqyUf3phnRIiYpLKBkhb1bajpcmSO1VjIpY
-        80UAB3CNb2NvpQzxZg9YG29BoPS2w04=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644395776;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d35YeDqdqSXEfIsK0vOdVIy2re55zB1PfQuTUy7m2OQ=;
-        b=VoXGtu7AajOMA3He85sA/4APGSmEFt5qbIpANNLsnukR04nS8xUyFK0sxPEGKFd96/7yYK
-        +OgI/cqK1M1voSAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F0C2813A7C;
-        Wed,  9 Feb 2022 08:36:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XYQZNP98A2JLKAAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 09 Feb 2022 08:36:15 +0000
-Message-ID: <69d3cbbf-a1c9-8d52-ab51-c9eca19c36aa@suse.de>
-Date:   Wed, 9 Feb 2022 09:36:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 42/44] wdc33c93: Move the SCSI pointer to private
- command data
+        with ESMTP id S230085AbiBIIok (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Feb 2022 03:44:40 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on20631.outbound.protection.outlook.com [IPv6:2a01:111:f400:7ea9::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C983C050CCC;
+        Wed,  9 Feb 2022 00:44:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B7vW21u9A+TxQrdNVrVOWmfSRJVx6fpjdLvAU0shORyhv6vl8aJREapAqR1XGHFx57ORK0XPAJWtfbNMgBt4fimjDoDfeC3Ic0gWr+50cHim2FVQ6ITcLYPafgUIWwfb/qm3lD50im5gLvxdjFyY/ai0QI6VSeB4q4rxvO0uEgH4xQ1P4sQe/PXwY8OmW4NybQywu2mlCICKYvgbHmpXjjzVpjo59mMmAlWVRwiRjWxwMPQOm/UwwG2s15XPF1QANokAff64WUEuWbcFr1hHSo00hw9dqfScvsS+zY+XPmNV8qZJvXH8pp4FcwmpTB2SR+WoHjg2WUtiB05rFRGo9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9Uu2cAzG7N0FZEAGYwDgcmDykXoOyLTwFFxsO67Qla4=;
+ b=T+nJOhKpEpRIdvUpayc0xGW7tpG0N9Yql4jWiiZG1Q70joVlCyQzrGsJ4pHfVXQ9poIOZg2hpiEAFSqyENyiL69bfmeUtvYbzm8r/IAm6E2Q5/aioFzhkQoEdIyIwDM2/3A5x8vSZpUwrLIH0mjVHt2ZkFndfPitzP9g6cZxwsmnUGppbtW1y1CoVxgqVT8OjH8pmAbPE8N/m8Snn512/0MlUgENFNJBY1D7RsBPazoSBHL/sXSMIN29H569JLOHdRCKCxxB3wQP6RE1jflO4AzhDxKu4NAd9tB5g2f3chbZjvTSf0V2WR8YP3hpWBu+lISLB2Tcm92HZPlyKAK64g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9Uu2cAzG7N0FZEAGYwDgcmDykXoOyLTwFFxsO67Qla4=;
+ b=CDsBQXOEUXL+mfSQRCt7XEBccCMWeFZemB/lpcI17cwvMVCtPVZVZgFwzTqxRUh2Tdt1CKHKH6F4Xhu5ricu37v6h/6P/5hwk86Cz+7XaXRVuTEJ9c0MJxp4DVbNXCQ1/sbcC2B1GDy3xw6i+MQGB0eEZDRe0oPQrbAUW+3SznHKEkBpdsj6E6F8DtetLArQx7zSvnWnT3IJSPyJxtW8d+Njo8cXEDUq5pLDzZSW08lhDnu6uUHM3sZL7Nmc28XBY5OjDfLGryQLPbNrdRB5NLQJXyZPgleEfnilhYrkdTapOY03QmTP5E/Ng+c2cpi+jqWkPam4ZWwqDdntxtVdtg==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by DM6PR12MB4910.namprd12.prod.outlook.com (2603:10b6:5:1bb::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Wed, 9 Feb
+ 2022 08:43:31 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::846c:d3cd:5a30:c35]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::846c:d3cd:5a30:c35%5]) with mapi id 15.20.4951.019; Wed, 9 Feb 2022
+ 08:43:31 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "philipp.reisner@linbit.com" <philipp.reisner@linbit.com>,
+        "lars.ellenberg@linbit.com" <lars.ellenberg@linbit.com>,
+        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
+        "haris.iqbal@ionos.com" <haris.iqbal@ionos.com>,
+        "jinpu.wang@ionos.com" <jinpu.wang@ionos.com>,
+        "manoj@linux.ibm.com" <manoj@linux.ibm.com>,
+        "mrochs@linux.ibm.com" <mrochs@linux.ibm.com>,
+        "ukrishn@linux.ibm.com" <ukrishn@linux.ibm.com>
+CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>
+Subject: Re: [PATCH 1/7] cxlflash: query write_zeroes limit for zeroing
+Thread-Topic: [PATCH 1/7] cxlflash: query write_zeroes limit for zeroing
+Thread-Index: AQHYHY8QM/uAF/9rJU2uXlr6tMxNBayK5xsA
+Date:   Wed, 9 Feb 2022 08:43:30 +0000
+Message-ID: <eea79469-a9d7-b80f-ef72-da9b4f4ecfff@nvidia.com>
+References: <20220209082828.2629273-1-hch@lst.de>
+ <20220209082828.2629273-2-hch@lst.de>
+In-Reply-To: <20220209082828.2629273-2-hch@lst.de>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-References: <20220208172514.3481-1-bvanassche@acm.org>
- <20220208172514.3481-43-bvanassche@acm.org>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20220208172514.3481-43-bvanassche@acm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3c1cefde-e8ec-4a9b-1571-08d9eba84000
+x-ms-traffictypediagnostic: DM6PR12MB4910:EE_
+x-microsoft-antispam-prvs: <DM6PR12MB49106BCACA9EBDEF793950C7A32E9@DM6PR12MB4910.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2733;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: E3dYK8VHYi/7CR0QybZDDlLnhRy59Co5DeyfByop7w7NtDvauhViYePIEQ24rqH/0S839Av9hwT0nQmghkALWM8NfRAGszDQV5AmIkOIQDiO0rqKn+FKRAjoEDMKvqlZZ0HZlU7Hf/7+wFjBm0mQCyZ1csOinh05f9LpT0BGmE5dyP69KtgWrsQKqraB3Y/Ao3q/rZXcqw9CthCw55l8vTsoSTFlgFkpkTqPCS9zqjqLrOe72Pw4lNzXt7KMay2yJHSp216KwmB2Ms2y6dEm2pMCumPCuDurJemiEUGLS5lZDi7KQRqt2p++f2xzgEEEYfmgp9BPjb7gxVfzyXVIqibd5EOSdCMupSDlv0MbLMB0E8bPr4Zjsk20SZqsr1OVw8NhkQD1MIo3rkuBtW+kXqy2Wez3kSzdRfIGmgTn4/Wh8V9TNvm8NVYhTnrolJKAznIJB5I9C8GEUkdmANLHHqCn1fF5Xrn3L6nPI1G1fygZUFCgwzr9u6RJNUX9IJBj4uFkfIz6e7EA2NEWTZ3kLse8s7C80wW2WHIffEa7AADvg16+fsrhyY97tvBJ6S1i4pv4qBVl+j0YoBfhku2z7A9qZzp+9rrf9B1tGcWvC7ESfkY/5d6ZXzdiOcPrnrQVxzOZ+bltESiRyLUfkTCwUSTBagAujvH+HnBT0XS9kp4I1jROv2Bu+Ae71Li8Cl9gWMC7cXVoJeq7wDp46qWBvFUHDYM/7qIJeRYrosNrsPRx5+FdPG3n8wrwXgQEfv2qk0vG4IJKIPr2HSaohNZsuKqy4S50ESf81/mRZOEoSyg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(508600001)(53546011)(2616005)(83380400001)(36756003)(31686004)(71200400001)(6506007)(76116006)(316002)(8936002)(4744005)(31696002)(7416002)(38070700005)(5660300002)(186003)(122000001)(921005)(110136005)(54906003)(38100700002)(91956017)(6512007)(8676002)(4326008)(64756008)(86362001)(2906002)(66476007)(66946007)(66446008)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ak1NMjArK085cFJHMHRmL1d4a0RiS3Y0c0ZlNXh2Q3VQZGJwSTYzckdIUGN4?=
+ =?utf-8?B?UFowVDJIVEw4NmRIYkFkcG9TaXpCM0xSZERqM2k5RE0rNVJOWExpandKM0wz?=
+ =?utf-8?B?QWxDYnZKQzRXV2t2bGpYeXEyblZxM25NTVNpQVlOMDJvWFJMNGJNTlJBSHJt?=
+ =?utf-8?B?dktIREUvbEFXTzdtSXJzVW1KZm1DNUduancxOGNsYzRXbTVtcm5nWnljRlF0?=
+ =?utf-8?B?MC9YNVVSZnMyNUhRaStZODNFNDJrZDBaMmsrVXF3WlAxa2MxUStKVWpTWHhK?=
+ =?utf-8?B?MGQ3emJKRURoaHB2YWZKbFlHZElEc0ZaaG1SNXJndXVUSVlMQkpkWnFsQW1p?=
+ =?utf-8?B?dzZOV3ltaFJzL2Y4c2graWF5WUhmVHYvYXg3dXA4eFFFUWdRTXJYVjZ4dkp5?=
+ =?utf-8?B?UEdHNzkwbUdPdzRPN2FOdTdNZDBmMzB2UnFzWXhYRXlpbDE5anZzNDR1V0Rn?=
+ =?utf-8?B?d2pkL3RlZjIvNlJuV3lnMjhUcDlCWFVEdGFUcVlITjdWNURuQmVoUEpEQW5h?=
+ =?utf-8?B?OXJ0ZVhYT2VJbFZtVzlFdkhqV0hTdnRLcm1FbDNpS2VqSEx4dTVuUmZ1Vml1?=
+ =?utf-8?B?NG5NaFpTcDRHbm5Ld1hucHpWVkFTOWtTN2dkelplSjlPQzBOQ1NlSzF2SGht?=
+ =?utf-8?B?cWhGTGlwVkNVRzlrd1FxMmRjd1R4cTZvbkw0VFNCNzFBaTl5VEcwUFFzbHIv?=
+ =?utf-8?B?VmRZZitzWkhkNnRsTE5FSjNpSFVFdllOMkdjNEE0bzN5YjR4d1ZuQSs4KzVp?=
+ =?utf-8?B?UTR4YkRhajFtMU9LSEV6NHR2eGczQmZCRGNKYWpEdWFyU1FZZXlsWTNZbG1S?=
+ =?utf-8?B?T3g0WXdKUzJob0o1c2ErZVdmUUxlRDlWcW9mZjdIeG5pSFhHTWdPYW0wZm5p?=
+ =?utf-8?B?YnFDaGJhOHR3MHR5SFNBYUdtREx2dXVLazFYb2NyVXk3bGlvMVRPSlRpaTNj?=
+ =?utf-8?B?T2R0TTNGQXJWVEZud3JQa0xBaWpLUjEzbUpsTXRSMDl4clNPamtNMVRQNmJl?=
+ =?utf-8?B?cU1YSnQ0dWtEdUR1U2JxMjZTWkd1bzZDMzMwWFgwV25sRUJnY0dpNzlLZExr?=
+ =?utf-8?B?ZG52d1BQZFU0TUtNaS80TkxndElvUTgrYmtsOUQ4U1hIK0tkdnBzL2lqK0xB?=
+ =?utf-8?B?blowWWRsU093N3czeTZpNDRPTGxiSHZCdFJKR2paN0lMNkUzWDhHMGpDSXBO?=
+ =?utf-8?B?NEIyUmVwSTh2eVJTMTZNbG5hQ0plaUw0bjV0Z3VpL1BueWlvZklUd0JLd1Av?=
+ =?utf-8?B?S0MyZ2ZNa1k1ZEJqMGNLUTVZeDYzbWVZT2IrU1lRaU8vMTdiZjVGa1kvQWtU?=
+ =?utf-8?B?bWtqQXlqc2ZWODJ6K2pxUTRHeVYraFptdFJRYnFlOFI1NmsrUmlkYzhBRzV1?=
+ =?utf-8?B?c2RlcXQzdjZieWplSWZqYnphRDVhTGFuYnU3NmlyNkhiMkJHb0EybU1rSzYr?=
+ =?utf-8?B?MjlnNUtMUDFmaGhsL2gyNU11UnRnOWRkQnJYM2F6NU5Ga3ZQRjUxNXV5Nk8w?=
+ =?utf-8?B?VWpJUFZRZVI3UE90SHRTeGVhdjJuUEkyMFFXMlovVHFTcG1tanU5b1IzV2xq?=
+ =?utf-8?B?SGlmbS9zSUhMdCtvV3JCQTZ3c2dJV3lHcnhab2UzT3BMRkFSbGVLRGJzaEVw?=
+ =?utf-8?B?bjFzNTVra3hHaWlaOHJySXVUem0wN080eGh1WC9tQ3lmSWFFK2FmVngyUWhi?=
+ =?utf-8?B?aGJvdFVFRTBlY0VpSzFmYUhhWGEvLzNtMFIxYVMrN0FTQjVoMVhVejVVVkVU?=
+ =?utf-8?B?bFRlcjdZMVRVOFl0U3FZWElDQ2UvZnorR1h0VHY3djV0RjVhY0ZaU0gzQkpK?=
+ =?utf-8?B?VldRY0EzbzdMeXRJOEN6M0VnYWNRclA0UG9EdFNTaHZBSmYvL000S1czTTF4?=
+ =?utf-8?B?MEVIc0ZaKzRBc3IyUmJ0R0lvR3NiVkpQcVRja3lRWlZkb25WaEc2cUFMSU1t?=
+ =?utf-8?B?Wnk3ZmlhWUNXNnZFcGJNWm5yWlYzRHJUWjU4T1U4SktxYUhyMWFtZGtPaGJ6?=
+ =?utf-8?B?ZlhHN3hEbmNHTFpNdmsvTUpJc0R5NHNSeHNnbWxUdzhIYTBiZFRpTDEvQXJX?=
+ =?utf-8?B?NGhKMmlERDVjRUhIY1VWM2FzSGNuWUZSUkRHQnJsYlN3R3RIV21OcitqdjlE?=
+ =?utf-8?B?aUdLanJTV3Vkamg3NG9TRDdLSHh6cDFna1pkWWtzTnNHNGJJRTBnbVduZ2lI?=
+ =?utf-8?Q?HeYpDc0YlfkWQ1PHi2TlLzQ+kCrxXSjjS0iOObPqzxoz?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <CB74BD47A71E634E956120B732D5F90A@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c1cefde-e8ec-4a9b-1571-08d9eba84000
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2022 08:43:30.9635
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: o9XIwn5bPHr5xJ+Vwxg48S/Q77AULe0t2p8dWv22AMoa0tTgiAZcbcL20faZ3nZbIklqTabXJEf23EnTBseOjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4910
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/8/22 18:25, Bart Van Assche wrote:
-> Set .cmd_size in the SCSI host template instead of using the SCSI pointer
-> from struct scsi_cmnd. This patch prepares for removal of the SCSI pointer
-> from struct scsi_cmnd.
-> 
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->   drivers/scsi/a2091.c   |  19 ++++---
->   drivers/scsi/a3000.c   |  19 ++++---
->   drivers/scsi/gvp11.c   |  19 ++++---
->   drivers/scsi/mvme147.c |  10 ++--
->   drivers/scsi/sgiwd93.c |  18 ++++---
->   drivers/scsi/wd33c93.c | 119 ++++++++++++++++++++++-------------------
->   drivers/scsi/wd33c93.h |  10 ++++
->   7 files changed, 123 insertions(+), 91 deletions(-)
-> 
-> diff --git a/drivers/scsi/a2091.c b/drivers/scsi/a2091.c
-> index bcbce23478b8..c619c834abd0 100644
-> --- a/drivers/scsi/a2091.c
-> +++ b/drivers/scsi/a2091.c
-> @@ -44,16 +44,17 @@ static irqreturn_t a2091_intr(int irq, void *data)
->   
->   static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   {
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(cmd);
->   	struct Scsi_Host *instance = cmd->device->host;
->   	struct a2091_hostdata *hdata = shost_priv(instance);
->   	struct WD33C93_hostdata *wh = &hdata->wh;
->   	struct a2091_scsiregs *regs = hdata->regs;
->   	unsigned short cntr = CNTR_PDMD | CNTR_INTEN;
-> -	unsigned long addr = virt_to_bus(cmd->SCp.ptr);
-> +	unsigned long addr = virt_to_bus(scsi_pointer->ptr);
->   
->   	/* don't allow DMA if the physical address is bad */
->   	if (addr & A2091_XFER_MASK) {
-> -		wh->dma_bounce_len = (cmd->SCp.this_residual + 511) & ~0x1ff;
-> +		wh->dma_bounce_len = (scsi_pointer->this_residual + 511) & ~0x1ff;
->   		wh->dma_bounce_buffer = kmalloc(wh->dma_bounce_len,
->   						GFP_KERNEL);
->   
-> @@ -77,8 +78,8 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   
->   		if (!dir_in) {
->   			/* copy to bounce buffer for a write */
-> -			memcpy(wh->dma_bounce_buffer, cmd->SCp.ptr,
-> -			       cmd->SCp.this_residual);
-> +			memcpy(wh->dma_bounce_buffer, scsi_pointer->ptr,
-> +			       scsi_pointer->this_residual);
->   		}
->   	}
->   
-> @@ -96,10 +97,10 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   
->   	if (dir_in) {
->   		/* invalidate any cache */
-> -		cache_clear(addr, cmd->SCp.this_residual);
-> +		cache_clear(addr, scsi_pointer->this_residual);
->   	} else {
->   		/* push any dirty cache */
-> -		cache_push(addr, cmd->SCp.this_residual);
-> +		cache_push(addr, scsi_pointer->this_residual);
->   	}
->   	/* start DMA */
->   	regs->ST_DMA = 1;
-> @@ -111,6 +112,7 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
->   		     int status)
->   {
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(SCpnt);
->   	struct a2091_hostdata *hdata = shost_priv(instance);
->   	struct WD33C93_hostdata *wh = &hdata->wh;
->   	struct a2091_scsiregs *regs = hdata->regs;
-> @@ -143,8 +145,8 @@ static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
->   	/* copy from a bounce buffer, if necessary */
->   	if (status && wh->dma_bounce_buffer) {
->   		if (wh->dma_dir)
-> -			memcpy(SCpnt->SCp.ptr, wh->dma_bounce_buffer,
-> -			       SCpnt->SCp.this_residual);
-> +			memcpy(scsi_pointer->ptr, wh->dma_bounce_buffer,
-> +			       scsi_pointer->this_residual);
->   		kfree(wh->dma_bounce_buffer);
->   		wh->dma_bounce_buffer = NULL;
->   		wh->dma_bounce_len = 0;
-> @@ -165,6 +167,7 @@ static struct scsi_host_template a2091_scsi_template = {
->   	.sg_tablesize		= SG_ALL,
->   	.cmd_per_lun		= CMD_PER_LUN,
->   	.dma_boundary		= PAGE_SIZE - 1,
-> +	.cmd_size		= sizeof(struct WD33C93_cmd),
->   };
->   
->   static int a2091_probe(struct zorro_dev *z, const struct zorro_device_id *ent)
-> diff --git a/drivers/scsi/a3000.c b/drivers/scsi/a3000.c
-> index 23f34411f7bf..1906c695ee4a 100644
-> --- a/drivers/scsi/a3000.c
-> +++ b/drivers/scsi/a3000.c
-> @@ -48,12 +48,13 @@ static irqreturn_t a3000_intr(int irq, void *data)
->   
->   static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   {
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(cmd);
->   	struct Scsi_Host *instance = cmd->device->host;
->   	struct a3000_hostdata *hdata = shost_priv(instance);
->   	struct WD33C93_hostdata *wh = &hdata->wh;
->   	struct a3000_scsiregs *regs = hdata->regs;
->   	unsigned short cntr = CNTR_PDMD | CNTR_INTEN;
-> -	unsigned long addr = virt_to_bus(cmd->SCp.ptr);
-> +	unsigned long addr = virt_to_bus(scsi_pointer->ptr);
->   
->   	/*
->   	 * if the physical address has the wrong alignment, or if
-> @@ -62,7 +63,7 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   	 * buffer
->   	 */
->   	if (addr & A3000_XFER_MASK) {
-> -		wh->dma_bounce_len = (cmd->SCp.this_residual + 511) & ~0x1ff;
-> +		wh->dma_bounce_len = (scsi_pointer->this_residual + 511) & ~0x1ff;
->   		wh->dma_bounce_buffer = kmalloc(wh->dma_bounce_len,
->   						GFP_KERNEL);
->   
-> @@ -74,8 +75,8 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   
->   		if (!dir_in) {
->   			/* copy to bounce buffer for a write */
-> -			memcpy(wh->dma_bounce_buffer, cmd->SCp.ptr,
-> -			       cmd->SCp.this_residual);
-> +			memcpy(wh->dma_bounce_buffer, scsi_pointer->ptr,
-> +			       scsi_pointer->this_residual);
->   		}
->   
->   		addr = virt_to_bus(wh->dma_bounce_buffer);
-> @@ -95,10 +96,10 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   
->   	if (dir_in) {
->   		/* invalidate any cache */
-> -		cache_clear(addr, cmd->SCp.this_residual);
-> +		cache_clear(addr, scsi_pointer->this_residual);
->   	} else {
->   		/* push any dirty cache */
-> -		cache_push(addr, cmd->SCp.this_residual);
-> +		cache_push(addr, scsi_pointer->this_residual);
->   	}
->   
->   	/* start DMA */
-> @@ -113,6 +114,7 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
->   		     int status)
->   {
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(SCpnt);
->   	struct a3000_hostdata *hdata = shost_priv(instance);
->   	struct WD33C93_hostdata *wh = &hdata->wh;
->   	struct a3000_scsiregs *regs = hdata->regs;
-> @@ -153,8 +155,8 @@ static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
->   	if (status && wh->dma_bounce_buffer) {
->   		if (SCpnt) {
->   			if (wh->dma_dir && SCpnt)
-> -				memcpy(SCpnt->SCp.ptr, wh->dma_bounce_buffer,
-> -				       SCpnt->SCp.this_residual);
-> +				memcpy(scsi_pointer->ptr, wh->dma_bounce_buffer,
-> +				       scsi_pointer->this_residual);
->   			kfree(wh->dma_bounce_buffer);
->   			wh->dma_bounce_buffer = NULL;
->   			wh->dma_bounce_len = 0;
-> @@ -179,6 +181,7 @@ static struct scsi_host_template amiga_a3000_scsi_template = {
->   	.this_id		= 7,
->   	.sg_tablesize		= SG_ALL,
->   	.cmd_per_lun		= CMD_PER_LUN,
-> +	.cmd_size		= sizeof(struct WD33C93_cmd),
->   };
->   
->   static int __init amiga_a3000_scsi_probe(struct platform_device *pdev)
-> diff --git a/drivers/scsi/gvp11.c b/drivers/scsi/gvp11.c
-> index 43754c2f36b3..c990b82451dd 100644
-> --- a/drivers/scsi/gvp11.c
-> +++ b/drivers/scsi/gvp11.c
-> @@ -53,18 +53,19 @@ void gvp11_setup(char *str, int *ints)
->   
->   static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   {
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(cmd);
->   	struct Scsi_Host *instance = cmd->device->host;
->   	struct gvp11_hostdata *hdata = shost_priv(instance);
->   	struct WD33C93_hostdata *wh = &hdata->wh;
->   	struct gvp11_scsiregs *regs = hdata->regs;
->   	unsigned short cntr = GVP11_DMAC_INT_ENABLE;
-> -	unsigned long addr = virt_to_bus(cmd->SCp.ptr);
-> +	unsigned long addr = virt_to_bus(scsi_pointer->ptr);
->   	int bank_mask;
->   	static int scsi_alloc_out_of_range = 0;
->   
->   	/* use bounce buffer if the physical address is bad */
->   	if (addr & wh->dma_xfer_mask) {
-> -		wh->dma_bounce_len = (cmd->SCp.this_residual + 511) & ~0x1ff;
-> +		wh->dma_bounce_len = (scsi_pointer->this_residual + 511) & ~0x1ff;
->   
->   		if (!scsi_alloc_out_of_range) {
->   			wh->dma_bounce_buffer =
-> @@ -113,8 +114,8 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   
->   		if (!dir_in) {
->   			/* copy to bounce buffer for a write */
-> -			memcpy(wh->dma_bounce_buffer, cmd->SCp.ptr,
-> -			       cmd->SCp.this_residual);
-> +			memcpy(wh->dma_bounce_buffer, scsi_pointer->ptr,
-> +			       scsi_pointer->this_residual);
->   		}
->   	}
->   
-> @@ -130,10 +131,10 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   
->   	if (dir_in) {
->   		/* invalidate any cache */
-> -		cache_clear(addr, cmd->SCp.this_residual);
-> +		cache_clear(addr, scsi_pointer->this_residual);
->   	} else {
->   		/* push any dirty cache */
-> -		cache_push(addr, cmd->SCp.this_residual);
-> +		cache_push(addr, scsi_pointer->this_residual);
->   	}
->   
->   	bank_mask = (~wh->dma_xfer_mask >> 18) & 0x01c0;
-> @@ -150,6 +151,7 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
->   		     int status)
->   {
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(SCpnt);
->   	struct gvp11_hostdata *hdata = shost_priv(instance);
->   	struct WD33C93_hostdata *wh = &hdata->wh;
->   	struct gvp11_scsiregs *regs = hdata->regs;
-> @@ -162,8 +164,8 @@ static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
->   	/* copy from a bounce buffer, if necessary */
->   	if (status && wh->dma_bounce_buffer) {
->   		if (wh->dma_dir && SCpnt)
-> -			memcpy(SCpnt->SCp.ptr, wh->dma_bounce_buffer,
-> -			       SCpnt->SCp.this_residual);
-> +			memcpy(scsi_pointer->ptr, wh->dma_bounce_buffer,
-> +			       scsi_pointer->this_residual);
->   
->   		if (wh->dma_buffer_pool == BUF_SCSI_ALLOCED)
->   			kfree(wh->dma_bounce_buffer);
-> @@ -189,6 +191,7 @@ static struct scsi_host_template gvp11_scsi_template = {
->   	.sg_tablesize		= SG_ALL,
->   	.cmd_per_lun		= CMD_PER_LUN,
->   	.dma_boundary		= PAGE_SIZE - 1,
-> +	.cmd_size		= sizeof(struct WD33C93_cmd),
->   };
->   
->   static int check_wd33c93(struct gvp11_scsiregs *regs)
-> diff --git a/drivers/scsi/mvme147.c b/drivers/scsi/mvme147.c
-> index 0893d4c3a916..28d73e6a99be 100644
-> --- a/drivers/scsi/mvme147.c
-> +++ b/drivers/scsi/mvme147.c
-> @@ -33,10 +33,11 @@ static irqreturn_t mvme147_intr(int irq, void *data)
->   
->   static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   {
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(cmd);
->   	struct Scsi_Host *instance = cmd->device->host;
->   	struct WD33C93_hostdata *hdata = shost_priv(instance);
->   	unsigned char flags = 0x01;
-> -	unsigned long addr = virt_to_bus(cmd->SCp.ptr);
-> +	unsigned long addr = virt_to_bus(scsi_pointer->ptr);
->   
->   	/* setup dma direction */
->   	if (!dir_in)
-> @@ -47,14 +48,14 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
->   
->   	if (dir_in) {
->   		/* invalidate any cache */
-> -		cache_clear(addr, cmd->SCp.this_residual);
-> +		cache_clear(addr, scsi_pointer->this_residual);
->   	} else {
->   		/* push any dirty cache */
-> -		cache_push(addr, cmd->SCp.this_residual);
-> +		cache_push(addr, scsi_pointer->this_residual);
->   	}
->   
->   	/* start DMA */
-> -	m147_pcc->dma_bcr = cmd->SCp.this_residual | (1 << 24);
-> +	m147_pcc->dma_bcr = scsi_pointer->this_residual | (1 << 24);
->   	m147_pcc->dma_dadr = addr;
->   	m147_pcc->dma_cntrl = flags;
->   
-> @@ -81,6 +82,7 @@ static struct scsi_host_template mvme147_host_template = {
->   	.this_id		= 7,
->   	.sg_tablesize		= SG_ALL,
->   	.cmd_per_lun		= CMD_PER_LUN,
-> +	.cmd_size		= sizeof(struct WD33C93_cmd),
->   };
->   
->   static struct Scsi_Host *mvme147_shost;
-> diff --git a/drivers/scsi/sgiwd93.c b/drivers/scsi/sgiwd93.c
-> index e797d89c873b..c519c7fa9c3c 100644
-> --- a/drivers/scsi/sgiwd93.c
-> +++ b/drivers/scsi/sgiwd93.c
-> @@ -69,14 +69,15 @@ static irqreturn_t sgiwd93_intr(int irq, void *dev_id)
->   static inline
->   void fill_hpc_entries(struct ip22_hostdata *hd, struct scsi_cmnd *cmd, int din)
->   {
-> -	unsigned long len = cmd->SCp.this_residual;
-> -	void *addr = cmd->SCp.ptr;
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(cmd);
-> +	unsigned long len = scsi_pointer->this_residual;
-> +	void *addr = scsi_pointer->ptr;
->   	dma_addr_t physaddr;
->   	unsigned long count;
->   	struct hpc_chunk *hcp;
->   
->   	physaddr = dma_map_single(hd->dev, addr, len, DMA_DIR(din));
-> -	cmd->SCp.dma_handle = physaddr;
-> +	scsi_pointer->dma_handle = physaddr;
->   	hcp = hd->cpu;
->   
->   	while (len) {
-> @@ -106,6 +107,7 @@ void fill_hpc_entries(struct ip22_hostdata *hd, struct scsi_cmnd *cmd, int din)
->   
->   static int dma_setup(struct scsi_cmnd *cmd, int datainp)
->   {
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(cmd);
->   	struct ip22_hostdata *hdata = host_to_hostdata(cmd->device->host);
->   	struct hpc3_scsiregs *hregs =
->   		(struct hpc3_scsiregs *) cmd->device->host->base;
-> @@ -120,7 +122,7 @@ static int dma_setup(struct scsi_cmnd *cmd, int datainp)
->   	 * obvious).  IMHO a better fix would be, not to do these dma setups
->   	 * in the first place.
->   	 */
-> -	if (cmd->SCp.ptr == NULL || cmd->SCp.this_residual == 0)
-> +	if (scsi_pointer->ptr == NULL || scsi_pointer->this_residual == 0)
->   		return 1;
->   
->   	fill_hpc_entries(hdata, cmd, datainp);
-> @@ -140,13 +142,14 @@ static int dma_setup(struct scsi_cmnd *cmd, int datainp)
->   static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
->   		     int status)
->   {
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(SCpnt);
->   	struct ip22_hostdata *hdata = host_to_hostdata(instance);
->   	struct hpc3_scsiregs *hregs;
->   
->   	if (!SCpnt)
->   		return;
->   
-> -	if (SCpnt->SCp.ptr == NULL || SCpnt->SCp.this_residual == 0)
-> +	if (scsi_pointer->ptr == NULL || scsi_pointer->this_residual == 0)
->   		return;
->   
->   	hregs = (struct hpc3_scsiregs *) SCpnt->device->host->base;
-> @@ -160,8 +163,8 @@ static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
->   			barrier();
->   	}
->   	hregs->ctrl = 0;
-> -	dma_unmap_single(hdata->dev, SCpnt->SCp.dma_handle,
-> -			 SCpnt->SCp.this_residual,
-> +	dma_unmap_single(hdata->dev, scsi_pointer->dma_handle,
-> +			 scsi_pointer->this_residual,
->   			 DMA_DIR(hdata->wh.dma_dir));
->   
->   	pr_debug("\n");
-> @@ -213,6 +216,7 @@ static struct scsi_host_template sgiwd93_template = {
->   	.sg_tablesize		= SG_ALL,
->   	.cmd_per_lun		= 8,
->   	.dma_boundary		= PAGE_SIZE - 1,
-> +	.cmd_size		= sizeof(struct WD33C93_cmd),
->   };
->   
->   static int sgiwd93_probe(struct platform_device *pdev)
-> diff --git a/drivers/scsi/wd33c93.c b/drivers/scsi/wd33c93.c
-> index 7d2f00f3571a..3fe562047d85 100644
-> --- a/drivers/scsi/wd33c93.c
-> +++ b/drivers/scsi/wd33c93.c
-> @@ -364,6 +364,7 @@ calc_sync_msg(unsigned int period, unsigned int offset, unsigned int fast,
->   
->   static int wd33c93_queuecommand_lck(struct scsi_cmnd *cmd)
->   {
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(cmd);
->   	struct WD33C93_hostdata *hostdata;
->   	struct scsi_cmnd *tmp;
->   
-> @@ -395,15 +396,15 @@ static int wd33c93_queuecommand_lck(struct scsi_cmnd *cmd)
->    */
->   
->   	if (scsi_bufflen(cmd)) {
-> -		cmd->SCp.buffer = scsi_sglist(cmd);
-> -		cmd->SCp.buffers_residual = scsi_sg_count(cmd) - 1;
-> -		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
-> -		cmd->SCp.this_residual = cmd->SCp.buffer->length;
-> +		scsi_pointer->buffer = scsi_sglist(cmd);
-> +		scsi_pointer->buffers_residual = scsi_sg_count(cmd) - 1;
-> +		scsi_pointer->ptr = sg_virt(scsi_pointer->buffer);
-> +		scsi_pointer->this_residual = scsi_pointer->buffer->length;
->   	} else {
-> -		cmd->SCp.buffer = NULL;
-> -		cmd->SCp.buffers_residual = 0;
-> -		cmd->SCp.ptr = NULL;
-> -		cmd->SCp.this_residual = 0;
-> +		scsi_pointer->buffer = NULL;
-> +		scsi_pointer->buffers_residual = 0;
-> +		scsi_pointer->ptr = NULL;
-> +		scsi_pointer->this_residual = 0;
->   	}
->   
->   /* WD docs state that at the conclusion of a "LEVEL2" command, the
-> @@ -423,7 +424,7 @@ static int wd33c93_queuecommand_lck(struct scsi_cmnd *cmd)
->    * status byte is stored.
->    */
->   
-> -	cmd->SCp.Status = ILLEGAL_STATUS_BYTE;
-> +	scsi_pointer->Status = ILLEGAL_STATUS_BYTE;
->   
->   	/*
->   	 * Add the cmd to the end of 'input_Q'. Note that REQUEST SENSE
-> @@ -470,6 +471,7 @@ DEF_SCSI_QCMD(wd33c93_queuecommand)
->   static void
->   wd33c93_execute(struct Scsi_Host *instance)
->   {
-> +	struct scsi_pointer *scsi_pointer;
->   	struct WD33C93_hostdata *hostdata =
->   	    (struct WD33C93_hostdata *) instance->hostdata;
->   	const wd33c93_regs regs = hostdata->regs;
-> @@ -546,7 +548,8 @@ wd33c93_execute(struct Scsi_Host *instance)
->    * to change around and experiment with for now.
->    */
->   
-> -	cmd->SCp.phase = 0;	/* assume no disconnect */
-> +	scsi_pointer = WD33C93_scsi_pointer(cmd);
-> +	scsi_pointer->phase = 0;	/* assume no disconnect */
->   	if (hostdata->disconnect == DIS_NEVER)
->   		goto no;
->   	if (hostdata->disconnect == DIS_ALWAYS)
-> @@ -563,7 +566,7 @@ wd33c93_execute(struct Scsi_Host *instance)
->   		    (prev->device->lun != cmd->device->lun)) {
->   			for (prev = (struct scsi_cmnd *) hostdata->input_Q; prev;
->   			     prev = (struct scsi_cmnd *) prev->host_scribble)
-> -				prev->SCp.phase = 1;
-> +				WD33C93_scsi_pointer(prev)->phase = 1;
->   			goto yes;
->   		}
->   	}
-> @@ -571,7 +574,7 @@ wd33c93_execute(struct Scsi_Host *instance)
->   	goto no;
->   
->    yes:
-> -	cmd->SCp.phase = 1;
-> +	scsi_pointer->phase = 1;
->   
->   #ifdef PROC_STATISTICS
->   	hostdata->disc_allowed_cnt[cmd->device->id]++;
-> @@ -579,7 +582,7 @@ wd33c93_execute(struct Scsi_Host *instance)
->   
->    no:
->   
-> -	write_wd33c93(regs, WD_SOURCE_ID, ((cmd->SCp.phase) ? SRCID_ER : 0));
-> +	write_wd33c93(regs, WD_SOURCE_ID, scsi_pointer->phase ? SRCID_ER : 0);
->   
->   	write_wd33c93(regs, WD_TARGET_LUN, (u8)cmd->device->lun);
->   	write_wd33c93(regs, WD_SYNCHRONOUS_TRANSFER,
-> @@ -648,14 +651,14 @@ wd33c93_execute(struct Scsi_Host *instance)
->   		 * up ahead of time.
->   		 */
->   
-> -		if ((cmd->SCp.phase == 0) && (hostdata->no_dma == 0)) {
-> +		if (scsi_pointer->phase == 0 && hostdata->no_dma == 0) {
->   			if (hostdata->dma_setup(cmd,
->   			    (cmd->sc_data_direction == DMA_TO_DEVICE) ?
->   			     DATA_OUT_DIR : DATA_IN_DIR))
->   				write_wd33c93_count(regs, 0);	/* guarantee a DATA_PHASE interrupt */
->   			else {
->   				write_wd33c93_count(regs,
-> -						    cmd->SCp.this_residual);
-> +						scsi_pointer->this_residual);
->   				write_wd33c93(regs, WD_CONTROL,
->   					      CTRL_IDI | CTRL_EDI | hostdata->dma_mode);
->   				hostdata->dma = D_DMA_RUNNING;
-> @@ -675,7 +678,7 @@ wd33c93_execute(struct Scsi_Host *instance)
->   	 */
->   
->   	DB(DB_EXECUTE,
-> -	   printk("%s)EX-2 ", (cmd->SCp.phase) ? "d:" : ""))
-> +	   printk("%s)EX-2 ", scsi_pointer->phase ? "d:" : ""))
->   }
->   
->   static void
-> @@ -717,6 +720,7 @@ static void
->   transfer_bytes(const wd33c93_regs regs, struct scsi_cmnd *cmd,
->   		int data_in_dir)
->   {
-> +	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(cmd);
->   	struct WD33C93_hostdata *hostdata;
->   	unsigned long length;
->   
-> @@ -730,13 +734,13 @@ transfer_bytes(const wd33c93_regs regs, struct scsi_cmnd *cmd,
->    * now we need to setup the next scatter-gather buffer as the
->    * source or destination for THIS transfer.
->    */
-> -	if (!cmd->SCp.this_residual && cmd->SCp.buffers_residual) {
-> -		cmd->SCp.buffer = sg_next(cmd->SCp.buffer);
-> -		--cmd->SCp.buffers_residual;
-> -		cmd->SCp.this_residual = cmd->SCp.buffer->length;
-> -		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
-> +	if (!scsi_pointer->this_residual && scsi_pointer->buffers_residual) {
-> +		scsi_pointer->buffer = sg_next(scsi_pointer->buffer);
-> +		--scsi_pointer->buffers_residual;
-> +		scsi_pointer->this_residual = scsi_pointer->buffer->length;
-> +		scsi_pointer->ptr = sg_virt(scsi_pointer->buffer);
->   	}
-> -	if (!cmd->SCp.this_residual) /* avoid bogus setups */
-> +	if (!scsi_pointer->this_residual) /* avoid bogus setups */
->   		return;
->   
->   	write_wd33c93(regs, WD_SYNCHRONOUS_TRANSFER,
-> @@ -750,11 +754,12 @@ transfer_bytes(const wd33c93_regs regs, struct scsi_cmnd *cmd,
->   #ifdef PROC_STATISTICS
->   		hostdata->pio_cnt++;
->   #endif
-> -		transfer_pio(regs, (uchar *) cmd->SCp.ptr,
-> -			     cmd->SCp.this_residual, data_in_dir, hostdata);
-> -		length = cmd->SCp.this_residual;
-> -		cmd->SCp.this_residual = read_wd33c93_count(regs);
-> -		cmd->SCp.ptr += (length - cmd->SCp.this_residual);
-> +		transfer_pio(regs, (uchar *) scsi_pointer->ptr,
-> +			     scsi_pointer->this_residual, data_in_dir,
-> +			     hostdata);
-> +		length = scsi_pointer->this_residual;
-> +		scsi_pointer->this_residual = read_wd33c93_count(regs);
-> +		scsi_pointer->ptr += length - scsi_pointer->this_residual;
->   	}
->   
->   /* We are able to do DMA (in fact, the Amiga hardware is
-> @@ -771,10 +776,10 @@ transfer_bytes(const wd33c93_regs regs, struct scsi_cmnd *cmd,
->   		hostdata->dma_cnt++;
->   #endif
->   		write_wd33c93(regs, WD_CONTROL, CTRL_IDI | CTRL_EDI | hostdata->dma_mode);
-> -		write_wd33c93_count(regs, cmd->SCp.this_residual);
-> +		write_wd33c93_count(regs, scsi_pointer->this_residual);
->   
->   		if ((hostdata->level2 >= L2_DATA) ||
-> -		    (hostdata->level2 == L2_BASIC && cmd->SCp.phase == 0)) {
-> +		    (hostdata->level2 == L2_BASIC && scsi_pointer->phase == 0)) {
->   			write_wd33c93(regs, WD_COMMAND_PHASE, 0x45);
->   			write_wd33c93_cmd(regs, WD_CMD_SEL_ATN_XFER);
->   			hostdata->state = S_RUNNING_LEVEL2;
-> @@ -788,6 +793,7 @@ transfer_bytes(const wd33c93_regs regs, struct scsi_cmnd *cmd,
->   void
->   wd33c93_intr(struct Scsi_Host *instance)
->   {
-> +	struct scsi_pointer *scsi_pointer;
->   	struct WD33C93_hostdata *hostdata =
->   	    (struct WD33C93_hostdata *) instance->hostdata;
->   	const wd33c93_regs regs = hostdata->regs;
-> @@ -806,6 +812,7 @@ wd33c93_intr(struct Scsi_Host *instance)
->   #endif
->   
->   	cmd = (struct scsi_cmnd *) hostdata->connected;	/* assume we're connected */
-> +	scsi_pointer = WD33C93_scsi_pointer(cmd);
->   	sr = read_wd33c93(regs, WD_SCSI_STATUS);	/* clear the interrupt */
->   	phs = read_wd33c93(regs, WD_COMMAND_PHASE);
->   
-> @@ -827,14 +834,14 @@ wd33c93_intr(struct Scsi_Host *instance)
->    */
->   	    if (hostdata->dma == D_DMA_RUNNING) {
->   		DB(DB_TRANSFER,
-> -		   printk("[%p/%d:", cmd->SCp.ptr, cmd->SCp.this_residual))
-> +		   printk("[%p/%d:", scsi_pointer->ptr, scsi_pointer->this_residual))
->   		    hostdata->dma_stop(cmd->device->host, cmd, 1);
->   		hostdata->dma = D_DMA_OFF;
-> -		length = cmd->SCp.this_residual;
-> -		cmd->SCp.this_residual = read_wd33c93_count(regs);
-> -		cmd->SCp.ptr += (length - cmd->SCp.this_residual);
-> +		length = scsi_pointer->this_residual;
-> +		scsi_pointer->this_residual = read_wd33c93_count(regs);
-> +		scsi_pointer->ptr += length - scsi_pointer->this_residual;
->   		DB(DB_TRANSFER,
-> -		   printk("%p/%d]", cmd->SCp.ptr, cmd->SCp.this_residual))
-> +		   printk("%p/%d]", scsi_pointer->ptr, scsi_pointer->this_residual))
->   	}
->   
->   /* Respond to the specific WD3393 interrupt - there are quite a few! */
-> @@ -884,7 +891,7 @@ wd33c93_intr(struct Scsi_Host *instance)
->   		/* construct an IDENTIFY message with correct disconnect bit */
->   
->   		hostdata->outgoing_msg[0] = IDENTIFY(0, cmd->device->lun);
-> -		if (cmd->SCp.phase)
-> +		if (scsi_pointer->phase)
->   			hostdata->outgoing_msg[0] |= 0x40;
->   
->   		if (hostdata->sync_stat[cmd->device->id] == SS_FIRST) {
-> @@ -926,8 +933,8 @@ wd33c93_intr(struct Scsi_Host *instance)
->   	case CSR_UNEXP | PHS_DATA_IN:
->   	case CSR_SRV_REQ | PHS_DATA_IN:
->   		DB(DB_INTR,
-> -		   printk("IN-%d.%d", cmd->SCp.this_residual,
-> -			  cmd->SCp.buffers_residual))
-> +		   printk("IN-%d.%d", scsi_pointer->this_residual,
-> +			  scsi_pointer->buffers_residual))
->   		    transfer_bytes(regs, cmd, DATA_IN_DIR);
->   		if (hostdata->state != S_RUNNING_LEVEL2)
->   			hostdata->state = S_CONNECTED;
-> @@ -938,8 +945,8 @@ wd33c93_intr(struct Scsi_Host *instance)
->   	case CSR_UNEXP | PHS_DATA_OUT:
->   	case CSR_SRV_REQ | PHS_DATA_OUT:
->   		DB(DB_INTR,
-> -		   printk("OUT-%d.%d", cmd->SCp.this_residual,
-> -			  cmd->SCp.buffers_residual))
-> +		   printk("OUT-%d.%d", scsi_pointer->this_residual,
-> +			  scsi_pointer->buffers_residual))
->   		    transfer_bytes(regs, cmd, DATA_OUT_DIR);
->   		if (hostdata->state != S_RUNNING_LEVEL2)
->   			hostdata->state = S_CONNECTED;
-> @@ -962,8 +969,8 @@ wd33c93_intr(struct Scsi_Host *instance)
->   	case CSR_UNEXP | PHS_STATUS:
->   	case CSR_SRV_REQ | PHS_STATUS:
->   		DB(DB_INTR, printk("STATUS="))
-> -		cmd->SCp.Status = read_1_byte(regs);
-> -		DB(DB_INTR, printk("%02x", cmd->SCp.Status))
-> +		scsi_pointer->Status = read_1_byte(regs);
-> +		DB(DB_INTR, printk("%02x", scsi_pointer->Status))
->   		    if (hostdata->level2 >= L2_BASIC) {
->   			sr = read_wd33c93(regs, WD_SCSI_STATUS);	/* clear interrupt */
->   			udelay(7);
-> @@ -991,7 +998,7 @@ wd33c93_intr(struct Scsi_Host *instance)
->   		else
->   			hostdata->incoming_ptr = 0;
->   
-> -		cmd->SCp.Message = msg;
-> +		scsi_pointer->Message = msg;
->   		switch (msg) {
->   
->   		case COMMAND_COMPLETE:
-> @@ -1163,21 +1170,21 @@ wd33c93_intr(struct Scsi_Host *instance)
->   		write_wd33c93(regs, WD_SOURCE_ID, SRCID_ER);
->   		if (phs == 0x60) {
->   			DB(DB_INTR, printk("SX-DONE"))
-> -			    cmd->SCp.Message = COMMAND_COMPLETE;
-> +			    scsi_pointer->Message = COMMAND_COMPLETE;
->   			lun = read_wd33c93(regs, WD_TARGET_LUN);
-> -			DB(DB_INTR, printk(":%d.%d", cmd->SCp.Status, lun))
-> +			DB(DB_INTR, printk(":%d.%d", scsi_pointer->Status, lun))
->   			    hostdata->connected = NULL;
->   			hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
->   			hostdata->state = S_UNCONNECTED;
-> -			if (cmd->SCp.Status == ILLEGAL_STATUS_BYTE)
-> -				cmd->SCp.Status = lun;
-> +			if (scsi_pointer->Status == ILLEGAL_STATUS_BYTE)
-> +				scsi_pointer->Status = lun;
->   			if (cmd->cmnd[0] == REQUEST_SENSE
-> -			    && cmd->SCp.Status != SAM_STAT_GOOD) {
-> +			    && scsi_pointer->Status != SAM_STAT_GOOD) {
->   				set_host_byte(cmd, DID_ERROR);
->   			} else {
->   				set_host_byte(cmd, DID_OK);
-> -				scsi_msg_to_host_byte(cmd, cmd->SCp.Message);
-> -				set_status_byte(cmd, cmd->SCp.Status);
-> +				scsi_msg_to_host_byte(cmd, scsi_pointer->Message);
-> +				set_status_byte(cmd, scsi_pointer->Status);
->   			}
->   			scsi_done(cmd);
->   
-> @@ -1259,12 +1266,12 @@ wd33c93_intr(struct Scsi_Host *instance)
->   		hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
->   		hostdata->state = S_UNCONNECTED;
->   		if (cmd->cmnd[0] == REQUEST_SENSE &&
-> -		    cmd->SCp.Status != SAM_STAT_GOOD) {
-> +		    scsi_pointer->Status != SAM_STAT_GOOD) {
->   			set_host_byte(cmd, DID_ERROR);
->   		} else {
->   			set_host_byte(cmd, DID_OK);
-> -			scsi_msg_to_host_byte(cmd, cmd->SCp.Message);
-> -			set_status_byte(cmd, cmd->SCp.Status);
-> +			scsi_msg_to_host_byte(cmd, scsi_pointer->Message);
-> +			set_status_byte(cmd, scsi_pointer->Status);
->   		}
->   		scsi_done(cmd);
->   
-> @@ -1293,14 +1300,14 @@ wd33c93_intr(struct Scsi_Host *instance)
->   			hostdata->connected = NULL;
->   			hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
->   			hostdata->state = S_UNCONNECTED;
-> -			DB(DB_INTR, printk(":%d", cmd->SCp.Status))
-> +			DB(DB_INTR, printk(":%d", scsi_pointer->Status))
->   			if (cmd->cmnd[0] == REQUEST_SENSE
-> -			    && cmd->SCp.Status != SAM_STAT_GOOD) {
-> +			    && scsi_pointer->Status != SAM_STAT_GOOD) {
->   				set_host_byte(cmd, DID_ERROR);
->   			} else {
->   				set_host_byte(cmd, DID_OK);
-> -				scsi_msg_to_host_byte(cmd, cmd->SCp.Message);
-> -				set_status_byte(cmd, cmd->SCp.Status);
-> +				scsi_msg_to_host_byte(cmd, scsi_pointer->Message);
-> +				set_status_byte(cmd, scsi_pointer->Status);
->   			}
->   			scsi_done(cmd);
->   			break;
-> diff --git a/drivers/scsi/wd33c93.h b/drivers/scsi/wd33c93.h
-> index 2edec34c5a42..b5d6842c6944 100644
-> --- a/drivers/scsi/wd33c93.h
-> +++ b/drivers/scsi/wd33c93.h
-> @@ -262,6 +262,16 @@ struct WD33C93_hostdata {
->   #endif
->       };
->   
-> +struct WD33C93_cmd {
-> +	struct scsi_pointer scsi_pointer;
-> +};
-> +
-> +static inline struct scsi_pointer *WD33C93_scsi_pointer(struct scsi_cmnd *cmd)
-> +{
-> +	struct WD33C93_cmd *wcmd = scsi_cmd_priv(cmd);
-> +
-> +	return &wcmd->scsi_pointer;
-> +}
->   
->   /* defines for hostdata->chip */
->   
-Please use 'struct scsi_pointer' directly.
-
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+T24gMi85LzIyIDEyOjI4IEFNLCBDaHJpc3RvcGggSGVsbHdpZyB3cm90ZToNCj4gVGhlIHdyaXRl
+X3NhbWUgYW5kIHdyaXRlX3plcm9lcyBsaW1pdHMgZm9yIFNDU0kgYXJlIGVmZmVjdGl2ZWx5IHRo
+ZQ0KPiBzYW1lLCBzbyB0aGUgY3VycmVudCBjb2RlIHdvcmtzIGp1c3QgZmluZS4gIEJ1dCB3ZSBw
+bGFuIHRvIHJlbW92ZQ0KPiBSRVFfT1BfV1JJVEVfU0FNRSBzdXBwb3J0LCBzbyBzd2l0Y2ggdG8g
+cXVlcmluZyB0aGUgd3JpdGUgemVyb2VzDQo+IGxpbWl0IGZvciBhIHplcm9pbmcgV1JJVEUgU0FN
+RSBvcGVyYXRpb24uDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RvcGggSGVsbHdpZyA8aGNo
+QGxzdC5kZT4NCj4gLS0tDQoNCkxvb2tzIGdvb2QuDQoNClJldmlld2VkLWJ5OiBDaGFpdGFueWEg
+S3Vsa2FybmkgPGtjaEBudmlkaWEuY29tPg0KDQo=
