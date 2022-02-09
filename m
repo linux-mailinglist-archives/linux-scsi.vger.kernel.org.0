@@ -2,195 +2,267 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F514B041B
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Feb 2022 04:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C854B0622
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Feb 2022 07:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiBJDyJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Feb 2022 22:54:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36944 "EHLO
+        id S235160AbiBJGNO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Feb 2022 01:13:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiBJDyH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Feb 2022 22:54:07 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4388923BF6
-        for <linux-scsi@vger.kernel.org>; Wed,  9 Feb 2022 19:54:09 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21A2aeof014382;
-        Wed, 9 Feb 2022 19:54:07 -0800
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3e4am94f13-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 19:54:07 -0800
-Received: from m0045851.ppops.net (m0045851.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 21A3pAAQ031734;
-        Wed, 9 Feb 2022 19:54:06 -0800
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2177.outbound.protection.outlook.com [104.47.73.177])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3e4am94f11-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 19:54:06 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VbOzcPEv/9hhVYRgk4RRMTFNTvaVdwy41SvGY1Ej5wHdS4Rdkm6LLFKgtLjnQE5mYNGd5lFWh/JPYDT37TPbOuWbCrM8leyb8SyHT2rTOS8iyB4PVE+d/eh9Z/eoLmOZTnpI+zNPfdHREoeEIDeUPJ44ciMnaYJTaqGlXQ3duj325cRZir28nncI8uizV994pvKRgdC6RQoRrO2d285/fntEwybdoF0967cl3f84wrpriGadY3pdVd33VqbxxbjUlgOn3o7XGzrIkmepl9Xjwnx38hhHcPf5Ppog+BpiC1LgwCUUu210NeRjxT2ZSSteUPO0+PgO+PCt6IuKkyMTfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q0qYXTCSrbRrUYUQ5/RZqOctcSbuODckbW7nKNWAvZM=;
- b=VaFWtUb1+Fr/mivc2SqO1PVoipkqF9l9P4bB/hZ9vIZNY0ixzjS1BX5GXbJPNIxDQ/6mlR4ymefgVSKMbGXR6LTp5ZWLv2OKPzZcefypj/n+LYVzXnKX5EY6A1aWiFms7MoQDtmORYJEZARBkJSVl05qAbvcVMd6NW5Q39+z2KKmQ4NPNbgoyR+63Nph9jiix3+uay9Rsvre+SQ+CGJ+UZD7NeO6s07A2PjPYMcILqsoStyzD76B3lp1u6o7/lBFmna9G3P/powWCc/9sK2zoO1oDXjggnxQDAztNUwA1mbZcYkO6RJnNa98K/I+2whZHYUlk/VdHP6KUSFH4NBiBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q0qYXTCSrbRrUYUQ5/RZqOctcSbuODckbW7nKNWAvZM=;
- b=IspBNxzjNOn08OubLTZMrO1Z5nc4rjQ9oJdjgJt+4f0/dmiQgYsEVjME9PUU7TGTygec6HkMcemScXyemtGs0O2pHclwGEYe+MMwzjewwz5YdzZvXYe+wGz8gzc8w+McG2vSK2uA7g33B9Moce0B+UPI1sohZTLhSZ4dQ+cQkiE=
-Received: from DM6PR18MB3034.namprd18.prod.outlook.com (2603:10b6:5:18c::32)
- by BYAPR18MB2487.namprd18.prod.outlook.com (2603:10b6:a03:139::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.19; Thu, 10 Feb
- 2022 03:54:03 +0000
-Received: from DM6PR18MB3034.namprd18.prod.outlook.com
- ([fe80::b449:a2ad:6124:26aa]) by DM6PR18MB3034.namprd18.prod.outlook.com
- ([fe80::b449:a2ad:6124:26aa%6]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
- 03:54:02 +0000
-From:   Saurav Kashyap <skashyap@marvell.com>
-To:     Ewan Milne <emilne@redhat.com>, Nilesh Javali <njavali@marvell.com>
-CC:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: RE: [PATCH] qla2xxx: Add qla2x00_async_done routine for async
- routines.
-Thread-Topic: [PATCH] qla2xxx: Add qla2x00_async_done routine for async
- routines.
-Thread-Index: AQHYHM/qOsOceH0juUyphPR39p7P5KyLqEIAgACBZLA=
-Date:   Thu, 10 Feb 2022 03:54:02 +0000
-Message-ID: <DM6PR18MB30343AE823BEEA0E946D6533D22F9@DM6PR18MB3034.namprd18.prod.outlook.com>
-References: <20220208093946.4471-1-njavali@marvell.com>
- <CAGtn9rnZZy9cENPt0hE4okN20BNTbWK0c0Jj7-RwdaAMmZW3Rw@mail.gmail.com>
-In-Reply-To: <CAGtn9rnZZy9cENPt0hE4okN20BNTbWK0c0Jj7-RwdaAMmZW3Rw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bca4df4f-6bed-45ba-f320-08d9ec48fa2d
-x-ms-traffictypediagnostic: BYAPR18MB2487:EE_
-x-microsoft-antispam-prvs: <BYAPR18MB24876994CA319E2E1A05F758D22F9@BYAPR18MB2487.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3826;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xuI7FDx0fH19w/jJ5rZhjnyWbHaEa4dNRE0Hp0T2KSW9ZhMVrP7wzZcbRcMxwTZBdI+Tp/YECk/5wfNvWsvqolWpOaZKr6MyM038pkzjz2vtNjFuMGIU1QHtcuhdxkWBjtyM+z6yK/T8bHkQMycNckLY2TLvuQkFhNlZbdb3Ht9FwC2Q8G6vzdUQ5RS3ORdGGAUsiWBqGu0in79I5ZfpORzx7RnAwB/7mEXp0Ty2IKWIv04YDIOfuVH665RmoMmel4J7xCrxaFooe4cf2XIrNKAtb9y0zWBbWm8mNXIyhIWgBGhc9jScacuWxTjvAq/wcBuXjky523E/erExYNj5Cu9DXQyZ/e4iHFCpFVJslyWpwj9/e31zyHUw0du7/s2ogqraQKUfbJzkhWmxFbOyHynMduLARp86+4AlILjWR3QVt4vuyRDqtjzODzm/qiwtrR6JW7iyiaVQpy7F+vwvy8rQthVvXWu0sf7IrpkouIHkdqn8zhsj+/MxpDaYwX8fqDWGGKZe9TMv1a93GuV/TRNEGaPlBrVPZM+ofFQRcYk8Bt/jLlZhVwD6D4S3p4OOz9cSXooubLf/BbYmvdI/vJ06+kXcWVVPRZyQBO6IKYsS9vhVL2m1JdlOuGhrQoIsMoLty/8voz3u/7frOq5Msxt8l9pqU4mnzvI34S0OmDEu7RW3s97KHWAkfrfW+Eri4y1+GPo+zj69R+tYYeZELQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR18MB3034.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(52536014)(508600001)(76116006)(54906003)(6636002)(316002)(9686003)(7696005)(6506007)(66476007)(33656002)(53546011)(110136005)(66946007)(4326008)(71200400001)(8936002)(66556008)(8676002)(64756008)(66446008)(26005)(2906002)(186003)(38100700002)(122000001)(86362001)(38070700005)(107886003)(5660300002)(55016003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dVVheE82SmN1d0srdmZQZm9ZU2J4UHFIakJLd3o4RWQ1MWlYSWc0dFZjcktT?=
- =?utf-8?B?TDZ3L3dldDBJQWdra05TOWlPZk9mSzhZQWhJRWw2bTBObkZiZDljdmczVWlV?=
- =?utf-8?B?V3djR1Mzc2J0cG9wNXhaYWMxeFdOczEzWUNydWl5bmRTUFFvS09TSFByY3FZ?=
- =?utf-8?B?aG1SV2R0dFR0R3hkbFNSdzJoTzRaZnRaU0ZtbzV0Q3BwUHZ4T2llS250UDFE?=
- =?utf-8?B?OVRxL2R3VE42M1RaRGRQT21aLzBJVGphRW04SWJvNms3cFl5R2RKQk9jWVUx?=
- =?utf-8?B?MDV0NkZYemd6T0V6VzNQSHZ5SUFaVHJlZFVqT0Y2UXlBTXRHZmxPVjkyTGx5?=
- =?utf-8?B?T0dnbk1SYUJQQWpYRE5pdnVYN0NjbkVvcmMrSENESVF2RTU3V0dSUjcrVjFZ?=
- =?utf-8?B?enJTUlhmMXBwbFd3N0tneEw2NUh3RS9DQ1BnNFRvVWN5M0pQcFlHclNQWWVU?=
- =?utf-8?B?OVBLOVU5UlllU2Y3T0N0VktSajh0QktDMVpMbG9HTVZEUXNNNmxCc3VwVThB?=
- =?utf-8?B?eHdRRmxkUE9KaG1iUURZQWhiclZ3dE1EbWwwbWNRUU1MQXhIaU52Z1haOUZh?=
- =?utf-8?B?Y1R5SXZ4SzI4dFFsRGZjc0pUOEdKYmo2V2dlYWtMVmU1S3l5OTJLTjNPQWVl?=
- =?utf-8?B?SkxaVXdOK1hQYmhMNUtydy9DTmdtS0lqVGNiY091SlJBSnJPNEp1K3R4d0pw?=
- =?utf-8?B?Z3ZKbE54ZEJaMTVMSFNUMmdmNk5yTUQ0Q2FvV1J4UWE3Z1FyV2hqK1JWUDlD?=
- =?utf-8?B?cEtHcFNHTEMxK1ZqdmQyTCtYMWhmbnBSbTI0blRyRE4rdXhwNm5Pazc3Zit2?=
- =?utf-8?B?NFVZdXdsYXFUUnliS0t2YVlic3BOYS9xN2F1Q3VkMTdQRDBtOFJuSWNKOURB?=
- =?utf-8?B?ZDJIRS9SaXNqTWo3cy84cVZ1Mzg5Yk5kSnU0YUVJQWNEaUgwNkFqZ2RFYnhM?=
- =?utf-8?B?ZTBleTZZNUVQNmZkMFJuNHgvVzJORTM2a3VveVdUbkd2ZEszSDgxYktHMnNE?=
- =?utf-8?B?Ti9zeW5CWWMyb2E3VysyVk1KNXc1L28wYW1yanJnaGdWU3ByQjN2Y3BEOG9T?=
- =?utf-8?B?ZU1GMzlZczBRYjFpRGdqY3BiMjJhQU5UMGg2WDhqdEREb05wbThmeXRsRFJh?=
- =?utf-8?B?Y01ka0tsMjl2dTRyTE1zamd0Rm1WLzlJQ2gwMk8wZStuVWthQlhkR0p4QU42?=
- =?utf-8?B?cTZreldBTUpjNjdieTh6RzhJVldlWElsRXBiYkhWbVRIOTY2WUJNeUFVL0FR?=
- =?utf-8?B?anc3VDRtMm9JY3BwZHJQUk5yNlZyUlpDSEJUSUpMTVRQcW9RME1FcEd1YlQy?=
- =?utf-8?B?ZEFlaHgwaWIrU3pwcTJKdFlPR1VmWmxsOUZMM2poRFF2NmlLeUdkWTFuNGQy?=
- =?utf-8?B?T3BjTnVuZVVTUk1XL1A0VWZDTWpHS2tIVUhHMVlDTDdrWkFPbFg0Qjg5NVF2?=
- =?utf-8?B?UFhvRVNXcXNJRFBLYjd3b0RZOE9BYzhDQVJCU2JUdE80Y1ZibUNqTFJEVGNC?=
- =?utf-8?B?VjhnMGNVYlFSMnlHZkZER0Z0K1hQNE1LcDdNNEsya2ZPQzl3dHYrcmg4eEFF?=
- =?utf-8?B?YldPT1g3UGxnS2ZKVFZRZitEQ3A5L2FBdnhwOS80czd0L0lRRXM2RVRrdkJs?=
- =?utf-8?B?VEh3UitYNkk0R1ZyMWF3bm1yM0NoMEpjb21jQ2hIaklsMktrTlZwdjQ1WXIx?=
- =?utf-8?B?OGpSTXFTS0o3Ukh1aVpRamt1Mi9FMWpHMkVVemFHOE0zaSt3QjNUT2RDREpn?=
- =?utf-8?B?bm81bGUzV21zNUp1YkdZdG9yaTd1ejkxOHYwQWpyWUM0dHF0VWZiVnQ0YW82?=
- =?utf-8?B?VUxVYkI1Vjd4bzRORlRmOWdzK1RzMVlYakt3VDJaeGwyMTRTMm1mWjBNWE9a?=
- =?utf-8?B?QUNrVU9waHZHL05CRjZhZGZ5R3o0alJTVDZjb2t5bXE1NisvZzFXcjNvdlkz?=
- =?utf-8?B?Smt1ZHNtb0dHcVNCbk12YUJ1OTVnK0MxeXplWktYakJST2ZCKzNlRWhCeW9K?=
- =?utf-8?B?OGxMWHBLVUY3K01Qdk1wYWlpTm5vTFB5VllaY0l1dW00STdxNVNMak5hem54?=
- =?utf-8?B?MEJhVlZYL1owRkp4M2dkSngyL2VpVnl2eUY0M2R0ZXdQUHc5OUJiQk8xLzNP?=
- =?utf-8?B?QkxYNXBBWS9VWmlFWmF1a0Z6R05wa05Ma1lXS3hKRndWRWFYTW13RW1JZXVT?=
- =?utf-8?Q?sJyDYFUyDAQuPv0414m0aBs=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S235150AbiBJGNN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Feb 2022 01:13:13 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A14276
+        for <linux-scsi@vger.kernel.org>; Wed,  9 Feb 2022 22:13:13 -0800 (PST)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220210061311epoutp04c3d56093c5b6b822744fc3f03eab7304~SWATXNaYK1417414174epoutp04k
+        for <linux-scsi@vger.kernel.org>; Thu, 10 Feb 2022 06:13:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220210061311epoutp04c3d56093c5b6b822744fc3f03eab7304~SWATXNaYK1417414174epoutp04k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1644473591;
+        bh=4zqH9MciNS5AP5+T3I3tflkXROekxxekqh86V9Nm4EE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YIQMSLW+QM4lOiRYBJkdkcyjVFO5vrnZEgH8YTRZsr6IkmWtwe221r6z+054xafLo
+         jzQGwpK4FLhlk6GEil4rP5bjn/3D0RfG24ve3eFf7/Qi+DqqX6VMa5ZsukcamgmK94
+         fOXbpEtQGXh7v4EdLTc9jrgSA+qp+IjSoMq3Jek0=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220210061310epcas5p49faab99a9c416fc1551e406cd5be718a~SWASoKd0C0469004690epcas5p42;
+        Thu, 10 Feb 2022 06:13:10 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4JvRHz28K8z4x9QT; Thu, 10 Feb
+        2022 06:13:03 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        17.51.06423.FECA4026; Thu, 10 Feb 2022 15:13:03 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220209103706epcas5p491553ba70337e2d38b889e8b99e8fbd5~SF9cz5JM33189431894epcas5p4z;
+        Wed,  9 Feb 2022 10:37:06 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220209103706epsmtrp23a16fa5d1250fd3d330dbe7396c87c82~SF9cwr3wB2288022880epsmtrp2C;
+        Wed,  9 Feb 2022 10:37:06 +0000 (GMT)
+X-AuditID: b6c32a49-b01ff70000001917-a6-6204acef2a62
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        54.1F.08738.25993026; Wed,  9 Feb 2022 19:37:06 +0900 (KST)
+Received: from test-zns (unknown [107.110.206.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220209103701epsmtip273f8ca5a5569b854667e3d2cf52c30ee~SF9XmcAEB1539015390epsmtip2d;
+        Wed,  9 Feb 2022 10:37:01 +0000 (GMT)
+Date:   Wed, 9 Feb 2022 16:02:06 +0530
+From:   Nitesh Shetty <nj.shetty@samsung.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, mpatocka@redhat.com, kbuild-all@lists.01.org,
+        javier@javigon.com, chaitanyak@nvidia.com,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, axboe@kernel.dk,
+        msnitzer@redhat.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, hare@suse.de, kbusch@kernel.org,
+        hch@lst.de, Frederick.Knight@netapp.com, osandov@fb.com,
+        lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
+        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
+        jack@suse.com, joshi.k@samsung.com, arnav.dawn@samsung.com,
+        SelvaKumar S <selvakuma.s1@samsung.com>,
+        nitheshshetty@gmail.com
+Subject: Re: [PATCH v2 03/10] block: Add copy offload support infrastructure
+Message-ID: <20220209103206.GD7698@test-zns>
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR18MB3034.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bca4df4f-6bed-45ba-f320-08d9ec48fa2d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2022 03:54:02.7345
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yEopwKm5huuFeeZTtz+6JH9shw7VOdXukND5XvyJgaIqk2XQAuyH/pZGCyLqj1iuBhuUf6L6eX9vJtsHbaVYKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB2487
-X-Proofpoint-GUID: aR-IobrAVlOROICFhjwKWnLdeyv2F3ZO
-X-Proofpoint-ORIG-GUID: ThEmxg1SrOF59ks5DsAclp_3JVHInlF6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-10_01,2022-02-09_01,2021-12-02_01
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202202090703.U5riBMIn-lkp@intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te1BUZRSf7967d3dplrnxqI8tgi5OhjzcJRY/VCwU8xJkGE0yTIgr3BYG
+        2N3ZXbKoGXmIJgjCIorQCJGAPAwGyUFgLXmEyEOIR4hgyENUAgzMWCVol4XG/37n9/ud75zv
+        nDk83KKFK+RFyjWsSi6Npkkz4kqTo6PLXAVxSFRQy0UNtxc4qHzkFInOPNbjaO76OAdpT+Vw
+        0fTyWQL1Tpgj3WweB3UvJmBovHoFQw2FWgyVlrdgaKrkB4BOtHdjaOmeGLWszJCoM3UAoPL4
+        KgxpGw1IN+SEGnRtBMovnuSi1N9rSXRtWoejktZlDGV+24+hrtwlEtVOJADUdLefQNOLbSRK
+        PqnnvmfH9Pb5MZlJs1zmau4Il0kqGCaY3s5YprrsBMmk5i0TzOULR5iswRLA1N+OJ5nEjhac
+        yZl/QjJpSbMk89fkEMHMXesnmfSaMhBgFRy1PYKVhrMqe1YepgiPlMu8aL/A0F2hEg+R2EXs
+        ibbQ9nJpDOtF+/gHuLwfGW0YGG3/hTQ61kAFSNVqevOO7SpFrIa1j1CoNV40qwyPVrorXdXS
+        GHWsXOYqZzVbxSKRm8RgPBgVkdH1G1dZ4/PlYFUFGQ9Oe6YAPg9S7vBO5V08BZjxLKh6AG/o
+        qjCjYEHNAzg0ttckLACYWDjKXc8YKNQTJqEOwJ8nv+OagvsANk0lr6YT1AZ4YzwdpAAej6Sc
+        YPsKz0hbUc6w98Tiqh+najlQpy3mGAVLyh+2n72EG/0Cg+l4j7WRFlAvw7ZzE4QR8yk3eFE7
+        uPq8NeUAf7nSipkaesaH+myJCftA7fGuNd4SPmqtWWtaCBdmdaSxLqRSAVzs+AMzBTkAJmUk
+        kSbXu7Cn4d/VbJyKgM1l5zkm3hZm3/xxjTeHac8n1ioIYO35dewAKyoL1t6xgQP/JKxhBs7l
+        9RGmmSYDOJz4dgawy33hc7kvlDNhZ1hQP0/mGmaBU6/BkmWeCTrCyrrNBYBTBmxYpTpGxqol
+        SrGcPfz/wsMUMdVg9Z42+daCkdHHro0A44FGAHk4bSW4eQQ/ZCEIl34Vx6oUoarYaFbdCCSG
+        XWXiQuswheEg5ZpQsbunyN3Dw8Pd8x0PMf2qoF1WJbWgZFING8WySla1nofx+MJ4LNHfflE9
+        tmVH/56jF8ee4gfZiufOxMjoyQM1h20fdvrmo5nljjd7juVjfX/bxIX0eBd92qHp9fzAqT3w
+        Wd4rQUJB/DczIztlLqVkXGCQ0Pno4N5tsZf6Extnrhd1yxMyHCuzfLx/2uNvpo3z3cZvpM5g
+        heFPhiVJn6BWzkJbsGzXiCTL4qP0pxs9P743HrQva6Kw9cL0GyEvudodcFB8SD869pYohDYX
+        Tu+f6n8947OlO1ODRRNbg3xOe3+fwk97sIArg5ut/vw816003G/fuQez9mLu1/tv/bqzM6TI
+        pW63V7f+alhb8UZan92QYglqBrM2WNuGhtxafnjZv6+z2UGkWYy6TxPqCKl4E65SS/8DDQZo
+        DtgEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpnleLIzCtJLcpLzFFi42LZdlhJXjdoJnOSwaU3BhZ7bn5mtVh9t5/N
+        YtqHn8wW7w8+ZrWY1D+D3eL1v+ksFpef8FnsfTeb1eLCj0Ymi8eb/jNZ7Fk0icli5eqjTBbP
+        ly9mtOg8fYHJ4s9DQ4uj/9+yWZztvsZosbphA5PFpENA1t5b2hZ79p5ksZi/7Cm7Rff1HWwW
+        +17vZbZYfvwfk8XEjqtMFudm/WGz2PGkkdHi8L2rLBavf5xks2jt+cnuIO9x+Yq3x8Tmd+we
+        O2fdZfdoXnCHxePy2VKPTas62Ty6Z/9j8di8pN5j8o3ljB67bzaweTSdOcrsMePTFzaP3uZ3
+        bB4fn95i8Xi/7yqbR9+WVYwBIlFcNimpOZllqUX6dglcGRc/9rMWfHGsWPF2LXsD41uzLkZO
+        DgkBE4lri36ydDFycQgJ7GCUuLXnBgtEQlJi2d8jzBC2sMTKf8/ZIYqeMEosPnWODSTBIqAi
+        ceJxH2MXIwcHm4C2xOn/HCBhEQEdicudP8DqmQV2sUq8vt/FCpIQFvCROD19LTNIPS9QUftF
+        UYiZrYwSWzd+AavhFRCUODnzCdgRzAJaEjf+vWQCqWcWkJZY/g9sPqeAkcSKSTeYQGxRAWWJ
+        A9uOM01gFJyFpHsWku5ZCN0LGJlXMUqmFhTnpucWGxYY5aWW6xUn5haX5qXrJefnbmIEpxUt
+        rR2Me1Z90DvEyMTBeIhRgoNZSYT3VD1zkhBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeC10n44UE
+        0hNLUrNTUwtSi2CyTBycUg1Mq7Y5Pt0yz3sBs+zGIxccjpeuaLHfrGfhVSWqofpQL2rG0ZLz
+        ll2PXpzXnpn3Zk7G9utSal+Wsk6YUar9uT7Ke0fscvHCzoQHCYH1JheXfvsqmrZ564egk5eE
+        xHPqVD5xTZ5Ufkau3iD4zcpUrupZMTY9HzSXLZ1///G6VaV/93zkeaafev3y+5TWVX8dlpQm
+        Bz4/uUvJSzduSqjLDa6FEZvZKzv71rjZKXtY53OVqp5Qf5fgsjS//O0b7lMyn5/PefBE+N+j
+        vf/1lTIstu58LBM7jbk4L2Oj9LeDGvzZ88UMvoWsjT20JuhAubOFrXvCPuXqeN9ltgueXtzG
+        H1HEZnHzpsuOqge55y8k2DZtVmIpzkg01GIuKk4EADQupw6aAwAA
+X-CMS-MailID: 20220209103706epcas5p491553ba70337e2d38b889e8b99e8fbd5
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----8TtN9ZnHmYbjupaEpeShJ04PQlBV3ZvePY_ZWnFgjSBPeLtG=_5fb74_"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220209075901epcas5p3cff468deadd8ef836522f032bd4ed36c
+References: <CGME20220209075901epcas5p3cff468deadd8ef836522f032bd4ed36c@epcas5p3.samsung.com>
+        <202202090703.U5riBMIn-lkp@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgRXdhbiwNClRoYW5rcyBhIGxvdCBmb3IgYW4gdXBkYXRlLg0KDQpIaSBNYXJ0aW4sDQpDYW4g
-dGhpcyBiZSBtZXJnZWQgdG8gb3JpZ2luYWwgcGF0Y2g/IA0KRml4ZXM6IDMxZTZjZGJlMGVhZSAo
-InNjc2k6IHFsYTJ4eHg6IEltcGxlbWVudCByZWYgY291bnQgZm9yIFNSQiIpDQoNClRoYW5rcywN
-Cn5TYXVyYXYNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBFd2FuIE1p
-bG5lIDxlbWlsbmVAcmVkaGF0LmNvbT4NCj4gU2VudDogVGh1cnNkYXksIEZlYnJ1YXJ5IDEwLCAy
-MDIyIDE6MzkgQU0NCj4gVG86IE5pbGVzaCBKYXZhbGkgPG5qYXZhbGlAbWFydmVsbC5jb20+DQo+
-IENjOiBNYXJ0aW4gSy4gUGV0ZXJzZW4gPG1hcnRpbi5wZXRlcnNlbkBvcmFjbGUuY29tPjsgbGlu
-dXgtDQo+IHNjc2lAdmdlci5rZXJuZWwub3JnOyBHUi1RTG9naWMtU3RvcmFnZS1VcHN0cmVhbSA8
-R1ItUUxvZ2ljLVN0b3JhZ2UtDQo+IFVwc3RyZWFtQG1hcnZlbGwuY29tPg0KPiBTdWJqZWN0OiBS
-ZTogW1BBVENIXSBxbGEyeHh4OiBBZGQgcWxhMngwMF9hc3luY19kb25lIHJvdXRpbmUgZm9yIGFz
-eW5jDQo+IHJvdXRpbmVzLg0KPiANCj4gVGhhbmtzLCB0aGF0IGFwcGVhcnMgdG8gaGF2ZSByZXNv
-bHZlZCB0aGUgY3Jhc2ggb24gYm9vdCBJIHdhcyBzZWVpbmcuDQo+IA0KPiBUZXN0ZWQtYnk6IEV3
-YW4gRC4gTWlsbmUgPGVtaWxuZUByZWRoYXQuY29tPg0KPiANCj4gT24gVHVlLCBGZWIgOCwgMjAy
-MiBhdCA0OjQwIEFNIE5pbGVzaCBKYXZhbGkgPG5qYXZhbGlAbWFydmVsbC5jb20+IHdyb3RlOg0K
-PiA+DQo+ID4gRnJvbTogU2F1cmF2IEthc2h5YXAgPHNrYXNoeWFwQG1hcnZlbGwuY29tPg0KPiA+
-DQo+ID4gVGhpcyBkb25lIHJvdXRpbmUgd2lsbCBkZWxldGUgdGhlIHRpbWVyIGFuZCBjaGVjayBm
-b3IgaXQncyByZXR1cm4NCj4gPiB2YWx1ZSBhbmQgYWNjb3JkaW5nbHkgZGVjcmVhc2UgdGhlIHJl
-ZmVyZW5jZSBjb3VudC4NCj4gPg0KPiA+IEZpeGVzOiAzMWU2Y2RiZTBlYWUgKCJzY3NpOiBxbGEy
-eHh4OiBJbXBsZW1lbnQgcmVmIGNvdW50IGZvciBTUkIiKQ0KPiA+IFNpZ25lZC1vZmYtYnk6IFNh
-dXJhdiBLYXNoeWFwIDxza2FzaHlhcEBtYXJ2ZWxsLmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBO
-aWxlc2ggSmF2YWxpIDxuamF2YWxpQG1hcnZlbGwuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJz
-L3Njc2kvcWxhMnh4eC9xbGFfaW9jYi5jIHwgMTcgKysrKysrKysrKysrKysrKy0NCj4gPiAgMSBm
-aWxlIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gPg0KPiA+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvcWxhMnh4eC9xbGFfaW9jYi5jIGIvZHJpdmVycy9zY3Np
-L3FsYTJ4eHgvcWxhX2lvY2IuYw0KPiA+IGluZGV4IDdkZDgyMjE0ZDU5Zi4uNWUzZWUxZjdiNDNj
-IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvc2NzaS9xbGEyeHh4L3FsYV9pb2NiLmMNCj4gPiAr
-KysgYi9kcml2ZXJzL3Njc2kvcWxhMnh4eC9xbGFfaW9jYi5jDQo+ID4gQEAgLTI1NjAsNiArMjU2
-MCwyMCBAQCBxbGEyNHh4X3RtX2lvY2Ioc3JiX3QgKnNwLCBzdHJ1Y3QNCj4gdHNrX21nbXRfZW50
-cnkgKnRzaykNCj4gPiAgICAgICAgIH0NCj4gPiAgfQ0KPiA+DQo+ID4gK3N0YXRpYyB2b2lkDQo+
-ID4gK3FsYTJ4MDBfYXN5bmNfZG9uZShzdHJ1Y3Qgc3JiICpzcCwgaW50IHJlcykNCj4gPiArew0K
-PiA+ICsgICAgICAgaWYgKGRlbF90aW1lcigmc3AtPnUuaW9jYl9jbWQudGltZXIpKSB7DQo+ID4g
-KyAgICAgICAgICAgICAgIC8qDQo+ID4gKyAgICAgICAgICAgICAgICAqIFN1Y2Nlc3NmdWxseSBj
-YW5jZWxsZWQgdGhlIHRpbWVvdXQgaGFuZGxlcg0KPiA+ICsgICAgICAgICAgICAgICAgKiByZWY6
-IFRNUg0KPiA+ICsgICAgICAgICAgICAgICAgKi8NCj4gPiArICAgICAgICAgICAgICAgaWYgKGty
-ZWZfcHV0KCZzcC0+Y21kX2tyZWYsIHFsYTJ4MDBfc3BfcmVsZWFzZSkpDQo+ID4gKyAgICAgICAg
-ICAgICAgICAgICAgICAgcmV0dXJuOw0KPiA+ICsgICAgICAgfQ0KPiA+ICsgICAgICAgc3AtPmFz
-eW5jX2RvbmUoc3AsIHJlcyk7DQo+ID4gK30NCj4gPiArDQo+ID4gIHZvaWQNCj4gPiAgcWxhMngw
-MF9zcF9yZWxlYXNlKHN0cnVjdCBrcmVmICprcmVmKQ0KPiA+ICB7DQo+ID4gQEAgLTI1NzMsNyAr
-MjU4Nyw4IEBAIHFsYTJ4MDBfaW5pdF9hc3luY19zcChzcmJfdCAqc3AsIHVuc2lnbmVkIGxvbmcN
-Cj4gdG1vLA0KPiA+ICAgICAgICAgICAgICAgICAgICAgIHZvaWQgKCpkb25lKShzdHJ1Y3Qgc3Ji
-ICpzcCwgaW50IHJlcykpDQo+ID4gIHsNCj4gPiAgICAgICAgIHRpbWVyX3NldHVwKCZzcC0+dS5p
-b2NiX2NtZC50aW1lciwgcWxhMngwMF9zcF90aW1lb3V0LCAwKTsNCj4gPiAtICAgICAgIHNwLT5k
-b25lID0gZG9uZTsNCj4gPiArICAgICAgIHNwLT5kb25lID0gcWxhMngwMF9hc3luY19kb25lOw0K
-PiA+ICsgICAgICAgc3AtPmFzeW5jX2RvbmUgPSBkb25lOw0KPiA+ICAgICAgICAgc3AtPmZyZWUg
-PSBxbGEyeDAwX3NwX2ZyZWU7DQo+ID4gICAgICAgICBzcC0+dS5pb2NiX2NtZC50aW1lb3V0ID0g
-cWxhMngwMF9hc3luY19pb2NiX3RpbWVvdXQ7DQo+ID4gICAgICAgICBzcC0+dS5pb2NiX2NtZC50
-aW1lci5leHBpcmVzID0gamlmZmllcyArIHRtbyAqIEhaOw0KPiA+IC0tDQo+ID4gMi4yMy4xDQo+
-ID4NCg0K
+------8TtN9ZnHmYbjupaEpeShJ04PQlBV3ZvePY_ZWnFgjSBPeLtG=_5fb74_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+
+On Wed, Feb 09, 2022 at 10:48:44AM +0300, Dan Carpenter wrote:
+> Hi Nitesh,
+> 
+> url:    https://protect2.fireeye.com/v1/url?k=483798a4-17aca1b5-483613eb-0cc47a31cdbc-db5fd22936f47f46&q=1&e=e5a0c082-878d-4bbf-be36-3c8e34773475&u=https%3A%2F%2Fgithub.com%2F0day-ci%2Flinux%2Fcommits%2FNitesh-Shetty%2Fblock-make-bio_map_kern-non-static%2F20220207-231407
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+> config: i386-randconfig-m021-20220207 (https://protect2.fireeye.com/v1/url?k=24e309ba-7b7830ab-24e282f5-0cc47a31cdbc-9cc4e76aaefa8c0d&q=1&e=e5a0c082-878d-4bbf-be36-3c8e34773475&u=https%3A%2F%2Fdownload.01.org%2F0day-ci%2Farchive%2F20220209%2F202202090703.U5riBMIn-lkp%40intel.com%2Fconfig)
+> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> 
+> smatch warnings:
+> block/blk-lib.c:272 blk_copy_offload() warn: possible memory leak of 'ctx'
+> 
+> vim +/ctx +272 block/blk-lib.c
+>
+
+acked
+
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  185  int blk_copy_offload(struct block_device *src_bdev, int nr_srcs,
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  186  		struct range_entry *rlist, struct block_device *dst_bdev, gfp_t gfp_mask)
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  187  {
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  188  	struct request_queue *sq = bdev_get_queue(src_bdev);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  189  	struct request_queue *dq = bdev_get_queue(dst_bdev);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  190  	struct bio *read_bio, *write_bio;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  191  	struct copy_ctx *ctx;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  192  	struct cio *cio;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  193  	struct page *token;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  194  	sector_t src_blk, copy_len, dst_blk;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  195  	sector_t remaining, max_copy_len = LONG_MAX;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  196  	int ri = 0, ret = 0;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  197  
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  198  	cio = kzalloc(sizeof(struct cio), GFP_KERNEL);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  199  	if (!cio)
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  200  		return -ENOMEM;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  201  	atomic_set(&cio->refcount, 0);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  202  	cio->rlist = rlist;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  203  
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  204  	max_copy_len = min3(max_copy_len, (sector_t)sq->limits.max_copy_sectors,
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  205  			(sector_t)dq->limits.max_copy_sectors);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  206  	max_copy_len = min3(max_copy_len, (sector_t)sq->limits.max_copy_range_sectors,
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  207  			(sector_t)dq->limits.max_copy_range_sectors) << SECTOR_SHIFT;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  208  
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  209  	for (ri = 0; ri < nr_srcs; ri++) {
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  210  		cio->rlist[ri].comp_len = rlist[ri].len;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  211  		for (remaining = rlist[ri].len, src_blk = rlist[ri].src, dst_blk = rlist[ri].dst;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  212  			remaining > 0;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  213  			remaining -= copy_len, src_blk += copy_len, dst_blk += copy_len) {
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  214  			copy_len = min(remaining, max_copy_len);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  215  
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  216  			token = alloc_page(gfp_mask);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  217  			if (unlikely(!token)) {
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  218  				ret = -ENOMEM;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  219  				goto err_token;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  220  			}
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  221  
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  222  			read_bio = bio_alloc(src_bdev, 1, REQ_OP_READ | REQ_COPY | REQ_NOMERGE,
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  223  					gfp_mask);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  224  			if (!read_bio) {
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  225  				ret = -ENOMEM;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  226  				goto err_read_bio;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  227  			}
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  228  			read_bio->bi_iter.bi_sector = src_blk >> SECTOR_SHIFT;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  229  			read_bio->bi_iter.bi_size = copy_len;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  230  			__bio_add_page(read_bio, token, PAGE_SIZE, 0);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  231  			ret = submit_bio_wait(read_bio);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  232  			if (ret) {
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  233  				bio_put(read_bio);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  234  				goto err_read_bio;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  235  			}
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  236  			bio_put(read_bio);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  237  			ctx = kzalloc(sizeof(struct copy_ctx), gfp_mask);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  238  			if (!ctx) {
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  239  				ret = -ENOMEM;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  240  				goto err_read_bio;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  241  			}
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  242  			ctx->cio = cio;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  243  			ctx->range_idx = ri;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  244  			ctx->start_sec = rlist[ri].src;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  245  
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  246  			write_bio = bio_alloc(dst_bdev, 1, REQ_OP_WRITE | REQ_COPY | REQ_NOMERGE,
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  247  					gfp_mask);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  248  			if (!write_bio) {
+> 
+> Please call kfree(ctx) before the goto.
+> 
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  249  				ret = -ENOMEM;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  250  				goto err_read_bio;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  251  			}
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  252  
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  253  			write_bio->bi_iter.bi_sector = dst_blk >> SECTOR_SHIFT;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  254  			write_bio->bi_iter.bi_size = copy_len;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  255  			__bio_add_page(write_bio, token, PAGE_SIZE, 0);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  256  			write_bio->bi_end_io = bio_copy_end_io;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  257  			write_bio->bi_private = ctx;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  258  			atomic_inc(&cio->refcount);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  259  			submit_bio(write_bio);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  260  		}
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  261  	}
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  262  
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  263  	/* Wait for completion of all IO's*/
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  264  	return cio_await_completion(cio);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  265  
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  266  err_read_bio:
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  267  	__free_page(token);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  268  err_token:
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  269  	rlist[ri].comp_len = min_t(sector_t, rlist[ri].comp_len, (rlist[ri].len - remaining));
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  270  
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  271  	cio->io_err = ret;
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07 @272  	return cio_await_completion(cio);
+> 12a9801a7301f1 Nitesh Shetty 2022-02-07  273  }
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://protect2.fireeye.com/v1/url?k=4cd82b59-13431248-4cd9a016-0cc47a31cdbc-7ef30a0abcb321a3&q=1&e=e5a0c082-878d-4bbf-be36-3c8e34773475&u=https%3A%2F%2Flists.01.org%2Fhyperkitty%2Flist%2Fkbuild-all%40lists.01.org
+> 
+> 
+> 
+
+--
+Thank you
+Nitesh
+
+------8TtN9ZnHmYbjupaEpeShJ04PQlBV3ZvePY_ZWnFgjSBPeLtG=_5fb74_
+Content-Type: text/plain; charset="utf-8"
+
+
+------8TtN9ZnHmYbjupaEpeShJ04PQlBV3ZvePY_ZWnFgjSBPeLtG=_5fb74_--
