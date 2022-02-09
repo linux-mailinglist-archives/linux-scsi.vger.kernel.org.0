@@ -2,63 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FD14AEE48
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Feb 2022 10:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5274AEDE3
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Feb 2022 10:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236294AbiBIJlk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Feb 2022 04:41:40 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35712 "EHLO
+        id S232260AbiBIJWd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Feb 2022 04:22:33 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiBIJhm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Feb 2022 04:37:42 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57192E016472
-        for <linux-scsi@vger.kernel.org>; Wed,  9 Feb 2022 01:37:39 -0800 (PST)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JtvLF1qB1z67pVR;
-        Wed,  9 Feb 2022 17:13:09 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Feb 2022 10:17:16 +0100
-Received: from [10.47.89.1] (10.47.89.1) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 9 Feb
- 2022 09:17:06 +0000
-Message-ID: <c94ce67e-74c9-bc16-3bd8-e851b1b63c72@huawei.com>
-Date:   Wed, 9 Feb 2022 09:17:01 +0000
+        with ESMTP id S229706AbiBIJWb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Feb 2022 04:22:31 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E31DD94E6D;
+        Wed,  9 Feb 2022 01:22:26 -0800 (PST)
+Subject: Re: [PATCH 3/7] rnbd: drop WRITE_SAME support
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1644398508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G5r0Xdb8ikemnPVF5lI7cPng/XJyVvYg/5LzR+eCPl8=;
+        b=SBWD6cBRt7Y057lo/4qj/+VF2PhBLswY5lpwyGDKDHGR+AtcS3+w+3Xw02pET5ANPPLSkF
+        Pptp3sql6V14GuDWBtZUCNIa2ZQP4S6aLZJyfhxesJBpqDnH2UYJYVvuQSqRWRCcjszb+I
+        FIAGH9YhhzQKy9IhE/O+9W6f2bb5gKc=
+To:     Jinpu Wang <jinpu.wang@ionos.com>
+Cc:     Christoph Hellwig <hch@lst.de>, axboe@kernel.dk,
+        martin.petersen@oracle.com, philipp.reisner@linbit.com,
+        lars.ellenberg@linbit.com, target-devel@vger.kernel.org,
+        haris.iqbal@ionos.com, manoj@linux.ibm.com, mrochs@linux.ibm.com,
+        ukrishn@linux.ibm.com, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org, drbd-dev@lists.linbit.com,
+        dm-devel@redhat.com
+References: <20220209082828.2629273-1-hch@lst.de>
+ <20220209082828.2629273-4-hch@lst.de>
+ <4f1565b2-0f83-0cfa-58bd-86d5dee48e51@linux.dev>
+ <CAMGffE=FmVj26PJtu5fwtr3rNbtE+-dcfxOrmT4hEt3sO7Kw2A@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+Message-ID: <0b8c9d4d-0fb0-1aee-97b2-f4381e124df2@linux.dev>
+Date:   Wed, 9 Feb 2022 17:21:39 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 03/44] scsi: Remove drivers/scsi/scsi.h
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Ming Lei <ming.lei@redhat.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Juergen E. Fischer" <fischer@norbit.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Doug Gilbert <dgilbert@interlog.com>,
-        Oliver Neukum <oliver@neukum.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-References: <20220208172514.3481-1-bvanassche@acm.org>
- <20220208172514.3481-4-bvanassche@acm.org>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220208172514.3481-4-bvanassche@acm.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <CAMGffE=FmVj26PJtu5fwtr3rNbtE+-dcfxOrmT4hEt3sO7Kw2A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.89.1]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+Content-Language: en-US
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,41 +58,26 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 08/02/2022 17:24, Bart Van Assche wrote:
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi.h>
 
-<scsi/scsi.h> seems to be included twice
 
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
-> +#include <scsi/scsi_eh.h>
->   #include <scsi/scsi_host.h>
-> +#include <scsi/scsi_ioctl.h>
-> +#include <scsi/scsi_tcq.h>
->   #include "aha152x.h"
->   
->   #include <pcmcia/cistpl.h>
-> diff --git a/drivers/scsi/pcmcia/nsp_cs.c b/drivers/scsi/pcmcia/nsp_cs.c
-> index a78a86511e94..dcffda384eaf 100644
-> --- a/drivers/scsi/pcmcia/nsp_cs.c
-> +++ b/drivers/scsi/pcmcia/nsp_cs.c
-> @@ -41,10 +41,9 @@
->   #include <asm/io.h>
->   #include <asm/irq.h>
->   
+On 2/9/22 5:13 PM, Jinpu Wang wrote:
+>>> --- a/drivers/block/rnbd/rnbd-srv.c
+>>> +++ b/drivers/block/rnbd/rnbd-srv.c
+>>> @@ -548,8 +548,7 @@ static void rnbd_srv_fill_msg_open_rsp(struct rnbd_msg_open_rsp *rsp,
+>>>                cpu_to_le16(rnbd_dev_get_max_segs(rnbd_dev));
+>>>        rsp->max_hw_sectors =
+>>>                cpu_to_le32(rnbd_dev_get_max_hw_sects(rnbd_dev));
+>>> -     rsp->max_write_same_sectors =
+>>> -             cpu_to_le32(bdev_write_same(rnbd_dev->bdev));
+>>> +     rsp->max_write_same_sectors = 0;
+>> IIUC, I think we can delete max_write_same_sectors from rsp as well given
+>> the earlier change in setup_request_queue and rnbd_clt_set_dev_attr.
+> No, I don't think it's a good idea, we need to keep the protocol
+> compatible, so client for old kernel version
+> won't be confused.
 
-...
->   
-> -#include "scsi.h"
-> +#include <scsi/scsi.h>
-> +#include <scsi/scsi.h>
-
-And here
-
-> +#include <scsi/scsi_cmnd.h>
-> +#include <scsi/scsi_device.h>
+Fair enough. Then I guess it is better to add obsolete_ prefix like 
+obsolete_rotational.
 
 Thanks,
-John
+Guoqing
