@@ -2,62 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6114AE62C
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Feb 2022 01:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB644AE67E
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Feb 2022 03:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240673AbiBIAna (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Feb 2022 19:43:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S234714AbiBICjN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Feb 2022 21:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235164AbiBIAn3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Feb 2022 19:43:29 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E661C061576;
-        Tue,  8 Feb 2022 16:43:29 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id i186so1492955pfe.0;
-        Tue, 08 Feb 2022 16:43:29 -0800 (PST)
+        with ESMTP id S238304AbiBIArE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Feb 2022 19:47:04 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1C0C061576;
+        Tue,  8 Feb 2022 16:47:04 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id a11-20020a17090a740b00b001b8b506c42fso3640519pjg.0;
+        Tue, 08 Feb 2022 16:47:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=fMOnOpTGKn9/jVrcDzClYggaX4u+eL9NpYQ7bzh9GdY=;
-        b=VhrPBaW9Pd7tSs4NlnRE27lUVYOlLlE6vXz5Tgjv+0TtyrRrh8+9fB/ddGQblRsR3X
-         Pyuovi/mmJE0lZxnk/y4Qdp+sMcVsfqpkbJ2dlLOiWIkRrXVeePBfglBxOEeM0mC7MCH
-         ZQhuKSysbxnPNF7Jdnt5x9cZijs/gw9FqPXWy/uyFzw22fOx73dCciWdd9NT1hhWA6xY
-         aaHh0shXwOHETOlYJSXDqsw0jEpyxNmoKYyAWmsqcz0QhbpUDpWc24kxkNpksKamO13V
-         0bI9S3GcfULUayOPY2ARCDwyaHYqyHzAno9GPxpBdTTSKrx7n019ZSWC7Ok4KJ/p+mIi
-         lPyQ==
+        bh=lQBeYPP3NnoU0nAcxubYc/fkF2bkRNl0GYFbA4mk8ZU=;
+        b=OufpY1qBhQPYKc9mNTnWn90fki/xDDQ3xfTi7TPwURnoUuuoTGxiZ9aJIYK4EZcxjq
+         Dt+qVDsIPeZQWPtUgc7sxRPoq+OrNoKZM8/V/KSBR8wHBWKU9rTArB7LSFD3C9pxt1G9
+         mzghIJ/3sCXuCgtp6VQwq9bSrpJ+0Mo/ndSYdB3kR/bVeInr/FH2twCxPeAFeYcTotC4
+         uIhDYsblK86LtMU8LXm+RPbLg5HAsIjQuM97uu4XTZtWY4v8pHqytH+YJrm+aGk/eeuz
+         yfHytX8BIpriEDLMO2ots5x3HNgxvU/6rRYc9aYFzW6TAy9ZnbmUal/KO8ttkz5pBQKC
+         3w5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=fMOnOpTGKn9/jVrcDzClYggaX4u+eL9NpYQ7bzh9GdY=;
-        b=ZwCeAGyHwNdz0xgoYzN6OW1DNFl6GFAniBM1apOPXCag2b+mAQVpt4LexzBmTWmTSm
-         guf9LAKnc0wJmDHNlS8J/C7TgbAEKFc/WDZuJ2PyXVzDy2HJU+0WrE9YucBRsUd5299H
-         tWfwZUa2A4p5L9NsbP0pTjCYzxP7QKPVFQfhWdOAnEdeyH/hgRfmvtMrS73NBKdzmy8l
-         /11EaVSdiyTtvy1DaZVKrQK8PU4cFCJw6yJPbcDFzFzoLiERBM5svlnXdvigROLCu7Eb
-         9RyiEU94BdotJLwvYOL73m84O27SaH+bXw5lAr1ztv8+MGfepopjVyFKanIXMgpUHPPB
-         GGZA==
-X-Gm-Message-State: AOAM530TTchA6w5GybHKEa840QVeVjHiTTjUAYtFCcFN2E8Lf+IQfqyC
-        xxmOsFHJAR0bDJJemKAIk7U=
-X-Google-Smtp-Source: ABdhPJxztLUaN8ctWe7jK8i2Ne76K3cV0pjkNHm76KdEOQhk6tD3/DaipquI7XsjKgga/7Jp9/9BZA==
-X-Received: by 2002:a65:4b8f:: with SMTP id t15mr5718920pgq.140.1644367408679;
-        Tue, 08 Feb 2022 16:43:28 -0800 (PST)
+        bh=lQBeYPP3NnoU0nAcxubYc/fkF2bkRNl0GYFbA4mk8ZU=;
+        b=fw1+yHaF+ERoypJwTTCVmVE9u3vWi9agDvCB+iC1H7PpGht3ZGhn1BrR0BvfYdcl8w
+         L4jDQy7qDae88rhnsqrNykt24MUNYi5HG6ZL/823w8vll45VjVl5MrTw6JMSOF6m19nF
+         4cue5jqZLAv/JOer7yCQBu9LFdLuTNJ+ONSg5/AplstCzXQbrJoMDs83V333UEdr6BJ8
+         x+LYwwRKaJQ9EUPktg0vUv2ajtbUppqThi/CHINfra5UYAkltL+sxpsrzKZQwKZWjdwU
+         qf6wzGU/OeGqacRTS/+3vSBwtQv7/bmGdwM0O5T8pFF3m+CU+QhrIQuZFClqXHarQzmc
+         5V1A==
+X-Gm-Message-State: AOAM530ydzJKimwQVB8JFjZZSQDjy7fngalhMcIHJ8zIEYEIPQzyHi1b
+        UxPXzyoQQMLIxMV00AJ7w8Nduc77nRM=
+X-Google-Smtp-Source: ABdhPJx8Yk0nRxg3jcilweQYnJwaZcdG071f3ShvgtMH2GzIudEZAehF3vdI9wnlrXRRxLi1rxAliw==
+X-Received: by 2002:a17:90a:ad81:: with SMTP id s1mr652078pjq.194.1644367623817;
+        Tue, 08 Feb 2022 16:47:03 -0800 (PST)
 Received: from localhost.localdomain (192.243.120.166.16clouds.com. [192.243.120.166])
-        by smtp.gmail.com with ESMTPSA id f22sm17352169pfj.206.2022.02.08.16.43.24
+        by smtp.gmail.com with ESMTPSA id s32sm10977754pfw.80.2022.02.08.16.47.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 16:43:28 -0800 (PST)
+        Tue, 08 Feb 2022 16:47:03 -0800 (PST)
 From:   davidcomponentone@gmail.com
-To:     tyreld@linux.ibm.com
-Cc:     davidcomponentone@gmail.com, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org, jejb@linux.ibm.com,
+To:     ketan.mukadam@broadcom.com
+Cc:     davidcomponentone@gmail.com, jejb@linux.ibm.com,
         martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Yang Guang <yang.guang5@zte.com.cn>,
+        linux-kernel@vger.kernel.org, Yang Guang <yang.guang5@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] scsi: ibmvfc: replace snprintf with sysfs_emit
-Date:   Wed,  9 Feb 2022 08:43:15 +0800
-Message-Id: <b4c150c86f539d3bac3fc8885252adb9f24ee48f.1644286482.git.yang.guang5@zte.com.cn>
+Subject: [PATCH] scsi: be2iscsi: replace snprintf with sysfs_emit
+Date:   Wed,  9 Feb 2022 08:46:51 +0800
+Message-Id: <610469dfb2cc5a4569c6b3c5105ea204b1a540b0.1644284406.git.yang.guang5@zte.com.cn>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,17 +72,13 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 From: Yang Guang <yang.guang5@zte.com.cn>
 
 coccinelle report:
-./drivers/scsi/ibmvscsi/ibmvfc.c:3453:8-16:
+./drivers/scsi/be2iscsi/be_mgmt.c:1251:9-17:
 WARNING: use scnprintf or sprintf
-./drivers/scsi/ibmvscsi/ibmvfc.c:3416:8-16:
+./drivers/scsi/be2iscsi/be_mgmt.c:1145:8-16:
 WARNING: use scnprintf or sprintf
-./drivers/scsi/ibmvscsi/ibmvfc.c:3436:8-16:
+./drivers/scsi/be2iscsi/be_mgmt.c:1164:8-16:
 WARNING: use scnprintf or sprintf
-./drivers/scsi/ibmvscsi/ibmvfc.c:3426:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/ibmvscsi/ibmvfc.c:3445:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/ibmvscsi/ibmvfc.c:3406:8-16:
+./drivers/scsi/be2iscsi/be_mgmt.c:1280:8-16:
 WARNING: use scnprintf or sprintf
 
 Use sysfs_emit instead of scnprintf or sprintf makes more sense.
@@ -93,85 +87,61 @@ Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
 Signed-off-by: David Yang <davidcomponentone@gmail.com>
 ---
- drivers/scsi/ibmvscsi/ibmvfc.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/scsi/be2iscsi/be_mgmt.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index d0eab5700dc5..d5a197d17e0a 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -3403,7 +3403,7 @@ static ssize_t ibmvfc_show_host_partition_name(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			vhost->login_buf->resp.partition_name);
- }
- 
-@@ -3413,7 +3413,7 @@ static ssize_t ibmvfc_show_host_device_name(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			vhost->login_buf->resp.device_name);
- }
- 
-@@ -3423,7 +3423,7 @@ static ssize_t ibmvfc_show_host_loc_code(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			vhost->login_buf->resp.port_loc_code);
- }
- 
-@@ -3433,7 +3433,7 @@ static ssize_t ibmvfc_show_host_drc_name(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			vhost->login_buf->resp.drc_name);
- }
- 
-@@ -3442,7 +3442,7 @@ static ssize_t ibmvfc_show_host_npiv_version(struct device *dev,
+diff --git a/drivers/scsi/be2iscsi/be_mgmt.c b/drivers/scsi/be2iscsi/be_mgmt.c
+index 4e899ec1477d..8b9ace2b3fd3 100644
+--- a/drivers/scsi/be2iscsi/be_mgmt.c
++++ b/drivers/scsi/be2iscsi/be_mgmt.c
+@@ -1142,7 +1142,7 @@ ssize_t
+ beiscsi_drvr_ver_disp(struct device *dev, struct device_attribute *attr,
+ 		       char *buf)
  {
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
--	return snprintf(buf, PAGE_SIZE, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
-+	return sysfs_emit(buf, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
- }
- 
- static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
-@@ -3450,7 +3450,7 @@ static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
- {
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
--	return snprintf(buf, PAGE_SIZE, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
-+	return sysfs_emit(buf, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
+-	return snprintf(buf, PAGE_SIZE, BE_NAME "\n");
++	return sysfs_emit(buf, BE_NAME "\n");
  }
  
  /**
-@@ -3471,7 +3471,7 @@ static ssize_t ibmvfc_show_log_level(struct device *dev,
- 	int len;
+@@ -1161,7 +1161,7 @@ beiscsi_fw_ver_disp(struct device *dev, struct device_attribute *attr,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct beiscsi_hba *phba = iscsi_host_priv(shost);
  
- 	spin_lock_irqsave(shost->host_lock, flags);
--	len = snprintf(buf, PAGE_SIZE, "%d\n", vhost->log_level);
-+	len = sysfs_emit(buf, "%d\n", vhost->log_level);
- 	spin_unlock_irqrestore(shost->host_lock, flags);
- 	return len;
+-	return snprintf(buf, PAGE_SIZE, "%s\n", phba->fw_ver_str);
++	return sysfs_emit(buf, "%s\n", phba->fw_ver_str);
  }
-@@ -3509,7 +3509,7 @@ static ssize_t ibmvfc_show_scsi_channels(struct device *dev,
- 	int len;
  
- 	spin_lock_irqsave(shost->host_lock, flags);
--	len = snprintf(buf, PAGE_SIZE, "%d\n", vhost->client_scsi_channels);
-+	len = sysfs_emit(buf, "%d\n", vhost->client_scsi_channels);
- 	spin_unlock_irqrestore(shost->host_lock, flags);
- 	return len;
+ /**
+@@ -1248,16 +1248,14 @@ beiscsi_adap_family_disp(struct device *dev, struct device_attribute *attr,
+ 	case BE_DEVICE_ID1:
+ 	case OC_DEVICE_ID1:
+ 	case OC_DEVICE_ID2:
+-		return snprintf(buf, PAGE_SIZE,
+-				"Obsolete/Unsupported BE2 Adapter Family\n");
++		return sysfs_emit(buf, "Obsolete/Unsupported BE2 Adapter Family\n");
+ 	case BE_DEVICE_ID2:
+ 	case OC_DEVICE_ID3:
+-		return snprintf(buf, PAGE_SIZE, "BE3-R Adapter Family\n");
++		return sysfs_emit(buf, "BE3-R Adapter Family\n");
+ 	case OC_SKH_ID1:
+-		return snprintf(buf, PAGE_SIZE, "Skyhawk-R Adapter Family\n");
++		return sysfs_emit(buf, "Skyhawk-R Adapter Family\n");
+ 	default:
+-		return snprintf(buf, PAGE_SIZE,
+-				"Unknown Adapter Family: 0x%x\n", dev_id);
++		return sysfs_emit(buf, "Unknown Adapter Family: 0x%x\n", dev_id);
+ 	}
  }
+ 
+@@ -1277,7 +1275,7 @@ beiscsi_phys_port_disp(struct device *dev, struct device_attribute *attr,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct beiscsi_hba *phba = iscsi_host_priv(shost);
+ 
+-	return snprintf(buf, PAGE_SIZE, "Port Identifier : %u\n",
++	return sysfs_emit(buf, "Port Identifier : %u\n",
+ 			phba->fw_config.phys_port);
+ }
+ 
 -- 
 2.30.2
 
