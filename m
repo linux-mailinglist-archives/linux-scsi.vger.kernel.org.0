@@ -2,134 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6695C4B18BD
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Feb 2022 23:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076D74B1A5C
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Feb 2022 01:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345155AbiBJWop (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Feb 2022 17:44:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34060 "EHLO
+        id S1346285AbiBKAYk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Feb 2022 19:24:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345168AbiBJWoo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Feb 2022 17:44:44 -0500
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6FB5F45
-        for <linux-scsi@vger.kernel.org>; Thu, 10 Feb 2022 14:44:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1644533083; x=1676069083;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=G5frLUnXTzMi3cXM68OvzRGggeQ3t2E2YhR1gGwKdq8=;
-  b=VDh9nvoHNVojZFw0Q7Dl0fqaG9okcUWny4nAVpMlbWK8tQekzg5uFwu9
-   +pw3cbltzgNvsGPrIEWRnBk0IwG+Du9wWfI5nZZvvw8wGhYyo04zvc37V
-   vL8SwnMzHrR9w4GotJ75ULkVPJlHAISN2FSW+lGlzL4hJPu2jPH65oW1A
-   13XwncdWRFb5zGEBTWWm/OLyyt0qInD/creNs7c/f7eu2M7SV1xnREwTa
-   cbth+ifHne67qzYjJxujretdLuupN15OoQGSvHtp3nN3K2GOqDypCqyIE
-   8+NtsHpy5zmbCrWEfuDs6ltA42W0HCCV6qVtT/+htlUEeacMZu7HwWEBG
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,359,1635177600"; 
-   d="scan'208";a="191585774"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 11 Feb 2022 06:44:43 +0800
-IronPort-SDR: lTMNPXv51wd5uyTjOOT84XbBeSBza/R+DuWu82dYZNrkBPa1Ck8JTSI1c7ZHZpNMVtz8N+4DIi
- ticQ6urUbtkU9F/lev4TP3MU9PhJz4hxB2UFXCbOtbRYEtFYrDKg7QqYK1t+tbJjUhOfhoHrrt
- 3nmvwAKF4fIIhshvXrBBke6D18ZHKsnSk+Z59g3xCUaHPj/n8ndHZ/4Xz709e2TpczBUIg6dj5
- VLrD/ic5tu8i/BP7l3piEF2xbryuoxttyp4eCNrtB13yZFFGcAkDLrOHkpQY63h6i0vYenfSvj
- RJEYGQJ1ffiNFHWkvLJ/IOss
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 14:17:40 -0800
-IronPort-SDR: QN2vGjLMnabAXMg03laZDSIiIN4amckqxschlAeZlMpKebZHnXGSFp4v1LlVSIK8qkO+1AhFBe
- VZtWrJUnISJcvMLd5AJj9Pda+ZPG7JBCqpUxM8di3M8hZ1PWUo0fzu70p7kKqX3UJEDr6OQGtZ
- 33832J33iqmyhsrzNP4m5ap/dzvr57EjgvQJ7SxpmKte9pTbiV1NvZGI3aa6u+t9udmU3hUSxw
- kVp+kmYU/d7FyUAhTid5hmu8F7GyZivUXqPG5H6uK0Ob3vZpVx/F4DPj0i2mW9uE+wJvf9/Yxt
- 8bs=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 14:44:44 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JvsJC2PnPz1SHwl
-        for <linux-scsi@vger.kernel.org>; Thu, 10 Feb 2022 14:44:43 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1644533083; x=1647125084; bh=G5frLUnXTzMi3cXM68OvzRGggeQ3t2E2YhR
-        1gGwKdq8=; b=VAxoBqHXhPT9EDd3w7kFRs1poVmx3nEw/AfmkNqHk0zY7ODHXRD
-        1Z7icuaQeWjgIGo0HdBqk4ok7s36fanltv00rxKQw9HVjiCRFSF0q+hyB7wqaFoE
-        ANHhqWlaFLohioOdfYtNS63QHr3z+sBsW0rjbyHzulqutOk5X+yb7TejzHJR9l+S
-        qr4+GIdBHdYGMLrkY7GuDvw/85xi6wwUZV5Li3ULI2+rfCqBMk8t5F/O6+zo3JfL
-        MnUrfXoj8Ng0Lc998UgFA90JKWl3JUK7iCpQZxxz9zOHltR5pkB9c6cRNIUno6VJ
-        EESWYd3nJ+CRI5DAPcIDANocO0p13DVrjBQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id olxh3r-9JJRK for <linux-scsi@vger.kernel.org>;
-        Thu, 10 Feb 2022 14:44:43 -0800 (PST)
-Received: from [10.225.163.67] (unknown [10.225.163.67])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JvsJB2K3Fz1Rwrw;
-        Thu, 10 Feb 2022 14:44:42 -0800 (PST)
-Message-ID: <ea6b25db-d4da-bab5-8bf2-ec5024c95f89@opensource.wdc.com>
-Date:   Fri, 11 Feb 2022 07:44:41 +0900
+        with ESMTP id S1346239AbiBKAYj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Feb 2022 19:24:39 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7462735;
+        Thu, 10 Feb 2022 16:24:39 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id d188so9541410iof.7;
+        Thu, 10 Feb 2022 16:24:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=QAzv4ww8wIlL+as7782AHbg1vH8P76wooakjw6i+3Lc=;
+        b=eXLLwoHPmmMGbzE7v0/eoXuOPxdUXwkX/S1PRH7+XaWXBdBlZ2LApOHE3iMbfl1Kr1
+         4GwEpbo6DXk12uqn0CKDnMRhKWqc5E3xyz9NlalC6BgjOF5wKrnvMhCPW9SSAhlLLl6m
+         SJ7sEazoSG1wTfj/t9S8PKfHMcLUmvpTj5Pc0aeefCRDO6tqtR1xpZoio2/j0k8YYyxX
+         zEBfNvS1zpcUSSWrMuGVBIRyH8o5iTxni7dpOaIzvLu25KQaD405JzCGbLLWDXy3I+2R
+         RrwzKsgeq5+sh8lMKFvhc8G58okPUNcmv6K7HmZ88pG7t1Y1PPc1VwW9SLPBecuQ6xwT
+         /6zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=QAzv4ww8wIlL+as7782AHbg1vH8P76wooakjw6i+3Lc=;
+        b=hTsQWyDyKSbu3ZwsEqV2Lzfe8WDWkNt0zcrOhzoUd/fBQGfNHGuJBM+0ezQFO1d8Vw
+         JiJkQor5dpMBA28s2VCM6IETHnXcBobFa2WgdXi9SYoF52ZOi7CLmV1/R7xChSTSgIBk
+         2vIW1WItHEmbEACEi7K6cMoCzdApArl0lABv0RwuQXlYiPbgaX4ptBXDaXCmzn9BN/iH
+         b56qic+7F/HGQ9Q1uvGmbzmQ/k3Cc21qdMQQclMZD/HAGlfn65Lup4hlmJB2/UjssJYm
+         srlWKE1ZeMliouUCh0LXo2Q551VVmkzL8kjChTXs4+xLscfuflTJv+xOgDWtSd7I12f4
+         G0nQ==
+X-Gm-Message-State: AOAM530PwIyTAlaANtjaQJSyBWmEiboBl4iYqctO07BibVncQK6WLvfl
+        1VlMk/tXepdhJS0eAS7TQ94=
+X-Google-Smtp-Source: ABdhPJzat5BMCPgkejoDjmOJcB5P48ExVxXh+fEyDvvDxqoIGAU7OXeWm93caqoE2/ZSItwt5e3CXA==
+X-Received: by 2002:a6b:ed06:: with SMTP id n6mr5210030iog.88.1644539079119;
+        Thu, 10 Feb 2022 16:24:39 -0800 (PST)
+Received: from localhost ([12.28.44.171])
+        by smtp.gmail.com with ESMTPSA id b5sm6780043ilr.0.2022.02.10.16.24.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 16:24:38 -0800 (PST)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH 42/49] scsi: lpfc: replace cpumask_weight with cpumask_weight_gt
+Date:   Thu, 10 Feb 2022 14:49:26 -0800
+Message-Id: <20220210224933.379149-43-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
+References: <20220210224933.379149-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 00/20] libsas and pm8001 fixes
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Xiang Chen <chenxiang66@hisilicon.com>,
-        Jason Yan <yanaijie@huawei.com>
-References: <20220210114218.632725-1-damien.lemoal@opensource.wdc.com>
- <b3efd3cf-e36b-9594-06b8-9772bb525e00@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <b3efd3cf-e36b-9594-06b8-9772bb525e00@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/11/22 00:35, John Garry wrote:
-> On 10/02/2022 11:41, Damien Le Moal wrote:
->> The first 3 patches fix a problem with libsas handling of NCQ NON DATA
->> commands and simplify libsas code in a couple of places.
->> The remaining patches are fixes for the pm8001 driver:
->> * All sparse warnings are addressed, fixing along the way many le32
->>    handling bugs for big-endian architectures
->> * Fix handling of NCQ NON DATA commands
->> * Fix NCQ error recovery (abort all task execution) that was causing a
->>    crash
->> * Simplify the code in many places
->>
->> With these fixes, libzbc test suite passes all test case. This test
->> suite was used with an SMR drive for testing because it generates many
->> NCQ NON DATA commands (for zone management commands) and also generates
->> many NCQ command errors to check ASC/ASCQ returned by the device. With
->> the test suite, the error recovery path was extensively exercised.
->>
->> Note that without these patches, libzbc test suite result in the
->> controller hanging, or in kernel crashes.
-> 
-> Unfortunately I still see the hang on my arm64 system with this series :(
+lpfc_cpuhp_get_eq() calls cpumask_weight() to compare the weight of
+cpumask with a given number. We can do it more efficiently with
+cpumask_weight_gt because conditional cpumask_weight may stop
+traversing the cpumask earlier, as soon as condition is (or can't be) met.
 
-That is unfortunate. Any particular command sequence triggering the hang
-? Or is it random ? What workload are you running ?
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ drivers/scsi/lpfc/lpfc_init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> Thanks,
-> John
-
-
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index f5c363f663f6..35688427cb7f 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -12642,7 +12642,7 @@ lpfc_cpuhp_get_eq(struct lpfc_hba *phba, unsigned int cpu,
+ 		 * gone offline yet, we need >1.
+ 		 */
+ 		cpumask_and(tmp, maskp, cpu_online_mask);
+-		if (cpumask_weight(tmp) > 1)
++		if (cpumask_weight_gt(tmp, 1))
+ 			continue;
+ 
+ 		/* Now that we have an irq to shutdown, get the eq
 -- 
-Damien Le Moal
-Western Digital Research
+2.32.0
+
