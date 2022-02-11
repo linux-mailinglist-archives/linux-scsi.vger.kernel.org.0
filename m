@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7004B268C
-	for <lists+linux-scsi@lfdr.de>; Fri, 11 Feb 2022 13:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879884B25EF
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Feb 2022 13:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350330AbiBKM5Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 11 Feb 2022 07:57:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57424 "EHLO
+        id S1344501AbiBKMiD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Feb 2022 07:38:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239825AbiBKM5Z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Feb 2022 07:57:25 -0500
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98E1E5E
-        for <linux-scsi@vger.kernel.org>; Fri, 11 Feb 2022 04:57:23 -0800 (PST)
+        with ESMTP id S234522AbiBKMiC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Feb 2022 07:38:02 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB421A4
+        for <linux-scsi@vger.kernel.org>; Fri, 11 Feb 2022 04:38:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1644584242; x=1676120242;
+  t=1644583081; x=1676119081;
   h=message-id:date:mime-version:subject:to:references:from:
    in-reply-to:content-transfer-encoding;
-  bh=MfSJfZZ/dqjduJU30VQ/R1UMLcoQOXIy4Zv8wXe5oOQ=;
-  b=jG+LWjU0TVvDHGh50LEmdsXCApXm0ghRNJDSRX4u/ms+HTuFvUFTcl/o
-   q3xtKwKSm6cPwMoQuOxq/jyz6u8gSBnPqpAt/3Nj0l7UFp2YDFwODresd
-   dIXZQQm6bRxQ5gtvvfuYwE54A17lgtJzKFHw9ZZwlMIFi2XCPd7b+Ddpy
-   lwz3A29XPdBnO4xblp1QnTWdGiuY0hGl/tMonPc4DzNL2xgz19oCd5BdB
-   Pb5vCHymnS19oTX0oidUfvCqVnz99XxQA94gMYuWpOX3+rj+o08HlyIK5
-   qdHSgB9BIXGk6Og0z05d40W5frbmlHP26NRfIrRCPAPXMxBcPJftvYBrs
-   Q==;
+  bh=kEh0jTHXxmBNlE41aV6VQVBYtoDqoc9X6I4sxM/aIwc=;
+  b=DQ1mJQvM/XUQRUwBTMhMSKh8Pj9ufWI4vU1U6en/Ixe9RK+H6B2EtcF1
+   X1+l0G99xX9AbpM7pMD5JqAwsemHRLo+PLDEJU573MBHmdOopxKyLNo/l
+   NdaGvqNjQFliUj+fLIGWInXTwOKLOyYRY40eos1YB1bPdYNbyrnnzELsz
+   cndJAdoOl44UE8oXlcuN0FH1HpT2HdZ7LP8wh+WvvONR36Ck7VaI3+XeP
+   iKqZ5rGQUMeo8S30M0xL1tVTvjg2Bm9jUgRB4ygLTkpDYcWJoHSPjF2Ne
+   1KjsWYsonB0fsmVDIGEmLVAG8y/w+6Pw/rUd90VTPuXm+jtY4Ot5YTV4G
+   g==;
 X-IronPort-AV: E=Sophos;i="5.88,360,1635177600"; 
-   d="scan'208";a="197514791"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 11 Feb 2022 20:57:22 +0800
-IronPort-SDR: 3nlqSOYwQlGCTRbkAFKoZd0YooIPz/pSti6c5cUPG906LtpKzuYK1RhQbQrcM9L6x6HlK2e1Y9
- ZTdA9+66kR+3EHgnuGKe8amFQzph+gECxnvAn2kAdi3NgY3qaDDFGvjmp0/dTq10LeRXAnqe7J
- OQSNqhgzXsYLJfenvtS58oDDYMFuF9D9S7AcTIEIYkyiEpiPng6Enb8SvvImhlkGzZlr9XNauQ
- f1rp0kq0MBuu6ZnN+Ep7ARM2bvkPtJSS/TG2Dio3D/RiRBozsnliqECqGYxIY0pLlWW15N3/2l
- jvmQxPcx+wgpksr0icf+thYI
+   d="scan'208";a="191632644"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 11 Feb 2022 20:38:00 +0800
+IronPort-SDR: IIU1kh8niSci61itpjeWaXstnBkScbnZ7YlYBpmcNq2lsYAGVChGV5bGryuAd6X4iBeIlsRtjQ
+ QX1epgQfjhKznFeS3zZthpHDXWDpDeDQpzIWdrXT7UyQX3WjTc2Lcxj8Ged0EmYOpPDe6gx3uW
+ QMqaZDjH3cadZ2tEJZaPPsNplcFRslrDuh4vENqDAzohQcFvLxm5TRlU0T+Ddzu3kkUMSNtEte
+ 8rS10PnbheItYIEXfvdWWqj0M7hdMjm2b2bK1UUdp+nkZd3OPet8ZcccNxwS5l6Yn9Xkx6P48t
+ TboZCeEMwxqgJO2h0Ra4XbJi
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:30:18 -0800
-IronPort-SDR: 2HqKfelgD6R4t1kx/SWjsMkfFVFWGlg2wfe0cA8leDi3XlPgTEJ8kr2OzEUQPM+GI7PTmbYSBB
- VR+aW9Oo8xE1cqPUkZXlbuI6nVfCbTwjZ8btscFlUmZom0rEIxtL5NFoFa8Ri7QYMhCtxX5MUP
- 5LrNOxdqqk2vtikyRRBKdJOmCQzRNn3lxU8hHEQnaU0QOagFuattAUXSO1Cxr9UGELwaGQUM2h
- AzbnReINq/xzW8nPqp2H5M9RCST/05+vNffNZMmXkw2oinpYd5acLTKrB+XL4MoVMZC+9Jt8zM
- 8IA=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:09:46 -0800
+IronPort-SDR: Bw4RBAWgtc1VO5G4uSG36W7w1F7sdMV3f5R+kX0XnISBIXUqB8kSOuoBHhuCBHndkEIGlKBuul
+ 2KLVKCScRAnZ4EBai+cv73IdZGJBkYtm8KDZ4IV6Z0NxwdB4gJEXr7Zfx8tV61t4/xvkZs+TfS
+ 9o9bks0j1U3pgva2ErdjsQZGDcIYKQkrwVALNo2KdfepE2QPt0ZOK9dYCb7Vecz9cZfT7RvI5j
+ SGcYRRxH97y2rZuI8wXeiWF2lmoZiSb+71kdt6KC022rUKN8Jmdj1sHi0PhWjpgCXaB3+K3GzR
+ Yuk=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:57:24 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:38:01 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JwDD31mNWz1SVp0
-        for <linux-scsi@vger.kernel.org>; Fri, 11 Feb 2022 04:57:23 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JwCnh1sLqz1SVp1
+        for <linux-scsi@vger.kernel.org>; Fri, 11 Feb 2022 04:38:00 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
@@ -56,39 +56,39 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:content-type
         :in-reply-to:organization:from:references:to:content-language
         :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1644584242; x=1647176243; bh=MfSJfZZ/dqjduJU30VQ/R1UMLcoQOXIy4Zv
-        8wXe5oOQ=; b=N4i9QfwK1AcTe3m5FYj3U7YAdQLHZYyfiQolPAOl66rg0gyvXak
-        i28seChWEwTyc8r2ZqeSZQVn87LPNa51Ll70Y6VFijCB8IHgmQ+TbxcBhcUhFu8/
-        9lV1QPkrSppfmy2Ln5gDMsbWpnfgbynUhRSjGa+48PPW2h+kTZ4Dphs72UWGaz9g
-        FmJOkPDneojnAUtMWe16321JPHOBfwA08O5nBGQd7fsKqWtRmBMqUvF134zbhzGg
-        02fhcODYGQ33yljI0YJS8rqmLSI09XYow0zT9H5wuVDOS7cdVTvSwUShm6uloUrP
-        3qjDNIjsVftX39CD6lScLBhqHNBp2d0JCtg==
+        1644583079; x=1647175080; bh=kEh0jTHXxmBNlE41aV6VQVBYtoDqoc9X6I4
+        sxM/aIwc=; b=lwCifWAEDBAY4yn/4Ac6wnoSx/L73KWIKjilo3mXAvyV8s63XUI
+        ZVnLIE2Z8Ylj0FI1fGC/uL7hYj9rIf6H9zEpgVfLxrCeR3yfuJBebSvfA2SkuM2O
+        zs4WKep0ayzY/n+rSTqeU0wPWnj5cTUYbCcNShX8E3M9fVVLLbK7HhMVTTSlZz8F
+        nCpf2FoFnd9AYxXRNHDGcxE8aRh2Q0WmI6TFg5e41EQ/LdF00oHlpWWFjwqw2RbC
+        Hg1yNZVvvVwQAeE2nkznyJB3h9J8buur2i5LcXlyc/ohxCt2qubgMWjWA0Xs5AQW
+        /CwNY1TRJpWYGGkdlrSFJ8WGoRTWp+jn36w==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id CWQDIpatfsBv for <linux-scsi@vger.kernel.org>;
-        Fri, 11 Feb 2022 04:57:22 -0800 (PST)
+        with ESMTP id h-mplCCMfGE9 for <linux-scsi@vger.kernel.org>;
+        Fri, 11 Feb 2022 04:37:59 -0800 (PST)
 Received: from [10.225.163.67] (unknown [10.225.163.67])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JwDD15Y9Qz1Rwrw;
-        Fri, 11 Feb 2022 04:57:21 -0800 (PST)
-Message-ID: <c21ed2da-73e9-b388-cef6-d350b504d0f1@opensource.wdc.com>
-Date:   Fri, 11 Feb 2022 21:57:20 +0900
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JwCnf70zCz1Rwrw;
+        Fri, 11 Feb 2022 04:37:58 -0800 (PST)
+Message-ID: <db9c1fb7-bc0b-5742-c856-4b739bdfec39@opensource.wdc.com>
+Date:   Fri, 11 Feb 2022 21:37:57 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v2 21/24] scsi: pm8001: Fix pm8001_task_exec()
+Subject: Re: [PATCH 00/20] libsas and pm8001 fixes
 Content-Language: en-US
 To:     John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Xiang Chen <chenxiang66@hisilicon.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        Luo Jiaxing <luojiaxing@huawei.com>
-References: <20220211073704.963993-1-damien.lemoal@opensource.wdc.com>
- <20220211073704.963993-22-damien.lemoal@opensource.wdc.com>
- <84d4c573-661a-39d5-f639-a3eb9ba8c0ee@huawei.com>
+        Jason Yan <yanaijie@huawei.com>
+References: <20220210114218.632725-1-damien.lemoal@opensource.wdc.com>
+ <b3efd3cf-e36b-9594-06b8-9772bb525e00@huawei.com>
+ <ea6b25db-d4da-bab5-8bf2-ec5024c95f89@opensource.wdc.com>
+ <af3b0aff-3e43-5a1f-0d98-f68b9100090e@huawei.com>
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Organization: Western Digital Research
-In-Reply-To: <84d4c573-661a-39d5-f639-a3eb9ba8c0ee@huawei.com>
+In-Reply-To: <af3b0aff-3e43-5a1f-0d98-f68b9100090e@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -101,30 +101,53 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/11/22 21:51, John Garry wrote:
-> On 11/02/2022 07:37, Damien Le Moal wrote:
+On 2/11/22 18:24, John Garry wrote:
+> On 10/02/2022 22:44, Damien Le Moal wrote:
 > 
 > Hi Damien,
 > 
->> The n_elem local variable in pm8001_task_exec() is initialized to 0 and
->> changed set to the number of DMA scatter elements for a needed for a
->> task command only for ATA commands and for SAS commands that have a
->> non-zero number of sg segments. n_elem is never initialized to 0 for SAS
+>>>> Note that without these patches, libzbc test suite result in the
+>>>> controller hanging, or in kernel crashes.
+>>> Unfortunately I still see the hang on my arm64 system with this series:(
+>> That is unfortunate. Any particular command sequence triggering the hang
+>> ? Or is it random ? What workload are you running ?
+>>
 > 
-> Do you mean re-initialized?
+> mount/unmount fails mostly even after as few as one attempt, but then 
+> even fdisk -l fails sometimes:
+
+Try with patch 21 of my v2. It does fix a bug for scsi/sas case. That
+problem would likely lead to a crash though, but never know...
+
+> root@(none)$ fdisk -l
+> [   97.924789] sas: Enter sas_scsi_recover_host busy: 1 failed: 1
+> [   97.930652] sas: sas_scsi_find_task: aborting task 0x(____ptrval____)
+> [   97.937149] pm80xx0:: mpi_ssp_completion  1937:sas IO status 0x3b
+> [   97.943232] pm80xx0:: mpi_ssp_completion  1948:SAS Address of IO 
+> Failure Drive:5000c500a7babc61
+[...]
 > 
-> I thought the current code was ok, as we init n_elem = 0 and we only 
-> ever loop once. Am I missing something?
+> Sometimes I get TMF timeouts, which is a bad situation. I guess it's a 
+> subtle driver bug, but where ....?
 
-It was not clear to me because of the loop. If the loop is done only
-once, why the loop in the first place ?
+What is the command failing ? Always the same ? Can you try adding scsi
+trace to see the commands ?
 
-Hold on...
+If you are "lucky", it is always the same type of command like for the
+NCQ NON DATA in my case. Though on mount, I would only expect a lot of
+read commands and not much else. There may be some writes and a flush
+too, so there will be "data" commands and "non data" commands. It may be
+an issue with non-data commands too ?
 
-Oh ! It is a while(0)... OK, this too ugly to live. We need to do
-something about this. The continue at the beginning of the loop seems
-totally crazy as it may lead to the same task being reused, so multiple
-->task_done() calls for the same task. Is that sane ?
+> BTW, this following log needs removal/fixing at some stage by someone:
+> 
+> [   98.480629] pm80xx: rc= -5
+> 
+> It's from pm8001_query_task().
+> 
+> Thanks,
+> John
+
 
 -- 
 Damien Le Moal
