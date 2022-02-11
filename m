@@ -2,21 +2,21 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AED24B1EB2
-	for <lists+linux-scsi@lfdr.de>; Fri, 11 Feb 2022 07:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A71E4B1EB0
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Feb 2022 07:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345608AbiBKGsX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 11 Feb 2022 01:48:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41056 "EHLO
+        id S1343644AbiBKGsW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Feb 2022 01:48:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245378AbiBKGsW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Feb 2022 01:48:22 -0500
+        with ESMTP id S238311AbiBKGsV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Feb 2022 01:48:21 -0500
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC75E10EA
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC51910B7
         for <linux-scsi@vger.kernel.org>; Thu, 10 Feb 2022 22:48:20 -0800 (PST)
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jw3xH2vQzzZfQq;
-        Fri, 11 Feb 2022 14:44:03 +0800 (CST)
+Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jw4104bPpzccwn;
+        Fri, 11 Feb 2022 14:47:16 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.58) by
  dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
@@ -25,9 +25,9 @@ From:   chenxiang <chenxiang66@hisilicon.com>
 To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
 CC:     <linuxarm@huawei.com>, <linux-scsi@vger.kernel.org>,
         <john.garry@huawei.com>, Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [PATCH 1/4] scsi: libsas: Use void for sas_discover_event() return code
-Date:   Fri, 11 Feb 2022 14:42:55 +0800
-Message-ID: <1644561778-183074-2-git-send-email-chenxiang66@hisilicon.com>
+Subject: [PATCH 2/4] scsi: libsas: Remove duplicated setting for task->task_state_flags
+Date:   Fri, 11 Feb 2022 14:42:56 +0800
+Message-ID: <1644561778-183074-3-git-send-email-chenxiang66@hisilicon.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1644561778-183074-1-git-send-email-chenxiang66@hisilicon.com>
 References: <1644561778-183074-1-git-send-email-chenxiang66@hisilicon.com>
@@ -48,55 +48,27 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Xiang Chen <chenxiang66@hisilicon.com>
 
-The callers of function sas_discover_event() don't check its return value,
-and also it only returns 0, so use void for its return code.
+Task->task_state_flags is already set in function sas_alloc_task(), so
+remove duplicated setting.
 
 Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
 Reviewed-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/libsas/sas_discover.c | 6 ++----
- include/scsi/libsas.h              | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ drivers/scsi/libsas/sas_ata.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/libsas/sas_discover.c b/drivers/scsi/libsas/sas_discover.c
-index 758213694091..d5bc1314c341 100644
---- a/drivers/scsi/libsas/sas_discover.c
-+++ b/drivers/scsi/libsas/sas_discover.c
-@@ -545,19 +545,17 @@ static void sas_chain_event(int event, unsigned long *pending,
+diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+index a315715b3622..8dbd5a771824 100644
+--- a/drivers/scsi/libsas/sas_ata.c
++++ b/drivers/scsi/libsas/sas_ata.c
+@@ -209,7 +209,6 @@ static unsigned int sas_ata_qc_issue(struct ata_queued_cmd *qc)
  	}
- }
+ 	task->scatter = qc->sg;
+ 	task->ata_task.retry_count = 1;
+-	task->task_state_flags = SAS_TASK_STATE_PENDING;
+ 	qc->lldd_task = task;
  
--int sas_discover_event(struct asd_sas_port *port, enum discover_event ev)
-+void sas_discover_event(struct asd_sas_port *port, enum discover_event ev)
- {
- 	struct sas_discovery *disc;
- 
- 	if (!port)
--		return 0;
-+		return;
- 	disc = &port->disc;
- 
- 	BUG_ON(ev >= DISC_NUM_EVENTS);
- 
- 	sas_chain_event(ev, &disc->pending, &disc->disc_work[ev].work, port->ha);
--
--	return 0;
- }
- 
- /**
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index 698f2032807b..1bb7ceded135 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -685,7 +685,7 @@ int  sas_ex_revalidate_domain(struct domain_device *);
- 
- void sas_unregister_domain_devices(struct asd_sas_port *port, int gone);
- void sas_init_disc(struct sas_discovery *disc, struct asd_sas_port *);
--int  sas_discover_event(struct asd_sas_port *, enum discover_event ev);
-+void sas_discover_event(struct asd_sas_port *, enum discover_event ev);
- 
- int  sas_discover_sata(struct domain_device *);
- int  sas_discover_end_dev(struct domain_device *);
+ 	task->ata_task.use_ncq = ata_is_ncq(qc->tf.protocol);
 -- 
 2.33.0
 
