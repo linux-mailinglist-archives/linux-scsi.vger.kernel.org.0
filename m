@@ -2,87 +2,166 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C2E4B312F
-	for <lists+linux-scsi@lfdr.de>; Sat, 12 Feb 2022 00:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F65E4B3138
+	for <lists+linux-scsi@lfdr.de>; Sat, 12 Feb 2022 00:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353966AbiBKXX3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 11 Feb 2022 18:23:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54300 "EHLO
+        id S1354098AbiBKXZs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Feb 2022 18:25:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiBKXX2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Feb 2022 18:23:28 -0500
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C733C5F
-        for <linux-scsi@vger.kernel.org>; Fri, 11 Feb 2022 15:23:26 -0800 (PST)
-Received: by mail-pj1-f52.google.com with SMTP id om7so9357531pjb.5
-        for <linux-scsi@vger.kernel.org>; Fri, 11 Feb 2022 15:23:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XEZANdFEPwB7Qp2uGiRFgd1CG/FLMeXDfsr06ypOhpM=;
-        b=NEKiS4nSgPT31lYJOMkM6oW4UJVJRz0ghvJN4kOzr70VgNHdwDswrrM8azwprBS974
-         7/zM0STwZKtp5naOcK7t6guZQOgNEdS1Zn2oKEYuBlIgnF8U0vBQlqnstZz+EGHUlf5L
-         wdzjDE7H1JFxDilxg0GItJi2zBohKR+X0mkwr9rLkMTE0Q1wLUSkTkS0DD1M8HaMopNT
-         YckxJNQpMzseaWRrDifuw+Uz7L0BZbQ9b1meHS6bZSQ+g8qnzIAC+AagfR9eXTNCqqtG
-         1tX8sLZWFqXm6cyoC0Z0rnJd5WKQMhVxmcBKYIYRY9/uRQtCV8D2vmtGEs03Pylp5Gvs
-         zPwg==
-X-Gm-Message-State: AOAM530iIvxC1RDuytqMfwzQ9maU6ydcSReeJL/CAogTtDZdCUCLSonQ
-        mmzyVtUplGC3SSLswc6P6KoVfeU8gXI2Tw==
-X-Google-Smtp-Source: ABdhPJxrpRLZcruSX5Qbj7QOr8SBTrSIifnhD3UcEwR9PWuz3Ka59RGntZsnkOET2NOm8X3weY2tHw==
-X-Received: by 2002:a17:902:e74e:: with SMTP id p14mr3673672plf.95.1644621805645;
-        Fri, 11 Feb 2022 15:23:25 -0800 (PST)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id y41sm29114744pfa.213.2022.02.11.15.23.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Feb 2022 15:23:24 -0800 (PST)
-Message-ID: <e3580324-6a3c-deb2-30f1-2d39c5ccda88@acm.org>
-Date:   Fri, 11 Feb 2022 15:23:22 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] scsi: ufs: Fix runtime PM messages never-ending cycle
-Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <huobean@gmail.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
+        with ESMTP id S237433AbiBKXZr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Feb 2022 18:25:47 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39B0C5F
+        for <linux-scsi@vger.kernel.org>; Fri, 11 Feb 2022 15:25:45 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21BJdn8L011211;
+        Fri, 11 Feb 2022 23:25:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=jbXTMi9DBkCEN0T2U/8yLPaNWbXYb+DkQQLbjPbMk9k=;
+ b=keQObEuwjpTNJKQNRiGU9GZno4tKLhTDyM6Lc6arnfifva6ER+Mjq7KWUGRlEqjrTysj
+ Q5KMEtgIQNELAfd8cd5GhKvxh63rBS0SYELrHDVfyjU3/e1sKsRZJa+64SWKVrOdePKC
+ K6QEVA3kV50T0hlP5fABrOMoJtezKItOC+vlqYBpWNDfUa9Hh/sdtXpxTdP29PMSCCce
+ m8m6UAMcXS/pZ0iasOa5UZnmzyDKQDyDAvhh5sAFZNvU3tzQXmt7FM8gWV3WM/1+37l8
+ oZE8iD7mDTNn3g/51G1eb9UhfnkAJEDwYL/Auz6IDx/weXZcd9RWedlqX1pvf1n2VW1q zw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e5njr1rgg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Feb 2022 23:25:31 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21BNG6sX020730;
+        Fri, 11 Feb 2022 23:25:30 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 3e1jpykk1r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Feb 2022 23:25:30 +0000
+Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 21BNPTt9094578;
+        Fri, 11 Feb 2022 23:25:30 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by userp3020.oracle.com with ESMTP id 3e1jpykk0v-1;
+        Fri, 11 Feb 2022 23:25:29 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     scott.teel@microchip.com, scott.benesh@microchip.com,
+        jejb@linux.vnet.ibm.com, POSWALD@suse.com, joseph.szczypek@hpe.com,
+        murthy.bhat@microchip.com, gerry.morong@microchip.com,
+        Don Brace <don.brace@microchip.com>,
+        mahesh.rajashekhara@microchip.com, Justin.Lindley@microchip.com,
+        hch@infradead.org, mike.mcgowen@microchip.com,
+        Kevin.Barnett@microchip.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org
-References: <20220211111727.161799-1-adrian.hunter@intel.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220211111727.161799-1-adrian.hunter@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 00/18] smartpqi updates
+Date:   Fri, 11 Feb 2022 18:25:24 -0500
+Message-Id: <164462189850.7606.16409799152267021175.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <164375113574.440833.13174600317115819605.stgit@brunhilda.pdev.net>
+References: <164375113574.440833.13174600317115819605.stgit@brunhilda.pdev.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: qnZQsk90CANAewCPgCo31grjw_V1y_Ba
+X-Proofpoint-ORIG-GUID: qnZQsk90CANAewCPgCo31grjw_V1y_Ba
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/11/22 03:17, Adrian Hunter wrote:
-> Kernel messages produced during runtime PM can cause a never-ending
-> cycle because user space utilities (e.g. journald or rsyslog) write the
-> messages back to storage, causing runtime resume, more messages, and so
-> on.
+On Tue, 1 Feb 2022 15:47:47 -0600, Don Brace wrote:
+
+> These patches are based on Martin Petersen's 5.18/scsi-queue tree
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+>   5.18/scsi-queue
 > 
-> Messages that tell of things that are expected to happen, are arguably
-> unnecessary, so suppress them.
+> This set of changes consist of:
+>  * Correcting a stack trace when the driver is unloaded. The driver was
+>    holding a spin lock when calling scsi_remove_device.
+>  * Adding in new PCI device IDs and aligning the device order with our
+>    out-of-box driver. No functional changes.
+>  * Allow NCQ to be enabled for SATA disks. The controller firmware has
+>    to have support for this feature.
+>  * Enhance reboot performance by now issuing disk spin-downs during
+>    reboots. This eliminates spin-up time required doing the boot up.
+>  * Speed up multipath failover detection by returning DID_NO_CONNECT
+>    when the controller returns a path failure. Previously, the driver was
+>    waiting on an internal re-scan to detect the path failure.
+>  * Change function name pqi_is_io_high_priority() to
+>    pqi_is_io_high_priority() for better readability. Remove some white
+>    spaces from the same function.
+>  * Correct the structure used for AIO command submission. The structure
+>    used was pqi_raid_path_request, but needs to be pqi_aio_path_request.
+>    Both structure are the same size and have the same member offsets,
+>    so no issues were reported.
+>  * A PQI_HZ MACRO was introduced some time ago to resolve some timing
+>    issues. This definition is not needed. Switch back to using HZ.
+>  * For certain controllers, there was a request to avoid a drive
+>    spin-down for suspend (S3) state transitions.
+>  * For small drive expansions, the driver was not detecting the new
+>    size changes. We added a rescan whenever the driver receives an
+>    event from the controller.
+>  * In some rare cases, the controller can be locked up when a kdump
+>    is requested. When this occurs, the kdump is failed. This helps
+>    in debugging the cause of the lockup.
+>  * For RAID 10 disks, only one set of disks were used for read
+>    operations. Now we spread out I/O to all volumes. This resolves
+>    some inconsistent performance issues.
+>  * Export SAS addresses for all disks instead of only SAS disks.
+>  * Correct NUMA node association during pci_probe. A small typo
+>    was causing a different NUMA node to be set.
+>  * Not all structures were checked with BUILD_BUG_ON.
+>  * Correct some rare Hibernate/Suspend issues. Newer controllers
+>    may boot up with different timings.
+>  * Correct WWID output for lsscsi -t. The wrong part of the 16-byte WWID
+>    was used for the SAS address field.
+>  * Bump the driver version to 2.1.14-035
+> 
+> [...]
 
-Instead of making the logging statements conditional, how about removing 
-the logging statements entirely? That would simplify the code. I don't 
-think the logging statements provide more information than what can 
-already be obtained with ftrace.
+Applied to 5.18/scsi-queue, thanks!
 
-Thanks,
+[01/18] smartpqi: fix rmmod stack trace
+        https://git.kernel.org/mkp/scsi/c/c4ff687d25c0
+[02/18] smartpqi: add PCI IDs
+        https://git.kernel.org/mkp/scsi/c/c57ee4ccb358
+[03/18] smartpqi: enable SATA NCQ priority in sysfs
+        https://git.kernel.org/mkp/scsi/c/2a47834d9452
+[04/18] smartpqi: eliminate drive spin down on warm boot
+        https://git.kernel.org/mkp/scsi/c/70ba20be4bb1
+[05/18] smartpqi: propagate path failures to SML quickly
+        https://git.kernel.org/mkp/scsi/c/94a68c814328
+[06/18] smartpqi: fix a name typo and cleanup code
+        https://git.kernel.org/mkp/scsi/c/b4dc06a9070e
+[07/18] smartpqi: fix a typo in func pqi_aio_submit_io
+        https://git.kernel.org/mkp/scsi/c/9e98e60bfca3
+[08/18] smartpqi: resolve delay issue with PQI_HZ value
+        https://git.kernel.org/mkp/scsi/c/42dc0426fbbb
+[09/18] smartpqi: avoid drive spin-down during suspend
+        https://git.kernel.org/mkp/scsi/c/b73357a1fd39
+[10/18] smartpqi: update volume size after expansion
+        https://git.kernel.org/mkp/scsi/c/27655e9db479
+[11/18] smartpqi: fix kdump issue when ctrl is locked up
+        https://git.kernel.org/mkp/scsi/c/3ada501d602a
+[12/18] smartpqi: speed up RAID 10 sequential reads
+        https://git.kernel.org/mkp/scsi/c/5d8fbce04d36
+[13/18] smartpqi: expose SAS address for SATA drives
+        https://git.kernel.org/mkp/scsi/c/00598b056aa6
+[14/18] smartpqi: fix NUMA node not updated during init
+        https://git.kernel.org/mkp/scsi/c/c52efc923856
+[15/18] smartpqi: fix BUILD_BUG_ON() statements
+        https://git.kernel.org/mkp/scsi/c/5e6935864d81
+[16/18] smartpqi: fix hibernate and suspend
+        https://git.kernel.org/mkp/scsi/c/c66e078ad89e
+[17/18] smartpqi: fix lsscsi-t SAS addresses
+        https://git.kernel.org/mkp/scsi/c/291c2e0071ef
+[18/18] smartpqi: update version to 2.1.14-035
+        https://git.kernel.org/mkp/scsi/c/62ed6622aaf0
 
-Bart.
+-- 
+Martin K. Petersen	Oracle Linux Engineering
