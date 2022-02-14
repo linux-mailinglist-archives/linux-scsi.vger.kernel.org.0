@@ -2,80 +2,121 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC65F4B5AAC
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Feb 2022 20:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1CF4B5C76
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Feb 2022 22:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiBNTq5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Feb 2022 14:46:57 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57906 "EHLO
+        id S230367AbiBNVSS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Feb 2022 16:18:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiBNTq4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Feb 2022 14:46:56 -0500
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26E611B329
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Feb 2022 11:46:39 -0800 (PST)
-Received: by mail-pf1-f179.google.com with SMTP id i6so29120104pfc.9
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Feb 2022 11:46:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=o/bcdmKORB3FHs951r4NvBJoe81wQvvsN5Q5Oc54A3o=;
-        b=I7JePGbWCFhkf/9PfyPbpw9rT2pLRzLyTxap34pl5MD1N6jtylbke7NBQ6fPWEV6fX
-         B+CdAHBo2MnhiQ51ocHI12lTU7bpqJqFLFAIhKjinpRXTSR29f+YDErjSHee94avsMqf
-         gWIRX+WBxXQNitwAK2hQaDVm6c6gE4HX/KSgHY2R9pSbbRdBEOHiefqFus/QKZdH6BFa
-         9E+zFNXLikNDm2zXOLWiZnBJrf5q1jQe6jZi1lPVZRq8F+2JCtFS6ez9hP53Kyky66lO
-         6st1hVgotrqUbJbY+a1rMJKGEGXSbDkiC6+gAhXgxVDhRnWVOL/3GxVWcm1c3qenceA+
-         FDng==
-X-Gm-Message-State: AOAM533a2136U/cGdVnAEhpaNxMvbCaSo0RN8hebYz8b7FRjC9L+0/fi
-        CinNsvT4f4Ni37sgzwp3UsXtQDKSsbk=
-X-Google-Smtp-Source: ABdhPJzuN7RZfb2h4oIoxln+e/VtGS9f7BmMLBgGSsTEioSY+6uXImEu34sAMpmAlMK7BEy8TEYYDQ==
-X-Received: by 2002:a63:4717:: with SMTP id u23mr512857pga.74.1644867130549;
-        Mon, 14 Feb 2022 11:32:10 -0800 (PST)
-Received: from ?IPV6:2600:1010:b05a:bf8:cd06:5464:d61e:f6b4? ([2600:1010:b05a:bf8:cd06:5464:d61e:f6b4])
-        by smtp.gmail.com with ESMTPSA id v12sm3486951pfu.155.2022.02.14.11.32.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 11:32:09 -0800 (PST)
-Message-ID: <c2e38183-fda7-65b1-3429-2b11061562c1@acm.org>
-Date:   Mon, 14 Feb 2022 11:32:07 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V2] scsi: ufs: Fix runtime PM messages never-ending cycle
-Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <huobean@gmail.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        linux-scsi@vger.kernel.org
-References: <20220214121941.296034-1-adrian.hunter@intel.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220214121941.296034-1-adrian.hunter@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        with ESMTP id S230155AbiBNVSR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Feb 2022 16:18:17 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD16108BE4
+        for <linux-scsi@vger.kernel.org>; Mon, 14 Feb 2022 13:18:06 -0800 (PST)
+Received: from epcas3p2.samsung.com (unknown [182.195.41.20])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220214211801epoutp038351e3be4c1c2bc015c4cc8c13461222~Tw7eC-j2n3003630036epoutp03c
+        for <linux-scsi@vger.kernel.org>; Mon, 14 Feb 2022 21:18:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220214211801epoutp038351e3be4c1c2bc015c4cc8c13461222~Tw7eC-j2n3003630036epoutp03c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1644873481;
+        bh=kLg3y1C57MGd7CXzhXTwI+7lw2u17ZSVQ9SR0owpbzU=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=dBF2VOqNcZ4j2L+Ow/qQgKwqFiInlx3/E1am2ekyouxZMQUsOlERyRyJwmmjbQM7N
+         Z6XP4ro9JYhmbItyrvvV6HypJm7+POAEPA9VQZ16hK5n12gxA0k9juEFY1Jsn/GzDw
+         HHq4oIoI/Y8T/gU2NboNhpFS+oroYhMykLZiWXag=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas3p4.samsung.com (KnoxPortal) with ESMTP id
+        20220214211801epcas3p453913a49631a117b8d2f4955cfe6cfb4~Tw7dcAUIH2286722867epcas3p4_;
+        Mon, 14 Feb 2022 21:18:01 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp2.localdomain
+        (Postfix) with ESMTP id 4JyHBK1N72z4x9Pv; Mon, 14 Feb 2022 21:18:01 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: [PATCH] scsi: ufs: Fix divide zero case in ufshcd_map_queues()
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1891546521.01644873481638.JavaMail.epsvc@epcpadp4>
+Date:   Mon, 14 Feb 2022 19:33:52 +0900
+X-CMS-MailID: 20220214103352epcms2p79697c0fcaa2755dd89af9de887ff14cd
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20220214103352epcms2p79697c0fcaa2755dd89af9de887ff14cd
+References: <CGME20220214103352epcms2p79697c0fcaa2755dd89af9de887ff14cd@epcms2p7>
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/14/22 04:19, Adrian Hunter wrote:
-> Kernel messages produced during runtime PM can cause a never-ending
-> cycle because user space utilities (e.g. journald or rsyslog) write the
-> messages back to storage, causing runtime resume, more messages, and so
-> on.
+Before calling blk_mq_map_queues(), the mq_map and nr_queues belonging
+to "struct blk_mq_queue_map" must be a vaild value.
 
+If nr_queues is set to 0, the system may encounter the "divide zero"
+depending on the type of architecture.
 
-Thanks!
+    blk_mq_map_queues() -> queue_index()
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 41d85b69fa50..36c5ca62ae0c 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -2674,21 +2674,21 @@ static int ufshcd_map_queues(struct Scsi_Host *shost)
+ 	for (i = 0; i < shost->nr_maps; i++) {
+ 		struct blk_mq_queue_map *map = &shost->tag_set.map[i];
+ 
+ 		switch (i) {
+ 		case HCTX_TYPE_DEFAULT:
+ 		case HCTX_TYPE_POLL:
+ 			map->nr_queues = 1;
+ 			break;
+ 		case HCTX_TYPE_READ:
+ 			map->nr_queues = 0;
+-			break;
++			continue;
+ 		default:
+ 			WARN_ON_ONCE(true);
+ 		}
+ 		map->queue_offset = 0;
+ 		ret = blk_mq_map_queues(map);
+ 		WARN_ON_ONCE(ret);
+ 	}
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
