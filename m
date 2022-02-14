@@ -2,166 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4026A4B4090
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Feb 2022 05:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 402AA4B40F8
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Feb 2022 05:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240159AbiBNEDP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Sun, 13 Feb 2022 23:03:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51682 "EHLO
+        id S236618AbiBNEtw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 13 Feb 2022 23:49:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234964AbiBNEDO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Feb 2022 23:03:14 -0500
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B724EA3B
-        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 20:03:06 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id l125so9250148ybl.4
-        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 20:03:06 -0800 (PST)
+        with ESMTP id S232958AbiBNEtv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Feb 2022 23:49:51 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F13050463
+        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 20:49:45 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id bs32so13509971qkb.1
+        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 20:49:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=N9tEFmJ5EUuxB+3+X+96jFuGp4B/wZQHGYlWHIoC8HU=;
+        b=dylpLAQQHf4R5x9fca3xOJBmjS+ovXfbmdTiJ5zQBSB++gWxFBT9WsLgQhkSlMjqyP
+         u4In3qRszndWEezoAPWukWygZD1Z3Ta2oukVVvNyFNU4i5NAGpkEv4w8q0Hw2CdOnDHc
+         4m+/R3O3c2wqzH3b6y/m9/uGuer0g7swCoCoGAtSBdDQ17QtRvVQqHgtfxZM/CgqqhWj
+         urc6J+g7BK8s6uSTw6rKRgOxhQ636dr6s3dNyVCwpAyMs8zW9MqOPTGjBejjt6UgAeVu
+         3dFuxD9OOql3v7bdEOTc1qFVyO+dVuSGMzj5x+Ry/leN8rX42bL30cg6w4+HMaLaqJ6J
+         KHSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nDtdbXUkP5nVGKTG8jioDGwnNgvUx1LTIm6ju2fwK0o=;
-        b=3XWMwGlF9VAt1ZKzmhrmNejVc8YVoGtitajvt/meyJvI/AztTIz3ATNoPczUrSPiXi
-         4jdKzpD/FNjJ3Ahy2E6c12jIcdlE4H1boV0uPz28G7rnQZNOnkOUtGo3yRikNm5+JY/j
-         6npmRpA1JCYlz1gxRPLFEbDO18A3gpWQrug7abGk+QRXE6UsWVSLgbZafU2u0v+Ft0Sy
-         rXcDu5ZLWSTGJMO+603nb0Xs1cE/2R0s9h3pLdwq2XRjPSAij+P0K7Z1dIlbpnnjq1Kz
-         Dw/enGgMfQqp5soCX0MObupTxVFH+ze0vmGirB9hDLnYtDlJLGi+6T4GIPj1kO4q8BtL
-         5Wnw==
-X-Gm-Message-State: AOAM530VIkocp/LAZae/lAoNmESdNZcURqLSfzSOJ/K8yAjkqASTPNFZ
-        C2kCb6Nhb6zTKEp1xQsFhCfJ4fx7QgkOtx6pWoQ=
-X-Google-Smtp-Source: ABdhPJxPZgxGWZMoFN9iGZQxzemSGHIPO2z6MJyj4UU5MLz+ji+zQKOaccGI3IGY5uXNFB41Jlbgv/8WzzX5ctFCKgk=
-X-Received: by 2002:a25:4742:: with SMTP id u63mr10467591yba.523.1644811385369;
- Sun, 13 Feb 2022 20:03:05 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=N9tEFmJ5EUuxB+3+X+96jFuGp4B/wZQHGYlWHIoC8HU=;
+        b=DTGfeMyric5Vp5q48fSj1XhxbEjqGMbNTyattLew5srsgWxUBmHJSY/w2choBk7o33
+         Uf9koBjX/GK30CdmxO2S1GrxKV1yWVgLtQ0VDhickgDmnwh5if1lKq6IZIA3HGu4Cju1
+         J7sIYmS1wuOrgU/vGvouDIORq/lnhflLcsEaWJ7dXprwInSRI53dA12eHkJEIaYVz3xy
+         VtLEShWmLGT4LZ5DLt3kGVl58I6PUGgTN7I9jqndFeZjra7yNXcIlO7pz4H/hkZjYGEq
+         1sagZQIGc7upfuy8AiO8tqd1GNUh1VVoqgtI831WQrfYna50IEzyaG6yhqmKO7CKWWjj
+         aKXA==
+X-Gm-Message-State: AOAM532hcYYT20FQ5f7j34hyu04yf0Gq0KJNK5giLnyDiW0XddDA9H2m
+        Y04+Zr6nCLTkc8PPy8Bh3MNcP8A3aeKvxWyMfzQ=
+X-Google-Smtp-Source: ABdhPJzo0rbYxGnR//E36ICtkzRLRJKLTZk7KVe/8eZbXrwwtLxh1I5rVcD09Rx4MLGdyWoKdwc+dN5l7iCjQ/MBCpc=
+X-Received: by 2002:a37:a409:: with SMTP id n9mr6081735qke.120.1644814184291;
+ Sun, 13 Feb 2022 20:49:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20220211223247.14369-1-bvanassche@acm.org> <20220211223247.14369-37-bvanassche@acm.org>
-In-Reply-To: <20220211223247.14369-37-bvanassche@acm.org>
-From:   Masanori Goto <gotom@debian.or.jp>
-Date:   Mon, 14 Feb 2022 13:02:39 +0900
-Message-ID: <CALZLnaGvDkkUC1RF0E7pfBjFJbz4gtkYhhHSN272kyzYRfF1Pw@mail.gmail.com>
-Subject: Re: [PATCH v3 36/48] scsi: nsp32: Stop using the SCSI pointer
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Received: by 2002:ad4:5c69:0:0:0:0:0 with HTTP; Sun, 13 Feb 2022 20:49:44
+ -0800 (PST)
+Reply-To: tiffanywiffany@gmx.com
+From:   Tiffany Wiffany <ivanroberti284@gmail.com>
+Date:   Sun, 13 Feb 2022 20:49:44 -0800
+Message-ID: <CAKp8dfoTZegEM5V1t0c9Px3a9WFqp4Pk-j_g6mY2G5-RPcqFLQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Looks good.
-
-Reviewed-by: Masanori Goto <gotom@debian.or.jp>
-
-2022年2月12日(土) 7:34 Bart Van Assche <bvanassche@acm.org>:
->
-> Move the SCSI status field to private data. Stop setting the .ptr,
-> .this_residual, .buffer and .buffer_residual SCSI pointer members
-> since no code in this driver reads these members.
->
-> This patch prepares for removal of the SCSI pointer from struct scsi_cmnd.
->
-> Reviewed-by: Hannes Reinecke <hare@suse.de>
-> Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/nsp32.c | 20 +++++++-------------
->  drivers/scsi/nsp32.h |  9 +++++++++
->  2 files changed, 16 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/scsi/nsp32.c b/drivers/scsi/nsp32.c
-> index bd3ee3bf08ee..75bb0028ed74 100644
-> --- a/drivers/scsi/nsp32.c
-> +++ b/drivers/scsi/nsp32.c
-> @@ -273,6 +273,7 @@ static struct scsi_host_template nsp32_template = {
->         .eh_abort_handler               = nsp32_eh_abort,
->         .eh_host_reset_handler          = nsp32_eh_host_reset,
->  /*     .highmem_io                     = 1, */
-> +       .cmd_size                       = sizeof(struct nsp32_cmd_priv),
->  };
->
->  #include "nsp32_io.h"
-> @@ -946,14 +947,9 @@ static int nsp32_queuecommand_lck(struct scsi_cmnd *SCpnt)
->         show_command(SCpnt);
->
->         data->CurrentSC      = SCpnt;
-> -       SCpnt->SCp.Status    = SAM_STAT_CHECK_CONDITION;
-> +       nsp32_priv(SCpnt)->status = SAM_STAT_CHECK_CONDITION;
->         scsi_set_resid(SCpnt, scsi_bufflen(SCpnt));
->
-> -       SCpnt->SCp.ptr              = (char *)scsi_sglist(SCpnt);
-> -       SCpnt->SCp.this_residual    = scsi_bufflen(SCpnt);
-> -       SCpnt->SCp.buffer           = NULL;
-> -       SCpnt->SCp.buffers_residual = 0;
-> -
->         /* initialize data */
->         data->msgout_len        = 0;
->         data->msgin_len         = 0;
-> @@ -1376,7 +1372,7 @@ static irqreturn_t do_nsp32_isr(int irq, void *dev_id)
->                 case BUSPHASE_STATUS:
->                         nsp32_dbg(NSP32_DEBUG_INTR, "fifo/status");
->
-> -                       SCpnt->SCp.Status = nsp32_read1(base, SCSI_CSB_IN);
-> +                       nsp32_priv(SCpnt)->status = nsp32_read1(base, SCSI_CSB_IN);
->
->                         break;
->                 default:
-> @@ -1687,18 +1683,18 @@ static int nsp32_busfree_occur(struct scsi_cmnd *SCpnt, unsigned short execph)
->                 /* MsgIn 00: Command Complete */
->                 nsp32_dbg(NSP32_DEBUG_BUSFREE, "command complete");
->
-> -               SCpnt->SCp.Status  = nsp32_read1(base, SCSI_CSB_IN);
-> +               nsp32_priv(SCpnt)->status  = nsp32_read1(base, SCSI_CSB_IN);
->                 nsp32_dbg(NSP32_DEBUG_BUSFREE,
->                           "normal end stat=0x%x resid=0x%x\n",
-> -                         SCpnt->SCp.Status, scsi_get_resid(SCpnt));
-> +                         nsp32_priv(SCpnt)->status, scsi_get_resid(SCpnt));
->                 SCpnt->result = (DID_OK << 16) |
-> -                       (SCpnt->SCp.Status << 0);
-> +                       (nsp32_priv(SCpnt)->status << 0);
->                 nsp32_scsi_done(SCpnt);
->                 /* All operation is done */
->                 return TRUE;
->         } else if (execph & MSGIN_04_VALID) {
->                 /* MsgIn 04: Disconnect */
-> -               SCpnt->SCp.Status  = nsp32_read1(base, SCSI_CSB_IN);
-> +               nsp32_priv(SCpnt)->status = nsp32_read1(base, SCSI_CSB_IN);
->
->                 nsp32_dbg(NSP32_DEBUG_BUSFREE, "disconnect");
->                 return TRUE;
-> @@ -1706,8 +1702,6 @@ static int nsp32_busfree_occur(struct scsi_cmnd *SCpnt, unsigned short execph)
->                 /* Unexpected bus free */
->                 nsp32_msg(KERN_WARNING, "unexpected bus free occurred");
->
-> -               /* DID_ERROR? */
-> -               //SCpnt->result   = (DID_OK << 16) | (SCpnt->SCp.Status << 0);
->                 SCpnt->result = DID_ERROR << 16;
->                 nsp32_scsi_done(SCpnt);
->                 return TRUE;
-> diff --git a/drivers/scsi/nsp32.h b/drivers/scsi/nsp32.h
-> index ab0726c070f7..924889f8bd37 100644
-> --- a/drivers/scsi/nsp32.h
-> +++ b/drivers/scsi/nsp32.h
-> @@ -534,6 +534,15 @@ typedef struct _nsp32_sync_table {
->        ---PERIOD-- ---OFFSET--   */
->  #define TO_SYNCREG(period, offset) (((period) & 0x0f) << 4 | ((offset) & 0x0f))
->
-> +struct nsp32_cmd_priv {
-> +       enum sam_status status;
-> +};
-> +
-> +static inline struct nsp32_cmd_priv *nsp32_priv(struct scsi_cmnd *cmd)
-> +{
-> +       return scsi_cmd_priv(cmd);
-> +}
-> +
->  typedef struct _nsp32_target {
->         unsigned char   syncreg;        /* value for SYNCREG   */
->         unsigned char   ackwidth;       /* value for ACKWIDTH  */
+-- 
+Hello, Please with honesty did you receive our message we send to you?
