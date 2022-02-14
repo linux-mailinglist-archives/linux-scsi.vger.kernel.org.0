@@ -2,74 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45344B3F45
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Feb 2022 03:19:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B0D4B3F43
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Feb 2022 03:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239296AbiBNCT6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 13 Feb 2022 21:19:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40368 "EHLO
+        id S239293AbiBNCTy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 13 Feb 2022 21:19:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239227AbiBNCTr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Feb 2022 21:19:47 -0500
+        with ESMTP id S239282AbiBNCTs (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Feb 2022 21:19:48 -0500
 Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C5454FA0
-        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 18:19:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497BB54FBD
+        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 18:19:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1644805179; x=1676341179;
+  t=1644805180; x=1676341180;
   h=from:to:subject:date:message-id:in-reply-to:references:
    mime-version:content-transfer-encoding;
-  bh=KDIZnht9JbMO/oQkD5bZFpkpgjYcz/UzkAqRFrp1J34=;
-  b=ckF+IvNGYL3OjbS0mKLetdW8gwxasJOqm83d906LEB3CbjvBWWm+/fPR
-   3I2xtuDF6VDGZHZP+muujbirPr6BIi23yuewNs6XnRsT453Fze9viNx96
-   EBSSZP+NsLDhZGF49B73cyBRAj53Xi35iE3o+MsnXw62MLg57nAUC6ZVa
-   Bc1dYxobN6X6zehkoi5tG+JVazKbh1wd/el1NKlyV4bW5egsxSgoBPahj
-   vDfBH6Uea9j71tlNGpprlz+ToUq/D4IKsFLgI3JP+r5M5gNsZW8E3Z37J
-   DwC9c+kCTuP5myTwRqEXbYSrsQUKEuFPWPDxNM/v27JBjunl+AhUyTlAC
-   w==;
+  bh=NED7TbeMhfuFfImpTHjjdM3/ALr1ocTrAkJX4NcdYvQ=;
+  b=ORz/BNYvYRtelvFUqB24f73eIKIJNbhYNnRLVii8yTn85NwDjznUCa5y
+   c2JMhPAvcXQ7/09qnVtPz7O+8jisVmadXvF5nEfyWWOw3mCnFj/ubcvSj
+   i0S5G4yJ+/lNLpuWEDytuQwzw5p2MB15cLr/QJHfpWT1d2vVXYbiA4EqL
+   y47YZzOHZ/Fm9H1SQuRzzRzfDX/WudAmdDLd0EW+XOtuxtORsgK1tFoqK
+   Y673z8jqqt7T24jI5U9Y2kdzswZ/8r/LDjhDkTl2+OH/96QcHE/SCFn15
+   9U8Ut2tSfzfYJSjJIVbNgq4LqaocZAoGvtI4+cqzs7hk0H/AzGF8AqJlF
+   A==;
 X-IronPort-AV: E=Sophos;i="5.88,366,1635177600"; 
-   d="scan'208";a="192819769"
+   d="scan'208";a="192819773"
 Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 14 Feb 2022 10:19:39 +0800
-IronPort-SDR: rmZK6s+vIj5nK7vxUcPywlkjm1fkJJAUD8eg0yJ5lXLe2PNZ1aIf1JYmbSuGjdZLXj4qqUdKO6
- 5Q2BRBD/hmmTAhmhl0JNjKp5ZgozUhelVpfIwjgQb8fMfNAPTQF009uNxU9azoLkd6pmeJUj7t
- tog79IAquIQBqlexNzmAXhhnqCml0J8xYu/fyjGlWNqDs/KJrltbppzxcqRbbs4KpEJUaDnKQI
- gqPezsTkCKN1ifNX5t8XsxLPdxnETsHHF+Cmu04nlyYFGIkeUURg0JaOwXLytxH6cDNepyzyPi
- B2tlu/ELaxOabh5U4K0sp6i5
+  by ob1.hgst.iphmx.com with ESMTP; 14 Feb 2022 10:19:40 +0800
+IronPort-SDR: uG6yx7W3pcUFTklRtaUebzgPMHdmBRSSHvLIJxgBE0UowYmmLh8z0B1jEv2s6WlnadSi5V5RJz
+ IcqBb5uk4mZvD1LynkpSZaiO6FKMx7Hdx5m7NFTflwz6hMG8B66uZPQ44THl6EDTCB6moln/+A
+ 3SlpVgTw59AfQw7M1MUSoCVQWnHlvqlQkzFgX24ydBT0oNa3KdyYrix7lAEIpg1wHjvRtV6TKP
+ igy84Jx6RMFJUjJSXvHu+FOIyGIjVHzpja8T4/0TLjk0PVgWPARaomZO+nUQEHXvwpDMRrpCXQ
+ 7mo0VHv0hkqNAsWbRi9ISIgY
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 17:52:32 -0800
-IronPort-SDR: qM7agTZAKKn6/kb16U1oBGBZ7xZAKePpaW3GgMvp6UFYVNLQpdNxSU8l3LAhQLTcQu7HrUd2Ix
- 4SnbJlGOlMPeIAkkTMLt4GSxi5C2ezP0MuF/7TgZwKQfKOSGv8Rzzb98gmEPhcDCUj2HDNA9Yp
- ELQ+BdFn74rCMfiGcu9d1NUR9Vu3PmUW+e5k2xc0O3xvcvWEdCxj6ATmeCaweufi/BiqlZrGuW
- diMmcebQq7Wf6R13f+BEzQvM66P0RCRPBwVZlk2TtXbhEuc3+EF73CpOF8dfZVkylYiqOYkmCp
- FP4=
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 17:52:33 -0800
+IronPort-SDR: luUdkZcgsEYLczcJ1V7fn07ZFGMn17Y3af8xrJGiob+7bSH4/4jkarGsqgwX5mKdhER6yyMJKz
+ PLtPoATM7qDvUxe5MmGF7POupC8hsOtqul4LXkaWexEXCrHflDmtvyQnhHlc3VDcjxbX7j5p7w
+ vVKhBrFWUD8ghiXXdj9wBMVAjdkPtkfTebFaL81DPMSGWWYqPShgn6M8CFKb9/MVpXXwFdeE0r
+ Ywq2V7OsXKK0/yDLJFs2h0oUFLn0yXPwqs4yEqwdt6jNcUxaJpKOXlyJv21UuPvA87GcNQ0sKL
+ EwI=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 18:19:41 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 18:19:42 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Jxnwr5ZBTz1SVnx
-        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 18:19:40 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Jxnws6WgLz1SVp3
+        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 18:19:41 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1644805180; x=1647397181; bh=KDIZnht9JbMO/oQkD5
-        bZFpkpgjYcz/UzkAqRFrp1J34=; b=c8n7YRbwukAgKmKv4ouBv2jC37YZyDwdrO
-        nnI+R/IrFFAi90sT1EcuSdvkCxbcKk18PUC05j59yw9nWeTqC4O57/FCM5t5zX8f
-        OWhAydCkECzT3m0d99Q0ExtQrQp2z5POdWhPY9Itu+jhVCf2Y15Ga/sbxYigkS2Q
-        UQHehqfK5gRG/UHhcM8fGW7WXqLYKN9EsZCL3rq1lNiMDW6rv5aGEr5hB+eU4kU4
-        M3kmZdPDi9I23PMQPwvOINy3cGqKWF4xpj7lcERWkK1ETS2JVEhNwlJepyuux4TU
-        YTma/M4CJ09t5A8OIYQIgG46ELV9xefaEFEJCPt+r9rwfEa6WYpg==
+        :from; s=dkim; t=1644805181; x=1647397182; bh=NED7TbeMhfuFfImpTH
+        jjdM3/ALr1ocTrAkJX4NcdYvQ=; b=DHym5d1P38n1A7IjCOpmBy+rcnv/okWif9
+        6FBSlVE774DNiIkQHrKhtzGi/aCNVBNLmFyOBVWGIVvR2lrqZNE3gWBNEzSMQdel
+        3oVVOy+oaAV5C8vEhFA/0qYQT/CCcdaBZEjdrPLMc6nrJgNDdOEbdU1ds8IGL+NJ
+        KCbEG0nXLXd0TSMwhN8tCwWXwLWA1UxiguB4BBLqen4H9Bj6C1/1tAhb5GvN2dDy
+        V9ZVjEboFW6G7KPJim4b46eZKt/W637pCCVgjHGEhba2jc0v9URKxpNudMWFv+tt
+        2IEfe5gHzusBcFqxurZitzoG0ZsEr6BFy+II6vsuP+u0KbsrhgBg==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Jpqxaw8C7AHL for <linux-scsi@vger.kernel.org>;
-        Sun, 13 Feb 2022 18:19:40 -0800 (PST)
+        with ESMTP id ytC-AyBDA657 for <linux-scsi@vger.kernel.org>;
+        Sun, 13 Feb 2022 18:19:41 -0800 (PST)
 Received: from washi.fujisawa.hgst.com (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Jxnwq1dd6z1Rwrw;
-        Sun, 13 Feb 2022 18:19:39 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Jxnwr3T1hz1SHwl;
+        Sun, 13 Feb 2022 18:19:40 -0800 (PST)
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 To:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
@@ -77,9 +77,9 @@ To:     linux-scsi@vger.kernel.org,
         Xiang Chen <chenxiang66@hisilicon.com>,
         Jason Yan <yanaijie@huawei.com>,
         Luo Jiaxing <luojiaxing@huawei.com>
-Subject: [PATCH v3 08/31] scsi: pm8001: Fix le32 values handling in pm80xx_set_sas_protocol_timer_config()
-Date:   Mon, 14 Feb 2022 11:17:24 +0900
-Message-Id: <20220214021747.4976-9-damien.lemoal@opensource.wdc.com>
+Subject: [PATCH v3 09/31] scsi: pm8001: Fix payload initialization in pm80xx_encrypt_update()
+Date:   Mon, 14 Feb 2022 11:17:25 +0900
+Message-Id: <20220214021747.4976-10-damien.lemoal@opensource.wdc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220214021747.4976-1-damien.lemoal@opensource.wdc.com>
 References: <20220214021747.4976-1-damien.lemoal@opensource.wdc.com>
@@ -95,109 +95,45 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-All fields of the SASProtocolTimerConfig structure have the __le32 type.
-As such, use cpu_to_le32() to initialize them. This change suppresses
-many sparse warnings:
+All fields of the kek_mgmt_req structure have the type __le32. So make
+sure to use cpu_to_le32() to initialize them. This suppresses the sparse
+warning:
 
 warning: incorrect type in assignment (different base types)
-   expected restricted __le32 [addressable] [usertype] pageCode
+   expected restricted __le32 [addressable] [assigned] [usertype] new_cur=
+idx_ksop
    got int
 
-Note that the check to limit the value of the STP_IDLE_TMO field is
-removed as this field is initialized using the fixed (and small) value
-defined by the STP_IDLE_TIME macro.
-
-The pm8001_dbg() calls printing the values of the SASProtocolTimerConfig
-structure fileds are changed to use le32_to_cpu() to present the values
-in human readable form.
-
-Fixes: a6cb3d012b98 ("[SCSI] pm80xx: thermal, sas controller config and e=
-rror handling update")
+Fixes: 5860992db55c ("[SCSI] pm80xx: Added SPCv/ve specific hardware func=
+tionalities and relevant changes in common files")
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 52 +++++++++++++++-----------------
- 1 file changed, 25 insertions(+), 27 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80x=
 x_hwi.c
-index f9c4cec514fb..108e4743fe81 100644
+index 108e4743fe81..8e4c515f54f4 100644
 --- a/drivers/scsi/pm8001/pm80xx_hwi.c
 +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1245,43 +1245,41 @@ pm80xx_set_sas_protocol_timer_config(struct pm800=
-1_hba_info *pm8001_ha)
- 	circularQ =3D &pm8001_ha->inbnd_q_tbl[0];
- 	payload.tag =3D cpu_to_le32(tag);
+@@ -1405,12 +1405,13 @@ static int pm80xx_encrypt_update(struct pm8001_hb=
+a_info *pm8001_ha)
+ 	/* Currently only one key is used. New KEK index is 1.
+ 	 * Current KEK index is 1. Store KEK to NVRAM is 1.
+ 	 */
+-	payload.new_curidx_ksop =3D ((1 << 24) | (1 << 16) | (1 << 8) |
+-					KEK_MGMT_SUBOP_KEYCARDUPDATE);
++	payload.new_curidx_ksop =3D
++		cpu_to_le32(((1 << 24) | (1 << 16) | (1 << 8) |
++			     KEK_MGMT_SUBOP_KEYCARDUPDATE));
 =20
--	SASConfigPage.pageCode        =3D  SAS_PROTOCOL_TIMER_CONFIG_PAGE;
--	SASConfigPage.MST_MSI         =3D  3 << 15;
--	SASConfigPage.STP_SSP_MCT_TMO =3D  (STP_MCT_TMO << 16) | SSP_MCT_TMO;
--	SASConfigPage.STP_FRM_TMO     =3D (SAS_MAX_OPEN_TIME << 24) |
--				(SMP_MAX_CONN_TIMER << 16) | STP_FRM_TIMER;
--	SASConfigPage.STP_IDLE_TMO    =3D  STP_IDLE_TIME;
--
--	if (SASConfigPage.STP_IDLE_TMO > 0x3FFFFFF)
--		SASConfigPage.STP_IDLE_TMO =3D 0x3FFFFFF;
--
--
--	SASConfigPage.OPNRJT_RTRY_INTVL =3D         (SAS_MFD << 16) |
--						SAS_OPNRJT_RTRY_INTVL;
--	SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO =3D  (SAS_DOPNRJT_RTRY_TMO << 16=
-)
--						| SAS_COPNRJT_RTRY_TMO;
--	SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR =3D  (SAS_DOPNRJT_RTRY_THR << 16=
-)
--						| SAS_COPNRJT_RTRY_THR;
--	SASConfigPage.MAX_AIP =3D  SAS_MAX_AIP;
-+	SASConfigPage.pageCode =3D cpu_to_le32(SAS_PROTOCOL_TIMER_CONFIG_PAGE);
-+	SASConfigPage.MST_MSI =3D cpu_to_le32(3 << 15);
-+	SASConfigPage.STP_SSP_MCT_TMO =3D
-+		cpu_to_le32((STP_MCT_TMO << 16) | SSP_MCT_TMO);
-+	SASConfigPage.STP_FRM_TMO =3D
-+		cpu_to_le32((SAS_MAX_OPEN_TIME << 24) |
-+			    (SMP_MAX_CONN_TIMER << 16) | STP_FRM_TIMER);
-+	SASConfigPage.STP_IDLE_TMO =3D cpu_to_le32(STP_IDLE_TIME);
-+
-+	SASConfigPage.OPNRJT_RTRY_INTVL =3D
-+		cpu_to_le32((SAS_MFD << 16) | SAS_OPNRJT_RTRY_INTVL);
-+	SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO =3D
-+		cpu_to_le32((SAS_DOPNRJT_RTRY_TMO << 16) | SAS_COPNRJT_RTRY_TMO);
-+	SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR =3D
-+		cpu_to_le32((SAS_DOPNRJT_RTRY_THR << 16) | SAS_COPNRJT_RTRY_THR);
-+	SASConfigPage.MAX_AIP =3D cpu_to_le32(SAS_MAX_AIP);
+ 	pm8001_dbg(pm8001_ha, DEV,
+ 		   "Saving Encryption info to flash. payload 0x%x\n",
+-		   payload.new_curidx_ksop);
++		   le32_to_cpu(payload.new_curidx_ksop));
 =20
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.pageCode 0x%08x\n",
--		   SASConfigPage.pageCode);
-+		   le32_to_cpu(SASConfigPage.pageCode));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.MST_MSI  0x%08x\n",
--		   SASConfigPage.MST_MSI);
-+		   le32_to_cpu(SASConfigPage.MST_MSI));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_SSP_MCT_TMO  0x%08x\n",
--		   SASConfigPage.STP_SSP_MCT_TMO);
-+		   le32_to_cpu(SASConfigPage.STP_SSP_MCT_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_FRM_TMO  0x%08x\n",
--		   SASConfigPage.STP_FRM_TMO);
-+		   le32_to_cpu(SASConfigPage.STP_FRM_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_IDLE_TMO  0x%08x\n",
--		   SASConfigPage.STP_IDLE_TMO);
-+		   le32_to_cpu(SASConfigPage.STP_IDLE_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.OPNRJT_RTRY_INTVL  0x%08x\n"=
-,
--		   SASConfigPage.OPNRJT_RTRY_INTVL);
-+		   le32_to_cpu(SASConfigPage.OPNRJT_RTRY_INTVL));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO  0x=
-%08x\n",
--		   SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO);
-+		   le32_to_cpu(SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR  0x=
-%08x\n",
--		   SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR);
-+		   le32_to_cpu(SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR));
- 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.MAX_AIP  0x%08x\n",
--		   SASConfigPage.MAX_AIP);
-+		   le32_to_cpu(SASConfigPage.MAX_AIP));
-=20
- 	memcpy(&payload.cfg_pg, &SASConfigPage,
- 			 sizeof(SASProtocolTimerConfig_t));
+ 	rc =3D pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
+ 			sizeof(payload), 0);
 --=20
 2.34.1
 
