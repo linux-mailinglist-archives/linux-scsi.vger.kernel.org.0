@@ -2,74 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9914B3F56
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Feb 2022 03:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 384554B3F5A
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Feb 2022 03:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239300AbiBNCUl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 13 Feb 2022 21:20:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40520 "EHLO
+        id S239361AbiBNCUp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 13 Feb 2022 21:20:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239328AbiBNCUI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Feb 2022 21:20:08 -0500
+        with ESMTP id S239335AbiBNCUJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Feb 2022 21:20:09 -0500
 Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF64254BF2
-        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 18:20:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2872D54F9C
+        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 18:20:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1644805200; x=1676341200;
+  t=1644805201; x=1676341201;
   h=from:to:subject:date:message-id:in-reply-to:references:
    mime-version:content-transfer-encoding;
-  bh=PIfDTjlErIm0Ykd9p/VcCUrV6cd20fMAmosk0+slmG4=;
-  b=A90trD039MHc0lRk2vJv6T25dXiJT2etQiGGgUm1F8UIgKoHmdj3DGWN
-   PTnWgiIJa3HNKMimI59mnmRpxNiprD++wGIj9yz10oHTd9N24/ssBLn/b
-   72xT9t9pZ0mdE7SDnDWDtQqTN06RmoScB6S4QlGnCU72Ky4mLrKdaAyQU
-   NWVW4iNk4NEe6rF7dY5/XVYEz7welxPI1CYONAgq8zLZ57Amk7kfB6YKC
-   CV5FitcqvBIRyKg9VACukEXH1D+/aUGTx+j5YnJebM1UypI7JFUAiKcuf
-   9e72TkQn+wShNu+AC7dLO8DeGjyz86GgeYnCM/UhUeJqkugovd+6Cmwd/
+  bh=G72px9zteVEyav9xzEEG21fzNpn0jSxqg6FF7e4Vh/0=;
+  b=hPvfotPh3JEU/u0kfU/NE2e2+hwhiY3KWqYZObQ3ZLOf/eLoEATVBd0X
+   iz3cAlr8UGjy4uNsMYK8q/mo4bEHOhrydhXifhUfZlQsdNLg2EnzTVIJn
+   xys4/9dptuUgofLmBNY3moDndUQhqAmeXkWJuWR+A1F0yCBbPJ63DiM7E
+   A6S/QgpTYDxE1Zx+VpV6covxEhGOkaiUBqoyBkht1wZ8KcHjRzS3KBZAp
+   9SlZa24icBETSfpEQMIB7JuIiDvrYdQpsdMX5PWtq7LNKIGHRfxdxEZMU
+   gX5/xF2F8Q34rJjIaOXzWIO7iAPRy/0S2iYyDV5+iXPreV12F1WIx3AAq
    w==;
 X-IronPort-AV: E=Sophos;i="5.88,366,1635177600"; 
-   d="scan'208";a="192819814"
+   d="scan'208";a="192819818"
 Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 14 Feb 2022 10:20:00 +0800
-IronPort-SDR: QXquiZvWXe4N77r/+GGjKu0oCZDxoWuSRymoAn0FSU8ER9PLotGNTNj8nf66mJpwCYnr8QC6v4
- UIaCnOYIgZlnFqirqDnA4vW+IPfBFfM2xr85/rU6anhIONnMHJef1hsiixuGIzDTk9gPjarGZn
- zLUE3uukmh3Bd4FYI0Feq3OlvfW+deXRP9RugCvTbJcjoi/km4gAjeZcqQE6gN1hC42BFqQXiN
- AfE8qOXPTJ/mOcsxCkIme86OEIU8pWtqVhVVD3EigIUnDZorQuOmlXTEhDu2jjMMR1izQmPF0v
- YKXSF7K52oqLKk/k1kce4Ubj
+  by ob1.hgst.iphmx.com with ESMTP; 14 Feb 2022 10:20:01 +0800
+IronPort-SDR: q4jpOBZZKkFsk4YnIKC5GOLVfs1JSO7Tpefz/X+9bKJOXoJ+EZhuR2/Ip233hDsF5VZhffQvyo
+ 5+NAckfYlrXpptR5QUaY1IVeBw13e2MPHD657PZFnBy/pY1Z6ydWV7pvnX3VgbJQaSvap64ZbS
+ h2gm7l1v0wzGNP2l9Q89AzWPhN/5K699/N0qGHK5IwG/aXLpPUhILX6vqqmxuTVF++dAQC/Pmo
+ 5YV3A7B/PNktjaedFaCKZ3gl/jXkqCRDK388ciBS4/TvJeBr30MsZyUNR4/gMTgsn2LTKBeDwG
+ ZcEPwtdG+VfCqj0UHqQtQO9A
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 17:52:53 -0800
-IronPort-SDR: tDOVQyF/VzWUfOvFBnfOOOQkkdXeUKHiQfQQQz91iHCWL3FwknObErS28yXwWgye+Ino46SAaA
- USO/ymaQr+LxNR/lohbFpm/i6L8ZL2cTCY4dRNGMClQMfGUDb1JGVyLEpCiTTf7zIp0+5PTfwY
- slUoaV6Xafbrr3H1yfq8lzR25X8TJ3W1jj3vtwWtILElPbw/SVjOv2JnEl/fCfsfd5iFjv624a
- kG7czFhPcPRKWhXTvW0rjg6hv9HSdVhla9JmYH94dSUj/aE4kbxACyZIi12IEHe+oRL3WJA/sv
- q74=
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 17:52:54 -0800
+IronPort-SDR: 7K0mQDzqWMJfroTqcn3+bL2JqI1DaxRGd6F7f/IepQjZ7pWc1sWZBm7uxLoyNuRzqx6ImvcHFE
+ VI0c9omzTMT34j8XeecemM9fZSgdaIL4HAE1C5wqkYVXvCoXIni5fz5NsfFsSWpy7QcEWfGKKs
+ tPQ/IZlPccTen9RtA/SubPGf2RjkWP3MBwxQ9tdGWk+ZcCmQtO8L+xJdPeSCpnq05jwXUC2s6z
+ hy6MMzL+7iE+94H1IYh+Gc+c3mYfgc3ELGCeUrNgWUG57barx+yCXQftySxKEtXjCe1sklzk+i
+ /9c=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 18:20:02 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 18:20:03 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JxnxF2t5dz1SVp3
-        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 18:20:01 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JxnxG51Qlz1SVp5
+        for <linux-scsi@vger.kernel.org>; Sun, 13 Feb 2022 18:20:02 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1644805201; x=1647397202; bh=PIfDTjlErIm0Ykd9p/
-        VcCUrV6cd20fMAmosk0+slmG4=; b=WreBekZ9p8RAOLpSqShNbP5N9MtqBGF60l
-        voWvKAskDlbvPzQnMTRPZbciAGbbI/Qsd/2pfCV2KRhF8G0J0zhSGJkAaG0glgjb
-        CDDVluUWQvSSGRsJDJXPFzaWygoXozJL6hfgTCsGqNqLV8W4r05Nq8Q8uCvv73Xz
-        H+PAZxTAoShLm61ElAnQkLEdOjO+SqUSHTcwbmAWjjps+epBSt304pbLWCwjsZL5
-        aocF5Nit8QQlcd2n56lrwGKr2r9aqwYja/7a8LRYNg3KoqOgOYGEHRZqLbT+KV34
-        sY0jsMoZgbpxlHilydpO2ZAEOq9o3WJaWI/tXlK37q6cMJq6/m+g==
+        :from; s=dkim; t=1644805202; x=1647397203; bh=G72px9zteVEyav9xzE
+        EG21fzNpn0jSxqg6FF7e4Vh/0=; b=CxOcdHUfFZnHQmFA2muZZ09m4qvY1ltsTp
+        TMnQuDLvf0r+3svcERZJHmQhSy4lQ3RbthxrEWYOJ8fjzN+FCvzCnt/6ZlbCmgls
+        7GadkiKJE+cmkZKSY/FKMG3Hy9CIxHE/FnRUNwNKGV/APqwjW9uJ7sMpkMYoaPAn
+        oHUxp7CtWS/QUT6sKgb2moLuOnT2AFL4CvvIEt1UZzIak+jtnUvjrKxzdXvaDLe2
+        No6BJra0Ly0erfw6HN+P9xUD3M9rBncIAtzOJUaRRLNAItXOWmMlIT+UH7INDn/W
+        b+qYHqZjLjPeZ6p2yctXmuS2iFzS6+C7cFJax8D00jDEnZLw+7oQ==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Q38e71KWmN4C for <linux-scsi@vger.kernel.org>;
-        Sun, 13 Feb 2022 18:20:01 -0800 (PST)
+        with ESMTP id 6Y2QTFpuYmsK for <linux-scsi@vger.kernel.org>;
+        Sun, 13 Feb 2022 18:20:02 -0800 (PST)
 Received: from washi.fujisawa.hgst.com (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JxnxD0661z1SVnx;
-        Sun, 13 Feb 2022 18:19:59 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JxnxF2LTdz1Rwrw;
+        Sun, 13 Feb 2022 18:20:01 -0800 (PST)
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 To:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
@@ -77,9 +77,9 @@ To:     linux-scsi@vger.kernel.org,
         Xiang Chen <chenxiang66@hisilicon.com>,
         Jason Yan <yanaijie@huawei.com>,
         Luo Jiaxing <luojiaxing@huawei.com>
-Subject: [PATCH v3 24/31] scsi: pm8001: Fix process_one_iomb() kdoc comment
-Date:   Mon, 14 Feb 2022 11:17:40 +0900
-Message-Id: <20220214021747.4976-25-damien.lemoal@opensource.wdc.com>
+Subject: [PATCH v3 25/31] scsi: libsas: Simplify sas_ata_qc_issue() detection of NCQ commands
+Date:   Mon, 14 Feb 2022 11:17:41 +0900
+Message-Id: <20220214021747.4976-26-damien.lemoal@opensource.wdc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220214021747.4976-1-damien.lemoal@opensource.wdc.com>
 References: <20220214021747.4976-1-damien.lemoal@opensource.wdc.com>
@@ -95,27 +95,38 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add missing description of the circularQ argument.
+To detect if a command is NCQ, there is no need to test all possible NCQ
+command codes. Instead, use ata_is_ncq() to test the command protocol.
 
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/scsi/libsas/sas_ata.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80x=
-x_hwi.c
-index 9cea0a27f1a1..e74cd02a5c08 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -3922,6 +3922,7 @@ static int ssp_coalesced_comp_resp(struct pm8001_hb=
-a_info *pm8001_ha,
- /**
-  * process_one_iomb - process one outbound Queue memory block
-  * @pm8001_ha: our hba card information
-+ * @circularQ: the outbound queue table.
-  * @piomb: IO message buffer
-  */
- static void process_one_iomb(struct pm8001_hba_info *pm8001_ha,
+diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.=
+c
+index 50f779088b6e..fcfc8fd4b14f 100644
+--- a/drivers/scsi/libsas/sas_ata.c
++++ b/drivers/scsi/libsas/sas_ata.c
+@@ -181,14 +181,9 @@ static unsigned int sas_ata_qc_issue(struct ata_queu=
+ed_cmd *qc)
+ 	task->task_proto =3D SAS_PROTOCOL_STP;
+ 	task->task_done =3D sas_ata_task_done;
+=20
+-	if (qc->tf.command =3D=3D ATA_CMD_FPDMA_WRITE ||
+-	    qc->tf.command =3D=3D ATA_CMD_FPDMA_READ ||
+-	    qc->tf.command =3D=3D ATA_CMD_FPDMA_RECV ||
+-	    qc->tf.command =3D=3D ATA_CMD_FPDMA_SEND ||
+-	    qc->tf.command =3D=3D ATA_CMD_NCQ_NON_DATA) {
+-		/* Need to zero out the tag libata assigned us */
++	/* For NCQ commands, zero out the tag libata assigned us */
++	if (ata_is_ncq(qc->tf.protocol))
+ 		qc->tf.nsect =3D 0;
+-	}
+=20
+ 	ata_tf_to_fis(&qc->tf, qc->dev->link->pmp, 1, (u8 *)&task->ata_task.fis=
+);
+ 	task->uldd_task =3D qc;
 --=20
 2.34.1
 
