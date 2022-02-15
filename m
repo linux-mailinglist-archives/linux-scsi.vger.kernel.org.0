@@ -2,61 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7994B6193
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Feb 2022 04:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A89C44B617D
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Feb 2022 04:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiBODV7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Feb 2022 22:21:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46988 "EHLO
+        id S233789AbiBODTj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Feb 2022 22:19:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiBODV6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Feb 2022 22:21:58 -0500
+        with ESMTP id S229972AbiBODTi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Feb 2022 22:19:38 -0500
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08031D32E
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Feb 2022 19:21:49 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21F2Ql24001593;
-        Tue, 15 Feb 2022 03:19:25 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DDE205C9
+        for <linux-scsi@vger.kernel.org>; Mon, 14 Feb 2022 19:19:29 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21F2WvHf022038;
+        Tue, 15 Feb 2022 03:19:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=NIZTnGfIVD7+m/ScAt1dOLdUCboWAED9akYW6rIFDl8=;
- b=sxCupk5lWkly4XpcPEbeutfEjLLoMMg6wx1wzCNdOYc0kJEsdz/ZCwn2ej02kX6N0BbC
- UZLMTVb/gT63MO9DW6esUSD0cS6N/uHV3bff4HIOD4VfeWxjgE6oVE0npG85fMkQiP2u
- PPKm3E9qTEdbTSY5+6Efa7iPJuUaP9/iemTQWRrpLC16clXrCIWCJRYII0th0rDNqJ/S
- IgPxuHEdloP9gx2ND5QTIrSXtMT0ITqZ9K8LFhaOagK0q796lBrjpIhBT/y8UyiqsgLa
- EEggTTRRJXUFFFBGcmAkDn0/AMJwznzjwpuONJ1/nKq1WYUZ/izSJZvHOpKFrS1ec8rB mw== 
+ bh=46zFtglfi8sjiXQSLhriwktINhdNnGTcag4ltk2w420=;
+ b=Bf1BQOsAB5fI4KcdkJj2CITJq35uXV/lAmKbw9VY3bjs276/wpKCbSgeREg2g6V6+0NP
+ 1jcftlExiQZiuBhodkKdsoJ1+FBOBBzVgZ2YLnjJXfzHdwcnaIvtlRxZS5MtAlUTg/PZ
+ s1mJU38FL0h5BugkwnoO2CjbEB+F4csdgaZdVI8uczL9nkWRxO6g3QEW7z8DHdUbrMSU
+ T9omhLdTk+xxiXeWU1VvZE77bypAZAgBy9sl6M7nSZ56v2PrquFwYKxu4x2J0yo+/h0J
+ TeWvg6oAsLVKNMoOHW5mfwaqRUFvlXJKIznWXu1FpnRAG1+a21KBDFZrf4JNhB7wkYk3 XA== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e63p26hch-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e63ad6bqs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Feb 2022 03:19:26 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21F3GmOk057516;
+        Tue, 15 Feb 2022 03:19:25 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3030.oracle.com with ESMTP id 3e620wpgrf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 15 Feb 2022 03:19:25 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21F3GmXd057526;
-        Tue, 15 Feb 2022 03:19:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3030.oracle.com with ESMTP id 3e620wpgr3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Feb 2022 03:19:24 +0000
 Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 21F3JMP4064243;
-        Tue, 15 Feb 2022 03:19:23 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 21F3JMP6064243;
+        Tue, 15 Feb 2022 03:19:25 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3030.oracle.com with ESMTP id 3e620wpgqq-2;
-        Tue, 15 Feb 2022 03:19:23 +0000
+        by userp3030.oracle.com with ESMTP id 3e620wpgqq-3;
+        Tue, 15 Feb 2022 03:19:25 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, Chesnokov Gleb <Chesnokov.G@raidix.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH 1/1] qla2xxx: Remove unused qla_sess_op_cmd_list from scsi_qla_host_t
-Date:   Mon, 14 Feb 2022 22:19:14 -0500
-Message-Id: <164489513314.15031.16564796657450806528.b4-ty@oracle.com>
+To:     linux-scsi@vger.kernel.org, Don Brace <don.brace@microchip.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        scott.benesh@microchip.com, gerry.morong@microchip.com,
+        mike.mcgowen@microchip.com, balsundar.p@microchip.com,
+        murthy.bhat@microchip.com, mahesh.rajashekhara@microchip.com,
+        Kevin.Barnett@microchip.com, scott.teel@microchip.com,
+        Justin.Lindley@microchip.com
+Subject: Re: [PATCH] smartpqi: fix unused variable pqi_pm_ops for clang
+Date:   Mon, 14 Feb 2022 22:19:15 -0500
+Message-Id: <164489513314.15031.15243432127896154049.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <AS8PR10MB49524AAB4C8016E4AFF17FFB9D2D9@AS8PR10MB4952.EURPRD10.PROD.OUTLOOK.COM>
-References: <AS8PR10MB49524AAB4C8016E4AFF17FFB9D2D9@AS8PR10MB4952.EURPRD10.PROD.OUTLOOK.COM>
+In-Reply-To: <20220210201151.236170-1-don.brace@microchip.com>
+References: <20220210201151.236170-1-don.brace@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: VFi3l2pXNICxuWacv2NmrVNjHFAoC8ar
-X-Proofpoint-GUID: VFi3l2pXNICxuWacv2NmrVNjHFAoC8ar
+X-Proofpoint-GUID: xd2wWdV7WZjD7tOfk6ZTBf9gMwoMpRZt
+X-Proofpoint-ORIG-GUID: xd2wWdV7WZjD7tOfk6ZTBf9gMwoMpRZt
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -67,22 +72,22 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 8 Feb 2022 15:18:38 +0000, Chesnokov Gleb wrote:
+On Thu, 10 Feb 2022 14:11:51 -0600, Don Brace wrote:
 
-> The qla_sess_op_cmd_list was introduced in 8b2f5ff3d05c
-> ("qla2xxx: cleanup cmd in qla workqueue before processing TMR").
+> Driver added a new dev_pm_ops structure used only if CONFIG_PM is set.
+> The CONFIG_PM MACRO needed to be moved up in the code to avoid the
+> compiler warnings. The HUNK to move the location was missing from
+> the above patch.
 > 
-> Then the usage of this list was dropped in fb35265b12bb
-> ("scsi: qla2xxx: Remove session creation redundant code").
-> 
-> Thus, remove this list since it is no longer used.
+> Found by kernel test robot by building driver with
+> CONFIG_PM disabled.
 > 
 > [...]
 
 Applied to 5.18/scsi-queue, thanks!
 
-[1/1] qla2xxx: Remove unused qla_sess_op_cmd_list from scsi_qla_host_t
-      https://git.kernel.org/mkp/scsi/c/fa1d43f396f7
+[1/1] smartpqi: fix unused variable pqi_pm_ops for clang
+      https://git.kernel.org/mkp/scsi/c/31b17c3aeb5e
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
