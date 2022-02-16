@@ -2,54 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7397F4B92C3
+	by mail.lfdr.de (Postfix) with ESMTP id DC0E84B92C6
 	for <lists+linux-scsi@lfdr.de>; Wed, 16 Feb 2022 22:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbiBPVDp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Feb 2022 16:03:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50982 "EHLO
+        id S233295AbiBPVDq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Feb 2022 16:03:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233634AbiBPVDj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Feb 2022 16:03:39 -0500
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE2121FEEA
-        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:03:26 -0800 (PST)
-Received: by mail-pl1-f182.google.com with SMTP id x4so2966192plb.4
-        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:03:26 -0800 (PST)
+        with ESMTP id S233439AbiBPVDk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Feb 2022 16:03:40 -0500
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2133B222193
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:03:27 -0800 (PST)
+Received: by mail-pl1-f180.google.com with SMTP id x11so2945903pll.10
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:03:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=uD1tH8wDMn3Wm4Fc6dGeyWCxFL02tMZz49ogOKnrwOU=;
-        b=MzZ2YshO+N8/q2EV7Y3LYDbbjRX9xoOd6CRyfQNNBPEds0liudgaTzfb0DwVH6m3tx
-         Ymv6mrEviT7ZhoT8vThO0wTZdN7pIUt01BxBIcSYGpRD/6cnOu/xJ5e3G+b0vtTlrf+x
-         hKAESKntWaLj2LI23RgWIAQgdAhPSf3hSihNrqB+5WWcU0MBzjGeF8GQAh01gDyH18Sc
-         Cfu+VReokdFTIH8fvOATVry5Dv5+S+ZIK8mTsNYQzsVrO92T/tfmgB2yabSaPWCAstku
-         zy02XC/6RdicbMQpTSDmYjdQWH0HQCbURcQaFY6Mce5DAaqWSKk1T22UppDaPtRF2m1h
-         N+eg==
-X-Gm-Message-State: AOAM531eQ2DYHNFlJvyp0CUEwMmqLg0jvWt64EPpFb1vwHBGh2n3tYET
-        XY8x+gf0EWMDnCbBULhkeIE=
-X-Google-Smtp-Source: ABdhPJycK/D48qfWldknXt0mNh5iw+qXxqoMJhA5j0jYNlgcdVUeJ86/DXcgWViNB70nj9bWqHlWwg==
-X-Received: by 2002:a17:90b:4a92:b0:1b8:a3c5:1afe with SMTP id lp18-20020a17090b4a9200b001b8a3c51afemr3875276pjb.69.1645045405421;
-        Wed, 16 Feb 2022 13:03:25 -0800 (PST)
+        bh=o/DjmKMEQ/TICGYiG1zbJphAMWsxSd5D/VpqW7WFmMA=;
+        b=qw9dR30iz7Nmy0CCA6PDbEs71/HPMXHHEkv/fY83VC6nWtNoMn2ak4qlc5fbUjwPyQ
+         QuOXTasRtFqfiT5zBxR9OvFpZXccrC2fuiadk19dO/x5N35sK1bAd461VcYl0KP9Vg4T
+         9s7w07aOcCf/wHeBZGd/ZW4lIJDgBI6bbDgi4FvjURhHmfkAnJVKrZ000Zu4i6uMcUZm
+         7aFxTiZ+f+y0gCGipkubFDGobpMW1/z/TjPIrc2J/ahXg1WewoASj2cwc1H0V5JH8tAw
+         AZdzLg+aDmKPl9wswXu5A2oAmor8h0oTbk60Y2MZhCsSiHD2Rco59+lzZoRGmRUg4OHg
+         id5Q==
+X-Gm-Message-State: AOAM531pgDJfsIoPFggzV+cuWT4OVI4brRwbNnuepBOU9oMIE9PQA7MO
+        1CL3yPcrvP2TQP+KRU+FoIs=
+X-Google-Smtp-Source: ABdhPJy02UEOrY8zIY+12tjQR8JrmJhItjyI17D4b0Y20AOs0x8Oq6GwDrLFIhzcxQXFUPSRpc5+Bw==
+X-Received: by 2002:a17:90b:33c4:b0:1b9:3aa6:e3e0 with SMTP id lk4-20020a17090b33c400b001b93aa6e3e0mr3900460pjb.182.1645045407083;
+        Wed, 16 Feb 2022 13:03:27 -0800 (PST)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id c8sm46591222pfv.57.2022.02.16.13.03.23
+        by smtp.gmail.com with ESMTPSA id c8sm46591222pfv.57.2022.02.16.13.03.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 13:03:24 -0800 (PST)
+        Wed, 16 Feb 2022 13:03:26 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Oliver Neukum <oneukum@suse.com>,
         Johannes Thumshirn <johannes.thumshirn@wdc.com>,
         Hannes Reinecke <hare@suse.de>,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Oliver Neukum <oliver@neukum.org>,
-        Ali Akcaagac <aliakc@web.de>,
-        Jamie Lenehan <lenehan@twibble.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v4 19/50] scsi: dc395x: Stop using the SCSI pointer
-Date:   Wed, 16 Feb 2022 13:02:02 -0800
-Message-Id: <20220216210233.28774-20-bvanassche@acm.org>
+Subject: [PATCH v4 20/50] scsi: esp_scsi: Stop using the SCSI pointer
+Date:   Wed, 16 Feb 2022 13:02:03 -0800
+Message-Id: <20220216210233.28774-21-bvanassche@acm.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220216210233.28774-1-bvanassche@acm.org>
 References: <20220216210233.28774-1-bvanassche@acm.org>
@@ -66,29 +62,52 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Remove the code that sets SCSI pointer members since there is no code in
-this driver that reads these members.
+Set .cmd_size in the SCSI host template instead of using the SCSI pointer
+from struct scsi_cmnd. This patch prepares for removal of the SCSI pointer
+from struct scsi_cmnd.
 
-Cc: Oliver Neukum <oneukum@suse.com>
 Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/dc395x.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/scsi/esp_scsi.c | 4 +---
+ drivers/scsi/esp_scsi.h | 3 ++-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
-index c11916b8ae00..67a89715c863 100644
---- a/drivers/scsi/dc395x.c
-+++ b/drivers/scsi/dc395x.c
-@@ -3314,9 +3314,6 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
+diff --git a/drivers/scsi/esp_scsi.c b/drivers/scsi/esp_scsi.c
+index 57787537285a..64ec6bb84550 100644
+--- a/drivers/scsi/esp_scsi.c
++++ b/drivers/scsi/esp_scsi.c
+@@ -2678,6 +2678,7 @@ struct scsi_host_template scsi_esp_template = {
+ 	.sg_tablesize		= SG_ALL,
+ 	.max_sectors		= 0xffff,
+ 	.skip_settle_delay	= 1,
++	.cmd_size		= sizeof(struct esp_cmd_priv),
+ };
+ EXPORT_SYMBOL(scsi_esp_template);
  
- 	/* Here is the info for Doug Gilbert's sg3 ... */
- 	scsi_set_resid(cmd, srb->total_xfer_length);
--	/* This may be interpreted by sb. or not ... */
--	cmd->SCp.this_residual = srb->total_xfer_length;
--	cmd->SCp.buffers_residual = 0;
- 	if (debug_enabled(DBG_KG)) {
- 		if (srb->total_xfer_length)
- 			dprintkdbg(DBG_KG, "srb_done: (0x%p) <%02i-%i> "
+@@ -2739,9 +2740,6 @@ static struct spi_function_template esp_transport_ops = {
+ 
+ static int __init esp_init(void)
+ {
+-	BUILD_BUG_ON(sizeof(struct scsi_pointer) <
+-		     sizeof(struct esp_cmd_priv));
+-
+ 	esp_transport_template = spi_attach_transport(&esp_transport_ops);
+ 	if (!esp_transport_template)
+ 		return -ENODEV;
+diff --git a/drivers/scsi/esp_scsi.h b/drivers/scsi/esp_scsi.h
+index 446a3d18c022..c73760d3cf83 100644
+--- a/drivers/scsi/esp_scsi.h
++++ b/drivers/scsi/esp_scsi.h
+@@ -262,7 +262,8 @@ struct esp_cmd_priv {
+ 	struct scatterlist	*cur_sg;
+ 	int			tot_residue;
+ };
+-#define ESP_CMD_PRIV(CMD)	((struct esp_cmd_priv *)(&(CMD)->SCp))
++
++#define ESP_CMD_PRIV(cmd)	((struct esp_cmd_priv *)scsi_cmd_priv(cmd))
+ 
+ /* NOTE: this enum is ordered based on chip features! */
+ enum esp_rev {
