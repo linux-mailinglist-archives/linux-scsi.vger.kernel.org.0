@@ -2,53 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4544B92F9
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Feb 2022 22:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A6F4B92F0
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Feb 2022 22:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbiBPVE4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Feb 2022 16:04:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53330 "EHLO
+        id S234753AbiBPVEk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Feb 2022 16:04:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234011AbiBPVEd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Feb 2022 16:04:33 -0500
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C5E2B1679
-        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:04:12 -0800 (PST)
-Received: by mail-pl1-f176.google.com with SMTP id j4so2951754plj.8
-        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:04:12 -0800 (PST)
+        with ESMTP id S234723AbiBPVEe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Feb 2022 16:04:34 -0500
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FCA2B1A83
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:04:14 -0800 (PST)
+Received: by mail-pf1-f181.google.com with SMTP id d17so3236593pfl.0
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:04:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nBwtGryv3+hjFI6gPofqHnRhTZ05RYrc/eDIGaEQe1I=;
-        b=kSGrsv91IjDZW540efBzYIJccRkz+ekQ2tyCgD+2XHxk9ijji9a61jd2IzUEUp+qgz
-         IYfjhg9mYcAn5foDBkDO0fVtAw5A0UCODCxRhou7gerfKaWaDsLzVByEubJtbYCC/F58
-         mwztTCPHXM3jESV8t0mYn1CO7HOWruSCNRMsq2TeEiDXyhQpkU2iJPxcUiw5xSUMIRVb
-         ui/ds1lPsEhCNGYEt2GLpNOflEp+a55+XP8t340YpWKQFgI6HSfHSrS6Vqqq6ht+6MKA
-         aMCwYhLlfyySCoJpD0CII06sOS3HZ4jbG0cFRfbh98hTGz0UJwVpNKaCC5yF8ONv93lu
-         WVwQ==
-X-Gm-Message-State: AOAM533ONo3066xC0WxlvrFSQbHHjJVXevRc1PagowZM1qdrT5+gyAWj
-        ODgx/Ka/SxICKkoyVifNDi8=
-X-Google-Smtp-Source: ABdhPJwTC6jV4sboA6BHVAtJ/YxLQFu03S6ovz9hTF5Fg97+HnuyXlNx9dU6+WAWO/mq/NA3I+vs7A==
-X-Received: by 2002:a17:90b:f0c:b0:1b9:c6b7:7cd6 with SMTP id br12-20020a17090b0f0c00b001b9c6b77cd6mr3780577pjb.231.1645045451829;
-        Wed, 16 Feb 2022 13:04:11 -0800 (PST)
+        bh=rJEfpYZmesmFuk0UQfGK2rmVME1mv8OVxEoziN58YoM=;
+        b=POy5dOKrdaBXmqKLt1qh1uMv6Bjh3hWl/b+AuW2a4hX1cSOyMJS2QD6DxRUA0KyOSJ
+         rSdDc27HEll4j5oDcw5AzFA/Etn8kac/OvkwpzoFmWhwb7WMCtPw7ZrJkxDCtYChrxv2
+         uwSuVuCmhZkLDKW1riemPtOwfKiXYRr2pFO1EFcJUoM6T5nms3ffQZkb1PcL3TQGEtbg
+         UO/Q6z0ny3PHy84+LFpuidi3Xq/lK42jvj1/wOPsJVBz1mqvTds6FFhQgRP4zHj0WLW3
+         pqhU7Pnmtl0tEfv3TBRXhD3qeSMzWm4d0vR7TA3AJxeUJKKGVN85woexSyf2V0r4LS2K
+         U7tg==
+X-Gm-Message-State: AOAM532o0kQBPRRF61XfKzjQMJsubTf4MH/FVmaQxqbqJgD3RFkiqbD3
+        iVxfMD995+m8ndVupl3i7xk=
+X-Google-Smtp-Source: ABdhPJzs7ll1JOklhlZ81B/xoODjls3+gWBDy1xPengQWATZ/sYp/HNoGkeOxOmxpq2Kqh0lRbPp3A==
+X-Received: by 2002:a05:6a00:130b:b0:4e1:7b1e:6c6 with SMTP id j11-20020a056a00130b00b004e17b1e06c6mr5247279pfu.22.1645045453465;
+        Wed, 16 Feb 2022 13:04:13 -0800 (PST)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id c8sm46591222pfv.57.2022.02.16.13.04.10
+        by smtp.gmail.com with ESMTPSA id c8sm46591222pfv.57.2022.02.16.13.04.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 13:04:11 -0800 (PST)
+        Wed, 16 Feb 2022 13:04:12 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
         Hannes Reinecke <hare@suse.de>,
-        Daniel Wagner <dwagner@suse.de>,
-        GR-QLogic-Storage-Upstream@marvell.com,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Don Brace <don.brace@microchip.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v4 43/50] scsi: qla2xxx: Stop using the SCSI pointer
-Date:   Wed, 16 Feb 2022 13:02:26 -0800
-Message-Id: <20220216210233.28774-44-bvanassche@acm.org>
+Subject: [PATCH v4 44/50] scsi: smartpqi: Stop using the SCSI pointer
+Date:   Wed, 16 Feb 2022 13:02:27 -0800
+Message-Id: <20220216210233.28774-45-bvanassche@acm.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220216210233.28774-1-bvanassche@acm.org>
 References: <20220216210233.28774-1-bvanassche@acm.org>
@@ -56,102 +54,70 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of using the SCp.ptr field to track whether or not a command is
-in flight, use the sp->type field to track this information. sp->type
-must be set for proper operation of the qla2xxx driver. See e.g. the
-switch (sp->type) statement in qla2x00_ct_entry().
+Set .cmd_size in the SCSI host template instead of using the SCSI pointer
+from struct scsi_cmnd. This patch prepares for removal of the SCSI pointer
+from struct scsi_cmnd.
 
-This patch prepares for removal of the SCSI pointer from struct scsi_cmnd.
-
-Cc: Nilesh Javali <njavali@marvell.com>
-Cc: Ewan D. Milne <emilne@redhat.com>
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Daniel Wagner <dwagner@suse.de>
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h |  2 --
- drivers/scsi/qla2xxx/qla_os.c  | 13 +++++--------
- 2 files changed, 5 insertions(+), 10 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index 47d7fa1c7ae8..174e80fbbdae 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -5201,8 +5201,6 @@ struct secure_flash_update_block_pk {
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 4611912ae261..7c0d069a3158 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -54,6 +54,15 @@ MODULE_DESCRIPTION("Driver for Microchip Smart Family Controller version "
+ MODULE_VERSION(DRIVER_VERSION);
+ MODULE_LICENSE("GPL");
  
- #define	QLA_DSDS_PER_IOCB	37
- 
--#define CMD_SP(Cmnd)		((Cmnd)->SCp.ptr)
--
- #define QLA_SG_ALL	1024
- 
- enum nexus_wait_type {
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index a4546346c18b..58c83525f006 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -739,7 +739,7 @@ void qla2x00_sp_compl(srb_t *sp, int res)
- 	/* kref: INIT */
- 	kref_put(&sp->cmd_kref, qla2x00_sp_release);
- 	cmd->result = res;
--	CMD_SP(cmd) = NULL;
-+	sp->type = 0;
- 	scsi_done(cmd);
- 	if (comp)
- 		complete(comp);
-@@ -831,7 +831,7 @@ void qla2xxx_qpair_sp_compl(srb_t *sp, int res)
- 	/* ref: INIT */
- 	kref_put(&sp->cmd_kref, qla2x00_sp_release);
- 	cmd->result = res;
--	CMD_SP(cmd) = NULL;
-+	sp->type = 0;
- 	scsi_done(cmd);
- 	if (comp)
- 		complete(comp);
-@@ -934,8 +934,6 @@ qla2xxx_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 
- 	sp->u.scmd.cmd = cmd;
- 	sp->type = SRB_SCSI_CMD;
--
--	CMD_SP(cmd) = (void *)sp;
- 	sp->free = qla2x00_sp_free_dma;
- 	sp->done = qla2x00_sp_compl;
- 
-@@ -1025,7 +1023,6 @@ qla2xxx_mqueuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd,
- 
- 	sp->u.scmd.cmd = cmd;
- 	sp->type = SRB_SCSI_CMD;
--	CMD_SP(cmd) = (void *)sp;
- 	sp->free = qla2xxx_qpair_sp_free_dma;
- 	sp->done = qla2xxx_qpair_sp_compl;
- 
-@@ -1071,6 +1068,7 @@ qla2x00_eh_wait_on_command(struct scsi_cmnd *cmd)
- 	unsigned long wait_iter = ABORT_WAIT_ITER;
- 	scsi_qla_host_t *vha = shost_priv(cmd->device->host);
- 	struct qla_hw_data *ha = vha->hw;
-+	srb_t *sp = scsi_cmd_priv(cmd);
- 	int ret = QLA_SUCCESS;
- 
- 	if (unlikely(pci_channel_offline(ha->pdev)) || ha->flags.eeh_busy) {
-@@ -1079,10 +1077,9 @@ qla2x00_eh_wait_on_command(struct scsi_cmnd *cmd)
- 		return ret;
++struct pqi_cmd_priv {
++	int this_residual;
++};
++
++static struct pqi_cmd_priv *pqi_cmd_priv(struct scsi_cmnd *cmd)
++{
++	return scsi_cmd_priv(cmd);
++}
++
+ static void pqi_verify_structures(void);
+ static void pqi_take_ctrl_offline(struct pqi_ctrl_info *ctrl_info,
+ 	enum pqi_ctrl_shutdown_reason ctrl_shutdown_reason);
+@@ -5552,7 +5561,7 @@ static void pqi_aio_io_complete(struct pqi_io_request *io_request,
+ 	scsi_dma_unmap(scmd);
+ 	if (io_request->status == -EAGAIN || pqi_raid_bypass_retry_needed(io_request)) {
+ 		set_host_byte(scmd, DID_IMM_RETRY);
+-		scmd->SCp.this_residual++;
++		pqi_cmd_priv(scmd)->this_residual++;
  	}
  
--	while (CMD_SP(cmd) && wait_iter--) {
-+	while (sp->type && wait_iter--)
- 		msleep(ABORT_POLLING_PERIOD);
--	}
--	if (CMD_SP(cmd))
-+	if (sp->type)
- 		ret = QLA_FUNCTION_FAILED;
+ 	pqi_free_io_request(io_request);
+@@ -5814,7 +5823,7 @@ static inline bool pqi_is_bypass_eligible_request(struct scsi_cmnd *scmd)
+ 	if (blk_rq_is_passthrough(scsi_cmd_to_rq(scmd)))
+ 		return false;
  
- 	return ret;
+-	return scmd->SCp.this_residual == 0;
++	return pqi_cmd_priv(scmd)->this_residual == 0;
+ }
+ 
+ /*
+@@ -7262,6 +7271,7 @@ static struct scsi_host_template pqi_driver_template = {
+ 	.map_queues = pqi_map_queues,
+ 	.sdev_groups = pqi_sdev_groups,
+ 	.shost_groups = pqi_shost_groups,
++	.cmd_size = sizeof(struct pqi_cmd_priv),
+ };
+ 
+ static int pqi_register_scsi(struct pqi_ctrl_info *ctrl_info)
