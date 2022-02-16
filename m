@@ -2,50 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6360D4B92CE
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Feb 2022 22:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFE34B92D5
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Feb 2022 22:04:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234286AbiBPVEM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Feb 2022 16:04:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52440 "EHLO
+        id S233822AbiBPVEQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Feb 2022 16:04:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbiBPVEB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Feb 2022 16:04:01 -0500
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D792B048E
-        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:03:41 -0800 (PST)
-Received: by mail-pj1-f43.google.com with SMTP id d9-20020a17090a498900b001b8bb1d00e7so3529896pjh.3
-        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:03:41 -0800 (PST)
+        with ESMTP id S233869AbiBPVEG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Feb 2022 16:04:06 -0500
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA55E2B04B1
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:03:42 -0800 (PST)
+Received: by mail-pj1-f48.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso7531420pjt.4
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 13:03:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=a6urj33gaKkePqg1xUPmjUt8DwssrZsVJTG4tFiazOI=;
-        b=dfn4vOR1G45U5s2RokAunvZp9dUnRjAzWVrUSaSXDb9t0o5WfXChBORYrQ9f0moKVe
-         9n3gF2EdZAT5TSTZjnxGhZWhK2EewkKNPO2hPfoxNo0VxTnHQPlrZcfS0UtsVMBT/hwd
-         U+vUPOfFmCCtXuFMauLW/Sy1U/EC496id1XmFvGT80k+lvuVd0Ro4Lm35msn9CRlOshJ
-         DelV3GznOaUNDa4HS/iIVq+ivMbbwNw/vtKz1YtWr+6it0w9U9mvEe38uZ50uo27Aibd
-         2K/FInI4V9zgfx5NOPNFjNBdUu2cez8Vn31Adjpp93lP28coPr2AxS6rRf5wL5wWc/rB
-         6snQ==
-X-Gm-Message-State: AOAM530lUahZ3RP4Y1yWpP6v0jFM+SNRG0pmFlG0eVU7YcB6zn/XLqtJ
-        tlnLjUzEQY/xgmvA431p1qQ=
-X-Google-Smtp-Source: ABdhPJxNThEZ6PcB9WssDRjhR2pWVfyuBKiL4XYEBy6BLX5JvT2EeF761RcMzGCSGe7I9DM0XCikXQ==
-X-Received: by 2002:a17:903:204a:b0:14e:b8d9:b13a with SMTP id q10-20020a170903204a00b0014eb8d9b13amr4398367pla.10.1645045420397;
-        Wed, 16 Feb 2022 13:03:40 -0800 (PST)
+        bh=yav6r05vxK8907t8q2M2B6D+PLZVf3wmq1Na5MjpaTQ=;
+        b=pmDkHD01q+lfySciP6vFTgpoiTHgEzeR6oCAm4KwSC+Kh4ysNSRhp73vOhaU5x9gPc
+         /8s1hVC8yHqhIXeY3YkiXrW/QcfVaFF1RD1qKv08jGwE5WrIKrY+RTvH+3CeqoRYmzei
+         mhPbC//7eiBViHBd0zZVSTOlSsmZbyByt7XK8KTVy6rhQvI6ulen4usDIVDwEsR7+QtV
+         85DjHQuXR/9Klbr0UFC+d7vt+e1o2FQDovkYj+cw9cHqNzZpSPIFRu5iqKsvU2I4UIir
+         NMM3dGcVe0JtJKDjdCCGLgZWWt3wCIQFyvp3ZQIYcqBVFCyBcuR23Q9QvnNEITNxdbS8
+         HrgA==
+X-Gm-Message-State: AOAM5306IVRthKYY1E77i7Xsm7NcrRmPTLzz2tsQSgbyCtPwhFrnlx+q
+        4rWYYkkw2ybZTYu8kPaXhi8=
+X-Google-Smtp-Source: ABdhPJwX8zD3tmAfMbNXdejW5xiN2XKYJOyT4XsRTA5XPyDnJtRZS02j1AM6+syH2ymQoJGO6GWlLQ==
+X-Received: by 2002:a17:902:eb52:b0:14d:5b6c:a27c with SMTP id i18-20020a170902eb5200b0014d5b6ca27cmr4499761pli.4.1645045422288;
+        Wed, 16 Feb 2022 13:03:42 -0800 (PST)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id c8sm46591222pfv.57.2022.02.16.13.03.39
+        by smtp.gmail.com with ESMTPSA id c8sm46591222pfv.57.2022.02.16.13.03.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Feb 2022 13:03:39 -0800 (PST)
+        Wed, 16 Feb 2022 13:03:41 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
         Hannes Reinecke <hare@suse.de>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        Javed Hasan <jhasan@marvell.com>,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v4 27/50] scsi: initio: Stop using the SCSI pointer
-Date:   Wed, 16 Feb 2022 13:02:10 -0800
-Message-Id: <20220216210233.28774-28-bvanassche@acm.org>
+Subject: [PATCH v4 28/50] scsi: libfc: Stop using the SCSI pointer
+Date:   Wed, 16 Feb 2022 13:02:11 -0800
+Message-Id: <20220216210233.28774-29-bvanassche@acm.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220216210233.28774-1-bvanassche@acm.org>
 References: <20220216210233.28774-1-bvanassche@acm.org>
@@ -62,85 +63,140 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Set .cmd_size in the SCSI host template instead of using the SCSI pointer
-from struct scsi_cmnd. This patch prepares for removal of the SCSI pointer
-from struct scsi_cmnd.
+Move the fc_fcp_pkt pointer, the residual length and the SCSI status into
+the new data structure libfc_cmd_priv. This patch prepares for removal of
+the SCSI pointer from struct scsi_cmnd.
 
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+The user of the libfc data path functions have been identified as follows:
+$ git grep -lw fc_queuecommand | grep -v scsi/libfc/
+drivers/scsi/fcoe/fcoe.c
+
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Saurav Kashyap <skashyap@marvell.com>
+Cc: Javed Hasan <jhasan@marvell.com>
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/initio.c | 14 ++++++++------
- drivers/scsi/initio.h |  9 +++++++++
- 2 files changed, 17 insertions(+), 6 deletions(-)
+ drivers/scsi/fcoe/fcoe.c    |  1 +
+ drivers/scsi/libfc/fc_fcp.c | 26 +++++++++++---------------
+ include/scsi/libfc.h        |  9 +++++++++
+ 3 files changed, 21 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/scsi/initio.c b/drivers/scsi/initio.c
-index 5f96ac47d7fd..f585d6e5fab9 100644
---- a/drivers/scsi/initio.c
-+++ b/drivers/scsi/initio.c
-@@ -2553,7 +2553,7 @@ static void initio_build_scb(struct initio_host * host, struct scsi_ctrl_blk * c
- 				  SENSE_SIZE, DMA_FROM_DEVICE);
- 	cblk->senseptr = (u32)dma_addr;
- 	cblk->senselen = SENSE_SIZE;
--	cmnd->SCp.ptr = (char *)(unsigned long)dma_addr;
-+	initio_priv(cmnd)->sense_dma_addr = dma_addr;
- 	cblk->cdblen = cmnd->cmd_len;
- 
- 	/* Clear the returned status */
-@@ -2577,7 +2577,7 @@ static void initio_build_scb(struct initio_host * host, struct scsi_ctrl_blk * c
- 					  sizeof(struct sg_entry) * TOTAL_SG_ENTRY,
- 					  DMA_BIDIRECTIONAL);
- 		cblk->bufptr = (u32)dma_addr;
--		cmnd->SCp.dma_handle = dma_addr;
-+		initio_priv(cmnd)->sglist_dma_addr = dma_addr;
- 
- 		cblk->sglen = nseg;
- 
-@@ -2704,16 +2704,17 @@ static int i91u_biosparam(struct scsi_device *sdev, struct block_device *dev,
- static void i91u_unmap_scb(struct pci_dev *pci_dev, struct scsi_cmnd *cmnd)
- {
- 	/* auto sense buffer */
--	if (cmnd->SCp.ptr) {
-+	if (initio_priv(cmnd)->sense_dma_addr) {
- 		dma_unmap_single(&pci_dev->dev,
--				 (dma_addr_t)((unsigned long)cmnd->SCp.ptr),
-+				 initio_priv(cmnd)->sense_dma_addr,
- 				 SENSE_SIZE, DMA_FROM_DEVICE);
--		cmnd->SCp.ptr = NULL;
-+		initio_priv(cmnd)->sense_dma_addr = 0;
- 	}
- 
- 	/* request buffer */
- 	if (scsi_sg_count(cmnd)) {
--		dma_unmap_single(&pci_dev->dev, cmnd->SCp.dma_handle,
-+		dma_unmap_single(&pci_dev->dev,
-+				 initio_priv(cmnd)->sglist_dma_addr,
- 				 sizeof(struct sg_entry) * TOTAL_SG_ENTRY,
- 				 DMA_BIDIRECTIONAL);
- 
-@@ -2796,6 +2797,7 @@ static struct scsi_host_template initio_template = {
- 	.can_queue		= MAX_TARGETS * i91u_MAXQUEUE,
- 	.this_id		= 1,
- 	.sg_tablesize		= SG_ALL,
-+	.cmd_size		= sizeof(struct initio_cmd_priv),
+diff --git a/drivers/scsi/fcoe/fcoe.c b/drivers/scsi/fcoe/fcoe.c
+index 6415f88738ad..44ca6110213c 100644
+--- a/drivers/scsi/fcoe/fcoe.c
++++ b/drivers/scsi/fcoe/fcoe.c
+@@ -277,6 +277,7 @@ static struct scsi_host_template fcoe_shost_template = {
+ 	.sg_tablesize = SG_ALL,
+ 	.max_sectors = 0xffff,
+ 	.track_queue_depth = 1,
++	.cmd_size = sizeof(struct libfc_cmd_priv),
  };
  
- static int initio_probe_one(struct pci_dev *pdev,
-diff --git a/drivers/scsi/initio.h b/drivers/scsi/initio.h
-index 9fd010cf1f8a..7c9741552654 100644
---- a/drivers/scsi/initio.h
-+++ b/drivers/scsi/initio.h
-@@ -640,3 +640,12 @@ typedef struct _NVRAM {
- #define SCSI_RESET_HOST_RESET 0x200
- #define SCSI_RESET_ACTION   0xff
+ /**
+diff --git a/drivers/scsi/libfc/fc_fcp.c b/drivers/scsi/libfc/fc_fcp.c
+index 871b11edb586..bce90eb56c9c 100644
+--- a/drivers/scsi/libfc/fc_fcp.c
++++ b/drivers/scsi/libfc/fc_fcp.c
+@@ -45,14 +45,10 @@ static struct kmem_cache *scsi_pkt_cachep;
+ #define FC_SRB_READ		(1 << 1)
+ #define FC_SRB_WRITE		(1 << 0)
  
-+struct initio_cmd_priv {
-+	dma_addr_t sense_dma_addr;
-+	dma_addr_t sglist_dma_addr;
-+};
-+
-+static inline struct initio_cmd_priv *initio_priv(struct scsi_cmnd *cmd)
+-/*
+- * The SCp.ptr should be tested and set under the scsi_pkt_queue lock
+- */
+-#define CMD_SP(Cmnd)		    ((struct fc_fcp_pkt *)(Cmnd)->SCp.ptr)
+-#define CMD_ENTRY_STATUS(Cmnd)	    ((Cmnd)->SCp.have_data_in)
+-#define CMD_COMPL_STATUS(Cmnd)	    ((Cmnd)->SCp.this_residual)
+-#define CMD_SCSI_STATUS(Cmnd)	    ((Cmnd)->SCp.Status)
+-#define CMD_RESID_LEN(Cmnd)	    ((Cmnd)->SCp.buffers_residual)
++static struct libfc_cmd_priv *libfc_priv(struct scsi_cmnd *cmd)
 +{
 +	return scsi_cmd_priv(cmd);
 +}
+ 
+ /**
+  * struct fc_fcp_internal - FCP layer internal data
+@@ -1137,7 +1133,7 @@ static int fc_fcp_pkt_send(struct fc_lport *lport, struct fc_fcp_pkt *fsp)
+ 	unsigned long flags;
+ 	int rc;
+ 
+-	fsp->cmd->SCp.ptr = (char *)fsp;
++	libfc_priv(fsp->cmd)->fsp = fsp;
+ 	fsp->cdb_cmd.fc_dl = htonl(fsp->data_len);
+ 	fsp->cdb_cmd.fc_flags = fsp->req_flags & ~FCP_CFL_LEN_MASK;
+ 
+@@ -1150,7 +1146,7 @@ static int fc_fcp_pkt_send(struct fc_lport *lport, struct fc_fcp_pkt *fsp)
+ 	rc = lport->tt.fcp_cmd_send(lport, fsp, fc_fcp_recv);
+ 	if (unlikely(rc)) {
+ 		spin_lock_irqsave(&si->scsi_queue_lock, flags);
+-		fsp->cmd->SCp.ptr = NULL;
++		libfc_priv(fsp->cmd)->fsp = NULL;
+ 		list_del(&fsp->list);
+ 		spin_unlock_irqrestore(&si->scsi_queue_lock, flags);
+ 	}
+@@ -1983,7 +1979,7 @@ static void fc_io_compl(struct fc_fcp_pkt *fsp)
+ 		fc_fcp_can_queue_ramp_up(lport);
+ 
+ 	sc_cmd = fsp->cmd;
+-	CMD_SCSI_STATUS(sc_cmd) = fsp->cdb_status;
++	libfc_priv(sc_cmd)->status = fsp->cdb_status;
+ 	switch (fsp->status_code) {
+ 	case FC_COMPLETE:
+ 		if (fsp->cdb_status == 0) {
+@@ -1992,7 +1988,7 @@ static void fc_io_compl(struct fc_fcp_pkt *fsp)
+ 			 */
+ 			sc_cmd->result = DID_OK << 16;
+ 			if (fsp->scsi_resid)
+-				CMD_RESID_LEN(sc_cmd) = fsp->scsi_resid;
++				libfc_priv(sc_cmd)->resid_len = fsp->scsi_resid;
+ 		} else {
+ 			/*
+ 			 * transport level I/O was ok but scsi
+@@ -2025,7 +2021,7 @@ static void fc_io_compl(struct fc_fcp_pkt *fsp)
+ 			 */
+ 			FC_FCP_DBG(fsp, "Returning DID_ERROR to scsi-ml "
+ 				   "due to FC_DATA_UNDRUN (scsi)\n");
+-			CMD_RESID_LEN(sc_cmd) = fsp->scsi_resid;
++			libfc_priv(sc_cmd)->resid_len = fsp->scsi_resid;
+ 			sc_cmd->result = (DID_ERROR << 16) | fsp->cdb_status;
+ 		}
+ 		break;
+@@ -2085,7 +2081,7 @@ static void fc_io_compl(struct fc_fcp_pkt *fsp)
+ 
+ 	spin_lock_irqsave(&si->scsi_queue_lock, flags);
+ 	list_del(&fsp->list);
+-	sc_cmd->SCp.ptr = NULL;
++	libfc_priv(sc_cmd)->fsp = NULL;
+ 	spin_unlock_irqrestore(&si->scsi_queue_lock, flags);
+ 	scsi_done(sc_cmd);
+ 
+@@ -2121,7 +2117,7 @@ int fc_eh_abort(struct scsi_cmnd *sc_cmd)
+ 
+ 	si = fc_get_scsi_internal(lport);
+ 	spin_lock_irqsave(&si->scsi_queue_lock, flags);
+-	fsp = CMD_SP(sc_cmd);
++	fsp = libfc_priv(sc_cmd)->fsp;
+ 	if (!fsp) {
+ 		/* command completed while scsi eh was setting up */
+ 		spin_unlock_irqrestore(&si->scsi_queue_lock, flags);
+diff --git a/include/scsi/libfc.h b/include/scsi/libfc.h
+index eeb8d689ff6b..6e29e1719db1 100644
+--- a/include/scsi/libfc.h
++++ b/include/scsi/libfc.h
+@@ -351,6 +351,15 @@ struct fc_fcp_pkt {
+ 	struct completion tm_done;
+ } ____cacheline_aligned_in_smp;
+ 
++/*
++ * @fsp should be tested and set under the scsi_pkt_queue lock
++ */
++struct libfc_cmd_priv {
++	struct fc_fcp_pkt *fsp;
++	u32 resid_len;
++	u8 status;
++};
++
+ /*
+  * Structure and function definitions for managing Fibre Channel Exchanges
+  * and Sequences
