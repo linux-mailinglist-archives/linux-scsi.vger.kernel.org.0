@@ -2,108 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514124B7E22
-	for <lists+linux-scsi@lfdr.de>; Wed, 16 Feb 2022 04:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C674B8307
+	for <lists+linux-scsi@lfdr.de>; Wed, 16 Feb 2022 09:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343999AbiBPDHB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Feb 2022 22:07:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56630 "EHLO
+        id S230144AbiBPIdP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Feb 2022 03:33:15 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237823AbiBPDHB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Feb 2022 22:07:01 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD2D2A270;
-        Tue, 15 Feb 2022 19:06:49 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id ca12so895610qtb.4;
-        Tue, 15 Feb 2022 19:06:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lWbWPRpljqyxUHO/4PPZALOIacGNZAKBTnuOLqqWIhs=;
-        b=Jbs61Yb2r2ZUEIR9A1UgOmQ9u4kR0q9hl/FV0ymx/e9E+nTqShQq/RLj/5lDCk1ib1
-         tOqkro+vkfo26b0R5PUPe/bPO+0KujlmRMMsaNOUFaD+/nVKVogL/m3J8g7luuMswJ0Z
-         cC5xbasFfHLherFK8eQ6P6I74iJBspgHFqC25PZCdzX3sEm2VAOUGbD89IR6sWQjuI4R
-         gKuFoThRa6c2BxfjlBiLVGQoEdbOGJCYr+QlcC+gBgNiCqqFfR+g/7qW212nKoiNTlNn
-         /ZGr5JmidTkzTgMJsnAPE3MzfRXoJ7GMXEm4Eu4bT/ZanDe/kG82eDE/9oNTDabAg5Sc
-         JX6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lWbWPRpljqyxUHO/4PPZALOIacGNZAKBTnuOLqqWIhs=;
-        b=DtQKCHspkgIo9bWm3BtgmlBCYIqpT5mK/5A70QPbvmp5X4F2YhapVU/lGQOxcl6NOS
-         aCpx7G+DmU09Sv+2kdbKuXFf9mQ+3XzIt17/zXzZ7nwqoYdKeV1tpOEJ99XAEEiMHGJO
-         SRa+elkfxUDq1goreFvjXLGFbM9vLz98ufhaxZiMiHnfxMFfST765i65asLIHSlV7Wh7
-         /NjIrig5ySfS19w61w+QTwXkGSb7R4CPN44BQ94vyKYUaetKq15GCtZafc78LWBhi1EM
-         8hmsTZ0aJdq1vVHfuVkLAONkPohtYcFd9r+kgxkPt8deOfdEB4qImt310UezI846JsMY
-         4f2g==
-X-Gm-Message-State: AOAM5332gpG5qZX5Boj2boy/CVnq1P9j2Ag7mwoAbsS9e+DqGcChQCnB
-        dVQUE7t8Ul7UwDsmFdTCZPTC6fBzeFw=
-X-Google-Smtp-Source: ABdhPJxofywMtYxXGkQSNPL94EkZi7+ZP0qtW5bAL+8Ub19FVxW4Q6TuoIJejiszbdQgnN72rw470g==
-X-Received: by 2002:ac8:5bd1:0:b0:2d0:a800:21c1 with SMTP id b17-20020ac85bd1000000b002d0a80021c1mr735525qtb.446.1644980809109;
-        Tue, 15 Feb 2022 19:06:49 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id h13sm9717122qkp.77.2022.02.15.19.06.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 19:06:48 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     sathya.prakash@broadcom.com
-Cc:     sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] message/fusion: use struct_size over open coded arithmetic
-Date:   Wed, 16 Feb 2022 03:06:41 +0000
-Message-Id: <20220216030641.1839422-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230143AbiBPIdO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Feb 2022 03:33:14 -0500
+X-Greylist: delayed 3600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 00:33:02 PST
+Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15EAB2534
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 00:33:02 -0800 (PST)
+Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 74F4B61577
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 06:35:34 +0000 (UTC)
+Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
+        by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id 651D43AA58
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 06:35:34 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.2
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
+        by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
+        with ESMTP id 7B3slkDB9Wzb for <linux-scsi@vger.kernel.org>;
+        Wed, 16 Feb 2022 06:35:34 +0000 (UTC)
+Received: from [192.168.48.23] (host-45-78-195-155.dyn.295.ca [45.78.195.155])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dgilbert@interlog.com)
+        by mail.ca.inter.net (Postfix) with ESMTPSA id 15DAD3AA55
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Feb 2022 06:35:34 +0000 (UTC)
+Message-ID: <ae40bef0-702f-04c4-9219-47502c37d977@interlog.com>
+Date:   Wed, 16 Feb 2022 01:35:33 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Reply-To: dgilbert@interlog.com
+Content-Language: en-CA
+To:     SCSI development list <linux-scsi@vger.kernel.org>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Subject: sd: Unaligned partial completion
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+What should the sd driver do when it gets the error in the subject
+line? Try again, and again, and again, and again ...?
 
-Replace zero-length array with flexible-array member and make use
-of the struct_size() helper in kzalloc(). For example:
+sd 2:0:1:0: [sdb] Unaligned partial completion (resid=3584, sector_sz=4096)
+sd 2:0:1:0: [sdb] tag#407 CDB: Read(16) 88 00 00 00 00 00 00 00 00 00 00 00 00 01 00
 
-struct fw_event_work {
-	...
-	u8			retries;
-	char			event_data[] __aligned(4);
-};
+Not very productive, IMO. Perhaps, after say 3 retries getting the _same_
+resid, it might rescan that disk. There is a big hint in the logged
+data shown above: trying to READ 1 block (sector_sz=4096) and getting a
+resid of 3584. So it got back 512 bytes (again and again ...). The disk
+isn't mounted so perhaps it is being prepared. And maybe that preparation
+involved a MODE SELECT which changed the LB size in its block descriptor,
+prior to a FORMAT UNIT.
 
-Make use of the struct_size() helper instead of an open-coded version
-in order to avoid any potential type mistakes.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
----
- drivers/message/fusion/mptsas.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Another issue with that error message: what does "unaligned" mean in
+this context? Surely it is superfluous and "Partial completion" is
+more accurate (unless the resid is negative).
 
-diff --git a/drivers/message/fusion/mptsas.c b/drivers/message/fusion/mptsas.c
-index 4acd8f9a48e1..c6fb4fd75434 100644
---- a/drivers/message/fusion/mptsas.c
-+++ b/drivers/message/fusion/mptsas.c
-@@ -5113,7 +5113,7 @@ mptsas_event_process(MPT_ADAPTER *ioc, EventNotificationReply_t *reply)
- 
- 	event_data_sz = ((reply->MsgLength * 4) -
- 	    offsetof(EventNotificationReply_t, Data));
--	fw_event = kzalloc(sizeof(*fw_event) + event_data_sz, GFP_ATOMIC);
-+	fw_event = kzalloc(struct_size(fw_event, event_data, event_data_sz), GFP_ATOMIC);
- 	if (!fw_event) {
- 		printk(MYIOC_s_WARN_FMT "%s: failed at (line=%d)\n", ioc->name,
- 		 __func__, __LINE__);
--- 
-2.25.1
+Doug Gilbert
 
