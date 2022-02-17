@@ -2,74 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39504BA130
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Feb 2022 14:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B6A4BA132
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Feb 2022 14:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240794AbiBQNa7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Feb 2022 08:30:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48570 "EHLO
+        id S240925AbiBQNbB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Feb 2022 08:31:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240928AbiBQNal (ORCPT
+        with ESMTP id S240929AbiBQNal (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Feb 2022 08:30:41 -0500
 Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336E72AF901
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 05:30:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ECE2AF904
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 05:30:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1645104623; x=1676640623;
+  t=1645104624; x=1676640624;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+5QCLKkX1tq4PVqXmHlRUBfb2x38QS5lZPfcIwY/Y+0=;
-  b=nZ56aZxG97CBmZd8sFsYW05YNsBX26FwOsRdMG6TaMJaZTnPN8UXKlCF
-   RQ/dFKAGuf4U8I2MnwrI1LA8zma65zIOUo2VKpfNUzQL+K74xBFNxIck7
-   eNxDqIV8RHtR9wf8fmRQxiyg0FqGiOJoHlcXPzmwH//LXZp6XOiPkz2jN
-   lrWfaBnCEpGt/8r70/MZqdW2q21RZNgbkO/diS3u4mg7xVhlps7Zupylg
-   TwunYsKhVOcAyWOp9uB48X+tC7QtcAO5z58JfL/YJrvWMmYj+qFyhP7Fi
-   L7uZu6KX8eVUq7S/BfejszvTedujM54IJl7v7QmBn0+jUOcaQzV6MV1eQ
-   g==;
+  bh=TVMRHdQyTJllbT9N8v3MkuVcvUSR3sbRM1CaOETmwwQ=;
+  b=mfmpNRsISmmScbb3mgEZSL366IncDXYnKSfa7+exeZBrZT1tdXmiuzPq
+   k9FvyEW+vvliGMAZ5DmwmtGon9QwxAXsa8W3DIHY6uCFa67e+1cI293e1
+   xvaasCgBVS3bnkz+iI56jx2lYHn8/o13Imo4DPzJwsZ6DyuzKTslrHcb5
+   1xzJW0/r6X4YIvh5hYToWVX1erru+8oSJrqwi2DN7TsMku3bZ3O8Vmso7
+   mAwjPfkvrRG3ZxXx61FLInXZKjuw3wp6Ih1g5OhWmiJLgrSQiskPXU8b+
+   QlD5NoELmWMhj3+cGD3oGaoWV3GVU17zvppJf8X7IR6I2dqi2UpG5rz9H
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.88,375,1635177600"; 
-   d="scan'208";a="297303202"
+   d="scan'208";a="297303210"
 Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 17 Feb 2022 21:30:23 +0800
-IronPort-SDR: Kl9AUfQVp4atJINlQUDIYRNdGr7+TdnR9/Wy04WO9OwUjHs68pAFdzZEvu3aIKbqzikSJ6BduR
- aEv9ejQeVY9DaaXbjW8hFg6pMhww+N/elDR9mqkCBdTnH9S049FL883xHmRsJpfsOe/M3J3oCd
- quFVbPbwHl/Q0wYzNtYGNdxKl2dv1VlNNy/7ahSZdbB9XoZg6AYLVPAtlvV44fT+6ICS4jIuY8
- qBkjD5VHBKs2m5CkVVaWsbbOZswV/8h8N2VmjuicNiPePgpeXPnPesXSevwlRrRO3xFAVnOgai
- 9MnbIORKZqhFiEa/PdEGpRLd
+  by ob1.hgst.iphmx.com with ESMTP; 17 Feb 2022 21:30:24 +0800
+IronPort-SDR: 2qm9/HUnoDHuH2mvyPPKmf0pQjhe5tNxFEa9Wm467vassXM9vJgVG6mmRCXRzilu3DeW/prSty
+ CzpZjXQF5sdybZlFOvBDTAkqyeqjbZTEMQx0TLqNyUSChCfx8pqj0boJCYDgK/haiSiMSuOacj
+ j6IlNxg5pe7MT6MCVCaAqGqUYfXSO6t57MXH/zoBgT6VL4QVnQlU4y7aZSH4bl6rl8vmehlOhC
+ KcIgZ3l1PtRMUnTVYA1lnCLsR8LZRXfYh7xrV1Kz5uCiYSKPd8RzzMKXb2LzCBP0Zko4geDjjX
+ nLSy/KeLYlA3P6cLblE1wWL+
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 05:02:01 -0800
-IronPort-SDR: HTmwLiuRFLUHeaMg56EU56FR1Q/QsC5XP74uADUZAbAl9dgHwvyGQrpXb2lBoZSaEWxSDPzxKh
- PlIOj0WXLcf4IJlAr48X+R4MPxMBaS07Rpuve7vrJ085kuA4UjhSqGwyyYkKcGiHwlTc1WW4GV
- nYk8QqkIbg5bPuAIBuCA3nBsoKp3I504RkIvu5m3P8ePpq9hX46r27AfEZicynBymfYDYur2IA
- n6owjPhTutbLcA7wHVv+2xuq+KT7FW2AW7FYSl3FQcaHQLT4MeJccJWGKW6jXngnWzHyy3bt4o
- GTo=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 05:02:03 -0800
+IronPort-SDR: 7RsJXVrEm0RCp0VwkKh7s7KW/KWrhmqmRKbFzn1vahX4P7+plrnK49V6J2YA1YijofW2+o/pS8
+ 4D1N8SKx8BEEvuXoHHrVfBUUBKFwtcI2hDnuzVdeg8aFkmov4fq2MvuAas7Kzq+kbSRbvUhh9+
+ +Txc7Zj0N5fuLMpPCNOUEhRxsgpamAxzw4gh32vdlfCkfzpN/kE15sFKgOwuzojP4MI+1esT/Y
+ 03SjGk2NEHnZcqBg0si5vlgZ5yx8u0wlbqoNA8FS2o50vAAGhYYN4HrZbDW/HU9qiL/SLTKo2k
+ kPE=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 05:30:23 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 05:30:24 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JzwgL5LXGz1SVp5
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 05:30:22 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JzwgN0f7Wz1SVp4
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 05:30:24 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1645104622; x=1647696623; bh=+5QCLKkX1tq4PVqXmH
-        lRUBfb2x38QS5lZPfcIwY/Y+0=; b=Y5If0SiTlrhoMI9O7lQTq7k1LH9w7X+RaT
-        QxRNEF+py9dKvRyMxuIkEIw7CSprO2TUPx6VRGFnhIDdUogtGt3ZjiMiRXOlWiDz
-        s4vNLnnhlsFh1wxjwtDTsoyE442zoNAtSKKRcaNAOWls5JThxrf0XUX8kQlvXKFv
-        HI9I1iCNwDz+6QuRJzhcjxlqkp49gvVTQeJl0mc9lfjG8nKbpe+fKXcV2PpZZM7l
-        BD48BUCoxbPjDzMcoRFtG87m7FMAeUX+jcCEzihbNzPk+EZXgedCPCPNUOWIURAc
-        kkza1vO6x4vxyDHHDvsEEPSq7sF4Cl9wTZa7puT7epUb1V32u2Sg==
+        :from; s=dkim; t=1645104623; x=1647696624; bh=TVMRHdQyTJllbT9N8v
+        3MkuVcvUSR3sbRM1CaOETmwwQ=; b=Dvr9iIPP0L2bO8iaRhmi11OCEwQ94Q6qdm
+        51t/n79s2XTV+7/NwaxaKF2pvIR2vPn41Xl+hMuND9SSYKrwuczfKWdazFtp26AY
+        kN7mkhYGEhcB1a8zaMgmU0Jx0oNhWT0t25maxygSvWua/NcEKMlXCk6NjTymp2rl
+        0UuJtQ56koDc9tNwzpJhPUqEuzl0VHPgQDmcJ+RmaCCG2T175XqZjY729hX3Y/eq
+        Xi+qSucOHpFwGS34mDsFNHgmuOeIu1bDvbOmPTgVmObcPThFpNqI8M0AgI97Ijg0
+        JBhZRdWGW2+LsbNx5TbWvSXcAORBbEdF/fQY80Hukt6YGbPevuXA==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qrHdmW4qEBRs for <linux-scsi@vger.kernel.org>;
-        Thu, 17 Feb 2022 05:30:22 -0800 (PST)
+        with ESMTP id 6YAe_Gds6twE for <linux-scsi@vger.kernel.org>;
+        Thu, 17 Feb 2022 05:30:23 -0800 (PST)
 Received: from washi.fujisawa.hgst.com (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JzwgJ6Jstz1SVnx;
-        Thu, 17 Feb 2022 05:30:20 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JzwgL2yZmz1Rwrw;
+        Thu, 17 Feb 2022 05:30:22 -0800 (PST)
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 To:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
@@ -78,9 +78,9 @@ To:     linux-scsi@vger.kernel.org,
 Cc:     Xiang Chen <chenxiang66@hisilicon.com>,
         Jason Yan <yanaijie@huawei.com>,
         Luo Jiaxing <luojiaxing@huawei.com>
-Subject: [PATCH v4 16/31] scsi: pm8001: Fix abort all task initialization
-Date:   Thu, 17 Feb 2022 22:29:41 +0900
-Message-Id: <20220217132956.484818-17-damien.lemoal@opensource.wdc.com>
+Subject: [PATCH v4 17/31] scsi: pm8001: Fix pm8001_tag_alloc() failures handling
+Date:   Thu, 17 Feb 2022 22:29:42 +0900
+Message-Id: <20220217132956.484818-18-damien.lemoal@opensource.wdc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220217132956.484818-1-damien.lemoal@opensource.wdc.com>
 References: <20220217132956.484818-1-damien.lemoal@opensource.wdc.com>
@@ -96,99 +96,84 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In pm80xx_send_abort_all(), the n_elem field of the ccb used is not
-initialized to 0. This missing initialization sometimes lead to the
-task completion path seeing the ccb with a non-zero n_elem resulting in
-the execution of invalid dma_unmap_sg() calls in pm8001_ccb_task_free(),
-causing a crash such as:
+In mpi_set_phy_profile_req() and in pm8001_set_phy_profile_single(), if
+pm8001_tag_alloc() fails to allocate a new tag, a warning message is
+issued but the uninitialized tag variable is still used to build a
+command. Avoid this by returning early in case of tag allocation
+failure.
 
-[  197.676341] RIP: 0010:iommu_dma_unmap_sg+0x6d/0x280
-[  197.700204] RSP: 0018:ffff889bbcf89c88 EFLAGS: 00010012
-[  197.705485] RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff8=
-3d0bda0
-[  197.712687] RDX: 0000000000000002 RSI: 0000000000000000 RDI: ffff88810=
-dffc0d0
-[  197.719887] RBP: 0000000000000000 R08: 0000000000000000 R09: ffff8881c=
-790098b
-[  197.727089] R10: ffffed1038f20131 R11: 0000000000000001 R12: 000000000=
-0000000
-[  197.734296] R13: ffff88810dffc0d0 R14: 0000000000000010 R15: 000000000=
-0000000
-[  197.741493] FS:  0000000000000000(0000) GS:ffff889bbcf80000(0000) knlG=
-S:0000000000000000
-[  197.749659] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  197.755459] CR2: 00007f16c1b42734 CR3: 0000000004814000 CR4: 000000000=
-0350ee0
-[  197.762656] Call Trace:
-[  197.765127]  <IRQ>
-[  197.767162]  pm8001_ccb_task_free+0x5f1/0x820 [pm80xx]
-[  197.772364]  ? do_raw_spin_unlock+0x54/0x220
-[  197.776680]  pm8001_mpi_task_abort_resp+0x2ce/0x4f0 [pm80xx]
-[  197.782406]  process_oq+0xe85/0x7890 [pm80xx]
-[  197.786817]  ? lock_acquire+0x194/0x490
-[  197.790697]  ? handle_irq_event+0x10e/0x1b0
-[  197.794920]  ? mpi_sata_completion+0x2d70/0x2d70 [pm80xx]
-[  197.800378]  ? __wake_up_bit+0x100/0x100
-[  197.804340]  ? lock_is_held_type+0x98/0x110
-[  197.808565]  pm80xx_chip_isr+0x94/0x130 [pm80xx]
-[  197.813243]  tasklet_action_common.constprop.0+0x24b/0x2f0
-[  197.818785]  __do_softirq+0x1b5/0x82d
-[  197.822485]  ? do_raw_spin_unlock+0x54/0x220
-[  197.826799]  __irq_exit_rcu+0x17e/0x1e0
-[  197.830678]  irq_exit_rcu+0xa/0x20
-[  197.834114]  common_interrupt+0x78/0x90
-[  197.840051]  </IRQ>
-[  197.844236]  <TASK>
-[  197.848397]  asm_common_interrupt+0x1e/0x40
+Also make sure to always return the error code returned by
+pm8001_tag_alloc() when this function fails instead of an arbitrary
+value.
 
-Avoid this issue by always initializing the ccb n_elem field to 0 in
-pm8001_send_abort_all(), pm8001_send_read_log() and
-pm80xx_send_abort_all().
-
-Fixes: c6b9ef5779c3 ("[SCSI] pm80xx: NCQ error handling changes")
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Reviewed-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 2 ++
- drivers/scsi/pm8001/pm80xx_hwi.c | 1 +
- 2 files changed, 3 insertions(+)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm800=
-1_hwi.c
-index 8149cc0d1ecd..35d62e5c9200 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -1787,6 +1787,7 @@ static void pm8001_send_abort_all(struct pm8001_hba=
-_info *pm8001_ha,
- 	ccb->device =3D pm8001_ha_dev;
- 	ccb->ccb_tag =3D ccb_tag;
- 	ccb->task =3D task;
-+	ccb->n_elem =3D 0;
-=20
- 	circularQ =3D &pm8001_ha->inbnd_q_tbl[0];
-=20
-@@ -1848,6 +1849,7 @@ static void pm8001_send_read_log(struct pm8001_hba_=
-info *pm8001_ha,
- 	ccb->device =3D pm8001_ha_dev;
- 	ccb->ccb_tag =3D ccb_tag;
- 	ccb->task =3D task;
-+	ccb->n_elem =3D 0;
- 	pm8001_ha_dev->id |=3D NCQ_READ_LOG_FLAG;
- 	pm8001_ha_dev->id |=3D NCQ_2ND_RLE_FLAG;
-=20
 diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80x=
 x_hwi.c
-index ac2178a13e4c..8fd38e54f07c 100644
+index 8fd38e54f07c..76260d06b6be 100644
 --- a/drivers/scsi/pm8001/pm80xx_hwi.c
 +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1800,6 +1800,7 @@ static void pm80xx_send_abort_all(struct pm8001_hba=
-_info *pm8001_ha,
- 	ccb->device =3D pm8001_ha_dev;
- 	ccb->ccb_tag =3D ccb_tag;
- 	ccb->task =3D task;
-+	ccb->n_elem =3D 0;
+@@ -1191,7 +1191,7 @@ pm80xx_set_thermal_config(struct pm8001_hba_info *p=
+m8001_ha)
+ 	memset(&payload, 0, sizeof(struct set_ctrl_cfg_req));
+ 	rc =3D pm8001_tag_alloc(pm8001_ha, &tag);
+ 	if (rc)
+-		return -1;
++		return rc;
 =20
  	circularQ =3D &pm8001_ha->inbnd_q_tbl[0];
+ 	payload.tag =3D cpu_to_le32(tag);
+@@ -1240,7 +1240,7 @@ pm80xx_set_sas_protocol_timer_config(struct pm8001_=
+hba_info *pm8001_ha)
+ 	rc =3D pm8001_tag_alloc(pm8001_ha, &tag);
 =20
+ 	if (rc)
+-		return -1;
++		return rc;
+=20
+ 	circularQ =3D &pm8001_ha->inbnd_q_tbl[0];
+ 	payload.tag =3D cpu_to_le32(tag);
+@@ -1398,7 +1398,7 @@ static int pm80xx_encrypt_update(struct pm8001_hba_=
+info *pm8001_ha)
+ 	memset(&payload, 0, sizeof(struct kek_mgmt_req));
+ 	rc =3D pm8001_tag_alloc(pm8001_ha, &tag);
+ 	if (rc)
+-		return -1;
++		return rc;
+=20
+ 	circularQ =3D &pm8001_ha->inbnd_q_tbl[0];
+ 	payload.tag =3D cpu_to_le32(tag);
+@@ -4967,8 +4967,11 @@ static void mpi_set_phy_profile_req(struct pm8001_=
+hba_info *pm8001_ha,
+=20
+ 	memset(&payload, 0, sizeof(payload));
+ 	rc =3D pm8001_tag_alloc(pm8001_ha, &tag);
+-	if (rc)
++	if (rc) {
+ 		pm8001_dbg(pm8001_ha, FAIL, "Invalid tag\n");
++		return;
++	}
++
+ 	circularQ =3D &pm8001_ha->inbnd_q_tbl[0];
+ 	payload.tag =3D cpu_to_le32(tag);
+ 	payload.ppc_phyid =3D
+@@ -5010,8 +5013,10 @@ void pm8001_set_phy_profile_single(struct pm8001_h=
+ba_info *pm8001_ha,
+ 	memset(&payload, 0, sizeof(payload));
+=20
+ 	rc =3D pm8001_tag_alloc(pm8001_ha, &tag);
+-	if (rc)
++	if (rc) {
+ 		pm8001_dbg(pm8001_ha, INIT, "Invalid tag\n");
++		return;
++	}
+=20
+ 	circularQ =3D &pm8001_ha->inbnd_q_tbl[0];
+ 	opc =3D OPC_INB_SET_PHY_PROFILE;
 --=20
 2.34.1
 
