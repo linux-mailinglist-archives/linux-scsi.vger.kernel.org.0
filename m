@@ -2,74 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E1C4BB026
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Feb 2022 04:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D61A4BB01B
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Feb 2022 04:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbiBRDP7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Feb 2022 22:15:59 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58548 "EHLO
+        id S231981AbiBRDP4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Feb 2022 22:15:56 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbiBRDPn (ORCPT
+        with ESMTP id S231942AbiBRDPn (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Feb 2022 22:15:43 -0500
 Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD281BBF58
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 19:15:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954E666F8B
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 19:15:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1645154118; x=1676690118;
+  t=1645154119; x=1676690119;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=g7EBBD7qLhE1YqM6ddgx33476kZlCQryWeE4NMPtD5c=;
-  b=P3WVjMQl7ZCZOvoiwr9H3e2Nz5Bi7hs0LalTzgulp+qmVzxIRALcWpZU
-   enK+tD5/wIV2HO7KKavoZPtnZpBg5YLIOXSE6JmdOkHGCaMPagTDfZV9c
-   Pwv8sqWuPCWA0klJf5QYRvgvSQ7xXpLpCoLvzgvXGWXf0iCzISORLQPPF
-   380CKbKP7BilJVXxJPcJoqzYgHtdBicyzt8CPVHOTB1d/WBoLpqysdLte
-   kFT7rHc0AgCgmySjB1VMnl6QXnEpL6kWE8Pk43XG3U+IhpFGY6jyFaogV
-   6QhdvYm3ZIUn0CUnKmW99FrIyFhuIq7ZzLTahqHhvKtyQ7jZDdd9es6JO
-   g==;
+  bh=goRnkkeqxKTUbei8qtQZ6iOM0R/J7gkprYGYQUTWsug=;
+  b=ZQjvWR5tRCNMyFrukWnCsIPO6+dwVewrX/y9/kl0xXgB9Yv0pBr+U1ml
+   wYFG/Z2eH7fQTQULYLlfYzvimcJbmC4dWDxcTU6v2zlKwbd7BIFLkwtHF
+   K8a1pGfw/7a+cecXWtDNy/WJXpFyjDKn5PiabG6P7pFqLnI+gc6ExEHEW
+   hBP2fCO6l678XrOAI0Lf6o0k3YGdtZ+Nc1+6dKnoQ6QIhhCsEMxmtEXg3
+   DGo3M3z691n1H+IBvALXC0km+d3yASivaUrt9VznABwA5qp7n/GH4HBS2
+   7+7hsWLrCzuZXdYs9WBgAOjdC0vrSj6yXyNhsl242GaIpMRz17av6lXjg
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.88,377,1635177600"; 
-   d="scan'208";a="198074189"
+   d="scan'208";a="198074193"
 Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 18 Feb 2022 11:15:18 +0800
-IronPort-SDR: Kkhkm+0vuDdw6WWDAjJrYGAMUrfrofg+k+Jue8OtTALwUhspjrLXfLRdiZ7B7xoBF7BHa3ne22
- tkFAYzOtLfUG4QTUg+GnbqFk4fBLoWBDL1oGXoeW7Ia2nyE/rJAb24hrUSmGUjmuT8Y9Y6jd4b
- 0nDjWHIms51ydN6iEdIC8CribboS2frULd5QMj9K7mGdzuNyLyEOmg2vDlJ0+o+h4Ka5KhpXYc
- JqhOIqxb9xNgCqCTYNtuiVHl0f5zINfPINJyc1jEVNcCJp2aSG4G4n2OZ6VD3BTtnN2Vm5CJ8G
- mpcbY+OPOHC+2gi8sNcF6Mmy
+  by ob1.hgst.iphmx.com with ESMTP; 18 Feb 2022 11:15:19 +0800
+IronPort-SDR: UMZD1WRXamDQU/s/4clc8hz/n1rH4ZgFDAq7pCmURiDfFOxJynyS/SGLdiQyBXYSe8WB76uc+X
+ 9LPHUFTb2p8zhBf36+ASToKtSM9bvS38RXlt2lqcwhsowC7J3HmrHgM5OssVIfFzkohZiICz+9
+ Vpw/H+HyK3vkyFiWIrVwqUzqB2ewlb0gRzFd0sPCX4/P8j5RerKEIAby4KowWI+3SQf0EF2oGv
+ SksQrM5xZ+YRWVXVwsFy0LDKIODNKdjJSZmMFWJeW0BQEgkSpIwCacLqvhHlrMk6YGv9OgpzKc
+ LsqsfmgE+QRcWJf2Hev/aiwV
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 18:46:57 -0800
-IronPort-SDR: RuP6VkkNxGYXYc0DTZVFbiZwhNFSSsK0dNJNM1o5ef9ECIoUoPWYtKaEnOnG3sguOIaDWbqwLy
- 3IhKGHzw1FUA/vkTiHSrHpL/c2smnbfPKTFd1ZVRfLTnQfB0g4G9G0RBc6GxT8BKZGLhf3PGni
- FQTWGW93iV3yr/yyCxnwtkenyTKIksTh8QXl5CThpzJ99HbeZI5+cYgPzHZ3SAEIpqBufodEQr
- NxoPN8TqsOKaeyaIwbpXxNhKzhudJsBCaRmyu24Xh/ZhIRuV8cfVkfGy1/O0BMhg/GO1IxjAiN
- EgY=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 18:46:58 -0800
+IronPort-SDR: /P9BknsobdSmZH0tD/o7+VPmtoXKgBGpv/l4XM5gFHr3okW3GJ3pY9uj0xoZb9zSKJNn78xcVK
+ p21cIXCOQ9KiCF7i9POGq/QoM0ywcPyHiW8gdafFEicZdBzxRBMNhweOmEXcbnjspffqxoDmtZ
+ u3jjrxDwdN02li1TWF3inFlXNz+TADXU2QHIMLuMb0mNU6QiOTgPWmpJd3uxwWB5BCKQuwFr3f
+ Ae8Rae0+TofiOLcHXWNWkw588geK977UhI3tvs9sGQicI3kWBBNlCw9J8xP/odd7b4turiaJrD
+ 3TA=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 19:15:19 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 19:15:20 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K0GzB5ysPz1SVp1
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 19:15:18 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K0GzD1GlRz1SVp3
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 19:15:20 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1645154118; x=1647746119; bh=g7EBBD7qLhE1YqM6dd
-        gx33476kZlCQryWeE4NMPtD5c=; b=XsPdkwrqnMV3t1CeBppH5T00WGB650EuV8
-        Jd2qNJTvfWR88jpSBrNwvVE/sw6sfIIGa1ta14OE4WeM5GdMALtJr+oLMgvl85F7
-        xAQqxEt2c6fZcB2bd/KhlSOv8bPkeYOUQVs9TOwOmLltYSCyblKOYfWdChD11Yyj
-        Blzr9Z7+e/knw8M4WkJMQtwmQKdr85hGQzcV0Abm5SuXG9JgalHAnGxeGoXVMcOh
-        lu/JvXx4vj2DDCoiizdUjoqBRoTWjeFjCDQcqNZ2WoPRFuCi63STTBzCZoqP3JZ1
-        AncJXl+pcHSM3U+SHBQiSPtMeEjQN26kaqKe5LXVClePW0xuTckw==
+        :from; s=dkim; t=1645154119; x=1647746120; bh=goRnkkeqxKTUbei8qt
+        QZ6iOM0R/J7gkprYGYQUTWsug=; b=hriRh8hi/YK5tQhS8yLfLU/iso9VaSPpp4
+        J7DT5OmlN3xgLnkHn56LeUPSuus4Xtg2GtAgEIhnQw3n8gczVUgTvfjTogLSIA8j
+        Xk0rF/rHZ1YBC2cK0WOWA4XW1Ma5FhqNJMpWjjlD4/ttuNj+1zTBwqwc2p38TSN9
+        f2rd4Yw1X8m8IkqtkVrkaKw+ApeGmGPjBKLLnCyrLGWo8qmewuSLf/X4HM4oSRMz
+        Q8J1B3GpBp23Dk2qr09zuhuytKMhtsmJETTmy7JesHBlFH3SZ4ySCLsu5N3XpgF9
+        NOIFumq5a8Q3ZsylwVi7ZtdNiZkpXyBnUXmzfqjHKqUr0aMVS8iQ==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 268xDrJ4qa-F for <linux-scsi@vger.kernel.org>;
-        Thu, 17 Feb 2022 19:15:18 -0800 (PST)
+        with ESMTP id 6aFrIxK6SVeQ for <linux-scsi@vger.kernel.org>;
+        Thu, 17 Feb 2022 19:15:19 -0800 (PST)
 Received: from washi.fujisawa.hgst.com (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K0Gz91hYzz1SVnx;
-        Thu, 17 Feb 2022 19:15:16 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K0GzB4qkjz1Rwrw;
+        Thu, 17 Feb 2022 19:15:18 -0800 (PST)
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 To:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
@@ -78,9 +78,9 @@ To:     linux-scsi@vger.kernel.org,
 Cc:     Xiang Chen <chenxiang66@hisilicon.com>,
         Jason Yan <yanaijie@huawei.com>,
         Luo Jiaxing <luojiaxing@huawei.com>
-Subject: [PATCH v5 21/31] scsi: pm8001: Fix tag leaks on error
-Date:   Fri, 18 Feb 2022 12:14:35 +0900
-Message-Id: <20220218031445.548767-22-damien.lemoal@opensource.wdc.com>
+Subject: [PATCH v5 22/31] scsi: pm8001: fix memory leak in pm8001_chip_fw_flash_update_req()
+Date:   Fri, 18 Feb 2022 12:14:36 +0900
+Message-Id: <20220218031445.548767-23-damien.lemoal@opensource.wdc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220218031445.548767-1-damien.lemoal@opensource.wdc.com>
 References: <20220218031445.548767-1-damien.lemoal@opensource.wdc.com>
@@ -96,102 +96,34 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In pm8001_chip_set_dev_state_req(), pm8001_chip_fw_flash_update_req(),
-pm80xx_chip_phy_ctl_req() and pm8001_chip_reg_dev_req() add missing
-calls to pm8001_tag_free() to free the allocated tag when
-pm8001_mpi_build_cmd() fails.
-
-Similarly, in pm8001_exec_internal_task_abort(), if the chip
-->task_abort method fails, the tag allocated for the abort request task
-must be freed. Add the missing call to pm8001_tag_free().
+In pm8001_chip_fw_flash_update_build(), if
+pm8001_chip_fw_flash_update_build() fails, the struct fw_control_ex
+allocated must be freed.
 
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Reviewed-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 9 +++++++++
- drivers/scsi/pm8001/pm8001_sas.c | 2 +-
- drivers/scsi/pm8001/pm80xx_hwi.c | 9 +++++++--
- 3 files changed, 17 insertions(+), 3 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm800=
 1_hwi.c
-index cc96e58454c8..431fc9160637 100644
+index 431fc9160637..41077c84eec9 100644
 --- a/drivers/scsi/pm8001/pm8001_hwi.c
 +++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -4458,6 +4458,9 @@ static int pm8001_chip_reg_dev_req(struct pm8001_hb=
-a_info *pm8001_ha,
- 		SAS_ADDR_SIZE);
- 	rc =3D pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
- 			sizeof(payload), 0);
-+	if (rc)
-+		pm8001_tag_free(pm8001_ha, tag);
-+
- 	return rc;
- }
-=20
-@@ -4870,6 +4873,9 @@ pm8001_chip_fw_flash_update_req(struct pm8001_hba_i=
-nfo *pm8001_ha,
+@@ -4873,8 +4873,10 @@ pm8001_chip_fw_flash_update_req(struct pm8001_hba_=
+info *pm8001_ha,
  	ccb->ccb_tag =3D tag;
  	rc =3D pm8001_chip_fw_flash_update_build(pm8001_ha, &flash_update_info,
  		tag);
-+	if (rc)
-+		pm8001_tag_free(pm8001_ha, tag);
-+
+-	if (rc)
++	if (rc) {
++		kfree(fw_control_context);
+ 		pm8001_tag_free(pm8001_ha, tag);
++	}
+=20
  	return rc;
  }
-=20
-@@ -4974,6 +4980,9 @@ pm8001_chip_set_dev_state_req(struct pm8001_hba_inf=
-o *pm8001_ha,
- 	payload.nds =3D cpu_to_le32(state);
- 	rc =3D pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
- 			sizeof(payload), 0);
-+	if (rc)
-+		pm8001_tag_free(pm8001_ha, tag);
-+
- 	return rc;
-=20
- }
-diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm800=
-1_sas.c
-index d0f5feb4f2d3..3e186cd6792d 100644
---- a/drivers/scsi/pm8001/pm8001_sas.c
-+++ b/drivers/scsi/pm8001/pm8001_sas.c
-@@ -843,10 +843,10 @@ pm8001_exec_internal_task_abort(struct pm8001_hba_i=
-nfo *pm8001_ha,
-=20
- 		res =3D PM8001_CHIP_DISP->task_abort(pm8001_ha,
- 			pm8001_dev, flag, task_tag, ccb_tag);
--
- 		if (res) {
- 			del_timer(&task->slow_task->timer);
- 			pm8001_dbg(pm8001_ha, FAIL, "Executing internal task failed\n");
-+			pm8001_tag_free(pm8001_ha, ccb_tag);
- 			goto ex_err;
- 		}
- 		wait_for_completion(&task->slow_task->completion);
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80x=
-x_hwi.c
-index cc46e2013eeb..4419fdb0db78 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -4915,8 +4915,13 @@ static int pm80xx_chip_phy_ctl_req(struct pm8001_h=
-ba_info *pm8001_ha,
- 	payload.tag =3D cpu_to_le32(tag);
- 	payload.phyop_phyid =3D
- 		cpu_to_le32(((phy_op & 0xFF) << 8) | (phyId & 0xFF));
--	return pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
--			sizeof(payload), 0);
-+
-+	rc =3D pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
-+				  sizeof(payload), 0);
-+	if (rc)
-+		pm8001_tag_free(pm8001_ha, tag);
-+
-+	return rc;
- }
-=20
- static u32 pm80xx_chip_is_our_interrupt(struct pm8001_hba_info *pm8001_h=
-a)
 --=20
 2.34.1
 
