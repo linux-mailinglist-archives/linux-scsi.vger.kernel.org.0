@@ -2,125 +2,143 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C204BB021
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Feb 2022 04:17:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95914BB098
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Feb 2022 05:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbiBRDQI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Feb 2022 22:16:08 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59074 "EHLO
+        id S229719AbiBRETO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Feb 2022 23:19:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbiBRDPu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Feb 2022 22:15:50 -0500
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9091BAC68
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 19:15:35 -0800 (PST)
+        with ESMTP id S229572AbiBRETN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Feb 2022 23:19:13 -0500
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC1E129B98
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 20:18:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1645154135; x=1676690135;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3co+YfVmCl22mdl0oAzrKAatpfLkzp43oEFR53BRMyM=;
-  b=cXzM1JwU2V0x0H3GsDHWl+Tm8Dh92zV1dFITYnHiNeWkfXR8dCM9buTJ
-   XJlvHSI8nw4RDS0vVkOctpJ0zrtA9B7PbQrP0xZJzrCsABAozzGyoC7+Z
-   H16llSiTAL49MNhEb4ZutGJ+SrD/UJX68vPAcDJpwoX9BnD4QCA5Dq1AG
-   QnYofdqBEdwXp+FOF27Sm+rwK27dhsRnjZaNkgE6ATUN9Fg66MaLIFGsR
-   bcwT68mFqS/Y5xRR6F9RLpm0gh+QeGeXIVkriFuEXZtHPWxtrH7JwwVdA
-   wDSCvZ1/vRynxN4fG2nK9F2STWBzxWMmhZgHuEhVd/U0+LcK5EY6E/Ebi
-   g==;
+  t=1645157937; x=1676693937;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NHtkgbMh6NXQ8widMJrekjBEmQlk/5ZVl1GQklUkRAU=;
+  b=MAh54K71VZ/XY5E1iDOy0B50l3wNDJ3jdIIooxkUukGCSEeigbfS28t1
+   uWIvCvdHhLr9x2KbGTx1bZM5/sSSkRaFAqevh8r0oOv8WCpq2GVhSmtMW
+   5hJniPCKOcgMZtOXOBafhN9rfadn6lT9xKr+1gTGS7uSgaXr+MHVJAstP
+   OoXlVPxWlpJIoAMe0A4Qf1jQtvOTBNnpt464b5t+tKSKU4AWjI1d3qZOZ
+   wkbavdCblkvJFH8zZd2U4qWbW/vNIxdN9xUA+IkIpdp4r6IjCX5fhy5+1
+   u10LsUXkzaV2vyD7sCYltwFwwUW6jE3WPEGAMXlSwfZ8Rm4Rb4DnifS1+
+   w==;
 X-IronPort-AV: E=Sophos;i="5.88,377,1635177600"; 
-   d="scan'208";a="192180431"
+   d="scan'208";a="194229784"
 Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 18 Feb 2022 11:15:35 +0800
-IronPort-SDR: ZFW4XFhEQISesgzRbCkK88f0zltdTTPCiLvgsJJnaJjsqDRl/rl0S8q0OQqPNI2biE8N8mLGZL
- jFbtN6sMlelY4/ULNSHugrFWpKayhUvXhfwV3wNBw0OooZWISG55YUJ+2HVBVMGZnoYQcuKr2u
- kvrCBbKWuUOERaEFN0Tahm48U7P9iynKHN+iYe//nAnIW3j8z3knnmj7X4Hkx/5qI1qe9cX5Ie
- Kydjkvk1SjaZIRSfXD46C1mf2P4rxjPyH7/xkg0hLhss13cKpmi9FTkwE3WQw66z+0epXonQwb
- buYq2ti65lNKJoeqKMa4cewJ
+  by ob1.hgst.iphmx.com with ESMTP; 18 Feb 2022 12:18:57 +0800
+IronPort-SDR: 0J55EuspXwe00zAmVw8fAvgIrS3YAzyGzGvxtHSAX5+p/2hfZ71QcY/mqdVpEzEGd5wfFvtuQm
+ /zLzAwRDIEx0hc0HyjUnfnd3XVfnYV1GuQl2aln/JpbMi6Bpiu27Hpy+enqvLv3Ao7v+SNX23W
+ 6LetnLyuWk4l8J0K1MiX7xycs5CydPFwxznvmy3PoKmw2qad1ZlZc0WEJahmay76z+ZrDY9cF/
+ fv+6EONYUBY80LlbJILHmcOjsPD6S8ULRbMZH+2Q5vCo0xQGhdwD/6RGHO7bgvmJ/96gduNfjW
+ OX/Qnt+MGYBdggWtBpyiL/7l
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 18:47:13 -0800
-IronPort-SDR: y8RCpg9DJpDvB1AaWVTfjV0/Khd1FgYu/dE1KyaRAEtj13hHUPf7kFDZGs7bZEYZ3ca0OOjPDV
- TdkG/eyirs92OJ/mnFt4Xol+DWJGish+g97mvCDBfSQIqgvmXL18qDCWYRgYM/pINcWbMNFAUK
- qF1uYiEidwZKUHpTdkJv+2ANNsHvtBJuLgsoTOL5Z7xfuGRMEss6ux0s+6UYPqbGSracEDDC4P
- j2jmQ/taU2zDOQ/llA90XExe9RRH6kXk9WplH4lhSUiwN7TPm2ZHTQ84sG/RMwkkmKvdnZV5RR
- 9Ws=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 19:50:33 -0800
+IronPort-SDR: 6wywAZvUzRV3gZy+ODZGogYgWObYPFbLorZBbTGoJYtVQw/j6oe2pp8TBHnnxp3qTL7Qp7VkP1
+ rDVVzdBq1Bq91BSSuM9Sje4Ngzx9Nk0MVQMtXL84MsJkRqc1/iNhgxBn9awKDoeYXPCS9xmFkw
+ UrOoirOB8Y60V8+WaBwO4ZS7yRriXijHHYoCBFfvMG/p04W4RbL9w/8AIhmiEVabIEeKGi7nci
+ ydoObZ3Qf1ydFCyDXuVhAANcfcQZbotDS1MP1tLL4B0zgxEy0fP7pV/fc9cU5juXpgeS98kVuz
+ Di8=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 19:15:35 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 20:18:55 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K0GzV6Y5jz1SVnx
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 19:15:34 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K0JNb0JdVz1SVp0
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 20:18:54 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1645154134; x=1647746135; bh=3co+YfVmCl22mdl0oA
-        zrKAatpfLkzp43oEFR53BRMyM=; b=k6ZY4vFf7B4gRrfnrJ0gGgC0O3m3kv9w9c
-        Kzk+5s0wXvI0aeSisO5H7eWtBcVeE71BIpHlkF1nHLxLjI1Y0LJJ+VKHo6e5bCEU
-        FhvOx31Npun9PW5c01LqVvINJbTIkb1kJUWokCdVgTj0BwZ3G5tVqTrPT97ky+Ec
-        HCQ6Dh9kteAyxMYQr8XDFXtdPOL47ROCFNcnNE1BGzqxCFLAjWshpV4eEmH5+F6S
-        K2GbQKM39nHSIfnxaCWa4L1HLSEjofAux/H1hrw53byZRy9Wv+V9RNvqq05KGbX6
-        NVgeVKE+xPqPAz9UkPfn5gYqrQhqgb8MnMkh6/iZNrXbvp1CXdvw==
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1645157933; x=1647749934; bh=NHtkgbMh6NXQ8widMJrekjBEmQlk/5ZVl1G
+        QklUkRAU=; b=qtG86AepzypzOHFq4PqMoqkS5YbSGB0RYRLaBHmsDX4yZb1aEKb
+        LPHHgRKPVeUUjaD68MKGugmNlK9gReNg/E13JKTrZCDem5620LTPWX25tyVyKeCP
+        eFy9vSGehdJ+q55/4kuxKLxn1SK+o7QDOe1LLB1MmQfCCOiH9iVG4gwkBgp4chDK
+        2nzP9h3byeo1Umji/RC/mCYm2Wrl+nJkp3vuWueeyhnCXNBMOzn63KPFuCzVjicZ
+        4rDK9hyjxDjmRqM5fn43KapPvAe4B/I6RTcQj+4/n7JxuChpsKOmqVssD3I5I9Z8
+        20tClbD2Zh+uTMsG5Tasn4vzlOT+VqjY4Cw==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Vtaanc2Zf4Tw for <linux-scsi@vger.kernel.org>;
-        Thu, 17 Feb 2022 19:15:34 -0800 (PST)
-Received: from washi.fujisawa.hgst.com (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K0GzT3PYSz1Rwrw;
-        Thu, 17 Feb 2022 19:15:33 -0800 (PST)
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-To:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        John Garry <john.garry@huawei.com>
-Cc:     Xiang Chen <chenxiang66@hisilicon.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        Luo Jiaxing <luojiaxing@huawei.com>
-Subject: [PATCH v5 31/31] scsi: pm8001: Fix pm8001_info() message format
-Date:   Fri, 18 Feb 2022 12:14:45 +0900
-Message-Id: <20220218031445.548767-32-damien.lemoal@opensource.wdc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220218031445.548767-1-damien.lemoal@opensource.wdc.com>
-References: <20220218031445.548767-1-damien.lemoal@opensource.wdc.com>
+        with ESMTP id 89q5IHYmruDQ for <linux-scsi@vger.kernel.org>;
+        Thu, 17 Feb 2022 20:18:53 -0800 (PST)
+Received: from [10.225.163.78] (unknown [10.225.163.78])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K0JNV75Syz1Rwrw;
+        Thu, 17 Feb 2022 20:18:50 -0800 (PST)
+Message-ID: <5ecf520e-588c-d756-1cb8-2224535b550e@opensource.wdc.com>
+Date:   Fri, 18 Feb 2022 13:18:49 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 00/18] scsi: libsas and users: Factor out LLDD TMF code
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, artur.paszkiewicz@intel.com,
+        jinpu.wang@cloud.ionos.com, chenxiang66@hisilicon.com, hch@lst.de
+Cc:     Ajish.Koshy@microchip.com, yanaijie@huawei.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linuxarm@huawei.com,
+        liuqi115@huawei.com, Viswas.G@microchip.com
+References: <1645112566-115804-1-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1645112566-115804-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Make the driver messages more readable by adding a space after the
-message prefix ":" and removing the extra space between function name
-and line number.
+On 2/18/22 00:42, John Garry wrote:
+> The LLDD TMF code is almost identical between hisi_sas, pm8001, and mvsas
+> drivers.
+> 
+> This series factors out that code into libsas, thus reducing much
+> duplication and giving a net reduction of ~350 LoC.
+> 
+> There are some subtle differences between the core TMF handler and each
+> of the LLDDs old implementation, so any review and testing is appreciated.
+> 
+> Some other minor patches are thrown in:
+> - Delete unused macro in hisi_sas driver
+> - Delete unused libsas callback
+> - Delete unused SAS_SG_ERR
+> - Add enum for response frame datapres field
+> - Handle unrecognised errors in sas_scsi_find_task()
+> 
+> I have another follow-up series to factor out the internal abort code,
+> which is common to hisi_sas and pm8001 drivers.
+> 
+> Based on mkp-scsi 5.18 staging queue at commit ac2beb4e3bd7
 
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
----
- drivers/scsi/pm8001/pm8001_sas.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I tested this series with my pm8001 v5 series on top. Everything looks
+good, no problems detected with both SAS and SATA drives tests. So feel
+free to add:
 
-diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm800=
-1_sas.h
-index 2aab357d9a23..d78e6690333f 100644
---- a/drivers/scsi/pm8001/pm8001_sas.h
-+++ b/drivers/scsi/pm8001/pm8001_sas.h
-@@ -71,7 +71,7 @@
- #define PM8001_IOERR_LOGGING	0x200 /* development io err message logging=
- */
-=20
- #define pm8001_info(HBA, fmt, ...)					\
--	pr_info("%s:: %s  %d:" fmt,					\
-+	pr_info("%s:: %s %d: " fmt,					\
- 		(HBA)->name, __func__, __LINE__, ##__VA_ARGS__)
-=20
- #define pm8001_dbg(HBA, level, fmt, ...)				\
---=20
-2.34.1
+Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
+Martin,
+
+This series and my pm8001 series have a conflict. When applying the
+pm8001 patches on top of these libsas changes, patch 28 has a fairly
+easy to resolve conflict. Let me know if you want me to send a v6
+rebased on top of this.
+
+Thanks !
+
+
+-- 
+Damien Le Moal
+Western Digital Research
