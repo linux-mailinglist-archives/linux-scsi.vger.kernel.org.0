@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F25E4BC09E
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Feb 2022 20:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F404BC0A1
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Feb 2022 20:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238479AbiBRTwt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Feb 2022 14:52:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55178 "EHLO
+        id S238561AbiBRTxO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 18 Feb 2022 14:53:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238495AbiBRTwo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 18 Feb 2022 14:52:44 -0500
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CC3D7E
-        for <linux-scsi@vger.kernel.org>; Fri, 18 Feb 2022 11:52:27 -0800 (PST)
-Received: by mail-pl1-f172.google.com with SMTP id y18so7952448plb.11
-        for <linux-scsi@vger.kernel.org>; Fri, 18 Feb 2022 11:52:27 -0800 (PST)
+        with ESMTP id S238324AbiBRTwq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 18 Feb 2022 14:52:46 -0500
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6954A237FC
+        for <linux-scsi@vger.kernel.org>; Fri, 18 Feb 2022 11:52:29 -0800 (PST)
+Received: by mail-pl1-f170.google.com with SMTP id x4so7977375plb.4
+        for <linux-scsi@vger.kernel.org>; Fri, 18 Feb 2022 11:52:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YP61j+bdAl74dbQczTSGv63U//0SRph+YlxAjDYjbWs=;
-        b=vOmqevbpyOJHKh5mThHie70U8tfFVMM/XzhqLQaSDnpH4BKbok4biXyrxa3pKF5+qE
-         oClQ92emdtxUHi/BDmQqDL2wEw4GAbT3nyxUjefLfZOLDheNda2avMhWgdtpRvnOpffo
-         GQucajVB9w5yurHd4LX80cdtw25RbzoKqq4WBu6cv85Tv0vugRfW+1hhr+p+TJEVqHwv
-         pJlLpmgany7xsHV0ZJV5PTUBYtNvxYhiqGmTF+WXiIBZpwY3g/ZcF8C7m4eYbO3WWc1A
-         gHQEpOHunDJRyYPmbOyzw28L3lA9dvLunC9vpglRTSOMxqEGxNMzhs29VDwyKSz6Ta8X
-         EgUA==
-X-Gm-Message-State: AOAM532OUP4ejAMv+VolQrzJ/83VXeIxcbvRpKggMwgCLsWeiKWzC83t
-        vxoGp6L4wa/jzlXr7t1txCQ=
-X-Google-Smtp-Source: ABdhPJw1e3Dsu2jJkAO75oOabKLm2sHp6ZbyC4vk//sejcup0hkPEBAke4bM3RKZNusTJi8VjOmTsw==
-X-Received: by 2002:a17:902:7002:b0:14d:76b9:2303 with SMTP id y2-20020a170902700200b0014d76b92303mr8981727plk.155.1645213946699;
-        Fri, 18 Feb 2022 11:52:26 -0800 (PST)
+        bh=izC2o5km+XoXKB3mjLq8CNCeGxEjCSSmIId9dxGJeDY=;
+        b=Zpcm/bXH/aoLc3RwI3IjQF5sI0iQqEJgaCsTsKDHwXcHaVpeZO7tAbfGd2iPH7wuXW
+         huLm75xtV5upvSrNQYjBGwIuinDbvhmfmGYRwcaDvbOlEf0t6Su7p5tWfXUORAt5sEPH
+         4zx8PjF0UVrM9wgwGniLxZu+hmL5CE9hnHfLFGyZvvWgHow6t3UFxu4ST+FIWurbN6rP
+         UnjnHN57aIbqMWI8aMZfi8/JmxQP/S3x6wO4Of3gsyU8R6XxNEABGrsDu3ME9gwPEixX
+         IRoryovnAqPLKKIg6iG7nzOXHn29a9j/JJ0HhS4eWY77StCGzRAUWrlbiRAYRs1x6wNP
+         C3Rw==
+X-Gm-Message-State: AOAM530ijjcV7+TrQ1kLngU1Ah3y+j8434z7ZHpmSzCwnzZkyMiMKMuC
+        +Ynj6zOfR2aZhTvGhFHBmst2mNUKxVGEbg==
+X-Google-Smtp-Source: ABdhPJz9w5UnJpxNtm85KCRX0Tvs4FmnFswlsXCTzBrHA/3p1XxUdPyju5GbH7CZq8p4MIfqSf9XyQ==
+X-Received: by 2002:a17:902:860a:b0:14b:341e:5ffb with SMTP id f10-20020a170902860a00b0014b341e5ffbmr8859267plo.6.1645213948647;
+        Fri, 18 Feb 2022 11:52:28 -0800 (PST)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id e15sm3930523pfv.104.2022.02.18.11.52.24
+        by smtp.gmail.com with ESMTPSA id e15sm3930523pfv.104.2022.02.18.11.52.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 11:52:25 -0800 (PST)
+        Fri, 18 Feb 2022 11:52:27 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.de>,
         Saurav Kashyap <skashyap@marvell.com>,
         Javed Hasan <jhasan@marvell.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Hannes Reinecke <hare@suse.de>,
+        GR-QLogic-Storage-Upstream@marvell.com,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v5 27/49] scsi: libfc: Stop using the SCSI pointer
-Date:   Fri, 18 Feb 2022 11:50:55 -0800
-Message-Id: <20220218195117.25689-28-bvanassche@acm.org>
+Subject: [PATCH v5 28/49] scsi: bnx2fc: Stop using the SCSI pointer
+Date:   Fri, 18 Feb 2022 11:50:56 -0800
+Message-Id: <20220218195117.25689-29-bvanassche@acm.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220218195117.25689-1-bvanassche@acm.org>
 References: <20220218195117.25689-1-bvanassche@acm.org>
@@ -54,148 +54,156 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Move the fc_fcp_pkt pointer, the residual length and the SCSI status into
-the new data structure libfc_cmd_priv. This patch prepares for removal of
-the SCSI pointer from struct scsi_cmnd.
+Set .cmd_size in the SCSI host template instead of using the SCSI pointer
+from struct scsi_cmnd. Remove the CMD_SCSI_STATUS() assignment because the
+assigned value is not used.
 
-The user of the libfc data path functions have been identified as follows:
-$ git grep -lw fc_queuecommand | grep -v scsi/libfc/
-drivers/scsi/fcoe/fcoe.c
+This patch prepares for removal of the SCSI pointer from struct scsi_cmnd.
 
-Cc: Saurav Kashyap <skashyap@marvell.com>
-Cc: Javed Hasan <jhasan@marvell.com>
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/fcoe/fcoe.c    |  1 +
- drivers/scsi/libfc/fc_fcp.c | 26 +++++++++++---------------
- include/scsi/libfc.h        |  9 +++++++++
- 3 files changed, 21 insertions(+), 15 deletions(-)
+ drivers/scsi/bnx2fc/bnx2fc.h      |  9 +++++++--
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c |  1 +
+ drivers/scsi/bnx2fc/bnx2fc_io.c   | 23 +++++++++++------------
+ 3 files changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/scsi/fcoe/fcoe.c b/drivers/scsi/fcoe/fcoe.c
-index 6415f88738ad..44ca6110213c 100644
---- a/drivers/scsi/fcoe/fcoe.c
-+++ b/drivers/scsi/fcoe/fcoe.c
-@@ -277,6 +277,7 @@ static struct scsi_host_template fcoe_shost_template = {
- 	.sg_tablesize = SG_ALL,
- 	.max_sectors = 0xffff,
- 	.track_queue_depth = 1,
-+	.cmd_size = sizeof(struct libfc_cmd_priv),
+diff --git a/drivers/scsi/bnx2fc/bnx2fc.h b/drivers/scsi/bnx2fc/bnx2fc.h
+index b4cea8b06ea1..046247420cfa 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc.h
++++ b/drivers/scsi/bnx2fc/bnx2fc.h
+@@ -137,8 +137,6 @@
+ #define BNX2FC_FW_TIMEOUT		(3 * HZ)
+ #define PORT_MAX			2
+ 
+-#define CMD_SCSI_STATUS(Cmnd)		((Cmnd)->SCp.Status)
+-
+ /* FC FCP Status */
+ #define	FC_GOOD				0
+ 
+@@ -493,7 +491,14 @@ struct bnx2fc_unsol_els {
+ 	struct work_struct unsol_els_work;
  };
  
- /**
-diff --git a/drivers/scsi/libfc/fc_fcp.c b/drivers/scsi/libfc/fc_fcp.c
-index 871b11edb586..bce90eb56c9c 100644
---- a/drivers/scsi/libfc/fc_fcp.c
-+++ b/drivers/scsi/libfc/fc_fcp.c
-@@ -45,14 +45,10 @@ static struct kmem_cache *scsi_pkt_cachep;
- #define FC_SRB_READ		(1 << 1)
- #define FC_SRB_WRITE		(1 << 0)
++struct bnx2fc_priv {
++	struct bnx2fc_cmd *io_req;
++};
  
--/*
-- * The SCp.ptr should be tested and set under the scsi_pkt_queue lock
-- */
--#define CMD_SP(Cmnd)		    ((struct fc_fcp_pkt *)(Cmnd)->SCp.ptr)
--#define CMD_ENTRY_STATUS(Cmnd)	    ((Cmnd)->SCp.have_data_in)
--#define CMD_COMPL_STATUS(Cmnd)	    ((Cmnd)->SCp.this_residual)
--#define CMD_SCSI_STATUS(Cmnd)	    ((Cmnd)->SCp.Status)
--#define CMD_RESID_LEN(Cmnd)	    ((Cmnd)->SCp.buffers_residual)
-+static struct libfc_cmd_priv *libfc_priv(struct scsi_cmnd *cmd)
++static inline struct bnx2fc_priv *bnx2fc_priv(struct scsi_cmnd *cmd)
 +{
 +	return scsi_cmd_priv(cmd);
 +}
  
- /**
-  * struct fc_fcp_internal - FCP layer internal data
-@@ -1137,7 +1133,7 @@ static int fc_fcp_pkt_send(struct fc_lport *lport, struct fc_fcp_pkt *fsp)
- 	unsigned long flags;
- 	int rc;
+ struct bnx2fc_cmd *bnx2fc_cmd_alloc(struct bnx2fc_rport *tgt);
+ struct bnx2fc_cmd *bnx2fc_elstm_alloc(struct bnx2fc_rport *tgt, int type);
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+index 68c4e3c3e7bb..f9a37ef57f1c 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+@@ -2979,6 +2979,7 @@ static struct scsi_host_template bnx2fc_shost_template = {
+ 	.track_queue_depth	= 1,
+ 	.slave_configure	= bnx2fc_slave_configure,
+ 	.shost_groups		= bnx2fc_host_groups,
++	.cmd_size		= sizeof(struct bnx2fc_priv),
+ };
  
--	fsp->cmd->SCp.ptr = (char *)fsp;
-+	libfc_priv(fsp->cmd)->fsp = fsp;
- 	fsp->cdb_cmd.fc_dl = htonl(fsp->data_len);
- 	fsp->cdb_cmd.fc_flags = fsp->req_flags & ~FCP_CFL_LEN_MASK;
- 
-@@ -1150,7 +1146,7 @@ static int fc_fcp_pkt_send(struct fc_lport *lport, struct fc_fcp_pkt *fsp)
- 	rc = lport->tt.fcp_cmd_send(lport, fsp, fc_fcp_recv);
- 	if (unlikely(rc)) {
- 		spin_lock_irqsave(&si->scsi_queue_lock, flags);
--		fsp->cmd->SCp.ptr = NULL;
-+		libfc_priv(fsp->cmd)->fsp = NULL;
- 		list_del(&fsp->list);
- 		spin_unlock_irqrestore(&si->scsi_queue_lock, flags);
- 	}
-@@ -1983,7 +1979,7 @@ static void fc_io_compl(struct fc_fcp_pkt *fsp)
- 		fc_fcp_can_queue_ramp_up(lport);
- 
- 	sc_cmd = fsp->cmd;
--	CMD_SCSI_STATUS(sc_cmd) = fsp->cdb_status;
-+	libfc_priv(sc_cmd)->status = fsp->cdb_status;
- 	switch (fsp->status_code) {
- 	case FC_COMPLETE:
- 		if (fsp->cdb_status == 0) {
-@@ -1992,7 +1988,7 @@ static void fc_io_compl(struct fc_fcp_pkt *fsp)
- 			 */
- 			sc_cmd->result = DID_OK << 16;
- 			if (fsp->scsi_resid)
--				CMD_RESID_LEN(sc_cmd) = fsp->scsi_resid;
-+				libfc_priv(sc_cmd)->resid_len = fsp->scsi_resid;
- 		} else {
- 			/*
- 			 * transport level I/O was ok but scsi
-@@ -2025,7 +2021,7 @@ static void fc_io_compl(struct fc_fcp_pkt *fsp)
- 			 */
- 			FC_FCP_DBG(fsp, "Returning DID_ERROR to scsi-ml "
- 				   "due to FC_DATA_UNDRUN (scsi)\n");
--			CMD_RESID_LEN(sc_cmd) = fsp->scsi_resid;
-+			libfc_priv(sc_cmd)->resid_len = fsp->scsi_resid;
- 			sc_cmd->result = (DID_ERROR << 16) | fsp->cdb_status;
- 		}
- 		break;
-@@ -2085,7 +2081,7 @@ static void fc_io_compl(struct fc_fcp_pkt *fsp)
- 
- 	spin_lock_irqsave(&si->scsi_queue_lock, flags);
- 	list_del(&fsp->list);
+ static struct libfc_function_template bnx2fc_libfc_fcn_templ = {
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_io.c b/drivers/scsi/bnx2fc/bnx2fc_io.c
+index b9114113ee73..962454f2e2b1 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_io.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_io.c
+@@ -204,7 +204,7 @@ static void bnx2fc_scsi_done(struct bnx2fc_cmd *io_req, int err_code)
+ 		sc_cmd, host_byte(sc_cmd->result), sc_cmd->retries,
+ 		sc_cmd->allowed);
+ 	scsi_set_resid(sc_cmd, scsi_bufflen(sc_cmd));
 -	sc_cmd->SCp.ptr = NULL;
-+	libfc_priv(sc_cmd)->fsp = NULL;
- 	spin_unlock_irqrestore(&si->scsi_queue_lock, flags);
++	bnx2fc_priv(sc_cmd)->io_req = NULL;
+ 	scsi_done(sc_cmd);
+ }
+ 
+@@ -765,7 +765,7 @@ static int bnx2fc_initiate_tmf(struct scsi_cmnd *sc_cmd, u8 tm_flags)
+ 	task = &(task_page[index]);
+ 	bnx2fc_init_mp_task(io_req, task);
+ 
+-	sc_cmd->SCp.ptr = (char *)io_req;
++	bnx2fc_priv(sc_cmd)->io_req = io_req;
+ 
+ 	/* Obtain free SQ entry */
+ 	spin_lock_bh(&tgt->tgt_lock);
+@@ -1147,7 +1147,7 @@ int bnx2fc_eh_abort(struct scsi_cmnd *sc_cmd)
+ 	BNX2FC_TGT_DBG(tgt, "Entered bnx2fc_eh_abort\n");
+ 
+ 	spin_lock_bh(&tgt->tgt_lock);
+-	io_req = (struct bnx2fc_cmd *)sc_cmd->SCp.ptr;
++	io_req = bnx2fc_priv(sc_cmd)->io_req;
+ 	if (!io_req) {
+ 		/* Command might have just completed */
+ 		printk(KERN_ERR PFX "eh_abort: io_req is NULL\n");
+@@ -1572,8 +1572,8 @@ void bnx2fc_process_tm_compl(struct bnx2fc_cmd *io_req,
+ 		printk(KERN_ERR PFX "tmf's fc_hdr r_ctl = 0x%x\n",
+ 			fc_hdr->fh_r_ctl);
+ 	}
+-	if (!sc_cmd->SCp.ptr) {
+-		printk(KERN_ERR PFX "tm_compl: SCp.ptr is NULL\n");
++	if (!bnx2fc_priv(sc_cmd)->io_req) {
++		printk(KERN_ERR PFX "tm_compl: io_req is NULL\n");
+ 		return;
+ 	}
+ 	switch (io_req->fcp_status) {
+@@ -1609,7 +1609,7 @@ void bnx2fc_process_tm_compl(struct bnx2fc_cmd *io_req,
+ 		return;
+ 	}
+ 
+-	sc_cmd->SCp.ptr = NULL;
++	bnx2fc_priv(sc_cmd)->io_req = NULL;
  	scsi_done(sc_cmd);
  
-@@ -2121,7 +2117,7 @@ int fc_eh_abort(struct scsi_cmnd *sc_cmd)
+ 	kref_put(&io_req->refcount, bnx2fc_cmd_release);
+@@ -1773,8 +1773,7 @@ static void bnx2fc_parse_fcp_rsp(struct bnx2fc_cmd *io_req,
+ 		io_req->fcp_resid = fcp_rsp->fcp_resid;
  
- 	si = fc_get_scsi_internal(lport);
- 	spin_lock_irqsave(&si->scsi_queue_lock, flags);
--	fsp = CMD_SP(sc_cmd);
-+	fsp = libfc_priv(sc_cmd)->fsp;
- 	if (!fsp) {
- 		/* command completed while scsi eh was setting up */
- 		spin_unlock_irqrestore(&si->scsi_queue_lock, flags);
-diff --git a/include/scsi/libfc.h b/include/scsi/libfc.h
-index eeb8d689ff6b..6e29e1719db1 100644
---- a/include/scsi/libfc.h
-+++ b/include/scsi/libfc.h
-@@ -351,6 +351,15 @@ struct fc_fcp_pkt {
- 	struct completion tm_done;
- } ____cacheline_aligned_in_smp;
+ 	io_req->scsi_comp_flags = rsp_flags;
+-	CMD_SCSI_STATUS(sc_cmd) = io_req->cdb_status =
+-				fcp_rsp->scsi_status_code;
++	io_req->cdb_status = fcp_rsp->scsi_status_code;
  
-+/*
-+ * @fsp should be tested and set under the scsi_pkt_queue lock
-+ */
-+struct libfc_cmd_priv {
-+	struct fc_fcp_pkt *fsp;
-+	u32 resid_len;
-+	u8 status;
-+};
-+
- /*
-  * Structure and function definitions for managing Fibre Channel Exchanges
-  * and Sequences
+ 	/* Fetch fcp_rsp_info and fcp_sns_info if available */
+ 	if (num_rq) {
+@@ -1946,8 +1945,8 @@ void bnx2fc_process_scsi_cmd_compl(struct bnx2fc_cmd *io_req,
+ 	/* parse fcp_rsp and obtain sense data from RQ if available */
+ 	bnx2fc_parse_fcp_rsp(io_req, fcp_rsp, num_rq, rq_data);
+ 
+-	if (!sc_cmd->SCp.ptr) {
+-		printk(KERN_ERR PFX "SCp.ptr is NULL\n");
++	if (!bnx2fc_priv(sc_cmd)->io_req) {
++		printk(KERN_ERR PFX "io_req is NULL\n");
+ 		return;
+ 	}
+ 
+@@ -2018,7 +2017,7 @@ void bnx2fc_process_scsi_cmd_compl(struct bnx2fc_cmd *io_req,
+ 			io_req->fcp_status);
+ 		break;
+ 	}
+-	sc_cmd->SCp.ptr = NULL;
++	bnx2fc_priv(sc_cmd)->io_req = NULL;
+ 	scsi_done(sc_cmd);
+ 	kref_put(&io_req->refcount, bnx2fc_cmd_release);
+ }
+@@ -2044,7 +2043,7 @@ int bnx2fc_post_io_req(struct bnx2fc_rport *tgt,
+ 	io_req->port = port;
+ 	io_req->tgt = tgt;
+ 	io_req->data_xfer_len = scsi_bufflen(sc_cmd);
+-	sc_cmd->SCp.ptr = (char *)io_req;
++	bnx2fc_priv(sc_cmd)->io_req = io_req;
+ 
+ 	stats = per_cpu_ptr(lport->stats, get_cpu());
+ 	if (sc_cmd->sc_data_direction == DMA_FROM_DEVICE) {
