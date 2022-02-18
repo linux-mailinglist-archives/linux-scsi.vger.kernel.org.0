@@ -2,136 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD1D4BB10D
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Feb 2022 06:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC384BB008
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Feb 2022 04:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiBRFBP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Feb 2022 00:01:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47818 "EHLO
+        id S231838AbiBRDNM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Feb 2022 22:13:12 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiBRFAz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 18 Feb 2022 00:00:55 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153682BAA03;
-        Thu, 17 Feb 2022 21:00:38 -0800 (PST)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220218050036epoutp023b79452c35d4668bac8b1525c55b5a1d~UyLNr7NGA2938129381epoutp02W;
-        Fri, 18 Feb 2022 05:00:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220218050036epoutp023b79452c35d4668bac8b1525c55b5a1d~UyLNr7NGA2938129381epoutp02W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1645160436;
-        bh=mh7UWvxwuvE8bNedSZzRwEQXl6IWDs4xsiiBLIhUrJs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eFzp0kt8fRy4Ejk62NXpYAstnS2EQvs2AoO3NjISQEPM4evhbiMX3MPmTEV6P4IBX
-         mwnaSmebWFvVDnOmS+PTFbezpTdZXWZOjn98xMDVAVovbmTckvlvV6OjsaT5Sca/QO
-         glvyySR+b0aMvqITc0DDZF5osxu1Mx9/oKC8VeHA=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220218050036epcas5p47dc1325db6e412d1dd5615722cab2134~UyLNRTZzn0649606496epcas5p4F;
-        Fri, 18 Feb 2022 05:00:36 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.180]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4K0KJV622Hz4x9Pv; Fri, 18 Feb
-        2022 05:00:26 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C1.F4.06423.9E72F026; Fri, 18 Feb 2022 14:00:25 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220217133547epcas5p305c93f10e815e275374ca2f41d75a2aa~Uljuy6HZZ1991119911epcas5p3t;
-        Thu, 17 Feb 2022 13:35:47 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220217133547epsmtrp21569afdc8d19e716eab1f6cdac5f9309~UljuxENvs1692816928epsmtrp2j;
-        Thu, 17 Feb 2022 13:35:47 +0000 (GMT)
-X-AuditID: b6c32a49-b13ff70000001917-2a-620f27e94992
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F0.3F.29871.23F4E026; Thu, 17 Feb 2022 22:35:46 +0900 (KST)
-Received: from test-zns (unknown [107.110.206.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220217133542epsmtip2abd6e670ac9ebfdb75c8f643565fcf05~UljqV5HGc2615626156epsmtip2J;
-        Thu, 17 Feb 2022 13:35:42 +0000 (GMT)
-Date:   Thu, 17 Feb 2022 19:00:46 +0530
-From:   Nitesh Shetty <nj.shetty@samsung.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     javier@javigon.com, chaitanyak@nvidia.com,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, axboe@kernel.dk,
-        msnitzer@redhat.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, hare@suse.de, kbusch@kernel.org,
-        hch@lst.de, Frederick.Knight@netapp.com, osandov@fb.com,
-        lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
-        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
-        jack@suse.com, joshi.k@samsung.com, arnav.dawn@samsung.com,
-        nitheshshetty@gmail.com, SelvaKumar S <selvakuma.s1@samsung.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/10] block: make bio_map_kern() non static
-Message-ID: <20220217133046.GA13770@test-zns>
+        with ESMTP id S231789AbiBRDNL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Feb 2022 22:13:11 -0500
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB49387AC
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 19:12:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1645153975; x=1676689975;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=VnJd2o5itS/4TPuSd4ZcOr19TSk4abFVlw5aIt3z+1I=;
+  b=jst5ttb+rlzlIxZa8/i1dl6HH62lmCGz1JRLmiEVTKZ3clKnPth0+gOq
+   mP2bfSJrC/5XeTgbFwPgukXvmaeGzV9yXQf09m6HBvKdyFHonHpkX/Toa
+   rMZxFZIbmRWQBxi+fjzl7eJOJ0/9klM21afCvxJBUIQF2zPFmh+5zRG3V
+   c5QUFzNcNLZ4/0SpDR/T4LVykCZQXUICM4q2JLoSBeLK6/KpAl2lXZ49D
+   ws5+RSPRFW/u4N4uPQ5jnxno9r1uq9UfC6z1l+XkksZBO/NCD1JeNE2bO
+   p2XVGNfR5JJh108atPM42QBYtWPFDyi1Xt8do38WoGqI4Bcp92XYMqvR5
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,377,1635177600"; 
+   d="scan'208";a="305149289"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 18 Feb 2022 11:12:54 +0800
+IronPort-SDR: 1ohBqAVRC61yWIYyUQkJVovXK6PkhwJ28LxzCTs+v79OFRaCWYykMxSQgv+24O1fbsceofV3Ng
+ VuyX/AfSdMbVmfaEc4DgDpSk34TPtLs7yHFOHLdjrfGCUAt/18sOres9vJJDmDG7KbzCodIwMw
+ mNK4lHZPwS2heWaSXBF3fYJuUxJwGus+0Qid6VCy03cZNQxnW8qHQDREWNc3xx3IWq9JgpqjyY
+ YZRxvOK98vG1uUeTUVtoI004w/1CnqCioOgKQ8J/MhecluirjexSO6ZxjgPBg3U88s7rMWmR/L
+ 5OcecmGzIyYRx6FHR5FTls2n
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 18:45:39 -0800
+IronPort-SDR: G+Uk/myGmORnMeZP73PljvTpua3xdDwDXuZ8isGoEn0ELsLbyWbEDKt9MNl3oviFAOPF9Xuohu
+ brDmuSaaHD9bu0yxNKdLHP4ujjAED+8aRqKZHYwuuG1H28rIV22qR6DQvvfRKd7A4yCuwI5BtX
+ H2ybl9N2n2/Gpqt1z71IHXQxEWGsh9OlPNUsYx0UdvlMXhMUloIu9ZtZaHyyiiGEYfADfC07U3
+ E9RXwmpGN2aUdIbIyrKAlB9T8ixC/vWKDEl25knLl/4IKB9l5zbZr0V70NsG8FZbQl6b6t5bSB
+ wHM=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 19:12:54 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K0GwQ1MFFz1SHwl
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Feb 2022 19:12:54 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1645153973; x=1647745974; bh=VnJd2o5itS/4TPuSd4ZcOr19TSk4abFVlw5
+        aIt3z+1I=; b=HWE8GomcT6squzgGRBk0J7Kxq1VbQvyhc8vcT1JbDfEbH8NV2dE
+        7U91VqOeCQiiBtPVcrQJ9tv+yCy5YA4YHDseJvWjgudwDiHk5zZX8BKKNmNmwOjW
+        85DGZVvJJEPTi1i1nVhFihWa2tIQrHo5Ny5P41ltGwgfhsyIkO8IgMGISR8x/otJ
+        3zJaiLGX73GMnGyry+lcolqXVmglM04ZW3Ni9jCuc38qSny6b+Z8gtiiqWWD+ij0
+        J1CVQoPNQ0HZXfqgd0DUoVZwl0uja/2eOrptWf23wBVgsFaTdOn4IBt9Di1lueMJ
+        MjT5R4TeUaezlGBBJLQmZWikkNoFlAV6Abg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id hlj0r1o0xI_U for <linux-scsi@vger.kernel.org>;
+        Thu, 17 Feb 2022 19:12:53 -0800 (PST)
+Received: from [10.225.163.78] (unknown [10.225.163.78])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K0GwN4LZJz1Rwrw;
+        Thu, 17 Feb 2022 19:12:52 -0800 (PST)
+Message-ID: <04a7d878-f5dc-6058-fc29-c72139d13aa3@opensource.wdc.com>
+Date:   Fri, 18 Feb 2022 12:12:51 +0900
 MIME-Version: 1.0
-In-Reply-To: <20220217083631.34ii6gqdrknrmufv@garbanzo>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTVxzHc+69vS246h1QdmTKWJvFqRRa5XHYQJbozPWxDffIFpMNL3Bt
-        FWibPhwj2aTijIhoYYNAZQ63uW5gAME5oJRJHTBEVEQQVF6jzEyhPHwACnQtrYv/fX6/8/29
-        c3i4z21uAG+PQsuqFUyKkPQmzl9cvUr876plCZKG1mBUcakZR/W9DziorO84iQomZnE03jjM
-        QXnHC7mo07YUWewnOOjajB5Dw1UODNX/kIehX8uaMHTX9CNA5lOTGMpqu4ahuSEpanKMkSjP
-        2g3QSJcRQ5Zba1G9pZVAnXXFJPr+5xEuyr5ZQ6KG+xYcmVoWMNRjGAHoinGORDU2PUAX+7sI
-        VH5/nED3Z1pJdOjsI4C+PjrLRVfnWzhviejOG9to40A7Sedm2rl0rbGPS1/tP0vQmSV3CLqz
-        XUdXlWaRdPVP++lvekyANvdmkPSBy004XTj1kKRzMu0kPTlyi6DHG7rIOP+dydFylkli1UGs
-        IlGZtEchixFu+yB+Y3x4hEQqlkahSGGQgkllY4SbtseJN+9JcS5RGLSPSdE5XXGMRiMM3RCt
-        Vuq0bJBcqdHGCFlVUooqTBWiYVI1OoUsRMFq35BKJOvCncJdyfKC2XKgqiXTnnzXTWSAKs4R
-        4MWDVBjsHysijwBvng9lBtCe8afHmALw9JM8wm08BrAjewJ7FtIyN8FxP1gAPHj9AO42/gHw
-        jvUg7lIR1GtwtqrUmYvHI6m1sM3Bc7n9qNdhgyFnMRFOPSKhvjLUxb7URljssHFdzKfE0Hh7
-        CLj5RdhaZCNc7EVFwqdt5xY1AkoEL5xvwVx1IZXvDU+P9gNXLUhtgqZ6tbtRX3ivxa2HVAB8
-        YLeQbn02gDOXBzzBhQBmGjJJtyoWdtTPe7qTQ8tMvmfklTD/UrnHvxTmPLV5/HxYc/IZi+CZ
-        ihJPnuWwe1rvYRrWDUx79jgKYHWOiTCAV4zPTWd8rp6bg2GJeYo0OgfCqZehaYHnxtWwoi60
-        BHBKwXJWpUmVsZpwlVTBfv7/yROVqVVg8Zet2VID+gYnQqwA4wErgDxc6MefaOQn+PCTmC/S
-        WbUyXq1LYTVWEO48Vi4eIEhUOr+pQhsvDYuShEVERIRFrY+QCl/it8kqGR9KxmjZZJZVsepn
-        cRjPKyAD2+vN7JMd7m2P+f2C1eivGzrqM18WAmeTRCtOXz+Jr/uqlhGs/+z97k8NXyZEDjh2
-        H+pM/6s79spHZ2qXCSO38reX7XxnSan+gHLrx4Gn+NF8xy/5d94Ujw3V2ScDE9d1mP2zRvG3
-        ewcDCgSs8pi6790Z9blmETmwP91UUTT4mCq67hu5sXH3ZXlN4IqF4B2vzr1H4nJxdVT8ldvD
-        az55YfPwLr1ZJIjawZ1bkisgTfAPv6wtem/s7/GbGut63+jGNK2m9TBdgjZ8e+OeSTIZu2q+
-        uG9lz8PmcotBVwSSHSpHqXj6w7NxdSFDOb/tHT9xNVkwPBY6X9nOq7blpln7o+82CwmNnJGu
-        wdUa5j+jLjDh7gQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SX0xTZxjG951zenro1ua0MvwAM7K6GaWIQ9n2ZWHqsgsOEqMXBg2ZQJXT
-        QoDa9IBTErdixYx/EatbpDpxQCAUkYkGcLSNLbIOu45GRIoDFmI7hh1tcWPaAGUrbJl3T97n
-        +f2uXgqXXObFUYWqUlajkhdLSQHRMyBN2Lp9n+jIO8333kNd97/HkWn8Dx7qmDxHoq+CIRwF
-        rE94SH/uEh+NeETI7L/MQ64XFRh60r2CIVOTHkPtHYMYmmlrBqj/m3kMVTlcGFqaTkGDK3Mk
-        0tseAeQdNWDI/FiGTOYhAo18d4VEja1ePqoZ6yORxWfGUZs9jCF3vRegnwxLJOrzVAA0MDVK
-        oBu+AIF8L4ZIdPbmAkCVtSE+Gl6283ZvZEYeZjKGX5wkc17n5zN3DJN8ZnjqJsHork0QzIiz
-        jOk2VpHMrZbPmQvuNsD0j2tJ5vSPgzhz6dmfJFOn85PMvPcxwQQso+T+mGxBWj5bXHic1Wzb
-        mScoGGi4T6hD+ImBmueEFtTg1SCKgnQqtC8FedVAQEnofgB7z/vItSIWti7f+3e0DraHZ/hr
-        Iw+AU5W/YZGCoN+GoW7jPwBFkbQMOlaoyDma3gwt9XVYZI/TiyT06hdWRevoj+GVFQ8/koX0
-        Vmj4eRpEsoT+HUCHJ23tLoZDDR4iknE6EbrDs1jEj9PxsC286o+i34eLjturmtfpjfBujx2r
-        B2LDS7ThJdrwP30N4EYQy6q5EmUJl6JOUbGfJnPyEq5MpUw+eqykG6z+T+KWPtBrDCbbAEYB
-        G4AULo0WBq3CIxJhvvxkOas5lqspK2Y5G4inCOl6oat6KFdCK+WlbBHLqlnNfy1GRcVpsc/w
-        1CSbe/8hYP1Qedr10dyGtFD+00Xngz2ST6YDS/qE7WarNlZxfffzJHWaYlMjripIqKUPps8t
-        y75W3j7QfOPo/FNFk+ZiI7dNGOO35pfKWi2db3wR1IWrCPNr4zmppUmmQ8Ge6eN/dc74xh4y
-        lXcyXy3qbErNNs0Krg7vTFC0SB7ZLWepdy/kqpQXK2K4hTx8Ii66K+eUqyPr6r7huCJxRuDb
-        nHi/usvTcvLLtyYaMvf+oMrY5a7VKURqerLO+asoe3TXm69UbZDJ19/d+yxvh1Ee5ZDv6NX6
-        Dp85k16+eJDJmidnnbnlqqz0A36X+MGpwrET7VkfZIgH9RmJIinBFchTEnENJ/8blpJWdq4D
-        AAA=
-X-CMS-MailID: 20220217133547epcas5p305c93f10e815e275374ca2f41d75a2aa
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----Fq-YzQe-sCxQ_.ALiW-8FMdnFblVNc8pE5kaYAan9Jc7INV.=_8df09_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220214080558epcas5p17c1fb3b659b956908ff7215a61bcc0c9
-References: <20220214080002.18381-1-nj.shetty@samsung.com>
-        <CGME20220214080558epcas5p17c1fb3b659b956908ff7215a61bcc0c9@epcas5p1.samsung.com>
-        <20220214080002.18381-2-nj.shetty@samsung.com>
-        <20220217083631.34ii6gqdrknrmufv@garbanzo>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 27/31] scsi: pm8001: Cleanup pm8001_queue_command()
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Xiang Chen <chenxiang66@hisilicon.com>,
+        Jason Yan <yanaijie@huawei.com>
+References: <20220214021747.4976-1-damien.lemoal@opensource.wdc.com>
+ <20220214021747.4976-28-damien.lemoal@opensource.wdc.com>
+ <51d7c127-f975-14e9-a036-c37416ed8679@huawei.com>
+ <32efd519-3485-ee34-84e2-34a0d8c27e17@opensource.wdc.com>
+ <38090771-ad24-1b20-9b79-f7f89d42ea66@huawei.com>
+ <37df3c92-c28e-72d4-76d8-33356829af5a@opensource.wdc.com>
+ <5a5481af-e975-c6fb-2d48-961769eae551@huawei.com>
+ <9c22abeb-1b22-4613-66bc-276aaa4a639c@opensource.wdc.com>
+ <e7b5c48b-4217-7247-8bc9-e5f8ae9411ce@huawei.com>
+ <e9b40eaf-7aa5-798b-1bde-1a2ce8d83433@opensource.wdc.com>
+ <712a4702-8534-fad2-2679-cc5cf62e4a9e@huawei.com>
+ <ba58ea9e-430a-ec22-e67a-ceb632e99f33@opensource.wdc.com>
+ <28cfcd43-e006-ab26-2d58-47384ae49146@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <28cfcd43-e006-ab26-2d58-47384ae49146@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -140,32 +110,65 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-------Fq-YzQe-sCxQ_.ALiW-8FMdnFblVNc8pE5kaYAan9Jc7INV.=_8df09_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-
-On Thu, Feb 17, 2022 at 12:36:31AM -0800, Luis Chamberlain wrote:
-> On Mon, Feb 14, 2022 at 01:29:51PM +0530, Nitesh Shetty wrote:
-> > From: SelvaKumar S <selvakuma.s1@samsung.com>
-> > 
-> > Make bio_map_kern() non static
-> > 
-> > Signed-off-by: SelvaKumar S <selvakuma.s1@samsung.com>
-> > Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
+On 2/17/22 21:49, John Garry wrote:
+>>>>
+>>>
+>>> I figured out what is happening here and it does not help solve the
+>>> mystery of my hang.
+>>>
+>>> Here's the steps:
+>>> a. scsi_cmnd times out
+>>> b. scsi error handling kicks in
+>>> c. libsas attempts to abort the task, which fails
+>>> d. libsas then tries IT nexus reset, which passes
+>>>    - libsas assumes the scsi_cmnd has completed with failure
+>>> e. error handling concludes
+>>> f. scsi midlayer then retries the same scsi_cmnd
+>>> g. since we did not "free" associated ccb earlier or dma unmap at d.,
+>>> the dma unmap on the same scsi_cmnd causes the warn
+>>>
+>>> So the LLD should really free resources and dma unmap at point IT nexus
+>>> reset completes, but it doesn't. I think in certain conditions dma map
+>>> should not be done twice.
+>>>
+>>> Anyway, that can be fixed, but I still have the hang :(
+>>
+>> I guess (a) (cmd timeout) is only the symptom of the hang ? That is, the
+>> hang is causing the timeout ?
 > 
-> This patch makes no sense on its own. I'd just merge it with
-> its first user.
+> Right
 > 
->   Luis
->
+>> It may be good to turn on scsi trace to see if the command was only
+>> partially done, or not at all, or if it is a non-data command.
+>>
+> 
+> I could do that. But I think that the command just does not complete. Or 
+> maybe it is missed.
+> 
+>> And speaking of errors, I am currently testing v4 of my series and
+>> noticed some weird things in the error handling. E.g., with one of the
+>> test executing a report zones command with an LBA out of range, I see this:
+>>
+>> [23962.027105] pm80xx0:: mpi_sata_event  2788:SATA EVENT 0x23
+>> [23962.036099] pm80xx0:: pm80xx_send_read_log  1863:Executing read log end
+>>
+> 
+> I don't know why the driver even does this, but the implementation of 
+> pm80xx_send_read_log() is questionable. It would be nice to not see ATA 
+> code in the driver like this.
 
-acked. I will do it next version.
+I have been thinking about this one. We should be able to avoid this
+read log and rely on libata-eh to do it. All we should need to do is an
+internal abort all without completing the commands. libata will do the
+read log and resend the retry for the failed command (if appropriate)
+and all the other aborted NCQ commands.
 
---
-Nitesh
+Need to look at how other libsas drivers are handling this. But the
+above should work, I think.
 
-------Fq-YzQe-sCxQ_.ALiW-8FMdnFblVNc8pE5kaYAan9Jc7INV.=_8df09_
-Content-Type: text/plain; charset="utf-8"
+Not adding this to the current series though :) That will be for another
+patch series.
 
-
-------Fq-YzQe-sCxQ_.ALiW-8FMdnFblVNc8pE5kaYAan9Jc7INV.=_8df09_--
+-- 
+Damien Le Moal
+Western Digital Research
