@@ -2,125 +2,157 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8524BCBF2
-	for <lists+linux-scsi@lfdr.de>; Sun, 20 Feb 2022 04:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E59E4BCCF5
+	for <lists+linux-scsi@lfdr.de>; Sun, 20 Feb 2022 08:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237791AbiBTDTl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 19 Feb 2022 22:19:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48568 "EHLO
+        id S232942AbiBTHRW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 20 Feb 2022 02:17:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243426AbiBTDTa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 19 Feb 2022 22:19:30 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A4F340DF
-        for <linux-scsi@vger.kernel.org>; Sat, 19 Feb 2022 19:19:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1645327141; x=1676863141;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2A6Xvm2+8LayS7L2VYBx1aN5agZihl1mgosK4OO3c78=;
-  b=jolg8J7DIkDJEtEOn/jI5lmMZn3KHuLrVfgxWrDy1IVlYQ9+1qgdHSZX
-   w57jkaA4HZsKsGalHVcaLYewkcveLERhC1qvy5J70KpfxFtzlnmB3jBsC
-   cALCNR/p600BUFfkpFiY3C3n6lIyvT7N7kultWRrj3vRbPztK1xbtyfbU
-   nX0Awft+e6z4gFVaMPa4xboZuvpo6BMGjH+sCrDHY8yAkf4knpg53XA4Q
-   VUTjuUgugjhrWbEszixR6vIUvHF9abqeuk2pKR6tESb8q01PUR5zm8uDT
-   XtxDEDuX9QLX8EsWvvWqGluhguYjVeWCEkTn+l4W4kTDLy3e50CXndgN8
-   g==;
-X-IronPort-AV: E=Sophos;i="5.88,382,1635177600"; 
-   d="scan'208";a="193405832"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 20 Feb 2022 11:19:00 +0800
-IronPort-SDR: q+SWtaZ7DAAK0ygggBy4w/IqEzScujbwT2QRkinp1YZVp4y9iTV7TOIcTsJkYTFcYib+jOj/2b
- rS0DjxDWWuBuN50p8DXYWYi36MQy7lNU7l08+sZvUFrPMuIB4Fd+KqdENT/jFGHpAUXNxqktqN
- nZ+QLR0kTJfstQkESh8+bUTQBPHtyY7vNwhFEBK/oeOPhmlLEsfXNYm2sgDZ7uEnv7OIORMHaD
- l4zmeXuk9vlwpmrggOGIsEZIzSGI/pTA9JeM1G6M7EZ/9wgE4zhhAWAIw5z9xj//Xwl1H/ZeL8
- 96EUl8FhYel2eM+/kQ2GcdUD
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 18:50:36 -0800
-IronPort-SDR: UUR6c5dcVfMsIxwMqaFSq7rCfAyR32g/xoA/QOc6bXQjjEbZvx4e8BaQI2d9vUf2nqTVVAZlU2
- vd8/rhmVTcU5YC+YffuJd3E+SgWrPjXkytoFiwHj9cyH4tvjVs8dw/DjEmQR1fw7NCY7HJD/pw
- WteOXr30kRcD/yEvadYv0Vk2rRTKdhL6wNNbsZr8Rhoh4MT3p/3/o21QjWwYOCTO41g+RlwEKn
- w0pF5oHisgkvafH/6IqC2qkS0RaclO1brlU6oEXp9anQBXJ/H8vma2vynPIzzOEWXQKhB8yOb+
- Lds=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 19:19:01 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K1VyY0kS9z1Rvlx
-        for <linux-scsi@vger.kernel.org>; Sat, 19 Feb 2022 19:19:01 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1645327140; x=1647919141; bh=2A6Xvm2+8LayS7L2VY
-        Bx1aN5agZihl1mgosK4OO3c78=; b=PA/masRTjpexVx74NyHFhMEM8kiuf+Ty3M
-        47Cw3IkBk43RFuTrAu/jKS2O2Cd+hWF6UwLfhT6nHcHRlkVgKASnEXyJYpse5z3x
-        AzbnbMObriOtrKpcbCKhaoXvhUON81o2+GBXd+nMhkMt7nJ4r9FUvVMRTyH+M2Bg
-        v7dDf6wiUO65h/bpDev29tc+AAeaIfo+7yBzPQMyKwAHPM649bMh1CP2pyZA8I6V
-        Ihjgw+frywsKq9HTa8JCvMnHJAcj0t72hVkxNJejKSwKxXTs2YxHJXRk8bxE9g1c
-        5ilO51Z92fI2GrdZowjdR0KFPojKAqjxbb7VYfkmM85A8wqTB4lA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id AKfEIDtuwtgg for <linux-scsi@vger.kernel.org>;
-        Sat, 19 Feb 2022 19:19:00 -0800 (PST)
-Received: from washi.fujisawa.hgst.com (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K1VyW4grwz1Rwrw;
-        Sat, 19 Feb 2022 19:18:59 -0800 (PST)
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-To:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        John Garry <john.garry@huawei.com>
-Cc:     Xiang Chen <chenxiang66@hisilicon.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        Luo Jiaxing <luojiaxing@huawei.com>
-Subject: [PATCH v6 31/31] scsi: pm8001: Fix pm8001_info() message format
-Date:   Sun, 20 Feb 2022 12:18:10 +0900
-Message-Id: <20220220031810.738362-32-damien.lemoal@opensource.wdc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220220031810.738362-1-damien.lemoal@opensource.wdc.com>
-References: <20220220031810.738362-1-damien.lemoal@opensource.wdc.com>
+        with ESMTP id S229774AbiBTHRS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Feb 2022 02:17:18 -0500
+Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A80E102D
+        for <linux-scsi@vger.kernel.org>; Sat, 19 Feb 2022 23:16:57 -0800 (PST)
+Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id AE4AD61462;
+        Sun, 20 Feb 2022 07:16:56 +0000 (UTC)
+Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
+        by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id A64663C0FD;
+        Sun, 20 Feb 2022 07:16:56 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.2
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
+        by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
+        with ESMTP id huKa3A0lye_5; Sun, 20 Feb 2022 07:16:56 +0000 (UTC)
+Received: from [192.168.48.23] (host-45-78-195-155.dyn.295.ca [45.78.195.155])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dgilbert@interlog.com)
+        by mail.ca.inter.net (Postfix) with ESMTPSA id 2FC663C0FB;
+        Sun, 20 Feb 2022 07:16:56 +0000 (UTC)
+Message-ID: <3d57d895-d133-87a5-23a6-721641711000@interlog.com>
+Date:   Sun, 20 Feb 2022 02:16:54 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Reply-To: dgilbert@interlog.com
+Subject: Re: sd: Unaligned partial completion
+Content-Language: en-CA
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     SCSI development list <linux-scsi@vger.kernel.org>
+References: <ae40bef0-702f-04c4-9219-47502c37d977@interlog.com>
+ <yq11qzyh4zj.fsf@ca-mkp.ca.oracle.com>
+ <22a343a6-f659-3938-b83e-a3842486bbb8@interlog.com>
+ <35b0d7bb-95d0-6c6a-2486-4d1336b9b98f@opensource.wdc.com>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+In-Reply-To: <35b0d7bb-95d0-6c6a-2486-4d1336b9b98f@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Make the driver messages more readable by adding a space after the
-message prefix ":" and removing the extra space between function name
-and line number.
+On 2022-02-19 20:35, Damien Le Moal wrote:
+> On 2/20/22 09:56, Douglas Gilbert wrote:
+>> On 2022-02-19 17:46, Martin K. Petersen wrote:
+>>>
+>>> Douglas,
+>>>
+>>>> What should the sd driver do when it gets the error in the subject
+>>>> line? Try again, and again, and again, and again ...?
+>>>>
+>>>> sd 2:0:1:0: [sdb] Unaligned partial completion (resid=3584, sector_sz=4096)
+>>>> sd 2:0:1:0: [sdb] tag#407 CDB: Read(16) 88 00 00 00 00 00 00 00 00 00 00 00 00 01 00
+>>>>
+>>>> Not very productive, IMO. Perhaps, after say 3 retries getting the
+>>>> _same_ resid, it might rescan that disk. There is a big hint in the
+>>>> logged data shown above: trying to READ 1 block (sector_sz=4096) and
+>>>> getting a resid of 3584. So it got back 512 bytes (again and again
+>>>> ...). The disk isn't mounted so perhaps it is being prepared. And
+>>>> maybe that preparation involved a MODE SELECT which changed the LB
+>>>> size in its block descriptor, prior to a FORMAT UNIT.
+>>>
+>>> The kernel doesn't inspect passthrough commands to track whether an
+>>> application is doing MODE SELECT or FORMAT UNIT. The burden is generally
+>>> on the application to do the right thing.
+>>
+>> No, of course not. But the kernel should inspect all UAs especially the one
+>> that says: CAPACITY DATA HAS CHANGED !
+>>
+>>> I'm assuming we're trying to read the partition table. Did the device
+>>> somehow get closed between the MODE SELECT and the FORMAT UNIT?
+>>
+>> Nope, look up "format corrupt" state in SBC, there is a asc/ascq code for
+>> that, and it was _not_ reported in this case. The disk was fine after those
+>> two commands, it was sd or the scsi mid-level that didn't observe the UAs,
+>> hence the snafu. Sending a READ command after a CAPACITY DATA HAS CHANGE
+>> UA is "undefined behaviour" as the say in the C/C++ spec.
+>>
+>> Also more and more settings in SCSI *** are giving the option to return an
+>> error (even MEDIUM ERROR) if the initiator is reading a block that has never
+>> been written. So if the sd driver is looking for a partition table (LBA 0 ?)
+>> then you have a chicken and egg problem that retrying will not solve.
+> 
+> It is not the scsi driver looking for partitions. This is generic block
+> layer code rescanning the partition table together with disk revalidate
+> after the bdev is closed. The disk revalidate should have caught the
+> change in LBA size, so it may be that the partition scan is before
+> revalidate instead of after... That would need checking.
+> 
+>>>> Another issue with that error message: what does "unaligned" mean in
+>>>> this context? Surely it is superfluous and "Partial completion" is
+>>>> more accurate (unless the resid is negative).
+>>>
+>>> The "unaligned" term comes from ZBC.
+>>
+>> The sd driver should take its lead from SBC, not ZBC.
+> 
+> It was observed in the past that some HBAs (Broadcom I think it was)
+> returned a resid not aligned to the LBA size with 4Kn disks, making it
+> impossible to restart the command to process the reminder of the data.
 
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
----
- drivers/scsi/pm8001/pm8001_sas.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But restarting the READ of one "logical block" at LBA 0 when the kernel
+thought that was 4096 bytes and the drive returned 512 bytes is exactly
+what I observed; again and again.
 
-diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm800=
-1_sas.h
-index 6bbf118f61e7..d522bd0bb46b 100644
---- a/drivers/scsi/pm8001/pm8001_sas.h
-+++ b/drivers/scsi/pm8001/pm8001_sas.h
-@@ -71,7 +71,7 @@
- #define PM8001_IOERR_LOGGING	0x200 /* development io err message logging=
- */
-=20
- #define pm8001_info(HBA, fmt, ...)					\
--	pr_info("%s:: %s  %d:" fmt,					\
-+	pr_info("%s:: %s %d: " fmt,					\
- 		(HBA)->name, __func__, __LINE__, ##__VA_ARGS__)
-=20
- #define pm8001_dbg(HBA, level, fmt, ...)				\
---=20
-2.34.1
+IMO the kernel should be prepared for surprises when reading LBA 0,
+such as:
+   - the block size is not what it was expecting [as in this case]
+   - that block has never been written and the disk has been told to
+     return an (IO) error in that case
+
+It is a pity that a SCSI pass-through like the bsg or sg driver cannot
+establish its own I_T nexus, separate from the I_T nexus that the
+sd driver uses. The reason is that if an I_T nexus causes a UA (e.g.
+MODE SELECT change LB size) then the next command (apart from
+INQUIRY, REPORT LUNS and friends) will _not_ receive that UA. [Other
+I_T nexi will receive that UA.]
+
+> This problem was especially apparent with ZBC disks writes. > So unaligned here is not just for ZBC disks.
+
+SCSI data-out and data-in transfers are inherently unaligned (or byte
+aligned) but I suppose the DMA silicon in the HBA may have some
+alignment requirements.
+
+> 
+>>
+>> Doug Gilbert
+>>
+>>
+>> *** for example, FORMAT UNIT (FFMT=2)
+>>
+> 
+> 
 
