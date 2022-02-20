@@ -2,74 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C044BCBD9
-	for <lists+linux-scsi@lfdr.de>; Sun, 20 Feb 2022 04:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E8F4BCBDB
+	for <lists+linux-scsi@lfdr.de>; Sun, 20 Feb 2022 04:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238040AbiBTDSr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 19 Feb 2022 22:18:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47348 "EHLO
+        id S233859AbiBTDSt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 19 Feb 2022 22:18:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235446AbiBTDSm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 19 Feb 2022 22:18:42 -0500
+        with ESMTP id S236462AbiBTDSn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 19 Feb 2022 22:18:43 -0500
 Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F9C340D2
-        for <linux-scsi@vger.kernel.org>; Sat, 19 Feb 2022 19:18:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D71340D3
+        for <linux-scsi@vger.kernel.org>; Sat, 19 Feb 2022 19:18:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1645327101; x=1676863101;
+  t=1645327102; x=1676863102;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tMu46lOD+saf9CD6nTTB39TE+9yuObAVdHXvuV2n3JQ=;
-  b=Cb8FwbbPWDvyIrKrqWXDYb1gvt5r5wc4xz/IDJ8IpAS0DU1vZA690QQo
-   ibok/0KEQASsosNmyg7sUZUIzwssur6tczFQM4zzbZqI+CqcnBy7liO0D
-   LGi5NpU70HefiWxuIQU5esMEoSRyUJaVea3yyblc8rU2RSp5eTbNMZ8Yz
-   SVPE4htH0ZhKYw0qlrh1N5+lcip8KvgnJP6Ai1XyMpDAVVnZO86BxFvc1
-   q/DtYiIe6eOGt4lDZFbnQp5hykKyx/hPU870P6Nb+mVcdocdX9ePRCj8N
-   HvT2chET+vMt3TkmF509tO9r38X7xfVLA7VFRyBYSqFOHQTm+Y+LIQTzb
-   w==;
+  bh=+NJqzc6YUpP+vwggbsF6cTeLSsRgTfL3XgaR3agxzlg=;
+  b=SKK+DS+76IHupnprDrmfN/qDk4B7G3M/x48LyolRSH9R3GsYqChDUu76
+   vn/wud695v72+Q8cvgb+JL/zPFocMtVkrUjXus7uEJW4s5BPTcBBO9k5i
+   EBNgv4TIqNxkHdl92gtKngBnesbxhOIMngW7MQLj6EHLlobju+J+V8DAz
+   db436N9gSdr3AVOUkEeJC4arGfGFQ3OmIKS1+xa0kiYv1OSdZPoTiZu7s
+   mDdSqErf1cciXKoJf97DPgJxcJR1ngOZpLQD74EB7BTrSazbdsc1Ms11R
+   qViydL/ZnJEZW3GHyjJjbctIFKAv3oLHIp82Zqx2a7F6YRQiMR0pWUPwF
+   A==;
 X-IronPort-AV: E=Sophos;i="5.88,382,1635177600"; 
-   d="scan'208";a="193405737"
+   d="scan'208";a="193405746"
 Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 20 Feb 2022 11:18:21 +0800
-IronPort-SDR: G+snjoB20wn8Qg9wOj+MRNF9wdmHKnX/GYEvzDxlqD/ABRddmYlpBvQ0mn+EkhXupchqolr69f
- GD6pqRkbHKgi7iAT8IItOSwOnlDwAUxhvszCBOj6VW4hn9+EmQMh0rxmePG/SiOgKpaKJFIar+
- 7aFnHhRndA/jsHO6gS2nujiDZ5YUAiUMC9r/T714PdWcdt4Gx5G/BcfiOWdHd0vHwQTHQpRONs
- 3fiqPO4AEJfWYJdpBeE3yzhjDDcPXgbLaFOtBE6PbA/uIVcuxVUKV+Jp0529Z69W6V24xuFt5p
- lZEu1AvH/dMmuo2UJmYmtB3g
+  by ob1.hgst.iphmx.com with ESMTP; 20 Feb 2022 11:18:22 +0800
+IronPort-SDR: zFDcJKavhOmJCOUzmLHEynt1gpz8sGpwLmla97IaVKqjQwACGND8lpHpjtbxTqmtHRvIeSvcs/
+ DbCcsiQIPB0m63JQPHZjIxbwLXl/S8WcVG79Xrm/uG4womKhTzBYeJhBqc3/bYbFkK1kJbb22E
+ hVamLv4ItD9XZiy35vyh33Hna7tiY1dJFhcf4x5ozoZo85/jTLRAj4Ni6+4FWLtIcxuYhgYmWY
+ BdDMfyBttPZaC/HzZWY1ZiMje2rHn+SNG87wEjd7yB62umsFMi1ryTyQITvD+GV43rNl5IU3cJ
+ LUDbDA5FRqRPmNHiXZ3/oR71
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 18:49:57 -0800
-IronPort-SDR: DTsP8+t4xBhUS/UCQWfD4+F8M1HpZVOwbKWHxaalvqjgBX1mvVa81rD5b6IPtNj4MO9Cc5iX9a
- kh+KJhdXkpJLsweK7wpLyHebdMHLf0snLAG++qMqo1uNPKfuroCKey8NoIibejQR9+fMxYuagr
- BWnBJBBZCtMn0mdPcOSsQY3KdW1Q8WZZV3yZhy08rcqQoj7RncKq4NQtQmhMDxxtvphHZGzwxH
- O0UkerKJ+VmXNSDEwJhb+dzJA60MPlsQqTUsGoCquqaLh4WAFdg28tyGzl3hUInoEOw9CSOnFY
- vpE=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 18:49:59 -0800
+IronPort-SDR: 1IvnYAmWNy33TcUOcK/T9KMsOPFBWoDk1m11JfrDJ2lduLsQjU9z96XtOBGQ+inxcW9JeydnLj
+ N/hcSh57Ouz8YVWyo55uSbnXRZqp1NXieOGffkgpON7mDse3s+LkoF2uV9x9lL4ygfgu1l5yJz
+ B3ayFCLS4dSERNaRgm1nX+jeaHbwWjB+yCDgcoArzzxqA17JoMBFPvIj6ogVXG9k1kU+Co0F8O
+ ewkyyQvFa0Etux3/RDSyfztjGPgnzLTHVfyZKH/CQ7WUpx3Y1uKG7potjM0eZsCVQV7lameRvh
+ JKw=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 19:18:22 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2022 19:18:23 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K1Vxn60dVz1SVp0
-        for <linux-scsi@vger.kernel.org>; Sat, 19 Feb 2022 19:18:21 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K1Vxq1sPdz1SVnx
+        for <linux-scsi@vger.kernel.org>; Sat, 19 Feb 2022 19:18:23 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1645327101; x=1647919102; bh=tMu46lOD+saf9CD6nT
-        TB39TE+9yuObAVdHXvuV2n3JQ=; b=s7VdFW9LCNBmFYr8YBXmpPSibGZIChJlNI
-        8W8jFZbVaezwTpOa4d2iULfXvXTSw+nEAJTDYsqN7hK6b2/nrmMUbyRV6d5fTjQY
-        yLCq9ifhsitvm5ZqhStyxqHPqJN3/U/v9QlyiyQ66ljQJLfIO8+aYd8T6Q09pz5d
-        RxBLgShXM9EaYFU6DkK9sYEQXkcaQpaCGPOh8ScZHjcUrdQgU8QL9oesgrvwBagT
-        C2vDEU+PrJryl3rrRiGO6xHsN0tWwuSqSlDnZu5vrGVutQomTGxIoxb31AZqqK+w
-        dacHoBwUwE1cjOV3toVwzPSkPM+2PGoZGOp+f0dCsRIqhuq2qCYA==
+        :from; s=dkim; t=1645327102; x=1647919103; bh=+NJqzc6YUpP+vwggbs
+        F6cTeLSsRgTfL3XgaR3agxzlg=; b=kl9PzeWgFbOtmicwKn7Trxqbln1kPgJNgf
+        ox+R6hBpumS2txZnkPbABvQBslH+p//1gdT6mrZ05rsrJplmn2NAM2CcZshFvlRf
+        jb4B7x3z0fHdvvmpqs2wOg4pyPjhRSDwCqvEsfelSLUUdI8WOfzfFdD+w4jOG6Y3
+        I9OS3+VpAdAqF22azWdgreKkg+CgUOaar8cMQRPPgvNbx92MbiJDVvfjfgiuyCc8
+        o/v4YgHEvhwE6bflNW6q7hzK1K+2lYGtvONFPtW9V9CKaZGIFUWREbS/uflaG9S+
+        o0G5cR7of/HspNQ9b4og9cqf4Z63DJBL5gn9uMOXlM1SYD/F2byw==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id cYFjpGiMGesO for <linux-scsi@vger.kernel.org>;
-        Sat, 19 Feb 2022 19:18:21 -0800 (PST)
+        with ESMTP id 1_qNkagE6yt8 for <linux-scsi@vger.kernel.org>;
+        Sat, 19 Feb 2022 19:18:22 -0800 (PST)
 Received: from washi.fujisawa.hgst.com (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K1Vxm2RKNz1Rwrw;
-        Sat, 19 Feb 2022 19:18:20 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K1Vxn5B9Qz1Rvlx;
+        Sat, 19 Feb 2022 19:18:21 -0800 (PST)
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 To:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
@@ -78,9 +78,9 @@ To:     linux-scsi@vger.kernel.org,
 Cc:     Xiang Chen <chenxiang66@hisilicon.com>,
         Jason Yan <yanaijie@huawei.com>,
         Luo Jiaxing <luojiaxing@huawei.com>
-Subject: [PATCH v6 05/31] scsi: pm8001: Fix pm80xx_pci_mem_copy() interface
-Date:   Sun, 20 Feb 2022 12:17:44 +0900
-Message-Id: <20220220031810.738362-6-damien.lemoal@opensource.wdc.com>
+Subject: [PATCH v6 06/31] scsi: pm8001: Fix command initialization in pm8001_chip_ssp_tm_req()
+Date:   Sun, 20 Feb 2022 12:17:45 +0900
+Message-Id: <20220220031810.738362-7-damien.lemoal@opensource.wdc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220220031810.738362-1-damien.lemoal@opensource.wdc.com>
 References: <20220220031810.738362-1-damien.lemoal@opensource.wdc.com>
@@ -96,57 +96,37 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The declaration of the local variable destination1 in
-pm80xx_pci_mem_copy() as a pointer to a u32 results in the sparse
-warning:
+The ds_ads_m field of struct ssp_ini_tm_start_req has the type __le32.
+Assigning a value to it should thus use cpu_to_le32(). This fixes the
+sparse warning:
 
 warning: incorrect type in assignment (different base types)
-    expected unsigned int [usertype]
-    got restricted __le32 [usertype]
+   expected restricted __le32 [addressable] [assigned] [usertype] ds_ads_=
+m
+   got int
 
-Furthermore, the destination" argument of pm80xx_pci_mem_copy() is
-wrongly declared with the const attribute.
-
-Fix both problems by changing the type of the "destination" argument
-to "__le32 *" and use this argument directly inside the
-pm80xx_pci_mem_copy() function, thus removing the need for the
-destination1 local variable.
-
+Fixes: dbf9bfe61571 ("[SCSI] pm8001: add SAS/SATA HBA driver")
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80x=
-x_hwi.c
-index f1663a10693a..0b3386a3c508 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -67,18 +67,16 @@ int pm80xx_bar4_shift(struct pm8001_hba_info *pm8001_=
-ha, u32 shift_value)
- }
-=20
- static void pm80xx_pci_mem_copy(struct pm8001_hba_info  *pm8001_ha, u32 =
-soffset,
--				const void *destination,
-+				__le32 *destination,
- 				u32 dw_count, u32 bus_base_number)
- {
- 	u32 index, value, offset;
--	u32 *destination1;
--	destination1 =3D (u32 *)destination;
-=20
--	for (index =3D 0; index < dw_count; index +=3D 4, destination1++) {
-+	for (index =3D 0; index < dw_count; index +=3D 4, destination++) {
- 		offset =3D (soffset + index);
- 		if (offset < (64 * 1024)) {
- 			value =3D pm8001_cr32(pm8001_ha, bus_base_number, offset);
--			*destination1 =3D  cpu_to_le32(value);
-+			*destination =3D cpu_to_le32(value);
- 		}
- 	}
- 	return;
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm800=
+1_hwi.c
+index dab75b481618..d80b48e0e41b 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -4619,7 +4619,7 @@ int pm8001_chip_ssp_tm_req(struct pm8001_hba_info *=
+pm8001_ha,
+ 	memcpy(sspTMCmd.lun, task->ssp_task.LUN, 8);
+ 	sspTMCmd.tag =3D cpu_to_le32(ccb->ccb_tag);
+ 	if (pm8001_ha->chip_id !=3D chip_8001)
+-		sspTMCmd.ds_ads_m =3D 0x08;
++		sspTMCmd.ds_ads_m =3D cpu_to_le32(0x08);
+ 	circularQ =3D &pm8001_ha->inbnd_q_tbl[0];
+ 	ret =3D pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &sspTMCmd,
+ 			sizeof(sspTMCmd), 0);
 --=20
 2.34.1
 
