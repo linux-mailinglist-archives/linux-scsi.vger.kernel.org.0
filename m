@@ -2,107 +2,119 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB164BEA82
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Feb 2022 20:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E369D4BEE7E
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Feb 2022 02:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbiBUTSj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Feb 2022 14:18:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47572 "EHLO
+        id S237093AbiBUXlU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Feb 2022 18:41:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbiBUTSh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Feb 2022 14:18:37 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1E42AD0
-        for <linux-scsi@vger.kernel.org>; Mon, 21 Feb 2022 11:18:10 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id s1so2353038wrg.10
-        for <linux-scsi@vger.kernel.org>; Mon, 21 Feb 2022 11:18:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=kvhZrpHBK0kPy/iKTd/Hcailtj+KjaeLTS+rPhszZPs=;
-        b=DvKvy4anWNpS713ruDITpK8IGz6yYCH8AwvjaRhPgx6UqY+1yApgXuN95QoKzY16ua
-         k8wEmqqtfp0LsSRz5qv7qAdcrGFLtH8Jhl1vWJsdKQI5Mbr807uOtNQnOZIcl06XzO2b
-         MRfvfZIeL3t7wU5jWhrOFiYQPP/BNjrHD7IBtcJwnjFcJrREUCIoEXxD8bBZclpU2/XN
-         Fq+HeKsz3vgygYaV5QSQmALtlGKTRag0ufJ8et7dPY8OJAybSsat2lqpbPCg0nAYAmw2
-         CqLM77XHNpfLctk3RgyQC89rik+NvSz2wXYZlrq4inP/++nXWbkeI2NOqvfQtb1pHhKM
-         m7aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=kvhZrpHBK0kPy/iKTd/Hcailtj+KjaeLTS+rPhszZPs=;
-        b=DfMfw0Pt4mhyQhfkoxNUH8HBVrLxTOr3+AaS/JoxSIaKxn5hxeey9nTEsIuqFKe5VQ
-         IMYL93xFcsOGFddWWgmL1iVVfI3QHeaLz5OlVIjHbUzF9QxnN7hF7STxAxQybpfjYCEw
-         aKom2FXzx8xVZw3g9BsNStMiN8f3106ypM9WnOaJipPLPXRvDqDhJUdiBnZEGccNrI5f
-         Rw3jBzyC11EbVyLuCeCRyQxhCU15pLUEKaNydkafOW0ELmlwNT/FbH6GjpGIolIrAIpk
-         nyZslIx5fgul7uKWpoEy1a5QZnqO5ko/C+0EX2VcoJKPWaBpPHPBx5zz8e7h01zyi9YD
-         ORlA==
-X-Gm-Message-State: AOAM532uqRDzg6Ggalq+3uGXQHZUf2mrcP9sw/XapiLb/c3cTE01YhuQ
-        ljbIySR8SjsWMra2vKml1f1y1ySo93BBuRzij3Y=
-X-Google-Smtp-Source: ABdhPJwkrndb61WcPmfegEqKY5hx76jmw0qG8ijOi3O3cg1b0D1psyG+s2c3jkhnn+1kA6n2bhxblvT85Gi0WkY0vCc=
-X-Received: by 2002:adf:df0b:0:b0:1e4:979f:a56f with SMTP id
- y11-20020adfdf0b000000b001e4979fa56fmr16438990wrl.686.1645471089071; Mon, 21
- Feb 2022 11:18:09 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:adf:e488:0:0:0:0:0 with HTTP; Mon, 21 Feb 2022 11:18:07
- -0800 (PST)
-Reply-To: jgrollande@gmail.com
-From:   "Mrs.Noah Emily Sara" <nichsteve1@gmail.com>
-Date:   Mon, 21 Feb 2022 11:18:07 -0800
-Message-ID: <CAOgf51Bi06jf84Zqs4AY-ikdw+UV-gc-f8mRv9jqWh_4_8dGsg@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:442 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [nichsteve1[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [nichsteve1[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+        with ESMTP id S232179AbiBUXlT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Feb 2022 18:41:19 -0500
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E5D245A8;
+        Mon, 21 Feb 2022 15:40:54 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id B42D22B00234;
+        Mon, 21 Feb 2022 18:23:46 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 21 Feb 2022 18:23:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:date:date:from:from:in-reply-to
+        :message-id:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=dGwM6z
+        CAZezD9UAOkbQM1FyRcimaQ2GZliBAK4GzXRc=; b=K624Q5LtzhKisanNhHxmUl
+        4AlQx8iTOn46MbDafdQfuJRNz/chZrzm7JugXOq+bef3SR77slDYEW5jlKoWss3a
+        mqoDdVU5o/+UEmScKwnKI5LE1h0PqH49BNz+Dg2RwlgUroKHRtVMrUigP3bLdzir
+        9dlpaexcuD2XptsC1jWSM+qCdw/6lmU0gBWy/LRwDsO8tzIpGI2FMgMTuYTZZBOV
+        wSwnhxlUZd7k9y+HbQiQNitMNGw4lAYySPeCi06XRO6TqP7Ea7CLMwtcK/sfLSwX
+        4c4Nc3omlKdZdC3d5kt2FW5gPzN3A0yxZ0hiJzgyFpBM/CFIi4tgpWXXN9i9Zjgw
+        ==
+X-ME-Sender: <xms:AR8UYlD0GaPkHt7D9oHky_-MO2OCxg_NwyAWBF-c7gMt14pwTi1Emg>
+    <xme:AR8UYjgCQ6XMUj5G30BTXNw492Wxp3VjStVvPU6VqZfXfIzIHc1LGezzsXOpHqrs7
+    ByrpcN3jz8erTBM0TE>
+X-ME-Received: <xmr:AR8UYgmahiQ_r0xt7dI5IFWD76nfzgCov5tv_ixy6caNFy2Jd5Hrc1YDfXpLOfDdy7m5xUdLakfwiFue4cP47ci85LWOErz64U8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeejgddutdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenog
+    fhohhrsghiugguvghnjfgurhculdehtddtmdenucfjughrpefvkffhufffsedttdertddt
+    tdenucfhrhhomhephfhinhhnucfvhhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmie
+    ekkhdrohhrgheqnecuhfhorhgsihguuggvnhfjughrpefvkffhufffsedttdertddttddp
+    vffkhffuffestddtredttddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepfhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
+X-ME-Proxy: <xmx:AR8UYvwX444dA81EMWJSsQ1H1tCfQJxUbbblLdmjnVfok6YMsYhiOg>
+    <xmx:AR8UYqRi0b4ErocgIbZ19LM2epQvjXmw4u41PSP-tCF4fXFQJ3NmHg>
+    <xmx:AR8UYib03AWo6dJnUXF7snUplEQdL-Vs2xhA6TUWIqFjn83hs4Hj_g>
+    <xmx:Ah8UYlegwH_YYIAi7N9IBATIZxIBiHnl8HM4zrZDBAGSYAiswlRxxQpq6q0>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Feb 2022 18:23:43 -0500 (EST)
+To:     "Juergen E. Fischer" <fischer@norbit.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <4e17ff7295a96e31ed21ccb250c65b56c173b530.1645484982.git.fthain@linux-m68k.org>
+From:   Finn Thain <fthain@linux-m68k.org>
+Subject: [PATCH] aha152x: Clean up struct scsi_pointer usage
+Date:   Tue, 22 Feb 2022 10:09:42 +1100
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-My names are Mrs.Noah Emily Sara I'm from Alberta Canada but stay here
-in the Bradford United Kingdom. There is something
+Bring aha152x into line with 10 other drivers which assign
+scsi_host_template.cmd_size = sizeof(struct scsi_pointer)
+and avoid the "struct foo { struct bar; };" silliness.
 
-very important I want to discuss with you.
+Remove a pointless scsi_pointer->have_data_in assignment.
 
-I'm a very influential and wealthy woman but I'm sick and dying. I'm
-suffering from severe oesophageal cancer and have a few months to
-live. I send you this message because I want to make a donation to you
-for charity purposes. I would like to donate funds for charity and
-investment purposes to you.
+Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+---
+ drivers/scsi/aha152x.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-Get back to me so I can send you more details about my donation.
+diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
+index 34b2378075fd..70f49fba66be 100644
+--- a/drivers/scsi/aha152x.c
++++ b/drivers/scsi/aha152x.c
+@@ -316,15 +316,9 @@ enum {
+ 	check_condition = 0x0800,	/* requesting sense after CHECK CONDITION */
+ };
+ 
+-struct aha152x_cmd_priv {
+-	struct scsi_pointer scsi_pointer;
+-};
+-
+ static struct scsi_pointer *aha152x_scsi_pointer(struct scsi_cmnd *cmd)
+ {
+-	struct aha152x_cmd_priv *acmd = scsi_cmd_priv(cmd);
+-
+-	return &acmd->scsi_pointer;
++	return scsi_cmd_priv(cmd);
+ }
+ 
+ MODULE_AUTHOR("Jürgen Fischer");
+@@ -931,7 +925,6 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
+ 	scsi_pointer->phase	   = not_issued | phase;
+ 	scsi_pointer->Status	   = 0x1; /* Ilegal status by SCSI standard */
+ 	scsi_pointer->Message	   = 0;
+-	scsi_pointer->have_data_in = 0;
+ 	scsi_pointer->sent_command = 0;
+ 
+ 	if (scsi_pointer->phase & (resetting | check_condition)) {
+@@ -2971,7 +2964,7 @@ static struct scsi_host_template aha152x_driver_template = {
+ 	.sg_tablesize			= SG_ALL,
+ 	.dma_boundary			= PAGE_SIZE - 1,
+ 	.slave_alloc			= aha152x_adjust_queue,
+-	.cmd_size			= sizeof(struct aha152x_cmd_priv),
++	.cmd_size			= sizeof(struct scsi_pointer),
+ };
+ 
+ #if !defined(AHA152X_PCMCIA)
+-- 
+2.32.0
 
-Warm Regards,
-Mrs.Noah Emily Sara
