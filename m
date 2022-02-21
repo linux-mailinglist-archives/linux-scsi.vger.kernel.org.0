@@ -2,83 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEF44BE9E7
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Feb 2022 19:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB164BEA82
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Feb 2022 20:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiBURl6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Feb 2022 12:41:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50154 "EHLO
+        id S232880AbiBUTSj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Feb 2022 14:18:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiBURlY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Feb 2022 12:41:24 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA5B26AF8;
-        Mon, 21 Feb 2022 09:40:27 -0800 (PST)
-Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K2Twb3c5Sz67WcM;
-        Tue, 22 Feb 2022 01:35:43 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Mon, 21 Feb 2022 18:40:25 +0100
-Received: from [10.47.94.94] (10.47.94.94) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 21 Feb
- 2022 17:40:23 +0000
-Message-ID: <9e7925d6-067c-0b3a-a788-f036272496e6@huawei.com>
-Date:   Mon, 21 Feb 2022 17:40:23 +0000
+        with ESMTP id S232836AbiBUTSh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Feb 2022 14:18:37 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1E42AD0
+        for <linux-scsi@vger.kernel.org>; Mon, 21 Feb 2022 11:18:10 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id s1so2353038wrg.10
+        for <linux-scsi@vger.kernel.org>; Mon, 21 Feb 2022 11:18:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=kvhZrpHBK0kPy/iKTd/Hcailtj+KjaeLTS+rPhszZPs=;
+        b=DvKvy4anWNpS713ruDITpK8IGz6yYCH8AwvjaRhPgx6UqY+1yApgXuN95QoKzY16ua
+         k8wEmqqtfp0LsSRz5qv7qAdcrGFLtH8Jhl1vWJsdKQI5Mbr807uOtNQnOZIcl06XzO2b
+         MRfvfZIeL3t7wU5jWhrOFiYQPP/BNjrHD7IBtcJwnjFcJrREUCIoEXxD8bBZclpU2/XN
+         Fq+HeKsz3vgygYaV5QSQmALtlGKTRag0ufJ8et7dPY8OJAybSsat2lqpbPCg0nAYAmw2
+         CqLM77XHNpfLctk3RgyQC89rik+NvSz2wXYZlrq4inP/++nXWbkeI2NOqvfQtb1pHhKM
+         m7aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=kvhZrpHBK0kPy/iKTd/Hcailtj+KjaeLTS+rPhszZPs=;
+        b=DfMfw0Pt4mhyQhfkoxNUH8HBVrLxTOr3+AaS/JoxSIaKxn5hxeey9nTEsIuqFKe5VQ
+         IMYL93xFcsOGFddWWgmL1iVVfI3QHeaLz5OlVIjHbUzF9QxnN7hF7STxAxQybpfjYCEw
+         aKom2FXzx8xVZw3g9BsNStMiN8f3106ypM9WnOaJipPLPXRvDqDhJUdiBnZEGccNrI5f
+         Rw3jBzyC11EbVyLuCeCRyQxhCU15pLUEKaNydkafOW0ELmlwNT/FbH6GjpGIolIrAIpk
+         nyZslIx5fgul7uKWpoEy1a5QZnqO5ko/C+0EX2VcoJKPWaBpPHPBx5zz8e7h01zyi9YD
+         ORlA==
+X-Gm-Message-State: AOAM532uqRDzg6Ggalq+3uGXQHZUf2mrcP9sw/XapiLb/c3cTE01YhuQ
+        ljbIySR8SjsWMra2vKml1f1y1ySo93BBuRzij3Y=
+X-Google-Smtp-Source: ABdhPJwkrndb61WcPmfegEqKY5hx76jmw0qG8ijOi3O3cg1b0D1psyG+s2c3jkhnn+1kA6n2bhxblvT85Gi0WkY0vCc=
+X-Received: by 2002:adf:df0b:0:b0:1e4:979f:a56f with SMTP id
+ y11-20020adfdf0b000000b001e4979fa56fmr16438990wrl.686.1645471089071; Mon, 21
+ Feb 2022 11:18:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH RFC v1 0/5] Add SCSI per device tagsets
-To:     "Melanie Plageman (Microsoft)" <melanieplageman@gmail.com>,
-        <mikelley@microsoft.com>, <jejb@linux.ibm.com>,
-        <kys@microsoft.com>, <martin.petersen@oracle.com>,
-        <mst@redhat.com>, <benh@kernel.crashing.org>,
-        <decui@microsoft.com>, <don.brace@microchip.com>,
-        <R-QLogic-Storage-Upstream@marvell.com>, <haiyangz@microsoft.com>,
-        <jasowang@redhat.com>, <kashyap.desai@broadcom.com>,
-        <mpe@ellerman.id.au>, <njavali@marvell.com>, <pbonzini@redhat.com>,
-        <paulus@samba.org>, <sathya.prakash@broadcom.com>,
-        <shivasharan.srikanteshwara@broadcom.com>,
-        <sreekanth.reddy@broadcom.com>, <stefanha@redhat.com>,
-        <sthemmin@microsoft.com>, <suganath-prabu.subramani@broadcom.com>,
-        <sumit.saxena@broadcom.com>, <tyreld@linux.ibm.com>,
-        <wei.liu@kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <megaraidlinux.pdl@broadcom.com>,
-        <mpi3mr-linuxdrv.pdl@broadcom.com>, <storagedev@microchip.com>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-hyperv@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>
-CC:     <andres@anarazel.de>
-References: <20220218184157.176457-1-melanieplageman@gmail.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220218184157.176457-1-melanieplageman@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.94.94]
-X-ClientProxiedBy: lhreml718-chm.china.huawei.com (10.201.108.69) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:adf:e488:0:0:0:0:0 with HTTP; Mon, 21 Feb 2022 11:18:07
+ -0800 (PST)
+Reply-To: jgrollande@gmail.com
+From:   "Mrs.Noah Emily Sara" <nichsteve1@gmail.com>
+Date:   Mon, 21 Feb 2022 11:18:07 -0800
+Message-ID: <CAOgf51Bi06jf84Zqs4AY-ikdw+UV-gc-f8mRv9jqWh_4_8dGsg@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:442 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nichsteve1[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [nichsteve1[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 18/02/2022 18:41, Melanie Plageman (Microsoft) wrote:
-> For example: a device provisioned with high IOPS and BW limits on the same
-> controller as a smaller and slower device can starve the slower device of tags.
-> This is especially noticeable when the slower device's workload has low I/O
-> depth tasks.
+My names are Mrs.Noah Emily Sara I'm from Alberta Canada but stay here
+in the Bradford United Kingdom. There is something
 
-If you check hctx_may_queue() in the block code then it is noticeable 
-that a fair allocation of HW queue depth is allocated per request queue 
-to ensure we don't get starvation.
+very important I want to discuss with you.
 
-Thanks,
-John
+I'm a very influential and wealthy woman but I'm sick and dying. I'm
+suffering from severe oesophageal cancer and have a few months to
+live. I send you this message because I want to make a donation to you
+for charity purposes. I would like to donate funds for charity and
+investment purposes to you.
+
+Get back to me so I can send you more details about my donation.
+
+Warm Regards,
+Mrs.Noah Emily Sara
