@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E369D4BEE7E
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Feb 2022 02:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D684BEEAF
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Feb 2022 02:14:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237093AbiBUXlU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Feb 2022 18:41:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57256 "EHLO
+        id S237123AbiBUXlV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Feb 2022 18:41:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbiBUXlT (ORCPT
+        with ESMTP id S237086AbiBUXlT (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Feb 2022 18:41:19 -0500
 Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E5D245A8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41AE245A7;
         Mon, 21 Feb 2022 15:40:54 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id B42D22B00234;
-        Mon, 21 Feb 2022 18:23:46 -0500 (EST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id EEF502B00256;
+        Mon, 21 Feb 2022 18:24:05 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 21 Feb 2022 18:23:47 -0500
+  by compute2.internal (MEProxy); Mon, 21 Feb 2022 18:24:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:date:date:from:from:in-reply-to
         :message-id:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=dGwM6z
-        CAZezD9UAOkbQM1FyRcimaQ2GZliBAK4GzXRc=; b=K624Q5LtzhKisanNhHxmUl
-        4AlQx8iTOn46MbDafdQfuJRNz/chZrzm7JugXOq+bef3SR77slDYEW5jlKoWss3a
-        mqoDdVU5o/+UEmScKwnKI5LE1h0PqH49BNz+Dg2RwlgUroKHRtVMrUigP3bLdzir
-        9dlpaexcuD2XptsC1jWSM+qCdw/6lmU0gBWy/LRwDsO8tzIpGI2FMgMTuYTZZBOV
-        wSwnhxlUZd7k9y+HbQiQNitMNGw4lAYySPeCi06XRO6TqP7Ea7CLMwtcK/sfLSwX
-        4c4Nc3omlKdZdC3d5kt2FW5gPzN3A0yxZ0hiJzgyFpBM/CFIi4tgpWXXN9i9Zjgw
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=cPkDhv
+        Jgih9UFmPppy8eIU/hh+P57W7zuqiT1Z8t4WI=; b=R08slQjALIM+MBQQQcAFrj
+        P1e2QTTPFKdZKmg2PGimTHM3Nw20pUMjEkgAiCkDQnOPH0Qvab85xUTGXwSrF5AO
+        jtqB/NZpNANgdwYLFaPX4C6sKPRikUZsWQAh2QXJS938Dwsdd7GwahS/PLqzwq5y
+        VKVHdh8CtELZxpq5hvtqrHQ0Q9qBpl8SeTIHQIxU1ZxPhdjqBdmpzGlRwK7iGh6U
+        eZO0IwWcuZq4xGy9KBuxKIl0jWaZdCQAbkMw13vMpIc7JW5blHxkZwM+65JL6933
+        IRwMF/4pP5XTY0AoNgyHNr7g5vOKuol4qSy2bJHvXtydXMj1YAiEp7b+SNEXBXAg
         ==
-X-ME-Sender: <xms:AR8UYlD0GaPkHt7D9oHky_-MO2OCxg_NwyAWBF-c7gMt14pwTi1Emg>
-    <xme:AR8UYjgCQ6XMUj5G30BTXNw492Wxp3VjStVvPU6VqZfXfIzIHc1LGezzsXOpHqrs7
-    ByrpcN3jz8erTBM0TE>
-X-ME-Received: <xmr:AR8UYgmahiQ_r0xt7dI5IFWD76nfzgCov5tv_ixy6caNFy2Jd5Hrc1YDfXpLOfDdy7m5xUdLakfwiFue4cP47ci85LWOErz64U8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeejgddutdcutefuodetggdotefrodftvf
+X-ME-Sender: <xms:FR8UYukqFxKvH_2GIVWKQjG2-WzR8yQPmCr-aErOcebVHDI0hw3mkg>
+    <xme:FR8UYl23LGlRamo3Losg4zVB-gX5Bekhtbew8MKknhyijHX_YxQl97z7Wrwu51gwk
+    BYJHjnvsOJ80_P7bxY>
+X-ME-Received: <xmr:FR8UYsr445vAyEgEocyNi9koAumKep_76-4ox0ISUIcLbfQfpA8jFNKjNxfeiQnnOAPbjvHejewwQ_svrYIul1YopQHlTNYyoGw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeejgddtlecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenog
     fhohhrsghiugguvghnjfgurhculdehtddtmdenucfjughrpefvkffhufffsedttdertddt
@@ -42,79 +42,136 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeejgddutdcutefuodetggdote
     ekkhdrohhrgheqnecuhfhorhgsihguuggvnhfjughrpefvkffhufffsedttdertddttddp
     vffkhffuffestddtredttddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
     hmrghilhhfrhhomhepfhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
-X-ME-Proxy: <xmx:AR8UYvwX444dA81EMWJSsQ1H1tCfQJxUbbblLdmjnVfok6YMsYhiOg>
-    <xmx:AR8UYqRi0b4ErocgIbZ19LM2epQvjXmw4u41PSP-tCF4fXFQJ3NmHg>
-    <xmx:AR8UYib03AWo6dJnUXF7snUplEQdL-Vs2xhA6TUWIqFjn83hs4Hj_g>
-    <xmx:Ah8UYlegwH_YYIAi7N9IBATIZxIBiHnl8HM4zrZDBAGSYAiswlRxxQpq6q0>
+X-ME-Proxy: <xmx:FR8UYinWsfwfc6n9rnxr62xfaj3tTux6fPLZjgwvIk_0yfqdrDGpaQ>
+    <xmx:FR8UYs3JMJY-LKtOmaXKXOWzvKb7HH02m6ugk1l3AU5A6mdZD0LNxg>
+    <xmx:FR8UYpu29heQr7lPfa5o-7ADTpgfSjE3U88DYPA9KkRIyAh5nWNkMA>
+    <xmx:FR8UYp8dNI0a9zZ340RwvQAoFmuS-mEsT3NXWJiLtZjtKzzk6mQob62WKzs>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 21 Feb 2022 18:23:43 -0500 (EST)
-To:     "Juergen E. Fischer" <fischer@norbit.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+ 21 Feb 2022 18:24:03 -0500 (EST)
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <4e17ff7295a96e31ed21ccb250c65b56c173b530.1645484982.git.fthain@linux-m68k.org>
+Message-Id: <3529a59873a7de8455a27af2528341afe5069adc.1645484982.git.fthain@linux-m68k.org>
 From:   Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH] aha152x: Clean up struct scsi_pointer usage
+Subject: [PATCH] mac53c94: Stop using struct scsi_pointer
 Date:   Tue, 22 Feb 2022 10:09:42 +1100
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Bring aha152x into line with 10 other drivers which assign
-scsi_host_template.cmd_size = sizeof(struct scsi_pointer)
-and avoid the "struct foo { struct bar; };" silliness.
-
-Remove a pointless scsi_pointer->have_data_in assignment.
+This driver doesn't use SCp.ptr to save a SCSI command data pointer
+which means "scsi pointer" is a complete misnomer here. Only a few
+members of struct scsi_pointer are used and the rest waste memory.
+Avoid the "struct foo { struct bar; };" silliness.
 
 Signed-off-by: Finn Thain <fthain@linux-m68k.org>
 ---
- drivers/scsi/aha152x.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ drivers/scsi/mac53c94.c | 21 ++++++++++-----------
+ drivers/scsi/mac53c94.h | 10 +++++-----
+ 2 files changed, 15 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
-index 34b2378075fd..70f49fba66be 100644
---- a/drivers/scsi/aha152x.c
-+++ b/drivers/scsi/aha152x.c
-@@ -316,15 +316,9 @@ enum {
- 	check_condition = 0x0800,	/* requesting sense after CHECK CONDITION */
+diff --git a/drivers/scsi/mac53c94.c b/drivers/scsi/mac53c94.c
+index f3005b38931f..070ebe352f9e 100644
+--- a/drivers/scsi/mac53c94.c
++++ b/drivers/scsi/mac53c94.c
+@@ -194,7 +194,7 @@ static void mac53c94_interrupt(int irq, void *dev_id)
+ 	struct mac53c94_regs __iomem *regs = state->regs;
+ 	struct dbdma_regs __iomem *dma = state->dma;
+ 	struct scsi_cmnd *const cmd = state->current_req;
+-	struct scsi_pointer *const scsi_pointer = mac53c94_scsi_pointer(cmd);
++	struct mac53c94_cmd_priv *const mcmd = mac53c94_priv(cmd);
+ 	int nb, stat, seq, intr;
+ 	static int mac53c94_errors;
+ 
+@@ -264,10 +264,10 @@ static void mac53c94_interrupt(int irq, void *dev_id)
+ 		/* set DMA controller going if any data to transfer */
+ 		if ((stat & (STAT_MSG|STAT_CD)) == 0
+ 		    && (scsi_sg_count(cmd) > 0 || scsi_bufflen(cmd))) {
+-			nb = scsi_pointer->this_residual;
++			nb = mcmd->this_residual;
+ 			if (nb > 0xfff0)
+ 				nb = 0xfff0;
+-			scsi_pointer->this_residual -= nb;
++			mcmd->this_residual -= nb;
+ 			writeb(nb, &regs->count_lo);
+ 			writeb(nb >> 8, &regs->count_mid);
+ 			writeb(CMD_DMA_MODE + CMD_NOP, &regs->command);
+@@ -294,13 +294,13 @@ static void mac53c94_interrupt(int irq, void *dev_id)
+ 			cmd_done(state, DID_ERROR << 16);
+ 			return;
+ 		}
+-		if (scsi_pointer->this_residual != 0
++		if (mcmd->this_residual != 0
+ 		    && (stat & (STAT_MSG|STAT_CD)) == 0) {
+ 			/* Set up the count regs to transfer more */
+-			nb = scsi_pointer->this_residual;
++			nb = mcmd->this_residual;
+ 			if (nb > 0xfff0)
+ 				nb = 0xfff0;
+-			scsi_pointer->this_residual -= nb;
++			mcmd->this_residual -= nb;
+ 			writeb(nb, &regs->count_lo);
+ 			writeb(nb >> 8, &regs->count_mid);
+ 			writeb(CMD_DMA_MODE + CMD_NOP, &regs->command);
+@@ -322,8 +322,8 @@ static void mac53c94_interrupt(int irq, void *dev_id)
+ 			cmd_done(state, DID_ERROR << 16);
+ 			return;
+ 		}
+-		scsi_pointer->Status = readb(&regs->fifo);
+-		scsi_pointer->Message = readb(&regs->fifo);
++		mcmd->status = readb(&regs->fifo);
++		mcmd->message = readb(&regs->fifo);
+ 		writeb(CMD_ACCEPT_MSG, &regs->command);
+ 		state->phase = busfreeing;
+ 		break;
+@@ -331,8 +331,7 @@ static void mac53c94_interrupt(int irq, void *dev_id)
+ 		if (intr != INTR_DISCONNECT) {
+ 			printk(KERN_DEBUG "got intr %x when expected disconnect\n", intr);
+ 		}
+-		cmd_done(state, (DID_OK << 16) + (scsi_pointer->Message << 8)
+-			 + scsi_pointer->Status);
++		cmd_done(state, (DID_OK << 16) + (mcmd->message << 8) + mcmd->status);
+ 		break;
+ 	default:
+ 		printk(KERN_DEBUG "don't know about phase %d\n", state->phase);
+@@ -390,7 +389,7 @@ static void set_dma_cmds(struct fsc_state *state, struct scsi_cmnd *cmd)
+ 	dma_cmd += OUTPUT_LAST - OUTPUT_MORE;
+ 	dcmds[-1].command = cpu_to_le16(dma_cmd);
+ 	dcmds->command = cpu_to_le16(DBDMA_STOP);
+-	mac53c94_scsi_pointer(cmd)->this_residual = total;
++	mac53c94_priv(cmd)->this_residual = total;
+ }
+ 
+ static struct scsi_host_template mac53c94_template = {
+diff --git a/drivers/scsi/mac53c94.h b/drivers/scsi/mac53c94.h
+index 37d7d30f42ef..b4093027f9c3 100644
+--- a/drivers/scsi/mac53c94.h
++++ b/drivers/scsi/mac53c94.h
+@@ -213,14 +213,14 @@ struct mac53c94_regs {
+ #define CF4_BBTE	0x01
+ 
+ struct mac53c94_cmd_priv {
+-	struct scsi_pointer scsi_pointer;
++	int this_residual;
++	int status;
++	int message;
  };
  
--struct aha152x_cmd_priv {
--	struct scsi_pointer scsi_pointer;
--};
--
- static struct scsi_pointer *aha152x_scsi_pointer(struct scsi_cmnd *cmd)
+-static inline struct scsi_pointer *mac53c94_scsi_pointer(struct scsi_cmnd *cmd)
++static inline struct mac53c94_cmd_priv *mac53c94_priv(struct scsi_cmnd *cmd)
  {
--	struct aha152x_cmd_priv *acmd = scsi_cmd_priv(cmd);
+-	struct mac53c94_cmd_priv *mcmd = scsi_cmd_priv(cmd);
 -
--	return &acmd->scsi_pointer;
+-	return &mcmd->scsi_pointer;
 +	return scsi_cmd_priv(cmd);
  }
  
- MODULE_AUTHOR("Jürgen Fischer");
-@@ -931,7 +925,6 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
- 	scsi_pointer->phase	   = not_issued | phase;
- 	scsi_pointer->Status	   = 0x1; /* Ilegal status by SCSI standard */
- 	scsi_pointer->Message	   = 0;
--	scsi_pointer->have_data_in = 0;
- 	scsi_pointer->sent_command = 0;
- 
- 	if (scsi_pointer->phase & (resetting | check_condition)) {
-@@ -2971,7 +2964,7 @@ static struct scsi_host_template aha152x_driver_template = {
- 	.sg_tablesize			= SG_ALL,
- 	.dma_boundary			= PAGE_SIZE - 1,
- 	.slave_alloc			= aha152x_adjust_queue,
--	.cmd_size			= sizeof(struct aha152x_cmd_priv),
-+	.cmd_size			= sizeof(struct scsi_pointer),
- };
- 
- #if !defined(AHA152X_PCMCIA)
+ #endif /* _MAC53C94_H */
 -- 
 2.32.0
 
