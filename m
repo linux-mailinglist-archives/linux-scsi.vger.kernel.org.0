@@ -2,370 +2,125 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4298D4BF89F
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Feb 2022 13:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D014BF985
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Feb 2022 14:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbiBVM6j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Feb 2022 07:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
+        id S231172AbiBVNhM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Feb 2022 08:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiBVM6b (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Feb 2022 07:58:31 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39284B0A6D;
-        Tue, 22 Feb 2022 04:57:44 -0800 (PST)
-Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K2zhV4rkHz67xWk;
-        Tue, 22 Feb 2022 20:56:58 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 22 Feb 2022 13:57:42 +0100
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 22 Feb 2022 12:57:38 +0000
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <artur.paszkiewicz@intel.com>, <jinpu.wang@cloud.ionos.com>,
-        <chenxiang66@hisilicon.com>, <damien.lemoal@opensource.wdc.com>,
-        <hch@lst.de>
-CC:     <Ajish.Koshy@microchip.com>, <yanaijie@huawei.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
-        <liuqi115@huawei.com>, <Viswas.G@microchip.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v3 18/18] scsi: libsas: Add sas_execute_ata_cmd()
-Date:   Tue, 22 Feb 2022 20:50:59 +0800
-Message-ID: <1645534259-27068-19-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1645534259-27068-1-git-send-email-john.garry@huawei.com>
-References: <1645534259-27068-1-git-send-email-john.garry@huawei.com>
+        with ESMTP id S229453AbiBVNhL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Feb 2022 08:37:11 -0500
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8648D8D
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Feb 2022 05:36:40 -0800 (PST)
+Received: by mail-pj1-f51.google.com with SMTP id ci24-20020a17090afc9800b001bc3071f921so2505610pjb.5
+        for <linux-scsi@vger.kernel.org>; Tue, 22 Feb 2022 05:36:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=LT7HejzwjBrk3suvkyvTyT0S/5EeRt7U2ag6qdDuIZc=;
+        b=z1LSgxt1GDEQGlWEr6CCejdlXi8Dhn4UvyCfTXw7LWNiaYRgkL7ILvocxFxUVY/+F4
+         QIQnSToY8u3dxnXZpCSPcn1Wb9zBuGhHuT36yn6uphjuuNU7JPJbhuXRhtQYS23kGpVA
+         u6fKrZQByGH1YGln+cOG+NAPdseTCYT/7e09AOvO9TtoMkv8SnCtSauGJfZFIZ7d9WPE
+         lizXgvtxXYA/eq3phBkI4GvwmtaTW++tdKVo+/QF84ynvioodjDHcFjXSnpDsOke/Bqz
+         FFl2o00qZWPHqflfMx6lxqhckUGnpyxUtCAQqBlcmsCtPYI1oNY1qKXzjU/2r98KkY0O
+         ziXA==
+X-Gm-Message-State: AOAM531ox79uJSJy/tn1feDwyOiWkzvQwQAs5Ppdx+/DGydP/fBc8VWy
+        5UOrXQ8hLb9budZJXDMV8qQ=
+X-Google-Smtp-Source: ABdhPJxsy4+eJxDuKwA6r50FsH++l4njAGmfGvkULkCMoVdbq9ljOSzLoPWPIpP3hNAs5LLtngwIBQ==
+X-Received: by 2002:a17:902:7207:b0:14d:938e:a88e with SMTP id ba7-20020a170902720700b0014d938ea88emr22973069plb.42.1645537000042;
+        Tue, 22 Feb 2022 05:36:40 -0800 (PST)
+Received: from [192.168.51.110] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id g1sm15628074pfu.32.2022.02.22.05.36.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 05:36:39 -0800 (PST)
+Message-ID: <ccd1f277-f9f8-cb4a-980e-6f9450f4e145@acm.org>
+Date:   Tue, 22 Feb 2022 05:36:36 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH RFC v1 0/5] Add SCSI per device tagsets
+To:     "Melanie Plageman (Microsoft)" <melanieplageman@gmail.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org
+References: <20220218184157.176457-1-melanieplageman@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20220218184157.176457-1-melanieplageman@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add a function to execute an ATA command using the TMF code, and use in
-the hisi_sas driver. That driver needs to be able to issue the command on
-a specific phy, so add an interface for that.
+On 2/18/22 10:41, Melanie Plageman (Microsoft) wrote:
+> Currently a single blk_mq_tag_set is associated with a Scsi_Host. When SCSI
+> controllers are limited, attaching multiple devices to the same controller is
+> required. In cloud environments with relatively high latency persistent storage,
+> requiring all devices on a controller to share a single blk_mq_tag_set
+> negatively impacts performance.
+> 
+> For example: a device provisioned with high IOPS and BW limits on the same
+> controller as a smaller and slower device can starve the slower device of tags.
+> This is especially noticeable when the slower device's workload has low I/O
+> depth tasks.
 
-With that, hisi_sas_exec_internal_tmf_task() may be deleted.
+The Cc-list for this patch series is way too long. Cc-ing linux-scsi and
+the most active SCSI contributors would have been sufficient.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Tested-by: Yihang Li <liyihang6@hisilicon.com>
-Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
----
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 130 +------------------------
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |   5 +-
- drivers/scsi/libsas/sas_ata.c          |   8 ++
- drivers/scsi/libsas/sas_scsi_host.c    |  10 +-
- include/scsi/libsas.h                  |   7 +-
- include/scsi/sas_ata.h                 |   8 ++
- 6 files changed, 34 insertions(+), 134 deletions(-)
+Is the reported behavior reproducible with an upstream Linux kernel? I'm
+asking this because I think that the following block layer code should
+prevent the reported starvation:
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 34ed4f8da7cc..efedfb3332c3 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -1239,124 +1239,7 @@ static void hisi_sas_tmf_timedout(struct timer_list *t)
- 		complete(&task->slow_task->completion);
- }
- 
--#define TASK_TIMEOUT			(20 * HZ)
--#define TASK_RETRY			3
- #define INTERNAL_ABORT_TIMEOUT		(6 * HZ)
--static int hisi_sas_exec_internal_tmf_task(struct domain_device *device,
--					   void *parameter, u32 para_len,
--					   struct sas_tmf_task *tmf)
--{
--	struct hisi_sas_device *sas_dev = device->lldd_dev;
--	struct hisi_hba *hisi_hba = sas_dev->hisi_hba;
--	struct device *dev = hisi_hba->dev;
--	struct sas_task *task;
--	int res, retry;
--
--	for (retry = 0; retry < TASK_RETRY; retry++) {
--		task = sas_alloc_slow_task(GFP_KERNEL);
--		if (!task)
--			return -ENOMEM;
--
--		task->dev = device;
--		task->task_proto = device->tproto;
--
--		if (dev_is_sata(device)) {
--			task->ata_task.device_control_reg_update = 1;
--			memcpy(&task->ata_task.fis, parameter, para_len);
--		} else {
--			memcpy(&task->ssp_task, parameter, para_len);
--		}
--		task->task_done = hisi_sas_task_done;
--
--		task->slow_task->timer.function = hisi_sas_tmf_timedout;
--		task->slow_task->timer.expires = jiffies + TASK_TIMEOUT;
--		add_timer(&task->slow_task->timer);
--
--		task->tmf = tmf;
--
--		res = hisi_sas_queue_command(task, GFP_KERNEL);
--		if (res) {
--			del_timer_sync(&task->slow_task->timer);
--			dev_err(dev, "abort tmf: executing internal task failed: %d\n",
--				res);
--			goto ex_err;
--		}
--
--		wait_for_completion(&task->slow_task->completion);
--		res = TMF_RESP_FUNC_FAILED;
--		/* Even TMF timed out, return direct. */
--		if ((task->task_state_flags & SAS_TASK_STATE_ABORTED)) {
--			if (!(task->task_state_flags & SAS_TASK_STATE_DONE)) {
--				struct hisi_sas_slot *slot = task->lldd_task;
--
--				dev_err(dev, "abort tmf: TMF task timeout and not done\n");
--				if (slot) {
--					struct hisi_sas_cq *cq =
--					       &hisi_hba->cq[slot->dlvry_queue];
--					/*
--					 * sync irq to avoid free'ing task
--					 * before using task in IO completion
--					 */
--					synchronize_irq(cq->irq_no);
--					slot->task = NULL;
--				}
--
--				goto ex_err;
--			} else
--				dev_err(dev, "abort tmf: TMF task timeout\n");
--		}
--
--		if (task->task_status.resp == SAS_TASK_COMPLETE &&
--		     task->task_status.stat == TMF_RESP_FUNC_COMPLETE) {
--			res = TMF_RESP_FUNC_COMPLETE;
--			break;
--		}
--
--		if (task->task_status.resp == SAS_TASK_COMPLETE &&
--			task->task_status.stat == TMF_RESP_FUNC_SUCC) {
--			res = TMF_RESP_FUNC_SUCC;
--			break;
--		}
--
--		if (task->task_status.resp == SAS_TASK_COMPLETE &&
--		      task->task_status.stat == SAS_DATA_UNDERRUN) {
--			/* no error, but return the number of bytes of
--			 * underrun
--			 */
--			dev_warn(dev, "abort tmf: task to dev %016llx resp: 0x%x sts 0x%x underrun\n",
--				 SAS_ADDR(device->sas_addr),
--				 task->task_status.resp,
--				 task->task_status.stat);
--			res = task->task_status.residual;
--			break;
--		}
--
--		if (task->task_status.resp == SAS_TASK_COMPLETE &&
--			task->task_status.stat == SAS_DATA_OVERRUN) {
--			dev_warn(dev, "abort tmf: blocked task error\n");
--			res = -EMSGSIZE;
--			break;
--		}
--
--		if (task->task_status.resp == SAS_TASK_COMPLETE &&
--		    task->task_status.stat == SAS_OPEN_REJECT) {
--			dev_warn(dev, "abort tmf: open reject failed\n");
--			res = -EIO;
--		} else {
--			dev_warn(dev, "abort tmf: task to dev %016llx resp: 0x%x status 0x%x\n",
--				 SAS_ADDR(device->sas_addr),
--				 task->task_status.resp,
--				 task->task_status.stat);
--		}
--		sas_free_task(task);
--		task = NULL;
--	}
--ex_err:
--	if (retry == TASK_RETRY)
--		dev_warn(dev, "abort tmf: executing internal task failed!\n");
--	sas_free_task(task);
--	return res;
--}
- 
- static void hisi_sas_fill_ata_reset_cmd(struct ata_device *dev,
- 		bool reset, int pmp, u8 *fis)
-@@ -1380,14 +1263,12 @@ static int hisi_sas_softreset_ata_disk(struct domain_device *device)
- 	int rc = TMF_RESP_FUNC_FAILED;
- 	struct hisi_hba *hisi_hba = dev_to_hisi_hba(device);
- 	struct device *dev = hisi_hba->dev;
--	int s = sizeof(struct host_to_dev_fis);
--	struct sas_tmf_task tmf = {};
- 
- 	ata_for_each_link(link, ap, EDGE) {
- 		int pmp = sata_srst_pmp(link);
- 
- 		hisi_sas_fill_ata_reset_cmd(link->device, 1, pmp, fis);
--		rc = hisi_sas_exec_internal_tmf_task(device, fis, s, &tmf);
-+		rc = sas_execute_ata_cmd(device, fis, -1);
- 		if (rc != TMF_RESP_FUNC_COMPLETE)
- 			break;
- 	}
-@@ -1397,8 +1278,7 @@ static int hisi_sas_softreset_ata_disk(struct domain_device *device)
- 			int pmp = sata_srst_pmp(link);
- 
- 			hisi_sas_fill_ata_reset_cmd(link->device, 0, pmp, fis);
--			rc = hisi_sas_exec_internal_tmf_task(device, fis,
--							     s, &tmf);
-+			rc = sas_execute_ata_cmd(device, fis, -1);
- 			if (rc != TMF_RESP_FUNC_COMPLETE)
- 				dev_err(dev, "ata disk %016llx de-reset failed\n",
- 					SAS_ADDR(device->sas_addr));
-@@ -1508,10 +1388,8 @@ static void hisi_sas_send_ata_reset_each_phy(struct hisi_hba *hisi_hba,
- 					     struct asd_sas_port *sas_port,
- 					     struct domain_device *device)
- {
--	struct sas_tmf_task tmf_task = { .force_phy = 1 };
- 	struct ata_port *ap = device->sata_dev.ap;
- 	struct device *dev = hisi_hba->dev;
--	int s = sizeof(struct host_to_dev_fis);
- 	int rc = TMF_RESP_FUNC_FAILED;
- 	struct ata_link *link;
- 	u8 fis[20] = {0};
-@@ -1524,10 +1402,8 @@ static void hisi_sas_send_ata_reset_each_phy(struct hisi_hba *hisi_hba,
- 		ata_for_each_link(link, ap, EDGE) {
- 			int pmp = sata_srst_pmp(link);
- 
--			tmf_task.phy_id = i;
- 			hisi_sas_fill_ata_reset_cmd(link->device, 1, pmp, fis);
--			rc = hisi_sas_exec_internal_tmf_task(device, fis, s,
--							     &tmf_task);
-+			rc = sas_execute_ata_cmd(device, fis, i);
- 			if (rc != TMF_RESP_FUNC_COMPLETE) {
- 				dev_err(dev, "phy%d ata reset failed rc=%d\n",
- 					i, rc);
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index 5bab51dc21b3..441ac4b6f1f4 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -2491,6 +2491,7 @@ static void prep_ata_v2_hw(struct hisi_hba *hisi_hba,
- 	struct hisi_sas_cmd_hdr *hdr = slot->cmd_hdr;
- 	struct asd_sas_port *sas_port = device->port;
- 	struct hisi_sas_port *port = to_hisi_sas_port(sas_port);
-+	struct sas_ata_task *ata_task = &task->ata_task;
- 	struct sas_tmf_task *tmf = slot->tmf;
- 	u8 *buf_cmd;
- 	int has_data = 0, hdr_tag = 0;
-@@ -2504,9 +2505,9 @@ static void prep_ata_v2_hw(struct hisi_hba *hisi_hba,
- 	else
- 		dw0 |= 4 << CMD_HDR_CMD_OFF;
- 
--	if (tmf && tmf->force_phy) {
-+	if (tmf && ata_task->force_phy) {
- 		dw0 |= CMD_HDR_FORCE_PHY_MSK;
--		dw0 |= (1 << tmf->phy_id) << CMD_HDR_PHY_ID_OFF;
-+		dw0 |= (1 << ata_task->force_phy_id) << CMD_HDR_PHY_ID_OFF;
- 	}
- 
- 	hdr->dw0 = cpu_to_le32(dw0);
-diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-index 71b42fe95b6f..d89ffb357f14 100644
---- a/drivers/scsi/libsas/sas_ata.c
-+++ b/drivers/scsi/libsas/sas_ata.c
-@@ -852,3 +852,11 @@ void sas_ata_wait_eh(struct domain_device *dev)
- 	ap = dev->sata_dev.ap;
- 	ata_port_wait_eh(ap);
- }
-+
-+int sas_execute_ata_cmd(struct domain_device *device, u8 *fis, int force_phy_id)
-+{
-+	struct sas_tmf_task tmf_task = {};
-+	return sas_execute_tmf(device, fis, sizeof(struct host_to_dev_fis),
-+			       force_phy_id, &tmf_task);
-+}
-+EXPORT_SYMBOL_GPL(sas_execute_ata_cmd);
-diff --git a/drivers/scsi/libsas/sas_scsi_host.c b/drivers/scsi/libsas/sas_scsi_host.c
-index 87dd18a85f6f..5b5747e33dbd 100644
---- a/drivers/scsi/libsas/sas_scsi_host.c
-+++ b/drivers/scsi/libsas/sas_scsi_host.c
-@@ -937,8 +937,16 @@ int sas_execute_tmf(struct domain_device *device, void *parameter,
- 		task->dev = device;
- 		task->task_proto = device->tproto;
- 
--		if (!dev_is_sata(device))
-+		if (dev_is_sata(device)) {
-+			task->ata_task.device_control_reg_update = 1;
-+			if (force_phy_id >= 0) {
-+				task->ata_task.force_phy = true;
-+				task->ata_task.force_phy_id = force_phy_id;
-+			}
-+			memcpy(&task->ata_task.fis, parameter, para_len);
-+		} else {
- 			memcpy(&task->ssp_task, parameter, para_len);
-+		}
- 
- 		task->task_done = sas_task_internal_done;
- 		task->tmf = tmf;
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index 4ea964d33600..dc529cc92d65 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -552,6 +552,9 @@ struct sas_ata_task {
- 	u8     stp_affil_pol:1;
- 
- 	u8     device_control_reg_update:1;
-+
-+	bool   force_phy;
-+	int    force_phy_id;
- };
- 
- struct sas_smp_task {
-@@ -579,10 +582,6 @@ struct sas_ssp_task {
- struct sas_tmf_task {
- 	u8 tmf;
- 	u16 tag_of_task_to_be_managed;
--
--	/* Temp */
--	int force_phy;
--	int phy_id;
- };
- 
- struct sas_task {
-diff --git a/include/scsi/sas_ata.h b/include/scsi/sas_ata.h
-index 21e7c10c6295..d47dea70855d 100644
---- a/include/scsi/sas_ata.h
-+++ b/include/scsi/sas_ata.h
-@@ -32,6 +32,8 @@ void sas_probe_sata(struct asd_sas_port *port);
- void sas_suspend_sata(struct asd_sas_port *port);
- void sas_resume_sata(struct asd_sas_port *port);
- void sas_ata_end_eh(struct ata_port *ap);
-+int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
-+			int force_phy_id);
- #else
- 
- 
-@@ -83,6 +85,12 @@ static inline int sas_get_ata_info(struct domain_device *dev, struct ex_phy *phy
- static inline void sas_ata_end_eh(struct ata_port *ap)
- {
- }
-+
-+static inline int sas_execute_ata_cmd(struct domain_device *device, u8 *fis,
-+				      int force_phy_id)
-+{
-+	return 0;
-+}
- #endif
- 
- #endif /* _SAS_ATA_H_ */
--- 
-2.26.2
+/*
+  * For shared tag users, we track the number of currently active users
+  * and attempt to provide a fair share of the tag depth for each of them.
+  */
+static inline bool hctx_may_queue(struct blk_mq_hw_ctx *hctx,
+				  struct sbitmap_queue *bt)
+{
+	unsigned int depth, users;
 
+	if (!hctx || !(hctx->flags & BLK_MQ_F_TAG_QUEUE_SHARED))
+		return true;
+
+	/*
+	 * Don't try dividing an ant
+	 */
+	if (bt->sb.depth == 1)
+		return true;
+
+	if (blk_mq_is_shared_tags(hctx->flags)) {
+		struct request_queue *q = hctx->queue;
+
+		if (!test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags))
+			return true;
+	} else {
+		if (!test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
+			return true;
+	}
+
+	users = atomic_read(&hctx->tags->active_queues);
+
+	if (!users)
+		return true;
+
+	/*
+	 * Allow at least some tags
+	 */
+	depth = max((bt->sb.depth + users - 1) / users, 4U);
+	return __blk_mq_active_requests(hctx) < depth;
+}
+
+Bart.
