@@ -2,74 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02CE4C28F3
-	for <lists+linux-scsi@lfdr.de>; Thu, 24 Feb 2022 11:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA26C4C2907
+	for <lists+linux-scsi@lfdr.de>; Thu, 24 Feb 2022 11:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233269AbiBXKMR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Feb 2022 05:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
+        id S233278AbiBXKMZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Feb 2022 05:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiBXKMI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Feb 2022 05:12:08 -0500
+        with ESMTP id S233266AbiBXKMK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Feb 2022 05:12:10 -0500
 Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DC72C125
-        for <linux-scsi@vger.kernel.org>; Thu, 24 Feb 2022 02:11:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EFE33A29
+        for <linux-scsi@vger.kernel.org>; Thu, 24 Feb 2022 02:11:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1645697498; x=1677233498;
+  t=1645697499; x=1677233499;
   h=from:to:subject:date:message-id:in-reply-to:references:
    mime-version:content-transfer-encoding;
-  bh=unaPc+bJDjDEi5zJ5BafAvJLsHIWC/zgKf9goBf7tAQ=;
-  b=nuLTGHNBkFErfXzNhL1wbXnBAMWJrM2XA5RFbYi1byKmh2lH95IpRCsY
-   V/wMmrFGpOypVxBlP/lViEy107R5iX05DZO4vJ2qXcZEYng3/Nk16Ej60
-   RoiY2w4S6bnVI9l9ml5zXXFQx/84TTmHFmq/R8cjfaWVqxvoRlLfLctrG
-   EkCEADgyCFq4StIrkC/n1Jxb9Gdi7U8tfmJHOifo/kR4I6zs4gA4Qb4wx
-   Lgdl1VUVZar5oZ5WmPaQybgR+KI9axI5o4SfHVT5/aEsQ077Y3aSLdwbK
-   u15s0wr9CEi7z7w2sOdoGeDNJYgvf0om0ufmdAAh7LVM7nkfhVvCXQYV5
+  bh=fy482iV7TvYo4Oi9JfCYtzCX6QbrjUioqGVwAf3nVMc=;
+  b=eMGqINQchYtORAAcQ/Eik59+11H7zld4xcEDfqdxwl+YAtmHsINycq+y
+   FMtpbyeocJLln8M1QIHcv/NQWGNa7PRuhtRqJaZaA4SnzBwSl2/WsU1G8
+   bu815WzLBzFMXL/s9ZwYbCdc8TGCSgsHDm1sIo1jEzRId1clAxd/LcRx4
+   Ys7QbzfdHjnHwsZYuAEi884FvJry+3OkKUMQ/w1tzTJ54pka5bZRcX88K
+   mMCRh/34Z+pU6+Pfwk76TWs3mmWP6/htdqPl7KywAhFHtb+KJ5pvGD4NV
+   QVPsXZjCFoOP/1X6257r20wbchryzsB70Vijil6jQISyYzKfViiLd7e4G
    w==;
 X-IronPort-AV: E=Sophos;i="5.88,393,1635177600"; 
-   d="scan'208";a="297965118"
+   d="scan'208";a="297965121"
 Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 24 Feb 2022 18:11:38 +0800
-IronPort-SDR: JqC8zctUljGBCLVKjtFLGQgbCPUOfN/oex92ZkFyOXotuv0BbdFX58viLQiZE+sPYEWmN1Ei2v
- o1uoyVm6RDm6SiUMo0JwR2Vtp6mpMihl041AsxKahZ3/0EdToUKK4OqeTclp9b1LSu5qEMUOQu
- Uq1JYJQ0WRHMSJ1gciCiabpnG2IdAZjC4lzGqW5RBYrPGH3DVCyCjeAR0qI8LsvzfwL3QwsZ1w
- 1/X5PWoEpgP84kN8OZBEWOnO22sQkoBMGp18EXouUOsprhKyefNAIQpfnNWNUoXH7G8aXA9+L2
- KwFnYVa7tQzrdu4IVTTba1KE
+  by ob1.hgst.iphmx.com with ESMTP; 24 Feb 2022 18:11:39 +0800
+IronPort-SDR: 7DF9abao0wW4ESOKJrxZL5DK+GPkzKehN/Fuxd581sxPdXL+MYpcq5Kso5RMPpyBV3v5e/v11O
+ cojjp/hD0p0PyRouahdrxd2+7VAtudNb7QYpGa9HGXl43gS57JamE4E0lsY6T5qatbbqeOldjP
+ k9Abu1FUth8PYhrH+1KbSCEtkkSLBxhGgaj68nuz+KN2pC8a9L+h8uAt7iYolhdbOZq9111zqy
+ f6m9QkLcencwD0cV+Gsn8n9tFQhjyTo8r+3RWAOxQvONgReWKa7NYzm6Q2U6HgJk9qtJowfg7b
+ 2wW6N78iKzw1TCIrmOXX1xiO
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 01:43:08 -0800
-IronPort-SDR: Q9hOYozxcNegkiOmyp+xlF/DMnTvxT/B9B4lHplgveJhtP+8u0ic+DQum7rJ4Uj7vONfFHIo9Q
- cZ0T921vm3LIYMAQfeYevHBsSfzDSlcC0JvAwBP80ICZonqTFjfELLnVFNV5lEzsrL4jM5rlQf
- EEuzdUBJ36ZLYMovMliK6yfipFQP966sPM30cx39EI0U/HXibGekNpT1qz9EbmHgdfD++eEFXC
- kVSXK1+JWuKUqTjylhi5nonveLrG3Zh6emkVUJC2k9rRJS0vK2ATdINSfnp0+49v2tQ6Gju3gm
- lWg=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 01:43:10 -0800
+IronPort-SDR: K27F23flgpvLp9UpxBwsHmDMQJbveFoSSMWCz2t4/9pbmxIaky/XDdqXNzeVrzYX7xTMStvxqS
+ xv7LETa70k8S1Aiu9OnpplZ48bF3AWeRTHLkS/Jbhoz6hO+ZSMF1uf/9IwsASG8bLgFhRyCwiG
+ zuCSkBaLxNr3h4QYNtUnKFg9iynoXdfdmBg3MlabkwMBzit8+RufAL+pMuCc3DzrTkLQ5Jdi3b
+ CxNTzFsqpCpHIbsWVFEUD86Vdkpnbaku3KbWX1aD05bmzsi4N70K3c5+ir158PcjSjotoRX/LE
+ U5k=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 02:11:38 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 02:11:39 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K47wp0Pq8z1SVnx
-        for <linux-scsi@vger.kernel.org>; Thu, 24 Feb 2022 02:11:38 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K47wq2mYXz1SVp3
+        for <linux-scsi@vger.kernel.org>; Thu, 24 Feb 2022 02:11:39 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:subject:to
-        :from; s=dkim; t=1645697497; x=1648289498; bh=unaPc+bJDjDEi5zJ5B
-        afAvJLsHIWC/zgKf9goBf7tAQ=; b=hLp4XajfRCd+9vLZeBE1Puf/eYpUC4Dw1M
-        ESyVtsg8brbjkvMmmEB9yL0A4pbrV4vEgDy7W/xFLPFVR+Gi1bth8TIXHtJQxiTA
-        xqbKg+9wW2d37i69UQ20ZSVesjT8yTqS8O9Rb46Q9tmKD86s3EVtK1R9oi95EvzK
-        vHk+63TGOCnIgzNCaCe5PYvHrI0lJhlKlmyIPoTBtX3fIIZjLlPaMMCHGsTjEhqr
-        DX8wtu189O+QkT0DobuZXVrOoWv30+ZzMCnldzxAVecwmHbDIftb201PfVWmDrtH
-        erY6NrxGe8XRz8JhKEVrvoHKjJpNValgwFMlVzmqwvNGIChGRQCw==
+        :from; s=dkim; t=1645697498; x=1648289499; bh=fy482iV7TvYo4Oi9Jf
+        CYtzCX6QbrjUioqGVwAf3nVMc=; b=fWdeRlXwEz6tKu1K1307Hn3IYCTUtDImqj
+        nay3htdjqZkhFM/nJzGjLpuu6D836FzvTBS0us6w3CuAX+6emlL7HdAVUGwhmrdM
+        QOSl7Z41t6Q+tD9fi6Y464wtf6yQTOW0A4/V1a9zug8M2QO6rTxA/nAstNjSx5Cy
+        CrVZp5a2Mq3fCHLx7B/FzR4Tw3Dl0PVUPwLY7PLgFqmfDrZ15pkFAYzbgjKi1vUj
+        s6knKCVl2jWf90IEwX/jEP4CP8/A0+mQ1QRKOSlvoxdOi4YlTWEtum71WYSNzoGX
+        gD2JJkEDK5SAqL16eny4VfoE4bdJjLz+wtR+OVAHJm3hiwaH1ImA==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id cRhPaQwysYXe for <linux-scsi@vger.kernel.org>;
-        Thu, 24 Feb 2022 02:11:37 -0800 (PST)
+        with ESMTP id XKYfdgPIGIog for <linux-scsi@vger.kernel.org>;
+        Thu, 24 Feb 2022 02:11:38 -0800 (PST)
 Received: from washi.fujisawa.hgst.com (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K47wm4kDPz1Rwrw;
-        Thu, 24 Feb 2022 02:11:36 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K47wn6VG5z1Rvlx;
+        Thu, 24 Feb 2022 02:11:37 -0800 (PST)
 From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
 To:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
@@ -78,9 +78,9 @@ To:     linux-scsi@vger.kernel.org,
         Suganath Prabu Subramani 
         <suganath-prabu.subramani@broadcom.com>,
         MPT-FusionLinux.pdl@broadcom.com
-Subject: [PATCH 3/5] scsi: mpt3sas: fix ioc->base_readl() use
-Date:   Thu, 24 Feb 2022 19:11:27 +0900
-Message-Id: <20220224101129.371905-4-damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 4/5] scsi: mpt3sas: fix event callback log_code value handling
+Date:   Thu, 24 Feb 2022 19:11:28 +0900
+Message-Id: <20220224101129.371905-5-damien.lemoal@opensource.wdc.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220224101129.371905-1-damien.lemoal@opensource.wdc.com>
 References: <20220224101129.371905-1-damien.lemoal@opensource.wdc.com>
@@ -96,59 +96,49 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The functions _base_readl_aero() and _base_readl() used for an adapter
-base_readl() method are implemented using a regular readl() call which
-performs internally a conversion to CPU endianness (le32_to_cpu()) of
-the values read. The users of the ioc base_readl() method should thus
-not convert again the values read using le16_to_cpu().
-Fixing this removes sparse warnings.
+In mpt3sas_scsih_event_callback(), fix a sparse warning when testing the
+event log code value by replacing the use of a pointer to the address
+storing the event log code with a log code local variable . Doing so,
+le32_to_cpu() is used when the log code value is assigned, avoiding a
+sparse warning.
 
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/m=
-pt3sas_base.c
-index 6ebdfedd84f5..5efe4bd186db 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -6925,16 +6925,16 @@ _base_handshake_req_reply_wait(struct MPT3SAS_ADA=
-PTER *ioc, int request_bytes,
- 	}
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/=
+mpt3sas_scsih.c
+index 00792767c620..a355bc145577 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -10926,20 +10926,20 @@ mpt3sas_scsih_event_callback(struct MPT3SAS_ADA=
+PTER *ioc, u8 msix_index,
+ 	case MPI2_EVENT_LOG_ENTRY_ADDED:
+ 	{
+ 		Mpi2EventDataLogEntryAdded_t *log_entry;
+-		u32 *log_code;
++		u32 log_code;
 =20
- 	/* read the first two 16-bits, it gives the total length of the reply *=
-/
--	reply[0] =3D le16_to_cpu(ioc->base_readl(&ioc->chip->Doorbell)
--	    & MPI2_DOORBELL_DATA_MASK);
-+	reply[0] =3D ioc->base_readl(&ioc->chip->Doorbell)
-+		& MPI2_DOORBELL_DATA_MASK;
- 	writel(0, &ioc->chip->HostInterruptStatus);
- 	if ((_base_wait_for_doorbell_int(ioc, 5))) {
- 		ioc_err(ioc, "doorbell handshake int failed (line=3D%d)\n",
- 			__LINE__);
- 		return -EFAULT;
- 	}
--	reply[1] =3D le16_to_cpu(ioc->base_readl(&ioc->chip->Doorbell)
--	    & MPI2_DOORBELL_DATA_MASK);
-+	reply[1] =3D ioc->base_readl(&ioc->chip->Doorbell)
-+		& MPI2_DOORBELL_DATA_MASK;
- 	writel(0, &ioc->chip->HostInterruptStatus);
+ 		if (!ioc->is_warpdrive)
+ 			break;
 =20
- 	for (i =3D 2; i < default_reply->MsgLength * 2; i++)  {
-@@ -6946,9 +6946,8 @@ _base_handshake_req_reply_wait(struct MPT3SAS_ADAPT=
-ER *ioc, int request_bytes,
- 		if (i >=3D  reply_bytes/2) /* overflow case */
- 			ioc->base_readl(&ioc->chip->Doorbell);
- 		else
--			reply[i] =3D le16_to_cpu(
--			    ioc->base_readl(&ioc->chip->Doorbell)
--			    & MPI2_DOORBELL_DATA_MASK);
-+			reply[i] =3D ioc->base_readl(&ioc->chip->Doorbell)
-+				& MPI2_DOORBELL_DATA_MASK;
- 		writel(0, &ioc->chip->HostInterruptStatus);
- 	}
+ 		log_entry =3D (Mpi2EventDataLogEntryAdded_t *)
+ 		    mpi_reply->EventData;
+-		log_code =3D (u32 *)log_entry->LogData;
++		log_code =3D le32_to_cpu(*(__le32 *)log_entry->LogData);
 =20
+ 		if (le16_to_cpu(log_entry->LogEntryQualifier)
+ 		    !=3D MPT2_WARPDRIVE_LOGENTRY)
+ 			break;
+=20
+-		switch (le32_to_cpu(*log_code)) {
++		switch (log_code) {
+ 		case MPT2_WARPDRIVE_LC_SSDT:
+ 			ioc_warn(ioc, "WarpDrive Warning: IO Throttling has occurred in the W=
+arpDrive subsystem. Check WarpDrive documentation for additional details.=
+\n");
+ 			break;
 --=20
 2.35.1
 
