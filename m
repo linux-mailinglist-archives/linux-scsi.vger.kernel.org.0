@@ -2,61 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7B04C3665
-	for <lists+linux-scsi@lfdr.de>; Thu, 24 Feb 2022 20:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEC44C392B
+	for <lists+linux-scsi@lfdr.de>; Thu, 24 Feb 2022 23:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233553AbiBXUAA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Feb 2022 15:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S235781AbiBXWui (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Feb 2022 17:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbiBXUAA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Feb 2022 15:00:00 -0500
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F86E2763F7;
-        Thu, 24 Feb 2022 11:59:30 -0800 (PST)
-Received: by mail-pj1-f54.google.com with SMTP id m22so2956265pja.0;
-        Thu, 24 Feb 2022 11:59:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=esSTEcxWYlmLPiSWhQ2VfsidNdEYUHFjatWC5lDvwME=;
-        b=JKC3rWXT/VssfEuoTY2bAyZlMx8QEbsF/+agv+oa5zRwUVMnS+oIyOzpAfdxZXBWPS
-         8lqAKGBrjTfOGsrUuAN5uHlRI0SopRKSKD9atTWkA+TSPc5x58yBP5+PQGPAXat/yJUe
-         hB7/HGd19y6iBa2jdPlgT+V/Fm25+IkddhZC2wqMSYFZJ1t+EqdJ9QLYTZquNEjD5pv3
-         QUOKoWX29ol58yXFFoBiXpMN3uU9Oou7UE1Ok+M9b+qGRs/zGFFVWbVnTMK/HbzKaEOP
-         M8vniLbCIqZo6Qzs4aBcuhEy2aWt0os76vJmoWgxaofcP8QFF8eySyXALpoHDB3zKFR5
-         WMyA==
-X-Gm-Message-State: AOAM532aA8Bolz7pfhXpfWsoOeoEeq8zxA09sC43Ai0DDLYnrk+mJuPr
-        Hba7At/NHV3+zUJu8RNQgdYMQGysSepDrQ==
-X-Google-Smtp-Source: ABdhPJzeDm+bjC7Qr7a0yX3vCI+Uk6gyS7nas2k0g65/6PYg4Wro7UcVq9TH6BSOLLkvWZfi7WkqHA==
-X-Received: by 2002:a17:902:70c4:b0:14f:9f56:1228 with SMTP id l4-20020a17090270c400b0014f9f561228mr3988093plt.114.1645732769532;
-        Thu, 24 Feb 2022 11:59:29 -0800 (PST)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id s22-20020a056a0008d600b004f0eaa735f2sm311051pfu.57.2022.02.24.11.59.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 11:59:28 -0800 (PST)
-Message-ID: <b9c43f2c-5888-41e6-a78f-355ef76121ac@acm.org>
-Date:   Thu, 24 Feb 2022 11:59:26 -0800
+        with ESMTP id S235480AbiBXWui (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Feb 2022 17:50:38 -0500
+Received: from outgoing-stata.csail.mit.edu (outgoing-stata.csail.mit.edu [128.30.2.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2AA3120F7D;
+        Thu, 24 Feb 2022 14:50:07 -0800 (PST)
+Received: from [128.177.79.46] (helo=[10.118.101.22])
+        by outgoing-stata.csail.mit.edu with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.82)
+        (envelope-from <srivatsa@csail.mit.edu>)
+        id 1nNMSg-000HH6-Ik; Thu, 24 Feb 2022 17:19:46 -0500
+Subject: [PATCH v5 0/3] Update VMware maintainer entries
+From:   "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
+To:     jgross@suse.com, x86@kernel.org, pv-drivers@vmware.com,
+        tglx@linutronix.de, bp@alien8.de
+Cc:     linux-graphics-maintainer@vmware.com, Deep Shah <sdeep@vmware.com>,
+        Joe Perches <joe@perches.com>, linux-rdma@vger.kernel.org,
+        Ronak Doshi <doshir@vmware.com>, Nadav Amit <namit@vmware.com>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Zack Rusin <zackr@vmware.com>, linux-input@vger.kernel.org,
+        Vivek Thampi <vithampi@vmware.com>, linux-scsi@vger.kernel.org,
+        Vishal Bhakta <vbhakta@vmware.com>, netdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, sdeep@vmware.com,
+        vithampi@vmware.com, amakhalov@vmware.com, keerthanak@vmware.com,
+        srivatsab@vmware.com, anishs@vmware.com,
+        linux-kernel@vger.kernel.org, namit@vmware.com, joe@perches.com,
+        kuba@kernel.org, rostedt@goodmis.org, srivatsa@csail.mit.edu
+Date:   Thu, 24 Feb 2022 14:23:48 -0800
+Message-ID: <164574138686.654750.10250173565414769119.stgit@csail.mit.edu>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 8/8] scsi: remove <scsi/scsi_request.h>
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-References: <20220224175552.988286-1-hch@lst.de>
- <20220224175552.988286-9-hch@lst.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220224175552.988286-9-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,8 +50,33 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/24/22 09:55, Christoph Hellwig wrote:
-> This header is empty now except for an include of <linux/blk-mq.h>, so
-> remove it.
+This series updates a few maintainer entries for VMware-maintained
+subsystems and cleans up references to VMware's private mailing lists
+to make it clear that they are effectively email-aliases to reach out
+to reviewers.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Changes from v4->v5:
+- Add Alexey as reviewer for paravirt ops.
+
+Changes from v3->v4:
+- Remove Cc: stable@vger.kernel.org from patches 1 and 2.
+
+Changes from v1->v3:
+- Add Zack as the named maintainer for vmmouse driver
+- Use R: to denote email-aliases for VMware reviewers
+
+Regards,
+Srivatsa
+VMware Photon OS
+
+---
+
+Srivatsa S. Bhat (VMware) (3):
+      MAINTAINERS: Update maintainers for paravirt ops and VMware hypervisor interface
+      MAINTAINERS: Add Zack as maintainer of vmmouse driver
+      MAINTAINERS: Mark VMware mailing list entries as email aliases
+
+
+ MAINTAINERS | 31 ++++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 13 deletions(-)
+
