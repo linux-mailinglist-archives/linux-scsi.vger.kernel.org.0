@@ -2,106 +2,120 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A11F4C2788
-	for <lists+linux-scsi@lfdr.de>; Thu, 24 Feb 2022 10:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D29914C28ED
+	for <lists+linux-scsi@lfdr.de>; Thu, 24 Feb 2022 11:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232529AbiBXJIS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Feb 2022 04:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        id S233265AbiBXKMI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Feb 2022 05:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbiBXJIO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Feb 2022 04:08:14 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B62113AEA;
-        Thu, 24 Feb 2022 01:07:44 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id ba20so2565444qvb.1;
-        Thu, 24 Feb 2022 01:07:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dBBa+m5WJxw/OTFjHbJ6+LeZpWFvvqiydygw9xKnoS4=;
-        b=Oc1r7lycBzB3aLDcGUGQxFXlvv19N4fMyOjhtgCRpBK/C7i6dmxBn41c7urKYHy/7Y
-         wMImarxg2DfHr7BAQf/EBepVdRTaJjyUOjmueW+6FfgK1vDuYO0EDesmtqsdFHCTeLJ4
-         bRkrB0Q1mOvAwCbi0VaLO8jV8O4YLiSwo+W+36lTzwn+o6ySkVR9jYwyDTvdl5dZLn88
-         h7yiv5O1qfhMDT/fO4WT/PdXYiAm6lpwJmkXWDW/R3mq67P8iu+/PTrgh7A2IBsaBs3v
-         Y93l+nYGYpLIkXID9oWSYxvstcXwUTSoljipiZu/W5GiaJ2c7tiX/hRfucnqcvr3+xtn
-         obuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dBBa+m5WJxw/OTFjHbJ6+LeZpWFvvqiydygw9xKnoS4=;
-        b=G2yxsDiGHmroVAfTubKgW+VhgH4AQ0pAHRoCvT13Ovlce5/mLQQTfNEr2fuKnKvLTL
-         OwwLG1S+LVHSBnGnSPygUheA1DKNWYZAn7m4lzOZrNicjjkIQmK2Fhmo48M0YFlY/cZ8
-         hKJzKXsOHX2LL4W9M4jkOe/czRE0T4BuT5qUyUbInSNaNiZB5QJteWRhgevrf0Zz/rOM
-         IjsUKzylgNY6l8YmWHfpjw0X6C5JvxC73gvPsCMrE30nN0N/Q9R6r3+TK/nOLXArCDWG
-         VR/ACr06neDaMBssgjiaWFNSaqKJqBxT04rG9JamY9YprHSELJIQYTim0qD7MyXOsq73
-         urWw==
-X-Gm-Message-State: AOAM533rHKZ5ykrKRFcfvQL7BGhUiuTdsC2ketKKWnEqkvMhjn8ijH85
-        dgebe24s7m7pU9rDtA73+Kk=
-X-Google-Smtp-Source: ABdhPJx0rn7zCTJSTevgT6ltmxUujV0ZykC+hrr/6rizOnVOLzaVlBpjaiaz5XmZbJRqt7I7bndUPA==
-X-Received: by 2002:ac8:7d90:0:b0:2de:7561:b2fc with SMTP id c16-20020ac87d90000000b002de7561b2fcmr1398833qtd.435.1645693663781;
-        Thu, 24 Feb 2022 01:07:43 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id bk19sm1053110qkb.125.2022.02.24.01.07.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 01:07:43 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     njavali@marvell.com
-Cc:     mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] scsi: qla4xxx: Remove unneeded variable
-Date:   Thu, 24 Feb 2022 09:07:35 +0000
-Message-Id: <20220224090735.1967816-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S232259AbiBXKMG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Feb 2022 05:12:06 -0500
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAD717A92
+        for <linux-scsi@vger.kernel.org>; Thu, 24 Feb 2022 02:11:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1645697496; x=1677233496;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XPY3G3y4GxNnPiAJ3NsSmzyXudU7m5HrXYjmEpz2kwA=;
+  b=NMsaYs0NjRQosMWT+JvvAC5F+mCcfOUNg78WXpn8gNO+gFKOURDnFYM+
+   RmLBA9a2kHhzmYJG63jXs1Ww7x8f957Jo5QsTeCN5UQChClqi/hDuUF5E
+   +Ub4/L1eoL535DbOqgjwNG6zdGIGyJ5++Ri5nRMAhtQy/ELZ4zBWjGOQO
+   NuhDaAR6CSq70hPRr+GQ0OsBlyOYeYAiym3xs4/eY1jRtgL1oEYddrpoZ
+   TTgUMBmiGUrSlwsQuOvTbQxYPXtOTyRC4VLbjIh9brJJSIIgvRKMm+DAp
+   BecQs2AQeqajt6AK3l22zKPp8mUdg9ojNQ37OlbM8gWp3a8WK6bxLjo8g
+   w==;
+X-IronPort-AV: E=Sophos;i="5.88,393,1635177600"; 
+   d="scan'208";a="297965108"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 24 Feb 2022 18:11:34 +0800
+IronPort-SDR: KLumPtSWHWGzAAXkfWgaU1YQXLpdnRbiwhP6vSyLzKpG5WotUfKe1f4/4NzExtqUR8ip8Q1YWx
+ aTjn8P54sZjzVapJNPOh88Orb71jYRr4iS/GqTDOgGu+hg3T8Aihkz0nT3XryfqwfjJa7Lh8DE
+ R8iZMo0IU9ErMy4eWXKiL1oUvZ8q1SxuMtSSiRgHMPs2pES7y+/jsBH4/uogVUArjqfK5lkRFE
+ Z5AdUG9yfty7awUsw1nFHFWKGwX8J6aXmXiNpvsfGIOOX9knTWG/rHlIVTWtPxLiOBs4p7H9GF
+ kygAxqt8EM9WPLRef0xqIL+B
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 01:43:04 -0800
+IronPort-SDR: FdSBsP+TQzDsXL9VwwyN66a1FEwUpOcdrYJmiqVC+zML2ej4FbfAE6zkt5lzuNdYNFOfxjrkIt
+ ON3pXhmyQkMfh5wuPpYxOlQKMwTSn7RdYCo2AbM7wmNuMXLbyWi1QiXy4RESsp6MsUDE/NI5UH
+ LIrm2KiOPU9peD0DrcqfzXqjAjaTq4hMSlaehoRmbfc2KguM9Feuvunmfzn5Pnn0udOggZkxv1
+ 076ShSVGjVX+PGCXVoVhqDxKxQUcllhVOnNfX5XpRueABm1Vlrz//uUxYSYOchbthDiiLs6JPe
+ 6eU=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 02:11:34 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K47wk0zTLz1SHwl
+        for <linux-scsi@vger.kernel.org>; Thu, 24 Feb 2022 02:11:34 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:subject:to:from; s=dkim; t=1645697493;
+         x=1648289494; bh=XPY3G3y4GxNnPiAJ3NsSmzyXudU7m5HrXYjmEpz2kwA=; b=
+        p0NFpszLWmLio3MCKSh3TwE7X3kKPhIT33wifHmTMuG3z9o2DbWTM39ctsAc802L
+        BFhsY9O9XZgePR13ll/lYhV8vkfR0iRue2ZbojydOiF26m73651lv+zL6oxvxDcQ
+        cKpwyznEzhmRBpLh57+mniQWWcHySLT/Jz3qRgOqRpwNH3V+LofQPQf50vhok1UU
+        Ghrmx2x8Kmf9vY9nX0YK1gchgMzAjUIDhZ+MLJjPfRSsUPVuDAF2iiY3jh1MU5kv
+        e+7yuqHwQoEWBPy8W9/ivEKKT22ZQTiw+U/M1wrUJLaWuk85r1caGbHaICumWZSV
+        AG4kIHPgyr94gFaSpuCjhw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id y0Q2v_ncYrW6 for <linux-scsi@vger.kernel.org>;
+        Thu, 24 Feb 2022 02:11:33 -0800 (PST)
+Received: from washi.fujisawa.hgst.com (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K47wh5PQqz1Rvlx;
+        Thu, 24 Feb 2022 02:11:32 -0800 (PST)
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+To:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com
+Subject: [PATCH 0/5] Fix mpt3sas driver sparse warnings
+Date:   Thu, 24 Feb 2022 19:11:24 +0900
+Message-Id: <20220224101129.371905-1-damien.lemoal@opensource.wdc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+This series fix (remove) all sparse warnings generated when compiling
+the mpt3sas driver. All warnings are related to __iomem access and
+endianness.
 
-Remove unneeded variable used to store return value.
+The series was tested on top of Martin's 5.18/scsi-staging branch with a
+9400-8i HBA with direct attached iSAS and SATA drives. The fixes need
+careful review by the maintainers as there is no documentation clearly
+explaning the proper endianness of the values touched.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
----
- drivers/scsi/qla4xxx/ql4_os.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Damien Le Moal (5):
+  scsi: mpt3sas: fix Mpi2SCSITaskManagementRequest_t TaskMID handling
+  scsi: mpt3sas: Fix writel() use
+  scsi: mpt3sas: fix ioc->base_readl() use
+  scsi: mpt3sas: fix event callback log_code value handling
+  scsi: mpt3sas: fix adapter replyPostRegisterIndex handling
 
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index d64eda961412..b49c38416fb9 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -3640,7 +3640,6 @@ static int qla4xxx_copy_to_fwddb_param(struct iscsi_bus_flash_session *sess,
- 				       struct dev_db_entry *fw_ddb_entry)
- {
- 	uint16_t options;
--	int rc = 0;
- 
- 	options = le16_to_cpu(fw_ddb_entry->options);
- 	SET_BITVAL(conn->is_fw_assigned_ipv6,  options, BIT_11);
-@@ -3739,7 +3738,7 @@ static int qla4xxx_copy_to_fwddb_param(struct iscsi_bus_flash_session *sess,
- 
- 	COPY_ISID(fw_ddb_entry->isid, sess->isid);
- 
--	return rc;
-+	return 0;
- }
- 
- static void qla4xxx_copy_to_sess_conn_params(struct iscsi_conn *conn,
--- 
-2.25.1
+ drivers/scsi/mpt3sas/mpi/mpi2_init.h |  2 +-
+ drivers/scsi/mpt3sas/mpt3sas_base.c  | 60 ++++++++++++++++------------
+ drivers/scsi/mpt3sas/mpt3sas_ctl.c   |  3 +-
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c |  6 +--
+ 4 files changed, 40 insertions(+), 31 deletions(-)
+
+--=20
+2.35.1
 
