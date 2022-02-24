@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787534C38CC
-	for <lists+linux-scsi@lfdr.de>; Thu, 24 Feb 2022 23:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D59754C3998
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Feb 2022 00:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbiBXWbi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Feb 2022 17:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
+        id S232855AbiBXXTd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Feb 2022 18:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbiBXWbh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Feb 2022 17:31:37 -0500
+        with ESMTP id S230394AbiBXXTb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Feb 2022 18:19:31 -0500
 Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531C049F00
-        for <linux-scsi@vger.kernel.org>; Thu, 24 Feb 2022 14:31:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C01723892C
+        for <linux-scsi@vger.kernel.org>; Thu, 24 Feb 2022 15:19:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1645741867; x=1677277867;
+  t=1645744740; x=1677280740;
   h=message-id:date:mime-version:subject:to:references:from:
    in-reply-to:content-transfer-encoding;
-  bh=++bDxWyUa0600WILZuVRl5CdN6JHPLb2Cu+YBAzrL0I=;
-  b=d0ibP+jgycRX3ct7EVRpj/3M9peYyLqw2Kin1jGipI1yzRiJpZdVx2v1
-   94s82cS/9JdYURUaAaQhq7HjnLacFPVcDNA2WXasMxjSZFchv5Mbhpnhs
-   AfmOqm7ZhwG3CM9sKoziWHOmBp10CkonfxrjkZB8QsWlXvKwZ/cbjNvY6
-   jeL40xQI68pJEALOlxrO4RJ2gncyVZxqQxrW7+bWJNRjM1wxHwBmAty/2
-   LS0U+MPcZKCy2x7FwmhWzYssmknb/h9qQzpqpXZBdqN2QFCN/MSUvsdQw
-   e0/L/fbdGWCSWWtKqsaK9l8z177DM9dvn1nTsnTLJ+9b4ZS6VTH94FjpX
-   A==;
+  bh=pr5g1OurZt+M/4GtXsnSqGs9UgLlb5cYv1RaVLspDdg=;
+  b=gYptbPwMUBnvGXaEd1C70IYLoMQKdGGx/O28Bm+Dp7brhn1PkoDRK7lA
+   2k1+AhV3TEY9aWcB4CLgQ2NpMIiRLAlJzq0McXTQ8g31pGjpnkQIl6Mcc
+   PNqjFlZFGa7IupkuFT0+x4IueHXQrc2BySAQNTl8UiUKSLNIn7/fFnpql
+   QVVWWj7nwxxgnjPLhGbIBUU43W/IbBf4+93VfAirvbDIcvD1X/cWrw+XX
+   VAD50jjLXRVQMrPUKt0cPVOw2lFuhxhDc8MKOpHsXZso+Vi7F3uLCCBVp
+   +hgoclph/s07yUD06gGujpqVWnTZ4w1o1mJF8E9NO6O49oo/4hx1KiJQq
+   w==;
 X-IronPort-AV: E=Sophos;i="5.90,134,1643644800"; 
-   d="scan'208";a="298014988"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 25 Feb 2022 06:31:06 +0800
-IronPort-SDR: Y2HjSEgjJEWm4IfFdIjrquziTtdCBgJqtzZ8wc8SYxrax/P65HX7LTdyzrX82GrdZkToqfQ2DZ
- U8KUEaKEhn53dZrU0ncBt8DtCMgDZLv+dIpowyljxrBI8beAx8kZebHjgC9EeQO6dLaVmfUVAH
- 3XgqDWM0zPrmhwdGv1gMy/wQsTucK1yRWDIlXcyeStwHvSWwdhRAyQHiPnDi1pvWe2c3btFjmW
- S8UGa7+0bAvvDL76PCPRER8khh+ido/JmYb/pJU5e7Cs+6qadHoKeamnYIbP8j4FJ09AlM2U4Z
- d2RZPZazk3WkKI8BxEXssWUQ
+   d="scan'208";a="298017443"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 25 Feb 2022 07:19:00 +0800
+IronPort-SDR: L3R208YYtXhSGhgKoTv1/cqpqjntka+H3+09eVwgw/DyB/rlryHj1EsdAOW9AcM7uXd4HKsFVf
+ 5hXGL4oF7usZeGOklro9etZKjp/zRWU70mlmFOrjytDp4XsnQ32MgaSYmXRmii3GnUemSTMeZs
+ 3XO3i9nb4ZZ3JPWSgZVlL1VR+YChb3K2VOBGEZF1NjLyyqLMkOWFAY5ghb4xqXAi/4fP2RSk4g
+ yFsQN+IlzYXzh1i5n92FftyoDfgOuaqPbZxDqZDdTCJ9ieM4GTHpQ4YAiXTnHj5Q0eB9HupOJ7
+ m9DV3EHIkaKj+mgdTfv6/FcG
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 14:02:36 -0800
-IronPort-SDR: c8re7Y+7jzgeplZ+zo7f0ksj+z3JmVtgiZtnhemJOdYdfrQSrjZowXgzsXphwzC1YPajQWlmWz
- Wo/JMCNBYm/zyZxSk2EyFYI1bICQ0hDqPDP0GXyhA4J5fT7VQ74Ro/DRUDMXgheHqKj8J3oWXb
- Ep4r+izvKZdPMnyERw8MVspyabJf7iILJjXGR33Z57vIWh9uvz+2DLx03j8lcp2FyIiZL7ZDPE
- 79vuz0sdJyJjJK5EjRKh8eK39Q1z0UsYWFGpXQhmAEIBMh2izwnXGsh6g8EJhBbQcUE1vUvJR3
- He8=
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 14:51:35 -0800
+IronPort-SDR: 1Wc5ZVqSOU9CkzBWRMTeli0fZfYCpXjsF7hx4hWyfv4cXAGO4w8uyDxr3YzNj52oIIxfQupueL
+ z+q8B5pIPBdeEPQ0xfm0pRzNbdiXMPpMn8KA3+QutK7NsYVcgobM2HofIe4NuvdhwYc/hVkIhd
+ C5UUc9E+4Bcb11nUplukHnIAQ94YBahGntMTWqeKXMH8CVr6FV/azRJ2ipgGaJsnIVh5SSSVnC
+ wo6hjfnpPxqR6MT8v6AdZQD9KL9qTgst5GMii1jV8sr7DgdY6BdAuCQbfmoLwGV8EDMhFlCbiS
+ pVs=
 WDCIronportException: Internal
 Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 14:31:07 -0800
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 15:19:00 -0800
 Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K4SL14KHXz1SHwl
-        for <linux-scsi@vger.kernel.org>; Thu, 24 Feb 2022 14:31:05 -0800 (PST)
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K4TPJ1ZGTz1SVp0
+        for <linux-scsi@vger.kernel.org>; Thu, 24 Feb 2022 15:19:00 -0800 (PST)
 Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
         reason="pass (just generated, assumed good)"
         header.d=opensource.wdc.com
@@ -56,23 +56,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
         opensource.wdc.com; h=content-transfer-encoding:content-type
         :in-reply-to:organization:from:references:to:content-language
         :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1645741865; x=1648333866; bh=++bDxWyUa0600WILZuVRl5CdN6JHPLb2Cu+
-        YBAzrL0I=; b=eu7OEt3X4uLHki18rl5ZUIiZ+CH6Bgy2msSpFqYOc/W+Fh6Qqem
-        rvObVY2CRzUeC9975FxRMiUClHe/MSGgG3eX0Cv08MCZSb/VJZTTlqin8vCG+RdE
-        ef7IwQkuwnpjQCq4etyw4u9TkNTNxv0Msc5Wk85IE7As5cYyOdYnvTDi1avIRlOM
-        UyYrJsALxYW86W9k2YG5BrWX64+uab0ThbrvpJPG54ufVR2rFjPcAeUGPiEd0i0K
-        6QNlKWu+ZviwGRaaj5YzkouQGgm7i70WJmDGT8LdphFolDAnRcoNx2NKt7W5Mh+c
-        LrJDaz1IlyL4HLAKbjKW3eJ+UjaF2WqXBDA==
+        1645744739; x=1648336740; bh=pr5g1OurZt+M/4GtXsnSqGs9UgLlb5cYv1R
+        aVLspDdg=; b=UYMENO3IYUcJx351L0/POFR1n4afHp+76JdHF7FASK4BATjlL8a
+        MO+fJZqVQ3VWfFdQ4rFV3tyZjBDQIEjsk55S7ZMrGt/f/ytkV8vINP2GJ0krr27u
+        ugPyOvm9fo/Vfr9BILcwLN3DRZ6eME1soERtQ6fJmx7peUkmag4jzv4SiC1bY8En
+        9DFubvf8XBLqvQTl681liJ6dP+Vi6GF0wNUTdBnIFd5wtQWsrtoB+TAf1ZW3lWAl
+        KDSxrq14jYkfzLvXks8yx3GdoHxNjfP3Gh36EYCKOZcVuy/38tDe4+60g7tzRyFe
+        Gik+pvHzEr5f31KE7SFJ64AL97umxCLQyCA==
 X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
 Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
         by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id jB4Zi-62U19W for <linux-scsi@vger.kernel.org>;
-        Thu, 24 Feb 2022 14:31:05 -0800 (PST)
+        with ESMTP id Cu67SlTX5F61 for <linux-scsi@vger.kernel.org>;
+        Thu, 24 Feb 2022 15:18:59 -0800 (PST)
 Received: from [10.225.163.81] (unknown [10.225.163.81])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K4SKz6h42z1Rvlx;
-        Thu, 24 Feb 2022 14:31:03 -0800 (PST)
-Message-ID: <c91d1bb9-dd5d-e9be-5c37-405a13e91901@opensource.wdc.com>
-Date:   Fri, 25 Feb 2022 07:31:02 +0900
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K4TPG1JH2z1Rvlx;
+        Thu, 24 Feb 2022 15:18:57 -0800 (PST)
+Message-ID: <f3119d75-25d9-ab1a-8712-891e0c81ce70@opensource.wdc.com>
+Date:   Fri, 25 Feb 2022 08:18:56 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -124,14 +124,14 @@ On 2/25/22 04:49, Bart Van Assche wrote:
 > 
 > typedef __le16 U16;
 
-Well, sparse seems to not catch that. Without the change, I get
-warnings. Will check again.
+Bart,
+
+You are correct. The type change is not needed. Sending v2 with the update.
+
+Thanks for checking.
 
 > 
 > BTW, I think the U16 etc. typedefs should disappear.
-
-I agree on that :)
-
 > 
 > Thanks,
 > 
