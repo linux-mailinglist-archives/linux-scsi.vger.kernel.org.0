@@ -2,100 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB47D4C50C2
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Feb 2022 22:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254D44C52E1
+	for <lists+linux-scsi@lfdr.de>; Sat, 26 Feb 2022 02:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234694AbiBYVeX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Feb 2022 16:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
+        id S240968AbiBZBCb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Feb 2022 20:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234087AbiBYVeT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Feb 2022 16:34:19 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0534A2118E8
-        for <linux-scsi@vger.kernel.org>; Fri, 25 Feb 2022 13:33:47 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id r13so13297842ejd.5
-        for <linux-scsi@vger.kernel.org>; Fri, 25 Feb 2022 13:33:46 -0800 (PST)
+        with ESMTP id S234829AbiBZBCa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Feb 2022 20:02:30 -0500
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800402036EB
+        for <linux-scsi@vger.kernel.org>; Fri, 25 Feb 2022 17:01:57 -0800 (PST)
+Received: by mail-qk1-x744.google.com with SMTP id 185so5995015qkh.1
+        for <linux-scsi@vger.kernel.org>; Fri, 25 Feb 2022 17:01:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=K7Cw7eu7nDP9gSWCyQumSXQvnof21/Hpw/hSXbhKoc0=;
-        b=XFP1TGFIFvS96DH+ZRhA6VduKZIVQ6ky4VVPdkCTMymVIAcpyL4Mz/i5Et/G4RhC2T
-         ccL8k8dEiAj6Ie87fYCusYcVDttHBNy5B+Cn9e6xHG2z1kCnWrDCUwltGhzGFnBA99bu
-         THirPpE0s/Goap/u9bCZe95JHVwRjsbawuckJG9BPlmcmbIZ262iW4RDII9jPz/T/JcM
-         aXFQJsaaiU7ZopFj81fNEMukna6tYsh/T35tRa4y8q49rt6tF7XLJ0AYMkR5dS7lyLm9
-         Jw8YuE5lIhglZCh9x95bILj/Ic1NvmrUci+4B1R54GkoJCTJQjsM+p5Gx/KBJWNclgyx
-         rDUQ==
+        bh=xLb3TQx9KxuMxtf3xcCBiCwA8sPGsTzld99AYCOXRKI=;
+        b=kUtyDh9Od1BC0DBdNOhV1PkNVzRgbC8PjTK9v6zFlhsy7UQPC3IXrCoqYCji3oWOSu
+         QnuEK8RkNLtgDdwJMxsQsU/C+JPxQtZuIfBRRAbAbqFhCppNW1vcefT71xasFW/Zc4z5
+         hb6xkgNRpb8ml0ipN2xyXnT2x3EU1G1ENQdxcSoGuud3OlbAJV0D5xqRMQquG4v/Qclu
+         jitcncorECzlzGfMmLuOhRU678LEW9dqQ3h2nd4Vga1sG/Wd0YovCjRGpBHJaZoQLORF
+         U7Li549BPIslBUNnR9BndvDQMN5O1wPn28Fk8jslRByWaQL+jJtXSMsnynqn8G29FR5y
+         S3Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=K7Cw7eu7nDP9gSWCyQumSXQvnof21/Hpw/hSXbhKoc0=;
-        b=vOGYxflVTJ7S5k18Zy/h0OWvhsWKW83TsKomOmUDHl8ckIP4L+CP7tiEOO2Uuc8B+1
-         e2A27q4U/W8RngCGfSzzrSvhCuDUiao8LkMAR9uXAf2cQa4wrT25zofenN2as2UxiKkS
-         jb/Akq0pueOBpO63xZDqcqsJEwFP+M+8C/vjvDcYaQ6kA1cVeO1wy3QZflDwvEyJnYC1
-         DNKZSEpkkfP1aP396PC1VqZxG4jAQ54e5FFhUadFaOy6JrB3mA7+7woUVtvsnoy1QG2p
-         1Z2GANbiNgGTi/wQ91OVS+VGN5V8zSHgIzCezfnQ5ZwIamrcaEALbM5FI3eEEKKbaTYz
-         uX7Q==
-X-Gm-Message-State: AOAM531JNmooVYE5upZqapLmY0KDAUbe4mfN4zsEGNRdU7tBbz0FcLeG
-        NZJJudtSN1/VZE970ODBdPZTMgdm97U=
-X-Google-Smtp-Source: ABdhPJxfWA3zYtvNmhqv7DO56vmWzGueKhLr/Aq+Yml0moNVY/E3HdwrSNSig+vzj9uoBLmhAASnjQ==
-X-Received: by 2002:a17:907:8a04:b0:6b6:1f22:a5e with SMTP id sc4-20020a1709078a0400b006b61f220a5emr7448638ejc.528.1645824825593;
-        Fri, 25 Feb 2022 13:33:45 -0800 (PST)
-Received: from nlaptop.localdomain (178-117-137-225.access.telenet.be. [178.117.137.225])
-        by smtp.gmail.com with ESMTPSA id r13-20020a1709064d0d00b0069f263a8104sm1443552eju.177.2022.02.25.13.33.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 13:33:45 -0800 (PST)
-From:   Niels Dossche <dossche.niels@gmail.com>
-X-Google-Original-From: Niels Dossche <niels.dossche@ugent.be>
-To:     linux-scsi@vger.kernel.org
-Cc:     aacraid@microsemi.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Niels Dossche <niels.dossche@ugent.be>,
-        Niels Dossche <dossche.niels@gmail.com>
-Subject: [PATCH v2] scsi: aacraid: add missing manage_lock on management_fib_count
-Date:   Fri, 25 Feb 2022 22:33:08 +0100
-Message-Id: <20220225213308.89883-1-niels.dossche@ugent.be>
-X-Mailer: git-send-email 2.35.1
+        bh=xLb3TQx9KxuMxtf3xcCBiCwA8sPGsTzld99AYCOXRKI=;
+        b=uC6V+Y4ovamDzCvDf+FBrf7T2BnnAUXQtKw+ChCQpgOHCJTFclUUvvU1Ll3SK8hSeW
+         n3du2/OibHfKc/+Jo+F1JLuhROWCMj80ZN6DunfCIJW01IGizhxDa+CcF/Lj9OkQbDfw
+         sLdXeDCJezP1+oJkE8Ba3JAcoV/KvYssjvuRRYqR41/kFXUF0etHwTlccZzF8/b9bzRh
+         Pb5Q4JG5lQOJDQvTQ2Bj8FX8DFUzcSwZT6gkmPuBX+2j3ETWczHTvx4NxYlwlyFfBOg3
+         Cbj2Y6/KFTN9AqMFZW6WA+mtU3NIuzOFFBVQ++l6Qgw91YLdj0/iAvH8IK+gX0YP+pWR
+         Fkdg==
+X-Gm-Message-State: AOAM533x4Y4Bjv5o8ZoE2Xsp3bLz5hrWeLVMNwNSucjUQkMo+G7nUvRc
+        KDTdsu440fnWUCkR8vzATGzPhSyWSfC91P7kI2Q=
+X-Google-Smtp-Source: ABdhPJx9kJb5axAwpSaY5FhKoXNA9aPOqVDHxhSb+RFaWxu9YU6y0xbXaciP9kym0ilwceISTelXvoCeWwiqOwaREQ8=
+X-Received: by 2002:a05:620a:12f9:b0:648:c4bb:2842 with SMTP id
+ f25-20020a05620a12f900b00648c4bb2842mr6480447qkl.559.1645837316734; Fri, 25
+ Feb 2022 17:01:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Received: by 2002:a05:6214:d62:0:0:0:0 with HTTP; Fri, 25 Feb 2022 17:01:55
+ -0800 (PST)
+From:   Miss Reacheal <zemegnisse@gmail.com>
+Date:   Sat, 26 Feb 2022 01:01:55 +0000
+Message-ID: <CANkd_0wkonJO_8dwk=UnA00H1gBYb7_Hm8iYD7i-4Hf3HKPQ1w@mail.gmail.com>
+Subject: Re: Hello Dear, how are you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-All other places modify the management_fib_count under the manage_lock.
-Avoid a possible race condition by also applying that lock in
-aac_src_intr_message.
+Hallo,
 
-Signed-off-by: Niels Dossche <niels.dossche@ugent.be>
-Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
----
-Changes in v2:
-  - Fix whitespace.
+Sie haben meine vorherige Nachricht erhalten? Ich habe Sie schon
+einmal kontaktiert, aber die Nachricht ist fehlgeschlagen, also habe
+ich beschlossen, noch einmal zu schreiben. Bitte best=C3=A4tigen Sie, ob
+Sie dies erhalten, damit ich fortfahren kann.
 
- drivers/scsi/aacraid/src.c | 2 ++
- 1 file changed, 2 insertions(+)
+warte auf deine Antwort.
 
-diff --git a/drivers/scsi/aacraid/src.c b/drivers/scsi/aacraid/src.c
-index 11ef58204e96..ca73439587ed 100644
---- a/drivers/scsi/aacraid/src.c
-+++ b/drivers/scsi/aacraid/src.c
-@@ -91,7 +91,9 @@ static irqreturn_t aac_src_intr_message(int irq, void *dev_id)
- 					dev->sync_fib);
- 			spin_lock_irqsave(&dev->sync_fib->event_lock, sflags);
- 			if (dev->sync_fib->flags & FIB_CONTEXT_FLAG_WAIT) {
-+				spin_lock(&dev->manage_lock);
- 				dev->management_fib_count--;
-+				spin_unlock(&dev->manage_lock);
- 				complete(&dev->sync_fib->event_wait);
- 			}
- 			spin_unlock_irqrestore(&dev->sync_fib->event_lock,
--- 
-2.35.1
-
+Gr=C3=BC=C3=9Fe,
+Fr=C3=A4ulein Reachal
