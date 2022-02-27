@@ -2,189 +2,231 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581994C58A4
-	for <lists+linux-scsi@lfdr.de>; Sun, 27 Feb 2022 00:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5384C5936
+	for <lists+linux-scsi@lfdr.de>; Sun, 27 Feb 2022 05:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiBZXFm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 26 Feb 2022 18:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S229944AbiB0EAn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 26 Feb 2022 23:00:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiBZXFh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 26 Feb 2022 18:05:37 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7800F15F0A1
-        for <linux-scsi@vger.kernel.org>; Sat, 26 Feb 2022 15:05:00 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21QHrURx021519;
-        Sat, 26 Feb 2022 23:04:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2021-07-09; bh=6DJdEhmGgVWMFbvFw6y6fIGFzS1UCjX6gqTb0diTeVE=;
- b=Q0wdoXE2KzTSFCKIBx0n5U4Gw5eNYy6Vr+GGbSbwGQbSFWFwr6TVmUI5hEw83TSBKgqh
- Q3fEzJP57rn8GlYF89FtS6c4szgJw61d0pckWRLmom7L/WgkH+uszVdYxqsCognIy7D6
- ZC+mC64hKLzrqPXcCdjh++qE/LyWyQlwhTmbBd3T2YVaP+RiFyLvJgZ6j4REMSfRd9KY
- Fh1gWKVMCqPN/5654TybTc5Ab/oFWzM0wZO22AMndKXOfMOd0mge+U9Krzx52Nk6+Ue+
- V8HfyszgmM835gnAJAwIL4Cykdprg8S7PRV1r+bH5TmhiThICnS1uUoNgm4haksKPyOZ pw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3efat1scnh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 26 Feb 2022 23:04:52 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21QMtm5N027402;
-        Sat, 26 Feb 2022 23:04:51 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2109.outbound.protection.outlook.com [104.47.70.109])
-        by userp3030.oracle.com with ESMTP id 3ef9at5krx-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 26 Feb 2022 23:04:51 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SuY28xhMTSOK0c3n8f0QfuEvUh+X5Xtcn36OVPwhbUmCPlrDnHOhqxzGqJRKjGqPsDts5plLzhl7MYzh5Nf59P63lrChhirtP4WF/GUtOJruPLRPSbPDjyoyaSo6jNbURX7L+F53zuAkinRC1YGqO57CQWCkpTuMfxdzn21tyMbSvxQ7BL0/oRyRUYOr4Cuky8Qn//sxOXJBOoYB3RxW8tOPomjqnFOP2sn5qseHKcsDYe4lvmeVyKtbwfk1U9QLeqpb+9acfaRd77QhqkHg41KhjcNwAgt8W/lCh3fJT0WVELqlukHP3rchcxlDNNKJGFKtCqT6ROi109UGZbFaYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6DJdEhmGgVWMFbvFw6y6fIGFzS1UCjX6gqTb0diTeVE=;
- b=P1gu7EhmTCoAHxpeYic9fW00nyC0zWqXRqs8MKEgHIs4l3gk6e7hd5mqgorlT1acm0cq1/aNn2JOuH1DcecbCXARev7WBSHEqHl4EUiSgHSkQIOKVLfh68p8n/7ST7L1dWWy4gtBEbVaQsahTGqqgJhAFTGFk3EnGFjKDbw/If+yn67rZDcH58GJQFgCwkpJ500W+yFay/QDiitCVJzHjuCajZty/k3sxPNB3wwwAzvYQB86lhHeCntWTdXaaISx8gzil9TldOfeKmutzWnkVJjj7OTCGAokaZosW1VmAvVEdi2dzDDBOdTwxjaI1NT41tTn/Q9FrZx4ICdHSwdayQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6DJdEhmGgVWMFbvFw6y6fIGFzS1UCjX6gqTb0diTeVE=;
- b=ihBr2BdD/17g5ugNibQAaU9v4cj8Vpb9tAFi1YN4JYPW7qHA74ES2kQn1r4ikPQABEjmOhdtqKL59bQDo/pxJnD1HRyB4Bum0zlqYZFTqtDIq3aaUlmQzo0rMtwirIT79Baas1NoG/pOGoynmjHzheikMDgsWwlkg+MI9ay4nts=
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
- MW4PR10MB5750.namprd10.prod.outlook.com (2603:10b6:303:18e::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Sat, 26 Feb
- 2022 23:04:46 +0000
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::3dd8:6b8:e2e6:c3a2]) by DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::3dd8:6b8:e2e6:c3a2%12]) with mapi id 15.20.5017.026; Sat, 26 Feb 2022
- 23:04:46 +0000
-From:   Mike Christie <michael.christie@oracle.com>
-To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        mrangankar@marvell.com, njavali@marvell.com,
-        GR-QLogic-Storage-Upstream@marvell.com, lduncan@suse.com,
-        cleech@redhat.com, liuzhengyuang521@gmail.com
-Cc:     Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH 6/6] scsi: iscsi: Drop temp workq_name.
-Date:   Sat, 26 Feb 2022 17:04:35 -0600
-Message-Id: <20220226230435.38733-7-michael.christie@oracle.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220226230435.38733-1-michael.christie@oracle.com>
-References: <20220226230435.38733-1-michael.christie@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: DM6PR08CA0048.namprd08.prod.outlook.com
- (2603:10b6:5:1e0::22) To DM5PR10MB1466.namprd10.prod.outlook.com
- (2603:10b6:3:b::7)
+        with ESMTP id S229939AbiB0EAm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 26 Feb 2022 23:00:42 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF1C1DB3E1
+        for <linux-scsi@vger.kernel.org>; Sat, 26 Feb 2022 20:00:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1645934406; x=1677470406;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+xrsuOI9TEYJqO66rOjju0qwmMM8tmROUCmeVCpyQHI=;
+  b=mf4fRUx7d6+nFUFNvriPbGZ6eJrKAsgiE3SzoPWfZ8g5pRnz2UeSIwFk
+   MPgcyw33817imUjnic/bi6RTxNTEfiS16JnHqUcizXWpTJ1hArLBhp8Bw
+   VWgIKd40L6kvr6sd8MNRFLSXpyoSfwy9uYrPDvvoKk3l79i7h4qbyKMMs
+   NhD7Ca8fNqkzvyN8a9fZrayOcUVWb2a4fiPMlRRZLerq70alwM8phG0SF
+   C0rz+vrR/TZi3EHfc8aiExbuccaKK6AXWFKP9YbRjTeJ3jP4tjL0QE1d9
+   ZThoAqD6MXWCd6xjb7ejYGkyieFVcYBEmK5IHjrNKD8CljtVnaaStg2TE
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,140,1643644800"; 
+   d="scan'208";a="192948255"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Feb 2022 12:00:04 +0800
+IronPort-SDR: d1bkg2lr6a6vawch+JyCeRTzRCQfAo5sW8Dyzi+06Bcq9xIa7Khrx2bSvGG7fXmRPIysJEXoM6
+ B08CAl9fpVoJSoebZD0vcBpXc7f1zExLzU1vO/ljCwTcTcj33IBg062a3AXFscZjIrfiuQf6s2
+ rP+a8c0Tk5AxbID3R1v2+GMfGTgfDzGQaAeR67AbM5/2O/tXXioFo6ZtA4t6PjLiuATFLsGYqJ
+ R5lIU81RvIiIvmxv4dmqr51zZUjBshZXheTdvUzQIWBeUQGvGjWTpNaA4bDpFUJ7T+qbbWxwT3
+ RN+N4UxEYZM70Qs3PhJgLnv2
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 19:31:31 -0800
+IronPort-SDR: VkRkzFEY0Sw7sthY46x7JXolsHdJbISb1mwvjEtmn171LNiOneqKCjsg+ENwh+olHt0WnO/024
+ Tj5rCdZDvfSySrqJhqK+lIGu3xRONQexTUGen5IRP0FU6F2mIlN7gAZS28XXT1/tEsoNbPeQzT
+ cZRSLZ0EIVey/Htj6L9h5+oUwrHP7qqNhI7yPcq3yX9hXU6I3d5oV44uuitw4uukQGJQxk1Kgk
+ F1ODZpO7fkD6rmQKPZu2m8UEq9vpnqvrtmQIPVRoG4FiZn2obt/5VL+IvLn7iXMI/WevhCyx4I
+ l4g=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Feb 2022 20:00:05 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K5qXh1p3Dz1SVp2
+        for <linux-scsi@vger.kernel.org>; Sat, 26 Feb 2022 20:00:04 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1645934403; x=1648526404; bh=+xrsuOI9TEYJqO66rOjju0qwmMM8tmROUCm
+        eVCpyQHI=; b=jk1YeFgsPfCpag0c2T6Oy7mM3oQ5g7iy2tDGelWSdpN3qQwMMXK
+        qZYW0NLhfY5+sxsbPtEHClAA8g1TaQ210PqaMA1o1kBA46Ja/NU6w3OY6A/WTiyh
+        Dh8Ba3PWulUDlK+6OfYAagahcf6chfwEPL5Cp8JhgWS4AJZOvMMiEhvtqQbbUnI3
+        CV+1wuIq+u6Nri/M1k51CHxnV9iqhhGfW0+iZ5me7sxcoGuzNJPhQyDb3vlx0gVI
+        Mp5OKG5S7JqJkV5+8w7QqNmLA+3WWkKVlGrQvbKfwMf1NA3kaPxcmPL+Q1SE5Z9L
+        WN1V4CEg4BtJdDmK6SJstmZhzHz8dd/Fv6Q==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id jaP32LwbT83n for <linux-scsi@vger.kernel.org>;
+        Sat, 26 Feb 2022 20:00:03 -0800 (PST)
+Received: from [10.225.33.67] (unknown [10.225.33.67])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K5qXd1TT3z1Rvlx;
+        Sat, 26 Feb 2022 20:00:00 -0800 (PST)
+Message-ID: <d81c76bd-36aa-4885-1f36-1aec17ab5098@opensource.wdc.com>
+Date:   Sun, 27 Feb 2022 12:59:57 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9129a874-5dc6-447d-8718-08d9f97c61ea
-X-MS-TrafficTypeDiagnostic: MW4PR10MB5750:EE_
-X-Microsoft-Antispam-PRVS: <MW4PR10MB5750675C7A3F0E1D294F26A7F13F9@MW4PR10MB5750.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FITltsYC1npAHWFsuAVLEZb6GazBmEkqKoFSCcj72A9LClcupE2ju6nylray/usxdvalgMZLGz4kO1It2j2EYrXE15hKarmFyb7Ujo2VaV7I7X0c8sa7LewWkteYZAN5nVgHYK4ZXlBcoeSYtzN33W/mFjIB/tGuIO8/EOUsUanGrQgs2dox4+kJq3m2TfeXmfNTrB+4pY3aRmbhgm5pNnLNuIUt/xYAfDvxgFNVL5DqiKlEuRUpL32ObqCDN4xLUAUItKtWagxYrnQGu6245Vn8OjQrRKdvIF75ykNv1cwVlKJlXoI0XlLx4ygwxXBb3OgfGHHNs8TSYD6l/hNTcssS4BZ0F9cPGE/t0NqfuA31HUNeOSQWQcvwPJ74lIiF92Lx48U/kkRiJjbcT3RAv3gUeqYhyIrZaGCKlFoKoBvIkp6fFOjrDE5g51nD58ene7HwMKZcO8VCrvrHzzCKZwsBltragR+i6FslcsPI7oNkU8ZaOxJMfrtxs8IcSZ6n9I8L7Hft3QJwHHHop6a0WTn08ehHOyIAtsq1sQkkhxEBKWnKRBadN5sC38AtRFaoVtZER3l4jcn6Pz4lXaruwuLlLtOjQuyy7Qf5UpBabsMdReMUZRL1KRNxqeg7awGVJGJ9jNEnL4w7W+xri9H0BRwJi7ADTc+x+MwrAJDcic/rtBiwWs3eRy6w1yi22240qGOtMrE/ckQGV7B8pMiolg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(1076003)(107886003)(2906002)(5660300002)(66946007)(4326008)(8676002)(36756003)(186003)(26005)(38350700002)(38100700002)(2616005)(66556008)(66476007)(6666004)(8936002)(6512007)(6486002)(52116002)(6506007)(83380400001)(86362001)(508600001)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QwTiUheFTWJiDG2YJvHCKcvCK6CwFE10DXiNFouAuJ8B/MAKzk1/HXKU+mzz?=
- =?us-ascii?Q?9F4U8EPKBMe+nTs7j5vIq/wZgRCAW06JCJd7WzVOyagRFiUPm2CTUFPfN8At?=
- =?us-ascii?Q?0L9uv/epvSSY+cFqiEqw6UAQ6t53dgfYFjxWGNDRVDN6tbxp5cQGc/O3bK6A?=
- =?us-ascii?Q?kwrkyZjfNXJ+OYlXodYWfzCgViw3GGP4lnOWlOPStITTuQh9UxZBIDHha2Kr?=
- =?us-ascii?Q?8B5Ccu+vedHEKQmBiQpDP3q5q0+NK6b/1dppA7sUJ6evC8U+fPUIx/OTazsi?=
- =?us-ascii?Q?GTboGlujtF91z2wMFN/cw5oCE00Z+ggBwjLrs0pflfLyY51NtztgfVGc8Gb/?=
- =?us-ascii?Q?6FaiJrLjAxWzrjQ8tRCqBD1DwuvJkseD8adlithj8qjqIJ0RP89sYzxqGuav?=
- =?us-ascii?Q?udeR5T5QoiyCX54ZX99I/L+gjfUAPVKnNvhNSSKQdR2GOqxPlygd+nOl5Zh4?=
- =?us-ascii?Q?VzmIzzc2wqQ80thTTt3RjYbQQaFA69OyiUy7bVGVzPrL5FrlW7Pv7WTKTwK/?=
- =?us-ascii?Q?ZUxOCfjOl89txyeEhIwqYyIUolzJWz2gJ4o5ocio7DZxaxYFRHLD0dn2HwI9?=
- =?us-ascii?Q?Sbu3LpltqRbTqg5R49qZQZfxHIrb8x+cv3KPPpTG/U370nL/dYCIlDez9Z3r?=
- =?us-ascii?Q?YZ6D4/RklOeXMco54XiWZ1tzLLgGe1McTXQb1b3TgxyyPnUOYjDR+b9+bHak?=
- =?us-ascii?Q?f13Msj3HPzymhOG0DKt9aqr8UxQ8vOC4DvRouz3Vy8+OubZgDayWtn1PuZAs?=
- =?us-ascii?Q?LgVJWs7zBKYaU+Cw9TBG+pKyZju9WeKtaX7wuJ64K8CDHBNc3hdJrs7IXbMh?=
- =?us-ascii?Q?uCmiR0+xD1l6KU+ckWFZBitcW/0CbiZ4msqOa527S9IMX08lZOU734AJrZ1H?=
- =?us-ascii?Q?cQE9tkzrrUGsgHSzbsbnIR+Z60wSTM9Jo+gFrG0WKUGgoriDUSf6xBRhUl8b?=
- =?us-ascii?Q?TYfIRKHx+bMjmqI8wszWHMTvVltyMBh86kEibK3MWVcb7Uvx1aYuOhU3tns6?=
- =?us-ascii?Q?LfgtpLimNBrCWHMlnGGfy55zICEG03CbieOpdsjdjRyJd/wSLXv2G1pxMmSZ?=
- =?us-ascii?Q?4uj6Pq2fGGWk4n6/AUFWS/4tadaK07ItG7S8q7uCLQe7QUl5sUXQFWArTgcZ?=
- =?us-ascii?Q?v1nClSTTb+PWEqDlY2CWmIUZMdBf9xlVV5VqMwr0LqxMKhqR1NMSlsijZQbi?=
- =?us-ascii?Q?qqlnrtpBWEV99MWauo58E/6jqxTgFSFC6yUdsW9prkPStS4h7J/q/L0XC3u+?=
- =?us-ascii?Q?t2lDnK2PweKbt22dSXYDZjwvaTeLtwN4KJs1kM5EZjWO+QzmqSoBIohq+9Ox?=
- =?us-ascii?Q?Nn95qwcjoGUz5NhQ/pkOgxKFkjlpT9LgC1hiVRg9aKNaIZsCUFpPhSLLonio?=
- =?us-ascii?Q?gGxmridujhIx/keeYfuGPASAtyzu1u5njvBY3R6D6CRTURZB28HTH7HrHc3V?=
- =?us-ascii?Q?+Pg3dZakXRapR3gFc7vyqFQgp5V1eMXfuiJ3NFXytIluodT+zUHiQOArv1W6?=
- =?us-ascii?Q?Xd14t7SrtYjMRtg874YmrYNNu3sdPOMCZRg6KQvClGJdZ6gbCceagVXJNTqR?=
- =?us-ascii?Q?m6vvfFL7SDDrYNMjExd0S6KU/UHdv7tqF8QBkY7tDJnAmxmsn7nhjSxx51U7?=
- =?us-ascii?Q?rc2nI40cVU51cE/Rt3zGhFHF757Jdn7ZKeqmpefzWU3+XJvDkklrB1MF3lg8?=
- =?us-ascii?Q?R9dLdQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9129a874-5dc6-447d-8718-08d9f97c61ea
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2022 23:04:46.5062
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nRoKdVK2j3OqnD+dC0ndFQdILcZbqzPpkT/GJb5e5DzSPjkyQoxK15QTLSrBvL5YPJ5i5XDjOOgxIcCtAe+Ujz8nfOCCML/Puv+ZVjV1hGU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB5750
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10270 signatures=684655
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
- mlxscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202260163
-X-Proofpoint-GUID: SijuU-eY7rTVe-WieGm_jEmWuVDNCWac
-X-Proofpoint-ORIG-GUID: SijuU-eY7rTVe-WieGm_jEmWuVDNCWac
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH v2 2/2] scsi: libsas: Use bool for queue_work() return
+ code
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     chenxiang66@hisilicon.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxarm@huawei.com
+References: <1645786656-221630-1-git-send-email-john.garry@huawei.com>
+ <1645786656-221630-3-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1645786656-221630-3-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When the workqueue code was created it didn't allow variable args so we
-have been using a temp buffer. Drop that.
+On 2022/02/25 19:57, John Garry wrote:
+> Function queue_work() returns a bool, so use a bool to hold this value
+> for the return code from callers, which should make the code a tiny bit
+> more clear.
+> 
+> Also take this opportunity to condense the code of the those callers, such
+> as sas_queue_work(), as suggested by Damien.
+> 
+> Signed-off-by: John Garry <john.garry@huawei.com>
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/scsi/libiscsi.c | 6 ++----
- include/scsi/libiscsi.h | 1 -
- 2 files changed, 2 insertions(+), 5 deletions(-)
+Looks good to me.
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 059dae8909ee..a75b85f0a189 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -2798,11 +2798,9 @@ struct Scsi_Host *iscsi_host_alloc(struct scsi_host_template *sht,
- 	ihost = shost_priv(shost);
- 
- 	if (xmit_can_sleep) {
--		snprintf(ihost->workq_name, sizeof(ihost->workq_name),
--			"iscsi_q_%d", shost->host_no);
--		ihost->workq = alloc_workqueue("%s",
-+		ihost->workq = alloc_workqueue("iscsi_q_%d",
- 			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND,
--			1, ihost->workq_name);
-+			1, shost->host_no);
- 		if (!ihost->workq)
- 			goto free_host;
- 	}
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index 4ee233e5a6ff..2d85810d1929 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -371,7 +371,6 @@ struct iscsi_host {
- 	int			state;
- 
- 	struct workqueue_struct	*workq;
--	char			workq_name[20];
- };
- 
- /*
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+
+> ---
+>  drivers/scsi/libsas/sas_event.c    | 30 +++++++++++-------------------
+>  drivers/scsi/libsas/sas_internal.h |  2 +-
+>  2 files changed, 12 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/scsi/libsas/sas_event.c b/drivers/scsi/libsas/sas_event.c
+> index 8ff58fd97837..f3a17191a4fe 100644
+> --- a/drivers/scsi/libsas/sas_event.c
+> +++ b/drivers/scsi/libsas/sas_event.c
+> @@ -10,29 +10,26 @@
+>  #include <scsi/scsi_host.h>
+>  #include "sas_internal.h"
+>  
+> -int sas_queue_work(struct sas_ha_struct *ha, struct sas_work *sw)
+> +bool sas_queue_work(struct sas_ha_struct *ha, struct sas_work *sw)
+>  {
+> -	/* it's added to the defer_q when draining so return succeed */
+> -	int rc = 1;
+> -
+>  	if (!test_bit(SAS_HA_REGISTERED, &ha->state))
+> -		return 0;
+> +		return false;
+>  
+>  	if (test_bit(SAS_HA_DRAINING, &ha->state)) {
+>  		/* add it to the defer list, if not already pending */
+>  		if (list_empty(&sw->drain_node))
+>  			list_add_tail(&sw->drain_node, &ha->defer_q);
+> -	} else
+> -		rc = queue_work(ha->event_q, &sw->work);
+> +		return true;
+> +	}
+>  
+> -	return rc;
+> +	return queue_work(ha->event_q, &sw->work);
+>  }
+>  
+> -static int sas_queue_event(int event, struct sas_work *work,
+> +static bool sas_queue_event(int event, struct sas_work *work,
+>  			    struct sas_ha_struct *ha)
+>  {
+>  	unsigned long flags;
+> -	int rc;
+> +	bool rc;
+>  
+>  	spin_lock_irqsave(&ha->lock, flags);
+>  	rc = sas_queue_work(ha, work);
+> @@ -44,13 +41,12 @@ static int sas_queue_event(int event, struct sas_work *work,
+>  void sas_queue_deferred_work(struct sas_ha_struct *ha)
+>  {
+>  	struct sas_work *sw, *_sw;
+> -	int ret;
+>  
+>  	spin_lock_irq(&ha->lock);
+>  	list_for_each_entry_safe(sw, _sw, &ha->defer_q, drain_node) {
+>  		list_del_init(&sw->drain_node);
+> -		ret = sas_queue_work(ha, sw);
+> -		if (ret != 1) {
+> +
+> +		if (!sas_queue_work(ha, sw)) {
+>  			pm_runtime_put(ha->dev);
+>  			sas_free_event(to_asd_sas_event(&sw->work));
+>  		}
+> @@ -170,7 +166,6 @@ void sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
+>  {
+>  	struct sas_ha_struct *ha = phy->ha;
+>  	struct asd_sas_event *ev;
+> -	int ret;
+>  
+>  	BUG_ON(event >= PORT_NUM_EVENTS);
+>  
+> @@ -186,8 +181,7 @@ void sas_notify_port_event(struct asd_sas_phy *phy, enum port_event event,
+>  	if (sas_defer_event(phy, ev))
+>  		return;
+>  
+> -	ret = sas_queue_event(event, &ev->work, ha);
+> -	if (ret != 1) {
+> +	if (!sas_queue_event(event, &ev->work, ha)) {
+>  		pm_runtime_put(ha->dev);
+>  		sas_free_event(ev);
+>  	}
+> @@ -199,7 +193,6 @@ void sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
+>  {
+>  	struct sas_ha_struct *ha = phy->ha;
+>  	struct asd_sas_event *ev;
+> -	int ret;
+>  
+>  	BUG_ON(event >= PHY_NUM_EVENTS);
+>  
+> @@ -215,8 +208,7 @@ void sas_notify_phy_event(struct asd_sas_phy *phy, enum phy_event event,
+>  	if (sas_defer_event(phy, ev))
+>  		return;
+>  
+> -	ret = sas_queue_event(event, &ev->work, ha);
+> -	if (ret != 1) {
+> +	if (!sas_queue_event(event, &ev->work, ha)) {
+>  		pm_runtime_put(ha->dev);
+>  		sas_free_event(ev);
+>  	}
+> diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
+> index 24843db2cb65..13d0ffaada93 100644
+> --- a/drivers/scsi/libsas/sas_internal.h
+> +++ b/drivers/scsi/libsas/sas_internal.h
+> @@ -67,7 +67,7 @@ void sas_porte_broadcast_rcvd(struct work_struct *work);
+>  void sas_porte_link_reset_err(struct work_struct *work);
+>  void sas_porte_timer_event(struct work_struct *work);
+>  void sas_porte_hard_reset(struct work_struct *work);
+> -int sas_queue_work(struct sas_ha_struct *ha, struct sas_work *sw);
+> +bool sas_queue_work(struct sas_ha_struct *ha, struct sas_work *sw);
+>  
+>  int sas_notify_lldd_dev_found(struct domain_device *);
+>  void sas_notify_lldd_dev_gone(struct domain_device *);
+
+
 -- 
-2.25.1
-
+Damien Le Moal
+Western Digital Research
