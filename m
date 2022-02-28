@@ -2,96 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BF24C6374
-	for <lists+linux-scsi@lfdr.de>; Mon, 28 Feb 2022 08:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F058F4C6396
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Feb 2022 08:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbiB1G66 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 28 Feb 2022 01:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S233538AbiB1HGl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 28 Feb 2022 02:06:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiB1G64 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Feb 2022 01:58:56 -0500
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E90649FA6
-        for <linux-scsi@vger.kernel.org>; Sun, 27 Feb 2022 22:58:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1646031498; x=1677567498;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=JwI15+J5tIEE90Bb8lbRkM3TdMbujXWpmsiRAFFM7Dc=;
-  b=M/Rfq8zMmVthH3xhwpBho1G6mj2uRp7QR3MqtCzHkTgV/mc87fK1TPFK
-   LKf0j3QZ5jFW2fjwmv4V5lpv0tVwTnkq9VEKVMmUlFZqZQtzukxsM6hLC
-   tOwaPbs3wl4E3FxGjQ5NqGE50UHbN94cYJ9vWr955n739+TftU7RK6/Hr
-   SLSFnpoXqkiCHwzgu5v+DuRpes3+bQiEAmJEo5FsVq2bswc/CNK5Jzrxr
-   48K+j/oXFrw8LGG31FgSHv2LgoulahmkLbVuxMdmWaSLQGfAXzncUi4SE
-   w7yBvA2Ks96SvZf6uOCMl1KXLb8ILcYMDK1vwqzbEet1tdE21Xri0Cega
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,142,1643644800"; 
-   d="scan'208";a="305986615"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Feb 2022 14:58:17 +0800
-IronPort-SDR: PspCHbYZxwHrIE8xR/uNGjo23f8d8nkoN56zgpGafMhy12BVU6P24qvw6WBQvxV+CGaaPm/1q8
- Y8KPsoP7mhtpmvuBC7jeH7aXnPcJ2aD+zHoPAzWkSs/pzJMmgOcPe5seL7ll+VL7UWkvUV008C
- dn874Cs/wbAx1BZEz0Cvce9iASlvaPU89CKvWfmxCTy4yJOIwAcnWQbeEFj7DeAXJ0O8zRJR8E
- /C4OLyFm8znEI71fU6Dkzn2JPXnoe8F36OxR/qgYTW+6vcYxmf8++lrZZI6FPmirWDlckJQ6s1
- vtoAl+cXIlJE5xoLcr5uUmVN
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 22:29:43 -0800
-IronPort-SDR: 2dh5lUmrmBrk78Z5cjWYjgz3NMVBRuDng5zS3FXsuzjKawTj1ewKzH4YLWgNSpUYwoIZg/ihnV
- ugot39he0EVyLNU5BO9ffz332zcKRQM/9PCFYV/peuKas6Qa3FieAYFITfpH8O1zFtkmzI0mZk
- 2uM2C1AoC3KG32W3AMODjnnAa8ALzkqABfNN1frA6JQweWYsLEyKuwLaRjm7HW+b/m+zQhtBAs
- h6ghweIzGboG5/voo5I6vGAh10RALz+ADLyU1aRt67d3JlST3qdAccbYclABydUJwovc0DdRr+
- HoA=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2022 22:58:18 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K6WRs2H3dz1Rwrw
-        for <linux-scsi@vger.kernel.org>; Sun, 27 Feb 2022 22:58:17 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1646031496; x=1648623497; bh=JwI15+J5tIEE90Bb8lbRkM3TdMbujXWpmsi
-        RAFFM7Dc=; b=UZr1IePUxCk0NcFbsbZpwJnj+U5xf1wuUUr7ipsUHPE3nqfXkaZ
-        qf/cNh4OKIzK47AEo4ddaxUTPwxZzbP5kxJW9ve0ZQ9vkv2BTORCqmbiz/juGq4/
-        txsS//AqWx84+2sVzCAOr8IKmvSku8pZ26HclSG87emJcobeL6EdqbB4at+OeYI5
-        xWnSFRgfSCSXqF93NH9H9KL9up43FrnlRYP5gshcWQqapfSr5UlVpDhbdMOZrsfr
-        pTHkexgGYMMXhPX75xhUVXXEQov7Xep/eCXezw/orcnbeUNqUtGU5e0rRkkJcCfM
-        aqPV0khDowIevvTui1f7pIVSRLf6m8jdo1Q==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id VtJmUTA_5UzU for <linux-scsi@vger.kernel.org>;
-        Sun, 27 Feb 2022 22:58:16 -0800 (PST)
-Received: from [10.225.33.67] (unknown [10.225.33.67])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K6WRp5vQZz1Rvlx;
-        Sun, 27 Feb 2022 22:58:14 -0800 (PST)
-Message-ID: <146bfd4a-a863-cfd4-6054-1c44439caea9@opensource.wdc.com>
-Date:   Mon, 28 Feb 2022 08:58:09 +0200
+        with ESMTP id S233521AbiB1HGg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Feb 2022 02:06:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854DE673D7;
+        Sun, 27 Feb 2022 23:05:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 366BEB80E45;
+        Mon, 28 Feb 2022 07:05:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8451C340F1;
+        Mon, 28 Feb 2022 07:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646031955;
+        bh=J36PJOgeTlo/05NdauMIt29rmiW4FJKTj7+qOHuMfFc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IumIuW+vVgoP+3OQ4WH1GFqGIjggezNH4IL7hlwsnnKf3QZVnSQX1TO7a4ProyA91
+         d5hKuLGtP7wZaeyqSp+Dxj4Z7IsOz30b/6y0kaYceIm9eZW1A4uGOHuWvErDK0Bh9+
+         Xl6wtXMqkI62g1nyjAd25aWIcoF1VogII6Qq9QGe9etGpzR1GEwGZjfaFzC4NDxGqa
+         IKMgBqoWGdAhT8gxdNtbgntTikva9p/b/9Yv5PwXipfMMExU+BXQA2g+F9Y/+rEMmk
+         T5KezDTKNRn9XOo9TzGXM1jdQoBkhSZFBVz1I3nnJsHAaZp9mKxnbPP6qllOTtJlv1
+         5NPu9TNQT4KGA==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-block@vger.kernel.org, linux-fscrypt@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com,
+        Gaurav Kashyap <quic_gaurkash@quicinc.com>,
+        Israel Rukshin <israelr@nvidia.com>
+Subject: [PATCH v5 0/3] Support for hardware-wrapped inline encryption keys
+Date:   Sun, 27 Feb 2022 23:05:17 -0800
+Message-Id: <20220228070520.74082-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH 1/2] scsi: scsi_debug: silence sparse unexpected unlock
- warnings
-Content-Language: en-US
-To:     dgilbert@interlog.com, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-References: <20220225084527.523038-1-damien.lemoal@opensource.wdc.com>
- <20220225084527.523038-2-damien.lemoal@opensource.wdc.com>
- <86e4fafa-f834-6fb5-2337-314a6078a480@interlog.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <86e4fafa-f834-6fb5-2337-314a6078a480@interlog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,151 +53,107 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2022/02/28 3:39, Douglas Gilbert wrote:
-> On 2022-02-25 03:45, Damien Le Moal wrote:
->> The return statement inside the sdeb_read_lock(), sdeb_read_unlock(),
->> sdeb_write_lock() and sdeb_write_unlock() confuse sparse, leading to
->> many warnings about unexpected unlocks in the resp_xxx() functions.
->>
->> Modify the lock/unlock functions using the __acquire() and __release()
->> inline annotations for the sdebug_no_rwlock == true case to avoid these
->> warnings.
-> 
-> I'm confused. The idea with sdebug_no_rwlock was that the application
-> may know that the protection afforded by the driver's rwlock is not
-> needed because locking is performed at a higher level (e.g. in the
-> user space). Hence there is no need to use a read-write lock (or a
-> full lock) in this driver to protect a read (say) against a co-incident
-> write to the same memory region. So this was a performance enhancement.
-> 
-> The proposed patch seems to be replacing a read-write lock with a full
-> lock. That would be going in the opposite direction to what I intended.
+[This patchset is based on v5.17-rc6.  It can also be retrieved from tag
+"wrapped-keys-v5" of https://git.kernel.org/pub/scm/fs/fscrypt/fscrypt.git]
 
-Not at all. The __acquire() and __release() calls are not locking functions.
-They are annotations for sparse so that we get a correct +/-1 counting of the
-lock/unlock calls. So there is no functional change here and no overhead added
-when compiling without C=1 since these macros disappear without sparse.
+This patchset adds block and fscrypt support for hardware-wrapped keys
+when the inline encryption hardware supports them.
 
-> 
-> If this is the only solution, a better idea might be to drop the
-> patch (in staging I think) that introduced the sdebug_no_rwlock option.
-> 
-> The sdebug_no_rwlock option has been pretty thoroughly tested (for over
-> a year) with memory to memory transfers (together with sgl to sgl
-> additions to lib/scatterlist.h). Haven't seen any unexplained crashes
-> that I could trace to this lack of locking. OTOH I haven't measured
-> any improvement of the copy speed either, that may be because my tests
-> are approaching the copy bandwidth of the ram.
-> 
-> 
-> Does sparse understand guard variables (e.g. like 'bool lock_taken')?
->  From what I've seen with sg3_utils Coverity doesn't, leading to many false
-> reports.
-> 
-> Doug Gilbert
-> 
->> Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
->> ---
->>   drivers/scsi/scsi_debug.c | 68 +++++++++++++++++++++++++--------------
->>   1 file changed, 44 insertions(+), 24 deletions(-)
->>
->> diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
->> index 0d25b30922ef..f4e97f2224b2 100644
->> --- a/drivers/scsi/scsi_debug.c
->> +++ b/drivers/scsi/scsi_debug.c
->> @@ -3167,45 +3167,65 @@ static int prot_verify_read(struct scsi_cmnd *scp, sector_t start_sec,
->>   static inline void
->>   sdeb_read_lock(struct sdeb_store_info *sip)
->>   {
->> -	if (sdebug_no_rwlock)
->> -		return;
->> -	if (sip)
->> -		read_lock(&sip->macc_lck);
->> -	else
->> -		read_lock(&sdeb_fake_rw_lck);
->> +	if (sdebug_no_rwlock) {
->> +		if (sip)
->> +			__acquire(&sip->macc_lck);
->> +		else
->> +			__acquire(&sdeb_fake_rw_lck);
->> +	} else {
->> +		if (sip)
->> +			read_lock(&sip->macc_lck);
->> +		else
->> +			read_lock(&sdeb_fake_rw_lck);
->> +	}
->>   }
->>   
->>   static inline void
->>   sdeb_read_unlock(struct sdeb_store_info *sip)
->>   {
->> -	if (sdebug_no_rwlock)
->> -		return;
->> -	if (sip)
->> -		read_unlock(&sip->macc_lck);
->> -	else
->> -		read_unlock(&sdeb_fake_rw_lck);
->> +	if (sdebug_no_rwlock) {
->> +		if (sip)
->> +			__release(&sip->macc_lck);
->> +		else
->> +			__release(&sdeb_fake_rw_lck);
->> +	} else {
->> +		if (sip)
->> +			read_unlock(&sip->macc_lck);
->> +		else
->> +			read_unlock(&sdeb_fake_rw_lck);
->> +	}
->>   }
->>   
->>   static inline void
->>   sdeb_write_lock(struct sdeb_store_info *sip)
->>   {
->> -	if (sdebug_no_rwlock)
->> -		return;
->> -	if (sip)
->> -		write_lock(&sip->macc_lck);
->> -	else
->> -		write_lock(&sdeb_fake_rw_lck);
->> +	if (sdebug_no_rwlock) {
->> +		if (sip)
->> +			__acquire(&sip->macc_lck);
->> +		else
->> +			__acquire(&sdeb_fake_rw_lck);
->> +	} else {
->> +		if (sip)
->> +			write_lock(&sip->macc_lck);
->> +		else
->> +			write_lock(&sdeb_fake_rw_lck);
->> +	}
->>   }
->>   
->>   static inline void
->>   sdeb_write_unlock(struct sdeb_store_info *sip)
->>   {
->> -	if (sdebug_no_rwlock)
->> -		return;
->> -	if (sip)
->> -		write_unlock(&sip->macc_lck);
->> -	else
->> -		write_unlock(&sdeb_fake_rw_lck);
->> +	if (sdebug_no_rwlock) {
->> +		if (sip)
->> +			__release(&sip->macc_lck);
->> +		else
->> +			__release(&sdeb_fake_rw_lck);
->> +	} else {
->> +		if (sip)
->> +			write_unlock(&sip->macc_lck);
->> +		else
->> +			write_unlock(&sdeb_fake_rw_lck);
->> +	}
->>   }
->>   
->>   static int resp_read_dt0(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
-> 
+Hardware-wrapped keys are inline encryption keys that are wrapped
+(encrypted) by a key internal to the hardware.  The wrapping key is an
+ephemeral per-boot key, except at initial unlocking time.
+Hardware-wrapped keys can only be unwrapped (decrypted) by the hardware,
+e.g. when a key is programmed into a keyslot.  They are never visible to
+software in raw form, except optionally during key generation.  The
+hardware supports importing keys as well as generating keys itself.
+
+This feature protects encryption keys from read-only compromises of
+kernel memory, such as that which can occur during a cold boot attack.
+It does this without limiting the number of keys that can be used, as
+would be the case with solutions that didn't use key wrapping.
+
+Hardware supporting this feature is present on recent Qualcomm SoCs
+(SM8350 and later) as well as on the Google Tensor SoC.
+
+This patchset is organized as follows:
+
+- Patch 1 adds the block support and documentation, excluding the ioctls
+  needed to get a key ready to be used in the first place.
+
+- Patch 2 adds new block device ioctls for importing, generating, and
+  preparing hardware-wrapped keys.
+
+- Patch 3 adds the fscrypt support and documentation.
+
+For full details, see the individual patches, especially the detailed
+documentation they add to Documentation/block/inline-encryption.rst and
+Documentation/filesystems/fscrypt.rst.
+
+This feature also requires UFS driver changes.  For Qualcomm SoCs, these
+are being worked on at
+https://lore.kernel.org/linux-scsi/20211206225725.77512-1-quic_gaurkash@quicinc.com/T/#u.
+I've verified that this feature works end-to-end on the SM8350 HDK with
+the upstream kernel with these two patchsets applied.  (One caveat is
+that a custom TrustZone image needs to be flashed to the board too; I
+understand that Qualcomm is working on addressing that.)
+
+I've also written xfstests which verify that this feature encrypts files
+correctly.  These tests can currently be found at
+https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/xfstests-dev.git/log/?h=wip-wrapped-keys.
+I'll be sending these tests in a separate patchset.
+
+Changed v4 => v5:
+    - Dropped the RFC tag, now that these patches are actually testable.
+    - Split the BLKCRYPTOCREATEKEY ioctl into BLKCRYPTOIMPORTKEY and
+      BLKCRYPTOGENERATEKEY.  (I'm thinking that these operations are
+      distinct enough that two separate ioctls would be best.)
+    - Added some warning messages in fscrypt_derive_sw_secret().
+    - Rebased onto v5.17-rc6.
+
+Changed v3 => v4:
+    - Rebased onto v5.16-rc1 and dropped a few bits that were upstreamed.
+    - Updated cover letter to link to Gaurav's UFS driver patchset.
+
+Changed v2 => v3:
+    - Dropped some fscrypt cleanups that were applied.
+    - Rebased on top of the latest linux-block and fscrypt branches.
+    - Minor cleanups.
+
+Changed v1 => v2:
+    - Added new ioctls for creating and preparing hardware-wrapped keys.
+    - Rebased onto my patchset which renames blk_keyslot_manager to
+      blk_crypto_profile.
+
+Eric Biggers (3):
+  block: add basic hardware-wrapped key support
+  block: add ioctls to create and prepare hardware-wrapped keys
+  fscrypt: add support for hardware-wrapped keys
+
+ Documentation/block/inline-encryption.rst | 241 +++++++++++++++++++++-
+ Documentation/filesystems/fscrypt.rst     | 154 ++++++++++++--
+ block/blk-crypto-fallback.c               |   5 +-
+ block/blk-crypto-internal.h               |  10 +
+ block/blk-crypto-profile.c                |  97 +++++++++
+ block/blk-crypto.c                        | 190 ++++++++++++++++-
+ block/ioctl.c                             |   5 +
+ drivers/md/dm-table.c                     |   1 +
+ drivers/mmc/host/cqhci-crypto.c           |   2 +
+ drivers/scsi/ufs/ufshcd-crypto.c          |   1 +
+ fs/crypto/fscrypt_private.h               |  72 ++++++-
+ fs/crypto/hkdf.c                          |   4 +-
+ fs/crypto/inline_crypt.c                  |  75 ++++++-
+ fs/crypto/keyring.c                       | 119 ++++++++---
+ fs/crypto/keysetup.c                      |  71 ++++++-
+ fs/crypto/keysetup_v1.c                   |   5 +-
+ fs/crypto/policy.c                        |  11 +-
+ include/linux/blk-crypto-profile.h        |  80 +++++++
+ include/linux/blk-crypto.h                |  70 ++++++-
+ include/uapi/linux/fs.h                   |  26 +++
+ include/uapi/linux/fscrypt.h              |   7 +-
+ 21 files changed, 1153 insertions(+), 93 deletions(-)
 
 
+base-commit: 7e57714cd0ad2d5bb90e50b5096a0e671dec1ef3
 -- 
-Damien Le Moal
-Western Digital Research
+2.35.1
+
