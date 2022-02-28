@@ -2,154 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C124C7A2A
-	for <lists+linux-scsi@lfdr.de>; Mon, 28 Feb 2022 21:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE774C7991
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Feb 2022 21:09:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbiB1ULy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 28 Feb 2022 15:11:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        id S230013AbiB1UHJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 28 Feb 2022 15:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiB1ULx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Feb 2022 15:11:53 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167668B6F4
-        for <linux-scsi@vger.kernel.org>; Mon, 28 Feb 2022 12:11:14 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id m14so23321719lfu.4
-        for <linux-scsi@vger.kernel.org>; Mon, 28 Feb 2022 12:11:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uod9R4vPcpqIjzHofeC96qXcIXUlGW+U5alvKq7K0ZA=;
-        b=Y+K+LAchMzIcesbCiqrzhisJgvbUIKYh3oFG/AlZJTKul1K9rRfHylHsN/EgM8hdwz
-         P3hABFpC0Wcw+/0V4cKR5X0P787Wy9QwMeL5ORY50P9+oNZqmMp6NkFq4yV6NAIkP79C
-         0bvk8ZnwfFSPqzKfD7Qqea+fs2YLRTaNcLanw=
+        with ESMTP id S230009AbiB1UHG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Feb 2022 15:07:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E00B4BBA6
+        for <linux-scsi@vger.kernel.org>; Mon, 28 Feb 2022 12:06:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646078784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dQMJKjvnmYnFunMilAShMLK8B75BOippUXgb1Xv5vI4=;
+        b=UoQjcvFULNVO9UOntTOjbjJNHK9Oii34iQ7Q8zQ3qNECgaIQyHRUkgyiIiSBkHX1YxQhPg
+        n5otMTRXCuvcKZJ1nTtj1aMickUw0uC6v3VwThY6azzEJdwqr4ko0Yor/TI6YESAso+VNv
+        UEdnoV6c8bD0h4FUWzOlpN0QAiSsXW8=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-38-Fe4Vl35FNwWJQUJcdoO4jw-1; Mon, 28 Feb 2022 15:06:21 -0500
+X-MC-Unique: Fe4Vl35FNwWJQUJcdoO4jw-1
+Received: by mail-qk1-f197.google.com with SMTP id u17-20020a05620a431100b004765c0dc33cso12236402qko.14
+        for <linux-scsi@vger.kernel.org>; Mon, 28 Feb 2022 12:06:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uod9R4vPcpqIjzHofeC96qXcIXUlGW+U5alvKq7K0ZA=;
-        b=n0vRBRsdV862DsM0TqJimCRxGQCf0UT5WUMovuIRdyeIe2HS6uWolBHPA4ZITfbvof
-         GpTuH317isLPymCpjs1hj0w3gewWJ1aFB3EcIoRcV5YtWNX16JK6fwWt3goEOrcZ0AvE
-         TtCl5+YpA7KZBVkkT6ZCq6RnW8VGNkniJ/l3b1ps4qGwfGuXeJMQYcmLsiYUbsr2IfeT
-         v+FD/bdl+/VvHspLAzcKXx3gU4q7dpTkxgRxZZduZgknWAEcX63e3Z8YnL6rnKZ75Fvs
-         FRUxBG9bc1NybQD4EMlRwafMyW1UIlFo4+lNTjBUtR+dAOuJpVlhoY/QyfNdWZ5rBdAx
-         9/8g==
-X-Gm-Message-State: AOAM533QWIlZFfaPigEr7tphYyPIiIiGAjiY8jUq+umaEPh2NhiBJCAG
-        zh07xN2bMlxyhdJnHSAvLAyheacBsSanSHlcRyQ=
-X-Google-Smtp-Source: ABdhPJx2Ddar5u3X8+/6ncjUT8fcJQ38/sghYEy0h2ehjZj6v5XUCtb4jeivaOLZDEU34IWllZ62bA==
-X-Received: by 2002:a19:771e:0:b0:444:23b0:c379 with SMTP id s30-20020a19771e000000b0044423b0c379mr13645072lfc.188.1646079072197;
-        Mon, 28 Feb 2022 12:11:12 -0800 (PST)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id g23-20020ac24d97000000b004433c8459a6sm1117623lfe.157.2022.02.28.12.11.11
-        for <linux-scsi@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dQMJKjvnmYnFunMilAShMLK8B75BOippUXgb1Xv5vI4=;
+        b=dTiNGftxH5DOTIOqtz6brqlJPWbutyK2MJW/O+Gzj4EcJ/y1A/PG7igIe+DAFaHeg2
+         Uvu2r44gM69SHBZGfyA+S30WJNI9fKV8Z9ZI1lHwXJVFX8hd37MXb6uypIcI7dNkrAeH
+         OBP8P+44bJWUlKoUbRyeezI88nbjJySX4DII6I56mhb5tA0s3yDogDnaxS3EPgCtsiwg
+         hFl7SSiVmkYdGIzilI1xni9PUZ+mR+j7oW9YBfwZPMXXse4p1XKdMsEikXlPCN6BknpC
+         JMuSxsoTHLRAuyfySal558ZF3g5DZ8OZ17AvmWDN4ysQmpRcsCTs0Qghc0r8RX4QN0K0
+         +0ag==
+X-Gm-Message-State: AOAM531oRgXo9T74AncnS/5P5HbPzDS0oIgN9THjTXjPSBK5Um3tBMBu
+        eJm5PZ/uWpVZ314ad8kUbht/B9NF8ImQmh63qzPeR2HTDlk9GHrjBglT0w8XX2LWCfPkZVR3ga/
+        NWFSDXb4oULFHt3VAwyvP+w==
+X-Received: by 2002:a05:6214:a8a:b0:430:8fbc:6be2 with SMTP id ev10-20020a0562140a8a00b004308fbc6be2mr15550984qvb.7.1646078781039;
+        Mon, 28 Feb 2022 12:06:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzv/l5V6+aspgKzPPYNn/6mZxZxpc5NV2ZUlWrXVmqVoITHSQKq1Z/io3a7hCxknMhOy2O0ng==
+X-Received: by 2002:a05:6214:a8a:b0:430:8fbc:6be2 with SMTP id ev10-20020a0562140a8a00b004308fbc6be2mr15550967qvb.7.1646078780836;
+        Mon, 28 Feb 2022 12:06:20 -0800 (PST)
+Received: from [192.168.0.14] (97-120-59-83.ptld.qwest.net. [97.120.59.83])
+        by smtp.gmail.com with ESMTPSA id y17-20020a376411000000b006490deb56b2sm5427984qkb.1.2022.02.28.12.06.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 12:11:11 -0800 (PST)
-Received: by mail-lf1-f48.google.com with SMTP id t13so11309986lfd.9
-        for <linux-scsi@vger.kernel.org>; Mon, 28 Feb 2022 12:11:11 -0800 (PST)
-X-Received: by 2002:ac2:44a4:0:b0:445:8fc5:a12a with SMTP id
- c4-20020ac244a4000000b004458fc5a12amr7653619lfm.27.1646078630855; Mon, 28 Feb
- 2022 12:03:50 -0800 (PST)
+        Mon, 28 Feb 2022 12:06:20 -0800 (PST)
+Message-ID: <1cc496ed-a023-9a06-72eb-fc0fb98025e5@redhat.com>
+Date:   Mon, 28 Feb 2022 12:06:18 -0800
 MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 28 Feb 2022 12:03:34 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
-Message-ID: <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/6] scsi: iscsi: Fix recovery and ublocking race.
+Content-Language: en-US
+To:     Mike Christie <michael.christie@oracle.com>,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        mrangankar@marvell.com, njavali@marvell.com,
+        GR-QLogic-Storage-Upstream@marvell.com, lduncan@suse.com,
+        liuzhengyuang521@gmail.com
+References: <20220226230435.38733-1-michael.christie@oracle.com>
+ <20220226230435.38733-2-michael.christie@oracle.com>
+From:   Chris Leech <cleech@redhat.com>
+In-Reply-To: <20220226230435.38733-2-michael.christie@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 11:56 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I do wish we could actually poison the 'pos' value after the loop
-> somehow - but clearly the "might be uninitialized" I was hoping for
-> isn't the way to do it.
+On 2/26/22 3:04 PM, Mike Christie wrote:
+> If the user sets the iscsi_eh_timer_workq/iscsi_eh workqueue's max_active
+> to greater than 1, the recovery_work could be running when
+> __iscsi_unblock_session runs. The cancel_delayed_work will then not wait
+> for the running work and we can race where we end up with the wrong
+> session state and scsi_device state set.
+> 
+> This replaces the cancel_delayed_work with the sync version.
+> 
+> Signed-off-by: Mike Christie <michael.christie@oracle.com>
+> ---
+>  drivers/scsi/scsi_transport_iscsi.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+> index 554b6f784223..c58126e8cd88 100644
+> --- a/drivers/scsi/scsi_transport_iscsi.c
+> +++ b/drivers/scsi/scsi_transport_iscsi.c
+> @@ -1917,11 +1917,8 @@ static void __iscsi_unblock_session(struct work_struct *work)
+>  	unsigned long flags;
+>  
+>  	ISCSI_DBG_TRANS_SESSION(session, "Unblocking session\n");
+> -	/*
+> -	 * The recovery and unblock work get run from the same workqueue,
+> -	 * so try to cancel it if it was going to run after this unblock.
+> -	 */
+> -	cancel_delayed_work(&session->recovery_work);
+> +
+> +	cancel_delayed_work_sync(&session->recovery_work);
+>  	spin_lock_irqsave(&session->lock, flags);
+>  	session->state = ISCSI_SESSION_LOGGED_IN;
+>  	spin_unlock_irqrestore(&session->lock, flags);
 
-Side note: we do need *some* way to do it.
+Looks good to me,
 
-Because if we make that change, and only set it to another pointer
-when not the head, then we very much change the semantics of
-"list_for_each_head()". The "list was empty" case would now exit with
-'pos' not set at all (or set to NULL if we add that). Or it would be
-set to the last entry.
+Reviewed-by: Chris Leech <cleech@redhat.com>
 
-And regardless, that means that all the
-
-        if (pos == head)
-
-kinds of checks after the loop would be fundamentally broken.
-
-Darn. I really hoped for (and naively expected) that we could actually
-have the compiler warn about the use-after-loop case. That whole
-"compiler will now complain about bad use" was integral to my clever
-plan to use the C99 feature of declaring the iterator inside the loop.
-
-But my "clever plan" was apparently some ACME-level Wile E. Coyote sh*t.
-
-Darn.
-
-                   Linus
