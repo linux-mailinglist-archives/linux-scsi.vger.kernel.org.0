@@ -2,61 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83034C8E05
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Mar 2022 15:40:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E57D4C8F71
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Mar 2022 16:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbiCAOkt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Mar 2022 09:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
+        id S234126AbiCAPxd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Mar 2022 10:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbiCAOkr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Mar 2022 09:40:47 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51510630B
-        for <linux-scsi@vger.kernel.org>; Tue,  1 Mar 2022 06:40:04 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id F2E0F1F8A6;
-        Tue,  1 Mar 2022 14:40:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1646145602; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jU5dO8yW/zX264uLAxDn+GCDGtKpgTwgXLS6EYa1LFs=;
-        b=CxhigvOIDxyI1zNdYw7gc+gZid2aWbzHJ3W9PKPGF3l0iLGHaQnHNI8LAglbP9ytg7HGKB
-        aC/q6Z8GZipcBJO0BtugHVcNLVgk9ro5kZpwTXqvt8lYGpaINdpNUTlFZ3DpcxIb6E1cZY
-        wSTFezMqi+TNimvZo1anCWdN+1G7HfE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1646145602;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jU5dO8yW/zX264uLAxDn+GCDGtKpgTwgXLS6EYa1LFs=;
-        b=YH0mk6X/1jI5Qjt3vfOdZCiN8neD39TgCpC7/ZUJjgQVq6iabdwbosLzjzjTntk7FaRvXq
-        E1CVhmhX90sGgDDQ==
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id EA616A3B8D;
-        Tue,  1 Mar 2022 14:40:02 +0000 (UTC)
-Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id DBB3351933DA; Tue,  1 Mar 2022 15:40:02 +0100 (CET)
-From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
+        with ESMTP id S230374AbiCAPxc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Mar 2022 10:53:32 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1A38BE11
+        for <linux-scsi@vger.kernel.org>; Tue,  1 Mar 2022 07:52:50 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 55D2C68AFE; Tue,  1 Mar 2022 16:52:47 +0100 (CET)
+Date:   Tue, 1 Mar 2022 16:52:47 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 4/4] aic79xx: do not reference scsi command when resetting device
-Date:   Tue,  1 Mar 2022 15:39:57 +0100
-Message-Id: <20220301143957.40998-5-hare@suse.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220301143957.40998-1-hare@suse.de>
-References: <20220301143957.40998-1-hare@suse.de>
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+Subject: Re: [PATCH 1/4] aic7xxx: use scsi device as argument for
+ BUILD_SCSIID()
+Message-ID: <20220301155247.GA6667@lst.de>
+References: <20220301143957.40998-1-hare@suse.de> <20220301143957.40998-2-hare@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301143957.40998-2-hare@suse.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,60 +41,31 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When sending a device reset we should not take a reference to the
-scsi command.
+On Tue, Mar 01, 2022 at 03:39:54PM +0100, Hannes Reinecke wrote:
+> Signed-off-by: Hannes Reinecke <hare@suse.com>
+> ---
+>  drivers/scsi/aic7xxx/aic7xxx_osm.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm.c b/drivers/scsi/aic7xxx/aic7xxx_osm.c
+> index d3b1082654d5..16d7a7310e90 100644
+> --- a/drivers/scsi/aic7xxx/aic7xxx_osm.c
+> +++ b/drivers/scsi/aic7xxx/aic7xxx_osm.c
+> @@ -799,10 +799,10 @@ struct scsi_host_template aic7xxx_driver_template = {
+>  /**************************** Tasklet Handler *********************************/
+>  
+>  /******************************** Macros **************************************/
+> -#define BUILD_SCSIID(ahc, cmd)						    \
+> -	((((cmd)->device->id << TID_SHIFT) & TID)			    \
+> -	| (((cmd)->device->channel == 0) ? (ahc)->our_id : (ahc)->our_id_b) \
+> -	| (((cmd)->device->channel == 0) ? 0 : TWIN_CHNLB))
+> +#define BUILD_SCSIID(ahc, sdev)						    \
+> +	((((sdev)->id << TID_SHIFT) & TID)			    \
+> +	| (((sdev)->channel == 0) ? (ahc)->our_id : (ahc)->our_id_b) \
+> +	| (((sdev)->channel == 0) ? 0 : TWIN_CHNLB))
 
-Signed-off-by: Hannes Reinecke <hare@suse.com>
----
- drivers/scsi/aic7xxx/aic79xx_osm.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+How about converting this to a function while you're at it?
 
-diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic79xx_osm.c
-index f900ed05f36a..b7b19fd8a2e3 100644
---- a/drivers/scsi/aic7xxx/aic79xx_osm.c
-+++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
-@@ -536,8 +536,10 @@ ahd_linux_unmap_scb(struct ahd_softc *ahd, struct scb *scb)
- 	struct scsi_cmnd *cmd;
- 
- 	cmd = scb->io_ctx;
--	ahd_sync_sglist(ahd, scb, BUS_DMASYNC_POSTWRITE);
--	scsi_dma_unmap(cmd);
-+	if (cmd) {
-+		ahd_sync_sglist(ahd, scb, BUS_DMASYNC_POSTWRITE);
-+		scsi_dma_unmap(cmd);
-+	}
- }
- 
- /******************************** Macros **************************************/
-@@ -811,7 +813,7 @@ ahd_linux_dev_reset(struct scsi_cmnd *cmd)
- 
- 	tinfo = ahd_fetch_transinfo(ahd, 'A', ahd->our_id,
- 				    cmd->device->id, &tstate);
--	reset_scb->io_ctx = cmd;
-+	reset_scb->io_ctx = NULL;
- 	reset_scb->platform_data->dev = dev;
- 	reset_scb->sg_count = 0;
- 	ahd_set_residual(reset_scb, 0);
-@@ -1766,9 +1768,16 @@ ahd_done(struct ahd_softc *ahd, struct scb *scb)
- 	dev = scb->platform_data->dev;
- 	dev->active--;
- 	dev->openings++;
--	if ((cmd->result & (CAM_DEV_QFRZN << 16)) != 0) {
--		cmd->result &= ~(CAM_DEV_QFRZN << 16);
--		dev->qfrozen--;
-+	if (cmd) {
-+		if ((cmd->result & (CAM_DEV_QFRZN << 16)) != 0) {
-+			cmd->result &= ~(CAM_DEV_QFRZN << 16);
-+			dev->qfrozen--;
-+		}
-+	} else if (scb->flags & SCB_DEVICE_RESET) {
-+		if (ahd->platform_data->eh_done)
-+			complete(ahd->platform_data->eh_done);
-+		ahd_free_scb(ahd, scb);
-+		return;
- 	}
- 	ahd_linux_unmap_scb(ahd, scb);
- 
--- 
-2.29.2
+Otherwise this looks good.
 
+Same comment for aic79xx.
