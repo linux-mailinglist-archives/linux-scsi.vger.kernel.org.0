@@ -2,21 +2,21 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297484C8F7A
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Mar 2022 16:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E797A4C8F7B
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Mar 2022 16:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235731AbiCAP4f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Mar 2022 10:56:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
+        id S235847AbiCAP4w (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Mar 2022 10:56:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234686AbiCAP4f (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Mar 2022 10:56:35 -0500
+        with ESMTP id S234686AbiCAP4v (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Mar 2022 10:56:51 -0500
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE043BBE2
-        for <linux-scsi@vger.kernel.org>; Tue,  1 Mar 2022 07:55:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A224E3BBE2
+        for <linux-scsi@vger.kernel.org>; Tue,  1 Mar 2022 07:56:10 -0800 (PST)
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 86DE868BEB; Tue,  1 Mar 2022 16:55:51 +0100 (CET)
-Date:   Tue, 1 Mar 2022 16:55:51 +0100
+        id 0F69568BEB; Tue,  1 Mar 2022 16:56:07 +0100 (CET)
+Date:   Tue, 1 Mar 2022 16:56:07 +0100
 From:   Christoph Hellwig <hch@lst.de>
 To:     Hannes Reinecke <hare@suse.de>
 Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
@@ -25,14 +25,14 @@ Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>,
         James Smart <jsmart2021@gmail.com>,
         James Smart <james.smart@broadcom.com>
-Subject: Re: [PATCH 4/5] lpfc: use rport as argument for
- lpfc_send_taskmgmt()
-Message-ID: <20220301155551.GC6717@lst.de>
-References: <20220301143718.40913-1-hare@suse.de> <20220301143718.40913-5-hare@suse.de>
+Subject: Re: [PATCH 5/5] lpfc: use rport as argument for
+ lpfc_chk_tgt_mapped()
+Message-ID: <20220301155607.GD6717@lst.de>
+References: <20220301143718.40913-1-hare@suse.de> <20220301143718.40913-6-hare@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220301143718.40913-5-hare@suse.de>
+In-Reply-To: <20220301143718.40913-6-hare@suse.de>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
