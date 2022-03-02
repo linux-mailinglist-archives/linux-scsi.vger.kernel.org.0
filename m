@@ -2,97 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7904C9CE6
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Mar 2022 06:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB294C9CF9
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Mar 2022 06:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233802AbiCBFGM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Mar 2022 00:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S237736AbiCBFOX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Mar 2022 00:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiCBFGK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Mar 2022 00:06:10 -0500
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFD3A1462;
-        Tue,  1 Mar 2022 21:05:27 -0800 (PST)
-Received: by mail-pg1-f170.google.com with SMTP id 195so677207pgc.6;
-        Tue, 01 Mar 2022 21:05:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=grFy95UMmw6XvQWZ5Vr9x+TwK2mEpVY3Ui9h0IeBjZ4=;
-        b=c5V3UY2MeQAyynpduQCeeqcvHx+3tZiV8/JtKjLA7/ZBiDuSzK6+cRXmOFzvjufAe0
-         q3TPZBIljjorACDi844klOn0pY1EcxOeqXeUDzwhL8wT8UvOmP00FRrCDq0k8ZD/aoCC
-         /8EKXyyX9T4JhmiKnpdl8miTRPhQURXbUdIEE+EIboXzh0ardtMtZ5zoYtZTpbdW3CO5
-         h2KSRGgy4jsucXbUrQqb90P0+NP8q4HOfNqM5ofvqO94GTRadvkzl4TjDP18uAalQHpL
-         Uoc0dkxixiAg6sNGJtPRspza8rvLkFjAUVgXCZxfeyC9SZKwq8+JHHJeENKzqyRu1g0i
-         FvRw==
-X-Gm-Message-State: AOAM532e4hbfhDLCGS3zCAaCBydGUYGhNWguamgTbCuhC4XzOIIlW2gh
-        VI1Qv24dFMHkDzAozKnKXDXzHHEJyCsYGg==
-X-Google-Smtp-Source: ABdhPJzF/kXNU/ZHajn5wh6Te0YLvbIb4Sj2XeBYEqdx1dObioM/pdgrxoOY8j+rwSnDCg0PPOPkeA==
-X-Received: by 2002:a05:6a00:1a04:b0:4e1:786c:cce3 with SMTP id g4-20020a056a001a0400b004e1786ccce3mr31231669pfv.81.1646197527155;
-        Tue, 01 Mar 2022 21:05:27 -0800 (PST)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id 132-20020a62168a000000b004f40e8b3133sm3755946pfw.188.2022.03.01.21.05.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 21:05:26 -0800 (PST)
-Message-ID: <c61b6a0d-c3b5-30e2-14c5-efa7ea475c23@acm.org>
-Date:   Tue, 1 Mar 2022 21:05:24 -0800
+        with ESMTP id S238681AbiCBFOV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Mar 2022 00:14:21 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B94419286
+        for <linux-scsi@vger.kernel.org>; Tue,  1 Mar 2022 21:13:38 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2222xuo5014684;
+        Wed, 2 Mar 2022 05:13:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=aCN9NflAAMvdFGaYbnVP+UXNoWWs88uwgRUsQ9PCDnc=;
+ b=QunudFvpePuljK8tdaZOI1zfzDdopTX9/LqIQy3ZVH70Fn6lPJpRgONHEx9w57+LhZxG
+ Ism4r/SrEdQEbCjzyXfN5+/B5xYZKmYV5af869EBBrphlC+8D4Qg91AfsovOXPv7XVBx
+ 8c39ofXv43j0fC1qJAs8X49iAoudKg4PPXr1GHQsyG1hdyvBjXXOAQH7oxFvJA1+Ytcd
+ q/uIPP1xCp8xsWr5ZUwyFXMrob9Dnz7gmGXgYTvlGo20OiEcfQuSkfaBgoKW9V/mz3Be
+ RHM6AZPxoGWh5zpZpzBDYyxiYSlt9b/uunbnWsjt3NmSzdQcrSRy4tVioj+xFiaQU1hp ig== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3eh15amp2k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Mar 2022 05:13:33 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2225C1xP175274;
+        Wed, 2 Mar 2022 05:13:31 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3030.oracle.com with ESMTP id 3ef9ayxgea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Mar 2022 05:13:31 +0000
+Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2225DVPG178145;
+        Wed, 2 Mar 2022 05:13:31 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by userp3030.oracle.com with ESMTP id 3ef9ayxgcv-1;
+        Wed, 02 Mar 2022 05:13:31 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     linux-scsi@vger.kernel.org, Ajish Koshy <Ajish.Koshy@microchip.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jinpu Wang <jinpu.wang@cloud.ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Viswas.G@microchip.com, Vasanthalakshmi.Tharmarajan@microchip.com
+Subject: Re: [PATCH v2] scsi: pm80xx: handle non-fatal errors
+Date:   Wed,  2 Mar 2022 00:13:19 -0500
+Message-Id: <164619702112.16127.1049773029089570035.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220222092618.108198-1-Ajish.Koshy@microchip.com>
+References: <20220222092618.108198-1-Ajish.Koshy@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: move more work to disk_release v2
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-References: <20220227172144.508118-1-hch@lst.de>
- <741e087a-43f8-dc90-b679-7865cf503ac3@acm.org> <20220301125632.GA3911@lst.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220301125632.GA3911@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: DbOhKrBVqvEWYtS7ed8tQuZwEZDEa1UW
+X-Proofpoint-GUID: DbOhKrBVqvEWYtS7ed8tQuZwEZDEa1UW
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 3/1/22 04:56, Christoph Hellwig wrote:
-> On Sun, Feb 27, 2022 at 03:18:24PM -0800, Bart Van Assche wrote:
->> The second issue I run into with this branch is as follows
->> (also for nvmeof-mp/002):
+On Tue, 22 Feb 2022 14:56:18 +0530, Ajish Koshy wrote:
+
+> Firmware expects host driver to clear scratchpad rsvd 0 register after
+> non-fatal error is found.
 > 
-> You'll need this patch, which is only in mainline but not the
-> for-5.18/block branch:
+> This is done when firmware raises fatal error interrupt and indicates
+> non-fatal error. At this point firmware updates scratchpad rsvd 0
+> register with non-fatal error value. Here host has to clear the register
+> after reading it during non-fatal errors.
 > 
-> fd9f4e62a39f09a7c014d7415c2b9d1390aa0504
-> Author: Christoph Hellwig <hch@lst.de>
-> Date:   Tue Jan 18 08:04:44 2022 +0100
-> 
->      block: assign bi_bdev for cloned bios in blk_rq_prep_clone
+> [...]
 
-Hmm ... even with that patch applied, I still see the crash reported in 
-my previous email. After I observed that crash I did a clean kernel 
-build to make sure that the kernel binaries used in my test match the 
-source code.
+Applied to 5.18/scsi-queue, thanks!
 
-Bart.
+[1/1] scsi: pm80xx: handle non-fatal errors
+      https://git.kernel.org/mkp/scsi/c/80cac47b0895
 
-BUG: KASAN: null-ptr-deref in __blk_account_io_start+0x28/0xa0
-Read of size 8 at addr 0000000000000008 by task kworker/0:1H/155
-
-CPU: 0 PID: 155 Comm: kworker/0:1H Not tainted 5.17.0-rc2-dbg+ #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 
-rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
-Workqueue: kblockd blk_mq_requeue_work
-Call Trace:
-[ ... ]
+-- 
+Martin K. Petersen	Oracle Linux Engineering
