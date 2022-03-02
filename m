@@ -2,60 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4944C9D76
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Mar 2022 06:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1D14C9D79
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Mar 2022 06:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239371AbiCBFhP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Mar 2022 00:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        id S239597AbiCBFhU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Mar 2022 00:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235160AbiCBFhN (ORCPT
+        with ESMTP id S238246AbiCBFhN (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Mar 2022 00:37:13 -0500
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10822B16D5
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56305B16DA
         for <linux-scsi@vger.kernel.org>; Tue,  1 Mar 2022 21:36:31 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2222m9p1014692
-        for <linux-scsi@vger.kernel.org>; Wed, 2 Mar 2022 05:36:30 GMT
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2222jYNA010945
+        for <linux-scsi@vger.kernel.org>; Wed, 2 Mar 2022 05:36:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2021-07-09;
- bh=nMmBzpYhUHTdlPVXepcIyqO48i+jKceUhZejNfuElOs=;
- b=C3wNdcrdE338iPTniS9aUCgXr/6Sul8+sXigFdPMg23vwSI0PC32K2WNUw8EhCDhJZpH
- fXngYM6Z/damNSJ8nY01z0NIOZH5hoPTTJjmAL/oA+X8uuj+4GZrwZh1Gl+5vbNs6I8g
- Lm6q4+a2N+5eYDwDJR8UyA435y9EmjjM4PiTYbopSt6MYv78K1oPIDzQWOGLIs4wfIWu
- tlxMkqT35x3NX3L2zf6uSytmG8ZdPfwqMNfNDyQpUZ81Gh1nzNVvHpN4/z5Vl5jBeOeu
- 18lJVnapOSXhJaI2nmTFEFM63CQCsZPsoysl9OxPjnTFhLaLwHcZiw5RY18Gm+jEVnDT ug== 
+ bh=6MeIGjyLcXc7nLxRjHNUMype0upcrKejx82eHH9RsUM=;
+ b=W0nAf89BZx6MliGzlNSHxyCrgUe/OLJ66SxVFCj1UXjjS3J+vFYN60zh/a9D61wMICcQ
+ wlYOdd6YiJ5SI0CRuXOMtdaZLwRVhS+mK2C8kOULRSV5I2XRnIZCE3K6IQaQnkKxQBkI
+ i+Cvg5sM1eO5vKDUll/r88DJCDeQ/7avYN4pObWVDasEPegiASr4P+7nu2nqHzAfxAlT
+ sq73yOsdIC2hXis2iWd03f8ZAfdK06chU5mYP4oRyNbpfPz1yfEzyobFU+eJefLt9vYO
+ CNKe6rY9qaPa8I7hI4M/g9BZgfRVtCLjLOsyGQkEiR1zHVhBofineCmFiZtBh/ZRz0B9 Fg== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3eh15amq8q-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3eh14bvwcj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
         for <linux-scsi@vger.kernel.org>; Wed, 02 Mar 2022 05:36:30 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2225IpLO175843
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2225IpAg175833
         for <linux-scsi@vger.kernel.org>; Wed, 2 Mar 2022 05:36:29 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 3efc15vah8-1
+        by aserp3020.oracle.com with ESMTP id 3efc15vahk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
         for <linux-scsi@vger.kernel.org>; Wed, 02 Mar 2022 05:36:29 +0000
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2225aRZb014395
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2225aRZd014395
         for <linux-scsi@vger.kernel.org>; Wed, 2 Mar 2022 05:36:29 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by aserp3020.oracle.com with ESMTP id 3efc15vaeg-5;
-        Wed, 02 Mar 2022 05:36:28 +0000
+        by aserp3020.oracle.com with ESMTP id 3efc15vaeg-6;
+        Wed, 02 Mar 2022 05:36:29 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 04/14] scsi: core: Pick suitable allocation length in scsi_report_opcode()
-Date:   Wed,  2 Mar 2022 00:35:49 -0500
-Message-Id: <20220302053559.32147-5-martin.petersen@oracle.com>
+Subject: [PATCH 05/14] scsi: core: Cache VPD pages b0, b1, b2
+Date:   Wed,  2 Mar 2022 00:35:50 -0500
+Message-Id: <20220302053559.32147-6-martin.petersen@oracle.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220302053559.32147-1-martin.petersen@oracle.com>
 References: <20220302053559.32147-1-martin.petersen@oracle.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: mewB3eW7IELqvE2jKHUFx05AN2Lvu2KN
-X-Proofpoint-GUID: mewB3eW7IELqvE2jKHUFx05AN2Lvu2KN
+X-Proofpoint-GUID: vEqFnmZBRPRGU2igZyzj93NljSZpG99i
+X-Proofpoint-ORIG-GUID: vEqFnmZBRPRGU2igZyzj93NljSZpG99i
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -66,57 +66,119 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Some devices hang when a buffer size larger than expected is passed in
-the ALLOCATION LENGTH field. For REPORT SUPPORTED OPERATION CODES we
-currently only request a single command descriptor at a time and
-therefore the actual size of the command is known ahead of time. Limit
-the ALLOCATION LENGTH to the header size plus the command length of
-the opcode we are asking about.
-
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 ---
- drivers/scsi/scsi.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/scsi/scsi.c        |  6 ++++++
+ drivers/scsi/scsi_sysfs.c  | 28 ++++++++++++++++++++++++++++
+ include/scsi/scsi_device.h |  4 ++++
+ 3 files changed, 38 insertions(+)
 
 diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index af896d0647a7..c6221a2ca04e 100644
+index c6221a2ca04e..524e03aba9ef 100644
 --- a/drivers/scsi/scsi.c
 +++ b/drivers/scsi/scsi.c
-@@ -508,21 +508,30 @@ int scsi_report_opcode(struct scsi_device *sdev, unsigned char *buffer,
- {
- 	unsigned char cmd[16];
- 	struct scsi_sense_hdr sshdr;
--	int result;
-+	int result, request_len;
+@@ -488,6 +488,12 @@ void scsi_attach_vpd(struct scsi_device *sdev)
+ 			scsi_update_vpd_page(sdev, 0x83, &sdev->vpd_pg83);
+ 		if (vpd_buf->data[i] == 0x89)
+ 			scsi_update_vpd_page(sdev, 0x89, &sdev->vpd_pg89);
++		if (vpd_buf->data[i] == 0xb0)
++			scsi_update_vpd_page(sdev, 0xb0, &sdev->vpd_pgb0);
++		if (vpd_buf->data[i] == 0xb1)
++			scsi_update_vpd_page(sdev, 0xb1, &sdev->vpd_pgb1);
++		if (vpd_buf->data[i] == 0xb2)
++			scsi_update_vpd_page(sdev, 0xb2, &sdev->vpd_pgb2);
+ 	}
+ 	kfree(vpd_buf);
+ }
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index 226a50944c00..1ed45de9970d 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -448,6 +448,7 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
+ 	struct list_head *this, *tmp;
+ 	struct scsi_vpd *vpd_pg80 = NULL, *vpd_pg83 = NULL;
+ 	struct scsi_vpd *vpd_pg0 = NULL, *vpd_pg89 = NULL;
++	struct scsi_vpd *vpd_pgb0 = NULL, *vpd_pgb1 = NULL, *vpd_pgb2 = NULL;
+ 	unsigned long flags;
+ 	struct module *mod;
  
- 	if (sdev->no_report_opcodes || sdev->scsi_level < SCSI_SPC_3)
- 		return -EINVAL;
+@@ -490,6 +491,12 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
+ 				       lockdep_is_held(&sdev->inquiry_mutex));
+ 	vpd_pg89 = rcu_replace_pointer(sdev->vpd_pg89, vpd_pg89,
+ 				       lockdep_is_held(&sdev->inquiry_mutex));
++	vpd_pgb0 = rcu_replace_pointer(sdev->vpd_pgb0, vpd_pgb0,
++				       lockdep_is_held(&sdev->inquiry_mutex));
++	vpd_pgb1 = rcu_replace_pointer(sdev->vpd_pgb1, vpd_pgb1,
++				       lockdep_is_held(&sdev->inquiry_mutex));
++	vpd_pgb2 = rcu_replace_pointer(sdev->vpd_pgb2, vpd_pgb2,
++				       lockdep_is_held(&sdev->inquiry_mutex));
+ 	mutex_unlock(&sdev->inquiry_mutex);
  
-+	/* RSOC header + size of command we are asking about */
-+	request_len = 4 + COMMAND_SIZE(opcode);
-+	if (request_len > len) {
-+		dev_warn_once(&sdev->sdev_gendev,
-+			      "%s: len %u bytes, opcode 0x%02x needs %u\n",
-+			      __func__, len, opcode, request_len);
-+		return -EINVAL;
-+	}
+ 	if (vpd_pg0)
+@@ -500,6 +507,12 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
+ 		kfree_rcu(vpd_pg80, rcu);
+ 	if (vpd_pg89)
+ 		kfree_rcu(vpd_pg89, rcu);
++	if (vpd_pgb0)
++		kfree_rcu(vpd_pgb0, rcu);
++	if (vpd_pgb1)
++		kfree_rcu(vpd_pgb1, rcu);
++	if (vpd_pgb2)
++		kfree_rcu(vpd_pgb2, rcu);
+ 	kfree(sdev->inquiry);
+ 	kfree(sdev);
+ 
+@@ -913,6 +926,9 @@ static struct bin_attribute dev_attr_vpd_##_page = {		\
+ sdev_vpd_pg_attr(pg83);
+ sdev_vpd_pg_attr(pg80);
+ sdev_vpd_pg_attr(pg89);
++sdev_vpd_pg_attr(pgb0);
++sdev_vpd_pg_attr(pgb1);
++sdev_vpd_pg_attr(pgb2);
+ sdev_vpd_pg_attr(pg0);
+ 
+ static ssize_t show_inquiry(struct file *filep, struct kobject *kobj,
+@@ -1250,6 +1266,15 @@ static umode_t scsi_sdev_bin_attr_is_visible(struct kobject *kobj,
+ 	if (attr == &dev_attr_vpd_pg89 && !sdev->vpd_pg89)
+ 		return 0;
+ 
++	if (attr == &dev_attr_vpd_pgb0 && !sdev->vpd_pgb0)
++		return 0;
 +
- 	memset(cmd, 0, 16);
- 	cmd[0] = MAINTENANCE_IN;
- 	cmd[1] = MI_REPORT_SUPPORTED_OPERATION_CODES;
- 	cmd[2] = 1;		/* One command format */
- 	cmd[3] = opcode;
--	put_unaligned_be32(len, &cmd[6]);
-+	put_unaligned_be32(request_len, &cmd[6]);
- 	memset(buffer, 0, len);
++	if (attr == &dev_attr_vpd_pgb1 && !sdev->vpd_pgb1)
++		return 0;
++
++	if (attr == &dev_attr_vpd_pgb2 && !sdev->vpd_pgb2)
++		return 0;
++
+ 	return S_IRUGO;
+ }
  
--	result = scsi_execute_req(sdev, cmd, DMA_FROM_DEVICE, buffer, len,
--				  &sshdr, 30 * HZ, 3, NULL);
-+	result = scsi_execute_req(sdev, cmd, DMA_FROM_DEVICE, buffer,
-+				  request_len, &sshdr, 30 * HZ, 3, NULL);
+@@ -1296,6 +1321,9 @@ static struct bin_attribute *scsi_sdev_bin_attrs[] = {
+ 	&dev_attr_vpd_pg83,
+ 	&dev_attr_vpd_pg80,
+ 	&dev_attr_vpd_pg89,
++	&dev_attr_vpd_pgb0,
++	&dev_attr_vpd_pgb1,
++	&dev_attr_vpd_pgb2,
+ 	&dev_attr_inquiry,
+ 	NULL
+ };
+diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+index 144d3a801c8d..fd6a803ac8cd 100644
+--- a/include/scsi/scsi_device.h
++++ b/include/scsi/scsi_device.h
+@@ -149,6 +149,10 @@ struct scsi_device {
+ 	struct scsi_vpd __rcu *vpd_pg83;
+ 	struct scsi_vpd __rcu *vpd_pg80;
+ 	struct scsi_vpd __rcu *vpd_pg89;
++	struct scsi_vpd __rcu *vpd_pgb0;
++	struct scsi_vpd __rcu *vpd_pgb1;
++	struct scsi_vpd __rcu *vpd_pgb2;
++
+ 	struct scsi_target      *sdev_target;
  
- 	if (result < 0)
- 		return result;
+ 	blist_flags_t		sdev_bflags; /* black/white flags as also found in
 -- 
 2.32.0
 
