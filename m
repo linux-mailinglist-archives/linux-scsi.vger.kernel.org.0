@@ -2,61 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4C84C9D7E
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Mar 2022 06:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0584C9D77
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Mar 2022 06:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239642AbiCBFhY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Mar 2022 00:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38356 "EHLO
+        id S239567AbiCBFhR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Mar 2022 00:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239521AbiCBFhQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Mar 2022 00:37:16 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0865CB16F2
-        for <linux-scsi@vger.kernel.org>; Tue,  1 Mar 2022 21:36:33 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2222iBHk016894;
-        Wed, 2 Mar 2022 05:36:29 GMT
+        with ESMTP id S234218AbiCBFhM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Mar 2022 00:37:12 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36641B16D4
+        for <linux-scsi@vger.kernel.org>; Tue,  1 Mar 2022 21:36:30 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2222bNBZ010964
+        for <linux-scsi@vger.kernel.org>; Wed, 2 Mar 2022 05:36:30 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2021-07-09;
- bh=ULnz/gkzD/hTVp62r05l6On+ELMmvG4umJ5WzfAQZts=;
- b=d3TszB61ijkLjHtsY+WmgP916WXsaCLHvS10CbMWv2SPrL5eRtTohRbHQwqbRLeJ059L
- EiPpN4jH7jRPZnhttQjl/DSGS8inOdl/xnbOmrQUxqMTbjcviMr9hZI8rPacOIgTGgwB
- ZdF2zMyhKmOIMDIzbqLTOIyIkBSq6+Vosmswh9Lc9DEcogfPzUKAdUYMvyCSVleo/exo
- 7dma0wULgpQO5Cl4PiXPgzn0A7vCIsnNBf2m37gDCKlpqZIMbmF8zR2chrnovS78ffF3
- cCIKPWDw0qconnjdb8Msd+7smeTG9m3kFwaAnOSkeDFZKb337SYOnTaj0JDLTysMcFi1 oQ== 
+ bh=CvzoEmqD2Ha8aFPBnqln8rrAH5c7YpxI7vZhSAvmsos=;
+ b=c/E0iKxkVB/QjNi1XlZg1m59gPb4xI4VWgwB/C5JOFBITdPFsdp28gyfH51Fb75NwL2V
+ BBgd5v6aJUr+JkEvWB2KN9sIjgAwR69ftXZBUgIWS2HTAfmQ5+Hv6AJTqkaG1Nw3L5Xg
+ 1sG/tT74hjBnVAVvRnjBpX+VzjbNG4Oe6kfvBqO7/1E1iAAZAiCtfVV36ehixZuMfOvu
+ 4C5cgRi8jpTJcvNAgHX10KzPc+dfM/mwFUwCvVDbvWezJt2WfJFRfPFyheLiJ0RxQvhS
+ ezKPn+jCrI//2UvBhpJFanJh4RgxoLGhLbVgERfsb92xH8dfNr3i6gRJpZ0/B0+DIg0I rw== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ehdayu52n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 02 Mar 2022 05:36:29 +0000
+        by mx0b-00069f02.pphosted.com with ESMTP id 3eh14bvwcg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-scsi@vger.kernel.org>; Wed, 02 Mar 2022 05:36:29 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2225Ipfg175853;
-        Wed, 2 Mar 2022 05:36:28 GMT
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2225IpfH175835
+        for <linux-scsi@vger.kernel.org>; Wed, 2 Mar 2022 05:36:28 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 3efc15vag7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 02 Mar 2022 05:36:28 +0000
+        by aserp3020.oracle.com with ESMTP id 3efc15vagt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-scsi@vger.kernel.org>; Wed, 02 Mar 2022 05:36:28 +0000
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2225aRZX014395;
-        Wed, 2 Mar 2022 05:36:28 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2225aRZZ014395
+        for <linux-scsi@vger.kernel.org>; Wed, 2 Mar 2022 05:36:28 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by aserp3020.oracle.com with ESMTP id 3efc15vaeg-3;
-        Wed, 02 Mar 2022 05:36:27 +0000
+        by aserp3020.oracle.com with ESMTP id 3efc15vaeg-4;
+        Wed, 02 Mar 2022 05:36:28 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     linux-scsi@vger.kernel.org
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>
-Subject: [PATCH 02/14] scsi: core: Query VPD size before getting full page
-Date:   Wed,  2 Mar 2022 00:35:47 -0500
-Message-Id: <20220302053559.32147-3-martin.petersen@oracle.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 03/14] scsi: core: Do not truncate INQUIRY data on modern devices
+Date:   Wed,  2 Mar 2022 00:35:48 -0500
+Message-Id: <20220302053559.32147-4-martin.petersen@oracle.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220302053559.32147-1-martin.petersen@oracle.com>
 References: <20220302053559.32147-1-martin.petersen@oracle.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: w7o7fsOylgUtcgd0RgQ-LkZWA1vo8q4a
-X-Proofpoint-ORIG-GUID: w7o7fsOylgUtcgd0RgQ-LkZWA1vo8q4a
+X-Proofpoint-GUID: rlDMHU01r3H8SS-bluSHtUyH09vMIjx8
+X-Proofpoint-ORIG-GUID: rlDMHU01r3H8SS-bluSHtUyH09vMIjx8
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -67,220 +66,44 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We currently default to 255 bytes when fetching VPD pages during discovery.
-However, we have had a few devices that are known to wedge if the requested
-buffer exceeds a certain size. See commit af73623f5f10 ("[SCSI] sd: Reduce
-buffer size for vpd request") which works around one example of this
-problem in the SCSI disk driver.
+Low-level device drivers have had the ability to limit the size of an
+INQUIRY for many years. This made sense for a wide variety of legacy
+devices. However, we are unnecessarily truncating the INQUIRY response
+for many modern devices. This prevents us from consulting fields
+beyond the first 36 bytes.
 
-With commit d188b0675b21 ("scsi: core: Add sysfs attributes for VPD pages
-0h and 89h") we now risk triggering the same issue in the generic midlayer
-code.
+If a device reports that it supports a larger INQUIRY response, and
+the device also reports that it implements SPC-4 or newer, allow the
+larger INQUIRY to proceed.
 
-The problem with the ATA VPD page in particular is that the SCSI portion of
-the page is trailed by 512 bytes of verbatim ATA Identify Device
-information.  However, not all controllers actually provide the additional
-512 bytes and will lock up if one asks for more than the 64 bytes
-containing the SCSI protocol fields.
-
-Instead of picking a new, somewhat arbitrary, number of bytes for the VPD
-buffer size, start fetching the 4-byte header for each page. The header
-contains the size of the page as far as the device is concerned. We can use
-the reported size to specify the correct allocation length when
-subsequently fetching the full page.
-
-The header validation is done by a new helper function scsi_get_vpd_size()
-and both scsi_get_vpd_page() and scsi_get_vpd_buf() now rely on this to
-query the page size.
-
-In addition, scsi_get_vpd_page() is simplified to mirror the logic in
-scsi_get_vpd_page(). This involves removing the Supported VPD Pages lookup
-prior to attempting to query a page. There does not appear any evidence,
-even in the oldest SCSI specs, that this step is required. We already rely
-on scsi_get_vpd_page() throughout the stack and this function never
-consulted the Supported VPD Pages. Since this has not caused any problems
-it should be safe to remove the precondition from scsi_get_vpd_page().
-
-Instrumented runs also revealed that the Supported VPD Pages lookup had
-little effect since the device page index often was larger than the
-supplied buffer size. As a result, inquiries frequently bypassed the index
-check and went through the "If we ran off the end of the buffer, give us
-the benefit of the doubt" code path which assumed the page was present
-despite not being listed. The revised code takes both the page size
-reported by the device as well as the size of the buffer provided by the
-scsi_get_vpd_page() caller into account.
-
-Fixes: d188b0675b21 ("scsi: core: Add sysfs attributes for VPD pages 0h and 89h")
-Reported-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Tested-by: Maciej W. Rozycki <macro@orcam.me.uk>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 ---
- drivers/scsi/scsi.c        | 94 +++++++++++++++++++++++++-------------
- include/scsi/scsi_device.h |  5 +-
- 2 files changed, 67 insertions(+), 32 deletions(-)
+ drivers/scsi/scsi_scan.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index 211aace69c22..af896d0647a7 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -321,6 +321,32 @@ static int scsi_vpd_inquiry(struct scsi_device *sdev, unsigned char *buffer,
- 	return get_unaligned_be16(&buffer[2]) + 4;
- }
- 
-+static int scsi_get_vpd_size(struct scsi_device *sdev, u8 page)
-+{
-+	unsigned char vpd_header[SCSI_VPD_HEADER_SIZE];
-+	int result;
-+
-+	/*
-+	 * Fetch the VPD page header to find out how big the page
-+	 * is. This is done to prevent problems on legacy devices
-+	 * which can not handle allocation lengths as large as
-+	 * potentially requested by the caller.
-+	 */
-+	result = scsi_vpd_inquiry(sdev, vpd_header, page, sizeof(vpd_header));
-+
-+	if (result < 0)
-+		return 0;
-+
-+	if (result < SCSI_VPD_HEADER_SIZE) {
-+		dev_warn_once(&sdev->sdev_gendev,
-+			      "%s: short VPD page 0x%02x length: %d bytes\n",
-+			      __func__, page, result);
-+		return 0;
-+	}
-+
-+	return result;
-+}
-+
- /**
-  * scsi_get_vpd_page - Get Vital Product Data from a SCSI device
-  * @sdev: The device to ask
-@@ -330,47 +356,42 @@ static int scsi_vpd_inquiry(struct scsi_device *sdev, unsigned char *buffer,
-  *
-  * SCSI devices may optionally supply Vital Product Data.  Each 'page'
-  * of VPD is defined in the appropriate SCSI document (eg SPC, SBC).
-- * If the device supports this VPD page, this routine returns a pointer
-- * to a buffer containing the data from that page.  The caller is
-- * responsible for calling kfree() on this pointer when it is no longer
-- * needed.  If we cannot retrieve the VPD page this routine returns %NULL.
-+ * If the device supports this VPD page, this routine fills @buf
-+ * with the data from that page and return 0. If the VPD page is not
-+ * supported or its content cannot be retrieved, -EINVAL is returned.
-  */
- int scsi_get_vpd_page(struct scsi_device *sdev, u8 page, unsigned char *buf,
- 		      int buf_len)
- {
--	int i, result;
-+	int result, vpd_len;
- 
--	if (sdev->skip_vpd_pages)
--		goto fail;
--
--	/* Ask for all the pages supported by this device */
--	result = scsi_vpd_inquiry(sdev, buf, 0, buf_len);
--	if (result < 4)
--		goto fail;
--
--	/* If the user actually wanted this page, we can skip the rest */
--	if (page == 0)
--		return 0;
-+	if (!scsi_device_supports_vpd(sdev))
-+		return -EINVAL;
- 
--	for (i = 4; i < min(result, buf_len); i++)
--		if (buf[i] == page)
--			goto found;
-+	vpd_len = scsi_get_vpd_size(sdev, page);
-+	if (vpd_len <= 0)
-+		return -EINVAL;
- 
--	if (i < result && i >= buf_len)
--		/* ran off the end of the buffer, give us benefit of doubt */
--		goto found;
--	/* The device claims it doesn't support the requested page */
--	goto fail;
-+	vpd_len = min(vpd_len, buf_len);
- 
-- found:
--	result = scsi_vpd_inquiry(sdev, buf, page, buf_len);
-+retry_pg:
-+	/*
-+	 * Fetch the actual page. Since the appropriate size was reported
-+	 * by the device it is now safe to ask for something bigger.
-+	 */
-+	memset(buf, 0, buf_len);
-+	result = scsi_vpd_inquiry(sdev, buf, page, vpd_len);
- 	if (result < 0)
--		goto fail;
-+		return -EINVAL;
-+	else if (result > vpd_len) {
-+		dev_warn_once(&sdev->sdev_gendev,
-+			      "%s: VPD page 0x%02x result %d > %d bytes\n",
-+			      __func__, page, result, vpd_len);
-+		vpd_len = min(result, buf_len);
-+		goto retry_pg;
-+	}
- 
- 	return 0;
--
-- fail:
--	return -EINVAL;
- }
- EXPORT_SYMBOL_GPL(scsi_get_vpd_page);
- 
-@@ -384,9 +405,17 @@ EXPORT_SYMBOL_GPL(scsi_get_vpd_page);
- static struct scsi_vpd *scsi_get_vpd_buf(struct scsi_device *sdev, u8 page)
- {
- 	struct scsi_vpd *vpd_buf;
--	int vpd_len = SCSI_VPD_PG_LEN, result;
-+	int vpd_len, result;
-+
-+	vpd_len = scsi_get_vpd_size(sdev, page);
-+	if (vpd_len <= 0)
-+		return NULL;
- 
- retry_pg:
-+	/*
-+	 * Fetch the actual page. Since the appropriate size was reported
-+	 * by the device it is now safe to ask for something bigger.
-+	 */
- 	vpd_buf = kmalloc(sizeof(*vpd_buf) + vpd_len, GFP_KERNEL);
- 	if (!vpd_buf)
- 		return NULL;
-@@ -397,6 +426,9 @@ static struct scsi_vpd *scsi_get_vpd_buf(struct scsi_device *sdev, u8 page)
- 		return NULL;
- 	}
- 	if (result > vpd_len) {
-+		dev_warn_once(&sdev->sdev_gendev,
-+			      "%s: VPD page 0x%02x result %d > %d bytes\n",
-+			      __func__, page, result, vpd_len);
- 		vpd_len = result;
- 		kfree(vpd_buf);
- 		goto retry_pg;
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index 647c53b26105..144d3a801c8d 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -100,6 +100,10 @@ struct scsi_vpd {
- 	unsigned char	data[];
- };
- 
-+enum scsi_vpd_parameters {
-+	SCSI_VPD_HEADER_SIZE = 4,
-+};
-+
- struct scsi_device {
- 	struct Scsi_Host *host;
- 	struct request_queue *request_queue;
-@@ -141,7 +145,6 @@ struct scsi_device {
- 	const char * model;		/* ... after scan; point to static string */
- 	const char * rev;		/* ... "nullnullnullnull" before scan */
- 
--#define SCSI_VPD_PG_LEN                255
- 	struct scsi_vpd __rcu *vpd_pg0;
- 	struct scsi_vpd __rcu *vpd_pg83;
- 	struct scsi_vpd __rcu *vpd_pg80;
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index f4e6c68ac99e..95bf9a1f35ce 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -728,7 +728,17 @@ static int scsi_probe_lun(struct scsi_device *sdev, unsigned char *inq_result,
+ 		if (pass == 1) {
+ 			if (BLIST_INQUIRY_36 & *bflags)
+ 				next_inquiry_len = 36;
+-			else if (sdev->inquiry_len)
++			/*
++			 * LLD specified a maximum sdev->inquiry_len
++			 * but device claims it has more data. Capping
++			 * the length only makes sense for legacy
++			 * devices. If a device supports SPC-4 (2014)
++			 * or newer, assume that it is safe to ask for
++			 * as much as the device says it supports.
++			 */
++			else if (sdev->inquiry_len &&
++				 response_len > sdev->inquiry_len &&
++				 (inq_result[2] & 0x7) < 6) /* SPC-4 */
+ 				next_inquiry_len = sdev->inquiry_len;
+ 			else
+ 				next_inquiry_len = response_len;
 -- 
 2.32.0
 
