@@ -2,230 +2,173 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7575E4CBDFA
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Mar 2022 13:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A514CBF30
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Mar 2022 14:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233390AbiCCMik (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Mar 2022 07:38:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
+        id S233295AbiCCNzT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Mar 2022 08:55:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbiCCMig (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Mar 2022 07:38:36 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179C340A1E;
-        Thu,  3 Mar 2022 04:37:48 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id z2so4410135plg.8;
-        Thu, 03 Mar 2022 04:37:48 -0800 (PST)
+        with ESMTP id S230230AbiCCNzQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Mar 2022 08:55:16 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED5918A79E
+        for <linux-scsi@vger.kernel.org>; Thu,  3 Mar 2022 05:54:30 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id k9-20020a056830242900b005ad25f8ebfdso4638957ots.7
+        for <linux-scsi@vger.kernel.org>; Thu, 03 Mar 2022 05:54:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FF/MJjppdIPbLAPuX69GDDcuetlfqDD+38vpsQJKjV4=;
-        b=bORDDPjE3HJ8Q+lkuHUI9YXm2z2OfuiHyYo73LjCVUqKH+mzapaLyTx7j6vUSzodyH
-         H1fbBW3W0VvnP5bKsE/Cw0qa3UKie6z+yV023jD/NJPLY9kKDIxXXIT7NvpcVUCfUtIs
-         KFg6MVSLFINqOtsOfPJChC2DDL1HsjgJIQ8T87wI93Fz/8cIhc43z3LdnIXEJu5YqpzN
-         mnmxIpvlp/TKF5EWx4k9hHupAU2T1e2iVIXLRuFiSvdgN4U8XMzx7dalBaWhuU90/nq+
-         yD0rNidPjh7VKui8oE8v/Ywp+ZPTs/OvJCCqJBXBdG8sdbvMpiVPMu/2SHGpauCCE/Ok
-         XUow==
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IijNdGC+6WVWwT9ghJp+UZFL1rbN52nAStXwZnt06ik=;
+        b=ILSDaPA5QQ3AaGxyswslIN2IhY1blbXCaou1G87S34976DsglBCQjqbKn4piSdS1fO
+         kGglbSChWE/tF3VexFOnD25BguXGlMjzpJSfFWwYt3jT+LJgaIKY+RPViIdIG+va8VST
+         KYQqVelUPQmL/zDKGI7Qxqt9hlsHSIB40YyKU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FF/MJjppdIPbLAPuX69GDDcuetlfqDD+38vpsQJKjV4=;
-        b=5nmLDPdt4158KChLD7ZNId285UqdJIJg11uAueR32aF7hOqlaYWbUvnmXZpM/JktUK
-         1qvgKYbYiTRkWHI5gTGarJSXkv/BPsY02qYjIyaKu5D1VoFhfQK3OfOvvBA1mitkp1pl
-         PHdB5t5bp1FMJUVOAH0K8EpBEK1rG15MNH4CTtmiib6Vw4Pr7eykcIDH7EDZNF9GTY6z
-         II2zykestbe6hJIjCaKLuZLX/2vbbnq4OYS/ayY74gRe/rgTtqZBgMurHZQMjy38p/aF
-         qArR0GkBo8iuzNewabyxKOYNjpfwJ8HcLGIyXlRseL3hv363FaX+5Gl48VoKpzYF3kmL
-         oM/A==
-X-Gm-Message-State: AOAM530wAj2kNlYNbl2xdlwDu3GliNRaOBAj8yqWQoWLLlVxSGhp9Yd4
-        BQspS3STPlljfAwrfky5Csc=
-X-Google-Smtp-Source: ABdhPJwaQutGx29a4puPWhBgOBT74prgxxfsvHgGuVwO/yqGuQ+dVL8XCd59bWLeDERLYwR3js66yQ==
-X-Received: by 2002:a17:903:22d0:b0:151:97f5:db54 with SMTP id y16-20020a17090322d000b0015197f5db54mr7837971plg.58.1646311068298;
-        Thu, 03 Mar 2022 04:37:48 -0800 (PST)
-Received: from ubuntu.huawei.com ([119.3.119.19])
-        by smtp.googlemail.com with ESMTPSA id t7-20020a17090a024700b001bf12386db4sm1483030pje.47.2022.03.03.04.37.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 04:37:47 -0800 (PST)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     david.laight@aculab.com
-Cc:     akpm@linux-foundation.org, alsa-devel@alsa-project.org,
-        amd-gfx@lists.freedesktop.org, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bcm-kernel-feedback-list@broadcom.com,
-        bjohannesmeyer@gmail.com, c.giuffrida@vu.nl,
-        christian.koenig@amd.com, christophe.jaillet@wanadoo.fr,
-        dan.carpenter@oracle.com, dmaengine@vger.kernel.org,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        gustavo@embeddedor.com, h.j.bos@vu.nl,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        jakobkoschel@gmail.com, jgg@ziepe.ca, keescook@chromium.org,
-        kgdb-bugreport@lists.sourceforge.net, kvm@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-block@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-sgx@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, linux@rasmusvillemoes.dk,
-        linuxppc-dev@lists.ozlabs.org, nathan@kernel.org,
-        netdev@vger.kernel.org, nouveau@lists.freedesktop.org,
-        rppt@kernel.org, samba-technical@lists.samba.org,
-        tglx@linutronix.de, tipc-discussion@lists.sourceforge.net,
-        torvalds@linux-foundation.org,
-        v9fs-developer@lists.sourceforge.net, xiam0nd.tong@gmail.com
-Subject: RE: [PATCH 2/6] treewide: remove using list iterator after loop body as a ptr
-Date:   Thu,  3 Mar 2022 20:37:18 +0800
-Message-Id: <20220303123718.12426-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <2d208771c50b4c6db4f43039e9d62851@AcuMS.aculab.com>
-References: <2d208771c50b4c6db4f43039e9d62851@AcuMS.aculab.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IijNdGC+6WVWwT9ghJp+UZFL1rbN52nAStXwZnt06ik=;
+        b=KP786+Rh+81e9veyQ7Q0U41gnpDhDEPoYdzASPeXBeeF+M4GDmIQ4gGqHKpQ07wn3q
+         /qashwcyY86rYpsA1v/VJqEkklB5tsJzpzeNgsUEKf7dyDaaUh3+dwc8jLh0RiMh8K2g
+         WpzS+O9kd98HHMr5jyl9ofUEkHMU/IrE3fsnfnWz+W3uhnmYmd5JJDofWG9jZoZKhEk7
+         7nou/HpaDkIH1XAzVhJReQoDaJWfGVyeWisxkIOAI9pTKDPcdsABXD09IXJD9Qv5lHIA
+         ooxtg1UOCtaqB0+FxHsV9JVmgPA86Z2FScFAxH3At4BjznM8BkpWSmC35FWs/peKt9g5
+         neLQ==
+X-Gm-Message-State: AOAM530R45PtPLlyvsXstKlTxD5lOUoHd19RdigURAr/q56sff6qLUBt
+        Cc15Ieod68iP1nTwC1N2LPi7q7tIHpYl+u55bjGWEZOtAvabnQ==
+X-Google-Smtp-Source: ABdhPJzZ+IRt86SAUE9RZaZAhh4bMMshWojIXvUJcZgmKMK3zXKZdhTbdtWN5+3DmNxvyGRwBROsZW3ZpQBUyfXCT24=
+X-Received: by 2002:a9d:7d14:0:b0:5ad:30ba:e8fc with SMTP id
+ v20-20020a9d7d14000000b005ad30bae8fcmr18916808otn.127.1646315670175; Thu, 03
+ Mar 2022 05:54:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220224233056.398054-1-damien.lemoal@opensource.wdc.com> <yq1sfs1yob5.fsf@ca-mkp.ca.oracle.com>
+In-Reply-To: <yq1sfs1yob5.fsf@ca-mkp.ca.oracle.com>
+From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Date:   Thu, 3 Mar 2022 19:24:18 +0530
+Message-ID: <CAK=zhgpspRmVszy+rzzF-9QEnjHC-p+aKWwE9Q37wKQ=NB22Og@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] Fix mpt3sas driver sparse warnings
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        PDL-MPT-FUSIONLINUX <MPT-FusionLinux.pdl@broadcom.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ba25c205d950bc3b"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> From: Xiaomeng Tong
-> > Sent: 03 March 2022 07:27
-> > 
-> > On Thu, 3 Mar 2022 04:58:23 +0000, David Laight wrote:
-> > > on 3 Mar 2022 10:27:29 +0800, Xiaomeng Tong wrote:
-> > > > The problem is the mis-use of iterator outside the loop on exit, and
-> > > > the iterator will be the HEAD's container_of pointer which pointers
-> > > > to a type-confused struct. Sidenote: The *mis-use* here refers to
-> > > > mistakely access to other members of the struct, instead of the
-> > > > list_head member which acutally is the valid HEAD.
-> > >
-> > > The problem is that the HEAD's container_of pointer should never
-> > > be calculated at all.
-> > > This is what is fundamentally broken about the current definition.
-> > 
-> > Yes, the rule is "the HEAD's container_of pointer should never be
-> > calculated at all outside the loop", but how do you make sure everyone
-> > follows this rule?
-> > Everyone makes mistakes, but we can eliminate them all from the beginning
-> > with the help of compiler which can catch such use-after-loop things.
-> > 
-> > > > IOW, you would dereference a (NULL + offset_of_member) address here.
-> > >
-> > >Where?
-> > 
-> > In the case where a developer do not follows the above rule, and mistakely
-> > access a non-list-head member of the HEAD's container_of pointer outside
-> > the loop. For example:
-> >     struct req{
-> >       int a;
-> >       struct list_head h;
-> >     }
-> >     struct req *r;
-> >     list_for_each_entry(r, HEAD, h) {
-> >       if (r->a == 0x10)
-> >         break;
-> >     }
-> >     // the developer made a mistake: he didn't take this situation into
-> >     // account where all entries in the list are *r->a != 0x10*, and now
-> >     // the r is the HEAD's container_of pointer.
-> >     r->a = 0x20;
-> > Thus the "r->a = 0x20" would dereference a (NULL + offset_of_member)
-> > address here.
-> 
-> That is just a bug.
-> No different to failing to check anything else might 'return'
-> a NULL pointer.
+--000000000000ba25c205d950bc3b
+Content-Type: text/plain; charset="UTF-8"
 
-Yes, but it‘s a mistake everyone has made and will make, we should avoid
-this at the beginning with the help of compiler.
+On Wed, Mar 2, 2022 at 9:54 AM Martin K. Petersen
+<martin.petersen@oracle.com> wrote:
+>
+>
+> > This series fix (remove) all sparse warnings generated when compiling
+> > the mpt3sas driver. All warnings are related to __iomem access and
+> > endianness.
+> >
+> > The series was tested on top of Martin's 5.18/scsi-staging branch with
+> > a 9400-8i HBA with direct attached iSAS and SATA drives. The fixes
+> > need careful review by the maintainers as there is no documentation
+> > clearly explaning the proper endianness of the values touched.
+>
+> Broadcom: Please review!
 
-> Because it is a NULL dereference you find out pretty quickly.
+Sure Martin. I will complete the review by the end of this week.
 
-AFAIK，NULL dereference is a undefined bahavior, can compiler quickly
-catch it? Or it can only be applied to some simple/restricted cases.
+>
+> --
+> Martin K. Petersen      Oracle Linux Engineering
 
-> The existing loop leaves you with a valid pointer to something
-> that isn't a list item.
-> 
-> > > > Please remind me if i missed something, thanks.
-> > > >
-> > > > Can you share your "alternative definitions" details? thanks!
-> > >
-> > > The loop should probably use as extra variable that points
-> > > to the 'list node' in the next structure.
-> > > Something like:
-> > > 	for (xxx *iter = head->next;
-> > > 		iter == &head ? ((item = NULL),0) : ((item = list_item(iter),1));
-> > > 		iter = item->member->next) {
-> > > 	   ...
-> > > With a bit of casting you can use 'item' to hold 'iter'.
-> > 
-> > you still can not make sure everyone follows this rule:
-> > "do not use iterator outside the loop" without the help of compiler,
-> > because item is declared outside the loop.
-> 
-> That one has 'iter' defined in the loop.
+--000000000000ba25c205d950bc3b
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Oh, sorry, I misunderstood. Then this is the same way with my way of
-list_for_each_entry_inside(pos, type, head, member), which declare
-the iterator inside the loop.
-You go further and make things like "&pos->member == (head)" goes away
-to avoid calculate the HEAD's container_of pointer, although the
-calculation is harmless.
-
-> 
-> > BTW, to avoid ambiguity，the "alternative definitions" here i asked is
-> > something from you in this context:
-> > "OTOH there may be alternative definitions that can be used to get
-> > the compiler (or other compiler-like tools) to detect broken code.
-> > Even if the definition can't possibly generate a working kerrnel."
-> 
-> I was thinking of something like:
-> 	if ((pos = list_first)), 1) pos = NULL else
-> so that unchecked dereferences after the loop will be detectable
-> as NULL pointer offsets - but that in itself isn't enough to avoid
-> other warnings.
-> 
-
-Do you mean put this right after the loop (I changed somthing that i
-do not understand, please correct me if i am worng, thanks):
-       if (pos == list_first) pos = NULL; else
-and compiler can detect the following NULL derefernce?
-But if the NULL derefernce is just right after the loop originally,
-it will be masked by the *else* keyword。
-
-> > > > The "list_for_each_entry_inside(pos, type, head, member)" way makes
-> > > > the iterator invisiable outside the loop, and would be catched by
-> > > > compiler if use-after-loop things happened.
-> > 
-> > > It is also a compete PITA for anything doing a search.
-> > 
-> > You mean it would be a burden on search? can you show me some examples?
-> 
-> The whole business of having to save the pointer to the located item
-> before breaking the loop, remembering to have set it to NULL earlier etc.
-
-Ok, i see. And then you need pass a "item" to the list_for_each_entry macro
-as a new argument.
-
-> 
-> It is so much better if you can just do:
-> 		if (found)
-> 			break;
-> 
-> 	David
-
-this confused me. this way is better or the "save the pointer to the located item
-before breaking the loop" one?
-
---
-Xiaomeng Tong
+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
+5AGo2E3pe+2yEgkxKvM2fnniZHUiSjbrfKk6nl9RIXPOKUP5HntZFdA5XuNYXWM+HPs3O0AJwBm/
+VCZsZtkjVjxeBmTXiXDnxytdsHdGrHGymPfjJYatDu6d1KRVDlMCAwEAAaOCAd0wggHZMA4GA1Ud
+DwEB/wQEAwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUu
+Z2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggr
+BgEFBQcwAYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
+YTIwMjAwTQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3
+Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4
+aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmww
+JwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
+BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUClVHbAvhzGT8
+s2/6xOf58NkGMQ8wDQYJKoZIhvcNAQELBQADggEBAENRsP1H3calKC2Sstg/8li8byKiqljCFkfi
+IhcJsjPOOR9UZnMFxAoH/s2AlM7mQDR7rZ2MxRuUnIa6Cp5W5w1lUJHktjCUHnQq5nIAZ9GH5SDY
+pgzbFsoYX8U2QCmkAC023FF++ZDJuc9aj0R/nhABxmUYErIze2jV/VO8Pj7TnCrBONZ/Qvf8G5CQ
+X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
+eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
+Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
+MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
+0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMJDUpU1GM6z/3Lc7HkM
+YRho795+369Kt2bFpw+GF6GQMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIyMDMwMzEzNTQzMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCyeUKo78K3m4kExFzM2d/vdotJYeeQniKa9JQq
+yyNJeVCvOHN7U9KNHYsB8gUAUiT24R9zEO/jKFxVi6JlZU2sHR6MhfrDNUqtWi87rDinlCJH2koF
+/FFoCp1i2N+l20oJ7N2XF5dZDsuOZ7SDZ7BKui3ScRES0W5RgHwRRca2BccT+MEhaUOcXD4nV/q2
+kdrybEVKyeazAKAcAyngnVjDuslBK69SK39nXWBhC0OPM5W3jjyoXj3mWTZ3pXqAwVzn8NKfr63N
+iNnjnFFz1rldSUaAyFQSf1qRnudsiQhJxJz3Be5fiwD9Y2OITJlwBuhgKjiW+K673v1+KJMQDmGe
+--000000000000ba25c205d950bc3b--
