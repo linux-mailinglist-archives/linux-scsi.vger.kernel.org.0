@@ -2,101 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD9A4CB94B
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Mar 2022 09:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 257CC4CB9AF
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Mar 2022 09:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbiCCIjm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Mar 2022 03:39:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
+        id S231731AbiCCI7T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Mar 2022 03:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiCCIjk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Mar 2022 03:39:40 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F249B148922;
-        Thu,  3 Mar 2022 00:38:55 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id j1so196967pfj.5;
-        Thu, 03 Mar 2022 00:38:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=SGMF6oSM44wO/3sji0yXCG/PEtOPShxdSQ68WLQRB2g=;
-        b=ZvINIOlHF3nZHDcX3MwxAzlzprOUAV7bE6ys/MgPVlfVq9lkuahVjDHsPLQ7QbaFo9
-         fQEFqUdMgi81YiKV62ulZnN7ZvbWazV6yRB1Qn/XiuQndMVO9fvHUymuPfTr2Dg+jh50
-         vUEnvjC71yyLrdhZGmiVJ4PzTrzLKfXKpEMH9pkW4eVCRVAqTfa9XuvSN7zcx65Vy8CK
-         d46NAYhkVq2HOhizng3Ws+JRbkWyYjQl4vq/u0RRAuHhPVUlG5PBN7oH7sIbE0gusQ26
-         6C+XTV9PxP4Ds6jAKJQCAmbFUS0yNAc3zTUs7Z/QKxXKC+XQ8KtJ4GqninQZxzg5r19Q
-         dsow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=SGMF6oSM44wO/3sji0yXCG/PEtOPShxdSQ68WLQRB2g=;
-        b=w4lIIlpEWhVPgQ3x/bg+YHIjulTWDKGK7kkBECCdGPzJ68GyOwdYp9eGD4vPHBHNJv
-         FqC4r8Kyv5bAnIgwCVQ6OQgrFGxCMH1nAv1PNs3XVeTH4Bfhv64vAWJFCGkGq98m+kpP
-         O5HuBr/pKxfzySFjhR1l1CEj2ZwBBgyNgYcM5w255mew6GdYh+mW1x/vkhYR+nHzG52m
-         3XxAnkB9mg/2X1S/OK3aD0PS46qcKXvoRVytX2Y7h/wE5x6ZQMl8nkfDPUbthKUZIzRx
-         r3WruzVeaWH156hJdcJyX/4bS3bpmEY80QZQd5MBO+Kug7rOV9qxGZewJWECinZBmhRI
-         0sAw==
-X-Gm-Message-State: AOAM5325jxmfLyVe9lc9dT85I2WUTfVZBpbQdetR2XWJ22VblciWWYRN
-        Lwlc6EeWgUfTfvwkvWo5w9s=
-X-Google-Smtp-Source: ABdhPJxqu7M+1zWgFCPBx1x396RDv729JpxnE5pMePfUDpYTg5HqtDHmeV1ToBxB32C6BUNb5VRxjw==
-X-Received: by 2002:a63:f03:0:b0:374:50b5:1432 with SMTP id e3-20020a630f03000000b0037450b51432mr28638188pgl.308.1646296735582;
-        Thu, 03 Mar 2022 00:38:55 -0800 (PST)
-Received: from ubuntu.huawei.com ([119.3.119.19])
-        by smtp.googlemail.com with ESMTPSA id q92-20020a17090a1b6500b001bc169e26aasm6405436pjq.2.2022.03.03.00.38.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 00:38:54 -0800 (PST)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     xiam0nd.tong@gmail.com
-Cc:     David.Laight@ACULAB.COM, akpm@linux-foundation.org,
-        alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de,
-        bcm-kernel-feedback-list@broadcom.com, bjohannesmeyer@gmail.com,
-        c.giuffrida@vu.nl, christian.koenig@amd.com,
-        christophe.jaillet@wanadoo.fr, dan.carpenter@oracle.com,
-        dmaengine@vger.kernel.org, drbd-dev@lists.linbit.com,
-        dri-devel@lists.freedesktop.org, gustavo@embeddedor.com,
-        h.j.bos@vu.nl, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, jakobkoschel@gmail.com,
-        jgg@ziepe.ca, keescook@chromium.org,
-        kgdb-bugreport@lists.sourceforge.net, kvm@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-block@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-sgx@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, linux@rasmusvillemoes.dk,
-        linuxppc-dev@lists.ozlabs.org, nathan@kernel.org,
-        netdev@vger.kernel.org, nouveau@lists.freedesktop.org,
-        rppt@kernel.org, samba-technical@lists.samba.org,
-        tglx@linutronix.de, tipc-discussion@lists.sourceforge.net,
-        torvalds@linux-foundation.org, v9fs-developer@lists.sourceforge.net
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body as a ptr
-Date:   Thu,  3 Mar 2022 16:38:31 +0800
-Message-Id: <20220303083831.11833-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220303083007.11640-1-xiam0nd.tong@gmail.com>
-References: <20220303083007.11640-1-xiam0nd.tong@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231730AbiCCI7R (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Mar 2022 03:59:17 -0500
+Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA0316AA6F
+        for <linux-scsi@vger.kernel.org>; Thu,  3 Mar 2022 00:58:31 -0800 (PST)
+X-QQ-mid: bizesmtp88t1646297875tvknoqfu
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 03 Mar 2022 16:57:24 +0800 (CST)
+X-QQ-SSF: 01400000002000C0G000000A0000000
+X-QQ-FEAT: F3yR32iATbj+CDy6glGXK7CfKwYA2ck11zfxblzjk7VPDD0ZwURNsb75Ores6
+        6rmZ71mSIHAdegatBujGhJxy0iFB926mAyQ2lmoA14jrRIrn3iUD9iXdTxetPHrc9d5JD3L
+        z6ZojemhQP4AqkBacJgVKZuUQgUiST4zz1wnOyVdx9Wv0ipWFVSLSxlbh1lkp2T1abkEg3N
+        SKKJT2CKXEyUz+R3UXm4TkYEHjAZzVKOXUzRBorA8tJ4U4zTxhb193hrQR9DrbYt7hDzDOb
+        WlhGh7c+X8Uraz3hSKcLsDSDDsbwCStum9U2IJ4g1eurIUU9wmTBrtlZFcBej6C1FfAm7OS
+        vSe7mxK+HNbC0r+k9F4j6FWlMi91Lh+AstpyJHnIagKrEkkvdM=
+X-QQ-GoodBg: 1
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH] scsi: sr: Simplify ptr_min_max_vals adjustment
+Date:   Thu,  3 Mar 2022 16:57:22 +0800
+Message-Id: <20220303085722.2400-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-correct for typo:
+When the med->media_event_code value is equal to 2 or 3, the
+same value is returned, so it would be better to combine the
+implementation statements when the med->media_event_code value
+is equal to 2 or 3.
 
--for (struct list_head *list = head->next, cond = (struct list_head *)-1; cond == (struct list_head *)-1; cond = NULL) \
-+for (struct list_head *list = head->next, *cond = (struct list_head *)-1; cond == (struct list_head *)-1; cond = NULL) \
+Moreover, when a variable is equal to multiple values, it is
+better to use a switch judgment statement.
 
---
-Xiaomeng Tong
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ drivers/scsi/sr.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+index f925b1f1f9ad..610baa630067 100644
+--- a/drivers/scsi/sr.c
++++ b/drivers/scsi/sr.c
+@@ -222,12 +222,16 @@ static unsigned int sr_get_events(struct scsi_device *sdev)
+ 	if (eh->nea || eh->notification_class != 0x4)
+ 		return 0;
+ 
+-	if (med->media_event_code == 1)
++	switch (med->media_event_code) {
++	case 1:
+ 		return DISK_EVENT_EJECT_REQUEST;
+-	else if (med->media_event_code == 2)
+-		return DISK_EVENT_MEDIA_CHANGE;
+-	else if (med->media_event_code == 3)
++	case 2:
++	case 3:
+ 		return DISK_EVENT_MEDIA_CHANGE;
++	default:
++		break;
++	}
++
+ 	return 0;
+ }
+ 
+-- 
+2.20.1
+
+
+
