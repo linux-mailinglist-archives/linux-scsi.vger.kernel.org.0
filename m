@@ -2,251 +2,212 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD34A4CBF29
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Mar 2022 14:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6744CC07A
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Mar 2022 15:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233772AbiCCNxE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Mar 2022 08:53:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S234211AbiCCPAW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Mar 2022 10:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiCCNxE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Mar 2022 08:53:04 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A19E1795DC
-        for <linux-scsi@vger.kernel.org>; Thu,  3 Mar 2022 05:52:18 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id bx5so4629872pjb.3
-        for <linux-scsi@vger.kernel.org>; Thu, 03 Mar 2022 05:52:18 -0800 (PST)
+        with ESMTP id S234205AbiCCPAU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Mar 2022 10:00:20 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63210DE2F8;
+        Thu,  3 Mar 2022 06:59:34 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 223C094w028870;
+        Thu, 3 Mar 2022 14:59:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=NdTOJvEPuVWz7NT6CQ3oHJj3AAdJcYuXcEu5GoiwbKU=;
+ b=k2A4DJsEBFtW3PwiWhpsJCQf6D42beL8wZxEMtc0/3R+T3MBDurjyRzxqqAsVqGV/nxk
+ E+960Zgb8YzjO+Hg8Os/Qg18yqzuV1pttYX9ejYkG+baRV7MNDsUHCbdMGNKR8zlEtXX
+ tPbSg2Iq9bSVgwx5iahnlPVSsRUFQeHwOF+Pm31J4yg5cy7010NannFIPW/9XhMnXWgw
+ lIkNGq+TRPgqazIdDPhiZyhDYWVVjzjG3l+Gz3Jot6bRFd194g7kEb2Dp6xJkX/t18iS
+ 7DD4fEKR97o0bhZ7F3oSprZFGvqJVLK+XvOVx/OKJNXWNTGEns14Hm3KZ8M9iIBo63yv mg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3eh14c1376-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 03 Mar 2022 14:59:15 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 223Eu7aO164498;
+        Thu, 3 Mar 2022 14:59:14 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2104.outbound.protection.outlook.com [104.47.58.104])
+        by userp3030.oracle.com with ESMTP id 3ef9b3k7yc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 03 Mar 2022 14:59:14 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BGDuo4xppngLzfmyrBY3RtbpHfqwbOJBLmmxNViiNiiCfr/9wDuX3cREPE1v//2V6In9CYdp9Sieq90H+s3pOOO2Kg6ObBll6hyOpeJNfB8TPc20BIEIh7F89+VcmMoqsyRRtHr4aAa/0dr535EyWh+0/9GHUvWU3d6LU1b8UiwL7alnNDvYGmy9l1gF1b8WQ9RBnJdweFeJUdwlkreM4x+MvZwKVkS4jjUmUS2BO17o6DSsjRXl3eGMnHDJPs8w9OtLe8XvsPfiaJSugf3nBxx7u2E2Hq/iHL2G0b88fS022B6p4gnPLJUdNIuwQbECEHKdJHLExLEYnF9F4pPxHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NdTOJvEPuVWz7NT6CQ3oHJj3AAdJcYuXcEu5GoiwbKU=;
+ b=J/s60wyLMX4vEfk0lgvpRr7QyfooYiStB4hG67Gm8Z6PATPvFEs4xGjaa9umXC4M5DdAgBA8axhN89Nq9wTenhl+NtPx4rrlq1kGS1nCxidYxmvdiSCS6euYyjX4meHqN+rJQb3C11w/cM36Yz9sw5HDSqkOy2u5/EaHZpkX56Rf2lbSPELR1xhrG0Bvv+a7F8nvl9rvgLw34QvRhUIPBcrBaoJ+cArs5KQS6YxF3cTLK2rsN3s2/FLz87cM1E/xutQshBDeJAphQ3yVOiyMTcBBd9rDYTbD935ccJToWw9kgyiet+Pv2IS+MAjU+zIUnt0VsUDqX77A2WPE/dtygQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=athXeL9enq5NDZ2c8XIOUaCPv0/mTgSdb3Eh7gkk5OI=;
-        b=NhSd7RGEgJFvniyppuWF7xFSTMKP1j7HogVSLq6TYX4OXtCbkImxUrn/qwjcWv/kRn
-         v2N+R5FVws9uyR9z30qEGL3GnjRWkAsbhvQGFUyfNcRYYCIgSgRdsEOPDqFJXK1a3RGJ
-         l0ULWQHo/mYkX/s4rI32/jzh3cpXHbGqPtbMk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=athXeL9enq5NDZ2c8XIOUaCPv0/mTgSdb3Eh7gkk5OI=;
-        b=Ty4ddtrjUaZFblC30VqL2HVZDt/xpOgTid6rDzbW2GFBpOcAxzIHGWR70Bn63vCe5c
-         egFkALZCP3KVmmhO2DGA7J8gYlrcdCuB3akF2rHij+tQphc7XkBF4oTyYSgu+7ayUIoZ
-         4SH0k4h8Si7Sv8mRWMzszARNrWxrc/9vTUOVywgwkmd9aZ1C7Lb0aCfBbXSk72tfzDnd
-         TbIWM4MXG4jpQPJEc1kmIGzhFbfVtw5bL0GBbpcxeSc3Js2HEjW3XWZL5ZJUbi5GEoAn
-         jxLKTjw35MbmzbiAbliaJbfAh7SjA7ciSooNEL+GyXdpPwXbnttif82CQ24XPd3WvXSG
-         hzSA==
-X-Gm-Message-State: AOAM533q6NyNkLb1pb+v5ioL27H3iZn+8lH4CUaxrzAFD801mrSVEYnn
-        iZs/cVQVWNjPfhOe1kxcrPjUhoiJC3cVuDL5tvN7qKxZyFCrBGpj4cIXTG/aeRfSJhOY/Y3hYFG
-        rbH5tvWRZZqMVeAVXcT55RttA/0cxoEcHUPx7F/Avk5qUPRnJ73Uxe7dcj6Un5x38zOOakhrq4y
-        eUIvr/emXgLLo=
-X-Google-Smtp-Source: ABdhPJwduJDi9rzsgU6fSSckuTpDAPjQxLuSyxq41Mm4OBnCMdfl6T2xe0AWirkqP/G5jKn0dec8ZQ==
-X-Received: by 2002:a17:90a:bf86:b0:1bd:6057:b77c with SMTP id d6-20020a17090abf8600b001bd6057b77cmr5418470pjs.72.1646315537343;
-        Thu, 03 Mar 2022 05:52:17 -0800 (PST)
-Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id i128-20020a626d86000000b004f3f2929d7asm2579757pfc.217.2022.03.03.05.52.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 05:52:16 -0800 (PST)
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH] mpt3sas: Fix incorrect 4gb boundary check
-Date:   Thu,  3 Mar 2022 19:32:30 +0530
-Message-Id: <20220303140230.13098-1-sreekanth.reddy@broadcom.com>
-X-Mailer: git-send-email 2.27.0
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NdTOJvEPuVWz7NT6CQ3oHJj3AAdJcYuXcEu5GoiwbKU=;
+ b=WuwEY2PIgUJ3tFK0T2YZAB7uuDwU1YX+1rhyTrv6+zWVEMKXNqZWOvs/u1hpAWyYCHNXBxu0h1o1ZGgg5qaGxqnvVAzGdWoUZSpCY7ewGQKvA0dT79OaH1GtWXqrtDjXfUldQPfs7/7pHV+uvYmJc3ujpyxtbeSA5HwYD/3wUZ0=
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
+ DM6PR10MB2811.namprd10.prod.outlook.com (2603:10b6:5:61::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5038.14; Thu, 3 Mar 2022 14:59:08 +0000
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::3dd8:6b8:e2e6:c3a2]) by DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::3dd8:6b8:e2e6:c3a2%12]) with mapi id 15.20.5038.015; Thu, 3 Mar 2022
+ 14:59:08 +0000
+Message-ID: <85a64450-99c8-268d-1ac7-86e70cbb3562@oracle.com>
+Date:   Thu, 3 Mar 2022 08:59:06 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 2/2] iscsi_tcp: Check if tcp_conn is valid in
+Content-Language: en-US
+To:     Wenchao Hao <haowenchao@huawei.com>, Lee Duncan <lduncan@suse.com>,
+        Chris Leech <cleech@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wu Bo <wubo40@huawei.com>, Zhiqiang Liu <liuzhiqiang26@huawei.com>,
+        linfeilong@huawei.com
+References: <20220304025608.1874516-1-haowenchao@huawei.com>
+ <20220304025608.1874516-2-haowenchao@huawei.com>
+From:   Mike Christie <michael.christie@oracle.com>
+In-Reply-To: <20220304025608.1874516-2-haowenchao@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM5PR07CA0083.namprd07.prod.outlook.com
+ (2603:10b6:4:ad::48) To DM5PR10MB1466.namprd10.prod.outlook.com
+ (2603:10b6:3:b::7)
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d3770905d950b49c"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0d8a0adc-e33c-4519-dbf6-08d9fd265e69
+X-MS-TrafficTypeDiagnostic: DM6PR10MB2811:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB281172971BDE0C13CC3B3F4BF1049@DM6PR10MB2811.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: I/18VjN8mSy1R5sEZzUJsGJWFzb2EGhzastWLlxL0M+XWlkT5I6MNOCLk3DYNvIj+/Zas5M/WwWuRnciwVjer4+Cf4sgy/o0xwdDTY06WneDEhQjUh7oaC+mk8ON6EVat7oZatJoTIQU6RQCTHduWUe0RmYmzW1cUrHkgjzcXNp0juMkRERZR+wMEutl1rA7OBvOGSYvGe5OBoE2n8zk3O4LxoHGAMx5y+AljzG2EJH3FvK4fPIMzxIXbfi9YdOB7GAFNgBYurWaTaJb/iCahLC5bdM93KcH4F7Je6XkAykujudTpUGns9Ly8LBttMT2EoNKPE9KXDxm2WWASFNbL5L5OHBk7T8Kd5Cq3JvOb6anW7nHguANEl7bD9EhQdJ7ROzHA4D4KE3Jl/NLytKuTgu1r9FbFgrKiK20JDp0VWWt26fZ7taBJteoQAGwnw2Hbz88JTXTteN3dgZzkWjm0CxVUU1EEH1rDbPUppayIZnl73ljq6QxN2ow4PMMLP7jpcXPWKjEacHHYVJn5IO3AXgvAegtV2XNg7mTlJjfILZC9zAcSYoGbbnbrQyCVxF1KoWZaUDxOXFg888bZdgJzuiXoA6Dim0quR9+IKqM4dnTPh4Bzc7tEbcT7jEqR9DZX5RvrYWsjKY/+81ZpCZbdYNcnvjdRU/0pBB7XMdF0vGnOGcbpoTkFJLKmEmhlyhohUzDV+8+qSEWzAj3PYBjiTkjVOJNP3qBbvCPc/chi/A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(110136005)(31686004)(316002)(83380400001)(8936002)(86362001)(6486002)(54906003)(36756003)(31696002)(26005)(186003)(7416002)(6506007)(2616005)(5660300002)(38100700002)(66946007)(4326008)(508600001)(66476007)(66556008)(8676002)(2906002)(53546011)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M2V3S2l6eTJXKzZHMXBuVTdqcWw5NGVIWFBwSWhkb2ptdWwrVjdFZERrWk1I?=
+ =?utf-8?B?NE9KOGI2bDNtOFVsRzVJU3VESGRoWDhpZW9OZ093WDl1b2tRcStNVmVUTXQz?=
+ =?utf-8?B?d2FmVmVFS2cxUnhuejd2WVFBL3FjYTNEWkVyVkVkbTd3cUg3Nng0VDB6M05p?=
+ =?utf-8?B?OWV1RWpxVXRZWC9wK21JTC9vSzhlNlBUeXZOUUdsd0VVQXF4cXdDdS81L2ZM?=
+ =?utf-8?B?TGdBUXNsbmJ5M1V2RU9qb0E1OUprQnN6NUtocWlIR2xrK2NxVm9yQkd4R0cv?=
+ =?utf-8?B?eldQUS9SV2huSjBRMTZkZG1obTlGeUgwOUJqTllPOWwwcGZSeW1OMnRCb3My?=
+ =?utf-8?B?VHhTTGlwcGF6dVNzV1l6S1o0cklYKzlRaENMaU5XZFkyV1JsOFlhWDEyMUd1?=
+ =?utf-8?B?d3pXWjVLWkVOczJaNDI5dUpXL29BaEgyZGJ1RVdOZFFsQmpxbWo4T1hXb3lx?=
+ =?utf-8?B?Y3J1N1c4Ri9odkFjdy95YzlRQVhDVHFBQUVFdWN6bXpYbDU4ZE5jcEsybHBa?=
+ =?utf-8?B?clVIOWViVm1iVU9mNnRxL1o2NHdTL00vd29sNHZjSzUvSEdtT2tIbGFnTmti?=
+ =?utf-8?B?UWR6UDV0SzBCcnE4T1JYOWZHSXNYUjFaSWNLWk90Q1N5RUpCTnZnVGVEL1VI?=
+ =?utf-8?B?QmswUUJacTZRMm9YM2locStZMWsyaFVQWmtLbStyVjRIczJrV2pCdGx3cUt5?=
+ =?utf-8?B?dFk3bXVLN1RrdkFoR1IvQTZ3T2lhRk1RaUpCRmZsMTdjZ3pScldraVhreDdz?=
+ =?utf-8?B?TkVxL1pZeVJ0OHo1Wkt2RVRLbG42Q0dESTJ4V3MydU1sbzZCNTZrRUNZQlVx?=
+ =?utf-8?B?OFJQOVFjZWpRWG9MNnVTRzZ2WWhBWExwdFFaVlhvUmdsYjhEUHY4TUZ4YUVk?=
+ =?utf-8?B?bzZndVJ2M0ZPb2pZQzZRcVQrWXpNK2pzVWpJeEFXNWt4b2dpSHZidWt1M1lD?=
+ =?utf-8?B?dkQzdnVGTEhFQ0JzaWJITmlOSzk5bTRidGxXRVp1VUllOU1KbzhabUJOOGFJ?=
+ =?utf-8?B?RVV2dHpDY0FaeEVNZFVxVHMyK1lyZlp0Nm4wQnpNTHMxZjVRWnhkWTczT2kx?=
+ =?utf-8?B?SWdLbVpqcTY1bVVVRFZKbWp1YVY4a2Jpd0VmaXN4RzFqcVFGWEhGTXZ1dVNI?=
+ =?utf-8?B?eWJMZ1JaSGdmMHVvcWtXUExSYUhERHR1bm95K2FSb2d2aE4yY1hXdGd1elV2?=
+ =?utf-8?B?TUR4bnJNa1crUkZ3WTJSekFzbG5TRU1lR3ZpTy9OVklQQUozZEkveXpZUFl5?=
+ =?utf-8?B?b2QvaUhyQi9uVlkvQXU3MzZjMUdybWlwS0VCUVh4aGF3UVh5L25VTWZFY2lH?=
+ =?utf-8?B?UG5jd3JRRlJ2Z1QwZXlsUzZSQkIxOG1TMGhoMGNBOGZEUnVxOEtiMjhOYUth?=
+ =?utf-8?B?VW1kN2N5QUd2Wm55aGxCOXdTVC9qWnVZdlF4UEFNWjJROHMyYWVSNWNHcm9y?=
+ =?utf-8?B?MnJXOEhEOHNBdE5kc3RJTndHUEdtdUFCdFRvVEJ2WElzN0F3TktJY0xUY1lC?=
+ =?utf-8?B?OThXZXlVNlRTbG9rYVVMUEYxWFR6Qkcra1JZQUtVWUtBTnNoWEFzL2tBeG9U?=
+ =?utf-8?B?ekNxVWIrbXFjcGtZYkJaSy93QXNQNmhCR1Q3VzdMM3NHTnpBZFp0YkFyWSty?=
+ =?utf-8?B?OWhBOXZPRGhDN0lTdE9odG9nd1VKbENZYk13UE5KclQ4WjF2Q1FueExNTEJX?=
+ =?utf-8?B?RTB3V0QvaHFjdU1QeFo1YkxwRnlxa1VlcGQ1QVlRdVlWWUY2ZlhHL0ltaUxW?=
+ =?utf-8?B?UGhmUjh6a01FUmtUdGhBbGJ0R3Z3UGRXNW13Z0l6OG5GQzJ4RUN1TEpveDlY?=
+ =?utf-8?B?MHFFc25ZT1Z3RS9oemFGd0pUOFMxczEwUVZlQU5MZEREM2h0dEJLdDdFU1FB?=
+ =?utf-8?B?YjJ0TjBYdlZ2QTdpeFBiekJXYStkRmlxdGl2UCtlM2UrMDZqaitYbTdHamxM?=
+ =?utf-8?B?MnI0K0NIWHZ0TUw1d2ltOUpSOTlxOEdreUYxQjRaUVFnUXBBa01PajUvQjQx?=
+ =?utf-8?B?alNRRnE5dFV2aWJwV1BMQ3Z6cnZ6UkROQzBBVmdwOHowRW83LzBQb05WY0Y1?=
+ =?utf-8?B?MU0wRnhSRDJ3dmF0SDRXQ2IwdGhZWEpXbFBwcERYQnpaSm9qSHg1VjhIUEZy?=
+ =?utf-8?B?TC83L0pFY1B0YlY1MVZSU3BYdjdFYWhVL2pMcG8zMkRGK2swdklEaTlObVBJ?=
+ =?utf-8?B?Nlo5YSt5VUpnTHpOY0ZSMTd6djJNTHhQWVRDMmU4S2FNSUlaMjZPMW9IRm1z?=
+ =?utf-8?B?dUZTNUwvdTV0cXpJdk42VnlQS093PT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d8a0adc-e33c-4519-dbf6-08d9fd265e69
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 14:59:08.6560
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pa8ucy6G4b2A+xAutUytPd3Beoc7AdcHmMbyeEg5NZPrY9v84EM70u+Ms1s89B17Tj/JkOZq5/sM+vIdQMa9Cj7Pdjxo1jtiOaHhBbm36L4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2811
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10274 signatures=686787
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
+ mlxscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2203030072
+X-Proofpoint-GUID: QBmCLm0Op-ixg7FgvjCo84tk_Bq9UHIf
+X-Proofpoint-ORIG-GUID: QBmCLm0Op-ixg7FgvjCo84tk_Bq9UHIf
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000d3770905d950b49c
-Content-Transfer-Encoding: 8bit
+On 3/3/22 8:56 PM, Wenchao Hao wrote:
+> iscsi_create_conn() would add newly alloced iscsi_cls_conn to connlist,
+> it means when userspace sends ISCSI_UEVENT_SET_PARAM, iscsi_conn_lookup()
+> would found this iscsi_cls_conn and call the set_param callback which is
+> iscsi_sw_tcp_conn_set_param(). While the iscsi_conn's dd_data might not
+> been initialized.
+> 
+> Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+> Signed-off-by: Wu Bo <wubo40@huawei.com>
+> ---
+>  drivers/scsi/iscsi_tcp.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+> index 14db224486be..a42449df6156 100644
+> --- a/drivers/scsi/iscsi_tcp.c
+> +++ b/drivers/scsi/iscsi_tcp.c
+> @@ -716,13 +716,17 @@ static int iscsi_sw_tcp_conn_set_param(struct iscsi_cls_conn *cls_conn,
+>  {
+>  	struct iscsi_conn *conn = cls_conn->dd_data;
+>  	struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
+> -	struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
+> +	struct iscsi_sw_tcp_conn *tcp_sw_conn;
+>  
+>  	switch(param) {
+>  	case ISCSI_PARAM_HDRDGST_EN:
+>  		iscsi_set_param(cls_conn, param, buf, buflen);
+>  		break;
+>  	case ISCSI_PARAM_DATADGST_EN:
+> +		if (!tcp_conn || !tcp_conn->dd_data)
+> +			return -ENOTCONN;
+> +
+> +		tcp_sw_conn = tcp_conn->dd_data;
+>  		iscsi_set_param(cls_conn, param, buf, buflen);
+>  		tcp_sw_conn->sendpage = conn->datadgst_en ?
+>  			sock_no_sendpage : tcp_sw_conn->sock->ops->sendpage;
 
-Driver has to do a 4gb boundary check using the pool's
-dma address instead of using a virtual address.
+Is this something you hit or from code review?
 
-Fixes: d6adc251dd2f("mpt3sas: Force PCIe scatterlist allocations to be within same 4 GB region")
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
----
- drivers/scsi/mpt3sas/mpt3sas_base.c | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+We have those state checks:
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index ebb61b47dc2f..a10ceaa8f881 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -5723,14 +5723,13 @@ _base_release_memory_pools(struct MPT3SAS_ADAPTER *ioc)
-  */
- 
- static int
--mpt3sas_check_same_4gb_region(long reply_pool_start_address, u32 pool_sz)
-+mpt3sas_check_same_4gb_region(dma_addr_t start_address, u32 pool_sz)
- {
--	long reply_pool_end_address;
-+	dma_addr_t end_address;
- 
--	reply_pool_end_address = reply_pool_start_address + pool_sz;
-+	end_address = start_address + pool_sz - 1;
- 
--	if (upper_32_bits(reply_pool_start_address) ==
--		upper_32_bits(reply_pool_end_address))
-+	if (upper_32_bits(start_address) == upper_32_bits(end_address))
- 		return 1;
- 	else
- 		return 0;
-@@ -5791,7 +5790,7 @@ _base_allocate_pcie_sgl_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
- 		}
- 
- 		if (!mpt3sas_check_same_4gb_region(
--		    (long)ioc->pcie_sg_lookup[i].pcie_sgl, sz)) {
-+		    ioc->pcie_sg_lookup[i].pcie_sgl_dma, sz)) {
- 			ioc_err(ioc, "PCIE SGLs are not in same 4G !! pcie sgl (0x%p) dma = (0x%llx)\n",
- 			    ioc->pcie_sg_lookup[i].pcie_sgl,
- 			    (unsigned long long)
-@@ -5846,8 +5845,8 @@ _base_allocate_chain_dma_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
- 			    GFP_KERNEL, &ctr->chain_buffer_dma);
- 			if (!ctr->chain_buffer)
- 				return -EAGAIN;
--			if (!mpt3sas_check_same_4gb_region((long)
--			    ctr->chain_buffer, ioc->chain_segment_sz)) {
-+			if (!mpt3sas_check_same_4gb_region(
-+			    ctr->chain_buffer_dma, ioc->chain_segment_sz)) {
- 				ioc_err(ioc,
- 				    "Chain buffers are not in same 4G !!! Chain buff (0x%p) dma = (0x%llx)\n",
- 				    ctr->chain_buffer,
-@@ -5883,7 +5882,7 @@ _base_allocate_sense_dma_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
- 	    GFP_KERNEL, &ioc->sense_dma);
- 	if (!ioc->sense)
- 		return -EAGAIN;
--	if (!mpt3sas_check_same_4gb_region((long)ioc->sense, sz)) {
-+	if (!mpt3sas_check_same_4gb_region(ioc->sense_dma, sz)) {
- 		dinitprintk(ioc, pr_err(
- 		    "Bad Sense Pool! sense (0x%p) sense_dma = (0x%llx)\n",
- 		    ioc->sense, (unsigned long long) ioc->sense_dma));
-@@ -5916,7 +5915,7 @@ _base_allocate_reply_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
- 	    &ioc->reply_dma);
- 	if (!ioc->reply)
- 		return -EAGAIN;
--	if (!mpt3sas_check_same_4gb_region((long)ioc->reply_free, sz)) {
-+	if (!mpt3sas_check_same_4gb_region(ioc->reply_dma, sz)) {
- 		dinitprintk(ioc, pr_err(
- 		    "Bad Reply Pool! Reply (0x%p) Reply dma = (0x%llx)\n",
- 		    ioc->reply, (unsigned long long) ioc->reply_dma));
-@@ -5951,7 +5950,7 @@ _base_allocate_reply_free_dma_pool(struct MPT3SAS_ADAPTER *ioc, u32 sz)
- 	    GFP_KERNEL, &ioc->reply_free_dma);
- 	if (!ioc->reply_free)
- 		return -EAGAIN;
--	if (!mpt3sas_check_same_4gb_region((long)ioc->reply_free, sz)) {
-+	if (!mpt3sas_check_same_4gb_region(ioc->reply_free_dma, sz)) {
- 		dinitprintk(ioc,
- 		    pr_err("Bad Reply Free Pool! Reply Free (0x%p) Reply Free dma = (0x%llx)\n",
- 		    ioc->reply_free, (unsigned long long) ioc->reply_free_dma));
-@@ -5990,7 +5989,7 @@ _base_allocate_reply_post_free_array(struct MPT3SAS_ADAPTER *ioc,
- 	    GFP_KERNEL, &ioc->reply_post_free_array_dma);
- 	if (!ioc->reply_post_free_array)
- 		return -EAGAIN;
--	if (!mpt3sas_check_same_4gb_region((long)ioc->reply_post_free_array,
-+	if (!mpt3sas_check_same_4gb_region(ioc->reply_post_free_array_dma,
- 	    reply_post_free_array_sz)) {
- 		dinitprintk(ioc, pr_err(
- 		    "Bad Reply Free Pool! Reply Free (0x%p) Reply Free dma = (0x%llx)\n",
-@@ -6055,7 +6054,7 @@ base_alloc_rdpq_dma_pool(struct MPT3SAS_ADAPTER *ioc, int sz)
- 			 * resources and set DMA mask to 32 and allocate.
- 			 */
- 			if (!mpt3sas_check_same_4gb_region(
--				(long)ioc->reply_post[i].reply_post_free, sz)) {
-+				ioc->reply_post[i].reply_post_free_dma, sz)) {
- 				dinitprintk(ioc,
- 				    ioc_err(ioc, "bad Replypost free pool(0x%p)"
- 				    "reply_post_free_dma = (0x%llx)\n",
--- 
-2.27.0
+if ((conn->state == ISCSI_CONN_BOUND) ||
+    (conn->state == ISCSI_CONN_UP)) {
+	err = transport->set_param(conn, ev->u.set_param.param,
 
+so we don't call set_param until after we have bound the
+connection which will be after ISCSI_UEVENT_CREATE_CONN has returned.
 
---000000000000d3770905d950b49c
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-5AGo2E3pe+2yEgkxKvM2fnniZHUiSjbrfKk6nl9RIXPOKUP5HntZFdA5XuNYXWM+HPs3O0AJwBm/
-VCZsZtkjVjxeBmTXiXDnxytdsHdGrHGymPfjJYatDu6d1KRVDlMCAwEAAaOCAd0wggHZMA4GA1Ud
-DwEB/wQEAwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUu
-Z2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggr
-BgEFBQcwAYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
-YTIwMjAwTQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3
-Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4
-aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmww
-JwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUClVHbAvhzGT8
-s2/6xOf58NkGMQ8wDQYJKoZIhvcNAQELBQADggEBAENRsP1H3calKC2Sstg/8li8byKiqljCFkfi
-IhcJsjPOOR9UZnMFxAoH/s2AlM7mQDR7rZ2MxRuUnIa6Cp5W5w1lUJHktjCUHnQq5nIAZ9GH5SDY
-pgzbFsoYX8U2QCmkAC023FF++ZDJuc9aj0R/nhABxmUYErIze2jV/VO8Pj7TnCrBONZ/Qvf8G5CQ
-X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
-eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
-Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMx1Xj2CO5RJEBKmk5xr
-HgwlnE4o2kWoWLgLZvFhjpuwMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIyMDMwMzEzNTIxN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
-BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDCvXL0iFfXxDJK816hotcXDFOnq64iyfYNk2Kd
-4DoTi5JcwAiX7wIlHFnjiD9X8M4lUodI5PHpf3ktJk4okmJtyuWw2mkvmO5ED6822dw24VJxSr3t
-nRZYc7vndi36UASziFPz2lrlaI16/o07BRUjl0zXFfVZoQFcTaP6Hwth5QwRPsiAu7asFDXASV22
-z97+Prb311Ue1UWPJ2YBb3OkZxmTR0FmcOZ7NgKVjPuxkKEcM6EvtrphqcXzUmAszbzXzsRhLKE3
-Jp8IYOm8Hidl8NcrOXKhu0VrhpTNnpUGaGAKMFT9jTX4ZUDy389qW9p/g7xsQX/dMkoo0g/+e8Vu
---000000000000d3770905d950b49c--
+Also for this specific bug iscsi_if_recv_msg is called with the
+rx_queue_mutex, so set_param can only be called after the
+ISCSI_UEVENT_CREATE_CONN cmd has returned.
