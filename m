@@ -2,88 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCBF4CEAC8
-	for <lists+linux-scsi@lfdr.de>; Sun,  6 Mar 2022 12:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 732F14CEDBD
+	for <lists+linux-scsi@lfdr.de>; Sun,  6 Mar 2022 21:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233344AbiCFLNF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 6 Mar 2022 06:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
+        id S232159AbiCFUfd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 6 Mar 2022 15:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233353AbiCFLMt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 6 Mar 2022 06:12:49 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CD760AB6
-        for <linux-scsi@vger.kernel.org>; Sun,  6 Mar 2022 03:11:57 -0800 (PST)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EB3913F631
-        for <linux-scsi@vger.kernel.org>; Sun,  6 Mar 2022 11:11:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646565111;
-        bh=fptfaOUAaErRHK6yyvwk8Ba2q3vPhWe6MKEfwn6hivY=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=kIEBkS4geO/1XXSDtxFXclTdE4OB6IWHj1bYyfy5BrVkAkJxAdvGint+r24MqMEpq
-         bw+6S1dZ118MfAZqKPCOgEgHhglW4+0jScD3gOMmUgn+YiJrAzWRI2hUTKaMXQ253g
-         Wt9ipRVKGhj2taUyerrFjvYzDi/oCsoffsscPC1Q0N6iveNoi9iGoi5GgZV9Vce4ae
-         Nt+NtAT72KQnK3F/Y0uUZz2QnYBZp48g/OZL6Tq7yoN43ONnolIiQ2XC3uC4tfwr25
-         MxIdaa7IsLbx4UePFnlUxp/Ozi9D72yjT/sXeDdcQ0MafaTxe0WSKAeW7Xz1A9LMrY
-         b+6atqfZ85/ZA==
-Received: by mail-ed1-f69.google.com with SMTP id l8-20020a056402028800b0041636072ef0so730349edv.13
-        for <linux-scsi@vger.kernel.org>; Sun, 06 Mar 2022 03:11:51 -0800 (PST)
+        with ESMTP id S230145AbiCFUfc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 6 Mar 2022 15:35:32 -0500
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225B25D66B;
+        Sun,  6 Mar 2022 12:34:40 -0800 (PST)
+Received: by mail-pg1-f178.google.com with SMTP id 27so11900038pgk.10;
+        Sun, 06 Mar 2022 12:34:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fptfaOUAaErRHK6yyvwk8Ba2q3vPhWe6MKEfwn6hivY=;
-        b=KFuLxwr9G+6R7pkQDkyllnwUs56nVBzTZcypiXxD2ItAEVC19ZIV2Kea5pk1MXmksg
-         rPxdE+1B1Xj6LcSNWgNEjih6PtipnJahH4X5Sq/62hZHoLCyHvOqCWz319byVgWAFMIx
-         SCnOJEmIfciZi6Gq2lHwk14BO+cE1JGIUPBLtx1U7hh+HS/3dML5HrNZbhybUoPdlqo3
-         sXevGDDG1bFom71LIhz/F0joydibYTCQgEPB/tTFOcIXmA76erzKppC5svn4AHoWC0IR
-         OwOl+fIuy1ElfFCSi3zJxeqcvmYEW7h7u57sIMtnPIelec5m5UOL5oVyWpCc+1797gzH
-         sqSA==
-X-Gm-Message-State: AOAM531fM8nJO5YteTo9ICGTOi9tRR622H99FmL15OlY2BlbP23uMd3Y
-        r7XYeAlOQNv2rFT+Iq/3hooc0+WbyqgMi7ICyuvt94XHIYzhwK8x8QGo/1SPKZewC2QWuj3511Q
-        vB1TDk9wq9MsB2SyKQ17Wo1b2fvqDGXat92iEkiI=
-X-Received: by 2002:a17:906:4fc7:b0:6da:92b2:f572 with SMTP id i7-20020a1709064fc700b006da92b2f572mr5333897ejw.184.1646565109086;
-        Sun, 06 Mar 2022 03:11:49 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJya7NhXOCbqGIagE53ZCTSIPIL5hGs6/ccWmxHFezSS2trgYWXGqqPKbwVvYlPcyFRrUXKq6w==
-X-Received: by 2002:a17:906:4fc7:b0:6da:92b2:f572 with SMTP id i7-20020a1709064fc700b006da92b2f572mr5333879ejw.184.1646565108853;
-        Sun, 06 Mar 2022 03:11:48 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id a9-20020a1709066d4900b006da888c3ef0sm3720444ejt.108.2022.03.06.03.11.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Mar 2022 03:11:48 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jan Kotas <jank@cadence.com>, Li Wei <liwei213@huawei.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 12/12] arm64: dts: qcom: sm8350: drop duplicated ref_clk in UFS
-Date:   Sun,  6 Mar 2022 12:11:25 +0100
-Message-Id: <20220306111125.116455-13-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220306111125.116455-1-krzysztof.kozlowski@canonical.com>
-References: <20220306111125.116455-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tkepIC4lMIVuMjQPZfxLhIDE5aSb73BtFhGo4WmZapk=;
+        b=YbijS4XGBhiAhdzDOXM1BqmSgnEEMNOFGOGayYwHzbjcmdZVuKRGISmsD/00iq+2Vj
+         JwGAjxxksNkEl9/4L6h89uUZPoDsCaSQpXc+XSEfMSOouljljMEZP0co76MYHjYLAoML
+         1Lt/8wn1eSd8N/XP9asSOY3lWvpBe2UIdBRq6HeyfbNNAtdr189e/bSZLYpHy4yX9/Ct
+         qIuS4uddqlJ5wK1eWRyDLHMa97G9QSMPPNsJeZ4HDtRmFoF2dOCLJS24jm7xKVDrxXCm
+         B1uRCeObScbOo/NXUfUUOT74zBOhaX7uBvYQ2spg/5jaT5kBZc6WRTCVtq2h8y/XaROY
+         6GBA==
+X-Gm-Message-State: AOAM530kAhQIRyhDZnzHWEthgXoY09tqnnRL9FHKKODUM3g5XgNkk7I3
+        bPuh9ryQQs0y64Dy1hYe2FKWrXXbMho=
+X-Google-Smtp-Source: ABdhPJxi7xF5oPWbisf85OMHp34Qugacxe8OccsHlhz2lNAozZnC4a2JY8ahGvzSVK5l6APlJCim0Q==
+X-Received: by 2002:a63:da0d:0:b0:364:b771:ff4 with SMTP id c13-20020a63da0d000000b00364b7710ff4mr7342369pgh.514.1646598879144;
+        Sun, 06 Mar 2022 12:34:39 -0800 (PST)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id na8-20020a17090b4c0800b001bf191ee347sm9049196pjb.27.2022.03.06.12.34.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Mar 2022 12:34:38 -0800 (PST)
+Message-ID: <99dc09a6-95b5-7dd4-2913-216aba35b3ba@acm.org>
+Date:   Sun, 6 Mar 2022 12:34:37 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 04/14] sd: rename the scsi_disk.dev field
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20220304160331.399757-1-hch@lst.de>
+ <20220304160331.399757-5-hch@lst.de>
+ <7ff2340d-892b-94b5-ec39-355a8f8adc73@acm.org>
+ <20220306084046.GA22113@lst.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220306084046.GA22113@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,42 +68,27 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ref_clk clock in UFS node is already there with a <0 0> frequency, which
-matches other DTSI files.
+On 3/6/22 00:40, Christoph Hellwig wrote:
+> On Sat, Mar 05, 2022 at 05:38:40PM -0800, Bart Van Assche wrote:
+>> On 3/4/22 08:03, Christoph Hellwig wrote:
+>>> +	/*
+>>> +	 * This device is mostly just used to show a bunch of attributes in a
+>>> +	 * weird place.  In doubt don't add any new users, and most importantly
+>>> +	 * don't use if for any actual refcounting.
+>>> +	 */
+>>> +	struct device	disk_dev;
+>>
+>> Isn't "weird place" subjective? How about mentioning the sysfs path
+>> explicitly (/sys/class/scsi_disk/H:C:I:L)? How about explaining why no new
+>> sysfs attributes should be added to that device instance?
+> 
+> Well, weird place means that all normale drivers would just use
+> attributes on the gendisk for it, but sd creates a completely pointless
+> device under the gendisk device for it.  If you have a better wording
+> I can change it.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 3 ---
- 1 file changed, 3 deletions(-)
+It's not that important. I wish it would be possible to get rid of this 
+struct device instance. I think this instance was introduced in 2006 by 
+patch "[SCSI] allow displaying and setting of cache type via sysfs".
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index d242bab69c2e..02589b3beb7c 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -1916,7 +1916,6 @@ ufs_mem_hc: ufshc@1d84000 {
- 			iommus = <&apps_smmu 0xe0 0x0>;
- 
- 			clock-names =
--				"ref_clk",
- 				"core_clk",
- 				"bus_aggr_clk",
- 				"iface_clk",
-@@ -1926,7 +1925,6 @@ ufs_mem_hc: ufshc@1d84000 {
- 				"rx_lane0_sync_clk",
- 				"rx_lane1_sync_clk";
- 			clocks =
--				<&rpmhcc RPMH_CXO_CLK>,
- 				<&gcc GCC_UFS_PHY_AXI_CLK>,
- 				<&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
- 				<&gcc GCC_UFS_PHY_AHB_CLK>,
-@@ -1936,7 +1934,6 @@ ufs_mem_hc: ufshc@1d84000 {
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
- 			freq-table-hz =
--				<75000000 300000000>,
- 				<75000000 300000000>,
- 				<0 0>,
- 				<0 0>,
--- 
-2.32.0
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
