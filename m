@@ -2,107 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EBA4CFCE8
-	for <lists+linux-scsi@lfdr.de>; Mon,  7 Mar 2022 12:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D52104CFD79
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Mar 2022 12:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242111AbiCGLbM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Mar 2022 06:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
+        id S235709AbiCGL44 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Mar 2022 06:56:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242085AbiCGLbC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Mar 2022 06:31:02 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1241028E1C
-        for <linux-scsi@vger.kernel.org>; Mon,  7 Mar 2022 03:18:44 -0800 (PST)
-X-UUID: b4b65282214a439aad2746082a62a926-20220307
-X-UUID: b4b65282214a439aad2746082a62a926-20220307
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <peter.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 314915228; Mon, 07 Mar 2022 19:18:39 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 7 Mar 2022 19:18:38 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 7 Mar 2022 19:18:38 +0800
-From:   <peter.wang@mediatek.com>
-To:     <stanley.chu@mediatek.com>, <linux-scsi@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
-CC:     <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <powen.kao@mediatek.com>, <qilin.tan@mediatek.com>,
-        <lin.gui@mediatek.com>, <mikebi@micron.com>, <beanhuo@micron.com>
-Subject: [PATCH v1] scsi: ufs: scsi_get_lba error fix by check cmd opcode
-Date:   Mon, 7 Mar 2022 19:17:52 +0800
-Message-ID: <20220307111752.10465-1-peter.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        with ESMTP id S233302AbiCGL4x (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Mar 2022 06:56:53 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235B76574;
+        Mon,  7 Mar 2022 03:55:59 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KBxcb0R6jz1GBys;
+        Mon,  7 Mar 2022 19:51:11 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 7 Mar 2022 19:55:57 +0800
+Received: from [10.174.178.220] (10.174.178.220) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 7 Mar 2022 19:55:56 +0800
+Subject: Re: [PATCH 1/2] iscsi_tcp: Fix NULL pointer dereference in
+ iscsi_sw_tcp_conn_get_param()
+To:     Mike Christie <michael.christie@oracle.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Wu Bo <wubo40@huawei.com>, Zhiqiang Liu <liuzhiqiang26@huawei.com>,
+        <linfeilong@huawei.com>
+References: <20220304025608.1874516-1-haowenchao@huawei.com>
+ <e2b37e24-44dc-a159-e45d-2c720fe7ffc1@oracle.com>
+From:   Wenchao Hao <haowenchao@huawei.com>
+Message-ID: <c2891c08-5809-1f56-8783-357e6df1bc1a@huawei.com>
+Date:   Mon, 7 Mar 2022 19:55:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e2b37e24-44dc-a159-e45d-2c720fe7ffc1@oracle.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Peter Wang <peter.wang@mediatek.com>
+On 2022/3/3 23:03, Mike Christie wrote:
+> On 3/3/22 8:56 PM, Wenchao Hao wrote:
+>> kernel might crash in iscsi_sw_tcp_conn_get_param() because it dereference
+>> an invalid address.
+>>
+>> The initialization of iscsi_conn's dd_data is after device_register() of
+>> struct iscsi_cls_conn, so iscsi_conn's dd_data might not initialized when
+>> iscsi_sw_tcp_conn_get_param() is called.
+>>
+> 
+> We are actually doing sysfs/device addition wrong.
+> 
+> We should be doing the 2 step setup where in step 1 we alloc/init.
+> When everything is allocated and initialized, then we should do
+> device_add which exposes us to sysfs. On the teardown side, we are
+> then supposed to do 2 steps where the remove function does device_del
+> which waits until sysfs accesses are completed. We can then tear
+> the structs down and free them and call device_put.
+> 
 
-When ufs init without scmd->device->sector_size set,
-scsi_get_lba will get a wrong shift number and ubsan error.
-shift exponent 4294967286 is too large for 64-bit type
-'sector_t' (aka 'unsigned long long')
-Call scsi_get_lba only when opcode is READ_10/WRITE_10/UNMAP.
+I reviewed the teardown flow of iscsi_cls_conn, it has already written 
+as what you saied.
 
-Signed-off-by: Peter Wang <peter.wang@mediatek.com>
----
- drivers/scsi/ufs/ufshcd.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 9349557b8a01..3c4caee8fb93 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -367,7 +367,7 @@ static void ufshcd_add_uic_command_trace(struct ufs_hba *hba,
- static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
- 				     enum ufs_trace_str_t str_t)
- {
--	u64 lba;
-+	u64 lba = 0;
- 	u8 opcode = 0, group_id = 0;
- 	u32 intr, doorbell;
- 	struct ufshcd_lrb *lrbp = &hba->lrb[tag];
-@@ -384,7 +384,6 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
- 		return;
- 
- 	opcode = cmd->cmnd[0];
--	lba = scsi_get_lba(cmd);
- 
- 	if (opcode == READ_10 || opcode == WRITE_10) {
- 		/*
-@@ -392,6 +391,7 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
- 		 */
- 		transfer_len =
- 		       be32_to_cpu(lrbp->ucd_req_ptr->sc.exp_data_transfer_len);
-+		lba = scsi_get_lba(cmd);
- 		if (opcode == WRITE_10)
- 			group_id = lrbp->cmd->cmnd[6];
- 	} else if (opcode == UNMAP) {
-@@ -399,6 +399,7 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
- 		 * The number of Bytes to be unmapped beginning with the lba.
- 		 */
- 		transfer_len = blk_rq_bytes(rq);
-+		lba = scsi_get_lba(cmd);
- 	}
- 
- 	intr = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
--- 
-2.18.0
+> The exposure to NL would be similar where it goes into the wrapper
+> around device_add. However, see my comments on the other patch where
+> I don't think we can hit the bug you mention because every nl cmd
+> that calls into the drivers is done under the rx_queue_mutex.
+> 
+> I think we should separate the iscsi_create_conn function like we
+> do for sessions. This is going to be a little more involved because
+> you need to also convert iscsi_tcp_conn_setup and the drivers since
+> we can call into the drivers for the get_conn_param callout.
+> .
+> 
+
+I hesitated about when should we call device_add(). I think there are 
+two places to call it.
+
+The first one is in iscsi_conn_setup(), after some initialization of 
+conn, it keeps same with previous's implement and need not to change 
+drivers' code. What's more, the change can fix iscsi_tcp's NULL pointer 
+access.  While this change can not make sure the LLDs related sources 
+are already initialized when iscsi_cls_conn is exposed to sysfs. It 
+means LLDs' callback are still responsible to check if the resources are 
+accessible.
+
+Another one is in create_conn callback for each driver's 
+iscsi_transport.  This need us to change each driver's code.
+
+I send 2 patches which make changes in iscsi_conn_setup(), it's ok with 
+iscsi_tcp, would you help to review them?
 
