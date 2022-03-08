@@ -2,62 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22ADB4D120E
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Mar 2022 09:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD6C4D1211
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Mar 2022 09:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344954AbiCHIWS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Mar 2022 03:22:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
+        id S1344979AbiCHIWW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Mar 2022 03:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344958AbiCHIWI (ORCPT
+        with ESMTP id S1344967AbiCHIWI (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Mar 2022 03:22:08 -0500
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D4D3F337
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Mar 2022 00:21:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD763F307
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Mar 2022 00:21:12 -0800 (PST)
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22881NIE019263
-        for <linux-scsi@vger.kernel.org>; Tue, 8 Mar 2022 00:21:10 -0800
+        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22881NIG019263
+        for <linux-scsi@vger.kernel.org>; Tue, 8 Mar 2022 00:21:12 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=WauoYmXPAzia8qIEqGeMdO4HverGL8Dm4HD5UNAkHRs=;
- b=Fi7f/ks81tQnpQSthqjECa0Hg1neObrhQg8hyX83kwvaSdSKvihUTJoFZqcr5bvkgQUp
- xQCT5f0bTj7stDQUyqQFOg3ZCIP2P75WiZgsB8X3X7Kho+OcMcgRyyWGF1I0crZlgQM0
- YmL0hpoBrFYgzRoyoOFG0TuS3VsUSs4uE3ToDEGNBBTqwsV6AH2TzMRvlg7INNvf/LIA
- rduhEmf06f3mJOWVOhzKZhGQ2BSiaJgj/obDna7nDCCQICLKAYGvxIWJ/u6zUORhhzpO
- xq0j9PwRqIIwqCTK6eHagGnXEdhSUChuAC+bgEv13iPbSkm77/9Mfvbm2XRCHtWgOfEZ KQ== 
+ content-type; s=pfpt0220; bh=DAoi2mL+YviUdvpicu3JIxY0cTG+YhS67DY/t42tjzU=;
+ b=ZxT8JxtF+lgTMp9cckDGRSDxGUBhaeImqjcsM0knPlt9mYB3m9v9M6Ya7GffofxF7Tef
+ ZHuWAE9Un9ToW8vjDyph9yyB66NbafOv3S+rvX8ARvR8f0JmAEtDsUZfTWOsI7xLE+pw
+ OQXZ0fWti6s9wRFAMFHX2JuBpf73jqTR4oTqD0avnx3fQkuA4teY+qhNt9wi5/UfqVF2
+ 2RcDBqhAtw/nNK1lTBJZ4F5yEuFJwbNx64y9M3ebQhLbe+7B571e0E2eLa6KG7Y4Eb7I
+ Rcu7nyHvsC/3AKDAZpS1qyxpJgNzuSw9pfNJ7DjEu2qJozqAsh3E+yaDOw9Uh0vSFKT6 qg== 
 Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3ep38p838b-7
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3ep38p838b-9
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Mar 2022 00:21:10 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+        for <linux-scsi@vger.kernel.org>; Tue, 08 Mar 2022 00:21:12 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
  (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 8 Mar
  2022 00:21:06 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
  Transport; Tue, 8 Mar 2022 00:21:06 -0800
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 4F02B5B6930;
+        by maili.marvell.com (Postfix) with ESMTP id 66E585B6926;
         Tue,  8 Mar 2022 00:21:06 -0800 (PST)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 2288L6Ux009845;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 2288L62V009849;
         Tue, 8 Mar 2022 00:21:06 -0800
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 2288L66L009844;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 2288L6Hu009848;
         Tue, 8 Mar 2022 00:21:06 -0800
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH 09/13] qla2xxx: reduce false trigger to login
-Date:   Tue, 8 Mar 2022 00:20:44 -0800
-Message-ID: <20220308082048.9774-10-njavali@marvell.com>
+Subject: [PATCH 10/13] qla2xxx: Fix stuck session of prli reject
+Date:   Tue, 8 Mar 2022 00:20:45 -0800
+Message-ID: <20220308082048.9774-11-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20220308082048.9774-1-njavali@marvell.com>
 References: <20220308082048.9774-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: JjnZn8_b3TdJHLIeU0tjRRly6SyAnrJs
-X-Proofpoint-ORIG-GUID: JjnZn8_b3TdJHLIeU0tjRRly6SyAnrJs
+X-Proofpoint-GUID: 8pAr2K579_QZGaWYHed3MDdgtCXXiln3
+X-Proofpoint-ORIG-GUID: 8pAr2K579_QZGaWYHed3MDdgtCXXiln3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-03-08_03,2022-03-04_01,2022-02-23_01
@@ -73,44 +73,34 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-While a session is in the middle of a relogin,
-a late RSCN can be delivered from switch. RSCN trigger fabric
-scan where the scan logic can trigger another session login
-while a login is in progress.
-This patch reduce the extra trigger to prevent multiple login
-to the same session.
+Remove stale recovery code that prevents normal path recovery.
 
 Cc: stable@vger.kernel.org
-Fixes: bee8b84686c4 ("scsi: qla2xxx: Reduce redundant ADISC command for RSCNs")
+Fixes: 1cbc0efcd9be ("scsi: qla2xxx: Fix retry for PRLI RJT with reason of BUSY")
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_init.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_init.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 3c58a2911937..a53894444460 100644
+index a53894444460..bf6979eb478a 100644
 --- a/drivers/scsi/qla2xxx/qla_init.c
 +++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -1644,7 +1644,8 @@ int qla24xx_fcport_handle_login(struct scsi_qla_host *vha, fc_port_t *fcport)
- 	    fcport->login_gen, fcport->loop_id, fcport->scan_state,
- 	    fcport->fc4_type);
- 
--	if (fcport->scan_state != QLA_FCPORT_FOUND)
-+	if (fcport->scan_state != QLA_FCPORT_FOUND ||
-+	    fcport->disc_state == DSC_DELETE_PEND)
- 		return 0;
- 
- 	if ((fcport->loop_id != FC_NO_LOOP_ID) &&
-@@ -1665,7 +1666,7 @@ int qla24xx_fcport_handle_login(struct scsi_qla_host *vha, fc_port_t *fcport)
- 	if (vha->host->active_mode == MODE_TARGET && !N2N_TOPO(vha->hw))
- 		return 0;
- 
--	if (fcport->flags & FCF_ASYNC_SENT) {
-+	if (fcport->flags & (FCF_ASYNC_SENT | FCF_ASYNC_ACTIVE)) {
- 		set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
- 		return 0;
- 	}
+@@ -2105,13 +2105,6 @@ qla24xx_handle_prli_done_event(struct scsi_qla_host *vha, struct event_arg *ea)
+ 		qla24xx_post_gpdb_work(vha, ea->fcport, 0);
+ 		break;
+ 	default:
+-		if ((ea->iop[0] == LSC_SCODE_ELS_REJECT) &&
+-		    (ea->iop[1] == 0x50000)) {   /* reson 5=busy expl:0x0 */
+-			set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
+-			ea->fcport->fw_login_state = DSC_LS_PLOGI_COMP;
+-			break;
+-		}
+-
+ 		sp = ea->sp;
+ 		ql_dbg(ql_dbg_disc, vha, 0x2118,
+ 		       "%s %d %8phC priority %s, fc4type %x prev try %s\n",
 -- 
 2.19.0.rc0
 
