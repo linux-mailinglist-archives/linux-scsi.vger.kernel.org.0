@@ -2,62 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79AC64D120C
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Mar 2022 09:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668924D1209
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Mar 2022 09:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344968AbiCHIWN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Mar 2022 03:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S1344973AbiCHIWK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Mar 2022 03:22:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344950AbiCHIWF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Mar 2022 03:22:05 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5523F312
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Mar 2022 00:21:08 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22881NI8019263
+        with ESMTP id S1344901AbiCHIWE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Mar 2022 03:22:04 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9159E3F304
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Mar 2022 00:21:07 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22883jqf000787
         for <linux-scsi@vger.kernel.org>; Tue, 8 Mar 2022 00:21:07 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=0BLKYEdapfD48YfBugNg0r93uA6yWTnAFxU0b3Ib8BE=;
- b=gEUkm2MrmqznimlvWaBVPF5b9MzyYzxKOCMLSGLitgkJV35378vsq3vNVAn9Zh8ejebS
- WqN7yjsRLkYgcK2+9A8oqvH9YIM7/c5PGM17WR8/gd6Vn+Ppg/F9RLW+8GyZ8ieUl73w
- x54y6V+qZCBev5mn484ds/M7dI1O6MElhyQy8EhDBqoLkgTZURkWLvphwrDwppfVZ2qq
- t/k5Qp1heRO8gNbEkL9QzalRGa/YxDYv1cm+/QKOzVKPLZYoQmSGGYZQLJch7qWTcE7c
- QEf+WrIvqJnFYJGtWTMDuNGnI1/Q0ejSfoko0oBEl7h8lEYRAkivwDnGvOjnvcA798cv +w== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3ep38p838b-1
+ content-type; s=pfpt0220; bh=mdo7I5BQgSXhkZdEVbh6RH8Pt6GTQY7vqtKmyGjF+xs=;
+ b=KqrS/6diGUrs9aR+rErA2OE43RCgu3jxqCUv4bn+ohIcycx3LgLPbZXTgQsJpCA2I4GP
+ up+KFFNxLS8zop8bPOIzMGQnvrLPyu2hOyP1rvm3CTltG4pjPD3IhtKWd7v37dZwhcMP
+ 8Vhxa2aw09IhrgyivyNVNIt94qbOKEaqspZi+otpyNkS+sV0ZCvI0yAG9d+aV4+bj71A
+ RYnEOODDcOCByTyUUYIT92FtbBPstn4FDBjyosCJvfgYKEQP+w5bxqqNFHEiT4y36WmV
+ D8zrfy8TbRwqcbtpU5V8Dnm3Y/hQbRkSMewe8phcEFuewusfgdhrqfCZxv8NlMkHGo0F fQ== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3ep39x82uy-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
         for <linux-scsi@vger.kernel.org>; Tue, 08 Mar 2022 00:21:07 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 8 Mar
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 8 Mar
  2022 00:21:05 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Tue, 8 Mar 2022 00:21:05 -0800
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 9B93A5B6929;
+        by maili.marvell.com (Postfix) with ESMTP id ADB8E5B692A;
         Tue,  8 Mar 2022 00:21:05 -0800 (PST)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 2288L5L6009817;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 2288L5qS009821;
         Tue, 8 Mar 2022 00:21:05 -0800
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 2288L52E009816;
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 2288L5FF009820;
         Tue, 8 Mar 2022 00:21:05 -0800
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH 02/13] qla2xxx: Fix disk failure to rediscover
-Date:   Tue, 8 Mar 2022 00:20:37 -0800
-Message-ID: <20220308082048.9774-3-njavali@marvell.com>
+Subject: [PATCH 03/13] qla2xxx: Fix loss of NVME namespaces after driver reload test
+Date:   Tue, 8 Mar 2022 00:20:38 -0800
+Message-ID: <20220308082048.9774-4-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20220308082048.9774-1-njavali@marvell.com>
 References: <20220308082048.9774-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: 8sjtvDFpeAE8qtOZrJtR2N_GouPdEQ_x
-X-Proofpoint-ORIG-GUID: 8sjtvDFpeAE8qtOZrJtR2N_GouPdEQ_x
+X-Proofpoint-ORIG-GUID: Rfv5XtrF98-mJwLgXY5tNbvM_rDNhYmF
+X-Proofpoint-GUID: Rfv5XtrF98-mJwLgXY5tNbvM_rDNhYmF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-03-08_03,2022-03-04_01,2022-02-23_01
@@ -71,76 +71,77 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Arun Easi <aeasi@marvell.com>
 
-User experience some of the LUN failed to rediscovered after
-long cable pull test. The issue is triggered by a race
-condition between driver setting session online state vs upper layer/UL
-starting the LUN scan process at the same time. Current code
-set the online state after notifying upper layer the session is
-available. In this case, UL was faster on the trigger to start
-the LUN scan process before driver could set the session in
-online state. LUN scan ends up with failure due to the session
-online check was failing.
+Driver registration of localport can race when it
+happens at the remote port discovery time. Fix
+this by calling the registration under a mutex.
 
-Set the online state before reporting to UL
-of the availability of the session.
-
+Reported-by: Marco Patalano <mpatalan@redhat.com>
+Tested-by: Marco Patalano <mpatalan@redhat.com>
 Cc: stable@vger.kernel.org
-Fixes: aecf043443d3 ("scsi: qla2xxx: Fix Remote port registration")
-Signed-off-by: Quinn Tran <qutran@marvell.com>
+Fixes: e84067d74301 ("scsi: qla2xxx: Add FC-NVMe F/W initialization and transport registration")
+Signed-off-by: Arun Easi <aeasi@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_init.c | 5 +++--
- drivers/scsi/qla2xxx/qla_nvme.c | 5 +++++
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_nvme.c | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 835ed4179887..6ffe44b805b6 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -5758,6 +5758,8 @@ qla2x00_reg_remote_port(scsi_qla_host_t *vha, fc_port_t *fcport)
- 	if (atomic_read(&fcport->state) == FCS_ONLINE)
- 		return;
- 
-+	qla2x00_set_fcport_state(fcport, FCS_ONLINE);
-+
- 	rport_ids.node_name = wwn_to_u64(fcport->node_name);
- 	rport_ids.port_name = wwn_to_u64(fcport->port_name);
- 	rport_ids.port_id = fcport->d_id.b.domain << 16 |
-@@ -5858,6 +5860,7 @@ qla2x00_update_fcport(scsi_qla_host_t *vha, fc_port_t *fcport)
- 		qla2x00_reg_remote_port(vha, fcport);
- 		break;
- 	case MODE_TARGET:
-+		qla2x00_set_fcport_state(fcport, FCS_ONLINE);
- 		if (!vha->vha_tgt.qla_tgt->tgt_stop &&
- 			!vha->vha_tgt.qla_tgt->tgt_stopped)
- 			qlt_fc_port_added(vha, fcport);
-@@ -5875,8 +5878,6 @@ qla2x00_update_fcport(scsi_qla_host_t *vha, fc_port_t *fcport)
- 	if (NVME_TARGET(vha->hw, fcport))
- 		qla_nvme_register_remote(vha, fcport);
- 
--	qla2x00_set_fcport_state(fcport, FCS_ONLINE);
--
- 	if (IS_IIDMA_CAPABLE(vha->hw) && vha->hw->flags.gpsc_supported) {
- 		if (fcport->id_changed) {
- 			fcport->id_changed = 0;
 diff --git a/drivers/scsi/qla2xxx/qla_nvme.c b/drivers/scsi/qla2xxx/qla_nvme.c
-index 718c761ff5f8..5723082d94d6 100644
+index 5723082d94d6..3bf5cbd754a7 100644
 --- a/drivers/scsi/qla2xxx/qla_nvme.c
 +++ b/drivers/scsi/qla2xxx/qla_nvme.c
-@@ -37,6 +37,11 @@ int qla_nvme_register_remote(struct scsi_qla_host *vha, struct fc_port *fcport)
- 		(fcport->nvme_flag & NVME_FLAG_REGISTERED))
- 		return 0;
+@@ -782,8 +782,6 @@ int qla_nvme_register_hba(struct scsi_qla_host *vha)
+ 	ha = vha->hw;
+ 	tmpl = &qla_nvme_fc_transport;
  
-+	if (atomic_read(&fcport->state) == FCS_ONLINE)
+-	WARN_ON(vha->nvme_local_port);
+-
+ 	if (ql2xnvme_queues < MIN_NVME_HW_QUEUES || ql2xnvme_queues > MAX_NVME_HW_QUEUES) {
+ 		ql_log(ql_log_warn, vha, 0xfffd,
+ 		    "ql2xnvme_queues=%d is out of range(MIN:%d - MAX:%d). Resetting ql2xnvme_queues to:%d\n",
+@@ -797,7 +795,7 @@ int qla_nvme_register_hba(struct scsi_qla_host *vha)
+ 		(uint8_t)(ha->max_qpairs ? ha->max_qpairs : 1));
+ 
+ 	ql_log(ql_log_info, vha, 0xfffb,
+-	    "Number of NVME queues used for this port: %d\n",
++	       "Number of NVME queues used for this port: %d\n",
+ 	    qla_nvme_fc_transport.max_hw_queues);
+ 
+ 	pinfo.node_name = wwn_to_u64(vha->node_name);
+@@ -805,13 +803,25 @@ int qla_nvme_register_hba(struct scsi_qla_host *vha)
+ 	pinfo.port_role = FC_PORT_ROLE_NVME_INITIATOR;
+ 	pinfo.port_id = vha->d_id.b24;
+ 
+-	ql_log(ql_log_info, vha, 0xffff,
+-	    "register_localport: host-traddr=nn-0x%llx:pn-0x%llx on portID:%x\n",
+-	    pinfo.node_name, pinfo.port_name, pinfo.port_id);
+-	qla_nvme_fc_transport.dma_boundary = vha->host->dma_boundary;
+-
+-	ret = nvme_fc_register_localport(&pinfo, tmpl,
+-	    get_device(&ha->pdev->dev), &vha->nvme_local_port);
++	mutex_lock(&ha->vport_lock);
++	/*
++	 * Check again for nvme_local_port to see if any other thread raced
++	 * with this one and finished registration.
++	 */
++	if (!vha->nvme_local_port) {
++		ql_log(ql_log_info, vha, 0xffff,
++		    "register_localport: host-traddr=nn-0x%llx:pn-0x%llx on portID:%x\n",
++		    pinfo.node_name, pinfo.port_name, pinfo.port_id);
++		qla_nvme_fc_transport.dma_boundary = vha->host->dma_boundary;
++
++		ret = nvme_fc_register_localport(&pinfo, tmpl,
++						 get_device(&ha->pdev->dev),
++						 &vha->nvme_local_port);
++		mutex_unlock(&ha->vport_lock);
++	} else {
++		mutex_unlock(&ha->vport_lock);
 +		return 0;
-+
-+	qla2x00_set_fcport_state(fcport, FCS_ONLINE);
-+
- 	fcport->nvme_flag &= ~NVME_FLAG_RESETTING;
- 
- 	memset(&req, 0, sizeof(struct nvme_fc_port_info));
++	}
+ 	if (ret) {
+ 		ql_log(ql_log_warn, vha, 0xffff,
+ 		    "register_localport failed: ret=%x\n", ret);
 -- 
 2.19.0.rc0
 
