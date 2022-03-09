@@ -2,62 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FB14D27D1
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Mar 2022 05:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 351834D27C8
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Mar 2022 05:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiCIEPW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Mar 2022 23:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        id S229611AbiCIEQS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Mar 2022 23:16:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiCIEPT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Mar 2022 23:15:19 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E7E3B3F9;
-        Tue,  8 Mar 2022 20:14:17 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 228M9Opt010816;
-        Wed, 9 Mar 2022 04:14:15 GMT
+        with ESMTP id S229542AbiCIEQP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Mar 2022 23:16:15 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2CA3BFB4
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Mar 2022 20:15:17 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 228M8nXp016933;
+        Wed, 9 Mar 2022 04:15:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=Ee8V5JTFr5ipyfP0/LnKk12lN6jSMRmDSRlUrIwmcaQ=;
- b=SrbdUig5uK8FtXQUYYiFMdU7+OCF66U6vZL/3TtZFBpXZZJITjOl+dKhKCKxUcSkknfg
- AM7P2hVCkBffep31MZmXUFCBBm69LBMcQB9kGxK/6zFhp9lcrYi+GUTar5FEzxRGIDEs
- QMtKomqa4aUI1Z+axQiqYvSv/3Zxm5e4fKY6nsLVz3H+Fm3vfFWqOoJj0kBZxoLXjpYb
- RGSbDI1mU5crqW9YVe4xQR3gz3jEXxSFuW+32DWBDV+C7YQXU8z26N+r644t/6EHMBIW
- 26vn/ZgF93FjAZzXcWEoVAbD96AmFoov2zYg64+g8KoiclHNcjKkeyj4G8vfZiBGg3TX Xg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ekyrarhvd-1
+ bh=3Xfsy+s+OQkYl6jbLfzFCJFTX9VupinNitLBF1CKatM=;
+ b=Su6656qootKT4qPxduCkclVQ4gNGM0m7RZSgj6xy2nZWpRBSDFd0lHOpfPEhuo6qOgPb
+ QkYZfvpdAokFkbZq19gC4HGwV5qKimUsgIAnIs5ouvfmGpOVHCYVqIBVRxMoXU9wHpcZ
+ dy/if3j5eLza8TooVduDoGkf7CWxmzQ1eAjdYobp6cl4zOkP77HerJmFW7QQz8pud5Xc
+ soLPdon03L1NKBvWVxFV6bnFGZbj4LA4SiiizZ8LSbjedLMSJxVemerc2LPxN94ugAcx
+ lpnnIvHIVpSqocU4K6bJUPeEoM3i8Pzs8CAaHxBCJMZuolvfWUgIqlvt+/X2iSZ+GFlR eQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekx9cgq1h-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Mar 2022 04:14:14 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22947CNu166749;
-        Wed, 9 Mar 2022 04:14:14 GMT
+        Wed, 09 Mar 2022 04:15:15 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22945uBr037470;
+        Wed, 9 Mar 2022 04:15:14 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 3ekyp2qdeu-1
+        by aserp3030.oracle.com with ESMTP id 3ekwwcjsqx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Mar 2022 04:14:14 +0000
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2294EAeN174884;
-        Wed, 9 Mar 2022 04:14:13 GMT
+        Wed, 09 Mar 2022 04:15:14 +0000
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2294FECj048146;
+        Wed, 9 Mar 2022 04:15:14 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by aserp3020.oracle.com with ESMTP id 3ekyp2qddd-5;
-        Wed, 09 Mar 2022 04:14:13 +0000
+        by aserp3030.oracle.com with ESMTP id 3ekwwcjsqr-1;
+        Wed, 09 Mar 2022 04:15:13 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     jejb@linux.ibm.com, Zheyu Ma <zheyuma97@gmail.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: wd719x: Return proper error code when dma_set_mask() fails
-Date:   Tue,  8 Mar 2022 23:14:09 -0500
-Message-Id: <164679903743.29335.13151374172045636513.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH V4 0/2] scsi: ufs: Fix runtime PM messages never-ending cycle
+Date:   Tue,  8 Mar 2022 23:15:13 -0500
+Message-Id: <164679903743.29335.5784041654049598417.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1646060055-11361-1-git-send-email-zheyuma97@gmail.com>
-References: <1646060055-11361-1-git-send-email-zheyuma97@gmail.com>
+In-Reply-To: <20220228113652.970857-1-adrian.hunter@intel.com>
+References: <20220228113652.970857-1-adrian.hunter@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 9IvUjNjLmE3ra5bt1neXgimORnAUbO6Z
-X-Proofpoint-ORIG-GUID: 9IvUjNjLmE3ra5bt1neXgimORnAUbO6Z
+X-Proofpoint-ORIG-GUID: zMBW35_oAs-516NKrTVE8EPXYjccfQMD
+X-Proofpoint-GUID: zMBW35_oAs-516NKrTVE8EPXYjccfQMD
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -68,17 +68,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 28 Feb 2022 14:54:15 +0000, Zheyu Ma wrote:
+On Mon, 28 Feb 2022 13:36:50 +0200, Adrian Hunter wrote:
 
-> During the process of driver probing, the probe function should return < 0
-> for failure, otherwise, the kernel will treat value >= 0 as success.
+> Here is V4 to address comments by Martin.  See patches for version history.
 > 
+> Summary:
 > 
+> Kernel messages produced during runtime PM can cause a never-ending
+> cycle because user space utilities (e.g. journald or rsyslog) write the
+> messages back to storage, causing runtime resume, more messages, and so
+> on.
+> 
+> [...]
 
 Applied to 5.18/scsi-queue, thanks!
 
-[1/1] scsi: wd719x: Return proper error code when dma_set_mask() fails
-      https://git.kernel.org/mkp/scsi/c/98cdcd6c6b4a
+[1/2] scsi: Add quiet_suspend flag for SCSI devices to suppress some PM messages
+      https://git.kernel.org/mkp/scsi/c/af4edb1d50c6
+[2/2] scsi: ufs: Fix runtime PM messages never-ending cycle
+      https://git.kernel.org/mkp/scsi/c/71bb9ab6e351
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
