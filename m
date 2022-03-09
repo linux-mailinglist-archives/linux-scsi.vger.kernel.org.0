@@ -2,63 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1ED4D27E1
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Mar 2022 05:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B60A44D27E0
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Mar 2022 05:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiCIEPU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Mar 2022 23:15:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
+        id S229619AbiCIEP1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Mar 2022 23:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiCIEPR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Mar 2022 23:15:17 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388543B3D0;
-        Tue,  8 Mar 2022 20:14:15 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 229480BL003070;
-        Wed, 9 Mar 2022 04:14:13 GMT
+        with ESMTP id S229625AbiCIEPT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Mar 2022 23:15:19 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4331C3B2A8
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Mar 2022 20:14:19 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22949h3V021319;
+        Wed, 9 Mar 2022 04:14:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=7YDEF59Ps/3e/eVNU2IpEWgxBT/6xGZCkQEgD3W7T5k=;
- b=F5SKtdMFsCuP9jMACUvYg0mSZFMRQEaHeNIuLPorjwvjMfrUj0aWq3foLdNqqihXBVAc
- FNGdtsFAwwAGTYnrtFp09rgBLHuR7NNgRV2yep4lOM/Sx6/aRKTU0AXps+jsyavvzFzP
- v6zyzehFGTnFT36uohEOZZqPpkmVL9KZ+Term4c6TABkbItm6/LBXFMoThKY0Px32+Iy
- Gb7pR/cUcjZ0ZOCWTg7pbIoLDroN4lFvZOUWtS/cFRTDbJ/aN+lKK9Gon+onzuKkVT88
- WJmHnADip2k6gWeOS8clibNsh82CEkLdH2t9PK59n0285qn917fMigZnz+pahx9xdFtd 5A== 
+ bh=C4sgUEjA7yuLa4FscLWCjMWMJDk3HJCaDif4HGMao0s=;
+ b=LyuFOV7PgfI3VwDWVRVAw8kgXUQCXQcgX2NcZTWNgwV7ODCNyvNZ0jaIi6LHfgcY8m3l
+ 0vWyxfUI+abA8tyS0okuOAXu4QQVJyCg5au3DmOXw2cCsEUicOL4FtD5KHa7EWxRihoT
+ GSYq3vQaDfSA75rvuJAh9WRg3VFv12hlSsHAehwmacbJN9WgYVcAgwP+ebv9pT0NYW/d
+ qY83Ajl3tlUMVMTunZ5dLqFUKLbw78o6+zstZhXS8xpYOwAWWSDN5FL+VqKBwM2aOyOx
+ RkgA80O/AZObUXScOuKV0SD1uIApAko0PnW7mPfZNqI2WXaKvdJkIEN9a8tDNF/EvnRQ 2g== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3em0du0xmj-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ekyfsguq1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 09 Mar 2022 04:14:13 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22947k11167717;
-        Wed, 9 Mar 2022 04:14:12 GMT
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22947J1C166791;
+        Wed, 9 Mar 2022 04:14:13 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 3ekyp2qdea-1
+        by aserp3020.oracle.com with ESMTP id 3ekyp2qden-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Mar 2022 04:14:12 +0000
+        Wed, 09 Mar 2022 04:14:13 +0000
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2294EAeJ174884;
-        Wed, 9 Mar 2022 04:14:11 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2294EAeL174884;
+        Wed, 9 Mar 2022 04:14:12 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by aserp3020.oracle.com with ESMTP id 3ekyp2qddd-3;
-        Wed, 09 Mar 2022 04:14:11 +0000
+        by aserp3020.oracle.com with ESMTP id 3ekyp2qddd-4;
+        Wed, 09 Mar 2022 04:14:12 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        stable@vger.kernel.org, Shyam Sundar <ssundar@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>
-Subject: Re: [PATCH][REPOST] scsi_transport_fc: Fix FPIN Link Integrity statistics counters
-Date:   Tue,  8 Mar 2022 23:14:07 -0500
-Message-Id: <164679903742.29335.9465242397242242999.b4-ty@oracle.com>
+To:     linux-scsi@vger.kernel.org, njavali@marvell.com,
+        liuzhengyuang521@gmail.com, mrangankar@marvell.com,
+        Mike Christie <michael.christie@oracle.com>, cleech@redhat.com,
+        lduncan@suse.com, GR-QLogic-Storage-Upstream@marvell.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH 0/6] iscsi: Speed up failover with lots of devices.
+Date:   Tue,  8 Mar 2022 23:14:08 -0500
+Message-Id: <164679903743.29335.12851352477345747123.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220301175536.60250-1-jsmart2021@gmail.com>
-References: <20220301175536.60250-1-jsmart2021@gmail.com>
+In-Reply-To: <20220226230435.38733-1-michael.christie@oracle.com>
+References: <20220226230435.38733-1-michael.christie@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: mrC2NkL4mCOEY4Lbe7QHXMzHmT81wpdG
-X-Proofpoint-GUID: mrC2NkL4mCOEY4Lbe7QHXMzHmT81wpdG
+X-Proofpoint-GUID: uPCxyjHCxgN4nhImOn4tWFt_uYbdUGpF
+X-Proofpoint-ORIG-GUID: uPCxyjHCxgN4nhImOn4tWFt_uYbdUGpF
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -69,21 +70,37 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 1 Mar 2022 09:55:36 -0800, James Smart wrote:
+On Sat, 26 Feb 2022 17:04:29 -0600, Mike Christie wrote:
 
-> In the original FPIN commit, stats were incremented by the event_count.
-> Event_count is the minimum # of events that must occur before an FPIN is
-> sent. Thus, its not the actual number of events, and could be
-> significantly off (too low) as it doesn't reflect anything not reported.
-> Rather than attempt to count events, have the statistic count how many
-> FPINS cross the threshold and were reported.
+> In:
+> 
+> https://lore.kernel.org/all/CAK3e-EZbJMDHkozGiz8LnMNAZ+SoCA+QeK0kpkqM4vQ4pz86SQ@mail.gmail.com/t/
+> 
+> Zhengyuan Liu found an issue where failovers are taking a long time
+> with lots of devices (/dev/sdXYZ nodes). The problem is that iscsid
+> expects most nl operations to be fast (ignoring mem issues) and when
+> the session block code was written blocking a queue/scsi_device was
+> just setting some flag bits and state values more or less. Now a block
+> call will actually handle IO that has been sent to the driver, so it
+> can be expensive. When you add in more and more devices, then a
+> session block call will take longer and longer.
 > 
 > [...]
 
 Applied to 5.18/scsi-queue, thanks!
 
-[1/1] scsi_transport_fc: Fix FPIN Link Integrity statistics counters
-      https://git.kernel.org/mkp/scsi/c/07e0984b96ec
+[1/6] scsi: iscsi: Fix recovery and ublocking race.
+      https://git.kernel.org/mkp/scsi/c/8dd3dff3bf3e
+[2/6] scsi: iscsi: Speed up session unblocking and removal.
+      https://git.kernel.org/mkp/scsi/c/b07c348f8ffb
+[3/6] scsi: iscsi: Remove iscsi_scan_finished.
+      https://git.kernel.org/mkp/scsi/c/d8ec5d67b8bb
+[4/6] scsi: iscsi, ql4: Use per session workqueue for unbinding.
+      https://git.kernel.org/mkp/scsi/c/5842ea366831
+[5/6] scsi: iscsi: Use the session workqueue for recovery.
+      https://git.kernel.org/mkp/scsi/c/7cb6683ce761
+[6/6] scsi: iscsi: Drop temp workq_name.
+      https://git.kernel.org/mkp/scsi/c/69af1c9577aa
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
