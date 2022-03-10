@@ -2,93 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236414D3C0A
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Mar 2022 22:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8AC4D3E56
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Mar 2022 01:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234910AbiCIV0i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Mar 2022 16:26:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
+        id S239041AbiCJApq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Mar 2022 19:45:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234999AbiCIV0g (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Mar 2022 16:26:36 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CDDC1D;
-        Wed,  9 Mar 2022 13:25:36 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id l10so2144696wmb.0;
-        Wed, 09 Mar 2022 13:25:36 -0800 (PST)
+        with ESMTP id S239060AbiCJApp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Mar 2022 19:45:45 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642261255A8
+        for <linux-scsi@vger.kernel.org>; Wed,  9 Mar 2022 16:44:44 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id w12so6683451lfr.9
+        for <linux-scsi@vger.kernel.org>; Wed, 09 Mar 2022 16:44:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=g6KjkEqs6nfY8SyVTKb71+0492kgEVv08yBN4Vf8F9c=;
-        b=npZMITQ0h7Cxml4W5J3Vxp64os2biBMdDuRrN4qXAOIXOiY54XPUQHmGwyz0FqCOdA
-         2jY9T8EeLufJPBAPygp2D2ilLnvhJB0pFrQ9fmvfoZ/3n9Mm/XcgYkR9KfODeciYuKnE
-         MPGExWPW++ncM0/LxuXV92GO8XcsU3dgp/6d6A9i66hCsD+icGZVdOlOFjFgcsNE1dSY
-         aDCG2ax6bc6si6cVHBNDkmHwrvulBS747WNclrPDV5fEhbabYXWMGiUVVJxdCUmXIxXT
-         ZKqjDokElzyq6UfJGvlNUuTy7zwF9f1BtDePN0pcyupqm2P4jcBEF5KGeLic0WV7pTfi
-         LBIA==
+        bh=fNxQZUenjMYTRaLZ8bVRtrts/KBsq8qlTn4csxEcmJM=;
+        b=QQ3IaSXjga+bqFNYqeQRJF7TOrau3j6WrJllhdrn7TSnfNZMjRYPIsbmrKnaxDRZLs
+         esWotoBiy1Dtv+e7ouUCNUSk1epfURjL4g/HCD2Iy2UWmUslYaP2xdBSCJMQE0ZWkOhg
+         XapKMk2LMEGZwxJgDT/b7eH2QASLNnD36832s6/Ly5EDSUskH0IuS3oxzqcJe5Wr76mk
+         u/NQWKy7XRAJ2qI9Lv7pz1lI1RvDA0EFK1oPKFIZHjQF1a/MUotLrAho+NTz6SL1sYkF
+         UKOIQFrktBSbEcoGAwuBtyeCszbu4pDOFwm4vBVXLsOZWzh7628ieNMfpZesJQQVOViG
+         KjHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=g6KjkEqs6nfY8SyVTKb71+0492kgEVv08yBN4Vf8F9c=;
-        b=KvScrzIG5ElFwPthzdnHzwzFLl1k2IyDWTFw2Rqmt/ETWVNq736sy0YoWjrQlRZZsd
-         YjDHbTqBleS5HviHWiddEOMY5xNKe5fDOXusICTyK1cRVIq/pCuY9XA4yNjYVn+wcm6q
-         KPCVmJGWu56RJ6T3l+ZyD1B1ikzIbOiyg8i9v2+RWAho5227GQEol2pscyU6mw2RAH3p
-         uWflGUVc0sl7jzFDrSamlyzog0ZYX78kCn10IslMAvIi81uhhdAoj0Rhl1XNxlWl1M5u
-         RNuiehuJEYElTHbYccUvTV3sUzSC2mLV4FKIQn6Ja7pIMZLYnHGtvUHJEqj6w3YF765T
-         WTHA==
-X-Gm-Message-State: AOAM532TUBrRvonQ5tUREO8OsAULEsgApa+5GERbdVSf1RsUEzv7YprT
-        FZrrEqWafx0RKNIgIVcbuKptkX53aGs=
-X-Google-Smtp-Source: ABdhPJyZ3VyOCIprRGLbGIUjwQ5IMWFzSeUQ2UMVdVm3W3thKPHa24j3249olGoaZJJki4zRANcCpA==
-X-Received: by 2002:a05:600c:214a:b0:385:9c42:848 with SMTP id v10-20020a05600c214a00b003859c420848mr1072824wml.176.1646861135093;
-        Wed, 09 Mar 2022 13:25:35 -0800 (PST)
-Received: from monster.fritz.box (dyndsl-085-016-033-210.ewe-ip-backbone.de. [85.16.33.210])
-        by smtp.gmail.com with ESMTPSA id k13-20020a7bc40d000000b00381890032dfsm5891053wmi.1.2022.03.09.13.25.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 13:25:34 -0800 (PST)
-From:   Alexey Galakhov <agalakhov@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, linux-kernel@vger.kernel.org,
-        Alexey Galakhov <agalakhov@gmail.com>
-Subject: [PATCH] scsi: mvsas: Add PCI ID of RocketRaid 2640
-Date:   Wed,  9 Mar 2022 22:25:35 +0100
-Message-Id: <20220309212535.402987-1-agalakhov@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        bh=fNxQZUenjMYTRaLZ8bVRtrts/KBsq8qlTn4csxEcmJM=;
+        b=c9HeGyzQ99bN3BnUrOZz8GZxL3cZlX7jaBmHfvGaSOsNTc974+T4Ild8fhjJgZCIz4
+         9z5q//vSmpn5Zyo0SMAogmY/DhCn90jp0syfSy3GizQGRWa+F7YYnMLhdbePmIG5zoY9
+         B6gdTfjZ2qQWgWZqdAM6Z/epg14kuMCe1BFGZ7+OTrPrt8IVysNvcAPppT+5a6yPZyVJ
+         yGZr3m+3QX9lXKNjTIIwio55qVkpNQsocabf1KA3VYwal98BnI8aRio9veJqwu6K40OV
+         xWzSfoX7jwTJpkpuaDHwDpxMtDEJccoshSni44oumyBdgkLu7roBYExBvgzxaG2GJKAg
+         fz1w==
+X-Gm-Message-State: AOAM531LY7z90fKpzkTLAPXV4LzV454LyIlm9iyo5bvZzKy6f+QeBUg1
+        Qs247T7wfmit1EyETnR10TZ8AQrnswI857X+feqn5G7S6L/KWg==
+X-Google-Smtp-Source: ABdhPJyv7NjZ5lJd0JDYz+wQ/ptNNnXYx23U51aOnIJBDY5Jc7ErfsS4sbqZAamAuQIsyb62anmSaRAr4B2XfTYzVak=
+X-Received: by 2002:a05:6512:1597:b0:443:bd68:6a70 with SMTP id
+ bp23-20020a056512159700b00443bd686a70mr1436631lfb.548.1646873081319; Wed, 09
+ Mar 2022 16:44:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6512:b83:0:0:0:0 with HTTP; Wed, 9 Mar 2022 16:44:40
+ -0800 (PST)
+From:   "Capt. Sherri" <latobaba3@gmail.com>
+Date:   Thu, 10 Mar 2022 00:44:40 +0000
+Message-ID: <CAHi4UtkZr4y-3ZdARi99UbzfprDG-EJG49NGjtt+0Li2FDXXKg@mail.gmail.com>
+Subject: Re: Hello Dear, How Are You
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The HighPoint RocketRaid 2640 is a low-cost SAS controller
-based on Marvell chip. The chip in question was already
-supported by the kernel, just the PCI ID of this particular board
-was missing.
-
-Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
----
- drivers/scsi/mvsas/mv_init.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
-index f18dd9703595..5c25354662ce 100644
---- a/drivers/scsi/mvsas/mv_init.c
-+++ b/drivers/scsi/mvsas/mv_init.c
-@@ -646,6 +646,7 @@ static struct pci_device_id mvs_pci_table[] = {
- 	{ PCI_VDEVICE(ARECA, PCI_DEVICE_ID_ARECA_1300), chip_1300 },
- 	{ PCI_VDEVICE(ARECA, PCI_DEVICE_ID_ARECA_1320), chip_1320 },
- 	{ PCI_VDEVICE(ADAPTEC2, 0x0450), chip_6440 },
-+	{ PCI_VDEVICE(TTI, 0x2640), chip_6440 },
- 	{ PCI_VDEVICE(TTI, 0x2710), chip_9480 },
- 	{ PCI_VDEVICE(TTI, 0x2720), chip_9480 },
- 	{ PCI_VDEVICE(TTI, 0x2721), chip_9480 },
--- 
-2.35.1
-
+5L2g5aW977yMDQoNCuS9oOaUtuWIsOaIkeS5i+WJjeeahOa2iOaBr+S6huWQl++8nyDmiJHkuYvl
+iY3ogZTns7vov4fkvaDvvIzkvYbmtojmga/lpLHotKXkuobvvIzmiYDku6XmiJHlhrPlrprlho3l
+hpnkuIDmrKHjgIIg6K+356Gu6K6k5oKo5piv5ZCm5pS25Yiw5q2k5L+h5oGv77yM5Lul5L6/5oiR
+57un57ut77yMDQoNCuetieW+heaCqOeahOetlOWkjeOAgg0KDQrpl67lgJnvvIwNCumbquiOieS4
+iuWwiQ0K
