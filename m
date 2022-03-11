@@ -2,119 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABE34D57E5
-	for <lists+linux-scsi@lfdr.de>; Fri, 11 Mar 2022 03:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 599CB4D5A63
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Mar 2022 06:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345573AbiCKCGo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Mar 2022 21:06:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S1346424AbiCKFTu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Mar 2022 00:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236911AbiCKCGn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Mar 2022 21:06:43 -0500
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF771A6157
-        for <linux-scsi@vger.kernel.org>; Thu, 10 Mar 2022 18:05:41 -0800 (PST)
-Received: by mail-io1-xd41.google.com with SMTP id e22so8642467ioe.11
-        for <linux-scsi@vger.kernel.org>; Thu, 10 Mar 2022 18:05:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=1WmTiruYcLYjgfCVpwaSh4JcERuBX8rKufTgiQZnbQI=;
-        b=UoLJwNFCONozXrSjxTaJ6CQMua4tKdfIBGwWrcuH+qg7qV4qvIQvKd6ZDBpfNl02B5
-         7/f3NDnXewP4MWvXArhhRIRgFfG5UHtOC8GFRmWoc9PoyDIH2OX7pe5JW5uJcZ3wDP1S
-         Yn21PV0Lv/2OgyaKFXFlcqz1E6zMkmznF70Xusq/1kkD8r2ZFWVVBH8EmOD3Wb8YItQG
-         J/2LjYjdLPknMZc7RLd2joKTTigo11SHOv7rIySkRSAj3EH8x3p4s3Cul6kdkGI86z9P
-         rkTtCf8I4vUc8NCgtF2G8j2Q79qe1CyULZ+SvV22FYAYLG43TpvlFIzdybDtrm705aHX
-         A0dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=1WmTiruYcLYjgfCVpwaSh4JcERuBX8rKufTgiQZnbQI=;
-        b=O8c7s8nZICfjniaVyupR61xUy4OyzYkAt2Eagkuy5N3tVEo1rg4sm1PKaybWQl5e48
-         DjawDztGtsX7inohVWAvyYrkTErSZ+499jmLbDvE5gKhQ+d/knZvDRf8i1GrNHb+bVpn
-         LRN9T2syZTSbD/PEjBpleT+NpID+BtDC45XRDyg1DejNJ1KMfo9NVFkxkWxoh18q3GjV
-         VfE1TwnLMRCrx+e9ni0gSCz8eObvdR6t3bccaG2ik3LfkpW6Esri2irYr0+MXzSsMVAw
-         NSch5XpB3f2UwXKIxFlKy0AOGjliLXuK4gGH/Pt1K7wAxCBt5NgZfrhEhVj1wtkJNTd0
-         vXsQ==
-X-Gm-Message-State: AOAM531ATGOHIXDeL2noDhL+4SbBeCp4Xatyvhy5BXdaYmbJKMzhil6P
-        E373r9VHtipiX0s78X1E+QzfFjDV8Q2q31MKtKc=
-X-Google-Smtp-Source: ABdhPJwzGv/EUFPjRAcnxAhD9CuVUfBUgzFPenxOjwyDW485lIubfpRBOLJ90AB7TTN85L7sK3xWajnPEHl2vMYBat8=
-X-Received: by 2002:a02:6383:0:b0:314:d9da:13b2 with SMTP id
- j125-20020a026383000000b00314d9da13b2mr6425055jac.99.1646964340692; Thu, 10
- Mar 2022 18:05:40 -0800 (PST)
+        with ESMTP id S1346387AbiCKFTt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Mar 2022 00:19:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E526A53B40;
+        Thu, 10 Mar 2022 21:18:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52591B82A78;
+        Fri, 11 Mar 2022 05:18:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7EA5C340EC;
+        Fri, 11 Mar 2022 05:18:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646975923;
+        bh=5iTm8AeQHWcspGp/ADW+jMjLy3o3qtcRvAvIkXEZzfg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hjo2jWAf5hpi3mLDP7pod3VhSowZ8b9tCqUFwFAGXsH4lLvV8Ji3hQdeQiLrfHvsS
+         zFQhCr2Bp+8DndACGpNH0eC5Nwc/puIVOxbOZMsJYnvDLuWbSDZQ6gJVVL6VKVYVJY
+         UIY/kg3zoYjxc/zzF8heQCT/2rv5Ir3lLOKPIl/OuaMml6Gy1o3jQWkk/7UsSRM5YK
+         ffGGyVJFju0VBTwmtWc7DJBTaYB9vvxsXLp48vOfYFFPPIDmvOWJNkYsy4oabsxCpu
+         /oxkfczBlfSN6h7Y68Lb82OapBKBnM+5iKH32wC9gcOd5/X5ueF08wBiilzvAWxOhz
+         xpvm1FfvWTU2A==
+Date:   Thu, 10 Mar 2022 21:18:42 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-block@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com,
+        Gaurav Kashyap <quic_gaurkash@quicinc.com>,
+        Israel Rukshin <israelr@nvidia.com>
+Subject: Re: [PATCH v5 3/3] fscrypt: add support for hardware-wrapped keys
+Message-ID: <YirbspMr5CAnlWAC@sol.localdomain>
+References: <20220228070520.74082-1-ebiggers@kernel.org>
+ <20220228070520.74082-4-ebiggers@kernel.org>
+ <c1da8aec-7bb9-dd88-7500-a09d29bbc1e4@acm.org>
 MIME-Version: 1.0
-Sender: aishagaddafii331@gmail.com
-Received: by 2002:a05:6e02:154a:0:0:0:0 with HTTP; Thu, 10 Mar 2022 18:05:40
- -0800 (PST)
-From:   Aisha Gaddafi <aishagaddagfi@gmail.com>
-Date:   Fri, 11 Mar 2022 03:05:40 +0100
-X-Google-Sender-Auth: CITmde-pPdp_g8mnybwmsbu1uXo
-Message-ID: <CAMrsXqNqn4XWsG0U-Y5b-EWFJB9yY6gExOZg_EQHigQ6WBAkPg@mail.gmail.com>
-Subject: I want to invest in your country
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,MILLION_HUNDRED,MILLION_USD,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5003]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aishagaddafii331[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [aishagaddafii331[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.0 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d41 listed in]
-        [list.dnswl.org]
-        *  0.6 URG_BIZ Contains urgent matter
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  3.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c1da8aec-7bb9-dd88-7500-a09d29bbc1e4@acm.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---=20
-Greetings Sir/Madam.
+On Thu, Mar 03, 2022 at 05:03:10PM -0800, Bart Van Assche wrote:
+> On 2/27/22 23:05, Eric Biggers wrote:
+> > diff --git a/include/uapi/linux/fscrypt.h b/include/uapi/linux/fscrypt.h
+> > index 9f4428be3e362..884c5bf526a05 100644
+> > --- a/include/uapi/linux/fscrypt.h
+> > +++ b/include/uapi/linux/fscrypt.h
+> > @@ -20,6 +20,7 @@
+> >   #define FSCRYPT_POLICY_FLAG_DIRECT_KEY		0x04
+> >   #define FSCRYPT_POLICY_FLAG_IV_INO_LBLK_64	0x08
+> >   #define FSCRYPT_POLICY_FLAG_IV_INO_LBLK_32	0x10
+> > +#define FSCRYPT_POLICY_FLAG_HW_WRAPPED_KEY	0x20
+> >   /* Encryption algorithms */
+> >   #define FSCRYPT_MODE_AES_256_XTS		1
+> > @@ -115,7 +116,7 @@ struct fscrypt_key_specifier {
+> >    */
+> >   struct fscrypt_provisioning_key_payload {
+> >   	__u32 type;
+> > -	__u32 __reserved;
+> > +	__u32 flags;
+> >   	__u8 raw[];
+> >   };
+> > @@ -124,7 +125,9 @@ struct fscrypt_add_key_arg {
+> >   	struct fscrypt_key_specifier key_spec;
+> >   	__u32 raw_size;
+> >   	__u32 key_id;
+> > -	__u32 __reserved[8];
+> > +#define FSCRYPT_ADD_KEY_FLAG_HW_WRAPPED			0x00000001
+> > +	__u32 flags;
+> > +	__u32 __reserved[7];
+> >   	__u8 raw[];
+> >   };
+> 
+> Is it allowed to use _Static_assert() in UAPI header files? There are
+> already some static_assert() checks under include/linux to verify the size
+> of certain data structures. gcc supports _Static_assert() since version 4.6.
+> That is older than the minimum required gcc version to build the kernel.
+> 
 
-I want to invest in your country
-May i use this medium to open a mutual communication with you, and
-seeking your acceptance towards investing in your country under your
-management as my partner, My name is Aisha Gaddafi , i am a Widow and
-single Mother with three Children, the only biological Daughter of
-late Libyan President (Late Colonel Muammar Gaddafi) and presently i
-am under political asylum protection by the  Government of this
-nation.
-I have funds worth =E2=80=9CTwenty Seven Million Five Hundred Thousand Unit=
-ed
-State Dollars=E2=80=9D -$27.500.000.00 US Dollars which i want to entrust o=
-n
-you for investment project in your country. If you are willing to
-handle this project on my behalf, kindly reply urgent to enable me
-provide you more details to start the transfer process.
-I shall appreciate your urgent response through my email address
-below: madamgadafiaisha@gmail.com
-Thanks
-Yours Truly Aisha
+Are you requesting static assertions that verify that the size of each fscrypt
+UAPI struct is a certain value?  Kernel UAPIs generally don't bother with that
+sort of thing, but it does seem like a good idea.  I'll add them as a cleanup,
+but it's orthogonal to this patch series.
+
+To answer your direct question, I believe that _Static_assert generally can't be
+used in UAPI header files, as it's a C11 feature and UAPI headers are included
+by arbitrary userspace programs.  These assertions will need to be in
+kernel-only code, either in a kernel-only file such as include/linux/fscrypt.h,
+or in an #ifdef __KERNEL__ section of the UAPI header.  Also, the kernel already
+conventionally uses BUILD_BUG_ON() for static assertions.
+
+- Eric
