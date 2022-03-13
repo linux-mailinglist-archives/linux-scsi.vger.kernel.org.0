@@ -2,93 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A10E4D75CE
-	for <lists+linux-scsi@lfdr.de>; Sun, 13 Mar 2022 15:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240184D78A5
+	for <lists+linux-scsi@lfdr.de>; Sun, 13 Mar 2022 23:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234588AbiCMOUC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 13 Mar 2022 10:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
+        id S234124AbiCMXAt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 13 Mar 2022 19:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbiCMOUC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Mar 2022 10:20:02 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2DD27B14;
-        Sun, 13 Mar 2022 07:18:52 -0700 (PDT)
+        with ESMTP id S233316AbiCMXAt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Mar 2022 19:00:49 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B597475626
+        for <linux-scsi@vger.kernel.org>; Sun, 13 Mar 2022 15:59:39 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id s25so24130610lfs.10
+        for <linux-scsi@vger.kernel.org>; Sun, 13 Mar 2022 15:59:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oUw08iIpNlygYly08MUnof6lcGY7VIecIfYGombIoYI=;
-  b=aESEUeMXhAHD94xBHKwIkW/ULJB1+YT56YrwSh1/6GtGfkJrZ3/TgGfx
-   hOGDQyQQQ/KxyWuaTnT/7HEfOFd8JxMxJX6o9lMgGZfowf2HkGXLSY6yz
-   JQxWG2inP7sKNbqc+g+igQf2d3MbouIppRt/Tex33kV7+RYjno6Bq2/VO
-   8=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,178,1643670000"; 
-   d="scan'208";a="25859617"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2022 15:18:51 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     James Smart <james.smart@broadcom.com>,
-        Joe Perches <joe@perches.com>
-Cc:     kernel-janitors@vger.kernel.org,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6 v2] scsi: lpfc: use kcalloc
-Date:   Sun, 13 Mar 2022 15:18:47 +0100
-Message-Id: <20220313141847.109804-1-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=efxDK1uU7DkE4cVJ9myazVuQ4eaJnIyftNcM+xFzvi0=;
+        b=Ut9r9L7vwKFDabSxR3YgNavoyQm5J389zUjgVcDRZ+Oe8Yd2Hqcp19AEwHWL5tdzBF
+         rt2KLBuR5lbOh66M88Y65IzTkZIdx6LvF6bOvBQ3ayYU7jNRBHFQ3WatQj26NoknEWWg
+         vMkhx6bZUSfHYO3PsZreKHHuHH09WAvO5m+9J9ZhYlbxjbsnxhowg7VshkS4G7nCtQdV
+         KBX0V6UbW8fyrvygTermfQltTj2dDWpTdrfgGss/esjnvep6wS40QIJUP7urpnwaQglR
+         ZuCQNEMr6y7t7Utib6AT4VzwGNDy0iFQP6qEDAER+ouD8kxtnA4C5M79f9F0Qzzo8ra3
+         uErw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=efxDK1uU7DkE4cVJ9myazVuQ4eaJnIyftNcM+xFzvi0=;
+        b=wJSD4qu1yV6Nh5S+cpI03SnOj+7KGqRFR4zG88yDRPJuBnYmNRoE9ojxVSr08mhGQW
+         gGl4mpby+VBzmiKrew+HhJnyfY8Wb8nD9z+Wkd2c/Ih4xt7zhQUVBS/sjBfi/jk9hYDD
+         Jv1kdlHElKw7fh094yXuV3SgPiw2HkdbyLVqhkQEmZhsLPTUj+k8ZF9UKl5CANOewbwR
+         S838mPraR5wh1wLyLMhLp46lXVbWasMtQazWulZ3wedBnlU/XCvhFncaIyREGU6vEtpf
+         +XdsY7TyKPjBq0EcyS/54i+AyiYedxRfVLohtIm9bCaz39fHIcs3171JwZxQ9v8X41Tr
+         Uo0w==
+X-Gm-Message-State: AOAM5334PUvHYzHB28edEzeMRGBdbtd/BW9fKSt/61oLflRETkgfkyDo
+        z3blrLOs0WJdZubOCWAFhgm6qm6o5hxlPJ2QjQ==
+X-Google-Smtp-Source: ABdhPJyVOjfPs77tJoc8BkrKyOhjIr7KwAgREIvvrhwAAukVnbnRc686xPXTMaIo+vwAQcxFAyEFJ2pQl041D1ABZpc=
+X-Received: by 2002:a05:6512:c11:b0:448:6987:47ca with SMTP id
+ z17-20020a0565120c1100b00448698747camr9682872lfu.448.1647212378102; Sun, 13
+ Mar 2022 15:59:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6512:68c:0:0:0:0 with HTTP; Sun, 13 Mar 2022 15:59:37
+ -0700 (PDT)
+Reply-To: fionahill.usa@outlook.com
+From:   Fiona Hill <xaviervives77@gmail.com>
+Date:   Sun, 13 Mar 2022 15:59:37 -0700
+Message-ID: <CAPB_yMRryy7cQKKDt8a6rYHopXFRAJbB-CdDkOfHhsmHC8A+0Q@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use kcalloc instead of kmalloc + memset.
-
-Suggested-by: Joe Perches <joe@perches.com>
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-
----
-
-v2: Use kcalloc instead of kzalloc
-
- drivers/scsi/lpfc/lpfc_debugfs.c |    9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
-index 30fac2f6fb06..7b24c932e812 100644
---- a/drivers/scsi/lpfc/lpfc_debugfs.c
-+++ b/drivers/scsi/lpfc/lpfc_debugfs.c
-@@ -6272,9 +6272,9 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
- 				 phba->hba_debugfs_root,
- 				 phba, &lpfc_debugfs_op_slow_ring_trc);
- 		if (!phba->slow_ring_trc) {
--			phba->slow_ring_trc = kmalloc(
--				(sizeof(struct lpfc_debugfs_trc) *
--				lpfc_debugfs_max_slow_ring_trc),
-+			phba->slow_ring_trc = kcalloc(
-+				lpfc_debugfs_max_slow_ring_trc,
-+				sizeof(struct lpfc_debugfs_trc),
- 				GFP_KERNEL);
- 			if (!phba->slow_ring_trc) {
- 				lpfc_printf_vlog(vport, KERN_ERR, LOG_INIT,
-@@ -6283,9 +6283,6 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
- 				goto debug_failed;
- 			}
- 			atomic_set(&phba->slow_ring_trc_cnt, 0);
--			memset(phba->slow_ring_trc, 0,
--				(sizeof(struct lpfc_debugfs_trc) *
--				lpfc_debugfs_max_slow_ring_trc));
- 		}
- 
- 		snprintf(name, sizeof(name), "nvmeio_trc");
-
+-- 
+Diid you see my  message i send to you ? I'm waiting for your urgent respond,
