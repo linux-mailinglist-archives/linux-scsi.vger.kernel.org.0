@@ -2,76 +2,121 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2924D840E
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Mar 2022 13:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93ECB4D8572
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Mar 2022 13:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241407AbiCNMWi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Mar 2022 08:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S231528AbiCNMwG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Mar 2022 08:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243868AbiCNMVV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Mar 2022 08:21:21 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6915F22;
-        Mon, 14 Mar 2022 05:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PohfiM/jemSw4lByumgtDX8BMjTHdgwkmP7e9cEnTTo=;
-  b=RXw0XrlN4OTwPHzhfcm0YzzUPIdrHr+IaikXeaoun2xV3D55B2BtfOLn
-   gNwI+926Y10jB264AiXXPz4oHQQ4Bd21JYPLx6GfUqwIUBvSoUF8aS5St
-   9c6tGEVCFhumdDA2ZTkRnlRP5yjL9/Whql9ezg24/orvPQtGEoqwAJN/o
-   Q=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="25997359"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:54:00 +0100
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Hannes Reinecke <hare@suse.com>
-Cc:     kernel-janitors@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 25/30] treewide: fix typos in comments
-Date:   Mon, 14 Mar 2022 12:53:49 +0100
-Message-Id: <20220314115354.144023-26-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220314115354.144023-1-Julia.Lawall@inria.fr>
-References: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+        with ESMTP id S239352AbiCNMwA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Mar 2022 08:52:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34337EB1
+        for <linux-scsi@vger.kernel.org>; Mon, 14 Mar 2022 05:50:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B15AE1F388;
+        Mon, 14 Mar 2022 12:50:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1647262231; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N37TTnn2utj4I/pgjrB5NDzuJTSw1PpPf0cQec9YUOI=;
+        b=Lvt/GVsGYVp+7GTyrMnqxMiQuW3CTTnYhnWVamcrb+Z+jo1lZl3FXsc+tYi5tw5/l0odnu
+        8VYttt2TbBkXd7K8iGiCrUdC7INISezoAd4VcAeiE4vI6cofKuJe7Zt7KdZoTvNd8jK8mA
+        v89gXTUIEVgbNdRI9UX1ZOAGWtbtfWc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1647262231;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N37TTnn2utj4I/pgjrB5NDzuJTSw1PpPf0cQec9YUOI=;
+        b=jbmte+oVnYLPn734zuzSAReopgKjWsNA460BPoKFhYMYU2Qoypgl22Zq+9mnqcjOsJbuH+
+        B8sFhzjXV8dm4xAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A0C7313B34;
+        Mon, 14 Mar 2022 12:50:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OBLgJhc6L2KiSwAAMHmgww
+        (envelope-from <hare@suse.de>); Mon, 14 Mar 2022 12:50:31 +0000
+Message-ID: <81d6a8c3-8fc8-cae4-cbfb-32594dec55b6@suse.de>
+Date:   Mon, 14 Mar 2022 13:50:31 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        lsf-pc@lists.linux-foundation.org, linux-scsi@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+References: <1cc5dd40-47e5-0756-db22-42e4e86468c5@redhat.com>
+ <ab4cb09f-cecb-0c1c-36e7-07db2556bc61@suse.com>
+From:   Hannes Reinecke <hare@suse.de>
+Subject: Re: [LSF/MM/BPF TOPIC] network storage transports managed within a
+ container
+In-Reply-To: <ab4cb09f-cecb-0c1c-36e7-07db2556bc61@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Various spelling mistakes in comments.
-Detected with the help of Coccinelle.
+On 3/1/22 20:20, Lee Duncan wrote:
+> On 2/28/22 18:04, Chris Leech wrote:
+>> There are various challenges when users start trying to manage SAN
+>> attachments from within a container, and how we deal with network
+>> namespaces.  I think it would be worth a discussion around what can be
+>> agreed on as desired behavior, and what it means to attach block
+>> devices from a containerized environment.
+>>
+>> iSCSI has a number of issues here with the kernel to iscsid
+>> interfaces, netlink and sysfs, which are largely fixable without
+>> needing to break anything.  But for kernel maintained network
+>> connections, there's an issue of interacting with namespace lifetimes
+>> without a process.
+>>
+>> NVMe/TCP has avoided complex user-space control planes, but when I
+>> checked subsystem connection occurred within the active namespace of
+>> nvme-cli, but afterwords all fabrics subsystems were visible,
+>> controllable, and disconnectable from any namespace.
+>>
+>>
+>> Lee Duncan had submitted a proposal to discuss this for iSCSI last
+>> year [1], partially based on some older work I did that never
+>> completed [2] (I need to update that code)
+>>
+>> [1]
+>> https://lore.kernel.org/linux-scsi/e9f0297a-a914-ba83-f706-5a2d508c666b@suse.com/ 
+>>
+>>
+>> [2] https://github.com/cleech/linux/commits/iscsi-netns-old-wip
+>>
+>> - Chris Leech
+>>
+> 
+> I would certainly be interested in attending this.
+> 
+Count me in.
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+Cheers,
 
----
- drivers/scsi/aic7xxx/aicasm/aicasm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/aic7xxx/aicasm/aicasm.c b/drivers/scsi/aic7xxx/aicasm/aicasm.c
-index 5f474e490f3e..cd692a4c5f85 100644
---- a/drivers/scsi/aic7xxx/aicasm/aicasm.c
-+++ b/drivers/scsi/aic7xxx/aicasm/aicasm.c
-@@ -283,7 +283,7 @@ main(int argc, char *argv[])
- 		/*
- 		 * Decend the tree of scopes and insert/emit
- 		 * patches as appropriate.  We perform a depth first
--		 * tranversal, recursively handling each scope.
-+		 * traversal, recursively handling each scope.
- 		 */
- 		/* start at the root scope */
- 		dump_scope(SLIST_FIRST(&scope_stack));
-
+Hannes
+-- 
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
