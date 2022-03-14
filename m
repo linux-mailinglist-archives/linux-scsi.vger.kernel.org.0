@@ -2,93 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7154D81A8
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Mar 2022 12:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC604D8550
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Mar 2022 13:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239663AbiCNLwB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Mar 2022 07:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
+        id S236401AbiCNMtD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Mar 2022 08:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237669AbiCNLwA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Mar 2022 07:52:00 -0400
+        with ESMTP id S238520AbiCNMr5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Mar 2022 08:47:57 -0400
 Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1D73F312;
-        Mon, 14 Mar 2022 04:50:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCBD387A8;
+        Mon, 14 Mar 2022 05:41:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=5tca+TAwShJLomr3kMuD+RKN41E2Sud56aTrN49/wAs=;
-  b=sZ6GqgN6LulclYMfrUGCFxnkK/8pww9se3SwTz6FOtPpcNrwPpBd+KQJ
-   uocAZuk55q0BSZBflnbCyHtvtpyHyjGc/Nvhh2b+uYReATG6xYpslxJ9l
-   iNJk5inyO3KJOwI78DJP0qJHrQ8Fba3Fgk9//L56GkGPt+pLtHSlzG22S
-   w=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=41PUcU9tzULCiIgb8Uibh/5DuRgn44vcqHlit9be1ys=;
+  b=da5ZDADTYjfUb4CkZvv1ifI5i+2sUHWvJw+dkr6l96rFI9+3qCoi3gnv
+   q0ycGdD5ccrm59796HzJuglqTi/Zn7sM07eq2eqJ7FQY8P7GtUxL24J6z
+   5W/zcd3/E6fo/TuVnTzoYm6lik0f+KcMTza69NkDCls6kpW1/h8PdxP5f
+   k=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
 X-IronPort-AV: E=Sophos;i="5.90,180,1643670000"; 
-   d="scan'208";a="25996944"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:50:48 +0100
-Date:   Mon, 14 Mar 2022 12:50:48 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: julia@hadrien
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-cc:     Joe Perches <joe@perches.com>,
-        James Smart <james.smart@broadcom.com>,
-        kernel-janitors@vger.kernel.org,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH 4/6] scsi: lpfc: use kzalloc
-In-Reply-To: <20220314113407.GM3293@kadam>
-Message-ID: <alpine.DEB.2.22.394.2203141247120.2561@hadrien>
-References: <20220312102705.71413-1-Julia.Lawall@inria.fr> <20220312102705.71413-5-Julia.Lawall@inria.fr> <846e22e76ba9e4c620df159b073bbf4e058a35f0.camel@perches.com> <20220314113407.GM3293@kadam>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+   d="scan'208";a="25997332"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 12:53:59 +0100
+From:   Julia Lawall <Julia.Lawall@inria.fr>
+To:     linux-can@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-spi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev, platform-driver-x86@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-leds@vger.kernel.org, Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-clk@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-rdma@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        linux-power@fi.rohmeurope.com, Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 00/30] fix typos in comments
+Date:   Mon, 14 Mar 2022 12:53:24 +0100
+Message-Id: <20220314115354.144023-1-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Various spelling mistakes in comments.
+Detected with the help of Coccinelle.
 
+---
 
-On Mon, 14 Mar 2022, Dan Carpenter wrote:
-
-> On Sat, Mar 12, 2022 at 01:45:01PM -0800, Joe Perches wrote:
-> > On Sat, 2022-03-12 at 11:27 +0100, Julia Lawall wrote:
-> > > Use kzalloc instead of kmalloc + memset.
-> > []
-> > > diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
-> > []
-> > > @@ -6272,10 +6272,8 @@ lpfc_debugfs_initialize(struct lpfc_vport *vport)
-> > >  				 phba->hba_debugfs_root,
-> > >  				 phba, &lpfc_debugfs_op_slow_ring_trc);
-> > >  		if (!phba->slow_ring_trc) {
-> > > -			phba->slow_ring_trc = kmalloc(
-> > > -				(sizeof(struct lpfc_debugfs_trc) *
-> > > -				lpfc_debugfs_max_slow_ring_trc),
-> > > -				GFP_KERNEL);
-> > > +			phba->slow_ring_trc = kzalloc((sizeof(struct lpfc_debugfs_trc) * lpfc_debugfs_max_slow_ring_trc),
-> > > +						      GFP_KERNEL);
-> >
-> > kcalloc
-> >
->
-> Did someone have a Coccinelle script that converted kzalloc() to
-> kcalloc()?
-
-Not sure if I have ever done that.  A long time ago, I made one that
-starts with kmalloc and picks kzalloc or kcalloc.  Perhaps Kees did such a
-thing?
-
-I'll see if it would be useful.
-
-julia
+ drivers/base/devres.c                               |    4 ++--
+ drivers/clk/qcom/gcc-sm6125.c                       |    2 +-
+ drivers/clk/ti/clkctrl.c                            |    2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c              |    4 ++--
+ drivers/gpu/drm/amd/display/dc/bios/command_table.c |    6 +++---
+ drivers/gpu/drm/amd/pm/amdgpu_pm.c                  |    2 +-
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c  |    4 ++--
+ drivers/gpu/drm/sti/sti_gdp.c                       |    2 +-
+ drivers/infiniband/hw/qib/qib_iba7220.c             |    4 ++--
+ drivers/leds/leds-pca963x.c                         |    2 +-
+ drivers/media/i2c/ov5695.c                          |    2 +-
+ drivers/mfd/rohm-bd9576.c                           |    2 +-
+ drivers/mtd/ubi/block.c                             |    2 +-
+ drivers/net/can/usb/ucan.c                          |    4 ++--
+ drivers/net/ethernet/packetengines/yellowfin.c      |    2 +-
+ drivers/net/wireless/ath/ath6kl/htc_mbox.c          |    2 +-
+ drivers/net/wireless/cisco/airo.c                   |    2 +-
+ drivers/net/wireless/mediatek/mt76/mt7915/init.c    |    2 +-
+ drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.c |    6 +++---
+ drivers/platform/x86/uv_sysfs.c                     |    2 +-
+ drivers/s390/crypto/pkey_api.c                      |    2 +-
+ drivers/scsi/aic7xxx/aicasm/aicasm.c                |    2 +-
+ drivers/scsi/elx/libefc_sli/sli4.c                  |    2 +-
+ drivers/scsi/lpfc/lpfc_mbox.c                       |    2 +-
+ drivers/scsi/qla2xxx/qla_gs.c                       |    2 +-
+ drivers/spi/spi-sun4i.c                             |    2 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme.c           |    2 +-
+ drivers/usb/gadget/udc/snps_udc_core.c              |    2 +-
+ fs/kernfs/file.c                                    |    2 +-
+ kernel/events/core.c                                |    2 +-
+ 30 files changed, 39 insertions(+), 39 deletions(-)
