@@ -2,62 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37F54D9423
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Mar 2022 06:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1854D93A7
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Mar 2022 06:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236005AbiCOFwG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Mar 2022 01:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
+        id S236782AbiCOFTF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Mar 2022 01:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234139AbiCOFwE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Mar 2022 01:52:04 -0400
+        with ESMTP id S233863AbiCOFTE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Mar 2022 01:19:04 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD4149F0D
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Mar 2022 22:50:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8686A643B
+        for <linux-scsi@vger.kernel.org>; Mon, 14 Mar 2022 22:17:52 -0700 (PDT)
 Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22F3HflX008028;
-        Tue, 15 Mar 2022 05:02:45 GMT
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22F39A6i008015;
+        Tue, 15 Mar 2022 05:02:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=j4hzlWsFcNMzGk+Zbolw0xM5YnNJSYlIBF4t3D3GkyY=;
- b=GInvPIVm1qIAAgAuy7QqKoW6I7rM0M/Xf4zozMHjlFEX0c2EG5gloTqqv+lz1sJvJRtg
- dVs1bP8G83eGWS0OlzH1FZg7JqUXzhAor3MLvv3rHMnB0dD0bdQMWVC9UonRnwcs1yw5
- zBSa0ec+8b+fDhMVKjhxH79P1L901734pEYgVrZOU93VrzzcXsdXysTt0oAoF36+D7fW
- xOc7zB393XUeiZvTfOkgTDPD1KLXRMz8B/Lg/ncbodqyoTmcsPDoomBMCq9LSumbiQrR
- yp6Fkht4+GNTfvtB+Fe1ccfXtrZgDocSUk1jYjRV+BWWUBc/LVwgGNRjJTFyjvWNYFBZ iQ== 
+ bh=1RgW0cjUuB6ERpvLNdXE7h2Y29V6CuESfRF7toQfAfc=;
+ b=PVgM6ogsWFRyGUh85K5pBvjfa1MgffASrlgc2MeRuguEmhaDgIu5rSEoQz6da+C2DpIX
+ jNxPVkQExp4uGjMEyzl3MnwiNUWwwX8+UQoDB7GT3ZZASqj3/R19ec0rh9yxoHSQckQZ
+ FT1nQ1S5EZ4OXjGHd6T3jahg3DXp4tUqiueMvPWid09N/1bETHTiUa1ZoyiqO9cDN7HM
+ STchkuQtwxSg/5qyD3yFsdLLYNUyAE8Qgevq4ItoQyNiGWqQvy0LusqvrgLdULP37bAg
+ T4pBXZ/CYP+RMR7+WJmElSk70S/huwTwyUNBuj+6Fwjbac1u2imOQNTfDOZ8UHbPvhON hQ== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3et5s6j20j-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3et5s6j20m-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 15 Mar 2022 05:02:45 +0000
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 22F51KJH004914;
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 22F51KHe004976;
         Tue, 15 Mar 2022 05:02:44 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3erhy25ww0-1
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3erhy25wwc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 15 Mar 2022 05:02:44 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 22F52cqB007094;
-        Tue, 15 Mar 2022 05:02:43 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 22F52cqD007094;
+        Tue, 15 Mar 2022 05:02:44 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3erhy25wts-5;
-        Tue, 15 Mar 2022 05:02:43 +0000
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3erhy25wts-6;
+        Tue, 15 Mar 2022 05:02:44 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
         linux-scsi@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] mpt3sas: Fix incorrect 4gb boundary check
-Date:   Tue, 15 Mar 2022 01:02:35 -0400
-Message-Id: <164732052813.23186.2821907604077350124.b4-ty@oracle.com>
+Subject: Re: [PATCH] mpt3sas: Remove scsi_dma_map errors messages
+Date:   Tue, 15 Mar 2022 01:02:36 -0400
+Message-Id: <164732052813.23186.5277228738704812053.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220303140230.13098-1-sreekanth.reddy@broadcom.com>
-References: <20220303140230.13098-1-sreekanth.reddy@broadcom.com>
+In-Reply-To: <20220303140203.12642-1-sreekanth.reddy@broadcom.com>
+References: <20220303140203.12642-1-sreekanth.reddy@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 1SwlyBlmEWoPpDhnzTGzP0gLiilsLb6F
-X-Proofpoint-ORIG-GUID: 1SwlyBlmEWoPpDhnzTGzP0gLiilsLb6F
+X-Proofpoint-GUID: Gga0oyTIZfrAT7oSVIKmh7ImWi2y10VK
+X-Proofpoint-ORIG-GUID: Gga0oyTIZfrAT7oSVIKmh7ImWi2y10VK
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -68,17 +68,21 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 3 Mar 2022 19:32:30 +0530, Sreekanth Reddy wrote:
+On Thu, 3 Mar 2022 19:32:03 +0530, Sreekanth Reddy wrote:
 
-> Driver has to do a 4gb boundary check using the pool's
-> dma address instead of using a virtual address.
+> When scsi_dma_map() fails by returning a sges_left value less than
+> zero, the amount of logging can be extremely high.  In a recent
+> end-user environment, 1200 messages per second were being sent to
+> the log buffer.  This eventually overwhelmed the system and it
+> stalled. Also these error messages are not needed and hence
+> removing them.
 > 
-> 
+> [...]
 
 Applied to 5.18/scsi-queue, thanks!
 
-[1/1] mpt3sas: Fix incorrect 4gb boundary check
-      https://git.kernel.org/mkp/scsi/c/208cc9fe6f21
+[1/1] mpt3sas: Remove scsi_dma_map errors messages
+      https://git.kernel.org/mkp/scsi/c/0c25422d34b4
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
