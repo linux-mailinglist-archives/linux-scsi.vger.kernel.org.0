@@ -2,69 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9B24D93A6
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Mar 2022 06:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FDB4D940F
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Mar 2022 06:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235603AbiCOFTE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Mar 2022 01:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
+        id S245552AbiCOFnf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Mar 2022 01:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233599AbiCOFTE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Mar 2022 01:19:04 -0400
+        with ESMTP id S234829AbiCOFne (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Mar 2022 01:43:34 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A4263E5
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Mar 2022 22:17:51 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22F3O8im008016;
-        Tue, 15 Mar 2022 05:02:43 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1CA2C113;
+        Mon, 14 Mar 2022 22:42:23 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22F3M3Do021977;
+        Tue, 15 Mar 2022 05:02:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=F+cbAGYnny0iSeDsc7twzJUA2Syx+pyIyz+9xYL+xBE=;
- b=nLE45LPef2Fzx4rwPHxO9zpKsqEtIiWTbgmRqQ1qVHlzXCQZCeRMa1v2iwMrs8kePxKm
- gVUKGAdAHvtD1zOTRy9LY1+u2pU8VgIF4l+P0YzhfQ3uL6rG6TExROKOc81sBEhsDd2B
- VJu1GUeogkty7qGjOl/d9vIciwL2kcr0/hsDhAtv4D5XCBy+dskdbsnEC/W63oGf/CHN
- 99/QtLKCJ8vc2ShmZ+w8yH1KgM8Bx5WiYr6uNk22GOJe15nP8yE9COJqZgvSeoS+qTE5
- ZVdj04WClTGuNTQbJ/WidmWT/7WC93vboeKNQDgum6VlXcH1GEUVofmnXUd8TclPk03i bQ== 
+ bh=oAFBBs/E5rptGEXYV7Li9rK+IINtjwWvmeJNAxYBj1o=;
+ b=BKInPhDx0n2GTgqFCCrj8Lf28m11M768vEewbDSXg+zELwyWLgYXfLhW0bJCjpwA3jld
+ 9Mjr7kJIGpadaNs6QCsq81IZcM7ER195R33rQSFHJBm6AjQe0rcpI3TSsHVHWTZ31Zj3
+ inx229R9yd+26wyP7QsyF4V2EzreW814rM4ahd5hugO3Qg+1KQr6RejZp8gSAlqeUxCR
+ BDdNGSq/ZjE0cV66St2vDigaN4eH7gHIuvHZfHyPanuLxmivb/9GbIdKKngimIayF/AI
+ 1NW7W+xelc5rt6w1YCAkyfU1z0/1HJ88wzRtr0h2oqJdRYIdfjQZE+k7SXk9SeV2kFWU +w== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3et5s6j20g-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3et60r9y1v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Mar 2022 05:02:44 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 22F51LHT005084;
+        Tue, 15 Mar 2022 05:02:43 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3erhy25wvk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 15 Mar 2022 05:02:43 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 22F51JJk004866;
-        Tue, 15 Mar 2022 05:02:42 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3erhy25wv9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Mar 2022 05:02:42 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 22F52cq7007094;
-        Tue, 15 Mar 2022 05:02:41 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 22F52cq9007094;
+        Tue, 15 Mar 2022 05:02:43 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3erhy25wts-3;
-        Tue, 15 Mar 2022 05:02:41 +0000
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3erhy25wts-4;
+        Tue, 15 Mar 2022 05:02:42 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, jejb@linux.ibm.com,
-        peter.wang@mediatek.com, avri.altman@wdc.com,
-        alim.akhtar@samsung.com, stanley.chu@mediatek.com
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-mediatek@lists.infradead.org, chun-hung.wu@mediatek.com,
-        chaotian.jing@mediatek.com, beanhuo@micron.com,
-        wsd_upstream@mediatek.com, alice.chao@mediatek.com,
-        jiajie.hao@mediatek.com, powen.kao@mediatek.com,
-        cc.chou@mediatek.com, mikebi@micron.com, qilin.tan@mediatek.com,
-        lin.gui@mediatek.com
-Subject: Re: [PATCH v1] scsi: ufs: scsi_get_lba error fix by check cmd opcode
-Date:   Tue, 15 Mar 2022 01:02:33 -0400
-Message-Id: <164732052814.23186.8418060830463850785.b4-ty@oracle.com>
+        patches@lists.linux.dev, linux-scsi@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>
+Subject: Re: [PATCH] SCSI: docs: UFS documentation corrections
+Date:   Tue, 15 Mar 2022 01:02:34 -0400
+Message-Id: <164732052813.23186.4136938710456467742.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220307111752.10465-1-peter.wang@mediatek.com>
-References: <20220307111752.10465-1-peter.wang@mediatek.com>
+In-Reply-To: <20220307013224.5130-1-rdunlap@infradead.org>
+References: <20220307013224.5130-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: CGHBTJI2hPrbY2UpGNc2X2W0cgtXK5GY
-X-Proofpoint-ORIG-GUID: CGHBTJI2hPrbY2UpGNc2X2W0cgtXK5GY
+X-Proofpoint-GUID: 85Krc8joo-tg30IlXanUJsns7K5BolM8
+X-Proofpoint-ORIG-GUID: 85Krc8joo-tg30IlXanUJsns7K5BolM8
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -75,22 +72,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 7 Mar 2022 19:17:52 +0800, peter.wang@mediatek.com wrote:
+On Sun, 6 Mar 2022 17:32:24 -0800, Randy Dunlap wrote:
 
-> From: Peter Wang <peter.wang@mediatek.com>
+> Make a variety of corrections to ufs.rst:
 > 
-> When ufs init without scmd->device->sector_size set,
-> scsi_get_lba will get a wrong shift number and ubsan error.
-> shift exponent 4294967286 is too large for 64-bit type
-> 'sector_t' (aka 'unsigned long long')
-> Call scsi_get_lba only when opcode is READ_10/WRITE_10/UNMAP.
+> - add spaces around parenthetical phrases
+> - correct singular/plural grammar and nouns
+> - correct punctuation
+> - add article adjectives
+> - add hyphens to multi-word adjectives
+> - spell Lun as LUN
+> - spell upiu as UPIU (in text, not code examples)
+> - don't capitalize generic "specification"
 > 
 > [...]
 
 Applied to 5.18/scsi-queue, thanks!
 
-[1/1] scsi: ufs: scsi_get_lba error fix by check cmd opcode
-      https://git.kernel.org/mkp/scsi/c/2bd3b6b75946
+[1/1] SCSI: docs: UFS documentation corrections
+      https://git.kernel.org/mkp/scsi/c/296559d41e0f
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
