@@ -2,87 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1854D93A7
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Mar 2022 06:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4394D9427
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Mar 2022 06:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236782AbiCOFTF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Mar 2022 01:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
+        id S239675AbiCOFyy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Mar 2022 01:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233863AbiCOFTE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Mar 2022 01:19:04 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8686A643B
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Mar 2022 22:17:52 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22F39A6i008015;
-        Tue, 15 Mar 2022 05:02:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=1RgW0cjUuB6ERpvLNdXE7h2Y29V6CuESfRF7toQfAfc=;
- b=PVgM6ogsWFRyGUh85K5pBvjfa1MgffASrlgc2MeRuguEmhaDgIu5rSEoQz6da+C2DpIX
- jNxPVkQExp4uGjMEyzl3MnwiNUWwwX8+UQoDB7GT3ZZASqj3/R19ec0rh9yxoHSQckQZ
- FT1nQ1S5EZ4OXjGHd6T3jahg3DXp4tUqiueMvPWid09N/1bETHTiUa1ZoyiqO9cDN7HM
- STchkuQtwxSg/5qyD3yFsdLLYNUyAE8Qgevq4ItoQyNiGWqQvy0LusqvrgLdULP37bAg
- T4pBXZ/CYP+RMR7+WJmElSk70S/huwTwyUNBuj+6Fwjbac1u2imOQNTfDOZ8UHbPvhON hQ== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3et5s6j20m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Mar 2022 05:02:45 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 22F51KHe004976;
-        Tue, 15 Mar 2022 05:02:44 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3erhy25wwc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Mar 2022 05:02:44 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 22F52cqD007094;
-        Tue, 15 Mar 2022 05:02:44 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3erhy25wts-6;
-        Tue, 15 Mar 2022 05:02:44 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        with ESMTP id S237121AbiCOFyw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Mar 2022 01:54:52 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08B2275C0;
+        Mon, 14 Mar 2022 22:53:40 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id t1so22574950edc.3;
+        Mon, 14 Mar 2022 22:53:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=gcxe7Q67Er+91W8CGkt9CKVxyZovdKpQHbbislZxMaI=;
+        b=T8t6aNIF28F/RLXMTBj4EVH+NN/fLhb23LBLmy2AgzTgdRtQajf0XbbzbYVGJOQNxb
+         B8zbxhg6kZzPaHWpSLtJdo+OtDUq4HEqLmHRw4nBl2bOVFo3vhmy9QeTSYpZOiKsphs6
+         RDuMWsztvWsB+WF0Hx1X9ihSKaTn4YcGUsD8w7xW68/vTky6JO9CWVibNvDDtmZyW4S7
+         JX5DxR5ERSQ7AeeXbjtBYQsO9Eo/fE2kpAu6DwTrXQ+ybbRUyNyC4WDPV+EUgMAbMt9G
+         ynqbM94johYsXzLB22ZyWK4pG2pLi8MzagEeIIvHo6yfNIWirShdjWxhxbpAqD7ZRY9f
+         tehg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=gcxe7Q67Er+91W8CGkt9CKVxyZovdKpQHbbislZxMaI=;
+        b=apf9MEZIZg53/0XnEh7AIqg8utECby3B/cZvNaMfpA4YHq/EY/iACuyZSW3bafwbzG
+         Dukeeo0jniZKGdakIBA59hvy9tVmyVVkAt8EzcRUuxAZv1+vwXNScdnDURelt2vneZki
+         uw4kX0ZVKy5FDv4PyNR6zuQ5aE4rsYnmFSNR9A+KfB0sGC/4HXHgsL8bIiiusvca8OLs
+         7H002f2aOcsq8UfdJjvDCiRWOkmak9xIlLoRPxj+23ZZj/nIlqIqesr0Z440jD0dhxMI
+         hAOg9FdT2N7wdmIAh0d17erMh7jcK15q73CHkwv7/aPP65C8uZVbePhuaAdIzO+M7ixL
+         haJQ==
+X-Gm-Message-State: AOAM5324s/rMm/w5L/DWTWjVuyB8I90630kkAnyb1tLAxktYZbXzYYSg
+        ctkuH+kWZu/p7cIeNekncpU=
+X-Google-Smtp-Source: ABdhPJyzYgQANwP4WOlef1dijASUQbxEe0O+IhciGaJOsPldIamf22MbJdJIkmlxSd2c3ZBPJ/5hXA==
+X-Received: by 2002:a05:6402:2896:b0:418:58c2:7254 with SMTP id eg22-20020a056402289600b0041858c27254mr13663551edb.283.1647323619067;
+        Mon, 14 Mar 2022 22:53:39 -0700 (PDT)
+Received: from felia.fritz.box (200116b8264e9400282aff0ca67bda3e.dip.versatel-1u1.de. [2001:16b8:264e:9400:282a:ff0c:a67b:da3e])
+        by smtp.gmail.com with ESMTPSA id re27-20020a170906d8db00b006d76251f4e7sm7613799ejb.109.2022.03.14.22.53.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 22:53:38 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] mpt3sas: Remove scsi_dma_map errors messages
-Date:   Tue, 15 Mar 2022 01:02:36 -0400
-Message-Id: <164732052813.23186.5277228738704812053.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220303140203.12642-1-sreekanth.reddy@broadcom.com>
-References: <20220303140203.12642-1-sreekanth.reddy@broadcom.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: Gga0oyTIZfrAT7oSVIKmh7ImWi2y10VK
-X-Proofpoint-ORIG-GUID: Gga0oyTIZfrAT7oSVIKmh7ImWi2y10VK
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] scsi: bsg: drop needless assignment in scsi_bsg_sg_io_fn()
+Date:   Tue, 15 Mar 2022 06:53:25 +0100
+Message-Id: <20220315055325.14974-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 3 Mar 2022 19:32:03 +0530, Sreekanth Reddy wrote:
+Commit ce70fd9a551a ("scsi: core: Remove the cmd field from struct
+scsi_request") refactored scsi_bsg_sg_io_fn(), so that it does not
+allocate directly and hence does not return -ENOMEM in its error case.
+That makes a remaining assignment of -ENOMEM to the return variable
+needless.
 
-> When scsi_dma_map() fails by returning a sges_left value less than
-> zero, the amount of logging can be extremely high.  In a recent
-> end-user environment, 1200 messages per second were being sent to
-> the log buffer.  This eventually overwhelmed the system and it
-> stalled. Also these error messages are not needed and hence
-> removing them.
-> 
-> [...]
+Drop this needless assignment in scsi_bsg_sg_io_fn().
 
-Applied to 5.18/scsi-queue, thanks!
+No functional change. No change in resulting object code.
 
-[1/1] mpt3sas: Remove scsi_dma_map errors messages
-      https://git.kernel.org/mkp/scsi/c/0c25422d34b4
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Christoph, please ack.
 
+Martin, please pick this minor clean-up on your -next tree on top of the
+commit above.
+
+ drivers/scsi/scsi_bsg.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/scsi/scsi_bsg.c b/drivers/scsi/scsi_bsg.c
+index 8039c3c11a6e..96ee35256a16 100644
+--- a/drivers/scsi/scsi_bsg.c
++++ b/drivers/scsi/scsi_bsg.c
+@@ -31,7 +31,6 @@ static int scsi_bsg_sg_io_fn(struct request_queue *q, struct sg_io_v4 *hdr,
+ 		return PTR_ERR(rq);
+ 	rq->timeout = timeout;
+ 
+-	ret = -ENOMEM;
+ 	scmd = blk_mq_rq_to_pdu(rq);
+ 	scmd->cmd_len = hdr->request_len;
+ 	if (scmd->cmd_len > sizeof(scmd->cmnd)) {
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.17.1
+
