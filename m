@@ -2,44 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8334DBEEA
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Mar 2022 07:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC0D4DBE73
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Mar 2022 06:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiCQGGg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Mar 2022 02:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
+        id S229516AbiCQFgH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Mar 2022 01:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiCQGG3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Mar 2022 02:06:29 -0400
-X-Greylist: delayed 9326 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Mar 2022 22:39:10 PDT
-Received: from tmailer.gwdg.de (tmailer.gwdg.de [134.76.10.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2CD13364F
-        for <linux-scsi@vger.kernel.org>; Wed, 16 Mar 2022 22:39:10 -0700 (PDT)
-Received: from excmbx-17.um.gwdg.de ([134.76.9.228] helo=email.gwdg.de)
-        by mailer.gwdg.de with esmtp (GWDG Mailer)
-        (envelope-from <alexander.vorwerk@stud.uni-goettingen.de>)
-        id 1nUgQO-000EEm-H3; Thu, 17 Mar 2022 04:03:40 +0100
-Received: from notebook.fritz.box (10.250.9.199) by excmbx-17.um.gwdg.de
- (134.76.9.228) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521) id 15.1.2375.24; Thu, 17
- Mar 2022 04:03:40 +0100
-From:   Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de>
-Subject: [PATCH] message: fusion: Remove unused variable retval
-Date:   Thu, 17 Mar 2022 04:03:25 +0100
-Message-ID: <20220317030325.30526-1-alexander.vorwerk@stud.uni-goettingen.de>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S229498AbiCQFgG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Mar 2022 01:36:06 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA391A94B3;
+        Wed, 16 Mar 2022 22:04:19 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1nUh2L-0002UJ-Gp; Thu, 17 Mar 2022 04:42:53 +0100
+Date:   Thu, 17 Mar 2022 04:42:53 +0100
+From:   Florian Westphal <fw@strlen.de>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eli Cohen <eli@mellanox.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
+        Joachim Fritschi <jfritschi@freenet.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org
+Subject: Re: [PATCH 4/9] netfilter: h323: eliminate anonymous module_init &
+ module_exit
+Message-ID: <20220317034253.GI9936@breakpoint.cc>
+References: <20220316192010.19001-1-rdunlap@infradead.org>
+ <20220316192010.19001-5-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.250.9.199]
-X-ClientProxiedBy: excmbx-11.um.gwdg.de (134.76.9.220) To excmbx-17.um.gwdg.de
- (134.76.9.228)
-X-Virus-Scanned: (clean) by clamav
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316192010.19001-5-rdunlap@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,47 +83,28 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The following warning showed up when compiling with W=1.
+Randy Dunlap <rdunlap@infradead.org> wrote:
+> Eliminate anonymous module_init() and module_exit(), which can lead to
+> confusion or ambiguity when reading System.map, crashes/oops/bugs,
+> or an initcall_debug log.
+> 
+> Give each of these init and exit functions unique driver-specific
+> names to eliminate the anonymous names.
+> 
+> Example 1: (System.map)
+>  ffffffff832fc78c t init
+>  ffffffff832fc79e t init
+>  ffffffff832fc8f8 t init
+> 
+> Example 2: (initcall_debug log)
+>  calling  init+0x0/0x12 @ 1
+>  initcall init+0x0/0x12 returned 0 after 15 usecs
+>  calling  init+0x0/0x60 @ 1
+>  initcall init+0x0/0x60 returned 0 after 2 usecs
+>  calling  init+0x0/0x9a @ 1
+>  initcall init+0x0/0x9a returned 0 after 74 usecs
+> 
+> Fixes: f587de0e2feb ("[NETFILTER]: nf_conntrack/nf_nat: add H.323 helper port")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 
-drivers/message/fusion/mptctl.c: In function ‘mptctl_hp_hostinfo’:
-drivers/message/fusion/mptctl.c:2337:8: warning: variable ‘retval’ set but not used [-Wunused-but-set-variable]
-  int   retval;
-
-Fixing by removing the variable.
-
-Signed-off-by: Alexander Vorwerk <alexander.vorwerk@stud.uni-goettingen.de>
----
- drivers/message/fusion/mptctl.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/message/fusion/mptctl.c b/drivers/message/fusion/mptctl.c
-index 03c8fb1795c2..f9ee957072c3 100644
---- a/drivers/message/fusion/mptctl.c
-+++ b/drivers/message/fusion/mptctl.c
-@@ -2334,7 +2334,6 @@ mptctl_hp_hostinfo(MPT_ADAPTER *ioc, unsigned long arg, unsigned int data_size)
- 	ToolboxIstwiReadWriteRequest_t	*IstwiRWRequest;
- 	MPT_FRAME_HDR		*mf = NULL;
- 	unsigned long		timeleft;
--	int			retval;
- 	u32			msgcontext;
- 
- 	/* Reset long to int. Should affect IA64 and SPARC only
-@@ -2488,7 +2487,6 @@ mptctl_hp_hostinfo(MPT_ADAPTER *ioc, unsigned long arg, unsigned int data_size)
- 	ioc->add_sge((char *)&IstwiRWRequest->SGL,
- 	    (MPT_SGE_FLAGS_SSIMPLE_READ|4), buf_dma);
- 
--	retval = 0;
- 	SET_MGMT_MSG_CONTEXT(ioc->ioctl_cmds.msg_context,
- 				IstwiRWRequest->MsgContext);
- 	INITIALIZE_MGMT_STATUS(ioc->ioctl_cmds.status)
-@@ -2498,7 +2496,6 @@ mptctl_hp_hostinfo(MPT_ADAPTER *ioc, unsigned long arg, unsigned int data_size)
- 	timeleft = wait_for_completion_timeout(&ioc->ioctl_cmds.done,
- 			HZ*MPT_IOCTL_DEFAULT_TIMEOUT);
- 	if (!(ioc->ioctl_cmds.status & MPT_MGMT_STATUS_COMMAND_GOOD)) {
--		retval = -ETIME;
- 		printk(MYIOC_s_WARN_FMT "%s: failed\n", ioc->name, __func__);
- 		if (ioc->ioctl_cmds.status & MPT_MGMT_STATUS_DID_IOCRESET) {
- 			mpt_free_msg_frame(ioc, mf);
--- 
-2.17.1
-
+Acked-by: Florian Westphal <fw@strlen.de>
