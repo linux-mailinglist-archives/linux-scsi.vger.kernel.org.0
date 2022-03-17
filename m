@@ -2,111 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4714DBD96
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Mar 2022 04:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBD94DBD9D
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Mar 2022 04:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbiCQD2F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 16 Mar 2022 23:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
+        id S229911AbiCQD3g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 16 Mar 2022 23:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233029AbiCQD1z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Mar 2022 23:27:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9BBC2E09A
-        for <linux-scsi@vger.kernel.org>; Wed, 16 Mar 2022 20:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647487599;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VdUR6nzOC/8O0v+PINEYQA8hLCMnHSUIAPMWwkW08rs=;
-        b=Wyfm3m60PtMDs9J980olZsBlkeVIRdwuebiXZVqR/xCw2kGY60wv6+aE80qaAaiMFwEGDM
-        7YRqS4nHgBrBPJ+pBHMKwcrRNiUoG52KtSnMdK0lsMRTr0fNEcoYGSXhHXgyBofffJUzFa
-        tIGbVspPUaqcrKVF86iqziLojiuccKA=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-56-Q53Ul9KVMrupQvaj6wdbXA-1; Wed, 16 Mar 2022 23:26:37 -0400
-X-MC-Unique: Q53Ul9KVMrupQvaj6wdbXA-1
-Received: by mail-lf1-f71.google.com with SMTP id m13-20020a19520d000000b00443423ff116so1340748lfb.11
-        for <linux-scsi@vger.kernel.org>; Wed, 16 Mar 2022 20:26:37 -0700 (PDT)
+        with ESMTP id S232949AbiCQD3Z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 16 Mar 2022 23:29:25 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAF511A32
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Mar 2022 20:28:02 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id g19so5737360pfc.9
+        for <linux-scsi@vger.kernel.org>; Wed, 16 Mar 2022 20:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VUOcnGCmkI9MgS52qXIb3FlhfMOUv2lQTH15zVr9Ia8=;
+        b=PwJ4qSum2YwEz5mm0VtPaQBrwVeKB7O/bU3EDytHiRRP18QZNFHHy6a14b5xpQcFn3
+         cW6BEVXYkmPGdjdjFlNdlDEdnGa6oJr87wo/ETSmUcw5n0CO8QmrasJ0ppStgbPm5er4
+         Mcu1LoX1/I3/tS/aXKsf0DJNseK+AYDhUA848ykbL1UwDQcuEGRRU48m4Sqfv+5Y6S26
+         xlD+k2By/widTEo2vUDWY43b1phT6YxyJIYt7H3nqMkoHS13yvGI7QTZjOaZdoNpqTtf
+         ZngVl/UgDXaZl1m/saVsP/DIaoZXfh0W4urXG3uerb0t4n54LE16St2XfdVvQTi/yUZw
+         dhQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VdUR6nzOC/8O0v+PINEYQA8hLCMnHSUIAPMWwkW08rs=;
-        b=J0KS9uB5KDr1KL39HTRoIWCPmW36apzeHpVJ/BF4ds3vTJ6LhXkQD5d2iUEzR27JT9
-         gi2GdbqEiZBw/qXeKlAHdb9YVchUysSE1MjLvl+5kyHUgZdjTZYBsFkmwWqSz76cLh7Y
-         nj20iozWC1dS9HEb31WDZK4eJuYlOH8jN+QxslSVSSkMvRKijdHWaWxS9HP6NniYsRDX
-         rdkm86jSch2iLiaFPMj1wqbiP0D99x0FJwdkbDuy+r7LgUcb0z7qu2Y+RTIswaQXaenp
-         NCRpV3h86w6yDuQ256BWkCZT5Wg5RD8ihdIFyjqYOJAikcZw76TpO/0YLIaoiGz35oKn
-         SwDw==
-X-Gm-Message-State: AOAM532RpXudBS0yOXf2CgXMDgZLRorcxYsjLbLrJNZx++HPNpMZPysL
-        aVXL+fh6dv+C4k0YGUyNfdOdOXoI8sUjUZvL/IN4cWyf1baMvGpg9YOeqcwg25QiXopC1waHZMn
-        7OBZG51/Q2vZmxKrpDanx69G50LMUAOaSpVIgHA==
-X-Received: by 2002:a2e:a490:0:b0:248:8f0:e4ee with SMTP id h16-20020a2ea490000000b0024808f0e4eemr1585880lji.97.1647487596363;
-        Wed, 16 Mar 2022 20:26:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxodJS4+oPuUw6/FJlLdS1DOlRDugHlSvT6drTv1PuTs0XvDj5DTLTyLGxZOhq4kq4IHrWqpfNVV0chS1q08S4=
-X-Received: by 2002:a2e:a490:0:b0:248:8f0:e4ee with SMTP id
- h16-20020a2ea490000000b0024808f0e4eemr1585821lji.97.1647487596075; Wed, 16
- Mar 2022 20:26:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VUOcnGCmkI9MgS52qXIb3FlhfMOUv2lQTH15zVr9Ia8=;
+        b=UkKDpjYVgsX94txYwR0UR2RSLu9xuX4VGZNWO3cWIpksWSuUwHjjZQECqs7mfT0laT
+         5KABFBpWylm99FfToJOL6EsQ+y2UxlfumuL2XYkVSppV7EtapAFsutzhG9R+fFUhOYRV
+         J1WLfpeWFRov4l8cMDmyqLpkAUnjjvE9PJzMc0CyTQQ2ZWCLFbU4YkkOSbEgZYLBaWBL
+         rOlljsWtmgWaDFVQCc8obXKQv2lIz13F+Qt7LpU0y9x+3f8uoeGWNKaIDpG3vjLSu/xF
+         LHF2A1nZ+TzX7DtSF/BV8lLAm/qzBYano1FjLcGln4LEx1XfwDVpGuDHfo9CwjzsDrQZ
+         wr5A==
+X-Gm-Message-State: AOAM5336YHQ7abc8OXPCuU9P97eQQK/COek+g4nxmEzIzL2y2lUOqlox
+        cyuEqEJQwYohw4g/84j3Sy/C8oBANLw=
+X-Google-Smtp-Source: ABdhPJwiJNpfNtviOGsFca7VCD3mD0fW0xWv8Bh3J6z6Fi+Gi8/TMi2RqCgoa5f/U8xuS9gFcCQZ8g==
+X-Received: by 2002:aa7:82d9:0:b0:4fa:2c7f:41e with SMTP id f25-20020aa782d9000000b004fa2c7f041emr2406010pfn.1.1647487667949;
+        Wed, 16 Mar 2022 20:27:47 -0700 (PDT)
+Received: from mail-lvn-it-01.broadcom.com (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
+        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm5017511pfc.190.2022.03.16.20.27.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 20:27:47 -0700 (PDT)
+From:   James Smart <jsmart2021@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     James Smart <jsmart2021@gmail.com>
+Subject: [PATCH 0/4] lpfc: Update lpfc to revision 14.2.0.1
+Date:   Wed, 16 Mar 2022 20:27:33 -0700
+Message-Id: <20220317032737.45308-1-jsmart2021@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20220316192010.19001-1-rdunlap@infradead.org> <20220316192010.19001-2-rdunlap@infradead.org>
-In-Reply-To: <20220316192010.19001-2-rdunlap@infradead.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 17 Mar 2022 11:26:24 +0800
-Message-ID: <CACGkMEtg6uCNfP-ncXEEWn+EeGLe1-KxbYu45g1-7vR_JHr7hg@mail.gmail.com>
-Subject: Re: [PATCH 1/9] virtio_blk: eliminate anonymous module_init & module_exit
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eli Cohen <eli@mellanox.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Krzysztof Opasiak <k.opasiak@samsung.com>,
-        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
-        Joachim Fritschi <jfritschi@freenet.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, netdev <netdev@vger.kernel.org>,
-        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-        RDMA mailing list <linux-rdma@vger.kernel.org>,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-        nouveau@lists.freedesktop.org,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,72 +66,28 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 3:25 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Eliminate anonymous module_init() and module_exit(), which can lead to
-> confusion or ambiguity when reading System.map, crashes/oops/bugs,
-> or an initcall_debug log.
->
-> Give each of these init and exit functions unique driver-specific
-> names to eliminate the anonymous names.
->
-> Example 1: (System.map)
->  ffffffff832fc78c t init
->  ffffffff832fc79e t init
->  ffffffff832fc8f8 t init
->
-> Example 2: (initcall_debug log)
->  calling  init+0x0/0x12 @ 1
->  initcall init+0x0/0x12 returned 0 after 15 usecs
->  calling  init+0x0/0x60 @ 1
->  initcall init+0x0/0x60 returned 0 after 2 usecs
->  calling  init+0x0/0x9a @ 1
->  initcall init+0x0/0x9a returned 0 after 74 usecs
->
-> Fixes: e467cde23818 ("Block driver using virtio.")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: "Michael S. Tsirkin" <mst@redhat.com>
-> Cc: Jason Wang <jasowang@redhat.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Stefan Hajnoczi <stefanha@redhat.com>
-> Cc: virtualization@lists.linux-foundation.org
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: linux-block@vger.kernel.org
-> ---
+Update lpfc to revision 14.2.0.1
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+This patch set contains 3 fixes for errors detected during eeh error
+injection.
 
->  drivers/block/virtio_blk.c |    8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> --- lnx-517-rc8.orig/drivers/block/virtio_blk.c
-> +++ lnx-517-rc8/drivers/block/virtio_blk.c
-> @@ -1058,7 +1058,7 @@ static struct virtio_driver virtio_blk =
->  #endif
->  };
->
-> -static int __init init(void)
-> +static int __init virtio_blk_init(void)
->  {
->         int error;
->
-> @@ -1084,14 +1084,14 @@ out_destroy_workqueue:
->         return error;
->  }
->
-> -static void __exit fini(void)
-> +static void __exit virtio_blk_fini(void)
->  {
->         unregister_virtio_driver(&virtio_blk);
->         unregister_blkdev(major, "virtblk");
->         destroy_workqueue(virtblk_wq);
->  }
-> -module_init(init);
-> -module_exit(fini);
-> +module_init(virtio_blk_init);
-> +module_exit(virtio_blk_fini);
->
->  MODULE_DEVICE_TABLE(virtio, id_table);
->  MODULE_DESCRIPTION("Virtio block driver");
->
+The patches were cut against Martin's 5.18/scsi-staging tree
+
+James Smart (4):
+  lpfc: Improve PCI EEH Error and Recovery Handling
+  lpfc: Fix unload hang after back to back PCI EEH faults
+  lpfc: Fix queue failures when recovering from PCI parity error
+  lpfc: Update lpfc version to 14.2.0.1
+
+ drivers/scsi/lpfc/lpfc.h         |   7 +-
+ drivers/scsi/lpfc/lpfc_crtn.h    |   3 +
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 120 +++++++++++++++++++++++++------
+ drivers/scsi/lpfc/lpfc_init.c    |  88 ++++++++++++++++-------
+ drivers/scsi/lpfc/lpfc_nvme.c    |  27 ++++---
+ drivers/scsi/lpfc/lpfc_sli.c     |  65 +++++++++++------
+ drivers/scsi/lpfc/lpfc_version.h |   2 +-
+ 7 files changed, 232 insertions(+), 80 deletions(-)
+
+-- 
+2.26.2
 
