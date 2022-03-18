@@ -2,100 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A914DE12C
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Mar 2022 19:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF904DE380
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Mar 2022 22:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240196AbiCRSkK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Mar 2022 14:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S241133AbiCRV0m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 18 Mar 2022 17:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240191AbiCRSkJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 18 Mar 2022 14:40:09 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208DC1C6ECD
-        for <linux-scsi@vger.kernel.org>; Fri, 18 Mar 2022 11:38:50 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id w12so15411964lfr.9
-        for <linux-scsi@vger.kernel.org>; Fri, 18 Mar 2022 11:38:50 -0700 (PDT)
+        with ESMTP id S241131AbiCRV0j (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 18 Mar 2022 17:26:39 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F46D12E741
+        for <linux-scsi@vger.kernel.org>; Fri, 18 Mar 2022 14:25:19 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id g17so16026079lfh.2
+        for <linux-scsi@vger.kernel.org>; Fri, 18 Mar 2022 14:25:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bHqKUGIuEtftMeafh3bJR5uOnAVeeytzXHaCASE6Gn4=;
-        b=ZoEWjWqwUVUE8RL638A1vp3y96A6v3Db295HCFYjubg8CsKNVOIs/CYwXnnGofh4Kz
-         TaGzYzmVWLyAdEjGzYHLSd7ZlKQOngV2b12idRYKK/t/ACCLVGTJSB4ni+8H89KGA52V
-         GVN+W26u8vg9htT9NJRsd3U2+4UfkiaYHp499jhPbQqa++f69xIskRzjnjpuTVc245G+
-         yND2HwBlRNQuUMqJqGGmUPIjyFcBINeYyqPccrYHCFr3bAqEQDxY9ebkV1HO02BDMQJF
-         DBDExuExpgcvCwgWVa17UrfqMw4a1evPMjujShh3mN8q/zBwzSP95mu6EvzaEGhW8jb2
-         2aWQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=T/YT8jITLgW7f0YnEkkxDYteBnHJRvTOMarDgnnU8jo=;
+        b=OxIPcfB7OTdpBTp94FpA0xhSma6t7LNtt25vlKMhzmJD+gPJrKKo1/vWBFj6LZK1+1
+         6zc/jmgbgv+1L1UJjANTajmcRxhGQfmk/9IY8q8DFjRJRrqQJagqN45g17wEuNxiRVy5
+         vsFQnw61rK7KeUUWpfMrAqwR2nuO5lbnJ7BaxP4l22wzENOWJR4QQABtaM2/4Y8YLGLd
+         7LVLpgaOpSU8aBuofeV2UzwEvjEGjrlxn2YqNWAJo/DczTvE5Mwg7jJGTDMyx2TEKz24
+         mF6DPwSo5rPK07NThDTackjAE8HZOCMmhYkfNL4H3rlfZ3lHPw9ERxzyWJfKhcM97jU+
+         3vYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bHqKUGIuEtftMeafh3bJR5uOnAVeeytzXHaCASE6Gn4=;
-        b=0zapvioNgAwD/1TZNZWiZsWGS3amaT5cnAFeju6lpzSnnl34aak0s2o53FdbbDzjjm
-         uvoofQLBD8flSWF+k0/VwDvA5RBb6og7xgt+HLgFQsoJXcaqjPO/jyitXm+3PYkU4nd1
-         rvS2LpYqIS2rJ8+CmX4g+gsvhupVF7NsE/vYHOWAtofwklqNYmda+3mjYjeVZVelT0J7
-         uW5l5P+pUWnikAQ3PpjyklVhhJfhhHwug12qWZHyp6oVRKOma4+LgiID32rA/VXN6K8K
-         4GUZrcI1QfyhhoW32Wk5LTMznn6axkv+HxwINFIjx9bIOvSmKGcsw9ZW86Q3W01uKpiK
-         e+WQ==
-X-Gm-Message-State: AOAM530w3xaP4FAqXKw6pz+RYVH9yPtG0rB2lu+yHz8TPuFKvlOK21Lc
-        sKONMktfXyogDqw9EUwK86WBzq+TaB5ouQ==
-X-Google-Smtp-Source: ABdhPJxrGyAm3rDmPJ5rZTz7TuI7XPNT/CCRKjeORWRNh9AvTOx1SAT/KaWg8k2+FR6cyt5034mAzg==
-X-Received: by 2002:a05:6402:d09:b0:418:7a4a:c3f2 with SMTP id eb9-20020a0564020d0900b004187a4ac3f2mr10797459edb.366.1647628226711;
-        Fri, 18 Mar 2022 11:30:26 -0700 (PDT)
-Received: from otso.arnhem.chello.nl (a246182.upc-a.chello.nl. [62.163.246.182])
-        by smtp.gmail.com with ESMTPSA id y8-20020a50eb08000000b00418b114469csm4567551edp.52.2022.03.18.11.30.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 11:30:26 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/6] scsi: ufs: dt-bindings: Add SM6350 compatible string
-Date:   Fri, 18 Mar 2022 19:29:59 +0100
-Message-Id: <20220318183004.858707-2-luca.weiss@fairphone.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220318183004.858707-1-luca.weiss@fairphone.com>
-References: <20220318183004.858707-1-luca.weiss@fairphone.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=T/YT8jITLgW7f0YnEkkxDYteBnHJRvTOMarDgnnU8jo=;
+        b=6jIPe2T+NhaHj9YvjTTb8ZDTks23sib82lnpw5u3bQw1N/9iFpkxUny9NMXKkp9ltH
+         vpdyy1gDozd3SWa3z+EbB5XLkdPb5+Y4yrGfmsmpsCFfPWoNDZChoFN35FwwvrgTYEk1
+         od6c5BhW5Wyxg7it/uW1f2OnJ7l6YzEpZR8QBpxdpWktir9305GdbDkDLUk+SBa9IGlP
+         AMq0EsHwc+slWJBSl7m6NjnkQBXcvLvguiMU4fmiTLyZlkkO6tRLAQPG5yg3sQrexx5w
+         0c9ZAGwULd0ST+w/Yvwdi69W24HYogLsl17XXxG1v7Tf9m5k/h3ZO+rHGBWsaHMNn6HQ
+         fVjw==
+X-Gm-Message-State: AOAM532GLkMa13HFy8Okc79mjyQgB+BaUH67E/sgVXHJVZOhk54Ayucz
+        pqw655tKyTCTMZp96zMI5E8OHsEwRMuWOMdys8Y=
+X-Google-Smtp-Source: ABdhPJzpjhjih9SBrVkPxbwZ1LIgKumcDFS/Pm7D/kQf7a+LB8Bnzy+FD7tj51+PviptxwzWjMDHOqNQqYCf8b+EQvg=
+X-Received: by 2002:ac2:5a0b:0:b0:448:3039:d179 with SMTP id
+ q11-20020ac25a0b000000b004483039d179mr7083845lfn.485.1647638717895; Fri, 18
+ Mar 2022 14:25:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6520:402a:b0:199:feb0:3ce7 with HTTP; Fri, 18 Mar 2022
+ 14:25:17 -0700 (PDT)
+Reply-To: clmloans9@gmail.com
+From:   MR ANTHONY EDWARD <nillapep@gmail.com>
+Date:   Fri, 18 Mar 2022 22:25:17 +0100
+Message-ID: <CAHJCGRgfpCX1zdTUhS3HyfkQY8XuHBLwwTKKOXPuPD7GK4NKCA@mail.gmail.com>
+Subject: SICHERES KREDITANGEBOT BEI 2%
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:12a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4991]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [clmloans9[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nillapep[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Document the compatible for the UFS found on SM6350.
+--=20
+Ben=C3=B6tigen Sie ein Gesch=C3=A4ftsdarlehen oder ein Darlehen jeglicher A=
+rt?
+Wenn ja, kontaktieren Sie uns
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-index 5b3a2157f7e5..d17db2cdf3c2 100644
---- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-@@ -27,6 +27,7 @@ properties:
-           - qcom,msm8996-ufshc
-           - qcom,msm8998-ufshc
-           - qcom,sdm845-ufshc
-+          - qcom,sm6350-ufshc
-           - qcom,sm8150-ufshc
-           - qcom,sm8250-ufshc
-           - qcom,sm8350-ufshc
--- 
-2.35.1
-
+*Vollst=C3=A4ndiger Name:
+* Ben=C3=B6tigte Menge:
+*Leihdauer:
+*Handy:
+*Land:
