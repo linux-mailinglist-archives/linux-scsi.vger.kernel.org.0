@@ -2,105 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924F54E18F8
-	for <lists+linux-scsi@lfdr.de>; Sun, 20 Mar 2022 00:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F724E190F
+	for <lists+linux-scsi@lfdr.de>; Sun, 20 Mar 2022 00:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244343AbiCSXQK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 19 Mar 2022 19:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S244399AbiCSXv2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 19 Mar 2022 19:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234512AbiCSXQJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 19 Mar 2022 19:16:09 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FF339B8F;
-        Sat, 19 Mar 2022 16:14:47 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso6568915wmz.4;
-        Sat, 19 Mar 2022 16:14:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nTQfK58lfNVp+J0LXWpfRWrYpUP0yrdZAkFT5Rd/9rE=;
-        b=Fpog2uLZ+xedDEcYM2+jMa9eO9VcpgfQ4T3seCP4UP7rCUsGsJU2EQkQe+ChljVG3M
-         30Lw3pdqCNfCQCuWRn4qQ+5x1qNbo1SUVB8oUmd9I1HRk7w1WHtOwSkrlBgQzCuFJVp3
-         tlFAKn/RQ2kwCGVG51UKWivM/eLDnDs3vDH7UZQayj5nbwKfW48y7Eb11M11olixrJzL
-         ObXHCuVji6eH4l+cB+rBNjWsNQ4KA+SHHJsQrLFjhdjAV1S6K63pxE63a7Sdy4rHbleO
-         jbQ41sBLzmABwhULfNGUKP40kAeO9od7wS7XZil4fq5ygvbBLv486aBjRaIwEdYejeK+
-         6Y4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nTQfK58lfNVp+J0LXWpfRWrYpUP0yrdZAkFT5Rd/9rE=;
-        b=hszGpVleitQNev2XLXJfVs8iW9B/032fhwlRl+anUcijK53sfb5mZDsSfplFM6EItW
-         +gZLqYeZGq5j7CLNTLROrvHYwplQG+fajyaQjDp4sCCANMNfdkwdvM4UhOshOPTOAB5S
-         jmpjuC4hMZG+mPEsEq0OxaAgM4pkYIEbl5wNl6ejdrn9DIHYMgE2yXdZI7X+K9H8u3Or
-         T02zBQShZ6FbsgSxhp5EsrBC4P0oZ25mmPRBICw6oVId6WdYy6WPgF2b9m4VAhAkEs8O
-         t8oCyWouPR1XcXK9QUq/RdHz/dMcsbNsTZULuXiwqjKlxix4WuUF4tJ5BznFoIt4qvt3
-         OKcQ==
-X-Gm-Message-State: AOAM533h0Zfe5ZDryn0Ewnzv+rH8EXztxJ1vpMejy7E2+nEL3n8hbvyq
-        UaPB0ECpBK3jUVsU6In6fdU=
-X-Google-Smtp-Source: ABdhPJxG/LUMlIE26DMoRWo47G0pHVBXXCSpct+Pg8H5rBhYwyTP1oG0aQdqwb3PMZdmXt8WsmRcRA==
-X-Received: by 2002:a7b:ca42:0:b0:38c:6d09:1362 with SMTP id m2-20020a7bca42000000b0038c6d091362mr16794697wml.103.1647731686210;
-        Sat, 19 Mar 2022 16:14:46 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id l12-20020a05600c4f0c00b0038be825b774sm11120662wmq.45.2022.03.19.16.14.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 16:14:45 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: bnx2i: Fix spelling mistake "mis-match" -> "mismatch"
-Date:   Sat, 19 Mar 2022 23:14:45 +0000
-Message-Id: <20220319231445.21696-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S240101AbiCSXv1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 19 Mar 2022 19:51:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01BE29819;
+        Sat, 19 Mar 2022 16:50:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 465C060EF0;
+        Sat, 19 Mar 2022 23:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AD556C340EC;
+        Sat, 19 Mar 2022 23:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647733803;
+        bh=pY7QPJiUo32hPXY0yiQ/tuO6qNxymu13nKdimgECFSs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Ju9qlum+L1yqyZXJrNDq3hEtr4XrU8a756Qvtos+JH3P0RSfT6u84FxGf6vqfom0+
+         qf0W231ERkorPSFj28JHi3OYrxVlB7lVjY9ld7/SAb87vyCfVShL+GtLN06aYc8BXB
+         k+ttW9x5MqXZ+GDLGSPUzdoAj35AaPc+IhmXCiquiDtDbukLNExLb+PvCNAsqfaFZ8
+         BO5bGY3iOWT9cVW5yPemh38AgNRTCnegdR/yYDCyRsZJpAsohuQ1E2QJvPdpbK1ROK
+         wdEosH23USCdsCSrJMq6vXWpKt20OUbYekRqfigVt1g3KASWJmDq4T8DZ0qswZEXK2
+         GACO3B3+wylqg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 943D7E6D3DD;
+        Sat, 19 Mar 2022 23:50:03 +0000 (UTC)
+Subject: Re: [GIT PULL] SCSI fixes for 5.17-rc8
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <2a71975c2888f30ddebff8aa509933bc87c1a552.camel@HansenPartnership.com>
+References: <2a71975c2888f30ddebff8aa509933bc87c1a552.camel@HansenPartnership.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <2a71975c2888f30ddebff8aa509933bc87c1a552.camel@HansenPartnership.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+X-PR-Tracked-Commit-Id: 733ab7e1b5d1041204c4ca7373f6e6f9d08e3283
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f76da4d5ad5168de58f0f5be1a12c1052a614663
+Message-Id: <164773380359.1966.8716812458635201424.pr-tracker-bot@kernel.org>
+Date:   Sat, 19 Mar 2022 23:50:03 +0000
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There are a few spelling mistakes in some error messages. Fix them.
+The pull request you sent on Sat, 19 Mar 2022 15:45:47 -0400:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/scsi/bnx2i/bnx2i_hwi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-diff --git a/drivers/scsi/bnx2i/bnx2i_hwi.c b/drivers/scsi/bnx2i/bnx2i_hwi.c
-index 5521469ce678..7fe7f53a41c0 100644
---- a/drivers/scsi/bnx2i/bnx2i_hwi.c
-+++ b/drivers/scsi/bnx2i/bnx2i_hwi.c
-@@ -2398,7 +2398,7 @@ static void bnx2i_process_conn_destroy_cmpl(struct bnx2i_hba *hba,
- 	}
- 
- 	if (hba != ep->hba) {
--		printk(KERN_ALERT "conn destroy- error hba mis-match\n");
-+		printk(KERN_ALERT "conn destroy- error hba mismatch\n");
- 		return;
- 	}
- 
-@@ -2432,7 +2432,7 @@ static void bnx2i_process_ofld_cmpl(struct bnx2i_hba *hba,
- 	}
- 
- 	if (hba != ep->hba) {
--		printk(KERN_ALERT "ofld_cmpl: error hba mis-match\n");
-+		printk(KERN_ALERT "ofld_cmpl: error hba mismatch\n");
- 		return;
- 	}
- 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f76da4d5ad5168de58f0f5be1a12c1052a614663
+
+Thank you!
+
 -- 
-2.35.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
