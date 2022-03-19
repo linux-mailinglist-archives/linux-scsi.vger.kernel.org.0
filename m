@@ -2,152 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12DF4DEA7C
-	for <lists+linux-scsi@lfdr.de>; Sat, 19 Mar 2022 20:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F2D4E18F5
+	for <lists+linux-scsi@lfdr.de>; Sun, 20 Mar 2022 00:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244056AbiCSTsS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 19 Mar 2022 15:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S241075AbiCSXMv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 19 Mar 2022 19:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235161AbiCSTsS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 19 Mar 2022 15:48:18 -0400
-Received: from bedivere.hansenpartnership.com (unknown [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924C57A981;
-        Sat, 19 Mar 2022 12:46:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1647719149;
-        bh=NggC2udics5UD05JBQeUyOZDTgDjR09Jt7/lciYz3xY=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=XT1E0GSbI48qj55tXnuSPiciBxLtNjeIaCdUqTn+xrbYnY3ST3LOO2my4l/9yma0a
-         foqyF4iXkB2ykIt2CZzBs4+rhRVkLQmvgUy3KJcu6nLfnrn81995n4SpjHxWrLubsc
-         GC4pF1+2O0i2TfhnxgaxPBAxr44Bvy42gnmEoS/Q=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 5D6011285CBD;
-        Sat, 19 Mar 2022 15:45:49 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zhyTaYH4fX1D; Sat, 19 Mar 2022 15:45:49 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1647719149;
-        bh=NggC2udics5UD05JBQeUyOZDTgDjR09Jt7/lciYz3xY=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=XT1E0GSbI48qj55tXnuSPiciBxLtNjeIaCdUqTn+xrbYnY3ST3LOO2my4l/9yma0a
-         foqyF4iXkB2ykIt2CZzBs4+rhRVkLQmvgUy3KJcu6nLfnrn81995n4SpjHxWrLubsc
-         GC4pF1+2O0i2TfhnxgaxPBAxr44Bvy42gnmEoS/Q=
-Received: from lingrow.int.hansenpartnership.com (c-67-166-174-65.hsd1.va.comcast.net [67.166.174.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C02D71281F58;
-        Sat, 19 Mar 2022 15:45:48 -0400 (EDT)
-Message-ID: <2a71975c2888f30ddebff8aa509933bc87c1a552.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.17-rc8
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Sat, 19 Mar 2022 15:45:47 -0400
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        with ESMTP id S234512AbiCSXMt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 19 Mar 2022 19:12:49 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7079E24F282;
+        Sat, 19 Mar 2022 16:11:25 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 185-20020a1c02c2000000b0038c99618859so70730wmc.2;
+        Sat, 19 Mar 2022 16:11:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uGTM8cTyUrNxkrBXIY5/ILn8OVYTkQ9XS5eNr97qsmk=;
+        b=E5BPRyZ2scf1rICA8FIIVqCeXi8CPtc56ogyIuYQEudewVmLw8reeSZ8fJSoz/GEA4
+         hVhmjI1D/quIHyzCJoGQ9yjTAAAVBtxP8wh5tvuACKT+8dTAw3qYAv0NUcrpl4vCdPbO
+         axpOpZOLtRnkMbnWuyFKI0lUO9kaZapkKV87sQ/BpM9RCNV78lmMp0TYEdZbxV7+obhF
+         S9/OqwY4bB8FcD/OiR6K2JBsFiLJAyUEuLNB4z5XHMKElSr/pyd09Rb5l2XkNdui7C2+
+         /MKYbyhM4pUH6V5qHZ+sn97dXWY02dvp6uzuSViJ9y0rEZpsnp5yt18+FLSByVTFf2s/
+         cpYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uGTM8cTyUrNxkrBXIY5/ILn8OVYTkQ9XS5eNr97qsmk=;
+        b=LAy8bTarjgSe9o9San9wt4X20Wa0LVyJTeKNnbWNkOwJvA1MReuOMgja6gYOSzx45i
+         h8RSv5j7mZ1KOfAfLxgEDtjm1iMtWafdLUrwYlOWQgYbxeQ4bdNyJwnvcMyemwbOHNZk
+         WmcGbllFofVC0py5yDe+es+aYqgBSahOPLnBJFLUzB+fuw4mypMJr31G1bNY6TefqYAc
+         zsaBFtz5//xd+wjjcCEC1xpehL5M/DjSjsXU65vAVLlm/eMwRzgG7xbFSfoq1ICbhBKA
+         2u0I7DEmSv5maEOBRnLWdK52WDOMBwSTqFm7XFoR6fqlmJ4zgytFfSO/nyaItqhWAEAk
+         lBLg==
+X-Gm-Message-State: AOAM530ltrHfaRGvQ5UTJlpBqwpmrVMqfU+UAJq0H2VBPOkPhcvYK193
+        DMi2vtn4QdRBmOTAW9Kg/hE4VdszY0A+JQ==
+X-Google-Smtp-Source: ABdhPJw/7SCTozzd3Ykpe8ud9T+4+rxpQzAlRrXy1KgEOi1h7FxxbNRjMUn9fZQaTsRaI/q7NXP5xw==
+X-Received: by 2002:a05:600c:4e4c:b0:38c:7af6:4fa1 with SMTP id e12-20020a05600c4e4c00b0038c7af64fa1mr12146423wmq.125.1647731483858;
+        Sat, 19 Mar 2022 16:11:23 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id f12-20020a5d64cc000000b00203d45bfbc7sm2079892wri.7.2022.03.19.16.11.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Mar 2022 16:11:23 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Saurav Kashyap <skashyap@marvell.com>,
+        Javed Hasan <jhasan@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: bnx2fc: Fix spelling mistake "mis-match" -> "mismatch"
+Date:   Sat, 19 Mar 2022 23:11:22 +0000
+Message-Id: <20220319231122.21476-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Two small(ish) fixes, both in drivers.
+There are a few spelling mistakes in some error messages. Fix them.
 
-The patch is available here:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-
-The short changelog is:
-
-David Jeffery (1):
-      scsi: fnic: Finish scsi_cmnd before dropping the spinlock
-
-Matt Lupfer (1):
-      scsi: mpt3sas: Page fault in reply q processing
-
-And the diffstat
-
- drivers/scsi/fnic/fnic_scsi.c       | 13 ++++++-------
- drivers/scsi/mpt3sas/mpt3sas_base.c |  5 +++--
- 2 files changed, 9 insertions(+), 9 deletions(-)
-
-With full diff below.
-
-James
-
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
+ drivers/scsi/bnx2fc/bnx2fc_hwi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
-index 88c549f257db..40a52feb315d 100644
---- a/drivers/scsi/fnic/fnic_scsi.c
-+++ b/drivers/scsi/fnic/fnic_scsi.c
-@@ -986,8 +986,6 @@ static void fnic_fcpio_icmnd_cmpl_handler(struct fnic *fnic,
- 	CMD_SP(sc) = NULL;
- 	CMD_FLAGS(sc) |= FNIC_IO_DONE;
- 
--	spin_unlock_irqrestore(io_lock, flags);
--
- 	if (hdr_status != FCPIO_SUCCESS) {
- 		atomic64_inc(&fnic_stats->io_stats.io_failures);
- 		shost_printk(KERN_ERR, fnic->lport->host, "hdr status = %s\n",
-@@ -996,8 +994,6 @@ static void fnic_fcpio_icmnd_cmpl_handler(struct fnic *fnic,
- 
- 	fnic_release_ioreq_buf(fnic, io_req, sc);
- 
--	mempool_free(io_req, fnic->io_req_pool);
--
- 	cmd_trace = ((u64)hdr_status << 56) |
- 		  (u64)icmnd_cmpl->scsi_status << 48 |
- 		  (u64)icmnd_cmpl->flags << 40 | (u64)sc->cmnd[0] << 32 |
-@@ -1021,6 +1017,12 @@ static void fnic_fcpio_icmnd_cmpl_handler(struct fnic *fnic,
- 	} else
- 		fnic->lport->host_stats.fcp_control_requests++;
- 
-+	/* Call SCSI completion function to complete the IO */
-+	scsi_done(sc);
-+	spin_unlock_irqrestore(io_lock, flags);
-+
-+	mempool_free(io_req, fnic->io_req_pool);
-+
- 	atomic64_dec(&fnic_stats->io_stats.active_ios);
- 	if (atomic64_read(&fnic->io_cmpl_skip))
- 		atomic64_dec(&fnic->io_cmpl_skip);
-@@ -1049,9 +1051,6 @@ static void fnic_fcpio_icmnd_cmpl_handler(struct fnic *fnic,
- 		if(io_duration_time > atomic64_read(&fnic_stats->io_stats.current_max_io_time))
- 			atomic64_set(&fnic_stats->io_stats.current_max_io_time, io_duration_time);
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_hwi.c b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+index 0103f811cc25..776544385598 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_hwi.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+@@ -1169,7 +1169,7 @@ static void bnx2fc_process_ofld_cmpl(struct bnx2fc_hba *hba,
+ 		ofld_kcqe->fcoe_conn_context_id);
+ 	interface = tgt->port->priv;
+ 	if (hba != interface->hba) {
+-		printk(KERN_ERR PFX "ERROR:ofld_cmpl: HBA mis-match\n");
++		printk(KERN_ERR PFX "ERROR:ofld_cmpl: HBA mismatch\n");
+ 		goto ofld_cmpl_err;
  	}
--
--	/* Call SCSI completion function to complete the IO */
--	scsi_done(sc);
- }
- 
- /* fnic_fcpio_itmf_cmpl_handler
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 511726f92d9a..76229b839560 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -2011,9 +2011,10 @@ mpt3sas_base_sync_reply_irqs(struct MPT3SAS_ADAPTER *ioc, u8 poll)
- 				enable_irq(reply_q->os_irq);
- 			}
- 		}
-+
-+		if (poll)
-+			_base_process_reply_queue(reply_q);
+ 	/*
+@@ -1226,12 +1226,12 @@ static void bnx2fc_process_enable_conn_cmpl(struct bnx2fc_hba *hba,
+ 	 * and enable
+ 	 */
+ 	if (tgt->context_id != context_id) {
+-		printk(KERN_ERR PFX "context id mis-match\n");
++		printk(KERN_ERR PFX "context id mismatch\n");
+ 		return;
  	}
--	if (poll)
--		_base_process_reply_queue(reply_q);
- }
- 
- /**
+ 	interface = tgt->port->priv;
+ 	if (hba != interface->hba) {
+-		printk(KERN_ERR PFX "bnx2fc-enbl_cmpl: HBA mis-match\n");
++		printk(KERN_ERR PFX "bnx2fc-enbl_cmpl: HBA mismatch\n");
+ 		goto enbl_cmpl_err;
+ 	}
+ 	if (!ofld_kcqe->completion_status)
+-- 
+2.35.1
 
