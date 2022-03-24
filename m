@@ -2,170 +2,151 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5DF4E6DBA
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Mar 2022 06:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D91AE4E6F6F
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Mar 2022 09:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240824AbiCYF1X (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Mar 2022 01:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S1354957AbiCYIan (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Mar 2022 04:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiCYF1X (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Mar 2022 01:27:23 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A579C558A
-        for <linux-scsi@vger.kernel.org>; Thu, 24 Mar 2022 22:25:49 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id c23so7008760plo.0
-        for <linux-scsi@vger.kernel.org>; Thu, 24 Mar 2022 22:25:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0P+LivAFBvMRAyoU3sS7xhRbJ6a7iUXHT7Ld7mWQNhw=;
-        b=Kn0Lw1EW1GwVjJlZ+8hmJI3uEYFH/kbo+YSYOjn28CFrFuCF2vm37h/hKw3h/TVmue
-         JWKCZREgHGH02Zr3Rxyc0f4i1CIeu5QqXG9TlGR9S2HRuhZzUI1ETr5fJG8sxs7Q24oq
-         Y96/02S02KFfjrbeomltEOckUI3F4W+H0nHFA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0P+LivAFBvMRAyoU3sS7xhRbJ6a7iUXHT7Ld7mWQNhw=;
-        b=mn3mZkm5pVTx7G8S+yvuVOSwqtS5o0SrlDrocjlTt9JTpcJwB9c265ktFcms88E/eW
-         Zs+ew13vxEswgoH+XcRMoAW6LNxWXEq+2IWmtONqTXG5u1l3xFIi5bIF4g3223Dcm2Qw
-         T/AU4fczmVKqAdcmxZK+K5C4Tc1wQrg8QTUuSBiZuE8sjAQ7H/Jb8HvbpHJY3FxYT83Q
-         ylUltLnz50KPyKCLvHjwuxAl2HCHTCsx8zikNsLe30t9y0cb9Hub873dE3ACVZsUEI00
-         p5/+en7QJ2yqVIGg0JpmoxLkU0p5WJ2abvJMtZ4a4sINENxnP8gTqEKvSYAkBw8+DI/S
-         vpZA==
-X-Gm-Message-State: AOAM531sPYDqmfPYkgz4v0UM5NhDho34pRwQhRMPnjubnFUcDLQ80/nU
-        02Y0PbXR5szcAPFN1U+cftlkoql0K+NsB5aiZgvukA==
-X-Google-Smtp-Source: ABdhPJxvxXfNEaCRry+eoeAQwh/rDA34M4QMI5t/Ylt/iX/NqctA2AuwQ0GAptIntSiO06V2ygD0P2+pGTmmXo9G4bA=
-X-Received: by 2002:a17:90b:314b:b0:1c7:3023:c218 with SMTP id
- ip11-20020a17090b314b00b001c73023c218mr22847270pjb.167.1648185944023; Thu, 24
- Mar 2022 22:25:44 -0700 (PDT)
+        with ESMTP id S1354832AbiCYIal (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Mar 2022 04:30:41 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7A415A37
+        for <linux-scsi@vger.kernel.org>; Fri, 25 Mar 2022 01:29:04 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220325082901epoutp0243d706222cf26a5010bcbca5f83e1224~fkmKxvFWn1789417894epoutp02X
+        for <linux-scsi@vger.kernel.org>; Fri, 25 Mar 2022 08:29:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220325082901epoutp0243d706222cf26a5010bcbca5f83e1224~fkmKxvFWn1789417894epoutp02X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1648196941;
+        bh=Re/TJcn/hkcuVtvC+CeTUXUbyr+ZF2q96RY2064Azww=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=p3+j4JWyK9nzUSWu3gveL5Wozp0azuTdfyFfy+UJ59foqKzgLNryZ73jTbRdV/WKj
+         USvBrTj/tgYE68TqDHMP3SSz/Aldtu8cbxTCfZRIbFXhgUyrC8DU///ighpuH+Kq32
+         7i+kVH+iS3v1PGya5fEGKKkXvPjSwnGOfs9ZspgA=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220325082900epcas2p174856821de343cce2dba2ce1984f8553~fkmKEasM10990509905epcas2p1N;
+        Fri, 25 Mar 2022 08:29:00 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.91]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4KPwGz1H6yz4x9QN; Fri, 25 Mar
+        2022 08:28:59 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E0.25.16040.A4D7D326; Fri, 25 Mar 2022 17:28:59 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220325082858epcas2p41c0918b1cacce09eaa5f7ffe84d9f994~fkmITmKSO2361223612epcas2p4K;
+        Fri, 25 Mar 2022 08:28:58 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220325082858epsmtrp21a3ca25db3d3f744b115732b2a57275f~fkmISm2dH0602206022epsmtrp22;
+        Fri, 25 Mar 2022 08:28:58 +0000 (GMT)
+X-AuditID: b6c32a46-bffff70000023ea8-81-623d7d4a139c
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8F.74.29871.A4D7D326; Fri, 25 Mar 2022 17:28:58 +0900 (KST)
+Received: from rack03.dsn.sec.samsung.com (unknown [12.36.155.109]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220325082858epsmtip29d36d20e5b35dba8ac07769bbd479a7f~fkmIGF5HD3042030420epsmtip2H;
+        Fri, 25 Mar 2022 08:28:58 +0000 (GMT)
+From:   SEO HOYOUNG <hy50.seo@samsung.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
+        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
+Cc:     SEO HOYOUNG <hy50.seo@samsung.com>
+Subject: [PATCH v2] scsi: ufs: unipro: add to define HS-Gear5 mode
+Date:   Fri, 25 Mar 2022 05:14:10 +0900
+Message-Id: <20220324201410.59187-1-hy50.seo@samsung.com>
+X-Mailer: git-send-email 2.26.0
+In-Reply-To: <sc.suh@samsung.com;>
 MIME-Version: 1.0
-References: <20220322122107.8482-1-sumit.saxena@broadcom.com>
- <20220322122107.8482-3-sumit.saxena@broadcom.com> <982a8a95-e431-6ce7-767a-8d67c01cd6be@acm.org>
-In-Reply-To: <982a8a95-e431-6ce7-767a-8d67c01cd6be@acm.org>
-From:   Sumit Saxena <sumit.saxena@broadcom.com>
-Date:   Fri, 25 Mar 2022 10:55:17 +0530
-Message-ID: <CAL2rwxrjKnokLymt6YU-boNobpNFzrHCHHaQ7jb6Y1NBzHbong@mail.gmail.com>
-Subject: Re: [PATCH 2/7] mpi3mr: add support for driver commands
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Linux SCSI List <linux-scsi@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Prayas Patel <prayas.patel@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000006d6e005db0432c1"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOJsWRmVeSWpSXmKPExsWy7bCmua53rW2SwYkTTBYP5m1js9jbdoLd
+        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1WL34AYvFohvbmCxubjnKYnF51xw2i+7rO9gs
+        lh//x+TA63H5irfH5b5eJo8Jiw4wenxf38Hm8fHpLRaPvi2rGD0+b5LzaD/QzRTAEZVtk5Ga
+        mJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0spJCWWJOKVAo
+        ILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLxArzgxt7g0L10vL7XEytDAwMgUqDAhO+NZ1xHW
+        gi72irOvX7A3MF5h7WLk5JAQMJG4fKiDsYuRi0NIYAejxLo5B9ghnE+MEi/bnjJBON8YJU68
+        XcYO0zJ90VGolr2MEg8f7oBq+QHUP3UCG0gVm4CGxJpjh8DaRQRWMEn0bPrEBJJgFlCT+Hx3
+        GQuILSzgJHHh4AqwS1gEVCX6ty4Ca+YVsJR4/HYTG8Q6eYlFDb/BejkFlCTen3rLDFEjKHFy
+        5hMWiJnyEs1bZzODLJMQWMshsaphMtStLhKnV+5ihLCFJV4d3wIVl5L4/G4v1IJiiR9vVjNB
+        NDcwSixtP8YMkTCWmPWsHaiZA2iDpsT6XfogpoSAssSRW1B7+SQ6Dv9lhwjzSnS0CUE0Kkmc
+        mXsbKiwhcXB2DkTYQ6Kl8SULSFhIoFRi8VHtCYwKs5D8MgvJL7MQti5gZF7FKJZaUJybnlps
+        VGAEj+Dk/NxNjOAUrOW2g3HK2w96hxiZOBgPMUpwMCuJ8N6/bJ0kxJuSWFmVWpQfX1Sak1p8
+        iNEUGNITmaVEk/OBWSCvJN7QxNLAxMzM0NzI1MBcSZzXK2VDopBAemJJanZqakFqEUwfEwen
+        VANT8OzyL0sS4vxOrFE9I/FizoMFs46p/1xWsT7odvbEJ6f+pO97s8CH1eLBr3fuO0vDdpR3
+        Bzr7KMpucb9dNoHFvJnzVp/p+6kxUXWrea9oydjdbdz+/uS6D60+WXc2z1te47QsceGF8yLP
+        tNaZNv/nmbX0dWywffH33qIdy48V1ibnWit/F2edMuea7+W+qzbH/RWbCs9XNzJq3P4pW2cR
+        JObZvvfRxHVaoUp3HsxdN/N2Zxjfp4BzYk1lOjKaf34UHfy9rSfGWVpVdL38kn9Kp9crRGR+
+        2Lo25jL3k+70aYufSjGsnVvwfErv7LZ10pWz40z9Cq5phk4Qsziroah0LbHGuiR336XHDx9J
+        /+s8psRSnJFoqMVcVJwIAAzb9vRKBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCLMWRmVeSWpSXmKPExsWy7bCSvK5XrW2SweX7chYP5m1js9jbdoLd
+        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1WL34AYvFohvbmCxubjnKYnF51xw2i+7rO9gs
+        lh//x+TA63H5irfH5b5eJo8Jiw4wenxf38Hm8fHpLRaPvi2rGD0+b5LzaD/QzRTAEcVlk5Ka
+        k1mWWqRvl8CV8azrCGtBF3vF2dcv2BsYr7B2MXJySAiYSExfdJSxi5GLQ0hgN6PE8jvTGCES
+        EhL/FzcxQdjCEvdbjrBCFH1jlOiYsI4dJMEmoCGx5tghJpCEiMA2Jom7H06ygSSYBdQkPt9d
+        xgJiCws4SVw4uAJsHYuAqkT/1kVgNbwClhKP325ig9ggL7Go4TfYNk4BJYn3p94yg9hCAooS
+        39auY4KoF5Q4OfMJC8R8eYnmrbOZJzAKzEKSmoUktYCRaRWjZGpBcW56brFhgWFearlecWJu
+        cWleul5yfu4mRnDEaGnuYNy+6oPeIUYmDsZDjBIczEoivPcvWycJ8aYkVlalFuXHF5XmpBYf
+        YpTmYFES573QdTJeSCA9sSQ1OzW1ILUIJsvEwSnVwMQqFbv6/+3vP6V1JJrfax6b9iNgmZP1
+        Qc9Jlo4HVle/Wi1/xkrvWgpzVJhT37V/v5+de/PaLO1Jbs/MqMjA2zFdpgmGZx7trvJlnHTO
+        +dkBc+6d5abfYvK8rfbY7mrT4W9Y7La5K7DlHD9LnHwtx7twxo07bwRO4JEU7VleZbhJfpJV
+        b/ncQAaFw8rPHX7s2LXB/8Nr1pPSZ1h+LVfdapV6f67hFduyM5NiF/+v6fm+ibX+G+PSE891
+        OfU+BBl1RF8SF79ybvONrPM2TH5Zfacf9Hx+yt8rMXndhbQjb3s2b5Rbzr2i7uoeaW0VAcW2
+        C6t2bLn3MeTz0Zxw3hPOfNz+X3O3OBXPb//Cd3rV5yIlluKMREMt5qLiRADl6LMWBwMAAA==
+X-CMS-MailID: 20220325082858epcas2p41c0918b1cacce09eaa5f7ffe84d9f994
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220325082858epcas2p41c0918b1cacce09eaa5f7ffe84d9f994
+References: <sc.suh@samsung.com;>
+        <CGME20220325082858epcas2p41c0918b1cacce09eaa5f7ffe84d9f994@epcas2p4.samsung.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000006d6e005db0432c1
-Content-Type: text/plain; charset="UTF-8"
+UFS devices support HS-Gear5 mode with UFS4.0 spec.
+However there is no definition of HS-Gear5.
+So added it in unipro header
 
-On Wed, Mar 23, 2022 at 7:05 PM Bart Van Assche <bvanassche@acm.org> wrote:
+- there is no another mainline need to changed for
+support GEAR5 with UFS4.0 spec.
+It just need to check if the device supports HS-gear5.
+And send to PMC command to changed HS-gear5.
+It is a definition to check if the device supports
+- delete change-id
 
->
-> Most if not all definitions in this file are needed by user space
-> applications that use the new BSG interface. Please move the definitions
-> from this file that are used by user space applications into a header
-> file under include/uapi/.
-I will fix it in v2.
+Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
+---
+ drivers/scsi/ufs/unipro.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Sumit
->
-> Thanks,
->
-> Bart.
+diff --git a/drivers/scsi/ufs/unipro.h b/drivers/scsi/ufs/unipro.h
+index 8e9e486a4f7b..0d2131e1f027 100644
+--- a/drivers/scsi/ufs/unipro.h
++++ b/drivers/scsi/ufs/unipro.h
+@@ -231,6 +231,7 @@ enum ufs_hs_gear_tag {
+ 	UFS_HS_G2,		/* HS Gear 2 */
+ 	UFS_HS_G3,		/* HS Gear 3 */
+ 	UFS_HS_G4,		/* HS Gear 4 */
++	UFS_HS_G5,		/* HS Gear 5 */
+ };
+ 
+ enum ufs_unipro_ver {
+-- 
+2.26.0
 
---00000000000006d6e005db0432c1
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-GmgWG68YahkDuVSTTt2beZdyMeDwq/KifJFo18EkhcL3e7rmDAh8SniUI/0o3HX6hrgdmUI1wSdz
-uIVL/m6Ok9mIl2U5kvguitOSC0bVaQPfNzlj+7PCKBECAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZc3VtaXQuc2F4ZW5hQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUNz+JSIXEXl2uQ4Utcnx7FnFi
-hhowDQYJKoZIhvcNAQELBQADggEBAL0HLbxgPSW4BFbbIMN3A/ifBg4Lzaph8ARJOnZpGQivo9jG
-kQOd95knQi9Lm95JlBAJZCqXXj7QS+dnE71tsFeHWcHNNxHrTSwn4Xi5EqaRjLC6g4IEPyZHWDrD
-zzJidgfwQvfZONkf4IXnnrIEFle+26/gPs2kOjCeLMo6XGkNC4HNla1ol1htToQaNN8974pCqwIC
-rTXcWqD03VkqSOo+oPP/NAgFAZVfpeuBoK2Xv8zYlrF49Q4hxgFpWhaiDsZUSdWIS7vg1ak1n+6L
-3aHRY/lheSkOn/uJWXsqsTDp613hVtOTEDsHSQK32yTGr8jN/oRQgJASuUqQFdD4VzAxggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwoQTpBmhDxj9JoN1ow
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIAeFU+8YKZHDrXPDChfAKMLLEU+OQYRk
-JqAmgx75EQpiMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDMy
-NTA1MjU0OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQAhgmg8ffgGxBxrX18covZ57nyAxTooOKxslpCBtAiNXp73wiWH
-zQe4SLY/W2LbxX0DqVvH+Clabkb6cmS3xprS3qSLDins0lOV+Vybi58biVMZZWbfVxGpT10ysa+M
-oqA+Kl+hU5A5bVH9oapWP3jtjlHDOsWq3WhAD0NtD9ZTrsIzpVbf4CW3Tl6mbO+YswYVMI6Q6imP
-wb8qqqNqo0J91C9H8hlh4U/pS7esM/E+Uux6Y6l44hIEUWGoo0NoRTzGsDcC248ebBr+G/rmdf1m
-mKTMeWTlteJAFbzZytb0hzHpayOm3dy4RVMqxttUl9SJQLvbN1oc7Ilprjv7M2aN
---00000000000006d6e005db0432c1--
