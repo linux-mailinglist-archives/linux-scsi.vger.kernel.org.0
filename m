@@ -2,121 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1193B4E6EAB
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Mar 2022 08:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE5F4E6FC7
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Mar 2022 10:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358525AbiCYHRQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Mar 2022 03:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
+        id S1354111AbiCYJIe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Mar 2022 05:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358518AbiCYHRP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Mar 2022 03:17:15 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7768C74A6
-        for <linux-scsi@vger.kernel.org>; Fri, 25 Mar 2022 00:15:37 -0700 (PDT)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220325071532epoutp01fbf545355fd41658f9a2fc1779046b15~fjmAuAJGR2110821108epoutp01h
-        for <linux-scsi@vger.kernel.org>; Fri, 25 Mar 2022 07:15:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220325071532epoutp01fbf545355fd41658f9a2fc1779046b15~fjmAuAJGR2110821108epoutp01h
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1648192532;
-        bh=DrQ/XqfAqPKOeZP4otDlqik6Kn6HApn4g8RKqgPws2A=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=N9GUJ+LaDwneq/Okh83lbQkeZ4H1uF2yTTPyAVzic/aq1jkDVczdaA7Fdy/wzVbNR
-         nAxWOPjrkeyseqbsGRxH9CI3mHlUxrs71PqhnZcHy3BvE3nDX8VVJJnSh+Ba++xhuz
-         +hsRn+FXiBmgb5XuondPEUeiDlTLGSRWyT0CPQMM=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220325071531epcas5p48b5ae3d2e9b423dc55ef63c1f61e4e8b~fjl-_ITuJ2667226672epcas5p40;
-        Fri, 25 Mar 2022 07:15:31 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4KPtf75g5qz4x9Q7; Fri, 25 Mar
-        2022 07:15:27 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2C.7D.05590.D0C6D326; Fri, 25 Mar 2022 16:15:25 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220325071524epcas5p30470f46df0e678811efcddb0476ec6c1~fjl5NtlRW2668926689epcas5p3y;
-        Fri, 25 Mar 2022 07:15:24 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220325071524epsmtrp12a2a3926db7fd279db2b5df40f55a1a7~fjl5MxPQw2367623676epsmtrp1B;
-        Fri, 25 Mar 2022 07:15:24 +0000 (GMT)
-X-AuditID: b6c32a4b-739ff700000015d6-57-623d6c0db7ab
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B7.AD.29871.C0C6D326; Fri, 25 Mar 2022 16:15:24 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220325071522epsmtip2b14063f84db13edb1813998459dd3c7d~fjl3E1rx91680916809epsmtip2i;
-        Fri, 25 Mar 2022 07:15:21 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'SEO HOYOUNG'" <hy50.seo@samsung.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <avri.altman@wdc.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <beanhuo@micron.com>,
-        <asutoshd@codeaurora.org>, <cang@codeaurora.org>,
-        <bvanassche@acm.org>, <bhoon95.kim@samsung.com>,
-        <kwmad.kim@samsung.com>
-In-Reply-To: <20220324172113.192370-1-hy50.seo@samsung.com>
-Subject: RE: [PATCH v1] scsi: ufs: unipro: add to define HS-Gear5 mode
-Date:   Fri, 25 Mar 2022 12:45:20 +0530
-Message-ID: <063f01d84018$1871e5e0$4955b1a0$@samsung.com>
+        with ESMTP id S229940AbiCYJId (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Mar 2022 05:08:33 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5310CD33A;
+        Fri, 25 Mar 2022 02:06:59 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id k10so8485236edj.2;
+        Fri, 25 Mar 2022 02:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VhdVUAWHXjzUGq4oP9g7su55g+qs75mizf7QQXpvJEw=;
+        b=euZVYebCE4XJ6h2KVEIZN/sxeNdWBhCLQ41F3VbBi73AFa8s6umon5UZl9YlT8u9vD
+         fp5poY35XXFvreG/fDo9a+X3woO+AKZa38cO0DSYqK+Dg+LmytrvB9q4rUXqVhP0E0qK
+         bWQTPeb835PslboqVCKK8yVwr6+RZXn+Pcj5irL12oEbLAKjT/cPXQAmCp4Uz1Wu1Kjg
+         +tffZ3ZZLqEIRodZ7+iJuewi0Age1X4soOIbsnvEAit3U5iUNsTTEoz4k4QfSfCdqEHh
+         yH+VoYrCj3wY1l5+lrFZJAzocKld8uAYeFiOVipvXPyK+TigtwMG/UQDqaT08hNZyR6C
+         HZIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VhdVUAWHXjzUGq4oP9g7su55g+qs75mizf7QQXpvJEw=;
+        b=es+MrmEUR4sGbkxC2OWDgyCL+qq+RKcAA4YuZVLgT4RISul2PO3ataL5PF849JifjP
+         JEeRWdlxw5mIUH1/dvURJn+eSc96T5XDY4/nEzP6w48NvB1WMBXaiqu6wRSuZ1+vqemS
+         g5sbd5QnhydkSOVIci/5sJB50sJuspeICtbmOTHEHNorNOZ7p7hlIFh+b/iUVSb95kiP
+         J9Wsu1tFAMRgHG8o1iI+pAzWwvHR0l0elY8D8F2SXxCBvRTWet+k+dzVm1WWOuQUYhQb
+         EaKTxqcqTvlPVKstERTCVs1F9tNTCUQiCiYEQOYQowwcu79rrmXxYv5ED+2uHy6ffKrW
+         sRQg==
+X-Gm-Message-State: AOAM532NasESIedtkyxqnHrWKwzRKMrEJJzVgkFGnjhufBjUGfJj6s4c
+        eT/xbNSEs3DM4hK3UEpmk98=
+X-Google-Smtp-Source: ABdhPJx01pPWcYHPsWa/D2UX3hyEAgDAM3v69gqG2zc9S5TZfdLa41DCwYMxLs2+YR31sY0zcWOsoQ==
+X-Received: by 2002:a05:6402:4315:b0:419:2e38:ab8f with SMTP id m21-20020a056402431500b004192e38ab8fmr11628871edc.250.1648199218448;
+        Fri, 25 Mar 2022 02:06:58 -0700 (PDT)
+Received: from [192.168.178.40] (ipbcc1cfad.dynamic.kabel-deutschland.de. [188.193.207.173])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170906c00900b006d4a45869basm2087116ejz.199.2022.03.25.02.06.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 02:06:58 -0700 (PDT)
+Message-ID: <d15369a8-7a98-1b1a-b950-40d78ed5e9ec@gmail.com>
+Date:   Fri, 25 Mar 2022 10:06:57 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQFnWDvKaMVANQKbUZJJE4NWseV9VgFQE2loAuwNqkqtj5108A==
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIJsWRmVeSWpSXmKPExsWy7bCmli5vjm2SwZ6v0hZ7206wW7z8eZXN
-        4uDDThaLr0ufsVpM+/CT2eLT+mWsFqsXP2CxWHRjG5PFzS1HWSwu75rDZtF9fQebxfLj/5gc
-        eDwuX/H2uNzXy+QxYdEBRo/v6zvYPD4+vcXi0bdlFaPH501yHu0HupkCOKKybTJSE1NSixRS
-        85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOArlVSKEvMKQUKBSQWFyvp
-        29kU5ZeWpCpk5BeX2CqlFqTkFJgU6BUn5haX5qXr5aWWWBkaGBiZAhUmZGccWzOZreAYb0Xz
-        n63MDYx/uLsYOTkkBEwkVtxYwtrFyMUhJLCbUaKzbTczhPOJUeLTzTlQzjdGiWcffzPDtOyf
-        dgnMFhLYyyixsFENouglo8TLbR1MIAk2AV2JHYvb2EASIgJnmSRWT1zLDpLgFLCW6JvzgKWL
-        kYNDWMBNYucdHZAwi4CqxOn/u8B6eQUsJR43tLJB2IISJ2c+YQGxmQW0JZYtfA11hILEz6fL
-        WEFsEQEniW9zrkHViEu8PHqEHWSvhMABDon1v26wQDS4SJzZ/Y4dwhaWeHV8C5QtJfGyv40d
-        5B4JAQ+JRX+kIMIZEm+Xr2eEsO0lDlyZA3Yys4CmxPpd+hCr+CR6fz9hgujklehoE4KoVpVo
-        fncVaqm0xMTublYI20Ni651f0JBexijRdriXcQKjwiwkX85C8uUsJN/MQti8gJFlFaNkakFx
-        bnpqsWmBcV5qOTy+k/NzNzGC07KW9w7GRw8+6B1iZOJgPMQowcGsJMJ7/7J1khBvSmJlVWpR
-        fnxRaU5q8SFGU2DQT2SWEk3OB2aGvJJ4QxNLAxMzMzMTS2MzQyVx3lPpGxKFBNITS1KzU1ML
-        Uotg+pg4OKUamDzXpZgYu53u8mmRXDIlNe7nNI26S07aZe/b1yUYcbzLVHo0b4l9tEDevNS0
-        n3VpER8bTq8R2aCefthzfpm+39mTT7fFfz3JMJHj0EerqQ0/Xqmdy15QadC9027uxbfLF//q
-        OG7Ff3LqIRFP183FhztaGdhnZsRFRvHnLAvPuffwaIK19xTHa7K5Ngb/3G/cuut36E5/1e1J
-        /yeu2WHDlWl708GKdbvGuwL5kO9rJrxwS5A/s/KejMPaYH+RFTM/XZStXOnfwXjC8f7BnCqb
-        efr/swoKTmXETs+7xviR+WPB5AzueM7WK/W1M3oElxyQZEpjexHEe+v1tMZ5x88I/fVfmCEq
-        nd5o4BP3aDt3vxJLcUaioRZzUXEiAKhw+OtUBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDIsWRmVeSWpSXmKPExsWy7bCSvC5Pjm2SQe9KHou9bSfYLV7+vMpm
-        cfBhJ4vF16XPWC2mffjJbPFp/TJWi9WLH7BYLLqxjcni5pajLBaXd81hs+i+voPNYvnxf0wO
-        PB6Xr3h7XO7rZfKYsOgAo8f39R1sHh+f3mLx6NuyitHj8yY5j/YD3UwBHFFcNimpOZllqUX6
-        dglcGV9Wf2AumM5TMW9pcQPjdK4uRk4OCQETif3TLjF3MXJxCAnsZpRo793FDpGQlri+cQKU
-        LSyx8t9zdoii54wSTx/8YwFJsAnoSuxY3MYGYosI3GaSmHFOCMQWEljEKLHtWxCIzSlgLdE3
-        5wFQPQeHsICbxM47OiBhFgFVidP/dzGB2LwClhKPG1rZIGxBiZMzn4CNZxbQlnh68ymcvWzh
-        a2aIexQkfj5dxgqx1kni25xrUDXiEi+PHmGfwCg0C8moWUhGzUIyahaSlgWMLKsYJVMLinPT
-        c4sNCwzzUsv1ihNzi0vz0vWS83M3MYIjUEtzB+P2VR/0DjEycTAeYpTgYFYS4b1/2TpJiDcl
-        sbIqtSg/vqg0J7X4EKM0B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBiaLj3Grdgq2z/xa
-        eufDs9wcrmq2xo35LfXWl0794f8d/+/XxqjZhV3pc3oNdVkCVvxeOCMs4rFBpXppn8EFkyP3
-        mNx2Lb15uqut6YvmAv6S+cu0k2ykWU1lpgfNm9+i+D7+WfOLmx+9tuxsT8v9xdO2a8v8c/F9
-        B948MP8Z3/Dcdk5U1uPfF/iCfj7Sm/1IOs0z/21LV1zihI+Fjpcqqqefd73yedZ2CavWbMnQ
-        mFfL98cLtLY6rOmJvlBU8EK2QzrzTZNIb0Rl917eBcfYpIRZV2/7PulJcNje586yBV/Oc3Uu
-        y5tz88mjDP8DQYd0OsOXH1zW8/9RQFfSIYEVZlfELJNqwrLe9tX/lObWPaDEUpyRaKjFXFSc
-        CAC2QFRdLwMAAA==
-X-CMS-MailID: 20220325071524epcas5p30470f46df0e678811efcddb0476ec6c1
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220325053615epcas2p25b140872340b4711d4fef4c5a4cb45f4
-References: <sc.suh@samsung.com;>
-        <CGME20220325053615epcas2p25b140872340b4711d4fef4c5a4cb45f4@epcas2p2.samsung.com>
-        <20220324172113.192370-1-hy50.seo@samsung.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC 3/3] scsi: target: tcmu: Support zero copy
+Content-Language: en-US
+To:     Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        linux-mm@kvack.org, target-devel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Cc:     linux-block@vger.kernel.org, xuyu@linux.alibaba.com
+References: <20220318095531.15479-1-xiaoguang.wang@linux.alibaba.com>
+ <20220318095531.15479-4-xiaoguang.wang@linux.alibaba.com>
+ <94b00e49-5efb-658f-3142-42e7cc551d19@gmail.com>
+ <57da7e54-f582-3b10-52a9-5166adacf4e6@linux.alibaba.com>
+From:   Bodo Stroesser <bostroesser@gmail.com>
+In-Reply-To: <57da7e54-f582-3b10-52a9-5166adacf4e6@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -125,44 +79,18 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 
 
->-----Original Message-----
->From: SEO HOYOUNG =5Bmailto:hy50.seo=40samsung.com=5D
->Sent: Thursday, March 24, 2022 10:51 PM
->To: linux-scsi=40vger.kernel.org; linux-kernel=40vger.kernel.org;
->alim.akhtar=40samsung.com; avri.altman=40wdc.com; jejb=40linux.ibm.com;
->martin.petersen=40oracle.com; beanhuo=40micron.com;
->asutoshd=40codeaurora.org; cang=40codeaurora.org; bvanassche=40acm.org;
->bhoon95.kim=40samsung.com; kwmad.kim=40samsung.com
->Cc: SEO HOYOUNG <hy50.seo=40samsung.com>
->Subject: =5BPATCH v1=5D scsi: ufs: unipro: add to define HS-Gear5 mode
->
->UFS devices support HS-Gear5 mode with UFS4.0 spec.
->However there is no definition of HS-Gear5.
->So added it in unipro header
->
->Change-Id: Id5475005000fe66b432ab76fa3364a8c12296f7c
+On 23.03.22 15:33, Xiaoguang Wang wrote:
 
+... snip ...
 
-Change-id should not be part of this, please run checkpatch to catch such t=
-hings
+>> What happens if the tcmu device currently is not open / mapped?
+> I'm not sure how it will happen.
+> But we may check whether udev->vma has a valid value. If yes,
+> it'll enter tcmu_cmd_zerocopy_map().
+> 
 
->Signed-off-by: SEO HOYOUNG <hy50.seo=40samsung.com>
->---
-> drivers/scsi/ufs/unipro.h =7C 1 +
-> 1 file changed, 1 insertion(+)
->
->diff --git a/drivers/scsi/ufs/unipro.h b/drivers/scsi/ufs/unipro.h index
->8e9e486a4f7b..0d2131e1f027 100644
->--- a/drivers/scsi/ufs/unipro.h
->+++ b/drivers/scsi/ufs/unipro.h
->=40=40 -231,6 +231,7 =40=40 enum ufs_hs_gear_tag =7B
-> 	UFS_HS_G2,		/* HS Gear 2 */
-> 	UFS_HS_G3,		/* HS Gear 3 */
-> 	UFS_HS_G4,		/* HS Gear 4 */
->+	UFS_HS_G5,		/* HS Gear 5 */
+Yeah, but what I also wanted to suggest is, that if userspace maps
+the uio device while zero copy cmds already being in the ring,
+you have to iterate over those cmds and populate the mapping.
 
-I don=E2=80=99t=20have=20access=20to=20UFS4.0=20spec=20yet,=20so=20not=20su=
-re=20if=20this=20is=20the=20only=20change=20required=20for=20UFS4.0=0D=0AWi=
-thout=20having=20added=20support=20for=20UFS4.0,=20just=20updating=20HS=20g=
-ear=20does=20not=20make=20much=20sense=0D=0A=0D=0A>=20=7D;=0D=0A=0D=0A>=0D=
-=0A>=20enum=20ufs_unipro_ver=20=7B=0D=0A>--=0D=0A>2.26.0=0D=0A=0D=0A=0D=0A
+Bodo
