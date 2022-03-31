@@ -2,49 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D134EDBD4
-	for <lists+linux-scsi@lfdr.de>; Thu, 31 Mar 2022 16:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFF94EDE79
+	for <lists+linux-scsi@lfdr.de>; Thu, 31 Mar 2022 18:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237671AbiCaOkl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 31 Mar 2022 10:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
+        id S239693AbiCaQQU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 31 Mar 2022 12:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236218AbiCaOkk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 31 Mar 2022 10:40:40 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9879927CD7;
-        Thu, 31 Mar 2022 07:38:50 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KTm6B5Gg7zBrdT;
-        Thu, 31 Mar 2022 22:34:42 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 31 Mar 2022 22:38:47 +0800
-Received: from huawei.com (10.175.101.6) by dggpemm500017.china.huawei.com
- (7.185.36.178) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 31 Mar
- 2022 22:38:46 +0800
-From:   Wenchao Hao <haowenchao@huawei.com>
-To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.de>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
-Subject: [PATCH] scsi: core: always finish successfully aborted notry command
-Date:   Thu, 31 Mar 2022 23:50:20 -0400
-Message-ID: <20220401035020.1043239-1-haowenchao@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S239681AbiCaQQT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 31 Mar 2022 12:16:19 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFC055201;
+        Thu, 31 Mar 2022 09:14:32 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bg10so385530ejb.4;
+        Thu, 31 Mar 2022 09:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=FcCfLyzsYqQGsFb8akFbb6JZWG/9vXgcMF8J+x5RgTo=;
+        b=KNVfSswHBmhK2iu1F1kOKQ3KNCpbNu/Ugef2TxvfwjloYZ3/DTFQMw5K8b91+zBaa1
+         +NR35BCwAd3B617BAuEReAFzyos00j7whUnx+kmcFquxjPPOkgegGrM2mv3Q3p0EI0Ty
+         pxYBhJgkZf0KT4UWuq/eRZiq/PVUFzA9dR+kL87L3Sb2XgrrcDd4jMev/C6i+RJagtEc
+         2aYeIyufTPHaQ9rKJuNSMcPbgXW0MfbutlnzYCoiGiutzWqkEO63R8Bf7RCSd/B3Q8Ui
+         QeQw82JngZa9PnCbfpElTirQ8d4W3uilTrQ6w1ajLcitEs9HT8CZiMOt87Vnv2p76g/s
+         wJvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FcCfLyzsYqQGsFb8akFbb6JZWG/9vXgcMF8J+x5RgTo=;
+        b=UE1ibcJusrLW1ikjmCCTGEN3izduWvjf+VE6RcsH4fO5uL1z3CXFSDgr619/zc9kDE
+         qIXVy/FUU0/Bqr6zFXUSSvbQWNZbTM8F7xeKgbhmqPcvtZNJ8uJmxijlZvo/3Go3EsSf
+         Wts/+TjFXqBErax9R6wZWE3/UdaIR3j6ETcSZGypATcWwbSc9E+W6glGZVB1aNbLZMPK
+         aQ8lp/pw6Eswi0pJi7oW5jQMZpVnKso9JziDNF2BiO5C2pzPHa8ouVxFEQAgJYu1azG2
+         gFCG2m/970MU9024iZXwtXcSjIr/SyYKbxtyOykuot2bzu1IBZ7HskfxwfZVbdNDXO2f
+         FVzQ==
+X-Gm-Message-State: AOAM5332xj2qgR4Rju9XFI0xQo6Jxj8FvKTKgs51ovIbKwnvUm8lwXcy
+        GbqQY2CMmnksDT1NFNo2I2w=
+X-Google-Smtp-Source: ABdhPJxrFeCrlrgYsId4lWZdjzNbs1gNXB+bHQsamw/8iBBZbKjMSEzvaieenk1/1kbxHBO64XBPnQ==
+X-Received: by 2002:a17:906:58d3:b0:6da:bdb2:2727 with SMTP id e19-20020a17090658d300b006dabdb22727mr5604700ejs.549.1648743270654;
+        Thu, 31 Mar 2022 09:14:30 -0700 (PDT)
+Received: from leap.localnet (host-95-249-145-232.retail.telecomitalia.it. [95.249.145.232])
+        by smtp.gmail.com with ESMTPSA id hp12-20020a1709073e0c00b006e02924bf20sm9606044ejc.117.2022.03.31.09.14.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 09:14:29 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Wenchao Hao <haowenchao@huawei.com>,
+        syzkaller-bugs@googlegroups.com,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     axboe@kernel.dk, jejb@linux.ibm.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com,
+        syzbot+f08c77040fa163a75a46@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, linfeilong@huawei.com
+Subject: Re: [PATCH] scsi: sd: call device_del() if device_add_disk() fails
+Date:   Thu, 31 Mar 2022 18:14:27 +0200
+Message-ID: <1787706.atdPhlSkOF@leap>
+In-Reply-To: <20220331134210.GF12805@kadam>
+References: <20220329154948.10350-1-fmdefrancesco@gmail.com> <fdebdbd3-575b-b30e-d37f-dcc6d53a4f53@huawei.com> <20220331134210.GF12805@kadam>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,95 +74,30 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If the abort command succeed and it does not need to be retired, do not add
-it to error handle list. 
+On gioved? 31 marzo 2022 15:42:10 CEST Dan Carpenter wrote:
+> Wenchao Hao, what you're saying makes a lot of sense but it raises a lot
+> of questions in turn.
+> 
+> Fabio, did you test your patch?
 
-Adding command to error handle list is an annoying flow which would stop I/O
-of all LUNs which shared a same HBA.
+Yes, I did, Dan. I tested it the usual way with the "#syz test:" command.
+Obviously I have not the hardware to test code on it.
 
-So here if we successfully abort a command, we can finish it via
-scsi_finish_command() which would reduce time spent on scsi_error_handler()
+Therefore, the messages that say "Syzbot tested the patch and it didn't
+trigger any issue" is all that I can know about the code being good or not.
+This is the criterion I've always used before sending patches for Syzbot's
+reports.
 
-Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
----
- drivers/scsi/scsi_error.c | 55 +++++++++++++++++++++------------------
- 1 file changed, 29 insertions(+), 26 deletions(-)
+However, my knowledge of these subsystems and the API that are related to 
+this bug were very little, but now I can say that during the last couple of 
+days it has improved to the point where I can affirm that Wenchao's patch
+seems to me to be the only correct solution.
 
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index cdaca13ac1f1..15299603b7ee 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -173,41 +173,44 @@ scmd_eh_abort_handler(struct work_struct *work)
- 		goto out;
- 	}
- 	set_host_byte(scmd, DID_TIME_OUT);
--	if (scsi_host_eh_past_deadline(shost)) {
--		SCSI_LOG_ERROR_RECOVERY(3,
--			scmd_printk(KERN_INFO, scmd,
--				    "eh timeout, not retrying "
--				    "aborted command\n"));
--		goto out;
--	}
- 
--	spin_lock_irqsave(shost->host_lock, flags);
--	list_del_init(&scmd->eh_entry);
-+	if (scsi_noretry_cmd(scmd) ||
-+	    !scsi_cmd_retry_allowed(scmd) &&
-+	    !scsi_eh_should_retry_cmd(scmd)) {
-+		spin_lock_irqsave(shost->host_lock, flags);
-+		list_del_init(&scmd->eh_entry);
- 
--	/*
--	 * If the abort succeeds, and there is no further
--	 * EH action, clear the ->last_reset time.
--	 */
--	if (list_empty(&shost->eh_abort_list) &&
--	    list_empty(&shost->eh_cmd_q))
--		if (shost->eh_deadline != -1)
--			shost->last_reset = 0;
-+		/*
-+		 * If the abort succeeds, and there is no further
-+		 * EH action, clear the ->last_reset time.
-+		 */
-+		if (list_empty(&shost->eh_abort_list) &&
-+		    list_empty(&shost->eh_cmd_q))
-+			if (shost->eh_deadline != -1)
-+				shost->last_reset = 0;
- 
--	spin_unlock_irqrestore(shost->host_lock, flags);
-+		spin_unlock_irqrestore(shost->host_lock, flags);
- 
--	if (!scsi_noretry_cmd(scmd) &&
--	    scsi_cmd_retry_allowed(scmd) &&
--	    scsi_eh_should_retry_cmd(scmd)) {
--		SCSI_LOG_ERROR_RECOVERY(3,
--			scmd_printk(KERN_WARNING, scmd,
--				    "retry aborted command\n"));
--		scsi_queue_insert(scmd, SCSI_MLQUEUE_EH_RETRY);
--	} else {
- 		SCSI_LOG_ERROR_RECOVERY(3,
- 			scmd_printk(KERN_WARNING, scmd,
- 				    "finish aborted command\n"));
- 		scsi_finish_command(scmd);
-+		return;
- 	}
-+
-+	if (scsi_host_eh_past_deadline(shost)) {
-+		SCSI_LOG_ERROR_RECOVERY(3,
-+			scmd_printk(KERN_INFO, scmd,
-+				    "eh timeout, not retrying "
-+				    "aborted command\n"));
-+		goto out;
-+	}
-+
-+	SCSI_LOG_ERROR_RECOVERY(3,
-+		scmd_printk(KERN_WARNING, scmd,
-+			    "retry aborted command\n"));
-+	scsi_queue_insert(scmd, SCSI_MLQUEUE_EH_RETRY);
-+
- 	return;
- 
- out:
--- 
-2.32.0
+Thanks for all the help you and the the other developers provided. It was
+invaluable for a better understanding of this matter.
+
+Regards,
+
+Fabio M. De Francesco
+
 
