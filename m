@@ -2,54 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF7D4EE427
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 00:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1474EE42D
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 00:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242518AbiCaWiK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 31 Mar 2022 18:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S242577AbiCaWiU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 31 Mar 2022 18:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242646AbiCaWiD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 31 Mar 2022 18:38:03 -0400
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21701D08F2
-        for <linux-scsi@vger.kernel.org>; Thu, 31 Mar 2022 15:36:15 -0700 (PDT)
-Received: by mail-pj1-f46.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so844913pjm.0
-        for <linux-scsi@vger.kernel.org>; Thu, 31 Mar 2022 15:36:15 -0700 (PDT)
+        with ESMTP id S242564AbiCaWiN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 31 Mar 2022 18:38:13 -0400
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904E01F42F3
+        for <linux-scsi@vger.kernel.org>; Thu, 31 Mar 2022 15:36:25 -0700 (PDT)
+Received: by mail-pg1-f171.google.com with SMTP id b130so871626pga.13
+        for <linux-scsi@vger.kernel.org>; Thu, 31 Mar 2022 15:36:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9wTIiLFsILVTDJzCqSy8yVc9kctCuu2o055jBgU0Ypk=;
-        b=A1xGD572pSsrY9/Dy3MICedFM+rJE7YzsWcL9IXGG8bvUfzmleg25ZV3ZDSawq+VoF
-         heQbutCLaN7GRKN9Ve4CnUi3CzwbMMErWSqKUDgPkm7FPLB57kM9GjVMtzSOfOzalcoy
-         Aa68NBsSL1UQbx7KlVuWhoyM5Qd2VL/YLKbcHd4rIkNw6yRjKkipNElT7Rlka8Y3hFii
-         uKvYXjW0UBgkFcOsgrW3aAAI8dKXIcPw8lvcYC4tIxJjxJQ8Y5bifhjCyzDogsAZrcaG
-         8HQWs2noUTsa3+NJ9TI1IAN4EddsUc1XwVvIWPcK74VOg8y3Yb5tXQs/JaOc6PdYdjHZ
-         M4Ew==
-X-Gm-Message-State: AOAM532xSCuuwBr8WWab0cdwtsQLyDxhzMl3fa2TGIQfCJOddUtp/19+
-        rbXBP3q4rBJNvfOA5MfmpJg=
-X-Google-Smtp-Source: ABdhPJx50oj4/LsLZkCTn4M3yK1hOrlnHti9aykVEKQpg6IkViu1pWYlczuuHB7JiPUbEvNHZR+GXg==
-X-Received: by 2002:a17:90b:4c8f:b0:1c7:7bc0:954a with SMTP id my15-20020a17090b4c8f00b001c77bc0954amr8416831pjb.214.1648766175317;
-        Thu, 31 Mar 2022 15:36:15 -0700 (PDT)
+        bh=8A3lmX9gl51Y3wb88G4Gpv9Hep6JrNv+1jNwvXeLpq4=;
+        b=b4MMvIZL9c4//i8f6fPIO3tHzl35+Yn5B2vPpcu9hrW3O2q6E4s850yDkUdu7YPmLQ
+         iv1l3mrE1oamck8AgymHJJ//74DKbgmYmnI3i7Rr1vaP5Pjfd13lDI15hx4y2BPZAKql
+         A3gIhILs3hL230euBI/fawFxPdu8UB1icrd1FuiIjCjYSvWxYtlP9/s0XBTcEBqf/H4a
+         R5mQm33yfVEZlN+jtz3pNjoRDx//8w9agpiwdU8+pmBglfMRtXGGosWVaIROURZrV7/3
+         aBgkHcsJTbCoune6OY+FD4bBSFchgPsXBBFCledb9o5VsTz/hpILoD09GbeTM9Fx/rqH
+         JOaQ==
+X-Gm-Message-State: AOAM533DAq4dVo7fth8zlSL6orPPwiSk0ZbRPIPCsmw/3whjgq40cqZT
+        /jrJFdZRK0AAyAKvm+v9Cjc=
+X-Google-Smtp-Source: ABdhPJwWX3qgmHfG+88d5vFp4AVLip9/x1GA2n2uUke47LG3VWBlo3lpTIDxw7EAx1r1uoopq86B8w==
+X-Received: by 2002:a65:6941:0:b0:381:fea7:f3d8 with SMTP id w1-20020a656941000000b00381fea7f3d8mr12777560pgq.235.1648766184971;
+        Thu, 31 Mar 2022 15:36:24 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:6375:fa54:efe8:6c8f])
-        by smtp.gmail.com with ESMTPSA id p3-20020a056a000b4300b004faee36ea56sm483481pfo.155.2022.03.31.15.36.13
+        by smtp.gmail.com with ESMTPSA id p3-20020a056a000b4300b004faee36ea56sm483481pfo.155.2022.03.31.15.36.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 15:36:14 -0700 (PDT)
+        Thu, 31 Mar 2022 15:36:24 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Daejun Park <daejun7.park@samsung.com>,
         Bean Huo <beanhuo@micron.com>,
         Avri Altman <avri.altman@wdc.com>,
-        Daejun Park <daejun7.park@samsung.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
         Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>
-Subject: [PATCH 10/29] scsi: ufs: Invert the return value of ufshcd_is_hba_active()
-Date:   Thu, 31 Mar 2022 15:34:05 -0700
-Message-Id: <20220331223424.1054715-11-bvanassche@acm.org>
+        Asutosh Das <quic_asutoshd@quicinc.com>
+Subject: [PATCH 11/29] scsi: ufs: Remove unused constants and code
+Date:   Thu, 31 Mar 2022 15:34:06 -0700
+Message-Id: <20220331223424.1054715-12-bvanassche@acm.org>
 X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
 In-Reply-To: <20220331223424.1054715-1-bvanassche@acm.org>
 References: <20220331223424.1054715-1-bvanassche@acm.org>
@@ -57,58 +58,92 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-It is confusing that ufshcd_is_hba_active() returns 'true' if the HBA is
-not active. Clear up this confusion by inverting the return value of
-ufshcd_is_hba_active(). This patch does not change any functionality.
+Commit 5b44a07b6bb2 ("scsi: ufs: Remove pre-defined initial voltage values
+of device power") removed the code that uses the UFS_VREG_VCC* constants
+and also the code that sets the min_uV and max_uV member variables. Hence
+also remove these constants and that member variable.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ufs/ufshcd.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/scsi/ufs/ufs.h    | 11 -----------
+ drivers/scsi/ufs/ufshcd.c | 29 +++--------------------------
+ 2 files changed, 3 insertions(+), 37 deletions(-)
 
+diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
+index 4a00c24a3209..225b5b4a2a7e 100644
+--- a/drivers/scsi/ufs/ufs.h
++++ b/drivers/scsi/ufs/ufs.h
+@@ -562,15 +562,6 @@ struct ufs_query_res {
+ 	struct utp_upiu_query upiu_res;
+ };
+ 
+-#define UFS_VREG_VCC_MIN_UV	   2700000 /* uV */
+-#define UFS_VREG_VCC_MAX_UV	   3600000 /* uV */
+-#define UFS_VREG_VCC_1P8_MIN_UV    1700000 /* uV */
+-#define UFS_VREG_VCC_1P8_MAX_UV    1950000 /* uV */
+-#define UFS_VREG_VCCQ_MIN_UV	   1140000 /* uV */
+-#define UFS_VREG_VCCQ_MAX_UV	   1260000 /* uV */
+-#define UFS_VREG_VCCQ2_MIN_UV	   1700000 /* uV */
+-#define UFS_VREG_VCCQ2_MAX_UV	   1950000 /* uV */
+-
+ /*
+  * VCCQ & VCCQ2 current requirement when UFS device is in sleep state
+  * and link is in Hibern8 state.
+@@ -582,8 +573,6 @@ struct ufs_vreg {
+ 	const char *name;
+ 	bool always_on;
+ 	bool enabled;
+-	int min_uV;
+-	int max_uV;
+ 	int max_uA;
+ };
+ 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 931ce620fc34..1ed54f6aef82 100644
+index 1ed54f6aef82..a48362165672 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -917,12 +917,11 @@ static inline void ufshcd_hba_start(struct ufs_hba *hba)
-  * ufshcd_is_hba_active - Get controller state
-  * @hba: per adapter instance
-  *
-- * Returns false if controller is active, true otherwise
-+ * Returns true if and only if the controller is active.
-  */
- static inline bool ufshcd_is_hba_active(struct ufs_hba *hba)
+@@ -8309,33 +8309,10 @@ static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
+ static int ufshcd_config_vreg(struct device *dev,
+ 		struct ufs_vreg *vreg, bool on)
  {
--	return (ufshcd_readl(hba, REG_CONTROLLER_ENABLE) & CONTROLLER_ENABLE)
--		? false : true;
-+	return ufshcd_readl(hba, REG_CONTROLLER_ENABLE) & CONTROLLER_ENABLE;
+-	int ret = 0;
+-	struct regulator *reg;
+-	const char *name;
+-	int min_uV, uA_load;
+-
+-	BUG_ON(!vreg);
+-
+-	reg = vreg->reg;
+-	name = vreg->name;
+-
+-	if (regulator_count_voltages(reg) > 0) {
+-		uA_load = on ? vreg->max_uA : 0;
+-		ret = ufshcd_config_vreg_load(dev, vreg, uA_load);
+-		if (ret)
+-			goto out;
++	if (regulator_count_voltages(vreg->reg) <= 0)
++		return 0;
+ 
+-		if (vreg->min_uV && vreg->max_uV) {
+-			min_uV = on ? vreg->min_uV : 0;
+-			ret = regulator_set_voltage(reg, min_uV, vreg->max_uV);
+-			if (ret)
+-				dev_err(dev,
+-					"%s: %s set voltage failed, err=%d\n",
+-					__func__, name, ret);
+-		}
+-	}
+-out:
+-	return ret;
++	return ufshcd_config_vreg_load(dev, vreg, on ? vreg->max_uA : 0);
  }
  
- u32 ufshcd_get_local_unipro_ver(struct ufs_hba *hba)
-@@ -4552,7 +4551,7 @@ static int ufshcd_hba_execute_hce(struct ufs_hba *hba)
- 	int retry_inner;
- 
- start:
--	if (!ufshcd_is_hba_active(hba))
-+	if (ufshcd_is_hba_active(hba))
- 		/* change controller state to "reset state" */
- 		ufshcd_hba_stop(hba);
- 
-@@ -4578,7 +4577,7 @@ static int ufshcd_hba_execute_hce(struct ufs_hba *hba)
- 
- 	/* wait for the host controller to complete initialization */
- 	retry_inner = 50;
--	while (ufshcd_is_hba_active(hba)) {
-+	while (!ufshcd_is_hba_active(hba)) {
- 		if (retry_inner) {
- 			retry_inner--;
- 		} else {
+ static int ufshcd_enable_vreg(struct device *dev, struct ufs_vreg *vreg)
