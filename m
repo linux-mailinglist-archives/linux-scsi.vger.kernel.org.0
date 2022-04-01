@@ -2,88 +2,145 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95AE4EE7AA
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 07:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6364EE8D0
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 09:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245033AbiDAFPB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Apr 2022 01:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S235431AbiDAHKG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Apr 2022 03:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245028AbiDAFPA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 01:15:00 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A64260C7A
-        for <linux-scsi@vger.kernel.org>; Thu, 31 Mar 2022 22:13:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CA1hvW7WjyxnKKlRdWf58paIu3EClTu1cIQzyiNkgCY=; b=JB5TidCKPgXlyK4XAbIDeDnQXk
-        Hx5XnqWLIpdi9LDhlY+wZznpvMxtsElL6/OQ0hbWS7a+D7YvCtDS9/NqU4O8kqpQxCILX08ovtz24
-        3T9y0kQTl8G9J9WAuS9Q6dVs8BpRPQ28dwCsJ9C3lj6bfAB2mTenDDVGCfAL0dw+QdsgZwvWkLOI/
-        m/EWKGgnvK5S4/8KpiUytZhxWJA0748jrnxT+Ia3V7s7iv+P3eYcDfm4bZ/8bdKfqyim/MpMddlVg
-        QGPGG9r+UD48cDEE4dGnElqgNJ+N4RD3MXouWS/y7fDOWKHC6Xg/hPjpYsOV435l60kyqbq2AFUig
-        tx7S8Emw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1na9aj-004WPb-6n; Fri, 01 Apr 2022 05:12:57 +0000
-Date:   Thu, 31 Mar 2022 22:12:57 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
+        with ESMTP id S235392AbiDAHKA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 03:10:00 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAB22498A7
+        for <linux-scsi@vger.kernel.org>; Fri,  1 Apr 2022 00:08:08 -0700 (PDT)
+Received: from epcas3p4.samsung.com (unknown [182.195.41.22])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220401070802epoutp04142691ec518c126f8c4255e679758c50~htAdsM9QT2616526165epoutp04U
+        for <linux-scsi@vger.kernel.org>; Fri,  1 Apr 2022 07:08:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220401070802epoutp04142691ec518c126f8c4255e679758c50~htAdsM9QT2616526165epoutp04U
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1648796882;
+        bh=SjVNELorl13yMoBbcdpcUxePmcPy0lt7Vr89b7mZtTg=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=XEpwiqnbaDd8WItJNlfT6jb9tC43AE0tjxJUEnXvx/rtKqLGtu2EGZ5nDKk5sFdI0
+         YIHDtOnKy32EUG7S5wzHipjvwY3+TQnuPPdnU/5B4z0BWW2NYz/HJlhFjLgzyJlcEn
+         lIfyjg0iEY5VqVUM0LEoYs8wPUOYGcUgmF6cWFOQ=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas3p1.samsung.com (KnoxPortal) with ESMTP id
+        20220401070802epcas3p1fb8d3b6fa7878a3e8b640b6ab93cf6cf~htAdNSuJK1159511595epcas3p1d;
+        Fri,  1 Apr 2022 07:08:02 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp3.localdomain
+        (Postfix) with ESMTP id 4KVB8K6zQMz4x9Q2; Fri,  1 Apr 2022 07:08:01 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: RE: [PATCH 04/29] scsi: ufs: Remove ufshcd_lrb.sense_bufflen
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     Jaegeuk Kim <jaegeuk@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        linux-scsi@vger.kernel.org,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        Can Guo <cang@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
         Bean Huo <beanhuo@micron.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Avri Altman <avri.altman@wdc.com>,
         Daejun Park <daejun7.park@samsung.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ye Bin <yebin10@huawei.com>,
-        ChanWoo Lee <cw9316.lee@samsung.com>,
-        Sergey Shtylyov <s.shtylyov@omprussia.ru>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Xiaoke Wang <xkernel.wang@foxmail.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: Re: [PATCH 29/29] scsi: ufs: Split the drivers/scsi/ufs directory
-Message-ID: <YkaJ2dapBN7XQgq/@infradead.org>
-References: <20220331223424.1054715-1-bvanassche@acm.org>
- <20220331223424.1054715-30-bvanassche@acm.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220331223424.1054715-30-bvanassche@acm.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220331223424.1054715-5-bvanassche@acm.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1891546521.01648796881971.JavaMail.epsvc@epcpadp4>
+Date:   Fri, 01 Apr 2022 15:14:36 +0900
+X-CMS-MailID: 20220401061436epcms2p580800d12062f387a216106766981ee1a
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20220331223522epcas2p4f8f20c2ec00dbc6d5a7bf855a1dd7395
+References: <20220331223424.1054715-5-bvanassche@acm.org>
+        <20220331223424.1054715-1-bvanassche@acm.org>
+        <CGME20220331223522epcas2p4f8f20c2ec00dbc6d5a7bf855a1dd7395@epcms2p5>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This lacks a changelog.  And making such a mess of the directory and
-creating annoyingly long paths better have a really good one.
+Hi Bart,
+>ufshcd_lrb.sense_bufflen is set but never read. Hence remove this struct
+>member.
+> 
+>Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+
+Reviewed-by: Keoseong Park <keosung.park@samsung.com>
+
+Best Regards,
+Keoseong Park
+
+>---
+> drivers/scsi/ufs/ufshcd.c | 3 ---
+> drivers/scsi/ufs/ufshcd.h | 2 --
+> 2 files changed, 5 deletions(-)
+> 
+>diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>index c60519372b3b..e52e86b0b7a3 100644
+>--- a/drivers/scsi/ufs/ufshcd.c
+>+++ b/drivers/scsi/ufs/ufshcd.c
+>@@ -2789,7 +2789,6 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+>         lrbp = &hba->lrb[tag];
+>         WARN_ON(lrbp->cmd);
+>         lrbp->cmd = cmd;
+>-        lrbp->sense_bufflen = UFS_SENSE_SIZE;
+>         lrbp->sense_buffer = cmd->sense_buffer;
+>         lrbp->task_tag = tag;
+>         lrbp->lun = ufshcd_scsi_to_upiu_lun(cmd->device->lun);
+>@@ -2830,7 +2829,6 @@ static int ufshcd_compose_dev_cmd(struct ufs_hba *hba,
+>                 struct ufshcd_lrb *lrbp, enum dev_cmd_type cmd_type, int tag)
+> {
+>         lrbp->cmd = NULL;
+>-        lrbp->sense_bufflen = 0;
+>         lrbp->sense_buffer = NULL;
+>         lrbp->task_tag = tag;
+>         lrbp->lun = 0; /* device management cmd is not specific to any LUN */
+>@@ -6802,7 +6800,6 @@ static int ufshcd_issue_devman_upiu_cmd(struct ufs_hba *hba,
+>         lrbp = &hba->lrb[tag];
+>         WARN_ON(lrbp->cmd);
+>         lrbp->cmd = NULL;
+>-        lrbp->sense_bufflen = 0;
+>         lrbp->sense_buffer = NULL;
+>         lrbp->task_tag = tag;
+>         lrbp->lun = 0;
+>diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+>index b2740b51a546..b6162b208d99 100644
+>--- a/drivers/scsi/ufs/ufshcd.h
+>+++ b/drivers/scsi/ufs/ufshcd.h
+>@@ -182,7 +182,6 @@ struct ufs_pm_lvl_states {
+>  * @ucd_req_dma_addr: UPIU request dma address for debug
+>  * @cmd: pointer to SCSI command
+>  * @sense_buffer: pointer to sense buffer address of the SCSI command
+>- * @sense_bufflen: Length of the sense buffer
+>  * @scsi_status: SCSI status of the command
+>  * @command_type: SCSI, UFS, Query.
+>  * @task_tag: Task tag of the command
+>@@ -207,7 +206,6 @@ struct ufshcd_lrb {
+> 
+>         struct scsi_cmnd *cmd;
+>         u8 *sense_buffer;
+>-        unsigned int sense_bufflen;
+>         int scsi_status;
+> 
+>         int command_type;
+> 
