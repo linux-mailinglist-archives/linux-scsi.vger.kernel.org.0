@@ -2,45 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351014EF193
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 16:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7034EF0D5
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 16:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348140AbiDAOhd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Apr 2022 10:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
+        id S1348180AbiDAOhp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Apr 2022 10:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347840AbiDAOde (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 10:33:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BDB35248;
-        Fri,  1 Apr 2022 07:30:45 -0700 (PDT)
+        with ESMTP id S1348207AbiDAOdt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 10:33:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3247B5F8F8;
+        Fri,  1 Apr 2022 07:31:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88A91B82500;
-        Fri,  1 Apr 2022 14:30:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E486C3410F;
-        Fri,  1 Apr 2022 14:30:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2ABE61C0C;
+        Fri,  1 Apr 2022 14:31:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C386C36AE2;
+        Fri,  1 Apr 2022 14:31:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648823443;
-        bh=/6OM4AT2jt3s7VuH2fl+vyybi0FE1ewX9K6YnXJYTJM=;
+        s=k20201202; t=1648823473;
+        bh=fMG8qmMkatb/ALXVaoU86uFYKtdvjs1G7iwQUSKByjo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NVPOfHKUD0B5ZrNTVbyt1uV5aDFG6vL01MQYCOiyyZp9bp0jTm6sOam4lON5WtVpU
-         82s91LNjFYzHNqAqJtmEQLpxMS7jgaEV+1gUOzpJvdSOUDPOSg50Dv+u0iwtMgCMUo
-         V+B4el5qsinm8PQXkTg8sHiqCy8Icwcz2YxppaFG1uXGfk0YKo1u115OV3tClCvibi
-         7BHYNLOlI9rwKjF6tDut0cyRiqspc/dww8aVTDl2IG9zvuU36m4yRAynE0zU+3uRM6
-         ZWHHeXVA+FwHYk3oH5u0gJbUf7Wkv6gjdaxMmjQ0oR8nZt7/FNH6xXxJkKdWQJ0o1I
-         Wglwq3GN6SFgg==
+        b=c4MJT80i9ES/cHNQDXRwP6MJJKW+ZyN7CQDfF6bPWeQLNbHhW2tdUMhaniFBt8DyK
+         iMKEjuOlzqMUsd1pfj3U1jUn8H6ZK0EvZ61xkp/kpfPY1dh2lDukCr4v53TKYpFWbq
+         T1u6DyMuVmTC+YrHiFb9oKd43rtm/SNgqua+cBg7VctFvOCIVILGiY6+RQUrv6ZnGM
+         Jzif9g2uwIBYnNON1dF9xiEiYUKlLp/Qts5QLuaTIhIAaRjeo4ISnoaN1J2Dhz3Tmq
+         kr0C2jbJjG7DO1s65w+IQ6gYmw6oexlJctA6VluIydk2wZB1CD32+sQwurYABQRFkH
+         g00nnyzBRCFOQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, jinpu.wang@cloud.ionos.com,
-        jejb@linux.ibm.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 098/149] scsi: pm8001: Fix memory leak in pm8001_chip_fw_flash_update_req()
-Date:   Fri,  1 Apr 2022 10:24:45 -0400
-Message-Id: <20220401142536.1948161-98-sashal@kernel.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        "Juergen E. Fischer" <fischer@norbit.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 106/149] scsi: aha152x: Fix aha152x_setup() __setup handler return value
+Date:   Fri,  1 Apr 2022 10:24:53 -0400
+Message-Id: <20220401142536.1948161-106-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220401142536.1948161-1-sashal@kernel.org>
 References: <20220401142536.1948161-1-sashal@kernel.org>
@@ -58,38 +59,49 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit f792a3629f4c4aa4c3703d66b43ce1edcc3ec09a ]
+[ Upstream commit cc8294ec4738d25e2bb2d71f7d82a9bf7f4a157b ]
 
-In pm8001_chip_fw_flash_update_build(), if
-pm8001_chip_fw_flash_update_build() fails, the struct fw_control_ex
-allocated must be freed.
+__setup() handlers should return 1 if the command line option is handled
+and 0 if not (or maybe never return 0; doing so just pollutes init's
+environment with strings that are not init arguments/parameters).
 
-Link: https://lore.kernel.org/r/20220220031810.738362-23-damien.lemoal@opensource.wdc.com
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Return 1 from aha152x_setup() to indicate that the boot option has been
+handled.
+
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Link: https://lore.kernel.org/r/20220223000623.5920-1-rdunlap@infradead.org
+Cc: "Juergen E. Fischer" <fischer@norbit.de>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/scsi/aha152x.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index 54db341455b9..c87ed28794c9 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -4877,8 +4877,10 @@ pm8001_chip_fw_flash_update_req(struct pm8001_hba_info *pm8001_ha,
- 	ccb->ccb_tag = tag;
- 	rc = pm8001_chip_fw_flash_update_build(pm8001_ha, &flash_update_info,
- 		tag);
--	if (rc)
-+	if (rc) {
-+		kfree(fw_control_context);
- 		pm8001_tag_free(pm8001_ha, tag);
-+	}
+diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
+index d17880b57d17..2449b4215b32 100644
+--- a/drivers/scsi/aha152x.c
++++ b/drivers/scsi/aha152x.c
+@@ -3375,13 +3375,11 @@ static int __init aha152x_setup(char *str)
+ 	setup[setup_count].synchronous = ints[0] >= 6 ? ints[6] : 1;
+ 	setup[setup_count].delay       = ints[0] >= 7 ? ints[7] : DELAY_DEFAULT;
+ 	setup[setup_count].ext_trans   = ints[0] >= 8 ? ints[8] : 0;
+-	if (ints[0] > 8) {                                                /*}*/
++	if (ints[0] > 8)
+ 		printk(KERN_NOTICE "aha152x: usage: aha152x=<IOBASE>[,<IRQ>[,<SCSI ID>"
+ 		       "[,<RECONNECT>[,<PARITY>[,<SYNCHRONOUS>[,<DELAY>[,<EXT_TRANS>]]]]]]]\n");
+-	} else {
++	else
+ 		setup_count++;
+-		return 0;
+-	}
  
- 	return rc;
+ 	return 1;
  }
 -- 
 2.34.1
