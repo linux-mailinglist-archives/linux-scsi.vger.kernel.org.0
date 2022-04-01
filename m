@@ -2,117 +2,240 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F864F0003
-	for <lists+linux-scsi@lfdr.de>; Sat,  2 Apr 2022 11:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549324F0145
+	for <lists+linux-scsi@lfdr.de>; Sat,  2 Apr 2022 13:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353940AbiDBJLc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 2 Apr 2022 05:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
+        id S232481AbiDBLyx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 2 Apr 2022 07:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239573AbiDBJLb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 2 Apr 2022 05:11:31 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E85532D5
-        for <linux-scsi@vger.kernel.org>; Sat,  2 Apr 2022 02:09:40 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ot30so490080ejb.12
-        for <linux-scsi@vger.kernel.org>; Sat, 02 Apr 2022 02:09:40 -0700 (PDT)
+        with ESMTP id S229534AbiDBLyw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 2 Apr 2022 07:54:52 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C62915FCC
+        for <linux-scsi@vger.kernel.org>; Sat,  2 Apr 2022 04:52:57 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id d10so1001876edj.0
+        for <linux-scsi@vger.kernel.org>; Sat, 02 Apr 2022 04:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=kd0NXB1Zpr99nwzhwykwjlZXPnel4cWxpQfKUpkCMHk=;
-        b=IPrXv9vJtuIqqczOLMSmbtbpxKLQMRqoHRQqRTjVRFt4XO+cn+jGv3A0ddYp/tq7gY
-         Zg7teYhVeEfjJ8csVKtGys1Y6/lrBvrxsdVaGEio7GpsGA26NvKIok57F6Ww8nbIHQye
-         rXmxl63yx1oW+DKpT22urlehfD/nbAMpo9LvOn1G6icNPf2NIzuPi1KPPEaHk5bXYQ2L
-         yfj9ZgvUPumDQ7S7kDptsISup59+tDCEC99Hw/VHbN6fEhZp+NoZ6CIxy1fjYa9XekPR
-         serYvl4TidGxyJu9quyVUhjNX3aQyNJjetX9Z2KkDWVzjwvoeVb0n+VdPnbOPkm+mK4A
-         0aQQ==
+        d=gmail.com; s=20210112;
+        h=from:message-id:subject:to:cc:in-reply-to:references:mime-version
+         :date:user-agent:content-transfer-encoding;
+        bh=nE3hf1YCDJ6kEtg0m/qHzL1wDrtyteiqpEI9iRcSgrQ=;
+        b=EFKNEmieblBRPj+Op+c+LkZw2/xxWuzzLI5k+fhm0SVfTwCjBv9tOouXDXpJAZMB9H
+         LHx/+6LF8MU/K8uNcBsOvTz+hwhIYIJCGC4eNSUGt2vEs2UdZgFsGKIe5HYfjN2z6jV7
+         W4JA0VjV92pS6uwN6tqHnvdD65PORhW9xeK56dgDRPDjhJjrZPFPSIiv3439Tq9JLipT
+         +qVdQ/6HBU8447Rfi2ayEbSCxIsya3qGgyJKPu3fnizxJZrxzXDuCWA78Pd2pI2vbmoH
+         jJl1ZZ0ObulcYp+56SWEg38sz14V2vCrYl55YUSxpYHovpLwlyIX9JjDahSLG+p5ZfF7
+         uM4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kd0NXB1Zpr99nwzhwykwjlZXPnel4cWxpQfKUpkCMHk=;
-        b=POHQkG/SrZ2te5V00xGf1ywTGFSLkAdX+/oYns6Q3L64IBDGV27tH6nfApFUHsGQJE
-         MeXk7ryPx3K8DeotIXi9oHU5V0oFY6ryZxmkvbz1F1zIB5e6BflXP9JcMeRYL5z/plRk
-         XmCV8XrB4pL4ourz1UnnWJGgMD8wivr0SW0BXn0SMynTbie7z10VPqUAFwSqU7onuISe
-         Qsul1Ajj4jLVJcBbgSh9zMM9C51E/Viepf7RK/2weXNDdhYk1Bw0TN+eAgwgBcq6oepU
-         5QKYsAVQwNvmWrgahIIIRXM7DJmTC0//jG0ut9Ql6IiudFscc86m2lO7yrjdeZht3Hr0
-         Q9Bg==
-X-Gm-Message-State: AOAM533f2RMIgiTbdNJec5A3kibxX4P5nB4mXrhkaeT/YqB4iId4NnsN
-        6AmlQf/YD+QC+4HphRG1y8OiYA==
-X-Google-Smtp-Source: ABdhPJwqleeVWzZcqz6QlP7/awNnzIZNAP/RE/+/3JTo9Oc/kx/lPCi9SIvYHyQ5AoA0h5pDpTMV4w==
-X-Received: by 2002:a17:907:3e16:b0:6df:b4f0:5cc2 with SMTP id hp22-20020a1709073e1600b006dfb4f05cc2mr3180696ejc.285.1648890579004;
-        Sat, 02 Apr 2022 02:09:39 -0700 (PDT)
-Received: from [192.168.0.170] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id o12-20020a50c90c000000b0041907e62024sm2192677edh.85.2022.04.02.02.09.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 02:09:38 -0700 (PDT)
-Message-ID: <c93bdf12-bf53-9277-0394-5eaeea081183@linaro.org>
-Date:   Sat, 2 Apr 2022 11:09:37 +0200
+        h=x-gm-message-state:from:message-id:subject:to:cc:in-reply-to
+         :references:mime-version:date:user-agent:content-transfer-encoding;
+        bh=nE3hf1YCDJ6kEtg0m/qHzL1wDrtyteiqpEI9iRcSgrQ=;
+        b=wHa/dqOT1NBls7dEZ0f5WILB+NhgiIPKXdLkacNxOh+/MDoWTWtGFQhjrRe4IKuACd
+         MyglnUKMxWl0cIL/loVf+wPiM0g1wOaNwL7x8OtzWiMwiJyXdhPhDkOImCmsPe8Bsnhn
+         EhSjrJgUzRgBYYAlTHtf+NvkuFz7hHDAXzQS/vgTyieZcILCRAh81/wP6K6znd9hKI5l
+         FMJFU0iMtac6Lig2ev8IZL18Gsv9XzqIV/yNuc7DvhlQjXq/sg6jZM2iheLLsYwQogzY
+         l0c4YbtBNCmt6sFANx1DK9FaElKHdpGzSmsuu0tZBq45lgFfPSBezlto/lMg7hWCH6hD
+         71xg==
+X-Gm-Message-State: AOAM533T7MqWsQUN7x7diqUAcAzw4ZOu03JQpMaMsosQf0vS7mgsYN7J
+        C9WNh1+KkBzONV2aWiVoJto=
+X-Google-Smtp-Source: ABdhPJzHBFhKK6kSqa+1WF1TvSgkt1FAJMbWclH5DOAxY0B7aRPBwVKAm9kXG0iJYSJaSIKBFyrlVw==
+X-Received: by 2002:a05:6402:1385:b0:413:2bc6:4400 with SMTP id b5-20020a056402138500b004132bc64400mr25538852edv.94.1648900376068;
+        Sat, 02 Apr 2022 04:52:56 -0700 (PDT)
+Received: from p200300c58701842d31e8d5ae8453ebf8.dip0.t-ipconnect.de (p200300c58701842d31e8d5ae8453ebf8.dip0.t-ipconnect.de. [2003:c5:8701:842d:31e8:d5ae:8453:ebf8])
+        by smtp.googlemail.com with ESMTPSA id rh26-20020a17090720fa00b006e0da7ef847sm2033194ejb.13.2022.04.02.04.52.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Apr 2022 04:52:55 -0700 (PDT)
+From:   Bean Huo <christopher.lee.eu@gmail.com>
+X-Google-Original-From: Bean Huo <huobean@gmail.com>
+Message-ID: <abd8eb1700c3cf914af76bf767eff0877e2e82cf.camel@gmail.com>
+Subject: Re: [PATCH 00/29] UFS patches for kernel v5.19
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Can Guo <cang@codeaurora.org>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-scsi@vger.kernel.org
+In-Reply-To: <20220331223424.1054715-1-bvanassche@acm.org>
+References: <20220331223424.1054715-1-bvanassche@acm.org>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH 1/4] dt-bindings: clock: qcom,gcc-sdm845: add parent
- power domain
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bean Huo <beanhuo@micron.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Taniya Das <tdas@codeaurora.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20220401145820.1003826-1-krzysztof.kozlowski@linaro.org>
- <20220401145820.1003826-2-krzysztof.kozlowski@linaro.org>
- <20220401232451.1B7A9C340F3@smtp.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220401232451.1B7A9C340F3@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 01 Apr 2022 11:28:30 +0200
+User-Agent: Evolution 3.36.5-0ubuntu1 
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 02/04/2022 01:24, Stephen Boyd wrote:
-> Quoting Krzysztof Kozlowski (2022-04-01 07:58:17)
->> Allow Qualcomm GCC to register its parent power domain (e.g. RPMHPD) to
->> properly pass performance state from children.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
->> index d902f137ab17..5fe1b2c42d5a 100644
->> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
->> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
->> @@ -43,6 +43,9 @@ properties:
->>    '#reset-cells':
->>      const: 1
->>  
->> +  powert-domains:
+Bart,
+
+Agree that the current UFS driver is messy, but I don't think there was
+such a big structural change before UFS 4.0 was released, especially
+the design of the UFS CQE driver. If you already have a plan for CQE,
+it's best to state it in the patch. If you have made such a big change
+in an environment that is now very stable, do we have to make changes
+after UFS 4.0? ?
+
+
+Kind regards,
+Bean
+
+
+On Thu, 2022-03-31 at 15:33 -0700, Bart Van Assche wrote:
+> Hi Martin,
 > 
-> s/powert/power/
+> This patch series includes the following changes:
+> - Separation of UFS core and UFS driver source code into separate
+> directories.
+> - Split the ufshcd.h header file into two header files - one file
+> that
+>   defines the interface with UFS drivers and another file with
+> definitions
+>   only used in the core.
+> - Multiple source code cleanup patches.
+> - A few patches with minor functional changes.
+> 
+> Please consider these changes for kernel v5.19.
+> 
+> Thank you,
+> 
+> Bart.
+> 
+> Bart Van Assche (29):
+>   scsi: ufs: Declare ufshcd_wait_for_register() static
+>   scsi: ufs: Remove superfluous boolean conversions
+>   scsi: ufs: Simplify statements that return a boolean
+>   scsi: ufs: Remove ufshcd_lrb.sense_bufflen
+>   scsi: ufs: Remove ufshcd_lrb.sense_buffer
+>   scsi: ufs: Use get_unaligned_be16() instead of be16_to_cpup()
+>   scsi: ufs: Remove the UFS_FIX() and END_FIX() macros
+>   scsi: ufs: Rename struct ufs_dev_fix into ufs_dev_quirk
+>   scsi: ufs: Declare the quirks array const
+>   scsi: ufs: Invert the return value of ufshcd_is_hba_active()
+>   scsi: ufs: Remove unused constants and code
+>   scsi: ufs: Switch to aggregate initialization
+>   scsi: ufs: Remove the LUN quiescing code from ufshcd_wl_shutdown()
+>   scsi: ufs: Make the config_scaling_param calls type safe
+>   scsi: ufs: Remove the driver version
+>   scsi: ufs: Rename sdev_ufs_device into ufs_device_wlun
+>   scsi: ufs: Use an SPDX license identifier in the Kconfig file
+>   scsi: ufs: Remove paths from source code comments
+>   scsi: ufs: Remove the TRUE and FALSE definitions
+>   scsi: ufs: Remove locking from around single register writes
+>   scsi: ufs: Introduce ufshcd_clkgate_delay_set()
+>   scsi: ufs: qcom: Fix ufs_qcom_resume()
+>   scsi: ufs: Remove unnecessary ufshcd-crypto.h include directives
+>   scsi: ufs: Fix kernel-doc syntax in ufshcd.h
+>   scsi: ufs: Minimize #include directives
+>   scsi: ufs: Split the ufshcd.h header file
+>   scsi: ufs: Move the struct ufs_ref_clk definition
+>   scsi: ufs: Move the ufs_is_valid_unit_desc_lun() definition
+>   scsi: ufs: Split the drivers/scsi/ufs directory
+> 
+>  drivers/scsi/Kconfig                          |   3 +-
+>  drivers/scsi/Makefile                         |   4 +-
+>  drivers/scsi/ufs-core/Kconfig                 |  82 ++++
+>  drivers/scsi/ufs-core/Makefile                |  10 +
+>  drivers/scsi/{ufs => ufs-core}/ufs-debugfs.c  |   4 +-
+>  drivers/scsi/{ufs => ufs-core}/ufs-debugfs.h  |   0
+>  .../{ufs => ufs-core}/ufs-fault-injection.c   |   4 +-
+>  .../{ufs => ufs-core}/ufs-fault-injection.h   |   0
+>  drivers/scsi/{ufs => ufs-core}/ufs-hwmon.c    |   4 +-
+>  drivers/scsi/{ufs => ufs-core}/ufs-sysfs.c    |   8 +-
+>  drivers/scsi/{ufs => ufs-core}/ufs-sysfs.h    |   3 +-
+>  drivers/scsi/{ufs => ufs-core}/ufs_bsg.c      |   6 +
+>  drivers/scsi/{ufs => ufs-core}/ufs_bsg.h      |   7 +-
+>  .../scsi/{ufs => ufs-core}/ufshcd-crypto.c    |   2 +-
+>  .../scsi/{ufs => ufs-core}/ufshcd-crypto.h    |   7 +-
+>  drivers/scsi/ufs-core/ufshcd-priv.h           | 296 ++++++++++++++
+>  drivers/scsi/{ufs => ufs-core}/ufshcd.c       | 254 ++++++------
+>  drivers/scsi/{ufs => ufs-core}/ufshpb.c       |  10 +-
+>  drivers/scsi/{ufs => ufs-core}/ufshpb.h       |   0
+>  drivers/scsi/ufs-drivers/Kconfig              | 118 ++++++
+>  drivers/scsi/{ufs => ufs-drivers}/Makefile    |  12 -
+>  .../scsi/{ufs => ufs-drivers}/cdns-pltfrm.c   |   5 +-
+>  .../{ufs => ufs-drivers}/tc-dwc-g210-pci.c    |   8 +-
+>  .../{ufs => ufs-drivers}/tc-dwc-g210-pltfrm.c |  10 +-
+>  .../scsi/{ufs => ufs-drivers}/tc-dwc-g210.c   |   8 +-
+>  .../scsi/{ufs => ufs-drivers}/tc-dwc-g210.h   |   2 +
+>  .../scsi/{ufs => ufs-drivers}/ti-j721e-ufs.c  |   0
+>  .../scsi/{ufs => ufs-drivers}/ufs-exynos.c    |  17 +-
+>  .../scsi/{ufs => ufs-drivers}/ufs-exynos.h    |   8 +-
+>  drivers/scsi/{ufs => ufs-drivers}/ufs-hisi.c  |  17 +-
+>  drivers/scsi/{ufs => ufs-drivers}/ufs-hisi.h  |   0
+>  .../{ufs => ufs-drivers}/ufs-mediatek-trace.h |   2 +-
+>  .../scsi/{ufs => ufs-drivers}/ufs-mediatek.c  |  40 +-
+>  .../scsi/{ufs => ufs-drivers}/ufs-mediatek.h  |   0
+>  .../scsi/{ufs => ufs-drivers}/ufs-qcom-ice.c  |   3 +-
+>  drivers/scsi/{ufs => ufs-drivers}/ufs-qcom.c  |  49 +--
+>  drivers/scsi/{ufs => ufs-drivers}/ufs-qcom.h  |   6 +-
+>  .../scsi/{ufs => ufs-drivers}/ufshcd-dwc.c    |   6 +-
+>  .../scsi/{ufs => ufs-drivers}/ufshcd-dwc.h    |   2 +
+>  .../scsi/{ufs => ufs-drivers}/ufshcd-pci.c    |  14 +-
+>  .../scsi/{ufs => ufs-drivers}/ufshcd-pltfrm.c |  35 +-
+>  .../scsi/{ufs => ufs-drivers}/ufshcd-pltfrm.h |   2 +-
+>  .../scsi/{ufs => ufs-drivers}/ufshci-dwc.h    |   0
+>  drivers/scsi/ufs/Kconfig                      | 211 ----------
+>  {drivers/scsi/ufs => include/scsi}/ufs.h      |  35 --
+>  .../scsi/ufs => include/scsi}/ufs_quirks.h    |  15 +-
+>  {drivers/scsi/ufs => include/scsi}/ufshcd.h   | 366 ++++----------
+> ----
+>  {drivers/scsi/ufs => include/scsi}/ufshci.h   |   2 +
+>  {drivers/scsi/ufs => include/scsi}/unipro.h   |  16 -
+>  49 files changed, 856 insertions(+), 857 deletions(-)
+>  create mode 100644 drivers/scsi/ufs-core/Kconfig
+>  create mode 100644 drivers/scsi/ufs-core/Makefile
+>  rename drivers/scsi/{ufs => ufs-core}/ufs-debugfs.c (99%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufs-debugfs.h (100%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufs-fault-injection.c (100%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufs-fault-injection.h (100%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufs-hwmon.c (98%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufs-sysfs.c (99%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufs-sysfs.h (95%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufs_bsg.c (97%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufs_bsg.h (77%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufshcd-crypto.c (99%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufshcd-crypto.h (94%)
+>  create mode 100644 drivers/scsi/ufs-core/ufshcd-priv.h
+>  rename drivers/scsi/{ufs => ufs-core}/ufshcd.c (98%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufshpb.c (99%)
+>  rename drivers/scsi/{ufs => ufs-core}/ufshpb.h (100%)
+>  create mode 100644 drivers/scsi/ufs-drivers/Kconfig
+>  rename drivers/scsi/{ufs => ufs-drivers}/Makefile (56%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/cdns-pltfrm.c (99%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/tc-dwc-g210-pci.c (98%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/tc-dwc-g210-pltfrm.c (98%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/tc-dwc-g210.c (99%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/tc-dwc-g210.h (95%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ti-j721e-ufs.c (100%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufs-exynos.c (99%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufs-exynos.h (97%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufs-hisi.c (99%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufs-hisi.h (100%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufs-mediatek-trace.h (92%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufs-mediatek.c (97%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufs-mediatek.h (100%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufs-qcom-ice.c (99%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufs-qcom.c (98%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufs-qcom.h (98%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufshcd-dwc.c (98%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufshcd-dwc.h (95%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufshcd-pci.c (99%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufshcd-pltfrm.c (94%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufshcd-pltfrm.h (98%)
+>  rename drivers/scsi/{ufs => ufs-drivers}/ufshci-dwc.h (100%)
+>  delete mode 100644 drivers/scsi/ufs/Kconfig
+>  rename {drivers/scsi/ufs => include/scsi}/ufs.h (93%)
+>  rename {drivers/scsi/ufs => include/scsi}/ufs_quirks.h (94%)
+>  rename {drivers/scsi/ufs => include/scsi}/ufshcd.h (82%)
+>  rename {drivers/scsi/ufs => include/scsi}/ufshci.h (99%)
+>  rename {drivers/scsi/ufs => include/scsi}/unipro.h (98%)
+> 
 
-Thanks. This actually points to the fact I did not test this bindings
-change :(
-
-Best regards,
-Krzysztof
