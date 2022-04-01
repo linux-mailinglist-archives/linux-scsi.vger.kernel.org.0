@@ -2,47 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47FB4EF45C
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 17:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B47A34EF326
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 17:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347321AbiDAO4o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Apr 2022 10:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S1348664AbiDAO53 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Apr 2022 10:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351235AbiDAOsg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 10:48:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B011EB82F;
-        Fri,  1 Apr 2022 07:39:20 -0700 (PDT)
+        with ESMTP id S1351352AbiDAOss (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 10:48:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E73A28AC60;
+        Fri,  1 Apr 2022 07:39:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C04A7B8250F;
-        Fri,  1 Apr 2022 14:38:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40A6CC36AE3;
-        Fri,  1 Apr 2022 14:38:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13EB160B9A;
+        Fri,  1 Apr 2022 14:39:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49578C36AEA;
+        Fri,  1 Apr 2022 14:39:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648823923;
-        bh=KjTwlcGI4jdZkSVaJHaegKF20Gmkwozf/XBuTvF1+Ug=;
+        s=k20201202; t=1648823960;
+        bh=bzbMuzZ+tSaSt+LWshNcwUC09neSrYgdPcYOVo06zZk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WfjvwjOSvLZhOkL0wcyFidhbEo87w4UyC5c0wpaBnxzOhVOyb4WyQRrFSOzAHR1If
-         rZ5nPBXFtNUkaIbCKwZKejSZzr8Ipi6jFZ+ftBFq/0KqbbZRtHUiq2JnCWNj7sEZOP
-         Q8zi94GrFbmZhYye/8OyYYTpbDVwU8/ViBXlFHC4HLT04EILoKD2TvHtiHKoeFxXAi
-         RIcoLjwES+j7iuyBbLCb1zQmANb3kPeGpg2+1dv0LhrB8/2W11QLWIAFhTO8NMcndL
-         5xRFfR+tYYqZml22c//1C4dB2z8PBWA0rN9hkvWWoPQv/T764LkVxccf7EJ5//m0+5
-         Tcl6VbidOQhyA==
+        b=d1xBqUJTzeB30yX+tPeZv9fWIUNl5Dd6gQG30MvuP9h/2L4rGTgnvgOye2BYGNBw/
+         JXzT0sstTQrmQlg/qZhJoLhb9p22ZZgRCrvDQ4XpPGVW/rf7UMZ2nujLVJJQ/u3dGl
+         gJO/rJ1NfifFFa2WAIaUs8Ej6S0dInv3+y8E8qODtL2i63nsvyevs+nyp1eqtbdw2k
+         qrU+RCQUgmWlJkMIXazN+85caZuzJl1ImdCERS54VzZ6ph0IdwWJlv4qlnQeOWl6F/
+         w7cy8KkezWCzH59TOrdmappCeIMDR7w/Vuzah9VenoUBbMiIEF4Z0uAbGFjaX76XAQ
+         jRU+tI0V6obWA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>,
-        David Yang <davidcomponentone@gmail.com>,
+Cc:     Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>,
+        Kevin Barnett <kevin.barnett@microchip.com>,
+        Scott Benesh <scott.benesh@microchip.com>,
+        Scott Teel <scott.teel@microchip.com>,
+        Don Brace <don.brace@microchip.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, anil.gurumurthy@qlogic.com,
-        sudarsana.kalluru@qlogic.com, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 20/98] scsi: bfa: Replace snprintf() with sysfs_emit()
-Date:   Fri,  1 Apr 2022 10:36:24 -0400
-Message-Id: <20220401143742.1952163-20-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
+        storagedev@microchip.com, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 31/98] scsi: smartpqi: Fix kdump issue when controller is locked up
+Date:   Fri,  1 Apr 2022 10:36:35 -0400
+Message-Id: <20220401143742.1952163-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220401143742.1952163-1-sashal@kernel.org>
 References: <20220401143742.1952163-1-sashal@kernel.org>
@@ -60,167 +61,98 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Yang Guang <yang.guang5@zte.com.cn>
+From: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
 
-[ Upstream commit 2245ea91fd3a04cafbe2f54911432a8657528c3b ]
+[ Upstream commit 3ada501d602abf02353445c03bb3258146445d90 ]
 
-coccinelle report:
-./drivers/scsi/bfa/bfad_attr.c:908:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/bfa/bfad_attr.c:860:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/bfa/bfad_attr.c:888:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/bfa/bfad_attr.c:853:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/bfa/bfad_attr.c:808:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/bfa/bfad_attr.c:728:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/bfa/bfad_attr.c:822:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/bfa/bfad_attr.c:927:9-17:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/bfa/bfad_attr.c:900:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/bfa/bfad_attr.c:874:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/bfa/bfad_attr.c:714:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/bfa/bfad_attr.c:839:8-16:
-WARNING: use scnprintf or sprintf
+Avoid dropping into shell if the controller is in locked up state.
 
-Use sysfs_emit() instead of scnprintf() or sprintf().
+Driver issues SIS soft reset to bring back the controller to SIS mode while
+OS boots into kdump mode.
 
-Link: https://lore.kernel.org/r/def83ff75faec64ba592b867a8499b1367bae303.1643181468.git.yang.guang5@zte.com.cn
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
-Signed-off-by: David Yang <davidcomponentone@gmail.com>
+If the controller is in lockup state, SIS soft reset does not work.
+
+Since the controller lockup code has not been cleared, driver considers the
+firmware is no longer up and running. Driver returns back an error code to
+OS and the kdump fails.
+
+Link: https://lore.kernel.org/r/164375212337.440833.11955356190354940369.stgit@brunhilda.pdev.net
+Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
+Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
+Reviewed-by: Scott Teel <scott.teel@microchip.com>
+Signed-off-by: Mahesh Rajashekhara <mahesh.rajashekhara@microchip.com>
+Signed-off-by: Don Brace <don.brace@microchip.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/bfa/bfad_attr.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 39 ++++++++++++++++-----------
+ 1 file changed, 23 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/scsi/bfa/bfad_attr.c b/drivers/scsi/bfa/bfad_attr.c
-index 5ae1e3f78910..e049cdb3c286 100644
---- a/drivers/scsi/bfa/bfad_attr.c
-+++ b/drivers/scsi/bfa/bfad_attr.c
-@@ -711,7 +711,7 @@ bfad_im_serial_num_show(struct device *dev, struct device_attribute *attr,
- 	char serial_num[BFA_ADAPTER_SERIAL_NUM_LEN];
- 
- 	bfa_get_adapter_serial_num(&bfad->bfa, serial_num);
--	return snprintf(buf, PAGE_SIZE, "%s\n", serial_num);
-+	return sysfs_emit(buf, "%s\n", serial_num);
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index a5453f5e87c3..2e690d8a3444 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -7653,6 +7653,21 @@ static int pqi_force_sis_mode(struct pqi_ctrl_info *ctrl_info)
+ 	return pqi_revert_to_sis_mode(ctrl_info);
  }
  
- static ssize_t
-@@ -725,7 +725,7 @@ bfad_im_model_show(struct device *dev, struct device_attribute *attr,
- 	char model[BFA_ADAPTER_MODEL_NAME_LEN];
- 
- 	bfa_get_adapter_model(&bfad->bfa, model);
--	return snprintf(buf, PAGE_SIZE, "%s\n", model);
-+	return sysfs_emit(buf, "%s\n", model);
- }
- 
- static ssize_t
-@@ -805,7 +805,7 @@ bfad_im_model_desc_show(struct device *dev, struct device_attribute *attr,
- 		snprintf(model_descr, BFA_ADAPTER_MODEL_DESCR_LEN,
- 			"Invalid Model");
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n", model_descr);
-+	return sysfs_emit(buf, "%s\n", model_descr);
- }
- 
- static ssize_t
-@@ -819,7 +819,7 @@ bfad_im_node_name_show(struct device *dev, struct device_attribute *attr,
- 	u64        nwwn;
- 
- 	nwwn = bfa_fcs_lport_get_nwwn(port->fcs_port);
--	return snprintf(buf, PAGE_SIZE, "0x%llx\n", cpu_to_be64(nwwn));
-+	return sysfs_emit(buf, "0x%llx\n", cpu_to_be64(nwwn));
- }
- 
- static ssize_t
-@@ -836,7 +836,7 @@ bfad_im_symbolic_name_show(struct device *dev, struct device_attribute *attr,
- 	bfa_fcs_lport_get_attr(&bfad->bfa_fcs.fabric.bport, &port_attr);
- 	strlcpy(symname, port_attr.port_cfg.sym_name.symname,
- 			BFA_SYMNAME_MAXLEN);
--	return snprintf(buf, PAGE_SIZE, "%s\n", symname);
-+	return sysfs_emit(buf, "%s\n", symname);
- }
- 
- static ssize_t
-@@ -850,14 +850,14 @@ bfad_im_hw_version_show(struct device *dev, struct device_attribute *attr,
- 	char hw_ver[BFA_VERSION_LEN];
- 
- 	bfa_get_pci_chip_rev(&bfad->bfa, hw_ver);
--	return snprintf(buf, PAGE_SIZE, "%s\n", hw_ver);
-+	return sysfs_emit(buf, "%s\n", hw_ver);
- }
- 
- static ssize_t
- bfad_im_drv_version_show(struct device *dev, struct device_attribute *attr,
- 				char *buf)
++static void pqi_perform_lockup_action(void)
++{
++	switch (pqi_lockup_action) {
++	case PANIC:
++		panic("FATAL: Smart Family Controller lockup detected");
++		break;
++	case REBOOT:
++		emergency_restart();
++		break;
++	case NONE:
++	default:
++		break;
++	}
++}
++
+ static int pqi_ctrl_init(struct pqi_ctrl_info *ctrl_info)
  {
--	return snprintf(buf, PAGE_SIZE, "%s\n", BFAD_DRIVER_VERSION);
-+	return sysfs_emit(buf, "%s\n", BFAD_DRIVER_VERSION);
+ 	int rc;
+@@ -7677,8 +7692,15 @@ static int pqi_ctrl_init(struct pqi_ctrl_info *ctrl_info)
+ 	 * commands.
+ 	 */
+ 	rc = sis_wait_for_ctrl_ready(ctrl_info);
+-	if (rc)
++	if (rc) {
++		if (reset_devices) {
++			dev_err(&ctrl_info->pci_dev->dev,
++				"kdump init failed with error %d\n", rc);
++			pqi_lockup_action = REBOOT;
++			pqi_perform_lockup_action();
++		}
+ 		return rc;
++	}
+ 
+ 	/*
+ 	 * Get the controller properties.  This allows us to determine
+@@ -8402,21 +8424,6 @@ static int pqi_ofa_ctrl_restart(struct pqi_ctrl_info *ctrl_info, unsigned int de
+ 	return pqi_ctrl_init_resume(ctrl_info);
  }
  
- static ssize_t
-@@ -871,7 +871,7 @@ bfad_im_optionrom_version_show(struct device *dev,
- 	char optrom_ver[BFA_VERSION_LEN];
- 
- 	bfa_get_adapter_optrom_ver(&bfad->bfa, optrom_ver);
--	return snprintf(buf, PAGE_SIZE, "%s\n", optrom_ver);
-+	return sysfs_emit(buf, "%s\n", optrom_ver);
- }
- 
- static ssize_t
-@@ -885,7 +885,7 @@ bfad_im_fw_version_show(struct device *dev, struct device_attribute *attr,
- 	char fw_ver[BFA_VERSION_LEN];
- 
- 	bfa_get_adapter_fw_ver(&bfad->bfa, fw_ver);
--	return snprintf(buf, PAGE_SIZE, "%s\n", fw_ver);
-+	return sysfs_emit(buf, "%s\n", fw_ver);
- }
- 
- static ssize_t
-@@ -897,7 +897,7 @@ bfad_im_num_of_ports_show(struct device *dev, struct device_attribute *attr,
- 			(struct bfad_im_port_s *) shost->hostdata[0];
- 	struct bfad_s *bfad = im_port->bfad;
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n",
-+	return sysfs_emit(buf, "%d\n",
- 			bfa_get_nports(&bfad->bfa));
- }
- 
-@@ -905,7 +905,7 @@ static ssize_t
- bfad_im_drv_name_show(struct device *dev, struct device_attribute *attr,
- 				char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%s\n", BFAD_DRIVER_NAME);
-+	return sysfs_emit(buf, "%s\n", BFAD_DRIVER_NAME);
- }
- 
- static ssize_t
-@@ -924,14 +924,14 @@ bfad_im_num_of_discovered_ports_show(struct device *dev,
- 	rports = kcalloc(nrports, sizeof(struct bfa_rport_qualifier_s),
- 			 GFP_ATOMIC);
- 	if (rports == NULL)
--		return snprintf(buf, PAGE_SIZE, "Failed\n");
-+		return sysfs_emit(buf, "Failed\n");
- 
- 	spin_lock_irqsave(&bfad->bfad_lock, flags);
- 	bfa_fcs_lport_get_rport_quals(port->fcs_port, rports, &nrports);
- 	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
- 	kfree(rports);
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", nrports);
-+	return sysfs_emit(buf, "%d\n", nrports);
- }
- 
- static          DEVICE_ATTR(serial_number, S_IRUGO,
+-static void pqi_perform_lockup_action(void)
+-{
+-	switch (pqi_lockup_action) {
+-	case PANIC:
+-		panic("FATAL: Smart Family Controller lockup detected");
+-		break;
+-	case REBOOT:
+-		emergency_restart();
+-		break;
+-	case NONE:
+-	default:
+-		break;
+-	}
+-}
+-
+ static struct pqi_raid_error_info pqi_ctrl_offline_raid_error_info = {
+ 	.data_out_result = PQI_DATA_IN_OUT_HARDWARE_ERROR,
+ 	.status = SAM_STAT_CHECK_CONDITION,
 -- 
 2.34.1
 
