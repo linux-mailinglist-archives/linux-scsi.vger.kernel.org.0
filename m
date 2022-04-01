@@ -2,269 +2,157 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1804EFA83
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 21:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA864EFA8F
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 21:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240168AbiDATqf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Apr 2022 15:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
+        id S236540AbiDATtS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Apr 2022 15:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236324AbiDATqd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 15:46:33 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0851C7E8D
-        for <linux-scsi@vger.kernel.org>; Fri,  1 Apr 2022 12:44:43 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so694767oos.9
-        for <linux-scsi@vger.kernel.org>; Fri, 01 Apr 2022 12:44:43 -0700 (PDT)
+        with ESMTP id S233551AbiDATtR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 15:49:17 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C8B1D2059
+        for <linux-scsi@vger.kernel.org>; Fri,  1 Apr 2022 12:47:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1648842446; x=1680378446;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=YHRoRSoGei/2Oda+BSlU4VFl8Dbw6eYBqdfrb0xO6qI=;
+  b=TBRvvBpFcMaes2DOK0t3hL4DO4up2205Ya2SkQWe25ia03yucN4LtYjf
+   7YMkyjc5OWZKOjcBAGkB7yMiL2knKIRP3BaChHRI6jiqq+pJixc5fi7FD
+   6rwh8YP2CkuOQqzJAem4SACUGFf2LvkUlSKk6X0kmZ4Mock2SR9vHy/3/
+   Aa2WjCDPlZcrEuA9vy3KWqT1K1Luiam+peGVr2KMAfXQxL/mPSN9pqlyH
+   MR8GdTzIsnTBI+D+Shoa+mBisQ0OZjEUaJQUjIj4Lwh8qptPvATPW3+TV
+   4NdJ3eT30an/8rXaArefC5iyv05dNeWVfuCRhttfnh0FCnCVAX9O397jw
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,228,1643644800"; 
+   d="scan'208";a="196872570"
+Received: from mail-bn8nam11lp2169.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.169])
+  by ob1.hgst.iphmx.com with ESMTP; 02 Apr 2022 03:47:24 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ixlvKNFwaX93ul1oaNDQEQiMo/y2XXehQe3SgksGbIFUOFVMBTszfZZTWUwdsENVGbwRtUcq60O0uMfMNRm79pbdU8MdMwhIMQ9hqPmptr9ZR4GSnup6YhZ3A7kwJvk28+mlu1K48PJUEkRlGtltCPJ66f2XgaYNUHxjFcOOJStgzWWmjM0vGAKl3u6H7Z++tWC9lzSVPL4Gt1N7OK9ydbp9TfzZGmjpCd6iHhTxc0MJwKgdJx2Log+Dtw/EmHlAt9pQNZOz9I1NfTGjOCSLZLpZluqTOvmxRZlG0I3wqwfPa/4AoNlD6c6+IkAnkL34E2i8jj54cM2hBjAbDwwaQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YHRoRSoGei/2Oda+BSlU4VFl8Dbw6eYBqdfrb0xO6qI=;
+ b=WyR7szGv4mgioaNDTw6UbsgHaN8tWMAM1wL+jHPDAzmPC+gpTvD3ItMDiYDQu17LyPNm7Oovmx/EVVYoi7x9YM22qclhFnKJRFlRi5Yadv8KZDglSQz6xFxO2dd+fxdM6hBk+KTnmsJybmmco7sx2qEMYTt2+yDEZ2iOCE6ubxnNrhcBDCnom2QFfqq4nR5qyCHaCgFxTMPAcspAGaAH7RvJUzuMX9liGIb6UPUWDwGXQVQZ6z6IKCLBix3TDTlfCsfkETeIvtn95BE1XegCVgh2sceqeGAztmtNntrAE3qqnJDRy+shtdVZApm4A4mgDv6LhVyJSzKaAB6vQnscgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eoDyR5wLKAdUvoHHm1+xh38XadYbaqhL+MtwYEWyQx4=;
-        b=VsEowxTR0k/JyCDGGuUfcIkJx6D9iJg0x4e775Hs5IF5VzVDHWy7FTWxg+JaXeooYe
-         emKqj242txx5xJs2nNhg0cZ1OOWohlr3NZfRYD69Go9l/uRSEF+kTPlL7u5/rw4MV57D
-         okE4+d+KK5c10M5p8KZrO9JnKaR8ZmpUcRv2MaCwl7TSXyCf7oL0evsV7LsN9sFy98Re
-         YTOGmJwzQIry8pY0PZWZcAKYdaSr8BqgbSEtq2WRIvFcHE8tRfRuJ9kRL0SOdicBBss4
-         5OOgf1fd31O5X5eh9dUyNtUGWPh5BBuHOdXLmo8mx+P6zbX6U24Sb8PSSmT6nQEiZbiv
-         9BRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eoDyR5wLKAdUvoHHm1+xh38XadYbaqhL+MtwYEWyQx4=;
-        b=i1Pvi2MdQaUVgsKLbi1wlsvqbsxYHis1WJs4uXvp7m3QY6jx7WSWuRYzxtOmzS/NL3
-         Dt7tl5wZMHmIRMP8Ot9Tsjb2FumYLEGDFmaUFRyPsbTRCTE2YHjv5fCsMZ3QElfY8WON
-         3HfreTsh3Ag3+1VcIC0/BOrFUhHzS5dlxDHwS0HJ3SDAvF6T/o0TOI/kSicRzYYt2NiU
-         ULjioh2HDWopFklwJjw0Uy1OunYfGnVIlgSare7xbV3W/pC2aLGRdNqU5YfjNbD9UtYN
-         RJJuT2fE+ZP5MV225tOdDWVfiHbcUglo4r43yYj4gEwhyKtl2IQT7khPNgSmAZpEgEtL
-         6/qQ==
-X-Gm-Message-State: AOAM533e5bEckpw2LN/0N5ud/v4oLZoyQyf7FZI/my7Z8CqZT03XrKSJ
-        ON1roBJOfkUFcBV5Wz15Ld9YZw==
-X-Google-Smtp-Source: ABdhPJzHVq2wM1+PpnlqzdvZWU1jvshpm1Veo28hKMWOVFTl5EbwrKGHejrrf26XPj5IVBEQR+BYfw==
-X-Received: by 2002:a4a:8904:0:b0:323:7039:6c68 with SMTP id f4-20020a4a8904000000b0032370396c68mr7182992ooi.8.1648842282375;
-        Fri, 01 Apr 2022 12:44:42 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id h8-20020a056830400800b005cdceb42261sm1533435ots.66.2022.04.01.12.44.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 12:44:41 -0700 (PDT)
-Date:   Fri, 1 Apr 2022 12:47:09 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YHRoRSoGei/2Oda+BSlU4VFl8Dbw6eYBqdfrb0xO6qI=;
+ b=RZa4UhqqD56PjXY8T0S9ze83IT9vOWqJqi4MK2ty2RGHSXhCAKY6BaLwdwt9KafM1wNkXCIiL455rbmxuEFRIa7dgkIOLQcrVWEuuRBYpWEtDvZY2CyF1GiNEYVZtcB8heXjaEg7gmOeNnmyYciJJzg97c5eVxJLTKTBj5YUeHc=
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
+ MWHPR04MB0414.namprd04.prod.outlook.com (2603:10b6:300:72::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5123.20; Fri, 1 Apr 2022 19:47:23 +0000
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::941d:9fe8:b1bd:ea4b]) by DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::941d:9fe8:b1bd:ea4b%5]) with mapi id 15.20.5123.026; Fri, 1 Apr 2022
+ 19:47:23 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH 4/4] ufs: set power domain performance state when
- scaling gears
-Message-ID: <YkdWvVVp4RloGjkC@ripper>
-References: <20220401145820.1003826-1-krzysztof.kozlowski@linaro.org>
- <20220401145820.1003826-5-krzysztof.kozlowski@linaro.org>
+        Daejun Park <daejun7.park@samsung.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>
+Subject: RE: [PATCH 08/29] scsi: ufs: Rename struct ufs_dev_fix into
+ ufs_dev_quirk
+Thread-Topic: [PATCH 08/29] scsi: ufs: Rename struct ufs_dev_fix into
+ ufs_dev_quirk
+Thread-Index: AQHYRU+0lqr5rm15A0C0vCBj4+K86qzbdwHg
+Date:   Fri, 1 Apr 2022 19:47:23 +0000
+Message-ID: <DM6PR04MB65754BB97F7C77FA41EEC8A8FCE09@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <20220331223424.1054715-1-bvanassche@acm.org>
+ <20220331223424.1054715-9-bvanassche@acm.org>
+In-Reply-To: <20220331223424.1054715-9-bvanassche@acm.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 88109385-8a0e-4389-e459-08da14187130
+x-ms-traffictypediagnostic: MWHPR04MB0414:EE_
+x-microsoft-antispam-prvs: <MWHPR04MB0414AB952CD65A1653C95596FCE09@MWHPR04MB0414.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GeMc2Tocfsnrf1AE2NnmKhqa66/FBdQ5bI+PU5DVYmZJNvgmwRkZOOmnn9zeb4mAGj7b+sVdIXZtvMixH33CgNPln+r1pmclj5Bzj8s5koGchB1QzGgdgj2QGzvHgJTLrCpBCC0gKrHIUqodSTCI2i9mgl67n04r13ODY6zCH4IdwqIdkfLpwHqfAzBwnSeGgiyaGJG+mEq0paxCj6qEIwCZxvmsiUedTDPe18hRva6syWC6CZYS4QxX+s4+NuwBc+wYMdclf7hJGaGymjZ2+rJjuXRmO6zNVyTqxp8weJAG7/4cd8uGEgYtzmbM1NJ6+eU6tgwxkZngXGXfEQ+Yew8YBBtk7iO2NDta4aMy0eMtmUTd7nUtSqsv/Ks0JGIZ/+QaPVMAnaKppZp/ay2XZlacNhdyaq5H0A2DHTA7h0/qxRaNIvRePQCcBtRB5/+u0QC5VheiRuwgQM5HHugAqYXpM79RDVurDpTsRGy89Fwx9azi2G1DH3A4CBwTr99vgdTkGaViIgVcurQFMhgB7OblXfm/joksBrZR+BJsLGjC9MCWIMQMS9BIJH05NCAzBLHL+WQeeMKvEfNkZTu2aoHe7Pp+KCXvkAjeuxaF7gIkEmrobBbpUx7t4JHcyTrNKGDal0XF9bwAOIrtRyetttXePWOp1ahrs0zjV/s5Jqh8cnQZVMMaQBpc6HXfymGTC9UdwEqxwBquTrkMvja5WQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(26005)(71200400001)(2906002)(186003)(7696005)(508600001)(33656002)(558084003)(9686003)(6506007)(66946007)(76116006)(38070700005)(66476007)(66556008)(64756008)(66446008)(38100700002)(8936002)(8676002)(122000001)(7416002)(5660300002)(110136005)(52536014)(54906003)(4326008)(55016003)(82960400001)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?HImCqqksLoP0RHA7eujngz3f0GYgG1jU86p6R5B8F+7PrbdqglxJiVMW/gG4?=
+ =?us-ascii?Q?Lg3A2lay8mmvZqU67JK4lHxIfk+hUfS7niOkDvDsgnZUOkz4Ha0cJp85oB/b?=
+ =?us-ascii?Q?qgyZs0gIeLJ5yQ9LSJhNMa2cOV9ScXOnXAN9CXR0t8YFaMPdVVh8yTzDI/rE?=
+ =?us-ascii?Q?YlnAk5c3a8RPEhPxPz1CQPdBsAhCSg2j+NHCUnntEQZi9oUB3AfVtOgM6Hef?=
+ =?us-ascii?Q?HTx63QFxNrJtQKYq18ZHpdXmQR3gTTAWr6HZfbblMirL7TA8DkkqB9BY8dHD?=
+ =?us-ascii?Q?e53yaC8OWDEA8Zk+EqQlclff7ai05copshgRap/fvHfPqDc5R5SVymeQDkX+?=
+ =?us-ascii?Q?DEJvmdLDacFco3G7o2zO25ryvBoLQNxyL+1+p22rs/tgC+68q/XsV+i0xiYp?=
+ =?us-ascii?Q?s+nUDhl/Jt2ptjumbk3nMWB79Wr/1TpYPPUene6WwyS7M/uIiAeJCJz6FKcd?=
+ =?us-ascii?Q?E4UjQ674ys/d8tDQ0lSyRuVkuFBI7+IBa3ME2q2zgpgHDNjgRxCy2aLRrSMx?=
+ =?us-ascii?Q?050eUe/oAl6DQLWx4pZlROqFrCjJFBB3slNM7b6mcyN7JGbPnweOqjrfT043?=
+ =?us-ascii?Q?tbUjjm9qWhlQ9N37/Ir3jnSvqs1AXCUv4Lwc3+WEYKvrpp6tY9gPcw3RDtkc?=
+ =?us-ascii?Q?AU19Z7ppQffpuSpjj4/Njmqknh8hBCujnXT7+WRYib2cHPyN7YM+YySqn4hB?=
+ =?us-ascii?Q?CUV2VnQpYThBW16tDsOrd/kTTULEfS4KAFJKxoz+9+xfpns18ltEZjEnT5Lf?=
+ =?us-ascii?Q?CbscczHvNwieS5WNOVotLEgJQTVbienx97EJ+iINbgyLcMwRsTq+njQ7ik0c?=
+ =?us-ascii?Q?LaqwRkgqRe2DnXI4Dgbnzr8C1a4hJEy21eBDX6N60kQsqesfM6zldP6lW9cW?=
+ =?us-ascii?Q?JOBts6Gvq/DNEeubpBNhoOiw2ImuYznAfGZQZcBVgXzlPNFfUFkr87F+IFHh?=
+ =?us-ascii?Q?xUSWAUqqf8a6bFEnpIV8ZnIJVuiKgXdB7GN+xA8zhyPqTFxRhA2/Xoexq4xy?=
+ =?us-ascii?Q?ynCCVjqDUJDfGvkF6GUabk2PCjTyxu66tB5PFLNWEb6dm/zB6frTaBqCq1up?=
+ =?us-ascii?Q?FkZeHmIKinDxzhtR74p2Lhc42zJTGPndzSqUXJWwsHbiA2HOySBJo4ibJdBI?=
+ =?us-ascii?Q?31aeftrF8i8dwqumscKBiVkYl8Y/qlHMojn8duallsZjIEzjmZbuWBuITmvY?=
+ =?us-ascii?Q?YtW2r9duQj2cGLISB3hVzxvMzJEbvYcE2SAE3AAXXHMJAvfpMLp9QeKw4OE2?=
+ =?us-ascii?Q?MrKW+fmRgbj56Hh263hVmO4ub8J7ZG3yxq5KJ+aSH4xDWk8uXdU7uF9/BmM8?=
+ =?us-ascii?Q?1J5VyH1W14rwtu8fj0AIYERUTapopCCYa65UUv+42QG3u5DpLo9QlGN3iTW+?=
+ =?us-ascii?Q?CGxBmk84O/xQXvPMBIPKbRMgBuVlXbEJ4xjzhn9aJpkDiybL1OQrpU/FJKTn?=
+ =?us-ascii?Q?9NKOKDJIz1w/4PajXQWMLLSn4z8jl0pk6xLaaNME2LO4jPSnZ5RJ/MS6BpO0?=
+ =?us-ascii?Q?/4vqeCV/PTKS2g/a7rrYn8bKvn5kItaIjCZB/7+Lc4RuKwPhf2LajYXj+dFd?=
+ =?us-ascii?Q?NjKnUdvxeSeDN55w7BryJgwx9SaJLG9tkEVhGv5aYWyWiHouSwn1QyuEiCT0?=
+ =?us-ascii?Q?k372yCzJ08SEcWkjJHTspb/py4vosyM32/I0QcjxrXdhtzoCmATTD/D+Pcf8?=
+ =?us-ascii?Q?wTnpl3fyvulcyQd3ezWrJKWtss3q27DVo+9BmAa4b9vmbGLSHtSRwLPAlJHc?=
+ =?us-ascii?Q?Pb8HaXivDA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401145820.1003826-5-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88109385-8a0e-4389-e459-08da14187130
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2022 19:47:23.6365
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MkA5yd5UwlIIsC2+EFcKmscaeMbBtXxjpEN+w5rX9U9iZDwQS+plSNcJsOELYN1Eg3xUYSvPdKCutvbwgyTh4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR04MB0414
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri 01 Apr 07:58 PDT 2022, Krzysztof Kozlowski wrote:
+=20
+> Since struct ufs_dev_fix contains quirk information, rename it into struc=
+t
+> ufs_dev_quirk.
+>=20
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Maybe squashed this one to 07/29?
 
-> Scaling gears requires not only scaling clocks, but also voltage levels,
-> e.g. via performance states.
-> 
-> USe the provided OPP table, to set proper OPP frequency which through
-> required-opps will trigger performance state change.
-> 
-
-This looks quite nice! Just two questions about the path looking forward.
-
-If we where to extend the opp core to allow specifying the clock rate
-for some N first clocks (similar to how e.g. regulators are handled) it
-seems possible to extend this to replace the freq-table property as
-well. Would you agree?
-
-
-The other missing required feature (in this area) from the upstream UFS
-driver is the ability of voting for interconnect bandwidth. Based on
-your path it would be trivial to specify different values for the votes
-for each speed, but looking at downstream [1] (each row represents the
-vote for the two paths in KB/s) indicates a more complex relationship
-between gear and voted bandwidth.
-
-This was the reason I suggested that perhaps we need to key the
-opp-table based on the gear? But I don't think there would be any issue
-detecting this in runtime...
-
-[1] https://github.com/MiCode/kernel_devicetree/blob/zeus-s-oss/qcom/waipio.dtsi#L1982
-
-Regards,
-Bjorn
-
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  drivers/scsi/ufs/ufshcd-pltfrm.c |  6 +++++
->  drivers/scsi/ufs/ufshcd.c        | 42 +++++++++++++++++++++++++-------
->  drivers/scsi/ufs/ufshcd.h        |  3 +++
->  3 files changed, 42 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-> index cca4b2181a81..c8f19b54be92 100644
-> --- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-> +++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-> @@ -360,6 +360,12 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
->  		goto dealloc_host;
->  	}
->  
-> +	if (devm_pm_opp_of_add_table(dev))
-> +		dev_dbg(dev, "no OPP table (%d), no performance state control\n",
-> +			err);
-> +	else
-> +		hba->use_pm_opp = true;
-> +
->  	ufshcd_init_lanes_per_dir(hba);
->  
->  	err = ufshcd_init(hba, mmio_base, irq);
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 3f9caafa91bf..84912db86da8 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -1164,11 +1164,16 @@ static int ufshcd_wait_for_doorbell_clr(struct ufs_hba *hba,
->  static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
->  {
->  	int ret = 0;
-> +	struct ufs_clk_info *clki;
-> +	unsigned long pm_opp_target_rate;
->  	struct ufs_pa_layer_attr new_pwr_info;
->  
-> +	clki = list_first_entry(&hba->clk_list_head, struct ufs_clk_info, list);
-> +
->  	if (scale_up) {
->  		memcpy(&new_pwr_info, &hba->clk_scaling.saved_pwr_info.info,
->  		       sizeof(struct ufs_pa_layer_attr));
-> +		pm_opp_target_rate = clki->max_freq;
->  	} else {
->  		memcpy(&new_pwr_info, &hba->pwr_info,
->  		       sizeof(struct ufs_pa_layer_attr));
-> @@ -1184,6 +1189,13 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
->  			new_pwr_info.gear_tx = hba->clk_scaling.min_gear;
->  			new_pwr_info.gear_rx = hba->clk_scaling.min_gear;
->  		}
-> +		pm_opp_target_rate = clki->min_freq;
-> +	}
-> +
-> +	if (hba->use_pm_opp && scale_up) {
-> +		ret = dev_pm_opp_set_rate(hba->dev, pm_opp_target_rate);
-> +		if (ret)
-> +			return ret;
->  	}
->  
->  	/* check if the power mode needs to be changed or not? */
-> @@ -1194,6 +1206,11 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
->  			hba->pwr_info.gear_tx, hba->pwr_info.gear_rx,
->  			new_pwr_info.gear_tx, new_pwr_info.gear_rx);
->  
-> +	if (ret && hba->use_pm_opp && scale_up)
-> +		dev_pm_opp_set_rate(hba->dev, hba->devfreq->previous_freq);
-> +	else if (hba->use_pm_opp && !scale_up)
-> +		ret = dev_pm_opp_set_rate(hba->dev, pm_opp_target_rate);
-> +
->  	return ret;
->  }
->  
-> @@ -1435,9 +1452,11 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  	if (list_empty(clk_list))
->  		return 0;
->  
-> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> -	dev_pm_opp_add(hba->dev, clki->min_freq, 0);
-> -	dev_pm_opp_add(hba->dev, clki->max_freq, 0);
-> +	if (!hba->use_pm_opp) {
-> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> +		dev_pm_opp_add(hba->dev, clki->min_freq, 0);
-> +		dev_pm_opp_add(hba->dev, clki->max_freq, 0);
-> +	}
->  
->  	ufshcd_vops_config_scaling_param(hba, &hba->vps->devfreq_profile,
->  					 &hba->vps->ondemand_data);
-> @@ -1449,8 +1468,10 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  		ret = PTR_ERR(devfreq);
->  		dev_err(hba->dev, "Unable to register with devfreq %d\n", ret);
->  
-> -		dev_pm_opp_remove(hba->dev, clki->min_freq);
-> -		dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +		if (!hba->use_pm_opp) {
-> +			dev_pm_opp_remove(hba->dev, clki->min_freq);
-> +			dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +		}
->  		return ret;
->  	}
->  
-> @@ -1462,7 +1483,6 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  static void ufshcd_devfreq_remove(struct ufs_hba *hba)
->  {
->  	struct list_head *clk_list = &hba->clk_list_head;
-> -	struct ufs_clk_info *clki;
->  
->  	if (!hba->devfreq)
->  		return;
-> @@ -1470,9 +1490,13 @@ static void ufshcd_devfreq_remove(struct ufs_hba *hba)
->  	devfreq_remove_device(hba->devfreq);
->  	hba->devfreq = NULL;
->  
-> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> -	dev_pm_opp_remove(hba->dev, clki->min_freq);
-> -	dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +	if (!hba->use_pm_opp) {
-> +		struct ufs_clk_info *clki;
-> +
-> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> +		dev_pm_opp_remove(hba->dev, clki->min_freq);
-> +		dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +	}
->  }
->  
->  static void __ufshcd_suspend_clkscaling(struct ufs_hba *hba)
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index 88c20f3608c2..3bd02095897f 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -776,6 +776,8 @@ struct ufs_hba_monitor {
->   * @auto_bkops_enabled: to track whether bkops is enabled in device
->   * @vreg_info: UFS device voltage regulator information
->   * @clk_list_head: UFS host controller clocks list node head
-> + * @use_pm_opp: whether OPP table is provided and scaling gears should trigger
-> + *              setting OPP
->   * @pwr_info: holds current power mode
->   * @max_pwr_info: keeps the device max valid pwm
->   * @clk_scaling_lock: used to serialize device commands and clock scaling
-> @@ -894,6 +896,7 @@ struct ufs_hba {
->  	bool auto_bkops_enabled;
->  	struct ufs_vreg_info vreg_info;
->  	struct list_head clk_list_head;
-> +	bool use_pm_opp;
->  
->  	/* Number of requests aborts */
->  	int req_abort_count;
-> -- 
-> 2.32.0
-> 
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
