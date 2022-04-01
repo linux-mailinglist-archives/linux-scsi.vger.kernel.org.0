@@ -2,93 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE0E4EF36A
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 17:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E994EF38B
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 17:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348960AbiDAO5L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Apr 2022 10:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
+        id S1349744AbiDAO5v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Apr 2022 10:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350176AbiDAOrR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 10:47:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6707D2A129A;
-        Fri,  1 Apr 2022 07:37:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F494B82519;
-        Fri,  1 Apr 2022 14:36:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 410DFC340EE;
-        Fri,  1 Apr 2022 14:36:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648823815;
-        bh=3zdgk+amzkz5hnhB65s9Sk8Gho2/tyIKqasTtRUMeCk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BctNgRVSEtxk445FEEonZjxTEkrFaTRSvsc6VmRRFUM9KAnv8RoNRyUnSfwgS7DCx
-         9y9oQ/PtuezvATvJcokVBbUkF3Q1xR8c1G9smDulNBM5QLDrYoMSXyXgZMLNrxfJDp
-         JveV+TQLD9vOI2pjf7+7He7Ua7GAvuqIxcr0LH35gjPqxDEYboXXfGQjXpY9dWER/V
-         AlrQ/5ujqGcXwFBojaiRDsj4e7h/HeavhYDJF/0AHLSnBLtYoSrckcbJ/mZYlhiflk
-         CDevnVMncdBJVCnOlUVLlMDJLTj2BJ00FTyTqHlZPyGLKsSRYpBJo3MXI5kTzovr5H
-         aH6P3VO0fEbeQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jianglei Nie <niejianglei2021@163.com>,
-        Hannes Reinecke <hare@suse.de>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 088/109] scsi: libfc: Fix use after free in fc_exch_abts_resp()
-Date:   Fri,  1 Apr 2022 10:32:35 -0400
-Message-Id: <20220401143256.1950537-88-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220401143256.1950537-1-sashal@kernel.org>
-References: <20220401143256.1950537-1-sashal@kernel.org>
+        with ESMTP id S1349319AbiDAOpq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 10:45:46 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B1A29A57E
+        for <linux-scsi@vger.kernel.org>; Fri,  1 Apr 2022 07:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648823746; x=1680359746;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JinOvZgQOLDXNfhZgNFKxhl/hzFt5+bNm8bUnrw4DNE=;
+  b=W9eVZIv+SbOJCIBr2YCkmgScKYQcHx5ylb2/wSu+wGM6ZXDuEjYvJDee
+   FPxfIbvQ+MZutQxehzebnJi+NQzqDGnBLbn3ouKPYLrYspfW6hDtJ6fB8
+   wKQobIgJ9t85IYoJzu1xli2ibKqZal6252uJMxeq/YAXB9iFk1zwDyiZC
+   IZNynni9v4FCJNa8cT8Hn3TY8xTQtkfEOkSdEvwSGXXXWeQeLZwJaw6BL
+   WbOEGPQgaqDReJnBrJma5RgEu247hzv0zXQNCHnTAifYKY9YRSeB0ujhb
+   xyyM6mFfZd1Er38fdXqBS4Fk3oFsF3rqkT+zJCVvnBMygrRk/sPH/vHIl
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10304"; a="260328560"
+X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
+   d="scan'208";a="260328560"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 07:35:13 -0700
+X-IronPort-AV: E=Sophos;i="5.90,227,1643702400"; 
+   d="scan'208";a="567534847"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.63.177])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2022 07:35:10 -0700
+Message-ID: <17c360e7-ea35-de7a-6f38-f1818826312a@intel.com>
+Date:   Fri, 1 Apr 2022 17:35:05 +0300
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH 13/29] scsi: ufs: Remove the LUN quiescing code from
+ ufshcd_wl_shutdown()
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>
+References: <20220331223424.1054715-1-bvanassche@acm.org>
+ <20220331223424.1054715-14-bvanassche@acm.org>
+ <8e1a89f6-4195-c0a9-62f3-c1dcbbd4202f@intel.com>
+ <66458c8f-157e-f050-f520-e3ec01e75d69@acm.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <66458c8f-157e-f050-f520-e3ec01e75d69@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+On 01/04/2022 16.52, Bart Van Assche wrote:
+> On 3/31/22 23:20, Adrian Hunter wrote:
+>> On 01/04/2022 1.34, Bart Van Assche wrote:
+>>> Quiescing LUNs falls outside the scope of a shutdown callback. The shutdown
+>>> callback is called from inside the reboot() system call and the reboot()
+>>> system call is called after user space has stopped accessing block devices.
+>>> Hence this patch that removes the quiescing calls from
+>>> ufshcd_wl_shutdown(). This patch makes shutdown faster since multiple
+>>> synchronize_rcu() calls are removed.
+>>
+>> AFAIK there is nothing stopping shutdown being called during intense UFS I/O.
+>> What happens then?
+> 
+> Hmm ... how could this happen? Am I perhaps misunderstanding something about the Linux shutdown sequence?
+> 
+> The UFS driver is the only driver I know that tries to stop I/O from inside its shutdown callback. I'm not aware of any other Linux kernel driver that tries to pause I/O from inside its shutdown callback.
 
-[ Upstream commit 271add11994ba1a334859069367e04d2be2ebdd4 ]
-
-fc_exch_release(ep) will decrease the ep's reference count. When the
-reference count reaches zero, it is freed. But ep is still used in the
-following code, which will lead to a use after free.
-
-Return after the fc_exch_release() call to avoid use after free.
-
-Link: https://lore.kernel.org/r/20220303015115.459778-1-niejianglei2021@163.com
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/libfc/fc_exch.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/scsi/libfc/fc_exch.c b/drivers/scsi/libfc/fc_exch.c
-index 841000445b9a..aa223db4cf53 100644
---- a/drivers/scsi/libfc/fc_exch.c
-+++ b/drivers/scsi/libfc/fc_exch.c
-@@ -1701,6 +1701,7 @@ static void fc_exch_abts_resp(struct fc_exch *ep, struct fc_frame *fp)
- 	if (cancel_delayed_work_sync(&ep->timeout_work)) {
- 		FC_EXCH_DBG(ep, "Exchange timer canceled due to ABTS response\n");
- 		fc_exch_release(ep);	/* release from pending timer hold */
-+		return;
- 	}
- 
- 	spin_lock_bh(&ep->ex_lock);
--- 
-2.34.1
+We are putting the UFS device into powerdown mode.  I am not sure what will happen if the device is processing requests at the same time.
 
