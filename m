@@ -2,55 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542C14EF3EF
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 17:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27E74EF767
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Apr 2022 18:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350282AbiDAPFL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Apr 2022 11:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S237102AbiDAP4y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Apr 2022 11:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350684AbiDAPAZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 11:00:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986A53BA57;
-        Fri,  1 Apr 2022 07:48:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D69AB8250F;
-        Fri,  1 Apr 2022 14:48:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFBD7C340F2;
-        Fri,  1 Apr 2022 14:48:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648824536;
-        bh=u9t8ec+R60dscpY1RNsPdumAnADN3VqVPPwLgkkCueM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JVPm/6sUa7GjE6c6fGNUy5s/ficJVCVq6OI06q9wZwq4MUeE/MiHKtayaq2HwVs8P
-         6eYBtewa6xDylp2Q2XLvkCo0JUGYPrG6kcErfoI/3BFqy3wAa600QQyyLFh0wAsCAS
-         Lk29yFOM+SWCfK7Aztmg83rTVkxzr5JsJn/4S/B0g6I5TxsJ2uE7xkLu+jR2b0P81w
-         zKjuL+VgfRZ8/TVGlDLgyIP5jiKwj0L5GGnbDQ72zNv3v70QTtkYGD9sdBr722H0xU
-         j8ZRYAU7hjpuvBZNuHU7MKMQkv3v2dDPVvM9NeyLwPbAarxMgajvG4cHX/oycbeGqF
-         lN0BmxUwwc3WA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jianglei Nie <niejianglei2021@163.com>,
-        Hannes Reinecke <hare@suse.de>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
+        with ESMTP id S1349948AbiDAPQk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Apr 2022 11:16:40 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCA712763
+        for <linux-scsi@vger.kernel.org>; Fri,  1 Apr 2022 07:58:26 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id i4so4657348wrb.5
+        for <linux-scsi@vger.kernel.org>; Fri, 01 Apr 2022 07:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=76a94LQu3rPoYffS/gDEHiTMZGGkCXPKcYRhl1KmpQU=;
+        b=FZ/ZDpkCU0djVj4XyAI7m5UPpa4SlwCKTGlM1Rj9RUWz//rOC9j/LUQYzDk1Gjw4Q0
+         AsbiLQA4Rdmj2qeJkpB70YhhXnTQByZqqayYpCmkxiFCeisjQVVps+92F9430mN7UlMh
+         xtPfJJba20MTPN9enY664ka9wxQ7asaIFKkPUplOdGBGcaY7/TxvF1GPxKW2fTaarqAW
+         +vsxCOnExuctwCF6g/FahFnG7PMBgdqiYknLTWy+HnDAQ6nKZp9UqbEfrJ2NNTxpzSzd
+         DEfo7hOfxl+nOIaXdn3s2mK2aVS6rlfcn07LWUAToobReKpKTZ1xwC5BZ7Qkd2ugAeZs
+         51Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=76a94LQu3rPoYffS/gDEHiTMZGGkCXPKcYRhl1KmpQU=;
+        b=qntAyEmxGxxMjRzTMM/zmrwQ5G81Q0aRTMNa5o0HBug6+E6lG9f6Lh6cny73CY0YSd
+         SwSLbhlCjWpLxn9ravBcjjLL4YJiAex9/fq3YupZHwpsAKl0vwZrKt1n565EM1HBhXY1
+         cU7xZaMlvIeQsaF1XBoSVwFTrFjh4seSLMsAMbRpGvve7EogEg4wwwLrdo4xArA39Vfq
+         OrZZVCxqbGA9t23uUYqiyH9krXNghoED0vAP9VuuFGOVdPd2bxchDFOSZ28rlvFaS0dh
+         kR8uEX93p1DstiAtOkrbkRhQ02Z0PoJoEjR5xPk8NiC2tdkMO3dDroOJtkwYzqDgIrPd
+         /SQw==
+X-Gm-Message-State: AOAM530L/MMI7fU9S70PAgZyZ2F6zygnej3k60Mw0/2pz0Pzx2N/U7Cs
+        TEV2cG1qnSTSAjFoHrZ1e/TE3g==
+X-Google-Smtp-Source: ABdhPJxi8Y6f6lrLshYHx+nvxgkTyKctJN8K3nHCREVNRv1HkEkJFWZspLSclpT12ofkeOYjbKJ8qQ==
+X-Received: by 2002:adf:fb48:0:b0:203:f986:874a with SMTP id c8-20020adffb48000000b00203f986874amr8067141wrs.614.1648825105436;
+        Fri, 01 Apr 2022 07:58:25 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id j8-20020a05600c404800b0038cc9c7670bsm8530722wmm.3.2022.04.01.07.58.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 07:58:25 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 12/16] scsi: libfc: Fix use after free in fc_exch_abts_resp()
-Date:   Fri,  1 Apr 2022 10:48:23 -0400
-Message-Id: <20220401144827.1955845-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220401144827.1955845-1-sashal@kernel.org>
-References: <20220401144827.1955845-1-sashal@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [RFC PATCH 0/4] ufs: set power domain performance state when scaling gears
+Date:   Fri,  1 Apr 2022 16:58:16 +0200
+Message-Id: <20220401145820.1003826-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,37 +82,32 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+Hi,
 
-[ Upstream commit 271add11994ba1a334859069367e04d2be2ebdd4 ]
+This is a proof-of-concept/RFC for changing the performance state
+of power rails when scaling gears.
 
-fc_exch_release(ep) will decrease the ep's reference count. When the
-reference count reaches zero, it is freed. But ep is still used in the
-following code, which will lead to a use after free.
+So far I added it as a parallel method to scaling clocks, thus
+freq-table-hz stays in DTS, however OPP table should be probably
+replace freq-table-hz entirely.
 
-Return after the fc_exch_release() call to avoid use after free.
+Best regards,
+Krzysztof
 
-Link: https://lore.kernel.org/r/20220303015115.459778-1-niejianglei2021@163.com
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/libfc/fc_exch.c | 1 +
- 1 file changed, 1 insertion(+)
+Krzysztof Kozlowski (4):
+  dt-bindings: clock: qcom,gcc-sdm845: add parent power domain
+  dt-bindings: ufs: common: allow OPP table
+  arm64: dts: qcom: sdm845: control RPMHPD performance states with UFS
+  ufs: set power domain performance state when scaling gears
 
-diff --git a/drivers/scsi/libfc/fc_exch.c b/drivers/scsi/libfc/fc_exch.c
-index 59fd6101f188..177e494b5e47 100644
---- a/drivers/scsi/libfc/fc_exch.c
-+++ b/drivers/scsi/libfc/fc_exch.c
-@@ -1663,6 +1663,7 @@ static void fc_exch_abts_resp(struct fc_exch *ep, struct fc_frame *fp)
- 	if (cancel_delayed_work_sync(&ep->timeout_work)) {
- 		FC_EXCH_DBG(ep, "Exchange timer canceled due to ABTS response\n");
- 		fc_exch_release(ep);	/* release from pending timer hold */
-+		return;
- 	}
- 
- 	spin_lock_bh(&ep->ex_lock);
+ .../bindings/clock/qcom,gcc-sdm845.yaml       |  3 ++
+ .../devicetree/bindings/ufs/ufs-common.yaml   |  4 ++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          | 17 +++++++-
+ drivers/scsi/ufs/ufshcd-pltfrm.c              |  6 +++
+ drivers/scsi/ufs/ufshcd.c                     | 42 +++++++++++++++----
+ drivers/scsi/ufs/ufshcd.h                     |  3 ++
+ 6 files changed, 65 insertions(+), 10 deletions(-)
+
 -- 
-2.34.1
+2.32.0
 
