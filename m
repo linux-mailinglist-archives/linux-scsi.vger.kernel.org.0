@@ -2,70 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167BD4F0704
-	for <lists+linux-scsi@lfdr.de>; Sun,  3 Apr 2022 05:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311C64F071A
+	for <lists+linux-scsi@lfdr.de>; Sun,  3 Apr 2022 05:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbiDCDIZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 2 Apr 2022 23:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
+        id S234664AbiDCDW0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 2 Apr 2022 23:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbiDCDIT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 2 Apr 2022 23:08:19 -0400
-X-Greylist: delayed 360 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Apr 2022 20:06:23 PDT
-Received: from mta-out-01.alice.it (mta-out-01.alice.it [217.169.118.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A76B38BFA
-        for <linux-scsi@vger.kernel.org>; Sat,  2 Apr 2022 20:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alice.it; s=20211207; t=1648955183; 
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        h=Reply-To:From:To:Date:Message-ID:MIME-Version;
-        b=fjiOcxGU4TNL/gZHGes7PeYk3ikwa/0Ae1miA+BVGGwEli9j42oN930bH5R0ZM95vguleOwTSaw+lRMhJu+2vS7KK4c4Zk2AQK46o7sbO0WRvurA/LzPDPJBRoxWxPhDCMAnyHTlpCU8w+hvmN1n0HbdXVWGqWx1uXsLDo951iM0Z3T9RjC1ONFShGgz5iu6zwxeOnppBRP3TZTcdGAJu6PhrKs+c1iXx2hFMMtykQhLi0aPwSPCXqhGrKtZcmM957+0xcxyOSxM9j+zn2hX0SJzkawusY5We07VnEKQJTz/VFQqjdFwzeSBQvLMvqj3rJOTqErs4z8RH6X9P4n3+g==
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrudeiledgiedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvffgnffgvefqoffkvfetnffktedpqfgfvfenuceurghilhhouhhtmecufedtudenucfgmhhpthihuchsuhgsjhgvtghtucdluddtmdengfhmphhthicusghougihucdlhedtmdenucfjughrpehrhffvfffkggestddtfedttddttdenucfhrhhomhephggvuchhrghvvgcurghnuchofhhfvghruchtohcuihhnvhgvshhtuchinhcuhihouhhrucgtohhunhhtrhihuchunhguvghrucgruchjohhinhhtuchvvghnthhurhgvuchprghrthhnvghrshhhihhpuchplhgvrghsvgcurhgvphhlhicufhhorhcumhhorhgvucguvghtrghilhhsuceofhgpphgvnhhnrgesrghlihgtvgdrihhtqeenucggtffrrghtthgvrhhnpeehjeetgefhleetiedtkeelfffgjeeugeegleekueffgfegtdekkeeifedvvdffteenucfkphepudejiedrvddvjedrvdegvddrudeltdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegrlhhitggvrdhithdpihhnvghtpedujeeirddvvdejrddvgedvrdduledtpdhmrghilhhfrhhomhepfhgpphgvnhhnrgesrghlihgtvgdrihhtpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqshgtshhisehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-RazorGate-Vade-Verdict: clean 60
-X-RazorGate-Vade-Classification: clean
-Received: from alice.it (176.227.242.190) by mta-out-01.alice.it (5.8.807.04) (authenticated as f_penna@alice.it)
-        id 6244775000E19E39 for linux-scsi@vger.kernel.org; Sun, 3 Apr 2022 05:00:22 +0200
-Reply-To: dougfield20@inbox.lv
-From:   We have an offer to invest in your country under a
-         joint venture partnership please reply for more
-         details <f_penna@alice.it>
-To:     linux-scsi@vger.kernel.org
-Date:   02 Apr 2022 20:00:20 -0700
-Message-ID: <20220402200020.6E3676C3BAE7A7D7@alice.it>
+        with ESMTP id S231280AbiDCDWZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 2 Apr 2022 23:22:25 -0400
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139412FFF7
+        for <linux-scsi@vger.kernel.org>; Sat,  2 Apr 2022 20:20:32 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso5946872pjb.5
+        for <linux-scsi@vger.kernel.org>; Sat, 02 Apr 2022 20:20:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bicyjnBwWkMmNYDlVhy7vDd58IG0QIQb8tpHSmKXQck=;
+        b=zangEzhVbg+UDzXyp5a+q8dwkiGM0cFXhlNf4ebiWw0ZWLwxnil51DmR2NcK+RhRmA
+         BGjXS/6TxtFX/cGV0scL4eQb9blwHgmiz6dVR2ClExxbH5pcQrfDJYFJleD7nfEzNY0K
+         +BmEhf1wbjrwCby3EjIhM6zaWmPeiFTKG7DpHIPZMfgQpTnM8MnarzaFA9h/fC/gPM4j
+         1h2weCkbiuoWMKgWUkY6z/AFPYUMwBT6OK/Moww+GhaHmUWDRq0MItYYn6hHbj+/ycwN
+         VlSckqqzWGYQAwgdhw7kZZTUNPiF7mhdGO7LI0suCJz5MNHYN+AZGFqgk2VYOFe7jndK
+         tZyQ==
+X-Gm-Message-State: AOAM531v106wDvP7ZAT25lpKNGr0400XuBG3jDBnk6rmLRC56EQUvnvM
+        x6DVwlKf84/RybPxzIaAV1o=
+X-Google-Smtp-Source: ABdhPJw3RRHA4BUC550x2PNcj5x4tJHm6xskkDfY77Gx4mpbxArOq6jjSNQ3ubQpuVFRUbw5o6ZBjw==
+X-Received: by 2002:a17:902:ef47:b0:156:646b:58e7 with SMTP id e7-20020a170902ef4700b00156646b58e7mr11386949plx.57.1648956031144;
+        Sat, 02 Apr 2022 20:20:31 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id j22-20020a637a56000000b003984be1f515sm6389012pgn.69.2022.04.02.20.20.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 20:20:30 -0700 (PDT)
+Message-ID: <291d191c-6d39-35b7-1a1f-b7022d97fe25@acm.org>
+Date:   Sat, 2 Apr 2022 20:20:28 -0700
 MIME-Version: 1.0
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,BODY_EMPTY,
-        DKIM_INVALID,DKIM_SIGNED,EMPTY_MESSAGE,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,MISSING_SUBJECT,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
-        *       low trust
-        *      [217.169.118.7 listed in list.dnswl.org]
-        *  0.0 RCVD_IN_MSPIKE_L3 RBL: Low reputation (-3)
-        *      [217.169.118.7 listed in bl.mailspike.net]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5142]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [f_penna[at]alice.it]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dougfield20[at]inbox.lv]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  2.3 EMPTY_MESSAGE Message appears to have no textual parts and no
-        *      Subject: text
-        *  1.8 MISSING_SUBJECT Missing Subject: header
-        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
-        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blacklisted
-        *  0.0 BODY_EMPTY No body text in message
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 02/29] scsi: ufs: Remove superfluous boolean conversions
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-scsi@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>
+References: <20220331223424.1054715-1-bvanassche@acm.org>
+ <20220331223424.1054715-3-bvanassche@acm.org> <YkY88lHdTiiaBcB7@ripper>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <YkY88lHdTiiaBcB7@ripper>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 3/31/22 16:44, Bjorn Andersson wrote:
+> On Thu 31 Mar 15:33 PDT 2022, Bart Van Assche wrote:
+>> diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+>> index 0d2e950d0865..808b677f6083 100644
+>> --- a/drivers/scsi/ufs/ufs-qcom.c
+>> +++ b/drivers/scsi/ufs/ufs-qcom.c
+>> @@ -299,8 +299,7 @@ static int ufs_qcom_power_up_sequence(struct ufs_hba *hba)
+>>   	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+>>   	struct phy *phy = host->generic_phy;
+>>   	int ret = 0;
+>> -	bool is_rate_B = (UFS_QCOM_LIMIT_HS_RATE == PA_HS_MODE_B)
+>> -							? true : false;
+>> +	bool is_rate_B = UFS_QCOM_LIMIT_HS_RATE == PA_HS_MODE_B;
+> 
+> UFS_QCOM_LIMIT_HS_RATE is defined as PA_HS_MODE_B. I wonder if this is
+> expected to change at some point, or if we could clean this up further
+> (in a future change).
+
+If someone would like to work on this I can help with reviewing the 
+resulting patches.
+
+Thanks,
+
+Bart.
