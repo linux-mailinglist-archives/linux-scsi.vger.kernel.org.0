@@ -2,120 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE21A4F1B4F
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Apr 2022 23:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A11534F1B32
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Apr 2022 23:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379478AbiDDVTq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Apr 2022 17:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52326 "EHLO
+        id S1379511AbiDDVTu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Apr 2022 17:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379840AbiDDSQY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Apr 2022 14:16:24 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F99D3EA95
-        for <linux-scsi@vger.kernel.org>; Mon,  4 Apr 2022 11:14:27 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id m12so2322793ljp.8
-        for <linux-scsi@vger.kernel.org>; Mon, 04 Apr 2022 11:14:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jA9O88Cl7Cj3DV9YqV3pxHKzHcpN0w127uH0DJrDu6A=;
-        b=cSyT5s8jfuk/1JR9/fI/Gqs9xQ74yToQSFVeEVZE16CzTs4y1cTOu7dQy0iEotcwpp
-         QXie2PHfvs7leMvJi+X5kQ9GgPivCzeYCJMWlKDtfiv2fOJIgHccPOImyRc3tPvaXTWK
-         I8gGR4josMrjK3iFj9rmn3/SieCQXjuOAEUL34WHsC4u4g2N1HZD+eDal9zVcALYiNGD
-         z97IvYhjqplonvMwwlZxugT2/f2yTjszKbrnzmJxMKd/56uQxqNMRguv/Obf8GOX+7v/
-         dUVZIvh+sRDUDSFPb/VkLSB7RsQkgdLAVyXMGApGh89rPO6CofiKvMSSLJXP4dWDEbfD
-         A3bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jA9O88Cl7Cj3DV9YqV3pxHKzHcpN0w127uH0DJrDu6A=;
-        b=b/Yoq0L22TwvW/P8dOSl3pPMrWZB4pE35zPP90kgLUYooFdwSrgAaC0OV6+KfdtgYl
-         lmCP6xqqDEFSh3i1D9diH8xepgS9SdEr2Hcj+EGBhwsQ61I2WVLwSB4rtdauuNJoTlfV
-         sNvY8znW5n1jApCdepuyGow2x62c7YQ60uwDQJ996GZOXJL5bZRu9hCEG3zvNMFmhpUX
-         JSsjXk/oemUxfYAmqtu+oYJZVx/2Iqqu4eeWr3b1QJ9fWxC8EO4STPra8nDxCMfB2Uwg
-         KBGqF14ONiiAE6pBn0kXgbaRCgipbNrV/JFRYWjWfJgj47kttqg7jA8KjQBkOO/tkESh
-         x5YA==
-X-Gm-Message-State: AOAM531GsJXtdqpM0DyUAI00HdsS1yh2bHmFIKoAXhZeoVr3P0KNH8db
-        FPRW/Wg//mAnezQme0jNp0UqmT6YpI4vyeHjEg0ZUQ==
-X-Google-Smtp-Source: ABdhPJy6X4VfItY0Exvmm9zT3KLeOkR4u/yRf3ZAF3nadtPeZPD3a5V5gvnOVvP+rwxXW2K1ofGissW4GbSk2e/aaR8=
-X-Received: by 2002:a2e:611a:0:b0:249:83e5:9f9b with SMTP id
- v26-20020a2e611a000000b0024983e59f9bmr546393ljb.165.1649096065187; Mon, 04
- Apr 2022 11:14:25 -0700 (PDT)
+        with ESMTP id S1380030AbiDDSlV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Apr 2022 14:41:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959D85F99;
+        Mon,  4 Apr 2022 11:39:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42A3FB818D8;
+        Mon,  4 Apr 2022 18:39:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B0EC340F3;
+        Mon,  4 Apr 2022 18:39:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649097561;
+        bh=uoCUt9kRip3xmuGeLGDqglk9GEPAPCSc46dVFwVFFvs=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=pWjK8T/SiEbCNPFdLabaKBhPZF8HEsxpYiFOPoj11AhzUzWc0mFSTNoTlb44mzjIt
+         F3UZs1LSUjPo/vOdjOWkHWODjT6vCZV4ZDdN74DxYDMI5v/o8GBHU2fLfKRNJyKNv7
+         gtUzy0Kf5ojn5swpmgVLnbCnNNgCbQO7w0i9dnoCj/kzOzhXBF6WNWKxFi9motkxV1
+         mAZPq5pTW07Pv3EOFvaB4dD/VUmByyweb+IizmotBRaNxe2OECt5SeCdq2GbRkzw8s
+         AQKJTPhJozQ/0jP8eneP9qLPjEAktInngDlNV+gUc4cd2uHWA+D6yPbPP1WfCZEgV2
+         5G+GoDEs7Lu2A==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        linux-rdma@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-xfs@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-s390@vger.kernel.org
+Subject: Re: Build regressions/improvements in v5.18-rc1
+References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
+        <20220404074734.1092959-1-geert@linux-m68k.org>
+        <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg>
+Date:   Mon, 04 Apr 2022 21:39:15 +0300
+In-Reply-To: <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg> (Geert
+        Uytterhoeven's message of "Mon, 4 Apr 2022 10:16:08 +0200 (CEST)")
+Message-ID: <874k38u20c.fsf@tynnyri.adurom.net>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220318003927.81471-1-colin.i.king@gmail.com>
-In-Reply-To: <20220318003927.81471-1-colin.i.king@gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 4 Apr 2022 11:14:13 -0700
-Message-ID: <CAKwvOd=jyrdkMHPR3ZNQHattOxXcS1SseAHvrXWQC2H6tDB-Xw@mail.gmail.com>
-Subject: Re: [PATCH] scsi: message: fusion: mptbase: remove redundant variable dmp
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 5:39 PM Colin Ian King <colin.i.king@gmail.com> wrote:
->
-> Variable dmp is being assigned a value that is never read, the
-> variable is redundant and can be removed.
->
-> Cleans up clang scan build warning:
-> drivers/message/fusion/mptbase.c:6667:39: warning: Although
-> the value stored to 'dmp' is used in the enclosing expression,
-> the value is never actually read from 'dmp' [deadcode.DeadStores]
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Geert Uytterhoeven <geert@linux-m68k.org> writes:
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>> /kisskb/src/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c:
+>> error: case label does not reduce to an integer constant: => 3798:2,
+>> 3809:2
+>
+> arm64-gcc5.4/arm64-allmodconfig
+> powerpc-gcc5/powerpc-allmodconfig
+> powerpc-gcc5/ppc64_book3e_allmodconfig
 
-> ---
->  drivers/message/fusion/mptbase.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
-> index e90adfa57950..9b3ba2df71c7 100644
-> --- a/drivers/message/fusion/mptbase.c
-> +++ b/drivers/message/fusion/mptbase.c
-> @@ -6658,13 +6658,13 @@ static int mpt_summary_proc_show(struct seq_file *m, void *v)
->  static int mpt_version_proc_show(struct seq_file *m, void *v)
->  {
->         u8       cb_idx;
-> -       int      scsi, fc, sas, lan, ctl, targ, dmp;
-> +       int      scsi, fc, sas, lan, ctl, targ;
->         char    *drvname;
->
->         seq_printf(m, "%s-%s\n", "mptlinux", MPT_LINUX_VERSION_COMMON);
->         seq_printf(m, "  Fusion MPT base driver\n");
->
-> -       scsi = fc = sas = lan = ctl = targ = dmp = 0;
-> +       scsi = fc = sas = lan = ctl = targ = 0;
->         for (cb_idx = MPT_MAX_PROTOCOL_DRIVERS-1; cb_idx; cb_idx--) {
->                 drvname = NULL;
->                 if (MptCallbacks[cb_idx]) {
-> --
-> 2.35.1
->
->
+After v5.17 there were two commits to brcmfmac/sdio.c:
 
+$ git log --oneline v5.17.. drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+ed26edf7bfd9 brcmfmac: Add BCM43454/6 support
+6d766d8cb505 brcmfmac: pcie: Declare missing firmware files in pcie.c
+
+I can't see how either of them could cause this warning. Could something
+else cause this or am I missing something?
 
 -- 
-Thanks,
-~Nick Desaulniers
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
