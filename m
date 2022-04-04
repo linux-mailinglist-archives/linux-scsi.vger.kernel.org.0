@@ -2,275 +2,193 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB004F17BE
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Apr 2022 16:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B5D4F17F5
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Apr 2022 17:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378299AbiDDPA5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Apr 2022 11:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
+        id S1378221AbiDDPKY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Apr 2022 11:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378296AbiDDPAz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Apr 2022 11:00:55 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35112BF6F;
-        Mon,  4 Apr 2022 07:58:59 -0700 (PDT)
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXDQM5WYWz67ms2;
-        Mon,  4 Apr 2022 22:57:15 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Apr 2022 16:58:57 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Apr 2022 15:58:54 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <damien.lemoal@opensource.wdc.com>, <hch@lst.de>
-CC:     <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 2/2] libata: Inline ata_qc_new_init() in ata_scsi_qc_new()
-Date:   Mon, 4 Apr 2022 22:53:10 +0800
-Message-ID: <1649083990-207133-3-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1649083990-207133-1-git-send-email-john.garry@huawei.com>
-References: <1649083990-207133-1-git-send-email-john.garry@huawei.com>
+        with ESMTP id S1357038AbiDDPKW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Apr 2022 11:10:22 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA361A6
+        for <linux-scsi@vger.kernel.org>; Mon,  4 Apr 2022 08:08:26 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id gt4so3176266pjb.4
+        for <linux-scsi@vger.kernel.org>; Mon, 04 Apr 2022 08:08:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0gwspQdPDB+l/Evv+qDfnRBGPMoJjcgtCyWMziDMDbw=;
+        b=hVVppLVEIKOd82GVdqWMG3js+ldLAHtSIobmi7A4LWoaiYiKBgKy/aU64j2EDSZxl6
+         LOlXrKH6CBZ9bRii+9GlASC1fvlOJU2fxVj2K8QJxANsVTze6MpIxYYJ1jr02NxfHUMC
+         PWYF+Yd3xGlRJYVadHe7nYMhqxssWBOjZ6vnI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0gwspQdPDB+l/Evv+qDfnRBGPMoJjcgtCyWMziDMDbw=;
+        b=eHBBYnWDOZWMxAwjKja/2jsTAMBXM5KOZuXajZyJ+2QpZt7KLI7Uotw5dLPO1iIx5O
+         /Oi5+EQiB/mqN1hcUMzBc28i4h0NnzYgb18QOTYCYegbjoeuWwKS7zh/2RgNpKjOaG8R
+         VQhtOPisVqL+UevbrEFwwgPsYVwrPqcpbarDco/BfYFS1XWlniGtlbzn3prWUOlcUJV/
+         tqlOF2MPEG0W/DSxpgb5DKVIF3zwy6RHPD5r9ToO26g5q9noGAsCrDzT5ya64HYlUnzB
+         G+UobBMgt59LOtFSTzrYeTTQIZcWd+v8CcvX88s2gGUkTADb+FvOwKGQKEMNziC4DAAX
+         IDyg==
+X-Gm-Message-State: AOAM531ozdGCxodRNika1mvp4eRzrCD6rdQpxD5HvRXzQMzKSsyj1wdy
+        rUGl28bchDL4lQokzi+HiUOq2e5SmNmD20aZq/oeiQ==
+X-Google-Smtp-Source: ABdhPJynDbSf3VDPHza7P3Xsb8p4OJ8VYsFc93Ry4MaVrsubBeezlT6LhHNhBKFAed/YdG7xRaeBbpx7asYuSFbH8O8=
+X-Received: by 2002:a17:902:868d:b0:154:4d09:5827 with SMTP id
+ g13-20020a170902868d00b001544d095827mr312313plo.21.1649084905921; Mon, 04 Apr
+ 2022 08:08:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220329180616.22547-1-sumit.saxena@broadcom.com>
+ <20220329180616.22547-3-sumit.saxena@broadcom.com> <8a3dfb77-9c42-871a-0d16-1ddf84516c8e@acm.org>
+In-Reply-To: <8a3dfb77-9c42-871a-0d16-1ddf84516c8e@acm.org>
+From:   Sumit Saxena <sumit.saxena@broadcom.com>
+Date:   Mon, 4 Apr 2022 20:37:59 +0530
+Message-ID: <CAL2rwxoT311ndWB-imycpC9_hkn8FExO0c0FCw6Q=wkYBnaJbg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] mpi3mr: add support for driver commands
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Linux SCSI List <linux-scsi@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Prayas Patel <prayas.patel@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000000b198005dbd58043"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+--0000000000000b198005dbd58043
+Content-Type: text/plain; charset="UTF-8"
 
-It is a bit pointless to have ata_qc_new_init() in libata-core.c since it
-pokes scsi internals, so inline it in ata_scsi_qc_new() (in libata-scsi.c).
+On Mon, Apr 4, 2022 at 7:55 PM Bart Van Assche <bvanassche@acm.org> wrote:
+>
+> On 3/29/22 11:06, Sumit Saxena wrote:
+> > +/**
+> > + * struct mpi3mr_nvme_pt_sge -  Structure to store SGEs for NVMe
+> > + * Encapsulated commands.
+> > + *
+> > + * @base_addr: Physical address
+> > + * @length: SGE length
+> > + * @rsvd: Reserved
+> > + * @rsvd1: Reserved
+> > + * @sgl_type: sgl type
+> > + */
+> > +struct mpi3mr_nvme_pt_sge {
+> > +     u64 base_addr;
+> > +     u32 length;
+> > +     u16 rsvd;
+> > +     u8 rsvd1;
+> > +     u8 sgl_type;
+> > +};
+>
+> Does the above data structure force user space software to pass a
+> physical address to the kernel? A kernel driver should not do this
+> unless there is a very good reason to do so. Passing a physical address
+> from user space to the kernel requires freezing the virtual-to-physical
+> mapping. Some user space developers erroneously use mlock() for this
+> purpose. Is there any other way than the VFIO_IOMMU_MAP_DMA ioctl to
+> prevent that the kernel modifies the virtual-to-physical mapping?
+This structure is not for user space consumption. Mistakenly, it's moved
+to this header. Will fix it in the next revision.
 
-<Christoph, please provide signed-off-by>
-[jpg, Take Christoph's change from list and form into a patch]
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- Documentation/driver-api/libata.rst | 11 -------
- drivers/ata/libata-core.c           | 44 +---------------------------
- drivers/ata/libata-sata.c           |  8 -----
- drivers/ata/libata-scsi.c           | 45 ++++++++++++++++++++++-------
- drivers/ata/libata.h                | 12 --------
- 5 files changed, 35 insertions(+), 85 deletions(-)
+Thanks,
+Sumit
+>
+> Thanks,
+>
+> Bart.
 
-diff --git a/Documentation/driver-api/libata.rst b/Documentation/driver-api/libata.rst
-index d477e296bda5..311af516a3fd 100644
---- a/Documentation/driver-api/libata.rst
-+++ b/Documentation/driver-api/libata.rst
-@@ -424,12 +424,6 @@ How commands are issued
- -----------------------
- 
- Internal commands
--    First, qc is allocated and initialized using :c:func:`ata_qc_new_init`.
--    Although :c:func:`ata_qc_new_init` doesn't implement any wait or retry
--    mechanism when qc is not available, internal commands are currently
--    issued only during initialization and error recovery, so no other
--    command is active and allocation is guaranteed to succeed.
--
-     Once allocated qc's taskfile is initialized for the command to be
-     executed. qc currently has two mechanisms to notify completion. One
-     is via ``qc->complete_fn()`` callback and the other is completion
-@@ -447,11 +441,6 @@ SCSI commands
-     translated. No qc is involved in processing a simulated scmd. The
-     result is computed right away and the scmd is completed.
- 
--    For a translated scmd, :c:func:`ata_qc_new_init` is invoked to allocate a
--    qc and the scmd is translated into the qc. SCSI midlayer's
--    completion notification function pointer is stored into
--    ``qc->scsidone``.
--
-     ``qc->complete_fn()`` callback is used for completion notification. ATA
-     commands use :c:func:`ata_scsi_qc_complete` while ATAPI commands use
-     :c:func:`atapi_qc_complete`. Both functions end up calling ``qc->scsidone``
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index 1067b2e2be28..5e7d6ccad5da 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -4563,43 +4563,6 @@ void swap_buf_le16(u16 *buf, unsigned int buf_words)
- #endif /* __BIG_ENDIAN */
- }
- 
--/**
-- *	ata_qc_new_init - Request an available ATA command, and initialize it
-- *	@dev: Device from whom we request an available command structure
-- *	@scmd: scmd for which to get qc
-- *
-- *	LOCKING:
-- *	None.
-- */
--
--struct ata_queued_cmd *ata_qc_new_init(struct ata_device *dev, struct scsi_cmnd *scmd)
--{
--	int tag = scsi_cmd_to_rq(scmd)->tag;
--	struct ata_port *ap = dev->link->ap;
--	struct ata_queued_cmd *qc;
--
--	/* no command while frozen */
--	if (unlikely(ap->pflags & ATA_PFLAG_FROZEN))
--		return NULL;
--
--	/* libsas case */
--	if (ap->flags & ATA_FLAG_SAS_HOST) {
--		tag = ata_sas_get_tag(scmd);
--		if (tag < 0)
--			return NULL;
--	}
--
--	qc = __ata_qc_from_tag(ap, tag);
--	qc->tag = qc->hw_tag = tag;
--	qc->scsicmd = NULL;
--	qc->ap = ap;
--	qc->dev = dev;
--
--	ata_qc_reinit(qc);
--
--	return qc;
--}
--
- /**
-  *	ata_qc_free - free unused ata_queued_cmd
-  *	@qc: Command to complete
-@@ -4612,13 +4575,8 @@ struct ata_queued_cmd *ata_qc_new_init(struct ata_device *dev, struct scsi_cmnd
-  */
- void ata_qc_free(struct ata_queued_cmd *qc)
- {
--	unsigned int tag;
--
--	WARN_ON_ONCE(qc == NULL); /* ata_qc_from_tag _might_ return NULL */
--
- 	qc->flags = 0;
--	tag = qc->tag;
--	if (ata_tag_valid(tag))
-+	if (ata_tag_valid(qc->tag))
- 		qc->tag = ATA_TAG_POISON;
- }
- 
-diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
-index c3e9fd7d920c..7a5fe41aa5ae 100644
---- a/drivers/ata/libata-sata.c
-+++ b/drivers/ata/libata-sata.c
-@@ -1268,14 +1268,6 @@ int ata_sas_queuecmd(struct scsi_cmnd *cmd, struct ata_port *ap)
- }
- EXPORT_SYMBOL_GPL(ata_sas_queuecmd);
- 
--int ata_sas_get_tag(struct scsi_cmnd *scmd)
--{
--	if (WARN_ON_ONCE(scmd->budget_token >= ATA_MAX_QUEUE))
--		return -1;
--
--	return scmd->budget_token;
--}
--
- /**
-  *	sata_async_notification - SATA async notification handler
-  *	@ap: ATA port where async notification is received
-diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index 61dd7f7c7743..50ef132ec48c 100644
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -638,24 +638,47 @@ EXPORT_SYMBOL_GPL(ata_scsi_ioctl);
- static struct ata_queued_cmd *ata_scsi_qc_new(struct ata_device *dev,
- 					      struct scsi_cmnd *cmd)
- {
-+	struct ata_port *ap = dev->link->ap;
- 	struct ata_queued_cmd *qc;
-+	int tag;
- 
--	qc = ata_qc_new_init(dev, cmd);
--	if (qc) {
--		qc->scsicmd = cmd;
--		qc->scsidone = scsi_done;
--
--		qc->sg = scsi_sglist(cmd);
--		qc->n_elem = scsi_sg_count(cmd);
-+	if (unlikely(ap->pflags & ATA_PFLAG_FROZEN))
-+		goto fail;
- 
--		if (scsi_cmd_to_rq(cmd)->rq_flags & RQF_QUIET)
--			qc->flags |= ATA_QCFLAG_QUIET;
-+	if (ap->flags & ATA_FLAG_SAS_HOST) {
-+		/*
-+		 * SAS hosts may queue > ATA_MAX_QUEUE commands so use
-+		 * unique per-device budget token as a tag.
-+		 */
-+		if (WARN_ON_ONCE(cmd->budget_token >= ATA_MAX_QUEUE))
-+			goto fail;
-+		tag = cmd->budget_token;
- 	} else {
--		cmd->result = (DID_OK << 16) | SAM_STAT_TASK_SET_FULL;
--		scsi_done(cmd);
-+		tag = scsi_cmd_to_rq(cmd)->tag;
- 	}
- 
-+	qc = __ata_qc_from_tag(ap, tag);
-+	qc->tag = qc->hw_tag = tag;
-+	qc->scsicmd = NULL;
-+	qc->ap = ap;
-+	qc->dev = dev;
-+
-+	ata_qc_reinit(qc);
-+
-+	qc->scsicmd = cmd;
-+	qc->scsidone = scsi_done;
-+
-+	qc->sg = scsi_sglist(cmd);
-+	qc->n_elem = scsi_sg_count(cmd);
-+
-+	if (scsi_cmd_to_rq(cmd)->rq_flags & RQF_QUIET)
-+		qc->flags |= ATA_QCFLAG_QUIET;
- 	return qc;
-+
-+fail:
-+	cmd->result = (DID_OK << 16) | SAM_STAT_TASK_SET_FULL;
-+	scsi_done(cmd);
-+	return NULL;
- }
- 
- static void ata_qc_set_pc_nbytes(struct ata_queued_cmd *qc)
-diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
-index 92e52090165b..926a7f41303d 100644
---- a/drivers/ata/libata.h
-+++ b/drivers/ata/libata.h
-@@ -44,7 +44,6 @@ static inline void ata_force_cbl(struct ata_port *ap) { }
- #endif
- extern u64 ata_tf_to_lba(const struct ata_taskfile *tf);
- extern u64 ata_tf_to_lba48(const struct ata_taskfile *tf);
--extern struct ata_queued_cmd *ata_qc_new_init(struct ata_device *dev, struct scsi_cmnd *scmd);
- extern int ata_build_rw_tf(struct ata_taskfile *tf, struct ata_device *dev,
- 			   u64 block, u32 n_block, unsigned int tf_flags,
- 			   unsigned int tag, int class);
-@@ -91,17 +90,6 @@ extern unsigned int ata_read_log_page(struct ata_device *dev, u8 log,
- 
- #define to_ata_port(d) container_of(d, struct ata_port, tdev)
- 
--/* libata-sata.c */
--#ifdef CONFIG_SATA_HOST
--int ata_sas_get_tag(struct scsi_cmnd *scmd);
--#else
--static inline int ata_sas_get_tag(struct scsi_cmnd *scmd)
--{
--	return -EOPNOTSUPP;
--}
--static inline void ata_sas_free_tag(unsigned int tag, struct ata_port *ap) { }
--#endif
--
- /* libata-acpi.c */
- #ifdef CONFIG_ATA_ACPI
- extern unsigned int ata_acpi_gtf_filter;
--- 
-2.26.2
+--0000000000000b198005dbd58043
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
+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
+GmgWG68YahkDuVSTTt2beZdyMeDwq/KifJFo18EkhcL3e7rmDAh8SniUI/0o3HX6hrgdmUI1wSdz
+uIVL/m6Ok9mIl2U5kvguitOSC0bVaQPfNzlj+7PCKBECAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZc3VtaXQuc2F4ZW5hQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUNz+JSIXEXl2uQ4Utcnx7FnFi
+hhowDQYJKoZIhvcNAQELBQADggEBAL0HLbxgPSW4BFbbIMN3A/ifBg4Lzaph8ARJOnZpGQivo9jG
+kQOd95knQi9Lm95JlBAJZCqXXj7QS+dnE71tsFeHWcHNNxHrTSwn4Xi5EqaRjLC6g4IEPyZHWDrD
+zzJidgfwQvfZONkf4IXnnrIEFle+26/gPs2kOjCeLMo6XGkNC4HNla1ol1htToQaNN8974pCqwIC
+rTXcWqD03VkqSOo+oPP/NAgFAZVfpeuBoK2Xv8zYlrF49Q4hxgFpWhaiDsZUSdWIS7vg1ak1n+6L
+3aHRY/lheSkOn/uJWXsqsTDp613hVtOTEDsHSQK32yTGr8jN/oRQgJASuUqQFdD4VzAxggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwoQTpBmhDxj9JoN1ow
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOfuhO5A6uPriylTSgAQoNQbeUbZmQla
+zpQ2+tjdY5WpMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDQw
+NDE1MDgyNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQBSIwicCWq3fnKp69j+wBgoaJio81G1F6+zhDcW8yAMvjp5Seoq
+TtZSfyQR/qoK3bPPXhLEdV7P6NgTlcn6bIzJindzFPprJkq7Dx5yeRwv8WXgPxGraSVRHT0DvzbL
+mT8z5rsEZBStKKV9Aeu0rvXdFlApkhe4O9aChGDhFU/bqqWAccq1ko1dkybDIJjegvYPV8KOkPJu
+NqG+Pr1ftZ2DVTQGcGKcihhZUVMIxH4BES5816QrCVYA2J1AClAZGkeVPucJkzKcvyWxU31cgnz1
+AXSNhL87WPRZ3WEGLLkQ4/ujlqBWM+iRMmBsK84no3CIlXTWDgsmbfglpT9YE1eG
+--0000000000000b198005dbd58043--
