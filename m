@@ -2,98 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FCF4F16E8
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Apr 2022 16:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99444F17BF
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Apr 2022 16:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377120AbiDDO1l (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Apr 2022 10:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
+        id S1378329AbiDDPA6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Apr 2022 11:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377146AbiDDO1k (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Apr 2022 10:27:40 -0400
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3173E5DA
-        for <linux-scsi@vger.kernel.org>; Mon,  4 Apr 2022 07:25:45 -0700 (PDT)
-Received: by mail-pg1-f179.google.com with SMTP id q19so8472056pgm.6
-        for <linux-scsi@vger.kernel.org>; Mon, 04 Apr 2022 07:25:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+Wtq/Z3aPZ2OAgttgisz65dz/8jstRPltCnkdQPfUyY=;
-        b=HS4/r83VQiII4t5JiuUogB2tmQADWOhIzgMyUcccji9QU/96C8Z1yrK3LS45JarPtM
-         ouu3hP57SRhQVpAss3g9L0ZCGevMw6kiZMihL8cvEsXLABDIIN2rodJrsA6Iwyu/pskE
-         mpm54eJ6bWVNeV4+A1wbh2xULzaxjMAj0+C+tcSvOmHW7YS13pQ45vD3h2IvolpRNncr
-         bY5Bdvzcpf8e/zDvWJtRzIVVE9hFmc7unGJYSU6tQFWqdVPgPMhf/RdUBDo3zPXG8lM0
-         bcm8Me6o7TBjgAEcXJqE+xWqnIwROr8qOIzKKLFRW9y+GJXxfe4W6G0Juyk7WidLKsNF
-         UMFw==
-X-Gm-Message-State: AOAM530TLVoMGDK3qyR6Km7RRP1wVJ3cS2q8IpHW9qvPclWmfV5c/1/t
-        P4RELGBJzt34hasviK3eEA4=
-X-Google-Smtp-Source: ABdhPJym3sU/JsSsQv1CuQ4h4litOJczWLrbTZ+1Y2CS00ejOla33Lo8zeBIC4eezQzjgwmhy9n9jA==
-X-Received: by 2002:a65:4503:0:b0:382:aad5:ad7d with SMTP id n3-20020a654503000000b00382aad5ad7dmr125445pgq.488.1649082344340;
-        Mon, 04 Apr 2022 07:25:44 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id p3-20020a056a000b4300b004faee36ea56sm12731360pfo.155.2022.04.04.07.25.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 07:25:43 -0700 (PDT)
-Message-ID: <8a3dfb77-9c42-871a-0d16-1ddf84516c8e@acm.org>
-Date:   Mon, 4 Apr 2022 07:25:41 -0700
+        with ESMTP id S1378318AbiDDPAy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Apr 2022 11:00:54 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C62DEE2;
+        Mon,  4 Apr 2022 07:58:54 -0700 (PDT)
+Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXDQH0Xx4z67ms2;
+        Mon,  4 Apr 2022 22:57:11 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 4 Apr 2022 16:58:52 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 4 Apr 2022 15:58:50 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <damien.lemoal@opensource.wdc.com>, <hch@lst.de>
+CC:     <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH v2 0/2] libata: A tagging improvement and related code reorg
+Date:   Mon, 4 Apr 2022 22:53:08 +0800
+Message-ID: <1649083990-207133-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/7] mpi3mr: add support for driver commands
-Content-Language: en-US
-To:     Sumit Saxena <sumit.saxena@broadcom.com>,
-        linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, sathya.prakash@broadcom.com,
-        kashyap.desai@broadcom.com, chandrakanth.patil@broadcom.com,
-        sreekanth.reddy@broadcom.com, prayas.patel@broadcom.com,
-        Christoph Hellwig <hch@lst.de>
-References: <20220329180616.22547-1-sumit.saxena@broadcom.com>
- <20220329180616.22547-3-sumit.saxena@broadcom.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220329180616.22547-3-sumit.saxena@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 3/29/22 11:06, Sumit Saxena wrote:
-> +/**
-> + * struct mpi3mr_nvme_pt_sge -  Structure to store SGEs for NVMe
-> + * Encapsulated commands.
-> + *
-> + * @base_addr: Physical address
-> + * @length: SGE length
-> + * @rsvd: Reserved
-> + * @rsvd1: Reserved
-> + * @sgl_type: sgl type
-> + */
-> +struct mpi3mr_nvme_pt_sge {
-> +	u64 base_addr;
-> +	u32 length;
-> +	u16 rsvd;
-> +	u8 rsvd1;
-> +	u8 sgl_type;
-> +};
+This is a follow-up to the series at [0] to fix SCSI device tagging and
+use the per-device token as the libata qc tag.
 
-Does the above data structure force user space software to pass a 
-physical address to the kernel? A kernel driver should not do this 
-unless there is a very good reason to do so. Passing a physical address 
-from user space to the kernel requires freezing the virtual-to-physical 
-mapping. Some user space developers erroneously use mlock() for this 
-purpose. Is there any other way than the VFIO_IOMMU_MAP_DMA ioctl to 
-prevent that the kernel modifies the virtual-to-physical mapping?
+I added the changes Christoph shared on the list to move
+the functionality from ata_qc_new_init() into libata-scsi.c
 
-Thanks,
+Please do not apply on a kernel which does not include
+"scsi: core: Fix sbitmap depth in scsi_realloc_sdev_budget_map()"
 
-Bart.
+v5.18-rc2 should be the release to include that patch.
+
+[0] https://lore.kernel.org/linux-ide/1647340746-17600-1-git-send-email-john.garry@huawei.com/
+
+Christoph Hellwig (1):
+  libata: Inline ata_qc_new_init() in ata_scsi_qc_new()
+
+John Garry (1):
+  libata: Use scsi cmnd budget token for qc tag for SAS host
+
+ Documentation/driver-api/libata.rst | 11 -------
+ drivers/ata/libata-core.c           | 48 +----------------------------
+ drivers/ata/libata-sata.c           | 25 ---------------
+ drivers/ata/libata-scsi.c           | 45 ++++++++++++++++++++-------
+ drivers/ata/libata.h                | 13 --------
+ include/linux/libata.h              |  1 -
+ 6 files changed, 35 insertions(+), 108 deletions(-)
+
+-- 
+2.26.2
+
