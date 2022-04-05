@@ -2,107 +2,125 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC694F35E2
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Apr 2022 15:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC7D4F35D0
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Apr 2022 15:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240915AbiDEKz1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Apr 2022 06:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
+        id S235143AbiDEKzR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Apr 2022 06:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345030AbiDEJmz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Apr 2022 05:42:55 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B320ABF95F
-        for <linux-scsi@vger.kernel.org>; Tue,  5 Apr 2022 02:28:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649150903; x=1680686903;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VD6j8Nu3A7lXR9Uk4FkaKFGK5kcgYsNGW5r9o3Wwkqs=;
-  b=EYVcgFktxXKZ6pSijtWBF+vPWIxcF7o4hXrdJILiNpJvi1UZWzabHrTJ
-   2W2W1ViO87zrF8qw3LYZ6iahjOJ3BtlBl3iAXKBDTOTqhaK8ALkAPc2pS
-   V+JO4dXnCCW0F0qFV4kyZRuy1X6UAdls8HHVUW9Kznq+FNN5EeZVHr4fK
-   mp3OLVQznER2yo+h/MQWEMmcsQFSFMHXnVSDNhsi2uYS1a+fCAioeYEag
-   vEuHvDrYrHsId2ANgPULFpy64eSzE8RJRNP/y8TkDjojItQpzgRq8PgDS
-   wXw/ozy20zlFRGjTKK38t+pSEa3zTzrUSJmBZSMG8fmo/1CsiiFNOiBoa
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,236,1643698800"; 
-   d="scan'208";a="159337353"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Apr 2022 02:28:23 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 5 Apr 2022 02:28:22 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Tue, 5 Apr 2022 02:28:22 -0700
-From:   Ajish Koshy <Ajish.Koshy@microchip.com>
-To:     <linux-scsi@vger.kernel.org>
-CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
-        <Viswas.G@microchip.com>, <damien.lemoal@opensource.wdc.com>,
-        <john.garry@huawei.com>, Jinpu Wang <jinpu.wang@cloud.ionos.com>
-Subject: [PATCH v2 2/2] scsi: pm80xx: enable upper inbound, outbound queues
-Date:   Tue, 5 Apr 2022 05:28:33 -0400
-Message-ID: <20220405092833.83335-3-Ajish.Koshy@microchip.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220405092833.83335-1-Ajish.Koshy@microchip.com>
-References: <20220405092833.83335-1-Ajish.Koshy@microchip.com>
+        with ESMTP id S1348193AbiDEJrM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Apr 2022 05:47:12 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D108EA778
+        for <linux-scsi@vger.kernel.org>; Tue,  5 Apr 2022 02:33:26 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id qh7so15405040ejb.11
+        for <linux-scsi@vger.kernel.org>; Tue, 05 Apr 2022 02:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=3DOTWF+v7LKn4npCmHoiswZmBh92qJ6RD1XtNsMouFs=;
+        b=TwbRgC8xhEgVLicRhUYJGvH3qVh8nfglMkeLYFUlz83Irf8mLjU5vY8vhpjI8DcFwe
+         2dl8MASt+2fCbcos0VGehTdOsw7oXVdQVKz/O8UNV+qZGw5axMkkIhudGfDDGzabfnws
+         Gsf+THg++vzkdM1OanLhwm/BW4EMmbEvJQlVfVfddwfH1A9zyU+qRda3KGELOlVj+k8e
+         TYujERd7Z7p10xqZ1W7qNTPacJHEc8kF76o0ts45oUtOaTFIl9CXnyWSX1yIFR7fMwzb
+         rt3mQrDKqVxKPzs+dy9rd0lEAdLriWr2ZVQ1VLaJOz6Im1XHmBn5mtw8sMlfxqW4UcBf
+         OWrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=3DOTWF+v7LKn4npCmHoiswZmBh92qJ6RD1XtNsMouFs=;
+        b=PbdNqaJ82yyaHIrHdBBqAP6PAoIcqDW4oWvRgbPt3wPFhqn3pxEhhVShS2nqmWhquX
+         NCygU9b/7bcKw608R0AIsx7Jr+eD8ObujRiprKoR5YDjZSMbGs0TkdFDSx0fUO/udVwU
+         9CpwtiBA/2n11LOaHa2elkaQWZy04cH3k7Lg9RNtGC/RMtu0FRw11mwRZA09z+oXehTX
+         fKa4ycZbGqhBMYF8xfeVNgCFAZ23zjzfgqU7ABI5JHDbOyVYc9gQH5gSHn6jzfJLsa5m
+         sLhc6GCUSqqX7G6CFgQrHLIpogtdUP5099nFQxNpRsPYYLqcgPhSwSEOAGxUT2E0lv+D
+         w8fQ==
+X-Gm-Message-State: AOAM532mTyfQsV2csj7pmieK7vpN9IgnitMCLtPivDdHuw+Ho6RsUCjs
+        apxTl4WafCcPCv26EeyYtBQ=
+X-Google-Smtp-Source: ABdhPJzolNvDKMa49b2Tiy5fBDrtAD+7x5c8KcaxxP6HP2R3x3gu9aHG+jzwpKPHfJNhPCDRfdXC+Q==
+X-Received: by 2002:a17:906:c0d6:b0:6ca:457e:f1b7 with SMTP id bn22-20020a170906c0d600b006ca457ef1b7mr2506558ejb.399.1649151204815;
+        Tue, 05 Apr 2022 02:33:24 -0700 (PDT)
+Received: from p200300c58701849e9101f49281d8361b.dip0.t-ipconnect.de (p200300c58701849e9101f49281d8361b.dip0.t-ipconnect.de. [2003:c5:8701:849e:9101:f492:81d8:361b])
+        by smtp.googlemail.com with ESMTPSA id j26-20020a1709064b5a00b006e808a933f4sm647421ejv.123.2022.04.05.02.33.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 02:33:24 -0700 (PDT)
+Message-ID: <2eea6ffcd83233a93a8a7ebfc24a58516cd6e79a.camel@gmail.com>
+Subject: Re: [PATCH 00/29] UFS patches for kernel v5.19
+From:   Bean Huo <huobean@gmail.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        quic_cang@quicinc.com
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Date:   Tue, 05 Apr 2022 11:33:23 +0200
+In-Reply-To: <5073d69e-20c4-0fce-a045-47c52e2d3424@acm.org>
+References: <20220331223424.1054715-1-bvanassche@acm.org>
+         <60dc8a92c7eda8f190a8a6123bc927e8403bdbb1.camel@gmail.com>
+         <eee8d304-aacd-9116-9e2d-92e2e3682b5b@acm.org>
+         <DM6PR04MB6575DBC3CFAD57F5AA19DCF8FCE29@DM6PR04MB6575.namprd04.prod.outlook.com>
+         <9bff98fa4a4a8a61a5c46830ef9515a7dfddcb89.camel@gmail.com>
+         <ebf3cc31-9cd1-3615-b033-06bfc7d25b9a@acm.org>
+         <94902f1e26a18ff7774dc429502bef7d54f23b5d.camel@gmail.com>
+         <5073d69e-20c4-0fce-a045-47c52e2d3424@acm.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Executing driver on servers with more than 32 CPUs were faced with command
-timeouts. This is because we were not geting completions for commands
-submitted on IQ32 - IQ63.
+Hi Bart,
 
-Set E64Q bit to enable upper inbound and outbound queues 32 to 63 in the
-MPI main configuration table.
+On Mon, 2022-04-04 at 14:13 -0700, Bart Van Assche wrote:
+> On 4/4/22 01:12, Bean Huo wrote:
+> > Very interested in this design. I'm assuming you're still going to
+> > continue parsing SCSI commands. Can we also shorten the UFS command
+> > path?
+> >=20
+> > Meaning we convert block requests directly to UFS UPIU commands?
+> > instead of like the current one: block request -> CDB -> UPIU.
+>=20
+> Hi Bean,
+>=20
+> Is there any data that shows that the benefits of shortening the UFS=20
+> command path outweigh the disadvantages?=C2=A0
 
-Added 500ms delay after successful MPI initialization as mentioned in
-controller datasheet.
 
-Signed-off-by: Ajish Koshy <Ajish.Koshy@microchip.com>
-Signed-off-by: Viswas G <Viswas.G@microchip.com>
-Fixes: 05c6c029a44d ("scsi: pm80xx: Increase number of supported queues")
----
- drivers/scsi/pm8001/pm80xx_hwi.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+For performance improvement, according to my test, if we abandon SCSI
+command parsing, we can get 3%~5% performance improvement. Maybe this
+is little or no improvement? Yes, reliability issues outweigh this
+performance improvement. Error handling and UFS probes should also be
+rebuilt. But most importantly, it makes UFS more scalable. How do you
+think about adding an immature development driver to drever/staging
+first? name it driver/staging/lightweight-ufs?
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 3e6413e21bfe..c41c24a4b906 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -766,6 +766,10 @@ static void init_default_table_values(struct pm8001_hba_info *pm8001_ha)
- 	pm8001_ha->main_cfg_tbl.pm80xx_tbl.pcs_event_log_severity	= 0x01;
- 	pm8001_ha->main_cfg_tbl.pm80xx_tbl.fatal_err_interrupt		= 0x01;
- 
-+	/* Enable higher IQs and OQs, 32 to 63, bit 16*/
-+	if (pm8001_ha->max_q_num > 32)
-+		pm8001_ha->main_cfg_tbl.pm80xx_tbl.fatal_err_interrupt |=
-+							1 << 16;
- 	/* Disable end to end CRC checking */
- 	pm8001_ha->main_cfg_tbl.pm80xx_tbl.crc_core_dump = (0x1 << 16);
- 
-@@ -1027,6 +1031,8 @@ static int mpi_init_check(struct pm8001_hba_info *pm8001_ha)
- 	if (0x0000 != gst_len_mpistate)
- 		return -EBUSY;
- 
-+	msleep(500);
-+
- 	return 0;
- }
- 
--- 
-2.31.1
+
+> For other SCSI LLDs the cost of=20
+> atomic operations and memory barriers in the LLD outweighs the cost
+> of=20
+> the operations in the SCSI core and sd drivers. I'm not sure whether=20
+> that's also the case for the UFS driver.
+>=20
+
+I didn't take this into account, maybe it's not a big deal, since the
+UFS driver might use its own lock/serialization lock.
+
+Kind regards,
+Bean.
+
+> Thanks,
+>=20
+> Bart.
 
