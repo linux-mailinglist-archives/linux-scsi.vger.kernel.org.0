@@ -2,138 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AAC4F4FCB
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Apr 2022 04:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 571C04F5000
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Apr 2022 04:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241394AbiDFBBy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Apr 2022 21:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
+        id S1358173AbiDFBIG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Apr 2022 21:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447682AbiDEPq6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Apr 2022 11:46:58 -0400
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D086158BBF
-        for <linux-scsi@vger.kernel.org>; Tue,  5 Apr 2022 07:22:44 -0700 (PDT)
-Received: by mail-pj1-f49.google.com with SMTP id bx5so11991390pjb.3
-        for <linux-scsi@vger.kernel.org>; Tue, 05 Apr 2022 07:22:44 -0700 (PDT)
+        with ESMTP id S1452390AbiDEPyv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Apr 2022 11:54:51 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EF150463;
+        Tue,  5 Apr 2022 07:54:34 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id h16so8188245wmd.0;
+        Tue, 05 Apr 2022 07:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=ZgloS23OHbbWJmMWCBBuxDQhTcLsXy3usgzVwJSOKgk=;
+        b=IZ5zhCimPIiAsz0DRrHxkz6PkwkjPuFniWAHfKJziaaJrfFbpYjZuJGaMF8O541WDU
+         fa7nFrPAgZOkHDqMa5NV4j64ioctuzTP5KY4v+CVHa9ie5efzsdPBr4rWv6xDankrbod
+         mNPxtwYZpOlyz/xP0BvwAB8foKwqOEH/JvEw/XYo1Y46hh/IwSZEZxPO+gn3CEKqAmch
+         Y3txROz/BrhKCeVLZkVoGtq43FsJyivRvYQFmbFijwCqmXKBxVzn1Q2j/Ln4F9kuHVAp
+         jR0ukyxQE8zRFZwsQDtJ6m+7pxEnjySQoxVjt53r9IfHzTHd7mS+46i0C96usXJzF8aV
+         lBgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to;
-        bh=BTcTVepOiUTD2wL9RJTfNH1XZZ48aFwIiqkmOvKNMMM=;
-        b=02Lg6Z924yC6PVg0nMl+l0q1E3+I6iS91LofN9Xv4x16JhbEW3k85Czu/hD9XOwWXL
-         RlKilAep/rNwtHp+CcJUwvEk0bSNRByTljJqnTXCy3B6ByYxZNSNEPJYa2vJpFkHJyNd
-         xaVLBVVLbKf438D9mDLqN9NOEiOn7IdtiwcG/HnNWYglf71KyClrExUJaPo9dpoWB4zk
-         2g7zYOMVOggwkZODGKv0A3qQg+rqT6p0IG4SZiCPtnJSfeGPvt59ChAFewQcyqJnQlj3
-         ySfa+CmC8yZn3mWdjTeCHQU/1mHx/BfQvigYzqmSNZ2Q2E7Pt4QapVSkAu9uaqqLgDwh
-         2RwQ==
-X-Gm-Message-State: AOAM531k6hsWiFDcseYWoW7Ch0zcgmZssQoQrSqrYqMw0Mh10U9925I/
-        QcBuNjNVZzEJNvtwizb51yw=
-X-Google-Smtp-Source: ABdhPJyimRXsrKDRVoBkMayNa0tXFlEASzSxGMISwVgeoG+Fwx5jpn/lLxn5dSu2QRB/vLVQp5iOXA==
-X-Received: by 2002:a17:90b:3ecb:b0:1c7:5634:df6f with SMTP id rm11-20020a17090b3ecb00b001c75634df6fmr4465429pjb.184.1649168564161;
-        Tue, 05 Apr 2022 07:22:44 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id z6-20020a17090a66c600b001ca7dbe1bc2sm2707328pjl.46.2022.04.05.07.22.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 07:22:43 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------jaqWYRVZg7FDbRrM0ywyvK4G"
-Message-ID: <ca7dff5d-ad32-fafe-d522-f455be04e2ef@acm.org>
-Date:   Tue, 5 Apr 2022 07:22:41 -0700
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=ZgloS23OHbbWJmMWCBBuxDQhTcLsXy3usgzVwJSOKgk=;
+        b=mD9DXTXxunSCKZZ2wRhKgxM4yk5bnee8yjTpmJ3zJXfFEHgRGOTYB9vDzeH+nW9z5V
+         wa/OMZm5rf7xCcmx62k7il0kAq5dCA7eA5SfXiCNKF6ub8PNtl5Lz2q6CCe5Si00wajj
+         qJiY/jGFIPsplv+l/hsYnsxTsyK3v25T6bNkCeNj3uCzjpvVQVqR6pw8RSmL4A4PEuUW
+         PzVRiYICMSe85ImDLt00FUvJgu6MtX/srW+TTC4hNziqgPefpczP+4MZKwtFuKCTRhu6
+         QP6KZ+D+9e1magMrvMC6f77MvBH33GxGxyds1mAyPbxwNJie6qgMVGP3VeUQv21wE6Bd
+         lNPQ==
+X-Gm-Message-State: AOAM53176nZ0gGA3m/lwXGmITVLTcx+NMvp5+9bdaRBQkYasEMJVL7x5
+        eNBy74t7VyPBO3YN0n6FOGw=
+X-Google-Smtp-Source: ABdhPJzuEe7OsLIY9AfwcG+I3E3XAqgVLzqCt8GNajGHJBJi7D2qTPcOGnYa5vyjo04qwdEoRMmBPA==
+X-Received: by 2002:a7b:c341:0:b0:37b:c619:c9f4 with SMTP id l1-20020a7bc341000000b0037bc619c9f4mr3536266wmj.38.1649170473374;
+        Tue, 05 Apr 2022 07:54:33 -0700 (PDT)
+Received: from [192.168.3.2] (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
+        by smtp.googlemail.com with ESMTPSA id i14-20020a0560001ace00b00203da1fa749sm17662993wry.72.2022.04.05.07.54.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 07:54:32 -0700 (PDT)
+Message-ID: <8b3ce88f65fd11523a4d2daab3c617f7089eb1ce.camel@gmail.com>
+Subject: Re: [PATCH  v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
+From:   Bean Huo <huobean@gmail.com>
+To:     Alex =?ISO-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+        linux-kernel@vger.kernel.org
+Cc:     maxim.uvarov@linaro.org, joakim.bech@linaro.org,
+        ulf.hansson@linaro.org, ilias.apalodimas@linaro.org,
+        arnd@linaro.org, ruchika.gupta@linaro.org, tomas.winkler@intel.com,
+        yang.huang@intel.com, bing.zhu@intel.com,
+        Matti.Moell@opensynergy.com, hmo@opensynergy.com,
+        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org
+Date:   Tue, 05 Apr 2022 16:54:32 +0200
+In-Reply-To: <20220405093759.1126835-1-alex.bennee@linaro.org>
+References: <20220405093759.1126835-1-alex.bennee@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 00/29] UFS patches for kernel v5.19
-Content-Language: en-US
-To:     Bean Huo <huobean@gmail.com>, Avri Altman <Avri.Altman@wdc.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        quic_cang@quicinc.com
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-References: <20220331223424.1054715-1-bvanassche@acm.org>
- <60dc8a92c7eda8f190a8a6123bc927e8403bdbb1.camel@gmail.com>
- <eee8d304-aacd-9116-9e2d-92e2e3682b5b@acm.org>
- <DM6PR04MB6575DBC3CFAD57F5AA19DCF8FCE29@DM6PR04MB6575.namprd04.prod.outlook.com>
- <9bff98fa4a4a8a61a5c46830ef9515a7dfddcb89.camel@gmail.com>
- <ebf3cc31-9cd1-3615-b033-06bfc7d25b9a@acm.org>
- <94902f1e26a18ff7774dc429502bef7d54f23b5d.camel@gmail.com>
- <5073d69e-20c4-0fce-a045-47c52e2d3424@acm.org>
- <2eea6ffcd83233a93a8a7ebfc24a58516cd6e79a.camel@gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <2eea6ffcd83233a93a8a7ebfc24a58516cd6e79a.camel@gmail.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------jaqWYRVZg7FDbRrM0ywyvK4G
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi Alex,
 
-On 4/5/22 02:33, Bean Huo wrote:
-> For performance improvement, according to my test, if we abandon SCSI
-> command parsing, we can get 3%~5% performance improvement. Maybe this
-> is little or no improvement? Yes, reliability issues outweigh this
-> performance improvement. Error handling and UFS probes should also be
-> rebuilt. But most importantly, it makes UFS more scalable. How do you
-> think about adding an immature development driver to drever/staging
-> first? name it driver/staging/lightweight-ufs?
+Thanks for this unified RPMB interface, I wanted to verify this on our
+UFS, it seems you didn't add the UFS access interface in this version=20
+from your userspace tools, right?
 
-I do not understand the interest in bypassing the SCSI core. The 
-scsi_debug driver supports more than a million IOPS on a single CPU core 
-(see also the attached script). I think this shows that the SCSI core is 
-not a performance bottleneck. Additionally, I think it will take a while 
-until UFS devices scale from the current performance level (100K IOPS?) 
-to more than a million IOPS.
 
-Please note that bypassing the SCSI core would make it much harder than 
-necessary to introduce zoned storage support and also that this would 
-lead to plenty of duplicated code.
-
->> For other SCSI LLDs the cost of
->> atomic operations and memory barriers in the LLD outweighs the cost
->> of
->> the operations in the SCSI core and sd drivers. I'm not sure whether
->> that's also the case for the UFS driver.
-> 
-> I didn't take this into account, maybe it's not a big deal, since the
-> UFS driver might use its own lock/serialization lock.
-
-Every single atomic operation in the hot path has a measurable 
-performance impact. That includes locking operations.
-
-Thanks,
-
-Bart.
---------------jaqWYRVZg7FDbRrM0ywyvK4G
-Content-Type: text/plain; charset=UTF-8; name="scsi_debug-iops"
-Content-Disposition: attachment; filename="scsi_debug-iops"
-Content-Transfer-Encoding: base64
-
-IyEvYmluL2Jhc2gKCnNldCAtZQoKaW9kZXB0aD0kezE6LTF9CnJ1bnRpbWU9MzAKYmxvY2tz
-aXplPTUxMgpudW1jcHVzPSQobnByb2MpCgptb2Rwcm9iZSAtciBzY3NpX2RlYnVnCm1vZHBy
-b2JlIHNjc2lfZGVidWcgbWF4X3F1ZXVlPTEyOCBzdWJtaXRfcXVldWVzPSIkbnVtY3B1cyIg
-ZGVsYXk9MCBmYWtlX3J3PTEgJiYKICAgIHVkZXZhZG0gc2V0dGxlCgpERVZJQ0U9JChmaW5k
-IC9zeXMvYnVzL3BzZXVkby9kcml2ZXJzL3Njc2lfZGVidWcvYWRhcHRlciovaG9zdCovdGFy
-Z2V0Ki8qL2Jsb2NrLyAtbWF4ZGVwdGggMSAtdHlwZSBkIHwgZ3JlcCAtdiAnYmxvY2svJCcg
-fCBoZWFkIC0xIHwgeGFyZ3MgYmFzZW5hbWUpIHx8IGV4aXQgJD8KWyAtbiAiJERFVklDRSIg
-XSB8fCBleGl0ICQ/CgphcmdzPSgpCmlmIFsgIiRpb2RlcHRoIiA9IDEgXTsgdGhlbgoJYXJn
-cys9KC0taW9lbmdpbmU9cHN5bmMpCmVsc2UKCWFyZ3MrPSgtLWlvZW5naW5lPWlvX3VyaW5n
-IC0taW9kZXB0aF9iYXRjaD0kKChpb2RlcHRoLzIpKSAtLWhpcHJpPTEpCmZpCmFyZ3MrPSgK
-ICAgIC0tYnM9IiR7YmxvY2tzaXplfSIKICAgIC0tZGlyZWN0PTEKICAgIC0tZmlsZW5hbWU9
-L2Rldi8iJERFVklDRSIKICAgIC0tZ3JvdXBfcmVwb3J0aW5nPTEKICAgIC0tZ3RvZF9yZWR1
-Y2U9MQogICAgLS1pbnZhbGlkYXRlPTEKICAgIC0taW9kZXB0aD0iJGlvZGVwdGgiCiAgICAt
-LWlvc2NoZWR1bGVyPW5vbmUKICAgIC0tbmFtZT1zY3NpX2RlYnVnCiAgICAtLW51bWpvYnM9
-MQogICAgLS1ydW50aW1lPSIkcnVudGltZSIKICAgIC0tcnc9cmVhZAogICAgLS10aHJlYWQK
-ICAgIC0tdGltZV9iYXNlZD0xCikKc2V0IC14CmlmIG51bWFjdGwgLW0gMCAtTiAwIGVjaG8g
-PiYvZGV2L251bGw7IHRoZW4KCW51bWFjdGwgLW0gMCAtTiAwIC0tIGZpbyAiJHthcmdzW0Bd
-fSIKZWxzZQoJZmlvICIke2FyZ3NbQF19IgpmaQo=
-
---------------jaqWYRVZg7FDbRrM0ywyvK4G--
+Kind regards,
+Bean
