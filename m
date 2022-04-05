@@ -2,50 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1CC4F5010
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Apr 2022 04:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCED4F500C
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Apr 2022 04:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452532AbiDFBJX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Apr 2022 21:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
+        id S1449377AbiDFBJD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Apr 2022 21:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455446AbiDEQAC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Apr 2022 12:00:02 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2D837A0D;
-        Tue,  5 Apr 2022 08:15:33 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S1456849AbiDEQCZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Apr 2022 12:02:25 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E814915D3AA;
+        Tue,  5 Apr 2022 08:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1649172298;
+        bh=ySu+WdbLhJy7RbHw1+FFBWYzYY6iBwBvKC8kGG4udH8=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=Qn7HJhLc1YnnJeD1uH+YD8JszCg3jcUfDll4fIeNiJETSxOeOCF7GwBes4YO9K6Ck
+         FYTGOyt8SIUswtDPGr4Jv7xDnWcVtExfP2ixKeP+CpFNeks7V33teQzcKPqkGY30rj
+         Wlasc6tpicOp/LYhi/VFAnoF35SVwEzgbIjx/CAY=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0C7C612878FE;
+        Tue,  5 Apr 2022 11:24:58 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GiwgNUSrnlUz; Tue,  5 Apr 2022 11:24:57 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1649172297;
+        bh=ySu+WdbLhJy7RbHw1+FFBWYzYY6iBwBvKC8kGG4udH8=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=AE5O0qlUuh4PfAJRZm3mQXR58Jv3mXkovnqsVGx8PD23lYOV7eLg1L/JOBhVddg+8
+         Yhkji33jf1xqka1UL8d+M+WeQBN2goZetlmA7wK9/u8sZFW2DgRPRp9/RXhTOYweNV
+         lAlOAFpVSaEGWclbnyGVT8I1C5DzkNd6CrG4csxQ=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::3774])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A17AB1EC0502;
-        Tue,  5 Apr 2022 17:15:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649171728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eiC67LvkcRptZ4vBTwfJLFk18efdkgw7h4pbP4PEKXY=;
-        b=hEUAFCh5v61AOluFcbWJkVxBkYfuIDLTWZWTaNKwVuVmu8wc+ckaad77AK2YlaNTKYaKYr
-        PFWhwwmQ9gQeF8jRu3SmcKDmXrgnwAArO/a7S61IZhA6h2tlUYrDO9pU2nhCnoYP+GqDpb
-        1jWA7ewvTWjdwVvE2eQxHNCiexjNsnM=
-From:   Borislav Petkov <bp@alien8.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 01/11] scsi: aacraid: Fix undefined behavior due to shift overflowing the constant
-Date:   Tue,  5 Apr 2022 17:15:07 +0200
-Message-Id: <20220405151517.29753-2-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405151517.29753-1-bp@alien8.de>
-References: <20220405151517.29753-1-bp@alien8.de>
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5B9CB12878FB;
+        Tue,  5 Apr 2022 11:24:57 -0400 (EDT)
+Message-ID: <175195a9b7840e883677c6f351ee186089ab2b6d.camel@HansenPartnership.com>
+Subject: Re: RIP: 0010:ahd_init.cold+0x96/0x98 [aic79xx] - 5.17.0
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Bruno Goncalves <bgoncalv@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-scsi@vger.kernel.org
+Cc:     CKI Project <cki-project@redhat.com>
+Date:   Tue, 05 Apr 2022 11:24:56 -0400
+In-Reply-To: <CA+QYu4qTtXgVegAd7S5bjJQye+kmtPaFau4dg3YPU2tH9faBjg@mail.gmail.com>
+References: <CA+QYu4qTtXgVegAd7S5bjJQye+kmtPaFau4dg3YPU2tH9faBjg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,40 +62,16 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On Tue, 2022-04-05 at 09:14 +0200, Bruno Goncalves wrote:
+> Hello,
+> 
+> We've been hitting the panic below when testing mainline kernel. More
+> logs can be found on [1] and CKI tracker [2].
 
-Fix
+When was the last time this driver passed the test?  I'm asking because
+nothing significant has changed in this driver for a while and the
+trivial changes all seem to check out.
 
-  drivers/scsi/aacraid/commsup.c: In function ‘aac_handle_sa_aif’:
-  drivers/scsi/aacraid/commsup.c:1983:2: error: case label does not reduce to an integer constant
-    case SA_AIF_BPCFG_CHANGE:
-    ^~~~
+James
 
-See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
-details as to why it triggers with older gccs only.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
----
- drivers/scsi/aacraid/aacraid.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
-index f849e7c9d428..5e115e8b2ba4 100644
---- a/drivers/scsi/aacraid/aacraid.h
-+++ b/drivers/scsi/aacraid/aacraid.h
-@@ -121,7 +121,7 @@ enum {
- #define SA_AIF_PDEV_CHANGE		(1<<4)
- #define SA_AIF_LDEV_CHANGE		(1<<5)
- #define SA_AIF_BPSTAT_CHANGE		(1<<30)
--#define SA_AIF_BPCFG_CHANGE		(1<<31)
-+#define SA_AIF_BPCFG_CHANGE		(1U<<31)
- 
- #define HBA_MAX_SG_EMBEDDED		28
- #define HBA_MAX_SG_SEPARATE		90
--- 
-2.35.1
 
