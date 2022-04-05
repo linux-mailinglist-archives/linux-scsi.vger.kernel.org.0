@@ -2,110 +2,153 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA2A4F5035
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Apr 2022 04:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6014F4FFE
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Apr 2022 04:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354781AbiDFBIC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Apr 2022 21:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
+        id S1349170AbiDFBH6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Apr 2022 21:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1458020AbiDERFV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Apr 2022 13:05:21 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5099969E;
-        Tue,  5 Apr 2022 10:03:22 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id ot30so18069581ejb.12;
-        Tue, 05 Apr 2022 10:03:22 -0700 (PDT)
+        with ESMTP id S1458175AbiDERNK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Apr 2022 13:13:10 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB9C60CDB
+        for <linux-scsi@vger.kernel.org>; Tue,  5 Apr 2022 10:11:10 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id b17-20020a0568301df100b005ce0456a9efso9797938otj.9
+        for <linux-scsi@vger.kernel.org>; Tue, 05 Apr 2022 10:11:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=FdSCliDZ7y34gZ+1XXQqplq5BHBXI8/zjaKCt3n8WuY=;
-        b=ENTS4odAznIeIHoHtSEu1ZKMCfX2DpQLnUpz2y0sl+WRpZMOLqgow6YaWv7vFm/sbL
-         5EFeM47ie6KhM41GyHOuX+697NJqRL4tBfij+Sr7UzQWX1gX+Curkmco1gop1cQwlxLd
-         OvyUg8aTb5wiLCJBBt6ouWI4DRkJ6kQ9VaVp4jL2M3TJ6EVU4sWJE2wh1CfIIkD8Rd+z
-         xNeo7kn43fkN3gGJD/Fy949N4B+ambl+CFUASPW0ekG/g+jGhuLaLOpm+98dCoVxSblN
-         ZIIyBgAwq94xgF7EKjxE2SlgOAM2ZvgB2I2AUAM5qByzxUckonQlN8N7Sp4VyNZvprQo
-         jjzw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2aY58p3Eu08i1zvroIKdthxIFG+lHzOcPDP1Vod5UdQ=;
+        b=BJlLixmapZXG3Z12MRft8f1o+ERnrNsMEOuO+htxHtOkkXNoC4g+Fj1hvUrrz2eiR4
+         bbLh9uCYeNiIVW87oZB/Hf2zirGPhRhZs4MZFYQKP0lT5uFogrweIdBUU638/F+vk8MM
+         1XdUXhdAsAizdg4UAkuu6oeBzHDIdwhMxz+vGg+2NqOPoCUyUnwMUPKELdYC0y2EEVnx
+         l302qabGpKEelNd6fdET2izAcrhjx6ZXdty+FKfxGQhRT1RWJZTm6vZ6qscVeEq76dyX
+         QL55dLz7mFEFaoJpPbnuJnPj9hVDedGHH2VDGUnoO0snxp7Lh/xCE0QEunJnYaWLh0gi
+         0wsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=FdSCliDZ7y34gZ+1XXQqplq5BHBXI8/zjaKCt3n8WuY=;
-        b=OaH0y7NzkhNrK9iYye2dF/5J96VNUoo5NoodKXb3BavQZuaZq4zpaLvukUEwKXxsOw
-         vvRC3KEdoqqWyn70U47ArUFPD6ZFEtfp0qG7z7cb8RamWeUPyhrDWibv33fQEGpQjevn
-         UvQ7x+WSMGPS6wvkFyW1FbFC4GwEOiE4/A6wgLHgTRp4USzhMRcAuiDMdn3moEAPWspP
-         SwsXgT5Qq1qNSOXejhMFpQP1uYekb32aV6dcscN0jKAM8WFfCBvPLSFZIFuSZk3wA98D
-         rqhYGgAWKphcr1/RJWtbT9FdmMchdDykmDgjt710mQAt9OwQG1k8KngLPRXtOnRRVpny
-         0d4A==
-X-Gm-Message-State: AOAM533FcshzqzYaxaOUrO0z1i/SJo4nWypszIduFgzCIVZM5l70dXVt
-        iiDS9jGvkQiXtPa7Dmmqq9o=
-X-Google-Smtp-Source: ABdhPJyeGeuae0b4tOgaXYZ/f7Hp7bTVMfkFRf4fWcB3qvU4PwQHV0bxr3esnA33saHL5j4dayu6OA==
-X-Received: by 2002:a17:907:9805:b0:6db:4c33:7883 with SMTP id ji5-20020a170907980500b006db4c337883mr4581508ejc.555.1649178200980;
-        Tue, 05 Apr 2022 10:03:20 -0700 (PDT)
-Received: from [192.168.3.2] (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.googlemail.com with ESMTPSA id w9-20020a50d989000000b0041cc3b9b43asm3839271edj.30.2022.04.05.10.03.18
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2aY58p3Eu08i1zvroIKdthxIFG+lHzOcPDP1Vod5UdQ=;
+        b=tgUo/pytHx/RSmY5l7+3OHCkgaN1QgNXn9r5tXNN0f3pSuv+S2SwSO1t0sUD3yE/VZ
+         CH0FvKTP38R4x0ajkb0k32LuKT/AZnWY1NmUGvoU8kIA1aMPc3uWj/paM342Vkfk4PAZ
+         u+ealZBuvp/Uzf+98jL+c8He9X0UWq3i/hM47tSbVfEQZaX8nF9M3brs4MM+A9RUfirB
+         EKpg8Q1PoTznmbulnnILJDd+GM8jIEf/rcfbPh6EE7A8aXwj4+RuoOTAazq6BuXcmssi
+         /eXyus6kBZHuDQh6e7WiqsSyPPcXa3hQox2MF6z8BLbKmiA0Jm0qwojtgyC1YfoIX3Mc
+         FDkw==
+X-Gm-Message-State: AOAM5322pyW1m+WccUun3m/UyoAKBl7y6X61STjsEKXcfvREwSdFioBy
+        12HelD49c4baEn+dTTVvxhh6PQ==
+X-Google-Smtp-Source: ABdhPJw3Dog+Ye6joupCF1nJ1gu6mLF/8uu2LULDI3pj1f67IYGzNXfMwLJXsBStJIdXMshXWyQ+wg==
+X-Received: by 2002:a9d:6442:0:b0:5b2:3851:597 with SMTP id m2-20020a9d6442000000b005b238510597mr1566869otl.247.1649178669314;
+        Tue, 05 Apr 2022 10:11:09 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id e4-20020a056808148400b002d9be41b179sm5680214oiw.50.2022.04.05.10.11.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 10:03:20 -0700 (PDT)
-Message-ID: <aeb64d1c4bbddfd8463c07a40ab1fc78be0d158d.camel@gmail.com>
-Subject: Re: [PATCH  v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
-From:   Bean Huo <huobean@gmail.com>
-To:     Alex =?ISO-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, maxim.uvarov@linaro.org,
-        joakim.bech@linaro.org, ulf.hansson@linaro.org,
-        ilias.apalodimas@linaro.org, arnd@linaro.org,
-        ruchika.gupta@linaro.org, tomas.winkler@intel.com,
-        yang.huang@intel.com, bing.zhu@intel.com,
-        Matti.Moell@opensynergy.com, hmo@opensynergy.com,
-        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org
-Date:   Tue, 05 Apr 2022 19:03:18 +0200
-In-Reply-To: <87r16bk013.fsf@linaro.org>
-References: <20220405093759.1126835-1-alex.bennee@linaro.org>
-         <8b3ce88f65fd11523a4d2daab3c617f7089eb1ce.camel@gmail.com>
-         <87r16bk013.fsf@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0-1 
+        Tue, 05 Apr 2022 10:11:08 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 10:13:31 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH 3/4] arm64: dts: qcom: sdm845: control RPMHPD
+ performance states with UFS
+Message-ID: <Ykx4u+E/vDNrQRUg@ripper>
+References: <20220401145820.1003826-1-krzysztof.kozlowski@linaro.org>
+ <20220401145820.1003826-4-krzysztof.kozlowski@linaro.org>
+ <0da0b229-3493-967d-c14d-60d3246b07b2@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0da0b229-3493-967d-c14d-60d3246b07b2@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2022-04-05 at 16:43 +0100, Alex Benn=C3=A9e wrote:
->=20
-> Bean Huo <huobean@gmail.com> writes:
->=20
-> > Hi Alex,
-> >=20
-> > Thanks for this unified RPMB interface, I wanted to verify this on
-> > our
-> > UFS, it seems you didn't add the UFS access interface in this
-> > version=20
-> > from your userspace tools, right?
->=20
-> No I didn't but it should be easy enough to add some function pointer
-> redirection everywhere one of the op_* functions calls a vrpmb_*
-> function. Do you already have a UFS RPMB device driver?
->=20
+On Sun 03 Apr 17:02 PDT 2022, Dmitry Baryshkov wrote:
 
-Hi Alex,
-Thanks for your feedback.
+> On 01/04/2022 17:58, Krzysztof Kozlowski wrote:
+> > UFS, when scaling gears, should choose appropriate performance state of
+> > RPMHPD power domain controller.  Since UFS belongs to UFS_PHY_GDSC power
+> > domain, add necessary parent power domain to GCC.
+> 
+> This will cause all gcc GDSCs to be rooted in the CX. Are we sure that this
+> is an expected (and correct) change?
+> 
 
-We now access UFS RPMB through the RPMB LUN BSG device, RPMB is a well-
-known LU and we have a userspace tool to access it.
+Per the last part of Rajendra's reply in [1], this should be fine.
+Naturally we might have to come up with some way to bind gdscs to one of
+multiple power-domains if that changes.
 
-I see that if we're going to use your interface, "static struct
-rpmb_ops" should be registered from a lower-level driver, for example
-in a UFS driver, yes there should be no problem with this registration,
-but I don't know with the current way Compared, what are the advantages
-to add a driver. maybe the main advantage is that we will have an
-unified user space tool for RPMB. right?
+[1] https://lore.kernel.org/all/5e572c50-d6fe-5a21-d09f-f11a072538c5@codeaurora.org/
 
-Kind regards,
-Bean
+Regards,
+Bjorn
+
+> > 
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> >   arch/arm64/boot/dts/qcom/sdm845.dtsi | 17 ++++++++++++++++-
+> >   1 file changed, 16 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > index b31bf62e8680..c999b41c2605 100644
+> > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > @@ -1078,6 +1078,7 @@ gcc: clock-controller@100000 {
+> >   			#clock-cells = <1>;
+> >   			#reset-cells = <1>;
+> >   			#power-domain-cells = <1>;
+> > +			power-domains = <&rpmhpd SDM845_CX>;
+> >   		};
+> >   		qfprom@784000 {
+> > @@ -2336,8 +2337,22 @@ ufs_mem_hc: ufshc@1d84000 {
+> >   				<0 0>,
+> >   				<0 0>,
+> >   				<0 300000000>;
+> > -
+> > +			operating-points-v2 = <&ufs_opp_table>;
+> >   			status = "disabled";
+> > +
+> > +			ufs_opp_table: opp-table {
+> > +				compatible = "operating-points-v2";
+> > +
+> > +				opp-50000000 {
+> > +					opp-hz = /bits/ 64 <50000000>;
+> > +					required-opps = <&rpmhpd_opp_svs>;
+> > +				};
+> > +
+> > +				opp-200000000 {
+> > +					opp-hz = /bits/ 64 <200000000>;
+> > +					required-opps = <&rpmhpd_opp_nom>;
+> > +				};
+> > +			};
+> >   		};
+> >   		ufs_mem_phy: phy@1d87000 {
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry
