@@ -2,207 +2,162 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5DA4F5A09
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Apr 2022 11:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D258F4F589D
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Apr 2022 11:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346552AbiDFJbx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 6 Apr 2022 05:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
+        id S241902AbiDFJFv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 6 Apr 2022 05:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1582849AbiDFJWM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Apr 2022 05:22:12 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785BE2706
-        for <linux-scsi@vger.kernel.org>; Tue,  5 Apr 2022 20:02:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1649214165; x=1680750165;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xLYeIzpE7JMPtN2mYXxJbH0QzN58v5C1//5Cz+Tsrjg=;
-  b=FBpnXv8KjjCcCzWWzgERBb/YkAPAKSEpHtlsM7INsr8Dctib5AkDOe5q
-   WEImuVR/cqeYTa79ASjYejGzJIqWbs2G+lt99Rxy9PDk8tPDs+lB/nvKo
-   Vv1K9GwKI0jfyG26urv4hEr8WbqoFlz4g9QhCqBz7yNdwSGd0fVwAwrMY
-   xpsjkgilBvI7j+kc7naU9UZEDaB2PL/8t0TTdlQF6+pCFacHE0PcPu1lD
-   F8dcI2NqhSsJOTnBIJGRJXlrhJaQhPMaJoi349vTM17tXlkrLIxju/t4y
-   VhNa82GyJJQr5FsIePYPfrc4YeuK5cR55MQCg4tcPoE/JaDi/I5KQsaht
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,238,1643644800"; 
-   d="scan'208";a="301366223"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Apr 2022 11:02:44 +0800
-IronPort-SDR: Qj88baJdB/V/GCjqyYa7WG+3FczJJX64qPWQUwROgleNJzaYXZqn+ZUrxHDpfbicDuZ6Ta+9yw
- P0OgTIcaC5ryvN76n1vq6uUBHOeVjolkTg9g2vRdCKkLeb/tzrOH3MqXZdVvsPAKjUTtSx29hi
- xrxfylTvj890m4NdBoaVeXW1lh4cHcb45qNjVrQG1l6wZewEwvg26/fn0lmLOJ9hnXFt0UBXy7
- hYL3K/+kI3c9FRCSqHuVfIJZpUIj2qMh4Gn01S8EhtOq5Kbp7wHjaq8zIAUk3yuGF7kTWTKfNI
- dAgGyKWdOhspX7dqYBhr/B3R
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Apr 2022 19:34:17 -0700
-IronPort-SDR: NbO9tOVeUpSP6IF9JW8CClXqinK8//sFQDhCInTVopooHWOkEpwf10oThzO8Df1s/lEZV5XGCt
- cdl+XMWqr+SfL/a8Fdej00FfawYZZfdv4n8Oy2gxUhUYjXQ/B2JYSfkP3BFrryQ/1YAappKJVS
- 8OroJoeaYzTWLNJhyl7tSkhGIy5Py8Q3GvcmU7TRf/NnzShomk9oFlATKd+PqnN7xFB1lIXeGO
- yueeDz9NbEmy+59qLjhdX4F4JXcByJ/vOvr/BTf3jvjSeM51zzSqS4IDI/IG9NqTLywJ0BahtR
- oNA=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Apr 2022 20:02:45 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KY8T00r3rz1Rwrw
-        for <linux-scsi@vger.kernel.org>; Tue,  5 Apr 2022 20:02:44 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1649214163; x=1651806164; bh=xLYeIzpE7JMPtN2mYXxJbH0QzN58v5C1//5
-        Cz+Tsrjg=; b=MYK6df3GyPOrzNDBB+0Qbo4NczEMFDNbzrmo4CCAt2z2d8ac9HX
-        Rhlaw1nimhXaV3IJ/MBiaYioPEWRYB910j/bCtK+wZaTGbUxKVYG0o/9yzBSV5L1
-        sYTzqvfmG/diOI9qRH+ob+oVfhQqYB0VWHNxK4eILmw6w3ALfBHekjM+Mmgaibne
-        LSPj+M388iB3jHgdcq4c26C8joy/U6sR46+JHWbrBt9D5Owm/Z+Es53iQNXperba
-        bNqtpfl3vjKPRFtliFM85i5YD4BaVWsgRaNpCPbP/jxALIbt4vyXY0DPAksJLMgJ
-        8ywNxlo6Rn1cp92xPDdLZt5eGcyUWSwso1g==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id xKssJ_xWcy4h for <linux-scsi@vger.kernel.org>;
-        Tue,  5 Apr 2022 20:02:43 -0700 (PDT)
-Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KY8Sy4hfbz1Rvlx;
-        Tue,  5 Apr 2022 20:02:42 -0700 (PDT)
-Message-ID: <3f94f4e6-762b-d1af-7021-45e5b250ab6d@opensource.wdc.com>
-Date:   Wed, 6 Apr 2022 12:02:41 +0900
+        with ESMTP id S1349283AbiDFJCq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Apr 2022 05:02:46 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E113948EC7A;
+        Tue,  5 Apr 2022 23:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=eIMQeXXWWkWx5FDwNbE0TlkL2lmBU9S9LJMrY9Onkc8=; b=VZ+7ypRmFaBJu2hWoqIAVoWmYj
+        4xuOKPhldWs90pyh7ymg8zDgtPiY3fUX65YZt7O8odlZK2biQektgi2RBU0M6b67r5qzYVAWooKMG
+        RUcSTyL9JbVdK+NxQGE8XxOqcy/ecJseZVyWJSGGYU9geNZke8bWZ+0hwzP7GapHHPs8RfgfuSXJe
+        Y6P+Puu3Utc5OgunETt6hMAarqS36XMC4GrXZMgHCqwyaBIKi8AV3Se7oh/6MaZCw/a19Dt2QCcAQ
+        3dQhNCC9soJ3UjvoF59FChYkHOkYI2VJYBUrVQVE7FpoCLMPp5lZq0dB9zF2n/zhNS+Ksy6vRUvVU
+        mD8TTxXw==;
+Received: from 213-225-3-188.nat.highway.a1.net ([213.225.3.188] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nbynA-003ukl-9g; Wed, 06 Apr 2022 06:05:20 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     dm-devel@redhat.com, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-block@vger.kernel.org, drbd-dev@lists.linbit.com,
+        nbd@other.debian.org, ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, jfs-discussion@lists.sourceforge.net,
+        linux-nilfs@vger.kernel.org, ntfs3@lists.linux.dev,
+        ocfs2-devel@oss.oracle.com, linux-mm@kvack.org
+Subject: use block_device based APIs in block layer consumers
+Date:   Wed,  6 Apr 2022 08:04:49 +0200
+Message-Id: <20220406060516.409838-1-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] scsi: pm80xx: mask and unmask upper interrupt
- vectors 32-63
-Content-Language: en-US
-To:     Ajish Koshy <Ajish.Koshy@microchip.com>, linux-scsi@vger.kernel.org
-Cc:     Vasanthalakshmi.Tharmarajan@microchip.com, Viswas.G@microchip.com,
-        john.garry@huawei.com, Jinpu Wang <jinpu.wang@cloud.ionos.com>
-References: <20220405092833.83335-1-Ajish.Koshy@microchip.com>
- <20220405092833.83335-2-Ajish.Koshy@microchip.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220405092833.83335-2-Ajish.Koshy@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 4/5/22 18:28, Ajish Koshy wrote:
-> When upper inbound and outbound queues 32-63 are enabled, we see upper
-> vectors 32-63 in interrupt service routine. We need corresponding
-> registers to handle masking and unmasking of these upper interrupts.
-> 
-> To achieve this, we use registers MSGU_ODMR_U(0x34) to mask and
-> MSGU_ODMR_CLR_U(0x3C) to unmask the interrupts. In these registers bit
-> 0-31 represents interrupt vectors 32-63.
-> 
-> Signed-off-by: Ajish Koshy <Ajish.Koshy@microchip.com>
-> Signed-off-by: Viswas G <Viswas.G@microchip.com>
-> Fixes: 05c6c029a44d ("scsi: pm80xx: Increase number of supported queues")
-> ---
->   drivers/scsi/pm8001/pm80xx_hwi.c | 31 +++++++++++++++++++++++++------
->   1 file changed, 25 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-> index 9bb31f66db85..3e6413e21bfe 100644
-> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
-> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-> @@ -1728,9 +1728,17 @@ pm80xx_chip_interrupt_enable(struct pm8001_hba_info *pm8001_ha, u8 vec)
->   {
->   #ifdef PM8001_USE_MSIX
->   	u32 mask;
-> -	mask = (u32)(1 << vec);
->   
-> -	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, (u32)(mask & 0xFFFFFFFF));
-> +	if (vec < 32) {
-> +		mask = 1U << vec;
+Hi Jens,
 
-Nit: Drop this...
+this series cleanups up the block layer API so that APIs consumed
+by file systems are (almost) only struct block_devic based, so that
+file systems don't have to poke into block layer internals like the
+request_queue.
 
-> +		/*vectors 0 - 31*/
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, mask);
+I also found a bunch of existing bugs related to partition offsets
+and discard so these are fixed while going along.
 
-...and do:
-
-		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, 1U << vec);
-
-> +	} else {
-> +		vec = vec - 32;
-> +		mask = 1U << vec;
-> +		/*vectors 32 - 63*/
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR_U, mask);
-
-And here:
-
-		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR_U,
-			    1U << (vec - 32));
-
-Then you do not need the mask variable.
-
-> +	}
->   	return;
->   #endif
->   	pm80xx_chip_intx_interrupt_enable(pm8001_ha);
-> @@ -1747,11 +1755,22 @@ pm80xx_chip_interrupt_disable(struct pm8001_hba_info *pm8001_ha, u8 vec)
->   {
->   #ifdef PM8001_USE_MSIX
->   	u32 mask;
-> -	if (vec == 0xFF)
-> +
-> +	if (vec == 0xFF) {
-
-This is not symmetric with pm80xx_chip_interrupt_enable(). Does 
-pm80xx_chip_interrupt_enable() need the same case too ?
-
->   		mask = 0xFFFFFFFF;
-> -	else
-> -		mask = (u32)(1 << vec);
-> -	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, (u32)(mask & 0xFFFFFFFF));
-> +		/* disable all vectors 0-31, 32-63*/
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, mask);
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U, mask);
-
-Similar here, no need for the mask variable.
-
-		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, 0xFFFFFFFF);
-		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U, 0xFFFFFFFF);
-
-> +	} else if (vec < 32) {
-> +		mask = 1U << vec;
-> +		/*vectors 0 - 31*/
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, mask);
-
-And here.
-		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, 1U << vec);
-
-> +	} else {
-> +		vec = vec - 32;
-> +		mask = 1U << vec;
-> +		/*vectors 32 - 63*/
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U, mask);
-
-And here.
-		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U,
-			    1U << (vec - 32));
-
-> +	}
->   	return;
->   #endif
->   	pm80xx_chip_intx_interrupt_disable(pm8001_ha);
-
-
--- 
-Damien Le Moal
-Western Digital Research
+Diffstat:
+ arch/um/drivers/ubd_kern.c           |    2 
+ block/blk-core.c                     |    4 -
+ block/blk-lib.c                      |  124 ++++++++++++++++++++---------------
+ block/blk-mq-debugfs.c               |    2 
+ block/blk-settings.c                 |   74 ++++++++++++++++++++
+ block/blk.h                          |   14 ---
+ block/fops.c                         |    2 
+ block/genhd.c                        |    4 -
+ block/ioctl.c                        |   48 ++++++++++---
+ block/partitions/core.c              |   12 ---
+ drivers/block/drbd/drbd_main.c       |   53 +++++++-------
+ drivers/block/drbd/drbd_nl.c         |   94 +++++++++++---------------
+ drivers/block/drbd/drbd_receiver.c   |   13 +--
+ drivers/block/loop.c                 |   15 +---
+ drivers/block/nbd.c                  |    3 
+ drivers/block/null_blk/main.c        |    1 
+ drivers/block/rbd.c                  |    1 
+ drivers/block/rnbd/rnbd-clt.c        |    6 -
+ drivers/block/rnbd/rnbd-srv-dev.h    |    8 --
+ drivers/block/rnbd/rnbd-srv.c        |    5 -
+ drivers/block/virtio_blk.c           |    2 
+ drivers/block/xen-blkback/blkback.c  |   15 ++--
+ drivers/block/xen-blkback/xenbus.c   |    9 --
+ drivers/block/xen-blkfront.c         |    7 -
+ drivers/block/zram/zram_drv.c        |    1 
+ drivers/md/bcache/alloc.c            |    2 
+ drivers/md/bcache/request.c          |    4 -
+ drivers/md/bcache/super.c            |    3 
+ drivers/md/bcache/sysfs.c            |    2 
+ drivers/md/dm-cache-target.c         |    9 --
+ drivers/md/dm-clone-target.c         |    9 --
+ drivers/md/dm-io.c                   |    2 
+ drivers/md/dm-log-writes.c           |    3 
+ drivers/md/dm-raid.c                 |    9 --
+ drivers/md/dm-table.c                |   25 +------
+ drivers/md/dm-thin.c                 |   15 ----
+ drivers/md/dm.c                      |    3 
+ drivers/md/md-linear.c               |   11 ---
+ drivers/md/md.c                      |    5 -
+ drivers/md/raid0.c                   |    7 -
+ drivers/md/raid1.c                   |   18 -----
+ drivers/md/raid10.c                  |   20 -----
+ drivers/md/raid5-cache.c             |    8 +-
+ drivers/md/raid5.c                   |   14 +--
+ drivers/mmc/core/queue.c             |    3 
+ drivers/mtd/mtd_blkdevs.c            |    1 
+ drivers/nvme/host/core.c             |    6 -
+ drivers/nvme/target/io-cmd-bdev.c    |    2 
+ drivers/nvme/target/zns.c            |    3 
+ drivers/s390/block/dasd_fba.c        |    1 
+ drivers/scsi/sd.c                    |    2 
+ drivers/target/target_core_device.c  |   19 ++---
+ drivers/target/target_core_file.c    |   10 +-
+ drivers/target/target_core_iblock.c  |   17 +---
+ fs/btrfs/disk-io.c                   |    3 
+ fs/btrfs/extent-tree.c               |    8 +-
+ fs/btrfs/ioctl.c                     |   12 +--
+ fs/btrfs/volumes.c                   |    4 -
+ fs/btrfs/zoned.c                     |    3 
+ fs/direct-io.c                       |   32 +--------
+ fs/exfat/file.c                      |    5 -
+ fs/exfat/super.c                     |   10 --
+ fs/ext4/ioctl.c                      |   10 --
+ fs/ext4/mballoc.c                    |   10 +-
+ fs/ext4/super.c                      |   10 --
+ fs/f2fs/f2fs.h                       |    3 
+ fs/f2fs/file.c                       |   19 ++---
+ fs/f2fs/segment.c                    |    8 --
+ fs/fat/file.c                        |    5 -
+ fs/fat/inode.c                       |   10 --
+ fs/gfs2/rgrp.c                       |    7 -
+ fs/iomap/direct-io.c                 |    3 
+ fs/jbd2/journal.c                    |    9 --
+ fs/jfs/ioctl.c                       |    5 -
+ fs/jfs/super.c                       |    8 --
+ fs/nilfs2/ioctl.c                    |    6 -
+ fs/nilfs2/sufile.c                   |    4 -
+ fs/nilfs2/the_nilfs.c                |    4 -
+ fs/ntfs3/file.c                      |    6 -
+ fs/ntfs3/super.c                     |   10 +-
+ fs/ocfs2/ioctl.c                     |    5 -
+ fs/super.c                           |    2 
+ fs/xfs/xfs_discard.c                 |    8 +-
+ fs/xfs/xfs_log_cil.c                 |    2 
+ fs/xfs/xfs_super.c                   |   12 +--
+ fs/zonefs/super.c                    |    3 
+ include/linux/blkdev.h               |  112 +++++++++++--------------------
+ include/target/target_core_backend.h |    4 -
+ mm/swapfile.c                        |   31 ++------
+ 89 files changed, 493 insertions(+), 652 deletions(-)
