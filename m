@@ -2,61 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD804F80B3
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Apr 2022 15:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9AA4F80BC
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Apr 2022 15:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343709AbiDGNhu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Apr 2022 09:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S1343686AbiDGNiH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Apr 2022 09:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343681AbiDGNhd (ORCPT
+        with ESMTP id S1343678AbiDGNhd (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Apr 2022 09:37:33 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE7C21B0
-        for <linux-scsi@vger.kernel.org>; Thu,  7 Apr 2022 06:35:29 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 237D6rkg014716
-        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:29 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9D82187
+        for <linux-scsi@vger.kernel.org>; Thu,  7 Apr 2022 06:35:27 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 237D7m7d024505
+        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=XvA23xvxwMVqyTu63ClwgiPuHEPlHrg/BeUG54DSLtg=;
- b=cFweYZvpmG8Yoi2PSI1pAGFli26XwWzNtxPxbn6oSP7oqpII8sLF8dygY9CWLDK8ub/u
- EazzwqSdGnnuqWd4fh4ou36MzZRtDIg5BEWVWtQfQAEcaxsCaWfYvhMBDzSkYyOc5VRH
- CoBGAGoVrFrqkKuYa3umTx2athP4iuGOZr3E/lMp7C9iK6GNYMJ+UErjeKAotE7gU1PZ
- ww9biwgl2wym91GE94cgrrHh78aOn6rtAl2pQmv7TZfNlb/m9mLKJ9D7mOPc7GZmNZVo
- SgzYssnL+4mBIh4ZHq+HZZzyMAuccywW7Tdun9VwES7E8L9dR0iEeVCnbC9QNEewWyqL 3Q== 
+ bh=Pz2OpM75yCUdehgEcxEvef+Q3t4B+XAv6YvLtx9PtIU=;
+ b=vZH4b7G2QtHpj/JQKJimAiSO2Pf2AeonFBAxX7rt9ZNNbK38DeTs4lxIrK2r/v02Gx8m
+ A1l088o3sJQ6egRYlPigg/b9xgxiBJBtqG/Nkn226iSntCCqxuwDvusRLGfsjucja8ly
+ 08xxE1/I64eWXVmBGRALfH2sgC7DFHCDPdJXnzJJ1cLW6Ejeq76/LwPtBN3Pktt9SLLn
+ mIgJ7wKIpuNDqXLhpfxFtCcGJHnWcaIzHmQt46MJOGsUgz5l0NX/ZYwIkkFvXg9MGVDd
+ dkDcJNB2Sxgsh4pt1k0u73hcG8BuDxJGiZ2D9XYYi80rq67OJh7+yGvewPKX3QsJfL+M 5Q== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f6ec9up2r-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f6f1tc3rp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-scsi@vger.kernel.org>; Thu, 07 Apr 2022 13:35:27 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 237DLV6e036872
+        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:26 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvva-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
         for <linux-scsi@vger.kernel.org>; Thu, 07 Apr 2022 13:35:26 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 237DLVwc036871
-        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:25 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvut-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Apr 2022 13:35:25 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 237DZJLu032479
-        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:25 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 237DZJLw032479
+        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:26 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvpy-8;
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvpy-9;
         Thu, 07 Apr 2022 13:35:25 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v2] scsi: core: Fix sbitmap depth in scsi_realloc_sdev_budget_map()
-Date:   Thu,  7 Apr 2022 09:35:07 -0400
-Message-Id: <164929678999.15424.13333895557979890772.b4-ty@oracle.com>
+Subject: Re: [PATCH 0/2] lpfc: Fix regressions in 14.2.0.0 refactoring
+Date:   Thu,  7 Apr 2022 09:35:08 -0400
+Message-Id: <164929678998.15424.15683001536446888702.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1647423870-143867-1-git-send-email-john.garry@huawei.com>
-References: <1647423870-143867-1-git-send-email-john.garry@huawei.com>
+In-Reply-To: <20220323205545.81814-1-jsmart2021@gmail.com>
+References: <20220323205545.81814-1-jsmart2021@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: FCD-j0HvCTUpKIlBGpCgY5dztSyj48BM
-X-Proofpoint-ORIG-GUID: FCD-j0HvCTUpKIlBGpCgY5dztSyj48BM
+X-Proofpoint-ORIG-GUID: BnorocGY2eyvmL2FsO-QT9APqAsnt1As
+X-Proofpoint-GUID: BnorocGY2eyvmL2FsO-QT9APqAsnt1As
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -67,22 +67,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 16 Mar 2022 17:44:30 +0800, John Garry wrote:
+On Wed, 23 Mar 2022 13:55:43 -0700, James Smart wrote:
 
-> In commit edb854a3680b ("scsi: core: Reallocate device's budget map on
-> queue depth change"), the sbitmap for the device budget map may be
-> reallocated after the slave device depth is configured.
+> Two regressions were found in further testing of the refactoring
+> work done for the 14.2.0.0 driver rev.
 > 
-> When the sbitmap is reallocated we use the result from
-> scsi_device_max_queue_depth() for the sbitmap size, but don't resize to
-> match the actual device queue depth.
+> These 2 patches correct the regressions
+> 
+> James Smart (2):
+>   lpfc: Fix broken sli4 abort path
+>   lpfc: Fix locking for lpfc_sli_iocbq_lookup
 > 
 > [...]
 
 Applied to 5.18/scsi-fixes, thanks!
 
-[1/1] scsi: core: Fix sbitmap depth in scsi_realloc_sdev_budget_map()
-      https://git.kernel.org/mkp/scsi/c/eaba83b5b850
+[1/2] lpfc: Fix broken sli4 abort path
+      https://git.kernel.org/mkp/scsi/c/7294a9bcaa7e
+[2/2] lpfc: Fix locking for lpfc_sli_iocbq_lookup
+      https://git.kernel.org/mkp/scsi/c/c26bd6602e1d
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
