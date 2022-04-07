@@ -2,61 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747D04F80B6
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Apr 2022 15:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393E44F80BE
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Apr 2022 15:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343720AbiDGNh4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Apr 2022 09:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S1343678AbiDGNiK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Apr 2022 09:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343683AbiDGNhd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Apr 2022 09:37:33 -0400
+        with ESMTP id S1343699AbiDGNhf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Apr 2022 09:37:35 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC6521A9
-        for <linux-scsi@vger.kernel.org>; Thu,  7 Apr 2022 06:35:29 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 237Bt3d1001019
-        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:28 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE85C2644
+        for <linux-scsi@vger.kernel.org>; Thu,  7 Apr 2022 06:35:30 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 237BoiKn004892
+        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=8t+LjSAn8N571UcgWIIJMlPGDRmO37jniBHbLHYAltQ=;
- b=lp8L/RLCrFAGOjOvjSnnjpu+D6DfaNxsE6oxdcB+eKw4Tu/aprpoNjjMw5TTyYucNYnR
- shjmZA/2S60IraaTeioM5tX7BBeDvhVh6hOQ1EuJIuvIfEbr7wf6lruwNglncyYszPL1
- OA8oJKqaaoP2ZVl8FjmjkfnuGNZ2UeBb2jjwdMPi5QEaxUmM7WSKlW4RjfRhjytdzPyd
- 4gi5CVQWMPbqqAslX7jtziMjHQuOFJUcalHqyxPX7um8Qe2ffvUFYvAUCwcQscej/lDr
- ElI3sp9staQXXHypJwWM2yfduPdfACUStBfYp1yJ4OTN6vozP9934kM7VBfClruY/TGQ ww== 
+ bh=+8HjjRfjx+eu4BHTLgLm6SuPvVt1Min+Pbz5F/ZGx3E=;
+ b=G9oYYPEkN95VLn0WsZpeZ8gv70pTUWpTUw5N8GBbPVAnyUXL0lESCtl4/2DgzfAfP0ml
+ w5z4thlGYAEdIrq39GR3Gpth+mT/UMmRkZW6EYz7XhgGwF5/RShcuPvqb/RwoMwNtxEM
+ COTbEq2Wlih6e/FJ62W74ZZ0rX3BBT+fPAeHgEvBBBHqu1l4RkRdKBG4uWIDuyDodLNG
+ RKuG3csMfkO5pxGkpFMf8oIAelKqnu952PNECm9Hi4pLyhOoGNN/+TyDNxFMXHr69ykq
+ yHSwIFIxuZykdraaeVdn4f1sTD1Z1v+TerCK2pYqiT7G0W9hr1WR7SlvIHr3wdlCYn8t 6A== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f6e3suw27-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f6d933ynf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-scsi@vger.kernel.org>; Thu, 07 Apr 2022 13:35:29 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 237DLVn7036817
+        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:28 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvwn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
         for <linux-scsi@vger.kernel.org>; Thu, 07 Apr 2022 13:35:28 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 237DLVcF036832
-        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:27 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvwc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Apr 2022 13:35:27 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 237DZJM2032479
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 237DZJM4032479
         for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:27 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvpy-11;
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvpy-12;
         Thu, 07 Apr 2022 13:35:27 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] scsi: ufs: core: Remove unused field in struct ufs_hba
-Date:   Thu,  7 Apr 2022 09:35:10 -0400
-Message-Id: <164929678998.15424.14809520929798140145.b4-ty@oracle.com>
+Subject: Re: [PATCH] scsi: sr: fix typo in CDROM(CLOSETRAY|EJECT) handling
+Date:   Thu,  7 Apr 2022 09:35:11 -0400
+Message-Id: <164929678999.15424.847039795505032538.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <413601558.101648105683746.JavaMail.epsvc@epcpadp4>
-References: <CGME20220324070146epcms2p577d43ce3e7cbd36aa964f3842e49b2ba@epcms2p5> <413601558.101648105683746.JavaMail.epsvc@epcpadp4>
+In-Reply-To: <20220323002242.21157-1-kgroeneveld@lenbrook.com>
+References: <20220323002242.21157-1-kgroeneveld@lenbrook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: wdW_Ejh3_aGg8NrBB_pt_yE-RA7JCP41
-X-Proofpoint-GUID: wdW_Ejh3_aGg8NrBB_pt_yE-RA7JCP41
+X-Proofpoint-ORIG-GUID: f_XzLeBaOW75qfSGUZoK8LdkGpoa53-l
+X-Proofpoint-GUID: f_XzLeBaOW75qfSGUZoK8LdkGpoa53-l
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -67,18 +67,21 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 24 Mar 2022 16:01:46 +0900, Keoseong Park wrote:
+On Tue, 22 Mar 2022 20:22:42 -0400, Kevin Groeneveld wrote:
 
-> Remove unused field "rpm_lvl_attr" and "spm_lvl_attr" in struct ufs_hba.
-> Commit cbb6813ee771 ("scsi: ufs: sysfs: attribute group for existing
-> sysfs entries.") removed all code using that field.
+> Commit 2e27f576abc6 ("scsi: scsi_ioctl: Call scsi_cmd_ioctl() from
+> scsi_ioctl()") seems to have a typo as it is checking ret instead of
+> cmd in the if statement checking for CDROMCLOSETRAY and CDROMEJECT.
+> This changes the behaviour of these ioctls as the cdrom_ioctl
+> handling of these is more restrictive than the scsi_ioctl version.
 > 
 > 
+> [...]
 
 Applied to 5.18/scsi-fixes, thanks!
 
-[1/1] scsi: ufs: core: Remove unused field in struct ufs_hba
-      https://git.kernel.org/mkp/scsi/c/8ee15ea779c3
+[1/1] scsi: sr: fix typo in CDROM(CLOSETRAY|EJECT) handling
+      https://git.kernel.org/mkp/scsi/c/bc5519c18a32
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
