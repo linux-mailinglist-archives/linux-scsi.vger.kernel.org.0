@@ -2,86 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8154F80C0
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Apr 2022 15:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A427A4F81B9
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Apr 2022 16:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343736AbiDGNib (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Apr 2022 09:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S1344019AbiDGOeY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Apr 2022 10:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343702AbiDGNhg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Apr 2022 09:37:36 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D262BD4
-        for <linux-scsi@vger.kernel.org>; Thu,  7 Apr 2022 06:35:34 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 237B1wgh012558
-        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=7uHcMyTq6xXoHfnKRdgC4J8MK7V+HyvsDJw5Mai7BhA=;
- b=u+1Jjm9C8mOn2O0yoNZNBjg3Apbz6MYphF/oclw1oL7t6BmrVlomJeEJXOQDz9zWyCZK
- XMM0Rka2zq/zyy3u5ZltoGT7r3SEYqIadVr9QN0QVXEsw/3VUB+MYsYHniXVQko9Yvwd
- N6C5Hul0Uv1/YPzyB/vtrWoI1KqtvCRxz439snLM3LONVu/H4bxvrbeba6ed7OSegecb
- FeMtfp0w6bLsaBhP+A1KtrtJYjDW0nHQu4p8J7yK0eojSFUkIpXEe9kaqY2qdOVGbedM
- 9GKN0pSSm/0lB+qE+d65z/N3xrLy8HZJyt7tAwlb6P3F6TodZEPye4X8r+JpoJO4h7Wj UQ== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f6cwckm06-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Apr 2022 13:35:33 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 237DLVcI036832
-        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:32 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtw04-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Apr 2022 13:35:32 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 237DZJMI032479
-        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:32 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvpy-19;
-        Thu, 07 Apr 2022 13:35:32 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH 1/2] scsi: target: tcmu: Fix possible page UAF
-Date:   Thu,  7 Apr 2022 09:35:18 -0400
-Message-Id: <164929678998.15424.5620374167103783972.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220311132206.24515-1-xiaoguang.wang@linux.alibaba.com>
-References: <20220311132206.24515-1-xiaoguang.wang@linux.alibaba.com>
+        with ESMTP id S1344006AbiDGOeW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Apr 2022 10:34:22 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9688D198526;
+        Thu,  7 Apr 2022 07:32:12 -0700 (PDT)
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KZ3gw30svz681Z4;
+        Thu,  7 Apr 2022 22:30:20 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 7 Apr 2022 16:32:10 +0200
+Received: from [10.47.80.129] (10.47.80.129) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 7 Apr
+ 2022 15:32:09 +0100
+Message-ID: <3e1914a8-5f6b-8fcf-7fb3-2d1edb9766e1@huawei.com>
+Date:   Thu, 7 Apr 2022 15:32:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 1B2hT_OULWa2XLkffNPYrGUMx-FgLzo9
-X-Proofpoint-GUID: 1B2hT_OULWa2XLkffNPYrGUMx-FgLzo9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH 03/11] libata: Send internal commands through the block
+ layer
+To:     Christoph Hellwig <hch@lst.de>
+CC:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
+        <bvanassche@acm.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <ming.lei@redhat.com>,
+        <hare@suse.de>, <chenxiang66@hisilicon.com>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <dm-devel@redhat.com>, <beanhuo@micron.com>
+References: <1647945585-197349-1-git-send-email-john.garry@huawei.com>
+ <1647945585-197349-4-git-send-email-john.garry@huawei.com>
+ <20220322112057.GC29270@lst.de>
+In-Reply-To: <20220322112057.GC29270@lst.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.80.129]
+X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 11 Mar 2022 21:22:05 +0800, Xiaoguang Wang wrote:
+On 22/03/2022 11:20, Christoph Hellwig wrote:
+> On Tue, Mar 22, 2022 at 06:39:37PM +0800, John Garry wrote:
+>> When SCSI HBA device drivers are required to process an ATA internal
+>> command they still need a tag for the IO. This often requires the driver
+>> to set aside a set of tags for these sorts of IOs and manage the tags
+>> themselves.
+>>
+>> If we associate a SCSI command (and request) with an ATA internal command
+>> then the tag is already provided, so introduce the change to send ATA
+>> internal commands through the block layer with a set of custom blk-mq ops.
+>>
+>> note: I think that the timeout handling needs to be fixed up.
 
-> tcmu_try_get_data_page() looks up pages under cmdr_lock, but it don't
-> take refcount properly and just return page pointer.
-> 
-> When tcmu_try_get_data_page() returns, the returned page may have been
-> freed by tcmu_blocks_release(), need to get_page() under cmdr_lock to
-> avoid concurrent tcmu_blocks_release().
-> 
-> [...]
+Hi Christoph,
 
-Applied to 5.18/scsi-fixes, thanks!
+> Any reason to not just send them through an ATA_16 passthrough CDB and
+> just use all the normal SCSI command handling?
 
-[1/2] scsi: target: tcmu: Fix possible page UAF
-      https://git.kernel.org/mkp/scsi/c/a6968f7a367f
+I had a go at implementing this but I have come up against a few issues:
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+- ATA_16 handling translates the passthrough CDB to a ATA TF. However 
+ata_exec_internal_sg() is passed a TF already. So what to do? Change the 
+callers to generate a ATA_16 CDB? I guess not. Otherwise we could put 
+the already-generated TF in the SCSI cmd CDB somehow and use directly.
+
+- We may have no SCSI device (yet) for the target when issuing an 
+internal command, but only the ATA port+dev. So need a method to pass 
+these pointers to ATA_16 handling
+
+- we would need to change ata_scsi_translate(), ata_scsi_pass_thru() and 
+other friends to deal with ATA_TAG_INTERNAL and its peculiarities - 
+today it just deals with regular qc's.
+
+It still does seem a reasonable idea to use ATA_16, but it looks like 
+significant modifications would be required....
+
+Thanks,
+John
