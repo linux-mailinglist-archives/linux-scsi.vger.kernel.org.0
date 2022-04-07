@@ -2,61 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06314F80B9
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Apr 2022 15:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB524F80BD
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Apr 2022 15:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343712AbiDGNiC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Apr 2022 09:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
+        id S1343697AbiDGNiJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Apr 2022 09:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343679AbiDGNhd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Apr 2022 09:37:33 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB1421A6
-        for <linux-scsi@vger.kernel.org>; Thu,  7 Apr 2022 06:35:26 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 237DVe29014690
-        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:26 GMT
+        with ESMTP id S1343700AbiDGNhf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Apr 2022 09:37:35 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BDE2BCD
+        for <linux-scsi@vger.kernel.org>; Thu,  7 Apr 2022 06:35:34 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 237CIOms000849;
+        Thu, 7 Apr 2022 13:35:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=SfNR0aLCnzLV1Vsz+4mk+JUPeV82Hyg5zRb5GrM7Rws=;
- b=l0tNXtB0i8JoPT13HCsPAnoCu1nY9Tku9uKOyQRz2/EH7Tl0cEZjZSyJh402SPDGVODp
- SIosMDUR3nHiVCbirTbsd4xj+BPP3O89dFot2aPHi7NXLq+V4bgFdvI7/Vx1XPcrPiX7
- Lr95avF87WkEuEyJFCAy+HkRMCJRQZ+9ZmpZAELRPtLcT5ahJsNP9PPHv1aWWj5SMUI2
- +YXNQnp/Otj26PD4hA4oxq5qswAk3kDT8SVrV5876UsuMKUfwISWQqAlxB+M4bxnJjxW
- cBx2gqX45Imz5K4IH8T194dNQbFOpEVkAM/o7ACrfpDY+OnymbDukXXEkCYuwnjG4pam HA== 
+ bh=9nCTYiLSYwu/rmvcx1gU/vvK5wgtcWkrK+BzqaOgLQc=;
+ b=qel0ruWG2s9yZM4N9TwHGkyxuLLuHqc+osapCdURflhqmJm++EJQzlt3wTB0xymDQsvr
+ SngfQi0e05DMx9gaipKRbFOcUvQwHP2wScgvynqRGhM3pskozQ477X80DcquWABHRWZv
+ aWSdO9j2+5g2X9V5wC3axA3djwuWXhYNvUKeYWTU0GPJpH9ZsRM14lDDUxf1FAFzhH+j
+ cdRDC7epA2VtFbBVDf5gzivbCqjLEsALEeeF1gzVTKayNj2uWQVSx/eSDqtxps/95Nsi
+ kjwSCO19tgAKYwK2kAHlZ73+v3xlDWTGXIT22oxP+jpONAcAIgpdkceiV90sj/o6BDgc QQ== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f6ec9up2h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Apr 2022 13:35:24 +0000
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f6e3suw25-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Apr 2022 13:35:25 +0000
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 237DLVR7036890
-        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:23 GMT
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 237DLVBA036848;
+        Thu, 7 Apr 2022 13:35:24 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvth-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-        for <linux-scsi@vger.kernel.org>; Thu, 07 Apr 2022 13:35:23 +0000
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvu9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Apr 2022 13:35:24 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 237DZJLq032479
-        for <linux-scsi@vger.kernel.org>; Thu, 7 Apr 2022 13:35:23 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 237DZJLs032479;
+        Thu, 7 Apr 2022 13:35:24 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvpy-6;
-        Thu, 07 Apr 2022 13:35:23 +0000
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f97uwtvpy-7;
+        Thu, 07 Apr 2022 13:35:24 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     linux-scsi@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] aha152x: Stop using struct scsi_pointer
-Date:   Thu,  7 Apr 2022 09:35:05 -0400
-Message-Id: <164929678999.15424.7742354832067450267.b4-ty@oracle.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Wu Bo <wubo40@huawei.com>,
+        Zhiqiang Liu <liuzhiqiang26@huawei.com>, linfeilong@huawei.com
+Subject: Re: [PATCH] scsi:libiscsi: remove unnecessary memset in iscsi_conn_setup
+Date:   Thu,  7 Apr 2022 09:35:06 -0400
+Message-Id: <164929678998.15424.5271215300515961574.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <bdc1264b6dd331150bffb737958cab8c9c068fa1.1648070977.git.fthain@linux-m68k.org>
-References: <bdc1264b6dd331150bffb737958cab8c9c068fa1.1648070977.git.fthain@linux-m68k.org>
+In-Reply-To: <20220317150116.194140-1-haowenchao@huawei.com>
+References: <20220317150116.194140-1-haowenchao@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: LISZLecErQ-Ud6HYqsmZuUX2wJTc_Ubp
-X-Proofpoint-ORIG-GUID: LISZLecErQ-Ud6HYqsmZuUX2wJTc_Ubp
+X-Proofpoint-ORIG-GUID: hxL4SOCBlDTz5YGKTbhjaeQgR3PQElSH
+X-Proofpoint-GUID: hxL4SOCBlDTz5YGKTbhjaeQgR3PQElSH
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -67,19 +69,18 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 24 Mar 2022 08:29:37 +1100, Finn Thain wrote:
+On Thu, 17 Mar 2022 11:01:16 -0400, Wenchao Hao wrote:
 
-> Remove aha152x_cmd_priv.scsi_pointer by moving the necessary members
-> into aha152x_cmd_priv proper.
-> 
-> Tested with an Adaptec SlimSCSI APA-1460A card.
+> iscsi_cls_conn is alloced by kzalloc(), the whole iscsi_cls_conn is
+> zero filled already including the dd_data. So it is unnecessary to
+> call memset again.
 > 
 > 
 
 Applied to 5.18/scsi-fixes, thanks!
 
-[1/1] aha152x: Stop using struct scsi_pointer
-      https://git.kernel.org/mkp/scsi/c/63221571ef77
+[1/1] scsi:libiscsi: remove unnecessary memset in iscsi_conn_setup
+      https://git.kernel.org/mkp/scsi/c/ebfe3e0c5e80
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
