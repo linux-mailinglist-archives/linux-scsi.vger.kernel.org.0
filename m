@@ -2,134 +2,131 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFE54F90AF
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Apr 2022 10:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9804F90E7
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Apr 2022 10:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiDHIZq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Apr 2022 04:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S231942AbiDHIfE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Apr 2022 04:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbiDHIZp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Apr 2022 04:25:45 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344F915E883
-        for <linux-scsi@vger.kernel.org>; Fri,  8 Apr 2022 01:23:42 -0700 (PDT)
-Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KZWRz0MGrz67NMl;
-        Fri,  8 Apr 2022 16:21:35 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Fri, 8 Apr 2022 10:23:40 +0200
-Received: from [10.47.91.39] (10.47.91.39) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 8 Apr
- 2022 09:23:39 +0100
-Message-ID: <45a4bb6d-7a09-b576-c68d-9981434b4b2a@huawei.com>
-Date:   Fri, 8 Apr 2022 09:23:37 +0100
+        with ESMTP id S231904AbiDHIfB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Apr 2022 04:35:01 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D520B2FF537;
+        Fri,  8 Apr 2022 01:32:58 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1nck1W-000SEY-Od; Fri, 08 Apr 2022 18:31:20 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 08 Apr 2022 16:31:19 +0800
+Date:   Fri, 8 Apr 2022 16:31:19 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Amit Shah <amit@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eli Cohen <eli@mellanox.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Igor Kotrasinski <i.kotrasinsk@samsung.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Jussi Kivilinna <jussi.kivilinna@mbnet.fi>,
+        Joachim Fritschi <jfritschi@freenet.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org
+Subject: Re: [PATCH 8/9] x86/crypto: eliminate anonymous module_init &
+ module_exit
+Message-ID: <Yk/y12WSN5+PpDkP@gondor.apana.org.au>
+References: <20220316192010.19001-1-rdunlap@infradead.org>
+ <20220316192010.19001-9-rdunlap@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 1/2] scsi: pm80xx: mask and unmask upper interrupt
- vectors 32-63
-To:     Ajish Koshy <Ajish.Koshy@microchip.com>,
-        <linux-scsi@vger.kernel.org>
-CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
-        <Viswas.G@microchip.com>, <damien.lemoal@opensource.wdc.com>,
-        Jinpu Wang <jinpu.wang@cloud.ionos.com>
-References: <20220408080538.278707-1-Ajish.Koshy@microchip.com>
- <20220408080538.278707-2-Ajish.Koshy@microchip.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220408080538.278707-2-Ajish.Koshy@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.91.39]
-X-ClientProxiedBy: lhreml718-chm.china.huawei.com (10.201.108.69) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316192010.19001-9-rdunlap@infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 08/04/2022 09:05, Ajish Koshy wrote:
-> When upper inbound and outbound queues 32-63 are enabled, we see upper
-> vectors 32-63 in interrupt service routine. We need corresponding
-> registers to handle masking and unmasking of these upper interrupts.
+On Wed, Mar 16, 2022 at 12:20:09PM -0700, Randy Dunlap wrote:
+> Eliminate anonymous module_init() and module_exit(), which can lead to
+> confusion or ambiguity when reading System.map, crashes/oops/bugs,
+> or an initcall_debug log.
 > 
-> To achieve this, we use registers MSGU_ODMR_U(0x34) to mask and
-> MSGU_ODMR_CLR_U(0x3C) to unmask the interrupts. In these registers bit
-> 0-31 represents interrupt vectors 32-63.
+> Give each of these init and exit functions unique driver-specific
+> names to eliminate the anonymous names.
 > 
-> Signed-off-by: Ajish Koshy <Ajish.Koshy@microchip.com>
-> Signed-off-by: Viswas G <Viswas.G@microchip.com>
-> Fixes: 05c6c029a44d ("scsi: pm80xx: Increase number of supported queues")
-
-Regardless of nitpick:
-Reviewed-by: John Garry <john.garry@huawei.com>
-
+> Example 1: (System.map)
+>  ffffffff832fc78c t init
+>  ffffffff832fc79e t init
+>  ffffffff832fc8f8 t init
+> 
+> Example 2: (initcall_debug log)
+>  calling  init+0x0/0x12 @ 1
+>  initcall init+0x0/0x12 returned 0 after 15 usecs
+>  calling  init+0x0/0x60 @ 1
+>  initcall init+0x0/0x60 returned 0 after 2 usecs
+>  calling  init+0x0/0x9a @ 1
+>  initcall init+0x0/0x9a returned 0 after 74 usecs
+> 
+> Fixes: 64b94ceae8c1 ("crypto: blowfish - add x86_64 assembly implementation")
+> Fixes: 676a38046f4f ("crypto: camellia-x86_64 - module init/exit functions should be static")
+> Fixes: 0b95ec56ae19 ("crypto: camellia - add assembler implementation for x86_64")
+> Fixes: 56d76c96a9f3 ("crypto: serpent - add AVX2/x86_64 assembler implementation of serpent cipher")
+> Fixes: b9f535ffe38f ("[CRYPTO] twofish: i586 assembly version")
+> Fixes: ff0a70fe0536 ("crypto: twofish-x86_64-3way - module init/exit functions should be static")
+> Fixes: 8280daad436e ("crypto: twofish - add 3-way parallel x86_64 assembler implemention")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jussi Kivilinna <jussi.kivilinna@mbnet.fi>
+> Cc: Joachim Fritschi <jfritschi@freenet.de>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: linux-crypto@vger.kernel.org
+> Cc: x86@kernel.org
 > ---
->   drivers/scsi/pm8001/pm80xx_hwi.c | 30 ++++++++++++++++++++----------
->   1 file changed, 20 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-> index 9bb31f66db85..cdb31679f419 100644
-> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
-> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-> @@ -1727,10 +1727,14 @@ static void
->   pm80xx_chip_interrupt_enable(struct pm8001_hba_info *pm8001_ha, u8 vec)
+>  arch/x86/crypto/blowfish_glue.c     |    8 ++++----
+>  arch/x86/crypto/camellia_glue.c     |    8 ++++----
+>  arch/x86/crypto/serpent_avx2_glue.c |    8 ++++----
+>  arch/x86/crypto/twofish_glue.c      |    8 ++++----
+>  arch/x86/crypto/twofish_glue_3way.c |    8 ++++----
+>  5 files changed, 20 insertions(+), 20 deletions(-)
 
-comment on current code: using u8 for vec seems dubious
-
->   {
->   #ifdef PM8001_USE_MSIX
-> -	u32 mask;
-> -	mask = (u32)(1 << vec);
-> -
-> -	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, (u32)(mask & 0xFFFFFFFF));
-> +	if (vec < 32) {
-> +		/* vectors 0 - 31 */
-
-nit: I doubt the use of these sort of comments. I mean, a check for vec 
-< 32 makes it pretty obvious
-
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, 1U << vec);
-> +	} else {
-> +		/* vectors 32 - 63 */
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR_U,
-> +			    1U << (vec - 32));
-> +	}
->   	return;
->   #endif
->   	pm80xx_chip_intx_interrupt_enable(pm8001_ha);
-> @@ -1746,12 +1750,18 @@ static void
->   pm80xx_chip_interrupt_disable(struct pm8001_hba_info *pm8001_ha, u8 vec)
->   {
->   #ifdef PM8001_USE_MSIX
-> -	u32 mask;
-> -	if (vec == 0xFF)
-> -		mask = 0xFFFFFFFF;
-> -	else
-> -		mask = (u32)(1 << vec);
-> -	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, (u32)(mask & 0xFFFFFFFF));
-> +	if (vec == 0xFF) {
-> +		/* disable all vectors 0-31, 32-63 */
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, 0xFFFFFFFF);
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U, 0xFFFFFFFF);
-> +	} else if (vec < 32) {
-> +		/* vectors 0 - 31 */
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, 1U << vec);
-> +	} else {
-> +		/* vectors 32 - 63 */
-> +		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U,
-> +			    1U << (vec - 32));
-> +	}
->   	return;
->   #endif
->   	pm80xx_chip_intx_interrupt_disable(pm8001_ha);
-
+Patch applied.  Thanks.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
