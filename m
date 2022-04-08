@@ -2,50 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9554F9059
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Apr 2022 10:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCCE4F905B
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Apr 2022 10:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbiDHIHu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Apr 2022 04:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
+        id S231175AbiDHIHx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Apr 2022 04:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbiDHIHd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Apr 2022 04:07:33 -0400
+        with ESMTP id S231152AbiDHIHe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Apr 2022 04:07:34 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3D127B05
-        for <linux-scsi@vger.kernel.org>; Fri,  8 Apr 2022 01:05:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AEA25E87
+        for <linux-scsi@vger.kernel.org>; Fri,  8 Apr 2022 01:05:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649405130; x=1680941130;
+  t=1649405131; x=1680941131;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5wLMG1uiQ1XDvNAz0iBOvothgFggYIKD1XnbZ3GqpHY=;
-  b=xeGM8yAqwK31L/KHBxl5VAFH7qnqDvdKHzYAgBOWtJHQg6pcLRt5d4jx
-   vzHmf23zDXxFtHFpmy4cNsQJB2rFZvrrWSvEbI2RE6ZNUIXjknyeFqHYt
-   KKcT5dJAbJEYo+mch/ToP8LUNk9nsvO869VOasfuBesuoM0h+/1+1oQzI
-   ExY+RzsOxLKtsyyIyGlOR2FhZ7yJASDGZaQQHNmtX3ZXYUVBVKoQO/xv5
-   kScbKezfKB232bGRqDRjspwEPQRJMyUbeu7wK9FKlYUTP3yid255MwuqP
-   t+vVAPXkllpX3thCyG9thZvMTwdci054MNrcLJMvNpQ/93BDUB7thETXM
-   g==;
+  bh=z1WOM/2ZWYubl+INssyZUzMwV9qDvUg0qXW97o4RZ2g=;
+  b=yk0PNnUiMCTMjuLnhueiSJrtbNH1uUVArFM5S2DeKJCtaZMIwtaPQ0E2
+   WK2So2A/gdlgmJ9KhRsDRps60fw7AzqFTOMqliZinIIH5EM4BJQjN35nC
+   626/93q/hENRcM8dU2QUIM2DDQd3j5rEDre7ShUeGNkYjjzQy1KfRKcZQ
+   cGm45lYYgC6xT3IHyMStLn3GaNA+Ifcsq3zXbO97C9ik5jArj99f6LUaf
+   t6tfDqaWB5eMV71BaT/SKbzbBB/Osir9MNL0tZuuI+CuNkkxGWHJ4W9m6
+   chDFCEWZ7XsGXw1zO4I6V5l2vqI6zfY6BPOweNKiaGJHyMuEjgu4FnVti
+   w==;
 X-IronPort-AV: E=Sophos;i="5.90,244,1643698800"; 
-   d="scan'208";a="159833059"
+   d="scan'208";a="159833085"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Apr 2022 01:05:24 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Apr 2022 01:05:26 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 8 Apr 2022 01:05:24 -0700
+ 15.1.2375.17; Fri, 8 Apr 2022 01:05:26 -0700
 Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
  (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 8 Apr 2022 01:05:23 -0700
+ Transport; Fri, 8 Apr 2022 01:05:25 -0700
 From:   Ajish Koshy <Ajish.Koshy@microchip.com>
 To:     <linux-scsi@vger.kernel.org>
 CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
         <Viswas.G@microchip.com>, <damien.lemoal@opensource.wdc.com>,
         <john.garry@huawei.com>, Jinpu Wang <jinpu.wang@cloud.ionos.com>
-Subject: [PATCH v3 1/2] scsi: pm80xx: mask and unmask upper interrupt vectors 32-63
-Date:   Fri, 8 Apr 2022 13:35:37 +0530
-Message-ID: <20220408080538.278707-2-Ajish.Koshy@microchip.com>
+Subject: [PATCH v3 2/2] scsi: pm80xx: enable upper inbound, outbound queues
+Date:   Fri, 8 Apr 2022 13:35:38 +0530
+Message-ID: <20220408080538.278707-3-Ajish.Koshy@microchip.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220408080538.278707-1-Ajish.Koshy@microchip.com>
 References: <20220408080538.278707-1-Ajish.Koshy@microchip.com>
@@ -63,69 +63,48 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When upper inbound and outbound queues 32-63 are enabled, we see upper
-vectors 32-63 in interrupt service routine. We need corresponding
-registers to handle masking and unmasking of these upper interrupts.
+Executing driver on servers with more than 32 CPUs were faced with command
+timeouts. This is because we were not geting completions for commands
+submitted on IQ32 - IQ63.
 
-To achieve this, we use registers MSGU_ODMR_U(0x34) to mask and
-MSGU_ODMR_CLR_U(0x3C) to unmask the interrupts. In these registers bit
-0-31 represents interrupt vectors 32-63.
+Set E64Q bit to enable upper inbound and outbound queues 32 to 63 in the
+MPI main configuration table.
+
+Added 500ms delay after successful MPI initialization as mentioned in
+controller datasheet.
 
 Signed-off-by: Ajish Koshy <Ajish.Koshy@microchip.com>
 Signed-off-by: Viswas G <Viswas.G@microchip.com>
 Fixes: 05c6c029a44d ("scsi: pm80xx: Increase number of supported queues")
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 9bb31f66db85..cdb31679f419 100644
+index cdb31679f419..71b6cc4b9420 100644
 --- a/drivers/scsi/pm8001/pm80xx_hwi.c
 +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1727,10 +1727,14 @@ static void
- pm80xx_chip_interrupt_enable(struct pm8001_hba_info *pm8001_ha, u8 vec)
- {
- #ifdef PM8001_USE_MSIX
--	u32 mask;
--	mask = (u32)(1 << vec);
--
--	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, (u32)(mask & 0xFFFFFFFF));
-+	if (vec < 32) {
-+		/* vectors 0 - 31 */
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, 1U << vec);
-+	} else {
-+		/* vectors 32 - 63 */
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR_U,
-+			    1U << (vec - 32));
-+	}
- 	return;
- #endif
- 	pm80xx_chip_intx_interrupt_enable(pm8001_ha);
-@@ -1746,12 +1750,18 @@ static void
- pm80xx_chip_interrupt_disable(struct pm8001_hba_info *pm8001_ha, u8 vec)
- {
- #ifdef PM8001_USE_MSIX
--	u32 mask;
--	if (vec == 0xFF)
--		mask = 0xFFFFFFFF;
--	else
--		mask = (u32)(1 << vec);
--	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, (u32)(mask & 0xFFFFFFFF));
-+	if (vec == 0xFF) {
-+		/* disable all vectors 0-31, 32-63 */
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, 0xFFFFFFFF);
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U, 0xFFFFFFFF);
-+	} else if (vec < 32) {
-+		/* vectors 0 - 31 */
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, 1U << vec);
-+	} else {
-+		/* vectors 32 - 63 */
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U,
-+			    1U << (vec - 32));
-+	}
- 	return;
- #endif
- 	pm80xx_chip_intx_interrupt_disable(pm8001_ha);
+@@ -766,6 +766,10 @@ static void init_default_table_values(struct pm8001_hba_info *pm8001_ha)
+ 	pm8001_ha->main_cfg_tbl.pm80xx_tbl.pcs_event_log_severity	= 0x01;
+ 	pm8001_ha->main_cfg_tbl.pm80xx_tbl.fatal_err_interrupt		= 0x01;
+ 
++	/* Enable higher IQs and OQs, 32 to 63, bit 16 */
++	if (pm8001_ha->max_q_num > 32)
++		pm8001_ha->main_cfg_tbl.pm80xx_tbl.fatal_err_interrupt |=
++							1 << 16;
+ 	/* Disable end to end CRC checking */
+ 	pm8001_ha->main_cfg_tbl.pm80xx_tbl.crc_core_dump = (0x1 << 16);
+ 
+@@ -1027,6 +1031,8 @@ static int mpi_init_check(struct pm8001_hba_info *pm8001_ha)
+ 	if (0x0000 != gst_len_mpistate)
+ 		return -EBUSY;
+ 
++	msleep(500);
++
+ 	return 0;
+ }
+ 
 -- 
 2.31.1
 
