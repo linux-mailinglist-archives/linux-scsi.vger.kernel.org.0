@@ -2,218 +2,220 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175474F92C5
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Apr 2022 12:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DE64F92F3
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Apr 2022 12:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234405AbiDHKTr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Apr 2022 06:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
+        id S231470AbiDHKcw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Apr 2022 06:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234311AbiDHKTp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Apr 2022 06:19:45 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE8CC748F;
-        Fri,  8 Apr 2022 03:17:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649413058; x=1680949058;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=ZN2WT+aHWp12igTiJOcFcOuGrpSymXLSvwLhWlCo5CA=;
-  b=nCQW6y+0U1FyujEKxJLqRYg7Cpt10pqNOpzWDbY1SvMls0IhBHjWYLK+
-   3+UZjceY27qkk5X9wSQzC8uAbGBxLfrhWmGRZWNmPF7V5jremElRQSZYi
-   wplAnCKjer4o/6/N+FiwpdQh+5PIXtUmV+eU1XochQixbqfifhHcejU0T
-   fk4nogI/mATK0syYSP1raiIxdufxfdL3YBUnEyd7Irqn/gXUFQKxtSnLf
-   rW/CnzjBGHH4ziORtRwpxncuLqNRuC8IE6Xj6w0jj/0L3QQyiwhLS9Jrx
-   c52Mp8kN0lY4xV2VxEZTV4DiVvyIqah6qMWLCc/tAUt2XViKxt4qDx+If
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="242155536"
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="242155536"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 03:17:38 -0700
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="571439569"
-Received: from dmunisam-mobl.ger.corp.intel.com (HELO localhost) ([10.249.141.69])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 03:17:31 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     cgel.zte@gmail.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie
-Cc:     daniel@ffwll.ch, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        lv.ruyi@zte.com.cn, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] drivers: Fix spelling mistake "writting" -> "writing"
-In-Reply-To: <20220408095531.2495168-1-lv.ruyi@zte.com.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220408095531.2495168-1-lv.ruyi@zte.com.cn>
-Date:   Fri, 08 Apr 2022 13:17:27 +0300
-Message-ID: <87sfqnj2vc.fsf@intel.com>
+        with ESMTP id S234399AbiDHKck (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Apr 2022 06:32:40 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D1C11164
+        for <linux-scsi@vger.kernel.org>; Fri,  8 Apr 2022 03:30:35 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id w4so12109932wrg.12
+        for <linux-scsi@vger.kernel.org>; Fri, 08 Apr 2022 03:30:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bMG1g7rr9n+ottfcmWcC55uPNKGnZnLQG5qxdVFfJ/c=;
+        b=GuN0iCXM2lz9mjvP6iCzd1e6rt5RPWJ4nuZzuAoDx9NGZHH5tDKPTiy7cAaUL5oRNe
+         2XLkko5EpqaKsJHS92hd9/F/7EJGNUCcK/kgY41x0mhgLq1wC8Tb25SjOpJKLc17SrPs
+         sw/kQskX+44pPyNZRYH5GEPFCLQ8DUSzAxoLkRmHT3cJQBi6za7uPIfDwD1E2gk9q2Iy
+         MmiiotFxmzNl3MQYH1pdYhyYFRCpu4ANdni/IMv+Q5k1H4NplH67700EAIufIXm7Fs3H
+         WP6mmanTZx0mJ9ZhpOOH1VT3NcNuO2Ve3VvisNFx6vvaXpCvmHYjAjboqXzIdax2xvZF
+         ynWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bMG1g7rr9n+ottfcmWcC55uPNKGnZnLQG5qxdVFfJ/c=;
+        b=iiy3ro7pgEcr6HfctKTsX/Vy88QoNX4/wKiou9Ib/3NtygH/E46dDzV11R9sWy/YAP
+         SoAWEi+OsxH+Ql3+FmlimSG6aHPQKHBtbE0HG+lbwgJveqND6jUMt2n3g4GlcXF5gcYN
+         //WrKkqnYgGiPDmbNkRY7B2A+J8KAd+1YaBEec1oMh0g0o1hhCKD2xfGrO+xdyWvuyiD
+         2XFLK+TKX0tQfKWYQji+MGFKoMH8JsjDKdSu1VQn7s7Mr6oQlSwI9Inlqaa4XqLcRTRj
+         C3fAHkEr0ypw24QsU1W83GirJig7VHE57xZuLKiYE654xJ68qQso7JOkBjoYc6D2AAkM
+         5Ghw==
+X-Gm-Message-State: AOAM532//jSLcB6ZoXMOM24+cLtlq8QUf9x/1+nra9E0qZZIMShEjIrD
+        H9ZpokAZ8NuUeG2A/OXH8piQgg==
+X-Google-Smtp-Source: ABdhPJwZ7jM3+apmEvFrdIdfPicFrGgQZzpdM5I4/wXm33byVs6x5S9P0Qn+4Q4HU8JohFPXPiB7yA==
+X-Received: by 2002:a5d:47c1:0:b0:206:1c38:ab87 with SMTP id o1-20020a5d47c1000000b002061c38ab87mr13380817wrc.620.1649413834040;
+        Fri, 08 Apr 2022 03:30:34 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id n2-20020adfb742000000b00205eda3b3c1sm20181920wre.34.2022.04.08.03.30.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 03:30:33 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/4] scsi: core: constify pointer to scsi_host_template
+Date:   Fri,  8 Apr 2022 12:30:24 +0200
+Message-Id: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 08 Apr 2022, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
->
-> There are some spelling mistakes in the comments. Fix it.
+Several pointers to 'struct scsi_host_template' do not modify it, so
+made them const for safety.
 
-Please prefer splitting by driver. This isn't even split by subsystem. I
-presume there are very few maintainers willing to pick this up as it is.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/scsi/hosts.c      |  2 +-
+ drivers/scsi/scsi_error.c | 17 +++++++++--------
+ drivers/scsi/scsi_proc.c  |  2 +-
+ drivers/scsi/scsi_sysfs.c |  6 +++---
+ 4 files changed, 14 insertions(+), 13 deletions(-)
 
-BR,
-Jani.
-
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-> ---
->  drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c              | 2 +-
->  drivers/gpu/drm/i915/i915_request.c                 | 2 +-
->  drivers/net/ethernet/sfc/mcdi_pcol.h                | 4 ++--
->  drivers/net/ethernet/toshiba/tc35815.c              | 2 +-
->  drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c | 4 ++--
->  drivers/platform/x86/hp_accel.c                     | 2 +-
->  drivers/rtc/rtc-sa1100.c                            | 2 +-
->  drivers/scsi/pmcraid.c                              | 4 ++--
->  8 files changed, 11 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
-> index 9426e252d8aa..ce361fce7155 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
-> @@ -7304,7 +7304,7 @@ static void gfx_v10_0_setup_grbm_cam_remapping(struct amdgpu_device *adev)
->  		return;
->  
->  	/* initialize cam_index to 0
-> -	 * index will auto-inc after each data writting */
-> +	 * index will auto-inc after each data writing */
->  	WREG32_SOC15(GC, 0, mmGRBM_CAM_INDEX, 0);
->  
->  	switch (adev->ip_versions[GC_HWIP][0]) {
-> diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
-> index 582770360ad1..cf79a25cd98a 100644
-> --- a/drivers/gpu/drm/i915/i915_request.c
-> +++ b/drivers/gpu/drm/i915/i915_request.c
-> @@ -451,7 +451,7 @@ static bool __request_in_flight(const struct i915_request *signal)
->  	 * to avoid tearing.]
->  	 *
->  	 * Note that the read of *execlists->active may race with the promotion
-> -	 * of execlists->pending[] to execlists->inflight[], overwritting
-> +	 * of execlists->pending[] to execlists->inflight[], overwriting
->  	 * the value at *execlists->active. This is fine. The promotion implies
->  	 * that we received an ACK from the HW, and so the context is not
->  	 * stuck -- if we do not see ourselves in *active, the inflight status
-> diff --git a/drivers/net/ethernet/sfc/mcdi_pcol.h b/drivers/net/ethernet/sfc/mcdi_pcol.h
-> index d3fcbf930dba..ff617b1b38d3 100644
-> --- a/drivers/net/ethernet/sfc/mcdi_pcol.h
-> +++ b/drivers/net/ethernet/sfc/mcdi_pcol.h
-> @@ -73,8 +73,8 @@
->   *               \------------------------------ Resync (always set)
->   *
->   * The client writes it's request into MC shared memory, and rings the
-> - * doorbell. Each request is completed by either by the MC writting
-> - * back into shared memory, or by writting out an event.
-> + * doorbell. Each request is completed by either by the MC writing
-> + * back into shared memory, or by writing out an event.
->   *
->   * All MCDI commands support completion by shared memory response. Each
->   * request may also contain additional data (accounted for by HEADER.LEN),
-> diff --git a/drivers/net/ethernet/toshiba/tc35815.c b/drivers/net/ethernet/toshiba/tc35815.c
-> index ce38f7515225..1b4c207afb66 100644
-> --- a/drivers/net/ethernet/toshiba/tc35815.c
-> +++ b/drivers/net/ethernet/toshiba/tc35815.c
-> @@ -157,7 +157,7 @@ struct tc35815_regs {
->  #define PROM_Read	       0x00004000 /*10:Read operation		     */
->  #define PROM_Write	       0x00002000 /*01:Write operation		     */
->  #define PROM_Erase	       0x00006000 /*11:Erase operation		     */
-> -					  /*00:Enable or Disable Writting,   */
-> +					  /*00:Enable or Disable Writing,    */
->  					  /*	  as specified in PROM_Addr. */
->  #define PROM_Addr_Ena	       0x00000030 /*11xxxx:PROM Write enable	     */
->  					  /*00xxxx:	      disable	     */
-> diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c b/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
-> index eaba66113328..fbb4941d0da8 100644
-> --- a/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
-> +++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
-> @@ -520,7 +520,7 @@ static void _rtl92cu_init_queue_reserved_page(struct ieee80211_hw *hw,
->  		 * 2 out-ep. Remainder pages have assigned to High queue */
->  		if (outepnum > 1 && txqremaininpage)
->  			numhq += txqremaininpage;
-> -		/* NOTE: This step done before writting REG_RQPN. */
-> +		/* NOTE: This step done before writing REG_RQPN. */
->  		if (ischipn) {
->  			if (queue_sel & TX_SELE_NQ)
->  				numnq = txqpageunit;
-> @@ -539,7 +539,7 @@ static void _rtl92cu_init_queue_reserved_page(struct ieee80211_hw *hw,
->  			numlq = ischipn ? WMM_CHIP_B_PAGE_NUM_LPQ :
->  				WMM_CHIP_A_PAGE_NUM_LPQ;
->  		}
-> -		/* NOTE: This step done before writting REG_RQPN. */
-> +		/* NOTE: This step done before writing REG_RQPN. */
->  		if (ischipn) {
->  			if (queue_sel & TX_SELE_NQ)
->  				numnq = WMM_CHIP_B_PAGE_NUM_NPQ;
-> diff --git a/drivers/platform/x86/hp_accel.c b/drivers/platform/x86/hp_accel.c
-> index e9f852f7c27f..b59b852a666f 100644
-> --- a/drivers/platform/x86/hp_accel.c
-> +++ b/drivers/platform/x86/hp_accel.c
-> @@ -122,7 +122,7 @@ static int lis3lv02d_acpi_read(struct lis3lv02d *lis3, int reg, u8 *ret)
->  static int lis3lv02d_acpi_write(struct lis3lv02d *lis3, int reg, u8 val)
->  {
->  	struct acpi_device *dev = lis3->bus_priv;
-> -	unsigned long long ret; /* Not used when writting */
-> +	unsigned long long ret; /* Not used when writing */
->  	union acpi_object in_obj[2];
->  	struct acpi_object_list args = { 2, in_obj };
->  
-> diff --git a/drivers/rtc/rtc-sa1100.c b/drivers/rtc/rtc-sa1100.c
-> index 1250887e4382..a52a333de8e8 100644
-> --- a/drivers/rtc/rtc-sa1100.c
-> +++ b/drivers/rtc/rtc-sa1100.c
-> @@ -231,7 +231,7 @@ int sa1100_rtc_init(struct platform_device *pdev, struct sa1100_rtc *info)
->  	 * initialization is unknown and could in principle happen during
->  	 * normal processing.
->  	 *
-> -	 * Notice that clearing bit 1 and 0 is accomplished by writting ONES to
-> +	 * Notice that clearing bit 1 and 0 is accomplished by writing ONES to
->  	 * the corresponding bits in RTSR. */
->  	writel_relaxed(RTSR_AL | RTSR_HZ, info->rtsr);
->  
-> diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-> index fd674ed1febe..d7f4680f6106 100644
-> --- a/drivers/scsi/pmcraid.c
-> +++ b/drivers/scsi/pmcraid.c
-> @@ -857,7 +857,7 @@ static void _pmcraid_fire_command(struct pmcraid_cmd *cmd)
->  	unsigned long lock_flags;
->  
->  	/* Add this command block to pending cmd pool. We do this prior to
-> -	 * writting IOARCB to ioarrin because IOA might complete the command
-> +	 * writing IOARCB to ioarrin because IOA might complete the command
->  	 * by the time we are about to add it to the list. Response handler
->  	 * (isr/tasklet) looks for cmd block in the pending pending list.
->  	 */
-> @@ -2450,7 +2450,7 @@ static void pmcraid_request_sense(struct pmcraid_cmd *cmd)
->  
->  	/* request sense might be called as part of error response processing
->  	 * which runs in tasklets context. It is possible that mid-layer might
-> -	 * schedule queuecommand during this time, hence, writting to IOARRIN
-> +	 * schedule queuecommand during this time, hence, writing to IOARRIN
->  	 * must be protect by host_lock
->  	 */
->  	pmcraid_send_cmd(cmd, pmcraid_erp_done,
-
+diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
+index f69b77cbf538..65616a01761a 100644
+--- a/drivers/scsi/hosts.c
++++ b/drivers/scsi/hosts.c
+@@ -209,7 +209,7 @@ EXPORT_SYMBOL(scsi_remove_host);
+ int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
+ 			   struct device *dma_dev)
+ {
+-	struct scsi_host_template *sht = shost->hostt;
++	const struct scsi_host_template *sht = shost->hostt;
+ 	int error = -EINVAL;
+ 
+ 	shost_printk(KERN_INFO, shost, "%s\n",
+diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+index cdaca13ac1f1..0bca4108aae2 100644
+--- a/drivers/scsi/scsi_error.c
++++ b/drivers/scsi/scsi_error.c
+@@ -58,7 +58,7 @@
+ #define HOST_RESET_SETTLE_TIME  (10)
+ 
+ static int scsi_eh_try_stu(struct scsi_cmnd *scmd);
+-static enum scsi_disposition scsi_try_to_abort_cmd(struct scsi_host_template *,
++static enum scsi_disposition scsi_try_to_abort_cmd(const struct scsi_host_template *,
+ 						   struct scsi_cmnd *);
+ 
+ void scsi_eh_wakeup(struct Scsi_Host *shost)
+@@ -692,7 +692,7 @@ EXPORT_SYMBOL_GPL(scsi_check_sense);
+ 
+ static void scsi_handle_queue_ramp_up(struct scsi_device *sdev)
+ {
+-	struct scsi_host_template *sht = sdev->host->hostt;
++	const struct scsi_host_template *sht = sdev->host->hostt;
+ 	struct scsi_device *tmp_sdev;
+ 
+ 	if (!sht->track_queue_depth ||
+@@ -724,7 +724,7 @@ static void scsi_handle_queue_ramp_up(struct scsi_device *sdev)
+ 
+ static void scsi_handle_queue_full(struct scsi_device *sdev)
+ {
+-	struct scsi_host_template *sht = sdev->host->hostt;
++	const struct scsi_host_template *sht = sdev->host->hostt;
+ 	struct scsi_device *tmp_sdev;
+ 
+ 	if (!sht->track_queue_depth)
+@@ -833,7 +833,7 @@ static enum scsi_disposition scsi_try_host_reset(struct scsi_cmnd *scmd)
+ 	unsigned long flags;
+ 	enum scsi_disposition rtn;
+ 	struct Scsi_Host *host = scmd->device->host;
+-	struct scsi_host_template *hostt = host->hostt;
++	const struct scsi_host_template *hostt = host->hostt;
+ 
+ 	SCSI_LOG_ERROR_RECOVERY(3,
+ 		shost_printk(KERN_INFO, host, "Snd Host RST\n"));
+@@ -863,7 +863,7 @@ static enum scsi_disposition scsi_try_bus_reset(struct scsi_cmnd *scmd)
+ 	unsigned long flags;
+ 	enum scsi_disposition rtn;
+ 	struct Scsi_Host *host = scmd->device->host;
+-	struct scsi_host_template *hostt = host->hostt;
++	const struct scsi_host_template *hostt = host->hostt;
+ 
+ 	SCSI_LOG_ERROR_RECOVERY(3, scmd_printk(KERN_INFO, scmd,
+ 		"%s: Snd Bus RST\n", __func__));
+@@ -905,7 +905,7 @@ static enum scsi_disposition scsi_try_target_reset(struct scsi_cmnd *scmd)
+ 	unsigned long flags;
+ 	enum scsi_disposition rtn;
+ 	struct Scsi_Host *host = scmd->device->host;
+-	struct scsi_host_template *hostt = host->hostt;
++	const struct scsi_host_template *hostt = host->hostt;
+ 
+ 	if (!hostt->eh_target_reset_handler)
+ 		return FAILED;
+@@ -934,7 +934,7 @@ static enum scsi_disposition scsi_try_target_reset(struct scsi_cmnd *scmd)
+ static enum scsi_disposition scsi_try_bus_device_reset(struct scsi_cmnd *scmd)
+ {
+ 	enum scsi_disposition rtn;
+-	struct scsi_host_template *hostt = scmd->device->host->hostt;
++	const struct scsi_host_template *hostt = scmd->device->host->hostt;
+ 
+ 	if (!hostt->eh_device_reset_handler)
+ 		return FAILED;
+@@ -963,7 +963,8 @@ static enum scsi_disposition scsi_try_bus_device_reset(struct scsi_cmnd *scmd)
+  *    link down on FibreChannel)
+  */
+ static enum scsi_disposition
+-scsi_try_to_abort_cmd(struct scsi_host_template *hostt, struct scsi_cmnd *scmd)
++scsi_try_to_abort_cmd(const struct scsi_host_template *hostt,
++		      struct scsi_cmnd *scmd)
+ {
+ 	if (!hostt->eh_abort_handler)
+ 		return FAILED;
+diff --git a/drivers/scsi/scsi_proc.c b/drivers/scsi/scsi_proc.c
+index 95aee1ad1383..6f023a2f951b 100644
+--- a/drivers/scsi/scsi_proc.c
++++ b/drivers/scsi/scsi_proc.c
+@@ -137,7 +137,7 @@ void scsi_proc_hostdir_rm(struct scsi_host_template *sht)
+  */
+ void scsi_proc_host_add(struct Scsi_Host *shost)
+ {
+-	struct scsi_host_template *sht = shost->hostt;
++	const struct scsi_host_template *sht = shost->hostt;
+ 	struct proc_dir_entry *p;
+ 	char name[10];
+ 
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index dc6872e352bd..cdc6e1ab8ce7 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -296,7 +296,7 @@ store_host_reset(struct device *dev, struct device_attribute *attr,
+ 		const char *buf, size_t count)
+ {
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+-	struct scsi_host_template *sht = shost->hostt;
++	const struct scsi_host_template *sht = shost->hostt;
+ 	int ret = -EINVAL;
+ 	int type;
+ 
+@@ -1017,7 +1017,7 @@ sdev_store_queue_depth(struct device *dev, struct device_attribute *attr,
+ {
+ 	int depth, retval;
+ 	struct scsi_device *sdev = to_scsi_device(dev);
+-	struct scsi_host_template *sht = sdev->host->hostt;
++	const struct scsi_host_template *sht = sdev->host->hostt;
+ 
+ 	if (!sht->change_queue_depth)
+ 		return -EINVAL;
+@@ -1584,7 +1584,7 @@ void scsi_sysfs_device_initialize(struct scsi_device *sdev)
+ {
+ 	unsigned long flags;
+ 	struct Scsi_Host *shost = sdev->host;
+-	struct scsi_host_template *hostt = shost->hostt;
++	const struct scsi_host_template *hostt = shost->hostt;
+ 	struct scsi_target  *starget = sdev->sdev_target;
+ 
+ 	device_initialize(&sdev->sdev_gendev);
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.32.0
+
