@@ -2,303 +2,159 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E274FAF57
-	for <lists+linux-scsi@lfdr.de>; Sun, 10 Apr 2022 19:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6094FB0B1
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Apr 2022 00:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243748AbiDJRj0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 10 Apr 2022 13:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
+        id S230294AbiDJWqV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 10 Apr 2022 18:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243745AbiDJRjR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 10 Apr 2022 13:39:17 -0400
-Received: from smtp.infotech.no (smtp.infotech.no [82.134.31.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4429728E13
-        for <linux-scsi@vger.kernel.org>; Sun, 10 Apr 2022 10:37:06 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 9AD072041C0;
-        Sun, 10 Apr 2022 19:37:05 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id yHhWbP3PqKbc; Sun, 10 Apr 2022 19:37:04 +0200 (CEST)
-Received: from xtwo70.bingwo.ca (host-45-78-195-155.dyn.295.ca [45.78.195.155])
-        by smtp.infotech.no (Postfix) with ESMTPA id 23CAB204179;
-        Sun, 10 Apr 2022 19:37:03 +0200 (CEST)
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
-        bvanassche@acm.org, hch@lst.de
-Subject: [PATCH v2 6/6] st,sr,stex: use scsi_cmnd cdb access functions
-Date:   Sun, 10 Apr 2022 13:36:52 -0400
-Message-Id: <20220410173652.313016-7-dgilbert@interlog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220410173652.313016-1-dgilbert@interlog.com>
-References: <20220410173652.313016-1-dgilbert@interlog.com>
+        with ESMTP id S232158AbiDJWqO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 10 Apr 2022 18:46:14 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1AF18E;
+        Sun, 10 Apr 2022 15:44:01 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id e189so14220414oia.8;
+        Sun, 10 Apr 2022 15:44:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hpXBKems3UG+wFxv0QCe5MNRbLOMx85cf7BfRRO6zmU=;
+        b=LHcqPy2pCPxk0g7PcqDQbA5+VjLEZ388wIecksOL4Rs8mquDlHheaBsjsei2K1xPjj
+         IW0S2i6DdjoKMkliXqOEmwSd9w2GE8GzhVqqhFkYlg9mU0O/eQU5ikbJhEYAcemZ2cg0
+         X0QLfKATIX69kDDp9N9eiHgjVfYro7smDr7xJobD+IH896POevvNCJuO9eCMJb9sz2V7
+         uWy+O/cHJSnf4MwbsEe2gIMO3XLR9ZQqzl1d7YHa25mWg/7yRzDMkJR8HkOgxJCSWpyU
+         i3aZkrLhcPQgtCRrYefIsW65uZXovCbYCWZeaqwhlWOqnmPF5vKAPKkWDtdXIzzqVik+
+         1ctA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hpXBKems3UG+wFxv0QCe5MNRbLOMx85cf7BfRRO6zmU=;
+        b=LcQF2xRcSokSvSbFq6N594wDoUWkdiYQKB80iJN5Tu8rF2jOBbNVm0TqRg3OL5iGwJ
+         bQLgStrwiDv8M6O6wqfWcBKpOSvRYvrKSYqawXY/PfpjXV+a2lSxp2jN4rcbIPjEOYEr
+         5s4GKi1SMDV2bROfEl14Hb+p4eAnlGVXq/Tw0Uq4YzrRkB6QtMzrLVKdT90Mctx+AuJM
+         7DP/wBekTe7KP9EJTDR9yYpNt2YWnNiCXr/631zHlcu0jXZNnwuneCCsjOJXLa7YGOfD
+         7ajgMhKhNHZwFZkUKwc64olaZl5r/CbdRz6jisxffFObVROpvEzPc7SAHpH3HBzJRoNO
+         ofxA==
+X-Gm-Message-State: AOAM530B8sTILw+Om32ifCciHalPgXO8DKQFW4TJg9FRtcAgP2mQM630
+        DwVdtFKPF71k3iO1FBSz9FE=
+X-Google-Smtp-Source: ABdhPJy3eekkjOw+1iVq4Y0fJoVCg3ivdiOox0nSgj0fSybVf6+AZOkC2Bvx2a7V1AbGu4dUXj5/xQ==
+X-Received: by 2002:aca:705:0:b0:2d9:6bb6:5b0 with SMTP id 5-20020aca0705000000b002d96bb605b0mr4106169oih.11.1649630641165;
+        Sun, 10 Apr 2022 15:44:01 -0700 (PDT)
+Received: from ubuntu-21.tx.rr.com (2603-8081-140c-1a00-dc1d-a6ff-2878-e7c1.res6.spectrum.com. [2603:8081:140c:1a00:dc1d:a6ff:2878:e7c1])
+        by smtp.googlemail.com with ESMTPSA id 60-20020a9d0642000000b005b22a82458csm11610304otn.55.2022.04.10.15.44.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 15:44:00 -0700 (PDT)
+From:   Bob Pearson <rpearsonhpe@gmail.com>
+To:     bvanassche@acm.org, jgg@nvidia.com, zyjzyj2000@gmail.com,
+        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
+        yi.zhang@redhat.com
+Cc:     Bob Pearson <rpearsonhpe@gmail.com>
+Subject: [PATCH for-next] RDMA/rxe: Fix "Replace red-black trees by xarrays"
+Date:   Sun, 10 Apr 2022 17:39:40 -0500
+Message-Id: <20220410223939.3769-1-rpearsonhpe@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
----
- drivers/scsi/sr.c   | 40 ++++++++++++++++++++++------------------
- drivers/scsi/st.c   | 12 +++++++-----
- drivers/scsi/stex.c | 22 +++++++++++++---------
- 3 files changed, 42 insertions(+), 32 deletions(-)
+The referenced commit causes lockdep warnings by using the
+default spin_lock in xa_alloc_cyclic and xa_erase which
+include calls to xa_lock()/xa_unlock() while at the same time
+explicitly calling xa_lock_irqsave() in rxe_pool_get_index().
 
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index 5ba9df334968..1d76fd309501 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -358,7 +358,9 @@ static blk_status_t sr_init_command(struct scsi_cmnd *SCpnt)
- 	int block = 0, this_count, s_size;
- 	struct scsi_cd *cd;
- 	struct request *rq = scsi_cmd_to_rq(SCpnt);
-+	u8 *cdb;
- 	blk_status_t ret;
-+	static const unsigned int read_write_10_cdb_len = 10;
+The latter is required to handle some object lookups correctly. The
+immediate fix is to explicitly use xa_lock_irqsave() everywhere.
+
+This commit replaces xa_alloc_cyclic() by __xa_alloc_cyclic() and
+xa_erase() by __xa_erase() and explicitly lock these calls with
+xa_lock_irqsave().
+
+This commit will be reverted later when the read side operations
+in rxe_pool.c will be converted to rcu_read_locks which will not
+require locking the write side operations with irqsave locks.
+
+This commit fixes the "WARNING: Inconsistent lock state" bug in
+blktests. The recent revert patch from Bart fixes the other
+bug in blktests with very long delays.
+
+Fixes: 3225717f6dfa ("RDMA/rxe: Replace red-black trees by carrays")
+Signed-off-by: Bob Pearson <rpearsonhpe@gmail.com>
+---
+ drivers/infiniband/sw/rxe/rxe_pool.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/infiniband/sw/rxe/rxe_pool.c b/drivers/infiniband/sw/rxe/rxe_pool.c
+index 87066d04ed18..440f96af213b 100644
+--- a/drivers/infiniband/sw/rxe/rxe_pool.c
++++ b/drivers/infiniband/sw/rxe/rxe_pool.c
+@@ -118,7 +118,9 @@ void rxe_pool_cleanup(struct rxe_pool *pool)
  
- 	ret = scsi_alloc_sgtables(SCpnt);
- 	if (ret != BLK_STS_OK)
-@@ -390,15 +392,17 @@ static blk_status_t sr_init_command(struct scsi_cmnd *SCpnt)
- 		goto out;
- 	}
- 
-+	/* scsi_cmnd_set_cdb() zeros out returned buffer */
-+	cdb = scsi_cmnd_set_cdb(SCpnt, NULL, read_write_10_cdb_len);
- 	switch (req_op(rq)) {
- 	case REQ_OP_WRITE:
- 		if (!cd->writeable)
- 			goto out;
--		SCpnt->cmnd[0] = WRITE_10;
-+		cdb[0] = WRITE_10;
- 		cd->cdi.media_written = 1;
- 		break;
- 	case REQ_OP_READ:
--		SCpnt->cmnd[0] = READ_10;
-+		cdb[0] = READ_10;
- 		break;
- 	default:
- 		blk_dump_rq_flags(rq, "Unknown sr command");
-@@ -439,7 +443,7 @@ static blk_status_t sr_init_command(struct scsi_cmnd *SCpnt)
- 					"writing" : "reading",
- 					this_count, blk_rq_sectors(rq)));
- 
--	SCpnt->cmnd[1] = 0;
-+	cdb[1] = 0;
- 	block = (unsigned int)blk_rq_pos(rq) / (s_size >> 9);
- 
- 	if (this_count > 0xffff) {
-@@ -447,9 +451,8 @@ static blk_status_t sr_init_command(struct scsi_cmnd *SCpnt)
- 		SCpnt->sdb.length = this_count * s_size;
- 	}
- 
--	put_unaligned_be32(block, &SCpnt->cmnd[2]);
--	SCpnt->cmnd[6] = SCpnt->cmnd[9] = 0;
--	put_unaligned_be16(this_count, &SCpnt->cmnd[7]);
-+	put_unaligned_be32(block, &cdb[2]);
-+	put_unaligned_be16(this_count, &cdb[7]);
- 
- 	/*
- 	 * We shouldn't disconnect in the middle of a sector, so with a dumb
-@@ -459,7 +462,6 @@ static blk_status_t sr_init_command(struct scsi_cmnd *SCpnt)
- 	SCpnt->transfersize = cd->device->sector_size;
- 	SCpnt->underflow = this_count << 9;
- 	SCpnt->allowed = MAX_RETRIES;
--	SCpnt->cmd_len = 10;
- 
- 	/*
- 	 * This indicates that the command is ready from our end to be queued.
-@@ -929,6 +931,7 @@ static int sr_read_cdda_bpc(struct cdrom_device_info *cdi, void __user *ubuf,
- 	struct scsi_cmnd *scmd;
- 	struct request *rq;
- 	struct bio *bio;
-+	u8 *cdb;
- 	int ret;
- 
- 	rq = scsi_alloc_request(disk->queue, REQ_OP_DRV_IN, 0);
-@@ -940,17 +943,18 @@ static int sr_read_cdda_bpc(struct cdrom_device_info *cdi, void __user *ubuf,
- 	if (ret)
- 		goto out_put_request;
- 
--	scmd->cmnd[0] = GPCMD_READ_CD;
--	scmd->cmnd[1] = 1 << 2;
--	scmd->cmnd[2] = (lba >> 24) & 0xff;
--	scmd->cmnd[3] = (lba >> 16) & 0xff;
--	scmd->cmnd[4] = (lba >>  8) & 0xff;
--	scmd->cmnd[5] = lba & 0xff;
--	scmd->cmnd[6] = (nr >> 16) & 0xff;
--	scmd->cmnd[7] = (nr >>  8) & 0xff;
--	scmd->cmnd[8] = nr & 0xff;
--	scmd->cmnd[9] = 0xf8;
- 	scmd->cmd_len = 12;
-+	cdb = scsi_cmnd_set_cdb(scmd, NULL, scmd->cmd_len);
-+	cdb[0] = GPCMD_READ_CD;
-+	cdb[1] = 1 << 2;
-+	cdb[2] = (lba >> 24) & 0xff;
-+	cdb[3] = (lba >> 16) & 0xff;
-+	cdb[4] = (lba >>  8) & 0xff;
-+	cdb[5] = lba & 0xff;
-+	cdb[6] = (nr >> 16) & 0xff;
-+	cdb[7] = (nr >>  8) & 0xff;
-+	cdb[8] = nr & 0xff;
-+	cdb[9] = 0xf8;
- 	rq->timeout = 60 * HZ;
- 	bio = rq->bio;
- 
-@@ -967,7 +971,7 @@ static int sr_read_cdda_bpc(struct cdrom_device_info *cdi, void __user *ubuf,
- 	if (blk_rq_unmap_user(bio))
- 		ret = -EFAULT;
- out_put_request:
--	blk_mq_free_request(rq);
-+	scsi_free_cmnd(scmd);
- 	return ret;
- }
- 
-diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-index 56a093a90b92..801486c9b411 100644
---- a/drivers/scsi/st.c
-+++ b/drivers/scsi/st.c
-@@ -473,10 +473,11 @@ static void st_release_request(struct st_request *streq)
- static void st_do_stats(struct scsi_tape *STp, struct request *req)
+ void *rxe_alloc(struct rxe_pool *pool)
  {
- 	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(req);
-+	const u8 *cdb = scsi_cmnd_get_cdb(scmd);
- 	ktime_t now;
++	struct xarray *xa = &pool->xa;
+ 	struct rxe_pool_elem *elem;
++	unsigned long flags;
+ 	void *obj;
+ 	int err;
  
- 	now = ktime_get();
--	if (scmd->cmnd[0] == WRITE_6) {
-+	if (cdb[0] == WRITE_6) {
- 		now = ktime_sub(now, STp->stats->write_time);
- 		atomic64_add(ktime_to_ns(now), &STp->stats->tot_write_time);
- 		atomic64_add(ktime_to_ns(now), &STp->stats->tot_io_time);
-@@ -490,7 +491,7 @@ static void st_do_stats(struct scsi_tape *STp, struct request *req)
- 		} else
- 			atomic64_add(atomic_read(&STp->stats->last_write_size),
- 				&STp->stats->write_byte_cnt);
--	} else if (scmd->cmnd[0] == READ_6) {
-+	} else if (cdb[0] == READ_6) {
- 		now = ktime_sub(now, STp->stats->read_time);
- 		atomic64_add(ktime_to_ns(now), &STp->stats->tot_read_time);
- 		atomic64_add(ktime_to_ns(now), &STp->stats->tot_io_time);
-@@ -531,7 +532,7 @@ static void st_scsi_execute_end(struct request *req, blk_status_t status)
- 		complete(SRpnt->waiting);
+@@ -138,8 +140,10 @@ void *rxe_alloc(struct rxe_pool *pool)
+ 	elem->obj = obj;
+ 	kref_init(&elem->ref_cnt);
  
- 	blk_rq_unmap_user(tmp);
--	blk_mq_free_request(req);
-+	scsi_free_cmnd(scmd);
- }
+-	err = xa_alloc_cyclic(&pool->xa, &elem->index, elem, pool->limit,
++	xa_lock_irqsave(xa, flags);
++	err = __xa_alloc_cyclic(&pool->xa, &elem->index, elem, pool->limit,
+ 			      &pool->next, GFP_KERNEL);
++	xa_unlock_irqrestore(xa, flags);
+ 	if (err)
+ 		goto err_free;
  
- static int st_scsi_execute(struct st_request *SRpnt, const unsigned char *cmd,
-@@ -558,7 +559,7 @@ static int st_scsi_execute(struct st_request *SRpnt, const unsigned char *cmd,
- 		err = blk_rq_map_user(req->q, req, mdata, NULL, bufflen,
- 				      GFP_KERNEL);
- 		if (err) {
--			blk_mq_free_request(req);
-+			scsi_free_cmnd(scmd);
- 			return err;
- 		}
- 	}
-@@ -576,7 +577,8 @@ static int st_scsi_execute(struct st_request *SRpnt, const unsigned char *cmd,
+@@ -154,6 +158,8 @@ void *rxe_alloc(struct rxe_pool *pool)
  
- 	SRpnt->bio = req->bio;
- 	scmd->cmd_len = COMMAND_SIZE(cmd[0]);
--	memcpy(scmd->cmnd, cmd, scmd->cmd_len);
-+	/* Don't check for NULL return as extremely unlikely */
-+	scsi_cmnd_set_cdb(scmd, cmd, scmd->cmd_len);
- 	req->timeout = timeout;
- 	scmd->allowed = retries;
- 	req->end_io_data = SRpnt;
-diff --git a/drivers/scsi/stex.c b/drivers/scsi/stex.c
-index e6420f2127ce..8f0d28ef2963 100644
---- a/drivers/scsi/stex.c
-+++ b/drivers/scsi/stex.c
-@@ -597,6 +597,7 @@ static int stex_queuecommand_lck(struct scsi_cmnd *cmd)
- 	struct Scsi_Host *host;
- 	unsigned int id, lun;
- 	struct req_msg *req;
-+	const u8 *cdb;
- 	u16 tag;
- 
- 	host = cmd->device->host;
-@@ -611,14 +612,15 @@ static int stex_queuecommand_lck(struct scsi_cmnd *cmd)
- 	if (unlikely(hba->mu_status != MU_STATE_STARTED))
- 		return SCSI_MLQUEUE_HOST_BUSY;
- 
--	switch (cmd->cmnd[0]) {
-+	cdb = scsi_cmnd_get_cdb(cmd);
-+	switch (cdb[0]) {
- 	case MODE_SENSE_10:
- 	{
- 		static char ms10_caching_page[12] =
- 			{ 0, 0x12, 0, 0, 0, 0, 0, 0, 0x8, 0xa, 0x4, 0 };
- 		unsigned char page;
- 
--		page = cmd->cmnd[2] & 0x3f;
-+		page = cdb[2] & 0x3f;
- 		if (page == 0x8 || page == 0x3f) {
- 			scsi_sg_copy_from_buffer(cmd, ms10_caching_page,
- 						 sizeof(ms10_caching_page));
-@@ -655,7 +657,7 @@ static int stex_queuecommand_lck(struct scsi_cmnd *cmd)
- 		if (id != host->max_id - 1)
- 			break;
- 		if (!lun && !cmd->device->channel &&
--			(cmd->cmnd[1] & INQUIRY_EVPD) == 0) {
-+			(cdb[1] & INQUIRY_EVPD) == 0) {
- 			scsi_sg_copy_from_buffer(cmd, (void *)console_inq_page,
- 						 sizeof(console_inq_page));
- 			cmd->result = DID_OK << 16;
-@@ -664,7 +666,7 @@ static int stex_queuecommand_lck(struct scsi_cmnd *cmd)
- 			stex_invalid_field(cmd, done);
- 		return 0;
- 	case PASSTHRU_CMD:
--		if (cmd->cmnd[1] == PASSTHRU_GET_DRVVER) {
-+		if (cdb[1] == PASSTHRU_GET_DRVVER) {
- 			struct st_drvver ver;
- 			size_t cp_len = sizeof(ver);
- 
-@@ -699,7 +701,7 @@ static int stex_queuecommand_lck(struct scsi_cmnd *cmd)
- 	req->target = id;
- 
- 	/* cdb */
--	memcpy(req->cdb, cmd->cmnd, STEX_CDB_LENGTH);
-+	memcpy(req->cdb, cdb, STEX_CDB_LENGTH);
- 
- 	if (cmd->sc_data_direction == DMA_FROM_DEVICE)
- 		req->data_dir = MSG_DATA_DIR_IN;
-@@ -783,8 +785,8 @@ static void stex_copy_data(struct st_ccb *ccb,
- static void stex_check_cmd(struct st_hba *hba,
- 	struct st_ccb *ccb, struct status_msg *resp)
+ int __rxe_add_to_pool(struct rxe_pool *pool, struct rxe_pool_elem *elem)
  {
--	if (ccb->cmd->cmnd[0] == MGT_CMD &&
--		resp->scsi_status != SAM_STAT_CHECK_CONDITION)
-+	if (scsi_cmnd_get_cdb(ccb->cmd)[0] == MGT_CMD &&
-+	    resp->scsi_status != SAM_STAT_CHECK_CONDITION)
- 		scsi_set_resid(ccb->cmd, scsi_bufflen(ccb->cmd) -
- 			le32_to_cpu(*(__le32 *)&resp->variable[0]));
- }
-@@ -858,11 +860,13 @@ static void stex_mu_intr(struct st_hba *hba, u32 doorbell)
- 		ccb->scsi_status = resp->scsi_status;
++	struct xarray *xa = &pool->xa;
++	unsigned long flags;
+ 	int err;
  
- 		if (likely(ccb->cmd != NULL)) {
-+			const u8 *cdb = scsi_cmnd_get_cdb(ccb->cmd);
-+
- 			if (hba->cardtype == st_yosemite)
- 				stex_check_cmd(hba, ccb, resp);
+ 	if (WARN_ON(pool->flags & RXE_POOL_ALLOC))
+@@ -166,8 +172,10 @@ int __rxe_add_to_pool(struct rxe_pool *pool, struct rxe_pool_elem *elem)
+ 	elem->obj = (u8 *)elem - pool->elem_offset;
+ 	kref_init(&elem->ref_cnt);
  
--			if (unlikely(ccb->cmd->cmnd[0] == PASSTHRU_CMD &&
--				ccb->cmd->cmnd[1] == PASSTHRU_GET_ADAPTER))
-+			if (unlikely(cdb[0] == PASSTHRU_CMD &&
-+				     cdb[1] == PASSTHRU_GET_ADAPTER))
- 				stex_controller_info(hba, ccb);
+-	err = xa_alloc_cyclic(&pool->xa, &elem->index, elem, pool->limit,
++	xa_lock_irqsave(xa, flags);
++	err = __xa_alloc_cyclic(&pool->xa, &elem->index, elem, pool->limit,
+ 			      &pool->next, GFP_KERNEL);
++	xa_unlock_irqrestore(xa, flags);
+ 	if (err)
+ 		goto err_cnt;
  
- 			scsi_dma_unmap(ccb->cmd);
+@@ -200,8 +208,12 @@ static void rxe_elem_release(struct kref *kref)
+ {
+ 	struct rxe_pool_elem *elem = container_of(kref, typeof(*elem), ref_cnt);
+ 	struct rxe_pool *pool = elem->pool;
++	struct xarray *xa = &pool->xa;
++	unsigned long flags;
+ 
+-	xa_erase(&pool->xa, elem->index);
++	xa_lock_irqsave(xa, flags);
++	__xa_erase(&pool->xa, elem->index);
++	xa_unlock_irqrestore(xa, flags);
+ 
+ 	if (pool->cleanup)
+ 		pool->cleanup(elem);
 -- 
-2.25.1
+2.32.0
 
