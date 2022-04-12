@@ -2,45 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4C84FCB5C
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Apr 2022 03:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A5B4FCB6D
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Apr 2022 03:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343705AbiDLBEf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Apr 2022 21:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
+        id S1345778AbiDLBEz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Apr 2022 21:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349288AbiDLA7h (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Apr 2022 20:59:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F8B37BD2;
-        Mon, 11 Apr 2022 17:52:55 -0700 (PDT)
+        with ESMTP id S1349796AbiDLA7o (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Apr 2022 20:59:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49181275EF;
+        Mon, 11 Apr 2022 17:53:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 689AC60DED;
-        Tue, 12 Apr 2022 00:52:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E8CC385AA;
-        Tue, 12 Apr 2022 00:52:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 960B6B80E9B;
+        Tue, 12 Apr 2022 00:53:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB878C385A3;
+        Tue, 12 Apr 2022 00:53:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649724774;
-        bh=t7Ek2bfIGx3XDB9l3vX26eAquej9L1q8mFbYIgiCgz8=;
+        s=k20201202; t=1649724784;
+        bh=sNno4EtBAliDgozzOpAWH0kapXXQuaF4DBpGUMYbEC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NRtjSLaWocyKriPF2VvcHypkhIhYCRJp8AX93HIWtWl0YVoz8FHX/kXH13bBXKt/+
-         MLM3wWk3mjn18nK8ieMK5QNmmgF0TigP+kkUqP6djf1TJb1W8zZrWabZ86enFpEDz8
-         iYkfOMZrvG0pEWWj+QRL4T7fOQrF8DDk7WeVmY+XuyJgzZcd/Qsj8uVENqcbJAjG5m
-         XWu2EpG50BVc1zGSAtMuW3camLYH7JJya9DO8dQy3xRUsDX7H08qMGSUb4HVb6m9EC
-         iPeYJ4B8ljTNIcRD2K6lW/lDF+vWpb+o+9XaIkmhaLBkOSPdYVXzGrX5XUTGqimW9T
-         uAnWSVIG4Dh0Q==
+        b=DvpOaFoJYLZhKVlDH7PcJ44oKiCaDen6RDwejep7YMORpvIChdwZ4XXRWirkL5Io+
+         vR72KPL7td1hkA89J1eQ7Kr1CNCkzj2cjFvW0zEb0tDW/Ewo/ljMU8/cOqSOP3o0GX
+         PSwKz1pMbtd4n6ZA9n48tSwgIICuXEXqqhfPTyMGrnzwdefgKhSU4ZixOgIHX5K8W6
+         6bBaasRshGqp0YMydicltqB+QvBdbIvFSwSoIOhvMU5+uXdwzjlsHbfL7bAaMRvD28
+         nCkSq9VuZR4vzg2mQy1KmRy/jFyK5vii/083/zokT+kJKHogQei867KMZCaerymoCG
+         EoVyfmuxk6QEw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tyrel Datwyler <tyreld@linux.ibm.com>,
+Cc:     Alexey Galakhov <agalakhov@gmail.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, mikecyr@linux.ibm.com,
-        jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 3/7] scsi: ibmvscsis: Increase INITIAL_SRP_LIMIT to 1024
-Date:   Mon, 11 Apr 2022 20:52:44 -0400
-Message-Id: <20220412005248.351701-3-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
+        john.garry@huawei.com, bvanassche@acm.org,
+        davidcomponentone@gmail.com, johannes.thumshirn@wdc.com,
+        yuyufen@huawei.com, thunder.leizhen@huawei.com,
+        yang.guang5@zte.com.cn, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 6/7] scsi: mvsas: Add PCI ID of RocketRaid 2640
+Date:   Mon, 11 Apr 2022 20:52:47 -0400
+Message-Id: <20220412005248.351701-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412005248.351701-1-sashal@kernel.org>
 References: <20220412005248.351701-1-sashal@kernel.org>
@@ -58,42 +60,34 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Tyrel Datwyler <tyreld@linux.ibm.com>
+From: Alexey Galakhov <agalakhov@gmail.com>
 
-[ Upstream commit 0bade8e53279157c7cc9dd95d573b7e82223d78a ]
+[ Upstream commit 5f2bce1e222028dc1c15f130109a17aa654ae6e8 ]
 
-The adapter request_limit is hardcoded to be INITIAL_SRP_LIMIT which is
-currently an arbitrary value of 800. Increase this value to 1024 which
-better matches the characteristics of the typical IBMi Initiator that
-supports 32 LUNs and a queue depth of 32.
+The HighPoint RocketRaid 2640 is a low-cost SAS controller based on Marvell
+chip. The chip in question was already supported by the kernel, just the
+PCI ID of this particular board was missing.
 
-This change also has the secondary benefit of being a power of two as
-required by the kfifo API. Since, Commit ab9bb6318b09 ("Partially revert
-"kfifo: fix kfifo_alloc() and kfifo_init()"") the size of IU pool for each
-target has been rounded down to 512 when attempting to kfifo_init() those
-pools with the current request_limit size of 800.
-
-Link: https://lore.kernel.org/r/20220322194443.678433-1-tyreld@linux.ibm.com
-Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220309212535.402987-1-agalakhov@gmail.com
+Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/mvsas/mv_init.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-index 5ed28111c3c3..569b662e19e7 100644
---- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-+++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-@@ -43,7 +43,7 @@
- 
- #define IBMVSCSIS_VERSION	"v0.2"
- 
--#define	INITIAL_SRP_LIMIT	800
-+#define	INITIAL_SRP_LIMIT	1024
- #define	DEFAULT_MAX_SECTORS	256
- #define MAX_TXU			1024 * 1024
- 
+diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
+index 8280046fd1f0..b29542b82c8a 100644
+--- a/drivers/scsi/mvsas/mv_init.c
++++ b/drivers/scsi/mvsas/mv_init.c
+@@ -679,6 +679,7 @@ static struct pci_device_id mvs_pci_table[] = {
+ 	{ PCI_VDEVICE(ARECA, PCI_DEVICE_ID_ARECA_1300), chip_1300 },
+ 	{ PCI_VDEVICE(ARECA, PCI_DEVICE_ID_ARECA_1320), chip_1320 },
+ 	{ PCI_VDEVICE(ADAPTEC2, 0x0450), chip_6440 },
++	{ PCI_VDEVICE(TTI, 0x2640), chip_6440 },
+ 	{ PCI_VDEVICE(TTI, 0x2710), chip_9480 },
+ 	{ PCI_VDEVICE(TTI, 0x2720), chip_9480 },
+ 	{ PCI_VDEVICE(TTI, 0x2721), chip_9480 },
 -- 
 2.35.1
 
