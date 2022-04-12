@@ -2,148 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795D44FDB9A
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Apr 2022 12:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C0A4FDB83
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Apr 2022 12:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347912AbiDLKF2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Apr 2022 06:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
+        id S232517AbiDLKE0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Apr 2022 06:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380839AbiDLIWn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 04:22:43 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED69C4F462
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 00:51:43 -0700 (PDT)
-X-UUID: 7a848ed315a6432a9cc4ded1bb433ab4-20220412
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:1ef5052d-7089-44d8-be8d-449538440eb3,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:-20
-X-CID-META: VersionHash:faefae9,CLOUDID:cc01dfa8-d103-4e36-82b9-b0e86991b3df,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 7a848ed315a6432a9cc4ded1bb433ab4-20220412
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <powen.kao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1523113766; Tue, 12 Apr 2022 15:51:37 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 12 Apr 2022 15:51:36 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 12 Apr 2022 15:51:36 +0800
-Message-ID: <4a13e84b5085c03f092a46ebac41690bd57bef3a.camel@mediatek.com>
-Subject: Re: Please check ufshpb init flow
-From:   Po-Wen Kao <powen.kao@mediatek.com>
-To:     "=?UTF-8?Q?=EC=A0=95=EC=9A=94=ED=95=9C=28JOUNG?= YOHAN) Mobile SE" 
-        <yohan.joung@sk.com>, Bean Huo <huobean@gmail.com>,
-        "daejun7.park@samsung.com" <daejun7.park@samsung.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "=?UTF-8?Q?=EC=B5=9C=EC=9E=AC=EC=98=81=28CHOI?= JAE YOUNG) Mobile SE" 
-        <jaeyoung21.choi@sk.com>,
-        "=?UTF-8?Q?=EA=B3=BD=ED=83=9C=EC=88=98=28KWAK?= TAESU) Mobile SE" 
-        <taesu.kwak@sk.com>
-Date:   Tue, 12 Apr 2022 15:51:36 +0800
-In-Reply-To: <4d2331ea33a246c78fcabaf1ca4e0b10@sk.com>
-References: <e092e35414844175bf76868b820d907f@sk.com>
-         <b06d9a87232a6d4e90fe635384a83c48586652e9.camel@gmail.com>
-         <4d2331ea33a246c78fcabaf1ca4e0b10@sk.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S1381855AbiDLIYP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 04:24:15 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9ED56203;
+        Tue, 12 Apr 2022 00:57:50 -0700 (PDT)
+Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KcyhJ1rfkz67xbc;
+        Tue, 12 Apr 2022 15:55:44 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Apr 2022 09:57:45 +0200
+Received: from [10.47.91.197] (10.47.91.197) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 12 Apr
+ 2022 08:57:44 +0100
+Message-ID: <b6af3fe8-db9a-b5dc-199f-21c05d7664a2@huawei.com>
+Date:   Tue, 12 Apr 2022 08:57:39 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/4] scsi: core: constify pointer to scsi_host_template
+To:     "Ewan D. Milne" <emilne@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "Doug Gilbert" <dgilbert@interlog.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <james.smart@broadcom.com>
+References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
+ <2a88a992-641a-b3ff-fe39-7a61fff87cb6@huawei.com>
+ <4c3be5b6-50ef-9e9a-6cee-9642df943342@linaro.org>
+ <7b3885e3-dbae-ff0b-21dc-c28d635d950b@huawei.com>
+ <c121430b1b5c8f5816b2b42b9178d00889260c90.camel@redhat.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <c121430b1b5c8f5816b2b42b9178d00889260c90.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.91.197]
+X-ClientProxiedBy: lhreml725-chm.china.huawei.com (10.201.108.76) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Yohan and Bean,
-
-I have propose a patch to remove ufshpb_issue_umap_all_req as we also
-consider this a redundant operation.
-
-Please refer to topic "[PATCH 1/1] scsi: ufs: remove redundant HPB
-unmap". Feel free to leave comments there. 
-Thanks~
-Po-Wen
- 
-On Tue, 2021-11-23 at 05:19 +0000, 정요한(JOUNG YOHAN) Mobile SE wrote:
-> > it's for "Inactivating all HPB regions" after reboot
-> > 
-> > scsi_add_lun()...>ufshpb_issue_umap_all_req(hpb);
-> > 
-> > if it is a cold reboot on both host side and UFS device side, it is
-> > not
-> > necessary to issue this write buffer.
+On 08/04/2022 20:31, Ewan D. Milne wrote:
+> On Fri, 2022-04-08 at 13:57 +0100, John Garry wrote:
+>> On 08/04/2022 13:32, Krzysztof Kozlowski wrote:
+>>> On 08/04/2022 14:14, John Garry wrote:
+>>>> On 08/04/2022 11:30, Krzysztof Kozlowski wrote:
+>>>>> Several pointers to 'struct scsi_host_template' do not modify it, so
+>>>>> made them const for safety.
+>>>>>
+>>>> Is this standard practice? What is so special here?
+>>> This is standard practice and there is nothing special here. Pointers to
+>>> const are preferred because:
+>>> 1. They add safety if data is actually const. This is not yet the case,
+>>> but scsi_host_template allocation could be made const with some effort.
 > 
-> According to you, is ufshpb_issue_umap_all_req used only for host
-> reset?
-> During boottime, the problem is that the hpb is set to the last LUN,
-> write buffer command is sent before sd_probe completes.
-> so, instead of performing unmap, UAC is returned. 
-> If ufshpb_issue_umap_all_req is not needed in cold boot, it seems
-> necessary to move it to an appropriate location or remove
-> > 
-> > 
-> > On Fri, 2021-11-19 at 02:31 +0000, 정요한(JOUNG YOHAN) Mobile SE
-> > wrote:
-> > > Hi daejun
-> > > 
-> > > Please check ufshpb init flow.
-> > > sending write buffer(0x03) seems spec violation (JESD220 Commands
-> > > for
-> > > exceptional behavior on UAC, SAM 5r05) before UAC clear
-> > > (sd_probe).
-> > > Anyway hpb reset query(ufshpb_check_hpb_reset_query) seems
-> > > sufficient.
-> > > Why do we need to send write buffer?
-> > > 
-> > > void ufshpb_init_hpb_lu(struct ufs_hba *hba, struct scsi_device
-> > > *sdev)
-> > > {
-> > > out:
-> > >     /* All LUs are initialized */
-> > >     if (atomic_dec_and_test(&hba->ufshpb_dev.slave_conf_cnt))
-> > > 	There seems to be a problem with this logic.
-> > > 	If hpb is set on the last LUN, write buffer command is sent
-> > > before
-> > > sd_probe completes.
-> > >         ufshpb_hpb_lu_prepared(hba);
-> > > }
-> > > 
-> > > static void ufshpb_hpb_lu_prepared(struct ufs_hba *hba) {
-> > > 
-> > >     init_success = !ufshpb_check_hpb_reset_query(hba);
-> > > 
-> > >     shost_for_each_device(sdev, hba->host) {
-> > >         hpb = ufshpb_get_hpb_data(sdev);
-> > >         if (!hpb)
-> > >             continue;
-> > > 
-> > >         if (init_success) {
-> > >             ufshpb_set_state(hpb, HPB_PRESENT);
-> > >             if ((hpb->lu_pinned_end - hpb->lu_pinned_start) > 0)
-> > >                 queue_work(ufshpb_wq, &hpb->map_work);
-> > >             if (!hpb->is_hcm)
-> > >                 ufshpb_issue_umap_all_req(hpb);
-> > > 		This seems unnecessary.
-> > > 
-> > >         } else {
-> > > 
-> > > Thanks
-> > > yohan
+> This seems unlikely, because some drivers, e.g. vmw_pvscsi and scsi_debug,
+> modify the scsi_host_template based on things like module parameters.
+>
+
+The standard flow is:
+
+shost = scsi_host_alloc(sht, )
+
+// modify shost, like
+shost->cmd_per_lun = 5;
+
+scsi_add_host(shost)
+
+Is there some reason for which those two drivers can't follow that?
+
+>>
+>> To me this seems better, but I think that some drivers might modify
+>> their scsi_host_template (so not possible)
 > 
+> Several drivers modify scsi_host_template, e.g. .can_queue, .cmd_per_lun
+> 
+> There is also code in lpfc_create_port() that initializes a scsi_host_template
+> that is embedded in the lpfc_hba struct.  I don't think it gets modified after
+> scsi_add_host() but it seems like driver maintainers might expect to be able
+> to do so, in general.
 > 
 
+Even so, I don't see why other drivers cannot declare their 
+scsi_host_template as const. C would have no problem with sht not be 
+being const for this:
+
+struct Scsi_Host *scsi_host_alloc(const struct scsi_host_template *sht, )
+
+thanks,
+John
