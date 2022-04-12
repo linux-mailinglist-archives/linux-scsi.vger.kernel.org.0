@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF0A4FEB38
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB304FEB26
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbiDLXg5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Apr 2022 19:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S231258AbiDLXhL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Apr 2022 19:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiDLXct (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 19:32:49 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DF9C559A
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:21 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id k14so3527pga.0
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:21 -0700 (PDT)
+        with ESMTP id S231343AbiDLXcv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 19:32:51 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF978CD95
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:22 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id z16so297252pfh.3
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dpJwyubmEEG4q6uBrYJoCQzzFk49i1eY4Z47w3D6rPQ=;
-        b=dDSHNAbz5K0fqBG5jatye8OSA+KVSM2JXxg6pjrvD5NGcEOEqrj34BDIQSfy5eCDhl
-         VTvo/sJRWsGWraVSSj884TEH5AMLjcOeQThLeBUwNHVMtgveNNrm6aA//a5Yj5Mq2G7B
-         lLpHq0fIJNRX0cbF+fope5SB9D95ND4e7CjO+ZBGJbNVzs92PS36dXC3rpC4wEv+3kcW
-         ssttPrjmdbS/1J7JrOCgMdkbjxlJcTDrKHd+fRIr1SVe/SuZq2J97iAB03p9GuqGZBPB
-         qm6dhgCENev/T9BSVzmZuYCA+2eKCappLCnbeOV7DGhPuEQjfuz7HBOx/4EQl11Cy8h+
-         bWQg==
+        bh=DN6hkdthWvF2+/ZmmR3lFexnZLzQXTTa5f2m+5PyPS4=;
+        b=dZvvvmiG35ZIwzOsBNbm8YzdoD8DJiQGHHP0nNcjwvej3EmIwW59j81SRPnokIXsNI
+         0gEM0qi45pAarTIvL+UzAppirRsXgxj/N1f303Mj3u0sm8itHC2V7xWMHGRIrLfkqokq
+         VVupp0Ofe1yFZUHSpK/CstDxlyXbfyLeL5XEjJ4G1koDW+kBJEzwcWR80LOpHHvVTnFj
+         gQuCRfSV50MKjJUhktk6FLCQuZ339vcM4sroYZYzCaZeJctsxn78OlN12i/ZP3HAwUNE
+         XCAgg0U+ehFdYLT6bRlx89fp6rnymwBChtpOH9WVgv8lGZmcMBEQo54jwxjrAAb+123s
+         qtfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dpJwyubmEEG4q6uBrYJoCQzzFk49i1eY4Z47w3D6rPQ=;
-        b=KZ5xJKBi7wQ4iGRn3WPBEn/dB42wC5Fmmh/I+RjZsmOG5fugUpZ3V7y822hOBpaRAH
-         keOq0HTXYWEFXAFdCy2qnx1CiueMWu4Aq6qgB/cxD5ZG6qm7hXGslTmQorISL5XfUcgw
-         DKGaH7hlw+Go8IR87iGlc1A3BikB2duO1FtNrjMOj+cT6/OVVTH6oowuVEP3TiKPr3kD
-         +UKJyNtLHh01xZLrc1KlUtPHinlZu+TlB52ix8Ab8KbkA5i6uQ5YkB0Mt4XIZMCvUnTu
-         so0PLkZD3/21Je6DfUM99WGRBLY4JJfLbjhivgZsMNuUACu+LYMJ0lOC/ehho3syQnYq
-         H4xg==
-X-Gm-Message-State: AOAM5302ZYzDK0AEuusrxGUR23rkWTiddlMX0ZDfsGhEEaWccfIDkfjg
-        67DO6+hJk0sTsjqYRssO52qYzrIC6Ow=
-X-Google-Smtp-Source: ABdhPJw+mxyfRT5KklzNNZ8J44tWJ1LFZWOFsPTx0AvyTKl/Z2nBXQ2CU/WcYhshnfwVzPAAHmT6Hw==
-X-Received: by 2002:aa7:90d4:0:b0:4fd:acb9:8eac with SMTP id k20-20020aa790d4000000b004fdacb98eacmr39852709pfk.24.1649802021329;
-        Tue, 12 Apr 2022 15:20:21 -0700 (PDT)
+        bh=DN6hkdthWvF2+/ZmmR3lFexnZLzQXTTa5f2m+5PyPS4=;
+        b=5Z+0Tf4LPZsgjscLOFg44cXfRGv4TIcLHDUB6gmtaofEKaZi/Q6m9kVS/D9delF/Ag
+         O0vXqBTUZ06H4l3JDYyFXRgY1QvMEvpQSZjbt8oleD/33EZczIY1kCjUe0yzasXfb50A
+         7/xRTIqfKP7yzzGi4H+ndud48GX/NpyHQlTXMOESidZ+6bl7yZwMhb9mZvj6sRrCxIjK
+         BbrBw71o7/npjjD1NME/74l4AhnBHVZYV3ck+Z3tawX8tMXVPkN7GTMd404vwhj9CE43
+         yxZawSyGwF0hbkpssAf3GVOheIGSVFYogc+Oa0Q1+WDn5rtgVUc8c1dKfxz2l1ue8mV5
+         ZXVA==
+X-Gm-Message-State: AOAM533Q+nrnD1WeVkpAo17qsa32z6o+rGsYF0OKU/J19DuvGWVLZnp7
+        Xc/gm5S728YbYlJq9uuRVziMlWkm4lw=
+X-Google-Smtp-Source: ABdhPJwN4RSSIiTfOtc62KAuWewH5xuoGJVz8vHqe4mgyaWd5jeevVj6TrZt7AFW8i1OnI+WzpRFIw==
+X-Received: by 2002:a65:6956:0:b0:399:1f0e:6172 with SMTP id w22-20020a656956000000b003991f0e6172mr31981728pgq.286.1649802022061;
+        Tue, 12 Apr 2022 15:20:22 -0700 (PDT)
 Received: from mail-lvn-it-01.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm40429824pfj.55.2022.04.12.15.20.20
+        by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm40429824pfj.55.2022.04.12.15.20.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 12 Apr 2022 15:20:21 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 08/26] lpfc: Fix null pointer dereference after failing to issue FLOGI and PLOGI
-Date:   Tue, 12 Apr 2022 15:19:50 -0700
-Message-Id: <20220412222008.126521-9-jsmart2021@gmail.com>
+Subject: [PATCH 09/26] lpfc: Protect memory leak for NPIV ports sending PLOGI_RJT
+Date:   Tue, 12 Apr 2022 15:19:51 -0700
+Message-Id: <20220412222008.126521-10-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220412222008.126521-1-jsmart2021@gmail.com>
 References: <20220412222008.126521-1-jsmart2021@gmail.com>
@@ -69,160 +69,82 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If lpfc_issue_els_flogi() fails and returns non-zero status, the
-node reference count is decremented to trigger the release of the
-nodelist structure. However, if there is a prior registration or
-dev-loss-evt work pending, the node may be released prematurely.
-When dev-loss-evt completes, the released node is referenced causing
-a use-after-free null pointer dereference.
+There is a potential memory leak in lpfc_ignore_els_cmpl and
+lpfc_els_rsp_reject that was allocated from NPIV PLOGI_RJT
+(lpfc_rcv_plogi's login_mbox).
 
-Similarly, when processing non-zero ELS PLOGI completion status in
-lpfc_cmpl_els_plogi(), the ndlp flags are checked for a transport
-registration before triggering node removal.  If dev-loss-evt work is
-pending, the node may be released prematurely and a subsequent call to
-lpfc_dev_loss_tmo_handler() results in a use after free ndlp dereference.
+Check if cmdiocb->context_un.mbox was allocated in lpfc_ignore_els_cmpl,
+and then free it back to phba->mbox_mem_pool along with mbox->ctx_buf for
+service parameters.
 
-Add test for pending dev-loss before decrementing the node reference
-count for FLOGI, PLOGI, PRLI, and ADISC handling.
+For lpfc_els_rsp_reject failure, free both the ctx_buf for service
+parameters and the login_mbox.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 51 +++++++++++++++++++++++++-----------
- 1 file changed, 35 insertions(+), 16 deletions(-)
+ drivers/scsi/lpfc/lpfc_nportdisc.c | 10 ++++++++--
+ drivers/scsi/lpfc/lpfc_sli.c       | 17 +++++++++++++++++
+ 2 files changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 863251322715..10e534d63508 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -1533,10 +1533,13 @@ lpfc_initial_flogi(struct lpfc_vport *vport)
- 	/* Reset the Fabric flag, topology change may have happened */
- 	vport->fc_flag &= ~FC_FABRIC;
- 	if (lpfc_issue_els_flogi(vport, ndlp, 0)) {
--		/* This decrement of reference count to node shall kick off
--		 * the release of the node.
-+		/* A node reference should be retained while registered with a
-+		 * transport or dev-loss-evt work is pending.
-+		 * Otherwise, decrement node reference to trigger release.
- 		 */
--		lpfc_nlp_put(ndlp);
-+		if (!(ndlp->fc4_xpt_flags & (SCSI_XPT_REGD | NVME_XPT_REGD)) &&
-+		    !(ndlp->nlp_flag & NLP_IN_DEV_LOSS))
-+			lpfc_nlp_put(ndlp);
- 		return 0;
- 	}
- 	return 1;
-@@ -1579,10 +1582,13 @@ lpfc_initial_fdisc(struct lpfc_vport *vport)
- 	}
- 
- 	if (lpfc_issue_els_fdisc(vport, ndlp, 0)) {
--		/* decrement node reference count to trigger the release of
--		 * the node.
-+		/* A node reference should be retained while registered with a
-+		 * transport or dev-loss-evt work is pending.
-+		 * Otherwise, decrement node reference to trigger release.
- 		 */
--		lpfc_nlp_put(ndlp);
-+		if (!(ndlp->fc4_xpt_flags & (SCSI_XPT_REGD | NVME_XPT_REGD)) &&
-+		    !(ndlp->nlp_flag & NLP_IN_DEV_LOSS))
-+			lpfc_nlp_put(ndlp);
- 		return 0;
- 	}
- 	return 1;
-@@ -1984,6 +1990,7 @@ lpfc_cmpl_els_plogi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	int disc;
- 	struct serv_parm *sp = NULL;
- 	u32 ulp_status, ulp_word4, did, iotag;
-+	bool release_node = false;
- 
- 	/* we pass cmdiocb to state machine which needs rspiocb as well */
- 	cmdiocb->context_un.rsp_iocb = rspiocb;
-@@ -2072,19 +2079,21 @@ lpfc_cmpl_els_plogi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 			spin_unlock_irq(&ndlp->lock);
- 			goto out;
- 		}
--		spin_unlock_irq(&ndlp->lock);
- 
- 		/* No PLOGI collision and the node is not registered with the
- 		 * scsi or nvme transport. It is no longer an active node. Just
- 		 * start the device remove process.
- 		 */
- 		if (!(ndlp->fc4_xpt_flags & (SCSI_XPT_REGD | NVME_XPT_REGD))) {
--			spin_lock_irq(&ndlp->lock);
- 			ndlp->nlp_flag &= ~NLP_NPR_2B_DISC;
--			spin_unlock_irq(&ndlp->lock);
-+			if (!(ndlp->nlp_flag & NLP_IN_DEV_LOSS))
-+				release_node = true;
+diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
+index 3d0ba046c902..e7b1174a057f 100644
+--- a/drivers/scsi/lpfc/lpfc_nportdisc.c
++++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
+@@ -614,9 +614,15 @@ lpfc_rcv_plogi(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 		stat.un.b.lsRjtRsnCode = LSRJT_INVALID_CMD;
+ 		stat.un.b.lsRjtRsnCodeExp = LSEXP_NOTHING_MORE;
+ 		rc = lpfc_els_rsp_reject(vport, stat.un.lsRjtError, cmdiocb,
+-			ndlp, login_mbox);
+-		if (rc)
++					 ndlp, login_mbox);
++		if (rc) {
++			mp = (struct lpfc_dmabuf *)login_mbox->ctx_buf;
++			if (mp) {
++				lpfc_mbuf_free(phba, mp->virt, mp->phys);
++				kfree(mp);
++			}
+ 			mempool_free(login_mbox, phba->mbox_mem_pool);
 +		}
-+		spin_unlock_irq(&ndlp->lock);
-+
-+		if (release_node)
- 			lpfc_disc_state_machine(vport, ndlp, cmdiocb,
- 						NLP_EVT_DEVICE_RM);
--		}
+ 		return 1;
+ 	}
+ 
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index 28d8ded9e7e1..ca7766940b4e 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -12069,6 +12069,8 @@ lpfc_ignore_els_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ {
+ 	struct lpfc_nodelist *ndlp = NULL;
+ 	IOCB_t *irsp;
++	LPFC_MBOXQ_t *mbox;
++	struct lpfc_dmabuf *mp;
+ 	u32 ulp_command, ulp_status, ulp_word4, iotag;
+ 
+ 	ulp_command = get_job_cmnd(phba, cmdiocb);
+@@ -12080,6 +12082,21 @@ lpfc_ignore_els_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
  	} else {
- 		/* Good status, call state machine */
- 		prsp = list_entry(((struct lpfc_dmabuf *)
-@@ -2295,6 +2304,7 @@ lpfc_cmpl_els_prli(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	u32 loglevel;
- 	u32 ulp_status;
- 	u32 ulp_word4;
-+	bool release_node = false;
- 
- 	/* we pass cmdiocb to state machine which needs rspiocb as well */
- 	cmdiocb->context_un.rsp_iocb = rspiocb;
-@@ -2371,14 +2381,18 @@ lpfc_cmpl_els_prli(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 		 * it is no longer an active node.  Otherwise devloss
- 		 * handles the final cleanup.
- 		 */
-+		spin_lock_irq(&ndlp->lock);
- 		if (!(ndlp->fc4_xpt_flags & (SCSI_XPT_REGD | NVME_XPT_REGD)) &&
- 		    !ndlp->fc4_prli_sent) {
--			spin_lock_irq(&ndlp->lock);
- 			ndlp->nlp_flag &= ~NLP_NPR_2B_DISC;
--			spin_unlock_irq(&ndlp->lock);
-+			if (!(ndlp->nlp_flag & NLP_IN_DEV_LOSS))
-+				release_node = true;
-+		}
-+		spin_unlock_irq(&ndlp->lock);
+ 		irsp = &rspiocb->iocb;
+ 		iotag = irsp->ulpIoTag;
 +
-+		if (release_node)
- 			lpfc_disc_state_machine(vport, ndlp, cmdiocb,
- 						NLP_EVT_DEVICE_RM);
--		}
- 	} else {
- 		/* Good status, call state machine.  However, if another
- 		 * PRLI is outstanding, don't call the state machine
-@@ -2750,6 +2764,7 @@ lpfc_cmpl_els_adisc(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	struct lpfc_nodelist *ndlp;
- 	int  disc;
- 	u32 ulp_status, ulp_word4, tmo;
-+	bool release_node = false;
- 
- 	/* we pass cmdiocb to state machine which needs rspiocb as well */
- 	cmdiocb->context_un.rsp_iocb = rspiocb;
-@@ -2816,13 +2831,17 @@ lpfc_cmpl_els_adisc(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 		 * transport, it is no longer an active node. Otherwise
- 		 * devloss handles the final cleanup.
- 		 */
-+		spin_lock_irq(&ndlp->lock);
- 		if (!(ndlp->fc4_xpt_flags & (SCSI_XPT_REGD | NVME_XPT_REGD))) {
--			spin_lock_irq(&ndlp->lock);
- 			ndlp->nlp_flag &= ~NLP_NPR_2B_DISC;
--			spin_unlock_irq(&ndlp->lock);
-+			if (!(ndlp->nlp_flag & NLP_IN_DEV_LOSS))
-+				release_node = true;
++		/* It is possible a PLOGI_RJT for NPIV ports to get aborted.
++		 * The MBX_REG_LOGIN64 mbox command is freed back to the
++		 * mbox_mem_pool here.
++		 */
++		if (cmdiocb->context_un.mbox) {
++			mbox = cmdiocb->context_un.mbox;
++			mp = (struct lpfc_dmabuf *)mbox->ctx_buf;
++			if (mp) {
++				lpfc_mbuf_free(phba, mp->virt, mp->phys);
++				kfree(mp);
++			}
++			mempool_free(mbox, phba->mbox_mem_pool);
++			cmdiocb->context_un.mbox = NULL;
 +		}
-+		spin_unlock_irq(&ndlp->lock);
-+
-+		if (release_node)
- 			lpfc_disc_state_machine(vport, ndlp, cmdiocb,
- 						NLP_EVT_DEVICE_RM);
--		}
- 	} else
- 		/* Good status, call state machine */
- 		lpfc_disc_state_machine(vport, ndlp, cmdiocb,
+ 	}
+ 
+ 	/* ELS cmd tag <ulpIoTag> completes */
 -- 
 2.26.2
 
