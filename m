@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14584FEA65
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3633F4FEB93
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbiDLXgV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Apr 2022 19:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33232 "EHLO
+        id S231358AbiDLXhA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Apr 2022 19:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiDLXcw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 19:32:52 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D68C55AD
+        with ESMTP id S231330AbiDLXct (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 19:32:49 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DD2C55AA
         for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:24 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y8so329533pfw.0
+Received: by mail-pf1-x431.google.com with SMTP id j17so274296pfi.9
         for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TsLNMYJ4zkgM6Icr3cjbZk4Yw4BK1K+tR4IhGs9dJeI=;
-        b=EkKTosh/Hp/W4mGJRlVTpQ/5JvUbNK+byc9EP7yffgXcRaG9IkM9wixnW1B5q2lsPJ
-         vCGYnejlLFmeesh9pOiv86HezLaI/GjKWfb6cepTWbuBBQkz+b3rw3D40k8WJmZ9oHnj
-         sTlYShUbauGrdiw4nxtrsrnkS4+xoiwkWg4Vpgoc2G/4fMiWDj/scvr0Ci5gKVtlqOwv
-         hvvMcz4tzMV76omnf/jF8RsyWE6BKwegI8/aHCOGtqHz0XssVuL6inKrjykKgc5TI1mP
-         7uzKW0mCqXrBnGvslSSKZAAne3Ux1dyzgG6BEV2luJPmBr/JMLD67/dfNF8a1gbwNA1J
-         x+5Q==
+        bh=dW68qIIoent7z8kxle+n3w7qPDar8TcBC8ygTvYVNGM=;
+        b=ec/TepUwKmGEBHXujbqt8nYfJfV5KDuaH9MBT3zK50/qEjTwCsdDb6eg+JwjVuP+6D
+         Tve+9VJf9m470Q1TIY7jjhVmalyvz4umEh23foaE1Il6wM9xtXINLtZBF7SL71mAfMZs
+         ISKBr/h61f3H3CBE4twdkyaUKZWbaf56jUPQ/nRth898DpOSnV2OFVn/FbUpcxsx2Tyc
+         GE0wsGsnS2ZNrv3Ompa6kzE7sPHQ/KKTETka0pVep929dkLcRsGq4XI1ZUkaKc+pPB9g
+         kovGBSQVz7jvaqjvLKQshrH/kvl/piUYVDK/5tQR8+QLjmtc0ivGL4i9wqjSZAn6U3ri
+         VRAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TsLNMYJ4zkgM6Icr3cjbZk4Yw4BK1K+tR4IhGs9dJeI=;
-        b=g+C1giazWLmLpNCIe+v/1lnawBvdcxkb1eAWyj3zRPUwMref+kPUHUR/D3V3C29lyS
-         eRysOFjLFw4l1WDUE8dDUUpt/ScFAgK6AQLGR6ToXoXnpriJemu0svGvL5oT54WVldnY
-         bdZiZf0wINMniAxAvLQTcn/uwPXL7Yhu/JYuX5jQFPyp0YkzfW9wPffikdJIN0/sfNfw
-         NEGxs/tiHWiAixoSkewkfR17Is3dOAXRoN//6O1pQwJFHfNqk/9j+8PaVbvtENL4hM9G
-         Us6FohGWBlCrNqDrKxvfFt+qkrtsEC3pqMIpe2vtyG9B2H/kaR79J9oIcwZlIdEKCx5R
-         O7Yg==
-X-Gm-Message-State: AOAM533E60sfGS3XkQtoPVsJMGI4bcpqFmtRJh1zBNrdXTrzbVmyZQQv
-        2dmj1+TPxnemFHd4CLJcoyU4Zr1VEM8=
-X-Google-Smtp-Source: ABdhPJxG/7qhr54IQRIqaqOD8vJgqq/Hkqo8gHMt8NVxbsPV7PYfcBT6Sg6SzA4qOge2U5z1O5gSpg==
-X-Received: by 2002:a05:6a00:24cf:b0:505:d9fd:e415 with SMTP id d15-20020a056a0024cf00b00505d9fde415mr6726917pfv.78.1649802022779;
-        Tue, 12 Apr 2022 15:20:22 -0700 (PDT)
+        bh=dW68qIIoent7z8kxle+n3w7qPDar8TcBC8ygTvYVNGM=;
+        b=NRhYVsvmfHonC54y1CQ24IDQsGGDg1nX6CLTDpABY7qBF2sJwzNjIsGrB3WrNHFzYY
+         +Udz/CVwAO+PCjilQjzWn5R7Vj2VziGwHSaHuN/MlZbW3rlHjdL6uZPgPztBwxIMI6WA
+         zjXXjj5z6CKpQ9oBg0p0qHqtbmcxNNDLUQziorcNs+ydt0M4Aw88a247jL621++yV+ds
+         U2WpolhOKGPKtmECQNCReVqBdo2QRO6is0ztRPxszixhZ/fiOW1Cth8CSiIOdZQBwfoW
+         ETHY+oylmPmdiMZ4gn3n/x9p+OWT1H0LTQJQ60MrVEUBMtJjKGrgnO9Qov94wxmFFNlG
+         yiBQ==
+X-Gm-Message-State: AOAM531pAaLTl2r5XjUxRpe/fZfyvEKGjHsLl54/DLMjxaiHZAzS+MzT
+        I+3gCUj0s7Pf9iYee7p5Q5SCkxWxj2Q=
+X-Google-Smtp-Source: ABdhPJzkjJJzrVfDnYUe/cWMkHw5WhQ2ZbenilabyhM3tAbwIb+AqkH00iWkRksJvcCJ2kAtvtMTNw==
+X-Received: by 2002:a63:5909:0:b0:399:b94:96f9 with SMTP id n9-20020a635909000000b003990b9496f9mr32949745pgb.622.1649802023521;
+        Tue, 12 Apr 2022 15:20:23 -0700 (PDT)
 Received: from mail-lvn-it-01.broadcom.com ([192.19.223.252])
         by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm40429824pfj.55.2022.04.12.15.20.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 15:20:22 -0700 (PDT)
+        Tue, 12 Apr 2022 15:20:23 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 10/26] lpfc: Update fc_prli_sent outstanding only after guaranteed IOCB submit
-Date:   Tue, 12 Apr 2022 15:19:52 -0700
-Message-Id: <20220412222008.126521-11-jsmart2021@gmail.com>
+Subject: [PATCH 11/26] lpfc: Transition to NPR state upon LOGO cmpl if link down or aborted
+Date:   Tue, 12 Apr 2022 15:19:53 -0700
+Message-Id: <20220412222008.126521-12-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220412222008.126521-1-jsmart2021@gmail.com>
 References: <20220412222008.126521-1-jsmart2021@gmail.com>
@@ -69,79 +69,34 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If lpfc_sli_issue_iocb fails, then the fc_prli_sent is never decremented.
+In P2P topology, a target controller reboot sometimes results in not
+reestablishing a login because the ndlp is stuck in LOGO state.
 
-Move the fc_prli_sent++ to after a guaranteed IOCB submit.
+Fix by transitioning to NPR state if we get link down before LOGO
+completes.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 29 +++++++++++------------------
- 1 file changed, 11 insertions(+), 18 deletions(-)
+ drivers/scsi/lpfc/lpfc_els.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 10e534d63508..be9d4618e52c 100644
+index be9d4618e52c..54456ddc6a90 100644
 --- a/drivers/scsi/lpfc/lpfc_els.c
 +++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -2570,16 +2570,6 @@ lpfc_issue_els_prli(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+@@ -3006,7 +3006,10 @@ lpfc_cmpl_els_logo(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 				 ndlp->nlp_DID, ulp_status,
+ 				 ulp_word4);
  
- 	phba->fc_stat.elsXmitPRLI++;
- 	elsiocb->cmd_cmpl = lpfc_cmpl_els_prli;
--	spin_lock_irq(&ndlp->lock);
--	ndlp->nlp_flag |= NLP_PRLI_SND;
--
--	/* The vport counters are used for lpfc_scan_finished, but
--	 * the ndlp is used to track outstanding PRLIs for different
--	 * FC4 types.
--	 */
--	vport->fc_prli_sent++;
--	ndlp->fc4_prli_sent++;
--	spin_unlock_irq(&ndlp->lock);
- 
- 	lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_ELS_CMD,
- 			      "Issue PRLI:  did:x%x refcnt %d",
-@@ -2587,16 +2577,25 @@ lpfc_issue_els_prli(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 	elsiocb->context1 = lpfc_nlp_get(ndlp);
- 	if (!elsiocb->context1) {
- 		lpfc_els_free_iocb(phba, elsiocb);
--		goto err;
-+		return 1;
- 	}
- 
- 	rc = lpfc_sli_issue_iocb(phba, LPFC_ELS_RING, elsiocb, 0);
- 	if (rc == IOCB_ERROR) {
- 		lpfc_els_free_iocb(phba, elsiocb);
- 		lpfc_nlp_put(ndlp);
--		goto err;
-+		return 1;
- 	}
- 
-+	/* The vport counters are used for lpfc_scan_finished, but
-+	 * the ndlp is used to track outstanding PRLIs for different
-+	 * FC4 types.
-+	 */
-+	spin_lock_irq(&ndlp->lock);
-+	ndlp->nlp_flag |= NLP_PRLI_SND;
-+	vport->fc_prli_sent++;
-+	ndlp->fc4_prli_sent++;
-+	spin_unlock_irq(&ndlp->lock);
- 
- 	/* The driver supports 2 FC4 types.  Make sure
- 	 * a PRLI is issued for all types before exiting.
-@@ -2606,12 +2605,6 @@ lpfc_issue_els_prli(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 		goto send_next_prli;
- 	else
- 		return 0;
--
--err:
--	spin_lock_irq(&ndlp->lock);
--	ndlp->nlp_flag &= ~NLP_PRLI_SND;
--	spin_unlock_irq(&ndlp->lock);
--	return 1;
- }
- 
- /**
++		/* Call NLP_EVT_DEVICE_RM if link is down or LOGO is aborted */
+ 		if (lpfc_error_lost_link(ulp_status, ulp_word4)) {
++			lpfc_disc_state_machine(vport, ndlp, cmdiocb,
++						NLP_EVT_DEVICE_RM);
+ 			skip_recovery = 1;
+ 			goto out;
+ 		}
 -- 
 2.26.2
 
