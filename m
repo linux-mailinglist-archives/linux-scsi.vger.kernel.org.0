@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB304FEB26
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14584FEA65
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbiDLXhL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Apr 2022 19:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
+        id S231210AbiDLXgV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Apr 2022 19:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbiDLXcv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 19:32:51 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF978CD95
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:22 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id z16so297252pfh.3
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:22 -0700 (PDT)
+        with ESMTP id S231348AbiDLXcw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 19:32:52 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D68C55AD
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:24 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id y8so329533pfw.0
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DN6hkdthWvF2+/ZmmR3lFexnZLzQXTTa5f2m+5PyPS4=;
-        b=dZvvvmiG35ZIwzOsBNbm8YzdoD8DJiQGHHP0nNcjwvej3EmIwW59j81SRPnokIXsNI
-         0gEM0qi45pAarTIvL+UzAppirRsXgxj/N1f303Mj3u0sm8itHC2V7xWMHGRIrLfkqokq
-         VVupp0Ofe1yFZUHSpK/CstDxlyXbfyLeL5XEjJ4G1koDW+kBJEzwcWR80LOpHHvVTnFj
-         gQuCRfSV50MKjJUhktk6FLCQuZ339vcM4sroYZYzCaZeJctsxn78OlN12i/ZP3HAwUNE
-         XCAgg0U+ehFdYLT6bRlx89fp6rnymwBChtpOH9WVgv8lGZmcMBEQo54jwxjrAAb+123s
-         qtfw==
+        bh=TsLNMYJ4zkgM6Icr3cjbZk4Yw4BK1K+tR4IhGs9dJeI=;
+        b=EkKTosh/Hp/W4mGJRlVTpQ/5JvUbNK+byc9EP7yffgXcRaG9IkM9wixnW1B5q2lsPJ
+         vCGYnejlLFmeesh9pOiv86HezLaI/GjKWfb6cepTWbuBBQkz+b3rw3D40k8WJmZ9oHnj
+         sTlYShUbauGrdiw4nxtrsrnkS4+xoiwkWg4Vpgoc2G/4fMiWDj/scvr0Ci5gKVtlqOwv
+         hvvMcz4tzMV76omnf/jF8RsyWE6BKwegI8/aHCOGtqHz0XssVuL6inKrjykKgc5TI1mP
+         7uzKW0mCqXrBnGvslSSKZAAne3Ux1dyzgG6BEV2luJPmBr/JMLD67/dfNF8a1gbwNA1J
+         x+5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DN6hkdthWvF2+/ZmmR3lFexnZLzQXTTa5f2m+5PyPS4=;
-        b=5Z+0Tf4LPZsgjscLOFg44cXfRGv4TIcLHDUB6gmtaofEKaZi/Q6m9kVS/D9delF/Ag
-         O0vXqBTUZ06H4l3JDYyFXRgY1QvMEvpQSZjbt8oleD/33EZczIY1kCjUe0yzasXfb50A
-         7/xRTIqfKP7yzzGi4H+ndud48GX/NpyHQlTXMOESidZ+6bl7yZwMhb9mZvj6sRrCxIjK
-         BbrBw71o7/npjjD1NME/74l4AhnBHVZYV3ck+Z3tawX8tMXVPkN7GTMd404vwhj9CE43
-         yxZawSyGwF0hbkpssAf3GVOheIGSVFYogc+Oa0Q1+WDn5rtgVUc8c1dKfxz2l1ue8mV5
-         ZXVA==
-X-Gm-Message-State: AOAM533Q+nrnD1WeVkpAo17qsa32z6o+rGsYF0OKU/J19DuvGWVLZnp7
-        Xc/gm5S728YbYlJq9uuRVziMlWkm4lw=
-X-Google-Smtp-Source: ABdhPJwN4RSSIiTfOtc62KAuWewH5xuoGJVz8vHqe4mgyaWd5jeevVj6TrZt7AFW8i1OnI+WzpRFIw==
-X-Received: by 2002:a65:6956:0:b0:399:1f0e:6172 with SMTP id w22-20020a656956000000b003991f0e6172mr31981728pgq.286.1649802022061;
+        bh=TsLNMYJ4zkgM6Icr3cjbZk4Yw4BK1K+tR4IhGs9dJeI=;
+        b=g+C1giazWLmLpNCIe+v/1lnawBvdcxkb1eAWyj3zRPUwMref+kPUHUR/D3V3C29lyS
+         eRysOFjLFw4l1WDUE8dDUUpt/ScFAgK6AQLGR6ToXoXnpriJemu0svGvL5oT54WVldnY
+         bdZiZf0wINMniAxAvLQTcn/uwPXL7Yhu/JYuX5jQFPyp0YkzfW9wPffikdJIN0/sfNfw
+         NEGxs/tiHWiAixoSkewkfR17Is3dOAXRoN//6O1pQwJFHfNqk/9j+8PaVbvtENL4hM9G
+         Us6FohGWBlCrNqDrKxvfFt+qkrtsEC3pqMIpe2vtyG9B2H/kaR79J9oIcwZlIdEKCx5R
+         O7Yg==
+X-Gm-Message-State: AOAM533E60sfGS3XkQtoPVsJMGI4bcpqFmtRJh1zBNrdXTrzbVmyZQQv
+        2dmj1+TPxnemFHd4CLJcoyU4Zr1VEM8=
+X-Google-Smtp-Source: ABdhPJxG/7qhr54IQRIqaqOD8vJgqq/Hkqo8gHMt8NVxbsPV7PYfcBT6Sg6SzA4qOge2U5z1O5gSpg==
+X-Received: by 2002:a05:6a00:24cf:b0:505:d9fd:e415 with SMTP id d15-20020a056a0024cf00b00505d9fde415mr6726917pfv.78.1649802022779;
         Tue, 12 Apr 2022 15:20:22 -0700 (PDT)
 Received: from mail-lvn-it-01.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm40429824pfj.55.2022.04.12.15.20.21
+        by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm40429824pfj.55.2022.04.12.15.20.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 15:20:21 -0700 (PDT)
+        Tue, 12 Apr 2022 15:20:22 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 09/26] lpfc: Protect memory leak for NPIV ports sending PLOGI_RJT
-Date:   Tue, 12 Apr 2022 15:19:51 -0700
-Message-Id: <20220412222008.126521-10-jsmart2021@gmail.com>
+Subject: [PATCH 10/26] lpfc: Update fc_prli_sent outstanding only after guaranteed IOCB submit
+Date:   Tue, 12 Apr 2022 15:19:52 -0700
+Message-Id: <20220412222008.126521-11-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220412222008.126521-1-jsmart2021@gmail.com>
 References: <20220412222008.126521-1-jsmart2021@gmail.com>
@@ -69,82 +69,79 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There is a potential memory leak in lpfc_ignore_els_cmpl and
-lpfc_els_rsp_reject that was allocated from NPIV PLOGI_RJT
-(lpfc_rcv_plogi's login_mbox).
+If lpfc_sli_issue_iocb fails, then the fc_prli_sent is never decremented.
 
-Check if cmdiocb->context_un.mbox was allocated in lpfc_ignore_els_cmpl,
-and then free it back to phba->mbox_mem_pool along with mbox->ctx_buf for
-service parameters.
-
-For lpfc_els_rsp_reject failure, free both the ctx_buf for service
-parameters and the login_mbox.
+Move the fc_prli_sent++ to after a guaranteed IOCB submit.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_nportdisc.c | 10 ++++++++--
- drivers/scsi/lpfc/lpfc_sli.c       | 17 +++++++++++++++++
- 2 files changed, 25 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_els.c | 29 +++++++++++------------------
+ 1 file changed, 11 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
-index 3d0ba046c902..e7b1174a057f 100644
---- a/drivers/scsi/lpfc/lpfc_nportdisc.c
-+++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
-@@ -614,9 +614,15 @@ lpfc_rcv_plogi(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 		stat.un.b.lsRjtRsnCode = LSRJT_INVALID_CMD;
- 		stat.un.b.lsRjtRsnCodeExp = LSEXP_NOTHING_MORE;
- 		rc = lpfc_els_rsp_reject(vport, stat.un.lsRjtError, cmdiocb,
--			ndlp, login_mbox);
--		if (rc)
-+					 ndlp, login_mbox);
-+		if (rc) {
-+			mp = (struct lpfc_dmabuf *)login_mbox->ctx_buf;
-+			if (mp) {
-+				lpfc_mbuf_free(phba, mp->virt, mp->phys);
-+				kfree(mp);
-+			}
- 			mempool_free(login_mbox, phba->mbox_mem_pool);
-+		}
- 		return 1;
+diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+index 10e534d63508..be9d4618e52c 100644
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -2570,16 +2570,6 @@ lpfc_issue_els_prli(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 
+ 	phba->fc_stat.elsXmitPRLI++;
+ 	elsiocb->cmd_cmpl = lpfc_cmpl_els_prli;
+-	spin_lock_irq(&ndlp->lock);
+-	ndlp->nlp_flag |= NLP_PRLI_SND;
+-
+-	/* The vport counters are used for lpfc_scan_finished, but
+-	 * the ndlp is used to track outstanding PRLIs for different
+-	 * FC4 types.
+-	 */
+-	vport->fc_prli_sent++;
+-	ndlp->fc4_prli_sent++;
+-	spin_unlock_irq(&ndlp->lock);
+ 
+ 	lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_ELS_CMD,
+ 			      "Issue PRLI:  did:x%x refcnt %d",
+@@ -2587,16 +2577,25 @@ lpfc_issue_els_prli(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 	elsiocb->context1 = lpfc_nlp_get(ndlp);
+ 	if (!elsiocb->context1) {
+ 		lpfc_els_free_iocb(phba, elsiocb);
+-		goto err;
++		return 1;
  	}
  
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 28d8ded9e7e1..ca7766940b4e 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -12069,6 +12069,8 @@ lpfc_ignore_els_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- {
- 	struct lpfc_nodelist *ndlp = NULL;
- 	IOCB_t *irsp;
-+	LPFC_MBOXQ_t *mbox;
-+	struct lpfc_dmabuf *mp;
- 	u32 ulp_command, ulp_status, ulp_word4, iotag;
- 
- 	ulp_command = get_job_cmnd(phba, cmdiocb);
-@@ -12080,6 +12082,21 @@ lpfc_ignore_els_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	} else {
- 		irsp = &rspiocb->iocb;
- 		iotag = irsp->ulpIoTag;
-+
-+		/* It is possible a PLOGI_RJT for NPIV ports to get aborted.
-+		 * The MBX_REG_LOGIN64 mbox command is freed back to the
-+		 * mbox_mem_pool here.
-+		 */
-+		if (cmdiocb->context_un.mbox) {
-+			mbox = cmdiocb->context_un.mbox;
-+			mp = (struct lpfc_dmabuf *)mbox->ctx_buf;
-+			if (mp) {
-+				lpfc_mbuf_free(phba, mp->virt, mp->phys);
-+				kfree(mp);
-+			}
-+			mempool_free(mbox, phba->mbox_mem_pool);
-+			cmdiocb->context_un.mbox = NULL;
-+		}
+ 	rc = lpfc_sli_issue_iocb(phba, LPFC_ELS_RING, elsiocb, 0);
+ 	if (rc == IOCB_ERROR) {
+ 		lpfc_els_free_iocb(phba, elsiocb);
+ 		lpfc_nlp_put(ndlp);
+-		goto err;
++		return 1;
  	}
  
- 	/* ELS cmd tag <ulpIoTag> completes */
++	/* The vport counters are used for lpfc_scan_finished, but
++	 * the ndlp is used to track outstanding PRLIs for different
++	 * FC4 types.
++	 */
++	spin_lock_irq(&ndlp->lock);
++	ndlp->nlp_flag |= NLP_PRLI_SND;
++	vport->fc_prli_sent++;
++	ndlp->fc4_prli_sent++;
++	spin_unlock_irq(&ndlp->lock);
+ 
+ 	/* The driver supports 2 FC4 types.  Make sure
+ 	 * a PRLI is issued for all types before exiting.
+@@ -2606,12 +2605,6 @@ lpfc_issue_els_prli(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 		goto send_next_prli;
+ 	else
+ 		return 0;
+-
+-err:
+-	spin_lock_irq(&ndlp->lock);
+-	ndlp->nlp_flag &= ~NLP_PRLI_SND;
+-	spin_unlock_irq(&ndlp->lock);
+-	return 1;
+ }
+ 
+ /**
 -- 
 2.26.2
 
