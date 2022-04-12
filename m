@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F194FEB41
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA264FEADF
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiDLXgu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Apr 2022 19:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
+        id S229512AbiDLXgK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Apr 2022 19:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbiDLXcy (ORCPT
+        with ESMTP id S231365AbiDLXcy (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 19:32:54 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888D2C624A
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:29 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 2so83376pjw.2
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:29 -0700 (PDT)
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD65C624F
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:30 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id bx5so72014pjb.3
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ADM8hEagvYj5j8EgYdQiVeDmYYbZ/CTt564WNuAXIX8=;
-        b=ZW4xgWJJ4MSW5AdBlNt2JWF7QPt6NGs/sOSW/7j13lKMtkyKyTP2AVGI2F9Bg0lBlE
-         4NFTD3muGunrkbbNj+ink+uOwHXWKsjxF82BuVvSzwiPG9MnbgJNQhO2hTjXX8Oqmdg2
-         z8Efvd7u8fm2Gu1XYoQ+5tyDuI8+ZgBZKgYqU0dad9FhkxtvdVCkDhn4tVnkkS0xNwMB
-         YGs2AxwSw8CCSp0tgS7owHi87MaJxM9MQn0ZtWZgbQTRGEIj22MHYXVYZQ9Q1cohvWrb
-         l6HSLG9CQa+ja6cS0vv9qAtuMSUI4YURzZnTEJFFfPoYQXhZsGrR/zoYR5V5AX+pGCvG
-         r+yQ==
+        bh=6mmV0JW08Uv5oVDrL+mWCkquVp5lL9j2n8D7zkUd/zg=;
+        b=P2mDutHuZHaGSN3/VXCRtN+CxhRs4Zl9ESyzVu4bhGHAT9q5cvwS5NdkGkrKN27jRl
+         VAybXuQkLLn8WjsuYDEG/Sk/HMWJcDpl+3rcNCYCnA3Ldk1mECCcB9jlzEGJBtWBQj56
+         HomuDSyP4lAQeE12cdHXeYGfjoAYrSnYWyzGk6HlwCJc9N62p8Gs9gSV9EYxJiDd3GG/
+         470wOlyGxgNXkmwv/ibOJFIuy/cb1PfJScm3+nT+bIWhOQFGahk0oU+hYoLyErZqQzvP
+         0u835yjrO/MRL6dZuwsFmO10nihiWH694Cc89/E7VwAw1/zfGF92ISBMVbELZ4/vEWdo
+         mVPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ADM8hEagvYj5j8EgYdQiVeDmYYbZ/CTt564WNuAXIX8=;
-        b=iGGObYJr64A9xVUOJjiu8IvbyKqXDShqEDsdWK54xecYvs+GrVUztjKdRHO+1W5/yW
-         Q6GEOcjwKHrN4FZcpInLCPNfp7YICjtgEv8BRKVSQVqA2HRMdooW1H4LtwHGKKNGKkEj
-         5BJ3nhWaSQXCm+QBugV/hDsBlM2YYReJfML77brqXdX20KmP4TLIzFb0WDh2Noe4mMjV
-         BVtRXuYn2qPDhsdgpfrYF3s8tzU6QeMAa5y7bp80f561CzOPZqp28+kvefAT/eYfsih3
-         qqsyMYEIiA+pqBjfqSI27V/62XRbeD0xwH4eZ4+WQH0jQgZDBgai3fbTcwCKfGXF4JDu
-         wzTA==
-X-Gm-Message-State: AOAM5304VUd9WzVYutzHqJV0L1lkIqgRk9QWfKvypIHBgLUl965UqLWD
-        LG9C/zviJz9Pz62Y7ZZBoO4vLG2XU84=
-X-Google-Smtp-Source: ABdhPJwBtaYLQ96HrZKXT8150P3fxSaFWTrq0D3hrnjzjIV4laMQbeINyde1q/5Pzj2lG34NOBkeiw==
-X-Received: by 2002:a17:902:be03:b0:156:7ed7:a02a with SMTP id r3-20020a170902be0300b001567ed7a02amr39417123pls.10.1649802028884;
-        Tue, 12 Apr 2022 15:20:28 -0700 (PDT)
+        bh=6mmV0JW08Uv5oVDrL+mWCkquVp5lL9j2n8D7zkUd/zg=;
+        b=1gDjVlz1QqYPk8GT9tUGNxj9ZlRUSx32QTgPjS5eY/bk6F/JTTv+F3Y6SvpBnVZxIE
+         8ms/aepCgyBrdU5RAAam9knTDFEENfKyK/NUSsLoN8U+/hLEdXxgGvVwlC4nMDNb2onF
+         3MApejxkd5fGOPfwbkWG7iJw81U+VQK88883mnUHiA2HtjCHeN4bQCWl+14NxlZJbThX
+         6N4B5Ifiw7fLBGflXPJggrN3Hm3ENvcsDiPXFmY800++Aj/hWEo4R8aT810i1+3M0qYS
+         kDKUB2fxE1o2cHi3e+ICdbKs3/J3YR6mFU0t3UQzJBT6TwLC1JG35Mz8LSyxVhm0iQk9
+         i5jQ==
+X-Gm-Message-State: AOAM532t+TWPcan1tUH9SSNg37GuuXbN/ZJ/0XXGehsJe2HPlUeKNzVA
+        LTeBhrufo8x1E/xstcQ3VcvXPKBY4is=
+X-Google-Smtp-Source: ABdhPJwzmN6ciqb98be8eH9Eibe4/s0ejrbG/bizJWkpJsLUwxU30ck4sEyRY0BgYcFSjuIgl0qG6g==
+X-Received: by 2002:a17:90a:6c64:b0:1cb:93b2:b6a9 with SMTP id x91-20020a17090a6c6400b001cb93b2b6a9mr7424666pjj.144.1649802029650;
+        Tue, 12 Apr 2022 15:20:29 -0700 (PDT)
 Received: from mail-lvn-it-01.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm40429824pfj.55.2022.04.12.15.20.28
+        by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm40429824pfj.55.2022.04.12.15.20.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 15:20:28 -0700 (PDT)
+        Tue, 12 Apr 2022 15:20:29 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 18/26] lpfc: Register for Application Services FC-4 type in Fabric topology
-Date:   Tue, 12 Apr 2022 15:20:00 -0700
-Message-Id: <20220412222008.126521-19-jsmart2021@gmail.com>
+Subject: [PATCH 19/26] lpfc: Introduce FC_RSCN_MEMENTO flag for tracking post RSCN completion
+Date:   Tue, 12 Apr 2022 15:20:01 -0700
+Message-Id: <20220412222008.126521-20-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220412222008.126521-1-jsmart2021@gmail.com>
 References: <20220412222008.126521-1-jsmart2021@gmail.com>
@@ -69,122 +69,95 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add new FC-4 type 0x60 Application Services for fabric registration when
-VMID is enabled.
+During an NVME target reboot, the target may initialize itself as FCP only
+during the first RSCN and shortly after trigger a second RSCN claiming NVME
+support.  The timing of these RSCNs occur before FCP-PRLI for the first
+RSCN completes leading discovery issues over NVME.
 
-Modified rft struture to indicate __be format. Removed redundant ipReg
-variable as it was not used.
+Change RSCN and NVME-PRLI send logic based on a new FC_RSCN_MEMENTO flag
+that signals when lpfc_end_rscn is completed and serves as a memento that
+discovery was started from RSCN.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_ct.c | 26 ++++++++++++++------------
- drivers/scsi/lpfc/lpfc_hw.h | 36 ++++++++++++++++++------------------
- 2 files changed, 32 insertions(+), 30 deletions(-)
+ drivers/scsi/lpfc/lpfc.h         | 1 +
+ drivers/scsi/lpfc/lpfc_els.c     | 8 ++++++--
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 3 ++-
+ 3 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
-index 8df5ba3ed482..c74833ed78c6 100644
---- a/drivers/scsi/lpfc/lpfc_ct.c
-+++ b/drivers/scsi/lpfc/lpfc_ct.c
-@@ -2018,28 +2018,30 @@ lpfc_ns_cmd(struct lpfc_vport *vport, int cmdcode,
- 		vport->ct_flags &= ~FC_CT_RFT_ID;
- 		CtReq->CommandResponse.bits.CmdRsp =
- 		    cpu_to_be16(SLI_CTNS_RFT_ID);
--		CtReq->un.rft.PortId = cpu_to_be32(vport->fc_myDID);
-+		CtReq->un.rft.port_id = cpu_to_be32(vport->fc_myDID);
-+
-+		/* Register Application Services type if vmid enabled. */
-+		if (phba->cfg_vmid_app_header)
-+			CtReq->un.rft.app_serv_reg =
-+				cpu_to_be32(RFT_APP_SERV_REG);
+diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
+index 8405fd0bbc59..96602a88b8ed 100644
+--- a/drivers/scsi/lpfc/lpfc.h
++++ b/drivers/scsi/lpfc/lpfc.h
+@@ -603,6 +603,7 @@ struct lpfc_vport {
+ #define FC_VFI_REGISTERED	0x800000 /* VFI is registered */
+ #define FC_FDISC_COMPLETED	0x1000000/* FDISC completed */
+ #define FC_DISC_DELAYED		0x2000000/* Delay NPort discovery */
++#define FC_RSCN_MEMENTO		0x4000000/* RSCN cmd processed */
  
- 		/* Register FC4 FCP type if enabled.  */
- 		if (vport->cfg_enable_fc4_type == LPFC_ENABLE_BOTH ||
- 		    vport->cfg_enable_fc4_type == LPFC_ENABLE_FCP)
--			CtReq->un.rft.fcpReg = 1;
-+			CtReq->un.rft.fcp_reg = cpu_to_be32(RFT_FCP_REG);
+ 	uint32_t ct_flags;
+ #define FC_CT_RFF_ID		0x1	 /* RFF_ID accepted by switch */
+diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+index 3bcc0243bf42..3801c39b62d4 100644
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -1895,6 +1895,7 @@ lpfc_end_rscn(struct lpfc_vport *vport)
+ 		else {
+ 			spin_lock_irq(shost->host_lock);
+ 			vport->fc_flag &= ~FC_RSCN_MODE;
++			vport->fc_flag |= FC_RSCN_MEMENTO;
+ 			spin_unlock_irq(shost->host_lock);
+ 		}
+ 	}
+@@ -2443,13 +2444,14 @@ lpfc_issue_els_prli(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 	u32 local_nlp_type, elscmd;
  
--		/* Register NVME type if enabled.  Defined LE and swapped.
--		 * rsvd[0] is used as word1 because of the hard-coded
--		 * word0 usage in the ct_request data structure.
--		 */
-+		/* Register NVME type if enabled. */
- 		if (vport->cfg_enable_fc4_type == LPFC_ENABLE_BOTH ||
- 		    vport->cfg_enable_fc4_type == LPFC_ENABLE_NVME)
--			CtReq->un.rft.rsvd[0] =
--				cpu_to_be32(LPFC_FC4_TYPE_BITMASK);
-+			CtReq->un.rft.nvme_reg = cpu_to_be32(RFT_NVME_REG);
+ 	/*
+-	 * If we are in RSCN mode, the FC4 types supported from a
++	 * If discovery was kicked off from RSCN mode,
++	 * the FC4 types supported from a
+ 	 * previous GFT_ID command may not be accurate. So, if we
+ 	 * are a NVME Initiator, always look for the possibility of
+ 	 * the remote NPort beng a NVME Target.
+ 	 */
+ 	if (phba->sli_rev == LPFC_SLI_REV4 &&
+-	    vport->fc_flag & FC_RSCN_MODE &&
++	    vport->fc_flag & (FC_RSCN_MODE | FC_RSCN_MEMENTO) &&
+ 	    vport->nvmei_support)
+ 		ndlp->nlp_fc4_type |= NLP_FC4_NVME;
+ 	local_nlp_type = ndlp->nlp_fc4_type;
+@@ -7970,6 +7972,7 @@ lpfc_els_rcv_rscn(struct lpfc_vport *vport, struct lpfc_iocbq *cmdiocb,
+ 		if ((rscn_cnt < FC_MAX_HOLD_RSCN) &&
+ 		    !(vport->fc_flag & FC_RSCN_DISCOVERY)) {
+ 			vport->fc_flag |= FC_RSCN_MODE;
++			vport->fc_flag &= ~FC_RSCN_MEMENTO;
+ 			spin_unlock_irq(shost->host_lock);
+ 			if (rscn_cnt) {
+ 				cmd = vport->fc_rscn_id_list[rscn_cnt-1]->virt;
+@@ -8019,6 +8022,7 @@ lpfc_els_rcv_rscn(struct lpfc_vport *vport, struct lpfc_iocbq *cmdiocb,
  
- 		ptr = (uint32_t *)CtReq;
- 		lpfc_printf_vlog(vport, KERN_INFO, LOG_DISCOVERY,
--				 "6433 Issue RFT (%s %s): %08x %08x %08x %08x "
--				 "%08x %08x %08x %08x\n",
--				 CtReq->un.rft.fcpReg ? "FCP" : " ",
--				 CtReq->un.rft.rsvd[0] ? "NVME" : " ",
-+				 "6433 Issue RFT (%s %s %s): %08x %08x %08x "
-+				 "%08x %08x %08x %08x %08x\n",
-+				 CtReq->un.rft.fcp_reg ? "FCP" : " ",
-+				 CtReq->un.rft.nvme_reg ? "NVME" : " ",
-+				 CtReq->un.rft.app_serv_reg ? "APPS" : " ",
- 				 *ptr, *(ptr + 1), *(ptr + 2), *(ptr + 3),
- 				 *(ptr + 4), *(ptr + 5),
- 				 *(ptr + 6), *(ptr + 7));
-diff --git a/drivers/scsi/lpfc/lpfc_hw.h b/drivers/scsi/lpfc/lpfc_hw.h
-index d6050f3c9efe..2f5537f57846 100644
---- a/drivers/scsi/lpfc/lpfc_hw.h
-+++ b/drivers/scsi/lpfc/lpfc_hw.h
-@@ -97,6 +97,18 @@ union CtCommandResponse {
- #define FC4_FEATURE_INIT	0x2
- #define FC4_FEATURE_NVME_DISC	0x4
+ 	spin_lock_irq(shost->host_lock);
+ 	vport->fc_flag |= FC_RSCN_MODE;
++	vport->fc_flag &= ~FC_RSCN_MEMENTO;
+ 	spin_unlock_irq(shost->host_lock);
+ 	vport->fc_rscn_id_list[vport->fc_rscn_id_cnt++] = pcmd;
+ 	/* Indicate we are done walking fc_rscn_id_list on this vport */
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 2b877dff5ed4..d6ff864b132b 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -1343,7 +1343,8 @@ lpfc_linkup_port(struct lpfc_vport *vport)
  
-+enum rft_word0 {
-+	RFT_FCP_REG	= (0x1 << 8),
-+};
-+
-+enum rft_word1 {
-+	RFT_NVME_REG	= (0x1 << 8),
-+};
-+
-+enum rft_word3 {
-+	RFT_APP_SERV_REG	= (0x1 << 0),
-+};
-+
- struct lpfc_sli_ct_request {
- 	/* Structure is in Big Endian format */
- 	union CtRevisionId RevisionId;
-@@ -131,25 +143,13 @@ struct lpfc_sli_ct_request {
- 			uint8_t Fc4Type;
- 		} gid_ff;
- 		struct rft {
--			uint32_t PortId;	/* For RFT_ID requests */
--
--#ifdef __BIG_ENDIAN_BITFIELD
--			uint32_t rsvd0:16;
--			uint32_t rsvd1:7;
--			uint32_t fcpReg:1;	/* Type 8 */
--			uint32_t rsvd2:2;
--			uint32_t ipReg:1;	/* Type 5 */
--			uint32_t rsvd3:5;
--#else	/*  __LITTLE_ENDIAN_BITFIELD */
--			uint32_t rsvd0:16;
--			uint32_t fcpReg:1;	/* Type 8 */
--			uint32_t rsvd1:7;
--			uint32_t rsvd3:5;
--			uint32_t ipReg:1;	/* Type 5 */
--			uint32_t rsvd2:2;
--#endif
-+			__be32 port_id; /* For RFT_ID requests */
- 
--			uint32_t rsvd[7];
-+			__be32 fcp_reg;	/* rsvd 31:9, fcp_reg 8, rsvd 7:0 */
-+			__be32 nvme_reg; /* rsvd 31:9, nvme_reg 8, rsvd 7:0 */
-+			__be32 word2;
-+			__be32 app_serv_reg; /* rsvd 31:1, app_serv_reg 0 */
-+			__be32 word[4];
- 		} rft;
- 		struct rnn {
- 			uint32_t PortId;	/* For RNN_ID requests */
+ 	spin_lock_irq(shost->host_lock);
+ 	vport->fc_flag &= ~(FC_PT2PT | FC_PT2PT_PLOGI | FC_ABORT_DISCOVERY |
+-			    FC_RSCN_MODE | FC_NLP_MORE | FC_RSCN_DISCOVERY);
++			    FC_RSCN_MEMENTO | FC_RSCN_MODE |
++			    FC_NLP_MORE | FC_RSCN_DISCOVERY);
+ 	vport->fc_flag |= FC_NDISC_ACTIVE;
+ 	vport->fc_ns_retry = 0;
+ 	spin_unlock_irq(shost->host_lock);
 -- 
 2.26.2
 
