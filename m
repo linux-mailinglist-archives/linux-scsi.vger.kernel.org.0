@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B1F4FEAE8
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9E14FEB60
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiDLXgL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Apr 2022 19:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
+        id S231396AbiDLXgX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Apr 2022 19:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbiDLXcr (ORCPT
+        with ESMTP id S231307AbiDLXcr (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 19:32:47 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C6D8CD99
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:16 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id q3so284540plg.3
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:16 -0700 (PDT)
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65158CDAD
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:17 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id a21so268567pfv.10
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=64/BCqJFZd6ks5SKwOEnA94soxcA/qZP55c28M4pGkg=;
-        b=MjdJe3uXg6W/f2xeR1DgSYikg6nccP6Dy0+37+59qUllhw+qplyZYPsJvnnBJidNSx
-         t8JJMAUonBbUbxQnIqguojdCOwl4ZPQ/KVUBCRLoJAK6Q3zXkgoU8Y24r2bkhYiP6Wni
-         sER9r7lGwhvMRwpx1+6gg8HlyUx15m+YjbcCWxekQlVrkRjFf7rg8W2cCiWkVquNhkHS
-         QnPFltW58REwKwbmaZm3z9SRfKwpoMg+C7OfNxe7kbSxTKo24jQfNEUfvOqZgkjoYDBm
-         XCKxAcDw2F7yPyw2XNY0IGGT85ESD+9AGOp21FTLdWby+FQuGgtf33z/EOGRWYGSxcsv
-         9uvw==
+        bh=fNiZViB4FtI2s2l7TxN4nH581qAP+ANAIyQ7TDuLSSE=;
+        b=RWe8Eva4JB/nstMZCO04icITw2qrrdHJDYi51Fx8d1iXhNNbdL01G4mcnsEUF0AeET
+         cCbVZeHCsE7dwSjpdKjI4+HTYo0VM/z+AGgp1FJuzgNCbS+eQcnu7RJSQMm7hT/ULsLQ
+         5fin4I/rYWR1AcShEP2SvIIa9V5htUfgmHQSO2py9t1tmVm4bhIogQwWEarqwjvI/eOC
+         wyK60Lm+4/C7bExCHo/+ZosUdPG5BJywuVMZawLNEZ6mamUSR8JSBj21rWiPAlEEWXG8
+         5rcQqxdnQWmTzbjxYhdLGN1qlDH58FLFXBEcaK9JS8ZdMOySb0jboLv38hW9fxMifj9e
+         WSrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=64/BCqJFZd6ks5SKwOEnA94soxcA/qZP55c28M4pGkg=;
-        b=GXCShwM8d/xkW9RCLsw1dCeWZj5nTZTgApQ0yhR+aSf2enChoqpkE8UW3Rt0CFMVHu
-         or7u+kY7o/jRYeql7fWDWGUX4kjvLGrNQSF1BdRHSeKdGwnLeiiop41GxuPieadOBxD8
-         /+NCjzF4QfxyxgTh14iAgWHYCp3aGarKY+DYw6YrQtDNkEARpg9oW7+L49cKSH7CrzCD
-         Jy/3+D4oDJx2nBXSO6rdx2QFZ6EGJNvcXvonDhJBkv1jv1N/clQqw4Tgxb9K2l4mwPgd
-         hd62MgdPnkqz7TJZqjv3r/YYDKnMod2zYGhfTag1+Bf7IRQUV6q+Y+E/mdVSe20o+EKk
-         ECiQ==
-X-Gm-Message-State: AOAM5336Smvn6WzGS/vC5+g1GJZWt0nptjCjfsdgDxzQW0JEdxKH9aWB
-        ZgOlvVP80iDBlL3OEsM+Poq3ZoBo1QM=
-X-Google-Smtp-Source: ABdhPJylCIvEdWQHppKqArQSXNQd1vqWJpa/+x3dsXwNj5zQLoJiw66w5UQv/VxWsRPKI3AK4znf0w==
-X-Received: by 2002:a17:903:1105:b0:156:3e9d:bb7b with SMTP id n5-20020a170903110500b001563e9dbb7bmr39192352plh.136.1649802016260;
-        Tue, 12 Apr 2022 15:20:16 -0700 (PDT)
+        bh=fNiZViB4FtI2s2l7TxN4nH581qAP+ANAIyQ7TDuLSSE=;
+        b=zHhpUmRZgozNi42p4fnHJr2NX3N3bDIhDitTNB/NMnXpMP6qqjLdDbjieKy0s2X4kT
+         ggZNCexe+9BJ2A6cOHEHp2DbwBJBnE+kjH6rnzltU4Q1sFecCMJ0UWBu9BZ1DQoIAQwA
+         7SQKh2Ezz7HipokE8VUEDwjW5epOn2QD4LqvXFVoXsoKAkKGAF+EUqRR5q/xTSO3qMFO
+         qXVoQrNDHUqLgmj1VSDGc3Hw0jfj+9wnOblk6M4ewbCRVAZ65MIpnkM3k8cljQs1BCyc
+         vPbqh2Pw/u+BEUENKrFpCTxbXtuVhnfLta4VHzPsOfbxBsU6EJjHYDqJPlH5xlrEtqYB
+         WPfw==
+X-Gm-Message-State: AOAM5308eruWygUp7hCEsMZgVSxoBMXQGWbgScMt2U8w7mCuoHCcuygI
+        gfJjQvwLC94XS0qFhgXtHMYEb/LobT0=
+X-Google-Smtp-Source: ABdhPJwuU1lsaOP2JBnbRNavoiu1zGKl0slGtTPawVLKpIFU8r/dKIiYI1xBYLc5cFP+1n2JVuaH9Q==
+X-Received: by 2002:a63:de41:0:b0:398:db26:bb6 with SMTP id y1-20020a63de41000000b00398db260bb6mr32245183pgi.516.1649802017024;
+        Tue, 12 Apr 2022 15:20:17 -0700 (PDT)
 Received: from mail-lvn-it-01.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm40429824pfj.55.2022.04.12.15.20.15
+        by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm40429824pfj.55.2022.04.12.15.20.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 15:20:15 -0700 (PDT)
+        Tue, 12 Apr 2022 15:20:16 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 01/26] lpfc: Tweak message log categories for ELS/FDMI/NVME Rescan
-Date:   Tue, 12 Apr 2022 15:19:43 -0700
-Message-Id: <20220412222008.126521-2-jsmart2021@gmail.com>
+Subject: [PATCH 02/26] lpfc: Move cfg_log_verbose check before calling lpfc_dmp_dbg
+Date:   Tue, 12 Apr 2022 15:19:44 -0700
+Message-Id: <20220412222008.126521-3-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220412222008.126521-1-jsmart2021@gmail.com>
 References: <20220412222008.126521-1-jsmart2021@gmail.com>
@@ -69,79 +69,103 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Several log message categories were updated:
-- Enable msg 4623 (Xmit of ECD) to display for ELS logging.
-- Change msg 0220 (FDMI cmd failed) to display for ELS logging.
-- Change msg 6460 (FDMI RPA failure) to be warning not hard error.
-- Change msg 6172 (NVME rescan of DID) to be logged under NVME
-  discovery.
+In an attempt to log message 0126 with LOG_TRACE_EVENT, the following hard
+lockup call trace hangs the system.
+
+Call Trace:
+ _raw_spin_lock_irqsave+0x32/0x40
+ lpfc_dmp_dbg.part.32+0x28/0x220 [lpfc]
+ lpfc_cmpl_els_fdisc+0x145/0x460 [lpfc]
+ lpfc_sli_cancel_jobs+0x92/0xd0 [lpfc]
+ lpfc_els_flush_cmd+0x43c/0x670 [lpfc]
+ lpfc_els_flush_all_cmd+0x37/0x60 [lpfc]
+ lpfc_sli4_async_event_proc+0x956/0x1720 [lpfc]
+ lpfc_do_work+0x1485/0x1d70 [lpfc]
+ kthread+0x112/0x130
+ ret_from_fork+0x1f/0x40
+Kernel panic - not syncing: Hard LOCKUP
+
+The same CPU tries to claim the phba->port_list_lock twice.
+
+Move the cfg_log_verbose checks as part of the lpfc_printf_vlog and
+lpfc_printf_log macros before calling lpfc_dmp_dbg.  There is no
+need to take the phba->port_list_lock within lpfc_dmp_dbg.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_ct.c   | 6 +++---
- drivers/scsi/lpfc/lpfc_els.c  | 2 +-
- drivers/scsi/lpfc/lpfc_nvme.c | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/scsi/lpfc/lpfc_init.c   | 29 +----------------------------
+ drivers/scsi/lpfc/lpfc_logmsg.h |  6 +++---
+ 2 files changed, 4 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
-index 4b024aa03c1b..4334bd358c5a 100644
---- a/drivers/scsi/lpfc/lpfc_ct.c
-+++ b/drivers/scsi/lpfc/lpfc_ct.c
-@@ -2236,7 +2236,7 @@ lpfc_cmpl_ct_disc_fdmi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	cmd =  be16_to_cpu(fdmi_cmd);
- 	if (fdmi_rsp == cpu_to_be16(SLI_CT_RESPONSE_FS_RJT)) {
- 		/* FDMI rsp failed */
--		lpfc_printf_vlog(vport, KERN_INFO, LOG_DISCOVERY,
-+		lpfc_printf_vlog(vport, KERN_INFO, LOG_DISCOVERY | LOG_ELS,
- 				 "0220 FDMI cmd failed FS_RJT Data: x%x", cmd);
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 461d333b1b3a..f9cd4b72d949 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -15700,34 +15700,7 @@ void lpfc_dmp_dbg(struct lpfc_hba *phba)
+ 	unsigned int temp_idx;
+ 	int i;
+ 	int j = 0;
+-	unsigned long rem_nsec, iflags;
+-	bool log_verbose = false;
+-	struct lpfc_vport *port_iterator;
+-
+-	/* Don't dump messages if we explicitly set log_verbose for the
+-	 * physical port or any vport.
+-	 */
+-	if (phba->cfg_log_verbose)
+-		return;
+-
+-	spin_lock_irqsave(&phba->port_list_lock, iflags);
+-	list_for_each_entry(port_iterator, &phba->port_list, listentry) {
+-		if (port_iterator->load_flag & FC_UNLOADING)
+-			continue;
+-		if (scsi_host_get(lpfc_shost_from_vport(port_iterator))) {
+-			if (port_iterator->cfg_log_verbose)
+-				log_verbose = true;
+-
+-			scsi_host_put(lpfc_shost_from_vport(port_iterator));
+-
+-			if (log_verbose) {
+-				spin_unlock_irqrestore(&phba->port_list_lock,
+-						       iflags);
+-				return;
+-			}
+-		}
+-	}
+-	spin_unlock_irqrestore(&phba->port_list_lock, iflags);
++	unsigned long rem_nsec;
  
- 		/* Should we fallback to FDMI-2 / FDMI-1 ? */
-@@ -2272,9 +2272,9 @@ lpfc_cmpl_ct_disc_fdmi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 				phba->link_flag &= ~LS_CT_VEN_RPA;
- 				if (phba->cmf_active_mode == LPFC_CFG_OFF)
- 					return;
--				lpfc_printf_log(phba, KERN_ERR,
-+				lpfc_printf_log(phba, KERN_WARNING,
- 						LOG_DISCOVERY | LOG_ELS,
--						"6460 VEN FDMI RPA failure\n");
-+						"6460 VEN FDMI RPA RJT\n");
- 				return;
- 			}
- 			if (vport->fdmi_port_mask == LPFC_FDMI2_PORT_ATTR) {
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 3a445a0fea86..65e884a416a5 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -4257,7 +4257,7 @@ lpfc_issue_els_edc(struct lpfc_vport *vport, uint8_t retry)
- 
- 	phba->cgn_sig_freq = lpfc_fabric_cgn_frequency;
- 
--	lpfc_printf_vlog(vport, KERN_INFO, LOG_CGN_MGMT,
-+	lpfc_printf_vlog(vport, KERN_INFO, LOG_ELS | LOG_CGN_MGMT,
- 			 "4623 Xmit EDC to remote "
- 			 "NPORT x%x reg_sig x%x reg_fpin:x%x\n",
- 			 ndlp->nlp_DID, phba->cgn_reg_signal,
-diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
-index 8d26f207ebd2..699b79d4f496 100644
---- a/drivers/scsi/lpfc/lpfc_nvme.c
-+++ b/drivers/scsi/lpfc/lpfc_nvme.c
-@@ -2466,12 +2466,12 @@ lpfc_nvme_rescan_port(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
- 	if (!nrport || !remoteport)
- 		goto rescan_exit;
- 
--	/* Only rescan if we are an NVME target in the MAPPED state */
-+	/* Rescan an NVME target in MAPPED state with DISCOVERY role set */
- 	if (remoteport->port_role & FC_PORT_ROLE_NVME_DISCOVERY &&
- 	    ndlp->nlp_state == NLP_STE_MAPPED_NODE) {
- 		nvme_fc_rescan_remoteport(remoteport);
- 
--		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
-+		lpfc_printf_vlog(vport, KERN_INFO, LOG_NVME_DISC,
- 				 "6172 NVME rescanned DID x%06x "
- 				 "port_state x%x\n",
- 				 ndlp->nlp_DID, remoteport->port_state);
+ 	if (atomic_cmpxchg(&phba->dbg_log_dmping, 0, 1) != 0)
+ 		return;
+diff --git a/drivers/scsi/lpfc/lpfc_logmsg.h b/drivers/scsi/lpfc/lpfc_logmsg.h
+index 7d480c798794..a5aafe230c74 100644
+--- a/drivers/scsi/lpfc/lpfc_logmsg.h
++++ b/drivers/scsi/lpfc/lpfc_logmsg.h
+@@ -73,7 +73,7 @@ do { \
+ #define lpfc_printf_vlog(vport, level, mask, fmt, arg...) \
+ do { \
+ 	{ if (((mask) & (vport)->cfg_log_verbose) || (level[1] <= '3')) { \
+-		if ((mask) & LOG_TRACE_EVENT) \
++		if ((mask) & LOG_TRACE_EVENT && !(vport)->cfg_log_verbose) \
+ 			lpfc_dmp_dbg((vport)->phba); \
+ 		dev_printk(level, &((vport)->phba->pcidev)->dev, "%d:(%d):" \
+ 			   fmt, (vport)->phba->brd_no, vport->vpi, ##arg);  \
+@@ -89,11 +89,11 @@ do { \
+ 				 (phba)->pport->cfg_log_verbose : \
+ 				 (phba)->cfg_log_verbose; \
+ 	if (((mask) & log_verbose) || (level[1] <= '3')) { \
+-		if ((mask) & LOG_TRACE_EVENT) \
++		if ((mask) & LOG_TRACE_EVENT && !log_verbose) \
+ 			lpfc_dmp_dbg(phba); \
+ 		dev_printk(level, &((phba)->pcidev)->dev, "%d:" \
+ 			fmt, phba->brd_no, ##arg); \
+-	} else  if (!(phba)->cfg_log_verbose)\
++	} else if (!log_verbose)\
+ 		lpfc_dbg_print(phba, "%d:" fmt, phba->brd_no, ##arg); \
+ 	} \
+ } while (0)
 -- 
 2.26.2
 
