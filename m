@@ -2,55 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A5C4FE7D7
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Apr 2022 20:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B41C4FE7DB
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Apr 2022 20:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbiDLSYQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Apr 2022 14:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
+        id S1352072AbiDLSYd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Apr 2022 14:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbiDLSYQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 14:24:16 -0400
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126256006F
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 11:21:58 -0700 (PDT)
-Received: by mail-pj1-f54.google.com with SMTP id b2-20020a17090a010200b001cb0c78db57so3903684pjb.2
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 11:21:58 -0700 (PDT)
+        with ESMTP id S1349095AbiDLSY2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 14:24:28 -0400
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837076007E
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 11:22:10 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id c23so17569571plo.0
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 11:22:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Aw6YY+9Ojmaf5Vn85bSv35EzCBs6xNM6n5pGVr8SH9w=;
-        b=JUhFDpnfTZB5Yj+3FY/ZT6WhqUcThdimiM5/3V8L6PbcpxZPBWOLzB8w57b8shTvxi
-         0QSxgmlLNrYo/QyUqMPluJgYqmKfmX0J16cTbJlHWPfTBkRVnzqRX00dXgOEM8Tq48VR
-         UBmd03aYJ4fbkk3mAE2tIRuoSaULObCkcLPdiv5nsVUOviJcP+aP4mNpaGqqxb7Q5X1h
-         N5G9r/SQXAEZudLEyoKtRfjw6DAtaWv1hOuBEgaJJTNd8nQwqbX/b3BQulrwvUeHtIOn
-         lrt9A1Cch5cCozhLUTqY+2XviCld51zfQ6eP83Wa/brW/DPHYmfw52BrvaEqtYB5rd26
-         yhnA==
-X-Gm-Message-State: AOAM533lfDXeThopKiZHgjNO3pRjKQgWCYMoEwAu9dlqi0uETts4MB6F
-        I6V4GsXYwdAcF0yhJL1/6MU=
-X-Google-Smtp-Source: ABdhPJwwlYlydbNFa3U5Sb5l7/45nvho3ePM+T5OLvzIWEyFTJYmT0x9GVDtTdZxbCXzzA7GhRFYgw==
-X-Received: by 2002:a17:90b:1e44:b0:1ca:9eb8:e1ec with SMTP id pi4-20020a17090b1e4400b001ca9eb8e1ecmr6536058pjb.63.1649787717448;
-        Tue, 12 Apr 2022 11:21:57 -0700 (PDT)
+        bh=thpfQVR6KxBSZIzdXb09bWsMzxC6P+h3c+aJ+9cCBrA=;
+        b=3Z+Mk0R8hsQKUZJSltHKAy6vRsSQu7uq1MGO/Ni1t4j08AnmQfwUFIzFtabtU2chnC
+         STQE6RN3QzxJfxWTMNeDqVZXswfuN4iX6W7wNpRlAY8mvJEz6yZbbuS2RJL+2YV0jXqF
+         /TDpfy7F8it5/nL1nADFZpMGgJXyyoggLmBDzBWTjY44RlAufLblXkG6DcQo/jG66ozk
+         oa9osBW/URq4kwW+2uacu4C5D1my6FnpOOogxkPpVUIwS3dk9I4CBR5gW8c9IJGoIk9C
+         KW2biqRhaZKBThJtpra4HFjSu4g30F1EbDuswWwsV6RUlefvmPXhSRTy71oltp9uz0sx
+         IuHw==
+X-Gm-Message-State: AOAM533JJvw3A9JcJtWifzp2D5luuUhRh9QRZvtTWJPrhFyNgzaOYiDm
+        tLl1kC3A2YuOsQcB+lwcXDk=
+X-Google-Smtp-Source: ABdhPJw4NnGD/J6VZ3eZ9vIom0rBOj6qH+X624/buqtVfw66oNgPe0MVLBpdolIsw/sJt0bfLk3zWw==
+X-Received: by 2002:a17:902:7445:b0:158:4bda:a594 with SMTP id e5-20020a170902744500b001584bdaa594mr15359961plt.16.1649787729462;
+        Tue, 12 Apr 2022 11:22:09 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:d4b2:56ee:d001:c159])
-        by smtp.gmail.com with ESMTPSA id d18-20020a056a0010d200b004fa2e13ce80sm40367037pfu.76.2022.04.12.11.21.55
+        by smtp.gmail.com with ESMTPSA id d18-20020a056a0010d200b004fa2e13ce80sm40367037pfu.76.2022.04.12.11.22.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 11:21:56 -0700 (PDT)
+        Tue, 12 Apr 2022 11:22:08 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
         linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Daejun Park <daejun7.park@samsung.com>
-Subject: [PATCH v2 17/29] scsi: ufs: Use an SPDX license identifier in the Kconfig file
-Date:   Tue, 12 Apr 2022 11:18:41 -0700
-Message-Id: <20220412181853.3715080-18-bvanassche@acm.org>
+Subject: [PATCH v2 18/29] scsi: ufs: Remove paths from source code comments
+Date:   Tue, 12 Apr 2022 11:18:42 -0700
+Message-Id: <20220412181853.3715080-19-bvanassche@acm.org>
 X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 In-Reply-To: <20220412181853.3715080-1-bvanassche@acm.org>
 References: <20220412181853.3715080-1-bvanassche@acm.org>
@@ -67,51 +66,50 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-As requested in Documentation/process/license-rules.rst, use an SPDX
-license identifier.
+Since specifying the path in a source file is redundant, remove the
+paths from source code comments.
 
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ufs/Kconfig | 25 +------------------------
- 1 file changed, 1 insertion(+), 24 deletions(-)
+ drivers/scsi/ufs/Kconfig      | 1 -
+ drivers/scsi/ufs/ufshcd-pci.c | 1 -
+ drivers/scsi/ufs/unipro.h     | 2 --
+ 3 files changed, 4 deletions(-)
 
 diff --git a/drivers/scsi/ufs/Kconfig b/drivers/scsi/ufs/Kconfig
-index 9fe27b01904e..3ebcd5bbc344 100644
+index 3ebcd5bbc344..393b9a01da36 100644
 --- a/drivers/scsi/ufs/Kconfig
 +++ b/drivers/scsi/ufs/Kconfig
-@@ -1,3 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0+
+@@ -2,7 +2,6 @@
  #
  # Kernel configuration file for the UFS Host Controller
  #
-@@ -7,30 +8,6 @@
+-# This code is based on drivers/scsi/ufs/Kconfig
+ # Copyright (C) 2011-2013 Samsung India Software Operations
+ #
  # Authors:
- #	Santosh Yaraganavi <santosh.sy@samsung.com>
- #	Vinayak Holikatti <h.vinayak@samsung.com>
--#
--# This program is free software; you can redistribute it and/or
--# modify it under the terms of the GNU General Public License
--# as published by the Free Software Foundation; either version 2
--# of the License, or (at your option) any later version.
--# See the COPYING file in the top-level directory or visit
--# <http://www.gnu.org/licenses/gpl-2.0.html>
--#
--# This program is distributed in the hope that it will be useful,
--# but WITHOUT ANY WARRANTY; without even the implied warranty of
--# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--# GNU General Public License for more details.
--#
--# This program is provided "AS IS" and "WITH ALL FAULTS" and
--# without warranty of any kind. You are solely responsible for
--# determining the appropriateness of using and distributing
--# the program and assume all risks associated with your exercise
--# of rights with respect to the program, including but not limited
--# to infringement of third party rights, the risks and costs of
--# program errors, damage to or loss of data, programs or equipment,
--# and unavailability or interruption of operations. Under no
--# circumstances will the contributor of this Program be liable for
--# any damages of any kind arising from your use or distribution of
--# this program.
+diff --git a/drivers/scsi/ufs/ufshcd-pci.c b/drivers/scsi/ufs/ufshcd-pci.c
+index 81aa14661072..d36873bc44fe 100644
+--- a/drivers/scsi/ufs/ufshcd-pci.c
++++ b/drivers/scsi/ufs/ufshcd-pci.c
+@@ -2,7 +2,6 @@
+ /*
+  * Universal Flash Storage Host controller PCI glue driver
+  *
+- * This code is based on drivers/scsi/ufs/ufshcd-pci.c
+  * Copyright (C) 2011-2013 Samsung India Software Operations
+  *
+  * Authors:
+diff --git a/drivers/scsi/ufs/unipro.h b/drivers/scsi/ufs/unipro.h
+index 705a6465ba5c..64647aa5c2e0 100644
+--- a/drivers/scsi/ufs/unipro.h
++++ b/drivers/scsi/ufs/unipro.h
+@@ -1,7 +1,5 @@
+ /* SPDX-License-Identifier: GPL-2.0-or-later */
+ /*
+- * drivers/scsi/ufs/unipro.h
+- *
+  * Copyright (C) 2013 Samsung Electronics Co., Ltd.
+  */
  
- config SCSI_UFSHCD
- 	tristate "Universal Flash Storage Controller Driver Core"
