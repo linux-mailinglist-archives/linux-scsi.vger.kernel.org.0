@@ -2,79 +2,131 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99694FEB30
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E64E04FEA52
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiDLXU7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Apr 2022 19:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
+        id S231343AbiDLXhP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Apr 2022 19:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiDLXUs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 19:20:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B709025C
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:07:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F053FB8204F
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 21:30:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F493C385A1;
-        Tue, 12 Apr 2022 21:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649799006;
-        bh=6GcLynZRWnw26OaQC8xbREY2TgH24tA243xH1doTwOI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WMZwkCE56EO5SFCivbcGOYwb8zu3rwHZrCy+vLCOvhuBI28lSLqmwu+c2Ynxf+lAL
-         pdrk6OJJwsiyGH/rC0JAASz5szcS7hYydxQgPE6iQrKiA5CxL1AuwFWuONMldYoCGC
-         C1s2Yqh+wdVPprRVgD60H9hUkU9zrlhXDv/ysDCYgVpUfIMCmk+AXC1ihHDGAHlB+H
-         SzXRTOVYiVd3Sey501bf3ZbTA7oRP4sQi9HZI873Ys9ht0m0lPGc63Zt2JcpIKq0pt
-         OAqgPnRyOmlzWVG6gvvVqtwDek4zn2gBiV4tGAJysXC0Np4H71vsYlpyGl7QTPpC5k
-         J9Kp/7LyyszHA==
-Date:   Tue, 12 Apr 2022 14:30:04 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v2 23/29] scsi: ufs: Remove unnecessary ufshcd-crypto.h
- include directives
-Message-ID: <YlXvXE61PPcFREZ8@sol.localdomain>
-References: <20220412181853.3715080-1-bvanassche@acm.org>
- <20220412181853.3715080-24-bvanassche@acm.org>
+        with ESMTP id S231303AbiDLXcr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 19:32:47 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3836E7C79C
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:16 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id f3so300346pfe.2
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uMgL2cDpyTLu1ZaQy4VHaI57pjl/M8wUWyaip/pbBtQ=;
+        b=eUQ+6w5sjYOGbYTK/xx1LGYyiS1oUJd1FlkRr2z4APBd6Ik+dJGafzOZHd9NFSe5gg
+         x0GeaDlCgy9MFbyJUaAU8mjUXSomKj5CWjAUP7xG/JSIatirFHVjYbV5YJvZRO/4Nlf8
+         JJUARQmGRKiqeBr6OrQSni+Fhp/K3pfqTo87w2sv+z/ASbq64xSyeCHyRyBsUxULm3ME
+         FiX25qAb6BkjVrY/SVK7nUsvUrB2vytNUYXFbDq1VO5XimTDxhlacH08ibWzJQBxqTXk
+         fNl2Uebeek4KpTZmD/uvWLR6ngm22K3SAUN5euSIQUCmzBIaVkiQUv/Zzf2lXpikwP7C
+         aPpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uMgL2cDpyTLu1ZaQy4VHaI57pjl/M8wUWyaip/pbBtQ=;
+        b=vRBN/uA9jahlF2vXyZtQ3mohH+8mo9UnhgdkOOQMjCqyfvmLtiDeZOEQYDiDT6NiBO
+         cTI2dsKwLS4Il+2WNU3lARebsBetHDKEcDWwh0cvz2wSddqyqn09p7p/wMUUwi/rN5us
+         36ZysyO5HOyBY7npiaR6uQ8lLQpWqHNRXpZol5k27PMbhzdpOGHrikAptb/ryiG/fom4
+         HiIAuhxA0NqIfv5pY4j/Kqh/WEZDd/MUW3Jbs+oB8S5WCJRWJsQ3eze7PVvHuOez4rTY
+         crUZiq0YI84uCwbNKrxbtS0a2RxYFAAwDqw/Ex4Fhso44cy0KqCrsJCmZUnZyURDNLUj
+         RcVg==
+X-Gm-Message-State: AOAM53090MdLrqKARQEEtA56vtnR8gPf/RDEphIrO2/n5ihiTwrB/frm
+        yMrMnGi1yqddr9mv5x5wF8m+2TpJFOc=
+X-Google-Smtp-Source: ABdhPJwIj0jNxa6VC51xYmZpZACwQNsPINmWNI931YUVxhpL6vAVvp41TLjxV/RDd9wmX1VnAFpkuw==
+X-Received: by 2002:a63:3246:0:b0:39d:9649:e07c with SMTP id y67-20020a633246000000b0039d9649e07cmr4443406pgy.261.1649802015385;
+        Tue, 12 Apr 2022 15:20:15 -0700 (PDT)
+Received: from mail-lvn-it-01.broadcom.com ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm40429824pfj.55.2022.04.12.15.20.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 15:20:15 -0700 (PDT)
+From:   James Smart <jsmart2021@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     James Smart <jsmart2021@gmail.com>
+Subject: [PATCH 00/26] lpfc: Update lpfc to revision 14.2.0.2
+Date:   Tue, 12 Apr 2022 15:19:42 -0700
+Message-Id: <20220412222008.126521-1-jsmart2021@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412181853.3715080-24-bvanassche@acm.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 11:18:47AM -0700, Bart Van Assche wrote:
-> ufshcd-crypto.h declares functions that must only be called by the UFS
-> core. Hence remove the #include "ufshcd-crypto.h" directive from UFS
-> drivers.
-> 
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/ufs/ufs-mediatek.c | 1 -
->  drivers/scsi/ufs/ufs-qcom-ice.c | 1 -
->  drivers/scsi/ufs/ufs-qcom.h     | 1 +
->  3 files changed, 1 insertion(+), 2 deletions(-)
+Update lpfc to revision 14.2.0.2
 
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+This patch set a bunch of small fixes, several discovery fixes,
+a few logging enhancements, and a rework patch to get rid of
+overloaded structure fields.
 
-- Eric
+The patches were cut against Martin's 5.18/scsi-queue tree
+
+James Smart (26):
+  lpfc: Tweak message log categories for ELS/FDMI/NVME Rescan
+  lpfc: Move cfg_log_verbose check before calling lpfc_dmp_dbg
+  lpfc: Fix diagnostic fw logging after a function reset
+  lpfc: Zero SLI4 fcp_cmnd buffer's fcpCntl0 field
+  lpfc: Requeue SCSI I/O to upper layer when fw reports link down
+  lpfc: Fix SCSI I/O completion and abort handler deadlock
+  lpfc: Clear fabric topology flag before initiating a new FLOGI
+  lpfc: Fix null pointer dereference after failing to issue FLOGI and
+    PLOGI
+  lpfc: Protect memory leak for NPIV ports sending PLOGI_RJT
+  lpfc: Update fc_prli_sent outstanding only after guaranteed IOCB
+    submit
+  lpfc: Transition to NPR state upon LOGO cmpl if link down or aborted
+  lpfc: Remove unnecessary NULL pointer assignment for ELS_RDF path
+  lpfc: Move MI module parameter check to handle dynamic disable
+  lpfc: Correct CRC32 calculation for congestion stats
+  lpfc: Fix call trace observed during I/O with CMF enabled
+  lpfc: Revise FDMI reporting of supported port speed for trunk groups
+  lpfc: Remove false FDMI NVME FC-4 support for NPIV ports
+  lpfc: Register for Application Services FC-4 type in Fabric topology
+  lpfc: Introduce FC_RSCN_MEMENTO flag for tracking post RSCN completion
+  lpfc: Fix field overload in lpfc_iocbq data structure
+  lpfc: Refactor cleanup of mailbox commands
+  lpfc: Change FA-PWWN detection methodology
+  lpfc: Update stat accounting for READ_STATUS mbox command
+  lpfc: Expand setting ELS_ID field in ELS_REQUEST64_WQE
+  lpfc: Update lpfc version to 14.2.0.2
+  lpfc: Copyright updates for 14.2.0.2 patches
+
+ drivers/scsi/lpfc/lpfc.h           |   6 +-
+ drivers/scsi/lpfc/lpfc_attr.c      |  55 ++-
+ drivers/scsi/lpfc/lpfc_bsg.c       |  79 ++--
+ drivers/scsi/lpfc/lpfc_crtn.h      |   4 +-
+ drivers/scsi/lpfc/lpfc_ct.c        | 252 ++++++-----
+ drivers/scsi/lpfc/lpfc_els.c       | 644 ++++++++++++++---------------
+ drivers/scsi/lpfc/lpfc_hbadisc.c   | 143 +++----
+ drivers/scsi/lpfc/lpfc_hw.h        |  75 ++--
+ drivers/scsi/lpfc/lpfc_hw4.h       |  17 +-
+ drivers/scsi/lpfc/lpfc_init.c      | 209 +++++-----
+ drivers/scsi/lpfc/lpfc_logmsg.h    |   8 +-
+ drivers/scsi/lpfc/lpfc_mbox.c      | 203 +++++----
+ drivers/scsi/lpfc/lpfc_nportdisc.c |  64 ++-
+ drivers/scsi/lpfc/lpfc_nvme.c      |  35 +-
+ drivers/scsi/lpfc/lpfc_nvmet.c     |  73 ++--
+ drivers/scsi/lpfc/lpfc_scsi.c      |  55 ++-
+ drivers/scsi/lpfc/lpfc_sli.c       | 226 +++++-----
+ drivers/scsi/lpfc/lpfc_sli.h       |  34 +-
+ drivers/scsi/lpfc/lpfc_sli4.h      |   3 +
+ drivers/scsi/lpfc/lpfc_version.h   |   2 +-
+ drivers/scsi/lpfc/lpfc_vport.c     |  31 +-
+ 21 files changed, 1112 insertions(+), 1106 deletions(-)
+
+-- 
+2.26.2
+
