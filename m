@@ -2,118 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C8C4FFD1B
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 19:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C77500170
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 23:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237473AbiDMRxN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Apr 2022 13:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
+        id S233711AbiDMWAf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Apr 2022 18:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237343AbiDMRxL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Apr 2022 13:53:11 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128DD38BF3
-        for <linux-scsi@vger.kernel.org>; Wed, 13 Apr 2022 10:50:48 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bu29so4982774lfb.0
-        for <linux-scsi@vger.kernel.org>; Wed, 13 Apr 2022 10:50:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=r74y0EwDVmDlpC/kUkPtE7VG7DVXEKM1QwmOEqbKwS0=;
-        b=MclBlZJVnfe0f0mcJEdBX+WMA04jn7pmAvarbJ3uHULyR87IvtLf7s1sGDHo7Sfb/S
-         T8TheUiHcvkPdluJi7tbPOVTKmCnVlbrARbMXWeUjf6Lmrc5fjjASySd5a1ZAvb4qBvH
-         g+Jhpcs6WQ/vAaDxkWNH7jhlZy+h1v4KNWSkI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=r74y0EwDVmDlpC/kUkPtE7VG7DVXEKM1QwmOEqbKwS0=;
-        b=4AwEv45kH1n3gXvpRAwAIluZjhtKUxSe30mFkN2tilcqGRoadh/ErB1YqPCq+WUtbS
-         6M8rZqH38VqHTtJ5ATJhyBrKXenvE/u8v/84XUS/nPuC1R6JeA6mELDnHF63y/F1NAJ+
-         JZ+nNaV1uJIMBaEgIJYdTJAWLs1Yx5cDrP29laj5tPWhDcLVWf81k93eyEm8EEKFuayB
-         ofzf+AdgRaoUJtPqvBH+G5vfwie2dDB5X2Rr2d7k+zdbxsvijKdnUf4CMUB3uAvhyzwy
-         p8x6sNQ0K9kvU200s4jq3n2bQ/zt/pTQakfpwcsPnzh8nqIaiZbv3t3EelsAdC0SS6m4
-         Fn4A==
-X-Gm-Message-State: AOAM530gg7ChRe0uftgEgyQvn7U1ylF4NKzJCfirM7N/7XAiaxQ2t3F9
-        CS908YN+UWMv64c0PHG6i4M/IK0CdiTxSwax0m0u4ghfj+/jEIgA
-X-Google-Smtp-Source: ABdhPJw06dZBVNUIDQBWGii1MtEgofJKqcwF1+Fxho2xulrNNrU9nvVhU36k0pdsY3uyxyPyjh40brLkZfbI4HV2Bp8=
-X-Received: by 2002:a05:6512:1694:b0:448:3fd4:c7a9 with SMTP id
- bu20-20020a056512169400b004483fd4c7a9mr30013864lfb.29.1649872245861; Wed, 13
- Apr 2022 10:50:45 -0700 (PDT)
-MIME-Version: 1.0
-From:   Brian Bunker <brian@purestorage.com>
-Date:   Wed, 13 Apr 2022 10:50:32 -0700
-Message-ID: <CAHZQxyKbksT=FrLvtPFyBUzGChsTHaRZ-+R0Uc1oDcedVHLTUg@mail.gmail.com>
-Subject: [PATCH 1/1] dm-mpath: do not fail paths on ALUA state transitioning state
-To:     linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S233128AbiDMWAe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Apr 2022 18:00:34 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB871DA51
+        for <linux-scsi@vger.kernel.org>; Wed, 13 Apr 2022 14:58:09 -0700 (PDT)
+Received: from epcas3p2.samsung.com (unknown [182.195.41.20])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220413215802epoutp0364aad78c03dea5bf27ff01a23ea778a8~lk49bSWmN3234432344epoutp03j
+        for <linux-scsi@vger.kernel.org>; Wed, 13 Apr 2022 21:58:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220413215802epoutp0364aad78c03dea5bf27ff01a23ea778a8~lk49bSWmN3234432344epoutp03j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1649887082;
+        bh=TVjtkp//1USqWfRLTx7nmSZ5eT3ctN7CpfIO5RSOBkM=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=LDPmiVktPFWpQUPMtzEznmHRLIpah4g87k7X3eddnpBbrR8RStkAW7kzrSaMWrTrc
+         Z0ROjTzUmc83HMaNk5y17Wv1W7S0uTAGimTPHpo0+T5LV7OjErv4Nay53xD0m8BYbl
+         JAx7NF+Wic4fro2WBKTyXtuQfjTRIoTdms1kkHw4=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas3p3.samsung.com (KnoxPortal) with ESMTP id
+        20220413215801epcas3p36ee852cf1a363837e1dde6f15fa80ed4~lk484V4Rv1438314383epcas3p3x;
+        Wed, 13 Apr 2022 21:58:01 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp3.localdomain
+        (Postfix) with ESMTP id 4KdxKj5gFcz4x9Pr; Wed, 13 Apr 2022 21:58:01 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: RE: [PATCH v2 04/29] scsi: ufs: Simplify statements that return a
+ boolean
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Keoseong Park <keosung.park@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <e946d403-8bf9-5c88-d502-353faf50c6b7@acm.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1891546521.01649887081779.JavaMail.epsvc@epcpadp4>
+Date:   Wed, 13 Apr 2022 14:18:48 +0900
+X-CMS-MailID: 20220413051848epcms2p3e5c3a4dbbe74e76d11c14626048d72ae
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20220412181947epcas2p18ab1ae9013aeb1f261fb46cb60881263
+References: <e946d403-8bf9-5c88-d502-353faf50c6b7@acm.org>
+        <20220412181853.3715080-5-bvanassche@acm.org>
+        <20220412181853.3715080-1-bvanassche@acm.org>
+        <1889248251.21649817605815.JavaMail.epsvc@epcpadp3>
+        <CGME20220412181947epcas2p18ab1ae9013aeb1f261fb46cb60881263@epcms2p3>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I would like to revisit this patch since it continues to cause fallout
-for us. Our best practice has always been to use the setting
-no_path_retry of 0 in multipath-tools.This means that our customers
-who have a previously working configuration file upgrade into this
-problem.
+>On 4/12/22 19:33, Keoseong Park wrote:
+>> Hi Bart,
+>> 
+>>> Convert "if (expr) return true; else return false;" into "return expr;"
+>>> if either 'expr' is a boolean expression or the return type of the
+>>> function is 'bool'.
+>> 
+>> How about adding ufshcd_is_pwr_mode_restore_needed()?
+>
+>Hi Keoseong,
+>
+>I'd like to keep that function as-is because it has three return 
+>statements instead of two.
+>
+>Thanks,
+>
+>Bart.
 
-My understanding around why this patch was not accepted the first time
-was because some array vendors stay in the ALUA transitioning state
-for a very long time. It doesn't seem to me that not failing the paths
-leads to a problem since the path checker and priority will protect
-against continually using the transioning paths, but I am not aware of
-the array vendor that led to this patch in the first place. If this
-patch is still not acceptable, can it be made acceptable with a flag
-allowing this behavior?
+I get it.
 
-Without this patch we have to reach out to all of our customers who
-are at risk and let them know that a change of no_path_retry to some
-non zero value is required before they upgrade. There is no good way
-to reach them all before this issue is hit and they take an unexpected
-outage.
+Reviewed-by: Keoseong Park <keosung.park@samsung.com>
 
-The solution of no_path_retry is not a perfect fit for us either.
-There are situations where getting to all paths down and the error
-bubbling up as soon as possible is expected. A distinction between the
-transitioning state getting there and some other state like
-unavailable or standby is not there. The fail path logic is the same.
+Best Regards,
+Keoseong Park
 
-If the answer is that multipath-tools should handle this, a
-distinction in failing the path should be made to allow the
-multipath-tools to queue on transitioning but fail on other states to
-be able to retain the previous behavior without either regression
-mentioned above.
-
-Signed-off-by: Brian Bunker <brian@purestorage.com>
-Acked-by: Krishna Kant <krishna.kant@purestorage.com>
-Acked-by: Seamus Connor <sconnor@purestorage.com>
---
-diff --git a/drivers/md/dm-mpath.c b/drivers/md/dm-mpath.c
-index bced42f082b0..28948cc481f9 100644
---- a/drivers/md/dm-mpath.c
-+++ b/drivers/md/dm-mpath.c
-@@ -1652,12 +1652,12 @@ static int multipath_end_io(struct dm_target
-*ti, struct request *clone,
-        if (error && blk_path_error(error)) {
-                struct multipath *m = ti->private;
-
--               if (error == BLK_STS_RESOURCE)
-+               if (error == BLK_STS_RESOURCE || error == BLK_STS_AGAIN)
-                        r = DM_ENDIO_DELAY_REQUEUE;
-                else
-                        r = DM_ENDIO_REQUEUE;
-
--               if (pgpath)
-+               if (pgpath && (error != BLK_STS_AGAIN))
-                        fail_path(pgpath);
-
-                if (!atomic_read(&m->nr_valid_paths) &&
--- 
-Brian Bunker
-PURE Storage, Inc.
-brian@purestorage.com
