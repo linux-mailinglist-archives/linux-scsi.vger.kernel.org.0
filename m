@@ -2,138 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CA34FEB5E
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 01:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E79F4FEBCA
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Apr 2022 02:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbiDLXgc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Apr 2022 19:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
+        id S230000AbiDMAK2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Apr 2022 20:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiDLXc4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 19:32:56 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAB4C6260
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:36 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id z16so297645pfh.3
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 15:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ENTUlso3vksuPH0adZzIPu/o9WgKRy7UKF1u/nJygWI=;
-        b=gurqKsXPPPlQnu874MRL0TWziJtGYR7sBXGP9K/urxELRsJKgJT7u3/UnOUBioQVjX
-         Z2GHWYTacrWdFxjRRlHmBadReIwloL2Q/fW/CmfXL7G2Dx2Dq64EyLmUjWSG0bEMeJMn
-         +okVyrtv0ZRdU87/KV21i9KNFgqYVJWsaId79703O9SB+oyx5529DRyPEZmqNHlbgxbL
-         UHPXGJ5GS/xoq5JM3lw8Ph3SdG71SOgL+jjZDn6tI9gQ/wGWWOj6LjJzSzCiLhPGy+0a
-         bY0H1dzY28gPs94o9DtxDT/9vcMaVM5/OOXFs3nk7cH26xTs282OafvxPqPfYvvR8Y6T
-         +zsw==
+        with ESMTP id S229998AbiDMAK1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Apr 2022 20:10:27 -0400
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709702B19D
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 17:08:08 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id j17so481897pfi.9
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Apr 2022 17:08:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ENTUlso3vksuPH0adZzIPu/o9WgKRy7UKF1u/nJygWI=;
-        b=EbhcB6rus1v1P+g3Q1qOf8K43ux+TdrpU5qV/2kikblOBdK6ybEGHhl3O62AMSD6Gt
-         aMV4VM37bLG/nab/p9l0d9zMVnWywVrO/v+tvq9rzDGaqUu9W0j7BGSIKhyhfOAKxJj1
-         v6M0MX041iThRWQMXLqrCIQrij3Sv8GLiH6hfG+NoTmw0nXyMj32ujX6c5T+O1mT/ORg
-         WfJ+btoOU5hpoP8zRNgc6T70WDRKqM4t0A0944RmKwzAb1Ev3RHTfIb0E+xshOZdZFN8
-         0XTeaF3nbvctF12m9M9Nohg1iqK2LvkAcvZTrn7QwG0KgN32rT/nUpAr1Dn1pQQqTbqA
-         CBiw==
-X-Gm-Message-State: AOAM531yrgYH5F+3Z0TIdtzqUJ/qMXbHgbLDCrMmUQoVGx/67jwsnP3k
-        ssWSnNSCeHmD1NG0SKwIv9vi6iGJfXU=
-X-Google-Smtp-Source: ABdhPJzLxDivLqehHv20GtoB466PmCCLwD2pKJD75vIJ1EfZQcFSShvhxLuc0C/Li3z3iKa4kF223A==
-X-Received: by 2002:a63:4721:0:b0:382:70fa:479d with SMTP id u33-20020a634721000000b0038270fa479dmr33106296pga.259.1649802035559;
-        Tue, 12 Apr 2022 15:20:35 -0700 (PDT)
-Received: from mail-lvn-it-01.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm40429824pfj.55.2022.04.12.15.20.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 15:20:35 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 26/26] lpfc: Copyright updates for 14.2.0.2 patches
-Date:   Tue, 12 Apr 2022 15:20:08 -0700
-Message-Id: <20220412222008.126521-27-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220412222008.126521-1-jsmart2021@gmail.com>
-References: <20220412222008.126521-1-jsmart2021@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DV3MqyFvN2qEcEU2LMShOH6QgvKElm8M5Xf8Fuxbs98=;
+        b=gHtj8PJNFbldGHsoA8dtrlP6cAo84b8VtQxCDXfNphzLsF/zUqCrjSzOklNz1ry7HO
+         jUsBCEfc7GLwM3/yQJBis8Gyl/qkzHxdBDOL2YYm9hDRUwfwKL7N/bZtM3pGiT4Ej9pb
+         AKqaeUipH3yGhH9bC99+5S4WUc8ITYBVq0n9ArVchiOAYTddlLBJD+BdEKuRUx7CaWpz
+         R0w7lKvKZnVSUYPKSAEUO1tpOcUX1Q4aKXzRYnOX+K+Gm3CVs+IvG1RDVECrfGPld1d4
+         7Z5eVhyfOJP35DodtagCB+MGa+kXUiJBIq5ORsAWCNzaU0kOa49LXG5IocmVozJQd+HD
+         706Q==
+X-Gm-Message-State: AOAM530xibONf8NSQBW81EOlFmhPHK+Sb2St7FmxBiJOoJ6L+hEH+Ldp
+        Mt7FqP76JQ8IDIv7y0XqrOrZ5mh7VTdYKA==
+X-Google-Smtp-Source: ABdhPJx7gVbVNyksBfUHJ7HMDgE1GfjLFAPMgraYKjkfGEb9Y7GS8jOYteYq4HsWcg2Z+5QELoqaJA==
+X-Received: by 2002:a05:6a00:24cb:b0:505:7935:670e with SMTP id d11-20020a056a0024cb00b005057935670emr25374042pfv.36.1649808487765;
+        Tue, 12 Apr 2022 17:08:07 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:d4b2:56ee:d001:c159? ([2620:15c:211:201:d4b2:56ee:d001:c159])
+        by smtp.gmail.com with ESMTPSA id y16-20020a637d10000000b00381268f2c6fsm4065652pgc.4.2022.04.12.17.08.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 17:08:07 -0700 (PDT)
+Message-ID: <f94c1865-ffac-d917-0604-00530047229d@acm.org>
+Date:   Tue, 12 Apr 2022 17:08:05 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 07/29] scsi: ufs: Use get_unaligned_be16() instead of
+ be16_to_cpup()
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-scsi@vger.kernel.org, Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Daejun Park <daejun7.park@samsung.com>
+References: <20220412181853.3715080-1-bvanassche@acm.org>
+ <20220412181853.3715080-8-bvanassche@acm.org>
+ <YlXuliEBsVH0VPaP@sol.localdomain>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <YlXuliEBsVH0VPaP@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update copyrights to 2022 for files modified in the 14.2.0.2 patch set.
+On 4/12/22 14:26, Eric Biggers wrote:
+> On Tue, Apr 12, 2022 at 11:18:31AM -0700, Bart Van Assche wrote:
+>> Use get_unaligned_be16(...) instead of the equivalent but harder to read
+>> be16_to_cpup((__be16 *)...).
+>>
+>> Reviewed-by: Bean Huo <beanhuo@micron.com>
+>> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+>> ---
+>>   drivers/scsi/ufs/ufshcd.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>> index d4ef31e1a409..3ec26c9eb1be 100644
+>> --- a/drivers/scsi/ufs/ufshcd.c
+>> +++ b/drivers/scsi/ufs/ufshcd.c
+>> @@ -7334,7 +7334,7 @@ static u32 ufshcd_get_max_icc_level(int sup_curr_uA, u32 start_scan, char *buff)
+>>   	u16 unit;
+>>   
+>>   	for (i = start_scan; i >= 0; i--) {
+>> -		data = be16_to_cpup((__be16 *)&buff[2 * i]);
+>> +		data = get_unaligned_be16(&buff[2 * i]);
+> 
+> This is not "equivalent".  get_unaligned_be16() works on unaligned values
+> whereas be16_to_cpup() assumes a naturally aligned value.  This patch might
+> still be the right thing to do, but the explanation is not correct.
 
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
----
- drivers/scsi/lpfc/lpfc_attr.c   | 2 +-
- drivers/scsi/lpfc/lpfc_logmsg.h | 2 +-
- drivers/scsi/lpfc/lpfc_mbox.c   | 2 +-
- drivers/scsi/lpfc/lpfc_vport.c  | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+This is what I found in an English dictionary for the word equivalent:
+"corresponding or virtually identical especially in effect or function". The
+effect of this patch is that the same value will be stored in 'data' as without
+this patch. Additionally, no runtime error will be generated with the patch
+applied if the original code did not trigger a runtime exception. I think that
+how I used the word "equivalent" is consistent with the explanation I found in
+an English dictionary.
 
-diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-index c8fa579168c6..0c9cd1924918 100644
---- a/drivers/scsi/lpfc/lpfc_attr.c
-+++ b/drivers/scsi/lpfc/lpfc_attr.c
-@@ -1,7 +1,7 @@
- /*******************************************************************
-  * This file is part of the Emulex Linux Device Driver for         *
-  * Fibre Channel Host Bus Adapters.                                *
-- * Copyright (C) 2017-2021 Broadcom. All Rights Reserved. The term *
-+ * Copyright (C) 2017-2022 Broadcom. All Rights Reserved. The term *
-  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.  *
-  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
-  * EMULEX and SLI are trademarks of Emulex.                        *
-diff --git a/drivers/scsi/lpfc/lpfc_logmsg.h b/drivers/scsi/lpfc/lpfc_logmsg.h
-index a5aafe230c74..4d455da9cd69 100644
---- a/drivers/scsi/lpfc/lpfc_logmsg.h
-+++ b/drivers/scsi/lpfc/lpfc_logmsg.h
-@@ -1,7 +1,7 @@
- /*******************************************************************
-  * This file is part of the Emulex Linux Device Driver for         *
-  * Fibre Channel Host Bus Adapters.                                *
-- * Copyright (C) 2017-2021 Broadcom. All Rights Reserved. The term *
-+ * Copyright (C) 2017-2022 Broadcom. All Rights Reserved. The term *
-  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
-  * Copyright (C) 2004-2009 Emulex.  All rights reserved.           *
-  * EMULEX and SLI are trademarks of Emulex.                        *
-diff --git a/drivers/scsi/lpfc/lpfc_mbox.c b/drivers/scsi/lpfc/lpfc_mbox.c
-index 712c8f6e4de2..9858b1743769 100644
---- a/drivers/scsi/lpfc/lpfc_mbox.c
-+++ b/drivers/scsi/lpfc/lpfc_mbox.c
-@@ -1,7 +1,7 @@
- /*******************************************************************
-  * This file is part of the Emulex Linux Device Driver for         *
-  * Fibre Channel Host Bus Adapters.                                *
-- * Copyright (C) 2017-2021 Broadcom. All Rights Reserved. The term *
-+ * Copyright (C) 2017-2022 Broadcom. All Rights Reserved. The term *
-  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
-  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
-  * EMULEX and SLI are trademarks of Emulex.                        *
-diff --git a/drivers/scsi/lpfc/lpfc_vport.c b/drivers/scsi/lpfc/lpfc_vport.c
-index f635eb8e9711..e7efb025ed50 100644
---- a/drivers/scsi/lpfc/lpfc_vport.c
-+++ b/drivers/scsi/lpfc/lpfc_vport.c
-@@ -1,7 +1,7 @@
- /*******************************************************************
-  * This file is part of the Emulex Linux Device Driver for         *
-  * Fibre Channel Host Bus Adapters.                                *
-- * Copyright (C) 2017-2021 Broadcom. All Rights Reserved. The term *
-+ * Copyright (C) 2017-2022 Broadcom. All Rights Reserved. The term *
-  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
-  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
-  * EMULEX and SLI are trademarks of Emulex.                        *
--- 
-2.26.2
+Thanks,
 
+Bart.
