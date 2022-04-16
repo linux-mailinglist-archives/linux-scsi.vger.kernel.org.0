@@ -2,110 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254E5503368
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 Apr 2022 07:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C21B5034FC
+	for <lists+linux-scsi@lfdr.de>; Sat, 16 Apr 2022 09:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbiDPEw3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 16 Apr 2022 00:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
+        id S230236AbiDPHwo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 16 Apr 2022 03:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiDPEwZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 16 Apr 2022 00:52:25 -0400
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F95641F;
-        Fri, 15 Apr 2022 21:49:54 -0700 (PDT)
-Received: by mail-pl1-f175.google.com with SMTP id q3so8517980plg.3;
-        Fri, 15 Apr 2022 21:49:54 -0700 (PDT)
+        with ESMTP id S230259AbiDPHw1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 16 Apr 2022 03:52:27 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF2D10075D
+        for <linux-scsi@vger.kernel.org>; Sat, 16 Apr 2022 00:49:38 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id u2so10073532pgq.10
+        for <linux-scsi@vger.kernel.org>; Sat, 16 Apr 2022 00:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=bJd2DIgtyK+bZCVQpMa9XLiI7bVnFQgVFeGzbZ6bXamjrEFIUCNaIDR9YpvR5iTRQC
+         EoRjHn2hxdGgHpTmUXoJLhLdkz8kw8CpdMkf+RjOM2yxgJf0M2w5tnzpw0NiczM9cGQm
+         aTRY2J48j2+AVBVM6ZplapTERLwB7sqpQHn0KTPy+GATyEE1HlWbU25nZewZyTln9PiO
+         eb2iuPe3VcoLkYjZ6tmC44EeIcF1BzRiek/y+/+gg720T1wEvd/5m2iOgdTIUS3isI5Z
+         q2z1OdX/gYACU6OexrbNcXzEKBC+MKUq0Bm7V68HpmeyS3D5tFhEEP1iOfnkPKJo7x6w
+         XtNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=n64Ceh0+mncTh8c+PN3WAxiVq0wOhX+10SaNJK7xeCg=;
-        b=Jqnmzopz5ELeysnhdiaOIaA8G07f/4jdOqvoLHb6YcDLZs4tqvKQzagzV+wK86eQAL
-         wtpzUZiHX7wnBd7mmAQ3l9jDVgBArNapaJGjtVWLCiousTou+ZM7HAX4luB1GxNDW9FI
-         WKk6lcZctQhpWjAQJoBhcddHQHunG9yAQ4IeEmRAdUf19AJVF0NUF3/YHNmNgA9vo5vo
-         xHzWWaIrJQeidPzeuSKLiggShjE5yoMh885s61e3/1ZnuHrSnxes6dE1L9RyT6CFWAfe
-         fKouCfNGBfjtVNYJdgzwY4HJVX70mzWQEi2iYjiToDJuFjYGe4sTbovEQql3/gr58CKC
-         T2PA==
-X-Gm-Message-State: AOAM531f0cmG9kg7wIGkZMEKfuxT+HlTcBT2JFcys3QIxQbFaCWvHQh2
-        KedyMGmSf07amDvT8+KztKc=
-X-Google-Smtp-Source: ABdhPJwT6to3858USQjNTK1oP4TKo79v1y7v98iKirBSDZhQhO7QnuXHQM8Wa7Lvk5eiXgmaG9AuCA==
-X-Received: by 2002:a17:90b:4c44:b0:1c7:1326:ec90 with SMTP id np4-20020a17090b4c4400b001c71326ec90mr7502827pjb.87.1650084593598;
-        Fri, 15 Apr 2022 21:49:53 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id k4-20020a17090a3e8400b001cd37f6c0b7sm6129296pjc.46.2022.04.15.21.49.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 21:49:52 -0700 (PDT)
-Message-ID: <3164cd23-28b5-e971-c7a9-1b565b344ed5@acm.org>
-Date:   Fri, 15 Apr 2022 21:49:51 -0700
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=nIpBXK5TOa+S92AFvKdMPrDJc0hM1yDrTLdkVxxJTQ+4ovz67DuPldN6wGE1W+GpvX
+         p5Io6ZOa90Eq4eP+zS9AOtEgRWJ9qxYj6l/CvdQ4n2L+QH46VNkV3PHm5LzQXiJak4SA
+         49lbUtqTf7d8/sybMzPeMeMiRJ7/daLp3ocnHxJO4P6Yjon1RwnYGhaLcY53DjIz0hXE
+         /ShrsY1AtglnCpdN0CCrXoefj5KlbseMWy/M24v8jVUX2mCDzhOK4l1FJc8/uV22kDsw
+         9mXWrCY1eLWvj779bMqOuXrtqpduUGbmnIDKnkwQX+1Jz/riiksCU5Sfvjk7+WQP6LUI
+         MJJA==
+X-Gm-Message-State: AOAM533asXjnzc9U7dCxUc/Jo+b6k0LPQ4ozZnlgaY7pFauy05ARGSKj
+        /oQnmnoEqgAXHWoOsFAp5t9eLWq8bxGZN+Br4TxPSpwTLTE=
+X-Google-Smtp-Source: ABdhPJzPQ782jxaaybf4v05kBQtFRTzv0MMrux20NcZ4Q10XmGrK6dnUIabFDBNBmBOv8fFyQY5zqzYAgf4Cnc3KaCc=
+X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id
+ q8-20020a920508000000b002cbebd8a76bmr1009500ile.156.1650095366830; Sat, 16
+ Apr 2022 00:49:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 1/1] scsi: Fix racing between dev init and dev reset
-Content-Language: en-US
-To:     Alice Chao <alice.chao@mediatek.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, matthias.bgg@gmail.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     stanley.chu@mediatek.com, peter.wang@mediatek.com,
-        chun-hung.wu@mediatek.com, powen.kao@mediatek.com,
-        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
-        jiajie.hao@mediatek.com, qilin.tan@mediatek.com,
-        lin.gui@mediatek.com, yanxu.wei@mediatek.com,
-        wsd_upstream@mediatek.com
-References: <20220415061243.30229-2-alice.chao@mediatek.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220415061243.30229-2-alice.chao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6638:1309:0:0:0:0 with HTTP; Sat, 16 Apr 2022 00:49:26
+ -0700 (PDT)
+Reply-To: daniel.seyba@yahoo.com
+From:   Seyba Daniel <royhalton13@gmail.com>
+Date:   Sat, 16 Apr 2022 09:49:26 +0200
+Message-ID: <CALSxb2w9zQYotuLcRSCPns53ksvT9UrEMVx-1Cp1f8RE7er3cA@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:542 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [royhalton13[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [royhalton13[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 4/14/22 23:12, Alice Chao wrote:
-> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> index 0a70aa763a96..abf9a71ed77c 100644
-> --- a/drivers/scsi/scsi_lib.c
-> +++ b/drivers/scsi/scsi_lib.c
-> @@ -2461,6 +2461,7 @@ static void scsi_evt_emit(struct scsi_device *sdev, struct scsi_event *evt)
->   		break;
->   	case SDEV_EVT_POWER_ON_RESET_OCCURRED:
->   		envp[idx++] = "SDEV_UA=POWER_ON_RESET_OCCURRED";
-> +		wait_event(sdev->host->host_wait, sdev->sdev_gendev.kobj.parent != NULL);
->   		break;
->   	default:
->   		/* do nothing */
-> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-> index f4e6c68ac99e..431f229ac435 100644
-> --- a/drivers/scsi/scsi_scan.c
-> +++ b/drivers/scsi/scsi_scan.c
-> @@ -1904,6 +1904,7 @@ static void do_scsi_scan_host(struct Scsi_Host *shost)
->   	} else {
->   		scsi_scan_host_selected(shost, SCAN_WILD_CARD, SCAN_WILD_CARD,
->   				SCAN_WILD_CARD, 0);
-> +		wake_up(&shost->host_wait);
->   	}
->   }
+Hello,
 
-The above patch can only work if scanning a host is followed by a POWER 
-ON unit attention. I don't think that is guaranteed. Additionally, what 
-will happen with the wait loop if the device generates a POWER on unit 
-attention after the device has been removed from its parent? 
-kobject_del() clears the parent pointer. device_del() calls 
-kobject_del(). scsi_remove_device() calls device_del() before the 
-request queue is destroyed.
+I am so sorry contacting you in this means especially when we have never
+met before. I urgently seek your service to represent me in investing in
+your region / country and you will be rewarded for your service without
+affecting your present job with very little time invested in it.
 
-Thanks,
+My interest is in buying real estate, private schools or companies with
+potentials for rapid growth in long terms.
 
-Bart.
+So please confirm interest by responding back.
 
+My dearest regards
 
+Seyba Daniel
