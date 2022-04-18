@@ -2,69 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33707505EE6
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Apr 2022 22:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3CF505F68
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Apr 2022 23:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238622AbiDRUcq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Apr 2022 16:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
+        id S230057AbiDRVj5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Apr 2022 17:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238619AbiDRUco (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Apr 2022 16:32:44 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651A67659
-        for <linux-scsi@vger.kernel.org>; Mon, 18 Apr 2022 13:30:04 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id v133so10153841vsv.7
-        for <linux-scsi@vger.kernel.org>; Mon, 18 Apr 2022 13:30:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WK6OLngTEGMQZnXAmgyK8gksEaTtYBKX+MRhgq0dtFw=;
-        b=eElSDq7CGUrBUELwyGhC5xEfeCIqHyKpefehh3iC7GGJ06B7iw8ooq8GcEgO87oQVy
-         DC7ZAClsfXqfBhNyhDsQUhAZWZz5ZzzJS87s93tYuSb71duN7u2wKRByjccCPXvzswcS
-         3sQRszw8y+Wn1vlCoB3WrTnoKhwE8x2lX8u0qoDRMzt3GbiAHsiFVy7vP3EzdvrESBv7
-         mEmpJk7KaiiSbDvrcxs8XTuuifLCJ3qZ6qipUei/TcZzxNxVirjiOROSNZOKTVM+7n1c
-         DMOKdzSZinRw+rBYHoYUnxyEksvqYGiWo59ONOkytdYFTG9ruOxb3rLBMbW1VGCJm56U
-         ntxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WK6OLngTEGMQZnXAmgyK8gksEaTtYBKX+MRhgq0dtFw=;
-        b=IF72LwvRkGRrGkA5YNgiszPZeXYI3gacy6IhJZqrG4+WA8HjaLuE+Z8u/RutPMvXj/
-         KhyyU5PaKIxnkoZH9f0KW77T1K3WvVmZfesLQaWt1cb74xMaZH3vl1d99VBSybi9cS4M
-         xQMmKX95uplCHDotSqwF8hoOXXEYst0EzBf9whUP5eE1nrzTp/Xj1GyirrZ8zy/GID47
-         /OdalGTWEk8ukk/pX2lVSSHW2xfo7QwaMhQa4d/71wv/z6Uy3tXT/H3IVMQnRy7dskd6
-         92VAjnrqAHOeWEOrYQaAqGEg2vx3LULxSokKXjYw/7ODWRIJbsT+F/Ld6y6wocWXu9d1
-         HBTw==
-X-Gm-Message-State: AOAM530ZHnqOGkhAbXmbTj/D301XsxWjVwXJH1iNhqz6Xlyo/1W+qxSo
-        TsdH9KasmWEYNJ+hRGTxdydAkfLQ7B9gJ+QyRCI=
-X-Google-Smtp-Source: ABdhPJzKLhGgtDyCi/1w2kYRgIGrsFyCfPql8qrjNo6iItVIGP5AwxVaVL1imcSZmBGyShBl3Mq0jkLukEjZFVuOw/Y=
-X-Received: by 2002:a67:b349:0:b0:32a:28cb:118f with SMTP id
- b9-20020a67b349000000b0032a28cb118fmr3658610vsm.32.1650313803565; Mon, 18 Apr
- 2022 13:30:03 -0700 (PDT)
+        with ESMTP id S230011AbiDRVjz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Apr 2022 17:39:55 -0400
+X-Greylist: delayed 593 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Apr 2022 14:37:14 PDT
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602312E9FB;
+        Mon, 18 Apr 2022 14:37:14 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id C522443AC2;
+        Mon, 18 Apr 2022 21:27:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received; s=mta-01; t=1650317237; x=
+        1652131638; bh=DseoJO+1W+w4gJy4d+4KRn/Xh6rVi45Wkk2zlEFZIs8=; b=m
+        FaKYx+8H7sR2gse8TAbnnQSX7iCJFdNdyH/ruHIA+VI6NEY1CIr2gZLgB2+Qc527
+        TfVQ3j00FerOdhugBbeXhru5QavpSwvg5QFOATg0Km7ahFfDlCXr4H9VLDwqJAxN
+        zZ2YOTR2hfIHXgf/8BeSdIct1dde8kxOuBXAmBkvD4=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fasM8xoosYKD; Tue, 19 Apr 2022 00:27:17 +0300 (MSK)
+Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id B50D1437E1;
+        Tue, 19 Apr 2022 00:27:17 +0300 (MSK)
+Received: from yadro.com (10.178.113.178) by T-EXCH-04.corp.yadro.com
+ (172.17.100.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Tue, 19
+ Apr 2022 00:27:15 +0300
+From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
+To:     Martin Petersen <martin.petersen@oracle.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        <target-devel@vger.kernel.org>
+CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
+        Konstantin Shelekhin <k.shelekhin@yadro.com>
+Subject: [PATCH] scsi: target: core: Silence the message about unknown VPD pages
+Date:   Tue, 19 Apr 2022 00:26:22 +0300
+Message-ID: <20220418212622.275516-1-k.shelekhin@yadro.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Received: by 2002:a67:a643:0:0:0:0:0 with HTTP; Mon, 18 Apr 2022 13:30:03
- -0700 (PDT)
-Reply-To: sgtkaylam28@gmail.com
-From:   SgtKayla Manthey <maichibigracemichael@gmail.com>
-Date:   Mon, 18 Apr 2022 14:30:03 -0600
-Message-ID: <CAN8GoAYY8L73Cyh4LMy60AEYMChRuGcD+uSmoC_sTtsX0UAuZg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.178.113.178]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-04.corp.yadro.com (172.17.100.104)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Target does not support some VPD pages and is very verbose about it.
+Sometimes initiators don't bother and just keep sending the same request
+from time to time, filling up the logs.
+
+This patch lowers the message priority to debug.
+
+Signed-off-by: Konstantin Shelekhin <k.shelekhin@yadro.com>
+---
+ drivers/target/target_core_spc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
+index 4c76498d3fb0..c14441c89bed 100644
+--- a/drivers/target/target_core_spc.c
++++ b/drivers/target/target_core_spc.c
+@@ -769,7 +769,7 @@ spc_emulate_inquiry(struct se_cmd *cmd)
+ 		}
+ 	}
+ 
+-	pr_err("Unknown VPD Code: 0x%02x\n", cdb[2]);
++	pr_debug("Unknown VPD Code: 0x%02x\n", cdb[2]);
+ 	ret = TCM_INVALID_CDB_FIELD;
+ 
+ out:
 -- 
-Greetings,
-Please did you receive my previous message? Write me back
+2.35.1
+
