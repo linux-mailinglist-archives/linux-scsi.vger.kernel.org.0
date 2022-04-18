@@ -2,112 +2,162 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E8F504733
-	for <lists+linux-scsi@lfdr.de>; Sun, 17 Apr 2022 10:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD0850479D
+	for <lists+linux-scsi@lfdr.de>; Sun, 17 Apr 2022 12:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233700AbiDQIhz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 17 Apr 2022 04:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S232054AbiDQK6Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 17 Apr 2022 06:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233661AbiDQIhp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 17 Apr 2022 04:37:45 -0400
-Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2891BEBC
-        for <linux-scsi@vger.kernel.org>; Sun, 17 Apr 2022 01:35:09 -0700 (PDT)
-Received: by mail-vk1-xa44.google.com with SMTP id r8so2339312vkq.4
-        for <linux-scsi@vger.kernel.org>; Sun, 17 Apr 2022 01:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z+v8ugHyK4Bi1bsAOtuex5rzJWIULuLfF++ZnJg6JJs=;
-        b=oNJc2INf8Rhr5FB/7dmVLUtXIN32Zpr+JOws5mZo8yLIZkx20k3ktobg4cFsyHfo10
-         opyovUTmrMqZBrjIIPL8dwM3Cl42hbyZvaLR8TbrZDbPh7rgV94AneypUIz7gx5LvazE
-         zDLFkcDX1nbPbvLE1YDjvnnDO6sd+MeRRKk7hJojVtPLOuB8iX7Tisqm37Yqye5BOvOD
-         qrtEmC9HZPFnF8UhgjxviHDBiEkp+KFrjrNS6AiUfUOujeKcrIPlTDjJJypvibkN2ZRc
-         Fcc5bL7t8fX01QLLow126XRV2cU5sFntAnAB/7YbhrXrCEA2hg1PeuWagasZGrwW/+fq
-         MCiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z+v8ugHyK4Bi1bsAOtuex5rzJWIULuLfF++ZnJg6JJs=;
-        b=cDN8FXYRY0PsOp/9JB1CAArDbqZjyHFVNXThgUEC2G0tqrL4bKjzQHMzxmY0HEkJJO
-         EiGcmS14weY4ymykQhkVgWgtSxWc2QcMQFz3mnzorHtYVwLkoqT9bEuDOiTeK2ONOiM0
-         6901bhObGqwJxgbzVmpFcz65dpc4VFjKy1vDYufS4Lk2IK1XrnRxB/B1SsHFH0caN8oF
-         vZza9qKTqIGtW7cBcF80/+PMOgBB5CJuL6xU035TnP16RtY/DssJLE6UtYpfDkpqdCgT
-         rAmxFo4s0PffewFRmYVDpj6RHA7v15mAuSXxOaq6h9b9taDuSDu5NoyZEe/sgA+E8WmB
-         BIuQ==
-X-Gm-Message-State: AOAM532orHtotzrd1RkBxwnLWIDJL7oAQbbROS9dbzevLuoMGEvGypcy
-        4dUbXVjy5R5sAMMf76uVlnUkTCGi0mW/UE5Xo2U=
-X-Google-Smtp-Source: ABdhPJw9Xt2OFrIK7hURg4kp9HjRikv5sLzHEzVl1NzDr5ZjkMyPbwTBECFNWcwqZlk35V3UQisOkE0Lf5eHqEkQTho=
-X-Received: by 2002:a1f:5105:0:b0:345:252e:b0f5 with SMTP id
- f5-20020a1f5105000000b00345252eb0f5mr1463329vkb.22.1650184508047; Sun, 17 Apr
- 2022 01:35:08 -0700 (PDT)
+        with ESMTP id S229559AbiDQK6W (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 17 Apr 2022 06:58:22 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA971010;
+        Sun, 17 Apr 2022 03:55:44 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kh6Nn1xYyzFpXF;
+        Sun, 17 Apr 2022 18:53:13 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 17 Apr 2022 18:55:41 +0800
+Received: from huawei.com (10.175.101.6) by dggpemm500017.china.huawei.com
+ (7.185.36.178) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 17 Apr
+ 2022 18:55:40 +0800
+From:   Wenchao Hao <haowenchao@huawei.com>
+To:     Mike Christie <michael.christie@oracle.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
+Subject: [PATCH v2] scsi: iscsi: Fix multiple iscsi session unbind event sent to userspace
+Date:   Sun, 17 Apr 2022 20:06:28 -0400
+Message-ID: <20220418000627.474784-1-haowenchao@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Received: by 2002:a05:612c:2303:b0:2a3:2b46:b7d with HTTP; Sun, 17 Apr 2022
- 01:35:07 -0700 (PDT)
-Reply-To: markwillima00@gmail.com
-From:   Mark <muhammadsuleima888@gmail.com>
-Date:   Sun, 17 Apr 2022 01:35:07 -0700
-Message-ID: <CANCcrFBrB3Qw8Ab_hBy19n0Ch6+XNpkXj3PjXKrc26cej7s+Kg@mail.gmail.com>
-Subject: Re: Greetings!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:a44 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [markwillima00[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [muhammadsuleima888[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [muhammadsuleima888[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello,
+I found an issue that kernel would send ISCSI_KEVENT_UNBIND_SESSION
+for multiple times which should be fixed.
 
-The HSBC Bank is a financial institution in United Kingdom. We
-promotes long-term,sustainable and broad-based economic growth in
-developing and emerging countries by providing financial support like
-loans and investment to large, small and
-medium-sized companies (SMEs) as well as fast-growing enterprises
-which in turn helps to create secure and permanent jobs and reduce
-poverty.
+This patch introduce target_unbound in iscsi_cls_session to make
+sure session would send only one ISCSI_KEVENT_UNBIND_SESSION.
 
-If you need fund to promotes your business, project(Project Funding),
-Loan, planning, budgeting and expansion of your business(s) , do not
-hesitate to indicate your interest as we are here to serve you better
-by granting your request.
+But this would break issue fixed in commit 13e60d3ba287 ("scsi: iscsi:
+Report unbind session event when the target has been removed"). The issue
+is iscsid died for any reason after it send unbind session to kernel, once
+iscsid restart again, it loss kernel's ISCSI_KEVENT_UNBIND_SESSION event.
 
+Now kernel think iscsi_cls_session has already sent an
+ISCSI_KEVENT_UNBIND_SESSION event and would not send it any more. Which
+would cause userspace unable to logout. Actually the session is in
+invalid state(it's target_id is INVALID), iscsid should not sync this
+session in it's restart.
 
-Thank you
-Mr:Mark
+So we need to check session's target unbound state during iscsid restart,
+if session is in unbound state, do not sync this session and perform
+session teardown. It's reasonable because once a session is unbound, we
+can not recover it any more(mainly because it's target id is INVALID)
+
+Changes from V1:
+- Using target_unbound rather than state to indicate session has been
+  unbound
+
+Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+---
+ drivers/scsi/scsi_transport_iscsi.c | 21 +++++++++++++++++++++
+ include/scsi/scsi_transport_iscsi.h |  1 +
+ 2 files changed, 22 insertions(+)
+
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 2c0dd64159b0..43ba31e595b4 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -1958,6 +1958,14 @@ static void __iscsi_unbind_session(struct work_struct *work)
+ 
+ 	ISCSI_DBG_TRANS_SESSION(session, "Unbinding session\n");
+ 
++	spin_lock_irqsave(&session->lock, flags);
++	if (session->target_unbound) {
++		spin_unlock_irqrestore(&session->lock, flags);
++		return;
++	}
++	session->target_unbound = 1;
++	spin_unlock_irqrestore(&session->lock, flags);
++
+ 	/* Prevent new scans and make sure scanning is not in progress */
+ 	mutex_lock(&ihost->mutex);
+ 	spin_lock_irqsave(&session->lock, flags);
+@@ -2058,6 +2066,7 @@ int iscsi_add_session(struct iscsi_cls_session *session, unsigned int target_id)
+ 		session->target_id = target_id;
+ 
+ 	dev_set_name(&session->dev, "session%u", session->sid);
++	session->target_unbound = 0;
+ 	err = device_add(&session->dev);
+ 	if (err) {
+ 		iscsi_cls_session_printk(KERN_ERR, session,
+@@ -4319,6 +4328,15 @@ iscsi_session_attr(def_taskmgmt_tmo, ISCSI_PARAM_DEF_TASKMGMT_TMO, 0);
+ iscsi_session_attr(discovery_parent_idx, ISCSI_PARAM_DISCOVERY_PARENT_IDX, 0);
+ iscsi_session_attr(discovery_parent_type, ISCSI_PARAM_DISCOVERY_PARENT_TYPE, 0);
+ 
++static ssize_t
++show_priv_session_target_unbound(struct device *dev, struct device_attribute *attr,
++			char *buf)
++{
++	struct iscsi_cls_session *session = iscsi_dev_to_session(dev->parent);
++	return sysfs_emit(buf, "%d\n", session->target_unbound);
++}
++static ISCSI_CLASS_ATTR(priv_sess, target_unbound, S_IRUGO,
++			show_priv_session_target_unbound, NULL);
+ static ssize_t
+ show_priv_session_state(struct device *dev, struct device_attribute *attr,
+ 			char *buf)
+@@ -4422,6 +4440,7 @@ static struct attribute *iscsi_session_attrs[] = {
+ 	&dev_attr_priv_sess_recovery_tmo.attr,
+ 	&dev_attr_priv_sess_state.attr,
+ 	&dev_attr_priv_sess_creator.attr,
++	&dev_attr_priv_sess_target_unbound.attr,
+ 	&dev_attr_sess_chap_out_idx.attr,
+ 	&dev_attr_sess_chap_in_idx.attr,
+ 	&dev_attr_priv_sess_target_id.attr,
+@@ -4534,6 +4553,8 @@ static umode_t iscsi_session_attr_is_visible(struct kobject *kobj,
+ 		return S_IRUGO | S_IWUSR;
+ 	else if (attr == &dev_attr_priv_sess_state.attr)
+ 		return S_IRUGO;
++	else if (attr == &dev_attr_priv_sess_target_unbound.attr)
++		return S_IRUGO;
+ 	else if (attr == &dev_attr_priv_sess_creator.attr)
+ 		return S_IRUGO;
+ 	else if (attr == &dev_attr_priv_sess_target_id.attr)
+diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
+index 9acb8422f680..877632c25e56 100644
+--- a/include/scsi/scsi_transport_iscsi.h
++++ b/include/scsi/scsi_transport_iscsi.h
+@@ -256,6 +256,7 @@ struct iscsi_cls_session {
+ 	struct workqueue_struct *workq;
+ 
+ 	unsigned int target_id;
++	int target_unbound;   /* make sure unbind session only once */
+ 	bool ida_used;
+ 
+ 	/*
+-- 
+2.32.0
+
