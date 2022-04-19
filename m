@@ -2,42 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D54506BCA
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Apr 2022 14:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065A1506CF1
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Apr 2022 15:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352113AbiDSMK0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Apr 2022 08:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
+        id S1350628AbiDSNCI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Apr 2022 09:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352080AbiDSMIR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Apr 2022 08:08:17 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF38864F7;
-        Tue, 19 Apr 2022 05:03:58 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.90,272,1643641200"; 
-   d="scan'208";a="118449907"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 19 Apr 2022 21:03:55 +0900
-Received: from localhost.localdomain (unknown [10.166.15.32])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 0FCDA427EA6F;
-        Tue, 19 Apr 2022 21:03:55 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com, robh+dt@kernel.org,
-        krzk+dt@kernel.org
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH v3 7/7] arm64: dts: renesas: r8a779f0: spider-cpu: Enable UFS device
-Date:   Tue, 19 Apr 2022 21:03:16 +0900
-Message-Id: <20220419120316.209151-8-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220419120316.209151-1-yoshihiro.shimoda.uh@renesas.com>
-References: <20220419120316.209151-1-yoshihiro.shimoda.uh@renesas.com>
+        with ESMTP id S236243AbiDSNCE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Apr 2022 09:02:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19622377CB;
+        Tue, 19 Apr 2022 05:59:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C99F51F38D;
+        Tue, 19 Apr 2022 12:59:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650373160;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VfBYsPW8LdFmKxr65w1hdhdV60yv3YMcCbpJWSrqKvk=;
+        b=NvUNYJ0aijygZaycEKANEzrLj5OpFXGbpMkv75nQ6FnXKgRf9EXcV4+9POedJBZkOwU5S7
+        5pILnN4Shqgf3JhLxLgoR5OWcJL0pDDsuxwB46NB53CVYSYKQtDfU6ZcMenkfu3sqHVTkW
+        IM2WCbvx+MAK2WLHjSdOm9gfT/yomU4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650373160;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VfBYsPW8LdFmKxr65w1hdhdV60yv3YMcCbpJWSrqKvk=;
+        b=R3XLspmIJ8AmIyyP6ZGhyQkfkNAvIfydJiDrLZbCwnLmc9AnAFEIt/H4vRE7D3uxeV/uH+
+        hd0WY76/Imja80AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 550DC139BE;
+        Tue, 19 Apr 2022 12:59:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BH7rEyiyXmLxeQAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 19 Apr 2022 12:59:20 +0000
+Date:   Tue, 19 Apr 2022 14:55:17 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, dm-devel@redhat.com,
+        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-block@vger.kernel.org,
+        drbd-dev@lists.linbit.com, nbd@other.debian.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, jfs-discussion@lists.sourceforge.net,
+        linux-nilfs@vger.kernel.org, ntfs3@lists.linux.dev,
+        ocfs2-devel@oss.oracle.com, linux-mm@kvack.org
+Subject: Re: [PATCH 27/27] direct-io: remove random prefetches
+Message-ID: <20220419125517.GB2348@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>, dm-devel@redhat.com,
+        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-block@vger.kernel.org,
+        drbd-dev@lists.linbit.com, nbd@other.debian.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, jfs-discussion@lists.sourceforge.net,
+        linux-nilfs@vger.kernel.org, ntfs3@lists.linux.dev,
+        ocfs2-devel@oss.oracle.com, linux-mm@kvack.org
+References: <20220415045258.199825-1-hch@lst.de>
+ <20220415045258.199825-28-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220415045258.199825-28-hch@lst.de>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,29 +101,23 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Enable UFS device for R-Car S4-8 Spider CPU board.
+On Fri, Apr 15, 2022 at 06:52:58AM +0200, Christoph Hellwig wrote:
+> Randomly poking into block device internals for manual prefetches isn't
+> exactly a very maintainable thing to do.  And none of the performance
+> criticil direct I/O implementations still use this library function
+> anyway, so just drop it.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
- arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+That the direct io function needed a valid bdev just for the prefetch
+but nothing else was one of the reasons we had to keep the latest_bdev
+in btrfs, so good riddance.
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi b/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
-index 41aa8591b3b1..999c823719bc 100644
---- a/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
-@@ -82,3 +82,11 @@ &scif3 {
- &scif_clk {
- 	clock-frequency = <24000000>;
- };
-+
-+&ufs {
-+	status = "okay";
-+};
-+
-+&ufs30_clk {
-+	clock-frequency = <38400000>;
-+};
--- 
-2.25.1
+You may want to add the reference to the patch that added the prefetch,
+65dd2aa90aa1 ("dio: optimize cache misses in the submission path") and
+also remove #include <linux/prefetch.h> as there are no more uses of
+prefetch in the file.
 
+With that
+
+Reviewed-by: David Sterba <dsterba@suse.com>
