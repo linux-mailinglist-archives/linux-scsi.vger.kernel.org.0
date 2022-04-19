@@ -2,35 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615C75077F6
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Apr 2022 20:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23F55077DA
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Apr 2022 20:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356771AbiDSSUg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Apr 2022 14:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
+        id S1356391AbiDSSZI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Apr 2022 14:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356621AbiDSSTm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Apr 2022 14:19:42 -0400
+        with ESMTP id S1356928AbiDSSWP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Apr 2022 14:22:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1827B3FBD4;
-        Tue, 19 Apr 2022 11:13:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C66141630;
+        Tue, 19 Apr 2022 11:14:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B59C6B81982;
-        Tue, 19 Apr 2022 18:13:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28534C385AD;
-        Tue, 19 Apr 2022 18:13:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46A03B81185;
+        Tue, 19 Apr 2022 18:14:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C679C385A5;
+        Tue, 19 Apr 2022 18:14:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650392022;
-        bh=CbTfT1XzeXL3nlleuSn+43H8lHVRa+ZsvFPNosQYhUA=;
+        s=k20201202; t=1650392075;
+        bh=PN7MlZLaSFRiCAIEjdDacTif52kmQ1VuhqaPv/a7oQk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PV8SJYrp3DVpFSL4oK9Y+6N+GWEKmPqXo4c70/SHJLK+qZRnKtawKDdC7yEa0h3FM
-         NEt+aKnUx67xM8XoMu3VwAW50AKAqtlSb5vnQJYP5dKnhst3YsKy2Q6tbYIiK/iXuX
-         CSzplmvotMx1/WAHT3+vakCPCCmSoWpr3a7x0echMg7OmKgjZ9Lodkv5s1LwnYt+qz
-         o6G9b3Cots5VKKEeiyxIh44vYQCGWIr8+EZrDFqp8PC9b4A+jqKRI02aQ8rxtvJ8Qn
-         KijWD8YbVEbxm8AFblY/rDgup9CpyuRXfTYWPSpPCvGrtJauBFyrJDCdspLqEpK8Pt
-         5hVlqUZ8p3OUA==
+        b=nLc8r3K6x9zNOg+HYLiakoHU5WpZ/t/pMy7ElNnBZiDgxvEGOPsla1l0/6u4I1iso
+         NZeALahfFxKnJbDw8AMDe5Dgx+/CPeSbtt7seTFLANdT1zXrg+2mVl6JTon+WQsyTN
+         bsJ3Y9HVai91tzpA49jhawkSSXY6qW1r72Ti5+X55pNzLftWctQs1xkIXVEX2Ic3aV
+         CnHPp6KczU2TYG//MNbdwWq4K/hAKmH+ZkAa3y7H1cqqqc+p48ejAYkT0jUndx85yS
+         ej0VUudsnAmDxIQUvykeul0jEUTs1n3SB49xVvE7HpL/14V9Acxno1Dbyd6v8/ZxHg
+         nJ+IEJqxTi1hg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mike Christie <michael.christie@oracle.com>,
@@ -40,12 +40,12 @@ Cc:     Mike Christie <michael.christie@oracle.com>,
         Sasha Levin <sashal@kernel.org>, njavali@marvell.com,
         GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 22/27] scsi: qedi: Fix failed disconnect handling
-Date:   Tue, 19 Apr 2022 14:12:37 -0400
-Message-Id: <20220419181242.485308-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 15/18] scsi: qedi: Fix failed disconnect handling
+Date:   Tue, 19 Apr 2022 14:13:49 -0400
+Message-Id: <20220419181353.485719-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220419181242.485308-1-sashal@kernel.org>
-References: <20220419181242.485308-1-sashal@kernel.org>
+In-Reply-To: <20220419181353.485719-1-sashal@kernel.org>
+References: <20220419181353.485719-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 34 insertions(+), 35 deletions(-)
 
 diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
-index c5260429c637..04b40a6c1aff 100644
+index f51723e2d522..b92be0d7db82 100644
 --- a/drivers/scsi/qedi/qedi_iscsi.c
 +++ b/drivers/scsi/qedi/qedi_iscsi.c
-@@ -859,6 +859,37 @@ static int qedi_task_xmit(struct iscsi_task *task)
+@@ -817,6 +817,37 @@ static int qedi_task_xmit(struct iscsi_task *task)
  	return qedi_iscsi_send_ioreq(task);
  }
  
@@ -129,7 +129,7 @@ index c5260429c637..04b40a6c1aff 100644
  static struct iscsi_endpoint *
  qedi_ep_connect(struct Scsi_Host *shost, struct sockaddr *dst_addr,
  		int non_blocking)
-@@ -907,6 +938,7 @@ qedi_ep_connect(struct Scsi_Host *shost, struct sockaddr *dst_addr,
+@@ -865,6 +896,7 @@ qedi_ep_connect(struct Scsi_Host *shost, struct sockaddr *dst_addr,
  	}
  	qedi_ep = ep->dd_data;
  	memset(qedi_ep, 0, sizeof(struct qedi_endpoint));
@@ -137,7 +137,7 @@ index c5260429c637..04b40a6c1aff 100644
  	qedi_ep->state = EP_STATE_IDLE;
  	qedi_ep->iscsi_cid = (u32)-1;
  	qedi_ep->qedi = qedi;
-@@ -1055,12 +1087,11 @@ static void qedi_ep_disconnect(struct iscsi_endpoint *ep)
+@@ -1015,12 +1047,11 @@ static void qedi_ep_disconnect(struct iscsi_endpoint *ep)
  	qedi_ep = ep->dd_data;
  	qedi = qedi_ep->qedi;
  
@@ -151,8 +151,8 @@ index c5260429c637..04b40a6c1aff 100644
 -
  	if (qedi_ep->conn) {
  		qedi_conn = qedi_ep->conn;
- 		abrt_conn = qedi_conn->abrt_conn;
-@@ -1234,37 +1265,6 @@ static int qedi_data_avail(struct qedi_ctx *qedi, u16 vlanid)
+ 		conn = qedi_conn->cls_conn->dd_data;
+@@ -1185,37 +1216,6 @@ static int qedi_data_avail(struct qedi_ctx *qedi, u16 vlanid)
  	return rc;
  }
  
@@ -190,7 +190,7 @@ index c5260429c637..04b40a6c1aff 100644
  static int qedi_set_path(struct Scsi_Host *shost, struct iscsi_path *path_data)
  {
  	struct qedi_ctx *qedi;
-@@ -1380,7 +1380,6 @@ static int qedi_set_path(struct Scsi_Host *shost, struct iscsi_path *path_data)
+@@ -1331,7 +1331,6 @@ static int qedi_set_path(struct Scsi_Host *shost, struct iscsi_path *path_data)
  			  qedi_ep->dst_addr, qedi_ep->dst_port);
  	}
  
