@@ -2,49 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DA8507CFF
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Apr 2022 00:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699C1507CFD
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Apr 2022 00:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358412AbiDSXCJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Apr 2022 19:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S1358410AbiDSXCG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Apr 2022 19:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358402AbiDSXB6 (ORCPT
+        with ESMTP id S1358403AbiDSXB6 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Apr 2022 19:01:58 -0400
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB6738BF2
-        for <linux-scsi@vger.kernel.org>; Tue, 19 Apr 2022 15:59:12 -0700 (PDT)
-Received: by mail-pj1-f44.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso217292pjj.2
-        for <linux-scsi@vger.kernel.org>; Tue, 19 Apr 2022 15:59:12 -0700 (PDT)
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7374C38BF8
+        for <linux-scsi@vger.kernel.org>; Tue, 19 Apr 2022 15:59:14 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id n8so121530plh.1
+        for <linux-scsi@vger.kernel.org>; Tue, 19 Apr 2022 15:59:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=loZN4P8PpEJMzWmmaiVmJVuchCHtJ8qGAORX0RHp8rk=;
-        b=4tIPld7t1qXOg0y24yaiXsQj+3EbZ5VkRgPTaCSp77gkt2UxYZ9rDIwSzze1xC8msI
-         WxigR7Bq1zEdsG9xmayMg66/sgrKGF2DBAWsta8gG5J49LzM3Wcs46TPsjIpC0lbmBn3
-         6YgU37THAOd902h6IKQaUj2PRskF1RCecRKulcAdKIqIq7RO3FQvOXd8/QQYBCrjJmdN
-         5z/gOD1BGOv7LbxLfyOSNG8eKKYeeLr0PZD/OrP9CilswF4nIzvEP3wC2U8fmTWPMVeQ
-         bLDZdG1/JgWtsfalZknGDZU9WP0/wyQUZZf4UtH29OdrNYgpmiT3aTVQswjsI23iH5qb
-         JrKw==
-X-Gm-Message-State: AOAM530OPBGJk5un8mxLCyXf6Ep80tx4egkNgezRcG0rAkkJOnApQX5e
-        12vyVJFS7k/TKmoH0DL9j7Y=
-X-Google-Smtp-Source: ABdhPJwQjdl1VH0HPRKVMbVwOHvEwfkK3mKKQi+SZhKr78C2j36HRy7pZJQ6SYeyVCfFLMJxfHNo9Q==
-X-Received: by 2002:a17:90a:1c08:b0:1cd:474a:a4f8 with SMTP id s8-20020a17090a1c0800b001cd474aa4f8mr994665pjs.82.1650409152206;
-        Tue, 19 Apr 2022 15:59:12 -0700 (PDT)
+        bh=wL8r/dkKyV4Y/mikFzmlbqWC8R98dUB/Oz42MtzPdL4=;
+        b=z1ROCS9qru8myhOarMAQnAjIExZweM19TDh3UHHuPm+zuqLBFrWfOD9hYndPV5jRTD
+         drMR4DhwJFDwq7301yMIOI81jAgQ8nUlLZ8UKnK2pN8UCVDp11L3BNeWoX4Sx6PLI906
+         Iwqt7ie9SL/tQ3JVlrxS0LRxr5ucLlsS78Ln+aW1RZJkZYHku02f+x+QaTT+/5kNDYoL
+         JC1ekAjONYOEB1aaAl7QNqN0jzdrcN+K0nK0PC3w1xEYq6JgjsJ/TgSaRkzmk4H4/FU/
+         1KY09dRYUrvxfNa9uQlUmU6CmecFRc7Knjv7GAXniyYsmu7ogu3+lpEBAgBjb/rzdwbG
+         Houg==
+X-Gm-Message-State: AOAM532oG5OtRE23NGGS8OPdVDUsqnZj3L8NN0dRRkRrg3Hgjvc0Jv2+
+        LlXyK9IeN1r6kUhh3nkJKE4=
+X-Google-Smtp-Source: ABdhPJx8MdZhyjQnAYdp86QJIdRetujvfaahK1Tjh9sfLEz6nzlkJom/QBUcPH+R2zitLzCFWIopfw==
+X-Received: by 2002:a17:90a:c70f:b0:1bf:3e2d:6cfa with SMTP id o15-20020a17090ac70f00b001bf3e2d6cfamr1015158pjt.70.1650409153943;
+        Tue, 19 Apr 2022 15:59:13 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:59ec:2e90:f751:1806])
-        by smtp.gmail.com with ESMTPSA id c15-20020a63350f000000b003992202f95fsm17622557pga.38.2022.04.19.15.59.10
+        by smtp.gmail.com with ESMTPSA id c15-20020a63350f000000b003992202f95fsm17622557pga.38.2022.04.19.15.59.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 15:59:11 -0700 (PDT)
+        Tue, 19 Apr 2022 15:59:13 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH v3 27/28] scsi: ufs: Move the struct ufs_ref_clk definition
-Date:   Tue, 19 Apr 2022 15:58:10 -0700
-Message-Id: <20220419225811.4127248-28-bvanassche@acm.org>
+        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v3 28/28] scsi: ufs: Move the ufs_is_valid_unit_desc_lun() definition
+Date:   Tue, 19 Apr 2022 15:58:11 -0700
+Message-Id: <20220419225811.4127248-29-bvanassche@acm.org>
 X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 In-Reply-To: <20220419225811.4127248-1-bvanassche@acm.org>
 References: <20220419225811.4127248-1-bvanassche@acm.org>
@@ -61,45 +60,68 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Move the definition of this data structure since it is only used in a
-single source file.
+Move the definition of this function from a public into a private header
+file since it is only used inside the UFS core.
 
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/ufs/ufs.h    | 5 -----
- drivers/scsi/ufs/ufshcd.c | 5 +++++
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/ufs/ufs.h         | 19 -------------------
+ drivers/scsi/ufs/ufshcd-priv.h | 19 +++++++++++++++++++
+ 2 files changed, 19 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
-index 225b5b4a2a7e..f52173b8ad96 100644
+index f52173b8ad96..1bba3fead2ce 100644
 --- a/drivers/scsi/ufs/ufs.h
 +++ b/drivers/scsi/ufs/ufs.h
-@@ -415,11 +415,6 @@ enum ufs_ref_clk_freq {
- 	REF_CLK_FREQ_INVAL	= -1,
+@@ -620,23 +620,4 @@ enum ufs_trace_tsf_t {
+ 	UFS_TSF_CDB, UFS_TSF_OSF, UFS_TSF_TM_INPUT, UFS_TSF_TM_OUTPUT
  };
  
--struct ufs_ref_clk {
--	unsigned long freq_hz;
--	enum ufs_ref_clk_freq val;
--};
+-/**
+- * ufs_is_valid_unit_desc_lun - checks if the given LUN has a unit descriptor
+- * @dev_info: pointer of instance of struct ufs_dev_info
+- * @lun: LU number to check
+- * @return: true if the lun has a matching unit descriptor, false otherwise
+- */
+-static inline bool ufs_is_valid_unit_desc_lun(struct ufs_dev_info *dev_info,
+-		u8 lun, u8 param_offset)
+-{
+-	if (!dev_info || !dev_info->max_lu_supported) {
+-		pr_err("Max General LU supported by UFS isn't initialized\n");
+-		return false;
+-	}
+-	/* WB is available only for the logical unit from 0 to 7 */
+-	if (param_offset == UNIT_DESC_PARAM_WB_BUF_ALLOC_UNITS)
+-		return lun < UFS_UPIU_MAX_WB_LUN_ID;
+-	return lun == UFS_UPIU_RPMB_WLUN || (lun < dev_info->max_lu_supported);
+-}
 -
- /* Query response result code */
- enum {
- 	QUERY_RESULT_SUCCESS                    = 0x00,
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index da8beed2767c..198bef3eb4b2 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -7959,6 +7959,11 @@ static int ufshcd_device_geo_params_init(struct ufs_hba *hba)
- 	return err;
+ #endif /* End of Header */
+diff --git a/drivers/scsi/ufs/ufshcd-priv.h b/drivers/scsi/ufs/ufshcd-priv.h
+index 3fa8ab94e4e1..38bc77d3dbbd 100644
+--- a/drivers/scsi/ufs/ufshcd-priv.h
++++ b/drivers/scsi/ufs/ufshcd-priv.h
+@@ -276,4 +276,23 @@ static inline int ufshcd_rpm_put(struct ufs_hba *hba)
+ 	return pm_runtime_put(&hba->ufs_device_wlun->sdev_gendev);
  }
  
-+struct ufs_ref_clk {
-+	unsigned long freq_hz;
-+	enum ufs_ref_clk_freq val;
-+};
++/**
++ * ufs_is_valid_unit_desc_lun - checks if the given LUN has a unit descriptor
++ * @dev_info: pointer of instance of struct ufs_dev_info
++ * @lun: LU number to check
++ * @return: true if the lun has a matching unit descriptor, false otherwise
++ */
++static inline bool ufs_is_valid_unit_desc_lun(struct ufs_dev_info *dev_info,
++		u8 lun, u8 param_offset)
++{
++	if (!dev_info || !dev_info->max_lu_supported) {
++		pr_err("Max General LU supported by UFS isn't initialized\n");
++		return false;
++	}
++	/* WB is available only for the logical unit from 0 to 7 */
++	if (param_offset == UNIT_DESC_PARAM_WB_BUF_ALLOC_UNITS)
++		return lun < UFS_UPIU_MAX_WB_LUN_ID;
++	return lun == UFS_UPIU_RPMB_WLUN || (lun < dev_info->max_lu_supported);
++}
 +
- static struct ufs_ref_clk ufs_ref_clk_freqs[] = {
- 	{19200000, REF_CLK_FREQ_19_2_MHZ},
- 	{26000000, REF_CLK_FREQ_26_MHZ},
+ #endif /* _UFSHCD_PRIV_H_ */
