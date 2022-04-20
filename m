@@ -2,104 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BC950846B
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Apr 2022 11:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B375084E1
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Apr 2022 11:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351380AbiDTJGt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Apr 2022 05:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S1377199AbiDTJ1z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Apr 2022 05:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351152AbiDTJGo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Apr 2022 05:06:44 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE862E9EB;
-        Wed, 20 Apr 2022 02:03:59 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id f22so505980qtp.13;
-        Wed, 20 Apr 2022 02:03:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y1TX3LxphyYPfykd3GExSANER38mSAXNP88zEi0V4a4=;
-        b=Dh7ya4c2ZRShPzME5GPDKQPO/sW4/HMyIBuiV4A8f1hf09QRJv4BHYInf9G5xh8ax9
-         itAo+PgEbcFvahcKYpQHAXx4TJ1G9dq7ph3Ce5Cr80/Xehyz1MLlno5hHhyXiYMcUQ95
-         fXl2F6XoVyXWZxv+SsbMnZpjF65sd1sePXQzZLJPU/8piPzXn+JjyewdxnMByo2qyY1c
-         EHRf6iDvoYX04QMGrzYF5+H9sOHSbn9sBcvxGMRVc0WZCHz5Nd8jQPBifYvLR1im+dTV
-         yon6u1fD4dHgl57p0NgHKOAIqTamOLaW2ApOwcnz0ZEbJZjUfpOUWbD0jaEATcA7YPsL
-         59aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y1TX3LxphyYPfykd3GExSANER38mSAXNP88zEi0V4a4=;
-        b=D9mXIxn9JTgXrjyiCDwbipGz8qJDqffbeBnW/TsJ9lnzeAfhUg//zAPQZFm3J7cuzk
-         fj4DUoRaQBsyLfTvc03sBgmXD0EtiPwUXPl9SQMQYrWwUHmoJW1Kr8vGPd+pOAAVU2z2
-         PNoB356MhKhMTmLf0QB5o1xxKCXD1Q7wv2eq2Vou4EJq3j4/t4kxD8N6/kxS1szoTG4e
-         Z9cHJQVKYcGCTvEQBvE/eJSfXKmH3EOEDknSqJJsik0soAP2/bUe86Dn0uU3nrs8pjkC
-         GTOx6eaBCqnw0yxnBI58ZLM6O/BZNGgX1XFiQAz0zhtOS2tR2SdTGgTEXGu+nCNnAjBX
-         wWwA==
-X-Gm-Message-State: AOAM531hjIBhlbLQufEkD9a0p0bwUufiRiUxO7UbRafAX+uQjGJW4RN7
-        QlzxApOv7y362c61+26otWo=
-X-Google-Smtp-Source: ABdhPJyWVBvS4DFoUzuUhmWNNT43TTb69T59j96Xkphuncrex//Ub01LqoYTFasZcaKrz4WtxRawxw==
-X-Received: by 2002:a05:622a:40d:b0:2f3:3d14:6959 with SMTP id n13-20020a05622a040d00b002f33d146959mr3321375qtx.519.1650445438695;
-        Wed, 20 Apr 2022 02:03:58 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 187-20020a370bc4000000b0069c8f01368csm1303613qkl.92.2022.04.20.02.03.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 02:03:58 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     alim.akhtar@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] scsi: ufs: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Wed, 20 Apr 2022 09:03:52 +0000
-Message-Id: <20220420090353.2588804-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S234247AbiDTJ1x (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Apr 2022 05:27:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51516262F;
+        Wed, 20 Apr 2022 02:25:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0849C1F380;
+        Wed, 20 Apr 2022 09:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1650446706; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=3E7uGHyVSRLlv1q/BP8AWtqLSArF2xlrVNvb53ZZO3Q=;
+        b=NMLVxS0XMRvWXReWNfowiUHySlIATTs0qYOx3BLmMovlp82yKFTiB3IwQ4F/agcqzd0JHr
+        VFlhKH2x+iPFwtXn4eQ7JsfcC3e4ClBot4vi8F3e+C75NLAw9vAQuyx0PZQpDvYC1ln1AS
+        4YxztFMutLngFG/7ISGEdFELcUZmNEc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B698C13A30;
+        Wed, 20 Apr 2022 09:25:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FzNFK3HRX2J1EAAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 20 Apr 2022 09:25:05 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     xen-devel@lists.xenproject.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 0/4] xen/pv-scsi: update header and harden frontend
+Date:   Wed, 20 Apr 2022 11:24:59 +0200
+Message-Id: <20220420092503.11123-1-jgross@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Update the Xen PV-scsi interface from the Xen tree and adapt the
+related drivers to use the new definitions.
 
-Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
-pm_runtime_put_noidle. This change is just to simplify the code, no
-actual functional changes.
+Harden the frontend driver to be no longer vulnerable to a malicious
+backend.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/scsi/ufs/ti-j721e-ufs.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Juergen Gross (4):
+  xen: update vscsiif.h
+  xen/scsiback: use new command result macros
+  xen/scsifront: use new command result macros
+  xen/scsifront: harden driver against malicious backend
 
-diff --git a/drivers/scsi/ufs/ti-j721e-ufs.c b/drivers/scsi/ufs/ti-j721e-ufs.c
-index eafe0db98d54..122d650d0810 100644
---- a/drivers/scsi/ufs/ti-j721e-ufs.c
-+++ b/drivers/scsi/ufs/ti-j721e-ufs.c
-@@ -29,11 +29,9 @@ static int ti_j721e_ufs_probe(struct platform_device *pdev)
- 		return PTR_ERR(regbase);
- 
- 	pm_runtime_enable(dev);
--	ret = pm_runtime_get_sync(dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
- 		goto disable_pm;
--	}
- 
- 	/* Select MPHY refclk frequency */
- 	clk = devm_clk_get(dev, NULL);
+ drivers/scsi/xen-scsifront.c       | 168 ++++++++++++++++++++++-------
+ drivers/xen/xen-scsiback.c         |  82 +++++++++++++-
+ include/xen/interface/io/vscsiif.h | 133 ++++++++++++++++++++++-
+ 3 files changed, 340 insertions(+), 43 deletions(-)
+
 -- 
-2.25.1
-
+2.34.1
 
