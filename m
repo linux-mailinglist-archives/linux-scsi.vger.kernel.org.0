@@ -2,93 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CDE50951C
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Apr 2022 04:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C29F509590
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Apr 2022 05:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiDUCoF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Apr 2022 22:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
+        id S1384011AbiDUDvd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Apr 2022 23:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiDUCoD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Apr 2022 22:44:03 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552A8B3E;
-        Wed, 20 Apr 2022 19:41:14 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xiaoguang.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VAcKenE_1650508871;
-Received: from 30.225.28.170(mailfrom:xiaoguang.wang@linux.alibaba.com fp:SMTPD_---0VAcKenE_1650508871)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 21 Apr 2022 10:41:12 +0800
-Message-ID: <1c0ffbd6-7ab5-e598-b4f2-fd6e9b932204@linux.alibaba.com>
-Date:   Thu, 21 Apr 2022 10:41:11 +0800
+        with ESMTP id S242476AbiDUDvc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 Apr 2022 23:51:32 -0400
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FC2AE74;
+        Wed, 20 Apr 2022 20:48:44 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id s17so3633294plg.9;
+        Wed, 20 Apr 2022 20:48:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OUAbMOKMp5owJVOPtlSKuDgkloZWwnX8sHS+jtpwsi4=;
+        b=0KiGV3VHLJ0AbetI3njD67YKXlNZdYImfWMIjJft87cDV9OONPlfJihXMUbP2rHTsm
+         NCL6k997/NiCTFQi2pXUzMBge+oZUyqsLoXc70+Hv0OUtAjY/cztYem6vYu5Jm1lJvTt
+         w5ve5oJTPFUsjMtrhImoa12dRLVSfgsDTsIUuYZ+gtIEtJ4h3t6PDKh35/EXb9Kv6MO9
+         a8X31or2U7xYgFqmIBisKlwikaim5YSXJqmII7ljkYEgEFCzVqDcqOZh6Msirm7wqH7a
+         68RcpNtwHg/BGvwSQQbYDgLhfchsl3ix2AHDC0clgx2bHdFt2xYjUYHTXqTBF9QEAGR/
+         no4Q==
+X-Gm-Message-State: AOAM532ZWGgtzyZZBqjmEm3qRmC807FXXNbjVtRqaH6HZmBxr24AfbH6
+        983eJ3Wvwl2jpy3DfV9PcBs=
+X-Google-Smtp-Source: ABdhPJwWAeOID9sQFTF9M5n47crYltU3I8lINZEJBhedJrYeNUdgVQT4ecFYiWY7ukglav/wlZdfZQ==
+X-Received: by 2002:a17:90a:e7c3:b0:1d4:9d67:4938 with SMTP id kb3-20020a17090ae7c300b001d49d674938mr6154488pjb.10.1650512923317;
+        Wed, 20 Apr 2022 20:48:43 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id b16-20020a056a00115000b004f6ff260c9esm21774731pfm.207.2022.04.20.20.48.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 20:48:42 -0700 (PDT)
+Message-ID: <f66f17bd-67a1-b888-01a6-4c1a02f1e21b@acm.org>
+Date:   Wed, 20 Apr 2022 20:48:39 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH v4] scsi: target: tcmu: Fix possible data corruption
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/5] scsi: ufshpb: Merge ufshpb_reset() and
+ ufshpb_reset_host()
 Content-Language: en-US
-To:     Bodo Stroesser <bostroesser@gmail.com>, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-Cc:     linux-block@vger.kernel.org
-References: <20220417052604.120942-1-xiaoguang.wang@linux.alibaba.com>
- <5015edcc-0b62-4c1f-d4f4-ec0d7a1470d7@gmail.com>
-From:   Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-In-Reply-To: <5015edcc-0b62-4c1f-d4f4-ec0d7a1470d7@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-14.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Bean Huo <huobean@gmail.com>, keosung.park@samsung.com,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "powen.kao@mediatek.com" <powen.kao@mediatek.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        cpgsproxy3 <cpgsproxy3@samsung.com>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220419183044.789065-2-huobean@gmail.com>
+ <20220419183044.789065-1-huobean@gmail.com>
+ <CGME20220419183926epcas2p4f529c4cc6bed9ba4b6536f3a5977c3f2@epcms2p8>
+ <1891546521.01650433981606.JavaMail.epsvc@epcpadp4>
+ <db1551628c191c8efdc2e7bec1313c58636c995e.camel@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <db1551628c191c8efdc2e7bec1313c58636c995e.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-hi,
+On 4/20/22 05:48, Bean Huo wrote:
+> On Wed, 2022-04-20 at 11:47 +0900, Keoseong Park wrote:
+>>> +void ufshpb_toggle(struct ufs_hba *hba, enum UFSHPB_STATE src,
+>>> enum UFSHPB_STATE dest)
+>> How about changing it to something like ufshpb_state_toggle()?
+>>
+>> Best Regards,
+>> Keoseong Park
+> 
+> ufshpb_state_toggle() is much better, I will change it in the next
+> version. Thanks.
 
-> Hi,
->
-> just some remarks regarding the new comment.
->
-> Bodo
->
-> On 17.04.22 07:26, Xiaoguang Wang wrote:
->
-> ... snip ...
->
->>   static const struct vm_operations_struct tcmu_vm_ops = {
->> @@ -3205,12 +3228,19 @@ static void find_free_blocks(void)
->>               udev->dbi_max = block;
->>           }
->>   +        /*
->> +         * Release the block pages.
->> +         * Also note that since tcmu_vma_fault() gets one extra page
->> +         * refcount, tcmu_blocks_release() won't free pages if pages
->> +         * are in page fault procedure, which means it's safe to
->
-> s/in page fault procedure/mapped/
->
->> +         * call tcmu_blocks_release() before unmap_mapping_range().
->
-> "... before unmap_mapping_range(), which drops the refcount of pages it
-> unmaps and thus releases those pages."
->
-> Please feel free to find an even better wording.
-Yours seems better, just apply your suggestions.
-I'm not a native english speaker :)
+How about ufshbp_toggle_state() such that the word order is correct?
 
-Regards,
-Xiaoguang Wang
->
->> +         */
->> +        pages_freed = tcmu_blocks_release(udev, start, end - 1);
->> +
->>           /* Here will truncate the data area from off */
->>           off = udev->data_off + (loff_t)start * udev->data_blk_size;
->>           unmap_mapping_range(udev->inode->i_mapping, off, 0, 1);
->>   -        /* Release the block pages */
->> -        pages_freed = tcmu_blocks_release(udev, start, end - 1);
->>           mutex_unlock(&udev->cmdr_lock);
->>             total_pages_freed += pages_freed;
+Thanks,
+
+Bart.
 
