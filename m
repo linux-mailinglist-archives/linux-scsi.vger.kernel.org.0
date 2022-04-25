@@ -2,180 +2,147 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A81150E047
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Apr 2022 14:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE94450E0F2
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Apr 2022 15:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241904AbiDYMaj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 25 Apr 2022 08:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
+        id S236449AbiDYNC5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 25 Apr 2022 09:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242138AbiDYMaC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 Apr 2022 08:30:02 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B92F62BE2
-        for <linux-scsi@vger.kernel.org>; Mon, 25 Apr 2022 05:24:56 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id z30so6710303pfw.6
-        for <linux-scsi@vger.kernel.org>; Mon, 25 Apr 2022 05:24:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=qKdKEOMgEeOkRh8M/hFvHGO3Z9o4W2RpKc8vUfNFvrQ=;
-        b=H4ybyD3fYPkFQmzuHStRsS6w8OidoPo2iypbxhre1Wep4niaJAPlZ/xrq+GgUDsxJS
-         pNqpX/28Ul5S1I3p7OIUTWG8UNJExVvhPt7bMrKkokPvljlibf/dfhCQVlDRZcjKToWB
-         02itsWri+kCUrq6nzcYRRKVej/f/Ci5Zcdceo=
+        with ESMTP id S237828AbiDYNCl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 Apr 2022 09:02:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DA3113F7B
+        for <linux-scsi@vger.kernel.org>; Mon, 25 Apr 2022 05:59:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650891577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DnYEkw8ulZZ9zI2h3SIen3Sz7tMMDf8FghFH38SaqtA=;
+        b=O8bXJoYMa1mHXnCMgJpw6LEUPqjs7z5V8bNcQqLPDRm81RbiQX5KyCFKsJM2l5TTq6OAhM
+        AKwnH5SinOj+WT7hDfPo+mGqCKeEKqXEUuraR5Hh/xVoQ3VOz0CqIAwq4b9ShCo/PG53lw
+        Jwd7+5QgpjHwORBAtNer/A+0Sd4tH6s=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-547-iBBQ1CRtPVKOGYnfm_yaHA-1; Mon, 25 Apr 2022 08:59:36 -0400
+X-MC-Unique: iBBQ1CRtPVKOGYnfm_yaHA-1
+Received: by mail-qk1-f197.google.com with SMTP id m17-20020a05620a24d100b0069f462e364bso2067943qkn.6
+        for <linux-scsi@vger.kernel.org>; Mon, 25 Apr 2022 05:59:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=qKdKEOMgEeOkRh8M/hFvHGO3Z9o4W2RpKc8vUfNFvrQ=;
-        b=0Ij6EehIjAERw0+pHKvNkUwhuiThUiBKTaKNTOha5WWSxOTJStlpZx2TQ5Xk3FNHRo
-         gE0PTHpFd4oUfeOGx5v6KOUQZplNtRrrkr7Q8GENfazwZHUg4H/ePd3rWhjrZgNMV6xB
-         BqMbiwtJJxiIBGbOVT/XoWH0ptpsMlkNLpJ/1lrwokGTuLUg+6lrhkIXUtZxMs8/HWbr
-         CLnGbbt+a2WaftKaKHSU79Xho15ZxWme2EJapVJxwxZj0mWOG6/gF5tQlbWfNjSgX85W
-         XXcSnTONLE3FXVQ0yqmzXsx1EVF6gN69eR233coSJYioc02YpolUdUdduIbBCPQ0+gFi
-         MSIg==
-X-Gm-Message-State: AOAM531eSAYHaRezAb/Vxo2P8dkvg0rY65DPx/PPYc+xEWWujww6uT/h
-        J6YubvGZX3XHJM3DNGP79Vsp9t8ap5pVG0mR3M3AsbEQoHUoRSrdiiDuA5xxiCgi9oL/GXt5p6T
-        rmXv0D6PSM1Q2R3CEyRHz32zCNR2Ad7rB+UEnV7Cu+wtIFHALs5lmPVgSDcbnHj08nJVFX4hKDH
-        zIbANFs1I=
-X-Google-Smtp-Source: ABdhPJxiToqgmjO6PNikYEELPntt9h2LRph7lsg/hqyTcdJyGGpVOpoZkfNnK7NES7nGcv2i9lGsUw==
-X-Received: by 2002:a65:604b:0:b0:398:ebeb:ad8f with SMTP id a11-20020a65604b000000b00398ebebad8fmr15216212pgp.89.1650889495430;
-        Mon, 25 Apr 2022 05:24:55 -0700 (PDT)
-Received: from dhcp-10-123-20-15.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id y16-20020a63b510000000b00398d8b19bbfsm9757722pge.23.2022.04.25.05.24.52
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DnYEkw8ulZZ9zI2h3SIen3Sz7tMMDf8FghFH38SaqtA=;
+        b=NwPckk751RwnKW7osDJK1LDqBusdQogGwRchrATMfDLkJC0iUM1vCvLJQID5YjdJ55
+         NRvIrqerfNtXFgeCluEsBjGdJ3CldYeN6CsMUhHCcmHJUfVYu3kdvZlbhsoKkBH+dI61
+         4C/uIEYFD4MpIZHUUI2XwwixsijyWvy7fAbqVuDrzEWXJdVpdB5RS7tlOzhUerEz7Qij
+         igqlq8l7BPqb0Qu/YFaOlzuvR4RdU1m21IhRebwavk0uV2MTSyzEiDXWopYRPHJce3sG
+         DGEX0KuwhZTEdLR2In3hz3M+OYWxTfzzAzCeJ7vxpffzOMXcJfgzgPK1cInmj/bE3VFl
+         K28A==
+X-Gm-Message-State: AOAM532ZOOVakAiqj4vUdQpYhWLFnBjmAAgrNPk7z1vS6uyd4Puq1Y80
+        AK4jz3LpOPcIHtr/Zf5NeynYGREo0PrL3Irl1oPaA7Pg1A4Q3iA3bt5NFeaFOhRZiM8pkoGvsDd
+        zmF8pGNel2OHQ2o+jidX3eA==
+X-Received: by 2002:ad4:5be8:0:b0:44e:b1dd:49dd with SMTP id k8-20020ad45be8000000b0044eb1dd49ddmr12215252qvc.57.1650891575420;
+        Mon, 25 Apr 2022 05:59:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJysjc4g9+k5z/ZgAsfyFPnG8gT7QemK7pZ8EjCjjux5cSOsib6kKtaTFEXjZGt0O10zOOulRg==
+X-Received: by 2002:ad4:5be8:0:b0:44e:b1dd:49dd with SMTP id k8-20020ad45be8000000b0044eb1dd49ddmr12215241qvc.57.1650891575205;
+        Mon, 25 Apr 2022 05:59:35 -0700 (PDT)
+Received: from halaneylaptop (068-184-200-203.res.spectrum.com. [68.184.200.203])
+        by smtp.gmail.com with ESMTPSA id v14-20020a05622a144e00b002f1f32f86a6sm5974951qtx.5.2022.04.25.05.59.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 05:24:54 -0700 (PDT)
-From:   Sumit Saxena <sumit.saxena@broadcom.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, bvanassche@acm.org, hch@lst.de,
-        hare@suse.de, himanshu.madhani@oracle.com,
-        sathya.prakash@broadcom.com, kashyap.desai@broadcom.com,
-        chandrakanth.patil@broadcom.com, sreekanth.reddy@broadcom.com,
-        prayas.patel@broadcom.com, Sumit Saxena <sumit.saxena@broadcom.com>
-Subject: [PATCH v6 8/8] mpi3mr: update driver version to 8.0.0.69.0
-Date:   Mon, 25 Apr 2022 08:23:34 -0400
-Message-Id: <20220425122334.368142-9-sumit.saxena@broadcom.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220425122334.368142-1-sumit.saxena@broadcom.com>
-References: <20220425122334.368142-1-sumit.saxena@broadcom.com>
+        Mon, 25 Apr 2022 05:59:34 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 07:59:31 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        martin.petersen@oracle.com, jejb@linux.ibm.com,
+        avri.altman@wdc.com, alim.akhtar@samsung.com,
+        linux-arm-msm@vger.kernel.org, quic_asutoshd@quicinc.com,
+        quic_cang@quicinc.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bvanassche@acm.org
+Subject: Re: [PATCH v2 1/5] scsi: ufs: qcom: Fix acquiring the optional reset
+ control line
+Message-ID: <20220425125931.g3ub2fprsfa56bl6@halaneylaptop>
+References: <20220423140245.394092-1-manivannan.sadhasivam@linaro.org>
+ <20220423140245.394092-2-manivannan.sadhasivam@linaro.org>
+ <YmQURV7yQMof4RB8@ripper>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f74bbb05dd79a9c1"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmQURV7yQMof4RB8@ripper>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000f74bbb05dd79a9c1
-Content-Transfer-Encoding: 8bit
+On Sat, Apr 23, 2022 at 07:59:17AM -0700, Bjorn Andersson wrote:
+> On Sat 23 Apr 07:02 PDT 2022, Manivannan Sadhasivam wrote:
+> 
+> > On Qcom UFS platforms, the reset control line seems to be optional
+> > (for SoCs like MSM8996 and probably for others too). The current logic
+> > tries to mimic the `devm_reset_control_get_optional()` API but it also
+> > continues the probe if there is an error with the declared reset line in
+> > DT/ACPI.
+> > 
+> > In an ideal case, if the reset line is not declared in DT/ACPI, the probe
+> > should continue. But if there is problem in acquiring the declared reset
+> > line (like EPROBE_DEFER) it should fail and return the appropriate error
+> > code.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/scsi/ufs/ufs-qcom.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+> > index 0d2e950d0865..bee81b45299e 100644
+> > --- a/drivers/scsi/ufs/ufs-qcom.c
+> > +++ b/drivers/scsi/ufs/ufs-qcom.c
+> > @@ -1002,13 +1002,13 @@ static int ufs_qcom_init(struct ufs_hba *hba)
+> >  	host->hba = hba;
+> >  	ufshcd_set_variant(hba, host);
+> >  
+> > -	/* Setup the reset control of HCI */
+> > -	host->core_reset = devm_reset_control_get(hba->dev, "rst");
+> > +	/* Setup the optional reset control of HCI */
+> > +	host->core_reset = devm_reset_control_get_optional(hba->dev, "rst");
+> >  	if (IS_ERR(host->core_reset)) {
+> >  		err = PTR_ERR(host->core_reset);
+> > -		dev_warn(dev, "Failed to get reset control %d\n", err);
+> > -		host->core_reset = NULL;
+> > -		err = 0;
+> > +		if (err != -EPROBE_DEFER)
+> 
+> dev_err_probe() does this comparison internally, so you can omit it
+> here.
+> 
+> With that removed, feel free to add my:
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> Regards,
+> Bjorn
 
-Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
----
- drivers/scsi/mpi3mr/mpi3mr.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
++1; well with that change in place:
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
-index b2dbb6543a9b..3130caac0d03 100644
---- a/drivers/scsi/mpi3mr/mpi3mr.h
-+++ b/drivers/scsi/mpi3mr/mpi3mr.h
-@@ -55,8 +55,8 @@ extern struct list_head mrioc_list;
- extern int prot_mask;
- extern atomic64_t event_counter;
- 
--#define MPI3MR_DRIVER_VERSION	"8.0.0.68.0"
--#define MPI3MR_DRIVER_RELDATE	"10-February-2022"
-+#define MPI3MR_DRIVER_VERSION	"8.0.0.69.0"
-+#define MPI3MR_DRIVER_RELDATE	"16-March-2022"
- 
- #define MPI3MR_DRIVER_NAME	"mpi3mr"
- #define MPI3MR_DRIVER_LICENSE	"GPL"
--- 
-2.27.0
+Thanks,
+Andrew
 
+> 
+> > +			dev_err_probe(dev, err, "Failed to get reset control\n");
+> > +		goto out_variant_clear;
+> >  	}
+> >  
+> >  	/* Fire up the reset controller. Failure here is non-fatal. */
+> > -- 
+> > 2.25.1
+> > 
+> 
 
---000000000000f74bbb05dd79a9c1
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-GmgWG68YahkDuVSTTt2beZdyMeDwq/KifJFo18EkhcL3e7rmDAh8SniUI/0o3HX6hrgdmUI1wSdz
-uIVL/m6Ok9mIl2U5kvguitOSC0bVaQPfNzlj+7PCKBECAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZc3VtaXQuc2F4ZW5hQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUNz+JSIXEXl2uQ4Utcnx7FnFi
-hhowDQYJKoZIhvcNAQELBQADggEBAL0HLbxgPSW4BFbbIMN3A/ifBg4Lzaph8ARJOnZpGQivo9jG
-kQOd95knQi9Lm95JlBAJZCqXXj7QS+dnE71tsFeHWcHNNxHrTSwn4Xi5EqaRjLC6g4IEPyZHWDrD
-zzJidgfwQvfZONkf4IXnnrIEFle+26/gPs2kOjCeLMo6XGkNC4HNla1ol1htToQaNN8974pCqwIC
-rTXcWqD03VkqSOo+oPP/NAgFAZVfpeuBoK2Xv8zYlrF49Q4hxgFpWhaiDsZUSdWIS7vg1ak1n+6L
-3aHRY/lheSkOn/uJWXsqsTDp613hVtOTEDsHSQK32yTGr8jN/oRQgJASuUqQFdD4VzAxggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwoQTpBmhDxj9JoN1ow
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBhodSLcjZB3HiznXXEQ9ecJf9TEiaZx
-LWB+VaVKVTo1MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDQy
-NTEyMjQ1NVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQBS1i8lKPAVr3YzSLpyzRf/zrTxd2iJqmBbkJx6zbTVUgqFR1Tb
-ENk/fHspaCkJP+/8IK47MtkiWRtvf4AySYL+NT3liKfXVK4bnM+y9SxqaIdog7QXfMNzyNnpcaW6
-21m8q5oszxwlEDNS4CnOFm2nc/xcgT9lWUbhIXOcBLmZCPQoaXRq+5DGPpJlAENgkSpPDm/G1ujp
-GjRtnwZJeltvCm/iXYGfCt9UKgD0vvlAHue+tNe5f9x0WCJt9qeonAQLXJq8bjctW3gAfI5rklLO
-VGq7TLc3CBZ660ekn0qpjvTbUoPmtHm8q6TbSbmT7fvOKgIKYKkfuB4/sVsSjPMW
---000000000000f74bbb05dd79a9c1--
