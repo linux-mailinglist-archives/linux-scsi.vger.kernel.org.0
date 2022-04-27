@@ -2,182 +2,456 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2553511950
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Apr 2022 16:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E8E5119D5
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Apr 2022 16:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237992AbiD0Oes (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Apr 2022 10:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
+        id S235326AbiD0NNp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Apr 2022 09:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238145AbiD0Oee (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Apr 2022 10:34:34 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C101AD90
-        for <linux-scsi@vger.kernel.org>; Wed, 27 Apr 2022 07:31:12 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220427143111epoutp03e6c3efa314ea40d97fcb15084f48c853~px0zMcFaF1048210482epoutp03M
-        for <linux-scsi@vger.kernel.org>; Wed, 27 Apr 2022 14:31:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220427143111epoutp03e6c3efa314ea40d97fcb15084f48c853~px0zMcFaF1048210482epoutp03M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651069871;
-        bh=crH6lA8CKSr3raD35a8WNJj9gNhvnxzuqz4w8DLYYGk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fBEiAL09DVN+6O96oSHfHYfLa/Y0rXC6OWr8HMjDqmKMbmsTHamZ3k97hKG7YmF2/
-         U2vK9ejkjv+6eatRrTbT5IhEm0Ymzg9tCefEY7cdhkQDb+GNpT7eoaHbK5wQ3IVfid
-         FrF7T1W5R4YAg2LFLwPW7VJslUT919RYSUn/PsoI=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220427143110epcas5p40c88d0aed948bf707494648074071e87~px0yta3Zx2356823568epcas5p4v;
-        Wed, 27 Apr 2022 14:31:10 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4KpLlZ5wJ5z4x9Pt; Wed, 27 Apr
-        2022 14:31:06 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        05.DD.10063.9A359626; Wed, 27 Apr 2022 23:31:05 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220427130824epcas5p38594effe1d648be050ff00284e115014~pwshxFhMl2087820878epcas5p35;
-        Wed, 27 Apr 2022 13:08:24 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220427130824epsmtrp14e26381493d2df92a583d1f425e97e0c~pwshwRhe_3201832018epsmtrp1G;
-        Wed, 27 Apr 2022 13:08:24 +0000 (GMT)
-X-AuditID: b6c32a49-4b5ff7000000274f-c5-626953a9862a
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D8.A4.08853.84049626; Wed, 27 Apr 2022 22:08:24 +0900 (KST)
-Received: from test-zns (unknown [107.110.206.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220427130823epsmtip2faace445336901ad6bad32c4c8c06a3d~pwsghFvIJ1516015160epsmtip2s;
-        Wed, 27 Apr 2022 13:08:23 +0000 (GMT)
-Date:   Wed, 27 Apr 2022 18:33:15 +0530
-From:   Nitesh Shetty <nj.shetty@samsung.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, nitheshshetty@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 03/10] block: Introduce a new ioctl for copy
-Message-ID: <20220427130315.GB9558@test-zns>
+        with ESMTP id S229655AbiD0NNo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Apr 2022 09:13:44 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0DA3898D9;
+        Wed, 27 Apr 2022 06:10:31 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id hf18so1075228qtb.0;
+        Wed, 27 Apr 2022 06:10:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r/ssOtiNsqa5EWnUNFE/Qav7i9mLXfcPE14X9cxwoYo=;
+        b=fM1P4fUusm/I6yu/BTE39bjTk0jEi6gSw7ADItNHR23VjoPeqK89x+fuidCcMkwmdO
+         NS3d8l14TabPW2AYf2p++1+kI0q8mjSzx7LRShNhwMqzdrWASnon15ze8ZQqOheRPCzg
+         /eeHxeHJ9KQzJfaLNMj0YYi2laZAq/OjvAan28EDDMKkFJoUS9PpgwNLPefPhjcGbO98
+         aCQkP9AFIPG4suCglPCWKQEtctZX17S7nQH1HPEX2GAjrHHXVx4wTwSIGZpZt5wSHiVb
+         wRNYLcGAwyI+Skqep1UO2bCAnaN7ESNWXoGUM1FRs3v5J+JxyZB8VR6hrZ9TZFDBzrCl
+         YUUA==
+X-Gm-Message-State: AOAM531a3AleQAN2+wean01zWfsultBD6ibhvLrlfccmmysh+ZFNRkyF
+        Avn4Bi4nPtHaMdHU7SJezOtxQr+8PA7CWw==
+X-Google-Smtp-Source: ABdhPJzbtPosCGiepB9sC041KNflSiHkvDs10m/0PEbWB0/l9B0HA2VVh1NjhssgMRB/nFSj7yG7Sg==
+X-Received: by 2002:a05:622a:651:b0:2f2:600:d146 with SMTP id a17-20020a05622a065100b002f20600d146mr18997963qtb.88.1651065029992;
+        Wed, 27 Apr 2022 06:10:29 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id c145-20020ae9ed97000000b0069f97fea9absm289784qkg.26.2022.04.27.06.10.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 06:10:29 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2ef5380669cso17785547b3.9;
+        Wed, 27 Apr 2022 06:10:29 -0700 (PDT)
+X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
+ v133-20020a81618b000000b002dbd9528a39mr27060501ywb.132.1651065029390; Wed, 27
+ Apr 2022 06:10:29 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <513edc25-1c73-6c85-9a50-0e267a106ec0@opensource.wdc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAJsWRmVeSWpSXmKPExsWy7bCmlu7K4Mwkg83dbBa/z55nttj7bjar
-        xd5b2hZ79p5ksbi8aw6bxfxlT9ktuq/vYLPY8aSR0YHDY+esu+wem5fUe+xsvc/q8X7fVTaP
-        z5vkAlijsm0yUhNTUosUUvOS81My89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJz
-        gC5RUihLzCkFCgUkFhcr6dvZFOWXlqQqZOQXl9gqpRak5BSYFOgVJ+YWl+al6+WlllgZGhgY
-        mQIVJmRnbOndwFrwUrBiw71fjA2MLXxdjJwcEgImEkv3zWDtYuTiEBLYzSjRvXYulPOJUeLs
-        wd9sEM43RomWxYcYYVpWX5sKVbWXUaK1+zhU1TNGieM7vrGDVLEIqEr0LF8AlODgYBPQljj9
-        nwMkLCJgKvG2p5UFpJ5Z4AyjRPv7XWD1wgLOEv0XbzOD2LwCOhJ7D2xlg7AFJU7OfMICYnMK
-        uElMPbaRCcQWFVCWOLDtOBPIIAmBVg6J91P2sUOc5yKx/Np3NghbWOLV8S1QcSmJl/1tUHa5
-        xPa2BVDNLYwSXadOsUAk7CUu7vkLtoFZIEPiZP8TqEGyElNPrYOK80n0/n7CBBHnldgxD8ZW
-        llizfgFUvaTEte+NULaHxJ9fkLATEvjNKHFuecQERvlZSJ6bhWQdhK0jsWD3JyCbA8iWllj+
-        jwPC1JRYv0t/ASPrKkbJ1ILi3PTUYtMCw7zUcniUJ+fnbmIEJ1Utzx2Mdx980DvEyMTBeIhR
-        goNZSYT3y+6MJCHelMTKqtSi/Pii0pzU4kOMpsDImsgsJZqcD0zreSXxhiaWBiZmZmYmlsZm
-        hkrivKfTNyQKCaQnlqRmp6YWpBbB9DFxcEo1MDHuZMtnCveS5dyplbLtQ6yT1cyrqp+jNV78
-        td50UtihS2znQbNss6ct9y5WSj7h4r/YvvP4l4mq586arxDgNPK0nbt2++XpMSyzTzCcP7bl
-        5Ga9AMnSCYdmflilkdHO6ZLZYi2mdeBXw/qNYccOMUeXMonf3vhNMHH187VXs/esU5gVdm+R
-        QH7+vZSl3Et/rs9sdvogqivX0XT8L7/GDZcT0a5aIZtfbT5d3nVm9QtZWSuWxw7PjrLxsXB6
-        ZAepV1oo5Jr3P3lwnr2ghq1ZxsBld7Y03/5b/IwP31969ER6+s043U+n6j5ylorx68Wd7luj
-        tu5F4JUE58n38kyZ060niWXO15t/W6h4z12VDCWW4oxEQy3mouJEAIGbFNYzBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrALMWRmVeSWpSXmKPExsWy7bCSvK6HQ2aSwaIl0ha/z55nttj7bjar
-        xd5b2hZ79p5ksbi8aw6bxfxlT9ktuq/vYLPY8aSR0YHDY+esu+wem5fUe+xsvc/q8X7fVTaP
-        z5vkAlijuGxSUnMyy1KL9O0SuDKaL3IXrOSv2LThL2MD413uLkZODgkBE4nV16aydjFycQgJ
-        7GaUeHP7DSNEQlJi2d8jzBC2sMTKf8/ZIYqeMEo03poDlmARUJXoWb6ArYuRg4NNQFvi9H8O
-        kLCIgKnE255WFpB6ZoEzjBLt73exgySEBZwl+i/eBuvlFdCR2HtgKxvE0N+MEkveTmaFSAhK
-        nJz5hAXEZhbQkrjx7yUTyAJmAWmJ5f/AFnAKuElMPbaRCcQWFVCWOLDtONMERsFZSLpnIeme
-        hdC9gJF5FaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZGcCRoae5g3L7qg94hRiYOxkOM
-        EhzMSiK8X3ZnJAnxpiRWVqUW5ccXleakFh9ilOZgURLnvdB1Ml5IID2xJDU7NbUgtQgmy8TB
-        KdXAdHDXNQfr76ea8g6xxHUXtj65+s76sFXCrNy02EbZflWt4s8m8WmWhQxPPdznWvr0qJo5
-        Zdl8rf1zY1c1R/y1JZ82m/OuXpJrPi9hS23woU4/0/Lo1nXzLrLdWXPw+pSD+Rk7bu3XYXDP
-        P6ZzU9qc1UTn5oMFWsuZp9vy5K7NW5w8V/286MKagv+9svKreO4v+lszVWWhb+8WvuP+G3Ym
-        nG8q/h5b8l38wV/NvALj/cZTT3quXejR71hYe6g79UiOzdrSezVVklPsvNUmu2qEVNfYPZ/y
-        ovWVfEzu76ojTfskD5v4KDZznLvU9rdpsWa19anSOSXHvrBI9QcbR2+MCWdc7zc5J/o8m5/l
-        pjQlluKMREMt5qLiRACj4ob+8wIAAA==
-X-CMS-MailID: 20220427130824epcas5p38594effe1d648be050ff00284e115014
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_17950_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220426101938epcas5p291690dd1f0e931cd9f8139daaf3f9296
-References: <20220426101241.30100-1-nj.shetty@samsung.com>
-        <CGME20220426101938epcas5p291690dd1f0e931cd9f8139daaf3f9296@epcas5p2.samsung.com>
-        <20220426101241.30100-4-nj.shetty@samsung.com>
-        <513edc25-1c73-6c85-9a50-0e267a106ec0@opensource.wdc.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220420025450.289578-1-yoshihiro.shimoda.uh@renesas.com> <20220420025450.289578-5-yoshihiro.shimoda.uh@renesas.com>
+In-Reply-To: <20220420025450.289578-5-yoshihiro.shimoda.uh@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 27 Apr 2022 15:10:16 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXn=qm_gutcq64y+XCa=CchKPqPnZqoc7jMMjcw-G0vmA@mail.gmail.com>
+Message-ID: <CAMuHMdXn=qm_gutcq64y+XCa=CchKPqPnZqoc7jMMjcw-G0vmA@mail.gmail.com>
+Subject: Re: [PATCH v4 4/7] scsi: ufs-renesas: Add support for Renesas R-Car
+ UFS controller
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>, avri.altman@wdc.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        scsi <linux-scsi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-------s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_17950_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+Hi Shimoda-san,
 
-O Wed, Apr 27, 2022 at 11:48:57AM +0900, Damien Le Moal wrote:
-> On 4/26/22 19:12, Nitesh Shetty wrote:
-> > Add new BLKCOPY ioctl that offloads copying of one or more sources ranges
-> > to one or more destination in a device. COPY ioctl accepts a 'copy_range'
-> > structure that contains no of range, a reserved field , followed by an
-> > array of ranges. Each source range is represented by 'range_entry' that
-> > contains source start offset, destination start offset and length of
-> > source ranges (in bytes)
-> > 
-> > MAX_COPY_NR_RANGE, limits the number of entries for the IOCTL and
-> > MAX_COPY_TOTAL_LENGTH limits the total copy length, IOCTL can handle.
-> > 
-> > Example code, to issue BLKCOPY:
-> > /* Sample example to copy three entries with [dest,src,len],
-> > * [32768, 0, 4096] [36864, 4096, 4096] [40960,8192,4096] on same device */
-> > 
-> > int main(void)
-> > {
-> > 	int i, ret, fd;
-> > 	unsigned long src = 0, dst = 32768, len = 4096;
-> > 	struct copy_range *cr;
-> > 	cr = (struct copy_range *)malloc(sizeof(*cr)+
-> > 					(sizeof(struct range_entry)*3));
-> > 	cr->nr_range = 3;
-> > 	cr->reserved = 0;
-> > 	for (i = 0; i< cr->nr_range; i++, src += len, dst += len) {
-> > 		cr->range_list[i].dst = dst;
-> > 		cr->range_list[i].src = src;
-> > 		cr->range_list[i].len = len;
-> > 		cr->range_list[i].comp_len = 0;
-> > 	}
-> > 	fd = open("/dev/nvme0n1", O_RDWR);
-> > 	if (fd < 0) return 1;
-> > 	ret = ioctl(fd, BLKCOPY, cr);
-> > 	if (ret != 0)
-> > 	       printf("copy failed, ret= %d\n", ret);
-> > 	for (i=0; i< cr->nr_range; i++)
-> > 		if (cr->range_list[i].len != cr->range_list[i].comp_len)
-> > 			printf("Partial copy for entry %d: requested %llu, completed %llu\n",
-> > 								i, cr->range_list[i].len,
-> > 								cr->range_list[i].comp_len);
-> > 	close(fd);
-> > 	free(cr);
-> > 	return ret;
-> > }
-> 
-> Nice to have a code example. But please format it correctly.
+On Wed, Apr 20, 2022 at 11:39 AM Yoshihiro Shimoda
+<yoshihiro.shimoda.uh@renesas.com> wrote:
+> Add support for Renesas R-Car UFS controller which needs vender specific
+> initialization.
 >
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-acked
+Thanks for your patch!
+
+> --- /dev/null
+> +++ b/drivers/scsi/ufs/ufs-renesas.c
+> @@ -0,0 +1,418 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+> +/*
+> + * Renesas UFS host controller driver
+> + *
+> + * Copyright (C) 2022 Renesas Electronics Corporation
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/err.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/pm_runtime.h>
+> +
+> +#include "ufshcd.h"
+> +#include "ufshcd-pltfrm.h"
+> +
+> +struct ufs_renesas_priv {
+> +       bool initialized;       /* The hardware needs initialization once */
+> +};
+> +
+> +enum {
+> +       SET_PHY_INDEX_LO = 0,
+> +       SET_PHY_INDEX_HI,
+> +       TIMER_INDEX,
+> +       MAX_INDEX
+> +};
+> +
+> +enum ufs_renesas_init_param_mode {
+> +       MODE_RESTORE,
+> +       MODE_SET,
+> +       MODE_SAVE,
+> +       MODE_POLL,
+> +       MODE_WAIT,
+> +       MODE_WRITE,
+> +};
+> +
+> +#define PARAM_RESTORE(_reg, _index) \
+> +               { .mode = MODE_RESTORE, .reg = _reg, .index = _index }
+> +#define PARAM_SET(_index, _set) \
+> +               { .mode = MODE_SET, .index = _index, .u.set = _set }
+> +#define PARAM_SAVE(_reg, _mask, _index) \
+> +               { .mode = MODE_SAVE, .reg = _reg, .mask = (u32)(_mask), \
+> +                 .index = _index }
+> +#define PARAM_POLL(_reg, _expected, _mask) \
+> +               { .mode = MODE_POLL, .reg = _reg, .u.expected = _expected, \
+> +                 .mask = (u32)(_mask) }
+> +#define PARAM_WAIT(_delay_us) \
+> +               { .mode = MODE_WAIT, .u.delay_us = _delay_us }
+> +
+> +#define PARAM_WRITE(_reg, _val) \
+> +               { .mode = MODE_WRITE, .reg = _reg, .u.val = _val }
+> +
+> +#define PARAM_WRITE_D0_D4(_d0, _d4) \
+> +               PARAM_WRITE(0xd0, _d0), PARAM_WRITE(0xd4, _d4)
+> +
+> +#define PARAM_WRITE_800_80C_POLL(_addr, _data_800)             \
+> +               PARAM_WRITE_D0_D4(0x0000080c, 0x00000100),      \
+> +               PARAM_WRITE_D0_D4(0x00000800, ((_data_800) << 16) | BIT(8) | (_addr)), \
+> +               PARAM_WRITE(0xd0, 0x0000080c),                  \
+> +               PARAM_POLL(0xd4, BIT(8), BIT(8))
+> +
+> +#define PARAM_RESTORE_800_80C_POLL(_index)                     \
+> +               PARAM_WRITE_D0_D4(0x0000080c, 0x00000100),      \
+> +               PARAM_WRITE(0xd0, 0x00000800),                  \
+> +               PARAM_RESTORE(0xd4, _index),                    \
+> +               PARAM_WRITE(0xd0, 0x0000080c),                  \
+> +               PARAM_POLL(0xd4, BIT(8), BIT(8))
+> +
+> +#define PARAM_WRITE_804_80C_POLL(_addr, _data_804)             \
+> +               PARAM_WRITE_D0_D4(0x0000080c, 0x00000100),      \
+> +               PARAM_WRITE_D0_D4(0x00000804, ((_data_804) << 16) | BIT(8) | (_addr)), \
+> +               PARAM_WRITE(0xd0, 0x0000080c),                  \
+> +               PARAM_POLL(0xd4, BIT(8), BIT(8))
+> +
+> +#define PARAM_WRITE_828_82C_POLL(_data_828)                    \
+> +               PARAM_WRITE_D0_D4(0x0000082c, 0x0f000000),      \
+> +               PARAM_WRITE_D0_D4(0x00000828, _data_828),       \
+> +               PARAM_WRITE(0xd0, 0x0000082c),                  \
+> +               PARAM_POLL(0xd4, _data_828, _data_828)
+> +
+> +#define PARAM_WRITE_PHY(_addr16, _data16)                      \
+> +               PARAM_WRITE(0xf0, 1),                           \
+> +               PARAM_WRITE_800_80C_POLL(0x16, (_addr16) & 0xff), \
+> +               PARAM_WRITE_800_80C_POLL(0x17, ((_addr16) >> 8) & 0xff), \
+> +               PARAM_WRITE_800_80C_POLL(0x18, (_data16) & 0xff), \
+> +               PARAM_WRITE_800_80C_POLL(0x19, ((_data16) >> 8) & 0xff), \
+> +               PARAM_WRITE_800_80C_POLL(0x1c, 0x01),           \
+> +               PARAM_WRITE_828_82C_POLL(0x0f000000),           \
+> +               PARAM_WRITE(0xf0, 0)
+> +
+> +#define PARAM_SET_PHY(_addr16, _data16)                                \
+> +               PARAM_WRITE(0xf0, 1),                           \
+> +               PARAM_WRITE_800_80C_POLL(0x16, (_addr16) & 0xff), \
+> +               PARAM_WRITE_800_80C_POLL(0x17, ((_addr16) >> 8) & 0xff), \
+> +               PARAM_WRITE_800_80C_POLL(0x1c, 0x01),           \
+> +               PARAM_WRITE_828_82C_POLL(0x0f000000),           \
+> +               PARAM_WRITE_804_80C_POLL(0x1a, 0),              \
+> +               PARAM_WRITE(0xd0, 0x00000808),                  \
+> +               PARAM_SAVE(0xd4, 0xff, SET_PHY_INDEX_LO),       \
+> +               PARAM_WRITE_804_80C_POLL(0x1b, 0),              \
+> +               PARAM_WRITE(0xd0, 0x00000808),                  \
+> +               PARAM_SAVE(0xd4, 0xff, SET_PHY_INDEX_HI),       \
+> +               PARAM_WRITE_828_82C_POLL(0x0f000000),           \
+> +               PARAM_WRITE(0xf0, 0),                           \
+> +               PARAM_WRITE(0xf0, 1),                           \
+> +               PARAM_WRITE_800_80C_POLL(0x16, (_addr16) & 0xff), \
+> +               PARAM_WRITE_800_80C_POLL(0x17, ((_addr16) >> 8) & 0xff), \
+> +               PARAM_SET(SET_PHY_INDEX_LO, ((_data16 & 0xff) << 16) | BIT(8) | 0x18), \
+> +               PARAM_RESTORE_800_80C_POLL(SET_PHY_INDEX_LO),   \
+> +               PARAM_SET(SET_PHY_INDEX_HI, (((_data16 >> 8) & 0xff) << 16) | BIT(8) | 0x19), \
+> +               PARAM_RESTORE_800_80C_POLL(SET_PHY_INDEX_HI),   \
+> +               PARAM_WRITE_800_80C_POLL(0x1c, 0x01),           \
+> +               PARAM_WRITE_828_82C_POLL(0x0f000000),           \
+> +               PARAM_WRITE(0xf0, 0)
+> +
+> +#define PARAM_INDIRECT_WRITE(_gpio, _addr, _data_800)          \
+> +               PARAM_WRITE(0xf0, _gpio),                       \
+> +               PARAM_WRITE_800_80C_POLL(_addr, _data_800),     \
+> +               PARAM_WRITE_828_82C_POLL(0x0f000000),           \
+> +               PARAM_WRITE(0xf0, 0)
+> +
+> +#define PARAM_INDIRECT_POLL(_gpio, _addr, _expected, _mask)    \
+> +               PARAM_WRITE(0xf0, _gpio),                       \
+> +               PARAM_WRITE_800_80C_POLL(_addr, 0),             \
+> +               PARAM_WRITE(0xd0, 0x00000808),                  \
+> +               PARAM_POLL(0xd4, _expected, _mask),             \
+> +               PARAM_WRITE(0xf0, 0)
+> +
+> +struct ufs_renesas_init_param {
+> +       enum ufs_renesas_init_param_mode mode;
+> +       u32 reg;
+> +       union {
+> +               u32 expected;
+> +               u32 delay_us;
+> +               u32 set;
+> +               u32 val;
+> +       } u;
+> +       u32 mask;
+> +       u32 index;
+> +};
+> +
+> +/* This setting is for SERIES B */
+> +static const struct ufs_renesas_init_param ufs_param[] = {
+> +       PARAM_WRITE(0xc0, 0x49425308),
+> +       PARAM_WRITE_D0_D4(0x00000104, 0x00000002),
+> +       PARAM_WAIT(1),
+> +       PARAM_WRITE_D0_D4(0x00000828, 0x00000200),
+> +       PARAM_WAIT(1),
+> +       PARAM_WRITE_D0_D4(0x00000828, 0x00000000),
+> +       PARAM_WRITE_D0_D4(0x00000104, 0x00000001),
+> +       PARAM_WRITE_D0_D4(0x00000940, 0x00000001),
+> +       PARAM_WAIT(1),
+> +       PARAM_WRITE_D0_D4(0x00000940, 0x00000000),
+> +
+> +       PARAM_WRITE(0xc0, 0x49425308),
+> +       PARAM_WRITE(0xc0, 0x41584901),
+> +
+> +       PARAM_WRITE_D0_D4(0x0000080c, 0x00000100),
+> +       PARAM_WRITE_D0_D4(0x00000804, 0x00000000),
+> +       PARAM_WRITE(0xd0, 0x0000080c),
+> +       PARAM_POLL(0xd4, BIT(8), BIT(8)),
+> +
+> +       PARAM_WRITE(REG_CONTROLLER_ENABLE, 0x00000001),
+> +
+> +       PARAM_WRITE(0xd0, 0x00000804),
+> +       PARAM_POLL(0xd4, BIT(8) | BIT(6) | BIT(0), BIT(8) | BIT(6) | BIT(0)),
+> +
+> +       PARAM_WRITE(0xd0, 0x00000d00),
+> +       PARAM_SAVE(0xd4, 0x0000ffff, TIMER_INDEX),
+> +       PARAM_WRITE(0xd4, 0x00000000),
+> +       PARAM_WRITE_D0_D4(0x0000082c, 0x0f000000),
+> +       PARAM_WRITE_D0_D4(0x00000828, 0x08000000),
+> +       PARAM_WRITE(0xd0, 0x0000082c),
+> +       PARAM_POLL(0xd4, BIT(27), BIT(27)),
+> +       PARAM_WRITE(0xd0, 0x00000d2c),
+> +       PARAM_POLL(0xd4, BIT(0), BIT(0)),
+> +
+> +       /* phy setup */
+> +       PARAM_INDIRECT_WRITE(1, 0x01, 0x001f),
+> +       PARAM_INDIRECT_WRITE(7, 0x5d, 0x0014),
+> +       PARAM_INDIRECT_WRITE(7, 0x5e, 0x0014),
+> +       PARAM_INDIRECT_WRITE(7, 0x0d, 0x0003),
+> +       PARAM_INDIRECT_WRITE(7, 0x0e, 0x0007),
+> +       PARAM_INDIRECT_WRITE(7, 0x5f, 0x0003),
+> +       PARAM_INDIRECT_WRITE(7, 0x60, 0x0003),
+> +       PARAM_INDIRECT_WRITE(7, 0x5b, 0x00a6),
+> +       PARAM_INDIRECT_WRITE(7, 0x5c, 0x0003),
+> +
+> +       PARAM_INDIRECT_POLL(7, 0x3c, 0, BIT(7)),
+> +       PARAM_INDIRECT_POLL(7, 0x4c, 0, BIT(4)),
+> +
+> +       PARAM_INDIRECT_WRITE(1, 0x32, 0x0080),
+> +       PARAM_INDIRECT_WRITE(1, 0x1f, 0x0001),
+> +       PARAM_INDIRECT_WRITE(0, 0x2c, 0x0001),
+> +       PARAM_INDIRECT_WRITE(0, 0x32, 0x0087),
+> +
+> +       PARAM_INDIRECT_WRITE(1, 0x4d, 0x0061),
+> +       PARAM_INDIRECT_WRITE(4, 0x9b, 0x0009),
+> +       PARAM_INDIRECT_WRITE(4, 0xa6, 0x0005),
+> +       PARAM_INDIRECT_WRITE(4, 0xa5, 0x0058),
+> +       PARAM_INDIRECT_WRITE(1, 0x39, 0x0027),
+> +       PARAM_INDIRECT_WRITE(1, 0x47, 0x004c),
+> +
+> +       PARAM_INDIRECT_WRITE(7, 0x0d, 0x0002),
+> +       PARAM_INDIRECT_WRITE(7, 0x0e, 0x0007),
+> +
+> +       PARAM_WRITE_PHY(0x0028, 0x0061),
+> +       PARAM_WRITE_PHY(0x4014, 0x0061),
+> +       PARAM_SET_PHY(0x401c, BIT(2)),
+> +       PARAM_WRITE_PHY(0x4000, 0x0000),
+> +       PARAM_WRITE_PHY(0x4001, 0x0000),
+> +
+> +       PARAM_WRITE_PHY(0x10ae, 0x0001),
+> +       PARAM_WRITE_PHY(0x10ad, 0x0000),
+> +       PARAM_WRITE_PHY(0x10af, 0x0001),
+> +       PARAM_WRITE_PHY(0x10b6, 0x0001),
+> +       PARAM_WRITE_PHY(0x10ae, 0x0000),
+> +
+> +       PARAM_WRITE_PHY(0x10ae, 0x0001),
+> +       PARAM_WRITE_PHY(0x10ad, 0x0000),
+> +       PARAM_WRITE_PHY(0x10af, 0x0002),
+> +       PARAM_WRITE_PHY(0x10b6, 0x0001),
+> +       PARAM_WRITE_PHY(0x10ae, 0x0000),
+> +
+> +       PARAM_WRITE_PHY(0x10ae, 0x0001),
+> +       PARAM_WRITE_PHY(0x10ad, 0x0080),
+> +       PARAM_WRITE_PHY(0x10af, 0x0000),
+> +       PARAM_WRITE_PHY(0x10b6, 0x0001),
+> +       PARAM_WRITE_PHY(0x10ae, 0x0000),
+> +
+> +       PARAM_WRITE_PHY(0x10ae, 0x0001),
+> +       PARAM_WRITE_PHY(0x10ad, 0x0080),
+> +       PARAM_WRITE_PHY(0x10af, 0x001a),
+> +       PARAM_WRITE_PHY(0x10b6, 0x0001),
+> +       PARAM_WRITE_PHY(0x10ae, 0x0000),
+> +
+> +       PARAM_INDIRECT_WRITE(7, 0x70, 0x0016),
+> +       PARAM_INDIRECT_WRITE(7, 0x71, 0x0016),
+> +       PARAM_INDIRECT_WRITE(7, 0x72, 0x0014),
+> +       PARAM_INDIRECT_WRITE(7, 0x73, 0x0014),
+> +       PARAM_INDIRECT_WRITE(7, 0x74, 0x0000),
+> +       PARAM_INDIRECT_WRITE(7, 0x75, 0x0000),
+> +       PARAM_INDIRECT_WRITE(7, 0x76, 0x0010),
+> +       PARAM_INDIRECT_WRITE(7, 0x77, 0x0010),
+> +       PARAM_INDIRECT_WRITE(7, 0x78, 0x00ff),
+> +       PARAM_INDIRECT_WRITE(7, 0x79, 0x0000),
+> +
+> +       PARAM_INDIRECT_WRITE(7, 0x19, 0x0007),
+> +
+> +       PARAM_INDIRECT_WRITE(7, 0x1a, 0x0007),
+> +
+> +       PARAM_INDIRECT_WRITE(7, 0x24, 0x000c),
+> +
+> +       PARAM_INDIRECT_WRITE(7, 0x25, 0x000c),
+> +
+> +       PARAM_INDIRECT_WRITE(7, 0x62, 0x0000),
+> +       PARAM_INDIRECT_WRITE(7, 0x63, 0x0000),
+> +       PARAM_INDIRECT_WRITE(7, 0x5d, 0x0014),
+> +       PARAM_INDIRECT_WRITE(7, 0x5e, 0x0017),
+> +       PARAM_INDIRECT_WRITE(7, 0x5d, 0x0004),
+> +       PARAM_INDIRECT_WRITE(7, 0x5e, 0x0017),
+> +       PARAM_INDIRECT_POLL(7, 0x55, 0, BIT(6)),
+> +       PARAM_INDIRECT_POLL(7, 0x41, 0, BIT(7)),
+> +       /* end of phy setup */
+> +
+> +       PARAM_WRITE(0xf0, 0),
+> +       PARAM_WRITE(0xd0, 0x00000d00),
+> +       PARAM_RESTORE(0xd4, TIMER_INDEX),
+> +};
+> +
+> +static void ufs_renesas_dbg_register_dump(struct ufs_hba *hba)
+> +{
+> +       ufshcd_dump_regs(hba, 0xc0, 0x40, "regs: 0xc0 + ");
+> +}
+> +
+> +static void ufs_renesas_reg_control(struct ufs_hba *hba,
+> +                                   const struct ufs_renesas_init_param *p)
+> +{
+> +       static u32 save[MAX_INDEX];
+> +       int ret;
+> +       u32 val;
+> +
+> +       pr_debug("%s: %d %04x %08x, %08x, %d\n", __func__, p->mode, p->reg,
+> +                p->u.val, p->mask, p->index);
+
+Do you need this?
+If yes, perhaps dev_dbg(hba->dev, ...)?
+
+> +
+> +       WARN_ON(p->index >= MAX_INDEX);
+> +
+> +       switch (p->mode) {
+> +       case MODE_RESTORE:
+> +               ufshcd_writel(hba, save[p->index], p->reg);
+> +               break;
+> +       case MODE_SET:
+> +               pr_debug("%s: %d %x %x\n", __func__, p->index, save[p->index],
+> +                        p->u.set);
+
+Likewise.
+
+> +               save[p->index] |= p->u.set;
+> +               break;
+> +       case MODE_SAVE:
+> +               save[p->index] = ufshcd_readl(hba, p->reg) & p->mask;
+> +               pr_debug("%s: index = %d, save = %08x\n", __func__,
+> +                        p->index, save[p->index]);
+
+Likewise.
+
+> +               break;
+> +       case MODE_POLL:
+> +               ret = readl_poll_timeout_atomic(hba->mmio_base + p->reg,
+> +                                               val,
+> +                                               (val & p->mask) == p->u.expected,
+> +                                               10, 1000);
+> +               if (ret)
+> +                       pr_err("%s: poll failed %d (%08x, %08x, %08x)\n",
+> +                              __func__, ret, val, p->mask, p->u.expected);
+> +               break;
+> +       case MODE_WAIT:
+> +               if (p->u.delay_us > 1000)
+> +                       mdelay(p->u.delay_us / 1000);
+
+mdelay(DIV_ROUND_UP(p->u.delay_us, 1000));
+(cfr. include/linux/delay.h:ndelay())
+
+
+> +               else
+> +                       udelay(p->u.delay_us);
+> +               break;
+> +       case MODE_WRITE:
+> +               ufshcd_writel(hba, p->u.val, p->reg);
+> +               break;
+> +       default:
+> +               break;
+> +       }
+> +}
+> +
+> +static void ufs_renesas_pre_init(struct ufs_hba *hba)
+> +{
+> +       const struct ufs_renesas_init_param *p = ufs_param;
+> +       int i;
+
+unsigned int i
+
+> +
+> +       for (i = 0; i < ARRAY_SIZE(ufs_param); i++)
+> +               ufs_renesas_reg_control(hba, &p[i]);
+> +}
+
+> +static const struct of_device_id __maybe_unused ufs_renesas_of_match[] = {
+> +       { .compatible = "renesas,r8a779f0-ufs" },
+
+As pointed out by the kernel test robot, this lack a sentinel.
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 --
-Nitesh Shetty
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-------s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_17950_
-Content-Type: text/plain; charset="utf-8"
-
-
-------s9reHD3dvq.Swzu4OgS99nNlXP7CLa0djtt04wdzZepsPVyA=_17950_--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
