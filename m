@@ -2,352 +2,160 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4650A512D7B
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 Apr 2022 09:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7EDA512E23
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 Apr 2022 10:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343541AbiD1H4p (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 28 Apr 2022 03:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S1344032AbiD1IWg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 28 Apr 2022 04:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343529AbiD1H4o (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Apr 2022 03:56:44 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DD85F256;
-        Thu, 28 Apr 2022 00:53:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 410E81F88C;
-        Thu, 28 Apr 2022 07:53:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651132408; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wQy1x+fRNHgv0+hbA7kZO4avv6jlEcwjeAC24DRrSzI=;
-        b=aT2gbQ4cLusb6bFR/NVvfh2fUPPiBfScImg4BQauGsfXBe4tL9IvgxoXAd1IB/RhKzgOdZ
-        sJJ8KvFn5k04VCyST136HD4Mo7vqC1tdff9LRZ+bWfwxN0JB29OJLWU0Fim4lB8nn62eQK
-        x71dMrdYjnsr0/Cra1B4XnCmpFJ8P8E=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0412813AF8;
-        Thu, 28 Apr 2022 07:53:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id uGFaO/dHamIoHAAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 28 Apr 2022 07:53:27 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     xen-devel@lists.xenproject.org, linux-scsi@vger.kernel.org,
+        with ESMTP id S1344046AbiD1IWS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Apr 2022 04:22:18 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F72D9E9EE
+        for <linux-scsi@vger.kernel.org>; Thu, 28 Apr 2022 01:19:03 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220428081901epoutp0486787be1c074025574638e98756f1f2d~qAZJDPQPu2856728567epoutp04n
+        for <linux-scsi@vger.kernel.org>; Thu, 28 Apr 2022 08:19:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220428081901epoutp0486787be1c074025574638e98756f1f2d~qAZJDPQPu2856728567epoutp04n
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651133941;
+        bh=wOXierUafvtxBlcmLM8miKLDWIrpcRM3NRzL9LIllCI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RRs2Pf/NQ1HxorjPRILWRRPuW8wd9+yspJN2nnu1mZZXHKUDrAsGgC6+MAH96KKzW
+         WRxujTUxwPrAWVlHgogHsRoPifVjfdMD6wMEgBeHZL4yhYSzUlRkXcsnLF9PuwM6//
+         Sf3X9a27uWVRH9AAyq72K3sK8C+2T32ob2v1PC20=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20220428081859epcas5p19880ba6dfa6389f18098ac62ca74e360~qAZIA-u-l0467704677epcas5p1x;
+        Thu, 28 Apr 2022 08:18:59 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KppRg2W7Dz4x9QB; Thu, 28 Apr
+        2022 08:18:55 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E2.07.09827.EED4A626; Thu, 28 Apr 2022 17:18:54 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220428075435epcas5p285a70634102f71440a283361657f4d9b~qAD0bnrr92164321643epcas5p2Q;
+        Thu, 28 Apr 2022 07:54:35 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220428075435epsmtrp1a9ee8d4d92953b0ff2d7f9b7559998a2~qAD0asRh-1575615756epsmtrp1S;
+        Thu, 28 Apr 2022 07:54:35 +0000 (GMT)
+X-AuditID: b6c32a4a-b3bff70000002663-dd-626a4deee6d4
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A6.BF.08924.B384A626; Thu, 28 Apr 2022 16:54:35 +0900 (KST)
+Received: from test-zns (unknown [107.110.206.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220428075434epsmtip13f509946fb1170bf6e1ff8e4df1f4948~qADzDll5X1873018730epsmtip1z;
+        Thu, 28 Apr 2022 07:54:34 +0000 (GMT)
+Date:   Thu, 28 Apr 2022 13:19:26 +0530
+From:   Nitesh Shetty <nj.shetty@samsung.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, nitheshshetty@gmail.com,
         linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH v2 4/4] xen/scsifront: harden driver against malicious backend
-Date:   Thu, 28 Apr 2022 09:53:23 +0200
-Message-Id: <20220428075323.12853-5-jgross@suse.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220428075323.12853-1-jgross@suse.com>
-References: <20220428075323.12853-1-jgross@suse.com>
+Subject: Re: [PATCH v4 00/10] Add Copy offload support
+Message-ID: <20220428074926.GG9558@test-zns>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c285f0da-ab1d-2b24-e5a4-21193ef93155@opensource.wdc.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBJsWRmVeSWpSXmKPExsWy7bCmpu5736wkgz+5Fr/Pnme22PtuNqvF
+        3lvaFnv2nmSxuLxrDpvF/GVP2S26r+9gs9jxpJHRgcNj56y77B6bl9R77Gy9z+rxft9VNo/P
+        m+QCWKOybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOA
+        DlFSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFJgU6BUn5haX5qXr5aWWWBkaGBiZ
+        AhUmZGfcv7eFtaCfu+Lm7busDYztnF2MnBwSAiYSXe+2sYLYQgK7GSXmLI3uYuQCsj8xSsx/
+        8IIVwvnMKHF8/Uk2mI75d6ayQyR2MUqcOz0XquoZo0TT/HnsIFUsAqoSD6Z2MXYxcnCwCWhL
+        nP7PARIWETCVeNvTygJSzyxwhlGi/f0usHphATOJ1Z2tYBt4BXQkFs/fzQ5hC0qcnPmEBcTm
+        FHCTmL3xG5gtKqAscWDbcSaIiyZySMyYmwqyS0LARaL5dTREWFji1fEt7BC2lMTL/jYou1xi
+        e9sCJpAbJARaGCW6Tp1igUjYS1zc8xdsJrNAhsTsb2uhPpaVmHpqHVScT6L39xOovbwSO+bB
+        2MoSa9YvgKqXlLj2vRHK9pDY+XElNIBWMkm8PH2IfQKj/Cwkv81Csm8W0A/MApoS63fpQ4Tl
+        JZq3zmaGCEtLLP/HgaRiASPbKkbJ1ILi3PTUYtMCo7zUcnjcJ+fnbmIEJ1ktrx2MDx980DvE
+        yMTBeIhRgoNZSYT3y+6MJCHelMTKqtSi/Pii0pzU4kOMpsBom8gsJZqcD0zzeSXxhiaWBiZm
+        ZmYmlsZmhkrivKfTNyQKCaQnlqRmp6YWpBbB9DFxcEo1MHmYxBi3KS/r+5xXoHh/5e5/mpOK
+        OLaz1QUJJm5LlWV+dGCy2qfIDR1bPTv4Cv8o7cuz5K+7k+o17+LTf7WP9Hb0x/PP1u849K1e
+        9ECS25U/X77MfXHhdDCf6CKtxUE1cj17vjAr/U6ZkKPatTBKKu23yc1t05J0TR/EblD+sWFx
+        0DPf6Q7i++QYDghltRZyCmdZbpQ0mbLf//CW7BVyO3Mj78a3hghMUJNqNAp1337257kTdWFK
+        F5WF48I+LnzLVaHz1Wvq/N+HWwX5lVy6/OQDdXwTmyQOHOF9+P5ORO+1sxMfmJVUr1snvTy8
+        Kfb+1bVvxTqdU/dcnR/13vrQ+u4M04X3O3s98v0vTXLvVmIpzkg01GIuKk4EAG3bN+s7BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOLMWRmVeSWpSXmKPExsWy7bCSnK61R1aSQcdnPYvfZ88zW+x9N5vV
+        Yu8tbYs9e0+yWFzeNYfNYv6yp+wW3dd3sFnseNLI6MDhsXPWXXaPzUvqPXa23mf1eL/vKpvH
+        501yAaxRXDYpqTmZZalF+nYJXBkrtjkWbOSo2PbVroHxKFsXIyeHhICJxPw7U9m7GLk4hAR2
+        MEp8aTrHApGQlFj29wgzhC0ssfLfc6iiJ4wSs+6vBetmEVCVeDC1i7GLkYODTUBb4vR/DpCw
+        iICpxNueVhaQemaBM4wS7e93sYMkhAXMJFZ3toL18groSCyevxtq6Eomiff7V7JDJAQlTs58
+        AnYFs4C6xJ95l5hBFjALSEss/8cBEZaXaN46G+w4TgE3idkbv4GViwooSxzYdpxpAqPQLCST
+        ZiGZNAth0iwkkxYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiOGy2tHYx7Vn3Q
+        O8TIxMF4iFGCg1lJhPfL7owkId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqem
+        FqQWwWSZODilGphmNkSeu+/Zy/AzdJGv3sPXJ3sNLl4t7nK+dN/kX+8ctbV/eb6LrRTa9s+k
+        YDWbSN7z4NI5On1n5fnNvWRuVogfPnn2Q/QKI/2ZvLOWpR5raFxyxPrm3G/zt/3jSAwIVNEV
+        vlGj9r15qkzKnZTAabfNrOunnG56dvDkm55ZLamR00U/P9HWbLHer/0vbFnmhkXlsVeflx5I
+        PvfhVElgVdO7F6tL4/72aE+82pMt+Icv6rLBBfXuw+1eMw7u+cD1b3uQ34IF52+4Sfkp/Ulg
+        1VRZN3Ghe9+N0/Z2JkkWB4s/O9acPB8mtemFG6OJ8TmFi3pr5/kn6pxVuj8j33YeF+MJ4zdn
+        HZjXyDM/fquzxWWKEktxRqKhFnNRcSIAWXgw9goDAAA=
+X-CMS-MailID: 20220428075435epcas5p285a70634102f71440a283361657f4d9b
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----MMcOyA4CJjQRgHhn55zXOrpiM0Dxers-aGNKdRjWa9MqQ0PV=_1cb6b_"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220426101804epcas5p4a0a325d3ce89e868e4924bbdeeba6d15
+References: <CGME20220426101804epcas5p4a0a325d3ce89e868e4924bbdeeba6d15@epcas5p4.samsung.com>
+        <20220426101241.30100-1-nj.shetty@samsung.com>
+        <6a85e8c8-d9d1-f192-f10d-09052703c99a@opensource.wdc.com>
+        <20220427124951.GA9558@test-zns>
+        <c285f0da-ab1d-2b24-e5a4-21193ef93155@opensource.wdc.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of relying on a well behaved PV scsi backend verify all meta
-data received from the backend and avoid multiple reads of the same
-data from the shared ring page.
+------MMcOyA4CJjQRgHhn55zXOrpiM0Dxers-aGNKdRjWa9MqQ0PV=_1cb6b_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
 
-In case any illegal data from the backend is detected switch the
-PV device to a new "error" state and deactivate it for further use.
+On Thu, Apr 28, 2022 at 07:05:32AM +0900, Damien Le Moal wrote:
+> On 4/27/22 21:49, Nitesh Shetty wrote:
+> > O Wed, Apr 27, 2022 at 11:19:48AM +0900, Damien Le Moal wrote:
+> >> On 4/26/22 19:12, Nitesh Shetty wrote:
+> >>> The patch series covers the points discussed in November 2021 virtual call
+> >>> [LSF/MM/BFP TOPIC] Storage: Copy Offload[0].
+> >>> We have covered the Initial agreed requirements in this patchset.
+> >>> Patchset borrows Mikulas's token based approach for 2 bdev
+> >>> implementation.
+> >>>
+> >>> Overall series supports –
+> >>>
+> >>> 1. Driver
+> >>> - NVMe Copy command (single NS), including support in nvme-target (for
+> >>>     block and file backend)
+> >>
+> >> It would also be nice to have copy offload emulation in null_blk for testing.
+> >>
+> > 
+> > We can plan this in next phase of copy support, once this series settles down.
+> 
+> So how can people test your series ? Not a lot of drives out there with
+> copy support.
+>
 
-Use the "lateeoi" variant for the event channel in order to avoid
-event storms blocking the guest.
+Yeah not many drives at present, Qemu can be used to test NVMe copy.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V2:
-- only remove spurious flag from eoiflag (Boris Ostrovsky)
----
- drivers/scsi/xen-scsifront.c | 104 +++++++++++++++++++++++++----------
- 1 file changed, 76 insertions(+), 28 deletions(-)
+--
+Nitesh Shetty
 
-diff --git a/drivers/scsi/xen-scsifront.c b/drivers/scsi/xen-scsifront.c
-index 8511bfc62963..56173beecbc6 100644
---- a/drivers/scsi/xen-scsifront.c
-+++ b/drivers/scsi/xen-scsifront.c
-@@ -83,6 +83,8 @@ struct vscsifrnt_shadow {
- 	uint16_t rqid;
- 	uint16_t ref_rqid;
- 
-+	bool inflight;
-+
- 	unsigned int nr_grants;		/* number of grants in gref[] */
- 	struct scsiif_request_segment *sg;	/* scatter/gather elements */
- 	struct scsiif_request_segment seg[VSCSIIF_SG_TABLESIZE];
-@@ -104,7 +106,11 @@ struct vscsifrnt_info {
- 	struct xenbus_device *dev;
- 
- 	struct Scsi_Host *host;
--	int host_active;
-+	enum {
-+		STATE_INACTIVE,
-+		STATE_ACTIVE,
-+		STATE_ERROR
-+	}  host_active;
- 
- 	unsigned int evtchn;
- 	unsigned int irq;
-@@ -217,6 +223,8 @@ static int scsifront_do_request(struct vscsifrnt_info *info,
- 	for (i = 0; i < (shadow->nr_segments & ~VSCSIIF_SG_GRANT); i++)
- 		ring_req->seg[i] = shadow->seg[i];
- 
-+	shadow->inflight = true;
-+
- 	RING_PUSH_REQUESTS_AND_CHECK_NOTIFY(ring, notify);
- 	if (notify)
- 		notify_remote_via_irq(info->irq);
-@@ -224,6 +232,13 @@ static int scsifront_do_request(struct vscsifrnt_info *info,
- 	return 0;
- }
- 
-+static void scsifront_set_error(struct vscsifrnt_info *info, const char *msg)
-+{
-+	shost_printk(KERN_ERR, info->host, KBUILD_MODNAME "%s\n"
-+		     "Disabling device for further use\n", msg);
-+	info->host_active = STATE_ERROR;
-+}
-+
- static void scsifront_gnttab_done(struct vscsifrnt_info *info,
- 				  struct vscsifrnt_shadow *shadow)
- {
-@@ -234,9 +249,8 @@ static void scsifront_gnttab_done(struct vscsifrnt_info *info,
- 
- 	for (i = 0; i < shadow->nr_grants; i++) {
- 		if (unlikely(!gnttab_try_end_foreign_access(shadow->gref[i]))) {
--			shost_printk(KERN_ALERT, info->host, KBUILD_MODNAME
--				     "grant still in use by backend\n");
--			BUG();
-+			scsifront_set_error(info, "grant still in use by backend");
-+			return;
- 		}
- 	}
- 
-@@ -308,6 +322,8 @@ static void scsifront_cdb_cmd_done(struct vscsifrnt_info *info,
- 	BUG_ON(sc == NULL);
- 
- 	scsifront_gnttab_done(info, shadow);
-+	if (info->host_active == STATE_ERROR)
-+		return;
- 	scsifront_put_rqid(info, id);
- 
- 	set_host_byte(sc, scsifront_host_byte(ring_rsp->rslt));
-@@ -348,9 +364,7 @@ static void scsifront_sync_cmd_done(struct vscsifrnt_info *info,
- 			scsifront_wake_up(info);
- 		return;
- 	default:
--		shost_printk(KERN_ERR, info->host, KBUILD_MODNAME
--			     "bad reset state %d, possibly leaking %u\n",
--			     shadow->rslt_reset, id);
-+		scsifront_set_error(info, "bad reset state");
- 		break;
- 	}
- 	spin_unlock_irqrestore(&info->shadow_lock, flags);
-@@ -361,28 +375,41 @@ static void scsifront_sync_cmd_done(struct vscsifrnt_info *info,
- static void scsifront_do_response(struct vscsifrnt_info *info,
- 				  struct vscsiif_response *ring_rsp)
- {
--	if (WARN(ring_rsp->rqid >= VSCSIIF_MAX_REQS ||
--		 test_bit(ring_rsp->rqid, info->shadow_free_bitmap),
--		 "illegal rqid %u returned by backend!\n", ring_rsp->rqid))
-+	struct vscsifrnt_shadow *shadow;
-+
-+	if (ring_rsp->rqid >= VSCSIIF_MAX_REQS ||
-+	    !info->shadow[ring_rsp->rqid]->inflight) {
-+		scsifront_set_error(info, "illegal rqid returned by backend!");
- 		return;
-+	}
-+	shadow = info->shadow[ring_rsp->rqid];
-+	shadow->inflight = false;
- 
--	if (info->shadow[ring_rsp->rqid]->act == VSCSIIF_ACT_SCSI_CDB)
-+	if (shadow->act == VSCSIIF_ACT_SCSI_CDB)
- 		scsifront_cdb_cmd_done(info, ring_rsp);
- 	else
- 		scsifront_sync_cmd_done(info, ring_rsp);
- }
- 
--static int scsifront_ring_drain(struct vscsifrnt_info *info)
-+static int scsifront_ring_drain(struct vscsifrnt_info *info,
-+				unsigned int *eoiflag)
- {
--	struct vscsiif_response *ring_rsp;
-+	struct vscsiif_response ring_rsp;
- 	RING_IDX i, rp;
- 	int more_to_do = 0;
- 
--	rp = info->ring.sring->rsp_prod;
--	rmb();	/* ordering required respective to dom0 */
-+	rp = READ_ONCE(info->ring.sring->rsp_prod);
-+	virt_rmb();	/* ordering required respective to backend */
-+	if (RING_RESPONSE_PROD_OVERFLOW(&info->ring, rp)) {
-+		scsifront_set_error(info, "illegal number of responses");
-+		return 0;
-+	}
- 	for (i = info->ring.rsp_cons; i != rp; i++) {
--		ring_rsp = RING_GET_RESPONSE(&info->ring, i);
--		scsifront_do_response(info, ring_rsp);
-+		RING_COPY_RESPONSE(&info->ring, i, &ring_rsp);
-+		scsifront_do_response(info, &ring_rsp);
-+		if (info->host_active == STATE_ERROR)
-+			return 0;
-+		*eoiflag &= ~XEN_EOI_FLAG_SPURIOUS;
- 	}
- 
- 	info->ring.rsp_cons = i;
-@@ -395,14 +422,15 @@ static int scsifront_ring_drain(struct vscsifrnt_info *info)
- 	return more_to_do;
- }
- 
--static int scsifront_cmd_done(struct vscsifrnt_info *info)
-+static int scsifront_cmd_done(struct vscsifrnt_info *info,
-+			      unsigned int *eoiflag)
- {
- 	int more_to_do;
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(info->host->host_lock, flags);
- 
--	more_to_do = scsifront_ring_drain(info);
-+	more_to_do = scsifront_ring_drain(info, eoiflag);
- 
- 	info->wait_ring_available = 0;
- 
-@@ -416,20 +444,28 @@ static int scsifront_cmd_done(struct vscsifrnt_info *info)
- static irqreturn_t scsifront_irq_fn(int irq, void *dev_id)
- {
- 	struct vscsifrnt_info *info = dev_id;
-+	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
-+
-+	if (info->host_active == STATE_ERROR) {
-+		xen_irq_lateeoi(irq, XEN_EOI_FLAG_SPURIOUS);
-+		return IRQ_HANDLED;
-+	}
- 
--	while (scsifront_cmd_done(info))
-+	while (scsifront_cmd_done(info, &eoiflag))
- 		/* Yield point for this unbounded loop. */
- 		cond_resched();
- 
-+	xen_irq_lateeoi(irq, eoiflag);
-+
- 	return IRQ_HANDLED;
- }
- 
- static void scsifront_finish_all(struct vscsifrnt_info *info)
- {
--	unsigned i;
-+	unsigned int i, dummy;
- 	struct vscsiif_response resp;
- 
--	scsifront_ring_drain(info);
-+	scsifront_ring_drain(info, &dummy);
- 
- 	for (i = 0; i < VSCSIIF_MAX_REQS; i++) {
- 		if (test_bit(i, info->shadow_free_bitmap))
-@@ -586,6 +622,9 @@ static int scsifront_queuecommand(struct Scsi_Host *shost,
- 	unsigned long flags;
- 	int err;
- 
-+	if (info->host_active == STATE_ERROR)
-+		return SCSI_MLQUEUE_HOST_BUSY;
-+
- 	sc->result = 0;
- 
- 	shadow->sc  = sc;
-@@ -638,6 +677,9 @@ static int scsifront_action_handler(struct scsi_cmnd *sc, uint8_t act)
- 	struct vscsifrnt_shadow *shadow, *s = scsi_cmd_priv(sc);
- 	int err = 0;
- 
-+	if (info->host_active == STATE_ERROR)
-+		return FAILED;
-+
- 	shadow = kzalloc(sizeof(*shadow), GFP_NOIO);
- 	if (!shadow)
- 		return FAILED;
-@@ -709,6 +751,9 @@ static int scsifront_sdev_configure(struct scsi_device *sdev)
- 	struct vscsifrnt_info *info = shost_priv(sdev->host);
- 	int err;
- 
-+	if (info->host_active == STATE_ERROR)
-+		return -EIO;
-+
- 	if (info && current == info->curr) {
- 		err = xenbus_printf(XBT_NIL, info->dev->nodename,
- 			      info->dev_state_path, "%d", XenbusStateConnected);
-@@ -784,7 +829,7 @@ static int scsifront_alloc_ring(struct vscsifrnt_info *info)
- 		goto free_gnttab;
- 	}
- 
--	err = bind_evtchn_to_irq(info->evtchn);
-+	err = bind_evtchn_to_irq_lateeoi(info->evtchn);
- 	if (err <= 0) {
- 		xenbus_dev_fatal(dev, err, "bind_evtchn_to_irq");
- 		goto free_gnttab;
-@@ -914,7 +959,7 @@ static int scsifront_probe(struct xenbus_device *dev,
- 		goto free_sring;
- 	}
- 	info->host = host;
--	info->host_active = 1;
-+	info->host_active = STATE_ACTIVE;
- 
- 	xenbus_switch_state(dev, XenbusStateInitialised);
- 
-@@ -982,10 +1027,10 @@ static int scsifront_remove(struct xenbus_device *dev)
- 	pr_debug("%s: %s removed\n", __func__, dev->nodename);
- 
- 	mutex_lock(&scsifront_mutex);
--	if (info->host_active) {
-+	if (info->host_active != STATE_INACTIVE) {
- 		/* Scsi_host not yet removed */
- 		scsi_remove_host(info->host);
--		info->host_active = 0;
-+		info->host_active = STATE_INACTIVE;
- 	}
- 	mutex_unlock(&scsifront_mutex);
- 
-@@ -1009,9 +1054,9 @@ static void scsifront_disconnect(struct vscsifrnt_info *info)
- 	 */
- 
- 	mutex_lock(&scsifront_mutex);
--	if (info->host_active) {
-+	if (info->host_active != STATE_INACTIVE) {
- 		scsi_remove_host(host);
--		info->host_active = 0;
-+		info->host_active = STATE_INACTIVE;
- 	}
- 	mutex_unlock(&scsifront_mutex);
- 
-@@ -1029,6 +1074,9 @@ static void scsifront_do_lun_hotplug(struct vscsifrnt_info *info, int op)
- 	unsigned int hst, chn, tgt, lun;
- 	struct scsi_device *sdev;
- 
-+	if (info->host_active == STATE_ERROR)
-+		return;
-+
- 	dir = xenbus_directory(XBT_NIL, dev->otherend, "vscsi-devs", &dir_n);
- 	if (IS_ERR(dir))
- 		return;
--- 
-2.34.1
+------MMcOyA4CJjQRgHhn55zXOrpiM0Dxers-aGNKdRjWa9MqQ0PV=_1cb6b_
+Content-Type: text/plain; charset="utf-8"
 
+
+------MMcOyA4CJjQRgHhn55zXOrpiM0Dxers-aGNKdRjWa9MqQ0PV=_1cb6b_--
