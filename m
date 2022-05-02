@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4133C5179AB
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 May 2022 00:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D38C5179AD
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 May 2022 00:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387827AbiEBWFe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 May 2022 18:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
+        id S237468AbiEBWFm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 May 2022 18:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387798AbiEBWDw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 18:03:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2922602
+        with ESMTP id S1387800AbiEBWDx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 18:03:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB08DEF0
         for <linux-scsi@vger.kernel.org>; Mon,  2 May 2022 15:00:05 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id E266621878;
+        by smtp-out2.suse.de (Postfix) with ESMTP id ED28E1F899;
         Mon,  2 May 2022 22:00:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1651528800; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ry5H6cMidPWYUAqkFmsNUYphLy8pO7JStnwRsjeJSZ0=;
-        b=Q5Lw3i34ThhYAXf4jNqjWSqIN66EwlBvX+Sk1jTg+AYgff3zkvuSaTqxdXUMklPTsal5I3
-        Xgk1aADl/EinDpa9DqSi3ArU2aVb6VqCu400Q6c2h62g6iggBxmHzTmMTLqtjRVVI1S3S1
-        REXDMrESWI+K11gZK89l6+WJAHZJcKo=
+        bh=fU2eeqadf72NQOyzHys2QmG3XVR0slnd0zlUuAkSDiI=;
+        b=qGRVlZEU5lEYH0mRqjBOVrBAGDNHXRq703O4Kjs6NUk7R8Wg7nabaQX0HddhqXeU/aBEfS
+        VAbt0V/gxMS1tq8uc3RZwU12AaBtEoEiQPNqLQSTg2A/SjqYZAzNH20ee2jL77H+U/vYwR
+        CTDQUCLfWzBjyPbRLdDqGTMG+nxSiIM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1651528800;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ry5H6cMidPWYUAqkFmsNUYphLy8pO7JStnwRsjeJSZ0=;
-        b=9KqoUFdmtvv3jI5ESWlBjjw3zpMlq1xQSJHeuGu6h17jrO4UJj/oklRaBvyF71LZX13HZY
-        Da2xLH3jqZxr+/Dg==
+        bh=fU2eeqadf72NQOyzHys2QmG3XVR0slnd0zlUuAkSDiI=;
+        b=hYpy7CDQKAxSN1jr+x8ata+OSzSgPHfdNUGY1o1neefh6QR5rgeO77UbqFzD7oH/YgQ++G
+        qI9POuHpV+MCdfBA==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id DC6AF2C161;
+        by relay2.suse.de (Postfix) with ESMTP id E7D8E2C165;
         Mon,  2 May 2022 22:00:00 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id D9CBB5194160; Tue,  3 May 2022 00:00:00 +0200 (CEST)
+        id E4F0F5194164; Tue,  3 May 2022 00:00:00 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 09/11] xen-scsifront: add scsi device as argument to scsifront_do_request()
-Date:   Mon,  2 May 2022 23:59:51 +0200
-Message-Id: <20220502215953.5463-17-hare@suse.de>
+Subject: [PATCH 11/11] csiostor: use separate TMF command
+Date:   Mon,  2 May 2022 23:59:53 +0200
+Message-Id: <20220502215953.5463-19-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220502215953.5463-1-hare@suse.de>
 References: <20220502215953.5463-1-hare@suse.de>
@@ -64,80 +64,185 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add scsi device as argument to scsifront_do_request() so that it
-will be possible to call it with a NULL command pointer.
+Set one command aside as a TMF command, and use this command to
+send the TMF. This avoids having to rely on the passed-in scsi
+command when resetting the device.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/xen-scsifront.c | 31 ++++++++++++++++++++-----------
- 1 file changed, 20 insertions(+), 11 deletions(-)
+ drivers/scsi/csiostor/csio_hw.h   |  2 ++
+ drivers/scsi/csiostor/csio_init.c |  2 +-
+ drivers/scsi/csiostor/csio_scsi.c | 48 +++++++++++++++++++------------
+ 3 files changed, 33 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/scsi/xen-scsifront.c b/drivers/scsi/xen-scsifront.c
-index 12109e4c73d4..9de099532f8b 100644
---- a/drivers/scsi/xen-scsifront.c
-+++ b/drivers/scsi/xen-scsifront.c
-@@ -175,7 +175,8 @@ static void scsifront_put_rqid(struct vscsifrnt_info *info, uint32_t id)
- 		scsifront_wake_up(info);
+diff --git a/drivers/scsi/csiostor/csio_hw.h b/drivers/scsi/csiostor/csio_hw.h
+index e351af6e7c81..8e22dccd6d88 100644
+--- a/drivers/scsi/csiostor/csio_hw.h
++++ b/drivers/scsi/csiostor/csio_hw.h
+@@ -68,6 +68,8 @@
+ 
+ #define CSIO_MAX_LUN		0xFFFF
+ #define CSIO_MAX_QUEUE		2048
++#define CSIO_TMF_TAG		(CSIO_MAX_QUEUE - 1)
++
+ #define CSIO_MAX_CMD_PER_LUN	32
+ #define CSIO_MAX_DDP_BUF_SIZE	(1024 * 1024)
+ #define CSIO_MAX_SECTOR_SIZE	128
+diff --git a/drivers/scsi/csiostor/csio_init.c b/drivers/scsi/csiostor/csio_init.c
+index ccbded3353bd..6a5529d6440f 100644
+--- a/drivers/scsi/csiostor/csio_init.c
++++ b/drivers/scsi/csiostor/csio_init.c
+@@ -621,7 +621,7 @@ csio_shost_init(struct csio_hw *hw, struct device *dev,
+ 	/* Link common lnode to this lnode */
+ 	ln->dev_num = (shost->host_no << 16);
+ 
+-	shost->can_queue = CSIO_MAX_QUEUE;
++	shost->can_queue = CSIO_MAX_QUEUE - 1;
+ 	shost->this_id = -1;
+ 	shost->unique_id = shost->host_no;
+ 	shost->max_cmd_len = 16; /* Max CDB length supported */
+diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
+index c1c410a1cfe0..b21aa2c43051 100644
+--- a/drivers/scsi/csiostor/csio_scsi.c
++++ b/drivers/scsi/csiostor/csio_scsi.c
+@@ -2056,17 +2056,20 @@ csio_tm_cbfn(struct csio_hw *hw, struct csio_ioreq *req)
+ 
+ 	/* Wake up the TM handler thread */
+ 	csio_scsi_cmnd(req) = NULL;
++	cmnd->host_scribble = NULL;
  }
  
--static int scsifront_do_request(struct vscsifrnt_info *info,
-+static int scsifront_do_request(struct scsi_device *sdev,
-+				struct vscsifrnt_info *info,
- 				struct vscsifrnt_shadow *shadow)
+ static int
+ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
  {
- 	struct vscsiif_front_ring *ring = &(info->ring);
-@@ -202,17 +203,25 @@ static int scsifront_do_request(struct vscsifrnt_info *info,
- 	ring_req->ref_rqid    = shadow->ref_rqid;
- 	ring_req->nr_segments = shadow->nr_segments;
+-	struct csio_lnode *ln = shost_priv(cmnd->device->host);
++	struct scsi_device *sdev = cmnd->device;
++	struct csio_lnode *ln = shost_priv(sdev->host);
+ 	struct csio_hw *hw = csio_lnode_to_hw(ln);
+ 	struct csio_scsim *scsim = csio_hw_to_scsim(hw);
+-	struct csio_rnode *rn = (struct csio_rnode *)(cmnd->device->hostdata);
++	struct csio_rnode *rn = (struct csio_rnode *)(sdev->hostdata);
+ 	struct csio_ioreq *ioreq = NULL;
+ 	struct csio_scsi_qset *sqset;
++	struct scsi_cmnd *tmf_cmnd;
+ 	unsigned long flags;
+ 	int retval;
+ 	int count, ret;
+@@ -2077,13 +2080,13 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 		goto fail;
  
--	ring_req->id      = sc->device->id;
--	ring_req->lun     = sc->device->lun;
--	ring_req->channel = sc->device->channel;
--	ring_req->cmd_len = sc->cmd_len;
-+	ring_req->id      = sdev->id;
-+	ring_req->lun     = sdev->lun;
-+	ring_req->channel = sdev->channel;
+ 	csio_dbg(hw, "Request to reset LUN:%llu (ssni:0x%x tgtid:%d)\n",
+-		      cmnd->device->lun, rn->flowid, rn->scsi_id);
++		      sdev->lun, rn->flowid, rn->scsi_id);
  
--	BUG_ON(sc->cmd_len > VSCSIIF_MAX_COMMAND_SIZE);
-+	if (sc) {
-+		ring_req->cmd_len = sc->cmd_len;
+ 	if (!csio_is_lnode_ready(ln)) {
+ 		csio_err(hw,
+ 			 "LUN reset cannot be issued on non-ready"
+ 			 " local node vnpi:0x%x (LUN:%llu)\n",
+-			 ln->vnp_flowid, cmnd->device->lun);
++			 ln->vnp_flowid, sdev->lun);
+ 		goto fail;
+ 	}
  
--	memcpy(ring_req->cmnd, sc->cmnd, sc->cmd_len);
-+		BUG_ON(sc->cmd_len > VSCSIIF_MAX_COMMAND_SIZE);
- 
--	ring_req->sc_data_direction   = (uint8_t)sc->sc_data_direction;
--	ring_req->timeout_per_command = scsi_cmd_to_rq(sc)->timeout / HZ;
-+		memcpy(ring_req->cmnd, sc->cmnd, sc->cmd_len);
-+
-+		ring_req->sc_data_direction   = (uint8_t)sc->sc_data_direction;
-+		ring_req->timeout_per_command =
-+			scsi_cmd_to_rq(sc)->timeout / HZ;
-+	} else {
-+		ring_req->cmd_len = VSCSIIF_MAX_COMMAND_SIZE;
-+		memset(ring_req->cmnd, 0, VSCSIIF_MAX_COMMAND_SIZE);
-+		ring_req->sc_data_direction = DMA_NONE;
+@@ -2103,7 +2106,15 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 		csio_err(hw,
+ 			 "LUN reset cannot be issued on non-ready"
+ 			 " remote node ssni:0x%x (LUN:%llu)\n",
+-			 rn->flowid, cmnd->device->lun);
++			 rn->flowid, sdev->lun);
++		goto fail;
 +	}
- 
- 	for (i = 0; i < (shadow->nr_segments & ~VSCSIIF_SG_GRANT); i++)
- 		ring_req->seg[i] = shadow->seg[i];
-@@ -561,7 +570,7 @@ static int scsifront_queuecommand(struct Scsi_Host *shost,
- 		return 0;
++
++	tmf_cmnd = scsi_host_find_tag(sdev->host, CSIO_TMF_TAG);
++	if (!tmf_cmnd || tmf_cmnd->host_scribble) {
++		csio_err(hw,
++			 "LUN reset TMF already busy (LUN:%llu)\n",
++			 sdev->lun);
+ 		goto fail;
  	}
  
--	if (scsifront_do_request(info, shadow)) {
-+	if (scsifront_do_request(sc->device, info, shadow)) {
- 		scsifront_gnttab_done(info, shadow);
- 		goto busy;
+@@ -2123,11 +2134,11 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	ioreq->iq_idx		= sqset->iq_idx;
+ 	ioreq->eq_idx		= sqset->eq_idx;
+ 
+-	csio_scsi_cmnd(ioreq)	= cmnd;
+-	cmnd->host_scribble	= (unsigned char *)ioreq;
+-	csio_priv(cmnd)->wr_status = 0;
++	csio_scsi_cmnd(ioreq)	= tmf_cmnd;
++	tmf_cmnd->host_scribble	= (unsigned char *)ioreq;
++	csio_priv(tmf_cmnd)->wr_status = 0;
+ 
+-	csio_priv(cmnd)->fc_tm_flags = FCP_TMF_LUN_RESET;
++	csio_priv(tmf_cmnd)->fc_tm_flags = FCP_TMF_LUN_RESET;
+ 	ioreq->tmo		= CSIO_SCSI_LUNRST_TMO_MS / 1000;
+ 
+ 	/*
+@@ -2144,7 +2155,7 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	sld.level = CSIO_LEV_LUN;
+ 	sld.lnode = ioreq->lnode;
+ 	sld.rnode = ioreq->rnode;
+-	sld.oslun = cmnd->device->lun;
++	sld.oslun = sdev->lun;
+ 
+ 	spin_lock_irqsave(&hw->lock, flags);
+ 	/* Kick off TM SM on the ioreq */
+@@ -2154,20 +2165,21 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	if (retval != 0) {
+ 		csio_err(hw, "Failed to issue LUN reset, req:%p, status:%d\n",
+ 			    ioreq, retval);
++		tmf_cmnd->host_scribble = NULL;
+ 		goto fail_ret_ioreq;
  	}
-@@ -606,7 +615,7 @@ static int scsifront_action_handler(struct scsi_cmnd *sc, uint8_t act)
- 		if (scsifront_enter(info))
- 			goto fail;
  
--		if (!scsifront_do_request(info, shadow))
-+		if (!scsifront_do_request(sc->device, info, shadow))
- 			break;
+ 	csio_dbg(hw, "Waiting max %d secs for LUN reset completion\n",
+ 		    count * (CSIO_SCSI_TM_POLL_MS / 1000));
+ 	/* Wait for completion */
+-	while ((((struct scsi_cmnd *)csio_scsi_cmnd(ioreq)) == cmnd)
++	while ((((struct scsi_cmnd *)csio_scsi_cmnd(ioreq)) == tmf_cmnd)
+ 								&& count--)
+ 		msleep(CSIO_SCSI_TM_POLL_MS);
  
- 		scsifront_return(info);
+ 	/* LUN reset timed-out */
+-	if (((struct scsi_cmnd *)csio_scsi_cmnd(ioreq)) == cmnd) {
++	if (((struct scsi_cmnd *)csio_scsi_cmnd(ioreq)) == tmf_cmnd) {
+ 		csio_err(hw, "LUN reset (%d:%llu) timed out\n",
+-			 cmnd->device->id, cmnd->device->lun);
++			 sdev->id, sdev->lun);
+ 
+ 		spin_lock_irq(&hw->lock);
+ 		csio_scsi_drvcleanup(ioreq);
+@@ -2178,10 +2190,10 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	}
+ 
+ 	/* LUN reset returned, check cached status */
+-	if (csio_priv(cmnd)->wr_status != FW_SUCCESS) {
++	if (csio_priv(tmf_cmnd)->wr_status != FW_SUCCESS) {
+ 		csio_err(hw, "LUN reset failed (%d:%llu), status: %d\n",
+-			 cmnd->device->id, cmnd->device->lun,
+-			 csio_priv(cmnd)->wr_status);
++			 sdev->id, sdev->lun,
++			 csio_priv(tmf_cmnd)->wr_status);
+ 		goto fail;
+ 	}
+ 
+@@ -2201,7 +2213,7 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	if (retval != 0) {
+ 		csio_err(hw,
+ 			 "Attempt to abort I/Os during LUN reset of %llu"
+-			 " returned %d\n", cmnd->device->lun, retval);
++			 " returned %d\n", sdev->lun, retval);
+ 		/* Return I/Os back to active_q */
+ 		spin_lock_irq(&hw->lock);
+ 		list_splice_tail_init(&local_q, &scsim->active_q);
+@@ -2212,7 +2224,7 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	CSIO_INC_STATS(rn, n_lun_rst);
+ 
+ 	csio_info(hw, "LUN reset occurred (%d:%llu)\n",
+-		  cmnd->device->id, cmnd->device->lun);
++		  sdev->id, sdev->lun);
+ 
+ 	return SUCCESS;
+ 
 -- 
 2.29.2
 
