@@ -2,129 +2,170 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4BDE517434
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 May 2022 18:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B694517575
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 May 2022 19:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241836AbiEBQ0N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 May 2022 12:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S1386499AbiEBRMm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 May 2022 13:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241610AbiEBQ0M (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 12:26:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A1EAE59
-        for <linux-scsi@vger.kernel.org>; Mon,  2 May 2022 09:22:42 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 02267210EE;
-        Mon,  2 May 2022 16:22:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651508561; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vv/tpMQ4hyEOMny+RhSkApOsB5stOnmxtAiqSmGhNF4=;
-        b=Bj7wGKc7IllbyJPS4hh4J7ThlQCCtA/3lIaA6n3/VenBt3ip9TvgRRYAsa3TPIq3iM0aSR
-        u6AqGzseWl5Blp7sIt0l8G41/dCTft+Q1XQDaTgM1P3A7fgTycoJPx6M9PPf5OvtsQfaqm
-        Hp89w1wZTzJzcgyQ4DBL6A6fJDdjrnU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651508561;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vv/tpMQ4hyEOMny+RhSkApOsB5stOnmxtAiqSmGhNF4=;
-        b=TxRfNmHtTYZAo8Hq7SToq/cZw+v6E0v7+EV/7DpYsu1o4ygJ0XFh4cMm43YjiMNffjFGMQ
-        OJ3eBPwoqVj1zZAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4D7BA13491;
-        Mon,  2 May 2022 16:22:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 2VJuBlAFcGITZwAAMHmgww
-        (envelope-from <hare@suse.de>); Mon, 02 May 2022 16:22:40 +0000
-Message-ID: <97362a06-2a50-21b9-eb1c-1fdb2179d0c9@suse.de>
-Date:   Mon, 2 May 2022 09:22:37 -0700
+        with ESMTP id S236194AbiEBRMl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 13:12:41 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021017.outbound.protection.outlook.com [52.101.62.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E862BD7;
+        Mon,  2 May 2022 10:09:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bvJRWPCwkiRDlcr5GBrsdqbTuG/65i5ctItRJL/QmteRS9tPBwSt7mDe6Jpduxr+juPyMI0QbTzincat1H+h4pX4oXPHMvF2i9qNI8n0zF5WPfr/KtOV2SQAnmWSc2QI0OYBWjT2bciTBPuU3mLihmXKAYY7uwkyPyTrClHRB8HWmReam65KT2Q5ZjpBkgobRcOzc9YrOLFMYf7EGGnCBX/YWSEGuQyqz3IcjIAHSSllmDTtQNbyXeKHdPylA13JpY4ejsDQgOhuXuwNQnFbV+yt3em8/JCMGNGVDb8WX23Jd/e1OhAMFPn3BWaUP3Fk/sdgAeLYVK430XE3yJpT2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LDEmLVK6oCHMQV761SGma4KHXpB+/6mD8OLMmo8di54=;
+ b=OTTej6STFU5cGIYyQsSxe5Bb0mBPeoXOjZYUioipazuzh2r9juNo7LvJ97vBVVc0ysX8fupeWtjUelkCXEQRB60xl689hRRtkSehOvjZL0jU29yJuz5cugrkWNpWGNUwLmcTR0kr2/nHzxNIoKSmmiLUJ0oz4IY8XItZbZvbyRHkRJvSdeSFzopAln+i5HpoS0JZ2OqvlIHMD9LKETYh7WQ4gTj+quvhjehu+IoUT8N1vjMzT1HmCTGnOHiq6KX88aAa3EGd+JAX1x/CR11CsOld4Iq7Kpxp8UYT0F2K52psAQT79OlzDVDyKZZ1EG3zsGLE09Q+AHBFkzG3q7J6wA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LDEmLVK6oCHMQV761SGma4KHXpB+/6mD8OLMmo8di54=;
+ b=Siv1ayp4LTPBjLndJ76fbFlOLfAuMg9OE9hhVgjZeE1Rlorh5f2dQhuOlTt58/S95w2QykwzafOgEHE98jk3kaLqKSxC2N0w+qyC19IhMdJiIGmwvAA8/uynimR07kKCdDv5UbyZ8Fq97ur7Ml8n50YwZq1Du6p/Ca9s+GVdSnE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from DM6PR21MB1370.namprd21.prod.outlook.com (2603:10b6:5:16b::28)
+ by DM6PR21MB1180.namprd21.prod.outlook.com (2603:10b6:5:161::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.4; Mon, 2 May
+ 2022 16:37:02 +0000
+Received: from DM6PR21MB1370.namprd21.prod.outlook.com
+ ([fe80::588e:9ede:461a:2372]) by DM6PR21MB1370.namprd21.prod.outlook.com
+ ([fe80::588e:9ede:461a:2372%4]) with mapi id 15.20.5250.004; Mon, 2 May 2022
+ 16:37:02 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, vkuznets@redhat.com,
+        decui@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        deller@gmx.de, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org
+Cc:     mikelley@microsoft.com
+Subject: [PATCH 0/4] Remove support for Hyper-V 2008 and 2008R2/Win7
+Date:   Mon,  2 May 2022 09:36:27 -0700
+Message-Id: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: MW2PR2101CA0020.namprd21.prod.outlook.com
+ (2603:10b6:302:1::33) To DM6PR21MB1370.namprd21.prod.outlook.com
+ (2603:10b6:5:16b::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 1/1] scsi_dh_alua: properly handling the ALUA
- transitioning state
-Content-Language: en-US
-To:     Brian Bunker <brian@purestorage.com>, linux-scsi@vger.kernel.org
-References: <CAHZQxy+4sTPz9+pY3=7VJH+CLUJsDct81KtnR2be8ycN5mhqTg@mail.gmail.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <CAHZQxy+4sTPz9+pY3=7VJH+CLUJsDct81KtnR2be8ycN5mhqTg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 88afdc49-77e2-4979-85f0-08da2c59fc36
+X-MS-TrafficTypeDiagnostic: DM6PR21MB1180:EE_
+X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+X-Microsoft-Antispam-PRVS: <DM6PR21MB1180D93559687104B53B1BDED7C19@DM6PR21MB1180.namprd21.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0e497YHycIrEJJSV7TXqHnsGCle71faQ4IsD+Ls6b1tCbXHQza7ktdjrdxbYbCLdAjqMPOaq9HAkpFoasEICACSQz/nf5P1P9qixKoq0oxFJ8ydCpLgz3AYhtr0xDzBB56oB9C2DspK2vwgS9y0g9xfpfOtZeUOCN8zV8KXdGN7YU0xNZTkzDiaKxVpRJ5ipWuqT4ofNmGeAZyAj6Ni0iebnlL5C8Fyd/atGnBVP6KbfyWE8dfKVrLEOWlHADqbJAdJFXMr+41p1CHffJmtkFUHPfYGX0BUw5zrl778s1gzsiWAbr6or32bsLlF1qRM2Y3DPxeR9PoCm38xflb6pACygoTTBgdnCoxmeHhgnOa+zczYeEtqq9WCV0mNUbdHArmOVKJNxLeaaJDvxG6GCwj49sFBLgYf80aIhfDTVmnd0FGGuOHV+cBMGfXXjDLhjPFsJzUdPQZ2ALxBi6y9y8XvxNOft6jDqWQXQPTx4dqo7BMB6om9vUlhgr1jrr+5xjAsHIJyRlkA/kECtWpwlp1p1NGHfE4NCqtfAkoSGUcnvGA75z6O4ls/6RnTgXrMm+VPBWDZTR8Cw31ifIolQdniwDMbiM+qaMJeVAeHwR4EAxTfwUD+KpVJ8G8NYuAg4SVPhJIcNny+TVeTY+cs+P7PBMEtgjBBIX2xvs8ETwPdRIzwjwHl3qFlZwCXwlH6F9MkTfhl/NCiZBjQhN1Qm0ovtPrQKtWpu3IBe9QwFeWFZTlzj0A8l6V03pkzDVE6+qqaEj72Jk9QWF8TvkeI/qg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1370.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(82950400001)(7416002)(10290500003)(66946007)(6486002)(66556008)(66476007)(2616005)(107886003)(6512007)(26005)(921005)(5660300002)(6506007)(83380400001)(508600001)(82960400001)(86362001)(6666004)(316002)(8936002)(38350700002)(38100700002)(186003)(52116002)(4326008)(36756003)(8676002)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?65UUDA/L9Kssg3JMtYYtMEiKe81jiSqez50j07JWwwFoBvF0N4kk1x+7A25D?=
+ =?us-ascii?Q?FOFuoH0eiOCJMgDKcu3n8UCynybpbeX2N2F160hYydckb4Ubvp+wr2dGKskm?=
+ =?us-ascii?Q?VFcQf5bN080dK9qCHkYZAY0vDjjZrj2g5prL4qTbqDl6o7/hzed1pQ/tvbR3?=
+ =?us-ascii?Q?dfZsSxOrAWL3D29kf6nUIcEHKMRLaWu3wmL5KwXugzmuZHGZXbhk5dB5ZN12?=
+ =?us-ascii?Q?+B7pokiGF+xPeDNUJ3ml+EDGuxNiPsi2+LDz5qpgnwgxcMtsr5EdipgOv6LE?=
+ =?us-ascii?Q?rG47kc4SWCllezBPSUOQov94hkBQ8e/CNsFv38pisLwhcI8Z8UrImHWSjIzQ?=
+ =?us-ascii?Q?M57g+hwg2J5mnaL987nR0htoXeIolbUrEvAH2nc19xxdFw6SG59MgoCaxIqS?=
+ =?us-ascii?Q?azj9z5s6fFdjsVoQ0QIIIMiJCm6abrRQQ5B6Cosi6pMIBAXddxIxTb5eyw5H?=
+ =?us-ascii?Q?HVHEqkJ2tNum51L9essqX6k8/kOzk9ejHkt6V6bgTdVPNcnPF652CcvoYCZs?=
+ =?us-ascii?Q?eNQQM5hEjLW9Kyghnnp9OvRFYrpMHKRx+ZsgqDx1EFeWLI5djly4kDt5+HZg?=
+ =?us-ascii?Q?X4P6FtAhAyjhqtEdPQR+8mBuoZrYtpxs0HLSlIiQJJlDdWCBa6Au/ojdGoUF?=
+ =?us-ascii?Q?ESNcO7PckRlH8Oq030KMJgiZDWGEpjPrwE9CB8ZB2ZfUWjTeZ/PM6zk9xhqO?=
+ =?us-ascii?Q?c2UKkqhV2AxZkkpJGfRVLHa0pmUyjmnVe87lu8NpOWu3NN8wvipUZoCdmGB/?=
+ =?us-ascii?Q?HF2PlwVIVaWLQ6/orQLmcihLIZtw7xUO4vaEWN+RZnKd4txzchulIvBQxDob?=
+ =?us-ascii?Q?F3MrLYdUHFf8N2Lx+ITQQ/AJlCS+icBzVS2YPb4idTMVNac9AoSdFyiIWMQg?=
+ =?us-ascii?Q?AER/qjzdvqEVS8VtkG8vLHr+++8h26tOBX832y2waPPO45OkwoUKkkA5A9uu?=
+ =?us-ascii?Q?DmEIYsmxvEaB51o3REzdofBaw9skUN4FqP6JIjMCHPK2tgCDLg9gymNtxqiV?=
+ =?us-ascii?Q?8K3VB01Go7GA0MkPLcA690B2mG5Sq1ILDVNVCFH5zzXT0tmjtZ6oVGY/a7T/?=
+ =?us-ascii?Q?OVU2MhxXOZZYmopp3yKiEeoy/ezvpGh41iIlpoCwUCb46mdlgAIpaqTbk19l?=
+ =?us-ascii?Q?bTodE+lallghjD+hsZzxJ+XB9lVweo4GCakV2iYu+Z0RchO6kYPKOMeRD+oK?=
+ =?us-ascii?Q?6bV5H5Nn9m5bKKEw6DZQPfAsfpM68NUUMLC4JfzIYqmiNdqhC+rZkCy8qijJ?=
+ =?us-ascii?Q?m/BBLzBhhGZmdVcGDrqQE/1BiMWIRM05cwlBGclvA5RMM36/JUhwOmzMrn4x?=
+ =?us-ascii?Q?1+JeugyTAyewtnH9+Eh1lR46v1M52mP9b5cCyAVspgs0q59tsaxc7dniP6iN?=
+ =?us-ascii?Q?xf4Hbc0hFcYRiEEqjF3F2x/UcvY0goscN733Q/N3nwWgvxfEfmFHjjeUFUeR?=
+ =?us-ascii?Q?sKFJV/hAD7tCjzRph2+7AYQWKG1GlJiqqSmMFO6PvliiI/Fl+4WlOIA8Rnd1?=
+ =?us-ascii?Q?3orQ+2LU3D65sPYHpRRYc2s6CPB8A87PekU+E3Ec3i/ICPGfI3KhIzLl71wr?=
+ =?us-ascii?Q?Yp3cMcQLzyJYbbE5pikZvAHub3U1kyscEMZ7SX5Jt0v1PH0J4HkB4uDZ3kRt?=
+ =?us-ascii?Q?SxfrzA1su5oYNOhI4wLJdfx8DzulBaxw5duu9G+XyZ2ewnUoGvHksnf8s266?=
+ =?us-ascii?Q?QNib8iKAYxAza20ZQY9jEAeoM5TEzt8pAH9XFqSsw5nDcyL2Z0D52riOSiN/?=
+ =?us-ascii?Q?N4mrK7JCA8mbAe+H+8/RRt6eNCManAg=3D?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88afdc49-77e2-4979-85f0-08da2c59fc36
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1370.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2022 16:37:02.2389
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XEFTeKT6lhkz/0zj+qwOoshzmXXfPL7qCTwhsNJV5meVTA6tgcO00CQk7rPYpuGndn/mPlZxNKrQaUsGn3Chrw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR21MB1180
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/2/22 08:09, Brian Bunker wrote:
-> The handling of the ALUA transitioning state is currently broken. When
-> a target goes into this state, it is expected that the target is
-> allowed to stay in this state for the implicit transition timeout
-> without a path failure. The handler has this logic, but it gets
-> skipped currently.
-> 
-> When the target transitions, there is in-flight I/O from the
-> initiator. The first of these responses from the target will be a unit
-> attention letting the initiator know that the ALUA state has changed.
-> The remaining in-flight I/Os, before the initiator finds out that the
-> portal state has changed, will return not ready, ALUA state is
-> transitioning. The portal state will change to
-> SCSI_ACCESS_STATE_TRANSITIONING. This will lead to all new I/O
-> immediately failing the path unexpectedly. The path failure happens in
-> less than a second instead of the expected successes until the
-> transition timer is exceeded.
-> 
-> This change allows I/Os to continue while the path is in the ALUA
-> transitioning state. The handler already takes care of a target that
-> stays in the transitioning state for too long by changing the state to
-> ALUA state standby once the transition timeout is exceeded at which
-> point the path will fail.
-> 
-> Signed-off-by: Brian Bunker <brian@purestorage.com>
-> Acked-by: Krishna Kant <krishna.kant@purestorage.com>
-> Acked-by: Seamus Connor <sconnor@purestorage.com>
-> ___
-> diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c
-> b/drivers/scsi/device_handler/scsi_dh_alua.c
-> index 37d06f993b76..1d9be771f3ee 100644
-> --- a/drivers/scsi/device_handler/scsi_dh_alua.c
-> +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-> @@ -1172,9 +1172,8 @@ static blk_status_t alua_prep_fn(struct
-> scsi_device *sdev, struct request *req)
->          case SCSI_ACCESS_STATE_OPTIMAL:
->          case SCSI_ACCESS_STATE_ACTIVE:
->          case SCSI_ACCESS_STATE_LBA:
-> -               return BLK_STS_OK;
->          case SCSI_ACCESS_STATE_TRANSITIONING:
-> -               return BLK_STS_AGAIN;
-> +               return BLK_STS_OK;
->          default:
->                  req->rq_flags |= RQF_QUIET;
->                  return BLK_STS_IOERR;
+Linux code for running as a Hyper-V guest includes special cases for the
+first released versions of Hyper-V: 2008 and 2008R2/Windows 7. These
+versions were very thinly used for running Linux guests when first
+released more than 12 years ago, and they are now out of support
+(except for extended security updates). As initial versions, they
+lack the performance features needed for effective production usage
+of Linux guests. In total, there's no need to continue to support
+the latest Linux kernels on these versions of Hyper-V.
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Simplify the code for running on Hyper-V by removing the special
+cases. This includes removing the negotiation of the VMbus protocol
+versions for 2008 and 2008R2, and the special case code based on
+those VMbus protocol versions. Changes are in the core VMbus code and
+several drivers for synthetic VMbus devices.
 
-Cheers,
+Some drivers have driver-specific protocols with the Hyper-V host and
+may have versions of those protocols that are limited to 2008 and
+2008R2. This patch set does the clean-up only for the top-level
+VMbus protocol versions, and not the driver-specific protocols.
+Cleaning up the driver-specific protocols can be done with
+follow-on patches.
 
-Hannes
+There's no specific urgency to removing the special case code for
+2008 and 2008R2, so if the broader Linux kernel community surfaces
+a reason why this clean-up should not be done now, we can wait.
+But I think we want to eventually stop carrying around this extra
+baggage, and based on discussions with the Hyper-V team within
+Microsoft, we're already past the point that it has any value.
+
+Michael Kelley (4):
+  Drivers: hv: vmbus: Remove support for Hyper-V 2008 and Hyper-V
+    2008R2/Win7
+  scsi: storvsc: Remove support for Hyper-V 2008 and 2008R2/Win7
+  video: hyperv_fb: Remove support for Hyper-V 2008 and 2008R2/Win7
+  drm/hyperv: Remove support for Hyper-V 2008 and 2008R2/Win7
+
+ drivers/gpu/drm/hyperv/hyperv_drm_proto.c | 23 ++++--------
+ drivers/hv/channel_mgmt.c                 | 29 ++++++---------
+ drivers/hv/connection.c                   |  6 ++--
+ drivers/hv/vmbus_drv.c                    | 60 +++++++------------------------
+ drivers/scsi/storvsc_drv.c                | 36 +++++--------------
+ drivers/video/fbdev/hyperv_fb.c           | 23 ++----------
+ include/linux/hyperv.h                    | 10 ++++--
+ 7 files changed, 52 insertions(+), 135 deletions(-)
+
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+1.8.3.1
+
