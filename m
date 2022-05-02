@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E341517953
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 May 2022 23:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57B1517951
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 May 2022 23:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387725AbiEBVnG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 May 2022 17:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S1387778AbiEBVnB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 May 2022 17:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387754AbiEBVmZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 17:42:25 -0400
+        with ESMTP id S1387743AbiEBVmU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 17:42:20 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867FCE0F1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868FFE0F5
         for <linux-scsi@vger.kernel.org>; Mon,  2 May 2022 14:38:39 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 214E31F8AE;
+        by smtp-out2.suse.de (Postfix) with ESMTP id 556811F8AF;
         Mon,  2 May 2022 21:38:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1651527513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XaMsDcgxmxoaoKvC5rK/X0K6asd/iVIV8FHEQlKS6yY=;
-        b=sYp0vzjr/6ZANWBx+lXMI0qwbNkNTBcPlMh2JhakeBge2wSuBrG5ZvIioi21P+8CEiYgVC
-        uK6AJkDULT9fYqH0bp+LZxdB3FweJ6Gmx2tYNEG8DJQ4cA6GfsCYPZJ/ViFDzpOQed3p7t
-        +FohldRYFejrPrS4hI6aiHe4CQ4oQB4=
+        bh=3eV+nAWpb1s6cucrrh1PALfsxGlRNCR2IXlROmBUhDI=;
+        b=MuW8Ub0Rx5sCEk/V3Pfqi7Lx4GJy94F8kFhCSO2I0PQHWxLvjBEOFNuu8VkUglLw6Wcu30
+        1oKVTDMDdMUf+H+Xk/QoIUU1O+xaGRYeJobelPrEdHZyl4v16DC9+0I4xAMvyQ/xrM+wQ2
+        KRF/yX+RjQaZD9UZrcvTyUruBKMyBQg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1651527513;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XaMsDcgxmxoaoKvC5rK/X0K6asd/iVIV8FHEQlKS6yY=;
-        b=1gGeLr2ewzEcyZuD9NuRW02EeHjlGDtWHHFAsqO+tuvzvyhY4RP7Ctqh4a9dvURtFkM2Ly
-        qZrS4UrL3glatuCg==
+        bh=3eV+nAWpb1s6cucrrh1PALfsxGlRNCR2IXlROmBUhDI=;
+        b=dBzmrQloOHid3OvRJJELaw8vxRMUHPDqy4alS5W3ZS4GnejJimZ/oil5qy4kCB1lPgiESZ
+        rTA7dA6JbSEMQ6Cg==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 1CCE12C166;
+        by relay2.suse.de (Postfix) with ESMTP id 21D8D2C16B;
         Mon,  2 May 2022 21:38:33 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 1A756519411C; Mon,  2 May 2022 23:38:33 +0200 (CEST)
+        id 1EE3F519411E; Mon,  2 May 2022 23:38:33 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Hannes Reinecke <hare@suse.com>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: [PATCH 20/24] sym53c8xx_2: split off bus reset from host reset
-Date:   Mon,  2 May 2022 23:38:16 +0200
-Message-Id: <20220502213820.3187-21-hare@suse.de>
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Subject: [PATCH 21/24] ips: Do not try to abort command from host reset
+Date:   Mon,  2 May 2022 23:38:17 +0200
+Message-Id: <20220502213820.3187-22-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220502213820.3187-1-hare@suse.de>
 References: <20220502213820.3187-1-hare@suse.de>
@@ -65,159 +65,53 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The current handler does both, bus reset and host reset.
-So split them off into two distinct functions.
+The code for aborting an outstanding command is a copy of the
+functionality from command abort. As we already have called this
+function once we reach host reset there's no point in trying to
+do so again.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
-Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
 ---
- drivers/scsi/sym53c8xx_2/sym_glue.c | 107 +++++++++++++++++-----------
- 1 file changed, 66 insertions(+), 41 deletions(-)
+ drivers/scsi/ips.c | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
-diff --git a/drivers/scsi/sym53c8xx_2/sym_glue.c b/drivers/scsi/sym53c8xx_2/sym_glue.c
-index 2e2852bd5860..9166af69bbb4 100644
---- a/drivers/scsi/sym53c8xx_2/sym_glue.c
-+++ b/drivers/scsi/sym53c8xx_2/sym_glue.c
-@@ -559,8 +559,6 @@ static void sym53c8xx_timer(struct timer_list *t)
-  */
- #define SYM_EH_ABORT		0
- #define SYM_EH_DEVICE_RESET	1
--#define SYM_EH_BUS_RESET	2
--#define SYM_EH_HOST_RESET	3
+diff --git a/drivers/scsi/ips.c b/drivers/scsi/ips.c
+index 16419aeec02d..d49c1d6df5d6 100644
+--- a/drivers/scsi/ips.c
++++ b/drivers/scsi/ips.c
+@@ -835,7 +835,6 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
+ 	int i;
+ 	ips_ha_t *ha;
+ 	ips_scb_t *scb;
+-	ips_copp_wait_item_t *item;
  
- /*
-  *  Generic method for our eh processing.
-@@ -580,35 +578,11 @@ static int sym_eh_handler(int op, char *opname, struct scsi_cmnd *cmd)
+ 	METHOD_TRACE("ips_eh_reset", 1);
  
- 	scmd_printk(KERN_WARNING, cmd, "%s operation started\n", opname);
+@@ -860,23 +859,6 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
+ 	if (!ha->active)
+ 		return (FAILED);
  
--	/* We may be in an error condition because the PCI bus
--	 * went down. In this case, we need to wait until the
--	 * PCI bus is reset, the card is reset, and only then
--	 * proceed with the scsi error recovery.  There's no
--	 * point in hurrying; take a leisurely wait.
-+	/*
-+	 * Escalate to host reset if the PCI bus went down
- 	 */
--#define WAIT_FOR_PCI_RECOVERY	35
--	if (pci_channel_offline(pdev)) {
--		int finished_reset = 0;
--		init_completion(&eh_done);
--		spin_lock_irq(shost->host_lock);
--		/* Make sure we didn't race */
--		if (pci_channel_offline(pdev)) {
--			BUG_ON(sym_data->io_reset);
--			sym_data->io_reset = &eh_done;
--		} else {
--			finished_reset = 1;
--		}
--		spin_unlock_irq(shost->host_lock);
--		if (!finished_reset)
--			finished_reset = wait_for_completion_timeout
--						(sym_data->io_reset,
--						WAIT_FOR_PCI_RECOVERY*HZ);
--		spin_lock_irq(shost->host_lock);
--		sym_data->io_reset = NULL;
--		spin_unlock_irq(shost->host_lock);
--		if (!finished_reset)
--			return SCSI_FAILED;
+-	/* See if the command is on the copp queue */
+-	item = ha->copp_waitlist.head;
+-	while ((item) && (item->scsi_cmd != SC))
+-		item = item->next;
+-
+-	if (item) {
+-		/* Found it */
+-		ips_removeq_copp(&ha->copp_waitlist, item);
+-		return (SUCCESS);
 -	}
-+	if (pci_channel_offline(pdev))
-+		return SCSI_FAILED;
- 
- 	spin_lock_irq(shost->host_lock);
- 	/* This one is queued in some place -> to wait for completion */
-@@ -629,15 +603,6 @@ static int sym_eh_handler(int op, char *opname, struct scsi_cmnd *cmd)
- 	case SYM_EH_DEVICE_RESET:
- 		sts = sym_reset_scsi_target(np, cmd->device->id);
- 		break;
--	case SYM_EH_BUS_RESET:
--		sym_reset_scsi_bus(np, 1);
--		sts = 0;
--		break;
--	case SYM_EH_HOST_RESET:
--		sym_reset_scsi_bus(np, 0);
--		sym_start_up(shost, 1);
--		sts = 0;
--		break;
- 	default:
- 		break;
- 	}
-@@ -679,12 +644,72 @@ static int sym53c8xx_eh_device_reset_handler(struct scsi_cmnd *cmd)
- 
- static int sym53c8xx_eh_bus_reset_handler(struct scsi_cmnd *cmd)
- {
--	return sym_eh_handler(SYM_EH_BUS_RESET, "BUS RESET", cmd);
-+	struct Scsi_Host *shost = cmd->device->host;
-+	struct sym_data *sym_data = shost_priv(shost);
-+	struct pci_dev *pdev = sym_data->pdev;
-+	struct sym_hcb *np = sym_data->ncb;
-+
-+	scmd_printk(KERN_WARNING, cmd, "BUS RESET operation started\n");
-+
-+	/*
-+	 * Escalate to host reset if the PCI bus went down
-+	 */
-+	if (pci_channel_offline(pdev))
-+		return SCSI_FAILED;
-+
-+	spin_lock_irq(shost->host_lock);
-+	sym_reset_scsi_bus(np, 1);
-+	spin_unlock_irq(shost->host_lock);
-+
-+	dev_warn(&cmd->device->sdev_gendev, "BUS RESET operation complete.\n");
-+	return SCSI_SUCCESS;
- }
- 
- static int sym53c8xx_eh_host_reset_handler(struct scsi_cmnd *cmd)
- {
--	return sym_eh_handler(SYM_EH_HOST_RESET, "HOST RESET", cmd);
-+	struct Scsi_Host *shost = cmd->device->host;
-+	struct sym_data *sym_data = shost_priv(shost);
-+	struct pci_dev *pdev = sym_data->pdev;
-+	struct sym_hcb *np = sym_data->ncb;
-+	struct completion eh_done;
-+	int finished_reset = 1;
-+
-+	shost_printk(KERN_WARNING, shost, "HOST RESET operation started\n");
-+
-+	/* We may be in an error condition because the PCI bus
-+	 * went down. In this case, we need to wait until the
-+	 * PCI bus is reset, the card is reset, and only then
-+	 * proceed with the scsi error recovery.  There's no
-+	 * point in hurrying; take a leisurely wait.
-+	 */
-+#define WAIT_FOR_PCI_RECOVERY	35
-+	if (pci_channel_offline(pdev)) {
-+		init_completion(&eh_done);
-+		spin_lock_irq(shost->host_lock);
-+		/* Make sure we didn't race */
-+		if (pci_channel_offline(pdev)) {
-+			BUG_ON(sym_data->io_reset);
-+			sym_data->io_reset = &eh_done;
-+			finished_reset = 0;
-+		}
-+		spin_unlock_irq(shost->host_lock);
-+		if (!finished_reset)
-+			finished_reset = wait_for_completion_timeout
-+						(sym_data->io_reset,
-+						WAIT_FOR_PCI_RECOVERY*HZ);
-+		spin_lock_irq(shost->host_lock);
-+		sym_data->io_reset = NULL;
-+		spin_unlock_irq(shost->host_lock);
-+	}
-+
-+	if (finished_reset) {
-+		sym_reset_scsi_bus(np, 0);
-+		sym_start_up(shost, 1);
-+	}
-+
-+	shost_printk(KERN_WARNING, shost, "HOST RESET operation %s.\n",
-+			finished_reset==1 ? "complete" : "failed");
-+	return finished_reset ? SCSI_SUCCESS : SCSI_FAILED;
- }
- 
- /*
+-
+-	/* See if the command is on the wait queue */
+-	if (ips_removeq_wait(&ha->scb_waitlist, SC)) {
+-		/* command not sent yet */
+-		return (SUCCESS);
+-	}
+-
+ 	/* An explanation for the casual observer:                              */
+ 	/* Part of the function of a RAID controller is automatic error         */
+ 	/* detection and recovery.  As such, the only problem that physically   */
 -- 
 2.29.2
 
