@@ -2,56 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39F651797F
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 May 2022 23:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EC4517997
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 May 2022 00:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241907AbiEBV6G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 May 2022 17:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
+        id S1387794AbiEBWDq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 May 2022 18:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387808AbiEBV5z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 17:57:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C06FD24
-        for <linux-scsi@vger.kernel.org>; Mon,  2 May 2022 14:54:24 -0700 (PDT)
+        with ESMTP id S1387774AbiEBWDc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 18:03:32 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1D3E2A
+        for <linux-scsi@vger.kernel.org>; Mon,  2 May 2022 15:00:01 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id B3A1F1F899;
-        Mon,  2 May 2022 21:54:20 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 8E423210E4;
+        Mon,  2 May 2022 22:00:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651528460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fU2eeqadf72NQOyzHys2QmG3XVR0slnd0zlUuAkSDiI=;
-        b=hMXkPKs5rgn+K7fEYBtSvaTYcKWn1+UwT6t8xA+M8KU/ZJo+C4kz20g5DOG/4IvbIvaR0A
-        R/woE772zFGFIewRJGIjtpK0x17QsJIGQmDmlvu0IWbLyym5wOAeG8zJuLyLKsHTw2Gv05
-        jTAS7D3UzFRjUrDUMrLvJRh+qXk2618=
+        t=1651528800; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=VjUw065zXC+KClvd1Zsveeunn1vqA97pXHGDr7SJ1X0=;
+        b=dXOeWVXt8uj5rUWxeKGFGV6np27w7kJGBe2OAIyZ+Gw9KpWYX3ZhZNCfFVET1KUUuZNQ2M
+        2r/AR3FC+zGEFG34qXJtH9ZimigXklLMdvAcDT8RnqhfVrhrjaqoDbR1NEL9uj7Tk0IKtl
+        KDfe0ImFJpNOK0k3poZlceAhx1TXiPw=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651528460;
+        s=susede2_ed25519; t=1651528800;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fU2eeqadf72NQOyzHys2QmG3XVR0slnd0zlUuAkSDiI=;
-        b=SkS/FyuhcdVN3CT9DMfvVFmavm5WXRhS+H/hX1V3Zu7GLwnGONPTixpkx9tnn6PUpGSry9
-        qLSCsGYrtGLEdoDw==
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=VjUw065zXC+KClvd1Zsveeunn1vqA97pXHGDr7SJ1X0=;
+        b=hfz/HxXyodFUAnVaw1Uf+Ur9tt8DO+Cljt4pvJ//fZOinzCHVb1DSqY2A+Hr/uD+LxeRBe
+        u6MyE884LGn9ntDw==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id AC0EF2C153;
-        Mon,  2 May 2022 21:54:20 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTP id 863E82C141;
+        Mon,  2 May 2022 22:00:00 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id A78AE519413C; Mon,  2 May 2022 23:54:20 +0200 (CEST)
+        id 793FD519413E; Tue,  3 May 2022 00:00:00 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 11/11] csiostor: use separate TMF command
-Date:   Mon,  2 May 2022 23:54:16 +0200
-Message-Id: <20220502215416.5351-12-hare@suse.de>
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH 0/7] scsi: EH rework main part
+Date:   Mon,  2 May 2022 23:59:35 +0200
+Message-Id: <20220502215953.5463-1-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220502215416.5351-1-hare@suse.de>
-References: <20220502215416.5351-1-hare@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -64,185 +57,138 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Set one command aside as a TMF command, and use this command to
-send the TMF. This avoids having to rely on the passed-in scsi
-command when resetting the device.
+Hi all,
 
-Signed-off-by: Hannes Reinecke <hare@suse.com>
----
- drivers/scsi/csiostor/csio_hw.h   |  2 ++
- drivers/scsi/csiostor/csio_init.c |  2 +-
- drivers/scsi/csiostor/csio_scsi.c | 48 +++++++++++++++++++------------
- 3 files changed, 33 insertions(+), 19 deletions(-)
+now that the prep is done we can convert the call sequence
+of the SCSI EH callbacks to use the respective object
+(ie struct Scsi_Host or struct scsi_device) and the Scsi command.
+With that we don't have to allocate a 'fake' command for
+ioctl reset anymore.
 
-diff --git a/drivers/scsi/csiostor/csio_hw.h b/drivers/scsi/csiostor/csio_hw.h
-index e351af6e7c81..8e22dccd6d88 100644
---- a/drivers/scsi/csiostor/csio_hw.h
-+++ b/drivers/scsi/csiostor/csio_hw.h
-@@ -68,6 +68,8 @@
- 
- #define CSIO_MAX_LUN		0xFFFF
- #define CSIO_MAX_QUEUE		2048
-+#define CSIO_TMF_TAG		(CSIO_MAX_QUEUE - 1)
-+
- #define CSIO_MAX_CMD_PER_LUN	32
- #define CSIO_MAX_DDP_BUF_SIZE	(1024 * 1024)
- #define CSIO_MAX_SECTOR_SIZE	128
-diff --git a/drivers/scsi/csiostor/csio_init.c b/drivers/scsi/csiostor/csio_init.c
-index ccbded3353bd..6a5529d6440f 100644
---- a/drivers/scsi/csiostor/csio_init.c
-+++ b/drivers/scsi/csiostor/csio_init.c
-@@ -621,7 +621,7 @@ csio_shost_init(struct csio_hw *hw, struct device *dev,
- 	/* Link common lnode to this lnode */
- 	ln->dev_num = (shost->host_no << 16);
- 
--	shost->can_queue = CSIO_MAX_QUEUE;
-+	shost->can_queue = CSIO_MAX_QUEUE - 1;
- 	shost->this_id = -1;
- 	shost->unique_id = shost->host_no;
- 	shost->max_cmd_len = 16; /* Max CDB length supported */
-diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
-index c1c410a1cfe0..b21aa2c43051 100644
---- a/drivers/scsi/csiostor/csio_scsi.c
-+++ b/drivers/scsi/csiostor/csio_scsi.c
-@@ -2056,17 +2056,20 @@ csio_tm_cbfn(struct csio_hw *hw, struct csio_ioreq *req)
- 
- 	/* Wake up the TM handler thread */
- 	csio_scsi_cmnd(req) = NULL;
-+	cmnd->host_scribble = NULL;
- }
- 
- static int
- csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
- {
--	struct csio_lnode *ln = shost_priv(cmnd->device->host);
-+	struct scsi_device *sdev = cmnd->device;
-+	struct csio_lnode *ln = shost_priv(sdev->host);
- 	struct csio_hw *hw = csio_lnode_to_hw(ln);
- 	struct csio_scsim *scsim = csio_hw_to_scsim(hw);
--	struct csio_rnode *rn = (struct csio_rnode *)(cmnd->device->hostdata);
-+	struct csio_rnode *rn = (struct csio_rnode *)(sdev->hostdata);
- 	struct csio_ioreq *ioreq = NULL;
- 	struct csio_scsi_qset *sqset;
-+	struct scsi_cmnd *tmf_cmnd;
- 	unsigned long flags;
- 	int retval;
- 	int count, ret;
-@@ -2077,13 +2080,13 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
- 		goto fail;
- 
- 	csio_dbg(hw, "Request to reset LUN:%llu (ssni:0x%x tgtid:%d)\n",
--		      cmnd->device->lun, rn->flowid, rn->scsi_id);
-+		      sdev->lun, rn->flowid, rn->scsi_id);
- 
- 	if (!csio_is_lnode_ready(ln)) {
- 		csio_err(hw,
- 			 "LUN reset cannot be issued on non-ready"
- 			 " local node vnpi:0x%x (LUN:%llu)\n",
--			 ln->vnp_flowid, cmnd->device->lun);
-+			 ln->vnp_flowid, sdev->lun);
- 		goto fail;
- 	}
- 
-@@ -2103,7 +2106,15 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
- 		csio_err(hw,
- 			 "LUN reset cannot be issued on non-ready"
- 			 " remote node ssni:0x%x (LUN:%llu)\n",
--			 rn->flowid, cmnd->device->lun);
-+			 rn->flowid, sdev->lun);
-+		goto fail;
-+	}
-+
-+	tmf_cmnd = scsi_host_find_tag(sdev->host, CSIO_TMF_TAG);
-+	if (!tmf_cmnd || tmf_cmnd->host_scribble) {
-+		csio_err(hw,
-+			 "LUN reset TMF already busy (LUN:%llu)\n",
-+			 sdev->lun);
- 		goto fail;
- 	}
- 
-@@ -2123,11 +2134,11 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
- 	ioreq->iq_idx		= sqset->iq_idx;
- 	ioreq->eq_idx		= sqset->eq_idx;
- 
--	csio_scsi_cmnd(ioreq)	= cmnd;
--	cmnd->host_scribble	= (unsigned char *)ioreq;
--	csio_priv(cmnd)->wr_status = 0;
-+	csio_scsi_cmnd(ioreq)	= tmf_cmnd;
-+	tmf_cmnd->host_scribble	= (unsigned char *)ioreq;
-+	csio_priv(tmf_cmnd)->wr_status = 0;
- 
--	csio_priv(cmnd)->fc_tm_flags = FCP_TMF_LUN_RESET;
-+	csio_priv(tmf_cmnd)->fc_tm_flags = FCP_TMF_LUN_RESET;
- 	ioreq->tmo		= CSIO_SCSI_LUNRST_TMO_MS / 1000;
- 
- 	/*
-@@ -2144,7 +2155,7 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
- 	sld.level = CSIO_LEV_LUN;
- 	sld.lnode = ioreq->lnode;
- 	sld.rnode = ioreq->rnode;
--	sld.oslun = cmnd->device->lun;
-+	sld.oslun = sdev->lun;
- 
- 	spin_lock_irqsave(&hw->lock, flags);
- 	/* Kick off TM SM on the ioreq */
-@@ -2154,20 +2165,21 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
- 	if (retval != 0) {
- 		csio_err(hw, "Failed to issue LUN reset, req:%p, status:%d\n",
- 			    ioreq, retval);
-+		tmf_cmnd->host_scribble = NULL;
- 		goto fail_ret_ioreq;
- 	}
- 
- 	csio_dbg(hw, "Waiting max %d secs for LUN reset completion\n",
- 		    count * (CSIO_SCSI_TM_POLL_MS / 1000));
- 	/* Wait for completion */
--	while ((((struct scsi_cmnd *)csio_scsi_cmnd(ioreq)) == cmnd)
-+	while ((((struct scsi_cmnd *)csio_scsi_cmnd(ioreq)) == tmf_cmnd)
- 								&& count--)
- 		msleep(CSIO_SCSI_TM_POLL_MS);
- 
- 	/* LUN reset timed-out */
--	if (((struct scsi_cmnd *)csio_scsi_cmnd(ioreq)) == cmnd) {
-+	if (((struct scsi_cmnd *)csio_scsi_cmnd(ioreq)) == tmf_cmnd) {
- 		csio_err(hw, "LUN reset (%d:%llu) timed out\n",
--			 cmnd->device->id, cmnd->device->lun);
-+			 sdev->id, sdev->lun);
- 
- 		spin_lock_irq(&hw->lock);
- 		csio_scsi_drvcleanup(ioreq);
-@@ -2178,10 +2190,10 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
- 	}
- 
- 	/* LUN reset returned, check cached status */
--	if (csio_priv(cmnd)->wr_status != FW_SUCCESS) {
-+	if (csio_priv(tmf_cmnd)->wr_status != FW_SUCCESS) {
- 		csio_err(hw, "LUN reset failed (%d:%llu), status: %d\n",
--			 cmnd->device->id, cmnd->device->lun,
--			 csio_priv(cmnd)->wr_status);
-+			 sdev->id, sdev->lun,
-+			 csio_priv(tmf_cmnd)->wr_status);
- 		goto fail;
- 	}
- 
-@@ -2201,7 +2213,7 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
- 	if (retval != 0) {
- 		csio_err(hw,
- 			 "Attempt to abort I/Os during LUN reset of %llu"
--			 " returned %d\n", cmnd->device->lun, retval);
-+			 " returned %d\n", sdev->lun, retval);
- 		/* Return I/Os back to active_q */
- 		spin_lock_irq(&hw->lock);
- 		list_splice_tail_init(&local_q, &scsim->active_q);
-@@ -2212,7 +2224,7 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
- 	CSIO_INC_STATS(rn, n_lun_rst);
- 
- 	csio_info(hw, "LUN reset occurred (%d:%llu)\n",
--		  cmnd->device->id, cmnd->device->lun);
-+		  sdev->id, sdev->lun);
- 
- 	return SUCCESS;
- 
+As usual, comments and reviews are welcome.
+
+Hannes Reinecke (7):
+  scsi: Use Scsi_Host as argument for eh_host_reset_handler
+  scsi: Use Scsi_Host and channel number as argument for
+    eh_bus_reset_handler()
+  scsi: Use scsi_target as argument for eh_target_reset_handler()
+  scsi: Use scsi_device as argument to eh_device_reset_handler()
+  scsi: Do not allocate scsi command in scsi_ioctl_reset()
+  scsi: remove SUBMITTED_BY_SCSI_RESET_IOCTL
+  scsi_error: streamline scsi_eh_bus_device_reset()
+
+ Documentation/scsi/scsi_eh.rst                |  16 +-
+ Documentation/scsi/scsi_mid_low_api.rst       |  31 +++-
+ drivers/infiniband/ulp/srp/ib_srp.c           |  12 +-
+ drivers/message/fusion/mptfc.c                |  25 ++-
+ drivers/message/fusion/mptsas.c               |  10 +-
+ drivers/message/fusion/mptscsih.c             |  86 ++++-----
+ drivers/message/fusion/mptscsih.h             |   8 +-
+ drivers/message/fusion/mptspi.c               |   8 +-
+ drivers/s390/scsi/zfcp_scsi.c                 |  14 +-
+ drivers/scsi/3w-9xxx.c                        |  11 +-
+ drivers/scsi/3w-sas.c                         |  11 +-
+ drivers/scsi/3w-xxxx.c                        |  11 +-
+ drivers/scsi/53c700.c                         |  39 ++--
+ drivers/scsi/BusLogic.c                       |  14 +-
+ drivers/scsi/NCR5380.c                        |   3 +-
+ drivers/scsi/a100u2w.c                        |  11 +-
+ drivers/scsi/aacraid/linit.c                  |  35 ++--
+ drivers/scsi/advansys.c                       |  26 +--
+ drivers/scsi/aha152x.c                        |  10 +-
+ drivers/scsi/aha1542.c                        |  30 +--
+ drivers/scsi/aic7xxx/aic79xx_osm.c            |  37 ++--
+ drivers/scsi/aic7xxx/aic7xxx_osm.c            |  10 +-
+ drivers/scsi/arcmsr/arcmsr_hba.c              |   6 +-
+ drivers/scsi/arm/acornscsi.c                  |   8 +-
+ drivers/scsi/arm/fas216.c                     |  18 +-
+ drivers/scsi/arm/fas216.h                     |  17 +-
+ drivers/scsi/atari_scsi.c                     |   4 +-
+ drivers/scsi/be2iscsi/be_main.c               |  12 +-
+ drivers/scsi/bfa/bfad_im.c                    |   8 +-
+ drivers/scsi/bnx2fc/bnx2fc.h                  |   4 +-
+ drivers/scsi/bnx2fc/bnx2fc_io.c               |  10 +-
+ drivers/scsi/csiostor/csio_scsi.c             |   3 +-
+ drivers/scsi/cxlflash/main.c                  |  10 +-
+ drivers/scsi/dc395x.c                         |  25 ++-
+ drivers/scsi/dpt_i2o.c                        |  43 +++--
+ drivers/scsi/dpti.h                           |   6 +-
+ drivers/scsi/esas2r/esas2r.h                  |   8 +-
+ drivers/scsi/esas2r/esas2r_main.c             |  55 +++---
+ drivers/scsi/esp_scsi.c                       |   8 +-
+ drivers/scsi/fdomain.c                        |   3 +-
+ drivers/scsi/fnic/fnic.h                      |   4 +-
+ drivers/scsi/fnic/fnic_scsi.c                 |   9 +-
+ drivers/scsi/hpsa.c                           |  14 +-
+ drivers/scsi/hptiop.c                         |   6 +-
+ drivers/scsi/ibmvscsi/ibmvfc.c                |  12 +-
+ drivers/scsi/ibmvscsi/ibmvscsi.c              |  23 +--
+ drivers/scsi/imm.c                            |   4 +-
+ drivers/scsi/initio.c                         |  11 +-
+ drivers/scsi/ipr.c                            |  35 ++--
+ drivers/scsi/ips.c                            |  22 +--
+ drivers/scsi/libfc/fc_fcp.c                   |  16 +-
+ drivers/scsi/libiscsi.c                       |  19 +-
+ drivers/scsi/libsas/sas_scsi_host.c           |  21 ++-
+ drivers/scsi/lpfc/lpfc_scsi.c                 |  23 ++-
+ drivers/scsi/mac53c94.c                       |   8 +-
+ drivers/scsi/megaraid.c                       |   4 +-
+ drivers/scsi/megaraid.h                       |   2 +-
+ drivers/scsi/megaraid/megaraid_mbox.c         |  14 +-
+ drivers/scsi/megaraid/megaraid_sas.h          |   3 +-
+ drivers/scsi/megaraid/megaraid_sas_base.c     |  44 ++---
+ drivers/scsi/megaraid/megaraid_sas_fusion.c   |  56 +++---
+ drivers/scsi/mesh.c                           |  10 +-
+ drivers/scsi/mpi3mr/mpi3mr_os.c               | 123 ++++++------
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c          |  72 +++----
+ drivers/scsi/mvumi.c                          |   7 +-
+ drivers/scsi/myrb.c                           |   3 +-
+ drivers/scsi/myrs.c                           |   3 +-
+ drivers/scsi/ncr53c8xx.c                      |   4 +-
+ drivers/scsi/nsp32.c                          |  12 +-
+ drivers/scsi/pcmcia/nsp_cs.c                  |  10 +-
+ drivers/scsi/pcmcia/nsp_cs.h                  |   6 +-
+ drivers/scsi/pcmcia/qlogic_stub.c             |   4 +-
+ drivers/scsi/pcmcia/sym53c500_cs.c            |   8 +-
+ drivers/scsi/pmcraid.c                        |  27 ++-
+ drivers/scsi/ppa.c                            |   4 +-
+ drivers/scsi/qedf/qedf_main.c                 |  13 +-
+ drivers/scsi/qedi/qedi_iscsi.c                |   3 +-
+ drivers/scsi/qla1280.c                        |  36 ++--
+ drivers/scsi/qla2xxx/qla_os.c                 |  83 ++++-----
+ drivers/scsi/qla4xxx/ql4_os.c                 |  54 +++---
+ drivers/scsi/qlogicfas408.c                   |  10 +-
+ drivers/scsi/qlogicfas408.h                   |   2 +-
+ drivers/scsi/qlogicpti.c                      |   3 +-
+ drivers/scsi/scsi_debug.c                     |  78 +++-----
+ drivers/scsi/scsi_error.c                     | 175 +++++++++---------
+ drivers/scsi/scsi_lib.c                       |   2 -
+ drivers/scsi/smartpqi/smartpqi_init.c         |  11 +-
+ drivers/scsi/snic/snic.h                      |   5 +-
+ drivers/scsi/snic/snic_scsi.c                 |  41 +---
+ drivers/scsi/stex.c                           |   7 +-
+ drivers/scsi/storvsc_drv.c                    |   4 +-
+ drivers/scsi/sym53c8xx_2/sym_glue.c           |  13 +-
+ drivers/scsi/ufs/ufshcd.c                     |  14 +-
+ drivers/scsi/virtio_scsi.c                    |  12 +-
+ drivers/scsi/vmw_pvscsi.c                     |  20 +-
+ drivers/scsi/wd33c93.c                        |   5 +-
+ drivers/scsi/wd33c93.h                        |   2 +-
+ drivers/scsi/wd719x.c                         |  17 +-
+ drivers/scsi/xen-scsifront.c                  |  23 ++-
+ drivers/staging/rts5208/rtsx.c                |   6 +-
+ .../staging/unisys/visorhba/visorhba_main.c   |  24 +--
+ drivers/target/loopback/tcm_loop.c            |  17 +-
+ drivers/usb/image/microtek.c                  |   4 +-
+ drivers/usb/storage/scsiglue.c                |   8 +-
+ drivers/usb/storage/uas.c                     |   3 +-
+ include/scsi/libfc.h                          |   4 +-
+ include/scsi/libiscsi.h                       |   4 +-
+ include/scsi/libsas.h                         |   4 +-
+ include/scsi/scsi_cmnd.h                      |   1 -
+ include/scsi/scsi_host.h                      |   8 +-
+ 110 files changed, 989 insertions(+), 1076 deletions(-)
+
 -- 
 2.29.2
 
