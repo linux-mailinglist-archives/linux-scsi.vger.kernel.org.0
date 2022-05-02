@@ -2,54 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57B1517951
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 May 2022 23:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75EE517943
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 May 2022 23:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387778AbiEBVnB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 May 2022 17:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37746 "EHLO
+        id S1387742AbiEBVmT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 May 2022 17:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387743AbiEBVmU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 17:42:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868FFE0F5
-        for <linux-scsi@vger.kernel.org>; Mon,  2 May 2022 14:38:39 -0700 (PDT)
+        with ESMTP id S1387716AbiEBVmF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 17:42:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889E0E0DB
+        for <linux-scsi@vger.kernel.org>; Mon,  2 May 2022 14:38:34 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 556811F8AF;
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2BA0621871;
         Mon,  2 May 2022 21:38:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1651527513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3eV+nAWpb1s6cucrrh1PALfsxGlRNCR2IXlROmBUhDI=;
-        b=MuW8Ub0Rx5sCEk/V3Pfqi7Lx4GJy94F8kFhCSO2I0PQHWxLvjBEOFNuu8VkUglLw6Wcu30
-        1oKVTDMDdMUf+H+Xk/QoIUU1O+xaGRYeJobelPrEdHZyl4v16DC9+0I4xAMvyQ/xrM+wQ2
-        KRF/yX+RjQaZD9UZrcvTyUruBKMyBQg=
+        bh=0soejsjk5swgBAFAO+34W4QG9rW5ror2NNGR4/eZ1VI=;
+        b=KxEvFAuqxgCE8F1jdzaBgB3rNPzXkFyKu6ql3nj+uKDnGQ8TW7/D/oDNKD2NUavrwa8Oei
+        IZ+KnsmSZ7LgVb+tjHrrEYySzoXhhmXMh87bPG6+R3JJ2W44LzxbIyxRS+KJ7P6epWXyWh
+        Zozw6ls0qnVPjXJqXUwBagjUoFT2TDI=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1651527513;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3eV+nAWpb1s6cucrrh1PALfsxGlRNCR2IXlROmBUhDI=;
-        b=dBzmrQloOHid3OvRJJELaw8vxRMUHPDqy4alS5W3ZS4GnejJimZ/oil5qy4kCB1lPgiESZ
-        rTA7dA6JbSEMQ6Cg==
+        bh=0soejsjk5swgBAFAO+34W4QG9rW5ror2NNGR4/eZ1VI=;
+        b=W4bGbFdQI6EQS8s2dWzllld6DLJ34LnJizP8iYJ5oPyNd3t8R7hRkfMQge+0MT8gl8ffTJ
+        gJ5KqAMgFxo2l5DQ==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 21D8D2C16B;
+        by relay2.suse.de (Postfix) with ESMTP id 265882C143;
         Mon,  2 May 2022 21:38:33 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 1EE3F519411E; Mon,  2 May 2022 23:38:33 +0200 (CEST)
+        id 23A835194120; Mon,  2 May 2022 23:38:33 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Hannes Reinecke <hare@suse.com>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
-Subject: [PATCH 21/24] ips: Do not try to abort command from host reset
-Date:   Mon,  2 May 2022 23:38:17 +0200
-Message-Id: <20220502213820.3187-22-hare@suse.de>
+        Hannes Reinecke <hare@suse.com>
+Subject: [PATCH 22/24] qla1280: separate out host reset function from qla1280_error_action()
+Date:   Mon,  2 May 2022 23:38:18 +0200
+Message-Id: <20220502213820.3187-23-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220502213820.3187-1-hare@suse.de>
 References: <20220502213820.3187-1-hare@suse.de>
@@ -65,53 +64,81 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The code for aborting an outstanding command is a copy of the
-functionality from command abort. As we already have called this
-function once we reach host reset there's no point in trying to
-do so again.
+There's not much in common between host reset and all other error
+handlers, so use a separate function here.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
-Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
 ---
- drivers/scsi/ips.c | 18 ------------------
- 1 file changed, 18 deletions(-)
+ drivers/scsi/qla1280.c | 40 +++++++++++++++++++++-------------------
+ 1 file changed, 21 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/scsi/ips.c b/drivers/scsi/ips.c
-index 16419aeec02d..d49c1d6df5d6 100644
---- a/drivers/scsi/ips.c
-+++ b/drivers/scsi/ips.c
-@@ -835,7 +835,6 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
- 	int i;
- 	ips_ha_t *ha;
- 	ips_scb_t *scb;
--	ips_copp_wait_item_t *item;
+diff --git a/drivers/scsi/qla1280.c b/drivers/scsi/qla1280.c
+index 0ab595c0870a..c4466e4e692f 100644
+--- a/drivers/scsi/qla1280.c
++++ b/drivers/scsi/qla1280.c
+@@ -716,7 +716,6 @@ enum action {
+ 	ABORT_COMMAND,
+ 	DEVICE_RESET,
+ 	BUS_RESET,
+-	ADAPTER_RESET,
+ };
  
- 	METHOD_TRACE("ips_eh_reset", 1);
  
-@@ -860,23 +859,6 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
- 	if (!ha->active)
- 		return (FAILED);
+@@ -898,22 +897,9 @@ qla1280_error_action(struct scsi_cmnd *cmd, enum action action)
+ 		}
+ 		break;
  
--	/* See if the command is on the copp queue */
--	item = ha->copp_waitlist.head;
--	while ((item) && (item->scsi_cmd != SC))
--		item = item->next;
+-	case ADAPTER_RESET:
+ 	default:
+-		if (qla1280_verbose) {
+-			printk(KERN_INFO
+-			       "scsi(%ld): Issued ADAPTER RESET\n",
+-			       ha->host_no);
+-			printk(KERN_INFO "scsi(%ld): I/O processing will "
+-			       "continue automatically\n", ha->host_no);
+-		}
+-		ha->flags.reset_active = 1;
 -
--	if (item) {
--		/* Found it */
--		ips_removeq_copp(&ha->copp_waitlist, item);
--		return (SUCCESS);
--	}
+-		if (qla1280_abort_isp(ha) != 0) {	/* it's dead */
+-			result = FAILED;
+-		}
 -
--	/* See if the command is on the wait queue */
--	if (ips_removeq_wait(&ha->scb_waitlist, SC)) {
--		/* command not sent yet */
--		return (SUCCESS);
--	}
--
- 	/* An explanation for the casual observer:                              */
- 	/* Part of the function of a RAID controller is automatic error         */
- 	/* detection and recovery.  As such, the only problem that physically   */
+-		ha->flags.reset_active = 0;
++		dprintk(1, "RESET invalid action %d\n", action);
++		return FAILED;
+ 	}
+ 
+ 	/*
+@@ -1012,10 +998,26 @@ static int
+ qla1280_eh_adapter_reset(struct scsi_cmnd *cmd)
+ {
+ 	int rc;
++	struct Scsi_Host *shost = cmd->device->host;
++	struct scsi_qla_host *ha = (struct scsi_qla_host *)shost->hostdata;
+ 
+-	spin_lock_irq(cmd->device->host->host_lock);
+-	rc = qla1280_error_action(cmd, ADAPTER_RESET);
+-	spin_unlock_irq(cmd->device->host->host_lock);
++	spin_lock_irq(shost->host_lock);
++	if (qla1280_verbose) {
++		printk(KERN_INFO
++		       "scsi(%ld): Issued ADAPTER RESET\n",
++		       ha->host_no);
++		printk(KERN_INFO "scsi(%ld): I/O processing will "
++		       "continue automatically\n", ha->host_no);
++	}
++	ha->flags.reset_active = 1;
++
++	if (qla1280_abort_isp(ha) != 0) {	/* it's dead */
++		rc = FAILED;
++	}
++
++	ha->flags.reset_active = 0;
++
++	spin_unlock_irq(shost->host_lock);
+ 
+ 	return rc;
+ }
 -- 
 2.29.2
 
