@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AD8517983
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 May 2022 23:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E72F51797D
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 May 2022 23:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387757AbiEBV6T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 May 2022 17:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S1343556AbiEBV6D (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 May 2022 17:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387654AbiEBV5y (ORCPT
+        with ESMTP id S1387806AbiEBV5y (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 17:57:54 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D67DEEA
-        for <linux-scsi@vger.kernel.org>; Mon,  2 May 2022 14:54:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFC8FD23
+        for <linux-scsi@vger.kernel.org>; Mon,  2 May 2022 14:54:24 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 9F9311F750;
+        by smtp-out2.suse.de (Postfix) with ESMTP id A2BB91F896;
         Mon,  2 May 2022 21:54:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1651528460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aj2EtAL2IJennjLUXkv4ywvVNru5/pzTbiWRfsuK4LI=;
-        b=nk1ks6KCxwvaagB49BWrKUq4Tnp0rUlO+ah50IFS+QyhEx8aBdVk1u8wnyBKpvi8tEXjqH
-        /JSfyurFeDL+5LB0yv5a7zA1TJ5DbeHH1qQ/nkKKhKfPq+s3XH/VuKhNVMoA3QT0iV5cSW
-        YE9BdTjpZ9wWRg/nJE5A021QFuy0Yf4=
+        bh=ry5H6cMidPWYUAqkFmsNUYphLy8pO7JStnwRsjeJSZ0=;
+        b=1wAa3xXqqEe7K4AFNY4p/wLtIOuGIiQPpp/OMRbafIYqgnFfrGokpRmq78rvVnsSGnRMS7
+        sIxLLEdX4WlCulTaShe+kFvHkccWh1Tws80zp/bJJqU8U2QO3IEaMD3tT4f979AHLIBe2W
+        0hlxOVpiKrap++GSnsoNV6usi1G9BMY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1651528460;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aj2EtAL2IJennjLUXkv4ywvVNru5/pzTbiWRfsuK4LI=;
-        b=q+N0xACIl4PAcUFq+WXZgqi3bKZiNMZHGdmKaTgI95MSBxT6/8LTLLLMQijzo6ofKQy2kJ
-        PFtYEhFxJbC/oGCg==
+        bh=ry5H6cMidPWYUAqkFmsNUYphLy8pO7JStnwRsjeJSZ0=;
+        b=ByAKZiXXjtp3LC4RPRNzarv+44AwoVXEO0EY1+gPYQ2w0Zlmip/zaMxx/NOdiQdKfwPXzw
+        SYOvSvmsAb7H7IDg==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 9950B2C14F;
+        by relay2.suse.de (Postfix) with ESMTP id 9D6B92C14E;
         Mon,  2 May 2022 21:54:20 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 964895194136; Mon,  2 May 2022 23:54:20 +0200 (CEST)
+        id 9B67D5194138; Mon,  2 May 2022 23:54:20 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 08/11] a1000u2w: do not rely on the command for inia100_device_reset()
-Date:   Mon,  2 May 2022 23:54:13 +0200
-Message-Id: <20220502215416.5351-9-hare@suse.de>
+Subject: [PATCH 09/11] xen-scsifront: add scsi device as argument to scsifront_do_request()
+Date:   Mon,  2 May 2022 23:54:14 +0200
+Message-Id: <20220502215416.5351-10-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220502215416.5351-1-hare@suse.de>
 References: <20220502215416.5351-1-hare@suse.de>
@@ -64,120 +64,80 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use the scsi device as argument to orc_device_reset() instead
-of relying on the passed in scsi command.
+Add scsi device as argument to scsifront_do_request() so that it
+will be possible to call it with a NULL command pointer.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/a100u2w.c | 43 +++++++++++-------------------------------
- 1 file changed, 11 insertions(+), 32 deletions(-)
+ drivers/scsi/xen-scsifront.c | 31 ++++++++++++++++++++-----------
+ 1 file changed, 20 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/scsi/a100u2w.c b/drivers/scsi/a100u2w.c
-index d02eb5b213d0..bf552c818958 100644
---- a/drivers/scsi/a100u2w.c
-+++ b/drivers/scsi/a100u2w.c
-@@ -592,39 +592,20 @@ static int orc_reset_scsi_bus(struct orc_host * host)
-  *	commands for target w/o soft reset
-  */
- 
--static int orc_device_reset(struct orc_host * host, struct scsi_cmnd *cmd, unsigned int target)
-+static int orc_device_reset(struct orc_host * host, struct scsi_device *sdev)
- {				/* I need Host Control Block Information */
- 	struct orc_scb *scb;
- 	struct orc_extended_scb *escb;
--	struct orc_scb *host_scb;
--	u8 i;
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&(host->allocation_lock), flags);
- 	scb = (struct orc_scb *) NULL;
- 	escb = (struct orc_extended_scb *) NULL;
- 
--	/* setup scatter list address with one buffer */
--	host_scb = host->scb_virt;
--
- 	/* FIXME: is this safe if we then fail to issue the reset or race
- 	   a completion ? */
- 	init_alloc_map(host);
- 
--	/* Find the scb corresponding to the command */
--	for (i = 0; i < ORC_MAXQUEUE; i++) {
--		escb = host_scb->escb;
--		if (host_scb->status && escb->srb == cmd)
--			break;
--		host_scb++;
--	}
--
--	if (i == ORC_MAXQUEUE) {
--		printk(KERN_ERR "Unable to Reset - No SCB Found\n");
--		spin_unlock_irqrestore(&(host->allocation_lock), flags);
--		return FAILED;
--	}
--
- 	/* Allocate a new SCB for the reset command to the firmware */
- 	if ((scb = __orc_alloc_scb(host)) == NULL) {
- 		/* Can't happen.. */
-@@ -635,7 +616,7 @@ static int orc_device_reset(struct orc_host * host, struct scsi_cmnd *cmd, unsig
- 	/* Reset device is handled by the firmware, we fill in an SCB and
- 	   fire it at the controller, it does the rest */
- 	scb->opcode = ORC_BUSDEVRST;
--	scb->target = target;
-+	scb->target = sdev->id;
- 	scb->hastat = 0;
- 	scb->tastat = 0;
- 	scb->status = 0x0;
-@@ -645,8 +626,8 @@ static int orc_device_reset(struct orc_host * host, struct scsi_cmnd *cmd, unsig
- 	scb->xferlen = cpu_to_le32(0);
- 	scb->sg_len = cpu_to_le32(0);
- 
-+	escb = scb->escb;
- 	escb->srb = NULL;
--	escb->srb = cmd;
- 	orc_exec_scb(host, scb);	/* Start execute SCB            */
- 	spin_unlock_irqrestore(&host->allocation_lock, flags);
- 	return SUCCESS;
-@@ -971,7 +952,7 @@ static int inia100_device_reset(struct scsi_cmnd * cmd)
- {				/* I need Host Control Block Information */
- 	struct orc_host *host;
- 	host = (struct orc_host *) cmd->device->host->hostdata;
--	return orc_device_reset(host, cmd, scmd_id(cmd));
-+	return orc_device_reset(host, cmd->device);
- 
+diff --git a/drivers/scsi/xen-scsifront.c b/drivers/scsi/xen-scsifront.c
+index 12109e4c73d4..9de099532f8b 100644
+--- a/drivers/scsi/xen-scsifront.c
++++ b/drivers/scsi/xen-scsifront.c
+@@ -175,7 +175,8 @@ static void scsifront_put_rqid(struct vscsifrnt_info *info, uint32_t id)
+ 		scsifront_wake_up(info);
  }
  
-@@ -991,11 +972,7 @@ static void inia100_scb_handler(struct orc_host *host, struct orc_scb *scb)
- 	struct orc_extended_scb *escb;
+-static int scsifront_do_request(struct vscsifrnt_info *info,
++static int scsifront_do_request(struct scsi_device *sdev,
++				struct vscsifrnt_info *info,
+ 				struct vscsifrnt_shadow *shadow)
+ {
+ 	struct vscsiif_front_ring *ring = &(info->ring);
+@@ -202,17 +203,25 @@ static int scsifront_do_request(struct vscsifrnt_info *info,
+ 	ring_req->ref_rqid    = shadow->ref_rqid;
+ 	ring_req->nr_segments = shadow->nr_segments;
  
- 	escb = scb->escb;
--	if ((cmd = (struct scsi_cmnd *) escb->srb) == NULL) {
--		printk(KERN_ERR "inia100_scb_handler: SRB pointer is empty\n");
--		orc_release_scb(host, scb);	/* Release SCB for current channel */
--		return;
--	}
-+	cmd = (struct scsi_cmnd *)escb->srb;
- 	escb->srb = NULL;
+-	ring_req->id      = sc->device->id;
+-	ring_req->lun     = sc->device->lun;
+-	ring_req->channel = sc->device->channel;
+-	ring_req->cmd_len = sc->cmd_len;
++	ring_req->id      = sdev->id;
++	ring_req->lun     = sdev->lun;
++	ring_req->channel = sdev->channel;
  
- 	switch (scb->hastat) {
-@@ -1033,13 +1010,15 @@ static void inia100_scb_handler(struct orc_host *host, struct orc_scb *scb)
- 		break;
- 	}
+-	BUG_ON(sc->cmd_len > VSCSIIF_MAX_COMMAND_SIZE);
++	if (sc) {
++		ring_req->cmd_len = sc->cmd_len;
  
--	if (scb->tastat == 2) {	/* Check condition              */
-+	if (cmd && scb->tastat == 2) {	/* Check condition              */
- 		memcpy((unsigned char *) &cmd->sense_buffer[0],
- 		   (unsigned char *) &escb->sglist[0], SENSE_SIZE);
- 	}
--	cmd->result = scb->tastat | (scb->hastat << 16);
--	scsi_dma_unmap(cmd);
--	scsi_done(cmd);		/* Notify system DONE           */
-+	if (cmd) {
-+		cmd->result = scb->tastat | (scb->hastat << 16);
-+		scsi_dma_unmap(cmd);
-+		scsi_done(cmd);		/* Notify system DONE           */
+-	memcpy(ring_req->cmnd, sc->cmnd, sc->cmd_len);
++		BUG_ON(sc->cmd_len > VSCSIIF_MAX_COMMAND_SIZE);
+ 
+-	ring_req->sc_data_direction   = (uint8_t)sc->sc_data_direction;
+-	ring_req->timeout_per_command = scsi_cmd_to_rq(sc)->timeout / HZ;
++		memcpy(ring_req->cmnd, sc->cmnd, sc->cmd_len);
++
++		ring_req->sc_data_direction   = (uint8_t)sc->sc_data_direction;
++		ring_req->timeout_per_command =
++			scsi_cmd_to_rq(sc)->timeout / HZ;
++	} else {
++		ring_req->cmd_len = VSCSIIF_MAX_COMMAND_SIZE;
++		memset(ring_req->cmnd, 0, VSCSIIF_MAX_COMMAND_SIZE);
++		ring_req->sc_data_direction = DMA_NONE;
 +	}
- 	orc_release_scb(host, scb);	/* Release SCB for current channel */
- }
  
+ 	for (i = 0; i < (shadow->nr_segments & ~VSCSIIF_SG_GRANT); i++)
+ 		ring_req->seg[i] = shadow->seg[i];
+@@ -561,7 +570,7 @@ static int scsifront_queuecommand(struct Scsi_Host *shost,
+ 		return 0;
+ 	}
+ 
+-	if (scsifront_do_request(info, shadow)) {
++	if (scsifront_do_request(sc->device, info, shadow)) {
+ 		scsifront_gnttab_done(info, shadow);
+ 		goto busy;
+ 	}
+@@ -606,7 +615,7 @@ static int scsifront_action_handler(struct scsi_cmnd *sc, uint8_t act)
+ 		if (scsifront_enter(info))
+ 			goto fail;
+ 
+-		if (!scsifront_do_request(info, shadow))
++		if (!scsifront_do_request(sc->device, info, shadow))
+ 			break;
+ 
+ 		scsifront_return(info);
 -- 
 2.29.2
 
