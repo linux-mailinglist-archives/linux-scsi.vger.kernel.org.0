@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173C6517986
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 May 2022 23:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE3B517984
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 May 2022 23:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387775AbiEBV6f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 May 2022 17:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
+        id S1387797AbiEBV6Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 May 2022 17:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346047AbiEBV5w (ORCPT
+        with ESMTP id S1380519AbiEBV5w (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 May 2022 17:57:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E1A630B
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D607D6310
         for <linux-scsi@vger.kernel.org>; Mon,  2 May 2022 14:54:21 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 85CC4210E4;
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8A63F1F749;
         Mon,  2 May 2022 21:54:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1651528460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=grGOyvjqtNuoSpgbKAnaztGM3uA0gTsCWUxiXlhAWEc=;
-        b=W6Isxpaj+e7pUZrzN5sHygAQ0UGIefiXcePGzqTVWhVfgylCs8jffB+IyB/61Mns/YWrCD
-        oSV+vih/aKdDu1+nWt3KdY1LCJdUkSxFt6mpqEYzQgheZbXRuWGAdeCgAM/0vujBMMM858
-        0gWlE2kd3zXCd5U+uuZcCRiOBOK3aPc=
+        bh=UouVL6NHMD7jslsWPvTjzgbNmTH0cJ9J/Qvv7QZUAfQ=;
+        b=GmLCKlkW3SUEA8xlGDrA2yaPElHlrf1sGyoj063iz2mqtmm/hlXL02v86mjkH42tph4IiT
+        krRZdkmEEux4HxieZpbC4a8UZbiDtc08f6jVJeYjjlSncK2g96tEuutJB+me00l0uU0vgG
+        vf6h7agMEeOKckip6sdADf5JExrT9GU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1651528460;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=grGOyvjqtNuoSpgbKAnaztGM3uA0gTsCWUxiXlhAWEc=;
-        b=8oXzb4kFhaw4SaXTzqecJ/TFNySjNyVyvnV77tWyXGQElxX3Q14jeJ0mW1l+xQ0Toqi74D
-        K5akL4H6wIC0JkCA==
+        bh=UouVL6NHMD7jslsWPvTjzgbNmTH0cJ9J/Qvv7QZUAfQ=;
+        b=spTb0QbSBDQvBvLX66ITBQuptSXZj9RWurqVEdXadFet1uYRlrwz1rYMgQACu2rTOvNx00
+        4K34a2OAB8PQEPBA==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 7D1652C142;
+        by relay2.suse.de (Postfix) with ESMTP id 81A4E2C143;
         Mon,  2 May 2022 21:54:20 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 6DB775194128; Mon,  2 May 2022 23:54:20 +0200 (CEST)
+        id 7224F519412A; Mon,  2 May 2022 23:54:20 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 01/11] pmcraid: Select device in pmcraid_eh_bus_reset_handler()
-Date:   Mon,  2 May 2022 23:54:06 +0200
-Message-Id: <20220502215416.5351-2-hare@suse.de>
+Subject: [PATCH 02/11] sym53c8xx_2: rework reset handling
+Date:   Mon,  2 May 2022 23:54:07 +0200
+Message-Id: <20220502215416.5351-3-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220502215416.5351-1-hare@suse.de>
 References: <20220502215416.5351-1-hare@suse.de>
@@ -64,102 +64,143 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The reset code requires a device to be selected, but we shouldn't
-rely on the command to provide a device for us. So select the first
-device on the bus when sending down a bus reset.
+Split off the combined abort and device reset handling into
+distinct functions.
+And the current device reset handler really is a target reset,
+so rename it.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/pmcraid.c | 46 ++++++++++++++++++++++++++++++++++--------
- 1 file changed, 38 insertions(+), 8 deletions(-)
+ drivers/scsi/sym53c8xx_2/sym_glue.c | 82 +++++++++++++++++++----------
+ 1 file changed, 55 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-index 3d5cd337a2a6..d508e81a03db 100644
---- a/drivers/scsi/pmcraid.c
-+++ b/drivers/scsi/pmcraid.c
-@@ -2691,7 +2691,7 @@ static int pmcraid_error_handler(struct pmcraid_cmd *cmd)
-  *	SUCCESS / FAILED
+diff --git a/drivers/scsi/sym53c8xx_2/sym_glue.c b/drivers/scsi/sym53c8xx_2/sym_glue.c
+index 9166af69bbb4..cb8885eb5a5b 100644
+--- a/drivers/scsi/sym53c8xx_2/sym_glue.c
++++ b/drivers/scsi/sym53c8xx_2/sym_glue.c
+@@ -564,7 +564,10 @@ static void sym53c8xx_timer(struct timer_list *t)
+  *  Generic method for our eh processing.
+  *  The 'op' argument tells what we have to do.
   */
- static int pmcraid_reset_device(
--	struct scsi_cmnd *scsi_cmd,
-+	struct scsi_device *scsi_dev,
- 	unsigned long timeout,
- 	u8 modifier)
+-static int sym_eh_handler(int op, char *opname, struct scsi_cmnd *cmd)
++/*
++ * Error handlers called from the eh thread (one thread per HBA).
++ */
++static int sym53c8xx_eh_abort_handler(struct scsi_cmnd *cmd)
  {
-@@ -2703,11 +2703,11 @@ static int pmcraid_reset_device(
- 	u32 ioasc;
+ 	struct sym_ucmd *ucmd = SYM_UCMD_PTR(cmd);
+ 	struct Scsi_Host *shost = cmd->device->host;
+@@ -576,7 +579,7 @@ static int sym_eh_handler(int op, char *opname, struct scsi_cmnd *cmd)
+ 	int sts = -1;
+ 	struct completion eh_done;
  
- 	pinstance =
--		(struct pmcraid_instance *)scsi_cmd->device->host->hostdata;
--	res = scsi_cmd->device->hostdata;
-+		(struct pmcraid_instance *)scsi_dev->host->hostdata;
-+	res = scsi_dev->hostdata;
+-	scmd_printk(KERN_WARNING, cmd, "%s operation started\n", opname);
++	scmd_printk(KERN_WARNING, cmd, "ABORT operation started\n");
  
- 	if (!res) {
--		sdev_printk(KERN_ERR, scsi_cmd->device,
-+		sdev_printk(KERN_ERR, scsi_dev,
- 			    "reset_device: NULL resource pointer\n");
- 		return FAILED;
+ 	/*
+ 	 * Escalate to host reset if the PCI bus went down
+@@ -594,19 +597,7 @@ static int sym_eh_handler(int op, char *opname, struct scsi_cmnd *cmd)
+ 		}
  	}
-@@ -3018,16 +3018,46 @@ static int pmcraid_eh_device_reset_handler(struct scsi_cmnd *scmd)
- {
- 	scmd_printk(KERN_INFO, scmd,
- 		    "resetting device due to an I/O command timeout.\n");
--	return pmcraid_reset_device(scmd,
-+	return pmcraid_reset_device(scmd->device,
- 				    PMCRAID_INTERNAL_TIMEOUT,
- 				    RESET_DEVICE_LUN);
+ 
+-	/* Try to proceed the operation we have been asked for */
+-	sts = -1;
+-	switch(op) {
+-	case SYM_EH_ABORT:
+-		sts = sym_abort_scsiio(np, cmd, 1);
+-		break;
+-	case SYM_EH_DEVICE_RESET:
+-		sts = sym_reset_scsi_target(np, cmd->device->id);
+-		break;
+-	default:
+-		break;
+-	}
+-
++	sts = sym_abort_scsiio(np, cmd, 1);
+ 	/* On error, restore everything and cross fingers :) */
+ 	if (sts)
+ 		cmd_queued = 0;
+@@ -623,23 +614,60 @@ static int sym_eh_handler(int op, char *opname, struct scsi_cmnd *cmd)
+ 		spin_unlock_irq(shost->host_lock);
+ 	}
+ 
+-	dev_warn(&cmd->device->sdev_gendev, "%s operation %s.\n", opname,
++	dev_warn(&cmd->device->sdev_gendev, "ABORT operation %s.\n",
+ 			sts==0 ? "complete" :sts==-2 ? "timed-out" : "failed");
+ 	return sts ? SCSI_FAILED : SCSI_SUCCESS;
  }
  
- static int pmcraid_eh_bus_reset_handler(struct scsi_cmnd *scmd)
+-
+-/*
+- * Error handlers called from the eh thread (one thread per HBA).
+- */
+-static int sym53c8xx_eh_abort_handler(struct scsi_cmnd *cmd)
++static int sym53c8xx_eh_target_reset_handler(struct scsi_cmnd *cmd)
  {
--	scmd_printk(KERN_INFO, scmd,
-+	struct Scsi_Host *host = scmd->device->host;
-+	struct pmcraid_instance *pinstance =
-+		(struct pmcraid_instance *)host->hostdata;
-+	struct pmcraid_resource_entry *res = NULL;
-+	struct pmcraid_resource_entry *temp;
-+	struct scsi_device *sdev = NULL;
-+	unsigned long lock_flags;
+-	return sym_eh_handler(SYM_EH_ABORT, "ABORT", cmd);
+-}
++	struct scsi_target *starget = scsi_target(cmd->device);
++	struct Scsi_Host *shost = dev_to_shost(starget->dev.parent);
++	struct sym_data *sym_data = shost_priv(shost);
++	struct pci_dev *pdev = sym_data->pdev;
++	struct sym_hcb *np = sym_data->ncb;
++	SYM_QUEHEAD *qp;
++	int sts;
++	struct completion eh_done;
+ 
+-static int sym53c8xx_eh_device_reset_handler(struct scsi_cmnd *cmd)
+-{
+-	return sym_eh_handler(SYM_EH_DEVICE_RESET, "DEVICE RESET", cmd);
++	starget_printk(KERN_WARNING, starget,
++		       "TARGET RESET operation started\n");
 +
 +	/*
-+	 * The reset device code insists on us passing down
-+	 * a device, so grab the first device on the bus.
++	 * Escalate to host reset if the PCI bus went down
 +	 */
-+	spin_lock_irqsave(&pinstance->resource_lock, lock_flags);
-+	list_for_each_entry(temp, &pinstance->used_res_q, queue) {
-+		if (scmd->device->channel == PMCRAID_VSET_BUS_ID &&
-+		    RES_IS_VSET(temp->cfg_entry)) {
-+			res = temp;
-+			break;
-+		} else if (scmd->device->channel == PMCRAID_PHYS_BUS_ID &&
-+			   RES_IS_GSCSI(temp->cfg_entry)) {
-+			res = temp;
-+			break;
++	if (pci_channel_offline(pdev))
++		return SCSI_FAILED;
++
++	spin_lock_irq(shost->host_lock);
++	sts = sym_reset_scsi_target(np, starget->id);
++	if (!sts) {
++		FOR_EACH_QUEUED_ELEMENT(&np->busy_ccbq, qp) {
++			struct sym_ccb *cp = sym_que_entry(qp, struct sym_ccb,
++							   link_ccbq);
++			struct scsi_cmnd *cmd = cp->cmd;
++			struct sym_ucmd *ucmd;
++
++			if (!cmd || cmd->device->channel != starget->channel ||
++			    cmd->device->id != starget->id)
++				continue;
++
++			ucmd = SYM_UCMD_PTR(cmd);
++			init_completion(&eh_done);
++			ucmd->eh_done = &eh_done;
++			spin_unlock_irq(shost->host_lock);
++			if (!wait_for_completion_timeout(&eh_done, 5*HZ)) {
++				ucmd->eh_done = NULL;
++				sts = -2;
++			}
++			spin_lock_irq(shost->host_lock);
 +		}
 +	}
-+	if (res)
-+		sdev = res->scsi_dev;
-+	spin_unlock_irqrestore(&pinstance->resource_lock, lock_flags);
-+	if (!sdev)
-+		return FAILED;
++	spin_unlock_irq(shost->host_lock);
 +
-+	sdev_printk(KERN_INFO, sdev,
- 		    "Doing bus reset due to an I/O command timeout.\n");
--	return pmcraid_reset_device(scmd,
-+	return pmcraid_reset_device(sdev,
- 				    PMCRAID_RESET_BUS_TIMEOUT,
- 				    RESET_DEVICE_BUS);
++	starget_printk(KERN_WARNING, starget, "TARGET RESET operation %s.\n",
++			sts==0 ? "complete" :sts==-2 ? "timed-out" : "failed");
++	return SCSI_SUCCESS;
  }
-@@ -3036,7 +3066,7 @@ static int pmcraid_eh_target_reset_handler(struct scsi_cmnd *scmd)
- {
- 	scmd_printk(KERN_INFO, scmd,
- 		    "Doing target reset due to an I/O command timeout.\n");
--	return pmcraid_reset_device(scmd,
-+	return pmcraid_reset_device(scmd->device,
- 				    PMCRAID_INTERNAL_TIMEOUT,
- 				    RESET_DEVICE_TARGET);
- }
+ 
+ static int sym53c8xx_eh_bus_reset_handler(struct scsi_cmnd *cmd)
+@@ -1660,7 +1688,7 @@ static struct scsi_host_template sym2_template = {
+ 	.slave_configure	= sym53c8xx_slave_configure,
+ 	.slave_destroy		= sym53c8xx_slave_destroy,
+ 	.eh_abort_handler	= sym53c8xx_eh_abort_handler,
+-	.eh_device_reset_handler = sym53c8xx_eh_device_reset_handler,
++	.eh_target_reset_handler = sym53c8xx_eh_target_reset_handler,
+ 	.eh_bus_reset_handler	= sym53c8xx_eh_bus_reset_handler,
+ 	.eh_host_reset_handler	= sym53c8xx_eh_host_reset_handler,
+ 	.this_id		= 7,
 -- 
 2.29.2
 
