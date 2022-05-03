@@ -2,52 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C24518DE8
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 May 2022 22:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5C9518DE6
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 May 2022 22:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241936AbiECULH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 May 2022 16:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
+        id S240665AbiECULC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 May 2022 16:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237460AbiECUKv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 May 2022 16:10:51 -0400
+        with ESMTP id S235690AbiECUKu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 May 2022 16:10:50 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A4926AE3
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25812714A
         for <linux-scsi@vger.kernel.org>; Tue,  3 May 2022 13:07:16 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 0D74D210E7;
+        by smtp-out1.suse.de (Postfix) with ESMTP id 10010210ED;
         Tue,  3 May 2022 20:07:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1651608435; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=r7HJkHr80WilWGLtgRALjqRPKQbUiMtulM1V6Eolt6I=;
-        b=obdT/IDtxZ4xC8hmXEe4hTEaknR1qLFiapphUVqY/zhkvixOmxuMKuKA/M+8uaKBLlrxAR
-        P6dw1X42mV2lKbmLDD4Ir+VxhTxQdUzyWoP8pwptxJqhHEZID2YGwG0TCyoUmyt4TjylPB
-        Tc2VMEUdmhR4v5S5yXPlheWN1LUZDB4=
+        bh=x/BdPdOVSwK2PoiZPiv+15Iq6K5R4lHm4RVThf68iWA=;
+        b=j0F0veGRJMbH5fArdL9I04e8GZGU07Hde7k3ocf44NNQRWioFnBBJBfbrtYrKVr2a4mP9I
+        jNkbhz9VplHV5ZcMX2MOSFFSqgTS3ctPDxm+nt8ErB3bkp7L89lZM2KEqIvqIbpExvFMwy
+        e1dt+y9Js4tMsCpo8hIYjbJR2R4OAWY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1651608435;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=r7HJkHr80WilWGLtgRALjqRPKQbUiMtulM1V6Eolt6I=;
-        b=8ZIX/saGMLfU4Sh8ypOGeNS+K+ZnrjIT3EcNxavchLB1rqmGAs3IMrpmOfVGFVvnF9Qit9
-        Lj3qOEqWuea15NBw==
+        bh=x/BdPdOVSwK2PoiZPiv+15Iq6K5R4lHm4RVThf68iWA=;
+        b=1YaDixckHpeHcKEpoUFIeOtcM+cEIHpKbOEYot4JcyUqQ9Cr4aQ4p4Q/kLmohixv0PJUam
+        qfQ+XSiTtTQQ9EBg==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id E56D72C14E;
+        by relay2.suse.de (Postfix) with ESMTP id E70F62C14F;
         Tue,  3 May 2022 20:07:14 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id EF26351941CE; Tue,  3 May 2022 22:07:14 +0200 (CEST)
+        id 0169B51941D0; Tue,  3 May 2022 22:07:15 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 04/24] mptfc: simplify mpt_fc_block_error_handler()
-Date:   Tue,  3 May 2022 22:06:44 +0200
-Message-Id: <20220503200704.88003-5-hare@suse.de>
+Subject: [PATCH 05/24] mptfusion: correct definitions for mptscsih_dev_reset()
+Date:   Tue,  3 May 2022 22:06:45 +0200
+Message-Id: <20220503200704.88003-6-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220503200704.88003-1-hare@suse.de>
 References: <20220503200704.88003-1-hare@suse.de>
@@ -63,147 +63,110 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of passing the a function we can as well return a status
-and call the function directly afterwards.
+mptscsih_dev_reset() is _not_ a device reset, but rather a
+target reset. Nevertheless it's being used for either purpose.
+This patch adds a correct implementation for mptscsih_dev_reset(),
+and renames the original function to mptscsih_target_reset().
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/message/fusion/mptfc.c | 83 ++++++++++++++++++++++------------
- 1 file changed, 54 insertions(+), 29 deletions(-)
+ drivers/message/fusion/mptscsih.c | 55 ++++++++++++++++++++++++++++++-
+ drivers/message/fusion/mptscsih.h |  1 +
+ 2 files changed, 55 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/message/fusion/mptfc.c b/drivers/message/fusion/mptfc.c
-index fac747109209..ea8fc32dacfa 100644
---- a/drivers/message/fusion/mptfc.c
-+++ b/drivers/message/fusion/mptfc.c
-@@ -183,73 +183,98 @@ static struct fc_function_template mptfc_transport_functions = {
- };
+diff --git a/drivers/message/fusion/mptscsih.c b/drivers/message/fusion/mptscsih.c
+index 276084ed04a6..ed21cc4d2c77 100644
+--- a/drivers/message/fusion/mptscsih.c
++++ b/drivers/message/fusion/mptscsih.c
+@@ -1794,7 +1794,7 @@ mptscsih_abort(struct scsi_cmnd * SCpnt)
  
- static int
--mptfc_block_error_handler(struct scsi_cmnd *SCpnt,
--			  int (*func)(struct scsi_cmnd *SCpnt),
--			  const char *caller)
-+mptfc_block_error_handler(struct fc_rport *rport)
- {
- 	MPT_SCSI_HOST		*hd;
--	struct scsi_device	*sdev = SCpnt->device;
--	struct Scsi_Host	*shost = sdev->host;
--	struct fc_rport		*rport = starget_to_rport(scsi_target(sdev));
-+	struct Scsi_Host	*shost = rport_to_shost(rport);
- 	unsigned long		flags;
- 	int			ready;
--	MPT_ADAPTER 		*ioc;
-+	MPT_ADAPTER		*ioc;
- 	int			loops = 40;	/* seconds */
+ /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /**
+- *	mptscsih_dev_reset - Perform a SCSI TARGET_RESET!  new_eh variant
++ *	mptscsih_dev_reset - Perform a SCSI LOGICAL_UNIT_RESET!
+  *	@SCpnt: Pointer to scsi_cmnd structure, IO which reset is due to
+  *
+  *	(linux scsi_host_template.eh_dev_reset_handler routine)
+@@ -1809,6 +1809,58 @@ mptscsih_dev_reset(struct scsi_cmnd * SCpnt)
+ 	VirtDevice	 *vdevice;
+ 	MPT_ADAPTER	*ioc;
  
--	hd = shost_priv(SCpnt->device->host);
-+	hd = shost_priv(shost);
- 	ioc = hd->ioc;
- 	spin_lock_irqsave(shost->host_lock, flags);
- 	while ((ready = fc_remote_port_chkready(rport) >> 16) == DID_IMM_RETRY
- 	 || (loops > 0 && ioc->active == 0)) {
- 		spin_unlock_irqrestore(shost->host_lock, flags);
- 		dfcprintk (ioc, printk(MYIOC_s_DEBUG_FMT
--			"mptfc_block_error_handler.%d: %d:%llu, port status is "
--			"%x, active flag %d, deferring %s recovery.\n",
-+			"mptfc_block_error_handler.%d: %s, port status is "
-+			"%x, active flag %d, deferring recovery.\n",
- 			ioc->name, ioc->sh->host_no,
--			SCpnt->device->id, SCpnt->device->lun,
--			ready, ioc->active, caller));
-+			dev_name(&rport->dev), ready, ioc->active));
- 		msleep(1000);
- 		spin_lock_irqsave(shost->host_lock, flags);
- 		loops --;
- 	}
- 	spin_unlock_irqrestore(shost->host_lock, flags);
- 
--	if (ready == DID_NO_CONNECT || !SCpnt->device->hostdata
--	 || ioc->active == 0) {
-+	if (ready == DID_NO_CONNECT || ioc->active == 0) {
- 		dfcprintk (ioc, printk(MYIOC_s_DEBUG_FMT
--			"%s.%d: %d:%llu, failing recovery, "
--			"port state %x, active %d, vdevice %p.\n", caller,
-+			"mpt_block_error_handler.%d: %s, failing recovery, "
-+			"port state %x, active %d.\n",
- 			ioc->name, ioc->sh->host_no,
--			SCpnt->device->id, SCpnt->device->lun, ready,
--			ioc->active, SCpnt->device->hostdata));
-+			dev_name(&rport->dev), ready, ioc->active));
- 		return FAILED;
- 	}
--	dfcprintk (ioc, printk(MYIOC_s_DEBUG_FMT
--		"%s.%d: %d:%llu, executing recovery.\n", caller,
--		ioc->name, ioc->sh->host_no,
--		SCpnt->device->id, SCpnt->device->lun));
--	return (*func)(SCpnt);
-+	return SUCCESS;
- }
- 
- static int
- mptfc_abort(struct scsi_cmnd *SCpnt)
- {
--	return
--	    mptfc_block_error_handler(SCpnt, mptscsih_abort, __func__);
-+	struct Scsi_Host *shost = SCpnt->device->host;
-+	struct fc_rport *rport = starget_to_rport(scsi_target(SCpnt->device));
-+	MPT_SCSI_HOST __maybe_unused *hd = shost_priv(shost);
-+	int rtn;
-+
-+	rtn = mptfc_block_error_handler(rport);
-+	if (rtn == SUCCESS) {
-+		dfcprintk (hd->ioc, printk(MYIOC_s_DEBUG_FMT
-+			"%s.%d: %d:%llu, executing recovery.\n", __func__,
-+			hd->ioc->name, shost->host_no,
-+			SCpnt->device->id, SCpnt->device->lun));
-+		rtn = mptscsih_abort(SCpnt);
++	/* If we can't locate our host adapter structure, return FAILED status.
++	 */
++	if ((hd = shost_priv(SCpnt->device->host)) == NULL){
++		printk(KERN_ERR MYNAM ": lun reset: "
++		   "Can't locate host! (sc=%p)\n", SCpnt);
++		return FAILED;
 +	}
-+	return rtn;
- }
- 
- static int
- mptfc_dev_reset(struct scsi_cmnd *SCpnt)
- {
--	return
--	    mptfc_block_error_handler(SCpnt, mptscsih_dev_reset, __func__);
-+	struct Scsi_Host *shost = SCpnt->device->host;
-+	struct fc_rport *rport = starget_to_rport(scsi_target(SCpnt->device));
-+	MPT_SCSI_HOST __maybe_unused *hd = shost_priv(shost);
-+	int rtn;
 +
-+	rtn = mptfc_block_error_handler(rport);
-+	if (rtn == SUCCESS) {
-+		dfcprintk (hd->ioc, printk(MYIOC_s_DEBUG_FMT
-+			"%s.%d: %d:%llu, executing recovery.\n", __func__,
-+			hd->ioc->name, shost->host_no,
-+			SCpnt->device->id, SCpnt->device->lun));
-+		rtn = mptscsih_dev_reset(SCpnt);
-+	}
-+	return rtn;
- }
- 
- static int
- mptfc_bus_reset(struct scsi_cmnd *SCpnt)
- {
--	return
--	    mptfc_block_error_handler(SCpnt, mptscsih_bus_reset, __func__);
-+	struct Scsi_Host *shost = SCpnt->device->host;
-+	struct fc_rport *rport = starget_to_rport(scsi_target(SCpnt->device));
-+	MPT_SCSI_HOST __maybe_unused *hd = shost_priv(shost);
-+	int rtn;
++	ioc = hd->ioc;
++	printk(MYIOC_s_INFO_FMT "attempting lun reset! (sc=%p)\n",
++	       ioc->name, SCpnt);
++	scsi_print_command(SCpnt);
 +
-+	rtn = mptfc_block_error_handler(rport);
-+	if (rtn == SUCCESS) {
-+		dfcprintk (hd->ioc, printk(MYIOC_s_DEBUG_FMT
-+			"%s.%d: %d:%llu, executing recovery.\n", __func__,
-+			hd->ioc->name, shost->host_no,
-+			SCpnt->device->id, SCpnt->device->lun));
-+		rtn = mptscsih_bus_reset(SCpnt);
++	vdevice = SCpnt->device->hostdata;
++	if (!vdevice || !vdevice->vtarget) {
++		retval = 0;
++		goto out;
 +	}
-+	return rtn;
- }
- 
- static void
++
++	retval = mptscsih_IssueTaskMgmt(hd,
++				MPI_SCSITASKMGMT_TASKTYPE_LOGICAL_UNIT_RESET,
++				vdevice->vtarget->channel,
++				vdevice->vtarget->id, vdevice->lun, 0,
++				mptscsih_get_tm_timeout(ioc));
++
++ out:
++	printk (MYIOC_s_INFO_FMT "lun reset: %s (sc=%p)\n",
++	    ioc->name, ((retval == 0) ? "SUCCESS" : "FAILED" ), SCpnt);
++
++	if (retval == 0)
++		return SUCCESS;
++	else
++		return FAILED;
++}
++
++/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
++/**
++ *	mptscsih_target_reset - Perform a SCSI TARGET_RESET!
++ *	@SCpnt: Pointer to scsi_cmnd structure, IO which reset is due to
++ *
++ *	(linux scsi_host_template.eh_target_reset_handler routine)
++ *
++ *	Returns SUCCESS or FAILED.
++ **/
++int
++mptscsih_target_reset(struct scsi_cmnd * SCpnt)
++{
++	MPT_SCSI_HOST	*hd;
++	int		 retval;
++	VirtDevice	 *vdevice;
++	MPT_ADAPTER	*ioc;
++
+ 	/* If we can't locate our host adapter structure, return FAILED status.
+ 	 */
+ 	if ((hd = shost_priv(SCpnt->device->host)) == NULL){
+@@ -3257,6 +3309,7 @@ EXPORT_SYMBOL(mptscsih_slave_destroy);
+ EXPORT_SYMBOL(mptscsih_slave_configure);
+ EXPORT_SYMBOL(mptscsih_abort);
+ EXPORT_SYMBOL(mptscsih_dev_reset);
++EXPORT_SYMBOL(mptscsih_target_reset);
+ EXPORT_SYMBOL(mptscsih_bus_reset);
+ EXPORT_SYMBOL(mptscsih_host_reset);
+ EXPORT_SYMBOL(mptscsih_bios_param);
+diff --git a/drivers/message/fusion/mptscsih.h b/drivers/message/fusion/mptscsih.h
+index a22c5eaf703c..e3d92c392673 100644
+--- a/drivers/message/fusion/mptscsih.h
++++ b/drivers/message/fusion/mptscsih.h
+@@ -120,6 +120,7 @@ extern void mptscsih_slave_destroy(struct scsi_device *device);
+ extern int mptscsih_slave_configure(struct scsi_device *device);
+ extern int mptscsih_abort(struct scsi_cmnd * SCpnt);
+ extern int mptscsih_dev_reset(struct scsi_cmnd * SCpnt);
++extern int mptscsih_target_reset(struct scsi_cmnd * SCpnt);
+ extern int mptscsih_bus_reset(struct scsi_cmnd * SCpnt);
+ extern int mptscsih_host_reset(struct scsi_cmnd *SCpnt);
+ extern int mptscsih_bios_param(struct scsi_device * sdev, struct block_device *bdev, sector_t capacity, int geom[]);
 -- 
 2.29.2
 
