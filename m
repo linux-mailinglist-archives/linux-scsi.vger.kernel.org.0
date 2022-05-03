@@ -2,186 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2125518DF3
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 May 2022 22:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB96518E38
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 May 2022 22:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238116AbiECULW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 May 2022 16:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S242266AbiECUNN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 May 2022 16:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238250AbiECUKz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 May 2022 16:10:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F368C26AEB
-        for <linux-scsi@vger.kernel.org>; Tue,  3 May 2022 13:07:21 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 80D7421882;
-        Tue,  3 May 2022 20:07:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651608435; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jUW4iJfuyEoe7uHxRk74VPFf3NmtImIJ0notDLIYzb0=;
-        b=ZbgskNfbYSdkJ3C/w5YnQ1OsqYkqL+KpfMOpAkjhL+9rA7NVFBcLa7+flfrCGztRcgKOyn
-        Tm8ixKmR9DP/LUFgjpvLThv92jxsEndgHL6zimxLOpBoCPH1e+RMOdmasH6qjyqresEmY/
-        v7QnBJ5wHiSFRQoJb/ofnd7KwNgOdEc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651608435;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jUW4iJfuyEoe7uHxRk74VPFf3NmtImIJ0notDLIYzb0=;
-        b=pAd9LHPUH41EfTsFDZpkVRpxx+06Z1bgQasc00LUEueOFfzigBOEWPn83lxZqK9HyrOstk
-        TuHYuzJQ1jsjpwCQ==
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 658622C175;
-        Tue,  3 May 2022 20:07:15 +0000 (UTC)
-Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 73D5B51941F6; Tue,  3 May 2022 22:07:15 +0200 (CEST)
-From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+        with ESMTP id S242287AbiECUM7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 May 2022 16:12:59 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CABD4093C
+        for <linux-scsi@vger.kernel.org>; Tue,  3 May 2022 13:09:16 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id i25-20020a9d6259000000b00605df9afea7so12016588otk.1
+        for <linux-scsi@vger.kernel.org>; Tue, 03 May 2022 13:09:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=i4qGR0imgOYicCRLwmbl9K5IraxQM0E325bZcMtzYAw=;
+        b=u8Fiwjzl1pCNVmPLstM+2tb6Tcnic+8yOBriAiE1lxWJZ+pP6Kc9vXu1woK8uO1P1n
+         usRY6faGmA8uuTEfDO3vCSYFIKj7aHo7yd52vyrAczbUSsAwGPagfYuUifMA193xaDiw
+         HTcnh7VaZj9JmwppAHnI+WDn8JYQKtqky0ReUO0OxAAZqhhu/N6Ma2I6Gzq5yV6WimJf
+         Zj94Kx8PnuJRYuB8PaohbEcbTbPWlsLdsB8M80A2goHv+wCFTQQGsCUW5juUB5yrxp06
+         rAy810RvjNbSH8kfy8jaxvbuxfumzfPryocmncHUEINvzs6bo/PHyOzy9EtWG14rpzQg
+         icoA==
+X-Gm-Message-State: AOAM532YkUeaV5LAd7E24ESvwzpLXlF7sMD8HiOElzoJ5iZEsxmiyOWM
+        5E6/jgT0R6rruL1n8ygcAd7ONLEfQZc=
+X-Google-Smtp-Source: ABdhPJzcdmqkS1TkRG6dyJB+K68MGcV2oXQFNQXEzqpeelfJUrs4UgiWAq5Z3CrcoI9/ypfEl5NUqw==
+X-Received: by 2002:a9d:5c8d:0:b0:605:dfef:54e7 with SMTP id a13-20020a9d5c8d000000b00605dfef54e7mr6262672oti.344.1651608555702;
+        Tue, 03 May 2022 13:09:15 -0700 (PDT)
+Received: from [10.10.69.251] ([8.34.116.185])
+        by smtp.gmail.com with ESMTPSA id r7-20020a056830236700b0060603221238sm4313116oth.8.2022.05.03.13.09.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 13:09:15 -0700 (PDT)
+Message-ID: <6598e955-ee0a-e113-0981-36941fe55d76@acm.org>
+Date:   Tue, 3 May 2022 13:09:13 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 17/24] snic: reserve tag for TMF
+Content-Language: en-US
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH 24/24] mpi3mr: split off bus_reset function from host_reset
-Date:   Tue,  3 May 2022 22:07:04 +0200
-Message-Id: <20220503200704.88003-25-hare@suse.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220503200704.88003-1-hare@suse.de>
-References: <20220503200704.88003-1-hare@suse.de>
-MIME-Version: 1.0
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+References: <20220502213820.3187-1-hare@suse.de>
+ <20220502213820.3187-18-hare@suse.de>
+ <b047dd15-4cb7-68d4-47d9-1cbe5f1b69d3@acm.org>
+ <38829ee8-23cd-d03c-577f-fad7f0842d57@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <38829ee8-23cd-d03c-577f-fad7f0842d57@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SCSI EH host reset is the final callback in the escalation chain;
-once we reach this we need to reset the controller.
-As such it defeats the purpose to skip controller reset if no
-I/Os are pending and the RAID device is to be reset; especially
-after kexec there might be stale commands pending in firmware
-for which we have no reference whatsoever.
-So this patch splits off the check for pending I/O into a
-'bus_reset' function, and leaves the actual controller reset
-to the host reset.
+On 5/3/22 11:31, Hannes Reinecke wrote:
+> On 5/3/22 09:18, Bart Van Assche wrote:
+>> On 5/2/22 14:38, Hannes Reinecke wrote:
+>>> diff --git a/drivers/scsi/snic/snic_main.c 
+>>> b/drivers/scsi/snic/snic_main.c
+>>> index 29d56396058c..f344cbc27923 100644
+>>> --- a/drivers/scsi/snic/snic_main.c
+>>> +++ b/drivers/scsi/snic/snic_main.c
+>>> @@ -512,6 +512,9 @@ snic_probe(struct pci_dev *pdev, const struct 
+>>> pci_device_id *ent)
+>>>                        max_t(u32, SNIC_MIN_IO_REQ, max_ios));
+>>>       snic->max_tag_id = shost->can_queue;
+>>> +    /* Reserve one reset command */
+>>> +    shost->can_queue--;
+>>> +    snic->tmf_tag_id = shost->can_queue;
+>>>       shost->max_lun = snic->config.luns_per_tgt;
+>>>       shost->max_id = SNIC_MAX_TARGET;
+>>
+>> Hmm ... shouldn't cmd_per_lun also be decreased?
+>>
+> Shudder. No. Why?
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Cc: Kashyap Desai <kashyap.desai@broadcom.com>
-Cc: Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
-Cc: Sumit Saxena <sumit.saxena@broadcom.com>
-Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
----
- drivers/scsi/mpi3mr/mpi3mr_os.c | 57 +++++++++++++++++++++------------
- 1 file changed, 37 insertions(+), 20 deletions(-)
+I found the answer. The following code from scsi_add_host_with_dma() 
+reduces cmd_per_lun so it is not necessary to do that from inside 
+snic_probe():
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index f7cd70a15ea6..31f05e9f5ee0 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_os.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -3337,20 +3337,45 @@ void mpi3mr_wait_for_host_io(struct mpi3mr_ioc *mrioc, u32 timeout)
-  * mpi3mr_eh_host_reset - Host reset error handling callback
-  * @scmd: SCSI command reference
-  *
-- * Issue controller reset if the scmd is for a Physical Device,
-- * if the scmd is for RAID volume, then wait for
-- * MPI3MR_RAID_ERRREC_RESET_TIMEOUT and checke whether any
-- * pending I/Os prior to issuing reset to the controller.
-+ * Issue controller reset
-  *
-  * Return: SUCCESS of successful reset else FAILED
-  */
- static int mpi3mr_eh_host_reset(struct scsi_cmnd *scmd)
-+{
-+	struct mpi3mr_ioc *mrioc = shost_priv(scmd->device->host);
-+	int retval = FAILED, ret;
-+
-+	ret = mpi3mr_soft_reset_handler(mrioc,
-+	    MPI3MR_RESET_FROM_EH_HOS, 1);
-+	if (ret)
-+		goto out;
-+
-+	retval = SUCCESS;
-+out:
-+	sdev_printk(KERN_INFO, scmd->device,
-+	    "Host reset is %s for scmd(%p)\n",
-+	    ((retval == SUCCESS) ? "SUCCESS" : "FAILED"), scmd);
-+
-+	return retval;
-+}
-+
-+/**
-+ * mpi3mr_eh_bus_reset - Bus reset error handling callback
-+ * @scmd: SCSI command reference
-+ *
-+ * Checks whether pending I/Os are present for the RAID volume;
-+ * if not there's no need to reset the adapter.
-+ *
-+ * Return: SUCCESS of successful reset else FAILED
-+ */
-+static int mpi3mr_eh_bus_reset(struct scsi_cmnd *scmd)
- {
- 	struct mpi3mr_ioc *mrioc = shost_priv(scmd->device->host);
- 	struct mpi3mr_stgt_priv_data *stgt_priv_data;
- 	struct mpi3mr_sdev_priv_data *sdev_priv_data;
- 	u8 dev_type = MPI3_DEVICE_DEVFORM_VD;
--	int retval = FAILED, ret;
-+	int retval = FAILED;
- 
- 	sdev_priv_data = scmd->device->hostdata;
- 	if (sdev_priv_data && sdev_priv_data->tgt_priv_data) {
-@@ -3360,25 +3385,16 @@ static int mpi3mr_eh_host_reset(struct scsi_cmnd *scmd)
- 
- 	if (dev_type == MPI3_DEVICE_DEVFORM_VD) {
- 		mpi3mr_wait_for_host_io(mrioc,
--		    MPI3MR_RAID_ERRREC_RESET_TIMEOUT);
--		if (!mpi3mr_get_fw_pending_ios(mrioc)) {
-+			MPI3MR_RAID_ERRREC_RESET_TIMEOUT);
-+		if (!mpi3mr_get_fw_pending_ios(mrioc))
- 			retval = SUCCESS;
--			goto out;
--		}
- 	}
-+	if (retval == FAILED)
-+		mpi3mr_print_pending_host_io(mrioc);
- 
--	mpi3mr_print_pending_host_io(mrioc);
--	ret = mpi3mr_soft_reset_handler(mrioc,
--	    MPI3MR_RESET_FROM_EH_HOS, 1);
--	if (ret)
--		goto out;
--
--	retval = SUCCESS;
--out:
- 	sdev_printk(KERN_INFO, scmd->device,
--	    "Host reset is %s for scmd(%p)\n",
--	    ((retval == SUCCESS) ? "SUCCESS" : "FAILED"), scmd);
--
-+		"Bus reset is %s for scmd(%p)\n",
-+		((retval == SUCCESS) ? "SUCCESS" : "FAILED"), scmd);
- 	return retval;
- }
- 
-@@ -4094,6 +4110,7 @@ static struct scsi_host_template mpi3mr_driver_template = {
- 	.change_queue_depth		= mpi3mr_change_queue_depth,
- 	.eh_device_reset_handler	= mpi3mr_eh_dev_reset,
- 	.eh_target_reset_handler	= mpi3mr_eh_target_reset,
-+	.eh_bus_reset_handler		= mpi3mr_eh_bus_reset,
- 	.eh_host_reset_handler		= mpi3mr_eh_host_reset,
- 	.bios_param			= mpi3mr_bios_param,
- 	.map_queues			= mpi3mr_map_queues,
--- 
-2.29.2
+	shost->cmd_per_lun = min_t(int, shost->cmd_per_lun,
+				   shost->can_queue);
 
+Bart.
