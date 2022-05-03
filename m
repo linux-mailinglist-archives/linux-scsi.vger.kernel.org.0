@@ -2,67 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54AF518D3C
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 May 2022 21:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7AA518C6F
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 May 2022 20:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239709AbiECTmh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 May 2022 15:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
+        id S241518AbiECSfm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 May 2022 14:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiECTme (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 May 2022 15:42:34 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77F429812;
-        Tue,  3 May 2022 12:39:01 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242N6sYP018740;
-        Tue, 3 May 2022 00:51:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=GDwmhui71kBGYpJFLTpLpsg/uJyruGStrtZbHv68bZU=;
- b=kdzSD4YBWC3VTG2Nmk8tZenewvhx1VhlmL39Fv2/Kjgg96YpvTgRETXUVz/Jv9CJ+tHv
- vnISp6o4ABX398sMXckmqUrF6hHPN1b5jMetMXH8pdrk+E3yIohJYceQjryZyZcxkHpy
- WoZR774pmHFns7dteSTr7bQY+fzdvniTn5Msgwn8tjpwBKBS+LCFmXwtnlRPUFsvp9R/
- Q4l0D0n1MCZIYVp9mkqbZS9yfC30DBG0zEZf0XqdMix5GEpqTFf1X6AgfzpZ930zImya
- pUveYlAhLnzWQvdiLQWj0MiEhczauzTJVxmCcj6N6zSFbSp6CMIT3sWtM1TNBiDpN7pf CQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frwnt4kwv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:51:59 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430oows008899;
-        Tue, 3 May 2022 00:51:57 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x91-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:51:57 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430pljW010389;
-        Tue, 3 May 2022 00:51:57 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-18;
-        Tue, 03 May 2022 00:51:57 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     alim.akhtar@samsung.com, cgel.zte@gmail.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] scsi: ufs: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Mon,  2 May 2022 20:51:28 -0400
-Message-Id: <165153836363.24053.9079302597637883038.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220420090353.2588804-1-chi.minghao@zte.com.cn>
-References: <20220420090353.2588804-1-chi.minghao@zte.com.cn>
+        with ESMTP id S241677AbiECSfe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 May 2022 14:35:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E99A3F8A9
+        for <linux-scsi@vger.kernel.org>; Tue,  3 May 2022 11:31:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B03E021871;
+        Tue,  3 May 2022 18:31:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651602715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gv1qdptjWfqnTBUFPdH5kegXl76Yy0uFXp+Rtpu9KXo=;
+        b=F59wTCK3UsxuBrIdahZDJH2L3SMaOHxJqa87R3rnKiBqJklxUjDe3b9mKasK7/sB0a5eos
+        GTsYuEXNLFIr53DJg5WGJNTSANINKu0pRiLA78KWeRzOtZkiHpAvL+HTfEYn3GBXXWZnSz
+        WBRqtrtFsldoUrv9ZoCOVVXzQt4Gmao=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651602715;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gv1qdptjWfqnTBUFPdH5kegXl76Yy0uFXp+Rtpu9KXo=;
+        b=htld8ue9wyRFLtuRBs8hN8DYnHMN2AgouDCj7xutTrX9NTHOH1tgFpuoidUcOF8Z7n8MWQ
+        /DVWtvyI3Jws9MCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 151B713AA3;
+        Tue,  3 May 2022 18:31:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dcIgMxl1cWKyTgAAMHmgww
+        (envelope-from <hare@suse.de>); Tue, 03 May 2022 18:31:53 +0000
+Message-ID: <38829ee8-23cd-d03c-577f-fad7f0842d57@suse.de>
+Date:   Tue, 3 May 2022 11:31:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 17/24] snic: reserve tag for TMF
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+References: <20220502213820.3187-1-hare@suse.de>
+ <20220502213820.3187-18-hare@suse.de>
+ <b047dd15-4cb7-68d4-47d9-1cbe5f1b69d3@acm.org>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <b047dd15-4cb7-68d4-47d9-1cbe5f1b69d3@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 821uxx0Y43ZbGMH6V2obdTmChDCvpSKo
-X-Proofpoint-GUID: 821uxx0Y43ZbGMH6V2obdTmChDCvpSKo
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,21 +77,32 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 20 Apr 2022 09:03:52 +0000, cgel.zte@gmail.com wrote:
-
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On 5/3/22 09:18, Bart Van Assche wrote:
+> On 5/2/22 14:38, Hannes Reinecke wrote:
+>> diff --git a/drivers/scsi/snic/snic_main.c 
+>> b/drivers/scsi/snic/snic_main.c
+>> index 29d56396058c..f344cbc27923 100644
+>> --- a/drivers/scsi/snic/snic_main.c
+>> +++ b/drivers/scsi/snic/snic_main.c
+>> @@ -512,6 +512,9 @@ snic_probe(struct pci_dev *pdev, const struct 
+>> pci_device_id *ent)
+>>                        max_t(u32, SNIC_MIN_IO_REQ, max_ios));
+>>       snic->max_tag_id = shost->can_queue;
+>> +    /* Reserve one reset command */
+>> +    shost->can_queue--;
+>> +    snic->tmf_tag_id = shost->can_queue;
+>>       shost->max_lun = snic->config.luns_per_tgt;
+>>       shost->max_id = SNIC_MAX_TARGET;
 > 
-> Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
-> pm_runtime_put_noidle. This change is just to simplify the code, no
-> actual functional changes.
+> Hmm ... shouldn't cmd_per_lun also be decreased?
 > 
-> 
-> [...]
+Shudder. No. Why?
 
-Applied to 5.19/scsi-queue, thanks!
+Cheers,
 
-[1/1] scsi: ufs: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-      https://git.kernel.org/mkp/scsi/c/75b8715e20a2
-
+Hannes
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
