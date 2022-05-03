@@ -2,75 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E3651A49F
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 17:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406F451A54A
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 18:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352915AbiEDP7N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 May 2022 11:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
+        id S1353016AbiEDQXR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 May 2022 12:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352823AbiEDP7M (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 11:59:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA30B6426
-        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 08:55:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3B31C210E0;
-        Wed,  4 May 2022 15:55:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651679734; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Oa+li9Sl4zHn7Vb1UunpCoJkkO7QVyDYkICVgKNBvM=;
-        b=Z14tVWMKMlTXiw7FK6PlVGMYti6E5MISC9CG2vKL0ZCumtry4k9ZiNaxHtwLE7nzO7pBJ9
-        itzawtGLiBjkCwsMTZAMrI3fPWFrfALZTmDmmWRi+0pFVpqV/qYV2SrRT4ZhDO2jCJbYi2
-        xCCx0FVR2SyiMWFHC0BLX6U0QRk89RQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E2762132C4;
-        Wed,  4 May 2022 15:55:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xpecNfWhcmItPAAAMHmgww
-        (envelope-from <mwilck@suse.com>); Wed, 04 May 2022 15:55:33 +0000
-Message-ID: <4a7f19b6330c3017c45074854cf86b04224e7706.camel@suse.com>
-Subject: Re: lpfc: regression with lpfc 14.2.0.0 / Skyhawk: FLOGI failure
-From:   Martin Wilck <mwilck@suse.com>
-To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Justin Tee <justin.tee@broadcom.com>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        David Bond <dbond@suse.com>, Hannes Reinecke <hare@suse.com>
-Date:   Wed, 04 May 2022 17:55:33 +0200
-In-Reply-To: <9d7e7a5613decc1737ef2601ebb2506890790930.camel@suse.com>
-References: <9d7e7a5613decc1737ef2601ebb2506890790930.camel@suse.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 
+        with ESMTP id S1353283AbiEDQXQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 12:23:16 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6529246B13
+        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 09:19:40 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242KZ9w3019152;
+        Tue, 3 May 2022 00:51:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=YUNQFmGyzV+g8ibxd2TeZcydDGJAM/fBmhc9kdz3WFY=;
+ b=hmQm0Fe0PeSKzgVVsIu91qBLrLZ/eYVhsaJ2DFL1ysRMcHsnJhgSJ5slviXot4m7DE2G
+ kr1Lqv32bmhRUhG5E+0o345saT3lhoqbuBdc1SOrOJexNEib7bMR4UwnSmofJXmG0Xv7
+ TS7QxtOAnXdt6N3iZo0+Vh0Jc1O/lPNh4fbJdut+i8ssYlljXID8yiKiVX25jcv+sMzr
+ rBIFYEv5E1CRXwM4ZYi5ebCUAtq7ISdw5lngPKudF+T2nICZTWzipfThkuhpsAjntk0J
+ VP2HOZ3fEfSRYJ9r9CjFhW6ls2FT8gM61/q4qlaf0nLylWXr3NmRAdRpchmIvddq+hkF 5A== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frw0amhjb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:59 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430ow5M009155;
+        Tue, 3 May 2022 00:51:58 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x95-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:58 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430pljY010389;
+        Tue, 3 May 2022 00:51:57 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-19;
+        Tue, 03 May 2022 00:51:57 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Chesnokov Gleb <Chesnokov.G@raidix.com>, linux-scsi@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH 1/2] qla2xxx: Remove free_sg command flag
+Date:   Mon,  2 May 2022 20:51:29 -0400
+Message-Id: <165153836357.24053.11452996733697072864.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <AS8PR10MB4952747D20B76DC8FE793CCA9DEE9@AS8PR10MB4952.EURPRD10.PROD.OUTLOOK.COM>
+References: <AS8PR10MB4952747D20B76DC8FE793CCA9DEE9@AS8PR10MB4952.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: lSLLjC1Px558Qby6demorZUuaMXSz8LY
+X-Proofpoint-ORIG-GUID: lSLLjC1Px558Qby6demorZUuaMXSz8LY
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 2022-05-04 at 09:11 +0200, Martin Wilck wrote:
->=20
-> Hints appreciated. Complete logs and additional debug data can be
-> provided on request.
+On Fri, 15 Apr 2022 12:42:24 +0000, Chesnokov Gleb wrote:
 
-Further analysis by David showed that the FLOGI via FCoE was using the
-VLAN ID.
+> The use of the free_sg command flag was dropped in 2c39b5ca2a8c
+> ("qla2xxx: Remove SRR code"). Hence remove this flag and its check.
+> 
+> 
 
-Martin
+Applied to 5.19/scsi-queue, thanks!
 
+[1/2] qla2xxx: Remove free_sg command flag
+      https://git.kernel.org/mkp/scsi/c/ad14649fc5ab
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
