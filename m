@@ -2,75 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3AF518C83
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 May 2022 20:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EE2518F0F
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 May 2022 22:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234806AbiECSqB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 May 2022 14:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S236018AbiECUmf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 May 2022 16:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbiECSp7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 May 2022 14:45:59 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B833191E
-        for <linux-scsi@vger.kernel.org>; Tue,  3 May 2022 11:42:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 06AF521871;
-        Tue,  3 May 2022 18:42:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651603345; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uBQS4foiJaAAUHMi1P0OFgno4dnRlUF1RQ5nlEzs944=;
-        b=HyFUYnTue2FkNSu7ziTaI/zMgf4UDzpyXfQvu+rDDroseODlKEoyXu2qHQT6Oem1qkpeC2
-        k+u3HclXzp9peq3AvKOsb5VPHwVIee6srx1pDGEQRY4MDAxIkso8om/WyFhQG2mL3hCNja
-        /Npj82dUxXETlxREbotFiOy/0LW3RUE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651603345;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uBQS4foiJaAAUHMi1P0OFgno4dnRlUF1RQ5nlEzs944=;
-        b=yeuHi+ZIGVEunXuOv77wBmntoTDezzVlvFC57JTuseVNoM5ZyRG3ss5PiSoAlHqJ8AMoPr
-        yhmjNATogbdM/mDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E6DB113AA3;
-        Tue,  3 May 2022 18:42:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HeEDKY53cWI0UgAAMHmgww
-        (envelope-from <hare@suse.de>); Tue, 03 May 2022 18:42:22 +0000
-Message-ID: <1c0b14a9-a389-776a-d9fa-aa26498c653d@suse.de>
-Date:   Tue, 3 May 2022 11:42:20 -0700
+        with ESMTP id S230391AbiECUme (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 May 2022 16:42:34 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BCF22511;
+        Tue,  3 May 2022 13:39:01 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242MkbAd018676;
+        Tue, 3 May 2022 00:52:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=WIoVTgq0vIEZvmnR+NEgL1XkmCDUTNJpZDr6GzvN/kc=;
+ b=U0SpwCyy8dC27IPsfbkPvqS0fqmLoYUhJ1e8+yJpvu5h1d7JtzTSjHphkVRrBc0HzQ5v
+ 3p3l9vv8D+vDV/08aERL4G8v/amn5J5MRvXZMmlQ/gxUSpZgQ2Vb334zCl/D9W1C4wjY
+ SMfpcC2b382skaKqJHNzXty+T1ree5hwA6Nsd/7jFv0NWIFTUS5zNwX+Orm9Bu/CJzdP
+ QjEcYBE0o4Xx31r/KdoWv1JCslyHi2RDRNcJecBX5PXxskbHp1p41fSn6irGq7Rn3JWK
+ dToYT0MAGi8oFPsVQ73OboV5y50/Ta1NlJcICPAjVMfy2RX13AX2eJ9B1IA65o0BgVqw YA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frwnt4kx2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:52:01 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430opOY008941;
+        Tue, 3 May 2022 00:52:00 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x9x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:52:00 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430pljg010389;
+        Tue, 3 May 2022 00:52:00 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-23;
+        Tue, 03 May 2022 00:51:59 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v2] scsi: core: Refine how we set tag_set NUMA node
+Date:   Mon,  2 May 2022 20:51:33 -0400
+Message-Id: <165153836362.24053.7061141693570031456.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <1648640315-21419-1-git-send-email-john.garry@huawei.com>
+References: <1648640315-21419-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 03/24] zfcp: open-code fc_block_scsi_eh() for host reset
-Content-Language: en-US
-To:     Steffen Maier <maier@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>,
-        Benjamin Block <bblock@linux.ibm.com>
-References: <20220502213820.3187-1-hare@suse.de>
- <20220502213820.3187-4-hare@suse.de>
- <6e2c56db-99bc-64d6-34e0-af0f21de9707@linux.ibm.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <6e2c56db-99bc-64d6-34e0-af0f21de9707@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Proofpoint-ORIG-GUID: 0SWjchfUlf8QrgHUKMczPIsYukTmH39J
+X-Proofpoint-GUID: 0SWjchfUlf8QrgHUKMczPIsYukTmH39J
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,81 +68,24 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/3/22 10:21, Steffen Maier wrote:
-> Hi Hannes,
-> 
-> On 5/2/22 23:37, Hannes Reinecke wrote:
->> When issuing a host reset we should be waiting for all
->> ports to become unblocked; just waiting for one might
->> be resulting in host reset to return too early.
->>
->> Signed-off-by: Hannes Reinecke <hare@suse.com>
->> Cc: Steffen Maier <maier@linux.ibm.com>
->> Cc: Benjamin Block <bblock@linux.ibm.com>
->> ---
->>   drivers/s390/scsi/zfcp_scsi.c | 29 +++++++++++++++++++++++------
->>   1 file changed, 23 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/s390/scsi/zfcp_scsi.c 
->> b/drivers/s390/scsi/zfcp_scsi.c
->> index 526ac240d9fe..fb2b73fca381 100644
->> --- a/drivers/s390/scsi/zfcp_scsi.c
->> +++ b/drivers/s390/scsi/zfcp_scsi.c
->> @@ -373,9 +373,11 @@ static int 
->> zfcp_scsi_eh_target_reset_handler(struct scsi_cmnd *scpnt)
->>   static int zfcp_scsi_eh_host_reset_handler(struct scsi_cmnd *scpnt)
->>   {
->> -    struct zfcp_scsi_dev *zfcp_sdev = sdev_to_zfcp(scpnt->device);
->> -    struct zfcp_adapter *adapter = zfcp_sdev->port->adapter;
->> -    int ret = SUCCESS, fc_ret;
->> +    struct Scsi_Host *host = scpnt->device->host;
->> +    struct zfcp_adapter *adapter = (struct zfcp_adapter 
->> *)host->hostdata[0];
->> +    int ret = SUCCESS;
->> +    unsigned long flags;
->> +    struct zfcp_port *port;
->>       if (!(adapter->connection_features & FSF_FEATURE_NPIV_MODE)) {
->>           zfcp_erp_port_forced_reopen_all(adapter, 0, "schrh_p");
->> @@ -383,9 +385,24 @@ static int zfcp_scsi_eh_host_reset_handler(struct 
->> scsi_cmnd *scpnt)
->>       }
->>       zfcp_erp_adapter_reopen(adapter, 0, "schrh_1");
->>       zfcp_erp_wait(adapter);
->> -    fc_ret = fc_block_scsi_eh(scpnt);
->> -    if (fc_ret)
->> -        ret = fc_ret;
->> +retry_rport_blocked:
->> +    spin_lock_irqsave(host->host_lock, flags);
->> +    list_for_each_entry(port, &adapter->port_list, list) {
-> 
-> Reading adapter->port_list needs to be protected by
->      read_lock_irq(&adapter->port_list_lock);
-> 
-> Cf. Benjamin's last review 
-> https://lore.kernel.org/linux-scsi/YRujHScPbb1Aokrj@t480-pf1aa2c2.linux.ibm.com/ 
-> 
-> 
-Ah. Sorry. Will be including it in the next round.
+On Wed, 30 Mar 2022 19:38:35 +0800, John Garry wrote:
 
->> +        struct fc_rport *rport = port->rport;
+> For SCSI hosts which enable host_tagset the NUMA node returned from
+> blk_mq_hw_queue_to_node() is NUMA_NO_NODE always. Then, since in
+> scsi_mq_setup_tags() the default we choose for the tag_set NUMA node is
+> NUMA_NO_NODE, we always evaluate the NUMA node as NUMA_NO_NODE in
+> functions like blk_mq_alloc_rq_map().
 > 
-> While an rport is blocked, port->rport == NULL [zfcp_scsi_rport_block() 
-> and zfcp_scsi_rport_register()], so below could be a NULL pointer deref.
-> Or is there evidence we would never have a blocked rport while iterating 
-> port_list here?
+> The reason we get NUMA_NO_NODE from blk_mq_hw_queue_to_node() is that
+> the hctx_idx passed is BLK_MQ_NO_HCTX_IDX - so we can't match against a
+> (HW) queue mapping index.
 > 
-> See also my previous review comments 
-> https://lore.kernel.org/linux-scsi/a7950ea7-380c-bb01-7f31-5c555217ad2d@linux.vnet.ibm.com/ 
-> 
-> It also alludes to lock ordering.
-> 
-Right. Will be folding in the changes.
+> [...]
 
-Cheers,
+Applied to 5.19/scsi-queue, thanks!
 
-Hannes
+[1/1] scsi: core: Refine how we set tag_set NUMA node
+      https://git.kernel.org/mkp/scsi/c/973dac8a8a14
+
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+Martin K. Petersen	Oracle Linux Engineering
