@@ -2,64 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761BB51D2AB
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 09:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A4E51D665
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 13:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389756AbiEFH7b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 May 2022 03:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
+        id S1391274AbiEFLSE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 6 May 2022 07:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386640AbiEFH7a (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 May 2022 03:59:30 -0400
-X-Greylist: delayed 615 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 May 2022 00:55:49 PDT
-Received: from mail.greatagencyonline.pl (mail.greatagencyonline.pl [89.40.125.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AAC186FC
-        for <linux-scsi@vger.kernel.org>; Fri,  6 May 2022 00:55:48 -0700 (PDT)
-Received: by mail.greatagencyonline.pl (Postfix, from userid 1001)
-        id 45B97A9933; Fri,  6 May 2022 08:41:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=greatagencyonline.pl;
-        s=mail; t=1651822909;
-        bh=ksvwLPFdjL017OLwir5xHXy3Vmrj/5fhZ5DwBI62qzc=;
-        h=Date:From:To:Subject:From;
-        b=G9FJIKoJURiggCQ/kooBWlYyDSKPDMSK9rLClYaU0N579apXbynUj/AYoxF/gUcly
-         u0yrlRUck72y/KlPCiNcF4VjO9pWkT72hB8cGziM5EODFiKXLIG0kAHVyohEcHHuX9
-         O/VjMky1BkW35A6Hr+lnIi9qt4GHodXhTM0CUAQjK+64guQ+wDaiIpnV3ISkJ6wtQP
-         1WiTzFq5RF/mcU6TULuKJ0e488RC7gNl7RLkdfAwYxgK9O3+R2zcRN1NNjiuDq9/WA
-         HBihJHDy/iqsCA6hZstr/A8LvAfPV2HIHQdZwR0Y7G8XMpaL6e9Vy/rxK+Vo45XwUX
-         GWv0h3n783UVA==
-Received: by mail.greatagencyonline.pl for <linux-scsi@vger.kernel.org>; Fri,  6 May 2022 07:38:48 GMT
-Message-ID: <20220506073002-0.1.3r.k0g3.0.22om89xq1o@greatagencyonline.pl>
-Date:   Fri,  6 May 2022 07:38:48 GMT
-From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= 
-        <mikolaj.rudzik@greatagencyonline.pl>
-To:     <linux-scsi@vger.kernel.org>
-Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
-X-Mailer: mail.greatagencyonline.pl
+        with ESMTP id S1391350AbiEFLRj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 May 2022 07:17:39 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3881168F8E;
+        Fri,  6 May 2022 04:13:56 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242M53jo024988;
+        Tue, 3 May 2022 00:51:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=HHb1zVF2Dw+udU2Ov7LmUB+S58UiMaN2JW9wFG/2hGs=;
+ b=k3avzyHbk6W5wmLmUkv4xRqTqjoawpultus8cOKAOWzgUh2QbQ0QrkRLDNnQYi4DC7j8
+ tRrPFxfKZi/eQ+/VZqoKI8lb2C8L+J2cyJXAJl/jO42PARSOXb16rPAf/kzHuSFUTok5
+ n8LrG9cbpENYuo8u6AHeqejOKCKWT/NJSrABfcJ61xxxAom08hYPTST9r3v8uVhYUABr
+ i/9U+wmPDWUh9yGXQm1lJpl8e6o7J9EGkWJslPTOGBvYcbSSad+umj/8WP79U9o14swx
+ sCGepDIuh/y5zhki7IDRHJtrnDqa3QD6Q2RALcKqXMTLSTXYaZ0NRTTMI3X1lmG/P52Z Fw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruw2cnx7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:51 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430op5u008954;
+        Tue, 3 May 2022 00:51:51 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x68-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:51 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430pljA010389;
+        Tue, 3 May 2022 00:51:50 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-7;
+        Tue, 03 May 2022 00:51:50 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Haowen Bai <baihaowen@meizu.com>,
+        Javed Hasan <jhasan@marvell.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: qedf: Remove useless code
+Date:   Mon,  2 May 2022 20:51:17 -0400
+Message-Id: <165153836361.24053.2275168348426586735.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <1650536693-13089-1-git-send-email-baihaowen@meizu.com>
+References: <1650536693-13089-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: 6RnAQrQAd4I-QJd0-E4krpV8N5wI7tDj
+X-Proofpoint-ORIG-GUID: 6RnAQrQAd4I-QJd0-E4krpV8N5wI7tDj
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Thu, 21 Apr 2022 18:24:53 +0800, Haowen Bai wrote:
 
-chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
-skania nowych zlece=C5=84 ze strony www.
+> buf msg only memset but no use at all, so we drop it.
+> 
+> 
 
-Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
-, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
-=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
-jonowania strony w Google.
+Applied to 5.19/scsi-queue, thanks!
 
-Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
+[1/1] scsi: qedf: Remove useless code
+      https://git.kernel.org/mkp/scsi/c/21faafff6abb
 
-
-Pozdrawiam,
-Miko=C5=82aj Rudzik
+-- 
+Martin K. Petersen	Oracle Linux Engineering
