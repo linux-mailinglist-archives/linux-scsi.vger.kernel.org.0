@@ -2,94 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E5751A642
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 18:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AAA551AC4F
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 20:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354033AbiEDQyr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 4 May 2022 12:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
+        id S1376573AbiEDSJt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 May 2022 14:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354288AbiEDQyA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 12:54:00 -0400
-X-Greylist: delayed 1717 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 09:49:20 PDT
-Received: from mail.megasoftsol.com (mail.megasoftsol.com [43.231.250.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF01488AE
-        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 09:49:20 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.megasoftsol.com (Postfix) with ESMTP id 077FA907444
-        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 21:38:55 +0530 (IST)
-Received: from mail.megasoftsol.com ([127.0.0.1])
-        by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Aab-JBczr2TC for <linux-scsi@vger.kernel.org>;
-        Wed,  4 May 2022 21:38:54 +0530 (IST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.megasoftsol.com (Postfix) with ESMTP id 3564F907446
-        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 21:38:54 +0530 (IST)
-X-Virus-Scanned: amavisd-new at megasoftsol.com
-Received: from mail.megasoftsol.com ([127.0.0.1])
-        by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wpoV3TTqbygP for <linux-scsi@vger.kernel.org>;
-        Wed,  4 May 2022 21:38:54 +0530 (IST)
-Received: from johnlewis.com (unknown [20.97.211.134])
-        (Authenticated sender: admin)
-        by mail.megasoftsol.com (Postfix) with ESMTPSA id 563C790743B
-        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 21:38:52 +0530 (IST)
-Reply-To: robert_turner@johnlewis-trades.com
-From:   John Lewis & Partnersip <robert.turner44@johnlewis.com>
-To:     linux-scsi@vger.kernel.org
-Subject: 5/04/2022 Product Inquiry (JL)
-Date:   04 May 2022 16:11:21 +0000
-Message-ID: <20220504123943.FC2298DF3455C8C3@johnlewis.com>
+        with ESMTP id S1377165AbiEDSJT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 14:09:19 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB81A6B0B4
+        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 10:25:15 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242KU6TI027785;
+        Tue, 3 May 2022 00:50:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=Q1dTKzZD5M5OdfSISxllMHRcvVgQhr7ZoMHap2gCs0g=;
+ b=pR24MoyC7mAhKkhi15UkF8asM6kY4ii7hg5l0g5B5WVome6PJBv8KzJG2JuwmJB3xQ0n
+ 19GcInPHe+DynuJuaS+kXoUCjpcmG2ukpdrHOhdR40+RIgMXpvH3/UKThTvz5RSKPKa2
+ v4rMaY4eVJR6YEFtgiAmSE0Q4rrN0/PoOG3/22f9bBmAq/Ca2BMlcS9fAVxAtFMFxkFZ
+ y19dGe2cLzXXl0q5NQZYMZFoWz1G8ocksq9pGscIw2gSadTbFAbJE8DQzwijY6g6VaFp
+ deCD8RjofR14tR0y7u64cGag/dTiMWcpl1q4vpv4esDGlGuAZ2m5w3beVsw37DNp//pQ yQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruw2cnvn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:50:30 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430fHFX040374;
+        Tue, 3 May 2022 00:50:29 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fs1a493ev-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:50:29 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430mf4v010456;
+        Tue, 3 May 2022 00:50:29 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fs1a493ef-2;
+        Tue, 03 May 2022 00:50:28 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Chesnokov Gleb <Chesnokov.G@raidix.com>, linux-scsi@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH 2/2] qla2xxx: Fix missed DMA unmap for aborted cmds
+Date:   Mon,  2 May 2022 20:50:26 -0400
+Message-Id: <165153834205.24012.4172910984795478484.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <AS8PR10MB4952D545F84B6B1DFD39EC1E9DEE9@AS8PR10MB4952.EURPRD10.PROD.OUTLOOK.COM>
+References: <AS8PR10MB4952D545F84B6B1DFD39EC1E9DEE9@AS8PR10MB4952.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=4.1 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
-        RCVD_IN_MSPIKE_H2,SPF_FAIL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: lFE8H9NA6w5-BEs3s3jzs0zM51FcN8wS
+X-Proofpoint-ORIG-GUID: lFE8H9NA6w5-BEs3s3jzs0zM51FcN8wS
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear linux-scsi
- 
- 
-The famous brand John Lewis & Partners, is UK's largest multi-
-channel retailer with over 126 shops and multiple expansion in 
-Africa furnished by European/Asian/American products. We are 
-sourcing new products to attract new customers and also retain 
-our existing ones, create new partnerships with companies dealing 
-with different kinds of goods globally.
- 
-Your company's products are of interest to our market as we have 
-an amazing market for your products.
- 
-Provide us your current catalog through email to review more. We 
-hope to be able to order with you and start a long-term friendly, 
-respectable and solid business partnership. Please we would 
-appreciate it if you could send us your stock availability via 
-email if any.
- 
- 
-Our payment terms are 15 days net in Europe, 30 days Net in UK 
-and 30 days net in Asia/USA as we have operated with over 5297 
-suppliers around the globe for the past 50 years now. For 
-immediate response Send your reply to "robert_turner@johnlewis-
-trades.com" for us to be able to treat with care and urgency.
- 
- 
- 
-Best Regards
- 
- 
-Rob Turner
-Head Of Procurement Operations
-John Lewis & Partners.
-robert_turner@johnlewis-trades.com
-Tel: +44-7451-274090
-WhatsApp: +447497483925
-www.johnlewis.com
-REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN
+On Fri, 15 Apr 2022 12:42:29 +0000, Chesnokov Gleb wrote:
+
+> Aborting commands that have already been sent to the firmware can
+> cause BUG in qlt_free_cmd(): BUG_ON(cmd->sg_mapped)
+> 
+> For instance:
+> - command passes rdx_to_xfer state, maps sgl, sends to the
+>   fimware
+> - reset occurs, qla2xxx performs ISP error recovery,
+>   aborts the command
+> - target stack calls qlt_abort_cmd() and then qlt_free_cmd()
+> - BUG_ON(cmd->sg_mapped) in qlt_free_cmd() occurs because sgl was not
+>   unmapped
+> 
+> [...]
+
+Applied to 5.18/scsi-fixes, thanks!
+
+[2/2] qla2xxx: Fix missed DMA unmap for aborted cmds
+      https://git.kernel.org/mkp/scsi/c/26f9ce53817a
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
