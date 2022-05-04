@@ -2,87 +2,237 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1C95194EF
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 03:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C885151932A
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 03:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243401AbiEDCBi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 May 2022 22:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
+        id S242666AbiEDBOY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 May 2022 21:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233897AbiEDCA0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 May 2022 22:00:26 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CB425C4F
-        for <linux-scsi@vger.kernel.org>; Tue,  3 May 2022 18:56:44 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242N6sYQ018740;
-        Tue, 3 May 2022 00:52:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=Svm5L4vd+psknhhhfxR468I8FTBZUDU0xFGag1czixU=;
- b=LqytFagz4NN2Uhboxv+NHF9BYcrJ17bqc3Z6A8JxLRYR67Sgm/RauIi745vol5B4zmDt
- Ee3ELHaddErJpdgJqb5E/q0yIDrm5EVCTwIMTPvYh4HSdLKgrnTbKjsnnreM3WiICdbF
- qeClkn4u/U+hWlanwT20S8baaLvs5XN8soRSE5+Js6NrLiHjjXAWUCECL8CP/LcWJVUQ
- oA7xQzf2Iom0lG4tCdNIFvUeGbdxh+Ts6cNuY3IUsDTtvRHArPMY33mPMIEf85qBmb4e
- 94uJUPnwoipD/lJ0HSSujVNMxEfQiWW1Ts0dR9W8N6mDik9w5x5QXZx+UdzoGnz00KBM Nw== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frwnt4kx3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:52:02 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430op61008954;
-        Tue, 3 May 2022 00:52:00 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83xa5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:52:00 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430plji010389;
-        Tue, 3 May 2022 00:52:00 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-24;
-        Tue, 03 May 2022 00:52:00 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Nigel Kirkland <nigel.kirkland@broadcom.com>
-Subject: Re: [PATCH] lpfc: Fix additional reference counting in lpfc_bsg_rport_els()
-Date:   Mon,  2 May 2022 20:51:34 -0400
-Message-Id: <165153836364.24053.18331726423388674581.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220427222158.57867-1-jsmart2021@gmail.com>
-References: <20220427222158.57867-1-jsmart2021@gmail.com>
+        with ESMTP id S245067AbiEDBNv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 May 2022 21:13:51 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00B24348C
+        for <linux-scsi@vger.kernel.org>; Tue,  3 May 2022 18:10:10 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 04558320090D;
+        Tue,  3 May 2022 21:10:07 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 03 May 2022 21:10:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651626607; x=
+        1651713007; bh=KnLM2eMwoGznwvjz4VGg1u92xntCjY3JXBr7b5wJ334=; b=H
+        sD6JdxkCvPO/fl8H1WgVNnNwv4jssvbL7cBrbS+JwHvzJ/2ct1fJxzB8J5YRGC9k
+        elmU2RDAALxIpiw8T9lXbJr8vEyqxHK05gkkoYm63rheC58gwAGJvWFSio3lMWEh
+        No4OlL/+fGlo6nP/hDrP0XkVYG7ln/wq/c2mr1YOScfIrBVMxL6tflSmionRMDbi
+        3dcMSRtGulXQl6AcSXiQ3uZfCEYzrTRMtFCLhsRSZdvN+77GC29WrVjFUqhjJKnB
+        rNt1mkfHj7fiF1rukuLPo9eq2W2CvFEcXVkOkdq8vIwkRV+2e7J0ryrcMVRK1CNf
+        hY42OCNGLSnXuZUnUZoTw==
+X-ME-Sender: <xms:b9JxYrSsI5QuzVsbDqDsoLqE_vbLAS-uV8w50TEffP9bNpEU28RtLg>
+    <xme:b9JxYsxcQLbJsteH6NIF1kWedOIAgMxF41okj9Dpzg87vlmihM9FQ9XRuWDBMrZdq
+    Mr3Rd6StU2_HijruG4>
+X-ME-Received: <xmr:b9JxYg0jN9gFoq4PAxswopWIrAHs7Gi1KZfzbyAJIuBaAkwa-l6cE1Vs9mLxdNn6iYj8GRHVVLDPR68fG70gw777kqpSwtF4Nso>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekgdegvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfv
+    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
+    htvghrnhepleeuheelheekgfeuvedtveetjeekhfffkeeffffftdfgjeevkeegfedvueeh
+    ueelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfh
+    hthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
+X-ME-Proxy: <xmx:b9JxYrAG13PsgwlXJUYKL3SxXD3FnFE0qpyuEjT5sCBe8hCoHiMStw>
+    <xmx:b9JxYki9E4lEIg1xlhD_OI3cx5-8vgOps9T3RN9xkw5FCXZkoJMlKw>
+    <xmx:b9JxYvrjvIi2ckbVLy_rz9GkA2YGrcaQLA4kQIodysCpYUpdWt_s7g>
+    <xmx:b9JxYnsrTr5pttDJv3P2km8KGXv6H_cqRhCReGhlfqzJ7YrU-dgJoQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 3 May 2022 21:10:04 -0400 (EDT)
+Date:   Wed, 4 May 2022 11:10:07 +1000 (AEST)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Hannes Reinecke <hare@suse.de>
+cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 15/24] aic7xxx: do not reference scsi command when
+ resetting device
+In-Reply-To: <20220503200704.88003-16-hare@suse.de>
+Message-ID: <871ed691-8c55-1c1e-507b-b8b77cfe326@linux-m68k.org>
+References: <20220503200704.88003-1-hare@suse.de> <20220503200704.88003-16-hare@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: V7LfiIwUCPuYdOQIW3Irg-WoviD0D1m8
-X-Proofpoint-GUID: V7LfiIwUCPuYdOQIW3Irg-WoviD0D1m8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 27 Apr 2022 15:21:58 -0700, James Smart wrote:
+Hi Hannes,
 
-> Code inspection has found an additional reference is taken in
-> lpfc_bsg_rport_els(). Results in the ndlp not being freed thus is
-> leaked.
+On Tue, 3 May 2022, Hannes Reinecke wrote:
+
+> When sending a device reset we should not take a reference to the
+> scsi command.
 > 
-> Fix by removing the redundant refcount taken before WQE submission.
+> Signed-off-by: Hannes Reinecke <hare@suse.de>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/scsi/aic7xxx/aic7xxx_osm.c | 102 +++++++++++++++--------------
+>  1 file changed, 54 insertions(+), 48 deletions(-)
 > 
-> 
-> [...]
+> diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm.c b/drivers/scsi/aic7xxx/aic7xxx_osm.c
+> index 05591650f89f..596d5870b024 100644
+> --- a/drivers/scsi/aic7xxx/aic7xxx_osm.c
+> +++ b/drivers/scsi/aic7xxx/aic7xxx_osm.c
+> @@ -366,7 +366,8 @@ static void ahc_linux_queue_cmd_complete(struct ahc_softc *ahc,
+>  					 struct scsi_cmnd *cmd);
+>  static void ahc_linux_freeze_simq(struct ahc_softc *ahc);
+>  static void ahc_linux_release_simq(struct ahc_softc *ahc);
+> -static int  ahc_linux_queue_recovery_cmd(struct scsi_cmnd *cmd, scb_flag flag);
+> +static int  ahc_linux_queue_recovery_cmd(struct scsi_device *sdev,
+> +					 struct scsi_cmnd *cmd);
+>  static void ahc_linux_initialize_scsi_bus(struct ahc_softc *ahc);
+>  static u_int ahc_linux_user_tagdepth(struct ahc_softc *ahc,
+>  				     struct ahc_devinfo *devinfo);
+> @@ -728,7 +729,7 @@ ahc_linux_abort(struct scsi_cmnd *cmd)
+>  {
+>  	int error;
+>  
+> -	error = ahc_linux_queue_recovery_cmd(cmd, SCB_ABORT);
+> +	error = ahc_linux_queue_recovery_cmd(cmd->device, cmd);
+>  	if (error != SUCCESS)
+>  		printk("aic7xxx_abort returns 0x%x\n", error);
+>  	return (error);
+> @@ -742,7 +743,7 @@ ahc_linux_dev_reset(struct scsi_cmnd *cmd)
+>  {
+>  	int error;
+>  
+> -	error = ahc_linux_queue_recovery_cmd(cmd, SCB_DEVICE_RESET);
+> +	error = ahc_linux_queue_recovery_cmd(cmd->device, NULL);
+>  	if (error != SUCCESS)
+>  		printk("aic7xxx_dev_reset returns 0x%x\n", error);
+>  	return (error);
+> @@ -2036,11 +2037,12 @@ ahc_linux_release_simq(struct ahc_softc *ahc)
+>  }
+>  
+>  static int
+> -ahc_linux_queue_recovery_cmd(struct scsi_cmnd *cmd, scb_flag flag)
+> +ahc_linux_queue_recovery_cmd(struct scsi_device *sdev,
+> +			     struct scsi_cmnd *cmd)
+>  {
+>  	struct ahc_softc *ahc;
+>  	struct ahc_linux_device *dev;
+> -	struct scb *pending_scb;
+> +	struct scb *pending_scb = NULL, *scb;
+>  	u_int  saved_scbptr;
+>  	u_int  active_scb_index;
+>  	u_int  last_phase;
+> @@ -2053,18 +2055,19 @@ ahc_linux_queue_recovery_cmd(struct scsi_cmnd *cmd, scb_flag flag)
+>  	int    disconnected;
+>  	unsigned long flags;
+>  
+> -	pending_scb = NULL;
+>  	paused = FALSE;
+>  	wait = FALSE;
+> -	ahc = *(struct ahc_softc **)cmd->device->host->hostdata;
+> +	ahc = *(struct ahc_softc **)sdev->host->hostdata;
+>  
+> -	scmd_printk(KERN_INFO, cmd, "Attempting to queue a%s message\n",
+> -	       flag == SCB_ABORT ? "n ABORT" : " TARGET RESET");
+> +	sdev_printk(KERN_INFO, sdev, "Attempting to queue a%s message\n",
+> +	       cmd ? "n ABORT" : " TARGET RESET");
+>  
+> -	printk("CDB:");
+> -	for (cdb_byte = 0; cdb_byte < cmd->cmd_len; cdb_byte++)
+> -		printk(" 0x%x", cmd->cmnd[cdb_byte]);
+> -	printk("\n");
+> +	if (cmd) {
+> +		printk("CDB:");
+> +		for (cdb_byte = 0; cdb_byte < cmd->cmd_len; cdb_byte++)
+> +			printk(" 0x%x", cmd->cmnd[cdb_byte]);
+> +		printk("\n");
+> +	}
+>  
+>  	ahc_lock(ahc, &flags);
+>  
+> @@ -2075,7 +2078,7 @@ ahc_linux_queue_recovery_cmd(struct scsi_cmnd *cmd, scb_flag flag)
+>  	 * at all, and the system wanted us to just abort the
+>  	 * command, return success.
+>  	 */
+> -	dev = scsi_transport_device_data(cmd->device);
+> +	dev = scsi_transport_device_data(sdev);
+>  
+>  	if (dev == NULL) {
+>  		/*
+> @@ -2083,13 +2086,12 @@ ahc_linux_queue_recovery_cmd(struct scsi_cmnd *cmd, scb_flag flag)
+>  		 * so we must not still own the command.
+>  		 */
+>  		printk("%s:%d:%d:%d: Is not an active device\n",
+> -		       ahc_name(ahc), cmd->device->channel, cmd->device->id,
+> -		       (u8)cmd->device->lun);
+> +		       ahc_name(ahc), sdev->channel, sdev->id, (u8)sdev->lun);
+>  		retval = SUCCESS;
+>  		goto no_cmd;
+>  	}
+>  
+> -	if ((dev->flags & (AHC_DEV_Q_BASIC|AHC_DEV_Q_TAGGED)) == 0
+> +	if (cmd && (dev->flags & (AHC_DEV_Q_BASIC|AHC_DEV_Q_TAGGED)) == 0
+>  	 && ahc_search_untagged_queues(ahc, cmd, cmd->device->id,
+>  				       cmd->device->channel + 'A',
+>  				       (u8)cmd->device->lun,
+> @@ -2104,25 +2106,28 @@ ahc_linux_queue_recovery_cmd(struct scsi_cmnd *cmd, scb_flag flag)
+>  	/*
+>  	 * See if we can find a matching cmd in the pending list.
+>  	 */
+> -	LIST_FOREACH(pending_scb, &ahc->pending_scbs, pending_links) {
+> -		if (pending_scb->io_ctx == cmd)
+> +	LIST_FOREACH(scb, &ahc->pending_scbs, pending_links) {
+> +		if (cmd && scb->io_ctx == cmd) {
+> +			pending_scb = scb;
+>  			break;
+> +		}
+>  	}
+>  
+> -	if (pending_scb == NULL && flag == SCB_DEVICE_RESET) {
+> -
+> +	if (!cmd) {
+>  		/* Any SCB for this device will do for a target reset */
+> -		LIST_FOREACH(pending_scb, &ahc->pending_scbs, pending_links) {
+> -			if (ahc_match_scb(ahc, pending_scb, scmd_id(cmd),
+> -					  scmd_channel(cmd) + 'A',
+> +		LIST_FOREACH(scb, &ahc->pending_scbs, pending_links) {
+> +			if (ahc_match_scb(ahc, scb, sdev->id,
+> +					  sdev->channel + 'A',
+>  					  CAM_LUN_WILDCARD,
+> -					  SCB_LIST_NULL, ROLE_INITIATOR))
+> +					  SCB_LIST_NULL, ROLE_INITIATOR)) {
+> +				pending_scb = scb;
+>  				break;
+> +			}
+>  		}
+>  	}
+>  
 
-Applied to 5.19/scsi-queue, thanks!
+A minor style criticism. Wouldn't that be better written as,
 
-[1/1] lpfc: Fix additional reference counting in lpfc_bsg_rport_els()
-      https://git.kernel.org/mkp/scsi/c/92bd903da12b
+if (cmd) {
+        LIST_FOREACH (...)
+                ...
+} else {
+        LIST_FOREACH (...)  
+                ...
+}
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+rather than,
+
+LIST_FOREACH (...)
+        if (cmd && ...)
+                ...
+if (!cmd)
+        LIST_FOREACH (...)
+                ...
