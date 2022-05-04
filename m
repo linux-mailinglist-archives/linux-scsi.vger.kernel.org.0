@@ -2,177 +2,226 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4FC5197E2
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 09:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6695519826
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 09:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242210AbiEDHPb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 May 2022 03:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S1345436AbiEDHc0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 May 2022 03:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234092AbiEDHP0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 03:15:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3838122BEA
-        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 00:11:51 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D7780210ED;
-        Wed,  4 May 2022 07:11:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651648309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=tFn9wwCC2jbZbvF2m0NYpG+KYz+1Qoet6t0hgOWJc6Y=;
-        b=qQs5BaWdkBcajRkOAEHRS6mRI+h/bTAuISJP75XGmBoaLJcqQvySBhKZxv83vRza0J5qIg
-        cMjjDnBcp0Mfx8hSeEAZaVP+X0OJcCkvuHUXJcEUeCz7PepO6nIel4kmphUhD90AVjoj0a
-        LdojoyU97Ovi274zrssUWkDExqKDav4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9BDEC131BD;
-        Wed,  4 May 2022 07:11:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4kiXJDUncmKiSwAAMHmgww
-        (envelope-from <mwilck@suse.com>); Wed, 04 May 2022 07:11:49 +0000
-Message-ID: <9d7e7a5613decc1737ef2601ebb2506890790930.camel@suse.com>
-Subject: lpfc: regression with lpfc 14.2.0.0 / Skyhawk: FLOGI failure
-From:   Martin Wilck <mwilck@suse.com>
-To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Justin Tee <justin.tee@broadcom.com>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        David Bond <dbond@suse.com>, Hannes Reinecke <hare@suse.com>
-Date:   Wed, 04 May 2022 09:11:49 +0200
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 
+        with ESMTP id S240712AbiEDHcT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 03:32:19 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1E823168;
+        Wed,  4 May 2022 00:28:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=ity6IPNC2WIGLGTiJizfPDCFcsI1FfOGUjdPuI/9x1Q=;
+        t=1651649323; x=1652858923; b=QT/lqMVOF1wssRE3WxIi8JFq9qydord3vIkdiB2RnWp4foW
+        Y2EKnvOYOMnbG95Qdly+MoPypq2sN7AwddMp0VYIzVbdfWTRU6B/9bcArAn9dLA9S3yjy/847JAMM
+        5LJInaNZlJNS2YxORo9/2LoJ6iUnT3wyCzCYnMBPg0rAQhl5m/80xeXDtvXNqloQm4rd81zUR3d9V
+        +Mcf8XskU9Hf/j9Yc5oRhMJ/y7/9QB3NmD3+sAFKcmfTxKBvoiJ6MhI/+px6IbLVE1cYELVTNv3+3
+        WgYpY8SAyqZNJdmAsttGuK1DDFIY0LoU33uBUCWEOSV4lb0v/xiWF1k3mZZVt6oQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nm9Oe-001wnb-ND;
+        Wed, 04 May 2022 09:26:04 +0200
+Message-ID: <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
+Subject: Re: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Kees Cook <keescook@chromium.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>
+Cc:     Keith Packard <keithp@keithp.com>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        Christian Brauner <brauner@kernel.org>,
+        Christian =?ISO-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Cong Wang <cong.wang@bytedance.com>,
+        David Gow <davidgow@google.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hulk Robot <hulkci@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        John Keeping <john@metanate.com>,
+        Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>,
+        keyrings@vger.kernel.org, kunit-dev@googlegroups.com,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Louis Peens <louis.peens@corigine.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Rich Felker <dalias@aerifal.cx>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Simon Horman <simon.horman@corigine.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
+        xen-devel@lists.xenproject.org,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>, kvalo@kernel.org
+Date:   Wed, 04 May 2022 09:25:56 +0200
+In-Reply-To: <20220504014440.3697851-3-keescook@chromium.org>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+         <20220504014440.3697851-3-keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We have encountered a regression with linux 5.18-rc5, where Skyhawk
-controllers ("Emulex OneConnect OCe14000") fail at the FLOGI stage and
-don't detect any rports.
+On Tue, 2022-05-03 at 18:44 -0700, Kees Cook wrote:
+> 
+> For example, using the most complicated helper, mem_to_flex_dup():
+> 
+>     /* Flexible array struct with members identified. */
+>     struct something {
+>         int mode;
+>         DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(int, how_many);
+>         unsigned long flags;
+>         DECLARE_FLEX_ARRAY_ELEMENTS(u32, value);
 
-We've bisected it to 1b64aa9eae28 ("scsi: lpfc: SLI path split:
-Refactor fast and slow paths to native SLI4").
+In many cases, the order of the elements doesn't really matter, so maybe
+it'd be nicer to be able to write it as something like
 
-As this was 5.18-rc5,the following fixups on top of 14.2.0.0 were
-already included in the tested code:
+DECLARE_FLEX_STRUCT(something,
+	int mode;
+	unsigned long flags;
+	,
+	int, how_many,
+	u32, value);
 
-c26bd6602e1d scsi: lpfc: Fix locking for lpfc_sli_iocbq_lookup()
-7294a9bcaa7e scsi: lpfc: Fix broken SLI4 abort path
-4f3beb36b1e4 scsi: lpfc: Update lpfc version to 14.2.0.1
-df0101197c4d scsi: lpfc: Fix queue failures when recovering from PCI parity=
- error
-a4691038b407 scsi: lpfc: Fix unload hang after back to back PCI EEH faults
-35ed9613d83f scsi: lpfc: Improve PCI EEH Error and Recovery Handling
+perhaps? OK, that doesn't seem so nice either.
 
-The relevant part of the log (AFAICT) looks like this, showing an "ELS
-CQE error at the FLOGI stage:
+Maybe
 
-lpfc 0000:04:00.2: 0:1303 Link Up Event x1 received Data: x1 x0 x4 x0 x0 x0=
- 0
-lpfc 0000:04:00.2: 0:2778 Start FCF table scan at linkup
-lpfc 0000:04:00.2: 0:2726 READ_FCF_RECORD Indicates empty FCF table.
-lpfc 0000:04:00.2: 0:2765 Mailbox command READ_FCF_RECORD failed to retriev=
-e a FCF record.
-lpfc 0000:04:00.2: 0:0392 Async Event: word0:x0, word1:x1, word2:x2, word3:=
-xc0010200
-lpfc 0000:04:00.2: 0:2546 New FCF event, evt_tag:x2, index:x0
-lpfc 0000:04:00.2: 0:2779 Read FCF (x0) for updating roundrobin FCF failove=
-r bmask
-lpfc 0000:04:00.2: 0:2770 Start FCF table scan per async FCF event, evt_tag=
-:x2, index:x0
-lpfc 0000:04:00.2: 0:2764 READ_FCF_RECORD:
-lpfc 0000:04:00.2: 0:3059 adding idx x0 pri x80 flg x0
-lpfc 0000:04:00.2: 0:2790 Set FCF (x0) to roundrobin FCF failover bmask
-lpfc 0000:04:00.2: 0:2764 READ_FCF_RECORD:
-lpfc 0000:04:00.2: 0:3059 adding idx x0 pri x80 flg x1
-lpfc 0000:04:00.2: 0:2790 Set FCF (x0) to roundrobin FCF failover bmask
-lpfc 0000:04:00.2: 0:2840 Update initial FCF candidate with FCF (x0)
-lpfc 0000:04:00.2: 0:(0):0247 Start Discovery Timer state x7 Data: x21 xfff=
-f9ac83c2449e8 x0 x0
-lpfc 0000:04:00.2: 0:(0):0932 FIND node did xfffffe NOT FOUND.
-lpfc 0000:04:00.2: 0:0001 Allocated rpi:x0 max:x1000 lim:x40
-lpfc 0000:04:00.2: 0:(0):0007 Init New ndlp xffff9abe3071ce00, rpi:x0 DID:f=
-ffffe flg:x0 refcnt:1
-lpfc 0000:04:00.2: 0:(0):0116 Xmit ELS command x4 to remote NPORT xfffffe I=
-/O tag: x800, port state:x7 rpi x0 fc_flag:x90014
-lpfc 0000:04:00.2: 0:(0):0247 Start Discovery Timer state x7 Data: x21 xfff=
-f9ac83c2449e8 x0 x0
-lpfc 0000:04:00.2: 0:(0):0354 Mbox cmd issue - Enqueue Data: x31 (x0/x0) x7=
- x200 x2
-lpfc 0000:04:00.2: 0:(0):0355 Mailbox cmd x31 (x0/x0) issue Data: x7 x300
-lpfc 0000:04:00.2: 0:0357 ELS CQE error: status=3Dx3: CQE: 08000300 0000000=
-0 00000002 80010000
-lpfc 0000:04:00.2: 0:0321 Rsp Ring 2 error: IOCB Data: x8000300 x0 x2 x8001=
-0000
-lpfc 0000:04:00.2: 0:2611 FLOGI failed on FCF (x0), status:x3/x2, tmo:x14, =
-perform roundrobin FCF failover
-lpfc 0000:04:00.2: 0:3060 Last IDX 0
-lpfc 0000:04:00.2: 0:3061 Last IDX 0
-lpfc 0000:04:00.2: 0:2844 No roundrobin failover FCF available
-lpfc 0000:04:00.2: 0:2865 No FCF available, stop roundrobin FCF failover an=
-d change port state:x7/x0
+struct something {
+	int mode;
+	unsigned long flags;
+	FLEX_ARRAY(
+		int, how_many,
+		u32, value
+	);
+};
 
-Comparison with a "good" case with lpfc 14.0.0.4:
+or so? The long and duplicated DECLARE_FLEX_ARRAY_ELEMENTS_COUNT and
+DECLARE_FLEX_ARRAY_ELEMENTS seems a bit tedious to me, at least in cases
+where the struct layout is not the most important thing (or it's already
+at the end anyway).
 
-lpfc 0000:04:00.2: 0:1303 Link Up Event x1 received Data: x1 x0 x4 x0 x0 x0=
- 0
-lpfc 0000:04:00.2: 0:2778 Start FCF table scan at linkup
-lpfc 0000:04:00.2: 0:2726 READ_FCF_RECORD Indicates empty FCF table.
-lpfc 0000:04:00.2: 0:2765 Mailbox command READ_FCF_RECORD failed to retriev=
-e a FCF record.
-lpfc 0000:04:00.2: 0:0392 Async Event: word0:x0, word1:x1, word2:x2, word3:=
-xc0010200
-lpfc 0000:04:00.2: 0:2546 New FCF event, evt_tag:x2, index:x0
-lpfc 0000:04:00.2: 0:2779 Read FCF (x0) for updating roundrobin FCF failove=
-r bmask
-lpfc 0000:04:00.2: 0:2770 Start FCF table scan per async FCF event, evt_tag=
-:x2, index:x0
-lpfc 0000:04:00.2: 0:2764 READ_FCF_RECORD:
-lpfc 0000:04:00.2: 0:3059 adding idx x0 pri x80 flg x0
-lpfc 0000:04:00.2: 0:2790 Set FCF (x0) to roundrobin FCF failover bmask
-lpfc 0000:04:00.2: 0:(0):0307 Mailbox cmd x9b (xc/x8) Cmpl lpfc_mbx_cmpl_fc=
-f_scan_read_fcf_rec [lpfc] Data: x9b00 x8 x244 x0 x0 x0 xfa8cd000 xf x244 x=
-0 x0 x0
-lpfc 0000:04:00.2: 0:2764 READ_FCF_RECORD:
-lpfc 0000:04:00.2: 0:3059 adding idx x0 pri x80 flg x1
-lpfc 0000:04:00.2: 0:2790 Set FCF (x0) to roundrobin FCF failover bmask
-lpfc 0000:04:00.2: 0:2840 Update initial FCF candidate with FCF (x0)
-lpfc 0000:04:00.2: 0:(0):0247 Start Discovery Timer state x7 Data: x21 xfff=
-f94b6fcae69e8 x0 x0
-lpfc 0000:04:00.2: 0:(0):0932 FIND node did xfffffe NOT FOUND.
-lpfc 0000:04:00.2: 0:0001 Allocated rpi:x0 max:x1000 lim:x40
-lpfc 0000:04:00.2: 0:(0):0007 Init New ndlp xffff94c6f0c99000, rpi:x0 DID:f=
-ffffe flg:x0 refcnt:1
-lpfc 0000:04:00.2: 0:(0):0116 Xmit ELS command x4 to remote NPORT xfffffe I=
-/O tag: x800, port state:x7 rpi x0 fc_flag:x90014
-lpfc 0000:04:00.2: 0:(0):0247 Start Discovery Timer state x7 Data: x21 xfff=
-f94b6fcae69e8 x0 x0
-lpfc 0000:04:00.2: 0:(0):0101 FLOGI completes successfully, I/O tag:x800, x=
-ri x0 Data: x40002 xd0070000 x10270000 x0 x7 90014 2
-lpfc 0000:04:00.2: 0:(0):1816 FLOGI NPIV supported, response data 0x1
-lpfc 0000:04:00.2: 0:(0):0904 NPort state transition xfffffe, UNUSED -> UNM=
-APPED
-lpfc 0000:04:00.2: 0:(0):3183 lpfc_register_remote_port rport xffff94b7c467=
-f800 DID xfffffe, role x0 refcnt 3
 
-Hints appreciated. Complete logs and additional debug data can be provided =
-on request.
+>     struct something *instance = NULL;
+>     int rc;
+> 
+>     rc = mem_to_flex_dup(&instance, byte_array, count, GFP_KERNEL);
+>     if (rc)
+>         return rc;
 
-Regards
-Martin
+This seems rather awkward, having to set it to NULL, then checking rc
+(and possibly needing a separate variable for it), etc.
 
+But I can understand how you arrived at this:
+ - need to pass instance or &instance or such for typeof()
+   or offsetof() or such
+ - instance = mem_to_flex_dup(instance, ...)
+   looks too much like it would actually dup 'instance', rather than
+   'byte_array'
+ - if you pass &instance anyway, checking for NULL is simple and adds a
+   bit of safety
+
+but still, honestly, I don't like it. As APIs go, it feels a bit
+cumbersome and awkward to use, and you really need everyone to use this,
+and not say "uh what, I'll memcpy() instead".
+
+Maybe there should also be a realloc() version of it?
+
+
+> +/** __fas_bytes - Calculate potential size of flexible array structure
+
+I think you forgot "\n *" in many cases here after "/**".
+
+johannes
