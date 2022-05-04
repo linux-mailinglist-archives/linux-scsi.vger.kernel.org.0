@@ -2,77 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E28851AC56
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 20:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F2B51ACE8
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 20:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376347AbiEDSIk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 May 2022 14:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
+        id S1377008AbiEDSg4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 May 2022 14:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376494AbiEDSHu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 14:07:50 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566BB6FA02;
-        Wed,  4 May 2022 10:23:10 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 99C7C1C0BAA; Wed,  4 May 2022 19:23:08 +0200 (CEST)
-Date:   Wed, 4 May 2022 19:23:07 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, vkuznets@redhat.com,
-        decui@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        deller@gmx.de, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH 0/4] Remove support for Hyper-V 2008 and 2008R2/Win7
-Message-ID: <20220504172307.GB1623@bug>
-References: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
+        with ESMTP id S1376986AbiEDSgp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 14:36:45 -0400
+X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 11:22:29 PDT
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B49965F1;
+        Wed,  4 May 2022 11:22:29 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 233F742B44;
+        Wed,  4 May 2022 18:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        mime-version:content-transfer-encoding:content-type:content-type
+        :content-language:accept-language:in-reply-to:references
+        :message-id:date:date:subject:subject:from:from:received
+        :received:received:received:received; s=mta-01; t=1651687350; x=
+        1653501751; bh=d1AvmeEuVZgsCOz9p7Jh6JALcdMQUebwCCJjiySqc3w=; b=Z
+        Pl5px0nVEqVgiJ2jfO7OD1RiJNO8dvbS2wXDfzEg8Gqc9ieuLc0DTCYMPc9R/QJH
+        bJwDE0x/J+/SywJAbD98WldPUm7LduUIZPhDVX2rslr0wr9aeV9lk7LXESt0IDu+
+        TNkbb1g+914eUu86EuRKWaCE9JZ5+EwWBfFOQ5hS8c=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id UoA5R8rV2ZWn; Wed,  4 May 2022 21:02:30 +0300 (MSK)
+Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 0B4ED4283A;
+        Wed,  4 May 2022 21:02:29 +0300 (MSK)
+Received: from T-EXCH-10.corp.yadro.com (172.17.11.60) by
+ T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Wed, 4 May 2022 21:02:29 +0300
+Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
+ T-EXCH-10.corp.yadro.com (172.17.11.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 4 May 2022 21:02:28 +0300
+Received: from T-EXCH-09.corp.yadro.com ([fe80::d9f:e165:8a50:d450]) by
+ T-EXCH-09.corp.yadro.com ([fe80::d9f:e165:8a50:d450%4]) with mapi id
+ 15.02.0986.022; Wed, 4 May 2022 21:02:28 +0300
+From:   Dmitriy Bogdanov <d.bogdanov@yadro.com>
+To:     Mike Christie <michael.christie@oracle.com>,
+        Martin Petersen <martin.petersen@oracle.com>,
+        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux@yadro.com" <linux@yadro.com>
+Subject: RE: [PATCH v3 0/3] target: iscsi: control authentication per ACL
+Thread-Topic: [PATCH v3 0/3] target: iscsi: control authentication per ACL
+Thread-Index: AQHXxLmS7SuA9HdbIk2r5RVxhcl+j6veWFEAgABFs0CBMY9zoA==
+Date:   Wed, 4 May 2022 18:02:28 +0000
+Message-ID: <bd9e50adcc95404c94b4408117a94b0a@yadro.com>
+References: <20211019071843.14890-1-d.bogdanov@yadro.com>
+ <ec9e01a3-73d0-a06b-8c20-ae492c0c3313@oracle.com>
+ <15af5f6f490a42c5a02c9d9bd79f1a28@yadro.com>
+In-Reply-To: <15af5f6f490a42c5a02c9d9bd79f1a28@yadro.com>
+Accept-Language: ru-RU, en-US
+Content-Language: ru-RU
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.178.114.42]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi!
-
-> Linux code for running as a Hyper-V guest includes special cases for the
-> first released versions of Hyper-V: 2008 and 2008R2/Windows 7. These
-> versions were very thinly used for running Linux guests when first
-> released more than 12 years ago, and they are now out of support
-> (except for extended security updates). As initial versions, they
-> lack the performance features needed for effective production usage
-> of Linux guests. In total, there's no need to continue to support
-> the latest Linux kernels on these versions of Hyper-V.
-> 
-> Simplify the code for running on Hyper-V by removing the special
-> cases. This includes removing the negotiation of the VMbus protocol
-> versions for 2008 and 2008R2, and the special case code based on
-> those VMbus protocol versions. Changes are in the core VMbus code and
-> several drivers for synthetic VMbus devices.
-
-> 2008 and 2008R2, so if the broader Linux kernel community surfaces
-> a reason why this clean-up should not be done now, we can wait.
-> But I think we want to eventually stop carrying around this extra
-> baggage, and based on discussions with the Hyper-V team within
-> Microsoft, we're already past the point that it has any value.
-
-Normal way to do such deprecations is to put printks in first, then hide it
-under config option noone sets, and wait for year or so if anyone complains.
-
-We can't really remove code that is in use.
-
-Best regards,
-									Pavel
--- 
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
+SGkgTWlrZSwNCg0KSSd2ZSBqdXN0IHRyaWVkIG9uZSBtb3JlIHRpbWUgdG8gcmVwcm9kdWNlIHlv
+dXIgZXJyb3IgYW5kIEkgZmFpbGVkIGFnYWluLg0KV2l0aCB5b3VyIGNvbmZpZyBmaWxlIHRoZSBi
+ZWhhdmlvciBpcyB0aGUgYWJzb2x1dGVseSB0aGUgc2FtZSBmb3IgYm90aCBjYXNlcyB3aXRoIG15
+IHBhdGNoc2V0IGFuZCB3aXRob3V0IG15IHBhdGNoc2V0OiANCiogZm9yIGR5bmFtaWMgQUNMcyAt
+IHRhcmdldCBmYWlscyB0aGUgbG9naW4gYW5kIHNob3dzIHRoZSBiZWxsb3cgbG9ncy4NCiogZm9y
+IHRoZSByZWdpc3RlcmVkIEFDTCAtIHRhcmdldCBzdWNjZWVkcyB0aGUgbG9naW4uDQoNCkNvdWxk
+IHlvdSwgcGxlYXNlLCByZS1jaGVjayB0aGUgcGF0Y2hzZXQ/DQoNCkJSLA0KIERtaXRyeQ0KDQot
+LS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogRG1pdHJpeSBCb2dkYW5vdiA8ZC5ib2dk
+YW5vdkB5YWRyby5jb20+IA0KU2VudDogRnJpZGF5LCBPY3RvYmVyIDIyLCAyMDIxIDEwOjQ4IEFN
+DQpUbzogTWlrZSBDaHJpc3RpZSA8bWljaGFlbC5jaHJpc3RpZUBvcmFjbGUuY29tPjsgTWFydGlu
+IFBldGVyc2VuIDxtYXJ0aW4ucGV0ZXJzZW5Ab3JhY2xlLmNvbT47IHRhcmdldC1kZXZlbEB2Z2Vy
+Lmtlcm5lbC5vcmcNCkNjOiBsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZzsgbGludXhAeWFkcm8u
+Y29tDQpTdWJqZWN0OiBSRTogW1BBVENIIHYzIDAvM10gdGFyZ2V0OiBpc2NzaTogY29udHJvbCBh
+dXRoZW50aWNhdGlvbiBwZXIgQUNMDQoNCkhpIE1pa2UsDQoNCj4gSSBjYW4ndCBzZWVtIHRvIGdl
+dCB0aGUgcGF0Y2hlcyB3b3JraW5nIHdpdGggdGhlIHRhcmdldGNsaSBjb25maWcgZmlsZSBiZWxv
+dyBJdCB3b3JrZWQgb2sgYmVmb3JlIHRoZSBwYXRjaGVzLg0KPg0KPiBJIGdldCB0aGlzIGVycm9y
+Og0KPg0KPiBPY3QgMjIgMDA6NTY6MjUgb2w0IGtlcm5lbDogQ0hBUCB1c2VyIG9yIHBhc3N3b3Jk
+IG5vdCBzZXQgZm9yIEluaXRpYXRvciBBQ0wNCj4gT2N0IDIyIDAwOjU2OjI1IG9sNCBrZXJuZWw6
+IFNlY3VyaXR5IG5lZ290aWF0aW9uIGZhaWxlZC4NCj4gT2N0IDIyIDAwOjU2OjI1IG9sNCBrZXJu
+ZWw6IGlTQ1NJIExvZ2luIG5lZ290aWF0aW9uIGZhaWxlZC4NCg0KVGhpcyBraW5kIG9mIGVycm9y
+IGlzIHJlcG9ydGVkIGZvciB0aGUgdW5rbm93biAoZHluYW1pYykgQUNMIHNpbmNlIHRoZSBjb25m
+aWcgZmlsZSBoYXZlIG5vdCBoYXZlDQp1c2VyaWQvcGFzc3dvcmQgY29uZmlndXJlZCBmb3IgVFBH
+LiBZb3VyIGNvbmZpZyBmaWxlIGxvb2tzIHN0cmFuZ2UgLSBpdCBoYXMgZ2VuZXJhdGVfZHluX2Fj
+bHM9MQ0KYnV0IGhhcyBub3QgY3JlZGVudGlhbHMgZm9yIGR5bmFtaWMgYWNscy4NCg0KTG9naW4g
+ZnJvbSB0aGUgY29uZmlndXJlZCBBQ0wgaW4gdGhpcyBjb25maWcgZmlsZSB3b3JrcyB3ZWxsIGZv
+ciBtZS4NCg0KQ291bGQgeW91LCBwbGVhc2UsIGRlc2NyaWJlIG1vcmUgZGV0YWlscyBvZiB5b3Vy
+IHVzZWNhc2U/DQoNCkJSLA0KIERtaXRyeQ0K
