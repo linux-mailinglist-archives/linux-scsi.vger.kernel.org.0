@@ -2,155 +2,167 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF6D51A2E5
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 17:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174ED51A33A
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 17:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351705AbiEDPE7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 May 2022 11:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S1351927AbiEDPMI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 May 2022 11:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351672AbiEDPE5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 11:04:57 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE582D1C3;
-        Wed,  4 May 2022 08:01:20 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 244EXaN2029440;
-        Wed, 4 May 2022 15:01:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=OHWcOtW86uVb11ZYus/te07w9zqDTQjC+DhEzsXlAsI=;
- b=IYdgkTqWxedVnKyY2xvyGeQ7jva+kOaxgO5z1gLtGeL0CSyfUs6TLqTg0lkRUgRYv30r
- BXY3CZiDXrZh8bbi8q5RI1afvcdjWHHl1vYYAVpYKC1NaE/3rZx/xGAhiQh1HE6rBoyY
- pdXCK56rknKrYD0AFvrcy6rgLiOECt/Y9fqX22q0HX91FdVHftvDim/x6Z8Ko5DESvMs
- 0cwgMrOqZLK1dL+kiM1zQ4h48UeTBAJ9ICSBk/udOz4ko82EEKIACFCzHGNSeLGmH5Cb
- 4NLoJKra9orKbkM40hvaA9A52A95etE6zROIIcy6av+GoKt4wwIXhNV4V84d43KCjMpf GA== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruq0grmb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 May 2022 15:01:13 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 244EtSvZ038948;
-        Wed, 4 May 2022 15:01:08 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2174.outbound.protection.outlook.com [104.47.55.174])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fusafmgtn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 May 2022 15:01:08 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QXVyLPGZhZ4TkM6/cAdO77PSavKsEdsZHD+orvSvuT3LuwNLRXuLmveYRHlBHuZHWIVLdhYP2kXMGfCwH9jYUMHMn82GXs4kMTAEJRXjoAweZMVisXa2cHKob0t3SI3ZDEGA2/YJ9wyj52gpiAISqQlKkxHSX6yplzNTihoqcATDSgRBsoH4bAxdh8aQaRLX8yqpmnUXwk5cFOOsyDMAQpJRtzshfgttWNTYIwXuqzSbl0xYgF3Is4HfX3Wi+q0XvJyiTvPB4yIgECOBpHjVkmLd0yauXKlb19mXGN9snBfrxhTzHCwgD8Ovsc0Fey4S3dcb7N+Np1ddSO0v2lrReQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OHWcOtW86uVb11ZYus/te07w9zqDTQjC+DhEzsXlAsI=;
- b=gxP9lqv75pIYtqwoaBfB36WJayUwHwZdlmCzy3KuJnaL1w1IwxRdl5g0nkKnCZdtgGfuhqbqK4nh74mXzGlwY41TdB1dZ1bofmi3YgdG1gzl+iJTyuY9pp9t1Wj5PirLK7JwD5SbqeaW7rdVZNqQ1EeQOtO/hS+IW5LcSSKCh1Nwb1tl/Oqm059Rf3sWz2lsd9lSNahUkDRaCknzv27kLw0fXTCbE2ouaonTc0lqhrIgBrn54jiF3LEhwOLMt/H7acMKsb5SerXOIn9BYpINnEMJXXfztP2KkeXBDLhLJsa3eAcGkdDTazjpIGtAQ2HckkxEEoB89xV6AsM+f9IPEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        with ESMTP id S1351905AbiEDPMF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 11:12:05 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E19220EF
+        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 08:08:28 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so1504732pjf.0
+        for <linux-scsi@vger.kernel.org>; Wed, 04 May 2022 08:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OHWcOtW86uVb11ZYus/te07w9zqDTQjC+DhEzsXlAsI=;
- b=zGhRG6QmeyN/wGgzOhnkyqRApBMpwhX7LvXJqlAiJ1zwLzS9pNh2UFvg9Azo0kQ6YzYOYMiHUTxOvBFivsMx2yA82u0O2tKCmKlKcxr4zlhQrlhm08Amca0F/xXkP1/OyxAeq18TrKuaV1BNgblk0phWb5GVMZDgzZO7+ejJjX0=
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
- DM5PR10MB1692.namprd10.prod.outlook.com (2603:10b6:4:8::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5186.20; Wed, 4 May 2022 15:01:06 +0000
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::3cb2:a04:baff:8586]) by DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::3cb2:a04:baff:8586%2]) with mapi id 15.20.5186.028; Wed, 4 May 2022
- 15:01:06 +0000
-Message-ID: <87fc30a1-be89-1a9a-a088-1b3b7d7778e3@oracle.com>
-Date:   Wed, 4 May 2022 08:01:04 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH 3/3] target/iscsi: rename iscsi_session to iscsit_session
-Content-Language: en-US
-To:     Max Gurtovoy <mgurtovoy@nvidia.com>, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, martin.petersen@oracle.com
-Cc:     hch@lst.de, sagi@grimberg.me
-References: <20220428092939.36768-1-mgurtovoy@nvidia.com>
- <20220428092939.36768-3-mgurtovoy@nvidia.com>
-From:   michael.christie@oracle.com
-In-Reply-To: <20220428092939.36768-3-mgurtovoy@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR08CA0014.namprd08.prod.outlook.com
- (2603:10b6:a03:100::27) To DM5PR10MB1466.namprd10.prod.outlook.com
- (2603:10b6:3:b::7)
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Qb+1GrJs8SRgE6Wq+GlmzxuejfTqdKZ3b89DzJavSQw=;
+        b=QW7CQXai9IiD71Wvf+o2VYxsrI+DMXmN1vsS0b5DV0rtrX+G8r3eGzQnrLgcSNLS6o
+         18VjexLmt9t17aqS0qc4jCF5CPslGIy/SB1vEauI+iOiw3aemKigwzjm7wU//Osg3Pbt
+         9wMF/4HUhAaX0invtmDD41DdrKFbACP1VK8u0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Qb+1GrJs8SRgE6Wq+GlmzxuejfTqdKZ3b89DzJavSQw=;
+        b=kduMRsZn7Lhm/ohaoucQr7yuSZWJYDHjqa2+7P8RNnfCCcLGNjqwxBwhrVTdMfU79J
+         H2nkx1TDjfQXfFcPDuGPDKRkjlzVx/MvvICarp0HLgiyIyihlo3C1qSKRfYPGBkcDmlA
+         DHQ034Yrhssq27yU7Wpg3UTDl2COv09NsW52J+SXCcxTobvP4lOFL/tvYRdydhBqkuQ/
+         1WFuktBHgDLtx4AaK6t06DrTPC2znC5hi/B8lRK3A08Axph2oFnbt6IK5EDsuyB7HJHM
+         JSFtUiupjQyq6ErMMXJkxYDfECEOX2sTGpFKlnUTd9KfSmYHlq0dUUubf38u1IwQy9aZ
+         XZ1w==
+X-Gm-Message-State: AOAM531UA7i9hwdGBGwihWGdRCg/rkgPGb/sM24SyUFwOkAv2u/88e9L
+        bpRkJFM+8Sx9NMXLNrQspKRNTA==
+X-Google-Smtp-Source: ABdhPJxppSZTl5CKjnq8a5hBmltXmdlckYUA+zJjxmwbiUJP9s+fG0NYe/ezZfchAEYBzvKm6cdN0g==
+X-Received: by 2002:a17:90a:e7d2:b0:1dc:3762:c72d with SMTP id kb18-20020a17090ae7d200b001dc3762c72dmr10809021pjb.243.1651676908004;
+        Wed, 04 May 2022 08:08:28 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q10-20020a170902bd8a00b0015e8d4eb2c8sm8430976pls.274.2022.05.04.08.08.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 08:08:27 -0700 (PDT)
+Date:   Wed, 4 May 2022 08:08:26 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, wcn36xx@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        Christian Brauner <brauner@kernel.org>,
+        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Gow <davidgow@google.com>,
+        David Howells <dhowells@redhat.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hulk Robot <hulkci@huawei.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        John Keeping <john@metanate.com>,
+        Juergen Gross <jgross@suse.com>,
+        Keith Packard <keithp@keithp.com>, keyrings@vger.kernel.org,
+        kunit-dev@googlegroups.com,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        llvm@lists.linux.dev, Louis Peens <louis.peens@corigine.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Rich Felker <dalias@aerifal.cx>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Simon Horman <simon.horman@corigine.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Wei Liu <wei.liu@kernel.org>, xen-devel@lists.xenproject.org,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: [PATCH 10/32] wcn36xx: Use mem_to_flex_dup() with struct
+ wcn36xx_hal_ind_msg
+Message-ID: <202205040730.161645EC@keescook>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-11-keescook@chromium.org>
+ <8735hpc0q1.fsf@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f065cdc9-5dea-445b-2c13-08da2ddeea80
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1692:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR10MB1692AD9DAA5378BBE30041E9F1C39@DM5PR10MB1692.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h7cpT4Fqa+D1mgbRgsjwJzgnDzhdKIiyCkOzhiduZk/94YZxUTNAQVvkLYXM5+/VblEx0RlWz9nQTLt0UabMIJ/Quu0yudV83dYbDvwc8Z6UoZCb6u7vpR8EklZmLHvjc8v/VjQhK+AfG7LoKfbtoc3S2sF05ioYzKF7wtuZE6ErHTnsIh2hhxKt4l/mD1WgvepdkJkXxxhRcWqQ9kSA9P53atjN2yV9eO69zd8ymsXXggrAMJ2dz+otNCeIATvSYAxc0GgyDxRHnB0hijEVuexEQza2MqxtCYARcAsbNKOSPe8rm1PjlZKymP33LrMj6x9VqqfWDDtExtjQHpikl7q7hAk7AC+2JHNlRGtbDvZQUW/Y4BVFkTDqS+TunTbC8xUwBg33b2DxQSHipIFX5dOKEUnW7B1el2GjJxO73Vv5jX0+wFAYPJ98ONbf2xtsNd6RtoZ1NSLmN6EoGMRkGnR+hpmaXBpNx2w87dPbKCpDvMYSjvFxdDolP2kGzNRU0Ii/QiADN/2pJtxfo3upUJZ77TeqQpM3Q5umlSsVkF5c4A48WjBEBD7oncnw2YhxEfkPj325EK+EkjnT1lVZQ5W2mF1A60KCTuxOavxQrysAqV7M3je8GEdnyvIMDlRySnFN22y4KfwVb/7OFEIEMtIUJNIOjJUDIDY3FXJzDXkRkhFTZrWD6y16c+pN47nEbspM00VbxvOriFN7A2pjxA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(9686003)(26005)(36756003)(53546011)(6506007)(31696002)(2906002)(316002)(31686004)(86362001)(508600001)(6486002)(186003)(2616005)(66476007)(4326008)(83380400001)(66946007)(8676002)(8936002)(5660300002)(38100700002)(66556008)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S2IySVV0M0ZTVlFBeEgzMHQyS1YvNitLMFpxYjJmeEl2WjFTQlBpbHgzRUdT?=
- =?utf-8?B?WDl1YklReEVNT05XVmw0d08xMGRZa08wSkFIMUZEbHBYbFRmRXN5cjVLUlVK?=
- =?utf-8?B?UjZ3MmVDZlIyeC92anFqQWhFSUtnQThMWCtEcTV1c2hUdlM4YmpHOG1LZ1k4?=
- =?utf-8?B?azVsSEtYcHg2d2djRk9Ec1V2c0E3V001U3BqdWRQRDhHQXFnalRUUUMrL09F?=
- =?utf-8?B?aWZXVnVYZkhHZFJZZFQrdjVUOWJXRVk1eHkrQVZmZmdIWE1ZRERqRmRIM3g4?=
- =?utf-8?B?QnlkVUlkUk1tTXV2cDNjVEtLcUpaVWIvZjBCbUtIa1UyYlYxQnZ5aXU1QWtm?=
- =?utf-8?B?R1VWeGNsT1ptSmx5aE9rVWNpSnVIS1ZHUmFJeTdiOUtGZTNEb0M4VU8zbWxK?=
- =?utf-8?B?dE85ZW1pMmVRYlFGRjI5VDRpL1FWMmRPbDlnWDJFMHkrUDFlcGtlWDVsVzYy?=
- =?utf-8?B?a3FURXdvcXJuWHZpUmtUeEN0UjVTYW5aMmxLQktSL3BUcldOQnFFTDVvYStm?=
- =?utf-8?B?T0NiZW5oQlRUNEtTY3BTU2thNmNkL090VkRmOWh0d0JLbnNaTWtteXVxK2Vq?=
- =?utf-8?B?R1dySFdNY09vdHA4WFBlb1crTmpGS3ZxajAxNC8yY1RqK0YxQjUwekcxTm1B?=
- =?utf-8?B?S2RtbStQWUhHRWM5eC8xV0dLUklta2cyQXdvMklBTDEwRTYxeGRYTVpHeHU3?=
- =?utf-8?B?NUlON3hiRXR2RjluZWNtOW1CSFY4SU45RnZJVkkwTnBHYUMrbTh4cmZ4TkxU?=
- =?utf-8?B?Wi96NFBNYVpMaGFBTXoxeERCdEtsT09rNFlrcEhxTkM0anprNng4UUJGMy9W?=
- =?utf-8?B?V0k0SHFsWTNOTjMxL1o2REIrbGlRMlhJZFZENmRLcTNPd3Z2ZnJOdDEwMDZX?=
- =?utf-8?B?MTliL1N1NkRzMTFGNnBvN3RQUHpuZXgzVlIyak1vd1dJMEx6WWdoUzJ0cDN6?=
- =?utf-8?B?SnhVdDE3dGIyc3YxMWhyTGRiekkzRXJJODJhL2V5S0g5RGh2ZG41NUNabUho?=
- =?utf-8?B?MUdqU0oxOWNRekxTTnFpM3liSFIweXpjUmtlTDM1dVdld3FZVUREY3pOcVpH?=
- =?utf-8?B?TnpqTjZCd09RM0kvUmp6WXhLTXViQ1cxK2VzYTBFWU9SOXpFVjVqZmtlT2Ra?=
- =?utf-8?B?RTJSSCtzTFIzaUFPRGg4SGpwQU04UGlVYk9qdE1mOWEwYzVuNElDZGFNc3pZ?=
- =?utf-8?B?bUlyaWRTWlRRYW1rdVhGSUxZZG43ZjlNN0JpdmRySFdoam80MERMNUplaFMy?=
- =?utf-8?B?KzNseVFoK0R2d0NDMk5QVWF1WE9EQUJyTGo0MUIzanltdDAvY3ZRbnpFbmUw?=
- =?utf-8?B?MSt1dmpraFR3TmtwcjRNYStQN05UbXZscmRLbzRId1JLd3BCb1BjQ0d6cmNI?=
- =?utf-8?B?MzFyM3RSRW8xakhUOTlTVmo3aXJObmtIcWtZUWtTRnB3VzdTQTBHdjljalRI?=
- =?utf-8?B?UWpORGxRaHdybG1vK3hMdlBzNGRoeDJvcmcwZHU2ZkxDdVVnWWJFNzA0WGlq?=
- =?utf-8?B?WXNUOTJ2TzA3QU84S0p1QTFxRW1Hc0xZNEJRaG1nZWh5M1VlN05pK0RBSkwy?=
- =?utf-8?B?M094bk9GWmw4UVoxQTRGUTZhV256RVRUaTBiQVBnUUtINHZ3OXpJenQ5OEcw?=
- =?utf-8?B?KzJkUGFaVEZDa0FXNngzYzdZbDVXNU1XYzJVRDFmcGlhSFVVS0VlZ204emVF?=
- =?utf-8?B?VUdFRnQzRDVSNllyYUVHZk1tVUg0S0VzRzdCRDJzN1pIQTdORWZ6bGdCWTU4?=
- =?utf-8?B?YXlUcDMvWVU4dFVBMkdWMlo0MFVkL1I5bXNTYjhNUXMzN1Mvbk1zQVhuQW9Y?=
- =?utf-8?B?WGRSRm9FUlExZE1HWUpnSFdhaVVDVkFYa1YrY2Z4TUlWWFc4ZFgwd3hyNHRR?=
- =?utf-8?B?M252cFdpbEF3RjFBa2ZBU292KzhMY0k3QUFrQ0VtYUVNQ3BHS3ltWkt5SURF?=
- =?utf-8?B?ODFZdFh2L280NkdJV0dmZUtlM2krYVFRSm1QUlNsbUxOc1hLUzlIZ1hhTFRq?=
- =?utf-8?B?UVhjZUxuak5wazhYN1JiZExkRTJGRzcwczFBeGNDOG4vU3FZZGRWbDNVUjF4?=
- =?utf-8?B?dmpPUUFibmJWNys0MnBvZWdtVVN1c2g0N3k0ZGFyV1FyZmtJOGJhRzl6MThP?=
- =?utf-8?B?WG9yRWpmOHYvK2VrM2pOZmZldXF2b0dKSmlDR1hlb1E4a0FzMS9wSjNXM1Qr?=
- =?utf-8?B?a1NZQVNLaWtSV040TmNseUlBaURmL0tqOUEwanNxMTVEV0V4cXV5RXJBZmdB?=
- =?utf-8?B?YWtuRDdkZkh0RFJXalJOOTd4aVFHbnFCc09PRmxwL2N1VzdqeVVnVkNZc2M2?=
- =?utf-8?B?emY0UkFSZnR3QzhJMUx4cm9jWkJPZVRscFZnaDJhUGp2c1lOZlRMZEZoT1pl?=
- =?utf-8?Q?VV9/KYQI8Iv2DB3Q=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f065cdc9-5dea-445b-2c13-08da2ddeea80
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2022 15:01:06.8010
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +WHQboqRDTkFOTsqdg70t2lEbq46KkqnmPfwrW7m4aOz7HjU+Ay0m1wPKcKxUVCDI57lks6cx7YaNHKzAD1W5TeZmq1rELZBOtiBQsYAAKg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1692
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-05-04_04:2022-05-04,2022-05-04 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 adultscore=0
- bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205040095
-X-Proofpoint-ORIG-GUID: wiSsXBnP9mYLV0vlL0akXO9nbCg9Z3AZ
-X-Proofpoint-GUID: wiSsXBnP9mYLV0vlL0akXO9nbCg9Z3AZ
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8735hpc0q1.fsf@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -158,36 +170,107 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 4/28/22 2:29 AM, Max Gurtovoy wrote:
-> The structure iscsi_session naming is used by the iscsi initiator
-> driver. Rename the target session to iscsit_session to have more
-> readable code.
+On Wed, May 04, 2022 at 08:42:46AM +0300, Kalle Valo wrote:
+> Kees Cook <keescook@chromium.org> writes:
 > 
-> Signed-off-by: Max Gurtovoy <mgurtovoy@nvidia.com>
-> ---
->  drivers/target/iscsi/iscsi_target.c           | 28 +++++++++----------
->  drivers/target/iscsi/iscsi_target.h           |  8 +++---
->  drivers/target/iscsi/iscsi_target_configfs.c  | 12 ++++----
->  drivers/target/iscsi/iscsi_target_device.c    |  4 +--
->  drivers/target/iscsi/iscsi_target_device.h    |  6 ++--
->  drivers/target/iscsi/iscsi_target_erl0.c      | 10 +++----
->  drivers/target/iscsi/iscsi_target_erl0.h      |  8 +++---
->  drivers/target/iscsi/iscsi_target_erl1.c      | 20 ++++++-------
->  drivers/target/iscsi/iscsi_target_erl1.h      | 10 +++----
->  drivers/target/iscsi/iscsi_target_erl2.c      | 18 ++++++------
->  drivers/target/iscsi/iscsi_target_erl2.h      | 10 +++----
->  drivers/target/iscsi/iscsi_target_login.c     | 20 ++++++-------
->  drivers/target/iscsi/iscsi_target_nego.c      |  6 ++--
->  .../target/iscsi/iscsi_target_nodeattrib.c    |  2 +-
->  .../target/iscsi/iscsi_target_seq_pdu_list.c  |  2 +-
->  drivers/target/iscsi/iscsi_target_stat.c      | 16 +++++------
->  drivers/target/iscsi/iscsi_target_tmr.c       |  6 ++--
->  drivers/target/iscsi/iscsi_target_tpg.c       |  2 +-
->  drivers/target/iscsi/iscsi_target_tpg.h       |  4 +--
->  drivers/target/iscsi/iscsi_target_util.c      | 28 +++++++++----------
->  drivers/target/iscsi/iscsi_target_util.h      | 18 ++++++------
->  include/target/iscsi/iscsi_target_core.h      | 10 +++----
->  include/target/iscsi/iscsi_transport.h        |  2 +-
->  23 files changed, 125 insertions(+), 125 deletions(-)
+> > As part of the work to perform bounds checking on all memcpy() uses,
+> > replace the open-coded a deserialization of bytes out of memory into a
+> > trailing flexible array by using a flex_array.h helper to perform the
+> > allocation, bounds checking, and copying.
+> >
+> > Cc: Loic Poulain <loic.poulain@linaro.org>
+> > Cc: Kalle Valo <kvalo@kernel.org>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Eric Dumazet <edumazet@google.com>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > Cc: wcn36xx@lists.infradead.org
+> > Cc: linux-wireless@vger.kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> [...]
+> 
+> > --- a/drivers/net/wireless/ath/wcn36xx/smd.h
+> > +++ b/drivers/net/wireless/ath/wcn36xx/smd.h
+> > @@ -46,8 +46,8 @@ struct wcn36xx_fw_msg_status_rsp {
+> >  
+> >  struct wcn36xx_hal_ind_msg {
+> >  	struct list_head list;
+> > -	size_t msg_len;
+> > -	u8 msg[];
+> > +	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(size_t, msg_len);
+> > +	DECLARE_FLEX_ARRAY_ELEMENTS(u8, msg);
+> 
+> This affects readability quite a lot and tbh I don't like it. Isn't
+> there any simpler way to solve this?
 
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
+Similar to how I plumbed member names into __mem_to_flex(), I could do
+the same for __mem_to_flex_dup(). That way if the struct member aliases
+(DECLARE_FLEX...)  aren't added, the longer form of the helper could
+be used. Instead of:
+
+	if (mem_to_flex_dup(&msg_ind, buf, len, GFP_ATOMIC)) {
+
+it would be:
+
+	if (__mem_to_flex_dup(&msg_ind, /* self */, msg,
+			      msg_len, buf, len, GFP_ATOMIC)) {
+
+This was how I'd written the helpers in an earlier version, but it
+seemed much cleaner to avoid repeating structure layout details at each
+call site.
+
+I couldn't find any other way to encode the needed information. It'd be
+wonderful if C would let us do:
+
+	struct wcn36xx_hal_ind_msg {
+		struct list_head list;
+		size_t msg_len;
+		u8 msg[msg_len];
+	}
+
+And provide some kind of interrogation:
+
+	__builtin_flex_array_member(msg_ind) -> msg_ind->msg
+	__builtin_flex_array_count(msg_ind)  -> msg_ind->msg_len
+
+My hope would be to actually use the member aliases to teach things like
+-fsanitize=array-bounds about flexible arrays. If it encounters a
+structure with the aliases, it could add the instrumentation to do the
+bounds checking of things like:
+
+	msg_ind->msg[42]; /* check that 42 is < msg_ind->msg_len */
+
+I also wish I could find a way to make the proposed macros "forward
+portable" into proposed C syntax above, but this eluded me as well.
+For example:
+
+	struct wcn36xx_hal_ind_msg {
+		size_t msg_len;
+		struct list_head list;
+		BOUNDED_FLEX_ARRAY(u8, msg, msg_len);
+	}
+
+	#ifdef CC_HAS_DYNAMIC_ARRAY_LEN
+	# define BOUNDED_FLEX_ARRAY(type, name, bounds)	type name[bounds]
+	#else
+	# define BOUNDED_FLEX_ARRAY(type, name, bounds)			\
+		magic_alias_of msg_len __flex_array_elements_count;	\
+		union {							\
+			type name[];					\
+			type __flex_array_elements[];			\
+		}
+	#endif
+
+But I couldn't sort out the "magic_alias_of" syntax that wouldn't force
+structures into having the count member immediately before the flex
+array, which would impose more limitations on where this could be
+used...
+
+Anyway, I'm open to ideas on how to improve this!
+
+-Kees
+
+-- 
+Kees Cook
