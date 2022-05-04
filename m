@@ -2,70 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD23519A2B
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 10:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E4E519A50
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 May 2022 10:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346616AbiEDIqe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 May 2022 04:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
+        id S1346495AbiEDIux (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 May 2022 04:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346613AbiEDIqa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 04:46:30 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB34424F17
-        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 01:42:42 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so3535633pjb.0
-        for <linux-scsi@vger.kernel.org>; Wed, 04 May 2022 01:42:42 -0700 (PDT)
+        with ESMTP id S1346403AbiEDIuw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 04:50:52 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFE324BD1
+        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 01:47:16 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id i19so1521947eja.11
+        for <linux-scsi@vger.kernel.org>; Wed, 04 May 2022 01:47:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Up2fAJgMf0kaWNX6KayG2iG4ovLjRNyGdehP+ZCx6XI=;
-        b=HHk0bHFYywL5PAJAJwPZ0gk/mxn9hJlTjL41vCuaNhVHit5I9mPsTeZ8XzcOWQqkXr
-         9ZD5YiD9SDEBjtG+bxFVjBkhe1gxl8cBKvWcRiiUce7JyJ8GrZuOdvkNunKFRmAvhkKp
-         tIpohSy2GqAxbEIZ8KzFVEHa4qWsXVx9v8NQOOe98oOQOw7m6tcozsZFhGDgWAQJfY+i
-         ACxR4TWkNeE6ZTkTTJa/JrP8Ktk36rauMwsPPwv1oTnRFtW3W7QTjFhs5f/RB8ZCeOkG
-         I8NC7rccUW5Fa7M92lNT7Ft6lLuw7R+E4v6tFVatg372Kj5SbChJkZBdG/FAzDhTT3qj
-         FASw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=QmtWwByo/ZIKuv6qy4yEByVOiPKOIaqS2BZn64y92Q4=;
+        b=AL3CjXJc7FL0+ahMAGnCQ7qmyxM+AoFMp+n++syujpzPeLdz3G9e8SumISuj6OAEA0
+         mN+gxfyTym9cCFHXVM2ma5gj6lTOqSS9+fFFVIN9K17+VhI/O5XELTfaBERRbjmSI/Nl
+         vvObVZ+lE/oHjIPDG5c3kZEYjJQEe1NvGt+HsrQ0Q+6yNj+8se8zRPFmuQGMPF5BpxNO
+         +M/mEz0tJP9w1V148yHSRWo5dQEAebdJpQrcp3fpkdmwYxogU+MGAbkl5NmYDLl3m4oe
+         Nv5JLzbG6l6Ef2KxCmwdwW2oy1uCKa2pWneGeT1ndmrmk+5OUccDsfooF869KS0AeRi0
+         oAQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Up2fAJgMf0kaWNX6KayG2iG4ovLjRNyGdehP+ZCx6XI=;
-        b=M6lv9JsFaz+hhRYMwzPLgPAJvAiN6j4KINCpmuF1NhKMfvrFtsjGbjouaoKmwloS7B
-         xfnAxOYhcMHvo8OrM1kG/30TUyHxS1biRl27pi75bRUMZdon8DwDCAxrWrZuvSnhjlp9
-         AlL/MWouRBM9U222eCnLMAmhrylYkneT6vRwgyoSyxNviVNHWHdnbBa5Aw6q9MTAwEJH
-         7vz2kNi0/UFxrhvlKisoQvZqACYIbW4Ug0B2us4XCHtGalCTeZQX53dV50eVIAKsaty4
-         eAQ4Jsg+YBb7yJQcUc3OhMglINgrMcYxad+Qkiz26DMW98GDZgei7XpXdm6ISjHJHTZp
-         ahWQ==
-X-Gm-Message-State: AOAM530siyec1dQ+qR+uYACukt6956m6OUzgxgQUVhhjVSRuHX5ifAKQ
-        orwawv+QM0e3HhpU0WtDPB/Z
-X-Google-Smtp-Source: ABdhPJxlKxetsi90KaLcM4uKZj9hOlXD5OcsWlwJitZdBW2rjKRg25l1Wz7uvsglmvayy3XHnoKW2Q==
-X-Received: by 2002:a17:90b:2311:b0:1d9:277e:edad with SMTP id mt17-20020a17090b231100b001d9277eedadmr9202775pjb.190.1651653762213;
-        Wed, 04 May 2022 01:42:42 -0700 (PDT)
-Received: from localhost.localdomain ([27.111.75.248])
-        by smtp.gmail.com with ESMTPSA id i10-20020a170902c94a00b0015e8d4eb278sm1386561pla.194.2022.05.04.01.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 01:42:41 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     martin.petersen@oracle.com, jejb@linux.ibm.com
-Cc:     avri.altman@wdc.com, alim.akhtar@samsung.com,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bvanassche@acm.org, ahalaney@redhat.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 5/5] scsi: ufs: qcom: Enable RPM_AUTOSUSPEND for runtime PM
-Date:   Wed,  4 May 2022 14:12:12 +0530
-Message-Id: <20220504084212.11605-6-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220504084212.11605-1-manivannan.sadhasivam@linaro.org>
-References: <20220504084212.11605-1-manivannan.sadhasivam@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QmtWwByo/ZIKuv6qy4yEByVOiPKOIaqS2BZn64y92Q4=;
+        b=0ufSDOUjlWEnH+bN0Udri8Gfd4prCNQiH5pwlY/PXiHxJ5dg6k1oftZQzWt4icbPEj
+         RnBw76RcFtv/I1Jy99+8wW6hk7ri7b70A8g82U8u9AlSWDHK4WHaPHDJEihdJQYLhkUT
+         zqgZuBd63GKTcJuFAxZD0+zFrr5De8PtMl/cnkHa43V8l0a+r0kMOwWSoq8hWAiLZlqj
+         lRG3/Gh9k8vRaB7mGLvKoqD599v9/33BdYkF/B3MJO1fpZUfwa9EzmzetZWfvYYwO5h6
+         p8uAWBB1WWNbga/3S1jc2r3tSbzaQfPfWAn7LtrTlgh5VIav+XxsAg24iqSU9+933tzz
+         H91g==
+X-Gm-Message-State: AOAM5305aECEqH66N/Bo+vJCZAWesVTN7CxORDRFIZVQJFf3+vsJwNzL
+        ly9lkvurhvOqoy6bBcbudTft/llZmkIz/Q==
+X-Google-Smtp-Source: ABdhPJxKi7C4JKAEzHKaoMX1d2sBQ/HwAm7M6aW+7svbe2ak15MPFJVqHU4FxQsE+k7anyG0Uq+cjQ==
+X-Received: by 2002:a17:906:4fc6:b0:6f4:b5c0:aa3f with SMTP id i6-20020a1709064fc600b006f4b5c0aa3fmr2810602ejw.382.1651654035170;
+        Wed, 04 May 2022 01:47:15 -0700 (PDT)
+Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id b6-20020aa7cd06000000b0042617ba63a9sm8799226edw.51.2022.05.04.01.47.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 01:47:14 -0700 (PDT)
+Message-ID: <38ddc169-7e8d-c8b5-62cb-7fd3de567e91@linaro.org>
+Date:   Wed, 4 May 2022 10:47:13 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/4] scsi: core: fix white-spaces
+Content-Language: en-US
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
+ <20220408103027.311624-2-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220408103027.311624-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,31 +77,32 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In order to allow the block devices to enter autosuspend mode during
-runtime, thereby allowing the ufshcd host driver to also runtime suspend,
-let's make use of the RPM_AUTOSUSPEND flag.
+On 08/04/2022 12:30, Krzysztof Kozlowski wrote:
+> Remove trailing white-spaces and correct mixed-up indentation.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/scsi/scsi_debug.c         |  2 +-
+>  drivers/scsi/scsi_priv.h          |  4 +--
+>  drivers/scsi/scsi_proc.c          | 14 ++++-----
+>  drivers/scsi/scsi_scan.c          | 10 +++----
+>  drivers/scsi/scsi_sysfs.c         |  4 +--
+>  drivers/scsi/scsi_transport_spi.c | 49 +++++++++++++++----------------
+>  drivers/scsi/scsicam.c            |  6 ++--
+>  include/scsi/scsi_cmnd.h          |  2 +-
+>  include/scsi/scsi_device.h        | 10 +++----
+>  include/scsi/scsi_host.h          | 13 ++++----
+>  include/scsi/scsi_ioctl.h         |  2 +-
+>  include/scsi/scsi_transport.h     |  2 +-
+>  include/scsi/scsi_transport_spi.h |  2 +-
+>  include/scsi/scsicam.h            |  2 +-
+>  include/scsi/sg.h                 |  2 +-
+>  15 files changed, 61 insertions(+), 63 deletions(-)
 
-Without this flag, userspace needs to enable the autosuspend feature of
-the block devices through sysfs.
+Hi folks!
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/scsi/ufs/ufs-qcom.c | 1 +
- 1 file changed, 1 insertion(+)
+I understand that patch #1 in the series is discussed/needs followup,
+but what about patches 2-4? Could you pick them up?
 
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index b718c38fccc9..358fa8ce51b8 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -876,6 +876,7 @@ static void ufs_qcom_set_caps(struct ufs_hba *hba)
- 	hba->caps |= UFSHCD_CAP_WB_EN;
- 	hba->caps |= UFSHCD_CAP_CRYPTO;
- 	hba->caps |= UFSHCD_CAP_AGGR_POWER_COLLAPSE;
-+	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
- 
- 	if (host->hw_ver.major >= 0x2) {
- 		host->caps = UFS_QCOM_CAP_QUNIPRO |
--- 
-2.25.1
-
+Best regards,
+Krzysztof
