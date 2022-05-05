@@ -2,105 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53F051C833
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 May 2022 20:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3D351C834
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 May 2022 20:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381408AbiEESrs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 May 2022 14:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
+        id S1384150AbiEESrm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 May 2022 14:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384639AbiEESrV (ORCPT
+        with ESMTP id S1384257AbiEESrV (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 14:47:21 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4513606C3
-        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 11:37:47 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 7so4258039pga.12
-        for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 11:37:47 -0700 (PDT)
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06FC606C4
+        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 11:37:49 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id c14so4322525pfn.2
+        for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 11:37:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=blJZNsj6z5am0z6BCLTC5pxY3WeKTWtqX4pzShGIzeg=;
-        b=LCyseZPJRjBBu318seTFMKL73yZxJ48KEwIc8ZFFEOjNW4b1m5YbrUFIGS7TIAWfJ9
-         ejp/6iuc/1a+uM+tjZeNOdP2QY8DpVm7Kqq0qtHgy+bYTgQyxOKRryflIdChbXBMl/3A
-         yWL4HBWnqO6D8WSditHjzlb8B7YOpHLFloguI=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version;
+        bh=FSQYakCEv1rrLqYb6g7hBavsxbn3irhnv0IdpOvrpOE=;
+        b=iJkhjSzgjD0vkh1U0otTkte4Rvt6kgEbwXzOvOc5mqmRPl3xM781jWhEicneh1PRpc
+         a3UqmEOgLlsEkyAFcAJHZYZ4NjT/TqsW8MgRbSmlu6FeKUKS4aH5HAHaupLZ9YeaRUjn
+         dAkD7/v4EbVmTGU6Y2Q1dkrKlfDqZ/RpDQw4g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=blJZNsj6z5am0z6BCLTC5pxY3WeKTWtqX4pzShGIzeg=;
-        b=icN/BNYFhthh2E/qeMnIU2gXco12jbKVC6E3R/zyVrBqyB/KTYi/XCocOyJt8RHoEo
-         rgn+UIBq7W9h9Kjg15yDf2xnkSGLk7m4mHqD2Pipq3sh9YAfFLnGQ3JA5Fg8Mq7UEZwZ
-         7iQRYMIoYjuAQCcgn6NIWDFhQ4Oib9tdSW7AJoxZckDM9nOEEw4wpKD1mUL4l9RVw4nQ
-         Eq0HAkRNj2444crWzv6Xm/VRdfLsHrN8mSyGSZ/yAD6AtnXdmZrFyGIyyyRQtd3svIj+
-         Ek/loTIJqQe1+1v3MQY8jYmwQjkIx/X9hVqAm7r2FlYbUUsX51j9Y1K7DAs4Pc+QMfrJ
-         Q7fQ==
-X-Gm-Message-State: AOAM531AcYGjOH/XcK2DL8HUv6nrUVJQCjK+Zo0YpQdSJOd2YIUr/bkg
-        ZrA8vsUSXWTRzVCfZ9SuB2IyH75cRVo4JhcZfnz6wDWMFWIS2wU3RhGc7waQytraSB6ZLRERrJa
-        fhmkSLlPlcY/b95R18k6Jh1yLLBQXZcvSKyv5urHZROr2tDTQ/lSja07Okb5pCw5EX9F4gL8j8c
-        Jl4hk55jCfdtE=
-X-Google-Smtp-Source: ABdhPJw8ALhiABDwiChKBAwuIrCJlmYInfAa2ilAq8ZYvSZZObCGobUVj28faHegfqQQhCti3P3T7w==
-X-Received: by 2002:a05:6a00:84e:b0:510:5fbc:7738 with SMTP id q14-20020a056a00084e00b005105fbc7738mr4352920pfk.86.1651775866574;
-        Thu, 05 May 2022 11:37:46 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version;
+        bh=FSQYakCEv1rrLqYb6g7hBavsxbn3irhnv0IdpOvrpOE=;
+        b=aAwFSOGNAIGyJ7As4lg7pmK/aLFHnyZU4h3WuMydOn/4dyr0FelSoWxYh1NX2jzvVf
+         H/Jf4B7sjHza3nTEXXpqdg6KmCESWvB/K7r1XmYdEO7LEl0Lc796HcJ4IqeH9EVHNU5S
+         c+otou1cVHce/1JDXzZ+xgUksxYMGBp0FByX9XFhpWQ0l+7Jp1e+qijldE/28srIVkM5
+         SKKKPCm8vNHU2FBQkGgHckzEDsl54eMrXyhHVYF0qc+NB49US9ASF9xvqKpPF/DKfPE2
+         A3oTnIFvClAGhBiOThQ6O/KOtGd0XHLQF5ENjkhneOBa0bH4gTsB3VBiwNA2fQly1Ows
+         dSEg==
+X-Gm-Message-State: AOAM531AvwbFvHvnDW+s6R2olgE+AzgTRv9QU2lKnpEanOsirVtkrgye
+        AfArbXdLGmj9yyk8a8a2QeW8fA2vFF0Vr9NcNshc8+ypjBhGkL+BQpXXHFnXUYhDPBj4yuTxl2f
+        naYBmx07wBnXiQFPIZVZeGsnG1Kb4d2YbBxpPjGwDkWYDCZug6LCCULQuTv7Grbm0zTVIjahBwK
+        6gRfzYmZb8TAk=
+X-Google-Smtp-Source: ABdhPJzZmSwjg6aCzCoVyAS6aGWuacVpThK0UjltJBp7x9PoMbjfF8CAj22Ih9IAQN4ImXQlZYvxnA==
+X-Received: by 2002:a05:6a00:4197:b0:510:671d:709c with SMTP id ca23-20020a056a00419700b00510671d709cmr3258810pfb.61.1651775868530;
+        Thu, 05 May 2022 11:37:48 -0700 (PDT)
 Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170902c24400b0015edb22aba1sm1696166plg.270.2022.05.05.11.37.44
+        by smtp.gmail.com with ESMTPSA id 4-20020a170902c24400b0015edb22aba1sm1696166plg.270.2022.05.05.11.37.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 11:37:45 -0700 (PDT)
+        Thu, 05 May 2022 11:37:47 -0700 (PDT)
 From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH] mpi3mr: Return IOs to an unrecoverable HBA with DID_ERROR
-Date:   Fri,  6 May 2022 00:18:06 +0530
-Message-Id: <20220505184808.24049-1-sreekanth.reddy@broadcom.com>
+Subject: [PATCH] mpi3mr: Hidden drives not removed during soft reset
+Date:   Fri,  6 May 2022 00:18:07 +0530
+Message-Id: <20220505184808.24049-2-sreekanth.reddy@broadcom.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220505184808.24049-1-sreekanth.reddy@broadcom.com>
+References: <20220505184808.24049-1-sreekanth.reddy@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ceb4be05de4809b7"
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        boundary="000000000000eb97da05de48091f"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000ceb4be05de4809b7
+--000000000000eb97da05de48091f
 Content-Transfer-Encoding: 8bit
 
-Complete all new I/O requests issued to an unrecoverable
-controller with DID_ERROR status instead of returning the
-I/O requests with SCSI_MLQUEUE_HOST_BUSY. This will prevent
-the infinite retries of the new I/Os when a controller
-is in the unrecoverable state.
+If any drive is missing during the reset, the driver
+checks whether the device is exposed to the OS and if it is,
+then only it removes the device from the OS and
+its own internal list. For hidden devices even if they are found
+as missing during reset the driver is not removing them from
+its internal list. Modified driver to remove hidden devices
+from the driver's target device list if they are missing
+during soft reset.
 
 Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 ---
- drivers/scsi/mpi3mr/mpi3mr_os.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/scsi/mpi3mr/mpi3mr_os.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index 89a4918..5c57519 100644
+index 5c57519..5ba490c 100644
 --- a/drivers/scsi/mpi3mr/mpi3mr_os.c
 +++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -3996,6 +3996,12 @@ static int mpi3mr_qcmd(struct Scsi_Host *shost,
- 	int iprio_class;
- 	u8 is_pcie_dev = 0;
+@@ -911,9 +911,11 @@ void mpi3mr_rfresh_tgtdevs(struct mpi3mr_ioc *mrioc)
  
-+	if (mrioc->unrecoverable) {
-+		scmd->result = DID_ERROR << 16;
-+		scsi_done(scmd);
-+		goto out;
-+	}
-+
- 	sdev_priv_data = scmd->device->hostdata;
- 	if (!sdev_priv_data || !sdev_priv_data->tgt_priv_data) {
- 		scmd->result = DID_NO_CONNECT << 16;
+ 	list_for_each_entry_safe(tgtdev, tgtdev_next, &mrioc->tgtdev_list,
+ 	    list) {
+-		if ((tgtdev->dev_handle == MPI3MR_INVALID_DEV_HANDLE) &&
+-		    tgtdev->host_exposed) {
+-			mpi3mr_remove_tgtdev_from_host(mrioc, tgtdev);
++		if (tgtdev->dev_handle == MPI3MR_INVALID_DEV_HANDLE) {
++			dprint_reset(mrioc, "removing target device with perst_id(%d)\n",
++			    tgtdev->perst_id);
++			if (tgtdev->host_exposed)
++				mpi3mr_remove_tgtdev_from_host(mrioc, tgtdev);
+ 			mpi3mr_tgtdev_del_from_list(mrioc, tgtdev);
+ 			mpi3mr_tgtdev_put(tgtdev);
+ 		}
 -- 
 2.27.0
 
 
---000000000000ceb4be05de4809b7
+--000000000000eb97da05de48091f
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -171,13 +180,13 @@ X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
 eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
 Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
 MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOELUAMZrGfwmsg7KhY6
-3OLIZE26ttpVapwzH1drzo3NMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIyMDUwNTE4Mzc0N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIA4Jibk6lhEIzEzCX+XK
+PWnXVBwaWmF1UPWifsIIFzalMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIyMDUwNTE4Mzc0OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
 BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBw137ezm/YmxOaebnkqOYsqUoBuhs6dtxMj2Fe
-6Arod4dJxeOMNwLCSAqIOjrPEyqlvZst9WruhA6amOMpgtZecJLcbdYQ32WWjODmRY2sRNZqxweJ
-/EYX4OJQw7pvjGtWYmsA4o9b1Of6yi8veyCjSpjnPcGNiLq8VDZs/9jo4KDupIhvW6aMP8afpK8T
-uvxkQ3bNoP4jpaYkGgQYj7ZWb71YJTVs1VeTo5oh6P0QFYTv1oDToZH4UkScVRwDLZxg4kZ4iNOm
-D2cYsJOjGpALUFkFSqliYnveC1UBJi+YHh3lzlYzDszC7SJE2FqzspJHqntvMdPiClYrSClX9Kmo
---000000000000ceb4be05de4809b7--
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAlG2u28ub0wCc/phV4Ib2FE2vivuJpKObAnNUk
+b8PlawTHW64AsatLxCjgCDcmfDgPw4mI7FSk16xDZEhFBtLbVQX0MxhQw30KfYH4ckkJJ66tKKNx
+aCZmiHrOftH2ivJwd6KdUbNUTMN1JbuVLo3dEE2lcm0xUkkVDhpMxX3fDo57BNVYF3RIp/JSiis7
+lWM4lSNN/D0fObptE9DpPBCnNFaCS3hOidjKyFhsb4LZJHlJdUiWhzRfvMlc1rrMyzfZzAyAoHpW
+dCUa2F+vUrsnSZNaaSEK+X5Qk0m/z3u27HjZLMvWr6VpJ3OJt4PLe5KUihRP77Bvxo+v3pB5RtbM
+--000000000000eb97da05de48091f--
