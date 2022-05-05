@@ -2,66 +2,169 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8678D51C835
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 May 2022 20:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7A751C8F7
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 May 2022 21:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383527AbiEESro (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 May 2022 14:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        id S1385031AbiEETbR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 May 2022 15:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384651AbiEESrV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 14:47:21 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8ED606CD
-        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 11:37:51 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o69so4956060pjo.3
-        for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 11:37:51 -0700 (PDT)
+        with ESMTP id S1354423AbiEETbP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 15:31:15 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF3354BF8
+        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 12:27:34 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d22so5297728plr.9
+        for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 12:27:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=87P4GGNrbFYwrgAteETtzuNfoSgkZbvBxXYnS7QSs4I=;
-        b=F965xnfWU7KY1pQVEQTeWXctWSYz+7G0iwvTDHSRSC9j5QPyWNa+0gwInLMjCQdJfI
-         ezNsylloYmPWYZpYxhJeQO/QQ2+JxPFn2Kp8v9ISSEwvd7JnCdUIcfw2NMfP3tXTpVRr
-         J4ktFeAD8Zu/KCkijw74SjsrggS5DaErJuOnQ=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/twjVtbcWPue2Jf3IhiwlWWY7Rof9WWSi6Cv9vIoV/Q=;
+        b=Zw4fRetuqYTkqeq+yVUkdhxXm/8i81f3Tz5yiq/8IIDSZ024zV3L+pNdERes4bJaav
+         31/Q4CkRhBZLAixBgNaxyPQDOPUfRkG6V2Lznu+vqnnAE8TdezgewvauqqI6bgLcXe8G
+         8pjfVWQFjtIzIDipg+thK9X2Q1whG0Xu+Ovt4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=87P4GGNrbFYwrgAteETtzuNfoSgkZbvBxXYnS7QSs4I=;
-        b=f+lw4Goku7DUNI77amAHr02o14nw4tO/G7SMrTWySmpzCAniYVxAalnLShETpBH37/
-         eIs1lxag34zRmbSdnxHwl4YxqNKNtmvqPl7rNEG8fvolVRVpgUuzmt1TDRVi/kKll2m9
-         Zw/9j79Avb/VN1Z8XCqD7CGAvmOBllEVnIijmkRuI4WYGUJ6sgeYBuetgfivwiP6Xwx8
-         1kdrl48gsuoB9LXN+LOR4lq3VASWr5QedFPuMDjdIZ6Bj6tzmhgCgtJ6GAyiLvgMVYkY
-         2xyNgGs6FHOPZdTRv9//714WN5LhSPOT8NbgLS0NllIHCPq2SoBIyDwRZNq0i/8Sm3of
-         QsOQ==
-X-Gm-Message-State: AOAM531vm02vQU7g06dcQ7OUnmrvNCnwVWZQUTLy7jZmASi7HoP86sMV
-        3AiIBIr+yCrdMmE6wiAON8Xro13zmDIbm5XTlpc2fuAryBGSYrmB8pHlD+i+/pzClvEhSDeb9l6
-        blq8blyqdRPowb2YvQQguyltnmMDEfpe0Cjly9PEplEjvcD/t3mMotWdF+ZZy/M8Z/TAuawJ9sM
-        dy+gH1Ukp+u8I=
-X-Google-Smtp-Source: ABdhPJxbu9XnR9KxxgCY+8sg1nFXbUoi/H3CobM6WIWAyZC1XQ59yeqEN2vOSkF1FVxpuzV5Y3dfbw==
-X-Received: by 2002:a17:90b:245:b0:1dc:1597:20e with SMTP id fz5-20020a17090b024500b001dc1597020emr7695975pjb.151.1651775870295;
-        Thu, 05 May 2022 11:37:50 -0700 (PDT)
-Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170902c24400b0015edb22aba1sm1696166plg.270.2022.05.05.11.37.48
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/twjVtbcWPue2Jf3IhiwlWWY7Rof9WWSi6Cv9vIoV/Q=;
+        b=hbYs0bKe4EHcEaMGQhKhrv40XhKcHXh4GjVKXq8u6QdzN6BIq1cpcbfjuG4WPu5nxk
+         M4TWuQmHO8maJQihyjR5faBFcB5c9m7sYB+1GzA606i6AesDbgRGa2RG5qKvXtsCB70r
+         BMEQ/nJxE/8rlhcVAUl435h6K9Hyq47RXK3b3MmYfEIuEuJcY1N+clNsEPc2JkiBZXba
+         OavmhHsOve59MCIYalI0kWV9CxcE0mX6AvagDFMuV0m5F8fZ0SaceKWp+ILd8+FKgQdu
+         2DFcr+se13W9vUc5J8+MVRrmatIddEupjdx446SH66DXIlCuYs9EEaUgJQZAex0hU1xD
+         R5zA==
+X-Gm-Message-State: AOAM530xXBIz5Jw7e27XUyeXhcVnQouTa/M7e5fFCLlolosjkw4oimFd
+        cIw81osKVUaFT6LnSHtrKjcQ9g==
+X-Google-Smtp-Source: ABdhPJyav77hf2OM1reUdtV3HW9WqLRQkX6N0+xVipZ4MkOtaIgBrGdD2dZR4M6krBDZsVod+2klvQ==
+X-Received: by 2002:a17:90b:1d92:b0:1dc:3f14:f8d0 with SMTP id pf18-20020a17090b1d9200b001dc3f14f8d0mr8041119pjb.7.1651778853636;
+        Thu, 05 May 2022 12:27:33 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b10-20020a17090a550a00b001d954837197sm5617594pji.22.2022.05.05.12.27.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 11:37:49 -0700 (PDT)
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH] mpi3mr: Increase IO timeout value to 60s
-Date:   Fri,  6 May 2022 00:18:08 +0530
-Message-Id: <20220505184808.24049-3-sreekanth.reddy@broadcom.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220505184808.24049-1-sreekanth.reddy@broadcom.com>
-References: <20220505184808.24049-1-sreekanth.reddy@broadcom.com>
+        Thu, 05 May 2022 12:27:33 -0700 (PDT)
+Date:   Thu, 5 May 2022 12:27:32 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Keith Packard <keithp@keithp.com>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        alsa-devel@alsa-project.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Bradley Grove <linuxdrivers@attotech.com>,
+        brcm80211-dev-list.pdl@broadcom.com,
+        Christian Brauner <brauner@kernel.org>,
+        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Cong Wang <cong.wang@bytedance.com>,
+        David Gow <davidgow@google.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        devicetree@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hulk Robot <hulkci@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        John Keeping <john@metanate.com>,
+        Juergen Gross <jgross@suse.com>, Kalle Valo <kvalo@kernel.org>,
+        keyrings@vger.kernel.org, kunit-dev@googlegroups.com,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, llvm@lists.linux.dev,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Louis Peens <louis.peens@corigine.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Rich Felker <dalias@aerifal.cx>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, selinux@vger.kernel.org,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        SHA-cyfmac-dev-list@infineon.com,
+        Simon Horman <simon.horman@corigine.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, Tom Rix <trix@redhat.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        wcn36xx@lists.infradead.org, Wei Liu <wei.liu@kernel.org>,
+        xen-devel@lists.xenproject.org,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Subject: Re: [PATCH 02/32] Introduce flexible array struct memcpy() helpers
+Message-ID: <202205051143.6B19E63983@keescook>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-3-keescook@chromium.org>
+ <d3b73d80f66325fdfaf2d1f00ea97ab3db03146a.camel@sipsolutions.net>
+ <202205040819.DEA70BD@keescook>
+ <970a674df04271b5fd1971b495c6b11a996c20c2.camel@sipsolutions.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000005fc9d05de480a16"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <970a674df04271b5fd1971b495c6b11a996c20c2.camel@sipsolutions.net>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,129 +172,115 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000005fc9d05de480a16
-Content-Transfer-Encoding: 8bit
+On Thu, May 05, 2022 at 03:16:19PM +0200, Johannes Berg wrote:
+> On Wed, 2022-05-04 at 08:38 -0700, Kees Cook wrote:
+> > 
+> > It seemed like requiring a structure be rearranged to take advantage of
+> > the "automatic layout introspection" wasn't very friendly. On the other
+> > hand, looking at the examples, most of them are already neighboring
+> > members. Hmmm.
+> 
+> A lot of them are, and many could be, though not all.
 
-Set each SCSI device's default IO timeout and
-default error handling IO timeout to 60s.
+Yeah, I did a pass through them for the coming v2. Only a few have the
+struct order as part of an apparent hardware interface.
 
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
----
- drivers/scsi/mpi3mr/mpi3mr.h    | 3 +++
- drivers/scsi/mpi3mr/mpi3mr_os.c | 4 ++++
- 2 files changed, 7 insertions(+)
+> > And DECLARE_FLEX_ARRAY_ELEMENTS could actually be expanded to include
+> > the count_name too, so both methods could be "forward portable" to a
+> > future where C grew the syntax for bounded flex arrays.
+> 
+> I guess I don't see that happening :)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
-index 8612b66..584659e 100644
---- a/drivers/scsi/mpi3mr/mpi3mr.h
-+++ b/drivers/scsi/mpi3mr/mpi3mr.h
-@@ -124,6 +124,9 @@ extern atomic64_t event_counter;
- 
- #define MPI3MR_WATCHDOG_INTERVAL		1000 /* in milli seconds */
- 
-+#define MPI3MR_SCMD_TIMEOUT    (60 * HZ)
-+#define MPI3MR_EH_SCMD_TIMEOUT (60 * HZ)
-+
- /* Internal admin command state definitions*/
- #define MPI3MR_CMD_NOTUSED	0x8000
- #define MPI3MR_CMD_COMPLETE	0x0001
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index 5ba490c..f5c345d 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_os.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -3727,6 +3727,10 @@ static int mpi3mr_slave_configure(struct scsi_device *sdev)
- 		return -ENXIO;
- 
- 	mpi3mr_change_queue_depth(sdev, tgt_dev->q_depth);
-+
-+	sdev->eh_timeout = MPI3MR_EH_SCMD_TIMEOUT;
-+	blk_queue_rq_timeout(sdev->request_queue, MPI3MR_SCMD_TIMEOUT);
-+
- 	switch (tgt_dev->dev_type) {
- 	case MPI3_DEVICE_DEVFORM_PCIE:
- 		/*The block layer hw sector size = 512*/
+Well ... it's on my roadmap. ;) I want it for -fsanitize=array-bounds so
+that dynamic array indexing can be checked too. (Right now we can do
+constant-sized array index bounds checking at runtime, but the much
+harder to find problems tend to come from flex arrays.)
+
+> > Requiring instance to be NULL is debatable, but I feel pretty strongly
+> > about it because it does handle a class of mistakes (resource leaks),
+> > and it's not much of a burden to require a known-good starting state.
+> 
+> Yeah, dunno, I guess I'm slightly more on the side of not requiring it,
+> since we don't do the same for kmalloc() etc. and probably really
+> wouldn't want to add kmalloc_s() that does it ;-)
+
+Well, I dislike all the *alloc APIs. :P
+
+> I mean, you _could_ go there:
+> 
+> int kmalloc_s(void **ptr, size_t size, gfp_t gfp)
+
+Oh, and I really do (though as a macro, not a "real" function), since
+having type introspection would be _extremely_ useful. Though maybe it
+needs to be through some kind of type-of-lvalue thing...
+
+https://github.com/KSPP/linux/issues/189
+https://github.com/KSPP/linux/issues/87
+
+> So I'm not really sure why this aspect here should need to be different,
+> except of course that you already need the input argument for the magic.
+
+Right, and trying to move the kernel code closer to a form where the
+compiler can take more of the burden of handling code safety.
+
+> And btw, while I was writing it down I was looking to see if it should
+> be "size_t elements" or "size_t len" (like memcpy), it took me some time
+> to figure out, and I was looking at the examples:
+> 
+>  1) most of them actually use __u8 or some variant thereof, so you
+>     could probably add an even simpler macro like
+>        BOUNDED_FLEX_DATA(int, bytes, data)
+>     which has the u8 type internally.
+
+I didn't want these helpers to be "opinionated" about their types (just
+their API), so while it's true u8 is usually "good enough", I don't
+think it's common enough to make a special case for.
+
+>  2) Unless I'm confusing myself, you got the firewire change wrong,
+>     because __mem_to_flex_dup takes the "elements_count", but the
+>     memcpy() there wasn't multiplied by the sizeof(element)? Or maybe
+>     the fact that it was declared as __u32 header[0] is wrong, and it
+>     should be __u8, but it's all very confusing, and I'm really not
+>     sure about this at all.
+
+Yes indeed; thanks for catching that. In fact, it's not a strict flex
+array struct, since, as you say, it's measuring bytes, not elements.
+Yeah, I'll see if that needs to be adjusted/dropped, etc.
+
+> One "perhaps you'll laugh me out of the room" suggestion might be to
+> actually be able to initialize the whole thing too?
+> 
+> mydata = flex_struct_alloc(mydata, GFP_KERNEL,
+>                            variable_data, variable_len,
+>                            .member = 1,
+>                            .another = 2);
+> 
+> (the ordering can't really be otherwise since you have to use
+> __VA_ARGS__).
+
+Oooh, that's a cool idea for the API. Hmmmm.
+
+> That might reduce some more code too, though I guess it's quite some
+> additional magic ... :)
+
+Yay preprocessor magic!
+
+> I was going to point to struct cfg80211_bss_ies, but I realize now
+> they're RCU-managed, so we never resize them anyway ... So maybe it's
+> less common than I thought it might be.
+> 
+> I suppose you know better since you converted a lot of stuff already :-)
+
+Well, I've seen a lot of fragile code (usually in the form of
+exploitable flaws around flex arrays) and they do mostly look the same.
+Not everything fits perfectly into the forms this API tries to address,
+but my goal is to get it fitting well enough, and the weird stuff can be
+more carefully examined -- they're easier to find and audit if all the
+others are nicely wrapped up in some fancy flex*() API.
+
+Thanks for your thoughts on all of this! I'll continue to work on a v2...
+
+-Kees
+
 -- 
-2.27.0
-
-
---00000000000005fc9d05de480a16
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-5AGo2E3pe+2yEgkxKvM2fnniZHUiSjbrfKk6nl9RIXPOKUP5HntZFdA5XuNYXWM+HPs3O0AJwBm/
-VCZsZtkjVjxeBmTXiXDnxytdsHdGrHGymPfjJYatDu6d1KRVDlMCAwEAAaOCAd0wggHZMA4GA1Ud
-DwEB/wQEAwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUu
-Z2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggr
-BgEFBQcwAYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
-YTIwMjAwTQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3
-Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4
-aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmww
-JwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUClVHbAvhzGT8
-s2/6xOf58NkGMQ8wDQYJKoZIhvcNAQELBQADggEBAENRsP1H3calKC2Sstg/8li8byKiqljCFkfi
-IhcJsjPOOR9UZnMFxAoH/s2AlM7mQDR7rZ2MxRuUnIa6Cp5W5w1lUJHktjCUHnQq5nIAZ9GH5SDY
-pgzbFsoYX8U2QCmkAC023FF++ZDJuc9aj0R/nhABxmUYErIze2jV/VO8Pj7TnCrBONZ/Qvf8G5CQ
-X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
-eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
-Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOIPBeVPQJOopvHRqSSA
-iStcH0RQuV0ntWQAJEpccrtvMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIyMDUwNTE4Mzc1MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
-BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAGMZMj2QojFBIwJG4d4aUP7xUo5UB8vywmH+nZ
-AK6obTeiPEnCBEVTgkgqXYIQHCRXqH12bcU+3QZL1c2J0R9x7D94ckkyRk+qe7PEhZPGeESVLx8J
-Eg9BpApHmbZKVmqw7hCSf5q1OS9pRZCA+eNAgrDRvTqU1B67drN0nLNv+EXEuU8VLMiyf9hdyJpZ
-uHF+ROxZwJFOlIVA4oVm6wG6oe7fPSVECsYmNnB9xGNhxbHPlmhxn6WJsbLzzrBg+AMeuAdH4SEY
-aWQMpC+wKj5BVIACzsvCkMOIN/wh0M1bGxJaaYwyZx8gMF/6F/UIT2oEDzUJRZcbnnb5qr9KzsPt
---00000000000005fc9d05de480a16--
+Kees Cook
