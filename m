@@ -2,66 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D1351C0AA
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 May 2022 15:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263B451C026
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 May 2022 15:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379474AbiEENbo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 May 2022 09:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
+        id S233679AbiEENGw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 May 2022 09:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377471AbiEENbm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 09:31:42 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C4A56C37
-        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 06:28:02 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242MkbAY018676;
-        Tue, 3 May 2022 00:51:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=VQkZ6AtDt0k9w3ScFeBCyueOiURzraQ8u9aJl4Z5+ZI=;
- b=ZXRU1d5P9Frln25AezJ5Xeg5zwnn2q2umNN3gXN/79sCV7OXDuoQKG260n5lSBOMybnN
- sWrrOoa/4KiSlESyglgfXeJDxgi+6TIe2FzAq1tODKeTivfsy1i7dmGfA4JwEhyDACg0
- pvA/4kpD6m/8VR314PQr3E7ySzPqZRshVJdjvB3RbOZkcpOGH26n27eK/TiI0WeDfSrY
- ii6xq5iAwXnggRn0zal0863EQng7m3sfaUEaROJZAO3TbULG1fIZW6i9SUk6SVGmC0QC
- 1E6JLimoQPHEZZCtaLWSu5j38xH8NBqfk9vN6o1YakCWUe2CiQUEyyVfzC9PgunTIxQN Kw== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frwnt4kwq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:51:55 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430op0K008940;
-        Tue, 3 May 2022 00:51:53 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x7d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:51:53 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430pljK010389;
-        Tue, 3 May 2022 00:51:53 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-12;
-        Tue, 03 May 2022 00:51:53 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCH v3 00/28] Split the ufshcd.h header file
-Date:   Mon,  2 May 2022 20:51:22 -0400
-Message-Id: <165153836359.24053.13374628224071400753.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220419225811.4127248-1-bvanassche@acm.org>
-References: <20220419225811.4127248-1-bvanassche@acm.org>
+        with ESMTP id S1376555AbiEENGu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 09:06:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E3F562E4
+        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 06:03:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E65761DFA
+        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 13:03:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6F01C385A4
+        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 13:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651755789;
+        bh=/gFi2ewnd58ygBh6Mx6uB6noejZplB1O8zrnBuZa/Yw=;
+        h=From:To:Subject:Date:From;
+        b=BfaUr6ktCJMd+3PNxyhgndRIrSE5qUvvVic2XCUJMmiVZEyGY3KkYtvow37ot4EY/
+         NnGC/88RwzFcCy2s7mZz6UogwxPvNBtOBcWl7PmcBEyC+rKTuNRmn7vjH2mrlnO9jh
+         JOsG1pJOweeDotFfKfLqTi9H84i7IuTq8tDAWCVb+dHelpgM8usdWnswLhWhJeEP2O
+         7hgG1v2foZ1nNgUzeRHZyKyGLZDccIRMS4mDW+9v4K+MPOku7pL86hp8PaO4xj1WBL
+         n/AZCNkeMEKDnxVcCUET47X9G9+npR0pFplzzY+u1ZZmiMjSYtEq4RA5nQQARaf5bi
+         /BHC/NTwV/UrA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C76E0CAC6E2; Thu,  5 May 2022 13:03:09 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-scsi@vger.kernel.org
+Subject: [Bug 215943] New: UBSAN: array-index-out-of-bounds in
+ drivers/scsi/megaraid/megaraid_sas_fp.c:103:32
+Date:   Thu, 05 May 2022 13:03:09 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: IO/Storage
+X-Bugzilla-Component: SCSI
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: christian.d.dietrich@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-215943-11613@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: wI0v1keK9QRUnNphDimtstqrLkJCLEAz
-X-Proofpoint-GUID: wI0v1keK9QRUnNphDimtstqrLkJCLEAz
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,75 +71,305 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 19 Apr 2022 15:57:43 -0700, Bart Van Assche wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215943
 
-> This patch series includes the following changes:
-> - Split the ufshcd.h header file into two header files - one file that
->   defines the interface with UFS drivers and another file with definitions
->   only used in the core.
-> - Multiple source code cleanup patches.
-> - A few patches with minor functional changes.
-> 
-> [...]
+            Bug ID: 215943
+           Summary: UBSAN: array-index-out-of-bounds in
+                    drivers/scsi/megaraid/megaraid_sas_fp.c:103:32
+           Product: IO/Storage
+           Version: 2.5
+    Kernel Version: 5.15.27
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: SCSI
+          Assignee: linux-scsi@vger.kernel.org
+          Reporter: christian.d.dietrich@gmail.com
+        Regression: No
 
-Applied to 5.19/scsi-queue, thanks!
+This bug also seems to affect other users / hardware:
+https://www.spinics.net/lists/kernel/msg4294764.html (H710P: LSI 2008 / H730
+mini & H730P: LSI 3108)
 
-[01/28] scsi: ufs: Fix a spelling error in a source code comment
-        https://git.kernel.org/mkp/scsi/c/2abe58002364
-[02/28] scsi: ufs: Declare ufshcd_wait_for_register() static
-        https://git.kernel.org/mkp/scsi/c/59a57bb79e10
-[03/28] scsi: ufs: Remove superfluous boolean conversions
-        https://git.kernel.org/mkp/scsi/c/51d1628fc457
-[04/28] scsi: ufs: Simplify statements that return a boolean
-        https://git.kernel.org/mkp/scsi/c/a858af9a9e01
-[05/28] scsi: ufs: Remove ufshcd_lrb.sense_bufflen
-        https://git.kernel.org/mkp/scsi/c/b639b59b44fd
-[06/28] scsi: ufs: Remove ufshcd_lrb.sense_buffer
-        https://git.kernel.org/mkp/scsi/c/1de4378f6057
-[07/28] scsi: ufs: Use get_unaligned_be16() instead of be16_to_cpup()
-        https://git.kernel.org/mkp/scsi/c/9d3ab17e840c
-[08/28] scsi: ufs: Remove the UFS_FIX() and END_FIX() macros
-        https://git.kernel.org/mkp/scsi/c/dd2cf44ff4ec
-[09/28] scsi: ufs: Rename struct ufs_dev_fix into ufs_dev_quirk
-        https://git.kernel.org/mkp/scsi/c/25eff2f543b1
-[10/28] scsi: ufs: Declare the quirks array const
-        https://git.kernel.org/mkp/scsi/c/aead21f32ae7
-[11/28] scsi: ufs: Invert the return value of ufshcd_is_hba_active()
-        https://git.kernel.org/mkp/scsi/c/acbbfe484faa
-[12/28] scsi: ufs: Remove unused constants and code
-        https://git.kernel.org/mkp/scsi/c/9474c64e83ca
-[13/28] scsi: ufs: Switch to aggregate initialization
-        https://git.kernel.org/mkp/scsi/c/778d2b0ec6d1
-[14/28] scsi: ufs: Make the config_scaling_param calls type safe
-        https://git.kernel.org/mkp/scsi/c/c906e8328de8
-[15/28] scsi: ufs: Remove the driver version
-        https://git.kernel.org/mkp/scsi/c/b4ade33b0d16
-[16/28] scsi: ufs: Rename sdev_ufs_device into ufs_device_wlun
-        https://git.kernel.org/mkp/scsi/c/e2106584d011
-[17/28] scsi: ufs: Use an SPDX license identifier in the Kconfig file
-        https://git.kernel.org/mkp/scsi/c/2b10863f7163
-[18/28] scsi: ufs: Remove paths from source code comments
-        https://git.kernel.org/mkp/scsi/c/d0c1725b1e64
-[19/28] scsi: ufs: Remove the TRUE and FALSE definitions
-        https://git.kernel.org/mkp/scsi/c/21c2e3418d07
-[20/28] scsi: ufs: Remove locking from around single register writes
-        https://git.kernel.org/mkp/scsi/c/3fb20fcd93fe
-[21/28] scsi: ufs: Introduce ufshcd_clkgate_delay_set()
-        https://git.kernel.org/mkp/scsi/c/ad8a647e7729
-[22/28] scsi: ufs: qcom: Fix ufs_qcom_resume()
-        https://git.kernel.org/mkp/scsi/c/bee40dc167da
-[23/28] scsi: ufs: Remove unnecessary ufshcd-crypto.h include directives
-        https://git.kernel.org/mkp/scsi/c/c10d52d73ae0
-[24/28] scsi: ufs: Fix kernel-doc syntax in ufshcd.h
-        https://git.kernel.org/mkp/scsi/c/cff91daf52d3
-[25/28] scsi: ufs: Minimize #include directives
-        https://git.kernel.org/mkp/scsi/c/3f06f7800b80
-[26/28] scsi: ufs: Split the ufshcd.h header file
-        https://git.kernel.org/mkp/scsi/c/4bc26113c603
-[27/28] scsi: ufs: Move the struct ufs_ref_clk definition
-        https://git.kernel.org/mkp/scsi/c/743b09d8541e
-[28/28] scsi: ufs: Move the ufs_is_valid_unit_desc_lun() definition
-        https://git.kernel.org/mkp/scsi/c/a8b032b5b3ba
+Apart from the kernel message, everything seems to be working so far.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+AVAGO MegaRAID SAS 9361-4i controller:
+
+Basics :
+=3D=3D=3D=3D=3D=3D
+Controller =3D 0
+Model =3D AVAGO MegaRAID SAS 9361-4i
+Serial Number =3D SK71088275
+Current Controller Date/Time =3D 05/05/2022, 12:55:31
+Current System Date/time =3D 05/05/2022, 14:55:30
+SAS Address =3D 500605b00cd3ce20
+PCI Address =3D 00:51:00:00
+Mfg Date =3D 03/13/17
+Rework Date =3D 00/00/00
+Revision No =3D 12A
+
+
+Version :
+=3D=3D=3D=3D=3D=3D=3D
+Firmware Package Build =3D 24.21.0-0148
+Firmware Version =3D 4.680.00-8555
+CPLD Version =3D 26747-01A
+Bios Version =3D 6.36.00.3_4.19.08.00_0x06180205
+HII Version =3D 03.25.05.14
+Ctrl-R Version =3D 5.19-0606
+Preboot CLI Version =3D 01.07-05:#%0000
+NVDATA Version =3D 3.1705.00-0024
+Boot Block Version =3D 3.07.00.00-0004
+Driver Name =3D megaraid_sas
+Driver Version =3D 07.717.02.00-rc1
+
+Kernel message:
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+UBSAN: array-index-out-of-bounds in
+/build/linux-HMZHpV/linux-5.15.0/drivers/scsi/megaraid/megaraid_sas_fp.c:10=
+3:32
+index 1 is out of range for type 'MR_LD_SPAN_MAP [1]'
+CPU: 41 PID: 268 Comm: kworker/41:0H Not tainted 5.15.0-27-generic #28-Ubun=
+tu
+Hardware name: Supermicro Super Server/H11DSU-iN, BIOS 1.3 07/15/2019
+Workqueue: kblockd blk_mq_run_work_fn
+Call Trace:
+ <TASK>
+ show_stack+0x52/0x58
+ dump_stack_lvl+0x4a/0x5f
+ dump_stack+0x10/0x12
+ ubsan_epilogue+0x9/0x45
+ __ubsan_handle_out_of_bounds.cold+0x44/0x49
+ MR_BuildRaidContext+0xa5a/0xb50 [megaraid_sas]
+ megasas_build_ldio_fusion+0x5b5/0x9a0 [megaraid_sas]
+ megasas_build_io_fusion+0x40e/0x450 [megaraid_sas]
+ megasas_build_and_issue_cmd_fusion+0xa5/0x370 [megaraid_sas]
+ megasas_queue_command+0x1b5/0x1f0 [megaraid_sas]
+ ? ktime_get+0x46/0xc0
+ scsi_dispatch_cmd+0x93/0x1f0
+ scsi_queue_rq+0x2d1/0x690
+ blk_mq_dispatch_rq_list+0x126/0x600
+ ? __sbitmap_queue_get+0x1/0x10
+ __blk_mq_do_dispatch_sched+0xba/0x2d0
+ ? ttwu_do_wakeup+0x1c/0x160
+ __blk_mq_sched_dispatch_requests+0x104/0x150
+ blk_mq_sched_dispatch_requests+0x35/0x60
+ __blk_mq_run_hw_queue+0x34/0xb0
+ blk_mq_run_work_fn+0x1b/0x20
+ process_one_work+0x22b/0x3d0
+ worker_thread+0x53/0x410
+ ? process_one_work+0x3d0/0x3d0
+ kthread+0x12a/0x150
+ ? set_kthread_struct+0x50/0x50
+ ret_from_fork+0x22/0x30
+ </TASK>
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+UBSAN: array-index-out-of-bounds in
+/build/linux-HMZHpV/linux-5.15.0/drivers/scsi/megaraid/megaraid_sas_fp.c:10=
+3:32
+index 1 is out of range for type 'MR_LD_SPAN_MAP [1]'
+CPU: 41 PID: 268 Comm: kworker/41:0H Not tainted 5.15.0-27-generic #28-Ubun=
+tu
+Hardware name: Supermicro Super Server/H11DSU-iN, BIOS 1.3 07/15/2019
+Workqueue: kblockd blk_mq_run_work_fn
+Call Trace:
+ <TASK>
+ show_stack+0x52/0x58
+ dump_stack_lvl+0x4a/0x5f
+ dump_stack+0x10/0x12
+ ubsan_epilogue+0x9/0x45
+ __ubsan_handle_out_of_bounds.cold+0x44/0x49
+ ? _printk+0x58/0x6f
+ MR_GetPhyParams+0x3d9/0x700 [megaraid_sas]
+ ? ubsan_epilogue+0x15/0x45
+ MR_BuildRaidContext+0x402/0xb50 [megaraid_sas]
+ megasas_build_ldio_fusion+0x5b5/0x9a0 [megaraid_sas]
+ megasas_build_io_fusion+0x40e/0x450 [megaraid_sas]
+ megasas_build_and_issue_cmd_fusion+0xa5/0x370 [megaraid_sas]
+ megasas_queue_command+0x1b5/0x1f0 [megaraid_sas]
+ ? ktime_get+0x46/0xc0
+ scsi_dispatch_cmd+0x93/0x1f0
+ scsi_queue_rq+0x2d1/0x690
+ blk_mq_dispatch_rq_list+0x126/0x600
+ ? __sbitmap_queue_get+0x1/0x10
+ __blk_mq_do_dispatch_sched+0xba/0x2d0
+ ? ttwu_do_wakeup+0x1c/0x160
+ __blk_mq_sched_dispatch_requests+0x104/0x150
+ blk_mq_sched_dispatch_requests+0x35/0x60
+ __blk_mq_run_hw_queue+0x34/0xb0
+ blk_mq_run_work_fn+0x1b/0x20
+ process_one_work+0x22b/0x3d0
+ worker_thread+0x53/0x410
+ ? process_one_work+0x3d0/0x3d0
+ kthread+0x12a/0x150
+ ? set_kthread_struct+0x50/0x50
+ ret_from_fork+0x22/0x30
+ </TASK>
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+UBSAN: array-index-out-of-bounds in
+/build/linux-HMZHpV/linux-5.15.0/drivers/scsi/megaraid/megaraid_sas_fp.c:11=
+5:31
+index 1 is out of range for type 'MR_LD_SPAN_MAP [1]'
+CPU: 41 PID: 268 Comm: kworker/41:0H Not tainted 5.15.0-27-generic #28-Ubun=
+tu
+Hardware name: Supermicro Super Server/H11DSU-iN, BIOS 1.3 07/15/2019
+Workqueue: kblockd blk_mq_run_work_fn
+Call Trace:
+ <TASK>
+ show_stack+0x52/0x58
+ dump_stack_lvl+0x4a/0x5f
+ dump_stack+0x10/0x12
+ ubsan_epilogue+0x9/0x45
+ __ubsan_handle_out_of_bounds.cold+0x44/0x49
+ ? _printk+0x58/0x6f
+ MR_GetPhyParams+0x509/0x700 [megaraid_sas]
+ MR_BuildRaidContext+0x402/0xb50 [megaraid_sas]
+ megasas_build_ldio_fusion+0x5b5/0x9a0 [megaraid_sas]
+ megasas_build_io_fusion+0x40e/0x450 [megaraid_sas]
+ megasas_build_and_issue_cmd_fusion+0xa5/0x370 [megaraid_sas]
+ megasas_queue_command+0x1b5/0x1f0 [megaraid_sas]
+ ? ktime_get+0x46/0xc0
+ scsi_dispatch_cmd+0x93/0x1f0
+ scsi_queue_rq+0x2d1/0x690
+ blk_mq_dispatch_rq_list+0x126/0x600
+ ? __sbitmap_queue_get+0x1/0x10
+ __blk_mq_do_dispatch_sched+0xba/0x2d0
+ ? ttwu_do_wakeup+0x1c/0x160
+ __blk_mq_sched_dispatch_requests+0x104/0x150
+ blk_mq_sched_dispatch_requests+0x35/0x60
+ __blk_mq_run_hw_queue+0x34/0xb0
+ blk_mq_run_work_fn+0x1b/0x20
+ process_one_work+0x22b/0x3d0
+ worker_thread+0x53/0x410
+ ? process_one_work+0x3d0/0x3d0
+ kthread+0x12a/0x150
+ ? set_kthread_struct+0x50/0x50
+ ret_from_fork+0x22/0x30
+ </TASK>
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+UBSAN: array-index-out-of-bounds in
+/build/linux-HMZHpV/linux-5.15.0/drivers/scsi/megaraid/megaraid_sas_fp.c:12=
+5:9
+index 1 is out of range for type 'MR_LD_SPAN_MAP [1]'
+CPU: 41 PID: 268 Comm: kworker/41:0H Not tainted 5.15.0-27-generic #28-Ubun=
+tu
+Hardware name: Supermicro Super Server/H11DSU-iN, BIOS 1.3 07/15/2019
+Workqueue: kblockd blk_mq_run_work_fn
+Call Trace:
+ <TASK>
+ show_stack+0x52/0x58
+ dump_stack_lvl+0x4a/0x5f
+ dump_stack+0x10/0x12
+ ubsan_epilogue+0x9/0x45
+ __ubsan_handle_out_of_bounds.cold+0x44/0x49
+ ? _printk+0x58/0x6f
+ MR_GetPhyParams+0x407/0x700 [megaraid_sas]
+ MR_BuildRaidContext+0x402/0xb50 [megaraid_sas]
+ megasas_build_ldio_fusion+0x5b5/0x9a0 [megaraid_sas]
+ megasas_build_io_fusion+0x40e/0x450 [megaraid_sas]
+ megasas_build_and_issue_cmd_fusion+0xa5/0x370 [megaraid_sas]
+ megasas_queue_command+0x1b5/0x1f0 [megaraid_sas]
+ ? ktime_get+0x46/0xc0
+ scsi_dispatch_cmd+0x93/0x1f0
+ scsi_queue_rq+0x2d1/0x690
+ blk_mq_dispatch_rq_list+0x126/0x600
+ ? __sbitmap_queue_get+0x1/0x10
+ __blk_mq_do_dispatch_sched+0xba/0x2d0
+ ? ttwu_do_wakeup+0x1c/0x160
+ __blk_mq_sched_dispatch_requests+0x104/0x150
+ blk_mq_sched_dispatch_requests+0x35/0x60
+ __blk_mq_run_hw_queue+0x34/0xb0
+ blk_mq_run_work_fn+0x1b/0x20
+ process_one_work+0x22b/0x3d0
+ worker_thread+0x53/0x410
+ ? process_one_work+0x3d0/0x3d0
+ kthread+0x12a/0x150
+ ? set_kthread_struct+0x50/0x50
+ ret_from_fork+0x22/0x30
+ </TASK>
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+UBSAN: array-index-out-of-bounds in
+/build/linux-HMZHpV/linux-5.15.0/drivers/scsi/megaraid/megaraid_sas_fp.c:15=
+1:32
+index 1 is out of range for type 'MR_LD_SPAN_MAP [1]'
+CPU: 41 PID: 268 Comm: kworker/41:0H Not tainted 5.15.0-27-generic #28-Ubun=
+tu
+Hardware name: Supermicro Super Server/H11DSU-iN, BIOS 1.3 07/15/2019
+Workqueue: kblockd blk_mq_run_work_fn
+Call Trace:
+ <TASK>
+ show_stack+0x52/0x58
+ dump_stack_lvl+0x4a/0x5f
+ dump_stack+0x10/0x12
+ ubsan_epilogue+0x9/0x45
+ __ubsan_handle_out_of_bounds.cold+0x44/0x49
+ ? _printk+0x58/0x6f
+ MR_GetPhyParams+0x47f/0x700 [megaraid_sas]
+ MR_BuildRaidContext+0x402/0xb50 [megaraid_sas]
+ megasas_build_ldio_fusion+0x5b5/0x9a0 [megaraid_sas]
+ megasas_build_io_fusion+0x40e/0x450 [megaraid_sas]
+ megasas_build_and_issue_cmd_fusion+0xa5/0x370 [megaraid_sas]
+ megasas_queue_command+0x1b5/0x1f0 [megaraid_sas]
+ ? ktime_get+0x46/0xc0
+ scsi_dispatch_cmd+0x93/0x1f0
+ scsi_queue_rq+0x2d1/0x690
+ blk_mq_dispatch_rq_list+0x126/0x600
+ ? __sbitmap_queue_get+0x1/0x10
+ __blk_mq_do_dispatch_sched+0xba/0x2d0
+ ? ttwu_do_wakeup+0x1c/0x160
+ __blk_mq_sched_dispatch_requests+0x104/0x150
+ blk_mq_sched_dispatch_requests+0x35/0x60
+ __blk_mq_run_hw_queue+0x34/0xb0
+ blk_mq_run_work_fn+0x1b/0x20
+ process_one_work+0x22b/0x3d0
+ worker_thread+0x53/0x410
+ ? process_one_work+0x3d0/0x3d0
+ kthread+0x12a/0x150
+ ? set_kthread_struct+0x50/0x50
+ ret_from_fork+0x22/0x30
+ </TASK>
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
