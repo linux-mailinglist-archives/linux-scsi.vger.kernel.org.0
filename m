@@ -2,47 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3C351B5E9
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 May 2022 04:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564C951B643
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 May 2022 05:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237672AbiEECbJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 May 2022 22:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S240524AbiEEDGB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 May 2022 23:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232555AbiEECbI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 22:31:08 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC360240A4
-        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 19:27:28 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KtyJD47zkzhYrB;
-        Thu,  5 May 2022 10:26:52 +0800 (CST)
-Received: from [10.40.193.166] (10.40.193.166) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 10:27:21 +0800
-Subject: Re: [PATCH 0/7] scsi: EH rework main part
-To:     Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-References: <20220502215953.5463-1-hare@suse.de>
-CC:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        <linux-scsi@vger.kernel.org>
-From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
-Message-ID: <4d4586e1-c25c-5452-2252-cf533842250d@hisilicon.com>
-Date:   Thu, 5 May 2022 10:27:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        with ESMTP id S240356AbiEEDF4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 May 2022 23:05:56 -0400
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A072D245A7
+        for <linux-scsi@vger.kernel.org>; Wed,  4 May 2022 20:02:13 -0700 (PDT)
+X-QQ-mid: bizesmtp91t1651719712tr7ccd8w
+Received: from mail-qk1-f173.google.com ( [209.85.222.173])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 05 May 2022 11:01:50 +0800 (CST)
+X-QQ-SSF: 01400000008000B0D000B00A0000000
+X-QQ-FEAT: k0yT7W7BRd3U1025a3U/i5S/kct1X5tWuD1+2WyfFsa8O6Jz6fKR9nGJd0vfL
+        2M1Pp1P7FrFH+fZuAFuTXQRyIdAJIy6WoPDybw5wThQbUDSYy1z/6zCQkZ20tuVne2EfJCH
+        mGDwRD2nnUASwqmVJ2zzuUQ3r9OOrTZDywK/mC+AXbatsiECTlCOrnN1W2J5wXnId2PMzMr
+        2Y+bdbSd+HCf9l4/KJpZmCtV0SmzYlFV7VHNKUK98OCgykTQKSnamqxZvvOZLXLwFpH0MUS
+        YpWmiO2kb/sRa8IwPNI/ToDYbQNBihZwx3D4uJZYIWZ2Jowpv0fXTcQhGMAk1PVryen/H3S
+        Rwz7Fcm
+X-QQ-GoodBg: 2
+Received: by mail-qk1-f173.google.com with SMTP id z126so2358649qkb.2;
+        Wed, 04 May 2022 20:01:51 -0700 (PDT)
+X-Gm-Message-State: AOAM530HrJKaOxsfMWAzMs5eM3d8InDdZClDx+E+N2/l9PVPf0MTnW7o
+        V8pi7AB4FOFlM3PjHl/Agfidn6LapeREhVrBzlY=
+X-Google-Smtp-Source: ABdhPJwKL82ySEUa93ww3YD5MCh2DdPRGW79kYFlPEGClcOFe5n5TiO3U8tcBLrn+zgHpvGsuMsJpA1QUfuCUAOx26E=
+X-Received: by 2002:a37:54c4:0:b0:67e:9cbf:a984 with SMTP id
+ i187-20020a3754c4000000b0067e9cbfa984mr19031192qkb.215.1651719708746; Wed, 04
+ May 2022 20:01:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220502215953.5463-1-hare@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.40.193.166]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220427090906.2257940-1-jinxiaobo@uniontech.com> <yq1sfpxkjpo.fsf@ca-mkp.ca.oracle.com>
+In-Reply-To: <yq1sfpxkjpo.fsf@ca-mkp.ca.oracle.com>
+From:   job jin <jinxiaobo@uniontech.com>
+Date:   Thu, 5 May 2022 11:01:37 +0800
+X-Gmail-Original-Message-ID: <CAEYFbwUBLJg5GEHBxd3xj77XbEwKXWOBV2wBo1AWs0THZCS-+w@mail.gmail.com>+7EADFA0502959A5A
+Message-ID: <CAEYFbwUBLJg5GEHBxd3xj77XbEwKXWOBV2wBo1AWs0THZCS-+w@mail.gmail.com>
+Subject: Re: [PATCH] scsi: sr: Fix some cdroms automatically ejected when
+ booting into the system
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign4
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,168 +59,32 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Hannes and other guys,
+Hi Martin K. Petersen!
 
-For SCSI EH, i have a question (sorry, it is not related to this 
-patchset): for current flow of SCSI EH, if IOs of one disk is failed
-
-(if there are many disks under the same scsi host), it will block all 
-the IOs of total scsi host.
-
-So during SCSI EH, all IOs are blocked even if some disks are normal. 
-That's the place product line sometimes complain about
-
-as it blocks IO bussiness of some normal disks because of just one bad 
-disk during SCSI EH.
-
-Is it possible to split the SCSI EH into two parts, the process of 
-recovering the disk and the process of recovering scsi host, at the 
-beginning
-
-it just blocks the IOs of the disk and not need to block all the IOs,  
-do some recovery related to the disk (such as abort IO/lun reset), and 
-if failed,
-
-then block all the IOs and do some recoverys related to scsi host (such 
-as host reset) ?
+As things stand, we cannot guarantee that all events will be propagated
+ to udev. So I think, we don't need to ensure that all events are received
+ by udev, we only need to ensure that events after sr probe can be received
+ by udev and actively discard events before sr probe.
 
 
-Best regards,
 
-chenxiang
-
-
-在 2022/5/3 5:59, Hannes Reinecke 写道:
-> Hi all,
 >
-> now that the prep is done we can convert the call sequence
-> of the SCSI EH callbacks to use the respective object
-> (ie struct Scsi_Host or struct scsi_device) and the Scsi command.
-> With that we don't have to allocate a 'fake' command for
-> ioctl reset anymore.
 >
-> As usual, comments and reviews are welcome.
+> Hi jinxiaobo!
 >
-> Hannes Reinecke (7):
->    scsi: Use Scsi_Host as argument for eh_host_reset_handler
->    scsi: Use Scsi_Host and channel number as argument for
->      eh_bus_reset_handler()
->    scsi: Use scsi_target as argument for eh_target_reset_handler()
->    scsi: Use scsi_device as argument to eh_device_reset_handler()
->    scsi: Do not allocate scsi command in scsi_ioctl_reset()
->    scsi: remove SUBMITTED_BY_SCSI_RESET_IOCTL
->    scsi_error: streamline scsi_eh_bus_device_reset()
+> > sr_get_events() has been called before udev starts when SCSI CDROM is
+> > built-in and AHCI SATA is bulit-in,so sr events propagated to user
+> > space are not handled.  if both is loadable, udev will handle sr
+> > events, some cdroms may eject.  We need call sr_get_events() once
+> > before device_add_disk() to keep the same result, whether both are
+> > built-in or loadable.
 >
->   Documentation/scsi/scsi_eh.rst                |  16 +-
->   Documentation/scsi/scsi_mid_low_api.rst       |  31 +++-
->   drivers/infiniband/ulp/srp/ib_srp.c           |  12 +-
->   drivers/message/fusion/mptfc.c                |  25 ++-
->   drivers/message/fusion/mptsas.c               |  10 +-
->   drivers/message/fusion/mptscsih.c             |  86 ++++-----
->   drivers/message/fusion/mptscsih.h             |   8 +-
->   drivers/message/fusion/mptspi.c               |   8 +-
->   drivers/s390/scsi/zfcp_scsi.c                 |  14 +-
->   drivers/scsi/3w-9xxx.c                        |  11 +-
->   drivers/scsi/3w-sas.c                         |  11 +-
->   drivers/scsi/3w-xxxx.c                        |  11 +-
->   drivers/scsi/53c700.c                         |  39 ++--
->   drivers/scsi/BusLogic.c                       |  14 +-
->   drivers/scsi/NCR5380.c                        |   3 +-
->   drivers/scsi/a100u2w.c                        |  11 +-
->   drivers/scsi/aacraid/linit.c                  |  35 ++--
->   drivers/scsi/advansys.c                       |  26 +--
->   drivers/scsi/aha152x.c                        |  10 +-
->   drivers/scsi/aha1542.c                        |  30 +--
->   drivers/scsi/aic7xxx/aic79xx_osm.c            |  37 ++--
->   drivers/scsi/aic7xxx/aic7xxx_osm.c            |  10 +-
->   drivers/scsi/arcmsr/arcmsr_hba.c              |   6 +-
->   drivers/scsi/arm/acornscsi.c                  |   8 +-
->   drivers/scsi/arm/fas216.c                     |  18 +-
->   drivers/scsi/arm/fas216.h                     |  17 +-
->   drivers/scsi/atari_scsi.c                     |   4 +-
->   drivers/scsi/be2iscsi/be_main.c               |  12 +-
->   drivers/scsi/bfa/bfad_im.c                    |   8 +-
->   drivers/scsi/bnx2fc/bnx2fc.h                  |   4 +-
->   drivers/scsi/bnx2fc/bnx2fc_io.c               |  10 +-
->   drivers/scsi/csiostor/csio_scsi.c             |   3 +-
->   drivers/scsi/cxlflash/main.c                  |  10 +-
->   drivers/scsi/dc395x.c                         |  25 ++-
->   drivers/scsi/dpt_i2o.c                        |  43 +++--
->   drivers/scsi/dpti.h                           |   6 +-
->   drivers/scsi/esas2r/esas2r.h                  |   8 +-
->   drivers/scsi/esas2r/esas2r_main.c             |  55 +++---
->   drivers/scsi/esp_scsi.c                       |   8 +-
->   drivers/scsi/fdomain.c                        |   3 +-
->   drivers/scsi/fnic/fnic.h                      |   4 +-
->   drivers/scsi/fnic/fnic_scsi.c                 |   9 +-
->   drivers/scsi/hpsa.c                           |  14 +-
->   drivers/scsi/hptiop.c                         |   6 +-
->   drivers/scsi/ibmvscsi/ibmvfc.c                |  12 +-
->   drivers/scsi/ibmvscsi/ibmvscsi.c              |  23 +--
->   drivers/scsi/imm.c                            |   4 +-
->   drivers/scsi/initio.c                         |  11 +-
->   drivers/scsi/ipr.c                            |  35 ++--
->   drivers/scsi/ips.c                            |  22 +--
->   drivers/scsi/libfc/fc_fcp.c                   |  16 +-
->   drivers/scsi/libiscsi.c                       |  19 +-
->   drivers/scsi/libsas/sas_scsi_host.c           |  21 ++-
->   drivers/scsi/lpfc/lpfc_scsi.c                 |  23 ++-
->   drivers/scsi/mac53c94.c                       |   8 +-
->   drivers/scsi/megaraid.c                       |   4 +-
->   drivers/scsi/megaraid.h                       |   2 +-
->   drivers/scsi/megaraid/megaraid_mbox.c         |  14 +-
->   drivers/scsi/megaraid/megaraid_sas.h          |   3 +-
->   drivers/scsi/megaraid/megaraid_sas_base.c     |  44 ++---
->   drivers/scsi/megaraid/megaraid_sas_fusion.c   |  56 +++---
->   drivers/scsi/mesh.c                           |  10 +-
->   drivers/scsi/mpi3mr/mpi3mr_os.c               | 123 ++++++------
->   drivers/scsi/mpt3sas/mpt3sas_scsih.c          |  72 +++----
->   drivers/scsi/mvumi.c                          |   7 +-
->   drivers/scsi/myrb.c                           |   3 +-
->   drivers/scsi/myrs.c                           |   3 +-
->   drivers/scsi/ncr53c8xx.c                      |   4 +-
->   drivers/scsi/nsp32.c                          |  12 +-
->   drivers/scsi/pcmcia/nsp_cs.c                  |  10 +-
->   drivers/scsi/pcmcia/nsp_cs.h                  |   6 +-
->   drivers/scsi/pcmcia/qlogic_stub.c             |   4 +-
->   drivers/scsi/pcmcia/sym53c500_cs.c            |   8 +-
->   drivers/scsi/pmcraid.c                        |  27 ++-
->   drivers/scsi/ppa.c                            |   4 +-
->   drivers/scsi/qedf/qedf_main.c                 |  13 +-
->   drivers/scsi/qedi/qedi_iscsi.c                |   3 +-
->   drivers/scsi/qla1280.c                        |  36 ++--
->   drivers/scsi/qla2xxx/qla_os.c                 |  83 ++++-----
->   drivers/scsi/qla4xxx/ql4_os.c                 |  54 +++---
->   drivers/scsi/qlogicfas408.c                   |  10 +-
->   drivers/scsi/qlogicfas408.h                   |   2 +-
->   drivers/scsi/qlogicpti.c                      |   3 +-
->   drivers/scsi/scsi_debug.c                     |  78 +++-----
->   drivers/scsi/scsi_error.c                     | 175 +++++++++---------
->   drivers/scsi/scsi_lib.c                       |   2 -
->   drivers/scsi/smartpqi/smartpqi_init.c         |  11 +-
->   drivers/scsi/snic/snic.h                      |   5 +-
->   drivers/scsi/snic/snic_scsi.c                 |  41 +---
->   drivers/scsi/stex.c                           |   7 +-
->   drivers/scsi/storvsc_drv.c                    |   4 +-
->   drivers/scsi/sym53c8xx_2/sym_glue.c           |  13 +-
->   drivers/scsi/ufs/ufshcd.c                     |  14 +-
->   drivers/scsi/virtio_scsi.c                    |  12 +-
->   drivers/scsi/vmw_pvscsi.c                     |  20 +-
->   drivers/scsi/wd33c93.c                        |   5 +-
->   drivers/scsi/wd33c93.h                        |   2 +-
->   drivers/scsi/wd719x.c                         |  17 +-
->   drivers/scsi/xen-scsifront.c                  |  23 ++-
->   drivers/staging/rts5208/rtsx.c                |   6 +-
->   .../staging/unisys/visorhba/visorhba_main.c   |  24 +--
->   drivers/target/loopback/tcm_loop.c            |  17 +-
->   drivers/usb/image/microtek.c                  |   4 +-
->   drivers/usb/storage/scsiglue.c                |   8 +-
->   drivers/usb/storage/uas.c                     |   3 +-
->   include/scsi/libfc.h                          |   4 +-
->   include/scsi/libiscsi.h                       |   4 +-
->   include/scsi/libsas.h                         |   4 +-
->   include/scsi/scsi_cmnd.h                      |   1 -
->   include/scsi/scsi_host.h                      |   8 +-
->   110 files changed, 989 insertions(+), 1076 deletions(-)
+> I am not sure how calling sr_get_events() and throwing away the result
+> ensures that events get propagated to udev. Isn't this just changing
+> timing slightly?
 >
+> --
+> Martin K. Petersen      Oracle Linux Engineering
+>
+
 
