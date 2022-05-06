@@ -2,106 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27ADC51E090
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 23:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B4951E0C2
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 23:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391619AbiEFVEQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 May 2022 17:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
+        id S1444292AbiEFVMy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 6 May 2022 17:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444309AbiEFVEP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 May 2022 17:04:15 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1BF1EADE
-        for <linux-scsi@vger.kernel.org>; Fri,  6 May 2022 14:00:31 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id g184so4518415pgc.1
-        for <linux-scsi@vger.kernel.org>; Fri, 06 May 2022 14:00:31 -0700 (PDT)
+        with ESMTP id S1444282AbiEFVMw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 May 2022 17:12:52 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C126F48D
+        for <linux-scsi@vger.kernel.org>; Fri,  6 May 2022 14:09:08 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so11866146pju.2
+        for <linux-scsi@vger.kernel.org>; Fri, 06 May 2022 14:09:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=rHDXE8PeP2Ay8M4994Qn3PWFDqlwloSb9G5ggCzXMG4=;
-        b=AjQki6uyITSGgBUl6bjMKbxapKdWr5xm6NLMY3vvY5eOPKDcLGmnYkjS6JJAzniukc
-         q9gD74c+Ro496jjVWB3vb5UpKBxH2Vk2V57RDf+w0h6mequInP7DgLtul89kTahSNV0s
-         U3lr+5j+nJRS280DxalOUgES5gn/0PM5E2lya06ajxTZJnFLqhl4QQ+YIyO11RIOT7wL
-         qFWv6Zs1KmmMSV0ym5wERVziBTTgkztOGm86vUX8UCOf85IGwm0FUSAvH7HLaiCoMtB0
-         d9eIQIB3mCXofRtThyuDkQCw4LnE/LqGBNmOQw9mcAcNBQ7UjDda04D6fHm6FQ0XYYRg
-         rNYw==
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=dRDKXprhlGbd1zHlYa/B+PvUTpdWL8YAmnaH4jigMFOTXdvn+Z3dBXD3WbRIhK4qMt
+         ChVmQ7di1vbvMY97AcQtrr1UKudk8k9dmk/Z0AmfrMeQVKrL7yFwSIzlP3Tn+TxIhKMr
+         Nsj2mVlY0ODbA+5kk6nn8otnIB0vbElitdZOdWwQfWvo/Q+S294F7AxfI2Ek7OccrEVM
+         Mnrj3r6nNZdO4vV8MZdKDEgV5fRtoAzuK6s5t9+IQv97F8jftlkQ2++YRclffzAMlAi9
+         kuCtFBHM61ab/EaFzHd5dGTi9QvMsrNHdPxC6xNs3UCEKoyi1yv313nFhsagBchAHr9i
+         GpEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=rHDXE8PeP2Ay8M4994Qn3PWFDqlwloSb9G5ggCzXMG4=;
-        b=mk/GUg9/FEuAQHczZCGCagAD1Tf0mQPNkvnP1XLx1m1MiH4mX1Z/obb2Q4RtgNrHiC
-         pZtQk/e0Qvi1fTdvS+jcbvHTd+PxVzojn5KGrsIRbyELF5ueGQ66mSibNSI8jDT/0spx
-         OCDtWDJsKt+3K95DGySNeCXo7XDqWgN+EQ61BL7Z26ZeIfjCNFLzCC0I1a4g7OXJduzF
-         7j/0st1funueutVvNXWaY07p+VeDNVMd8nQqMso+BX3ukyOmsH9WeknTq8jjvd8WT2YT
-         MEyD3se3PzydALRiv8tzHGAI+o612yxqff+8N2YCuVap9wO0cH5Ge5wSBKUcj9BpI2O7
-         ZHdw==
-X-Gm-Message-State: AOAM531EjReaP0LjC32OqRcIfSMRSWELD4/H9MrUWAmrXG+XQC74qiPX
-        xG2WKoyOFA8Ct/RJHEQ75Mg=
-X-Google-Smtp-Source: ABdhPJw4LP0nfV/TP9syjjBE3wR0rKrOJVbS43F9poqTnBHqPbEtO+UzaWSR0Hs9tf6RnylJmjmkgw==
-X-Received: by 2002:a65:6051:0:b0:39d:1b00:e473 with SMTP id a17-20020a656051000000b0039d1b00e473mr4162828pgp.578.1651870831486;
-        Fri, 06 May 2022 14:00:31 -0700 (PDT)
-Received: from [10.69.47.244] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id bt19-20020a056a00439300b0050dc76281f2sm3709589pfb.204.2022.05.06.14.00.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 14:00:31 -0700 (PDT)
-Message-ID: <47fab09c-641a-b827-ecc6-7af55c44144e@gmail.com>
-Date:   Fri, 6 May 2022 14:00:30 -0700
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=dRCNWFFs+6mLGIQ/YLin9Lifq21Fy8rLbzJRxCl1PqEZq8FFkxZPPhaq6NzAlg6A6R
+         mExZKpFqKbFbDykYeUK8W59Otkg5AymLnJ5pHenn+qBmh4GNJLiRK/en45rCFq0jnyle
+         wyGbtSkXrYjCaLcR10OiLRFkukgM65GOKLTj0ss+x2Ze5EnN5KqEwRkz+zooNwS90Zyy
+         j2FuxJDjt0XjmPy1BFOdsZhH6sVrhUCLLiq7TUvpEeuSIwOR2NEMJ+vKFjDuA9JJ+D+1
+         OV0yTC0YY7ch+iuunK6X3VZ7fE+5/ymwNzD9Y80rp20hvsu8hKOzDs4bCXxZKgHQYIJn
+         r9Iw==
+X-Gm-Message-State: AOAM530tgF07Kz4eeTb7QpvjDrg07OD9w0Hkc7f8sl5Ks3+M98il3SdP
+        Fr1FPYFqfRXlf460P5HgTVHqEEk+0gv8WLT5eA==
+X-Google-Smtp-Source: ABdhPJwMKgJBXMjhN20uF8yhf6Mue5+3eAmiRBptNZlvlrSOFxeAzVJVQyuXlAKHHa5EmliuLWK7uSzxfB2MTwb7ajc=
+X-Received: by 2002:a17:903:32c6:b0:15e:c1cc:2400 with SMTP id
+ i6-20020a17090332c600b0015ec1cc2400mr5592118plr.153.1651871348442; Fri, 06
+ May 2022 14:09:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: lpfc: regression with lpfc 14.2.0.0 / Skyhawk: FLOGI failure
-Content-Language: en-US
-From:   James Smart <jsmart2021@gmail.com>
-To:     Martin Wilck <mwilck@suse.com>, linux-scsi@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Justin Tee <justin.tee@broadcom.com>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        David Bond <dbond@suse.com>, Hannes Reinecke <hare@suse.com>
-References: <9d7e7a5613decc1737ef2601ebb2506890790930.camel@suse.com>
- <4a7f19b6330c3017c45074854cf86b04224e7706.camel@suse.com>
- <f9b4c954-b5b5-d40c-b3dc-974757134daf@gmail.com>
-In-Reply-To: <f9b4c954-b5b5-d40c-b3dc-974757134daf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ac4:9906:0:b0:4ba:807b:b8f3 with HTTP; Fri, 6 May 2022
+ 14:09:07 -0700 (PDT)
+Reply-To: warren001buffett@gmail.com
+In-Reply-To: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+References: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+From:   Warren Buffett <guidayema@gmail.com>
+Date:   Fri, 6 May 2022 21:09:07 +0000
+Message-ID: <CAD_xG_rq7Wy-0XZWX43Z7+9iCoaSZDkqEBOA7UBXiiQE6duuhA@mail.gmail.com>
+Subject: Fwd: My name is Warren Buffett, an American businessman.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1042 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4891]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [guidayema[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/5/2022 8:08 PM, James Smart wrote:
-> On 5/4/2022 8:55 AM, Martin Wilck wrote:
->> On Wed, 2022-05-04 at 09:11 +0200, Martin Wilck wrote:
->>>
->>> Hints appreciated. Complete logs and additional debug data can be
->>> provided on request.
->>
->> Further analysis by David showed that the FLOGI via FCoE was using the
->> VLAN ID.
->>
->> Martin
->>
-> 
-> We believe we understand the issue and are testing fixes.  Will keep you 
-> posted.
-> 
-> -- james
-> 
+My name is Warren Buffett, an American businessman and investor I have
+something important to discuss with you.
 
-FYI - patches just posted:
-
-lpfc: Fix split code for FLOGI on FCoE
-https://lore.kernel.org/linux-scsi/20220506205528.61590-1-jsmart2021@gmail.com/T/#u
-
-lpfc: Correct BDE DMA address assignment for GEN_REQ_WQE
-https://lore.kernel.org/linux-scsi/20220506205548.61644-1-jsmart2021@gmail.com/T/#u
-
--- james
+Mr. Warren Buffett
+warren001buffett@gmail.com
+Chief Executive Officer: Berkshire Hathaway
+aphy/Warren-Edward-Buffett
