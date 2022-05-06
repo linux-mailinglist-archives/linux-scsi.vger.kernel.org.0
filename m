@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C137B51CFDE
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 05:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DDE51CFE0
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 05:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388841AbiEFD7O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 May 2022 23:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S1388857AbiEFD7X (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 May 2022 23:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388856AbiEFD7M (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 23:59:12 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1712655C
-        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 20:55:29 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c11so6225785plg.13
-        for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 20:55:29 -0700 (PDT)
+        with ESMTP id S1388836AbiEFD7O (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 23:59:14 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBF265AA
+        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 20:55:30 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id w5-20020a17090aaf8500b001d74c754128so9781832pjq.0
+        for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 20:55:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IKC5VYOSrma1br6bpss3+JGoTu8uDh+cfluIvfZaNnA=;
-        b=D6SvQiMJX5c5qbuc5TuFhoMVYkE/FxcIAAagoX5eH+0aP1Q5nzMIiwDhw2DC+QNVwr
-         ZZ/GL82nIQ5aisfnGrgH82iZQiH8k43GEBlXG42po/bLsLGefNnQlnZ3ICvj5xfFOiAW
-         ew75qSfMPh9CDR/xoNKhLp/0tkYePef74b6WZkUYMwho57/2vVwllIZNCQur8zAQumhT
-         awvwCqv6RCCIB2VPbVB6BlE3Eg88gsr/NjzC3b8hneh56zAeGQ4d74GudByUeYtpnUYG
-         G12rJBeI9A9XLSMsrgMX0029/jZ7oZYTCRo83kW9yrF4wGvOG9HN9Zfg4vw3jO7mGUAO
-         /URg==
+        bh=SpUVwnkg++HeDm+jTiQAVjn/6CkYaRl6cjZRC1hD6ec=;
+        b=SyWA3/4OU808NPvKSfTJmyrIl4LadzO+0zull2PPnSLnbcTaalhTzUu3UDLxdWI8KD
+         PU7HEJTwU0un8ELvuOBFdl4Ak74mWqdZrnqleD3WjusAYHAIQ1csCLraWFzbxgL0zWPt
+         nvcKGUN6tPVyyIEJ5h/ALN58CBpeqlpbEmxnXJkAMSylrUnLSMmIApIWF4y8xjpGqO6t
+         Ug4Eud1b46JiLINKTHHPULYp8VnvtDOSE52DvyK45SnvCbsY+qiH7PAIEeBpMIJWRsHj
+         FGkOwaq77xPcFU7X47vsy9E4O5mdA/Y9kgLF/dbuK0Ozx/RvKzmoUKPGvxl0eOlrEaWG
+         AcQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IKC5VYOSrma1br6bpss3+JGoTu8uDh+cfluIvfZaNnA=;
-        b=mCK/IYpydAxg/z0sk9p61fNzvrwsvmoVD2JZmaw8R6iRuG1aJUXAmsD8P5QAY7lZQL
-         U331Qh7QR5NkR2ISrfaqaBZJ+Z7lsTdVE4+NWOzbTz6twQm8PGl0dBGQR+46CNTH2ZFg
-         N2oPoeJ8yVD0aVc0safjce75WstDIVL7HZMuFMf80qEWhTdvxq7o75KZl0g/zK/SFyhx
-         SPoJXVXBM2s0e9ZNcUSytFTB/E3MpVaPo9e+M9zc8IhJGO/oDODy25t+wtjTEgzpwsP7
-         6oWrC15YcvH8TjX+oIJJwYPosPMcyzZ5jmj4K3neFS4KO/ARNA5k7CERZGEZQC6tnZg8
-         37zw==
-X-Gm-Message-State: AOAM532umOKc1MX6/9mC22iBWczXobNFO7n6PX65Hbngu+yyGjwr0sP1
-        Ra0YUIa/TE1JKlyebZTduBrkQq6Q93M=
-X-Google-Smtp-Source: ABdhPJye546LaYccBI0wD2etMkUWVZMA9XfyGfmUGnlZgp0axvUZ0bRjC+34Rqj2zUWPW+YUx8qU9A==
-X-Received: by 2002:a17:90b:224f:b0:1dc:76e9:e963 with SMTP id hk15-20020a17090b224f00b001dc76e9e963mr1916664pjb.16.1651809329221;
-        Thu, 05 May 2022 20:55:29 -0700 (PDT)
+        bh=SpUVwnkg++HeDm+jTiQAVjn/6CkYaRl6cjZRC1hD6ec=;
+        b=etVrIPa1i5tOZnkY0oKx3qLA41kqLzKEgJorsvB0/4LuNkAnzMg+KkMhn2LOr1VRjX
+         pnGOUv+wPv17JXNXWfIFIP2yOKzl3Cfv2yDNaz5X/sId08OkB9/eupQq+gEoRroMbyeX
+         uYenz0HLQ1KAl48j93G+9h0kjPFsPvGFaYVI82Av+/RjphpgxGI2oexkxVRqGb1pbsgJ
+         cJ3NAFJyDviVBxoXs+byjI/56OOdUL1/9dsyjWYNDpgTfnuGvOS6njpxVfyv0qBmc3fd
+         YaDpMOmTUgaFP67NeAIkeorlBjf9D9JDyTt8N3OKrQhzC4tVij8FISmO/LGM7FqY9lC3
+         aHmA==
+X-Gm-Message-State: AOAM532D7P8ZGwnmRnSmib4FI+EiAoMuOKhOhM5frVLGxfAS+GBcWwfd
+        6pbovZBsb9rbI2vautSkGtFI9FcbjPY=
+X-Google-Smtp-Source: ABdhPJyKNiZcKph15UQwtiveE7ID8CPgDQABTJrsdNcy78dR0lIU6QEpshyiE1gVMP9R9N3wk1lovw==
+X-Received: by 2002:a17:903:120c:b0:154:c135:60d3 with SMTP id l12-20020a170903120c00b00154c13560d3mr1603579plh.48.1651809330092;
+        Thu, 05 May 2022 20:55:30 -0700 (PDT)
 Received: from mail-ash-it-01.broadcom.com (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id ck3-20020a17090afe0300b001cd4989feebsm6065187pjb.55.2022.05.05.20.55.28
+        by smtp.gmail.com with ESMTPSA id ck3-20020a17090afe0300b001cd4989feebsm6065187pjb.55.2022.05.05.20.55.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 20:55:28 -0700 (PDT)
+        Thu, 05 May 2022 20:55:29 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 02/12] lpfc: Fill in missing ndlp kref puts in error paths
-Date:   Thu,  5 May 2022 20:55:09 -0700
-Message-Id: <20220506035519.50908-3-jsmart2021@gmail.com>
+Subject: [PATCH 03/12] lpfc: Fix ndlp put following a LOGO completion
+Date:   Thu,  5 May 2022 20:55:10 -0700
+Message-Id: <20220506035519.50908-4-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220506035519.50908-1-jsmart2021@gmail.com>
 References: <20220506035519.50908-1-jsmart2021@gmail.com>
@@ -69,136 +69,49 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Code review, following every lpfc_nlp_get call vs calls during error
-handling, discovered cases of missing put calls.
+During testing with repeated asynchronous resets of the target, and issue
+was found when the driver issues a LOGO to disconnect it's login and
+recover all exchanges. The LOGO command take a node reference but
+neglects to remove it, keeping the node reference count artifically high.
 
-Correct by adding ndlp kref puts in the respective error paths.
-
-Also added comments to several of the error paths to record
-relationships to reference counts.
+Add a call to lpfc_nlp_put to lpfc_nlp_logo_unreg and move the mempool
+free call to the routine exit along with the needed put.  This is always
+safe as this will not be the last reference removed as lpfc_unreg_rpi
+ensures there is an additional reference on the ndlp.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c       | 11 +++++------
- drivers/scsi/lpfc/lpfc_nportdisc.c | 15 +++++++++++++--
- drivers/scsi/lpfc/lpfc_nvme.c      |  5 +++++
- drivers/scsi/lpfc/lpfc_sli.c       |  6 +++++-
- 4 files changed, 28 insertions(+), 9 deletions(-)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 527f2c148e04..ace812ce857d 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -8725,19 +8725,18 @@ lpfc_issue_els_rrq(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 	elsiocb->cmd_cmpl = lpfc_cmpl_els_rrq;
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 2d846256990c..e4805101cd5c 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -5235,7 +5235,6 @@ lpfc_nlp_logo_unreg(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
+ 	if (!ndlp)
+ 		return;
+ 	lpfc_issue_els_logo(vport, ndlp, 0);
+-	mempool_free(pmb, phba->mbox_mem_pool);
  
- 	elsiocb->ndlp = lpfc_nlp_get(ndlp);
--	if (!elsiocb->ndlp) {
--		lpfc_els_free_iocb(phba, elsiocb);
--		return 1;
--	}
-+	if (!elsiocb->ndlp)
-+		goto io_err;
- 
- 	ret = lpfc_sli_issue_iocb(phba, LPFC_ELS_RING, elsiocb, 0);
--	if (ret == IOCB_ERROR)
-+	if (ret == IOCB_ERROR) {
-+		lpfc_nlp_put(ndlp);
- 		goto io_err;
-+	}
- 	return 0;
- 
-  io_err:
- 	lpfc_els_free_iocb(phba, elsiocb);
--	lpfc_nlp_put(ndlp);
- 	return 1;
- }
- 
-diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
-index 5e4822bf54f4..639f86635127 100644
---- a/drivers/scsi/lpfc/lpfc_nportdisc.c
-+++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
-@@ -513,6 +513,10 @@ lpfc_rcv_plogi(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 			lpfc_config_link(phba, link_mbox);
- 			link_mbox->mbox_cmpl = lpfc_sli_def_mbox_cmpl;
- 			link_mbox->vport = vport;
-+
-+			/* The default completion handling for CONFIG_LINK
-+			 * does not require the ndlp so no reference is needed.
-+			 */
- 			link_mbox->ctx_ndlp = ndlp;
- 
- 			rc = lpfc_sli_issue_mbox(phba, link_mbox, MBX_NOWAIT);
-@@ -633,6 +637,9 @@ lpfc_rcv_plogi(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 	 */
- 	login_mbox->mbox_cmpl = lpfc_defer_plogi_acc;
- 	login_mbox->ctx_ndlp = lpfc_nlp_get(ndlp);
-+	if (!login_mbox->ctx_ndlp)
-+		goto out;
-+
- 	login_mbox->context3 = save_iocb; /* For PLOGI ACC */
- 
- 	spin_lock_irq(&ndlp->lock);
-@@ -641,8 +648,10 @@ lpfc_rcv_plogi(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
- 
- 	/* Start the ball rolling by issuing REG_LOGIN here */
- 	rc = lpfc_sli_issue_mbox(phba, login_mbox, MBX_NOWAIT);
--	if (rc == MBX_NOT_FINISHED)
-+	if (rc == MBX_NOT_FINISHED) {
-+		lpfc_nlp_put(ndlp);
- 		goto out;
-+	}
- 	lpfc_nlp_set_state(vport, ndlp, NLP_STE_REG_LOGIN_ISSUE);
- 
- 	return 1;
-@@ -1099,8 +1108,10 @@ lpfc_release_rpi(struct lpfc_hba *phba, struct lpfc_vport *vport,
- 				 ndlp->nlp_rpi, ndlp->nlp_DID, ndlp->nlp_flag);
- 
- 		rc = lpfc_sli_issue_mbox(phba, pmb, MBX_NOWAIT);
--		if (rc == MBX_NOT_FINISHED)
-+		if (rc == MBX_NOT_FINISHED) {
-+			lpfc_nlp_put(ndlp);
- 			mempool_free(pmb, phba->mbox_mem_pool);
-+		}
+ 	/* Check to see if there are any deferred events to process */
+ 	if ((ndlp->nlp_flag & NLP_UNREG_INP) &&
+@@ -5262,6 +5261,13 @@ lpfc_nlp_logo_unreg(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
+ 		ndlp->nlp_flag &= ~NLP_UNREG_INP;
+ 		spin_unlock_irq(&ndlp->lock);
  	}
++
++	/* The node has an outstanding reference for the unreg. Now
++	 * that the LOGO action and cleanup are finished, release
++	 * resources.
++	 */
++	lpfc_nlp_put(ndlp);
++	mempool_free(pmb, phba->mbox_mem_pool);
  }
  
-diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
-index 376f6c0265c0..3aebd01e07fd 100644
---- a/drivers/scsi/lpfc/lpfc_nvme.c
-+++ b/drivers/scsi/lpfc/lpfc_nvme.c
-@@ -2357,6 +2357,11 @@ lpfc_nvme_register_port(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
- 		rpinfo.dev_loss_tmo = vport->cfg_devloss_tmo;
- 
- 	spin_lock_irq(&ndlp->lock);
-+
-+	/* If an oldrport exists, so does the ndlp reference.  If not
-+	 * a new reference is needed because either the node has never
-+	 * been registered or it's been unregistered and getting deleted.
-+	 */
- 	oldrport = lpfc_ndlp_get_nrport(ndlp);
- 	if (oldrport) {
- 		prev_ndlp = oldrport->ndlp;
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index d2900ac8de9d..fe4eb36426df 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -20684,8 +20684,12 @@ lpfc_cleanup_pending_mbox(struct lpfc_vport *vport)
- 			mb->mbox_cmpl = lpfc_sli_def_mbox_cmpl;
- 		if (mb->u.mb.mbxCommand == MBX_REG_LOGIN64) {
- 			act_mbx_ndlp = (struct lpfc_nodelist *)mb->ctx_ndlp;
--			/* Put reference count for delayed processing */
-+
-+			/* This reference is local to this routine.  The
-+			 * reference is removed at routine exit.
-+			 */
- 			act_mbx_ndlp = lpfc_nlp_get(act_mbx_ndlp);
-+
- 			/* Unregister the RPI when mailbox complete */
- 			mb->mbox_flag |= LPFC_MBX_IMED_UNREG;
- 		}
+ /*
 -- 
 2.26.2
 
