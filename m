@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064E251CFE7
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 05:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC7251CFE9
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 05:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388878AbiEFD7e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 May 2022 23:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
+        id S1388852AbiEFD7l (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 May 2022 23:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388851AbiEFD7W (ORCPT
+        with ESMTP id S1388856AbiEFD7W (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 23:59:22 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CED12AB1
-        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 20:55:37 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id j6so5248581pfe.13
-        for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 20:55:37 -0700 (PDT)
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A6A14099
+        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 20:55:38 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so6821361pjb.1
+        for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 20:55:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XO6QjupNFyPtXmjpMd71skiI90TCPe3nMuV/Fs5xeAI=;
-        b=oqLSN7WLP9y0sIRa16KN+U56MscCngbYR+cbMo0is5leosxvHCC1oXIZGRB/K/hEfF
-         tHrbgbxIW1HZki8PjGucO6bUTQu2zee1b8n9tcEHkCOFEIFhjcU6nwDciPvhgefqZYxp
-         rad9NQudb1w2U4ndVGG30Hpv7ANCenE2UtJPKXAdRIoZAd86ST4+Cp5A/qnr1NYAOBak
-         xsaS+DMwEDF5Z1nKmRpbOR2OD4uxYKNIS7IRnxV4ggHo6mriGwQ4Ewoyd8sL1M1vAry0
-         WBJjtPZ9kZeuQhsTFqzfxP2dwO607NxTnMKF7xLl49HudhXvC1xdbYNtUB9n5X8Txl91
-         tpBg==
+        bh=RRiklrwfeFpT22jLAKe6QaKiYruMKel+3owLkp87EMk=;
+        b=TgI7qt1n13v1vBypLBYOsf4ctyZgQpad9cda9B7faIcNhYg+6tieeklM2EkF08+bNB
+         G4G/6UzGWAxMGmgjpgnqkx0nEsH6hzZZb7+bmnOvMtdY7Lq3q6A3l9BIwzMpUV0k/EEe
+         nc7GqCK4K9Re/CeWqIunTJshBul7wukwPbrHVQ2g3EqZ0cJRp2AliizPUQ2TTH9kbrRA
+         4RwIS0UfxQp0lRIz12xXrv7BgnsVOK6dh3g/h29J3mOCCM2Z0Kn+ugVY86U8XIqqzrUV
+         M2GKz/16nyatknVMoJaO3JQu4h878SfkaEaPK/7xC7jdcuIfC6KZwfYDnLawrCr+W1Dw
+         TQYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XO6QjupNFyPtXmjpMd71skiI90TCPe3nMuV/Fs5xeAI=;
-        b=7+mEbg1B4XPFlPgftgk9iJHEEFSCUtt7la59hzho71djVgokx9f4JNk7IJATq1wtWD
-         pQWXIWW2rWzLhVeWKwPIlBc6E4QUnVDTAwDv885FneIZPuR7ruwp8thbF4PP8NuJyDOU
-         /ur7KTaFtVmfMSMh9VLb2UlBtVgK8U2hlmj6xsvgqhIg1X8j20K7VoXqzx3rBZynWR22
-         LB2xzNT0tutRYLul4aCuvX9hxfQzBekcoRzphu1RdbHcNa5Jkcqf1zR5zcUagex5YHY3
-         Q3bzV628QEaQi2GLUvKH1Gsfk7tHaymPPFk/Atwhb1dTisETGxqYZDYSfSoc0o1tQDEm
-         Dbcg==
-X-Gm-Message-State: AOAM532yk5UK1uga6YPlf5m5QdtymUxf/gGiO99OzPK9F5e/oYFtCbJi
-        7QBMTnPqT8ypBw9fnlLaHpy2Q1Zc240=
-X-Google-Smtp-Source: ABdhPJzU9OYmvzxJWlhDvOj3w4jBlBCCIwXaWnGKt1RRi8JNR024fvvH/4kK+LSAk5VmPYYMNGi7pw==
-X-Received: by 2002:a63:8b49:0:b0:3c6:1ec9:a018 with SMTP id j70-20020a638b49000000b003c61ec9a018mr1176854pge.451.1651809336808;
-        Thu, 05 May 2022 20:55:36 -0700 (PDT)
+        bh=RRiklrwfeFpT22jLAKe6QaKiYruMKel+3owLkp87EMk=;
+        b=znFeMaKTAfO2AqYEepVBWJHtxhGr1XaT00GIUY/e0zbzxcE5g8U28ZzU8PnmOVNRWR
+         JAwL90u9dpPrWWQV33E4S2Irw7zMVE/FKAo1tBwJvVo2yGx0GT+RworktSVvlN0Rx+Fw
+         9AMRatLAcxrsD5hrxhve5s48RYjDxTVHFsnKVjw0Z48gNQrgB9KpQZg0h09s41K/kbH9
+         mS2PoIrfqSQwprZmk9YbdpYe1PWuypqhi4pkrtqS3y0B98QYsyv5pOAMut/emHK3hHHc
+         cRMUXinQglGuinZXOYAshq9MdHMg8qs3yw659UUnLAslhn5OxTIQgsQIVh47Q0CTbe02
+         3KQg==
+X-Gm-Message-State: AOAM530sCQyGJHGSaU7Zt84MeTfCmdIuATl82PdA7+IzjIaHfiCcVH/m
+        Mx2+VDNOENzFp9JOw5MVbn3dk8t52aw=
+X-Google-Smtp-Source: ABdhPJzosv5+N9aOCeMcukA6e15dpuKqwQoW9CSBKfwh+0ZWTXvPEw9CMUiMtwBZx0Se8YWv69gSOQ==
+X-Received: by 2002:a17:90b:4d0c:b0:1dc:d293:148c with SMTP id mw12-20020a17090b4d0c00b001dcd293148cmr2841823pjb.75.1651809337512;
+        Thu, 05 May 2022 20:55:37 -0700 (PDT)
 Received: from mail-ash-it-01.broadcom.com (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
         by smtp.gmail.com with ESMTPSA id ck3-20020a17090afe0300b001cd4989feebsm6065187pjb.55.2022.05.05.20.55.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 20:55:36 -0700 (PDT)
+        Thu, 05 May 2022 20:55:37 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
-        Nigel Kirkland <nkirkland2304@gmail.com>
-Subject: [PATCH 11/12] lpfc: Use sg_dma_address and sg_dma_len macros for NVMe I/O
-Date:   Thu,  5 May 2022 20:55:18 -0700
-Message-Id: <20220506035519.50908-12-jsmart2021@gmail.com>
+        Justin Tee <justin.tee@broadcom.com>
+Subject: [PATCH 12/12] lpfc: Update lpfc version to 14.2.0.3
+Date:   Thu,  5 May 2022 20:55:19 -0700
+Message-Id: <20220506035519.50908-13-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220506035519.50908-1-jsmart2021@gmail.com>
 References: <20220506035519.50908-1-jsmart2021@gmail.com>
@@ -69,42 +69,28 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-NVME I/O problems may be seen on IOMMU enabled platforms. Adapter I/O's
-failing with transfer length mismatches.
+Update lpfc version to 14.2.0.3
 
-The sg list processing routine for nvme I/O is accessing the sg entry
-directly for the length and address fields. On some iommu platforms,
-contigous mappings are compressed to the first sg entry with the sum
-of the lengths set to the sg entry dma_length field. The length fields
-are left for later use by the unmap call. As such, the driver didn't see
-the actual dma_length value, just the first entries length value.
-Drivers are to use the sg_dma_length and sg_dma_address macros to
-reference the sg entry. The macros select the proper length field
-(dma_length or length) to reference.
-
-Fix the offending code to use the sg_dma_xxx macros.
-
-Signed-off-by: Nigel Kirkland <nkirkland2304@gmail.com>
+Co-developed-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_nvme.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_version.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
-index 3aebd01e07fd..5385f4de5523 100644
---- a/drivers/scsi/lpfc/lpfc_nvme.c
-+++ b/drivers/scsi/lpfc/lpfc_nvme.c
-@@ -1401,8 +1401,8 @@ lpfc_nvme_prep_io_dma(struct lpfc_vport *vport,
- 				if ((nseg - 1) == i)
- 					bf_set(lpfc_sli4_sge_last, sgl, 1);
+diff --git a/drivers/scsi/lpfc/lpfc_version.h b/drivers/scsi/lpfc/lpfc_version.h
+index a615011c282d..4fab79ed58ed 100644
+--- a/drivers/scsi/lpfc/lpfc_version.h
++++ b/drivers/scsi/lpfc/lpfc_version.h
+@@ -20,7 +20,7 @@
+  * included with this package.                                     *
+  *******************************************************************/
  
--				physaddr = data_sg->dma_address;
--				dma_len = data_sg->length;
-+				physaddr = sg_dma_address(data_sg);
-+				dma_len = sg_dma_len(data_sg);
- 				sgl->addr_lo = cpu_to_le32(
- 							 putPaddrLow(physaddr));
- 				sgl->addr_hi = cpu_to_le32(
+-#define LPFC_DRIVER_VERSION "14.2.0.2"
++#define LPFC_DRIVER_VERSION "14.2.0.3"
+ #define LPFC_DRIVER_NAME		"lpfc"
+ 
+ /* Used for SLI 2/3 */
 -- 
 2.26.2
 
