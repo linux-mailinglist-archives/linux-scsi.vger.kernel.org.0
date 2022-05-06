@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD7251CFE6
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 05:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2542551CFE8
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 05:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388877AbiEFD7b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 May 2022 23:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S1388890AbiEFD7j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 May 2022 23:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388842AbiEFD7P (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 23:59:15 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5B1DFB6
+        with ESMTP id S1388852AbiEFD7W (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 23:59:22 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE153E015
         for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 20:55:34 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id p6so5957178pjm.1
+Received: by mail-pf1-x430.google.com with SMTP id y41so442225pfw.12
         for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 20:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ji9tEaN7ljTyztkTImBXsG1xCuExSXwSNHR5IBZuZ84=;
-        b=TR3uIAdsON4Aw+2aodYtaIVZXPUjq1YGb+16niL0NhnggmiXQtL9A7v1OEyXmTp4Md
-         4eTFk/5M+/JMMrk/onzbqcseJrwxHssoT/ysoFkTxsJE7y/gF0lDLkd75/Z5TC8Q17Ry
-         HMAtNdTXHN++AARQ2H3dQfKqa7xxIPcJsPZDgtdhzU8UZ6f97yFUmcDPrbLJKZ+XbCmu
-         HC8s1pwzpvd8ky4H2LX6g3WzTbe1sDodpoWxnV0kCa6tSvIToJQcl4Lz5R5bpmjr95+f
-         aSj4+spcRR0KtHBOgIRntTguE9QCM82COMHZD+kiB+ymsLBo01fIM/sgV/pm+D/T+m3K
-         JFJQ==
+        bh=8G7FCdKjQW8GboICwBoCIFipNJHwbjaqY6MmWWoXJXo=;
+        b=ffpAwD0MDFxZJQEXPzELmQvupBgMl8ovk8NQlXzyGTKs60zY2LzvfDx/XA3NU8jHSR
+         pF5ZaUmyCYHTvKu9jFv91AhdLkGF4/MHRxhun26PUET3+xvj6kBw9QLyLa50y3fmcOnQ
+         7o09VYlLqz7NtfVIzCElEQQgQh4xBI0ktV5Y5JvNYAIF2ZOkjks/+etKjEZtkAtufFi8
+         ZXWdOZImxySPecQbo6qcdBrOA5xhR2gvhcJSDeBua+rMBSd1kEJ1IxIXQ8MpYicB6fkt
+         P9vPJ2CIL5ZohtS0Zx4ffLhpWlFiaLxAdl99gqpoYd5Z6dpn61kvIln+tndJsjXoDyG1
+         4hNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ji9tEaN7ljTyztkTImBXsG1xCuExSXwSNHR5IBZuZ84=;
-        b=6HE5i790P5zgqmyF1oOJyIn3G/w73/CYgkhj/mNsJx/2Av07TbwoqFhz7FOO/8FYsZ
-         uL8IDI3fKMIFXpvGe8sEYzhSURYJzo2dsxtyfgrDn9iIXllfFjEAxK9d+U1rwE0U35Yt
-         RUwLN8dq81SgIMMm/RgxqLG/R930vgrjkIfwXByV5HuJHyWdwBiLBagF9ljKRGQR+sgh
-         zMJtLrv7iK3VtMreiFydIb29I7xbdb/i2hkPol74D7Ymor6T++smAfX38rvi7EDL+TxO
-         B/pvsgzdUuIaxinCArTNZPf4QoaA0ZF+o3GNKiL5MYMFybRpbyYvaPca9NzYjvMmu9oL
-         z8SQ==
-X-Gm-Message-State: AOAM533K2Jt11BWY6Qi2lb/UL3PASxqGpJQxL9jEXPYBweLyQ9ODyjww
-        i5m4d9Stu/3l081w69FiMhd0OpnNdXk=
-X-Google-Smtp-Source: ABdhPJySrQPGiwLCIOaM/exjWzfqNRS/HPwLxP0rLg3Lb89VjcecsKzAsYnXomMLlE0zWzT4AJvZvA==
-X-Received: by 2002:a17:903:244c:b0:15e:b3f7:950d with SMTP id l12-20020a170903244c00b0015eb3f7950dmr1473790pls.9.1651809333528;
-        Thu, 05 May 2022 20:55:33 -0700 (PDT)
+        bh=8G7FCdKjQW8GboICwBoCIFipNJHwbjaqY6MmWWoXJXo=;
+        b=uMj/a7Ukk1QDWebBpD8zllhuw/AD9XvlBuGGETHcxg2MT9TxfryFzkI2zrDlFxZpea
+         O2+DSKQedJ3k1d5Kr+MxHjBHPzE37LWghwZqisA0OrRg73s53gka/KuzytYZHPEZTH3C
+         3nZJ6gD6pmOjo0VYt178CFXl9fckEBztTE5E/wsSM25MArja9OCGGKvzsmIhr2ZkYWdt
+         0i7zygXyvEgSj5YX85i01neIL+f6z1lNNBW2imAPwf25ZWDGY2giGSmZ5sfkK2f/EylK
+         EKNzM9Isa/CfIROuHHTUZq3hKRvj9RgwoOjJ6plZhRFB2LUArc/QVI8VDq6uFiZ+xu2K
+         LmNQ==
+X-Gm-Message-State: AOAM532KMKYaxDbTZZ06tI6PGhskRKkJw5VyZFBjXq+YKkDb1UduW50a
+        R9/QS76GOLsgg4oJ2X7lJNQ1rEEPq9U=
+X-Google-Smtp-Source: ABdhPJxGDMfMv7MTQwXQtW46V6yBXsir6iOTV1s5s4fmHoMOv03Rl9XchUshYgExsHDvnYRJ8/8Etw==
+X-Received: by 2002:a05:6a00:1353:b0:50e:982:6a4f with SMTP id k19-20020a056a00135300b0050e09826a4fmr1649375pfu.50.1651809334273;
+        Thu, 05 May 2022 20:55:34 -0700 (PDT)
 Received: from mail-ash-it-01.broadcom.com (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id ck3-20020a17090afe0300b001cd4989feebsm6065187pjb.55.2022.05.05.20.55.32
+        by smtp.gmail.com with ESMTPSA id ck3-20020a17090afe0300b001cd4989feebsm6065187pjb.55.2022.05.05.20.55.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 20:55:32 -0700 (PDT)
+        Thu, 05 May 2022 20:55:34 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 07/12] lpfc: Decrement outstanding gidft_inp counter if lpfc_err_lost_link
-Date:   Thu,  5 May 2022 20:55:14 -0700
-Message-Id: <20220506035519.50908-8-jsmart2021@gmail.com>
+Subject: [PATCH 08/12] lpfc: Change VMID registration to be based on fabric parameters
+Date:   Thu,  5 May 2022 20:55:15 -0700
+Message-Id: <20220506035519.50908-9-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220506035519.50908-1-jsmart2021@gmail.com>
 References: <20220506035519.50908-1-jsmart2021@gmail.com>
@@ -69,83 +69,121 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-During large NPIV port testing, it was sometimes seen that not all vports
-would log back in to the target device.
+Currently, VMID registration is configured via module parameters.  This
+could lead to VMID compatibility issues if two ports are connected to
+different brands of switches, as the two brands implement VMID
+differently.
 
-There are instances when the fabric is slow to respond to a spam of GID_PT
-requests and as a result the SLI PORT may abort the GID_PT request because
-the fabric takes so long.  lpfc_cmpl_ct_cmd_gid_pt would enter the
-lpfc_err_lost_link logic and attempt to lpfc_els_flush_rscn, which is fine,
-but forgets to decrement the gidft_inp counter.  This results in a
-vport->gidft_inp never reaching 0 and never restarting discovery again.
-
-Decrement vport->gidft_inp if lpfc_err_lost_link is true for both
-lpfc_cmpl_ct_cmd_gid_pt and lpfc_cmpl_ct_cmd_gid_ft.
-
-Increase logging info during RSCN timeout and lpfc_err_lost_link events.
+Make logical changes so that VMID registration is based on common service
+parameters from FLOGI_ACC with fabric rather than module parameters.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_ct.c      | 16 ++++++++++++++--
- drivers/scsi/lpfc/lpfc_hbadisc.c |  5 +++--
- 2 files changed, 17 insertions(+), 4 deletions(-)
+ drivers/scsi/lpfc/lpfc.h      |  1 +
+ drivers/scsi/lpfc/lpfc_els.c  |  3 ++-
+ drivers/scsi/lpfc/lpfc_scsi.c | 17 +++++++++--------
+ drivers/scsi/lpfc/lpfc_sli.c  |  4 ++--
+ 4 files changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
-index 6cda8ee25d4f..094199d1006a 100644
---- a/drivers/scsi/lpfc/lpfc_ct.c
-+++ b/drivers/scsi/lpfc/lpfc_ct.c
-@@ -960,9 +960,15 @@ lpfc_cmpl_ct_cmd_gid_ft(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	}
- 	if (lpfc_error_lost_link(ulp_status, ulp_word4)) {
- 		lpfc_printf_vlog(vport, KERN_INFO, LOG_DISCOVERY,
--				 "0226 NS query failed due to link event\n");
-+				 "0226 NS query failed due to link event: "
-+				 "ulp_status x%x ulp_word4 x%x fc_flag x%x "
-+				 "port_state x%x gidft_inp x%x\n",
-+				 ulp_status, ulp_word4, vport->fc_flag,
-+				 vport->port_state, vport->gidft_inp);
- 		if (vport->fc_flag & FC_RSCN_MODE)
- 			lpfc_els_flush_rscn(vport);
-+		if (vport->gidft_inp)
-+			vport->gidft_inp--;
- 		goto out;
- 	}
+diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
+index 405c8a8dd795..f8f5b4a2d523 100644
+--- a/drivers/scsi/lpfc/lpfc.h
++++ b/drivers/scsi/lpfc/lpfc.h
+@@ -714,6 +714,7 @@ struct lpfc_vport {
+ #define LPFC_VMID_QFPA_CMPL		0x4
+ #define LPFC_VMID_QOS_ENABLED		0x8
+ #define LPFC_VMID_TIMER_ENBLD		0x10
++#define LPFC_VMID_TYPE_PRIO		0x20
+ 	struct fc_qfpa_res *qfpa_res;
  
-@@ -1177,9 +1183,15 @@ lpfc_cmpl_ct_cmd_gid_pt(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	}
- 	if (lpfc_error_lost_link(ulp_status, ulp_word4)) {
- 		lpfc_printf_vlog(vport, KERN_INFO, LOG_DISCOVERY,
--				 "4166 NS query failed due to link event\n");
-+				 "4166 NS query failed due to link event: "
-+				 "ulp_status x%x ulp_word4 x%x fc_flag x%x "
-+				 "port_state x%x gidft_inp x%x\n",
-+				 ulp_status, ulp_word4, vport->fc_flag,
-+				 vport->port_state, vport->gidft_inp);
- 		if (vport->fc_flag & FC_RSCN_MODE)
- 			lpfc_els_flush_rscn(vport);
-+		if (vport->gidft_inp)
-+			vport->gidft_inp--;
- 		goto out;
- 	}
+ 	struct fc_vport *fc_vport;
+diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+index 3671e0f8e041..33fac4401e8f 100644
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -1105,7 +1105,8 @@ lpfc_cmpl_els_flogi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 			 sp->cmn.priority_tagging, kref_read(&ndlp->kref));
  
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index a833a493a3ee..3ab22ac49e49 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -6355,8 +6355,9 @@ lpfc_disc_timeout_handler(struct lpfc_vport *vport)
- 			lpfc_printf_vlog(vport, KERN_ERR,
- 					 LOG_TRACE_EVENT,
- 					 "0231 RSCN timeout Data: x%x "
--					 "x%x\n",
--					 vport->fc_ns_retry, LPFC_MAX_NS_RETRY);
-+					 "x%x x%x x%x\n",
-+					 vport->fc_ns_retry, LPFC_MAX_NS_RETRY,
-+					 vport->port_state, vport->gidft_inp);
+ 	if (sp->cmn.priority_tagging)
+-		vport->vmid_flag |= LPFC_VMID_ISSUE_QFPA;
++		vport->phba->pport->vmid_flag |= (LPFC_VMID_ISSUE_QFPA |
++						  LPFC_VMID_TYPE_PRIO);
  
- 			/* Cleanup any outstanding ELS commands */
- 			lpfc_els_flush_cmd(vport);
+ 	if (vport->port_state == LPFC_FLOGI) {
+ 		/*
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index 1959c58d22f8..1d134a01ff3e 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -5344,9 +5344,9 @@ static void lpfc_vmid_update_entry(struct lpfc_vport *vport, struct scsi_cmnd
+ {
+ 	u64 *lta;
+ 
+-	if (vport->vmid_priority_tagging)
++	if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO)
+ 		tag->cs_ctl_vmid = vmp->un.cs_ctl_vmid;
+-	else
++	else if (vport->phba->cfg_vmid_app_header)
+ 		tag->app_id = vmp->un.app_id;
+ 
+ 	if (cmd->sc_data_direction == DMA_TO_DEVICE)
+@@ -5391,11 +5391,12 @@ static int lpfc_vmid_get_appid(struct lpfc_vport *vport, char *uuid, struct
+ 			       scsi_cmnd * cmd, union lpfc_vmid_io_tag *tag)
+ {
+ 	struct lpfc_vmid *vmp = NULL;
+-	int hash, len, rc, i;
++	int hash, len, rc = -EPERM, i;
+ 
+ 	/* check if QFPA is complete */
+-	if (lpfc_vmid_is_type_priority_tag(vport) && !(vport->vmid_flag &
+-	      LPFC_VMID_QFPA_CMPL)) {
++	if (lpfc_vmid_is_type_priority_tag(vport) &&
++	    !(vport->vmid_flag & LPFC_VMID_QFPA_CMPL) &&
++	    (vport->vmid_flag & LPFC_VMID_ISSUE_QFPA)) {
+ 		vport->work_port_events |= WORKER_CHECK_VMID_ISSUE_QFPA;
+ 		return -EAGAIN;
+ 	}
+@@ -5469,7 +5470,7 @@ static int lpfc_vmid_get_appid(struct lpfc_vport *vport, char *uuid, struct
+ 			vport->vmid_inactivity_timeout ? 1 : 0;
+ 
+ 		/* if type priority tag, get next available VMID */
+-		if (lpfc_vmid_is_type_priority_tag(vport))
++		if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO)
+ 			lpfc_vmid_assign_cs_ctl(vport, vmp);
+ 
+ 		/* allocate the per cpu variable for holding */
+@@ -5488,9 +5489,9 @@ static int lpfc_vmid_get_appid(struct lpfc_vport *vport, char *uuid, struct
+ 		write_unlock(&vport->vmid_lock);
+ 
+ 		/* complete transaction with switch */
+-		if (lpfc_vmid_is_type_priority_tag(vport))
++		if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO)
+ 			rc = lpfc_vmid_uvem(vport, vmp, true);
+-		else
++		else if (vport->phba->cfg_vmid_app_header)
+ 			rc = lpfc_vmid_cmd(vport, SLI_CTAS_RAPP_IDENT, vmp);
+ 		if (!rc) {
+ 			write_lock(&vport->vmid_lock);
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index 573526f08baf..79d2ef5f0f05 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -10377,11 +10377,11 @@ lpfc_prep_embed_io(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd)
+ 
+ 	/* add the VMID tags as per switch response */
+ 	if (unlikely(piocb->cmd_flag & LPFC_IO_VMID)) {
+-		if (phba->pport->vmid_priority_tagging) {
++		if (phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO) {
+ 			bf_set(wqe_ccpe, &wqe->fcp_iwrite.wqe_com, 1);
+ 			bf_set(wqe_ccp, &wqe->fcp_iwrite.wqe_com,
+ 					(piocb->vmid_tag.cs_ctl_vmid));
+-		} else {
++		} else if (phba->cfg_vmid_app_header) {
+ 			bf_set(wqe_appid, &wqe->fcp_iwrite.wqe_com, 1);
+ 			bf_set(wqe_wqes, &wqe->fcp_iwrite.wqe_com, 1);
+ 			wqe->words[31] = piocb->vmid_tag.app_id;
 -- 
 2.26.2
 
