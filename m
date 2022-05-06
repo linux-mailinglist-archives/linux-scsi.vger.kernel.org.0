@@ -2,58 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6E851CFDD
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 05:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2973D51CFDF
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 05:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388860AbiEFD7N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 May 2022 23:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S1388844AbiEFD7Q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 May 2022 23:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388851AbiEFD7M (ORCPT
+        with ESMTP id S1388857AbiEFD7M (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 23:59:12 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F426540
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEC16542
         for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 20:55:28 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id x52so5254124pfu.11
+Received: by mail-pl1-x631.google.com with SMTP id c9so5544084plh.2
         for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 20:55:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1RZuvVhmvLAC0SxqGKLfNX7xe2phMhrsVzlzxDC7F+c=;
-        b=mhwYN+6eHb221pb7ekY7+46JyB2DbtNQWTElYfw5HyIMq3MHrwlK3/qtjmeW4v58i9
-         PxIH1KuLZjp8trlmOB5anZFV2CQSExhXOEAWhot15xAOV9f0+nJVefMvC6+5jDsAiv+5
-         NAhGXZJjpm7AWkOewcck187qMnqnQlAgAPaVG+jlGRI8RYKecFDFcRhpRP59lIhkTWrr
-         oUrD1h39ySstmWHyubr6AhBblUHBMxFe3lXraVDYbnOMoLP3ZxT4m6PzCqby6zEhCCBs
-         KAX348R/Pj+AlHnsAgH+qdYYqKtQ3Bu6iXHaTjl+fv+8+VnT4SkBIDmVqu4XTrvp5jEt
-         js7g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=czsypJKtYYOrNNv4cfWap7C6jb0ZrdiKyEtTKEmYg9o=;
+        b=Emnr2pCTIXMQ2UusVnAT8e4UK89Y0NMNmMkwmqfiE4fwcxt74y0tB+yCPKk+6AikaE
+         W7bv+AY5nYV3SJRnb8IJksrZLaLbQ49r4rTMTbrsPaYoOEoE3aCy/fvlYqhLMBOUmkh5
+         Zg9rZesDxUmKceFd2Xm2IIAJEuRu8C8kReefrsN9l95be231Dysbe/KtYhkOptUe3GRI
+         gEaHNCZ7zigFW9awpuPbW1LKZgCiM3f5axjCaKFAJdJpvFM9IubXPxDPRr2zN15w5EFa
+         eOIofg0UaaxXiCIvpOx8b0GwGDv0HTgA/XCckR2jYJ5AutjtBlZ+H6jxLe70H61ApaI1
+         H06A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1RZuvVhmvLAC0SxqGKLfNX7xe2phMhrsVzlzxDC7F+c=;
-        b=qHNhGzoR4oBu+iAkhtMuKDyfRoSwi5AoGsPrst0t92CI6SX7JsVFpxiqsm5+Ppa43i
-         invgSXqXhovzRz1FPBzlKhCjZzTYu/BQiNWmRlwU0Wg2SX4411OpVobxD+am2Otk7ikS
-         fk2zE7XmcL7MpAyJ40VVlFZvGgFEb0CqUGmAGx5NPM9MuPfOhO3TnROWWi/yOOnCbyD4
-         pIhV4iF8/PlIOrxJKbaadd8XIbuG86em6JBWozLUUJUpdOJBe02BExaTH+H9VB8P8HTk
-         HigXicX/KrGDkXbsVWds1NqrO2FZXw131DnWlOaWwngCcsIRjlbI/cgD2s7nExs3YHSh
-         xIbQ==
-X-Gm-Message-State: AOAM5324sVfOdSxqQRYPcuDxFH5UAyDVUqAdQ98tXwABQskbs/CjxfaK
-        +wc2mM2KXT0N/TaZuHaFCOT+GpSKXj8=
-X-Google-Smtp-Source: ABdhPJzIcFyrW5xfUGdiGZ3URIcoX0q7xnQbCYTiv5l5nzPbBEm9c/aaFPFBiO1yqZPV9z5dzU0u1g==
-X-Received: by 2002:a63:86c6:0:b0:3ab:2c2c:42e9 with SMTP id x189-20020a6386c6000000b003ab2c2c42e9mr1175519pgd.230.1651809327437;
-        Thu, 05 May 2022 20:55:27 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=czsypJKtYYOrNNv4cfWap7C6jb0ZrdiKyEtTKEmYg9o=;
+        b=Aqt0X0XWfIRlyF8gdFYS/2Tko+vHsNYR2KkwYBGOY7Q7oXYHmpgvABBb3gxCO6Q4GX
+         sEDjhV3zDp/PlwnQW1K9db5U7NfkfvKESbBy6Po7+Pq73UWRUtElz5wAWN1IyQLVfOZJ
+         1+RN5Ha3qXIgPSOfPseR1JlEVUAuiq1tpRHrLasaQL/zuWz/C6LN4dORzpqmECgYMXzJ
+         TSwYq2Z76JZBMBGifSOun4AUCVspsulZP6LWivs9YtxI3W4tZBDBeXmkdVYIBWd8IzmW
+         J50BQVcxgMqOK9UpO8o+X/imCwURlISDlh4tecnW45OZUgC1pgLp477wHh8xEMGli/QA
+         SdIQ==
+X-Gm-Message-State: AOAM5300d2eKr0KTBpMpTNSEGe11xkrdyfADCMH0Q31UrEc/y+wzd7/S
+        4ySF8MY6nHPe5C9CK4u0XpoOSV7/lks=
+X-Google-Smtp-Source: ABdhPJxsgqJbbkNK17jaGgEHk4mbuiynZxZyaFPL9CzRKhjWu2qRux4lGX5K5GO1MrAnrk63lnO3DA==
+X-Received: by 2002:a17:90a:cc6:b0:1d2:9a04:d29e with SMTP id 6-20020a17090a0cc600b001d29a04d29emr1860565pjt.136.1651809328197;
+        Thu, 05 May 2022 20:55:28 -0700 (PDT)
 Received: from mail-ash-it-01.broadcom.com (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id ck3-20020a17090afe0300b001cd4989feebsm6065187pjb.55.2022.05.05.20.55.25
+        by smtp.gmail.com with ESMTPSA id ck3-20020a17090afe0300b001cd4989feebsm6065187pjb.55.2022.05.05.20.55.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 20:55:26 -0700 (PDT)
+        Thu, 05 May 2022 20:55:27 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>
-Subject: [PATCH 00/12] lpfc: Update lpfc to revision 14.2.0.3
-Date:   Thu,  5 May 2022 20:55:07 -0700
-Message-Id: <20220506035519.50908-1-jsmart2021@gmail.com>
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Justin Tee <justin.tee@broadcom.com>
+Subject: [PATCH 01/12] lpfc: Fix element offset in __lpfc_sli_release_iocbq_s4()
+Date:   Thu,  5 May 2022 20:55:08 -0700
+Message-Id: <20220506035519.50908-2-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20220506035519.50908-1-jsmart2021@gmail.com>
+References: <20220506035519.50908-1-jsmart2021@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -66,41 +69,32 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update lpfc to revision 14.2.0.3
+The prior patch that moved from iocb elements to explicit wqe elements
+missed a name change.
 
-This patch set contains fixes in several different areas including
-ref counting areas, oops, I/O length failures, etc.
+Correct __lpfc_sli_release_iocbq_s4() to reference wqe rather than iocb
 
-The patches were cut against Martin's 5.19/scsi-queue tree
+Fixes: a680a9298e7b ("scsi: lpfc: SLI path split: Refactor lpfc_iocbq")
+Co-developed-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+---
+ drivers/scsi/lpfc/lpfc_sli.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-James Smart (12):
-  lpfc: Fix element offset in __lpfc_sli_release_iocbq_s4()
-  lpfc: Fill in missing ndlp kref puts in error paths
-  lpfc: Fix ndlp put following a LOGO completion
-  lpfc: Inhibit aborts if external loopback plug is inserted
-  lpfc: Fix dmabuf ptr assignment in lpfc_ct_reject_event
-  lpfc: Use list_for_each_entry_safe on fc_nodes list in
-    rscn_recovery_check
-  lpfc: Decrement outstanding gidft_inp counter if lpfc_err_lost_link
-  lpfc: Change VMID registration to be based on fabric parameters
-  lpfc: Rework FDMI initialization after link up
-  lpfc: Alter FPIN stat accounting logic
-  lpfc: Use sg_dma_address and sg_dma_len macros for NVMe I/O
-  lpfc: Update lpfc version to 14.2.0.3
-
- drivers/scsi/lpfc/lpfc.h           |   4 +
- drivers/scsi/lpfc/lpfc_crtn.h      |   1 +
- drivers/scsi/lpfc/lpfc_ct.c        | 114 ++++++++++++++++++++++++++---
- drivers/scsi/lpfc/lpfc_els.c       |  79 +++++++++-----------
- drivers/scsi/lpfc/lpfc_hbadisc.c   |  21 ++++--
- drivers/scsi/lpfc/lpfc_init.c      |  65 ++++++++--------
- drivers/scsi/lpfc/lpfc_nportdisc.c |  15 +++-
- drivers/scsi/lpfc/lpfc_nvme.c      |   9 ++-
- drivers/scsi/lpfc/lpfc_scsi.c      |  17 +++--
- drivers/scsi/lpfc/lpfc_sli.c       |  35 ++++-----
- drivers/scsi/lpfc/lpfc_version.h   |   2 +-
- 11 files changed, 242 insertions(+), 120 deletions(-)
-
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index aba06794146d..d2900ac8de9d 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -1373,7 +1373,7 @@ static void
+ __lpfc_sli_release_iocbq_s4(struct lpfc_hba *phba, struct lpfc_iocbq *iocbq)
+ {
+ 	struct lpfc_sglq *sglq;
+-	size_t start_clean = offsetof(struct lpfc_iocbq, iocb);
++	size_t start_clean = offsetof(struct lpfc_iocbq, wqe);
+ 	unsigned long iflag = 0;
+ 	struct lpfc_sli_ring *pring;
+ 
 -- 
 2.26.2
 
