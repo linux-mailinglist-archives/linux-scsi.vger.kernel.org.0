@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E70C51CFE1
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 05:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F19851CFE4
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 May 2022 05:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388858AbiEFD7Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 May 2022 23:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S1388876AbiEFD73 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 May 2022 23:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388840AbiEFD7O (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 23:59:14 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645DEDF08
-        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 20:55:32 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id w5-20020a17090aaf8500b001d74c754128so9781872pjq.0
-        for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 20:55:32 -0700 (PDT)
+        with ESMTP id S1388846AbiEFD7S (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 May 2022 23:59:18 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1723ADF29
+        for <linux-scsi@vger.kernel.org>; Thu,  5 May 2022 20:55:33 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id g8so5265909pfh.5
+        for <linux-scsi@vger.kernel.org>; Thu, 05 May 2022 20:55:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=V+6uiLx/k4VFmYDVC5AjP1sVnBgsOR2Jqn5YaTRl/Cc=;
-        b=AgdawogO6g6qGtes0ykwPvlP0ITJbFAvL240nacedj+PjHIPbj0lBDKBNgmjo+mn3e
-         bmqwYkHFQUvRTxTQ3xiXOnhlYJNdHMV8TmcCKMvEjGVmKTPgMjH9vlo4GsXX9HNGuM7g
-         6lyBhUmodCqmyjlia40COuLGihscWE/sdpD5pdZXTTjQeWnn1NZPUXwdkfBLeXvjqtN8
-         oeFfbTRxAE5MwFSENFXYNyXzrfX7NceLh9Nc6DIo0itqE/1Gp0V+cZ/ahRhbqQyWr3UG
-         ThT+sYPFx7OBGbo/qOcO8zkKaZHdPCnOKvWojJfZASTd1NOOfAXgCfk/mHYSMdA4DPGg
-         llzQ==
+        bh=CFG4FVBjoMWKHe+LEoBTTsXpvwr10JyuuHeZnwcfE5Q=;
+        b=jFOarW/XH8hoXPxkK4yoDpx5CdhSyBzvNAuTBk2iHi7eDCLekzyyYpiCldDgM4+QTb
+         JtckQ5P9HUsZcSk/SA5v2BBLG/cmlH0M0fVm3de9A5jmZg2HVuWp3wx4wseDnyPIN3en
+         yuKf+B+YW0VoSESLwjJg1K3581dPx8UZ2b67asHNBqv84kTCEFzq+p8TItkR8U+O3CXw
+         dCROShOuZb70IHgrtozaeTU9CDPzs6wAfjY2SXK4Sg3rd4mRTzBH2RcjNcfvvEkSFakP
+         D2DbbdTry4O73JSll82Sb1hFRh6OJJ0QQd+rmT8FbRybQ/PHiH6AHo4HxVPmxJnfAqfh
+         tACQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=V+6uiLx/k4VFmYDVC5AjP1sVnBgsOR2Jqn5YaTRl/Cc=;
-        b=nHlznF9T8qK0GjZk6OZLqdhyyvFRdnuA5Y3F/9SBPktevRxfgjbqgtcFITVL+dg0Kb
-         6a/vbKiGEHWyd21UmVmWxw02TABZH4lXu1vIRv1SFvQKnFfHl4g3koY2MSDfA7eGeF3G
-         DPKqVLvZBlBf8cF8FEkSRSeVQICukbcjYWuBWHnG9ma5n7mHzWZqv3VMvuWyXZ2fJxLp
-         iqa/vnqhmPd6Do6ePKEEMVgrStyJSgn82HMqxgVRA26gugx1WiHCgvzBqVyJTRh4jsGr
-         AXI62/4rfIA3ANzhG7bTdx/C4IFRyrJe6maKyrZTWHDZMcE9UalZcsgIUWluH27/a09H
-         el1g==
-X-Gm-Message-State: AOAM532MTK2BDm9ml+szylva1+5SIAg2AF2wKK2kHS6bkMta4eqim+l0
-        SasP71DBBN5DBJxaYpb9r6JL/vaHLIo=
-X-Google-Smtp-Source: ABdhPJypgh1RMNhrSTFYMgRAVm02ldZAmcaSVkBagAohVDYmdIzaKiccgQcVHb1w2jCagWAH/D0gYg==
-X-Received: by 2002:a17:902:7c8c:b0:156:5651:1d51 with SMTP id y12-20020a1709027c8c00b0015656511d51mr1567028pll.107.1651809331660;
-        Thu, 05 May 2022 20:55:31 -0700 (PDT)
+        bh=CFG4FVBjoMWKHe+LEoBTTsXpvwr10JyuuHeZnwcfE5Q=;
+        b=uGX00TTzbb2PQl0Jc0OvN9pUU/GUMkz7WjW9u/zW4+/p65WgCfmP9TfBR2BVN90RVv
+         M8RkitE9EGnMS1PSUvgmCpMocknUTCDRBR/tocgBhkaP2yiMC3Qlk2PhCbMbAd+TZQ9D
+         a/godbiuRTs5qy4L6IsEddJjgaXAZ9ALz9lM3R9oflNc5v6MmLL3U6oXgeicPpDCT5PO
+         lIucjY0u8fD+9LRGBWtmfhni/bnondItnxuKuQCGCk+VH4ZkEsRgeHpJPZEZuItsbhD0
+         zJEapk8gutkSD3qcFG61H3Vqs+dUcQIinCeL0Hv20P9xqALspqTPfKxKmYNbHULIGFAI
+         SFzQ==
+X-Gm-Message-State: AOAM531ZnE/XLp5pfbkPbYwkdZbKlK7TM8GNZrxnzyi3nj8gCqOAkM1u
+        1XkSft44jqVDnNu/Tv3tRPP7z06gJM0=
+X-Google-Smtp-Source: ABdhPJzeiYzeJ6Nmli2aifJ80FpfsjP/eCWOw2dGNhwoOpPoqW84TWG+lS2uoSDFrdoicOXvJOCALQ==
+X-Received: by 2002:a05:6a00:2310:b0:505:a8ac:40e7 with SMTP id h16-20020a056a00231000b00505a8ac40e7mr1393896pfh.11.1651809332411;
+        Thu, 05 May 2022 20:55:32 -0700 (PDT)
 Received: from mail-ash-it-01.broadcom.com (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
         by smtp.gmail.com with ESMTPSA id ck3-20020a17090afe0300b001cd4989feebsm6065187pjb.55.2022.05.05.20.55.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 20:55:31 -0700 (PDT)
+        Thu, 05 May 2022 20:55:32 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 05/12] lpfc: Fix dmabuf ptr assignment in lpfc_ct_reject_event
-Date:   Thu,  5 May 2022 20:55:12 -0700
-Message-Id: <20220506035519.50908-6-jsmart2021@gmail.com>
+Subject: [PATCH 06/12] lpfc: Use list_for_each_entry_safe on fc_nodes list in rscn_recovery_check
+Date:   Thu,  5 May 2022 20:55:13 -0700
+Message-Id: <20220506035519.50908-7-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220506035519.50908-1-jsmart2021@gmail.com>
 References: <20220506035519.50908-1-jsmart2021@gmail.com>
@@ -69,57 +69,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Upon driver receipt of a CT cmd for type = 0xFA (Management Server) and
-subtype = 0x11 (Fabric Device Management Interface), the driver is
-responding with garbage CT cmd data when it should send a properly
-formed RJT.
+In GID_PT mode with lpfc_ns_query=1, a race condition between iterating
+the vport->fc_nodes list in lpfc_rscn_recovery_check and cleanup of an
+ndlp can trigger a crash while processing the RSCN of another initiator
+from the same zone.
 
-The __lpfc_prep_xmit_seq64_s4() routine was using the wrong buffer
-for the reject.
+During iteration of the vport->fc_nodes list, an ndlp is cleaned up and
+released. lpfc_dequeue_node is called from lpfc_cleanup_node leading to
+a bad ndlp dereference in lpfc_rscn_recovery_check.
 
-Fix by converting the routine to use the buffer specified in the bde
-within the wqe rather than the ill-set bmp element.
+Change list_for_each_entry to list_for_each_entry_safe in
+lpfc_rscn_recovery_check to protect against removal of an initiator ndlp,
+while walking the vport->fc_nodes list.
 
-Fixes: 61910d6a5243 ("scsi: lpfc: SLI path split: Refactor CT paths")
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+ drivers/scsi/lpfc/lpfc_els.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index b509b3147759..573526f08baf 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -10808,24 +10808,15 @@ __lpfc_sli_prep_xmit_seq64_s4(struct lpfc_iocbq *cmdiocbq,
+diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+index 583a287b2d0c..3671e0f8e041 100644
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -7708,10 +7708,10 @@ lpfc_rscn_payload_check(struct lpfc_vport *vport, uint32_t did)
+ static int
+ lpfc_rscn_recovery_check(struct lpfc_vport *vport)
  {
- 	union lpfc_wqe128 *wqe;
- 	struct ulp_bde64 *bpl;
--	struct ulp_bde64_le *bde;
+-	struct lpfc_nodelist *ndlp = NULL;
++	struct lpfc_nodelist *ndlp = NULL, *n;
  
- 	wqe = &cmdiocbq->wqe;
- 	memset(wqe, 0, sizeof(*wqe));
- 
- 	/* Words 0 - 2 */
- 	bpl = (struct ulp_bde64 *)bmp->virt;
--	if (cmdiocbq->cmd_flag & (LPFC_IO_LIBDFC | LPFC_IO_LOOPBACK)) {
--		wqe->xmit_sequence.bde.addrHigh = bpl->addrHigh;
--		wqe->xmit_sequence.bde.addrLow = bpl->addrLow;
--		wqe->xmit_sequence.bde.tus.w = bpl->tus.w;
--	} else {
--		bde = (struct ulp_bde64_le *)&wqe->xmit_sequence.bde;
--		bde->addr_low = cpu_to_le32(putPaddrLow(bmp->phys));
--		bde->addr_high = cpu_to_le32(putPaddrHigh(bmp->phys));
--		bde->type_size = cpu_to_le32(bpl->tus.f.bdeSize);
--		bde->type_size |= cpu_to_le32(ULP_BDE64_TYPE_BDE_64);
--	}
-+	wqe->xmit_sequence.bde.addrHigh = bpl->addrHigh;
-+	wqe->xmit_sequence.bde.addrLow = bpl->addrLow;
-+	wqe->xmit_sequence.bde.tus.w = bpl->tus.w;
- 
- 	/* Word 5 */
- 	bf_set(wqe_ls, &wqe->xmit_sequence.wge_ctl, last_seq);
+ 	/* Move all affected nodes by pending RSCNs to NPR state. */
+-	list_for_each_entry(ndlp, &vport->fc_nodes, nlp_listp) {
++	list_for_each_entry_safe(ndlp, n, &vport->fc_nodes, nlp_listp) {
+ 		if ((ndlp->nlp_state == NLP_STE_UNUSED_NODE) ||
+ 		    !lpfc_rscn_payload_check(vport, ndlp->nlp_DID))
+ 			continue;
 -- 
 2.26.2
 
