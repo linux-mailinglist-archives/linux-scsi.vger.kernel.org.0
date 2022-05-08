@@ -2,88 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC03951E59B
-	for <lists+linux-scsi@lfdr.de>; Sat,  7 May 2022 10:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7807351EADD
+	for <lists+linux-scsi@lfdr.de>; Sun,  8 May 2022 04:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446101AbiEGIhT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 7 May 2022 04:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
+        id S1359829AbiEHCTG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 7 May 2022 22:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446093AbiEGIhR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 7 May 2022 04:37:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDA453710;
-        Sat,  7 May 2022 01:33:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6081961033;
-        Sat,  7 May 2022 08:33:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BA8AC385AC;
-        Sat,  7 May 2022 08:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651912409;
-        bh=eieCeE9Fdh+mCSq7kvDqUtqD4dWmttb7ZzhtYGZmMhA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=02sb1bav56AqxmyArlrAX21IGgeG1DopOeTzyubuc25nQZRtkFcUnmmwdZwUUUUPs
-         OY63D6KlNDo8TblbXBPoRpa4TpHokrst1y0/x2OVYqK8/uFCBbASkg07cBIFpC+Db9
-         L0Uue1gdqUxJvOVbFKRQqTVTEHKgTDmQXZaK/0+k=
-Date:   Sat, 7 May 2022 10:33:25 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     lizhe <sensor1010@163.com>, lee.jones@linaro.org,
-        fthain@linux-m68k.org, akrowiak@linux.ibm.com, pasic@linux.ibm.com,
-        jjherne@linux.ibm.com, freude@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, zbr@ioremap.net, perex@perex.cz,
-        tiwai@suse.com, bvanassche@acm.org, dan.j.williams@intel.com,
-        srinivas.kandagatla@linaro.org, wens@csie.org,
-        colin.king@intel.com, hare@suse.de, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH] kernel/drivers: Remove redundant driver match function
-Message-ID: <YnYu1XGeyRvMn77g@kroah.com>
-References: <20220506045952.136290-1-sensor1010@163.com>
- <20220507082137.i23gbxkbjwt36ggd@pengutronix.de>
+        with ESMTP id S245084AbiEHCTD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 7 May 2022 22:19:03 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549711116C
+        for <linux-scsi@vger.kernel.org>; Sat,  7 May 2022 19:15:14 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id w24so4846340edx.3
+        for <linux-scsi@vger.kernel.org>; Sat, 07 May 2022 19:15:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Cr4jqiwCZqgvtQ1mPAG6hA/aEXX0FhXJr8HGvR+MOF4=;
+        b=hIE5zwv2rTKn+CswdyopQHf0jMYKWFxRBF6odjeCxWBM/WRdVHzPYHl78NQfbEd29K
+         9enqxTUB9ZAvVAoyjF8AWhpC+f5IVcnJoMj+unQol6NBiW/KIRN+RPaYSq7RoP62yjw1
+         2X5NuVc9b98bRcPhXJz7ydAIkaPKYIMfoxEKnd5fu9ZsX03fmWcqseP8+bykpooAanlU
+         h5RINDqd4mWKTcsWni5bShtEPJLQkkRYT8dOneNqwF1lDvdzymwuLYp+4P1W1ToIwe8o
+         DNyWfhk7sajXrmDQAaFVYyGNgCHChouTJ3BZcW21ISZxH2nUIlO4cSJ32UEeiIotkomt
+         QV/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Cr4jqiwCZqgvtQ1mPAG6hA/aEXX0FhXJr8HGvR+MOF4=;
+        b=CXXdsSGDEJQ5F9Z9gltePxwCKLXthGdh2+o48gfXc9U5ThNiQ9dd4z7ETQ2XUnDaAY
+         Ef3bdfXrYN92zl5BfSKbgBgdH/gbf3mCPMKyz1qwJFdnMdvIwYCBX9VNA97+nQd2gcks
+         ECqqiqCgmndOnJQafugXfB4iokAn5XsTSo2hXdDFgVl9gowpfOZhfeQj2HihAJwe/o+q
+         EcSVfEFfdKBz8PXgLcDOg54kgDgKAUyWBRLXWITuQLMnKTg/kuA6BKOv1J83gyETDyE3
+         ur0VsBtrm57LC1xf2AzIswRnZFwu1CHbx6/3PDqkMprjE7DWocE3+0DFuQa1SCZQK92W
+         eJzA==
+X-Gm-Message-State: AOAM533gDzTJEda3fe4CSN3lmgmf6DCh3quFMwQN7hxw7M++PK0uk0Tk
+        yhU84N2U6TrMtQZx1rk1OpGqWMpm9xFTcrHUu20=
+X-Google-Smtp-Source: ABdhPJzTI/QqRCdwIAmphqF9OzyyYNq5Vx7Ax17gRaKdquRTzXBKHWHIi7p9/pNhdRsw+jE0joTHzv2TJm/aPiu3TUo=
+X-Received: by 2002:a50:ed0e:0:b0:425:e476:f4ed with SMTP id
+ j14-20020a50ed0e000000b00425e476f4edmr10770566eds.32.1651976112082; Sat, 07
+ May 2022 19:15:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220507082137.i23gbxkbjwt36ggd@pengutronix.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a50:3554:0:0:0:0:0 with HTTP; Sat, 7 May 2022 19:15:11 -0700 (PDT)
+Reply-To: wijh555@gmail.com
+From:   "Mr. David Kabore" <dkabore16@gmail.com>
+Date:   Sat, 7 May 2022 19:15:11 -0700
+Message-ID: <CANLKR0vzXK+xff8dc1NLRToAvTmMja99WOdUionm413PVRoNow@mail.gmail.com>
+Subject: Good Day,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        HK_NAME_FM_MR_MRS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:529 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5001]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [wijh555[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [dkabore16[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [dkabore16[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 HK_NAME_FM_MR_MRS No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, May 07, 2022 at 10:21:37AM +0200, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Thu, May 05, 2022 at 09:59:52PM -0700, lizhe wrote:
-> > If there is no driver match function, the driver core assumes that each
-> > candidate pair (driver, device) matches, see driver_match_device().
-> 
-> I wonder who is supposed to apply this patch. Either it should be split
-> by file and go in via the respective maintainers, or it goes in via
-> Greg's tree? I added Greg to To: for him to chime in.
+-- 
+Hello,
+I'm Mr. David Kabore, how are you doing hope you are in good health,
+the Board irector try to reach you on phone several times Meanwhile,
+your number was not connecting. before he ask me to send you an email
+to hear from you if you are fine. hope to hear you are in good Health.
 
-It should be split up into each subsystem patch and submitted that way.
-
-> Best regards
-> Uwe
->  
-> > Signed-off-by: lizhe <sensor1010@163.com>
-
-We also need a "real name" here that is used to sign legal documents.  I
-doubt an all-lower-case name is used that way, so I have to ask.
-
-thanks,
-
-greg k-h
+Thanks,
+Mr. David Kabore.
