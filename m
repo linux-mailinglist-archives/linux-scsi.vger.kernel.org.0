@@ -2,131 +2,125 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A19F520A82
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 May 2022 03:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23977520AEB
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 May 2022 03:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbiEJBNs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 May 2022 21:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S234446AbiEJCCK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 May 2022 22:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233325AbiEJBNr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 May 2022 21:13:47 -0400
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855812BA9B5
-        for <linux-scsi@vger.kernel.org>; Mon,  9 May 2022 18:09:49 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 19AE75A0D78;
-        Tue, 10 May 2022 01:00:11 +0000 (UTC)
-Received: from pdx1-sub0-mail-a278.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 45DDE5A1224;
-        Tue, 10 May 2022 01:00:10 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1652144410; a=rsa-sha256;
-        cv=none;
-        b=3PZgdd3jIeBrdDX0sv6aA9d1CAWzOHbZRO8XQ3m9r72RVjTZXnOnlE4gWVKA60/0i6bcJU
-        CW+2bH+zwSdsCpBYQIsgjIbC4gyxwlBppl9lLLVO1yJeQFEJqQx4YV0YrhNRlNltbjPsKO
-        EZ16GhatMOu4Zudpt5wpRZVP1s6VrKUqMzZK1aDA3iJiPycIa/LCMQtt4LK2UD57mFWkYg
-        +dXGICsO0fROZji9PcFuYub/6TzJtlcVzxxSZYhtrf0w89qB58/cR1Arcx13m2zoRavL2P
-        RG8/zNdDYG8s/HGeZsF75Y4/Yexs3z2UjaLszsELqEzb/HVlD5ZLc+v/GcPjkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1652144410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=OkYsVEQbc5DO/sqSoctBIA2Dppvklnw/UbE5LoqMvBo=;
-        b=9dUyqZ1rNUS3LIMbZvJNJk6T3I7k2k5tQKYgxgkz9eDj+wmrPCiXoVmrXYn1l0uzm5LlIE
-        WrH0UUrCz/c+BlvwMy0mGheifmmi+Vds8nAkT68610MOaPObFmGBdIAxAvJBu1xcz0mj+Y
-        muu9hAejL4R/EFgG18SeRNbvc4boTUOJqZNjKmTbI47EDq0d0hVcsm3otglJtofQj5MiQv
-        1KRXgWvrUoihfNQFopEJGeB7cnJuhItqrAFDeSBjreONGOP2grkoiU+m8Xfv5t45ul4HCf
-        +bFQ8lBzsK2aqRory8PWQ2JcXmOy78bdQLjrkqqSspXGCKJ5wMCmYtl48cj7RQ==
-ARC-Authentication-Results: i=1;
-        rspamd-554c8f6c56-2pv82;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Desert-Wide-Eyed: 4a875f752ba7591c_1652144410667_419043207
-X-MC-Loop-Signature: 1652144410667:2618495434
-X-MC-Ingress-Time: 1652144410666
-Received: from pdx1-sub0-mail-a278.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.127.95.68 (trex/6.7.1);
-        Tue, 10 May 2022 01:00:10 +0000
-Received: from offworld (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a278.dreamhost.com (Postfix) with ESMTPSA id 4Ky07s2MGPz1Ny;
-        Mon,  9 May 2022 18:00:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1652144410;
-        bh=OkYsVEQbc5DO/sqSoctBIA2Dppvklnw/UbE5LoqMvBo=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=Kx/NtImp0B3LJ1QXpTJdrnlMpE9crtk1c84TIb3NeVjxKTb6VHqG6tWi9Q8nxnOZA
-         KsP+xwhijgFhEtL/ZE7VSkPEfecwkFqEfBSglNxsz9suQKUyoRiWZfOM0FlRtC+rXC
-         X5gWjMzqKMixY6dnRGscixUFRJue0xYQxmu/FSkIgRvEqQbiI+k9aBVazRfbgeAmiO
-         QsOJkI2Jysu/PuL2yVuLbwC24l6Hrwg8bXujuo75CoWCTzcxl+q/pPkaJKkiFnsWM6
-         DoEPcIOwq52Ipc5sW0HKm8NRnIG+OL8sEGUbzfLXU4J0yEXyXp6GyfzbZ7bTyto7ZW
-         tEHeFvJV1cWEQ==
-Date:   Mon, 9 May 2022 17:48:01 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Hannes Reinecke <hare@suse.de>,
-        Javed Hasan <jhasan@marvell.com>,
-        Saurav Kashyap <skashyap@marvell.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Davidlohr Bueso <dbueso@suse.de>
-Subject: Re: [PATCH 2/4] scsi: fcoe: Use per-CPU API to update per-CPU
- statistics.
-Message-ID: <20220510004801.w6hiyka7gi2vnto5@offworld>
-References: <20220506105758.283887-1-bigeasy@linutronix.de>
- <20220506105758.283887-3-bigeasy@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220506105758.283887-3-bigeasy@linutronix.de>
-User-Agent: NeoMutt/20220408
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234432AbiEJCCK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 May 2022 22:02:10 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE82721330F
+        for <linux-scsi@vger.kernel.org>; Mon,  9 May 2022 18:58:09 -0700 (PDT)
+Received: from epcas3p3.samsung.com (unknown [182.195.41.21])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220510015803epoutp0295ed36b362e80a8f31172394cba3a234~tm788dLZj3273632736epoutp02R
+        for <linux-scsi@vger.kernel.org>; Tue, 10 May 2022 01:58:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220510015803epoutp0295ed36b362e80a8f31172394cba3a234~tm788dLZj3273632736epoutp02R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1652147884;
+        bh=BLA8xn4IElcO3LAMo06B8+heYNNfifdUw16XRT/rcmc=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=UpSfHuf5ZNEO03uoeaRtz3N8ygdqu7/uzq+GsaYCdPrVGPsIS5BQCeZ0cFXrO8ltX
+         EqxrX+8VRse/lAP+G3+bKD8nYIoKsTfsbjYVqgyhUUZHHNq0ON4IrcqWJpSRSx1PPW
+         3Z6wUNKPso18Ue5LVFp5NWL/jTIW9YTE+pRJs0Ro=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas3p1.samsung.com (KnoxPortal) with ESMTP id
+        20220510015803epcas3p1237a4112ed387a6af4ac0dffe51b9028~tm78XAo8U1834718347epcas3p1p;
+        Tue, 10 May 2022 01:58:03 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp3.localdomain
+        (Postfix) with ESMTP id 4Ky1Qg29SRz4x9Q2; Tue, 10 May 2022 01:58:03 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: RE: [PATCH v4 5/6] scsi: ufshpb: Add handing of device reset HPB
+ regions Infos in HPB device mode
+Reply-To: daejun7.park@samsung.com
+Sender: Daejun Park <daejun7.park@samsung.com>
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     Bean Huo <huobean@gmail.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        Daejun Park <daejun7.park@samsung.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "powen.kao@mediatek.com" <powen.kao@mediatek.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        cpgsproxy3 <cpgsproxy3@samsung.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1889248251.21652147883293.JavaMail.epsvc@epcpadp4>
+Date:   Tue, 10 May 2022 10:02:55 +0900
+X-CMS-MailID: 20220510010255epcms2p3f347f4b1a597c27248bacfa9dddf3139
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20220505134735epcas2p457a16df1b023585b188cc6fc15f37932
+References: <CGME20220505134735epcas2p457a16df1b023585b188cc6fc15f37932@epcms2p3>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 06 May 2022, Sebastian Andrzej Siewior wrote:
-
->The per-CPU statistics (struct fc_stats) is updated by getting a stable
->per-CPU pointer via get_cpu() + per_cpu_ptr() and then performing the
->increment. This can be optimized by using this_cpu_*() which will do
->whatever is needed on the architecture to perform the update safe and
->efficient.
->The read out of the individual value (fc_get_host_stats()) should be
->done by using READ_ONCE() instead of a plain-C access. The difference is
->that READ_ONCE() will always perform a single access while the plain-C
->access can be splitt by the compiler into two loads if it appears
->beneficial.
->The usage of u64 has the side-effect that it is also 64bit wide on 32bit
->architectures and the read is always split into two loads. The can lead
->to strange values if the read happens during an update which alters both
->32bit parts of the 64bit value. This can be circumvanted by either using
->a 32bit variables on 32bit architecures or extending the statistics with
->a sequence counter.
->
->Use this_cpu_*() API to update the statistics and READ_ONCE() to read
->it.
-
-LGTM, feel free to add my:
-
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+Hi=C2=A0Bean=C2=A0Huo,
+=C2=A0
+>In=C2=A0UFS=C2=A0HPB=C2=A0Spec=C2=A0JESD220-3A,
+>=C2=A0
+>"5.8.=C2=A0Active=C2=A0and=C2=A0inactive=C2=A0information=C2=A0upon=C2=A0p=
+ower=C2=A0cycle
+>...
+>When=C2=A0the=C2=A0device=C2=A0is=C2=A0powered=C2=A0off=C2=A0by=C2=A0the=
+=C2=A0host,=C2=A0the=C2=A0device=C2=A0may=C2=A0restore=C2=A0L2P=C2=A0map=C2=
+=A0data
+>upon=C2=A0power=C2=A0up=C2=A0or=C2=A0build=C2=A0from=C2=A0the=C2=A0host=E2=
+=80=99s=C2=A0HPB=C2=A0READ=C2=A0command.=C2=A0In=C2=A0case=C2=A0device=C2=
+=A0powered
+>up=C2=A0and=C2=A0lost=C2=A0HPB=C2=A0information,=C2=A0device=C2=A0can=C2=
+=A0signal=C2=A0to=C2=A0the=C2=A0host=C2=A0through=C2=A0HPB=C2=A0Sense=C2=A0=
+data,
+>by=C2=A0setting=C2=A0HPB=C2=A0Operation=C2=A0as=C2=A0=E2=80=982=E2=80=99=
+=C2=A0which=C2=A0will=C2=A0inform=C2=A0the=C2=A0host=C2=A0that=C2=A0device=
+=C2=A0reset=C2=A0HPB
+>information."
+>=C2=A0
+>Therefore,=C2=A0for=C2=A0HPB=C2=A0device=C2=A0control=C2=A0mode,=C2=A0if=
+=C2=A0the=C2=A0UFS=C2=A0device=C2=A0is=C2=A0reset=C2=A0via=C2=A0the=C2=A0RS=
+T_N
+>pin,=C2=A0the=C2=A0active=C2=A0region=C2=A0information=C2=A0in=C2=A0the=C2=
+=A0device=C2=A0will=C2=A0be=C2=A0reset.=C2=A0If=C2=A0the=C2=A0host=C2=A0sid=
+e
+>receives=C2=A0this=C2=A0notification=C2=A0from=C2=A0the=C2=A0device=C2=A0s=
+ide,=C2=A0it=C2=A0is=C2=A0recommended=C2=A0to=C2=A0inactivate
+>all=C2=A0active=C2=A0regions=C2=A0in=C2=A0the=C2=A0host's=C2=A0HPB=C2=A0ca=
+che.
+>=C2=A0
+>Signed-off-by:=C2=A0Bean=C2=A0Huo=C2=A0<beanhuo@micron.com>
+>Reviewed-by:=C2=A0Keoseong=C2=A0Park=C2=A0<keosung.park@samsung.com>
+=C2=A0
+Here=C2=A0is=C2=A0my=C2=A0reviewed-by=C2=A0tag.
+Reviewed-by:=C2=A0Daejun=C2=A0Park=C2=A0<daejun7.park@samsung.com>
+=C2=A0
+Thanks,
+Daejun
+=C2=A0
