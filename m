@@ -2,117 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5378A5212DD
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 May 2022 12:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3B452138A
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 May 2022 13:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240324AbiEJK6o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 10 May 2022 06:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
+        id S240890AbiEJLYd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 10 May 2022 07:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240034AbiEJK62 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 May 2022 06:58:28 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210124FC6D;
-        Tue, 10 May 2022 03:51:50 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id n10so4458946pjh.5;
-        Tue, 10 May 2022 03:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eCsMj0d1/H3KDoAfroxIa4b76PXDccyfi+yCHTDyPoE=;
-        b=CtJrbRkdYLd2m75y3KnT1llgVR0TrXUGgcfjKnerzLytO3KhE+tKJrXpMCdL73JkrV
-         wAE/cO12OX9q8ZV1cNOS2d1PVJ3Qq6lwn2BevdYI7dWmfYZ2/oqbSVU++K8smSj58FPP
-         qH2VzrXI9m/8h87/7bLOVM9SJ/Z9Qi1/Vg02c9t+/YE5MskdJQkY7Yv27xiblP6N0kXP
-         TG6LEgZiozrbLNKeR8paleRjAh4a35//96uGyg2aupHR9sl3JIWgl3G7DgaAYcn7yoVu
-         aMcsAfjp+U4rmcJo3ncmyakDkU9nWPvBVkGpPNnXlLE+sUg0xrn3ZP5fFh2UEWYFW7Qe
-         yjHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eCsMj0d1/H3KDoAfroxIa4b76PXDccyfi+yCHTDyPoE=;
-        b=nyw9qC0QGpBG1qp7yi6s9pHz7lMpeigzY639MYZL6hnxK5nNm6Fzwjmzg714w9vRC1
-         UYO0mMVq4O7jKQqajkd5JF+qIR77+CnoulgDRhnsgGRBTgStoZRvxac7OLOkRLLWtYNd
-         zrePeTLzB3OJcxU5qqbvlRoQN7EMUJmhW3Huc48R4qZYyVe/20dfnKRIq6/rrG+65hut
-         2WB0Bn8RtVgWectZ05Nlw9+fDrirGBml9eCIfO8PFouqGZrm1CfYZnUElisuSuUwus2l
-         8M3mVxMmgWylWmhnp+DOtvuPa8bDDKEx5UOyzMPF6cGKHXJH5TXKWV98wLv7qnMCQY2t
-         VvQA==
-X-Gm-Message-State: AOAM530eylbINopiecyeAtkmZZRHgbRRBGt+oNG/+9MpPNnCkl65Y7gY
-        +zFiTcIEzz4dMgJNp16xgdU=
-X-Google-Smtp-Source: ABdhPJwkdiCGUU+XM88WpYZnDkq5K9ncI89i87n9dQBbbP43hghm580ctBP9FYiQdGdVRcOiq1UP3w==
-X-Received: by 2002:a17:903:1d1:b0:15e:9607:d4c9 with SMTP id e17-20020a17090301d100b0015e9607d4c9mr20156470plh.41.1652179909689;
-        Tue, 10 May 2022 03:51:49 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id r9-20020a056a00216900b0050dc7628195sm10288927pff.111.2022.05.10.03.51.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 03:51:49 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     james.smart@broadcom.com
-Cc:     dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] lpfc: use kobj_to_dev()
-Date:   Tue, 10 May 2022 10:51:45 +0000
-Message-Id: <20220510105145.1352030-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S240912AbiEJLY3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 May 2022 07:24:29 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB8A1BDDBF;
+        Tue, 10 May 2022 04:20:25 -0700 (PDT)
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KyFqc0SLRz6GD99;
+        Tue, 10 May 2022 19:17:00 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 10 May 2022 13:20:23 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 10 May 2022 12:20:20 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        John Garry <john.garry@huawei.com>
+Subject: [RFC PATCH 0/2] sbitmap: NUMA node spreading
+Date:   Tue, 10 May 2022 19:14:32 +0800
+Message-ID: <1652181274-136198-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Hi Jens, guys,
 
-Use kobj_to_dev() instead of open-coding it.
+I am sending this as an RFC to see if there is any future in it or ideas
+on how to make better. I also need to improve some items (as mentioned in
+2/2 commit message) and test a lot more.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/scsi/lpfc/lpfc_attr.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+The general idea is that we change from allocating a single array of
+sbitmap words to allocating an sub-array per NUMA node. And then each CPU
+in that node is hinted to use that sub-array
 
-diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-index 3caaa7c4af48..97f87155c1bd 100644
---- a/drivers/scsi/lpfc/lpfc_attr.c
-+++ b/drivers/scsi/lpfc/lpfc_attr.c
-@@ -4376,8 +4376,7 @@ sysfs_drvr_stat_data_read(struct file *filp, struct kobject *kobj,
- 		struct bin_attribute *bin_attr,
- 		char *buf, loff_t off, size_t count)
- {
--	struct device *dev = container_of(kobj, struct device,
--		kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct Scsi_Host  *shost = class_to_shost(dev);
- 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
- 	struct lpfc_hba   *phba = vport->phba;
-@@ -6396,7 +6395,7 @@ sysfs_ctlreg_write(struct file *filp, struct kobject *kobj,
- 		   char *buf, loff_t off, size_t count)
- {
- 	size_t buf_off;
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct Scsi_Host  *shost = class_to_shost(dev);
- 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
- 	struct lpfc_hba   *phba = vport->phba;
-@@ -6456,7 +6455,7 @@ sysfs_ctlreg_read(struct file *filp, struct kobject *kobj,
- {
- 	size_t buf_off;
- 	uint32_t * tmp_ptr;
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct Scsi_Host  *shost = class_to_shost(dev);
- 	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
- 	struct lpfc_hba   *phba = vport->phba;
+Initial performance looks decent.
+
+Some figures:
+System: 4-nodes (with memory on all nodes), 128 CPUs
+
+null blk config block:
+20 devs, submit_queues=NR_CPUS, shared_tags, shared_tag_bitmap,
+hw_queue_depth=256
+
+fio config:
+bs=4096, iodepth=128, numjobs=10, cpus_allowed_policy=split, rw=read,
+ioscheduler=none
+
+Before:
+7130K
+
+After:
+7630K
+
+So a +7% IOPS gain.
+
+Any comments welcome, thanks!.
+
+Based on v5.18-rc6.
+
+John Garry (2):
+  sbitmap: Make sbitmap.map a double pointer
+  sbitmap: Spread sbitmap word allocation over NUMA nodes
+
+ include/linux/sbitmap.h | 16 +++++---
+ lib/sbitmap.c           | 83 +++++++++++++++++++++++++++++++++--------
+ 2 files changed, 79 insertions(+), 20 deletions(-)
+
 -- 
-2.25.1
-
+2.26.2
 
