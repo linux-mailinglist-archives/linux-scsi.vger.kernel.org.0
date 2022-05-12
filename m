@@ -2,88 +2,248 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E95E524EBF
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 May 2022 15:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC592524EC2
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 May 2022 15:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354688AbiELNu1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 12 May 2022 09:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S1354505AbiELNud (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 12 May 2022 09:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354649AbiELNuZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 May 2022 09:50:25 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D058186281
-        for <linux-scsi@vger.kernel.org>; Thu, 12 May 2022 06:50:24 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id j14so4934581plx.3
-        for <linux-scsi@vger.kernel.org>; Thu, 12 May 2022 06:50:24 -0700 (PDT)
+        with ESMTP id S1354694AbiELNu1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 May 2022 09:50:27 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD26E2550A9
+        for <linux-scsi@vger.kernel.org>; Thu, 12 May 2022 06:50:26 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id c14so4865158pfn.2
+        for <linux-scsi@vger.kernel.org>; Thu, 12 May 2022 06:50:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=vx2UcZDO/hpvMd/iNYtEInq2Gt6WbVTqs4dsRL391K8=;
-        b=MaY6XS5ssuy3hcG1i3MPPkFWg4Q6g3tqiyfkFX/Gr53thnf5nFgLdUmUsPrA2wyadv
-         o08g/4Kjr07zBcM2FSLP6+6/EqV703QjO3whfMZw8fSc3epEKxzj1jRM05djP9a70RFi
-         o/E4avK88fEPfY5tXlhW9WcjVekPrLSrYBYEo=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version;
+        bh=rM70m8eZ0pakv69/iTvtJzOWiFpVeylcQX42wha9Z4w=;
+        b=NQvrMdOzQ4dB6DLqQpRKShb6bsG3gRH87u39uKG3sWdMYrTB4uckttbH5k/TS5esqK
+         SwfAumu4PlCxn5MJFp9kiuI1OTD6/EJQwvs5Uu7GkSd8rVwAPYHLBYPfvsfLDMggPZlz
+         od7FKf1ktwA8aO27pXmA0QonFkgrCb4N204cw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=vx2UcZDO/hpvMd/iNYtEInq2Gt6WbVTqs4dsRL391K8=;
-        b=obFnFlmp6WWEC4TOPhXom1I3W3YXdHwQI8UQ6SB6TsTufcrgKmNlcs/J2KS1JuA+Sp
-         IW1trIv9ETZkLPzj1WI5UDYNceHALeoyQBkpJ729vvIebsr1DvEcw7YseEuJgcT5dzPH
-         JK/IYdWmKYVhCtHMAdDAFIDhRcHKtoPHoYWF2CeDYqwgQJ8yWA2+O0xeziFvjvm4fU1g
-         W2hBPFla/pTxohyfB8MSADNWzJB+mTDCQjfWXNw6Z6JmHcBaekAj9G+1kGZFUbMeWygL
-         9mj3aB8R9I0Ueguw5OSis3LhtipoDjXsTsrliTh44yJv60zso813vVnCsIg/Vnz5Prdc
-         TeTw==
-X-Gm-Message-State: AOAM531sfMqUjESN5JNZO/GVX2uK4DME/Dk7/Zxv+f/lidlznLqbngqa
-        NfAz3uZ+kBZOD2NjUfFOD2j7HoY7Ne32c6tgYNM4kXN1ANZTWWXpSIB7cd2y7DK6L5slMINHER1
-        uHz3C/bdZiYNRTYiMm4Mphn8De18AOn5AhC2l5wnONtUG4b05aXUm1ozkus3iqzeBdzxO8ZeKK0
-        hYggmvrKHc
-X-Google-Smtp-Source: ABdhPJwZIAhLMYkWe3WgUCTnqrsUwedNGvwwDMfR6X638ZYYKD+7nmb8urzRVmNqxmIBK40/Qe4/vg==
-X-Received: by 2002:a17:90a:f310:b0:1db:effb:a614 with SMTP id ca16-20020a17090af31000b001dbeffba614mr11048042pjb.233.1652363423550;
-        Thu, 12 May 2022 06:50:23 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version;
+        bh=rM70m8eZ0pakv69/iTvtJzOWiFpVeylcQX42wha9Z4w=;
+        b=HkSwtQCMAMKiYJEO6r6o34LPw7cTITsNM0lmbIMSjf3pt38YmuRmZJQZI5X26LuuGa
+         Wn1h5scyBHKoVaQdjnYFBKza9hupG3kJYND+uqpUxBoRatuHdkHDJ+wxiuwa/0G5Fb0+
+         TjD0PjiC9SuMeVZ6lZ96upB4jg2VvpBYHBLRtZs3Dx1xwcNa5LuybJpaD+jIBqT9gctt
+         IXDaCujxl+BALlHJXEaVj7+WyMh4aNkx8Yo6CkxRULU5f6t7d3sTRIYHyPw1VcSKFvLq
+         WNHVN6rLaT1Wtkp1+0MXrJSslgKRnuaYT1bsRDB9MZoknCP55zQ6hVknQHiXoa2i37Yi
+         Vzzg==
+X-Gm-Message-State: AOAM530ppGI65aJWQJGJDuNrRTv4WzPd8jAygk8X292CWeo4RIdxyBUJ
+        1utGL5VCrVipRAV9tqgCRgLxkPKqDvLHKEX9Z2MC341H8+sOylYYahTTX55o7IYsK8zwg/pIF8b
+        xp9zXK0NQyAYhHL9sb0eoyOwwTXCfF3uQp2HyoMi06Q45rWKdyMA6krMzLVStFR0OaI3a81QwgP
+        htUSwy82/7
+X-Google-Smtp-Source: ABdhPJzNvt2R6ul81nFckPjiuczwAWfxRNLv86HNvyvOBsyPKmR5kBLCcBWV6e47Xxy6BhwGVZyBNQ==
+X-Received: by 2002:a63:d907:0:b0:3c6:c6e3:1498 with SMTP id r7-20020a63d907000000b003c6c6e31498mr15433803pgg.535.1652363425593;
+        Thu, 12 May 2022 06:50:25 -0700 (PDT)
 Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.252.250])
-        by smtp.gmail.com with ESMTPSA id t21-20020a17090ad15500b001cd4989ff47sm1872409pjw.14.2022.05.12.06.50.21
+        by smtp.gmail.com with ESMTPSA id t21-20020a17090ad15500b001cd4989ff47sm1872409pjw.14.2022.05.12.06.50.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 06:50:22 -0700 (PDT)
+        Thu, 12 May 2022 06:50:24 -0700 (PDT)
 From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH 0/2] mpi3mr: Add shost & device sysfs attributes
-Date:   Thu, 12 May 2022 19:30:44 +0530
-Message-Id: <20220512140046.19046-1-sreekanth.reddy@broadcom.com>
+Subject: [PATCH 1/2] mpi3mr: Add shost related sysfs attributes
+Date:   Thu, 12 May 2022 19:30:45 +0530
+Message-Id: <20220512140046.19046-2-sreekanth.reddy@broadcom.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220512140046.19046-1-sreekanth.reddy@broadcom.com>
+References: <20220512140046.19046-1-sreekanth.reddy@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ee517505ded0d60a"
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        boundary="0000000000000d114a05ded0d7a4"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000ee517505ded0d60a
+--0000000000000d114a05ded0d7a4
 Content-Transfer-Encoding: 8bit
 
-Added shost & device related sysfs attributes
+Added shost related sysfs attributes to get the controller's
+firmware version, controlller's queue depth,
+number of request & reply queues.
+Also added an attribute to set & get the logging_level.
 
-Sreekanth Reddy (2):
-  mpi3mr: Add shost related sysfs attributes
-  mpi3mr: Add target device related sysfs attributes
+Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+---
+ drivers/scsi/mpi3mr/mpi3mr_app.c | 139 +++++++++++++++++++++++++++++++
+ 1 file changed, 139 insertions(+)
 
- drivers/scsi/mpi3mr/mpi3mr.h     |   1 +
- drivers/scsi/mpi3mr/mpi3mr_app.c | 259 +++++++++++++++++++++++++++++++
- drivers/scsi/mpi3mr/mpi3mr_os.c  |   1 +
- 3 files changed, 261 insertions(+)
-
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_app.c b/drivers/scsi/mpi3mr/mpi3mr_app.c
+index 73bb799..c9b153c 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_app.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_app.c
+@@ -1558,6 +1558,140 @@ err_device_add:
+ 	kfree(mrioc->bsg_dev);
+ }
+ 
++/**
++ * version_fw_show - SysFS callback for firmware version read
++ * @dev: class device
++ * @attr: Device attributes
++ * @buf: Buffer to copy
++ *
++ * Return: snprintf() return after copying firmware version
++ */
++static ssize_t
++version_fw_show(struct device *dev, struct device_attribute *attr,
++	char *buf)
++{
++	struct Scsi_Host *shost = class_to_shost(dev);
++	struct mpi3mr_ioc *mrioc = shost_priv(shost);
++	struct mpi3mr_compimg_ver *fwver = &mrioc->facts.fw_ver;
++
++	return snprintf(buf, PAGE_SIZE, "%d.%d.%d.%d.%05d-%05d\n",
++	    fwver->gen_major, fwver->gen_minor, fwver->ph_major,
++	    fwver->ph_minor, fwver->cust_id, fwver->build_num);
++}
++static DEVICE_ATTR_RO(version_fw);
++
++/**
++ * fw_queue_depth_show - SysFS callback for firmware max cmds
++ * @dev: class device
++ * @attr: Device attributes
++ * @buf: Buffer to copy
++ *
++ * Return: snprintf() return after copying firmware max commands
++ */
++static ssize_t
++fw_queue_depth_show(struct device *dev, struct device_attribute *attr,
++			char *buf)
++{
++	struct Scsi_Host *shost = class_to_shost(dev);
++	struct mpi3mr_ioc *mrioc = shost_priv(shost);
++
++	return snprintf(buf, PAGE_SIZE, "%d\n", mrioc->facts.max_reqs);
++}
++static DEVICE_ATTR_RO(fw_queue_depth);
++
++/**
++ * op_req_q_count_show - SysFS callback for request queue count
++ * @dev: class device
++ * @attr: Device attributes
++ * @buf: Buffer to copy
++ *
++ * Return: snprintf() return after copying request queue count
++ */
++static ssize_t
++op_req_q_count_show(struct device *dev, struct device_attribute *attr,
++			char *buf)
++{
++	struct Scsi_Host *shost = class_to_shost(dev);
++	struct mpi3mr_ioc *mrioc = shost_priv(shost);
++
++	return snprintf(buf, PAGE_SIZE, "%d\n", mrioc->num_op_req_q);
++}
++static DEVICE_ATTR_RO(op_req_q_count);
++
++/**
++ * reply_queue_count_show - SysFS callback for reply queue count
++ * @dev: class device
++ * @attr: Device attributes
++ * @buf: Buffer to copy
++ *
++ * Return: snprintf() return after copying reply queue count
++ */
++static ssize_t
++reply_queue_count_show(struct device *dev, struct device_attribute *attr,
++			char *buf)
++{
++	struct Scsi_Host *shost = class_to_shost(dev);
++	struct mpi3mr_ioc *mrioc = shost_priv(shost);
++
++	return snprintf(buf, PAGE_SIZE, "%d\n", mrioc->num_op_reply_q);
++}
++
++static DEVICE_ATTR_RO(reply_queue_count);
++
++/**
++ * logging_level_show - Show controller debug level
++ * @dev: class device
++ * @attr: Device attributes
++ * @buf: Buffer to copy
++ *
++ * A sysfs 'read/write' shost attribute, to show the current
++ * debug log level used by the driver for the specific
++ * controller.
++ *
++ * Return: snprintf() return
++ */
++static ssize_t
++logging_level_show(struct device *dev,
++	struct device_attribute *attr, char *buf)
++
++{
++	struct Scsi_Host *shost = class_to_shost(dev);
++	struct mpi3mr_ioc *mrioc = shost_priv(shost);
++
++	return snprintf(buf, PAGE_SIZE, "%08xh\n", mrioc->logging_level);
++}
++
++/**
++ * logging_level_store- Change controller debug level
++ * @dev: class device
++ * @attr: Device attributes
++ * @buf: Buffer to copy
++ * @count: size of the buffer
++ *
++ * A sysfs 'read/write' shost attribute, to change the current
++ * debug log level used by the driver for the specific
++ * controller.
++ *
++ * Return: strlen() return
++ */
++static ssize_t
++logging_level_store(struct device *dev,
++	struct device_attribute *attr,
++	const char *buf, size_t count)
++{
++	struct Scsi_Host *shost = class_to_shost(dev);
++	struct mpi3mr_ioc *mrioc = shost_priv(shost);
++	int val = 0;
++
++	if (kstrtoint(buf, 0, &val) != 0)
++		return -EINVAL;
++
++	mrioc->logging_level = val;
++	ioc_info(mrioc, "logging_level=%08xh\n", mrioc->logging_level);
++	return strlen(buf);
++}
++static DEVICE_ATTR_RW(logging_level);
++
+ /**
+  * adapter_state_show - SysFS callback for adapter state show
+  * @dev: class device
+@@ -1591,6 +1725,11 @@ adp_state_show(struct device *dev, struct device_attribute *attr,
+ static DEVICE_ATTR_RO(adp_state);
+ 
+ static struct attribute *mpi3mr_host_attrs[] = {
++	&dev_attr_version_fw.attr,
++	&dev_attr_fw_queue_depth.attr,
++	&dev_attr_op_req_q_count.attr,
++	&dev_attr_reply_queue_count.attr,
++	&dev_attr_logging_level.attr,
+ 	&dev_attr_adp_state.attr,
+ 	NULL,
+ };
 -- 
 2.27.0
 
 
---000000000000ee517505ded0d60a
+--0000000000000d114a05ded0d7a4
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -154,13 +314,13 @@ X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
 eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
 Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
 MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPgnvJ83T+iXJViEnmpK
-sl8y9Qb29+cUxlSUrSKCU/AgMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIyMDUxMjEzNTAyNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJd9OfeSuUZWU1h+j+lD
+6KthZ0+bFmVzSaZkAiy/nonXMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIyMDUxMjEzNTAyNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
 BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCRNdtnzU194DcSSIVVIF3jNZSN59W7QM9i2Evo
-WdfQVRkLt52htWD9l6y0VE8/oYVJOBpxUSTmZXdPQNkrqF6XLYhgoYPE7Qo8DzzwyuPHcd16QF2E
-VGklgVK3V+Ow9PJcTxqUysqyZ1Wdj9LsGkR3AIenEZ6gZwQ6m2oTlNgALTX84uHdKqJFAb8Ltewz
-yYiEgyap4TXZ/B88SOi4N8wwEBwnnZnVdaYv/2uBeN/48XhMGccGDQXvpmrcNHom9au8GC8bV9fi
-Wfwi3Uf7SI2a3TNRITumsMod1O8ikqHB/UznXMqQs8i/tEK7HvRNSBaYAOVfWLl2LTliRGRb6QrV
---000000000000ee517505ded0d60a--
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCeG9/Kzs9j+SJzU37j/4i8PwtWd3t9Ds+mv3zK
+UUX9NuI+aYBhcwE3HY6ToAIphj0PIKZsQrdngu+l4vdm/HnlW/ryzzXokikYwUla/aU3xIN5nQHz
+tvE34ahqADy9zl3yiw6S2bcUUCyT8SLDj5qCf2Ci0MLP23qp6FclaQfAkjXvAHHBA3KGCbG/+ab6
+4Qxck3NE41GEOFnIMt7pgzbP7jYrJmqZ/4UsVpabxKKddPlTYGEAWzduj2QV4YGCVOKoVxX8WO1J
+lPwIa5KnbaqnvsvgFF9F8VPYet1hS+qXxAKDVl86GG8kWpepSDVu74Hto47hnlUb0xUz3TQWr8NP
+--0000000000000d114a05ded0d7a4--
