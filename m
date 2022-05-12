@@ -2,53 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C84524B2D
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 May 2022 13:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C649524B1E
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 May 2022 13:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353096AbiELLNn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 12 May 2022 07:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S1353028AbiELLNG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 12 May 2022 07:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353041AbiELLM6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 May 2022 07:12:58 -0400
+        with ESMTP id S1353011AbiELLMw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 May 2022 07:12:52 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33E565D0D
-        for <linux-scsi@vger.kernel.org>; Thu, 12 May 2022 04:12:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0E36004A
+        for <linux-scsi@vger.kernel.org>; Thu, 12 May 2022 04:12:48 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 634E71F935;
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5EBA51F933;
         Thu, 12 May 2022 11:12:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1652353966; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=afNDgdCMsbxlbqYImqGCF65kYSrnWmCqxVEFBqiN78g=;
-        b=jPj8759LniirFdHje4MFsojOlwW7NHFhm4E0L/Nbzi5qdtQ7AN5UJVZwQWpLwzcTC2SDA1
-        862V4yMoUW4bvwNrfJncBFuv0+7h74sKZcBxOOAaDr94pgG7MKSnQdKUGf0DwjJQ3Esd7U
-        BB9vY1PU6up6s7YyJbH4RGaUr9vD7xA=
+        bh=BDc1i1H/xX9y8V3CZwZmrbdQnTGaotK/s+rTeszO5yg=;
+        b=pKJ9YXoqrVQa4NZBinT5A24rvv4Qj5XBEnYslx1eYNQMbe6XtRoVeyrGirMBqAwcGx/sgT
+        JBV10sgZOSR0PPO4emwd3QjVywYeYugdEuPVaqEy3m4R1YKbFjEd+G+jWaBVBlF3tWi/qz
+        Zy5Waum2fsxxZCOaosb1mL1L0tVSnTs=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1652353966;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=afNDgdCMsbxlbqYImqGCF65kYSrnWmCqxVEFBqiN78g=;
-        b=80HJoqQ4aTt5OmzADuedmo9qDt1P2s7TGiNCDQ0PUnIqzkCM6D/1Vh0u038RkALiQYz8qd
-        izQ2lHtawqgF+5BQ==
+        bh=BDc1i1H/xX9y8V3CZwZmrbdQnTGaotK/s+rTeszO5yg=;
+        b=W1jelasAJ1PsTaafhRJYO1XiXZlTgoyIc18J+noQ/kSqGYSDhykZ4h38gIjhIpx1ynwMTm
+        gIsP+mBX0udXWiBA==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 545972C15F;
+        by relay2.suse.de (Postfix) with ESMTP id 540A72C15D;
         Thu, 12 May 2022 11:12:46 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 2F91F51943F8; Thu, 12 May 2022 13:12:46 +0200 (CEST)
+        id 32FC251943FA; Thu, 12 May 2022 13:12:46 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Hannes Reinecke <hare@suse.com>,
         Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: [PATCH 16/20] snic: reserve tag for TMF
-Date:   Thu, 12 May 2022 13:12:32 +0200
-Message-Id: <20220512111236.109851-17-hare@suse.de>
+Subject: [PATCH 17/20] snic: use dedicated device reset command
+Date:   Thu, 12 May 2022 13:12:33 +0200
+Message-Id: <20220512111236.109851-18-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220512111236.109851-1-hare@suse.de>
 References: <20220512111236.109851-1-hare@suse.de>
@@ -64,158 +65,118 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Rather than re-using the failed command the snic driver should
-reserve one command for TMFs.
+Use a dedicated command to send a device reset instead of relying
+on using the command which triggered the device failure.
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Hannes Reinecke <hare@suse.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 ---
- drivers/scsi/snic/snic.h      |  2 +-
- drivers/scsi/snic/snic_main.c |  8 +++++++
- drivers/scsi/snic/snic_scsi.c | 44 +++++++++++++++++------------------
- 3 files changed, 31 insertions(+), 23 deletions(-)
+ drivers/scsi/snic/snic_scsi.c | 52 ++++++++++++++++-------------------
+ 1 file changed, 24 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/scsi/snic/snic.h b/drivers/scsi/snic/snic.h
-index 4ec7e30678e1..28059b66f191 100644
---- a/drivers/scsi/snic/snic.h
-+++ b/drivers/scsi/snic/snic.h
-@@ -380,7 +380,7 @@ int snic_queuecommand(struct Scsi_Host *, struct scsi_cmnd *);
- int snic_abort_cmd(struct scsi_cmnd *);
- int snic_device_reset(struct scsi_cmnd *);
- int snic_host_reset(struct scsi_cmnd *);
--int snic_reset(struct Scsi_Host *, struct scsi_cmnd *);
-+int snic_reset(struct Scsi_Host *);
- void snic_shutdown_scsi_cleanup(struct snic *);
- 
- 
-diff --git a/drivers/scsi/snic/snic_main.c b/drivers/scsi/snic/snic_main.c
-index 29d56396058c..3375153dd636 100644
---- a/drivers/scsi/snic/snic_main.c
-+++ b/drivers/scsi/snic/snic_main.c
-@@ -663,6 +663,14 @@ snic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		goto err_get_conf;
- 	}
- 
-+	/*
-+	 * Hack alert: reduce can_queue by one after scsi_add_host()
-+	 * had been called.
-+	 * This essentially reserves the topmost request for TMF.
-+	 * Should be replaced by reserved command
-+	 * once support is being added.
-+	 */
-+	shost->can_queue--;
- 	snic_set_state(snic, SNIC_ONLINE);
- 
- 	ret = snic_disc_start(snic);
 diff --git a/drivers/scsi/snic/snic_scsi.c b/drivers/scsi/snic/snic_scsi.c
-index 5f17666f3e1d..e69bed855a39 100644
+index e69bed855a39..6570d5bc203f 100644
 --- a/drivers/scsi/snic/snic_scsi.c
 +++ b/drivers/scsi/snic/snic_scsi.c
-@@ -1018,17 +1018,6 @@ snic_hba_reset_cmpl_handler(struct snic *snic, struct snic_fw_req *fwreq)
- 		      "reset_cmpl: type = %x, hdr_stat = %x, cmnd_id = %x, hid = %x, ctx = %lx\n",
- 		      typ, hdr_stat, cmnd_id, hid, ctx);
- 
--	/* spl case, host reset issued through ioctl */
--	if (cmnd_id == SCSI_NO_TAG) {
--		rqi = (struct snic_req_info *) ctx;
--		SNIC_HOST_INFO(snic->shost,
--			       "reset_cmpl:Tag %d ctx %lx cmpl stat %s\n",
--			       cmnd_id, ctx, snic_io_status_to_str(hdr_stat));
--		sc = rqi->sc;
--
--		goto ioctl_hba_rst;
--	}
--
- 	if (cmnd_id >= snic->max_tag_id) {
- 		SNIC_HOST_ERR(snic->shost,
- 			      "reset_cmpl: Tag 0x%x out of Range,HdrStat %s\n",
-@@ -1039,7 +1028,6 @@ snic_hba_reset_cmpl_handler(struct snic *snic, struct snic_fw_req *fwreq)
- 	}
- 
- 	sc = scsi_host_find_tag(snic->shost, cmnd_id);
--ioctl_hba_rst:
- 	if (!sc) {
- 		atomic64_inc(&snic->s_stats.io.sc_null);
- 		SNIC_HOST_ERR(snic->shost,
-@@ -1725,7 +1713,7 @@ snic_dr_clean_single_req(struct snic *snic,
+@@ -2128,57 +2128,53 @@ snic_unlink_and_release_req(struct snic *snic, struct scsi_cmnd *sc, int flag)
+ int
+ snic_device_reset(struct scsi_cmnd *sc)
  {
+-	struct Scsi_Host *shost = sc->device->host;
++	struct scsi_device *sdev = sc->device;
++	struct Scsi_Host *shost = sdev->host;
+ 	struct snic *snic = shost_priv(shost);
  	struct snic_req_info *rqi = NULL;
- 	struct snic_tgt *tgt = NULL;
--	struct scsi_cmnd *sc = NULL;
-+	struct scsi_cmnd *sc;
- 	spinlock_t *io_lock = NULL;
- 	u32 sv_state = 0, tmf = 0;
- 	DECLARE_COMPLETION_ONSTACK(tm_done);
-@@ -2238,13 +2226,6 @@ snic_issue_hba_reset(struct snic *snic, struct scsi_cmnd *sc)
- 		goto hba_rst_end;
+-	int tag = snic_cmd_tag(sc);
+ 	int start_time = jiffies;
+ 	int ret = FAILED;
+ 	int dr_supp = 0;
+ 
+-	SNIC_SCSI_DBG(shost, "dev_reset:sc %p :0x%x :req = %p :tag = %d\n",
+-		      sc, sc->cmnd[0], scsi_cmd_to_rq(sc),
+-		      snic_cmd_tag(sc));
+-	dr_supp = snic_dev_reset_supported(sc->device);
++	SNIC_SCSI_DBG(shost, "dev_reset\n");
++	dr_supp = snic_dev_reset_supported(sdev);
+ 	if (!dr_supp) {
+ 		/* device reset op is not supported */
+ 		SNIC_HOST_INFO(shost, "LUN Reset Op not supported.\n");
+-		snic_unlink_and_release_req(snic, sc, SNIC_DEV_RST_NOTSUP);
+-
+ 		goto dev_rst_end;
  	}
  
--	if (snic_cmd_tag(sc) == SCSI_NO_TAG) {
+ 	if (unlikely(snic_get_state(snic) != SNIC_ONLINE)) {
+-		snic_unlink_and_release_req(snic, sc, 0);
+ 		SNIC_HOST_ERR(shost, "Devrst: Parent Devs are not online.\n");
+ 
+ 		goto dev_rst_end;
+ 	}
+ 
+-	/* There is no tag when lun reset is issue through ioctl. */
+-	if (unlikely(tag <= SNIC_NO_TAG)) {
+-		SNIC_HOST_INFO(snic->shost,
+-			       "Devrst: LUN Reset Recvd thru IOCTL.\n");
+-
+-		rqi = snic_req_init(snic, 0);
+-		if (!rqi)
+-			goto dev_rst_end;
+-
 -		memset(scsi_cmd_priv(sc), 0,
 -			sizeof(struct snic_internal_io_state));
--		SNIC_HOST_INFO(snic->shost, "issu_hr:Host reset thru ioctl.\n");
+-		CMD_SP(sc) = (char *)rqi;
+-		CMD_FLAGS(sc) = SNIC_NO_FLAGS;
++	rqi = snic_req_init(snic, 0);
++	if (!rqi)
++		goto dev_rst_end;
+ 
+-		/* Add special tag for dr coming from user spc */
+-		rqi->tm_tag = SNIC_TAG_IOCTL_DEV_RST;
 -		rqi->sc = sc;
--	}
--
- 	req = rqi_to_req(rqi);
- 
- 	io_lock = snic_io_lock_hash(snic, sc);
-@@ -2319,11 +2300,13 @@ snic_issue_hba_reset(struct snic *snic, struct scsi_cmnd *sc)
- } /* end of snic_issue_hba_reset */
- 
- int
--snic_reset(struct Scsi_Host *shost, struct scsi_cmnd *sc)
-+snic_reset(struct Scsi_Host *shost)
- {
- 	struct snic *snic = shost_priv(shost);
-+	struct scsi_cmnd *sc = NULL;
- 	enum snic_state sv_state;
- 	unsigned long flags;
-+	u32 start_time  = jiffies;
- 	int ret = FAILED;
- 
- 	/* Set snic state as SNIC_FWRESET*/
-@@ -2348,6 +2331,19 @@ snic_reset(struct Scsi_Host *shost, struct scsi_cmnd *sc)
- 	while (atomic_read(&snic->ios_inflight))
- 		schedule_timeout(msecs_to_jiffies(1));
- 
-+	/* The topmost command is reserved for TMF */
-+	sc = scsi_host_find_tag(shost, snic->max_tag_id - 1);
-+	if (!sc) {
-+		SNIC_HOST_ERR(shost,
-+			      "reset:Host Reset Failed to allocate sc.\n");
-+		spin_lock_irqsave(&snic->snic_lock, flags);
-+		snic_set_state(snic, sv_state);
-+		spin_unlock_irqrestore(&snic->snic_lock, flags);
-+		atomic64_inc(&snic->s_stats.reset.hba_reset_fail);
-+		ret = FAILED;
++	/* The last tag is reserved for TMF */
++	sc = scsi_host_find_tag(snic->shost, snic->max_tag_id - 1);
++	if (!sc || CMD_SP(sc)) {
++		SNIC_HOST_ERR(snic->shost,
++			      "Devrst: TMF busy\n");
++		goto dev_rst_end;
+ 	}
++	memset(scsi_cmd_priv(sc), 0,
++	       sizeof(struct snic_internal_io_state));
++	CMD_SP(sc) = (char *)rqi;
++	CMD_FLAGS(sc) = SNIC_NO_FLAGS;
 +
-+		goto reset_end;
-+	}
- 	ret = snic_issue_hba_reset(snic, sc);
++	/* Add special tag for dr coming from user spc */
++	rqi->tm_tag = SNIC_TAG_IOCTL_DEV_RST;
++	rqi->sc = sc;
+ 
+ 	ret = snic_send_dr_and_wait(snic, sc);
  	if (ret) {
- 		SNIC_HOST_ERR(shost,
-@@ -2365,6 +2361,10 @@ snic_reset(struct Scsi_Host *shost, struct scsi_cmnd *sc)
- 	ret = SUCCESS;
+ 		SNIC_HOST_ERR(snic->shost,
+ 			      "Devrst: IO w/ Tag %x Failed w/ err = %d\n",
+-			      tag, ret);
++			      snic_cmd_tag(sc), ret);
  
- reset_end:
-+	SNIC_TRC(shost->host_no, sc ? snic_cmd_tag(sc) : SCSI_NO_TAG,
-+		 (ulong) sc, jiffies_to_msecs(jiffies - start_time),
-+		 0, 0, 0);
-+
- 	return ret;
- } /* end of snic_reset */
+ 		snic_unlink_and_release_req(snic, sc, 0);
  
-@@ -2387,7 +2387,7 @@ snic_host_reset(struct scsi_cmnd *sc)
- 		      sc, sc->cmnd[0], scsi_cmd_to_rq(sc),
- 		      snic_cmd_tag(sc), CMD_FLAGS(sc));
+@@ -2188,7 +2184,7 @@ snic_device_reset(struct scsi_cmnd *sc)
+ 	ret = snic_dr_finish(snic, sc);
  
--	ret = snic_reset(shost, sc);
-+	ret = snic_reset(shost);
- 
- 	SNIC_TRC(shost->host_no, snic_cmd_tag(sc), (ulong) sc,
+ dev_rst_end:
+-	SNIC_TRC(snic->shost->host_no, tag, (ulong) sc,
++	SNIC_TRC(snic->shost->host_no, snic_cmd_tag(sc), (ulong) sc,
  		 jiffies_to_msecs(jiffies - start_time),
+ 		 0, SNIC_TRC_CMD(sc), SNIC_TRC_CMD_STATE_FLAGS(sc));
+ 
+@@ -2333,7 +2329,7 @@ snic_reset(struct Scsi_Host *shost)
+ 
+ 	/* The topmost command is reserved for TMF */
+ 	sc = scsi_host_find_tag(shost, snic->max_tag_id - 1);
+-	if (!sc) {
++	if (!sc || CMD_SP(sc)) {
+ 		SNIC_HOST_ERR(shost,
+ 			      "reset:Host Reset Failed to allocate sc.\n");
+ 		spin_lock_irqsave(&snic->snic_lock, flags);
 -- 
 2.29.2
 
