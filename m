@@ -2,99 +2,251 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E32524E96
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 May 2022 15:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C181C524EF5
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 May 2022 15:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354593AbiELNqp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 12 May 2022 09:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
+        id S1354775AbiELN5I (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 12 May 2022 09:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354588AbiELNqo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 May 2022 09:46:44 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A8363BEC
-        for <linux-scsi@vger.kernel.org>; Thu, 12 May 2022 06:46:42 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d25so4826173pfo.10
-        for <linux-scsi@vger.kernel.org>; Thu, 12 May 2022 06:46:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=BKTUsOZXurokKw93pDZ/qCH4rd2yh1Ne8HUq4b8wchY=;
-        b=Y63gqBsfRrjW5Wg1/uqYlapV4UJPKvEAySHVc1O+o5rdfyAvM2PuHfdMQRqcBanwpn
-         GXeS95qUUCdS+zKdlYnkVwLfRXrNXrXS0qrhDiLkgm/sp7IKbnGI2USzMB2Ls7vBHCmC
-         XUlthZehM9dELVvDP9rF96SFUOF2U+o7gNgWiZd4kxez6dnpQ/sM+zFxMMzxjKjeVHDN
-         waZCI68CDWH8Jh8uwR9BzqLoDAjfy7Ll6lr9RCL332yQnTNgAmrHR0XtTVKhln5eoq3T
-         zm+80JagvdpuIPhyyFyCsIPVCTJlt/OBYi2SRZJZAJhSV3olCTtlQBzLHwcdrv+bYNKw
-         mTKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=BKTUsOZXurokKw93pDZ/qCH4rd2yh1Ne8HUq4b8wchY=;
-        b=Oj+i+A47Pc8keXOenthwLbmTIefTJftUybi19RLbWH/htqgvP6z0uVpuOJK8sh8hjH
-         uoizcOtLT3FrrjIdTMvT66idr+4tMh3ONRw/JX/tEsU44e2kYKXoFIEJr5QK9T7G3wh5
-         WnTMEoDX/FgSY9B6C08B9kzyWYNc5xEBmfdMR8S/GNTNYoSJecGtidvddPl1lL+LkCRE
-         BuMTJSheKXkKJsIS9mhEl+NDt/jCAwWu8j6UhTsH+7LA/bN/CK8l9FvdmP5eMq88lmSg
-         xtShcNojfL07Rs7A8V1qbIRHNocpepm3EOZ9kk28JIAPCjz/L5HwTA+5g0CcKdJF1Bhv
-         bF0Q==
-X-Gm-Message-State: AOAM530V7eEaeNvqfUjqxMXZnt+GWvzUKBNzIkd+h8L00A7Y39Zr2Q8E
-        wmMtn2/HBOEQjhfmVo2dmSOHSQhOeF0zIC8E6HQ=
-X-Google-Smtp-Source: ABdhPJxA/liaQk8S8plDAjUxUg979oUjC+zu1NUmIntTt9lxaJpdTWjcqji/aFlbusbg3ZA8ub+Y5JQEYTxokdOoGHc=
-X-Received: by 2002:a05:6a00:a1e:b0:50d:bb0c:2e27 with SMTP id
- p30-20020a056a000a1e00b0050dbb0c2e27mr30166684pfh.49.1652363202221; Thu, 12
- May 2022 06:46:42 -0700 (PDT)
+        with ESMTP id S1354779AbiELN5D (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 May 2022 09:57:03 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304271C345C
+        for <linux-scsi@vger.kernel.org>; Thu, 12 May 2022 06:57:01 -0700 (PDT)
+X-UUID: 162a9dc646ba46e285457a6e4d43ea3e-20220512
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:ea0fc23a-65f7-4ab5-ae9a-3f6de342ee11,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:-15
+X-CID-META: VersionHash:faefae9,CLOUDID:959c13a7-eab7-4b74-a74d-5359964535a9,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 162a9dc646ba46e285457a6e4d43ea3e-20220512
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <peter.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1861353464; Thu, 12 May 2022 21:56:58 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 12 May 2022 21:56:57 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 12 May 2022 21:56:57 +0800
+From:   <peter.wang@mediatek.com>
+To:     <stanley.chu@mediatek.com>, <linux-scsi@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
+CC:     <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <powen.kao@mediatek.com>, <qilin.tan@mediatek.com>,
+        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
+        <tun-yu.yu@mediatek.com>
+Subject: [PATCH v1] scsi: ufs-mediatek: introduce new UFS4.0 HS-G5 mode
+Date:   Thu, 12 May 2022 21:56:54 +0800
+Message-ID: <20220512135654.3656-1-peter.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Received: by 2002:a05:6a20:3e0c:b0:7f:499d:4df6 with HTTP; Thu, 12 May 2022
- 06:46:41 -0700 (PDT)
-Reply-To: musadosseh1@gmail.com
-From:   David Randal <barr.musabame9@gmail.com>
-Date:   Thu, 12 May 2022 15:46:41 +0200
-Message-ID: <CACXnS-6WgcbSi9DpVems9L8U0N04T5VN9meEYuUV-6UU+TcQ+g@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:435 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [barr.musabame9[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [barr.musabame9[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [musadosseh1[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-My name is DAVID Randal from africa construction equipment operator I
-want you to work with me as an overseas partner to do business GOLD.
-If you are interested answer me.
+From: Peter Wang <peter.wang@mediatek.com>
 
-Ms.David
+Per UFS4.0 spec, HS-G5 is a new speed mode.
+This patch introduce HS-G5 speed mode to mediatek.
+Also add a host cap for power mode change via fastauto.
+
+Co-Developed-by: CC Chou <cc.chou@mediatek.com>
+Signed-off-by: CC Chou <cc.chou@mediatek.com>
+Co-Developed-by: Eddie Huang <eddie.huang@mediatek.com>
+Signed-off-by: Eddie Huang <eddie.huang@mediatek.com>
+Co-Developed-by: Dennis Yu <tun-yu.yu@mediatek.com>
+Signed-off-by: Dennis Yu <tun-yu.yu@mediatek.com>
+Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+---
+ drivers/scsi/ufs/ufs-mediatek.c | 60 +++++++++++++++++++++++++++++++--
+ drivers/scsi/ufs/ufs-mediatek.h |  1 +
+ drivers/scsi/ufs/ufshcd.c       |  3 +-
+ drivers/scsi/ufs/ufshcd.h       |  1 +
+ drivers/scsi/ufs/unipro.h       |  4 ++-
+ 5 files changed, 65 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
+index 86a938075f30..8f2a3b03d244 100644
+--- a/drivers/scsi/ufs/ufs-mediatek.c
++++ b/drivers/scsi/ufs/ufs-mediatek.c
+@@ -78,6 +78,13 @@ static bool ufs_mtk_is_broken_vcc(struct ufs_hba *hba)
+ 	return !!(host->caps & UFS_MTK_CAP_BROKEN_VCC);
+ }
+ 
++static bool ufs_mtk_is_pmc_via_fastauto(struct ufs_hba *hba)
++{
++	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
++
++	return !!(host->caps & UFS_MTK_CAP_PMC_VIA_FASTAUTO);
++}
++
+ static void ufs_mtk_cfg_unipro_cg(struct ufs_hba *hba, bool enable)
+ {
+ 	u32 tmp;
+@@ -580,6 +587,9 @@ static void ufs_mtk_init_host_caps(struct ufs_hba *hba)
+ 	if (of_property_read_bool(np, "mediatek,ufs-broken-vcc"))
+ 		host->caps |= UFS_MTK_CAP_BROKEN_VCC;
+ 
++	if (of_property_read_bool(np, "mediatek,ufs-pmc-via-fastauto"))
++		host->caps |= UFS_MTK_CAP_PMC_VIA_FASTAUTO;
++
+ 	dev_info(hba->dev, "caps: 0x%x", host->caps);
+ }
+ 
+@@ -755,6 +765,26 @@ static int ufs_mtk_init(struct ufs_hba *hba)
+ 	return err;
+ }
+ 
++static bool ufs_mtk_pmc_via_fastauto(struct ufs_hba *hba,
++	struct ufs_pa_layer_attr *dev_req_params)
++{
++	if (!ufs_mtk_is_pmc_via_fastauto(hba))
++		return false;
++
++	if (dev_req_params->hs_rate == hba->pwr_info.hs_rate)
++		return false;
++
++	if ((dev_req_params->pwr_tx != FAST_MODE) &&
++		(dev_req_params->gear_tx < UFS_HS_G4))
++		return false;
++
++	if ((dev_req_params->pwr_rx != FAST_MODE) &&
++		(dev_req_params->gear_rx < UFS_HS_G4))
++		return false;
++
++	return true;
++}
++
+ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
+ 				  struct ufs_pa_layer_attr *dev_max_params,
+ 				  struct ufs_pa_layer_attr *dev_req_params)
+@@ -764,8 +794,8 @@ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
+ 	int ret;
+ 
+ 	ufshcd_init_pwr_dev_param(&host_cap);
+-	host_cap.hs_rx_gear = UFS_HS_G4;
+-	host_cap.hs_tx_gear = UFS_HS_G4;
++	host_cap.hs_rx_gear = UFS_HS_G5;
++	host_cap.hs_tx_gear = UFS_HS_G5;
+ 
+ 	ret = ufshcd_get_pwr_dev_param(&host_cap,
+ 				       dev_max_params,
+@@ -775,6 +805,32 @@ static int ufs_mtk_pre_pwr_change(struct ufs_hba *hba,
+ 			__func__);
+ 	}
+ 
++	if (ufs_mtk_pmc_via_fastauto(hba, dev_req_params)) {
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_TXTERMINATION), TRUE);
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_TXGEAR), UFS_HS_G1);
++
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_RXTERMINATION), TRUE);
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_RXGEAR), UFS_HS_G1);
++
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_ACTIVETXDATALANES),
++						dev_req_params->lane_tx);
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_ACTIVERXDATALANES),
++						dev_req_params->lane_rx);
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_HSSERIES),
++						dev_req_params->hs_rate);
++
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_TXHSADAPTTYPE),
++		     PA_NO_ADAPT);
++
++		ret = ufshcd_uic_change_pwr_mode(hba,
++			FASTAUTO_MODE << 4 | FASTAUTO_MODE);
++
++		if (ret) {
++			dev_err(hba->dev, "%s: HSG1B FASTAUTO failed ret=%d\n",
++				__func__, ret);
++		}
++	}
++
+ 	if (host->hw_ver.major >= 3) {
+ 		ret = ufshcd_dme_configure_adapt(hba,
+ 					   dev_req_params->gear_tx,
+diff --git a/drivers/scsi/ufs/ufs-mediatek.h b/drivers/scsi/ufs/ufs-mediatek.h
+index 414dca86c09f..3a31f03f3cb1 100644
+--- a/drivers/scsi/ufs/ufs-mediatek.h
++++ b/drivers/scsi/ufs/ufs-mediatek.h
+@@ -108,6 +108,7 @@ enum ufs_mtk_host_caps {
+ 	UFS_MTK_CAP_VA09_PWR_CTRL              = 1 << 1,
+ 	UFS_MTK_CAP_DISABLE_AH8                = 1 << 2,
+ 	UFS_MTK_CAP_BROKEN_VCC                 = 1 << 3,
++	UFS_MTK_CAP_PMC_VIA_FASTAUTO           = 1 << 4,
+ };
+ 
+ struct ufs_mtk_crypt_cfg {
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 3f9caafa91bf..e750011d0de7 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -4076,7 +4076,7 @@ static int ufshcd_uic_pwr_ctrl(struct ufs_hba *hba, struct uic_command *cmd)
+  *
+  * Returns 0 on success, non-zero value on failure
+  */
+-static int ufshcd_uic_change_pwr_mode(struct ufs_hba *hba, u8 mode)
++int ufshcd_uic_change_pwr_mode(struct ufs_hba *hba, u8 mode)
+ {
+ 	struct uic_command uic_cmd = {0};
+ 	int ret;
+@@ -4101,6 +4101,7 @@ static int ufshcd_uic_change_pwr_mode(struct ufs_hba *hba, u8 mode)
+ out:
+ 	return ret;
+ }
++EXPORT_SYMBOL(ufshcd_uic_change_pwr_mode);
+ 
+ int ufshcd_link_recovery(struct ufs_hba *hba)
+ {
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 94f545be183a..1cda0f211d72 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -1101,6 +1101,7 @@ extern int ufshcd_dme_set_attr(struct ufs_hba *hba, u32 attr_sel,
+ 			       u8 attr_set, u32 mib_val, u8 peer);
+ extern int ufshcd_dme_get_attr(struct ufs_hba *hba, u32 attr_sel,
+ 			       u32 *mib_val, u8 peer);
++extern int ufshcd_uic_change_pwr_mode(struct ufs_hba *hba, u8 mode);
+ extern int ufshcd_config_pwr_mode(struct ufs_hba *hba,
+ 			struct ufs_pa_layer_attr *desired_pwr_mode);
+ 
+diff --git a/drivers/scsi/ufs/unipro.h b/drivers/scsi/ufs/unipro.h
+index 8e9e486a4f7b..94d97f123e3a 100644
+--- a/drivers/scsi/ufs/unipro.h
++++ b/drivers/scsi/ufs/unipro.h
+@@ -231,6 +231,7 @@ enum ufs_hs_gear_tag {
+ 	UFS_HS_G2,		/* HS Gear 2 */
+ 	UFS_HS_G3,		/* HS Gear 3 */
+ 	UFS_HS_G4,		/* HS Gear 4 */
++	UFS_HS_G5,		/* HS Gear 5 */
+ };
+ 
+ enum ufs_unipro_ver {
+@@ -240,7 +241,8 @@ enum ufs_unipro_ver {
+ 	UFS_UNIPRO_VER_1_6  = 3, /* UniPro version 1.6 */
+ 	UFS_UNIPRO_VER_1_61 = 4, /* UniPro version 1.61 */
+ 	UFS_UNIPRO_VER_1_8  = 5, /* UniPro version 1.8 */
+-	UFS_UNIPRO_VER_MAX  = 6, /* UniPro unsupported version */
++	UFS_UNIPRO_VER_2_0  = 6, /* UniPro version 2.0 */
++	UFS_UNIPRO_VER_MAX  = 7, /* UniPro unsupported version */
+ 	/* UniPro version field mask in PA_LOCALVERINFO */
+ 	UFS_UNIPRO_VER_MASK = 0xF,
+ };
+-- 
+2.18.0
+
