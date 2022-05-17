@@ -2,88 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A826852973E
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 May 2022 04:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35301529738
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 May 2022 04:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238034AbiEQCRI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 May 2022 22:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        id S232821AbiEQCQu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 May 2022 22:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236124AbiEQCQ7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 May 2022 22:16:59 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066893CA78;
-        Mon, 16 May 2022 19:16:58 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GKjIkv009400;
+        with ESMTP id S229667AbiEQCQt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 May 2022 22:16:49 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CB33B556
+        for <linux-scsi@vger.kernel.org>; Mon, 16 May 2022 19:16:48 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GKrCWp027282;
         Tue, 17 May 2022 02:16:47 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=EDZx3noKrdncNz/1cvortvCCaSiIFzGoHAED5uODYmY=;
- b=ZUgAq9w26MDCIv2e46/lE1LUwy3l0EA2qcxUSLWAUDm6B98RyP3Chog43/1p9CxYQJow
- O2WoGm2FwyZIw+E/CQmjzpWjZZyYQq/lb6dfOVaiiI2wBfuWgXsDBDM0CgQibiugWRgl
- +BwIEJ4sKeMTbQoyyFsfAccZo/CTMaJn1wuKZJw/TO2iHWXuxP/QX70PEu/OpTRKro+G
- yxH34Z75lY0wMQjxGg9181A2gdx+4OQZZQ64AKbbIrPPah7nTKUvTyw6dOsfYlnhEfdF
- LuNjcS06sdtRbf2jApFEB4zAijHyb/JAdTXt9UPHSL/OWQMdC2mplHbCs45F4wx9GXZy Dw== 
+ bh=i0HgM0+QBPGuKMUMqibwzHq4KLlNGVNG0LOwR9AHo4w=;
+ b=k695PJbI5o6zm4d+OJNlzcCaNEffbOSlLaHkNkjoz6EMOq76oSdLlmMH8+jtnaBq++AG
+ 4xN+UGx+QQPpAv9wXKdYH9Ifea4CEMHn2+GwULSlKXcOKTJZ7bISDIeqO+Bg4vJOpCBt
+ 5yU+ylgzQgajt7SKB+HVUqnrJsUpCucYTa56d+z6/fNNhjTpiyP9vcd0jsU983Eu55IB
+ g13QWVbMpK6PmsiuHNFa1JS7QrE3fxpXKumsB8mdjw6owXYSvnHhlMDO4K3A+tTJPYLD
+ qG6MuY8BNfJDcsf5WygRHtAg22h6+xkNlap7ZcxUAoADEhvKii6KswYS0evp/d+sVMwD BQ== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g24ytmwjy-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g2371vy1s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 17 May 2022 02:16:47 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24H2G8Bp019232;
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24H2G8nZ019235;
         Tue, 17 May 2022 02:16:46 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v83hmf-1
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v83hmk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 17 May 2022 02:16:46 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 24H2Ghw3019875;
-        Tue, 17 May 2022 02:16:45 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 24H2Ghw5019875;
+        Tue, 17 May 2022 02:16:46 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v83hkf-5;
-        Tue, 17 May 2022 02:16:45 +0000
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v83hkf-6;
+        Tue, 17 May 2022 02:16:46 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     target-devel@vger.kernel.org, Max Gurtovoy <mgurtovoy@nvidia.com>,
+To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
         linux-scsi@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>, hch@lst.de,
-        sagi@grimberg.me, michael.christie@oracle.com
-Subject: Re: [PATCH 1/3] target/iscsi: rename iscsi_cmd to iscsit_cmd
-Date:   Mon, 16 May 2022 22:16:40 -0400
-Message-Id: <165275376861.24722.17710637076786131.b4-ty@oracle.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH] mpi3mr: Hidden drives not removed during soft reset
+Date:   Mon, 16 May 2022 22:16:41 -0400
+Message-Id: <165275376861.24722.16126558314300804095.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220428092939.36768-1-mgurtovoy@nvidia.com>
-References: <20220428092939.36768-1-mgurtovoy@nvidia.com>
+In-Reply-To: <20220505184808.24049-2-sreekanth.reddy@broadcom.com>
+References: <20220505184808.24049-1-sreekanth.reddy@broadcom.com> <20220505184808.24049-2-sreekanth.reddy@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: ODsEWbcH5sMk7Op0QYBD8ZS5-zVX8QEO
-X-Proofpoint-ORIG-GUID: ODsEWbcH5sMk7Op0QYBD8ZS5-zVX8QEO
+X-Proofpoint-GUID: 0_9WlxaSp_Aw0erhTQLtMWTRpyWHQQVm
+X-Proofpoint-ORIG-GUID: 0_9WlxaSp_Aw0erhTQLtMWTRpyWHQQVm
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 28 Apr 2022 12:29:37 +0300, Max Gurtovoy wrote:
+On Fri, 6 May 2022 00:18:07 +0530, Sreekanth Reddy wrote:
 
-> The structure iscsi_cmd naming is used by the iscsi initiator driver.
-> Rename the target cmd to iscsit_cmd to have more readable code.
+> If any drive is missing during the reset, the driver
+> checks whether the device is exposed to the OS and if it is,
+> then only it removes the device from the OS and
+> its own internal list. For hidden devices even if they are found
+> as missing during reset the driver is not removing them from
+> its internal list. Modified driver to remove hidden devices
+> from the driver's target device list if they are missing
+> during soft reset.
 > 
-> 
+> [...]
 
 Applied to 5.19/scsi-queue, thanks!
 
-[1/3] target/iscsi: rename iscsi_cmd to iscsit_cmd
-      https://git.kernel.org/mkp/scsi/c/66cd9d4ef74a
-[2/3] target/iscsi: rename iscsi_conn to iscsit_conn
-      https://git.kernel.org/mkp/scsi/c/be36d683fc29
-[3/3] target/iscsi: rename iscsi_session to iscsit_session
-      https://git.kernel.org/mkp/scsi/c/0873fe44e780
+[1/1] mpi3mr: Hidden drives not removed during soft reset
+      https://git.kernel.org/mkp/scsi/c/2dd8389f96d6
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
