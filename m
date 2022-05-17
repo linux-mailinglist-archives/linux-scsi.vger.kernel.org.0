@@ -2,83 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20AA9529739
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 May 2022 04:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9233529952
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 May 2022 08:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbiEQCQx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 May 2022 22:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S232212AbiEQGLj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 May 2022 02:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiEQCQu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 May 2022 22:16:50 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEA03BBDC
-        for <linux-scsi@vger.kernel.org>; Mon, 16 May 2022 19:16:49 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24GKgPN8009394;
-        Tue, 17 May 2022 02:16:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=fz6pcb2Wzi6kngupNdymDjuLX3eUpFjiPH5//OO98A0=;
- b=w85RasYvMYm0jHd/lhrl61kwL8L+vLtDcXHC7IyLt2ykBo0z3iWAsJC5JGzFz3JcBeTp
- prGeu2fovQiHD28H78uVNVn/unpL7gvPYMaIZY+FOP0d30jFmCidJAvW3MImcG36EWcU
- g8E/h0eNR1Hi/umtKILeHO1kitaEXZGVAmPsljQOS1hJhnVVDYP/BhdL5D0ePqKjU0EY
- sSvgfiDPHcB4aPFJ+icCmXwfd7Bz5bAwzLt1ycF68xos1QR1yQ5IqD9B2xQ6cFyZyCW6
- ShIgbzwwVwU8gPp8DabBuhTPrmiS4OBlSyaGUoeo1aa7Pj/3XJAQv/LsiQq6lcbI09k4 PA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g24ytmwk1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 May 2022 02:16:48 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24H2G8Bq019232;
-        Tue, 17 May 2022 02:16:47 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v83hmp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 May 2022 02:16:47 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 24H2Ghw7019875;
-        Tue, 17 May 2022 02:16:46 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v83hkf-7;
-        Tue, 17 May 2022 02:16:46 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        linux-scsi@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] mpi3mr: Increase IO timeout value to 60s
-Date:   Mon, 16 May 2022 22:16:42 -0400
-Message-Id: <165275376861.24722.12853184735182877372.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220505184808.24049-3-sreekanth.reddy@broadcom.com>
-References: <20220505184808.24049-1-sreekanth.reddy@broadcom.com> <20220505184808.24049-3-sreekanth.reddy@broadcom.com>
+        with ESMTP id S233729AbiEQGLh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 May 2022 02:11:37 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CED427D2
+        for <linux-scsi@vger.kernel.org>; Mon, 16 May 2022 23:11:36 -0700 (PDT)
+Date:   Tue, 17 May 2022 08:11:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652767893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pSxgm/7Pd1JJhPeSrjTq/v+c83EZcs+qaKrHmAbM4Z4=;
+        b=X9g8U7gU7t5VaYubttC8P3UAKQ0+Mkc9Uf+qrbVrIAcRlEbIwlWZn4Gka4J1yZjXpPevpf
+        Na8NeF00Jau/SyslvLc2dQ/8iQvuXfNFBpPWOf4pHwH7cVULicq1Gw7/BtpbRTqwq88I96
+        pfPmt7Pu4CeA5fOG6TXciBlDy18neMwXuLyRuBUj6ANUKJ5MtB1iWZrhoXZpRqJeG3ofyD
+        WUBzyoGUr0A8ieCJ47g8EWIrhnWEh6M4H5j+PKrYuchIG+uFnyPWN3DCN+jUC8dPnLhiCR
+        ksZ5es/ll0MpAycQHf9ZAqWK7hGsyA9heXuv8jhyH6+jjG5NhbF+WclI8PfG7A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652767893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pSxgm/7Pd1JJhPeSrjTq/v+c83EZcs+qaKrHmAbM4Z4=;
+        b=Dzi9TX+RFUmCxNwOxBMwDVWpUARbT0C84AU6Y+RLLgIX7KcIJNZS2F0KYD/73SMP/BRcZE
+        X699Zz/4J8fdmtAA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Hannes Reinecke <hare@suse.de>,
+        Javed Hasan <jhasan@marvell.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [PATCH 0/4] scsi: PREEMPT_RT related fixes.
+Message-ID: <YoM8lKljQFcNO4vB@linutronix.de>
+References: <20220506105758.283887-1-bigeasy@linutronix.de>
+ <yq1mtfhrlrr.fsf@ca-mkp.ca.oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: r9N8OBfpZ7-ilhsZKWKt0uXn7K9VwUEn
-X-Proofpoint-ORIG-GUID: r9N8OBfpZ7-ilhsZKWKt0uXn7K9VwUEn
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <yq1mtfhrlrr.fsf@ca-mkp.ca.oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 6 May 2022 00:18:08 +0530, Sreekanth Reddy wrote:
-
-> Set each SCSI device's default IO timeout and
-> default error handling IO timeout to 60s.
+On 2022-05-16 21:28:51 [-0400], Martin K. Petersen wrote:
 > 
-> 
+> Sebastian,
+Hi Martin,
 
-Applied to 5.19/scsi-queue, thanks!
+> Applied to 5.19/scsi-staging, thanks!
 
-[1/1] mpi3mr: Increase IO timeout value to 60s
-      https://git.kernel.org/mkp/scsi/c/1aa529d40025
+Thank you.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Sebastian
