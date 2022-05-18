@@ -2,49 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DAF052BA42
-	for <lists+linux-scsi@lfdr.de>; Wed, 18 May 2022 14:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8776252BA76
+	for <lists+linux-scsi@lfdr.de>; Wed, 18 May 2022 14:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236408AbiERM0u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 18 May 2022 08:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S236897AbiERMan (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 18 May 2022 08:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236381AbiERM0s (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 18 May 2022 08:26:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DCF6A025;
-        Wed, 18 May 2022 05:26:47 -0700 (PDT)
+        with ESMTP id S236709AbiERM3S (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 18 May 2022 08:29:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB43C170675;
+        Wed, 18 May 2022 05:27:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0182361627;
-        Wed, 18 May 2022 12:26:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40075C34118;
-        Wed, 18 May 2022 12:26:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EF9E61610;
+        Wed, 18 May 2022 12:27:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8ADC34100;
+        Wed, 18 May 2022 12:27:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652876806;
-        bh=8QN6ZDxAXXalgKOCm82pX3l1ONLJOdJsMwDCWD9vdA4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hOUB6VALnL+eT0kOMTfwrGSsxnAS7UDByL5xy0WVQpCuQSGJKgINE7QXLk5seD2b5
-         2T3Qy5SMMF7avsZaFRzOAxYWycKPkl+WZi234p+3FVWvQqq/W0LVi2mLw0uFAJclNW
-         jJPq8ezD81iQ/cypWcpZGnQ6HbPn3agDTZQ5J65MbIs6+XQHTNHMFQr1nVzlEgt9Pz
-         r7nu+MWV445X4BeV2o5pzcpM5BB2OEECKv8zsuEzgs6DuIcYcVBX9KE0Zn1uKL+TKs
-         +FDDThpUy6dcvihqGg4RRZoKRw3pcJQx8o/mUUGjxNC4TLFPXQ5utn55/pA9bfbaA2
-         /Krncsbr0Kskg==
+        s=k20201202; t=1652876876;
+        bh=Q6WGn+T2IYOJX+pYvJtK4Xq4x5ALfQD1/9ZqxdvFrkU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HuTI6Uz//aFPyA8Z6jvOUA/F2E1YVjroJA8yMngxLg69X1DztYVoiH5ycJ1rOLyJI
+         X5ucyTU2Sw0RTiBzfNcEKmcJqF/FPXg9olOCXUrE6r+rFFmvo5y16wNpC8sWQMML0H
+         5cKDjOi5nHfxttgWgKuUw3Z6eody4i0XuXZSsO3M370k7Q6iEOV6v4ACAkrbnYRF79
+         c689G7prdPnESW7p9t1x76ugYHpCyTWc7S6BvYrGNYO3xC41cU9l1/F9asZRlnF+d0
+         uCGwkWUoGm06sBBvI3WyCHvZV/xdBI5ihbmFQgEScWEw7bCifWI1/t1RXK4Ko26bNH
+         50ASbj+/yEdbw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Gleb Chesnokov <Chesnokov.G@raidix.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
+Cc:     Brian Bunker <brian@purestorage.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Krishna Kant <krishna.kant@purestorage.com>,
+        Seamus Connor <sconnor@purestorage.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, njavali@marvell.com,
-        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
+        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
+        mwilck@suse.com, dan.carpenter@oracle.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 02/23] scsi: qla2xxx: Fix missed DMA unmap for aborted commands
-Date:   Wed, 18 May 2022 08:26:15 -0400
-Message-Id: <20220518122641.342120-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 01/17] scsi: scsi_dh_alua: Properly handle the ALUA transitioning state
+Date:   Wed, 18 May 2022 08:27:35 -0400
+Message-Id: <20220518122753.342758-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220518122641.342120-1-sashal@kernel.org>
-References: <20220518122641.342120-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,49 +59,57 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Gleb Chesnokov <Chesnokov.G@raidix.com>
+From: Brian Bunker <brian@purestorage.com>
 
-[ Upstream commit 26f9ce53817a8fd84b69a73473a7de852a24c897 ]
+[ Upstream commit 6056a92ceb2a7705d61df7ec5370548e96aee258 ]
 
-Aborting commands that have already been sent to the firmware can
-cause BUG in qlt_free_cmd(): BUG_ON(cmd->sg_mapped)
+The handling of the ALUA transitioning state is currently broken. When a
+target goes into this state, it is expected that the target is allowed to
+stay in this state for the implicit transition timeout without a path
+failure. The handler has this logic, but it gets skipped currently.
 
-For instance:
+When the target transitions, there is in-flight I/O from the initiator. The
+first of these responses from the target will be a unit attention letting
+the initiator know that the ALUA state has changed.  The remaining
+in-flight I/Os, before the initiator finds out that the portal state has
+changed, will return not ready, ALUA state is transitioning. The portal
+state will change to SCSI_ACCESS_STATE_TRANSITIONING. This will lead to all
+new I/O immediately failing the path unexpectedly. The path failure happens
+in less than a second instead of the expected successes until the
+transition timer is exceeded.
 
- - Command passes rdx_to_xfer state, maps sgl, sends to the firmware
+Allow I/Os to continue while the path is in the ALUA transitioning
+state. The handler already takes care of a target that stays in the
+transitioning state for too long by changing the state to ALUA state
+standby once the transition timeout is exceeded at which point the path
+will fail.
 
- - Reset occurs, qla2xxx performs ISP error recovery, aborts the command
-
- - Target stack calls qlt_abort_cmd() and then qlt_free_cmd()
-
- - BUG_ON(cmd->sg_mapped) in qlt_free_cmd() occurs because sgl was not
-   unmapped
-
-Thus, unmap sgl in qlt_abort_cmd() for commands with the aborted flag set.
-
-Link: https://lore.kernel.org/r/AS8PR10MB4952D545F84B6B1DFD39EC1E9DEE9@AS8PR10MB4952.EURPRD10.PROD.OUTLOOK.COM
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Gleb Chesnokov <Chesnokov.G@raidix.com>
+Link: https://lore.kernel.org/r/CAHZQxy+4sTPz9+pY3=7VJH+CLUJsDct81KtnR2be8ycN5mhqTg@mail.gmail.com
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Acked-by: Krishna Kant <krishna.kant@purestorage.com>
+Acked-by: Seamus Connor <sconnor@purestorage.com>
+Signed-off-by: Brian Bunker <brian@purestorage.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_target.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/scsi/device_handler/scsi_dh_alua.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index b109716d44fb..7ab3c9e4d478 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -3837,6 +3837,9 @@ int qlt_abort_cmd(struct qla_tgt_cmd *cmd)
- 
- 	spin_lock_irqsave(&cmd->cmd_lock, flags);
- 	if (cmd->aborted) {
-+		if (cmd->sg_mapped)
-+			qlt_unmap_sg(vha, cmd);
-+
- 		spin_unlock_irqrestore(&cmd->cmd_lock, flags);
- 		/*
- 		 * It's normal to see 2 calls in this path:
+diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
+index 37d06f993b76..1d9be771f3ee 100644
+--- a/drivers/scsi/device_handler/scsi_dh_alua.c
++++ b/drivers/scsi/device_handler/scsi_dh_alua.c
+@@ -1172,9 +1172,8 @@ static blk_status_t alua_prep_fn(struct scsi_device *sdev, struct request *req)
+ 	case SCSI_ACCESS_STATE_OPTIMAL:
+ 	case SCSI_ACCESS_STATE_ACTIVE:
+ 	case SCSI_ACCESS_STATE_LBA:
+-		return BLK_STS_OK;
+ 	case SCSI_ACCESS_STATE_TRANSITIONING:
+-		return BLK_STS_AGAIN;
++		return BLK_STS_OK;
+ 	default:
+ 		req->rq_flags |= RQF_QUIET;
+ 		return BLK_STS_IOERR;
 -- 
 2.35.1
 
