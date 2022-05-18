@@ -2,307 +2,167 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F79552CD3E
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 May 2022 09:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670C252CF0B
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 May 2022 11:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234381AbiESHhV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 May 2022 03:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
+        id S235828AbiESJKZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 May 2022 05:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiESHhT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 May 2022 03:37:19 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D379A7E22;
-        Thu, 19 May 2022 00:37:18 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id v65so5489939oig.10;
-        Thu, 19 May 2022 00:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v2SLSqGyEqCVCFyRJjJ1FWWgUfwr+NH72nZQlIiDXkE=;
-        b=WGH+dwO8se/FhSCRNeba5p0sFNVXE9263uBNF4pPqfMXnry5rIkoWqXyxpL05G1WrY
-         QpxdnWeESUL2Jcw7W14nVn/l0UsamZ+cLeNPpzInyI78mdma0Gqa6mPR9tSH91PqtKEe
-         d+F1slgbSCjdeKXdikIAyUP/P7nSmCCjYqk5UzVkJyM7k49wQ1ZUKOb145UGggRpKkmq
-         ww5c1wwpsiPAl7YyV2GRnKQFZQdOzanHh+pqPm+lTBYHCI22FGFFy3JmGBjpCyKQMJlc
-         LIv8+o8zZwSij2D7xzGuAqyCPY/9/aSLfrZTwnqvMyRptI1JbMZ6laihx3nCxyU2pg1z
-         Ndig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v2SLSqGyEqCVCFyRJjJ1FWWgUfwr+NH72nZQlIiDXkE=;
-        b=auZ/gpcvQDzMnqpTef0Y8LNDvx8o1M5BQasqsmAWNqVB2ke3KwBM6m8wuD5GMDOHfJ
-         T3nJ1CBX7p60DfKRM71c9a+cKp6EmipcfyDx28VUdU/+M4MMOkXffs9OczhsrQb8Cxhp
-         zlbS9w2O4Qek+pfRt3LY6yCUl8m1FtxtUuR2X8GPmAvQs8dVtMFlfM26JCkKs0B+oEY9
-         CicCD8LQpb9/sOUyJC2x7GfP984PB9FE23BJ0q9Qha7m1pWwu4C2QC/k9EJ66Mc+ctBo
-         JTf2pqE377BW+SNuzzKMagZst0O5rZJgTX5s8LbALEVSpErp5yn0XOPctc0mJZ8N0TUt
-         ar8w==
-X-Gm-Message-State: AOAM530GrcyI6COM1d0VJGcTRuRyCg1U9bqgMPq0LguWfWgF+bl/gDZx
-        4ey5qJOrDA0F3OL8ZQAkPKyhs89G3kQoxEmm7AoPq0HYwIo=
-X-Google-Smtp-Source: ABdhPJxItnrTnSxOkneZOHQL9ziiuGMoBB3E3m/OksHC5WeGBfxAGNmnO1Z75T1qIL7SU2nLEi+149x6QZzHgSL53EU=
-X-Received: by 2002:a05:6808:180d:b0:328:b7dc:d68b with SMTP id
- bh13-20020a056808180d00b00328b7dcd68bmr1988751oib.15.1652945837787; Thu, 19
- May 2022 00:37:17 -0700 (PDT)
+        with ESMTP id S235819AbiESJKX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 May 2022 05:10:23 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95BC4D614
+        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 02:10:20 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220519091014epoutp0440c58e6c1e25c0463d9d7ccc54c29abd~wdo3dCTxc1398413984epoutp04E
+        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 09:10:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220519091014epoutp0440c58e6c1e25c0463d9d7ccc54c29abd~wdo3dCTxc1398413984epoutp04E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1652951414;
+        bh=yubcOGk4qBi6F7AK2qNHCDaOxiRtu1ZlVFm1AAMU0xg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qxB0F0cknfBC3vPdDVAC8PpU76OHGL/xotEs6j9xPSMBQmGxV1FavIcD4Rp1mnKjK
+         90nQynLPpn+ffyTMqE5bkWLtkqXwbtxw2KC6Tp0/btBfGpWGsJOSkiOWb6QLfz9UI1
+         uuVpQGkue87n9n7xXrVUik7c0CfajlXZ7YlPV9wE=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220519091013epcas2p416d53e04b30074a096e59ca0f212ea54~wdo2kAvC31891518915epcas2p4d;
+        Thu, 19 May 2022 09:10:13 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.100]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4L3kb56xP8z4x9Px; Thu, 19 May
+        2022 09:10:09 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D9.2F.10028.07906826; Thu, 19 May 2022 18:10:08 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220519091007epcas2p2ba7cd404e9948ec4160f48cd83a995fa~wdowydnrZ3174631746epcas2p2Z;
+        Thu, 19 May 2022 09:10:07 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220519091007epsmtrp10cf908a2262ecf4b60e494f6890ad86d~wdowxmNml1347613476epsmtrp1H;
+        Thu, 19 May 2022 09:10:07 +0000 (GMT)
+X-AuditID: b6c32a47-589ff7000000272c-0f-62860970cb17
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9D.5F.11276.F6906826; Thu, 19 May 2022 18:10:07 +0900 (KST)
+Received: from rack03.dsn.sec.samsung.com (unknown [10.229.95.126]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220519091007epsmtip27852461bb84b16036f626c1d4545a560~wdowmbKLy2681426814epsmtip2d;
+        Thu, 19 May 2022 09:10:07 +0000 (GMT)
+From:   SEO HOYOUNG <hy50.seo@samsung.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        asutoshd@codeaurora.org, cang@codeaurora.org, bvanassche@acm.org,
+        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
+Cc:     SEO HOYOUNG <hy50.seo@samsung.com>
+Subject: [PATCH v1] scsi: ufs: Change the shutting_down flag setting
+ position
+Date:   Thu, 19 May 2022 05:52:01 +0900
+Message-Id: <20220518205201.58264-1-hy50.seo@samsung.com>
+X-Mailer: git-send-email 2.26.0
+In-Reply-To: <sc.suh@samsung.com;>
 MIME-Version: 1.0
-References: <20220517064901.3059255-1-hch@lst.de> <20220517064901.3059255-4-hch@lst.de>
-In-Reply-To: <20220517064901.3059255-4-hch@lst.de>
-From:   Kanchan Joshi <joshiiitr@gmail.com>
-Date:   Thu, 19 May 2022 13:06:51 +0530
-Message-ID: <CA+1E3rKZkP=Rekf0zA5wvewxzFEuBFqa0v2uH4wxcewz0beFSQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] blk-mq: remove the done argument to blk_execute_rq_nowait
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>, Ming Lei <ming.lei@redhat.com>,
-        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmuW4BZ1uSwcYb/BYP5m1js9jbdoLd
+        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1WL34AYvFohvbmCxubjnKYnF51xw2i+7rO9gs
+        lh//x+TA63H5irfH5b5eJo8Jiw4wenxf38Hm8fHpLRaPvi2rGD0+b5LzaD/QzRTAEZVtk5Ga
+        mJJapJCal5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0spJCWWJOKVAo
+        ILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLxArzgxt7g0L10vL7XEytDAwMgUqDAhO+Nft3JB
+        F3fFy00HWRoYF3F2MXJySAiYSNzo7GbrYuTiEBLYwSixsW0DK4TziVFi/dalUM43RokVPyey
+        wLRM/7cdzBYS2MsocaRJFaLoB6PElPmvmUESbAIaEmuOHWICSYgIrGCS6Nn0iQkkwSygJvH5
+        7jKwbmEBf4ltr/YDxTk4WARUJU6fFAUJ8wpYSpzeP5EdYpm8xKKG32CtnAJKEu9PvWWGqBGU
+        ODnzCQvESHmJ5q2zmUF2SQis5JA4d/oIG0Szi8S7b1NZIWxhiVfHt0ANlZJ42d8GZRdL/Hiz
+        mgmiuYFRYmn7MWaIhLHErGftjCDHMQtoSqzfpQ9iSggoSxy5BbWXT6Lj8F92iDCvREebEESj
+        ksSZubehwhISB2fnQJgeEg/XMEFCrVTixYU/jBMYFWYh+WUWkl9mIWxdwMi8ilEstaA4Nz21
+        2KjAGB67yfm5mxjByVfLfQfjjLcf9A4xMnEwHmKU4GBWEuFlzG1JEuJNSaysSi3Kjy8qzUkt
+        PsRoCgzoicxSosn5wPSfVxJvaGJpYGJmZmhuZGpgriTO65WyIVFIID2xJDU7NbUgtQimj4mD
+        U6qBKSMuZ/Er4wXTMi0laq22bHx8ev6Nk9tOsLmzbdwlMHlj0+enbN84v5m+rrYS2PW+LunU
+        kye/+RnDr/IcED/z6MthR5c23cCI8v9N/CIH1h92tblRlnbwZoZ71711yrrWTj3z+bydMw4I
+        v5lf+D3u43bj2tT+kjkZ/WlTn0sJvCt4Pu3eyeRkQd2yvT5SIoYzvT9JT5LumF1fuGSXwXrD
+        B20L5978UJV8NEVH4LTNrhzlcxa2QlM37dnt1fn4anSKiRp/x3PZT7qKy64Uxx8Wk3im8dQw
+        WSLTq43HVcJQaOPPucw9bFUzj/92OFnckM0Z/jzk2Sw/2ZpLPb2tsbI2FjtP5nUwz7c5fKrx
+        4zwuJZbijERDLeai4kQAuYR3akcEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrELMWRmVeSWpSXmKPExsWy7bCSvG4+Z1uSwc0DmhYP5m1js9jbdoLd
+        4uXPq2wWBx92slh8XfqM1WLah5/MFp/WL2O1WL34AYvFohvbmCxubjnKYnF51xw2i+7rO9gs
+        lh//x+TA63H5irfH5b5eJo8Jiw4wenxf38Hm8fHpLRaPvi2rGD0+b5LzaD/QzRTAEcVlk5Ka
+        k1mWWqRvl8CV8a9buaCLu+LlpoMsDYyLOLsYOTkkBEwkpv/bztLFyMUhJLCbUWLu5ptMEAkJ
+        if+Lm6BsYYn7LUdYIYq+MUqcXPmNFSTBJqAhsebYISaQhIjANiaJux9OsoEkmAXUJD7fXcYC
+        YgsL+Eoc+fwIKM7BwSKgKnH6pChImFfAUuL0/onsEAvkJRY1/AZbximgJPH+1FtmEFtIQFHi
+        29p1TBD1ghInZz5hgRgvL9G8dTbzBEaBWUhSs5CkFjAyrWKUTC0ozk3PLTYsMMxLLdcrTswt
+        Ls1L10vOz93ECI4WLc0djNtXfdA7xMjEwXiIUYKDWUmElzG3JUmINyWxsiq1KD++qDQntfgQ
+        ozQHi5I474Wuk/FCAumJJanZqakFqUUwWSYOTqkGJsGFu9hTVyuEm9osk9nA3l14MztlJnNm
+        fumsdR/WFu5o5dSMsep29Di9wt/1hO15tv3r/vQ2XJ/UeFDkHt8Kzok/5Xvz11crTN2WdKYo
+        Z89LzSmL488I7W884lliujEnOFLmuPfh6k7hdcJLS77O0fAw/d658Prk+AlsCyL7fp0TbK+z
+        Uf+a6zt3jfj1hQqby1mn7tZL7WS5vD90aZ3fh/fyL+3MI093FmUc3dewVp75yPJpT86dyX8R
+        ezzNcn+jXvfbuDs7P63yfsaaPv8x0+5lnyy2xokKdqqe1GjWn9CREv+3oVdR4bLCRZmJios3
+        MzkmZcaqCE+IUuPZs/215Pk89TXth9Vf+Xaxz332SomlOCPRUIu5qDgRAJ9CpnMFAwAA
+X-CMS-MailID: 20220519091007epcas2p2ba7cd404e9948ec4160f48cd83a995fa
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220519091007epcas2p2ba7cd404e9948ec4160f48cd83a995fa
+References: <sc.suh@samsung.com;>
+        <CGME20220519091007epcas2p2ba7cd404e9948ec4160f48cd83a995fa@epcas2p2.samsung.com>
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, May 17, 2022 at 12:27 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> Let the caller set it together with the end_io_data instead of passing
-> a pointless argument.  Note the the target code did in fact already
-> set it and then just overrode it again by calling blk_execute_rq_nowait.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  block/blk-mq.c                     |  5 +----
->  drivers/block/sx8.c                |  4 ++--
->  drivers/nvme/host/core.c           |  3 ++-
->  drivers/nvme/host/ioctl.c          |  3 ++-
->  drivers/nvme/host/pci.c            | 10 +++++++---
->  drivers/nvme/target/passthru.c     |  3 ++-
->  drivers/scsi/scsi_error.c          |  5 +++--
->  drivers/scsi/sg.c                  |  3 ++-
->  drivers/scsi/st.c                  |  3 ++-
->  drivers/scsi/ufs/ufshpb.c          |  6 ++++--
->  drivers/target/target_core_pscsi.c |  3 +--
->  include/linux/blk-mq.h             |  3 +--
->  12 files changed, 29 insertions(+), 22 deletions(-)
->
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index 0169b624edda1..c832011bc90dd 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -1189,7 +1189,6 @@ static void blk_add_rq_to_plug(struct blk_plug *plug, struct request *rq)
->   * blk_execute_rq_nowait - insert a request to I/O scheduler for execution
->   * @rq:                request to insert
->   * @at_head:    insert request at head or tail of queue
-> - * @done:      I/O completion handler
->   *
->   * Description:
->   *    Insert a fully prepared request at the back of the I/O scheduler queue
-> @@ -1198,13 +1197,11 @@ static void blk_add_rq_to_plug(struct blk_plug *plug, struct request *rq)
->   * Note:
->   *    This function will invoke @done directly if the queue is dead.
->   */
-> -void blk_execute_rq_nowait(struct request *rq, bool at_head, rq_end_io_fn *done)
-> +void blk_execute_rq_nowait(struct request *rq, bool at_head)
->  {
->         WARN_ON(irqs_disabled());
->         WARN_ON(!blk_rq_is_passthrough(rq));
->
-> -       rq->end_io = done;
-> -
->         blk_account_io_start(rq);
->         if (current->plug)
->                 blk_add_rq_to_plug(current->plug, rq);
-> diff --git a/drivers/block/sx8.c b/drivers/block/sx8.c
-> index b361583944b94..63b4f6431d2e6 100644
-> --- a/drivers/block/sx8.c
-> +++ b/drivers/block/sx8.c
-> @@ -540,7 +540,7 @@ static int carm_array_info (struct carm_host *host, unsigned int array_idx)
->         spin_unlock_irq(&host->lock);
->
->         DPRINTK("blk_execute_rq_nowait, tag == %u\n", rq->tag);
-> -       blk_execute_rq_nowait(rq, true, NULL);
-> +       blk_execute_rq_nowait(rq, true);
->
->         return 0;
->
-> @@ -579,7 +579,7 @@ static int carm_send_special (struct carm_host *host, carm_sspc_t func)
->         crq->msg_bucket = (u32) rc;
->
->         DPRINTK("blk_execute_rq_nowait, tag == %u\n", rq->tag);
-> -       blk_execute_rq_nowait(rq, true, NULL);
-> +       blk_execute_rq_nowait(rq, true);
->
->         return 0;
->  }
-> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-> index 510e3860358bb..22aa5780623da 100644
-> --- a/drivers/nvme/host/core.c
-> +++ b/drivers/nvme/host/core.c
-> @@ -1206,8 +1206,9 @@ static void nvme_keep_alive_work(struct work_struct *work)
->         nvme_init_request(rq, &ctrl->ka_cmd);
->
->         rq->timeout = ctrl->kato * HZ;
-> +       rq->end_io = nvme_keep_alive_end_io;
->         rq->end_io_data = ctrl;
-> -       blk_execute_rq_nowait(rq, false, nvme_keep_alive_end_io);
-> +       blk_execute_rq_nowait(rq, false);
->  }
->
->  static void nvme_start_keep_alive(struct nvme_ctrl *ctrl)
-> diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
-> index 7b0e2c9cdcae3..a92cc686ffbc0 100644
-> --- a/drivers/nvme/host/ioctl.c
-> +++ b/drivers/nvme/host/ioctl.c
-> @@ -453,6 +453,7 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
->                         blk_flags);
->         if (IS_ERR(req))
->                 return PTR_ERR(req);
-> +       req->end_io = nvme_uring_cmd_end_io;
->         req->end_io_data = ioucmd;
->
->         /* to free bio on completion, as req->bio will be null at that time */
-> @@ -461,7 +462,7 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
->         pdu->meta_buffer = nvme_to_user_ptr(d.metadata);
->         pdu->meta_len = d.metadata_len;
->
-> -       blk_execute_rq_nowait(req, 0, nvme_uring_cmd_end_io);
-> +       blk_execute_rq_nowait(req, false);
->         return -EIOCBQUEUED;
->  }
->
-> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-> index 3aacf1c0d5a5f..068dbb00c5ea9 100644
-> --- a/drivers/nvme/host/pci.c
-> +++ b/drivers/nvme/host/pci.c
-> @@ -1438,8 +1438,9 @@ static enum blk_eh_timer_return nvme_timeout(struct request *req, bool reserved)
->         }
->         nvme_init_request(abort_req, &cmd);
->
-> +       abort_req->end_io = abort_endio;
->         abort_req->end_io_data = NULL;
-> -       blk_execute_rq_nowait(abort_req, false, abort_endio);
-> +       blk_execute_rq_nowait(abort_req, false);
->
->         /*
->          * The aborted req will be completed on receiving the abort req.
-> @@ -2483,11 +2484,14 @@ static int nvme_delete_queue(struct nvme_queue *nvmeq, u8 opcode)
->                 return PTR_ERR(req);
->         nvme_init_request(req, &cmd);
->
-> +       if (opcode == nvme_admin_delete_cq)
-> +               req->end_io = nvme_del_cq_end;
-> +       else
-> +               req->end_io = nvme_del_queue_end;
->         req->end_io_data = nvmeq;
->
->         init_completion(&nvmeq->delete_done);
-> -       blk_execute_rq_nowait(req, false, opcode == nvme_admin_delete_cq ?
-> -                       nvme_del_cq_end : nvme_del_queue_end);
-> +       blk_execute_rq_nowait(req, false);
->         return 0;
->  }
->
-> diff --git a/drivers/nvme/target/passthru.c b/drivers/nvme/target/passthru.c
-> index 5247c24538eba..3cc4d6709c93c 100644
-> --- a/drivers/nvme/target/passthru.c
-> +++ b/drivers/nvme/target/passthru.c
-> @@ -285,8 +285,9 @@ static void nvmet_passthru_execute_cmd(struct nvmet_req *req)
->                 req->p.rq = rq;
->                 queue_work(nvmet_wq, &req->p.work);
->         } else {
-> +               rq->end_io = nvmet_passthru_req_done;
->                 rq->end_io_data = req;
-> -               blk_execute_rq_nowait(rq, false, nvmet_passthru_req_done);
-> +               blk_execute_rq_nowait(rq, false);
->         }
->
->         if (ns)
-> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-> index cdaca13ac1f1c..49ef864df5816 100644
-> --- a/drivers/scsi/scsi_error.c
-> +++ b/drivers/scsi/scsi_error.c
-> @@ -2039,12 +2039,13 @@ static void scsi_eh_lock_door(struct scsi_device *sdev)
->         scmd->cmnd[4] = SCSI_REMOVAL_PREVENT;
->         scmd->cmnd[5] = 0;
->         scmd->cmd_len = COMMAND_SIZE(scmd->cmnd[0]);
-> +       scmd->allowed = 5;
->
->         req->rq_flags |= RQF_QUIET;
->         req->timeout = 10 * HZ;
-> -       scmd->allowed = 5;
-> +       req->end_io = eh_lock_door_done;
->
-> -       blk_execute_rq_nowait(req, true, eh_lock_door_done);
-> +       blk_execute_rq_nowait(req, true);
->  }
->
->  /**
-> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-> index cbffa712b9f3e..118c7b4a8af2c 100644
-> --- a/drivers/scsi/sg.c
-> +++ b/drivers/scsi/sg.c
-> @@ -831,7 +831,8 @@ sg_common_write(Sg_fd * sfp, Sg_request * srp,
->
->         srp->rq->timeout = timeout;
->         kref_get(&sfp->f_ref); /* sg_rq_end_io() does kref_put(). */
-> -       blk_execute_rq_nowait(srp->rq, at_head, sg_rq_end_io);
-> +       srp->rq->end_io = sg_rq_end_io;
-> +       blk_execute_rq_nowait(srp->rq, at_head);
->         return 0;
->  }
->
-> diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-> index 56a093a90b922..850172a2b8f14 100644
-> --- a/drivers/scsi/st.c
-> +++ b/drivers/scsi/st.c
-> @@ -579,9 +579,10 @@ static int st_scsi_execute(struct st_request *SRpnt, const unsigned char *cmd,
->         memcpy(scmd->cmnd, cmd, scmd->cmd_len);
->         req->timeout = timeout;
->         scmd->allowed = retries;
-> +       req->end_io = st_scsi_execute_end;
->         req->end_io_data = SRpnt;
->
-> -       blk_execute_rq_nowait(req, true, st_scsi_execute_end);
-> +       blk_execute_rq_nowait(req, true);
->         return 0;
->  }
->
-> diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-> index 81099b68bbfbd..796a9773bf3de 100644
-> --- a/drivers/scsi/ufs/ufshpb.c
-> +++ b/drivers/scsi/ufs/ufshpb.c
-> @@ -671,11 +671,12 @@ static void ufshpb_execute_umap_req(struct ufshpb_lu *hpb,
->
->         req->timeout = 0;
->         req->end_io_data = umap_req;
-> +       req->end_io = ufshpb_umap_req_compl_fn;
->
->         ufshpb_set_unmap_cmd(scmd->cmnd, rgn);
->         scmd->cmd_len = HPB_WRITE_BUFFER_CMD_LENGTH;
->
-> -       blk_execute_rq_nowait(req, true, ufshpb_umap_req_compl_fn);
-> +       blk_execute_rq_nowait(req, true);
->
->         hpb->stats.umap_req_cnt++;
->  }
-> @@ -707,6 +708,7 @@ static int ufshpb_execute_map_req(struct ufshpb_lu *hpb,
->         blk_rq_append_bio(req, map_req->bio);
->
->         req->end_io_data = map_req;
-> +       req->end_io = ufshpb_map_req_compl_fn;
->
->         if (unlikely(last))
->                 mem_size = hpb->last_srgn_entries * HPB_ENTRY_SIZE;
-> @@ -716,7 +718,7 @@ static int ufshpb_execute_map_req(struct ufshpb_lu *hpb,
->                                 map_req->rb.srgn_idx, mem_size);
->         scmd->cmd_len = HPB_READ_BUFFER_CMD_LENGTH;
->
-> -       blk_execute_rq_nowait(req, true, ufshpb_map_req_compl_fn);
-> +       blk_execute_rq_nowait(req, true)
+When System shutdown, will called ufshcd_wl_shutdown().
+Then the shutting_down falg set to 1 at ufshcd_wl_shutdown().
+And send to SSU cmd at ufshcd_wl_shutdown()->__ufshcd_wl_suspend()->
+ufshcd_set_dev_pwr_mode() function.
 
-Missing semicolon here. Otherwise, looks good.
+If occurred fail during send SSU cmd,
+then will called ufshcd_err_handler for recovery.
+But already set shutting_down to 1, so ufs driver could not recovery.
+Then System wait for SSU cmd to be completed and
+eventaully it will take Hang.
+So changed the position where shutting_down is set.
 
-Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
+Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 1fb3a8b9b03e..65d47cd5afbe 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -9235,10 +9235,6 @@ static void ufshcd_wl_shutdown(struct device *dev)
+ 
+ 	hba = shost_priv(sdev->host);
+ 
+-	down(&hba->host_sem);
+-	hba->shutting_down = true;
+-	up(&hba->host_sem);
+-
+ 	/* Turn on everything while shutting down */
+ 	ufshcd_rpm_get_sync(hba);
+ 	scsi_device_quiesce(sdev);
+@@ -9248,6 +9244,10 @@ static void ufshcd_wl_shutdown(struct device *dev)
+ 		scsi_device_quiesce(sdev);
+ 	}
+ 	__ufshcd_wl_suspend(hba, UFS_SHUTDOWN_PM);
++
++	down(&hba->host_sem);
++	hba->shutting_down = true;
++	up(&hba->host_sem);
+ }
+ 
+ /**
+-- 
+2.26.0
+
