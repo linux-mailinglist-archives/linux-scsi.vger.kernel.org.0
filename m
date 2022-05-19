@@ -2,65 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B0A52D27E
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 May 2022 14:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1132B52D280
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 May 2022 14:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237870AbiESMbX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 May 2022 08:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
+        id S237939AbiESMba (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 May 2022 08:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233642AbiESMbT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 May 2022 08:31:19 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27D817E14
-        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 05:31:18 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so5114280pjq.2
-        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 05:31:18 -0700 (PDT)
+        with ESMTP id S237848AbiESMbV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 May 2022 08:31:21 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF2F1759F
+        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 05:31:20 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id q4so4644393plr.11
+        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 05:31:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=pJh8WirqYdswsr6jJeoDn4B+Kd+ShXKahHaQuAvRypI=;
-        b=I48Er1b4DLjS6Z232dl0eH/pWRliW1u0llXQoKt2YKIrR2mPL1G07U+1yyGULYL03X
-         gaQmbu56LElJsBA5SFIWLExbj2pw2U90+ZgSExDcJvYuS1mQ+J9HrOk5Y0kjlCEkCX1b
-         NFswGoOd7ZT77M6QjJzHqX3m9Zuy4DjHyvqP0j7mQg2e2uDVBp2RdBa7utolRrPSIadO
-         5FB946KjB2MwkazDUfXyqjq7I5mCNxahEeuk5Fs2WqbXnb0wKNOQMDxZb5TS9Qt8cVIX
-         s/HzONrlQfOHt1+5HpoN9OWdzHtXAB45n9Fu/GnAh8kaxOWkOfNQnQaxJaxaIrMDrNdS
-         4vng==
+        bh=kio7SQB6T9WafpqyDE1ABw14HZ6FvqJqlfJVTDttngc=;
+        b=cqVT1ZcSfTmh+Tnun/90BMpRWAOpMGLlkdnApzjVKB3o9+vbE6GjiNTy57cMTWGfCg
+         YwK5R8pEtwt8iim8F6qBdz+iHJUhCe0JsvOqNMomQqbX5014OR8GbyRbWaLF0F/jjHhz
+         VtmTVBX7bPupJNAxWhEdnoAC7PC1mamuirS04Ti++xf1YcpSJr9kpJt3v/PfdS9iLatR
+         0f47R9Ray7Uj5H7iovZj9lxBegL50QpOYG+rU46MXrt2ngjNyUcPdNjRaSsYJTmZEiNp
+         15A3slDmH3VkLIy4yErw83z1w1e/KatmpZbonAjs/eKWa8VsRYdnB3rze+ddBd14NK6H
+         JAOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pJh8WirqYdswsr6jJeoDn4B+Kd+ShXKahHaQuAvRypI=;
-        b=6BHec57pcfBJqWBDr1prYJ9u4WcVxstSfOiWwI6Wci8Vg5E/60MqAOLcox+6QjYJV6
-         97rc69VWfEXMCVGkLuSa0khBBSSOegbhzmcJE+jg6ACvFsyAhar8pmZpJBMccQmoDC1F
-         Ene4EX8kNg99kvQ6MEDdxmH9OF2R1LDIv55rdYtNZOuYRoD8DWYPpw2MVNK5NG1ogMRp
-         yUY7ba+Ln8zxDFokXezq6yjNjMY50ovSfEcK7Sax2AA2kQbJwD1OfLvVotK4pDNsjXPO
-         dlMCO9IXaqpcpVl9dIUa9PDvq+B8HKoAIfS14TjgeqMuMbu8+h6Yt0uwk5/C7RgGLqpF
-         wV9A==
-X-Gm-Message-State: AOAM532B73dp05lLFLq4NlT9QNBcGIwdWau0X9jtWatPYQOcNaMqh/Gi
-        pM6Qo6eaFSJkQOf7kssftRMygBE8Ki8=
-X-Google-Smtp-Source: ABdhPJxNi7FvNHdc4YZSS4PGsSI1lYhbd+Y1WfueXs4BVYi6nQbBbUfCs/La6G4+Oa6xF89XzGxuRA==
-X-Received: by 2002:a17:903:210:b0:15e:f139:f901 with SMTP id r16-20020a170903021000b0015ef139f901mr4758992plh.66.1652963478179;
-        Thu, 19 May 2022 05:31:18 -0700 (PDT)
+        bh=kio7SQB6T9WafpqyDE1ABw14HZ6FvqJqlfJVTDttngc=;
+        b=lrhZioIC1znrXPzs4VnrNKb3rJF7KG6r0OMT3LLQlP4yEfYmpW6j5mdCEwuVTr3UDZ
+         5k8FCwBAr11MarYMLiTA/NzAeb/nP6Y0Fv9ctLo/y9rAj73M+W6iUOg/+tdYIavF5gNe
+         ybG2/5OlfNHBAA+jyCxF5/2HjnxQ0sb9kN7xx6TFey608AJM32g2/k4OJBh3bWsARFgU
+         DVD2Rwg6l1eVkWopAq/pjOiPnpttJhSfhGfuVJU5xeX93LM0UQPH2t2NSbErZIy5ZNSy
+         B1ONw6SgI3uMhG+I/vDB36LRShi8fEXoeChQ8BHUEVZw8MNfwQcms00LC23TQlVzHwyx
+         7FQQ==
+X-Gm-Message-State: AOAM532WoOFUgr7iqpBohy11ckqJL2Qw4HXAC72+PitSoNi7crHEk5wZ
+        kAb5+Mc8V6VOZfApKBS/X13gBA+imyg=
+X-Google-Smtp-Source: ABdhPJwiY6+J4VB+82SPX6SJcC5YzIv1thh5onQSAe08WmMI7aj7Z15eRTkD1/iyIbLo3CI6gIXymA==
+X-Received: by 2002:a17:903:2285:b0:161:c7ed:38f2 with SMTP id b5-20020a170903228500b00161c7ed38f2mr4436098plh.49.1652963479107;
+        Thu, 19 May 2022 05:31:19 -0700 (PDT)
 Received: from mail-lvn-it-01.broadcom.com (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id z26-20020aa79e5a000000b005180f4733a8sm3581797pfq.106.2022.05.19.05.31.17
+        by smtp.gmail.com with ESMTPSA id z26-20020aa79e5a000000b005180f4733a8sm3581797pfq.106.2022.05.19.05.31.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 05:31:17 -0700 (PDT)
+        Thu, 19 May 2022 05:31:18 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
-Cc:     Muneendra <muneendra.kumar@broadcom.com>,
-        James Smart <jsmart2021@gmail.com>,
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Gaurav Srivastava <gaurav.srivastava@broadcom.com>,
         Hannes Reinecke <hare@suse.de>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v2 1/4] nvme-fc: Add new routine nvme_fc_io_getuuid
-Date:   Thu, 19 May 2022 05:31:07 -0700
-Message-Id: <20220519123110.17361-2-jsmart2021@gmail.com>
+        Himanshu Madhani <himanshu.madhani@oracle.com>
+Subject: [PATCH v2 2/4] lpfc: commonize VMID code location
+Date:   Thu, 19 May 2022 05:31:08 -0700
+Message-Id: <20220519123110.17361-3-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220519123110.17361-1-jsmart2021@gmail.com>
 References: <20220519123110.17361-1-jsmart2021@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -72,90 +72,612 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Muneendra <muneendra.kumar@broadcom.com>
+Remove VMID code from its scsi-specific location and move to a new
+file solely for VMID code.
 
-Add nvme_fc_io_getuuid() to the nvme-fc transport.
-The routine is invoked by the fc LLDD on a per-io request basis.
-The routine translates from the fc-specific request structure to
-the bio and the cgroup structure in order to obtain the fc appid
-stored in the cgroup structure. If a value is not set or a bio
-is not found, a NULL appid (aka uuid) will be returned to the LLDD.
-
-Signed-off-by: Muneendra Kumar <muneendra.kumar@broadcom.com>
+Signed-off-by: Gaurav Srivastava <gaurav.srivastava@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Acked-by: Christoph Hellwig <hch@lst.de>
-
 ---
-v2: modify to sync with Christoph's patch:
- blk-cgroup: move blkcg_{get,set}_fc_appid out of line
- commit db05628435aa
----
- drivers/nvme/host/fc.c         | 18 ++++++++++++++++++
- include/linux/nvme-fc-driver.h | 14 ++++++++++++++
- 2 files changed, 32 insertions(+)
+ drivers/scsi/lpfc/Makefile    |   2 +-
+ drivers/scsi/lpfc/lpfc_crtn.h |   2 +
+ drivers/scsi/lpfc/lpfc_scsi.c | 256 ------------------------------
+ drivers/scsi/lpfc/lpfc_vmid.c | 288 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 291 insertions(+), 257 deletions(-)
+ create mode 100644 drivers/scsi/lpfc/lpfc_vmid.c
 
-diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
-index 080f85f4105f..05f9da251758 100644
---- a/drivers/nvme/host/fc.c
-+++ b/drivers/nvme/host/fc.c
-@@ -1899,6 +1899,24 @@ nvme_fc_ctrl_ioerr_work(struct work_struct *work)
- 	nvme_fc_error_recovery(ctrl, "transport detected io error");
+diff --git a/drivers/scsi/lpfc/Makefile b/drivers/scsi/lpfc/Makefile
+index 092a971d066b..bbd1faf41e80 100644
+--- a/drivers/scsi/lpfc/Makefile
++++ b/drivers/scsi/lpfc/Makefile
+@@ -33,4 +33,4 @@ obj-$(CONFIG_SCSI_LPFC) := lpfc.o
+ lpfc-objs := lpfc_mem.o lpfc_sli.o lpfc_ct.o lpfc_els.o \
+ 	lpfc_hbadisc.o	lpfc_init.o lpfc_mbox.o lpfc_nportdisc.o   \
+ 	lpfc_scsi.o lpfc_attr.o lpfc_vport.o lpfc_debugfs.o lpfc_bsg.o \
+-	lpfc_nvme.o lpfc_nvmet.o
++	lpfc_nvme.o lpfc_nvmet.o lpfc_vmid.o
+diff --git a/drivers/scsi/lpfc/lpfc_crtn.h b/drivers/scsi/lpfc/lpfc_crtn.h
+index b0775be31d5c..913844f01bf5 100644
+--- a/drivers/scsi/lpfc/lpfc_crtn.h
++++ b/drivers/scsi/lpfc/lpfc_crtn.h
+@@ -671,6 +671,8 @@ int lpfc_vmid_cmd(struct lpfc_vport *vport,
+ int lpfc_vmid_hash_fn(const char *vmid, int len);
+ struct lpfc_vmid *lpfc_get_vmid_from_hashtable(struct lpfc_vport *vport,
+ 					      uint32_t hash, uint8_t *buf);
++int lpfc_vmid_get_appid(struct lpfc_vport *vport, char *uuid, struct
++			       scsi_cmnd * cmd, union lpfc_vmid_io_tag *tag);
+ void lpfc_vmid_vport_cleanup(struct lpfc_vport *vport);
+ int lpfc_issue_els_qfpa(struct lpfc_vport *vport);
+ 
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index 1d134a01ff3e..70d0a4d3d92e 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -87,14 +87,6 @@ static void
+ lpfc_release_scsi_buf_s3(struct lpfc_hba *phba, struct lpfc_io_buf *psb);
+ static int
+ lpfc_prot_group_type(struct lpfc_hba *phba, struct scsi_cmnd *sc);
+-static void
+-lpfc_put_vmid_in_hashtable(struct lpfc_vport *vport, u32 hash,
+-			   struct lpfc_vmid *vmp);
+-static void lpfc_vmid_update_entry(struct lpfc_vport *vport, struct scsi_cmnd
+-				   *cmd, struct lpfc_vmid *vmp,
+-				   union lpfc_vmid_io_tag *tag);
+-static void lpfc_vmid_assign_cs_ctl(struct lpfc_vport *vport,
+-				    struct lpfc_vmid *vmid);
+ 
+ /**
+  * lpfc_sli4_set_rsp_sgl_last - Set the last bit in the response sge.
+@@ -5270,254 +5262,6 @@ void lpfc_poll_timeout(struct timer_list *t)
+ 	}
  }
  
-+/*
-+ * nvme_fc_io_getuuid - Routine called to get the appid field
-+ * associated with request by the lldd
-+ * @req:IO request from nvme fc to driver
-+ * Returns: UUID if there is an appid associated with VM or
-+ * NULL if the user/libvirt has not set the appid to VM
-+ */
-+char *nvme_fc_io_getuuid(struct nvmefc_fcp_req *req)
-+{
-+	struct nvme_fc_fcp_op *op = fcp_req_to_fcp_op(req);
-+	struct request *rq = op->rq;
-+
-+	if (!IS_ENABLED(CONFIG_BLK_CGROUP_FC_APPID) || !rq->bio)
-+		return NULL;
-+	return blkcg_get_fc_appid(rq->bio);
-+}
-+EXPORT_SYMBOL_GPL(nvme_fc_io_getuuid);
-+
- static void
- nvme_fc_fcpio_done(struct nvmefc_fcp_req *req)
- {
-diff --git a/include/linux/nvme-fc-driver.h b/include/linux/nvme-fc-driver.h
-index 5358a5facdee..fa092b9be2fd 100644
---- a/include/linux/nvme-fc-driver.h
-+++ b/include/linux/nvme-fc-driver.h
-@@ -564,6 +564,15 @@ int nvme_fc_rcv_ls_req(struct nvme_fc_remote_port *remoteport,
- 			void *lsreqbuf, u32 lsreqbuf_len);
- 
- 
-+/*
-+ * Routine called to get the appid field associated with request by the lldd
-+ *
-+ * If the return value is NULL : the user/libvirt has not set the appid to VM
-+ * If the return value is non-zero: Returns the appid associated with VM
-+ *
-+ * @req: IO request from nvme fc to driver
-+ */
-+char *nvme_fc_io_getuuid(struct nvmefc_fcp_req *req);
- 
+-/*
+- * lpfc_get_vmid_from_hashtable - search the UUID in the hash table
+- * @vport: The virtual port for which this call is being executed.
+- * @hash: calculated hash value
+- * @buf: uuid associated with the VE
+- * Return the VMID entry associated with the UUID
+- * Make sure to acquire the appropriate lock before invoking this routine.
+- */
+-struct lpfc_vmid *lpfc_get_vmid_from_hashtable(struct lpfc_vport *vport,
+-					      u32 hash, u8 *buf)
+-{
+-	struct lpfc_vmid *vmp;
+-
+-	hash_for_each_possible(vport->hash_table, vmp, hnode, hash) {
+-		if (memcmp(&vmp->host_vmid[0], buf, 16) == 0)
+-			return vmp;
+-	}
+-	return NULL;
+-}
+-
+-/*
+- * lpfc_put_vmid_in_hashtable - put the VMID in the hash table
+- * @vport: The virtual port for which this call is being executed.
+- * @hash - calculated hash value
+- * @vmp: Pointer to a VMID entry representing a VM sending I/O
+- *
+- * This routine will insert the newly acquired VMID entity in the hash table.
+- * Make sure to acquire the appropriate lock before invoking this routine.
+- */
+-static void
+-lpfc_put_vmid_in_hashtable(struct lpfc_vport *vport, u32 hash,
+-			   struct lpfc_vmid *vmp)
+-{
+-	hash_add(vport->hash_table, &vmp->hnode, hash);
+-}
+-
+-/*
+- * lpfc_vmid_hash_fn - create a hash value of the UUID
+- * @vmid: uuid associated with the VE
+- * @len: length of the VMID string
+- * Returns the calculated hash value
+- */
+-int lpfc_vmid_hash_fn(const char *vmid, int len)
+-{
+-	int c;
+-	int hash = 0;
+-
+-	if (len == 0)
+-		return 0;
+-	while (len--) {
+-		c = *vmid++;
+-		if (c >= 'A' && c <= 'Z')
+-			c += 'a' - 'A';
+-
+-		hash = (hash + (c << LPFC_VMID_HASH_SHIFT) +
+-			(c >> LPFC_VMID_HASH_SHIFT)) * 19;
+-	}
+-
+-	return hash & LPFC_VMID_HASH_MASK;
+-}
+-
+-/*
+- * lpfc_vmid_update_entry - update the vmid entry in the hash table
+- * @vport: The virtual port for which this call is being executed.
+- * @cmd: address of scsi cmd descriptor
+- * @vmp: Pointer to a VMID entry representing a VM sending I/O
+- * @tag: VMID tag
+- */
+-static void lpfc_vmid_update_entry(struct lpfc_vport *vport, struct scsi_cmnd
+-				   *cmd, struct lpfc_vmid *vmp,
+-				   union lpfc_vmid_io_tag *tag)
+-{
+-	u64 *lta;
+-
+-	if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO)
+-		tag->cs_ctl_vmid = vmp->un.cs_ctl_vmid;
+-	else if (vport->phba->cfg_vmid_app_header)
+-		tag->app_id = vmp->un.app_id;
+-
+-	if (cmd->sc_data_direction == DMA_TO_DEVICE)
+-		vmp->io_wr_cnt++;
+-	else
+-		vmp->io_rd_cnt++;
+-
+-	/* update the last access timestamp in the table */
+-	lta = per_cpu_ptr(vmp->last_io_time, raw_smp_processor_id());
+-	*lta = jiffies;
+-}
+-
+-static void lpfc_vmid_assign_cs_ctl(struct lpfc_vport *vport,
+-				    struct lpfc_vmid *vmid)
+-{
+-	u32 hash;
+-	struct lpfc_vmid *pvmid;
+-
+-	if (vport->port_type == LPFC_PHYSICAL_PORT) {
+-		vmid->un.cs_ctl_vmid = lpfc_vmid_get_cs_ctl(vport);
+-	} else {
+-		hash = lpfc_vmid_hash_fn(vmid->host_vmid, vmid->vmid_len);
+-		pvmid =
+-		    lpfc_get_vmid_from_hashtable(vport->phba->pport, hash,
+-						vmid->host_vmid);
+-		if (pvmid)
+-			vmid->un.cs_ctl_vmid = pvmid->un.cs_ctl_vmid;
+-		else
+-			vmid->un.cs_ctl_vmid = lpfc_vmid_get_cs_ctl(vport);
+-	}
+-}
+-
+-/*
+- * lpfc_vmid_get_appid - get the VMID associated with the UUID
+- * @vport: The virtual port for which this call is being executed.
+- * @uuid: UUID associated with the VE
+- * @cmd: address of scsi_cmd descriptor
+- * @tag: VMID tag
+- * Returns status of the function
+- */
+-static int lpfc_vmid_get_appid(struct lpfc_vport *vport, char *uuid, struct
+-			       scsi_cmnd * cmd, union lpfc_vmid_io_tag *tag)
+-{
+-	struct lpfc_vmid *vmp = NULL;
+-	int hash, len, rc = -EPERM, i;
+-
+-	/* check if QFPA is complete */
+-	if (lpfc_vmid_is_type_priority_tag(vport) &&
+-	    !(vport->vmid_flag & LPFC_VMID_QFPA_CMPL) &&
+-	    (vport->vmid_flag & LPFC_VMID_ISSUE_QFPA)) {
+-		vport->work_port_events |= WORKER_CHECK_VMID_ISSUE_QFPA;
+-		return -EAGAIN;
+-	}
+-
+-	/* search if the UUID has already been mapped to the VMID */
+-	len = strlen(uuid);
+-	hash = lpfc_vmid_hash_fn(uuid, len);
+-
+-	/* search for the VMID in the table */
+-	read_lock(&vport->vmid_lock);
+-	vmp = lpfc_get_vmid_from_hashtable(vport, hash, uuid);
+-
+-	/* if found, check if its already registered  */
+-	if (vmp  && vmp->flag & LPFC_VMID_REGISTERED) {
+-		read_unlock(&vport->vmid_lock);
+-		lpfc_vmid_update_entry(vport, cmd, vmp, tag);
+-		rc = 0;
+-	} else if (vmp && (vmp->flag & LPFC_VMID_REQ_REGISTER ||
+-			   vmp->flag & LPFC_VMID_DE_REGISTER)) {
+-		/* else if register or dereg request has already been sent */
+-		/* Hence VMID tag will not be added for this I/O */
+-		read_unlock(&vport->vmid_lock);
+-		rc = -EBUSY;
+-	} else {
+-		/* The VMID was not found in the hashtable. At this point, */
+-		/* drop the read lock first before proceeding further */
+-		read_unlock(&vport->vmid_lock);
+-		/* start the process to obtain one as per the */
+-		/* type of the VMID indicated */
+-		write_lock(&vport->vmid_lock);
+-		vmp = lpfc_get_vmid_from_hashtable(vport, hash, uuid);
+-
+-		/* while the read lock was released, in case the entry was */
+-		/* added by other context or is in process of being added */
+-		if (vmp && vmp->flag & LPFC_VMID_REGISTERED) {
+-			lpfc_vmid_update_entry(vport, cmd, vmp, tag);
+-			write_unlock(&vport->vmid_lock);
+-			return 0;
+-		} else if (vmp && vmp->flag & LPFC_VMID_REQ_REGISTER) {
+-			write_unlock(&vport->vmid_lock);
+-			return -EBUSY;
+-		}
+-
+-		/* else search and allocate a free slot in the hash table */
+-		if (vport->cur_vmid_cnt < vport->max_vmid) {
+-			for (i = 0; i < vport->max_vmid; i++) {
+-				vmp = vport->vmid + i;
+-				if (vmp->flag == LPFC_VMID_SLOT_FREE)
+-					break;
+-			}
+-			if (i == vport->max_vmid)
+-				vmp = NULL;
+-		} else {
+-			vmp = NULL;
+-		}
+-
+-		if (!vmp) {
+-			write_unlock(&vport->vmid_lock);
+-			return -ENOMEM;
+-		}
+-
+-		/* Add the vmid and register */
+-		lpfc_put_vmid_in_hashtable(vport, hash, vmp);
+-		vmp->vmid_len = len;
+-		memcpy(vmp->host_vmid, uuid, vmp->vmid_len);
+-		vmp->io_rd_cnt = 0;
+-		vmp->io_wr_cnt = 0;
+-		vmp->flag = LPFC_VMID_SLOT_USED;
+-
+-		vmp->delete_inactive =
+-			vport->vmid_inactivity_timeout ? 1 : 0;
+-
+-		/* if type priority tag, get next available VMID */
+-		if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO)
+-			lpfc_vmid_assign_cs_ctl(vport, vmp);
+-
+-		/* allocate the per cpu variable for holding */
+-		/* the last access time stamp only if VMID is enabled */
+-		if (!vmp->last_io_time)
+-			vmp->last_io_time = __alloc_percpu(sizeof(u64),
+-							   __alignof__(struct
+-							   lpfc_vmid));
+-		if (!vmp->last_io_time) {
+-			hash_del(&vmp->hnode);
+-			vmp->flag = LPFC_VMID_SLOT_FREE;
+-			write_unlock(&vport->vmid_lock);
+-			return -EIO;
+-		}
+-
+-		write_unlock(&vport->vmid_lock);
+-
+-		/* complete transaction with switch */
+-		if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO)
+-			rc = lpfc_vmid_uvem(vport, vmp, true);
+-		else if (vport->phba->cfg_vmid_app_header)
+-			rc = lpfc_vmid_cmd(vport, SLI_CTAS_RAPP_IDENT, vmp);
+-		if (!rc) {
+-			write_lock(&vport->vmid_lock);
+-			vport->cur_vmid_cnt++;
+-			vmp->flag |= LPFC_VMID_REQ_REGISTER;
+-			write_unlock(&vport->vmid_lock);
+-		} else {
+-			write_lock(&vport->vmid_lock);
+-			hash_del(&vmp->hnode);
+-			vmp->flag = LPFC_VMID_SLOT_FREE;
+-			free_percpu(vmp->last_io_time);
+-			write_unlock(&vport->vmid_lock);
+-			return -EIO;
+-		}
+-
+-		/* finally, enable the idle timer once */
+-		if (!(vport->phba->pport->vmid_flag & LPFC_VMID_TIMER_ENBLD)) {
+-			mod_timer(&vport->phba->inactive_vmid_poll,
+-				  jiffies +
+-				  msecs_to_jiffies(1000 * LPFC_VMID_TIMER));
+-			vport->phba->pport->vmid_flag |= LPFC_VMID_TIMER_ENBLD;
+-		}
+-	}
+-	return rc;
+-}
+-
  /*
-  * ***************  LLDD FC-NVME Target/Subsystem API ***************
-@@ -1048,5 +1057,10 @@ int nvmet_fc_rcv_fcp_req(struct nvmet_fc_target_port *tgtport,
- 
- void nvmet_fc_rcv_fcp_abort(struct nvmet_fc_target_port *tgtport,
- 			struct nvmefc_tgt_fcp_req *fcpreq);
+  * lpfc_is_command_vm_io - get the UUID from blk cgroup
+  * @cmd: Pointer to scsi_cmnd data structure
+diff --git a/drivers/scsi/lpfc/lpfc_vmid.c b/drivers/scsi/lpfc/lpfc_vmid.c
+new file mode 100644
+index 000000000000..f64ced04b912
+--- /dev/null
++++ b/drivers/scsi/lpfc/lpfc_vmid.c
+@@ -0,0 +1,288 @@
++/*******************************************************************
++ * This file is part of the Emulex Linux Device Driver for         *
++ * Fibre Channel Host Bus Adapters.                                *
++ * Copyright (C) 2017-2022 Broadcom. All Rights Reserved. The term *
++ * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
++ * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
++ * EMULEX and SLI are trademarks of Emulex.                        *
++ * www.broadcom.com                                                *
++ * Portions Copyright (C) 2004-2005 Christoph Hellwig              *
++ *                                                                 *
++ * This program is free software; you can redistribute it and/or   *
++ * modify it under the terms of version 2 of the GNU General       *
++ * Public License as published by the Free Software Foundation.    *
++ * This program is distributed in the hope that it will be useful. *
++ * ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND          *
++ * WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,  *
++ * FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT, ARE      *
++ * DISCLAIMED, EXCEPT TO THE EXTENT THAT SUCH DISCLAIMERS ARE HELD *
++ * TO BE LEGALLY INVALID.  See the GNU General Public License for  *
++ * more details, a copy of which can be found in the file COPYING  *
++ * included with this package.                                     *
++ *******************************************************************/
++
++#include <linux/interrupt.h>
++#include <linux/dma-direction.h>
++
++#include <scsi/scsi_transport_fc.h>
++
++#include "lpfc_hw4.h"
++#include "lpfc_hw.h"
++#include "lpfc_sli.h"
++#include "lpfc_sli4.h"
++#include "lpfc_nl.h"
++#include "lpfc_disc.h"
++#include "lpfc.h"
++#include "lpfc_crtn.h"
++
++
 +/*
-+ * add a define, visible to the compiler, that indicates support
-+ * for feature. Allows for conditional compilation in LLDDs.
++ * lpfc_get_vmid_from_hashtable - search the UUID in the hash table
++ * @vport: The virtual port for which this call is being executed.
++ * @hash: calculated hash value
++ * @buf: uuid associated with the VE
++ * Return the VMID entry associated with the UUID
++ * Make sure to acquire the appropriate lock before invoking this routine.
 + */
-+#define NVME_FC_FEAT_UUID	0x0001
- 
- #endif /* _NVME_FC_DRIVER_H */
++struct lpfc_vmid *lpfc_get_vmid_from_hashtable(struct lpfc_vport *vport,
++					       u32 hash, u8 *buf)
++{
++	struct lpfc_vmid *vmp;
++
++	hash_for_each_possible(vport->hash_table, vmp, hnode, hash) {
++		if (memcmp(&vmp->host_vmid[0], buf, 16) == 0)
++			return vmp;
++	}
++	return NULL;
++}
++
++/*
++ * lpfc_put_vmid_in_hashtable - put the VMID in the hash table
++ * @vport: The virtual port for which this call is being executed.
++ * @hash - calculated hash value
++ * @vmp: Pointer to a VMID entry representing a VM sending I/O
++ *
++ * This routine will insert the newly acquired VMID entity in the hash table.
++ * Make sure to acquire the appropriate lock before invoking this routine.
++ */
++static void
++lpfc_put_vmid_in_hashtable(struct lpfc_vport *vport, u32 hash,
++			   struct lpfc_vmid *vmp)
++{
++	hash_add(vport->hash_table, &vmp->hnode, hash);
++}
++
++/*
++ * lpfc_vmid_hash_fn - create a hash value of the UUID
++ * @vmid: uuid associated with the VE
++ * @len: length of the VMID string
++ * Returns the calculated hash value
++ */
++int lpfc_vmid_hash_fn(const char *vmid, int len)
++{
++	int c;
++	int hash = 0;
++
++	if (len == 0)
++		return 0;
++	while (len--) {
++		c = *vmid++;
++		if (c >= 'A' && c <= 'Z')
++			c += 'a' - 'A';
++
++		hash = (hash + (c << LPFC_VMID_HASH_SHIFT) +
++			(c >> LPFC_VMID_HASH_SHIFT)) * 19;
++	}
++
++	return hash & LPFC_VMID_HASH_MASK;
++}
++
++/*
++ * lpfc_vmid_update_entry - update the vmid entry in the hash table
++ * @vport: The virtual port for which this call is being executed.
++ * @iodir: io direction
++ * @vmp: Pointer to a VMID entry representing a VM sending I/O
++ * @tag: VMID tag
++ */
++static void lpfc_vmid_update_entry(struct lpfc_vport *vport,
++				   enum dma_data_direction iodir,
++				   struct lpfc_vmid *vmp,
++				   union lpfc_vmid_io_tag *tag)
++{
++	u64 *lta;
++
++	if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO)
++		tag->cs_ctl_vmid = vmp->un.cs_ctl_vmid;
++	else if (vport->phba->cfg_vmid_app_header)
++		tag->app_id = vmp->un.app_id;
++
++	if (iodir == DMA_TO_DEVICE)
++		vmp->io_wr_cnt++;
++	else if (iodir == DMA_FROM_DEVICE)
++		vmp->io_rd_cnt++;
++
++	/* update the last access timestamp in the table */
++	lta = per_cpu_ptr(vmp->last_io_time, raw_smp_processor_id());
++	*lta = jiffies;
++}
++
++static void lpfc_vmid_assign_cs_ctl(struct lpfc_vport *vport,
++				    struct lpfc_vmid *vmid)
++{
++	u32 hash;
++	struct lpfc_vmid *pvmid;
++
++	if (vport->port_type == LPFC_PHYSICAL_PORT) {
++		vmid->un.cs_ctl_vmid = lpfc_vmid_get_cs_ctl(vport);
++	} else {
++		hash = lpfc_vmid_hash_fn(vmid->host_vmid, vmid->vmid_len);
++		pvmid =
++		    lpfc_get_vmid_from_hashtable(vport->phba->pport, hash,
++						 vmid->host_vmid);
++		if (pvmid)
++			vmid->un.cs_ctl_vmid = pvmid->un.cs_ctl_vmid;
++		else
++			vmid->un.cs_ctl_vmid = lpfc_vmid_get_cs_ctl(vport);
++	}
++}
++
++/*
++ * lpfc_vmid_get_appid - get the VMID associated with the UUID
++ * @vport: The virtual port for which this call is being executed.
++ * @uuid: UUID associated with the VE
++ * @cmd: address of scsi_cmd descriptor
++ * @iodir: io direction
++ * @tag: VMID tag
++ * Returns status of the function
++ */
++int lpfc_vmid_get_appid(struct lpfc_vport *vport, char *uuid,
++			enum dma_data_direction iodir,
++			union lpfc_vmid_io_tag *tag)
++{
++	struct lpfc_vmid *vmp = NULL;
++	int hash, len, rc = -EPERM, i;
++
++	/* check if QFPA is complete */
++	if (lpfc_vmid_is_type_priority_tag(vport) &&
++	    !(vport->vmid_flag & LPFC_VMID_QFPA_CMPL) &&
++	    (vport->vmid_flag & LPFC_VMID_ISSUE_QFPA)) {
++		vport->work_port_events |= WORKER_CHECK_VMID_ISSUE_QFPA;
++		return -EAGAIN;
++	}
++
++	/* search if the UUID has already been mapped to the VMID */
++	len = strlen(uuid);
++	hash = lpfc_vmid_hash_fn(uuid, len);
++
++	/* search for the VMID in the table */
++	read_lock(&vport->vmid_lock);
++	vmp = lpfc_get_vmid_from_hashtable(vport, hash, uuid);
++
++	/* if found, check if its already registered  */
++	if (vmp  && vmp->flag & LPFC_VMID_REGISTERED) {
++		read_unlock(&vport->vmid_lock);
++		lpfc_vmid_update_entry(vport, iodir, vmp, tag);
++		rc = 0;
++	} else if (vmp && (vmp->flag & LPFC_VMID_REQ_REGISTER ||
++			   vmp->flag & LPFC_VMID_DE_REGISTER)) {
++		/* else if register or dereg request has already been sent */
++		/* Hence VMID tag will not be added for this I/O */
++		read_unlock(&vport->vmid_lock);
++		rc = -EBUSY;
++	} else {
++		/* The VMID was not found in the hashtable. At this point, */
++		/* drop the read lock first before proceeding further */
++		read_unlock(&vport->vmid_lock);
++		/* start the process to obtain one as per the */
++		/* type of the VMID indicated */
++		write_lock(&vport->vmid_lock);
++		vmp = lpfc_get_vmid_from_hashtable(vport, hash, uuid);
++
++		/* while the read lock was released, in case the entry was */
++		/* added by other context or is in process of being added */
++		if (vmp && vmp->flag & LPFC_VMID_REGISTERED) {
++			lpfc_vmid_update_entry(vport, iodir, vmp, tag);
++			write_unlock(&vport->vmid_lock);
++			return 0;
++		} else if (vmp && vmp->flag & LPFC_VMID_REQ_REGISTER) {
++			write_unlock(&vport->vmid_lock);
++			return -EBUSY;
++		}
++
++		/* else search and allocate a free slot in the hash table */
++		if (vport->cur_vmid_cnt < vport->max_vmid) {
++			for (i = 0; i < vport->max_vmid; i++) {
++				vmp = vport->vmid + i;
++				if (vmp->flag == LPFC_VMID_SLOT_FREE)
++					break;
++			}
++			if (i == vport->max_vmid)
++				vmp = NULL;
++		} else {
++			vmp = NULL;
++		}
++
++		if (!vmp) {
++			write_unlock(&vport->vmid_lock);
++			return -ENOMEM;
++		}
++
++		/* Add the vmid and register */
++		lpfc_put_vmid_in_hashtable(vport, hash, vmp);
++		vmp->vmid_len = len;
++		memcpy(vmp->host_vmid, uuid, vmp->vmid_len);
++		vmp->io_rd_cnt = 0;
++		vmp->io_wr_cnt = 0;
++		vmp->flag = LPFC_VMID_SLOT_USED;
++
++		vmp->delete_inactive =
++			vport->vmid_inactivity_timeout ? 1 : 0;
++
++		/* if type priority tag, get next available VMID */
++		if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO)
++			lpfc_vmid_assign_cs_ctl(vport, vmp);
++
++		/* allocate the per cpu variable for holding */
++		/* the last access time stamp only if VMID is enabled */
++		if (!vmp->last_io_time)
++			vmp->last_io_time = __alloc_percpu(sizeof(u64),
++							   __alignof__(struct
++							   lpfc_vmid));
++		if (!vmp->last_io_time) {
++			hash_del(&vmp->hnode);
++			vmp->flag = LPFC_VMID_SLOT_FREE;
++			write_unlock(&vport->vmid_lock);
++			return -EIO;
++		}
++
++		write_unlock(&vport->vmid_lock);
++
++		/* complete transaction with switch */
++		if (vport->phba->pport->vmid_flag & LPFC_VMID_TYPE_PRIO)
++			rc = lpfc_vmid_uvem(vport, vmp, true);
++		else if (vport->phba->cfg_vmid_app_header)
++			rc = lpfc_vmid_cmd(vport, SLI_CTAS_RAPP_IDENT, vmp);
++		if (!rc) {
++			write_lock(&vport->vmid_lock);
++			vport->cur_vmid_cnt++;
++			vmp->flag |= LPFC_VMID_REQ_REGISTER;
++			write_unlock(&vport->vmid_lock);
++		} else {
++			write_lock(&vport->vmid_lock);
++			hash_del(&vmp->hnode);
++			vmp->flag = LPFC_VMID_SLOT_FREE;
++			free_percpu(vmp->last_io_time);
++			write_unlock(&vport->vmid_lock);
++			return -EIO;
++		}
++
++		/* finally, enable the idle timer once */
++		if (!(vport->phba->pport->vmid_flag & LPFC_VMID_TIMER_ENBLD)) {
++			mod_timer(&vport->phba->inactive_vmid_poll,
++				  jiffies +
++				  msecs_to_jiffies(1000 * LPFC_VMID_TIMER));
++			vport->phba->pport->vmid_flag |= LPFC_VMID_TIMER_ENBLD;
++		}
++	}
++	return rc;
++}
 -- 
 2.26.2
 
