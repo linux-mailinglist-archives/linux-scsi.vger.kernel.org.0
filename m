@@ -2,157 +2,153 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84E452C771
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 May 2022 01:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4031B52C8AC
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 May 2022 02:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiERXX7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 18 May 2022 19:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S231812AbiESAfm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 18 May 2022 20:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiERXX7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 18 May 2022 19:23:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51B01D89FE;
-        Wed, 18 May 2022 16:23:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652916236; x=1684452236;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mRamq6y/FrL9IrxKmzQMYKfzRyhfzGHairLTpmN6JHc=;
-  b=CtC+lfNDKnQw12RjOKavFSJ3288yv4TzPRU5rxWEvf0TrEwxGdaJpZaG
-   8K03M5N1c0N96IACHZUL9aT7OWAZWhVOb52kJhOlzhL7itmnQOxUFdHb9
-   Gw7dR31QEv9FRbZWSr/WG0Lk2pO4baBU0zxgpBYGAAuj1by8AsIzZXfAw
-   TVTZhFIXmOthmxOSQBHqgkSlZkI81gpo3/rYaMRKXAwvEiMiFSpKrSrgJ
-   IcCt2EEEu0uUoE/CkvcUfZxZTKyAxKLY28z0z6CEndglx07gbSumwgX08
-   CiK7VVLjq64GUqHxS2lUYs6Q6zBLAYRXkkNxqbnP49L9YFHXatS1O9LJ1
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="272064309"
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="272064309"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 16:23:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="627292758"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 18 May 2022 16:23:54 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrT1F-0002lT-NY;
-        Wed, 18 May 2022 23:23:53 +0000
-Date:   Thu, 19 May 2022 07:23:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc:     kbuild-all@lists.01.org, Ming Lei <ming.lei@redhat.com>,
-        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: Re: [PATCH 3/3] blk-mq: remove the done argument to
- blk_execute_rq_nowait
-Message-ID: <202205190712.zyCIh9kG-lkp@intel.com>
-References: <20220517064901.3059255-4-hch@lst.de>
+        with ESMTP id S232202AbiESAfg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 18 May 2022 20:35:36 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADF3D9EAA
+        for <linux-scsi@vger.kernel.org>; Wed, 18 May 2022 17:35:34 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IMIlnO007800;
+        Thu, 19 May 2022 00:35:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=0CgNi9CrcXKT/Vl1f/b20qS1e5AD5lSoE2RLqB47y/U=;
+ b=zWUdpK2EkveyuIndHZbqSBIydC3OjTeIBKZX0NovBjKEsSZ4R9MSZhsGzuQfxsCLk5VF
+ 3Vl8aOA/O5LHuB+dtXyMugBOQ3fcMZeofeeXUJElbUNu6CwvZTNOO+fN/iyS1ja26CR1
+ uXO8rKK2nik81P7cHqrPaZOA0mx9TsJ4TvGLjKqKU9LJgOpzBppfYClG0oMM5fffhoFE
+ ZdBwsFhXlxUUY0KRtkFHvQRutKXQcyiklsZyCc1xhH5/8dAD0GCzOVBMWrCI5lloqETF
+ 58JZuO0MaODc4SshvEOt8KJl3qDiBM7rZSeFLGY5a2iw+c6NLmaNoiTvUVYdkz4K7sqx 4A== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g22ucajj4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 00:35:27 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24J0U2SH020228;
+        Thu, 19 May 2022 00:35:26 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2174.outbound.protection.outlook.com [104.47.55.174])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22va9pcg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 00:35:26 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M8m++u2J+ffH8gD1Mwbtp3vT1/+0WpFhP0vR+zfTXiXbMststewzVHO+rD2hZdq850F5WAmfH3xdC5m87NXwQtGxHMSMcHTUKvqhK5Js+IifHzG1vDCWs+btAdKTdjVmghA/jDyrWAqpSTQwLvcloHwcDKdwOyxhuOf5ujLtSLqVc1kUwPvDPn+0rU8oh2EbM7eOp8JoxQCfUWB3WalqGD0BeneOeO5keYDxOjCpwCiCf5IhQD2jgO7NvH4XQmzs+2C/9uXFPDt4C3jRxWCfBzluxPRzghGbpXMQExLccw7ZdgU1tkJLuPR6//SKye7Bki1nUcKOoJzIrpELeQR7GA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0CgNi9CrcXKT/Vl1f/b20qS1e5AD5lSoE2RLqB47y/U=;
+ b=Cyjjw5dq888tPg3++N7cgw2QxynkVys0O7m0ujlMF4MeTiJ3obWprFloBLKSPrfB6GYqaa1qnN6MqKnQZlERiSgaZL2wqTxCdSSfIv7uSe5Vz/jKgKGslvxiTd+6auZIkFtll9kqZ3ktkg2/SdTkdgxDeApSQFRp90lWsCmLffdZwpvD6knXMLPNY4Gs0qpvwY1uLo72oYc0Eokq9XB3fztb5l8e8gumzxsnNGLKtoPy7FbKb9if+6VVPohtuimYTy0KhU9sMmXg6kEZNOOgd0UfDDwWq5ObplFM5Szo3lgSiCRND78IHh5DYCpofS9bi3f7LUIPH6GHWLVkR7fsxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0CgNi9CrcXKT/Vl1f/b20qS1e5AD5lSoE2RLqB47y/U=;
+ b=iJPpY3KpbJLD6uGuXYCOjI4TqU+8sMIJH8KotgppKz5ziMi0FqvW/CbMwsTgRj3CjiR8KmbOiWVr9h+Lst/rLLzCHdxMDBLkS0jGKPWA0Dpmc/hJ8yF/N57qOgg8zrry9y40lNBq3Rwfm0W19ki4LtA7Y5MC1zdWydR0eneTYn4=
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
+ DM6PR10MB3020.namprd10.prod.outlook.com (2603:10b6:5:67::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5250.18; Thu, 19 May 2022 00:35:25 +0000
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::f81d:b8ef:c5a4:9c9b]) by DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::f81d:b8ef:c5a4:9c9b%3]) with mapi id 15.20.5250.018; Thu, 19 May 2022
+ 00:35:25 +0000
+From:   Mike Christie <michael.christie@oracle.com>
+To:     lduncan@suse.com, cleech@redhat.com, njavali@marvell.com,
+        mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        jejb@linux.ibm.com
+Subject: [PATCH V2 00/13] scsi fixes, perf improvements and cleanups
+Date:   Wed, 18 May 2022 19:35:05 -0500
+Message-Id: <20220519003518.34187-1-michael.christie@oracle.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: DM6PR17CA0015.namprd17.prod.outlook.com
+ (2603:10b6:5:1b3::28) To DM5PR10MB1466.namprd10.prod.outlook.com
+ (2603:10b6:3:b::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517064901.3059255-4-hch@lst.de>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: efa9c55b-90be-4d02-2330-08da392f7714
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3020:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB3020AF47565108F0F7998B36F1D09@DM6PR10MB3020.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: msfmxPdAAwZSyYXevvquTS6LjaMfz7xLJOXaqh88kreBinoUKi1SOZLpprB8BaCJT6d+8ubltTWix7GQfPoYrUETGnkuEMMM9/GjScNmB6ufo2TgL/2fU+OsZyQeBL6wvE+T2+S96DA6wC+hFFrBUlpPWzQn7dpaxcpNyIIJ3ibtvP8gtQGhREkVNMwqve8frTSiOf/UjGWhr2pU+Dv2ZWUZpSav5JVG53MBzCLi3ZX37XozwAQpi6ILGyIx6MVxmyUPkr+DARYcUJAS8yAem5n9bMhJzk1kFu5ehAkXJiprpV3gBIl4hQc6WHLaF7pA88/m16asz0jPMONTidDIkrjgOFgWo4lOSAJJG/k+5N7HWcZMt5Br4jrFjrjY+Vmanj59iU1Yaf7TSmrAmQtOqqTwuRO2XkI9gODVFW1Y2VJrZemAhZwJK5u5fJHr3w6SN41U/p195+T73yxnc+2/kwPU6fGTOTEBDLzMHETnJpsXNjm9yj/oYC+FvEqCc+8Zje/2KRfq2dFnxGQCd74tpz12/Qtc7f7l+IYRb9DPXiH1WMuaDFwHhoEEhuTIX3W7rjx3r+zi7MW7AV8qbIkhRMwpPqPP4vgrjgHGqZ8r9DYitdFzbd/HcwXwTIJh1pNnnzpG+sGNzoxn7eHE9MrPSx11l/bVlZKEZIayyTpLGim/owRRnj3h70/QkTde1zaCBOCpbf4KENtoPLPD1Yg1ZA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(186003)(66556008)(1076003)(52116002)(2616005)(2906002)(6512007)(36756003)(26005)(8936002)(66476007)(38100700002)(86362001)(66946007)(5660300002)(8676002)(6666004)(38350700002)(508600001)(558084003)(6506007)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?G4iZwGPy0ItXSc+zwSiL0ucrUMBPs7+7kdgseP2WDjOXWHLAsSoqNKqeJLqi?=
+ =?us-ascii?Q?TwuEUUG3uIXqe3EUmp8JMS2FE3ildLIAH6nvNHXPI+BZNSuNcAVLhwczMeZ4?=
+ =?us-ascii?Q?UKmYRk3SJwuwIeK5c2y4arbvGtbNUwH7cewn+Fy0Y2OUexmUINZa49joxxBr?=
+ =?us-ascii?Q?x4KnOFkkOpJ+Wfx0qhoI106hUVg9n9DcYbHyqsZEHeafjovDG2JGW8SeBQsR?=
+ =?us-ascii?Q?V2K6vcHN6Y8ObtezReCcY3B11OssWMOSb0LeadNs1dHJNgjSj1z88gn8uznM?=
+ =?us-ascii?Q?rJjiQYNa0wESBAw+yO/Ro7qiFeQd8yNhppAfzpOyZS+K2EYA++dkOmfi6ZbM?=
+ =?us-ascii?Q?p9dG0Vr944WUMQmYvRu5I9s4F+EgxXcdTu3NSab1C5CLtmigQancvpmN7jQ6?=
+ =?us-ascii?Q?kABm/+N0joQL/IkFslw9+shyQbaUw78TGV7gW5w0nnzmPt5dAw4c6UnA0Es6?=
+ =?us-ascii?Q?zjMfSYAsxghUlbBuI4tli+WbU5P128LwvjiTVAzMRZXyawiN60zzQyIjAfNy?=
+ =?us-ascii?Q?MEvRW9NcgfeVXdLglicMxXBBkyqnk8S6UJLLHQTaBpi7O15WHgeoRYPkCL0o?=
+ =?us-ascii?Q?KO1mvB8mqwnyiF38D0roECkKnJUKGFUK3XXJr+dO/lrJ5TnnBOtpTnaQPqzz?=
+ =?us-ascii?Q?HTipXLPf3ZXQhdJr3+yi0YwJ4cvv0zHgO2d/rAN1Y/Xt7KhR2KmmQ9vrjncM?=
+ =?us-ascii?Q?G8wl64HhCIFiY83F8vkPAunX34nFvhUMk91M4mcLQZ7qFmZus3qjecSvdkNz?=
+ =?us-ascii?Q?fdH7yUCJ0hzK6Q1WeA5NU2Vez7wcChwil0UpX6gLjBTBNcgQvwD/jbqCG0zG?=
+ =?us-ascii?Q?8fJokyrQE43QWqKwVON1Py4VYI2pdLaW+eofKnd7VZomU+hwT53GMBSJRV69?=
+ =?us-ascii?Q?9k5UEenpPUnrMNgRhWJVTqvc+ika9DwwrwTYIDyZDUllpVUu5bMg5ejwQYs9?=
+ =?us-ascii?Q?733Ro7uxm/VjaofJfEKcP0w/OH1ld1YZ89VkykM/6nR3KejY1wQ385pTh7Kz?=
+ =?us-ascii?Q?NtcbXjgWQGw/anhpRWZZbLGvjDI4oO/MK50mB2B8kBQen0AbzFxPZB8I39Hr?=
+ =?us-ascii?Q?e3HcC/lL0ZM1R9/drUSHk2Y2OBZphmoYJpR3ADYuWZOKJzAgFXC9D7+2zduu?=
+ =?us-ascii?Q?mPhX//A82rIpnPMQK3yPzjT1SiBRiML/RrYZFO9gTNrwW2+vxSlblnvZorCN?=
+ =?us-ascii?Q?cdYsNiuCvFlAy5rfYIUNXRJA6rhBgkBigrOCH/VTvQEebvjiqSRicXouQYLb?=
+ =?us-ascii?Q?xDhsF9PM5qX+OruRoJmWLZmj8Widi4olTHVpKLwQ/XlPyanq3u+0PlR8frrN?=
+ =?us-ascii?Q?YrZJA/aF+IrwHtoiaLvYDHKYsto5Jrr9aJ1NfALkdysKREUQKFsF6h+J4Xr1?=
+ =?us-ascii?Q?g9x7Sf2dEOguWCtoq0RNC+En9ohlZAzSPTe3GSJzOuJ4vHo4ttb1yUiJsh2W?=
+ =?us-ascii?Q?kYLryeDv8x1NIQBRiV5VI6gyln3fZ48ssU1VVNpvbXEuVU67Hm7ZdPWsVzML?=
+ =?us-ascii?Q?AwdclBhn74WjwPgOD+uawAVIMGLAvTJPBahBF5sX7givxIkdbMQoKyjONCYM?=
+ =?us-ascii?Q?Yrm7yT8L/Gd8+DslnG+QoivKZApLz4jwks79RB/CwNrjrNdlJTxgAQmiidex?=
+ =?us-ascii?Q?kEd5E4oLfCyNe+XjCbVHtVmNfQtacR6f+h15kyBqKz5+GpZ9L+GWuqzfVi1x?=
+ =?us-ascii?Q?ETab7BhKANrMifkCyhJTUicjI31EHgdk3G9wnhoDveAeed3Rs4sA2pu5kxwU?=
+ =?us-ascii?Q?FHYIgcao3q9xukOPTpQxyxCmBcII2U8=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: efa9c55b-90be-4d02-2330-08da392f7714
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 00:35:25.1963
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ySqeJ7R99+l+JBR2kDPzDZlizQ1tC6LdtvbYkIRWFHcBGE98Aprst801ICEk5XdVoyBSFjcGf0GxB2hTtnttWK6apUh/yK1G81Llfr6j/zA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3020
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
+ definitions=2022-05-18_06:2022-05-17,2022-05-18 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
+ phishscore=0 suspectscore=0 mlxlogscore=927 adultscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205190002
+X-Proofpoint-GUID: T5kJPY9rcGkTEOVE4Vsik-SY1wl6p3sK
+X-Proofpoint-ORIG-GUID: T5kJPY9rcGkTEOVE4Vsik-SY1wl6p3sK
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Christoph,
+The following patches made over Linus/Martin's tree fixes a qedi boot
+regression during shutdown, improve read performance when using multiple
+sessions, and do some cleanup.
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on next-20220518]
-[cannot apply to mkp-scsi/for-next jejb-scsi/for-next linus/master v5.18-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/blk-mq-remove-__blk_execute_rq_nowait/20220517-154900
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220519/202205190712.zyCIh9kG-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2dc03b4b4f1f1aa542a1ab6d6ff64be3d9db050c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christoph-Hellwig/blk-mq-remove-__blk_execute_rq_nowait/20220517-154900
-        git checkout 2dc03b4b4f1f1aa542a1ab6d6ff64be3d9db050c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/scsi/ufs/ufshpb.c: In function 'ufshpb_execute_map_req':
->> drivers/scsi/ufs/ufshpb.c:721:41: error: expected ';' before 'hpb'
-     721 |         blk_execute_rq_nowait(req, true)
-         |                                         ^
-         |                                         ;
-     722 | 
-     723 |         hpb->stats.map_req_cnt++;
-         |         ~~~                              
+V2
+- Fix checkpatch errors about incorrect commit format and code style.
 
 
-vim +721 drivers/scsi/ufs/ufshpb.c
-
-   683	
-   684	static int ufshpb_execute_map_req(struct ufshpb_lu *hpb,
-   685					  struct ufshpb_req *map_req, bool last)
-   686	{
-   687		struct request_queue *q;
-   688		struct request *req;
-   689		struct scsi_cmnd *scmd;
-   690		int mem_size = hpb->srgn_mem_size;
-   691		int ret = 0;
-   692		int i;
-   693	
-   694		q = hpb->sdev_ufs_lu->request_queue;
-   695		for (i = 0; i < hpb->pages_per_srgn; i++) {
-   696			ret = bio_add_pc_page(q, map_req->bio, map_req->rb.mctx->m_page[i],
-   697					      PAGE_SIZE, 0);
-   698			if (ret != PAGE_SIZE) {
-   699				dev_err(&hpb->sdev_ufs_lu->sdev_dev,
-   700					   "bio_add_pc_page fail %d - %d\n",
-   701					   map_req->rb.rgn_idx, map_req->rb.srgn_idx);
-   702				return ret;
-   703			}
-   704		}
-   705	
-   706		req = map_req->req;
-   707	
-   708		blk_rq_append_bio(req, map_req->bio);
-   709	
-   710		req->end_io_data = map_req;
-   711		req->end_io = ufshpb_map_req_compl_fn;
-   712	
-   713		if (unlikely(last))
-   714			mem_size = hpb->last_srgn_entries * HPB_ENTRY_SIZE;
-   715	
-   716		scmd = blk_mq_rq_to_pdu(req);
-   717		ufshpb_set_read_buf_cmd(scmd->cmnd, map_req->rb.rgn_idx,
-   718					map_req->rb.srgn_idx, mem_size);
-   719		scmd->cmd_len = HPB_READ_BUFFER_CMD_LENGTH;
-   720	
- > 721		blk_execute_rq_nowait(req, true)
-   722	
-   723		hpb->stats.map_req_cnt++;
-   724		return 0;
-   725	}
-   726	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
