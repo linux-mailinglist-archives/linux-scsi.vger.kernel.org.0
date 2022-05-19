@@ -2,374 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1705C52DCA6
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 May 2022 20:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9355152DD9E
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 May 2022 21:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242968AbiESSXS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 May 2022 14:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S241263AbiESTSa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 May 2022 15:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241524AbiESSXQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 May 2022 14:23:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 443F450E0E
-        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 11:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652984593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K4smjWp14znqoihq7xaben8zyFhRUmdSHMIeNZ/0XE4=;
-        b=Pt3gndqGzIEEFpon+v9iE9rCDcGkmiTf9I8QU9DITns1ZYGZyFMD8jtvU1J6dVqAyTOAOc
-        tO6cc8pBdh1fWdRbV0IBd4pxN4wCauThZVyjqqDeR8sS30PH4ORO71paPW/2pdXytkiILN
-        4ScURE208MjETK1ghDJ6ioGLrk1nqJU=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-659-npD8qD2eMjCffxmCAgfMYg-1; Thu, 19 May 2022 14:23:12 -0400
-X-MC-Unique: npD8qD2eMjCffxmCAgfMYg-1
-Received: by mail-lf1-f71.google.com with SMTP id u13-20020a05651206cd00b00477c7503103so1419311lff.15
-        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 11:23:11 -0700 (PDT)
+        with ESMTP id S236174AbiESTS2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 May 2022 15:18:28 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608D6939E7
+        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 12:18:27 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id j2so10774023ybu.0
+        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 12:18:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sldeoUHN+XKV/25qdr8o1yS1uyCAwpn/8BNmGuwP1dE=;
+        b=W7vER1CJgLuLZN7/pekzEqMHHpM6NJHQVbipYKw5pM3E8VRylGxndVn8JdSS6BHUN6
+         3ZxUteHpq7VassCKw8ZlQfsdlnNTF86UGz+ozzEZJYKFwsGBNzB8uuyru42HmY2c2+X3
+         pei0jtAYfrK3eM8MK9DRyjAeXbkW3nr5/sF1C7sh/MyDUgEDDCYw5Fg9VutCkqqVk72O
+         7C7nKBTuamT0/RHieeI3ZHZFxKJCIQDSlnb4UbtgJ0MJ5zlF9bhQ3yzDz5OHGsqtIuiB
+         9rMBjhpqHcXLB/4GJngCltJVyYoZqjW3JzstCyKwHIoRfx4PsuYcwxSVBa7uSReKnLOg
+         rs7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K4smjWp14znqoihq7xaben8zyFhRUmdSHMIeNZ/0XE4=;
-        b=KwZd0MZZ5+C5lJtjdmLidiil3h3IUv6BeZEq6tDLYS1fTyvPvN8bc3pEAsm1DQBGk8
-         48Qk2oa1KEYg6uBUCwdK3fjM4+m4FFn/OE85l4elTYEr/8yx5ZFWo0cUoqtCIsy2r6db
-         rVO8b2FYI0Cwfw8qhApgJNdnh5T/79zjkqykUOybBcbk5ka1AuF+nrzkes9krSLOj+1N
-         x6yBoHAsJgtcid+iF/4gD78SW0wpgwOi/kmMvlsA5EO1lmdsuAyL28q1Xd4zyKJ1B/jU
-         JLzj+rmTbJu2wZ2UdnygKIOrvHqJgTNjgiJLkv2ha2xn4KA+dquV72MnzD8RvjXK85jm
-         E/dQ==
-X-Gm-Message-State: AOAM533BgUfrdt2LHZHFCg93PnDcvjbiO2SZaxYvs1zhm/pRl3sty4aC
-        1H+2RTLmPfUv/YvmGdzigX6IOAz3imL2zEHMyGcALFpxI39O/1ohUDpl/6OMIqHS5kNmwU0RvVU
-        RIVBTh5OSkJUhlZfPJjMjXNAsokC6bhmW0ktsyA==
-X-Received: by 2002:a05:6512:23a6:b0:477:943a:818d with SMTP id c38-20020a05651223a600b00477943a818dmr4144447lfv.644.1652984590357;
-        Thu, 19 May 2022 11:23:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxG7rECMHICUvzOFKrSVTCymxJqcu4qsBNr/MUwRxI2gr2DhMlwZdzvh69KU31p2WXmioD/KC9UVYpFdUxcu1k=
-X-Received: by 2002:a05:6512:23a6:b0:477:943a:818d with SMTP id
- c38-20020a05651223a600b00477943a818dmr4144434lfv.644.1652984590052; Thu, 19
- May 2022 11:23:10 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sldeoUHN+XKV/25qdr8o1yS1uyCAwpn/8BNmGuwP1dE=;
+        b=R+KUHeMJ8mR0twQBvayigmEISe+ZsMlfP+7lhfkXF85crLU8gLf3fRh1OoYSVMgLvy
+         IvrPFu3m6ZZoHpfEuIhocf+5c+lQcJcFJGkFFjcSEEpQqr4qf4dTGseBnBLPR4kAhqAe
+         TJzUSHBHhQ2C/FI9oDKAaGC2t9Yx96751jTsdRbIfW2aK6wX0oO5Ur1qEJXHmpqODM3j
+         G1Fqqe8UdNtU92raheSahd1kT3jIcRm3Ppspp0Ou/Bd9f16K1HSSqEUUnbEPIDVkV5Vh
+         j36gva/hTbUAH335d2zmNEXys60yLSOk0tw+FEYL2n70RzziUtovN3u+9MrO9vzFpWcs
+         Ow/g==
+X-Gm-Message-State: AOAM530glTW7L8PbWufTdmeL70QnHgLB67tal4QEWeepUszVEe6bv65D
+        zG9L+apcI8DOcGI+hr2ZdLMsnHWfUWxsx9F66sg=
+X-Google-Smtp-Source: ABdhPJxyFt8BCFWs4lDRGcG1+gJYKsyIadPOcypbFQ+/v21/4ggH7eYOE+1W4wUMoA9aVoLPdW0guXEJ1T3MfiHHCeQ=
+X-Received: by 2002:a05:6902:114d:b0:644:ba0d:e95c with SMTP id
+ p13-20020a056902114d00b00644ba0de95cmr6258671ybu.516.1652987906529; Thu, 19
+ May 2022 12:18:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220512111236.109851-1-hare@suse.de> <20220512111236.109851-7-hare@suse.de>
-In-Reply-To: <20220512111236.109851-7-hare@suse.de>
-From:   Ewan Milne <emilne@redhat.com>
-Date:   Thu, 19 May 2022 14:22:58 -0400
-Message-ID: <CAGtn9rkR02KF8QikQ0J6MskocA6VQ385ajoz36Q7RH32VXBjGg@mail.gmail.com>
-Subject: Re: [PATCH 06/20] qedf: use fc rport as argument for qedf_initiate_tmf()
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Saurav Kashyap <skashyap@marvell.com>
+Received: by 2002:a05:7010:6b12:b0:2ad:f417:94bd with HTTP; Thu, 19 May 2022
+ 12:18:26 -0700 (PDT)
+From:   Manuel Franco <manuelfrancolove048@gmail.com>
+Date:   Thu, 19 May 2022 12:18:26 -0700
+Message-ID: <CA+PGJtCVE3WdKtpgunnmBdc97Duk8b0vSh1D7hTkS595FzmUpw@mail.gmail.com>
+Subject: Der Betrag von 500.000,00 Euro wurde Ihnen gespendet. Kontakt: manuelfranco4love@gmail.com
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The patch changes the data type of the 'lun' argument to qedf_flush_active_ios()
-to a u64, but the remaining code still uses a wildcard of -1, perhaps
-this needs a
-#define or enum of a value that is unsigned also?
+Ich bin Manuel Franco und habe am 23. April 2019 den Power Ball
+Jackpot im Wert von 758,7 Millionen Dollar gewonnen. Ich gew=C3=A4hre 5
+Personen jeweils 500.000,00 Euro und Sie geh=C3=B6ren zu den 5 gl=C3=BCckli=
+chen
+Gewinnern, die ausgew=C3=A4hlt wurden, um meine Spende von 500.000,00 Euro
+zu erhalten.
 
-Removing the call to fc_remote_port_chkready() in qedf_initiate_tmf()
-will result
-in different semantics for whether the TMF will be issued.
-
-Changing the debug logging in qedf_eh_target_reset() and qedf_eh_device_reset()
-might make identifying the target more difficult, although
-qedf_initiate_tmf() will
-also log a message, the rport->scsi_target_id is not the same value as
-the sdev->id.
-
--Ewan
-
-On Thu, May 12, 2022 at 7:13 AM Hannes Reinecke <hare@suse.de> wrote:
->
-> When sending a TMF we're only concerned with the rport and the LUN ID,
-> so use struct fc_rport as argument for qedf_initiate_tmf().
->
-> Signed-off-by: Hannes Reinecke <hare@suse.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-> Cc: Saurav Kashyap <skashyap@marvell.com>
-> ---
->  drivers/scsi/qedf/qedf.h      |  5 ++-
->  drivers/scsi/qedf/qedf_io.c   | 75 ++++++++++-------------------------
->  drivers/scsi/qedf/qedf_main.c | 19 ++++-----
->  3 files changed, 33 insertions(+), 66 deletions(-)
->
-> diff --git a/drivers/scsi/qedf/qedf.h b/drivers/scsi/qedf/qedf.h
-> index c5c0bbdafc4e..80814bcf4db1 100644
-> --- a/drivers/scsi/qedf/qedf.h
-> +++ b/drivers/scsi/qedf/qedf.h
-> @@ -112,6 +112,7 @@ struct qedf_ioreq {
->  #define QEDF_CMD_ERR_SCSI_DONE         0x5
->         u8 io_req_flags;
->         uint8_t tm_flags;
-> +       u64 tm_lun;
->         struct qedf_rport *fcport;
->  #define        QEDF_CMD_ST_INACTIVE            0
->  #define        QEDFC_CMD_ST_IO_ACTIVE          1
-> @@ -497,7 +498,7 @@ extern void qedf_process_warning_compl(struct qedf_ctx *qedf,
->         struct fcoe_cqe *cqe, struct qedf_ioreq *io_req);
->  extern void qedf_process_error_detect(struct qedf_ctx *qedf,
->         struct fcoe_cqe *cqe, struct qedf_ioreq *io_req);
-> -extern void qedf_flush_active_ios(struct qedf_rport *fcport, int lun);
-> +extern void qedf_flush_active_ios(struct qedf_rport *fcport, u64 lun);
->  extern void qedf_release_cmd(struct kref *ref);
->  extern int qedf_initiate_abts(struct qedf_ioreq *io_req,
->         bool return_scsi_cmd_on_abts);
-> @@ -522,7 +523,7 @@ extern int qedf_initiate_cleanup(struct qedf_ioreq *io_req,
->         bool return_scsi_cmd_on_abts);
->  extern void qedf_process_cleanup_compl(struct qedf_ctx *qedf,
->         struct fcoe_cqe *cqe, struct qedf_ioreq *io_req);
-> -extern int qedf_initiate_tmf(struct scsi_cmnd *sc_cmd, u8 tm_flags);
-> +extern int qedf_initiate_tmf(struct fc_rport *rport, u64 lun, u8 tm_flags);
->  extern void qedf_process_tmf_compl(struct qedf_ctx *qedf, struct fcoe_cqe *cqe,
->         struct qedf_ioreq *io_req);
->  extern void qedf_process_cqe(struct qedf_ctx *qedf, struct fcoe_cqe *cqe);
-> diff --git a/drivers/scsi/qedf/qedf_io.c b/drivers/scsi/qedf/qedf_io.c
-> index 2ec1f710fd1d..5d82fd95e74c 100644
-> --- a/drivers/scsi/qedf/qedf_io.c
-> +++ b/drivers/scsi/qedf/qedf_io.c
-> @@ -546,7 +546,7 @@ static int qedf_build_bd_list_from_sg(struct qedf_ioreq *io_req)
->  }
->
->  static void qedf_build_fcp_cmnd(struct qedf_ioreq *io_req,
-> -                                 struct fcp_cmnd *fcp_cmnd)
-> +                               struct fcp_cmnd *fcp_cmnd)
->  {
->         struct scsi_cmnd *sc_cmd = io_req->sc_cmd;
->
-> @@ -554,8 +554,12 @@ static void qedf_build_fcp_cmnd(struct qedf_ioreq *io_req,
->         memset(fcp_cmnd, 0, FCP_CMND_LEN);
->
->         /* 8 bytes: SCSI LUN info */
-> -       int_to_scsilun(sc_cmd->device->lun,
-> -                       (struct scsi_lun *)&fcp_cmnd->fc_lun);
-> +       if (io_req->cmd_type == QEDF_TASK_MGMT_CMD)
-> +               int_to_scsilun(io_req->tm_lun,
-> +                              (struct scsi_lun *)&fcp_cmnd->fc_lun);
-> +       else
-> +               int_to_scsilun(sc_cmd->device->lun,
-> +                              (struct scsi_lun *)&fcp_cmnd->fc_lun);
->
->         /* 4 bytes: flag info */
->         fcp_cmnd->fc_pri_ta = 0;
-> @@ -1096,7 +1100,7 @@ static void qedf_parse_fcp_rsp(struct qedf_ioreq *io_req,
->         }
->
->         /* The sense buffer can be NULL for TMF commands */
-> -       if (sc_cmd->sense_buffer) {
-> +       if (sc_cmd && sc_cmd->sense_buffer) {
->                 memset(sc_cmd->sense_buffer, 0, SCSI_SENSE_BUFFERSIZE);
->                 if (fcp_sns_len)
->                         memcpy(sc_cmd->sense_buffer, sense_data,
-> @@ -1581,7 +1585,7 @@ static void qedf_flush_els_req(struct qedf_ctx *qedf,
->  /* A value of -1 for lun is a wild card that means flush all
->   * active SCSI I/Os for the target.
->   */
-> -void qedf_flush_active_ios(struct qedf_rport *fcport, int lun)
-> +void qedf_flush_active_ios(struct qedf_rport *fcport, u64 lun)
->  {
->         struct qedf_ioreq *io_req;
->         struct qedf_ctx *qedf;
-> @@ -1769,10 +1773,6 @@ void qedf_flush_active_ios(struct qedf_rport *fcport, int lun)
->                         kref_put(&io_req->refcount, qedf_release_cmd);
->                         continue;
->                 }
-> -               if (lun > -1) {
-> -                       if (io_req->lun != lun)
-> -                               continue;
-> -               }
->
->                 /*
->                  * Use kref_get_unless_zero in the unlikely case the command
-> @@ -2282,7 +2282,7 @@ void qedf_process_cleanup_compl(struct qedf_ctx *qedf, struct fcoe_cqe *cqe,
->         complete(&io_req->cleanup_done);
->  }
->
-> -static int qedf_execute_tmf(struct qedf_rport *fcport, struct scsi_cmnd *sc_cmd,
-> +static int qedf_execute_tmf(struct qedf_rport *fcport, u64 tm_lun,
->         uint8_t tm_flags)
->  {
->         struct qedf_ioreq *io_req;
-> @@ -2292,17 +2292,10 @@ static int qedf_execute_tmf(struct qedf_rport *fcport, struct scsi_cmnd *sc_cmd,
->         int rc = 0;
->         uint16_t xid;
->         int tmo = 0;
-> -       int lun = 0;
->         unsigned long flags;
->         struct fcoe_wqe *sqe;
->         u16 sqe_idx;
->
-> -       if (!sc_cmd) {
-> -               QEDF_ERR(&qedf->dbg_ctx, "sc_cmd is NULL\n");
-> -               return FAILED;
-> -       }
-> -
-> -       lun = (int)sc_cmd->device->lun;
->         if (!test_bit(QEDF_RPORT_SESSION_READY, &fcport->flags)) {
->                 QEDF_ERR(&(qedf->dbg_ctx), "fcport not offloaded\n");
->                 rc = FAILED;
-> @@ -2322,7 +2315,7 @@ static int qedf_execute_tmf(struct qedf_rport *fcport, struct scsi_cmnd *sc_cmd,
->                 qedf->target_resets++;
->
->         /* Initialize rest of io_req fields */
-> -       io_req->sc_cmd = sc_cmd;
-> +       io_req->sc_cmd = NULL;
->         io_req->fcport = fcport;
->         io_req->cmd_type = QEDF_TASK_MGMT_CMD;
->
-> @@ -2336,6 +2329,7 @@ static int qedf_execute_tmf(struct qedf_rport *fcport, struct scsi_cmnd *sc_cmd,
->
->         /* Default is to return a SCSI command when an error occurs */
->         io_req->return_scsi_cmd_on_abts = false;
-> +       io_req->tm_lun = tm_lun;
->
->         /* Obtain exchange id */
->         xid = io_req->xid;
-> @@ -2390,7 +2384,7 @@ static int qedf_execute_tmf(struct qedf_rport *fcport, struct scsi_cmnd *sc_cmd,
->
->
->         if (tm_flags == FCP_TMF_LUN_RESET)
-> -               qedf_flush_active_ios(fcport, lun);
-> +               qedf_flush_active_ios(fcport, tm_lun);
->         else
->                 qedf_flush_active_ios(fcport, -1);
->
-> @@ -2405,23 +2399,18 @@ static int qedf_execute_tmf(struct qedf_rport *fcport, struct scsi_cmnd *sc_cmd,
->         return rc;
->  }
->
-> -int qedf_initiate_tmf(struct scsi_cmnd *sc_cmd, u8 tm_flags)
-> +int qedf_initiate_tmf(struct fc_rport *rport, u64 lun, u8 tm_flags)
->  {
-> -       struct fc_rport *rport = starget_to_rport(scsi_target(sc_cmd->device));
->         struct fc_rport_libfc_priv *rp = rport->dd_data;
->         struct qedf_rport *fcport = (struct qedf_rport *)&rp[1];
-> -       struct qedf_ctx *qedf;
-> -       struct fc_lport *lport = shost_priv(sc_cmd->device->host);
-> +       struct qedf_ctx *qedf = fcport->qedf;
-> +       struct fc_lport *lport = rp->local_port;
->         int rc = SUCCESS;
-> -       int rval;
-> -       struct qedf_ioreq *io_req = NULL;
-> -       int ref_cnt = 0;
->         struct fc_rport_priv *rdata = fcport->rdata;
->
->         QEDF_ERR(NULL,
-> -                "tm_flags 0x%x sc_cmd %p op = 0x%02x target_id = 0x%x lun=%d\n",
-> -                tm_flags, sc_cmd, sc_cmd->cmd_len ? sc_cmd->cmnd[0] : 0xff,
-> -                rport->scsi_target_id, (int)sc_cmd->device->lun);
-> +                "tm_flags 0x%x target_id = 0x%x lun=%llu\n",
-> +                tm_flags, rport->scsi_target_id, lun);
->
->         if (!rdata || !kref_get_unless_zero(&rdata->kref)) {
->                 QEDF_ERR(NULL, "stale rport\n");
-> @@ -2432,33 +2421,10 @@ int qedf_initiate_tmf(struct scsi_cmnd *sc_cmd, u8 tm_flags)
->                  (tm_flags == FCP_TMF_TGT_RESET) ? "TARGET RESET" :
->                  "LUN RESET");
->
-> -       if (qedf_priv(sc_cmd)->io_req) {
-> -               io_req = qedf_priv(sc_cmd)->io_req;
-> -               ref_cnt = kref_read(&io_req->refcount);
-> -               QEDF_ERR(NULL,
-> -                        "orig io_req = %p xid = 0x%x ref_cnt = %d.\n",
-> -                        io_req, io_req->xid, ref_cnt);
-> -       }
-> -
-> -       rval = fc_remote_port_chkready(rport);
-> -       if (rval) {
-> -               QEDF_ERR(NULL, "device_reset rport not ready\n");
-> -               rc = FAILED;
-> -               goto tmf_err;
-> -       }
-> -
-> -       rc = fc_block_scsi_eh(sc_cmd);
-> +       rc = fc_block_rport(rport);
->         if (rc)
->                 goto tmf_err;
->
-> -       if (!fcport) {
-> -               QEDF_ERR(NULL, "device_reset: rport is NULL\n");
-> -               rc = FAILED;
-> -               goto tmf_err;
-> -       }
-> -
-> -       qedf = fcport->qedf;
-> -
->         if (!qedf) {
->                 QEDF_ERR(NULL, "qedf is NULL.\n");
->                 rc = FAILED;
-> @@ -2495,7 +2461,7 @@ int qedf_initiate_tmf(struct scsi_cmnd *sc_cmd, u8 tm_flags)
->                 goto tmf_err;
->         }
->
-> -       rc = qedf_execute_tmf(fcport, sc_cmd, tm_flags);
-> +       rc = qedf_execute_tmf(fcport, lun, tm_flags);
->
->  tmf_err:
->         kref_put(&rdata->kref, fc_rport_destroy);
-> @@ -2512,7 +2478,6 @@ void qedf_process_tmf_compl(struct qedf_ctx *qedf, struct fcoe_cqe *cqe,
->         fcp_rsp = &cqe->cqe_info.rsp_info;
->         qedf_parse_fcp_rsp(io_req, fcp_rsp);
->
-> -       io_req->sc_cmd = NULL;
->         complete(&io_req->tm_done);
->  }
->
-> diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
-> index 18dc68d577b6..85ccfbc5cd26 100644
-> --- a/drivers/scsi/qedf/qedf_main.c
-> +++ b/drivers/scsi/qedf/qedf_main.c
-> @@ -773,7 +773,7 @@ static int qedf_eh_abort(struct scsi_cmnd *sc_cmd)
->                 goto drop_rdata_kref;
->         }
->
-> -       rc = fc_block_scsi_eh(sc_cmd);
-> +       rc = fc_block_rport(rport);
->         if (rc)
->                 goto drop_rdata_kref;
->
-> @@ -857,18 +857,19 @@ static int qedf_eh_abort(struct scsi_cmnd *sc_cmd)
->
->  static int qedf_eh_target_reset(struct scsi_cmnd *sc_cmd)
->  {
-> -       QEDF_ERR(NULL, "%d:0:%d:%lld: TARGET RESET Issued...",
-> -                sc_cmd->device->host->host_no, sc_cmd->device->id,
-> -                sc_cmd->device->lun);
-> -       return qedf_initiate_tmf(sc_cmd, FCP_TMF_TGT_RESET);
-> +       struct scsi_target *starget = scsi_target(sc_cmd->device);
-> +       struct fc_rport *rport = starget_to_rport(starget);
-> +
-> +       QEDF_ERR(NULL, "TARGET RESET Issued...");
-> +       return qedf_initiate_tmf(rport, 0, FCP_TMF_TGT_RESET);
->  }
->
->  static int qedf_eh_device_reset(struct scsi_cmnd *sc_cmd)
->  {
-> -       QEDF_ERR(NULL, "%d:0:%d:%lld: LUN RESET Issued... ",
-> -                sc_cmd->device->host->host_no, sc_cmd->device->id,
-> -                sc_cmd->device->lun);
-> -       return qedf_initiate_tmf(sc_cmd, FCP_TMF_LUN_RESET);
-> +       struct fc_rport *rport = starget_to_rport(scsi_target(sc_cmd->device));
-> +
-> +       QEDF_ERR(NULL, "LUN RESET Issued...\n");
-> +       return qedf_initiate_tmf(rport, sc_cmd->device->lun, FCP_TMF_LUN_RESET);
->  }
->
->  bool qedf_wait_for_upload(struct qedf_ctx *qedf)
-> --
-> 2.29.2
->
-
+Kontaktieren Sie mich f=C3=BCr weitere Informationen unter:
+manuelfranco4love@gmail.com
