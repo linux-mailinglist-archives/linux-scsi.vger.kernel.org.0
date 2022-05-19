@@ -2,89 +2,121 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C541552D279
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 May 2022 14:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD7E52D27F
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 May 2022 14:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237935AbiESM2H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 May 2022 08:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43148 "EHLO
+        id S237905AbiESMb0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 May 2022 08:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbiESM2C (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 May 2022 08:28:02 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE52BA57A;
-        Thu, 19 May 2022 05:28:01 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 20D5C1C0B92; Thu, 19 May 2022 14:27:58 +0200 (CEST)
-Date:   Thu, 19 May 2022 14:27:46 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Arseny Maslennikov <ar@cs.msu.ru>
-Cc:     Walt Drummond <walt@drummond.us>, Theodore Ts'o <tytso@mit.edu>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, aacraid@microsemi.com,
-        viro@zeniv.linux.org.uk, anna.schumaker@netapp.com, arnd@arndb.de,
-        bsegall@google.com, bp@alien8.de, chuck.lever@oracle.com,
-        bristot@redhat.com, dave.hansen@linux.intel.com,
-        dwmw2@infradead.org, dietmar.eggemann@arm.com, dinguyen@kernel.org,
-        geert@linux-m68k.org, gregkh@linuxfoundation.org, hpa@zytor.com,
-        idryomov@gmail.com, mingo@redhat.com, yzaikin@google.com,
-        ink@jurassic.park.msu.ru, jejb@linux.ibm.com, jmorris@namei.org,
-        bfields@fieldses.org, jlayton@kernel.org, jirislaby@kernel.org,
-        john.johansen@canonical.com, juri.lelli@redhat.com,
-        keescook@chromium.org, mcgrof@kernel.org,
-        martin.petersen@oracle.com, mattst88@gmail.com, mgorman@suse.de,
-        oleg@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        rth@twiddle.net, richard@nod.at, serge@hallyn.com,
-        rostedt@goodmis.org, tglx@linutronix.de,
-        trond.myklebust@hammerspace.com, vincent.guittot@linaro.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-m68k@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH 0/8] signals: Support more than 64 signals
-Message-ID: <20220519122746.GA3904@localhost>
-References: <20220103181956.983342-1-walt@drummond.us>
- <87iluzidod.fsf@email.froward.int.ebiederm.org>
- <YdSzjPbVDVGKT4km@mit.edu>
- <87pmp79mxl.fsf@email.froward.int.ebiederm.org>
- <YdTI16ZxFFNco7rH@mit.edu>
- <CADCN6nzT-Dw-AabtwWrfVRDd5HzMS3EOy8WkeomicJF07nQyoA@mail.gmail.com>
- <YdiUiHAhLyfgpvVY@cello>
+        with ESMTP id S230213AbiESMbT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 May 2022 08:31:19 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF501759F
+        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 05:31:17 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id i17so4646153pla.10
+        for <linux-scsi@vger.kernel.org>; Thu, 19 May 2022 05:31:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oiA6uiLQZSwvY/0jBnBgVrltTu8yb3o9abMqa/qFOXg=;
+        b=R6ldpVwsTE4CVUrBYHWqee3M8xzqw4+8mc88wsNGLQP/XAXR9DQ92ecg1uf+kvlgUo
+         mUWqcdHz85zydl5AwGFaj7tLi+w9h8TdVFROA6KuGVprU/yqajOtHujpcp2wieT+bMW0
+         XzfUS4/OxrJOIkpCeN5mhrTLsCbdmr6t1tkNwCrGEOFwISPQ5sW2ewpEoH64hxEW/CoB
+         6rmrwprFHCiwGwDoc8vxV+VNXh/ioIlXldEBARsEiPdGXpHYsF5wwcefakGAwsklpwmT
+         +Hh3ZlTzgZTgY+EzDObyLw4GYpCwXdj/UcCgHn0u8IQQRQYLglU9YwzCaQNmrOvSvb+l
+         J0gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oiA6uiLQZSwvY/0jBnBgVrltTu8yb3o9abMqa/qFOXg=;
+        b=hYoqd3RHdVUj7pEsFekmUKZI38U9zQu554+1QW0JRybVe40M0r0KJ4GAnIMnlbmGz6
+         e0GFkImgrE0vb9dyLs9tEHvS1FpAdJ/j5bYOaJdhEBtyKCytfkktDvzqOF7hOuILf//6
+         P8EBrMThgxtWmT1V1WLLuWfGmj630CPBKKamm73IKhW1dDdrlBjlMGBPiGe0wHFt9v7u
+         5qngE2XnB9l6kkF0yb/VTW0QUGVov5g4P6iGwEYtfG62wmtEXNnmrFdpWKeyU/gzKnHW
+         QAN/u+TZ9YJFMt2hDYggyRAXRkjelCVjGfzoZ5Rj6Qu77xw8h5CrENXWGmpVTJbtHd7X
+         j40w==
+X-Gm-Message-State: AOAM5324aA3rcbCs+VS4rD4+8/+kzSoytd0sDSgs3YPLdEujO8jq4Fk6
+        RTHgNK0HYtXUFbyPUoCvkRJEI5pkuTw=
+X-Google-Smtp-Source: ABdhPJzR5Yus1C91XEZYExrsAaApATfMh2spzjXAM6WhQqJUCzEMe36Ef7GbqYNOeyQEliMzZogLyw==
+X-Received: by 2002:a17:902:db0e:b0:15e:b847:2937 with SMTP id m14-20020a170902db0e00b0015eb8472937mr4699942plx.8.1652963477196;
+        Thu, 19 May 2022 05:31:17 -0700 (PDT)
+Received: from mail-lvn-it-01.broadcom.com (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
+        by smtp.gmail.com with ESMTPSA id z26-20020aa79e5a000000b005180f4733a8sm3581797pfq.106.2022.05.19.05.31.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 05:31:16 -0700 (PDT)
+From:   James Smart <jsmart2021@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     James Smart <jsmart2021@gmail.com>
+Subject: [PATCH v2 0/4] Add VMID support to nvme-fc transport and lpfc driver
+Date:   Thu, 19 May 2022 05:31:06 -0700
+Message-Id: <20220519123110.17361-1-jsmart2021@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdiUiHAhLyfgpvVY@cello>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi!
+This patch adds vmid support to the nvme-fc transport.
 
-> > The only standard tools that support SIGINFO are sleep, dd and ping,
-> > (and kill, for obvious reasons) so it's not like there's a vast hole
-> > in the tooling or something, nor is there a large legacy software base
-> > just waiting for SIGINFO to appear.   So while I very much enjoyed
-> > figuring out how to make SIGINFO work ...
-> 
-> As far as I recall, GNU make on *BSD does support SIGINFO (Not a
-> standard tool, but obviously an established one).
-> 
-> The developers of strace have expressed interest in SIGINFO support
-> to print tracer status messages (unfortunately, not on a public list).
-> Computational software can use this instead of stderr progress spam, if
-> run in an interactive fashion on a terminal, as it frequently is. There
-> is a user base, it's just not very vocal on kernel lists. :)
+Various virtualization technologies used in Fibre Channel
+SAN deployments have the ability to identify and associate traffic
+with specific virtualized applications. The T11 standard defines
+an application services tag that can be added to FC traffic to aid
+in identification and monitoring of traffic associated with the
+applications.
 
-And often it would be useful if cp supported this. Yes, this
-is feature I'd like to see.
+VMID support is present in the kernel in blkcg, the SCSI fc transport
+has tied into the infrastructure, and libvirt has been
+updated to support the blkcg settings.  Refer to:
+https://lore.kernel.org/all/20210608043556.274139-1-muneendra.kumar@broadcom.com/
 
-BR,							Pavel
+This patch set ties the nvme-fc transport into the blkcg infrastructure
+so that vmid tags can be added to nvme traffic. The patch set also
+updates the lpfc driver to utilize the nvme-fc transport addition.
+
+Although the patch adds a nvme interface, it is being sent to the SCSI
+maintainers tree due to the lpfc dependencies.  As there is no other
+consumer of the new interface, when the scsi tree merges with mainline,
+the new interface will be picked up there.
+
+Patches cut against scsi 5.19/scsi-queue tree with lpfc 14.2.0.3 patches
+included.
+
+V2:
+Revised the first patch which calls blkcg_get_fc_appid().
+Fixes build errors when merged with 
+ blk-cgroup: move blkcg_{get,set}_fc_appid out of line
+ commit db05628435aa
+
+
+James Smart (3):
+  lpfc: commonize VMID code location
+  lpfc: rework lpfc_vmid_get_appid() to be protocol independent
+  lpfc: Add support for vmid tagging of NVMe I/Os
+
+Muneendra (1):
+  nvme-fc: Add new routine nvme_fc_io_getuuid
+
+ drivers/nvme/host/fc.c         |  18 +++
+ drivers/scsi/lpfc/Makefile     |   2 +-
+ drivers/scsi/lpfc/lpfc_crtn.h  |   3 +
+ drivers/scsi/lpfc/lpfc_nvme.c  |  45 ++++++
+ drivers/scsi/lpfc/lpfc_scsi.c  | 263 +-----------------------------
+ drivers/scsi/lpfc/lpfc_vmid.c  | 288 +++++++++++++++++++++++++++++++++
+ include/linux/nvme-fc-driver.h |  14 ++
+ 7 files changed, 373 insertions(+), 260 deletions(-)
+ create mode 100644 drivers/scsi/lpfc/lpfc_vmid.c
 
 -- 
+2.26.2
+
