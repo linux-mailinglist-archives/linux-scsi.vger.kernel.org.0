@@ -2,99 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43787530684
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 May 2022 00:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BA75308FF
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 May 2022 07:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351844AbiEVWWp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 22 May 2022 18:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        id S233000AbiEWFu0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 23 May 2022 01:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351676AbiEVWWn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 22 May 2022 18:22:43 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D995125C78
-        for <linux-scsi@vger.kernel.org>; Sun, 22 May 2022 15:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1653258162; x=1684794162;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=g7+JeN4wnrl6dFXGk3nhuKNxU3bxTCBHH+iqteHxNFE=;
-  b=qom7J0UPljuV3SlsejTAR0GN9eLFTyZF/Jge45CqmuPhYNKyFMsRQh5V
-   Cpl0J1+8UrYYAiOtPI1aMQBT2+nIxD9XOaeAY+/bbG++pcLOsBaM4B5a5
-   WeUmHP7Rw/4ldnDvNZcj2XC7DM2bzVsjqP1+PhvvhGk2oxjtcB7kMT+ui
-   klOoaC42KiVmtbkDHvVYqg4ym74HBAG8846VbKaxXVlu9PBb6LktUhXEZ
-   MbEQcg/uD4eia0yQ81Sqxi8MMXJkRUOkL3Gq1wslYHcq3TgdbtVhRDLx9
-   7HGxhHt2x/AWoAymtukIc5rBtNb8iEgZqloGodYfnvwZK11kH+XRlF+Mu
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,244,1647273600"; 
-   d="scan'208";a="305310282"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 23 May 2022 06:22:41 +0800
-IronPort-SDR: +c/iwmiKy8b0LyupN3gcmRpLYq4LwcigrHEcw/VzRXLrA3iqAnBWqFNTJ44dQwiL0lFEzZ0Xmc
- 7be63DmqdWQrLNRnzncNYkP/q9SGEZSETNUHMm8E5wPh5zlaaaJcTcApuILnBUYkqsRnSuPxTS
- FwpaPdt/73O9FWOt8fpYJPKtGKHRYFlz12CYyVnUx8NhgCELov9jogtALSEF6CQ0kuNThhjzMK
- ZLdHZ4vswhheYZcA2LepMYMWwkbyeanpbgcJDTTg8o33BlfcLqJLM5e3cAuoUkUMpkifMK5J0E
- VhHC9xqRxZEOp2Bqmha6hIDk
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 May 2022 14:42:16 -0700
-IronPort-SDR: RPItbeQa+5Gpi/cN5+r0A0Ez02rzCPtkdr21BwvH98vQPB2IFCzUGN5cYuMrr6svqJjPCciel4
- hdUxl7REroC9QCebtRrBTEbQJr04yS3dajLI11jCmRp1Nb0xtKg6XVJabYzCRfkWdxS4MXNM9n
- LzWuSsT1Jiad3M+nDW9uJkpXzkRFHNp8o6zSlYH7rJJYjXUdBaDTXiihnm6hFthd9M65EKMqGy
- roCeQEkHOG3eCtikhUuTd40GOZMklC5Igsawd/PZnUz5kbVSHo1FLYCWgeVOUkSN5FOuzw0Gvt
- OBE=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 May 2022 15:22:41 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4L5w2847Tcz1SVp2
-        for <linux-scsi@vger.kernel.org>; Sun, 22 May 2022 15:22:40 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1653258159; x=1655850160; bh=g7+JeN4wnrl6dFXGk3nhuKNxU3bxTCBHH+i
-        qteHxNFE=; b=cFP8EjCWYzIn0k4ie3WKPohm2MCo0AumuYqBQTKCtVbOnF5ahgC
-        3DMD77wHEBGNIby9QYVO8Kyj8ThYO13/AhkkmwvMo1hw6M+usps0UivIXgCdZseU
-        9A6F5n+Fh6VrhIr7wexiIbbqwP/tasyeStlJ/r5Q78CNt8JpJvfsexJ4TyKQTbY2
-        aY7WAwIjYDT4mh9L4oSbx4j06Oa3+BPww0WpgkiA5gn05hxU90tfn4OZw+TdYdiC
-        O82vY1I2LjR+sEaV1nVlyE1A1wP+OTnEVYJ/WTGpbJJtbREAsy8XMVCmYRSC0I1S
-        oStpPqSyJ5iYY82wZ98GYO9okFFzZCtC3dw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id hdNceKn_Lxpn for <linux-scsi@vger.kernel.org>;
-        Sun, 22 May 2022 15:22:39 -0700 (PDT)
-Received: from [10.89.85.73] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.85.73])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4L5w252KbGz1Rvlc;
-        Sun, 22 May 2022 15:22:37 -0700 (PDT)
-Message-ID: <15f94ea2-fa97-3122-60dd-a87a3dd8a7db@opensource.wdc.com>
-Date:   Mon, 23 May 2022 07:22:35 +0900
+        with ESMTP id S229814AbiEWFuU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 23 May 2022 01:50:20 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B682B272
+        for <linux-scsi@vger.kernel.org>; Sun, 22 May 2022 22:50:17 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220523055015epoutp0241dda9afbf5c927cd2c09aaa9940c8e4~xpfZMUccI2084120841epoutp02F
+        for <linux-scsi@vger.kernel.org>; Mon, 23 May 2022 05:50:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220523055015epoutp0241dda9afbf5c927cd2c09aaa9940c8e4~xpfZMUccI2084120841epoutp02F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1653285015;
+        bh=pA/oh00VW5BYtnIAPos+Rl3OXf5h4kl7QqAwkIfF1oA=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=Cz/8O4u3/2i6uVnkr3R8kLYex8x9tLropJtwjA255Ledja1ZowHY0Ptolnh4DGPpE
+         ALTsB61ZzKolK86NYRiot9Os267HXFR5Dd9/UOFxv9w3WTcS9d3OyaIWiQXI79Rqcm
+         KUlEszj8v6AmL1ZejcJ1chMhHZMXXMqE+p4hsFD0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220523055015epcas2p31401698dcf419c43915aa32487c96d57~xpfYwDQG72228522285epcas2p3-;
+        Mon, 23 May 2022 05:50:15 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.100]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4L65yW5dQwz4x9QZ; Mon, 23 May
+        2022 05:50:11 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        82.22.09764.1902B826; Mon, 23 May 2022 14:50:09 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220523055008epcas2p4b3c935a52b6b362f1bd84a8a57949b3e~xpfTH7w_H0414604146epcas2p4w;
+        Mon, 23 May 2022 05:50:08 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220523055008epsmtrp2b1ee6aa9b949dcc80073bcaa5c24124e~xpfTG7zMY2587425874epsmtrp2b;
+        Mon, 23 May 2022 05:50:08 +0000 (GMT)
+X-AuditID: b6c32a46-79619a8000002624-89-628b20911f9c
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FA.05.08924.0902B826; Mon, 23 May 2022 14:50:08 +0900 (KST)
+Received: from KORDO040863 (unknown [10.229.8.56]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220523055008epsmtip2ae963e12a700d380b6eb784abdcad9ed~xpfS-wqnw1425914259epsmtip2M;
+        Mon, 23 May 2022 05:50:08 +0000 (GMT)
+From:   "Hoyoung SEO" <hy50.seo@samsung.com>
+To:     "'SEO HOYOUNG'" <hy50.seo@samsung.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20220522171847.66373-1-hy50.seo@samsung.com>
+Subject: RE: [RESEND PATCH v1] scsi: ufs: Change the shutting_down flag
+ setting position
+Date:   Mon, 23 May 2022 14:50:08 +0900
+Message-ID: <221501d86e68$f5e613a0$e1b23ae0$@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH 0/4] DMA mapping changes for SCSI core
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>, John Garry <john.garry@huawei.com>
-Cc:     joro@8bytes.org, will@kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-scsi@vger.kernel.org,
-        liyihang6@hisilicon.com, chenxiang66@hisilicon.com,
-        thunder.leizhen@huawei.com
-References: <1653035003-70312-1-git-send-email-john.garry@huawei.com>
- <20220522131345.GB25785@lst.de>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220522131345.GB25785@lst.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Mailer: Microsoft Outlook 14.0
+Thread-Index: AQHYKRR1NoX3jnWOYKYl5kKfNMG5oQK7eI1prRai7gA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCKsWRmVeSWpSXmKPExsWy7bCmqe5Ehe4kgyUTRS1WL37AYnF51xw2
+        i+7rO9gcmD36tqxi9Pi8SS6AKSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJ
+        IS8xN9VWycUnQNctMwdoh5JCWWJOKVAoILG4WEnfzqYov7QkVSEjv7jEVim1ICWnwLxArzgx
+        t7g0L10vL7XEytDAwMgUqDAhO+P+8utsBa+FKmZufsLYwHiPv4uRk0NCwETizrVdjF2MXBxC
+        AjsYJX53TWeDcD4xSixasYUVwvnMKHFt4wtmuJb+ScwQiV2MEud2r2aBcJ4zSsw52s8IUsUm
+        oCVxfeJbsA4RgSyJB4/nMoHYnAJWEj2HL4HZwgJREmcuzGUDsVkEVCWaV25iAbF5BSwlFt2c
+        CGULSpyc+QTMZhaQl9j+dg7UFQoSO86+ZoSYbyXxYPoRRogaEYnZnW1g10kInGKXuPh9ORtE
+        g4vEnV3/2CFsYYlXx7dA2VISn9/thaoplvjxZjUTRHMDo8TS9mNQ24wlZj1rB9rAAbRBU2L9
+        Ln0QU0JAWeLILajb+CQ6Dv9lhwjzSnS0CUE0KkmcmXsbKiwhcXB2DkTYQ2LGnrPsExgVZyF5
+        chaSJ2cheWYWwtoFjCyrGMVSC4pz01OLjQqM4JGdnJ+7iRGc/LTcdjBOeftB7xAjEwfjIUYJ
+        DmYlEd7tiR1JQrwpiZVVqUX58UWlOanFhxhNgcE+kVlKNDkfmH7zSuINTSwNTMzMDM2NTA3M
+        lcR5vVI2JAoJpCeWpGanphakFsH0MXFwSjUw7WBdte8av8z7I5veacVN35A8/8gS7doQxpLe
+        t/Z/iuVceSMLkxeZXp9r3WUuduPtJsf7V5SN+OTlsjqSDbU4Gq5EGS7KeBzB1e1qdIc56Wjl
+        RsWWR6mOvfN3iPrtuDjbI8le7LOuq9+hS0tUdzbylaqUNYav3x6U52s6/4X8CY1Nea2nGH8+
+        jW6pvOB8lfnB/1Nh7Nrra+ZbWmit2f7CMG2r8J5Q21ezf59d6qwuqnqRJ92sJ1Y3qVtsrcYr
+        9zKZdx/1rJdoH/719b3ifmNha6YZzw62z9s8T9GL66cC/wWP11r29scXqq36cujatOKYnZsF
+        PaaELLL9XCX6cvU7wW88y88rlK9bncO3jJdPiaU4I9FQi7moOBEAB+fWrwcEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrKLMWRmVeSWpSXmKPExsWy7bCSvO4Ehe4kgw2XzS1WL37AYnF51xw2
+        i+7rO9gcmD36tqxi9Pi8SS6AKYrLJiU1J7MstUjfLoEr4/7y62wFr4UqZm5+wtjAeI+/i5GT
+        Q0LAROJO/yTmLkYuDiGBHYwSh2dNZYZISEj8X9zEBGELS9xvOcIKUfSUUaLh80OwIjYBLYnr
+        E9+C2SICORJLFu2HmtTNKLHt6zQWkASngJVEz+FLYJOEBSIkWr53soLYLAKqEs0rN4HV8ApY
+        Siy6ORHKFpQ4OfMJmM0soC3R+7CVEcKWl9j+dg7UdQoSO86+ZoRYbCXxYPoRqBoRidmdbcwT
+        GIVmIRk1C8moWUhGzULSsoCRZRWjZGpBcW56brFhgVFearlecWJucWleul5yfu4mRnDIa2nt
+        YNyz6oPeIUYmDsZDjBIczEoivNsTO5KEeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkvJJCe
+        WJKanZpakFoEk2Xi4JRqYNIOtOlbPcs2zs3t3jdHGR5zptkrlY+2nErhWHxdIv7ItYJLTBH7
+        de7PriuOuvPQbr1LR9bfp92WJ5UCZ4kpfjtlYOxyKSv9Sd7fa8utOHjNY5gldJrOVYWlf0x1
+        P9gWlr4/sXCOYVzN1h9/1Uwj6xvk1/87LBM851dndHLu7ZoH/e0T7340fM6eyv7v2o+GNUz3
+        pj73eHb2k0WxsFOJxMrjR1WqdG9l9pUeOZEQuy93+0GDKe5rpx4+ekTUyoNnj6fkXt2e43Oa
+        NuioNz0+J/hmgREX5zQutdbaKn2X04tYXc40eX+c1sPUyJj6inOfkrzszdKY65pfTglMY7j9
+        dJXgjceLeq16VvlJnFp4WomlOCPRUIu5qDgRAB/JW2boAgAA
+X-CMS-MailID: 20220523055008epcas2p4b3c935a52b6b362f1bd84a8a57949b3e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220523053658epcas2p2400c4c92126baa05d5fb4b5d6ed7e274
+References: <CGME20220523053658epcas2p2400c4c92126baa05d5fb4b5d6ed7e274@epcas2p2.samsung.com>
+        <20220522171847.66373-1-hy50.seo@samsung.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -103,13 +114,74 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2022/05/22 22:13, Christoph Hellwig wrote:
-> The whole series looks fine to me.  I'll happily queue it up in the
-> dma-mapping tree if the SCSI and ATA maintainers are ok with that.
+> -----Original Message-----
+> From: SEO HOYOUNG [mailto:hy50.seo@samsung.com]
+> Sent: Monday, May 23, 2022 2:19 AM
+> To: linux-scsi@vger.kernel.org; linux-kernel@vger.kernel.org;
+> alim.akhtar@samsung.com; avri.altman@wdc.com; jejb@linux.ibm.com;
+> martin.petersen@oracle.com; beanhuo@micron.com; asutoshd@codeaurora.org;
+> cang@codeaurora.org; bvanassche@acm.org; bhoon95.kim@samsung.com;
+> kwmad.kim@samsung.com
+> Cc: SEO HOYOUNG
+> Subject: [RESEND PATCH v1] scsi: ufs: Change the shutting_down flag
+> setting position
 > 
+> When System shutdown, will called ufshcd_wl_shutdown().
+> Then the shutting_down falg set to 1 at ufshcd_wl_shutdown().
+> And send to SSU cmd at ufshcd_wl_shutdown()->__ufshcd_wl_suspend()->
+> ufshcd_set_dev_pwr_mode() function.
+> 
+> If occurred fail during send SSU cmd,
+> then will called ufshcd_err_handler for recovery.
+> But already set shutting_down to 1, so ufs driver could not recovery.
+> Then System wait for SSU cmd to be completed and eventaully it will tak
+> Hang.
+> So changed the position where shutting_down is set.
+> 
+> Signed-off-by: SEO HOYOUNG <hy50.seo@samsung.com>
+> ---
+>  drivers/scsi/ufs/ufshcd.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c index
+> 1fb3a8b9b03e..65d47cd5afbe 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -9235,10 +9235,6 @@ static void ufshcd_wl_shutdown(struct device *dev)
+> 
+>  	hba = shost_priv(sdev->host);
+> 
+> -	down(&hba->host_sem);
+> -	hba->shutting_down = true;
+> -	up(&hba->host_sem);
+> -
+>  	/* Turn on everything while shutting down */
+>  	ufshcd_rpm_get_sync(hba);
+>  	scsi_device_quiesce(sdev);
+> @@ -9248,6 +9244,10 @@ static void ufshcd_wl_shutdown(struct device *dev)
+>  		scsi_device_quiesce(sdev);
+>  	}
+>  	__ufshcd_wl_suspend(hba, UFS_SHUTDOWN_PM);
+> +
+> +	down(&hba->host_sem);
+> +	hba->shutting_down = true;
+> +	up(&hba->host_sem);
+>  }
+> 
+>  /**
+> --
+> 2.26.0
 
-Fine with me. I sent an acked-by for the libata bit.
+Hi,
 
--- 
-Damien Le Moal
-Western Digital Research
+It seems that same patch below this.
+https://lore.kernel.org/lkml/74cade30-6dde-c5f7-e009-b34423d22c12@intel.com/
+
+I think that will occurred error with called __ufshcd_wl_suspend().
+
+So the hba->shutting_down need to set after call __ufshcd_wl_suspend().
+Otherwise, the error_handler cannot operate when an error occurs.
+Please give opinion.
+
+Thanks.
+
