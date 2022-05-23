@@ -2,71 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349E2531CA2
-	for <lists+linux-scsi@lfdr.de>; Mon, 23 May 2022 22:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C606530C3D
+	for <lists+linux-scsi@lfdr.de>; Mon, 23 May 2022 11:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbiEWUBp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 23 May 2022 16:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53600 "EHLO
+        id S232447AbiEWJDY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 23 May 2022 05:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbiEWUBo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 23 May 2022 16:01:44 -0400
-X-Greylist: delayed 3597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 May 2022 13:01:42 PDT
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E904C5DBE6
-        for <linux-scsi@vger.kernel.org>; Mon, 23 May 2022 13:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=Rp6lg8HRxHqDig1j8uGr1UUFpGMW7dGsFYdyux2VykY=; b=nuzm9p5cMtUx2sOubl3SLEafkR
-        h04F34Xvj2nj4+R+NCJL24X9mjw2rgdEpcmnQQGU7wk+eHHNOE0vdSou98k4rOAHBCWu5Ir/j4VC+
-        tXsIQLdnioJ1I0wCrN62BSb8e8XLOYqilvXDSixkxwXZbSlRgkL2XnxwryXtXNvyiV+CColOTrLNN
-        BxniHCVJWiXU/4NvSNTEgPDFvDARQxEIi2rXM3D6pM0myNsLOHBsqtM4mb6ZntWetb7lLoX8MhE7M
-        sxSLdpECITp93dd797OCpJLYa/bxfEo+qiI0hjPWsLQZKr+TfmZuTFSCDiK/fOudrciWyKBu0FGOs
-        3no4g3lQ==;
-Received: from [2001:4bb8:19a:6dab:5f72:16bd:9d04:6b8a] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nt3aK-002V5s-Op; Mon, 23 May 2022 08:38:41 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: unexport scsi_bus_type
-Date:   Mon, 23 May 2022 10:38:38 +0200
-Message-Id: <20220523083838.227987-1-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S232348AbiEWJDX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 23 May 2022 05:03:23 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBDE44749
+        for <linux-scsi@vger.kernel.org>; Mon, 23 May 2022 02:03:22 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id a127so14316348vsa.3
+        for <linux-scsi@vger.kernel.org>; Mon, 23 May 2022 02:03:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=SUWQMmwZSct1NUq5pHL/uGOr0m/f9iWjJQkP63QJuAY=;
+        b=SBQ7DoRX5gke2Q/mjE+5kshDm2ZXV5BSYmR3xP+RX3pizdNdkCqCxwZrCgfW6Q6k4a
+         AKhYxKrlrZgoBKIk666rQM60dgh96ZLXCodT9cE8VCfRB5eeOqIicLv7+kpMq6cTQ8c8
+         ejMQHBueujEz4f2ca2RGM/qT1ARLSRToVZg652lvR6HAxp89cw3HP4bGZlMJKEG+QAvm
+         r86VM89JrzA6yRZke0E3dver/UrlZjAUmxTIZo36unDem/m6AJKkjagAlJH3Ciznu6ds
+         yUnVQimunM33yRnSjP9MkOG+sWZDqgmT2sKDVG99aI77xfneLLNxzdBeyLvNZxS9taTj
+         u92w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=SUWQMmwZSct1NUq5pHL/uGOr0m/f9iWjJQkP63QJuAY=;
+        b=etRD/+Ub2+A3U1TrKM5S1NsYjXcup9KfDbvTSekqCXS2OvM6SfmUCx3ZYmevFY7WMF
+         FRlDC5YIa7/ZU0salsT0VKyb+D/1ugagGBvmBf5MgaPewuKTW7iR6yoMBZwZOHRNq/CQ
+         3AtLv3M7MJjUAeg7zX8UpxADLGfFs/Gzt0yuYNA0i6plC3c0htz1UtyLWKJ4B3xhbTw+
+         /AS6ywEouidLfItpln1BBhY/eYlfO/Uy9ZmbEeoXuH1ZKG38EaWiOpWhPKZS5ZpAvSk9
+         PEOTeJeGZOiMlKM6JuLWRgh/ANRcEi3CpIKF7QmFuA1I+CiLF1yexPuceKXUil4Ajpxi
+         EGkQ==
+X-Gm-Message-State: AOAM530Q20wFV9+APhuxWr9zWgk1YgX0KzZ0D0CTPsI6n2gBwHiJe9kq
+        hk5tGZ/yxiu8dnkATMMGoqznPxtWfNskvk06F/0=
+X-Google-Smtp-Source: ABdhPJwMg466ObMsD3WrTt8zEdOs/0VcOJ/Yk/gB2CP4n7eyAnjpKdhcr4ygj6r3b4Kyj2NIG6DIoZDQ+8V3K7C6UJU=
+X-Received: by 2002:a05:6102:23d9:b0:335:e916:b99d with SMTP id
+ x25-20020a05610223d900b00335e916b99dmr7336394vsr.70.1653296601763; Mon, 23
+ May 2022 02:03:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:612c:1095:b0:2ba:f7f:f651 with HTTP; Mon, 23 May 2022
+ 02:03:21 -0700 (PDT)
+Reply-To: jub47823@gmail.com
+From:   Julian Bikarm <kodjoafanou2001@gmail.com>
+Date:   Mon, 23 May 2022 09:03:21 +0000
+Message-ID: <CALgh3en0h6bgLUPfRkvH1jy0X-S3RY9AJiKQuw+2X7O994kH+Q@mail.gmail.com>
+Subject: Please can i have your attention
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e32 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4989]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [jub47823[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [kodjoafanou2001[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [kodjoafanou2001[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-scsi_bus_type is not used by any code outside of scsi_mod.ko.
+Dear ,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/scsi/scsi_sysfs.c | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index dc6872e352bd4..81b6ca75f395f 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -560,7 +560,6 @@ struct bus_type scsi_bus_type = {
- 	.pm		= &scsi_bus_pm_ops,
- #endif
- };
--EXPORT_SYMBOL_GPL(scsi_bus_type);
- 
- int scsi_sysfs_register(void)
- {
--- 
-2.30.2
+Please can I have your attention and possibly help me for humanity's
+sake please. I am writing this message with a heavy heart filled with
+sorrows and sadness.
 
+Please if you can respond, i have an issue that i will be most
+grateful if you could help me deal with it please.
+
+Julian
