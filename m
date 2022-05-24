@@ -2,53 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6635322F7
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 May 2022 08:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 797225322FB
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 May 2022 08:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234822AbiEXGQd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 24 May 2022 02:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S234835AbiEXGQn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 24 May 2022 02:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiEXGQQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 24 May 2022 02:16:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26D9DFA6
-        for <linux-scsi@vger.kernel.org>; Mon, 23 May 2022 23:16:14 -0700 (PDT)
+        with ESMTP id S234788AbiEXGQS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 24 May 2022 02:16:18 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912ED10FF2
+        for <linux-scsi@vger.kernel.org>; Mon, 23 May 2022 23:16:16 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id F028321A59;
-        Tue, 24 May 2022 06:16:10 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0CEDA1F92D;
+        Tue, 24 May 2022 06:16:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1653372970; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1653372971; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PYapeo9LLsL7NQobmzSI065crYTSLSNoL+Y2r909dNM=;
-        b=IBMEXOFYhWpv0nDTxYxF2Lt55xB67DAUrkVg7GpcR0+IeBf2T37DVEgxJa1lGJ4ZGXSRis
-        ZIdP6CG0l0Nv/VkAuypin0znTvq5LMLZau97V/wL5C+T2Q5P/pVvHa47chxPEuX83rkxMC
-        1NybqUlDAorSZGJa1uvd8aDosYCFDO8=
+        bh=yKicc2hl3SOPadeMaWpZjxLZd2bBlgjUggUf1gNYDRk=;
+        b=iH+k3C4rCTCrKzlODpRzyuEqKoSTSW3Bp+XLFlKwo+uLq16Lx5Mi3huluj6M1Rbx7wPTSP
+        /vIx1TNzE/EoBiuL5S6q2hwyr069YmOES/qLg9G9RoEsoJjN6L5MTPO7m0rfI5PyeroQpo
+        n8eC0CT3YtvPodVMmJKcSUht457iSUY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1653372970;
+        s=susede2_ed25519; t=1653372971;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PYapeo9LLsL7NQobmzSI065crYTSLSNoL+Y2r909dNM=;
-        b=G6x7buh7FRu9IPa75XW3//taIXuN//QiQRZiHqxhi1CKq9jP7FvEomgih49ieKAfOqjlUP
-        AM1ttrHl2AoAwFDA==
+        bh=yKicc2hl3SOPadeMaWpZjxLZd2bBlgjUggUf1gNYDRk=;
+        b=+JE9GMxi6Z9WVCAVRXrie73o65J6cAn+jWiSuSmQDqsfY9StSiYibC6BuP5yblMbitClm5
+        H+gKQ7PAVPxSfjBA==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id CF86C2C15F;
+        by relay2.suse.de (Postfix) with ESMTP id D536C2C146;
         Tue, 24 May 2022 06:16:10 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id CD6F05194654; Tue, 24 May 2022 08:16:10 +0200 (CEST)
+        id D30005194656; Tue, 24 May 2022 08:16:10 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: [PATCH 14/16] aic79xx: do not reference scsi command when resetting device
-Date:   Tue, 24 May 2022 08:16:00 +0200
-Message-Id: <20220524061602.86760-15-hare@suse.de>
+        Hannes Reinecke <hare@suse.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Subject: [PATCH 15/16] ips: Do not try to abort command from host reset
+Date:   Tue, 24 May 2022 08:16:01 +0200
+Message-Id: <20220524061602.86760-16-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220524061602.86760-1-hare@suse.de>
 References: <20220524061602.86760-1-hare@suse.de>
@@ -64,62 +66,55 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When sending a device reset we should not take a reference to the
-scsi command.
+The code for aborting an outstanding command is a copy of the
+functionality from command abort. As we already have called this
+function once we reach host reset there's no point in trying to
+do so again.
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Hannes Reinecke <hare@suse.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
 ---
- drivers/scsi/aic7xxx/aic79xx_osm.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+ drivers/scsi/ips.c | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
-diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic79xx_osm.c
-index 8172ec43736c..109a61162fcc 100644
---- a/drivers/scsi/aic7xxx/aic79xx_osm.c
-+++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
-@@ -536,8 +536,10 @@ ahd_linux_unmap_scb(struct ahd_softc *ahd, struct scb *scb)
- 	struct scsi_cmnd *cmd;
+diff --git a/drivers/scsi/ips.c b/drivers/scsi/ips.c
+index 16419aeec02d..d49c1d6df5d6 100644
+--- a/drivers/scsi/ips.c
++++ b/drivers/scsi/ips.c
+@@ -835,7 +835,6 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
+ 	int i;
+ 	ips_ha_t *ha;
+ 	ips_scb_t *scb;
+-	ips_copp_wait_item_t *item;
  
- 	cmd = scb->io_ctx;
--	ahd_sync_sglist(ahd, scb, BUS_DMASYNC_POSTWRITE);
--	scsi_dma_unmap(cmd);
-+	if (cmd) {
-+		ahd_sync_sglist(ahd, scb, BUS_DMASYNC_POSTWRITE);
-+		scsi_dma_unmap(cmd);
-+	}
- }
+ 	METHOD_TRACE("ips_eh_reset", 1);
  
- /******************************** Macros **************************************/
-@@ -814,7 +816,7 @@ ahd_linux_dev_reset(struct scsi_cmnd *cmd)
+@@ -860,23 +859,6 @@ static int __ips_eh_reset(struct scsi_cmnd *SC)
+ 	if (!ha->active)
+ 		return (FAILED);
  
- 	tinfo = ahd_fetch_transinfo(ahd, 'A', ahd->our_id,
- 				    cmd->device->id, &tstate);
--	reset_scb->io_ctx = cmd;
-+	reset_scb->io_ctx = NULL;
- 	reset_scb->platform_data->dev = dev;
- 	reset_scb->sg_count = 0;
- 	ahd_set_residual(reset_scb, 0);
-@@ -1769,9 +1771,16 @@ ahd_done(struct ahd_softc *ahd, struct scb *scb)
- 	dev = scb->platform_data->dev;
- 	dev->active--;
- 	dev->openings++;
--	if ((cmd->result & (CAM_DEV_QFRZN << 16)) != 0) {
--		cmd->result &= ~(CAM_DEV_QFRZN << 16);
--		dev->qfrozen--;
-+	if (cmd) {
-+		if ((cmd->result & (CAM_DEV_QFRZN << 16)) != 0) {
-+			cmd->result &= ~(CAM_DEV_QFRZN << 16);
-+			dev->qfrozen--;
-+		}
-+	} else if (scb->flags & SCB_DEVICE_RESET) {
-+		if (ahd->platform_data->eh_done)
-+			complete(ahd->platform_data->eh_done);
-+		ahd_free_scb(ahd, scb);
-+		return;
- 	}
- 	ahd_linux_unmap_scb(ahd, scb);
- 
+-	/* See if the command is on the copp queue */
+-	item = ha->copp_waitlist.head;
+-	while ((item) && (item->scsi_cmd != SC))
+-		item = item->next;
+-
+-	if (item) {
+-		/* Found it */
+-		ips_removeq_copp(&ha->copp_waitlist, item);
+-		return (SUCCESS);
+-	}
+-
+-	/* See if the command is on the wait queue */
+-	if (ips_removeq_wait(&ha->scb_waitlist, SC)) {
+-		/* command not sent yet */
+-		return (SUCCESS);
+-	}
+-
+ 	/* An explanation for the casual observer:                              */
+ 	/* Part of the function of a RAID controller is automatic error         */
+ 	/* detection and recovery.  As such, the only problem that physically   */
 -- 
 2.29.2
 
