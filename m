@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58B35322F2
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 May 2022 08:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2892A5322ED
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 May 2022 08:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234807AbiEXGQ1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 24 May 2022 02:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S234755AbiEXGQS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 24 May 2022 02:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234324AbiEXGQP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 24 May 2022 02:16:15 -0400
+        with ESMTP id S234147AbiEXGQN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 24 May 2022 02:16:13 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B773311179
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B700FD28
         for <linux-scsi@vger.kernel.org>; Mon, 23 May 2022 23:16:12 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id D53731F925;
+        by smtp-out2.suse.de (Postfix) with ESMTP id CB9F31F920;
         Tue, 24 May 2022 06:16:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1653372970; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EHHWkdFLsSAFkAy9by9wkYrIAb1tj3q44mL+hQfWAkE=;
-        b=URga6TYOHBcFnHurwfzArB7kXu2OcToI2T2KkCunqNBU6+UXADW9Dn1oPVZ07diRCj+lOG
-        p36lMkyfkh7qR7TnJcUvTc/uvpV3AdZXOAlWlBGfbaeB3YwlZsVDrVHaammUffbBqoCLnI
-        FeWjLhshQ7kJYQJZXA4IkK43UXNLmls=
+        bh=8qKJBbif5ygTcs6ZfAghq7JqttecLOh1XuEENdq9MaE=;
+        b=VTJPt5Ua2nRhPxuSgY0enlphZ/5vDWacMx//WvS9mEmJVmYrNeSoe14HgEcHupsIrhbNgn
+        EYD8SlrdVpSHL5CRfC09gVnXxyyJ7y9BSJkUs01m4rwZhFy1izvPghRLIz5OQ8He/XRiBM
+        3h6BANpGXUB6gmkwEpceyDHbJkdGkvw=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1653372970;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EHHWkdFLsSAFkAy9by9wkYrIAb1tj3q44mL+hQfWAkE=;
-        b=mdIAbAE2BVBOI+zKmq2DMmsTs0pp3PtnQH/q2kZXnRkbjLsSo/16CepM3ofnutHMEp7K+O
-        ICzo2JE2GPRr1DAA==
+        bh=8qKJBbif5ygTcs6ZfAghq7JqttecLOh1XuEENdq9MaE=;
+        b=V/cDgxergdBbKjxeVb4V/2+BBqK2/eaR7GuW1Ds+D1i0UKvKN1b9aWw0bH0y5sA68/LfXu
+        7/as2bCWMiekZCCQ==
 Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 9B4842C143;
+        by relay2.suse.de (Postfix) with ESMTP id 9EF8D2C145;
         Tue, 24 May 2022 06:16:10 +0000 (UTC)
 Received: by adalid.arch.suse.de (Postfix, from userid 16045)
-        id 8CCB2519463C; Tue, 24 May 2022 08:16:10 +0200 (CEST)
+        id 92DD7519463E; Tue, 24 May 2022 08:16:10 +0200 (CEST)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
         Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: [PATCH 02/16] fc_fcp: use fc_block_rport()
-Date:   Tue, 24 May 2022 08:15:48 +0200
-Message-Id: <20220524061602.86760-3-hare@suse.de>
+Subject: [PATCH 03/16] mptfc: simplify mpt_fc_block_error_handler()
+Date:   Tue, 24 May 2022 08:15:49 +0200
+Message-Id: <20220524061602.86760-4-hare@suse.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220524061602.86760-1-hare@suse.de>
 References: <20220524061602.86760-1-hare@suse.de>
@@ -65,30 +65,148 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use fc_block_rport() instead of fc_block_scsi_eh() as the SCSI command
-will be removed as argument for SCSI EH functions.
+Instead of passing the a function we can as well return a status
+and call the function directly afterwards.
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Hannes Reinecke <hare@suse.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 ---
- drivers/scsi/libfc/fc_fcp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/message/fusion/mptfc.c | 83 ++++++++++++++++++++++------------
+ 1 file changed, 54 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/scsi/libfc/fc_fcp.c b/drivers/scsi/libfc/fc_fcp.c
-index bce90eb56c9c..074996319df5 100644
---- a/drivers/scsi/libfc/fc_fcp.c
-+++ b/drivers/scsi/libfc/fc_fcp.c
-@@ -2157,7 +2157,7 @@ int fc_eh_device_reset(struct scsi_cmnd *sc_cmd)
- 	int rc = FAILED;
- 	int rval;
+diff --git a/drivers/message/fusion/mptfc.c b/drivers/message/fusion/mptfc.c
+index fac747109209..ea8fc32dacfa 100644
+--- a/drivers/message/fusion/mptfc.c
++++ b/drivers/message/fusion/mptfc.c
+@@ -183,73 +183,98 @@ static struct fc_function_template mptfc_transport_functions = {
+ };
  
--	rval = fc_block_scsi_eh(sc_cmd);
-+	rval = fc_block_rport(rport);
- 	if (rval)
- 		return rval;
+ static int
+-mptfc_block_error_handler(struct scsi_cmnd *SCpnt,
+-			  int (*func)(struct scsi_cmnd *SCpnt),
+-			  const char *caller)
++mptfc_block_error_handler(struct fc_rport *rport)
+ {
+ 	MPT_SCSI_HOST		*hd;
+-	struct scsi_device	*sdev = SCpnt->device;
+-	struct Scsi_Host	*shost = sdev->host;
+-	struct fc_rport		*rport = starget_to_rport(scsi_target(sdev));
++	struct Scsi_Host	*shost = rport_to_shost(rport);
+ 	unsigned long		flags;
+ 	int			ready;
+-	MPT_ADAPTER 		*ioc;
++	MPT_ADAPTER		*ioc;
+ 	int			loops = 40;	/* seconds */
  
+-	hd = shost_priv(SCpnt->device->host);
++	hd = shost_priv(shost);
+ 	ioc = hd->ioc;
+ 	spin_lock_irqsave(shost->host_lock, flags);
+ 	while ((ready = fc_remote_port_chkready(rport) >> 16) == DID_IMM_RETRY
+ 	 || (loops > 0 && ioc->active == 0)) {
+ 		spin_unlock_irqrestore(shost->host_lock, flags);
+ 		dfcprintk (ioc, printk(MYIOC_s_DEBUG_FMT
+-			"mptfc_block_error_handler.%d: %d:%llu, port status is "
+-			"%x, active flag %d, deferring %s recovery.\n",
++			"mptfc_block_error_handler.%d: %s, port status is "
++			"%x, active flag %d, deferring recovery.\n",
+ 			ioc->name, ioc->sh->host_no,
+-			SCpnt->device->id, SCpnt->device->lun,
+-			ready, ioc->active, caller));
++			dev_name(&rport->dev), ready, ioc->active));
+ 		msleep(1000);
+ 		spin_lock_irqsave(shost->host_lock, flags);
+ 		loops --;
+ 	}
+ 	spin_unlock_irqrestore(shost->host_lock, flags);
+ 
+-	if (ready == DID_NO_CONNECT || !SCpnt->device->hostdata
+-	 || ioc->active == 0) {
++	if (ready == DID_NO_CONNECT || ioc->active == 0) {
+ 		dfcprintk (ioc, printk(MYIOC_s_DEBUG_FMT
+-			"%s.%d: %d:%llu, failing recovery, "
+-			"port state %x, active %d, vdevice %p.\n", caller,
++			"mpt_block_error_handler.%d: %s, failing recovery, "
++			"port state %x, active %d.\n",
+ 			ioc->name, ioc->sh->host_no,
+-			SCpnt->device->id, SCpnt->device->lun, ready,
+-			ioc->active, SCpnt->device->hostdata));
++			dev_name(&rport->dev), ready, ioc->active));
+ 		return FAILED;
+ 	}
+-	dfcprintk (ioc, printk(MYIOC_s_DEBUG_FMT
+-		"%s.%d: %d:%llu, executing recovery.\n", caller,
+-		ioc->name, ioc->sh->host_no,
+-		SCpnt->device->id, SCpnt->device->lun));
+-	return (*func)(SCpnt);
++	return SUCCESS;
+ }
+ 
+ static int
+ mptfc_abort(struct scsi_cmnd *SCpnt)
+ {
+-	return
+-	    mptfc_block_error_handler(SCpnt, mptscsih_abort, __func__);
++	struct Scsi_Host *shost = SCpnt->device->host;
++	struct fc_rport *rport = starget_to_rport(scsi_target(SCpnt->device));
++	MPT_SCSI_HOST __maybe_unused *hd = shost_priv(shost);
++	int rtn;
++
++	rtn = mptfc_block_error_handler(rport);
++	if (rtn == SUCCESS) {
++		dfcprintk (hd->ioc, printk(MYIOC_s_DEBUG_FMT
++			"%s.%d: %d:%llu, executing recovery.\n", __func__,
++			hd->ioc->name, shost->host_no,
++			SCpnt->device->id, SCpnt->device->lun));
++		rtn = mptscsih_abort(SCpnt);
++	}
++	return rtn;
+ }
+ 
+ static int
+ mptfc_dev_reset(struct scsi_cmnd *SCpnt)
+ {
+-	return
+-	    mptfc_block_error_handler(SCpnt, mptscsih_dev_reset, __func__);
++	struct Scsi_Host *shost = SCpnt->device->host;
++	struct fc_rport *rport = starget_to_rport(scsi_target(SCpnt->device));
++	MPT_SCSI_HOST __maybe_unused *hd = shost_priv(shost);
++	int rtn;
++
++	rtn = mptfc_block_error_handler(rport);
++	if (rtn == SUCCESS) {
++		dfcprintk (hd->ioc, printk(MYIOC_s_DEBUG_FMT
++			"%s.%d: %d:%llu, executing recovery.\n", __func__,
++			hd->ioc->name, shost->host_no,
++			SCpnt->device->id, SCpnt->device->lun));
++		rtn = mptscsih_dev_reset(SCpnt);
++	}
++	return rtn;
+ }
+ 
+ static int
+ mptfc_bus_reset(struct scsi_cmnd *SCpnt)
+ {
+-	return
+-	    mptfc_block_error_handler(SCpnt, mptscsih_bus_reset, __func__);
++	struct Scsi_Host *shost = SCpnt->device->host;
++	struct fc_rport *rport = starget_to_rport(scsi_target(SCpnt->device));
++	MPT_SCSI_HOST __maybe_unused *hd = shost_priv(shost);
++	int rtn;
++
++	rtn = mptfc_block_error_handler(rport);
++	if (rtn == SUCCESS) {
++		dfcprintk (hd->ioc, printk(MYIOC_s_DEBUG_FMT
++			"%s.%d: %d:%llu, executing recovery.\n", __func__,
++			hd->ioc->name, shost->host_no,
++			SCpnt->device->id, SCpnt->device->lun));
++		rtn = mptscsih_bus_reset(SCpnt);
++	}
++	return rtn;
+ }
+ 
+ static void
 -- 
 2.29.2
 
