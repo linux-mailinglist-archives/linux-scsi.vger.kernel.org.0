@@ -2,70 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E564A533029
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 May 2022 20:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B12F53302F
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 May 2022 20:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240244AbiEXSMC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 24 May 2022 14:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S240256AbiEXSME (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 24 May 2022 14:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240206AbiEXSL4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 24 May 2022 14:11:56 -0400
+        with ESMTP id S240212AbiEXSL5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 24 May 2022 14:11:57 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042715DD17;
-        Tue, 24 May 2022 11:11:56 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OHntbo016634;
-        Tue, 24 May 2022 18:11:45 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17AD5E16C
+        for <linux-scsi@vger.kernel.org>; Tue, 24 May 2022 11:11:56 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24OHnrWF022454;
+        Tue, 24 May 2022 18:11:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=VD5R3b32Wt9gf1id9XvUQX1gkmNk9R4zm2sc0+SFSYU=;
- b=Qi+ttpp3ytkgwxk8aCpuYzeMudKb1FV8BqGgNd58jlkmpu9bf1kx0k8pFndFiOMHfzr/
- TnQo8MFV79kYSFI2QQrrfNMKi9guMLDDDKnZKUHf02aLFNuQpZrTCGdOJ0Xw5oAtAYuj
- RcDdW7c4iwIIGlOC3r8MeZomiQk7yBf3baJBk3sO4hJ6g9e2U3EPvqhn+AdocuaYqKmV
- /rfvgojDZS6jHdxWGv4WypXku0OTGt9h0Z/sc0PFvz8b+/rBduBPWVfolmn0iT5LhJ1v
- k6vgmFvxClILBqUBUb7Mf6QJ3Wcf/1CzGhX2Sa4eD218me+wFo+f/xFmtfA/MB1FGQOv Ig== 
+ bh=4N3oavYm7srSSmyU7HRMbbIaGEzKYtuehG7tD0eXNQo=;
+ b=SgfSu/5vxfrRMKU2NY4PFM7r0XwKsxnMD6R+uea379Um5BJ/27Nwg3yRh4a6zvzH6txS
+ XvS3YmY7eUS+zsGyWWpSG2HHFku0OfrlNVadqGL8kSKW7PF8zpIjHzDshE5Z3IYXP/4s
+ 0Ej/9ee5kp0uvLzFndQRXp6VqvUV+aiSzfpYEzeDsNS6SuBNxGe66sBSdkl/w0xNOILC
+ ZxxObr2bR1z1AT1s8Sk/0AOd5j2Bz4OGc2+L/abMmYp4QghbfkugVbXnPyqM58Z9PLip
+ o+AQwP9MT7C7Bdi0qVT0ZnRWN9B2IvYqv46o0NKPCxrmZf/4opBQB3KTgGqDjkRiKkSr wA== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g93tdr3ep-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g93tar3fv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 May 2022 18:11:45 +0000
+        Tue, 24 May 2022 18:11:46 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24OHwNEH039894;
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24OHoOGZ016620;
         Tue, 24 May 2022 18:11:44 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g93x50s44-1
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g93x50s4b-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 24 May 2022 18:11:44 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 24OIAvms039045;
-        Tue, 24 May 2022 18:11:43 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 24OIAvmu039045;
+        Tue, 24 May 2022 18:11:44 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g93x50s3r-1;
-        Tue, 24 May 2022 18:11:43 +0000
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g93x50s3r-2;
+        Tue, 24 May 2022 18:11:44 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
+To:     Hannes Reinecke <hare@suse.de>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] scsi: ufs: ufshcd: delete unnecessary NULL check
-Date:   Tue, 24 May 2022 14:11:33 -0400
-Message-Id: <165341587530.22286.4324172271777105211.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>
+Subject: Re: [PATCHv2] myrb: fixup null pointer access on myrb_cleanup()
+Date:   Tue, 24 May 2022 14:11:34 -0400
+Message-Id: <165341587531.22286.3143357087389295163.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <YotFotj43TkB8Rid@kili>
-References: <YotFotj43TkB8Rid@kili>
+In-Reply-To: <20220523120244.99515-1-hare@suse.de>
+References: <20220523120244.99515-1-hare@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: qBCsRe2uHxbCurCPLrhtvr02muHI0WUy
-X-Proofpoint-ORIG-GUID: qBCsRe2uHxbCurCPLrhtvr02muHI0WUy
+X-Proofpoint-GUID: 8Pwru6qVKXRPX1b3JautBAIpU3gMShBo
+X-Proofpoint-ORIG-GUID: 8Pwru6qVKXRPX1b3JautBAIpU3gMShBo
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -76,17 +70,19 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 23 May 2022 11:28:18 +0300, Dan Carpenter wrote:
+On Mon, 23 May 2022 14:02:44 +0200, Hannes Reinecke wrote:
 
-> The "info" pointer points to somewhere in the middle of the "hba" struct.
-> It can't possibly be NULL.  Delete the NULL check.
+> When myrb_probe() fails the callback might not be set, so we need
+> to validate the 'disable_intr' callback in myrb_cleanup() to not
+> cause a null pointer exception. And while at it do not call
+> myrb_cleanup() if we cannot enable the PCI device at all.
 > 
 > 
 
 Applied to 5.19/scsi-queue, thanks!
 
-[1/1] scsi: ufs: ufshcd: delete unnecessary NULL check
-      https://git.kernel.org/mkp/scsi/c/476e45923b5d
+[1/1] myrb: fixup null pointer access on myrb_cleanup()
+      https://git.kernel.org/mkp/scsi/c/f9f0a46141e2
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
