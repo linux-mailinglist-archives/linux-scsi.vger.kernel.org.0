@@ -2,105 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3367953454B
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 May 2022 22:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F6253454D
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 May 2022 22:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245415AbiEYUsb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 25 May 2022 16:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
+        id S242682AbiEYUst (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 25 May 2022 16:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236631AbiEYUsY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 May 2022 16:48:24 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC66AA88A7
-        for <linux-scsi@vger.kernel.org>; Wed, 25 May 2022 13:48:22 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id q184so9410287ybg.11
-        for <linux-scsi@vger.kernel.org>; Wed, 25 May 2022 13:48:22 -0700 (PDT)
+        with ESMTP id S1344003AbiEYUsr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 May 2022 16:48:47 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BC4B41ED
+        for <linux-scsi@vger.kernel.org>; Wed, 25 May 2022 13:48:46 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 137so19844792pgb.5
+        for <linux-scsi@vger.kernel.org>; Wed, 25 May 2022 13:48:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
-        b=MIznAoP29XHGMZwK2XaORcuFYY4KHU3SiD37YZr3IksbwEszYFwRGI6NMOaIsgw3Rc
-         MNWUak9e2Pk5zm0JPp6szTBpWptBOFEsDKaXw1mzZOTFcRGcvyjOwqdtF8UB9EvyuuJZ
-         fMICjT1+KZ7bxeE9NTTU8LESXRGeqFThSri55TjzyU4r+qSYB8KRkbeHsWYNf08X2bEy
-         pryupL2ykuBV+sygnkk+fqajrVN1/45XJT6UIDBI/J4JIiO7GZW4kaISjbo9xtOnIbu3
-         /lAT2wlHOnLDqj2MsvwscUqPgxRkbuhwflLse0VSR01xDxZYapbGb527uMRlqnyfWWDn
-         3l8g==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+rJFsrpWf96IBFapZZS/u5IzR56LOV7xtfRzSAaw63E=;
+        b=cwldpChSAF8BUp4EP7wlKNwGkW9sbHhNM8bfhLsTzATGycffaiO9uW5o4jrQV7XWpU
+         wJRdCyaC+j04x5rBylg2pXkEQRWHeT4Jk3Dk4Fv5AoBQ1LNne8ddTiiZ3BUZzL7gI4Kc
+         FvuhRuUwk3iEzq9A1vpjezYdi44cAoRAwluPvIUmoyULM9JG04OC8+tf8CsJ4Az4ZEpv
+         vCcc4UWjRf9b9pyGwkH3BBwW/HMZ817juKHDQxitMxtuX/eryBIpTHhRr7GHlchmL01p
+         uFbvnQGWYVeR0ZJQOtfXzIW5INcgfp+/7IB7yIprXG0ALrDFhHSo5MR0JMUq/jGVQgl6
+         m2vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
-        b=YEelU/LcMrUMAQcXlbLqVKnIO3MfHXZu8QiR9t9iDIhwt9U66u1o+OHPnsOpZurw8F
-         p5fyBDNPQC20Pm5gtykuFF45oc7FMNfW+OcYvBsaD+MvLibfij7uzOie16//tQzwDqgl
-         VZpMm4dtDjAvNNBRCHYTWg4D6p8SCCg2ElAtWa22StI8aUsDFvv7ktHLuJJcrcZovE9l
-         VFILILcBvnHI/xQvohtVqvSGe3h40xKR/M9RUtyrT/grz3Mg2KrPLRECpQJsFzeqlrAB
-         M3foYtLeZxmQP/0vsO5/OmgWt6JYEDpkcS1OiP7N9UlTWHPGPXytdJRKTOaKGj3ssRf0
-         jyIQ==
-X-Gm-Message-State: AOAM531PS/PFNyCV/d0deKfX3zcj7AfjxG6rcaRrAI6F7gVjWRoHh6pt
-        MyLdBmUbJCF0exE+xWq7uwO1WaGZ05rH+2255CY=
-X-Google-Smtp-Source: ABdhPJygDnPWuNyLLxTk2B3Kv8LEKih1+m2wVtTUpsrNi1Bs8nM6GPylqvWzkD99kDlHZJJaie6GrPKCBIwCtXokpK8=
-X-Received: by 2002:a05:6902:1023:b0:64f:39e7:ef05 with SMTP id
- x3-20020a056902102300b0064f39e7ef05mr31533397ybt.126.1653511701867; Wed, 25
- May 2022 13:48:21 -0700 (PDT)
+        bh=+rJFsrpWf96IBFapZZS/u5IzR56LOV7xtfRzSAaw63E=;
+        b=DEwC6H+vftKlTI/dLMHWdWl6u55ALrvR65vLvDiw9dgS7y9PdAsCOwYOWeibF8HL0l
+         i9N+ZVdQ66SbT9WROWOI88OGklLoyPEDx2WIxwgZdLMkX/3k8smp4rd+vPx2UjHXBQ4S
+         qZf53j5v7ataYqH/NS5mufRwvYnxuIsqnyGrdx9i9N5gUYIf5VwTni8tR0Q5RBZh/TpR
+         0tZPTrrPKjDPURuxqSoWji4G1f3aQZbg26WJkQpjqjWFQovm4HlgcV71JDkyJDOn1pBD
+         Q8sDACZnmu9SHaklDKjbBSKMsWxiydB7odw/7oYlCORibFOpTRphWbX7PpfcW3AIVKCv
+         JA+g==
+X-Gm-Message-State: AOAM531imBgB3MyDUqEdIJEXHpVA/EzMYk2K+vk67Y0J8yYgGJI8HH1K
+        K/L3Adk1TwQkKXp6KhiBroY=
+X-Google-Smtp-Source: ABdhPJwXlwsrhBjM6vucZqtALauAaNvDDOl8GWsUklDg4MTjZodBQpJfcmr25swO79BO7DzVfpWiuA==
+X-Received: by 2002:a65:62d0:0:b0:3fa:c6aa:6901 with SMTP id m16-20020a6562d0000000b003fac6aa6901mr6250634pgv.314.1653511725978;
+        Wed, 25 May 2022 13:48:45 -0700 (PDT)
+Received: from [10.69.47.244] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id x21-20020a62fb15000000b0050dc76281b8sm12053092pfm.146.2022.05.25.13.48.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 13:48:45 -0700 (PDT)
+Message-ID: <28131480-245f-55ce-f515-103d9d096c37@gmail.com>
+Date:   Wed, 25 May 2022 13:48:44 -0700
 MIME-Version: 1.0
-Received: by 2002:a05:7110:3682:b0:17b:2b7b:c035 with HTTP; Wed, 25 May 2022
- 13:48:21 -0700 (PDT)
-From:   Colina Fernando <colinafernando724@gmail.com>
-Date:   Wed, 25 May 2022 22:48:21 +0200
-Message-ID: <CAP7Hh1-EL6tqrQsO0De_QJ1avJao_roXNeVStyzCoPtO9q14fg@mail.gmail.com>
-Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
-To:     contact@firstdiamondbk.com
-Cc:     info@firstdiamondbk.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH REPOST] scsi: lpfc: Add support for ATTO Fibre Channel
+ devices
+Content-Language: en-US
+To:     Bradley Grove <bradley.grove@gmail.com>, linux-scsi@vger.kernel.org
+Cc:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        Bradley Grove <bgrove@attotech.com>,
+        Jason Seba <jseba@attotech.com>
+References: <20220524125621.47102-1-bgrove@attotech.com>
+From:   James Smart <jsmart2021@gmail.com>
+In-Reply-To: <20220524125621.47102-1-bgrove@attotech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Guten Tag,
+On 5/24/2022 5:56 AM, Bradley Grove wrote:
+> Update pci_device_id table and generate reporting strings for ATTO
+> Celerity and ThunderLink Fibre Channel devices.
+> 
+> Co-developed-by: Jason Seba <jseba@attotech.com>
+> Signed-off-by: Jason Seba <jseba@attotech.com>
+> Signed-off-by: Bradley Grove <bgrove@attotech.com>
+> ---
+>   drivers/scsi/lpfc/lpfc_hw.h   | 22 +++++++++
+>   drivers/scsi/lpfc/lpfc_ids.h  | 30 ++++++++++++
+>   drivers/scsi/lpfc/lpfc_init.c | 89 +++++++++++++++++++++++++++++++++++
+>   3 files changed, 141 insertions(+)
+> 
 
-Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
+Reviewed-by: James Smart <jsmart2021@gmail.com>
 
-haben ?
-
-Ich habe versucht, Sie per E-Mail zu erreichen.
-
-Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
-
-Danke
-
-Fernando Colina
-
-colinafernando724@gmail.com
-
-
-
-
-----------------------------------
-
-
-
-
-Good Afternoon,
-
-I was just wondering if you got my Previous E-mail
-have ?
-
-I tried to reach you by E-mail.
-
-Please come back to me quickly, it is very Important.
-
-Thanks
-
-Fernando Colina
-
-colinafernando724@gmail.com
+-- james
