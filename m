@@ -2,65 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763BE53443D
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 May 2022 21:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3367953454B
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 May 2022 22:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234852AbiEYTdq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 25 May 2022 15:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
+        id S245415AbiEYUsb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 25 May 2022 16:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbiEYTdq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 May 2022 15:33:46 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDE21260C
-        for <linux-scsi@vger.kernel.org>; Wed, 25 May 2022 12:33:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9F70D21982;
-        Wed, 25 May 2022 19:33:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1653507223; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6ZfEWOfSE8ohd4PpAK42AepitR5XuIcj0TpU27Kbrwk=;
-        b=FNig6IHplHG8sCdzhkWIuFRjVOKZ7kQBXX2L4AVgsuIM0HkpgCrv52TPhFaFpX3nFDhdS7
-        AMLPUpi3DddJplzqiRwbBARYOQpGPJE5VoKhnjweZPTB6oUfgVKqzEn5PKXX9cTjVzod7g
-        zhqGOoaczP/23uAgfg8ortwoy5CBLGs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 597A313ADF;
-        Wed, 25 May 2022 19:33:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gCTkE5eEjmKhawAAMHmgww
-        (envelope-from <mwilck@suse.com>); Wed, 25 May 2022 19:33:43 +0000
-Message-ID: <3161c450d78c79c3dbc8f471fd9d387f32f92d09.camel@suse.com>
-Subject: Re: [PATCH] scsi_dh_alua: mark port group as failed after ALUA
- transitioning timeout
-From:   Martin Wilck <mwilck@suse.com>
-To:     Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Brian Bunker <brian@purestorage.com>,
-        Martin Wilck <mwilck@suse.de>
-Date:   Wed, 25 May 2022 21:33:42 +0200
-In-Reply-To: <afa5f370-4e16-319f-ded8-49e11f12ff56@suse.de>
-References: <20220525081139.88165-1-hare@suse.de>
-         <37b61d6b956c18bf4a56d14b5746dab2719ef20d.camel@suse.com>
-         <afa5f370-4e16-319f-ded8-49e11f12ff56@suse.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.1 
+        with ESMTP id S236631AbiEYUsY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 May 2022 16:48:24 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC66AA88A7
+        for <linux-scsi@vger.kernel.org>; Wed, 25 May 2022 13:48:22 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id q184so9410287ybg.11
+        for <linux-scsi@vger.kernel.org>; Wed, 25 May 2022 13:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
+        b=MIznAoP29XHGMZwK2XaORcuFYY4KHU3SiD37YZr3IksbwEszYFwRGI6NMOaIsgw3Rc
+         MNWUak9e2Pk5zm0JPp6szTBpWptBOFEsDKaXw1mzZOTFcRGcvyjOwqdtF8UB9EvyuuJZ
+         fMICjT1+KZ7bxeE9NTTU8LESXRGeqFThSri55TjzyU4r+qSYB8KRkbeHsWYNf08X2bEy
+         pryupL2ykuBV+sygnkk+fqajrVN1/45XJT6UIDBI/J4JIiO7GZW4kaISjbo9xtOnIbu3
+         /lAT2wlHOnLDqj2MsvwscUqPgxRkbuhwflLse0VSR01xDxZYapbGb527uMRlqnyfWWDn
+         3l8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
+        b=YEelU/LcMrUMAQcXlbLqVKnIO3MfHXZu8QiR9t9iDIhwt9U66u1o+OHPnsOpZurw8F
+         p5fyBDNPQC20Pm5gtykuFF45oc7FMNfW+OcYvBsaD+MvLibfij7uzOie16//tQzwDqgl
+         VZpMm4dtDjAvNNBRCHYTWg4D6p8SCCg2ElAtWa22StI8aUsDFvv7ktHLuJJcrcZovE9l
+         VFILILcBvnHI/xQvohtVqvSGe3h40xKR/M9RUtyrT/grz3Mg2KrPLRECpQJsFzeqlrAB
+         M3foYtLeZxmQP/0vsO5/OmgWt6JYEDpkcS1OiP7N9UlTWHPGPXytdJRKTOaKGj3ssRf0
+         jyIQ==
+X-Gm-Message-State: AOAM531PS/PFNyCV/d0deKfX3zcj7AfjxG6rcaRrAI6F7gVjWRoHh6pt
+        MyLdBmUbJCF0exE+xWq7uwO1WaGZ05rH+2255CY=
+X-Google-Smtp-Source: ABdhPJygDnPWuNyLLxTk2B3Kv8LEKih1+m2wVtTUpsrNi1Bs8nM6GPylqvWzkD99kDlHZJJaie6GrPKCBIwCtXokpK8=
+X-Received: by 2002:a05:6902:1023:b0:64f:39e7:ef05 with SMTP id
+ x3-20020a056902102300b0064f39e7ef05mr31533397ybt.126.1653511701867; Wed, 25
+ May 2022 13:48:21 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Received: by 2002:a05:7110:3682:b0:17b:2b7b:c035 with HTTP; Wed, 25 May 2022
+ 13:48:21 -0700 (PDT)
+From:   Colina Fernando <colinafernando724@gmail.com>
+Date:   Wed, 25 May 2022 22:48:21 +0200
+Message-ID: <CAP7Hh1-EL6tqrQsO0De_QJ1avJao_roXNeVStyzCoPtO9q14fg@mail.gmail.com>
+Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
+To:     contact@firstdiamondbk.com
+Cc:     info@firstdiamondbk.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,88 +66,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTA1LTI1IGF0IDE0OjA3ICswMjAwLCBIYW5uZXMgUmVpbmVja2Ugd3JvdGU6
-Cj4gT24gNS8yNS8yMiAxMzoyMCwgTWFydGluIFdpbGNrIHdyb3RlOgo+ID4gT24gV2VkLCAyMDIy
-LTA1LTI1IGF0IDEwOjExICswMjAwLCBIYW5uZXMgUmVpbmVja2Ugd3JvdGU6Cj4gPiA+IFdoZW4g
-QUxVQSB0cmFuc2l0aW9uaW5nIHRpbWVvdXQgdHJpZ2dlcnMgdGhlIHBhdGggZ3JvdXAgc3RhdGUK
-PiA+ID4gbXVzdAo+ID4gPiBiZSBjb25zaWRlcmVkIGludmFsaWQuIFNvIGFkZCBhIG5ldyBmbGFn
-IEFMVUFfUEdfRkFJTEVEIHRvCj4gPiA+IGluZGljYXRlCj4gPiA+IHRoYXQgdGhlIHBhdGggc3Rh
-dGUgaXNuJ3QgbmVjZXNzYXJpbHkgdmFsaWQsIGFuZCBrZWVwIHRoZQo+ID4gPiBleGlzdGluZwo+
-ID4gPiBwYXRoIHN0YXRlIHVudGlsIHdlIGdldCBhIHZhbGlkIHJlc3BvbnNlIGZyb20gYSBSVFBH
-Lgo+ID4gPiAKPiA+ID4gQ2M6IEJyaWFuIEJ1bmtlciA8YnJpYW5AcHVyZXN0b3JhZ2UuY29tPgo+
-ID4gPiBDYzogTWFydGluIFdpbGNrIDxtd2lsY2tAc3VzZS5kZT4KPiA+ID4gU2lnbmVkLW9mZi1i
-eTogSGFubmVzIFJlaW5lY2tlIDxoYXJlQHN1c2UuZGU+Cj4gPiA+IC0tLQo+ID4gPiCgoGRyaXZl
-cnMvc2NzaS9kZXZpY2VfaGFuZGxlci9zY3NpX2RoX2FsdWEuYyB8IDI0ICsrKysrKystLS0tLS0t
-LQo+ID4gPiAtLS0tLQo+ID4gPiAtLQo+ID4gPiCgoDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlv
-bnMoKyksIDE3IGRlbGV0aW9ucygtKQo+ID4gPiAKPiA+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-c2NzaS9kZXZpY2VfaGFuZGxlci9zY3NpX2RoX2FsdWEuYwo+ID4gPiBiL2RyaXZlcnMvc2NzaS9k
-ZXZpY2VfaGFuZGxlci9zY3NpX2RoX2FsdWEuYwo+ID4gPiBpbmRleCAxZDliZTc3MWYzZWUuLjY5
-MjE0OTBhNWU2NSAxMDA2NDQKPiA+ID4gLS0tIGEvZHJpdmVycy9zY3NpL2RldmljZV9oYW5kbGVy
-L3Njc2lfZGhfYWx1YS5jCj4gPiA+ICsrKyBiL2RyaXZlcnMvc2NzaS9kZXZpY2VfaGFuZGxlci9z
-Y3NpX2RoX2FsdWEuYwo+ID4gPiBAQCAtNDksNiArNDksNyBAQAo+ID4gPiCgoCNkZWZpbmUgQUxV
-QV9QR19SVU5fUlRQR6CgoKCgoKCgoKCgoKCgoDB4MTAKPiA+ID4goKAjZGVmaW5lIEFMVUFfUEdf
-UlVOX1NUUEegoKCgoKCgoKCgoKCgoKAweDIwCj4gPiA+IKCgI2RlZmluZSBBTFVBX1BHX1JVTk5J
-TkegoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAweDQwCj4gPiA+ICsjZGVmaW5lIEFMVUFfUEdfRkFJ
-TEVEoKCgoKCgoKCgoKCgoKCgoKAweDgwCj4gPiA+IKAgCj4gPiA+IKCgc3RhdGljIHVpbnQgb3B0
-aW1pemVfc3RwZzsKPiA+ID4goKBtb2R1bGVfcGFyYW0ob3B0aW1pemVfc3RwZywgdWludCwgU19J
-UlVHT3xTX0lXVVNSKTsKPiA+ID4gQEAgLTQyMCw3ICs0MjEsNyBAQCBzdGF0aWMgZW51bSBzY3Np
-X2Rpc3Bvc2l0aW9uCj4gPiA+IGFsdWFfY2hlY2tfc2Vuc2Uoc3RydWN0IHNjc2lfZGV2aWNlICpz
-ZGV2LAo+ID4gPiCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgICovCj4gPiA+IKCgoKCgoKCgoKCg
-oKCgoKCgoKCgoKCgoKByY3VfcmVhZF9sb2NrKCk7Cj4gPiA+IKCgoKCgoKCgoKCgoKCgoKCgoKCg
-oKCgoKBwZyA9IHJjdV9kZXJlZmVyZW5jZShoLT5wZyk7Cj4gPiA+IC2goKCgoKCgoKCgoKCgoKCg
-oKCgoKCgoGlmIChwZykKPiA+ID4gK6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgaWYgKHBnICYmICEo
-cGctPmZsYWdzICYgQUxVQV9QR19GQUlMRUQpKQo+ID4gPiCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
-oKCgoKCgoKCgoKBwZy0+c3RhdGUgPQo+ID4gPiBTQ1NJX0FDQ0VTU19TVEFURV9UUkFOU0lUSU9O
-SU5HOwo+ID4gPiCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgcmN1X3JlYWRfdW5sb2NrKCk7Cj4g
-PiA+IKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKBhbHVhX2NoZWNrKHNkZXYsIGZhbHNlKTsKPiA+
-IAo+ID4gWW91IHN0aWxsIHJldHVybiBORUVEU19SRVRSWSBmcm9tIGFsdWFfY2hlY2tfc2Vuc2Uo
-KSwgZXZlbiBpZgo+ID4gQUxVQV9QR19GQUlMRUQgaXMgc2V0Pwo+ID4gCj4gPiA+IEBAIC02OTQs
-NyArNjk1LDcgQEAgc3RhdGljIGludCBhbHVhX3J0cGcoc3RydWN0IHNjc2lfZGV2aWNlCj4gPiA+
-ICpzZGV2LAo+ID4gPiBzdHJ1Y3QgYWx1YV9wb3J0X2dyb3VwICpwZykKPiA+ID4goCAKPiA+ID4g
-oKAgc2tpcF9ydHBnOgo+ID4gPiCgoKCgoKCgoKBzcGluX2xvY2tfaXJxc2F2ZSgmcGctPmxvY2ss
-IGZsYWdzKTsKPiA+ID4gLaCgoKCgoKBpZiAodHJhbnNpdGlvbmluZ19zZW5zZSkKPiA+ID4gK6Cg
-oKCgoKBpZiAodHJhbnNpdGlvbmluZ19zZW5zZSAmJiAhKHBnLT5mbGFncyAmIEFMVUFfUEdfRkFJ
-TEVEKSkKPiA+ID4goKCgoKCgoKCgoKCgoKCgoKBwZy0+c3RhdGUgPSBTQ1NJX0FDQ0VTU19TVEFU
-RV9UUkFOU0lUSU9OSU5HOwo+ID4gPiCgIAo+ID4gPiCgoKCgoKCgoKBpZiAoZ3JvdXBfaWRfb2xk
-ICE9IHBnLT5ncm91cF9pZCB8fCBzdGF0ZV9vbGQgIT0gcGctCj4gPiA+ID5zdGF0ZSB8fAo+ID4g
-PiBAQCAtNzE4LDIzICs3MTksMTAgQEAgc3RhdGljIGludCBhbHVhX3J0cGcoc3RydWN0IHNjc2lf
-ZGV2aWNlCj4gPiA+ICpzZGV2LAo+ID4gPiBzdHJ1Y3QgYWx1YV9wb3J0X2dyb3VwICpwZykKPiA+
-ID4goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoHBnLT5pbnRlcnZhbCA9IEFMVUFfUlRQR19SRVRS
-WV9ERUxBWTsKPiA+ID4goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoGVyciA9IFNDU0lfREhfUkVU
-Ulk7Cj4gPiA+IKCgoKCgoKCgoKCgoKCgoKCgfSBlbHNlIHsKPiA+ID4gLaCgoKCgoKCgoKCgoKCg
-oKCgoKCgoKCgc3RydWN0IGFsdWFfZGhfZGF0YSAqaDsKPiA+ID4gLQo+ID4gPiAtoKCgoKCgoKCg
-oKCgoKCgoKCgoKCgoKAvKiBUcmFuc2l0aW9uaW5nIHRpbWUgZXhjZWVkZWQsIHNldCBwb3J0Cj4g
-PiA+IHRvCj4gPiA+IHN0YW5kYnkgKi8KPiA+ID4gK6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgLyog
-VHJhbnNpdGlvbmluZyB0aW1lIGV4Y2VlZGVkLCBtYXJrIHBnCj4gPiA+IGFzCj4gPiA+IGZhaWxl
-ZCAqLwo+ID4gPiCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgZXJyID0gU0NTSV9ESF9JTzsKPiA+
-ID4gLaCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgcGctPnN0YXRlID0gU0NTSV9BQ0NFU1NfU1RBVEVf
-U1RBTkRCWTsKPiA+ID4gK6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgcGctPmZsYWdzIHw9IEFMVUFf
-UEdfRkFJTEVEOwo+ID4gPiCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgcGctPmV4cGlyeSA9IDA7
-Cj4gPiA+IC2goKCgoKCgoKCgoKCgoKCgoKCgoKCgoHJjdV9yZWFkX2xvY2soKTsKPiA+ID4gLaCg
-oKCgoKCgoKCgoKCgoKCgoKCgoKCgbGlzdF9mb3JfZWFjaF9lbnRyeV9yY3UoaCwgJnBnLT5kaF9s
-aXN0LAo+ID4gPiBub2RlKSB7Cj4gPiA+IC2goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
-aWYgKCFoLT5zZGV2KQo+ID4gPiAtoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
-oKCgY29udGludWU7Cj4gPiA+IC2goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgaC0+c2Rl
-di0+YWNjZXNzX3N0YXRlID0KPiA+ID4gLaCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
-oKCgoKCgoChwZy0+c3RhdGUgJgo+ID4gPiBTQ1NJX0FDQ0VTU19TVEFURV9NQVNLKTsKPiA+ID4g
-LaCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKBpZiAocGctPnByZWYpCj4gPiA+IC2goKCg
-oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKBoLT5zZGV2LT5hY2Nlc3Nfc3RhdGUg
-fD0KPiA+ID4gLQo+ID4gPiCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
-oKCgoKCgoKBTQ1NJX0FDQ0VTU19TVEFURQo+ID4gPiBfUFJFRkUKPiA+ID4gUlJFRDsKPiA+ID4g
-LaCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgfQo+ID4gPiAtoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKBy
-Y3VfcmVhZF91bmxvY2soKTsKPiA+ID4goKCgoKCgoKCgoKCgoKCgoKB9Cj4gPiA+IKCgoKCgoKCg
-oKCgoKCgoKCgYnJlYWs7Cj4gPiA+IKCgoKCgoKCgoGNhc2UgU0NTSV9BQ0NFU1NfU1RBVEVfT0ZG
-TElORToKPiA+ID4gQEAgLTc0Niw2ICs3MzQsOCBAQCBzdGF0aWMgaW50IGFsdWFfcnRwZyhzdHJ1
-Y3Qgc2NzaV9kZXZpY2UKPiA+ID4gKnNkZXYsCj4gPiA+IHN0cnVjdCBhbHVhX3BvcnRfZ3JvdXAg
-KnBnKQo+ID4gPiCgoKCgoKCgoKCgoKCgoKCgoC8qIFVzZWFibGUgcGF0aCBpZiBhY3RpdmUgKi8K
-PiA+ID4goKCgoKCgoKCgoKCgoKCgoKBlcnIgPSBTQ1NJX0RIX09LOwo+ID4gPiCgoKCgoKCgoKCg
-oKCgoKCgoHBnLT5leHBpcnkgPSAwOwo+ID4gPiAroKCgoKCgoKCgoKCgoKCgLyogUlRQRyBzdWNj
-ZWVkZWQsIGNsZWFyIEFMVUFfUEdfRkFJTEVEICovCj4gPiA+ICugoKCgoKCgoKCgoKCgoKBwZy0+
-ZmxhZ3MgJj0gfkFMVUFfUEdfRkFJTEVEOwo+ID4gCj4gPiBTaG91bGRuJ3QgdGhpcyBiZSBkb25l
-IGZvciBhbnkgc3RhdGUgZXhjZXB0IFRSQU5TSVRJT05JTkc/Cj4gPiAKPiBXaHksIGJ1dCBpdCBk
-b2VzLgo+IFdlJ3JlIG9ubHkgZW50ZXJpbmcgdGhpcyBibG9jayBpZiB0aGUgc3RhdGUgaXMgbm90
-IFRSQU5TSVRJT05JTkcuCj4gKEl0J3MgcGFydCBvZiBhICdzd2l0Y2gnIHN0YXRlbWVudCkKClJp
-Z2h0LCB0aGUgb25seSBleGNlcHRpb24gaXMgU0NTSV9BQ0NFU1NfU1RBVEVfT0ZGTElORSwgZm9y
-IHdoaWNoIHRoZQpBTFVBX1BHX0ZBSUxFRCBzdGF0ZSBzaG91bGQgb2YgY2F1c2UgcGVyc2lzdC4g
-U29ycnkgZm9yIGJvdGhlcmluZy4KCgpNYXJ0aW4K
+Guten Tag,
 
+Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
+
+haben ?
+
+Ich habe versucht, Sie per E-Mail zu erreichen.
+
+Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
+
+Danke
+
+Fernando Colina
+
+colinafernando724@gmail.com
+
+
+
+
+----------------------------------
+
+
+
+
+Good Afternoon,
+
+I was just wondering if you got my Previous E-mail
+have ?
+
+I tried to reach you by E-mail.
+
+Please come back to me quickly, it is very Important.
+
+Thanks
+
+Fernando Colina
+
+colinafernando724@gmail.com
