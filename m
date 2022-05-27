@@ -2,87 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E165C53682A
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 May 2022 22:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA40B5368B8
+	for <lists+linux-scsi@lfdr.de>; Sat, 28 May 2022 00:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350587AbiE0UlT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 May 2022 16:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
+        id S1347778AbiE0WSY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 May 2022 18:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237106AbiE0UlS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 May 2022 16:41:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8452F21A8
-        for <linux-scsi@vger.kernel.org>; Fri, 27 May 2022 13:41:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 339BCB82522
-        for <linux-scsi@vger.kernel.org>; Fri, 27 May 2022 20:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F3076C385A9
-        for <linux-scsi@vger.kernel.org>; Fri, 27 May 2022 20:41:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653684075;
-        bh=ZXVMlXt9RPGUw6MOzPi4Opa0buDZyAb0BZnCXWxTruE=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=VraliJuahtBTPNR9alELmtt5cAkaul5ALnqfMJRr/YE/PFRdIgigK8cWvhd29u1UI
-         mQJZUF+hUGnRpXYlGRL5/0QXl+yWOtuvj5XxpegbXN0BbGAB3ZFaqCgE00nVQB++1y
-         0R1yTLaIrzCbxhbl5WOeT0s2i5+W9/vrQlAW0gKEv7JSTicR0b9tCWXnNrcJKZPFTr
-         AJcFACPLcHbAW0YZHrGE6tUgLOAxISS98EHVBmWtS+AzQHJcXQXjYBvRu9P26bvCqe
-         bvh+o1bVCP1dct2gNS3yjZtQyHfMGmmLpqNP1j8tyI85wD0nqNMhvbQgx+hkFVGiKT
-         AQigNvCg34X+g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id E29B9CAC6E2; Fri, 27 May 2022 20:41:14 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-scsi@vger.kernel.org
-Subject: [Bug 215943] UBSAN: array-index-out-of-bounds in
- drivers/scsi/megaraid/megaraid_sas_fp.c:103:32
-Date:   Fri, 27 May 2022 20:41:14 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: IO/Storage
-X-Bugzilla-Component: SCSI
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: darren.armstrong85@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215943-11613-0TnOm6FOsw@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215943-11613@https.bugzilla.kernel.org/>
-References: <bug-215943-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229610AbiE0WSX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 May 2022 18:18:23 -0400
+Received: from alahly-cah-01.alahly.local (unknown [213.212.208.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E985EAF332
+        for <linux-scsi@vger.kernel.org>; Fri, 27 May 2022 15:18:15 -0700 (PDT)
+Received: from User (103.153.79.240) by Alahly-CAH-01.alahly.local
+ (192.168.0.20) with Microsoft SMTP Server id 14.3.498.0; Sat, 28 May 2022
+ 00:17:28 +0200
+Reply-To: <info@miketailorinv.us>
+From:   MIKE TAILOR INVESTMENT <webmaster@alahly.com>
+Subject: Re: Lucrative Opportunity !!!
+Date:   Fri, 27 May 2022 15:03:02 -0700
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <c78f0b98-542e-488d-9bab-e0e91b5d385d@ALAHLY-CAH-01.alahly.local>
+To:     Undisclosed recipients:;
+X-Originating-IP: [103.153.79.240]
+X-Spam-Status: No, score=4.2 required=5.0 tests=AXB_XMAILER_MIMEOLE_OL_024C2,
+        BAYES_50,FAKE_REPLY_C,FORGED_MUA_OUTLOOK,FSL_CTYPE_WIN1251,
+        FSL_NEW_HELO_USER,NSL_RCVD_FROM_USER,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215943
-
---- Comment #3 from darren.armstrong85@gmail.com ---
-That makes a *bit* more sense.  Is there something special about the zero-th
-entry which allows for treating MR_DRV_RAID_MAP_ALL as a MR_DRV_RAID_MAP so=
-me
-of the time?  Something like that would explain why this code is set up in =
-this
-way and has persisted in this way for so long.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Mike Tailor Inv is currently doing a great Promo, You have the opportunity to invest at least  $250 USD and earn $2,500 USD in 4 working days time. Contact the INV company via this email: ( info@miketailorinv.us ). The higher you invest the higher your profit value.
