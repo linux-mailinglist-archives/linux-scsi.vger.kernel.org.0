@@ -2,69 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA08537206
-	for <lists+linux-scsi@lfdr.de>; Sun, 29 May 2022 20:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 038ED537191
+	for <lists+linux-scsi@lfdr.de>; Sun, 29 May 2022 17:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbiE2SEG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 29 May 2022 14:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
+        id S231192AbiE2PjO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 29 May 2022 11:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiE2SEE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 May 2022 14:04:04 -0400
-X-Greylist: delayed 5241 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 May 2022 11:04:01 PDT
-Received: from mx.sb-roscoff.fr (mx.sb-roscoff.fr [193.52.39.203])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B61964BD6;
-        Sun, 29 May 2022 11:04:01 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mx.sb-roscoff.fr (Postfix) with ESMTP id 97F95225D65;
-        Sun, 29 May 2022 17:30:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mx.sb-roscoff.fr
-Received: from mx.sb-roscoff.fr ([127.0.0.1])
-        by localhost (mx.sb-roscoff.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id uzxxGK7uxwgL; Sun, 29 May 2022 17:30:43 +0200 (CEST)
-Received: from web11.sb-roscoff.fr (web11.sb-roscoff.fr [192.168.1.181])
-        by mx.sb-roscoff.fr (Postfix) with ESMTP id C5319225BF3;
-        Sun, 29 May 2022 17:28:23 +0200 (CEST)
-Received: from 141.11.28.159
-        (SquirrelMail authenticated user sgarric)
-        by web11.sb-roscoff.fr with HTTP;
-        Sun, 29 May 2022 17:28:24 +0200
-Message-ID: <1bface92207363f7077be37c71aa39a3.squirrel@web11.sb-roscoff.fr>
-Date:   Sun, 29 May 2022 17:28:24 +0200
-Subject: =?iso-8859-1?Q?Gesch=E4ft?=
-From:   "Dave Ramsden" <sgarric@sb-roscoff.fr>
-Reply-To: davrsd1@aol.com
-User-Agent: SquirrelMail/1.4.22
+        with ESMTP id S231154AbiE2PjM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 May 2022 11:39:12 -0400
+Received: from sender2-op-o12.zoho.com.cn (sender2-op-o12.zoho.com.cn [163.53.93.243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD12862CF2;
+        Sun, 29 May 2022 08:39:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1653838734;
+        s=zohomail; d=mykernel.net; i=cgxu519@mykernel.net;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=H/7tQvtUiqi0ZJQmTxMoDoDs/okaMbJa/iz0nsWrZos=;
+        b=XqgBJ5yCJqSPQ/aDKSeP8W34gSaSsT2m5ylRPK9XOjRSVSAjln1QDS3FGL5zmWVH
+        a63vXBYuOriHpDzDdpNFldOQDXIVl+CSxnCpWRbJUu3i5iKnbA24zkEvg2vkTP84D0F
+        Vg2ehgeM1Wq/+cyK5bmeXw5ljhbq1CSS67jqMsek=
+Received: from localhost.localdomain (81.71.33.115 [81.71.33.115]) by mx.zoho.com.cn
+        with SMTPS id 1653838730991907.8340407713124; Sun, 29 May 2022 23:38:50 +0800 (CST)
+From:   Chengguang Xu <cgxu519@mykernel.net>
+To:     netdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-scsi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-media@vger.kernel.org
+Cc:     Chengguang Xu <cgxu519@mykernel.net>
+Message-ID: <20220529153456.4183738-1-cgxu519@mykernel.net>
+Subject: [PATCH 0/6] fix a common error of while loop condition in error path
+Date:   Sun, 29 May 2022 23:34:50 +0800
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain;charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
-X-Priority: 3 (Normal)
-Importance: Normal
-To:     undisclosed-recipients:;
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: quoted-printable
+X-ZohoCNMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+There is a common error of while loop condition which misses
+the case '(--i) =3D=3D 0' in error path. This patch series just
+tries to fix it in several driver's code.
 
+Note: I'm not specialist of specific drivers so just compile tested
+for the fixes.
 
+Chengguang Xu (6):
+  netlink: fix missing destruction of rhash table in error case
+  staging: vt6655: fix missing resource cleanup in error cases
+  scsi: ipr: fix missing/incorrect resource cleanup in error case
+  drm/exynos: fix missing resource cleanup in error case
+  scsi: pmcraid: fix missing resource cleanup in error case
+  media: platform: fix missing/incorrect resource cleanup in error case
 
-Ich bin Herr. Dave Ramsden und ich arbeiten mit der Bank of England
-zusammen. Ich habe einen lukrativen Geschäftsvorschlag für Sie, den ich
-Ihnen als Antwort auf diese E-Mail mit Einzelheiten zur Prüfung zukommen
-lassen werde.
+ drivers/gpu/drm/exynos/exynos_drm_gsc.c             | 2 +-
+ drivers/media/platform/samsung/s5p-mfc/s5p_mfc_pm.c | 3 +--
+ drivers/scsi/ipr.c                                  | 4 ++--
+ drivers/scsi/pmcraid.c                              | 2 +-
+ drivers/staging/vt6655/device_main.c                | 8 ++++----
+ net/netlink/af_netlink.c                            | 2 +-
+ 6 files changed, 10 insertions(+), 11 deletions(-)
 
-Bitte senden Sie Ihre Antwort, wenn möglich, auf Englisch, um weitere
-Einzelheiten zu erhalten.
+--=20
+2.27.0
 
-Mit freundlichen Grüßen,
-David Ramsden
-_____________________________________
-Persönlicher Assistent: Sarah Garric
 
