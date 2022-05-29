@@ -2,77 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9948D5372D4
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 May 2022 00:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA2C5372ED
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 May 2022 01:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbiE2Wqe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 29 May 2022 18:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        id S231858AbiE2XEG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 29 May 2022 19:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiE2Wqc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 May 2022 18:46:32 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7911E3EE
-        for <linux-scsi@vger.kernel.org>; Sun, 29 May 2022 15:46:29 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d21so10437707qtj.5
-        for <linux-scsi@vger.kernel.org>; Sun, 29 May 2022 15:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Hmv83JilRiKuRRxRo60MIn+sKLUYVV24um1FSjs0jNM=;
-        b=Pa5n2V1QU+XB8C7lkSt8bJ0fv6llyYvi+pOhvIIp+j7pcnrCAeU/AvfAexs4odbK5S
-         JrRuTcb6z/aQpadP/QwwsAFeeye8aaoJ7l/z/mX7TSitDT51qCwvD0FCsmyPYMyWAvvZ
-         Yev9ho+DiXjcpRkfmizFptdpoYdU8XPlkGTJk/cjq7tPROLMpDBPCHYjo9RUSso3YIKv
-         ait4UGYcZoFPmGInrKf6zfb/luA3OppsiAw90PmVf1UhZ3kHya6oRlD1CjV19XZ/6Pic
-         dZTjXHL33NddkfnGIZdo2vsWr5ShjDKwmEgAm7zZkBrEyY0kYYwdMGytN/1MhfEzEeEc
-         Yl1Q==
+        with ESMTP id S230417AbiE2XEE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 May 2022 19:04:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C94F31370
+        for <linux-scsi@vger.kernel.org>; Sun, 29 May 2022 16:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653865442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QfA6UHdmD6AfDXf89CPlsdUhs1JGy6QuSQscvfoYwvU=;
+        b=VJFKs/KG8b6/SiOCOF+AgrVd86VGoq2uBoKZMdEAm+1y30eiAXURr7IBAt+itLfvxhtMkU
+        Rp09cP0hy83DvCoTkcdz8WlxdIpmc2InCLRkhgcd6RnhPZOGFmNZWfee1U54BfDA5Uog3A
+        t9W4QfBw4DZBTvNRa0kNpWu/eOf6n1I=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-138-3L_bWk3yNb-avLnUQunGng-1; Sun, 29 May 2022 19:04:00 -0400
+X-MC-Unique: 3L_bWk3yNb-avLnUQunGng-1
+Received: by mail-wm1-f71.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so6051792wmj.0
+        for <linux-scsi@vger.kernel.org>; Sun, 29 May 2022 16:03:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Hmv83JilRiKuRRxRo60MIn+sKLUYVV24um1FSjs0jNM=;
-        b=20zUbqE2E8XFZply4ZSQ0Ib2Y63WJBhWmBZUVbM+hZey9Z3WLpEsEUnMLlT0mdpDXz
-         pwR+Ji9TSZ/5awwWwhP92W0VAIa3DZQmug4Ncmj9BNBLz9+RWoPpOghKKq0bpFgNm3ay
-         f5Q9c2XBBJsuZeakHH2yVeWNEyMXgC/fBVIDCRWLYRY/h2VPITWUNLarCVnnMk4J8fXm
-         I/hsZqfRHuMLqOBzOt3EsfGho+PQu6usTA+2G7NEJ0bEnYgSh8CB/Ws1i4zMDil7tHZk
-         F+scINfVkflS/EkX+O5A8O2dQWwCVx832BMgZOyTCppX/Ca9FgKNa/iwmqCc14z/snge
-         Amvg==
-X-Gm-Message-State: AOAM533j8OYYyEp3/VfQBT/JoJpaK34RRltmUrs0kdN87a0S0Ni0VBBX
-        0J1zqqhJlfRsSfrzNydIeVIKLwmW25RnT4gqtBA=
-X-Google-Smtp-Source: ABdhPJyiQOLa/az76WOjjqk0Ss4BsWKkg6TLbNTxrQuXJ2dX2MA37y0sUc931nr6Iq/ZRbIuhBlf0Z5pBGNWDgBQQsY=
-X-Received: by 2002:a05:622a:508:b0:2f9:1cc0:2d50 with SMTP id
- l8-20020a05622a050800b002f91cc02d50mr37139949qtx.66.1653864388931; Sun, 29
- May 2022 15:46:28 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QfA6UHdmD6AfDXf89CPlsdUhs1JGy6QuSQscvfoYwvU=;
+        b=VhWcSN83K+IqrG79HS13e8V9ShH6vqaaa6/jFZQao7u3hlbj91nozeO7B6REAlK6e3
+         wgwzD/ncEUD+tcPaYaGMceG542JDP4OsuBmEoGKG3oAzIalto+axaLzApYE6sh5XnvMV
+         swbANGbN6oXcB0WnN9cWYVGBsDClGC3qKnop2IUppFs/E1zljrZ+NBI2OWZ2m9B3CAkU
+         o9eyQQEVSEhyWQpuV586iBPdpnqryvuXK4gExVrXYsNtRgAv1uZPcD0huSiGb/B6mL5L
+         YjGPiO4KbyFr9zenQ6wX4M1+XmPia6nJaIkJWbacxvRaH9IjGCeZHNsNx8fte+TzqZZ2
+         Yozw==
+X-Gm-Message-State: AOAM531bzscZO3U5jBvMchJF4jwK7EuTkLd+dxOiJ1KUZxZbrVxBjCcs
+        Ad46jYO4bPOZdnapJKYug1qOdBom3nemCryvYssOhH9nhelS2/AMM22sBye7AbfsfevCVicyT55
+        nXhupLQd5AJPd10my5TOm9w==
+X-Received: by 2002:a05:600c:c5:b0:39c:1396:b489 with SMTP id u5-20020a05600c00c500b0039c1396b489mr399592wmm.146.1653865438996;
+        Sun, 29 May 2022 16:03:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxqRZXyAmmQh2eZzD7j1relm4FzT2zt1M4JHI7qlma3IXTujk/tbky1ZdtkzPHV4VR3uBskNw==
+X-Received: by 2002:a05:600c:c5:b0:39c:1396:b489 with SMTP id u5-20020a05600c00c500b0039c1396b489mr399590wmm.146.1653865438794;
+        Sun, 29 May 2022 16:03:58 -0700 (PDT)
+Received: from [192.168.0.106] (ip4-83-240-118-160.cust.nbox.cz. [83.240.118.160])
+        by smtp.gmail.com with ESMTPSA id ay5-20020a05600c1e0500b0039765a7add4sm8701735wmb.29.2022.05.29.16.03.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 May 2022 16:03:57 -0700 (PDT)
+Message-ID: <2004629b-4da6-8499-ea3f-709468178b42@redhat.com>
+Date:   Mon, 30 May 2022 01:03:56 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:6214:400e:0:0:0:0 with HTTP; Sun, 29 May 2022 15:46:28
- -0700 (PDT)
-Reply-To: si1470267@gmail.com
-From:   Svetlana Ivanovna <carenwalker11@gmail.com>
-Date:   Sun, 29 May 2022 15:46:28 -0700
-Message-ID: <CALy_L2bWW-abN8hHyxyPCjnmkBFQy-KEF7XFCLuo0remtqqm8g@mail.gmail.com>
-Subject: =?UTF-8?B?VGVydmVpc2nDpCw=?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] mpi3mr: rework mrioc->bsg_device model to fix up smatch
+ warnings
+Content-Language: en-US
+To:     Sumit Saxena <sumit.saxena@broadcom.com>,
+        linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220526170157.58274-1-sumit.saxena@broadcom.com>
+From:   Tomas Henzl <thenzl@redhat.com>
+In-Reply-To: <20220526170157.58274-1-sumit.saxena@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Terveisi=C3=A4,
-Nimeni on Svetlana Ivanovna, ty=C3=B6skentelen Punaisen Ristin
-humanitaarisen avun kanssa
-toimisto Kiovassa Ukrainassa, haluan jakaa jotain, mik=C3=A4 ei kiinnosta
-sinua. Ota yhteytt=C3=A4 saadaksesi lis=C3=A4tietoja.
+On 5/26/22 19:01, Sumit Saxena wrote:
+> During driver unload, "mrioc->bsg_device" reference count becomes negative.
+> Also, as reported in [1], driver's bsg_device model had few more 
+> bugs so reworked it to fix up them.
+>
+> [1] https://marc.info/?l=linux-scsi&m=165183971411991&w=2
+>
+> Fixes: 4268fa751365 ("scsi: mpi3mr: Add bsg device support")
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
 
-Parhain terveisin
-Svetlana Ivanovna
-Osoite: Velyka Vasykivska St, 60, Kiova, Ukraina, 01004
+I've been seeing the issue when rmmod the driver, with this patch it's gone.
+
+Tested-by: Tomas Henzl <thenzl@redhat.com>
+
