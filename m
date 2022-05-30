@@ -2,46 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98781538023
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 May 2022 16:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CC2537EF7
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 May 2022 16:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239659AbiE3OKD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 May 2022 10:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
+        id S239446AbiE3OJk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 May 2022 10:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238863AbiE3OEx (ORCPT
+        with ESMTP id S238887AbiE3OEx (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 May 2022 10:04:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DFD994EA;
-        Mon, 30 May 2022 06:40:33 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E07CE5E0;
+        Mon, 30 May 2022 06:40:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5585B80D86;
-        Mon, 30 May 2022 13:40:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5006EC3411F;
-        Mon, 30 May 2022 13:40:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9291D60F1F;
+        Mon, 30 May 2022 13:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 003D1C385B8;
+        Mon, 30 May 2022 13:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918030;
-        bh=Ow6M4ULs7W4f93rXHxWgT7eJhCkKFS4V4mUHz2rkBzU=;
+        s=k20201202; t=1653918047;
+        bh=8fyaHLfs66JSD8DWARG4Vmw9VaXoP4pQwZnrSrmzxME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gefLLr7T35C+YQz3IfpmnoJJjf+DxwkLZGMH6+QMIEwhnwgXFdh4R9gCT7FUezRVV
-         8H2GhZksJE43JM239zOhH4dLxA8yyk3g8t9i+vXKBeP8f6vx+byMZYo9IydNqpCNWP
-         dxeLogbVLZ38P8hbDzmjoStGjIcEzZt6tcjKchRd425JhAO2H7X+w/m55BwL6MJkZE
-         uSq3XPwfiPN93DzY/ggF/8T68RemKvOUeV2GyXuUnBfqYCOpf3FCQ9e24R4MGb4HRG
-         QMeE2kcPiMufT2IA6NzyHK9LInpl7mhL6LMv2pLZCa3XZZpBT1C5EOikQXtPaWk6Iv
-         xN4sOzYFnpE1A==
+        b=DZbHdGMerHHxFQoZyo/oTOZxhyLmfEvBSYe3hKzNLjLlWpc89izrnA/AucNRKGzKK
+         BTkk5W8LpGolAA6QZ+ptdQ3tNN4h6BJqTIqoGkIZpxa32c2msCEHyAV7hPa7k20ht7
+         1cS11m7Y/gzoBlIR/lPcUeRA6gHle6/FfnfbcorrIkOwRYOn4FYfNjQaYD/8kDesQP
+         ly0GnzNOGKvOd8vnWPhel3/TPt+PUWJJs+GeVifbAjC4ueTRGAjNsyJh5UlRB5Jhel
+         e9PjQiuy+Uwg+z8cdffhMQHZ6DEsuWYx4yjFmyjV6o4zrOaF3PhtzY1523cbIrgI+A
+         aG020obpTNNHQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>,
+Cc:     Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        jejb@linux.ibm.com, megaraidlinux.pdl@broadcom.com,
+        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 039/109] scsi: megaraid: Fix error check return value of register_chrdev()
-Date:   Mon, 30 May 2022 09:37:15 -0400
-Message-Id: <20220530133825.1933431-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 041/109] scsi: ufs: Use pm_runtime_resume_and_get() instead of pm_runtime_get_sync()
+Date:   Mon, 30 May 2022 09:37:17 -0400
+Message-Id: <20220530133825.1933431-41-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530133825.1933431-1-sashal@kernel.org>
 References: <20220530133825.1933431-1-sashal@kernel.org>
@@ -59,36 +58,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-[ Upstream commit c5acd61dbb32b6bda0f3a354108f2b8dcb788985 ]
+[ Upstream commit 75b8715e20a20bc7b4844835e4035543a2674200 ]
 
-If major equals 0, register_chrdev() returns an error code when it fails.
-This function dynamically allocates a major and returns its number on
-success, so we should use "< 0" to check it instead of "!".
+Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync() and
+pm_runtime_put_noidle(). This change is just to simplify the code, no
+actual functional changes.
 
-Link: https://lore.kernel.org/r/20220418105755.2558828-1-lv.ruyi@zte.com.cn
+Link: https://lore.kernel.org/r/20220420090353.2588804-1-chi.minghao@zte.com.cn
 Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/megaraid.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/ufs/ti-j721e-ufs.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/megaraid.c b/drivers/scsi/megaraid.c
-index 56910e94dbf2..7dd6dd74d2bc 100644
---- a/drivers/scsi/megaraid.c
-+++ b/drivers/scsi/megaraid.c
-@@ -4628,7 +4628,7 @@ static int __init megaraid_init(void)
- 	 * major number allocation.
- 	 */
- 	major = register_chrdev(0, "megadev_legacy", &megadev_fops);
--	if (!major) {
-+	if (major < 0) {
- 		printk(KERN_WARNING
- 				"megaraid: failed to register char device\n");
- 	}
+diff --git a/drivers/scsi/ufs/ti-j721e-ufs.c b/drivers/scsi/ufs/ti-j721e-ufs.c
+index eafe0db98d54..122d650d0810 100644
+--- a/drivers/scsi/ufs/ti-j721e-ufs.c
++++ b/drivers/scsi/ufs/ti-j721e-ufs.c
+@@ -29,11 +29,9 @@ static int ti_j721e_ufs_probe(struct platform_device *pdev)
+ 		return PTR_ERR(regbase);
+ 
+ 	pm_runtime_enable(dev);
+-	ret = pm_runtime_get_sync(dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(dev);
++	ret = pm_runtime_resume_and_get(dev);
++	if (ret < 0)
+ 		goto disable_pm;
+-	}
+ 
+ 	/* Select MPHY refclk frequency */
+ 	clk = devm_clk_get(dev, NULL);
 -- 
 2.35.1
 
