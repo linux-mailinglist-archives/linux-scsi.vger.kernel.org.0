@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37745538917
-	for <lists+linux-scsi@lfdr.de>; Tue, 31 May 2022 01:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD45C538919
+	for <lists+linux-scsi@lfdr.de>; Tue, 31 May 2022 01:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242826AbiE3XPk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 May 2022 19:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
+        id S242889AbiE3XPm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 May 2022 19:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbiE3XPj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 May 2022 19:15:39 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB94712FA
-        for <linux-scsi@vger.kernel.org>; Mon, 30 May 2022 16:15:37 -0700 (PDT)
+        with ESMTP id S242787AbiE3XPk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 May 2022 19:15:40 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC70719C4
+        for <linux-scsi@vger.kernel.org>; Mon, 30 May 2022 16:15:38 -0700 (PDT)
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 6C739811AD;
-        Mon, 30 May 2022 23:15:36 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTP id 678BBC0ADB;
+        Mon, 30 May 2022 23:15:37 +0000 (UTC)
 Received: from pdx1-sub0-mail-a312.dreamhost.com (unknown [127.0.0.6])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 036D380F3B;
+        by relay.mailchannels.net (Postfix) with ESMTPA id D6CABC0249;
         Mon, 30 May 2022 23:15:36 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1653952536; a=rsa-sha256;
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1653952537; a=rsa-sha256;
         cv=none;
-        b=It8KsC59iNnDYcaDCFv10wEeH76+nt7+cURuYKffLQi83H7HxC21B8CO77WgellhHECNmR
-        oZWD9AAJ/L2m7jCqa+eV2ZvpiZaVP9iy4XguKNo9nAgVE0rX1ofaWSfXz3FijHiE1JZWxn
-        pUMhphUrlCrmmfBIAyfSFd7jrjRmfgnz+KOH4PHmZ/TuoSGhLh5gUSRd+/1YXrx18YR2Zk
-        oOfkc795rauvSREg+oDaTj7VNKRxFSfkuTm8mJ6SsYQjW8X/HSNAFR2XpOjywOCio8xZ1W
-        G7HEKOdD8u868v5KggHLzxTPGPXqZ87H1VfRosdFp/AGGyhlm+LHE/Tv81qC0g==
+        b=H//RckYQq5UvXkhrkV7LTsKfLc1HzdOuB9WkbQBpWd7o2gu2D3mpvkVMFoEImwq+CYPM0R
+        DEL0jbpWwW1rwFW3TneQsl6IlXrMeiN8/gMPAXa8bYAxzOcCYHS+gEVtYCwtKr0SRgxplr
+        m3hwzC946osLsv4E48l8IbyZGusZJKE2U3jHdTTG9dymrvRVvKo7aeXAd7OKPZpXmyFzPA
+        DjMYmysnrz+6NBScYiXtsNb90FAy9L89uK0X2aKRMyR7APfBrOyZIS2xr45W4VaWYwuYZF
+        0VmbIC9b7sAcnjUkGA6ekdsqf/mgJ9zXrsBELzIq1XXi+goZ8BPsKX1koDT7uQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-        s=arc-2022; t=1653952536;
+        s=arc-2022; t=1653952537;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=Md0UglnLrm55xoVRMWppSTa3P+8k6XDCY738goMHV5Y=;
-        b=sMVE0bdUumyBTqHEqIOWLsnFbK8izFNwsrfd8WCsPxROb8jgI2e3NDhsX3XcUmO9LIDXQZ
-        5xiXNZ4eXe9Bhv9EVGE+IqcZp9XuQiIiealrSpzKGbMbnBXQ0lPe/M5we9qsck3l4hXeHx
-        qdBRxSHevtMbNbtV5R5WmtEpvyz56kmgi54FFY4yensfQkVfYf7Dkv+SZKxfwXmGHi8qSA
-        KReC5/fWY9DFDT3XRJZgPmCTwlQ338gfGfudM63jTFQzYQFMgQ0TWaSW5x7hx3UD9NnOm0
-        lbFTEAja8LR4UEu9+ASWy5dT/JjvLn7jE6Tfx+8IElGfokHluAmZg0KpwM7rTw==
+        bh=gjWDDeJAYGuSQUYvY7rPie1Lt934CZzCvlxupbtLAfA=;
+        b=qqr3yfYZuX95TNt+2ENFYdFCtVhjH5NrRcQCw0qYeJeEFqIUIiGXE4QawWDpXJ17MG8uW8
+        1Xup9ZMPkzbXjYE00ggQ2Eky0SIR2EB2jq2Twps3IObhSECptVULLJkEd+yJUffC0XVH/4
+        hq5X53ECKw7+y9t5A6Whhn3+EEMbK9oxXGqN+1N0JYX/b9SzXSDkCRpAANEGB3yD00Newz
+        se6m06kMgkOHGHm8EUm2mF498A4hSgTj3YzsEOWKheQkohC/i4j628kcddtlpfxBU/NI6l
+        EekO4U915razx7kuBOVzPwrTg8unxjNwyUb8Lz8h+yoFooY6G3n4/5MBjCFU1w==
 ARC-Authentication-Results: i=1;
         rspamd-54ff499d4f-n6vbx;
         auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
@@ -49,38 +49,42 @@ X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
 X-MailChannels-Auth-Id: dreamhost
-X-Chief-Celery: 3fef4f62615d56c2_1653952536289_3632414120
-X-MC-Loop-Signature: 1653952536289:2402954016
-X-MC-Ingress-Time: 1653952536289
+X-Madly-Absorbed: 1fec91ef01aa13f4_1653952537221_3194783024
+X-MC-Loop-Signature: 1653952537221:1767497567
+X-MC-Ingress-Time: 1653952537221
 Received: from pdx1-sub0-mail-a312.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.98.242.203 (trex/6.7.1);
-        Mon, 30 May 2022 23:15:36 +0000
+        by 100.101.255.183 (trex/6.7.1);
+        Mon, 30 May 2022 23:15:37 +0000
 Received: from localhost.localdomain (unknown [104.36.31.105])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4LBrqW2md9z2g;
+        by pdx1-sub0-mail-a312.dreamhost.com (Postfix) with ESMTPSA id 4LBrqW705qz4C;
         Mon, 30 May 2022 16:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1653952535;
-        bh=Md0UglnLrm55xoVRMWppSTa3P+8k6XDCY738goMHV5Y=;
+        s=dreamhost; t=1653952536;
+        bh=gjWDDeJAYGuSQUYvY7rPie1Lt934CZzCvlxupbtLAfA=;
         h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=S7ptYqF471xXf0BTVRrDs4tBPOmLlel5kWhtNEQ88mDPXXO4OXAdJBHdyly+usN6p
-         a+2jiNpot8770CGXWJyDz/S+MMixx6dxZG9tpgm/xGAGQYaIsxcvyPUxKGnpKZHni2
-         YmnavqgIn2NVxYhwRk1VdBvRXKX5qSJUhgjhKneEQ8e+Brpcyi7o8ZiyNGmFmiXc0I
-         3uzTyUc//tLu464VMrwr+m71YKLSFgVb7W94hZ6W1OmE7M9+bo3N4MeqnpXqGqRbfq
-         hE8JjXaIt/7wLvMaTXqBFTF1en1qwE0wECRWW4gzAY5HTZLbgYFRgd6ewjVsfCqDNU
-         vlkhC8YOZFZuA==
+        b=W7QbRHPQS4mzzdzqlvLqNAEmNu781pDRkfjRI0Qytg1lXRl06WeMopPV/51+Beai3
+         cEcUJ19s/Gj+b4REGeB0WS8y1DXDpNov7MY12yEYe4nr27WonFPO/GNdeCFdrQ8qG3
+         YN1rW2pMcy4clHQ9MVl8XUOiimUmm1loCP6mivBEJP+aQXfrQqni6w6WBHsFm018KC
+         6xoEti13disQYV5cbRlIHq1X7s843cz3jtU5sqLHP/kAyG39Tf3EFWLtWrOcD5U1sP
+         T+Oi9WjuDKlGiODWPw3bKIW5PrfyiCMcWNyTRnD4sWEWt9Ibubp04iEJYGn3sC/WPd
+         7e6LNmS9YQcyg==
 From:   Davidlohr Bueso <dave@stgolabs.net>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, ejb@linux.ibm.com,
-        bigeasy@linutronix.de, tglx@linutronix.de, dave@stgolabs.net
-Subject: [PATCH 01/10] scsi/mvsas: Kill CONFIG_SCSI_MVSAS_TASKLET
-Date:   Mon, 30 May 2022 16:15:03 -0700
-Message-Id: <20220530231512.9729-2-dave@stgolabs.net>
+        bigeasy@linutronix.de, tglx@linutronix.de, dave@stgolabs.net,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        megaraidlinux.pdl@broadcom.com
+Subject: [PATCH 02/10] scsi/megaraid: Replace adapter->dpc_h tasklet with threaded irq
+Date:   Mon, 30 May 2022 16:15:04 -0700
+Message-Id: <20220530231512.9729-3-dave@stgolabs.net>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220530231512.9729-1-dave@stgolabs.net>
 References: <20220530231512.9729-1-dave@stgolabs.net>
@@ -88,8 +92,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -100,156 +104,195 @@ Tasklets have long been deprecated as being too heavy on the system
 by running in irq context - and this is not a performance critical
 path. If a higher priority process wants to run, it must wait for
 the tasklet to finish before doing so. A more suitable equivalent
-is to converted to threaded irq instead.
+is to converted to threaded irq instead and do the ack sequence
+in task context.
 
-As such remove CONFIG_SCSI_MVSAS_TASKLET (which is horrible to begin
-with) and continue to do the async work, unconditionally now, just
-in task context. Just as with the tasklet version, device interrupts
-(MVS_IRQ_SAS_A/B) continues to be disabled from when the work was
-putted until it is actually complete. Because there are no guarantees
-vs ksoftirqd, if this is broken for threaded irqs, then they are
-also broken for tasklets.
-
+Cc: Kashyap Desai <kashyap.desai@broadcom.com>
+Cc: Sumit Saxena <sumit.saxena@broadcom.com>
+Cc: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+Cc: megaraidlinux.pdl@broadcom.com
 Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
 ---
- drivers/scsi/mvsas/Kconfig   |  7 ------
- drivers/scsi/mvsas/mv_init.c | 44 ++++++------------------------------
- drivers/scsi/mvsas/mv_sas.h  |  1 -
- 3 files changed, 7 insertions(+), 45 deletions(-)
+ drivers/scsi/megaraid/mega_common.h   |  2 --
+ drivers/scsi/megaraid/megaraid_mbox.c | 52 ++++++++++-----------------
+ 2 files changed, 19 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/scsi/mvsas/Kconfig b/drivers/scsi/mvsas/Kconfig
-index 79812b80743b..e9dd8dc84b1c 100644
---- a/drivers/scsi/mvsas/Kconfig
-+++ b/drivers/scsi/mvsas/Kconfig
-@@ -23,10 +23,3 @@ config SCSI_MVSAS_DEBUG
- 	help
- 		Compiles the 88SE64XX/88SE94XX driver in debug mode.  In debug mode,
- 		the driver prints some messages to the console.
--config SCSI_MVSAS_TASKLET
--	bool "Support for interrupt tasklet"
--	default n
--	depends on SCSI_MVSAS
--	help
--		Compiles the 88SE64xx/88SE94xx driver in interrupt tasklet mode.In this mode,
--		the interrupt will schedule a tasklet.
-diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
-index 2fde496fff5f..f36b270ba502 100644
---- a/drivers/scsi/mvsas/mv_init.c
-+++ b/drivers/scsi/mvsas/mv_init.c
-@@ -146,12 +146,10 @@ static void mvs_free(struct mvs_info *mvi)
- 	kfree(mvi);
- }
+diff --git a/drivers/scsi/megaraid/mega_common.h b/drivers/scsi/megaraid/mega_common.h
+index 2ad0aa2f837d..3e56f74061b4 100644
+--- a/drivers/scsi/megaraid/mega_common.h
++++ b/drivers/scsi/megaraid/mega_common.h
+@@ -95,7 +95,6 @@ typedef struct {
  
--#ifdef CONFIG_SCSI_MVSAS_TASKLET
--static void mvs_tasklet(unsigned long opaque)
-+static irqreturn_t mvs_async(int irq, void *opaque)
- {
- 	u32 stat;
- 	u16 core_nr, i = 0;
+ /**
+  * struct adapter_t - driver's initialization structure
+- * @aram dpc_h			: tasklet handle
+  * @pdev			: pci configuration pointer for kernel
+  * @host			: pointer to host structure of mid-layer
+  * @lock			: synchronization lock for mid-layer and driver
+@@ -149,7 +148,6 @@ typedef struct {
+ #define VERSION_SIZE	16
+ 
+ typedef struct {
+-	struct tasklet_struct	dpc_h;
+ 	struct pci_dev		*pdev;
+ 	struct Scsi_Host	*host;
+ 	spinlock_t		lock;
+diff --git a/drivers/scsi/megaraid/megaraid_mbox.c b/drivers/scsi/megaraid/megaraid_mbox.c
+index 2a339d4a7e9d..b76f67887592 100644
+--- a/drivers/scsi/megaraid/megaraid_mbox.c
++++ b/drivers/scsi/megaraid/megaraid_mbox.c
+@@ -118,8 +118,7 @@ static void megaraid_mbox_prepare_epthru(adapter_t *, scb_t *,
+ 		struct scsi_cmnd *);
+ 
+ static irqreturn_t megaraid_isr(int, void *);
 -
- 	struct mvs_info *mvi;
- 	struct sas_ha_struct *sha = (struct sas_ha_struct *)opaque;
+-static void megaraid_mbox_dpc(unsigned long);
++static irqreturn_t megaraid_mbox_dpc(int, void *);
  
-@@ -172,46 +170,29 @@ static void mvs_tasklet(unsigned long opaque)
- out:
- 	MVS_CHIP_DISP->interrupt_enable(mvi);
+ static ssize_t megaraid_mbox_app_hndl_show(struct device *, struct device_attribute *attr, char *);
+ static ssize_t megaraid_mbox_ld_show(struct device *, struct device_attribute *attr, char *);
+@@ -764,9 +763,8 @@ megaraid_init_mbox(adapter_t *adapter)
+ 	 */
  
-+	return IRQ_HANDLED;
- }
--#endif
- 
- static irqreturn_t mvs_interrupt(int irq, void *opaque)
- {
- 	u32 stat;
- 	struct mvs_info *mvi;
- 	struct sas_ha_struct *sha = opaque;
--#ifndef CONFIG_SCSI_MVSAS_TASKLET
--	u32 i;
--	u32 core_nr;
+ 	/* request IRQ and register the interrupt service routine */
+-	if (request_irq(adapter->irq, megaraid_isr, IRQF_SHARED, "megaraid",
+-		adapter)) {
 -
--	core_nr = ((struct mvs_prv_info *)sha->lldd_ha)->n_host;
--#endif
- 
- 	mvi = ((struct mvs_prv_info *)sha->lldd_ha)->mvi[0];
- 
- 	if (unlikely(!mvi))
- 		return IRQ_NONE;
--#ifdef CONFIG_SCSI_MVSAS_TASKLET
-+
- 	MVS_CHIP_DISP->interrupt_disable(mvi);
--#endif
- 
- 	stat = MVS_CHIP_DISP->isr_status(mvi, irq);
- 	if (!stat) {
--	#ifdef CONFIG_SCSI_MVSAS_TASKLET
- 		MVS_CHIP_DISP->interrupt_enable(mvi);
--	#endif
- 		return IRQ_NONE;
++	if (request_threaded_irq(adapter->irq, megaraid_isr, megaraid_mbox_dpc,
++				 IRQF_SHARED, "megaraid", adapter)) {
+ 		con_log(CL_ANN, (KERN_WARNING
+ 			"megaraid: Couldn't register IRQ %d!\n", adapter->irq));
+ 		goto out_alloc_cmds;
+@@ -879,10 +877,6 @@ megaraid_init_mbox(adapter_t *adapter)
+ 		}
  	}
  
--#ifdef CONFIG_SCSI_MVSAS_TASKLET
--	tasklet_schedule(&((struct mvs_prv_info *)sha->lldd_ha)->mv_tasklet);
--#else
--	for (i = 0; i < core_nr; i++) {
--		mvi = ((struct mvs_prv_info *)sha->lldd_ha)->mvi[i];
--		MVS_CHIP_DISP->isr(mvi, irq, stat);
--	}
--#endif
--	return IRQ_HANDLED;
-+	return IRQ_WAKE_THREAD;
+-	// setup tasklet for DPC
+-	tasklet_init(&adapter->dpc_h, megaraid_mbox_dpc,
+-			(unsigned long)adapter);
+-
+ 	con_log(CL_DLEVEL1, (KERN_INFO
+ 		"megaraid mbox hba successfully initialized\n"));
+ 
+@@ -917,8 +911,6 @@ megaraid_fini_mbox(adapter_t *adapter)
+ 	// flush all caches
+ 	megaraid_mbox_flush_cache(adapter);
+ 
+-	tasklet_kill(&adapter->dpc_h);
+-
+ 	megaraid_sysfs_free_resources(adapter);
+ 
+ 	megaraid_free_cmd_packets(adapter);
+@@ -2027,7 +2019,7 @@ megaraid_mbox_prepare_epthru(adapter_t *adapter, scb_t *scb,
+  *
+  * Returns:	1 if the interrupt is valid, 0 otherwise
+  */
+-static int
++static irqreturn_t
+ megaraid_ack_sequence(adapter_t *adapter)
+ {
+ 	mraid_device_t		*raid_dev = ADAP2RAIDDEV(adapter);
+@@ -2036,7 +2028,7 @@ megaraid_ack_sequence(adapter_t *adapter)
+ 	uint8_t			nstatus;
+ 	uint8_t			completed[MBOX_MAX_FIRMWARE_STATUS];
+ 	struct list_head	clist;
+-	int			handled;
++	int			ret = IRQ_NONE;
+ 	uint32_t		dword;
+ 	unsigned long		flags;
+ 	int			i, j;
+@@ -2048,7 +2040,6 @@ megaraid_ack_sequence(adapter_t *adapter)
+ 	INIT_LIST_HEAD(&clist);
+ 
+ 	// loop till F/W has more commands for us to complete
+-	handled = 0;
+ 	spin_lock_irqsave(MAILBOX_LOCK(raid_dev), flags);
+ 	do {
+ 		/*
+@@ -2056,9 +2047,10 @@ megaraid_ack_sequence(adapter_t *adapter)
+ 		 * interrupt line low.
+ 		 */
+ 		dword = RDOUTDOOR(raid_dev);
+-		if (dword != 0x10001234) break;
++		if (dword != 0x10001234)
++			break;
+ 
+-		handled = 1;
++		ret = IRQ_WAKE_THREAD;
+ 
+ 		WROUTDOOR(raid_dev, 0x10001234);
+ 
+@@ -2124,12 +2116,7 @@ megaraid_ack_sequence(adapter_t *adapter)
+ 
+ 	spin_unlock_irqrestore(COMPLETED_LIST_LOCK(adapter), flags);
+ 
+-
+-	// schedule the DPC if there is some work for it
+-	if (handled)
+-		tasklet_schedule(&adapter->dpc_h);
+-
+-	return handled;
++	return ret;
  }
  
- static int mvs_alloc(struct mvs_info *mvi, struct Scsi_Host *shost)
-@@ -557,14 +538,6 @@ static int mvs_pci_init(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		}
- 		nhost++;
- 	} while (nhost < chip->n_host);
--#ifdef CONFIG_SCSI_MVSAS_TASKLET
--	{
--	struct mvs_prv_info *mpi = SHOST_TO_SAS_HA(shost)->lldd_ha;
+ 
+@@ -2144,29 +2131,27 @@ static irqreturn_t
+ megaraid_isr(int irq, void *devp)
+ {
+ 	adapter_t	*adapter = devp;
+-	int		handled;
++	int		ret;
+ 
+-	handled = megaraid_ack_sequence(adapter);
++	ret = megaraid_ack_sequence(adapter);
+ 
+ 	/* Loop through any pending requests */
+ 	if (!adapter->quiescent) {
+ 		megaraid_mbox_runpendq(adapter, NULL);
+ 	}
+ 
+-	return IRQ_RETVAL(handled);
++	return ret;
+ }
+ 
+ 
+ /**
+- * megaraid_mbox_dpc - the tasklet to complete the commands from completed list
+- * @devp	: pointer to HBA soft state
++ * megaraid_mbox_dpc - complete the commands from completed list
+  *
+  * Pick up the commands from the completed list and send back to the owners.
+  * This is a reentrant function and does not assume any locks are held while
+- * it is being called.
++ * it is being called. Runs in process context.
+  */
+-static void
+-megaraid_mbox_dpc(unsigned long devp)
++static irqreturn_t megaraid_mbox_dpc(int irq, void *devp)
+ {
+ 	adapter_t		*adapter = (adapter_t *)devp;
+ 	mraid_device_t		*raid_dev;
+@@ -2188,7 +2173,8 @@ megaraid_mbox_dpc(unsigned long devp)
+ 	uioc_t			*kioc;
+ 
+ 
+-	if (!adapter) return;
++	if (!adapter)
++		goto done;
+ 
+ 	raid_dev = ADAP2RAIDDEV(adapter);
+ 
+@@ -2361,8 +2347,8 @@ megaraid_mbox_dpc(unsigned long devp)
+ 		// send the scsi packet back to kernel
+ 		scsi_done(scp);
+ 	}
 -
--	tasklet_init(&(mpi->mv_tasklet), mvs_tasklet,
--		     (unsigned long)SHOST_TO_SAS_HA(shost));
--	}
--#endif
+-	return;
++done:
++	return IRQ_HANDLED;
+ }
  
- 	mvs_post_sas_ha_init(shost, chip);
  
-@@ -575,8 +548,9 @@ static int mvs_pci_init(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	rc = sas_register_ha(SHOST_TO_SAS_HA(shost));
- 	if (rc)
- 		goto err_out_shost;
--	rc = request_irq(pdev->irq, irq_handler, IRQF_SHARED,
--		DRV_NAME, SHOST_TO_SAS_HA(shost));
-+	rc = request_threaded_irq(pdev->irq, irq_handler, mvs_async,
-+				  IRQF_SHARED, DRV_NAME,
-+				  SHOST_TO_SAS_HA(shost));
- 	if (rc)
- 		goto err_not_sas;
- 
-@@ -607,10 +581,6 @@ static void mvs_pci_remove(struct pci_dev *pdev)
- 	core_nr = ((struct mvs_prv_info *)sha->lldd_ha)->n_host;
- 	mvi = ((struct mvs_prv_info *)sha->lldd_ha)->mvi[0];
- 
--#ifdef CONFIG_SCSI_MVSAS_TASKLET
--	tasklet_kill(&((struct mvs_prv_info *)sha->lldd_ha)->mv_tasklet);
--#endif
--
- 	sas_unregister_ha(sha);
- 	sas_remove_host(mvi->shost);
- 
-diff --git a/drivers/scsi/mvsas/mv_sas.h b/drivers/scsi/mvsas/mv_sas.h
-index 509d8f32a04f..a0e87fdab98a 100644
---- a/drivers/scsi/mvsas/mv_sas.h
-+++ b/drivers/scsi/mvsas/mv_sas.h
-@@ -403,7 +403,6 @@ struct mvs_prv_info{
- 	u8 scan_finished;
- 	u8 reserve;
- 	struct mvs_info *mvi[2];
--	struct tasklet_struct mv_tasklet;
- };
- 
- struct mvs_wq {
 -- 
 2.36.1
 
