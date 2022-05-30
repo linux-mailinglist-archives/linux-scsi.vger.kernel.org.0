@@ -2,102 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2DC53738D
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 May 2022 04:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 229005375A9
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 May 2022 09:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbiE3C03 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 29 May 2022 22:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
+        id S233734AbiE3Hmu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 May 2022 03:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbiE3C00 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 May 2022 22:26:26 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F83C71DBE
-        for <linux-scsi@vger.kernel.org>; Sun, 29 May 2022 19:26:25 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id q21so18254492ejm.1
-        for <linux-scsi@vger.kernel.org>; Sun, 29 May 2022 19:26:25 -0700 (PDT)
+        with ESMTP id S233732AbiE3Hmc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 May 2022 03:42:32 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C46825EAF
+        for <linux-scsi@vger.kernel.org>; Mon, 30 May 2022 00:42:30 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id y24so5818977wmq.5
+        for <linux-scsi@vger.kernel.org>; Mon, 30 May 2022 00:42:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Kw2XsHaOr3U+iE1j+G98PTQr/5GCVr7TQntxOGqCCbY=;
-        b=lfOu0Y768XSNboyRhNarhUBMnS8grMO00ojmnmFwfpbDPCqtVXRXU98OET9cqCKhzD
-         gLgUEcO76HNj5KL0a+M3NP2FePb24yWQ0zUmvDPMfvWRklfIS3SbKdALHVny+HCxkgPq
-         d5LJavCGA5G+vvuQBYGxsjO6MYN4b3KsUVKa+OMXwUVQ8s05dA558MLHCXcDCH7lFoS3
-         hxfFUlhQkhmbwR7OJMqcJfVDMw0tl/5H9HyWeYqvUmPUaf5Epk64nE8asSnNqVhDVnPl
-         EKwca7V3x8vCIqb/ZQCoBGPeBradFTvb10pJGLs8cdVfE6csA/F1xq/ViSIlHhu32cru
-         IiHQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tDRiL7T1D2xh8IqjQ4J9GQ/82u6rcAgsmar4+giEo/c=;
+        b=DyT3t+1nyG9y4HN64kgP299uQMuwvYQw3UXLpbawcwaWR/Jqerrg29FeN0CWFMCYbo
+         wYFK+RTScfJC11jD7p12SBCHM6cnrVn02ZhrexSayH9QhoKjl2Fki9rOWgd4xZEPrdKW
+         FAsewudhQ2ax1Og0wls9gcytEW/VAX4IZe534jNFQORswYITHyoUjmlqAURly9zdzHRC
+         swS5xuL9QRfIpzLsOkyIdTkIgzHaIrsc2BdcHDRVSj7MXk3v4dQKr/VuBNGhpnRtifDJ
+         dicKc83acHjeI51wuiYAKK2AwU7sn0qjvC8PnR1L+d9/YmVy0Nj7Pvpd+13OkuHk7uw2
+         pA8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kw2XsHaOr3U+iE1j+G98PTQr/5GCVr7TQntxOGqCCbY=;
-        b=nYu2J5jXzqjOGKpEjjSVzgREVzRS8wP0g463q792odql3jY32P0yg/mHyjkBv1o+uE
-         mRwSiz14IpMuA4Ce9T8CUKs0UyeSTecUy1CAB26WCzBpNDNlgNUyRWWUOgQLbtyWQXDt
-         9s71aUs6e4V7mzGaGkktzsYPIAqRls+uG7MNPLZE9HhbngkWjWrxRi/+HBquFpr185d9
-         NaUa3uQf/KxTyQQIElXnpiMJJoQMa7kmVxgN3pWhF+lq0Kjn4++8Zf9RhJm+/z3sWyhA
-         +K6Mf0mg5JhTAnCaOKMqK9lVmjTLWuC9eoqp0DNX+V/5HCOrfPk99PtiTuOtE0CrCBJW
-         1enA==
-X-Gm-Message-State: AOAM530joBQwfYNEO6XfLTZJ5Llw0D0mftpk29ASbfuu/yxsLNmZOvXv
-        BoCjJXKzygyVCqgP2xexgkHDPquxcN7OWUMk+1Q=
-X-Google-Smtp-Source: ABdhPJza5DYpb9pK+duvmMFHPGLN/8K1+RYoB1X9TweOXqveDQhDwasndpELcPAhE+cYPiwtbLrCyhPyYB/F7x1tkjE=
-X-Received: by 2002:a17:907:3f9f:b0:6fe:f9e2:9c6a with SMTP id
- hr31-20020a1709073f9f00b006fef9e29c6amr29503130ejc.479.1653877583728; Sun, 29
- May 2022 19:26:23 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tDRiL7T1D2xh8IqjQ4J9GQ/82u6rcAgsmar4+giEo/c=;
+        b=lGvgvhF+oIb/RL+xwcz8J+NCSUY+VZpDv8F/XLr0Snbymm+nuxUjDPRrdzF8CN+ATk
+         e5nH348SkHcp+GQRFqSYAezJR1yJYKr7ebhm4AnaV2YfhNPmnhEf3tUETrvyut3OVcKG
+         tzPyY0vcjsGvDg1+Hp/5+6vbh5HNDl/xY18yGnEE1t+Go/USu4eNTmw9S/jYQB1t3TRD
+         gHYVymHh+HsR/aFsTVL84nSAa80QlRMTyOnk5xssTWGk62vAR2fKy/kU5OIyoBlSIWM7
+         Ul378N3VNeLo1kofpZuqojtSlfRa6D21b/6Qa7u+uSt70d9I3qIjsvxHKHtZxP/uDbpR
+         f7Ng==
+X-Gm-Message-State: AOAM531BIYbILmZ4BQ4XQ02iZVPS3NlRkZLQL41ec87yJ6jVhGkYokfK
+        Ws2wP9czNZTBU29CmFqsVEhAtA==
+X-Google-Smtp-Source: ABdhPJwoeX8AFnrofXaPRVEbqd1WcQ2GzDw7JV+PLebAOLW2qA5bkbyquUytImzShJhd5/S7esV1wA==
+X-Received: by 2002:a05:600c:2305:b0:397:44a4:d3cb with SMTP id 5-20020a05600c230500b0039744a4d3cbmr17393978wmo.115.1653896549076;
+        Mon, 30 May 2022 00:42:29 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h19-20020a05600c351300b0039456fb80b3sm9966481wmq.43.2022.05.30.00.42.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 00:42:28 -0700 (PDT)
+Message-ID: <fb007f9f-b2bc-9221-64d1-48de8fdb25f0@linaro.org>
+Date:   Mon, 30 May 2022 09:42:27 +0200
 MIME-Version: 1.0
-References: <20220530014341.115427-1-damien.lemoal@opensource.wdc.com> <20220530014341.115427-2-damien.lemoal@opensource.wdc.com>
-In-Reply-To: <20220530014341.115427-2-damien.lemoal@opensource.wdc.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Mon, 30 May 2022 10:25:57 +0800
-Message-ID: <CAD-N9QUdNpseSDG-9=CocvysNTfoJCD83vgdv=TXzXE_0DhyoQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] scsi: sd: Fix potential NULL pointer dereference
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 4/7] arm64: dts: qcom: sdm845: control RPMHPD
+ performance states with UFS
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+References: <20220513061347.46480-1-krzysztof.kozlowski@linaro.org>
+ <20220513061347.46480-5-krzysztof.kozlowski@linaro.org>
+ <20220525071630.irrz24rs73l3ke4o@vireshk-i7>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220525071630.irrz24rs73l3ke4o@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, May 30, 2022 at 9:43 AM Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
->
-> If sd_probe() sees an error before sdkp->device is initialized,
-> sd_zbc_release_disk() is called, which causes a NULL pointer dereference
-> when sd_is_zoned() is called. Avoid this by also testing if a scsi disk
-> device pointer is set in sd_is_zoned().
->
-> Reported-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> Fixes: 89d947561077 ("sd: Implement support for ZBC device")
-> Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> ---
->  drivers/scsi/sd.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/scsi/sd.h b/drivers/scsi/sd.h
-> index 2abad54fd23f..b90b96e8834e 100644
-> --- a/drivers/scsi/sd.h
-> +++ b/drivers/scsi/sd.h
-> @@ -236,7 +236,8 @@ static inline void sd_dif_config_host(struct scsi_disk *disk)
->
->  static inline int sd_is_zoned(struct scsi_disk *sdkp)
->  {
-> -       return sdkp->zoned == 1 || sdkp->device->type == TYPE_ZBC;
-> +       return sdkp->zoned == 1 ||
-> +               (sdkp->device && sdkp->device->type == TYPE_ZBC);
->  }
->
+On 25/05/2022 09:16, Viresh Kumar wrote:
+> On 13-05-22, 08:13, Krzysztof Kozlowski wrote:
+>> +			ufs_opp_table: opp-table {
+>> +				compatible = "operating-points-v2";
+>> +
+>> +				opp-50000000 {
+>> +					opp-hz = /bits/ 64 <50000000
+>> +						 0
+>> +						 0
+>> +						 37500000
+>> +						 0
+>> +						 0
+>> +						 0
+>> +						 0
+>> +						 // FIXME: value 0 copied from freq-table-hz
+>> +						 0>;
+> 
+> One general comment, I think this should follow how we specify
+> multiple voltages or other fields and so each frequency should be part
+> of a different < > braces. Like: opp-hz = /bits/ 64 <5000000>, <0>, ....
+> 
+> Whatever is there between < > seems to be connected, like
+> min/max/target for voltage.
+> 
+> The code will process both in a similar way though eventually.
 
-Tested-by: Dongliang Mu <mudongliangabcd@gmail.com>
+OK, I can change to such format.
 
-
->  #ifdef CONFIG_BLK_DEV_ZONED
-> --
-> 2.36.1
->
+Best regards,
+Krzysztof
