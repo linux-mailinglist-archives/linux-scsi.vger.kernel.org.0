@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C522537C27
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 May 2022 15:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44433537C29
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 May 2022 15:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236960AbiE3N24 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 May 2022 09:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
+        id S237071AbiE3NbW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 May 2022 09:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236959AbiE3N2F (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 May 2022 09:28:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5F68A055;
-        Mon, 30 May 2022 06:26:06 -0700 (PDT)
+        with ESMTP id S237222AbiE3NaO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 May 2022 09:30:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284B44D616;
+        Mon, 30 May 2022 06:26:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7085960ED7;
-        Mon, 30 May 2022 13:25:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C67D3C385B8;
-        Mon, 30 May 2022 13:25:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49975B80C9C;
+        Mon, 30 May 2022 13:26:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C63C385B8;
+        Mon, 30 May 2022 13:26:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917151;
-        bh=NQr4DnHVulh4RbREC1iNFCv8RKjtbaKcjTm0ZM5tSvU=;
+        s=k20201202; t=1653917208;
+        bh=0um7h6J74b9iCwQNa3KP+UZfrgaiwOgLoUiCqYjh1tU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nw+2E8UMYNOOogM7+uLYuW1TurdH3v55iPI5rp0tV4AAMpbB2NLTUHM/Tie9B3QNk
-         hyg8qjNrfNyDljFAYswwkbx7k1XxKB3005VPeB68zkZ07JlfTHgONyKyBQg0WYtLP1
-         KqWNDQQmlICcfRA5PldUpy63aaeRSodYZUBfidXbsqnBiVGeITeR33Lz7oozFEwovx
-         iwjrR+FU5U3Lnf006YF/jignqzbNZ6iB7f4rpcyQy3a5WpI9X86Iaa1dtJQoWhHqYN
-         MXZzdBxdUQTirZya7NaQtBwj0FnzKsaQLH38f3jNLFCzvV0vzDzPujoMHK7LsfBLVY
-         7ybNk3/mx9OXg==
+        b=pZLed3WyktGT6a5om6DOJBvHmOLuFDBHoMqlQOsT38ajdXZFsUdyUntLu8aPnhQ1p
+         QKtZea/IMa3/hAhkU16mckaUvZWIaIJGxRWwgD12Qb/BFMunl4AShzKWWPlFQbUcjM
+         6QylHU1NdxxlbFHMss2VLgHutoX0XYcSwHxaLauCMJPAHpan3VBmKQfBfydGeq3Esn
+         iAm9jDBHK13PXcYWmPVMXJJd2KSGmr/ZppvMKsC53jGZChEfF4Xqb3IW/yxwZMWeOQ
+         ixslyzrqrhy/rOpajJXEk5dMEOIe51PmR4ozS24Ry+uQcm9Ag14mAnmWNnuqosznY4
+         cpW78NMJPjL0g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>,
+Cc:     Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        Sasha Levin <sashal@kernel.org>, kashyap.desai@broadcom.com,
+        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
+        jejb@linux.ibm.com, megaraidlinux.pdl@broadcom.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 039/159] scsi: lpfc: Fix call trace observed during I/O with CMF enabled
-Date:   Mon, 30 May 2022 09:22:24 -0400
-Message-Id: <20220530132425.1929512-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.18 058/159] scsi: megaraid: Fix error check return value of register_chrdev()
+Date:   Mon, 30 May 2022 09:22:43 -0400
+Message-Id: <20220530132425.1929512-58-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
 References: <20220530132425.1929512-1-sashal@kernel.org>
@@ -59,59 +59,36 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit d6d45f67a11136cb88a70a29ab22ea6db8ae6bd5 ]
+[ Upstream commit c5acd61dbb32b6bda0f3a354108f2b8dcb788985 ]
 
-The following was seen with CMF enabled:
+If major equals 0, register_chrdev() returns an error code when it fails.
+This function dynamically allocates a major and returns its number on
+success, so we should use "< 0" to check it instead of "!".
 
-BUG: using smp_processor_id() in preemptible
-code: systemd-udevd/31711
-kernel: caller is lpfc_update_cmf_cmd+0x214/0x420  [lpfc]
-kernel: CPU: 12 PID: 31711 Comm: systemd-udevd
-kernel: Call Trace:
-kernel: <TASK>
-kernel: dump_stack_lvl+0x44/0x57
-kernel: check_preemption_disabled+0xbf/0xe0
-kernel: lpfc_update_cmf_cmd+0x214/0x420 [lpfc]
-kernel: lpfc_nvme_fcp_io_submit+0x23b4/0x4df0 [lpfc]
-
-this_cpu_ptr() calls smp_processor_id() in a preemptible context.
-
-Fix by using per_cpu_ptr() with raw_smp_processor_id() instead.
-
-Link: https://lore.kernel.org/r/20220412222008.126521-16-jsmart2021@gmail.com
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
+Link: https://lore.kernel.org/r/20220418105755.2558828-1-lv.ruyi@zte.com.cn
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_scsi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/megaraid.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
-index c4fa7d68fe03..f617a2ef6b0f 100644
---- a/drivers/scsi/lpfc/lpfc_scsi.c
-+++ b/drivers/scsi/lpfc/lpfc_scsi.c
-@@ -3835,7 +3835,7 @@ lpfc_update_cmf_cmpl(struct lpfc_hba *phba,
- 		else
- 			time = div_u64(time + 500, 1000); /* round it */
- 
--		cgs = this_cpu_ptr(phba->cmf_stat);
-+		cgs = per_cpu_ptr(phba->cmf_stat, raw_smp_processor_id());
- 		atomic64_add(size, &cgs->rcv_bytes);
- 		atomic64_add(time, &cgs->rx_latency);
- 		atomic_inc(&cgs->rx_io_cnt);
-@@ -3879,7 +3879,7 @@ lpfc_update_cmf_cmd(struct lpfc_hba *phba, uint32_t size)
- 			atomic_set(&phba->rx_max_read_cnt, size);
+diff --git a/drivers/scsi/megaraid.c b/drivers/scsi/megaraid.c
+index a5d8cee2d510..bf491af9f0d6 100644
+--- a/drivers/scsi/megaraid.c
++++ b/drivers/scsi/megaraid.c
+@@ -4607,7 +4607,7 @@ static int __init megaraid_init(void)
+ 	 * major number allocation.
+ 	 */
+ 	major = register_chrdev(0, "megadev_legacy", &megadev_fops);
+-	if (!major) {
++	if (major < 0) {
+ 		printk(KERN_WARNING
+ 				"megaraid: failed to register char device\n");
  	}
- 
--	cgs = this_cpu_ptr(phba->cmf_stat);
-+	cgs = per_cpu_ptr(phba->cmf_stat, raw_smp_processor_id());
- 	atomic64_add(size, &cgs->total_bytes);
- 	return 0;
- }
 -- 
 2.35.1
 
