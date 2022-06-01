@@ -2,96 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038E0539EB5
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jun 2022 09:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C4A539F17
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Jun 2022 10:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350363AbiFAHrs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Jun 2022 03:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        id S1350555AbiFAIMV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Jun 2022 04:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343726AbiFAHrr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jun 2022 03:47:47 -0400
-Received: from sender2-op-o12.zoho.com.cn (sender2-op-o12.zoho.com.cn [163.53.93.243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F05532F6;
-        Wed,  1 Jun 2022 00:47:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1654069632;
-        s=zohomail; d=mykernel.net; i=cgxu519@mykernel.net;
-        h=Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:Message-ID:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=9TczPh2ye+CJ8GtYFJSne4FSC2NTbNH+NU7EnCqZ18w=;
-        b=D35LycFD+mvLMX83hWZ9dF2BUC1OWf7Rra5au3PiApuEwyrB3MPc0aAHS1eZ8Es/
-        ak0aU+6ZQLZ4U221uENcEwkb4FyIx20T5ZctmyeOIGTos9RxfnPN9cVgzoosumJbZEH
-        FShu5qOOLisxjDvMcGeksJuDFoEG9zVvkLocy2sc=
-Received: from [192.168.255.10] (113.108.77.71 [113.108.77.71]) by mx.zoho.com.cn
-        with SMTPS id 1654069629528896.3577145683946; Wed, 1 Jun 2022 15:47:09 +0800 (CST)
-Date:   Wed, 1 Jun 2022 15:47:07 +0800
+        with ESMTP id S1350562AbiFAIML (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Jun 2022 04:12:11 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991966545
+        for <linux-scsi@vger.kernel.org>; Wed,  1 Jun 2022 01:12:09 -0700 (PDT)
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LChcF26lXz67N5b;
+        Wed,  1 Jun 2022 16:08:45 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 1 Jun 2022 10:12:07 +0200
+Received: from [10.47.88.115] (10.47.88.115) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 1 Jun
+ 2022 09:12:06 +0100
+Message-ID: <89016395-635f-fb09-24bc-94fa3908a729@huawei.com>
+Date:   Wed, 1 Jun 2022 09:12:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/6] netlink: fix missing destruction of rhash table in
- error case
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-scsi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <20220529153456.4183738-1-cgxu519@mykernel.net>
- <20220529153456.4183738-2-cgxu519@mykernel.net>
- <e530dc2021d43a29b64f985d7365319eab0d5595.camel@redhat.com>
- <20220531112551.GT2146@kadam>
-From:   Chengguang Xu <cgxu519@mykernel.net>
-Message-ID: <5a5d847c-f8e6-48a7-85ad-75e76105122d@mykernel.net>
-In-Reply-To: <20220531112551.GT2146@kadam>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-ZohoCNMailClient: External
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 01/10] scsi/mvsas: Kill CONFIG_SCSI_MVSAS_TASKLET
+To:     Davidlohr Bueso <dave@stgolabs.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+CC:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <ejb@linux.ibm.com>, <tglx@linutronix.de>
+References: <20220530231512.9729-1-dave@stgolabs.net>
+ <20220530231512.9729-2-dave@stgolabs.net>
+ <17747966-ea44-ebe5-3d79-df7c33b6a16e@huawei.com>
+ <20220531145231.opypdzrlrg23ihil@offworld>
+ <5d28e848-0b9d-2aaa-e00e-7888342d25a7@huawei.com>
+ <YpYxfSYDbCJEh9PG@linutronix.de> <20220601010407.kar45dc75pqcuhhl@offworld>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220601010407.kar45dc75pqcuhhl@offworld>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.88.115]
+X-ClientProxiedBy: lhreml730-chm.china.huawei.com (10.201.108.81) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-=E5=9C=A8 2022/5/31 19:25, Dan Carpenter =E5=86=99=E9=81=93:
-> On Tue, May 31, 2022 at 10:43:09AM +0200, Paolo Abeni wrote:
->> Hello,
+On 01/06/2022 02:04, Davidlohr Bueso wrote:
+> On Tue, 31 May 2022, Sebastian Andrzej Siewior wrote:
+> 
+>> On 2022-05-31 16:12:05 [+0100], John Garry wrote:
+>>> Sorry, maybe I was not clear, but I was just asking if there was a good
+>>> reason to disable interrupts at source while handling the interrupt, 
+>>> and not
+>>> the change to stop using a tasklet.
 >>
->> On Sun, 2022-05-29 at 23:34 +0800, Chengguang Xu wrote:
->>> Fix missing destruction(when '(--i) =3D=3D 0') for error case in
->>> netlink_proto_init().
->>>
->>> Signed-off-by: Chengguang Xu <cgxu519@mykernel.net>
->>> ---
->>>   net/netlink/af_netlink.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
->>> index 0cd91f813a3b..bd0b090a378b 100644
->>> --- a/net/netlink/af_netlink.c
->>> +++ b/net/netlink/af_netlink.c
->>> @@ -2887,7 +2887,7 @@ static int __init netlink_proto_init(void)
->>>   =09for (i =3D 0; i < MAX_LINKS; i++) {
->>>   =09=09if (rhashtable_init(&nl_table[i].hash,
->>>   =09=09=09=09    &netlink_rhashtable_params) < 0) {
->>> -=09=09=09while (--i > 0)
->>> +=09=09=09while (--i >=3D 0)
->>>   =09=09=09=09rhashtable_destroy(&nl_table[i].hash);
->>>   =09=09=09kfree(nl_table);
->>>   =09=09=09goto panic;
->> The patch looks correct to me, but it looks like each patch in this
->> series is targeting a different tree. I suggest to re-send, splitting
->> the series into individual patches, and sending each of them to the
->> appropriate tree. You can retain Dan's Review tag.
-> Since it looks like you're going to be resending these then could you
-> add Fixes tags?  Please keep my Review tag.
->
+>> Without reading the patch first: You need to disable the interrupt
+>> source while the tasklet/ threaded interrupt is handled. Otherwise the
+>> interrupt will keep coming and the tasklet/ threaded interrupt will have
+>> no chance to make progress. So the box will lock up. This is often
+>> overseen on fast machines because the interrupt needs a few usecs to
+>> trigger and so the CPU is able to make a little bit of progress between
+>> each trigger.
+> 
+> In addition it keeps current semantics wrt ksoftirqd, so no guarantees
+> this runs in irq context in the first place.
 
-OK, no problem.
+ok, Fine.
+
+So is it actually documented anywhere what any low-level driver should 
+do in terms of masking interrupts at source for interrupt handling, i.e. 
+when and where we should ever do this? I see pci.rst does mention how we 
+may need this at driver removal time in "Stop IRQs on the device" 
+section, but not totally related.
 
 Thanks,
-Chengguang
-
-
-
+John
