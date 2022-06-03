@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E08853CECE
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jun 2022 19:47:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67BD53CEC9
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jun 2022 19:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345200AbiFCRrU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Jun 2022 13:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S239027AbiFCRrL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Jun 2022 13:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345237AbiFCRqh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jun 2022 13:46:37 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C79453E1B;
-        Fri,  3 Jun 2022 10:43:39 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id q123so7735591pgq.6;
-        Fri, 03 Jun 2022 10:43:39 -0700 (PDT)
+        with ESMTP id S1345341AbiFCRqj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jun 2022 13:46:39 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171406373
+        for <linux-scsi@vger.kernel.org>; Fri,  3 Jun 2022 10:43:40 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id y187so7748239pgd.3
+        for <linux-scsi@vger.kernel.org>; Fri, 03 Jun 2022 10:43:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8+0I0SHfG0zz73fJ2FA496i9DVz96wphBCcvxAp0CpA=;
-        b=jrSpzUpvJysLpcT9KHdN7iayPW+qGXtismb/MpiHJ4iwHbhvt8rqzRYT6SbrTWeqc/
-         YwnYqal4iKzgyLCRZ2eq16OSCGI9KR2FOYp2/mL49VYyw2kG2ESxtUDZQ1GTJCa+2zxZ
-         Eyt9DyriY4MDVfJ/XCe/1Qcgli+v5ZJmPjiqjn/0hCg9+NljxcnqQwKB17bJ+pR6JZZi
-         oIZME0vToFc843ET4DfemOaCs/B++i3HMR8jlJWAEYiCg106Acu5yCtbhPHQmMoO1GD9
-         IUs6wg3Qk6Ek7E/4choP/99ZpjsSyORfugIfIogwVkW29+pJ1y/RKFkc8G6mPsIIgQY/
-         Mk+w==
+        bh=0Gcdftwb8mE00o6wiVyVM1abvHyHYZu+SCMr0IEKeM8=;
+        b=qhvvqiFgLaylWsXnyBrDeZRbd4kGykXzQdXt6rz39zsa2snkbloA5ALBrgzPSg25MP
+         dVkFmZP4ExnPu4PgaRwkQAQbznmiZHqi5vdi1zkEK/5mtv5lRUvK4AlvJqoT4eJhYyPX
+         t4VGV7CmT2XSyL2eGLOy3RLiMU05ZhxnRKsmsnLDzYYurmxLJlG6Lf0KOEK6a8hhQRRV
+         9eiNbZkc7+XQpkmhL+smCeO1gBMF2CgvUPKw78N9B/NkaXbGTJDleMJp5T0apklRG3HB
+         IfgDWHDTeJeTTgdDERXEodTkmg3Z1hGBOyoL2UT/CMhazisUeiMLKuTPu1KhFSKj+c4P
+         tspg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8+0I0SHfG0zz73fJ2FA496i9DVz96wphBCcvxAp0CpA=;
-        b=m80nKyzaumRkqaNZ7FglihvgLKXtc5SBBz1b75v7rjkDZ4lHNYpOCW6t+aPcjk0eBO
-         xrn6px4/ASGM1TxpTqOOCXdSO0PcaDrCsr8WdBYEZRIUoyl2l2sS6IfjUe3iQQP0SA1e
-         Z/Gd65MOlJyZJfWXKZS3zFNvpMEQePMhrc9Wbqr3lXnkjUitSUSt+KbnQcZBRqau1QZA
-         X4f9dBFcvmnfe8H7S8mSiI0K+kP94n5RQREWtjNMfUKLDcmcpJnqU6GPhn6Ame6Zo509
-         VHUwQ/ddxJ1LAkry1rpBO6Jr7Q357Jl2Db3OP2JDtpdB0dkF2ddhIKX6GbR2vg9dreOj
-         8Epg==
-X-Gm-Message-State: AOAM532n9nz7Hkn+7RIJQZsdz4jsrOtgzDRe5uapnC8YcOmsSqRkhfT8
-        CXCx0pjhsKGiplPpsVF7LBJwolxtOcE=
-X-Google-Smtp-Source: ABdhPJxSR4y3U82TXHppiIHKpM/WM/aE1pZqWV9Ge54biKSoSKUXkjnLcBXsIS4XRYb5dtT3aJKEyw==
-X-Received: by 2002:a63:f955:0:b0:3fc:cf92:cd26 with SMTP id q21-20020a63f955000000b003fccf92cd26mr9767628pgk.137.1654278218432;
-        Fri, 03 Jun 2022 10:43:38 -0700 (PDT)
+        bh=0Gcdftwb8mE00o6wiVyVM1abvHyHYZu+SCMr0IEKeM8=;
+        b=4W6JCG6mQu7gOKwpY80IDiFHkLXf7si+WfrXFVwt/62cbWdOIFXTis7pnY7CglWEDg
+         MW7obnY3WFxIRm0RzsIhp9F6/GJCtPdtGGliD5yyk6IVuot5yqtnoApGpVbPDAmh8MQK
+         MngYtBNszOT8KBuI8HnWN2P6+JJ2htv8DbjdI8zeM4TRdzrItzUWcgNVLCEb/HZFwBt3
+         ke1QvDFoT9hpscmLSa54zTKRP2l/UObz3ryxOCLxNgMBBsCoDePQtCLtD5KULmLvUpH3
+         7IDFsTZMdqUarSCV+/XptoooIHylvztZXINPO0WgRO6NlfkkcJfMcBuID5J5DnniJcof
+         Z5fg==
+X-Gm-Message-State: AOAM531C4mrwI2dkWNuXc5hS5Y+mNCz/zvRBPeABxOvdbW3i3o/jmUsl
+        2ZJ/Nx0HF09TeZojoFhCK91RCnQnP8E=
+X-Google-Smtp-Source: ABdhPJyrhFhDMunq85iwWKQt+SuMMOA+RlqNMg3tJd7w0t/LxJtlQbI22VMQIKMSosZAHDHQ4SL+ng==
+X-Received: by 2002:a63:87:0:b0:3fd:5248:9780 with SMTP id 129-20020a630087000000b003fd52489780mr204174pga.159.1654278219463;
+        Fri, 03 Jun 2022 10:43:39 -0700 (PDT)
 Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
-        by smtp.gmail.com with ESMTPSA id a13-20020a170902710d00b0015e8d4eb1d2sm5705047pll.28.2022.06.03.10.43.37
+        by smtp.gmail.com with ESMTPSA id a13-20020a170902710d00b0015e8d4eb1d2sm5705047pll.28.2022.06.03.10.43.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 10:43:38 -0700 (PDT)
+        Fri, 03 Jun 2022 10:43:39 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>, stable@vger.kernel.org,
+Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 4/9] lpfc: Address null pointer dereference after starget_to_rport()
-Date:   Fri,  3 Jun 2022 10:43:24 -0700
-Message-Id: <20220603174329.63777-5-jsmart2021@gmail.com>
+Subject: [PATCH 5/9] lpfc: Resolve null ptr dereference after an ELS LOGO is aborted
+Date:   Fri,  3 Jun 2022 10:43:25 -0700
+Message-Id: <20220603174329.63777-6-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220603174329.63777-1-jsmart2021@gmail.com>
 References: <20220603174329.63777-1-jsmart2021@gmail.com>
@@ -69,42 +69,80 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Calls to starget_to_rport() may return null.  Add check for null rport
-before dereference.
+A use-after-free crash can occur after an ELS LOGO is aborted.
 
-Fixes: bb21fc9911ee ("scsi: lpfc: Use fc_block_rport()")
-Cc: <stable@vger.kernel.org> # v5.18
+Specifically, a nodelist structure is freed and then
+ndlp->vport->cfg_log_verbose is dereferenced in lpfc_nlp_get when the
+discovery state machine is mistakenly called a second time with
+NLP_EVT_DEVICE_RM argument.
+
+Rework lpfc_cmpl_els_logo to prevent the duplicate calls to release a
+nodelist structure.
+
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_scsi.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/scsi/lpfc/lpfc_els.c | 21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
-index f5f4409e24cd..cb5e4e63ac44 100644
---- a/drivers/scsi/lpfc/lpfc_scsi.c
-+++ b/drivers/scsi/lpfc/lpfc_scsi.c
-@@ -6060,6 +6060,9 @@ lpfc_device_reset_handler(struct scsi_cmnd *cmnd)
- 	int status;
- 	u32 logit = LOG_FCP;
+diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+index 51c505d15410..57e189f62e42 100644
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -2998,10 +2998,7 @@ lpfc_cmpl_els_logo(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 				 ndlp->nlp_DID, ulp_status,
+ 				 ulp_word4);
  
-+	if (!rport)
-+		return FAILED;
-+
- 	rdata = rport->dd_data;
- 	if (!rdata || !rdata->pnode) {
- 		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
-@@ -6138,6 +6141,9 @@ lpfc_target_reset_handler(struct scsi_cmnd *cmnd)
- 	unsigned long flags;
- 	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(waitq);
+-		/* Call NLP_EVT_DEVICE_RM if link is down or LOGO is aborted */
+ 		if (lpfc_error_lost_link(ulp_status, ulp_word4)) {
+-			lpfc_disc_state_machine(vport, ndlp, cmdiocb,
+-						NLP_EVT_DEVICE_RM);
+ 			skip_recovery = 1;
+ 			goto out;
+ 		}
+@@ -3021,18 +3018,10 @@ lpfc_cmpl_els_logo(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 		spin_unlock_irq(&ndlp->lock);
+ 		lpfc_disc_state_machine(vport, ndlp, cmdiocb,
+ 					NLP_EVT_DEVICE_RM);
+-		lpfc_els_free_iocb(phba, cmdiocb);
+-		lpfc_nlp_put(ndlp);
+-
+-		/* Presume the node was released. */
+-		return;
++		goto out_rsrc_free;
+ 	}
  
-+	if (!rport)
-+		return FAILED;
+ out:
+-	/* Driver is done with the IO.  */
+-	lpfc_els_free_iocb(phba, cmdiocb);
+-	lpfc_nlp_put(ndlp);
+-
+ 	/* At this point, the LOGO processing is complete. NOTE: For a
+ 	 * pt2pt topology, we are assuming the NPortID will only change
+ 	 * on link up processing. For a LOGO / PLOGI initiated by the
+@@ -3059,6 +3048,10 @@ lpfc_cmpl_els_logo(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 				 ndlp->nlp_DID, ulp_status,
+ 				 ulp_word4, tmo,
+ 				 vport->num_disc_nodes);
 +
- 	rdata = rport->dd_data;
- 	if (!rdata || !rdata->pnode) {
- 		lpfc_printf_vlog(vport, KERN_ERR, LOG_TRACE_EVENT,
++		lpfc_els_free_iocb(phba, cmdiocb);
++		lpfc_nlp_put(ndlp);
++
+ 		lpfc_disc_start(vport);
+ 		return;
+ 	}
+@@ -3075,6 +3068,10 @@ lpfc_cmpl_els_logo(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 		lpfc_disc_state_machine(vport, ndlp, cmdiocb,
+ 					NLP_EVT_DEVICE_RM);
+ 	}
++out_rsrc_free:
++	/* Driver is done with the I/O. */
++	lpfc_els_free_iocb(phba, cmdiocb);
++	lpfc_nlp_put(ndlp);
+ }
+ 
+ /**
 -- 
 2.26.2
 
