@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC8D53CEC5
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jun 2022 19:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05D453CEC6
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jun 2022 19:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344437AbiFCRrF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Jun 2022 13:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
+        id S1345191AbiFCRrT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Jun 2022 13:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345329AbiFCRqg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jun 2022 13:46:36 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA15356C2C;
-        Fri,  3 Jun 2022 10:43:37 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so9456384pjm.2;
-        Fri, 03 Jun 2022 10:43:37 -0700 (PDT)
+        with ESMTP id S1345193AbiFCRqh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jun 2022 13:46:37 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB9E546BF;
+        Fri,  3 Jun 2022 10:43:38 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 129so7751304pgc.2;
+        Fri, 03 Jun 2022 10:43:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SFmo1YtzIJ9rmtpE/GhXgq77Pr76QMO7iRfjafIiLu0=;
-        b=DOaMjOtD7xGK0cNLL5ZRRrHaBowV+EmnbJRuvIZOQnRjfBK35/MHWGGcgGI+ugA4Yc
-         aeBIErNDmUc8+C6/HtbbsCk9Z1NljkrlVnthWrgBpKGm4jYXNILCqQUXBTiTpeqNMzR/
-         XUfnlYjf8ZGcFA+kyPcRPQgftWRiuKjFmaKksyM3ja4FGDnbBXR4nulbkIR1bklPJszu
-         r9vYqDeVoFEqZNXsuxo1tc1A7c/YM6h9hMf/pUMiH5c6KEfCquRmcsxjzXhBTb6IdlaT
-         qxyU7pa1ibPn5ork30bJkoBX0fYwafqEvmeySvX1CFDsZJjVT80dPzJPzP5QbpM40Tmf
-         7hiw==
+        bh=K+OvXl8F3WzCqNf70UpmJS6odKLeTjrU7uwEIJKRwK0=;
+        b=frX5HQa6TXSTqO34GUZuEz30tI4uNyWkXHnrxaZC3hh2uswcYnaHz9agEfCuDggXsR
+         iDbfxgkWN1pGOEdYFcAV8bvJ3vZLjB06OBFxGXijQkDGjhyoKVaYGZEz0/102HL7AxzO
+         raf6D6bvuWj/Xlq+LMZoki3pOjXUlxnTtBPL+Q8k5N+AHaDi4whLw55ovSwimld2Dwdc
+         XIKSQvAXcEZLk2qeKh9mCoVG8CiOR0SxXwRRJVTxc+wnKG/yAFndWp5QqivyBJW9GBAV
+         O/78WK304DmljtS+5IkTw4NlJIQtDe0ycDwhDQa1R2sa7bBeszDwWoPUFgWlc3PzRnQP
+         SOqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SFmo1YtzIJ9rmtpE/GhXgq77Pr76QMO7iRfjafIiLu0=;
-        b=EbmjM3kr593DsHCoqogbhrsk10galw3n8dMCgdx8qsaz0nlyS77hUwOj57PdgIUI+C
-         W+BdAiwb5EOY7hqhLubMxMuagM45Z/nnVN0ZyCoZu/FnrFLJfY4MUC9ndQ0ouNOjmv7o
-         duuKZ/U6WXd8CZ8M7nQiHIwJR5o6MxN3Vzq6Fo10twxKtub3A5pqWCduw8LbuxY5pipS
-         8fYQIFuUQ7oFHuedf1CxUhF67B8MEZSObBqzy/63ctPBc4yu35VyfXND5E3ZQ2pehxij
-         V8HV8wttMth3uw4w5SilsS45Dkh1Q64Vny5o62AOR0GVFmYi+0UPxPbrnpK5jAns7wlV
-         cb1g==
-X-Gm-Message-State: AOAM530FanN9cEqy9rDNWvsKFeRyez2OLlDmiiwkSu+frbb9rrz03xXO
-        9SpnRqEr3aOqF9Eorm4V+3B4f/0KICs=
-X-Google-Smtp-Source: ABdhPJw+XqpqJ8OB9TZASqA/8JeEhe8fyUMlPzwLT5FkwqeSDQAN1uyG8C1Kf16l2HiTGKm9QjDwhg==
-X-Received: by 2002:a17:90b:4c52:b0:1e8:2af5:901e with SMTP id np18-20020a17090b4c5200b001e82af5901emr5568640pjb.180.1654278216714;
-        Fri, 03 Jun 2022 10:43:36 -0700 (PDT)
+        bh=K+OvXl8F3WzCqNf70UpmJS6odKLeTjrU7uwEIJKRwK0=;
+        b=RMZfz03oUjCXGQVsG9m+rsz1l2HmwQLReMV9XpK5P1afTysyfsTdv/9RtzfNQbpkAz
+         XsFB5O5vINrbefKaU7CoB5YPU0S5IxCvolCo/82/Krryh/NV+Xu62OzENHzYHDDP85tA
+         Br6+wT/EewgHZIJA4qs5V+g7OZDj5uESAscelD/3s+8zU375HoJdCQWSQuTGrPyYRsjV
+         6u+jPIXqHUdSPnL1W/loYf9FM+LSu+3XVNIGcjIUNGHHUkX+RwD+Fcmjd6y+NA/3YP7F
+         nwhXU6ePjl4jtAi2Fi86ndOpk0MoVjKcJRS2QyQb+VwB7vot3JQRo8bb1mERiuNO6Q6g
+         c7PA==
+X-Gm-Message-State: AOAM532n+zBh4IEoBz8An3Q1OfdZANJfAyM4fOgxEFWER+ZdJBJIJqtM
+        WYvd8HS7yhyyJzmwXT89lp1OYh4MIWo=
+X-Google-Smtp-Source: ABdhPJxF3sLPkMdM96wtx7S4Geocn/u6mIKTbkb/TK8amcDOpiy432kP+l6u/u6rKV+5JKIwmutKDA==
+X-Received: by 2002:a63:8642:0:b0:3fc:a5ee:678 with SMTP id x63-20020a638642000000b003fca5ee0678mr9832639pgd.178.1654278217584;
+        Fri, 03 Jun 2022 10:43:37 -0700 (PDT)
 Received: from localhost.localdomain (ip174-67-196-173.oc.oc.cox.net. [174.67.196.173])
         by smtp.gmail.com with ESMTPSA id a13-20020a170902710d00b0015e8d4eb1d2sm5705047pll.28.2022.06.03.10.43.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jun 2022 10:43:36 -0700 (PDT)
+        Fri, 03 Jun 2022 10:43:37 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>, stable@vger.kernel.org,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 2/9] lpfc: Resolve some cleanup issues following abort path refactoring
-Date:   Fri,  3 Jun 2022 10:43:22 -0700
-Message-Id: <20220603174329.63777-3-jsmart2021@gmail.com>
+Subject: [PATCH 3/9] lpfc: Resolve some cleanup issues following SLI path refactoring
+Date:   Fri,  3 Jun 2022 10:43:23 -0700
+Message-Id: <20220603174329.63777-4-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220603174329.63777-1-jsmart2021@gmail.com>
 References: <20220603174329.63777-1-jsmart2021@gmail.com>
@@ -69,75 +69,143 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Following refactoring and consolidation of abort paths,
+Following refactoring and consolidation in SLI processing, fixup some
+minor issues related to SLI path.
 
-- lpfc_sli4_abort_fcp_cmpl and lpfc_sli_abort_fcp_cmpl are combined into
-  a single generic lpfc_sli_abort_fcp_cmpl routine.  Thus, remove
-  extraneous lpfc_sli4_abort_fcp_cmpl prototype declaration.
+- Correct the setting of LPFC_EXCHANGE_BUSY flag in response iocb.
+- Fix some typographical errors.
+- Fix duplicate log messages.
 
-- lpfc_nvme_abort_fcreq_cmpl abort completion routine is called with a
-  mismatched argument type.  This may result in misleading log message
-  content.  Update to the correct argument type of lpfc_iocbq instead
-  of lpfc_wcqe_complete.  The lpfc_wcqe_complete should be derived from
-  the lpfc_iocbq structure.
-
-Fixes: 31a59f75702f ("scsi: lpfc: SLI path split: Refactor Abort paths")
+Fixes: 1b64aa9eae28 ("scsi: lpfc: SLI path split: Refactor fast and slow paths to native SLI4")
 Cc: <stable@vger.kernel.org> # v5.18
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_crtn.h | 4 +---
- drivers/scsi/lpfc/lpfc_nvme.c | 6 ++++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/lpfc/lpfc_init.c |  2 +-
+ drivers/scsi/lpfc/lpfc_sli.c  | 25 ++++++++++++-------------
+ 2 files changed, 13 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_crtn.h b/drivers/scsi/lpfc/lpfc_crtn.h
-index b1be0dd0337a..f5d74958b664 100644
---- a/drivers/scsi/lpfc/lpfc_crtn.h
-+++ b/drivers/scsi/lpfc/lpfc_crtn.h
-@@ -420,8 +420,6 @@ int lpfc_sli_issue_iocb_wait(struct lpfc_hba *, uint32_t,
- 			     uint32_t);
- void lpfc_sli_abort_fcp_cmpl(struct lpfc_hba *, struct lpfc_iocbq *,
- 			     struct lpfc_iocbq *);
--void lpfc_sli4_abort_fcp_cmpl(struct lpfc_hba *h, struct lpfc_iocbq *i,
--			      struct lpfc_wcqe_complete *w);
- 
- void lpfc_sli_free_hbq(struct lpfc_hba *, struct hbq_dmabuf *);
- 
-@@ -630,7 +628,7 @@ void lpfc_nvmet_invalidate_host(struct lpfc_hba *phba,
- 			struct lpfc_nodelist *ndlp);
- void lpfc_nvme_abort_fcreq_cmpl(struct lpfc_hba *phba,
- 				struct lpfc_iocbq *cmdiocb,
--				struct lpfc_wcqe_complete *abts_cmpl);
-+				struct lpfc_iocbq *rspiocb);
- void lpfc_create_multixri_pools(struct lpfc_hba *phba);
- void lpfc_create_destroy_pools(struct lpfc_hba *phba);
- void lpfc_move_xri_pvt_to_pbl(struct lpfc_hba *phba, u32 hwqid);
-diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
-index 335e90633933..88fa630ab93a 100644
---- a/drivers/scsi/lpfc/lpfc_nvme.c
-+++ b/drivers/scsi/lpfc/lpfc_nvme.c
-@@ -1787,7 +1787,7 @@ lpfc_nvme_fcp_io_submit(struct nvme_fc_local_port *pnvme_lport,
-  * lpfc_nvme_abort_fcreq_cmpl - Complete an NVME FCP abort request.
-  * @phba: Pointer to HBA context object
-  * @cmdiocb: Pointer to command iocb object.
-- * @abts_cmpl: Pointer to wcqe complete object.
-+ * @rspiocb: Pointer to response iocb object.
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 93b94c64518d..750dd1e9f2cc 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -12188,7 +12188,7 @@ lpfc_sli_enable_msi(struct lpfc_hba *phba)
+ 	rc = pci_enable_msi(phba->pcidev);
+ 	if (!rc)
+ 		lpfc_printf_log(phba, KERN_INFO, LOG_INIT,
+-				"0462 PCI enable MSI mode success.\n");
++				"0012 PCI enable MSI mode success.\n");
+ 	else {
+ 		lpfc_printf_log(phba, KERN_INFO, LOG_INIT,
+ 				"0471 PCI enable MSI mode failed (%d)\n", rc);
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index 79d2ef5f0f05..dd96fc09105d 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -1930,7 +1930,7 @@ lpfc_issue_cmf_sync_wqe(struct lpfc_hba *phba, u32 ms, u64 total)
+ 	sync_buf = __lpfc_sli_get_iocbq(phba);
+ 	if (!sync_buf) {
+ 		lpfc_printf_log(phba, KERN_ERR, LOG_CGN_MGMT,
+-				"6213 No available WQEs for CMF_SYNC_WQE\n");
++				"6244 No available WQEs for CMF_SYNC_WQE\n");
+ 		ret_val = ENOMEM;
+ 		goto out_unlock;
+ 	}
+@@ -3805,7 +3805,7 @@ lpfc_sli_process_sol_iocb(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 						set_job_ulpword4(cmdiocbp,
+ 								 IOERR_ABORT_REQUESTED);
+ 						/*
+-						 * For SLI4, irsiocb contains
++						 * For SLI4, irspiocb contains
+ 						 * NO_XRI in sli_xritag, it
+ 						 * shall not affect releasing
+ 						 * sgl (xri) process.
+@@ -3823,7 +3823,7 @@ lpfc_sli_process_sol_iocb(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 					}
+ 				}
+ 			}
+-			(cmdiocbp->cmd_cmpl) (phba, cmdiocbp, saveq);
++			cmdiocbp->cmd_cmpl(phba, cmdiocbp, saveq);
+ 		} else
+ 			lpfc_sli_release_iocbq(phba, cmdiocbp);
+ 	} else {
+@@ -4063,8 +4063,7 @@ lpfc_sli_handle_fast_ring_event(struct lpfc_hba *phba,
+ 				cmdiocbq->cmd_flag &= ~LPFC_DRIVER_ABORTED;
+ 			if (cmdiocbq->cmd_cmpl) {
+ 				spin_unlock_irqrestore(&phba->hbalock, iflag);
+-				(cmdiocbq->cmd_cmpl)(phba, cmdiocbq,
+-						      &rspiocbq);
++				cmdiocbq->cmd_cmpl(phba, cmdiocbq, &rspiocbq);
+ 				spin_lock_irqsave(&phba->hbalock, iflag);
+ 			}
+ 			break;
+@@ -10288,7 +10287,7 @@ __lpfc_sli_issue_iocb_s3(struct lpfc_hba *phba, uint32_t ring_number,
+  * @flag: Flag indicating if this command can be put into txq.
   *
-  * This is the callback function for any NVME FCP IO that was aborted.
+  * __lpfc_sli_issue_fcp_io_s3 is wrapper function to invoke lockless func to
+- * send  an iocb command to an HBA with SLI-4 interface spec.
++ * send  an iocb command to an HBA with SLI-3 interface spec.
   *
-@@ -1796,8 +1796,10 @@ lpfc_nvme_fcp_io_submit(struct nvme_fc_local_port *pnvme_lport,
-  **/
- void
- lpfc_nvme_abort_fcreq_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
--			   struct lpfc_wcqe_complete *abts_cmpl)
-+			   struct lpfc_iocbq *rspiocb)
- {
-+	struct lpfc_wcqe_complete *abts_cmpl = &rspiocb->wcqe_cmpl;
-+
- 	lpfc_printf_log(phba, KERN_INFO, LOG_NVME,
- 			"6145 ABORT_XRI_CN completing on rpi x%x "
- 			"original iotag x%x, abort cmd iotag x%x "
+  * This function takes the hbalock before invoking the lockless version.
+  * The function will return success after it successfully submit the wqe to
+@@ -12740,7 +12739,7 @@ lpfc_sli_wake_iocb_wait(struct lpfc_hba *phba,
+ 		cmdiocbq->cmd_cmpl = cmdiocbq->wait_cmd_cmpl;
+ 		cmdiocbq->wait_cmd_cmpl = NULL;
+ 		if (cmdiocbq->cmd_cmpl)
+-			(cmdiocbq->cmd_cmpl)(phba, cmdiocbq, NULL);
++			cmdiocbq->cmd_cmpl(phba, cmdiocbq, NULL);
+ 		else
+ 			lpfc_sli_release_iocbq(phba, cmdiocbq);
+ 		return;
+@@ -12754,9 +12753,9 @@ lpfc_sli_wake_iocb_wait(struct lpfc_hba *phba,
+ 
+ 	/* Set the exchange busy flag for task management commands */
+ 	if ((cmdiocbq->cmd_flag & LPFC_IO_FCP) &&
+-		!(cmdiocbq->cmd_flag & LPFC_IO_LIBDFC)) {
++	    !(cmdiocbq->cmd_flag & LPFC_IO_LIBDFC)) {
+ 		lpfc_cmd = container_of(cmdiocbq, struct lpfc_io_buf,
+-			cur_iocbq);
++					cur_iocbq);
+ 		if (rspiocbq && (rspiocbq->cmd_flag & LPFC_EXCHANGE_BUSY))
+ 			lpfc_cmd->flags |= LPFC_SBUF_XBUSY;
+ 		else
+@@ -13896,7 +13895,7 @@ void lpfc_sli4_els_xri_abort_event_proc(struct lpfc_hba *phba)
+  * @irspiocbq: Pointer to work-queue completion queue entry.
+  *
+  * This routine handles an ELS work-queue completion event and construct
+- * a pseudo response ELS IODBQ from the SLI4 ELS WCQE for the common
++ * a pseudo response ELS IOCBQ from the SLI4 ELS WCQE for the common
+  * discovery engine to handle.
+  *
+  * Return: Pointer to the receive IOCBQ, NULL otherwise.
+@@ -13940,7 +13939,7 @@ lpfc_sli4_els_preprocess_rspiocbq(struct lpfc_hba *phba,
+ 
+ 	if (bf_get(lpfc_wcqe_c_xb, wcqe)) {
+ 		spin_lock_irqsave(&phba->hbalock, iflags);
+-		cmdiocbq->cmd_flag |= LPFC_EXCHANGE_BUSY;
++		irspiocbq->cmd_flag |= LPFC_EXCHANGE_BUSY;
+ 		spin_unlock_irqrestore(&phba->hbalock, iflags);
+ 	}
+ 
+@@ -14799,7 +14798,7 @@ lpfc_sli4_fp_handle_fcp_wcqe(struct lpfc_hba *phba, struct lpfc_queue *cq,
+ 		/* Pass the cmd_iocb and the wcqe to the upper layer */
+ 		memcpy(&cmdiocbq->wcqe_cmpl, wcqe,
+ 		       sizeof(struct lpfc_wcqe_complete));
+-		(cmdiocbq->cmd_cmpl)(phba, cmdiocbq, cmdiocbq);
++		cmdiocbq->cmd_cmpl(phba, cmdiocbq, cmdiocbq);
+ 	} else {
+ 		lpfc_printf_log(phba, KERN_WARNING, LOG_SLI,
+ 				"0375 FCP cmdiocb not callback function "
+@@ -18956,7 +18955,7 @@ lpfc_sli4_send_seq_to_ulp(struct lpfc_vport *vport,
+ 
+ 	/* Free iocb created in lpfc_prep_seq */
+ 	list_for_each_entry_safe(curr_iocb, next_iocb,
+-		&iocbq->list, list) {
++				 &iocbq->list, list) {
+ 		list_del_init(&curr_iocb->list);
+ 		lpfc_sli_release_iocbq(phba, curr_iocb);
+ 	}
 -- 
 2.26.2
 
