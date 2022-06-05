@@ -2,86 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C58653DD97
-	for <lists+linux-scsi@lfdr.de>; Sun,  5 Jun 2022 20:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4308153DEF4
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jun 2022 01:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346778AbiFESPX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 5 Jun 2022 14:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
+        id S1351814AbiFEXdd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 5 Jun 2022 19:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236164AbiFESPV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 5 Jun 2022 14:15:21 -0400
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A8C4E3A8;
-        Sun,  5 Jun 2022 11:15:18 -0700 (PDT)
-Received: by mail-pj1-f51.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so16076141pjl.4;
-        Sun, 05 Jun 2022 11:15:18 -0700 (PDT)
+        with ESMTP id S1351820AbiFEXdb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 5 Jun 2022 19:33:31 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF41E27168
+        for <linux-scsi@vger.kernel.org>; Sun,  5 Jun 2022 16:33:29 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id h5so17740971wrb.0
+        for <linux-scsi@vger.kernel.org>; Sun, 05 Jun 2022 16:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=hzqCG52SPEe4tQY/Tt070sXpLEE5srR/6HSZh6AwAPo=;
+        b=kYqyTELNv74MY0+Xtsf1lfj7zVGpOEbEQXrg+C/90Mms9oiDDoR1tAGfsH8wjin1au
+         YgEibdYFsC3ZX5fD3ZTrbFmbUnOpr2QIubv1+FRg642AmsgEU7LFuDOzvCU8SrQo9uVc
+         ANsX9cHR3AzEewxi1sIvXUoaPTeYqv+2Rr+WwQ4SIg93A7YMlS/dL93POpl3GQL8wbq0
+         PYcTfhT2s+YV+U+JG3Ased41N76s52gmJ8jiCBg7Ax2sUve8NNNgMFY+pegOkd1ur6+T
+         LdPia7q6wNFPzAz/tX5zACpBCXsVxa66UTUf4H0pWTFHakZKiEbv0L32pINnRW88WSQ1
+         6gmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XSlVkyH7U19xGkYlKr/QL4qLZZfZicYNepi5FhO2rEw=;
-        b=FilqbPU4Vbkp8rROaouKUX7VSkd4uz2WvmDlDJJwkGK620i8niF0GR3e6iC3piV6nI
-         cW6razdzK9jeb0hjRVfmElRuBJoyCALlkzuzi4Y70WkmEpBrJVoD82o0av3kqdQC5i+x
-         g4dLNeh+hS3SoGRjyEjN1lv8ypv/AvYE3oAAHiSMTBHz/rkSngj33XCGI659rbcGwOMv
-         y4Qi9/KJbSmdnS/t9Dx7eNLjpDvCz2enhMwVAFYgD8q7eWZRInhiPy3xrYr7xJNLMfEI
-         SpkyEfOw6noXZpyZJxcuK8c+LO8DNTeeKLKEAEmRgw2DhCWnMKoofV9KS3zDGfYnBn/B
-         coWw==
-X-Gm-Message-State: AOAM5339jyDm3Y8Tf+dfns0qtiU+RDfORQU6DMJvp6EOP+7rrZaPrT0r
-        p+/WrkAtlj0S6PjsY4By0hc=
-X-Google-Smtp-Source: ABdhPJzwmoB07s/jOnk8v4k4T/5zMb0rCKNH1kw1FFfezoahiovaXCjjQpB7yOYVhdgpQekTAqpCEA==
-X-Received: by 2002:a17:902:ef49:b0:15e:b6ed:4832 with SMTP id e9-20020a170902ef4900b0015eb6ed4832mr19851455plx.173.1654452917814;
-        Sun, 05 Jun 2022 11:15:17 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id y189-20020a6264c6000000b0050dc762814asm9061560pfb.36.2022.06.05.11.15.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Jun 2022 11:15:16 -0700 (PDT)
-Message-ID: <09be5981-705a-5c82-a189-dd7f0475d227@acm.org>
-Date:   Sun, 5 Jun 2022 11:15:14 -0700
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=hzqCG52SPEe4tQY/Tt070sXpLEE5srR/6HSZh6AwAPo=;
+        b=QWOSfVVRF/FcRWyIdtpATxx1ejxkc0xYpFwT52O9oyW9f4bXBDfqKxR9LCUTWz0YfE
+         n6i5lhKkD/qesWM/jdzWZQi1HYZWcM2fpFMSQZ3gd3rIcU3eQzeC2ArB6blmAtmRokAF
+         G7J7tfCmRNifmIvOEA83Rf7WqxSCX8kcvV4NFqWVTBwD298hRog8DPYY1vg3sfzPSCZa
+         0tK4HfjiMMlk9NXNcNsstKSR9smQZ6byEsK0lps4CJUDVTq2QP7ublqD7gK1a5vvDepx
+         FoOciG5B+oIjPEwCQ6ocmzTSnZHM9BZlxh2buct/lyLXuYKr2AT2v50iZFYBTlqalQ+T
+         hUuw==
+X-Gm-Message-State: AOAM533Bz/0qMSVcX28svELDthGSSQLl6+O7uw2eX0xjkdTzV1ApqU+O
+        HQkXA+Ad4dGJAHYdoOot6VrI3oIllq/WK1L+5aY=
+X-Google-Smtp-Source: ABdhPJx05vkg/25slKFEQFCOcyfbvjg4JjNZFII0Ku3f/Gnu+Tw5+Fxv0/0emaesTDl49gfm20FsSYTWpw96OZmltzk=
+X-Received: by 2002:adf:dd52:0:b0:213:bb11:2fde with SMTP id
+ u18-20020adfdd52000000b00213bb112fdemr14778741wrm.467.1654472008195; Sun, 05
+ Jun 2022 16:33:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [dm-devel] [PATCH 0/8] Use block pr_ops in LIO
-Content-Language: en-US
-To:     Mike Christie <michael.christie@oracle.com>,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        snitzer@kernel.org, hch@lst.de, axboe@kernel.dk,
-        martin.petersen@oracle.com, james.bottomley@hansenpartnership.com,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-References: <20220603065536.5641-1-michael.christie@oracle.com>
- <923053d3-adf8-e4b4-9ef3-8e920ae90a79@acm.org>
- <d18d9e19-d184-357c-9921-d024f0b50d1a@oracle.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <d18d9e19-d184-357c-9921-d024f0b50d1a@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6020:5b8d:b0:19a:1ddd:b4f with HTTP; Sun, 5 Jun 2022
+ 16:33:27 -0700 (PDT)
+Reply-To: mrmichaeldoku@hotmail.com
+From:   mr michael <md22334d@gmail.com>
+Date:   Sun, 5 Jun 2022 23:33:27 +0000
+Message-ID: <CA+6A211ud5NH2G_+uu26KkANKe6w8HCvQ+uyrrd45zBvifEkSA@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:442 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5132]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [md22334d[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/5/22 09:55, Mike Christie wrote:
-> libiscsi is not suitable for this type of setup.
-I think that this setup can be tested as follows with libiscsi:
-* Configure the backend storage.
-* Configure LIO to use the backend storage on two different servers.
-* On a third server, log in with the iSCSI initiator to both servers.
-* Run the libiscsi iscsi-test-cu test software on the third server and
-   pass the two IQNs that refer to the LIO servers as arguments.
+Greetings,
 
- From the iscsi-test-cu -h output:
+With due respect to your person, I need your cooperation in
+transferring the sum of $11.3million to your private account where
+this money can be shared between us. The money has been here in our
+bank lying dormant for years without anybody coming for the claim.
 
-     iscsi-test-cu [OPTIONS] <iscsi-url> [multipath-iscsi-url]
+By indicating your interest I will send you the full details on how
+the business will be executed.
 
-Did I perhaps overlook or misunderstand something?
-
-Thanks,
-
-Bart.
+Best regards,
+Mr. Michael Doku.
