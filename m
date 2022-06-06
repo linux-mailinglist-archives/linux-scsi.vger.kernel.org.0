@@ -2,113 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69DC53EA88
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jun 2022 19:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2342E53E69C
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jun 2022 19:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbiFFKUf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Jun 2022 06:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
+        id S233885AbiFFKY3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Jun 2022 06:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233762AbiFFKU2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jun 2022 06:20:28 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7902B1760E9
-        for <linux-scsi@vger.kernel.org>; Mon,  6 Jun 2022 03:20:27 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id f1so802368vsv.5
-        for <linux-scsi@vger.kernel.org>; Mon, 06 Jun 2022 03:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CrA4YBm/C0o/d7+8DPi9KXWYpOuSBuqwF7Z6o0fXbnA=;
-        b=IPAyvlkDNeODQC1CMhAZeQwaxudOWV93r9AQBEvBvz3FnaErE1m6NNowI3oHnI/aAD
-         HPpM4iNd8xfcR2rfj3oVi01r+5Sa8bU2KZeOfYUcgWvms9ZY/tqmI18F8LoLP7N2NWRr
-         i13rtuY47qz/V5FIZ/zp3vRbhj3IWOeGv5cMUDGgFju1eI3J0+P7/Lp1Fye8SwL2jTj4
-         ksrYutpv0Q231TyhaEqDzEdaK64Kq05r4Fb+Rh3SHqJ8NKzQJAZXr5AD4M2OwtarXC86
-         QHLJNcyYVzHt09R+TXkjptEH2PEOjS8OuJWv5yeEogtA6RPaoPnwctvEYazTHAulWTvx
-         Hgxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=CrA4YBm/C0o/d7+8DPi9KXWYpOuSBuqwF7Z6o0fXbnA=;
-        b=KAyhb4z6Bfac+Q+YxJBokruEX3wLaqNKxmXhHU9EqsMdwtc0KUBsYrWNo20QVFv45d
-         ZXo5mKVyTR2IyCzL6R38eLkr3O5QSK48nE0ls42MPURsomzxwMfO1MGY0djkHzLUYK2W
-         YdoZr5MpUO82CFLO3aUDhJNr0ITF1ftNuH3sQsm6gV/CjLe+8YEXO+ujA8yBDUAPGd3Z
-         aYB7HH5pDYxTIe13sKbKCo0n8HBu25o/RiosZvlDCdGFGzlzXscGiU8p962JqaDl8xbf
-         XN5OxAXQdg8FS8Rl5FNf636esEYdnw4QKo8kfcT4SczBqudvqe22KHNQEe8bUj9U/6dE
-         DlTA==
-X-Gm-Message-State: AOAM533q1biIBE6NhirVJf7/WHPUQE3pT3PLrVt7k+r5YGph9zAe9AGA
-        k1Vf19bYFZ9nFS5vY790QqJx0RvDeGVG9Dec4Q8=
-X-Google-Smtp-Source: ABdhPJyxbKLcTqZpv9jc4BDD9lwLT1HQue1JJnDM5Drgco0I1kc0QCpkl4iV6W/1NMt9AMHzoXlTvczN2pwykzsX7H0=
-X-Received: by 2002:a05:6102:208:b0:34b:b645:a5c2 with SMTP id
- z8-20020a056102020800b0034bb645a5c2mr1706553vsp.9.1654510826357; Mon, 06 Jun
- 2022 03:20:26 -0700 (PDT)
+        with ESMTP id S233975AbiFFKY1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jun 2022 06:24:27 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFF11D315
+        for <linux-scsi@vger.kernel.org>; Mon,  6 Jun 2022 03:24:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654511065; x=1686047065;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nBGhhEbBFxVusIpBEHH8++r1sfJROZ0nXUk9EhiNcmY=;
+  b=ThPto13iatuXVr9PoRJ/rjhHbRc4O1h1R23jjDzBYlevu6ODyqNvKhEs
+   UVajejh/ALCWjz5ncIWcegOKich++KbKlcCp03VF/3fDet+XQdIvceQnO
+   QXUYnVcePrUz/TGk6+tQakO+Bzp5WLtK0ZPmy9LUWlxJZ8MFopzCrCKWn
+   GmcJyIvW+hH6pqTAJ6sZPUYLvwyUORTOCMNlXtq/egh6w6GHQxqqXXkeB
+   nSZ7LVsl92YICY4rMmtUWr/7ERQibiQJOfp1NqTBW0ASTSM377uSGSz/G
+   y5G7oOoysphaEQlgBdS2QNnB480UPScEGUhtuxqlTfdg24G2jtJG3trYa
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10369"; a="362987992"
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="362987992"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2022 03:24:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,280,1647327600"; 
+   d="scan'208";a="669426991"
+Received: from apaszkie-desk.igk.intel.com (HELO [10.102.102.225]) ([10.102.102.225])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Jun 2022 03:24:23 -0700
+Message-ID: <c15b98e3-f1e5-79c9-3581-6b015b476cad@intel.com>
+Date:   Mon, 6 Jun 2022 12:24:22 +0200
 MIME-Version: 1.0
-Sender: agaddafi752@gmail.com
-Received: by 2002:a05:6102:827:0:0:0:0 with HTTP; Mon, 6 Jun 2022 03:20:25
- -0700 (PDT)
-From:   agaddafi752 <madamisha00@gmail.com>
-Date:   Mon, 6 Jun 2022 11:20:25 +0100
-X-Google-Sender-Auth: dMN0HjL98Nrgz_NGTd3kJkpe_E0
-Message-ID: <CABwDasOXiNhhf=A_xrnyUTWH+KEse+ziYZPftaG4KjcoQHbOHw@mail.gmail.com>
-Subject: =?UTF-8?B?15HXkden16nXlCDXkNeg15kg16bXqNeZ15og15DXqiDXoteW16jXqtea?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_50,
-        BODY_EMAIL_419_FRAUD_GM,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
-        LOTS_OF_MONEY,MILLION_HUNDRED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.0
+Subject: Re: [PATCH 05/10] scsi/isci: Replace completion_tasklet with threaded
+ irq
+Content-Language: en-US
+To:     Davidlohr Bueso <dave@stgolabs.net>, linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, ejb@linux.ibm.com,
+        bigeasy@linutronix.de, tglx@linutronix.de
+References: <20220530231512.9729-1-dave@stgolabs.net>
+ <20220530231512.9729-6-dave@stgolabs.net>
+From:   Artur Paszkiewicz <artur.paszkiewicz@intel.com>
+In-Reply-To: <20220530231512.9729-6-dave@stgolabs.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-15HXkden16nXlCDXkNeg15kg16bXqNeZ15og15DXqiDXoteW16jXqteaDQrXkNeg15kg16nXldec
-15cg15zXmiDXkNeqINeR16jXm9eq15kg157XodeV15zXmNeg15XXqiDXoteV157XkNefLCDXkdei
-15nXqCDXlNeR15nXqNeUINee15XXoden15guDQrXlNeQ150g15DXldeb15wg15zXlNep16rXntep
-INeR157Xk9eZ15XXnSDXlNeW15Qg15vXk9eZINec16TXqteV15cg15DXmdeq15og16rXp9ep15XX
-qNeqINeU15PXk9eZ16osINeV15zXl9ek16kg15DXqiDXp9eR15zXqteaDQrXnNeU16nXp9ei15Qg
-15HXnteT15nXoNeUINep15zXmiDXkdeg15nXlNeV15zXmiDXm9ep15XXqtek15Qg16nXnNeZLCDX
-qdee15kg16LXmdeZ16nXlCDXp9eT15DXpNeZINeV157XqteS15XXqNeo16og15vXmdeV150NCteR
-16LXldee15DXnywg15DXoNeZINeQ15zXnteg15Qg15XXkNedINeX15Mg15TXldeo15nXqiDXoted
-INep15zXldep15Qg15nXnNeT15nXnSAsINeR16rXlSDXlNeR15nXldec15XXkteZ16og15TXmdeX
-15nXk9eUDQrXqdecINeg16nXmdeQINec15XXkSDXlNee16DXldeXICjXp9eV15zXldeg15wg15TX
-nteg15XXlyDXnteV16LXnteoINen15PXkNek15kpINeV15vXqNeS16Ig15DXoNeZINeg157XpteQ
-16og16rXl9eqINeU15LXoNeqDQrXnten15zXmCDXnteT15nXoNeZINei15wg15nXk9eZINee157X
-qdec16og16LXldee16DXmS4NCteZ16kg15zXmSDXm9eh16TXmdedINeR16nXldeV15kgItei16nX
-qNeZ150g15XXqdeR16Ig157Xmdec15nXldefINeV15fXntepINee15DXldeqINeQ15zXoyDXk9eV
-15zXqCDXkNee16jXmden15DXmSINCi0kMjcuNTAwLjAwMC4wMCDXk9eV15zXqCDXkNee16jXmden
-15DXmSDXqdeQ16DXmSDXqNeV16bXlCDXnNeU16TXp9eZ15Mg15HXmdeT15og16LXkdeV16gg16TX
-qNeV15nXp9eYINeU16nXp9ei15QNCteR15DXqNem15ouINeQ150g15DXqteUINee15XXm9efINec
-15jXpNecINeR16TXqNeV15nXp9eYINeW15Qg15HXqdee15ksINeQ16DXkCDXlNep15Eg15PXl9eV
-16Mg15vXk9eZINec15DXpNep16gg15zXmQ0K15zXodek16cg15zXmiDXpNeo15jXmdedINeg15XX
-odek15nXnSDXm9eT15kg15zXlNeq15fXmdecINeR16rXlNec15nXmiDXlNeU16LXkdeo15QuDQrX
-kNeV15PXlCDXnNeq15LXldeR16rXmiDXlNeT15fXldek15Qg15HXkNee16bXoteV16og15vXqteV
-15HXqiDXlNeT15XXkCLXnCDXqdec15kg15zXnteY15Q6IG1hZGFtZ2FkYWZpYWlzaGFAZ21haWwu
-Y29tDQrXqteV15PXlA0K16nXnNeaINeR15DXnteqINei15nXmdep15QNCiwsLCwsLCwsLCwsLCws
-LCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCws
-LCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCws
-LA0KUGxlYXNlIGkgbmVlZCB5b3VyIGhlbHANCkkgYW0gc2VuZGluZyBteSBncmVldGluZ3MgdG8g
-eW91IGZyb20gdGhlIFN1bHRhbmF0ZSBvZiBPbWFuLCBJbiB0aGUNCmNhcGl0YWwgY2l0eSBvZiBN
-dXNjYXQuDQpNYXkgaSB1c2UgdGhpcyBtZWRpdW0gdG8gb3BlbiBhIG11dHVhbCBjb21tdW5pY2F0
-aW9uIHdpdGggeW91LCBhbmQNCnNlZWtpbmcgeW91ciBhY2NlcHRhbmNlIHRvd2FyZHMgaW52ZXN0
-aW5nIGluIHlvdXIgY291bnRyeSB1bmRlciB5b3VyDQptYW5hZ2VtZW50IGFzIG15IHBhcnRuZXIs
-IE15IG5hbWUgaXMgQWlzaGEgR2FkZGFmaSBhbmQgcHJlc2VudGx5DQpsaXZpbmcgaW4gT21hbiwg
-aSBhbSBhIFdpZG93IGFuZCBzaW5nbGUgTW90aGVyIHdpdGggdGhyZWUgQ2hpbGRyZW4sDQp0aGUg
-b25seSBiaW9sb2dpY2FsIERhdWdodGVyIG9mIGxhdGUgTGlieWFuIFByZXNpZGVudCAoTGF0ZSBD
-b2xvbmVsDQpNdWFtbWFyIEdhZGRhZmkpIGFuZCBwcmVzZW50bHkgaSBhbSB1bmRlciBwb2xpdGlj
-YWwgYXN5bHVtIHByb3RlY3Rpb24NCmJ5IHRoZSBPbWFuaSBHb3Zlcm5tZW50Lg0KSSBoYXZlIGZ1
-bmRzIHdvcnRoIOKAnFR3ZW50eSBTZXZlbiBNaWxsaW9uIEZpdmUgSHVuZHJlZCBUaG91c2FuZCBV
-bml0ZWQNClN0YXRlIERvbGxhcnPigJ0gLSQyNy41MDAuMDAwLjAwIFVTIERvbGxhcnMgd2hpY2gg
-aSB3YW50IHRvIGVudHJ1c3Qgb24NCnlvdSBmb3IgaW52ZXN0bWVudCBwcm9qZWN0IGluIHlvdXIg
-Y291bnRyeS4gSWYgeW91IGFyZSB3aWxsaW5nIHRvDQpoYW5kbGUgdGhpcyBwcm9qZWN0IG9uIG15
-IGJlaGFsZiwga2luZGx5IHJlcGx5IHVyZ2VudCB0byBlbmFibGUgbWUNCnByb3ZpZGUgeW91IG1v
-cmUgZGV0YWlscyB0byBzdGFydCB0aGUgdHJhbnNmZXIgcHJvY2Vzcy4NCkkgc2hhbGwgYXBwcmVj
-aWF0ZSB5b3VyIHVyZ2VudCByZXNwb25zZSB0aHJvdWdoIG15IGVtYWlsIGFkZHJlc3MNCmJlbG93
-OiBtYWRhbWdhZGFmaWFpc2hhQGdtYWlsLmNvbQ0KVGhhbmtzDQpZb3VycyBUcnVseSBBaXNoYQ0K
+On 31.05.2022 01:15, Davidlohr Bueso wrote:
+> Tasklets have long been deprecated as being too heavy on the system
+> by running in irq context - and this is not a performance critical
+> path. If a higher priority process wants to run, it must wait for
+> the tasklet to finish before doing so. A more suitable equivalent
+> is to converted to threaded irq instead and run in regular task
+> context.
+> 
+> Cc: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
+> Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+
+Acked-by: Artur Paszkiewicz <artur.paszkiewicz@intel.com>
