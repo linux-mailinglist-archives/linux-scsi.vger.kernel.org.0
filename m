@@ -2,91 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2DE53E375
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jun 2022 10:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDC053E2BD
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jun 2022 10:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiFFG6o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Jun 2022 02:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
+        id S231536AbiFFICZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Jun 2022 04:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiFFG6l (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jun 2022 02:58:41 -0400
-Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E0EE27FC8;
-        Sun,  5 Jun 2022 23:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hKU5A
-        rRzebO/PE+A96fqDA5Q8vQg8R9L8GsPEj4JphE=; b=IiVdN7NNxICc5j1HeQD+B
-        WmmSHTO8T7BYST/tH1blW+7S4GK7S3RU+zZs1BTWsU2ZAD2xWrX0wF++8zWTb8F8
-        MqBHLdLt2j/WYXlFhlTSvkI1WWaN9RKcLzj09I5ZfoJ+MNRuXLoXKhGSjsiS1s14
-        bRFpi3Z2U/PAuS9RbsDOrE=
-Received: from carlis-virtual-machine (unknown [218.17.89.93])
-        by smtp7 (Coremail) with SMTP id C8CowAC3Rbp3pZ1iSKn7GQ--.60343S2;
-        Mon, 06 Jun 2022 14:58:00 +0800 (CST)
-From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-To:     linux@highpoint-tech.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-Subject: [PATCH] scsi: hptiop: convert sysfs snprintf to sysfs_emit
-Date:   Mon,  6 Jun 2022 14:57:57 +0800
-Message-Id: <20220606065757.48514-1-zhangxuezhi1@coolpad.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S231443AbiFFICN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jun 2022 04:02:13 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB742DD76
+        for <linux-scsi@vger.kernel.org>; Mon,  6 Jun 2022 01:02:12 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id c2so17690596edf.5
+        for <linux-scsi@vger.kernel.org>; Mon, 06 Jun 2022 01:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=3FaCpxcsWD+oaofcA3Y4DB5TwtQsfV7B/aOuz+eAXuk=;
+        b=jmZmkE2ICasfVeCIMUxSByRKCghYLcFIwYSWaUvVLZW+kkvonGVoy8HplIheG4sXXR
+         9CiWod8mg7XajK39q5dXjZHMsGlZU7/sRz2nVrI3fzsTTjgqinWbure6d/vFNyxyecWT
+         l019s/cjUBOIysJEbe80UG/k16ZPZJgc+//015BDMbeln63uo3ssxKtmYC9uC38KHz6D
+         oI+AkOvXrLJcuUssA7ojlqq2QGwuy8Pz+moGVMyeMbtisuSY5BFqPQ3yTuJ4GxX3M1MG
+         z804khBvB2Yia0HFQI3jgY32IAyvIZEJpxx9YICD07YKFazh+6yyTJdSMggDhz7ze7Ic
+         5tew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=3FaCpxcsWD+oaofcA3Y4DB5TwtQsfV7B/aOuz+eAXuk=;
+        b=vIrkPWNy7ujjkwvcpo90In997rwnyA45ZJQXMeM+zKIi8IL22ebEoJCFTv6f4MYGNy
+         ra1jspcXZCK0TVYufdBhwHp6TVZbjuSBrSiI3jETQjPaLITADPa+pU8QVIzL2waO9MYK
+         5zs7CzqRUpvTnZWxNDdARWui/NAv9TqqCGZqYt/BoMc55/22K5tr9b6dfSSK9RjynNHc
+         Wew0x/yViJADFloEp2jhQVqwNbnAgYo4zfyRrXU3CzUwo2XVbQq24yGrbnVHhK3/HedB
+         U5Q6SSmhmLX+P5a1KCATdKuIpKTo0vjSj6d5+b2bbYfSZ8MGiZk4RgEulEN8ypzz0htT
+         XB8g==
+X-Gm-Message-State: AOAM530DwurbXQNDrYRKlysq4N669WJEpCKOa/1gnDUHyMW+HhEeomY7
+        FMkqFSLal5/Um0N/E1I4e/iYxXPvcLLrtc+5jR4=
+X-Google-Smtp-Source: ABdhPJy/ka5+5g97YJf6KmRtqeof5yS+GF2a30VeMa/CiXzP8uRDAqUfadfUGmpse6OmmNhMRTR9bWzfS0xHlXiNzz4=
+X-Received: by 2002:a05:6402:438a:b0:42e:985:4944 with SMTP id
+ o10-20020a056402438a00b0042e09854944mr24376950edc.283.1654502530012; Mon, 06
+ Jun 2022 01:02:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8CowAC3Rbp3pZ1iSKn7GQ--.60343S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WF13JFy5XFWxKr1kWw48WFg_yoW8Jw1xpF
-        47Ga47urs5Aw47WF1UXF1fZFyFvas3tr9rJaykW3s8uF17JrWDJFW5AFWjqryrGay8Grya
-        yF4qkFy5ua18Ar7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jkBMtUUUUU=
-X-Originating-IP: [218.17.89.93]
-Sender: llyz108@163.com
-X-CM-SenderInfo: xoo16iiqy6il2tof0z/xtbB0RgYhVzIBMhdNgAAsn
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Sender: midonicolas84@gmail.com
+Received: by 2002:a55:c10e:0:b0:18a:9c26:7dbb with HTTP; Mon, 6 Jun 2022
+ 01:02:08 -0700 (PDT)
+From:   Tomani David <davidtomani24@gmail.com>
+Date:   Mon, 6 Jun 2022 08:02:08 +0000
+X-Google-Sender-Auth: KwyWVR-ki7RHffHd1TYNubkTpsk
+Message-ID: <CAE_PYmrprZKqtHSz=vQxGO1biPLC3XPdGCnMxKxj3H_Nc=YjfA@mail.gmail.com>
+Subject: I have a message for you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix the following coccicheck warnings:
-drivers/scsi/hptiop.c:1126:8-16:
-WARNING: use scnprintf or sprintf
-drivers/scsi/hptiop.c:1117:8-16:
-WARNING: use scnprintf or sprintf
+Good morning,
 
-Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
----
- drivers/scsi/hptiop.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Did you receive my previous email? I'm still waiting for your answer.
 
-diff --git a/drivers/scsi/hptiop.c b/drivers/scsi/hptiop.c
-index f18b770626e6..51833839c850 100644
---- a/drivers/scsi/hptiop.c
-+++ b/drivers/scsi/hptiop.c
-@@ -1114,7 +1114,7 @@ static int hptiop_adjust_disk_queue_depth(struct scsi_device *sdev,
- static ssize_t hptiop_show_version(struct device *dev,
- 				   struct device_attribute *attr, char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%s\n", driver_ver);
-+	return sysfs_emit(buf, "%s\n", driver_ver);
- }
- 
- static ssize_t hptiop_show_fw_version(struct device *dev,
-@@ -1123,7 +1123,7 @@ static ssize_t hptiop_show_fw_version(struct device *dev,
- 	struct Scsi_Host *host = class_to_shost(dev);
- 	struct hptiop_hba *hba = (struct hptiop_hba *)host->hostdata;
- 
--	return snprintf(buf, PAGE_SIZE, "%d.%d.%d.%d\n",
-+	return sysfs_emit(buf, "%d.%d.%d.%d\n",
- 				hba->firmware_version >> 24,
- 				(hba->firmware_version >> 16) & 0xff,
- 				(hba->firmware_version >> 8) & 0xff,
--- 
-2.34.1
 
+Regards,
+Mr. David
