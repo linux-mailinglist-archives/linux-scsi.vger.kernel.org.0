@@ -2,105 +2,132 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4308153DEF4
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jun 2022 01:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597ED53DFD2
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jun 2022 04:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351814AbiFEXdd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 5 Jun 2022 19:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S1352237AbiFFCsK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 5 Jun 2022 22:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351820AbiFEXdb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 5 Jun 2022 19:33:31 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF41E27168
-        for <linux-scsi@vger.kernel.org>; Sun,  5 Jun 2022 16:33:29 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id h5so17740971wrb.0
-        for <linux-scsi@vger.kernel.org>; Sun, 05 Jun 2022 16:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=hzqCG52SPEe4tQY/Tt070sXpLEE5srR/6HSZh6AwAPo=;
-        b=kYqyTELNv74MY0+Xtsf1lfj7zVGpOEbEQXrg+C/90Mms9oiDDoR1tAGfsH8wjin1au
-         YgEibdYFsC3ZX5fD3ZTrbFmbUnOpr2QIubv1+FRg642AmsgEU7LFuDOzvCU8SrQo9uVc
-         ANsX9cHR3AzEewxi1sIvXUoaPTeYqv+2Rr+WwQ4SIg93A7YMlS/dL93POpl3GQL8wbq0
-         PYcTfhT2s+YV+U+JG3Ased41N76s52gmJ8jiCBg7Ax2sUve8NNNgMFY+pegOkd1ur6+T
-         LdPia7q6wNFPzAz/tX5zACpBCXsVxa66UTUf4H0pWTFHakZKiEbv0L32pINnRW88WSQ1
-         6gmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=hzqCG52SPEe4tQY/Tt070sXpLEE5srR/6HSZh6AwAPo=;
-        b=QWOSfVVRF/FcRWyIdtpATxx1ejxkc0xYpFwT52O9oyW9f4bXBDfqKxR9LCUTWz0YfE
-         n6i5lhKkD/qesWM/jdzWZQi1HYZWcM2fpFMSQZ3gd3rIcU3eQzeC2ArB6blmAtmRokAF
-         G7J7tfCmRNifmIvOEA83Rf7WqxSCX8kcvV4NFqWVTBwD298hRog8DPYY1vg3sfzPSCZa
-         0tK4HfjiMMlk9NXNcNsstKSR9smQZ6byEsK0lps4CJUDVTq2QP7ublqD7gK1a5vvDepx
-         FoOciG5B+oIjPEwCQ6ocmzTSnZHM9BZlxh2buct/lyLXuYKr2AT2v50iZFYBTlqalQ+T
-         hUuw==
-X-Gm-Message-State: AOAM533Bz/0qMSVcX28svELDthGSSQLl6+O7uw2eX0xjkdTzV1ApqU+O
-        HQkXA+Ad4dGJAHYdoOot6VrI3oIllq/WK1L+5aY=
-X-Google-Smtp-Source: ABdhPJx05vkg/25slKFEQFCOcyfbvjg4JjNZFII0Ku3f/Gnu+Tw5+Fxv0/0emaesTDl49gfm20FsSYTWpw96OZmltzk=
-X-Received: by 2002:adf:dd52:0:b0:213:bb11:2fde with SMTP id
- u18-20020adfdd52000000b00213bb112fdemr14778741wrm.467.1654472008195; Sun, 05
- Jun 2022 16:33:28 -0700 (PDT)
+        with ESMTP id S242467AbiFFCsI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 5 Jun 2022 22:48:08 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50527140F6
+        for <linux-scsi@vger.kernel.org>; Sun,  5 Jun 2022 19:48:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1654483687; x=1686019687;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=D/wS6F2qtObb/FfuG5OxzP+ia1M5T+oSNe0EBUl49xg=;
+  b=fCgseHhT0em9GDLiu4/ytS/FosGgLdcyjVUzYnWYR/4jfbFm9+48xPjM
+   HPKx0sszxS4UHDcRUn4abiKbX7FV8WlGIuYDsQFbRod1uT8ETMBbdJr1K
+   7VqBln5DjXGCv7NCX6xxVnMrvwYuDdg5OQbLF3lnXsGkTU+v40+f/wP5w
+   X4LjsQEvta8Dy8L4Jw+NOgNB+AFoULdddGEyiEuwWBSlev4rtv6MLMauZ
+   9kM5YaorR90KTYeNK4KbkYGLPk3l88Na6BGc9YKHLhitY7lVkSWGBKU9h
+   tEjc7EQHFEc2VyQKIrvPZbx64Qpc68Lj/jhDfYJO7COmBqysbH7RnHDxY
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,280,1647273600"; 
+   d="scan'208";a="203119275"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 06 Jun 2022 10:48:07 +0800
+IronPort-SDR: Psk+Oz7xv7SgFg5Lt/gnSRFc/Xlsd8AkyDjTUkvkIN943ZD8KoKGBW5+Ucz+hA2Nm1ZeEmT7SA
+ DlakD0gzEW/eKQVrLD72f3EuW1//kmkbQdpcGsn32Scd8B2cTE6BPmr8OL+Rl/E8u84LtuEpuP
+ NiVAe/cg7+CYatYD25PSkoGvnMJn90CPGBqXe0AeNzJWyn40RjMU3xaDJi6bSqwykASPgplf7f
+ vg/ZR6tjFxT2BbvBwVmJFhBGMci6phLv1EgOkztm1pqTn+0sjm77pMddMqDcyGZ4pFoJJh+48f
+ HTp/RQaPk6Z1vldLiiEJ/eAT
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Jun 2022 19:11:27 -0700
+IronPort-SDR: lqjCxefmwW9loe/N09XAnMlC+lHWOv2XL2S7BjsEz1BO0FTqd+OGogUfvXoQxY7l29CpriKNW3
+ KL88RqgLFNNwaEqDZsXrI664Kg+QfG1VgMzbgYN6fcgW5NmNVQB1Ad9QDKYSgppdWW9FKvQZRo
+ 0jHA+HsYHOnTGA2GmC0oU53oZ69duJuDCmxh8mdm4YtLE/YpKrCFWuCykwhmsbBfLRCBCWori6
+ wI2IWrNh72JZymLSLI6SAWsQqk7pUuUBBPKEmPVRKZOQ3CCC2qrtkWarqERuURbB0KW8j64dMx
+ vY8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Jun 2022 19:48:07 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LGdFy0FsNz1SVnx
+        for <linux-scsi@vger.kernel.org>; Sun,  5 Jun 2022 19:48:06 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1654483685; x=1657075686; bh=D/wS6F2qtObb/FfuG5OxzP+ia1M5T+oSNe0
+        EBUl49xg=; b=d3dlbZMa6gaY3hULhIWoEKv6PVGRqRPMuhOz0C2c2KhqPDJM6yr
+        7LZI1PPTTX/14vzTEcmERaWpNWrjm/dclvcOVvQo98bYDCeEIH5fVWRAwS8HIjzD
+        AT2uy8O9hWtwGGNzTd5GPvps3u2Q9VCbVKQAjizuCbGfdObJChsS5siq+/1hAbzU
+        65yTiuBF0gVI1nXbmFB3KVOsto+2WXaodQlAZpVMdS+bBZ2scyPWZswunlT3Nw01
+        ly94Vvpkf7LLdV9UURUrqdKsHT4AkgnPQZ2oBjQrmeX2Qj30sYcktr+9HYzt+Xft
+        m2j031FcpSh5iHLlzEPPmeLUQ1eLoDqElHQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id hgR1RZ9ezhuG for <linux-scsi@vger.kernel.org>;
+        Sun,  5 Jun 2022 19:48:05 -0700 (PDT)
+Received: from [10.225.163.72] (unknown [10.225.163.72])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LGdFt50L7z1Rvlc;
+        Sun,  5 Jun 2022 19:48:02 -0700 (PDT)
+Message-ID: <3c400db6-d251-c4bd-b019-b9dc1d807212@opensource.wdc.com>
+Date:   Mon, 6 Jun 2022 11:48:01 +0900
 MIME-Version: 1.0
-Received: by 2002:a05:6020:5b8d:b0:19a:1ddd:b4f with HTTP; Sun, 5 Jun 2022
- 16:33:27 -0700 (PDT)
-Reply-To: mrmichaeldoku@hotmail.com
-From:   mr michael <md22334d@gmail.com>
-Date:   Sun, 5 Jun 2022 23:33:27 +0000
-Message-ID: <CA+6A211ud5NH2G_+uu26KkANKe6w8HCvQ+uyrrd45zBvifEkSA@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:442 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5132]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [md22334d[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RESEND PATCH] scsi: ufs: sysfs: support writing boot_lun attr
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        "a5b6@riseup.net" <a5b6@riseup.net>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "~postmarketos/upstreaming@lists.sr.ht" 
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        "phone-devel@vger.kernel.org" <phone-devel@vger.kernel.org>
+References: <20220525164013.93748-1-a5b6@riseup.net>
+ <DM6PR04MB65750969ACD36EEEB48374DFFCD69@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <8d25171a-5d86-9acc-0f94-1a3c6efdb360@riseup.net>
+ <DM6PR04MB65752422396C86EAD4591701FCD89@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <a7f46ad1-6d9e-a38e-31cc-29fddfa2b496@linaro.org>
+ <DM6PR04MB65751A3B1D0BA4467CADDA93FCDF9@DM6PR04MB6575.namprd04.prod.outlook.com>
+ <a4746c67-fa74-8af1-3f2d-7853e9fae8a6@acm.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <a4746c67-fa74-8af1-3f2d-7853e9fae8a6@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings,
+On 6/5/22 12:55, Bart Van Assche wrote:
+> On 6/1/22 10:05, Avri Altman wrote:
+>> As a design rule, sysfs attribute files should not be used to make
+>> persistent modifications to a device configuration. This rule applies
+>> to all subsystems and ufs is no different.
+> 
+> Hmm ... where does that rule come from? I can't find it in
+> Documentation/admin-guide/sysfs-rules.rst. Did I perhaps overlook something?
 
-With due respect to your person, I need your cooperation in
-transferring the sum of $11.3million to your private account where
-this money can be shared between us. The money has been here in our
-bank lying dormant for years without anybody coming for the claim.
+I am not aware of any writable sysfs attribute file that can be used to
+make persistent device configuration changes, at least in storage area.
+I know of plenty that do change a device setting, but without saving this
+setting to maintain it across power cycles. Do you know of any such
+attribute ? I was under the impression that sysfs should not be used to
+persistently reconfigure a device...
 
-By indicating your interest I will send you the full details on how
-the business will be executed.
-
-Best regards,
-Mr. Michael Doku.
+-- 
+Damien Le Moal
+Western Digital Research
