@@ -2,67 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6026453E9D3
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jun 2022 19:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E8C53EA77
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jun 2022 19:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbiFFJZQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Jun 2022 05:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56282 "EHLO
+        id S232823AbiFFJZo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Jun 2022 05:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232879AbiFFJZM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jun 2022 05:25:12 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915786D39E
-        for <linux-scsi@vger.kernel.org>; Mon,  6 Jun 2022 02:25:09 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id a2so22359694lfc.2
-        for <linux-scsi@vger.kernel.org>; Mon, 06 Jun 2022 02:25:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=DCTOHlnn9bgmau2O5B11dgpXKkwCcv7DNwv92J7STCs=;
-        b=Fe24jRmVB8wf0EoN2JMaAHULLWYYo6Ma8WNnGqIzOB0kEMZVs3gzRe2E74cA8Yk08p
-         3A/WXQh3oT6Me2UaXj0H8oGyqsZ/ins20lXm74aTGjCqYg3G6prd1uV24NwZMjnot1wn
-         KzaJQAWYjHofC4QNMgAHoaTtILDet2rAfcExXhuI5ucQBUNKndELPeuKrN4NkVTCj7Hw
-         busCADbirW1jMT0EEQfNSCek0u3kCc7HoB1ho+8Nl3YG4CK4oA10XuQ4IkHtbE2RxH2p
-         Ho3wLz5dtYB98taRI5BeXS/kKhDa3onee3sOQMlVnn3kSCOFo9IOqCb4YWgNDksjLV1w
-         VUlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=DCTOHlnn9bgmau2O5B11dgpXKkwCcv7DNwv92J7STCs=;
-        b=DsLfPxLCP7aBTM1EKZososOzlFoGhGO2hUtwXXAWyekIbONo6cPvY0h/KnKCZBLgSX
-         2X3xpwpR4mPscaM08QQzhmRKbh1pS0gl5x2qdGM3lnaW0voQakb60SzfRzGsfUgdHNEZ
-         mVplkeanPFMnJAJdIxauU+bTJDCJ3uV40ujwY50o5NKqqlnuafaHVYfq3EapmVnylsBB
-         o7BOIZs6qrdM3hqzJFZinBsk3DwrtOpv/Y+kl6ruDXqZ47V5+l4Nx3g4WBFFBi2GJ/bv
-         0/pCDYYNNGd946JDQ7ReLWvSowmAMjtBCt+ltlt/KNvMPPQ9qllXKloZdAZsVDLH8+pk
-         uYew==
-X-Gm-Message-State: AOAM533BYEXpRiTHS4S1LRqf5QYZUzKSZ0dQUNOJqFXgQZwob4Tij+dJ
-        iLrXvYa+Va+u0vm5UCZ73ENy/XLtxqwFdyJzVzE=
-X-Google-Smtp-Source: ABdhPJyPbHARf6EZ9D1yKBLzZvHEOyWeOLIIm1QQZ94Rp9cT8C0gE1I6A18PXHmm+BZ/4KYY4P6IeLLhkHpwn9PLxw8=
-X-Received: by 2002:a19:640e:0:b0:479:5347:b86e with SMTP id
- y14-20020a19640e000000b004795347b86emr1160163lfb.563.1654507506890; Mon, 06
- Jun 2022 02:25:06 -0700 (PDT)
+        with ESMTP id S232856AbiFFJZk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jun 2022 05:25:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284F19418A;
+        Mon,  6 Jun 2022 02:25:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1CA261323;
+        Mon,  6 Jun 2022 09:25:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84FA8C385A9;
+        Mon,  6 Jun 2022 09:25:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654507538;
+        bh=SGyOc8QTUXhFBU0FK2dbWFATxGIrz/5ZeL4pH3h6UnI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o5+R3V8oO4+EAgAGTpyjUIQqB3KNAeJts/jhrJSGEBRzH1PN9a+gCBfvBwaJfsi0j
+         S+xDAbHwdHZEgYXeWMOFMcC/5op2p7s+cMgBf8QSuvMTb6YuVTYwduPx5uxc+DOYFd
+         fr4c0yZ5gapUx5x3IKS7vTtcG+YZNWc9Hh4gX5Rc=
+Date:   Mon, 6 Jun 2022 11:25:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        Khalid Aziz <khalid@gonehiking.org>,
+        linux-scsi@vger.kernel.org,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-parisc@vger.kernel.org, Denis Efremov <efremov@linux.com>
+Subject: Re: [PATCH 0/6] phase out CONFIG_VIRT_TO_BUS
+Message-ID: <Yp3ID86TBFxl7qyL@kroah.com>
+References: <20220606084109.4108188-1-arnd@kernel.org>
 MIME-Version: 1.0
-Sender: avrilharri612@gmail.com
-Received: by 2002:a05:6504:2d4:0:0:0:0 with HTTP; Mon, 6 Jun 2022 02:25:06
- -0700 (PDT)
-From:   Kayla Manthey <sgtkaylamanthey612@gmail.com>
-Date:   Mon, 6 Jun 2022 09:25:06 +0000
-X-Google-Sender-Auth: zjDZzG-yAZAWazPR4JEcmcNf-jI
-Message-ID: <CAHnu19Lw=-G8AJ0NDWzGK84FHo+Mq94L4PQ0HjSFMOk_fHcZgg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606084109.4108188-1-arnd@kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi, how have you been? I'm yet to receive a reply from you in regards
-to my two previous emails, please check and get back to me.
+On Mon, Jun 06, 2022 at 10:41:03AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The virt_to_bus/bus_to_virt interface has been deprecated for
+> decades. After Jakub Kicinski put a lot of work into cleaning out the
+> network drivers using them, there are only a couple of other drivers
+> left, which can all be removed or otherwise cleaned up, to remove the
+> old interface for good.
+> 
+> Any out of tree drivers using virt_to_bus() should be converted to
+> using the dma-mapping interfaces, typically dma_alloc_coherent()
+> or dma_map_single()).
+> 
+> There are a few m68k and ppc32 specific drivers that keep using the
+> interfaces, but these are all guarded with architecture-specific
+> Kconfig dependencies, and are not actually broken.
+> 
+> There are still a number of drivers that are using virt_to_phys()
+> and phys_to_virt() in place of dma-mapping operations, and these
+> are often broken, but they are out of scope for this series.
+
+I'll take patches 1 and 2 right now through my staging tree if that's
+ok.
+
+thanks,
+
+greg k-h
