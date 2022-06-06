@@ -2,88 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E8C53EA77
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jun 2022 19:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EE153E8F2
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jun 2022 19:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbiFFJZo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Jun 2022 05:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S232940AbiFFJgq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Jun 2022 05:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbiFFJZk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jun 2022 05:25:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284F19418A;
-        Mon,  6 Jun 2022 02:25:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1CA261323;
-        Mon,  6 Jun 2022 09:25:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84FA8C385A9;
-        Mon,  6 Jun 2022 09:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654507538;
-        bh=SGyOc8QTUXhFBU0FK2dbWFATxGIrz/5ZeL4pH3h6UnI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o5+R3V8oO4+EAgAGTpyjUIQqB3KNAeJts/jhrJSGEBRzH1PN9a+gCBfvBwaJfsi0j
-         S+xDAbHwdHZEgYXeWMOFMcC/5op2p7s+cMgBf8QSuvMTb6YuVTYwduPx5uxc+DOYFd
-         fr4c0yZ5gapUx5x3IKS7vTtcG+YZNWc9Hh4gX5Rc=
-Date:   Mon, 6 Jun 2022 11:25:35 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        Khalid Aziz <khalid@gonehiking.org>,
-        linux-scsi@vger.kernel.org,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-parisc@vger.kernel.org, Denis Efremov <efremov@linux.com>
-Subject: Re: [PATCH 0/6] phase out CONFIG_VIRT_TO_BUS
-Message-ID: <Yp3ID86TBFxl7qyL@kroah.com>
-References: <20220606084109.4108188-1-arnd@kernel.org>
+        with ESMTP id S232850AbiFFJgi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jun 2022 05:36:38 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1AB1BF166;
+        Mon,  6 Jun 2022 02:36:34 -0700 (PDT)
+Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LGpFB45xXz68778;
+        Mon,  6 Jun 2022 17:33:02 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 11:36:31 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 6 Jun 2022 10:36:26 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <damien.lemoal@opensource.wdc.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <hch@lst.de>,
+        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <linux-scsi@vger.kernel.org>, <liyihang6@hisilicon.com>,
+        <chenxiang66@hisilicon.com>, <thunder.leizhen@huawei.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH v3 0/4] DMA mapping changes for SCSI core
+Date:   Mon, 6 Jun 2022 17:30:18 +0800
+Message-ID: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220606084109.4108188-1-arnd@kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 10:41:03AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The virt_to_bus/bus_to_virt interface has been deprecated for
-> decades. After Jakub Kicinski put a lot of work into cleaning out the
-> network drivers using them, there are only a couple of other drivers
-> left, which can all be removed or otherwise cleaned up, to remove the
-> old interface for good.
-> 
-> Any out of tree drivers using virt_to_bus() should be converted to
-> using the dma-mapping interfaces, typically dma_alloc_coherent()
-> or dma_map_single()).
-> 
-> There are a few m68k and ppc32 specific drivers that keep using the
-> interfaces, but these are all guarded with architecture-specific
-> Kconfig dependencies, and are not actually broken.
-> 
-> There are still a number of drivers that are using virt_to_phys()
-> and phys_to_virt() in place of dma-mapping operations, and these
-> are often broken, but they are out of scope for this series.
+As reported in [0], DMA mappings whose size exceeds the IOMMU IOVA caching
+limit may see a big performance hit.
 
-I'll take patches 1 and 2 right now through my staging tree if that's
-ok.
+This series introduces a new DMA mapping API, dma_opt_mapping_size(), so
+that drivers may know this limit when performance is a factor in the
+mapping.
 
-thanks,
+Robin didn't like using dma_max_mapping_size() for this [1].
 
-greg k-h
+The SCSI core code is modified to use this limit.
+
+I also added a patch for libata-scsi as it does not currently honour the
+shost max_sectors limit.
+
+Note: Christoph has previously kindly offered to take this series via the
+      dma-mapping tree, so I think that we just need an ack from the
+      IOMMU guys now. 
+
+[0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
+[1] https://lore.kernel.org/linux-iommu/f5b78c9c-312e-70ab-ecbb-f14623a4b6e3@arm.com/
+
+Changes since v2:
+- Rebase on v5.19-rc1
+- Add Damien's tag to 2/4 (thanks)
+
+Changes since v1:
+- Relocate scsi_add_host_with_dma() dma_dev check (Reported by Dan)
+- Add tags from Damien and Martin (thanks)
+  - note: I only added Martin's tag to the SCSI patch
+
+John Garry (4):
+  dma-mapping: Add dma_opt_mapping_size()
+  dma-iommu: Add iommu_dma_opt_mapping_size()
+  scsi: core: Cap shost max_sectors according to DMA optimum mapping
+    limits
+  libata-scsi: Cap ata_device->max_sectors according to
+    shost->max_sectors
+
+ Documentation/core-api/dma-api.rst |  9 +++++++++
+ drivers/ata/libata-scsi.c          |  1 +
+ drivers/iommu/dma-iommu.c          |  6 ++++++
+ drivers/iommu/iova.c               |  5 +++++
+ drivers/scsi/hosts.c               |  5 +++++
+ drivers/scsi/scsi_lib.c            |  4 ----
+ include/linux/dma-map-ops.h        |  1 +
+ include/linux/dma-mapping.h        |  5 +++++
+ include/linux/iova.h               |  2 ++
+ kernel/dma/mapping.c               | 12 ++++++++++++
+ 10 files changed, 46 insertions(+), 4 deletions(-)
+
+-- 
+2.26.2
+
