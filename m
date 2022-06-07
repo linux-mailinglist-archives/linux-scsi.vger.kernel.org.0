@@ -2,52 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3B4542639
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 08:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0E0542697
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 08:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232940AbiFHDgl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jun 2022 23:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S1348797AbiFHAiw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jun 2022 20:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232991AbiFHDc3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jun 2022 23:32:29 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AF81D30EC
-        for <linux-scsi@vger.kernel.org>; Tue,  7 Jun 2022 14:12:01 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id s6so30176012lfo.13
-        for <linux-scsi@vger.kernel.org>; Tue, 07 Jun 2022 14:12:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=yj4Xh9MSBlghRVtBmO7RMyttUbHWlgilMETrV8oTCrU=;
-        b=VVHPsnGzaCPYmkZm11oXz5uuPyYBPgG6G8RMBSgwe3ngD4rakjU51JclhwySSTvFJp
-         URkexzQ9po5J0RtWNF/9SbtF3EKVjFLiDZ+wG4zEomV0gMB+DwGSXgD/38CDsHnQ4iRk
-         kZlHigzzZQYWaJ1Mc7V1uocNTm2GUcOEa9iUc=
+        with ESMTP id S1587310AbiFGXxC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jun 2022 19:53:02 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4FB2945E5;
+        Tue,  7 Jun 2022 15:44:00 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id k5-20020a17090a404500b001e8875e6242so5942877pjg.5;
+        Tue, 07 Jun 2022 15:44:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=yj4Xh9MSBlghRVtBmO7RMyttUbHWlgilMETrV8oTCrU=;
-        b=P9wBeLaEvgU8fbMSWmPwLOIm+Ijicq0SWiqC4isBpFD4U/utYIxcutw5uId4z++YSo
-         pFbXfxCfximM2NtzgdfXnu8PqeG6s0TubEvdSWhjF/bU4eZTKDQmYYF1KA22VjDIn8FA
-         JP2Yo7s+6X7segX/ofiWsHzEnZO2OsN0JLbUuI7rGDTFZVFM7RRcscgr/S71YLYkLL0t
-         lmVGgbCbYEaWCaQsCUQEFrYnuDoc5RBXnH536tVo+kj7mgdxV97bn0LKbrOKxljLeebc
-         dNq/2XC0McPirOMZonpiTPx/RupuEnEMG2OOCVi9NV44Elc9V/VzeCXib7ecdzKE2+ji
-         2OOQ==
-X-Gm-Message-State: AOAM531CyQw5puyVNImDw3UgdFozi1VpN1c2wE+CI42GDb7g01S3SHK/
-        aXWmYF4wzVrCW+dzToKDak6ZllUD1h188OHOoOIj0Mx/5tMd2A==
-X-Google-Smtp-Source: ABdhPJyH2yNOh+/jZbqFdFBOVONlQjrfgx34q1zbgXtPIcY+NWAKRZAL8z0li3BelbTQb0ceRnKvAHAqpmei79PGJok=
-X-Received: by 2002:a19:6917:0:b0:478:fe4c:5b6f with SMTP id
- e23-20020a196917000000b00478fe4c5b6fmr20628635lfc.29.1654636319402; Tue, 07
- Jun 2022 14:11:59 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=w8NDUBo3z6UDbWsc/XByX6YF7c4oG4yuYC7oAUnBsYY=;
+        b=wmJNHrZm8vt1N3Fna/3p1FnnVcRuFZZyEy/21hgX49HizjQ9yvZQ53zCvdetoUatVE
+         432zbmPjCUDVtLHXgY6WF2Ivztymj8hl6NqWHXa0mPQ4iQOpCLXwCcnMrFzcSmNGbQaj
+         8ofK7SluYbs2cnAC1+h/0f/MXzhSLGBygpi5nXuTQMwJyBfiHKPPiBpWunGlpXEtGtHq
+         Rj6CYPjj+W1C3sn6g3YobF9ktE01x9ja+yy1MBf2Hf8VGzfoWRBGu6EGXIHFUpNPOUZC
+         IvqdeEoJTm/U1gyCG1ieunVWZO9WkxDZuNEbPl8v7osYuJMLlkesJi5fx4Ju5P8WT+2m
+         +kWQ==
+X-Gm-Message-State: AOAM532+nFS/mMnENlXByKy9Bdh+4jxEPPf5bKLS8/I9CvOyGLk/OQUm
+        aN3qzw6VPJeJUd3HbFFRT3Q=
+X-Google-Smtp-Source: ABdhPJyerYGytLfJP4UmMuvbsKpIxNlss+3u6Myd9djlsW8ZEBq2xQNYIWDPe/Kqg6qSLUHDPa8PZg==
+X-Received: by 2002:a17:902:7088:b0:167:78c0:e05e with SMTP id z8-20020a170902708800b0016778c0e05emr13533905plk.149.1654641824895;
+        Tue, 07 Jun 2022 15:43:44 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:e794:fbe6:94b0:435b? ([2620:15c:211:201:e794:fbe6:94b0:435b])
+        by smtp.gmail.com with ESMTPSA id v11-20020a62a50b000000b0051ba97b788bsm13451064pfm.27.2022.06.07.15.43.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 15:43:44 -0700 (PDT)
+Message-ID: <3e2324dc-2ab1-6a35-46ab-72d970cc466c@acm.org>
+Date:   Tue, 7 Jun 2022 15:43:42 -0700
 MIME-Version: 1.0
-From:   Brian Bunker <brian@purestorage.com>
-Date:   Tue, 7 Jun 2022 14:11:48 -0700
-Message-ID: <CAHZQxyKHeiZkceJgKRYhXFihwTnLa-1pWqicukk7JyV2aBgSNQ@mail.gmail.com>
-Subject: [PATCH] scsi_lib: Don't fail the path in ALUA transition state
-To:     linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 0/4] DMA mapping changes for SCSI core
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        damien.lemoal@opensource.wdc.com, joro@8bytes.org, will@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, hch@lst.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-scsi@vger.kernel.org, liyihang6@hisilicon.com,
+        chenxiang66@hisilicon.com, thunder.leizhen@huawei.com
+References: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,148 +68,36 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The error path for the SCSI check condition of not ready, target in
-ALUA state transition, will result in the failure of that path after
-the retries are exhausted. In most cases that is well ahead of the
-transition timeout established in the SCSI ALUA device handler.
+On 6/6/22 02:30, John Garry wrote:
+> As reported in [0], DMA mappings whose size exceeds the IOMMU IOVA caching
+> limit may see a big performance hit.
+> 
+> This series introduces a new DMA mapping API, dma_opt_mapping_size(), so
+> that drivers may know this limit when performance is a factor in the
+> mapping.
+> 
+> Robin didn't like using dma_max_mapping_size() for this [1].
+> 
+> The SCSI core code is modified to use this limit.
+> 
+> I also added a patch for libata-scsi as it does not currently honour the
+> shost max_sectors limit.
+> 
+> Note: Christoph has previously kindly offered to take this series via the
+>        dma-mapping tree, so I think that we just need an ack from the
+>        IOMMU guys now.
+> 
+> [0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
+> [1] https://lore.kernel.org/linux-iommu/f5b78c9c-312e-70ab-ecbb-f14623a4b6e3@arm.com/
 
-Instead, reprep the command and re-add it to the queue after a 1 second
-delay. This will allow the handler to take care of the timeout and
-only fail the path in the transition state if the target has exceeded
-the transition timeout (default 60 seconds).
+Regarding [0], that patch reverts commit 4e89dce72521 ("iommu/iova: 
+Retry from last rb tree node if iova search fails"). Reading the 
+description of that patch, it seems to me that the iova allocator can be 
+improved. Shouldn't the iova allocator be improved such that we don't 
+need this patch series? There are algorithms that handle fragmentation 
+much better than the current iova allocator algorithm, e.g. the 
+https://en.wikipedia.org/wiki/Buddy_memory_allocation algorithm.
 
-Acked-by: Krishna Kant <krishna.kant@purestorage.com>
-Acked-by: Seamus Connor <sconnor@purestorage.com>
-Signed-off-by: Brian Bunker <brian@purestorage.com>
----
- drivers/scsi/scsi_lib.c | 44 +++++++++++++++++++++++------------------
- 1 file changed, 25 insertions(+), 19 deletions(-)
+Thanks,
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 6ffc9e4258a8..1afb267ff9a2 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -118,7 +118,7 @@ scsi_set_blocked(struct scsi_cmnd *cmd, int reason)
-        }
- }
-
--static void scsi_mq_requeue_cmd(struct scsi_cmnd *cmd)
-+static void scsi_mq_requeue_cmd(struct scsi_cmnd *cmd, unsigned long msecs)
- {
-        struct request *rq = scsi_cmd_to_rq(cmd);
-
-@@ -128,7 +128,12 @@ static void scsi_mq_requeue_cmd(struct scsi_cmnd *cmd)
-        } else {
-                WARN_ON_ONCE(true);
-        }
--       blk_mq_requeue_request(rq, true);
-+
-+       if (msecs) {
-+               blk_mq_requeue_request(rq, false);
-+               blk_mq_delay_kick_requeue_list(rq->q, msecs);
-+       } else
-+               blk_mq_requeue_request(rq, true);
- }
-
- /**
-@@ -658,14 +663,6 @@ static unsigned int scsi_rq_err_bytes(const
-struct request *rq)
-        return bytes;
- }
-
--/* Helper for scsi_io_completion() when "reprep" action required. */
--static void scsi_io_completion_reprep(struct scsi_cmnd *cmd,
--                                     struct request_queue *q)
--{
--       /* A new command will be prepared and issued. */
--       scsi_mq_requeue_cmd(cmd);
--}
--
- static bool scsi_cmd_runtime_exceeced(struct scsi_cmnd *cmd)
- {
-        struct request *req = scsi_cmd_to_rq(cmd);
-@@ -683,14 +680,21 @@ static bool scsi_cmd_runtime_exceeced(struct
-scsi_cmnd *cmd)
-        return false;
- }
-
-+/*
-+ * When ALUA transition state is returned, reprep the cmd to
-+ * use the ALUA handlers transition timeout. Delay the reprep
-+ * 1 sec to avoid aggressive retries of the target in that
-+ * state.
-+ */
-+#define ALUA_TRANSITION_REPREP_DELAY   1000
-+
- /* Helper for scsi_io_completion() when special action required. */
- static void scsi_io_completion_action(struct scsi_cmnd *cmd, int result)
- {
--       struct request_queue *q = cmd->device->request_queue;
-        struct request *req = scsi_cmd_to_rq(cmd);
-        int level = 0;
--       enum {ACTION_FAIL, ACTION_REPREP, ACTION_RETRY,
--             ACTION_DELAYED_RETRY} action;
-+       enum {ACTION_FAIL, ACTION_REPREP, ACTION_DELAYED_REPREP,
-+             ACTION_RETRY, ACTION_DELAYED_RETRY} action;
-        struct scsi_sense_hdr sshdr;
-        bool sense_valid;
-        bool sense_current = true;      /* false implies "deferred sense" */
-@@ -779,8 +783,8 @@ static void scsi_io_completion_action(struct
-scsi_cmnd *cmd, int result)
-                                        action = ACTION_DELAYED_RETRY;
-                                        break;
-                                case 0x0a: /* ALUA state transition */
--                                       blk_stat = BLK_STS_TRANSPORT;
--                                       fallthrough;
-+                                       action = ACTION_DELAYED_REPREP;
-+                                       break;
-                                default:
-                                        action = ACTION_FAIL;
-                                        break;
-@@ -839,7 +843,10 @@ static void scsi_io_completion_action(struct
-scsi_cmnd *cmd, int result)
-                        return;
-                fallthrough;
-        case ACTION_REPREP:
--               scsi_io_completion_reprep(cmd, q);
-+               scsi_mq_requeue_cmd(cmd, 0);
-+               break;
-+       case ACTION_DELAYED_REPREP:
-+               scsi_mq_requeue_cmd(cmd, ALUA_TRANSITION_REPREP_DELAY);
-                break;
-        case ACTION_RETRY:
-                /* Retry the same command immediately */
-@@ -933,7 +940,7 @@ static int scsi_io_completion_nz_result(struct
-scsi_cmnd *cmd, int result,
-  * command block will be released and the queue function will be goosed. If we
-  * are not done then we have to figure out what to do next:
-  *
-- *   a) We can call scsi_io_completion_reprep().  The request will be
-+ *   a) We can call scsi_mq_requeue_cmd().  The request will be
-  *     unprepared and put back on the queue.  Then a new command will
-  *     be created for it.  This should be used if we made forward
-  *     progress, or if we want to switch from READ(10) to READ(6) for
-@@ -949,7 +956,6 @@ static int scsi_io_completion_nz_result(struct
-scsi_cmnd *cmd, int result,
- void scsi_io_completion(struct scsi_cmnd *cmd, unsigned int good_bytes)
- {
-        int result = cmd->result;
--       struct request_queue *q = cmd->device->request_queue;
-        struct request *req = scsi_cmd_to_rq(cmd);
-        blk_status_t blk_stat = BLK_STS_OK;
-
-@@ -986,7 +992,7 @@ void scsi_io_completion(struct scsi_cmnd *cmd,
-unsigned int good_bytes)
-         * request just queue the command up again.
-         */
-        if (likely(result == 0))
--               scsi_io_completion_reprep(cmd, q);
-+               scsi_mq_requeue_cmd(cmd, 0);
-        else
-                scsi_io_completion_action(cmd, result);
- }
--- 
-
-Brian Bunker
-PURE Storage, Inc.
-brian@purestorage.com
+Bart.
