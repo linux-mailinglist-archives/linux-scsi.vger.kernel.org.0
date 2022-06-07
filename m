@@ -2,110 +2,120 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9D453F710
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jun 2022 09:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5660C53F73A
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jun 2022 09:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237571AbiFGHWh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jun 2022 03:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S237676AbiFGHaU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jun 2022 03:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbiFGHWf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jun 2022 03:22:35 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FD913D04
-        for <linux-scsi@vger.kernel.org>; Tue,  7 Jun 2022 00:22:32 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id h19so21791755edj.0
-        for <linux-scsi@vger.kernel.org>; Tue, 07 Jun 2022 00:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=OHbou33WPhW0PDy9/CZae9mIrL4buN3/FALSld4obAM=;
-        b=gbUPyH9FhMYDGLkSiDAHDIKaSoblWLvMidaaT/8fxgWHYqQvwKXHB2yDCs1UmDZAd/
-         VmjPAKDK3YTKasP3rJspx4x+GAO62S0j/TpwxCsaVcve0/Op3TpU6FP6FgjOm8N93CPR
-         7d4x7IeWB9jGvhBngdGYYgOmeIXKcLFSLRbvqQSnTKKb6fQ7vfv51haw1BcwMtsg3Bbv
-         AWHTFl4XhtDBPAkG/j6uYg9/4EdI1Mx4CCXWvHBqBO1U2PwrUAVJNNUKdWNs6eSk7o6P
-         RIA45bfJPUvJ+fM99WlNYfZ+EZIQFHMXYHV2sPuwtKT/6KJxIHblmrDdylKu4+7/eFew
-         sD3A==
+        with ESMTP id S237673AbiFGH37 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jun 2022 03:29:59 -0400
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C589753E33;
+        Tue,  7 Jun 2022 00:29:52 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id hf10so12032907qtb.7;
+        Tue, 07 Jun 2022 00:29:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=OHbou33WPhW0PDy9/CZae9mIrL4buN3/FALSld4obAM=;
-        b=A8+G0PKulSuegRPuBazqW6JJdvppnstjRT+v6F2t0rZxGQldtbQWFP83tWqbSk6sTp
-         yPoZPCYVYA9FA4lzT5sQfosLYRIyLz2ywqfuCHyhOhem2u0hEQtxJWMxOS2D8CoNQR/D
-         xNjehCpiovEs7Qcrj3J97OarbxeBxcaPLBEHcCOsaDxWAZcnsWAzJdLtkS4JverR93h4
-         tbNwMqPSwZYeziuyPao5wgAf9rXwo5TqgPlvNz0XTJnDte86nWgfwcdVgW4idHX9szUF
-         BNDyWBlWANSPWAoZBhw7llKzExgXcXiFE0VCxRCuAVWjXR5UDvpjatul8rCA+vhvlLUd
-         sNyg==
-X-Gm-Message-State: AOAM5336VotnEs8h2xaO40I0yV2W605wzccKNqK1MXgwt7d2cLBl1V+A
-        Vb8Md581ayE0/JjGJt8supFr+U+kfZjtE5TDjmE=
-X-Google-Smtp-Source: ABdhPJwdMIItCqZqOHed9Z3Wev1gU3Bl4yKtT+tkEc71GYlqm7jeaNKIsrKYwP3kZjRD8QHPgqQhpbLx+cw2/CHAbOE=
-X-Received: by 2002:aa7:d303:0:b0:42d:d192:4c41 with SMTP id
- p3-20020aa7d303000000b0042dd1924c41mr32071420edq.178.1654586551382; Tue, 07
- Jun 2022 00:22:31 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/vvSp91df5DXi30Fd3pExmyOkjiZTMAg5zYSvB9bVbM=;
+        b=eiLVg12zzPiX72BjdOPhRaANtE+XgsbxcszNXFToB/g+H0ddcx5Kv7z31zVrPMQvC5
+         34JoXFomujkj3W7R19Z68M8H8ykwBW5rwf7MOPq5LBKmKw7woSlay3VbOGD5VDDlNOnJ
+         GCj3cG97x7xbZ9nMftvX6Oca2yeFk85W1AGH1nPTLTZr7UycofpqYMzKaurrE14YVaB8
+         rJ8RycPKTxyZjGnkNiMbPIHFXFn9yrbUNctajckt780aBp0xgdmGGUGJoAmLTeeD6g18
+         w7DiyzfUwBNMAtmYGEw9jwoF/OTI+KeBJrlUkMBX+rpt3xMOzvTRe6j5vf0rTc4CvQ7m
+         3m3g==
+X-Gm-Message-State: AOAM531hkkBCDypBgorofVpvwAgqmZEEAuXldx40jzwuvr0F5wSAKH6R
+        4mY1FW8bQpe3kqjTfIePlvjR08JyKZRvCQ==
+X-Google-Smtp-Source: ABdhPJy6/LxYiJvYw6lGXpLiwInrJxNS2/wS/j/jDf1hCzWVUK1aU4p+sy/+LTZGnAZILTzM8KYJ+g==
+X-Received: by 2002:a05:622a:1903:b0:2f3:ddac:436d with SMTP id w3-20020a05622a190300b002f3ddac436dmr20876961qtc.25.1654586990718;
+        Tue, 07 Jun 2022 00:29:50 -0700 (PDT)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id v1-20020a05620a0f0100b006a6a6f148e6sm8902896qkl.17.2022.06.07.00.29.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 00:29:50 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id e184so29684808ybf.8;
+        Tue, 07 Jun 2022 00:29:49 -0700 (PDT)
+X-Received: by 2002:a25:7307:0:b0:65c:b98a:f592 with SMTP id
+ o7-20020a257307000000b0065cb98af592mr28407064ybc.380.1654586989616; Tue, 07
+ Jun 2022 00:29:49 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6402:26c8:0:0:0:0 with HTTP; Tue, 7 Jun 2022 00:22:30
- -0700 (PDT)
-Reply-To: andyhalford22@gmail.com
-From:   Andy Halford <fameyemrf@gmail.com>
-Date:   Tue, 7 Jun 2022 00:22:30 -0700
-Message-ID: <CAATdNavv99j6iodD2vEQKOz9W6KZi4DJ5o4_e0G9xx4vSY09qQ@mail.gmail.com>
-Subject: Dear Friend
-To:     undisclosed-recipients:;
+References: <20220606084109.4108188-1-arnd@kernel.org> <20220606084109.4108188-7-arnd@kernel.org>
+In-Reply-To: <20220606084109.4108188-7-arnd@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 Jun 2022 09:29:38 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXi2LkrWSs9=D9tSfhz+YDHB+638F6JdmgQ7V8Gj1ehqQ@mail.gmail.com>
+Message-ID: <CAMuHMdXi2LkrWSs9=D9tSfhz+YDHB+638F6JdmgQ7V8Gj1ehqQ@mail.gmail.com>
+Subject: Re: [PATCH 6/6] arch/*/: remove CONFIG_VIRT_TO_BUS
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Denis Efremov <efremov@linux.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,DEAR_FRIEND,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:542 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5162]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [fameyemrf[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [andyhalford22[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Hello Sir
+On Mon, Jun 6, 2022 at 11:10 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> All architecture-independent users of virt_to_bus() and bus_to_virt()
+> have been fixed to use the dma mapping interfaces or have been
+> removed now.  This means the definitions on most architectures, and the
+> CONFIG_VIRT_TO_BUS symbol are now obsolete and can be removed.
+>
+> The only exceptions to this are a few network and scsi drivers for m68k
+> Amiga and VME machines and ppc32 Macintosh. These drivers work correctly
+> with the old interfaces and are probably not worth changing.
+>
+> On alpha and parisc, virt_to_bus() were still used in asm/floppy.h.
+> alpha can use isa_virt_to_bus() like x86 does, and parisc can just
+> open-code the virt_to_phys() here, as this is architecture specific
+> code.
+>
+> I tried updating the bus-virt-phys-mapping.rst documentation, which
+> started as an email from Linus to explain some details of the Linux-2.0
+> driver interfaces. The bits about virt_to_bus() were declared obsolete
+> backin 2000, and the rest is not all that relevant any more, so in the
+> end I just decided to remove the file completely.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
+>  arch/m68k/Kconfig                             |   1 -
+>  arch/m68k/include/asm/virtconvert.h           |   4 +-
 
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-  I am Andy Halford from London, UK. Nice to meet you. Sorry for the
-inconvenience it's because of the time difference. I contacted you
-specifically regarding an important piece of information I intend
-sharing with you that will be of interest to you. Having gone through
-an intelligent methodical search, I decided to specifically contact
-you hoping that you will find this information useful. Kindly confirm
-I got the correct email by replying via same email to ensure I don't
-send the information to the wrong person.
+Gr{oetje,eeting}s,
 
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-REGARDS
-Andy Halford
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
