@@ -2,53 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C845E540D80
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jun 2022 20:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8C254222A
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 08:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353920AbiFGSsv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jun 2022 14:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        id S1347477AbiFHAit (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jun 2022 20:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354431AbiFGSrC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jun 2022 14:47:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADDA44749;
-        Tue,  7 Jun 2022 11:01:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E97DF616B6;
-        Tue,  7 Jun 2022 18:01:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53DD0C3411C;
-        Tue,  7 Jun 2022 18:01:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654624871;
-        bh=Th3DUZqFk8+1/xRoOYXgybjrLnW/ivzgL1Rlj1RfciY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bLE/JclFbYmZ5ZSHsjv2g2QrJAAQJ+1R8g0rDS8xdFmU3EsdOWQYVc2w3G/c+jQCD
-         enuq65DounycUIBRNN1zMjapoUP67q3Y8jY/UoEt08f6fsbqgw4JH94eVT54Fdxg4P
-         lr3QGicdi3WFDSE8fxfBjphnw/nlMKdyebXBpfn66P2GJQyF62zg0Cy8DMMnjYyhSp
-         NuJ9eLqhAttKsnHUFXvLEOcYXNwcNeW67lX2d2Z3MMTUza2nC2lpkGEFDFsF4+BswX
-         IcjfHfjEjPRsQfzrspgtRVqCm4dattSIvKKewbRz4aW68Vq6ay41YLzTKX9w+u0xx7
-         XTJrd/uwofvtA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hannes Reinecke <hare@suse.de>, Zheyu Ma <zheyuma97@gmail.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, hare@kernel.org,
-        jejb@linux.ibm.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 23/34] scsi: myrb: Fix up null pointer access on myrb_cleanup()
-Date:   Tue,  7 Jun 2022 13:59:58 -0400
-Message-Id: <20220607180011.481266-23-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220607180011.481266-1-sashal@kernel.org>
-References: <20220607180011.481266-1-sashal@kernel.org>
+        with ESMTP id S1392638AbiFGW6G (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jun 2022 18:58:06 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A03F325258
+        for <linux-scsi@vger.kernel.org>; Tue,  7 Jun 2022 13:03:01 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id k5-20020a17090a404500b001e8875e6242so5608888pjg.5
+        for <linux-scsi@vger.kernel.org>; Tue, 07 Jun 2022 13:03:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DELD8KMeXui2A7kgi36tgonOPUlj758pTn6fyp8eDBE=;
+        b=SL6QMzPyvzsE2SzpCpK7uL+PyVlxU842QfV+bf4rTCP20vjfBf8Ox/5Z3HRAqrX4Wq
+         Vbqf7yqC/CiB36wbqkpDw3NvfCkwOaSOTcj6VZCxYJNy7k/NPOfiCkJ0eYOwaIUE0Ubj
+         26KBEPgJ1z1p/J3Mu6U2ZHqzzPntDwrafyChc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DELD8KMeXui2A7kgi36tgonOPUlj758pTn6fyp8eDBE=;
+        b=KSppCR90ztvLp+cEAZyMNMHFS/XcxYY86LlTMnn8SGbx5vQYCpYEd9A3fhwbcWeuC6
+         5mdmb+6GW3rG/bp8BCD0LqZgoLH7PWk199ohgT0L0VtjrJeXSyOg3H6LZN+KvzdpSaPa
+         AyjIaKawUzHRwECC7PqiPdiqu0JuSs67/4nOAPji2o7Hu0NxmA/JkOgQ0w9MNeuLzbbF
+         0bbQ8LGY/QagD9Q/de6vUeq6do6lIdRzDQagIm1yfCdyT1nAmqMmImOe4RLzPfEFtcnv
+         TjnUOC+4HKNeF6Na7/bqE5eQ0feN58njFsT9nQienh6HTuqa4RtLW/8ZW48F7Bxvkdw0
+         8VvQ==
+X-Gm-Message-State: AOAM532onJ+VAsMazPiOOyIOyUfEuM7lWOK9Pvsfk91w9KoYrqn5gFJb
+        d+SGECFAQRCYbXbg9B8hcnJdKJTuETcfGRxkZnFhh8dvlv1/Qp5bx/ZjTsECBfWkXgfqNj876UV
+        gSjQI8ucvNHBclp0ERBsj9IKYLQgiQ+xQdW34Xc93Cf/9dQQdfxkYmGwIPtmlek4XQu50U0dN62
+        eL
+X-Google-Smtp-Source: ABdhPJyIM2PAG0V1wyleKN1W6m9NrVMYj5uHBzDHplsF4zr4L0wz8u8cUbWBJGFR6uBGWUW7mhITKA==
+X-Received: by 2002:a17:90a:1544:b0:1e0:66c5:4080 with SMTP id y4-20020a17090a154400b001e066c54080mr69010924pja.141.1654632180095;
+        Tue, 07 Jun 2022 13:03:00 -0700 (PDT)
+Received: from localhost.localdomain (vpn.purestorage.com. [192.30.189.1])
+        by smtp.gmail.com with ESMTPSA id a20-20020aa794b4000000b0050dc76281d9sm13734352pfl.179.2022.06.07.13.02.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 13:02:59 -0700 (PDT)
+From:   Brian Bunker <brian@purestorage.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     Brian Bunker <brian@purestorage.com>,
+        Krishna Kant <krishna.kant@purestorage.com>,
+        Seamus Connor <sconnor@purestorage.com>
+Subject: [PATCH] scsi_lib: Don't fail the path in ALUA transition state
+Date:   Tue,  7 Jun 2022 13:02:54 -0700
+Message-Id: <20220607200254.43822-1-brian@purestorage.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,55 +67,139 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Hannes Reinecke <hare@suse.de>
+The error path for the SCSI check condition of not ready, target in
+ALUA state transition, will result in the failure of that path after
+the retries are exhausted. In most cases that is well ahead of the
+transition timeout established in the SCSI ALUA device handler.
 
-[ Upstream commit f9f0a46141e2e39bedb4779c88380d1b5f018c14 ]
+Instead, reprep the command and re-add it to the queue after a 1 second
+delay. This will allow the handler to take care of the timeout and
+only fail the path in the transition state if the target has exceeded
+the transition timeout (default 60 seconds).
 
-When myrb_probe() fails the callback might not be set, so we need to
-validate the 'disable_intr' callback in myrb_cleanup() to not cause a null
-pointer exception. And while at it do not call myrb_cleanup() if we cannot
-enable the PCI device at all.
-
-Link: https://lore.kernel.org/r/20220523120244.99515-1-hare@suse.de
-Reported-by: Zheyu Ma <zheyuma97@gmail.com>
-Tested-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Acked-by: Krishna Kant <krishna.kant@purestorage.com>
+Acked-by: Seamus Connor <sconnor@purestorage.com>
+Signed-off-by: Brian Bunker <brian@purestorage.com>
 ---
- drivers/scsi/myrb.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/scsi/scsi_lib.c | 44 +++++++++++++++++++++++------------------
+ 1 file changed, 25 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/scsi/myrb.c b/drivers/scsi/myrb.c
-index 539ac8ce4fcd..35b32920a94a 100644
---- a/drivers/scsi/myrb.c
-+++ b/drivers/scsi/myrb.c
-@@ -1241,7 +1241,8 @@ static void myrb_cleanup(struct myrb_hba *cb)
- 	myrb_unmap(cb);
- 
- 	if (cb->mmio_base) {
--		cb->disable_intr(cb->io_base);
-+		if (cb->disable_intr)
-+			cb->disable_intr(cb->io_base);
- 		iounmap(cb->mmio_base);
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 6ffc9e4258a8..1afb267ff9a2 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -118,7 +118,7 @@ scsi_set_blocked(struct scsi_cmnd *cmd, int reason)
  	}
- 	if (cb->irq)
-@@ -3516,9 +3517,13 @@ static struct myrb_hba *myrb_detect(struct pci_dev *pdev,
- 	mutex_init(&cb->dcmd_mutex);
- 	mutex_init(&cb->dma_mutex);
- 	cb->pdev = pdev;
-+	cb->host = shost;
+ }
  
--	if (pci_enable_device(pdev))
--		goto failure;
-+	if (pci_enable_device(pdev)) {
-+		dev_err(&pdev->dev, "Failed to enable PCI device\n");
-+		scsi_host_put(shost);
-+		return NULL;
-+	}
+-static void scsi_mq_requeue_cmd(struct scsi_cmnd *cmd)
++static void scsi_mq_requeue_cmd(struct scsi_cmnd *cmd, unsigned long msecs)
+ {
+ 	struct request *rq = scsi_cmd_to_rq(cmd);
  
- 	if (privdata->hw_init == DAC960_PD_hw_init ||
- 	    privdata->hw_init == DAC960_P_hw_init) {
+@@ -128,7 +128,12 @@ static void scsi_mq_requeue_cmd(struct scsi_cmnd *cmd)
+ 	} else {
+ 		WARN_ON_ONCE(true);
+ 	}
+-	blk_mq_requeue_request(rq, true);
++
++	if (msecs) {
++		blk_mq_requeue_request(rq, false);
++		blk_mq_delay_kick_requeue_list(rq->q, msecs);
++	} else
++		blk_mq_requeue_request(rq, true);
+ }
+ 
+ /**
+@@ -658,14 +663,6 @@ static unsigned int scsi_rq_err_bytes(const struct request *rq)
+ 	return bytes;
+ }
+ 
+-/* Helper for scsi_io_completion() when "reprep" action required. */
+-static void scsi_io_completion_reprep(struct scsi_cmnd *cmd,
+-				      struct request_queue *q)
+-{
+-	/* A new command will be prepared and issued. */
+-	scsi_mq_requeue_cmd(cmd);
+-}
+-
+ static bool scsi_cmd_runtime_exceeced(struct scsi_cmnd *cmd)
+ {
+ 	struct request *req = scsi_cmd_to_rq(cmd);
+@@ -683,14 +680,21 @@ static bool scsi_cmd_runtime_exceeced(struct scsi_cmnd *cmd)
+ 	return false;
+ }
+ 
++/*
++ * When ALUA transition state is returned, reprep the cmd to
++ * use the ALUA handlers transition timeout. Delay the reprep
++ * 1 sec to avoid aggressive retries of the target in that
++ * state.
++ */
++#define ALUA_TRANSITION_REPREP_DELAY	1000
++
+ /* Helper for scsi_io_completion() when special action required. */
+ static void scsi_io_completion_action(struct scsi_cmnd *cmd, int result)
+ {
+-	struct request_queue *q = cmd->device->request_queue;
+ 	struct request *req = scsi_cmd_to_rq(cmd);
+ 	int level = 0;
+-	enum {ACTION_FAIL, ACTION_REPREP, ACTION_RETRY,
+-	      ACTION_DELAYED_RETRY} action;
++	enum {ACTION_FAIL, ACTION_REPREP, ACTION_DELAYED_REPREP,
++	      ACTION_RETRY, ACTION_DELAYED_RETRY} action;
+ 	struct scsi_sense_hdr sshdr;
+ 	bool sense_valid;
+ 	bool sense_current = true;      /* false implies "deferred sense" */
+@@ -779,8 +783,8 @@ static void scsi_io_completion_action(struct scsi_cmnd *cmd, int result)
+ 					action = ACTION_DELAYED_RETRY;
+ 					break;
+ 				case 0x0a: /* ALUA state transition */
+-					blk_stat = BLK_STS_TRANSPORT;
+-					fallthrough;
++					action = ACTION_DELAYED_REPREP;
++					break;
+ 				default:
+ 					action = ACTION_FAIL;
+ 					break;
+@@ -839,7 +843,10 @@ static void scsi_io_completion_action(struct scsi_cmnd *cmd, int result)
+ 			return;
+ 		fallthrough;
+ 	case ACTION_REPREP:
+-		scsi_io_completion_reprep(cmd, q);
++		scsi_mq_requeue_cmd(cmd, 0);
++		break;
++	case ACTION_DELAYED_REPREP:
++		scsi_mq_requeue_cmd(cmd, ALUA_TRANSITION_REPREP_DELAY);
+ 		break;
+ 	case ACTION_RETRY:
+ 		/* Retry the same command immediately */
+@@ -933,7 +940,7 @@ static int scsi_io_completion_nz_result(struct scsi_cmnd *cmd, int result,
+  * command block will be released and the queue function will be goosed. If we
+  * are not done then we have to figure out what to do next:
+  *
+- *   a) We can call scsi_io_completion_reprep().  The request will be
++ *   a) We can call scsi_mq_requeue_cmd().  The request will be
+  *	unprepared and put back on the queue.  Then a new command will
+  *	be created for it.  This should be used if we made forward
+  *	progress, or if we want to switch from READ(10) to READ(6) for
+@@ -949,7 +956,6 @@ static int scsi_io_completion_nz_result(struct scsi_cmnd *cmd, int result,
+ void scsi_io_completion(struct scsi_cmnd *cmd, unsigned int good_bytes)
+ {
+ 	int result = cmd->result;
+-	struct request_queue *q = cmd->device->request_queue;
+ 	struct request *req = scsi_cmd_to_rq(cmd);
+ 	blk_status_t blk_stat = BLK_STS_OK;
+ 
+@@ -986,7 +992,7 @@ void scsi_io_completion(struct scsi_cmnd *cmd, unsigned int good_bytes)
+ 	 * request just queue the command up again.
+ 	 */
+ 	if (likely(result == 0))
+-		scsi_io_completion_reprep(cmd, q);
++		scsi_mq_requeue_cmd(cmd, 0);
+ 	else
+ 		scsi_io_completion_action(cmd, result);
+ }
 -- 
-2.35.1
+2.33.1
 
