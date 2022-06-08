@@ -2,90 +2,249 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F87A5427D0
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 09:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C735428CF
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 10:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbiFHHPu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jun 2022 03:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        id S232191AbiFHH7k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jun 2022 03:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241331AbiFHGui (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jun 2022 02:50:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD10F16837B
-        for <linux-scsi@vger.kernel.org>; Tue,  7 Jun 2022 23:39:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S234469AbiFHH7B (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jun 2022 03:59:01 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B7021488E
+        for <linux-scsi@vger.kernel.org>; Wed,  8 Jun 2022 00:33:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D84E0B825A0
-        for <linux-scsi@vger.kernel.org>; Wed,  8 Jun 2022 06:39:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 741C9C3411D
-        for <linux-scsi@vger.kernel.org>; Wed,  8 Jun 2022 06:39:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654670368;
-        bh=9h1pr4VTUOSe+TSZxTXYfFCl3bVqAaVcO6njibrrgns=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=rSYiHTlCWyf2XEUpffXH21wPnIXCQLsattCI8cIf92L6aj0TKTErHntYLYxfg6/Y8
-         hO9ZtAUGLi51LKpusXT7oKJDSgzsm+hVEUDdqTvnQ4jrGFRPkVXCMv4Vdk10hh0uFf
-         MKnXg3Oq7oxNWZgA7taeBc3OWeVggRCvNhMCew4VJQsGcrXGv3/M7g4uhzDnz/nI7V
-         Y+BJyGlApcC0wO/LE+nF7MpMBB9K3iPaHAe7Y3uxZhlY9qzjrEc9hr/5XDmtXvG3Q+
-         hmGajofaGf7sW3cJzh/Kgb68qbSKOMcrCYHF1AomMIenG5AB5leuetNrOBSKGSm159
-         3BmH16SXFOjww==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 5D59DC05FD5; Wed,  8 Jun 2022 06:39:28 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-scsi@vger.kernel.org
-Subject: [Bug 215943] UBSAN: array-index-out-of-bounds in
- drivers/scsi/megaraid/megaraid_sas_fp.c:103:32
-Date:   Wed, 08 Jun 2022 06:39:26 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: IO/Storage
-X-Bugzilla-Component: SCSI
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: darren.armstrong85@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215943-11613-xxyWUMXM0G@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215943-11613@https.bugzilla.kernel.org/>
-References: <bug-215943-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2AB6E1F892;
+        Wed,  8 Jun 2022 07:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654673527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=a1YaBkbjfd2hWGrUkD/iKU6TjvxYpaDym494qOaqyP8=;
+        b=HgwtqG/Fb9F9GJgazM3QKAacWd4BCXMZv9zJ3VLzVYAORDiMoP8l6bu6Uzn4VQw/VMMRlq
+        4WaeonLcdNv3Ndb357unp2nq7PXTxELYysMemonMmQ+fxz4A93vuibrv0GDxvxkMsi0jYM
+        uSy/BoLZ7KZlilVHd/sx1uAcqaUaYQU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DB7F713A15;
+        Wed,  8 Jun 2022 07:32:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EHJTM3ZQoGI9IAAAMHmgww
+        (envelope-from <mwilck@suse.com>); Wed, 08 Jun 2022 07:32:06 +0000
+Message-ID: <64935157aac54ad86d710451ff63cacfbc41d4cb.camel@suse.com>
+Subject: Re: [PATCH] scsi_dh_alua: mark port group as failed after ALUA
+ transitioning timeout
+From:   Martin Wilck <mwilck@suse.com>
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Brian Bunker <brian@purestorage.com>,
+        Martin Wilck <mwilck@suse.de>
+Date:   Wed, 08 Jun 2022 09:32:06 +0200
+In-Reply-To: <3161c450d78c79c3dbc8f471fd9d387f32f92d09.camel@suse.com>
+References: <20220525081139.88165-1-hare@suse.de>
+         <37b61d6b956c18bf4a56d14b5746dab2719ef20d.camel@suse.com>
+         <afa5f370-4e16-319f-ded8-49e11f12ff56@suse.de>
+         <3161c450d78c79c3dbc8f471fd9d387f32f92d09.camel@suse.com>
+Content-Type: text/plain; charset="ISO-8859-15"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+User-Agent: Evolution 3.44.2 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215943
+On Wed, 2022-05-25 at 21:33 +0200, Martin Wilck wrote:
+> On Wed, 2022-05-25 at 14:07 +0200, Hannes Reinecke wrote:
+> > On 5/25/22 13:20, Martin Wilck wrote:
+> > > On Wed, 2022-05-25 at 10:11 +0200, Hannes Reinecke wrote:
+> > > > When ALUA transitioning timeout triggers the path group state
+> > > > must
+> > > > be considered invalid. So add a new flag ALUA_PG_FAILED to
+> > > > indicate
+> > > > that the path state isn't necessarily valid, and keep the
+> > > > existing
+> > > > path state until we get a valid response from a RTPG.
+> > > >=20
+> > > > Cc: Brian Bunker <brian@purestorage.com>
+> > > > Cc: Martin Wilck <mwilck@suse.de>
+> > > > Signed-off-by: Hannes Reinecke <hare@suse.de>
+> > > > ---
+> > > > =A0=A0drivers/scsi/device_handler/scsi_dh_alua.c | 24 +++++++------
+> > > > --
+> > > > -----
+> > > > --
+> > > > =A0=A01 file changed, 7 insertions(+), 17 deletions(-)
+> > > >=20
+> > > > diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c
+> > > > b/drivers/scsi/device_handler/scsi_dh_alua.c
+> > > > index 1d9be771f3ee..6921490a5e65 100644
+> > > > --- a/drivers/scsi/device_handler/scsi_dh_alua.c
+> > > > +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
+> > > > @@ -49,6 +49,7 @@
+> > > > =A0=A0#define ALUA_PG_RUN_RTPG=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A00x10
+> > > > =A0=A0#define ALUA_PG_RUN_STPG=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A00x20
+> > > > =A0=A0#define ALUA_PG_RUNNING=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A00x40
+> > > > +#define ALUA_PG_FAILED=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A00x80
+> > > > =A0=20
+> > > > =A0=A0static uint optimize_stpg;
+> > > > =A0=A0module_param(optimize_stpg, uint, S_IRUGO|S_IWUSR);
+> > > > @@ -420,7 +421,7 @@ static enum scsi_disposition
+> > > > alua_check_sense(struct scsi_device *sdev,
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0 */
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0rcu_read_lock();
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0pg =3D rcu_dereference(h->pg);
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0if (pg)
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0if (pg && !(pg->flags &
+> > > > ALUA_PG_FAILED))
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0pg->state =3D
+> > > > SCSI_ACCESS_STATE_TRANSITIONING;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0rcu_read_unlock();
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0alua_check(sdev, false);
+> > >=20
+> > > You still return NEEDS_RETRY from alua_check_sense(), even if
+> > > ALUA_PG_FAILED is set?
+> > >=20
+> > > > @@ -694,7 +695,7 @@ static int alua_rtpg(struct scsi_device
+> > > > *sdev,
+> > > > struct alua_port_group *pg)
+> > > > =A0=20
+> > > > =A0=A0 skip_rtpg:
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0spin_lock_irqsave(&pg->lock, flags);
+> > > > -=A0=A0=A0=A0=A0=A0=A0if (transitioning_sense)
+> > > > +=A0=A0=A0=A0=A0=A0=A0if (transitioning_sense && !(pg->flags &
+> > > > ALUA_PG_FAILED))
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0pg->state =3D SC=
+SI_ACCESS_STATE_TRANSITIONING;
+> > > > =A0=20
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0if (group_id_old !=3D pg->group_id || st=
+ate_old !=3D pg-
+> > > > > state ||
+> > > > @@ -718,23 +719,10 @@ static int alua_rtpg(struct scsi_device
+> > > > *sdev,
+> > > > struct alua_port_group *pg)
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0pg->interval =3D ALUA_RTPG_RETRY_DELAY;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0err =3D SCSI_DH_RETRY;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0} else {
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0struct alua_dh_data *h;
+> > > > -
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0/* Transitioning time exceeded, set
+> > > > port
+> > > > to
+> > > > standby */
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0/* Transitioning time exceeded, mark pg
+> > > > as
+> > > > failed */
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0err =3D SCSI_DH_IO;
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0pg->state =3D SCSI_ACCESS_STATE_STANDBY;
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0pg->flags |=3D ALUA_PG_FAILED;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0pg->expiry =3D 0;
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0rcu_read_lock();
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0list_for_each_entry_rcu(h, &pg-
+> > > > >dh_list,
+> > > > node) {
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0if (!h->sdev)
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0continue;
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0h->sdev->access_state =3D
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0(pg->state &
+> > > > SCSI_ACCESS_STATE_MASK);
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0if (pg->pref)
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0h->sdev->access_state
+> > > > |=3D
+> > > > -
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0SCSI_ACCESS_STA
+> > > > TE
+> > > > _PREFE
+> > > > RRED;
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0}
+> > > > -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0rcu_read_unlock();
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0}
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0case SCSI_ACCESS_STATE_OFFLINE:
+> > > > @@ -746,6 +734,8 @@ static int alua_rtpg(struct scsi_device
+> > > > *sdev,
+> > > > struct alua_port_group *pg)
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/* Useable path =
+if active */
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0err =3D SCSI_DH_=
+OK;
+> > > > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0pg->expiry =3D 0=
+;
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/* RTPG succeeded, cl=
+ear ALUA_PG_FAILED */
+> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0pg->flags &=3D ~ALUA_=
+PG_FAILED;
+> > >=20
+> > > Shouldn't this be done for any state except TRANSITIONING?
+> > >=20
+> > Why, but it does.
+> > We're only entering this block if the state is not TRANSITIONING.
+> > (It's part of a 'switch' statement)
+>=20
+> Right, the only exception is SCSI_ACCESS_STATE_OFFLINE, for which the
+> ALUA_PG_FAILED state should of cause persist. Sorry for bothering.
+>=20
 
---- Comment #5 from darren.armstrong85@gmail.com ---
-That makes sense, the code path I saw this on was loading state from firmwa=
-re.
+What I'm still missing here is how we avoid sending further I/O down
+the path after the timeout has expired.
 
-I guess we need to resolve whether/how we can safely "spill over" into the
-array in this manner. As above there's some assumptions implicitly behind m=
-ade
-about the layout of the ldTgtIdToLd map that the zero-th entry in ldSpanMap=
- is
-special.
+alua_check_sense() will return NEEDS_RETRY, even if ALUA_PG_FAILED is
+set. Without this patch, alua_prep_fn() would return an error because
+it would see STANDBY state. With this patch, the state will stay
+TRANSITIONING, and (after 6056a92ceb2a ("scsi: scsi_dh_alua: Properly
+handle the ALUA transitioning state")) alua_prep_fn() will return
+BLK_STS_OK.
 
---=20
-You may reply to this email to add a comment.
+IMO alua_check_sense() should return SUCCESS if ALUA_PG_FAILED is set,
+and alua_prep_fn() should return an error.
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+Regards
+Martin
