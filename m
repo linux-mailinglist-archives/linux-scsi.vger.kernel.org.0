@@ -2,61 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0927542539
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 08:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B70C542301
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 08:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbiFHFhx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jun 2022 01:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        id S234832AbiFHGBk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jun 2022 02:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234121AbiFHFhn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jun 2022 01:37:43 -0400
+        with ESMTP id S238601AbiFHFv5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jun 2022 01:51:57 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA438169DFF
-        for <linux-scsi@vger.kernel.org>; Tue,  7 Jun 2022 20:04:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7E0113A11;
+        Tue,  7 Jun 2022 20:34:43 -0700 (PDT)
 Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 257Na3Uw014272;
-        Wed, 8 Jun 2022 02:28:03 GMT
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 257NUv1w014268;
+        Wed, 8 Jun 2022 02:28:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=2dhzMdOl9wyyTGOmmbgO0+0AuirYhxVpvoPLjPDFOkk=;
- b=0atDqKaP0ISaWN/2vrXVNM2L4O4MZwnVWPFeX8LYVh9RuTRte4GtiCFdc9CCDzy/0N8r
- zWG3hj6qsIx6UDSmNjmoiXx/Cy4eWOJhUWRtxIZoczz40wEeKILEayQ/9TJmR57L3STV
- PqnLDfiGT7QlNw1KzH72UVe1uu2cQ60F3EilN/7lKQhUBjd/2TAgzrale2EeKE1GrvS8
- w6wFsYliQmoBlCcSpLCsT/l+coqq8Y/nzIP8yAjAwzFzxDQPOWkYUcZYRwZfuxBeY/4t
- ayLBqocBshNxRWvEmg/U1teqFTZNXS+OHKyy6P1kX+tT7s1oNUOpjkHZCHthfVtfSmgo Kw== 
+ bh=UnmqXkpiTAP51sDtRl4BUGeSYwx+BbIJjn7jP9GGSSA=;
+ b=cil1gp1W3a6YoNE7HWm1YZZQyC8N/J7S/LFm0XrvqvB81u8XyLtVNu8gfR0HUh2lxPy5
+ JCjH7I9nbGnx9H1bR1XMGDPpnclO96silMrZpftTCf6k0S/ys2nuQfO6PQBTfk8PozDa
+ CyHLer0bPO04K2iea7qXgbD92Sm8C+jDqFP/e9v7ruomzWzLfJh0XDZ2M4SUE+pXp0XG
+ Tr6arrxFm+lZzi9Ln16wpOeSIHT/1VjHtH15nAgOzQPt5VbKVc5yELm4zVpMbqmTacU9
+ kEujsaiqyfv76wXKA1tQMVviZljmLXFJQBfcQ6oX3D5BHKc62mUp8AJdZb0gMX4eM7SV BA== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ggvxmwff9-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ggvxmwffa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 08 Jun 2022 02:28:02 +0000
+        Wed, 08 Jun 2022 02:28:03 +0000
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2582ASHt037889;
-        Wed, 8 Jun 2022 02:28:02 GMT
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2582ATsj037982;
+        Wed, 8 Jun 2022 02:28:03 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu3349y-1
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu334ae-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 08 Jun 2022 02:28:02 +0000
+        Wed, 08 Jun 2022 02:28:03 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2582RxlT032073;
-        Wed, 8 Jun 2022 02:28:01 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2582RxlV032073;
+        Wed, 8 Jun 2022 02:28:02 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu33499-3;
-        Wed, 08 Jun 2022 02:28:01 +0000
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu33499-4;
+        Wed, 08 Jun 2022 02:28:02 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, James Smart <jsmart2021@gmail.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH 0/9] lpfc: Update lpfc to revision 14.2.0.4
-Date:   Tue,  7 Jun 2022 22:27:55 -0400
-Message-Id: <165465514542.8982.8078251769362214979.b4-ty@oracle.com>
+To:     jejb@linux.ibm.com, damien.lemoal@opensource.wdc.com,
+        Tyler Erickson <tyler.erickson@seagate.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-ide@vger.kernel.org, muhammad.ahmad@seagate.com,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] ata,sd: Fix reading concurrent positioning ranges
+Date:   Tue,  7 Jun 2022 22:27:56 -0400
+Message-Id: <165465514542.8982.625569084964110654.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220603174329.63777-1-jsmart2021@gmail.com>
-References: <20220603174329.63777-1-jsmart2021@gmail.com>
+In-Reply-To: <20220602225113.10218-1-tyler.erickson@seagate.com>
+References: <20220602225113.10218-1-tyler.erickson@seagate.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 0HAFNHlLCDE1Wnw6Mub7LaYPFPD9BODA
-X-Proofpoint-ORIG-GUID: 0HAFNHlLCDE1Wnw6Mub7LaYPFPD9BODA
+X-Proofpoint-GUID: qRnPzEOXv_0mWC_6WnAvzLhqJ_6rCYex
+X-Proofpoint-ORIG-GUID: qRnPzEOXv_0mWC_6WnAvzLhqJ_6rCYex
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -67,38 +70,23 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 3 Jun 2022 10:43:20 -0700, James Smart wrote:
+On Thu, 2 Jun 2022 16:51:10 -0600, Tyler Erickson wrote:
 
-> Update lpfc to revision 14.2.0.4
+> This patch series fixes reading the concurrent positioning ranges.
 > 
-> This patch set contains mainly fixes. Also adds some additional logging
-> for NVMe command completions when errors, and enabling of nvme-fc flush
-> handling on async event cmds.
+> The first patch fixes reading this in libata, where it was reading
+> more data than a drive necessarily supports, resulting in a
+> command abort.
 > 
-> The patches were cut against Martin's 5.19/scsi-queue tree
+> The second patch fixes the SCSI translated data to put the VPD page
+> length in the correct starting byte.
 > 
 > [...]
 
 Applied to 5.19/scsi-fixes, thanks!
 
-[1/9] lpfc: Correct BDE type for XMIT_SEQ64_WQE in ct_reject_event
-      https://git.kernel.org/mkp/scsi/c/44ba9786b673
-[2/9] lpfc: Resolve some cleanup issues following abort path refactoring
-      https://git.kernel.org/mkp/scsi/c/24e1f056677e
-[3/9] lpfc: Resolve some cleanup issues following SLI path refactoring
-      https://git.kernel.org/mkp/scsi/c/e27f05147bff
-[4/9] lpfc: Address null pointer dereference after starget_to_rport()
-      https://git.kernel.org/mkp/scsi/c/6f808bd78e82
-[5/9] lpfc: Resolve null ptr dereference after an ELS LOGO is aborted
-      https://git.kernel.org/mkp/scsi/c/b1b3440f437b
-[6/9] lpfc: Fix port stuck in bypassed state after lip in PT2PT topology
-      https://git.kernel.org/mkp/scsi/c/336d63615466
-[7/9] lpfc: Add more logging of cmd and cqe information for aborted NVME cmds
-      https://git.kernel.org/mkp/scsi/c/ea7bd1f39331
-[8/9] lpfc: Allow reduced polling rate for nvme_admin_async_event cmd completion
-      https://git.kernel.org/mkp/scsi/c/2e7e9c0c1ec0
-[9/9] lpfc: Update lpfc version to 14.2.0.4
-      https://git.kernel.org/mkp/scsi/c/1af48fffd7ff
+[3/3] scsi: sd: Fix interpretation of VPD B9h length
+      https://git.kernel.org/mkp/scsi/c/f92de9d11042
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
