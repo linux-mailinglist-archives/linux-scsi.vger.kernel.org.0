@@ -2,99 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2AA542A2E
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 11:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7258542D82
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 12:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiFHJBY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jun 2022 05:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
+        id S236918AbiFHKY5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jun 2022 06:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiFHJBI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jun 2022 05:01:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED11C39181A;
-        Wed,  8 Jun 2022 01:20:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C170615CE;
-        Wed,  8 Jun 2022 08:20:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C275FC341C8;
-        Wed,  8 Jun 2022 08:20:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654676402;
-        bh=rDMX5BalcedoM4G0RTFNbUxPOQoghsgu/8OBAke+GR0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W/h6WxvlBEsPXQ7LLxZr5QO/u8vafOvVrOKwRNodyKrcwdtYx8uewJ8cCA65YcEMg
-         alacQ3aEaCFnYucv14vBpxrln7eE0w+IUl9Ml0Q/7LYCRVNvGSHDuVNBRGtIoi0BHD
-         Qr5ufM1dsDnPItR2irIQVGVoxerv51UkVHYmpLW+0WsyY7wVvJ+J6YNWoxtfegtWYz
-         FamoyOjC7VQXl4xIUHow5CF1p1P7Wxh0bzVc5DDARXrzB/D9DtH7DJLq2uy7QMFIxO
-         8gV+qq78/NW5yn20jf56zStPrE0wosJLKD6MRBsnwDN5kNQhLX1HrDNepJvQufi2cH
-         3p2+fMos1M1jw==
-Received: by mail-yb1-f178.google.com with SMTP id i39so7216895ybj.9;
-        Wed, 08 Jun 2022 01:20:02 -0700 (PDT)
-X-Gm-Message-State: AOAM531wI2heu6yNv41f62rWPN0YV807Sr2dgw09++hKPk0eJygCQpXX
-        b1xqkxMlmKdXFI6c/C1frVIZfl6a5q9NAIsFztg=
-X-Google-Smtp-Source: ABdhPJw5adnNWBE7ztmmPDIsnyIjJmMrgIr8fa8e/0DIxEnxDLg4p0rx65KL8vLCz2hbQ8e4xmPnl5Ru880ilknwmmg=
-X-Received: by 2002:a25:d6d7:0:b0:663:efa3:3fd2 with SMTP id
- n206-20020a25d6d7000000b00663efa33fd2mr4459955ybg.480.1654676401784; Wed, 08
- Jun 2022 01:20:01 -0700 (PDT)
+        with ESMTP id S237373AbiFHKYT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jun 2022 06:24:19 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB0C142A8D;
+        Wed,  8 Jun 2022 03:14:12 -0700 (PDT)
+Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJ32H3WYkz6H6pv;
+        Wed,  8 Jun 2022 18:12:55 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 8 Jun 2022 12:14:09 +0200
+Received: from [10.47.90.54] (10.47.90.54) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 8 Jun
+ 2022 11:14:08 +0100
+Message-ID: <202f1969-41e4-5f9a-3ff6-0009757434f5@huawei.com>
+Date:   Wed, 8 Jun 2022 11:14:07 +0100
 MIME-Version: 1.0
-References: <20220606084109.4108188-1-arnd@kernel.org> <20220606084109.4108188-6-arnd@kernel.org>
- <d39fc9bb-07c1-ad74-1e89-d2aa80578cd4@gonehiking.org>
-In-Reply-To: <d39fc9bb-07c1-ad74-1e89-d2aa80578cd4@gonehiking.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 8 Jun 2022 10:19:44 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3dfTNS4m-SVa1UH+ncT7ZOcMBRaEc7TiO9R19J3KNSxg@mail.gmail.com>
-Message-ID: <CAK8P3a3dfTNS4m-SVa1UH+ncT7ZOcMBRaEc7TiO9R19J3KNSxg@mail.gmail.com>
-Subject: Re: [PATCH 5/6] scsi: remove stale BusLogic driver
-To:     Khalid Aziz <khalid@gonehiking.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Denis Efremov <efremov@linux.com>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Matt Wang <wwentao@vmware.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH v3 0/4] DMA mapping changes for SCSI core
+To:     Bart Van Assche <bvanassche@acm.org>,
+        <damien.lemoal@opensource.wdc.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <hch@lst.de>,
+        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <linux-scsi@vger.kernel.org>, <liyihang6@hisilicon.com>,
+        <chenxiang66@hisilicon.com>, <thunder.leizhen@huawei.com>
+References: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
+ <3e2324dc-2ab1-6a35-46ab-72d970cc466c@acm.org>
+In-Reply-To: <3e2324dc-2ab1-6a35-46ab-72d970cc466c@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.90.54]
+X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 6:35 PM Khalid Aziz <khalid@gonehiking.org> wrote:
-> On 6/6/22 02:41, Arnd Bergmann wrote: From: Arnd Bergmann<arnd@arndb.de>
->
-> I would say no to removing BusLogic driver. Virtualbox is another
-> consumer of this driver. This driver is very old but I would rather fix
-> the issues than remove it until we do not have any users.
+On 07/06/2022 23:43, Bart Van Assche wrote:
+> On 6/6/22 02:30, John Garry wrote:
+>> As reported in [0], DMA mappings whose size exceeds the IOMMU IOVA 
+>> caching
+>> limit may see a big performance hit.
+>>
+>> This series introduces a new DMA mapping API, dma_opt_mapping_size(), so
+>> that drivers may know this limit when performance is a factor in the
+>> mapping.
+>>
+>> Robin didn't like using dma_max_mapping_size() for this [1].
+>>
+>> The SCSI core code is modified to use this limit.
+>>
+>> I also added a patch for libata-scsi as it does not currently honour the
+>> shost max_sectors limit.
+>>
+>> Note: Christoph has previously kindly offered to take this series via the
+>>        dma-mapping tree, so I think that we just need an ack from the
+>>        IOMMU guys now.
+>>
+>> [0] 
+>> https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/ 
+>>
+>> [1] 
+>> https://lore.kernel.org/linux-iommu/f5b78c9c-312e-70ab-ecbb-f14623a4b6e3@arm.com/ 
+>>
+> 
+> Regarding [0], that patch reverts commit 4e89dce72521 ("iommu/iova: 
+> Retry from last rb tree node if iova search fails"). Reading the 
+> description of that patch, it seems to me that the iova allocator can be 
+> improved. Shouldn't the iova allocator be improved such that we don't 
+> need this patch series? There are algorithms that handle fragmentation 
+> much better than the current iova allocator algorithm, e.g. the 
+> https://en.wikipedia.org/wiki/Buddy_memory_allocation algorithm.
 
-Maciej already offered to help fix the driver, so I think it will be ok.
+Regardless of whether the IOVA allocator can be improved - which it 
+probably can be - this series is still useful. That is due to the IOVA 
+rcache - that is a cache of pre-allocated IOVAs which can be quickly 
+used in the DMA mapping. The rache contains IOVAs up to certain fixed 
+size. In this series we limit the DMA mapping length to the rcache size 
+upper limit to always bypass the allocator (when we have a cached IOVA 
+available) - see alloc_iova_fast().
 
-On the other hand, it sounds like VirtualBox users should not actually try to
-use the BusLogic driver with modern Linux guests. From what I can tell
-from the documentation [1], VirtualBox only provides this emulation because it
-was shipped with early versions of VMware and is supported by Windows 2000
-and earlier, but not actually on any modern Windows guest. The VMware
-documentation in turn explicitly says that BusLogic does not work with 64-bit
-guests [2], presumably this applies to both Windows and Linux guests.
+Even if the IOVA allocator were greatly optimised for speed, there would 
+still be an overhead in the alloc and free for those larger IOVAs which 
+would outweigh the advantage of having larger DMA mappings. But is there 
+even an advantage in very large streaming DMA mappings? Maybe for iotlb 
+efficiency. But some say it's better to have the DMA engine start 
+processing the data ASAP and not wait for larger lists to be built.
 
-        Arnd
+Thanks,
+John
 
-[1] https://www.virtualbox.org/manual/ch05.html#harddiskcontrollers
-[2] https://kb.vmware.com/s/article/2010470
