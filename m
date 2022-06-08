@@ -2,56 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EA9542F90
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFBE542F8F
 	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 13:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238507AbiFHL7S (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jun 2022 07:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
+        id S238467AbiFHL7A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jun 2022 07:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238412AbiFHL7N (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jun 2022 07:59:13 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3332A24D69C
-        for <linux-scsi@vger.kernel.org>; Wed,  8 Jun 2022 04:59:11 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2581X4Nh020925
-        for <linux-scsi@vger.kernel.org>; Wed, 8 Jun 2022 04:59:10 -0700
+        with ESMTP id S238397AbiFHL67 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jun 2022 07:58:59 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3556A16F938
+        for <linux-scsi@vger.kernel.org>; Wed,  8 Jun 2022 04:58:58 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2587SoaA013216
+        for <linux-scsi@vger.kernel.org>; Wed, 8 Jun 2022 04:58:57 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=JiSKnMdH8JLQa3cviFSP4FNceUnRKFWP0j0p22stWA4=;
- b=R050SD8nBeg65gTMPAvBhaqp1pySogSz/gCc386dqb+YLNlwC5U1W3UlhkD+B+AKc7hC
- sbaT6RHHfDE8jg9u3tYJKpXgldhMLifJMYCa7sUISA/2f4t8Ci8hCt30Sy2lLHBZECIz
- lIdUCJCutQTEz0uKIRAC0HmCPnkx12kCXkW0XAmZiBYuUat5zeptk80Q38v6G3s8CFwR
- hecwhcjOMFOccFByZ4ietoDdjMTjpSn59ChyWX6k3L9XX7fvZz20nwteleQdKi4rJ1j5
- Gn5LZgUaXOQ26l864o0XpUiL9A/vaxCK9ba1tHzFxWvPKJ1rJqM0q/2X2vWL7nbwsyx2 HA== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3gjb7pbsag-5
+ content-type; s=pfpt0220; bh=dc3ECuf0ogrGfko3U+vxZCgjxpGHnfOCbvl7avAPKJc=;
+ b=dQi07SRHcF9D4SAJTKdr4JnT1RHmLRD6YHMIOtpGJYr++pJIXhadiqwLlCYSKhcdZF32
+ L/qmnYIf3Dr8tbIH7n57oplhR9BgL4x+au1XARK8Toyo7oCF0Fa9ae6kD2F1FS+Y9wqn
+ OUHBXTMYh+92JGNmU/s/NwGyjHsd/tREsZxIhu4+touX2eqvzZHE10JALVHP/cLdmcEl
+ +7azm3zkNtUR0fu2q7uX5L9ixQ+QTRP7lS63kkok4ZrewrP7cUsnVEGkSfJJBd/Vl+bE
+ +Z0xpogXlB5NhDdKSICRn3RyaJU1cYyz8/jyiwFPtHaaOOM0xRs9BmgdK08CcyhaB2jL sA== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3gjqdps05t-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Jun 2022 04:59:10 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 8 Jun
+        for <linux-scsi@vger.kernel.org>; Wed, 08 Jun 2022 04:58:57 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 8 Jun
  2022 04:58:56 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
  Transport; Wed, 8 Jun 2022 04:58:56 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id E8A0A3F7088;
-        Wed,  8 Jun 2022 04:58:55 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id 19F0D3F7089;
+        Wed,  8 Jun 2022 04:58:56 -0700 (PDT)
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH 03/10] qla2xxx: edif: reduce disruption due to multiple app start
-Date:   Wed, 8 Jun 2022 04:58:42 -0700
-Message-ID: <20220608115849.16693-4-njavali@marvell.com>
+Subject: [PATCH 04/10] qla2xxx: edif: fix no login after app start
+Date:   Wed, 8 Jun 2022 04:58:43 -0700
+Message-ID: <20220608115849.16693-5-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20220608115849.16693-1-njavali@marvell.com>
 References: <20220608115849.16693-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: qtTf5rxNYNVYSEJjBd9BV108PapWnSAI
-X-Proofpoint-ORIG-GUID: qtTf5rxNYNVYSEJjBd9BV108PapWnSAI
+X-Proofpoint-ORIG-GUID: Lp7xIQKkOoh4aXAbecpzvJDXIP8uTD2Q
+X-Proofpoint-GUID: Lp7xIQKkOoh4aXAbecpzvJDXIP8uTD2Q
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-08_03,2022-06-07_02,2022-02-23_01
@@ -67,39 +67,39 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-Multiple app start can trigger session bounce.
-Driver will skip over session tear down if app start is
-seen more than once.
+The scenario is user loaded driver but has not start authentication
+app. All sessions to secure device will exhaust all login attempt,
+fail and in stay in delete state.
+Some time later, app started. Driver will:
+replenish the login retry count,
+trigger delete to prepare for secure login,
+after deletion, relogin is triggered.
+
+For the session that is already deleted, the delete trigger
+is a no-op. If none of the session trigger the relogin needed, then
+there's no movement.
+
+This patch add a re-login trigger to relogin.
 
 Fixes: 7ebb336e45ef ("scsi: qla2xxx: edif: Add start + stop bsgs")
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_edif.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_edif.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/scsi/qla2xxx/qla_edif.c b/drivers/scsi/qla2xxx/qla_edif.c
-index d25eb212398e..a4e444ea0363 100644
+index a4e444ea0363..dd3593333d7b 100644
 --- a/drivers/scsi/qla2xxx/qla_edif.c
 +++ b/drivers/scsi/qla2xxx/qla_edif.c
-@@ -510,8 +510,7 @@ qla_edif_app_start(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 		/* mark doorbell as active since an app is now present */
- 		vha->e_dbell.db_flags |= EDB_ACTIVE;
- 	} else {
--		ql_dbg(ql_dbg_edif, vha, 0x911e, "%s doorbell already active\n",
--		     __func__);
-+		goto out;
+@@ -567,6 +567,7 @@ qla_edif_app_start(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
+ 			qlt_schedule_sess_for_deletion(fcport);
+ 			qla_edif_sa_ctl_init(vha, fcport);
+ 		}
++		set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
  	}
  
- 	if (N2N_TOPO(vha->hw)) {
-@@ -578,6 +577,7 @@ qla_edif_app_start(scsi_qla_host_t *vha, struct bsg_job *bsg_job)
- 		     __func__);
- 	}
- 
-+out:
- 	appreply.host_support_edif = vha->hw->flags.edif_enabled;
- 	appreply.edif_enode_active = vha->pur_cinfo.enode_flags;
- 	appreply.edif_edb_active = vha->e_dbell.db_flags;
+ 	if (vha->pur_cinfo.enode_flags != ENODE_ACTIVE) {
 -- 
 2.19.0.rc0
 
