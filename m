@@ -2,102 +2,168 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0E0542697
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 08:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEFF542647
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 08:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348797AbiFHAiw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jun 2022 20:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
+        id S230014AbiFHEHX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jun 2022 00:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1587310AbiFGXxC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jun 2022 19:53:02 -0400
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4FB2945E5;
-        Tue,  7 Jun 2022 15:44:00 -0700 (PDT)
-Received: by mail-pj1-f43.google.com with SMTP id k5-20020a17090a404500b001e8875e6242so5942877pjg.5;
-        Tue, 07 Jun 2022 15:44:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=w8NDUBo3z6UDbWsc/XByX6YF7c4oG4yuYC7oAUnBsYY=;
-        b=wmJNHrZm8vt1N3Fna/3p1FnnVcRuFZZyEy/21hgX49HizjQ9yvZQ53zCvdetoUatVE
-         432zbmPjCUDVtLHXgY6WF2Ivztymj8hl6NqWHXa0mPQ4iQOpCLXwCcnMrFzcSmNGbQaj
-         8ofK7SluYbs2cnAC1+h/0f/MXzhSLGBygpi5nXuTQMwJyBfiHKPPiBpWunGlpXEtGtHq
-         Rj6CYPjj+W1C3sn6g3YobF9ktE01x9ja+yy1MBf2Hf8VGzfoWRBGu6EGXIHFUpNPOUZC
-         IvqdeEoJTm/U1gyCG1ieunVWZO9WkxDZuNEbPl8v7osYuJMLlkesJi5fx4Ju5P8WT+2m
-         +kWQ==
-X-Gm-Message-State: AOAM532+nFS/mMnENlXByKy9Bdh+4jxEPPf5bKLS8/I9CvOyGLk/OQUm
-        aN3qzw6VPJeJUd3HbFFRT3Q=
-X-Google-Smtp-Source: ABdhPJyerYGytLfJP4UmMuvbsKpIxNlss+3u6Myd9djlsW8ZEBq2xQNYIWDPe/Kqg6qSLUHDPa8PZg==
-X-Received: by 2002:a17:902:7088:b0:167:78c0:e05e with SMTP id z8-20020a170902708800b0016778c0e05emr13533905plk.149.1654641824895;
-        Tue, 07 Jun 2022 15:43:44 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:e794:fbe6:94b0:435b? ([2620:15c:211:201:e794:fbe6:94b0:435b])
-        by smtp.gmail.com with ESMTPSA id v11-20020a62a50b000000b0051ba97b788bsm13451064pfm.27.2022.06.07.15.43.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 15:43:44 -0700 (PDT)
-Message-ID: <3e2324dc-2ab1-6a35-46ab-72d970cc466c@acm.org>
-Date:   Tue, 7 Jun 2022 15:43:42 -0700
+        with ESMTP id S231426AbiFHEDD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jun 2022 00:03:03 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D25926D8A1
+        for <linux-scsi@vger.kernel.org>; Tue,  7 Jun 2022 18:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1654650973; x=1686186973;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PPhoRAeTv47RR97cO35Z0q9LVEb3uFeKAtyPj/I4DYM=;
+  b=EuZHtDGqPlzUx3xXdnhvuuVMZWScv5+ws+1s6Sb71oDocUW5GPDHJaLv
+   3RPadxGJBkreZG/igI9izgvvkkQLmpZ8/uR6pMEMk1XgBbLsAiGxmEojj
+   YjOwhKkDuVuNtKdr+bPJdzwI+NgvqkVmsfN8btJgR+t1/wjmDKI0Yn/qg
+   k7/MD5cg015OCGY8QTJvX4hGvHWBg3MXFYmEFiMMiPhsuI7vbWywGGUMb
+   DgAmh+waB/ZvCiGetC/A0xGnQdwWvNED6RIGU9QXwgmnAsoGk8M96CeR5
+   Z4GutDeYk19Om7CF/dsTzXDtGrZsBxIyEi+ECLmFi68f7bL+vIIqeLocO
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,284,1647273600"; 
+   d="scan'208";a="202546629"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 08 Jun 2022 09:13:03 +0800
+IronPort-SDR: nBrc8HBWDzdf+yII8dyqMD4y8rwkn2dgkOD9Kh1330ldTUgp/lMRxaPSlnV6pcXW3iSs/yzlEu
+ JXhilLMceIkcP8UTDQ/vB++DMedckRKz5gvaAlYoTn01g7gXFBYvSzpFk2mwdDYqyg8EQFD6tV
+ naTj40RHisOd6tGwjRyp6gCuGUCrgNpyi02EKyQO1/lfAKb6P2n8Eg7O2zA/qgYyA87V0jeolL
+ tvPIoUplzAJMfWdIDIh6sQ0kpUcZBz50ooyt/FzJwZ/XTJlvQ9LWLy/90nlsuUe6bnWeej+dUA
+ oHpV+3nsBCLhkKcIbKifQPsD
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Jun 2022 17:31:55 -0700
+IronPort-SDR: 36z6ZAN2XJP82isOFn0JhUnMdniX1k8mPyIvLEQSfo5XA0R+3lH4j+Jllb027bXAR5jsOb7nLi
+ xzsXA0cIUDFw31HFWsuzmB5uc1y/7Gve3X20mT0elQ3P4Gz5m1LkGPmA8s52Pf/6wg8k/4NzrK
+ xcbF4EG2ZdnCzbSnyBbs+JLqFqzaqDKF18nu5QBVuUCZu+1fVH5To34n3Qk9RrpWCn+BUAEGhr
+ E8HY/92tDq84zVsOlUwksdmC6+yi9UbwAtGRDTGIyqgpVtiB00okGZs1/2QEpzEAQ6+kpQhLDG
+ 1Ew=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Jun 2022 18:13:06 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LHq3P2SwSz1Rwrw
+        for <linux-scsi@vger.kernel.org>; Tue,  7 Jun 2022 18:13:05 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:subject:to:from; s=dkim; t=1654650784;
+         x=1657242785; bh=PPhoRAeTv47RR97cO35Z0q9LVEb3uFeKAtyPj/I4DYM=; b=
+        BKnjL193nHwsoPNwHU5oVQLri30U2sngRiajtVGTSTULYw2OCMm8WjzWjIZfPG1i
+        bdqGir4Hmqqdl81+sBU2D0AasxAmopFm+whPpUAruVbhfHZwYVglpQYyCCfaOCV9
+        eatGG1SCDh0HgeeD8M3VvEc6w3w5uDmzb9VmWaL6/piuDv/vg9lIlXJORDzBKJuf
+        jjHVC1RTxWwS1BT5iTpeCYOX1VdvuutK++CvDR3AefYuCu7vs9hWhMekLLwBVzJn
+        si+uW6rsyypKKCKCVd0y15PTfku/3RGNLGSv2+sdSUTotLldsrNgFqMWMa/Zs3zg
+        M30ZuhV8vt9X/uRufmMt+Q==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Ig_NHZUpe8ic for <linux-scsi@vger.kernel.org>;
+        Tue,  7 Jun 2022 18:13:04 -0700 (PDT)
+Received: from washi.fujisawa.hgst.com (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LHq3N1HH9z1Rvlc;
+        Tue,  7 Jun 2022 18:13:03 -0700 (PDT)
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+To:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Douglas Gilbert <dgilbert@interlog.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>
+Subject: [PATCH v2] scsi: scsi_debug: fix zone transition to full condition
+Date:   Wed,  8 Jun 2022 10:13:02 +0900
+Message-Id: <20220608011302.92061-1-damien.lemoal@opensource.wdc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 0/4] DMA mapping changes for SCSI core
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>,
-        damien.lemoal@opensource.wdc.com, joro@8bytes.org, will@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, hch@lst.de,
-        m.szyprowski@samsung.com, robin.murphy@arm.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-scsi@vger.kernel.org, liyihang6@hisilicon.com,
-        chenxiang66@hisilicon.com, thunder.leizhen@huawei.com
-References: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/6/22 02:30, John Garry wrote:
-> As reported in [0], DMA mappings whose size exceeds the IOMMU IOVA caching
-> limit may see a big performance hit.
-> 
-> This series introduces a new DMA mapping API, dma_opt_mapping_size(), so
-> that drivers may know this limit when performance is a factor in the
-> mapping.
-> 
-> Robin didn't like using dma_max_mapping_size() for this [1].
-> 
-> The SCSI core code is modified to use this limit.
-> 
-> I also added a patch for libata-scsi as it does not currently honour the
-> shost max_sectors limit.
-> 
-> Note: Christoph has previously kindly offered to take this series via the
->        dma-mapping tree, so I think that we just need an ack from the
->        IOMMU guys now.
-> 
-> [0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
-> [1] https://lore.kernel.org/linux-iommu/f5b78c9c-312e-70ab-ecbb-f14623a4b6e3@arm.com/
+When a write command to a sequential write required or sequential write
+preferred zone result in the zone write pointer reaching the end of the
+zone, the zone condition must be set to full AND the number of
+implicitly or explicitly open zones updated to have a correct accounting
+for zone resources. However, the function zbc_inc_wp() only sets the
+zone condition to full without updating the open zone counters,
+resulting in a zone state machine breakage.
 
-Regarding [0], that patch reverts commit 4e89dce72521 ("iommu/iova: 
-Retry from last rb tree node if iova search fails"). Reading the 
-description of that patch, it seems to me that the iova allocator can be 
-improved. Shouldn't the iova allocator be improved such that we don't 
-need this patch series? There are algorithms that handle fragmentation 
-much better than the current iova allocator algorithm, e.g. the 
-https://en.wikipedia.org/wiki/Buddy_memory_allocation algorithm.
+Introduce the helper function zbc_set_zone_full() and use it in
+zbc_inc_wp() to correctly transition zones to the full condition.
 
-Thanks,
+Fixes: 0d1cf9378bd4 ("scsi: scsi_debug: Add ZBC zone commands")
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+---
+Changes from v1:
+* Simplify the patch to not modify the zbc_finish_zone() function and
+  not use the CLOSED zone condition as an intermediate state in
+  zbc_set_zone_full(). Cleanups to remove the use of the closed
+  condition as an intermediate state will be sent later.
 
-Bart.
+ drivers/scsi/scsi_debug.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 1f423f723d06..b8a76b89f85a 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -2826,6 +2826,24 @@ static void zbc_open_zone(struct sdebug_dev_info *=
+devip,
+ 	}
+ }
+=20
++static inline void zbc_set_zone_full(struct sdebug_dev_info *devip,
++				     struct sdeb_zone_state *zsp)
++{
++	switch (zsp->z_cond) {
++	case ZC2_IMPLICIT_OPEN:
++		devip->nr_imp_open--;
++		break;
++	case ZC3_EXPLICIT_OPEN:
++		devip->nr_exp_open--;
++		break;
++	default:
++		WARN_ONCE(true, "Invalid zone %llu condition %x\n",
++			  zsp->z_start, zsp->z_cond);
++		break;
++	}
++	zsp->z_cond =3D ZC5_FULL;
++}
++
+ static void zbc_inc_wp(struct sdebug_dev_info *devip,
+ 		       unsigned long long lba, unsigned int num)
+ {
+@@ -2838,7 +2856,7 @@ static void zbc_inc_wp(struct sdebug_dev_info *devi=
+p,
+ 	if (zsp->z_type =3D=3D ZBC_ZTYPE_SWR) {
+ 		zsp->z_wp +=3D num;
+ 		if (zsp->z_wp >=3D zend)
+-			zsp->z_cond =3D ZC5_FULL;
++			zbc_set_zone_full(devip, zsp);
+ 		return;
+ 	}
+=20
+@@ -2857,7 +2875,7 @@ static void zbc_inc_wp(struct sdebug_dev_info *devi=
+p,
+ 			n =3D num;
+ 		}
+ 		if (zsp->z_wp >=3D zend)
+-			zsp->z_cond =3D ZC5_FULL;
++			zbc_set_zone_full(devip, zsp);
+=20
+ 		num -=3D n;
+ 		lba +=3D n;
+--=20
+2.36.1
+
