@@ -2,67 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858305429F5
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 10:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2AA542A2E
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Jun 2022 11:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiFHIxl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jun 2022 04:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
+        id S233460AbiFHJBY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jun 2022 05:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbiFHIxB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jun 2022 04:53:01 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340FA2A5D7A
-        for <linux-scsi@vger.kernel.org>; Wed,  8 Jun 2022 01:11:54 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3137316bb69so5978997b3.10
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Jun 2022 01:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=MM7XUMAvmlk6h7cE3y+LS0P/v9AIDMPXrU5uC3Bfwzw=;
-        b=XVSljIgT/jBvn5goq40KAuGuPmThVjGC0GBP8nxxSeg27vrDs+d6zigU2XOBcv1s83
-         286YBVXsivGphwt8J1nmGoPJ7Z6JbfCjv9VTyCFGzSHoceRJjwhj/6wvUaFLqUCnCQNJ
-         X+aHVt1Rs6Vz6iBs+I37hsWrgp/qdROL5IBKCwH82iiuYZO1E9XXMwsqygdMFMPQig2Y
-         uOavONWcADPmnHK1E2ujc3IUpVS8mvQ+89abYkvVrE5u0FxOA0DRMuNsera8ka33rTCB
-         /w1WGf/2raUazBqCT0uVUBU5CBkOBBGClXFYNARW6sxNAV8NS5FaJzBz50lAxLWciK5g
-         RFww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=MM7XUMAvmlk6h7cE3y+LS0P/v9AIDMPXrU5uC3Bfwzw=;
-        b=qaY3StL3sygLGkQH5Rs591zKsV1PijJmQ9Cr/lKr0niPmIObNDZ80ZCPiOwC4db7L6
-         VBD5rL0wu2Et5YdpyEfYKxZmQP0FW/ZY64tndlvwpac6YPbe6pFly9/ADJDBPxnpRikg
-         GQe1WuH+bbighEjeCrz0kgUoMfkdehgDQ+mwyQBlCKid+meuxGZTXIkmUFHzUjZ7purQ
-         IzNnk1xhtthHQnfX57dsxs6RPM4F5V6HsSCyKAM9FN1hM+B/2hicxIgA1ft7TlAEVK7f
-         TfT8zDmHLbFeOwTIp5fhyK+NTgPLdnBnKTmX5z7iNZ9UuuWibN61fbYnWschkc40KI8N
-         elmg==
-X-Gm-Message-State: AOAM532KQHZouEt8Q0IEfmbznFHGw384FQjlMSh6CYaqNxhcHWzRwgnY
-        BVDXn5NK288BM8QpMZbRAH1M/9l2yVVrx2mH2as=
-X-Google-Smtp-Source: ABdhPJz/e7JiAYsDZvEwBhOAMlerze8YDJ5vxQmPuCnh2W4iZoFuZs2ZggKFSF3ovqjYrHkL9Tk7fTJ9P+M3BCDQN+o=
-X-Received: by 2002:a0d:f882:0:b0:2f4:d830:6fd with SMTP id
- i124-20020a0df882000000b002f4d83006fdmr37215432ywf.387.1654675913287; Wed, 08
- Jun 2022 01:11:53 -0700 (PDT)
+        with ESMTP id S230143AbiFHJBI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jun 2022 05:01:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED11C39181A;
+        Wed,  8 Jun 2022 01:20:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C170615CE;
+        Wed,  8 Jun 2022 08:20:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C275FC341C8;
+        Wed,  8 Jun 2022 08:20:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654676402;
+        bh=rDMX5BalcedoM4G0RTFNbUxPOQoghsgu/8OBAke+GR0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=W/h6WxvlBEsPXQ7LLxZr5QO/u8vafOvVrOKwRNodyKrcwdtYx8uewJ8cCA65YcEMg
+         alacQ3aEaCFnYucv14vBpxrln7eE0w+IUl9Ml0Q/7LYCRVNvGSHDuVNBRGtIoi0BHD
+         Qr5ufM1dsDnPItR2irIQVGVoxerv51UkVHYmpLW+0WsyY7wVvJ+J6YNWoxtfegtWYz
+         FamoyOjC7VQXl4xIUHow5CF1p1P7Wxh0bzVc5DDARXrzB/D9DtH7DJLq2uy7QMFIxO
+         8gV+qq78/NW5yn20jf56zStPrE0wosJLKD6MRBsnwDN5kNQhLX1HrDNepJvQufi2cH
+         3p2+fMos1M1jw==
+Received: by mail-yb1-f178.google.com with SMTP id i39so7216895ybj.9;
+        Wed, 08 Jun 2022 01:20:02 -0700 (PDT)
+X-Gm-Message-State: AOAM531wI2heu6yNv41f62rWPN0YV807Sr2dgw09++hKPk0eJygCQpXX
+        b1xqkxMlmKdXFI6c/C1frVIZfl6a5q9NAIsFztg=
+X-Google-Smtp-Source: ABdhPJw5adnNWBE7ztmmPDIsnyIjJmMrgIr8fa8e/0DIxEnxDLg4p0rx65KL8vLCz2hbQ8e4xmPnl5Ru880ilknwmmg=
+X-Received: by 2002:a25:d6d7:0:b0:663:efa3:3fd2 with SMTP id
+ n206-20020a25d6d7000000b00663efa33fd2mr4459955ybg.480.1654676401784; Wed, 08
+ Jun 2022 01:20:01 -0700 (PDT)
 MIME-Version: 1.0
-Sender: watcha.tiem@gmail.com
-Received: by 2002:a05:6900:1b4f:0:0:0:0 with HTTP; Wed, 8 Jun 2022 01:11:52
- -0700 (PDT)
-From:   Ethan Stevenson <eslaw20211@gmail.com>
-Date:   Wed, 8 Jun 2022 01:11:52 -0700
-X-Google-Sender-Auth: Fu-4rpt0osrARgwh8tdtmXAS1TA
-Message-ID: <CANcVp83R=L1XvhWfe84m++FkUaoFA2RCAitx3nuny2gG4bavsA@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
+References: <20220606084109.4108188-1-arnd@kernel.org> <20220606084109.4108188-6-arnd@kernel.org>
+ <d39fc9bb-07c1-ad74-1e89-d2aa80578cd4@gonehiking.org>
+In-Reply-To: <d39fc9bb-07c1-ad74-1e89-d2aa80578cd4@gonehiking.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 8 Jun 2022 10:19:44 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3dfTNS4m-SVa1UH+ncT7ZOcMBRaEc7TiO9R19J3KNSxg@mail.gmail.com>
+Message-ID: <CAK8P3a3dfTNS4m-SVa1UH+ncT7ZOcMBRaEc7TiO9R19J3KNSxg@mail.gmail.com>
+Subject: Re: [PATCH 5/6] scsi: remove stale BusLogic driver
+To:     Khalid Aziz <khalid@gonehiking.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Denis Efremov <efremov@linux.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Matt Wang <wwentao@vmware.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Did you get the e-mail which i sent you last week? Please confirm and
-give me feedback
+On Mon, Jun 6, 2022 at 6:35 PM Khalid Aziz <khalid@gonehiking.org> wrote:
+> On 6/6/22 02:41, Arnd Bergmann wrote: From: Arnd Bergmann<arnd@arndb.de>
+>
+> I would say no to removing BusLogic driver. Virtualbox is another
+> consumer of this driver. This driver is very old but I would rather fix
+> the issues than remove it until we do not have any users.
+
+Maciej already offered to help fix the driver, so I think it will be ok.
+
+On the other hand, it sounds like VirtualBox users should not actually try to
+use the BusLogic driver with modern Linux guests. From what I can tell
+from the documentation [1], VirtualBox only provides this emulation because it
+was shipped with early versions of VMware and is supported by Windows 2000
+and earlier, but not actually on any modern Windows guest. The VMware
+documentation in turn explicitly says that BusLogic does not work with 64-bit
+guests [2], presumably this applies to both Windows and Linux guests.
+
+        Arnd
+
+[1] https://www.virtualbox.org/manual/ch05.html#harddiskcontrollers
+[2] https://kb.vmware.com/s/article/2010470
