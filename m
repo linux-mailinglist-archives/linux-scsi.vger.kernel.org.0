@@ -2,79 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C99654463C
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jun 2022 10:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5FF5446CD
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jun 2022 10:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242178AbiFIIqQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Jun 2022 04:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
+        id S238084AbiFII7Q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Jun 2022 04:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242974AbiFIIoM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Jun 2022 04:44:12 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12111AE7E
-        for <linux-scsi@vger.kernel.org>; Thu,  9 Jun 2022 01:43:14 -0700 (PDT)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJctm5pL3z689rl;
-        Thu,  9 Jun 2022 16:38:24 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 9 Jun 2022 10:43:12 +0200
-Received: from [10.47.88.201] (10.47.88.201) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 9 Jun
- 2022 09:43:11 +0100
-Message-ID: <9a4612db-7cc2-398d-f882-4190bc5d7759@huawei.com>
-Date:   Thu, 9 Jun 2022 09:43:10 +0100
+        with ESMTP id S243096AbiFII62 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Jun 2022 04:58:28 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FA16412
+        for <linux-scsi@vger.kernel.org>; Thu,  9 Jun 2022 01:57:59 -0700 (PDT)
+X-UUID: d1394c885e474f67ae12a29b09a43e4f-20220609
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:709d99aa-a1b2-4491-ab0a-02886774b775,OB:0,LO
+        B:10,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:90
+X-CID-INFO: VERSION:1.1.5,REQID:709d99aa-a1b2-4491-ab0a-02886774b775,OB:0,LOB:
+        10,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:90
+X-CID-META: VersionHash:2a19b09,CLOUDID:fd59c77e-c8dc-403a-96e8-6237210dceee,C
+        OID:0a1ce689c957,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:0,BEC:nil
+X-UUID: d1394c885e474f67ae12a29b09a43e4f-20220609
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1970452185; Thu, 09 Jun 2022 16:57:53 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Thu, 9 Jun 2022 16:57:52 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Thu, 9 Jun 2022 16:57:52 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>
+CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
+        <mason.zhang@mediatek.com>, <qilin.tan@mediatek.com>,
+        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
+        <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v1 0/3] scsi: ufs: Introduce workaround for power mode change in MediaTek SoC chips
+Date:   Thu, 9 Jun 2022 16:57:48 +0800
+Message-ID: <20220609085751.25305-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 1/3] scsi: libsas: introduce struct smp_disc_resp
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-References: <20220609022456.409087-1-damien.lemoal@opensource.wdc.com>
- <20220609022456.409087-2-damien.lemoal@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220609022456.409087-2-damien.lemoal@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.88.201]
-X-ClientProxiedBy: lhreml727-chm.china.huawei.com (10.201.108.78) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+This series fixes ADAPT logic for HS-G5 and provide workaround
+for power mode change in MediaTek SoC chips.
 
->   #define DISCOVER_REQ_SIZE  16
-> -#define DISCOVER_RESP_SIZE 56
-> +#define DISCOVER_RESP_SIZE sizeof(struct smp_disc_resp)
+CC Chou (1):
+  scsi: ufs-mediatek: Introduce workaround for power mode change
 
-I feel that it would be nice to get rid of these.
+Stanley Chu (2):
+  scsi: ufs: Export ufshcd_uic_change_pwr_mode()
+  scsi: ufs: Fix ADAPT logic for HS-G5
 
-Maybe something like:
+ drivers/ufs/core/ufshcd.c       |  5 +--
+ drivers/ufs/host/ufs-mediatek.c | 60 +++++++++++++++++++++++++++++++--
+ drivers/ufs/host/ufs-mediatek.h |  1 +
+ include/ufs/ufshcd.h            |  1 +
+ include/ufs/unipro.h            |  1 +
+ 5 files changed, 64 insertions(+), 4 deletions(-)
 
-#define smp_execute_task_wrap(dev, req, resp)\
-smp_execute_task(dev, req, sizeof(*req), resp, DISCOVER_REQ_SIZE)
+-- 
+2.18.0
 
-
-static int sas_ex_phy_discover_helper(struct domain_device *dev, u8 
-*disc_req, struct smp_disc_resp *disc_resp, int single)
-{
-	res = smp_execute_task_wrap(dev, disc_req, disc_resp);
-
-We could even introduce a smp req struct to get rid of DISCOVER_REQ_SIZE 
-- the (current) code would be a bit less cryptic then.
-
-But no big deal. Looks ok apart from that.
-
-Thanks,
-John
