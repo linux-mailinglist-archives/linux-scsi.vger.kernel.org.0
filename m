@@ -2,108 +2,129 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F8C546BD2
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jun 2022 19:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32627547021
+	for <lists+linux-scsi@lfdr.de>; Sat, 11 Jun 2022 01:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350172AbiFJRpT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Jun 2022 13:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S240550AbiFJX3n (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Jun 2022 19:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350183AbiFJRpQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Jun 2022 13:45:16 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6D455368
-        for <linux-scsi@vger.kernel.org>; Fri, 10 Jun 2022 10:45:15 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25AEOuIs026118;
-        Fri, 10 Jun 2022 17:45:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=4nElZWEoX0kDLlF4At8zaQEo+chMXHUQa9E0TbOa/0E=;
- b=pShBoxmoeLmKMQjicAskHoRT1RhOdhcofjJlYlZMBZDimBxihCRbCUoL9Ex2zrZUs4bd
- 1UlurUg3QOqKVBEIgFwNhGFk9K8t4F+qtsg4P9LGj0nKRzLKMGLsGB2NUniEeNk6CPo6
- TTjZFYMInc2flbZ9XGNVacHA4Og+oROVKbOH8Mi4Odkk62o7Bo30rHjmh3OgNfKTumWz
- Se1kNRF4skQ40yTY3VcvFDQFdZ13hBTfnLN1+mSsoaMHjhH6oPUM2NTT5hRtKqMtyvn1
- g7IjGebxYk3cItW9iODHE2ytxx5mNHcpz7rdHPWZ/yEZrnjAHWaUiLYXZJhyx/gRUxVk Rw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ghvs3hexv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jun 2022 17:45:14 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25AHFK8Z034766;
-        Fri, 10 Jun 2022 17:45:13 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gfwudauqa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jun 2022 17:45:13 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 25AHcugl012397;
-        Fri, 10 Jun 2022 17:45:12 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gfwudaunq-3;
-        Fri, 10 Jun 2022 17:45:12 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Nilesh Javali <njavali@marvell.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, GR-QLogic-Storage-Upstream@marvell.com
-Subject: Re: [PATCH 00/11] Misc EDiF bug fixes
-Date:   Fri, 10 Jun 2022 13:45:10 -0400
-Message-Id: <165488292962.17199.13840246858245024668.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220607044627.19563-1-njavali@marvell.com>
-References: <20220607044627.19563-1-njavali@marvell.com>
+        with ESMTP id S231666AbiFJX3n (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Jun 2022 19:29:43 -0400
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2531C289707
+        for <linux-scsi@vger.kernel.org>; Fri, 10 Jun 2022 16:29:40 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id y196so726985pfb.6
+        for <linux-scsi@vger.kernel.org>; Fri, 10 Jun 2022 16:29:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6l+R6OqUDBjq3stM+ZNacKUllsAPIf7GsOoYWPsQHn8=;
+        b=FW+hhMSeWpMdPv/LfHZxuXBATpgwoPvSDUmIMXnAASsdHp+tujDXau+FciKky9T+4/
+         RVJIzHcgPwVTz+hunIVPyIV0wJGRktO08NhLilBqDoUEQevUpodPgiomC0DQlZaOA7ui
+         LZVVHBtB77/MsdaQH5ESlU3M42O8zDsOeYSbMe1v2PtdMljSi47paHc5g0Mgo/oaJJ4m
+         J8JuCzdPk0GqITzodvP0HZkmog9K6EaowXaem02zxwDTK71ZowZzlo/mQd7uwj78OTB2
+         +/1DJOjEoDIW9lPrIxT1t4TNfYWeu6xBkBt9zz6OtNkGRpoM86QPxppZ3HbvQtsojeHV
+         sCCQ==
+X-Gm-Message-State: AOAM532U7Kodi+0fJOyyjYO4O/gD0vK+YVeiDLu51t9ke1gfUgWUbrXG
+        0QIAB+kqkiHS0dTLFIrLsFc=
+X-Google-Smtp-Source: ABdhPJxT6L+FWS1MtsCcPGyEZB7LgZSadhuVqWOycT74jdr+RWo17W03RHEX0b8AauZpbJ1JfHP13Q==
+X-Received: by 2002:a05:6a00:1a91:b0:51c:2fab:7340 with SMTP id e17-20020a056a001a9100b0051c2fab7340mr24369967pfv.74.1654903779454;
+        Fri, 10 Jun 2022 16:29:39 -0700 (PDT)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:9eb7:13f0:a1e0:550e])
+        by smtp.gmail.com with ESMTPSA id ix13-20020a170902f80d00b0016160b33319sm243158plb.246.2022.06.10.16.29.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 16:29:38 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH] scsi: ufs: Fix a race between the interrupt handler and the reset handler
+Date:   Fri, 10 Jun 2022 16:29:15 -0700
+Message-Id: <20220610232915.2916712-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: JS9QFO_nBGdVDtyDW-2Qxu9vXCF970-N
-X-Proofpoint-GUID: JS9QFO_nBGdVDtyDW-2Qxu9vXCF970-N
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 6 Jun 2022 21:46:16 -0700, Nilesh Javali wrote:
+Prevent that both the interrupt handler and the reset handler try to
+complete a request at the same time. This patch is the result of the
+analysis of the following crash:
 
-> Martin,
-> 
-> Please apply the qla2xxx driver misc EDiF bug fixes to the scsi tree
-> at your earliest convenience.
-> 
-> Thanks,
-> Nilesh
-> 
-> [...]
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000120
+CPU: 0 PID: 0 Comm: swapper/0 Tainted: G           OE     5.10.107-android13-4-00051-g1e48e8970cca-ab8664745 #1
+pc : ufshcd_release_scsi_cmd+0x30/0x46c
+lr : __ufshcd_transfer_req_compl+0x4fc/0x9c0
+Call trace:
+ ufshcd_release_scsi_cmd+0x30/0x46c
+ __ufshcd_transfer_req_compl+0x4fc/0x9c0
+ ufshcd_poll+0xf0/0x208
+ ufshcd_sl_intr+0xb8/0xf0
+ ufshcd_intr+0x168/0x2f4
+ __handle_irq_event_percpu+0xa0/0x30c
+ handle_irq_event+0x84/0x178
+ handle_fasteoi_irq+0x150/0x2e8
+ __handle_domain_irq+0x114/0x1e4
+ gic_handle_irq.31846+0x58/0x300
+ el1_irq+0xe4/0x1c0
+ cpuidle_enter_state+0x3ac/0x8c4
+ do_idle+0x2fc/0x55c
+ cpu_startup_entry+0x84/0x90
+ kernel_init+0x0/0x310
+ start_kernel+0x0/0x608
+ start_kernel+0x4ec/0x608
 
-Applied to 5.20/scsi-queue, thanks!
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-[01/11] qla2xxx: edif: Reduce Initiator-Initiator thrashing
-        https://git.kernel.org/mkp/scsi/c/9c40c36e75ff
-[02/11] qla2xxx: edif: bsg refactor
-        https://git.kernel.org/mkp/scsi/c/7a7b0b4865d3
-[03/11] qla2xxx: edif: wait for app to ack on sess down
-        https://git.kernel.org/mkp/scsi/c/df648afa39da
-[04/11] qla2xxx: edif: add bsg interface to read doorbell events
-        https://git.kernel.org/mkp/scsi/c/5ecd241bd7b1
-[05/11] qla2xxx: edif: Fix potential stuck session in sa update
-        https://git.kernel.org/mkp/scsi/c/e0fb8ce2bb9e
-[06/11] qla2xxx: edif: Synchronize NPIV deletion with authentication application
-        https://git.kernel.org/mkp/scsi/c/cf79716e6636
-[07/11] qla2xxx: edif: add retry for els pass through
-        https://git.kernel.org/mkp/scsi/c/0b3f3143d473
-[08/11] qla2xxx: edif: remove old doorbell interface
-        https://git.kernel.org/mkp/scsi/c/1040e5f75ddf
-[09/11] qla2xxx: edif: fix n2n discovery issue with secure target
-        https://git.kernel.org/mkp/scsi/c/789d54a41786
-[10/11] qla2xxx: edif: fix n2n login retry for secure device
-        https://git.kernel.org/mkp/scsi/c/aec55325ddec
-[11/11] qla2xxx: Update version to 10.02.07.500-k
-        https://git.kernel.org/mkp/scsi/c/4dc48a107a14
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 1fb3a8b9b03e..279691ff3562 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -6966,6 +6966,7 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
+  */
+ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
+ {
++	unsigned long flags, completed_reqs = 0;
+ 	struct Scsi_Host *host;
+ 	struct ufs_hba *hba;
+ 	u32 pos;
+@@ -6984,13 +6985,18 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
+ 	}
+ 
+ 	/* clear the commands that were pending for corresponding LUN */
+-	for_each_set_bit(pos, &hba->outstanding_reqs, hba->nutrs) {
+-		if (hba->lrb[pos].lun == lun) {
+-			err = ufshcd_clear_cmd(hba, pos);
+-			if (err)
+-				break;
+-			__ufshcd_transfer_req_compl(hba, 1U << pos);
+-		}
++	spin_lock_irqsave(&hba->outstanding_lock, flags);
++	for_each_set_bit(pos, &hba->outstanding_reqs, hba->nutrs)
++		if (hba->lrb[pos].lun == lun)
++			__set_bit(pos, &completed_reqs);
++	hba->outstanding_reqs &= ~completed_reqs;
++	spin_unlock_irqrestore(&hba->outstanding_lock, flags);
++
++	for_each_set_bit(pos, &completed_reqs, hba->nutrs) {
++		err = ufshcd_clear_cmd(hba, pos);
++		if (err)
++			break;
++		__ufshcd_transfer_req_compl(hba, 1U << pos);
+ 	}
+ 
+ out:
