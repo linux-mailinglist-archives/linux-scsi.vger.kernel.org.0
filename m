@@ -2,49 +2,145 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E819546B02
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jun 2022 18:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC758546AF9
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jun 2022 18:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349892AbiFJQxB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Jun 2022 12:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
+        id S1349815AbiFJQwR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Jun 2022 12:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349856AbiFJQw5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Jun 2022 12:52:57 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367D712AEB;
-        Fri, 10 Jun 2022 09:52:55 -0700 (PDT)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LKRkj5J6lz67KdQ;
-        Sat, 11 Jun 2022 00:49:17 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 10 Jun 2022 18:52:53 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 10 Jun 2022 17:52:50 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <jinpu.wang@cloud.ionos.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.de>, <damien.lemoal@opensource.wdc.com>,
-        <Ajish.Koshy@microchip.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH 4/4] scsi: pm8001: Expose HW queues for pm80xx hw
-Date:   Sat, 11 Jun 2022 00:46:42 +0800
-Message-ID: <1654879602-33497-5-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1654879602-33497-1-git-send-email-john.garry@huawei.com>
-References: <1654879602-33497-1-git-send-email-john.garry@huawei.com>
-MIME-Version: 1.0
+        with ESMTP id S1349710AbiFJQv4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Jun 2022 12:51:56 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1CA1F42B5
+        for <linux-scsi@vger.kernel.org>; Fri, 10 Jun 2022 09:51:20 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25AEOu5E026118;
+        Fri, 10 Jun 2022 16:51:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=mTacVMBAgRH42THCYKhZIO+1vFs2KLo9iV/8vKOA7eY=;
+ b=R8FrOfHygdJN7NlQolynbALpk44Uf6jZPpR+JThT5G/+Bq5OJmlCNWdMV1Iks0fY4vOi
+ GMa/wu2hZhfUnq5nny+i3OpRMSV8sKUL+LUFjRe6PM5612DYrmpmOagu6y+dmzBS4o5K
+ UmPD9CHY2KX19kLVreHKAtf7iYnN7yJ5EdectKmnQ6YSAD/eIYiby1iG+G5rXS4okf8m
+ oLdHkShLGx1EHF7NIJeV3GT3yeWwHgxM7wm2CoRjIk+zopOiF+ndh0AAYorKorieFPCM
+ 5WSyQq8hr2qUCeQ3em8M28+lSj5bdfy8CPgr9l2be4KKj73ZAVZeDb5kWeydJmDI6KyA Ow== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ghvs3hbmj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Jun 2022 16:51:18 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25AGkbeZ034560;
+        Fri, 10 Jun 2022 16:51:18 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2046.outbound.protection.outlook.com [104.47.73.46])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gfwu651x4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Jun 2022 16:51:17 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cyilKM4q3v2tF4/o092QmDEBAmBBiLp7Mm7kWf+yhes18ZjWsEvKZk1gafIu1xu38MVrk+Z9onqF2eXKHD+aNmJorYtipcyRfjaIZsCWZ4uWUheNo+22RvQrD2tF5r2x0sxwfWbH3EyXF+JFm1ADduT9nKLh65Rzmusp7ZS/AB3qmI+Nrxc8MYjlXBkd9erKgVYJbxJf51dR7cEloiiI9ssH7f16pbahwYK4K4hIOUKRs4CRKYk6LgvKWD5+QfIrknqsw3vJVfhpAwL/4KxxYWviOxUAwgl4eCJzB12XfXNRh1QqktFHklYlFiUGEBpnoLcTAUJbGLgJ+Qqw/9X0Rg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mTacVMBAgRH42THCYKhZIO+1vFs2KLo9iV/8vKOA7eY=;
+ b=d8URSKSO+visqcXab5TA4ziPYmCLAMNJGRkMYGLB0lTv7T81Q0dP48K13EwbS0l024cFd7UWDL6sskJhPiOJnHYWNPe0LXVOR73rlHjFgWteSYG6e6KGVT1I10id4eJNCIq1G02TsB90sr71VRW+GCBYbgDXSt3Db005fIkkzfV+5t0HgbArP8g5PKZloavkfNyKKfwmmRn6FueoaaTYwNhIdj4UAtcuoOyE9lOtuX5+U1dTsME/GuO/7BIfNnrkTQzC89Js3Qg0MPDIb0TauzrH+hwNIt8Hrv+DPQ6mzsFL4XgD5Yz7k7r+WWaTm0VgPhbkQrHaQWG1Sh5115ijEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mTacVMBAgRH42THCYKhZIO+1vFs2KLo9iV/8vKOA7eY=;
+ b=Ncv3BdFbsgaIl5n4btnQPxYp3UDv1buP2WBaWL7uil58m2upbcqtCMMw0/bkL1ckcPNi6jI5uhSyjCBDv3YLwL4uZ/sIy8wGTlp/AP8zkTb5PNoZR5WNiFXC/hzuLTnXyJKoiCUEPcQxXEwPQL7s71V3eul5X8tZm3EzNwAXszc=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by DM6PR10MB2842.namprd10.prod.outlook.com (2603:10b6:5:64::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.18; Fri, 10 Jun
+ 2022 16:51:16 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::6516:e908:d2bd:ca45]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::6516:e908:d2bd:ca45%5]) with mapi id 15.20.5332.013; Fri, 10 Jun 2022
+ 16:51:16 +0000
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>
+Subject: Re: [PATCH v2] scsi: scsi_debug: fix zone transition to full condition
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1a6akwji4.fsf@ca-mkp.ca.oracle.com>
+References: <20220608011302.92061-1-damien.lemoal@opensource.wdc.com>
+Date:   Fri, 10 Jun 2022 12:51:12 -0400
+In-Reply-To: <20220608011302.92061-1-damien.lemoal@opensource.wdc.com> (Damien
+        Le Moal's message of "Wed, 8 Jun 2022 10:13:02 +0900")
 Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-ClientProxiedBy: DM5PR19CA0064.namprd19.prod.outlook.com
+ (2603:10b6:3:116::26) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bbeb068a-f659-4d72-71f2-08da4b016f3c
+X-MS-TrafficTypeDiagnostic: DM6PR10MB2842:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB2842EE9EA956277E981F1FAF8EA69@DM6PR10MB2842.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ClZNQmI3k4043aSjGYkz8xhmpj6/wk4zaC9IJZO9v3uV+MwpTRMXybcety9YB9OOQEDL6cny/isTGxZPlG13hMyARCXxfiRJX2C3Q0hAutqYPb8mYIwaXwwhhiPH5HX5x4uyu7RjqZvS6ip7dU9VqXIwIvaUpGI6ul4iN+dJJALVpzFnIpgV0ogZ9/2CWd7/er6dSmzagW1h2uy96JSZepOKR3fIYpa6TfWITap1VVXTWS7hsVLJZRff+4L7YAt+0Fgn5riPcaiuuQXQP15D9ry5tsBMD/tIWmmwvB6HoV0dDn0M/wMk46XNNVnaNjEr6mRJtwtuxFubGjwhIw64SFhuEhPrr9HxYu1gejYNE6OL6KLo0KpzHvzp7zK6jh8oaOx3MfTwybLuQ0KfegMj3jhW7IcZXj3MC43j2oZrJnJdfnjp2lEl3ZLbKAjEL9ye854VUrKFELtjQRofzHQB1yrEsOHcjOFxTz6OdJrYXY+edXuZWj7VGW6Pjb/PdrWyASSDUYm6yzd/yb5X9EMPDbbcRbd7ysnBwzXdTqjCsE/iK9wsGWAUQ9sW5xShzZeq4Z2vt64hJPPVoDYA23+6wmGL2r1A1XKtPeRVw0Pq/579jRKzKo8UkL3Q6e5hp2RiO7RL8ZdO9Pak5O7dpnbmdGi4MLF6x7vBLo7dvIKkwrSuJ9c7RDlxoCXVg4Nyq5F9e5RBaSncU+ydWoEIQqmY3g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(558084003)(8676002)(86362001)(5660300002)(66476007)(36916002)(66946007)(66556008)(4326008)(6666004)(6486002)(186003)(6512007)(6506007)(52116002)(6916009)(54906003)(2906002)(316002)(26005)(508600001)(38100700002)(38350700002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yDQOKckhVRsYEEeOGctmhp0BxhEwasrWilh/WR7tSTSKX/UA36mU4gpAoZuU?=
+ =?us-ascii?Q?OLvK/TJIxLR0UBAZB6t/yw3JaVnVhw7ga3McPv4F9k8Zkusd9vt0Bq4hw923?=
+ =?us-ascii?Q?3hlJTS4RDGTUSAG+qcmuUomOxEaqlEJuyGgRmzOn7NOSZig3Fviv20/a4mf7?=
+ =?us-ascii?Q?2E+SozEbMZwuuNqUHiLS1skRv8zMesCwvWekvnauoCKqu/CSa8+BZoPWbJ0+?=
+ =?us-ascii?Q?9xMUmCOf0nOGpqd+i6tVq0qV7os1CSqv0Eqr4e2P9xMIXVJCw+xZXaqRWKYy?=
+ =?us-ascii?Q?rjZuVvah2Y9cjG4TP829B1hrBQB9WO/ZPcvwbZyEvby1junm7lZ/I/rZwdma?=
+ =?us-ascii?Q?HbsQHHcEb99hXS8bum7ZclaJcfyzETzSBeSK0ra3tTPv0OwEzVp+oTutRvDL?=
+ =?us-ascii?Q?HK12jvISU+hgnOEfx49+BY/RGConV7e88cuBObkygHjYcY/SBuKtd2yZyUgA?=
+ =?us-ascii?Q?UNntmg4zIrNSoK7947uhwtdhveqtfc9yeRSpJj1H5Rw4cpCubaFlr5s1tC7p?=
+ =?us-ascii?Q?DR4BSkdFAfAaDT6f9/njN69Z84/YpaBXNBgcD7TPXh6boA/bI5N6eQw8bWLT?=
+ =?us-ascii?Q?pKdxd1CxqrHq8GCCRonawRtJH8QONXG6YDjEk0JOZ51tKyeW4TU+c2T5yYJs?=
+ =?us-ascii?Q?SC0VwmGs7uTfSUaUNGDfwDyAy/G0cyhDxlovirDKMjg4mPZ/hWtYQTnYMnts?=
+ =?us-ascii?Q?BgiaaxUVoYQUDoXADvcSit2JjsHigsHoa14ofEdcOFoiCBna2ZnUZlQ5rykm?=
+ =?us-ascii?Q?DSODIMGPRzqYpjegQnAYU2r2ENoUqWGVfwUXHmHizrLRNpmDCGRnJwnLjc/p?=
+ =?us-ascii?Q?JbP5W9HipRBqioaYPmgU1eUtzWBVKl70Nmrilz0EFbdmC1yeID8SLywbNviS?=
+ =?us-ascii?Q?9WvaMmZu2/yFSjlghCS5pQiBvpS+6Fccn+2h+EyBtNBE7aafrsq8yFBAQkMz?=
+ =?us-ascii?Q?2uv0GK+I+F9uGUueGnouh+xkJVZilcjvdDKiPwKj56gBJwHhreXYmWXE1iC9?=
+ =?us-ascii?Q?D/Wwk14Cc1sQcarg5Vhg30D+uOXYYSgd3Ys+KmDHOFHOEnUcMpoqgrganlkd?=
+ =?us-ascii?Q?4y04YUGZhEMXpyUQdR//wp0ofHelPhxR6iqs7n8Hv1iBIMuS/Tr+1+5LBOqk?=
+ =?us-ascii?Q?Y9R8BRPymB3L4hgukBSnpNLgtr1txrcR/r/Xto+V2QR1kcwsRbP1MFZWzZWW?=
+ =?us-ascii?Q?36uZJjOjhp97VnCN3qlyHP0GJ3M6qycSowo3jZO5BNuCv+zo3pGcK4wEU7OC?=
+ =?us-ascii?Q?LGH/JHyl093Gy27Y78KK2/PdUcM+b6d5ZomyIQQo1e1PVjtu5B1F7W+Q3xLF?=
+ =?us-ascii?Q?c6u0+WDMaEoIgkmBZgVyzH/KvwL7Ay+Wa0nSgvf2irb0lUdra9OhyZD0jspt?=
+ =?us-ascii?Q?kDst8FBINGzmFcsvj0Hca9GMgn8iy/AdjQSN2Mci0JNiA4nBYlTncExigvr+?=
+ =?us-ascii?Q?gYZgJbbxam0QjScvsqS66+onY8mWsfrsTUdMxF1+yJHnLPfEN/z5eN81G1L0?=
+ =?us-ascii?Q?yasDuFYEHYHUBWoUUbhpyIUexmy2EIMToOaQIicaI9NhOjp+zG+O8LDuG8pS?=
+ =?us-ascii?Q?Dzul6uzuNlVZNIQVAtUP50rksJCJaf1QZQpOYcCLsWc/NJ3/PFNT++rSzHsJ?=
+ =?us-ascii?Q?6FsfM4JsWSx3imdn0WZIXYG+9P4077oAgW0XL1pfvEku2HYpxGGLkOOYj7uY?=
+ =?us-ascii?Q?0jM31zqSzEr4TxuEbm7JBP7ajo13YQ20jH7PExHX6vJcGUWnOfYqqBEzEcrF?=
+ =?us-ascii?Q?lu96iCOY90rPdJHdZ64ZHvI2EdZFtg8=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbeb068a-f659-4d72-71f2-08da4b016f3c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 16:51:16.1035
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uQzIKRCiYnnuQI3kSm258moUcOHTVYCYnCnWq3wUkJorEbYUf2Aid7wkHTl+PH9N60lAzT1Er2h62CMTG64sJTPP/qE1Wkiih787r9Qmj2E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB2842
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
+ definitions=2022-06-10_06:2022-06-09,2022-06-10 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
+ phishscore=0 mlxscore=0 adultscore=0 suspectscore=0 mlxlogscore=848
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206100067
+X-Proofpoint-ORIG-GUID: J4waLs8D_d2sIbcKV4PaMOlbM8eEq0ga
+X-Proofpoint-GUID: J4waLs8D_d2sIbcKV4PaMOlbM8eEq0ga
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,218 +148,14 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In commit 05c6c029a44d ("scsi: pm80xx: Increase number of supported
-queues"), support for 80xx chip was improved by enabling multiple HW
-queues.
 
-In this, like other SCSI MQ HBA drivers at the time, the HW queues were
-not exposed to upper layer, and instead the driver managed the queues
-internally.
+Damien,
 
-However, this management duplicates blk-mq code. In addition, the HW queue
-management is sub-optimal for a system where the number of CPUs exceeds
-the HW queues - this is because queues are selected in a round-robin
-fashion, when it would be better to make adjacent CPUs submit on the same
-queue. And finally, the affinity of the completion queue interrupts is not
-set to mirror the cpu<->HQ queue mapping, which is suboptimal.
+> Fixes: 0d1cf9378bd4 ("scsi: scsi_debug: Add ZBC zone commands")
 
-As such, for when MSIX is supported, expose HW queues to upper layer. We
-always use queue index #0 for "internal" commands, i.e. anything which
-does not come from the block layer, so omit this from the affinity
-spreading.
+Not sure where this SHA is from?
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/pm8001/pm8001_init.c | 50 ++++++++++++++++++++++++-------
- drivers/scsi/pm8001/pm8001_sas.h  |  2 ++
- drivers/scsi/pm8001/pm80xx_hwi.c  | 35 +++++++++++++++++-----
- 3 files changed, 69 insertions(+), 18 deletions(-)
+I fixed it up...
 
-diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
-index 171f0a2cf2d6..a3a972c2e532 100644
---- a/drivers/scsi/pm8001/pm8001_init.c
-+++ b/drivers/scsi/pm8001/pm8001_init.c
-@@ -81,6 +81,18 @@ LIST_HEAD(hba_list);
- 
- struct workqueue_struct *pm8001_wq;
- 
-+static int pm8001_map_queues(struct Scsi_Host *shost)
-+{
-+	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
-+	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
-+	struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
-+
-+	if (pm8001_ha->number_of_intr > 1)
-+		blk_mq_pci_map_queues(qmap, pm8001_ha->pdev, 1);
-+
-+	return blk_mq_map_queues(qmap);
-+}
-+
- /*
-  * The main structure which LLDD must register for scsi core.
-  */
-@@ -110,6 +122,7 @@ static struct scsi_host_template pm8001_sht = {
- 	.shost_groups		= pm8001_host_groups,
- 	.track_queue_depth	= 1,
- 	.cmd_per_lun		= 32,
-+	.map_queues		= pm8001_map_queues,
- };
- 
- /*
-@@ -928,31 +941,35 @@ static int pm8001_configure_phy_settings(struct pm8001_hba_info *pm8001_ha)
-  */
- static u32 pm8001_setup_msix(struct pm8001_hba_info *pm8001_ha)
- {
--	u32 number_of_intr;
--	int rc, cpu_online_count;
- 	unsigned int allocated_irq_vectors;
-+	int rc;
- 
- 	/* SPCv controllers supports 64 msi-x */
- 	if (pm8001_ha->chip_id == chip_8001) {
--		number_of_intr = 1;
-+		rc = pci_alloc_irq_vectors(pm8001_ha->pdev, 1, 1,
-+					   PCI_IRQ_MSIX);
- 	} else {
--		number_of_intr = PM8001_MAX_MSIX_VEC;
-+		/*
-+		 * Queue index #0 is used always for housekeeping, so don't
-+		 * include in the affinity spreading.
-+		 */
-+		struct irq_affinity desc = {
-+			.pre_vectors = 1,
-+		};
-+		rc = pci_alloc_irq_vectors_affinity(
-+				pm8001_ha->pdev, 2, PM8001_MAX_MSIX_VEC,
-+				PCI_IRQ_MSIX | PCI_IRQ_AFFINITY, &desc);
- 	}
- 
--	cpu_online_count = num_online_cpus();
--	number_of_intr = min_t(int, cpu_online_count, number_of_intr);
--	rc = pci_alloc_irq_vectors(pm8001_ha->pdev, number_of_intr,
--			number_of_intr, PCI_IRQ_MSIX);
- 	allocated_irq_vectors = rc;
- 	if (rc < 0)
- 		return rc;
- 
- 	/* Assigns the number of interrupts */
--	number_of_intr = min_t(int, allocated_irq_vectors, number_of_intr);
--	pm8001_ha->number_of_intr = number_of_intr;
-+	pm8001_ha->number_of_intr = allocated_irq_vectors;
- 
- 	/* Maximum queue number updating in HBA structure */
--	pm8001_ha->max_q_num = number_of_intr;
-+	pm8001_ha->max_q_num = allocated_irq_vectors;
- 
- 	pm8001_dbg(pm8001_ha, INIT,
- 		   "pci_alloc_irq_vectors request ret:%d no of intr %d\n",
-@@ -1123,8 +1140,19 @@ static int pm8001_pci_probe(struct pci_dev *pdev,
- 	if (rc)
- 		goto err_out_enable;
- 
-+
- 	PM8001_CHIP_DISP->chip_post_init(pm8001_ha);
- 
-+	if (pm8001_ha->number_of_intr > 1) {
-+		shost->nr_hw_queues = pm8001_ha->number_of_intr - 1;
-+		/*
-+		 * For now, ensure we're not sent too many commands by setting
-+		 * host_tagset. This is also required if we start using request
-+		 * tag.
-+		 */
-+		shost->host_tagset = 1;
-+	}
-+
- 	rc = scsi_add_host(shost, &pdev->dev);
- 	if (rc)
- 		goto err_out_ha_free;
-diff --git a/drivers/scsi/pm8001/pm8001_sas.h b/drivers/scsi/pm8001/pm8001_sas.h
-index c761a2fd25e5..c5e3f380a01c 100644
---- a/drivers/scsi/pm8001/pm8001_sas.h
-+++ b/drivers/scsi/pm8001/pm8001_sas.h
-@@ -55,6 +55,8 @@
- #include <scsi/scsi_tcq.h>
- #include <scsi/sas_ata.h>
- #include <linux/atomic.h>
-+#include <linux/blk-mq.h>
-+#include <linux/blk-mq-pci.h>
- #include "pm8001_defs.h"
- 
- #define DRV_NAME		"pm80xx"
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index d5cc726c034e..3893f704602e 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -4351,6 +4351,29 @@ static int check_enc_sat_cmd(struct sas_task *task)
- 	return ret;
- }
- 
-+static u32 pm80xx_chip_get_q_index(struct sas_task *task)
-+{
-+	struct scsi_cmnd *scmd = NULL;
-+	u32 blk_tag;
-+
-+	if (task->uldd_task) {
-+		struct ata_queued_cmd *qc;
-+
-+		if (dev_is_sata(task->dev)) {
-+			qc = task->uldd_task;
-+			scmd = qc->scsicmd;
-+		} else {
-+			scmd = task->uldd_task;
-+		}
-+	}
-+
-+	if (!scmd)
-+		return 0;
-+
-+	blk_tag = blk_mq_unique_tag(scsi_cmd_to_rq(scmd));
-+	return blk_mq_unique_tag_to_hwq(blk_tag);
-+}
-+
- /**
-  * pm80xx_chip_ssp_io_req - send an SSP task to FW
-  * @pm8001_ha: our hba card information.
-@@ -4366,7 +4389,7 @@ static int pm80xx_chip_ssp_io_req(struct pm8001_hba_info *pm8001_ha,
- 	u32 tag = ccb->ccb_tag;
- 	u64 phys_addr, end_addr;
- 	u32 end_addr_high, end_addr_low;
--	u32 q_index, cpu_id;
-+	u32 q_index;
- 	u32 opc = OPC_INB_SSPINIIOSTART;
- 
- 	memset(&ssp_cmd, 0, sizeof(ssp_cmd));
-@@ -4387,8 +4410,7 @@ static int pm80xx_chip_ssp_io_req(struct pm8001_hba_info *pm8001_ha,
- 	ssp_cmd.ssp_iu.efb_prio_attr |= (task->ssp_task.task_attr & 7);
- 	memcpy(ssp_cmd.ssp_iu.cdb, task->ssp_task.cmd->cmnd,
- 		       task->ssp_task.cmd->cmd_len);
--	cpu_id = smp_processor_id();
--	q_index = (u32) (cpu_id) % (pm8001_ha->max_q_num);
-+	q_index = pm80xx_chip_get_q_index(task);
- 
- 	/* Check if encryption is set */
- 	if (pm8001_ha->chip->encrypt &&
-@@ -4517,8 +4539,7 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
- 	struct domain_device *dev = task->dev;
- 	struct pm8001_device *pm8001_ha_dev = dev->lldd_dev;
- 	struct ata_queued_cmd *qc = task->uldd_task;
--	u32 tag = ccb->ccb_tag;
--	u32 q_index, cpu_id;
-+	u32 tag = ccb->ccb_tag, q_index;
- 	struct sata_start_req sata_cmd;
- 	u32 hdr_tag, ncg_tag = 0;
- 	u64 phys_addr, end_addr;
-@@ -4528,8 +4549,8 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
- 	unsigned long flags;
- 	u32 opc = OPC_INB_SATA_HOST_OPSTART;
- 	memset(&sata_cmd, 0, sizeof(sata_cmd));
--	cpu_id = smp_processor_id();
--	q_index = (u32) (cpu_id) % (pm8001_ha->max_q_num);
-+
-+	q_index = pm80xx_chip_get_q_index(task);
- 
- 	if (task->data_dir == DMA_NONE && !task->ata_task.use_ncq) {
- 		ATAP = 0x04; /* no data*/
 -- 
-2.26.2
-
+Martin K. Petersen	Oracle Linux Engineering
