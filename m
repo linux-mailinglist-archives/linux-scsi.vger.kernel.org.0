@@ -2,75 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F51454780A
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Jun 2022 02:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048185479F5
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Jun 2022 13:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbiFLAdo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 11 Jun 2022 20:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
+        id S233259AbiFLLce (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 12 Jun 2022 07:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232885AbiFLAdn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Jun 2022 20:33:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CBB3DDF2;
-        Sat, 11 Jun 2022 17:33:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9165EB80B73;
-        Sun, 12 Jun 2022 00:33:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 47B9EC3411C;
-        Sun, 12 Jun 2022 00:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654994020;
-        bh=buLTWx2Jh9iWTHCfilb1zuCO9rv7g/ztJ2zF9KV26Hw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Sc+aJv2j0PK3025YGnyjCsF7b2ZczdN5/ADvN/9s22lj1v95zS3SrHhwJ1gvMHbZS
-         s/Zv49h6oH5boA84mWp/u1dfWWd2zSW9ZMvh1uonG4DB+6RR6jo5eefTgz22x6zXg+
-         RFheFxJFQKDV2rrGtzeDQ6srepomz652H3vnf9NATkHRQwDpk+4oNlTtnHCpC/IDTg
-         EnZKV61Vc+ZPCM7FPeUSZaUf5PtO6Iyys2GYTlG4/mDmzRlSVvsmgQkVY7lhnfu5cc
-         oywwS0zdcuTPaxuYt377qWa6E92aoBfUgR4Ys1iBRSmSMLIoTcUGEL5PWOK1jb+P4M
-         D0/HypsCemfTQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2F392E737F4;
-        Sun, 12 Jun 2022 00:33:40 +0000 (UTC)
-Subject: Re: [GIT PULL] SCSI fixes for 5.19-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <7373802fc26a9a41b2dd4f5c05f993f574365029.camel@HansenPartnership.com>
-References: <7373802fc26a9a41b2dd4f5c05f993f574365029.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <7373802fc26a9a41b2dd4f5c05f993f574365029.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: ec1e8adcbdf661c57c395bca342945f4f815add7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cecb3540b89ef2b586d07c1bd69408e251791b76
-Message-Id: <165499402018.23172.11406827094090410009.pr-tracker-bot@kernel.org>
-Date:   Sun, 12 Jun 2022 00:33:40 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S236417AbiFLLcb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 12 Jun 2022 07:32:31 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4072C107
+        for <linux-scsi@vger.kernel.org>; Sun, 12 Jun 2022 04:32:29 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 25so3921034edw.8
+        for <linux-scsi@vger.kernel.org>; Sun, 12 Jun 2022 04:32:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=9FfohXFhB1sP403VxH1swwcmiEO4r97TnueS6gdgla0=;
+        b=HutqJca9cz10+fhpLBqF5pkCfmNuVpB/QmLPLH2RoeSpp+88FPj9DCRLsYlrV60IRI
+         yfGt8kTQJ3+U5hD05c9eQjOTUDndc3kFmmCKtoZcJTw6iEXGeaPRZUwBIb2hL10aHe3A
+         7EbObtS3e/RUerZDq6P0if6rMoEsasBL0IeuLIxwTHpNu3CceyHT/j7BTvAXuGh/jXn3
+         mZ2PnrRRlC0NrnYO4yqGRbm/BexgsBU/ybIJL5KQreT4XiaErEnB2fMcohiz3+qsoqp8
+         Xl5GKvTeAgRog3ZkHFVKaziM00o+HwG/FDCDlODVc32UellWfe2pLGmko+Rt8jRhNdyv
+         b+pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=9FfohXFhB1sP403VxH1swwcmiEO4r97TnueS6gdgla0=;
+        b=8HPe3D77H25/s9CllmLMLF9rurL2i94zx94Hz28+ZQ1FpPrSCKOueiXCxjhYsUCg51
+         6nLKlGVOo4oavZeSy29oBFoTS/GHSwA+KMPL0Ij671e/WG+sE4ZZIXr7ZeYoz5xyaoGh
+         FXIrI1F8zfZ8LDgQJTjODUWnM5lhGNm8TzrJnFl4mcEY9jXhctE1/PnoM8z48VuOWKGx
+         xS4luKzHMSy/5BxEH+NMt2R7BQpKbILWY6eO4Wus5IFoe16ivxNR5rLRQLDs8PzKASDx
+         /HkbVJXez235w1dOtBFbT6xQEE1pjo43Oyc2Csylb5qxyxZ5hLa03YFQ3teHcYZplBGV
+         Uq4w==
+X-Gm-Message-State: AOAM530hHnQXA1846H85ktcLo7cqDvLjnpn8P45IyQ6knvlzzBMRlQs2
+        Qacj8gRiRKAH8JToKetE2g9HqatfVTGz5V4Mp/w=
+X-Google-Smtp-Source: ABdhPJwdx/ts4yT81TfY9H4jSVwEQwJ2e/fPBdkfFmfsPIbmOM0FEcnF1voZtHMiIfkmIVV3xB+6Fmj8j1iYk6t89oo=
+X-Received: by 2002:a05:6402:d05:b0:425:b5c8:faeb with SMTP id
+ eb5-20020a0564020d0500b00425b5c8faebmr60549161edb.273.1655033547542; Sun, 12
+ Jun 2022 04:32:27 -0700 (PDT)
+MIME-Version: 1.0
+Sender: mariajohn0331@gmail.com
+Received: by 2002:a54:3a4a:0:0:0:0:0 with HTTP; Sun, 12 Jun 2022 04:32:26
+ -0700 (PDT)
+From:   MARIA ROLAND <mariaroland74@gmail.com>
+Date:   Sun, 12 Jun 2022 04:32:26 -0700
+X-Google-Sender-Auth: Co32K8Guj2mgf2O-dHQRzwqxqMY
+Message-ID: <CAEmdD2WEq8iFu03odoUHJOLqaAfOodUu9x8Et1FumwjSBv0eHw@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.4 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Sat, 11 Jun 2022 08:22:17 -0400:
+Greetings,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+I sent this mail praying it will find you in a good condition, since I
+myself am in a very critical health condition in which I sleep every
+night  without knowing if I may be alive to see the next day. I am
+Mrs. Maria Roland, a widow suffering from a long time illness. I have
+some funds I  inherited from my late husband, the sum of
+($11,000,000.00) my Doctor told me recently that I have serious
+sickness which is a cancer problem. What disturbs me most is my stroke
+sickness. Having known my condition, I decided to donate this fund to
+a good person that will utilize it the way I am going to instruct
+herein. I need a very honest God.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cecb3540b89ef2b586d07c1bd69408e251791b76
+fearing a person who can claim this money and use it for Charity
+works, for orphanages, widows and also build schools for less
+privileges that will be named after my late husband if possible and to
+promote the word of God and the effort that the house of God is
+maintained. I do not want a situation where this money will be used in
+an ungodly manner. That's why I' making this decision. I'm not afraid
+of death so I know where I'm going. I accept this decision because I
+do not have any child who will inherit this money after I die. Please
+I want your sincere and urgent answer to know if you will be able to
+execute this project, and I will give you more information on how the
+fund will be transferred to your bank account. I am waiting for your reply,
 
-Thank you!
+May God Bless you,
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Mrs. Maria Roland,
