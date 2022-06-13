@@ -2,73 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BF254A088
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jun 2022 22:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9471F54A0D0
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jun 2022 23:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244988AbiFMU4k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jun 2022 16:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
+        id S241478AbiFMVHJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Jun 2022 17:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245601AbiFMUzQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jun 2022 16:55:16 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB74DE4
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jun 2022 13:27:41 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id e20so7015882vso.4
-        for <linux-scsi@vger.kernel.org>; Mon, 13 Jun 2022 13:27:41 -0700 (PDT)
+        with ESMTP id S1351768AbiFMVGf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jun 2022 17:06:35 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86B53BBC3;
+        Mon, 13 Jun 2022 13:42:51 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id h192so6606101pgc.4;
+        Mon, 13 Jun 2022 13:42:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=f/v1gZW2d1xf+y6gXLTGdOPEOS7UDztcZyURQzQMDp0=;
-        b=iV1wU8igYYc8aFTG1C2qNx2u/f1vdLEov7GeicSvbHQJwCzJR0+XmynJx9EhU4ie4F
-         jPg2I0s24/+ikZkCDiwK9s851r85HJc84RAu/6Z9EWDPGcxEH0BkxikcnAiZNnYC4rBh
-         /+8diQYw3nvFmOf5AOjqc7uQIeTxHeWLvbABSAtmbLVAF1NmmrE5VokEB3GpJFtV92mz
-         Z2COsLqUeh6XgwXZ7ZyQ1GmDF7XuVOW4bZn06Ua10m6oIFxzgOPGMHhUQn+uW3pYfBk4
-         LBF0fM/lwZx42G5aXtLzCTUPZZt2HYZhzSfRSBRTeRUDW0PmG3EvWAfnfWKvLf5wRfvv
-         2i/A==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zksiAjqc+ofCnYjvBYw1PF+pN6ibTOkQH6elqHNAtYU=;
+        b=byTHm3x89jOX7huHSgYMmmBJBFc1mQLA0hFsAIojFyto3o1MCbca/Jtzr7C9w6tGVl
+         9L3XlNPoqkjbYwvuGNyMnhaINfbjM0wJomBTYadE73vbAbXCxs3hPxlGVCVPEF5m3N7q
+         GglBlOwCsppYhs6ZGLtBYvLMrIBXGPExiQoK+XhhjvfdTx8Lubees3Bq2CGUqGvGH2rz
+         /bBFohpxycCtfV6IbakJqPJ9a4GWN3sDGmIQelrLQDfbEwx95MmpZeS71DTpDp3cryQb
+         w5p3E/+LM0z0sTsXdSDaGczfR/dA8mpnRN5qwOs85z//PrRHQQDsl5RxK9KFR5YSBt1B
+         UZkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=f/v1gZW2d1xf+y6gXLTGdOPEOS7UDztcZyURQzQMDp0=;
-        b=McrX6mhPMrt9zpSvD+PXHA1rstrnwxcuoN+GJPEGEzYNDCHUWNm3rppKJTdD39k8yO
-         sRy4typyA/VuYnIN+pfF5NKMnEzOWcq3ctUsqPjYU9Za/ZxBEFcr968s9fzuqeMdr0WO
-         ZeOc7RCRSnOyWGMeC/UdZdLnz9m1QITtsIlbNPYOnIM5D/8AvKM1Cy9wo8IIx4vUdkpN
-         m3aIeAplC5NHQRkcmAfs3oA6jVq9BRSU+pYOnCp8cC42zQlKc7m6aJjpjVABxfSohqui
-         kZCtMp4DQNvU1xFNjCnqRX23FJXMgZfKbAtP/1o7sP1WPdx01BJfuWr2/8ff3Nof1GWM
-         rrpQ==
-X-Gm-Message-State: AJIora91TUU1W5rl4i1wUroNTlBJpmjDe7e/li9214N1OwU79uWdraPi
-        DsQejGIeuwu8Wg1QwigZL2dbDwiiIAo2YpUMPhU=
-X-Google-Smtp-Source: AGRyM1sBYWpfyeQkD6pA6OKHKwqiBSHC1n08vQLFMztJw0fYixZgsglIR54SedZWa1PF/xdhd5MBW5VKoso+VKSHPNY=
-X-Received: by 2002:a05:6102:953:b0:34b:920f:e8f0 with SMTP id
- a19-20020a056102095300b0034b920fe8f0mr531465vsi.73.1655152060498; Mon, 13 Jun
- 2022 13:27:40 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zksiAjqc+ofCnYjvBYw1PF+pN6ibTOkQH6elqHNAtYU=;
+        b=o85L6J01GPsayNi4g5687tIBQRZ5NS4okF7s+8VddSUEiMg2q40BluUZDqSajQnjOQ
+         zr7zK81WgOWUuJjHaWlZL/7qf2ojDwKy9csJcl6eFNPBrasBzJnSM8mzqFy48h1OE7Su
+         k5QSOzwXuSm8yhGkYUL+cPlJsUBVOTozDecqy5/KKhi74V/YZMrqwLCt122LyvQ+gKLW
+         lZVIS+cvKn6a4qo01OXBKtlS8rllHyFj2nR8qs6h5cMy11iDGTL8A7lOAS1sPvQOxu9V
+         7n1v8sjUvM5Gctj1zJBDqdKzzT9+2x5lRLoPGnJD7CVi8bz3afgzbuPfkYhHIsyP9sPs
+         LnhA==
+X-Gm-Message-State: AOAM530k+3FIdGqI/+LlDqLJgs2nbci1dm0hBDFhEQjXs95PN/3J73YY
+        cOyYv5VxVsKw5kCbZJBT3YZSzyt0gHw=
+X-Google-Smtp-Source: ABdhPJxVPL7iI/NqVCP2IhMcUJgHvWpVv13j+JY8VWlh+P9qdQSAmkx79Mr9Ta+C+hvvFuxCnO01Cw==
+X-Received: by 2002:a65:6912:0:b0:3fc:907b:e05 with SMTP id s18-20020a656912000000b003fc907b0e05mr1233288pgq.414.1655152971369;
+        Mon, 13 Jun 2022 13:42:51 -0700 (PDT)
+Received: from [10.69.47.244] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 6-20020a170902c20600b00163e4410b82sm5547670pll.239.2022.06.13.13.42.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 13:42:51 -0700 (PDT)
+Message-ID: <634ce85d-362a-5563-8af5-ddf9f2e379f9@gmail.com>
+Date:   Mon, 13 Jun 2022 13:42:50 -0700
 MIME-Version: 1.0
-Received: by 2002:a59:bf8a:0:b0:2ca:3b5c:ca48 with HTTP; Mon, 13 Jun 2022
- 13:27:39 -0700 (PDT)
-Reply-To: nikkifenton79@gmail.com
-From:   Nikki Fenton <gustaviagrowe629@gmail.com>
-Date:   Mon, 13 Jun 2022 22:27:39 +0200
-Message-ID: <CAEmpkiDpmTS23rOA8toDpKQQ=QyB46=VH66FoEcjAULoj5VWog@mail.gmail.com>
-Subject: Please Read
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH RESEND --next] scsi: lpfc: Use memset_startat() helper in
+ lpfc_nvmet_xmt_fcp_op_cmp
+Content-Language: en-US
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220613021851.59699-1-xiujianfeng@huawei.com>
+From:   James Smart <jsmart2021@gmail.com>
+In-Reply-To: <20220613021851.59699-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Good Day,
-I viewed your profile on Linkedin regarding a proposal that has
-something in common with you, reply for more details on my private
-email:nikkifenton79@gmail.com
+On 6/12/2022 7:18 PM, Xiu Jianfeng wrote:
+> Use memset_startat() helper to simplify the code, no functional change
+> in this patch.
+> 
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
 
-Nikki Fenton,
-nikkifenton79@gmail.com
+Reviewed-by: James Smart <jsmart2021@gmail.com>
+
+-- james
