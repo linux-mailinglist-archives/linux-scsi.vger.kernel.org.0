@@ -2,106 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743B65483A4
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jun 2022 11:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD515483EA
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jun 2022 12:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239960AbiFMJl2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jun 2022 05:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S233322AbiFMJqY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Jun 2022 05:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234627AbiFMJlZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jun 2022 05:41:25 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAE11658F;
-        Mon, 13 Jun 2022 02:41:23 -0700 (PDT)
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LM5zp5M84z68BVP;
-        Mon, 13 Jun 2022 17:36:22 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 11:41:21 +0200
-Received: from [10.195.33.253] (10.195.33.253) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 10:41:21 +0100
-Message-ID: <7dbd2f49-89b9-16f2-dbd5-e6c8978ebf22@huawei.com>
-Date:   Mon, 13 Jun 2022 10:44:29 +0100
+        with ESMTP id S234182AbiFMJqU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jun 2022 05:46:20 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C8C19295
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jun 2022 02:46:15 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id l2-20020a05600c4f0200b0039c55c50482so4261222wmq.0
+        for <linux-scsi@vger.kernel.org>; Mon, 13 Jun 2022 02:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hs5EQNjyVVeQgXbgcD/B6aTCezXJTyIP0AIWYJHWpT8=;
+        b=APbJeV+X+PShWtNWFgeKdVAH4z8gKsM3NXzCEkGB0F+Z3FSuGHnfa2rj0pN4SOQmgT
+         5lTxfRhUt7zM7rS3b7yzn0i/q4OcNO8uZsOIkIBdV+91P1nsnz+5557Nz9tnONj/aLS7
+         1SmeZ7qWfY9SfQHCK3t8IQGioargGycbNr9htQW4erzcnjVccfbTycyNCGHHxCWmNVDx
+         NTIh0oDFXthjekUXjk4gOWYQITYml+0AutQvOsp3oNvl+62fewDnQGoJ4/5Cs7lC16Ph
+         Qgqc0dSEIGtvGz57YfjvIQ5wZHdUQmrqNOoITxyj/TMm7hCjWQu7D3+5fr3D5Lfh9HBy
+         XwqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hs5EQNjyVVeQgXbgcD/B6aTCezXJTyIP0AIWYJHWpT8=;
+        b=Scy/TR30ouyvXNyoeMDXtbCbNZiRTZ20w72wpgdsd3v//crZqR+A5wSctDxgtSEl3u
+         22JC7tQbRhnMRJwEsJX01mgFTni/x/D6LWqL0AXVNytLWTURka1PbH35/LqecDkVD9EK
+         R1Z42SzmHMzJ1xVCyCnkbyOdSl0hAi8bHDGW20/1lPpy45Yr4mOTRnlYNFxIjV46YXnE
+         F+u1vN+FfS2wvg0P9B684X+qcaPro8/Ho+YC/KDlyxcYRTx4+OD6q8o32cUE2VSVh2hd
+         AFar77Xhh8tRhHFHLEXQgO2eV0pcaxREkszk7x/qirKrHcxRAhhPHRD9VkklNlD18RH2
+         W+5g==
+X-Gm-Message-State: AOAM533+nUgElObC2rja3xN8A13T6a701FsVIrHq/JoIUAmPY3ImRTzC
+        oykwAmtnzwgxrocdi7LH4whAfA==
+X-Google-Smtp-Source: ABdhPJzUy6r3Wybk2hiKuA1ZAmjOCgeGwtQMYQTkR3vSuIE82HPoMqu5t6274YLEzIG5fwsAwO99RQ==
+X-Received: by 2002:a1c:f317:0:b0:39c:831c:bd43 with SMTP id q23-20020a1cf317000000b0039c831cbd43mr12255305wmq.139.1655113574279;
+        Mon, 13 Jun 2022 02:46:14 -0700 (PDT)
+Received: from [10.227.148.193] (80-254-69-65.dynamic.monzoon.net. [80.254.69.65])
+        by smtp.gmail.com with ESMTPSA id n4-20020a05600c4f8400b0039c362311d2sm11578741wmq.9.2022.06.13.02.46.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 02:46:13 -0700 (PDT)
+Message-ID: <db1e29a4-3138-4a0f-2582-a2614a68cd22@linaro.org>
+Date:   Mon, 13 Jun 2022 11:46:12 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH RFC v2 07/18] libata-scsi: Add ata_internal_queuecommand()
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <axboe@kernel.dk>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <brking@us.ibm.com>, <hare@suse.de>,
-        <hch@lst.de>
-CC:     <linux-block@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <chenxiang66@hisilicon.com>
-References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
- <1654770559-101375-8-git-send-email-john.garry@huawei.com>
- <da6a77ff-0dde-b0b4-4d6c-047eab48d595@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <da6a77ff-0dde-b0b4-4d6c-047eab48d595@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 2/6] phy: samsung-ufs: move cdr offset to drvdata
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-phy@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        avri.altman@wdc.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, chanho61.park@samsung.com,
+        pankaj.dubey@samsung.com, Bharat Uppal <bharat.uppal@samsung.com>
+References: <20220610104119.66401-1-alim.akhtar@samsung.com>
+ <CGME20220610104346epcas5p4f59c073d15b3cd8fbc99de03d9cd1c41@epcas5p4.samsung.com>
+ <20220610104119.66401-3-alim.akhtar@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220610104119.66401-3-alim.akhtar@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.33.253]
-X-ClientProxiedBy: lhreml746-chm.china.huawei.com (10.201.108.196) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 13/06/2022 08:16, Damien Le Moal wrote:
->> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
->> index baac35dd17ca..b2702ab0183b 100644
->> --- a/drivers/ata/libata-scsi.c
->> +++ b/drivers/ata/libata-scsi.c
->> @@ -1114,6 +1114,20 @@ int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev)
->>   	return 0;
->>   }
->>   
->> +int ata_internal_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *scmd)
-> ata_scsi_internal_queuecommand()
-
-ok
-
+On 10/06/2022 12:41, Alim Akhtar wrote:
+> Move CDR lock offset to drv data so that it can be extended for other SoCs
+> which are having CDR lock at different register offset.
 > 
-> But given that this is used for the .reserved_queuecommand() method, I
-> would call it ata_scsi_reserved_queuecommand().
+> Signed-off-by: Bharat Uppal <bharat.uppal@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 
-I did mention somewhere that I continued to use the term "internal" as 
-that is what libata already uses, but I can change it.
 
-> 
->> +{
->> +	struct ata_port *ap;
->> +	int res;
->> +
->> +	ap = ata_shost_to_port(shost);
-> You can move this to ap declaration.
-> 
-> 	struct ata_port *ap = ata_shost_to_port(shost);
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-ok
 
-> 
->> +	spin_lock_irq(ap->lock);
-> spin_lock_irqsave() ?
-
-Right
-
-> 
->> +	res = ata_sas_queuecmd(scmd, ap);
->> +	spin_unlock_irq(ap->lock);
->> +
->> +	return res;
-
-Thanks,
-John
+Best regards,
+Krzysztof
