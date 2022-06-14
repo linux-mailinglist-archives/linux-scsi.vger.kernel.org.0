@@ -2,194 +2,131 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEB054ADD4
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jun 2022 11:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E1654B18E
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jun 2022 14:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242324AbiFNJ5w (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jun 2022 05:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
+        id S243131AbiFNMll (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jun 2022 08:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238421AbiFNJ5t (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jun 2022 05:57:49 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B382862EA;
-        Tue, 14 Jun 2022 02:57:45 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25E8VFnU004177;
-        Tue, 14 Jun 2022 09:57:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : from : subject : to : cc : content-type :
- content-transfer-encoding; s=pp1;
- bh=hsPsNQftuwTpM3KnoJoDWJzD/IvqYi9Y6nS7wKuLjsE=;
- b=Yh6MQyJh3kx+lSPikHxzsTHcvq8lntGsRTxKtQO/ZJVQNLBDATHyk0wIoN7eGzKO/LfB
- YgEjmnetQvg+71QpuaHmN291Zx/eSX4n5GztKs5Y1YvrmsuFI5OoVZ7FNhSmWrweu5Vm
- exlsrPlYRGcEILTitpz6ZLkJm/W85nz1WQGQbNTYV3HTgWVEdP810zO7rvqNQTnTWSiN
- W+AieZo8WNZOzv+7BZ/oERTgGMa4bQNtA9Gseb/4bJsuW3UNEiabNFjC1X69NSHflrTo
- s3lupxU1UDuHg3GT1UBHZW/6b3/KwOUhVNvzO/wvphk8YWb5YCTLRabGJaNFZXhHCwrC Ww== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gppw2t3fg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 09:57:44 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25E9p4GN018394;
-        Tue, 14 Jun 2022 09:57:43 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma01dal.us.ibm.com with ESMTP id 3gmjp9rca9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 09:57:42 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25E9vfgM16908560
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jun 2022 09:57:41 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C97BF7805E;
-        Tue, 14 Jun 2022 09:57:41 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9B94C7805C;
-        Tue, 14 Jun 2022 09:57:39 +0000 (GMT)
-Received: from [9.43.86.163] (unknown [9.43.86.163])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Jun 2022 09:57:39 +0000 (GMT)
-Message-ID: <c1846219-cea9-e82c-7337-6f6d9ffadd3d@linux.vnet.ibm.com>
-Date:   Tue, 14 Jun 2022 15:27:37 +0530
+        with ESMTP id S241708AbiFNMl2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jun 2022 08:41:28 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1315C4B400
+        for <linux-scsi@vger.kernel.org>; Tue, 14 Jun 2022 05:37:51 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id y17so6426401ilj.11
+        for <linux-scsi@vger.kernel.org>; Tue, 14 Jun 2022 05:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=DsUpTMVy3AnG06ab2HPPYE6VPm25Tedt2mleq6KKBcw=;
+        b=eKlWD7ohA3xZ9yXe6Y5ZyXXap+XJ/70fOMsAeyzBLO7eJ+3wx4BCRK/gnIEhQXwJx8
+         FZJa+1nUBHUZfxZKLRqLcLt4VTNVeWmX3wQ7VqZGlaQafQkNSIj8Q5PjqzjLY53pJEEf
+         Dh+xjOBUBkjOTIybsnK1Mn3PAEQFlmwqHUroWkM/3dUY7EdV3c/Zl8/ZHx+SF7jf6WcN
+         MHOwCtaeqILPAFoH29oAMbJireFCSnT8w8HppusbDiyKw1t6NLeZ74U+I4Dv8sr3aC4i
+         UPRlZCSt293Hd8tTgUS3FhnbZj3p0/HX4gnFKOOqJUybJW58flZCz3uwK5T9h22rQuPO
+         Iycw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=DsUpTMVy3AnG06ab2HPPYE6VPm25Tedt2mleq6KKBcw=;
+        b=e31jbsmVEfZ6PmohiBMy2LqbdyCuk2NpwOfXmdp/fi3QdRpzKupI+dq+EoAY8GjHjB
+         7w2K8jTZA7mFEDo5duckULZQRLTQx7/TkJkfNOPs8Isg+GCw8d3ms8vlCKkifV8jvRo1
+         S2YzYG5adxtuOO1zZmQ8XyBwUklh77Y1Km9+3vXh3Sl69+ttFbvr2WUNHEg141tzpFw4
+         prGqm7V/dDDwfGx1S5B6TJBesWjEYpdgpjDdQHlxXBCl8GBN9E0v/5faonOnLtsDRsCQ
+         hD9vXm/I6Gj/eG5FWSvZNjOiczfuTQjJ/Bg/85BidqUNjMK6qXo3dvoE20i7gz2ZVDH8
+         cuHw==
+X-Gm-Message-State: AJIora9/ObADmAL2xs6sW7FP2w2mW0bDLeANiOCw2T0KtG/+AIgSLXDa
+        RFhjxRYW/lBuqzqSGxKmiplsf2wNVGM3ndXOTac=
+X-Google-Smtp-Source: AGRyM1tDxPJxtNls3RvTahA5wgxnL3UDdELbAS25sVs6MhsKBi3tA5K2+vd+KbOlVb1dkHH94JqZ21Io8GQQNcd+5+8=
+X-Received: by 2002:a05:6e02:184f:b0:2d3:d0c2:d56a with SMTP id
+ b15-20020a056e02184f00b002d3d0c2d56amr3006656ilv.174.1655210270362; Tue, 14
+ Jun 2022 05:37:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-From:   Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>
-Subject: [linux-next] [5.19.0-rc1] kernel crashes while performing driver
- bind/unbind test with SLUB_DEBUG enabled
-To:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     abdhalee@linux.vnet.ibm.com, mputtash@linux.vnet.com,
-        sachinp@linux.vnet.com
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: LEU3Ru38PXnCsWFmPPVm9x_YQ6K7xi58
-X-Proofpoint-ORIG-GUID: LEU3Ru38PXnCsWFmPPVm9x_YQ6K7xi58
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-14_02,2022-06-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 bulkscore=0 adultscore=0 phishscore=0
- spamscore=0 clxscore=1011 mlxscore=0 impostorscore=0 mlxlogscore=793
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206140037
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Sender: drhasska@gmail.com
+Received: by 2002:a05:6622:2916:0:0:0:0 with HTTP; Tue, 14 Jun 2022 05:37:49
+ -0700 (PDT)
+From:   Mrs Lila Haber <mrslilahabe2016@gmail.com>
+Date:   Tue, 14 Jun 2022 12:37:49 +0000
+X-Google-Sender-Auth: xzkxI--erc1UW14cEExPPWFb4l0
+Message-ID: <CAEj_HpQ9TG7cYPenfw6zsEU9mxxtx-U_pd1zcKc6Osf81_eVPQ@mail.gmail.com>
+Subject: Dear Child of God
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.4 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        RISK_FREE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:144 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5157]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [drhasska[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 HK_SCAM No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.6 URG_BIZ Contains urgent matter
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  1.6 RISK_FREE No risk!
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings,
+Dear Child of God,
 
-[linux-next] [5.19.0-rc1-next-20220610] kernel crashes while performing 
-driver bind/unbind test with SLUB_DEBUG enabled
+Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
+CHRIST the giver of every good thing. Good day and compliments of the
+seasons, i know this letter will definitely come to you as a huge
+surprise, but I implore you to take the time to go through it
+carefully as the decision you make will go off a long way to determine
+my future and continued existence. I am Mrs Lila Haber aging widow of
+57 years old suffering from long time illness.I have some funds I
+inherited from my late husband, the sum of (7.2Million Dollars) and I
+needed a very honest and God fearing who can withdraw this money then
+use the funds for Charity works. I WISH TO GIVE THIS FUNDS TO YOU FOR
+CHARITY WORKS. I found your email address from the internet after
+honest prayers to the LORD to bring me a helper and i decided to
+contact you if you may be willing and interested to handle these trust
+funds in good faith before anything happens to me.
 
-Traces :
+I accept this decision because I do not have any child who will
+inherit this money after I die. I want your urgent reply to me so that
+I will give you the deposit receipt which the SECURITY COMPANY issued
+to me as next of kin for immediate transfer of the money to your
+account in your country, to start the good work of God, I want you to
+use the 25/percent of the total amount to help yourself in doing the
+project. I am desperately in keen need of assistance and I have
+summoned up courage to contact you for this task, you must not fail me
+and the millions of the poor people in our todays WORLD. This is no
+stolen money and there are no dangers involved,100% RISK FREE with
+full legal proof. Please if you would be able to use the funds for the
+Charity works kindly let me know immediately.I will appreciate your
+utmost confidentiality and trust in this matter to accomplish my heart
+desire, as I don't want anything that will jeopardize my last wish.
 
-[ 9107.676656] BUG: Unable to handle kernel data access at 
-0x6b6b6b6b6b6b6eeb
-[ 9107.676661] Faulting instruction address: 0xc0000000002163e0
-[ 9107.676665] Oops: Kernel access of bad area, sig: 11 [#1]
-[ 9107.676692] LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
-[ 9107.676703] Modules linked in: rpadlpar_io rpaphp kvm_pr kvm 
-nf_tables libcrc32c nfnetlink tcp_diag udp_diag inet_diag unix_diag 
-af_packet_diag netlink_diag rfkill sunrpc dm_service_time dm_multipath 
-dm_mod pseries_rng xts vmx_crypto gf128mul sg sch_fq_codel binfmt_misc 
-ip_tables ext4 mbcache jbd2 sd_mod ibmvscsi ibmveth scsi_transport_srp 
-lpfc nvmet_fc nvmet nvme_fc nvme_fabrics nvme_core t10_pi crc64_rocksoft 
-crc64 scsi_transport_fc
-[ 9107.676813] CPU: 42 PID: 4549 Comm: multipathd Kdump: loaded Not 
-tainted 5.19.0-rc1-next-20220610-autotest #1
-[ 9107.676825] NIP:  c0000000002163e0 LR: c000000000880d7c CTR: 
-c000000000880d40
-[ 9107.676834] REGS: c000000051d93490 TRAP: 0380   Not tainted 
-(5.19.0-rc1-next-20220610-autotest)
-[ 9107.676844] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> 
-  CR: 44022484  XER: 20040000
-[ 9107.676875] CFAR: c000000000880d78 IRQMASK: 0
-[ 9107.676875] GPR00: c000000000880d70 c000000051d93730 c0000000028cee00 
-6b6b6b6b6b6b6b6b
-[ 9107.676875] GPR04: 0000000000000083 0000000000000000 0000000000000000 
-00000000000000ff
-[ 9107.676875] GPR08: 0000000000000001 0000000000000003 6b6b6b6b6b6b6eeb 
-c0080000012485f0
-[ 9107.676875] GPR12: c000000000880d40 c00000000ffb1a80 00007fff6c005d10 
-00007fff7f107638
-[ 9107.676875] GPR16: 00007fff7f107638 00007fff7f107638 00007fff7f133670 
-0000000000000000
-[ 9107.676875] GPR20: 00007fff7f132040 00007fff7f1109e8 00007fff6c005d40 
-0000000000000131
-[ 9107.676875] GPR24: 0000000000000001 5deadbeef0000100 5deadbeef0000122 
-c0000000040338a8
-[ 9107.676875] GPR28: 0000000000000083 c00000008da32670 6b6b6b6b6b6b6b6b 
-6b6b6b6b6b6b6b6b
-[ 9107.676993] NIP [c0000000002163e0] module_put+0x20/0x100
-[ 9107.677004] LR [c000000000880d7c] scsi_device_put+0x3c/0x60
-[ 9107.677014] Call Trace:
-[ 9107.677019] [c000000051d93730] [00007fff7f133670] 0x7fff7f133670 
-(unreliable)
-[ 9107.677039] [c000000051d93770] [c000000000880d70] 
-scsi_device_put+0x30/0x60
-[ 9107.677051] [c000000051d937a0] [c00800000124191c] 
-sd_release+0x74/0x120 [sd_mod]
-[ 9107.677074] [c000000051d93810] [c000000000637ff8] 
-blkdev_put_whole+0x68/0x90
-[ 9107.677088] [c000000051d93850] [c0000000006385dc] blkdev_put+0x1ac/0x280
-[ 9107.677100] [c000000051d938b0] [c008000001934e60] 
-dm_put_table_device+0xb8/0x1a8 [dm_mod]
-[ 9107.677129] [c000000051d938f0] [c008000001937868] 
-dm_put_device+0x110/0x190 [dm_mod]
-[ 9107.677149] [c000000051d93970] [c008000001872584] 
-free_priority_group+0xec/0x150 [dm_multipath]
-[ 9107.677163] [c000000051d939d0] [c008000001872698] 
-free_multipath+0xb0/0x120 [dm_multipath]
-[ 9107.677175] [c000000051d93a20] [c008000001937ee0] 
-dm_table_destroy+0x78/0x1a0 [dm_mod]
-[ 9107.677192] [c000000051d93ab0] [c00800000193deec] 
-dev_suspend+0x134/0x3e0 [dm_mod]
-[ 9107.677210] [c000000051d93b40] [c0080000019405c4] 
-ctl_ioctl+0x1ec/0x780 [dm_mod]
-[ 9107.677227] [c000000051d93d40] [c008000001940b70] 
-dm_ctl_ioctl+0x18/0x30 [dm_mod]
-[ 9107.677244] [c000000051d93d60] [c000000000487a28] sys_ioctl+0xf8/0x150
-[ 9107.677254] [c000000051d93db0] [c00000000002f228] 
-system_call_exception+0x178/0x380
-[ 9107.677266] [c000000051d93e10] [c00000000000c63c] 
-system_call_common+0xec/0x250
-[ 9107.677277] --- interrupt: c00 at 0x7fff7ee00290
-[ 9107.677284] NIP:  00007fff7ee00290 LR: 00007fff7f1041f0 CTR: 
-0000000000000000
-[ 9107.677290] REGS: c000000051d93e80 TRAP: 0c00   Not tainted 
-(5.19.0-rc1-next-20220610-autotest)
-[ 9107.677298] MSR:  800000000280f033 
-<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 28004284  XER: 00000000
-[ 9107.677323] IRQMASK: 0
-[ 9107.677323] GPR00: 0000000000000036 00007fff7e39c940 00007fff7eee7300 
-0000000000000005
-[ 9107.677323] GPR04: 00000000c138fd06 00007fff6c005d10 00007fff7f107738 
-00007fff7e39a838
-[ 9107.677323] GPR08: 0000000000000005 0000000000000000 0000000000000000 
-0000000000000000
-[ 9107.677323] GPR12: 0000000000000000 00007fff7e3a6400 00007fff6c005d10 
-00007fff7f107638
-[ 9107.677323] GPR16: 00007fff7f107638 00007fff7f107638 00007fff7f133670 
-0000000000000000
-[ 9107.677323] GPR20: 00007fff7f132040 00007fff7f1109e8 00007fff6c005d40 
-00007fff6c001ba0
-[ 9107.677323] GPR24: 00007fff7f107638 00007fff7f110f70 00007fff7f107638 
-0000000000000001
-[ 9107.677323] GPR28: 00007fff7f107638 00007fff7f107638 0000000000000000 
-00007fff7f107638
-[ 9107.677412] NIP [00007fff7ee00290] 0x7fff7ee00290
-[ 9107.677418] LR [00007fff7f1041f0] 0x7fff7f1041f0
-[ 9107.677423] --- interrupt: c00
+Please kindly respond quickly for further details.
 
--- 
-Regards,
-Tasmiya Nalatwad
-IBM Linux Technology Center
+Warmest Regards,
+Mrs Lila Haber
