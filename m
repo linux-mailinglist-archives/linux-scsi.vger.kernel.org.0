@@ -2,90 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C6654AA9E
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jun 2022 09:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F066454AB5B
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jun 2022 10:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354576AbiFNHaV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jun 2022 03:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
+        id S239268AbiFNIAj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jun 2022 04:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239942AbiFNHaM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jun 2022 03:30:12 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4779E3EA8C
-        for <linux-scsi@vger.kernel.org>; Tue, 14 Jun 2022 00:30:03 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25E2fWDM021034
-        for <linux-scsi@vger.kernel.org>; Tue, 14 Jun 2022 00:30:02 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=YBQgdt6yGFdp7P2ihOUfe/UXtFuiqQZ3umK4Nq/tC4s=;
- b=gp0Qz5PUBIkFqufy3VMMgM1P6nTnka5AltbbNlboqql7AMXLocJ4tvm2YPHfoP+h3kqN
- 6kVG3v/v8sWdmaCPXW29iwXOv0kX8rVYeMZOZXa4Exlo1CquhM5qzXg21bBSx9+nbDuq
- EB69CE0rnB3SvTmM4UcrGNs2Yb4KCRhY4OnO7J8Xd7yVFMJbELE45gYtMfSEzRX528V1
- FouqG6Rfcd58aFUf75W07gXiDWUUs3tJzz4gFyT489lTriQy5yyk3jDOelWT7K5TJlLO
- 9aUIOey6Vz+koo2wsKKI4GFlKRkMfbtIQrUs3LkNpR/6Pvbddno/NOTHskcvRjno7F9N Fg== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3gmtjp2bje-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Tue, 14 Jun 2022 00:30:02 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 14 Jun
- 2022 00:30:00 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 14 Jun 2022 00:30:00 -0700
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 3F2233F70AA;
-        Tue, 14 Jun 2022 00:30:00 -0700 (PDT)
-From:   Nilesh Javali <njavali@marvell.com>
-To:     <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH 11/11] qla2xxx: Update version to 10.02.07.700-k
-Date:   Tue, 14 Jun 2022 00:29:53 -0700
-Message-ID: <20220614072953.16462-12-njavali@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20220614072953.16462-1-njavali@marvell.com>
-References: <20220614072953.16462-1-njavali@marvell.com>
+        with ESMTP id S233210AbiFNIAh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Jun 2022 04:00:37 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991049E;
+        Tue, 14 Jun 2022 01:00:34 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id n197so5841792qke.1;
+        Tue, 14 Jun 2022 01:00:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UwqQBif62pfk96bb34/7O5EloXnDszc4ir5IVolTz3g=;
+        b=hdTHzFQ88zMSuLlQwR/BAMHsRr9N/6OvvFoBzLAmMx3oH1B+/go0WxQP2RogboQjdh
+         Q5SicRfa/0gnKidc63j2MMQDHl2NfoI2NT/yUbvQhXdu5f3aZpLJ5l4lfpIQeLpk1fd4
+         MWaiInN4Nj1OxVlNZ3nu4d6mkYQns2NPEop6GPDwghXG+I49EdD6EqXB/R1xAio2SzsF
+         JlMXCMgIEUjyceX/flgajEwa7r0fKOrWpQ4TU8zPcTiZFPKTLrBwHQvX/SohxJ722iOV
+         LAC5AktADDgm9FRLk+Hb2Tk5xfq09NK0TE8ce5LL+WK+jwCFIGVAe5nt06usNB6GfkZw
+         thdA==
+X-Gm-Message-State: AOAM531o3vZDczHj395n29Rj12RBrkvM+qsrdLtL37hOpsvMvhSBvwJk
+        t6KGjxe+5sCIiRCEIjGJdF671Wqt+DPgMQ==
+X-Google-Smtp-Source: ABdhPJyO5TT5P4K7NsU5lwZsyEm2L/MSCC4kofYWkftuljEnHuUMT3I0cKVG/H0KnAFLTljEIj8QNA==
+X-Received: by 2002:ae9:dd03:0:b0:6a7:1c2a:bbea with SMTP id r3-20020ae9dd03000000b006a71c2abbeamr2933196qkf.769.1655193633514;
+        Tue, 14 Jun 2022 01:00:33 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id k15-20020a05620a138f00b006a73654c19bsm8306604qki.23.2022.06.14.01.00.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 01:00:33 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id x38so13826352ybd.9;
+        Tue, 14 Jun 2022 01:00:32 -0700 (PDT)
+X-Received: by 2002:a25:818c:0:b0:664:a584:fafd with SMTP id
+ p12-20020a25818c000000b00664a584fafdmr3587127ybk.543.1655193632753; Tue, 14
+ Jun 2022 01:00:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: 2RE7QQOcm6sDKylEFGZGTKy8I-TqrVPr
-X-Proofpoint-ORIG-GUID: 2RE7QQOcm6sDKylEFGZGTKy8I-TqrVPr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-14_02,2022-06-13_01,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220603110524.1997825-1-yoshihiro.shimoda.uh@renesas.com>
+In-Reply-To: <20220603110524.1997825-1-yoshihiro.shimoda.uh@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Jun 2022 10:00:21 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWY7OpB=F3sUoBEpMyJx9U=+YJBFrVd59y=wdsEvN=4JA@mail.gmail.com>
+Message-ID: <CAMuHMdWY7OpB=F3sUoBEpMyJx9U=+YJBFrVd59y=wdsEvN=4JA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/7] treewide: ufs: Add support for Renesas R-Car UFS controller
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>, avri.altman@wdc.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        scsi <linux-scsi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
----
- drivers/scsi/qla2xxx/qla_version.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Martin,
 
-diff --git a/drivers/scsi/qla2xxx/qla_version.h b/drivers/scsi/qla2xxx/qla_version.h
-index 0f0fbb391561..defd21ec1555 100644
---- a/drivers/scsi/qla2xxx/qla_version.h
-+++ b/drivers/scsi/qla2xxx/qla_version.h
-@@ -6,9 +6,9 @@
- /*
-  * Driver version
-  */
--#define QLA2XXX_VERSION      "10.02.07.600-k"
-+#define QLA2XXX_VERSION      "10.02.07.700-k"
- 
- #define QLA_DRIVER_MAJOR_VER	10
- #define QLA_DRIVER_MINOR_VER	2
- #define QLA_DRIVER_PATCH_VER	7
--#define QLA_DRIVER_BETA_VER	600
-+#define QLA_DRIVER_BETA_VER	700
--- 
-2.19.0.rc0
+On Fri, Jun 3, 2022 at 5:40 PM Yoshihiro Shimoda
+<yoshihiro.shimoda.uh@renesas.com> wrote:
+> This patch series adds support Renesas R-Car S4-8 UFS controller.
+> This controller has some restrictions so adds some quirks for it.
+>
+> Yoshihiro Shimoda (7):
+>   dt-bindings: ufs: Document Renesas R-Car UFS host controller
+>   ufs: add UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS
+>   ufs: add UFSHCD_QUIRK_HIBERN_FASTAUTO
+>   scsi: ufs-renesas: Add support for Renesas R-Car UFS controller
+>   scsi: MAINTAINERS: Add maintainer for Renesas UFS driver
+>   arm64: dts: renesas: r8a779f0: Add UFS node
+>   arm64: dts: renesas: r8a779f0: spider-cpu: Enable UFS device
 
+I see you have applied this series, including the DTS parts, to
+your for-next tree. Please never apply DTS patches to the SCSI tree,
+as they are meant to go in through the soc tree.
+
+Can you please drop the last two patches from your tree?
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
