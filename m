@@ -2,90 +2,116 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E6E54D9BC
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jun 2022 07:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC1E54D9D7
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jun 2022 07:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358659AbiFPFfn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jun 2022 01:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        id S1358776AbiFPFhu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jun 2022 01:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358611AbiFPFfQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jun 2022 01:35:16 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8EA5AEFF
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:15 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25FN9uIK014684
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:15 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=YBQgdt6yGFdp7P2ihOUfe/UXtFuiqQZ3umK4Nq/tC4s=;
- b=WHM6jxMREqW1bPfPriihZcv6EdE/u5uEvN829KdySt1+TIzsFdyaUzL2aI/1gng0s6ac
- bkTT55M0gtriR96B4Efs30zJloGjEWpDmMpNi9HsuIjVwWYLRMYD17MVz+flQmemmurU
- yPmnUUt7YKnHDISatMFn7cdhXxSkCZQU8+f5VJYOc4Xo5pGBKYcmq0Wxk/7gfBtZAIaA
- 0Cp99KZwt+PAHZ9PI46DimfGRBwXLTAM/fx1xAppfllICuAXHSM0vcqqRTBNPxhJHh0r
- NNTPxoImmLuauRjSINZwE4fYHHYjR011JVLevC103Z0aJdGE5HP46G/AouviBOTejzeX yQ== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3gqruu977u-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:15 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 15 Jun
- 2022 22:35:13 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Wed, 15 Jun 2022 22:35:13 -0700
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 3EF153F70B1;
-        Wed, 15 Jun 2022 22:35:13 -0700 (PDT)
-From:   Nilesh Javali <njavali@marvell.com>
-To:     <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH v2 11/11] qla2xxx: Update version to 10.02.07.700-k
-Date:   Wed, 15 Jun 2022 22:35:08 -0700
-Message-ID: <20220616053508.27186-12-njavali@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20220616053508.27186-1-njavali@marvell.com>
-References: <20220616053508.27186-1-njavali@marvell.com>
+        with ESMTP id S1358705AbiFPFhm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jun 2022 01:37:42 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0C221833;
+        Wed, 15 Jun 2022 22:37:37 -0700 (PDT)
+X-UUID: 7159031185264cbe8c3ed82499ac59c5-20220616
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:15b8930b-3d90-4be5-8982-943dea47cfec,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:b14ad71,CLOUDID:c05b6ff6-e099-41ba-a32c-13b8bfe63214,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 7159031185264cbe8c3ed82499ac59c5-20220616
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1951251212; Thu, 16 Jun 2022 13:37:27 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 16 Jun 2022 13:37:26 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 16 Jun 2022 13:37:26 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <bvanassche@acm.org>
+CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
+        <mason.zhang@mediatek.com>, <qilin.tan@mediatek.com>,
+        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
+        <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <stanley.chu@mediatek.com>
+Subject: [PATCH v5 00/11] scsi: ufs: Fix PMC and low-power mode on MediaTek UFS platforms
+Date:   Thu, 16 Jun 2022 13:37:14 +0800
+Message-ID: <20220616053725.5681-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: lZGwi6LvgyP6x3LhdDbqlZGqiubTfpfx
-X-Proofpoint-GUID: lZGwi6LvgyP6x3LhdDbqlZGqiubTfpfx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-16_02,2022-06-15_01,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
----
- drivers/scsi/qla2xxx/qla_version.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Martin,
 
-diff --git a/drivers/scsi/qla2xxx/qla_version.h b/drivers/scsi/qla2xxx/qla_version.h
-index 0f0fbb391561..defd21ec1555 100644
---- a/drivers/scsi/qla2xxx/qla_version.h
-+++ b/drivers/scsi/qla2xxx/qla_version.h
-@@ -6,9 +6,9 @@
- /*
-  * Driver version
-  */
--#define QLA2XXX_VERSION      "10.02.07.600-k"
-+#define QLA2XXX_VERSION      "10.02.07.700-k"
- 
- #define QLA_DRIVER_MAJOR_VER	10
- #define QLA_DRIVER_MINOR_VER	2
- #define QLA_DRIVER_PATCH_VER	7
--#define QLA_DRIVER_BETA_VER	600
-+#define QLA_DRIVER_BETA_VER	700
+This series provides some fixes on MediaTek UFS platforms, please consider this patch series for kernel v5.20.
+
+- Provide workaround for power mode change for HS-G5
+- Fix and provide regulator features
+
+Changes compared to v4:
+- Add one patch to disable unused VCCQx
+- Fix the invoking location of ufs_mtk_vreg_fix_vccqx()
+
+Changes compared to v3:
+- Rewrite and simplify SMC call wrappers
+- Fix coding styles
+
+Changes compared to v2:
+- Add patches to support multiple VCC sources
+
+Changes compared to v1:
+- Add patches to fix and provide VCCQx low-power support
+
+CC Chou (1):
+  scsi: ufs-mediatek: Introduce workaround for power mode change
+
+Peter Wang (1):
+  scsi: ufs-mediatek: Support low-power mode for VCCQ
+
+Po-Wen Kao (2):
+  scsi: ufs-mediatek: Fix the timing of configuring device regulators
+  scsi: ufs-mediatek: Prevent device regulators setting as LPM
+    incorrectly
+
+Stanley Chu (7):
+  scsi: ufs: Export ufshcd_uic_change_pwr_mode()
+  scsi: ufs: Fix ADAPT logic for HS-G5
+  scsi: ufs-mediatek: Support flexible parameters for smc calls
+  scsi: ufs-mediatek: Support low-power mode for parents of VCCQx
+  scsi: ufs: Export regulator functions
+  scsi: ufs-mediatek: Support multiple VCC sources
+  scsi: ufs-mediatek: Disable unused VCCQx power rails
+
+ drivers/ufs/core/ufshcd.c        |   8 +-
+ drivers/ufs/host/ufs-mediatek.c  | 255 +++++++++++++++++++++++++++----
+ drivers/ufs/host/ufs-mediatek.h  |  58 +++++++
+ drivers/ufs/host/ufshcd-pltfrm.c |   5 +-
+ drivers/ufs/host/ufshcd-pltfrm.h |   2 +
+ include/ufs/ufshcd.h             |   3 +
+ include/ufs/unipro.h             |   1 +
+ 7 files changed, 295 insertions(+), 37 deletions(-)
+
 -- 
-2.19.0.rc0
+2.18.0
 
