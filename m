@@ -2,56 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D45D54D9B5
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jun 2022 07:35:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9D554D9B9
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jun 2022 07:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358626AbiFPFfT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jun 2022 01:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
+        id S1358664AbiFPFf1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jun 2022 01:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358575AbiFPFfP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jun 2022 01:35:15 -0400
+        with ESMTP id S1358594AbiFPFfQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jun 2022 01:35:16 -0400
 Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64795A094
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE6B5932B
+        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:14 -0700 (PDT)
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25FN9tAe014579
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:13 -0700
+        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25FN9uII014684
+        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=t9K0bQIsh0c5jQVaXBFGyZQ5hkIlvJDDEFPQEIyDcXk=;
- b=O2VNRIEBc2kkmaxirx+TtYi+kbDbWcBSe4BCAJ7Z5Hzbao8UmMQyWiYrzZg29vRPjydn
- DlcwY0uMX/uKTK/rt63inWo0L4uK1nk2DxrvMpCP0vi77nwlkwLlBWx+cUUEsGA+XvO9
- kIslkQh9uIRUvOiCfoD/wjTA94dbh91Sw6ekSK9dyt2whPBMnBXUrX39fxBcA4bm1oev
- /D1imjZr5PzxKZEcsvEpnzaVEjYFdONnBWm9+Ql7hfcV2RwDsoqdj0Mh+2nBl1XyD91H
- /huoK9hXmhyH2TW7rJRuy9fayaebpB6FXGmwKUcBjiU/VUYwx7ZDwx+zhuRmn79HwIso Ww== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3gqruu977w-2
+ content-type; s=pfpt0220; bh=monWPMQ3PAN+HrvMYQdymBKehNx0u2JHrnbxFsi1VZE=;
+ b=fUT++5sDSzfVbj4xxrcW/TfYvGRs+1SRfMqW3f25Y5qvj6/KnJP8C1om+AsIJsLjEBnZ
+ RWzh0C/utwZy3ikhhxINiECtOufcK387HSjZl8FHuL7dyd0vyCjsOlgJA9L7XamFSOpc
+ oGt9aeSfJZlOwHKStoXYjlEgWnlD8yf3Yw4eeRJmH/5HAmNAv+rADgZnGcMGmFiWxgbX
+ yO8bhmT/NEQE9VKvc1wiCFkGX++XoJqb7dMr9W9rw9Ph+GMs8JxgNC0dvjCTHHsQRlQw
+ ILy3XBx1AhDafPFiTtKCkHRzQiHT3OrijjfM6omhS5KN/7NYvN5csHlTdA21WDrwwykU ZQ== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3gqruu977u-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:13 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 15 Jun
+        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:14 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 15 Jun
  2022 22:35:12 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Wed, 15 Jun 2022 22:35:12 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id EE37F3F70B1;
-        Wed, 15 Jun 2022 22:35:11 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id 24CC23F70B2;
+        Wed, 15 Jun 2022 22:35:12 -0700 (PDT)
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH v2 04/11] qla2xxx: Turn off multi-queue for 8G adapter
-Date:   Wed, 15 Jun 2022 22:35:01 -0700
-Message-ID: <20220616053508.27186-5-njavali@marvell.com>
+Subject: [PATCH v2 05/11] qla2xxx: Fix crash due to stale srb access around IO timeouts
+Date:   Wed, 15 Jun 2022 22:35:02 -0700
+Message-ID: <20220616053508.27186-6-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20220616053508.27186-1-njavali@marvell.com>
 References: <20220616053508.27186-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: klCSuV8z7guKpEN8pXoGoQ7LjpLbfTfU
-X-Proofpoint-GUID: klCSuV8z7guKpEN8pXoGoQ7LjpLbfTfU
+X-Proofpoint-ORIG-GUID: Wdz2BUc6SMMkWBZVacRiwYMTDl_jq19c
+X-Proofpoint-GUID: Wdz2BUc6SMMkWBZVacRiwYMTDl_jq19c
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-16_02,2022-06-15_01,2022-02-23_01
@@ -65,61 +65,118 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Arun Easi <aeasi@marvell.com>
 
-For 8G adapter, multi-queue was enabled accidentally.
-This patch make sure multi-queue is not enabled accidentally.
+Ensure srb is returned during IO timeout error escalation. If that is
+not possible fail the escalation path
 
+Following crash stack was seen:
+
+BUG: unable to handle kernel paging request at 0000002f56aa90f8
+IP: qla_chk_edif_rx_sa_delete_pending+0x14/0x30 [qla2xxx]
+Call Trace:
+ ? qla2x00_status_entry+0x19f/0x1c50 [qla2xxx]
+ ? qla2x00_start_sp+0x116/0x1170 [qla2xxx]
+ ? dma_pool_alloc+0x1d6/0x210
+ ? mempool_alloc+0x54/0x130
+ ? qla24xx_process_response_queue+0x548/0x12b0 [qla2xxx]
+ ? qla_do_work+0x2d/0x40 [qla2xxx]
+ ? process_one_work+0x14c/0x390
+
+Fixes: d74595278f4a ("scsi: qla2xxx: Add multiple queue pair functionality.)
 Cc: stable@vger.kernel.org
-Signed-off-by: Quinn Tran <qutran@marvell.com>
+Signed-off-by: Arun Easi <aeasi@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_def.h |  4 ++--
- drivers/scsi/qla2xxx/qla_isr.c | 16 ++++++----------
- 2 files changed, 8 insertions(+), 12 deletions(-)
+ drivers/scsi/qla2xxx/qla_os.c | 43 +++++++++++++++++++++++++----------
+ 1 file changed, 31 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index 74d4234e5a31..89cb6c24258d 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -4273,8 +4273,8 @@ struct qla_hw_data {
- #define IS_OEM_001(ha)          ((ha)->device_type & DT_OEM_001)
- #define HAS_EXTENDED_IDS(ha)    ((ha)->device_type & DT_EXTENDED_IDS)
- #define IS_CT6_SUPPORTED(ha)	((ha)->device_type & DT_CT6_SUPPORTED)
--#define IS_MQUE_CAPABLE(ha)	((ha)->mqenable || IS_QLA83XX(ha) || \
--				IS_QLA27XX(ha) || IS_QLA28XX(ha))
-+#define IS_MQUE_CAPABLE(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
-+				 IS_QLA28XX(ha))
- #define IS_BIDI_CAPABLE(ha) \
-     (IS_QLA25XX(ha) || IS_QLA2031(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha))
- /* Bit 21 of fw_attributes decides the MCTP capabilities */
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index 9af9b35edc27..24f9a3b116d8 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -4430,16 +4430,12 @@ qla24xx_enable_msix(struct qla_hw_data *ha, struct rsp_que *rsp)
- 	}
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 210fb5c52421..1c7fb6484db2 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -1342,21 +1342,20 @@ qla2xxx_eh_abort(struct scsi_cmnd *cmd)
+ /*
+  * Returns: QLA_SUCCESS or QLA_FUNCTION_FAILED.
+  */
+-int
+-qla2x00_eh_wait_for_pending_commands(scsi_qla_host_t *vha, unsigned int t,
+-	uint64_t l, enum nexus_wait_type type)
++static int
++__qla2x00_eh_wait_for_pending_commands(struct qla_qpair *qpair, unsigned int t,
++				       uint64_t l, enum nexus_wait_type type)
+ {
+ 	int cnt, match, status;
+ 	unsigned long flags;
+-	struct qla_hw_data *ha = vha->hw;
+-	struct req_que *req;
++	scsi_qla_host_t *vha = qpair->vha;
++	struct req_que *req = qpair->req;
+ 	srb_t *sp;
+ 	struct scsi_cmnd *cmd;
  
- 	/* Enable MSI-X vector for response queue update for queue 0 */
--	if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
--		if (ha->msixbase && ha->mqiobase &&
--		    (ha->max_rsp_queues > 1 || ha->max_req_queues > 1 ||
--		     ql2xmqsupport))
--			ha->mqenable = 1;
--	} else
--		if (ha->mqiobase &&
--		    (ha->max_rsp_queues > 1 || ha->max_req_queues > 1 ||
--		     ql2xmqsupport))
--			ha->mqenable = 1;
-+	if (IS_MQUE_CAPABLE(ha) &&
-+	    (ha->msixbase && ha->mqiobase && ha->max_qpairs))
-+		ha->mqenable = 1;
-+	else
-+		ha->mqenable = 0;
+ 	status = QLA_SUCCESS;
+ 
+-	spin_lock_irqsave(&ha->hardware_lock, flags);
+-	req = vha->req;
++	spin_lock_irqsave(qpair->qp_lock_ptr, flags);
+ 	for (cnt = 1; status == QLA_SUCCESS &&
+ 		cnt < req->num_outstanding_cmds; cnt++) {
+ 		sp = req->outstanding_cmds[cnt];
+@@ -1383,12 +1382,32 @@ qla2x00_eh_wait_for_pending_commands(scsi_qla_host_t *vha, unsigned int t,
+ 		if (!match)
+ 			continue;
+ 
+-		spin_unlock_irqrestore(&ha->hardware_lock, flags);
++		spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
+ 		status = qla2x00_eh_wait_on_command(cmd);
+-		spin_lock_irqsave(&ha->hardware_lock, flags);
++		spin_lock_irqsave(qpair->qp_lock_ptr, flags);
+ 	}
+-	spin_unlock_irqrestore(&ha->hardware_lock, flags);
++	spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
 +
- 	ql_dbg(ql_dbg_multiq, vha, 0xc005,
- 	    "mqiobase=%p, max_rsp_queues=%d, max_req_queues=%d.\n",
- 	    ha->mqiobase, ha->max_rsp_queues, ha->max_req_queues);
++	return status;
++}
++
++int
++qla2x00_eh_wait_for_pending_commands(scsi_qla_host_t *vha, unsigned int t,
++				     uint64_t l, enum nexus_wait_type type)
++{
++	struct qla_qpair *qpair;
++	struct qla_hw_data *ha = vha->hw;
++	int i, status = QLA_SUCCESS;
+ 
++	status = __qla2x00_eh_wait_for_pending_commands(ha->base_qpair, t, l,
++							type);
++	for (i = 0; status == QLA_SUCCESS && i < ha->max_qpairs; i++) {
++		qpair = ha->queue_pair_map[i];
++		if (!qpair)
++			continue;
++		status = __qla2x00_eh_wait_for_pending_commands(qpair, t, l,
++								type);
++	}
+ 	return status;
+ }
+ 
+@@ -1425,7 +1444,7 @@ qla2xxx_eh_device_reset(struct scsi_cmnd *cmd)
+ 		return err;
+ 
+ 	if (fcport->deleted)
+-		return SUCCESS;
++		return FAILED;
+ 
+ 	ql_log(ql_log_info, vha, 0x8009,
+ 	    "DEVICE RESET ISSUED nexus=%ld:%d:%llu cmd=%p.\n", vha->host_no,
+@@ -1493,7 +1512,7 @@ qla2xxx_eh_target_reset(struct scsi_cmnd *cmd)
+ 		return err;
+ 
+ 	if (fcport->deleted)
+-		return SUCCESS;
++		return FAILED;
+ 
+ 	ql_log(ql_log_info, vha, 0x8009,
+ 	    "TARGET RESET ISSUED nexus=%ld:%d cmd=%p.\n", vha->host_no,
 -- 
 2.19.0.rc0
 
