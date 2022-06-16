@@ -2,31 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886DA54D9B2
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jun 2022 07:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A9254D9B6
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jun 2022 07:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358613AbiFPFfQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jun 2022 01:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
+        id S1358633AbiFPFfW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jun 2022 01:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358557AbiFPFfO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jun 2022 01:35:14 -0400
+        with ESMTP id S1358593AbiFPFfQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jun 2022 01:35:16 -0400
 Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C755A08B
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABAF5AEEA
+        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:14 -0700 (PDT)
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25FN9uIG014684
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:13 -0700
+        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25FN9uIH014684
+        for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=xgXhoth0GVJyC/K0gfma2HOZ6oMCsWh2iXr8xxvryvI=;
- b=J/6rnyb+OPnusWTd6G+4Abj0bREnXIjEy9M8HHefeAGD0R8irgmT9qMiWRSTGCZqMvC2
- weC3sroyit96kaDT5xDxzAjGuh0K2yNUeHhxUeLkujU2zT1/8agP8u9rVXivlleWYyLX
- pM3aPIbP1sebnJCMrV/Cgrkx1oWqyW2iNQb7YSWKLOUHnMv2qkw0eltndtRhqvxRw2/u
- PvgDt62+LxLWhKjQfPlAEgxt5Vt/Eu6zanzEh7Eox847pOKclpBtxnZA52jiYtuMqNw6
- +5dVaOhlS3jEgxskBRnrjbvGFHqHMSfEm7XP1ZZm9UUmBsFsXp7FdqGLE2lTk/inDlNY Rw== 
+ content-type; s=pfpt0220; bh=JfuBy3nkcESKZ8aFY7UKvIcW0lfRn3rMlyVLWB52Yow=;
+ b=F+5w9V+sBcN+1t075WlfcC8hRQDDYT8f3FYnuyYOZs9VjybNj6g5D+U7AwT+EpRbOcQL
+ iHaR4rKDZNtLU+C3UJD+Z4P0n/p6k620qNNOmKh9kSdUQKyFDbh8YwDECnSjN14dMoOc
+ 7R1XzhR9itwj5g4OW09slFNxMlSilXkvqEpbU1o9cqZ0+oO5f5DZrE5nXT4Q8/H52jxp
+ Tz1/rSWe4jR769ooYsnoLOqwFsHRIfPZRnR7cHXieWhcS25iKrxgGrnqXMuWuuckA6Md
+ GMxPG6MQEPsAvE53lMirXPMJLK5J1h7mkEdszrt4MiMpr/tmubPXi+plIYM5h7qoogAP gg== 
 Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3gqruu977u-2
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3gqruu977u-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
         for <linux-scsi@vger.kernel.org>; Wed, 15 Jun 2022 22:35:13 -0700
 Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
@@ -36,328 +36,233 @@ Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
  (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Wed, 15 Jun 2022 22:35:11 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 977723F7073;
+        by maili.marvell.com (Postfix) with ESMTP id C2F013F70AF;
         Wed, 15 Jun 2022 22:35:11 -0700 (PDT)
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH v2 02/11] qla2xxx: Add a new v2 dport diagnostic feature
-Date:   Wed, 15 Jun 2022 22:34:59 -0700
-Message-ID: <20220616053508.27186-3-njavali@marvell.com>
+Subject: [PATCH v2 03/11] qla2xxx: Wind down adapter after pcie error
+Date:   Wed, 15 Jun 2022 22:35:00 -0700
+Message-ID: <20220616053508.27186-4-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20220616053508.27186-1-njavali@marvell.com>
 References: <20220616053508.27186-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: xzRThcc-JhM6Z7XttMzLdz0wgwLd7s6r
-X-Proofpoint-GUID: xzRThcc-JhM6Z7XttMzLdz0wgwLd7s6r
+X-Proofpoint-ORIG-GUID: 3SK_DPQH5FGdIP0yXDaFthycf9-Whv2Q
+X-Proofpoint-GUID: 3SK_DPQH5FGdIP0yXDaFthycf9-Whv2Q
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-16_02,2022-06-15_01,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bikash Hazarika <bhazarika@marvell.com>
+From: Quinn Tran <qutran@marvell.com>
 
-FW requires minimum 72 bytes buffer size for
-D_port result. Buffer size 1024 is mentioned in the
-FW spec so buffer size is increased to 1024.
-Re-write the logic to handle START/RESTART command from SDMAPI.
+Put adapter into a wind down state if OS does not
+make any attempt to recover the adapter after
+PCIE error.
 
-Signed-off-by: Bikash Hazarika <bhazarika@marvell.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_bsg.c  | 86 +++++++++++++++++++++++++++++++++
- drivers/scsi/qla2xxx/qla_bsg.h  | 15 ++++++
- drivers/scsi/qla2xxx/qla_def.h  | 10 ++++
- drivers/scsi/qla2xxx/qla_gbl.h  |  4 ++
- drivers/scsi/qla2xxx/qla_init.c |  3 ++
- drivers/scsi/qla2xxx/qla_isr.c  |  3 ++
- drivers/scsi/qla2xxx/qla_mbx.c  | 48 ++++++++++++++++++
- 7 files changed, 169 insertions(+)
+ drivers/scsi/qla2xxx/qla_bsg.c  | 10 ++++++-
+ drivers/scsi/qla2xxx/qla_def.h  |  4 +++
+ drivers/scsi/qla2xxx/qla_init.c | 20 ++++++++++++++
+ drivers/scsi/qla2xxx/qla_os.c   | 48 +++++++++++++++++++++++++++++++++
+ 4 files changed, 81 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bsg.c
-index c2f00f076f79..606474ae4419 100644
+index 606474ae4419..299c5cba92f4 100644
 --- a/drivers/scsi/qla2xxx/qla_bsg.c
 +++ b/drivers/scsi/qla2xxx/qla_bsg.c
-@@ -2424,6 +2424,89 @@ qla2x00_do_dport_diagnostics(struct bsg_job *bsg_job)
- 	return 0;
- }
+@@ -3061,6 +3061,13 @@ qla24xx_bsg_timeout(struct bsg_job *bsg_job)
  
-+static int
-+qla2x00_do_dport_diagnostics_v2(struct bsg_job *bsg_job)
-+{
-+	struct fc_bsg_reply *bsg_reply = bsg_job->reply;
-+	struct Scsi_Host *host = fc_bsg_to_shost(bsg_job);
-+	scsi_qla_host_t *vha = shost_priv(host);
-+	int rval;
-+	struct qla_dport_diag_v2 *dd;
-+	mbx_cmd_t mc;
-+	mbx_cmd_t *mcp = &mc;
-+	uint16_t options;
+ 	ql_log(ql_log_info, vha, 0x708b, "%s CMD timeout. bsg ptr %p.\n",
+ 	    __func__, bsg_job);
 +
-+	if (!IS_DPORT_CAPABLE(vha->hw))
-+		return -EPERM;
-+
-+	dd = kzalloc(sizeof(*dd), GFP_KERNEL);
-+	if (!dd)
-+		return -ENOMEM;
-+
-+	sg_copy_to_buffer(bsg_job->request_payload.sg_list,
-+			bsg_job->request_payload.sg_cnt, dd, sizeof(*dd));
-+
-+	options  = dd->options;
-+
-+	/*  Check dport Test in progress */
-+	if (options == QLA_GET_DPORT_RESULT_V2 &&
-+	    vha->dport_status & DPORT_DIAG_IN_PROGRESS) {
-+		bsg_reply->reply_data.vendor_reply.vendor_rsp[0] =
-+					EXT_STATUS_DPORT_DIAG_IN_PROCESS;
-+		goto dportcomplete;
++	if (qla2x00_isp_reg_stat(ha)) {
++		ql_log(ql_log_info, vha, 0x9007,
++		    "PCI/Register disconnect.\n");
++		qla_pci_set_eeh_busy(vha);
 +	}
 +
-+	/*  Check chip reset in progress and start/restart requests arrive */
-+	if (vha->dport_status & DPORT_DIAG_CHIP_RESET_IN_PROGRESS &&
-+	    (options == QLA_START_DPORT_TEST_V2 ||
-+	     options == QLA_RESTART_DPORT_TEST_V2)) {
-+		vha->dport_status &= ~DPORT_DIAG_CHIP_RESET_IN_PROGRESS;
-+	}
+ 	/* find the bsg job from the active list of commands */
+ 	spin_lock_irqsave(&ha->hardware_lock, flags);
+ 	for (que = 0; que < ha->max_req_queues; que++) {
+@@ -3078,7 +3085,8 @@ qla24xx_bsg_timeout(struct bsg_job *bsg_job)
+ 			    sp->u.bsg_job == bsg_job) {
+ 				req->outstanding_cmds[cnt] = NULL;
+ 				spin_unlock_irqrestore(&ha->hardware_lock, flags);
+-				if (ha->isp_ops->abort_command(sp)) {
 +
-+	/*  Check chip reset in progress and get result request arrive */
-+	if (vha->dport_status & DPORT_DIAG_CHIP_RESET_IN_PROGRESS &&
-+	    options == QLA_GET_DPORT_RESULT_V2) {
-+		bsg_reply->reply_data.vendor_reply.vendor_rsp[0] =
-+					EXT_STATUS_DPORT_DIAG_NOT_RUNNING;
-+		goto dportcomplete;
-+	}
-+
-+	rval = qla26xx_dport_diagnostics_v2(vha, dd, mcp);
-+
-+	if (rval == QLA_SUCCESS) {
-+		bsg_reply->reply_data.vendor_reply.vendor_rsp[0] =
-+					EXT_STATUS_OK;
-+		if (options == QLA_START_DPORT_TEST_V2 ||
-+		    options == QLA_RESTART_DPORT_TEST_V2) {
-+			dd->mbx1 = mcp->mb[0];
-+			dd->mbx2 = mcp->mb[1];
-+			vha->dport_status |=  DPORT_DIAG_IN_PROGRESS;
-+		} else if (options == QLA_GET_DPORT_RESULT_V2) {
-+			dd->mbx1 = vha->dport_data[1];
-+			dd->mbx2 = vha->dport_data[2];
-+		}
-+	} else {
-+		dd->mbx1 = mcp->mb[0];
-+		dd->mbx2 = mcp->mb[1];
-+		bsg_reply->reply_data.vendor_reply.vendor_rsp[0] =
-+				EXT_STATUS_DPORT_DIAG_ERR;
-+	}
-+
-+dportcomplete:
-+	sg_copy_from_buffer(bsg_job->reply_payload.sg_list,
-+			    bsg_job->reply_payload.sg_cnt, dd, sizeof(*dd));
-+
-+	bsg_reply->reply_payload_rcv_len = sizeof(*dd);
-+	bsg_job->reply_len = sizeof(*bsg_reply);
-+	bsg_reply->result = DID_OK << 16;
-+	bsg_job_done(bsg_job, bsg_reply->result,
-+		     bsg_reply->reply_payload_rcv_len);
-+
-+	kfree(dd);
-+
-+	return 0;
-+}
-+
- static int
- qla2x00_get_flash_image_status(struct bsg_job *bsg_job)
- {
-@@ -2860,6 +2943,9 @@ qla2x00_process_vendor_specific(struct scsi_qla_host *vha, struct bsg_job *bsg_j
- 	case QL_VND_DPORT_DIAGNOSTICS:
- 		return qla2x00_do_dport_diagnostics(bsg_job);
- 
-+	case QL_VND_DPORT_DIAGNOSTICS_V2:
-+		return qla2x00_do_dport_diagnostics_v2(bsg_job);
-+
- 	case QL_VND_EDIF_MGMT:
- 		return qla_edif_app_mgmt(bsg_job);
- 
-diff --git a/drivers/scsi/qla2xxx/qla_bsg.h b/drivers/scsi/qla2xxx/qla_bsg.h
-index 6d2b0a7436c1..bb64b9c5a74b 100644
---- a/drivers/scsi/qla2xxx/qla_bsg.h
-+++ b/drivers/scsi/qla2xxx/qla_bsg.h
-@@ -37,6 +37,7 @@
- #define QL_VND_GET_TGT_STATS		0x25
- #define QL_VND_MANAGE_HOST_PORT		0x26
- #define QL_VND_MBX_PASSTHRU		0x2B
-+#define QL_VND_DPORT_DIAGNOSTICS_V2	0x2C
- 
- /* BSG Vendor specific subcode returns */
- #define EXT_STATUS_OK			0
-@@ -60,6 +61,9 @@
- #define EXT_STATUS_TIMEOUT		30
- #define EXT_STATUS_THREAD_FAILED	31
- #define EXT_STATUS_DATA_CMP_FAILED	32
-+#define EXT_STATUS_DPORT_DIAG_ERR	40
-+#define EXT_STATUS_DPORT_DIAG_IN_PROCESS	41
-+#define EXT_STATUS_DPORT_DIAG_NOT_RUNNING	42
- 
- /* BSG definations for interpreting CommandSent field */
- #define INT_DEF_LB_LOOPBACK_CMD         0
-@@ -288,6 +292,17 @@ struct qla_dport_diag {
- 	uint8_t  unused[62];
- } __packed;
- 
-+#define QLA_GET_DPORT_RESULT_V2		0  /* Get Result */
-+#define QLA_RESTART_DPORT_TEST_V2	1  /* Restart test */
-+#define QLA_START_DPORT_TEST_V2		2  /* Start test */
-+struct qla_dport_diag_v2 {
-+	uint16_t options;
-+	uint16_t mbx1;
-+	uint16_t mbx2;
-+	uint8_t  unused[58];
-+	uint8_t buf[1024]; /* Test Result */
-+} __packed;
-+
- /* D_Port options */
- #define QLA_DPORT_RESULT	0x0
- #define QLA_DPORT_START		0x2
++				if (!ha->flags.eeh_busy && ha->isp_ops->abort_command(sp)) {
+ 					ql_log(ql_log_warn, vha, 0x7089,
+ 					    "mbx abort_command failed.\n");
+ 					bsg_reply->result = -EIO;
 diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index f064dcdbb975..5888362cf8d1 100644
+index 5888362cf8d1..74d4234e5a31 100644
 --- a/drivers/scsi/qla2xxx/qla_def.h
 +++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -1173,6 +1173,12 @@ static inline bool qla2xxx_is_valid_mbs(unsigned int mbs)
+@@ -4053,6 +4053,9 @@ struct qla_hw_data {
+ 		uint32_t	n2n_fw_acc_sec:1;
+ 		uint32_t	plogi_template_valid:1;
+ 		uint32_t	port_isolated:1;
++		uint32_t	eeh_flush:2;
++#define EEH_FLUSH_RDY  1
++#define EEH_FLUSH_DONE 2
+ 	} flags;
  
- /* ISP mailbox loopback echo diagnostic error code */
- #define MBS_LB_RESET	0x17
-+
-+/* AEN mailbox Port Diagnostics test */
-+#define AEN_START_DIAG_TEST		0x0	/* start the diagnostics */
-+#define AEN_DONE_DIAG_TEST_WITH_NOERR	0x1	/* Done with no errors */
-+#define AEN_DONE_DIAG_TEST_WITH_ERR	0x2	/* Done with error.*/
-+
- /*
-  * Firmware options 1, 2, 3.
-  */
-@@ -5019,6 +5025,10 @@ typedef struct scsi_qla_host {
- 	u64 short_link_down_cnt;
- 	struct edif_dbell e_dbell;
- 	struct pur_core pur_cinfo;
-+
-+#define DPORT_DIAG_IN_PROGRESS                 BIT_0
-+#define DPORT_DIAG_CHIP_RESET_IN_PROGRESS      BIT_1
-+	uint16_t dport_status;
- } scsi_qla_host_t;
+ 	uint16_t max_exchg;
+@@ -4087,6 +4090,7 @@ struct qla_hw_data {
+ 	uint32_t		rsp_que_len;
+ 	uint32_t		req_que_off;
+ 	uint32_t		rsp_que_off;
++	unsigned long		eeh_jif;
  
- struct qla27xx_image_status {
-diff --git a/drivers/scsi/qla2xxx/qla_gbl.h b/drivers/scsi/qla2xxx/qla_gbl.h
-index 08103efa170f..3674b35196b0 100644
---- a/drivers/scsi/qla2xxx/qla_gbl.h
-+++ b/drivers/scsi/qla2xxx/qla_gbl.h
-@@ -555,6 +555,10 @@ qla2x00_dump_mctp_data(scsi_qla_host_t *, dma_addr_t, uint32_t, uint32_t);
- extern int
- qla26xx_dport_diagnostics(scsi_qla_host_t *, void *, uint, uint);
- 
-+extern int
-+qla26xx_dport_diagnostics_v2(scsi_qla_host_t *,
-+			     struct qla_dport_diag_v2 *,  mbx_cmd_t *);
-+
- int qla24xx_send_mb_cmd(struct scsi_qla_host *, mbx_cmd_t *);
- int qla24xx_gpdb_wait(struct scsi_qla_host *, fc_port_t *, u8);
- int qla24xx_gidlist_wait(struct scsi_qla_host *, void *, dma_addr_t,
+ 	/* Multi queue data structs */
+ 	device_reg_t *mqiobase;
 diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 6070834104f6..e4db1c1f3f6b 100644
+index e4db1c1f3f6b..7860cf4319ef 100644
 --- a/drivers/scsi/qla2xxx/qla_init.c
 +++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -7208,6 +7208,9 @@ qla2x00_abort_isp(scsi_qla_host_t *vha)
- 	if (vha->flags.online) {
- 		qla2x00_abort_isp_cleanup(vha);
+@@ -47,6 +47,7 @@ qla2x00_sp_timeout(struct timer_list *t)
+ {
+ 	srb_t *sp = from_timer(sp, t, u.iocb_cmd.timer);
+ 	struct srb_iocb *iocb;
++	scsi_qla_host_t *vha = sp->vha;
  
-+		vha->dport_status |= DPORT_DIAG_CHIP_RESET_IN_PROGRESS;
-+		vha->dport_status &= ~DPORT_DIAG_IN_PROGRESS;
+ 	WARN_ON(irqs_disabled());
+ 	iocb = &sp->u.iocb_cmd;
+@@ -54,6 +55,12 @@ qla2x00_sp_timeout(struct timer_list *t)
+ 
+ 	/* ref: TMR */
+ 	kref_put(&sp->cmd_kref, qla2x00_sp_release);
 +
- 		if (vha->hw->flags.port_isolated)
- 			return status;
- 
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index 9ca20eafe433..9af9b35edc27 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -1761,6 +1761,9 @@ qla2x00_async_event(scsi_qla_host_t *vha, struct rsp_que *rsp, uint16_t *mb)
- 		break;
- 
- 	case MBA_DPORT_DIAGNOSTICS:
-+		if ((mb[1] & 0xF) == AEN_DONE_DIAG_TEST_WITH_NOERR ||
-+		    (mb[1] & 0xF) == AEN_DONE_DIAG_TEST_WITH_ERR)
-+			vha->dport_status &= ~DPORT_DIAG_IN_PROGRESS;
- 		ql_dbg(ql_dbg_async, vha, 0x5052,
- 		    "D-Port Diagnostics: %04x %04x %04x %04x\n",
- 		    mb[0], mb[1], mb[2], mb[3]);
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 892caf2475df..16a736a7130d 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -6471,6 +6471,54 @@ qla26xx_dport_diagnostics(scsi_qla_host_t *vha,
- 	return rval;
++	if (vha && qla2x00_isp_reg_stat(vha->hw)) {
++		ql_log(ql_log_info, vha, 0x9008,
++		    "PCI/Register disconnect.\n");
++		qla_pci_set_eeh_busy(vha);
++	}
  }
  
-+int
-+qla26xx_dport_diagnostics_v2(scsi_qla_host_t *vha,
-+			     struct qla_dport_diag_v2 *dd,  mbx_cmd_t *mcp)
+ void qla2x00_sp_free(srb_t *sp)
+@@ -9671,6 +9678,12 @@ int qla2xxx_disable_port(struct Scsi_Host *host)
+ 
+ 	vha->hw->flags.port_isolated = 1;
+ 
++	if (qla2x00_isp_reg_stat(vha->hw)) {
++		ql_log(ql_log_info, vha, 0x9006,
++		    "PCI/Register disconnect, exiting.\n");
++		qla_pci_set_eeh_busy(vha);
++		return FAILED;
++	}
+ 	if (qla2x00_chip_is_down(vha))
+ 		return 0;
+ 
+@@ -9686,6 +9699,13 @@ int qla2xxx_enable_port(struct Scsi_Host *host)
+ {
+ 	scsi_qla_host_t *vha = shost_priv(host);
+ 
++	if (qla2x00_isp_reg_stat(vha->hw)) {
++		ql_log(ql_log_info, vha, 0x9001,
++		    "PCI/Register disconnect, exiting.\n");
++		qla_pci_set_eeh_busy(vha);
++		return FAILED;
++	}
++
+ 	vha->hw->flags.port_isolated = 0;
+ 	/* Set the flag to 1, so that isp_abort can proceed */
+ 	vha->flags.online = 1;
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 4f3125b826c4..210fb5c52421 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -333,6 +333,11 @@ MODULE_PARM_DESC(ql2xabts_wait_nvme,
+ 		 "To wait for ABTS response on I/O timeouts for NVMe. (default: 1)");
+ 
+ 
++u32 ql2xdelay_before_pci_error_handling = 5;
++module_param(ql2xdelay_before_pci_error_handling, uint, 0644);
++MODULE_PARM_DESC(ql2xdelay_before_pci_error_handling,
++	"Number of seconds delayed before qla begin PCI error self-handling (default: 5).\n");
++
+ static void qla2x00_clear_drv_active(struct qla_hw_data *);
+ static void qla2x00_free_device(scsi_qla_host_t *);
+ static int qla2xxx_map_queues(struct Scsi_Host *shost);
+@@ -7238,6 +7243,44 @@ static void qla_heart_beat(struct scsi_qla_host *vha, u16 dpc_started)
+ 	}
+ }
+ 
++static void qla_wind_down_chip(scsi_qla_host_t *vha)
 +{
-+	int rval;
-+	dma_addr_t dd_dma;
-+	uint size = sizeof(dd->buf);
-+	uint16_t options = dd->options;
++	struct qla_hw_data *ha = vha->hw;
 +
-+	ql_dbg(ql_dbg_mbx + ql_dbg_verbose, vha, 0x119f,
-+	       "Entered %s.\n", __func__);
++	if (!ha->flags.eeh_busy)
++		return;
++	if (ha->pci_error_state)
++		/* system is trying to recover */
++		return;
 +
-+	dd_dma = dma_map_single(&vha->hw->pdev->dev,
-+				dd->buf, size, DMA_FROM_DEVICE);
-+	if (dma_mapping_error(&vha->hw->pdev->dev, dd_dma)) {
-+		ql_log(ql_log_warn, vha, 0x1194,
-+		       "Failed to map dma buffer.\n");
-+		return QLA_MEMORY_ALLOC_FAILED;
++	/*
++	 * Current system is not handling PCIE error.  At this point, this is
++	 * best effort to wind down the adapter.
++	 */
++	if (time_after_eq(jiffies, ha->eeh_jif + ql2xdelay_before_pci_error_handling * HZ) &&
++	    !ha->flags.eeh_flush) {
++		ql_log(ql_log_info, vha, 0x9009,
++		    "PCI Error detected, attempting to reset hardware.\n");
++
++		ha->isp_ops->reset_chip(vha);
++		ha->isp_ops->disable_intrs(ha);
++
++		ha->flags.eeh_flush = EEH_FLUSH_RDY;
++		ha->eeh_jif = jiffies;
++
++	} else if (ha->flags.eeh_flush == EEH_FLUSH_RDY &&
++	    time_after_eq(jiffies, ha->eeh_jif +  5 * HZ)) {
++		pci_clear_master(ha->pdev);
++
++		/* flush all command */
++		qla2x00_abort_isp_cleanup(vha);
++		ha->flags.eeh_flush = EEH_FLUSH_DONE;
++
++		ql_log(ql_log_info, vha, 0x900a,
++		    "PCI Error handling complete, all IOs aborted.\n");
 +	}
-+
-+	memset(dd->buf, 0, size);
-+
-+	mcp->mb[0] = MBC_DPORT_DIAGNOSTICS;
-+	mcp->mb[1] = options;
-+	mcp->mb[2] = MSW(LSD(dd_dma));
-+	mcp->mb[3] = LSW(LSD(dd_dma));
-+	mcp->mb[6] = MSW(MSD(dd_dma));
-+	mcp->mb[7] = LSW(MSD(dd_dma));
-+	mcp->mb[8] = size;
-+	mcp->out_mb = MBX_8 | MBX_7 | MBX_6 | MBX_3 | MBX_2 | MBX_1 | MBX_0;
-+	mcp->in_mb = MBX_3 | MBX_2 | MBX_1 | MBX_0;
-+	mcp->buf_size = size;
-+	mcp->flags = MBX_DMA_IN;
-+	mcp->tov = MBX_TOV_SECONDS * 4;
-+	rval = qla2x00_mailbox_command(vha, mcp);
-+
-+	if (rval != QLA_SUCCESS) {
-+		ql_dbg(ql_dbg_mbx, vha, 0x1195, "Failed=%x.\n", rval);
-+	} else {
-+		ql_dbg(ql_dbg_mbx + ql_dbg_verbose, vha, 0x1196,
-+		       "Done %s.\n", __func__);
-+	}
-+
-+	dma_unmap_single(&vha->hw->pdev->dev, dd_dma, size, DMA_FROM_DEVICE);
-+
-+	return rval;
 +}
 +
- static void qla2x00_async_mb_sp_done(srb_t *sp, int res)
- {
- 	sp->u.iocb_cmd.u.mbx.rc = res;
+ /**************************************************************************
+ *   qla2x00_timer
+ *
+@@ -7261,6 +7304,8 @@ qla2x00_timer(struct timer_list *t)
+ 	fc_port_t *fcport = NULL;
+ 
+ 	if (ha->flags.eeh_busy) {
++		qla_wind_down_chip(vha);
++
+ 		ql_dbg(ql_dbg_timer, vha, 0x6000,
+ 		    "EEH = %d, restarting timer.\n",
+ 		    ha->flags.eeh_busy);
+@@ -7841,6 +7886,9 @@ void qla_pci_set_eeh_busy(struct scsi_qla_host *vha)
+ 
+ 	spin_lock_irqsave(&base_vha->work_lock, flags);
+ 	if (!ha->flags.eeh_busy) {
++		ha->eeh_jif = jiffies;
++		ha->flags.eeh_flush = 0;
++
+ 		ha->flags.eeh_busy = 1;
+ 		do_cleanup = true;
+ 	}
 -- 
 2.19.0.rc0
 
