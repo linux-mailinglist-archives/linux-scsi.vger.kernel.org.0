@@ -2,257 +2,158 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBF354EA0F
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jun 2022 21:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BC954ED4E
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jun 2022 00:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349272AbiFPTXJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jun 2022 15:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S1379010AbiFPW2L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jun 2022 18:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378415AbiFPTWw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jun 2022 15:22:52 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0288562FC
-        for <linux-scsi@vger.kernel.org>; Thu, 16 Jun 2022 12:22:16 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id p63so1706194qkd.10
-        for <linux-scsi@vger.kernel.org>; Thu, 16 Jun 2022 12:22:16 -0700 (PDT)
+        with ESMTP id S1378915AbiFPW2C (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jun 2022 18:28:02 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB555C373
+        for <linux-scsi@vger.kernel.org>; Thu, 16 Jun 2022 15:27:58 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25GJJBPC022329;
+        Thu, 16 Jun 2022 22:27:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=QyxuJzlHxjL19yLMqebv2QVgSb2Xhi9sDKrA/y6F+V0=;
+ b=p9AAST60P6t2/GVRQ8p6Y52CL+0K501LVZbpJTBXCHJe2OsxL+nndrj1WaWx0EjYqJd0
+ 2TbOQ41ueGycQgPsqdzWjBN7ME+kY+WCdlHYyWY3EITa1AByu0MOwwAswAFqI06L7Zbd
+ JIkwAbxIdIoe1K80ntqtSUV5I8JjdhcbsdLBkptREoHapl+OVIjTHlKhyQ8oRbTPMq5H
+ DYEsQ1dpOmVSGWeaMaQzyKDMs1e8GXFFLl5P4bae0hNiAZ30YKK6b+lUIVFYJyJQUlAA
+ c1MXoZl8sKYAY6HgCoX9R+A4wo+z20MS1u4BTwpsGceJepmAE4mlEkqZHEM4hZ3ZmNHm Hw== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmhfcvbum-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Jun 2022 22:27:50 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25GMG1fI013371;
+        Thu, 16 Jun 2022 22:27:49 GMT
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2042.outbound.protection.outlook.com [104.47.51.42])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gpr7qjfvd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Jun 2022 22:27:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NW93emu/nQLH2P0URs9Coj04UhO/1z9EBq3bpHVYcHSpscgKYDs9XCBEVtzqa+EmFEjBL95qNYxpfaf1jNA9cPhhPTqZNCiNMw6oS79lKVYKi0zhZXJQhevtjbXiHHF7M+llYFOm6lcaIWiMBlUZ+kAxh0R26OgCaqHtJdFTYRAG/S743Z7LplxX1B/FA+dg2d7Y8YArZccfkZM/saofjHkjMYtiqBDf8z43b5cDNJ++xxXiRSNoWADpna456J3cAnnJHdnRoTkQYNedAdrGZGx/0QiGrorAFiacOTgACG0lCxxX7WBvOSN6zC9L6FCaeLxgDIlW0W6Fyeq643b4Jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QyxuJzlHxjL19yLMqebv2QVgSb2Xhi9sDKrA/y6F+V0=;
+ b=cc/maen+7VNqXwXryI41W4Oi7KPrQFypvQFMg+8AJbyj8Ilt9oklygbbuXtVAm5YP3veWws4YtLguHy0NmrEJ1Qp/V3oxWeKkwvqZfIF1TJ4OUkr2rN+J70y8XQV/w944akXJHiXAl1hpwYWrnCJbXp5ap/un0J7Cz6Yp3VAzjTqLk8iaeMsfHP3bCx1MgUahTWoc8Hi1tfmZ5EvVSTb5hG1pspm0AUyAELHRZjT9APw8cdJF3B11dtWLy38SBWcVEFUoPmX8+LW7EWqEWPz89CSyTvEU4R146ndCIc7Lw0HYvgxKpQdg3TJ6tDlp65ZSCVl1O11MZzHCWXYmv8bRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=px+zQB2QIe/Sc5BaXEKHEw8B2vAxzFzKAk+Qqh0TdWQ=;
-        b=ZRUSgbgyboiffTJL2svIbN0fV/PAcCmgaLRu9DQZZnmruyBzU914IVgWUtYYqe1YUs
-         ydhhVxWO6wjM3oJdMNXgZxW8kev0RGzt+5vqGMKEh04LJyEC+e5mAQ1PS8TTyjuw4N28
-         +DC6hvhASFekAQ6T8dNJLCtJ/e2QmjoB6LQthkp1Ut4++/xhPNlmUgIuw+U22i/xAsGB
-         j7ZUyn7SLuJop4Fzb8P5OV/mAOU/A1YbtxmbTwVvVRO7PQgbCqwKu24ILSCA90ik2w/8
-         bxYafFz6mO8bPuZ9yQeda5EmFI65bAQpAAOUnV6Y0t87ujZqLRQjh8DJYdZ+rO0sBj56
-         dd2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=px+zQB2QIe/Sc5BaXEKHEw8B2vAxzFzKAk+Qqh0TdWQ=;
-        b=MDSL//Brq7hl9Yxt58aw7k+U2EXaw6Xf7OYxNlidDAxPO4COsnOaCcSPlqJqfp2+BY
-         OSNSS/fIml/H31u8obSJ9RW4FmwfhDEwfgkPY6XVW2+vFDGhYQn8E2PUPn+a23fJemUv
-         eGsXi23xIk977K+8p8hqqWC1bMgqzhNNxnV2Big3MxyI0wRfsITuiqwmWvK1Qg3B0R1l
-         WNEYtgwv/znJZB0K/oUBegBZ+b+lPbRhhCHHenL/9pdTJ2MRwdxXxnzD49wJHZTFhdY4
-         ggOPo8mRljmJeILfGoO7wcrvyhqJk1/LtSibreTWFDc86Etx3ptVuu4kK++kKYYUH/FJ
-         u2og==
-X-Gm-Message-State: AJIora+4cWZePgg1UPiX6rNtVpu2X23uh3+Tp0jBjvX9xXSvyMOSRjnv
-        wTeLHgBHaN6G8GZa68i2BagWscR0qV5gNYR65Xo=
-X-Google-Smtp-Source: AGRyM1uaQ8kl+lyTCVmMeI0Uq6kC0kZXEpQj5QKlPurp5ZUCgrKagZ+gdcPsyL+SfHXLL/xNHF1cJA==
-X-Received: by 2002:a05:620a:4714:b0:6a7:2f11:d04f with SMTP id bs20-20020a05620a471400b006a72f11d04fmr4770202qkb.688.1655407335698;
-        Thu, 16 Jun 2022 12:22:15 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id f5-20020a05620a280500b006a6a6f148e6sm2341887qkp.17.2022.06.16.12.22.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 12:22:14 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-30fdbe7467cso23198237b3.1;
-        Thu, 16 Jun 2022 12:22:13 -0700 (PDT)
-X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
- 206-20020a810ad7000000b002e684de3223mr7472185ywk.209.1655407332919; Thu, 16
- Jun 2022 12:22:12 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QyxuJzlHxjL19yLMqebv2QVgSb2Xhi9sDKrA/y6F+V0=;
+ b=DwB87Y10YZbbLLZZenPsyd+aLBYmrO03QdRHGFl/gRRQkMT7YKUIn4IeAV9OQ8ZfVzlJuqNv99v4M01JYtGyBD+68c8vdL3HyjResYhMjNdlHf7B4ZEZggViygH75uQuabWlz6aOTyFRKkfmfExS3eYC0RnC3R/ylUcnJhfvW2A=
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
+ BN6PR10MB1267.namprd10.prod.outlook.com (2603:10b6:405:e::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5353.14; Thu, 16 Jun 2022 22:27:47 +0000
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::f81d:b8ef:c5a4:9c9b]) by DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::f81d:b8ef:c5a4:9c9b%3]) with mapi id 15.20.5332.016; Thu, 16 Jun 2022
+ 22:27:47 +0000
+From:   Mike Christie <michael.christie@oracle.com>
+To:     lduncan@suse.com, cleech@redhat.com, njavali@marvell.com,
+        mrangankar@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        jejb@linux.ibm.com
+Subject: [PATCH 0/6] iscsi fixes for 5.19 or 5.20
+Date:   Thu, 16 Jun 2022 17:27:32 -0500
+Message-Id: <20220616222738.5722-1-michael.christie@oracle.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: DM5PR18CA0070.namprd18.prod.outlook.com
+ (2603:10b6:3:22::32) To DM5PR10MB1466.namprd10.prod.outlook.com
+ (2603:10b6:3:b::7)
 MIME-Version: 1.0
-References: <20220405093759.1126835-1-alex.bennee@linaro.org> <20220405093759.1126835-3-alex.bennee@linaro.org>
-In-Reply-To: <20220405093759.1126835-3-alex.bennee@linaro.org>
-From:   Arnd Bergmann <arnd@linaro.org>
-Date:   Thu, 16 Jun 2022 21:21:56 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1xC5jVT9dE7GTtMhE5siFzOkgb5uBEC-ZCt5GPW09u+g@mail.gmail.com>
-Message-ID: <CAK8P3a1xC5jVT9dE7GTtMhE5siFzOkgb5uBEC-ZCt5GPW09u+g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] char: rpmb: provide a user space interface
-To:     =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Maxim Uvarov <maxim.uvarov@linaro.org>,
-        Joakim Bech <joakim.bech@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Ruchika Gupta <ruchika.gupta@linaro.org>,
-        "Winkler, Tomas" <tomas.winkler@intel.com>,
-        "Huang, Yang" <yang.huang@intel.com>,
-        "Zhu, Bing" <bing.zhu@intel.com>, Matti.Moell@opensynergy.com,
-        hmo@opensynergy.com, linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd.bergmann@linaro.org>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Avri Altman <avri.altman@sandisk.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 360db289-bcef-4bd1-46f1-08da4fe7707d
+X-MS-TrafficTypeDiagnostic: BN6PR10MB1267:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR10MB12673ED833289CAA887111AAF1AC9@BN6PR10MB1267.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fShX0FZxPHXTznoY+zXbeTpOEAmXzb7BbueLcnoiseQ3lMntAJve4aniPY9PIkw4ThSdUYLMoV/9UOmWPyhzvQ2AnCgnnkVxKQSRuGSC9B1c5C+F7XGM7fCoZ63YAANrUHbAzvVPiV6OkZt3YsRDcgAmyEkXByHV6LVuFWtyMmXzs28w3Blv6j6TNvgDdg7nvVFsgJKA52g7aVcrTix1uQXSGrkaGsFCsCpYVrJhw3AmZgc0QDEEwC3iIM93Uy+9qzl1D6c7dhAcwE3D3Apjr1sv4N7DZs9kMu5c+csBunp+IokZY3ohCHJ0CQ28kknrm73/escM7aIdeXvkZjwq/QBgbm+3RKmSt2F/f/fNJmhCPRYo2VwfogjAkh1gtFDTVpv5oUEf4udDYhCa3RLKOgF5MwThLQXjhf5/1H1gxYQR76CyOySyYtF4xze+wFMxKizscKQMbZPz6Q3j3m30Zux+FFEMSC0fV6K14lcwGb4dyFUMOUfajo5bE+coi2HxLL9UahLhZ0rUvTib2hKQEbzun5V348v7q4j15o85U0DFSAEF1ogZw8MjocarOk6Qf4zo4x+LZdBCLqQ+qsdFvqgWAmR0SsZlwPstE4sVlwmWapF52QzMC5N+AjDzwvqWQJwcOVoJceNFqb6JBTZgO43THQVr7qkB94QoxOsgMfbi/fk6goCKTr/G/elJROU897z+tsdkazPUhyE5xo+80g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(4744005)(5660300002)(36756003)(2906002)(86362001)(38100700002)(6506007)(38350700002)(26005)(6512007)(6486002)(1076003)(2616005)(508600001)(6666004)(66476007)(8676002)(186003)(66946007)(66556008)(316002)(8936002)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?r03ZPq1WTo4irA2zNZaZBIM4rk3QAQARXAOgdH0jDq8D3/bAlbzjBDrLqHHV?=
+ =?us-ascii?Q?aya5B2yqkPuvKo673Y8Kqauepz+V/+d+aDTSMqWZdfSiIWNDrwoUW7nV0DCL?=
+ =?us-ascii?Q?8nWPNj/iIeIQi2wN6/eI36KqdOu7zOTeEpsADmK+dXvtHftJiMJumk1i6+1S?=
+ =?us-ascii?Q?Ji8wAGBtRnzYE7DqzAmHUzRhspVOQaZfiQJTjxQqcRsp2sssYs8YdD8IFLyU?=
+ =?us-ascii?Q?TaShbL3nFscObiZQ+ZrCkqDx2spNrOO0Lzk8Sd9rLbvihuFyVrkJmm+x0ys5?=
+ =?us-ascii?Q?6yGz7sT+KkBGXD3cNwC63LXucmXCn5BTtyxYXj3H940bp3OUbOQvgCxK3MTq?=
+ =?us-ascii?Q?6MMW1UOhJuQxfWg6d9To4DRwfvQzw3R3wkGxSA+GYs2qW4yAF+3sLwCIEBQo?=
+ =?us-ascii?Q?pfphy40ru4tobn5ktiSA7y8h2aSppj1MYkfV/I4+YMSvsA3vxpIVwLlq/oAD?=
+ =?us-ascii?Q?vyq/mLLUnfRpzJG3sZqJBfD+fMqf0Ny9EBaF7NRnGYLyiPgrTJrLgT6FKwFy?=
+ =?us-ascii?Q?OgBdDhVC41n9Q6csJYeAcMkP3YcQ9xkWa4cXYUT92uLBRSMjuTooXuYDCRIW?=
+ =?us-ascii?Q?c3i0M50xX3Ejkw3nhCZ5Pq3Bn+rFGk1apIPq3cQMJIUJlvWb6QodsJ9t01ts?=
+ =?us-ascii?Q?a1XIyLMpwzWwVJOCEkoI+LV5dqa4m0j48IomsqP29ChbGkSdBXlcVtCTpTcv?=
+ =?us-ascii?Q?zRm84s6RpwB1TUD+YUSddtj0L7bDgaZ1BznnDUbeAPWnNdb7ZqpLxX0b1pbJ?=
+ =?us-ascii?Q?KbhobcgF0wYXF/yGpYzx1i7zaVmkrU6GKv5/3CA/31oZNTXuaO+sBFM4A/27?=
+ =?us-ascii?Q?J3vfGUA3h9gzAFCQLxewwtBDBw+rEid8INBGV+4RXEG++CVV/G05+oiOSoaE?=
+ =?us-ascii?Q?pbF88FiQ1Djo2GWjOJgr4xivn1VgPi/dIX9GZXwGXN1rtH/9xDfA35d0yrFb?=
+ =?us-ascii?Q?bAT3RRXtGDwDz2oipXMKoqZl3F4K9rpcA3Uygxk19C1Xslqim1UArifKtEO7?=
+ =?us-ascii?Q?1VLIEYDiHlF891vDg7tTgTeY78rqdlLC+341+u94YjXxfpT5RV9XgBPLuuQY?=
+ =?us-ascii?Q?0Bo7nvCgvKoFcyqYQykIhZzUmHyCzT0inGPo84ILtz2y8h9fV9+WxJVrZ1rs?=
+ =?us-ascii?Q?7Vzjl2rZ5PW4b/V7/IOcHFVgHooiXVVRjfe3i6tvW3kdoLTAeyIDnqUrEqxC?=
+ =?us-ascii?Q?yWYn4UHevEMCHGo4VQ/KLKwfR361MBhetBrHwkqDm8A3Fq04PLEK13bs6PpC?=
+ =?us-ascii?Q?GYAAYXUsBTp0MzDkWrrLWyt6OeX2mkEJeURE+KGuozxtq3kElmEjPza5lpKK?=
+ =?us-ascii?Q?wJmTjd5KaKJzcBYyZxcC4QkvtOQiqMKhBzhKNjWPll7citJ9nxtXi0d47ovx?=
+ =?us-ascii?Q?33/TQIMdp6VuqI6Aopo9Rgu2sktGRHGSwIYKXhvlpJjalfUwzoZXduR5tMWA?=
+ =?us-ascii?Q?O3PAPCXTKOFoZvkth+i+jrOZZ2PrA3gUtjFo3JkvKAgXR0h3Iw+v3OeUODZF?=
+ =?us-ascii?Q?Sheo6z7+SxUGDoy+aWVPR0Lq2HUC/A39tP7l4T0YVzuKTQjitLB0mzLiUqJI?=
+ =?us-ascii?Q?DUR0X1UUCReAz8am6KId66qZ+PjHcov8qqu6cS37gouMm59BldbvEa/9ZQ+p?=
+ =?us-ascii?Q?7qWuxQetwNPanyDt2FlrATGlZoSiQwpKkAYir0pgFXZJil5DJb0EV9C0vGrz?=
+ =?us-ascii?Q?l4UZAIxEKhw5p/DbCBYCqhtkK4wNOcO0jtuUB1ASv1/nixfPNu6w12OtjkqV?=
+ =?us-ascii?Q?9MKatBXWh8hGD3E7VWykoGm6nQtAg1E=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 360db289-bcef-4bd1-46f1-08da4fe7707d
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 22:27:47.1988
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l5Z6e3ATMU5BwDryqj9m+Q3v6ytOoVhNUG7web8r4KiNfdGEt2xF5CmMmVYCKiRaHimS71zBUD8d9a39f5kCiIUvfjc3j7Bz63xkn/UxknU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1267
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-06-16_16:2022-06-16,2022-06-16 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 suspectscore=0 mlxlogscore=912 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206160090
+X-Proofpoint-ORIG-GUID: pLHzHt35e4OFqc-bM28J-XSvGpFJ5NiM
+X-Proofpoint-GUID: pLHzHt35e4OFqc-bM28J-XSvGpFJ5NiM
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 11:37 AM Alex Benn=C3=A9e <alex.bennee@linaro.org> w=
-rote:
+The following patches are some fixes for qla4xxx and qedi. They were built
+over linus's tree, but apply over Martin's staging and queueing branches.
+They do not have conflicts with the other iscsi patches that I've ackd on
+the list, so they can be applied before or after those patches.
 
-> +static int rpmb_open(struct inode *inode, struct file *fp)
-> +{
-> +       struct rpmb_dev *rdev;
-> +
-> +       rdev =3D container_of(inode->i_cdev, struct rpmb_dev, cdev);
-> +       if (!rdev)
-> +               return -ENODEV;
-> +
-> +       /* the rpmb is single open! */
-> +       if (test_and_set_bit(RPMB_DEV_OPEN, &rdev->status))
-> +               return -EBUSY;
-> +
-> +       mutex_lock(&rdev->lock);
-> +
-> +       fp->private_data =3D rdev;
-> +
-> +       mutex_unlock(&rdev->lock);
-
-The mutex here doesn't really do anything, as the file structure is not
-reachable from any other context.
-
-I'm not sure the single-open protection gains you anything either,
-as it does not prevent the file structure to be shared between
-processes.
-
-> +static long rpmb_ioctl_ver_cmd(struct rpmb_dev *rdev,
-> +                              struct rpmb_ioc_ver_cmd __user *ptr)
-> +{
-> +       struct rpmb_ioc_ver_cmd ver =3D {
-> +               .api_version =3D RPMB_API_VERSION,
-> +       };
-> +
-> +       return copy_to_user(ptr, &ver, sizeof(ver)) ? -EFAULT : 0;
-> +}
-
-API version ioctls are generally a bad idea, I think this should be skipped=
-.
-The way to handle incompatible API changes is to introduce new ioctl
-commands.
-
-> +static const struct file_operations rpmb_fops =3D {
-> +       .open           =3D rpmb_open,
-> +       .release        =3D rpmb_release,
-> +       .unlocked_ioctl =3D rpmb_ioctl,
+The first patch is trivial and fixes a bug that can only be triggered with
+qla4xxx which should be rare. Patches 2 - 6 are more invassive and fix a
+regression in qedi where shutdown hangs when you are using that driver for
+iscsi boot. I was not sure if this was too much of an edge case and the
+pathes were too invassive for 5.19 so the patches do apply over either
+of your 5.19 or 5.20 branches.
 
 
-
-> diff --git a/drivers/rpmb/rpmb-cdev.h b/drivers/rpmb/rpmb-cdev.h
-> new file mode 100644
-> index 000000000000..e59ff0c05e9d
-> --- /dev/null
-> +++ b/drivers/rpmb/rpmb-cdev.h
-> @@ -0,0 +1,17 @@
-> +/* SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0 */
-> +/*
-> + * Copyright (C) 2015-2018 Intel Corp. All rights reserved
-> + */
-> +#ifdef CONFIG_RPMB_INTF_DEV
-> +int __init rpmb_cdev_init(void);
-> +void __exit rpmb_cdev_exit(void);
-> +void rpmb_cdev_prepare(struct rpmb_dev *rdev);
-> +void rpmb_cdev_add(struct rpmb_dev *rdev);
-> +void rpmb_cdev_del(struct rpmb_dev *rdev);
-> +#else
-> +static inline int __init rpmb_cdev_init(void) { return 0; }
-> +static inline void __exit rpmb_cdev_exit(void) {}
-> +static inline void rpmb_cdev_prepare(struct rpmb_dev *rdev) {}
-> +static inline void rpmb_cdev_add(struct rpmb_dev *rdev) {}
-> +static inline void rpmb_cdev_del(struct rpmb_dev *rdev) {}
-> +#endif /* CONFIG_RPMB_INTF_DEV */
-
-What is the purpose of the fallback? Would you ever build the code without
-the interface?
-
-> +/**
-> + * struct rpmb_ioc_ver_cmd - rpmb api version
-> + *
-> + * @api_version: rpmb API version.
-> + */
-> +struct rpmb_ioc_ver_cmd {
-> +       __u32 api_version;
-> +} __packed;
-
-Best remove this completely.
-
-> +enum rpmb_auth_method {
-> +       RPMB_HMAC_ALGO_SHA_256 =3D 0,
-> +};
-> +
-> +/**
-> + * struct rpmb_ioc_cap_cmd - rpmb capabilities
-> + *
-> + * @target: rpmb target/region within RPMB partition.
-> + * @capacity: storage capacity (in units of 128K)
-> + * @block_size: storage data block size (in units of 256B)
-> + * @wr_cnt_max: maximal number of block that can be written in a single =
-request.
-> + * @rd_cnt_max: maximal number of block that can be read in a single req=
-uest.
-> + * @auth_method: authentication method: currently always HMAC_SHA_256
-> + * @reserved: reserved to align to 4 bytes.
-> + */
-> +struct rpmb_ioc_cap_cmd {
-> +       __u16 target;
-> +       __u16 capacity;
-> +       __u16 block_size;
-> +       __u16 wr_cnt_max;
-> +       __u16 rd_cnt_max;
-> +       __u16 auth_method;
-> +       __u16 reserved;
-> +} __packed;
-
-I would remove the __packed attribute here. If you want to keep it, then
-it needs to have a __aligned() attribute as well.
-
-It seems strange to have an odd number of 16-bit fields in this, maybe
-make it two reserved fields to have a multiple of 32-bit.
-
-> + * struct rpmb_ioc_reqresp_cmd - general purpose reqresp
-> + *
-> + * Most RPMB operations consist of a set of request frames and an
-> + * optional response frame. If a response is requested the user must
-> + * allocate enough space for the response, otherwise the fields should
-> + * be set to 0/NULL.
-> + *
-> + * It is used for programming the key, reading the counter and writing
-> + * blocks to the device. If the frames are malformed they may be
-> + * rejected by the underlying driver or the device itself.
-> + *
-> + * Assuming the transaction succeeds it is still up to user space to
-> + * validate the response and check MAC values correspond to the
-> + * programmed keys.
-> + *
-> + * @len: length of write counter request
-> + * @request: ptr to device specific request frame
-> + * @rlen: length of response frame
-> + * @resp: ptr to device specific response frame
-> + */
-> +struct rpmb_ioc_reqresp_cmd {
-> +       __u32 len;
-> +       __u8 __user *request;
-> +       __u32 rlen;
-> +       __u8 __user *response;
-> +} __packed;
-
-Try to avoid indirect pointers in ioctl structures, they break
-compatibility with
-32-bit processes. I think you can do this with a variable-length structure =
-that
-has the two length fields followed by the actual data. If there is a reason=
-able
-upper bound for the length, it could also just be a fixed-length buffer.
-
-If you end up having to use a pointer, make it a __u64 value and cast betwe=
-en
-that and the actual pointer value.
-
-Whatever you do though, don't use misaligned pointers or implicit padding i=
-n the
-structure. You can have explicit padding by adding an extra __u32 before
-a __u64 pointer value, and then remove the __packed attribute, or reorder t=
-he
-members so each pointer is naturally aligned.
-
-       Arnd
