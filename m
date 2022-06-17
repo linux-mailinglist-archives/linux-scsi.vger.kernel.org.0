@@ -2,64 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D356D54EF39
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jun 2022 04:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DAA54EF35
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jun 2022 04:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379698AbiFQCUi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jun 2022 22:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
+        id S1379695AbiFQCUg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jun 2022 22:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379692AbiFQCUf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jun 2022 22:20:35 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232CD64BE4
-        for <linux-scsi@vger.kernel.org>; Thu, 16 Jun 2022 19:20:34 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25H0Nxcf032726;
-        Fri, 17 Jun 2022 02:20:23 GMT
+        with ESMTP id S232651AbiFQCUe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jun 2022 22:20:34 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9981464BF6;
+        Thu, 16 Jun 2022 19:20:31 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25H2FfQd029754;
+        Fri, 17 Jun 2022 02:20:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=BU/H6yrFeCtO/q4QQN5kffcZXGyYzsayIZkuE0LnD58=;
- b=hH9f2pFlDaIO5a2OsQ+ZdPU7AOpv6DShEhaVyMAWlfm5K8aGuTKc+tvK2llu9r0aVoki
- C4SFueecQi6gDmEtg4RC5Up/kAgjLkQ7pLEZwYlf6SpWqLyD/rYrd/235zGlSXpu7vnV
- 5LsOz00ry/qUgKZ5BS8v7ugPqSsPFwaqYX8iBceBrfOX2KdJYuKqY/eawTfkLUsoKZu+
- he9AU9cMDvpuvb//xJ5mhDNSaiS+rtyJfVw270VI2y49OMspTx6LvkiEWCx2akSnbD9v
- xkw0JWsd2q3SqUh/NrAzyN9agHxgpKLdGKkZ5qFQgT5fqB3dLkksDeI3rDlhXdJ6j7bx xw== 
+ bh=JraEGcq645uaUTZHc2tASRhn8rvhQfMYW+IL7QF6ELI=;
+ b=gUmt8KhukmpjSJSTSC2v39gg6OuTJ+RNef8IqdlAjvbtVfRxzsbN9+xulZvJEaxVq5C8
+ bLiRiR0a3WRHQ3EKs3AePUyidKyjVp+IjVFOKF3mRcI2ZCjncAzCZgFkEG9HcYe660al
+ CNBWGc7z7R3jdJ7Jh+EOYK2JywLU1wfUevyHfCYVu5cY+rL3Tqn3VK1w9YD81QvsOCdc
+ UrAlqH4BKV6oVm5SivD0siSagakrihpAzsbUOGq8JNWyAeltdcds4A5jTmunpRrUst66
+ jCzdzozBPdm2HRgdZcZaLsBWzCYfMKgGGqcWBCP4QNLHMnZMCycmhrIyCUvyUOvGj+xV Qg== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmhu2vv14-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmjx9mfn4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jun 2022 02:20:23 +0000
+        Fri, 17 Jun 2022 02:20:25 +0000
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25H2GGwx038516;
-        Fri, 17 Jun 2022 02:20:22 GMT
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25H2GK9V038707;
+        Fri, 17 Jun 2022 02:20:24 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gpqq327dx-1
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gpqq327eq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jun 2022 02:20:22 +0000
+        Fri, 17 Jun 2022 02:20:24 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 25H2KMSa006844;
-        Fri, 17 Jun 2022 02:20:22 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 25H2KMSc006844;
+        Fri, 17 Jun 2022 02:20:24 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gpqq327d4-1;
-        Fri, 17 Jun 2022 02:20:22 +0000
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gpqq327d4-2;
+        Fri, 17 Jun 2022 02:20:23 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: Re: [PATCH v2 0/3] ufs: Fix a race between the interrupt handler and the reset handler
-Date:   Thu, 16 Jun 2022 22:20:18 -0400
-Message-Id: <165543238453.26073.13111240985908624306.b4-ty@oracle.com>
+To:     haiyangz@microsoft.com,
+        Saurabh Sengar <ssengar@linux.microsoft.com>,
+        wei.liu@kernel.org, kys@microsoft.com,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-scsi@vger.kernel.org, mikelley@microsoft.com,
+        decui@microsoft.com, sthemmin@microsoft.com, jejb@linux.ibm.com,
+        ssengar@microsoft.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v3] scsi: storvsc: Correct reporting of Hyper-V I/O size limits
+Date:   Thu, 16 Jun 2022 22:20:19 -0400
+Message-Id: <165543238454.26073.6374641443239965869.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220613214442.212466-1-bvanassche@acm.org>
-References: <20220613214442.212466-1-bvanassche@acm.org>
+In-Reply-To: <1655190355-28722-1-git-send-email-ssengar@linux.microsoft.com>
+References: <1655190355-28722-1-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: CbkWeIQGFdDbT6vguuXlKQnD6Gt00lvg
-X-Proofpoint-ORIG-GUID: CbkWeIQGFdDbT6vguuXlKQnD6Gt00lvg
+X-Proofpoint-ORIG-GUID: HaMWH-0UJBwIz5X0lao9AB56iGqQIO3Q
+X-Proofpoint-GUID: HaMWH-0UJBwIz5X0lao9AB56iGqQIO3Q
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -70,25 +73,26 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 13 Jun 2022 14:44:39 -0700, Bart Van Assche wrote:
+On Tue, 14 Jun 2022 00:05:55 -0700, Saurabh Sengar wrote:
 
-> This patch series is version two of a fix between the UFS interrupt handler and
-> reset handlers. Please consider this patch series for kernel v5.20.
-> 
-> Changes compared to v1:
-> - Converted a single patch into three patches.
-> - Modified patch 3/3 such that only cleared requests are completed.
+> Current code is based on the idea that the max number of SGL entries
+> also determines the max size of an I/O request.  While this idea was
+> true in older versions of the storvsc driver when SGL entry length
+> was limited to 4 Kbytes, commit 3d9c3dcc58e9 ("scsi: storvsc: Enable
+> scatterlist entry lengths > 4Kbytes") removed that limitation. It's
+> now theoretically possible for the block layer to send requests that
+> exceed the maximum size supported by Hyper-V. This problem doesn't
+> currently happen in practice because the block layer defaults to a
+> 512 Kbyte maximum, while Hyper-V in Azure supports 2 Mbyte I/O sizes.
+> But some future configuration of Hyper-V could have a smaller max I/O
+> size, and the block layer could exceed that max.
 > 
 > [...]
 
 Applied to 5.19/scsi-fixes, thanks!
 
-[1/3] scsi: ufs: Simplify ufshcd_clear_cmd()
-      https://git.kernel.org/mkp/scsi/c/da8badd7d358
-[2/3] scsi: ufs: Support clearing multiple commands at once
-      https://git.kernel.org/mkp/scsi/c/d1a7644648b7
-[3/3] scsi: ufs: Fix a race between the interrupt handler and the reset handler
-      https://git.kernel.org/mkp/scsi/c/2acd76e7b859
+[1/1] scsi: storvsc: Correct reporting of Hyper-V I/O size limits
+      https://git.kernel.org/mkp/scsi/c/1d3e0980782f
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
