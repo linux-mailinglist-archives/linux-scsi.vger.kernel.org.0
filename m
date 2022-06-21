@@ -2,55 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCBFB58908D
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Aug 2022 18:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E0558905F
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Aug 2022 18:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238481AbiHCQcY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Aug 2022 12:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        id S238418AbiHCQaC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Aug 2022 12:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238222AbiHCQbf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Aug 2022 12:31:35 -0400
+        with ESMTP id S238365AbiHCQ3e (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Aug 2022 12:29:34 -0400
 Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BE07663;
-        Wed,  3 Aug 2022 09:30:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF90548E87;
+        Wed,  3 Aug 2022 09:29:30 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 3D10C4137E;
-        Wed,  3 Aug 2022 16:30:15 +0000 (UTC)
+        by mta-01.yadro.com (Postfix) with ESMTP id 95044412C8;
+        Wed,  3 Aug 2022 16:29:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received:received; s=
-        mta-01; t=1659544213; x=1661358614; bh=/qy+AU5xyZkgMhCzOHh14ktfG
-        ZtI8a6kol2zDDHecjw=; b=NSlHc3aUjNGuJIbNapupwKQqgUm7U9KZvydOI3sVr
-        I6kajW9ViQTF2hzrITGYuSCwqAEY3k5adV4/14u/aHusaZlspXq8u39nX4hxgRPU
-        HDZ3mS5SBtC7Ba6fT7NElhKAzVEdxmX7SzMvEvO6F+caMfK1/Y+9QgLgb0uyWzeg
-        tc=
+        mta-01; t=1659544168; x=1661358569; bh=JHkgEFMleDElEJ2wqhkUHs2WM
+        +dDaxJpel72TXz3koY=; b=bRRtaJp7VDpMoEXU4bXRPzl5NVBk8U9HLpGBwQepl
+        HEg3+Z+r3cJSnk3bNuytnK1G67psdYiLjmRGY6flFgG7upYnvKyCpAVbs28mD27n
+        vF2HY2oV+Lwpf4y1TELO9ZOD75akUKAxak3Unr44u8Umr2tz0DkihZwvBkojhCtN
+        DU=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tNjZMERgxICD; Wed,  3 Aug 2022 19:30:13 +0300 (MSK)
+        with ESMTP id hRzGNMd_oW73; Wed,  3 Aug 2022 19:29:28 +0300 (MSK)
 Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 6DE6341306;
-        Wed,  3 Aug 2022 19:29:27 +0300 (MSK)
+        by mta-01.yadro.com (Postfix) with ESMTPS id D1BEE412DE;
+        Wed,  3 Aug 2022 19:29:18 +0300 (MSK)
 Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
  T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Wed, 3 Aug 2022 19:29:27 +0300
+ 15.1.669.32; Wed, 3 Aug 2022 19:29:18 +0300
 Received: from NB-591.corp.yadro.com (10.199.18.20) by
  T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.9; Wed, 3 Aug 2022 19:29:26 +0300
+ 15.2.1118.9; Wed, 3 Aug 2022 19:29:18 +0300
 From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
 To:     Martin Petersen <martin.petersen@oracle.com>,
         <target-devel@vger.kernel.org>
 CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
         Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [RFC PATCH 48/48] target: cluster: request data on initial sync
-Date:   Fri, 25 Mar 2022 10:58:34 +0300
-Message-ID: <20220803162857.27770-49-d.bogdanov@yadro.com>
+Subject: [RFC PATCH 24/48] target: core: pr: use RTPI in APTPL
+Date:   Tue, 21 Jun 2022 16:05:59 +0300
+Message-ID: <20220803162857.27770-25-d.bogdanov@yadro.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220803162857.27770-1-d.bogdanov@yadro.com>
 References: <20220803162857.27770-1-d.bogdanov@yadro.com>
@@ -70,112 +70,194 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If there is no cluster data in cluster (master node died), request it
-from alive nodes.
+Since RTPI is an unique identifier of target port there is no need to
+check fabric name and port tag.
+RTPI is already saved in APTPL data, so it is backward compatible
+change.
 
 Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
 ---
- drivers/target/target_cluster_dlm.c | 36 ++++++++++++++++++++++++++++-
- 1 file changed, 35 insertions(+), 1 deletion(-)
+ drivers/target/target_core_configfs.c |  4 ++-
+ drivers/target/target_core_pr.c       | 41 +++++++--------------------
+ drivers/target/target_core_pr.h       |  2 +-
+ include/target/target_core_base.h     |  5 ----
+ 4 files changed, 15 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/target/target_cluster_dlm.c b/drivers/target/target_cluster_dlm.c
-index ff0c207be141..39754d3671b7 100644
---- a/drivers/target/target_cluster_dlm.c
-+++ b/drivers/target/target_cluster_dlm.c
-@@ -19,6 +19,7 @@ struct target_cluster_data {
- 	struct dlm_ckv_lock *pr_lock;
- 	struct dlm_ckv_kv *pr_data;
- 	struct dlm_ckv_notify *pr_sync_notify;
-+	struct dlm_ckv_notify *init_sync_notify;
- 	int reserved_node_id;
- 	struct dlm_ckv_kv **pr_reg_kv;
- 	size_t pr_reg_kv_len;
-@@ -101,7 +102,10 @@ struct async_group {
+diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
+index 34901f0b2350..f469cfde3f1e 100644
+--- a/drivers/target/target_core_configfs.c
++++ b/drivers/target/target_core_configfs.c
+@@ -1993,6 +1993,7 @@ static ssize_t target_pr_res_aptpl_metadata_store(struct config_item *item,
+ 	u64 mapped_lun = 0, target_lun = 0;
+ 	int ret = -1, res_holder = 0, all_tg_pt = 0, arg, token;
+ 	u16 tpgt = 0;
++	u16 rtpi = 0;
+ 	u8 type = 0;
  
- #define PR_SYNC_REASON_RESERVE	10
- #define PR_SYNC_REASON_RESET	11
-+#define PR_SYNC_REASON_INIT	13
- 
-+static void target_initial_sync(struct se_device *dev);
-+static void target_initial_sync_cb(void *arg);
- static void target_pr_sync_cb(void *arg);
- static void target_nodeleft_cb(void *arg, int nodeid);
- static int pr_reg_realloc(struct target_cluster_data *cluster_data,
-@@ -157,15 +161,22 @@ static int target_init_dlm(struct se_device *dev)
- 	if (!cluster_data->pr_sync_notify)
- 		goto fail;
- 
-+	cluster_data->init_sync_notify = dlm_ckv_create_notification(
-+		cluster_data->bucket, "init_sync", target_initial_sync_cb);
-+	if (!cluster_data->init_sync_notify)
-+		goto fail;
-+
- 	dev->cluster_data = cluster_data;
- 
- 	/* initial sync-up on joining the cluster */
- 	dlm_ckv_lock_get(cluster_data->pr_lock);
--	target_pr_sync_cb(dev);
-+	target_initial_sync(dev);
- 	dlm_ckv_lock_release(cluster_data->pr_lock);
- 
- 	return err;
- fail:
-+	if (cluster_data->init_sync_notify)
-+		dlm_ckv_free_notification(cluster_data->init_sync_notify);
- 	if (cluster_data->pr_sync_notify)
- 		dlm_ckv_free_notification(cluster_data->pr_sync_notify);
- 	if (cluster_data->pr_lock)
-@@ -188,6 +199,7 @@ static int target_cleanup_dlm(struct se_device *dev)
- 			dlm_ckv_free_kv(cluster_data->pr_reg_kv[i]);
- 	kfree(cluster_data->pr_reg_kv);
- 
-+	dlm_ckv_free_notification(cluster_data->init_sync_notify);
- 	dlm_ckv_free_notification(cluster_data->pr_sync_notify);
- 	dlm_ckv_free_lock(cluster_data->pr_lock);
- 	dlm_ckv_free_kv(cluster_data->pr_data);
-@@ -410,6 +422,13 @@ static int target_pr_sync_dlm(struct se_device *dev, u8 pro_sa)
- 	return res;
- }
- 
-+static void target_initial_sync_cb(void *arg)
-+{
-+	struct se_device *dev = arg;
-+
-+	target_pr_sync_dlm(dev, PR_SYNC_REASON_INIT);
-+}
-+
- static int target_update_pr_reg(struct se_device *dev,
- 				struct t10_pr_registration *pr_reg,
- 				const struct pr_lvb *pr_data,
-@@ -584,6 +603,7 @@ static int target_dlm_read_cluster_data(
- 	if (!pr_data->version) {
- 		pr_info("TARGET_CORE[%d]: PR data from cluster is invalid\n",
- 			dev->dev_index);
-+		res = -ENOLCK;
- 		goto done;
+ 	if (!dev->dev_attrib.emulate_pr ||
+@@ -2127,6 +2128,7 @@ static ssize_t target_pr_res_aptpl_metadata_store(struct config_item *item,
+ 			ret = match_int(args, &arg);
+ 			if (ret)
+ 				goto out;
++			rtpi = (u16)arg;
+ 			break;
+ 		case Opt_target_lun:
+ 			ret = match_u64(args, &tmp_ll);
+@@ -2153,7 +2155,7 @@ static ssize_t target_pr_res_aptpl_metadata_store(struct config_item *item,
  	}
  
-@@ -877,6 +897,20 @@ static void target_dlm_apply_cluster_data(
- 	kfree(pr_reg_data);
- }
- 
-+static void target_initial_sync(struct se_device *dev)
-+{
-+	struct target_cluster_data *cluster_data = dev->cluster_data;
-+	struct pr_reg_lvb *pr_reg_data = NULL;
-+	struct pr_lvb pr_data;
-+	int res;
-+
-+	res = target_dlm_read_cluster_data(dev, &pr_data, &pr_reg_data);
-+	if (!res)
-+		target_dlm_apply_cluster_data(dev, &pr_data, pr_reg_data);
-+	if (res == -ENOLCK)
-+		dlm_ckv_notify(cluster_data->init_sync_notify);
-+}
-+
- static void target_pr_sync_cb(void *arg)
+ 	ret = core_scsi3_alloc_aptpl_registration(&dev->t10_pr, sa_res_key,
+-			i_port, isid, mapped_lun, t_port, tpgt, target_lun,
++			i_port, isid, mapped_lun, rtpi, target_lun,
+ 			res_holder, all_tg_pt, type);
+ out:
+ 	kfree(i_fabric);
+diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
+index dfecb155bf88..1f19bfd0fa00 100644
+--- a/drivers/target/target_core_pr.c
++++ b/drivers/target/target_core_pr.c
+@@ -832,8 +832,7 @@ int core_scsi3_alloc_aptpl_registration(
+ 	unsigned char *i_port,
+ 	unsigned char *isid,
+ 	u64 mapped_lun,
+-	unsigned char *t_port,
+-	u16 tpgt,
++	u16 rtpi,
+ 	u64 target_lun,
+ 	int res_holder,
+ 	int all_tg_pt,
+@@ -841,7 +840,7 @@ int core_scsi3_alloc_aptpl_registration(
  {
- 	struct pr_reg_lvb *pr_reg_data = NULL;
+ 	struct t10_pr_registration *pr_reg;
+ 
+-	if (!i_port || !t_port || !sa_res_key) {
++	if (!i_port || !sa_res_key) {
+ 		pr_err("Illegal parameters for APTPL registration\n");
+ 		return -EINVAL;
+ 	}
+@@ -867,6 +866,7 @@ int core_scsi3_alloc_aptpl_registration(
+ 	pr_reg->pr_reg_aptpl = 1;
+ 	pr_reg->pr_res_scope = 0; /* Always LUN_SCOPE */
+ 	pr_reg->pr_res_type = type;
++	pr_reg->tg_pt_sep_rtpi = rtpi;
+ 	/*
+ 	 * If an ISID value had been saved in APTPL metadata for this
+ 	 * SCSI Initiator Port, restore it now.
+@@ -877,11 +877,9 @@ int core_scsi3_alloc_aptpl_registration(
+ 		pr_reg->isid_present_at_reg = 1;
+ 	}
+ 	/*
+-	 * Copy the i_port and t_port information from caller.
++	 * Copy the i_port information from caller.
+ 	 */
+ 	snprintf(pr_reg->pr_iport, PR_APTPL_MAX_IPORT_LEN, "%s", i_port);
+-	snprintf(pr_reg->pr_tport, PR_APTPL_MAX_TPORT_LEN, "%s", t_port);
+-	pr_reg->pr_reg_tpgt = tpgt;
+ 	/*
+ 	 * Set pr_res_holder from caller, the pr_reg who is the reservation
+ 	 * holder will get it's pointer set in core_scsi3_aptpl_reserve() once
+@@ -933,17 +931,7 @@ static int __core_scsi3_check_aptpl_registration(
+ {
+ 	struct t10_pr_registration *pr_reg, *pr_reg_tmp;
+ 	struct t10_reservation *pr_tmpl = &dev->t10_pr;
+-	unsigned char i_port[PR_APTPL_MAX_IPORT_LEN] = { };
+-	unsigned char t_port[PR_APTPL_MAX_TPORT_LEN] = { };
+-	u16 tpgt;
+ 
+-	/*
+-	 * Copy Initiator Port information from struct se_node_acl
+-	 */
+-	snprintf(i_port, PR_APTPL_MAX_IPORT_LEN, "%s", nacl->initiatorname);
+-	snprintf(t_port, PR_APTPL_MAX_TPORT_LEN, "%s",
+-			tpg->se_tpg_tfo->tpg_get_wwn(tpg));
+-	tpgt = tpg->se_tpg_tfo->tpg_get_tag(tpg);
+ 	/*
+ 	 * Look for the matching registrations+reservation from those
+ 	 * created from APTPL metadata.  Note that multiple registrations
+@@ -954,11 +942,8 @@ static int __core_scsi3_check_aptpl_registration(
+ 	list_for_each_entry_safe(pr_reg, pr_reg_tmp, &pr_tmpl->aptpl_reg_list,
+ 				pr_reg_aptpl_list) {
+ 
+-		if (!strcmp(pr_reg->pr_iport, i_port) &&
+-		     (pr_reg->pr_res_mapped_lun == mapped_lun) &&
+-		    !(strcmp(pr_reg->pr_tport, t_port)) &&
+-		     (pr_reg->pr_reg_tpgt == tpgt) &&
+-		     (pr_reg->pr_aptpl_target_lun == target_lun)) {
++		if (!strcmp(pr_reg->pr_iport, nacl->initiatorname) &&
++		     (pr_reg->tg_pt_sep_rtpi == tpg->tpg_rtpi)) {
+ 			/*
+ 			 * Obtain the ->pr_reg_deve pointer + reference, that
+ 			 * is released by __core_scsi3_add_registration() below.
+@@ -1851,25 +1836,22 @@ static int core_scsi3_update_aptpl_buf(
+ 		 * reservation holder.
+ 		 */
+ 		if (dev->dev_pr_res_holder == pr_reg) {
+-			snprintf(tmp, 512, "PR_REG_START: %d"
+-				"\ninitiator_fabric=%s\n"
++			snprintf(tmp, 512, "PR_REG_START: %d\n"
+ 				"initiator_node=%s\n%s"
+ 				"sa_res_key=%llu\n"
+ 				"res_holder=1\nres_type=%02x\n"
+ 				"res_scope=%02x\nres_all_tg_pt=%d\n"
+ 				"mapped_lun=%llu\n", reg_count,
+-				tpg->se_tpg_tfo->fabric_name,
+ 				pr_reg->pr_iport, isid_buf,
+ 				pr_reg->pr_res_key, pr_reg->pr_res_type,
+ 				pr_reg->pr_res_scope, pr_reg->pr_reg_all_tg_pt,
+ 				pr_reg->pr_res_mapped_lun);
+ 		} else {
+ 			snprintf(tmp, 512, "PR_REG_START: %d\n"
+-				"initiator_fabric=%s\ninitiator_node=%s\n%s"
++				"initiator_node=%s\n%s"
+ 				"sa_res_key=%llu\nres_holder=0\n"
+ 				"res_all_tg_pt=%d\nmapped_lun=%llu\n",
+-				reg_count, tpg->se_tpg_tfo->fabric_name,
+-				pr_reg->pr_iport, isid_buf,
++				reg_count, pr_reg->pr_iport, isid_buf,
+ 				pr_reg->pr_res_key, pr_reg->pr_reg_all_tg_pt,
+ 				pr_reg->pr_res_mapped_lun);
+ 		}
+@@ -1885,9 +1867,8 @@ static int core_scsi3_update_aptpl_buf(
+ 		/*
+ 		 * Include information about the associated SCSI target port.
+ 		 */
+-		snprintf(tmp, 512, "target_fabric=%s\ntarget_node=%s\n"
+-			"tpgt=%hu\nport_rtpi=%hu\ntarget_lun=%llu\nPR_REG_END:"
+-			" %d\n", tpg->se_tpg_tfo->fabric_name,
++		snprintf(tmp, 512, "target_node=%s\n"
++			"tpgt=%hu\nport_rtpi=%hu\ntarget_lun=%llu\nPR_REG_END: %d\n",
+ 			tpg->se_tpg_tfo->tpg_get_wwn(tpg),
+ 			tpg->se_tpg_tfo->tpg_get_tag(tpg),
+ 			pr_reg->tg_pt_sep_rtpi, pr_reg->pr_aptpl_target_lun,
+diff --git a/drivers/target/target_core_pr.h b/drivers/target/target_core_pr.h
+index 9c4710f34d94..e4bdabfc4b31 100644
+--- a/drivers/target/target_core_pr.h
++++ b/drivers/target/target_core_pr.h
+@@ -64,7 +64,7 @@ extern sense_reason_t target_scsi2_reservation_reserve(struct se_cmd *);
+ extern int core_scsi3_alloc_aptpl_registration(
+ 			struct t10_reservation *, u64,
+ 			unsigned char *, unsigned char *, u64,
+-			unsigned char *, u16, u64, int, int, u8);
++			u16, u64, int, int, u8);
+ extern int core_scsi3_check_aptpl_registration(struct se_device *,
+ 			struct se_portal_group *, struct se_lun *,
+ 			struct se_node_acl *, u64);
+diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
+index 1b673b25c6cd..095b96cb3557 100644
+--- a/include/target/target_core_base.h
++++ b/include/target/target_core_base.h
+@@ -347,11 +347,6 @@ struct t10_pr_registration {
+ 	/* Used during APTPL metadata reading */
+ #define PR_APTPL_MAX_IPORT_LEN			256
+ 	unsigned char pr_iport[PR_APTPL_MAX_IPORT_LEN];
+-	/* Used during APTPL metadata reading */
+-#define PR_APTPL_MAX_TPORT_LEN			256
+-	unsigned char pr_tport[PR_APTPL_MAX_TPORT_LEN];
+-	u16 pr_aptpl_rpti;
+-	u16 pr_reg_tpgt;
+ 	/* Reservation effects all target ports */
+ 	int pr_reg_all_tg_pt;
+ 	/* Activate Persistence across Target Power Loss */
 -- 
 2.25.1
 
