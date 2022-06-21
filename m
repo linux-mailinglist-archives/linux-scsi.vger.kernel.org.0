@@ -2,107 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC05552EAD
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jun 2022 11:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F552552FC8
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jun 2022 12:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349563AbiFUJko (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Jun 2022 05:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S229660AbiFUKcm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Jun 2022 06:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349192AbiFUJkK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jun 2022 05:40:10 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A342727FCA
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jun 2022 02:39:57 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id r3so23501808ybr.6
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Jun 2022 02:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/0bRExIb6Mv4sy5raFRmeQINC+UUx7zEZcUUOWWOPJg=;
-        b=NKhg6kSkfnglJlsPDVUWhCY3Iibudx7OhZC5CePFgeNekYJKNrcmU8wB8gkktmjPqY
-         f0o4DET3nwW7oGb1WQAmWVCm6yLISrVrQXMY/9qoCppMNLX7K/jA/JZ+JMs1mNT38j+N
-         qSlM2vTiSOIkQo5cZ6oY4dkMVda7fWn0vzKRT295Q67AStI8u0BTanvw38uSxo4IMvFm
-         mtbeFJOQugEk6bmbrSLJZHxNWvSEoU0AT9TQz59V3jAGDZbWiI6U0Fx8UlroTYMr9wGQ
-         +xC78kHT5AZK7k/f6wmWhdDj3ThC5Cy20ctCKCcYvb/idPExEpgvQXB/UX/ziCu3vO07
-         Q2/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/0bRExIb6Mv4sy5raFRmeQINC+UUx7zEZcUUOWWOPJg=;
-        b=xHysowBfQFIZqo0PBiGCC+/6lXziuCWe0ZSNk2WxQ04EhIuxgcxdq08CORc3cZhYku
-         g7symU6JeBJk1BY4s19DBp4UxDsnDyZP+cFhoU9StCTk3HPCxQ8LdIkry3hW/DYsZZK5
-         s8v9rD3sJSwGPcXmL2KVZROdEBmrLcsDCbH4KKLMBmpIHpxnaV7h1Pc5+CJeJyEfRZuQ
-         p+Z3ThgoSzPTfnfoH81TwIvFqmi4azbSvbpZ11JsMbmpuR4IEWrQe6wPDIU8hX87jpAG
-         4V1D+idkZjfx8yuw+Q3sPjDNLnthCLj0ruxIcxA/z84BmimEOUqGt2MK0kVFvQBl5LV2
-         WLKA==
-X-Gm-Message-State: AJIora8efiBQ+rm7ixhR+7gJrxrs7hHu0Pw+hB46aUsfKArKJB5Io5wp
-        8Y+1Uke43nUeaYy5IRCBjv03iGOwei8DbcNdSN7GQYnfIng6qx8H
-X-Google-Smtp-Source: AGRyM1sTF/SvvxCyraPE52znD36ZX02jNmxmam87lP8bWzXT3yTfChS1a9JgJI9LjBXh9tpS4qLO5E/t+5efudcEruY=
-X-Received: by 2002:a0d:d7c7:0:b0:317:bfe8:4f2 with SMTP id
- z190-20020a0dd7c7000000b00317bfe804f2mr12417910ywd.276.1655804384555; Tue, 21
- Jun 2022 02:39:44 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:7010:e10a:b0:2d9:e631:94d0 with HTTP; Tue, 21 Jun 2022
- 02:39:44 -0700 (PDT)
-Reply-To: dimitryedik@gmail.com
-From:   Dimitry Edik <lsbthdwrds@gmail.com>
-Date:   Tue, 21 Jun 2022 02:39:44 -0700
-Message-ID: <CAGrL05aBO8rbFuij24J-APa+Luis69gEjhj35iv_GZfkHCVYDQ@mail.gmail.com>
-Subject: Dear Partner,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b29 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [lsbthdwrds[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+        with ESMTP id S229464AbiFUKcl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jun 2022 06:32:41 -0400
+Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D411A28735;
+        Tue, 21 Jun 2022 03:32:36 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1655807486tz9qxx2r
+Received: from ubuntu.localdomain ( [106.117.99.68])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 21 Jun 2022 18:31:22 +0800 (CST)
+X-QQ-SSF: 0100000000700030B000B00A0000000
+X-QQ-FEAT: 12WmTNdz4A2GoaWCvcCF9Kah1F9MRC/IaBdPf9aTvkOpMYtufAJDkWffRNh3h
+        qrqNocBrembt7PJ0yWatRyXwzsXs0qCSM0hrPTn/jfF+kafDyFygUK8AGq9mpV7vrPV8qjL
+        4hva569l3L4icTGQ/kUN+/4wk9Sc5CYFyipqVMGWugUim9qlWSUtHoM0uAeH8nlJLi2gs/n
+        X+woROn6C21lOVJw1FHlDFDCNmJwZXP3o2zuCeyXJ9NlJg1VonDYFeFA9NdPnG/43w0lhxP
+        40hVxY8ZI6xCqkg0nRrm6CXS62Zb9cb5sCamXhFUyQQD4Dd7Gv5Uk0u7YeTj58IRJjt2DnF
+        p0EyJ7BfOwdz7N/ukLjXj6xFpViEg==
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com
+Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jiangjian@cdjrlc.com
+Subject: [PATCH] scsi: message: fusion: drop unexpected word "the"
+Date:   Tue, 21 Jun 2022 18:31:19 +0800
+Message-Id: <20220621103119.91492-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Dear,
+there is an unexpected word "the" in the comments that need to be dropped
 
-My Name is Dimitry Edik from Russia A special assistance to my Russia
-boss who deals in oil import and export He was killed by the Ukraine
-soldiers at the border side. He supplied
-oil to the Philippines company and he was paid over 90 per cent of the
-transaction and the remaining $18.6 Million dollars have been paid into a
-Taiwan bank in the Philippines..i want a partner that will assist me
-with the claims. Is a (DEAL ) 40% for you and 60% for me
-I have all information for the claims.
-Kindly read and reply to me back is 100 per cent risk-free
+>-   *  Update the target negotiation parameters based on the the Inquiry
+>+   *  Update the target negotiation parameters based on the Inquiry
 
-Yours Sincerely
-Dimitry Edik
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/message/fusion/mptspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/message/fusion/mptspi.c b/drivers/message/fusion/mptspi.c
+index 388675cc1765..4c87a6b986f6 100644
+--- a/drivers/message/fusion/mptspi.c
++++ b/drivers/message/fusion/mptspi.c
+@@ -101,7 +101,7 @@ static u8	mptspiInternalCtx = MPT_MAX_PROTOCOL_DRIVERS; /* Used only for interna
+  *	@target: per target private data
+  *	@sdev: SCSI device
+  *
+- * 	Update the target negotiation parameters based on the the Inquiry
++ * 	Update the target negotiation parameters based on the Inquiry
+  *	data, adapter capabilities, and NVRAM settings.
+  **/
+ static void
+-- 
+2.17.1
+
