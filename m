@@ -2,73 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A09C5529A6
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jun 2022 05:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4335529FC
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Jun 2022 06:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345012AbiFUDNX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 Jun 2022 23:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
+        id S243063AbiFUD4v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Jun 2022 23:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344994AbiFUDNW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Jun 2022 23:13:22 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C827B12AAA
-        for <linux-scsi@vger.kernel.org>; Mon, 20 Jun 2022 20:13:20 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id s185so6144569pgs.3
-        for <linux-scsi@vger.kernel.org>; Mon, 20 Jun 2022 20:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=MUPE+WCKiaoxRAdnteR3TsIHrvUD8FAr/F1eBQt4pX0=;
-        b=VuxBloebgqYs6q47Hdp+hDzN42mMVAk49JQ3qzvYsp/hBTLXwJUXe1nKHE9Wo/tnlx
-         FV+L4G/9jcqPBdyoIX/TL2fsi0acPWP2hDAvGb8O4kl+ridK3PcU2FhUwJw2G5+Bnr5B
-         5WX/yEwjh7lYUeXbLA2P332gBoFikewQngvBoQFGCEIVq4MA5neFJVHBJXbgXGyAazX2
-         S3QkawbW6dC+1fS3tJAH+glmKoNyFUhi02lDAl/e/GXF3A/8p5/q07pGoSzpx+1U16ch
-         OCjqW+IDf1TVsoAldLDPHP+ieOZbzPpEFWmg5dCea0Ifhpe8TIdioNJ3w7TTI9e7wkxN
-         uFaQ==
+        with ESMTP id S232935AbiFUD4u (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Jun 2022 23:56:50 -0400
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148F22127F;
+        Mon, 20 Jun 2022 20:56:50 -0700 (PDT)
+Received: by mail-pj1-f41.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so8460634pjr.0;
+        Mon, 20 Jun 2022 20:56:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=MUPE+WCKiaoxRAdnteR3TsIHrvUD8FAr/F1eBQt4pX0=;
-        b=PaaCJBkVb6j8WUlMOxQdW4VdVFcHlPZ0rJNCW32VzYDZru1DYzs6cKrFyBzXioga/x
-         oFO5+SdNTAilg0LPqE4uXRTPffKmKlC6Af5huBgH/T/eL6zvTmPKyt1adt5UMKa5p3y4
-         j13xsjjnP5Zknkzti4EP+ZbOmD9bhHtJqgFwjMY64bV+HnsgP15uA6tEknYEkss5tEEI
-         Rclzk/x2c1ykfFX03PhiinHg24NX8l/RF/eu0vhvLvRbJnXf4sKTg6i4RZC4gz4vQDa2
-         pE+6yf2XVHwwMnzHTW2Xdb8i++J9lqgH9fCI9sXgWPGfnDo+iEzjN4LSqc68DhtKpvl0
-         oyZg==
-X-Gm-Message-State: AJIora+UgB1oIIwdRuo+lxoZ6w6cQxtqRCDSGk+l0IB5b0dFAZ4nhDjM
-        7GPIlCN3bPqk3YcTiOWpTw+9FnUJCImPzRtUWUo=
-X-Google-Smtp-Source: AGRyM1vPILnufbOgVS46XEALHToRWDWJz9CMAN1pqRSwT+bCE/w+2MR3KNWyllBbK1FCvUfXfsMeNimOzK/kVCQOmF8=
-X-Received: by 2002:a63:4a4d:0:b0:401:9f40:26a7 with SMTP id
- j13-20020a634a4d000000b004019f4026a7mr24688786pgl.282.1655781200308; Mon, 20
- Jun 2022 20:13:20 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0dn1nrEhMmNTab7d8HWQiHYpxCy3xYlyPAzQg2QoWuQ=;
+        b=6STyHIfsVEngcpAXTqj6ajpAn3xWZ8mZUOwy9gShBFF3QMwJuRBmYNY16mBubSqNUk
+         6mQQmppXGivDfFZy9/kAe9GsQA78b/UbOFOZesp09Kxm8ngQ/A8LJoBP6/4NwH84t1ro
+         4R3DVWjwKwYPnMot5/u+5m6+YiKF0qKHQhT3f6IIUm5ZeoLAuxsMkDTIi6T0nOEJ4ze6
+         ZKLm9DKLkmTZuCXtVIV+ZIlgfE7DddNrMRPmEU1t8CWwTA/oDChcy8hqRJXiK7e9E80j
+         VtYP1FOhXVOOiJS1Qp7gEhlAKsqBnMTZ1YG5VCbqlzQL0flabslnNX2U+67q8CHeaf/3
+         27Yg==
+X-Gm-Message-State: AJIora8QpxqIHAx7KuLLQ1g2y0p2Gn1tIBctyGt4xeERU3xuooHKZt1F
+        sGIjf3RNJ1yhDp/WmfAIZ44=
+X-Google-Smtp-Source: AGRyM1uFV8Ime7c/P/pn6ocMTrvvGTYTVYiFhpcniEJqxG3Gfafbfm2MLBaGJtH1W//X43U71EMZAQ==
+X-Received: by 2002:a17:902:e411:b0:16a:187d:99ac with SMTP id m17-20020a170902e41100b0016a187d99acmr12595347ple.25.1655783809383;
+        Mon, 20 Jun 2022 20:56:49 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id y2-20020a17090264c200b0016a12fab6c2sm5175804pli.307.2022.06.20.20.56.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jun 2022 20:56:47 -0700 (PDT)
+Message-ID: <f21b7a51-ccb0-b8dc-a48e-94a7a0f7e125@acm.org>
+Date:   Mon, 20 Jun 2022 20:56:46 -0700
 MIME-Version: 1.0
-Received: by 2002:a05:7300:3726:b0:69:5676:9027 with HTTP; Mon, 20 Jun 2022
- 20:13:19 -0700 (PDT)
-Reply-To: jerrydosso@hotmail.com
-From:   Jerry Dosso <jerry20dosso@gmail.com>
-Date:   Tue, 21 Jun 2022 05:13:19 +0200
-Message-ID: <CAHfM5QYEBY0PFE0sK4_q__d1U3Cm0T=5KGYaRAhQLOXSTL81Lw@mail.gmail.com>
-Subject: Mr Jerry Dosso
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] trace: events: scsi: Print driver_tag and scheduler_tag
+ in SCSI trace
+Content-Language: en-US
+To:     Changyuan Lyu <changyuanl@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Rajat Jain <rajatja@google.com>
+Cc:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        Vishakha Channapattan <vishakhavc@google.com>,
+        Jolly Shah <jollys@google.com>
+References: <20220620202602.2805912-1-changyuanl@google.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220620202602.2805912-1-changyuanl@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-My Dear Friend,
+On 6/20/22 13:26, Changyuan Lyu wrote:
+> Traces like scsi_dispatch_cmd_start and scsi_dispatch_cmd_done are
+   ^^^^^^
 
-Did you receive the message i sent to you?
+Aren't these called "trace events" instead of "traces"?
 
-Regards,
+> useful for tracking a command thoughout its lifetime. But for some ATA
+                                 ^^^^^^^^^
+throughout?
 
-Mr Jerry Dosso
+> passthrough commands, the information printed in current logs are not
+                                                                 ^^^
+is?
+
+> enough to identify and match them. For example, if two threads send
+> SMART cmd to the same disk at the same time, their trace logs may
+> look the same, which makes it hard to match scsi_dispatch_cmd_done and
+> scsi_dispatch_cmd_start. Printing tags can help us solve the problem.
+> Further, if a command failed for some reason and then retried, its
+                                                         ^^^^^^^
+is retried?
+
+> driver_tag will change. So scheduler_tag is also included such that we
+> can track the retries of a command.
+
+Despite the above comments, thanks for the detailed and very informative 
+patch description.
+
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
