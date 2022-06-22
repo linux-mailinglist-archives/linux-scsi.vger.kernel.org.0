@@ -2,73 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AD9554E74
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Jun 2022 17:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4F0554F55
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Jun 2022 17:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358961AbiFVPEO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Jun 2022 11:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
+        id S1355693AbiFVPbd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Jun 2022 11:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358861AbiFVPEC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jun 2022 11:04:02 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5B33EABD
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Jun 2022 08:03:53 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id a15so9157677pfv.13
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Jun 2022 08:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=Jt/qXO7TwQJF3EWuk5p4azKGOCxq/Rzk3KoLqC6Pwff+0tHhs8als9639cidnzFde4
-         ry7ero38QELHA22RBkZWtE0xNRPiiPEWIvKtPd0fZpNhUDrKHRyETW5WgRrbPPmi6/vT
-         vJpxoQNLrGfsMgIfV+PXszjD1nMaBRUe0Gxx0eYZw7YGtSc5pfRkGeshne5cjr5BaKxu
-         3INPcNuWqxw7/0puGY6UuhzUSAv6SoxD7Bz3CVHuDQWru55+lIHO02gOv78FJXnTYNjB
-         rbtWgbiyhkE21LXWR11Bk6fRJOPFFcU92J8XbdNavb7vvb9W0t8MjYRzeI2ufnWOCsiS
-         AGLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=JQNH/Gb3t1ZeHAjIumtcELXiKsFNLMZg0CMxOLX2VRkm+jWsJNQaI4liXTmuW1B1/C
-         iwDEedAOZd1DNZMDHzpJc1s+BNjd/QzTSstDFlDLaayQOrj3+F6N8SZ8Fj5vyR/TI5D0
-         nxJJ7FZrVSsW/MKotElcFoIXfjHnRqDMsxhhBoq1RVk9g9wQ9b3HJdcZoLsCQ+8oKutR
-         TDAj0KXnDbgkJ2/nOPZ/b9mS/JOJsKzUMMEgW0yO4/YuML1pFnlARfCR+GSDz8rE8Se4
-         LiS7VrLYg3Ak6iWD6t+1tBZf1XxRi64oRZp5K9r1jb2Q3UYRuUDRFv7DcUnnAOZoxKL2
-         RPdg==
-X-Gm-Message-State: AJIora/TbsVCSEa/1JtwHHbqAqTZg53HsA3lv9Sgg3XDvgOIT70jgpv5
-        ymOHFq8MEINsctYQnSYrSyTqd/TZmSg0PvpGv0g=
-X-Google-Smtp-Source: AGRyM1uVFGSnpr+dTCH2B3yi91+xpZWxlNuq532hGAWMLDkFZu1Qrq3wwA6KogrJ63y1ppaQwcWp21NviyeWeo5Xswg=
-X-Received: by 2002:a63:af1c:0:b0:40c:f9fb:deca with SMTP id
- w28-20020a63af1c000000b0040cf9fbdecamr3305128pge.479.1655910232628; Wed, 22
- Jun 2022 08:03:52 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a17:903:2308:b0:16a:1b3f:f74b with HTTP; Wed, 22 Jun 2022
- 08:03:51 -0700 (PDT)
-Reply-To: sales0212@asonmedsystemsinc.com
-From:   Prasad Ronni <lerwickfinance7@gmail.com>
-Date:   Wed, 22 Jun 2022 16:03:51 +0100
-Message-ID: <CAFkto5szY9scoLwccBhUx92cgUVnT2cx2c=WmxiOTkm7N_y9gg@mail.gmail.com>
-Subject: Service Needed.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S236904AbiFVPbd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jun 2022 11:31:33 -0400
+Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D7D38D9F;
+        Wed, 22 Jun 2022 08:31:27 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1655911843trynz47q
+Received: from ubuntu.localdomain ( [106.117.78.84])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 22 Jun 2022 23:30:31 +0800 (CST)
+X-QQ-SSF: 01000000008000B0B000E00A0000000
+X-QQ-FEAT: Mzskoac49OhJzI5Pv8Mj9o2FIj6xOcNrBDvWJ3hTpBVkV722THm8ctn7nR7Yg
+        0XIja2PyZBaM3+xY19y9b1mL/ANmV8kEMyoK72Auoi4R/rLePZUVkn6/3tXgWxVjtL5/8/5
+        1o+E21YbV38vSSqM7rCP0kSbt45HVhIGk/mb7qXkdbCmIXdAQgEeHa02uVvXx51T+qniteD
+        /uQTIIwP6CTXT/mYBBxPTzI8E59mk60pYBt8StL/QbI29dwCwqmX4ZuVwgFoAUsNT13I8zw
+        DNBh2DRdnCOF1vEKTiFa1noGQnhXNxpICCEDoeq2jtS1oWos0zvSZDLdS+Y3qvSB/R9KBTY
+        C3eFAl2VE2w0c/LqadH67PYETNEPOIvZD7lKGZF
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     dgilbert@interlog.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] scsi: sg: Fix typo in comments
+Date:   Wed, 22 Jun 2022 23:30:29 +0800
+Message-Id: <20220622153029.4137-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+there is an unexpected word 'is' in the comments that need to be dropped
+
+file: drivers/scsi/sg.c
+line: 697
+
+* but is is possible that the app intended SG_DXFER_TO_DEV, because there
+
+changed to:
+
+* but is possible that the app intended SG_DXFER_TO_DEV, because there
+
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/scsi/sg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+index 118c7b4a8af2..047761f62b23 100644
+--- a/drivers/scsi/sg.c
++++ b/drivers/scsi/sg.c
+@@ -694,7 +694,7 @@ sg_write(struct file *filp, const char __user *buf, size_t count, loff_t * ppos)
+ 	}
+ 	/*
+ 	 * SG_DXFER_TO_FROM_DEV is functionally equivalent to SG_DXFER_FROM_DEV,
+-	 * but is is possible that the app intended SG_DXFER_TO_DEV, because there
++	 * but is possible that the app intended SG_DXFER_TO_DEV, because there
+ 	 * is a non-zero input_size, so emit a warning.
+ 	 */
+ 	if (hp->dxfer_direction == SG_DXFER_TO_FROM_DEV) {
 -- 
-Hi,
+2.17.1
 
-Are you currently open to work as our executive company representative
-on contractual basis working remotely? If yes, we will be happy to
-share more details. Looking forward to your response.
-
-Regards,
