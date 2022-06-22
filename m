@@ -2,117 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD37A554066
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Jun 2022 04:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53A8554189
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Jun 2022 06:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356179AbiFVCKd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Jun 2022 22:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
+        id S1356863AbiFVEVr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Jun 2022 00:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356136AbiFVCKb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Jun 2022 22:10:31 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10245338AE;
-        Tue, 21 Jun 2022 19:10:31 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25M0IiLt002242;
-        Wed, 22 Jun 2022 02:10:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=Uh2KVX83UjniT/X3eBrQjsKFrVSNSOBjSj6MbRV+RM8=;
- b=d2HrjYXPPj6DSaai5niGRZw6POBnEcuy0OU1ED0W4wV3Kz3QeRxPDS5BWRipxLt76giS
- 7KjzVwQnV0qbbmf6J9eXUHdIRw+X9Zny1H0kkLCBKgKJJlBqC4mnS0dkDsfE9mv3A3y4
- 1/CyPY+Vy+2JMxI4KUXAxsju79wtRY9ZNVGm61T+gybdcH1vngNpj49syiVATkXOHisx
- Sxlty68FGNPqsoOhlQJKsZSShHOv6+QF2bJT7eKD35z1Rf3bdSIMbyvoLTzo6CfMnSVC
- orkLdd6UhVrEVBtOi33jM2OWww3hFeOIXIZ6JWEthj5Ardww54bkUxE3irK02UsL4XSi KA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gs5a0f6wk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Jun 2022 02:10:22 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25M26bgV038209;
-        Wed, 22 Jun 2022 02:10:21 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtd9usx4e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Jun 2022 02:10:21 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 25M29Biw002724;
-        Wed, 22 Jun 2022 02:10:21 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtd9usx36-6;
-        Wed, 22 Jun 2022 02:10:20 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     bvanassche@acm.org, jejb@linux.ibm.com,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        linux-scsi@vger.kernel.org, avri.altman@wdc.com,
-        alim.akhtar@samsung.com, linux-kernel@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        cc.chou@mediatek.com, chun-hung.wu@mediatek.com,
-        qilin.tan@mediatek.com, chaotian.jing@mediatek.com,
-        lin.gui@mediatek.com, jiajie.hao@mediatek.com,
-        eddie.huang@mediatek.com, powen.kao@mediatek.com,
-        peter.wang@mediatek.com, alice.chao@mediatek.com,
-        tun-yu.yu@mediatek.com, mason.zhang@mediatek.com
-Subject: Re: [PATCH v5 00/11] scsi: ufs: Fix PMC and low-power mode on MediaTek UFS platforms
-Date:   Tue, 21 Jun 2022 22:10:16 -0400
-Message-Id: <165586371838.21830.10837067016201802350.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220616053725.5681-1-stanley.chu@mediatek.com>
-References: <20220616053725.5681-1-stanley.chu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: GWhTys5xcKuFfbQu_U5O6KuMkUa_kQM8
-X-Proofpoint-GUID: GWhTys5xcKuFfbQu_U5O6KuMkUa_kQM8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S1356836AbiFVEVq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jun 2022 00:21:46 -0400
+Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6737654;
+        Tue, 21 Jun 2022 21:21:41 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1655871674tzpd9dy0
+Received: from ubuntu.localdomain ( [106.117.99.132])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 22 Jun 2022 12:21:10 +0800 (CST)
+X-QQ-SSF: 01000000000000B0B000000A0000000
+X-QQ-FEAT: ArfJXynxbT1uXABXlykhqfjVcC9+bIBOVONNwN3WyHigVLDsSmf88mOeQ2HT1
+        U55QAVx5d9Z2B33tRC+0PR2qPSH9nikzCxBcWsJHHoXf1jR4uBnyiG28g0JdSEQxJbb5EDu
+        2+LUTNM4XlzhUX9ydtDludZhC8ZEMnp5ra/D5R3WavQdqCnRKkCDagx2S3wKzZaz36EbHH2
+        tZYKhyEvbQEP64tDhMbCG1hpOhGtvPgsC0yy8b64ZjpfslG42jEHE/hv1sid36qqp9P0+Lu
+        6cNGu/YhUKyRFXmUeZ0CAJQ5Wnaq9qacqtkaOdzMiNIWPMUV7KHkZCenKx4ekjPM+3y3hD6
+        Vat9mlK3sqFg3OpTzIqkB30xiXFBA==
+X-QQ-GoodBg: 0
+From:   Jiang Jian <jiangjian@cdjrlc.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     artur.paszkiewicz@intel.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiang Jian <jiangjian@cdjrlc.com>
+Subject: [PATCH] scsi: isci: Remove duplicate 'the'
+Date:   Wed, 22 Jun 2022 12:21:07 +0800
+Message-Id: <20220622042107.9069-1-jiangjian@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 16 Jun 2022 13:37:14 +0800, Stanley Chu wrote:
+Fix an obvious typing error, found by spellcheck(1).
 
-> This series provides some fixes on MediaTek UFS platforms, please consider this patch series for kernel v5.20.
-> 
-> - Provide workaround for power mode change for HS-G5
-> - Fix and provide regulator features
-> 
-> Changes compared to v4:
-> - Add one patch to disable unused VCCQx
-> - Fix the invoking location of ufs_mtk_vreg_fix_vccqx()
-> 
-> [...]
+Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+---
+ drivers/scsi/isci/host.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to 5.20/scsi-queue, thanks!
-
-[01/11] scsi: ufs: Export ufshcd_uic_change_pwr_mode()
-        https://git.kernel.org/mkp/scsi/c/fc53683b45b0
-[02/11] scsi: ufs: Fix ADAPT logic for HS-G5
-        https://git.kernel.org/mkp/scsi/c/d81c4c6f7170
-[03/11] scsi: ufs-mediatek: Introduce workaround for power mode change
-        https://git.kernel.org/mkp/scsi/c/3f9b6cec12e2
-[04/11] scsi: ufs-mediatek: Fix the timing of configuring device regulators
-        https://git.kernel.org/mkp/scsi/c/3fd23b8dfb54
-[05/11] scsi: ufs-mediatek: Prevent device regulators setting as LPM incorrectly
-        https://git.kernel.org/mkp/scsi/c/005ffdf09cd3
-[06/11] scsi: ufs-mediatek: Support low-power mode for VCCQ
-        https://git.kernel.org/mkp/scsi/c/0836cc252a52
-[07/11] scsi: ufs-mediatek: Support flexible parameters for smc calls
-        https://git.kernel.org/mkp/scsi/c/bc602ae977f3
-[08/11] scsi: ufs-mediatek: Support low-power mode for parents of VCCQx
-        https://git.kernel.org/mkp/scsi/c/42b1928360a3
-[09/11] scsi: ufs: Export regulator functions
-        https://git.kernel.org/mkp/scsi/c/1d6f9decb60a
-[10/11] scsi: ufs-mediatek: Support multiple VCC sources
-        https://git.kernel.org/mkp/scsi/c/ece418d02911
-[11/11] scsi: ufs-mediatek: Disable unused VCCQx power rails
-        https://git.kernel.org/mkp/scsi/c/cb142b6d2f60
-
+diff --git a/drivers/scsi/isci/host.h b/drivers/scsi/isci/host.h
+index 6bc3f022630a..64e4759f25d7 100644
+--- a/drivers/scsi/isci/host.h
++++ b/drivers/scsi/isci/host.h
+@@ -244,7 +244,7 @@ enum sci_controller_states {
+ 	SCIC_INITIALIZED,
+ 
+ 	/**
+-	 * This state indicates the the controller is in the process of becoming
++	 * This state indicates the controller is in the process of becoming
+ 	 * ready (i.e. starting).  In this state no new IO operations are permitted.
+ 	 * This state is entered from the INITIALIZED state.
+ 	 */
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.17.1
+
