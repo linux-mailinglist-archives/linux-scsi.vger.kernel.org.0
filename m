@@ -2,60 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 158F55571DF
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jun 2022 06:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6FE5571DB
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jun 2022 06:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231903AbiFWEnR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 Jun 2022 00:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S231842AbiFWEnE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 Jun 2022 00:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234476AbiFWDOI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jun 2022 23:14:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA51C33342;
-        Wed, 22 Jun 2022 20:14:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66A54B821B5;
-        Thu, 23 Jun 2022 03:14:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D331C34114;
-        Thu, 23 Jun 2022 03:14:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655954045;
-        bh=tMql+TIkSnjW4WRius3c1TEz0HI4bgsYlsrLKY6L5Ew=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OYuO+XZ4QA2Pp6VymwOHQa23cJQzMt2r0Aye7vCwaxWQkda5nzUlGkVYPgzXTaYzp
-         czB3TEoX1tUToqBe/qSL5ShKrYU3aJYco/A+orATckTKJ/KbibCGZnKjAYhE8URQja
-         lKuCVNEk3EXNQGVbKJo/f5Z93eXObbpldHAL5oy3kNPPstUnKasHrlhJxiPQRApPWz
-         zpzy13i9+iKvg1TV5V820wgqtsBn6KA+gioogb7KEE+MtSQOI3KhDANBSx6lA+qmOa
-         8O+wiSlnNo2I0m44v3OgWtdTg+cbLmCkE78WpOdqBLI9Fudvv5EQIiwG4/QDqQ8P62
-         y380chNZho/fA==
-Date:   Thu, 23 Jun 2022 05:14:01 +0200
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 3/4][next] scsi: megaraid_sas: Replace one-element
- array with flexible-array member in MR_DRV_RAID_MAP
-Message-ID: <20220623031401.GA8896@embeddedor>
-References: <cover.1628136510.git.gustavoars@kernel.org>
- <b43d4083d9788bb746dc0b2205d6a67ebb609b0d.1628136510.git.gustavoars@kernel.org>
- <202206221457.1A12D768EF@keescook>
- <20220623014533.GA7132@embeddedor>
+        with ESMTP id S243696AbiFWDvC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jun 2022 23:51:02 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902D43DA6B;
+        Wed, 22 Jun 2022 20:51:00 -0700 (PDT)
+X-UUID: 2070dd6c5bd947c4b2835ce1b48b1af5-20220623
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:f4f43547-331d-4304-bb86-f63ac35b19f7,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:90
+X-CID-INFO: VERSION:1.1.6,REQID:f4f43547-331d-4304-bb86-f63ac35b19f7,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:90
+X-CID-META: VersionHash:b14ad71,CLOUDID:b6c047ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:8e0e5388b4eb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2070dd6c5bd947c4b2835ce1b48b1af5-20220623
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1200983025; Thu, 23 Jun 2022 11:50:54 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 23 Jun 2022 11:50:53 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 23 Jun 2022 11:50:53 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <bvanassche@acm.org>
+CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
+        <mason.zhang@mediatek.com>, <qilin.tan@mediatek.com>,
+        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
+        <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <stanley.chu@mediatek.com>
+Subject: [PATCH v2 0/8] Provide features and fixes in MediaTek UFS platform
+Date:   Thu, 23 Jun 2022 11:50:44 +0800
+Message-ID: <20220623035052.18802-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623014533.GA7132@embeddedor>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,114 +65,34 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 03:45:33AM +0200, Gustavo A. R. Silva wrote:
-> On Wed, Jun 22, 2022 at 03:26:38PM -0700, Kees Cook wrote:
-> > On Wed, Aug 04, 2021 at 11:20:04PM -0500, Gustavo A. R. Silva wrote:
-> > > Replace one-element array with a flexible-array member in struct
-> > > MR_DRV_RAID_MAP and use the flex_array_size() helper.
-> > > 
-> > > This helps with the ongoing efforts to globally enable -Warray-bounds
-> > > and get us closer to being able to tighten the FORTIFY_SOURCE routines
-> > > on memcpy().
-> > > 
-> > > Link: https://en.wikipedia.org/wiki/Flexible_array_member
-> > > Link: https://www.kernel.org/doc/html/v5.10/process/deprecated.html#zero-length-and-one-element-arrays
-> > > Link: https://github.com/KSPP/linux/issues/79
-> > > Link: https://github.com/KSPP/linux/issues/109
-> > > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > 
-> > I'd really like to see this fixed. :) I'm running into this 1-element
-> > array problem now with UBSAN_BOUNDS:
-> 
-> Wow; another forgoten patch from the times we didn't have Patchwork. :) 
-> 
-> > 
-> > [   10.011173] UBSAN: array-index-out-of-bounds in /build/linux-WLUive/linux-5.15.0/drivers/scsi/megaraid/megaraid_sas_fp.c:103:32
-> > [   10.087824] index 1 is out of range for type 'MR_LD_SPAN_MAP [1]'
-> > 
-> > and I'm not the only one:
-> > 
-> > https://bugzilla.kernel.org/show_bug.cgi?id=215943
-> 
-> It's actually great that other people are running into these issues now.
-> That could only means that we should fixed ASAP. :)
-> 
-> We also have this other series that hasn't been applied yet:
-> 
-> https://lore.kernel.org/linux-hardening/cover.1645513670.git.gustavoars@kernel.org/
-> 
-> > 
-> > > ---
-> > > Changes in v2:
-> > >  - None.
-> > > 
-> > >  drivers/scsi/megaraid/megaraid_sas_fp.c     | 6 +++---
-> > >  drivers/scsi/megaraid/megaraid_sas_fusion.h | 2 +-
-> > >  2 files changed, 4 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/scsi/megaraid/megaraid_sas_fp.c b/drivers/scsi/megaraid/megaraid_sas_fp.c
-> > > index da1cad1ee123..9cb36ef96c2c 100644
-> > > --- a/drivers/scsi/megaraid/megaraid_sas_fp.c
-> > > +++ b/drivers/scsi/megaraid/megaraid_sas_fp.c
-> > > @@ -229,8 +229,8 @@ static int MR_PopulateDrvRaidMap(struct megasas_instance *instance, u64 map_id)
-> > >  					le32_to_cpu(desc_table->raid_map_desc_offset));
-> > >  				memcpy(pDrvRaidMap->ldSpanMap,
-> > >  				       fw_map_dyn->ld_span_map,
-> > > -				       sizeof(struct MR_LD_SPAN_MAP) *
-> > > -				       le32_to_cpu(desc_table->raid_map_desc_elements));
-> > > +				       flex_array_size(pDrvRaidMap, ldSpanMap,
-> > > +				       le32_to_cpu(desc_table->raid_map_desc_elements)));
-> > >  			break;
-> > >  			default:
-> > >  				dev_dbg(&instance->pdev->dev, "wrong number of desctableElements %d\n",
-> > > @@ -254,7 +254,7 @@ static int MR_PopulateDrvRaidMap(struct megasas_instance *instance, u64 map_id)
-> > >  			pDrvRaidMap->ldTgtIdToLd[i] =
-> > >  				(u16)fw_map_ext->ldTgtIdToLd[i];
-> > >  		memcpy(pDrvRaidMap->ldSpanMap, fw_map_ext->ldSpanMap,
-> > > -		       sizeof(struct MR_LD_SPAN_MAP) * ld_count);
-> > > +		       flex_array_size(pDrvRaidMap, ldSpanMap, ld_count));
-> > >  		memcpy(pDrvRaidMap->arMapInfo, fw_map_ext->arMapInfo,
-> > >  		       sizeof(struct MR_ARRAY_INFO) * MAX_API_ARRAYS_EXT);
-> > >  		memcpy(pDrvRaidMap->devHndlInfo, fw_map_ext->devHndlInfo,
-> > > diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.h b/drivers/scsi/megaraid/megaraid_sas_fusion.h
-> > > index 9adb8b30f422..5fe2f7a6eebe 100644
-> > > --- a/drivers/scsi/megaraid/megaraid_sas_fusion.h
-> > > +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.h
-> > > @@ -1182,7 +1182,7 @@ struct MR_DRV_RAID_MAP {
-> > >  		devHndlInfo[MAX_RAIDMAP_PHYSICAL_DEVICES_DYN];
-> > >  	u16 ldTgtIdToLd[MAX_LOGICAL_DRIVES_DYN];
-> > >  	struct MR_ARRAY_INFO arMapInfo[MAX_API_ARRAYS_DYN];
-> > > -	struct MR_LD_SPAN_MAP      ldSpanMap[1];
-> > > +	struct MR_LD_SPAN_MAP      ldSpanMap[];
-> > >  
-> > >  };
-> > >  
-> > 
-> > I think this patch is incomplete, and the wrapping struct needs to be
-> > adjusted too:
-> > 
-> > @@ -1193,7 +1193,7 @@ struct MR_DRV_RAID_MAP {
-> >  struct MR_DRV_RAID_MAP_ALL {
-> >  
-> >         struct MR_DRV_RAID_MAP raidMap;
-> > -       struct MR_LD_SPAN_MAP ldSpanMap[MAX_LOGICAL_DRIVES_DYN - 1];
-> > +       struct MR_LD_SPAN_MAP ldSpanMap[MAX_LOGICAL_DRIVES_DYN];
-> >  } __packed;
+Hi Martin,
 
-BTW, I'd really like to get some input from the maintainers of this
-code. :)
+This series provides some fixes and features in MediaTek UFS platform.
+Please consider this patch series for kernel v5.20.
 
-Thanks
---
-Gustavo
+Compared to v1:
+- Add one patch to fix invalid access to vccqx
 
-> >  
-> > With that added, I get zero changes to the executable code.
-> > 
-> > I assume the others need adjustment too.
-> 
-> Interesting... OK, let me refresh my memory about the whole thing
-> and be back in a minute.
-> 
-> --
-> Gustavo
+Alice Chao (1):
+  scsi: ufs-mediatek: Fix invalid access to vccqx
+
+Peter Wang (4):
+  scsi: ufs-mediatek: Always add delays for VCC operations
+  scsi: ufs-mediatek: Prevent host hang by setting CLK_CG early
+  scsi: ufs-mediatek: Add stage information for ref-clk control
+  scsi: ufs-mediatek: Support performance boosting
+
+Po-Wen Kao (2):
+  scsi: ufs-mediatek: Disable reset confirm feature by UniPro
+  scsi: ufs-mediatek: Support host power control
+
+Stanley Chu (1):
+  scsi: ufs-mediatek: Fix build warnings
+
+ drivers/ufs/host/ufs-mediatek.c | 77 +++++++++++++++++++++++++--------
+ drivers/ufs/host/ufs-mediatek.h | 20 ++++++++-
+ 2 files changed, 76 insertions(+), 21 deletions(-)
+
+-- 
+2.18.0
+
