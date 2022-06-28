@@ -2,63 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9897C55C64A
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jun 2022 14:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD3355D0E7
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jun 2022 15:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbiF1DZd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Jun 2022 23:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
+        id S232007AbiF1DZ1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Jun 2022 23:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbiF1DZN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Jun 2022 23:25:13 -0400
+        with ESMTP id S231815AbiF1DZH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Jun 2022 23:25:07 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D776625291
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3937324F3D
         for <linux-scsi@vger.kernel.org>; Mon, 27 Jun 2022 20:25:07 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25S2HwTl031758;
-        Tue, 28 Jun 2022 03:25:01 GMT
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25S19Mmp002132;
+        Tue, 28 Jun 2022 03:25:02 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=bRmfH7zx4BXbO+KqEHcdieV8R/+4aPRnfCnKacFSmK8=;
- b=Qy+jjP7xnwuIcBjCEr/kV2/VMOL/qyNR29DAq10EgI5pWuTrqNssWMGyr7kdHPOLtoqb
- sLx6lk1oaXyqHoUoLjfKXN6A2PTZCtB4JfhSJNNtZAQbdT+nCasAhlADhwUhCrQDQzup
- +OX8IX6mZULlWaEglop4pxKuPg7DLuP7irHaej6gStFbmR+6aH5WG31vI9h6JKOnAjc/
- TNP3wBRwgODgO+oXhUEMu8jtbqUwIr7MG4hxUGUnk4ltbF3Z53O2A4V6DEZ7KQqM4dZB
- 1sJhbFi/NY8tTihyC7WqgMrr3mbWJ51EIitJUYs+n5r+8egzCyvXI18g+tklD4aruU7K iw== 
+ bh=PsOaPXJY8y1iVmjiwyDNPWvg6cXLIzhbMAnvNFI/WCI=;
+ b=VNCB4PbeXPnIB8o1wV9ntdphuIkARtf6xUHwS0Hkl/O3/ElG1D62MLm4aEIeSa2n6cTy
+ wUbbL2GhY6yHzVMH2MxiBNYsN32bUnDNdumdzbUX6W+JajD8LCXsokI5XiCRoKeYqUYt
+ a1q1S89EUXs3gyLPacGx5K5wtLHZ3+jx1v1taq/+JHbA8zf2NmeB9GzVuuQOGGBBQEfB
+ iL2bl0j4Wi9QesvvG/4BdLeBPzS5Ncr9k+glVJtVUe1umfZj793ULX9BooMbf141doT9
+ qT3iHhucUjdlQo3dsR+EBVYYi8CbFhVZL4H8TwAGAX/QWc6xfbXyfN12a3lW5Lp0tt3O gA== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gwrscctnn-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gws52cuq2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jun 2022 03:25:01 +0000
+        Tue, 28 Jun 2022 03:25:02 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25S3F1LG002385;
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25S3F1LH002385;
         Tue, 28 Jun 2022 03:25:01 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gwrt7jjn4-1
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gwrt7jjna-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 28 Jun 2022 03:25:01 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 25S3NvqI016584;
-        Tue, 28 Jun 2022 03:25:00 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 25S3NvqK016584;
+        Tue, 28 Jun 2022 03:25:01 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gwrt7jjkg-11;
-        Tue, 28 Jun 2022 03:25:00 +0000
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gwrt7jjkg-12;
+        Tue, 28 Jun 2022 03:25:01 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     lduncan@suse.com, cleech@redhat.com, jejb@linux.ibm.com,
-        Mike Christie <michael.christie@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH 0/9] iscsi features for 5.20
-Date:   Mon, 27 Jun 2022 23:24:49 -0400
-Message-Id: <165638665783.7726.3252947810161544654.b4-ty@oracle.com>
+To:     Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: mpt3sas: Remove flush_scheduled_work() call.
+Date:   Mon, 27 Jun 2022 23:24:50 -0400
+Message-Id: <165638665787.7726.9538341545727262642.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220616224557.115234-1-michael.christie@oracle.com>
-References: <20220616224557.115234-1-michael.christie@oracle.com>
+In-Reply-To: <f3b97c7c-1094-4e46-20d8-4321716d6f3f@I-love.SAKURA.ne.jp>
+References: <f3b97c7c-1094-4e46-20d8-4321716d6f3f@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 2RXJz00HNwrNeXjyxTqJtKMKtrwuKHdN
-X-Proofpoint-GUID: 2RXJz00HNwrNeXjyxTqJtKMKtrwuKHdN
+X-Proofpoint-ORIG-GUID: Nhu6_YNrqU_dcDb02OT_5gpzfTviOLrJ
+X-Proofpoint-GUID: Nhu6_YNrqU_dcDb02OT_5gpzfTviOLrJ
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -69,40 +73,18 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 16 Jun 2022 17:45:48 -0500, Mike Christie wrote:
+On Thu, 9 Jun 2022 22:26:48 +0900, Tetsuo Handa wrote:
 
-> The following patches are for 5.20. They were built against Linus's tree
-> but they have no conflicts with the existing patches on the list and
-> can be applied before or after those patches. The patches also apply over
-> Martin's staging and queueing branches.
+> It seems to me that mpt3sas driver is using dedicated workqueues and
+> is not calling schedule{,_delayed}_work{,_on}(). Then, there will be
+> no work to flush using flush_scheduled_work().
 > 
-> The bulk of the patches allow us to run from a workqueue instead of always
-> running from the net softirq. When using lots of sessions we see a nice
-> perf bump when doing throughput and IOPs tests. There's then some cleanups
-> and locking improvements.
 > 
-> [...]
 
 Applied to 5.20/scsi-queue, thanks!
 
-[1/9] scsi: iscsi: Rename iscsi_conn_queue_work()
-      https://git.kernel.org/mkp/scsi/c/4b9f8ce4d5e8
-[2/9] scsi: iscsi: Add recv workqueue helpers
-      https://git.kernel.org/mkp/scsi/c/8af809966c0b
-[3/9] scsi: iscsi: Run recv path from workqueue
-      https://git.kernel.org/mkp/scsi/c/f1d269765ee2
-[4/9] scsi: iscsi_tcp: Tell net when there's more data
-      https://git.kernel.org/mkp/scsi/c/f93a722fa7b3
-[5/9] scsi: iscsi_tcp: Drop target_alloc use
-      https://git.kernel.org/mkp/scsi/c/9b89153680f6
-[6/9] scsi: iscsi: Remove unneeded task state check
-      https://git.kernel.org/mkp/scsi/c/533ac412fdb4
-[7/9] scsi: iscsi: Remove iscsi_get_task back_lock requirement
-      https://git.kernel.org/mkp/scsi/c/e1c6a7ec1429
-[8/9] scsi: iscsi: Try to avoid taking back_lock in xmit path
-      https://git.kernel.org/mkp/scsi/c/6d626150d6d1
-[9/9] scsi: libiscsi: Improve conn_send_pdu API
-      https://git.kernel.org/mkp/scsi/c/6e637b723d82
+[1/1] scsi: mpt3sas: Remove flush_scheduled_work() call.
+      https://git.kernel.org/mkp/scsi/c/90c3ca3f247d
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
