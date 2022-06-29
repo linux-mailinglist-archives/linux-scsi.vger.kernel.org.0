@@ -2,97 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1D055F2BC
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jun 2022 03:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1B455F5C9
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jun 2022 07:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbiF2BWM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 28 Jun 2022 21:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
+        id S231461AbiF2Fkd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Jun 2022 01:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiF2BWL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 Jun 2022 21:22:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD09530F50
-        for <linux-scsi@vger.kernel.org>; Tue, 28 Jun 2022 18:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656465729;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5n4VbPGYL0IVOHlHnT2VRLu5F8GGV+cKi991jjpyi/U=;
-        b=G6P0bKaMhk7pgx7jJ+uK3D7r0OG7UDMX1JbsswClALHPek1Wh6/dyDpcWN8DOszlYZGOG3
-        5ZaOAEwlnLVOhOPMBEGT46mbobBFl4o1ayLzc+CSB5cP2qdSw/FP0eifQXtHYIqXRi6AGb
-        Bp7pUxlr6STpMVMSbGFDGkM5W7F+e60=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-P7zLZM3FP5qHu-V-hmtgvA-1; Tue, 28 Jun 2022 21:22:06 -0400
-X-MC-Unique: P7zLZM3FP5qHu-V-hmtgvA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5D14801233;
-        Wed, 29 Jun 2022 01:22:05 +0000 (UTC)
-Received: from T590 (ovpn-8-17.pek2.redhat.com [10.72.8.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A3B81492CA4;
-        Wed, 29 Jun 2022 01:22:01 +0000 (UTC)
-Date:   Wed, 29 Jun 2022 09:21:55 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
-        Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH 2/3] scsi: core: Retry after a delay if the device is
- becoming ready
-Message-ID: <YrupM8k8uG3HIRmt@T590>
-References: <20220628222131.14780-1-bvanassche@acm.org>
- <20220628222131.14780-3-bvanassche@acm.org>
+        with ESMTP id S229475AbiF2Fkc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Jun 2022 01:40:32 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FD224F0D;
+        Tue, 28 Jun 2022 22:40:31 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 1586067373; Wed, 29 Jun 2022 07:40:28 +0200 (CEST)
+Date:   Wed, 29 Jun 2022 07:40:27 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>, hch@lst.de,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
+        iommu@lists.linux.dev, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com, joro@8bytes.org, will@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        m.szyprowski@samsung.com, robin.murphy@arm.com
+Subject: Re: [PATCH v4 5/5] libata-scsi: Cap ata_device->max_sectors
+ according to shost->max_sectors
+Message-ID: <20220629054027.GB16297@lst.de>
+References: <1656343521-62897-1-git-send-email-john.garry@huawei.com> <1656343521-62897-6-git-send-email-john.garry@huawei.com> <b69c6112-98b7-3890-9d11-bb321a7c877a@opensource.wdc.com> <6619638c-52e8-cb67-c56c-9c9d38c18161@huawei.com> <ba59a0da-a982-e3eb-1cb7-6e60f80fd319@opensource.wdc.com> <38ae1cc8-1411-bb54-e082-0f7b91cb9e63@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220628222131.14780-3-bvanassche@acm.org>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <38ae1cc8-1411-bb54-e082-0f7b91cb9e63@huawei.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 03:21:30PM -0700, Bart Van Assche wrote:
-> If a logical unit reports that it is becoming ready, retry the command
-> after a delay instead of retrying immediately.
-> 
-> Cc: Ming Lei <ming.lei@redhat.com>
-> Cc: Hannes Reinecke <hare@suse.de>
-> Cc: John Garry <john.garry@huawei.com>
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/scsi_error.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-> index 49ef864df581..fb7e363c4c00 100644
-> --- a/drivers/scsi/scsi_error.c
-> +++ b/drivers/scsi/scsi_error.c
-> @@ -625,10 +625,10 @@ enum scsi_disposition scsi_check_sense(struct scsi_cmnd *scmd)
->  			return NEEDS_RETRY;
->  		/*
->  		 * if the device is in the process of becoming ready, we
-> -		 * should retry.
-> +		 * should retry after a delay.
->  		 */
->  		if ((sshdr.asc == 0x04) && (sshdr.ascq == 0x01))
-> -			return NEEDS_RETRY;
-> +			return ADD_TO_MLQUEUE;
+On Tue, Jun 28, 2022 at 12:33:58PM +0100, John Garry wrote:
+> Well Christoph originally offered to take this series via the dma-mapping 
+> tree.
+>
+> @Christoph, is that still ok with you? If so, would you rather I send this 
+> libata patch separately?
 
-The above code & commit log just said changing to retry after a delay, but not
-explains why, care to document reason why the delay is useful?
-
-Thanks
-Ming
-
+The offer still stands, and I don't really care where the libata
+patch is routed.  Just tell me what you prefer.
