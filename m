@@ -2,268 +2,145 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48701560FAD
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jun 2022 05:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495A9560FEF
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jun 2022 06:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbiF3DdY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Jun 2022 23:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
+        id S230355AbiF3EQL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Jun 2022 00:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbiF3DdR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Jun 2022 23:33:17 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3546310541;
-        Wed, 29 Jun 2022 20:33:11 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 136so11788815pfy.10;
-        Wed, 29 Jun 2022 20:33:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=LD9+LKe3uS0Sb8A9xgYkUVoA3AVOOFQp9Gn9fGnfF/k=;
-        b=QnaqhU/fYGHEzzbOIPM8oBRiB3tAbEc/baWflW1vTUGBtpiMhXLeCyfsLExK4WL5Mt
-         39qRkiUAff9wEKw0tKTvUnkjzz2JiDakw8+iTi/ReL0+reNxogjyCTlJ//QwfVEUagR3
-         jVKaTbiD84IAxTI6NBgd61iDXl/QNy+O/gr5E9N/99j/OQWoTo+ajfwE76rdt+9R6aT3
-         BVti6inxERl0MaBsp9jNOkjvV0Gxs1mfOEf7yweRT7yV6gbl1iAmE3Q51UNcT8VtBCcA
-         Ftu+Xs6LsNtd1WCFP95ktAF6B61OoIhgDjrToJ2VtxOx9eqczuMjv9P+cIVVVI9gH0CO
-         WRag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=LD9+LKe3uS0Sb8A9xgYkUVoA3AVOOFQp9Gn9fGnfF/k=;
-        b=E6PHppiF3gEbubppBPuerA4+NSHISGi1Hf/DRW0tj1EBnwcYXwG+mXYHAYeKqmd5ws
-         rgxEN/VAXWDZgTESNWoyS0cmQz5OIUDSe+TtpvnqrfZWg8lZMyOberrMEDa0yWYlu5ER
-         PxnMVQCghDrBnYcdCaKvHIG0TZp2M7km+O7hJL/5FKIHHMzBEp57VBX/38U7fJmcxVtX
-         ytO7JpoYDjEP+alOoGxbRyq+4s7PDbKRTzQDslcAB80gdIOPzb1CISQU17TYH4W/16zk
-         oRrRNeb2+hyyWySVQVUHuw8sqBUn/UZa4TYaUdBoD+4nCDhx6gPYJBYUUzkVrsnceQ0x
-         c/AA==
-X-Gm-Message-State: AJIora/9OFwJqTi1noPSpwl3wBZGsiqOSgnUNmtflnwdaxohFZLOXbKT
-        fZHOGYugEbjakB1v2BGHVRw=
-X-Google-Smtp-Source: AGRyM1v7BW2A1s0vPAc1EU41PaoaKmcVZC2nGmfRVZXc4HeOzkQ7+qzlskrEx1EFeMhbM5P5jZuHnw==
-X-Received: by 2002:a63:6984:0:b0:40d:9ebe:5733 with SMTP id e126-20020a636984000000b0040d9ebe5733mr5841296pgc.170.1656559990657;
-        Wed, 29 Jun 2022 20:33:10 -0700 (PDT)
-Received: from xplor.waratah.dyndns.org (222-155-0-244-adsl.sparkbb.co.nz. [222.155.0.244])
-        by smtp.gmail.com with ESMTPSA id y11-20020a170902d64b00b0016782c55790sm12162761plh.232.2022.06.29.20.33.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jun 2022 20:33:10 -0700 (PDT)
-Received: by xplor.waratah.dyndns.org (Postfix, from userid 1000)
-        id E46503603FB; Thu, 30 Jun 2022 15:33:06 +1200 (NZST)
-From:   Michael Schmitz <schmitzmic@gmail.com>
-To:     linux-m68k@vger.kernel.org, arnd@kernel.org
-Cc:     linux-scsi@vger.kernel.org, geert@linux-m68k.org,
-        Michael Schmitz <schmitzmic@gmail.com>
-Subject: [PATCH v2 3/3] scsi - gvp11.c: convert m68k WD33C93 drivers to DMA API
-Date:   Thu, 30 Jun 2022 15:33:02 +1200
-Message-Id: <20220630033302.3183-4-schmitzmic@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220630033302.3183-1-schmitzmic@gmail.com>
-References: <20220630033302.3183-1-schmitzmic@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229512AbiF3EQJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Jun 2022 00:16:09 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7390732EE9
+        for <linux-scsi@vger.kernel.org>; Wed, 29 Jun 2022 21:16:06 -0700 (PDT)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220630041604epoutp01c477ec8100f01b3270926f795920e882~9SuAaj6sb0783807838epoutp01C
+        for <linux-scsi@vger.kernel.org>; Thu, 30 Jun 2022 04:16:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220630041604epoutp01c477ec8100f01b3270926f795920e882~9SuAaj6sb0783807838epoutp01C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1656562564;
+        bh=DZoUVfy5aUPNeZ5oLtZlbxhLYaJtK9AlkneUo9epumM=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=DUUZJlXPEfY0/sBya+VF/7YACKNHzzA3pX65kD5MJVuvP6bcdmKzkL1taGUH/obGZ
+         fAm8pu7hfTAXjOcQRtwmO32FEKoMF+AsP4+Xm0k7QR0HArwVAmoisR4Xbe7V0t7owF
+         4jkvzIpcA0NEuCVHOgdEIuy2BM/srPSzlQ4OyDKw=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20220630041603epcas1p39c428f856066d6282b0f1d7ad886f7a9~9St-z80E32840228402epcas1p3U;
+        Thu, 30 Jun 2022 04:16:03 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.36.227]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4LYQ4M4668z4x9Pw; Thu, 30 Jun
+        2022 04:16:03 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A4.7E.09661.3832DB26; Thu, 30 Jun 2022 13:16:03 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220630041602epcas1p3f3427b4ceac68f8325d3f89bc8635603~9St-KPOyX2821528215epcas1p3M;
+        Thu, 30 Jun 2022 04:16:02 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220630041602epsmtrp2d00ad6178ab1c937dbd9bd0017e43d75~9St-JWdM32097120971epsmtrp2x;
+        Thu, 30 Jun 2022 04:16:02 +0000 (GMT)
+X-AuditID: b6c32a37-2cfff700000025bd-58-62bd23836131
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        92.B7.08905.2832DB26; Thu, 30 Jun 2022 13:16:02 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.253.101.71]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220630041602epsmtip1b467428961970a7dd5abfc55eaa4f3fd~9St_43dAT1966919669epsmtip1B;
+        Thu, 30 Jun 2022 04:16:02 +0000 (GMT)
+From:   Seunghui Lee <sh043.lee@samsung.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     grant.jung@samsung.com, jt77.jang@samsung.com,
+        dh0421.hwang@samsung.com, junwoo80.lee@samsung.com,
+        jangsub.yi@samsung.com, cw9316.lee@samsung.com,
+        sh8267.baek@samsung.com, wkon.kim@samsung.com,
+        Seunghui Lee <sh043.lee@samsung.com>
+Subject: [PATCH] scsi: ufs: no sw reset after last linkstartup fail
+Date:   Thu, 30 Jun 2022 13:48:04 +0900
+Message-Id: <20220630044804.6080-1-sh043.lee@samsung.com>
+X-Mailer: git-send-email 2.29.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAJsWRmVeSWpSXmKPExsWy7bCmgW6z8t4kg+tz5CwezNvGZvHy51U2
+        i2kffjJbzDjVxmqx79pJdotff9ezW3RsncxksejGNiaLHc/PsFvs+tvMZHF51xw2i+7rO9gs
+        lh//x2TR9Gcfi8W1MydYLTZf+sbiIOBx+Yq3x4RFBxg9Pj69xeLRt2UVo8fnTXIe7Qe6mQLY
+        orJtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4DuVlIo
+        S8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBXoFSfmFpfmpevlpZZYGRoYGJkCFSZk
+        Zxx7Zlpwgr3i6uZHTA2MvWxdjJwcEgImEu/vzAWyuTiEBHYwSnyfc5QdwvnEKLGx8SwrhPON
+        UeLq04OsMC0nH51mArGFBPYyShxdZAdR9JlRYvnEFrAEm4CWxPRNW5hAEiICm4ASC2awgDjM
+        Ah8YJX71rQSrEhZwllizeRnYJSwCqhJXDu0GKuLg4BWwlJgxtRZim7zEn/s9zCA2r4CgxMmZ
+        T1hAbGagePPW2cwgMyUEZnJIrLs/Geo8F4mL889C2cISr45vYYewpSQ+v9sL9XWxRNu/f8wQ
+        doXEwb4vULaxxKfPnxlBbmAW0JRYv0sfIqwosfP3XEaIvXwS7772sIKUSAjwSnS0CUGUKEu8
+        fLSMCcKWlFjSfgtqoofEtlMXWSGBFStxdNk/lgmM8rOQfDMLyTezEBYvYGRexSiWWlCcm55a
+        bFhgDI/U5PzcTYzgpKtlvoNx2tsPeocYmTgYDzFKcDArifAuPLMzSYg3JbGyKrUoP76oNCe1
+        +BCjKTB4JzJLiSbnA9N+Xkm8oYmlgYmZkYmFsaWxmZI476pppxOFBNITS1KzU1MLUotg+pg4
+        OKUamNhF2oIqrbeGLQ+KEDQzrvna37Vr86Qqp5jagDOv698tjuHub23tK7oysaVy36Xly1W4
+        Nk4vVNznIMOyoLhEy9w1QqDjFtePvNotCQLbUhISpqTsmB0Q/3brzrCAKQqe3XsZDhy0zK18
+        OUdG8NWPVfyL+ookAw+dXtjwalmuKW9R9NxyOwPutI3XG9v5m2qKJffmqRUcUlf+XXinTHxB
+        wKJb6xkff7n5cH+4b+yBvt0u3pvCoxd/eDtl0zufKzq7f9+fvXvW6Rqx/b9CleKyuEQSXmk+
+        NVFYyK74sKp8y9KZlYsTI5aY/JNXeblH+ke27trjeuzTtkaz/PeYKKgn+DN//yo15VWCe7Rf
+        dAfqK7EUZyQaajEXFScCAL/Lj3RDBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHLMWRmVeSWpSXmKPExsWy7bCSnG6T8t4kg6MrTCwezNvGZvHy51U2
+        i2kffjJbzDjVxmqx79pJdotff9ezW3RsncxksejGNiaLHc/PsFvs+tvMZHF51xw2i+7rO9gs
+        lh//x2TR9Gcfi8W1MydYLTZf+sbiIOBx+Yq3x4RFBxg9Pj69xeLRt2UVo8fnTXIe7Qe6mQLY
+        orhsUlJzMstSi/TtErgyjj0zLTjBXnF18yOmBsZeti5GTg4JAROJk49OM3UxcnEICexmlLjY
+        vJAdIiEpsfjRQ6AiDiBbWOLw4WKQsJDAR0aJlnnVIDabgJbE9E1bwHpFBHYxSsyY+JYRxGEW
+        +MUosWPqMrANwgLOEms2Q9gsAqoSVw7tZgEZyitgKTFjai3ELnmJP/d7mEFsXgFBiZMzn7CA
+        2MxA8eats5knMPLNQpKahSS1gJFpFaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZGcBRo
+        ae5g3L7qg94hRiYOxkOMEhzMSiK8C8/sTBLiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6HrZLyQ
+        QHpiSWp2ampBahFMlomDU6qByXf3bmGHq5dNMs9WcVbuUU/MV7/h5CUm9u1Og3Pv6eTd/RLL
+        vk8+9T4k3PnVp0h+v9vfAtLu9rOUHtZ9M6VWpzBHOOf/ncybMpr74qWnf5//18b2UGgNb/RF
+        Ho29v2TE4plPd2stvvxktepbob1xHlPfNG/+cky9YM5TlhPcH32jjjJNbS9rWTp5QWvKp2SZ
+        syGKFrePO/RzBbh9/lQwf9L9m3/Lnn+0dFQ3mincayp7wi2+JuPRw5X7Jm5QvcSb4CY3zTfK
+        KyN63+MJ0pI+Of8lnX1bFn0wtv99tjqoMn93wVH22LPPJs+9+7XyjPnyK7WfrfOzI27vvmC8
+        1jFhReC9r1u9RELsXugpaM4oUWIpzkg01GIuKk4EAPi654TxAgAA
+X-CMS-MailID: 20220630041602epcas1p3f3427b4ceac68f8325d3f89bc8635603
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220630041602epcas1p3f3427b4ceac68f8325d3f89bc8635603
+References: <CGME20220630041602epcas1p3f3427b4ceac68f8325d3f89bc8635603@epcas1p3.samsung.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use dma_map_single() for gvp11 driver (leave bounce buffer
-logic unchanged).
+Host driver resets the host(ufshcd_hba_enable) after last linkstartup
+command failed. All of the member or host dump after linkstartup fail are
+reset value because of sw reset.
 
-Use dma_set_mask_and_coherent() to avoid explicit cache
-flushes.
-
-Compile-tested only.
-
-CC: linux-scsi@vger.kernel.org
-Link: https://lore.kernel.org/r/6d1d88ee-1cf6-c735-1e6d-bafd2096e322@gmail.com
-Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-
---
-
-Changes from v1:
-
-Arnd Bergmann:
-- reorder bounce buffer copy and dma mapping
+Signed-off-by: Junwoo Lee <junwoo80.lee@samsung.com>
+Signed-off-by: Seunghui Lee <sh043.lee@samsung.com>
 ---
- drivers/scsi/gvp11.c | 95 +++++++++++++++++++++++++++++++++++---------
- 1 file changed, 77 insertions(+), 18 deletions(-)
+ drivers/ufs/core/ufshcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/gvp11.c b/drivers/scsi/gvp11.c
-index 2f6c56aabe1d..e8b7a09eb8c7 100644
---- a/drivers/scsi/gvp11.c
-+++ b/drivers/scsi/gvp11.c
-@@ -26,8 +26,12 @@
- struct gvp11_hostdata {
- 	struct WD33C93_hostdata wh;
- 	struct gvp11_scsiregs *regs;
-+	struct device *dev;
- };
- 
-+#define DMA_DIR(d)   ((d == DATA_OUT_DIR) ? DMA_TO_DEVICE : DMA_FROM_DEVICE)
-+#define TO_DMA_MASK(m)	((~(m & 0xfffffff0))-1)
-+
- static irqreturn_t gvp11_intr(int irq, void *data)
- {
- 	struct Scsi_Host *instance = data;
-@@ -54,17 +58,33 @@ void gvp11_setup(char *str, int *ints)
- static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
- {
- 	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(cmd);
-+	unsigned long len = scsi_pointer->this_residual;
- 	struct Scsi_Host *instance = cmd->device->host;
- 	struct gvp11_hostdata *hdata = shost_priv(instance);
- 	struct WD33C93_hostdata *wh = &hdata->wh;
- 	struct gvp11_scsiregs *regs = hdata->regs;
- 	unsigned short cntr = GVP11_DMAC_INT_ENABLE;
--	unsigned long addr = virt_to_bus(scsi_pointer->ptr);
-+	dma_addr_t addr;
- 	int bank_mask;
- 	static int scsi_alloc_out_of_range = 0;
- 
-+	addr = dma_map_single(hdata->dev, scsi_pointer->ptr,
-+			      len, DMA_DIR(dir_in));
-+	if (dma_mapping_error(hdata->dev, addr)) {
-+		dev_warn(hdata->dev, "cannot map SCSI data block %p\n",
-+			 scsi_pointer->ptr);
-+		return 1;
-+	}
-+	scsi_pointer->dma_handle = addr;
-+
- 	/* use bounce buffer if the physical address is bad */
- 	if (addr & wh->dma_xfer_mask) {
-+		/* drop useless mapping */
-+		dma_unmap_single(hdata->dev, scsi_pointer->dma_handle,
-+				 scsi_pointer->this_residual,
-+				 DMA_DIR(dir_in));
-+		scsi_pointer->dma_handle = (dma_addr_t) NULL;
-+
- 		wh->dma_bounce_len = (scsi_pointer->this_residual + 511) & ~0x1ff;
- 
- 		if (!scsi_alloc_out_of_range) {
-@@ -87,10 +107,32 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
- 			wh->dma_buffer_pool = BUF_CHIP_ALLOCED;
- 		}
- 
--		/* check if the address of the bounce buffer is OK */
--		addr = virt_to_bus(wh->dma_bounce_buffer);
-+		if (!dir_in) {
-+			/* copy to bounce buffer for a write */
-+			memcpy(wh->dma_bounce_buffer, scsi_pointer->ptr,
-+			       scsi_pointer->this_residual);
-+		}
-+
-+		if (wh->dma_buffer_pool == BUF_SCSI_ALLOCED) {
-+		/* will flush/invalidate cache for us */
-+			addr = dma_map_single(hdata->dev,
-+					      wh->dma_bounce_buffer,
-+					      wh->dma_bounce_len,
-+					      DMA_DIR(dir_in));
-+			/* can't map buffer; use PIO */
-+			if (dma_mapping_error(hdata->dev, addr)) {
-+				dev_warn(hdata->dev,
-+					 "cannot map bounce buffer %p\n",
-+					 wh->dma_bounce_buffer);
-+				return 1;
-+			}
-+		}
- 
- 		if (addr & wh->dma_xfer_mask) {
-+			/* drop useless mapping */
-+			dma_unmap_single(hdata->dev, scsi_pointer->dma_handle,
-+					 scsi_pointer->this_residual,
-+					 DMA_DIR(dir_in));
- 			/* fall back to Chip RAM if address out of range */
- 			if (wh->dma_buffer_pool == BUF_SCSI_ALLOCED) {
- 				kfree(wh->dma_bounce_buffer);
-@@ -108,15 +150,19 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
- 				return 1;
- 			}
- 
--			addr = virt_to_bus(wh->dma_bounce_buffer);
-+			if (!dir_in) {
-+				/* copy to bounce buffer for a write */
-+				memcpy(wh->dma_bounce_buffer, scsi_pointer->ptr,
-+				       scsi_pointer->this_residual);
-+			}
-+			/* chip RAM can be mapped to phys. address directly */
-+			addr = virt_to_phys(wh->dma_bounce_buffer);
-+			/* no need to flush/invalidate cache */
- 			wh->dma_buffer_pool = BUF_CHIP_ALLOCED;
- 		}
-+		/* finally, have OK mapping (punted for PIO else) */
-+		scsi_pointer->dma_handle = addr;
- 
--		if (!dir_in) {
--			/* copy to bounce buffer for a write */
--			memcpy(wh->dma_bounce_buffer, scsi_pointer->ptr,
--			       scsi_pointer->this_residual);
--		}
- 	}
- 
- 	/* setup dma direction */
-@@ -129,13 +175,7 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
- 	/* setup DMA *physical* address */
- 	regs->ACR = addr;
- 
--	if (dir_in) {
--		/* invalidate any cache */
--		cache_clear(addr, scsi_pointer->this_residual);
--	} else {
--		/* push any dirty cache */
--		cache_push(addr, scsi_pointer->this_residual);
--	}
-+	/* no more cache flush here - dma_map_single() takes care */
- 
- 	bank_mask = (~wh->dma_xfer_mask >> 18) & 0x01c0;
- 	if (bank_mask)
-@@ -161,6 +201,11 @@ static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
- 	/* remove write bit from CONTROL bits */
- 	regs->CNTR = GVP11_DMAC_INT_ENABLE;
- 
-+	if (wh->dma_buffer_pool == BUF_SCSI_ALLOCED)
-+		dma_unmap_single(hdata->dev, scsi_pointer->dma_handle,
-+				 scsi_pointer->this_residual,
-+				 DMA_DIR(wh->dma_dir));
-+
- 	/* copy from a bounce buffer, if necessary */
- 	if (status && wh->dma_bounce_buffer) {
- 		if (wh->dma_dir && SCpnt)
-@@ -287,6 +332,13 @@ static int gvp11_probe(struct zorro_dev *z, const struct zorro_device_id *ent)
- 
- 	default_dma_xfer_mask = ent->driver_data;
- 
-+	if (dma_set_mask_and_coherent(&z->dev,
-+		TO_DMA_MASK(default_dma_xfer_mask))) {
-+		dev_warn(&z->dev, "cannot use DMA mask %x\n",
-+			 TO_DMA_MASK(default_dma_xfer_mask));
-+		return -ENODEV;
-+	}
-+
- 	/*
- 	 * Rumors state that some GVP ram boards use the same product
- 	 * code as the SCSI controllers. Therefore if the board-size
-@@ -327,9 +379,16 @@ static int gvp11_probe(struct zorro_dev *z, const struct zorro_device_id *ent)
- 	wdregs.SCMD = &regs->SCMD;
- 
- 	hdata = shost_priv(instance);
--	if (gvp11_xfer_mask)
-+	if (gvp11_xfer_mask) {
- 		hdata->wh.dma_xfer_mask = gvp11_xfer_mask;
--	else
-+		if (dma_set_mask_and_coherent(&z->dev,
-+			TO_DMA_MASK(gvp11_xfer_mask))) {
-+			dev_warn(&z->dev, "cannot use DMA mask %x\n",
-+				 TO_DMA_MASK(gvp11_xfer_mask));
-+			error = -ENODEV;
-+			goto fail_check_or_alloc;
-+		}
-+	} else
- 		hdata->wh.dma_xfer_mask = default_dma_xfer_mask;
- 
- 	hdata->wh.no_sync = 0xff;
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 7c1d7bb9c579..2cdc14675443 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -4753,7 +4753,7 @@ static int ufshcd_link_startup(struct ufs_hba *hba)
+ 		 * but we can't be sure if the link is up until link startup
+ 		 * succeeds. So reset the local Uni-Pro and try again.
+ 		 */
+-		if (ret && ufshcd_hba_enable(hba)) {
++		if (ret && retries && ufshcd_hba_enable(hba)) {
+ 			ufshcd_update_evt_hist(hba,
+ 					       UFS_EVT_LINK_STARTUP_FAIL,
+ 					       (u32)ret);
 -- 
-2.17.1
+2.29.0
 
