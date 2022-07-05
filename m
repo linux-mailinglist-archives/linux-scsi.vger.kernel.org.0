@@ -2,85 +2,152 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91CD566374
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Jul 2022 08:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0704E56637B
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Jul 2022 08:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiGEGyP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Jul 2022 02:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S230072AbiGEG5f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Jul 2022 02:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiGEGyM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Jul 2022 02:54:12 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26284959B
-        for <linux-scsi@vger.kernel.org>; Mon,  4 Jul 2022 23:54:11 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31c8340a6f7so58408087b3.4
-        for <linux-scsi@vger.kernel.org>; Mon, 04 Jul 2022 23:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Queo7cdMLBRpaTu5Sc/SmhVPDMVL0zH+Ng8A8pwNRLQ=;
-        b=VsGity2DdqDD8LwLxtEJyw86QtfSDZXELPdE4X6pHWq42zwWUJmxrFw5N2IfMG26xd
-         qIqzK98T3R4rYXJ7HcesTzkxmTKnXyhrcL1S2oh59kxFIrQhEfGQVfPLsGFUTFlWd1un
-         ss/tKq0JP1YQLSzqLN/1agR5bLV+navkqOOwk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Queo7cdMLBRpaTu5Sc/SmhVPDMVL0zH+Ng8A8pwNRLQ=;
-        b=RxeSPLvQfBbLvYdlJutIgVWxsm7NAxmekLVYJAn30m60Z/q47rzT5XbcMZUA1SQELP
-         xdreahARCJHDCOz3u+Fb2udiXKIgkTMcBz12FaxYO3EBM6pAD+I3UIFiMOW9vrKG0CjB
-         6epyiIX7DnWJ6FcAlr9j+UhxDuz5g6sP4RqQOLzKmes3WETwUaFLSTLLEnBBHWwGJmTV
-         3FEhblFTZpyEXrw0k4GqkWNbWOhY+QK4LSmy13ErkRWinsfPYUX/XPzXkYU6GgC2qQY6
-         uIO8zHLSj8FNpE9WP2xvlmG5iOe4ZC5+5OwtMkFrj7firfz5O+6ijMA05M0GYQ8aSs2i
-         gXaQ==
-X-Gm-Message-State: AJIora+JJ8fyx/h3wAvT6+St6ZQH8KLKtYSIuTkUekmUQiA9biw+vsau
-        x0/UW1HGJv5grozsJxxI9tQHxHRJg5+jHmuuhz9UAw==
-X-Google-Smtp-Source: AGRyM1uYahqfKP3lgPn/sQ8wD9kpteYhZ+/WekxkCP8fq6Mfa5wNY9A0kgr97SUsb0jkUqgAtR/7KRXQXxlbxysGCJM=
-X-Received: by 2002:a81:c8b:0:b0:31c:7d90:ff0d with SMTP id
- 133-20020a810c8b000000b0031c7d90ff0dmr19629109ywm.266.1657004050457; Mon, 04
- Jul 2022 23:54:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220704092721.1.Ib5ebec952d9a59f5c69c89b694777f517d22466d@changeid>
- <fd3bb4b5-0a19-2dc0-c4b5-60f32abce508@acm.org>
-In-Reply-To: <fd3bb4b5-0a19-2dc0-c4b5-60f32abce508@acm.org>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Tue, 5 Jul 2022 16:53:59 +1000
-Message-ID: <CAONX=-e+4+92aY=g-_Y-8PZmk1ALkrj7BDADKaSDE9fNJfR96A@mail.gmail.com>
-Subject: Re: [PATCH] scsi: ufs: ufs-pci: Enable WriteBooster capability on ADL
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        with ESMTP id S229747AbiGEG5d (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Jul 2022 02:57:33 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC4411143
+        for <linux-scsi@vger.kernel.org>; Mon,  4 Jul 2022 23:57:28 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220705065723epoutp03b8e49063f2b0d1f08fc672583b757dd7~_3JSj_2A50369003690epoutp03g
+        for <linux-scsi@vger.kernel.org>; Tue,  5 Jul 2022 06:57:23 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220705065723epoutp03b8e49063f2b0d1f08fc672583b757dd7~_3JSj_2A50369003690epoutp03g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1657004243;
+        bh=+fKg/3rfWFNBDpULkhIiwwgM+mtM/eW4Tg7+cCOJaEc=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=JWN/kvpfPr1QOnAFWGkhDBmGrQmxg/V1mYOxf1q32ws+Gc9UuibhCXgqwDTTN1nIN
+         tw4Ysh4SLrGRHNAkaodhnjPi80WgETPMqbEyRmsm8uIRRtorWTY3eeYmmqO1p48HZz
+         nINS0MEUWjZX/Tbor3Qx050QSvPbXhk3ANfNN9vY=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220705065723epcas2p150d3b8e7b892ef89e09134996ca5ff74~_3JSBmuLy0199601996epcas2p12;
+        Tue,  5 Jul 2022 06:57:23 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.91]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4LcYQB6Zm1z4x9QG; Tue,  5 Jul
+        2022 06:57:22 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        14.A0.09666.2D0E3C26; Tue,  5 Jul 2022 15:57:22 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220705065722epcas2p3fad39b3edf1a0fd1789de77997bf5728~_3JRGYhf01445414454epcas2p3b;
+        Tue,  5 Jul 2022 06:57:22 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220705065722epsmtrp1cad036feff46b161f803f3b919c154f1~_3JRFoGw-0059400594epsmtrp1j;
+        Tue,  5 Jul 2022 06:57:22 +0000 (GMT)
+X-AuditID: b6c32a45-471ff700000025c2-14-62c3e0d2574e
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E3.99.08802.2D0E3C26; Tue,  5 Jul 2022 15:57:22 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.51]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220705065722epsmtip16c46ac8ff9059f9a714701d67a4c9c5b~_3JQ1jft63051230512epsmtip1K;
+        Tue,  5 Jul 2022 06:57:22 +0000 (GMT)
+From:   Chanho Park <chanho61.park@samsung.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: [PATCH 0/3] change exynos ufs phy control
+Date:   Tue,  5 Jul 2022 15:54:37 +0900
+Message-Id: <20220705065440.117864-1-chanho61.park@samsung.com>
+X-Mailer: git-send-email 2.37.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNJsWRmVeSWpSXmKPExsWy7bCmme6lB4eTDL4/17N4MG8bm8W0Dz+Z
+        LS7v17ZYdGMbk8WFpz1sFntfb2W32PT4GqvFhFXfWCxmnN/HZNF9fQebxfLj/5gsdt45wezA
+        43H5irfHplWdbB53ru1h85iw6ACjx+Yl9R4fn95i8ejbsorR4/iN7UwenzfJBXBGZdtkpCam
+        pBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAB2spFCWmFMKFApI
+        LC5W0rezKcovLUlVyMgvLrFVSi1IySkwL9ArTswtLs1L18tLLbEyNDAwMgUqTMjOaFr5j62g
+        lbOi/cpT1gbG2exdjJwcEgImEu0vj7F0MXJxCAnsYJTYf66fDcL5xCix9cAMVgjnM6PEzadn
+        WWFaNn6ZClW1i1HiWd96KOcjo0TH/H4WkCo2AV2JLc9fMYIkRAR2MEncapkItoVZYDOjRPvV
+        nWwgVcICRhKnZz0F62ARUJWY++MaI4jNK2Avca15EiPEPnmJDQe3s0DEBSVOznwCZjMDxZu3
+        zmYGGSohMJFDYtPHx0A/cQA5LhJbv8lA9ApLvDq+BepVKYmX/W1QdrHE0lmfmCB6GxglLm/7
+        xQaRMJaY9aydEWQOs4CmxPpd+hAjlSWO3IJayyfRcfgv1CZeiY42IYhGdYkD26ezQNiyEt1z
+        PkNDy0OicUYD2HAhgViJM8+msU1glJ+F5JlZSJ6ZhbB3ASPzKkax1ILi3PTUYqMCQ3i0Jufn
+        bmIEp1ot1x2Mk99+0DvEyMTBeIhRgoNZSYR31aSDSUK8KYmVValF+fFFpTmpxYcYTYHBO5FZ
+        SjQ5H5js80riDU0sDUzMzAzNjUwNzJXEeb1SNiQKCaQnlqRmp6YWpBbB9DFxcEo1MHUUvF1y
+        +roSq+ehSzt+TbztUsSswXKxsG71t9cs8UxRvB3cbWJaNkI73hxwivrDU+To7v5U/n7t1tYz
+        wfemte9sK/o/+0GBzz0tEfkmd7HMazL2Z1LzJn88W9/XKy6cVX3L1yehbrurBT+Hxezed93z
+        3c8anb7keqj2IsOVnz9zkpvWm9SYbmU8kJK6+GlQ6fR54Q3ty1/Yiq97w9j82fDC1bxrdiVi
+        IsvKPuq/uJXIte1Z5lzdqA1PhOJyxOwjnV+V3KjZvPjUys2mhvY/3I+8FlwyyVg8MHzuguC5
+        M7VqDysLB1fr7+1bc2l+cq7SlqDiWzO8/ltKnO7NnvxbfVfTJbPcQJM8RhXHlvNxSizFGYmG
+        WsxFxYkAH39Rgz4EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNLMWRmVeSWpSXmKPExsWy7bCSnO6lB4eTDNbc57Z4MG8bm8W0Dz+Z
+        LS7v17ZYdGMbk8WFpz1sFntfb2W32PT4GqvFhFXfWCxmnN/HZNF9fQebxfLj/5gsdt45wezA
+        43H5irfHplWdbB53ru1h85iw6ACjx+Yl9R4fn95i8ejbsorR4/iN7UwenzfJBXBGcdmkpOZk
+        lqUW6dslcGU0rfzHVtDKWdF+5SlrA+Ns9i5GTg4JAROJjV+msnUxcnEICexglNi+/icLREJW
+        4tm7HVBFwhL3W46wQhS9Z5S4tuc+M0iCTUBXYsvzV4wgCRGBPUwSX+ZtYAFxmAW2M0pMeXsd
+        bJSwgJHE6VlPwWwWAVWJuT+uMYLYvAL2EteaJzFCrJCX2HBwOwtEXFDi5MwnYDYzULx562zm
+        CYx8s5CkZiFJLWBkWsUomVpQnJueW2xYYJSXWq5XnJhbXJqXrpecn7uJERz+Wlo7GPes+qB3
+        iJGJg/EQowQHs5II76pJB5OEeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkvJJCeWJKanZpa
+        kFoEk2Xi4JRqYLJ//Ind+eX93397tG1DZz/3CrE1L36pq9Mnyu5uKGcwPUKjcNEz00z/+0vO
+        W4ifbctznH9v/WFr22/qnhs0nxdIHhRZ63X4r/vEIluvcqm48mlzQyfprbzzXvncr/f216Kf
+        3P/0467V2SZFjbnF0WEn2HfN+ix94PXX43/sKg78E2nI/vTq6jGp0pBDq4Qev//zbQvvap4J
+        PgskZH5KPLqyvfKk1K7/1qIfD7I/ehXc8e30xB49sXuc7TPKm7P1U+eE8oT+d8jofjlBdubu
+        DXO0H4Tcebwiy019c7Xdp5r3RyR7gottc566ZUi4zi4L9TUyX1KR+veQ60J7bUeL9c2Kj3fp
+        KFXxtG7s2dRx/LQSS3FGoqEWc1FxIgAciYao7gIAAA==
+X-CMS-MailID: 20220705065722epcas2p3fad39b3edf1a0fd1789de77997bf5728
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220705065722epcas2p3fad39b3edf1a0fd1789de77997bf5728
+References: <CGME20220705065722epcas2p3fad39b3edf1a0fd1789de77997bf5728@epcas2p3.samsung.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Thanks Bart.
-Sent v2 patch with the commit message fixed.
---Daniil
+Since commit 1599069a62c6 ("phy: core: Warn when phy_power_on is called
+before phy_init"), below warning has been reported.
 
-On Mon, Jul 4, 2022 at 1:00 PM Bart Van Assche <bvanassche@acm.org> wrote:
->
-> On 7/3/22 16:28, Daniil Lunev wrote:
-> > Sets the WrtieBooster capability flag when ADL's UFS controller is used.
->             ^^^^^^^^^^^^
-> WriteBooster?
->
-> Otherwise this patch looks fine to me.
->
-> Thanks,
->
-> Bart.
+phy_power_on was called before phy_init
+
+To address this, we need to remove phy_power_on from
+exynos_ufs_phy_init.
+
+The first patch is for changing phy clocks manipulation from controlling
+each symbol/ref clocks to clk_bulk APIs. The second patch is for making
+power on/off sequences between pmu isolation and clk control.
+Finally, the third patch changes the phy on/off and init sequences from
+ufs-exynos host driver.
+
+Chanho Park (3):
+  phy: samsung-ufs: convert phy clk usage to clk_bulk API
+  phy: samsung-ufs: ufs: change phy on/off control
+  ufs: ufs-exynos: change ufs phy control sequence
+
+ drivers/phy/samsung/phy-exynos7-ufs.c      |   7 +-
+ drivers/phy/samsung/phy-exynosautov9-ufs.c |   7 +-
+ drivers/phy/samsung/phy-fsd-ufs.c          |   7 +-
+ drivers/phy/samsung/phy-samsung-ufs.c      | 121 ++++++---------------
+ drivers/phy/samsung/phy-samsung-ufs.h      |  10 +-
+ drivers/ufs/host/ufs-exynos.c              |  13 ++-
+ 6 files changed, 63 insertions(+), 102 deletions(-)
+
+-- 
+2.37.0
+
