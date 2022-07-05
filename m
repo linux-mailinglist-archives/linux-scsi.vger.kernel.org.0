@@ -2,263 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98EB5661E7
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Jul 2022 05:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0991F566349
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Jul 2022 08:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbiGEDi2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Jul 2022 23:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S229696AbiGEGm3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Jul 2022 02:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbiGEDi0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Jul 2022 23:38:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C43F3113B
-        for <linux-scsi@vger.kernel.org>; Mon,  4 Jul 2022 20:38:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656992303;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jYELZJdJtbBBZ8E1ctzFuWbeRh51icMF2i3QiP3BTlM=;
-        b=UnZQAGtFlb+zeJoaWaoGvSc3SpduY+3G7NbA8z6H1DIJE6uI0uIJuf5rxOF+KBXrZC3s1j
-        tDnQE202Ojhh+YYTqwMoWFPRZRhy8BWizcpJX+CtlZ+2wP7l6id3FthrlO3aDP/bthaMUE
-        piRLOCYYm0xJyubNpYd1vpEAlPbJYgc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-350-hC1a_oBfN8S4gxtInRXxFw-1; Mon, 04 Jul 2022 23:38:19 -0400
-X-MC-Unique: hC1a_oBfN8S4gxtInRXxFw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4CE2811E75;
-        Tue,  5 Jul 2022 03:38:18 +0000 (UTC)
-Received: from T590 (ovpn-8-22.pek2.redhat.com [10.72.8.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2766C2166B26;
-        Tue,  5 Jul 2022 03:38:11 +0000 (UTC)
-Date:   Tue, 5 Jul 2022 11:38:06 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>, ming.lei@redhat.com
-Subject: Re: [PATCH v2 2/3] scsi: Make scsi_forget_host() wait for request
- queue removal
-Message-ID: <YsOyHnIydqVdRVnQ@T590>
-References: <20220630213733.17689-1-bvanassche@acm.org>
- <20220630213733.17689-3-bvanassche@acm.org>
+        with ESMTP id S229461AbiGEGm2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Jul 2022 02:42:28 -0400
+X-Greylist: delayed 2521 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Jul 2022 23:42:21 PDT
+Received: from mx5.ufrn.br (mx5.ufrn.br [177.20.144.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34C11B2
+        for <linux-scsi@vger.kernel.org>; Mon,  4 Jul 2022 23:42:21 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mx5.ufrn.br (Postfix) with ESMTP id 75B1C21DAA28;
+        Tue,  5 Jul 2022 02:45:53 -0300 (-03)
+Received: from mx5.ufrn.br ([127.0.0.1])
+        by localhost (mx5.ufrn.br [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id qJwiMrl81PCv; Tue,  5 Jul 2022 02:45:53 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by mx5.ufrn.br (Postfix) with ESMTP id 2928C21DAC40;
+        Tue,  5 Jul 2022 02:45:53 -0300 (-03)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mx5.ufrn.br 2928C21DAC40
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ccs.ufrn.br;
+        s=D408A1DC-9817-11E9-B0E2-982472FCD4FB; t=1656999953;
+        bh=Fs8aTUP98+pt97V/m4HkFhdQV6VCQAF9oT1XmgezGj8=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=BM0QYvcg4BXp2h614WVz/Thca46h+s6qv/jrohTH8gWpusg3d7tcpVLYnOVN0/u04
+         jDjd3joNC8N42kEZkoDTc/KEvWKZbtN8pFH6ZSh5pmBqeUKp3fxw7kGlSQowe76E+C
+         O1h0d5AaKboDhjVuofgi1bniJLGpcGADNguqQsygNbaRcM8II50bWqPbQtQrWNgE/E
+         JC3qpMOSxWnd08VaN4eWV0qK6diQ7216LlVdfTAnO033ymdlGM5huk9INrAUOBzgkD
+         dOFmn6M5cBNYeqOvzwMHSSP5cgojgSkNZso1R11BiY5E8MuLKpvRO2zS89AAVtqT9s
+         yy4AUMv0NRx4A==
+X-Virus-Scanned: amavisd-new at mx5.ufrn.br
+Received: from mx5.ufrn.br ([127.0.0.1])
+        by localhost (mx5.ufrn.br [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id IWXgsXZ-m3lu; Tue,  5 Jul 2022 02:45:53 -0300 (-03)
+Received: from [172.20.10.5] (unknown [102.89.38.162])
+        by mx5.ufrn.br (Postfix) with ESMTPSA id E9D2021DA68F;
+        Tue,  5 Jul 2022 02:45:18 -0300 (-03)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220630213733.17689-3-bvanassche@acm.org>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re: My Service -
+To:     Recipients <observatoriorh@ccs.ufrn.br>
+From:   "Mr. Charles W. Jackson Jr." <observatoriorh@ccs.ufrn.br>
+Date:   Tue, 05 Jul 2022 13:40:18 +0800
+Reply-To: tupperwareman@sisna.com
+Message-Id: <20220705054518.E9D2021DA68F@mx5.ufrn.br>
+X-Spam-Status: No, score=2.1 required=5.0 tests=ADVANCE_FEE_3_NEW_MONEY,
+        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HK_NAME_MR_MRS,
+        LOTS_OF_MONEY,MILLION_USD,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Jun 30, 2022 at 02:37:32PM -0700, Bart Van Assche wrote:
-> Prepare for freeing the host tag set earlier by making scsi_forget_host()
-> wait until all activity on the host tag set has stopped.
+Hello,
 
-I think it is correct to free the host tag during removing host.
+I am Mr. Charles W. Jackson Jr., the mega winner of $344.6 Million in Mega =
+Millions Jackpot, I am donating to 5 random individuals if you get this ema=
+il then your email was selected after a spin ball. I have spread most of my=
+ wealth over a number of charities and organizations. I have voluntarily de=
+cided to donate the sum of $3 Million USD to you as one of the selected 5, =
+to verify my winnings via YouTube page below.
 
-> 
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Ming Lei <ming.lei@redhat.com>
-> Cc: Hannes Reinecke <hare@suse.de>
-> Cc: John Garry <john.garry@huawei.com>
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/scsi_scan.c | 25 ++++++++++++++++++++++++-
->  1 file changed, 24 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-> index 5c3bb4ceeac3..c8331ccdde95 100644
-> --- a/drivers/scsi/scsi_scan.c
-> +++ b/drivers/scsi/scsi_scan.c
-> @@ -1961,6 +1961,16 @@ void scsi_scan_host(struct Scsi_Host *shost)
->  }
->  EXPORT_SYMBOL(scsi_scan_host);
->  
-> +/**
-> + * scsi_forget_host() - Remove all SCSI devices from a host.
-> + * @shost: SCSI host to remove devices from.
-> + *
-> + * Removes all SCSI devices that have not yet been removed. For the SCSI devices
-> + * for which removal started before scsi_forget_host(), wait until the
-> + * associated request queue has reached the "dead" state. In that state it is
-> + * guaranteed that no new requests will be allocated and also that no requests
-> + * are in progress anymore.
-> + */
->  void scsi_forget_host(struct Scsi_Host *shost)
->  {
->  	struct scsi_device *sdev;
-> @@ -1970,8 +1980,21 @@ void scsi_forget_host(struct Scsi_Host *shost)
->   restart:
->  	spin_lock_irq(shost->host_lock);
->  	list_for_each_entry(sdev, &shost->__devices, siblings) {
-> -		if (sdev->sdev_state == SDEV_DEL)
-> +		if (sdev->sdev_state == SDEV_DEL &&
-> +		    blk_queue_dead(sdev->request_queue)) {
->  			continue;
-> +		}
-> +		if (sdev->sdev_state == SDEV_DEL) {
-> +			get_device(&sdev->sdev_gendev);
-> +			spin_unlock_irq(shost->host_lock);
-> +
-> +			while (!blk_queue_dead(sdev->request_queue))
-> +				msleep(10);
+WATCH ME HERE: https://www.youtube.com/watch?v=3D0MUR8QEIMQI
 
-Thinking of further, this report on UAF on SRP resource and Changhui's
-report on UAF of host->hostt should belong to same kind of issue:
+THIS IS YOUR DONATION CODE: CJJ207162
 
-1) after scsi_remove_host() returns, either the HBA driver module can be
-unloaded and hostt can't be used, or any HBA resources can be freed, both
-may cause UAF in scsi_mq_exit_request, so moving freeing host tagset to
-scsi_remove_host() is correct.
+Reply with the DONATION CODE to this email: tupperwareman@sisna.com
 
-static void scsi_mq_exit_request()
-{
-	...
-    if (shost->hostt->exit_cmd_priv)
-		shost->hostt->exit_cmd_priv(shost, cmd);
-}
+Hope to make you and your family happy.
 
-
-2) checking request queue dead here isn't good, which not only relies
-on block layer implementation detail, but also can't avoid UAF on ->hostt,
-I'd suggest to fix them all. The attached patch may drain all sdevs, which
-can replace the 2nd patch if you don't mind, but the 3rd patch is still needed:
-
-
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index e1cb187402fd..6445718c2b18 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -189,6 +189,14 @@ void scsi_remove_host(struct Scsi_Host *shost)
- 	transport_unregister_device(&shost->shost_gendev);
- 	device_unregister(&shost->shost_dev);
- 	device_del(&shost->shost_gendev);
-+
-+	/*
-+	 * Once returning, the scsi LLD module can be unloaded, so we have
-+	 * to wait until our descendants are released, otherwise our host
-+	 * device reference can be grabbed by them, then use-after-free
-+	 * on shost->hostt will be triggered
-+	 */
-+	wait_for_completion(&shost->targets_completion);
- }
- EXPORT_SYMBOL(scsi_remove_host);
- 
-@@ -393,6 +401,7 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
- 	INIT_LIST_HEAD(&shost->starved_list);
- 	init_waitqueue_head(&shost->host_wait);
- 	mutex_init(&shost->scan_mutex);
-+	init_completion(&shost->targets_completion);
- 
- 	index = ida_simple_get(&host_index_ida, 0, 0, GFP_KERNEL);
- 	if (index < 0) {
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index 10e5bffc34aa..b6e6354da396 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -545,10 +545,8 @@ EXPORT_SYMBOL(scsi_device_get);
-  */
- void scsi_device_put(struct scsi_device *sdev)
- {
--	struct module *mod = sdev->host->hostt->module;
--
-+	module_put(sdev->host->hostt->module);
- 	put_device(&sdev->sdev_gendev);
--	module_put(mod);
- }
- EXPORT_SYMBOL(scsi_device_put);
- 
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 2ef78083f1ef..931333a48372 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -406,9 +406,14 @@ static void scsi_target_destroy(struct scsi_target *starget)
- static void scsi_target_dev_release(struct device *dev)
- {
- 	struct device *parent = dev->parent;
-+	struct Scsi_Host *shost = dev_to_shost(parent);
- 	struct scsi_target *starget = to_scsi_target(dev);
- 
- 	kfree(starget);
-+
-+	if (!atomic_dec_return(&shost->nr_targets))
-+		complete_all(&shost->targets_completion);
-+
- 	put_device(parent);
- }
- 
-@@ -521,6 +526,7 @@ static struct scsi_target *scsi_alloc_target(struct device *parent,
- 	starget->state = STARGET_CREATED;
- 	starget->scsi_level = SCSI_2;
- 	starget->max_target_blocked = SCSI_DEFAULT_TARGET_BLOCKED;
-+	atomic_inc(&shost->nr_targets);
-  retry:
- 	spin_lock_irqsave(shost->host_lock, flags);
- 
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index 94091d5281ba..28c51ef0ea54 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -449,12 +449,9 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
- 	struct scsi_vpd *vpd_pg80 = NULL, *vpd_pg83 = NULL;
- 	struct scsi_vpd *vpd_pg0 = NULL, *vpd_pg89 = NULL;
- 	unsigned long flags;
--	struct module *mod;
- 
- 	sdev = container_of(work, struct scsi_device, ew.work);
- 
--	mod = sdev->host->hostt->module;
--
- 	scsi_dh_release_device(sdev);
- 
- 	parent = sdev->sdev_gendev.parent;
-@@ -505,17 +502,11 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
- 
- 	if (parent)
- 		put_device(parent);
--	module_put(mod);
- }
- 
- static void scsi_device_dev_release(struct device *dev)
- {
- 	struct scsi_device *sdp = to_scsi_device(dev);
--
--	/* Set module pointer as NULL in case of module unloading */
--	if (!try_module_get(sdp->host->hostt->module))
--		sdp->host->hostt->module = NULL;
--
- 	execute_in_process_context(scsi_device_dev_release_usercontext,
- 				   &sdp->ew);
- }
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index 37718373defc..d0baffd62287 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -710,6 +710,9 @@ struct Scsi_Host {
- 	/* ldm bits */
- 	struct device		shost_gendev, shost_dev;
- 
-+	atomic_t nr_targets;
-+	struct completion   targets_completion;
-+
- 	/*
- 	 * Points to the transport data (if any) which is allocated
- 	 * separately
-
-
-Thanks,
-Ming
-
+Regards,
+Mr. Charles W. Jackson Jr.
