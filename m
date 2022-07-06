@@ -2,131 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D309A568E7E
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Jul 2022 18:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C470568F0D
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Jul 2022 18:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233268AbiGFP76 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 6 Jul 2022 11:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
+        id S233971AbiGFQZp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 6 Jul 2022 12:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232409AbiGFP7x (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Jul 2022 11:59:53 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F249021810;
-        Wed,  6 Jul 2022 08:59:52 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 266Fonb8001910;
-        Wed, 6 Jul 2022 15:59:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : sender :
- content-transfer-encoding : mime-version; s=pp1;
- bh=BX+n5fBYSAdWzK5Fv6TOs/uw1D1qZthzzBWrUrdtVRg=;
- b=K9n3jKjOA3vqHbidN58bGgSJHvFfMItEDVfALxoMfMKANt801PInv6rxBO38xdLf1IeP
- QpNyXhAJRv0BgW1lmNllgDf3tHReHAVuiAfCA7uv3OdmPHZS3oT4pxptG/ZIvyGxwAHY
- UcnPj7fexrqQnpWEWjbZ6YXW8GTpLwFW66n6MIEfJYVzIRTgvxib8llz6dSCBjh5LPdJ
- s75CayMY6I29Ljih80BWTChQvFnu+2CL4NvbqZBLmQZXiIP1W5K8S1IZtQ0g3CWbmtHj
- bkcU6kJi06/iq01ptz4xbnu3sNWt5V1nAStgD8YHlzpoXHFiLdJfujWyDDB6dcIEs+q9 hA== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h5dd586jy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Jul 2022 15:59:47 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 266FpaOm025969;
-        Wed, 6 Jul 2022 15:59:44 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3h4v4jsbay-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Jul 2022 15:59:44 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 266FxfmB16974318
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 6 Jul 2022 15:59:41 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 76805A4051;
-        Wed,  6 Jul 2022 15:59:41 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 62109A4040;
-        Wed,  6 Jul 2022 15:59:41 +0000 (GMT)
-Received: from t480-pf1aa2c2 (unknown [9.145.72.132])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed,  6 Jul 2022 15:59:41 +0000 (GMT)
-Received: from bblock by t480-pf1aa2c2 with local (Exim 4.95)
-        (envelope-from <bblock@linux.ibm.com>)
-        id 1o97RF-005M3t-0z;
-        Wed, 06 Jul 2022 17:59:41 +0200
-From:   Benjamin Block <bblock@linux.ibm.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Steffen Maier" <maier@linux.ibm.com>
-Cc:     Jiang Jian <jiangjian@cdjrlc.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        "Fedor Loshakov" <loshakov@linux.ibm.com>,
-        "Heiko Carstens" <hca@linux.ibm.com>,
-        "Vasily Gorbik" <gor@linux.ibm.com>,
-        "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH 2/2] scsi: zfcp: drop unexpected word "the" in the comments
-Date:   Wed,  6 Jul 2022 17:59:40 +0200
-Message-Id: <4c02fefa19ab46f0f163990bde3ce10bd9c7caf1.1657122360.git.bblock@linux.ibm.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1657122360.git.bblock@linux.ibm.com>
-References: <cover.1657122360.git.bblock@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH, Vorsitz. AufsR. Gregor Pillen, Geschaeftsfuehrung David Faller, Sitz der Gesellschaft Boeblingen, Registergericht AmtsG Stuttgart, HRB 243294, https://www.ibm.com/privacy
-Sender: Benjamin Block <bblock@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ynzrshdZZETZ9AM2dWvWFmUWkrVQxd_5
-X-Proofpoint-GUID: ynzrshdZZETZ9AM2dWvWFmUWkrVQxd_5
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S233801AbiGFQZm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Jul 2022 12:25:42 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8768025C7B
+        for <linux-scsi@vger.kernel.org>; Wed,  6 Jul 2022 09:25:40 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id s13-20020a0568301e0d00b00616ad12fee7so12151739otr.10
+        for <linux-scsi@vger.kernel.org>; Wed, 06 Jul 2022 09:25:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Uk0kx353H+gGEfDDNFmV1k9XciWZTV5g6S3ovbgNaYc=;
+        b=gQqyK8e6UjlfcdDaTwuapyo5u6WCZfyOyUo3o+rhjn0y6o6twgaREpXrfDzmOzwGI4
+         Xf5d+/XrpNxcXy2P+S6Arj4mikQrOs7tn8Zi0G2PfPlx9DQA87CxYpyOLLtznadJxTdi
+         YU7sooZaHsJFupUvH9P8JYZr92v53Ewf8CO0k3ftFj8+aClkoUt3Yeir2cznint1XJiZ
+         4cnnfCCVb7Hw+AuxNnLfsLhkSiPepj+3DXTkepicubsvvsJ96h6vgKMiBtxHx7xscJfy
+         hYzHaxW5ZBme1j+WHTF16ek8bjQKD3UIMwwyTBOCWbSiEqVVtQB8nsIb5WVv5H9A4LNz
+         CKmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Uk0kx353H+gGEfDDNFmV1k9XciWZTV5g6S3ovbgNaYc=;
+        b=JjC7oUVjCMYTJkSTQEDSHMpJiQOKb8xb8eT+0rqyESk+UEdjEIaBrn8KjvYJE/Em25
+         BVeOpbLwnIe9JFOyupxwMCsaALYCiA0jYTf1aVVJeeoz5sSTcCECW5D+0Ldw84NTMyvy
+         GW/EzsbEX6Xtm0R2gwFEQAm6FLkRtS4oY5lCWtri9RAHq3DQaJllYDmGWFV+TzmK1xb+
+         f1JAI46kI0KEICiLDxXn3hPbIImybDLVNvb1rcnoGgAdFnhnaAbJ9ZWFOYTDc6+l5zQd
+         XZeyHtM2KO4rB5+14HDRi/t2CVGt/jgzV1H7gpO5g+5+XYdrXo6gSh4xTvX5id+aGC1Y
+         In/Q==
+X-Gm-Message-State: AJIora9DB+vA5YJBzB4QLTak7KVzy4kYUHhqx7p119i7bl/kSpMg5hT9
+        cFhSaFcSu33dS2kEi5UGr9Kfj5k7fFVn609sbd0=
+X-Google-Smtp-Source: AGRyM1uBbeke8wh9mfu4ZJ+5+4KGZ7yZiqEh677cojeZ6bpzgdiE8hjHgHdURg0ZRw4xgz6IWLD+HWiH2GsizApoY9E=
+X-Received: by 2002:a05:6830:1d5b:b0:616:de98:2556 with SMTP id
+ p27-20020a0568301d5b00b00616de982556mr18845241oth.367.1657124739940; Wed, 06
+ Jul 2022 09:25:39 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-06_09,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- phishscore=0 mlxscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0
- malwarescore=0 priorityscore=1501 clxscore=1011 suspectscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207060062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a4a:4545:0:0:0:0:0 with HTTP; Wed, 6 Jul 2022 09:25:39 -0700 (PDT)
+Reply-To: sgtkaylla202@gmail.com
+From:   Kayla Manthey <avrielharry73@gmail.com>
+Date:   Wed, 6 Jul 2022 16:25:39 +0000
+Message-ID: <CAFSKFDY94cW50tP6DDz2oHbhf0ni4DDv1hxhbaqXPu50CZ_Xug@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Jiang Jian <jiangjian@cdjrlc.com>
-
-there is an unexpected word "the" in the comments that need to be dropped
-
-file: ./drivers/s390/scsi/zfcp_diag.h
-line: 5
-* Definitions for handling diagnostics in the the zfcp device driver.
-changed to
-* Definitions for handling diagnostics in the zfcp device driver.
-
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
-Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
-Signed-off-by: Benjamin Block <bblock@linux.ibm.com>
-Link: https://lore.kernel.org/r/20220621114207.106405-1-jiangjian@cdjrlc.com
----
- drivers/s390/scsi/zfcp_diag.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/s390/scsi/zfcp_diag.h b/drivers/s390/scsi/zfcp_diag.h
-index da55133da8fe..15c25fefe91a 100644
---- a/drivers/s390/scsi/zfcp_diag.h
-+++ b/drivers/s390/scsi/zfcp_diag.h
-@@ -2,7 +2,7 @@
- /*
-  * zfcp device driver
-  *
-- * Definitions for handling diagnostics in the the zfcp device driver.
-+ * Definitions for handling diagnostics in the zfcp device driver.
-  *
-  * Copyright IBM Corp. 2018, 2020
-  */
--- 
-2.36.1
-
+LS0gDQrQl9C00YDQsNCy0L4g0LTRgNCw0LPQsA0K0JLQtSDQvNC+0LvQsNC8LCDQtNCw0LvQuCDR
+mNCwINC00L7QsdC40LLRgtC1INC80L7RmNCw0YLQsCDQv9GA0LXRgtGF0L7QtNC90LAg0L/QvtGA
+0LDQutCwLCDQstC4INCx0LvQsNCz0L7QtNCw0YDQsNC8Lg0K
