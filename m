@@ -2,84 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922F1568E80
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Jul 2022 18:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE8C568E7C
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Jul 2022 17:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbiGFQAA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 6 Jul 2022 12:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
+        id S233130AbiGFP7w (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 6 Jul 2022 11:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233351AbiGFP76 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Jul 2022 11:59:58 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7680220F4;
-        Wed,  6 Jul 2022 08:59:54 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 266Eodaa008359;
-        Wed, 6 Jul 2022 15:59:47 GMT
+        with ESMTP id S232357AbiGFP7v (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Jul 2022 11:59:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C564521810;
+        Wed,  6 Jul 2022 08:59:50 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 266FraYL007171;
+        Wed, 6 Jul 2022 15:59:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding : sender;
- s=pp1; bh=v/Y26GgveLsFvEWSO2N9c+SHM8FAT1jXHDpq+NuHPZg=;
- b=S1M+gxzs/cvXZQQYGtr9zuETXWto4ZRXm/Dn6sLXOTsdxWUwtDXcWK6g29y9B/IEF7q7
- f8BVJVgwhyustUynHh7yqCqtAj97xU6VbP2u/K5rcUf0IcvI77cDFX4vn8OaDyHSR3YJ
- kpwG8PwD5iH1T6C5i0WNZRxzjEj3PuaBgKHdWWe4ZHF6bLHpoLUGi/MQ7iRErdX3A7R0
- xgtQqvTSZVC1R+2+xgiF2HuTaFzxK2I36YHira2esqArR41Hz/yZ9/ZkSrk3wrBoJC3z
- UMSkml9PSkl0+6nexR03W1JURVfhV86wbT512uCqci8nrCR1jokldIQYky5QkC1+rcPR ag== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h5as4davg-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : sender; s=pp1;
+ bh=b5mSK2qdEaaIeywLwgD86cIPxSvtMuGUpZSjnRg92tw=;
+ b=KI6qrbrm6BQKTZYBrqo9KpDCvieXSegb5JDQppJo0af0DTKG9BgSxv7kecnqtdR9EYPb
+ xtb3m1Jj1rGBwfAaIoTCqpnieEKCGHt7vkCcjO9rMWDioJr3FMUbvJLtB9Q1nCpH8lLa
+ r4AW0uQcpxL7W1ggDTsul9aFt1quHfKYXhqFOMKtvzxnQ/ASuqD/xVD/OnKg84HbOma7
+ B/qtN1wZDUW5unSj3T4mLS8QirGtbNLCVVFIrQ9LxMxyAeEHoThkg8wBmwrmDRB+hBhZ
+ IQ919GpfFt9nfySBy+6vQzB3GdQkHhp9Nt0i0ILA+UOZOZ+NM39DOYI3Xm2pscgaYkoI aQ== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3h55gjvw77-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Jul 2022 15:59:46 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 266FqStj026006;
-        Wed, 6 Jul 2022 15:59:44 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3h4ukw0ytr-1
+        Wed, 06 Jul 2022 15:59:47 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 266FqSiD004816;
+        Wed, 6 Jul 2022 15:59:45 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3h4ujshbn1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Jul 2022 15:59:44 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 266FxoPU16056698
+        Wed, 06 Jul 2022 15:59:45 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 266FxfEo18022800
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 6 Jul 2022 15:59:50 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6766952050;
+        Wed, 6 Jul 2022 15:59:41 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6EF59A405B;
+        Wed,  6 Jul 2022 15:59:41 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5C3C7A4054;
         Wed,  6 Jul 2022 15:59:41 +0000 (GMT)
 Received: from t480-pf1aa2c2 (unknown [9.145.72.132])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 53E185204F;
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
         Wed,  6 Jul 2022 15:59:41 +0000 (GMT)
 Received: from bblock by t480-pf1aa2c2 with local (Exim 4.95)
         (envelope-from <bblock@linux.ibm.com>)
-        id 1o97RE-005M3p-V6;
-        Wed, 06 Jul 2022 17:59:40 +0200
+        id 1o97RE-005M3r-WA;
+        Wed, 06 Jul 2022 17:59:41 +0200
 From:   Benjamin Block <bblock@linux.ibm.com>
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         "Steffen Maier" <maier@linux.ibm.com>
-Cc:     Benjamin Block <bblock@linux.ibm.com>,
+Cc:     Julian Wiedmann <jwi@linux.ibm.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
         "Fedor Loshakov" <loshakov@linux.ibm.com>,
         "Heiko Carstens" <hca@linux.ibm.com>,
         "Vasily Gorbik" <gor@linux.ibm.com>,
         "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        "Jiang Jian" <jiangjian@cdjrlc.com>, linux-scsi@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: [PATCH 0/2] zfcp changes for v5.20
-Date:   Wed,  6 Jul 2022 17:59:38 +0200
-Message-Id: <cover.1657122360.git.bblock@linux.ibm.com>
+        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH 1/2] scsi: zfcp: declare zfcp_sdev_attrs as static
+Date:   Wed,  6 Jul 2022 17:59:39 +0200
+Message-Id: <0791b9149ebfa39e6b8eab093113cd2527dbf3d3.1657122360.git.bblock@linux.ibm.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1657122360.git.bblock@linux.ibm.com>
+References: <cover.1657122360.git.bblock@linux.ibm.com>
 MIME-Version: 1.0
 Organization: IBM Deutschland Research & Development GmbH, Vorsitz. AufsR. Gregor Pillen, Geschaeftsfuehrung David Faller, Sitz der Gesellschaft Boeblingen, Registergericht AmtsG Stuttgart, HRB 243294, https://www.ibm.com/privacy
 Content-Transfer-Encoding: 8bit
 Sender: Benjamin Block <bblock@linux.ibm.com>
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: IeNuG14OzvO7F57PIDchsQlrgldA7S5A
-X-Proofpoint-ORIG-GUID: IeNuG14OzvO7F57PIDchsQlrgldA7S5A
+X-Proofpoint-ORIG-GUID: Jz5-ulQeGG1SDvU8TMk8hx6YpgQdzpap
+X-Proofpoint-GUID: Jz5-ulQeGG1SDvU8TMk8hx6YpgQdzpap
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-06_09,2022-06-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- impostorscore=0 adultscore=0 mlxlogscore=730 lowpriorityscore=0
- bulkscore=0 clxscore=1011 priorityscore=1501 suspectscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207060062
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ malwarescore=0 suspectscore=0 bulkscore=0 phishscore=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207060062
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -89,25 +95,32 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello James, Martin,
+From: Julian Wiedmann <jwi@linux.ibm.com>
 
-here is a (very) small set of changes for the zFCP device driver. The
-change from Jiang Jian came in recently, and Julian's patch has been
-laying around for quite a while now, so I didn't want to let them linger
-any longer in anticipation of any bigger change that might come.
+These attributes are now only accessed through the
+zfcp_sysfs_sdev_attr_group.
 
-It would be nice, if you could include them for v5.20.
-
-Jiang Jian (1):
-  scsi: zfcp: drop unexpected word "the" in the comments
-
-Julian Wiedmann (1):
-  scsi: zfcp: declare zfcp_sdev_attrs as static
-
- drivers/s390/scsi/zfcp_diag.h  | 2 +-
+Fixes: d8d7cf3f7d07 ("scsi: zfcp: Switch to attribute groups")
+Signed-off-by: Julian Wiedmann <jwi@linux.ibm.com>
+Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
+Signed-off-by: Benjamin Block <bblock@linux.ibm.com>
+---
  drivers/s390/scsi/zfcp_sysfs.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/s390/scsi/zfcp_sysfs.c b/drivers/s390/scsi/zfcp_sysfs.c
+index dbf3e50444e6..cb67fa80fb12 100644
+--- a/drivers/s390/scsi/zfcp_sysfs.c
++++ b/drivers/s390/scsi/zfcp_sysfs.c
+@@ -672,7 +672,7 @@ ZFCP_DEFINE_SCSI_ATTR(zfcp_in_recovery, "%d\n",
+ ZFCP_DEFINE_SCSI_ATTR(zfcp_status, "0x%08x\n",
+ 		      atomic_read(&zfcp_sdev->status));
+ 
+-struct attribute *zfcp_sdev_attrs[] = {
++static struct attribute *zfcp_sdev_attrs[] = {
+ 	&dev_attr_fcp_lun.attr,
+ 	&dev_attr_wwpn.attr,
+ 	&dev_attr_hba_id.attr,
 -- 
 2.36.1
 
