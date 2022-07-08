@@ -2,91 +2,654 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E0C56C257
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jul 2022 01:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A9056C394
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jul 2022 01:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238932AbiGHTiS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Jul 2022 15:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S239926AbiGHTiY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Jul 2022 15:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238087AbiGHTiR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Jul 2022 15:38:17 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258FC6EEA5
-        for <linux-scsi@vger.kernel.org>; Fri,  8 Jul 2022 12:38:16 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id r1so17116075plo.10
-        for <linux-scsi@vger.kernel.org>; Fri, 08 Jul 2022 12:38:16 -0700 (PDT)
+        with ESMTP id S238702AbiGHTiT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Jul 2022 15:38:19 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46045675BD
+        for <linux-scsi@vger.kernel.org>; Fri,  8 Jul 2022 12:38:18 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id o3-20020a17090a744300b001ef8f7f3dddso2638602pjk.3
+        for <linux-scsi@vger.kernel.org>; Fri, 08 Jul 2022 12:38:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version;
-        bh=QWQ3qPlIUT0uzHeLZI+A4VK93YPj44Tbgx13f28ymxI=;
-        b=AZaWahy1nVKo1awzMljfhmU5o15ofb+cukLQB+g98xzlObJX6zLzOm369L28xuHhg2
-         nmmWzGXNTSzle3f98Zc/nfKWGxBKDxOo+jfdNx2djbvOoq2MqxY0C7iY1rsG8ziZPeAx
-         TEiwB+mirhyypxk5QmrmRasKt19kv4uKYoxy0=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version;
+        bh=ePw5bM95QauQCLYzkkyv1z82OLK/G2UJ8NxXeLI2Vzs=;
+        b=hYX/SXGB9eeTapIJLtGA02kfUdKWOA8M7xvE3ITVTECcYhGhAf2/DLg9BZE3M35NBZ
+         ppRn/DXQEHTZFpAvkaBZfi9qW8SChgnh31fzx9GTO+3B/xpi6kykeeXEuuwW0Zv7E0OC
+         U9sSbgZXjSFvUqEdcI6rsNqutPC+EYVNr/mkg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
-        bh=QWQ3qPlIUT0uzHeLZI+A4VK93YPj44Tbgx13f28ymxI=;
-        b=D7KKIFIJ/CYm4dgHOwGiRRp139FbKlJfExTdXIJvi5IKGsr6dIyVgcmhbd1CCo/4+S
-         lHJr3zf366534tZxQI+SR/pMTg1e2fdQt4GhSHT+RTqZDAWdWoUEm2woDfP8Wc6r6j8e
-         +6ldhyT9HwSZgOcL5r8gJq1hTA3NzlR+1xrhfZ3UIi8NUeY6ibxJi3koNtb7OC9VrmSC
-         j1NQ6n/fAQ2ARVLI+DM2izcTXa6T7gbTsADX/y2gxhTtN0p/Q0Q1o867aBhiOt/knrjh
-         MU0QOK5GtyDtcitbqK0IlI+VYWQ1JtJ8exuvRdRl3ErczYDlhfAjYj01w+QRHoNKPqfG
-         7Gig==
-X-Gm-Message-State: AJIora8Nk14IE3R8S5ygLPNOTK193Q5Vs/87crVasWnOnGVSkmre682m
-        8p5vzvfo1uBw+lGiZDE3eGlRdEuSQS+w1rcfekyHi2EUqPFaOS8S8vuN94ft2AanFA3gRsoxpwo
-        Ii7w+Ag530v29BbSJgji/AsRamF+1ZsAFnbUXlmU5Exsw1s7JtwHp/LebnXJauykFwbjouDmM9I
-        WZSWIGEfNITvM=
-X-Google-Smtp-Source: AGRyM1tC9oYBKnXEkUjLNgr72OZkAU/MhBh2NDc3pbDAvDNiUuAd1eeBfRWiKrlt/638nOOp6CjxQA==
-X-Received: by 2002:a17:903:3093:b0:16b:deea:4d36 with SMTP id u19-20020a170903309300b0016bdeea4d36mr5224791plc.126.1657309095138;
-        Fri, 08 Jul 2022 12:38:15 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version;
+        bh=ePw5bM95QauQCLYzkkyv1z82OLK/G2UJ8NxXeLI2Vzs=;
+        b=fg2DO8Ql+y1SNcOxHPzRDfaX9enAV76gmLfdtxAFcCWfkTMOGaJG2SaGKJtO0AtOed
+         nNTe7a8j63vz0M7SqfPsliU9IYKdv96u2ZsAn5kojFd9BJA8XGL4Mu281AY5Rj3fE9rZ
+         7bl6sJH+HMazkMKVk/Cs0gvkZQ2SM1jdZ4rDeCg59q2G7OVSxqg8NIyTPO43fnVUfrr8
+         KHMsLPG/K2xVbaoVirwOqSZgSxXjDV1UBNmtgFK7YHlg4ywOkEDp6yxqZONfO5PG4h0B
+         YdGmmQ2j5Jj+LdOz197vWaRDuOBSUBA9Yk8k4o15ClqUMa6KigIRw3EzB1ul0q8ZQI4D
+         sX0A==
+X-Gm-Message-State: AJIora+vlyO2SWif36HYyThNANzi6ya+nJTIolurACtf5XKarWEQhvlU
+        kZFwBYwmm+pkeeWE8arwKQb4RSww7fvdF3W9XoS0Y+5TWl0anZjN+uQDXBwXvlwkUp6iJ7IBnCv
+        Jm9UXVgrS87z8GJQXwLWXwuuJOJ+JNffre4jAZEHLAnvPXZw5a7FBAVa0/Z/UpwjVTjjfyEiI/X
+        ay139AMO789wM=
+X-Google-Smtp-Source: AGRyM1s1pUHUakpdQsi2MZa6rKjOiN6sOMkOs6bURC4rdmVCl9Wo42gHuRQFPxTB6KRdIRTKPlxi6w==
+X-Received: by 2002:a17:902:aa8a:b0:16a:1ea5:d417 with SMTP id d10-20020a170902aa8a00b0016a1ea5d417mr5520171plr.4.1657309097108;
+        Fri, 08 Jul 2022 12:38:17 -0700 (PDT)
 Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id i16-20020a170902c95000b0015e8d4eb20dsm14256484pla.87.2022.07.08.12.38.12
+        by smtp.gmail.com with ESMTPSA id i16-20020a170902c95000b0015e8d4eb20dsm14256484pla.87.2022.07.08.12.38.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 12:38:14 -0700 (PDT)
+        Fri, 08 Jul 2022 12:38:16 -0700 (PDT)
 From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH 0/2] mpi3mr: Add support for Resource Based Metering
-Date:   Sat,  9 Jul 2022 01:20:18 +0530
-Message-Id: <20220708195020.8323-1-sreekanth.reddy@broadcom.com>
+Subject: [PATCH 1/2] mpi3mr: Resource Based Metering
+Date:   Sat,  9 Jul 2022 01:20:19 +0530
+Message-Id: <20220708195020.8323-2-sreekanth.reddy@broadcom.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220708195020.8323-1-sreekanth.reddy@broadcom.com>
+References: <20220708195020.8323-1-sreekanth.reddy@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000eedfa705e3505772"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        boundary="0000000000000e820205e35058f5"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000eedfa705e3505772
+--0000000000000e820205e35058f5
 Content-Transfer-Encoding: 8bit
 
-Enhanced driver to track cumulative pending large data size
-at the controller level and at a throttle group level.
-when one of the value exceeds a firmware determined value
-then divert the future selective I/O to the firmware.
+Updated driver to track cumulative pending large data size
+at the controller level and at the throttle group level.
+And when one of the value meet or exceeds the controller's firmware
+determined high threshold value then the driver will divert
+future selective I/O to the firmware. Once both controller level
+and at the throttle group level cumulative pending
+large data size reach controller's firmware determined
+low threshold value then the driver will stop diverting I/Os to
+the firmware.
 
-Sreekanth Reddy (2):
-  mpi3mr: Resource Based Metering
-  mpi3mr: Reduce VD queue depth on detecting the throttling
+Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+---
+ drivers/scsi/mpi3mr/mpi3mr.h    |  61 +++++++++++-
+ drivers/scsi/mpi3mr/mpi3mr_fw.c |  62 ++++++++++++
+ drivers/scsi/mpi3mr/mpi3mr_os.c | 167 ++++++++++++++++++++++++++++++--
+ 3 files changed, 280 insertions(+), 10 deletions(-)
 
- drivers/scsi/mpi3mr/mpi3mr.h    |  71 +++++++-
- drivers/scsi/mpi3mr/mpi3mr_fw.c |  66 ++++++++
- drivers/scsi/mpi3mr/mpi3mr_os.c | 290 +++++++++++++++++++++++++++++++-
- 3 files changed, 417 insertions(+), 10 deletions(-)
-
+diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
+index 0557dbf..6bb3311 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr.h
++++ b/drivers/scsi/mpi3mr/mpi3mr.h
+@@ -66,6 +66,8 @@ extern atomic64_t event_counter;
+ #define MPI3MR_NAME_LENGTH	32
+ #define IOCNAME			"%s: "
+ 
++#define MPI3MR_MAX_SECTORS	2048
++
+ /* Definitions for internal SGL and Chain SGL buffers */
+ #define MPI3MR_PAGE_SIZE_4K		4096
+ #define MPI3MR_SG_DEPTH		(MPI3MR_PAGE_SIZE_4K / sizeof(struct mpi3_sge_common))
+@@ -333,6 +335,12 @@ struct mpi3mr_ioc_facts {
+ 	u8 sge_mod_mask;
+ 	u8 sge_mod_value;
+ 	u8 sge_mod_shift;
++	u8 max_dev_per_tg;
++	u16 max_io_throttle_group;
++	u16 io_throttle_data_length;
++	u16 io_throttle_low;
++	u16 io_throttle_high;
++
+ };
+ 
+ /**
+@@ -424,6 +432,23 @@ struct mpi3mr_intr_info {
+ 	char name[MPI3MR_NAME_LENGTH];
+ };
+ 
++/**
++ * struct mpi3mr_throttle_group_info - Throttle group info
++ *
++ * @io_divert: Flag indicates io divert is on or off for the TG
++ * @id: Throttle Group ID.
++ * @high: High limit to turn on throttling in 512 byte blocks
++ * @low: Low limit to turn off throttling in 512 byte blocks
++ * @pend_large_data_sz: Counter to track pending large data
++ */
++struct mpi3mr_throttle_group_info {
++	u8 io_divert;
++	u16 id;
++	u32 high;
++	u32 low;
++	atomic_t pend_large_data_sz;
++};
++
+ /**
+  * struct tgt_dev_sas_sata - SAS/SATA device specific
+  * information cached from firmware given data
+@@ -457,22 +482,31 @@ struct tgt_dev_pcie {
+ };
+ 
+ /**
+- * struct tgt_dev_volume - virtual device specific information
++ * struct tgt_dev_vd - virtual device specific information
+  * cached from firmware given data
+  *
+  * @state: State of the VD
++ * @tg_id: VDs throttle group ID
++ * @high: High limit to turn on throttling in 512 byte blocks
++ * @low: Low limit to turn off throttling in 512 byte blocks
++ * @tg: Pointer to throttle group info
+  */
+-struct tgt_dev_volume {
++struct tgt_dev_vd {
+ 	u8 state;
++	u16 tg_id;
++	u32 tg_high;
++	u32 tg_low;
++	struct mpi3mr_throttle_group_info *tg;
+ };
+ 
++
+ /**
+  * union _form_spec_inf - union of device specific information
+  */
+ union _form_spec_inf {
+ 	struct tgt_dev_sas_sata sas_sata_inf;
+ 	struct tgt_dev_pcie pcie_inf;
+-	struct tgt_dev_volume vol_inf;
++	struct tgt_dev_vd vd_inf;
+ };
+ 
+ 
+@@ -490,6 +524,7 @@ union _form_spec_inf {
+  * @dev_type: SAS/SATA/PCIE device type
+  * @is_hidden: Should be exposed to upper layers or not
+  * @host_exposed: Already exposed to host or not
++ * @io_throttle_enabled: I/O throttling needed or not
+  * @q_depth: Device specific Queue Depth
+  * @wwid: World wide ID
+  * @dev_spec: Device type specific information
+@@ -506,6 +541,7 @@ struct mpi3mr_tgt_dev {
+ 	u8 dev_type;
+ 	u8 is_hidden;
+ 	u8 host_exposed;
++	u8 io_throttle_enabled;
+ 	u16 q_depth;
+ 	u64 wwid;
+ 	union _form_spec_inf dev_spec;
+@@ -557,6 +593,9 @@ static inline void mpi3mr_tgtdev_put(struct mpi3mr_tgt_dev *s)
+  * @dev_removed: Device removed in the Firmware
+  * @dev_removedelay: Device is waiting to be removed in FW
+  * @dev_type: Device type
++ * @io_throttle_enabled: I/O throttling needed or not
++ * @io_divert: Flag indicates io divert is on or off for the dev
++ * @throttle_group: Pointer to throttle group info
+  * @tgt_dev: Internal target device pointer
+  * @pend_count: Counter to track pending I/Os during error
+  *		handling
+@@ -570,6 +609,9 @@ struct mpi3mr_stgt_priv_data {
+ 	u8 dev_removed;
+ 	u8 dev_removedelay;
+ 	u8 dev_type;
++	u8 io_throttle_enabled;
++	u8 io_divert;
++	struct mpi3mr_throttle_group_info *throttle_group;
+ 	struct mpi3mr_tgt_dev *tgt_dev;
+ 	u32 pend_count;
+ };
+@@ -796,6 +838,12 @@ struct scmd_priv {
+  * @logdata_buf: Circular buffer to store log data entries
+  * @logdata_buf_idx: Index of entry in buffer to store
+  * @logdata_entry_sz: log data entry size
++ * @pend_large_data_sz: Counter to track pending large data
++ * @io_throttle_data_length: I/O size to track in 512b blocks
++ * @io_throttle_high: I/O size to start throttle in 512b blocks
++ * @io_throttle_low: I/O size to stop throttle in 512b blocks
++ * @num_io_throttle_group: Maximum number of throttle groups
++ * @throttle_groups: Pointer to throttle group info structures
+  */
+ struct mpi3mr_ioc {
+ 	struct list_head list;
+@@ -960,6 +1008,13 @@ struct mpi3mr_ioc {
+ 	u8 *logdata_buf;
+ 	u16 logdata_buf_idx;
+ 	u16 logdata_entry_sz;
++
++	atomic_t pend_large_data_sz;
++	u32 io_throttle_data_length;
++	u32 io_throttle_high;
++	u32 io_throttle_low;
++	u16 num_io_throttle_group;
++	struct mpi3mr_throttle_group_info *throttle_groups;
+ };
+ 
+ /**
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_fw.c b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+index f1d4ea8..ab79374 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_fw.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+@@ -2785,6 +2785,27 @@ static void mpi3mr_process_factsdata(struct mpi3mr_ioc *mrioc,
+ 	mrioc->facts.shutdown_timeout =
+ 	    le16_to_cpu(facts_data->shutdown_timeout);
+ 
++	mrioc->facts.max_dev_per_tg =
++	    facts_data->max_devices_per_throttle_group;
++	mrioc->facts.io_throttle_data_length =
++	    le16_to_cpu(facts_data->io_throttle_data_length);
++	mrioc->facts.max_io_throttle_group =
++	    le16_to_cpu(facts_data->max_io_throttle_group);
++	mrioc->facts.io_throttle_low = le16_to_cpu(facts_data->io_throttle_low);
++	mrioc->facts.io_throttle_high =
++	    le16_to_cpu(facts_data->io_throttle_high);
++
++	/* Store in 512b block count */
++	if (mrioc->facts.io_throttle_data_length)
++		mrioc->io_throttle_data_length =
++		    (mrioc->facts.io_throttle_data_length * 2 * 4);
++	else
++		/* set the length to 1MB + 1K to disable throttle */
++		mrioc->io_throttle_data_length = MPI3MR_MAX_SECTORS + 2;
++
++	mrioc->io_throttle_high = (mrioc->facts.io_throttle_high * 2 * 1024);
++	mrioc->io_throttle_low = (mrioc->facts.io_throttle_low * 2 * 1024);
++
+ 	ioc_info(mrioc, "ioc_num(%d), maxopQ(%d), maxopRepQ(%d), maxdh(%d),",
+ 	    mrioc->facts.ioc_num, mrioc->facts.max_op_req_q,
+ 	    mrioc->facts.max_op_reply_q, mrioc->facts.max_devhandle);
+@@ -2798,6 +2819,13 @@ static void mpi3mr_process_factsdata(struct mpi3mr_ioc *mrioc,
+ 	ioc_info(mrioc, "DMA mask %d InitialPE status 0x%x\n",
+ 	    mrioc->facts.dma_mask, (facts_flags &
+ 	    MPI3_IOCFACTS_FLAGS_INITIAL_PORT_ENABLE_MASK));
++	ioc_info(mrioc,
++	    "max_dev_per_throttle_group(%d), max_throttle_groups(%d)\n",
++	    mrioc->facts.max_dev_per_tg, mrioc->facts.max_io_throttle_group);
++	ioc_info(mrioc,
++	   "io_throttle_data_len(%dKiB), io_throttle_high(%dMiB), io_throttle_low(%dMiB)\n",
++	   mrioc->facts.io_throttle_data_length * 4,
++	   mrioc->facts.io_throttle_high, mrioc->facts.io_throttle_low);
+ }
+ 
+ /**
+@@ -3666,6 +3694,7 @@ int mpi3mr_init_ioc(struct mpi3mr_ioc *mrioc)
+ 	int retval = 0;
+ 	u8 retry = 0;
+ 	struct mpi3_ioc_facts_data facts_data;
++	u32 sz;
+ 
+ retry_init:
+ 	retval = mpi3mr_bring_ioc_ready(mrioc);
+@@ -3691,6 +3720,9 @@ retry_init:
+ 
+ 	mrioc->max_host_ios = mrioc->facts.max_reqs - MPI3MR_INTERNAL_CMDS_RESVD;
+ 
++	mrioc->num_io_throttle_group = mrioc->facts.max_io_throttle_group;
++	atomic_set(&mrioc->pend_large_data_sz, 0);
++
+ 	if (reset_devices)
+ 		mrioc->max_host_ios = min_t(int, mrioc->max_host_ios,
+ 		    MPI3MR_HOST_IOS_KDUMP);
+@@ -3760,6 +3792,15 @@ retry_init:
+ 		}
+ 	}
+ 
++	if (!mrioc->throttle_groups && mrioc->num_io_throttle_group) {
++		dprint_init(mrioc, "allocating memory for throttle groups\n");
++		sz = sizeof(struct mpi3mr_throttle_group_info);
++		mrioc->throttle_groups = (struct mpi3mr_throttle_group_info *)
++		    kcalloc(mrioc->num_io_throttle_group, sz, GFP_KERNEL);
++		if (!mrioc->throttle_groups)
++			goto out_failed_noretry;
++	}
++
+ 	retval = mpi3mr_enable_events(mrioc);
+ 	if (retval) {
+ 		ioc_err(mrioc, "failed to enable events %d\n",
+@@ -3981,6 +4022,7 @@ static void mpi3mr_memset_op_req_q_buffers(struct mpi3mr_ioc *mrioc, u16 qidx)
+ void mpi3mr_memset_buffers(struct mpi3mr_ioc *mrioc)
+ {
+ 	u16 i;
++	struct mpi3mr_throttle_group_info *tg;
+ 
+ 	mrioc->change_count = 0;
+ 	mrioc->active_poll_qcount = 0;
+@@ -4029,6 +4071,18 @@ void mpi3mr_memset_buffers(struct mpi3mr_ioc *mrioc)
+ 		spin_lock_init(&mrioc->req_qinfo[i].q_lock);
+ 		mpi3mr_memset_op_req_q_buffers(mrioc, i);
+ 	}
++
++	atomic_set(&mrioc->pend_large_data_sz, 0);
++	if (mrioc->throttle_groups) {
++		tg = mrioc->throttle_groups;
++		for (i = 0; i < mrioc->num_io_throttle_group; i++, tg++) {
++			tg->id = 0;
++			tg->io_divert = 0;
++			tg->high = 0;
++			tg->low = 0;
++			atomic_set(&tg->pend_large_data_sz, 0);
++		}
++	}
+ }
+ 
+ /**
+@@ -4663,6 +4717,14 @@ int mpi3mr_soft_reset_handler(struct mpi3mr_ioc *mrioc,
+ 		ioc_err(mrioc, "Failed to issue soft reset to the ioc\n");
+ 		goto out;
+ 	}
++	if (mrioc->num_io_throttle_group !=
++	    mrioc->facts.max_io_throttle_group) {
++		ioc_err(mrioc,
++		    "max io throttle group doesn't match old(%d), new(%d)\n",
++		    mrioc->num_io_throttle_group,
++		    mrioc->facts.max_io_throttle_group);
++		return -EPERM;
++	}
+ 
+ 	mpi3mr_flush_delayed_cmd_lists(mrioc);
+ 	mpi3mr_flush_drv_cmds(mrioc);
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
+index da85eda..e1ccb5f 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_os.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
+@@ -373,6 +373,9 @@ void mpi3mr_invalidate_devhandles(struct mpi3mr_ioc *mrioc)
+ 		if (tgtdev->starget && tgtdev->starget->hostdata) {
+ 			tgt_priv = tgtdev->starget->hostdata;
+ 			tgt_priv->dev_handle = MPI3MR_INVALID_DEV_HANDLE;
++			tgt_priv->io_throttle_enabled = 0;
++			tgt_priv->io_divert = 0;
++			tgt_priv->throttle_group = NULL;
+ 		}
+ 	}
+ }
+@@ -717,6 +720,35 @@ static struct mpi3mr_tgt_dev  *__mpi3mr_get_tgtdev_from_tgtpriv(
+ 	return tgtdev;
+ }
+ 
++/**
++ * mpi3mr_set_io_divert_for_all_vd_in_tg -set divert for TG VDs
++ * @mrioc: Adapter instance reference
++ * @tg: Throttle group information pointer
++ * @divert_value: 1 or 0
++ *
++ * Accessor to set io_divert flag for each device associated
++ * with the given throttle group with the given value.
++ *
++ * Return: None.
++ */
++static void mpi3mr_set_io_divert_for_all_vd_in_tg(struct mpi3mr_ioc *mrioc,
++	struct mpi3mr_throttle_group_info *tg, u8 divert_value)
++{
++	unsigned long flags;
++	struct mpi3mr_tgt_dev *tgtdev;
++	struct mpi3mr_stgt_priv_data *tgt_priv;
++
++	spin_lock_irqsave(&mrioc->tgtdev_lock, flags);
++	list_for_each_entry(tgtdev, &mrioc->tgtdev_list, list) {
++		if (tgtdev->starget && tgtdev->starget->hostdata) {
++			tgt_priv = tgtdev->starget->hostdata;
++			if (tgt_priv->throttle_group == tg)
++				tgt_priv->io_divert = divert_value;
++		}
++	}
++	spin_unlock_irqrestore(&mrioc->tgtdev_lock, flags);
++}
++
+ /**
+  * mpi3mr_print_device_event_notice - print notice related to post processing of
+  *					device event after controller reset.
+@@ -934,6 +966,7 @@ void mpi3mr_rfresh_tgtdevs(struct mpi3mr_ioc *mrioc)
+  * @mrioc: Adapter instance reference
+  * @tgtdev: Target device internal structure
+  * @dev_pg0: New device page0
++ * @is_added: Flag to indicate the device is just added
+  *
+  * Update the information from the device page0 into the driver
+  * cached target device structure.
+@@ -941,10 +974,11 @@ void mpi3mr_rfresh_tgtdevs(struct mpi3mr_ioc *mrioc)
+  * Return: Nothing.
+  */
+ static void mpi3mr_update_tgtdev(struct mpi3mr_ioc *mrioc,
+-	struct mpi3mr_tgt_dev *tgtdev, struct mpi3_device_page0 *dev_pg0)
++	struct mpi3mr_tgt_dev *tgtdev, struct mpi3_device_page0 *dev_pg0,
++	bool is_added)
+ {
+ 	u16 flags = 0;
+-	struct mpi3mr_stgt_priv_data *scsi_tgt_priv_data;
++	struct mpi3mr_stgt_priv_data *scsi_tgt_priv_data = NULL;
+ 	u8 prot_mask = 0;
+ 
+ 	tgtdev->perst_id = le16_to_cpu(dev_pg0->persistent_id);
+@@ -959,12 +993,19 @@ static void mpi3mr_update_tgtdev(struct mpi3mr_ioc *mrioc,
+ 	flags = le16_to_cpu(dev_pg0->flags);
+ 	tgtdev->is_hidden = (flags & MPI3_DEVICE0_FLAGS_HIDDEN);
+ 
++	if (is_added == true)
++		tgtdev->io_throttle_enabled =
++		    (flags & MPI3_DEVICE0_FLAGS_IO_THROTTLING_REQUIRED) ? 1 : 0;
++
++
+ 	if (tgtdev->starget && tgtdev->starget->hostdata) {
+ 		scsi_tgt_priv_data = (struct mpi3mr_stgt_priv_data *)
+ 		    tgtdev->starget->hostdata;
+ 		scsi_tgt_priv_data->perst_id = tgtdev->perst_id;
+ 		scsi_tgt_priv_data->dev_handle = tgtdev->dev_handle;
+ 		scsi_tgt_priv_data->dev_type = tgtdev->dev_type;
++		scsi_tgt_priv_data->io_throttle_enabled =
++		    tgtdev->io_throttle_enabled;
+ 	}
+ 
+ 	switch (dev_pg0->access_status) {
+@@ -1042,10 +1083,27 @@ static void mpi3mr_update_tgtdev(struct mpi3mr_ioc *mrioc,
+ 	{
+ 		struct mpi3_device0_vd_format *vdinf =
+ 		    &dev_pg0->device_specific.vd_format;
++		struct mpi3mr_throttle_group_info *tg = NULL;
++		u16 vdinf_io_throttle_group =
++		    le16_to_cpu(vdinf->io_throttle_group);
+ 
+-		tgtdev->dev_spec.vol_inf.state = vdinf->vd_state;
++		tgtdev->dev_spec.vd_inf.state = vdinf->vd_state;
+ 		if (vdinf->vd_state == MPI3_DEVICE0_VD_STATE_OFFLINE)
+ 			tgtdev->is_hidden = 1;
++		tgtdev->dev_spec.vd_inf.tg_id = vdinf_io_throttle_group;
++		tgtdev->dev_spec.vd_inf.tg_high =
++		    le16_to_cpu(vdinf->io_throttle_group_high) * 2048;
++		tgtdev->dev_spec.vd_inf.tg_low =
++		    le16_to_cpu(vdinf->io_throttle_group_low) * 2048;
++		if (vdinf_io_throttle_group < mrioc->num_io_throttle_group) {
++			tg = mrioc->throttle_groups + vdinf_io_throttle_group;
++			tg->id = vdinf_io_throttle_group;
++			tg->high = tgtdev->dev_spec.vd_inf.tg_high;
++			tg->low = tgtdev->dev_spec.vd_inf.tg_low;
++		}
++		tgtdev->dev_spec.vd_inf.tg = tg;
++		if (scsi_tgt_priv_data)
++			scsi_tgt_priv_data->throttle_group = tg;
+ 		break;
+ 	}
+ 	default:
+@@ -1142,7 +1200,7 @@ static void mpi3mr_devinfochg_evt_bh(struct mpi3mr_ioc *mrioc,
+ 	tgtdev = mpi3mr_get_tgtdev_by_handle(mrioc, dev_handle);
+ 	if (!tgtdev)
+ 		goto out;
+-	mpi3mr_update_tgtdev(mrioc, tgtdev, dev_pg0);
++	mpi3mr_update_tgtdev(mrioc, tgtdev, dev_pg0, false);
+ 	if (!tgtdev->is_hidden && !tgtdev->host_exposed)
+ 		mpi3mr_report_tgtdev_to_host(mrioc, perst_id);
+ 	if (tgtdev->is_hidden && tgtdev->host_exposed)
+@@ -1548,13 +1606,13 @@ static int mpi3mr_create_tgtdev(struct mpi3mr_ioc *mrioc,
+ 	perst_id = le16_to_cpu(dev_pg0->persistent_id);
+ 	tgtdev = mpi3mr_get_tgtdev_by_perst_id(mrioc, perst_id);
+ 	if (tgtdev) {
+-		mpi3mr_update_tgtdev(mrioc, tgtdev, dev_pg0);
++		mpi3mr_update_tgtdev(mrioc, tgtdev, dev_pg0, true);
+ 		mpi3mr_tgtdev_put(tgtdev);
+ 	} else {
+ 		tgtdev = mpi3mr_alloc_tgtdev();
+ 		if (!tgtdev)
+ 			return -ENOMEM;
+-		mpi3mr_update_tgtdev(mrioc, tgtdev, dev_pg0);
++		mpi3mr_update_tgtdev(mrioc, tgtdev, dev_pg0, true);
+ 		mpi3mr_tgtdev_add_to_list(mrioc, tgtdev);
+ 	}
+ 
+@@ -2566,6 +2624,11 @@ void mpi3mr_process_op_reply_desc(struct mpi3mr_ioc *mrioc,
+ 	u32 xfer_count = 0, sense_count = 0, resp_data = 0;
+ 	u16 dev_handle = 0xFFFF;
+ 	struct scsi_sense_hdr sshdr;
++	struct mpi3mr_stgt_priv_data *stgt_priv_data = NULL;
++	struct mpi3mr_sdev_priv_data *sdev_priv_data = NULL;
++	u32 ioc_pend_data_len = 0, tg_pend_data_len = 0, data_len_blks = 0;
++	struct mpi3mr_throttle_group_info *tg = NULL;
++	u8 throttle_enabled_dev = 0;
+ 
+ 	*reply_dma = 0;
+ 	reply_desc_type = le16_to_cpu(reply_desc->reply_flags) &
+@@ -2622,6 +2685,51 @@ void mpi3mr_process_op_reply_desc(struct mpi3mr_ioc *mrioc,
+ 		goto out;
+ 	}
+ 	priv = scsi_cmd_priv(scmd);
++
++	data_len_blks = scsi_bufflen(scmd) >> 9;
++	sdev_priv_data = scmd->device->hostdata;
++	if (sdev_priv_data) {
++		stgt_priv_data = sdev_priv_data->tgt_priv_data;
++		if (stgt_priv_data) {
++			tg = stgt_priv_data->throttle_group;
++			throttle_enabled_dev =
++			    stgt_priv_data->io_throttle_enabled;
++		}
++	}
++	if (unlikely((data_len_blks >= mrioc->io_throttle_data_length) &&
++	    throttle_enabled_dev)) {
++		ioc_pend_data_len = atomic_sub_return(data_len_blks,
++		    &mrioc->pend_large_data_sz);
++		if (tg) {
++			tg_pend_data_len = atomic_sub_return(data_len_blks,
++			    &tg->pend_large_data_sz);
++			if (tg->io_divert  && ((ioc_pend_data_len <=
++			    mrioc->io_throttle_low) &&
++			    (tg_pend_data_len <= tg->low))) {
++				tg->io_divert = 0;
++				mpi3mr_set_io_divert_for_all_vd_in_tg(
++				    mrioc, tg, 0);
++			}
++		} else {
++			if (ioc_pend_data_len <= mrioc->io_throttle_low)
++				stgt_priv_data->io_divert = 0;
++		}
++	} else if (unlikely((stgt_priv_data && stgt_priv_data->io_divert))) {
++		ioc_pend_data_len = atomic_read(&mrioc->pend_large_data_sz);
++		if (!tg) {
++			if (ioc_pend_data_len <= mrioc->io_throttle_low)
++				stgt_priv_data->io_divert = 0;
++
++		} else if (ioc_pend_data_len <= mrioc->io_throttle_low) {
++			tg_pend_data_len = atomic_read(&tg->pend_large_data_sz);
++			if (tg->io_divert  && (tg_pend_data_len <= tg->low)) {
++				tg->io_divert = 0;
++				mpi3mr_set_io_divert_for_all_vd_in_tg(
++				    mrioc, tg, 0);
++			}
++		}
++	}
++
+ 	if (success_desc) {
+ 		scmd->result = DID_OK << 16;
+ 		goto out_success;
+@@ -3842,6 +3950,11 @@ static int mpi3mr_target_alloc(struct scsi_target *starget)
+ 		tgt_dev->starget = starget;
+ 		atomic_set(&scsi_tgt_priv_data->block_io, 0);
+ 		retval = 0;
++		scsi_tgt_priv_data->io_throttle_enabled =
++		    tgt_dev->io_throttle_enabled;
++		if (tgt_dev->dev_type == MPI3_DEVICE_DEVFORM_VD)
++			scsi_tgt_priv_data->throttle_group =
++			    tgt_dev->dev_spec.vd_inf.tg;
+ 	} else
+ 		retval = -ENXIO;
+ 	spin_unlock_irqrestore(&mrioc->tgtdev_lock, flags);
+@@ -3997,10 +4110,13 @@ static int mpi3mr_qcmd(struct Scsi_Host *shost,
+ 	int retval = 0;
+ 	u16 dev_handle;
+ 	u16 host_tag;
+-	u32 scsiio_flags = 0;
++	u32 scsiio_flags = 0, data_len_blks = 0;
+ 	struct request *rq = scsi_cmd_to_rq(scmd);
+ 	int iprio_class;
+ 	u8 is_pcie_dev = 0;
++	u32 tracked_io_sz = 0;
++	u32 ioc_pend_data_len = 0, tg_pend_data_len = 0;
++	struct mpi3mr_throttle_group_info *tg = NULL;
+ 
+ 	if (mrioc->unrecoverable) {
+ 		scmd->result = DID_ERROR << 16;
+@@ -4104,11 +4220,48 @@ static int mpi3mr_qcmd(struct Scsi_Host *shost,
+ 		goto out;
+ 	}
+ 	op_req_q = &mrioc->req_qinfo[scmd_priv_data->req_q_idx];
++		data_len_blks = scsi_bufflen(scmd) >> 9;
++	if ((data_len_blks >= mrioc->io_throttle_data_length) &&
++	    stgt_priv_data->io_throttle_enabled) {
++		tracked_io_sz = data_len_blks;
++		tg = stgt_priv_data->throttle_group;
++		if (tg) {
++			ioc_pend_data_len = atomic_add_return(data_len_blks,
++			    &mrioc->pend_large_data_sz);
++			tg_pend_data_len = atomic_add_return(data_len_blks,
++			    &tg->pend_large_data_sz);
++			if (!tg->io_divert  && ((ioc_pend_data_len >=
++			    mrioc->io_throttle_high) ||
++			    (tg_pend_data_len >= tg->high))) {
++				tg->io_divert = 1;
++				mpi3mr_set_io_divert_for_all_vd_in_tg(mrioc,
++				    tg, 1);
++			}
++		} else {
++			ioc_pend_data_len = atomic_add_return(data_len_blks,
++			    &mrioc->pend_large_data_sz);
++			if (ioc_pend_data_len >= mrioc->io_throttle_high)
++				stgt_priv_data->io_divert = 1;
++		}
++	}
++
++	if (stgt_priv_data->io_divert) {
++		scsiio_req->msg_flags |=
++		    MPI3_SCSIIO_MSGFLAGS_DIVERT_TO_FIRMWARE;
++		scsiio_flags |= MPI3_SCSIIO_FLAGS_DIVERT_REASON_IO_THROTTLING;
++	}
++	scsiio_req->flags = cpu_to_le32(scsiio_flags);
+ 
+ 	if (mpi3mr_op_request_post(mrioc, op_req_q,
+ 	    scmd_priv_data->mpi3mr_scsiio_req)) {
+ 		mpi3mr_clear_scmd_priv(mrioc, scmd);
+ 		retval = SCSI_MLQUEUE_HOST_BUSY;
++		if (tracked_io_sz) {
++			atomic_sub(tracked_io_sz, &mrioc->pend_large_data_sz);
++			if (tg)
++				atomic_sub(tracked_io_sz,
++				    &tg->pend_large_data_sz);
++		}
+ 		goto out;
+ 	}
+ 
 -- 
 2.27.0
 
 
---000000000000eedfa705e3505772
+--0000000000000e820205e35058f5
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -157,13 +720,13 @@ X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
 eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
 Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
 MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILg9xrMCmoVfCD50VEJp
-+SGv4SiEOyp8u1hojLD+CcFbMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIyMDcwODE5MzgxNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFvZirXdyYtg3IC0iEZs
+EDncAFyL6CAeqwiO6T/PezNaMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIyMDcwODE5MzgxN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
 BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBeDJOc+HB6gcrVDg8k7rEH+cQ3fzBwDiXhFKHe
-futQPDsjz91L24DSjUqc+wqqBp7bmVQaBIH2yIJv/RmvoQwn+XxHfiomqKFX6wqwfpaEol78MJzQ
-4sbmvTaUbn+AjyQ0W+uRzp5aBB7DHJPReTgrklI0rptzLcLshDhBMxt8JvhHo+pj3yxNx4CYTLkE
-Vsfmz9k3qsHN9dkpx9hP4NfCloB3Qv/RQEsvyWRO2GPTv4vs7HcxdCQ120hqkNY1a+ZYPg/OURRK
-G7P/wybqvb2PIZBSAAyxEI9fTmC4gcXnCLuseXXQV3siEpMqf1VikL4MPsXN4luOV2UhjhsH8YhA
---000000000000eedfa705e3505772--
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCVAp5gp59WyOM/Xf5qlaPo4pnAL6B0DyuWCmum
+gidrdtCzIUy2nSazkRQZdrLk/TtFyi79UoNEUeAlzsX0nj4xbp7ziL9prtM/qWa7y/0eOJCnRc93
+TwZ02qBfW8MVe4XFCo2GHyUgTJSwexv9lvTzz69r/tBwYZzQAcKr0cWRmww+YREVPutbICECqbis
+6425IGzRC8HIcQzRat/pQvqYlSLESuNmkV8Vw/H1t3HE57VU80CpM72CEoWIvtms/Mhi9ZGvZmVH
+a1r5NG/z2joeaY3v1qi+xzRKYqBTXf0PTOAf2ujul9GDRTI/Q+Uav2dahVf038D5bulaOtViiFfF
+--0000000000000e820205e35058f5--
