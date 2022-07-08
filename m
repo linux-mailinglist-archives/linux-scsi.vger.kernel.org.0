@@ -2,49 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4A456C2C8
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jul 2022 01:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0470356C485
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jul 2022 01:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238951AbiGHS67 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Jul 2022 14:58:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        id S239374AbiGHSpn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Jul 2022 14:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238179AbiGHS65 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Jul 2022 14:58:57 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123C41C138
-        for <linux-scsi@vger.kernel.org>; Fri,  8 Jul 2022 11:58:57 -0700 (PDT)
+        with ESMTP id S235506AbiGHSpn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Jul 2022 14:45:43 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1F85724F
+        for <linux-scsi@vger.kernel.org>; Fri,  8 Jul 2022 11:45:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657306736; x=1688842736;
+  t=1657305939; x=1688841939;
   h=subject:from:to:cc:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=4qKp7IvRA8jI2S6/EChGZqo06FK6YHS2bK1qN9IdsIU=;
-  b=juwjafDyODO0b40cKqEZT02MuJHh859Pm5gbZ8sZeJGJHTkwYY/8sri6
-   DYtbSNJDwlL7Zu1YM/bE0WtWubzjSlARS8xlav0RlpUGk7LRlh+2UoAAf
-   rYHto/9OUXi76Oe5OFRdTCHAuAgfp6fDOM/lPcOxQFCRgriQyCyyllmPm
-   XPNFEEmUctr0y7T+MaqAJAyGIGvXVaME9khJuLADy0xEqiX6ZbahiWSyx
-   PwIjCjcxCj4o4zo8xL1EoVdrdrsInr4uSRvOsv5msIBafn5TUtr4lExez
-   PzLn9kfFxN+VUKe++j7PTSwNLhROEE82nNrg3HrHLx1SIwj0K74ht3VmP
-   A==;
+  bh=wwriwoL3w6Yencd+55q9PLiYVJRkTvUiug4j91TUZJ4=;
+  b=W/qLMB5wOtq051F7OtKSvrB2rB4A/WSJj/WfpW7Z9NzoSPCmL3l1ihwW
+   Yi/N+vhfC8XnWGCZ+jUNdw5wt9620ga2OcNckdIjdd/zY42fnBr22CJoA
+   eMbp3kQqqXR/U3QUWCeis+Q2cdYHpmkDnMFsNDLL0NvOCKYsOTsAXlKD1
+   OhopuFUI4gJ7+S5l93q0PBReAWkC8UbgWh2KYOv92K6JLQ8vHcff2iFuB
+   LYWefu79ofWBKMSUjhEbn5qPduKyblxfjb/mxQFuj4rhTRzowMU8zRW8a
+   Qhp/pb1/dG5hvMK9mfZTmjGRwtXSsVu78BPvCkcpsgSN4dCbdbUFSQzwo
+   g==;
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="171647209"
+   d="scan'208";a="103695498"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 11:58:56 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 11:45:38 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 8 Jul 2022 11:58:56 -0700
+ 15.1.2375.17; Fri, 8 Jul 2022 11:45:37 -0700
 Received: from brunhilda.pdev.net (10.10.115.15) by chn-vm-ex04.mchp-main.com
  (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Fri, 8 Jul 2022 11:58:56 -0700
+ Transport; Fri, 8 Jul 2022 11:45:37 -0700
 Received: from brunhilda.pdev.net (localhost [127.0.0.1])
-        by brunhilda.pdev.net (8.15.2/8.15.2/Debian-22ubuntu3) with ESMTP id 268J03GD178993;
-        Fri, 8 Jul 2022 14:00:03 -0500
+        by brunhilda.pdev.net (8.15.2/8.15.2/Debian-22ubuntu3) with ESMTP id 268IkjVR177245;
+        Fri, 8 Jul 2022 13:46:45 -0500
 Received: (from brace@localhost)
-        by brunhilda.pdev.net (8.15.2/8.15.2/Submit) id 268IiWMV176988;
-        Fri, 8 Jul 2022 13:44:32 -0500
+        by brunhilda.pdev.net (8.15.2/8.15.2/Submit) id 268IkjHp177244;
+        Fri, 8 Jul 2022 13:46:45 -0500
 X-Authentication-Warning: brunhilda.pdev.net: brace set sender to don.brace@microchip.com using -f
 Subject: [PATCH V2 00/16] smartpqi updates
 From:   Don Brace <don.brace@microchip.com>
@@ -52,10 +52,12 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
         <gerry.morong@microchip.com>, <mahesh.rajashekhara@microchip.com>,
         <mike.mcgowen@microchip.com>, <murthy.bhat@microchip.com>,
-        <kumar.meiyappan@microchip.com>, <hch@infradead.org>
+        <kumar.meiyappan@microchip.com>, <hch@infradead.org>,
+        <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
+        <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Fri, 8 Jul 2022 13:44:32 -0500
-Message-ID: <165730583388.176877.14952461707528012388.stgit@brunhilda>
+Date:   Fri, 8 Jul 2022 13:46:45 -0500
+Message-ID: <165730597930.177165.11663580730429681919.stgit@brunhilda>
 User-Agent: StGit/1.5.dev2+g9ce680a52bd9
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -118,11 +120,6 @@ This set of changes consists of:
    from customers with large installations requesting a longer wait time.
  * Updated copyright information.
  * Bump the driver version to 2.1.18-045
-
-Changes since V1:
-I had trouble with sendmail. I am not sure if anyone outside of
-my office even received my patches. I believe the issue is now
-resolved, so I am resending. Sorry about that.
 
 ---
 
