@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD39B56C3FF
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jul 2022 01:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4721C56C457
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jul 2022 01:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239673AbiGHSqr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Jul 2022 14:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
+        id S239682AbiGHSrL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Jul 2022 14:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239672AbiGHSqo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Jul 2022 14:46:44 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AB0796BF
-        for <linux-scsi@vger.kernel.org>; Fri,  8 Jul 2022 11:46:42 -0700 (PDT)
+        with ESMTP id S239132AbiGHSrK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Jul 2022 14:47:10 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE0E796BF
+        for <linux-scsi@vger.kernel.org>; Fri,  8 Jul 2022 11:47:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657306002; x=1688842002;
+  t=1657306029; x=1688842029;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=XfK1ZJ94igatQoWQfCRlJxtxEamYvKP8YVvIaEkA4iU=;
-  b=Wy3txGi6iI7Hcv7ci54+3fTVQEFnLRYpN7Hs0h6e+/Q/1gSwL7t01t48
-   g8P4Ex4F2iefXATunFeD2YECPbqOfWR5yzs/Ab3b8U5D3fgeHP0oBGJyT
-   pjO1lCDCXA0Uvpkpr2LB+HDBtmmKgqkyVZh80n5390YbkXafi7O8JsIHa
-   AY4UnLCyftHXUx+q4T0QoEVxSuoIcrDc2GZkJTkOBX81iriD3CWZWNYjx
-   YC+WpWMnfniQSKV5U6epFE3SygKITHTfJoqrC6C++C295mjwyXkss7e8K
-   ZtQh6Zxk11Jku4+FVHmnRurEtcisdIrdC0pDY8e21npvzFHWFCj7GwPdx
-   A==;
+  bh=QuCbbpl7sCEQeP5cBnTlhO3tF+AhwUOxr3eKPGSOmsQ=;
+  b=fj6F9vBxXQX5O0cQqHHtyyq3h7cZ+X4SGP2hQq4mkkc+Zmdk/aSt2Mg4
+   9GPxVyDDHoBLZh6EMyU4+1rEo74Bx7nGAcQc5lY7OZCTZS7rrCh6NDPIi
+   3NWTANYdBmrwilZRKhv3YeAMdg40bFvzjS5p4bFohyuAVbYTAlAAXSTT1
+   WfckiObzTr28NG9tIRjs/C99E9cjPIJKmiMqdkkem3pM6EMn0OEJXD4lm
+   NBYgdyF2YDUSf0E77xSUmcH0tExok9IstyZDLYnWWj2Kct7Apk3Zyig8p
+   Bw59IxcrR+AL2gs3KE1mJfwZtjJaW86L/Ys26xBx+83syIz2mdg9BKL0b
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="181377329"
+   d="scan'208";a="163971205"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 11:46:42 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 11:46:59 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 8 Jul 2022 11:46:39 -0700
+ 15.1.2375.17; Fri, 8 Jul 2022 11:46:44 -0700
 Received: from brunhilda.pdev.net (10.10.115.15) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Fri, 8 Jul 2022 11:46:39 -0700
+ Transport; Fri, 8 Jul 2022 11:46:44 -0700
 Received: from brunhilda.pdev.net (localhost [127.0.0.1])
-        by brunhilda.pdev.net (8.15.2/8.15.2/Debian-22ubuntu3) with ESMTP id 268Ilkuj177479;
-        Fri, 8 Jul 2022 13:47:46 -0500
+        by brunhilda.pdev.net (8.15.2/8.15.2/Debian-22ubuntu3) with ESMTP id 268IlpSL177491;
+        Fri, 8 Jul 2022 13:47:51 -0500
 Received: (from brace@localhost)
-        by brunhilda.pdev.net (8.15.2/8.15.2/Submit) id 268IlkpN177478;
-        Fri, 8 Jul 2022 13:47:46 -0500
+        by brunhilda.pdev.net (8.15.2/8.15.2/Submit) id 268Ilpu9177490;
+        Fri, 8 Jul 2022 13:47:51 -0500
 X-Authentication-Warning: brunhilda.pdev.net: brace set sender to don.brace@microchip.com using -f
-Subject: [PATCH V2 12/16] smartpqi: add module param to disable managed ints
+Subject: [PATCH V2 13/16] smartpqi: update deleting a LUN via sysfs
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -56,8 +56,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
         <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Fri, 8 Jul 2022 13:47:46 -0500
-Message-ID: <165730606638.177165.12846020942931640329.stgit@brunhilda>
+Date:   Fri, 8 Jul 2022 13:47:51 -0500
+Message-ID: <165730607154.177165.9723066932202995774.stgit@brunhilda>
 In-Reply-To: <165730597930.177165.11663580730429681919.stgit@brunhilda>
 References: <165730597930.177165.11663580730429681919.stgit@brunhilda>
 User-Agent: StGit/1.5.dev2+g9ce680a52bd9
@@ -74,84 +74,102 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Mike McGowen <Mike.McGowen@microchip.com>
+From: Kevin Barnett <kevin.barnett@microchip.com>
 
-Allow SMP affinity to be changeable by disabling managed interrupts.
+Change removing a LUN using sysfs from an internal driver function
+pqi_remove_all_scsi_devices() to using the .slave_destroy entry in
+the scsi_host_template.
 
-On distributions where the driver is enabled for multi-queue support the
-driver utilizes kernel managed interrupts, which automatically distributes
-interrupts to all available CPUs and assigns SMP affinity.
+A LUN can be deleted via sysfs using this syntax:
 
-On most distributions, the affinity can not be changed by the user.
+echo 1 > /sys/block/sdX/device/delete
 
-This change will allow managed interrupts to be disabled by the user via a
-module parameter while still allowing multi-queue support to function
-properly.
-
-Use the module parameter disable_managed_interrupts=1
-
-Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
-Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
-Signed-off-by: Mike McGowen <Mike.McGowen@microchip.com>
+Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
+Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi.h      |    2 +-
- drivers/scsi/smartpqi/smartpqi_init.c |   13 ++++++++++++-
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c |   48 +++++++++++++++++++++------------
+ 1 file changed, 30 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
-index f1145ded843e..49d3a8a275f3 100644
---- a/drivers/scsi/smartpqi/smartpqi.h
-+++ b/drivers/scsi/smartpqi/smartpqi.h
-@@ -1351,7 +1351,7 @@ struct pqi_ctrl_info {
- 	u8		enable_r6_writes : 1;
- 	u8		lv_drive_type_mix_valid : 1;
- 	u8		enable_stream_detection : 1;
--
-+	u8		disable_managed_interrupts : 1;
- 	u8		ciss_report_log_flags;
- 	u32		max_transfer_encrypted_sas_sata;
- 	u32		max_transfer_encrypted_nvme;
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index e07282ed0f34..2df1e8453029 100644
+index 2df1e8453029..122772628a2f 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -175,6 +175,12 @@ module_param_named(hide_vsep,
- 	pqi_hide_vsep, int, 0644);
- MODULE_PARM_DESC(hide_vsep, "Hide the virtual SEP for direct attached drives.");
- 
-+static int pqi_disable_managed_interrupts;
-+module_param_named(disable_managed_interrupts,
-+	pqi_disable_managed_interrupts, int, 0644);
-+MODULE_PARM_DESC(disable_managed_interrupts,
-+	"Disable the kernel automatically assigning SMP affinity to IRQs.");
-+
- static char *raid_levels[] = {
- 	"RAID-0",
- 	"RAID-4",
-@@ -4039,10 +4045,14 @@ static void pqi_free_irqs(struct pqi_ctrl_info *ctrl_info)
- static int pqi_enable_msix_interrupts(struct pqi_ctrl_info *ctrl_info)
- {
- 	int num_vectors_enabled;
-+	unsigned int flags = PCI_IRQ_MSIX;
-+
-+	if (!pqi_disable_managed_interrupts)
-+		flags |= PCI_IRQ_AFFINITY;
- 
- 	num_vectors_enabled = pci_alloc_irq_vectors(ctrl_info->pci_dev,
- 			PQI_MIN_MSIX_VECTORS, ctrl_info->num_queue_groups,
--			PCI_IRQ_MSIX | PCI_IRQ_AFFINITY);
-+			flags);
- 	if (num_vectors_enabled < 0) {
- 		dev_err(&ctrl_info->pci_dev->dev,
- 			"MSI-X init failed with error %d\n",
-@@ -8588,6 +8598,7 @@ static struct pqi_ctrl_info *pqi_alloc_ctrl_info(int numa_node)
- 	ctrl_info->max_write_raid_5_6 = PQI_DEFAULT_MAX_WRITE_RAID_5_6;
- 	ctrl_info->max_write_raid_1_10_2drive = ~0;
- 	ctrl_info->max_write_raid_1_10_3drive = ~0;
-+	ctrl_info->disable_managed_interrupts = pqi_disable_managed_interrupts;
- 
- 	return ctrl_info;
+@@ -2536,23 +2536,6 @@ static int pqi_update_scsi_devices(struct pqi_ctrl_info *ctrl_info)
+ 	return rc;
  }
+ 
+-static void pqi_remove_all_scsi_devices(struct pqi_ctrl_info *ctrl_info)
+-{
+-	unsigned long flags;
+-	struct pqi_scsi_dev *device;
+-	struct pqi_scsi_dev *next;
+-
+-	list_for_each_entry_safe(device, next, &ctrl_info->scsi_device_list,
+-		scsi_device_list_entry) {
+-		if (pqi_is_device_added(device))
+-			pqi_remove_device(ctrl_info, device);
+-		spin_lock_irqsave(&ctrl_info->scsi_device_list_lock, flags);
+-		list_del(&device->scsi_device_list_entry);
+-		pqi_free_device(device);
+-		spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+-	}
+-}
+-
+ static int pqi_scan_scsi_devices(struct pqi_ctrl_info *ctrl_info)
+ {
+ 	int rc;
+@@ -6476,6 +6459,35 @@ static int pqi_slave_configure(struct scsi_device *sdev)
+ 	return rc;
+ }
+ 
++static void pqi_slave_destroy(struct scsi_device *sdev)
++{
++	struct pqi_ctrl_info *ctrl_info;
++	struct pqi_scsi_dev *device;
++	int mutex_acquired;
++	unsigned long flags;
++
++	ctrl_info = shost_to_hba(sdev->host);
++
++	mutex_acquired = mutex_trylock(&ctrl_info->scan_mutex);
++	if (!mutex_acquired)
++		return;
++
++	device = sdev->hostdata;
++	if (!device) {
++		mutex_unlock(&ctrl_info->scan_mutex);
++		return;
++	}
++
++	spin_lock_irqsave(&ctrl_info->scsi_device_list_lock, flags);
++	list_del(&device->scsi_device_list_entry);
++	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
++
++	mutex_unlock(&ctrl_info->scan_mutex);
++
++	pqi_dev_info(ctrl_info, "removed", device);
++	pqi_free_device(device);
++}
++
+ static int pqi_getpciinfo_ioctl(struct pqi_ctrl_info *ctrl_info, void __user *arg)
+ {
+ 	struct pci_dev *pci_dev;
+@@ -7363,6 +7375,7 @@ static struct scsi_host_template pqi_driver_template = {
+ 	.ioctl = pqi_ioctl,
+ 	.slave_alloc = pqi_slave_alloc,
+ 	.slave_configure = pqi_slave_configure,
++	.slave_destroy = pqi_slave_destroy,
+ 	.map_queues = pqi_map_queues,
+ 	.sdev_groups = pqi_sdev_groups,
+ 	.shost_groups = pqi_shost_groups,
+@@ -8649,7 +8662,6 @@ static void pqi_remove_ctrl(struct pqi_ctrl_info *ctrl_info)
+ 		pqi_fail_all_outstanding_requests(ctrl_info);
+ 		ctrl_info->pqi_mode_enabled = false;
+ 	}
+-	pqi_remove_all_scsi_devices(ctrl_info);
+ 	pqi_unregister_scsi(ctrl_info);
+ 	if (ctrl_info->pqi_mode_enabled)
+ 		pqi_revert_to_sis_mode(ctrl_info);
 
