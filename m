@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E494356C1ED
-	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jul 2022 01:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E35356C2F1
+	for <lists+linux-scsi@lfdr.de>; Sat,  9 Jul 2022 01:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239646AbiGHSpz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Jul 2022 14:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
+        id S239653AbiGHSqZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Jul 2022 14:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239625AbiGHSpv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Jul 2022 14:45:51 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C13E65D52
-        for <linux-scsi@vger.kernel.org>; Fri,  8 Jul 2022 11:45:50 -0700 (PDT)
+        with ESMTP id S239596AbiGHSqY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Jul 2022 14:46:24 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A844D4DC
+        for <linux-scsi@vger.kernel.org>; Fri,  8 Jul 2022 11:46:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657305952; x=1688841952;
+  t=1657305983; x=1688841983;
   h=subject:from:to:cc:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bJRpBTGmKCGVvVPI2q0kSaHw//a7RaFcG1Wy6g0Rr0k=;
-  b=Y2besGv2zqFwLpeb+nuq8wN/9iTbt6c48DBO3d7ISdAEkZggAIIYy0XN
-   Bx3vcQWrJYKBQI/WF1swwsMRi2SWvDp7+WEZiC9kJ6NY4TrK4tYXy8djH
-   fe01E5SHO52D9PKlfRdjHkPZqPK9laH7+dWO9IAi20NOi2686eX9R3IX+
-   X/NPjdCmZZVSUN/AhHMDHJkNODoGRufNoQeize2j4LgBmqzVCdCSVJhZO
-   h7RgV43+KtxwHjzlL+gCS9N7YFapdFFpUj3e9MHkXCxfyRB+2Rf+K8ZTg
-   eaDo00M9C2c8OIpU1FzI9f9Hgup60uFv6mBfwXfYG1niDHkebIqfZg8FV
-   A==;
+  bh=SWlYYEdMbNC6dAJB0+WlXz8wtwHqRzyxIQA0S2veKRg=;
+  b=gdKiABCVk73Iva7S/rKVSoE1CdTWkMtGyjagcUKE6LrjeUS0NLKxCPxl
+   ZiHc+Qc9SDKnngWL4biT9ZIjhUsDjMGariME77qx4wUtoVYB+erSRKZLl
+   2+rqjzTrt4seJ51MvZlLmSDjnRxAiFa0WodTxPLutP6S90vodcQXBofmQ
+   tTMVg8LkQf9Qist+JUYpD89vOo3iBZj3ocGXSb5EVoCmFwDDK/rSwOgak
+   RRgwYbQmdTBv6aF6x8pOXzM/qKP5eZeX1LWQKscmIbP7lTLPQtAtBf/4i
+   JbmDkhjhdoFK498TK/cfVhJWHL/B3f9Dm+xBtUM6aA3Jn79MOcBbA2jKB
+   g==;
 X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="171374316"
+   d="scan'208";a="103695540"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 11:45:51 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jul 2022 11:46:11 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 8 Jul 2022 11:45:48 -0700
-Received: from brunhilda.pdev.net (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ 15.1.2375.17; Fri, 8 Jul 2022 11:45:53 -0700
+Received: from brunhilda.pdev.net (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Fri, 8 Jul 2022 11:45:48 -0700
+ Transport; Fri, 8 Jul 2022 11:45:53 -0700
 Received: from brunhilda.pdev.net (localhost [127.0.0.1])
-        by brunhilda.pdev.net (8.15.2/8.15.2/Debian-22ubuntu3) with ESMTP id 268IktXw177297;
-        Fri, 8 Jul 2022 13:46:55 -0500
+        by brunhilda.pdev.net (8.15.2/8.15.2/Debian-22ubuntu3) with ESMTP id 268Il08T177310;
+        Fri, 8 Jul 2022 13:47:00 -0500
 Received: (from brace@localhost)
-        by brunhilda.pdev.net (8.15.2/8.15.2/Submit) id 268Iktmw177296;
-        Fri, 8 Jul 2022 13:46:55 -0500
+        by brunhilda.pdev.net (8.15.2/8.15.2/Submit) id 268Il0AA177309;
+        Fri, 8 Jul 2022 13:47:00 -0500
 X-Authentication-Warning: brunhilda.pdev.net: brace set sender to don.brace@microchip.com using -f
-Subject: [PATCH V2 02/16] smartpqi: add controller fw version to console log
+Subject: [PATCH V2 03/16] smartpqi: add PCI-IDs for ramaxel controllers
 From:   Don Brace <don.brace@microchip.com>
 To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
@@ -56,8 +56,8 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
         <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Fri, 8 Jul 2022 13:46:55 -0500
-Message-ID: <165730601536.177165.17698744242908911822.stgit@brunhilda>
+Date:   Fri, 8 Jul 2022 13:47:00 -0500
+Message-ID: <165730602045.177165.3720208650043407285.stgit@brunhilda>
 In-Reply-To: <165730597930.177165.11663580730429681919.stgit@brunhilda>
 References: <165730597930.177165.11663580730429681919.stgit@brunhilda>
 User-Agent: StGit/1.5.dev2+g9ce680a52bd9
@@ -74,33 +74,42 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Gilbert Wu <Gilbert.Wu@microchip.com>
+From: Murthy Bhat <Murthy.Bhat@microchip.com>
 
-Print controller firmware version to OS message log during driver
-initialization or after OFA.
+Add the following controllers (values in hex):
+
+                               VID  / DID  / SVID / SDID
+                               ---- / ---- / ---- / ----
+Ramaxel FBGF-RAD PM8204        9005 / 028F / 1CC4 / 0101
+Ramaxel FBGF-RAD PM8222        9005 / 028F / 1CC4 / 0201
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
 Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
 Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
-Signed-off-by: Gilbert Wu <Gilbert.Wu@microchip.com>
+Signed-off-by: Murthy Bhat <Murthy.Bhat@microchip.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- drivers/scsi/smartpqi/smartpqi_init.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/scsi/smartpqi/smartpqi_init.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index fa5cd2dfa3ad..394583672b0d 100644
+index 394583672b0d..b13233dbe46c 100644
 --- a/drivers/scsi/smartpqi/smartpqi_init.c
 +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -7469,6 +7469,9 @@ static int pqi_get_ctrl_product_details(struct pqi_ctrl_info *ctrl_info)
- 		sizeof(identify->vendor_id));
- 	ctrl_info->vendor[sizeof(identify->vendor_id)] = '\0';
- 
-+	dev_info(&ctrl_info->pci_dev->dev,
-+		"Firmware version: %s\n", ctrl_info->firmware_version);
-+
- out:
- 	kfree(identify);
- 
+@@ -9746,6 +9746,14 @@ static const struct pci_device_id pqi_pci_id_table[] = {
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       0x1cf2, 0x0b45)
+ 	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1cc4, 0x0101)
++	},
++	{
++		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
++			       0x1cc4, 0x0201)
++	},
+ 	{
+ 		PCI_DEVICE_SUB(PCI_VENDOR_ID_ADAPTEC2, 0x028f,
+ 			       PCI_ANY_ID, PCI_ANY_ID)
 
