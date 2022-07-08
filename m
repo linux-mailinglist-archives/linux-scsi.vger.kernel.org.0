@@ -2,108 +2,129 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F21E56B332
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Jul 2022 09:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A6956B3A5
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Jul 2022 09:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237378AbiGHHLz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Jul 2022 03:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
+        id S237228AbiGHHfz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Jul 2022 03:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237369AbiGHHLv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Jul 2022 03:11:51 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE4776975;
-        Fri,  8 Jul 2022 00:11:50 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4LfPbN0nG9z9tKr;
-        Fri,  8 Jul 2022 09:11:44 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id GUC-TTr3AKPS; Fri,  8 Jul 2022 09:11:44 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4LfPbK6l2yz9tFj;
-        Fri,  8 Jul 2022 09:11:41 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id CE6C88B76C;
-        Fri,  8 Jul 2022 09:11:41 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id NctDR-Rk0r9G; Fri,  8 Jul 2022 09:11:41 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.233.202])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6FB338B763;
-        Fri,  8 Jul 2022 09:11:41 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2687BYYl603410
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 8 Jul 2022 09:11:34 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2687BXTU603406;
-        Fri, 8 Jul 2022 09:11:33 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>, deller@gmx.de,
-        manoj@linux.ibm.com, mrochs@linux.ibm.com, ukrishn@linux.ibm.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, tzimmermann@suse.de
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v3 4/4] powerpc: Finally remove unnecessary headers from asm/prom.h
-Date:   Fri,  8 Jul 2022 09:11:08 +0200
-Message-Id: <4be954abef978b34cff9193fc566ffefdd3517bb.1657264228.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <f75b383673663e27f6b57e50b4abfb9fe3780b00.1657264228.git.christophe.leroy@csgroup.eu>
-References: <f75b383673663e27f6b57e50b4abfb9fe3780b00.1657264228.git.christophe.leroy@csgroup.eu>
+        with ESMTP id S237028AbiGHHfy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Jul 2022 03:35:54 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC64E7C1AB;
+        Fri,  8 Jul 2022 00:35:53 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 297CF41263;
+        Fri,  8 Jul 2022 07:35:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:references:message-id:subject:subject:from:from
+        :date:date:received:received:received:received; s=mta-01; t=
+        1657265751; x=1659080152; bh=pyi3WPmYCwLTZLN0o14rSoiMGYCctnNyG0Q
+        VEsJk9vM=; b=A0f2B9Tnw8WhG33dWjDaM0y5gSAOdVjNtQY7rH5H4CEF7ifocWP
+        m05/xC4Spb0hhfsJwcp0WiZX5imcEI7hlflMe1qWx+zhy/zkDBFlz+LHIXOA773g
+        88Hqw0H7yb6pNMR2rAIM5iVb3koVTIee/kKVNG3Eqxbl+nC5u7Ncq29w=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id oQfybfdEI_kI; Fri,  8 Jul 2022 10:35:51 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id CE8F8412E1;
+        Fri,  8 Jul 2022 10:35:46 +0300 (MSK)
+Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Fri, 8 Jul 2022 10:35:46 +0300
+Received: from yadro.com (10.178.114.42) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Fri, 8 Jul 2022
+ 10:35:45 +0300
+Date:   Fri, 8 Jul 2022 10:35:46 +0300
+From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Roman Bolshakov <r.bolshakov@yadro.com>,
+        <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>
+Subject: Re: [PATCH 32/36] usb: gadget: f_tcm: Send sense reason
+Message-ID: <20220708073546.GL23838@yadro.com>
+References: <cover.1657149962.git.Thinh.Nguyen@synopsys.com>
+ <ce84775a1364314625f366d1bf5f71befb1ca335.1657149962.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1657264266; l=1143; s=20211009; h=from:subject:message-id; bh=rhMeWgMRVJCcnZ4LkUB/MevA+zWJ66UrLEuQIoq1Yg0=; b=aSzeb+chFstwLU0nCOuwBtbA5U5xgYndUebgzgAFOP3kvtFTlKpIphdt6XSL2LaRlBzvqMzXeceC 3WcuvQhNCXW3RZk7r1HJGuNvWAJdmtN/35jcrr7gzAg+rGVfsK9j
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ce84775a1364314625f366d1bf5f71befb1ca335.1657149962.git.Thinh.Nguyen@synopsys.com>
+X-Originating-IP: [10.178.114.42]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Remove all headers included from asm/prom.h which are not used
-by asm/prom.h itself.
-
-Declare struct device_node and struct property locally to
-avoid including of.h
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/prom.h | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/arch/powerpc/include/asm/prom.h b/arch/powerpc/include/asm/prom.h
-index 6f109b5cb84e..2e82820fbd64 100644
---- a/arch/powerpc/include/asm/prom.h
-+++ b/arch/powerpc/include/asm/prom.h
-@@ -12,16 +12,10 @@
-  * Updates for PPC64 by Peter Bergner & David Engebretsen, IBM Corp.
-  */
- #include <linux/types.h>
--#include <asm/irq.h>
--#include <linux/atomic.h>
- #include <asm/firmware.h>
- 
--/* These includes should be removed once implicit includes are cleaned up. */
--#include <linux/of.h>
--#include <linux/of_fdt.h>
--#include <linux/of_address.h>
--#include <linux/of_irq.h>
--#include <linux/platform_device.h>
-+struct device_node;
-+struct property;
- 
- #define OF_DT_BEGIN_NODE	0x1		/* Start of node, full name */
- #define OF_DT_END_NODE		0x2		/* End node */
--- 
-2.36.1
-
+On Wed, Jul 06, 2022 at 04:37:43PM -0700, Thinh Nguyen wrote:
+> If there's a failure, report it back to the host with a sense reason.
+> 
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  drivers/usb/gadget/function/f_tcm.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+> index 7162be5fdf2f..fb9b71158c4b 100644
+> --- a/drivers/usb/gadget/function/f_tcm.c
+> +++ b/drivers/usb/gadget/function/f_tcm.c
+> @@ -669,6 +669,9 @@ static int uasp_send_read_response(struct usbg_cmd *cmd)
+>  			pr_err("%s(%d) => %d\n", __func__, __LINE__, ret);
+>  	}
+>  out:
+> +	if (ret)
+> +		transport_send_check_condition_and_sense(&cmd->se_cmd,
+> +				TCM_CHECK_CONDITION_UNIT_ATTENTION, 0);
+>  	return ret;
+>  }
+>  
+> @@ -711,6 +714,9 @@ static int uasp_send_write_request(struct usbg_cmd *cmd)
+>  	}
+>  
+>  cleanup:
+> +	if (ret)
+> +		transport_send_check_condition_and_sense(&cmd->se_cmd,
+> +				TCM_CHECK_CONDITION_UNIT_ATTENTION, 0);
+1. TCM_CHECK_CONDITION_UNIT_ATTENTION is used if some UA is allocated.
+You do not have UA allocated here, so that reason is not apropriate.
+2. I am not sure that it's ok to initiate sending failure response if
+you cannot send a response right now.
+Other fabric drivers just returns -EAGAIN in case of some lack of
+resources to send a response. Then TCM Core will retry to sent that
+response again.
+>  	return ret;
+>  }
+>  
+> @@ -955,7 +961,15 @@ static void usbg_data_write_cmpl(struct usb_ep *ep, struct usb_request *req)
+>  	return;
+>  
+>  cleanup:
+> -	transport_generic_free_cmd(&cmd->se_cmd, 0);
+> +	/* Command was aborted */
+> +	if (cmd->state == UASP_QUEUE_COMMAND) {
+> +		transport_generic_free_cmd(se_cmd, 0);
+> +		return;
+> +	}
+> +
+> +	cmd->state = UASP_QUEUE_COMMAND;
+> +	transport_send_check_condition_and_sense(se_cmd,
+> +			TCM_CHECK_CONDITION_UNIT_ATTENTION, 0);
+>  }
+>  
+>  static int usbg_prepare_w_request(struct usbg_cmd *cmd, struct usb_request *req)
