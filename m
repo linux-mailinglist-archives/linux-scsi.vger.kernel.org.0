@@ -2,92 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0E0570087
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 Jul 2022 13:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8716B570201
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 Jul 2022 14:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiGKL2q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 Jul 2022 07:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S229676AbiGKM2G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 Jul 2022 08:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiGKL16 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Jul 2022 07:27:58 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74980DF1A
-        for <linux-scsi@vger.kernel.org>; Mon, 11 Jul 2022 04:07:23 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id t1so4535824lft.8
-        for <linux-scsi@vger.kernel.org>; Mon, 11 Jul 2022 04:07:23 -0700 (PDT)
+        with ESMTP id S229572AbiGKM2A (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 Jul 2022 08:28:00 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3B54A833
+        for <linux-scsi@vger.kernel.org>; Mon, 11 Jul 2022 05:28:00 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 136so8433010ybl.5
+        for <linux-scsi@vger.kernel.org>; Mon, 11 Jul 2022 05:28:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=esWLLHFam/15zHB96iM4D3bq4no+BOJdxnjIb7Et4dM=;
-        b=Crc/1bAGZOpGOgG+jajMBcMUzo8vpCFAgCrlYjNT2J1FVc0gawgKITZ1tqCwrezR76
-         oS+4Oy6e/M5u2r42PtJsT6iBTUMQpElwDAQx1bFH6SBaW4gwLqRD5ccgeMMSioiYISzZ
-         ra3fk2YllmukAvOz5nF30sRHQosiFVK1vVjVF5+dGIJ8WzN5/JQL+GPNs/24SvPQTrSb
-         HPpLOxImQKMkP8+Lywm5Zut6txhbmSKQrPHWAK7lkwS4qEV6QuqQflK/0wVGb8JoKwuA
-         Jm9k1kRFbvC4V5w79IdtpIofS+hV0Ik6KF4XbBxoPmCsp00n6Ws9rMDexHls/4tuL4YJ
-         rZFA==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=5cJHSClaSNSC6CADWeDtciJpzEgHDP3Cx3FDxh15jpg=;
+        b=dgFPoBIent78fG06v6q2l3E5bzLT2DHVVNf0ovSsw7s5Yr0a8mEKV6x5hA7g8vEtSs
+         cSB0wNtM0tRNopE4NuJ9LS1RMlBbJFa/T0ZXnPtxKzTEfwi2Ekbt+3tMitruuCipn/I0
+         9c9U5HTnWYEwKmHknB2JANMreXa5KWTc5u3nrftwnxEpFtN0H2nWiakn1+5FtRTDlQDO
+         +Wf8Mn76so3Mc+E/S1evHVdeqKpWq49Hdvz06VZWhu4FGLX0BpuxbZ1+9U43MvqfLvuz
+         CvGGQYU/hiaAGhtxR14NXtUqks4ysuzVKcLvrFfXt4EvsXNc5qyGr+IZ3sr8xTQwwyfW
+         26bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=esWLLHFam/15zHB96iM4D3bq4no+BOJdxnjIb7Et4dM=;
-        b=3mUuVd6Z8MAEmk6MNwfgvx0Tvhp8NXpOfe601wQ0afgxzAUaQkqEVFtVNO8Pm9ozSo
-         3L7ZC+XZOUyLK7lZNcfIxj887Qbx5KmWYpu7rYFtN3HHSicTWiEEMV/lywBRvoDMhpif
-         hKZqIQswRtu7/LzqrE3znJ0tCR2FBnplXyJgvXU+61z4rln0/QoksOkPpiQglsmnwFdk
-         Bhu3/K/PR5rzDpI3OW1isjCLi/0aJxc01taNwnOM+Mz5LD4j9r+HWMM2kA6uJyGrjO7X
-         nomVNdZe/5dXCrX6hgIyQ3o5JHo9yFaMrfpC1z59xfSgWdcTap3V/B963Oh+s4e3UugC
-         jS5A==
-X-Gm-Message-State: AJIora9EXZtNfF5htgumnu2ojcR5g/q5wXL2tHubFnbOKZS9r7rX5dZP
-        a7tVmzxk4NT9tur9fG3fjcrK4Q==
-X-Google-Smtp-Source: AGRyM1tNeHMUJvVpip2GXgSQxTRj1bmz7Z/WsdSE95/Eb16GoRB8MpQzcpWWaGdYAfxNOiNUDDGI6Q==
-X-Received: by 2002:a05:6512:c21:b0:47f:6392:dcf5 with SMTP id z33-20020a0565120c2100b0047f6392dcf5mr12054254lfu.117.1657537641871;
-        Mon, 11 Jul 2022 04:07:21 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id x2-20020a2e9c82000000b0025c04962b5dsm1685748lji.139.2022.07.11.04.07.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Jul 2022 04:07:21 -0700 (PDT)
-Message-ID: <f3bd6afb-b1f2-a5e0-de52-e6ecb2f53217@linaro.org>
-Date:   Mon, 11 Jul 2022 13:07:19 +0200
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=5cJHSClaSNSC6CADWeDtciJpzEgHDP3Cx3FDxh15jpg=;
+        b=m8gbbP/DBGTGY+K6NYsqL7Yz0VWdJFipMXir0EIBGmswO8Kkpl2hyAB7OmOiC7+Rgr
+         X7ijzdEzLQWj8NjI60CKRFoxXJ8zLa/5N5NTrrBBGu6PVH7XFqVSIcEcPQYOAHU+XaxB
+         P1EFbNJJ05gZDK93ghu4ZOFmqpK99dgKM6Ugq+dk8pwR92fRnoS0Cjf+xZ2q54XV0mSK
+         g4P8DV8tlX9o4elONeY8U8PShCwjS2vdUW8UDU/MtVD1lDOoIanRbkihFeWR1KA7yJB7
+         fj943xJ1k5zaGe7OxN2XJxi6HZ50pOR6d6m/IfTjUDfFu4X95LiERmFBBi7MwY8dMCam
+         216g==
+X-Gm-Message-State: AJIora8Qayq/l0d2xT4Bm9DvvaFujNgLl0LWzHRql9HhEQwMetEaBj/J
+        AhhhF5EoY5UpQgcaj4k5XfAW2gr3TzzOnJAuFco=
+X-Google-Smtp-Source: AGRyM1v6B5Rksf0Mx+SPwgEHpoBYYVCf2fN91YeYIydtmyhTKLJMmNaAA27q5t0zYsJN/ek9H4zDTeWoZkqLN1Q0Thg=
+X-Received: by 2002:a25:3383:0:b0:66b:6205:1583 with SMTP id
+ z125-20020a253383000000b0066b62051583mr15991268ybz.387.1657542479371; Mon, 11
+ Jul 2022 05:27:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] dt-bindings: ufs: qcom,ufs: add SC8280XP binding
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220711101441.4896-1-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220711101441.4896-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7010:a60f:b0:2da:3756:6112 with HTTP; Mon, 11 Jul 2022
+ 05:27:59 -0700 (PDT)
+Reply-To: mr.abraham022@gmail.com
+From:   Mr Abraham <mr.abraham2021@gmail.com>
+Date:   Mon, 11 Jul 2022 12:27:59 +0000
+Message-ID: <CAJ2UK+bWv06gHgFocZmAQcekF0OP5NEVamV5CLOE+Vp4jRXipg@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b34 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4795]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mr.abraham2021[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mr.abraham2021[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mr.abraham022[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/07/2022 12:14, Johan Hovold wrote:
-> Add SC8280XP to the DT schema.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+My Greeting, Did you receive the letter i sent to you. Please answer me.
+Best Regard,Mr.Abraham.
