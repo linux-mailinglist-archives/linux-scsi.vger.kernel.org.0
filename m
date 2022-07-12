@@ -2,59 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4136C5713B1
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jul 2022 09:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D4F5713B5
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Jul 2022 09:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbiGLH6s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Jul 2022 03:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S232507AbiGLH6x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Jul 2022 03:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbiGLH6n (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Jul 2022 03:58:43 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45624391;
-        Tue, 12 Jul 2022 00:58:40 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id x18-20020a17090a8a9200b001ef83b332f5so10641494pjn.0;
-        Tue, 12 Jul 2022 00:58:40 -0700 (PDT)
+        with ESMTP id S232428AbiGLH6r (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Jul 2022 03:58:47 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D204A3B3;
+        Tue, 12 Jul 2022 00:58:41 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 73so6860828pgb.10;
+        Tue, 12 Jul 2022 00:58:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=QcZZ4ub4WwN95qjSoiSBbijtRxPDIIjCgWyTOxMJML4=;
-        b=I97z6+j9/lUoZj5t0yWMuu9L5dGZG5KKpXOUfRndDCKSTSHaapwNcJkldvJXe+x9LB
-         buOCRJgQI/Zugkaz44TMZ2/iYrnurG+BP9S8S1f4fHIpe4/rCk7B8YGsiE6EvlJ1fOka
-         5BJAKyPLXfpjGI0xSnYmh0rVBdr1m3cmSl9w37OkY5pzwpKUPp8RlOtk+lxAPSsZqnA6
-         1JzfXkqFg0MUaPN6HM833p3F2pFXVaTQR7NCLrTuGW5yFOjfZ7nRnauLYGdVN2oF9mvo
-         bkWR4GXNU+TNjy/UV5tCuxul/xycvaBZQPCEx+WFn/Onc5zgfNeVVxElnvjKIfENYqbJ
-         DBMw==
+        bh=KsiErWWdRW3Hk14U/AhfcSq+a/LkvR4Yk5HQLw394/o=;
+        b=REiuhOYm/SL8aaddOgNyKke7UBpYUUtnidsbOGMBPgt5XveGcY7yWkYSzsdRsoIB4y
+         2CPhpzt1B69iTcQVKvjO/U0jLDagvfpEd6VQu+peve0F1GzbrdJN7CnKqzWlfm9fTnIx
+         MwXAnWDdwNmgaQ2hNwGZrJKKJLHvWwNyMp12FkvX6u3TWAvuaMBmqQhKqcAFB0REcUDD
+         r8cN9eXCX07kSKKc/xpozgd7REFU2az3qPIxvJ6va5w0+Fuekc7XaNdQJl79DS3WgbII
+         CiAo/kMyXjHxB/mB4lbBLBbbl90n27lGMP6EIFy4DHoWa4f3/bmuw84lkY90+p3FOi3U
+         LF9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=QcZZ4ub4WwN95qjSoiSBbijtRxPDIIjCgWyTOxMJML4=;
-        b=ElUaTm38WhAwWhbXeUBQjLN5Et76QCHqUqIDLaGXvz5TjPEozHqlBfnSGaodDnDCKi
-         s+K1nbbo7gClLSE9hjfryy+qMT0NBHUjFjXZc169gnGRWWLDXb+vhvCZ5pHfHpHAmQnV
-         oWA64lOsk1bMRuTWjxC1RBu1nZuRWtc3GX4xh3ipWQQQMsYoIAFFqbAHvhgcidky9Ilz
-         oYgQz1W7Rdnvn9fDcNKFbvOLOPw/SVokf0V0cAZrBu7atGevcaButZIVG+iJBHa/YHug
-         9IaQyXwOFReXEemCeHBC4aQKsqwq2UJ5eQGT6jttpoSp31KQspq2pGyWXPKK1vnQ4way
-         1f7Q==
-X-Gm-Message-State: AJIora92GTfvzFu1zeEFfKRMZzUzTGotTo8DW5rjgJa5KH1LJxcABHfS
-        vlPg0AiWsuSCp4//Hs6Ycy4=
-X-Google-Smtp-Source: AGRyM1ukLMtz9Ne++6ILvS2RzmFS6FcCOxWAIFQ/RR0OfmbJZvsfoLQNDcynP1mevFcf3jBLTnZJ5A==
-X-Received: by 2002:a17:90a:f3c8:b0:1ef:7976:a6d8 with SMTP id ha8-20020a17090af3c800b001ef7976a6d8mr2857087pjb.198.1657612720326;
-        Tue, 12 Jul 2022 00:58:40 -0700 (PDT)
+        bh=KsiErWWdRW3Hk14U/AhfcSq+a/LkvR4Yk5HQLw394/o=;
+        b=SgA+E4ArBBuxP4I3TSlE+9H6RmQUlP+oKXdNCHERgOF7b/8fVg6TIt/i5XMLOSndWH
+         sy8n6Epr1HaOnLUioTswn7j05w5GJ9ZhgL4W6F0+AkfE/6HQLN9JAJAEo7M44FrYrY5O
+         lG8HtVJDwzarzqkuRYP8ogvcMXIQCbWc0Iqf92hQEhfWFcsAjmHISlOPWEfGPJ0jAsE5
+         /9+f703D842GPC2oeczF7sXZ0YPCsiWYDdky4Jr3Fc4um+22ssU31klYxJ91ITLLisLq
+         rAoFtnSKTKUtYFZC7CRPszGti6fwHGrsU0eujUqF6JIjAYKiDwif/nkIhHyyy5jJz7TT
+         7QSg==
+X-Gm-Message-State: AJIora/rrqhx/Zqq9/DjljT5WRB29Du90Ix17cmCKzjH/gLxGYSdFl4U
+        +nUjkbLSRNTKoXqb6ba7Yro=
+X-Google-Smtp-Source: AGRyM1u571TcaLXfgri+YldABCVGiVF3l6orO7eVRXRGPuiSjJpsKtFhdT+M7faB5YdgP7k53kQSVg==
+X-Received: by 2002:a05:6a00:b54:b0:52a:d3d1:f63f with SMTP id p20-20020a056a000b5400b0052ad3d1f63fmr8211527pfo.26.1657612721294;
+        Tue, 12 Jul 2022 00:58:41 -0700 (PDT)
 Received: from xplor.waratah.dyndns.org (222-155-0-244-adsl.sparkbb.co.nz. [222.155.0.244])
-        by smtp.gmail.com with ESMTPSA id jj9-20020a170903048900b0016be4d78792sm6076738plb.257.2022.07.12.00.58.39
+        by smtp.gmail.com with ESMTPSA id n6-20020a622706000000b00528c22fbb45sm6236203pfn.141.2022.07.12.00.58.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jul 2022 00:58:40 -0700 (PDT)
+        Tue, 12 Jul 2022 00:58:41 -0700 (PDT)
 Received: by xplor.waratah.dyndns.org (Postfix, from userid 1000)
-        id E73243603FB; Tue, 12 Jul 2022 19:58:36 +1200 (NZST)
+        id 859A8360403; Tue, 12 Jul 2022 19:58:37 +1200 (NZST)
 From:   Michael Schmitz <schmitzmic@gmail.com>
 To:     linux-m68k@vger.kernel.org, arnd@kernel.org
 Cc:     linux-scsi@vger.kernel.org, geert@linux-m68k.org,
         Michael Schmitz <schmitzmic@gmail.com>
-Subject: [PATCH v2 4/5] scsi - convert mvme147.c driver to platform device
-Date:   Tue, 12 Jul 2022 19:58:31 +1200
-Message-Id: <20220712075832.23793-5-schmitzmic@gmail.com>
+Subject: [PATCH v2 5/5] scsi - convert mvme147.c driver to DMA API
+Date:   Tue, 12 Jul 2022 19:58:32 +1200
+Message-Id: <20220712075832.23793-6-schmitzmic@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220712075832.23793-1-schmitzmic@gmail.com>
 References: <20220712075832.23793-1-schmitzmic@gmail.com>
@@ -68,8 +68,8 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Convert the mvme147.c driver to a platform device driver.
-This is required for conversion of the driver to the DMA API.
+Convert mvme147.c to DMA API to eliminate one of the last
+usages of virt_to_bus().
 
 CC: linux-scsi@vger.kernel.org
 Link: https://lore.kernel.org/r/6d1d88ee-1cf6-c735-1e6d-bafd2096e322@gmail.com
@@ -78,159 +78,87 @@ Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
 --
 
 Changes from v1:
-
-- change patch index from 3 to 3 (due to insertion of m68k kmap patch)
-
-Arnd Bergmann:
-- use devm_platform_ioremap_resource() for wd33c93 base address
+- change patch index from 3 to 4 (due to insertion of m68k kmap patch)
 ---
- drivers/scsi/mvme147.c | 89 +++++++++++++++++++++++++++++-------------
- 1 file changed, 61 insertions(+), 28 deletions(-)
+ drivers/scsi/mvme147.c | 33 ++++++++++++++++++++++++---------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/scsi/mvme147.c b/drivers/scsi/mvme147.c
-index 472fa043094f..ea8afeec8e56 100644
+index ea8afeec8e56..166248bef6cf 100644
 --- a/drivers/scsi/mvme147.c
 +++ b/drivers/scsi/mvme147.c
-@@ -3,6 +3,7 @@
- #include <linux/mm.h>
- #include <linux/blkdev.h>
- #include <linux/interrupt.h>
-+#include <linux/platform_device.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-@@ -85,40 +86,52 @@ static struct scsi_host_template mvme147_host_template = {
- 	.cmd_size		= sizeof(struct scsi_pointer),
- };
+@@ -21,6 +21,8 @@
+ #include "wd33c93.h"
+ #include "mvme147.h"
  
--static struct Scsi_Host *mvme147_shost;
--
--static int __init mvme147_init(void)
-+static int __init mvme147_scsi_probe(struct platform_device *pdev)
++#define DMA_DIR(d)   ((d == DATA_OUT_DIR) ? DMA_TO_DEVICE : DMA_FROM_DEVICE)
++
+ static irqreturn_t mvme147_intr(int irq, void *data)
  {
-+	struct resource *mres, *ires;
-+	struct Scsi_Host *mvme147_inst;
- 	wd33c93_regs regs;
- 	struct WD33C93_hostdata *hdata;
-+	void __iomem *base;
+ 	struct Scsi_Host *instance = data;
+@@ -35,10 +37,20 @@ static irqreturn_t mvme147_intr(int irq, void *data)
+ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
+ {
+ 	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(cmd);
++	unsigned long len = scsi_pointer->this_residual;
+ 	struct Scsi_Host *instance = cmd->device->host;
+ 	struct WD33C93_hostdata *hdata = shost_priv(instance);
+ 	unsigned char flags = 0x01;
+-	unsigned long addr = virt_to_bus(scsi_pointer->ptr);
++	dma_addr_t addr;
++
++	addr = dma_map_single(instance->dma_dev, scsi_pointer->ptr,
++			      len, DMA_DIR(dir_in));
++	if (dma_mapping_error(instance->dma_dev, addr)) {
++		dev_warn(instance->dma_dev, "cannot map SCSI data block %p\n",
++			 scsi_pointer->ptr);
++		return 1;
++	}
++	scsi_pointer->dma_handle = addr;
+ 
+ 	/* setup dma direction */
+ 	if (!dir_in)
+@@ -47,14 +59,6 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
+ 	/* remember direction */
+ 	hdata->dma_dir = dir_in;
+ 
+-	if (dir_in) {
+-		/* invalidate any cache */
+-		cache_clear(addr, scsi_pointer->this_residual);
+-	} else {
+-		/* push any dirty cache */
+-		cache_push(addr, scsi_pointer->this_residual);
+-	}
+-
+ 	/* start DMA */
+ 	m147_pcc->dma_bcr = scsi_pointer->this_residual | (1 << 24);
+ 	m147_pcc->dma_dadr = addr;
+@@ -67,7 +71,13 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
+ static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
+ 		     int status)
+ {
++	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(SCpnt);
++	struct WD33C93_hostdata *hdata = shost_priv(instance);
++
+ 	m147_pcc->dma_cntrl = 0;
++	dma_unmap_single(instance->dma_dev, scsi_pointer->dma_handle,
++			 scsi_pointer->this_residual,
++			 DMA_DIR(hdata->dma_dir));
+ }
+ 
+ static struct scsi_host_template mvme147_host_template = {
+@@ -95,6 +105,11 @@ static int __init mvme147_scsi_probe(struct platform_device *pdev)
+ 	void __iomem *base;
  	int error = -ENOMEM;
  
--	if (!MACH_IS_MVME147)
--		return 0;
-+	mres = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!mres)
++	if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32))) {
++		dev_warn(&pdev->dev, "cannot use 32 bit DMA\n");
 +		return -ENODEV;
++	}
 +
-+	ires = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-+	if (!ires)
-+		return -ENODEV;
-+
-+	if (!request_mem_region(mres->start, resource_size(mres), "wd33c93"))
-+		return -EBUSY;
- 
--	mvme147_shost = scsi_host_alloc(&mvme147_host_template,
-+	mvme147_inst = scsi_host_alloc(&mvme147_host_template,
- 			sizeof(struct WD33C93_hostdata));
--	if (!mvme147_shost)
-+	if (!mvme147_inst)
- 		goto err_out;
--	mvme147_shost->base = 0xfffe4000;
--	mvme147_shost->irq = MVME147_IRQ_SCSI_PORT;
- 
--	regs.SASR = (volatile unsigned char *)0xfffe4000;
--	regs.SCMD = (volatile unsigned char *)0xfffe4001;
-+	base = devm_platform_ioremap_resource(pdev, 0);
- 
--	hdata = shost_priv(mvme147_shost);
-+	mvme147_inst->base = (unsigned int) base;
-+	mvme147_inst->irq = ires->start;
-+
-+	regs.SASR = (volatile unsigned char *)base;
-+	regs.SCMD = (volatile unsigned char *)(base+1);
-+
-+	hdata = shost_priv(mvme147_inst);
- 	hdata->no_sync = 0xff;
- 	hdata->fast = 0;
- 	hdata->dma_mode = CTRL_DMA;
- 
--	wd33c93_init(mvme147_shost, regs, dma_setup, dma_stop, WD33C93_FS_8_10);
-+	wd33c93_init(mvme147_inst, regs, dma_setup, dma_stop, WD33C93_FS_8_10);
- 
--	error = request_irq(MVME147_IRQ_SCSI_PORT, mvme147_intr, 0,
--			"MVME147 SCSI PORT", mvme147_shost);
-+	error = request_irq(ires->start, mvme147_intr, 0,
-+			"MVME147 SCSI PORT", mvme147_inst);
- 	if (error)
- 		goto err_unregister;
--	error = request_irq(MVME147_IRQ_SCSI_DMA, mvme147_intr, 0,
--			"MVME147 SCSI DMA", mvme147_shost);
-+	error = request_irq(ires->start+1, mvme147_intr, 0,
-+			"MVME147 SCSI DMA", mvme147_inst);
- 	if (error)
- 		goto err_free_irq;
- #if 0	/* Disabled; causes problems booting */
-@@ -133,30 +146,50 @@ static int __init mvme147_init(void)
- 	m147_pcc->dma_cntrl = 0x00;	/* ensure DMA is stopped */
- 	m147_pcc->dma_intr = 0x89;	/* Ack and enable ints */
- 
--	error = scsi_add_host(mvme147_shost, NULL);
-+	error = scsi_add_host(mvme147_inst, &pdev->dev);
- 	if (error)
- 		goto err_free_irq;
--	scsi_scan_host(mvme147_shost);
-+
-+	platform_set_drvdata(pdev, mvme147_inst);
-+
-+	scsi_scan_host(mvme147_inst);
- 	return 0;
- 
- err_free_irq:
--	free_irq(MVME147_IRQ_SCSI_PORT, mvme147_shost);
-+	free_irq(ires->start, mvme147_inst);
- err_unregister:
--	scsi_host_put(mvme147_shost);
-+	scsi_host_put(mvme147_inst);
- err_out:
- 	return error;
- }
- 
--static void __exit mvme147_exit(void)
-+static int __exit mvme147_scsi_remove(struct platform_device *pdev)
- {
--	scsi_remove_host(mvme147_shost);
-+	struct Scsi_Host *mvme147_inst = platform_get_drvdata(pdev);
-+	struct resource *mres = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	struct resource *ires = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-+
-+	scsi_remove_host(mvme147_inst);
- 
- 	/* XXX Make sure DMA is stopped! */
--	free_irq(MVME147_IRQ_SCSI_PORT, mvme147_shost);
--	free_irq(MVME147_IRQ_SCSI_DMA, mvme147_shost);
-+	free_irq(ires->start, mvme147_inst);
-+	free_irq(ires->start+1, mvme147_inst);
- 
--	scsi_host_put(mvme147_shost);
-+	iounmap((void __iomem *)mvme147_inst->base);
-+	scsi_host_put(mvme147_inst);
-+	release_mem_region(mres->start, resource_size(mres));
-+	return 0;
- }
- 
--module_init(mvme147_init);
--module_exit(mvme147_exit);
-+static struct platform_driver mvme147_scsi_driver = {
-+	.remove = __exit_p(mvme147_scsi_remove),
-+	.driver   = {
-+		.name	= "mvme147-scsi",
-+	},
-+};
-+
-+module_platform_driver_probe(mvme147_scsi_driver, mvme147_scsi_probe);
-+
-+MODULE_DESCRIPTION("MVME147 built-in SCSI");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:mvme147-scsi");
+ 	mres = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	if (!mres)
+ 		return -ENODEV;
 -- 
 2.17.1
 
