@@ -2,56 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D6D572CF7
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jul 2022 07:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE42572CF9
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jul 2022 07:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbiGMFVM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Jul 2022 01:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
+        id S233727AbiGMFVO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Jul 2022 01:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232913AbiGMFVA (ORCPT
+        with ESMTP id S233330AbiGMFVA (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jul 2022 01:21:00 -0400
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E17D4459
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D7CD5147
         for <linux-scsi@vger.kernel.org>; Tue, 12 Jul 2022 22:20:59 -0700 (PDT)
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26D2Lj1W025309
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Jul 2022 22:20:58 -0700
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26D2Lj1X025309
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Jul 2022 22:20:59 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=leTHu1//1ZZMs5Do+5Cr+P7YZT1ZrG3rKH/niQkQWPY=;
- b=UFBmTKlGZ0b/H9L2BnTXbtR8euHvCT3eEi5bMHU3Wenlh+eSYdxtz4SYL7+Lw3AtBGFM
- /BFTtwybUfnnM4NZBIoVcMzOeu0I8iQmDu3ztx7toGYjG8dBdbeA8WQELzCTLvHfSrkn
- lUALyEgKo6DPSo0s+nIQw48Oel6VIBCNtnYsNMGAMDX16VQm7zM8ZYzYkRMIjh0hsUc7
- GKniI/t/FJKv3eUFLirJtjU5vIxikUKtCDweU/fCGoiTWcwdPf3nxVt7SsbMLSGP9yXZ
- O+DiIS2FdLesQEnbQUwMg/aImvIGR8CHkWbsWCTxHGCVplGSqb+pXBPE+ZYKEPF0cRto 9g== 
+ content-type; s=pfpt0220; bh=eR2JkDJkZ7CAcf98uMYQQ4+gGZQmie3p/GH/8ByTszY=;
+ b=jFRXSoOdip8wSDjNuVXAvNNiw2wTNvSoGHiJ2BGv537cgtcQmYBfq74ZpQTN3LLGxU9m
+ aGSvxQy1Rrtia3t2yA27zCRbcizw0HD/mLOTnHnLA3ca9wkVCqoxJDV8gVEoNg0KCLfI
+ lfXB8XrNMXmUYjvezxz1NhRyqe/+su6QTt/wD1EGj7tDX5qZADHK5+A16seZvyqW3xDH
+ ZZV0/y67bnUZBGby2gfUhG8HdO4M2uHVdHIbZc0WU61XyCn5k2Rd3RHrIODMvncnxQg3
+ aTmY04RQ9Dckm+Ci8Fy0l5PzEQgrHepCgjxFX55f8s166o8BaYki0tegSDzqQx2U7peP 1A== 
 Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3h9n6n0f0h-5
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3h9n6n0f0h-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Jul 2022 22:20:58 -0700
+        for <linux-scsi@vger.kernel.org>; Tue, 12 Jul 2022 22:20:59 -0700
 Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
  (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 12 Jul
- 2022 22:20:55 -0700
+ 2022 22:20:56 -0700
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Tue, 12 Jul 2022 22:20:55 -0700
+ Transport; Tue, 12 Jul 2022 22:20:56 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 54E4E3F70BE;
+        by maili.marvell.com (Postfix) with ESMTP id 7F42E3F70C2;
         Tue, 12 Jul 2022 22:20:55 -0700 (PDT)
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>
-Subject: [PATCH 06/10] qla2xxx: Fix imbalance vha->vref_count
-Date:   Tue, 12 Jul 2022 22:20:41 -0700
-Message-ID: <20220713052045.10683-7-njavali@marvell.com>
+Subject: [PATCH 07/10] qla2xxx: Fix discovery issues in FC-AL topology
+Date:   Tue, 12 Jul 2022 22:20:42 -0700
+Message-ID: <20220713052045.10683-8-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20220713052045.10683-1-njavali@marvell.com>
 References: <20220713052045.10683-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: V-fcwRpEKtla8mugqfFHVlDIxUMVJDGj
-X-Proofpoint-GUID: V-fcwRpEKtla8mugqfFHVlDIxUMVJDGj
+X-Proofpoint-ORIG-GUID: fwhjnTEZesZQPq1uzh018o5533IoRgAx
+X-Proofpoint-GUID: fwhjnTEZesZQPq1uzh018o5533IoRgAx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-12_14,2022-07-12_01,2022-06-22_01
@@ -65,53 +65,109 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Arun Easi <aeasi@marvell.com>
 
-vref_count took an extra decrement in the task management path.
-Add an extra ref count to compensate the imbalance.
+A direct attach tape device, when gets swapped
+with another, was not discovered. Fix this by
+looking at loop map and reinitialize link if
+there are devices present.
 
+Reported-by: Tony Battersby <tonyb@cybernetics.com>
+Tested-by: Tony Battersby <tonyb@cybernetics.com>
+Link: https://lore.kernel.org/linux-scsi/baef87c3-5dad-3b47-44c1-6914bfc90108@cybernetics.com/
 Cc: stable@vger.kernel.org
-Signed-off-by: Quinn Tran <qutran@marvell.com>
+Signed-off-by: Arun Easi <aeasi@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_init.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/scsi/qla2xxx/qla_gbl.h  |  3 ++-
+ drivers/scsi/qla2xxx/qla_init.c | 29 +++++++++++++++++++++++++++++
+ drivers/scsi/qla2xxx/qla_mbx.c  |  5 ++++-
+ 3 files changed, 35 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/scsi/qla2xxx/qla_gbl.h b/drivers/scsi/qla2xxx/qla_gbl.h
+index 96147ca40126..5dd2932382ee 100644
+--- a/drivers/scsi/qla2xxx/qla_gbl.h
++++ b/drivers/scsi/qla2xxx/qla_gbl.h
+@@ -436,7 +436,8 @@ extern int
+ qla2x00_get_resource_cnts(scsi_qla_host_t *);
+ 
+ extern int
+-qla2x00_get_fcal_position_map(scsi_qla_host_t *ha, char *pos_map);
++qla2x00_get_fcal_position_map(scsi_qla_host_t *ha, char *pos_map,
++		u8 *num_entries);
+ 
+ extern int
+ qla2x00_get_link_status(scsi_qla_host_t *, uint16_t, struct link_statistics *,
 diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 15fb5ed565c0..83fae4c341ee 100644
+index 83fae4c341ee..e7fe0e52c11d 100644
 --- a/drivers/scsi/qla2xxx/qla_init.c
 +++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -168,6 +168,7 @@ int qla24xx_async_abort_cmd(srb_t *cmd_sp, bool wait)
- 	struct srb_iocb *abt_iocb;
- 	srb_t *sp;
- 	int rval = QLA_FUNCTION_FAILED;
-+	uint8_t bail;
+@@ -5516,6 +5516,22 @@ static int qla2x00_configure_n2n_loop(scsi_qla_host_t *vha)
+ 	return QLA_FUNCTION_FAILED;
+ }
  
- 	/* ref: INIT for ABTS command */
- 	sp = qla2xxx_get_qpair_sp(cmd_sp->vha, cmd_sp->qpair, cmd_sp->fcport,
-@@ -175,6 +176,7 @@ int qla24xx_async_abort_cmd(srb_t *cmd_sp, bool wait)
- 	if (!sp)
- 		return QLA_MEMORY_ALLOC_FAILED;
++static void
++qla_reinitialize_link(scsi_qla_host_t *vha)
++{
++	int rval;
++
++	atomic_set(&vha->loop_state, LOOP_DOWN);
++	atomic_set(&vha->loop_down_timer, LOOP_DOWN_TIME);
++	rval = qla2x00_full_login_lip(vha);
++	if (rval == QLA_SUCCESS) {
++		ql_dbg(ql_dbg_disc, vha, 0xd050, "Link reinitialized\n");
++	} else {
++		ql_dbg(ql_dbg_disc, vha, 0xd051,
++			"Link reinitialization failed (%d)\n", rval);
++	}
++}
++
+ /*
+  * qla2x00_configure_local_loop
+  *	Updates Fibre Channel Device Database with local loop devices.
+@@ -5567,6 +5583,19 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+ 		spin_unlock_irqrestore(&vha->work_lock, flags);
  
-+	QLA_VHA_MARK_BUSY(vha, bail);
- 	abt_iocb = &sp->u.iocb_cmd;
- 	sp->type = SRB_ABT_CMD;
- 	sp->name = "abort";
-@@ -2018,12 +2020,14 @@ qla2x00_async_tm_cmd(fc_port_t *fcport, uint32_t flags, uint32_t lun,
- 	struct srb_iocb *tm_iocb;
- 	srb_t *sp;
- 	int rval = QLA_FUNCTION_FAILED;
-+	uint8_t bail;
+ 		if (vha->scan.scan_retry < MAX_SCAN_RETRIES) {
++			u8 loop_map_entries = 0;
++			int rc;
++
++			rc = qla2x00_get_fcal_position_map(vha, NULL,
++						&loop_map_entries);
++			if (rc == QLA_SUCCESS && loop_map_entries > 1) {
++				/*
++				 * There are devices that are still not logged
++				 * in. Reinitialize to give them a chance.
++				 */
++				qla_reinitialize_link(vha);
++				return QLA_FUNCTION_FAILED;
++			}
+ 			set_bit(LOCAL_LOOP_UPDATE, &vha->dpc_flags);
+ 			set_bit(LOOP_RESYNC_NEEDED, &vha->dpc_flags);
+ 		}
+diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
+index 9a3f832c49ef..359595a64664 100644
+--- a/drivers/scsi/qla2xxx/qla_mbx.c
++++ b/drivers/scsi/qla2xxx/qla_mbx.c
+@@ -3068,7 +3068,8 @@ qla2x00_get_resource_cnts(scsi_qla_host_t *vha)
+  *	Kernel context.
+  */
+ int
+-qla2x00_get_fcal_position_map(scsi_qla_host_t *vha, char *pos_map)
++qla2x00_get_fcal_position_map(scsi_qla_host_t *vha, char *pos_map,
++		u8 *num_entries)
+ {
+ 	int rval;
+ 	mbx_cmd_t mc;
+@@ -3108,6 +3109,8 @@ qla2x00_get_fcal_position_map(scsi_qla_host_t *vha, char *pos_map)
  
- 	/* ref: INIT */
- 	sp = qla2x00_get_sp(vha, fcport, GFP_KERNEL);
- 	if (!sp)
- 		goto done;
+ 		if (pos_map)
+ 			memcpy(pos_map, pmap, FCAL_MAP_SIZE);
++		if (num_entries)
++			*num_entries = pmap[0];
+ 	}
+ 	dma_pool_free(ha->s_dma_pool, pmap, pmap_dma);
  
-+	QLA_VHA_MARK_BUSY(vha, bail);
- 	sp->type = SRB_TM_CMD;
- 	sp->name = "tmf";
- 	qla2x00_init_async_sp(sp, qla2x00_get_async_timeout(vha),
 -- 
 2.19.0.rc0
 
