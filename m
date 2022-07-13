@@ -2,103 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633C2573763
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jul 2022 15:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BA1573774
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Jul 2022 15:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235134AbiGMN32 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Jul 2022 09:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S230303AbiGMNdf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Jul 2022 09:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbiGMN3Z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jul 2022 09:29:25 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E9613D3C;
-        Wed, 13 Jul 2022 06:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657718965; x=1689254965;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=L4CProI6gki3JdTLeUa3J0QD35v7lRC9rLkvXYbbm7s=;
-  b=lV/hhsEbkyd+L7t3ZQqw6MWnR9E18g8YfiL4VeXmzltRn/Wl5Ld0w8Ij
-   WvydpqY+Vn4rAmnoF/9KGGv00GIsL6Hgq1w7JbQtmIjwmPcZObUu1mV1Q
-   jv0gzWQpunN3QYPiyka3BNhDJ9gTGmKKp5k+NQ3yKOjdBylBs+0URuc3k
-   BYr+vkRarW+wj09oOSwn0TaOVdoEC6CWSTOx5Pw2JJk/FxJCw6UcK9Dox
-   7EV66XKD+4kB/RLeOvbJbJwNzkLfmzg5cG5I3ZAnksE7IUlOGFVJ+oEkD
-   yQqnaeg/8by2xkD+qlGyzTOWwT7md43TXq6e9uV7vUJctEyuyo5qDgQ6I
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10406"; a="346891062"
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="346891062"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 06:29:24 -0700
-X-IronPort-AV: E=Sophos;i="5.92,267,1650956400"; 
-   d="scan'208";a="622940542"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.51.236])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2022 06:29:22 -0700
-Message-ID: <0c1da7b8-1be0-76a9-f613-ef307bac4e36@intel.com>
-Date:   Wed, 13 Jul 2022 16:29:18 +0300
+        with ESMTP id S230497AbiGMNdd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 Jul 2022 09:33:33 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9126F21C
+        for <linux-scsi@vger.kernel.org>; Wed, 13 Jul 2022 06:33:32 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id e132so10450484pgc.5
+        for <linux-scsi@vger.kernel.org>; Wed, 13 Jul 2022 06:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mO/rKYKB8TZovbO5cQAqIciRv98bFTuqiwjEZXYoHPU=;
+        b=CKtFgRg6T4R/hvR/r0vc7i50JKXmFWpQt7EF8rwDWH9qJ/PkwoKPR7KfSZGG6CP+36
+         2r91/84lLbIfDWpZN3fheX0s6LjUyfqGVckSNpEn46HaZeDPe+8Ke/EPOHXlcL2XLM/7
+         Zyc4reFTshnF3IzXuS9IwATqe4Gf2Imcb7+ErUPCzBMhrtBCliz7syPoS2HenyF+gOTU
+         GzhI83uOomiGbbO5jhKIiWSCNIMnBUR+rO64mGmfru6t18PlDjW0wwwTeBRKt1/XEhR/
+         mc13+Z6LB0m5bPPepAnR95jA2YMfzQafk67R10WCapA+tiPNY3eiA50LOM7TJ6CtC97c
+         /r6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mO/rKYKB8TZovbO5cQAqIciRv98bFTuqiwjEZXYoHPU=;
+        b=2i3ii3HlWp61FgvsAxM4p7nYdCTAJiOS41Za8ESxNRY9L7hEj4ilATSk+RPEFeruEy
+         DrUZgCdbK7j4pRWYZ93AODEc0PAM6Fi8o4U4eLGWKGxocVklTQsjp6qmbXcuWYxIwNoD
+         R2nX+w7t/htUNumAXgmP5YSZvo6M3FtP2OGQUeI2DYNdmAbpUOBCaEKTqh1xx/aPkzyM
+         TkaLjxLS+CvRsOE+1SA+jMHwqRheAWn71pLKFFTcAqNhsBpWoA57ZnEcU7HYFEeg+s5i
+         cYbXN3+FtkTrPTRX8yuxkL6vI6Do2ZTGB7mDn5jl5yFpsyn3ahsVfapWB2p+r69aAUxM
+         fMMw==
+X-Gm-Message-State: AJIora8i+lnqRnu28u+ZgK8meTkDo0+MgGgh/qsuFcqOmp95lo00Dxll
+        wptavxSfTIS9yjCr1k8swKBimEBMRKbuVDWCIgo=
+X-Google-Smtp-Source: AGRyM1uORNTXXlM0VdfDDuh2ORmeSCAEW9EHJebcVjRfDaCo+I/iHCFEEUtdt9vKhV6QscyHgasZZievpr6uGlWSG/o=
+X-Received: by 2002:a63:455a:0:b0:412:9855:64eb with SMTP id
+ u26-20020a63455a000000b00412985564ebmr3059776pgk.131.1657719211585; Wed, 13
+ Jul 2022 06:33:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH] scsi: ufs: ufs-pci: default clock frequency for Intel's
- UFS controller
-Content-Language: en-US
-To:     Daniil Lunev <dlunev@chromium.org>
-Cc:     Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bean Huo <beanhuo@micron.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20220708141612.1.Ice2e8173bd0937c7c4898b112350120063572269@changeid>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220708141612.1.Ice2e8173bd0937c7c4898b112350120063572269@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:419a:b0:42:5721:a84b with HTTP; Wed, 13 Jul 2022
+ 06:33:30 -0700 (PDT)
+Reply-To: lindacliford05@yahoo.com
+From:   limda clifford <limdaclifford65@gmail.com>
+Date:   Wed, 13 Jul 2022 10:33:30 -0300
+Message-ID: <CAGUtzAs=J89KO5oYHmtki3+8i-wd+GWcqY=YQXuobLLo=6htuw@mail.gmail.com>
+Subject: WITH DUE RESPECT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5003]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [limdaclifford65[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lindacliford05[at]yahoo.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [limdaclifford65[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:532 listed in]
+        [list.dnswl.org]
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/07/22 07:17, Daniil Lunev wrote:
-> ARM platforms rely on 'ref_clk' of a UFS controller's node in DTS to set
-> up the proper bRefClkFreq for the UFS storage device. The facility is
-> not available on x86. To circumvene that, default the parameter,
-> responsible for carrying the value to the UFS storage device
-> initialization, to the one that Intel's controllers support. This is
-> required to support provisioning of UFS storage devices from userspace,
-> without relying on FW and/or bootloader to make the necessary
-> preparations.
-> 
-> Signed-off-by: Daniil Lunev <dlunev@chromium.org>
-> ---
-> 
->  drivers/ufs/host/ufshcd-pci.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/ufs/host/ufshcd-pci.c b/drivers/ufs/host/ufshcd-pci.c
-> index 04166bda41daa..a6f9222cbea74 100644
-> --- a/drivers/ufs/host/ufshcd-pci.c
-> +++ b/drivers/ufs/host/ufshcd-pci.c
-> @@ -336,6 +336,7 @@ static int ufs_intel_common_init(struct ufs_hba *hba)
->  	struct intel_host *host;
->  
->  	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
-> +	hba->dev_ref_clk_freq = REF_CLK_FREQ_19_2_MHZ;
+ Good day dear love one my name is miss linda cliford  from cote
+d'ivoire please i need your help for fund transffer if you  are
+willing please get back to me  for  more information thanks and have a
+good day,
+Waitting to hear from you thamks,
 
-I have seen requirement documents saying 19.2 or 38.4, so this is would
-be a problem since it overwrites the value even if it has been set correctly
-to something other than 19.2 MHz.
+your s Linda Clifford
+Regards
 
->  
->  	host = devm_kzalloc(hba->dev, sizeof(*host), GFP_KERNEL);
->  	if (!host)
-
+--
