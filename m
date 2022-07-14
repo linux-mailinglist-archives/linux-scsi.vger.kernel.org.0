@@ -2,69 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F44757424E
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jul 2022 06:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0B8574248
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jul 2022 06:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234216AbiGNEXK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 14 Jul 2022 00:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
+        id S234187AbiGNEW7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 14 Jul 2022 00:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbiGNEWm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 14 Jul 2022 00:22:42 -0400
+        with ESMTP id S233857AbiGNEWl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 14 Jul 2022 00:22:41 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E6127CC3;
-        Wed, 13 Jul 2022 21:22:40 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E3nF2v009267;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CEA27B23
+        for <linux-scsi@vger.kernel.org>; Wed, 13 Jul 2022 21:22:40 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E3n4VB000305;
         Thu, 14 Jul 2022 04:22:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=6c0WORp1kWFJyOdGYgbP5guV+K75uCzztk+wVlDmxL4=;
- b=BUd6N4FvpmIDkk6TBlv5wlUA99T5xGRB0xVuiYP+JTwL7bh2QqPEWdVxuqYd107J3nXA
- xFoX4WipEqUUQv1iQH2TFoMxEcQjIQKw5jnJYqu5vlUYYx5mRqCC6IfxUKdPKClOmIXk
- bQulIlgHjwKsCi7Iu5JQy9cKRxzijUI0MwFTtRH7erEc/P4ZzEOcw3dyEKdZWemOWTrO
- kQllXm4czch3Mes2WwsdKIyZYVmmYS14QvM7jMeBtm2/DZcwZUgHPRSBwvbwoFjoyuK3
- PDnraZVDDrfCCLHroNti5BkB8E0NnVS2w9942siXoQ8MKB3fANGTzGlerfnCX+2T8ukr tQ== 
+ bh=0NKKPHeoWxavl6Qhunb3yW0ek09dXtWGUsfk8eUqFOg=;
+ b=ismLSbusz10V/T4gfH3eVzwEIW14Y09fkcQUoksLQLT/x8i5CDGs5OGrSQ7nKI4WxVzM
+ ZJKZIVwv4FM3kGO9N6miJIEREvwGoM8rchNfwTS/CiqoQ7na1dbnNcDA12FaZiEjKRAp
+ TWT8yDcBgVIklAR1clPvB8+zCDN9I9rns0X8ylmp2rc1laUmP5/iOFpk1QQn30vEPjAo
+ KR0/PSmHoOQM1dAlv//yA0li7w7tTVhYB8kOF3XkXHYNBBZ6+K29UDr/CQpDy06sURi0
+ mQs64b7y9KMZF0slm9XDPS0aNboC3TfFM+om6VhFU9zdoSS2YyJy2fkbNml4BTUC0sPQ 1Q== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71rg3tpp-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71sgubx0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Jul 2022 04:22:34 +0000
+        Thu, 14 Jul 2022 04:22:35 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26E4ApYl040463;
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26E4Aop6040444;
         Thu, 14 Jul 2022 04:22:33 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h70451jnt-1
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h70451jp1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 14 Jul 2022 04:22:33 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 26E4MWBf023864;
-        Thu, 14 Jul 2022 04:22:32 GMT
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 26E4MWBh023864;
+        Thu, 14 Jul 2022 04:22:33 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h70451jnc-1;
-        Thu, 14 Jul 2022 04:22:32 +0000
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h70451jnc-2;
+        Thu, 14 Jul 2022 04:22:33 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Benjamin Block <bblock@linux.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>
+To:     Bart Van Assche <bvanassche@acm.org>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Fedor Loshakov <loshakov@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jiang Jian <jiangjian@cdjrlc.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 0/2] zfcp changes for v5.20
-Date:   Thu, 14 Jul 2022 00:22:21 -0400
-Message-Id: <165777182484.7272.9988840297540552966.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: Re: [PATCH v2 0/2] Reduce ATA disk resume time
+Date:   Thu, 14 Jul 2022 00:22:22 -0400
+Message-Id: <165777182483.7272.8448048942289944785.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1657122360.git.bblock@linux.ibm.com>
-References: <cover.1657122360.git.bblock@linux.ibm.com>
+In-Reply-To: <20220630195703.10155-1-bvanassche@acm.org>
+References: <20220630195703.10155-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: PtPfu1ESeFSaHN59s2i81q0AlgzZ_Bf7
-X-Proofpoint-ORIG-GUID: PtPfu1ESeFSaHN59s2i81q0AlgzZ_Bf7
+X-Proofpoint-GUID: BfsN40y6iFdR99r-cUwnQNfXOJYMTuzc
+X-Proofpoint-ORIG-GUID: BfsN40y6iFdR99r-cUwnQNfXOJYMTuzc
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -75,23 +68,23 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 6 Jul 2022 17:59:38 +0200, Benjamin Block wrote:
+On Thu, 30 Jun 2022 12:57:01 -0700, Bart Van Assche wrote:
 
-> here is a (very) small set of changes for the zFCP device driver. The
-> change from Jiang Jian came in recently, and Julian's patch has been
-> laying around for quite a while now, so I didn't want to let them linger
-> any longer in anticipation of any bigger change that might come.
+> Recently it was reported that patch "scsi: core: pm: Rely on the device driver
+> core for async power management" causes resuming to take longer if an ATA disk
+> is present. This patch series fixes that regression. Please consider this
+> patch series for kernel v5.20.
 > 
-> It would be nice, if you could include them for v5.20.
+> Thanks,
 > 
 > [...]
 
 Applied to 5.20/scsi-queue, thanks!
 
-[1/2] scsi: zfcp: declare zfcp_sdev_attrs as static
-      https://git.kernel.org/mkp/scsi/c/b9787bdfdba5
-[2/2] scsi: zfcp: drop unexpected word "the" in the comments
-      https://git.kernel.org/mkp/scsi/c/9821106213c8
+[1/2] scsi: core: Move the definition of SCSI_QUEUE_DELAY
+      https://git.kernel.org/mkp/scsi/c/90552cd2d1f9
+[2/2] scsi: sd: Rework asynchronous resume support
+      https://git.kernel.org/mkp/scsi/c/88f1669019bd
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
