@@ -2,63 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF8757425C
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jul 2022 06:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC52057424C
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Jul 2022 06:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234651AbiGNEXs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 14 Jul 2022 00:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
+        id S234293AbiGNEXR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 14 Jul 2022 00:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233714AbiGNEXJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 14 Jul 2022 00:23:09 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F3A27FEE;
-        Wed, 13 Jul 2022 21:22:45 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E3mtjB020536;
-        Thu, 14 Jul 2022 04:22:38 GMT
+        with ESMTP id S233782AbiGNEWu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 14 Jul 2022 00:22:50 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D4327CF9
+        for <linux-scsi@vger.kernel.org>; Wed, 13 Jul 2022 21:22:41 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E3nDAX009147;
+        Thu, 14 Jul 2022 04:22:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=qqQoPJEn9o0XaXmiw3FJvD7o2uy7D2pyuKTKKsv4/gM=;
- b=xsba4z+RPMfHmkE+LQ4bZwL470OJsXfFe01jpJSaSKxCmtigT5lh3he77MtjrEl2GU6v
- gy77DVXZQb50srGJYbe2nlQ0j7og+p9nrmno3TWHObt1Rl/CmMVAROkcBbSHJ5VukN/Y
- IbQyCEAPP7a0Gq/8wyoR3mTGOQUqp0nSY0mkKCJrj+NVDio+jNMo1Pbdia1CV48Dw8ES
- ylM8vEzrf3D3fXdT5fhWzlZQaiPsRwdIEI3MnAi2hnWWiEVwmcMC5JLDZ7tWSM2Afj2W
- oe+RjKGxlK+uTBLc2zW1Ac6q+MsiMtGqXVOnFcWi7FXavkJ/Vohz2ZgjJFJu0aK3gdGz qA== 
+ bh=hgg9EWkXajbbbOvkLmnx/vdbF9z2MqBlp+KrAX85iqI=;
+ b=wjMLALOPtoGDcZMFV0mOLXuizQe77WLZyQgr9PmuXlxOmBxCSWLD9PhujPaq3HVl4QuI
+ XSPZZ2jR1jlte5C3+V+iP0zRtqiUUE8gIlWvYw9YYYVHJduIBMY4fT2hLC5yl7z25qXq
+ g2nkAa8W6BYNw8LB0fPkTveShazX0UNxzrbnVGrpRcehOGTpu3eW+G8uyGC51MHU2FVs
+ UlUzfKlNaX/oV0qD0QfaNlfHDGC6YiuB8UlwegDCaVdM8TROWLhT2MRWBws+N4JO5i2a
+ OzF9dSbbdtJQaXVPxs+pXvlFMbl2a7gBDsFSyZ9QBSxErAkEb2TNiSZmVpFBKAMCzsPl Cw== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71xrkxsp-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h71rg3tps-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Jul 2022 04:22:39 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26E4Aop8040444;
+        Thu, 14 Jul 2022 04:22:38 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h70451jq5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 14 Jul 2022 04:22:38 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 26E4ApYp040463;
-        Thu, 14 Jul 2022 04:22:37 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h70451jq2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 Jul 2022 04:22:37 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 26E4MWBv023864;
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 26E4MWBx023864;
         Thu, 14 Jul 2022 04:22:37 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h70451jnc-9;
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3h70451jnc-10;
         Thu, 14 Jul 2022 04:22:37 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-m68k@vger.kernel.org, Michael Schmitz <schmitzmic@gmail.com>,
-        arnd@kernel.org
+To:     avri.altman@wdc.com, Seunghui Lee <sh043.lee@samsung.com>,
+        linux-scsi@vger.kernel.org
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, geert@linux-m68k.org
-Subject: Re: [PATCH v2 0/3] Converting m68k WD33C93 drivers to DMA API
-Date:   Thu, 14 Jul 2022 00:22:29 -0400
-Message-Id: <165777182483.7272.12553166750416691884.b4-ty@oracle.com>
+        Junwoo Lee <junwoo80.lee@samsung.com>
+Subject: Re: [PATCH v2] scsi: ufs: skip last hci reset to get valid register values
+Date:   Thu, 14 Jul 2022 00:22:30 -0400
+Message-Id: <165777182484.7272.8706649768499227373.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220630033302.3183-1-schmitzmic@gmail.com>
-References: <20220630033302.3183-1-schmitzmic@gmail.com>
+In-Reply-To: <20220705083538.15143-1-sh043.lee@samsung.com>
+References: <CGME20220705080318epcas1p18896b13b2f7ad16509d7047584f1fe86@epcas1p1.samsung.com> <20220705083538.15143-1-sh043.lee@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: R5CCJnRVyCuVajHWaoMQpmyq11k0dxNA
-X-Proofpoint-ORIG-GUID: R5CCJnRVyCuVajHWaoMQpmyq11k0dxNA
+X-Proofpoint-GUID: iafcNspFF6xicG3esIr2NPTTzWs95qit
+X-Proofpoint-ORIG-GUID: iafcNspFF6xicG3esIr2NPTTzWs95qit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -69,26 +69,35 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 30 Jun 2022 15:32:59 +1200, Michael Schmitz wrote:
+On Tue, 5 Jul 2022 17:35:38 +0900, Seunghui Lee wrote:
 
-> This series was precipitated by Arnd removing CONFIG_VIRT_TO_BUS. The
-> m68k WD33C93 still used virt_to_bus to convert virtual addresses to
-> physical addresses suitable for the DMA engines (note m68k does not
-> have an IOMMU and uses a direct mapping for DMA addresses).
+> Once the host fails to link startup 3 times, all host registers are reset value
+> except ufshcd_hba_enable after linkstartup failure.
 > 
-> Arnd suggested to use dma_map_single() to set up dma mappings instead
-> of open-coding much the same in every driver dma_setup() function.
+> The ufs host controller is disabled and enabled in the ufshcd_hba_enable().
+> That's why we need to skip last hci reset to get valid host register values.
+> 
+> e.g.
+> [    1.898026] [2:  kworker/u16:2:  211] ufs: link startup failed 1
+> [    1.898133] [2:  kworker/u16:2:  211] host_regs: 00000000: 1383ff1f 00000000 00000300 00000000
+> [    1.898141] [2:  kworker/u16:2:  211] host_regs: 00000010: 00000106 000001ce 00000000 00000000
+> [    1.898148] [2:  kworker/u16:2:  211] host_regs: 00000020: 00000000 00000470 00000000 00000000
+> [    1.898155] [2:  kworker/u16:2:  211] host_regs: 00000030: 00000008 00000003 00000000 00000000
+> [    1.898163] [2:  kworker/u16:2:  211] host_regs: 00000040: 00000000 00000000 00000000 00000000
+> [    1.898171] [2:  kworker/u16:2:  211] host_regs: 00000050: 00000000 00000000 00000000 00000000
+> [    1.898177] [2:  kworker/u16:2:  211] host_regs: 00000060: 00000000 00000000 00000000 00000000
+> [    1.898186] [2:  kworker/u16:2:  211] host_regs: 00000070: 00000000 00000000 00000000 00000000
+> [    1.898194] [2:  kworker/u16:2:  211] host_regs: 00000080: 00000000 00000000 00000000 00000000
+> [    1.898201] [2:  kworker/u16:2:  211] host_regs: 00000090: 00000000 00000000 00000000 00000000
+> All host registers(standard special function register) are reset value except
+> ufshcd_hba_enable after linkstartup failure.
 > 
 > [...]
 
 Applied to 5.20/scsi-queue, thanks!
 
-[1/3] scsi - a3000.c: convert m68k WD33C93 drivers to DMA API
-      https://git.kernel.org/mkp/scsi/c/e214806d52b8
-[2/3] scsi - a2091.c: convert m68k WD33C93 drivers to DMA API
-      https://git.kernel.org/mkp/scsi/c/479accbbb839
-[3/3] scsi - gvp11.c: convert m68k WD33C93 drivers to DMA API
-      https://git.kernel.org/mkp/scsi/c/158da6bcae7a
+[1/1] scsi: ufs: skip last hci reset to get valid register values
+      https://git.kernel.org/mkp/scsi/c/174e909b5435
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
