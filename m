@@ -2,92 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91657576A3D
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 Jul 2022 00:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFBF576A90
+	for <lists+linux-scsi@lfdr.de>; Sat, 16 Jul 2022 01:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiGOWw3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 15 Jul 2022 18:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
+        id S231994AbiGOXVD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 Jul 2022 19:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbiGOWwO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Jul 2022 18:52:14 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Jul 2022 15:51:58 PDT
-Received: from mx01.oniris-nantes.fr (mx01.oniris-nantes.fr [193.48.2.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD148EEC0
-        for <linux-scsi@vger.kernel.org>; Fri, 15 Jul 2022 15:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=oniris-nantes.fr; i=@oniris-nantes.fr; q=dns/txt;
-  s=onirissmtprelay; t=1657925519; x=1689461519;
-  h=mime-version:content-transfer-encoding:
-   content-description:subject:to:from:date:reply-to:
-   message-id;
-  bh=AQd2ojwH61akYClB9q7V/X50pC8tSyoSWQn6ZMhvUxY=;
-  b=CAoFPwrMOtSJW5N9w0RYPNcQcNckXiuiDaod/lq3/6kuPg7qCQ7bukgv
-   Z+EEx+iOzWYRJS7OxApRRwSh3UN/5D+tAGIVOcogTLp9ZoGqVRfJaEjw1
-   jEvJQTXmVlDr1k/lclJPFxETJ2BwE87FNrLECTmi4nvzIRFwvoS/mPXpG
-   tkeIx+GDDabK4s8JShpHPffTAy4xTWy5tZuS12c7PyVB30nHkBF7GKsu8
-   vhEaZ5wMtuBUOLOUF3c/nfrvTW/JYd5qujqK5HS3pct2EKsOjJHEQ5OMc
-   DOq9M+mcs8rlFjxRxdy3eZY0LDrp/3IdY/svyKcZFdL6a2Js3g2tJAoHn
-   g==;
-IronPort-SDR: SbFTf4WbX3DLudztwXHUawb9r9Tk5qIllNgAiwm3oZCdPkao4HvC62Tn2pFaihGQi1DMtbojEh
- i/+mj74EeMHw==
-Received: from srv-rproxy-01.oniris-nantes.fr ([193.48.2.222])
-  by mx01.oniris-nantes.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 00:50:54 +0200
-Received: from localhost (localhost [127.0.0.1])
-        by srv-rproxy-01.oniris-nantes.fr (Postfix) with ESMTP id 38A672035C;
-        Sat, 16 Jul 2022 00:50:53 +0200 (CEST)
-Received: from srv-rproxy-01.oniris-nantes.fr ([127.0.0.1])
-        by localhost (srv-rproxy-01.oniris-nantes.fr [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id aJoDZtMkyi4c; Sat, 16 Jul 2022 00:50:53 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by srv-rproxy-01.oniris-nantes.fr (Postfix) with ESMTP id CD1CC2030D;
-        Sat, 16 Jul 2022 00:50:52 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 srv-rproxy-01.oniris-nantes.fr CD1CC2030D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oniris-nantes.fr;
-        s=584628BC-C45C-11EB-88D3-95D0CF659A93; t=1657925452;
-        bh=TwWkYl19ABnkv5SxTw1S0zUfrK6a15soWxaXxRYyNU8=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=Rd/XVdiHMLhr7xb+7DIQSbvIeqgnoUe/C8QYZDsime+is0J/e1mF+OOxZO9iNtj06
-         Op3QoEKC23F5k5DZlVAD31gHAwqHHAsmbcPkPhb6Z5ac5a3MHMK1b4/+ohzH8iDQjj
-         L10+MJ0iqvQieTCJNL1PlfrIywLLsJkJTU5ngozZMfe9V2wJvmxlY6668Qhdl1r1rH
-         uurTjLXPW49g8n6UULe7+QcrQ9MEysWcBmAOvLt0m6+iUDEJaXmdmku480BcgJJKR+
-         1mHWOd1de1mhhQ9l6ZOIJ4/oEtbc+nojNLJ7wZKoNW45RhfzkFt4RSUfE/1fU5JqrD
-         lmhQJfnbMILBw==
-X-Virus-Scanned: amavisd-new at srv-rproxy-01.oniris-nantes.fr
-Received: from srv-rproxy-01.oniris-nantes.fr ([127.0.0.1])
-        by localhost (srv-rproxy-01.oniris-nantes.fr [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id KLFEjTHJPiFa; Sat, 16 Jul 2022 00:50:52 +0200 (CEST)
-Received: from [192.168.0.77] (unknown [197.184.178.189])
-        by srv-rproxy-01.oniris-nantes.fr (Postfix) with ESMTPSA id 521F120348;
-        Sat, 16 Jul 2022 00:50:48 +0200 (CEST)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S232067AbiGOXVB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Jul 2022 19:21:01 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9378492843;
+        Fri, 15 Jul 2022 16:21:00 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h17so8715013wrx.0;
+        Fri, 15 Jul 2022 16:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=WP1k9JR3q2kpU+9oKdGOJLSJzHWZD7K59YLDv38ZoL0=;
+        b=grQe+yEXMAPCAHSAunuX+EoiVPfPaejhQT4VwaCEMeCUCYiS6l2SyQ+aeoyOJw3W/7
+         b/jqE9cF3bCn2ziZdfSb6fEy0GX2ElksprrDd81oEOgXVTI3qsGlBoKAQa6y3nwSwsRG
+         sEMczA5h4N/eFYB44M5Az2PDZ0Yjbz6Zi13/hOvpc5c/nFP8lgWlrMYbfAYWe38h4/m/
+         /V0lqiT4mi3lZ2yMbMIiXL0Obh7J+PAv5ltruzfU8STtUMcLI0c558Lz4vW/pRLc6CCb
+         1Q9wT4cNdz0XdKTAlZR0vNdpNfWVoE4RSDZtTGmzHv9QotuiAu0xUblginxYtzkgUAKS
+         AIzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=WP1k9JR3q2kpU+9oKdGOJLSJzHWZD7K59YLDv38ZoL0=;
+        b=ZH6JdfNsZ1rQDm1pu9ile8LggVtFjgX4fDyXBPufm4MkIkZJm5R3Duu3PFj0lOyXeZ
+         A8qrRqSIXKZes2FTPgXoUFp3Gx3XHh4FtnWJUnmNmRgYpeQpZoVWd1teu5jXEgayCHP+
+         jUZMplx0sHutVjX6h7VPXnO8sWHAsqFMzf4RzrtVkU9SzPVFXr75npl1UNWkUGH4YEHJ
+         PtwdQ5Ex+Hmtk8aqUEHe15dt379OUjCvKdLG25OnBShOuV2X6C86gTNMJUJB1pclHVN1
+         RydZWXnilngiyYoWzEV4G54Iho1YnRN67Lg2Q4ceaXNZHLIW12LZRWzPACbQy1yl8N/T
+         uXVQ==
+X-Gm-Message-State: AJIora+Mp47cAF1aeQWM/CMLQDCxf2ba9czaqC7ftzY8j40QiO4nzxHe
+        6GQdX3KPgCCcZHUjLNkIKlGrGvvZyiMo9Q==
+X-Google-Smtp-Source: AGRyM1ssL3Q4jhmsPST6RCt9ekVCAqNaz9O0eEbF9UXtJQnJA9Q78S9gWF30tP2AdTeHULgC1Ae6NQ==
+X-Received: by 2002:a5d:59ac:0:b0:21d:944a:8a0e with SMTP id p12-20020a5d59ac000000b0021d944a8a0emr14342183wrr.61.1657927259108;
+        Fri, 15 Jul 2022 16:20:59 -0700 (PDT)
+Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
+        by smtp.gmail.com with ESMTPSA id bg10-20020a05600c3c8a00b003a0323463absm8144010wmb.45.2022.07.15.16.20.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 16:20:58 -0700 (PDT)
+Date:   Sat, 16 Jul 2022 00:20:56 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     mpi3mr-linuxdrv.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: build failure of next-20220715 due to "cast from pointer to integer
+ of different size"
+Message-ID: <YtH2WLmSXX7qLV5X@debian>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: VERTRAULICHKEIT
-To:     Recipients <julie.marie@oniris-nantes.fr>
-From:   julie.marie@oniris-nantes.fr
-Date:   Sat, 16 Jul 2022 06:50:44 +0800
-Reply-To: silvanatenreyro1480@gmail.com
-X-Antivirus: AVG (VPS 220715-4, 7/15/2022), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20220715225048.521F120348@srv-rproxy-01.oniris-nantes.fr>
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_BL_SPAMCOP_NET,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Zu Ihrer Information: Wir haben eine Erbschaft in Verwahrung, die mit Ihren=
- Namen verkn=FCpft ist. Kontaktieren Sie Frau S. Tenreyro unter: silvanaten=
-reyro1480@gmail.com mit Ihren vollst=E4ndigen Namen f=FCr Anspr=FCche
+Hi All,
 
--- 
-This email has been checked for viruses by AVG.
-https://www.avg.com
+Not sure if it has been reported, builds of xtensa, csky and mips allmodsconfig
+have failed to build next-20220715 with the error:
 
+drivers/scsi/mpi3mr/mpi3mr_os.c: In function 'mpi3mr_queue_qd_reduction_event':
+drivers/scsi/mpi3mr/mpi3mr_os.c:389:40: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
+  389 |         *(__le64 *)fwevt->event_data = (__le64)tg;
+      |                                        ^
+drivers/scsi/mpi3mr/mpi3mr_os.c: In function 'mpi3mr_fwevt_bh':
+drivers/scsi/mpi3mr/mpi3mr_os.c:1655:22: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+ 1655 |                 tg = (struct mpi3mr_throttle_group_info *)
+      |                   
+
+
+--
+Regards
+Sudip
