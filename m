@@ -2,57 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44354575B25
+	by mail.lfdr.de (Postfix) with ESMTP id E13A1575B27
 	for <lists+linux-scsi@lfdr.de>; Fri, 15 Jul 2022 08:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiGOGCm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 15 Jul 2022 02:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48518 "EHLO
+        id S230151AbiGOGCq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 Jul 2022 02:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbiGOGCi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Jul 2022 02:02:38 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BDF7A536
-        for <linux-scsi@vger.kernel.org>; Thu, 14 Jul 2022 23:02:36 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26EMB5Z8009903
-        for <linux-scsi@vger.kernel.org>; Thu, 14 Jul 2022 23:02:35 -0700
+        with ESMTP id S230105AbiGOGCg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Jul 2022 02:02:36 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC20B7A53C
+        for <linux-scsi@vger.kernel.org>; Thu, 14 Jul 2022 23:02:34 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26F1ifoA013575
+        for <linux-scsi@vger.kernel.org>; Thu, 14 Jul 2022 23:02:34 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=aMsiJr7gIGzkLBNAywjHJEYWs+/665M5djfLk+Lthxc=;
- b=b1iAGvYp3rKj8TCbClEr3trIGSYx3ngLmWXwdTl8kND/EJsFvfpckX33vTX92BG5No2m
- J/+bn5QZ/DXWOIMduH/gXng/XvxQletKT+cfcuTzLKCN5uf+k9mWv1IviwX/e8M09WSc
- /NmDvIQKplZQpAJ6LSPK0DPzrSN1B13LvnSGsZSviznPHeCnJw54MRYWNAjUabOgXJ8e
- eVwXMABDzgs1dQvr7zpNmj51T5EchSA3bN3PqUb+s67Es2hz+BRzQsocubS02YLXL48g
- VQbCSlQT0eLifoRSLuSkHYduqcISyrlCarkfXLBLkAC0qc3jXHIXIz0Ut2duRagVg2ph ZQ== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3h9udu8g1u-2
+ content-type; s=pfpt0220; bh=zgOS0yBZ3xA72UvgJZ2lsFILTGx9fkGbWOJGG/H1kVo=;
+ b=i3BjEx3FSQDUmLe4nciLlLPmTs2xgLqBSWX7D6Kupb8bOsPyC1sT8H1QdZRiHO12gXYN
+ 4JRGCLlru/FXBv3HwTqZ5Y5rdZ6y8yvQ5mAHKVotKcmrN+DWtL+SjVwxc8ryee+iyaHC
+ hQ43lryUMHJ3fYpfV5GGjRfXZjTnuT3ND+KzmbCrOxC7fZVfqkk9uyOCSJ+zymZtxJh3
+ UwB0sw8fEG0FaZem0RCN2AnQt75fQhx9C6mbtIQc1yI1Xrs3KIoOqdgDr3kkOtlQRT/N
+ qbhA+a3PGenA9XrYWn6k2n0TuIeJEzcxDr71D72kDyacRBw0wSI4q0GOUftPWDRnZtOP Vw== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3haxu9gkug-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Thu, 14 Jul 2022 23:02:35 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Jul
+        for <linux-scsi@vger.kernel.org>; Thu, 14 Jul 2022 23:02:34 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 14 Jul
  2022 23:02:32 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Thu, 14 Jul 2022 23:02:32 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 7B6473F7065;
+        by maili.marvell.com (Postfix) with ESMTP id 9FDAE3F7072;
         Thu, 14 Jul 2022 23:02:32 -0700 (PDT)
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>, <bhazarika@marvell.com>,
         <agurumurthy@marvell.com>
-Subject: [PATCH 3/6] qla2xxx: Add driver console messages tracing
-Date:   Thu, 14 Jul 2022 23:02:24 -0700
-Message-ID: <20220715060227.23923-4-njavali@marvell.com>
+Subject: [PATCH 4/6] qla2xxx: Add srb tracing
+Date:   Thu, 14 Jul 2022 23:02:25 -0700
+Message-ID: <20220715060227.23923-5-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20220715060227.23923-1-njavali@marvell.com>
 References: <20220715060227.23923-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: B4xt4DN73wNvor2OaxFwz2jhY8Sl5yPz
-X-Proofpoint-ORIG-GUID: B4xt4DN73wNvor2OaxFwz2jhY8Sl5yPz
+X-Proofpoint-ORIG-GUID: B3s9v5QdRfDW4vU5Bt5PJKY6Y3LPjowo
+X-Proofpoint-GUID: B3s9v5QdRfDW4vU5Bt5PJKY6Y3LPjowo
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-15_02,2022-07-14_01,2022-06-22_01
@@ -68,222 +68,176 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Arun Easi <aeasi@marvell.com>
 
-Driver messages, using the default log settings of 1 are captured
-by default in an internal trace buffer.
-Traces can be read from:
-	/sys/kernel/debug/qla2xxx/message_trace
+Add a separate driver internal trace to capture srb
+related info. The debugfs file is:
+	/sys/kernel/debug/qla2xxx/qla2xxx_<host#>/srb_trace
 
-Enable/disable/resize operations are possible by writing
-enable/disable/resize=<nlines> to the debugfs file.
+Like message trace, enable/disable/resize operations are possible
+by writing:
+            enable/disable/resize=<nlines>
+..to the debugfs file.
 
 Signed-off-by: Arun Easi <aeasi@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_dbg.c | 14 +++++-
- drivers/scsi/qla2xxx/qla_dbg.h | 79 ++++++++++++++++++++++++++++++++++
- drivers/scsi/qla2xxx/qla_dfs.c | 30 +++++++++++++
- drivers/scsi/qla2xxx/qla_gbl.h |  1 +
- drivers/scsi/qla2xxx/qla_os.c  |  2 +
- 5 files changed, 125 insertions(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_dbg.h    | 67 +++++++++++++++++++++++++++++++
+ drivers/scsi/qla2xxx/qla_def.h    | 17 +++++---
+ drivers/scsi/qla2xxx/qla_dfs.c    | 17 ++++++++
+ drivers/scsi/qla2xxx/qla_inline.h | 12 ++++++
+ drivers/scsi/qla2xxx/qla_iocb.c   |  4 ++
+ drivers/scsi/qla2xxx/qla_isr.c    |  5 +++
+ drivers/scsi/qla2xxx/qla_os.c     | 28 +++++++++++++
+ 7 files changed, 144 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_dbg.c b/drivers/scsi/qla2xxx/qla_dbg.c
-index c4ba8ac51d27..3d12a5bf54b9 100644
---- a/drivers/scsi/qla2xxx/qla_dbg.c
-+++ b/drivers/scsi/qla2xxx/qla_dbg.c
-@@ -68,7 +68,7 @@
- #define CREATE_TRACE_POINTS
- #include <trace/events/qla.h>
- 
--static uint32_t ql_dbg_offset = 0x800;
-+uint32_t ql_dbg_offset = 0x800;
- 
- static inline void
- qla2xxx_prep_dump(struct qla_hw_data *ha, struct qla2xxx_fw_dump *fw_dump)
-@@ -2491,6 +2491,8 @@ ql_dbg(uint level, scsi_qla_host_t *vha, uint id, const char *fmt, ...)
- 	struct va_format vaf;
- 	char pbuf[64];
- 
-+	ql_msg_trace(1, level, vha, NULL, id, fmt);
-+
- 	if (!ql_mask_match(level) && !trace_ql_dbg_log_enabled())
- 		return;
- 
-@@ -2533,6 +2535,9 @@ ql_dbg_pci(uint level, struct pci_dev *pdev, uint id, const char *fmt, ...)
- 
- 	if (pdev == NULL)
- 		return;
-+
-+	ql_msg_trace(1, level, NULL, pdev, id, fmt);
-+
- 	if (!ql_mask_match(level))
- 		return;
- 
-@@ -2570,6 +2575,8 @@ ql_log(uint level, scsi_qla_host_t *vha, uint id, const char *fmt, ...)
- 	if (level > ql_errlev)
- 		return;
- 
-+	ql_msg_trace(0, level, vha, NULL, id, fmt);
-+
- 	ql_dbg_prefix(pbuf, ARRAY_SIZE(pbuf), vha, id);
- 
- 	va_start(va, fmt);
-@@ -2621,6 +2628,8 @@ ql_log_pci(uint level, struct pci_dev *pdev, uint id, const char *fmt, ...)
- 	if (level > ql_errlev)
- 		return;
- 
-+	ql_msg_trace(0, level, NULL, pdev, id, fmt);
-+
- 	ql_dbg_prefix(pbuf, ARRAY_SIZE(pbuf), NULL, id);
- 
- 	va_start(va, fmt);
-@@ -2783,9 +2792,12 @@ void qla_tracing_init(void)
- {
- 	if (is_kdump_kernel())
- 		return;
-+
-+	qla_trace_init(&qla_message_trace, "message_trace", ql2xnum_msg_trace);
- }
- 
- void qla_tracing_exit(void)
- {
-+	qla_trace_uninit(&qla_message_trace);
- }
- #endif /* QLA_TRACING */
 diff --git a/drivers/scsi/qla2xxx/qla_dbg.h b/drivers/scsi/qla2xxx/qla_dbg.h
-index e0d91a1f81c0..9704cb13aacf 100644
+index 9704cb13aacf..056fbdbc6794 100644
 --- a/drivers/scsi/qla2xxx/qla_dbg.h
 +++ b/drivers/scsi/qla2xxx/qla_dbg.h
-@@ -325,6 +325,24 @@ extern uint ql_errlev;
- #ifdef QLA_TRACING
- #include <linux/crash_dump.h>
+@@ -342,6 +342,22 @@ extern uint ql_errlev;
+ extern int ql2xnum_msg_trace;
+ extern int ql2xextended_error_logging_msg_trace;
  
-+#define QLA_MTRC_DEF_NUM_REC		(4*1024) /* Has to be power of 2 */
-+#define QLA_MESSAGE_TRACE_DEFINES \
-+	struct qla_trace qla_message_trace;	\
-+	int ql2xextended_error_logging_msg_trace = 1; \
-+	module_param(ql2xextended_error_logging_msg_trace, int, 0600); \
-+	MODULE_PARM_DESC(ql2xextended_error_logging_msg_trace, \
-+		"Option to log console messages to buffer; uses same " \
++#define QLA_SRB_TRACE_DEFINES \
++	int ql2xextended_error_logging_srb_trace = 1; \
++	module_param(ql2xextended_error_logging_srb_trace, int, \
++						S_IRUGO|S_IWUSR); \
++	MODULE_PARM_DESC(ql2xextended_error_logging_srb_trace, \
++		"Option to log srb messages to buffer; uses same " \
 +			"ql2xextended_error_logging masks."); \
 +	\
-+	int ql2xnum_msg_trace = QLA_MTRC_DEF_NUM_REC;	\
-+	module_param(ql2xnum_msg_trace, int, 0600);	\
-+	MODULE_PARM_DESC(ql2xnum_msg_trace, \
-+		"Number of trace entries in power of 2. (default 4k)");
++	int ql2xnum_srb_trace = 0;	\
++	module_param(ql2xnum_srb_trace, int, S_IRUGO);	\
++	MODULE_PARM_DESC(ql2xnum_srb_trace, \
++		"Number of srb trace entries in power of 2. (default 0)");
 +
-+extern int ql2xnum_msg_trace;
-+extern int ql2xextended_error_logging_msg_trace;
++extern int ql2xnum_srb_trace;
++extern int ql2xextended_error_logging_srb_trace;
 +
-+extern struct qla_trace qla_message_trace;
+ extern struct qla_trace qla_message_trace;
  extern void qla_tracing_init(void);
  extern void qla_tracing_exit(void);
- 
-@@ -422,6 +440,61 @@ qla_trace_quiesce(struct qla_trace *trc)
- 	return ret;
+@@ -495,6 +511,57 @@ __ql_msg_trace(struct qla_trace *trc, scsi_qla_host_t *vha,
+ 	qla_trace_put(trc);
  }
  
-+#define ql_msg_trace(dbg_msg, level, vha, pdev, id, fmt) do {		\
-+	struct va_format _vaf;						\
-+	va_list _va;							\
-+	u32 dbg_off = dbg_msg ? ql_dbg_offset : 0;			\
-+									\
-+	if (!test_bit(QLA_TRACE_ENABLED, &qla_message_trace.flags))	\
-+		break;							\
-+									\
-+	if (dbg_msg && !ql_mask_match_ext(level,			\
-+				&ql2xextended_error_logging_msg_trace))	\
-+		break;							\
-+									\
-+	va_start(_va, fmt);						\
-+									\
-+	_vaf.fmt = fmt;							\
-+	_vaf.va = &_va;							\
-+	__ql_msg_trace(&qla_message_trace, vha, pdev,			\
-+						id + dbg_off, &_vaf);	\
-+									\
-+	va_end(_va);							\
++#define ql_srb_trace_ext(_level, _vha, _fcport, _fmt, _args...) do {	\
++	if (_fcport) {							\
++		__ql_srb_trace(_level, _vha,				\
++			DBG_FCPORT_PRFMT(_fcport, _fmt, ##_args));	\
++	} else {							\
++		__ql_srb_trace(_level, _vha,				\
++			"%s: " _fmt "\n", __func__, ##_args);		\
++	}								\
 +} while (0)
 +
-+/* Messages beyond QLA_TRACE_LINE_SIZE characters are not printed */
++#define ql_srb_trace(_level, _vha, _fmt, _args...) \
++	__ql_srb_trace(_level, _vha, _fmt, ##_args)
++
 +static inline void
-+__ql_msg_trace(struct qla_trace *trc, scsi_qla_host_t *vha,
-+		struct pci_dev *pdev, uint id, struct va_format *vaf)
++__ql_srb_trace(int level, scsi_qla_host_t *vha, const char *fmt, ...)
 +{
 +	int tl;
 +	char *buf;
-+	u64 t_us = ktime_to_us(ktime_get());
-+	uint cpu = raw_smp_processor_id();
++	u64 t_us;
++	uint cpu;
++	struct va_format vaf;
++	va_list va;
 +
-+	buf = qla_get_trace_next(trc);
++	if (!test_bit(QLA_TRACE_ENABLED, &vha->hw->srb_trace.flags))
++		return;
++
++	if (!ql_mask_match_ext(level, &ql2xextended_error_logging_srb_trace))
++		return;
++
++	t_us = ktime_to_us(ktime_get());
++	cpu = raw_smp_processor_id();
++	buf = qla_get_trace_next(&vha->hw->srb_trace);
 +	if (!buf)
 +		return;
 +
-+	if (vha) {
-+		const struct pci_dev *_pdev = vha->hw->pdev;
-+		tl = snprintf(buf, QLA_TRACE_LINE_SIZE,
-+			"%12llu %03u %s [%s]-%04x:%ld: %pV", t_us, cpu,
-+			QL_MSGHDR, dev_name(&(_pdev->dev)), id,
-+			vha->host_no, vaf);
-+	} else {
-+		tl = snprintf(buf, QLA_TRACE_LINE_SIZE,
-+			"%12llu %03u %s [%s]-%04x: : %pV", t_us, cpu, QL_MSGHDR,
-+			pdev ? dev_name(&(pdev->dev)) : "0000:00:00.0",
-+			id, vaf);
-+	}
++	va_start(va, fmt);
++
++	vaf.fmt = fmt;
++	vaf.va = &va;
++
++	tl = snprintf(buf, QLA_TRACE_LINE_SIZE, "%12llu %03u %pV",
++			t_us, cpu, &vaf);
 +
 +	tl = min(tl, QLA_TRACE_LINE_SIZE - 1);
 +	buf[tl] = '\0';
 +
-+	qla_trace_put(trc);
++	qla_trace_put(&vha->hw->srb_trace);
++
++	va_end(va);
 +}
 +
  static inline void
  qla_trace_init(struct qla_trace *trc, char *name, u32 num_entries)
  {
-@@ -455,10 +528,16 @@ qla_trace_uninit(struct qla_trace *trc)
- }
- 
- #else /* QLA_TRACING */
-+#define ql_msg_trace(dbg_msg, level, vha, pdev, id, fmt) do { } while (0)
- #define qla_trace_init(trc, name, num)
- #define qla_trace_uninit(trc)
- #define qla_tracing_init()
- #define qla_tracing_exit()
-+#define QLA_MESSAGE_TRACE_DEFINES
+diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
+index 39322105e7be..e1528a4e6ee4 100644
+--- a/drivers/scsi/qla2xxx/qla_def.h
++++ b/drivers/scsi/qla2xxx/qla_def.h
+@@ -4793,6 +4793,11 @@ struct qla_hw_data {
+ 	spinlock_t sadb_lock;	/* protects list */
+ 	struct els_reject elsrej;
+ 	u8 edif_post_stop_cnt_down;
 +
-+#define ql_srb_trace_ext(_level, _vha, _fcport, _fmt, _args...) do { } while (0)
-+#define ql_srb_trace(_level, _vha, _fmt, _args...) do { } while (0)
-+#define QLA_SRB_TRACE_DEFINES
- #endif /* QLA_TRACING */
++#ifdef QLA_TRACING
++	QLA_DFS_DEFINE_DENTRY(srb_trace);
++	struct qla_trace srb_trace;
++#endif /* QLA_TRACING */
+ };
  
- void __attribute__((format (printf, 4, 5)))
+ #define RX_ELS_SIZE (roundup(sizeof(struct enode) + ELS_MAX_PAYLOAD, SMP_CACHE_BYTES))
+@@ -5493,6 +5498,12 @@ struct ql_vnd_tgt_stats_resp {
+ 	struct ql_vnd_stats stats;
+ } __packed;
+ 
++#define DBG_FCPORT_PRFMT(_fp, _fmt, _args...) \
++	"%s: %8phC: " _fmt " (state=%d disc_state=%d scan_state=%d loopid=0x%x deleted=%d flags=0x%x)\n", \
++	__func__, _fp->port_name, ##_args, atomic_read(&_fp->state), \
++	_fp->disc_state, _fp->scan_state, _fp->loop_id, _fp->deleted, \
++	_fp->flags
++
+ #include "qla_target.h"
+ #include "qla_gbl.h"
+ #include "qla_dbg.h"
+@@ -5501,10 +5512,4 @@ struct ql_vnd_tgt_stats_resp {
+ #define IS_SESSION_DELETED(_fcport) (_fcport->disc_state == DSC_DELETE_PEND || \
+ 				      _fcport->disc_state == DSC_DELETED)
+ 
+-#define DBG_FCPORT_PRFMT(_fp, _fmt, _args...) \
+-	"%s: %8phC: " _fmt " (state=%d disc_state=%d scan_state=%d loopid=0x%x deleted=%d flags=0x%x)\n", \
+-	__func__, _fp->port_name, ##_args, atomic_read(&_fp->state), \
+-	_fp->disc_state, _fp->scan_state, _fp->loop_id, _fp->deleted, \
+-	_fp->flags
+-
+ #endif
 diff --git a/drivers/scsi/qla2xxx/qla_dfs.c b/drivers/scsi/qla2xxx/qla_dfs.c
-index 98c6390ad1f1..d3f9f6af43f2 100644
+index d3f9f6af43f2..806cb4afcb30 100644
 --- a/drivers/scsi/qla2xxx/qla_dfs.c
 +++ b/drivers/scsi/qla2xxx/qla_dfs.c
-@@ -11,6 +11,10 @@
- static struct dentry *qla2x00_dfs_root;
- static atomic_t qla2x00_dfs_root_count;
- 
-+#ifdef QLA_TRACING
-+static QLA_DFS_ROOT_DEFINE_DENTRY(message_trace); /* qla_dfs_message_trace */
-+#endif /* QLA_TRACING */
+@@ -599,12 +599,26 @@ qla_dfs_message_trace_show(struct seq_file *s, void *unused)
+ {
+ 	return qla_dfs_trace_show(s, unused);
+ }
 +
- #define QLA_DFS_RPORT_DEVLOSS_TMO	1
- 
- static int
-@@ -589,6 +593,18 @@ qla_dfs_trace_write(struct file *file, const char __user *buffer,
- done:
- 	return ret;
+ static ssize_t
+ qla_dfs_message_trace_write(struct file *file, const char __user *buffer,
+ 	size_t count, loff_t *pos)
+ {
+ 	return qla_dfs_trace_write(file, buffer, count, pos);
  }
 +
 +static int
-+qla_dfs_message_trace_show(struct seq_file *s, void *unused)
++qla_dfs_srb_trace_show(struct seq_file *s, void *unused)
 +{
 +	return qla_dfs_trace_show(s, unused);
 +}
++
 +static ssize_t
-+qla_dfs_message_trace_write(struct file *file, const char __user *buffer,
++qla_dfs_srb_trace_write(struct file *file, const char __user *buffer,
 +	size_t count, loff_t *pos)
 +{
 +	return qla_dfs_trace_write(file, buffer, count, pos);
@@ -291,66 +245,200 @@ index 98c6390ad1f1..d3f9f6af43f2 100644
  #endif /* QLA_TRACING */
  
  /*
-@@ -681,6 +697,10 @@ static const struct file_operations qla_dfs_##_name##_ops = {		\
- 		}							\
- 	} while (0)
+@@ -699,6 +713,7 @@ static const struct file_operations qla_dfs_##_name##_ops = {		\
  
-+#ifdef QLA_TRACING
-+QLA_DFS_SETUP_RW(message_trace, struct qla_trace *);
-+#endif /* QLA_TRACING */
-+
+ #ifdef QLA_TRACING
+ QLA_DFS_SETUP_RW(message_trace, struct qla_trace *);
++QLA_DFS_SETUP_RW(srb_trace, struct qla_trace *);
+ #endif /* QLA_TRACING */
+ 
  static int
- qla_dfs_naqp_open(struct inode *inode, struct file *file)
- {
-@@ -788,6 +808,11 @@ qla2x00_dfs_setup(scsi_qla_host_t *vha)
- 	ha->tgt.dfs_tgt_sess = debugfs_create_file("tgt_sess",
- 		S_IRUSR, ha->dfs_dir, vha, &qla2x00_dfs_tgt_sess_fops);
+@@ -811,6 +826,7 @@ qla2x00_dfs_setup(scsi_qla_host_t *vha)
+ #ifdef QLA_TRACING
+ 	QLA_DFS_ROOT_CREATE_FILE(message_trace, 0600, &qla_message_trace);
  
-+#ifdef QLA_TRACING
-+	QLA_DFS_ROOT_CREATE_FILE(message_trace, 0600, &qla_message_trace);
-+
-+#endif /* QLA_TRACING */
-+
++	QLA_DFS_CREATE_FILE(ha, srb_trace, 0600, ha->dfs_dir, &ha->srb_trace);
+ #endif /* QLA_TRACING */
+ 
  	if (IS_QLA27XX(ha) || IS_QLA83XX(ha) || IS_QLA28XX(ha)) {
- 		ha->tgt.dfs_naqp = debugfs_create_file("naqp",
- 		    0400, ha->dfs_dir, vha, &dfs_naqp_ops);
-@@ -847,6 +872,11 @@ qla2x00_dfs_remove(scsi_qla_host_t *vha)
- 		vha->dfs_rport_root = NULL;
- 	}
+@@ -875,6 +891,7 @@ qla2x00_dfs_remove(scsi_qla_host_t *vha)
+ #ifdef QLA_TRACING
+ 	QLA_DFS_ROOT_REMOVE_FILE(message_trace);
  
-+#ifdef QLA_TRACING
-+	QLA_DFS_ROOT_REMOVE_FILE(message_trace);
-+
-+#endif /* QLA_TRACING */
-+
++	QLA_DFS_REMOVE_FILE(ha, srb_trace);
+ #endif /* QLA_TRACING */
+ 
  	if (ha->dfs_dir) {
- 		debugfs_remove(ha->dfs_dir);
- 		ha->dfs_dir = NULL;
-diff --git a/drivers/scsi/qla2xxx/qla_gbl.h b/drivers/scsi/qla2xxx/qla_gbl.h
-index 5dd2932382ee..8c149a3482cb 100644
---- a/drivers/scsi/qla2xxx/qla_gbl.h
-+++ b/drivers/scsi/qla2xxx/qla_gbl.h
-@@ -163,6 +163,7 @@ extern int ql2xrdpenable;
- extern int ql2xsmartsan;
- extern int ql2xallocfwdump;
- extern int ql2xextended_error_logging;
-+extern uint32_t ql_dbg_offset;
- extern int ql2xiidmaenable;
- extern int ql2xmqsupport;
- extern int ql2xfwloadbin;
+diff --git a/drivers/scsi/qla2xxx/qla_inline.h b/drivers/scsi/qla2xxx/qla_inline.h
+index db17f7f410cd..19f334693a38 100644
+--- a/drivers/scsi/qla2xxx/qla_inline.h
++++ b/drivers/scsi/qla2xxx/qla_inline.h
+@@ -201,6 +201,10 @@ qla2xxx_get_qpair_sp(scsi_qla_host_t *vha, struct qla_qpair *qpair,
+ 		return NULL;
+ 
+ 	sp = mempool_alloc(qpair->srb_mempool, flag);
++	/* Avoid trace for calls from qla2x00_get_sp */
++	if (vha->hw->base_qpair != qpair)
++		ql_srb_trace_ext(ql_dbg_io, vha, fcport,
++			"sp=%px", sp);
+ 	if (sp)
+ 		qla2xxx_init_sp(sp, vha, qpair, fcport);
+ 	else
+@@ -214,6 +218,10 @@ void qla2xxx_rel_free_warning(srb_t *sp);
+ static inline void
+ qla2xxx_rel_qpair_sp(struct qla_qpair *qpair, srb_t *sp)
+ {
++	/* Avoid trace for calls from qla2x00_get_sp */
++	if (qpair->vha->hw->base_qpair != qpair)
++		ql_srb_trace_ext(ql_dbg_io, sp->vha, sp->fcport,
++			"sp=%px type=%d", sp, sp->type);
+ 	sp->qpair = NULL;
+ 	sp->done = qla2xxx_rel_done_warning;
+ 	sp->free = qla2xxx_rel_free_warning;
+@@ -234,6 +242,7 @@ qla2x00_get_sp(scsi_qla_host_t *vha, fc_port_t *fcport, gfp_t flag)
+ 
+ 	qpair = vha->hw->base_qpair;
+ 	sp = qla2xxx_get_qpair_sp(vha, qpair, fcport, flag);
++	ql_srb_trace_ext(ql_dbg_disc, vha, fcport, "sp=%px", sp);
+ 	if (!sp)
+ 		goto done;
+ 
+@@ -247,6 +256,9 @@ qla2x00_get_sp(scsi_qla_host_t *vha, fc_port_t *fcport, gfp_t flag)
+ static inline void
+ qla2x00_rel_sp(srb_t *sp)
+ {
++	ql_srb_trace_ext(ql_dbg_disc, sp->vha, sp->fcport,
++		"sp=%px type=%d", sp, sp->type);
++
+ 	QLA_VHA_MARK_NOT_BUSY(sp->vha);
+ 	qla2xxx_rel_qpair_sp(sp->qpair, sp);
+ }
+diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
+index 42ce4e1fe744..4fe569ef27ae 100644
+--- a/drivers/scsi/qla2xxx/qla_iocb.c
++++ b/drivers/scsi/qla2xxx/qla_iocb.c
+@@ -3826,6 +3826,10 @@ qla2x00_start_sp(srb_t *sp)
+ 	if (vha->hw->flags.eeh_busy)
+ 		return -EIO;
+ 
++	ql_srb_trace_ext(ql_dbg_disc, vha, sp->fcport,
++			"caller=%ps sp=%px type=%d",
++			__builtin_return_address(0), sp, sp->type);
++
+ 	spin_lock_irqsave(qp->qp_lock_ptr, flags);
+ 	pkt = __qla2x00_alloc_iocbs(sp->qpair, sp);
+ 	if (!pkt) {
+diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+index 76e79f350a22..af368d3beeab 100644
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -3197,6 +3197,11 @@ qla2x00_status_entry(scsi_qla_host_t *vha, struct rsp_que *rsp, void *pkt)
+ 		}
+ 		return;
+ 	}
++
++	ql_srb_trace_ext(ql_dbg_io, vha, sp->fcport,
++			 "sp=%px handle=0x%x type=%d done=%ps",
++			 sp, sp->handle, sp->type, sp->done);
++
+ 	qla_put_iocbs(sp->qpair, &sp->iores);
+ 
+ 	if (sp->cmd_type != TYPE_SRB) {
 diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 0d2397069cac..b937283f5e53 100644
+index b937283f5e53..4f9d2c1680c1 100644
 --- a/drivers/scsi/qla2xxx/qla_os.c
 +++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -117,6 +117,8 @@ MODULE_PARM_DESC(ql2xextended_error_logging,
- 		"ql2xextended_error_logging=1).\n"
- 		"\t\tDo LOGICAL OR of the value to enable more than one level");
+@@ -119,6 +119,8 @@ MODULE_PARM_DESC(ql2xextended_error_logging,
  
-+QLA_MESSAGE_TRACE_DEFINES;
+ QLA_MESSAGE_TRACE_DEFINES;
+ 
++QLA_SRB_TRACE_DEFINES;
 +
  int ql2xshiftctondsd = 6;
  module_param(ql2xshiftctondsd, int, S_IRUGO);
  MODULE_PARM_DESC(ql2xshiftctondsd,
+@@ -752,6 +754,10 @@ void qla2x00_sp_compl(srb_t *sp, int res)
+ 	struct scsi_cmnd *cmd = GET_CMD_SP(sp);
+ 	struct completion *comp = sp->comp;
+ 
++	ql_srb_trace_ext(ql_dbg_io, sp->vha, sp->fcport,
++			 "sp=%px handle=0x%x cmd=%px res=%x",
++			 sp, sp->handle, cmd, res);
++
+ 	/* kref: INIT */
+ 	kref_put(&sp->cmd_kref, qla2x00_sp_release);
+ 	cmd->result = res;
+@@ -844,6 +850,10 @@ void qla2xxx_qpair_sp_compl(srb_t *sp, int res)
+ 	struct scsi_cmnd *cmd = GET_CMD_SP(sp);
+ 	struct completion *comp = sp->comp;
+ 
++	ql_srb_trace_ext(ql_dbg_io, sp->vha, sp->fcport,
++			 "sp=%px handle=0x%x cmd=%px res=%x",
++			 sp, sp->handle, cmd, res);
++
+ 	/* ref: INIT */
+ 	kref_put(&sp->cmd_kref, qla2x00_sp_release);
+ 	cmd->result = res;
+@@ -870,6 +880,10 @@ qla2xxx_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+ 		goto qc24_fail_command;
+ 	}
+ 
++	ql_srb_trace_ext(ql_dbg_io, fcport->vha, fcport,
++		"cmd=%px mq=%d remchk=0x%x",
++		cmd, ha->mqenable, fc_remote_port_chkready(rport));
++
+ 	if (ha->mqenable) {
+ 		uint32_t tag;
+ 		uint16_t hwq;
+@@ -877,6 +891,10 @@ qla2xxx_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+ 
+ 		tag = blk_mq_unique_tag(scsi_cmd_to_rq(cmd));
+ 		hwq = blk_mq_unique_tag_to_hwq(tag);
++
++		ql_srb_trace_ext(ql_dbg_io, fcport->vha, fcport,
++				 "tag=%px hwq=%d", tag, hwq);
++
+ 		qpair = ha->queue_pair_map[hwq];
+ 
+ 		if (qpair)
+@@ -1298,6 +1316,10 @@ qla2xxx_eh_abort(struct scsi_cmnd *cmd)
+ 
+ 	vha->cmd_timeout_cnt++;
+ 
++	ql_srb_trace_ext(ql_dbg_io, sp->vha, sp->fcport,
++			 "sp=%px cmd=%px fast_fail_sts=0x%x",
++			 sp, cmd, fast_fail_status);
++
+ 	if ((sp->fcport && sp->fcport->deleted) || !qpair)
+ 		return fast_fail_status != SUCCESS ? fast_fail_status : FAILED;
+ 
+@@ -3528,6 +3550,8 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	ql_dbg(ql_dbg_init, base_vha, 0x00f2,
+ 	    "Init done and hba is online.\n");
+ 
++	qla_trace_init(&ha->srb_trace, "srb_trace", ql2xnum_srb_trace);
++
+ 	if (qla_ini_mode_enabled(base_vha) ||
+ 		qla_dual_mode_enabled(base_vha))
+ 		scsi_scan_host(host);
+@@ -3600,6 +3624,8 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	rsp = NULL;
+ 
+ probe_hw_failed:
++	qla_trace_uninit(&ha->srb_trace);
++
+ 	qla2x00_mem_free(ha);
+ 	qla2x00_free_req_que(ha, req);
+ 	qla2x00_free_rsp_que(ha, rsp);
+@@ -3883,6 +3909,8 @@ qla2x00_remove_one(struct pci_dev *pdev)
+ 
+ 	qla2x00_delete_all_vps(ha, base_vha);
+ 
++	qla_trace_uninit(&ha->srb_trace);
++
+ 	qla2x00_dfs_remove(base_vha);
+ 
+ 	qla84xx_put_chip(base_vha);
 -- 
 2.19.0.rc0
 
