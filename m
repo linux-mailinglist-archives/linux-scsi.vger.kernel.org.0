@@ -2,106 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C39575897
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Jul 2022 02:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05B4575B2A
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Jul 2022 08:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241031AbiGOAR1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 14 Jul 2022 20:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S230149AbiGOGCw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 Jul 2022 02:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbiGOAR1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 14 Jul 2022 20:17:27 -0400
-Received: from mail-m964.mail.126.com (mail-m964.mail.126.com [123.126.96.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C04CC73936
-        for <linux-scsi@vger.kernel.org>; Thu, 14 Jul 2022 17:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=lQZc7
-        4qvDL7wDfhdGqakL3PiCA0YrzNHgxfo7u78gYk=; b=pEiWXvQKUXcGrja0vnxsH
-        +/eGZzIcyXqcfHjiParhCGKzpV7ozEKwRCd42cVr1BTdcRggwRDpH1VHy7RsiVOc
-        5JQxkuXCBtYGD0o6/JGQCdI8cUpsNNbdWpZQvV2H0KNTLV8HfhK1MkYoq1ytFwhs
-        uROWLMJ8+lUDm66S2cuG90=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp9 (Coremail) with SMTP id NeRpCgAXk9MAstBiyeO3Gg--.3606S2;
-        Fri, 15 Jul 2022 08:17:05 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com, bvanassche@acm.org,
-        windhl@126.com, linux-scsi@vger.kernel.org
-Subject: [PATCH v2] ufs: host: ufschd-pltfrm: Hold reference returned by  of_parse_phandle()
-Date:   Fri, 15 Jul 2022 08:17:03 +0800
-Message-Id: <20220715001703.389981-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230119AbiGOGCi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Jul 2022 02:02:38 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5020F7A53F
+        for <linux-scsi@vger.kernel.org>; Thu, 14 Jul 2022 23:02:35 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26EMB5Z7009903
+        for <linux-scsi@vger.kernel.org>; Thu, 14 Jul 2022 23:02:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=NCcU5ixjsW/8Aefo6/rDOEom1BBytsch+1NmNvKhxwg=;
+ b=gN9ESHWCnazinFMIzTbAqWJhmgnzEgUvI+vOet02iV3zJwlQNy8h753EzoU2Q6EkWLaG
+ CfQ2H5VZIKyRHaWZYOCIFBpDoXGWZ4v662zCQH6Du4LuKs+0ln9QUk920WQe+3/bDDMp
+ T46rAiN9vIfgshvj2e3n+u7O5sIiVECKSm/GLn/8RAwgmGR6Q+oIzvZ30Po2k3ezHIQG
+ WzpiSlXwJwGiSP/MuDMIRCx6Itjx4s5f01ZYxcbm11NX65ioPNsmTbGCyczHnMNxS0O4
+ fPpMhln2xmVpmb5zAKHEaVWEDislNBQIMtJ6n6EWrAG/egwxDb4NejjBF+1PasHvnNcW yA== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3h9udu8g1u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Thu, 14 Jul 2022 23:02:34 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Jul
+ 2022 23:02:32 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 14 Jul 2022 23:02:32 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id 0246A3F7059;
+        Thu, 14 Jul 2022 23:02:31 -0700 (PDT)
+From:   Nilesh Javali <njavali@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>, <bhazarika@marvell.com>,
+        <agurumurthy@marvell.com>
+Subject: [PATCH 0/6] qla2xxx driver features
+Date:   Thu, 14 Jul 2022 23:02:21 -0700
+Message-ID: <20220715060227.23923-1-njavali@marvell.com>
+X-Mailer: git-send-email 2.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NeRpCgAXk9MAstBiyeO3Gg--.3606S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zry5XrWxKw1DWFykZF13Jwb_yoW8WFWkpF
-        WY93y5Zr4xKFWIgayIy3WUC3s3Kw4xGryUGFZ2k34Syrs2qayxXa1kKa45C3WrJFyfZ3W8
-        tFs2vF1kuanFvFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U5WrZUUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizgE-F18RPfsofAAAs7
+Content-Type: text/plain
+X-Proofpoint-GUID: -Z0Y67RrHkXXlm2ZWeZHqeWwLeYtwsnP
+X-Proofpoint-ORIG-GUID: -Z0Y67RrHkXXlm2ZWeZHqeWwLeYtwsnP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-15_02,2022-07-14_01,2022-06-22_01
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In ufshcd_populate_vreg(), we should hold the reference returned by
-of_parse_phandle() and then use it to call of_node_put() for refcount
-balance.
+Martin,
 
-Fixes: aa4976130934 ("ufs: Add regulator enable support")
-Signed-off-by: Liang He <windhl@126.com>
----
- changelog:
+Please apply the qla2xxx driver features to the scsi tree
+at your earliest convenience.
 
- v2: use a proper helper name advised by Bart Van Assche.
- v1: add a helper to fix the bug
+Thanks,
+Nilesh
 
- v1 link: https://lore.kernel.org/all/20220714055413.373449-1-windhl@126.com/
+Anil Gurumurthy (1):
+  qla2xxx: Add NVMe parameters support in Auxiliary Image Status
+
+Arun Easi (4):
+  qla2xxx: Add debugfs create/delete helpers
+  qla2xxx: Add a generic tracing framework
+  qla2xxx: Add driver console messages tracing
+  qla2xxx: Add srb tracing
+
+Nilesh Javali (1):
+  qla2xxx: Update version to 10.02.07.900-k
+
+ drivers/scsi/qla2xxx/qla_bsg.c     |   8 +-
+ drivers/scsi/qla2xxx/qla_bsg.h     |   3 +-
+ drivers/scsi/qla2xxx/qla_dbg.c     |  26 ++-
+ drivers/scsi/qla2xxx/qla_dbg.h     | 286 +++++++++++++++++++++++++++++
+ drivers/scsi/qla2xxx/qla_def.h     |  55 +++++-
+ drivers/scsi/qla2xxx/qla_dfs.c     | 239 ++++++++++++++++++++++++
+ drivers/scsi/qla2xxx/qla_fw.h      |   3 +
+ drivers/scsi/qla2xxx/qla_gbl.h     |   1 +
+ drivers/scsi/qla2xxx/qla_init.c    |   8 +-
+ drivers/scsi/qla2xxx/qla_inline.h  |  12 ++
+ drivers/scsi/qla2xxx/qla_iocb.c    |   4 +
+ drivers/scsi/qla2xxx/qla_isr.c     |   5 +
+ drivers/scsi/qla2xxx/qla_os.c      |  35 ++++
+ drivers/scsi/qla2xxx/qla_version.h |   4 +-
+ 14 files changed, 675 insertions(+), 14 deletions(-)
 
 
- drivers/ufs/host/ufshcd-pltfrm.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/ufs/host/ufshcd-pltfrm.c b/drivers/ufs/host/ufshcd-pltfrm.c
-index e7332cc65b1f..46ded7813c42 100644
---- a/drivers/ufs/host/ufshcd-pltfrm.c
-+++ b/drivers/ufs/host/ufshcd-pltfrm.c
-@@ -108,6 +108,21 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
- 	return ret;
- }
- 
-+static bool phandle_exists(const struct device_node *np,
-+						const char *phandle_name,
-+						int index)
-+{
-+	struct device_node *parse_np = of_parse_phandle(np, phandle_name, index);
-+	bool ret = false;
-+
-+	if (parse_np) {
-+		ret = true;
-+		of_node_put(parse_np);
-+	}
-+
-+	return ret;
-+}
-+
- #define MAX_PROP_SIZE 32
- static int ufshcd_populate_vreg(struct device *dev, const char *name,
- 		struct ufs_vreg **out_vreg)
-@@ -122,7 +137,7 @@ static int ufshcd_populate_vreg(struct device *dev, const char *name,
- 	}
- 
- 	snprintf(prop_name, MAX_PROP_SIZE, "%s-supply", name);
--	if (!of_parse_phandle(np, prop_name, 0)) {
-+	if (!phandle_exists(np, prop_name, 0)) {
- 		dev_info(dev, "%s: Unable to find %s regulator, assuming enabled\n",
- 				__func__, prop_name);
- 		goto out;
+base-commit: f095c3cd1b694a73a5de276dae919f05a8dd1811
 -- 
-2.25.1
+2.19.0.rc0
 
