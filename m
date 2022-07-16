@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A85576B29
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 Jul 2022 02:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1338576B2E
+	for <lists+linux-scsi@lfdr.de>; Sat, 16 Jul 2022 03:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiGPA6m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 15 Jul 2022 20:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
+        id S230206AbiGPBRM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 Jul 2022 21:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbiGPA6k (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Jul 2022 20:58:40 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05274B66
-        for <linux-scsi@vger.kernel.org>; Fri, 15 Jul 2022 17:58:37 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id j29-20020a05600c1c1d00b003a2fdafdefbso4033644wms.2
-        for <linux-scsi@vger.kernel.org>; Fri, 15 Jul 2022 17:58:37 -0700 (PDT)
+        with ESMTP id S229507AbiGPBRK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Jul 2022 21:17:10 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DF490DB5
+        for <linux-scsi@vger.kernel.org>; Fri, 15 Jul 2022 18:17:07 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id q9so8940278wrd.8
+        for <linux-scsi@vger.kernel.org>; Fri, 15 Jul 2022 18:17:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
         bh=VfGBwE3nxon1uDbx0998W/FFH0rpRdzfN+GxYik6QBo=;
-        b=YYRa86v0YGgmy08b+HRffOanbXL6ftOnclLo2dpBREMY1++z99FxPxFsHZcBBCBfej
-         Oanibj2IlZrJzluZMwxG4Tp9q54vdw3tOjprtqK8En6e6LUEn7EHsXvrh3WIg/Zewa2T
-         R1+YV+GimMk4KHC3lYubx64I+i2VC4QkjzGbzPSFTvoRT6STDIgbX+I46fIGrPAmIoms
-         BP4NN1FrwYCAw0u4LKtHi8pJUxF2fWMlAjTyWLm+IB7O0ZubrPJNECTdlqr9mlqIKSQn
-         dyynQrGJrDsCkavKfrn8iNNryUpW+34ke79H6xOkbD2il4demVvJavjrrgM6InbFdqlD
-         gHpQ==
+        b=qKe+8cwkMMNi/5geoF5VEVOcyGJVrYLQkI771aeKyDiv/vXuK/MoUrQCIZ4ypAQRJL
+         JgloZdsgGdMh0RPupriJ/sJUy4pU36nhJmLcMGbPwSP2Kb9G6PsPipoM18JourXSTzp4
+         2ZMY8Cqij5SWy242+ebG2smlpY2i7BReWoWcCSP30VvZhs+/FIThyKzLrWmmvkfx8TLB
+         pyH4Q14bjx2FWqnQTWFakDIgd8QsFBxe5ZNLopY8a3LVrmiBvTM+ddaXtUvkDHIfDSUb
+         8utiRa9oPb6DQYKBazZGSSMFplPIJ1kTLuBarW7FSwNnpR9EkcpFZyk91nQTTtyJQBqZ
+         4dgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
         bh=VfGBwE3nxon1uDbx0998W/FFH0rpRdzfN+GxYik6QBo=;
-        b=Rp0qStUp7EmTCZngWwhlM5bZlZa8kdBuV/SXWbCyTWYS0uUPfuOv4jpP9voGDH1/4A
-         wKWD5dLWAU+7cdGFL7eVGc/x4O96YmID/KCU3c9pCPuCANlibEFYmCrSU0IJUy2DTbWg
-         C0S4FoQ85CXgARd078YmFQq12Jk/9iCc2OZR3JCBhyZb6z551V+QE92pkbsW/iM3xP9V
-         xfs5VshqLFm2q4KY2SAXMMT7vKU0g/dJK/4Wwdgi76dbBGcHL8AGwVtsSbBbaVZL/Q+S
-         3QTW46pvGSV4kWrOLIYzKozVxQi2/DoxM0SdmH4k8cHEFYpCDT2n7o2LntW2LAMI2erG
-         fYwQ==
-X-Gm-Message-State: AJIora/kGVhoMf68kjbTyCfXAr9Aqta8eg1DQRkAx152zHorDMX9I3k9
-        IGN0ekXRVDQaIXtPCo7f3w4oTSDgoOEkAp0d6xM=
-X-Google-Smtp-Source: AGRyM1unXciws6HcPVklI3THrz25+h7fyUtV/HuoeGEhMikSwLf12A5j9SkilwuJtgiriENzpUXJ240iFxSG6bphGGM=
-X-Received: by 2002:a05:600c:3511:b0:3a1:9992:f72f with SMTP id
- h17-20020a05600c351100b003a19992f72fmr23734203wmq.164.1657933115722; Fri, 15
- Jul 2022 17:58:35 -0700 (PDT)
+        b=7kU5z8exoco1M2GJHZLCGyUgjjjntR7MiWM8j+ww6Xl9tOKawPRjyCUpy4owJ48WNW
+         kjoBKj4soX65Muou5GJIdgf+lIstCERk2iVkeC4ftrWn9uD4wN0wyTZMT8RRl50RHqI6
+         9pFsW9InmDwnw6DqR+F3dqYoXc+Lbs/yDsnEcZKzAT8Ye+VABIamWw2Ra3CopurBf+eZ
+         LHkQkQIFHPoHj3nI8tLF1nSh+Nh2p2AAjWjspmGZYCsFAQcy0DSA09sz7YaobfVzlgo7
+         R9HbtlIaFWDes/s9ABM5f6HYUk8qy7XI8faIoOs+9A7Q6VRsj9WIJadGsnQ6Ma+vd+Pw
+         BSmA==
+X-Gm-Message-State: AJIora+8gqRIlEsU5ITw2reoEJsLW1wi3VxzLw2WTdAVdaYkkKQ76pqj
+        0L41pSlWcbtEEAjODAH71pEYRj3ckPEijGYxfuU=
+X-Google-Smtp-Source: AGRyM1sPIEOKK5CGWmCUEcEpgJsSbV488MBr2M9lXSzib/fgy5vAlT4nW/ctDE+baQ7xcfCA2N9PVEhfEMewvRwSeNw=
+X-Received: by 2002:a5d:5c05:0:b0:21d:83b4:d339 with SMTP id
+ cc5-20020a5d5c05000000b0021d83b4d339mr14674928wrb.611.1657934225359; Fri, 15
+ Jul 2022 18:17:05 -0700 (PDT)
 MIME-Version: 1.0
 Received: by 2002:a05:6020:6654:b0:1f1:4dfc:430c with HTTP; Fri, 15 Jul 2022
- 17:58:34 -0700 (PDT)
+ 18:17:04 -0700 (PDT)
 Reply-To: fairfinanceloanfirm110@gmail.com
 From:   welcome to fair finance loan firm <inuwaasulaiman2@gmail.com>
-Date:   Sat, 16 Jul 2022 01:58:34 +0100
-Message-ID: <CAHMbq03C1vCYG+vijS9Zqrr4fQojYaTUONLX1e2TnQAF6s=q1w@mail.gmail.com>
+Date:   Sat, 16 Jul 2022 02:17:04 +0100
+Message-ID: <CAHMbq01CP=dzjVzjr_EALsUfmg0R33mkmS9PdN-cZTo1g-touA@mail.gmail.com>
 Subject: Loan offer at 2% interest rate
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
@@ -60,10 +60,10 @@ X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         autolearn_force=no version=3.4.6
 X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
         *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:343 listed in]
+        *      [2a00:1450:4864:20:0:0:0:443 listed in]
         [list.dnswl.org]
         *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5005]
+        *      [score: 0.5000]
         *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
         *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
         *       in digit
