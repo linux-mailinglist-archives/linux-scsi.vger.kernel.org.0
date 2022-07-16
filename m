@@ -2,65 +2,268 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E39D576D3F
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 Jul 2022 12:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928F0576E1C
+	for <lists+linux-scsi@lfdr.de>; Sat, 16 Jul 2022 15:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiGPKLV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 16 Jul 2022 06:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S229882AbiGPNKZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 16 Jul 2022 09:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiGPKLV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 16 Jul 2022 06:11:21 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7E71D0CA
-        for <linux-scsi@vger.kernel.org>; Sat, 16 Jul 2022 03:11:18 -0700 (PDT)
-Received: from localhost ([82.165.81.187]) by mrelayeu.kundenserver.de
- (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis) id
- 1N7Qp1-1nTnxY1qc1-017oqE for <linux-scsi@vger.kernel.org>; Sat, 16 Jul 2022
- 12:11:17 +0200
-To:     linux-scsi@vger.kernel.org
-Subject: =?utf-8?B?QmVudXR6ZXItS29udG9pbmZvcm1hdGlvbmVuIGbDvHIg0JQ=?=  =?utf-8?B?0L7QsdGA0YvQuSDQtNC10L3RjCEg0J3QsNC/0L7QvNC40L3QsNC10Lwg0L4g?=  =?utf-8?B?0JLQsNGI0LXQvCDQstGL0LjQs9GA0YvRiNC90L7QvCDQsdC40LvQtdGC0LUg?=  =?utf-8?B?0JPQvtGB0JvQvtGC0L4hINCf0L7Qu9GD0YfQuNGC0LUg0LLRi9C40LPRgNGL?=  =?utf-8?B?0Yg6IGh0dHBzOi8vdGlueXVybC5jb20vMmRhenh0cHYgYg==?=  =?utf-8?B?ZWkgVW50ZXJuZWhtZW5zLVdlYnNpdGU=?=
-Date:   Sat, 16 Jul 2022 12:11:17 +0200
-From:   Unternehmens-Website <braukhoff@gmx.de>
-Message-ID: <84646098662c2896dc71bee5d0e56375@braukhoff.eu>
-X-Mailer: PHPMailer 5.2.14 (https://github.com/PHPMailer/PHPMailer)
+        with ESMTP id S229499AbiGPNKY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 16 Jul 2022 09:10:24 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4751E2125A;
+        Sat, 16 Jul 2022 06:10:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1657977022;
+        bh=vUqUtmUEDZfWFKsn92CnDaPfM6DHV7s9AN7k1vumVNc=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=wjfxfVjIuAA4L96If5G0Vwo3f+5ZuByCh3iUH+Wkouoe13ize9JG5j0keerAbnts2
+         cH2CtLYDO3eW/oMoOZDIy6R0Tw0+EY2fghsgeujP0Q4ImRQtIGBMYRbtuSaQMobBIk
+         lmtl43pSIz6IERD9n5bwnN8ymS91ZxNgHp/9hVaI=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 174BF1280DB8;
+        Sat, 16 Jul 2022 09:10:22 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VAhJjgHU5la5; Sat, 16 Jul 2022 09:10:21 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1657977021;
+        bh=vUqUtmUEDZfWFKsn92CnDaPfM6DHV7s9AN7k1vumVNc=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=KNgeYhkV09nGBIhz3i7jhYhn6solcdxTWdTP39oQ8xoPt/v/YScXkcdyQvD9+dz3m
+         +RG00X2jt1sQsEhYLqqeiQKjCpDiXTQXk3mlKMKX/ulhLhsr5jJViG6MWYCqmh5n9u
+         VI2O8qiqgGr7mztIyDK/GPZnYe66Ku/4Rrsq4zu0=
+Received: from [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b] (unknown [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 6BFF11280C16;
+        Sat, 16 Jul 2022 09:10:21 -0400 (EDT)
+Message-ID: <ce185648f24041886a7194ab8eee23f9649b8a85.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.19-rc6
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Sat, 16 Jul 2022 09:10:20 -0400
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:VjHmxtEJCejiUYy51dlU/5heU4ga2gaCK5Z4/hIvrlpZOXWxNAT
- C3jubXU/hCZzPQXo11VLskcs+DL2DEZ2TQkDC9qbnvHKzFOcxlOueTsVlOUUZlkmwiu3noa
- dq5puz1cSd3ZTI+A0fHT/6E7kF/A5QzpA5VTxH52zfixOEnLazMVy5bKkjoCUOL0IA3THyx
- /PmRe5TSWHnKr7A0n7p7w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8OQS7rfgz+g=:xs6KzWjRlMnXtwAna0E+ES
- z6c3ETWECYwogaZpr9tJ0xMf8o0xyEn6F3RuhUjdNkNKpxaUuF3uoMY39UXPSxe4UAGR0Ec5R
- /cEImEFbFGI4snDTptNeiVSLa9KxCATXARTY2QFtv/NTkhBDxPN7N3uJ1iSaMfS49X5JjhEh0
- U7Q9WIybs5pRZPES6/G4AoXsNc5jkYbC2KQaXd/X3foem1mlo0D4CRfAXI8w8XGn+rtBNqQ0I
- SD+V/uhUOzUGdaJSmvnjbvTgB5xt2cSNFfafGqpi7BoGKrhHGqxGtuLaF7T8yQIQQBna5HwoL
- mROfKfoSgzJQo1psXGnTwEa9niEPaiRC+4mwv2LpMOc2DQqgl+zdsVabygipSbmRTtIZrLW/M
- lT1l4bVuKpLSc1NFpqwcPbt/dOl3tAoafrFkX0XmX9zZaF4kLXODwnkZCKu3n/BQ7TupE57zk
- pht9vkdzuBvlciQixcgTmaYmmyHuFjV/KagGBX38zW5zIHXtmLd72DsGS8FA/o+dlJH7H0kTu
- EbzdTbVkKuZiKZbiXFkvJ90iGzeB+BHhTEOc2jL74sXclPGmMLYzzL37+m4fXGNLuwWkKsp87
- ncIKEhuIGdco2LMgLKatgkeMalIP0wSUjZtSNK1Jn4VC/Fsebbz74i9QbmSN39M18WHiHw/ye
- JWp5eAmnU/aR2UGPdYYQ+4YuvSmVvF89NENkUd10i9FGlkOfHwvsIGJWrweF29v38ZPGtLvWQ
- EMJvCdo8yzLJ5TTCUQue5jZwiNpO7Y+BIbQTqh55+VV06Xw9+MMvhLcPp0U=
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,FREEMAIL_FROM,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_GB_WEBFORM autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hallo Добрый день! Напоминаем о Вашем выигрышном билете ГосЛото! Получите выигрыш: https://tinyurl.com/2dazxtpv,
+Six small and reasonably obvious fixes, all in drivers.
 
-vielen Dank für die Registrierung bei Unternehmens-Website. Das Benutzerkonto wurde angelegt und muss zur Verwendung noch verifiziert werden.
-Um dieses zu tun, genügt ein Klick auf den folgenden Link oder der Link kann auch aus dieser Nachricht kopiert und in den Webbrowser eingefügt werden:
-http://braukhoff.eu/index.php/component/users/?task=registration.activate&token=b5c85e698e913cf72818ad36d980527b
+The patch is available here:
 
-Nach der Verifizierung wird der Administrator über die ausstehende Aktivierung des Benutzerkontos informiert. Sobald das Benutzerkonto aktiviert wurde wird eine Bestätigungsmail verschickt.
-Nach der Aktivierung ist eine Anmeldung bei http://braukhoff.eu/ mit dem folgenden Benutzernamen und Passwort möglich:
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-Benutzername: franacoschtig1973
-Passwort: V8NTqm4nad
+The short changelog is:
+
+Bjorn Andersson (1):
+      scsi: ufs: core: Drop loglevel of WriteBoost message
+
+Changyuan Lyu (2):
+      scsi: pm80xx: Set stopped phy's linkrate to Disabled
+      scsi: pm80xx: Fix 'Unknown' max/min linkrate
+
+Mike Christie (1):
+      scsi: target: Fix WRITE_SAME No Data Buffer crash
+
+Ming Lei (1):
+      scsi: megaraid: Clear READ queue map's nr_queues
+
+Po-Wen Kao (1):
+      scsi: ufs: core: Fix missing clk change notification on host reset
+
+And the diffstat:
+
+ drivers/scsi/megaraid/megaraid_sas_base.c |  3 +++
+ drivers/scsi/pm8001/pm8001_hwi.c          | 19 +++----------------
+ drivers/scsi/pm8001/pm8001_init.c         |  2 ++
+ drivers/scsi/pm8001/pm80xx_hwi.c          |  6 +++++-
+ drivers/target/target_core_file.c         |  3 +++
+ drivers/target/target_core_iblock.c       |  4 ++++
+ drivers/target/target_core_sbc.c          |  6 ++++++
+ drivers/ufs/core/ufshcd.c                 |  4 ++--
+ 8 files changed, 28 insertions(+), 19 deletions(-)
+
+With full diff below.
+
+James
+
+---
+
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index c95360a3c186..0917b05059b4 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -3195,6 +3195,9 @@ static int megasas_map_queues(struct Scsi_Host *shost)
+ 	qoff += map->nr_queues;
+ 	offset += map->nr_queues;
+ 
++	/* we never use READ queue, so can't cheat blk-mq */
++	shost->tag_set.map[HCTX_TYPE_READ].nr_queues = 0;
++
+ 	/* Setup Poll hctx */
+ 	map = &shost->tag_set.map[HCTX_TYPE_POLL];
+ 	map->nr_queues = instance->iopoll_q_count;
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index f7466a895d3b..991eb01bb1e0 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -3145,15 +3145,6 @@ void pm8001_bytes_dmaed(struct pm8001_hba_info *pm8001_ha, int i)
+ 	if (!phy->phy_attached)
+ 		return;
+ 
+-	if (sas_phy->phy) {
+-		struct sas_phy *sphy = sas_phy->phy;
+-		sphy->negotiated_linkrate = sas_phy->linkrate;
+-		sphy->minimum_linkrate = phy->minimum_linkrate;
+-		sphy->minimum_linkrate_hw = SAS_LINK_RATE_1_5_GBPS;
+-		sphy->maximum_linkrate = phy->maximum_linkrate;
+-		sphy->maximum_linkrate_hw = phy->maximum_linkrate;
+-	}
+-
+ 	if (phy->phy_type & PORT_TYPE_SAS) {
+ 		struct sas_identify_frame *id;
+ 		id = (struct sas_identify_frame *)phy->frame_rcvd;
+@@ -3177,26 +3168,22 @@ void pm8001_get_lrate_mode(struct pm8001_phy *phy, u8 link_rate)
+ 	switch (link_rate) {
+ 	case PHY_SPEED_120:
+ 		phy->sas_phy.linkrate = SAS_LINK_RATE_12_0_GBPS;
+-		phy->sas_phy.phy->negotiated_linkrate = SAS_LINK_RATE_12_0_GBPS;
+ 		break;
+ 	case PHY_SPEED_60:
+ 		phy->sas_phy.linkrate = SAS_LINK_RATE_6_0_GBPS;
+-		phy->sas_phy.phy->negotiated_linkrate = SAS_LINK_RATE_6_0_GBPS;
+ 		break;
+ 	case PHY_SPEED_30:
+ 		phy->sas_phy.linkrate = SAS_LINK_RATE_3_0_GBPS;
+-		phy->sas_phy.phy->negotiated_linkrate = SAS_LINK_RATE_3_0_GBPS;
+ 		break;
+ 	case PHY_SPEED_15:
+ 		phy->sas_phy.linkrate = SAS_LINK_RATE_1_5_GBPS;
+-		phy->sas_phy.phy->negotiated_linkrate = SAS_LINK_RATE_1_5_GBPS;
+ 		break;
+ 	}
+ 	sas_phy->negotiated_linkrate = phy->sas_phy.linkrate;
+-	sas_phy->maximum_linkrate_hw = SAS_LINK_RATE_6_0_GBPS;
++	sas_phy->maximum_linkrate_hw = phy->maximum_linkrate;
+ 	sas_phy->minimum_linkrate_hw = SAS_LINK_RATE_1_5_GBPS;
+-	sas_phy->maximum_linkrate = SAS_LINK_RATE_6_0_GBPS;
+-	sas_phy->minimum_linkrate = SAS_LINK_RATE_1_5_GBPS;
++	sas_phy->maximum_linkrate = phy->maximum_linkrate;
++	sas_phy->minimum_linkrate = phy->minimum_linkrate;
+ }
+ 
+ /**
+diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+index 9b04f1a6a67d..01f2f41928eb 100644
+--- a/drivers/scsi/pm8001/pm8001_init.c
++++ b/drivers/scsi/pm8001/pm8001_init.c
+@@ -143,6 +143,8 @@ static void pm8001_phy_init(struct pm8001_hba_info *pm8001_ha, int phy_id)
+ 	struct asd_sas_phy *sas_phy = &phy->sas_phy;
+ 	phy->phy_state = PHY_LINK_DISABLE;
+ 	phy->pm8001_ha = pm8001_ha;
++	phy->minimum_linkrate = SAS_LINK_RATE_1_5_GBPS;
++	phy->maximum_linkrate = SAS_LINK_RATE_6_0_GBPS;
+ 	sas_phy->enabled = (phy_id < pm8001_ha->chip->n_phy) ? 1 : 0;
+ 	sas_phy->class = SAS;
+ 	sas_phy->iproto = SAS_PROTOCOL_ALL;
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 01c5e8ff4cc5..303cd05fec50 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -3723,8 +3723,12 @@ static int mpi_phy_stop_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
+ 	pm8001_dbg(pm8001_ha, MSG, "phy:0x%x status:0x%x\n",
+ 		   phyid, status);
+ 	if (status == PHY_STOP_SUCCESS ||
+-		status == PHY_STOP_ERR_DEVICE_ATTACHED)
++		status == PHY_STOP_ERR_DEVICE_ATTACHED) {
+ 		phy->phy_state = PHY_LINK_DISABLE;
++		phy->sas_phy.phy->negotiated_linkrate = SAS_PHY_DISABLED;
++		phy->sas_phy.linkrate = SAS_PHY_DISABLED;
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/target/target_core_file.c b/drivers/target/target_core_file.c
+index e68f1cc8ef98..6c8d8b051bfd 100644
+--- a/drivers/target/target_core_file.c
++++ b/drivers/target/target_core_file.c
+@@ -448,6 +448,9 @@ fd_execute_write_same(struct se_cmd *cmd)
+ 		return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
+ 	}
+ 
++	if (!cmd->t_data_nents)
++		return TCM_INVALID_CDB_FIELD;
++
+ 	if (cmd->t_data_nents > 1 ||
+ 	    cmd->t_data_sg[0].length != cmd->se_dev->dev_attrib.block_size) {
+ 		pr_err("WRITE_SAME: Illegal SGL t_data_nents: %u length: %u"
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index 378c80313a0f..1ed9381751e6 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -494,6 +494,10 @@ iblock_execute_write_same(struct se_cmd *cmd)
+ 		       " backends not supported\n");
+ 		return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
+ 	}
++
++	if (!cmd->t_data_nents)
++		return TCM_INVALID_CDB_FIELD;
++
+ 	sg = &cmd->t_data_sg[0];
+ 
+ 	if (cmd->t_data_nents > 1 ||
+diff --git a/drivers/target/target_core_sbc.c b/drivers/target/target_core_sbc.c
+index ca1b2312d6e7..f6132836eb38 100644
+--- a/drivers/target/target_core_sbc.c
++++ b/drivers/target/target_core_sbc.c
+@@ -312,6 +312,12 @@ sbc_setup_write_same(struct se_cmd *cmd, unsigned char flags, struct sbc_ops *op
+ 		pr_warn("WRITE SAME with ANCHOR not supported\n");
+ 		return TCM_INVALID_CDB_FIELD;
+ 	}
++
++	if (flags & 0x01) {
++		pr_warn("WRITE SAME with NDOB not supported\n");
++		return TCM_INVALID_CDB_FIELD;
++	}
++
+ 	/*
+ 	 * Special case for WRITE_SAME w/ UNMAP=1 that ends up getting
+ 	 * translated into block discard requests within backend code.
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index ce86d1b790c0..c7b337480e3e 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -5738,7 +5738,7 @@ int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable)
+ 	}
+ 
+ 	hba->dev_info.wb_enabled = enable;
+-	dev_info(hba->dev, "%s Write Booster %s\n",
++	dev_dbg(hba->dev, "%s Write Booster %s\n",
+ 			__func__, enable ? "enabled" : "disabled");
+ 
+ 	return ret;
+@@ -7253,7 +7253,7 @@ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba)
+ 	hba->silence_err_logs = false;
+ 
+ 	/* scale up clocks to max frequency before full reinitialization */
+-	ufshcd_set_clk_freq(hba, true);
++	ufshcd_scale_clks(hba, true);
+ 
+ 	err = ufshcd_hba_enable(hba);
+ 
 
