@@ -2,92 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6C4578718
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jul 2022 18:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A355787B7
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jul 2022 18:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234709AbiGRQQD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jul 2022 12:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        id S231821AbiGRQqd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jul 2022 12:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234234AbiGRQQC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jul 2022 12:16:02 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBF66364
-        for <linux-scsi@vger.kernel.org>; Mon, 18 Jul 2022 09:16:01 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id d4so6247002ilc.8
-        for <linux-scsi@vger.kernel.org>; Mon, 18 Jul 2022 09:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=MUDd76TinUcA5JyTPJBAHn1VumWVzYjA1fKwU0h/HzI=;
-        b=F6ABfGXp5jt+z5hHdjsGmYB4EravlJ+RqekEqnDkdrJGiMuWxMlmwDX9LcdTD4kWcV
-         n1cqvpZ/XFI/TQpYGnbi5KMhuLvWFvcOWDj4H7kPilzXTwthkm0susVG+wDVJGlLfb7M
-         ouk7C9W5SL0tUq42Bb7ZZITiPJ+r1J5REu3YJmwuDIJqDz8BGb3v7hK/6Db4CEYPHPoE
-         wxDlsJJPJwdoS5MYWTDmGlBow0dFIvb6wi7To/vEpa7OTvUPVm6xLBSpLipXoQvly3Vx
-         q1glwIWb65lz80+yRqxTq4RSumMAGTv2UARFXNIuaajxL/c6Eikzs1Ql2PbfX99Tcj3S
-         BVCA==
+        with ESMTP id S230171AbiGRQqb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jul 2022 12:46:31 -0400
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B791F33
+        for <linux-scsi@vger.kernel.org>; Mon, 18 Jul 2022 09:46:30 -0700 (PDT)
+Received: by mail-pj1-f42.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso13253803pjo.0
+        for <linux-scsi@vger.kernel.org>; Mon, 18 Jul 2022 09:46:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=MUDd76TinUcA5JyTPJBAHn1VumWVzYjA1fKwU0h/HzI=;
-        b=KnB301GK7SXVtWfKIV0dAEv9qElNuey8V/wuYZwl4WJpfunCZpLgDNgwigN500WEE9
-         vGIQc+p9424pJjkWvAVJ3wN8WdahmLNvN0/4d+bmZ9vOPo9w9DZ402szlp5wD64Lswoe
-         L//O9qcX7zZpiRU0aLb5nigEDRHuhNnf84iwwBiOd7hv3yK6OUlAGiawyrAdAesbV6qz
-         YHhtqTHnd6CH5rQ9EjREEvdxMHOC1f7uP4fCEABGKEPYfPhB8qpKhhoyspe+o95GC0JU
-         FVVJ5mAGa6NixCsRqZVyTuzKVTL07uBVWCOJNnmDkY5TcAsLns27+INX1NyYxEbPXiw1
-         XWEA==
-X-Gm-Message-State: AJIora+50HWgzvESGC6nV7bFRSHqtNzHcKhlQPJvSf9KyZTOnlSteW5s
-        f7qrlSKDKBIQtYGLEVOER98MFYq/Esf2d58rkxo=
-X-Google-Smtp-Source: AGRyM1vNmq9FgELz6uTHCbLjcblEfmCkLAnTqK+T0q21oKAEhX0fk7/Ox9DgvUbx2REBzGpZMmn14jZgvRkL4pVmz9c=
-X-Received: by 2002:a92:c241:0:b0:2dc:7408:ad66 with SMTP id
- k1-20020a92c241000000b002dc7408ad66mr14790746ilo.137.1658160960878; Mon, 18
- Jul 2022 09:16:00 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=IwJe4HbwVBMt1h3hnr1ncGrmWgDhSFdwziS0xEsHDk0=;
+        b=l6/lALR/6LH4ilBZg3Wze4zHXzNhEOYmFzQGcAHzuQE9uP8LHbWkB5AD6JNCLwMfbI
+         EpSke01Z+IAqnLkB4LWmXkpkXnOa9mN33OhDFLxzbTp+SPPNcLn2dQgea3SyYtdog7yT
+         0BXiPxzGLieaaDig1+HOB7koibwIsJaR6t7sLA6lp6DHdlW5GydRpw3TfFXh/FKHNSe6
+         xe9IX40rbmOZAeQC1TlB6IdGU1eQlPnKOOHUFV4g/n3rgT4xdWptefH8SS94/ko0EDfc
+         zOtUmbM49XoTbLpfw+wwxiTk2p61MlP982zhJkD2pSyWTarVc8eTqBQy16VJMQdSRE6O
+         2omg==
+X-Gm-Message-State: AJIora85SHKaFR64htNV2QIUxXrMmFupzz3IYT7vzk9NVWZ7xcsciwGo
+        ZzsjZEtGU5aivECsMSGd2lc=
+X-Google-Smtp-Source: AGRyM1sqAwFZfoSVdzSzIVE52re+9ewcYZojNiacQbyh+7poOj8iQ2FUJRsUFZhJhRMILOLAoONabw==
+X-Received: by 2002:a17:902:c94b:b0:16c:7289:b402 with SMTP id i11-20020a170902c94b00b0016c7289b402mr28840679pla.66.1658162789841;
+        Mon, 18 Jul 2022 09:46:29 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id y10-20020aa7942a000000b0052890d61628sm9595067pfo.60.2022.07.18.09.46.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Jul 2022 09:46:28 -0700 (PDT)
+Message-ID: <4c4132ce-ea97-82bb-1e0d-5887bd3e18d5@acm.org>
+Date:   Mon, 18 Jul 2022 09:46:27 -0700
 MIME-Version: 1.0
-Received: by 2002:a05:6638:13c5:0:0:0:0 with HTTP; Mon, 18 Jul 2022 09:16:00
- -0700 (PDT)
-Reply-To: marykaya3n@gmail.com
-From:   Mary Kayash <reynoldbill21@gmail.com>
-Date:   Mon, 18 Jul 2022 11:16:00 -0500
-Message-ID: <CALDGGy9G0WyivhixnJR1qspz8kKq98hJpF44G8D9U+TrAKvQCA@mail.gmail.com>
-Subject: Dear In Christ,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:130 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.7894]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [reynoldbill21[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [reynoldbill21[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/3] scsi: sd_zbc: Fix handling of RC BASIS
+Content-Language: en-US
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Hannes Reinecke <hare@suse.com>
+References: <20220711230051.15372-1-bvanassche@acm.org>
+ <20220711230051.15372-4-bvanassche@acm.org>
+ <90cb95f0-7d8b-af10-9480-76a2163993e2@opensource.wdc.com>
+ <95f2f1d5-3e32-bb6f-b8e4-df0c232ed6eb@opensource.wdc.com>
+ <7f58e047-8fa8-7300-3062-ab1d22495b2d@acm.org>
+ <6d228185-1ce3-b0c8-71b8-badfe78505b7@opensource.wdc.com>
+ <01cac097-1420-2142-c701-2542bf437656@acm.org>
+ <11a23d81-b949-15de-11d3-426d2fd45db9@opensource.wdc.com>
+ <03268468-f884-fa94-91f9-40ef4c3e57ca@acm.org>
+In-Reply-To: <03268468-f884-fa94-91f9-40ef4c3e57ca@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Please I want to know if the email is valid to reach you.
+On 7/18/22 06:59, Bart Van Assche wrote:
+> On 7/18/22 03:38, Damien Le Moal wrote:
+>> Even the above code (removing the "sdkp->rc_basis == 0" test) is
+>> borderline in my opinion. The code with the test is per specs, so 
+>> correct.
+> 
+> I do not agree that the current code is compliant with the ZBC 
+> specification. My interpretation of the ZBC specification is that the RC 
+> BASIS field influences the meaning of the RETURNED LOGICAL BLOCK ADDRESS 
+> field in the READ CAPACITY response only. The max_lba variable in 
+> sd_zbc_check_capacity() represents the MAXIMUM LBA field from the REPORT 
+> ZONES response. All I found in ZBC-2 about that field is the following: 
+> "The MAXIMUM LBA field contains the LBA of the last logical block on the 
+> logical unit." I haven't found any reference to RC BASIS in the 
+> description of the REPORT ZONES command - neither in ZBC-1 nor in ZBC-2.
 
-Mrs Mary.
+Hi Damien,
+
+I want to take the above back. After having taken a closer look at the 
+READ CAPACITY implementation I think the current implementation of 
+sd_zbc_check_capacity() is fine.
+
+Thanks,
+
+Bart.
