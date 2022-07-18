@@ -2,193 +2,180 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1E3577ED6
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jul 2022 11:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329D7577FD5
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jul 2022 12:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234166AbiGRJmN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jul 2022 05:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S233401AbiGRKiK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jul 2022 06:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234189AbiGRJlv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jul 2022 05:41:51 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FA718B19
-        for <linux-scsi@vger.kernel.org>; Mon, 18 Jul 2022 02:41:49 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so12064986pjf.2
-        for <linux-scsi@vger.kernel.org>; Mon, 18 Jul 2022 02:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version;
-        bh=jYzkq426+uqL/XFtDPOsAEQeK0doS0hRFdPKamrR8xg=;
-        b=K2KREIocC7HROWrgOb6LcQ9KbctTq77umnqN92xOgTq7n/MK7Xc/NIG1nXMX6cVV6D
-         /Tzbn3vhXps/UfqCnUdeZNyaAhWL0n0FNoSCHPmKl5ODqQ7eXAsbzo69b1iDMrsS8KVb
-         vejVNeVtg0pcRlsTS/+eBSSDsyJ4v+LTLOK+Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version;
-        bh=jYzkq426+uqL/XFtDPOsAEQeK0doS0hRFdPKamrR8xg=;
-        b=67aNLvwNl/blHlCXda9KqlyE8/c7Yp6aUs5ntr98+YfwIjbXXs17QaaSUrwLRMh4gi
-         eEs4IZgHZ0m8dgjkROV9r6kK17BLRbexBr7wJwYNGJEMI5OEZydjRJ1HnCI1uxERdyxA
-         XjcEJ/hemmIvcs3gJrPOUH/TaQkG9mIClZUVK6ewUm/m+5/s7aturpHjz+kOqGWgpVYZ
-         y/xa7exiAiRudxJKTMhXqlCeFYkR7DjhVySSf/K3oBtuf40IPnRkMokUCbPm+7fqnZ1j
-         i9xr47rfl5CF3/i29dt8nTpxQ5K4PZciQmwPuABj5Cxxlv8Zi0NE//OZ79Vrp62JF+4a
-         Bv1A==
-X-Gm-Message-State: AJIora9YJS1MjKXe8XLi/yCLD2xW2baahwpv2Cz7PnJK4NfzvQypjwJU
-        teEXgL7KUC6+MsivgTRzdhPSksnwbqA4/lkCJEJpc87sujvrjG6Eh9Xm0UVgvSLyIg1F9xutDzY
-        m60CW/DRxRi5LN79F/p9AGJ4v8NFERys//XWHQyFXhqcmnFnMBrk2DLn9wDKISzuasI+qzgjPLl
-        6Ap3MDR2c0s5s=
-X-Google-Smtp-Source: AGRyM1sacUSwr4dCPDJ4seXk2zNm4tqixu4ezDepf0IPNZVPIxFi2CAntCUmWSmgYW3/hRQ9l86qYQ==
-X-Received: by 2002:a17:902:d542:b0:16c:8ac:f471 with SMTP id z2-20020a170902d54200b0016c08acf471mr27744231plf.39.1658137308932;
-        Mon, 18 Jul 2022 02:41:48 -0700 (PDT)
-Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id x19-20020aa79413000000b0052b66304d54sm2303092pfo.74.2022.07.18.02.41.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 02:41:48 -0700 (PDT)
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 1/1] mpi3mr: Fix compilation errors observed on i386 arch
-Date:   Mon, 18 Jul 2022 15:23:51 +0530
-Message-Id: <20220718095351.15868-2-sreekanth.reddy@broadcom.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220718095351.15868-1-sreekanth.reddy@broadcom.com>
-References: <20220718095351.15868-1-sreekanth.reddy@broadcom.com>
+        with ESMTP id S230249AbiGRKiJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jul 2022 06:38:09 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881031E3CC
+        for <linux-scsi@vger.kernel.org>; Mon, 18 Jul 2022 03:38:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1658140688; x=1689676688;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xgDweaqwjGUysEECMRUqriZmy2u4jS4ab5O4RgakWtI=;
+  b=Qa+vtsCwWfAZcqjJimnCs0IfjgKWukLayHyyr1wgzWoVTMzsW52rj9JD
+   8l4Jbb0gUj8iBCC1vnVRQ+oXFcPAD+5+tgDvFsKrWFFfJ+UwDNc98Irfm
+   0vNmxrHTuIPHJWi6Fk1x9m+6f6rZHu86YXdJBkRyYDL41ovcAYDaK33DR
+   D2M/FT2O9z+MUzvPpHiaGEv4Ko5FhdLueuYmG7OiIKej6X3el30DhRloV
+   +m5tFPywA3D4AGn3VXmDoOO5GcJZBKXiJ/P3Fa32aELee4/+DA3KVdPQW
+   VKBLICXB4hYFnrOToeIR27HUndAQFDWX3+/R6TyRESAehsR2IL10QNAaM
+   w==;
+X-IronPort-AV: E=Sophos;i="5.92,280,1650902400"; 
+   d="scan'208";a="206713533"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 18 Jul 2022 18:38:07 +0800
+IronPort-SDR: V/39qDUe4HD2GePwXzdbNL9HsVgx01+ToTObpL6zolRiME2O48xKKByfdYtd5c5zv7N6UWvBk7
+ KACfd9RV0+px/IrH0/Iypaw0j4IfwyeL9JXXYCZDucR023a4bw5hHz3fGAN92i3/TDZo4mJ5+z
+ rZBq/kARToSyS/5v9hCFF4vr18Z7pav5dQqgEVRLKwx4lc3AZMPqcHCE6qD8m7VCKWwzvVpkSd
+ J8IZC+hWGdVdRYoZKPO6b8Xt7DqPwGljtdmxVYrD1ZIP4s4vxUzvSvlSxKg+EOLLt2C8e1wt01
+ Y2kT3ZKptWp1u/XDZ4Mk7Rli
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 18 Jul 2022 02:54:51 -0700
+IronPort-SDR: 9IW7gM8lvEZ00GF6HX3iNKaDPKh4ciltqE3/+ARlSZzEyL9lGufBZJT4FVKvEc4mNsWJh5lrPu
+ W4rtacxxPp1mho14XBN09/bvFoj2xP0g9icMt2Dk+uWByUR+xpnKtc3zwdJ6J6ozIljDIj6/y5
+ TQHl6vTPMkM667XuX8BXVh1ydg5zyuvcEQJAafIz9uGjT0qjh9lRJxAiq6MyogQkRAEOw4JPNy
+ PvhA+kIbxmPv4l3A2LZ3gt56cVObexxXM9hDoKDx+MmCTxxot5FQ9HSCZDYRmtArklNI/LVxG8
+ cYY=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 18 Jul 2022 03:38:08 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Lmdhv2cRRz1Rwqy
+        for <linux-scsi@vger.kernel.org>; Mon, 18 Jul 2022 03:38:07 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1658140686; x=1660732687; bh=xgDweaqwjGUysEECMRUqriZmy2u4jS4ab5O
+        4RgakWtI=; b=LEH1+2RUN/bJXe3q39TQQCBwyW9DcE6FJBp9iWhBoh16S168f7T
+        jxYGt7li+vorxylifIdeaJKoCiWS90oMC1StXaIGRqRZ+a+xzpSj+8HgMK4DjyRv
+        rsgxTz6qlY1/WcYu9G3U3b+3sykraW5DYiHUHgF3vDfAMfWPXEX2WCcQcRFJDsDB
+        VLXhPiUGMYX5w+fXXRjiHMPrgQiz/Uy2x4agKjdL8SitTfdctuPdC9fxrq8jJ2zQ
+        5peMav8Ay58Qo7pg+qe3YSmx7PeNL51T0vKHzgizhGhklepgOYRBCPf7jflpvF++
+        ThxxeqS2h41WTYAk72YSAmao5RV1cHM924A==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id QSNp4k-b3CIa for <linux-scsi@vger.kernel.org>;
+        Mon, 18 Jul 2022 03:38:06 -0700 (PDT)
+Received: from [10.225.163.120] (unknown [10.225.163.120])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Lmdhr4K4pz1RtVk;
+        Mon, 18 Jul 2022 03:38:04 -0700 (PDT)
+Message-ID: <11a23d81-b949-15de-11d3-426d2fd45db9@opensource.wdc.com>
+Date:   Mon, 18 Jul 2022 19:38:02 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000514c1005e4112d3c"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/3] scsi: sd_zbc: Fix handling of RC BASIS
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Hannes Reinecke <hare@suse.com>
+References: <20220711230051.15372-1-bvanassche@acm.org>
+ <20220711230051.15372-4-bvanassche@acm.org>
+ <90cb95f0-7d8b-af10-9480-76a2163993e2@opensource.wdc.com>
+ <95f2f1d5-3e32-bb6f-b8e4-df0c232ed6eb@opensource.wdc.com>
+ <7f58e047-8fa8-7300-3062-ab1d22495b2d@acm.org>
+ <6d228185-1ce3-b0c8-71b8-badfe78505b7@opensource.wdc.com>
+ <01cac097-1420-2142-c701-2542bf437656@acm.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <01cac097-1420-2142-c701-2542bf437656@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000514c1005e4112d3c
-Content-Transfer-Encoding: 8bit
+On 7/16/22 05:53, Bart Van Assche wrote:
+> On 7/12/22 15:08, Damien Le Moal wrote:
+>> diff --git a/drivers/scsi/sd_zbc.c b/drivers/scsi/sd_zbc.c
+>> index 6acc4f406eb8..32da54e7b68a 100644
+>> --- a/drivers/scsi/sd_zbc.c
+>> +++ b/drivers/scsi/sd_zbc.c
+>> @@ -716,17 +716,15 @@ static int sd_zbc_check_capacity(struct scsi_disk
+>> *sdkp, unsigned char *buf,
+>>          if (ret)
+>>                  return ret;
+>>
+>> -       if (sdkp->rc_basis == 0) {
+>> -               /* The max_lba field is the capacity of this device */
+>> -               max_lba = get_unaligned_be64(&buf[8]);
+>> -               if (sdkp->capacity != max_lba + 1) {
+>> -                       if (sdkp->first_scan)
+>> -                               sd_printk(KERN_WARNING, sdkp,
+>> -                                       "Changing capacity from %llu to
+>> max LBA+1 %llu\n",
+>> -                                       (unsigned long long)sdkp->capacity,
+>> -                                       (unsigned long long)max_lba + 1);
+>> -                       sdkp->capacity = max_lba + 1;
+>> -               }
+>> +       /* The max_lba field is the capacity of this device */
+>> +       max_lba = get_unaligned_be64(&buf[8]);
+>> +       if (sdkp->capacity != max_lba + 1) {
+>> +               if (sdkp->first_scan)
+>> +                       sd_printk(KERN_WARNING, sdkp,
+>> +                               "Changing capacity from %llu to max LBA+1 %llu\n",
+>> +                               (unsigned long long)sdkp->capacity,
+>> +                               (unsigned long long)max_lba + 1);
+>> +               sdkp->capacity = max_lba + 1;
+>>          }
+>>
+>>          if (sdkp->zone_starting_lba_gran == 0) {
+>>
+>> That is, always check the reported capacity against max_lba of report
+>> zones reply, regardless of rc_basis (and we can even then drop the
+>> rc_basis field from struct scsi_disk).
+> 
+> I like the above patch because it simplifies the existing code.
+> 
+>> But I would argue that any problem with the current code would mean a
+>> buggy device firmware. For such case, the device FW should be fixed or we
+>> should add a quirk for it.
+> 
+> My question was which approach should be followed for devices with a 
+> buggy firmware? Use the zones up to the LBA reported in the READ 
+> CAPACITY response or reject these devices entirely?
 
-Fix below compilation errors observed on i386 ARCH,
+We should not try to write code for buggy devices. These should be handled
+with quirks, or even better, ignored to give incentives to the device
+vendor to fix their bugs.
 
-cast from pointer to integer of different size
-[-Werror=pointer-to-int-cast]
+Even the above code (removing the "sdkp->rc_basis == 0" test) is
+borderline in my opinion. The code with the test is per specs, so correct.
 
-Fixes: c196bc4dce ("scsi: mpi3mr: Reduce VD queue depth on detecting throttling")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
----
- drivers/scsi/mpi3mr/mpi3mr_os.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+If you really insist on changing the code as above, we should add
+something like this under the "if (sdkp->capacity != max_lba + 1) {":
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index 0901bc932d5c..4102636df4fc 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_os.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -386,7 +386,7 @@ static void mpi3mr_queue_qd_reduction_event(struct mpi3mr_ioc *mrioc,
- 		ioc_warn(mrioc, "failed to queue TG QD reduction event\n");
- 		return;
- 	}
--	*(__le64 *)fwevt->event_data = (__le64)tg;
-+	*(struct mpi3mr_throttle_group_info **)fwevt->event_data = tg;
- 	fwevt->mrioc = mrioc;
- 	fwevt->event_id = MPI3MR_DRIVER_EVENT_TG_QD_REDUCTION;
- 	fwevt->send_ack = 0;
-@@ -1660,8 +1660,7 @@ static void mpi3mr_fwevt_bh(struct mpi3mr_ioc *mrioc,
- 	{
- 		struct mpi3mr_throttle_group_info *tg;
- 
--		tg = (struct mpi3mr_throttle_group_info *)
--		    (*(__le64 *)fwevt->event_data);
-+		tg = *(struct mpi3mr_throttle_group_info **)fwevt->event_data;
- 		dprint_event_bh(mrioc,
- 		    "qd reduction event processed for tg_id(%d) reduction_needed(%d)\n",
- 		    tg->id, tg->need_qd_reduction);
+	if (sdkp->rc_basis != 0)
+		sd_printk(KERN_WARNING, sdkp,
+			  "ZBC device reported an invalid capacity\n");
+
+To signal that the drive is wrong.
+
+> 
+> Thanks,
+> 
+> Bart.
+
+
 -- 
-2.27.0
-
-
---000000000000514c1005e4112d3c
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-5AGo2E3pe+2yEgkxKvM2fnniZHUiSjbrfKk6nl9RIXPOKUP5HntZFdA5XuNYXWM+HPs3O0AJwBm/
-VCZsZtkjVjxeBmTXiXDnxytdsHdGrHGymPfjJYatDu6d1KRVDlMCAwEAAaOCAd0wggHZMA4GA1Ud
-DwEB/wQEAwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUu
-Z2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggr
-BgEFBQcwAYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
-YTIwMjAwTQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3
-Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4
-aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmww
-JwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUClVHbAvhzGT8
-s2/6xOf58NkGMQ8wDQYJKoZIhvcNAQELBQADggEBAENRsP1H3calKC2Sstg/8li8byKiqljCFkfi
-IhcJsjPOOR9UZnMFxAoH/s2AlM7mQDR7rZ2MxRuUnIa6Cp5W5w1lUJHktjCUHnQq5nIAZ9GH5SDY
-pgzbFsoYX8U2QCmkAC023FF++ZDJuc9aj0R/nhABxmUYErIze2jV/VO8Pj7TnCrBONZ/Qvf8G5CQ
-X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
-eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
-Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIAhbg6eZcPMam5IabP7p
-BvKjOBI8siskkr9uXGIHYxrvMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIyMDcxODA5NDE0OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
-BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBSbWSJF9ornlQzDOujO6T8WrytdAVGpPO1gU4X
-15MWyuYj7an2p5k3NYKChszR8mwSwWsyASrrOqheppn298sPeNq+zGQY0042RlsfNne74IdPYpdc
-AHIzUTkJCAjAJxmons8LxO0HwNPnd5Hh3VIjMnf9+kHx2PSUROcnaRpXhBBaKHiU1xtWb87fDMh2
-koqIFVZ6hhPgOTqqt7Z1cj4Gx8djD5noa5zHGZEVL9K2ACWflqbvdvDIZ4dOesHwCQVm2hJMCPRS
-kLA3K87BlOoqH/NRGT7kvRcMGwTf4EDB5RflpvRoS20kmkewzOsyOlL6ocSopq+FVsI1/hH0tbfT
---000000000000514c1005e4112d3c--
+Damien Le Moal
+Western Digital Research
