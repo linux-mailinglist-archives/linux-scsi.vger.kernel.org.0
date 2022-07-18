@@ -2,91 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE67D578497
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jul 2022 15:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6038857863E
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Jul 2022 17:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235661AbiGRN73 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jul 2022 09:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        id S235376AbiGRP0O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jul 2022 11:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234666AbiGRN72 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jul 2022 09:59:28 -0400
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447661D325
-        for <linux-scsi@vger.kernel.org>; Mon, 18 Jul 2022 06:59:28 -0700 (PDT)
-Received: by mail-pl1-f182.google.com with SMTP id k19so9080466pll.5
-        for <linux-scsi@vger.kernel.org>; Mon, 18 Jul 2022 06:59:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Lq/fpXinlaBHMmExMgxXWRpxnZ1QzetP4yrNawYBvnY=;
-        b=3pFclR7AanGL/OF4FuwZ6di1aGUFsoO++DbJ1Wl8BKxvrlW1dJdSN0aF9T4NOBHITp
-         JXoFy0MxA1VtaDi/frHArjo5z4P99v6Wk45gytDAo8L02Vh5YfqyRfM30OrUjlNeSGnq
-         5I3HFpZfbDBtaA5Ez9SsWd31LLkSj2JBscoLE4mrWn6waI2dvmpr9zlPNy7JJFBqJZ0J
-         TWDVkRSs9RC0RyGM3pEpGVSmRv5z7l2v0FP/vPnGpUVO91alBRhJ56yatqJHek7DSG93
-         lYlV+fWlPgU4XuP+Robw63eongY3K37R74V1LmUnAOAuG2DNI4+a2dOHtQ2jXSLvmkaO
-         Mzhw==
-X-Gm-Message-State: AJIora99Cs84DcewNP4n7aVaLuoC/yGABhYK0wZk07+VsD2KLbx1kxgB
-        YbhhTFqN1SnGGNf12llZnko=
-X-Google-Smtp-Source: AGRyM1sQloJe0MUm++Z/7U9DjbALT9KZ/HD9UzZSIeRTv3EitUwyriSj+XYvzAlGYjfi19EqqpvXMg==
-X-Received: by 2002:a17:902:d683:b0:16c:b718:f94b with SMTP id v3-20020a170902d68300b0016cb718f94bmr21212901ply.9.1658152767583;
-        Mon, 18 Jul 2022 06:59:27 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id c66-20020a621c45000000b00528ce53a4a6sm9240111pfc.196.2022.07.18.06.59.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jul 2022 06:59:26 -0700 (PDT)
-Message-ID: <03268468-f884-fa94-91f9-40ef4c3e57ca@acm.org>
-Date:   Mon, 18 Jul 2022 06:59:25 -0700
+        with ESMTP id S233600AbiGRP0M (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jul 2022 11:26:12 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAD328E26;
+        Mon, 18 Jul 2022 08:26:11 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 9ABA341239;
+        Mon, 18 Jul 2022 15:26:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received:received; s=mta-01; t=1658157969; x=
+        1659972370; bh=qfjlOOHgy+rOsES9el+0S9l32s+UHl69L49XGl250Hw=; b=Y
+        7hOqH4Mtoh2IwnWEE9O+OK2qesdp5zOYvsvo+SZWvemJtOe44cvLT/pseQZtRTEV
+        vkYfT8lyrWJumYl6ahLHFt3UkGwHDY2thsuws9hOC5eCrQn0DTnPecSa1i/kMakd
+        Z+DUiXckYqZ3SaTrpTepFYvJj71sESqbhpCsir1lnE=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id U83YD00tkfbb; Mon, 18 Jul 2022 18:26:09 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id C359941241;
+        Mon, 18 Jul 2022 18:26:08 +0300 (MSK)
+Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Mon, 18 Jul 2022 18:26:08 +0300
+Received: from NB-591.corp.yadro.com (10.199.18.20) by
+ T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.9; Mon, 18 Jul 2022 18:26:07 +0300
+From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
+To:     Martin Petersen <martin.petersen@oracle.com>,
+        <target-devel@vger.kernel.org>
+CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
+        Dmitry Bogdanov <d.bogdanov@yadro.com>
+Subject: [PATCH 0/4] Improve iSCSI target code
+Date:   Mon, 18 Jul 2022 18:25:51 +0300
+Message-ID: <20220718152555.17084-1-d.bogdanov@yadro.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] scsi: sd_zbc: Fix handling of RC BASIS
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Hannes Reinecke <hare@suse.com>
-References: <20220711230051.15372-1-bvanassche@acm.org>
- <20220711230051.15372-4-bvanassche@acm.org>
- <90cb95f0-7d8b-af10-9480-76a2163993e2@opensource.wdc.com>
- <95f2f1d5-3e32-bb6f-b8e4-df0c232ed6eb@opensource.wdc.com>
- <7f58e047-8fa8-7300-3062-ab1d22495b2d@acm.org>
- <6d228185-1ce3-b0c8-71b8-badfe78505b7@opensource.wdc.com>
- <01cac097-1420-2142-c701-2542bf437656@acm.org>
- <11a23d81-b949-15de-11d3-426d2fd45db9@opensource.wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <11a23d81-b949-15de-11d3-426d2fd45db9@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.199.18.20]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/18/22 03:38, Damien Le Moal wrote:
-> Even the above code (removing the "sdkp->rc_basis == 0" test) is
-> borderline in my opinion. The code with the test is per specs, so correct.
+This patchset adds few improvements of iSCSI target that mostly
+required by tests in Window HLK.
 
-Hi Damien,
+Dmitry Bogdanov (4):
+  scsi: target: iscsi: add support extended CDB AHS
+  scsi: target: iscsi: support base64 in CHAP
+  target: iscsi: allow negotiate AuthMethod=None
+  target: iscsi: not require target authentication
 
-I do not agree that the current code is compliant with the ZBC 
-specification. My interpretation of the ZBC specification is that the RC 
-BASIS field influences the meaning of the RETURNED LOGICAL BLOCK ADDRESS 
-field in the READ CAPACITY response only. The max_lba variable in 
-sd_zbc_check_capacity() represents the MAXIMUM LBA field from the REPORT 
-ZONES response. All I found in ZBC-2 about that field is the following: 
-"The MAXIMUM LBA field contains the LBA of the last logical block on the 
-logical unit." I haven't found any reference to RC BASIS in the 
-description of the REPORT ZONES command - neither in ZBC-1 nor in ZBC-2.
+ drivers/target/iscsi/iscsi_target.c       |  55 +++++++++-
+ drivers/target/iscsi/iscsi_target_auth.c  | 122 +++++++++++++++++-----
+ drivers/target/iscsi/iscsi_target_login.c |  13 +++
+ drivers/target/iscsi/iscsi_target_nego.c  |  15 +--
+ drivers/target/iscsi/iscsi_target_nego.h  |   3 +-
+ 5 files changed, 173 insertions(+), 35 deletions(-)
 
-Thanks,
+-- 
+2.25.1
 
-Bart.
