@@ -2,76 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DC757A0D6
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jul 2022 16:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5731157A29B
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jul 2022 17:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239098AbiGSOLs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Jul 2022 10:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
+        id S237070AbiGSPF1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Jul 2022 11:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238577AbiGSOLc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Jul 2022 10:11:32 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8872A8048D;
-        Tue, 19 Jul 2022 06:31:48 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id DC4CA41259;
-        Tue, 19 Jul 2022 13:31:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received:received; s=mta-01; t=
-        1658237505; x=1660051906; bh=XrITR47fnf2t0wVK0wpJtyPLqiFPHKFv2Pe
-        EYhpbtT8=; b=lETh2L0p0YLl36RJW3PihKh7l/ldkPpWB00hTVrgupEbajUZblJ
-        /qaHacLJB5T2pEkczNRC1rkdsSXtS+MSmGYLv0qbve0B4RoILXcA9vRIL7dYuGzT
-        jMM9Nd93BTRSEUhxbIUUe/qty181hA6LsVLF1LC81VsFzSQ1Bzl/QedU=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Ep4OKdx950dO; Tue, 19 Jul 2022 16:31:45 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id F3A47411FB;
-        Tue, 19 Jul 2022 16:31:44 +0300 (MSK)
-Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
- T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Tue, 19 Jul 2022 16:31:44 +0300
-Received: from yadro.com (10.199.20.241) by T-EXCH-09.corp.yadro.com
- (172.17.11.59) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Tue, 19 Jul
- 2022 16:31:43 +0300
-Date:   Tue, 19 Jul 2022 16:31:42 +0300
-From:   Konstantin Shelekhin <k.shelekhin@yadro.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        John Youn <John.Youn@synopsys.com>, <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v2 1/4] target: Handle MI_REPORT_SUPPORTED_OPERATION_CODES
-Message-ID: <YtayPpMGagzPSff+@yadro.com>
-References: <cover.1658195608.git.Thinh.Nguyen@synopsys.com>
- <41806206e78812afe97101a11881f5a33092a93b.1658195608.git.Thinh.Nguyen@synopsys.com>
+        with ESMTP id S238879AbiGSPFL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 19 Jul 2022 11:05:11 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16AF25F8
+        for <linux-scsi@vger.kernel.org>; Tue, 19 Jul 2022 08:05:10 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id c6so12210055pla.6
+        for <linux-scsi@vger.kernel.org>; Tue, 19 Jul 2022 08:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Y0glaxE2SB/+meGH7t/RcrFWo2y6tmV7j8nBVmezP9c=;
+        b=YuxEtXnDOf9y9y7RXWaFFecaUb6ECgdeTspoKM76cz+5GfJuTytBS/fJCn2VbLAEu2
+         dbEUd2oCeRkV2QdXONeM3qdEsbTC2u78EQVgAs986xu/Nj2hsgj00/0gyU8s6dLGpens
+         spARFbciYMoNRgfCPDsNGZXVWS2lw37ay/6oft1ZzaMJS9vIsNiIoD7Ke8pPR5ommnP+
+         +YhGmNoTRca9Dy8Xre06aqhSa1+t1E55EEnKDe6VqHZpeCuW5Tu/18f+IkZI2GNAK56j
+         35Uae9I53n27CZxJHiYPYfE8L7su9VxQHQ1ehpXOKO7r1RlemXjpKMcL98p1yPAK9v/w
+         RRfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Y0glaxE2SB/+meGH7t/RcrFWo2y6tmV7j8nBVmezP9c=;
+        b=EAEItnqymNzVn8iU/KCWbWgVw0Eaqjj5oFNCGS0qktD7gP87aMtgZlqm2vatnuU/ix
+         HT+0Db4+fuE4M1onIbMMOtwIIU8sOov8U+zOe0U87BRAL27cwaRe0swV4+O86hVhaBGD
+         yS4JZISdmOECFAwBBY2bIx1ls5d21RFZy0oH/h3fYz2fYgA4sv6aZecDeU3Stxpp2B33
+         E5Rs3AyNhPiK43zl/RAC64ckDRnS7Hk4hhYpwhzp0amD61F+k7818hL/2WFTMz2UmaPv
+         1GGawD2xtEHQK76BB1/9uwCAjetdphj7d7adPnd4ylYN2Pbp/5vxbeUj5asCR/tXvJGM
+         RUdw==
+X-Gm-Message-State: AJIora+huBXZq/vuMsy2EHf5/8GhsgH4zVIo80XuFJYAm30DiRS9Uri2
+        n+ceneHDgRSfXfxcSLitAqiMH0RgWfpAt4nayZs=
+X-Google-Smtp-Source: AGRyM1uf3yk1eHH/WqIdHQN2mpR0UON62IKR4QlzicmCwbKBUX2L64S2LzlxxGQ0jUceBtmqyeAmRiHxXrhtxtSve9U=
+X-Received: by 2002:a17:902:8647:b0:16c:e60e:570a with SMTP id
+ y7-20020a170902864700b0016ce60e570amr14675363plt.77.1658243110031; Tue, 19
+ Jul 2022 08:05:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <41806206e78812afe97101a11881f5a33092a93b.1658195608.git.Thinh.Nguyen@synopsys.com>
-X-Originating-IP: [10.199.20.241]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-09.corp.yadro.com (172.17.11.59)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:90b:3503:0:0:0:0 with HTTP; Tue, 19 Jul 2022 08:05:09
+ -0700 (PDT)
+From:   "uchennailobitenone@gmail.com" <robertandersongood25@gmail.com>
+Date:   Tue, 19 Jul 2022 16:05:09 +0100
+Message-ID: <CAAgv-EJ0+msOOm5FTWO7o2=BdV+Sy=qVNJV5UOF+v2fpfjeK6A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,MONEY_FORM_SHORT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 07:07:00PM -0700, Thinh Nguyen wrote:
-> Microsoft Windows checks for MI_REPORT_SUPPORTED_OPERATION_CODES. Let's
-> handle this MAINTENANCE_IN command and report supported commands.
+Herzliche Gl=C3=BCckw=C3=BCnsche!
 
-Please see the RSOC patch series[1].
+Die Vereinten Nationen haben beschlossen, die Auszahlung eines
+Entsch=C3=A4digungsfonds in H=C3=B6he von sechs Millionen US-Dollar
+(6.000.000,00 $) an gl=C3=BCckliche Beg=C3=BCnstigte weltweit durch die
+Unterst=C3=BCtzung des designierten Pr=C3=A4sidenten im Gefolge der
+COVID-19-Krankheit (Coronavirus) zu genehmigen, die zu
+wirtschaftlichen Sch=C3=A4den gef=C3=BChrt hat Zusammenbruch im Laufe des J=
+ahres
+in verschiedenen L=C3=A4ndern und die globale Bedrohung so vieler
+Menschenleben.
 
-[1]: https://lore.kernel.org/target-devel/20220718120117.4435-1-d.bogdanov@yadro.com/T/#t
+ Die Vereinten Nationen haben die Schweizerische Weltbank beauftragt,
+Zahlungen aus dem Entsch=C3=A4digungsfonds in Zusammenarbeit mit der IBE
+Bank im Vereinigten K=C3=B6nigreich freizugeben.
+
+Die Zahlung wird auf eine ATM-Visa-Karte ausgestellt und an den
+gl=C3=BCcklichen Empf=C3=A4nger gesendet, der sie =C3=BCber die IBE Bank im
+Vereinigten K=C3=B6nigreich =C3=BCber ein diplomatisches Kurierunternehmen =
+in
+der N=C3=A4he des Empf=C3=A4ngerlandes anfordert.
+
+Dies sind die Informationen, die von der britischen Regierung ben=C3=B6tigt
+werden, um die Zahlung des Entsch=C3=A4digungsfonds an das Empf=C3=A4ngerla=
+nd zu
+liefern.
+
+1. Ihr Name:
+2. Wohnadresse:
+3. Stadt:
+4. Land:
+5. Beruf:
+6. Geschlecht:
+7. Familienstand:
+8. Alter:
+9. Reisepass / Personalausweis / F=C3=BChrerschein
+10. Telefonnummer:
+Kontaktieren Sie unseren E-Mail-Vertreter:
+der Name Solomo Brandy
+
+EMIL-ADRESSE (solomonbrandyfiveone@gmail.com) f=C3=BCr Ihre unverz=C3=BCgli=
+che Zahlung,
+
+Aufrichtig
+Frau Mary J Robertson.
