@@ -2,127 +2,196 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6F757908D
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jul 2022 04:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E64285790C3
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Jul 2022 04:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236856AbiGSCHf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Jul 2022 22:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
+        id S231645AbiGSCXi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Jul 2022 22:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236859AbiGSCH3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jul 2022 22:07:29 -0400
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384DF3DF18;
-        Mon, 18 Jul 2022 19:07:26 -0700 (PDT)
-Received: from pps.filterd (m0098571.ppops.net [127.0.0.1])
-        by mx0a-00230701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26J1JOY9002282;
-        Mon, 18 Jul 2022 19:07:20 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=date : message-id :
- in-reply-to : references : from : subject : to : cc; s=pfptdkimsnps;
- bh=SO+Ozr9/sPtknW4Dm2IkfjhqY8KkDi0uGbNsxMi0Luw=;
- b=DHfN+lJthYr91oMkuIQEI99WM+x8Kjt9GNqpYmE1Z/X5nEcBmgVC6ex4Ecpga7/Ilzvf
- aqCbKO9S8UDQZCCwQq8iQnqDvllKoGocuSpkJyqqAc2J7njw9Wgkd0S2HJnuzPnXFYR9
- oEPQzJnaRhGhSWCWX3Fj1CgQIBRujKu2vBPLwtIRl27sf/8AXkXX1Tw/ZJ1K5kyx9xxY
- OM6CMcPOlolUNZnWFrZvoAgiI3by3ssQ4s8qlFVmiSR5TqfPLY0XyVqPDIbtVful+BRj
- 2D/N6FoaY2TFEQeu4oKRxbGC3VQtuNi/fxdhHm+0ANUaKzicMUKvLLE8ir4OosEVQf1n Rw== 
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-        by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3hbvbmwp4s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Jul 2022 19:07:20 -0700
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 432F34008A;
-        Tue, 19 Jul 2022 02:07:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1658196440; bh=12PH3KrZuQ0fN8QB633gu08Ms0Ej1Uos3YJGTPWL0BI=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=fPToFenfChGBl6tQA33x51J0+UMO+wVl8tr0rRWXYkHVKzEKVxsp15fLC5g6QHL4u
-         9KPOfQqJQIGbohI7HfXEaV3zvvjK+zMEKSsBlTBOf+DkY0jy0ffS552DNo5aiWx10j
-         dEjH9CoMvBsITw5NpdCZcy2Amcz6l/LzxE0I51Ql870SmT+p0E5YgK83SMzeYLvcpz
-         /CqzRByaB25zvMxhcCxDBi7tVrbGXDdfdPS7xTuuoGuw0qcjp6YD6f2Yx9kVsrmua7
-         8SKMjdTMZ2ztLBuovoDgAXTUIw3bYsloE992We3Nayq1hwduFeyStfUOoXcZG8Ju6A
-         RK+29TWqRbQEQ==
-Received: from te-lab16-v2 (nanobot.internal.synopsys.com [10.204.48.11])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 23754A0062;
-        Tue, 19 Jul 2022 02:07:19 +0000 (UTC)
-Received: by te-lab16-v2 (sSMTP sendmail emulation); Mon, 18 Jul 2022 19:07:19 -0700
-Date:   Mon, 18 Jul 2022 19:07:19 -0700
-Message-Id: <71ea0c365383e038b7eb6a638faf45a7345fcb33.1658195984.git.Thinh.Nguyen@synopsys.com>
-In-Reply-To: <cover.1658195984.git.Thinh.Nguyen@synopsys.com>
-References: <cover.1658195984.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v2 4/4] target: Properly set Sense data length when copy sense
-To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-X-Proofpoint-GUID: 82IDjKJFH3kYKSM0h1cE1uCoz1GHQyAA
-X-Proofpoint-ORIG-GUID: 82IDjKJFH3kYKSM0h1cE1uCoz1GHQyAA
+        with ESMTP id S229618AbiGSCXh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Jul 2022 22:23:37 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4881233E20
+        for <linux-scsi@vger.kernel.org>; Mon, 18 Jul 2022 19:23:37 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26IKqKf0032487;
+        Tue, 19 Jul 2022 02:23:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=F4DGAJ9RjU7KYLvoufIl3HNFzsGZpSwBy5WnAfvygbU=;
+ b=r/nHbMlNYZrTRMeBFLzZTbpDOyBUYNKc6wa1mkO2mc9rQZZLvUdTrPXUcrNeRDGwtYSm
+ BYp3fOaB4c7c32oULGGRA+PFJtn0NN09peaP+47VY+gJUfzQeqH+pGTUZ6WNUgB0oj8e
+ EjUU+7FqTEzOpoq0rDug9PFe0Iubg7gcKydoUMnFiSQxSS5rO9RM1/gcmlHJc75wvDXW
+ Z057N5Opp4r5h8C8F5BUkuY1e3KB6olTj6Ygq6xgEOfut/J91vYCt8Sxa5qRjyZLokkp
+ NudCQ/tkarHTKg/JD+AeGlTBw4iVtaZ0yaBHXyiGe+//S9Nj6YpAygtxT6bw4hiCY+g1 DQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hbkx0vyk6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 Jul 2022 02:23:35 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26J10l2K006362;
+        Tue, 19 Jul 2022 02:23:34 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2043.outbound.protection.outlook.com [104.47.56.43])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hc1gg1wgt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 Jul 2022 02:23:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NhMne1vnMRJmwIMQZZJAJLINBw7bpYmHlYzFnwd0ChhKlqEzjuSFgSnZSsBz87X5SU6AXk++DvQ5iLZhucwN30OoDrJdwzAiyHOyEpQhNcuGhmNElO6B9GV2WbTWBaSAKXxpmFH6m6F0oTEONTyNz9w23MtfzfqoGAVGI4Feg5XBio7ph7wVhnpgrOpLkHBaE5/of2vn5fgCF/eZkpNQyEOibqQDfZgEfIVRSZzTPCh/exaXGKkFVQYABY8VaPqeikOida+cLLCnJF905vJKoRpBlKZjVdxYdVnBzqucN/qlfih7FFNn8FHqK+Oz6bTx9IP/XniVWc5TqobqH4A9AA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F4DGAJ9RjU7KYLvoufIl3HNFzsGZpSwBy5WnAfvygbU=;
+ b=HT74af4KClrG7R6fxMemruNr6TS7/c/vfDIvVnp3YgEXgQN4W8ZHWYHTQRTtgb5kIPZjQqxNUWf2V/7z1gY0qgbyMd/7BSNR7lMvkjNug495JjYWH+IAJdAb2FWZCzRvuBBtRUNRGWRVRuH9qvK7PyZrb0m0WgW0YcMzljooifD72OyUwny7jLJXSc94wlEOKf3HuhBQKElNNk++JPk88nvr5DcPtsMWByMXYABT3Uy7Crd1tjQIOzwasM1nVbzf1Bn+SXU2qOkjpaf1lYNhvOlS+4nZTNoJnhqfEPNb1ST+oTji51lr+WGKuwjLMIUDHIX8ugp2SXpQpNp5PB+JWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F4DGAJ9RjU7KYLvoufIl3HNFzsGZpSwBy5WnAfvygbU=;
+ b=QIJbalu6E1HPL3Wy13KYI0HIqLyrHe+lihA8M669dTswAFERcj96ZRPaBpuQujKcbicqx+p7HKQNPlLYfbE800F0cdB9BlqnhoiVAVGoKm8lvLwofYgli9TB8cx5jBfoGWNpWQImKUz1Z7iE5CESz6AR6mqFkXAmG50sm0F6Zak=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by BL3PR10MB6233.namprd10.prod.outlook.com (2603:10b6:208:38c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5438.12; Tue, 19 Jul
+ 2022 02:23:32 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::6516:e908:d2bd:ca45]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::6516:e908:d2bd:ca45%6]) with mapi id 15.20.5438.023; Tue, 19 Jul 2022
+ 02:23:32 +0000
+To:     Benjamin Block <bblock@linux.ibm.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Steffen Maier <maier@linux.ibm.com>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>
+Subject: Re: regression next-20220714: mkfs.ext4 on multipath device over
+ scsi disks causes 'lifelock' in block layer
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1edyhrgpi.fsf@ca-mkp.ca.oracle.com>
+References: <20220302053559.32147-1-martin.petersen@oracle.com>
+        <20220302053559.32147-11-martin.petersen@oracle.com>
+        <YtWPoZISMLxHA/vu@t480-pf1aa2c2.fritz.box>
+Date:   Mon, 18 Jul 2022 22:23:26 -0400
+In-Reply-To: <YtWPoZISMLxHA/vu@t480-pf1aa2c2.fritz.box> (Benjamin Block's
+        message of "Mon, 18 Jul 2022 16:51:45 +0000")
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: BYAPR07CA0015.namprd07.prod.outlook.com
+ (2603:10b6:a02:bc::28) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5783af5b-c8ae-4341-2f4a-08da692dacec
+X-MS-TrafficTypeDiagnostic: BL3PR10MB6233:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8xoNQ+sRMjlKHm3NLCIo2sjD5keF2pKmd59SZsW6MksgfAtZ6t40+lGQxecSegDJSUnF3hqZzJdXphehwaj9/dTcTkxHR7zNMC8/fFD4v0AIG+KuFkJ5KPFj/CVaji725Ew55VhYdiyxG5pI3RwLB5/UNbZU+wMhZF6jFTkyQUerhchOcvVumQO+mU8DeBUAN+EU+rYv2Fvqhtj1p01CSeClpAeGHpjDHFf5bc6e8Sbjs2csDREsbiiBVECJU7MOZeuoK5Z63gMtKEEzXFfU+u+HAmbCheZ94qTdU4/NHGZZvlB2aL6S88VfEmYMQul4hbCCgYPRBtxyLhUhYTvPFYRDSlTRtKMHTAlNmqszReRYBWEAS/vMPdA2K4/fDofiq1RjOmdyeEC7dEBq1KwgW/GeqGGX2zK2v9q+RJeZGdViIrMwoyF1+pbCktMtezZFrJvG5BzVHouqoVqMfd2XzdCT+okjI/2HYuXtCQVyQ6whU31hYKVZ9jpENEW5eeLK8oKaAPP03N6Tfajnj/snU7vnJabaAUx+DlVTE0XYfrWI8uzpl68xClLa3Y8XE28fTdxrhJwanyeVjcnZZttQAmRhhvgt1ueGxoZa7fcrQrp7oo0prcz2ScBKGXCPY396J0m2AKfnazU2VZ9ji9+vjL28qx5Nv0sxxt0f3Ajogq0mU1Iw4TMUfhX5tN6+gpG1bpjSwFRb40YTaAub7RMdwF2CgZ0Z2t5CeT/aidRhF7KYj/rMHj896FUZSHialq7C01gc/sn7lDwEhFSbwGY8X4/ZqvfwGcjvVdkMTSaFdF8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(346002)(396003)(376002)(39860400002)(136003)(52116002)(5660300002)(6506007)(316002)(8936002)(26005)(86362001)(38100700002)(38350700002)(36916002)(6916009)(6512007)(8676002)(186003)(4326008)(83380400001)(6666004)(4744005)(2906002)(66946007)(478600001)(6486002)(66556008)(54906003)(41300700001)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dFM0dlFoZlFTdkJydEcxcUpIZHBXMjJRUVhxeGNuMzgvSElzekdWa1VqcW50?=
+ =?utf-8?B?cEZnazBBMHpOQmJtOHJSWFRvZkRxb09YT2xsdHJVWEpTWDVzcDNMV0ZsUWpL?=
+ =?utf-8?B?UkFaeU5DQUpEYzFkQ3ozMFY5QzA0U3RtakM2TWYxOWs1cUo2ckJqNHdsTEdU?=
+ =?utf-8?B?MlhZZ2JSdVFBWU5kejVnQmVLS2hYVFZkS2ZkQzZDMEY2Z3k3SEFuUmhyNktj?=
+ =?utf-8?B?MUF2ZGdpU21kcGhkMHZyMFZ0SGY4NGZ4NUhKTkdXeEt0elRLSVg0dzYyRFJi?=
+ =?utf-8?B?VE9lL0lTMGo1eW1kTFZOeEdDaFhvTUNuVXpSTW53U09QbjlJS3JiWXZGOXZj?=
+ =?utf-8?B?Vm9HQWRhbmwvU05oamtqRlJJdWpIV3RJNm8zUmh5TEg4Z3Z3MW9CSGoxNDhh?=
+ =?utf-8?B?aFFMWFhHa1Q2N3lsMGhIc2V2WUlUd0xhMlF3dkFIRlJQMmE0UnB2aU5rWmlS?=
+ =?utf-8?B?aEtNVVVpdVUzV0RWQXZ2RzBJYXptSlNvZHdkSHFFZ2ZhQWVnZEgzL2pxa3ZR?=
+ =?utf-8?B?U0Z2cXAyL2NZQndOOHlma2xLQURiblByTExENnBUU1g1Sm1ZREplOHVKVEh6?=
+ =?utf-8?B?ZnY5bVNMMUt6ZU5GeDRjcmtsVVVEWElsUmF0djlJZWp2TFlQVXBmQW9ORmVR?=
+ =?utf-8?B?UW1DdEdIUHBFWVpudkptUTlybktIMjUwN0thb1d2K0ZIeGdCWkFrdnJDc00y?=
+ =?utf-8?B?cHdJY3BRRFFzYzlEczVNMHFwTExsQmk3ZXMyeVc5RW5ZTjBRSDBFS1ZjS2Fi?=
+ =?utf-8?B?cGVSQXorQjh0TmVMQnY3eWtFTGdCdzAwWHNVVitCYkR5OWxCc1U0QUc3S3NX?=
+ =?utf-8?B?bWxXNTM1VEFYYVdvQnpybS9XZmpiT0dhOGxYM3lxYktLNGZqZW5KQmRLdHNH?=
+ =?utf-8?B?TkR2a2hYNjBjR2xQclovYXZyWStNekwzbEZ3WGxxaXNGM2h2eVpzeXIycDdF?=
+ =?utf-8?B?OW5OOFVPWUVYcmh2eFBaZml0MlJDU09ZUTdsRktUMlU3RWRDeVByTldEaVFJ?=
+ =?utf-8?B?MlkxYmx1M2MxTXlBTTJITmM1UHpvQ1FDR3JObFpOQ0VzYXVZZWptYlowc01B?=
+ =?utf-8?B?dUZPSXcvR3EyVktwL1JUSHFrOU5tVGRDNEMrRmdjUy9qVDZRdDZsc0lqU05F?=
+ =?utf-8?B?REhmNG9obmNRMncvTld4YlBqSXNKdE5TVFJ0dGN0c0Z2dTZLb0JwN0laNVhU?=
+ =?utf-8?B?cUg5UEcvVkd5VlIybmxGUllXQzlRdmZ3aTlHZVpOZTNiNXNid1RLVVZZMnR1?=
+ =?utf-8?B?T1o5UzRKV0VDNzJvaEtmQ3ZCWEZhM2VjUWdtTG5KWjIyRzd2Y3BEZmE2dWN6?=
+ =?utf-8?B?ZWJVQ3BMWm5Nb09sZkRyb1dKMWtxYnRPMk5ZS2hKc0gxdUlYU2o3OFMzNlFM?=
+ =?utf-8?B?N3N4aXJ0Tkt4NzJ4ZmxUMlRUN1kydGV3bUxDbDY0ekNpRkx3RHoxRUdwUkF4?=
+ =?utf-8?B?SXFtWDRZTTRrV1ZHbzd5eVF5OUZQdG1YTTAvbzM3WTNoZXRNbWJ4ckRCNVNa?=
+ =?utf-8?B?ajNlZUVJeVEyZjlnK2RiZy9Fem1FOXZBZC9ucmpyTDdqZFRwM1dudXdyTG5p?=
+ =?utf-8?B?T29IVXFwK2xjbGlMaE12b280ekg1ZnQ4U0FtVTRxSTF4SEtjbk1GZitxTEJv?=
+ =?utf-8?B?SkZ1RENsWEhiVHU4RHpiWWhBUThscEw3M2lPZW1mMEhsb1JnSzZSbG5nZ1JU?=
+ =?utf-8?B?OVI3YTg1aXhZYmtDeWN0NzNZSFpKZzVlc2V0ZUluR0xudS80UE5lbjN2SjJo?=
+ =?utf-8?B?Vm9zcVJXR0V0VUFLTmdnU2M0Syt3cGF3MTkyWS9hMkZzNE9mTyt1bzZwYUU4?=
+ =?utf-8?B?TzlhUWV0S1lsM1E4ZXlONWF2Zi9BTG9sQ1FLT2tGWUZacE95SC9hN3h0Tmd0?=
+ =?utf-8?B?cGkxMWtFeTg0ZFYzUis0cUwxVlVUU0NsOUMvWFpzTWU1cnZqd0FTSExWa1Vw?=
+ =?utf-8?B?UFB2Y3JUQzZUTmZrU3V6WEdpMDJNZ0M2Zzk4ZFR1VnFreHJLVjNCOXN1Z3VR?=
+ =?utf-8?B?THFxdXhoRXVFYlkvQnZNQlN3RVAvM21DVUdDR0dvMVhpNUtxeFpUaU9kby91?=
+ =?utf-8?B?TzR4aWFmSEdvTDdkNkg2bHlSTVZxWi9BNW5XNFkvSERDRElheUhLcmJWUjV4?=
+ =?utf-8?B?ODl4QUszMWkzTXg2Tjc5dCtPS2ZxQ3pRU29uV0JhTldGdlRlL0ovUmZhN1ZU?=
+ =?utf-8?B?T2c9PQ==?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5783af5b-c8ae-4341-2f4a-08da692dacec
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2022 02:23:32.3512
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uNZOCBJ4R4E6dLrCW3nmNO3MyVxDDcIiFbka0lln5bfxDyKbh0HHB7Fp9b1UkHF5sE/TiK4lI8TCAm5BFZhrJwC5BxvBhZo/orSKA1d/OCg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR10MB6233
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-18_22,2022-07-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- clxscore=1015 priorityscore=1501 impostorscore=0 suspectscore=0
- bulkscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0 adultscore=0
- malwarescore=0 spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2206140000 definitions=main-2207190006
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=962 spamscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207190007
+X-Proofpoint-GUID: 707iEZqbVx1UOTJyP3UP_uzo8wfvhWZW
+X-Proofpoint-ORIG-GUID: 707iEZqbVx1UOTJyP3UP_uzo8wfvhWZW
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The transport_get_sense_buffer() sets sense data length to be the
-allocated sense buffer length TRANSPORT_SENSE_BUFFER. However, the sense
-data length is depending on the sense data description. Check the sense
-data for cmd->scsi_sense_length.
 
-See SPC4-R37 section 4.5.2.1.
+Benjamin,
 
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
----
- Changes in v2:
- - Only memcpy sense data length rather than the entire TRANSPORT_SENSE_BUFFER.
+>   # lsblk -D /dev/sda /dev/sde
+>   NAME        DISC-ALN DISC-GRAN DISC-MAX DISC-ZERO
+>   sda                0        1G       4G         0
+>   =E2=94=94=E2=94=80mpathc           0        1G       4G         0
+>     =E2=94=94=E2=94=80mpathc1        0        1G       4G         0
+>   sde                0        1G       4G         0
+>   =E2=94=94=E2=94=80mpathc           0        1G       4G         0
+>     =E2=94=94=E2=94=80mpathc1        0        1G       4G         0
 
- drivers/target/target_core_transport.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+>   # lsblk -S /dev/sda /dev/sde
+>   NAME HCTL             TYPE VENDOR   MODEL    REV SERIAL      TRAN
+>   sda  0:0:0:1079787648 disk IBM      2107900 1060 75DL241805C fc
+>   sde  1:0:0:1079787648 disk IBM      2107900 1060 75DL241805C fc
+>
+> Any idea why this is happening? In case you need more details, this
+> reproduces very reliably here.
 
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index db53b326048d..95b7788e7cbc 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -771,8 +771,6 @@ static unsigned char *transport_get_sense_buffer(struct se_cmd *cmd)
- 	if (cmd->se_cmd_flags & SCF_SENT_CHECK_CONDITION)
- 		return NULL;
- 
--	cmd->scsi_sense_length = TRANSPORT_SENSE_BUFFER;
--
- 	pr_debug("HBA_[%u]_PLUG[%s]: Requesting sense for SAM STATUS: 0x%02x\n",
- 		dev->se_hba->hba_id, dev->transport->name, cmd->scsi_status);
- 	return cmd->sense_buffer;
-@@ -791,6 +789,11 @@ void transport_copy_sense_to_cmd(struct se_cmd *cmd, unsigned char *sense)
- 	}
- 
- 	cmd->se_cmd_flags |= SCF_TRANSPORT_TASK_SENSE;
-+
-+	/* Sense data length = min sense data + additional sense data length */
-+	cmd->scsi_sense_length = min_t(u16, cmd_sense_buf[7] + 8,
-+				       TRANSPORT_SENSE_BUFFER);
-+
- 	memcpy(cmd_sense_buf, sense, cmd->scsi_sense_length);
- 	spin_unlock_irqrestore(&cmd->t_state_lock, flags);
- }
--- 
-2.28.0
+Are the reported discard limits different on kernels predating that
+commit?
 
+Please send the output of:
+
+# grep . /sys/block/sdN/queue/discard_* /sys/block/sdN/device/scsi_disk/*/*=
+_mode
+# sg_readcap -l /dev/sdN
+# sg_vpg -p bl /dev/sdN
+# sg_vpg -p lbpv /dev/sdN
+
+Ideally (for the grep) before and after the offending commit.
+
+Thanks!
+
+--=20
+Martin K. Petersen	Oracle Linux Engineering
