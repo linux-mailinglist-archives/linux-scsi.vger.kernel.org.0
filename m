@@ -2,123 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6D157F9EF
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Jul 2022 09:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E22ED57FBAE
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Jul 2022 10:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbiGYHMA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Mon, 25 Jul 2022 03:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
+        id S234112AbiGYIu7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 25 Jul 2022 04:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiGYHL7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 Jul 2022 03:11:59 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54AC65B4;
-        Mon, 25 Jul 2022 00:11:57 -0700 (PDT)
-Received: from mail-ej1-f45.google.com ([209.85.218.45]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MnZwp-1nopQX0l7t-00jdY3; Mon, 25 Jul 2022 09:11:56 +0200
-Received: by mail-ej1-f45.google.com with SMTP id l23so18932180ejr.5;
-        Mon, 25 Jul 2022 00:11:56 -0700 (PDT)
-X-Gm-Message-State: AJIora9cyPaOFO5T5UBLHTYa3kxrYXxtwB95KREtPbkkvXUz+64EA87l
-        YQe7AMUIZ5ulLaa+Ebu3CPyYZZftE5VAluc2Ox0=
-X-Google-Smtp-Source: AGRyM1vsXI3Ky9UWaTbBb62V/2imE1yupiH29WQmI1FGfnsmQmviYwxhNC+GHy4zia5B5lmb/ALvUGKfZkDP6ajCAGg=
-X-Received: by 2002:a17:906:dc89:b0:72f:1d4f:cea8 with SMTP id
- cs9-20020a170906dc8900b0072f1d4fcea8mr9259669ejc.654.1658733115829; Mon, 25
- Jul 2022 00:11:55 -0700 (PDT)
+        with ESMTP id S234089AbiGYIu5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 Jul 2022 04:50:57 -0400
+X-Greylist: delayed 4764 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jul 2022 01:50:56 PDT
+Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [221.12.31.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E576437
+        for <linux-scsi@vger.kernel.org>; Mon, 25 Jul 2022 01:50:56 -0700 (PDT)
+Received: from h3cspam02-ex.h3c.com (localhost [127.0.0.2] (may be forged))
+        by h3cspam02-ex.h3c.com with ESMTP id 26P7VTni055343
+        for <linux-scsi@vger.kernel.org>; Mon, 25 Jul 2022 15:31:29 +0800 (GMT-8)
+        (envelope-from xi.fengfei@h3c.com)
+Received: from mail.maildlp.com ([172.25.15.154])
+        by h3cspam02-ex.h3c.com with ESMTP id 26P7Txkk050140;
+        Mon, 25 Jul 2022 15:29:59 +0800 (GMT-8)
+        (envelope-from xi.fengfei@h3c.com)
+Received: from DAG2EX05-BASE.srv.huawei-3com.com (unknown [10.8.0.68])
+        by mail.maildlp.com (Postfix) with ESMTP id 6A45B22FEFE6;
+        Mon, 25 Jul 2022 15:34:07 +0800 (CST)
+Received: from localhost.localdomain (10.99.222.162) by
+ DAG2EX05-BASE.srv.huawei-3com.com (10.8.0.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 25 Jul 2022 15:29:59 +0800
+From:   Fengfei Xi <xi.fengfei@h3c.com>
+To:     <sathya.prakash@broadcom.com>, <sreekanth.reddy@broadcom.com>,
+        <suganath-prabu.subramani@broadcom.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <MPT-FusionLinux.pdl@broadcom.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zhou.kete@h3c.com>,
+        Fengfei Xi <xi.fengfei@h3c.com>
+Subject: [PATCH] scsi: mpt3sas: fix kernel panic in scsih_qcmd after shutdown/unload
+Date:   Mon, 25 Jul 2022 15:27:03 +0800
+Message-ID: <20220725072703.5562-1-xi.fengfei@h3c.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220704025632.235968-1-renzhijie2@huawei.com>
- <CAK8P3a07jGCuAVQAZgpENRP_xFLiogU9W1Uze+n21h7TdOZhog@mail.gmail.com>
- <df9909dc-3303-808e-575a-47190f636279@huawei.com> <CAK8P3a3SA9zvVu0i1m0kqbemLd4WfTMGfpc8VwhsmJOBgZHvsA@mail.gmail.com>
- <af043109-c101-a147-707b-82e79469ae73@huawei.com> <CAK8P3a0LCaMoWArcQNY5qayUABgRXWEogrtQQ-sbR+zY6n=O4w@mail.gmail.com>
- <f565a5b5-8ba2-adbb-8093-6d60b2159222@huawei.com>
-In-Reply-To: <f565a5b5-8ba2-adbb-8093-6d60b2159222@huawei.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 25 Jul 2022 09:11:39 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2L4J1Qfu5rw8dvbto25zZDiUrv6vbv-6A6nckgyoRmZQ@mail.gmail.com>
-Message-ID: <CAK8P3a2L4J1Qfu5rw8dvbto25zZDiUrv6vbv-6A6nckgyoRmZQ@mail.gmail.com>
-Subject: Re: [PATCH -next] scsi: ufs: ufs-mediatek: Fix build error
-To:     Ren Zhijie <renzhijie2@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, stanley.chu@mediatek.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:4Hnd6qv2aReeCv4L40SIrXRriKLErRfBQYpKFGLEr+8SRSlbCJ/
- XzANk0NFSzCuqkCrvXPxu5eSEgxUhzHslJh5kFTYdXGlKj9LQi4p5IQ6FplbLp55YHFRdta
- id5tEGet6Z9EYZCNcr9i37IXptQL4dTXt3wZEsaPxvCPFsQr2t1gopJYIRxG0CXSC9auNpd
- xZD8DGv+YYRBMbqpGnyEA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2nCKXhoUNyI=:SP205vTv+DP4PCcpUufk8P
- NnGvuGHi3h1YGJjeewb1H1GlC8NNcaXP+/LDHKAStDWH2TT+z/RH2f4Wh76PSEDzgPPpnFuJX
- SPrdoyiJ8DtJCtX7P4cULORS7iQ1hRB/BRwJwXJ8HJ7yvmo0UuumloaThqV3eQrHD4fiYtrUg
- x1SsyLBIBuQBVn/eVdMGm0ni+16AfFHDaMHxfKrknukGLIjQxXX845OIJF3NeYdm7qVjtLOei
- zg7QKf0VB2yZgxd8EzGtvayMaUXCINfiR9yRLJI9lLDdzyteR5cAxr9zQF9oaNFOBBExjvzsC
- VS4cpynTxBUkCY15jlBYDAzFEmX44uglVhbn5fg3vHHdU8cayBJ14ZSe1DHlAiXe9MHF0+k9F
- +hRN5bNivo1+411Muho62mkWmczwfl9q77rOE5QiFZwAzSkR9ZptWr2ftmWzmEmR3SjizGz+k
- gmBRQyZVoi3/oRabfITLLaJwuletIRcSO1hcmHeHX9ev//RA/16RQqV2pjk0f11IZhQjiOdsu
- DgTCpKh9p5AJtkrNGQpz/bdY4WlgOj8i2S1ds26Yveb8KuDITFt1OPb053ie+lM/b5A3ptm9y
- cOku9V04QC+CtJrzxbWM252IWvpqKmgO01fGHrkTSyz42Rqq0KkItn35m/Pg7woiknxRQgOfM
- TNBJkCf7V9xSKYPQoRpn+cMIjPr+cAGMQxNsWkmECkqZnOxpxCcpromHntyp9k00GlUvq1Er/
- aex9kFJa4ZkR1ojWbwoLPZKycOtE3eww3I94snSZFL4OIS4WvQ8Y10l3ur6KuRwcuUbf6wynC
- Fo4ETTFYHL9GOAsHfipv+QR6T+TlmECR9gtiEQbDgOSsUBhhSu3/RThZoxooY0uDcJtRtbYtj
- /vz09guMIi/gp7MT7C9g==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.99.222.162]
+X-ClientProxiedBy: BJSMTP01-EX.srv.huawei-3com.com (10.63.20.132) To
+ DAG2EX05-BASE.srv.huawei-3com.com (10.8.0.68)
+X-DNSRBL: 
+X-MAIL: h3cspam02-ex.h3c.com 26P7VTni055343
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 9:00 AM Ren Zhijie <renzhijie2@huawei.com> wrote:
-> 在 2022/7/25 14:34, Arnd Bergmann 写道:
-> > On Mon, Jul 25, 2022 at 5:38 AM Ren Zhijie <renzhijie2@huawei.com> wrote:
-> >> 在 2022/7/13 16:48, Arnd Bergmann 写道:
-> >>
-> >> I try to use the new marcos SYSTEM_SLEEP_PM_OPS and RUNTIME_PM_OPS to
-> >> replace the old ones, and remove #ifdef around the declarations in the
-> >> header, my local changes attach below.
-> >>
-> >> But it seems  that doesn't work, which has ld errors:
-> >>
-> >> aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-> >> aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-> >> drivers/ufs/host/ufs-mediatek.o: In function `ufs_mtk_runtime_resume':
-> >> ufs-mediatek.c:(.text+0x1d0c): undefined reference to
-> >> `ufshcd_runtime_resume'
-> >> drivers/ufs/host/ufs-mediatek.o: In function `ufs_mtk_runtime_suspend':
-> >> ufs-mediatek.c:(.text+0x1d64): undefined reference to
-> >> `ufshcd_runtime_suspend'
-> >> Makefile:1255: recipe for target 'vmlinux' failed
-> >> make: *** [vmlinux] Error 1
-> >>
-> >> (CONFIG_PM and CONFIG_PM_SLEEP are both not set, and
-> >>
-> > It appears that there is a mistake in the RUNTIME_PM_OPS()
-> > macro definition, can you try this patch on top?
->
-> Hi Arnd,
->
-> I apply this patch and it worked.
->
-> When will this patch be merged?
+We encountered a kernel crash problem after the user performed a 
+shutdown operation. By analyzing the vmcore file, it is confirmed 
+that it is scsih_qcmd called memset to access ioc->request resources 
+that have been released in shutdown/module unload path.
 
-So far nobody has submitted this, I was just guessing and I had no idea
-if this would do the right thing. Can you send this patch to the power
-management maintainers with a proper changelog and a
+crash> struct MPT3SAS_ADAPTER 0xffff00ff85806880
+struct MPT3SAS_ADAPTER {
+  list = {
+    next = 0xffff800008eb8038 <mpt3sas_ioc_list>,
+    prev = 0xffff800008eb8038 <mpt3sas_ioc_list>
+  },
+  ...
+  name = "mpt3sas_cm0\000\000\000\000\000\000\000\
+  ...
+  remove_host = 1 '\001',
+  ...
+  request_sz = 128,
+  request = 0x0,
+  ...
+  sense = 0x0,
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
+The SCSI queuecommand handlers(scsih_qcmd) may be invoked after 
+shutdown/unload, depending on other components. So we should add 
+checks for 'ioc->remove_host' in scsih_qcmd, so not to access 
+pointers/resources potentially freed in the PCI shutdown/module 
+unload path.
 
- line? Thanks,
+Just like the following commit:
+  9ff549ffb4fb4cc9a4b24d1de9dc3e68287797c4
+  scsi: mpt3sas: fix oops in error handlers after shutdown/unload
 
-     Arnd
+Signed-off-by: Fengfei Xi <xi.fengfei@h3c.com>
+---
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+index b519f4b59..d8994eaec 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -5140,7 +5140,8 @@ scsih_qcmd(struct Scsi_Host *shost, struct scsi_cmnd *scmd)
+ 		scsi_print_command(scmd);
+ 
+ 	sas_device_priv_data = scmd->device->hostdata;
+-	if (!sas_device_priv_data || !sas_device_priv_data->sas_target) {
++	if (!sas_device_priv_data || !sas_device_priv_data->sas_target ||
++	    ioc->remove_host) {
+ 		scmd->result = DID_NO_CONNECT << 16;
+ 		scsi_done(scmd);
+ 		return 0;
+-- 
+2.17.1
+
