@@ -2,66 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF35581E15
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jul 2022 05:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B453C581E0A
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jul 2022 05:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240281AbiG0DQN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Jul 2022 23:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
+        id S240253AbiG0DP2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Jul 2022 23:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240264AbiG0DQJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jul 2022 23:16:09 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3083D591
-        for <linux-scsi@vger.kernel.org>; Tue, 26 Jul 2022 20:15:51 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26R2p1i9009205;
+        with ESMTP id S240247AbiG0DPZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 Jul 2022 23:15:25 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1058019C0B
+        for <linux-scsi@vger.kernel.org>; Tue, 26 Jul 2022 20:15:19 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26R2oXUe024544;
         Wed, 27 Jul 2022 03:15:16 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=pjE//OQ1O+RSDCwFw9yj0ZKbC9zltxEwaWGxtK6R+tw=;
- b=0HZNqCrtWOTaJX8zakqT/0WQyCZ2tjGwKLxI/Ed97q9lxtxrY0VHydrWpA2H9GxjMnjR
- AFPbB3PZPmCGxSabQifrSPEJ/5XfRV8kelSFs5xkqe6XoFLN2pdFu5UJj7g4vKD+Cjrk
- tk3HeYFHvr2YOFtGfrmRikiyyCbFS5LnNAmsjqXVBRJ9x+tmcuj7qXbX/43bce72KtlN
- tQLjAji6cnNUwW2XfMR4iqhISsrucrdw3DX3C3TkQ4IbhqTJOSPX3FOzH6wEav2ktFz/
- DG9xhOiJMU+7JhyS+0bxlhilryJNGImtWTk+JR5+PrIq/UI0blwR3VZ341ZbDs48i1Qm dw== 
+ bh=NeYSpmUc75UFbJLJmKRwVqAPYjHbnaqeEe7yTsnGn4o=;
+ b=YOI2+wkZXdlU8mYXHHXw0lIwqydzPiMvxlE12hBhspPoJdDCu1jmk0OwiOBpBMY8CbWx
+ wDHGR9VF64ljJOJ3J4O8FvfOK59piBMRlSbue+At88yzwGxSdB9wItQ/w8QRUjyqFz2p
+ nGcMAvoaB1tNpbLyrgBA8aRJ6pPvAPurEAViqqcn7l1m7SvmxzkEXJuPDanT3SuhHG0j
+ jAS0cAETwR41JlOh8m7FkuTE8fWMFNaBm01Nerhppo1k7wjRL8HjpbgO03B8R9mhOI1R
+ O0IFFscYYquHBREmKix0ISz/4JXMxM6uP/0MPqnrHM1sIMaUQ6QsB85hBRnhfbhwVhHb bQ== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hg9anyu2t-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hg940r0pb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 27 Jul 2022 03:15:16 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26R1BDsI019875;
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 26QNn39A020003;
         Wed, 27 Jul 2022 03:15:15 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hh638mksh-1
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3hh638mkst-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 27 Jul 2022 03:15:15 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26R3Dx7V005078;
-        Wed, 27 Jul 2022 03:15:14 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26R3Dx7X005078;
+        Wed, 27 Jul 2022 03:15:15 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3hh638mkrj-1;
-        Wed, 27 Jul 2022 03:15:14 +0000
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3hh638mkrj-2;
+        Wed, 27 Jul 2022 03:15:15 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Bart Van Assche <bvanassche@acm.org>
+To:     linux-scsi@vger.kernel.org, David Jeffery <djeffery@redhat.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Stanley Chu <stanley.chu@mediatek.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Santosh Y <santoshsy@gmail.com>,
-        Sujit Reddy Thumma <sthumma@codeaurora.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: Re: [PATCH v2] scsi: ufs: Fix a race condition related to device management
-Date:   Tue, 26 Jul 2022 23:15:10 -0400
-Message-Id: <165889169552.689.16787074693111519230.b4-ty@oracle.com>
+        Laurence Oberman <loberman@redhat.com>,
+        MPT-FusionLinux.pdl@broadcom.com,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Subject: Re: [PATCH] scsi: mpt3sas: Stop fw fault watchdog work item during system shutdown
+Date:   Tue, 26 Jul 2022 23:15:11 -0400
+Message-Id: <165889169551.689.2429580988083621138.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220720170228.1598842-1-bvanassche@acm.org>
-References: <20220720170228.1598842-1-bvanassche@acm.org>
+In-Reply-To: <20220722142448.6289-1-djeffery@redhat.com>
+References: <20220722142448.6289-1-djeffery@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -72,8 +68,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 m
  suspectscore=0 mlxscore=0 bulkscore=0 adultscore=0 spamscore=0
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2206140000 definitions=main-2207270009
-X-Proofpoint-ORIG-GUID: bBj_zkbumSb5eckUcDC5jt8bnBrS8ZK3
-X-Proofpoint-GUID: bBj_zkbumSb5eckUcDC5jt8bnBrS8ZK3
+X-Proofpoint-GUID: qYTpmqi8Sx2vmoep_NfST8FZiJy62-2E
+X-Proofpoint-ORIG-GUID: qYTpmqi8Sx2vmoep_NfST8FZiJy62-2E
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -84,44 +80,21 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 20 Jul 2022 10:02:23 -0700, Bart Van Assche wrote:
+On Fri, 22 Jul 2022 10:24:48 -0400, David Jeffery wrote:
 
-> If a device management command completion happens after
-> wait_for_completion_timeout() times out and before ufshcd_clear_cmds() is
-> called then the completion code may crash on the complete() call in
-> __ufshcd_transfer_req_compl(). This patch fixes the following crash:
-> 
-> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-> Call trace:
->  complete+0x64/0x178
->  __ufshcd_transfer_req_compl+0x30c/0x9c0
->  ufshcd_poll+0xf0/0x208
->  ufshcd_sl_intr+0xb8/0xf0
->  ufshcd_intr+0x168/0x2f4
->  __handle_irq_event_percpu+0xa0/0x30c
->  handle_irq_event+0x84/0x178
->  handle_fasteoi_irq+0x150/0x2e8
->  __handle_domain_irq+0x114/0x1e4
->  gic_handle_irq.31846+0x58/0x300
->  el1_irq+0xe4/0x1c0
->  efi_header_end+0x110/0x680
->  __irq_exit_rcu+0x108/0x124
->  __handle_domain_irq+0x118/0x1e4
->  gic_handle_irq.31846+0x58/0x300
->  el1_irq+0xe4/0x1c0
->  cpuidle_enter_state+0x3ac/0x8c4
->  do_idle+0x2fc/0x55c
->  cpu_startup_entry+0x84/0x90
->  kernel_init+0x0/0x310
->  start_kernel+0x0/0x608
->  start_kernel+0x4ec/0x608
+> During system shutdown or reboot, mpt3sas will reset the firmware back to
+> ready state. However, the driver leaves running a watchdog work item
+> intended to keep the firmware in operational state. This causes a second,
+> unneeded reset on shutdown and moves the firmware back to operational
+> instead of in ready state as intended. And if the mpt3sas_fwfault_debug
+> module parameter is set, this extra reset also panics the system.
 > 
 > [...]
 
 Applied to 5.19/scsi-fixes, thanks!
 
-[1/1] scsi: ufs: Fix a race condition related to device management
-      https://git.kernel.org/mkp/scsi/c/f5c2976e0cb0
+[1/1] scsi: mpt3sas: Stop fw fault watchdog work item during system shutdown
+      https://git.kernel.org/mkp/scsi/c/0fde22c5420e
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
