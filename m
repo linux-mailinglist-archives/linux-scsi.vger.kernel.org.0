@@ -2,42 +2,42 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6D25820B4
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jul 2022 09:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB5C5820BE
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 Jul 2022 09:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiG0HIq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 Jul 2022 03:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
+        id S229907AbiG0HKh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 Jul 2022 03:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiG0HIp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jul 2022 03:08:45 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCAB31DD8
-        for <linux-scsi@vger.kernel.org>; Wed, 27 Jul 2022 00:08:44 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220727070842epoutp038fe16b15fc0fd7c5c2730334d4a8a0a6~FnfciWLk02506225062epoutp03K
-        for <linux-scsi@vger.kernel.org>; Wed, 27 Jul 2022 07:08:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220727070842epoutp038fe16b15fc0fd7c5c2730334d4a8a0a6~FnfciWLk02506225062epoutp03K
+        with ESMTP id S229922AbiG0HK3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 Jul 2022 03:10:29 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8346C380
+        for <linux-scsi@vger.kernel.org>; Wed, 27 Jul 2022 00:10:27 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220727071026epoutp01c03ba1c003902601572cb35d1462f16c~Fng88NaHC2179821798epoutp01w
+        for <linux-scsi@vger.kernel.org>; Wed, 27 Jul 2022 07:10:26 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220727071026epoutp01c03ba1c003902601572cb35d1462f16c~Fng88NaHC2179821798epoutp01w
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1658905722;
-        bh=kE5ExXSvw6fqt9zPwb7EORYse8FtwZoVjEh3xB9n0C0=;
+        s=mail20170921; t=1658905826;
+        bh=yAjYthTYZ1VyQYto1gO6QWEcENXGTa9Eb2Hnw6HNmz0=;
         h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=YEIc68ecIl0VBnlF09hJ/xYhEzUQIU7tI29juoXyIzKnN9HiFsUDfgS74DctQ76Yc
-         RAp4rsMQKrzTttsh0IClYy4Nna89DZ/3VOvuvMVgOBLrLwmAYjdUzzKLl9YygucTXQ
-         ZqSTr5B6xBIA7zFXU7t3pyKtoY+M7/uGSrq0feTA=
+        b=IATVFzNG57C5SWtHwqD6uoLNgBrR6gOuHyT3y4UNJ+tn4bVknZC1KAFLpx3tNKZKI
+         ebUNs+jmQYh+NSXRvL6yQN5BhZVz0rGozXV5fzFI5I3bLNeavLFmAwIoYXs+TdnPGJ
+         u1YGWj9m6sfrjgTgVKzlFvIjK20IZ6sPAbsDr8NE=
 Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220727070842epcas2p11f795dedb46f6256ec7e3053fa07bf98~FnfcGHI4m2410824108epcas2p1n;
-        Wed, 27 Jul 2022 07:08:42 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.68]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Lt4d552GFz4x9QB; Wed, 27 Jul
-        2022 07:08:41 +0000 (GMT)
-X-AuditID: b6c32a47-5f7ff700000025aa-3f-62e0e479e8f9
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EF.45.09642.974E0E26; Wed, 27 Jul 2022 16:08:41 +0900 (KST)
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220727071025epcas2p291524394ff894074012c809c4472ef65~Fng8ecihB1321913219epcas2p2R;
+        Wed, 27 Jul 2022 07:10:25 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Lt4g51fryz4x9Pv; Wed, 27 Jul
+        2022 07:10:25 +0000 (GMT)
+X-AuditID: b6c32a48-9e1ff700000025be-ed-62e0e4e1d6e9
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E1.47.09662.1E4E0E26; Wed, 27 Jul 2022 16:10:25 +0900 (KST)
 Mime-Version: 1.0
-Subject: [PATCH v4 4/7] scsi: ufs: wb: Add explicit flush sysfs attribute
+Subject: [PATCH v4 5/7] scsi: ufs: wb: Add ufshcd_is_wb_buf_flush_allowed()
 Reply-To: j-young.choi@samsung.com
 Sender: Jinyoung CHOI <j-young.choi@samsung.com>
 From:   Jinyoung CHOI <j-young.choi@samsung.com>
@@ -52,46 +52,47 @@ To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 X-Priority: 3
 X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220727070724epcms2p8e449d0c89b52f03a9d3dc254df0ec547@epcms2p8>
+In-Reply-To: <20220727070841epcms2p5e212d617dd0f985555fa052f099013f0@epcms2p5>
 X-CPGS-Detection: blocking_info_exchange
 X-Drm-Type: N,general
 X-Msg-Generator: Mail
 X-Msg-Type: PERSONAL
 X-Reply-Demand: N
-Message-ID: <20220727070841epcms2p5e212d617dd0f985555fa052f099013f0@epcms2p5>
-Date:   Wed, 27 Jul 2022 16:08:41 +0900
-X-CMS-MailID: 20220727070841epcms2p5e212d617dd0f985555fa052f099013f0
+Message-ID: <20220727071024epcms2p70366b54ac8eca3758b7cf4336e0d457c@epcms2p7>
+Date:   Wed, 27 Jul 2022 16:10:24 +0900
+X-CMS-MailID: 20220727071024epcms2p70366b54ac8eca3758b7cf4336e0d457c
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 X-CPGSPASS: Y
 X-CPGSPASS: Y
 CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLJsWRmVeSWpSXmKPExsWy7bCmuW7lkwdJBvd2KlucfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Vi2oefzBYvD2laLLqxjcni8q45bBbd13ewWSw//o/Jgcvj8hVvj8V7XjJ5
-        TFh0gNHj+/oONo+PT2+xePRtWcXo8XmTnEf7gW6mAI6obJuM1MSU1CKF1Lzk/JTMvHRbJe/g
-        eOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoBOVFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnF
-        JbZKqQUpOQXmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZT9s7mArOalTMW2TVwPhAsYuRk0NC
-        wETi+vw1bF2MXBxCAjsYJTpONDF1MXJw8AoISvzdIQxSIyzgKTG78zUbiC0koCRxbs0sRpAS
-        YQEDiVu95iBhNgE9iZ9LZoCNERE4yyyx8OEUJoj5vBIz2p+yQNjSEtuXb2UEsTkF/CRa575k
-        hYhrSPxY1ssMYYtK3Fz9lh3Gfn9sPiOELSLReu8sVI2gxIOfu6HikhKHDn1lA7lHQiBfYsOB
-        QIhwjcTb5QegSvQlrnVsBDuBV8BXYuvsV2AfsgioSvRfs4IocZG49+8w2HRmAXmJ7W/nMIOU
-        MAtoSqzfpQ8xXFniyC0WmJ8aNv5mR2czC/BJdBz+CxffMe8JE0SrmsSiJiOIsIzE18Pz2Scw
-        Ks1CBPIsJGtnIaxdwMi8ilEstaA4Nz212KjAGB6tyfm5mxjB6VTLfQfjjLcf9A4xMnEwHmKU
-        4GBWEuFNiL6fJMSbklhZlVqUH19UmpNafIjRFOjficxSosn5wISeVxJvaGJpYGJmZmhuZGpg
-        riTO65WyIVFIID2xJDU7NbUgtQimj4mDU6qBye8+Q3Dxk+iDjCwvAnkOBWxa7VHkku+yKGfL
-        k2zrieWOhmyrWRb8fP58H4NvY5PsnVeW9ts3Lag087L5+oHNe2ZicHX1HcHpGlwTnzvmLYxU
-        vvp36pdW3rQ1jAev5RYltbf8nKFbvWBLUFyxhaG4zp/r22cYuXZ0/l+g4eV+bInH5EKWvOzo
-        3Xl+GpI9HE0i+9ateHV1i8PysEsi9W4ZClIFeT0qK7SF+PYsedcTqfEx/NTZtEtrc3T4lPbL
-        JjxLT9pZE2tyanP1k1mqqnd6Ledu+ngvy+ofq6PltNu21+LKN9caJemw8NZt+TpD5LDC46M/
-        GJ8uKdR1kd3NcW6K/vb3VwVX85255DTFwTxFiaU4I9FQi7moOBEAxc1ldzAEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmme7DJw+SDD4fYbM4+WQNm8WDedvY
+        LF7+vMpmcfBhJ4vFtA8/mS1eHtK0WHRjG5PF5V1z2Cy6r+9gs1h+/B+TA5fH5SveHov3vGTy
+        mLDoAKPH9/UdbB4fn95i8ejbsorR4/MmOY/2A91MARxR2TYZqYkpqUUKqXnJ+SmZeem2St7B
+        8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QCcqKZQl5pQChQISi4uV9O1sivJLS1IVMvKL
+        S2yVUgtScgrMC/SKE3OLS/PS9fJSS6wMDQyMTIEKE7Izbt6+wl6wWrji5ffUBsbjAl2MnBwS
+        AiYSs1s+MYPYQgI7GCVWfNXsYuTg4BUQlPi7QxgkLCzgLfHv2WUWiBIliXNrZjGClAgLGEjc
+        6jUHCbMJ6En8XDKDrYuRi0NE4CyzxMKHU5ggxvNKzGh/ygJhS0tsX76VEcTmFPCTeDJzPitE
+        XEPix7JeZghbVOLm6rfsMPb7Y/MZIWwRidZ7Z6FqBCUe/NwNFZeUOHToKxvIPRIC+RIbDgRC
+        hGsk3i4/AFWiL3GtYyMLxFe+EvcmxIOEWQRUJU6svwtV4iLxafk3MJtZQF5i+9s5zCDlzAKa
+        Eut36UMMV5Y4cosF5qeGjb/Z0dnMAnwSHYf/wsV3zHvCBNGqJrGoyQgiLCPx9fB89gmMSrMQ
+        gTwLydpZCGsXMDKvYhRLLSjOTU8tNiowgcdqcn7uJkZwMtXy2ME4++0HvUOMTByMhxglOJiV
+        RHgTou8nCfGmJFZWpRblxxeV5qQWH2I0BXp4IrOUaHI+MJ3nlcQbmlgamJiZGZobmRqYK4nz
+        eqVsSBQSSE8sSc1OTS1ILYLpY+LglGpgckxn+v89mn21VGdx2sFN/yZ9LQ44LvnuP1shT/8u
+        oc7001JKwifP/Y8+Mvmr4+QlHv6fLoTbZDxrfqByX3LHmRXXpz/pMn812f/NkRdKr6cwitxX
+        VkirvtUdHDvTNvDKj8zHEz6JzGH059p1btXV2erLdnuVsPZ07ouO/nJO2WatyVdOJ/aCzpyL
+        5RLLXJnd3Y7vXXiCKc6jUeF63GrbHYuNlJ5Y+V7YZpvKrnonLjFp/bSFFglybd9Un+iETI3p
+        87nwMMWu4q5hrMzx0ms8EbMdT5cVPl98PatdUye+u/jCv8jtT9qZZhXGqmvKn2XqrVfcG+zY
+        fbjd+oNm8xvtdr7bf+aUNlXNn3zX/fp8JZbijERDLeai4kQATm7UfS8EAAA=
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
 X-CMS-RootMailID: 20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d
-References: <20220727070724epcms2p8e449d0c89b52f03a9d3dc254df0ec547@epcms2p8>
+References: <20220727070841epcms2p5e212d617dd0f985555fa052f099013f0@epcms2p5>
+        <20220727070724epcms2p8e449d0c89b52f03a9d3dc254df0ec547@epcms2p8>
         <20220727070410epcms2p5206785e4d960b32dcbb6729710dab535@epcms2p5>
         <20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p6>
-        <CGME20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p5>
+        <CGME20220727065904epcms2p60a7a56101785ddefa55c82b3cc25116d@epcms2p7>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
@@ -102,157 +103,73 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There is the following quirk to bypass "WB Flush" in Write Booster.
-
+The explicit flushing should check the following.
+	- UFSHCD_CAP_WB_EN
 	- UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL
 
-If this quirk is not set, there is no knob that can control "WB Flush".
-
-There are three flags that control Write Booster Feature.
-	1. WB ON/OFF
-	2. WB Hibern Flush ON/OFF (implicitly)
-	3. WB Flush ON/OFF (explicit)
-
-The sysfs attribute that controls the WB was implemented. (1)
-
-In the case of "Hibern Flush", it is always good to turn on.
-Control may not be required. (2)
-
-Finally, "Flush" may be necessary because the Auto-Hibern8 is not
-supported in a specific environment.
-So the sysfs attribute that controls this is necessary. (3)
+Changed to improve readability.
 
 Reviewed-by: Avri Altman <avri.altman@wdc.com>
 Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
 ---
- drivers/ufs/core/ufs-sysfs.c | 45 ++++++++++++++++++++++++++++++++++++
- drivers/ufs/core/ufshcd.c    |  9 ++++----
- include/ufs/ufshcd.h         |  1 +
- 3 files changed, 51 insertions(+), 4 deletions(-)
+ drivers/ufs/core/ufs-sysfs.c | 3 +--
+ drivers/ufs/core/ufshcd.c    | 5 +++--
+ include/ufs/ufshcd.h         | 6 ++++++
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-index 0a088b47d557..e7800e49998a 100644
+index e7800e49998a..63b02b2541c8 100644
 --- a/drivers/ufs/core/ufs-sysfs.c
 +++ b/drivers/ufs/core/ufs-sysfs.c
-@@ -254,6 +254,49 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
- 	return res < 0 ? res : count;
- }
+@@ -271,8 +271,7 @@ static ssize_t wb_buf_flush_en_store(struct device *dev,
+ 	unsigned int wb_buf_flush_en;
+ 	ssize_t res;
  
-+static ssize_t wb_buf_flush_en_show(struct device *dev,
-+				    struct device_attribute *attr,
-+				    char *buf)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", hba->dev_info.wb_buf_flush_enabled);
-+}
-+
-+static ssize_t wb_buf_flush_en_store(struct device *dev,
-+				     struct device_attribute *attr,
-+				     const char *buf, size_t count)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	unsigned int wb_buf_flush_en;
-+	ssize_t res;
-+
-+	if (ufshcd_is_wb_allowed(hba) &&
-+	   !(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL)) {
-+		dev_warn(dev, "It is not allowed to configure WB buf flush!\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	if (kstrtouint(buf, 0, &wb_buf_flush_en))
-+		return -EINVAL;
-+
-+	if (wb_buf_flush_en != 0 && wb_buf_flush_en != 1)
-+		return -EINVAL;
-+
-+	down(&hba->host_sem);
-+	if (!ufshcd_is_user_access_allowed(hba)) {
-+		res = -EBUSY;
-+		goto out;
-+	}
-+
-+	ufshcd_rpm_get_sync(hba);
-+	res = ufshcd_wb_toggle_buf_flush(hba, wb_buf_flush_en);
-+	ufshcd_rpm_put_sync(hba);
-+out:
-+	up(&hba->host_sem);
-+	return res < 0 ? res : count;
-+}
-+
- static DEVICE_ATTR_RW(rpm_lvl);
- static DEVICE_ATTR_RO(rpm_target_dev_state);
- static DEVICE_ATTR_RO(rpm_target_link_state);
-@@ -262,6 +305,7 @@ static DEVICE_ATTR_RO(spm_target_dev_state);
- static DEVICE_ATTR_RO(spm_target_link_state);
- static DEVICE_ATTR_RW(auto_hibern8);
- static DEVICE_ATTR_RW(wb_on);
-+static DEVICE_ATTR_RW(wb_buf_flush_en);
- 
- static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
- 	&dev_attr_rpm_lvl.attr,
-@@ -272,6 +316,7 @@ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
- 	&dev_attr_spm_target_link_state.attr,
- 	&dev_attr_auto_hibern8.attr,
- 	&dev_attr_wb_on.attr,
-+	&dev_attr_wb_buf_flush_en.attr,
- 	NULL
- };
- 
+-	if (ufshcd_is_wb_allowed(hba) &&
+-	   !(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL)) {
++	if (!ufshcd_is_wb_buf_flush_allowed(hba)) {
+ 		dev_warn(dev, "It is not allowed to configure WB buf flush!\n");
+ 		return -EOPNOTSUPP;
+ 	}
 diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 52377fedae49..a8a797e0033d 100644
+index a8a797e0033d..17a14b046c44 100644
 --- a/drivers/ufs/core/ufshcd.c
 +++ b/drivers/ufs/core/ufshcd.c
-@@ -267,7 +267,6 @@ static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
- static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
- static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
- 						 bool enable);
--static void ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable);
- static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
- static void ufshcd_hba_vreg_set_hpm(struct ufs_hba *hba);
+@@ -294,7 +294,8 @@ static void ufshcd_wb_set_default_flags(struct ufs_hba *hba)
+ 	ufshcd_wb_toggle(hba, true);
  
-@@ -5767,24 +5766,26 @@ static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
- 			__func__, enable ? "enabled" : "disabled");
- }
- 
--static void ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable)
-+int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable)
- {
- 	int ret;
- 
- 	if (hba->dev_info.wb_buf_flush_enabled == enable)
--		return;
-+		return 0;
- 
- 	ret = __ufshcd_wb_toggle(hba, enable, QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN);
- 	if (ret) {
- 		dev_err(hba->dev, "%s WB-Buf Flush %s failed %d\n", __func__,
- 			enable ? "enable" : "disable", ret);
--		return;
-+		return ret;
- 	}
- 
- 	hba->dev_info.wb_buf_flush_enabled = enable;
- 
- 	dev_dbg(hba->dev, "%s WB-Buf Flush %s\n",
- 			__func__, enable ? "enabled" : "disabled");
+ 	ufshcd_wb_toggle_buf_flush_during_h8(hba, true);
+-	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
 +
-+	return ret;
++	if (ufshcd_is_wb_buf_flush_allowed(hba))
+ 		ufshcd_wb_toggle_buf_flush(hba, true);
  }
  
- static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
+@@ -5816,7 +5817,7 @@ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
+ 
+ static void ufshcd_wb_force_disable(struct ufs_hba *hba)
+ {
+-	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
++	if (ufshcd_is_wb_buf_flush_allowed(hba))
+ 		ufshcd_wb_toggle_buf_flush(hba, false);
+ 
+ 	ufshcd_wb_toggle_buf_flush_during_h8(hba, false);
 diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 7fe1a926cd99..94bcfec98fb8 100644
+index 94bcfec98fb8..78adc556444a 100644
 --- a/include/ufs/ufshcd.h
 +++ b/include/ufs/ufshcd.h
-@@ -1211,6 +1211,7 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
- 			     enum query_opcode desc_op);
+@@ -1017,6 +1017,12 @@ static inline bool ufshcd_is_wb_allowed(struct ufs_hba *hba)
+ 	return hba->caps & UFSHCD_CAP_WB_EN;
+ }
  
- int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable);
-+int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable);
- int ufshcd_suspend_prepare(struct device *dev);
- int __ufshcd_suspend_prepare(struct device *dev, bool rpm_ok_for_spm);
- void ufshcd_resume_complete(struct device *dev);
++static inline bool ufshcd_is_wb_buf_flush_allowed(struct ufs_hba *hba)
++{
++	return ufshcd_is_wb_allowed(hba) &&
++		!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL);
++}
++
+ #define ufshcd_writel(hba, val, reg)	\
+ 	writel((val), (hba)->mmio_base + (reg))
+ #define ufshcd_readl(hba, reg)	\
 -- 
 2.25.1
