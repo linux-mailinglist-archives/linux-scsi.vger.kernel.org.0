@@ -2,103 +2,169 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34752586B1B
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Aug 2022 14:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA5E586B0E
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Aug 2022 14:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234934AbiHAMp0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 1 Aug 2022 08:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S234797AbiHAMo3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 1 Aug 2022 08:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234919AbiHAMow (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Aug 2022 08:44:52 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32C945F4C
-        for <linux-scsi@vger.kernel.org>; Mon,  1 Aug 2022 05:31:08 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id u76so12877303oie.3
-        for <linux-scsi@vger.kernel.org>; Mon, 01 Aug 2022 05:31:08 -0700 (PDT)
+        with ESMTP id S232240AbiHAMoO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Aug 2022 08:44:14 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6634D15C
+        for <linux-scsi@vger.kernel.org>; Mon,  1 Aug 2022 05:29:34 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id y15so10286913plp.10
+        for <linux-scsi@vger.kernel.org>; Mon, 01 Aug 2022 05:29:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc;
-        bh=kCSqCOP5NnmgqzMKAvoC+xj8lkHVueu0SPSEqGKA1Ew=;
-        b=TsnfoUQOE/+QihQpvQPinG0iQST10WRCiYY7OPfklMlHc3yLCUb+J4WfBxrvUnsgcA
-         JsL8sdk6n/vgVLN0HG5NnDn3vGPss1fXmTxWGyfPUcdI74xAAat/9mmhNbD9rWbpKYR7
-         TK37Uz+gt/MFEukcUJ7TK9mCsTmRcELTgWScfxOsbGx6kL7pl/1v57eImNAysunwYMiR
-         ICQqWOD9pvR+HK+WTYqzX9FSXE1qFeOJ+3s9watughqNJLXYQiP3OxMIlCxaDcxFTO49
-         wYj9W2DcoXd94Q7M5RIOTt+6d+A2Ov6/u34KM/rVjDV/TUH3IKp//prYQ7QVOmw/d75R
-         g8/A==
+        d=broadcom.com; s=google;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc;
+        bh=4zHClytxrViNWCJ6LsaaL6M4T3vucdUQqQ2rdsk/kcY=;
+        b=Z9Avgt4cFonx0bSn7MTi6cie1PA2mu32ga+aCDr1Chagv3lXD7jgR6iRwBmugwdo3O
+         c16WomeJ49OLhhIcA6jc9wuCcgJ2JaHmMegahWzNOYhZuensiGO+kR9wp+ilOBknBK25
+         5cL8zlXEyT1yy4VUssEnq+XfK4Wt6spSOkAGA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=kCSqCOP5NnmgqzMKAvoC+xj8lkHVueu0SPSEqGKA1Ew=;
-        b=WS6c2Y/Z37z2Phmie10sLPh9vf3yqJAa3Ompn/aDMc5Sf5AX2zc00KcM3CPG1VL/vf
-         jjEHBPK5igWVGlAQFb7aPHqdzIJuKUHnjwVTGP9aymIUj1ncn6ZImB+AHHsASSKvNEKy
-         Y49R7NXlGC5aLv4y9ADG6DUldZl093PuPASXn/25lje/mj1DZHf0QVtPCsVgJ5+0HRi6
-         /FHEhq0kZ78F8Zaoa+YZc/YqTP9I//s7GY6uSJKj09xN4A6usV6wEULeH013qb21okoX
-         oloF5DRLqMVQKjUQbCGQd3ZIQfS23Hz+EAEe9oPwCQoAZCiX/JUnfRB1KJNnEGR4OC1l
-         1t6w==
-X-Gm-Message-State: AJIora+A7LqWUPCbmsGdetdxEySu5y7NCCXrbtXnHud5Ozs3LZQDt9b2
-        GyqA05baC/ms9LF27fSaqOXLTAdDhvAvBRwhz2c=
-X-Google-Smtp-Source: AGRyM1sl5ROXbLLk18AVKg6UGR0eY5+mTpByIMK652n1RkTpFNnARd93odKe7mpLvmy/0eTH9N5uSPTSQ9voeyjQwMM=
-X-Received: by 2002:a05:6808:308c:b0:33a:73a9:a1ca with SMTP id
- bl12-20020a056808308c00b0033a73a9a1camr5979245oib.279.1659357068300; Mon, 01
- Aug 2022 05:31:08 -0700 (PDT)
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc;
+        bh=4zHClytxrViNWCJ6LsaaL6M4T3vucdUQqQ2rdsk/kcY=;
+        b=XXYBaz4tGoZqD11cOSkRr9sgQC9l4jz8prLnLZSBZecOTHuwlRvXUYYKniz+JOh4J0
+         gr/+SW7FYtsNuxJr9rztL3XWB0t1mmZBqQfCtyLRf+kZUdrswTFJuExOCe7PmKXFI7jW
+         FeTPfeVqU039aGncVwRICWp+JlzAOnNup2IsC9sfLUiKwOm0ku7WiKNh6v5DwwDt7Rzz
+         4GevLggsi3wf6nWmNazqOQzrRPn1af3hWRrSFbj5196NMUbr75IMi7XtKCQGPX+GwrZa
+         b0T3Xz9dkdzQZcIwLUFY53mfGXAVKEi4SpGAawwZcpPt0KV1wqi5AW7RuJLpaKNKzFCZ
+         B4Lg==
+X-Gm-Message-State: ACgBeo2Xc8Sc/b6N67q2fzhuuvANaeowJoM4Kj9Cu6OfvBoI3VxRwzHT
+        DvR9RqIdGWapHzfzj/Sanpij428jdsTjBLPm+/RI+Ua/Fxsf+eDFnhnYVURsrJ3qZcYcLnvNg2f
+        +OucNWEg9V9ce4tp7XARdef41O1N/xHg6+X11eWfnjYjSPX2D/Ujpk6BUw5HcUJdo8meNUV0jxi
+        4GVLcBxJZb
+X-Google-Smtp-Source: AA6agR4PwgiAMJf+GLFZBKqFi84gwNCscz5O1NZkQAkD50ckbBvu8GVcg5nHywKbVTlol8oyoCZL+Q==
+X-Received: by 2002:a17:902:d48a:b0:16b:f0be:4e15 with SMTP id c10-20020a170902d48a00b0016bf0be4e15mr16399946plg.155.1659356973749;
+        Mon, 01 Aug 2022 05:29:33 -0700 (PDT)
+Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
+        by smtp.gmail.com with ESMTPSA id u3-20020a17090add4300b001f260b1954bsm8931912pjv.13.2022.08.01.05.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 05:29:32 -0700 (PDT)
+From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Subject: [PATCH 0/4] mpt3sas: Few enhancements and fixes
+Date:   Mon,  1 Aug 2022 18:11:40 +0530
+Message-Id: <20220801124144.11458-1-sreekanth.reddy@broadcom.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Received: by 2002:a05:6850:e61c:b0:314:dc02:5b77 with HTTP; Mon, 1 Aug 2022
- 05:31:07 -0700 (PDT)
-Reply-To: lisarobinsongift02@gmail.com
-From:   Lisa Robinson <masesedinah132@gmail.com>
-Date:   Mon, 1 Aug 2022 15:31:07 +0300
-Message-ID: <CAPaG1UTtPJzROH7Hre+MncDRbLYWMSvtdHL3Cd4fV2b0JkgBww@mail.gmail.com>
-Subject: Donation
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000018ede05e52d271b"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:232 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [lisarobinsongift02[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [masesedinah132[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [masesedinah132[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---=20
-You were chosen by God to receive my Grant Donation of 1.200.000,00 =E2=82=
-=AC
-Please contact: Mrs Lisa Robinson via email:
-lisarobinsongift02@gmail.com
-Surname:
-Country:
-WhatsApp phone number:
+--000000000000018ede05e52d271b
+Content-Transfer-Encoding: 8bit
+
+Few enhancements and fixes of mpt3sas driver.
+
+Sreekanth Reddy (4):
+  mpt3sas: Don't change dma mask while reallocating pools
+  mpt3sas: Fix trace buffer registration failed
+  mpt3sas: Increase cmd_per_lun to 128
+  mpt3sas: Update driver version to 43.100.00.00
+
+ drivers/scsi/mpt3sas/mpt3sas_base.c  | 21 ++++++++++++++-------
+ drivers/scsi/mpt3sas/mpt3sas_base.h  |  4 ++--
+ drivers/scsi/mpt3sas/mpt3sas_ctl.c   |  4 ++++
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c |  2 +-
+ 4 files changed, 21 insertions(+), 10 deletions(-)
+
+-- 
+2.27.0
+
+
+--000000000000018ede05e52d271b
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+5AGo2E3pe+2yEgkxKvM2fnniZHUiSjbrfKk6nl9RIXPOKUP5HntZFdA5XuNYXWM+HPs3O0AJwBm/
+VCZsZtkjVjxeBmTXiXDnxytdsHdGrHGymPfjJYatDu6d1KRVDlMCAwEAAaOCAd0wggHZMA4GA1Ud
+DwEB/wQEAwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUu
+Z2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggr
+BgEFBQcwAYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
+YTIwMjAwTQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3
+Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4
+aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmww
+JwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
+BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUClVHbAvhzGT8
+s2/6xOf58NkGMQ8wDQYJKoZIhvcNAQELBQADggEBAENRsP1H3calKC2Sstg/8li8byKiqljCFkfi
+IhcJsjPOOR9UZnMFxAoH/s2AlM7mQDR7rZ2MxRuUnIa6Cp5W5w1lUJHktjCUHnQq5nIAZ9GH5SDY
+pgzbFsoYX8U2QCmkAC023FF++ZDJuc9aj0R/nhABxmUYErIze2jV/VO8Pj7TnCrBONZ/Qvf8G5CQ
+X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
+eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
+Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
+MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
+0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEFB4nrc4wx6X3yROsHT
+mo26IFXZKlU0IJQzZptHIhpYMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIyMDgwMTEyMjkzNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBkoIs36oaHfk31jf9NK0UsbuHfOiTGw7F/weK+
+ZommUbnI5lnL95MzsiRiyy7qV3Zw5V5Gbvnjiz03mnlB6oPJw6gxDT3bDhXFD/BgKkaHfnylkR+T
+hIeRdAREmLrMEJVmvV7wYQhF9semOhD1KPIDeyQVPLa8ENvvL7266ZsIY/zh3S6MBGMwwRVcqoNW
+4SzTjw+Eo7ferkWIF83vqZ241TTeZTD78wratodfDTlTjkIUUWj9HkFlTSDVpMfbTmsrXuYR3Uxj
+sLchNdL9KfAefwWpONhit9dpkb4DCaG3OHU1kgWJh/Ly7P3JeOIakBQJsTXkkxM82Gdf0Q/5ZImN
+--000000000000018ede05e52d271b--
