@@ -2,67 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F981587B81
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Aug 2022 13:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F0C587D05
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Aug 2022 15:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236614AbiHBLXm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 2 Aug 2022 07:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        id S236456AbiHBNYd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Aug 2022 09:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbiHBLXl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Aug 2022 07:23:41 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F01A3E740;
-        Tue,  2 Aug 2022 04:23:39 -0700 (PDT)
-Received: from kwepemi100016.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Lxsvs5jP5zWfFn;
-        Tue,  2 Aug 2022 19:19:37 +0800 (CST)
-Received: from canpemm500008.china.huawei.com (7.192.105.151) by
- kwepemi100016.china.huawei.com (7.221.188.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 2 Aug 2022 19:23:36 +0800
-Received: from canpemm500008.china.huawei.com ([7.192.105.151]) by
- canpemm500008.china.huawei.com ([7.192.105.151]) with mapi id 15.01.2375.024;
- Tue, 2 Aug 2022 19:23:36 +0800
-From:   "lijinlin (A)" <lijinlin3@huawei.com>
-To:     "lduncan@suse.com" <lduncan@suse.com>,
-        "cleech@redhat.com" <cleech@redhat.com>,
-        "michael.christie@oracle.com" <michael.christie@oracle.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "mark.mielke@gmail.com" <mark.mielke@gmail.com>
-CC:     "open-iscsi@googlegroups.com" <open-iscsi@googlegroups.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linfeilong <linfeilong@huawei.com>,
-        "liuzhiqiang (I)" <liuzhiqiang26@huawei.com>
-Subject: RE: [PATCH] scsi: iscsi: iscsi_tcp: Fix null-ptr-deref while calling
- getpeername()
-Thread-Topic: [PATCH] scsi: iscsi: iscsi_tcp: Fix null-ptr-deref while calling
- getpeername()
-Thread-Index: AQHYplPSHTFXshUY502LyLNPnnKlQa2bdgFg
-Date:   Tue, 2 Aug 2022 11:23:36 +0000
-Message-ID: <d8afc88468ab481eb325e842ad384e0e@huawei.com>
-References: <20220802101939.3972556-1-lijinlin3@huawei.com>
-In-Reply-To: <20220802101939.3972556-1-lijinlin3@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.179.2]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S236530AbiHBNYb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Aug 2022 09:24:31 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D3515828
+        for <linux-scsi@vger.kernel.org>; Tue,  2 Aug 2022 06:24:24 -0700 (PDT)
+X-UUID: 3dddcde822ac4d7084009516314908e3-20220802
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:0db3ca23-7438-442a-b340-359ad8491c8f,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:0f94e32,CLOUDID:c9ff05d1-841b-4e95-ad42-8f86e18f54fc,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 3dddcde822ac4d7084009516314908e3-20220802
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <peter.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 509659250; Tue, 02 Aug 2022 21:24:18 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 2 Aug 2022 21:24:17 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 2 Aug 2022 21:24:16 +0800
+From:   <peter.wang@mediatek.com>
+To:     <stanley.chu@mediatek.com>, <linux-scsi@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
+CC:     <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <powen.kao@mediatek.com>, <qilin.tan@mediatek.com>,
+        <lin.gui@mediatek.com>
+Subject: [PATCH v2 0/2] ufs: allow host driver disable wb toggle druing clock scaling
+Date:   Tue, 2 Aug 2022 21:24:12 +0800
+Message-ID: <20220802132414.32607-1-peter.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-So sorry, this patch has problem, please ignore.
+From: Peter Wang <peter.wang@mediatek.com>
 
-Thanks
-Li Jinlin
+Mediatek ufs do not want to toggle write booster during clock scaling. 
+This patch set allow host driver disable wb toggle during clock scaling.
+
+Peter Wang (2):
+  ufs: core: introduce a choice of wb toggle during clock scaling
+  ufs: host: support wb toggle with clock scaling
+
+ drivers/ufs/core/ufs-sysfs.c | 3 ++-
+ drivers/ufs/core/ufshcd.c    | 8 +++++---
+ drivers/ufs/host/ufs-qcom.c  | 2 +-
+ include/ufs/ufshcd.h         | 7 +++++++
+ 4 files changed, 15 insertions(+), 5 deletions(-)
+
+-- 
+2.18.0
+
