@@ -2,86 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE26B58762D
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Aug 2022 06:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FCA5877B5
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Aug 2022 09:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234754AbiHBEMV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Aug 2022 00:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
+        id S235893AbiHBHTC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Aug 2022 03:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232708AbiHBEMU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Aug 2022 00:12:20 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049EC18B0D
-        for <linux-scsi@vger.kernel.org>; Mon,  1 Aug 2022 21:12:19 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id j63so21896793ybb.13
-        for <linux-scsi@vger.kernel.org>; Mon, 01 Aug 2022 21:12:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mB9h8G9LJF8fW8nHybI8e5Iuu0xEFlrhVdl6RtAPL58=;
-        b=D8xqF6gqVwgRmjc6T7IFge/nqYPeDWoinA/3nld8iU+Rg3OvO70iE2v1rzUIrG8MZj
-         qGhIBy760M2U1mdG2ZYlat0wTNl05qOXhSP6ELrth4M0ansXNj/qv8lRqp1J5FwCrZVv
-         TJiUTFnl3jsOxN0b9vuw3V48OlVC0QBVetP5k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mB9h8G9LJF8fW8nHybI8e5Iuu0xEFlrhVdl6RtAPL58=;
-        b=pnuyyEpR+UFNf/fxs8Y3wiLhQGfKC7a+Vxo6jnU2PU7JsR11DGbXrykeiHhzXOH+QQ
-         AEO6MPIEUPfi8IO/jAwC7veEvfh1Qf3fPPAEq9fmIApczFQqJ0tGsKFxI09bTQsSc11r
-         PMz1oSqPCPX2nyoJ4JNV7F+mgSRkImSfooqNzvR/U9HkJ4HMJTbfLkaN1kXR2+llP/bf
-         dWUGwKBiNGlmJz/k8YQhqNztBXQKJuEyxSmlHaMD1oiuRdQ5vK2/03vx48dThcwBMQWy
-         96D+/R9Vh52D1QgOsOE3KTpOpZxllPUAJa01WGUwKI9I/kwSFVymv6gjdOb9IQu/bCFL
-         2BHg==
-X-Gm-Message-State: ACgBeo18iCqXbBU71D6LEYSts7kpTml1A0EXA+j3OB/cR6N9uyguNxYX
-        idJns3Dmt2f4uGVLNytDQ3I8coAjLOb5kmxndD6Z8A==
-X-Google-Smtp-Source: AA6agR4jGk7db6YnblMvl6gotI+dOcEvoOeEMq6XPSBgfWTyVIX+RKhIFBiQKVY7fmHKWFKz/7SAl7l1eDzedE16O98=
-X-Received: by 2002:a25:7cc2:0:b0:677:5a84:9f79 with SMTP id
- x185-20020a257cc2000000b006775a849f79mr4233940ybc.518.1659413538291; Mon, 01
- Aug 2022 21:12:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220802103643.v5.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
- <c4acb34f-7bba-336f-ddfc-a9c098f2c95f@acm.org> <CAONX=-cAW5UX__xu5y7NdtHkZq-YWmh_k=iFa5witdxw3xXkYA@mail.gmail.com>
- <d06d9625-8ef9-f385-a9c9-75c306a959ed@acm.org>
-In-Reply-To: <d06d9625-8ef9-f385-a9c9-75c306a959ed@acm.org>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Tue, 2 Aug 2022 14:12:07 +1000
-Message-ID: <CAONX=-fpMBSgMzdY9AnV3iJftv2+0UTiruMiR+Dt_dfwKEd6gA@mail.gmail.com>
-Subject: Re: [PATCH v5] ufs: core: print UFSHCD capabilities in controller's
- sysfs node
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S235835AbiHBHS6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Aug 2022 03:18:58 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7C546D88
+        for <linux-scsi@vger.kernel.org>; Tue,  2 Aug 2022 00:18:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=kanie@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VLAavpD_1659424729;
+Received: from localhost(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0VLAavpD_1659424729)
+          by smtp.aliyun-inc.com;
+          Tue, 02 Aug 2022 15:18:54 +0800
+From:   Guixin Liu <kanie@linux.alibaba.com>
+To:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH] scsi: megaraid_sas: fix double kfree
+Date:   Tue,  2 Aug 2022 15:18:49 +0800
+Message-Id: <1659424729-46502-1-git-send-email-kanie@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> Calling this the effective capabilities of the controller-device pair
-> sounds good to me. But please do not refer to hba->caps. I'd like to
-> rework hba->caps such that it only includes controller capabilities and
-> no information related to the WriteBooster. Additionally, several UFS
-> device capabilities that may be exported in the future are not
-> represented in hba->caps.
-So can you clarify where specifically do you want me to mention that?
-Should I name the directory "effective_capabilities" or the commit
-message?
-Thanks,
---Daniil
+When alloc log_to_span fail, call kfree(instance->ctrl_context) first,
+then jump to megasas_free_ctrl_mem() in megasas_init_fw(), call
+kfree(instance->ctrl_context) second.
+
+Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
+---
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index 5b5885d..3e9b2b0 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -5311,7 +5311,6 @@ void megasas_fusion_ocr_wq(struct work_struct *work)
+ 		if (!fusion->log_to_span) {
+ 			dev_err(&instance->pdev->dev, "Failed from %s %d\n",
+ 				__func__, __LINE__);
+-			kfree(instance->ctrl_context);
+ 			return -ENOMEM;
+ 		}
+ 	}
+-- 
+1.8.3.1
+
