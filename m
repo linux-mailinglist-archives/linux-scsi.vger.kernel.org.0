@@ -2,44 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74BD4587C4B
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Aug 2022 14:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6940587DD2
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Aug 2022 16:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236916AbiHBMVN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Aug 2022 08:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
+        id S237144AbiHBOCn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Aug 2022 10:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236338AbiHBMVM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Aug 2022 08:21:12 -0400
-Received: from smtpbg.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7E4CE3B;
-        Tue,  2 Aug 2022 05:21:07 -0700 (PDT)
-X-QQ-mid: bizesmtp64t1659442862t7nrn8ne
-Received: from kali.lan ( [125.69.43.47])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 02 Aug 2022 20:21:01 +0800 (CST)
-X-QQ-SSF: 01000000002000F0U000B00A0000020
-X-QQ-FEAT: 239gR2IZrluC1pAPMzCNZ8NMBaIrAycgGKaZ3zX/swGBEWqaiMTvbnFVcHmKI
-        +dWXvxpw3iwXhoP0LqwA2YT6zOSWDjjaDzQpQBQ8KJ+5L66mAqZy5ZoMOCalsE5y4lm/fgF
-        ho09gbsw+RG66qX26aSDbRlvNJg99hyN08Nt8HMGidr//Moop1rQR9hwZcdb8aqcJ6nuGxZ
-        ekHcQomlLsz5jYLqjNoKS9k9JP5KAIsCU69k27yzuZ+JN19tsZN/x+gXMi/khsJervIhB8+
-        dIkCYf74N1WBNN6MhW6Uana1r7DJO8w4/2xEkyQ6lEJjn04bPZQMho5aw+6qE1brEVf9+mv
-        oSC7DS5iNM5xhrc2cwimTkDPF1BM+TzWrnk0xRdvraGoKQJFNBpAfRHh8njXYVoet8ultnX
-X-QQ-GoodBg: 0
-From:   Jason Wang <wangborong@cdjrlc.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] target/pscsi: Fix comment typo
-Date:   Wed,  3 Aug 2022 04:21:00 +0800
-Message-Id: <20220802202100.9102-1-wangborong@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S237014AbiHBOCR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Aug 2022 10:02:17 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5182871C
+        for <linux-scsi@vger.kernel.org>; Tue,  2 Aug 2022 07:02:15 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id u1so11836414lfq.4
+        for <linux-scsi@vger.kernel.org>; Tue, 02 Aug 2022 07:02:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=0UzXuhE6yJcwl87VMTObzQUfGKkJDSW5LnrMp+jbqhs=;
+        b=Y4dHHvintKOmRVO2Ms2dA0ZqYrdCW9AvjR0/yNnXIS+sSWBfDv5V3Ck2AUg2AyYLj3
+         g9cxGOatvUFNKf7jOx6wWXNXSnE8EJpvSNPAx5MASiS8qtaEmUbelabEZlfFBUbqH31v
+         /8n1zvu8ORV1ywV9LZ1kwhoW2EK6tEGO9tGYphVeFjbm1p6NUniuOx7WNu43AoxzIyV9
+         MdxYkPnN3VIy6zMv/SgVDeBV84peCOpGRnNu1cRVmup1R+Xz8e7HVL1acOWw4tv0sz4g
+         H+OkMKVNCrwQGWRrEVoTTW0622hNPqTH+rYHTB0gqhuKam4I4M0RM+ncBZUCE+m7wIqB
+         6fAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=0UzXuhE6yJcwl87VMTObzQUfGKkJDSW5LnrMp+jbqhs=;
+        b=y37heJp7YmmEAgwpMYB9Xdp3F1TAq8I8GnQBu7OYMnKULGEAru0vxmc6SAvwxvev0K
+         yN2sD80NocG1tAx5cNW57TSKPVDa63Id67Z289VFBKFFf3pVcBZSbs9dPkxEfjPZeTcH
+         6yrBLsDZ+d0sfcUHZiW1yainECbnWCcPFb4QiVNRzJIT+TxPL5TIffF7mG8xCAsl6XXI
+         BGZz6OEb4xmzxMtReRwCXMnuhjAUC6IiBrHNf9qZogZdCvluuFfNrSgRXQWMC+ryyG+8
+         s37ApxcjlSPdpmcxgBFDeCIs2BGg2kTX5DYAj0Z4Crp3MrEXDLytnYvIk2HV3MkFMEH+
+         mMyw==
+X-Gm-Message-State: AJIora/kIoP4f1BFDOuFo7RnDWrIfGafIpe+vKry6tEobtjZmAciRQGF
+        z+QrJTrHzBW5ecAYzfXhsmwLayIkdD4Sz9DNNw==
+X-Google-Smtp-Source: AGRyM1ux1TT8aEvnhCvivua72XsQNagFqcnYuzYOVKOhiawf4AJLoxYkrXXFPqq6a221cDDRGzWuvKcefgs6rPMZbKI=
+X-Received: by 2002:a05:6512:1694:b0:48a:9d45:763f with SMTP id
+ bu20-20020a056512169400b0048a9d45763fmr7213036lfb.662.1659448933851; Tue, 02
+ Aug 2022 07:02:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        RDNS_NONE,SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=no
+References: <20220802132414.32607-1-peter.wang@mediatek.com>
+In-Reply-To: <20220802132414.32607-1-peter.wang@mediatek.com>
+From:   Stanley Chu <chu.stanley@gmail.com>
+Date:   Tue, 2 Aug 2022 22:02:02 +0800
+Message-ID: <CAGaU9a96uHTqaG_9n0jUVDuqfyzmD_hQE_h_n4rbUuS_u-6tUg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] ufs: allow host driver disable wb toggle druing
+ clock scaling
+To:     peter.wang@mediatek.com
+Cc:     stanley.chu@mediatek.com, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, avri.altman@wdc.com,
+        alim.akhtar@samsung.com, jejb@linux.ibm.com,
+        wsd_upstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        cc.chou@mediatek.com, chaotian.jing@mediatek.com,
+        jiajie.hao@mediatek.com, powen.kao@mediatek.com,
+        qilin.tan@mediatek.com, lin.gui@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,26 +72,30 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The double `calling' is duplicated in the comment, remove one.
+Hi Peter,
 
-Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
----
- drivers/target/target_core_pscsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, Aug 2, 2022 at 9:25 PM <peter.wang@mediatek.com> wrote:
+>
+> From: Peter Wang <peter.wang@mediatek.com>
+>
+> Mediatek ufs do not want to toggle write booster during clock scaling.
+> This patch set allow host driver disable wb toggle during clock scaling.
+>
+> Peter Wang (2):
+>   ufs: core: introduce a choice of wb toggle during clock scaling
+>   ufs: host: support wb toggle with clock scaling
+>
+>  drivers/ufs/core/ufs-sysfs.c | 3 ++-
+>  drivers/ufs/core/ufshcd.c    | 8 +++++---
+>  drivers/ufs/host/ufs-qcom.c  | 2 +-
+>  include/ufs/ufshcd.h         | 7 +++++++
+>  4 files changed, 15 insertions(+), 5 deletions(-)
+>
+> --
+> 2.18.0
+>
+Except for some typos in the commit messages, otherwise this series
+looks good to me.
 
-diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
-index e6a967ddc08c..245912fc209c 100644
---- a/drivers/target/target_core_pscsi.c
-+++ b/drivers/target/target_core_pscsi.c
-@@ -500,7 +500,7 @@ static int pscsi_configure_device(struct se_device *dev)
- 			continue;
- 		/*
- 		 * Functions will release the held struct scsi_host->host_lock
--		 * before calling calling pscsi_add_device_to_list() to register
-+		 * before calling pscsi_add_device_to_list() to register
- 		 * struct scsi_device with target_core_mod.
- 		 */
- 		switch (sd->type) {
--- 
-2.35.1
-
+Please feel free to add
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
