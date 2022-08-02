@@ -2,114 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B8E5884F4
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Aug 2022 01:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7314C5884E7
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Aug 2022 01:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235181AbiHBX4Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Aug 2022 19:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
+        id S234981AbiHBXyv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Aug 2022 19:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236205AbiHBX4J (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Aug 2022 19:56:09 -0400
-X-Greylist: delayed 901 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 Aug 2022 16:55:50 PDT
-Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6273DFBA
-        for <linux-scsi@vger.kernel.org>; Tue,  2 Aug 2022 16:55:49 -0700 (PDT)
-X-AuditID: a67dfc5b-1a5ff7000001a3fa-92-62e9b5fd7b78
-Received: from hymail21.hynixad.com (10.156.135.51) by hymail20.hynixad.com
- (10.156.135.50) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.986.15; Wed, 3 Aug 2022
- 08:40:45 +0900
-Received: from hymail21.hynixad.com ([10.156.135.51]) by hymail21.hynixad.com
- ([10.156.135.51]) with mapi id 15.02.0986.015; Wed, 3 Aug 2022 08:40:45 +0900
-From:   =?ks_c_5601-1987?B?waS/5MfRKEpPVU5HIFlPSEFOKSBNb2JpbGUgU0U=?= 
-        <yohan.joung@sk.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-CC:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Avri Altman" <avri.altman@wdc.com>, Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: RE: [PATCH v3] scsi: ufs: Increase the maximum data buffer size
-Thread-Topic: [PATCH v3] scsi: ufs: Increase the maximum data buffer size
-Thread-Index: AQHYoUKOvUbRZtx3z0GI27+IE7yewa2cTOUQ
-Date:   Tue, 2 Aug 2022 23:40:45 +0000
-Message-ID: <55fce3baaabf4e33aeaccbe5b4e1f145@sk.com>
-References: <20220726225232.1362251-1-bvanassche@acm.org>
-In-Reply-To: <20220726225232.1362251-1-bvanassche@acm.org>
-Accept-Language: ko-KR, en-US
-Content-Language: ko-KR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.152.36.223]
-Content-Type: text/plain; charset="ks_c_5601-1987"
-Content-Transfer-Encoding: base64
+        with ESMTP id S229648AbiHBXyu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Aug 2022 19:54:50 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F6E5464E;
+        Tue,  2 Aug 2022 16:54:42 -0700 (PDT)
+X-UUID: 29ffd97a8f0c475bbce18b9c714f8db8-20220803
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:290dd0ef-930b-4f35-ab16-617b4ca1eac6,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:90
+X-CID-INFO: VERSION:1.1.8,REQID:290dd0ef-930b-4f35-ab16-617b4ca1eac6,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:90
+X-CID-META: VersionHash:0f94e32,CLOUDID:377e1525-a982-4824-82d2-9da3b6056c2a,C
+        OID:7d9806452e3c,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 29ffd97a8f0c475bbce18b9c714f8db8-20220803
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 436032328; Wed, 03 Aug 2022 07:54:39 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 3 Aug 2022 07:54:38 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 3 Aug 2022 07:54:38 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <bvanassche@acm.org>
+CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
+        <mason.zhang@mediatek.com>, <qilin.tan@mediatek.com>,
+        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
+        <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <stanley.chu@mediatek.com>
+Subject: [PATCH v5 0/5] scsi: ufs-mediatek: Provide features and fixes in MediaTek platforms
+Date:   Wed, 3 Aug 2022 07:54:32 +0800
+Message-ID: <20220802235437.4547-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFLMWRmVeSWpSXmKPExsXCNUdUWffv1pdJBlceG1l0X9/B5sDo8XmT
-        XABjFJdNSmpOZllqkb5dAlfG/0nLGAvWSVecvXSKrYHxilQXIyeHhICJxOtzN5i6GLk4hARe
-        MUrs6bzCCOHMZZTY+/k8M0gVm0CUxOPWFewgtohAnETrrFdgRcwCV5gkJn38C5YQFvCQWPd5
-        BlCCA6jIU+L+lBCIeiOJt02fwOawCKhI/Dq9jAnE5hUwldhycCtYXEjAUuLC2s9gcU4BK4lL
-        f9pZQcYwCshKXL0mAxJmFhCXWPz1GjPE0QISS/ach7JFJV4+/scKYStK/P6zlRWi3khiyer5
-        TBC2osSU7ofsEGsFJU7OfMICUS8pcXDFDZYJjGKzkKyYhaR9FpL2WUjaFzCyrGIUyswry03M
-        zDHRy6jMy6zQS87P3cQIjJFltX+idzB+uhB8iFGAg1GJh/eD9cskIdbEsuLK3EOMEhzMSiK8
-        d1yeJwnxpiRWVqUW5ccXleakFh9ilOZgURLn/RaWmiAkkJ5YkpqdmlqQWgSTZeLglGpg7Bb1
-        mr7HPFxXaVGTwrbJ8f4ia0/zvhO2fdl1Jj3fc1LA15u/5qz9/qx1P3tp/MuXGy8t9Nn589Ok
-        4jtfj6Yr93yfvUQnksF39YwPEgySnctu9SVz+qgbd68TcFox4X6TboRxzLvpi/WXPT9aso+x
-        xyk0+U5p/aXgJ2HLds++b5L9pe2hYuk6cSWW4oxEQy3mouJEAHt1ggeNAgAA
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgYmFydA0KDQpJcyBpdCBwb3NzaWJsZSBieSBhZGRpbmcgb25seSBtYXhfc2VjdG9yIHRvIGlu
-Y3JlYXNlIHRoZSBkYXRhIGJ1ZmZlciBzaXplPw0KSSB0aGluayB0aGUgZGF0YSBidWZmZXIgd2ls
-bCBzcGxpdCB0byA1MTIgS2lCLCBiZWNhdXNlIHRoZSBzZ190YWJsZSBzaXplIGlzIFNHX0FMTA0K
-DQpUaGFua3MsDQp5b2hhbg0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206
-IEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPg0KPiBTZW50OiBXZWRuZXNkYXks
-IEp1bHkgMjcsIDIwMjIgNzo1MiBBTQ0KPiBUbzogTWFydGluIEsgLiBQZXRlcnNlbiA8bWFydGlu
-LnBldGVyc2VuQG9yYWNsZS5jb20+DQo+IENjOiBKYWVnZXVrIEtpbSA8amFlZ2V1a0BrZXJuZWwu
-b3JnPjsgbGludXgtc2NzaUB2Z2VyLmtlcm5lbC5vcmc7IEFkcmlhbg0KPiBIdW50ZXIgPGFkcmlh
-bi5odW50ZXJAaW50ZWwuY29tPjsgQmFydCBWYW4gQXNzY2hlIDxidmFuYXNzY2hlQGFjbS5vcmc+
-Ow0KPiBBdnJpIEFsdG1hbiA8YXZyaS5hbHRtYW5Ad2RjLmNvbT47IEJlYW4gSHVvIDxiZWFuaHVv
-QG1pY3Jvbi5jb20+OyBTdGFubGV5DQo+IENodSA8c3RhbmxleS5jaHVAbWVkaWF0ZWsuY29tPjsg
-SmFtZXMgRS5KLiBCb3R0b21sZXkgPGplamJAbGludXguaWJtLmNvbT47DQo+IE1hdHRoaWFzIEJy
-dWdnZXIgPG1hdHRoaWFzLmJnZ0BnbWFpbC5jb20+DQo+IFN1YmplY3Q6IFtQQVRDSCB2M10gc2Nz
-aTogdWZzOiBJbmNyZWFzZSB0aGUgbWF4aW11bSBkYXRhIGJ1ZmZlciBzaXplDQo+IA0KPiBNZWFz
-dXJlbWVudHMgZm9yIG9uZSBwYXJ0aWN1bGFyIFVGUyBjb250cm9sbGVyICsgVUZTIGRldmljZSBz
-aG93IGEgMjUlDQo+IGhpZ2hlciByZWFkIGJhbmR3aWR0aCBpZiB0aGUgbWF4aW11bSBkYXRhIGJ1
-ZmZlciBzaXplIGlzIGluY3JlYXNlZCBmcm9tDQo+IDUxMiBLaUIgdG8gMSBNaUIuIEhlbmNlIGlu
-Y3JlYXNlIHRoZSBtYXhpbXVtIHNpemUgb2YgdGhlIGRhdGEgYnVmZmVyDQo+IGFzc29jaWF0ZWQg
-d2l0aCBhIHNpbmdsZSByZXF1ZXN0IGZyb20gU0NTSV9ERUZBVUxUX01BWF9TRUNUT1JTICgxMDI0
-KQ0KPiAqIDUxMiBieXRlcyA9IDUxMiBLaUIgdG8gMSBNaUIuDQo+IA0KPiBOb3RlczoNCj4gLSBU
-aGUgbWF4aW11bSBkYXRhIGJ1ZmZlciBzaXplIHN1cHBvcnRlZCBieSB0aGUgVUZTSENJIHNwZWNp
-ZmljYXRpb24NCj4gICBpcyA2NTUzNSAqIDI1NiBLaUIgb3IgYWJvdXQgMTYgR2lCLg0KPiAtIFRo
-ZSBtYXhpbXVtIGRhdGEgYnVmZmVyIHNpemUgZm9yIFJFQUQoMTApIGNvbW1hbmRzIGlzIDY1NTM1
-IGxvZ2ljYWwNCj4gICBibG9ja3MuIFRvIHRyYW5zZmVyIG1vcmUgdGhhbiA2NTUzNSAqIDQwOTYg
-Ynl0ZXMgPSAyNTUgTWlCIHdpdGggYQ0KPiAgIHNpbmdsZSBTQ1NJIGNvbW1hbmQsIHRoZSBSRUFE
-KDE2KSBjb21tYW5kIGlzIHJlcXVpcmVkLiBTdXBwb3J0IGZvcg0KPiAgIFJFQUQoMTYpIGlzIG9w
-dGlvbmFsIGluIHRoZSBVRlMgMy4xIGFuZCBVRlMgNC4wIHN0YW5kYXJkcy4NCj4gDQo+IENjOiBB
-ZHJpYW4gSHVudGVyIDxhZHJpYW4uaHVudGVyQGludGVsLmNvbT4NCj4gQ2M6IEF2cmkgQWx0bWFu
-IDxhdnJpLmFsdG1hbkB3ZGMuY29tPg0KPiBDYzogQmVhbiBIdW8gPGJlYW5odW9AbWljcm9uLmNv
-bT4NCj4gQ2M6IFN0YW5sZXkgQ2h1IDxzdGFubGV5LmNodUBtZWRpYXRlay5jb20+DQo+IFNpZ25l
-ZC1vZmYtYnk6IEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPg0KPiAtLS0NCj4g
-Q2hhbmdlcyBjb21wYXJlZCB0byB2MjogY2hhbmdlZCBtYXhpbXVtIHRyYW5zZmVyIHNpemUgMjU1
-IE1pQiB0byAxIE1pQi4NCj4gQ2hhbmdlcyBjb21wYXJlZCB0byB2MTogY2hhbmdlZCBtYXhpbXVt
-IHRyYW5zZmVyIHNpemUgZnJvbSAxIEdpQiB0byAyNTUgTWlCLg0KPiANCj4gIGRyaXZlcnMvdWZz
-L2NvcmUvdWZzaGNkLmMgfCAxICsNCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0K
-PiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdWZzL2NvcmUvdWZzaGNkLmMgYi9kcml2ZXJzL3Vm
-cy9jb3JlL3Vmc2hjZC5jIGluZGV4DQo+IDM2YjcyMTJlOWNiNS4uNjc4YmM4ZDZkNmFhIDEwMDY0
-NA0KPiAtLS0gYS9kcml2ZXJzL3Vmcy9jb3JlL3Vmc2hjZC5jDQo+ICsrKyBiL2RyaXZlcnMvdWZz
-L2NvcmUvdWZzaGNkLmMNCj4gQEAgLTgzNjUsNiArODM2NSw3IEBAIHN0YXRpYyBzdHJ1Y3Qgc2Nz
-aV9ob3N0X3RlbXBsYXRlDQo+IHVmc2hjZF9kcml2ZXJfdGVtcGxhdGUgPSB7DQo+ICAJLmNtZF9w
-ZXJfbHVuCQk9IFVGU0hDRF9DTURfUEVSX0xVTiwNCj4gIAkuY2FuX3F1ZXVlCQk9IFVGU0hDRF9D
-QU5fUVVFVUUsDQo+ICAJLm1heF9zZWdtZW50X3NpemUJPSBQUkRUX0RBVEFfQllURV9DT1VOVF9N
-QVgsDQo+ICsJLm1heF9zZWN0b3JzCQk9ICgxIDw8IDIwKSAvIFNFQ1RPUl9TSVpFLCAvKiAxIE1p
-QiAqLw0KPiAgCS5tYXhfaG9zdF9ibG9ja2VkCT0gMSwNCj4gIAkudHJhY2tfcXVldWVfZGVwdGgJ
-PSAxLA0KPiAgCS5zZGV2X2dyb3VwcwkJPSB1ZnNoY2RfZHJpdmVyX2dyb3VwcywNCg==
+Hi Martin,
+
+This series provides some features and fixes in MediaTek UFS platforms.
+Please consider this patch series for kernel v5.20.
+
+Changes since v4:
+ - Fix typo in the patch "scsi: ufs: ufs-mediatek: Support clk-scaling to optimize power consumption"
+ 
+Changes since v3:
+ - Fix some type errors caught by Coverity Tool
+
+Changes since v2:
+ - Remove Change-ID tag in patch "scsi: ufs: ufs-mediatek: Remove redundant header files" (Bart)
+ - Move const string table to ufs-mediatek.c from ufs-mediatek.h (Bart)
+
+Changes since v1:
+ - Remove unnecessary changes in patch "scsi: ufs: ufs-mediatek: Fix performance scaling"
+
+Peter Wang (2):
+  scsi: ufs: ufs-mediatek: Dump more registers
+  scsi: ufs: ufs-mediatek: Fix performance scaling
+
+Po-Wen Kao (1):
+  scsi: ufs: ufs-mediatek: Support clk-scaling to optimize power
+    consumption
+
+Stanley Chu (2):
+  scsi: ufs: ufs-mediatek: Remove redundant header files
+  scsi: ufs: ufs-mediatek: Provide detailed description for UIC errors
+
+ drivers/ufs/host/ufs-mediatek-trace.h |  27 +++-
+ drivers/ufs/host/ufs-mediatek.c       | 205 +++++++++++++++++++++++++-
+ drivers/ufs/host/ufs-mediatek.h       |   7 +
+ 3 files changed, 230 insertions(+), 9 deletions(-)
+
+-- 
+2.18.0
+
