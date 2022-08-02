@@ -2,222 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DF05884C0
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Aug 2022 01:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B8E5884F4
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Aug 2022 01:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbiHBXgL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Aug 2022 19:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
+        id S235181AbiHBX4Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Aug 2022 19:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiHBXgK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Aug 2022 19:36:10 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FBEDF4D
-        for <linux-scsi@vger.kernel.org>; Tue,  2 Aug 2022 16:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1659483369; x=1691019369;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=N8wMYVdLrWmKyU/6iiST3jSGdiVrToaUwR5oSxGgUoI=;
-  b=mbC2oq9xWcG4O6IKJeWMwd5BSCyqNM5bi1DFmX5dyCug5jsaN2GqwO6g
-   IPnXyMb/Z8MWa3LlHUrNCgA98JW4aD0eac/VhcteCWokAYtRmFPdLepRX
-   8s9CH17dvTjZASH7xT7zbaCaXwO5YjSFOQcIC+ZmDphog4ISffFoszDln
-   S+fl40+lo397mb81BuAkxFK3hJcZwBwBR7Q1wcfixH1vOfUeibfQ+016p
-   9+O+z3wXuWYSZGVCDot/HPkewA0ABb4TmfdvV0IP/3XESIB1F6LZPDumB
-   F9eNqlyvhULgcgetloWnUkoNDBM00JLrn7/2hoseZ8HGmVkNJkcWheV5H
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,212,1654531200"; 
-   d="scan'208";a="212617222"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 03 Aug 2022 07:36:08 +0800
-IronPort-SDR: 1J6n9QXl4zD09Z+n/5w/sALTfrSo3jOEI33jMASMKtDFuk1z4P4q9zGBykBJLtwbRZzNc1WPgA
- LgnNWMa6pVTjRuFvmucl0QJW8yrwjdbOrzvl0oHB0ANh1G4jM85Amjd3UnMNS0HzCJIVJGggvC
- s7/8fJkFfoeu3yUp4e7UljxaCruC0LJcC/aOn+iuTTculgBSwF5J6a3kY8w6jdhTkHPg75B2E3
- gkIQfXyDq0qJKaV5bvK7F/jVnrC+eL0M6/ylCrOJVanXtEqaKJ4MMuFBoDFcan6AGXihFkC5Gb
- jwTTm8GfYq4xHK08NV6F27FC
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Aug 2022 15:52:05 -0700
-IronPort-SDR: ZT2WJhhBv8KNbiuSn+CiwiQqgUIqyvpNp6R/NeIHAfImdAYoqxCZzLo4VlMYT2yv/vnOJhH8A9
- 0uatIuq+FkEDW/u5SjgM6WjfK6rFipON36UM1M0z+wdC7nWFLiRw6C8irOAlWQ9idgrabZD6bv
- avphW+mUKR0KK8HG+qLndHlWNioo3tEH/3cLY/4X1WTqqk4oZBNJBGKPc+rHOdu+bzTo6FWgvJ
- 8sjhq9F6LBjaxbL+OBpCIycm9uspC+DV74vhAOxoDC3gpyZD3LHOgBljap3vu10ljvljLaN3BX
- L+8=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Aug 2022 16:36:09 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LyBFh362vz1Rwnx
-        for <linux-scsi@vger.kernel.org>; Tue,  2 Aug 2022 16:36:08 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1659483366; x=1662075367; bh=N8wMYVdLrWmKyU/6iiST3jSGdiVrToaUwR5
-        oSxGgUoI=; b=GQWLk8cF9274bPnl/xIVHxwqoV5OOiwLcp9VkWEy0eX75KoPvP8
-        SCXJThE/bbQkE/0TVe8tpZI/kw6BmKQry90kdqLIK8C0T81QxrIXL2q+/aUjMtdM
-        NKn/hlUnVXUcRvcgcfyNHdFKAq2kqRDZ7I69C3TgSEeOQVgt6qiVNQ6lIpkCubzN
-        43ud1YcF9irmsO7XmccTpnNhKxH24PrMQpqnJCwNpsAgpNwkCZd4mffb1de+ZTwM
-        pB5tWKMva2G0eQB2RX91qbAWVkoBPAd+nqTEoQsbagV2xXjztyJ6GgkjpajRH45J
-        XQQwQ84dyJWkUYES68VnWc0Ohm0Uw5vhfNA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id DskHe5qycA9G for <linux-scsi@vger.kernel.org>;
-        Tue,  2 Aug 2022 16:36:06 -0700 (PDT)
-Received: from [10.225.163.22] (unknown [10.225.163.22])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LyBFd5vJ3z1RtVk;
-        Tue,  2 Aug 2022 16:36:05 -0700 (PDT)
-Message-ID: <fdb96df5-a9a2-673a-6f4c-bef2f14c23cc@opensource.wdc.com>
-Date:   Wed, 3 Aug 2022 08:36:04 +0900
+        with ESMTP id S236205AbiHBX4J (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Aug 2022 19:56:09 -0400
+X-Greylist: delayed 901 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 Aug 2022 16:55:50 PDT
+Received: from invmail4.hynix.com (exvmail4.hynix.com [166.125.252.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6273DFBA
+        for <linux-scsi@vger.kernel.org>; Tue,  2 Aug 2022 16:55:49 -0700 (PDT)
+X-AuditID: a67dfc5b-1a5ff7000001a3fa-92-62e9b5fd7b78
+Received: from hymail21.hynixad.com (10.156.135.51) by hymail20.hynixad.com
+ (10.156.135.50) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.986.15; Wed, 3 Aug 2022
+ 08:40:45 +0900
+Received: from hymail21.hynixad.com ([10.156.135.51]) by hymail21.hynixad.com
+ ([10.156.135.51]) with mapi id 15.02.0986.015; Wed, 3 Aug 2022 08:40:45 +0900
+From:   =?ks_c_5601-1987?B?waS/5MfRKEpPVU5HIFlPSEFOKSBNb2JpbGUgU0U=?= 
+        <yohan.joung@sk.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Avri Altman" <avri.altman@wdc.com>, Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: RE: [PATCH v3] scsi: ufs: Increase the maximum data buffer size
+Thread-Topic: [PATCH v3] scsi: ufs: Increase the maximum data buffer size
+Thread-Index: AQHYoUKOvUbRZtx3z0GI27+IE7yewa2cTOUQ
+Date:   Tue, 2 Aug 2022 23:40:45 +0000
+Message-ID: <55fce3baaabf4e33aeaccbe5b4e1f145@sk.com>
+References: <20220726225232.1362251-1-bvanassche@acm.org>
+In-Reply-To: <20220726225232.1362251-1-bvanassche@acm.org>
+Accept-Language: ko-KR, en-US
+Content-Language: ko-KR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.152.36.223]
+Content-Type: text/plain; charset="ks_c_5601-1987"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 0/5] Fix mpt3sas driver sparse warnings
-Content-Language: en-US
-To:     matoro <matoro_mailinglist_kernel@matoro.tk>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        PDL-MPT-FUSIONLINUX <MPT-FusionLinux.pdl@broadcom.com>
-References: <20220307234854.148145-1-damien.lemoal@opensource.wdc.com>
- <yq1a6dzkcgb.fsf@ca-mkp.ca.oracle.com>
- <CAK=zhgosaNGejvNq9ANzhuHqwLSxfckfdhLAX_r2y=9DN=oAvA@mail.gmail.com>
- <13f2f53e87ff7b653c46c3da19ea8115@matoro.tk>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <13f2f53e87ff7b653c46c3da19ea8115@matoro.tk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFLMWRmVeSWpSXmKPExsXCNUdUWffv1pdJBlceG1l0X9/B5sDo8XmT
+        XABjFJdNSmpOZllqkb5dAlfG/0nLGAvWSVecvXSKrYHxilQXIyeHhICJxOtzN5i6GLk4hARe
+        MUrs6bzCCOHMZZTY+/k8M0gVm0CUxOPWFewgtohAnETrrFdgRcwCV5gkJn38C5YQFvCQWPd5
+        BlCCA6jIU+L+lBCIeiOJt02fwOawCKhI/Dq9jAnE5hUwldhycCtYXEjAUuLC2s9gcU4BK4lL
+        f9pZQcYwCshKXL0mAxJmFhCXWPz1GjPE0QISS/ach7JFJV4+/scKYStK/P6zlRWi3khiyer5
+        TBC2osSU7ofsEGsFJU7OfMICUS8pcXDFDZYJjGKzkKyYhaR9FpL2WUjaFzCyrGIUyswry03M
+        zDHRy6jMy6zQS87P3cQIjJFltX+idzB+uhB8iFGAg1GJh/eD9cskIdbEsuLK3EOMEhzMSiK8
+        d1yeJwnxpiRWVqUW5ccXleakFh9ilOZgURLn/RaWmiAkkJ5YkpqdmlqQWgSTZeLglGpg7Bb1
+        mr7HPFxXaVGTwrbJ8f4ia0/zvhO2fdl1Jj3fc1LA15u/5qz9/qx1P3tp/MuXGy8t9Nn589Ok
+        4jtfj6Yr93yfvUQnksF39YwPEgySnctu9SVz+qgbd68TcFox4X6TboRxzLvpi/WXPT9aso+x
+        xyk0+U5p/aXgJ2HLds++b5L9pe2hYuk6cSWW4oxEQy3mouJEAHt1ggeNAgAA
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/3/22 05:27, matoro wrote:
-> Hi folks, sorry for the lateness, unfortunately this is in fact broken 
-> on BE.  I use mpt3sas on sparc and my drives fail to come up on 5.19, 
-> bisected to this patchset.  Reverting both of the endian-related 
-> commits, b4efbec4c2a75b619fae4e8768be379e88c78687 and 
-> 7ab4d2441b952977556672c2fe3f4c2a698cbb37, allows it to boot.  However, 
-> after booting, I can't load any modules - everything errors with 
-> "disagrees about version of symbol module_layout".  I have completely 
-> wiped out kernel sources, the module tree, and the kernel image, 
-> rebuilding both from scratch with ONLY the revert patch applied, but I 
-> still can't load any modules.  Presumably it would work with 
-> CONFIG_MODVERSIONS=n, but these CRC checks are there for a reason and I 
-> can't tell if it has something to do with the revert or not.
-
-For b4efbec4c2a75b619fae4e8768be379e88c78687, removing the cpu_to_le32()
-call results in the bytes actually being reversed by writel()/readl() for
-your BE machine. So it looks like the values that need to be written to
-the HBA have to be in CPU endian, not le32. Should be easy to fix.
-And for 7ab4d2441b952977556672c2fe3f4c2a698cbb37, this looks like the same
-problem.
-
-I will be traveling and busy this week, but I can have a look at a fix
-next Monday. If the Broadcom folks can send a fix faster than that, that
-is of course welcome :)
-
-> 
-> $ modprobe --dump-modversions 
-> /lib/modules/5.19.0-gentoo-sparc64/kernel/fs/openpromfs/openpromfs.ko  | 
-> grep "module_layout"
-> 0xa6c23707      module_layout
-> $ grep "module_layout" /usr/src/linux/Module.symvers
-> 0xa6c23707      module_layout   vmlinux EXPORT_SYMBOL
-> 
-> If you need real hardware access and do not have any on hand, please 
-> reach out and I can provide temporary access!
-> 
-> Here is the full error on vanilla 5.19:
-> 
-> mpt3sas version 42.100.00.00 loaded
-> mpt2sas_cm0: 64 BIT PCI BUS DMA ADDRESSING SUPPORTED, total mem 
-> (32650280 kB)
-> mpt2sas_cm0: _base_wait_for_doorbell_not_used: failed due to timeout 
-> count(5000), doorbell_reg(18000000)!
-> mpt2sas_cm0: CurrentHostPageSize is 0: Setting default host page size to 
-> 4k
-> mpt2sas_cm0: MSI-X vectors supported: 1
->           no of cores: 64, max_msix_vectors: -1
-> mpt2sas_cm0:  0 1 1
-> mpt2sas_cm0: pci_alloc_irq_vectors failed (r=-22) !!!
-> mpt2sas_cm0: High IOPs queues : disabled
-> mpt2sas0: IO-APIC enabled: IRQ 4
-> mpt2sas_cm0: iomem(0x0000084100000000), mapped(0x(____ptrval____)), 
-> size(16384)
-> mpt2sas_cm0: ioport(0x0000085100000000), size(256)
-> mpt2sas_cm0: doorbell is in use (line=6869)
-> mpt2sas_cm0: _base_get_ioc_facts: handshake failed (r=-14)
-> mpt2sas_cm0: failure at 
-> drivers/scsi/mpt3sas/mpt3sas_scsih.c:12336/_scsih_probe()!
-> mpt2sas_cm1: 64 BIT PCI BUS DMA ADDRESSING SUPPORTED, total mem 
-> (32650280 kB)
-> mpt2sas_cm1: _base_wait_for_doorbell_not_used: failed due to timeout 
-> count(5000), doorbell_reg(18000000)!
-> mpt2sas_cm1: CurrentHostPageSize is 0: Setting default host page size to 
-> 4k
-> mpt2sas_cm1: MSI-X vectors supported: 1
->           no of cores: 64, max_msix_vectors: -1
-> mpt2sas_cm1:  0 1 1
-> mpt2sas_cm1: pci_alloc_irq_vectors failed (r=-22) !!!
-> mpt2sas_cm1: High IOPs queues : disabled
-> mpt2sas1: IO-APIC enabled: IRQ 5
-> mpt2sas_cm1: iomem(0x0000084120000000), mapped(0x(____ptrval____)), 
-> size(16384)
-> mpt2sas_cm1: ioport(0x0000085100002000), size(256)
-> mpt2sas_cm1: doorbell is in use (line=6869)
-> mpt2sas_cm1: _base_get_ioc_facts: handshake failed (r=-14)
-> mpt2sas_cm1: failure at 
-> drivers/scsi/mpt3sas/mpt3sas_scsih.c:12336/_scsih_probe()!
-> 
-> -------- Original Message --------
-> Subject: Re: [PATCH v3 0/5] Fix mpt3sas driver sparse warnings
-> Date: 2022-03-09 01:35
->  From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-> To: "Martin K. Petersen" <martin.petersen@oracle.com>
-> 
-> On Wed, Mar 9, 2022 at 9:26 AM Martin K. Petersen
-> <martin.petersen@oracle.com> wrote:
->>
->>
->> Sreekanth,
->>
->>> This series fix (remove) all sparse warnings generated when compiling
->>> the mpt3sas driver. All warnings are related to __iomem access and
->>> endianness.
->>
->> Please review this series and validate the patch 5 modification.
-> 
-> Martin,
-> This patch set looks good, but before acknowledging this patch set I
-> just wanted to do some basic testing on a big endian machine.
-> Currently I don't have a big endian machine, internally I am checking
-> to get access to big endian machines. Meanwhile if anyone does a basic
-> testing on any big endian machine then please let me know. I will add
-> the acknowledgement signature.
-> 
-> Thanks,
-> Sreekanth
-> 
->>
->> Thanks!
->>
->> --
->> Martin K. Petersen      Oracle Linux Engineering
-
-
--- 
-Damien Le Moal
-Western Digital Research
+SGkgYmFydA0KDQpJcyBpdCBwb3NzaWJsZSBieSBhZGRpbmcgb25seSBtYXhfc2VjdG9yIHRvIGlu
+Y3JlYXNlIHRoZSBkYXRhIGJ1ZmZlciBzaXplPw0KSSB0aGluayB0aGUgZGF0YSBidWZmZXIgd2ls
+bCBzcGxpdCB0byA1MTIgS2lCLCBiZWNhdXNlIHRoZSBzZ190YWJsZSBzaXplIGlzIFNHX0FMTA0K
+DQpUaGFua3MsDQp5b2hhbg0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206
+IEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPg0KPiBTZW50OiBXZWRuZXNkYXks
+IEp1bHkgMjcsIDIwMjIgNzo1MiBBTQ0KPiBUbzogTWFydGluIEsgLiBQZXRlcnNlbiA8bWFydGlu
+LnBldGVyc2VuQG9yYWNsZS5jb20+DQo+IENjOiBKYWVnZXVrIEtpbSA8amFlZ2V1a0BrZXJuZWwu
+b3JnPjsgbGludXgtc2NzaUB2Z2VyLmtlcm5lbC5vcmc7IEFkcmlhbg0KPiBIdW50ZXIgPGFkcmlh
+bi5odW50ZXJAaW50ZWwuY29tPjsgQmFydCBWYW4gQXNzY2hlIDxidmFuYXNzY2hlQGFjbS5vcmc+
+Ow0KPiBBdnJpIEFsdG1hbiA8YXZyaS5hbHRtYW5Ad2RjLmNvbT47IEJlYW4gSHVvIDxiZWFuaHVv
+QG1pY3Jvbi5jb20+OyBTdGFubGV5DQo+IENodSA8c3RhbmxleS5jaHVAbWVkaWF0ZWsuY29tPjsg
+SmFtZXMgRS5KLiBCb3R0b21sZXkgPGplamJAbGludXguaWJtLmNvbT47DQo+IE1hdHRoaWFzIEJy
+dWdnZXIgPG1hdHRoaWFzLmJnZ0BnbWFpbC5jb20+DQo+IFN1YmplY3Q6IFtQQVRDSCB2M10gc2Nz
+aTogdWZzOiBJbmNyZWFzZSB0aGUgbWF4aW11bSBkYXRhIGJ1ZmZlciBzaXplDQo+IA0KPiBNZWFz
+dXJlbWVudHMgZm9yIG9uZSBwYXJ0aWN1bGFyIFVGUyBjb250cm9sbGVyICsgVUZTIGRldmljZSBz
+aG93IGEgMjUlDQo+IGhpZ2hlciByZWFkIGJhbmR3aWR0aCBpZiB0aGUgbWF4aW11bSBkYXRhIGJ1
+ZmZlciBzaXplIGlzIGluY3JlYXNlZCBmcm9tDQo+IDUxMiBLaUIgdG8gMSBNaUIuIEhlbmNlIGlu
+Y3JlYXNlIHRoZSBtYXhpbXVtIHNpemUgb2YgdGhlIGRhdGEgYnVmZmVyDQo+IGFzc29jaWF0ZWQg
+d2l0aCBhIHNpbmdsZSByZXF1ZXN0IGZyb20gU0NTSV9ERUZBVUxUX01BWF9TRUNUT1JTICgxMDI0
+KQ0KPiAqIDUxMiBieXRlcyA9IDUxMiBLaUIgdG8gMSBNaUIuDQo+IA0KPiBOb3RlczoNCj4gLSBU
+aGUgbWF4aW11bSBkYXRhIGJ1ZmZlciBzaXplIHN1cHBvcnRlZCBieSB0aGUgVUZTSENJIHNwZWNp
+ZmljYXRpb24NCj4gICBpcyA2NTUzNSAqIDI1NiBLaUIgb3IgYWJvdXQgMTYgR2lCLg0KPiAtIFRo
+ZSBtYXhpbXVtIGRhdGEgYnVmZmVyIHNpemUgZm9yIFJFQUQoMTApIGNvbW1hbmRzIGlzIDY1NTM1
+IGxvZ2ljYWwNCj4gICBibG9ja3MuIFRvIHRyYW5zZmVyIG1vcmUgdGhhbiA2NTUzNSAqIDQwOTYg
+Ynl0ZXMgPSAyNTUgTWlCIHdpdGggYQ0KPiAgIHNpbmdsZSBTQ1NJIGNvbW1hbmQsIHRoZSBSRUFE
+KDE2KSBjb21tYW5kIGlzIHJlcXVpcmVkLiBTdXBwb3J0IGZvcg0KPiAgIFJFQUQoMTYpIGlzIG9w
+dGlvbmFsIGluIHRoZSBVRlMgMy4xIGFuZCBVRlMgNC4wIHN0YW5kYXJkcy4NCj4gDQo+IENjOiBB
+ZHJpYW4gSHVudGVyIDxhZHJpYW4uaHVudGVyQGludGVsLmNvbT4NCj4gQ2M6IEF2cmkgQWx0bWFu
+IDxhdnJpLmFsdG1hbkB3ZGMuY29tPg0KPiBDYzogQmVhbiBIdW8gPGJlYW5odW9AbWljcm9uLmNv
+bT4NCj4gQ2M6IFN0YW5sZXkgQ2h1IDxzdGFubGV5LmNodUBtZWRpYXRlay5jb20+DQo+IFNpZ25l
+ZC1vZmYtYnk6IEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPg0KPiAtLS0NCj4g
+Q2hhbmdlcyBjb21wYXJlZCB0byB2MjogY2hhbmdlZCBtYXhpbXVtIHRyYW5zZmVyIHNpemUgMjU1
+IE1pQiB0byAxIE1pQi4NCj4gQ2hhbmdlcyBjb21wYXJlZCB0byB2MTogY2hhbmdlZCBtYXhpbXVt
+IHRyYW5zZmVyIHNpemUgZnJvbSAxIEdpQiB0byAyNTUgTWlCLg0KPiANCj4gIGRyaXZlcnMvdWZz
+L2NvcmUvdWZzaGNkLmMgfCAxICsNCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0K
+PiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdWZzL2NvcmUvdWZzaGNkLmMgYi9kcml2ZXJzL3Vm
+cy9jb3JlL3Vmc2hjZC5jIGluZGV4DQo+IDM2YjcyMTJlOWNiNS4uNjc4YmM4ZDZkNmFhIDEwMDY0
+NA0KPiAtLS0gYS9kcml2ZXJzL3Vmcy9jb3JlL3Vmc2hjZC5jDQo+ICsrKyBiL2RyaXZlcnMvdWZz
+L2NvcmUvdWZzaGNkLmMNCj4gQEAgLTgzNjUsNiArODM2NSw3IEBAIHN0YXRpYyBzdHJ1Y3Qgc2Nz
+aV9ob3N0X3RlbXBsYXRlDQo+IHVmc2hjZF9kcml2ZXJfdGVtcGxhdGUgPSB7DQo+ICAJLmNtZF9w
+ZXJfbHVuCQk9IFVGU0hDRF9DTURfUEVSX0xVTiwNCj4gIAkuY2FuX3F1ZXVlCQk9IFVGU0hDRF9D
+QU5fUVVFVUUsDQo+ICAJLm1heF9zZWdtZW50X3NpemUJPSBQUkRUX0RBVEFfQllURV9DT1VOVF9N
+QVgsDQo+ICsJLm1heF9zZWN0b3JzCQk9ICgxIDw8IDIwKSAvIFNFQ1RPUl9TSVpFLCAvKiAxIE1p
+QiAqLw0KPiAgCS5tYXhfaG9zdF9ibG9ja2VkCT0gMSwNCj4gIAkudHJhY2tfcXVldWVfZGVwdGgJ
+PSAxLA0KPiAgCS5zZGV2X2dyb3VwcwkJPSB1ZnNoY2RfZHJpdmVyX2dyb3VwcywNCg==
