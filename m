@@ -2,171 +2,171 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520AA58964C
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Aug 2022 04:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CDD45896A3
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Aug 2022 05:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238079AbiHDCyi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Aug 2022 22:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
+        id S237086AbiHDDlT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Aug 2022 23:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237551AbiHDCyg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Aug 2022 22:54:36 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D335A88B
-        for <linux-scsi@vger.kernel.org>; Wed,  3 Aug 2022 19:54:34 -0700 (PDT)
-X-UUID: 587ca261bd4d4c01b462a9d8d0b7a7ec-20220804
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=1vI3wruLcjIYklT5fsqB4avGk8cA64Dy6aiHNB94GPM=;
-        b=IeYvkfjva9xVCiRaRv7mx+arRKZ/AHRXB9x1hsdtDG/zJibr8mFSiBAXibMDRhwvIGqJaqYBm4D4yC7uxQRnsrPI3ga+FVDInhNnOmC4xWraqzxNM/1/gZF9DaGMVlaBqi4xNZLLg7i+D+/Dg4QsgTSWhhX2rYjZaFom5f9HFdg=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.8,REQID:25e67dae-db11-44da-aacd-3ea982bbb38d,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:95
-X-CID-INFO: VERSION:1.1.8,REQID:25e67dae-db11-44da-aacd-3ea982bbb38d,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:95
-X-CID-META: VersionHash:0f94e32,CLOUDID:8b7e2dd1-841b-4e95-ad42-8f86e18f54fc,C
-        OID:005c62367045,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 587ca261bd4d4c01b462a9d8d0b7a7ec-20220804
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <peter.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1469363403; Thu, 04 Aug 2022 10:54:26 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 4 Aug 2022 10:54:25 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 4 Aug 2022 10:54:25 +0800
-From:   <peter.wang@mediatek.com>
-To:     <stanley.chu@mediatek.com>, <linux-scsi@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
-CC:     <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <powen.kao@mediatek.com>, <qilin.tan@mediatek.com>,
-        <lin.gui@mediatek.com>
-Subject: [PATCH v5] ufs: allow host driver to disable wb toggling during clock scaling
-Date:   Thu, 4 Aug 2022 10:54:22 +0800
-Message-ID: <20220804025422.18803-1-peter.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-MIME-Version: 1.0
+        with ESMTP id S231235AbiHDDlQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Aug 2022 23:41:16 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9196B3E767
+        for <linux-scsi@vger.kernel.org>; Wed,  3 Aug 2022 20:41:15 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2741iIKQ017622;
+        Thu, 4 Aug 2022 03:41:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=yQlj2iU1w0ab89y3jIU2VsAVbSHQoMlLV7ZDY0xggNM=;
+ b=mPm0wZmWkofLXPtvIAjJomQ7eJr8tmZ+kBy8Yo5H6iI2VWWOT0+p+IZYn9dnS4RklraP
+ Mmo0ts8VeQMki5Fvf03hEw8SYJjudUMSEgb7Ec+xROApAjhDf2G6W4jHmUFhorFjKtq0
+ mqnl2i5C8si6xrJvX7WthtMJ8cyjXJwyA0TAPBoJOew0NS/SH4oYYEcNFUNpyDk/5W1W
+ s7qOA9xvpmQOcsz+SUPPSPO5Q+IV9uGzh9XZivBQChehfTZi9PfIdyH9Wb0YpzYGCNbX
+ KG88pgUbcV+NiCG7ZbIFJNkSG0K4MflGeLaoOzvCDwXjbmgs6l/xXCPob3c38NoHLrlS bw== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3hmvh9ucvc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 04 Aug 2022 03:41:06 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 274007mE006766;
+        Thu, 4 Aug 2022 03:41:05 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3hmu33m5me-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 04 Aug 2022 03:41:05 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ITGnj9cjXCAYjI7+MG4ieepU0hQVF1jaiwr4Vab8DulCoh4C1RHxb3iZXFrLyelmHJBSsQNQyTdnvrKnjAdVeUGpNEQkZx6z+PWCwRlkTJMdqnATOaa5ykm8ipVoLUnBNYCeeUYGr61JVtN5NAExpTlhMPYnMb0wtdtmZrQJbnrVBZJkzH2LN8rbvTYVdT4ovgnHtVil3e1AsWsAqHH1XrU5YXc7dNpJfNE/+Gi1Ma/vLomLyulzI1CO0h6kG+ZirEywmvwhFsd/2Hpm43f3lYD35W9pQdQBVrHXAwAeaqRYXbu1Y+20enadyHERddJZ1UXXxYxKqRGZ7P0lDF9vEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yQlj2iU1w0ab89y3jIU2VsAVbSHQoMlLV7ZDY0xggNM=;
+ b=CfQnWDYEXBmIs2hT0Blyp3IAXaUHsih2PFU6ZOGiQiyPRYCuzgAL4FqKbf8pTApekd0PhXB5fs5+E7O0beNEKVkBLJEf0jpaV3fHbbytoS1wuV+DvI2K0wpnRYBwoz2+UGkL+YnPHvymjxGEW7y2k4IZrQg8wzL3P/r4W38DkNVhy7hbcN6/hA2uKrjjcKn6kFwdVrF9YvrROamlOlo9q1MgwYsj/lGvWSR+n6PuO5bZh5k91JzkZ2nq7zCO0vaK7KHpcOPOLMSg4z7FYKd5zMsB+2GGAuYJI+/+4drVRVDfGCEfpW+FwgzbGcleH/Gbx/DUsfOKiqMAcXgB+4kQoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yQlj2iU1w0ab89y3jIU2VsAVbSHQoMlLV7ZDY0xggNM=;
+ b=mhB5na9ECO3Vqg0F4oRV9XKt1JB+ZbKl+GTPtv1gY+84yhn4vfXWCiZoPPv/+b2JQ2EduY7hRnWP/ozNt9RWOmNo1qSPCB2aCkS+4cTykQ1SiJJu4cmqAd0Wg9FBIIpSIdNlH0ZrbrbWaRRymSDh0d4uQ2jK6cofjfZuLBiMCgY=
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
+ DM4PR10MB6037.namprd10.prod.outlook.com (2603:10b6:8:bb::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5504.14; Thu, 4 Aug 2022 03:41:03 +0000
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::8dee:d667:f326:1d50]) by DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::8dee:d667:f326:1d50%6]) with mapi id 15.20.5504.014; Thu, 4 Aug 2022
+ 03:41:02 +0000
+From:   Mike Christie <michael.christie@oracle.com>
+To:     jgross@suse.com, njavali@marvell.com, pbonzini@redhat.com,
+        jasowang@redhat.com, mst@redhat.com, stefanha@redhat.com,
+        oneukum@suse.com, manoj@linux.ibm.com, mrochs@linux.ibm.com,
+        ukrishn@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
+Subject: [PATCH 00/10] scsi: Fix internal host code use
+Date:   Wed,  3 Aug 2022 22:40:50 -0500
+Message-Id: <20220804034100.121125-1-michael.christie@oracle.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: CH0PR03CA0067.namprd03.prod.outlook.com
+ (2603:10b6:610:cc::12) To DM5PR10MB1466.namprd10.prod.outlook.com
+ (2603:10b6:3:b::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d3db7bf5-9fd8-44f3-3316-08da75cb2781
+X-MS-TrafficTypeDiagnostic: DM4PR10MB6037:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uepKXXnDf8fVZy/h6YSmgXi9AMItqLuMiheRTFGSLM78vMshBrXnGY9VsMMZsjR1XTBtbwd/lDijNV3XVwlTNpJor1MjyXuGdclbQry4eWIYRYURHCFzFHbKXQYEB6iICHczxxehhrLReGW1V0RHGtuR7jJ+oLBkersvbVCHzRMZqpbPf0KQtWFkNh8+nh8qDCropsQ+Wcb416FAzOzDuHGahVpkppZfHgSz3dWbSRidOGA3Cw1WbDuchDUdVbMvdr4TqUVHrx8FayzY5BT879uTr7dWOqOh+u5PWG7mpfkXQzmCfeciZYx3BkSDQXWCFCXCRrlaiLKERMuSQMvd4sy9RzG6Z/i489Av+rnOKwQr5pPma0J7zvIU1AnPl2VIIowcGH9WGxZxVuGDnXVgE4Zrd0or4p36ZI+BZ1ROS+NaZ37WcNyhIVP7I9nYef6kOKhOq3Y9xo5+lhRumLKdIWRSw2KVtKszuTAIy79BvB8kZMStKLdNK12q3d3GzxHfoh3Kr4GM0lRuSHeymkDsPRjpv/+Bkhbs5Qw4v+c8NoSGRt5Vf8QYMLKLXwqRBQxq0/1E8/k4X0c7r8B1vFg3Kbu4BqlhMUl1vjfHCiJPA5DwBtZ+0qIWzwe2JVZi14vbNNymNN7zDXqB3Ajf1w/LmkqbtDvPM6NU2vxKSrKe2vKl0+3oVuhALOc5FXeUGl/rYF0TQJBsY00B5J3abzd0tNH6al62lTBfETDjIByqjaDs+awDLr5rq4mKEJFZHJOjejh8MtRq633z1LKR8hgnkw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(376002)(346002)(366004)(396003)(136003)(1076003)(186003)(2616005)(41300700001)(6666004)(4744005)(6506007)(7416002)(36756003)(2906002)(5660300002)(478600001)(6486002)(66946007)(8676002)(86362001)(66476007)(8936002)(38100700002)(66556008)(921005)(83380400001)(6512007)(316002)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qfb/drg5U73cQnTQWeQZ5AWDBG2SXYTdr6Io1pkaHsnU12f4QPW8GWx4Ki6f?=
+ =?us-ascii?Q?Zp44InoGehOHSXviHELo77lvyZzteqH5/ANmN3f4taKNOS9TFTzD3EZ708ge?=
+ =?us-ascii?Q?eOjGRPy2ew+vkIpEVAsF+YhhUWBv86QA+SO4GHThbM5SWz0jsZaG1y0E7/RS?=
+ =?us-ascii?Q?5rqQmWgCx6HKlxMrEphuvjirJm9o//OvPOaKdlw+QBxJpKhx3UikTu4gUY7M?=
+ =?us-ascii?Q?vxp1koXq/H5NwvLfyfE15iAK8angoDHWThhDaDS1mqQ8wYtAm2Lu4QacBeJw?=
+ =?us-ascii?Q?HVKXhenIT4wXfMdgaJIeeR/70HPaPLLqh4Z23TRsaQ9Sb44ZymkE5Er2FH+E?=
+ =?us-ascii?Q?8PjyM07m6QEinsgFUS/iRf85tTnK1yWY4WyngY4WG0cHPC7ARgxczrGBlvlF?=
+ =?us-ascii?Q?jShRGf3MkCkfTMzCV7sWZgYx5ciaYjru/ZcTQ23/SdkF5av0yiiuV4eKiWdl?=
+ =?us-ascii?Q?Fy/auPTvAYuzBNOrdIIrPWvYiuTbIkAuWl7L+wreSC5dUQ5MtdagjxljcstF?=
+ =?us-ascii?Q?Xr0fXCZ2NGTva1v66+fKyqqCbRXSU0/RnQaLBvf4BB7JFECk3Fo+WosAAFn+?=
+ =?us-ascii?Q?VxzDD4mM2eQtaqsUCiEEl4fH0EkSAwLSqeWVYaQKMMRbVylUbcfYwD87Sx32?=
+ =?us-ascii?Q?lqXgVxysDMl/mOQfk7xHQtCNBhFWw0519muRTAb0ocG0Xc4jQehSHE58k/Z5?=
+ =?us-ascii?Q?h/sMAUJYvkQ9NZXR89/iDMWWForZ+fm+OYcEih/Vp922z7yyvgQt2/QRy1M9?=
+ =?us-ascii?Q?Atl2mRhjroq8k69KCIpjGzbKiBOd7bL2yQ2DAxn2dBZ4g67aSVUkNecXrIce?=
+ =?us-ascii?Q?vdGuS2BLOVujt0TxXkA+QLmMttfuoyt1QTVmUVnzlBk6hxVD4+Jx8HkCCyiY?=
+ =?us-ascii?Q?NxayNaxwKnPJ14DpFvEkGiqUKxgE9NfBsvx9nFVB5TNIek+EL6YjAjgTThsN?=
+ =?us-ascii?Q?ndMkhZfkaQRc41QWcjrvbrd/D3BJYk2DfIhxfL7JhE0ckOwc1g8W7eX9Ra1p?=
+ =?us-ascii?Q?EAZApI72ykBPoM7COaDhRi/GvisSdS9SvNrefIbDAdMq+s/XTWt2gSWJRgKb?=
+ =?us-ascii?Q?gmyHvDTLb33H+vTuuJlBQi5xy0jQ7WTeu61RAO2pHJJvSPW52GRITy0FiLfl?=
+ =?us-ascii?Q?1smCJ2qAwT7LK0bGfvPFZg23fnPlsY/oRQPj+DvgQ1nydzIEcmGuTeM8qsjA?=
+ =?us-ascii?Q?2IUbNmhbycbebhc24wqY2yiIuRcZggfyUXHEPNYC9ZZdlsXfySr35VNUZe7p?=
+ =?us-ascii?Q?9v4wDN0b86V8Khn1M8O6jzAv62r/bYmOpC075aVJKzXoIJ81FcMLiT3RnANY?=
+ =?us-ascii?Q?F5W0NGU3gc45WRfn6v/UImOyCrWou7R8lVXkATvgbQKAy7s7hFdI/TpuPeAK?=
+ =?us-ascii?Q?OFvTFu3KwyIguscZ64klpt+Wlo//6mD2DlpGfU+hnkBmDoDsARBwalRDKjEq?=
+ =?us-ascii?Q?e+5kg5lPWi1Ou3mmQVJUk17VrqTZAMO3iTKtymCR1K/PWwxBo8W8HhB2L5yL?=
+ =?us-ascii?Q?ZEQSMPIPDnDKLpunt4Jm8hm8+WxMBpNUMhtq2eBgeAXX5+nd3kG2a3FHse1v?=
+ =?us-ascii?Q?I3knx9R2KwTxWVlorVOd1PlyVexhOvmUlyjPpF3PJY/YD0l5aEZebLPUho7a?=
+ =?us-ascii?Q?PQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3db7bf5-9fd8-44f3-3316-08da75cb2781
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2022 03:41:02.8717
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oa5+RxEaH1djxJ+wQcagt2D0+Qtn3RDwOHU1s8trUbEPRvFweLHro8TQo7ckE8JP6q7Z4nEk5QK/lxQKXkhbRT60K/FFRMzIHJ78QqVZsKo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6037
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-03_07,2022-08-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 suspectscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2208040015
+X-Proofpoint-ORIG-GUID: vqS95gnIyibpPgYCIPLlHtjj3s5icPGV
+X-Proofpoint-GUID: vqS95gnIyibpPgYCIPLlHtjj3s5icPGV
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Peter Wang <peter.wang@mediatek.com>
+The following patches made over Martin's 5.20 staging branch fix an issue
+where we probably intended the host codes:
 
-Mediatek ufs do not want to toggle write booster during clock scaling.
-This patch allow host driver to disable wb toggling during clock scaling.
+DID_TARGET_FAILURE
+DID_NEXUS_FAILURE
+DID_ALLOC_FAILURE
+DID_MEDIUM_ERROR
 
-So, introduce a flag UFSHCD_CAP_WB_WITH_CLK_SCALING to decouple WB
-and clock scaling. UFSHCD_CAP_WB_WITH_CLK_SCALING only valid when
-UFSHCD_CAP_CLK_SCALING is set. Just like UFSHCD_CAP_HIBERN8_WITH_CLK_GATING
-is valid only when UFSHCD_CAP_CLK_GATING set.
+to be internal to scsi-ml, but at some point drivers started using them
+and the driver writers never updated scsi-ml.
 
-Set UFSHCD_CAP_WB_WITH_CLK_SCALING for qcom to compatible legacy design in
-the same time.
+The problem with drivers using them to tell scsi-ml there was an error
+is:
 
-Signed-off-by: Peter Wang <peter.wang@mediatek.com>
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/ufs/core/ufs-sysfs.c |  3 ++-
- drivers/ufs/core/ufshcd.c    |  8 +++++---
- drivers/ufs/host/ufs-qcom.c  |  2 +-
- include/ufs/ufshcd.h         | 11 +++++++++++
- 4 files changed, 19 insertions(+), 5 deletions(-)
+1. scsi_result_to_blk_status clears those codes, so they are not
+propagated upwards. SG IO/passthrough users will then not see an error
+and think a command was successful.
 
-diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
-index 0a088b47d557..7f41f2a69b04 100644
---- a/drivers/ufs/core/ufs-sysfs.c
-+++ b/drivers/ufs/core/ufs-sysfs.c
-@@ -225,7 +225,8 @@ static ssize_t wb_on_store(struct device *dev, struct
- device_attribute *attr,
- 	unsigned int wb_enable;
- 	ssize_t res;
- 
--	if (!ufshcd_is_wb_allowed(hba) || ufshcd_is_clkscaling_supported(hba)) {
-+	if (!ufshcd_is_wb_allowed(hba) || (ufshcd_is_clkscaling_supported(hba)
-+		&& ufshcd_enable_wb_if_scaling_up(hba))) {
- 		/*
- 		 * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
- 		 * on/off will be done while clock scaling up/down.
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index c7b337480e3e..ac50fbe8aeb8 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -1301,9 +1301,11 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba,
- bool scale_up)
- 	}
- 
- 	/* Enable Write Booster if we have scaled up else disable it */
--	downgrade_write(&hba->clk_scaling_lock);
--	is_writelock = false;
--	ufshcd_wb_toggle(hba, scale_up);
-+	if (ufshcd_enable_wb_if_scaling_up(hba)) {
-+		downgrade_write(&hba->clk_scaling_lock);
-+		is_writelock = false;
-+		ufshcd_wb_toggle(hba, scale_up);
-+	}
- 
- out_unprepare:
- 	ufshcd_clock_scaling_unprepare(hba, is_writelock);
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index f10d4668814c..f8c9a78e7776 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -869,7 +869,7 @@ static void ufs_qcom_set_caps(struct ufs_hba *hba)
- 	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
- 
- 	hba->caps |= UFSHCD_CAP_CLK_GATING | UFSHCD_CAP_HIBERN8_WITH_CLK_GATING;
--	hba->caps |= UFSHCD_CAP_CLK_SCALING;
-+	hba->caps |= UFSHCD_CAP_CLK_SCALING | UFSHCD_CAP_WB_WITH_CLK_SCALING;
- 	hba->caps |= UFSHCD_CAP_AUTO_BKOPS_SUSPEND;
- 	hba->caps |= UFSHCD_CAP_WB_EN;
- 	hba->caps |= UFSHCD_CAP_CRYPTO;
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index a92271421718..bed6fb1da78d 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -648,6 +648,12 @@ enum ufshcd_caps {
- 	 * notification if it is supported by the UFS device.
- 	 */
- 	UFSHCD_CAP_TEMP_NOTIF				= 1 << 11,
-+
-+	/*
-+	 * Enable WriteBooster when scaling up the clock and disable
-+	 * WriteBooster when scaling the clock down.
-+	 */
-+	UFSHCD_CAP_WB_WITH_CLK_SCALING			= 1 << 12,
- };
- 
- struct ufs_hba_variant_params {
-@@ -1005,6 +1011,11 @@ static inline bool ufshcd_is_wb_allowed(struct
- ufs_hba *hba)
- 	return hba->caps & UFSHCD_CAP_WB_EN;
- }
- 
-+static inline bool ufshcd_enable_wb_if_scaling_up(struct ufs_hba *hba)
-+{
-+	return hba->caps & UFSHCD_CAP_WB_WITH_CLK_SCALING;
-+}
-+
- #define ufshcd_writel(hba, val, reg)	\
- 	writel((val), (hba)->mmio_base + (reg))
- #define ufshcd_readl(hba, reg)	\
--- 
-2.18.0
+2. The SCSI error handler runs because scsi_decide_disposition has no
+case statements for them and we return FAILED.
+
+This patchset converts the drivers to stop using these codes, and then
+moves them to scsi_priv.h in a new error byte so they can only be used
+by scsi-ml.
+
+
 
