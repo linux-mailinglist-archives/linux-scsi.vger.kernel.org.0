@@ -2,260 +2,263 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E11858CA15
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Aug 2022 16:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E27058CC79
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Aug 2022 19:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243206AbiHHODB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 8 Aug 2022 10:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        id S236532AbiHHRDM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 8 Aug 2022 13:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242420AbiHHOC7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 Aug 2022 10:02:59 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501C4E0A5
-        for <linux-scsi@vger.kernel.org>; Mon,  8 Aug 2022 07:02:59 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 7so13839679ybw.0
-        for <linux-scsi@vger.kernel.org>; Mon, 08 Aug 2022 07:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=3lo07hWTyjMILOLqvPjXRKyktUyhBqIvLrlHCW4UFKs=;
-        b=SvBYUBCBEXSiudD69tdkI0FdbnxIsstI/2ZRUNJ/ChkccYgCLLLtggkAHum/knZYYs
-         j5fgPJEtxEdOWdk9+4q0o18GIxEBUp1qBs76ASrgocxZ7y5CEYqPR7/H1kTXRLPNzlov
-         QwZpWOGIFqxDDOw8SkYJ1cLXa+jH+BgcBj/tUedtYucNKeMHxAzN1x0Dk5WRaUBJDzPi
-         dWw73hLEJtFb2p3PkABxR+custzokwsekt8oHa3bKEdyqJrG942BW/0+Wa7DRoOin5FD
-         JhcfuxiHgRHTkHJybhDR6GDt7mXrb/v8f+Rwv8XNFwLSZ3Nes8vv0RNuoRWklGfhDERQ
-         n4Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=3lo07hWTyjMILOLqvPjXRKyktUyhBqIvLrlHCW4UFKs=;
-        b=LZBbIl3PTilvnXOZKdLsppiABtv4Z2j4d3oW4gRl0CBSu23CrbUA1tlwsXr2+/a3l4
-         PSsqmGpzJJ8CVHS5WDmNsE0UzOmiyyrB71ACbeYe4dVW2t49rjAIqu+Ec5dVOSjn4MP7
-         ML0e9ic+Ox3Lzzx16f44fN+kwvRm//XaJ7K45qxeeSwpVuSbfh/E0rh0wu1W5cEZKtHH
-         T6J5iatxTqfcBHvDMQBVKiBa2YOW1IwKVu2au21aUQ6yJTfLH7new/GeLJ8/ENeDMwae
-         BdLFuXiGMOt35x4Q3dy+cuU4ta7X4u6H3QVCplLLes9REsogk1T9e7SrKHfttw3q9XH2
-         rqDg==
-X-Gm-Message-State: ACgBeo3AZbo/8neMS+ZAwixkiMe5SdNhLlKSBq9h+Hjot+N62lkyVkNO
-        JV0a4ERLWbJLoQ/YiKPXj0RBDSdiDvEkK0J0yHs=
-X-Google-Smtp-Source: AA6agR4qFt5npFf1k3UDwNV9c2iBvPK2Ni9EtzLZBgS4wBoe4R68oY0hcshZmo1MwgOuFkhCgYrW4eeGPW8gbjGdGlg=
-X-Received: by 2002:a25:428f:0:b0:67a:82bd:5a0 with SMTP id
- p137-20020a25428f000000b0067a82bd05a0mr16672747yba.257.1659967377790; Mon, 08
- Aug 2022 07:02:57 -0700 (PDT)
+        with ESMTP id S233053AbiHHRDK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 Aug 2022 13:03:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E80140FE
+        for <linux-scsi@vger.kernel.org>; Mon,  8 Aug 2022 10:03:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CA7E734E2C;
+        Mon,  8 Aug 2022 17:03:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1659978187; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DYNu2VbrH5irDZS8Z31D8Qdrq9XX2rC2jr2PFNEjMBs=;
+        b=vBenYf+4ruj0IKNaAP4Uss5R/PxaL+fzv8/ONEJuzQcgTE7sfqJLUdleQjAbwevxNYBFvG
+        f2EMrjIQqWfOjHdJIWyRpSQx+YXFIFz4q4Ut+13dTa1jmwCb51zBd/ZfB7UjkfcfNe/cXm
+        T53HYHx5NdGM+sp4ezoivUhFYfkvnFM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 97C7613A7C;
+        Mon,  8 Aug 2022 17:03:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id co5sI8tB8WLFSQAAMHmgww
+        (envelope-from <mwilck@suse.com>); Mon, 08 Aug 2022 17:03:07 +0000
+Message-ID: <e307dbbefd669e47312d6e2bd9784e88e823f242.camel@suse.com>
+Subject: Re: [PATCH] scsi_lib: Allow the ALUA transitioning state enough time
+From:   Martin Wilck <mwilck@suse.com>
+To:     Brian Bunker <brian@purestorage.com>, linux-scsi@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Krishna Kant <krishna.kant@purestorage.com>,
+        Seamus Connor <sconnor@purestorage.com>
+Date:   Mon, 08 Aug 2022 19:03:07 +0200
+In-Reply-To: <20220729214110.58576-1-brian@purestorage.com>
+References: <20220729214110.58576-1-brian@purestorage.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3 
 MIME-Version: 1.0
-Received: by 2002:a05:7010:5a10:b0:2e8:96a6:819 with HTTP; Mon, 8 Aug 2022
- 07:02:57 -0700 (PDT)
-From:   "From:Mrs Reb" <mre69138@gmail.com>
-Date:   Mon, 8 Aug 2022 07:02:57 -0700
-Message-ID: <CALy5kCW8XSoxZtoV9ZHBz_qL8hhuHu9_pYcM-RcsRvPw8wO12Q@mail.gmail.com>
-Subject: From:Mrs Reb
-To:     undisclosed-recipients:;
-Content-Type: multipart/mixed; boundary="000000000000e49e6905e5bb45cf"
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_FREEMAIL_DOC_PDF,T_FREEMAIL_DOC_PDF_BCC,T_HK_NAME_FM_FROM,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000e49e6905e5bb45cf
-Content-Type: text/plain; charset="UTF-8"
+On Fri, 2022-07-29 at 14:41 -0700, Brian Bunker wrote:
+> The error path for the SCSI check condition of not ready, target in
+> ALUA state transition, will result in the failure of that path after
+> the retries are exhausted. In most cases that is well ahead of the
+> transition timeout established in the SCSI ALUA device handler.
+>=20
+> Instead, reprep the command and re-add it to the queue after a 1
+> second
+> delay. This will allow the handler to take care of the timeout and
+> only fail the path if the target has exceeded the transition expiry
+> timeout (default 60 seconds). If the expiry timeout is exceeded, the
+> handler will change the path state from transitioning to standby
+> leading to a path failure eliminating the potential of this re-prep
+> to continue endlessly. In most cases the target will exit the
+> transitioning state well before the expiry timeout but after the
+> retries are exhausted as mentioned.
+>=20
+> Additionally remove the scsi_io_completion_reprep function which
+> provides little value.
+>=20
+> Acked-by: Krishna Kant <krishna.kant@purestorage.com>
+> Acked-by: Seamus Connor <sconnor@purestorage.com>
+> Signed-off-by: Brian Bunker <brian@purestorage.com>
 
--- 
-My Dear,
-I  Have A Mutual Confidential Offer For You .
-Please Kindly Open The Attached File Meanwhile Your Positive Response is Needed.
-E-mail : rebeccaschieble111major@gmail.com
-Best Regards,
-Major: Rebecca Schieble.
-US Army Baghdad Iraq.
+Reviewed-by: Martin Wilck <mwilck@suse.com>
 
---000000000000e49e6905e5bb45cf
-Content-Type: application/pdf; name="FROM.MRS_SCHIEBLE (1).pdf"
-Content-Disposition: attachment; filename="FROM.MRS_SCHIEBLE (1).pdf"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: file0
+> ---
+> =A0drivers/scsi/scsi_lib.c | 44 +++++++++++++++++++++++----------------
+> --
+> =A01 file changed, 25 insertions(+), 19 deletions(-)
+>=20
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index 6ffc9e4258a8..1afb267ff9a2 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -118,7 +118,7 @@ scsi_set_blocked(struct scsi_cmnd *cmd, int
+> reason)
+> =A0=A0=A0=A0=A0=A0=A0=A0}
+> =A0}
+> =A0
+> -static void scsi_mq_requeue_cmd(struct scsi_cmnd *cmd)
+> +static void scsi_mq_requeue_cmd(struct scsi_cmnd *cmd, unsigned long
+> msecs)
+> =A0{
+> =A0=A0=A0=A0=A0=A0=A0=A0struct request *rq =3D scsi_cmd_to_rq(cmd);
+> =A0
+> @@ -128,7 +128,12 @@ static void scsi_mq_requeue_cmd(struct scsi_cmnd
+> *cmd)
+> =A0=A0=A0=A0=A0=A0=A0=A0} else {
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0WARN_ON_ONCE(true);
+> =A0=A0=A0=A0=A0=A0=A0=A0}
+> -=A0=A0=A0=A0=A0=A0=A0blk_mq_requeue_request(rq, true);
+> +
+> +=A0=A0=A0=A0=A0=A0=A0if (msecs) {
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0blk_mq_requeue_request(rq, =
+false);
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0blk_mq_delay_kick_requeue_l=
+ist(rq->q, msecs);
+> +=A0=A0=A0=A0=A0=A0=A0} else
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0blk_mq_requeue_request(rq, =
+true);
+> =A0}
+> =A0
+> =A0/**
+> @@ -658,14 +663,6 @@ static unsigned int scsi_rq_err_bytes(const
+> struct request *rq)
+> =A0=A0=A0=A0=A0=A0=A0=A0return bytes;
+> =A0}
+> =A0
+> -/* Helper for scsi_io_completion() when "reprep" action required. */
+> -static void scsi_io_completion_reprep(struct scsi_cmnd *cmd,
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 struct request_queue *q)
+> -{
+> -=A0=A0=A0=A0=A0=A0=A0/* A new command will be prepared and issued. */
+> -=A0=A0=A0=A0=A0=A0=A0scsi_mq_requeue_cmd(cmd);
+> -}
+> -
+> =A0static bool scsi_cmd_runtime_exceeced(struct scsi_cmnd *cmd)
+> =A0{
+> =A0=A0=A0=A0=A0=A0=A0=A0struct request *req =3D scsi_cmd_to_rq(cmd);
+> @@ -683,14 +680,21 @@ static bool scsi_cmd_runtime_exceeced(struct
+> scsi_cmnd *cmd)
+> =A0=A0=A0=A0=A0=A0=A0=A0return false;
+> =A0}
+> =A0
+> +/*
+> + * When ALUA transition state is returned, reprep the cmd to
+> + * use the ALUA handlers transition timeout. Delay the reprep
+> + * 1 sec to avoid aggressive retries of the target in that
+> + * state.
+> + */
+> +#define ALUA_TRANSITION_REPREP_DELAY=A0=A0=A01000
+> +
+> =A0/* Helper for scsi_io_completion() when special action required. */
+> =A0static void scsi_io_completion_action(struct scsi_cmnd *cmd, int
+> result)
+> =A0{
+> -=A0=A0=A0=A0=A0=A0=A0struct request_queue *q =3D cmd->device->request_qu=
+eue;
+> =A0=A0=A0=A0=A0=A0=A0=A0struct request *req =3D scsi_cmd_to_rq(cmd);
+> =A0=A0=A0=A0=A0=A0=A0=A0int level =3D 0;
+> -=A0=A0=A0=A0=A0=A0=A0enum {ACTION_FAIL, ACTION_REPREP, ACTION_RETRY,
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ACTION_DELAYED_RETRY} action;
+> +=A0=A0=A0=A0=A0=A0=A0enum {ACTION_FAIL, ACTION_REPREP, ACTION_DELAYED_RE=
+PREP,
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ACTION_RETRY, ACTION_DELAYED_RETRY}=
+ action;
+> =A0=A0=A0=A0=A0=A0=A0=A0struct scsi_sense_hdr sshdr;
+> =A0=A0=A0=A0=A0=A0=A0=A0bool sense_valid;
+> =A0=A0=A0=A0=A0=A0=A0=A0bool sense_current =3D true;=A0=A0=A0=A0=A0 /* fa=
+lse implies "deferred
+> sense" */
+> @@ -779,8 +783,8 @@ static void scsi_io_completion_action(struct
+> scsi_cmnd *cmd, int result)
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0action =3D
+> ACTION_DELAYED_RETRY;
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0case 0x0a: /* ALUA state transition
+> */
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0blk_stat =3D BLK_STS_TRANSPORT=
+;
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0fallthrough;
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0action =3D
+> ACTION_DELAYED_REPREP;
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0default:
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0action =3D ACTION_FAIL;
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> @@ -839,7 +843,10 @@ static void scsi_io_completion_action(struct
+> scsi_cmnd *cmd, int result)
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0r=
+eturn;
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0fallthrough;
+> =A0=A0=A0=A0=A0=A0=A0=A0case ACTION_REPREP:
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0scsi_io_completion_reprep(c=
+md, q);
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0scsi_mq_requeue_cmd(cmd, 0)=
+;
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> +=A0=A0=A0=A0=A0=A0=A0case ACTION_DELAYED_REPREP:
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0scsi_mq_requeue_cmd(cmd,
+> ALUA_TRANSITION_REPREP_DELAY);
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0break;
+> =A0=A0=A0=A0=A0=A0=A0=A0case ACTION_RETRY:
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/* Retry the same command=
+ immediately */
+> @@ -933,7 +940,7 @@ static int scsi_io_completion_nz_result(struct
+> scsi_cmnd *cmd, int result,
+> =A0 * command block will be released and the queue function will be
+> goosed. If we
+> =A0 * are not done then we have to figure out what to do next:
+> =A0 *
+> - *=A0=A0 a) We can call scsi_io_completion_reprep().=A0 The request will
+> be
+> + *=A0=A0 a) We can call scsi_mq_requeue_cmd().=A0 The request will be
+> =A0 *=A0=A0=A0=A0=A0unprepared and put back on the queue.=A0 Then a new c=
+ommand
+> will
+> =A0 *=A0=A0=A0=A0=A0be created for it.=A0 This should be used if we made =
+forward
+> =A0 *=A0=A0=A0=A0=A0progress, or if we want to switch from READ(10) to RE=
+AD(6)
+> for
+> @@ -949,7 +956,6 @@ static int scsi_io_completion_nz_result(struct
+> scsi_cmnd *cmd, int result,
+> =A0void scsi_io_completion(struct scsi_cmnd *cmd, unsigned int
+> good_bytes)
+> =A0{
+> =A0=A0=A0=A0=A0=A0=A0=A0int result =3D cmd->result;
+> -=A0=A0=A0=A0=A0=A0=A0struct request_queue *q =3D cmd->device->request_qu=
+eue;
+> =A0=A0=A0=A0=A0=A0=A0=A0struct request *req =3D scsi_cmd_to_rq(cmd);
+> =A0=A0=A0=A0=A0=A0=A0=A0blk_status_t blk_stat =3D BLK_STS_OK;
+> =A0
+> @@ -986,7 +992,7 @@ void scsi_io_completion(struct scsi_cmnd *cmd,
+> unsigned int good_bytes)
+> =A0=A0=A0=A0=A0=A0=A0=A0 * request just queue the command up again.
+> =A0=A0=A0=A0=A0=A0=A0=A0 */
+> =A0=A0=A0=A0=A0=A0=A0=A0if (likely(result =3D=3D 0))
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0scsi_io_completion_reprep(c=
+md, q);
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0scsi_mq_requeue_cmd(cmd, 0)=
+;
+> =A0=A0=A0=A0=A0=A0=A0=A0else
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0scsi_io_completion_action=
+(cmd, result);
+> =A0}
 
-JVBERi0xLjUKJeLjz9MKMSAwIG9iago8PCAKICAgL1R5cGUgL0NhdGFsb2cKICAgL1BhZ2VzIDIg
-MCBSCiAgIC9QYWdlTGF5b3V0IC9PbmVDb2x1bW4KICAgL1BhZ2VNb2RlIC9Vc2VOb25lCiAgIC9P
-Q1Byb3BlcnRpZXMgPDwgCiAgIC9EIDw8IAogICAvT3JkZXIgW10KICAgL0FTIFs8PCAKICAgL0V2
-ZW50IC9WaWV3CiAgIC9DYXRlZ29yeSBbL1ZpZXcgXQo+PiA8PCAKICAgL0V2ZW50IC9QcmludAog
-ICAvQ2F0ZWdvcnkgWy9QcmludCBdCj4+IDw8IAogICAvRXZlbnQgL0V4cG9ydAogICAvQ2F0ZWdv
-cnkgWy9FeHBvcnQgXQo+PiBdCj4+Cj4+Cj4+CmVuZG9iagoyIDAgb2JqCjw8IAogICAvVHlwZSAv
-UGFnZXMKICAgL0tpZHMgWzMgMCBSIF0KICAgL0NvdW50IDEKPj4KZW5kb2JqCjMgMCBvYmoKPDwg
-CiAgIC9UeXBlIC9QYWdlCiAgIC9QYXJlbnQgMiAwIFIKICAgL1Jlc291cmNlcyA8PCAKICAgL1By
-b2NTZXQgWy9QREYgL1RleHQgXQogICAvRm9udCA8PCAKICAgL0YxIDYgMCBSCiAgIC9GMiA5IDAg
-UgogICAvRjMgMTIgMCBSCj4+Cj4+CiAgIC9NZWRpYUJveCBbMCAwIDYxMiA3OTJdCiAgIC9Db250
-ZW50cyA0IDAgUgo+PgplbmRvYmoKNCAwIG9iago8PCAKICAgL0ZpbHRlciAvRmxhdGVEZWNvZGUK
-ICAgL0xlbmd0aCA0MjAyCj4+CnN0cmVhbQp4Xq1c244ctxF936+YhwDeBjytIZt9Ux4SO1FgBbFj
-S/JDEATBaHa0kkdardUrB8pn5IvDKrIu7NtqNYQw2tluNlms66li9f568euF2cC/D9cXrd20u27T
-2tK6jcH/PxwvXl385Ad9++Li0V/8uF1ZN5sXry52pamqapP+8HPsyr7vzGbn/5kNTOifcJsX7y7+
-efl9se0vPxXWXG4Kd/nnYttcHov+cu8/H4pth1f/Umyr8NubYlvj/ZviX5sXf7148uLL6TBVV7pO
-03KVYVLngENq0s35k3qONX1butkZtaCatip7u3G1KyubS1hN28BsM9K6iYJ65+VjUSxwFWU0wDcc
-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
-+7MXgsO7KmV1iPZ+satCRcchw+F35UKRUy32eBIpceYHvGpUudDTnmhm6JV/WcSXmQ744TQrXsHX
-n94wkn15FhnO9IDyNRlvY6Qx+IHV4ZsXpA1/k+2XIr6VBfT+sdhC64zp1IA3GLZD0/sBg4kfPNPi
-pMksd7Z1G/5hgeSJK6+wg2/ZvhJXXoEqtjnrJf56me80tQ19MzLnP+J7VFxvw6CLZ+NsPwR05GRJ
-okmWc+PQnihEfZ1h0hrzgEXuJVIzmIgYk/MP4Rkricj383/18HHEUs/O+KuH5zOqi4UcITcDAII8
-vk6ZsML/HXbcGb9EvpISvDVKr5gmf/Vt6e/YLf2JN93dNHoJ6Xw2dbuE0BnOV4lb9f+mc+CJh55G
-s/qni/8DUNsoGQplbmRzdHJlYW0KZW5kb2JqCjUgMCBvYmoKPDwgCiAgIC9Qcm9kdWNlciA8RkVG
-RjAwNjQwMDZGMDA1MDAwNDQwMDQ2MDAyMDAwNTYwMDY1MDA3MjAwMjAwMDM3MDAyRTAwMzIwMDIw
-MDA0MjAwNzUwMDY5MDA2QzAwNjQwMDIwMDAzMzAwMzcwMDM2MDAyMDAwMjgwMDc1MDA2RTAwNkIw
-MDZFMDA2RjAwNzcwMDZFMDAyMDAwNTcwMDY5MDA2RTAwNjQwMDZGMDA3NzAwNzMwMDIwMDA3NjAw
-NjUwMDcyMDA3MzAwNjkwMDZGMDA2RTAwMjAwMDJEMDAyMDAwNTYwMDY1MDA3MjAwNzMwMDY5MDA2
-RjAwNkUwMDNBMDAyMDAwMzEwMDMwMDAyRTAwMzAwMDJFMDAzMTAwMzkwMDMwMDAzNDAwMzMwMDIw
-MDAyODAwNzgwMDM2MDAzNDAwMjkwMDI5PgogICAvQ3JlYXRpb25EYXRlIChEOjIwMjExMTIzMTQy
-MDA0KzAzJzAwJykKPj4KZW5kb2JqCjYgMCBvYmoKPDwgCiAgIC9UeXBlIC9Gb250CiAgIC9TdWJ0
-eXBlIC9UcnVlVHlwZQogICAvRm9udERlc2NyaXB0b3IgNyAwIFIKICAgL0Jhc2VGb250IC9Bcmlh
-bE1UCiAgIC9GaXJzdENoYXIgMAogICAvTGFzdENoYXIgMjU1CiAgIC9XaWR0aHMgOCAwIFIKICAg
-L0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcKPj4KZW5kb2JqCjcgMCBvYmoKPDwgCiAgIC9UeXBl
-IC9Gb250RGVzY3JpcHRvcgogICAvRm9udE5hbWUgL0FyaWFsTVQKICAgL0FzY2VudCA3MjgKICAg
-L0NhcEhlaWdodCA3MTYKICAgL0Rlc2NlbnQgLTIxMAogICAvRmxhZ3MgMzIKICAgL0ZvbnRCQm94
-IFstNjY1IC0zMjUgMjAwMCAxMDQwXQogICAvSXRhbGljQW5nbGUgMAogICAvU3RlbVYgODcKICAg
-L1hIZWlnaHQgNTE5Cj4+CmVuZG9iago4IDAgb2JqCls3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3
-NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1
-MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDI3OCAyNzggMzU1
-IDU1NiA1NTYgODg5IDY2NyAxOTEgMzMzIDMzMyAzODkgNTg0IDI3OCAzMzMgMjc4IDI3OCA1NTYg
-NTU2IDU1NiA1NTYgNTU2IDU1NiA1NTYgNTU2IDU1NiA1NTYgMjc4IDI3OCA1ODQgNTg0IDU4NCA1
-NTYgMTAxNSA2NjcgNjY3IDcyMiA3MjIgNjY3IDYxMSA3NzggNzIyIDI3OCA1MDAgNjY3IDU1NiA4
-MzMgNzIyIDc3OCA2NjcgNzc4IDcyMiA2NjcgNjExIDcyMiA2NjcgOTQ0IDY2NyA2NjcgNjExIDI3
-OCAyNzggMjc4IDQ2OSA1NTYgMzMzIDU1NiA1NTYgNTAwIDU1NiA1NTYgMjc4IDU1NiA1NTYgMjIy
-IDIyMiA1MDAgMjIyIDgzMyA1NTYgNTU2IDU1NiA1NTYgMzMzIDUwMCAyNzggNTU2IDUwMCA3MjIg
-NTAwIDUwMCA1MDAgMzM0IDI2MCAzMzQgNTg0IDM1MCA1NTYgMzUwIDIyMiA1NTYgMzMzIDEwMDAg
-NTU2IDU1NiAzMzMgMTAwMCA2NjcgMzMzIDEwMDAgMzUwIDYxMSAzNTAgMzUwIDIyMiAyMjIgMzMz
-IDMzMyAzNTAgNTU2IDEwMDAgMzMzIDEwMDAgNTAwIDMzMyA5NDQgMzUwIDUwMCA2NjcgMjc4IDMz
-MyA1NTYgNTU2IDU1NiA1NTYgMjYwIDU1NiAzMzMgNzM3IDM3MCA1NTYgNTg0IDMzMyA3MzcgNTUy
-IDQwMCA1NDkgMzMzIDMzMyAzMzMgNTc2IDUzNyAzMzMgMzMzIDMzMyAzNjUgNTU2IDgzNCA4MzQg
-ODM0IDYxMSA2NjcgNjY3IDY2NyA2NjcgNjY3IDY2NyAxMDAwIDcyMiA2NjcgNjY3IDY2NyA2Njcg
-Mjc4IDI3OCAyNzggMjc4IDcyMiA3MjIgNzc4IDc3OCA3NzggNzc4IDc3OCA1ODQgNzc4IDcyMiA3
-MjIgNzIyIDcyMiA2NjcgNjY3IDYxMSA1NTYgNTU2IDU1NiA1NTYgNTU2IDU1NiA4ODkgNTAwIDU1
-NiA1NTYgNTU2IDU1NiAyNzggMjc4IDI3OCAyNzggNTU2IDU1NiA1NTYgNTU2IDU1NiA1NTYgNTU2
-IDU0OSA2MTEgNTU2IDU1NiA1NTYgNTU2IDUwMCA1NTYgNTAwIF0KZW5kb2JqCjkgMCBvYmoKPDwg
-CiAgIC9UeXBlIC9Gb250CiAgIC9TdWJ0eXBlIC9UcnVlVHlwZQogICAvRm9udERlc2NyaXB0b3Ig
-MTAgMCBSCiAgIC9CYXNlRm9udCAvQXJpYWwtQm9sZE1UCiAgIC9GaXJzdENoYXIgMAogICAvTGFz
-dENoYXIgMjU1CiAgIC9XaWR0aHMgMTEgMCBSCiAgIC9FbmNvZGluZyAvV2luQW5zaUVuY29kaW5n
-Cj4+CmVuZG9iagoxMCAwIG9iago8PCAKICAgL1R5cGUgL0ZvbnREZXNjcmlwdG9yCiAgIC9Gb250
-TmFtZSAvQXJpYWwtQm9sZE1UCiAgIC9Bc2NlbnQgNzI4CiAgIC9DYXBIZWlnaHQgNzE2CiAgIC9E
-ZXNjZW50IC0yMTAKICAgL0ZsYWdzIDI2MjE3NgogICAvRm9udEJCb3ggWy02MjggLTM3NiAyMDAw
-IDEwNTZdCiAgIC9JdGFsaWNBbmdsZSAwCiAgIC9TdGVtViAxNjUKICAgL1hIZWlnaHQgNTE5Cj4+
-CmVuZG9iagoxMSAwIG9iagpbNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUw
-IDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAg
-NzUwIDc1MCA3NTAgNzUwIDc1MCA3NTAgNzUwIDc1MCAyNzggMzMzIDQ3NCA1NTYgNTU2IDg4OSA3
-MjIgMjM4IDMzMyAzMzMgMzg5IDU4NCAyNzggMzMzIDI3OCAyNzggNTU2IDU1NiA1NTYgNTU2IDU1
-NiA1NTYgNTU2IDU1NiA1NTYgNTU2IDMzMyAzMzMgNTg0IDU4NCA1ODQgNjExIDk3NSA3MjIgNzIy
-IDcyMiA3MjIgNjY3IDYxMSA3NzggNzIyIDI3OCA1NTYgNzIyIDYxMSA4MzMgNzIyIDc3OCA2Njcg
-Nzc4IDcyMiA2NjcgNjExIDcyMiA2NjcgOTQ0IDY2NyA2NjcgNjExIDMzMyAyNzggMzMzIDU4NCA1
-NTYgMzMzIDU1NiA2MTEgNTU2IDYxMSA1NTYgMzMzIDYxMSA2MTEgMjc4IDI3OCA1NTYgMjc4IDg4
-OSA2MTEgNjExIDYxMSA2MTEgMzg5IDU1NiAzMzMgNjExIDU1NiA3NzggNTU2IDU1NiA1MDAgMzg5
-IDI4MCAzODkgNTg0IDM1MCA1NTYgMzUwIDI3OCA1NTYgNTAwIDEwMDAgNTU2IDU1NiAzMzMgMTAw
-MCA2NjcgMzMzIDEwMDAgMzUwIDYxMSAzNTAgMzUwIDI3OCAyNzggNTAwIDUwMCAzNTAgNTU2IDEw
-MDAgMzMzIDEwMDAgNTU2IDMzMyA5NDQgMzUwIDUwMCA2NjcgMjc4IDMzMyA1NTYgNTU2IDU1NiA1
-NTYgMjgwIDU1NiAzMzMgNzM3IDM3MCA1NTYgNTg0IDMzMyA3MzcgNTUyIDQwMCA1NDkgMzMzIDMz
-MyAzMzMgNTc2IDU1NiAzMzMgMzMzIDMzMyAzNjUgNTU2IDgzNCA4MzQgODM0IDYxMSA3MjIgNzIy
-IDcyMiA3MjIgNzIyIDcyMiAxMDAwIDcyMiA2NjcgNjY3IDY2NyA2NjcgMjc4IDI3OCAyNzggMjc4
-IDcyMiA3MjIgNzc4IDc3OCA3NzggNzc4IDc3OCA1ODQgNzc4IDcyMiA3MjIgNzIyIDcyMiA2Njcg
-NjY3IDYxMSA1NTYgNTU2IDU1NiA1NTYgNTU2IDU1NiA4ODkgNTU2IDU1NiA1NTYgNTU2IDU1NiAy
-NzggMjc4IDI3OCAyNzggNjExIDYxMSA2MTEgNjExIDYxMSA2MTEgNjExIDU0OSA2MTEgNjExIDYx
-MSA2MTEgNjExIDU1NiA2MTEgNTU2IF0KZW5kb2JqCjEyIDAgb2JqCjw8IAogICAvVHlwZSAvRm9u
-dAogICAvU3VidHlwZSAvVHJ1ZVR5cGUKICAgL0ZvbnREZXNjcmlwdG9yIDEzIDAgUgogICAvQmFz
-ZUZvbnQgL0NhbGlicmkKICAgL0ZpcnN0Q2hhciAwCiAgIC9MYXN0Q2hhciAyNTUKICAgL1dpZHRo
-cyAxNCAwIFIKICAgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcKPj4KZW5kb2JqCjEzIDAgb2Jq
-Cjw8IAogICAvVHlwZSAvRm9udERlc2NyaXB0b3IKICAgL0ZvbnROYW1lIC9DYWxpYnJpCiAgIC9B
-c2NlbnQgNzUwCiAgIC9DYXBIZWlnaHQgNjMyCiAgIC9EZXNjZW50IC0yNTAKICAgL0ZsYWdzIDMy
-CiAgIC9Gb250QkJveCBbLTUwMyAtMzEzIDEyNDAgMTAyNl0KICAgL0l0YWxpY0FuZ2xlIDAKICAg
-L1N0ZW1WIDg3CiAgIC9YSGVpZ2h0IDQ2NAo+PgplbmRvYmoKMTQgMCBvYmoKWzUwNyA1MDcgNTA3
-IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcg
-NTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1
-MDcgMjI2IDMyNiA0MDEgNDk4IDUwNyA3MTUgNjgyIDIyMSAzMDMgMzAzIDQ5OCA0OTggMjUwIDMw
-NiAyNTIgMzg2IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyA1MDcgNTA3IDUwNyAyNjggMjY4
-IDQ5OCA0OTggNDk4IDQ2MyA4OTQgNTc5IDU0NCA1MzMgNjE1IDQ4OCA0NTkgNjMxIDYyMyAyNTIg
-MzE5IDUyMCA0MjAgODU1IDY0NiA2NjIgNTE3IDY3MyA1NDMgNDU5IDQ4NyA2NDIgNTY3IDg5MCA1
-MTkgNDg3IDQ2OCAzMDcgMzg2IDMwNyA0OTggNDk4IDI5MSA0NzkgNTI1IDQyMyA1MjUgNDk4IDMw
-NSA0NzEgNTI1IDIyOSAyMzkgNDU1IDIyOSA3OTkgNTI1IDUyNyA1MjUgNTI1IDM0OSAzOTEgMzM1
-IDUyNSA0NTIgNzE1IDQzMyA0NTMgMzk1IDMxNCA0NjAgMzE0IDQ5OCA0OTggNTA3IDQ5OCAyNTAg
-MzA1IDQxOCA2OTAgNDk4IDQ5OCAzOTUgMTAzOCA0NTkgMzM5IDg2NyA0OTggNDY4IDQ5OCA0OTgg
-MjUwIDI1MCA0MTggNDE4IDQ5OCA0OTggOTA1IDQ1MCA3MDUgMzkxIDMzOSA4NTAgNDk4IDM5NSA0
-ODcgMjI2IDMyNiA0OTggNTA3IDQ5OCA1MDcgNDk4IDQ5OCAzOTMgODM0IDQwMiA1MTIgNDk4IDMw
-NiA1MDcgMzk0IDMzOSA0OTggMzM2IDMzNCAyOTIgNTUwIDU4NiAyNTIgMzA3IDI0NiA0MjIgNTEy
-IDYzNiA2NzEgNjc1IDQ2MyA1NzkgNTc5IDU3OSA1NzkgNTc5IDU3OSA3NjMgNTMzIDQ4OCA0ODgg
-NDg4IDQ4OCAyNTIgMjUyIDI1MiAyNTIgNjI1IDY0NiA2NjIgNjYyIDY2MiA2NjIgNjYyIDQ5OCA2
-NjQgNjQyIDY0MiA2NDIgNjQyIDQ4NyA1MTcgNTI3IDQ3OSA0NzkgNDc5IDQ3OSA0NzkgNDc5IDc3
-MyA0MjMgNDk4IDQ5OCA0OTggNDk4IDIyOSAyMjkgMjI5IDIyOSA1MjUgNTI1IDUyNyA1MjcgNTI3
-IDUyNyA1MjcgNDk4IDUyOSA1MjUgNTI1IDUyNSA1MjUgNDUzIDUyNSA0NTMgXQplbmRvYmoKeHJl
-ZgowIDE1IAowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDMy
-MCAwMDAwMCBuIAowMDAwMDAwMzg4IDAwMDAwIG4gCjAwMDAwMDA1OTEgMDAwMDAgbiAKMDAwMDAw
-NDg3MyAwMDAwMCBuIAowMDAwMDA1MjY2IDAwMDAwIG4gCjAwMDAwMDU0NTIgMDAwMDAgbiAKMDAw
-MDAwNTY2NiAwMDAwMCBuIAowMDAwMDA2NzE1IDAwMDAwIG4gCjAwMDAwMDY5MDggMDAwMDAgbiAK
-MDAwMDAwNzEzMyAwMDAwMCBuIAowMDAwMDA4MTgyIDAwMDAwIG4gCjAwMDAwMDgzNzEgMDAwMDAg
-biAKMDAwMDAwODU4NiAwMDAwMCBuIAp0cmFpbGVyCjw8IAogICAvUm9vdCAxIDAgUgogICAvSW5m
-byA1IDAgUgogICAvU2l6ZSAxNQo+PgpzdGFydHhyZWYKOTYzMAolJUVPRgo=
---000000000000e49e6905e5bb45cf--
