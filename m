@@ -2,133 +2,145 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BA25903A9
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Aug 2022 18:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE33590506
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Aug 2022 18:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237812AbiHKQYg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Aug 2022 12:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
+        id S229655AbiHKQsX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Aug 2022 12:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237841AbiHKQXp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Aug 2022 12:23:45 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E17FBC22
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Aug 2022 09:05:15 -0700 (PDT)
-Received: from mail-ua1-f71.google.com (mail-ua1-f71.google.com [209.85.222.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B472C40AB0
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Aug 2022 16:05:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1660233913;
-        bh=Gpg/iZCht06ZJwQqzIOGCQK+PZyVVKbql5uSYvNmUno=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=pssEXXnx/MNoPi4yj/6LmwIRgEbOtROuzBK/IBcPSZ9TPhYGLWHNBQQZ8Nk3eMO3F
-         h2qxia5o/B7wBIVC64PN+6M3bPQehqDRdD6zMgNLsLdrGK3MorzqgMNdvKFTxW1CyX
-         cxSZfmpywFpr0gEUXxUXOo+TqRVWVHdWWzxOYKaxqdtWB0GVw6/IQ0kWSa/BB6lyO5
-         VBzzev9YhKCKTDqvpH7LTOjHJvWjJDg03iCjATEUmjTKW8b5qb5eb+uyBEFVPc0INx
-         dkZ03TZ+TXBHWOew/NwE4gtmQ5d7ViIFllcpj15XbFA3VRBAaAZy0Ei6uG1EbsGEnJ
-         qSUj6E3GEjnXA==
-Received: by mail-ua1-f71.google.com with SMTP id 3-20020ab00503000000b0038cddbf6b02so2042057uax.7
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Aug 2022 09:05:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=Gpg/iZCht06ZJwQqzIOGCQK+PZyVVKbql5uSYvNmUno=;
-        b=KIR855ti/IbF3R4w7C+zdTe+4EDWVdE158V1VpGo2xb4jGh/6KuP8dhgbuPufqt2+J
-         Oan0lx70c7x13blO2eHzgOdkJWwYv1nAm/Gs9xdmpcegKu2iPpq9BRyeNyfKzV/FOASb
-         UJmin0D8SQoKCX+J4iMvY8xRZGP2srqqJ1q6NgxK3UicKaMjOqAmAGBHbtsIv4nJ/cG6
-         xgEwoY/solXD4cnC5ogKPbTn/QsgYVy+f0vvjawuQqnlQrSgf6YRNKP2KkNB5N96p+9/
-         X3n1xQ7HO3zvDssc0P53iEamP+/Dh1j0ytY9/vJGk4tWXNL7B5wsauqbCaT7tOuQT43y
-         I32Q==
-X-Gm-Message-State: ACgBeo2/lPQBqWcmGDklhm1EINNEhc8gClSJ6YMxDAvd8aawXXcGJ9aH
-        ir5O8PWtIMh7xXkOWz5eDLClRneueASMvh+bX12NyUnO9XpSx+/NuZmBJ+1udLKqMsd80kgWySN
-        T2PpzpDqQzTuOaTDj3GZmGs/rIZVG3grOwVuQDi0=
-X-Received: by 2002:ab0:67cf:0:b0:341:257f:ce52 with SMTP id w15-20020ab067cf000000b00341257fce52mr14471453uar.109.1660233912782;
-        Thu, 11 Aug 2022 09:05:12 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6NN0lSAMItN2EJu88W2jMnb/9oM0Z1LLTCND0CzIQb8WtR5ITOtGO6k0w3XxBpuBaJ2ePPBw==
-X-Received: by 2002:ab0:67cf:0:b0:341:257f:ce52 with SMTP id w15-20020ab067cf000000b00341257fce52mr14471422uar.109.1660233912473;
-        Thu, 11 Aug 2022 09:05:12 -0700 (PDT)
-Received: from mfo-t470.. ([2804:14c:4e1:83a2:2ee9:2118:a2dc:3dd6])
-        by smtp.gmail.com with ESMTPSA id s65-20020a1ff444000000b003778205cfe7sm2266218vkh.35.2022.08.11.09.05.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 09:05:11 -0700 (PDT)
-From:   Mauricio Faria de Oliveira <mfo@canonical.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: qla2xxx: log message "skipping scsi_scan_host()" as informational
-Date:   Thu, 11 Aug 2022 13:05:07 -0300
-Message-Id: <20220811160507.108006-1-mfo@canonical.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S239112AbiHKQsC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Aug 2022 12:48:02 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8AAAA3E8
+        for <linux-scsi@vger.kernel.org>; Thu, 11 Aug 2022 09:21:25 -0700 (PDT)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220811162122epoutp036fc2d4af3417b49de4eb33e74b699373~KVtRQDd5A1654116541epoutp03j
+        for <linux-scsi@vger.kernel.org>; Thu, 11 Aug 2022 16:21:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220811162122epoutp036fc2d4af3417b49de4eb33e74b699373~KVtRQDd5A1654116541epoutp03j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1660234882;
+        bh=Ne9iUaPDtu+8u7/wT0WYI6Ighrqj1RwlsWCWGL1U9iM=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=a6CtLPFyQD3IRS7UQVp5q4JzLqEl5Iuykhf3VqwFw993ZXTdjuiUbIlfyvzO88ulQ
+         x/abAtYRn12TmfQqDSWhBAyNuGHbRX7wR7tmKgENLkUEbwxs71gYMovWjiziqUl0Ti
+         xU3k+I1V5IHBm3Z6DQ8Kce12wXQ1DvSZk5NUR7zI=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220811162121epcas5p330284ed7640d1f16526cf01e4318b22e~KVtQgjO7C2852928529epcas5p32;
+        Thu, 11 Aug 2022 16:21:21 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4M3X9q2s7kz4x9Pv; Thu, 11 Aug
+        2022 16:21:19 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4E.71.49477.F7C25F26; Fri, 12 Aug 2022 01:21:19 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220811162118epcas5p2f452b3b425953d47e60e4b29868c03c9~KVtNi-6S63124631246epcas5p2_;
+        Thu, 11 Aug 2022 16:21:18 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220811162118epsmtrp23d2eae6fb88e0ef6a10b665374365cd2~KVtNiMxnR1427614276epsmtrp22;
+        Thu, 11 Aug 2022 16:21:18 +0000 (GMT)
+X-AuditID: b6c32a49-82dff7000000c145-a1-62f52c7ff20c
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C7.FC.08802.E7C25F26; Fri, 12 Aug 2022 01:21:18 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.6]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220811162115epsmtip187aa3b015256f5e3e01f735ade902be3~KVtKeFPLJ0691106911epsmtip1Y;
+        Thu, 11 Aug 2022 16:21:14 +0000 (GMT)
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, avri.altman@wdc.com,
+        bvanassche@acm.org, martin.petersen@oracle.com,
+        chanho61.park@samsung.com, linux-samsung-soc@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH v2] scsi: ufs: host: ufs-exynos: staticize fsd_ufs_drvs
+Date:   Thu, 11 Aug 2022 21:40:53 +0530
+Message-Id: <20220811161053.54081-1-alim.akhtar@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFKsWRmVeSWpSXmKPExsWy7bCmum69ztckg1nThSwezNvGZvHy51U2
+        i2kffjJbXN6vbdH34iGzxabH11gtLu+aw2Yx4/w+Jovu6zvYLJYf/8fkwOVx+Yq3x51re9g8
+        Ni+p9/j49BaLR9+WVYwenzfJebQf6GYKYI/KtslITUxJLVJIzUvOT8nMS7dV8g6Od443NTMw
+        1DW0tDBXUshLzE21VXLxCdB1y8wBOk5JoSwxpxQoFJBYXKykb2dTlF9akqqQkV9cYquUWpCS
+        U2BSoFecmFtcmpeul5daYmVoYGBkClSYkJ3x5apAwVeOiq3b5jE2MC5j72Lk5JAQMJG497sb
+        zBYS2M0o8XO9WRcjF5D9iVFiXs9OZgjnM6PE3gOHGWE6fmy4zQKR2MUo0XN7DyOE08wkMePQ
+        G2aQKjYBbYm707cwgdgiAikSV/f/ZAIpYha4zCixb851sISwgLvExL53YMtZBFQlzn7fyAJi
+        8wrYSBx6/JsNYp28xOoNB8DukBA4xy6x58BVqDtcJH7tvckCYQtLvDq+BeojKYnP7/YCNXMA
+        2R4Si/5IQYQzJN4uXw/Vai9x4MocFpASZgFNifW79EHCzAJ8Er2/nzBBdPJKdLQJQVSrSjS/
+        uwq1SFpiYnc3K8zwt+cKICEXKzFz2wPGCYwysxBmLmBkXMUomVpQnJueWmxaYJiXWg6PmeT8
+        3E2M4ESm5bmD8e6DD3qHGJk4GA8xSnAwK4nwli36nCTEm5JYWZValB9fVJqTWnyI0RQYSBOZ
+        pUST84GpNK8k3tDE0sDEzMzMxNLYzFBJnNfr6qYkIYH0xJLU7NTUgtQimD4mDk6pBqatDJOW
+        VYe2XTd8d0GJddOGexd491ima824eqrW7ceMndtOHLHpOZtUzbQ23V5t6ivlzdbVJvYzD0pN
+        3yeg99mD6d3P/mt57D4W8x87Vc05//mOp0HjH/cNZiz37/3synRLKVohMlci+caF2bNicpd0
+        LEuelCFz7OvxeZv2xOV2bur9FGg8rYLNU1ax+tyfJ9uyp+47fUd0SYvKVd7LPHl2NUf8DURK
+        Fq3hFzS77RWzszeu7Xv9iu8nlAzCDMqXi87leC8UN5s/uzPKbr7vU33BX6wWi6cG7HxdcCa6
+        4Afzkm8b/a+5ePTkLTF/EHr1uM7MO3tcrVdcDOj4YlK55WRzvjRvkY2Kt9WSz0oc5beVWIoz
+        Eg21mIuKEwFaLycs7QMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCLMWRmVeSWpSXmKPExsWy7bCSnG6dztckgzcbpSwezNvGZvHy51U2
+        i2kffjJbXN6vbdH34iGzxabH11gtLu+aw2Yx4/w+Jovu6zvYLJYf/8fkwOVx+Yq3x51re9g8
+        Ni+p9/j49BaLR9+WVYwenzfJebQf6GYKYI/isklJzcksSy3St0vgyvhyVaDgK0fF1m3zGBsY
+        l7F3MXJySAiYSPzYcJuli5GLQ0hgB6PErsaPLBAJaYnrGydAFQlLrPz3nB2iqJFJYvKJv0wg
+        CTYBbYm707cA2RwcIgJpEt9OqoDUMAvcZpRY9+ETG0iNsIC7xMS+d2CDWARUJc5+3wi2gFfA
+        RuLQ499sEAvkJVZvOMA8gZFnASPDKkbJ1ILi3PTcYsMCo7zUcr3ixNzi0rx0veT83E2M4IDT
+        0trBuGfVB71DjEwcjIcYJTiYlUR4yxZ9ThLiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6HrZLyQ
+        QHpiSWp2ampBahFMlomDU6qBqborfBljctaTCTdzq9wVBCK7+5K/7prn8yHWc7n4PJGvaVLm
+        rHJVX03NHWctmmPI4eJb/o1RZikDQ/KCJ8ZHvqw72bDJ8673KVvflF2TApuZPQ97dAafChKf
+        vHFa2X+TLv3rr8+anFCvFPIK0zdk+Mr6bLL078u3TBwuRG17fKHKadEt4WDHecdY1zT+n+6e
+        OVfBd8PHtenr165m/Vmx9K3SOd3UTTWLZERU1s4P/P+w/MSVeSr7OaqzIvZt2GuacPmYhMa9
+        YOlH5pOXR2elTJ21M7N85oauBfOka6vWZTvtu3bs1yyrx3ZBt37fXLP9XlOO9Orv652m+bEt
+        cmst9mrV3fRY0KZAon/+n40vTJVYijMSDbWYi4oTAU7q3YinAgAA
+X-CMS-MailID: 20220811162118epcas5p2f452b3b425953d47e60e4b29868c03c9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220811162118epcas5p2f452b3b425953d47e60e4b29868c03c9
+References: <CGME20220811162118epcas5p2f452b3b425953d47e60e4b29868c03c9@epcas5p2.samsung.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This message is helpful to troubleshoot missing LUNs/SAN boot errors.
-It'd be nice to log it by default instead of only enabled with debug.
+struct fsd_ufs_drvs is not used outside this file, so made it static.
+This fixes sparse warning:
 
-This user had an accidental/forgotten file modprobe.d/qla2xxx.conf
-w/ option qlini_mode=disabled from experiments with FC target mode,
-and their boot LUN didn't come up, as it skips scsi scan, of course.
+drivers/ufs/host/ufs-exynos.c:1721:28: sparse: sparse:
+symbol 'fsd_ufs_drvs' was not declared. Should it be static?
 
-But their boot log didn't provide any clues to help understand that.
-
-The issue/message could be figured out w/ ql2xextended_error_logging,
-but it would have been simpler (or even deflected/addressed by user)
-w/ it there by default.
-(And it also would help support/triage/deflection tooling.)
-
-P.S.: I can't test it on real hardware now (built on next-20220811),
-but it's just like other messages in the same function, just below.
-
-Expected change:
-
- scsi host15: qla2xxx
-+qla2xxx [0000:3b:00.0]-00fb:15: skipping scsi_scan_host() for non-initiator port
- qla2xxx [0000:3b:00.0]-00fb:15: QLogic QLE2692 - QLE2692 Dual Port 16Gb FC to PCIe Gen3 x8 Adapter.
-
-According to:
-
-  qla2x00_probe_one()
-  ...
-          ret = scsi_add_host(...);
-  ...
-                  ql_log(ql_log_info, ...
-                          "skipping scsi_scan_host() for non-initiator port\n");
-  ...
-          ql_log(ql_log_info, ...
-              "QLogic %s - %s.\n", ha->model_number, ha->model_desc);
-
-Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 216f74e8059a ("scsi: ufs: host: ufs-exynos: Add support for FSD UFS HCI")
+Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 ---
- drivers/scsi/qla2xxx/qla_os.c | 2 +-
+* Changes since v1
+	- Addressed Krzysztof's  review comment
+
+ drivers/ufs/host/ufs-exynos.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 0bd0fd1042df..f19cd2b59ad5 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -3530,7 +3530,7 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
- 		qla_dual_mode_enabled(base_vha))
- 		scsi_scan_host(host);
- 	else
--		ql_dbg(ql_dbg_init, base_vha, 0x0122,
-+		ql_log(ql_log_info, base_vha, 0x0122,
- 			"skipping scsi_scan_host() for non-initiator port\n");
+diff --git a/drivers/ufs/host/ufs-exynos.c b/drivers/ufs/host/ufs-exynos.c
+index eced97538082..c3628a8645a5 100644
+--- a/drivers/ufs/host/ufs-exynos.c
++++ b/drivers/ufs/host/ufs-exynos.c
+@@ -1711,7 +1711,7 @@ static struct exynos_ufs_uic_attr fsd_uic_attr = {
+ 	.pa_dbg_option_suite		= 0x2E820183,
+ };
  
- 	qla2x00_alloc_sysfs_attr(base_vha);
+-struct exynos_ufs_drv_data fsd_ufs_drvs = {
++static const struct exynos_ufs_drv_data fsd_ufs_drvs = {
+ 	.uic_attr               = &fsd_uic_attr,
+ 	.quirks                 = UFSHCD_QUIRK_PRDT_BYTE_GRAN |
+ 				  UFSHCI_QUIRK_BROKEN_REQ_LIST_CLR |
 -- 
-2.34.1
+2.25.1
 
