@@ -2,71 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E955906F8
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Aug 2022 21:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0C25906FA
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Aug 2022 21:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234636AbiHKTct (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Aug 2022 15:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S235199AbiHKTeV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Aug 2022 15:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233129AbiHKTcr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Aug 2022 15:32:47 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD58E90C6E
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Aug 2022 12:32:46 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31f445bd486so182378977b3.13
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Aug 2022 12:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=KnZhSRmmnhV6NXnx60Qv/kbkELQWVsKuvSM9qoqa/sw=;
-        b=a7cwYyQODPi/Md2tiwpSPJXrks/VkWThYOsbbcNH3vKWy3TnE/Gi0uAnM6KOBaxCS1
-         aNCvVmKzPSxa++36Yb3m1kUEHJ6c9hN7l3SssTxDlXvllxy1XcWKcjWETCkwD+qTYFnD
-         0sYuFBq8rOBdWiemISJeKUqTGOJY9Sy4b8Wvo=
+        with ESMTP id S233439AbiHKTeU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Aug 2022 15:34:20 -0400
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039B994EDA;
+        Thu, 11 Aug 2022 12:34:20 -0700 (PDT)
+Received: by mail-pj1-f47.google.com with SMTP id 15-20020a17090a098f00b001f305b453feso6336986pjo.1;
+        Thu, 11 Aug 2022 12:34:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=KnZhSRmmnhV6NXnx60Qv/kbkELQWVsKuvSM9qoqa/sw=;
-        b=7mO4u56mZXgyInyc07pkXs1Y+XRWQDxWpd60rtiMp5BjlkFTCz/iYjkOMx4aZeswrq
-         kKaU/lnX9N2rT8bnwxO18cIH0vjjeAXWO9JDbaTVZP/oLDqGp4ouxjxweTZOyGK4GKZz
-         ODcXuxnyyg6h4ENb6IokiFFeSK4Dd8OXSqHaAYXX89nU2A5fl7TLOeZ+/kAWzAUFIH5T
-         vkedXNZ3xbnvN+kg7FFbLJRM0N4czYhrO0b8nxCt5Jp6SLOt/T62wzXh/haigSpOirTE
-         fqQqojfvptVd7ezmPs0yyoMZXyIM9e6AXmpcdO9r/AOQ3o4tC68/3Z92i/5H3M20R+NC
-         f56g==
-X-Gm-Message-State: ACgBeo2BONWJ4CRBGC56/YgLeY4LsfI3EL1+YPsIMa1DiS2mq6QLNcxZ
-        wMvxguvx4rZCIhQV9wBW7dGP2Ulaf1pXazYjJtWjfw==
-X-Google-Smtp-Source: AA6agR7R+/ZJPUr5AS/wPDpISVd1svxGA8bRr4yB/uEMC/Y+fldKYatkUgIcEhXzoDH4sNQSFv90bVEw0Tk41/UnT5E=
-X-Received: by 2002:a81:81c1:0:b0:31e:7378:960c with SMTP id
- r184-20020a8181c1000000b0031e7378960cmr820348ywf.266.1660246366132; Thu, 11
- Aug 2022 12:32:46 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Bs/bxKpNBgIDdDqwbr9wjYFckNPlCjQjOS6PCSHcIEI=;
+        b=YRGupIkpDPQIZ9mFctK8UbO9tMhmuZHMQL35YV7d1ZEZiX/vFSfgzE4o4eiy8GHMXc
+         dVTxiefV5AG1mkloovk/Qi1LJeHyoGe3rhhKwXRZ0mL3J0PcxSHgS+KDhb/WPBRirLhU
+         9Q3DyPfx4y1W1aSwDg5/ry8z8pgkKEFqiX3qATJQTbXX7grBUt9l57UMMcInhlr58qT4
+         nS5wtCQpsS8eyvblbWrJDXMyEqowcVyfrEal03rWUvGR4rAGF9zI9Omkf79a57xvbkT+
+         5chJ0Zdgq4x2Npq2/+GKdsiLV1K4/2iidoO/lhLZMMYnkveg3/20Jqve1nUvFVy7ZIJM
+         +u8A==
+X-Gm-Message-State: ACgBeo0pLwVyiHz58zaRK4UD8D9ZiVlu/HZ/FM8F6yPNFw24Q93YUxny
+        3+9gsClvivsnUnQ1d/WmO2w=
+X-Google-Smtp-Source: AA6agR7rquJCAXgvgyvuvbdvgQrZW3tU6B8suOS7/or4aPAL2vnjGcUeHd5+pR32XGqKUFU3Zs1MVA==
+X-Received: by 2002:a17:902:e812:b0:16e:f29b:cb10 with SMTP id u18-20020a170902e81200b0016ef29bcb10mr623668plg.54.1660246458348;
+        Thu, 11 Aug 2022 12:34:18 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:fa57:1951:439d:3051? ([2620:15c:211:201:fa57:1951:439d:3051])
+        by smtp.gmail.com with ESMTPSA id d14-20020a170902654e00b0016ed715d244sm11478pln.300.2022.08.11.12.34.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 12:34:17 -0700 (PDT)
+Message-ID: <a15badd3-b9db-929f-1dc2-863fbff03992@acm.org>
+Date:   Thu, 11 Aug 2022 12:34:15 -0700
 MIME-Version: 1.0
-References: <20220803074955.v6.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
- <YuoRuP2pxgSQ6c9E@kroah.com> <CAONX=-f8kHWCEEyqUdpn5wsyMZKa4eJSSCLvPDn3R5mQF9FSMA@mail.gmail.com>
- <YvSfjwCu69ivTGIZ@sol.localdomain>
-In-Reply-To: <YvSfjwCu69ivTGIZ@sol.localdomain>
-From:   Daniil Lunev <dlunev@chromium.org>
-Date:   Fri, 12 Aug 2022 05:32:34 +1000
-Message-ID: <CAONX=-dK3CA2Tp2z+HrSTrR8=VJQuiFPhgoqKQkLhrDU1JXG5A@mail.gmail.com>
-Subject: Re: [PATCH v6] ufs: core: print UFSHCD capabilities in controller's
- sysfs node
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4] scsi: support packing multi-segment in UNMAP command
+Content-Language: en-US
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chao Yu <chao@kernel.org>
+Cc:     jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hch@infradead.org
+References: <20220616013617.2284341-1-chao@kernel.org>
+ <yq1wndgnj4i.fsf@ca-mkp.ca.oracle.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <yq1wndgnj4i.fsf@ca-mkp.ca.oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,12 +65,27 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Eric,
-> This is describing the directory, so please include it in a documentation entry
-> for the directory itself (/sys/bus/platform/drivers/ufshcd/*/capabilities/) just
-> above the documentation entries for the files in the directory.
+On 6/16/22 19:01, Martin K. Petersen wrote:
+>> As SCSI SBC4 specification section 5.30.2 describes that it can
+>> support unmapping one or more LBA range in single UNMAP command.
+>>
+>> However, previously we only pack one LBA range in UNMAP command by
+>> default no matter device gives the block limits that says it can
+>> support unmapping multiple LBA ranges with a single UNMAP command.
+>>
+>> This patch sets max_discard_segments config according to block limits
+>> of device, and supports unmapping multiple LBA ranges with a single
+>> UNMAP command.
+> 
+> This looks OK to me. Will test with a variety of targets.
 
-Should I keep the comment in this file as well, or remove it here when
-adding to the documentation?
+Hi Martin,
 
---Daniil
+Have you already had the chance to test this patch? We would like to use 
+this functionality in Android.
+
+Thanks,
+
+Bart.
+
+
