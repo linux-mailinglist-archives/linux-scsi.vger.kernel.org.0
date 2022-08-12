@@ -2,111 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44113590BEE
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Aug 2022 08:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F61590D22
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Aug 2022 10:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236955AbiHLGXR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Aug 2022 02:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
+        id S231698AbiHLIDZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Aug 2022 04:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237024AbiHLGXQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Aug 2022 02:23:16 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE90EA50F4
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Aug 2022 23:23:14 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id r6so12874ilc.12
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Aug 2022 23:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=XD21JD+K+a8oVdMsdQOvvYNmKdGALvhGBN389+nvhDQ=;
-        b=qQsu56UdKZ7tvA+rpWpdetB4faWHDJjYOa30nKYYWXJCLZWjPXZBv4D4fXdgmkSwwi
-         iD77c+LxRdR0Ffc/VGFXi7A6AcU8VoNeCfd5Qbf15UO522DcoSLZXjRly/FJMaK3FB2v
-         zaUrXbw+TGfEsAJajfl8EtOa7hHP75HP8QFal6aHb/kDY6te7F5fYyYfI6B9Cit4Onwr
-         RauriGvb73GbQyASK0qvk81bTFoBBZDra1loRa7desBeWbfroMhZdMHiwwmidd2s7swq
-         qdOMb3yAds1baMkUNVITXaifK3CBLZguNZXbAvTpNEBziUJUCmWzUImK8ZoTRTqx1Mli
-         Nr6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=XD21JD+K+a8oVdMsdQOvvYNmKdGALvhGBN389+nvhDQ=;
-        b=fpMBFTGB/ZmK4hw/S59aN8VwKL9N+QPsDSW1x9/DVKT9eXyDIxspLmWRLFtpFQMmt4
-         LJSkqQgx85Mxu7CRT5CN3XMgvhZjKOMY3dUAX3DbjeWnoXeVfcpRk2fClwW3I1Gj5OfK
-         JfCDQjRsBoYQ8KTWxqTg91AEc46ojhTkHyiv18YYqao7sgdMqRmvC2oeSgGGXQSWzXu3
-         ZL/NfwsJ5+xc6FPf0Sbb00YjdIvE+tW+sUfT9IOfPZc9bALFW45tux6iqhh1bRq2Q7Jh
-         ErnouWdmn2nMORnht0MjhWCrTlNn/jQBPlPR4OKsxcy3h3A3a83yA/DqbUyAzsHn7q3+
-         mkQw==
-X-Gm-Message-State: ACgBeo0KfOEpyHpTKoEyfr+OUDbHRSUtk5hQeRgFqa/1c832qhhiQwz7
-        XDri84pUac/WtMQ12cTzFgL0agVt0bEtCwCESks=
-X-Google-Smtp-Source: AA6agR4qhC6zxykNT0/5NwI0UKwYpm7c2u+y58tRXMDsX7j4Y6qmojh+xZO50nLsd8FqaYJZeQNBfrNOVQUGaOPhMwA=
-X-Received: by 2002:a92:c567:0:b0:2e0:c51b:6a13 with SMTP id
- b7-20020a92c567000000b002e0c51b6a13mr1209766ilj.27.1660285394147; Thu, 11 Aug
- 2022 23:23:14 -0700 (PDT)
+        with ESMTP id S229552AbiHLIDY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Aug 2022 04:03:24 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AEC9C2FA;
+        Fri, 12 Aug 2022 01:03:23 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 54B6C41242;
+        Fri, 12 Aug 2022 08:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-transfer-encoding:content-disposition
+        :content-type:content-type:mime-version:references:message-id
+        :subject:subject:from:from:date:date:received:received:received
+        :received; s=mta-01; t=1660291400; x=1662105801; bh=gM3xqwycVx6f
+        d8QpBl8Se03RISF8OOLrmfL75nBVpnU=; b=FXvxl5dE0UvWpJV7xuqZS7B0du5u
+        UB3oIvaTi+u2Ki0hG7lg5vDU6DZ+08WMWJFVwRCS0TR4LCjgsWJdG5is+M1z9wMn
+        e4vrp9k6slpbu/HTDKkjHbP3cx7WJSY5H64Pa9iUJc4M4HDz/ET50U8cmAS+aM45
+        dIXnjMGxV5lzGUU=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FPjeQs0V6vw2; Fri, 12 Aug 2022 11:03:20 +0300 (MSK)
+Received: from T-EXCH-01.corp.yadro.com (t-exch-01.corp.yadro.com [172.17.10.101])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 8E4E64138F;
+        Fri, 12 Aug 2022 11:03:07 +0300 (MSK)
+Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
+ T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Fri, 12 Aug 2022 11:03:07 +0300
+Received: from yadro.com (10.178.114.42) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Fri, 12 Aug
+ 2022 11:03:06 +0300
+Date:   Fri, 12 Aug 2022 11:03:07 +0300
+From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
+To:     Mike Christie <michael.christie@oracle.com>
+CC:     Martin Petersen <martin.petersen@oracle.com>,
+        <target-devel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux@yadro.com>, Roman Bolshakov <r.bolshakov@yadro.com>
+Subject: Re: [PATCH 2/6] scsi: target: core: add list of opcodes for RSOC
+Message-ID: <20220812080307.GA29582@yadro.com>
+References: <20220718120117.4435-1-d.bogdanov@yadro.com>
+ <20220718120117.4435-3-d.bogdanov@yadro.com>
+ <99508f9b-46cb-b696-a5c4-3874b4d08355@oracle.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6602:2d47:0:0:0:0 with HTTP; Thu, 11 Aug 2022 23:23:13
- -0700 (PDT)
-Reply-To: warners@telkomsa.net
-From:   Yours Faithfully <99onlinemasters2022@gmail.com>
-Date:   Fri, 12 Aug 2022 07:23:13 +0100
-Message-ID: <CAJ6qs-wWM8sNG6mmDHRwQAT1MGHMAq6WBt1QTggXe8x1boiQkQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=ADVANCE_FEE_4_NEW,BAYES_80,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:142 listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8164]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [99onlinemasters2022[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [99onlinemasters2022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.2 ADVANCE_FEE_4_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  3.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <99508f9b-46cb-b696-a5c4-3874b4d08355@oracle.com>
+X-Originating-IP: [10.178.114.42]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-I have a proposition for you, this however is not mandatory nor will I
-in any manner compel you to honor against your will. Let me start by
-introducing myself. I am Dr. Smith Lee, Director of Operations of the
-Hang Seng Bank Ltd, Sai Wan Ho Branch. I have a mutually beneficial
-business suggestion for you.
-
-1. Can you handle this project?
-
-2. Can I give you this trust ?
-
-Absolute confidentiality is required from you. Besides, i  will use my
-connection to get some documents to back up the fund so that the fund
-can not be questioned by any authority.
-
-More information awaits you in my next response to your email message.
-
-Treat as very urgent.
-
-Yours Faithfully,
+On Thu, Aug 11, 2022 at 10:38:29PM -0500, Mike Christie wrote:
+> «Внимание! Данное письмо от внешнего адресата!»
+> 
+> On 7/18/22 7:01 AM, Dmitry Bogdanov wrote:
+> > Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
+> > Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
+> > ---
+> >  drivers/target/target_core_spc.c | 595 +++++++++++++++++++++++++++++++
+> >  include/scsi/scsi_proto.h        |   3 +
+> >  2 files changed, 598 insertions(+)
+> >
+> > diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
+> > index 4157f73977cf..506e28b14e5a 100644
+> > --- a/drivers/target/target_core_spc.c
+> > +++ b/drivers/target/target_core_spc.c
+> 
+> 
+> > +static struct target_opcode_descriptor tcm_opcode_xdwriteread10 = {
+> > +     .support = SCSI_SUPPORT_FULL,
+> > +     .opcode = XDWRITEREAD_10,
+> > +     .cdb_size = 10,
+> > +     .usage_bits = {XDWRITEREAD_10, 0x18, 0xff, 0xff,
+> > +                    0xff, 0xff, SCSI_GROUP_NUMBER_MASK, 0xff,
+> > +                    0xff, SCSI_CONTROL_MASK},
+> > +};
+> > +
+> > +static struct target_opcode_descriptor tcm_opcode_xdwriteread32 = {
+> > +     .support = SCSI_SUPPORT_FULL,
+> > +     .serv_action_valid = 1,
+> > +     .opcode = VARIABLE_LENGTH_CMD,
+> > +     .service_action = XDWRITEREAD_32,
+> > +     .cdb_size = 32,
+> > +     .usage_bits = {VARIABLE_LENGTH_CMD, SCSI_CONTROL_MASK, 0x00, 0x00,
+> > +                    0x00, 0x00, SCSI_GROUP_NUMBER_MASK, 0x18,
+> > +                    0x00, XDWRITEREAD_32, 0x18, 0x00,
+> > +                    0xff, 0xff, 0xff, 0xff,
+> > +                    0xff, 0xff, 0xff, 0xff,
+> > +                    0x00, 0x00, 0x00, 0x00,
+> > +                    0x00, 0x00, 0x00, 0x00,
+> > +                    0xff, 0xff, 0xff, 0xff},
+> > +};
+> > +
+> 
+> I just removed these because they didn't work. I think the patch was added to
+> one of Martin's tree after you made this patch.
+Yes, I saw,  Iwill remove XDWRITEREAD_* in the next revision.
