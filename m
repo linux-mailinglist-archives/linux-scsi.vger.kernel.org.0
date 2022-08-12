@@ -2,80 +2,146 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 590AC590FC6
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Aug 2022 12:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D07159100C
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Aug 2022 13:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233226AbiHLKzt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Aug 2022 06:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S231843AbiHLLbN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Aug 2022 07:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237390AbiHLKzr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Aug 2022 06:55:47 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FC49C23E
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Aug 2022 03:55:45 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id f65so493490pgc.12
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Aug 2022 03:55:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
-        bh=447DttLGWlnXVhl3+i4qWwJxEj6tFprhGwRHCuyrWEY=;
-        b=CJ8cmabUBS6s6xxd/K2d4ioKxSyRIqE+ZbMGdtOsB0xEii8PW96QxCDErfQIjC5BLN
-         N2ucmgiycJJWzTi4cqrjfE9/Qd9qFAIMAw3S3lJYynV7FOantBCVlh8p1SpJp0OmBkJd
-         zJ1W862js8LoAcODPIYF/9lavQGzrv9SxLLzKYwZYs+aFDugs4i1SnnikoRnH73/HBzk
-         m18p9qWtHEY7DEvtYfAV2/hTbPa+PdePCQgit6nPZjTo7qoxPOQVMH1Q9ud8T5lQAHsP
-         cKX6gM3XXgZAfM0H0ll1XdJ5ldBa3MmWx9WKcy61QJhphhLbPc4wMweOQcNzCq3zEyrE
-         y24w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=447DttLGWlnXVhl3+i4qWwJxEj6tFprhGwRHCuyrWEY=;
-        b=Np5aT3Cz9oERynu0kDIyLPoK8I/bVXLSb2BKV+mG/qljwB7X1IMhXSEG5MUmhPJCEs
-         7oXkId5QAUba7BYa+BQEa7tIhb6z78aKBZBUp7QKDBhd1uAi8raME/s4x6tZgd/KXSW9
-         Xu2clatTVOxMOQy4J1qexhl9ZWBpkGqXnAzBCX/iYtXcV8Nge0V5dzFR5PLpn53Mu2zx
-         vHzvzUG2AuF5i19LUKF6qlj6+8J0FRO/RyhMEEQBAmHKnVeDfxvnLaZVyOrfNEB2HEbr
-         gIAa3nU+OtriKsqK6k4IUCy35tyEvxN6YoNH/HlCkBjjDwvOe9dzMrP5chjgDyCKuCA8
-         tYBw==
-X-Gm-Message-State: ACgBeo3vmd/fAaD/kHK7IMf06TixCLjcGhUZHndo+orp3UVp3XBZAoVQ
-        rxDxRaf8L4DepgaWxtQEOC5ifzY8btYkM9DLnmi3JWKwFSgco75A
-X-Google-Smtp-Source: AA6agR5zQzBmW33GmQFIhAp2AFpk7CL7LTn9PCx8JAiUD3jKsaMXzwesI8XRy+JYh8XJgI9UhTgK6vqxdcdpvvJuJ30=
-X-Received: by 2002:a65:688f:0:b0:41d:e38a:e8c4 with SMTP id
- e15-20020a65688f000000b0041de38ae8c4mr2677864pgt.437.1660301744807; Fri, 12
- Aug 2022 03:55:44 -0700 (PDT)
+        with ESMTP id S229739AbiHLLbM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Aug 2022 07:31:12 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6DDADCCE;
+        Fri, 12 Aug 2022 04:31:10 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id AFE4141399;
+        Fri, 12 Aug 2022 11:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-transfer-encoding:content-disposition
+        :content-type:content-type:mime-version:references:message-id
+        :subject:subject:from:from:date:date:received:received:received
+        :received; s=mta-01; t=1660303867; x=1662118268; bh=YROq5AD6XA+G
+        3xOZ51mMOlYP1/LF/t6LqTV9Jm331xY=; b=mbPZmP1JgLoGvvi8TN49/hFUOYWA
+        ICPT0pda+XsQB6+mOihxH9t/ZqBmS4PVFSmiWs5mLuHafUG7Q/mmPrOt2Iw9k3l6
+        jIf+wrCjZdLLYSFMp/e6j6UWRcAdN+j5TN5EJVQvQMvQtp6Dyl8CQmZf3GOD6rj0
+        C24sIEIHI83y1fM=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 5JRZ64mOZG8R; Fri, 12 Aug 2022 14:31:07 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 06D2041395;
+        Fri, 12 Aug 2022 14:30:44 +0300 (MSK)
+Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Fri, 12 Aug 2022 14:30:44 +0300
+Received: from yadro.com (10.199.18.20) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Fri, 12 Aug
+ 2022 14:30:43 +0300
+Date:   Fri, 12 Aug 2022 14:30:42 +0300
+From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
+To:     Mike Christie <michael.christie@oracle.com>
+CC:     Martin Petersen <martin.petersen@oracle.com>,
+        <target-devel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux@yadro.com>, Roman Bolshakov <r.bolshakov@yadro.com>
+Subject: Re: [PATCH 3/6] scsi: target: core: dynamic opcode support in RSOC
+Message-ID: <20220812113042.GA32459@yadro.com>
+References: <20220718120117.4435-1-d.bogdanov@yadro.com>
+ <20220718120117.4435-4-d.bogdanov@yadro.com>
+ <1f72d08c-10e3-e625-0c19-e666fb70e5bb@oracle.com>
 MIME-Version: 1.0
-Sender: bazarkowanigeria@gmail.com
-Received: by 2002:a17:90a:9f91:0:0:0:0 with HTTP; Fri, 12 Aug 2022 03:55:44
- -0700 (PDT)
-From:   "Mrs. Margaret Christopher" <mrsmargaretchristopher01@gmail.com>
-Date:   Fri, 12 Aug 2022 03:55:44 -0700
-X-Google-Sender-Auth: 9ez0BQ54ybr4-2FSOghKq3nW-Ek
-Message-ID: <CAPgaJa30zdehdauxJA=VaWKLgjKBywWenmnn-VngZ4tZAfQP_Q@mail.gmail.com>
-Subject: Humanitarian Project For Less Privileged.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1f72d08c-10e3-e625-0c19-e666fb70e5bb@oracle.com>
+X-Originating-IP: [10.199.18.20]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Hello Dear
+On Thu, Aug 11, 2022 at 10:43:05PM -0500, Mike Christie wrote:
+> «Внимание! Данное письмо от внешнего адресата!»
+> 
+> On 7/18/22 7:01 AM, Dmitry Bogdanov wrote:
+> > Report supported opcodes depending on a dynamic device configuration
+> >
+> > Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
+> > Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
+> > ---
+> >  drivers/target/target_core_spc.c  | 118 ++++++++++++++++++++++++++++--
+> >  include/target/target_core_base.h |   1 +
+> >  2 files changed, 114 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
+> > index 506e28b14e5a..cf516136b933 100644
+> > --- a/drivers/target/target_core_spc.c
+> > +++ b/drivers/target/target_core_spc.c
+> > @@ -1424,6 +1424,13 @@ static struct target_opcode_descriptor tcm_opcode_xdwriteread32 = {
+> >                      0xff, 0xff, 0xff, 0xff},
+> >  };
+> >
+> > +static bool tcm_is_ws_enabled(struct se_cmd *cmd)
+> > +{
+> > +     struct se_device *dev = cmd->se_dev;
+> > +
+> > +     return dev->dev_attrib.emulate_tpws;
+> > +}
+> > +
+> >  static struct target_opcode_descriptor tcm_opcode_write_same32 = {
+> >       .support = SCSI_SUPPORT_FULL,
+> >       .serv_action_valid = 1,
+> > @@ -1438,8 +1445,16 @@ static struct target_opcode_descriptor tcm_opcode_write_same32 = {
+> >                      0x00, 0x00, 0x00, 0x00,
+> >                      0x00, 0x00, 0x00, 0x00,
+> >                      0xff, 0xff, 0xff, 0xff},
+> > +     .enabled = tcm_is_ws_enabled,
+> >  };
+> 
+> I'm not sure what's incorrect. I think your patch is correct but the write
+> same code is wrong.
+> 
+> If emulate_tpws is 0, we will still execute the command. We actually only fail
+> with TCM_UNSUPPORTED_SCSI_OPCODE if it's a WRITE_SAME with the UNMAP bit = 1
+> and emulate_tpws=0.
+> 
+> If it's just a normal WRITE_SAME we maybe go by if by max_write_same_len is
+> greater than zero? Maybe that was a mistake and sbc_setup_write_same needs
+> a emulate_tpws check.
+Looks like emulate_tpws was introduced exaclty for WS+UNMAP bit case
+and it can not be used in tcm_is_ws_enabled as only check. Because of
+WS is actually two different commands selected by UNMAP bit it is
+unable somehow to differentiate them in RSOC. So I will reformulate
+the check in tcm_is_ws_enabled to be true if some of cases is
+supported by the backstore device.
++	return (dev->dev_attrib.emulate_tpws && !!ops->execute_unmap) ||
++	       !!ops->execute_write_same;
 
-  Am a dying woman here in the hospital, i was diagnose as a
-Coronavirus patient over 2 months ago. I am A business woman who is
-dealing with Gold Exportation, I Am 59 year old from USA California i
-have a charitable and unfufilling  project that am about to handover
-to you, if you are interested to know more about this project please reply me.
+> 
+> >  static struct target_opcode_descriptor tcm_opcode_sync_cache = {
+> > @@ -1502,6 +1533,14 @@ static struct target_opcode_descriptor tcm_opcode_sync_cache16 = {
+> >                      0xff, 0xff, SCSI_GROUP_NUMBER_MASK, SCSI_CONTROL_MASK},
+> >  };
+> >
+> > +static bool tcm_is_unmap_enabled(struct se_cmd *cmd)
+> > +{
+> > +     struct sbc_ops *ops = cmd->protocol_data;
+> > +     struct se_device *dev = cmd->se_dev;
+> > +
+> > +     return ops->execute_unmap  && dev->dev_attrib.emulate_tpu;
+> > +}
+> 
+> Just a trivial nit. You had an extra space there.
+yep, will fix 
 
- Hope to hear from you
-
-Best Regard
-
-Mrs. Margaret
