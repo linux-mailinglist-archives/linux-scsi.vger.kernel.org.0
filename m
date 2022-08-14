@@ -2,51 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FBA5920D7
-	for <lists+linux-scsi@lfdr.de>; Sun, 14 Aug 2022 17:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D021559218B
+	for <lists+linux-scsi@lfdr.de>; Sun, 14 Aug 2022 17:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240396AbiHNPbk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 14 Aug 2022 11:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S239928AbiHNPhk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 14 Aug 2022 11:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240362AbiHNPa4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 Aug 2022 11:30:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA3D1A826;
-        Sun, 14 Aug 2022 08:29:32 -0700 (PDT)
+        with ESMTP id S239858AbiHNPfa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 Aug 2022 11:35:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161B913D53;
+        Sun, 14 Aug 2022 08:30:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1479460C41;
-        Sun, 14 Aug 2022 15:29:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DFB2C433D6;
-        Sun, 14 Aug 2022 15:29:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63919B80B77;
+        Sun, 14 Aug 2022 15:30:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC7EC433C1;
+        Sun, 14 Aug 2022 15:30:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660490971;
-        bh=qt61o7YewrXnnLL9ocm5HDs/bnCH6kg7cv3t1Ds3lw8=;
+        s=k20201202; t=1660491046;
+        bh=USr/7H+W22phQatZu5Xppi2ymWAL1+5qrZm1balBdmc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hNNDrRCxBQIok7pc0B2BtKN5py0ml1fNBjXHenOw1KbwjmkXG0ygxTZfC5Li6wAWj
-         GO4Gpr4SayO+Bq7eM7s/8fGxtdUQWGKZ+38+MA9Mi0lzj744IjuDaHhnHReTgY1phE
-         H01+WJac0OSGq34E8QzVhyQdVb2hIpGzbDq6qOquhx/4Sf4baaJQT9vTeF2BUY6EMJ
-         4jG6EI6P/dzNK4JbRIbkYtbMJvEDrYa3rI6AigALbR+6IgIqR4R4eTfNmMEoI31/k8
-         ayczk4roQ4ZfRDtMQvi2vAFyzRp14sJBckV41bGMGADwBzxW5ilWufRa4/ZZPfcEAU
-         eGw6fgjfgLxWg==
+        b=EO/IfEBs3sXyixftAeaB1nz3igTFztKHe1eiWlNSbjygqnQIGWWJpiL3d2xA5RNoM
+         Uf/3i2y5RpMZCBjvAA3hMxmsIu/av8H9OtchZlmq2pJ4/oPqEAgkqQ5rd+UCnWxIMM
+         VRV+JLGGKHWbbMstHVlG2K2r1tkmAD6FJSZHS38k6QCJXhAeA/FRTNvxWeBfHnqvyM
+         CIKgmeGeTMk/knjrXLRHM5DQlt75WtEr9S7fYUOs3fUI/Q3I7TWjiG8xpvzQn0dokz
+         BK0RjWPE7gpJW15vxXImyoZrn9J331upiEh3aumolXWFgYO5A6uqhiDEZtfrzWlgu3
+         PtNDNN5Freo1w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chanho Park <chanho61.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
-        alim.akhtar@samsung.com, bvanassche@acm.org, beanhuo@micron.com,
-        peter.wang@mediatek.com, linux-scsi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 38/64] scsi: ufs: ufs-exynos: Change ufs phy control sequence
-Date:   Sun, 14 Aug 2022 11:24:11 -0400
-Message-Id: <20220814152437.2374207-38-sashal@kernel.org>
+        bvanassche@acm.org, beanhuo@micron.com, avri.altman@wdc.com,
+        adrian.hunter@intel.com, j-young.choi@samsung.com,
+        ebiggers@google.com, jjmin.jeong@samsung.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 10/56] scsi: ufs: core: Add UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS
+Date:   Sun, 14 Aug 2022 11:29:40 -0400
+Message-Id: <20220814153026.2377377-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814152437.2374207-1-sashal@kernel.org>
-References: <20220814152437.2374207-1-sashal@kernel.org>
+In-Reply-To: <20220814153026.2377377-1-sashal@kernel.org>
+References: <20220814153026.2377377-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,82 +60,52 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Chanho Park <chanho61.park@samsung.com>
+From: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-[ Upstream commit 3d73b200f9893d8f5ba5d105e8b69c8d16744fa2 ]
+[ Upstream commit 6554400d6f66b9494a0c0f07712ab0a9d307eb01 ]
 
-Since commit 1599069a62c6 ("phy: core: Warn when phy_power_on is called
-before phy_init"), the following warning has been reported:
+Add UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS for host controllers which do not
+support 64-bit addressing.
 
-	phy_power_on was called before phy_init
-
-To address this, we need to remove phy_power_on from exynos_ufs_phy_init()
-and move it after phy_init. phy_power_off and phy_exit are also necessary
-in exynos_ufs_remove().
-
-Link: https://lore.kernel.org/r/20220706020255.151177-4-chanho61.park@samsung.com
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Chanho Park <chanho61.park@samsung.com>
+Link: https://lore.kernel.org/r/20220603110524.1997825-3-yoshihiro.shimoda.uh@renesas.com
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ufs/host/ufs-exynos.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 2 ++
+ drivers/scsi/ufs/ufshcd.h | 6 ++++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/drivers/ufs/host/ufs-exynos.c b/drivers/ufs/host/ufs-exynos.c
-index a81d8cbd542f..25995667c832 100644
---- a/drivers/ufs/host/ufs-exynos.c
-+++ b/drivers/ufs/host/ufs-exynos.c
-@@ -910,9 +910,13 @@ static int exynos_ufs_phy_init(struct exynos_ufs *ufs)
- 	if (ret) {
- 		dev_err(hba->dev, "%s: phy init failed, ret = %d\n",
- 			__func__, ret);
--		goto out_exit_phy;
-+		return ret;
- 	}
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 874490f7f5e7..95be78549ed2 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -2210,6 +2210,8 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
+ 	int err;
  
-+	ret = phy_power_on(generic_phy);
-+	if (ret)
-+		goto out_exit_phy;
+ 	hba->capabilities = ufshcd_readl(hba, REG_CONTROLLER_CAPABILITIES);
++	if (hba->quirks & UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS)
++		hba->capabilities &= ~MASK_64_ADDRESSING_SUPPORT;
+ 
+ 	/* nutrs and nutmrs are 0 based values */
+ 	hba->nutrs = (hba->capabilities & MASK_TRANSFER_REQUESTS_SLOTS) + 1;
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 94f545be183a..1745144eb904 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -602,6 +602,12 @@ enum ufshcd_quirks {
+ 	 * support physical host configuration.
+ 	 */
+ 	UFSHCD_QUIRK_SKIP_PH_CONFIGURATION		= 1 << 16,
 +
- 	return 0;
++	/*
++	 * This quirk needs to be enabled if the host controller has
++	 * 64-bit addressing supported capability but it doesn't work.
++	 */
++	UFSHCD_QUIRK_BROKEN_64BIT_ADDRESS		= 1 << 17,
+ };
  
- out_exit_phy:
-@@ -1174,10 +1178,6 @@ static int exynos_ufs_init(struct ufs_hba *hba)
- 		goto out;
- 	}
- 
--	ret = phy_power_on(ufs->phy);
--	if (ret)
--		goto phy_off;
--
- 	exynos_ufs_priv_init(hba, ufs);
- 
- 	if (ufs->drv_data->drv_init) {
-@@ -1195,8 +1195,6 @@ static int exynos_ufs_init(struct ufs_hba *hba)
- 	exynos_ufs_config_smu(ufs);
- 	return 0;
- 
--phy_off:
--	phy_power_off(ufs->phy);
- out:
- 	hba->priv = NULL;
- 	return ret;
-@@ -1514,9 +1512,14 @@ static int exynos_ufs_probe(struct platform_device *pdev)
- static int exynos_ufs_remove(struct platform_device *pdev)
- {
- 	struct ufs_hba *hba =  platform_get_drvdata(pdev);
-+	struct exynos_ufs *ufs = ufshcd_get_variant(hba);
- 
- 	pm_runtime_get_sync(&(pdev)->dev);
- 	ufshcd_remove(hba);
-+
-+	phy_power_off(ufs->phy);
-+	phy_exit(ufs->phy);
-+
- 	return 0;
- }
- 
+ enum ufshcd_caps {
 -- 
 2.35.1
 
