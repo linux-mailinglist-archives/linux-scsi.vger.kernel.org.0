@@ -2,49 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802DD592168
-	for <lists+linux-scsi@lfdr.de>; Sun, 14 Aug 2022 17:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D261B592152
+	for <lists+linux-scsi@lfdr.de>; Sun, 14 Aug 2022 17:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240871AbiHNPgv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 14 Aug 2022 11:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
+        id S240713AbiHNPgn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 14 Aug 2022 11:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240888AbiHNPft (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 Aug 2022 11:35:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3F91CFD7;
-        Sun, 14 Aug 2022 08:31:11 -0700 (PDT)
+        with ESMTP id S240926AbiHNPfx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 Aug 2022 11:35:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7721659B;
+        Sun, 14 Aug 2022 08:31:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F830B80B4D;
-        Sun, 14 Aug 2022 15:31:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23144C433C1;
-        Sun, 14 Aug 2022 15:31:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D4F8B80B77;
+        Sun, 14 Aug 2022 15:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B224C4347C;
+        Sun, 14 Aug 2022 15:31:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660491068;
-        bh=dt0BS2f9ek9t8KbWEO8Bu16vd6SbZkTKMNwAzrHuyl8=;
+        s=k20201202; t=1660491075;
+        bh=mr9tRLqQ8X+aGtXimse11oHRXOJPJJGTmgtdeuO+DJw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mCfSQcX0LwFhupOmt+HrhSvWnZIJStW9VXOZ67AozprFqhcNdy+UAL8Qw75UXBwUz
-         Jtr6X+8uilCy6P0IJFcYVQtpvL8KeXBa08r2ZXbhlxGgVzg1n/vNJxyWooQh6vdVfu
-         yG30rnyN+1OiylbUGmFmJPMorIcAePjg7haIqZinTPs4UL8rbARiZaqLW9ZAPUL+hO
-         5BDq3bjHqcFzmgwr7cl3Fl8fPMN1rwaoaMqW8OU1FexnHHuDgfCKY7gOaA9LCFTh2m
-         89SpVLywgOy87Ve93lu00ulb+z6qNU8UhdBlW/WQ6Pyrlzq9QvQDREoKjCnipLGc67
-         vmYPNW9sHV9Yg==
+        b=M9vn/6Wd5wdsXN/xuTvTQ9nYtAOatjkOuaca9GeCq2Pp5yClaiSHzplciUf8Klxf6
+         i/j43apPXjV4vderG4mM84JUD0J7NqEqDEhSw4pKtHexwo1SaCISGoI+WS60zw/hd7
+         nGD6qylCVwCOQSnb9kxcMlK8PHAw5b1yXZwL/4lUy74jlE67tuMv8nLTq8/jYJ4gaO
+         M8c6s0spIhZUlOt1IyIh1Xfw0ERRasceaVjSYWDisIGIarHR1o5wKRlllLhiGm0yfi
+         P0UDlWBLZm65w9svV04Ka+x+0lWhvngGLxeRZTbkmV2KZP0ZGiAIKw3nRMkBY65J58
+         h5w+g1t8xoVWg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Po-Wen Kao <powen.kao@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
+Cc:     Mike Christie <michael.christie@oracle.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        Lee Duncan <lduncan@suse.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
-        matthias.bgg@gmail.com, beanhuo@micron.com, bvanassche@acm.org,
-        avri.altman@wdc.com, peter.wang@mediatek.com, linmq006@gmail.com,
-        ye.guojin@zte.com.cn, linux-scsi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.18 15/56] scsi: ufs: ufs-mediatek: Fix the timing of configuring device regulators
-Date:   Sun, 14 Aug 2022 11:29:45 -0400
-Message-Id: <20220814153026.2377377-15-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, cleech@redhat.com,
+        jejb@linux.ibm.com, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 18/56] scsi: iscsi: Fix HW conn removal use after free
+Date:   Sun, 14 Aug 2022 11:29:48 -0400
+Message-Id: <20220814153026.2377377-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220814153026.2377377-1-sashal@kernel.org>
 References: <20220814153026.2377377-1-sashal@kernel.org>
@@ -62,113 +60,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Po-Wen Kao <powen.kao@mediatek.com>
+From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit 3fd23b8dfb54d9b74eba6dfdd3225db3ac116785 ]
+[ Upstream commit c577ab7ba5f3bf9062db8a58b6e89d4fe370447e ]
 
-Currently the LPM configurations of device regulators may not work since
-VCC is not disabled yet while ufs_mtk_vreg_set_lpm() is executed.
+If qla4xxx doesn't remove the connection before the session, the iSCSI
+class tries to remove the connection for it. We were doing a
+iscsi_put_conn() in the iter function which is not needed and will result
+in a use after free because iscsi_remove_conn() will free the connection.
 
-Fix this by changing the timing of invoking ufs_mtk_vreg_set_lpm().
-
-Link: https://lore.kernel.org/r/20220616053725.5681-5-stanley.chu@mediatek.com
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+Link: https://lore.kernel.org/r/20220616222738.5722-2-michael.christie@oracle.com
+Tested-by: Nilesh Javali <njavali@marvell.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Reviewed-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufs-mediatek.c | 58 ++++++++++++++++++++++++++++++---
- 1 file changed, 53 insertions(+), 5 deletions(-)
+ drivers/scsi/scsi_transport_iscsi.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
-index 86a938075f30..266ceed34751 100644
---- a/drivers/scsi/ufs/ufs-mediatek.c
-+++ b/drivers/scsi/ufs/ufs-mediatek.c
-@@ -1033,7 +1033,6 @@ static int ufs_mtk_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
- 		 * ufshcd_suspend() re-enabling regulators while vreg is still
- 		 * in low-power mode.
- 		 */
--		ufs_mtk_vreg_set_lpm(hba, true);
- 		err = ufs_mtk_mphy_power_on(hba, false);
- 		if (err)
- 			goto fail;
-@@ -1057,12 +1056,13 @@ static int ufs_mtk_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- {
- 	int err;
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 5d21f07456c6..6e73f14b9749 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -2143,8 +2143,6 @@ static int iscsi_iter_destroy_conn_fn(struct device *dev, void *data)
+ 		return 0;
  
-+	if (hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL)
-+		ufs_mtk_vreg_set_lpm(hba, false);
-+
- 	err = ufs_mtk_mphy_power_on(hba, true);
- 	if (err)
- 		goto fail;
- 
--	ufs_mtk_vreg_set_lpm(hba, false);
+ 	iscsi_remove_conn(iscsi_dev_to_conn(dev));
+-	iscsi_put_conn(iscsi_dev_to_conn(dev));
 -
- 	if (ufshcd_is_link_hibern8(hba)) {
- 		err = ufs_mtk_link_set_hpm(hba);
- 		if (err)
-@@ -1227,9 +1227,57 @@ static int ufs_mtk_remove(struct platform_device *pdev)
  	return 0;
  }
  
-+int ufs_mtk_system_suspend(struct device *dev)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = ufshcd_system_suspend(dev);
-+	if (ret)
-+		return ret;
-+
-+	ufs_mtk_vreg_set_lpm(hba, true);
-+
-+	return 0;
-+}
-+
-+int ufs_mtk_system_resume(struct device *dev)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+
-+	ufs_mtk_vreg_set_lpm(hba, false);
-+
-+	return ufshcd_system_resume(dev);
-+}
-+
-+int ufs_mtk_runtime_suspend(struct device *dev)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	int ret = 0;
-+
-+	ret = ufshcd_runtime_suspend(dev);
-+	if (ret)
-+		return ret;
-+
-+	ufs_mtk_vreg_set_lpm(hba, true);
-+
-+	return 0;
-+}
-+
-+int ufs_mtk_runtime_resume(struct device *dev)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+
-+	ufs_mtk_vreg_set_lpm(hba, false);
-+
-+	return ufshcd_runtime_resume(dev);
-+}
-+
- static const struct dev_pm_ops ufs_mtk_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(ufshcd_system_suspend, ufshcd_system_resume)
--	SET_RUNTIME_PM_OPS(ufshcd_runtime_suspend, ufshcd_runtime_resume, NULL)
-+	SET_SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend,
-+				ufs_mtk_system_resume)
-+	SET_RUNTIME_PM_OPS(ufs_mtk_runtime_suspend,
-+			   ufs_mtk_runtime_resume, NULL)
- 	.prepare	 = ufshcd_suspend_prepare,
- 	.complete	 = ufshcd_resume_complete,
- };
 -- 
 2.35.1
 
