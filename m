@@ -2,35 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD715921F8
-	for <lists+linux-scsi@lfdr.de>; Sun, 14 Aug 2022 17:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495A059226B
+	for <lists+linux-scsi@lfdr.de>; Sun, 14 Aug 2022 17:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241218AbiHNPmm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 14 Aug 2022 11:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
+        id S241556AbiHNPr1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 14 Aug 2022 11:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241692AbiHNPmK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 Aug 2022 11:42:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B052823BC6;
-        Sun, 14 Aug 2022 08:33:32 -0700 (PDT)
+        with ESMTP id S241894AbiHNPqg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 Aug 2022 11:46:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F15527CE1;
+        Sun, 14 Aug 2022 08:35:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7525260D3D;
-        Sun, 14 Aug 2022 15:33:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0BD3C43470;
-        Sun, 14 Aug 2022 15:33:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 031F960DEB;
+        Sun, 14 Aug 2022 15:35:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57A64C43142;
+        Sun, 14 Aug 2022 15:35:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660491211;
-        bh=O8aE1jTKrL0TskUtT7Qa2QYgF4+w8ELLS2dMm9AG0R4=;
+        s=k20201202; t=1660491302;
+        bh=kVlUXOCqSVxVL6zHBfQjFoxbj12/c/D87XseBODHvrM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hepIXFa4YAHHDQdkwFBSp6VqLf+G9gxvmWV1FJEsRVhEAMjBfyDXLaza2PTdj0Slp
-         S/Y9julYFEY0NxFAIsTU6P51/X/XJFA/gocUuJUyr5b5z1mnQGGkMqVN+BFdqW/lci
-         i/EXj4cUT68M0i5+e9ASqOWYTfmrFppWnyKaYGJtApEv0th6gOWgtUQKL0HY+I8SNU
-         8f2KSTBsglMgnYxuQQ93ftQRO34XhQoEBuMmkF6snB1CPAVE2miv+WBwfvbTvSMXr3
-         RUobwgljhaWdui8QEAa+r0Jnm2BtiHsM7SKt30tm2NXt7+gk4zzhjjPj6pHAzIJtWX
-         CmuTTCbn3mK5A==
+        b=HhqF+yOEqr5sDBk/lN0sj3hfYNhSF8+MfQEBK4xOZNAoL2PbnT4Rad4vUSz6gRwLB
+         RTjBT/irz7vBOcFb/GO0lK5XRD5Em/6XeAms/kLsqhwyFQEfwFl2kW1zM95HcPNeSj
+         dAYzb6a57t24XgaXfeoVZVR6BqSKflMuaTFacr6fuAWxS0Y1Z+JZOVk16tGwmLbzB6
+         LODbZENAi4K9uZyZDSPFNwpUMGzvh33qsP8GOxmz4Ts+LJjwSlfKJlY1kYMr6nBkW0
+         5DY4jI75TORcNOCrUZbl7sPOVFh/J9KXQGheSETJWrxDxn2P8Pty+tKLCKYdzewVXs
+         ZeVjua1oIPdrQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
@@ -39,12 +39,12 @@ Cc:     James Smart <jsmart2021@gmail.com>,
         Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
         dick.kennedy@broadcom.com, jejb@linux.ibm.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 22/46] scsi: lpfc: Fix possible memory leak when failing to issue CMF WQE
-Date:   Sun, 14 Aug 2022 11:32:23 -0400
-Message-Id: <20220814153247.2378312-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 16/31] scsi: lpfc: Prevent buffer overflow crashes in debugfs with malformed user input
+Date:   Sun, 14 Aug 2022 11:34:16 -0400
+Message-Id: <20220814153431.2379231-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814153247.2378312-1-sashal@kernel.org>
-References: <20220814153247.2378312-1-sashal@kernel.org>
+In-Reply-To: <20220814153431.2379231-1-sashal@kernel.org>
+References: <20220814153431.2379231-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,41 +61,81 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: James Smart <jsmart2021@gmail.com>
 
-[ Upstream commit 2f67dc7970bce3529edce93a0a14234d88b3fcd5 ]
+[ Upstream commit f8191d40aa612981ce897e66cda6a88db8df17bb ]
 
-There is no corresponding free routine if lpfc_sli4_issue_wqe fails to
-issue the CMF WQE in lpfc_issue_cmf_sync_wqe.
+Malformed user input to debugfs results in buffer overflow crashes.  Adapt
+input string lengths to fit within internal buffers, leaving space for NULL
+terminators.
 
-If ret_val is non-zero, then free the iocbq request structure.
-
-Link: https://lore.kernel.org/r/20220701211425.2708-6-jsmart2021@gmail.com
+Link: https://lore.kernel.org/r/20220701211425.2708-3-jsmart2021@gmail.com
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_debugfs.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index d8d26cde70b6..d5a47fdf8650 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -2007,10 +2007,12 @@ lpfc_issue_cmf_sync_wqe(struct lpfc_hba *phba, u32 ms, u64 total)
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index beaf3a8d206f..fbc76d69ea0b 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -2609,8 +2609,8 @@ lpfc_debugfs_multixripools_write(struct file *file, const char __user *buf,
+ 	struct lpfc_sli4_hdw_queue *qp;
+ 	struct lpfc_multixri_pool *multixri_pool;
  
- 	sync_buf->iocb_flag |= LPFC_IO_CMF;
- 	ret_val = lpfc_sli4_issue_wqe(phba, &phba->sli4_hba.hdwq[0], sync_buf);
--	if (ret_val)
-+	if (ret_val) {
- 		lpfc_printf_log(phba, KERN_INFO, LOG_CGN_MGMT,
- 				"6214 Cannot issue CMF_SYNC_WQE: x%x\n",
- 				ret_val);
-+		__lpfc_sli_release_iocbq(phba, sync_buf);
-+	}
- out_unlock:
- 	spin_unlock_irqrestore(&phba->hbalock, iflags);
- 	return ret_val;
+-	if (nbytes > 64)
+-		nbytes = 64;
++	if (nbytes > sizeof(mybuf) - 1)
++		nbytes = sizeof(mybuf) - 1;
+ 
+ 	memset(mybuf, 0, sizeof(mybuf));
+ 
+@@ -2690,8 +2690,8 @@ lpfc_debugfs_nvmestat_write(struct file *file, const char __user *buf,
+ 	if (!phba->targetport)
+ 		return -ENXIO;
+ 
+-	if (nbytes > 64)
+-		nbytes = 64;
++	if (nbytes > sizeof(mybuf) - 1)
++		nbytes = sizeof(mybuf) - 1;
+ 
+ 	memset(mybuf, 0, sizeof(mybuf));
+ 
+@@ -2828,8 +2828,8 @@ lpfc_debugfs_ioktime_write(struct file *file, const char __user *buf,
+ 	char mybuf[64];
+ 	char *pbuf;
+ 
+-	if (nbytes > 64)
+-		nbytes = 64;
++	if (nbytes > sizeof(mybuf) - 1)
++		nbytes = sizeof(mybuf) - 1;
+ 
+ 	memset(mybuf, 0, sizeof(mybuf));
+ 
+@@ -2956,8 +2956,8 @@ lpfc_debugfs_nvmeio_trc_write(struct file *file, const char __user *buf,
+ 	char mybuf[64];
+ 	char *pbuf;
+ 
+-	if (nbytes > 63)
+-		nbytes = 63;
++	if (nbytes > sizeof(mybuf) - 1)
++		nbytes = sizeof(mybuf) - 1;
+ 
+ 	memset(mybuf, 0, sizeof(mybuf));
+ 
+@@ -3062,8 +3062,8 @@ lpfc_debugfs_hdwqstat_write(struct file *file, const char __user *buf,
+ 	char *pbuf;
+ 	int i;
+ 
+-	if (nbytes > 64)
+-		nbytes = 64;
++	if (nbytes > sizeof(mybuf) - 1)
++		nbytes = sizeof(mybuf) - 1;
+ 
+ 	memset(mybuf, 0, sizeof(mybuf));
+ 
 -- 
 2.35.1
 
