@@ -2,46 +2,42 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CE959725C
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Aug 2022 17:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803045972EE
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Aug 2022 17:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240467AbiHQO7F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Aug 2022 10:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
+        id S240132AbiHQP0d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Aug 2022 11:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240411AbiHQO6x (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Aug 2022 10:58:53 -0400
+        with ESMTP id S235568AbiHQP0c (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Aug 2022 11:26:32 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E184BA7A;
-        Wed, 17 Aug 2022 07:58:52 -0700 (PDT)
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M7B0K3C0sz67M1h;
-        Wed, 17 Aug 2022 22:55:45 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA315EDC2;
+        Wed, 17 Aug 2022 08:26:30 -0700 (PDT)
+Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M7BZ61jJJz67Hfl;
+        Wed, 17 Aug 2022 23:21:34 +0800 (CST)
 Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 16:58:50 +0200
+ 15.1.2375.24; Wed, 17 Aug 2022 17:26:28 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 17 Aug 2022 15:58:47 +0100
+ 15.1.2375.24; Wed, 17 Aug 2022 16:26:26 +0100
 From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>,
-        <yangxingui@huawei.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <hare@suse.de>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 6/6] scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
-Date:   Wed, 17 Aug 2022 22:52:14 +0800
-Message-ID: <1660747934-60059-7-git-send-email-john.garry@huawei.com>
+To:     <damien.lemoal@opensource.wdc.com>, <oliver.sang@intel.com>
+CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <hch@lst.de>, John Garry <john.garry@huawei.com>
+Subject: [RFT PATCH] ata: libata: Set __ATA_BASE_SHT max_sectors
+Date:   Wed, 17 Aug 2022 23:20:08 +0800
+Message-ID: <1660749608-62897-1-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1660747934-60059-1-git-send-email-john.garry@huawei.com>
-References: <1660747934-60059-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  lhrpeml500003.china.huawei.com (7.191.162.67)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -53,74 +49,45 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We have no users outside libsas any longer, so make sas_alloc_task(),
-sas_alloc_slow_task(), and sas_free_task() private.
+Commit 0568e6122574 ("ata: libata-scsi: cap ata_device->max_sectors
+according to shost->max_sectors") inadvertently capped the max_sectors
+value for some SATA disks to a value which is lower than we would want.
 
+For a device which supports LBA48, we would previously have request queue
+max_sectors_kb and max_hw_sectors_kb values of 1280 and 32767 respectively.
+
+For AHCI controllers, the value chosen for shost max sectors comes from
+the minimum of the SCSI host default max sectors in
+SCSI_DEFAULT_MAX_SECTORS (1024) and the shost DMA device mapping limit.
+
+This means that we would now set the max_sectors_kb and max_hw_sectors_kb
+values for a disk which supports LBA48 at 512, ignoring DMA mapping limit.
+
+As report by Oliver at [0], this caused a performance regression.
+
+Fix by picking a large enough max sectors value for ATA host controllers
+such that we don't needlessly reduce max_sectors_kb for LBA48 disks.
+
+[0] https://lore.kernel.org/linux-ide/YvsGbidf3na5FpGb@xsang-OptiPlex-9020/T/#m22d9fc5ad15af66066dd9fecf3d50f1b1ef11da3
+
+Fixes: 0568e6122574 ("ata: libata-scsi: cap ata_device->max_sectors according to shost->max_sectors")
+Reported-by: Oliver Sang <oliver.sang@intel.com>
 Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/libsas/sas_init.c     | 3 ---
- drivers/scsi/libsas/sas_internal.h | 4 ++++
- include/scsi/libsas.h              | 4 ----
- 3 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index e4f77072a58d..f2c05ebeb72f 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -35,7 +35,6 @@ struct sas_task *sas_alloc_task(gfp_t flags)
+diff --git a/include/linux/libata.h b/include/linux/libata.h
+index 0269ff114f5a..698032e5ef2d 100644
+--- a/include/linux/libata.h
++++ b/include/linux/libata.h
+@@ -1382,7 +1382,8 @@ extern const struct attribute_group *ata_common_sdev_groups[];
+ 	.proc_name		= drv_name,			\
+ 	.slave_destroy		= ata_scsi_slave_destroy,	\
+ 	.bios_param		= ata_std_bios_param,		\
+-	.unlock_native_capacity	= ata_scsi_unlock_native_capacity
++	.unlock_native_capacity	= ata_scsi_unlock_native_capacity,\
++	.max_sectors		= ATA_MAX_SECTORS_LBA48
  
- 	return task;
- }
--EXPORT_SYMBOL_GPL(sas_alloc_task);
- 
- struct sas_task *sas_alloc_slow_task(gfp_t flags)
- {
-@@ -56,7 +55,6 @@ struct sas_task *sas_alloc_slow_task(gfp_t flags)
- 
- 	return task;
- }
--EXPORT_SYMBOL_GPL(sas_alloc_slow_task);
- 
- void sas_free_task(struct sas_task *task)
- {
-@@ -65,7 +63,6 @@ void sas_free_task(struct sas_task *task)
- 		kmem_cache_free(sas_task_cache, task);
- 	}
- }
--EXPORT_SYMBOL_GPL(sas_free_task);
- 
- /*------------ SAS addr hash -----------*/
- void sas_hash_addr(u8 *hashed, const u8 *sas_addr)
-diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
-index 8d0ad3abc7b5..b54bcf3c9a9d 100644
---- a/drivers/scsi/libsas/sas_internal.h
-+++ b/drivers/scsi/libsas/sas_internal.h
-@@ -52,6 +52,10 @@ void sas_unregister_phys(struct sas_ha_struct *sas_ha);
- struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy, gfp_t gfp_flags);
- void sas_free_event(struct asd_sas_event *event);
- 
-+struct sas_task *sas_alloc_task(gfp_t flags);
-+struct sas_task *sas_alloc_slow_task(gfp_t flags);
-+void sas_free_task(struct sas_task *task);
-+
- int  sas_register_ports(struct sas_ha_struct *sas_ha);
- void sas_unregister_ports(struct sas_ha_struct *sas_ha);
- 
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index 2dbead74a2af..f86b56bf7833 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -639,10 +639,6 @@ struct sas_task_slow {
- #define SAS_TASK_STATE_ABORTED      4
- #define SAS_TASK_NEED_DEV_RESET     8
- 
--extern struct sas_task *sas_alloc_task(gfp_t flags);
--extern struct sas_task *sas_alloc_slow_task(gfp_t flags);
--extern void sas_free_task(struct sas_task *task);
--
- static inline bool sas_is_internal_abort(struct sas_task *task)
- {
- 	return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
+ #define ATA_SUBBASE_SHT(drv_name)				\
+ 	__ATA_BASE_SHT(drv_name),				\
 -- 
 2.35.3
 
