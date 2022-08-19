@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEB759926C
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Aug 2022 03:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5075C599267
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Aug 2022 03:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239019AbiHSBSS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Aug 2022 21:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
+        id S241680AbiHSBST (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Aug 2022 21:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbiHSBSQ (ORCPT
+        with ESMTP id S236179AbiHSBSQ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Aug 2022 21:18:16 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F93CCDD
-        for <linux-scsi@vger.kernel.org>; Thu, 18 Aug 2022 18:18:11 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id f4so2407208qkl.7
-        for <linux-scsi@vger.kernel.org>; Thu, 18 Aug 2022 18:18:11 -0700 (PDT)
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6399CE97
+        for <linux-scsi@vger.kernel.org>; Thu, 18 Aug 2022 18:18:12 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id c20so2417423qtw.8
+        for <linux-scsi@vger.kernel.org>; Thu, 18 Aug 2022 18:18:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=92o+rEXGNMD4nQyfbUugMGB+odPqfWIsb7XTD9K8WHs=;
-        b=mUl2Cu0FsxqrYn5q9Rnv7kXnvWnLzD0y+htunV2cxijHZcoAjQ6k4+mh0MowxrH69G
-         zPJJ9CS7bp/7+7duUnhIBHtdpqLPj85QEwHuMfP9yHRmViyol5EPwaRwNWHaG6x6QeiY
-         sMeeBbQpNHyPPHXW67tE3asdMAqFZ/CRNV6olgvgYr+jOT5qW2S5tfNqFOwnYiDmeqGE
-         bohXy6aYk7AZV+uyxwVaKyJCc+hKSx3PCjwYgl3iaJhKiw0QOYgxu/NKODPC5a7oe+Zt
-         8/3MgGgApUnt7xzTYG7jcZ8dxdYLQmuKAfvw068UNXSSq2XAW2pZ9lHnW9MI/jZjEVy+
-         09wg==
+        bh=pahNwCbJrf/wSivBBZ0962KNSPOHVIkwr/mWjP1s69A=;
+        b=c5Wu3raM5PR3T3s6D+uND8Iuy2WXjYEGvdCQVy8AUdnoYv69IidNWjwbKH3SRrDsDx
+         bJ/hnaxRRP/vf62XtrTG2GqVpV/knS30D2EvbDfSk20027OKs2UZOrrv2vscTI9u5Kid
+         8nwGiQzgq9UeWgvoVetjXu+6Pzx5V21vkYxXgE3zG/tOFnOD3CdRYMtrJiQzYM/6Nh4F
+         E5IbTZT56SmQKf4EBFEMOOtYghYMGXXLAjINCmVPvcdTlVUkhUzYp8QfsvSR6Nx31BDY
+         LXAv9QaX9R1JSNTC7fAFXMIioZM6jwc3gjiXwjh03hESS3LZvhFMnaWqE/ETVJ95Pbcq
+         Qcrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=92o+rEXGNMD4nQyfbUugMGB+odPqfWIsb7XTD9K8WHs=;
-        b=6OQjqCFnk0tIq9LhedfqKmXuDliECHNZaxltyri5jAytIlo8EUFUMvOIhnM3Kxab05
-         45jGuBTh53yyTqsIYFyzCHJH5z1K9uwfpu9upIHLZOXYWi4G06p84T7TXPEGTgQLO9yj
-         EVsrT95GDX+/ZYeuItp1QmZwOahynb/xu+3OiFT33YHcY2GZeu2IiW+K7ZECx+tfUjFc
-         +YbPB1os3/n2HLG1R9xLgADmfH/y1NDIe4RZUlQkyXd8Cb3bRAUflavEkPZPEw7qcAB3
-         BpW1Sp1x12m4c2cu1ExWlu5LYXi7bz2JQuf2WJb3yiZOvH+ScWUfi+nmc67GxzPsj59n
-         ahiA==
-X-Gm-Message-State: ACgBeo352Ou/UT/lKzPKRBAxXj6fqsv2MKg6E9CfywjsamSDjhP3nHnE
-        uQL7U8bSRRjbq7qBlapelPCTChg5VvM=
-X-Google-Smtp-Source: AA6agR5X3X9C/gkZB6GPuHTdR/iGdaqRnJYsSKO6GT7J/s8lqRE2yQHYCj6tb9PSkJ3tdTWuQ7qe5Q==
-X-Received: by 2002:a05:620a:298d:b0:6b9:bf26:c801 with SMTP id r13-20020a05620a298d00b006b9bf26c801mr3933789qkp.470.1660871890320;
-        Thu, 18 Aug 2022 18:18:10 -0700 (PDT)
+        bh=pahNwCbJrf/wSivBBZ0962KNSPOHVIkwr/mWjP1s69A=;
+        b=s+tqh//LQJiIPb44fRxSAkjipdWcbY0B+AsI9HkZa2RZ8guPWFZbB/X33dDVTzL1+N
+         GbnupsTnprfQNvRVuzZXo7RmH6EG2/ZLSaKi5f3B5/QkBQpw5ch9N4kbtCs3DL5bwV7k
+         0ZkSARbjj9BRH8ypsgGWKrV3d3r5tPJx7c5QrNKYTjAI3jzcu0sdDtv3klTwIv1A++Gl
+         9ZCeiQSBSx5WPRgjhq6magK/JX8wF1RfQbQw/KHz8+NOTP29NCgbXqPjTmyoxqrwvlgi
+         rfR6SmIH12aJ+YJheg6jfzFbllgnVYWCE2y8q7kw9Ej/xwc5qNoGiWT5CATNJlmUZZmS
+         O2kw==
+X-Gm-Message-State: ACgBeo0FvtXsdQMFcMM0onNa1wQKMZ0BAOCmy+/rWbP6Pp6Y9rvzSbYd
+        iwE85PDxi//GuruiTNanelj/yYgnsyM=
+X-Google-Smtp-Source: AA6agR7/2LX4YodjNltJ35McanozesgFtowrU8M0XQugKxQiA7pR3YGgxWdcWdE0oS1gRDFAvOj6cg==
+X-Received: by 2002:a05:622a:1492:b0:344:5130:4094 with SMTP id t18-20020a05622a149200b0034451304094mr4941966qtx.3.1660871891423;
+        Thu, 18 Aug 2022 18:18:11 -0700 (PDT)
 Received: from mail-ash-it-01.broadcom.com (ip98-164-255-77.oc.oc.cox.net. [98.164.255.77])
-        by smtp.gmail.com with ESMTPSA id u5-20020a05620a0c4500b006b5e296452csm2612502qki.54.2022.08.18.18.18.09
+        by smtp.gmail.com with ESMTPSA id u5-20020a05620a0c4500b006b5e296452csm2612502qki.54.2022.08.18.18.18.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Aug 2022 18:18:10 -0700 (PDT)
+        Thu, 18 Aug 2022 18:18:11 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 1/7] lpfc: Fix unsolicited FLOGI receive handling during PT2PT discovery
-Date:   Thu, 18 Aug 2022 18:17:30 -0700
-Message-Id: <20220819011736.14141-2-jsmart2021@gmail.com>
+Subject: [PATCH 2/7] lpfc: Fix null ndlp ptr dereference in abnormal exit path for GFT_ID
+Date:   Thu, 18 Aug 2022 18:17:31 -0700
+Message-Id: <20220819011736.14141-3-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220819011736.14141-1-jsmart2021@gmail.com>
 References: <20220819011736.14141-1-jsmart2021@gmail.com>
@@ -69,42 +69,49 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-During a stress offline/online test in PT2PT topology, target
-rediscovery can fail with a specific target vendor array.
+An error case exit from lpfc_cmpl_ct_cmd_gft_id() results in a call
+to lpfc_nlp_put() with a null pointer to a nodelist structure.
 
-When the HBA transitions to online mode it is possible to receive an
-unsolicited FLOGI before processing the Link Up event. The received
-FLOGI will set the defer_flogi_acc_flag, which instructs the driver
-to wait until it transmits its own FLOGI before ACKing the received
-FLOGI.  In this failure scenario, the link up processing clears
-the set defer_flogi_acc_flag before we have sent out the FLOGI.
-As the target has the higher WWPN and is responsible for sending
-the PLOGI, the target is stuck waiting for its FLOGI_ACC that the
-driver will never send.
-
-Remove the clear of defer_flogi_acc_flag from Link Up event
-processing.  In this stress test case, the defer_flogi_acc_flag is
-cleared during the Link Down event processing anyways.
+Changed lpfc_cmpl_ct_cmd_gft_id() to initialize nodelist pointer
+upon entry.
 
 Co-developed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_hbadisc.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_ct.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index 2645def612e6..36090e21bb10 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -1392,7 +1392,6 @@ lpfc_linkup(struct lpfc_hba *phba)
+diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
+index 13dfe285493d..b555ccb5ae34 100644
+--- a/drivers/scsi/lpfc/lpfc_ct.c
++++ b/drivers/scsi/lpfc/lpfc_ct.c
+@@ -1509,7 +1509,7 @@ lpfc_cmpl_ct_cmd_gft_id(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 	struct lpfc_sli_ct_request *CTrsp;
+ 	int did;
+ 	struct lpfc_nodelist *ndlp = NULL;
+-	struct lpfc_nodelist *ns_ndlp = NULL;
++	struct lpfc_nodelist *ns_ndlp = cmdiocb->ndlp;
+ 	uint32_t fc4_data_0, fc4_data_1;
+ 	u32 ulp_status = get_job_ulpstatus(phba, rspiocb);
+ 	u32 ulp_word4 = get_job_word4(phba, rspiocb);
+@@ -1522,15 +1522,12 @@ lpfc_cmpl_ct_cmd_gft_id(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+ 			      ulp_status, ulp_word4, did);
  
- 	/* reinitialize initial HBA flag */
- 	phba->hba_flag &= ~(HBA_FLOGI_ISSUED | HBA_RHBA_CMPL);
--	phba->defer_flogi_acc_flag = false;
+ 	/* Ignore response if link flipped after this request was made */
+-	if ((uint32_t) cmdiocb->event_tag != phba->fc_eventTag) {
++	if ((uint32_t)cmdiocb->event_tag != phba->fc_eventTag) {
+ 		lpfc_printf_vlog(vport, KERN_INFO, LOG_DISCOVERY,
+ 				 "9046 Event tag mismatch. Ignoring NS rsp\n");
+ 		goto out;
+ 	}
  
- 	return 0;
- }
+-	/* Preserve the nameserver node to release the reference. */
+-	ns_ndlp = cmdiocb->ndlp;
+-
+ 	if (ulp_status == IOSTAT_SUCCESS) {
+ 		/* Good status, continue checking */
+ 		CTrsp = (struct lpfc_sli_ct_request *)outp->virt;
 -- 
 2.26.2
 
