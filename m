@@ -2,68 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A4E59EC3E
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Aug 2022 21:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DD359F357
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Aug 2022 08:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiHWTZq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Aug 2022 15:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S232564AbiHXGAk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Aug 2022 02:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiHWTZR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Aug 2022 15:25:17 -0400
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E0513A529
-        for <linux-scsi@vger.kernel.org>; Tue, 23 Aug 2022 11:10:41 -0700 (PDT)
-Received: by mail-pj1-f42.google.com with SMTP id s36-20020a17090a69a700b001faad0a7a34so17999740pjj.4
-        for <linux-scsi@vger.kernel.org>; Tue, 23 Aug 2022 11:10:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=BgTyYUlweJZgux/lp3ya54RGYC3ZvAVJrJaVrVtaUJU=;
-        b=oAlRdZEEAfGSxC4N3lyW+c3qamsjh9AWcx+RXKXZIJhb/+dFRFXiONjAx+EdCeMN85
-         wrYMnJPZKFIUip4xwkysOf7eq/iO+PZf2gXvddhJrFVzhLBA8Cbwbf/2pOfTTW3vI/nx
-         FCfCEldxk0cCCEFgl22lbhxatba0n8tFwSqMBXaJ4y2dGMtpMfw1cazIrDnFid74Pde+
-         W81TO7Sd4SfPGoExrsDuMphAoN+pjf11LTgBFVvgjjIubhDLx+SPshZ93Ea0PAvkdLS3
-         SIJCLQa64gY4TlwfT7gxizqNZrYEW8LcpvazyrlHUah+wF/addBkfYGDExZgjCLdz0ER
-         WVqg==
-X-Gm-Message-State: ACgBeo0EJZseE2Ozn58N1H8Dim7zlE0LAHI1fFXeuRiV+BMQLTkggdNF
-        flsqqFj0f4fT50cqYR3XROk=
-X-Google-Smtp-Source: AA6agR5TYpZdsIh4QsG8aRpYYR8fmj/b24tHoq7IhM9wZEBPYpaXsB3SxGp0ydHj9mnC1MB/eQLWjw==
-X-Received: by 2002:a17:902:6b47:b0:172:9b8b:a3fe with SMTP id g7-20020a1709026b4700b001729b8ba3femr25108572plt.13.1661278240082;
-        Tue, 23 Aug 2022 11:10:40 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:7a86:fe9e:3984:50b8? ([2620:15c:211:201:7a86:fe9e:3984:50b8])
-        by smtp.gmail.com with ESMTPSA id mh1-20020a17090b4ac100b001fac5c53e4esm10519308pjb.38.2022.08.23.11.10.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Aug 2022 11:10:39 -0700 (PDT)
-Message-ID: <026ad7cc-5be9-e90b-8c95-0649caf68779@acm.org>
-Date:   Tue, 23 Aug 2022 11:10:37 -0700
+        with ESMTP id S230492AbiHXGAi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Aug 2022 02:00:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B804456A
+        for <linux-scsi@vger.kernel.org>; Tue, 23 Aug 2022 23:00:36 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 83B571FABA;
+        Wed, 24 Aug 2022 06:00:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1661320834; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ThFT0lFo/T1lvLwlXVMvcWQuqnGGzpwMMeqOkKvhCLk=;
+        b=HxlXmDr4Jv2JT2zIagQ1VZGFqVBBSF+LWAg00DHHm6Wq0ZG3LjKCgkdLuPJvUVdYbIam6f
+        SydD3TFX64gZzsStnqdckL7cYY5Y7FR4Qy5MLRuw/kilIndHxqfQ3diQklgZmEiQJJ00aZ
+        /OnGXuCoaCxnkoz9uM9tRK9qMzRQ2iU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1661320834;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ThFT0lFo/T1lvLwlXVMvcWQuqnGGzpwMMeqOkKvhCLk=;
+        b=kf/pQaN5raDBT12C1dxd705Q9HauaEYJs+wzbidNC8IGFg2Eeocv9+JY7odfY/KyVtuc97
+        fpCeXXAOzb+/zVBw==
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id 7B9452C142;
+        Wed, 24 Aug 2022 06:00:34 +0000 (UTC)
+Received: by adalid.arch.suse.de (Postfix, from userid 16045)
+        id 6D05051A9937; Wed, 24 Aug 2022 08:00:34 +0200 (CEST)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH] lpfc: Return DID_TRANSPORT_DISRUPTED instead of DID_REQUEUE
+Date:   Wed, 24 Aug 2022 08:00:33 +0200
+Message-Id: <20220824060033.138661-1-hare@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] scsi: sd: Revert "Rework asynchronous resume support"
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hannes Reinecke <hare@suse.de>, gzhqyz@gmail.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-References: <20220816172638.538734-1-bvanassche@acm.org>
- <decc1ef4-ec85-d947-ec81-ebeaa982f53f@redhat.com>
- <CAMuHMdVDWrLs_KusG8vXA_1z8ORdPnpfxzNqw4jCG_G0D-fn+A@mail.gmail.com>
- <ecf878dc-905b-f714-4c44-6c90e81f8391@acm.org>
- <CAMuHMdW0WzgQjR33hz9om7ahE5StbDCLozVnZzYAS1WEzStR0w@mail.gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <CAMuHMdW0WzgQjR33hz9om7ahE5StbDCLozVnZzYAS1WEzStR0w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,51 +57,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/22/22 23:41, Geert Uytterhoeven wrote:
-> A lock-up (magic sysrq does not work) during s2idle.
-> I tried bisecting it yesterday, but failed.
-> On v6.0-rc1 (and rc2) it happens ca. 25% of the time, but the closer
-> I get to v5.19, the less likely it is to happen. Apparently 100
-> successful s2idle cycles was not enough to declare a kernel good...
-> 
->      Freezing ...
->      Filesystems sync: 0.001 seconds
->      Freezing user space processes ... (elapsed 0.001 seconds) done.
->      OOM killer disabled.
->      Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
->      sd 0:0:0:0: [sda] Synchronizing SCSI cache
->      sd 0:0:0:0: [sda] Stopping disk
-> 
-> ---> hangs here if it happens
-> 
->      ravb e6800000.ethernet eth0: Link is Down
->      sd 0:0:0:0: [sda] Starting disk
->      Micrel KSZ9031 Gigabit PHY e6800000.ethernet-ffffffff:00: attached
-> PHY driver (mii_bus:phy_addr=e6800000.ethernet-ffffffff:00, irq=186)
->      ata1: link resume succeeded after 1 retries
->      ata1: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
->      ata1.00: configured for UDMA/133
->      OOM killer enabled.
->      Restarting tasks ... done.
->      random: crng reseeded on system resumption
->      PM: suspend exit
->      ravb e6800000.ethernet eth0: Link is Up - 1Gbps/Full - flow control off
+When the driver hits on an internal error condition returning
+DID_REQUEUE will cause I/O to be retried on the same ITL nexus.
+This will inhibit multipathing, resulting in endless retries
+even if the error could have been resolved by using a different
+ITL nexus.
+So return DID_TRANSPORT_DISRUPTED to allow for multipath to engage
+and route I/O to another ITL nexus.
 
-Hi Geert,
+Signed-off-by: Hannes Reinecke <hare@suse.de>
+---
+ drivers/scsi/lpfc/lpfc_scsi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I'm not sure that is enough information to find the root cause. How 
-about enabling the tp_printk boot option and to enable tracing for 
-suspend/resume operations, e.g. as follows?
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index 084c0f9fdc3a..938a5e435943 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -4272,7 +4272,7 @@ lpfc_fcp_io_cmd_wqe_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *pwqeIn,
+ 		    lpfc_cmd->result == IOERR_ABORT_REQUESTED ||
+ 		    lpfc_cmd->result == IOERR_RPI_SUSPENDED ||
+ 		    lpfc_cmd->result == IOERR_SLER_CMD_RCV_FAILURE) {
+-			cmd->result = DID_REQUEUE << 16;
++			cmd->result = DID_TRANSPORT_DISRUPTED << 16;
+ 			break;
+ 		}
+ 		if ((lpfc_cmd->result == IOERR_RX_DMA_FAILED ||
+@@ -4562,7 +4562,7 @@ lpfc_scsi_cmd_iocb_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *pIocbIn,
+ 			    lpfc_cmd->result == IOERR_NO_RESOURCES ||
+ 			    lpfc_cmd->result == IOERR_ABORT_REQUESTED ||
+ 			    lpfc_cmd->result == IOERR_SLER_CMD_RCV_FAILURE) {
+-				cmd->result = DID_REQUEUE << 16;
++				cmd->result = DID_TRANSPORT_DISRUPTED << 16;
+ 				break;
+ 			}
+ 			if ((lpfc_cmd->result == IOERR_RX_DMA_FAILED ||
+-- 
+2.35.3
 
-cd /sys/kernel/tracing &&
-echo 256 > /sys/kernel/tracing/buffer_size_kb &&
-echo nop > current_tracer &&
-echo > trace &&
-echo 1 > events/power/device_pm_callback_start/enable &&
-echo 1 > events/power/device_pm_callback_end/enable &&
-echo 1 > events/power/suspend_resume/enable &&
-echo 1 > tracing_on
-
-Thanks,
-
-Bart.
