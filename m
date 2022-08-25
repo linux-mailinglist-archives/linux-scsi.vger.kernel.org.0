@@ -2,63 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E64A85A0A81
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9525A0A80
 	for <lists+linux-scsi@lfdr.de>; Thu, 25 Aug 2022 09:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238511AbiHYHmv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 25 Aug 2022 03:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
+        id S236070AbiHYHnC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 25 Aug 2022 03:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238468AbiHYHmo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 Aug 2022 03:42:44 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9279DB4C
-        for <linux-scsi@vger.kernel.org>; Thu, 25 Aug 2022 00:42:43 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id bh13so17180746pgb.4
-        for <linux-scsi@vger.kernel.org>; Thu, 25 Aug 2022 00:42:42 -0700 (PDT)
+        with ESMTP id S238507AbiHYHmu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 Aug 2022 03:42:50 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9F0A3441
+        for <linux-scsi@vger.kernel.org>; Thu, 25 Aug 2022 00:42:45 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id n65-20020a17090a5ac700b001fbb4fad865so518963pji.1
+        for <linux-scsi@vger.kernel.org>; Thu, 25 Aug 2022 00:42:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc;
-        bh=h9s46oAmPCQL0s1h3/VJrjMdopyqM1mwca5/TWZPItw=;
-        b=VXhwnLvgpPB7jqfjwxjBI7yjSuPVJPqf5pNjaNlNAlyfbzgDNvVfTht1H74vktDPwO
-         FzNidJuUEei3U7fkX9yU1ish9XuJ/koIodoucanq7rGLBZpfI5iPRfzWEZ6KaDUwF7UO
-         oosLcGAi3uieWm/TgDL1ermPsB5nMFk3yMLWc=
+        bh=QGYWF+NS2PttYj3I8aGAZ/ViUqq7S7cYk1IYTUwu/HY=;
+        b=e+pstbdNl3phss/HI0LC5+XKwx9avnQXLuDIpUJY9cAaZnENnHJFI2ZawRW44su88j
+         Z9DJoPp8q1+ySvweo43pVFImh6OdleY2OaxNkAjvIPPaBDeY7BsTDjdY2cyMTliVU5H8
+         lnbZUSx7y6MY44SjWP+sGMv1MtmwJkXeN4gFA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-message-state:from:to:cc;
-        bh=h9s46oAmPCQL0s1h3/VJrjMdopyqM1mwca5/TWZPItw=;
-        b=Q3YQoprb9o+rxM4pZCPO8BomYlKzRAlUqmrWrW9GRuwVXSHeZeOKTA+ikfQlsHDLjP
-         AG4gruNiXLyPhnp8EBDv9a+RcGvVgnItttQdcDKoY611x/4cbvJPRpWz/bhe5N1wajB0
-         OhyT06faCUY4oV+r6/D3YXchhyMOnvF24Wi4du0fMnl3DayKi3b24dj5wwDBR3s0EYoA
-         T0bENvKMYlqgw+2QGgSkGLuAVeiq3XCrUagiH5wpaWnl697kU3IxWrnPU0GjDBqx6eF3
-         +xq0FY6/uMQenwbZYg4QiR6aCkpqpJ0mvi8CNK+ClqdGAagyqZJ6tymYK1n1qfWtkySR
-         LBPQ==
-X-Gm-Message-State: ACgBeo3S5yNOgJ4Urdpi76jhDKmMMc4I0aFTN5hrckbCxS9Ms3TCzU5M
-        PcfNJlD7jjA32ZrZP4sdqlHVlzmzlUm9akXoj/irdFHN8pOhWfm43mrR6lTFSXHslDMbuhrI2SA
-        jblzWkMnTGXxLZ4G1pubzt++eiZpDWho0q7DDeXD5tzCZWKyIDde1v2S5zxjMbwxwdcImWuiwNF
-        IGeJvpar0w
-X-Google-Smtp-Source: AA6agR7V2155Ow0bsQZucfkwEWyMSUMYSUbnlqI9ouYjfltV7lOjaQyH39Z4eFdzAciY5D9+2/G15Q==
-X-Received: by 2002:a05:6a00:21c2:b0:52b:ff44:6680 with SMTP id t2-20020a056a0021c200b0052bff446680mr2659418pfj.57.1661413361979;
-        Thu, 25 Aug 2022 00:42:41 -0700 (PDT)
+        bh=QGYWF+NS2PttYj3I8aGAZ/ViUqq7S7cYk1IYTUwu/HY=;
+        b=g+ekPpgnsUsKm67ci8F6SOGZD2Ox4tSUXgIkbYueA+W7sW51igmN9l7Fh3BfeXOPiZ
+         PJbxKZrA6ZnTBMNX6q9eR0YNWjD2vcZQJsDAZi9D2Arm7PXlOtPYx84zzkB4hlm93RSC
+         FJCm6QsVTJNLmmDM2zNJnDd7B5ftYX/nPvSyHZpO+rjJ39gXIhedNb6QoTgrr8qTQVbx
+         q5fiEabuQuOuNfVGR3aoqu6SZtCEhFcxhNmzDlgghSG1adI1GLje+XWJNrHhJfBSZZJz
+         LmNdx078chikIYWDmpUxR/h9jjZITjttk2D5k8TG9QaREX0tmstYE5XaaktaMmfpyUih
+         YZuw==
+X-Gm-Message-State: ACgBeo3OLPDLiuMX3GPQ+pQn6NjPZISkM4dBoBU+reg32f1cUSXowY5p
+        ikjGGOj+5G8iEKD6SpMOHnwsjdHK/Ltr57/ehTq1Abdax1lDG3OF+OolySuvGshSccyM4zrgODR
+        wk4c2qdRmyLOefR5i6McdyY9Mq5hrndg+A7693//4lCBwPLj5a8FPmh4aJ9Dl8SqxhIPXx4q1HB
+        7gwuO1pbli
+X-Google-Smtp-Source: AA6agR5t9WBy8zoWEOnre62ftFZZD4ctasTcqwUIj6hJhKqtRNXgRhF4qskJs0Bt9HYUcc0zp2Ih9A==
+X-Received: by 2002:a17:90b:1bca:b0:1fb:7eaf:8955 with SMTP id oa10-20020a17090b1bca00b001fb7eaf8955mr7949729pjb.37.1661413363807;
+        Thu, 25 Aug 2022 00:42:43 -0700 (PDT)
 Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id ns3-20020a17090b250300b001fbb0d07363sm644916pjb.39.2022.08.25.00.42.40
+        by smtp.gmail.com with ESMTPSA id ns3-20020a17090b250300b001fbb0d07363sm644916pjb.39.2022.08.25.00.42.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 00:42:41 -0700 (PDT)
+        Thu, 25 Aug 2022 00:42:43 -0700 (PDT)
 From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH v2 1/4] mpt3sas: Don't change dma mask while reallocating pools
-Date:   Thu, 25 Aug 2022 13:24:54 +0530
-Message-Id: <20220825075457.16422-2-sreekanth.reddy@broadcom.com>
+Subject: [PATCH v2 2/4] mpt3sas: Fix trace buffer registration failed
+Date:   Thu, 25 Aug 2022 13:24:55 +0530
+Message-Id: <20220825075457.16422-3-sreekanth.reddy@broadcom.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220825075457.16422-1-sreekanth.reddy@broadcom.com>
 References: <20220825075457.16422-1-sreekanth.reddy@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004af84005e70bf1f8"
+        boundary="00000000000068186705e70bf1bd"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -69,61 +69,62 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---0000000000004af84005e70bf1f8
+--00000000000068186705e70bf1bd
 Content-Transfer-Encoding: 8bit
 
-When a pool crosses the 4gb boundary region then
-before reallocation pools just change the coherent
-dma mask to 32bit and keep the normal dma mask to 63/64 bit.
+The ExtendedType field was set to one in the diag buffer
+register command and hence MPT Endpoint firmware is
+failing the request with Invalid Field IOCStatus.
+
+So, memset the request frame to zero before framing the
+diag buffer register command.
 
 Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_ctl.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index eeebe80..f8a3b0d 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -2990,19 +2990,26 @@ static int
- _base_config_dma_addressing(struct MPT3SAS_ADAPTER *ioc, struct pci_dev *pdev)
- {
- 	struct sysinfo s;
-+	u64 coherent_dma_mask, dma_mask;
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+index c47da95..0d8b1e9 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+@@ -1694,6 +1694,7 @@ _ctl_diag_register_2(struct MPT3SAS_ADAPTER *ioc,
+ 	ioc->ctl_cmds.status = MPT3_CMD_PENDING;
+ 	memset(ioc->ctl_cmds.reply, 0, ioc->reply_sz);
+ 	mpi_request = mpt3sas_base_get_msg_frame(ioc, smid);
++	memset(mpi_request, 0, ioc->request_sz);
+ 	ioc->ctl_cmds.smid = smid;
  
--	if (ioc->is_mcpu_endpoint ||
--	    sizeof(dma_addr_t) == 4 || ioc->use_32bit_dma ||
--	    dma_get_required_mask(&pdev->dev) <= 32)
-+	if (ioc->is_mcpu_endpoint || sizeof(dma_addr_t) == 4 ||
-+	    dma_get_required_mask(&pdev->dev) <= 32) {
- 		ioc->dma_mask = 32;
-+		coherent_dma_mask = dma_mask = DMA_BIT_MASK(32);
- 	/* Set 63 bit DMA mask for all SAS3 and SAS35 controllers */
--	else if (ioc->hba_mpi_version_belonged > MPI2_VERSION)
-+	} else if (ioc->hba_mpi_version_belonged > MPI2_VERSION) {
- 		ioc->dma_mask = 63;
--	else
-+		coherent_dma_mask = dma_mask = DMA_BIT_MASK(63);
-+	} else {
- 		ioc->dma_mask = 64;
-+		coherent_dma_mask = dma_mask = DMA_BIT_MASK(64);
-+	}
-+
-+	if (ioc->use_32bit_dma)
-+		coherent_dma_mask = DMA_BIT_MASK(32);
+ 	request_data = ioc->diag_buffer[buffer_type];
+@@ -1795,6 +1796,7 @@ _ctl_diag_register_2(struct MPT3SAS_ADAPTER *ioc,
+ 	if (rc && request_data) {
+ 		dma_free_coherent(&ioc->pdev->dev, request_data_sz,
+ 		    request_data, request_data_dma);
++		ioc->diag_buffer[buffer_type] = NULL;
+ 		ioc->diag_buffer_status[buffer_type] &=
+ 		    ~MPT3_DIAG_BUFFER_IS_DRIVER_ALLOCATED;
+ 	}
+@@ -2171,6 +2173,7 @@ mpt3sas_send_diag_release(struct MPT3SAS_ADAPTER *ioc, u8 buffer_type,
+ 	ioc->ctl_cmds.status = MPT3_CMD_PENDING;
+ 	memset(ioc->ctl_cmds.reply, 0, ioc->reply_sz);
+ 	mpi_request = mpt3sas_base_get_msg_frame(ioc, smid);
++	memset(mpi_request, 0, ioc->request_sz);
+ 	ioc->ctl_cmds.smid = smid;
  
--	if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(ioc->dma_mask)) ||
--	    dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(ioc->dma_mask)))
-+	if (dma_set_mask(&pdev->dev, dma_mask) ||
-+	    dma_set_coherent_mask(&pdev->dev, coherent_dma_mask))
- 		return -ENODEV;
+ 	mpi_request->Function = MPI2_FUNCTION_DIAG_RELEASE;
+@@ -2425,6 +2428,7 @@ _ctl_diag_read_buffer(struct MPT3SAS_ADAPTER *ioc, void __user *arg)
+ 	ioc->ctl_cmds.status = MPT3_CMD_PENDING;
+ 	memset(ioc->ctl_cmds.reply, 0, ioc->reply_sz);
+ 	mpi_request = mpt3sas_base_get_msg_frame(ioc, smid);
++	memset(mpi_request, 0, ioc->request_sz);
+ 	ioc->ctl_cmds.smid = smid;
  
- 	if (ioc->dma_mask > 32) {
+ 	mpi_request->Function = MPI2_FUNCTION_DIAG_BUFFER_POST;
 -- 
 2.27.0
 
 
---0000000000004af84005e70bf1f8
+--00000000000068186705e70bf1bd
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -194,13 +195,13 @@ X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
 eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
 Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
 MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDHGkW7fVfk09TRgrZ5o
-46CZwsC5ydvpZtxkMR2kJJWdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIyMDgyNTA3NDI0MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIHI11rrgcvtGC/dj+Jy
+AORSGpq3qdxRmseu0MTGhn9iMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIyMDgyNTA3NDI0NFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
 BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBNEmflad9iDykoWo1NvJ/k9uI4QgiJXnCp/NBS
-fc3OoxjuxceWfuPbE5Q5XMpZkHCEsh2ftdWPZmIN719Kfshv2hjeJO4jKePL4fTLBu003Nzlme97
-oqLVt1/vfE2jPFdEeijzZ59OWxPCB7G/lhqbd7MJvEXbTu3Z6n/ufRASEnhCYRXK8XwhgTa/QPdZ
-YwtPSFd00ikagtDl8ir94A2GXbRD22+Lvofl/10zCSgAyT0i5xqLC4PIX6OsUmbkofJAiw3W2t6v
-0ZbOj/wXBf+YC2P/Ty9HFpz5nIxwTJPL7pdVA6lvJMGV1LdKCAICz7BQVyLY9AiP6M7v/s0OhPT8
---0000000000004af84005e70bf1f8--
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBz6dq3k3k3UQ3zHvoc3rBH6Q0RV8DtLsHdXKBa
+gYFhTCakAO3xgvgL00b6coAPMbyH9t0H/NLkomp1Aykn9IZmjx2BJHctWpusnVYK82xezRBn7SpR
+nhtSx9WLWgCMSu0HF7f8wmP6OZNpkZj2RYqLnTr4DGMtiqBvV67+eklInCgVDzCkE3qkuC88kIHd
+du0VBH4md6Atb96pCMhpKNm9RSsk3Y8BqTR3DLAqdFFy+9KOPB/71mXdaT7vxr/1zi00y1cJBMFN
+sAtR0lt5sLh2GsEBgRXjdZue+TflAtZDU96NA1xugCfcWkdIdQJ3t7zTGcpq2b+WIb6SrYRyo7Ax
+--00000000000068186705e70bf1bd--
