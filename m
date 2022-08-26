@@ -2,64 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4790A5A25A8
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Aug 2022 12:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7D45A25CB
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Aug 2022 12:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245714AbiHZKOr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Aug 2022 06:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S1343672AbiHZK0Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Aug 2022 06:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242826AbiHZKOl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Aug 2022 06:14:41 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D741EBE4F9
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Aug 2022 03:14:38 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id e13so329855wrm.1
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Aug 2022 03:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=YRpdcaJ4r7VRT3/3i///gd/6IhC/k0ujvr195lrn9Lk=;
-        b=VSUkeWQzqxVlhVFu4DC9tyaajVlj//djUl8X7BaKZwQua+k3/xBJFtIuDLjNJjQWLL
-         GUaedmIJPtnNIiSBpY5M30o+30Jmmq1+sM9Rcp9s3vlmgwWWjzOLVA9s2rUJiYwfzqSI
-         ruXSplnM+iFUnlzG+3jlq28Y6R/yJQmNN42YpzLUNlvU/DMtnH8RREhwp6CNmsiD6cAn
-         P+odQZOAnBZyjm6qfeiccNeyztJh7Y0leBhqXWaNypkUwVE/lTfDMjJZ14dvEqlveVCO
-         JbSmJo0t4quHGh+3J0eEE02Ec8Xn1LwKIkbOSGlqxJVVetWJH28se8Gz+WiQRhVspY0M
-         RAiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=YRpdcaJ4r7VRT3/3i///gd/6IhC/k0ujvr195lrn9Lk=;
-        b=3NASf5TEhl89TpjGBSulJ9pil0KKM+/Yqk2BReQeA9OjxAQp8MKDvWVCPBqeZOKoiZ
-         Od43vR5g2xxsXlURljeqRihhakVWJlU90hT+2pC7EQ/Xqe3nm3LGiDmxdYRIS5G65MWQ
-         3hsYu0JSBiKn8kx2xO3OfflRVfSnnfk28JDcRNarlgdCUEp13BSffkQRNCfM4tsbs7qn
-         czAkpK3AN5a2HPWJGUAtI0QQjEmheyMQU40keMlC6yezQlojfxNQJ09jb74zjCeYEwdf
-         wNNAMjOoUpQj/o0zkkJrNlWFSqDbInf17T32dTH7LmyTN3rDqyjkAyWqUYtafTWuG3xF
-         gw3w==
-X-Gm-Message-State: ACgBeo3qcq9kihGW9pVq84/oDKmJ6a0zm7zxgPzwqnbjhBgDwcrvyMyT
-        zZ5nRpZsHfLOG2jqEPHTgaNfTQ==
-X-Google-Smtp-Source: AA6agR6XuzcSJ7avTDDbXtkKVvQcQEVjKXh2P9x7wWoHp7sT5sEudBIMCpUai6U2OGmhHrEje1PKMg==
-X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id b13-20020adff90d000000b0020cde324d35mr4466170wrr.583.1661508877365;
-        Fri, 26 Aug 2022 03:14:37 -0700 (PDT)
-Received: from lb02065.fritz.box ([2001:9e8:140d:2300:3a17:fa67:2b0b:b905])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05600c284800b003a3561d4f3fsm1920423wmb.43.2022.08.26.03.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Aug 2022 03:14:36 -0700 (PDT)
-From:   Jack Wang <jinpu.wang@ionos.com>
-To:     jejb@linux.ibm.com
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi/qlogicpti: Fix dma_map_sg check
-Date:   Fri, 26 Aug 2022 12:14:35 +0200
-Message-Id: <20220826101435.79170-1-jinpu.wang@ionos.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S239595AbiHZK0W (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Aug 2022 06:26:22 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4566CCE35
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Aug 2022 03:26:21 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q319Bi027726
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Aug 2022 03:26:20 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=tu/uZzRxZuI74yVsFyhXuWA93tfXuFEUd2ATj5JolLI=;
+ b=clJsIZ3QnqcXlAEM988V8R7dKaLpW4/hXmu6l/rPw3lLRBgMhWOCEkq074iQv0DK0fLy
+ bvayl+M/JWU0NiWvMtusKbyFTAColF53AtWBD97yqzBiOglDcm4/VZMZ7uLQyLnhWp0O
+ mT+Nw9JcslFavlgGnjmMr692s2zx86oxGha2pkFZsSYd6ax55I+p6dzLWUAu3UyUqDJy
+ frSqph8KBmgheufExq76RWzP8o+qOIrJHvbeUtdqj5qxKg1uzICTakt1iCctYTylPFZc
+ 2/7EaU2oNtseiXQN9XIhlKbPMKhfl/pbAMQk1jh+WfZNazOxGwGUShNtG4Ksm+jmnlt6 aw== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3j5a67na2p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Aug 2022 03:26:20 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 26 Aug
+ 2022 03:26:18 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Fri, 26 Aug 2022 03:26:18 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id E6C593F712F;
+        Fri, 26 Aug 2022 03:26:16 -0700 (PDT)
+From:   Nilesh Javali <njavali@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>, <bhazarika@marvell.com>,
+        <agurumurthy@marvell.com>
+Subject: [PATCH v2 0/7] qla2xxx driver features
+Date:   Fri, 26 Aug 2022 03:25:52 -0700
+Message-ID: <20220826102559.17474-1-njavali@marvell.com>
+X-Mailer: git-send-email 2.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: QPmPxny-agTp3vdbP3T-drE5F-7-M8gQ
+X-Proofpoint-GUID: QPmPxny-agTp3vdbP3T-drE5F-7-M8gQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-26_04,2022-08-25_01,2022-06-22_01
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,32 +64,50 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add the missing error check for dma_map_sg.
+Martin,
 
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Please apply the qla2xxx driver features to the scsi tree
+at your earliest convenience.
 
-Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
----
- drivers/scsi/qlogicpti.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+v2:
+- Revert and incorporate fix based on review comments for,
+"qla2xxx: Fix response queue handler reading stale packets"
+- Incorporate review comments for adding enhancement to driver tracing
+infrastucture.
 
-diff --git a/drivers/scsi/qlogicpti.c b/drivers/scsi/qlogicpti.c
-index 57f2f4135a06..8c961ff03fcd 100644
---- a/drivers/scsi/qlogicpti.c
-+++ b/drivers/scsi/qlogicpti.c
-@@ -909,7 +909,8 @@ static inline int load_cmd(struct scsi_cmnd *Cmnd, struct Command_Entry *cmd,
- 		sg_count = dma_map_sg(&qpti->op->dev, sg,
- 				      scsi_sg_count(Cmnd),
- 				      Cmnd->sc_data_direction);
--
-+		if (!sg_count)
-+			return -1;
- 		ds = cmd->dataseg;
- 		cmd->segment_cnt = sg_count;
- 
+Thanks,
+Nilesh
+
+Anil Gurumurthy (1):
+  qla2xxx: Add NVMe parameters support in Auxiliary Image Status
+
+Arun Easi (4):
+  Revert "scsi: qla2xxx: Fix response queue handler reading stale
+    packets"
+  qla2xxx: Fix response queue handler reading stale packets
+  qla2xxx: Add debugfs create/delete helpers
+  qla2xxx: Enhance driver tracing with separate tunable and more
+
+Nilesh Javali (2):
+  qla2xxx: define static symbols
+  qla2xxx: Update version to 10.02.07.900-k
+
+ drivers/scsi/qla2xxx/qla_bsg.c     |  8 ++-
+ drivers/scsi/qla2xxx/qla_bsg.h     |  3 +-
+ drivers/scsi/qla2xxx/qla_dbg.c     | 50 +++++++++++-----
+ drivers/scsi/qla2xxx/qla_dbg.h     | 43 ++++++++++++++
+ drivers/scsi/qla2xxx/qla_def.h     |  7 +++
+ drivers/scsi/qla2xxx/qla_dfs.c     | 93 ++++++++++++++++++++++++++++++
+ drivers/scsi/qla2xxx/qla_fw.h      |  3 +
+ drivers/scsi/qla2xxx/qla_gbl.h     |  3 +-
+ drivers/scsi/qla2xxx/qla_init.c    |  8 ++-
+ drivers/scsi/qla2xxx/qla_isr.c     | 22 +++----
+ drivers/scsi/qla2xxx/qla_os.c      | 47 +++++++++++----
+ drivers/scsi/qla2xxx/qla_version.h |  4 +-
+ 12 files changed, 242 insertions(+), 49 deletions(-)
+
+
+base-commit: d957e7ffb2c72410bcc1a514153a46719255a5da
 -- 
-2.34.1
+2.19.0.rc0
 
