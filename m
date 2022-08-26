@@ -2,57 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0125A25CA
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Aug 2022 12:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D9A5A25D1
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Aug 2022 12:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343670AbiHZK0Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Aug 2022 06:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S1343691AbiHZK0d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Aug 2022 06:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245238AbiHZK0X (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Aug 2022 06:26:23 -0400
+        with ESMTP id S1343649AbiHZK0Y (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Aug 2022 06:26:24 -0400
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06225CCE3F
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Aug 2022 03:26:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD605CD514
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Aug 2022 03:26:22 -0700 (PDT)
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q319Bj027726
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Aug 2022 03:26:21 -0700
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q6TUeO001371
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Aug 2022 03:26:22 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=zpVyerr0aa3TJnleEu21/cyVKgr0MINvHjUeMO8p+zs=;
- b=hC5+KrcWx7spcMALMzc5JnCks0U78M0XDbHQjBvAF1b0qYcvMBSs3DTLhS+X7c/Scb0h
- eivTBcdDiU18jMAUlzJPftrxiydjOzdNDmVC7NGazMLfTLhtZGZK+b26eKoJnvD9ilqE
- abeqvaNlms4uZmSjfbBdGjF9Qmksm6iXlD0TqBe16b1ELLH/Xlg4muEB8WVDjtr+T8xC
- 7KGaWgHjHNqBCbU61Fue2pjlVsVIZSpbieongBX+uYoijzZ0soAqBrepsCKmAvxHYMn0
- 8f0WeLzRJ1QEMQBl/+agkP5UqjQMao8yKZMJIMz9RalogBkWkJkiiKhc8reMnlMf45/d wg== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3j5a67na2p-2
+ content-type; s=pfpt0220; bh=AdICEKiiFE0sMCWwwLHyDZvRkEHOdNz7JqQCRLGGsOE=;
+ b=DrqGtjaq1AjgZGoZzwztVtiTi/jiWlm77w43f+HmskdxarTJ2jl7GwY9pJ7LlvfgCsP2
+ D1LTB6HYERPJrnCENpWTxsGMKJlVsIdRuh3LoelLy02kvbXtrBX1rwP5SQR55GQQWctG
+ JRonuBBCHHQJ7PYYSKcEicStKTbJLIjatUJ3RIhKv9Whe5eD5vnZ9Mg9VDeEO7657Ymp
+ DrVBGSE0EaRp6LPqKv9LEcsyaFWrN4Waqyulkeh8kUCgIdE7VgcZsg42002PC+4qX+tu
+ N1rfYD+u/kSzQVCF7i5rQCza0/W2ONRFIdLeP2PpVh5O2vdFewLXstTpu80T8/4+zUyQ 6A== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3j5a67na2n-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
         for <linux-scsi@vger.kernel.org>; Fri, 26 Aug 2022 03:26:21 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 26 Aug
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 26 Aug
  2022 03:26:19 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Fri, 26 Aug 2022 03:26:19 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 966423F70F2;
+        by maili.marvell.com (Postfix) with ESMTP id CC5543F70F6;
         Fri, 26 Aug 2022 03:26:17 -0700 (PDT)
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>, <bhazarika@marvell.com>,
         <agurumurthy@marvell.com>
-Subject: [PATCH v2 3/7] qla2xxx: Add debugfs create/delete helpers
-Date:   Fri, 26 Aug 2022 03:25:55 -0700
-Message-ID: <20220826102559.17474-4-njavali@marvell.com>
+Subject: [PATCH v2 4/7] qla2xxx: Add NVMe parameters support in Auxiliary Image Status
+Date:   Fri, 26 Aug 2022 03:25:56 -0700
+Message-ID: <20220826102559.17474-5-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20220826102559.17474-1-njavali@marvell.com>
 References: <20220826102559.17474-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: md6wmRXFU74yP_02nCTPxPnBca2e9t9U
-X-Proofpoint-GUID: md6wmRXFU74yP_02nCTPxPnBca2e9t9U
+X-Proofpoint-ORIG-GUID: 1m3oZpKVzTPBpbbNFbH8qseg3CNmID7F
+X-Proofpoint-GUID: 1m3oZpKVzTPBpbbNFbH8qseg3CNmID7F
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-26_04,2022-08-25_01,2022-06-22_01
@@ -66,137 +66,135 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Arun Easi <aeasi@marvell.com>
+From: Anil Gurumurthy <agurumurthy@marvell.com>
 
-Define a few helpful macros for creating debugfs files.
+Add new API to obtain the NVMe Parameters region status from the
+Auxiliary Image Status bitmap.
 
-Signed-off-by: Arun Easi <aeasi@marvell.com>
+Signed-off-by: Anil Gurumurthy <agurumurthy@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_def.h |  5 ++
- drivers/scsi/qla2xxx/qla_dfs.c | 93 ++++++++++++++++++++++++++++++++++
- 2 files changed, 98 insertions(+)
+ drivers/scsi/qla2xxx/qla_bsg.c  | 8 ++++++--
+ drivers/scsi/qla2xxx/qla_bsg.h  | 3 ++-
+ drivers/scsi/qla2xxx/qla_def.h  | 2 ++
+ drivers/scsi/qla2xxx/qla_fw.h   | 3 +++
+ drivers/scsi/qla2xxx/qla_init.c | 8 ++++++--
+ 5 files changed, 19 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bsg.c
+index 5db9bf69dcff..cd75b179410d 100644
+--- a/drivers/scsi/qla2xxx/qla_bsg.c
++++ b/drivers/scsi/qla2xxx/qla_bsg.c
+@@ -2519,19 +2519,23 @@ qla2x00_get_flash_image_status(struct bsg_job *bsg_job)
+ 	qla27xx_get_active_image(vha, &active_regions);
+ 	regions.global_image = active_regions.global;
+ 
++	if (IS_QLA27XX(ha))
++		regions.nvme_params = QLA27XX_PRIMARY_IMAGE;
++
+ 	if (IS_QLA28XX(ha)) {
+ 		qla28xx_get_aux_images(vha, &active_regions);
+ 		regions.board_config = active_regions.aux.board_config;
+ 		regions.vpd_nvram = active_regions.aux.vpd_nvram;
+ 		regions.npiv_config_0_1 = active_regions.aux.npiv_config_0_1;
+ 		regions.npiv_config_2_3 = active_regions.aux.npiv_config_2_3;
++		regions.nvme_params = active_regions.aux.nvme_params;
+ 	}
+ 
+ 	ql_dbg(ql_dbg_user, vha, 0x70e1,
+-	    "%s(%lu): FW=%u BCFG=%u VPDNVR=%u NPIV01=%u NPIV02=%u\n",
++	    "%s(%lu): FW=%u BCFG=%u VPDNVR=%u NPIV01=%u NPIV02=%u NVME_PARAMS=%u\n",
+ 	    __func__, vha->host_no, regions.global_image,
+ 	    regions.board_config, regions.vpd_nvram,
+-	    regions.npiv_config_0_1, regions.npiv_config_2_3);
++	    regions.npiv_config_0_1, regions.npiv_config_2_3, regions.nvme_params);
+ 
+ 	sg_copy_from_buffer(bsg_job->reply_payload.sg_list,
+ 	    bsg_job->reply_payload.sg_cnt, &regions, sizeof(regions));
+diff --git a/drivers/scsi/qla2xxx/qla_bsg.h b/drivers/scsi/qla2xxx/qla_bsg.h
+index bb64b9c5a74b..d38dab0a07e8 100644
+--- a/drivers/scsi/qla2xxx/qla_bsg.h
++++ b/drivers/scsi/qla2xxx/qla_bsg.h
+@@ -314,7 +314,8 @@ struct qla_active_regions {
+ 	uint8_t vpd_nvram;
+ 	uint8_t npiv_config_0_1;
+ 	uint8_t npiv_config_2_3;
+-	uint8_t reserved[32];
++	uint8_t nvme_params;
++	uint8_t reserved[31];
+ } __packed;
+ 
+ #include "qla_edif_bsg.h"
 diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index 3ec6a200942e..22274b405d01 100644
+index 22274b405d01..802eec6407d9 100644
 --- a/drivers/scsi/qla2xxx/qla_def.h
 +++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -35,6 +35,11 @@
+@@ -4773,6 +4773,7 @@ struct active_regions {
+ 		uint8_t vpd_nvram;
+ 		uint8_t npiv_config_0_1;
+ 		uint8_t npiv_config_2_3;
++		uint8_t nvme_params;
+ 	} aux;
+ };
  
- #include <uapi/scsi/fc/fc_els.h>
+@@ -5057,6 +5058,7 @@ struct qla27xx_image_status {
+ #define QLA28XX_AUX_IMG_VPD_NVRAM		BIT_1
+ #define QLA28XX_AUX_IMG_NPIV_CONFIG_0_1		BIT_2
+ #define QLA28XX_AUX_IMG_NPIV_CONFIG_2_3		BIT_3
++#define QLA28XX_AUX_IMG_NVME_PARAMS		BIT_4
  
-+#define QLA_DFS_DEFINE_DENTRY(_debugfs_file_name) \
-+	struct dentry *dfs_##_debugfs_file_name
-+#define QLA_DFS_ROOT_DEFINE_DENTRY(_debugfs_file_name) \
-+	struct dentry *qla_dfs_##_debugfs_file_name
+ #define SET_VP_IDX	1
+ #define SET_AL_PA	2
+diff --git a/drivers/scsi/qla2xxx/qla_fw.h b/drivers/scsi/qla2xxx/qla_fw.h
+index 361015b5763e..f307beed9d29 100644
+--- a/drivers/scsi/qla2xxx/qla_fw.h
++++ b/drivers/scsi/qla2xxx/qla_fw.h
+@@ -1675,6 +1675,7 @@ struct qla_flt_location {
+ #define FLT_REG_VPD_SEC_27XX_1	0x52
+ #define FLT_REG_VPD_SEC_27XX_2	0xD8
+ #define FLT_REG_VPD_SEC_27XX_3	0xDA
++#define FLT_REG_NVME_PARAMS_27XX	0x21
+ 
+ /* 28xx */
+ #define FLT_REG_AUX_IMG_PRI_28XX	0x125
+@@ -1691,6 +1692,8 @@ struct qla_flt_location {
+ #define FLT_REG_MPI_SEC_28XX		0xF0
+ #define FLT_REG_PEP_PRI_28XX		0xD1
+ #define FLT_REG_PEP_SEC_28XX		0xF1
++#define FLT_REG_NVME_PARAMS_PRI_28XX	0x14E
++#define FLT_REG_NVME_PARAMS_SEC_28XX	0x179
+ 
+ struct qla_flt_region {
+ 	__le16	code;
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index e7fe0e52c11d..e12db95de688 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -7933,6 +7933,9 @@ qla28xx_component_status(
+ 
+ 	active_regions->aux.npiv_config_2_3 =
+ 	    qla28xx_component_bitmask(aux, QLA28XX_AUX_IMG_NPIV_CONFIG_2_3);
 +
- /* Big endian Fibre Channel S_ID (source ID) or D_ID (destination ID). */
- typedef struct {
- 	uint8_t domain;
-diff --git a/drivers/scsi/qla2xxx/qla_dfs.c b/drivers/scsi/qla2xxx/qla_dfs.c
-index 85bd0e468d43..777808af5634 100644
---- a/drivers/scsi/qla2xxx/qla_dfs.c
-+++ b/drivers/scsi/qla2xxx/qla_dfs.c
-@@ -489,6 +489,99 @@ qla_dfs_naqp_show(struct seq_file *s, void *unused)
- 	return 0;
++	active_regions->aux.nvme_params =
++	    qla28xx_component_bitmask(aux, QLA28XX_AUX_IMG_NVME_PARAMS);
  }
  
-+/*
-+ * Helper macros for setting up debugfs entries.
-+ * _name: The name of the debugfs entry
-+ * _ctx_struct: The context that was passed when creating the debugfs file
-+ *
-+ * QLA_DFS_SETUP_RD could be used when there is only a show function.
-+ * - show function take the name qla_dfs_<sysfs-name>_show
-+ *
-+ * QLA_DFS_SETUP_RW could be used when there are both show and write functions.
-+ * - show function take the name  qla_dfs_<sysfs-name>_show
-+ * - write function take the name qla_dfs_<sysfs-name>_write
-+ *
-+ * To have a new debugfs entry, do:
-+ * 1. Create a "struct dentry *" in the appropriate structure in the format
-+ * dfs_<sysfs-name>
-+ * 2. Setup debugfs entries using QLA_DFS_SETUP_RD / QLA_DFS_SETUP_RW
-+ * 3. Create debugfs file in qla2x00_dfs_setup() using QLA_DFS_CREATE_FILE
-+ * or QLA_DFS_ROOT_CREATE_FILE
-+ * 4. Remove debugfs file in qla2x00_dfs_remove() using QLA_DFS_REMOVE_FILE
-+ * or QLA_DFS_ROOT_REMOVE_FILE
-+ *
-+ * Example for creating "TEST" sysfs file:
-+ * 1. struct qla_hw_data { ... struct dentry *dfs_TEST; }
-+ * 2. QLA_DFS_SETUP_RD(TEST, scsi_qla_host_t);
-+ * 3. In qla2x00_dfs_setup():
-+ * QLA_DFS_CREATE_FILE(ha, TEST, 0600, ha->dfs_dir, vha);
-+ * 4. In qla2x00_dfs_remove():
-+ * QLA_DFS_REMOVE_FILE(ha, TEST);
-+ */
-+#define QLA_DFS_SETUP_RD(_name, _ctx_struct)				\
-+static int								\
-+qla_dfs_##_name##_open(struct inode *inode, struct file *file)		\
-+{									\
-+	_ctx_struct *__ctx = inode->i_private;				\
-+									\
-+	return single_open(file, qla_dfs_##_name##_show, __ctx);	\
-+}									\
-+									\
-+static const struct file_operations qla_dfs_##_name##_ops = {		\
-+	.open           = qla_dfs_##_name##_open,			\
-+	.read           = seq_read,					\
-+	.llseek         = seq_lseek,					\
-+	.release        = single_release,				\
-+};
-+
-+#define QLA_DFS_SETUP_RW(_name, _ctx_struct)				\
-+static int								\
-+qla_dfs_##_name##_open(struct inode *inode, struct file *file)		\
-+{									\
-+	_ctx_struct *__ctx = inode->i_private;				\
-+									\
-+	return single_open(file, qla_dfs_##_name##_show, __ctx);	\
-+}									\
-+									\
-+static const struct file_operations qla_dfs_##_name##_ops = {		\
-+	.open           = qla_dfs_##_name##_open,			\
-+	.read           = seq_read,					\
-+	.llseek         = seq_lseek,					\
-+	.release        = single_release,				\
-+	.write		= qla_dfs_##_name##_write,			\
-+};
-+
-+#define QLA_DFS_ROOT_CREATE_FILE(_name, _perm, _ctx)			\
-+	do {								\
-+		if (!qla_dfs_##_name)					\
-+			qla_dfs_##_name = debugfs_create_file(#_name,	\
-+					_perm, qla2x00_dfs_root, _ctx,	\
-+					&qla_dfs_##_name##_ops);	\
-+	} while (0)
-+
-+#define QLA_DFS_ROOT_REMOVE_FILE(_name)					\
-+	do {								\
-+		if (qla_dfs_##_name) {					\
-+			debugfs_remove(qla_dfs_##_name);		\
-+			qla_dfs_##_name = NULL;				\
-+		}							\
-+	} while (0)
-+
-+#define QLA_DFS_CREATE_FILE(_struct, _name, _perm, _parent, _ctx)	\
-+	do {								\
-+		(_struct)->dfs_##_name = debugfs_create_file(#_name,	\
-+					_perm, _parent, _ctx,		\
-+					&qla_dfs_##_name##_ops)		\
-+	} while (0)
-+
-+#define QLA_DFS_REMOVE_FILE(_struct, _name)				\
-+	do {								\
-+		if ((_struct)->dfs_##_name) {				\
-+			debugfs_remove((_struct)->dfs_##_name);		\
-+			(_struct)->dfs_##_name = NULL;			\
-+		}							\
-+	} while (0)
-+
  static int
- qla_dfs_naqp_open(struct inode *inode, struct file *file)
- {
+@@ -8041,11 +8044,12 @@ qla28xx_get_aux_images(
+ 	}
+ 
+ 	ql_dbg(ql_dbg_init, vha, 0x018f,
+-	    "aux images active: BCFG=%u VPD/NVR=%u NPIV0/1=%u NPIV2/3=%u\n",
++	    "aux images active: BCFG=%u VPD/NVR=%u NPIV0/1=%u NPIV2/3=%u, NVME=%u\n",
+ 	    active_regions->aux.board_config,
+ 	    active_regions->aux.vpd_nvram,
+ 	    active_regions->aux.npiv_config_0_1,
+-	    active_regions->aux.npiv_config_2_3);
++	    active_regions->aux.npiv_config_2_3,
++	    active_regions->aux.nvme_params);
+ }
+ 
+ void
 -- 
 2.19.0.rc0
 
