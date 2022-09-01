@@ -2,97 +2,161 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C345A8D2A
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Sep 2022 07:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F41A25A8DF0
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Sep 2022 08:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbiIAFNH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Sep 2022 01:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
+        id S233231AbiIAGEg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Sep 2022 02:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbiIAFNC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Sep 2022 01:13:02 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93121122BE1
-        for <linux-scsi@vger.kernel.org>; Wed, 31 Aug 2022 22:13:01 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27VNmwM6024939;
-        Thu, 1 Sep 2022 05:13:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=pDa4gw1glcjZuvI/t48ojLWxijZqhYwK7YAZZSYeWK0=;
- b=0IJKqXxfevM8+s7vTjA3oEdrxe+7+0FiaM+zElbiGUSSBIk1n9DZVuARQ46fbsvtEqkt
- 3b9xA+tCqiTLf6wX2XazzzE+JwJ+Fj7XA2jsJt2ZPpojRRb6bBz2Uj/0EIcpdzLDJyDe
- CJ6qxBQfIbgg/GxNN6DK5Okm9pzzwczTsg/9vVm83+0WTB8Xt3Bu5Td18xt8v1VeU/HG
- S7ncStMWESR5fQqmOGrGYH6kBskk8xE9WBIzfIyMc9J+Rce9y8NqVSR16YzSu94prcKc
- qr5mASu4/heMTaSAUUOXHEbtPLJ6ByTOyNBKJpfEFT0lGEY0NT2TRm0qpoH6ocNowX6R jA== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j79pc2qa7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Sep 2022 05:13:00 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2813ZxZC033641;
-        Thu, 1 Sep 2022 05:12:59 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ja6gr3g3q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Sep 2022 05:12:59 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2815CsXV008754;
-        Thu, 1 Sep 2022 05:12:59 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3ja6gr3g0k-9;
-        Thu, 01 Sep 2022 05:12:59 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        linux-scsi@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v2 00/15] mpi3mr: Added Support for SAS Transport
-Date:   Thu,  1 Sep 2022 01:12:53 -0400
-Message-Id: <166200877444.26143.13021831569993619314.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220804131226.16653-1-sreekanth.reddy@broadcom.com>
-References: <20220804131226.16653-1-sreekanth.reddy@broadcom.com>
+        with ESMTP id S232440AbiIAGEf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Sep 2022 02:04:35 -0400
+Received: from m13111.mail.163.com (m13111.mail.163.com [220.181.13.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEA91E8339;
+        Wed, 31 Aug 2022 23:04:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=TXvoI
+        haUY/iXJSdIN8mkn50AsHOGVufvR2Mtl3RH4BM=; b=ggqzbHFQNUWhsr0bD5kwm
+        C5+lYXTyNQ69PRbpS66nbsEyX5vuPJG8Vgb4CoS0veH2RkqdIENNkoH/9Ds7WBYR
+        Zuj5SVpcH8YDqRzXJP3IpqEX1Pg+ytE6gmH/Be2E4n6U31w0wJLBu7DWAvZCsW9T
+        zEgCidXcKBCkemVe0iZuh8=
+Received: from 15815827059$163.com ( [116.128.244.169] ) by
+ ajax-webmail-wmsvr111 (Coremail) ; Thu, 1 Sep 2022 14:03:48 +0800 (CST)
+X-Originating-IP: [116.128.244.169]
+Date:   Thu, 1 Sep 2022 14:03:48 +0800 (CST)
+From:   huhai <15815827059@163.com>
+To:     "Sathya Prakash Veerichetty" <sathya.prakash@broadcom.com>
+Cc:     jejb@linux.ibm.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Sreekanth Reddy" <sreekanth.reddy@broadcom.com>,
+        "Suganath Prabu Subramani" <suganath-prabu.subramani@broadcom.com>,
+        PDL-MPT-FUSIONLINUX <MPT-FusionLinux.pdl@broadcom.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        huhai <huhai@kylinos.cn>, stable@vger.kernel.org,
+        "Jackie Liu" <liuyun01@kylinos.cn>
+Subject: Re:Re: [PATCH] scsi: mpt3sas: Fix NULL pointer crash due to missing
+ check device hostdata
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <CAFdVvOzAWcFLgPi_y8HW5Jx5JbC1AgBtADnwvd9usq8veU0vOg@mail.gmail.com>
+References: <20220825092645.326953-1-15815827059@163.com>
+ <49b0768d.96d.182f69a26f6.Coremail.15815827059@163.com>
+ <CAFdVvOzAWcFLgPi_y8HW5Jx5JbC1AgBtADnwvd9usq8veU0vOg@mail.gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_02,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- mlxscore=0 spamscore=0 phishscore=0 mlxlogscore=999 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209010022
-X-Proofpoint-ORIG-GUID: WtWX1Oc4ht0AMaUKhO7XR5hWBiwoL6E1
-X-Proofpoint-GUID: WtWX1Oc4ht0AMaUKhO7XR5hWBiwoL6E1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <3b74287a.3728.182f7a604b3.Coremail.15815827059@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: b8GowAD3TNtFSxBjugZMAA--.28828W
+X-CM-SenderInfo: rprvmiivyslimvzbiqqrwthudrp/xtbB3xdvhWBHLk8cHQABsk
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 4 Aug 2022 18:42:11 +0530, Sreekanth Reddy wrote:
-
-> - Enhanced the driver to support SAS transport layer and
->  expose SAS controller PHYs, ports, attached expander, expander PHYs,
->  expander ports and SAS/SATA end devices to the kernel through
->  SAS transport class.
-> - The driver also provides call back handlers for get_linkerrors,
->  get_enclosure_identifier, get_bay_identifier, phy_reset, phy_enable,
->  set_phy_speed and smp_handler to the kernel as defined by the
->  SAS transport layer.
-> - The SAS transport layer support is enabled only when the
->  controller multipath capability is not enabled.
-> - The NVMe devices, VDs, vSES and PCIe Managed SES devices
->  are not exposed through SAS transport.
-> 
-> [...]
-
-Applied to 6.1/scsi-queue, thanks!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+CkF0IDIwMjItMDktMDEgMTM6MDg6MTQsICJTYXRoeWEgUHJha2FzaCBWZWVyaWNoZXR0eSIgPHNh
+dGh5YS5wcmFrYXNoQGJyb2FkY29tLmNvbT4gd3JvdGU6Cj5UaGUgcGF0Y2ggY291bGQgYmUgaW1w
+cm92ZWQgdG8gY2xlYXIgdGhlIGF0YV9jbWRfcGVuZGluZyBiaXQgZm9yIHRoZQo+Y2FzZXMgIXNh
+c19kZXZpY2VfcHJpdl9kYXRhLT5zYXNfdGFyZ2V0IGFuZAo+c2FzX2RldmljZV9wcml2X2RhdGEt
+PnNhc190YXJnZXQtPmRlbGV0ZWQgYmVmb3JlIHJldHVybmluZwoKPkRJRF9OT19DT05ORUNUIHRv
+IHJldGFpbiB0aGUgY3VycmVudCBmdW5jdGlvbmFsaXR5LgoKSGksIAoKTWF5YmUgbXkgY29tbWl0
+IGluZm9ybWF0aW9uIGlzIG5vdCBjbGVhciBlbm91Z2ijrFRoaXMgcGF0Y2ggaXMgZml4ZWQgTlVM
+TCBwb2ludGVyIGNyYXNoCmR1dG8gdG8gInN0cnVjdCBNUFQzU0FTX0RFVklDRSAqcHJpdiA9IHNj
+bWQtPmRldmljZS0+aG9zdGRhdGE7IiAgZ290IGEgTlVMTCBwb2ludGVyLCBhbmQKd2hlbiAiY2xl
+YXJfYml0KDAsICZwcml2LT5hdGFfY29tbWFuZF9wZW5kaW5nKTsiIGlzIGNhbGxlZCwga2VybmVs
+IHdpbGwgcGFuaWMuIAoKVGhhbmtzCgo+Cj4KPk9uIFdlZCwgQXVnIDMxLCAyMDIyIGF0IDc6MTEg
+UE0gaHVoYWkgPDE1ODE1ODI3MDU5QDE2My5jb20+IHdyb3RlOgo+Pgo+PiBGcmllbmRseSBwaW5n
+Lgo+Pgo+Pgo+PiBBdCAyMDIyLTA4LTI1IDE3OjI2OjQ1LCAiaHVoYWkiIDwxNTgxNTgyNzA1OUAx
+NjMuY29tPiB3cm90ZToKPj4gPkZyb206IGh1aGFpIDxodWhhaUBreWxpbm9zLmNuPgo+PiA+Cj4+
+ID5JZiBfc2NzaWhfaW9fZG9uZSgpIGlzIGNhbGxlZCB3aXRoIHNjbWQtPmRldmljZS0+aG9zdGRh
+dGE9TlVMTCwgaXQgY2FuIGxlYWQKPj4gPnRvIHRoZSBmb2xsb3dpbmcgcGFuaWM6Cj4+ID4KPj4g
+PiAgQlVHOiB1bmFibGUgdG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2Ug
+YXQgMDAwMDAwMDAwMDAwMDAxOAo+PiA+ICBQR0QgNDU0N2E0MDY3IFA0RCA0NTQ3YTQwNjcgUFVE
+IDAKPj4gPiAgT29wczogMDAwMiBbIzFdIFNNUCBOT1BUSQo+PiA+ICBDUFU6IDYyIFBJRDogMCBD
+b21tOiBzd2FwcGVyLzYyIEtkdW1wOiBsb2FkZWQgTm90IHRhaW50ZWQgNC4xOS45MC0yNC40LnYy
+MTAxLmt5MTAueDg2XzY0ICMxCj4+ID4gIEhhcmR3YXJlIG5hbWU6IFN0b3JhZ2UgU2VydmVyLzY1
+TjMyLVVTLCBCSU9TIFNRTDEwNDEyMTcgMDUvMzAvMjAyMgo+PiA+ICBSSVA6IDAwMTA6X3Njc2lo
+X3NldF9zYXRsX3BlbmRpbmcrMHgyZC8weDUwIFttcHQzc2FzXQo+PiA+ICBDb2RlOiAwMCAwMCA0
+OCA4YiA4NyA2MCAwMSAwMCAwMCAwZiBiNiAxMCA4MCBmYSBhMSA3NCAwOSAzMSBjMCA4MCBmYSA4
+NSA3NCAwMiBmMyBjMyA0OCA4YiA0NyAzOCA0MCA4NCBmNiA0OCA4YiA4MCA5OCAwMCAwMCAwMCA3
+NSAwOCA8ZjA+IDgwIDYwIDE4IGZlIDMxIGMwIGMzIGYwIDQ4IDBmIGJhIDY4IDE4IDAwIDBmIDky
+IGMwIDBmIGI2IGMwIGMzCj4+ID4gIFJTUDogMDAxODpmZmZmOGVjMjJmYzAzZTAwIEVGTEFHUzog
+MDAwMTAwNDYKPj4gPiAgUkFYOiAwMDAwMDAwMDAwMDAwMDAwIFJCWDogZmZmZjhlYmExYjA3MjUx
+OCBSQ1g6IDAwMDAwMDAwMDAwMDAwMDEKPj4gPiAgUkRYOiAwMDAwMDAwMDAwMDAwMDg1IFJTSTog
+MDAwMDAwMDAwMDAwMDAwMCBSREk6IGZmZmY4ZWJhMWIwNzI1MTgKPj4gPiAgUkJQOiAwMDAwMDAw
+MDAwMDAwZGJkIFIwODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6IDAwMDAwMDAwMDAwMjk3MDAKPj4g
+PiAgUjEwOiBmZmZmOGVjMjJmYzAzZjgwIFIxMTogMDAwMDAwMDAwMDAwMDAwMCBSMTI6IGZmZmY4
+ZWJlMmQzNjA5ZTgKPj4gPiAgUjEzOiBmZmZmOGViZTJhNzJiNjAwIFIxNDogZmZmZjhlY2E0NzI3
+MDdlMCBSMTU6IDAwMDAwMDAwMDAwMDAwMjAKPj4gPiAgRlM6ICAwMDAwMDAwMDAwMDAwMDAwKDAw
+MDApIEdTOmZmZmY4ZWMyMmZjMDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAwMDAwMAo+PiA+
+ICBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzCj4+ID4g
+IENSMjogMDAwMDAwMDAwMDAwMDAxOCBDUjM6IDAwMDAwMDA0NmU1ZjYwMDAgQ1I0OiAwMDAwMDAw
+MDAwMzQwNmUwCj4+ID4gIENhbGwgVHJhY2U6Cj4+ID4gICA8SVJRPgo+PiA+ICAgX3Njc2loX2lv
+X2RvbmUrMHg0YS8weDlmMCBbbXB0M3Nhc10KPj4gPiAgIF9iYXNlX2ludGVycnVwdCsweDIzZi8w
+eGUxMCBbbXB0M3Nhc10KPj4gPiAgIF9faGFuZGxlX2lycV9ldmVudF9wZXJjcHUrMHg0MC8weDE5
+MAo+PiA+ICAgaGFuZGxlX2lycV9ldmVudF9wZXJjcHUrMHgzMC8weDcwCj4+ID4gICBoYW5kbGVf
+aXJxX2V2ZW50KzB4MzYvMHg2MAo+PiA+ICAgaGFuZGxlX2VkZ2VfaXJxKzB4N2UvMHgxOTAKPj4g
+PiAgIGhhbmRsZV9pcnErMHhhOC8weDExMAo+PiA+ICAgZG9fSVJRKzB4NDkvMHhlMAo+PiA+Cj4+
+ID5GaXggaXQgYnkgbW92ZSBzY21kLT5kZXZpY2UtPmhvc3RkYXRhIGNoZWNrIGJlZm9yZSBfc2Nz
+aWhfc2V0X3NhdGxfcGVuZGluZwo+PiA+Y2FsbGVkLgo+PiA+Cj4+ID5PdGhlciBjaGFuZ2VzOgo+
+PiA+LSBJdCBsb29rcyBjbGVhciB0byBtb3ZlIGdldCBtcGlfcmVwbHkgdG8gbmVhciBpdHMgY2hl
+Y2suCj4+ID4KPj4gPkZpeGVzOiBmZmI1ODQ1NjU4OTQgKCJzY3NpOiBtcHQzc2FzOiBmaXggaGFu
+ZyBvbiBhdGEgcGFzc3Rocm91Z2ggY29tbWFuZHMiKQo+PiA+Q2M6IDxzdGFibGVAdmdlci5rZXJu
+ZWwub3JnPiAjIHY0LjkrCj4+ID5Dby1kZXZlbG9wZWQtYnk6IEphY2tpZSBMaXUgPGxpdXl1bjAx
+QGt5bGlub3MuY24+Cj4+ID5TaWduZWQtb2ZmLWJ5OiBKYWNraWUgTGl1IDxsaXV5dW4wMUBreWxp
+bm9zLmNuPgo+PiA+U2lnbmVkLW9mZi1ieTogaHVoYWkgPGh1aGFpQGt5bGlub3MuY24+Cj4+ID4t
+LS0KPj4gPiBkcml2ZXJzL3Njc2kvbXB0M3Nhcy9tcHQzc2FzX3Njc2loLmMgfCAxNSArKysrKysr
+LS0tLS0tLS0KPj4gPiAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9u
+cygtKQo+PiA+Cj4+ID5kaWZmIC0tZ2l0IGEvZHJpdmVycy9zY3NpL21wdDNzYXMvbXB0M3Nhc19z
+Y3NpaC5jIGIvZHJpdmVycy9zY3NpL21wdDNzYXMvbXB0M3Nhc19zY3NpaC5jCj4+ID5pbmRleCBk
+ZWYzN2E3ZTU5ODAuLjg1ZjU3NDlhMDQyMSAxMDA2NDQKPj4gPi0tLSBhL2RyaXZlcnMvc2NzaS9t
+cHQzc2FzL21wdDNzYXNfc2NzaWguYwo+PiA+KysrIGIvZHJpdmVycy9zY3NpL21wdDNzYXMvbXB0
+M3Nhc19zY3NpaC5jCj4+ID5AQCAtNTcwNCwyNyArNTcwNCwyNiBAQCBfc2NzaWhfaW9fZG9uZShz
+dHJ1Y3QgTVBUM1NBU19BREFQVEVSICppb2MsIHUxNiBzbWlkLCB1OCBtc2l4X2luZGV4LCB1MzIg
+cmVwbHkpCj4+ID4gICAgICAgc3RydWN0IE1QVDNTQVNfREVWSUNFICpzYXNfZGV2aWNlX3ByaXZf
+ZGF0YTsKPj4gPiAgICAgICB1MzIgcmVzcG9uc2VfY29kZSA9IDA7Cj4+ID4KPj4gPi0gICAgICBt
+cGlfcmVwbHkgPSBtcHQzc2FzX2Jhc2VfZ2V0X3JlcGx5X3ZpcnRfYWRkcihpb2MsIHJlcGx5KTsK
+Pj4gPi0KPj4gPiAgICAgICBzY21kID0gbXB0M3Nhc19zY3NpaF9zY3NpX2xvb2t1cF9nZXQoaW9j
+LCBzbWlkKTsKPj4gPiAgICAgICBpZiAoc2NtZCA9PSBOVUxMKQo+PiA+ICAgICAgICAgICAgICAg
+cmV0dXJuIDE7Cj4+ID4KPj4gPisgICAgICBzYXNfZGV2aWNlX3ByaXZfZGF0YSA9IHNjbWQtPmRl
+dmljZS0+aG9zdGRhdGE7Cj4+ID4rICAgICAgaWYgKCFzYXNfZGV2aWNlX3ByaXZfZGF0YSB8fCAh
+c2FzX2RldmljZV9wcml2X2RhdGEtPnNhc190YXJnZXQgfHwKPj4gPisgICAgICAgICAgIHNhc19k
+ZXZpY2VfcHJpdl9kYXRhLT5zYXNfdGFyZ2V0LT5kZWxldGVkKSB7Cj4+ID4rICAgICAgICAgICAg
+ICBzY21kLT5yZXN1bHQgPSBESURfTk9fQ09OTkVDVCA8PCAxNjsKPj4gPisgICAgICAgICAgICAg
+IGdvdG8gb3V0Owo+PiA+KyAgICAgIH0KPj4gPiAgICAgICBfc2NzaWhfc2V0X3NhdGxfcGVuZGlu
+ZyhzY21kLCBmYWxzZSk7Cj4+ID4KPj4gPiAgICAgICBtcGlfcmVxdWVzdCA9IG1wdDNzYXNfYmFz
+ZV9nZXRfbXNnX2ZyYW1lKGlvYywgc21pZCk7Cj4+ID4KPj4gPisgICAgICBtcGlfcmVwbHkgPSBt
+cHQzc2FzX2Jhc2VfZ2V0X3JlcGx5X3ZpcnRfYWRkcihpb2MsIHJlcGx5KTsKPj4gPiAgICAgICBp
+ZiAobXBpX3JlcGx5ID09IE5VTEwpIHsKPj4gPiAgICAgICAgICAgICAgIHNjbWQtPnJlc3VsdCA9
+IERJRF9PSyA8PCAxNjsKPj4gPiAgICAgICAgICAgICAgIGdvdG8gb3V0Owo+PiA+ICAgICAgIH0K
+Pj4gPgo+PiA+LSAgICAgIHNhc19kZXZpY2VfcHJpdl9kYXRhID0gc2NtZC0+ZGV2aWNlLT5ob3N0
+ZGF0YTsKPj4gPi0gICAgICBpZiAoIXNhc19kZXZpY2VfcHJpdl9kYXRhIHx8ICFzYXNfZGV2aWNl
+X3ByaXZfZGF0YS0+c2FzX3RhcmdldCB8fAo+PiA+LSAgICAgICAgICAgc2FzX2RldmljZV9wcml2
+X2RhdGEtPnNhc190YXJnZXQtPmRlbGV0ZWQpIHsKPj4gPi0gICAgICAgICAgICAgIHNjbWQtPnJl
+c3VsdCA9IERJRF9OT19DT05ORUNUIDw8IDE2Owo+PiA+LSAgICAgICAgICAgICAgZ290byBvdXQ7
+Cj4+ID4tICAgICAgfQo+PiA+ICAgICAgIGlvY19zdGF0dXMgPSBsZTE2X3RvX2NwdShtcGlfcmVw
+bHktPklPQ1N0YXR1cyk7Cj4+ID4KPj4gPiAgICAgICAvKgo+PiA+LS0KPj4gPjIuMjcuMAo+PiA+
+Cj4+ID4KPj4gPk5vIHZpcnVzIGZvdW5kCj4+ID4gICAgICAgICAgICAgICBDaGVja2VkIGJ5IEhp
+bGxzdG9uZSBOZXR3b3JrIEFudGlWaXJ1cwo+Cj4tLSAKPlRoaXMgZWxlY3Ryb25pYyBjb21tdW5p
+Y2F0aW9uIGFuZCB0aGUgaW5mb3JtYXRpb24gYW5kIGFueSBmaWxlcyB0cmFuc21pdHRlZCAKPndp
+dGggaXQsIG9yIGF0dGFjaGVkIHRvIGl0LCBhcmUgY29uZmlkZW50aWFsIGFuZCBhcmUgaW50ZW5k
+ZWQgc29sZWx5IGZvciAKPnRoZSB1c2Ugb2YgdGhlIGluZGl2aWR1YWwgb3IgZW50aXR5IHRvIHdo
+b20gaXQgaXMgYWRkcmVzc2VkIGFuZCBtYXkgY29udGFpbiAKPmluZm9ybWF0aW9uIHRoYXQgaXMg
+Y29uZmlkZW50aWFsLCBsZWdhbGx5IHByaXZpbGVnZWQsIHByb3RlY3RlZCBieSBwcml2YWN5IAo+
+bGF3cywgb3Igb3RoZXJ3aXNlIHJlc3RyaWN0ZWQgZnJvbSBkaXNjbG9zdXJlIHRvIGFueW9uZSBl
+bHNlLiBJZiB5b3UgYXJlIAo+bm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQgb3IgdGhlIHBlcnNv
+biByZXNwb25zaWJsZSBmb3IgZGVsaXZlcmluZyB0aGUgCj5lLW1haWwgdG8gdGhlIGludGVuZGVk
+IHJlY2lwaWVudCwgeW91IGFyZSBoZXJlYnkgbm90aWZpZWQgdGhhdCBhbnkgdXNlLCAKPmNvcHlp
+bmcsIGRpc3RyaWJ1dGluZywgZGlzc2VtaW5hdGlvbiwgZm9yd2FyZGluZywgcHJpbnRpbmcsIG9y
+IGNvcHlpbmcgb2YgCj50aGlzIGUtbWFpbCBpcyBzdHJpY3RseSBwcm9oaWJpdGVkLiBJZiB5b3Ug
+cmVjZWl2ZWQgdGhpcyBlLW1haWwgaW4gZXJyb3IsIAo+cGxlYXNlIHJldHVybiB0aGUgZS1tYWls
+IHRvIHRoZSBzZW5kZXIsIGRlbGV0ZSBpdCBmcm9tIHlvdXIgY29tcHV0ZXIsIGFuZCAKPmRlc3Ry
+b3kgYW55IHByaW50ZWQgY29weSBvZiBpdC4K
