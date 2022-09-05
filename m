@@ -2,177 +2,163 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7CD5AD84E
-	for <lists+linux-scsi@lfdr.de>; Mon,  5 Sep 2022 19:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5765AD884
+	for <lists+linux-scsi@lfdr.de>; Mon,  5 Sep 2022 19:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237988AbiIERWW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 5 Sep 2022 13:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        id S231733AbiIERkx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 5 Sep 2022 13:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237907AbiIERWU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Sep 2022 13:22:20 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28E161D98
-        for <linux-scsi@vger.kernel.org>; Mon,  5 Sep 2022 10:22:16 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 285HDfKm010867;
-        Mon, 5 Sep 2022 17:22:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=U/eXC6gE60NrCv37lnHTnjj0qY22Ns3iSRp538G7Hi8=;
- b=lcJDJLFaOnyuNwxz2nN3y8YwdnaEs3UPlRVigGo9/Si3FcfasDl1sRO6pxz/UxqyzxK+
- 5b0mLqYu/sWAoPIzLfwigc39SmVwA82VAj4W7IWSRPSbrwwJOUchc2x8grvWb5P1mmEI
- oU/1vsjgcc9vvZfxpPZjXkj+mTAzZTg4Yjehj9COTyusih3JBsx6oi0eiRlbiMsTU/Cj
- Gi/mHb0Q8AjSnMGuws4H8Itwvm2uy1Pm6/35X8ey2QxI/p7zyxO7I10A86lqHbeFu81M
- smZV9YAsjjnT3GBELUcr7gv0IqwzCkkQDQ48h1y5Uee0xXr23fmlNvDQqyvbdH005Z8L AQ== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jdnaqr5ds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 17:22:06 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 285HKEAO018715;
-        Mon, 5 Sep 2022 17:22:05 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3jbxj8t0r1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 05 Sep 2022 17:22:04 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 285HMQXo44040694
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 5 Sep 2022 17:22:26 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 969A35204F;
-        Mon,  5 Sep 2022 17:22:02 +0000 (GMT)
-Received: from [9.145.147.217] (unknown [9.145.147.217])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 8FD555204E;
-        Mon,  5 Sep 2022 17:22:01 +0000 (GMT)
-Message-ID: <d192edad-26c1-c466-49d4-56e19df4c24c@linux.ibm.com>
-Date:   Mon, 5 Sep 2022 19:22:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] scsi: scsi_transport_fc: use %u for dev_loss_tmo
-Content-Language: en-US
-To:     mwilck@suse.com, "Martin K. Petersen" <martin.petersen@oracle.com>,
+        with ESMTP id S231500AbiIERkw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Sep 2022 13:40:52 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C4828704
+        for <linux-scsi@vger.kernel.org>; Mon,  5 Sep 2022 10:40:51 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id q15so9115711pfn.11
+        for <linux-scsi@vger.kernel.org>; Mon, 05 Sep 2022 10:40:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=rPEqF/kCJ1Ce5s+YMC4wzaNAHEIxIfz6CvorWqdp7RA=;
+        b=WdkmDL+IC+SkCs7mujG+hRn45TN29/qwzchq5zX/YXf8GtaSCNwjehbRZmxO426TIg
+         KAfgS69Z7tVFuWzcSpD8u8bb0/VimovAHu9mj9PXbWamaZrigA4J4Fs7GbFzFfKoHk19
+         O9zSsl5N+PN6jA12dir7gmDyMA1rDx2IiEaWNInMzG1WhacmUrQJL3pnt5QOX8AGbhk7
+         7nkM/oAH0TbJT90Ow2pe5WfBlYiTaFZQpRC9NcEtq95vOGJe0ngpgXBiHEWRBPYyfhJs
+         JuZZNA74Am3me23ef/M4hY5FyTY20CyRxu0vOgiPOHEfXHUx4ATtw07VdPw2vD7xIwgk
+         tkIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=rPEqF/kCJ1Ce5s+YMC4wzaNAHEIxIfz6CvorWqdp7RA=;
+        b=j6d3FDnrWig0iBj1OQWIPLCFMqv6kN5qT/6N6KxI91mf5ltmvE7s3PNWg5V556iN2Q
+         FLp3/TRS6ZHHifcIQMf90rjZQ6l5i51Z6YWhG7GdKCpE7zWdi+ZIMWI8E7eAiFPqUp6t
+         2h61J80NbN0V28TKMUUcMnU49T13a6hTXmYZduONlgK1KKWsoSJXFcCSpiAUBWs8OvvR
+         nMTQl3NOTsomoc6o1s25rgo5xgjc3KGmZBfPicWKv7g14QD7TOPdnUPb9E0D/PLeDuo2
+         BZlkMuZ3zJx7O0le7Mphh/RyKrD6WPjorp6wXa+M0sHT8pHvCSFFaXw9SVRwgP/m5X8C
+         G4uA==
+X-Gm-Message-State: ACgBeo0zethFkpZMwY0fevGwEdQxliOZfsuZxP37mENy1QeJzZ5o5Tev
+        nbDTas78KfJVz1HkeuF+F5E=
+X-Google-Smtp-Source: AA6agR4kxW+YBcBeY7g1Py6WZQVR4yhIY1nlkESKtJFWHhfTvFSyXTv2QkXv4K2A+H2ascHC2oI1XA==
+X-Received: by 2002:a05:6a00:c96:b0:52e:979c:dd63 with SMTP id a22-20020a056a000c9600b0052e979cdd63mr51824766pfv.50.1662399650741;
+        Mon, 05 Sep 2022 10:40:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j6-20020a170902c08600b0016d1f474653sm7843455pld.52.2022.09.05.10.40.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Sep 2022 10:40:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 5 Sep 2022 10:40:47 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
         Mike Christie <michael.christie@oracle.com>,
-        Hannes Reinecke <hare@suse.de>
-Cc:     "George, Martin" <Martin.George@netapp.com>,
-        James Bottomley <jejb@linux.vnet.ibm.com>,
-        linux-scsi@vger.kernel.org, Benjamin Block <bblock@linux.ibm.com>,
-        James Smart <james.smart@broadcom.com>
-References: <20220902131519.16513-1-mwilck@suse.com>
-From:   Steffen Maier <maier@linux.ibm.com>
-In-Reply-To: <20220902131519.16513-1-mwilck@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: aVnw9iE98B5mqhEs9Xe5H5B_9avz0sRM
-X-Proofpoint-GUID: aVnw9iE98B5mqhEs9Xe5H5B_9avz0sRM
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: Re: [PATCH v5 2/4] scsi: core: Make sure that hosts outlive targets
+Message-ID: <20220905173905.GA3405134@roeck-us.net>
+References: <20220728221851.1822295-1-bvanassche@acm.org>
+ <20220728221851.1822295-3-bvanassche@acm.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-05_12,2022-09-05_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
- bulkscore=0 priorityscore=1501 adultscore=0 suspectscore=0 mlxlogscore=999
- mlxscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209050082
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728221851.1822295-3-bvanassche@acm.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/2/22 15:15, mwilck@suse.com wrote:
-> From: Martin Wilck <mwilck@suse.com>
+On Thu, Jul 28, 2022 at 03:18:49PM -0700, Bart Van Assche wrote:
+> From: Ming Lei <ming.lei@redhat.com>
 > 
-> dev_loss_tmo is an unsigned value. Using "%d" as output format
-> causes irritating negative values to be shown in sysfs.
+> Fix the race conditions between SCSI LLD kernel module unloading and SCSI
+> device and target removal by making sure that SCSI hosts are destroyed after
+> all associated target and device objects have been freed.
 > 
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Ming Lei <ming.lei@redhat.com>
+> Cc: Mike Christie <michael.christie@oracle.com>
+> Cc: Hannes Reinecke <hare@suse.de>
+> Cc: John Garry <john.garry@huawei.com>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> [ bvanassche: Reworked Ming's patch and split it ]
 
-Yes, I had also noticed this a while ago and took the following notes along 
-with the workaround clamping -1 to the old max value in my automated zfcp test 
-script in user space:
+I know this has been reported before, but it is still seen in the
+upstream kernel, so:
 
-read val < ${fcrportsys}/dev_loss_tmo
-# 
-https://github.com/opensvc/multipath-tools/commit/d01ccd33fca99884baeb7da037f729e6058c03ef
-# ("libmultipath: dev_loss_tmo is unsigned") changing MAX_DEV_LOSS_TMO from 
-0x7FFFFFFF==2147483647 to UINT_MAX
-# on top of the older
-# 
-https://github.com/opensvc/multipath-tools/commit/15e5070fdc22cde2dd2a9f4a8022e124e9425bd9
-# ("libmultipath: ensure dev_loss_tmo will be update to MAX_DEV_LOSS_TMO if 
-no_path_retry set to queue")
-# vvv
-# The deamon seems to complain:
-# multipathd[...]: rport-1:0-3: Cannot parse dev_loss_tmo attribute '-1'
-# ^^^
-[ "$val" = "-1" ] && val=2147483647
+This patch results in a deadlock if a USB storage device is removed.
 
+[   29.291148] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+[   29.300064] ci_hdrc ci_hdrc.1: remove, state 4
+[   29.300317] usb usb2: USB disconnect, device number 1
+[   29.305090] ci_hdrc ci_hdrc.1: USB bus 2 deregistered
+[   29.307052] ci_hdrc ci_hdrc.0: remove, state 1
+[   29.307214] usb usb1: USB disconnect, device number 1
+[   29.307321] usb 1-1: USB disconnect, device number 2
+[   29.344575] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+[   29.345323] sd 0:0:0:0: [sda] Synchronize Cache(10) failed: Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK
+[   63.358569] INFO: task init:347 blocked for more than 30 seconds.
+[   63.358928]       Tainted: G        W        N 6.0.0-rc4-00017-gcec18aa4b63a #1
+[   63.359200] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[   63.359600] task:init            state:D stack:    0 pid:  347 ppid:     1 flags:0x00000000
+[   63.360104]  __schedule from schedule+0x60/0xbc
+[   63.360368]  schedule from scsi_remove_host+0x154/0x1c0
+[   63.360602]  scsi_remove_host from usb_stor_disconnect+0x4c/0xac
+[   63.360852]  usb_stor_disconnect from usb_unbind_interface+0x74/0x268
+[   63.361100]  usb_unbind_interface from device_release_driver_internal+0x1a0/0x22c
+[   63.361383]  device_release_driver_internal from bus_remove_device+0xcc/0xfc
+[   63.361651]  bus_remove_device from device_del+0x16c/0x3f8
+[   63.361877]  device_del from usb_disable_device+0xcc/0x178
+[   63.362097]  usb_disable_device from usb_disconnect+0xd0/0x230
+[   63.362325]  usb_disconnect from usb_disconnect+0x9c/0x230
+[   63.362536]  usb_disconnect from usb_remove_hcd+0xd0/0x16c
+[   63.362741]  usb_remove_hcd from host_stop+0x38/0xa8
+[   63.362946]  host_stop from ci_hdrc_remove+0x44/0x120
+[   63.363148]  ci_hdrc_remove from platform_remove+0x20/0x4c
+[   63.363367]  platform_remove from device_release_driver_internal+0x1a0/0x22c
+[   63.363635]  device_release_driver_internal from bus_remove_device+0xcc/0xfc
+[   63.363897]  bus_remove_device from device_del+0x16c/0x3f8
+[   63.364117]  device_del from platform_device_del.part.0+0x10/0x74
+[   63.364353]  platform_device_del.part.0 from platform_device_unregister+0x18/0x24
+[   63.364623]  platform_device_unregister from ci_hdrc_remove_device+0xc/0x20
+[   63.364886]  ci_hdrc_remove_device from ci_hdrc_imx_remove+0x28/0x110
+[   63.365131]  ci_hdrc_imx_remove from device_shutdown+0x174/0x250
+[   63.365372]  device_shutdown from __do_sys_reboot+0x124/0x270
+[   63.365616]  __do_sys_reboot from ret_fast_syscall+0x0/0x1c
+[   63.365849] Exception stack(0xd1859fa8 to 0xd1859ff0)
+[   63.366054] 9fa0:                   01234567 000c623f fee1dead 28121969 01234567 00000000
+[   63.366343] 9fc0: 01234567 000c623f 00000001 00000058 000d85c0 00000000 00000000 00000000
+[   63.366620] 9fe0: 000d8298 bef49de4 000918bc b6e8cedc
+[   63.366881] INFO: lockdep is turned off.
+[   63.367069] Kernel panic - not syncing: hung_task: blocked tasks
 
-Even though I don't care too much about the default value source in fc_host, I 
-wonder if we should also fix this for consistency:
-> fc_private_host_show_function(dev_loss_tmo, "%d\n", 20, );
-=> fc_private_host_show_function(dev_loss_tmo, "%u\n", 20, );
-> static FC_DEVICE_ATTR(host, dev_loss_tmo, S_IRUGO | S_IWUSR,
-> 		      show_fc_host_dev_loss_tmo,
-> 		      store_fc_private_host_dev_loss_tmo);
+I understand that it looks like the problem is caused by the shutdown
+function in the imx driver calling remove_device, but that is not really
+the problem.
 
-After all, the other default value source is already a proper unsigned int:
-> /*
->  * dev_loss_tmo: the default number of seconds that the FC transport
->  *   should insulate the loss of a remote port.
->  *   The maximum will be capped by the value of SCSI_DEVICE_BLOCK_MAX_TIMEOUT.
->  */
-> static unsigned int fc_dev_loss_tmo = 60;		/* seconds */
-> 
-> module_param_named(dev_loss_tmo, fc_dev_loss_tmo, uint, S_IRUGO|S_IWUSR);
-> MODULE_PARM_DESC(dev_loss_tmo,
-> 		 "Maximum number of seconds that the FC transport should"
-> 		 " insulate the loss of a remote port. Once this value is"
-> 		 " exceeded, the scsi target is removed. Value should be"
-> 		 " between 1 and SCSI_DEVICE_BLOCK_MAX_TIMEOUT if"
-> 		 " fast_io_fail_tmo is not set.");
+As can be seen in the backtrace, usb_stor_disconnect() calls
+scsi_remove_host(). Thanks to this patch, scsi_remove_host() now
+waits for the scsi release function to be called. However,
+usb_stor_disconnect() only calls release_everything() and with it
+scsi_host_put() _after_ scsi_remove_host() has returned. Since
+scsi_remove_host() now waits for the resource which is released
+by calling scsi_host_put(), this causes a deadlock.
 
+If my analysis is correct, any USB storage device removal should
+result in the deadlock. My analysis may of course be wrong. If so,
+please let me know what I missed.
 
-
-Reviewed-by: Steffen Maier <maier@linux.ibm.com>
-
-> Signed-off-by: Martin Wilck <mwilck@suse.com>
-> ---
->   drivers/scsi/scsi_transport_fc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/scsi_transport_fc.c b/drivers/scsi/scsi_transport_fc.c
-> index a2524106206db..df4aa4a5f83c4 100644
-> --- a/drivers/scsi/scsi_transport_fc.c
-> +++ b/drivers/scsi/scsi_transport_fc.c
-> @@ -1170,7 +1170,7 @@ static int fc_rport_set_dev_loss_tmo(struct fc_rport *rport,
->   	return 0;
->   }
-> 
-> -fc_rport_show_function(dev_loss_tmo, "%d\n", 20, )
-> +fc_rport_show_function(dev_loss_tmo, "%u\n", 20, )
->   static ssize_t
->   store_fc_rport_dev_loss_tmo(struct device *dev, struct device_attribute *attr,
->   			    const char *buf, size_t count)
-
-
--- 
-Mit freundlichen Gruessen / Kind regards
-Steffen Maier
-
-Linux on IBM Z and LinuxONE
-
-https://www.ibm.com/privacy/us/en/
-IBM Deutschland Research & Development GmbH
-Vorsitzender des Aufsichtsrats: Gregor Pillen
-Geschaeftsfuehrung: David Faller
-Sitz der Gesellschaft: Boeblingen
-Registergericht: Amtsgericht Stuttgart, HRB 243294
+Thanks,
+Guenter
