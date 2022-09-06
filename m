@@ -2,84 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1823D5AEE6F
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Sep 2022 17:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34D05AEE51
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Sep 2022 17:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbiIFPP7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Sep 2022 11:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
+        id S232380AbiIFPFT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Sep 2022 11:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232944AbiIFPPi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Sep 2022 11:15:38 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CCE7D79A
-        for <linux-scsi@vger.kernel.org>; Tue,  6 Sep 2022 07:28:51 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id o123so11868568vsc.3
-        for <linux-scsi@vger.kernel.org>; Tue, 06 Sep 2022 07:28:50 -0700 (PDT)
+        with ESMTP id S230382AbiIFPEz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Sep 2022 11:04:55 -0400
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20AF1B7AC;
+        Tue,  6 Sep 2022 07:19:51 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id r12so2295447pfl.10;
+        Tue, 06 Sep 2022 07:19:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=uRHNUx4gSoSK/8ZMa9UsDNi3QnbIs3RAldhpW93mcWQ=;
-        b=yy61nk9qRg0cLGVxYB1F0MMGbjVzUU0sVgP6NtGL8ofz9nDTaHbF1wcAEBEXBZiorY
-         oWzQ8UwDpo3lbjljdDkwj8e2+rqKVhmhnYsjuBQi7egHHoInErSf39NAJRyEISyyrFWI
-         odNOElb90PJk+iqM9gxiwUuFlw09TCAjznWqYSN6W6ljMlyqP6QSuwOU1gzBK3rxzSVQ
-         xpmOmu5wz2rqb6NaGwxxrwvc41QjHcRq3BFJeCUDMSu/rTHb9QcNCN2zw0a1vu2Xv4Ay
-         ji1ktXuO5YiQfEdY1InIKRS4p7IFeHZEI/YVQPhu43tVMsBEnlo1KacD/M03uSfaxkcY
-         DkfQ==
-X-Gm-Message-State: ACgBeo0wZA3tNYfrKyZvlTgGp8PQmOINUz6C0yh6F/hCUszA3ik3JJ/+
-        jyL0tg57ozcMEzLt96kCHYSzJws4DgA=
-X-Google-Smtp-Source: AA6agR5nWv6BBBL6BJJCQFH226Pg52utvjFt1KN8vt38xlCzbtQfF1djIr4XZ52uWSVFF8UpuZsizA==
-X-Received: by 2002:a17:902:e886:b0:176:a2b7:3977 with SMTP id w6-20020a170902e88600b00176a2b73977mr11771204plg.160.1662473778600;
-        Tue, 06 Sep 2022 07:16:18 -0700 (PDT)
+        bh=8z+ngUdgRfZSNBd8l0oMIcTPjlLmd2UOWV/IwBCVAfU=;
+        b=p+8PH4SH5P4k0l/GnRHFkZNZG1JQn3N/83GpgO+3gAnuUA4nEPIvwBMqy5Bo46eSw+
+         f/4i9EzXVA3hhpwdeJXNNahHjQssXF0WhGqGV3/fF5jKodHP9/gVNM9K6/sNXI3eRv+j
+         3lKmdC4zYLgVgLHkXCPALPGJpRnKcDHUzCHkh0mvIzBvg+abLwv61tbk4Y7Yn46gme9M
+         Kll3l5W33LA1fCtKn/zvZ6VN9o1rydoIm5Yl8WPpII+yqg8mTTivWzp2R3bpuV40y7ZE
+         GTNHebbntddrB8bUeDlKFa8162574UWJJn7vpGhevt3ok4+MYLNu1Ly1QtqFyFSnXUHV
+         YzJQ==
+X-Gm-Message-State: ACgBeo1H3qaDqOY15p+AF6y1pEtuyw5BNhFc3FLuybmMxNJ06t5cy4Tk
+        m8cS0yxFNdodrN8Z2dXUr2U=
+X-Google-Smtp-Source: AA6agR6XOdN2aEBhWvd4c7pK+bXTS/Ch8bb+Y6PEzCwePrt21LVWKFUu9naCrelNpPV7MTJyZP2hVA==
+X-Received: by 2002:aa7:9f82:0:b0:538:5e1e:86dc with SMTP id z2-20020aa79f82000000b005385e1e86dcmr40711351pfr.54.1662473886337;
+        Tue, 06 Sep 2022 07:18:06 -0700 (PDT)
 Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id e22-20020aa79816000000b00537e328bc11sm10134478pfl.31.2022.09.06.07.16.16
+        by smtp.gmail.com with ESMTPSA id z27-20020aa7991b000000b005385e2e86eesm9608397pff.18.2022.09.06.07.18.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 07:16:17 -0700 (PDT)
-Message-ID: <5462c15b-3ae2-21b7-2f1d-79103b196c34@acm.org>
-Date:   Tue, 6 Sep 2022 07:16:15 -0700
+        Tue, 06 Sep 2022 07:18:05 -0700 (PDT)
+Message-ID: <97f7a666-39b5-0132-368d-06985436c377@acm.org>
+Date:   Tue, 6 Sep 2022 07:18:04 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.1
-Subject: Re: [PATCH v5 2/4] scsi: core: Make sure that hosts outlive targets
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Mike Christie <michael.christie@oracle.com>,
-        Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-References: <20220728221851.1822295-1-bvanassche@acm.org>
- <20220728221851.1822295-3-bvanassche@acm.org>
- <20220905173905.GA3405134@roeck-us.net>
+Subject: Re: [Bisected] Disconnecting pendrive with opened files causes
+ trouble on 6.0.0-rc3
 Content-Language: en-US
+To:     =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-scsi@vger.kernel.org, adrian.hunter@intel.com,
+        martin.petersen@oracle.com, jaegeuk@kernel.org,
+        michael.christie@oracle.com, hch@lst.de, ming.lei@redhat.com,
+        hare@suse.de, john.garry@huawei.com
+References: <fbd28a8c-858d-8891-f6be-a5c2ca3131da@o2.pl>
 From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220905173905.GA3405134@roeck-us.net>
+In-Reply-To: <fbd28a8c-858d-8891-f6be-a5c2ca3131da@o2.pl>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/5/22 10:40, Guenter Roeck wrote:
-> I understand that it looks like the problem is caused by the shutdown
-> function in the imx driver calling remove_device, but that is not really
-> the problem.
+On 9/4/22 11:28, Mateusz Jończyk wrote:
+> I have bisected this down to
+> commit 16728aaba62e ("scsi: core: Make sure that hosts outlive targets")
+> 
+> With the previous
+> commit fe442604199e ("scsi: core: Make sure that targets outlive devices")
+> the problem does not happen.
 
-Hi Guenter,
+Hi Mateusz,
 
-A revert for this patch series has been queued and is expected to be sent
-soon to Linus. See also
+A revert for the patch series "Call blk_mq_free_tag_set() earlier" has been
+queued and is expected to be sent soon to Linus. See also
 https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git/log/?h=6.0/scsi-fixes
 
+Thanks,
+
 Bart.
+
 
