@@ -2,87 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E6A5AF32C
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Sep 2022 19:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 494305AF3CF
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Sep 2022 20:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiIFRzd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Sep 2022 13:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
+        id S229480AbiIFShi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Sep 2022 14:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiIFRyA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Sep 2022 13:54:00 -0400
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AF19C1DF;
-        Tue,  6 Sep 2022 10:53:51 -0700 (PDT)
-Received: by mail-pl1-f182.google.com with SMTP id x1so7677066plv.5;
-        Tue, 06 Sep 2022 10:53:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/jlkCt8/HNkpJ8C9EjYNBrsQTfK+Od0un5wI1P6Oahk=;
-        b=QHIPPz3GO60VUF/SDukUT6dYVfHhIcTfwIPbY/9Zw33qXLBGnr4LYeU2+0ztSopWo3
-         s7QjQi5pmoX9Sol9yu+Ih88NUIfQewwXhbkV7vyH8loUszn2MUzFD2iQ4Q8CLkGmKt+S
-         5i6PgXscQcVuTBdSqDFFAPo54386JHQm9KoXfpMGe5WQEZ25ml3sNNBDOFjzg7BC6w/3
-         EyfZcSfe46tKL8XIcx8XoG7hiE2okvG0h3wuN9j1QwTD5Hh7GKEyi0+ePNfWPSTSkdRT
-         2t/5dCs7OUD5EEfuJ/n/Aq3vIl++gYFZlm74abauNjhDQuyxTnrdnRGCyAIZK8dRtlmB
-         sr5g==
-X-Gm-Message-State: ACgBeo2thVz52NkmZlegmhRMhotIPiK9nGVks7+0p+CxpIst55XwEZLu
-        2HKQyuqB5jfNUkmD9i7/+IA=
-X-Google-Smtp-Source: AA6agR592wrE1WLKmqBuFRYP7O4+NrDTbHexBZVuxFbzpt9TI0ski77jxKlLLuAQUJDJQbhHzmYQGA==
-X-Received: by 2002:a17:902:b94b:b0:170:c9d6:a06d with SMTP id h11-20020a170902b94b00b00170c9d6a06dmr55680569pls.105.1662486830204;
-        Tue, 06 Sep 2022 10:53:50 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:4e4a:abd5:5969:d00e? ([2620:15c:211:201:4e4a:abd5:5969:d00e])
-        by smtp.gmail.com with ESMTPSA id i9-20020a170902c94900b0016ecc7d5297sm10246100pla.292.2022.09.06.10.53.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Sep 2022 10:53:49 -0700 (PDT)
-Message-ID: <de7a1d36-cfb7-4db0-716e-e79dd93b6852@acm.org>
-Date:   Tue, 6 Sep 2022 10:53:46 -0700
+        with ESMTP id S229793AbiIFSh1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Sep 2022 14:37:27 -0400
+X-Greylist: delayed 21600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Sep 2022 11:37:14 PDT
+Received: from sv12388.xserver.jp (sv12388.xserver.jp [202.233.66.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EA78034D;
+        Tue,  6 Sep 2022 11:37:13 -0700 (PDT)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/521/virusgw12002.xserver.jp)
+Received: from webmail.xserver.ne.jp (webmail.xserver.ne.jp [202.226.37.183])
+        by sv12388.xserver.jp (Postfix) with ESMTPA id 7462550230863A;
+        Tue,  6 Sep 2022 19:41:56 +0900 (JST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8] ufs: core: print UFSHCD capabilities in controller's
- sysfs node
-Content-Language: en-US
-To:     Daniil Lunev <dlunev@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20220829081845.v8.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220829081845.v8.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Date:   Tue, 06 Sep 2022 12:41:56 +0200
+From:   Greg Hansmann <monokaki@96nekobase.net>
+To:     undisclosed-recipients:;
+Subject: THIS VERY CONFIDENTIAL
+Reply-To: greghansmann22@gmail.com
+Mail-Reply-To: greghansmann22@gmail.com
+Message-ID: <a159579982f263d03f28834047479d72@96nekobase.net>
+X-Sender: monokaki@96nekobase.net
+User-Agent: Roundcube Webmail/1.2.0
+X-Spam-Status: Yes, score=7.9 required=5.0 tests=BAYES_50,DATE_IN_PAST_06_12,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,ODD_FREEM_REPTO,
+        SPF_HELO_PASS,SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  1.5 DATE_IN_PAST_06_12 Date: is 6 to 12 hours before Received: date
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [greghansmann22[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  2.8 ODD_FREEM_REPTO Has unusual reply-to header
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/28/22 15:18, Daniil Lunev wrote:
-> Userspace may want to manually control when the data should go into
-> WriteBooster buffer. The control happens via "wb_on" node, but
-> presently, there is no simple way to check if WriteBooster is supported
-> and enabled. This change exposes the Write Booster and Clock Scaling
-> capabilities to be able to determin if the Write Booster is available
-> and if its manual control is blocked by Clock Scaling mechanism.
 
-determin -> determine?
 
-Anyway:
+-- 
+Hello,
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+My name is Greg Hansmann
+I apologize to have contacted you this way without a direct 
+relationship. There is an opportunity to collaborate with me in the 
+sourcing of some materials needed by our company for production of the 
+different medicines we are researching.
+
+I'm aware that this might be totally outside your professional 
+specialization, but it will be a great source for generating extra 
+revenue. I  discovered a manufacturer who can supply us at a lower rate 
+than our company's previous purchases. I will give you more specific 
+details when/if I receive feedback from you showing interest.
+
+Warm Regards
+Greg Hansmann
+Production & Control Manager,
+Green Field Laboratories
+Gothic House, Barker Gate,
+Nottingham, NG1 1JU,
+United Kingdom.
