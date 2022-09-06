@@ -2,95 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB045AEDC2
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Sep 2022 16:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1823D5AEE6F
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Sep 2022 17:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbiIFOlh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Sep 2022 10:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
+        id S232895AbiIFPP7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Sep 2022 11:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242412AbiIFOjU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Sep 2022 10:39:20 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C109BB4B;
-        Tue,  6 Sep 2022 07:01:28 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id az24-20020a05600c601800b003a842e4983cso7527014wmb.0;
-        Tue, 06 Sep 2022 07:01:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=pkMRy8XuGDtx9NMZA7uZCO5i/b7uDNNrxfsjCrj+Lc4=;
-        b=o4utixdJwalOBX1Q1sHVX2nwdDOJAJs9T+YbOtRt/UYSkeX5u+HMoGm1pJiYHACN31
-         tPj8fkgp7ANeqeE2sj3eT6XkJZtuuNV0koMxFM8zpW9qNBwRfoK8QN5hAzBXGskn6hoe
-         KEWGtDvunl3PCmUD8Diy3P+4Smc3U6xHZ/+xZZyaMLlTlUuny5GFIAMDSURhMJrub87d
-         BtsM6foajqPixys05COHdkj62R+NJG1UleOYFrNHcyakuGCLZDY2ccM5a+yo7lFbZ0WJ
-         a7fJ+elQA2Yf5Lpa9Z0JteOihcRg3zD/EWNHkM2L3pb2jhbLCbZXDaN8E2PCT3AqxOro
-         04Kw==
+        with ESMTP id S232944AbiIFPPi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Sep 2022 11:15:38 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CCE7D79A
+        for <linux-scsi@vger.kernel.org>; Tue,  6 Sep 2022 07:28:51 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id o123so11868568vsc.3
+        for <linux-scsi@vger.kernel.org>; Tue, 06 Sep 2022 07:28:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=pkMRy8XuGDtx9NMZA7uZCO5i/b7uDNNrxfsjCrj+Lc4=;
-        b=OchJ1IDDoSOLUNiFPWGbIqQfrhymPcgGYayp3aCUNw+oGrpTePIrxmU6HscZCClVCE
-         cq/jB24PjE0qwQeEFK66srU8BNP1TIld/Wr2C4E6rqY2PlTqOepASQJaaTKNY1LufpOd
-         8pUbzq3sRCUwKGCVnHQ6YY921amXzXwOuoW8FPs3gB4lFpUSkyK58y4ls6tD8eyr/m0y
-         pz/hgR5QK5Fg1eiLaYN9gvGqcEa64lAt6PllP7zNcC2kdUqTmhzWvHBhUMYaet7VwegY
-         TRXuAgtUViscSq9bJjrtPENbNgWI+OHNkB1h2XvHBXOtK/nWeNK8BK0Vtqz1FxuQ9/MO
-         isgw==
-X-Gm-Message-State: ACgBeo2M3KhkJGdAFikmQrknQ5rHWOI1DBAs9F69KigHu08lYUC+ffHT
-        oCAyJJLBvDlQ6xqLsUFQ/bI=
-X-Google-Smtp-Source: AA6agR6n8ts0/UWy/dounDKDCATDUCcX6IigUCNZspTdYgXsA+nwu6S5DsvfuJhzVBBuGPZzK4bqaQ==
-X-Received: by 2002:a05:600c:4f04:b0:3a5:f380:69dc with SMTP id l4-20020a05600c4f0400b003a5f38069dcmr14246016wmq.103.1662472812136;
-        Tue, 06 Sep 2022 07:00:12 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id e7-20020a05600c4e4700b003a60f0f34b7sm15189468wmq.40.2022.09.06.07.00.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Sep 2022 07:00:11 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] scsi: qla2xxx: Fix spelling mistake "definiton" -> "definition"
-Date:   Tue,  6 Sep 2022 15:00:10 +0100
-Message-Id: <20220906140010.194273-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=uRHNUx4gSoSK/8ZMa9UsDNi3QnbIs3RAldhpW93mcWQ=;
+        b=yy61nk9qRg0cLGVxYB1F0MMGbjVzUU0sVgP6NtGL8ofz9nDTaHbF1wcAEBEXBZiorY
+         oWzQ8UwDpo3lbjljdDkwj8e2+rqKVhmhnYsjuBQi7egHHoInErSf39NAJRyEISyyrFWI
+         odNOElb90PJk+iqM9gxiwUuFlw09TCAjznWqYSN6W6ljMlyqP6QSuwOU1gzBK3rxzSVQ
+         xpmOmu5wz2rqb6NaGwxxrwvc41QjHcRq3BFJeCUDMSu/rTHb9QcNCN2zw0a1vu2Xv4Ay
+         ji1ktXuO5YiQfEdY1InIKRS4p7IFeHZEI/YVQPhu43tVMsBEnlo1KacD/M03uSfaxkcY
+         DkfQ==
+X-Gm-Message-State: ACgBeo0wZA3tNYfrKyZvlTgGp8PQmOINUz6C0yh6F/hCUszA3ik3JJ/+
+        jyL0tg57ozcMEzLt96kCHYSzJws4DgA=
+X-Google-Smtp-Source: AA6agR5nWv6BBBL6BJJCQFH226Pg52utvjFt1KN8vt38xlCzbtQfF1djIr4XZ52uWSVFF8UpuZsizA==
+X-Received: by 2002:a17:902:e886:b0:176:a2b7:3977 with SMTP id w6-20020a170902e88600b00176a2b73977mr11771204plg.160.1662473778600;
+        Tue, 06 Sep 2022 07:16:18 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id e22-20020aa79816000000b00537e328bc11sm10134478pfl.31.2022.09.06.07.16.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Sep 2022 07:16:17 -0700 (PDT)
+Message-ID: <5462c15b-3ae2-21b7-2f1d-79103b196c34@acm.org>
+Date:   Tue, 6 Sep 2022 07:16:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v5 2/4] scsi: core: Make sure that hosts outlive targets
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        Mike Christie <michael.christie@oracle.com>,
+        Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+References: <20220728221851.1822295-1-bvanassche@acm.org>
+ <20220728221851.1822295-3-bvanassche@acm.org>
+ <20220905173905.GA3405134@roeck-us.net>
+Content-Language: en-US
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220905173905.GA3405134@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There is a spelling mistake in a MODULE_PARM_DESC description. Fix it.
+On 9/5/22 10:40, Guenter Roeck wrote:
+> I understand that it looks like the problem is caused by the shutdown
+> function in the imx driver calling remove_device, but that is not really
+> the problem.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/scsi/qla2xxx/qla_os.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Guenter,
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 632f4d2956f4..2c85f3cce726 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -124,7 +124,7 @@ MODULE_PARM_DESC(ql2xextended_error_logging,
- int ql2xextended_error_logging_ktrace = 1;
- module_param(ql2xextended_error_logging_ktrace, int, S_IRUGO|S_IWUSR);
- MODULE_PARM_DESC(ql2xextended_error_logging_ktrace,
--		"Same BIT definiton as ql2xextended_error_logging, but used to control logging to kernel trace buffer (default=1).\n");
-+		"Same BIT definition as ql2xextended_error_logging, but used to control logging to kernel trace buffer (default=1).\n");
- 
- int ql2xshiftctondsd = 6;
- module_param(ql2xshiftctondsd, int, S_IRUGO);
--- 
-2.37.1
+A revert for this patch series has been queued and is expected to be sent
+soon to Linus. See also
+https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git/log/?h=6.0/scsi-fixes
+
+Bart.
 
