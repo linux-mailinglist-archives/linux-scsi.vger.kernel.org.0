@@ -2,85 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0045AE4F4
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Sep 2022 12:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A975AE5CB
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Sep 2022 12:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233147AbiIFKCK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Sep 2022 06:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
+        id S239740AbiIFKr1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Sep 2022 06:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbiIFKBb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Sep 2022 06:01:31 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0BD786E6;
-        Tue,  6 Sep 2022 03:01:06 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso5939463pjd.4;
-        Tue, 06 Sep 2022 03:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=YKSHnIDLbk0AOTJw59kitMI5uEp3xXvtgpVkSTjCkzM=;
-        b=H4kMv845J9bYxtEKRZDhNBqclS6L0jLOyG2wkW9mw1r6JHSUY/loXrG7v9/6KXbFhC
-         LIgwRkq+DG8+eR3EhVLg+eaBusmwi7B+Wra6hTbnNpaqmgHjt+H7fRP8DkaF0azLhZLK
-         OEijzWDlZ1FyOzrSDGNsS4LTkrDTb7I3ZyfioHeslVHHOL0HoinNfpz7FKt+PV2Xzlts
-         ihLo5dnospLa23Lo2RP8wxxSLlX4JzRhW36NgS7ddt1cBntwaQKHFaxPqsk+3zFdorKq
-         E3Im6vhSB1NH3jwXioIma4Qq6jyFQTVhNkAizUB8utpzg/aQeCVdxBXV8eQL/pEKnW98
-         tBuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=YKSHnIDLbk0AOTJw59kitMI5uEp3xXvtgpVkSTjCkzM=;
-        b=G63MyYUk1goP/6kOFIYjXG7/R/MRSbV2X/QAs7kXP7MseHb3ybZNbxbEzvGgY2xQ6k
-         8B3ndyz3sKQa5ukGNVHK1vOsRE3ypyth6H79r4wLTLhDaCasPOHZFnL+fTVVeDZwSrO2
-         tEqc6yzWZgp4qQ+jYUR7jRl8KiMd5ztWyHJxi9wCuqbyH5O/8eZA4O6oIx20axZioymp
-         KlAGT6F7CXEXWLgj2cHRkEX9fqlfG3kvrr2Lv/a/v3UZxsJf9oe4mFQqv8wrE6xX/5Ps
-         BeclZj1G7GBOXC/880UW04DvbwVheFk2Lnk72T9EZIsvoqSqB0kGr4/pi0dAyCCAJoOc
-         DDrw==
-X-Gm-Message-State: ACgBeo0Jb+aV6rJWigoDa58d6HTUe3LSScIm50zLBrt96uc0fNDSDQU6
-        1g4mi5RAmj+fgnMXCT8b4AQ6sLbsd+zA9FZSnhw=
-X-Google-Smtp-Source: AA6agR46YAPLjMSYp7Kanoo0p3TW1lBtmX3+X7oA6gNMSU+WNlt0CEM4uGqfh6I6eB99C87Z8N2NMj2CSl61ps815CQ=
-X-Received: by 2002:a17:90a:1d0:b0:1fa:c551:5e83 with SMTP id
- 16-20020a17090a01d000b001fac5515e83mr23953494pjd.106.1662458466109; Tue, 06
- Sep 2022 03:01:06 -0700 (PDT)
+        with ESMTP id S239834AbiIFKqd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Sep 2022 06:46:33 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEB07C19A;
+        Tue,  6 Sep 2022 03:45:27 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 2071856578;
+        Tue,  6 Sep 2022 10:45:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received:received; s=mta-01; t=1662461110; x=
+        1664275511; bh=37T4DMFSfoz0Cm0Uqq4HUSCmLa5RwyTOfxC+zsm45C0=; b=H
+        ySvunSqq2+Duwx/vg0JUXjjo5uAUPAB4Y5mF9d+o3J+YFMoA2+qQ8iebB9l3+eGT
+        odyG7MsxTWOft/otA5wyHwSQelTvlr3gJTlFyUQMJSLyM9dNIko7VaxAKmQy6L7/
+        J7wfdjwN4KrVYdUkqwKgzwEc8wdVlCirLE0c8A6Bm4=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id r1FMOl1kB60o; Tue,  6 Sep 2022 13:45:10 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (T-EXCH-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 913B8445A5;
+        Tue,  6 Sep 2022 13:34:43 +0300 (MSK)
+Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Tue, 6 Sep 2022 13:34:43 +0300
+Received: from NB-591.corp.yadro.com (10.199.18.20) by
+ T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.9; Tue, 6 Sep 2022 13:34:40 +0300
+From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
+To:     Martin Petersen <martin.petersen@oracle.com>,
+        <target-devel@vger.kernel.org>
+CC:     Mike Christie <michael.christie@oracle.com>,
+        <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
+        Dmitry Bogdanov <d.bogdanov@yadro.com>
+Subject: [PATCH v2 0/6] add support of RSOC command
+Date:   Tue, 6 Sep 2022 13:34:15 +0300
+Message-ID: <20220906103421.22348-1-d.bogdanov@yadro.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211112120641.16073-1-fantasquex@gmail.com> <DM6PR18MB303406C9CF97E2B42CEC63ACD2499@DM6PR18MB3034.namprd18.prod.outlook.com>
-In-Reply-To: <DM6PR18MB303406C9CF97E2B42CEC63ACD2499@DM6PR18MB3034.namprd18.prod.outlook.com>
-From:   Letu Ren <fantasquex@gmail.com>
-Date:   Tue, 6 Sep 2022 18:00:54 +0800
-Message-ID: <CAEUwDuD0ZMNqwdi-zkH_s7Gj6SkSJpvrcVzhtMz_1HRrXN=dpA@mail.gmail.com>
-Subject: Re: [EXT] [PATCH] scsi: qedf: Fix a UAF bug in __qedf_probe
-To:     Saurav Kashyap <skashyap@marvell.com>
-Cc:     Javed Hasan <jhasan@marvell.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        GR-QLogic-Storage-Upstream <GR-QLogic-Storage-Upstream@marvell.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Zheyu Ma <zheyuma97@gmail.com>, Wende Tan <twd2.me@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.199.18.20]
+X-ClientProxiedBy: T-EXCH-02.corp.yadro.com (172.17.10.102) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Saurav,
+This patchset is based on 6.1/scsi-queue.
 
-> Thanks for the patch.
->
-> Acked-by: Saurav Kashyap <skashyap@marvell.com>
+Resending with a current datetime. Sorry for the experiment with a date
+of the patch creation.
 
+The patchset adds support of REPORT SUPPORTED OPERATION CODES command
+according to SPC4. Including CDB USAGE DATA and timeout descriptors.
+Timeout descriptors are zeroed currently, meaning that no time is
+indicated, but an encoding of it there is.
+Opcode support and Usage Data are dynamically generated - reflects
+the backstore configuration.
+libiscsi tests for RSOC and tests that uses RSOC command are all PASSED.
 
-This is a friendly reminder. I wonder the review progress of this
-patch. Almost a year has passed since I submitted the patch. And we
-have tested qedf on Linux 6.0-rc0. This UAF problem still exists. If
-there's anything I can do to help with this issue please let me know.
-I'm willing to help.
+v2:
+  fix sparse warnings
+  remove extra space
+  remove XDWRITEREAD_*
+  fix tcm_is_ws_enabled
 
-Letu Ren
+Dmitry Bogdanov (6):
+  scsi: target: core: add support of RSOC command
+  scsi: target: core: add list of opcodes for RSOC
+  scsi: target: core: dynamic opcode support in RSOC
+  scsi: target: core: add emulate_rsoc attribute
+  scsi: target: check emulate_3pc for RECEIVE COPY
+  scsi: target: core: dynamicaly set dpofua in usage_bits
+
+ drivers/target/target_core_configfs.c |  20 +
+ drivers/target/target_core_device.c   |   1 +
+ drivers/target/target_core_spc.c      | 920 ++++++++++++++++++++++++++
+ drivers/target/target_core_xcopy.c    |   6 +
+ include/scsi/scsi_proto.h             |  10 +
+ include/target/target_core_base.h     |  18 +
+ 6 files changed, 975 insertions(+)
+
+-- 
+2.25.1
+
