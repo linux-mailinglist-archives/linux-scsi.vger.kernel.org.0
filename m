@@ -2,38 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668335B05E9
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Sep 2022 15:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A94725B05ED
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Sep 2022 15:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbiIGN7Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Sep 2022 09:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S229982AbiIGN7d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Sep 2022 09:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiIGN7X (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Sep 2022 09:59:23 -0400
+        with ESMTP id S229706AbiIGN73 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Sep 2022 09:59:29 -0400
 Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986901E4;
-        Wed,  7 Sep 2022 06:59:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217C0319;
+        Wed,  7 Sep 2022 06:59:22 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 2D378449EB;
-        Wed,  7 Sep 2022 13:59:20 +0000 (UTC)
+        by mta-01.yadro.com (Postfix) with ESMTP id 0768E445A5;
+        Wed,  7 Sep 2022 13:59:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received:received; s=
-        mta-01; t=1662559158; x=1664373559; bh=NACBRGOBKNfBOlEOSW6Y/1DW8
-        0zCFu2n39YFudlLjrI=; b=mHcBhMWvHu1bNU9qTUk9M5vsFSPawL1mc77u1pAus
-        G5uco1dx1r1e6blnywaBzsv5Otfu/Wn0RDrKCw/K89pbFQ0K/eHuX8fW4o2Emxz6
-        cq+tI27ebSXKBLpW9fosxFNCSnltCmSlEUrp2AVCjMGYZlffCpfmNfi8rE+AXeP0
-        mk=
+        mta-01; t=1662559159; x=1664373560; bh=KKfhBzB4M8nL3qeVorAlXcWtz
+        DieHqC2/n754Ez+k7U=; b=PaOIY4r9p9/RnVoEhzZRZQhUHhM56Lr+i/beitVPs
+        YOlHEncrKaXsvw77k2pB3Kbl6ygYRbY32gqifGLvD9Fc9aSDMnp4LEsDKZuWbfGV
+        uiTh+iC7z37npGezdLL2L6nNlBXdIqQxFxOhKdL/9I4SNcp9Z4xM8E6Aq3ox/l0S
+        AQ=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bSPN0w-zXzQC; Wed,  7 Sep 2022 16:59:18 +0300 (MSK)
+        with ESMTP id KK-mSYAsuiwX; Wed,  7 Sep 2022 16:59:19 +0300 (MSK)
 Received: from T-EXCH-02.corp.yadro.com (T-EXCH-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 7FD4846DAF;
+        by mta-01.yadro.com (Postfix) with ESMTPS id C265346DB5;
         Wed,  7 Sep 2022 16:59:05 +0300 (MSK)
 Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
  T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
@@ -42,15 +42,15 @@ Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
 Received: from NB-591.corp.yadro.com (10.199.18.20) by
  T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.9; Wed, 7 Sep 2022 16:59:04 +0300
+ 15.2.1118.9; Wed, 7 Sep 2022 16:59:05 +0300
 From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
 To:     Martin Petersen <martin.petersen@oracle.com>,
         <target-devel@vger.kernel.org>
 CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
         Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [PATCH 3/4] target: core: abort all preempted regs if requested
-Date:   Wed, 7 Sep 2022 16:58:50 +0300
-Message-ID: <20220907135851.3756-4-d.bogdanov@yadro.com>
+Subject: [PATCH 4/4] target: core: new key must be used for moved PR
+Date:   Wed, 7 Sep 2022 16:58:51 +0300
+Message-ID: <20220907135851.3756-5-d.bogdanov@yadro.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220907135851.3756-1-d.bogdanov@yadro.com>
 References: <20220907135851.3756-1-d.bogdanov@yadro.com>
@@ -69,48 +69,45 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-According to SPC the preempted commands shall be always aborted.
+According to SPC4 5.12.8:
+e) Retain the reservation key specified in the SERVICE ACTION
+RESERVATION KEY field and associated information;
 
-SPC-4: 5.12.11.2.6 Preempting and aborting
-c) all commands from the I_T nexus(es) associated with the persistent
-reservations or registrations being preempted (i.e., preempted commands)
-except the PERSISTENT RESERVE OUT command itself shall be aborted as
-defined in SAM-5;
+But currently sa_res_key is only used for the not existing I_T nexus.
+The patch adds an updating of the key for the existing I_T nexus the PR
+moved to.
 
 Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
 ---
- drivers/target/target_core_pr.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ drivers/target/target_core_pr.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
-index 24441427f7b4..8c83c5530536 100644
+index 8c83c5530536..fc7b2e2c17a5 100644
 --- a/drivers/target/target_core_pr.c
 +++ b/drivers/target/target_core_pr.c
-@@ -2960,9 +2960,23 @@ core_scsi3_pro_preempt(struct se_cmd *cmd, int type, int scope, u64 res_key,
- 
- 		spin_unlock(&dev->dev_reservation_lock);
- 
--		if (preempt_type == PREEMPT_AND_ABORT)
-+		/*
-+		 * SPC-4 5.12.11.2.6 Preempting and aborting
-+		 * The actions described in this subclause shall be performed
-+		 * for all I_T nexuses that are registered with the non-zero
-+		 * SERVICE ACTION RESERVATION KEY value, without regard for
-+		 * whether the preempted I_T nexuses hold the persistent
-+		 * reservation. If the SERVICE ACTION RESERVATION KEY field is
-+		 * set to zero and an all registrants persistent reservation is
-+		 * present, the device server shall abort all commands for all
-+		 * registered I_T nexuses.
-+		 */
-+		if (preempt_type == PREEMPT_AND_ABORT) {
-+			core_tmr_lun_reset(dev, NULL, &preempt_and_abort_list,
-+					   cmd);
- 			core_scsi3_release_preempt_and_abort(
- 				&preempt_and_abort_list, pr_reg_n);
-+		}
- 
- 		if (pr_tmpl->pr_aptpl_active)
- 			core_scsi3_update_and_write_aptpl(cmd->se_dev, true);
+@@ -3440,8 +3440,6 @@ core_scsi3_emulate_pro_register_and_move(struct se_cmd *cmd, u64 res_key,
+ 	 *       transport protocols where port names are not required;
+ 	 * d) Register the reservation key specified in the SERVICE ACTION
+ 	 *    RESERVATION KEY field;
+-	 * e) Retain the reservation key specified in the SERVICE ACTION
+-	 *    RESERVATION KEY field and associated information;
+ 	 *
+ 	 * Also, It is not an error for a REGISTER AND MOVE service action to
+ 	 * register an I_T nexus that is already registered with the same
+@@ -3463,6 +3461,12 @@ core_scsi3_emulate_pro_register_and_move(struct se_cmd *cmd, u64 res_key,
+ 		dest_pr_reg = __core_scsi3_locate_pr_reg(dev, dest_node_acl,
+ 						iport_ptr);
+ 		new_reg = 1;
++	} else {
++	/*
++	 * e) Retain the reservation key specified in the SERVICE ACTION
++	 *    RESERVATION KEY field and associated information;
++	 */
++		dest_pr_reg->pr_res_key = sa_res_key;
+ 	}
+ 	/*
+ 	 * f) Release the persistent reservation for the persistent reservation
 -- 
 2.25.1
 
