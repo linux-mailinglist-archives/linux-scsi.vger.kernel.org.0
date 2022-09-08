@@ -2,153 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05455B12BD
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Sep 2022 05:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01355B1416
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Sep 2022 07:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiIHDC2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Sep 2022 23:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
+        id S230071AbiIHFfZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 8 Sep 2022 01:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiIHDCN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Sep 2022 23:02:13 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F4BC6EBF;
-        Wed,  7 Sep 2022 20:02:12 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2882iKuW007817;
-        Thu, 8 Sep 2022 03:01:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=CtCov/HTtvkaw18uY3TwBF/vS9gZM0HZDatDbWzyo0M=;
- b=Bfmdo1LDYDb9gIObixjvHxbiaiCDsZWG+4Oi/0L+BuEO07BOSZayf9oRxevnoXcUhxtZ
- Kt+zGtMiTmses9uFtRmhTrJMKep0mQQvP90zZVfncTK+VhkQb+kNBmIZOoHU+YcKbCYn
- amRnIKpVMAmbTVRFPn7/ce0YsYd4ZHSqcBjIPHkjAQyG85javJwYa/xVVc7sQoOv9rq6
- W52rGuuT3Q/rSfyuADn1vz5gVqz+KZys/O0XC3FJmNWbTDgiyENPj0JBCg2DHJlQBhF9
- sS+R2PWyS3YIqeX6UqguGEpj/6MhZ6lop1ZQyVFD9RwCnXLlxk5np/9YjZA+CxNLxw6Z ow== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jequfk8wf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Sep 2022 03:01:38 +0000
-Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28831bXW020433
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Sep 2022 03:01:37 GMT
-Received: from [10.110.102.110] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 7 Sep 2022
- 20:01:36 -0700
-Message-ID: <4caaf07f-115a-eb2c-ed53-f62698167802@quicinc.com>
-Date:   Wed, 7 Sep 2022 20:01:36 -0700
+        with ESMTP id S230092AbiIHFfY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Sep 2022 01:35:24 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E3A4DB5B
+        for <linux-scsi@vger.kernel.org>; Wed,  7 Sep 2022 22:35:22 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bj12so35384498ejb.13
+        for <linux-scsi@vger.kernel.org>; Wed, 07 Sep 2022 22:35:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
+        b=FDYuhrjzupqDJY40NDtCR87PKWGjMuEV/iCUW7Vw71hTR5avkj5dgW+vUUZ2+zN00C
+         LlMCFbLs+3J8c1CL4nKEY5SPVAMCRxSljqhAi8BIfhxPeaUIA4rcBZYAr154yczwNuI6
+         q7+c0cdb79mU6cu41DBFT/enN+0EwDBEjGeAZLkMDNpcnBn16B9P2sDZPqa6FRYzX9gY
+         osyHnvDo/d16MGYFAPIQYkRYcXHOsOqf5FET1iBVQun0F8mtkePo+oMRZ+UTnn9vmyYo
+         g98rXHfgW52KSb4B3Bye1QzDsCwm53Bmn0c0j8dNjTbQ/azvO1ALlyZjNVU6BIbSWcC3
+         ihxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
+        b=WvIm2//47bbWF4DuABbLDayV1f1y3b6uEHHkgsV4zsKbavBl2Kr0VECtuvkLcqviFv
+         bK2OnHi7ZV8YGZLuzvCo6I4Z/yfCDgVyP719KjrZ/cs6qcjJ2qAP5HentuyxhhPAnwBg
+         T7/eag5hkhhb5XOtgtMy4nK5p+fFviTynRICAdidlAvRxduK1xP2E/iyiOeZby2GUAbM
+         9g2Ol/8JIDKdQRY3KrRKs88I9v00hXQFBJ3XVlsR8HhPC7wiqhskV4wqJ8hgZ7PEKtd4
+         ahxqPz04LQAlus7NIt1e9mxhDuxF6PWpwdfA3TPxbKbiwsxUsso4kF/eA3hlnyyCoGrZ
+         WOXQ==
+X-Gm-Message-State: ACgBeo1gcjc2Rkm1SwDJCwzKRGjlTszQusOUIAIkAiYU02/us9z4VC/B
+        bWAKwLfg2Jy4RGd2xr52JMaCEnIRp5KkjD5MRoQ=
+X-Google-Smtp-Source: AA6agR6f9ganJGPnS3fCR9EUD6F+W17XWJLpchvokE0N3GHFTL+yU6BJqShw+38dQHdiM0dz0gaqHuc1cNPMmiIrUWc=
+X-Received: by 2002:a17:907:a0c7:b0:76f:35bb:5795 with SMTP id
+ hw7-20020a170907a0c700b0076f35bb5795mr4584556ejc.308.1662615320941; Wed, 07
+ Sep 2022 22:35:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [RFC PATCH v3 2/4] ufs: core: mcq: Adds Multi-Circular Queue
- support
-To:     Bean Huo <huobean@gmail.com>, <quic_nguyenb@quicinc.com>,
-        <quic_xiaosenh@quicinc.com>, <stanley.chu@mediatek.com>,
-        <adrian.hunter@intel.com>, <bvanassche@acm.org>,
-        <avri.altman@wdc.com>, <mani@kernel.org>, <quic_cang@quicinc.com>,
-        <beanhuo@micron.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <cover.1662157846.git.quic_asutoshd@quicinc.com>
- <04f4949e4dea991a93bdf6727bf12948ecc586be.1662157846.git.quic_asutoshd@quicinc.com>
- <c3d2d8b307f7e11b7a2be751673220049b9a1a77.camel@gmail.com>
-From:   "Asutosh Das (asd)" <quic_asutoshd@quicinc.com>
-In-Reply-To: <c3d2d8b307f7e11b7a2be751673220049b9a1a77.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8zpRFCoviYprsjCSSEhq823F5RdlOb66
-X-Proofpoint-ORIG-GUID: 8zpRFCoviYprsjCSSEhq823F5RdlOb66
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-08_02,2022-09-07_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- mlxlogscore=999 adultscore=0 clxscore=1015 priorityscore=1501 bulkscore=0
- malwarescore=0 phishscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209080008
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6f02:c88d:b0:22:d711:dd with HTTP; Wed, 7 Sep 2022
+ 22:35:20 -0700 (PDT)
+Reply-To: jennifermbaya036@gmail.com
+From:   "Mrs.Jennifer Mbaya" <taibaondikwa445@gmail.com>
+Date:   Thu, 8 Sep 2022 06:35:20 +0100
+Message-ID: <CAJvZ1T5nrs0eSC7OwLE2OqR8Aj_ufW0QO__UhXK5qSdDW_JBAg@mail.gmail.com>
+Subject: Edunsaaja
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Bean
-Thanks for your comments. Responses inline.
+Edunsaaja
 
-On 9/5/2022 9:27 AM, Bean Huo wrote:
-> On Fri, 2022-09-02 at 15:41 -0700, Asutosh Das wrote:
->>
->> +
->> +static void ufshcd_mcq_config_nr_queues(struct ufs_hba *hba)
->> +{
->> +       int i, rem;
->> +       u32 hbaq_cap, cmp;
->> +       struct Scsi_Host *host = hba->host;
->> +
->> +       hbaq_cap = hba->mcq_capabilities & 0xff;
->> +
->> +       rem = hbaq_cap - dev_cmd_queue;
->> +       /* min() compares variables of same type */
->> +       hba->nr_queues[HCTX_TYPE_DEFAULT] = min(hbaq_cap -
->> dev_cmd_queue,
-> 
->   hba->nr_queues[HCTX_TYPE_DEFAULT] = min(rem, num_possible_cpus());
-> 
-min() compares variables of same type only.
->> +                                               num_possible_cpus());
->> +       rem -= hba->nr_queues[HCTX_TYPE_DEFAULT];
->> +       if (rem <= 0)
->> +               goto out;
->> +       cmp = rem;
->> +       hba->nr_queues[HCTX_TYPE_POLL] = min(cmp, poll_queues);
->> +       rem -= hba->nr_queues[HCTX_TYPE_POLL];
->> +       if (rem <= 0)
->> +               goto out;
->> +       cmp = rem;
->> +       hba->nr_queues[HCTX_TYPE_READ] = min(cmp, read_queues);
-> 
-> static read_queues is not initialized.
-> 
-It would be initialized to 0. But I think we should configure it as a 
-module parameter which is missing. Let me add it in the next version.
->>
-> .....
->> +static inline void ufshcd_inc_tp(struct ufs_hw_queue *q)
->> +{
->> +       u32 mask = q->max_entries - 1;
->> +       u32 val;
->> +
->> +       q->sq_tp_slot = (q->sq_tp_slot + 1) & mask;
->> +       val = q->sq_tp_slot * sizeof(struct utp_transfer_req_desc);
->> +       writel(val, q->mcq_sq_tp);
->> +}
-> 
-> This function just accesses the submission queue tail pointer. The
-> function name should clearly explain this.
-> 
-The reason for this naming was that only SQ's tail pointer can be 
-updated by SW. I can add a _sq_ to this function in the next version. 
-Plmk if you prefer a better name.
-
-> 
-> 
-> 
-
+Nimess=C3=A4si on palkinto Yhdistyneilt=C3=A4 Kansakunnilta ja Maailman
+terveysj=C3=A4rjest=C3=B6lt=C3=A4, joka on osa kansainv=C3=A4list=C3=A4 val=
+uuttarahastoa, johon
+s=C3=A4hk=C3=B6postisi, osoite ja raha on luovutettu meille siirtoa varten,
+vahvista yst=C3=A4v=C3=A4llisesti tietosi siirtoa varten.
+Meit=C3=A4 kehotettiin siirt=C3=A4m=C3=A4=C3=A4n kaikki vireill=C3=A4 oleva=
+t tapahtumat
+seuraavien kahden aikana, mutta jos olet vastaanottanut rahasi, j=C3=A4t=C3=
+=A4
+t=C3=A4m=C3=A4 viesti huomioimatta, jos et toimi heti.
+Tarvitsemme kiireellist=C3=A4 vastausta t=C3=A4h=C3=A4n viestiin, t=C3=A4m=
+=C3=A4 ei ole yksi
+niist=C3=A4 Internet-huijareista, se on pandemiaapu.
+Jennifer
