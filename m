@@ -2,62 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F74A5B32D8
-	for <lists+linux-scsi@lfdr.de>; Fri,  9 Sep 2022 11:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BAB05B363E
+	for <lists+linux-scsi@lfdr.de>; Fri,  9 Sep 2022 13:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbiIIJFT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 9 Sep 2022 05:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S229687AbiIILWn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 9 Sep 2022 07:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiIIJEr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 9 Sep 2022 05:04:47 -0400
+        with ESMTP id S229534AbiIILWm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 9 Sep 2022 07:22:42 -0400
 Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB08462C8;
-        Fri,  9 Sep 2022 02:04:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861691365CC;
+        Fri,  9 Sep 2022 04:22:41 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 5B70056986;
-        Fri,  9 Sep 2022 09:04:36 +0000 (UTC)
+        by mta-01.yadro.com (Postfix) with ESMTP id 29FF156C65;
+        Fri,  9 Sep 2022 11:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-type:content-type:content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:date:subject
-        :subject:from:from:received:received:received:received; s=
-        mta-01; t=1662714275; x=1664528676; bh=j3EFmaiCZMVFbbLxrbUxJL+ew
-        m0YbGI9Kr2Un5elhMI=; b=sBO9uK0JFX106nhqMRE7qaMdgtkFgtQfpy+u0Pb+C
-        LPem6LwLjUOFt3uG3feB8UB+EUEfqeTLU9GAPTUPfAPXXeNr6oIhhpdsQSRjss+d
-        XIeN47lUFNLy8V3Md/OYJsc3xQ+LImdyRZK9k5WKNS67xtLag4fTXg8J9Eh7RKC7
-        tI=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:references:message-id:subject:subject:from:from
+        :date:date:received:received:received:received; s=mta-01; t=
+        1662722558; x=1664536959; bh=BhyeHfAPNf2W6us4lzEiGV6NM5zWsAf+1ob
+        4gjpjMZ0=; b=UKUWykX8Af4U3sZXZ5AmKm62f1xSm8B2A+F0Zn/bPdk/eS+CEmp
+        YWMAyd2IvG9/B8H80prZwph/5EPV37tN9JMVvb2GZL84HEeDuTde+PWalnZiEuzi
+        2dQ4Ztr04LQh+dd60xZaRDHJ9Bx2reGAhmLL+WxdGAiCfYKAoUNzWz/Y=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UolzIMD3xYMV; Fri,  9 Sep 2022 12:04:35 +0300 (MSK)
+        with ESMTP id MdpTYhiSVOBN; Fri,  9 Sep 2022 14:22:38 +0300 (MSK)
 Received: from T-EXCH-02.corp.yadro.com (T-EXCH-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 2FF19569AA;
-        Fri,  9 Sep 2022 12:04:33 +0300 (MSK)
+        by mta-01.yadro.com (Postfix) with ESMTPS id CE28F56A88;
+        Fri,  9 Sep 2022 14:22:37 +0300 (MSK)
 Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
  T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Fri, 9 Sep 2022 12:04:33 +0300
-Received: from NB-591.corp.yadro.com (10.199.18.20) by
- T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.9; Fri, 9 Sep 2022 12:04:32 +0300
+ 15.1.669.32; Fri, 9 Sep 2022 14:22:37 +0300
+Received: from yadro.com (172.17.190.47) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Fri, 9 Sep 2022
+ 14:22:36 +0300
+Date:   Fri, 9 Sep 2022 14:22:35 +0300
 From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
-To:     Martin Petersen <martin.petersen@oracle.com>,
-        <target-devel@vger.kernel.org>
-CC:     Bart Van Assche <bvanassche@acm.org>, <linux-scsi@vger.kernel.org>,
-        <linux@yadro.com>, Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [PATCH v2 4/4] target: core: new key must be used for moved PR
-Date:   Fri, 9 Sep 2022 12:04:25 +0300
-Message-ID: <20220909090425.14479-5-d.bogdanov@yadro.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220909090425.14479-1-d.bogdanov@yadro.com>
-References: <20220909090425.14479-1-d.bogdanov@yadro.com>
+To:     Mike Christie <michael.christie@oracle.com>
+CC:     Martin Petersen <martin.petersen@oracle.com>,
+        <target-devel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux@yadro.com>, Roman Bolshakov <r.bolshakov@yadro.com>
+Subject: Re: [PATCH] scsi: target: core: Add a way to hide a port group
+Message-ID: <20220909112235.GD9218@yadro.com>
+References: <20220906074903.18755-1-d.bogdanov@yadro.com>
+ <f85ec171-f3c6-cc14-daa1-84ef1b20898a@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.199.18.20]
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f85ec171-f3c6-cc14-daa1-84ef1b20898a@oracle.com>
+X-Originating-IP: [172.17.190.47]
 X-ClientProxiedBy: T-EXCH-02.corp.yadro.com (172.17.10.102) To
  T-EXCH-08.corp.yadro.com (172.17.11.58)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,48 +68,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-According to SPC4 5.12.8:
-e) Retain the reservation key specified in the SERVICE ACTION
-RESERVATION KEY field and associated information;
+On Wed, Sep 07, 2022 at 03:01:00PM -0500, Mike Christie wrote:
+> 
+> On 9/6/22 2:49 AM, Dmitry Bogdanov wrote:
+> > From: Roman Bolshakov <r.bolshakov@yadro.com>
+> >
+> > Default target port group is always returned in the list of port groups,
+> > even if the behaviour is unwanted, i.e. it has no members and
+> > non-default port groups are primary port groups.
+> >
+> > A new port group attribute - "hidden" can be used to hide empty port
+> > groups with no ports in REPORT TARGET PORT GROUPS, including default
+> > target port group:
+> >
+> >   echo 1 > $DEVICE/alua/default_tg_pt_gp/hidden
+> >
+> 
+> How about "enable"? I think that fits how we handle other objects like
+> targets that are setup automatically but are not yet usable (can't login
+> or reported in discovery commands) and devices we have setup but are not
+> reported in commands like REPORT_LUNs (technically you need to enable and
+> map them but you get the idea I'm going for).
+There is already an enable semantic. It is pg_pt_gp_id field. Until it
+(id) is not set the port group is treated as disabled and it is not
+reported in RTPG. But the default_tg_pt_gp is enabled by default and can
+not be deleted.
 
-But currently sa_res_key is only used for the not existing I_T nexus.
-The patch adds a changing of the key for the existing I_T nexus the PR
-moved to.
+The patch solves the presence of non-deletable empty default_tg_pt_gp
+in RTPG.
+May be, a global attribute like target/core/alua/hide_emtpy_tpg would
+fit better than an attribute per each port group?
 
-Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
----
-v2:
-  fix indentation
----
- drivers/target/target_core_pr.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+I would always hide the empty default_lu_gp (not configurable) but I am
+afraid that it will be considered as not backward compatible change. :(
 
-diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
-index 6a5f9504a481..1493b1d01194 100644
---- a/drivers/target/target_core_pr.c
-+++ b/drivers/target/target_core_pr.c
-@@ -3440,8 +3440,6 @@ core_scsi3_emulate_pro_register_and_move(struct se_cmd *cmd, u64 res_key,
- 	 *       transport protocols where port names are not required;
- 	 * d) Register the reservation key specified in the SERVICE ACTION
- 	 *    RESERVATION KEY field;
--	 * e) Retain the reservation key specified in the SERVICE ACTION
--	 *    RESERVATION KEY field and associated information;
- 	 *
- 	 * Also, It is not an error for a REGISTER AND MOVE service action to
- 	 * register an I_T nexus that is already registered with the same
-@@ -3463,6 +3461,12 @@ core_scsi3_emulate_pro_register_and_move(struct se_cmd *cmd, u64 res_key,
- 		dest_pr_reg = __core_scsi3_locate_pr_reg(dev, dest_node_acl,
- 						iport_ptr);
- 		new_reg = 1;
-+	} else {
-+		/*
-+		 * e) Retain the reservation key specified in the SERVICE ACTION
-+		 *    RESERVATION KEY field and associated information;
-+		 */
-+		dest_pr_reg->pr_res_key = sa_res_key;
- 	}
- 	/*
- 	 * f) Release the persistent reservation for the persistent reservation
--- 
-2.25.1
-
+BR,
+ Dmitry 
