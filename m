@@ -2,63 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768455B5B85
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Sep 2022 15:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FADE5B5B84
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Sep 2022 15:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiILNpr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 12 Sep 2022 09:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S229924AbiILNpq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 12 Sep 2022 09:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiILNpj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Sep 2022 09:45:39 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1649D1EEC8
-        for <linux-scsi@vger.kernel.org>; Mon, 12 Sep 2022 06:45:37 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id b75so3422873pfb.7
-        for <linux-scsi@vger.kernel.org>; Mon, 12 Sep 2022 06:45:37 -0700 (PDT)
+        with ESMTP id S229893AbiILNpn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Sep 2022 09:45:43 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3BA1FCD8
+        for <linux-scsi@vger.kernel.org>; Mon, 12 Sep 2022 06:45:39 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id y127so8670783pfy.5
+        for <linux-scsi@vger.kernel.org>; Mon, 12 Sep 2022 06:45:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc:subject:date;
-        bh=kEmppSPcE4Lj+84cUfESjf2jcWZ77u5xrD42BWYu5DU=;
-        b=TW98ZMVD1WtfY8ztASxHZcaciZo4MIqkND6yyX4a4YPLdNEhoAfYhW73q2aLs2ldEc
-         s0vGuOQvkw6zwVSqNIeUTGiULeNikn4IkrUBxd3s8s9NCO43TmZqgKQYqS97AvRJ9OpY
-         z+IfmfcDxCEmBt0utMCe366w/MBXXr/WMiq5M=
+        bh=1cz8cJddhv/UgFa7XsIYYwuNzFE3YN92ZTJq73Pl1Qc=;
+        b=a5z+y1xMNN6XuV6W0isJc6VvM5gTW6uKg1ra7XVNTtEgfzOXH6JTj1scw5oHcSytL8
+         ALbnuQOUWt9qxZIwePVTQSfBiXd8/wHfnpatbUZ3iq2VGbJITSs7RZlFq08WMcHjP6oH
+         gdBrztJ/T5uJlpBn5KxEP5BkQi+9YyUHpjf9I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=kEmppSPcE4Lj+84cUfESjf2jcWZ77u5xrD42BWYu5DU=;
-        b=d7bBavG22BDM8sOsgmvhFQTeLsACyWQBlfTVNR+sw99hDtpNwJOItOlAsUSfnnEHj+
-         aV+/brVdCNKBtFDmrRl8XKwjNs9wMcH0B7JIQiwig9smsnjmOpu7XgrUYMhnPncUJ+Gd
-         7GJ8SWYTY6dj1O6ww0GT0CBoNHPb2uboaDn9KpkXbnWIzXcjATIaeSzU3SaTeC6JKBnp
-         UfRYCXHa2b2ReEYs5P0JnyRCRyPokKhopHGGqizNhmbdqDjwvaM4FPxv3Bz2dqVigENj
-         GlBRhZfSX8b64xVCdBMLr2ZpGvygWU04Q2y584ro/p4NJk4mcam/rVl+tWzNqdlXSD7u
-         rktw==
-X-Gm-Message-State: ACgBeo0SHW5y8ZuvuXmmTIc/q6Lu0NhHuCQaIMYse3mm0X83ZNwevpLS
-        8Nboc3Ia3oXcWhRIrGUChTeIZKhj00iWiW222bZE1w351C5LT/2eL+8PF4ivAj+VIeySnU9dHI9
-        qekKkO9taqlLofS/SB/X11mqnRm9Fo8ZARH8wTP+JGq9YwycrfXqei+Ar3+vHm31nNzOvA2OTTV
-        dNRxo5a2q2
-X-Google-Smtp-Source: AA6agR5eCLeX1o3KILkDNb2jMPwILPjRvveRDgbKb6ZdUolPsmC9LV0oyZOo8vSDQ5lnw3F6RSes7g==
-X-Received: by 2002:a05:6a00:2446:b0:52b:e9a8:cb14 with SMTP id d6-20020a056a00244600b0052be9a8cb14mr27824763pfj.32.1662990336337;
-        Mon, 12 Sep 2022 06:45:36 -0700 (PDT)
+        bh=1cz8cJddhv/UgFa7XsIYYwuNzFE3YN92ZTJq73Pl1Qc=;
+        b=gFtecKTMEkQPmIJaotN5ZFu4ljTBZn1xEJvh+waWdusARXV3GFMsWCL4DXOqtBEPyG
+         Ss/OIlMqDne1MEqJwgH6Wk/TNDleffuXmcDOTCOxYnphD/ijxpDeXp+0vRMebpm4V2//
+         AnfjKY7jGRQ9e0EoBkUoHcTj80pCjBCVTeF+GTZsgXEH73iyHSMpfes/eFEQmQBZiWQV
+         XU3QkCIZUdwMRAL59vn8beCn+oScJypwVuZj3p8eUnZ30eutZXHzv+beZj8Kf+3igfQ0
+         ek88N6IWpZEmTXIXmCgtnatD6O/MVQYxDkneYIcgu43Q4902YJbumZNt1rUheAYvgSnP
+         Er9Q==
+X-Gm-Message-State: ACgBeo1E8agUIHwzMQWbeN/FRv5KpbuUjY+x0GXmAlL6Y9cnFgt6PzXO
+        5EyhMpL7fNq42YKux9x6KARl2fAHmVClzhxnpdY6XeR9iFnu6xI0mzb6CXs6pRvugv7QUZqdr5o
+        g9olCDwJzrk6i0KSiOQ9DswDtXteFH80ShJsKqfSToHxMNR09ahgzNxcIQZLfwJx4zlTySlmivK
+        bzZHZK19I9
+X-Google-Smtp-Source: AA6agR7ARvU8ukwJ07nFXCRORLyMIXvymdWlZHpx+bXosYoW5viDdGYOvECmsSKE3hKLF81lAIu4qw==
+X-Received: by 2002:a63:8641:0:b0:434:c1cf:9546 with SMTP id x62-20020a638641000000b00434c1cf9546mr23312431pgd.109.1662990338381;
+        Mon, 12 Sep 2022 06:45:38 -0700 (PDT)
 Received: from dhcp-10-123-20-36.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id u7-20020a170903124700b00176e8f85146sm6112900plh.185.2022.09.12.06.45.34
+        by smtp.gmail.com with ESMTPSA id u7-20020a170903124700b00176e8f85146sm6112900plh.185.2022.09.12.06.45.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Sep 2022 06:45:35 -0700 (PDT)
+        Mon, 12 Sep 2022 06:45:37 -0700 (PDT)
 From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH v2 5/9] mpi3mr: Handle 0xF003 Fault Code
-Date:   Mon, 12 Sep 2022 19:27:38 +0530
-Message-Id: <20220912135742.11764-6-sreekanth.reddy@broadcom.com>
+Subject: [PATCH v2 6/9] mpi3mr: Free enclosure objects during driver unload
+Date:   Mon, 12 Sep 2022 19:27:39 +0530
+Message-Id: <20220912135742.11764-7-sreekanth.reddy@broadcom.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220912135742.11764-1-sreekanth.reddy@broadcom.com>
 References: <20220912135742.11764-1-sreekanth.reddy@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004b221d05e87b1c26"
+        boundary="0000000000006c112005e87b1cf0"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,39 +69,86 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---0000000000004b221d05e87b1c26
+--0000000000006c112005e87b1cf0
 Content-Transfer-Encoding: 8bit
 
-Handle the 0xF003 controller fault code as a special case by
-marking the controller as unrecoverable with logging a
-message indicating the driver marks the controller as
-unrecoverable due to the specific fault.
+Free the enclosure device objects during driver unload and
+before rescanning the target devices during controller reset.
 
 Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 ---
- drivers/scsi/mpi3mr/mpi3mr_fw.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/mpi3mr/mpi3mr.h    |  1 +
+ drivers/scsi/mpi3mr/mpi3mr_fw.c |  4 ++++
+ drivers/scsi/mpi3mr/mpi3mr_os.c | 19 +++++++++++++++++++
+ 3 files changed, 24 insertions(+)
 
+diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
+index 0eb0647..883ed59 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr.h
++++ b/drivers/scsi/mpi3mr/mpi3mr.h
+@@ -1392,4 +1392,5 @@ void mpi3mr_refresh_expanders(struct mpi3mr_ioc *mrioc);
+ void mpi3mr_add_event_wait_for_device_refresh(struct mpi3mr_ioc *mrioc);
+ void mpi3mr_flush_drv_cmds(struct mpi3mr_ioc *mrioc);
+ void mpi3mr_flush_cmds_for_unrecovered_controller(struct mpi3mr_ioc *mrioc);
++void mpi3mr_free_enclosure_list(struct mpi3mr_ioc *mrioc);
+ #endif /*MPI3MR_H_INCLUDED*/
 diff --git a/drivers/scsi/mpi3mr/mpi3mr_fw.c b/drivers/scsi/mpi3mr/mpi3mr_fw.c
-index a10cffa..abdccff 100644
+index abdccff..e3df044 100644
 --- a/drivers/scsi/mpi3mr/mpi3mr_fw.c
 +++ b/drivers/scsi/mpi3mr/mpi3mr_fw.c
-@@ -2502,8 +2502,9 @@ static void mpi3mr_watchdog_work(struct work_struct *work)
- 	mrioc->diagsave_timeout = 0;
+@@ -4250,6 +4250,8 @@ void mpi3mr_free_mem(struct mpi3mr_ioc *mrioc)
+ 	u16 i;
+ 	struct mpi3mr_intr_info *intr_info;
  
- 	switch (fault) {
-+	case MPI3_SYSIF_FAULT_CODE_COMPLETE_RESET_NEEDED:
- 	case MPI3_SYSIF_FAULT_CODE_POWER_CYCLE_REQUIRED:
--		ioc_info(mrioc,
-+		ioc_warn(mrioc,
- 		    "controller requires system power cycle, marking controller as unrecoverable\n");
- 		mrioc->unrecoverable = 1;
- 		goto schedule_work;
++	mpi3mr_free_enclosure_list(mrioc);
++
+ 	if (mrioc->sense_buf_pool) {
+ 		if (mrioc->sense_buf)
+ 			dma_pool_free(mrioc->sense_buf_pool, mrioc->sense_buf,
+@@ -4897,6 +4899,8 @@ int mpi3mr_soft_reset_handler(struct mpi3mr_ioc *mrioc,
+ 	mpi3mr_flush_host_io(mrioc);
+ 	mpi3mr_cleanup_fwevt_list(mrioc);
+ 	mpi3mr_invalidate_devhandles(mrioc);
++	mpi3mr_free_enclosure_list(mrioc);
++
+ 	if (mrioc->prepare_for_reset) {
+ 		mrioc->prepare_for_reset = 0;
+ 		mrioc->prepare_for_reset_timeout_counter = 0;
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
+index a5b6402..bb276b5 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_os.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
+@@ -1334,6 +1334,25 @@ out:
+ 		mpi3mr_tgtdev_put(tgtdev);
+ }
+ 
++/**
++ * mpi3mr_free_enclosure_list - release enclosures
++ * @mrioc: Adapter instance reference
++ *
++ * Free memory allocated during encloure add.
++ *
++ * Return nothing.
++ */
++void mpi3mr_free_enclosure_list(struct mpi3mr_ioc *mrioc)
++{
++	struct mpi3mr_enclosure_node *enclosure_dev, *enclosure_dev_next;
++
++	list_for_each_entry_safe(enclosure_dev,
++	    enclosure_dev_next, &mrioc->enclosure_list, list) {
++		list_del(&enclosure_dev->list);
++		kfree(enclosure_dev);
++	}
++}
++
+ /**
+  * mpi3mr_enclosure_find_by_handle - enclosure search by handle
+  * @mrioc: Adapter instance reference
 -- 
 2.27.0
 
 
---0000000000004b221d05e87b1c26
+--0000000000006c112005e87b1cf0
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -172,13 +219,13 @@ X1hfOcCDBgT7eSvf9YRLaV935mB9/V+KYX8lT4E0lB4wQ0OLV8qUS9UuNoG2lCJ5UQTMrBgeUFFY
 eKKhn+R91COmRlKGlaCdTtzKG5atS6dPnGEYUHjcpUvzejmJ5ghBk6P01HqSACsszDOzmBvdiOs+
 Ux0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
 MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxyeqr1
-0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEKwSzoivzmDUuKKLg4D
-TaLy7GTr70dvpkA+aaHLfAoGMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIyMDkxMjEzNDUzNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+0keLkvPdYw4wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMI/E943Nry/N+fRMwRC
+jIPzpTvL0d8h9AwtxGpYJoZXMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIyMDkxMjEzNDUzOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
 BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAYmNsbAIKIBPSs3j7Yyr1qdAZezc5JsBEg/3gf
-55NdYUCQz1L3QqmPAPjRoagvYDVp3NuXsL7KRq0vGG1kwaVaOXnpUd8onFgtqXHj0cImWsihCrc/
-WV2NudGI/XpnIO3/gMS6r4pFfgPHP8tflWpnS2iUKzkNT/KC7U8YawwZQtAfN7j3srVLkzypkEM1
-6+LvURE9WbYOin+rMeGLAI68RaccxyrmHJxc7gT75wd1ZQRglziloGz4M/bJN9Ju6mShOrzdz5PQ
-xXB2Oj751hSiddra5/+UEd6X3AlgdXU+CYFDOkMHrAtaqzpIVWRdJZAmFVGsR2OqEGWgG5h9CJxf
---0000000000004b221d05e87b1c26--
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAUQ2uKeLDGaoawqyEpyYZJcCxl9WvZKg3lUFXc
+ftaGv3295MNvBPx91pBNUn4LZuC4VxFurMlU3eXLJYZPWKqMPnkyt8ibhr8V7a8UGdkqVTWQdnc+
+uK2l+l/iEkTCZoQFtxAFMmzSlBY3upxoG6830kPwgazBjlTTVo4nhsTzeFeNx3H7c0MUs6Rdx2h0
++P5hszcUosGv/I6nfsfaPjaxX/Gd8YrTqbaPJqllM+BqY6r2kDavp9fghUtCxhUJ+xkfQ0s8vJLx
+RdcUi2NBM5kgLp8/gjTDEbbO2dxFqDP12pqtZwNVWiSnCMu6JfiKo+TByM+jwbgL6d52/+lquNm3
+--0000000000006c112005e87b1cf0--
