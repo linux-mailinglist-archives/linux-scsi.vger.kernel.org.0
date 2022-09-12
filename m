@@ -2,96 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FF95B5182
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Sep 2022 00:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7967E5B599A
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Sep 2022 13:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiIKWPo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 11 Sep 2022 18:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        id S229620AbiILLsc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 12 Sep 2022 07:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiIKWP2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 11 Sep 2022 18:15:28 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEE317E24
-        for <linux-scsi@vger.kernel.org>; Sun, 11 Sep 2022 15:15:23 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id j1so5495818qvv.8
-        for <linux-scsi@vger.kernel.org>; Sun, 11 Sep 2022 15:15:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=LtqRw6AUxLtc0YPMeMIUJga063P0I2Zv0hMnS+ZtVuU=;
-        b=oqzOG+TL4iE8GZ3xOigWKYUG2D0LwejUw4TJszaVsEYyKKrmkbn8dRbOLiSB7PzImA
-         hO42TzAmC0g1NjdioggUo7+bjyKdnQQmlgTDzDhqYSdzteWQZ7gOSikzK8SuVJbNui0Z
-         PRxqN+kUe7eHo7n8sc6er6mfV6qTEzNwsIEs8kPNgAz3u+CPGYs5UmYcXgzflJ4y5Tcu
-         ofy7W7hpM9jHnRvHP9ahXq4ELISPElWZg2IzhfjHNdCKxmXD9vuWimp1kpYaqZqFeasf
-         BcxrC5QpLl0clsH5OrPHK85y3ubDpRAu6KtBUp+txQRpl4wP+XGCeK46LUdEZ+08BYrO
-         o7Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=LtqRw6AUxLtc0YPMeMIUJga063P0I2Zv0hMnS+ZtVuU=;
-        b=vRjsjcsbgt/NUajv8N0gy7G0Xu+yj346oE78e+JdWQzIj7KcAe7N5Nbw7wQsyBNGXe
-         aLwdOnTDAbG99Z6yKHTlTFP+cqcuYedhLAts+uWOPm6IwzD3GjEWBqIKcYowSiYWflfv
-         QQ/oo9xo1arbzCzUzNfG8RKEy/W5Dilq0YWIvtdlbaJ9sqHPcYH/KEtrQ/twyzm+ucG8
-         gcaxDS2nOHl1fRMRJj/huUxyeq8sxtozcWwLW/SXrwiyPzLKbF1oMgF0fF5WruwLlE23
-         CC8RavoD/PtAD9UylCGwf7VdCnOyvNehQWyLCV0vgzap6k7HIH5lSL1xTqyCQoI1Vo0G
-         NGag==
-X-Gm-Message-State: ACgBeo0y4BRYPjUKr/gS+ZzVZK6ziTTWeaLTOyH4o0pFey7VNydk4USR
-        g8iiNVOIkZ8WncnlrxS11d0YVdjaWIg=
-X-Google-Smtp-Source: AA6agR7nuBQpxke/hkNg6xwGh3mi9ivFfx6QH2zzgqbEO1mLNFu1XOejOt881eu3C4FdGrq3w0yjpg==
-X-Received: by 2002:a05:6214:260e:b0:4ac:8470:99a7 with SMTP id gu14-20020a056214260e00b004ac847099a7mr12932746qvb.102.1662934522492;
-        Sun, 11 Sep 2022 15:15:22 -0700 (PDT)
-Received: from localhost.localdomain (ip98-164-255-77.oc.oc.cox.net. [98.164.255.77])
-        by smtp.gmail.com with ESMTPSA id x8-20020a05622a000800b0035a70d82d7bsm5324305qtw.47.2022.09.11.15.15.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Sep 2022 15:15:22 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>
-Subject: [PATCH 13/13] lpfc: Update lpfc version to 14.2.0.7
-Date:   Sun, 11 Sep 2022 15:15:05 -0700
-Message-Id: <20220911221505.117655-14-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220911221505.117655-1-jsmart2021@gmail.com>
-References: <20220911221505.117655-1-jsmart2021@gmail.com>
+        with ESMTP id S229608AbiILLsb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Sep 2022 07:48:31 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E193C8CA
+        for <linux-scsi@vger.kernel.org>; Mon, 12 Sep 2022 04:48:30 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28BMw36Z017006;
+        Mon, 12 Sep 2022 04:48:28 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=EhajUTYuhAPW5kV9VP0eYgqRp6qcDnVZ4PcmU6Ql09M=;
+ b=jvBMx/2jw1sZ5w647g2Z+ITqyATqlAXsDyjSFA3WJdrf2qOnkjf6i4HFLFQeM8YPJ2t3
+ SU7kDu0GmWxrxh8aOH4F7bTwep48B6K1KQ5xmpvi74m1tHKdZdrMnru7HwM9ofOmOuYN
+ fIbBVJA6p8sRgMywB8BjOxipj2TNdAENEsh7GRdCCawg6R4bD3L9Y0YWXBk5lTIyoCBz
+ pNf4PgKWOo74EvFCHMjDCKA+XguTqlLZl+9XR1YZI5C/JojU2g3ThifNqkNk02S8masQ
+ gpSC6+W/5YlSiW/KaWbc8OgocwsOs+o8uf6Su+AJspWeaydyi6Xuf7gtx42uCAOsmDvX sg== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3jgt3mxhg5-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 12 Sep 2022 04:48:28 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 12 Sep
+ 2022 04:48:26 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 12 Sep 2022 04:48:26 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id 5773D3F705A;
+        Mon, 12 Sep 2022 04:48:26 -0700 (PDT)
+From:   Nilesh Javali <njavali@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <jmeneghi@redhat.com>,
+        <guazhang@redhat.com>, <GR-QLogic-Storage-Upstream@marvell.com>
+Subject: [PATCH] qedf: Populate sysfs attributes for vport
+Date:   Mon, 12 Sep 2022 04:48:03 -0700
+Message-ID: <20220912114803.7644-1-njavali@marvell.com>
+X-Mailer: git-send-email 2.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: aJKSLKhK7qyFDa1GVHC7O7p0raJrVcnR
+X-Proofpoint-GUID: aJKSLKhK7qyFDa1GVHC7O7p0raJrVcnR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-12_08,2022-09-12_01,2022-06-22_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update lpfc version to 14.2.0.7
+From: Saurav Kashyap <skashyap@marvell.com>
 
-Co-developed-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
+Copy speed, supported_speed, frame_size and update port_type for NPIV port.
+
+Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/lpfc/lpfc_version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qedf/qedf_main.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/drivers/scsi/lpfc/lpfc_version.h b/drivers/scsi/lpfc/lpfc_version.h
-index aa89225e0595..192d5630a44d 100644
---- a/drivers/scsi/lpfc/lpfc_version.h
-+++ b/drivers/scsi/lpfc/lpfc_version.h
-@@ -20,7 +20,7 @@
-  * included with this package.                                     *
-  *******************************************************************/
+diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
+index 3d6b137314f3..cc6d9decf62c 100644
+--- a/drivers/scsi/qedf/qedf_main.c
++++ b/drivers/scsi/qedf/qedf_main.c
+@@ -1921,6 +1921,27 @@ static int qedf_vport_create(struct fc_vport *vport, bool disabled)
+ 		fc_vport_setlink(vn_port);
+ 	}
  
--#define LPFC_DRIVER_VERSION "14.2.0.6"
-+#define LPFC_DRIVER_VERSION "14.2.0.7"
- #define LPFC_DRIVER_NAME		"lpfc"
++	/* Set symbolic node name */
++	if (base_qedf->pdev->device == QL45xxx)
++		snprintf(fc_host_symbolic_name(vn_port->host), 256,
++			 "Marvell FastLinQ 45xxx FCoE v%s", QEDF_VERSION);
++
++	if (base_qedf->pdev->device == QL41xxx)
++		snprintf(fc_host_symbolic_name(vn_port->host), 256,
++			 "Marvell FastLinQ 41xxx FCoE v%s", QEDF_VERSION);
++
++	/* Set supported speed */
++	fc_host_supported_speeds(vn_port->host) = n_port->link_supported_speeds;
++
++	/* Set speed */
++	vn_port->link_speed = n_port->link_speed;
++
++	/* Set port type */
++	fc_host_port_type(vn_port->host) = FC_PORTTYPE_NPIV;
++
++	/* Set maxframe size */
++	fc_host_maxframe_size(vn_port->host) = n_port->mfs;
++
+ 	QEDF_INFO(&(base_qedf->dbg_ctx), QEDF_LOG_NPIV, "vn_port=%p.\n",
+ 		   vn_port);
  
- /* Used for SLI 2/3 */
 -- 
-2.35.3
+2.23.1
 
