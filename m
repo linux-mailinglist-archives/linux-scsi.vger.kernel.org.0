@@ -2,138 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0265B7879
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Sep 2022 19:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903ED5B799B
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Sep 2022 20:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233406AbiIMRnM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 13 Sep 2022 13:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
+        id S229942AbiIMSak (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 13 Sep 2022 14:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233210AbiIMRmj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Sep 2022 13:42:39 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDF9B864;
-        Tue, 13 Sep 2022 09:36:25 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 0B372452C0;
-        Tue, 13 Sep 2022 16:36:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-type:content-type:content-transfer-encoding:mime-version
-        :x-mailer:message-id:date:date:subject:subject:from:from
-        :received:received:received:received; s=mta-01; t=1663086982; x=
-        1664901383; bh=r0CwdQ0aYnZ3almcA+1OnRUGEpZIizTOz5cKY7PpPfg=; b=Z
-        aU2vX7qltX1PfLn5owQR7TKvUvfsBqMzeG8TkPFCljAmPbJMDYZsgSp4hCSmiDu6
-        Tx/Gjw09x1EdDCo/+zbLln3g+VEpmZ2ey1qda10OgS7qWavXz9LhXx9kEPPtgnse
-        AjkpC3+75+L28wVySFfPTg9Xy9S382/Cwpi+/a6teI=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hzlHwMt33NPP; Tue, 13 Sep 2022 19:36:22 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (T-EXCH-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id AB5CA452CB;
-        Tue, 13 Sep 2022 19:36:21 +0300 (MSK)
-Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
- T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Tue, 13 Sep 2022 19:36:21 +0300
-Received: from NB-591.corp.yadro.com (10.199.18.20) by
- T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.9; Tue, 13 Sep 2022 19:36:20 +0300
-From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
-To:     Martin Petersen <martin.petersen@oracle.com>,
-        <target-devel@vger.kernel.org>
-CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [PATCH] target: core: UA on all luns after reset
-Date:   Tue, 13 Sep 2022 19:36:02 +0300
-Message-ID: <20220913163602.20597-1-d.bogdanov@yadro.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S232020AbiIMSaS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Sep 2022 14:30:18 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03130A2622
+        for <linux-scsi@vger.kernel.org>; Tue, 13 Sep 2022 10:46:29 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id 13so298790ejn.3
+        for <linux-scsi@vger.kernel.org>; Tue, 13 Sep 2022 10:46:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
+        b=gVZ90l6hcWeze25kN56lqRugwkbWhkehnc8dJIxs+mpnPNawneCjeaXpb/44I3jldK
+         25qOGSr2+mdHDEi7jWefjDLwYjwjZKxY3uC3AfhQjBr9yR8uq0tBS7pAjXLdeJ99o4j2
+         YdS6kOYSUOv4qAIn0NyNGzkQE+UwQlCqKgSsZgyuNZG+fPVrL5D7kMBsw3GLK75Y+yDm
+         krhBuiVf3gcpbBj3o5DyyIJsbimPOPJ1O0BebcK19gma0ApbIzEfD0jQLkdERmIHeXox
+         2iJP0ppFrddC7+DN/n52u7LnrZhde+Mv/Ao3WTJ0L4bV0mnnibNRErhCopEgtwEWCepf
+         FDGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
+        b=cHxG46GXDWX84EjSsLZYzHSeJYSNURQJO7ggchEe2aNidwaCaG5owKWG/721avbGGP
+         CrqhzcJKV69Ath1WKkP7g0T1fauOHqwxmVHZ2E+uYkxq0zPFgIFzGSZV49Am+m2M5HeF
+         /dschAN/z28B3S8G5FacoiuH4lfoUmmQQirOOrjWquuOf6lGODeZzriVSzTlonbTuHx7
+         AuyDMSqTFrYkmBgYqA2m53ph7WpIhIGUMscINuuN0f4BNot5jZREb9NIMaSGFe0dAqu+
+         5icea2ENSfQml0BQuSxBAa81p10EP8hl0BtJlRot++DbUds3rJjXsQiispie520o9n+G
+         8UWw==
+X-Gm-Message-State: ACgBeo22qf/A3AUGK4QUBUKfFZwqE7P7V79OvJzfHL/wNsPPX0DUEIjD
+        8EoHcMjJlBTEHgS2ekBY3wBvoeSdYeDHBxbAbWg=
+X-Google-Smtp-Source: AA6agR6vVZ8pO2iqRBDOeRR2NMIjC9bFdiquZ5bXZrfL3y3E88+Orby6Opm30kg2VvVgKtiIajgy2z2JEdNMsA2RpZ8=
+X-Received: by 2002:a17:906:cc0e:b0:77c:d77:576d with SMTP id
+ ml14-20020a170906cc0e00b0077c0d77576dmr10075074ejb.658.1663091187609; Tue, 13
+ Sep 2022 10:46:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.199.18.20]
-X-ClientProxiedBy: T-EXCH-02.corp.yadro.com (172.17.10.102) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:906:58c7:b0:6fe:9a00:633 with HTTP; Tue, 13 Sep 2022
+ 10:46:27 -0700 (PDT)
+Reply-To: maryalbertt00045@gmail.com
+From:   Mary Albert <mardiatidjani738@gmail.com>
+Date:   Tue, 13 Sep 2022 18:46:27 +0100
+Message-ID: <CAHR7mL5Zt8XxUi6VGKpUf3P5qzdjAXj6TV+m1qftGwfQ99kuAg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:632 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5002]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mardiatidjani738[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mardiatidjani738[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [maryalbertt00045[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Allocate UA "BUS DEVICE RESET OCCURRED" on all LUNs on all
-target ports of the device upon reception of TMF LUN RESET.
-
-The patch passes a libiscsi test SCSI.MultipathIO.Reset.
-
-Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
----
- drivers/target/target_core_device.c    | 19 +++++++++++++++++++
- drivers/target/target_core_internal.h  |  1 +
- drivers/target/target_core_transport.c |  3 +--
- 3 files changed, 21 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
-index 2209660261d0..b8ab744783ed 100644
---- a/drivers/target/target_core_device.c
-+++ b/drivers/target/target_core_device.c
-@@ -284,6 +284,25 @@ void target_pr_kref_release(struct kref *kref)
- 	complete(&deve->pr_comp);
- }
- 
-+/*
-+ * Establish UA condition on SCSI device - all LUNs
-+ */
-+void target_dev_ua_allocate(struct se_device *dev, u8 asc, u8 ascq)
-+{
-+	struct se_dev_entry *se_deve;
-+	struct se_lun *lun;
-+
-+	spin_lock(&dev->se_port_lock);
-+	list_for_each_entry(lun, &dev->dev_sep_list, lun_dev_link) {
-+
-+		spin_lock(&lun->lun_deve_lock);
-+		list_for_each_entry(se_deve, &lun->lun_deve_list, lun_link)
-+			core_scsi3_ua_allocate(se_deve, asc, ascq);
-+		spin_unlock(&lun->lun_deve_lock);
-+	}
-+	spin_unlock(&dev->se_port_lock);
-+}
-+
- static void
- target_luns_data_has_changed(struct se_node_acl *nacl, struct se_dev_entry *new,
- 			     bool skip_new)
-diff --git a/drivers/target/target_core_internal.h b/drivers/target/target_core_internal.h
-index d4ace697edb0..4b608a282579 100644
---- a/drivers/target/target_core_internal.h
-+++ b/drivers/target/target_core_internal.h
-@@ -88,6 +88,7 @@ int	target_configure_device(struct se_device *dev);
- void	target_free_device(struct se_device *);
- int	target_for_each_device(int (*fn)(struct se_device *dev, void *data),
- 			       void *data);
-+void	target_dev_ua_allocate(struct se_device *dev, u8 asc, u8 ascq);
- 
- /* target_core_configfs.c */
- extern struct configfs_item_operations target_core_dev_item_ops;
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index 7838dc20f713..5926316252eb 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -3531,8 +3531,7 @@ static void target_tmr_work(struct work_struct *work)
- 		tmr->response = (!ret) ? TMR_FUNCTION_COMPLETE :
- 					 TMR_FUNCTION_REJECTED;
- 		if (tmr->response == TMR_FUNCTION_COMPLETE) {
--			target_ua_allocate_lun(cmd->se_sess->se_node_acl,
--					       cmd->orig_fe_lun, 0x29,
-+			target_dev_ua_allocate(dev, 0x29,
- 					       ASCQ_29H_BUS_DEVICE_RESET_FUNCTION_OCCURRED);
- 		}
- 		break;
 -- 
-2.25.1
-
+Hello,
+how are you?
