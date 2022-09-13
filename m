@@ -2,119 +2,230 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE965B7BA2
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Sep 2022 21:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760845B7D30
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Sep 2022 00:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiIMT5e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 13 Sep 2022 15:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        id S229716AbiIMWsB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 13 Sep 2022 18:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiIMT5c (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Sep 2022 15:57:32 -0400
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B9172EF1
-        for <linux-scsi@vger.kernel.org>; Tue, 13 Sep 2022 12:57:31 -0700 (PDT)
-Received: by mail-pf1-f173.google.com with SMTP id u132so12753003pfc.6
-        for <linux-scsi@vger.kernel.org>; Tue, 13 Sep 2022 12:57:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=ylKZD8iGuK1Qfl5i65YCidupdDov7GWxNJ2GDKD/xGY=;
-        b=eYhY0Ds648Jz5DJ/dQI+e5OvEznloAKQoRrPjRwDgcMFQc4jmem8BO9t1OZgaCSyXS
-         3OmHudn2/m8DAhuN5d+32dqV8/3v1RgcsqSUGaDrxrQNLjPjsMk1nP/TQ+ksIfW9ifo+
-         LsQzKtASYdcaFW41oNDZfGaLjNTRN47FlcpIPPNEjhHdErM8e9H8qh5A/HFacUgXYB7M
-         p8WjKo6Ty0kn/JbfVaASONuGDIBtMG1VE7EyXPkJCcAFCfQ6mkhTeY8504LPr1TR5d04
-         u9EgZM+kXadCS7pSqw79M0aQEri4nAKUtrUTaMNjQ5jAen8HqDYLmT1HxWZ/aq8mpvZi
-         ZIZg==
-X-Gm-Message-State: ACgBeo2YmuM16hx0ndksmxdrESGeXTPhVO8r/VDvDm1mAlLeVT87ryWF
-        76/AIGpbQYba4npKICtJS6M=
-X-Google-Smtp-Source: AA6agR6OpHZdcBm8UJz1BAIjwDb+PCKC1HvYCIBuNsZNTMusT3zSsIlOfSNUKEr9OHwxZnaPoh66kA==
-X-Received: by 2002:a63:2c0b:0:b0:434:ebb6:7594 with SMTP id s11-20020a632c0b000000b00434ebb67594mr27184514pgs.245.1663099049792;
-        Tue, 13 Sep 2022 12:57:29 -0700 (PDT)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:515b:d33a:21be:45a])
-        by smtp.gmail.com with ESMTPSA id p15-20020a1709027ecf00b0017825ab5320sm6739987plb.251.2022.09.13.12.57.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 12:57:28 -0700 (PDT)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v4 4/4] scsi: core: Rework the code for dropping the LLD module reference
-Date:   Tue, 13 Sep 2022 12:57:16 -0700
-Message-Id: <20220913195716.3966875-5-bvanassche@acm.org>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-In-Reply-To: <20220913195716.3966875-1-bvanassche@acm.org>
-References: <20220913195716.3966875-1-bvanassche@acm.org>
+        with ESMTP id S229487AbiIMWr7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Sep 2022 18:47:59 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BB552DCA;
+        Tue, 13 Sep 2022 15:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663109278; x=1694645278;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7vuGPrjvpnP8JElr2b5KXy1+oZKLBwocK710pEgM2W4=;
+  b=acMlU++0f/JvE4f+o/Mc4qinBfmGaQoC8B4JidDyHcAod/UeDgyaExVD
+   P6AGeIdDIhSYrt9gkUf44fA4U2uzGfo1Nsl5OqWUlYgVxiS24bY1y9wzZ
+   bRgWgBrzXXFYNybz6uvYuAKm/FzD6rBFed2Ro9Sm371vcARvCR6xpxEOt
+   6keeBQwTe6XRNAi+S2OcX9dM0HmkIKOMM+00OoZQZxz/4EUBWmTxwS0Ic
+   Ee+ia5KKOP9x5Doi9Ll0m2Ijlp83IfvwReRcW/5nlNPglEi83i8FQuUkv
+   g91+cRWaUhPXlZ1LGQIiT4rbxJAtV4beXyIhgUcZyMyIcUKuzLhjyqlGF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10469"; a="278008848"
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="278008848"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 15:47:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="678778744"
+Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Sep 2022 15:47:55 -0700
+Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oYEh8-00045Z-2P;
+        Tue, 13 Sep 2022 22:47:54 +0000
+Date:   Wed, 14 Sep 2022 06:47:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        linux-hwmon@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        damon@lists.linux.dev, bpf@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, alsa-devel@alsa-project.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 0caac1da994900d12a9be6106edb8e98696712a3
+Message-ID: <6321087b.WsDIw5m+1a7xRREp%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of clearing the host template module pointer if the LLD kernel
-module is being unloaded, set the 'drop_module_ref' SCSI device member.
-This patch prepares for constifying the SCSI host template.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 0caac1da994900d12a9be6106edb8e98696712a3  Add linux-next specific files for 20220913
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Ming Lei <ming.lei@redhat.com>
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Mike Christie <michael.christie@oracle.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/scsi_sysfs.c  | 7 +++----
- include/scsi/scsi_device.h | 1 +
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Error/Warning reports:
 
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index 5d61f58399dc..822ae60a64b9 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -454,7 +454,7 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
- 
- 	sdev = container_of(work, struct scsi_device, ew.work);
- 
--	mod = sdev->host->hostt->module;
-+	mod = sdev->drop_module_ref ? sdev->host->hostt->module : NULL;
- 
- 	scsi_dh_release_device(sdev);
- 
-@@ -525,9 +525,8 @@ static void scsi_device_dev_release(struct device *dev)
- {
- 	struct scsi_device *sdp = to_scsi_device(dev);
- 
--	/* Set module pointer as NULL in case of module unloading */
--	if (!try_module_get(sdp->host->hostt->module))
--		sdp->host->hostt->module = NULL;
-+	if (try_module_get(sdp->host->hostt->module))
-+		sdp->drop_module_ref = true;
- 
- 	execute_in_process_context(scsi_device_dev_release_usercontext,
- 				   &sdp->ew);
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index 2493bd65351a..b03176b69056 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -214,6 +214,7 @@ struct scsi_device {
- 					 * creation time */
- 	unsigned ignore_media_change:1; /* Ignore MEDIA CHANGE on resume */
- 	unsigned silence_suspend:1;	/* Do not print runtime PM related messages */
-+	unsigned drop_module_ref:1;
- 
- 	unsigned int queue_stopped;	/* request queue is quiesced */
- 	bool offline_already;		/* Device offline message logged */
+https://lore.kernel.org/linux-mm/202209042337.FQi69rLV-lkp@intel.com
+https://lore.kernel.org/linux-mm/202209060229.dVuyxjBv-lkp@intel.com
+https://lore.kernel.org/linux-mm/202209080718.y5QmlNKH-lkp@intel.com
+
+Error/Warning: (recently discovered and may have been fixed)
+
+drivers/gpu/drm/amd/amdgpu/imu_v11_0_3.c:139:6: warning: no previous prototype for 'imu_v11_0_3_program_rlc_ram' [-Wmissing-prototypes]
+drivers/gpu/drm/drm_atomic_helper.c:802: warning: expecting prototype for drm_atomic_helper_check_wb_connector_state(). Prototype was for drm_atomic_helper_check_wb_encoder_state() instead
+drivers/hwmon/emc2305.c:194 emc2305_set_cur_state() warn: impossible condition '(val > 255) => (0-255 > 255)'
+drivers/scsi/qla2xxx/qla_os.c:2854:23: warning: assignment to 'struct trace_array *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+drivers/scsi/qla2xxx/qla_os.c:2854:25: error: implicit declaration of function 'trace_array_get_by_name'; did you mean 'trace_array_set_clr_event'? [-Werror=implicit-function-declaration]
+drivers/scsi/qla2xxx/qla_os.c:2869:9: error: implicit declaration of function 'trace_array_put' [-Werror=implicit-function-declaration]
+kernel/bpf/memalloc.c:499 bpf_mem_alloc_destroy() error: potentially dereferencing uninitialized 'c'.
+mm/damon/vaddr.c:158 __damon_va_three_regions() error: uninitialized symbol 'start'.
+net/mac80211/iface.c:251 ieee80211_can_powered_addr_change() warn: inconsistent returns '&local->mtx'.
+sound/soc/codecs/tas2562.c:442:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_get_by_name
+|   |-- drivers-scsi-qla2xxx-qla_os.c:error:implicit-declaration-of-function-trace_array_put
+|   |-- drivers-scsi-qla2xxx-qla_os.c:warning:assignment-to-struct-trace_array-from-int-makes-pointer-from-integer-without-a-cast
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- alpha-buildonly-randconfig-r003-20220911
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arc-buildonly-randconfig-r002-20220912
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r012-20220913
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r021-20220911
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r043-20220911
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-r043-20220912
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arc-randconfig-s052-20220911
+|   |-- kernel-bpf-hashtab.c:sparse:sparse:cast-removes-address-space-__percpu-of-expression
+|   |-- kernel-bpf-hashtab.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-noderef-__percpu-assigned-pptr-got-void
+|   |-- kernel-bpf-hashtab.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-ptr_to_pptr-got-void-noderef-__percpu-assigned-pptr
+|   |-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-noderef-__percpu-__pdata-got-void
+|   |-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-noderef-__percpu-__pdata-got-void-pptr
+|   |-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-pptr-got-void-noderef-__percpu
+|   `-- kernel-exit.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-struct-sighand_struct-sighand-got-struct-sighand_struct-noderef-__rcu-sighand
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arm-defconfig
+|   `-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|-- arm-randconfig-r001-20220911
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arm-randconfig-r006-20220911
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-imu_v11_0_3_program_rlc_ram
+|   |-- drivers-gpu-drm-drm_atomic_helper.c:warning:expecting-prototype-for-drm_atomic_helper_check_wb_connector_state().-Prototype-was-for-drm_atomic_helper_check_wb_encoder_state()-instead
+|   `-- sound-soc-codecs-tas2562.c:warning:variable-ret-set-but-not-used
+|-- csky-buildonly-randconfig-r001-20220911
+clang_recent_errors
+|-- i386-randconfig-a012-20220912
+|   `-- sound-soc-intel-skylake-skl.c:warning:unused-variable-skl
+|-- i386-randconfig-a015-20220912
+|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+|-- powerpc-buildonly-randconfig-r006-20220912
+|   `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+|-- powerpc-randconfig-r004-20220911
+|   `-- drivers-gpu-drm-amd-amdgpu-imu_v11_0_3.c:warning:no-previous-prototype-for-function-imu_v11_0_3_program_rlc_ram
+`-- riscv-randconfig-r042-20220912
+    `-- drivers-extcon-extcon-usbc-tusb320.c:warning:expecting-prototype-for-drivers-extcon-extcon-tusb320c().-Prototype-was-for-TUSB320_REG8()-instead
+
+elapsed time: 725m
+
+configs tested: 63
+configs skipped: 2
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+i386                 randconfig-a001-20220912
+i386                 randconfig-a002-20220912
+x86_64                              defconfig
+i386                 randconfig-a004-20220912
+x86_64                           rhel-8.3-kvm
+i386                 randconfig-a003-20220912
+x86_64                          rhel-8.3-func
+i386                 randconfig-a006-20220912
+x86_64                               rhel-8.3
+x86_64                         rhel-8.3-kunit
+i386                 randconfig-a005-20220912
+x86_64                    rhel-8.3-kselftests
+m68k                             allmodconfig
+x86_64                           rhel-8.3-syz
+arc                              allyesconfig
+x86_64                           allyesconfig
+alpha                            allyesconfig
+i386                                defconfig
+m68k                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+arm                                 defconfig
+mips                             allyesconfig
+x86_64               randconfig-a001-20220912
+x86_64               randconfig-a006-20220912
+sh                               allmodconfig
+x86_64               randconfig-a004-20220912
+riscv                randconfig-r042-20220911
+x86_64               randconfig-a002-20220912
+i386                             allyesconfig
+arc                  randconfig-r043-20220912
+x86_64               randconfig-a005-20220912
+arm64                            allyesconfig
+x86_64               randconfig-a003-20220912
+arm                              allyesconfig
+arc                  randconfig-r043-20220911
+s390                 randconfig-r044-20220911
+ia64                             allmodconfig
+csky                              allnoconfig
+arc                               allnoconfig
+alpha                             allnoconfig
+riscv                             allnoconfig
+
+clang tested configs:
+i386                 randconfig-a014-20220912
+i386                 randconfig-a013-20220912
+x86_64               randconfig-a014-20220912
+i386                 randconfig-a011-20220912
+x86_64               randconfig-a011-20220912
+i386                 randconfig-a015-20220912
+x86_64               randconfig-a012-20220912
+i386                 randconfig-a012-20220912
+x86_64               randconfig-a016-20220912
+i386                 randconfig-a016-20220912
+x86_64               randconfig-a013-20220912
+riscv                randconfig-r042-20220912
+x86_64               randconfig-a015-20220912
+hexagon              randconfig-r041-20220912
+hexagon              randconfig-r045-20220911
+hexagon              randconfig-r041-20220911
+hexagon              randconfig-r045-20220912
+s390                 randconfig-r044-20220912
+x86_64                          rhel-8.3-rust
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
