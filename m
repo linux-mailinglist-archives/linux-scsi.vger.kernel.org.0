@@ -2,98 +2,117 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903ED5B799B
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Sep 2022 20:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6125B7A35
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Sep 2022 20:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbiIMSak (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 13 Sep 2022 14:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
+        id S232982AbiIMSxL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 13 Sep 2022 14:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbiIMSaS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Sep 2022 14:30:18 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03130A2622
-        for <linux-scsi@vger.kernel.org>; Tue, 13 Sep 2022 10:46:29 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id 13so298790ejn.3
-        for <linux-scsi@vger.kernel.org>; Tue, 13 Sep 2022 10:46:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=gVZ90l6hcWeze25kN56lqRugwkbWhkehnc8dJIxs+mpnPNawneCjeaXpb/44I3jldK
-         25qOGSr2+mdHDEi7jWefjDLwYjwjZKxY3uC3AfhQjBr9yR8uq0tBS7pAjXLdeJ99o4j2
-         YdS6kOYSUOv4qAIn0NyNGzkQE+UwQlCqKgSsZgyuNZG+fPVrL5D7kMBsw3GLK75Y+yDm
-         krhBuiVf3gcpbBj3o5DyyIJsbimPOPJ1O0BebcK19gma0ApbIzEfD0jQLkdERmIHeXox
-         2iJP0ppFrddC7+DN/n52u7LnrZhde+Mv/Ao3WTJ0L4bV0mnnibNRErhCopEgtwEWCepf
-         FDGw==
+        with ESMTP id S233005AbiIMSwc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Sep 2022 14:52:32 -0400
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155F3B39
+        for <linux-scsi@vger.kernel.org>; Tue, 13 Sep 2022 11:38:35 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id b21so12713692plz.7
+        for <linux-scsi@vger.kernel.org>; Tue, 13 Sep 2022 11:38:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
-        b=cHxG46GXDWX84EjSsLZYzHSeJYSNURQJO7ggchEe2aNidwaCaG5owKWG/721avbGGP
-         CrqhzcJKV69Ath1WKkP7g0T1fauOHqwxmVHZ2E+uYkxq0zPFgIFzGSZV49Am+m2M5HeF
-         /dschAN/z28B3S8G5FacoiuH4lfoUmmQQirOOrjWquuOf6lGODeZzriVSzTlonbTuHx7
-         AuyDMSqTFrYkmBgYqA2m53ph7WpIhIGUMscINuuN0f4BNot5jZREb9NIMaSGFe0dAqu+
-         5icea2ENSfQml0BQuSxBAa81p10EP8hl0BtJlRot++DbUds3rJjXsQiispie520o9n+G
-         8UWw==
-X-Gm-Message-State: ACgBeo22qf/A3AUGK4QUBUKfFZwqE7P7V79OvJzfHL/wNsPPX0DUEIjD
-        8EoHcMjJlBTEHgS2ekBY3wBvoeSdYeDHBxbAbWg=
-X-Google-Smtp-Source: AA6agR6vVZ8pO2iqRBDOeRR2NMIjC9bFdiquZ5bXZrfL3y3E88+Orby6Opm30kg2VvVgKtiIajgy2z2JEdNMsA2RpZ8=
-X-Received: by 2002:a17:906:cc0e:b0:77c:d77:576d with SMTP id
- ml14-20020a170906cc0e00b0077c0d77576dmr10075074ejb.658.1663091187609; Tue, 13
- Sep 2022 10:46:27 -0700 (PDT)
+        bh=btl+MY5ALJhiZ/peFx7FmUskDDUuRc6Zo47jLvuCKaw=;
+        b=uFtt4dph32SffHWl8NRYrJoGuWhu4p8mj6j674EdyLHkLoVaJ2E39mt2d7rpi5T6W9
+         REjkhjKM6SotznI7/2GfiuxNgAJKI4D4uLphW9I0cIPUvopm6RYpjOqM8byf/RxU6kQf
+         opNVCS5whUxjRdmLHd6F18m3zJwDmlmw5ImNsJImsdl9XtRpECM1dqJVrb6VKOOAvaUm
+         J4FVjQXIETZFqCUxfwgX0ReC5wKd3FopxxibOwCE8fBXTo9hfkKTM0kufCIyvTiXDuPz
+         0u3xf/9Xfarcyed1wJUh1Y5XbrcYZHPK21z6hcsVxNagsbQbyBYwm8lZ2PbRtpzm6Tl2
+         1PFA==
+X-Gm-Message-State: ACrzQf2b8qnPlXSbxIkbKza1hHCrq9SARKoM2dbm4ngpwTkrryuuCA69
+        9yA7iBlVZFiQqQx+NSvHE7M=
+X-Google-Smtp-Source: AMsMyM5xxoEkL3uWSQfb8wDj++wIiARy7jMeTHImiiWJFP4CXqmGvxK3vZ310aZ9yl2JPMql5g5DYQ==
+X-Received: by 2002:a17:90b:1d8a:b0:203:6db:ed6f with SMTP id pf10-20020a17090b1d8a00b0020306dbed6fmr612850pjb.228.1663094314450;
+        Tue, 13 Sep 2022 11:38:34 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:b206:445a:9717:79df? ([2620:15c:211:201:b206:445a:9717:79df])
+        by smtp.gmail.com with ESMTPSA id h9-20020a056a00000900b0053e5daf1a25sm8288227pfk.45.2022.09.13.11.38.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Sep 2022 11:38:33 -0700 (PDT)
+Message-ID: <bf551369-5a0c-cbe9-7175-525bfb3c4e47@acm.org>
+Date:   Tue, 13 Sep 2022 11:38:31 -0700
 MIME-Version: 1.0
-Received: by 2002:a17:906:58c7:b0:6fe:9a00:633 with HTTP; Tue, 13 Sep 2022
- 10:46:27 -0700 (PDT)
-Reply-To: maryalbertt00045@gmail.com
-From:   Mary Albert <mardiatidjani738@gmail.com>
-Date:   Tue, 13 Sep 2022 18:46:27 +0100
-Message-ID: <CAHR7mL5Zt8XxUi6VGKpUf3P5qzdjAXj6TV+m1qftGwfQ99kuAg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:632 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5002]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mardiatidjani738[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mardiatidjani738[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [maryalbertt00045[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 2/3] scsi: core: Introduce a new list for SCSI proc
+ directory entries
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        Mike Christie <michael.christie@oracle.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+References: <20220908233600.3043271-1-bvanassche@acm.org>
+ <20220908233600.3043271-3-bvanassche@acm.org>
+ <4dc1a0ba-75f3-d7f6-16c3-daddfaa05cf4@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <4dc1a0ba-75f3-d7f6-16c3-daddfaa05cf4@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Hello,
-how are you?
+On 9/13/22 07:26, John Garry wrote:
+> On 09/09/2022 00:35, Bart Van Assche wrote:
+>> +struct scsi_proc_entry {
+>> +    struct list_head    entry;
+>> +    const struct scsi_host_template *sht;
+>> +    struct proc_dir_entry    *proc_dir;
+>> +    unsigned char        present;
+> 
+> is there really a hard limit of 255 hosts?
+
+Apparently that limit exists today. I can use a wider data type for the 
+'present' member if you want.
+
+>> +static struct scsi_proc_entry *
+>> +__scsi_lookup_proc_entry(const struct scsi_host_template *sht)
+>> +{
+>> +    struct scsi_proc_entry *e;
+>> +
+>> +    lockdep_assert_held(&global_host_template_mutex);
+> 
+> I'm not sure we really need this - maybe a comment would be better. I 
+> don't care too much either way.
+
+lockdep_assert_held() statements get verified at runtime if lockdep is 
+enabled but comments not. This is why I prefer lockdep_assert_held() 
+over a comment.
+
+>> +    if (e->present++) {
+>> +        e = NULL;
+>> +        goto unlock;
+>> +    }
+>> +    e->proc_dir = proc_mkdir(sht->proc_name, proc_scsi);
+>> +    if (!e->proc_dir) {
+>> +        printk(KERN_ERR "%s: proc_mkdir failed for %s\n", __func__,
+>> +               sht->proc_name);
+>> +        goto unlock;
+> 
+> hmmm... in this case we don't add e to the list. As unlikely as it 
+> seems, if a subsequent attempt to create the proc dir passes for another 
+> host with the same sht, then e->present would be incorrect, right?
+
+Right, this needs to be fixed.
+
+Thanks,
+
+Bart.
