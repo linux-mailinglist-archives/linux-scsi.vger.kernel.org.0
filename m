@@ -2,101 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173775B90A9
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Sep 2022 00:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958785B90FA
+	for <lists+linux-scsi@lfdr.de>; Thu, 15 Sep 2022 01:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiINW5I (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Sep 2022 18:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        id S229899AbiINXhf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Sep 2022 19:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiINW5B (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Sep 2022 18:57:01 -0400
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A69832E6
-        for <linux-scsi@vger.kernel.org>; Wed, 14 Sep 2022 15:57:00 -0700 (PDT)
-Received: by mail-pl1-f178.google.com with SMTP id b21so16578326plz.7
-        for <linux-scsi@vger.kernel.org>; Wed, 14 Sep 2022 15:57:00 -0700 (PDT)
+        with ESMTP id S229716AbiINXhe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Sep 2022 19:37:34 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CD931DF0
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Sep 2022 16:37:32 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id a21so4055240ljq.7
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Sep 2022 16:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date;
+        bh=ShE51VUQ4axb0Bz/NABdTBjNwA+Qofa4jx9r0eRkBes=;
+        b=k2M2ZNIpdn7xEOMNqcL5GdC6tdfW+P5XwnuQttFsmlako7YEcDKGGvl1kHc01Kvs0U
+         2Qify9hf1enFB76+xEiyVof4/OAmdOW9ajqrJcietmAjrKw+omqu4OXbznTQQnUQffdW
+         asgvWRx+VuJYoKynfrOfnq47seroQG1C2R6gFJjhDRmFuF7KwEb6u2ALlGvCTiXTle/I
+         iM6cozYwqFGJqYp7kzvSo+wd8KqsmQv2IZvN37uYXHCR6eoz/C33Ogif4GeypgaxUfnq
+         GWh7AzBbx0EdbLW4zYEirPcczsuiUW6fkM9uN/M10urhH+8RSbPBzODJIbmHsGDscEGz
+         5xaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=vUM2HolRGWQC4/RRb/dHgvk9K9vdj30UGyVRRJl+YPo=;
-        b=wjHQIj02cDKMDyZKLub1WR6VQ+b3M3cofkUODcaukw03nc/7Ar2CVn+feLnvsf3g25
-         W+lhSmhlkZSsxB0NykSeNlli3E3xrkVsD9RF88QoIIF61u9FkIACMfIueQwRwU4W4t0T
-         teF1JUWeWHUI93Wrq+onKIGKqlMV8XharWHLttpZDQ8GdPwRb6ZCWa7O4leK71UZskc6
-         qOsQ6n74vGJxk2cDvhWx2zckZdX1nHRhBG9HTnirUMT3R1Uw9Ctl6zWv90GsBVazeyUw
-         J5Rb+LR3XR5gTLpjoBVL+Tzi/pXaQwVKbNy1d92BBcp5XlS8ykO+1qMp9ECOZ1nTyG8c
-         Nh/w==
-X-Gm-Message-State: ACrzQf2DRI3mEyJLwE4bgKDJBkuLnFbBVHcyM9g50T2Ptpzd1l+HCDOh
-        tiIows3N+OX2KDrwdx2OGdP5Cdk6aGY=
-X-Google-Smtp-Source: AMsMyM7x6fZkDQi7WnRLkODg9HiXyItdWEXdojYBIU4rYArM6WNJcI/+7hwJYwcupS6RDJowTR343A==
-X-Received: by 2002:a17:90b:4a4f:b0:202:5bbb:b76f with SMTP id lb15-20020a17090b4a4f00b002025bbbb76fmr7412193pjb.230.1663196220236;
-        Wed, 14 Sep 2022 15:57:00 -0700 (PDT)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:9147:e0c1:9227:cf53])
-        by smtp.gmail.com with ESMTPSA id w9-20020a170902d70900b0016d1b70872asm2606926ply.134.2022.09.14.15.56.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 15:56:59 -0700 (PDT)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
-        Hannes Reinecke <hare@suse.de>,
-        John Garry <john.garry@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v5 7/7] scsi: core: Improve SCSI device removal
-Date:   Wed, 14 Sep 2022 15:56:21 -0700
-Message-Id: <20220914225621.415631-8-bvanassche@acm.org>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-In-Reply-To: <20220914225621.415631-1-bvanassche@acm.org>
-References: <20220914225621.415631-1-bvanassche@acm.org>
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ShE51VUQ4axb0Bz/NABdTBjNwA+Qofa4jx9r0eRkBes=;
+        b=NqoEf5KU9AVfPOcZmP79sv2DOxn0o10gExc7ETbucMLeTgO8L93A+8Q0Mw4YyW8NFf
+         f5KbXi3/ZA9BZrQ82vVgf/zitPG4bW0XMVZKY+rh/6k0Wb3LbQKjPQt8YkV+tFZi45HJ
+         2G7KdivDpWU/ZN+l19nxlo0XpiyneGu7z/v0UWaKe+j+5JKVQgClMJCuf8BXfS8a4od8
+         /F+LHKs/zkGpukw98MJtzoahj7O0UWS3DhfhiRSF0k5QvQWMwnPFjVaBYWiHb7eA2V+o
+         oOky0Ul6uThSAcnl/mw3jAX2vKpkZ6/NKT5xvHfzdxucAVIOQN5wxz0VeP1TH45HKKiC
+         hybQ==
+X-Gm-Message-State: ACgBeo3zUnGPoex5QtkUzVSZ/uzNIgjlrRGbykT4gf2csvAN86AgyvoX
+        UMHnR61nPoCx/kr47BH88DQkNsddT7vi9oYWkDs=
+X-Google-Smtp-Source: AA6agR7EYgYy6szLVA8vENFHiH3Hqw7A/W2CZtdlWSnzo8Y14WwknEYJSnghlP4jE/Jw0PB7o/Rn3czvG6bHFjHaU88=
+X-Received: by 2002:a05:651c:1242:b0:26b:eb9e:96c6 with SMTP id
+ h2-20020a05651c124200b0026beb9e96c6mr7245937ljh.498.1663198651381; Wed, 14
+ Sep 2022 16:37:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Sender: anselmenicki@gmail.com
+Received: by 2002:a2e:a0c3:0:0:0:0:0 with HTTP; Wed, 14 Sep 2022 16:37:30
+ -0700 (PDT)
+From:   John Kumor <omaralaji51@gmail.com>
+Date:   Wed, 14 Sep 2022 23:37:30 +0000
+X-Google-Sender-Auth: vBSLmwFGJ0164yzvC-NTmzMUyl8
+Message-ID: <CANbcXbF-8ctGU8q1SXozty5X1ogJizj42VRcHk7ReJ1b61gTiQ@mail.gmail.com>
+Subject: It's urgent.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of clearing the host template module pointer if the LLD kernel
-module is being unloaded, call __module_get() unconditionally. This
-patch is a bug fix because it prevents that a SCSI LLD is unloaded after
-scsi_device_dev_release() returns and before
-scsi_device_dev_release_usercontext() is called.
-
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Ming Lei <ming.lei@redhat.com>
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Mike Christie <michael.christie@oracle.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/scsi_sysfs.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index a3aaafdeac1d..661c2bdd4588 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -523,9 +523,7 @@ static void scsi_device_dev_release(struct device *dev)
- {
- 	struct scsi_device *sdp = to_scsi_device(dev);
- 
--	/* Set module pointer as NULL in case of module unloading */
--	if (!try_module_get(sdp->host->hostt->module))
--		sdp->host->hostt->module = NULL;
-+	__module_get(sdp->host->hostt->module);
- 
- 	execute_in_process_context(scsi_device_dev_release_usercontext,
- 				   &sdp->ew);
+Greetings!!
+Did you receive my previous email?
+Please reply back it=E2=80=99s urgent.
+Regards,
+Attorney John.
