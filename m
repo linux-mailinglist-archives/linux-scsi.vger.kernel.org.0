@@ -2,55 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2BD5B90A7
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Sep 2022 00:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C725B90AA
+	for <lists+linux-scsi@lfdr.de>; Thu, 15 Sep 2022 00:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiINW5B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Sep 2022 18:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
+        id S229622AbiINW5K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Sep 2022 18:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiINW45 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Sep 2022 18:56:57 -0400
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82AB7FF9D
-        for <linux-scsi@vger.kernel.org>; Wed, 14 Sep 2022 15:56:56 -0700 (PDT)
-Received: by mail-pj1-f49.google.com with SMTP id q15-20020a17090a304f00b002002ac83485so15824521pjl.0
-        for <linux-scsi@vger.kernel.org>; Wed, 14 Sep 2022 15:56:56 -0700 (PDT)
+        with ESMTP id S229772AbiINW5A (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Sep 2022 18:57:00 -0400
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E969083059;
+        Wed, 14 Sep 2022 15:56:58 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id l10so16568348plb.10;
+        Wed, 14 Sep 2022 15:56:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=J2XQsX+0ms+bazFRVKIAEDMgyTBXxMOAVpbtlR1zqtY=;
-        b=1vfOALCrW15xX+iUJPvGCekvwPKF+muwNTGc7eKX1NIIDbrwUn1anNoxbgtXJfFu2u
-         bLss5e3BEmazUWqCBOhVaLvMZa5aHtRFGJz5lzgP/8rCwGRaWAfNP3W2P0alevoNQtl7
-         ebIahDhHGrF6Uxb39j8RIHrxi43Mz6Wj0aN52Rx5xoI67kDpE60YZA1PtOPb4t3Ks3n9
-         SxtJwZvIVTyz1qG1OzSlghkZ8do73re0bYFseK7GzDFrSQhR+IgDBw+nuyF9QiKLXUQS
-         kxwz1qwtVRE+I4OWSrGzFtVFZ4VHBPWZez0diUVuOqMSomGEfPkmwic23lCa8VoipbVI
-         BcLA==
-X-Gm-Message-State: ACrzQf37ueFOdofmbmVgIgEBY4aRuU3DXal8vGLKonsSJdxP68WRBifu
-        /kuUMMDlvnqkke9oGyQ3jBg=
-X-Google-Smtp-Source: AMsMyM6j2wPL/eYW0Zte5z2hG12fNb4iMJ1zU63Va2E57M2aFOgghIX1DUEah8hfzscTBi9rheD64Q==
-X-Received: by 2002:a17:902:7082:b0:177:f7fc:5290 with SMTP id z2-20020a170902708200b00177f7fc5290mr1238807plk.143.1663196216113;
-        Wed, 14 Sep 2022 15:56:56 -0700 (PDT)
+        bh=hIeIUTsBV4QxjBZVDpe2dp3qI8fehLgRx48IHpHPzW8=;
+        b=wdIrNcyTufCnLE2MrarhWcgNI47ziV7uNfT9DSr4fNIANC8H59e3bIu4qvfIjcaOmS
+         9w27RE8tuYJEGH6jqrrbqSN7++hKQJQ7+muFaEPzS3pJ0Ap1kqihckqKZ/OlB9IgaH7J
+         wNudswNnMFHg+EjA0AkgCbGsf231t+qvtoxX5lVEECfK9wkqPYplQpga6lr87jL1/wus
+         cSSOINTUHvtavMGymA440x9VbPvgxUuKVymo+AfRiT6/6+JPsXnEvxPYcOQxxrV6Bghn
+         YZYzLq3Wp3+FRTcyr9XpORH79uc+mxG9UVWE3sqRh0PkTYWRPaBTu3ej+zDidPw7lg5x
+         Uo8Q==
+X-Gm-Message-State: ACrzQf0ammYT0b7vP2LZwSdp16c61gRQQqUJ9UILsgELsigOJLjqwh6o
+        Zknmx938O9syRXCWVxtjCao=
+X-Google-Smtp-Source: AMsMyM7xbb0K/O3zh7pzBk0SS0ANyvZ/W2+59zP+9cC7ZtIfUPFv4j7NqiRjg9PlRZ0Cr9vyvQoM7g==
+X-Received: by 2002:a17:90b:b06:b0:200:aff0:2e68 with SMTP id bf6-20020a17090b0b0600b00200aff02e68mr7411578pjb.159.1663196218342;
+        Wed, 14 Sep 2022 15:56:58 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:9147:e0c1:9227:cf53])
-        by smtp.gmail.com with ESMTPSA id w9-20020a170902d70900b0016d1b70872asm2606926ply.134.2022.09.14.15.56.54
+        by smtp.gmail.com with ESMTPSA id w9-20020a170902d70900b0016d1b70872asm2606926ply.134.2022.09.14.15.56.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Sep 2022 15:56:55 -0700 (PDT)
+        Wed, 14 Sep 2022 15:56:57 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Jun'ichi Nomura <j-nomura@ce.jp.nec.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
         Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
         Hannes Reinecke <hare@suse.de>,
         John Garry <john.garry@huawei.com>,
         Mike Christie <michael.christie@oracle.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        James Bottomley <JBottomley@Odin.com>
-Subject: [PATCH v5 5/7] scsi: core: Fix a use-after-free related to releasing device handlers
-Date:   Wed, 14 Sep 2022 15:56:19 -0700
-Message-Id: <20220914225621.415631-6-bvanassche@acm.org>
+        Tejun Heo <tj@kernel.org>
+Subject: [PATCH v5 6/7] module: Improve support for asynchronous module exit code
+Date:   Wed, 14 Sep 2022 15:56:20 -0700
+Message-Id: <20220914225621.415631-7-bvanassche@acm.org>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 In-Reply-To: <20220914225621.415631-1-bvanassche@acm.org>
 References: <20220914225621.415631-1-bvanassche@acm.org>
@@ -58,104 +60,138 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The SCSI device name can be freed by kobject_cleanup() before
-scsi_device_dev_release_usercontext() is called since the latter function
-may be called asynchronously. Hence, the SCSI device name must not be
-dereferenced from inside the SCSI device release function. Since
-scsi_dh_release_device() dereferences the SCSI device name, call it
-earlier. This patch fixes the following use-after-free:
+Some kernel modules call device_del() from their module exit code and
+schedule asynchronous work from inside the .release callback without waiting
+until that callback has finished. As an example, many SCSI LLD drivers call
+scsi_remove_host() from their module exit code. scsi_remove_host() may
+invoke scsi_device_dev_release_usercontext() asynchronously.
+scsi_device_dev_release_usercontext() uses the host template pointer and
+that pointer usually exists in static storage in the SCSI LLD. Support
+using the module reference count to keep the module around until
+asynchronous module exiting has completed by waiting in the delete_module()
+system call until the module reference count drops to zero.
 
-BUG: KASAN: use-after-free in string+0xdc/0x1d0
-Read of size 1 at addr ffff8881280d05f0 by task kworker/54:2/1373
+The following debug patch has been used to make the new wait_event()
+call wait:
 
-CPU: 54 PID: 1373 Comm: kworker/54:2 Tainted: G            E      6.0.0-rc5-dbg #12
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
-Workqueue: events scsi_device_dev_release_usercontext
-Call Trace:
- <TASK>
- show_stack+0x4e/0x53
- dump_stack_lvl+0x51/0x66
- print_address_description.constprop.0.cold+0xd5/0x412
- print_report.cold+0x90/0x219
- kasan_report+0xb1/0xe0
- __asan_load1+0x4d/0x50
- string+0xdc/0x1d0
- vsnprintf+0x44d/0x7f0
- snprintf+0x88/0xa0
- dev_vprintk_emit+0x19c/0x1dc
- dev_printk_emit+0x8c/0xa6
- __dev_printk+0x73/0x8f
- _dev_printk+0xa8/0xbe
- sdev_prefix_printk+0x12c/0x180
- scsi_dh_release_device+0x74/0xa0
- scsi_device_dev_release_usercontext+0x60/0x8a0
- process_one_work+0x571/0xa40
- worker_thread+0x90/0x650
- kthread+0x185/0x1c0
- ret_from_fork+0x1f/0x30
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index 8be8e08fb67d..fead694ff95a 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -14,6 +14,7 @@
+ #include <linux/device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/bsg.h>
++#include <linux/delay.h>
 
-Freed by task 509:
- kasan_save_stack+0x26/0x50
- kasan_set_track+0x25/0x30
- kasan_set_free_info+0x24/0x40
- ____kasan_slab_free+0x155/0x1c0
- __kasan_slab_free+0x12/0x20
- kfree+0x1fe/0x3e0
- kfree_const+0x21/0x30
- kobject_cleanup+0x8d/0x1c0
- kobject_put+0x6e/0x90
- put_device+0x13/0x20
- __scsi_remove_device+0x140/0x200
- scsi_forget_host+0xa7/0xb0
- scsi_remove_host+0x9b/0x1b0
- srp_remove_work+0x12b/0x2e0 [ib_srp]
- process_one_work+0x571/0xa40
- worker_thread+0x90/0x650
- kthread+0x185/0x1c0
- ret_from_fork+0x1f/0x30
+ #include <scsi/scsi.h>
+ #include <scsi/scsi_device.h>
+@@ -518,6 +519,7 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
 
-Cc: Jun'ichi Nomura <j-nomura@ce.jp.nec.com>
+ 	if (parent)
+ 		put_device(parent);
++	msleep(100);
+ 	module_put(mod);
+ }
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index a271126d7d59..0bf75ec3f5a8 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -756,8 +756,10 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+ 	 * unloading is not forced, wait for the module reference count to drop
+ 	 * to zero again.
+ 	 */
+-	if (!forced)
++	if (!forced) {
++		WARN_ON_ONCE(atomic_read(&mod->refcnt));
+ 		wait_event(mod->refcnt_wq, atomic_read(&mod->refcnt) == 0);
++	}
+ 	blocking_notifier_call_chain(&module_notify_list,
+ 				     MODULE_STATE_GOING, mod);
+ 	klp_module_going(mod);
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index aeea9731ef80..f021625f2caa 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -3355,7 +3355,7 @@ int schedule_on_each_cpu(work_func_t func)
+  */
+ int execute_in_process_context(work_func_t fn, struct execute_work *ew)
+ {
+-	if (!in_interrupt()) {
++	if (false && !in_interrupt()) {
+ 		fn(&ew->work);
+ 		return 0;
+ 	}
+
+Cc: Luis Chamberlain <mcgrof@kernel.org>
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: Ming Lei <ming.lei@redhat.com>
 Cc: Hannes Reinecke <hare@suse.de>
 Cc: John Garry <john.garry@huawei.com>
 Cc: Mike Christie <michael.christie@oracle.com>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Fixes: 23695e41a1ca ("scsi_dh: fix use-after-free when removing scsi device")
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-modules@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/scsi_sysfs.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ include/linux/module.h |  1 +
+ kernel/module/main.c   | 10 ++++++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index 5d61f58399dc..a3aaafdeac1d 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -456,8 +456,6 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 518296ea7f73..3a77d2bd4198 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -533,6 +533,7 @@ struct module {
+ 	/* Destruction function. */
+ 	void (*exit)(void);
  
- 	mod = sdev->host->hostt->module;
++	wait_queue_head_t refcnt_wq;
+ 	atomic_t refcnt;
+ #endif
  
--	scsi_dh_release_device(sdev);
--
- 	parent = sdev->sdev_gendev.parent;
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index a4e4d84b6f4e..a271126d7d59 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -550,6 +550,7 @@ static int module_unload_init(struct module *mod)
  
- 	spin_lock_irqsave(sdev->host->host_lock, flags);
-@@ -1479,6 +1477,9 @@ void __scsi_remove_device(struct scsi_device *sdev)
- 	kref_put(&sdev->host->tagset_refcnt, scsi_mq_free_tags);
- 	cancel_work_sync(&sdev->requeue_work);
+ 	/* Hold reference count during initialization. */
+ 	atomic_inc(&mod->refcnt);
++	init_waitqueue_head(&mod->refcnt_wq);
  
-+	/* Only detach the device handler after I/O processing has finished. */
-+	scsi_dh_release_device(sdev);
-+
- 	if (sdev->host->hostt->slave_destroy)
- 		sdev->host->hostt->slave_destroy(sdev);
- 	transport_destroy_device(dev);
+ 	return 0;
+ }
+@@ -750,6 +751,13 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+ 	/* Final destruction now no one is using it. */
+ 	if (mod->exit != NULL)
+ 		mod->exit();
++	/*
++	 * If the module reference count was increased by mod->exit() and if
++	 * unloading is not forced, wait for the module reference count to drop
++	 * to zero again.
++	 */
++	if (!forced)
++		wait_event(mod->refcnt_wq, atomic_read(&mod->refcnt) == 0);
+ 	blocking_notifier_call_chain(&module_notify_list,
+ 				     MODULE_STATE_GOING, mod);
+ 	klp_module_going(mod);
+@@ -854,6 +862,8 @@ void module_put(struct module *module)
+ 		WARN_ON(ret < 0);	/* Failed to put refcount */
+ 		trace_module_put(module, _RET_IP_);
+ 		preempt_enable();
++		if (ret == 0)
++			wake_up(&module->refcnt_wq);
+ 	}
+ }
+ EXPORT_SYMBOL(module_put);
