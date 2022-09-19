@@ -2,100 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C9C5BCE21
-	for <lists+linux-scsi@lfdr.de>; Mon, 19 Sep 2022 16:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837AA5BCE3F
+	for <lists+linux-scsi@lfdr.de>; Mon, 19 Sep 2022 16:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiISOLs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 19 Sep 2022 10:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
+        id S229709AbiISONs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 19 Sep 2022 10:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiISOLr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Sep 2022 10:11:47 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9243136D;
-        Mon, 19 Sep 2022 07:11:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A64CA1F8F1;
-        Mon, 19 Sep 2022 14:11:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1663596704; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e6jSNGpl22UihrSVGdfwL4XCFmdk1CRaeZx03G6VvDw=;
-        b=mi++xQf2IMvnO7tVXg8ZdrZCJG8o9WnzMX3ODVhH7qIQAG0JJbxWP+iv3M6XRTa6VoTIu/
-        /bgt7tVr3ld5s36pNmxtbrh34Jmk7H+uWhyUtMJDvu6ycYwO5zOb5Jv79taISG1+aSvvBe
-        8Xa9jtx7l8D+LNpLXPSmfBEIfzmLWzU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1663596704;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e6jSNGpl22UihrSVGdfwL4XCFmdk1CRaeZx03G6VvDw=;
-        b=ofAowOSMq9XCaF37++HSumkP9gkjGyoL4Ac3NhrB9LQyRjwZR6hZNNFZy7m+ArExdpDfcr
-        Ws28jpuFOxZcxRBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 99DFF13ABD;
-        Mon, 19 Sep 2022 14:11:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WqSDJaB4KGNQWgAAMHmgww
-        (envelope-from <dwagner@suse.de>); Mon, 19 Sep 2022 14:11:44 +0000
-Date:   Mon, 19 Sep 2022 16:11:44 +0200
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Ren Zhijie <renzhijie2@huawei.com>
-Cc:     njavali@marvell.com, GR-QLogic-Storage-Upstream@marvell.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, aeasi@marvell.com,
-        himanshu.madhani@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 -next] scsi: qla2xxx: Fix build error
- implicit-function-declaration
-Message-ID: <20220919141144.h2dw57cmjs2egwep@carbon.lan>
-References: <20220919133404.85425-1-renzhijie2@huawei.com>
+        with ESMTP id S229551AbiISONr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Sep 2022 10:13:47 -0400
+Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBB4326C7
+        for <linux-scsi@vger.kernel.org>; Mon, 19 Sep 2022 07:13:46 -0700 (PDT)
+Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-3450a7358baso340489767b3.13
+        for <linux-scsi@vger.kernel.org>; Mon, 19 Sep 2022 07:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
+        b=mUWl7S2Y4/CWgqFso+XmN6Xqp8+CFE05l7JuQpZyPgBkK+hCv4nAf5riUlWYlCEvT4
+         5Qky6Sqf87ecwSE6ZgnN/M4JNgb90eWdXgvublcOBvJ4fmSXto+LIN17Nd+Zo7LkKAXH
+         JiFkCIcsM4TzAFdhHNb4/dvx19hVFUsWVLCQeexD0+XseruCvKpUl3dGh0D334YkmTHI
+         VmtrQ3fTwTXkV5l50FR04UN5RMTqmDkNSISD/PkMGvv0O95GNPhQ0hzc9I6ayYV1BhHx
+         MEoi6AxmJxiODxUnIj2Hd0gj/rRMdCp1bmwPwXIY3ff8pNSca2pGQXJpLDpwHL7VxXVq
+         tLGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
+        b=AaJLsGrkBAQ5JOYMGf8EgG2QHjIlgId32h25uCjpzFKLVwqA840g96laA64BT+gyZK
+         4wckWX+jlG05rdcvzcPhdxN+nUP6srJYVOb+L8BjgtFQ54nIOdmx4r1EanyfQ9l7KnVd
+         DuvjLn16qMoHWqJHq4eW8psSsNB0V9kD02DhzOK9TEr7OfFRWOj1D+m5DZ+v0g4ZvbbK
+         JCTqd0UTePgaVTlemGwsy8TZtNe1I1MZgoFekysy55mSLmxDDL59/jKusgbjUmBaBera
+         UBAbcS4o2ZvRq88FEWIE+GdLouilPy0MbEZJkfyo0l5GBxBgAfQYGF8OEvgIm/I7yoNM
+         fvxg==
+X-Gm-Message-State: ACrzQf0pFl41rxGgkksatABfm9Lmth+yPr0R+2tWEhWnxlSx3yT2v+o9
+        Am6Utny2kAvu1J6ltW3KIqywY+ysEr0Xb4fN27w=
+X-Google-Smtp-Source: AMsMyM7Ef0u62N/5DUXX0q86EAugLF0XHftnjQsZCYkMa85rQjam7b1SYONFq2Dyyl8oo9VHyrqGiu8Le9FphSdDf7o=
+X-Received: by 2002:a81:1dd6:0:b0:349:c9c9:eb61 with SMTP id
+ d205-20020a811dd6000000b00349c9c9eb61mr14822070ywd.7.1663596825274; Mon, 19
+ Sep 2022 07:13:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220919133404.85425-1-renzhijie2@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7010:8e28:b0:305:bafb:f9c2 with HTTP; Mon, 19 Sep 2022
+ 07:13:44 -0700 (PDT)
+Reply-To: jennifermbaya036@gmail.com
+From:   "Mrs.Jennifer Mbaya" <tantisayo@gmail.com>
+Date:   Mon, 19 Sep 2022 15:13:44 +0100
+Message-ID: <CAOOke06_EYisqAAMuj_qqrsu7FL6WSsJKocc3LQa_4H1emUOPA@mail.gmail.com>
+Subject: Edunsaaja
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 09:34:04PM +0800, Ren Zhijie wrote:
-> If CONFIG_TRACING is not set,
-> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
-> will be failed, like this:
-> 
-> drivers/scsi/qla2xxx/qla_os.c: In function ‘qla_trace_init’:
-> drivers/scsi/qla2xxx/qla_os.c:2854:18: error: implicit declaration of function ‘trace_array_get_by_name’; did you mean ‘trace_array_set_clr_event’? [-Werror=implicit-function-declaration]
->   qla_trc_array = trace_array_get_by_name("qla2xxx");
->                   ^~~~~~~~~~~~~~~~~~~~~~~
->                   trace_array_set_clr_event
-> drivers/scsi/qla2xxx/qla_os.c:2854:16: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]
->   qla_trc_array = trace_array_get_by_name("qla2xxx");
->                 ^
-> drivers/scsi/qla2xxx/qla_os.c: In function ‘qla_trace_uninit’:
-> drivers/scsi/qla2xxx/qla_os.c:2869:2: error: implicit declaration of function ‘trace_array_put’; did you mean ‘trace_seq_putc’? [-Werror=implicit-function-declaration]
->   trace_array_put(qla_trc_array);
->   ^~~~~~~~~~~~~~~
->   trace_seq_putc
-> cc1: all warnings being treated as errors
-> 
-> To fix this error, wrap up all the relevant code with CONFIG_TRACING.
-> 
-> Fixes: 8bfc149ba24c ("scsi: qla2xxx: Enhance driver tracing with separate tunable and more")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+Edunsaaja
 
-Reviewed-by: Daniel Wagner <dwagner@suse.de>
+Nimess=C3=A4si on palkinto Yhdistyneilt=C3=A4 Kansakunnilta ja Maailman
+terveysj=C3=A4rjest=C3=B6lt=C3=A4, joka on osa kansainv=C3=A4list=C3=A4 val=
+uuttarahastoa, johon
+s=C3=A4hk=C3=B6postisi, osoite ja raha on luovutettu meille siirtoa varten,
+vahvista yst=C3=A4v=C3=A4llisesti tietosi siirtoa varten.
+Meit=C3=A4 kehotettiin siirt=C3=A4m=C3=A4=C3=A4n kaikki vireill=C3=A4 oleva=
+t tapahtumat
+seuraavien kahden aikana, mutta jos olet vastaanottanut rahasi, j=C3=A4t=C3=
+=A4
+t=C3=A4m=C3=A4 viesti huomioimatta, jos et toimi heti.
+Tarvitsemme kiireellist=C3=A4 vastausta t=C3=A4h=C3=A4n viestiin, t=C3=A4m=
+=C3=A4 ei ole yksi
+niist=C3=A4 Internet-huijareista, se on pandemiaapu.
+Jennifer
