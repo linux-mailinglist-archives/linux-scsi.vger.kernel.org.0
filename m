@@ -2,112 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC35E5BE0C1
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Sep 2022 10:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990FA5BE230
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Sep 2022 11:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiITIwG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 20 Sep 2022 04:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S230153AbiITJi2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 20 Sep 2022 05:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiITIwE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 20 Sep 2022 04:52:04 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB4062AA2
-        for <linux-scsi@vger.kernel.org>; Tue, 20 Sep 2022 01:52:02 -0700 (PDT)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MWwFj4hb4zpT6w;
-        Tue, 20 Sep 2022 16:49:13 +0800 (CST)
-Received: from dggpeml500019.china.huawei.com (7.185.36.137) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 20 Sep 2022 16:52:01 +0800
-Received: from huawei.com (10.175.124.27) by dggpeml500019.china.huawei.com
- (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 20 Sep
- 2022 16:52:00 +0800
-From:   Wu Bo <wubo40@huawei.com>
-To:     <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <bvanassche@acm.org>,
-        <qiuchangqi.qiu@huawei.com>, <wubo40@huawei.com>
-Subject: [PATCH V2] scsi: core: Add io timeout count for scsi device
-Date:   Tue, 20 Sep 2022 17:32:19 +0800
-Message-ID: <1663666339-17560-1-git-send-email-wubo40@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        with ESMTP id S229681AbiITJi1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 20 Sep 2022 05:38:27 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED56F66A70;
+        Tue, 20 Sep 2022 02:38:23 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id 13so4762523ejn.3;
+        Tue, 20 Sep 2022 02:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date;
+        bh=1ACvBNS/BmPcZghXQgeH0xRzJtAbKL6tPXfSnoaBoJQ=;
+        b=XaP21kFUG88BKe4RytNxQVkBU7oeorpYQLBbWW8pNETJyNJU75ehFxaxDGf+0huQDv
+         rUBLuaEXXfRGUstiD80bGBRlXZjbt/cxnv/XoeGRw8rRUghQahgn12j3d6Y/0RiFEC0I
+         VVPRibKngjYq+nrdJZ3+Lm7DReCnjK68y3hnNghoisv4bGa7DMGSEs0xa+M8nrPVW1sr
+         Mt0EeTfCRUb1K7Uq24FD8PlwV5zN9zMSR2IgRLStmP7ctig9UO2K/uA7NSF531JNK2Oq
+         fpeD+kQ9llFF4fa4rluiPET0zpWoU+gXPR6nY/8bMb3Tys7zMQR15zEE4/ltmPDv/2c3
+         t5OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=1ACvBNS/BmPcZghXQgeH0xRzJtAbKL6tPXfSnoaBoJQ=;
+        b=r5/k3w2Azqmr41DIIv0mkzRvFWEEU9NrbRuRrYak+ElJWjoVhwSWwoiuqtXasbBJEm
+         77iFF41aZ+DlLgclu1tW/33ADHzPuUU+yT9jgT+M37kTkqxvyEnUj9M8YnajcR6FI6iR
+         pG4EzBd8VRFKREu0o2yAF0+TRq2Z7l+Ghz5+gtFNsHep0yYVqOa6Y1/GnhOgufQNSjQH
+         BgNdChkodf0zEXnJs/X+GS/oCUHhh8p3ZsjLl40kjaG0QhSMyFztkRqsknqRfwnSuJEE
+         Ad9TdcFjWNbdAbHfyfOKqo2TD2k2/nG1uCDxP79dxmi/pGlOb2bO6TAXTJx+KuBn+dgY
+         v/gw==
+X-Gm-Message-State: ACrzQf1weE6z7ooatcxWo4YoHVtycC6mxGif5SiQKJulplGf8yGYAcam
+        boVeW72h6miQnkFve0aRZBQ=
+X-Google-Smtp-Source: AMsMyM5DKlUx30EnlT+m8b/NyFhKRw1MZqDFyfqzrrGCGN0FvzidzIvezsle0sfFHUcjRwmF5tByHA==
+X-Received: by 2002:a17:906:9756:b0:781:bc50:abe3 with SMTP id o22-20020a170906975600b00781bc50abe3mr1976678ejy.291.1663666702457;
+        Tue, 20 Sep 2022 02:38:22 -0700 (PDT)
+Received: from [10.176.234.249] ([137.201.254.41])
+        by smtp.googlemail.com with ESMTPSA id e6-20020a170906314600b0073ddd36ba8csm553544eje.145.2022.09.20.02.38.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Sep 2022 02:38:22 -0700 (PDT)
+Message-ID: <87e6fdb49d9d76c468712e1b42cbc130273b5635.camel@gmail.com>
+Subject: Re: [PATCH] scsi: ufs-bsg: Remove ufs_bsg_get_query_desc_size
+ function
+From:   Bean Huo <huobean@gmail.com>
+To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>, James@vger.kernel.org,
+        E.J.Bottomley@vger.kernel.org, jejb@linux.vnet.ibm.com,
+        Martin@vger.kernel.org, K.Petersen@vger.kernel.org,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bean@vger.kernel.org, Huo@vger.kernel.org, beanhuo@micron.com
+Date:   Tue, 20 Sep 2022 11:38:20 +0200
+In-Reply-To: <1655727966-31584-1-git-send-email-Arthur.Simchaev@wdc.com>
+References: <1655727966-31584-1-git-send-email-Arthur.Simchaev@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500019.china.huawei.com (7.185.36.137)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Wu Bo <wubo40@huawei.com>
+Hi Arthur,
 
-Current the scsi device has iorequest count, iodone count
-and ioerr count, but lack of io timeout count.
 
-For better tracking of scsi io, So add it now.
+On Mon, 2022-06-20 at 15:26 +0300, Arthur Simchaev wrote:
+> The bsg driver allows user space to send device management commands.
+> As such, it is often used by field application engineers to debug
+> various problems,
+> and as a test bed for new features as well.
+>=20
+> Let's not bound ourself to hard coded descriptor sizes, as the new
 
-Signed-off-by: Wu Bo <wubo40@huawei.com>
----
-v1->v2
-Rebase this patch on top of Martin's for-next branch.
----
- drivers/scsi/scsi_error.c  | 1 +
- drivers/scsi/scsi_sysfs.c  | 2 ++
- include/scsi/scsi_device.h | 1 +
- 3 files changed, 4 insertions(+)
+UFS descriptor size is no longer hardcoded (defined in the driver), the
+size of the descriptor is reported by UFS itself, check the latest
+kernel.
 
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 448748e..e84aea9 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -334,6 +334,7 @@ enum blk_eh_timer_return scsi_timeout(struct request *req)
- 	trace_scsi_dispatch_cmd_timeout(scmd);
- 	scsi_log_completion(scmd, TIMEOUT_ERROR);
- 
-+	atomic_inc(&scmd->device->iotmo_cnt);
- 	if (host->eh_deadline != -1 && !host->last_reset)
- 		host->last_reset = jiffies;
- 
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index 5d61f58..c95177c 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -976,6 +976,7 @@ static DEVICE_ATTR(field, S_IRUGO, show_iostat_##field, NULL)
- show_sdev_iostat(iorequest_cnt);
- show_sdev_iostat(iodone_cnt);
- show_sdev_iostat(ioerr_cnt);
-+show_sdev_iostat(iotmo_cnt);
- 
- static ssize_t
- sdev_show_modalias(struct device *dev, struct device_attribute *attr, char *buf)
-@@ -1295,6 +1296,7 @@ static umode_t scsi_sdev_bin_attr_is_visible(struct kobject *kobj,
- 	&dev_attr_iorequest_cnt.attr,
- 	&dev_attr_iodone_cnt.attr,
- 	&dev_attr_ioerr_cnt.attr,
-+	&dev_attr_iotmo_cnt.attr,
- 	&dev_attr_modalias.attr,
- 	&dev_attr_queue_depth.attr,
- 	&dev_attr_queue_type.attr,
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index 2493bd6..c36656d 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -231,6 +231,7 @@ struct scsi_device {
- 	atomic_t iorequest_cnt;
- 	atomic_t iodone_cnt;
- 	atomic_t ioerr_cnt;
-+	atomic_t iotmo_cnt;
- 
- 	struct device		sdev_gendev,
- 				sdev_dev;
--- 
-1.8.3.1
+
+> Descriptors that supports new features are not defined yet.
+>=20
+> Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
+> ---
+> =C2=A0drivers/scsi/ufs/ufs_bsg.c | 28 ++++------------------------
+> =C2=A01 file changed, 4 insertions(+), 24 deletions(-)
+>=20
+> diff --git a/drivers/scsi/ufs/ufs_bsg.c b/drivers/scsi/ufs/ufs_bsg.c
+
+This UFS driver is in the wrong location, I assume you are using an
+older kernel version?
+
+Kind regards,
+Bean
 
