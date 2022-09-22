@@ -2,89 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB905E6516
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Sep 2022 16:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D925E652D
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Sep 2022 16:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiIVOYr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 22 Sep 2022 10:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
+        id S231888AbiIVO0P (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 22 Sep 2022 10:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiIVOYf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 22 Sep 2022 10:24:35 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C619FE7;
-        Thu, 22 Sep 2022 07:24:34 -0700 (PDT)
-Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MYHV84HPxz67M1h;
-        Thu, 22 Sep 2022 22:19:44 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 22 Sep 2022 16:24:31 +0200
-Received: from [10.195.244.8] (10.195.244.8) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 22 Sep
- 2022 15:24:31 +0100
-Message-ID: <0034eff3-70a5-becb-0821-f9c36371e6d9@huawei.com>
-Date:   Thu, 22 Sep 2022 15:24:30 +0100
+        with ESMTP id S231956AbiIVOZu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 22 Sep 2022 10:25:50 -0400
+Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F49A8332
+        for <linux-scsi@vger.kernel.org>; Thu, 22 Sep 2022 07:25:49 -0700 (PDT)
+Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-346cd4c3d7aso100439857b3.8
+        for <linux-scsi@vger.kernel.org>; Thu, 22 Sep 2022 07:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=jykim3sD7w1OkYSM7Q+3i1V7E+acKHrVct2kMXb/55M=;
+        b=W03fwFROUSeNVERuaj9om8JobVZ9zoOImF0UjR7ftwVauoy00RTOhqoji2WGAybdFC
+         W2lsQz9UGbzEVSyvlipouxRxh5tUkplqUN6tTByZGnfUJNfpyVhzImqhinixjLX5RAzZ
+         7Rtu913G5rzm0fSOdR5DI9lvm7P3AroKIG75AuL/oCZHK8uxaS53ygS4gNPO+RJMnIp0
+         cTh9yE5omMd1BFNNH/BzZzaHWmwqYfG+ZAQfBVVtlgi/QvxB5M+zpAWcK+6erQIDlGMB
+         u1/5x29TrBWrhvb7LEPk6r3MnxTE5VP7D6xVxQt1Sros9oB/nGNECJI+ARFePgOei3BQ
+         nbGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=jykim3sD7w1OkYSM7Q+3i1V7E+acKHrVct2kMXb/55M=;
+        b=UuI28QMeavs4vXWV6cqe1Ip1Rk+KD7wFEiGmLVSQa2V2bCTvZL77yF13xCp4U0NDcC
+         /gdfBaif2MWLgAR3ie/61s0s9yB0srFs6z/H/uKQje2xfR5Yjb6o15g/NQuKkjG1KDf8
+         PmvhsVNglP2spqtGYRH5QRoAfK19X5PSDiM1cTrs+8EGq8p3sq7VvCpPBHpNUM8WOeYu
+         EFqtruMukeeC5zyjdKi+SYDWLzhnzADd9f1F04WbDDhw2kxRRewNylj45nmT7HkQxAnl
+         feObwr6+UMOorb7UItcbk6wnn1OWnGj2ayYbI2UWiTCoWbriksoi9IbvvUQNC3Smp58G
+         QQig==
+X-Gm-Message-State: ACrzQf2a2T6GWOZIpfuvfjQstJ22HLvVdh+xttQsSU7auEqKdrUV+06a
+        A/nN+0idlPj9xZPC+3W2v2MK3RgJT1a2vpemSIA=
+X-Google-Smtp-Source: AMsMyM4Szktqa41nSiWbwJ9FzBO+BtE3zGN3VlbE7jZ/zrL5n1Ub76suBUS+M8rkaO1+gX3aaLKqfaaURWNdwhqD2Uc=
+X-Received: by 2002:a81:3941:0:b0:345:594e:ef06 with SMTP id
+ g62-20020a813941000000b00345594eef06mr3378022ywa.179.1663856748287; Thu, 22
+ Sep 2022 07:25:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 6/7] scsi: pm8001: use dev_and_phy_addr_same() instead of
- open coded
-To:     Jason Yan <yanaijie@huawei.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
-        <jinpu.wang@cloud.ionos.com>
-References: <20220917104311.1878250-1-yanaijie@huawei.com>
- <20220917104311.1878250-7-yanaijie@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220917104311.1878250-7-yanaijie@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.244.8]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7108:1cf7:0:0:0:0 with HTTP; Thu, 22 Sep 2022 07:25:47
+ -0700 (PDT)
+From:   frg411 <minekporleopold@gmail.com>
+Date:   Thu, 22 Sep 2022 14:25:47 +0000
+Message-ID: <CAOL8c_M6Q+TMfYMP48YnQqRkNObYP5d91zfQxpGn4Z2n8daD_g@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 17/09/2022 11:43, Jason Yan wrote:
-> The sas address comparation of domain device and expander phy is open
-> coded. Now we can replace it with dev_and_phy_addr_same().
-> 
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
-> ---
->   drivers/scsi/pm8001/pm8001_sas.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
-> index 8e3f2f9ddaac..bb1b1722f3ee 100644
-> --- a/drivers/scsi/pm8001/pm8001_sas.c
-> +++ b/drivers/scsi/pm8001/pm8001_sas.c
-> @@ -649,8 +649,7 @@ static int pm8001_dev_found_notify(struct domain_device *dev)
->   		for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
+Hello. I hope this email is valid?
 
-This code seems the same between many libsas LLDDs - could we factor it 
-out into libsas? If so, then maybe those new helpers could be put in 
-sas_internal.h
-
-Thanks,
-John
-
->   		phy_id++) {
->   			phy = &parent_dev->ex_dev.ex_phy[phy_id];
-> -			if (SAS_ADDR(phy->attached_sas_addr)
-> -				== SAS_ADDR(dev->sas_addr)) {
-> +			if (dev_and_phy_addr_same(dev, phy)) {
->   				pm8001_device->attached_phy = phy_id;
->   				break;
->   			}
-
+Regards.
+Sami Alkhaldi. from Palestine.
