@@ -2,99 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758C95E71A3
-	for <lists+linux-scsi@lfdr.de>; Fri, 23 Sep 2022 03:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCE25E737F
+	for <lists+linux-scsi@lfdr.de>; Fri, 23 Sep 2022 07:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbiIWBzN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 22 Sep 2022 21:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
+        id S229686AbiIWFqt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Sep 2022 01:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiIWBzM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 22 Sep 2022 21:55:12 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A85056B85;
-        Thu, 22 Sep 2022 18:55:10 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MYZt11nZszHqFf;
-        Fri, 23 Sep 2022 09:52:57 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 09:55:08 +0800
-Subject: Re: [PATCH 6/7] scsi: pm8001: use dev_and_phy_addr_same() instead of
- open coded
-To:     John Garry <john.garry@huawei.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
-        <jinpu.wang@cloud.ionos.com>
-References: <20220917104311.1878250-1-yanaijie@huawei.com>
- <20220917104311.1878250-7-yanaijie@huawei.com>
- <0034eff3-70a5-becb-0821-f9c36371e6d9@huawei.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <cb4591d2-1e71-c04d-fd7a-c8536716000b@huawei.com>
-Date:   Fri, 23 Sep 2022 09:55:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        with ESMTP id S229779AbiIWFqs (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 23 Sep 2022 01:46:48 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A9B11E5C4
+        for <linux-scsi@vger.kernel.org>; Thu, 22 Sep 2022 22:46:47 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-346cd4c3d7aso121453577b3.8
+        for <linux-scsi@vger.kernel.org>; Thu, 22 Sep 2022 22:46:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
+        b=IAjYaCdARxeBpnLFVCHEt+ImVGi/i9rDR10xzlsH+lQaSTM1WIIuHBCBFSMD+Q1Sra
+         Kj9KGn79PO6pQOL49s6uED+PcAgqtM4CMsN2vikUS08sQ1OlbdVwgFMumzzLd3SjQaVc
+         ZqoXAVi6EsiENuxThNhxrqGzCYwLcB6paDRQFVtLLI/zD0pqBaJYdzGUikk1UolhgFUd
+         XsvNHMlzD2AAhQz/CulYiLcz9Rmu/5d0bWDiInQZDQWUkW2vawOnjLg3IcQ3wmx0LnQe
+         TxOT5TredSkin9EJe/HBx4Q3yj9XooQ/VdgN2C2nVIseR6M16+Zmt+Wc7C+aufT2edHW
+         rgMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
+        b=mx2XSFzi/T6ah5mHt4SIaJq/gxvbDNY1dgZkB73z+DzAjbrGcRj2lfI7WiQ55q61rY
+         U1sJ7bYKyFcvwXlXVflvLoxrzAui3Lv5vVNaBYeJvtKUapWci44wzcBFlYxz9xQjtO6s
+         Pqz3F3cbQ+dcsnJirCs/dvGuKjn/jFTlX8nC/TqbbK3K0cPoLH/fxDQwWlwz4YdFzu1f
+         +lyUAVFRu/RYUZhzKN7/B761tLc5Rsry50bx57JgzHmgEJR6oJUVQcOCG93qcEjZmT7h
+         orO+0zhfr0XoHbsZRuWoj0/VjTY/oTwl0383nySX/Dp4ujDva6kxuaJL4YScX8cfpM8z
+         vDQg==
+X-Gm-Message-State: ACrzQf2mLvCws/CmTnWju53PbLpv62tRpfsdEuefu4AxNmdRkgMN9A1E
+        vS7kLKE1u++cI+4/YyKZxI8UEhfswjB9B8Y/qR8=
+X-Google-Smtp-Source: AMsMyM77/pE/0GEuNTJgf1+rM7a3IYtnotQQycy4TgadqjWXPz1pdUz4vu/04Tvl5D4YrDyi64wO/xTvXpxI19FxgEc=
+X-Received: by 2002:a81:67d4:0:b0:34d:835f:4ccf with SMTP id
+ b203-20020a8167d4000000b0034d835f4ccfmr6181125ywc.518.1663912006798; Thu, 22
+ Sep 2022 22:46:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <0034eff3-70a5-becb-0821-f9c36371e6d9@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:6c2:b0:3bb:bdee:dfc5 with HTTP; Thu, 22 Sep 2022
+ 22:46:46 -0700 (PDT)
+Reply-To: jennifermbaya036@gmail.com
+From:   "Mrs.Jennifer Mbaya" <issakak65@gmail.com>
+Date:   Fri, 23 Sep 2022 06:46:46 +0100
+Message-ID: <CAMwbs2C7aUwDq2mHBNbDY75EbM3dFpv0jJ8kCObxepZrsB5R1g@mail.gmail.com>
+Subject: Edunsaaja
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Edunsaaja
 
-On 2022/9/22 22:24, John Garry wrote:
-> On 17/09/2022 11:43, Jason Yan wrote:
->> The sas address comparation of domain device and expander phy is open
->> coded. Now we can replace it with dev_and_phy_addr_same().
->>
->> Signed-off-by: Jason Yan <yanaijie@huawei.com>
->> ---
->>   drivers/scsi/pm8001/pm8001_sas.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/scsi/pm8001/pm8001_sas.c 
->> b/drivers/scsi/pm8001/pm8001_sas.c
->> index 8e3f2f9ddaac..bb1b1722f3ee 100644
->> --- a/drivers/scsi/pm8001/pm8001_sas.c
->> +++ b/drivers/scsi/pm8001/pm8001_sas.c
->> @@ -649,8 +649,7 @@ static int pm8001_dev_found_notify(struct 
->> domain_device *dev)
->>           for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
-> 
-> This code seems the same between many libsas LLDDs - could we factor it 
-> out into libsas?
-
-Sure we can. I will try to factor it out in the next revision.
-
-Thanks,
-Jason
-
-  If so, then maybe those new helpers could be put in
-> sas_internal.h
-> 
-> Thanks,
-> John
-> 
->>           phy_id++) {
->>               phy = &parent_dev->ex_dev.ex_phy[phy_id];
->> -            if (SAS_ADDR(phy->attached_sas_addr)
->> -                == SAS_ADDR(dev->sas_addr)) {
->> +            if (dev_and_phy_addr_same(dev, phy)) {
->>                   pm8001_device->attached_phy = phy_id;
->>                   break;
->>               }
-> 
-> .
+Nimess=C3=A4si on palkinto Yhdistyneilt=C3=A4 Kansakunnilta ja Maailman
+terveysj=C3=A4rjest=C3=B6lt=C3=A4, joka on osa kansainv=C3=A4list=C3=A4 val=
+uuttarahastoa, johon
+s=C3=A4hk=C3=B6postisi, osoite ja raha on luovutettu meille siirtoa varten,
+vahvista yst=C3=A4v=C3=A4llisesti tietosi siirtoa varten.
+Meit=C3=A4 kehotettiin siirt=C3=A4m=C3=A4=C3=A4n kaikki vireill=C3=A4 oleva=
+t tapahtumat
+seuraavien kahden aikana, mutta jos olet vastaanottanut rahasi, j=C3=A4t=C3=
+=A4
+t=C3=A4m=C3=A4 viesti huomioimatta, jos et toimi heti.
+Tarvitsemme kiireellist=C3=A4 vastausta t=C3=A4h=C3=A4n viestiin, t=C3=A4m=
+=C3=A4 ei ole yksi
+niist=C3=A4 Internet-huijareista, se on pandemiaapu.
+Jennifer
