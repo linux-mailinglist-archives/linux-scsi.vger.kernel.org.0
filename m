@@ -2,80 +2,172 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B525E7723
-	for <lists+linux-scsi@lfdr.de>; Fri, 23 Sep 2022 11:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAE65E7794
+	for <lists+linux-scsi@lfdr.de>; Fri, 23 Sep 2022 11:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbiIWJ3f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 23 Sep 2022 05:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
+        id S231835AbiIWJqq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Sep 2022 05:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbiIWJ2r (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 23 Sep 2022 05:28:47 -0400
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B64F5971;
-        Fri, 23 Sep 2022 02:28:17 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id bq9so19513496wrb.4;
-        Fri, 23 Sep 2022 02:28:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=fI2lO/p0Tgu9FuD6GUmjhPF/627CFAkNm/iJ5jz3IKc=;
-        b=DPPARzT2KsWkpAqZByKqbenZPdTtt7JMVUAhHmIRRuZtefqceyw28bepsGXPGgvvTp
-         ZaHkoJcicTOUzneNZRzgQQuQSjHVFOCg7oQkVYoPOcMyJxwkxycB6IfK/RnXVV9hJRcW
-         pjjKIbQjWfZRJe2wl/ZKxey3x5IfsHBnBAAg9GcBKEyYEU0FX+d91+I9QSFX0qcJUgOM
-         52COLBcsXX2CwRmO2y3Se9DolCtqxGUgtpVfe7t5XS53lFNDPJAEHqq50MWT2eHgCCyX
-         2WdgoM+TR2U35oUxb+fImuifYIzIYcseqOJktiPwprIlfk2pbR+62jK5sV8Z3MG8ZUtz
-         Kllg==
-X-Gm-Message-State: ACrzQf3rcGcJjWjvKhRkejowv4qNoD/mdX7z3/W68fUH/U3PvDo9I2yX
-        B9MFuxDKZ8mhu/TCfMucEYU=
-X-Google-Smtp-Source: AMsMyM6d4MFsmIRMHMVoz1pAsgjMy4X3kVPesZ4ZQ1zGtKpyqvBlXnSQrg3dQn54qGcGLUueJdZg9g==
-X-Received: by 2002:a5d:574a:0:b0:228:b90c:e5ee with SMTP id q10-20020a5d574a000000b00228b90ce5eemr4546269wrw.328.1663925279780;
-        Fri, 23 Sep 2022 02:27:59 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id n6-20020a5d4206000000b0022b315b4649sm3628846wrq.26.2022.09.23.02.27.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Sep 2022 02:27:59 -0700 (PDT)
-Date:   Fri, 23 Sep 2022 09:27:57 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] Drivers: hv: vmbus: Optimize vmbus_on_event
-Message-ID: <Yy18HV8iAFLhF3P/@liuwe-devbox-debian-v2>
-References: <1658741848-4210-1-git-send-email-ssengar@linux.microsoft.com>
- <20220815153141.x7q6qryxv25gvjgy@liuwe-devbox-debian-v2>
+        with ESMTP id S231819AbiIWJp7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 23 Sep 2022 05:45:59 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6267B5FDA;
+        Fri, 23 Sep 2022 02:44:34 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYnGs5qj0zpVMc;
+        Fri, 23 Sep 2022 17:41:41 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 23 Sep 2022 17:44:32 +0800
+Subject: Re: [PATCH 6/7] scsi: pm8001: use dev_and_phy_addr_same() instead of
+ open coded
+To:     John Garry <john.garry@huawei.com>, <martin.petersen@oracle.com>,
+        <jejb@linux.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
+        <jinpu.wang@cloud.ionos.com>
+References: <20220917104311.1878250-1-yanaijie@huawei.com>
+ <20220917104311.1878250-7-yanaijie@huawei.com>
+ <0034eff3-70a5-becb-0821-f9c36371e6d9@huawei.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <3c1aa262-7e9b-cb6c-e8a1-a1a201050a10@huawei.com>
+Date:   Fri, 23 Sep 2022 17:44:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815153141.x7q6qryxv25gvjgy@liuwe-devbox-debian-v2>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <0034eff3-70a5-becb-0821-f9c36371e6d9@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 03:31:41PM +0000, Wei Liu wrote:
-> On Mon, Jul 25, 2022 at 02:37:28AM -0700, Saurabh Sengar wrote:
-> > In the vmbus_on_event loop, 2 jiffies timer will not serve the purpose if
-> > callback_fn takes longer. For effective use move this check inside of
-> > callback functions where needed. Out of all the VMbus drivers using
-> > vmbus_on_event, only storvsc has a high packet volume, thus add this limit
-> > only in storvsc callback for now.
-> > There is no apparent benefit of loop itself because this tasklet will be
-> > scheduled anyway again if there are packets left in ring buffer. This
-> > patch removes this unnecessary loop as well.
-> > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> 
-> Unfortunately this missed the recent merge window so it will be picked
-> up for the next release.
-> 
 
-Applied to hyperv-next. Thanks.
+On 2022/9/22 22:24, John Garry wrote:
+> On 17/09/2022 11:43, Jason Yan wrote:
+>> The sas address comparation of domain device and expander phy is open
+>> coded. Now we can replace it with dev_and_phy_addr_same().
+>>
+>> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+>> ---
+>>   drivers/scsi/pm8001/pm8001_sas.c | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/scsi/pm8001/pm8001_sas.c 
+>> b/drivers/scsi/pm8001/pm8001_sas.c
+>> index 8e3f2f9ddaac..bb1b1722f3ee 100644
+>> --- a/drivers/scsi/pm8001/pm8001_sas.c
+>> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+>> @@ -649,8 +649,7 @@ static int pm8001_dev_found_notify(struct 
+>> domain_device *dev)
+>>           for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
+> 
+> This code seems the same between many libsas LLDDs - could we factor it 
+> out into libsas? If so, then maybe those new helpers could be put in 
+> sas_internal.h
+
+For the part of putting helpers in sas_internal.h, this needs to make 
+the helpers exported. I think it's not worth to do this because they are 
+very small. I'd still like to make them inline functions in libsas.h 
+such as:
+
+
+diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
+index 2dbead74a2af..e9e76c898287 100644
+--- a/include/scsi/libsas.h
++++ b/include/scsi/libsas.h
+@@ -648,6 +648,22 @@ static inline bool sas_is_internal_abort(struct 
+sas_task *task)
+         return task->task_proto == SAS_PROTOCOL_INTERNAL_ABORT;
+  }
+
++static inline int sas_find_attathed_phy(struct expander_device *ex_dev,
++                                       struct domain_device *dev)
++{
++       struct ex_phy *phy;
++       int phy_id;
++
++       for (phy_id = 0; phy_id < ex_dev->num_phys; phy_id++) {
++               phy = &ex_dev->ex_phy[phy_id];
++               if (SAS_ADDR(phy->attached_sas_addr)
++                       == SAS_ADDR(dev->sas_addr))
++                       return phy_id;
++       }
++
++       return ex_dev->num_phys;
++}
++
+  struct sas_domain_function_template {
+         /* The class calls these to notify the LLDD of an event. */
+         void (*lldd_port_formed)(struct asd_sas_phy *);
+
+
+
+And the LLDDs change like:
+
+
+diff --git a/drivers/scsi/pm8001/pm8001_sas.c 
+b/drivers/scsi/pm8001/pm8001_sas.c
+index 8e3f2f9ddaac..4e7350609b3d 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.c
++++ b/drivers/scsi/pm8001/pm8001_sas.c
+@@ -645,16 +645,8 @@ static int pm8001_dev_found_notify(struct 
+domain_device *dev)
+         pm8001_device->dcompletion = &completion;
+         if (parent_dev && dev_is_expander(parent_dev->dev_type)) {
+                 int phy_id;
+-               struct ex_phy *phy;
+-               for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
+-               phy_id++) {
+-                       phy = &parent_dev->ex_dev.ex_phy[phy_id];
+-                       if (SAS_ADDR(phy->attached_sas_addr)
+-                               == SAS_ADDR(dev->sas_addr)) {
+-                               pm8001_device->attached_phy = phy_id;
+-                               break;
+-                       }
+-               }
++
++               phy_id = sas_find_attathed_phy(&parent_dev->ex_dev, dev);
+                 if (phy_id == parent_dev->ex_dev.num_phys) {
+                         pm8001_dbg(pm8001_ha, FAIL,
+                                    "Error: no attached dev:%016llx at 
+ex:%016llx.\n",
+@@ -662,6 +654,7 @@ static int pm8001_dev_found_notify(struct 
+domain_device *dev)
+                                    SAS_ADDR(parent_dev->sas_addr));
+                         res = -1;
+                 }
++               pm8001_device->attached_phy = phy_id;
+         } else {
+                 if (dev->dev_type == SAS_SATA_DEV) {
+                         pm8001_device->attached_phy =
+
+
+So I wonder if you have any reasons to insist exporting the helper?
+
+> 
+> Thanks,
+> John
+> 
+>>           phy_id++) {
+>>               phy = &parent_dev->ex_dev.ex_phy[phy_id];
+>> -            if (SAS_ADDR(phy->attached_sas_addr)
+>> -                == SAS_ADDR(dev->sas_addr)) {
+>> +            if (dev_and_phy_addr_same(dev, phy)) {
+>>                   pm8001_device->attached_phy = phy_id;
+>>                   break;
+>>               }
+> 
+> .
