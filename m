@@ -2,68 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6095E866C
-	for <lists+linux-scsi@lfdr.de>; Sat, 24 Sep 2022 02:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D875E86DB
+	for <lists+linux-scsi@lfdr.de>; Sat, 24 Sep 2022 03:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbiIXAEL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 23 Sep 2022 20:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S232449AbiIXBAO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Sep 2022 21:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232753AbiIXAEK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 23 Sep 2022 20:04:10 -0400
-Received: from mail-ot1-x361.google.com (mail-ot1-x361.google.com [IPv6:2607:f8b0:4864:20::361])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F91132FD9
-        for <linux-scsi@vger.kernel.org>; Fri, 23 Sep 2022 17:04:09 -0700 (PDT)
-Received: by mail-ot1-x361.google.com with SMTP id h9-20020a9d5549000000b0063727299bb4so994596oti.9
-        for <linux-scsi@vger.kernel.org>; Fri, 23 Sep 2022 17:04:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=D1FE9xU7+IExBeharNsuuKm6USBA72cJZvyRumUo6lk=;
-        b=P+wibKWHbPDV3j1aCQ2zmWXvZDTdUojPLyO4UYCd9bwKAA5HArdf8MfQhOnlcA6Zc6
-         B6WFuRjLTJ4S4rfYYFW2YGS4N8727UKFcuusoMf+j3VS7Zsp1vindYo4XRkGya3iulpB
-         JcDemarIB8LIUyGycFc/F73eCwpkc2EE/ss7I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=D1FE9xU7+IExBeharNsuuKm6USBA72cJZvyRumUo6lk=;
-        b=13kEU15SxX2W5cHiNDz3iUsffGgQUdpRXmPVLBtUeVz3EcYvAVAkI3TqHqVFAYP7ux
-         NvE8Qo4/GFPMCkpE6keIeo4RdB1IZUG6OPIPbcqEbDGkZx8hP1Er/3hr1Tybza8wILGF
-         gSQgLo2kY4KsJqrpSoxJ1wXuzXtoKZ/o3sd1R2JdgAlbJC9m7taUHWmFLGEvrtYCqAzB
-         dKMg7gp9hTf4bEYL+rzDTK8bFRJrsi0LxWO8BeFmGqi7SpXILjCAZBNV5RmVYaUj8DVo
-         PHDPzHWmJ2iI9h2gBnzE4mpdSVnfxGGziV3WKYZ3P1lgvnfHn9BlCeQV4vidcAM0+YIy
-         A4WA==
-X-Gm-Message-State: ACrzQf1lbGnvyHwRDU6nT2sH0CTtN9vSHe2AWwqJPuY7TgEHbz0YAhcS
-        sQUM7DYPF9q40XZDg6WyGUFZQH9NMGtbgGDcqoFU9g+FwuIGaQ==
-X-Google-Smtp-Source: AMsMyM6a45o/3BJInsIISottjOwXWLGU0+EFr3EBl9lWiGE3EXu4GHsfBuosip2lhZuSNcE+OV3cHBF8YFiD
-X-Received: by 2002:a9d:61c1:0:b0:65b:d7e7:aba9 with SMTP id h1-20020a9d61c1000000b0065bd7e7aba9mr5058453otk.148.1663977848373;
-        Fri, 23 Sep 2022 17:04:08 -0700 (PDT)
-Received: from c7-smtp.dev.purestorage.com ([208.88.159.129])
-        by smtp-relay.gmail.com with ESMTPS id og1-20020a056870bd4100b0010c289bc8ffsm1026310oab.16.2022.09.23.17.04.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 23 Sep 2022 17:04:08 -0700 (PDT)
-X-Relaying-Domain: purestorage.com
-Received: from dev-ushankar.dev.purestorage.com (dev-ushankar.dev.purestorage.com [10.7.70.36])
-        by c7-smtp.dev.purestorage.com (Postfix) with ESMTP id BF3A1221B3;
-        Fri, 23 Sep 2022 18:04:07 -0600 (MDT)
-Received: by dev-ushankar.dev.purestorage.com (Postfix, from userid 1557716368)
-        id BAE35E40D52; Fri, 23 Sep 2022 18:04:07 -0600 (MDT)
-From:   Uday Shankar <ushankar@purestorage.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Uday Shankar <ushankar@purestorage.com>,
-        Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH] restrict legal sdev_state transitions via sysfs
-Date:   Fri, 23 Sep 2022 18:02:42 -0600
-Message-Id: <20220924000241.2967323-1-ushankar@purestorage.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S232392AbiIXBAE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 23 Sep 2022 21:00:04 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37BD2CDEE
+        for <linux-scsi@vger.kernel.org>; Fri, 23 Sep 2022 18:00:03 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MZ9Y22FqkzHtg7;
+        Sat, 24 Sep 2022 08:55:18 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 24 Sep 2022 09:00:02 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <bvanassche@acm.org>
+CC:     <linux-scsi@vger.kernel.org>, <xiujianfeng@huawei.com>
+Subject: [PATCH] scsi: arcmsr: Add __init/__exit annotations to module init/exit funcs
+Date:   Sat, 24 Sep 2022 08:56:21 +0800
+Message-ID: <20220924005621.186635-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,48 +43,34 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Userspace can currently write to sysfs to transition sdev_state to
-RUNNING or OFFLINE from any source state. This causes issues because
-proper transitioning out of some states involves steps besides just
-changing sdev_state, so allowing userspace to change sdev_state
-regardless of the source state can result in inconsistencies; e.g. with
-iscsi we can end up with sdev_state == SDEV_RUNNING while the device
-queue is quiesced. Any task attempting IO on the device will then hang,
-and in more recent kernels, iscsid will hang as well. More detail about
-this bug is provided in my first attempt:
-https://groups.google.com/g/open-iscsi/c/PNKca4HgPDs/m/CXaDkntOAQAJ
+Add missing __init/__exit annotations to module init/exit funcs.
 
-Signed-off-by: Uday Shankar <ushankar@purestorage.com>
-Suggested-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 ---
-Looking for feedback on the "allowed source states" list. The bug I hit
-is solved by prohibiting transitions out of SDEV_BLOCKED, but I think
-most others shouldn't be allowed either.
+ drivers/scsi/arcmsr/arcmsr_hba.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/scsi/scsi_sysfs.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index 9dad2fd5297f..b38c30fe681d 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -822,6 +822,14 @@ store_state_field(struct device *dev, struct device_attribute *attr,
- 	}
+diff --git a/drivers/scsi/arcmsr/arcmsr_hba.c b/drivers/scsi/arcmsr/arcmsr_hba.c
+index d3fb8a9c1c39..dcc0b93050fa 100644
+--- a/drivers/scsi/arcmsr/arcmsr_hba.c
++++ b/drivers/scsi/arcmsr/arcmsr_hba.c
+@@ -1720,14 +1720,14 @@ static void arcmsr_shutdown(struct pci_dev *pdev)
+ 	arcmsr_flush_adapter_cache(acb);
+ }
  
- 	mutex_lock(&sdev->state_mutex);
-+	switch (sdev->sdev_state) {
-+	case SDEV_RUNNING:
-+	case SDEV_OFFLINE:
-+		break;
-+	default:
-+		mutex_unlock(&sdev->state_mutex);
-+		return -EINVAL;
-+	}
- 	if (sdev->sdev_state == SDEV_RUNNING && state == SDEV_RUNNING) {
- 		ret = 0;
- 	} else {
-
-base-commit: 7f615c1b5986ff08a725ee489e838c90f8197bcd
+-static int arcmsr_module_init(void)
++static int __init arcmsr_module_init(void)
+ {
+ 	int error = 0;
+ 	error = pci_register_driver(&arcmsr_pci_driver);
+ 	return error;
+ }
+ 
+-static void arcmsr_module_exit(void)
++static void __exit arcmsr_module_exit(void)
+ {
+ 	pci_unregister_driver(&arcmsr_pci_driver);
+ }
 -- 
-2.25.1
+2.17.1
 
