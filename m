@@ -2,66 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01D75EB9FA
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Sep 2022 07:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7265EBB2D
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Sep 2022 09:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiI0FsU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Sep 2022 01:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        id S230190AbiI0HLd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Sep 2022 03:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiI0FsS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 27 Sep 2022 01:48:18 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19077CB6A;
-        Mon, 26 Sep 2022 22:48:17 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id fs14so8246996pjb.5;
-        Mon, 26 Sep 2022 22:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=7J08lJx+XncUAcnTIUuRjmZ5LZ59+jI5T4gbCu+R9no=;
-        b=SAp7Mv46u2dFHrnVeh7EMtbdEsrvHEI1UQ61XLVWwiHnvxnQYNkovLl+wl9IkYK59Q
-         6+CPWUVJq8wPXDTatTRwyWygmy6QLMFXcCVi8PLXIBzLH4Af+X04biLzRhkWsVy/e3FQ
-         vZdQ7g4HHeO/Re6XPyaZLU5eZGIoRlpcfKHIKDh8rWLgwCIgJBP1Z2gjZQvWHLJJS+zg
-         VsORcznJbDVfvYPG6tgK1RyvM6pEbdepvs0rd+9kjz3RSsO31u9RkGmAd429D+J+DHxD
-         eSQLiLFL9FfN7nlGkM0NKv0RP2b2iB96XMzTUtQrgEddSpAcg5km4NtQUHeBzMAXnJkb
-         xebQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=7J08lJx+XncUAcnTIUuRjmZ5LZ59+jI5T4gbCu+R9no=;
-        b=gWo5hMHt8O0WJMEg8/LnW0WGjr0YUccq9X66sIBsxWfsvS5LyippMeaVir2Gs1kDyo
-         IFRAimvYK4eB6DtHDej/rzJ33l3iIsIbhszPdHy9Lm7pQ8wF/sM7B1vvLXTO1FW71wLV
-         7I0NNLzjSC31LgvGXlcTHakRwyduk1UccmjTo7NB+Yjcm2a/cz+3bz13Fjs3DzSaTKvC
-         htK2Ko49rMLDb5734XpS7d44nLTWk2UcrMsl9tJL9zHTIYlm8u3Inj8RKYe68eEsN6Qy
-         tjdWwKvtIczTJJiucW8zFO8zGfDCHDIuruFncc3iCaM9tl5UxOXTFRlyofsrHt4ZQ9Rz
-         4LRg==
-X-Gm-Message-State: ACrzQf15vPY9RTp5tttReWF/6ET7/ff9tdbZxr3Sielwb2Ajcgt5juwU
-        g0akFPy8PXiTiR5XUyBzstkNjTJXoc3+yHvX37clLg==
-X-Google-Smtp-Source: AMsMyM7EAxzbtn39KWWsoLEV9NRezEfCnq0IfiGNQQi8abh1gCkBF8yzRQ2j5/LPv2Z+7XqOcjnPlQ==
-X-Received: by 2002:a17:90b:4a50:b0:203:1204:5bc4 with SMTP id lb16-20020a17090b4a5000b0020312045bc4mr2681816pjb.79.1664257697163;
-        Mon, 26 Sep 2022 22:48:17 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id m12-20020a633f0c000000b0043bf861008fsm514647pga.90.2022.09.26.22.48.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 22:48:16 -0700 (PDT)
-From:   zhangsongyi.cegl@gmail.com
-X-Google-Original-From: zhang.songyi@zte.com.cn
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhang songyi <zhang.songyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] scsi: pmcraid: Convert to use sysfs_emit() APIs
-Date:   Tue, 27 Sep 2022 05:48:08 +0000
-Message-Id: <20220927054808.256965-1-zhang.songyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229967AbiI0HLc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 27 Sep 2022 03:11:32 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BC2A6C65;
+        Tue, 27 Sep 2022 00:11:31 -0700 (PDT)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mc9lh4qPJz689NN;
+        Tue, 27 Sep 2022 15:11:28 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 09:11:29 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 27 Sep 2022 08:11:26 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <jinpu.wang@cloud.ionos.com>, <damien.lemoal@opensource.wdc.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
+        <yanaijie@huawei.com>, "John Garry" <john.garry@huawei.com>
+Subject: [PATCH v5 0/7] libsas and drivers: NCQ error handling 
+Date:   Tue, 27 Sep 2022 15:04:51 +0800
+Message-ID: <1664262298-239952-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,50 +50,77 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+As reported in [0], the pm8001 driver NCQ error handling more or less
+duplicates what libata does in link error handling, as follows:
+- abort all commands
+- do autopsy with read log ext 10 command
+- reset the target to recover, if necessary
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the value
-to be returned to user space.
+Indeed for the hisi_sas driver we want to add similar handling for NCQ
+errors.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
----
- drivers/scsi/pmcraid.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This series add a new libsas API - sas_ata_device_link_abort() - to handle
+host NCQ errors, and fixes up pm8001 and hisi_sas drivers to use it.
 
-diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-index 836ddc476764..057d6172d643 100644
---- a/drivers/scsi/pmcraid.c
-+++ b/drivers/scsi/pmcraid.c
-@@ -3493,7 +3493,7 @@ static ssize_t pmcraid_show_log_level(
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct pmcraid_instance *pinstance =
- 		(struct pmcraid_instance *)shost->hostdata;
--	return snprintf(buf, PAGE_SIZE, "%d\n", pinstance->current_log_level);
-+	return sysfs_emit(buf, "%d\n", pinstance->current_log_level);
- }
- 
- /**
-@@ -3554,7 +3554,7 @@ static ssize_t pmcraid_show_drv_version(
- 	char *buf
- )
- {
--	return snprintf(buf, PAGE_SIZE, "version: %s\n",
-+	return sysfs_emit(buf, "version: %s\n",
- 			PMCRAID_DRIVER_VERSION);
- }
- 
-@@ -3588,7 +3588,7 @@ static ssize_t pmcraid_show_adapter_id(
- 		pinstance->pdev->devfn;
- 	u32 aen_group = pmcraid_event_family.id;
- 
--	return snprintf(buf, PAGE_SIZE,
-+	return sysfs_emit(buf,
- 			"adapter id: %d\nminor: %d\naen group: %d\n",
- 			adapter_id, MINOR(pinstance->cdev.dev), aen_group);
- }
+A difference in the pm8001 driver NCQ error handling is that we send
+SATA_ABORT per-task prior to read log ext10, but I feel that this should
+not make a difference to the error handling.
+
+Damien kindly tested previous the series for pm8001, but any further pm8001
+testing would be appreciated as I have since tweaked pm8001 handling again.
+This is because the pm8001 driver hangs on my arm64 machine read log ext10
+command.
+
+Finally with these changes we can make the libsas task alloc/free APIs
+private, which they should always have been.
+
+Based on mkp-scsi @ 6.1/scsi-staging 57569c37f0ad ("scsi: iscsi:
+iscsi_tcp: Fix null-ptr-deref while calling getpeername()")
+
+[0] https://lore.kernel.org/linux-scsi/8fb3b093-55f0-1fab-81f4-e8519810a978@huawei.com/
+
+Changes since v4:
+- Add Jason's tags (thanks)
+- Rebase
+
+Changes since v3:
+- Add Damien's tags (thanks)
+- Modify hisi_sas processing as follows:
+  - use sas_task_abort() for rejected IO
+  - Modify abort task processing to issue softreset in certain circumstances
+- rebase
+
+Changes since v2:
+- Stop sending SATA_ABORT all for pm8001 handling
+- Make "reset" optional in sas_ata_device_link_abort()
+- Drop Jack's ACK
+
+John Garry (5):
+  scsi: libsas: Add sas_ata_device_link_abort()
+  scsi: hisi_sas: Move slot variable definition in hisi_sas_abort_task()
+  scsi: pm8001: Modify task abort handling for SATA task
+  scsi: pm8001: Use sas_ata_device_link_abort() to handle NCQ errors
+  scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
+
+Xingui Yang (2):
+  scsi: hisi_sas: Add SATA_DISK_ERR bit handling for v3 hw
+  scsi: hisi_sas: Modify v3 HW SATA disk error state completion
+    processing
+
+ drivers/scsi/hisi_sas/hisi_sas.h       |   1 +
+ drivers/scsi/hisi_sas/hisi_sas_main.c  |  26 +++-
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  53 ++++++-
+ drivers/scsi/libsas/sas_ata.c          |  12 ++
+ drivers/scsi/libsas/sas_init.c         |   3 -
+ drivers/scsi/libsas/sas_internal.h     |   4 +
+ drivers/scsi/pm8001/pm8001_hwi.c       | 186 ++++---------------------
+ drivers/scsi/pm8001/pm8001_sas.c       |   8 ++
+ drivers/scsi/pm8001/pm8001_sas.h       |   4 -
+ drivers/scsi/pm8001/pm80xx_hwi.c       | 177 +++--------------------
+ include/scsi/libsas.h                  |   4 -
+ include/scsi/sas_ata.h                 |   6 +
+ 12 files changed, 143 insertions(+), 341 deletions(-)
+
 -- 
-2.25.1
-
+2.35.3
 
