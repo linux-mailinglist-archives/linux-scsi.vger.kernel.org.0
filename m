@@ -2,75 +2,161 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6623B5ED504
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Sep 2022 08:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A94205ED5A0
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Sep 2022 09:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233149AbiI1Gju (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Sep 2022 02:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
+        id S233172AbiI1HCv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Sep 2022 03:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233066AbiI1Gjk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Sep 2022 02:39:40 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E6C60C7;
-        Tue, 27 Sep 2022 23:39:34 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mcmxl637GzHqMl;
-        Wed, 28 Sep 2022 14:37:15 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 28 Sep
- 2022 14:39:32 +0800
-From:   Jason Yan <yanaijie@huawei.com>
-To:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <hch@lst.de>, <bvanassche@acm.org>,
-        <john.garry@huawei.com>, <jinpu.wang@cloud.ionos.com>,
-        <damien.lemoal@opensource.wdc.com>, Jason Yan <yanaijie@huawei.com>
-Subject: [PATCH v6 8/8] scsi: libsas: use sas_phy_match_port_addr() instead of open coded
-Date:   Wed, 28 Sep 2022 15:01:30 +0800
-Message-ID: <20220928070130.3657183-9-yanaijie@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220928070130.3657183-1-yanaijie@huawei.com>
-References: <20220928070130.3657183-1-yanaijie@huawei.com>
+        with ESMTP id S233465AbiI1HCh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Sep 2022 03:02:37 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679DBB02B6
+        for <linux-scsi@vger.kernel.org>; Wed, 28 Sep 2022 00:02:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1664348549; x=1695884549;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qOEW5f8ioGdKEGmbuw9N3Q7nWNbHA0O8JWBj8guvtZQ=;
+  b=Ckw9sTwGevr+Vav3csa0Wh3V3gm7txS3WMMCtN0ryqJtFWOUAdz/0ypX
+   QoC7ltPWAC8o/ZMTOtnbViW/tQ7NvqwNSLlgVenoI5xWh87kuzRS2DkRh
+   dN5gYM668fSfndJW1lSB8JdBJ8JfE91UinRU+tD3PgcXp0KLBL+21V0lY
+   5N7wj4laAwCVjZEzBlBAR9ku3eS8uYNzlIVVGylKBXxZiW6oMLPMtKycz
+   aQmZ09vJ12vksXZiIfPbFnivHQOPr5EeW30n8sOUkIWo/XjDr46yMPL5D
+   O2Kkg/EBK3JA51ipewX6fVhBWkPwl6IMmc5+9Bm/b7ccrf9DRq0H9h/26
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,351,1654531200"; 
+   d="scan'208";a="217642621"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Sep 2022 15:02:25 +0800
+IronPort-SDR: Ro1yWhvjoVqIruuj/LEv65uY1UXvHui/g4BxuNBQJ8WOXQKAAJ7Iw6DqClOAX2B5QDabAdkbU2
+ 8C4cvfdH2goWlVWcwVfzcbxOw8bXub5fA0FRXVzGuMAn6aKcr1zgu3mwWsOmifXdP0XViGPodh
+ p7OGg7ZNm3Zgd8iWIOFveolTtfIREtuIq+x/NSxrjFub3Tv+LXm2FhFL11AcXkvg0l46W9D+RL
+ nQeGh6Co/Ky91xux10nlEXtezBAa8BPtDY3MctHbpUCBYBYjxIdLN0q4pY6BL/wbjvz6uvfgJ4
+ BmDzegLfPw/xM+Ha0pX3RFnw
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Sep 2022 23:16:49 -0700
+IronPort-SDR: ZFqbSzP6EVHQ/MSJ+TI8Jv/IUILwwTeKTwoEccOedCVoototptqro5U6DsVlZejE1PYUP9if7q
+ rnSnshdoi8rWYBcqJVcF/KsZp7zPaiuEjPOXrpeZEeQkd7phMGG+d+dFexRHDc497lCTiGPBoS
+ 6v57Wy6/xiVBpdIZjll21CAJkx5hA1uU6OJwXg3MTy4N4iTXVQWEDFboiGLbb5wx1kUQzxB3Ng
+ hgCfi1pjcFunXs1Vt2MNJ9G5YNRe1TkZrONFyxWLC00X35oEIM1lQQMle/T90zsk8zFQd+jSDe
+ 3TQ=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Sep 2022 00:02:26 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4McnVn02v4z1Rwtm
+        for <linux-scsi@vger.kernel.org>; Wed, 28 Sep 2022 00:02:24 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1664348544; x=1666940545; bh=qOEW5f8ioGdKEGmbuw9N3Q7nWNbHA0O8JWB
+        j8guvtZQ=; b=ATjCGLQOJlxI0DE3dotUOlFGytsjJ81/2B8H1gmKwJFHH74BjxX
+        AgFONfzJFyuoXw1chT41K1kkfVKD1AjDWC+TMru6/HsXyPIt2sKagOGBiC5l8v9L
+        g8MAZme+A5kmR3l5rUG0Y1MlzMy2ajgwOIiML8YDV/QFUvTA0XX00PG3a1hR1PCr
+        oQ+M85Wr0zzmm2OzS/bBtWyfL/lHrWofqbRDhNWdRGx7yi4YzfSWdd039hdqtKi2
+        wITRws1CXGkX2bS5DoXE8W91yA1CiIGuYA789UbVXSc33wAsclofGE2KWITRn8Cg
+        GDLKWUadu8NBNsWCCjGsFVBk1Whop+81fPQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id cqjfIiQ0BGxi for <linux-scsi@vger.kernel.org>;
+        Wed, 28 Sep 2022 00:02:24 -0700 (PDT)
+Received: from [10.225.163.91] (unknown [10.225.163.91])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4McnVk33Jbz1RvLy;
+        Wed, 28 Sep 2022 00:02:22 -0700 (PDT)
+Message-ID: <e3bfbe7e-baee-9f4a-7d55-c6dc27e3eba1@opensource.wdc.com>
+Date:   Wed, 28 Sep 2022 16:02:21 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v6 3/8] scsi: pm8001: use sas_find_attached_phy_id()
+ instead of open coded
+Content-Language: en-US
+To:     Jason Yan <yanaijie@huawei.com>, martin.petersen@oracle.com,
+        jejb@linux.ibm.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hare@suse.com, hch@lst.de, bvanassche@acm.org,
+        john.garry@huawei.com, jinpu.wang@cloud.ionos.com,
+        Jack Wang <jinpu.wang@ionos.com>
+References: <20220928070130.3657183-1-yanaijie@huawei.com>
+ <20220928070130.3657183-4-yanaijie@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220928070130.3657183-4-yanaijie@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The sas address comparison of asd_sas_port and expander phy is open
-coded. Now we can replace it with sas_phy_match_port_addr().
+On 9/28/22 16:01, Jason Yan wrote:
+> The attached phy id finding is open coded. Now we can replace it with
+> sas_find_attached_phy_id(). To keep consistent, the return value of
+> pm8001_dev_found_notify() is also changed to -ENODEV after calling
+> sas_find_attathed_phy_id() failed.
+> 
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-Signed-off-by: Jason Yan <yanaijie@huawei.com>
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
----
- drivers/scsi/libsas/sas_expander.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Looks good.
 
-diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-index 38ed42b14fa0..b358a1cd9a68 100644
---- a/drivers/scsi/libsas/sas_expander.c
-+++ b/drivers/scsi/libsas/sas_expander.c
-@@ -1005,8 +1005,7 @@ static int sas_ex_discover_dev(struct domain_device *dev, int phy_id)
- 	}
- 
- 	/* Parent and domain coherency */
--	if (!dev->parent && (SAS_ADDR(ex_phy->attached_sas_addr) ==
--			     SAS_ADDR(dev->port->sas_addr))) {
-+	if (!dev->parent && sas_phy_match_port_addr(dev->port, ex_phy)) {
- 		sas_add_parent_port(dev, phy_id);
- 		return 0;
- 	}
+Note for future patches: if you change a patch, it needs to be reviewed
+again. So please drop any review tag from the patch commit message to make
+that clear.
+
+> ---
+>  drivers/scsi/pm8001/pm8001_sas.c | 18 ++++++------------
+>  1 file changed, 6 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+> index 8e3f2f9ddaac..b4007c4f157d 100644
+> --- a/drivers/scsi/pm8001/pm8001_sas.c
+> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+> @@ -645,22 +645,16 @@ static int pm8001_dev_found_notify(struct domain_device *dev)
+>  	pm8001_device->dcompletion = &completion;
+>  	if (parent_dev && dev_is_expander(parent_dev->dev_type)) {
+>  		int phy_id;
+> -		struct ex_phy *phy;
+> -		for (phy_id = 0; phy_id < parent_dev->ex_dev.num_phys;
+> -		phy_id++) {
+> -			phy = &parent_dev->ex_dev.ex_phy[phy_id];
+> -			if (SAS_ADDR(phy->attached_sas_addr)
+> -				== SAS_ADDR(dev->sas_addr)) {
+> -				pm8001_device->attached_phy = phy_id;
+> -				break;
+> -			}
+> -		}
+> -		if (phy_id == parent_dev->ex_dev.num_phys) {
+> +
+> +		phy_id = sas_find_attached_phy_id(&parent_dev->ex_dev, dev);
+> +		if (phy_id < 0) {
+>  			pm8001_dbg(pm8001_ha, FAIL,
+>  				   "Error: no attached dev:%016llx at ex:%016llx.\n",
+>  				   SAS_ADDR(dev->sas_addr),
+>  				   SAS_ADDR(parent_dev->sas_addr));
+> -			res = -1;
+> +			res = phy_id;
+> +		} else {
+> +			pm8001_device->attached_phy = phy_id;
+>  		}
+>  	} else {
+>  		if (dev->dev_type == SAS_SATA_DEV) {
+
 -- 
-2.31.1
+Damien Le Moal
+Western Digital Research
 
