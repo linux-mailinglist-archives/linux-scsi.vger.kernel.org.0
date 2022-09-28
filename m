@@ -2,156 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98295EDAA7
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Sep 2022 12:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630615EDAE4
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Sep 2022 13:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiI1Kzn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Sep 2022 06:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
+        id S234060AbiI1LBP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Sep 2022 07:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiI1KzU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Sep 2022 06:55:20 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B32A74B8A
-        for <linux-scsi@vger.kernel.org>; Wed, 28 Sep 2022 03:53:33 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a26so26318630ejc.4
-        for <linux-scsi@vger.kernel.org>; Wed, 28 Sep 2022 03:53:33 -0700 (PDT)
+        with ESMTP id S233850AbiI1LAr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Sep 2022 07:00:47 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEED47EFC4
+        for <linux-scsi@vger.kernel.org>; Wed, 28 Sep 2022 03:59:59 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id w20so11440976ply.12
+        for <linux-scsi@vger.kernel.org>; Wed, 28 Sep 2022 03:59:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=P73iFHlUFF/GiU1BFLDo7/c8K9SFgBJnAGlCrXNOWZI=;
-        b=E9tc/XusMfsR5jgkhrMb6OOlLDPzBhO+qIJYteO52s8A0S8wRx0rMh1D1PWhQ+AiNH
-         glOm+gLMtmXdSjEHQLeGz3306PhpARluCN/cZ7PXKlxXnK2fVzlITMDKYUP0jksQFx8z
-         ODRpVg2scOQAmcdYy/VbTEfkcbUSi/klMqRRw=
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=fo4HmuLb/yqh2kDNnoKinrIdDSvba5fowzMna9C2QUg=;
+        b=SJyC2mJGff3oqgJGbJ2CIG5odbv/+k+1zDOycX2oUS4T2LLeoqU3dGE1ZjN4uoa9Nl
+         L1NfMbijmpRASuYUSNvspDxj8CM+rmq+/DcgF1yNslYBahnv7Jb+1k0YpGpi6O/VoXyp
+         GCrRgidVi8vWTLkSPgT8qrawa1Xty5l7bByP6CdG/DOYYe0SpUcqP9wk9r9hQ/Ioqxav
+         LHNhhGOS8rnJwxzopvjmpsVw3e+VTF33QopJR0QRACOzuMj/kpD0CM6KmvStlb4Og72e
+         DEiv3fFrzOIVDxsWfTKuL64jyIYcqAOGQi6b6EG9tMIphMP2u9SnfieVTmst7pefV5rv
+         zROQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=P73iFHlUFF/GiU1BFLDo7/c8K9SFgBJnAGlCrXNOWZI=;
-        b=GnA5/o++byBs/rqKWkx0pKts2DNd8ZcWrPjHKCd2D/KmOAqMT8e3MiXE3lxAYYoEvW
-         tzaSkcvEkO4fQZB5pIrGXol2uDUSGZQaEaEbSjEif3q1BhJ0xs+da/SrGf3SMquFj8a8
-         B9ZhTKPffEZf7b+C7znVYltot8GtrdKt14Udd4nSzN7u07vBVcegyJ2ecamiUHAzApGG
-         +mm4C0B9EES8TEHXdP+0UTei/NoZsKAFhyACig7uLqXAVPK7EucCfPXwshRmbKDavu3Y
-         zTZ0vAID/v6HoydPCLKQkaoAXGCDS7MT9/tWqt9MaHDeVpQUFnoekrMEK1JQ1AldodXs
-         kKcg==
-X-Gm-Message-State: ACrzQf2FvJGIpL2ORAad1p60exdWG4jtGF0WFGeuH34fOJKNlF3/9nlj
-        IcXYjBvDPQ4g1raAqLRl+DN7oFoev68EmblL3wVVMw==
-X-Google-Smtp-Source: AMsMyM4TSDF41Z1OXhjhtO9wTObVHHiTuWipz/TwK8E1u0Z3Li/AW25M2V+eAwnaqFgRE35HAMaZrHr4STofMqi26+o=
-X-Received: by 2002:a17:907:7b9e:b0:783:10cb:2826 with SMTP id
- ne30-20020a1709077b9e00b0078310cb2826mr17076919ejc.208.1664362350529; Wed, 28
- Sep 2022 03:52:30 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=fo4HmuLb/yqh2kDNnoKinrIdDSvba5fowzMna9C2QUg=;
+        b=Jf8eZ3aPmmvg0Cy+7qEO/uLkjJVFY2aR+65GI3IOyeL9xGTBQB8QKhuyHTx5/RWXMf
+         h/FzQi5kol0BwWEi+UuWjmlPn0Rik7J8k6pt9Gm8AszU+duiehxmswoy4hbnnyunpm/h
+         FouEbUReiQLJnQl7Fa/iCcaai4OP6Pt89MRbbO7lOkegcZVN3MjjiFvNVewuNrVV2q1q
+         +GkWyKDHJToicwkHR6jHV3+wBgSGRu9ikmXsNU0BFC+FHIfpKLAnwXXqoZJsvT6QTb15
+         zRicSkVagqHyhNPk/l6pgmoDrGEw0Gz/hlQYC+doxCKOsAApdZJXPS+TJbcIRn9m16jg
+         zmcQ==
+X-Gm-Message-State: ACrzQf1tTRB31YMoeSfxh9DhyS5JAkkNcpsqIQ2pQ4UoCw6yAftFHpJq
+        +dIKjLrmaKYY4ZOj197OYBPsfA==
+X-Google-Smtp-Source: AMsMyM6I8LxP5weTVzsQIxACRMckvsr0iobx2qFTGVa4rjJZfzUFY8aCAwEoIseeeiNOKAkMUe7yDQ==
+X-Received: by 2002:a17:90b:38c3:b0:205:d6b5:582d with SMTP id nn3-20020a17090b38c300b00205d6b5582dmr9053345pjb.229.1664362798761;
+        Wed, 28 Sep 2022 03:59:58 -0700 (PDT)
+Received: from C02F63J9MD6R.bytedance.net ([61.120.150.77])
+        by smtp.gmail.com with ESMTPSA id b13-20020a170902d50d00b00177efb56475sm1539524plg.85.2022.09.28.03.59.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Sep 2022 03:59:58 -0700 (PDT)
+From:   Zhuo Chen <chenzhuo.1@bytedance.com>
+To:     sathyanarayanan.kuppuswamy@linux.intel.com, bhelgaas@google.com,
+        ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
+        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
+        james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     chenzhuo.1@bytedance.com, linuxppc-dev@lists.ozlabs.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntb@lists.linux.dev, linux-scsi@vger.kernel.org
+Subject: [PATCH v3 0/9] PCI/AER: Fix and optimize usage of status clearing api
+Date:   Wed, 28 Sep 2022 18:59:37 +0800
+Message-Id: <20220928105946.12469-1-chenzhuo.1@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-References: <1663145283-4872-1-git-send-email-kanie@linux.alibaba.com> <1663145283-4872-3-git-send-email-kanie@linux.alibaba.com>
-In-Reply-To: <1663145283-4872-3-git-send-email-kanie@linux.alibaba.com>
-From:   Sumit Saxena <sumit.saxena@broadcom.com>
-Date:   Wed, 28 Sep 2022 16:22:03 +0530
-Message-ID: <CAL2rwxoKLQqpJ8F2Xmzk0SQJb2BZ-MGzx5rNLjGtRs3CaDB9QQ@mail.gmail.com>
-Subject: Re: [PATCH 2/5] scsi: megaraid_sas: correct an error message
-To:     Guixin Liu <kanie@linux.alibaba.com>
-Cc:     kashyap.desai@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, megaraidlinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000b3e7c605e9ba8e1d"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000b3e7c605e9ba8e1d
-Content-Type: text/plain; charset="UTF-8"
+Hello.
 
-On Wed, Sep 14, 2022 at 2:18 PM Guixin Liu <kanie@linux.alibaba.com> wrote:
->
-> Correct the error message when alloc init request fail.
->
-> Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
-Acked-by: Sumit Saxena <sumit.saxena@broadcom.com>
+Here comes patch v3, which contains some fixes and optimizations of
+aer api usage. The v1 and v2 can be found on the mailing list.
 
---000000000000b3e7c605e9ba8e1d
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+v3:
+- Modifications to comments proposed by Sathyanarayanan. Remove
+  pci_aer_clear_nonfatal_status() call in NTB and improve commit log. 
 
-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
-1J8x62/iEVbCstJaE1Nt3oXnL5yBlqX1Ihp8cZLe1weS7Wp/v5Jg2Ks13jeYOKW45xXExpqPPd1f
-3meFjTf9K+rGZHb63htWaJtf0NYbE+5yIbXFv21cBxECAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZc3VtaXQuc2F4ZW5hQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUTIFIrhFDaoMEbXuV9O+Y+XgS
-kVwwDQYJKoZIhvcNAQELBQADggEBAFyioHqB2PHWcQ5cU8nprPRk37uSWK2x0w7W50jjc0cooz6G
-G6pltJ+DvbG7XIzCU8cKHmuyAxoe1+/vhB8yJH78MVdfKDDND7zL/IqfhZedxHcHG5jVqbVH/ufu
-H19y4fHxo5bLkybX3UxkN9b3bMsBZ4FFCLSCFgFfjI0BmTx6IoGyi0R89rzD0H1rURy7WTn0ijl1
-nERsqENeyGfUTJLcDSURb49qpFqqWweJ7ifC64Iak8wCK2CxCe8lHfTyEgC9MuEa586NMQJDguvw
-jlC7kxrgwf4sZ/9Wj/GS2HLzZPkxWCcQIrgNJm2wceHQwPBpM0ZoqL1D2tsFgOA8BvYxggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwdgevXLIdo6fbCNI8w
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJoGe9FOulwdG+62Uxc40hXm9aGEROyR
-gbSkhzzKSUIBMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDky
-ODEwNTIzMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQBbHoYS4UFtPSj1hhcxBVE133aULovZJD7dDeqa2Xnp98NMnyRw
-/T9nm82DLVAg8RVSziApIQr/3rH32MO1YX9ScXeHF9p0KZvWlvj03NNJe/p7dxBjPCK3zess70hG
-s7W5fGI1iRVzweaHYBscX1TnbnK1/M36K15osexM8dB8DrGFR38kd6TWOXBFT09eXvDBLwMBY59/
-l3iy5BAlPASRaxhwZBm9ItyWbxPS/todIzIv/XCGQhIdT/vT/MPflS1RbRceGYRwlf7U5ni391l/
-aukRe1wnV0LwvXD0Ftr6TXlAkiD3SYJR9Ayuyv+tnsCD8BMjfauwWKGv38MnbZkq
---000000000000b3e7c605e9ba8e1d--
+v2:
+- Modifications to comments proposed by Bjorn. Split patch into more
+  obvious parts.
+
+Zhuo Chen (9):
+  PCI/AER: Add pci_aer_clear_uncorrect_error_status() to PCI core
+  PCI/DPC: Use pci_aer_clear_uncorrect_error_status() to clear
+    uncorrectable error status
+  NTB: Remove pci_aer_clear_nonfatal_status() call
+  scsi: lpfc: Change to use pci_aer_clear_uncorrect_error_status()
+  PCI/AER: Unexport pci_aer_clear_nonfatal_status()
+  PCI/AER: Move check inside pcie_clear_device_status().
+  PCI/AER: Use pcie_aer_is_native() to judge whether OS owns AER
+  PCI/ERR: Clear fatal error status when pci_channel_io_frozen
+  PCI/AER: Refine status clearing process with api
+
+ drivers/ntb/hw/idt/ntb_hw_idt.c |  2 --
+ drivers/pci/pci.c               |  7 +++--
+ drivers/pci/pci.h               |  2 ++
+ drivers/pci/pcie/aer.c          | 45 +++++++++++++++++++--------------
+ drivers/pci/pcie/dpc.c          |  3 +--
+ drivers/pci/pcie/err.c          | 15 ++++-------
+ drivers/pci/pcie/portdrv_core.c |  3 +--
+ drivers/scsi/lpfc/lpfc_attr.c   |  4 +--
+ include/linux/aer.h             |  4 +--
+ 9 files changed, 44 insertions(+), 41 deletions(-)
+
+-- 
+2.30.1 (Apple Git-130)
+
