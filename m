@@ -2,54 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECE85F00EA
-	for <lists+linux-scsi@lfdr.de>; Fri, 30 Sep 2022 00:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F41185F00E8
+	for <lists+linux-scsi@lfdr.de>; Fri, 30 Sep 2022 00:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbiI2WqL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 29 Sep 2022 18:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
+        id S230193AbiI2WqH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 29 Sep 2022 18:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiI2Wpg (ORCPT
+        with ESMTP id S229636AbiI2Wpg (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Thu, 29 Sep 2022 18:45:36 -0400
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83DBD8C
-        for <linux-scsi@vger.kernel.org>; Thu, 29 Sep 2022 15:44:38 -0700 (PDT)
-Received: by mail-pf1-f176.google.com with SMTP id b75so2682650pfb.7
-        for <linux-scsi@vger.kernel.org>; Thu, 29 Sep 2022 15:44:38 -0700 (PDT)
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CA32AC2
+        for <linux-scsi@vger.kernel.org>; Thu, 29 Sep 2022 15:44:40 -0700 (PDT)
+Received: by mail-pj1-f45.google.com with SMTP id u12so2657284pjj.1
+        for <linux-scsi@vger.kernel.org>; Thu, 29 Sep 2022 15:44:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=GuaxyPekQwOEv+1YHUUtxyW6Rq419NNxCuDWec4VbOA=;
-        b=054aFehUbXjphBX/3mP6DNCU0HWSJsx2j20q5jPMweEyKGzWagOb7B3SEkueqmu/CC
-         mS4D6kXus5rJWBjHjx2H1WfFjMULg59zANmOrC0ydrh1D+GyaS0FysBihyMCEiMO1Vze
-         uURjngzv9gOlZpsYIR9M6wqtbiYaN4uXWux2SELs/f0TLjo0SwQR186/Jetu6MmjqYly
-         pSIFDoDdkSqCrwYwmVOD/S7CXVRnh4lW+x1YUYM+vZgKlnpy+0dOS4O8DHBd8Wz5rpnx
-         Ypmt1PoewQxYyuwYIe6z6IVRoKhSQisQVJ/gRa1/BwU5nIIfNbehT9rXl//y+mjlq5SG
-         xRhQ==
-X-Gm-Message-State: ACrzQf2+R52zQ3ssAz8FAwDKZZAGc+dXEG/MT46vZxfzKU95e16k8yuH
-        qt/gqIquLzEXtQLdjfBrvu0=
-X-Google-Smtp-Source: AMsMyM4eYmdWUI/9D7JnW5z2QfC6bU22sdOUMBIGV8ixa4nqX5gkd8faks1o8oaNqFZxM4PjyWv9tA==
-X-Received: by 2002:a65:6e0f:0:b0:43a:1cd4:4ae6 with SMTP id bd15-20020a656e0f000000b0043a1cd44ae6mr4772174pgb.289.1664491477685;
-        Thu, 29 Sep 2022 15:44:37 -0700 (PDT)
+        bh=Dga2FoWMsPDIzm7bQA4fn6a11AQGBoCeCg/M4Arbqr4=;
+        b=fiGv+iUpNCQTtHjxC0jmVsUTb1XCS0+jl7FtTPtkvK9Heahrh7bkr6cy9CvGYbVdPd
+         CH7zD/N4EhPl7cY0zTJqKhBwswFfuho503Cz5jyfslzaFiryv5zT1xZzzpyvyz+NIvXc
+         5MRsB2y/HMVUUuJtqSV/sibBO5HhtrHaDj3lPNuCIsfJ0T9eA+hzxZInF1WEmiWYdzwY
+         ZM8ZI5n3fA3udwFelQPLdVHu57/eoc0vEyill8E2rf3GrdyokQt93wE/B4TmgVz7o96h
+         m+XSdrIMq/KlG8zy+cB/4ehVTVabDyRRhvnIN2MZqSWFFTvIoH/uyxivWnlnHKiTbWm6
+         +Pvg==
+X-Gm-Message-State: ACrzQf1KOwY1v5oRhv5iPt/W46okmb0Ix8hmhcFcPtIaHuL4J+n4x9C0
+        MBjaBFK1w54WfCccNSB2wSo=
+X-Google-Smtp-Source: AMsMyM4aKh25aHSnVa7Kms7m5PMVYwzcUQNb4c+YST6HxXHRcMP+AaIKYsuB+nSqHBi4iddYIF+cKg==
+X-Received: by 2002:a17:90b:4f8d:b0:202:dd39:c03a with SMTP id qe13-20020a17090b4f8d00b00202dd39c03amr19154704pjb.71.1664491479490;
+        Thu, 29 Sep 2022 15:44:39 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:56f2:482f:20c2:1d35])
-        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b0016d1b70872asm404508plk.134.2022.09.29.15.44.36
+        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b0016d1b70872asm404508plk.134.2022.09.29.15.44.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 15:44:37 -0700 (PDT)
+        Thu, 29 Sep 2022 15:44:38 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         John Garry <john.garry@huawei.com>,
-        Bradley Grove <linuxdrivers@attotech.com>,
         Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
         Hannes Reinecke <hare@suse.de>,
         Mike Christie <michael.christie@oracle.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v6 2/8] scsi: esas2r: Introduce scsi_template_proc_dir()
-Date:   Thu, 29 Sep 2022 15:44:15 -0700
-Message-Id: <20220929224421.587465-3-bvanassche@acm.org>
+Subject: [PATCH v6 3/8] scsi: core: Fail host creation if creating the proc directory fails
+Date:   Thu, 29 Sep 2022 15:44:16 -0700
+Message-Id: <20220929224421.587465-4-bvanassche@acm.org>
 X-Mailer: git-send-email 2.38.0.rc1.362.ged0d419d3c-goog
 In-Reply-To: <20220929224421.587465-1-bvanassche@acm.org>
 References: <20220929224421.587465-1-bvanassche@acm.org>
@@ -57,105 +56,98 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Prepare for removing the 'proc_dir' and 'present' members from the SCSI
-host template. This patch does not change any functionality.
+Users expect that the contents of /proc/scsi is in sync with the contents
+of /sys/class/scsi_host. Hence fail host creation if creating the proc
+directory fails.
 
-Reviewed-by: John Garry <john.garry@huawei.com>
-Cc: Bradley Grove <linuxdrivers@attotech.com>
+Suggested-by: John Garry <john.garry@huawei.com>
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: Ming Lei <ming.lei@redhat.com>
 Cc: Hannes Reinecke <hare@suse.de>
+Cc: John Garry <john.garry@huawei.com>
 Cc: Mike Christie <michael.christie@oracle.com>
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/esas2r/esas2r_main.c | 17 +++++++++++------
- drivers/scsi/scsi_proc.c          | 11 +++++++++++
- include/scsi/scsi_host.h          |  6 ++++++
- 3 files changed, 28 insertions(+), 6 deletions(-)
+ drivers/scsi/hosts.c     |  3 ++-
+ drivers/scsi/scsi_priv.h |  4 ++--
+ drivers/scsi/scsi_proc.c | 13 +++++++++----
+ 3 files changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/esas2r/esas2r_main.c b/drivers/scsi/esas2r/esas2r_main.c
-index 27f6e7ccded8..d7a2c49ff5ee 100644
---- a/drivers/scsi/esas2r/esas2r_main.c
-+++ b/drivers/scsi/esas2r/esas2r_main.c
-@@ -635,10 +635,13 @@ static void __exit esas2r_exit(void)
- 	esas2r_log(ESAS2R_LOG_INFO, "%s called", __func__);
+diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
+index 0738238ed6cc..098d1970c451 100644
+--- a/drivers/scsi/hosts.c
++++ b/drivers/scsi/hosts.c
+@@ -517,7 +517,8 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
+ 			     "failed to create tmf workq\n");
+ 		goto fail;
+ 	}
+-	scsi_proc_hostdir_add(shost->hostt);
++	if (scsi_proc_hostdir_add(shost->hostt) < 0)
++		goto fail;
+ 	return shost;
+  fail:
+ 	/*
+diff --git a/drivers/scsi/scsi_priv.h b/drivers/scsi/scsi_priv.h
+index 2b9e0559ddcb..a7da51bc22da 100644
+--- a/drivers/scsi/scsi_priv.h
++++ b/drivers/scsi/scsi_priv.h
+@@ -111,14 +111,14 @@ extern void scsi_evt_thread(struct work_struct *work);
  
- 	if (esas2r_proc_major > 0) {
-+		struct proc_dir_entry *proc_dir;
-+
- 		esas2r_log(ESAS2R_LOG_INFO, "unregister proc");
- 
--		remove_proc_entry(ATTONODE_NAME,
--				  esas2r_proc_host->hostt->proc_dir);
-+		proc_dir = scsi_template_proc_dir(esas2r_proc_host->hostt);
-+		if (proc_dir)
-+			remove_proc_entry(ATTONODE_NAME, proc_dir);
- 		unregister_chrdev(esas2r_proc_major, ESAS2R_DRVR_NAME);
- 
- 		esas2r_proc_major = 0;
-@@ -728,11 +731,13 @@ const char *esas2r_info(struct Scsi_Host *sh)
- 			       esas2r_proc_major);
- 
- 		if (esas2r_proc_major > 0) {
--			struct proc_dir_entry *pde;
-+			struct proc_dir_entry *proc_dir;
-+			struct proc_dir_entry *pde = NULL;
- 
--			pde = proc_create(ATTONODE_NAME, 0,
--					  sh->hostt->proc_dir,
--					  &esas2r_proc_ops);
-+			proc_dir = scsi_template_proc_dir(sh->hostt);
-+			if (proc_dir)
-+				pde = proc_create(ATTONODE_NAME, 0, proc_dir,
-+						  &esas2r_proc_ops);
- 
- 			if (!pde) {
- 				esas2r_log_dev(ESAS2R_LOG_WARN,
+ /* scsi_proc.c */
+ #ifdef CONFIG_SCSI_PROC_FS
+-extern void scsi_proc_hostdir_add(struct scsi_host_template *);
++extern int scsi_proc_hostdir_add(struct scsi_host_template *);
+ extern void scsi_proc_hostdir_rm(struct scsi_host_template *);
+ extern void scsi_proc_host_add(struct Scsi_Host *);
+ extern void scsi_proc_host_rm(struct Scsi_Host *);
+ extern int scsi_init_procfs(void);
+ extern void scsi_exit_procfs(void);
+ #else
+-# define scsi_proc_hostdir_add(sht)	do { } while (0)
++# define scsi_proc_hostdir_add(sht)	0
+ # define scsi_proc_hostdir_rm(sht)	do { } while (0)
+ # define scsi_proc_host_add(shost)	do { } while (0)
+ # define scsi_proc_host_rm(shost)	do { } while (0)
 diff --git a/drivers/scsi/scsi_proc.c b/drivers/scsi/scsi_proc.c
-index 95aee1ad1383..456b43097288 100644
+index 456b43097288..8c84f1a74773 100644
 --- a/drivers/scsi/scsi_proc.c
 +++ b/drivers/scsi/scsi_proc.c
-@@ -83,6 +83,17 @@ static int proc_scsi_host_open(struct inode *inode, struct file *file)
- 				4 * PAGE_SIZE);
+@@ -108,20 +108,25 @@ static const struct proc_ops proc_scsi_ops = {
+  *
+  * Sets sht->proc_dir to the new directory.
+  */
+-
+-void scsi_proc_hostdir_add(struct scsi_host_template *sht)
++int scsi_proc_hostdir_add(struct scsi_host_template *sht)
+ {
++	int ret = 0;
++
+ 	if (!sht->show_info)
+-		return;
++		return 0;
+ 
+ 	mutex_lock(&global_host_template_mutex);
+ 	if (!sht->present++) {
+ 		sht->proc_dir = proc_mkdir(sht->proc_name, proc_scsi);
+-        	if (!sht->proc_dir)
++        	if (!sht->proc_dir) {
+ 			printk(KERN_ERR "%s: proc_mkdir failed for %s\n",
+ 			       __func__, sht->proc_name);
++			ret = -ENOMEM;
++		}
+ 	}
+ 	mutex_unlock(&global_host_template_mutex);
++
++	return ret;
  }
  
-+/**
-+ * scsi_template_proc_dir() - returns the procfs dir for a SCSI host template
-+ * @sht: SCSI host template pointer.
-+ */
-+struct proc_dir_entry *
-+scsi_template_proc_dir(const struct scsi_host_template *sht)
-+{
-+	return sht->proc_dir;
-+}
-+EXPORT_SYMBOL_GPL(scsi_template_proc_dir);
-+
- static const struct proc_ops proc_scsi_ops = {
- 	.proc_open	= proc_scsi_host_open,
- 	.proc_release	= single_release,
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index aa7b7496c93a..c2b8427e0305 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -752,6 +752,12 @@ extern struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *, int);
- extern int __must_check scsi_add_host_with_dma(struct Scsi_Host *,
- 					       struct device *,
- 					       struct device *);
-+#if defined(CONFIG_SCSI_PROC_FS)
-+struct proc_dir_entry *
-+scsi_template_proc_dir(const struct scsi_host_template *sht);
-+#else
-+#define scsi_template_proc_dir(sht) NULL
-+#endif
- extern void scsi_scan_host(struct Scsi_Host *);
- extern void scsi_rescan_device(struct device *);
- extern void scsi_remove_host(struct Scsi_Host *);
+ /**
