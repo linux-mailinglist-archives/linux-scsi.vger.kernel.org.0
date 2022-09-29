@@ -2,237 +2,147 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C2F5EEC52
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Sep 2022 05:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 914A25EEC3F
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Sep 2022 04:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234844AbiI2DJA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Sep 2022 23:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
+        id S234358AbiI2C5z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Sep 2022 22:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234851AbiI2DIz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Sep 2022 23:08:55 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C293126458
-        for <linux-scsi@vger.kernel.org>; Wed, 28 Sep 2022 20:08:53 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28T1PvsP032602;
-        Thu, 29 Sep 2022 03:08:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=uTH/yBfi2dN2Gzmf4fEr9WdYA89sSvyAUe6ES5Siqe0=;
- b=Y0xoQ9d5WUIkhaDDGQd33Nq7TBI0WZRfVRCieqoQ9PKBHExBhbZGaWV9ofqznN7e+OPh
- eQ9VAu4+rEzsw/0x6IM53KBb9X+soVzcFpf0cN4I32a89XEGFcevRPsNOhA6CA+5Vg/V
- eIhGXBvDyYewMlst/IeRnq2xPL1soMmrzP69RwS/UXPX2lqA8dOSBmOQCllIFZubNprS
- pd1GiC5CwXqASgvf3a/8AMnatN9Woxu8dt2KPfrejiD++Q9OJgpKYhwhyMxgng0I5uou
- zqlv7youtS+m3V2w1ArpgjemgWeNEZvAQr02aSbbj1FQ2ow0gg7mAQvco8KmXmW/Ibib 7Q== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3jssubkj1v-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Sep 2022 03:08:43 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 28SML3Vl033548;
-        Thu, 29 Sep 2022 02:55:19 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2103.outbound.protection.outlook.com [104.47.58.103])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3jtpv22r08-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Sep 2022 02:55:19 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D0SbYKplMzHLjRYuAm4oJGlc5UwiAPzptL+h4mOVWhsCSM9dpLum0tVlXxX2iVDTy1KL57UAsC4IBlUgaFLACATsRBj8oGX1qmtJ93e43NkNJvqR1elcXUtijM30fuka+zTNAmFJNESUlaUNtSlplq59cT2ywxUTPEPGML/KW0B+dPXupDfpZDANiE0lZvx2SdOSfk3LhjaPEGI5FkqMGrAjMpHj+yt2uLAT6N+1+HqYzEwNOj99VtQmOEukX7FZHRxRMeJyDAy8bsrmqHegqhXWlt8CHgJagZBVmEJUfyV+qwn+DDEqzn4TXHEX538Xem5ms2pNE+dV4t86zgE24Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uTH/yBfi2dN2Gzmf4fEr9WdYA89sSvyAUe6ES5Siqe0=;
- b=Cn2w1OOVezMnDTWJp8pMN6EOfbL1mqFaY2o5YNo97/CZT41X8RvXYgIJ2Yq5QAsQPGSVG8BaoHyKefCjpaozWTDYv7jo3GJbIlIdPb7NaUP04+3J1Q/9XNNIADa1sTqYdO7Y+m7lmMJuOUS3+TIQI0eeBOd5Ln8cHqBAatVE/murHOlOPfcoAH5Pdd6/77u51mK8uBiA6Kl4WWvxIUhQP7fSBy+suHQW/755yImHs6Z9GBuBhODy5bOnFFgj6aEi8vw7fdjL5u9YH180kAyCeXzIIonEXUkkg0JjoWX8sW0ovFoh2N/JlrXnYwLUSoDnYt8sWeJclVnFexVdjodGjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uTH/yBfi2dN2Gzmf4fEr9WdYA89sSvyAUe6ES5Siqe0=;
- b=EtL4mvD7SOr6WDskjglvo44GY9vC6KOx4GDmoo8O0+F93DIXVAaIXtbVh4qhyq5bkpNhd4kyQcrMSecJ75i7u0Z0nFlHRIUMVQX6pUpyNxlzks/Ukrv8u6S8H5HT9gLYnMV4yyV7nnRbsfqF/flboJzI4vn4zdt8gIM68BRB7Xk=
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
- PH0PR10MB5872.namprd10.prod.outlook.com (2603:10b6:510:146::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.26; Thu, 29 Sep
- 2022 02:55:05 +0000
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::5503:f2f0:f101:9a22]) by DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::5503:f2f0:f101:9a22%8]) with mapi id 15.20.5654.025; Thu, 29 Sep 2022
- 02:55:05 +0000
-From:   Mike Christie <michael.christie@oracle.com>
-To:     bvanassche@acm.org, mwilck@suse.com, hch@lst.de,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        james.bottomley@hansenpartnership.com
-Cc:     Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH v2 35/35] scsi: cxlflash: Have scsi-ml retry read_cap16 errors
-Date:   Wed, 28 Sep 2022 21:54:07 -0500
-Message-Id: <20220929025407.119804-36-michael.christie@oracle.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220929025407.119804-1-michael.christie@oracle.com>
-References: <20220929025407.119804-1-michael.christie@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CH2PR19CA0010.namprd19.prod.outlook.com
- (2603:10b6:610:4d::20) To DM5PR10MB1466.namprd10.prod.outlook.com
- (2603:10b6:3:b::7)
+        with ESMTP id S234212AbiI2C5y (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Sep 2022 22:57:54 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2796A11E945;
+        Wed, 28 Sep 2022 19:57:50 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MdJ011pkDzl4Lx;
+        Thu, 29 Sep 2022 10:56:01 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP2 (Coremail) with SMTP id Syh0CgC3VW+pCTVjH9E7Bg--.34168S3;
+        Thu, 29 Sep 2022 10:57:47 +0800 (CST)
+Subject: Re: [PATCH 5.10] scsi: hisi_sas: Revert "scsi: hisi_sas: Limit max hw
+ sectors for v3 HW"
+To:     John Garry <john.garry@huawei.com>,
+        Yu Kuai <yukuai1@huaweicloud.com>, gregkh@linuxfoundation.org,
+        stable@vger.kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20220927130116.1013775-1-yukuai3@huawei.com>
+ <a1fe584c-5001-9983-3a3d-65d3bd396642@huawei.com>
+ <2bcb72eb-b9a7-8fed-f17d-3f1df4da9ee5@huaweicloud.com>
+ <f50cc744-f522-259a-e670-809d65361548@huawei.com>
+ <5b8cc025-0755-74c1-3df5-a95718d23861@huaweicloud.com>
+ <f24d0eb1-a578-2221-c8da-17ddbd35e96d@huawei.com>
+ <4734dd2d-8a32-98b5-3fda-9def720724c9@huaweicloud.com>
+ <c618db25-89ed-8814-b825-50655236a92d@huawei.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <21d07b22-c3bc-6def-0298-ac76e8d92223@huaweicloud.com>
+Date:   Thu, 29 Sep 2022 10:57:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1466:EE_|PH0PR10MB5872:EE_
-X-MS-Office365-Filtering-Correlation-Id: 15a7791e-e8d7-4814-8a87-08daa1c602d6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CAYzdyS1gDE+Kp/rP9LDJKWi4CFpYBdTzZEsE3Ia/gF9Eowu2hJbVuZjQ1IB7jaO2gOqcA5AmkHBAL7+1dHHWhZxsJDTImJ4JEHUrn4JRBlrfYz72SeAhqSv50smIJFp873OtTfUMFYwxDtDWFlN6ME8h6gf2cml+h5SOBSX8Sa3V8OTQ60Tfvw35s66uWJyc450nr/grOIJS08FPSTjW5j0nIXikc/BaWATPMRHaLP/pMQbpiiOOQTaMQxruUHMaENySlD9TnbbgMCmjlK0lLcP+InXiCSkvAzxsxKNs854sMFS4nBf4Vs1Ld51TUYCJaDC+5P5MHBVZBmNRMZVRUW2eZGOrmvUmTrzdnTZme+FhDZJLmjZ+vRnQnGK+Ct2Djt7NHnu/OuQwpFfsHTt79zrc+S7TK6fJ8V9/bxcb8o3jNzPDPMNf0cEtgY+6TbJ+l9GgAjmJhgcCgIFk3vwCuKHoPeGyKcEHJ2js2vpKXhVUlv64VRuZmKTqItAk/FCWax4aI0+ilcwUulddaGuPe+i+Xnhpl5B2IvvQXagujHDKqUxhQcoep6z8Uo1w/PCaJgqyFZJXqhhrbn668mZU3XP4c9kc6Qbp10F0y5LxJawEp+/KHWSBjIt2OxJMMJGIJJDAsHAJdJFJNLOZ+AC436DVfFhd05GAyfYaMFL2OXwKtgVaa7cyKgDOy1Gt1n472NmfcZ3cfzUIhAZAIXT9Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39860400002)(366004)(396003)(376002)(346002)(451199015)(2906002)(41300700001)(83380400001)(66946007)(6506007)(107886003)(6512007)(478600001)(8936002)(36756003)(6486002)(38100700002)(26005)(186003)(1076003)(86362001)(4326008)(2616005)(66476007)(316002)(8676002)(5660300002)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wAb0kdH3mKdT5qkj6vW9bg4x10FzBSfdU+r5dKKWqGf3f1tgw46cUk4uoLas?=
- =?us-ascii?Q?F9LsMlad+XpO/FpjKrSNex3LO9CUwi3A1eOvbPUdi6ijnw5hxURPjLllpiqK?=
- =?us-ascii?Q?iGIbMAiQjbkadj/+zlglhYI0rgX11wvs7wykBNmXKRMvQbrk6I8aBZhqOMP2?=
- =?us-ascii?Q?TL5agTOFSo++eWTxnw26qgk8XW/T9BLRHtbt5rl/SkqQrwtPVsuocTuJJqKN?=
- =?us-ascii?Q?Mmc3eJkV3tfX/YstcKdhG9Fmtjpwg2/GYuWR349Intzaq0uoOR3YQjAjy6nd?=
- =?us-ascii?Q?4DwWN6rrW20Bs3QxBaPSSd95uXXU5/dkFJJgSBwezHJTsG4N9AqTAPsh5jvt?=
- =?us-ascii?Q?xDHfdj+aPkQpePKXRV2WdZjMaZsQI4kc24sKfWccsm/k3OWwtjI2sgAtec8s?=
- =?us-ascii?Q?mEaourvrC9a001cvg14oRgRQlket8D2T6vnfmyK453nVDSGP7LpvNKpwM3X5?=
- =?us-ascii?Q?3yeXR8gVXyxb2TSp1hTtyqC9hNjLyT/yc03LTKj+o8cWtzVG6Bu9KwQqoGwf?=
- =?us-ascii?Q?sfT9wgzuXcmlDrRMg/v9oTqmZovcfi90E2PFzWKx6TqZaOeC4bjoNk4dcafk?=
- =?us-ascii?Q?ZL0BpyFBzVkf2FNTQHLqUxVTZeZXsFyA9ZL0dOqKK4LuAzmolnFhqaAlHlK3?=
- =?us-ascii?Q?5AIx3VKXm9b99W+xV5qE6Ffi7WHxcjDEgqSVLjwfGZUMUik3RkrE1Xs2WDyE?=
- =?us-ascii?Q?j3YQSFj7sMwSr8zgErodtZu0Dc030WcuPxvSN2GH4xX2UbuJoRqrvmNZPnE2?=
- =?us-ascii?Q?9QGHVGrKVax/cZeBeb3tELarlITGcfR5ZnWcx/+fp6NNctfxTVNAv/XSaxIh?=
- =?us-ascii?Q?OfPWL+DUItCsqWgDr4i1Vl4V+TBHjtOn+Mdt5StjaMaCALLFvygZRDFI7/fO?=
- =?us-ascii?Q?b9cS1Rm+vIVXydmn6hJPNKaFeIRTXd/Wv7uv0rVqfnDtLt7N0Wz491P9HSPi?=
- =?us-ascii?Q?xfd95VnAKIrEhYa9cKB4KB2mA2uzfr8hfZh95BW3BK5O0l9GttapxemRT91G?=
- =?us-ascii?Q?15rf77R+0oaLxz9eNNw0D+5AmL/k4canh78rsmlyxIvIeDBE/mje76abWkpL?=
- =?us-ascii?Q?S4Yf+BrFFBgKRAmAYRXMSPpCDWKP9PmwoCabB9v57ulJQT7Pp3QdpDZnAIDC?=
- =?us-ascii?Q?YSnDv6C+xCzy/j/PdutSrgmyg/pNXOltgEMDBiNCwTxFYzjCFGgN0O6kZwLo?=
- =?us-ascii?Q?00O4FUiNhKEw67jdvqJB9M3Shwkqzp7vV3eWP4TDuMH/25KRp3a+rubJWY9F?=
- =?us-ascii?Q?SITk1evoxjL1GtffKOO3cYYZQJjIsG7tbaWRBK4XHF0Nbk1/ryP3HuOK7lqX?=
- =?us-ascii?Q?ax+Y+SsXP1zWqar00cQkn41Fd4A1KhkOHTY12YC/DIemRsHmdH5YjRzGd4vc?=
- =?us-ascii?Q?BoT+eD5TkHf9QspB82IoIhj1WkEb++X29eRV7ZmFoow8qgvwpzEpIiuH2IGV?=
- =?us-ascii?Q?byybE7CnjY3EIapgbJEGLgTFHu7RdFPCEclJUYwCY2uQh+LIp/tfXEp/aUbj?=
- =?us-ascii?Q?NYhFcYWCCOAOEWOAwGeI6j+sg/fdhAbagXPArcXEO7YhxrCzvUhm8/VlqTcc?=
- =?us-ascii?Q?J0sis3D0mPLKdjejOCPnXRmPcm6XhszNNE8frqDNBaz898+XWN4dOPrAy55T?=
- =?us-ascii?Q?sA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 15a7791e-e8d7-4814-8a87-08daa1c602d6
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 02:55:05.0963
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8dkHUCfKLt39PPWKxfhr2j9r1zNcKFC2j82WFo/J5fB1ux+jnaWreOJZ6q8ftb/tl+BIcBVfVsHFBMAIZQYN+9Zn35MzLkP0/74z34jqmfs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5872
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-29_02,2022-09-28_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
- mlxscore=0 mlxlogscore=999 adultscore=0 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209290017
-X-Proofpoint-GUID: jtDFYgNLbRY7cbWE-A0XcN4ySdQ8qi4H
-X-Proofpoint-ORIG-GUID: jtDFYgNLbRY7cbWE-A0XcN4ySdQ8qi4H
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c618db25-89ed-8814-b825-50655236a92d@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgC3VW+pCTVjH9E7Bg--.34168S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF43Cw1fuw17Zr1xZw4DCFg_yoW8tw48pa
+        yrJ3Z8KryUJF1rJw47K3yUXa48trZ5Jw1UXF45GF4xAr4Dtr1jqF4UXrWFgryDCw4xGryj
+        vryUX3srZrW8trJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
+        UUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This has read_cap16 have scsi-ml retry errors instead of driving them
-itself.
+Hi,
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/scsi/cxlflash/superpipe.c | 46 ++++++++++++++++++-------------
- 1 file changed, 27 insertions(+), 19 deletions(-)
+在 2022/09/28 15:36, John Garry 写道:
+> On 28/09/2022 02:35, Yu Kuai wrote:
+>>>>> However both 5.15 stable and 5.19 mainline include fce54ed02757 - 
+>>>>> it was automatically backported for 5.15 stable. Please double 
+>>>>> check that.
+>>>>>
+>>>>> And can you also check performance there for those kernels?
+>>>>
+>>>> I'm pretty sure io split can decline performance, especially for HDD,
+>>>> because blk-mq can't guarantee that split io can be dispatched to disk
+>>>> sequentially. However, this is usually not common with proper
+>>>> max_sectors_kb.
+>>>>
+>>>> Here is an example that if max_sector_kb is 128k, performance will
+>>>> drop a lot under high concurrency:
+>>>>
+>>>> https://lore.kernel.org/all/20220408073916.1428590-1-yukuai3@huawei.com/ 
+>>>>
+> 
+> This never got merged in any form, right?
 
-diff --git a/drivers/scsi/cxlflash/superpipe.c b/drivers/scsi/cxlflash/superpipe.c
-index 724e52f0b58c..8627c825d031 100644
---- a/drivers/scsi/cxlflash/superpipe.c
-+++ b/drivers/scsi/cxlflash/superpipe.c
-@@ -337,10 +337,32 @@ static int read_cap16(struct scsi_device *sdev, struct llun_info *lli)
- 	u8 *scsi_cmd = NULL;
- 	int rc = 0;
- 	int result = 0;
--	int retry_cnt = 0;
- 	u32 to = CMD_TIMEOUT * HZ;
-+	struct scsi_failure failures[] = {
-+		{
-+			.sense = UNIT_ATTENTION,
-+			.asc = 0x29,
-+			.ascq = SCMD_FAILURE_ASCQ_ANY,
-+			.allowed = 1,
-+			.result = SAM_STAT_CHECK_CONDITION,
-+		},
-+		{
-+			.sense = UNIT_ATTENTION,
-+			.asc = 0x2A,
-+			.ascq = SCMD_FAILURE_ASCQ_ANY,
-+			.allowed = 1,
-+			.result = SAM_STAT_CHECK_CONDITION,
-+		},
-+		{
-+			.sense = UNIT_ATTENTION,
-+			.asc = 0x3F,
-+			.ascq = SCMD_FAILURE_ASCQ_ANY,
-+			.allowed = 1,
-+			.result = SAM_STAT_CHECK_CONDITION,
-+		},
-+		{},
-+	};
- 
--retry:
- 	cmd_buf = kzalloc(CMD_BUFSIZE, GFP_KERNEL);
- 	scsi_cmd = kzalloc(MAX_COMMAND_SIZE, GFP_KERNEL);
- 	if (unlikely(!cmd_buf || !scsi_cmd)) {
-@@ -352,8 +374,7 @@ static int read_cap16(struct scsi_device *sdev, struct llun_info *lli)
- 	scsi_cmd[1] = SAI_READ_CAPACITY_16;	/* service action */
- 	put_unaligned_be32(CMD_BUFSIZE, &scsi_cmd[10]);
- 
--	dev_dbg(dev, "%s: %ssending cmd(%02x)\n", __func__,
--		retry_cnt ? "re" : "", scsi_cmd[0]);
-+	dev_dbg(dev, "%s: sending cmd(%02x)\n", __func__, scsi_cmd[0]);
- 
- 	/* Drop the ioctl read semahpore across lengthy call */
- 	up_read(&cfg->ioctl_rwsem);
-@@ -365,7 +386,8 @@ static int read_cap16(struct scsi_device *sdev, struct llun_info *lli)
- 					.buf_len = CMD_BUFSIZE,
- 					.sshdr = &sshdr,
- 					.timeout = to,
--					.retries = CMD_RETRIES }));
-+					.retries = CMD_RETRIES,
-+					.failures = failures }));
- 	down_read(&cfg->ioctl_rwsem);
- 	rc = check_state(cfg);
- 	if (rc) {
-@@ -383,20 +405,6 @@ static int read_cap16(struct scsi_device *sdev, struct llun_info *lli)
- 			case NOT_READY:
- 				result &= ~SAM_STAT_CHECK_CONDITION;
- 				break;
--			case UNIT_ATTENTION:
--				switch (sshdr.asc) {
--				case 0x29: /* Power on Reset or Device Reset */
--					fallthrough;
--				case 0x2A: /* Device capacity changed */
--				case 0x3F: /* Report LUNs changed */
--					/* Retry the command once more */
--					if (retry_cnt++ < 1) {
--						kfree(cmd_buf);
--						kfree(scsi_cmd);
--						goto retry;
--					}
--				}
--				break;
- 			default:
- 				break;
- 			}
--- 
-2.25.1
+Yes.
+
+> 
+>>>>
+>>>> Here I set max_sectors_kb to 128k manually, and 1m random io 
+>>>> performance
+>>>> will drop while io concurrency increase:
+>>>>
+>>>> | numjobs | v5.18-rc1 |
+>>>> | ------- | --------- |
+>>>> | 1       | 67.7      |
+>>>> | 2       | 67.7      |
+>>>> | 4       | 67.7      |
+>>>> | 8       | 67.7      |
+>>>> | 16      | 64.8      |
+>>>> | 32      | 59.8      |
+>>>> | 64      | 54.9      |
+>>>> | 128     | 49        |
+>>>> | 256     | 37.7      |
+>>>> | 512     | 31.8      |
+>>>
+>>> Commit fce54ed02757 was to circumvent a terrible performance hit for 
+>>> IOMMU enabled from 4e89dce72521 - have you ever tested with IOMMU 
+>>> enabled?
+>>
+>> I understand that fce54ed02757 fix a terrible performance regression,
+>> and I'm not familiar with IOMMU and I never test that.
+>>>
+>>> If fce54ed02757 really does cause a performance regression in some 
+>>> scenarios, then we can consider reverting it from any stable kernel 
+>>> and also backporting [0] when it is included in Linus' kernel
+>>
+>> That sounds good.
+>>
+>> For 5.10 stable, I think it's ok to revert it for now, and if someone
+>> cares about the problem 4e89dce72521 fixed, they can try to backport it
+>> together with follow up patches.
+> 
+> For 5.10 stable revert only,
+> 
+> Reviewed-by: John Garry <john.garry@huawei.com>
+
+Thanks for the review!
+
+Kuai
+> 
+> Thanks,
+> John
+> .
+> 
 
