@@ -2,116 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1522B5F0CFE
-	for <lists+linux-scsi@lfdr.de>; Fri, 30 Sep 2022 16:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B7A5F0E65
+	for <lists+linux-scsi@lfdr.de>; Fri, 30 Sep 2022 17:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiI3OFF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 30 Sep 2022 10:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
+        id S230471AbiI3PD5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 30 Sep 2022 11:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiI3OFD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 30 Sep 2022 10:05:03 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEEB69186
-        for <linux-scsi@vger.kernel.org>; Fri, 30 Sep 2022 07:05:00 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id h194so3328307iof.4
-        for <linux-scsi@vger.kernel.org>; Fri, 30 Sep 2022 07:05:00 -0700 (PDT)
+        with ESMTP id S231911AbiI3PDv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 30 Sep 2022 11:03:51 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154E460F3
+        for <linux-scsi@vger.kernel.org>; Fri, 30 Sep 2022 08:03:50 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id r18so9605365eja.11
+        for <linux-scsi@vger.kernel.org>; Fri, 30 Sep 2022 08:03:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date;
-        bh=KE/La02ogRQIY/HzxSEopjUhIfT01GVed+k6zu427FM=;
-        b=eTSscY00rOLUJHWuFQyJIl59dQGpUSoWvHHwSfNnFKA4Lw44WSKU49+jZTWN47Jnf5
-         55R/FwWHdwkFedGF7J3APM2KsySrM9JgactJUB3aSET9yPsj9KVjVwyT4ZLrz+OD+KKV
-         AhfLWzDGtUjoMr5OXEttfZYzZDT4hj0bjxzcqlI1syLfAFm+CjXjGbkI72jZhUIib47a
-         TiVeQlPuyIFn+ebZpyH/8DYCExfqdWWWzDillNjOUNcotehAMdGUndCvUHfH4w0GpLJq
-         ughRo26e9JqrBgCkOHoGxXOjnjLv3PQ8AiiKFqEgltASsaQc8z5EH/ExdZCSOWlOJt00
-         kMXA==
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date;
+        bh=v6K6/zg5ajUnLtl/DvWZXKe8DPRpoYDcFR343TCXQy8=;
+        b=arxsywWSf2dDq1PMyz3YCcgShWHcG0PCIm3LXgdKHN9Q7z1eVau18557gRW89fz+mJ
+         CwiA7swvlJ9f2MdVHtcbOlun+PkEIxH1V6HHggElSCKbVjBuQLNEOuLYPjTrWxjZsCzX
+         9fCUQmZ3jgikiy/uE0rQLK+nmoXive6ZnsYP0S5k5K1EfkPPYfDHoXnhbAAeZ61+1v/9
+         phHjAWWtC0MXXl+fN7Gtc5Y0bK5wG0BA6AX2y60yOHo/d6bHSbCXO7M1VmD+u9BMLVrj
+         vJFYPmU/G1NQZjdKtUNYyHkpZ/5tcCydG8VWKWJesQItAed2/Ea1dmnNvh3wSSE4hQ5f
+         87Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=KE/La02ogRQIY/HzxSEopjUhIfT01GVed+k6zu427FM=;
-        b=MoBmg1V+dge8ZupKNPKRRshibwtIg53pF0OMqoFkIy2whDVWRDcHJFpIpeOQMUvn19
-         u2hMXIT00CNwukhihunwPoUrP7VkyLoXLvZHP+7cpXa5MjJWrW+wZYPWEI58QFcSSfGp
-         uUg/KhDuB2oyWTnoDTb5uyiseusPnsO/KeLVpiMgR+z13gbcdngpEB7kE9+3Sactrfwf
-         DHUegy1tMarC/oFLXYxOopz3bc2SayM9ZiTK17GftVYS2LS10SsyNjb+65GGXRr5y0/3
-         WOUSJD1V7XbnM53oZ1olZ/ZJnidhurI1RSrSC1sWSC8l4cZVaBpSJZzEftDnFKn6q3fB
-         CXQg==
-X-Gm-Message-State: ACrzQf0Hq091Ku8IEXDy9MQ9qlQKa6EShyQFt95HjyJf3nxDvzzqtTg/
-        L9rA8VcejS1fHQWTWa8kC74kNCbTDIvrag==
-X-Google-Smtp-Source: AMsMyM4JtLxVJcRSJ6Gida3IQoin845TBOh5Ewp8EzEnzwL947qn7d3mtbmSE+hpAqBx4RR26Cvc1w==
-X-Received: by 2002:a05:6638:1449:b0:35a:70ce:8a3f with SMTP id l9-20020a056638144900b0035a70ce8a3fmr4631148jad.42.1664546700214;
-        Fri, 30 Sep 2022 07:05:00 -0700 (PDT)
-Received: from [127.0.0.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id y4-20020a027304000000b00349d2d52f6asm963095jab.37.2022.09.30.07.04.59
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=v6K6/zg5ajUnLtl/DvWZXKe8DPRpoYDcFR343TCXQy8=;
+        b=fe4kfTzfqNyCjFcj1CnWjq3ylr/hvRU0+AdjqzBul9lB9hJVDZkD/RVdAjfmXAQWt9
+         d/uQHHvU+UOLROJw5X4GeN8e5wNBF3h0GZx525FRgombUxGcxZBy5oNq7732Rgz8vm+w
+         PtMs4ue/QvLe6UgDD8qffAw/oi1LRIwl8gpQ/UsYSc0zDtU2CPJWXwhh1XVFcRokAV8v
+         lTfCiA5AEXDToULTntXQ9Fti6YgBAloi3K/mKNNlt0KNMdG9ibkYne//GXhVVXKjSLys
+         9uw2hSPMYIAdSeTlDNKFdQFRaGp2k346+99RRfE9Tffor8mCiY/q0fN+vSwE6gcgWhBs
+         6Cxw==
+X-Gm-Message-State: ACrzQf3kn2eAIApOjicSlb+RrotN7u6hBkg6o9zXMasWhdX58IiRvkCX
+        71ZXDmVNUoe2qCU/OKTk700=
+X-Google-Smtp-Source: AMsMyM6oKyO7GgpKnDLP4+SjRTBPCk6COtnI3ffV2G52bjzD+x24vEzflbGgL+mB85Y/vOvczC+l1A==
+X-Received: by 2002:a17:907:2721:b0:77f:d471:47b3 with SMTP id d1-20020a170907272100b0077fd47147b3mr6769331ejl.591.1664550228445;
+        Fri, 30 Sep 2022 08:03:48 -0700 (PDT)
+Received: from [10.176.234.249] ([137.201.254.41])
+        by smtp.googlemail.com with ESMTPSA id k5-20020a17090632c500b0077f324979absm1315828ejk.67.2022.09.30.08.03.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Sep 2022 07:04:59 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     kbusch@kernel.org, Anuj Gupta <anuj20.g@samsung.com>, hch@lst.de
-Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        gost.dev@samsung.com, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-In-Reply-To: <20220930062749.152261-1-anuj20.g@samsung.com>
-References: <CGME20220930063754epcas5p2aff33c952032713a39604388eacda910@epcas5p2.samsung.com>
- <20220930062749.152261-1-anuj20.g@samsung.com>
-Subject: Re: [PATCH for-next v12 00/12] Fixed-buffer for uring-cmd/passthru
-Message-Id: <166454669913.10664.15099234392865928285.b4-ty@kernel.dk>
-Date:   Fri, 30 Sep 2022 08:04:59 -0600
+        Fri, 30 Sep 2022 08:03:47 -0700 (PDT)
+Message-ID: <67bfe4a2175da74b686a4990a6ebe0b91017599f.camel@gmail.com>
+Subject: Re: [PATCH v3 8/8] scsi: ufs: Fix a deadlock between PM and the
+ SCSI error handler
+From:   Bean Huo <huobean@gmail.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>
+Date:   Fri, 30 Sep 2022 17:03:46 +0200
+In-Reply-To: <20220929220021.247097-9-bvanassche@acm.org>
+References: <20220929220021.247097-1-bvanassche@acm.org>
+         <20220929220021.247097-9-bvanassche@acm.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 30 Sep 2022 11:57:37 +0530, Anuj Gupta wrote:
-> uring-cmd lacks the ability to leverage the pre-registered buffers.
-> This series adds that support in uring-cmd, and plumbs nvme passthrough
-> to work with it.
-> Patches 3 - 5 carve out a block helper and scsi, nvme then use it to
-> avoid duplication of code.
-> Patch 6 and 7 contains a bunch of general nvme cleanups, which got added
-> along the iterations.
-> 
-> [...]
+On Thu, 2022-09-29 at 15:00 -0700, Bart Van Assche wrote:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ufshcd_link_recovery(hba);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_info(hba->dev, "%s() finis=
+hed; outstanding_tasks =3D
+> %#lx.\n",
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 __func__, hba->outstanding_tasks);
+> +
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return hba->outstanding_tasks =
+? SCSI_EH_RESET_TIMER :
+> SCSI_EH_DONE;
 
-Applied, thanks!
+Bart,
 
-[01/12] io_uring: add io_uring_cmd_import_fixed
-        commit: a9216fac3ed8819cbbda5d39dd5fcaa43dfd35d8
-[02/12] io_uring: introduce fixed buffer support for io_uring_cmd
-        commit: 9cda70f622cdcf049521a9c2886e5fd8a90a0591
-[03/12] block: add blk_rq_map_user_io
-        commit: 557654025df5706785d395558244890dc4b2c875
-[04/12] scsi: Use blk_rq_map_user_io helper
-        commit: 6732932c836a4313f471b92b4d90761f31d3fa81
-[05/12] nvme: Use blk_rq_map_user_io helper
-        commit: 7f05635764390d5f811971af9f4c89b794032c80
-[06/12] nvme: refactor nvme_add_user_metadata
-        commit: 38c0ddab7b93daa90c046d0b9064a34fb0e586e5
-[07/12] nvme: refactor nvme_alloc_request
-        commit: 470e900c8036ff1aafeb5f06f3cb7a375a081399
-[08/12] block: rename bio_map_put to blk_mq_map_bio_put
-        commit: 32f1c71b15fc9cb8e964c3d0c15ca99a70cfe8a7
-[09/12] block: factor out blk_rq_map_bio_alloc helper
-        commit: ab89e8e7ca526ca04baaad2aa28172d336425d67
-[10/12] block: extend functionality to map bvec iterator
-        commit: 37987547932c89f15f9b76950040131ddb591a8b
-[11/12] nvme: pass ubuffer as an integer
-        commit: 4d174486820e625fa85bac5d4235d4b4cb659866
-[12/12] nvme: wire up fixed buffer support for nvme passthrough
-        commit: 23fd22e55b767be9c31fda57205afb2023cd6aad
+you have reset the device and host,  in the case, there are pending
+TMs, Should be cleared locally, just like ufshcd_err_handler() does?
 
-Best regards,
--- 
-Jens Axboe
-
-
+Kind regards,
+Bean
