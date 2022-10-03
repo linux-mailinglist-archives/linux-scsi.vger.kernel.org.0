@@ -2,102 +2,129 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01B15F3964
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Oct 2022 00:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7812F5F3A28
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Oct 2022 01:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiJCWyr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Oct 2022 18:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S229994AbiJCX5F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Oct 2022 19:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiJCWyo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Oct 2022 18:54:44 -0400
-X-Greylist: delayed 1801 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Oct 2022 15:54:42 PDT
-Received: from mail-filter.k24.co.id (mail-filter.k24.co.id [117.20.63.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171FFCFB;
-        Mon,  3 Oct 2022 15:54:37 -0700 (PDT)
-Received: from mail-filter.k24.co.id (localhost.localdomain [127.0.0.1])
-        by mail-filter.k24.co.id (Proxmox) with ESMTP id 3B55750344F;
-        Tue,  4 Oct 2022 04:58:16 +0700 (WIB)
-Received: from mta-02.k24.co.id (mta-02.k24.co.id [192.168.2.11])
-        by mail-filter.k24.co.id (Proxmox) with ESMTPS id 29A595039F8;
-        Tue,  4 Oct 2022 04:58:16 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mta-02.k24.co.id (Postfix) with ESMTP id BD790A0FBF;
-        Tue,  4 Oct 2022 04:58:15 +0700 (WIB)
-Received: from mta-02.k24.co.id ([127.0.0.1])
-        by localhost (mta-02.k24.co.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id CtNj6BeHeIYk; Tue,  4 Oct 2022 04:58:15 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mta-02.k24.co.id (Postfix) with ESMTP id 3DBC9A0FF9;
-        Tue,  4 Oct 2022 04:58:14 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mta-02.k24.co.id 3DBC9A0FF9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=k24.co.id;
-        s=201D0EFA-BD0A-11EB-90FB-4354FB48657B; t=1664834294;
-        bh=Yw62bKNhDK09NF2C5/gJe1ePr0AC5lJ8dr3g9D9gnpA=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=eUel0ZyS4voooRXyAazrKUe9sSWvTOizWK/QjeafO1HHQov97lTtJ8zE/VKDW9kG/
-         4TXcKgbBadRJ3BgoKn/B2z5zwkAWMFvJ8SBdYfBK77Dlh7Fy5aGVrj3aoPsxUUd/xE
-         y65Dc84ASVq0gmCJBMtp+PFH0Qv5ZebfB3e/gzePfkauLe10Q2Ivk36A3qBe+YE3a5
-         vbkuLoN26XE7eZ7z1URW2wLY6gX9A5PKdjMKAq/8Y0Vy8UH/hGuYh/9hyfQb1cDpcy
-         Pk2k2jPTRZLjGbjjRAtbCtcr+Zr9O65rO7nxLtsU/OCybAlxauXdi0MbpIzGBrP+Cw
-         HdCgRe7dK//DQ==
-X-Virus-Scanned: amavisd-new at k24.co.id
-Received: from mta-02.k24.co.id ([127.0.0.1])
-        by localhost (mta-02.k24.co.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id J1sKnII_1ODb; Tue,  4 Oct 2022 04:58:14 +0700 (WIB)
-Received: from mailbox1.k24.co.id (mailbox1.k24.co.id [192.168.2.15])
-        by mta-02.k24.co.id (Postfix) with ESMTP id 198B0A0FAE;
-        Tue,  4 Oct 2022 04:57:51 +0700 (WIB)
-Date:   Tue, 4 Oct 2022 04:57:50 +0700 (WIB)
-From:   DIVERSITY CASH LOAN <fredy.daniswara@k24.co.id>
-Reply-To: BELINDA <belindasteenkamp14@gmail.com>
-Message-ID: <2129288997.3602620.1664834270921.JavaMail.zimbra@k24.co.id>
-Subject: New month promo
+        with ESMTP id S229950AbiJCX4u (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Oct 2022 19:56:50 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6077F27CDB;
+        Mon,  3 Oct 2022 16:56:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=G37LnXkC8VTdsMvruTDa2+n50xVxzxAz9mNwqVDycIY=; b=XTOqMBWME2UGab0kwjo1gzrMRW
+        gB+DuURn9NS4zcZSmoeMs18rQmqAsTNNa6uuhzopJE7oJUzHFGX+qVY7cdxQlfhPuwqLeXoDvetBs
+        CcsdjMo+/vbb/SNGM9xa8ArXmcyHMYiLJbgqoh53RFxan4Zh6rxIM0KwecTCGmVw7g/2QE2XOPexA
+        zmbGEaVvP9cKgoIuClztMdTyR+b3wnCwudN9YEIqi1v33/NbiEad2VssWmt64gBQQnGlv4v+/ejDr
+        cvjhjQ2lZjbHT91+3gOMqh0aGmftMrWfQC/SD1FT/gQY7QqVITbhlMYVu9rTYP2v6z59AYKycxcnF
+        095W7VAA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ofVIh-0086q0-0V; Mon, 03 Oct 2022 23:56:43 +0000
+Date:   Mon, 3 Oct 2022 16:56:42 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.garry@huawei.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH v5 6/7] module: Improve support for asynchronous module
+ exit code
+Message-ID: <Yzt2upqiG2i/eHnV@bombadil.infradead.org>
+References: <20220914225621.415631-1-bvanassche@acm.org>
+ <20220914225621.415631-7-bvanassche@acm.org>
+ <a4084b27-dd2d-10df-493c-35998eed664c@acm.org>
+ <YzOPJHSQsPtc5o0Y@bombadil.infradead.org>
+ <33ee1c3a-d37a-b81f-68be-d1901c7dd6e8@acm.org>
+ <YzdF72yRae7lnZAy@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [192.168.2.10]
-X-Mailer: Zimbra 8.8.15_GA_4372 (zclient/8.8.15_GA_4372)
-Thread-Index: FEQ3IfcU2FvE+SDQCgXbHke9nAOpgg==
-Thread-Topic: New month promo
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5013]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  1.0 MISSING_HEADERS Missing To: header
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [belindasteenkamp14[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YzdF72yRae7lnZAy@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Whatever your goals are we will customize a loan just right for you from up=
- to TEN MILLION RANDS
+On Fri, Sep 30, 2022 at 12:39:27PM -0700, Luis Chamberlain wrote:
+> On Wed, Sep 28, 2022 at 11:17:02AM -0700, Bart Van Assche wrote:
+> > On 9/27/22 17:02, Luis Chamberlain wrote:
+> > > On Tue, Sep 20, 2022 at 10:13:40AM -0700, Bart Van Assche wrote:
+> > > > On 9/14/22 15:56, Bart Van Assche wrote:
+> > > > > Some kernel modules call device_del() from their module exit code and
+> > > > > schedule asynchronous work from inside the .release callback without waiting
+> > > > > until that callback has finished. As an example, many SCSI LLD drivers call
+> > > > > scsi_remove_host() from their module exit code. scsi_remove_host() may
+> > > > > invoke scsi_device_dev_release_usercontext() asynchronously.
+> > > > > scsi_device_dev_release_usercontext() uses the host template pointer and
+> > > > > that pointer usually exists in static storage in the SCSI LLD. Support
+> > > > > using the module reference count to keep the module around until
+> > > > > asynchronous module exiting has completed by waiting in the delete_module()
+> > > > > system call until the module reference count drops to zero.
+> > > > 
+> > > > Hi Luis,
+> > > > 
+> > > > I'd like to know your opinion about this patch since you are the maintainer
+> > > > of the kernel module system.
+> > > 
+> > > See this patch which extends the documentation of try_module_get():
+> > > 
+> > > https://lkml.kernel.org/r/20211029184500.2821444-7-mcgrof@kernel.org
+> > > 
+> > > You can ignore discussion around the thread as sadly it is just
+> > > irrelevant stuff not about that patch. But the logic it spells out
+> > > is still true.
+> > > 
+> > > So, in short, using try_module_get() on exit is actually the wrong
+> > > thing to do and it is no surprise it would fail. I haven't gotten
+> > > yet around to reviewing Mauro's driver API which let's you unbind
+> > > drivers, but it sounds related so I CC'd you on that.
+> > > 
+> > > So I'd like to ask instead if an alternative to using try_module_get()
+> > > on exit would be better here and for the future.
+> > 
+> > Hi Luis,
+> > 
+> > The extended documentation of try_module_get() is very helpful. But please
+> > note that this patch is not related to try_module_get() at all. See also
+> > patch 7/7 in this series (https://lore.kernel.org/linux-scsi/20220914225621.415631-8-bvanassche@acm.org/).
+> 
+> I cannot see how this patch set is no way related to try_module_get()
+> given the 7/7 patch you posted replaces try_module_get() with __module_get().
+> My point, and hint, is that the original construct that added try_module_get()
+> on removal was flawed and I'm not sure trying to expand on that idea would
+> or even *should* be fruitful given the issues / tribal knowledge I tried
+> extending documentation for.
+> 
+> It would beg the question if instead re-evaluating the goal could be
+> done in such a way that the new documentation I suggested on try_module_get()
+> would be seriously taken into account.
 
-What can an unsecured loan do for you and your family and also your busines=
-s.
+Yeah I've gone ahead and re-read your original patch again the issue
+with that is it waits *once* for the refcnt to go to 0, but that does
+not forbit it from going back up, at which point you have a race which
+can still create the situation. Every subsystem is different, but for
+instance simply running a loop opening a device block file should
+suffice to bump the refcnt of a respective block driver module. So
+at least the patch itself won't ultimately address this issue I'm
+afraid.
 
-??Pensioners, blacklisted, debt review clients and self-employed, no paysli=
-p are highly welcome ??
-
-Call ??or what=E2=80=99s-app???? on...+27677352072
-Email??: belindasteenkamp14@gmail.com
-
+  Luis
