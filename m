@@ -2,105 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF955F3713
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Oct 2022 22:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01B15F3964
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Oct 2022 00:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiJCU1z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Oct 2022 16:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S229719AbiJCWyr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Oct 2022 18:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiJCU1v (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Oct 2022 16:27:51 -0400
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB993E771;
-        Mon,  3 Oct 2022 13:27:49 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id A6673411F8;
-        Mon,  3 Oct 2022 20:27:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-type:content-type:content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:date:subject
-        :subject:from:from:received:received:received:received; s=
-        mta-01; t=1664828867; x=1666643268; bh=BlqpQ5lIMULqb1JjlXGVS3eHU
-        p/CLKPTsZvHH0M03Rs=; b=E4+r8JK/MwOfEy35B0/d+CHgbeiT6Ik2A7cnOTdTw
-        SBu6RTr/reOsQ0EMqooqNb7oq3SHShp4XjIKinc5AV7cHt9KX1iXGJ9VQveY2nd9
-        sVpyZNzb+IPynN0Bcf4KwYjAj3p6S2wqofKozJykUwZAWyEmvgjkUp22qf9TiU55
-        rI=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jEze6DcVS8Mg; Mon,  3 Oct 2022 23:27:47 +0300 (MSK)
-Received: from T-EXCH-01.corp.yadro.com (T-EXCH-01.corp.yadro.com [172.17.10.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 743E34120E;
-        Mon,  3 Oct 2022 23:27:43 +0300 (MSK)
-Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
- T-EXCH-01.corp.yadro.com (172.17.10.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Mon, 3 Oct 2022 23:27:36 +0300
-Received: from NB-591.corp.yadro.com (10.199.18.20) by
- T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.9; Mon, 3 Oct 2022 23:27:36 +0300
-From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
-To:     Martin Petersen <martin.petersen@oracle.com>,
-        <target-devel@vger.kernel.org>
-CC:     <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [PATCH 3/3] target: iscsi: close session without connections
-Date:   Mon, 3 Oct 2022 23:27:23 +0300
-Message-ID: <20221003202723.22714-4-d.bogdanov@yadro.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221003202723.22714-1-d.bogdanov@yadro.com>
-References: <20221003202723.22714-1-d.bogdanov@yadro.com>
+        with ESMTP id S229616AbiJCWyo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Oct 2022 18:54:44 -0400
+X-Greylist: delayed 1801 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Oct 2022 15:54:42 PDT
+Received: from mail-filter.k24.co.id (mail-filter.k24.co.id [117.20.63.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171FFCFB;
+        Mon,  3 Oct 2022 15:54:37 -0700 (PDT)
+Received: from mail-filter.k24.co.id (localhost.localdomain [127.0.0.1])
+        by mail-filter.k24.co.id (Proxmox) with ESMTP id 3B55750344F;
+        Tue,  4 Oct 2022 04:58:16 +0700 (WIB)
+Received: from mta-02.k24.co.id (mta-02.k24.co.id [192.168.2.11])
+        by mail-filter.k24.co.id (Proxmox) with ESMTPS id 29A595039F8;
+        Tue,  4 Oct 2022 04:58:16 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mta-02.k24.co.id (Postfix) with ESMTP id BD790A0FBF;
+        Tue,  4 Oct 2022 04:58:15 +0700 (WIB)
+Received: from mta-02.k24.co.id ([127.0.0.1])
+        by localhost (mta-02.k24.co.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id CtNj6BeHeIYk; Tue,  4 Oct 2022 04:58:15 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mta-02.k24.co.id (Postfix) with ESMTP id 3DBC9A0FF9;
+        Tue,  4 Oct 2022 04:58:14 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mta-02.k24.co.id 3DBC9A0FF9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=k24.co.id;
+        s=201D0EFA-BD0A-11EB-90FB-4354FB48657B; t=1664834294;
+        bh=Yw62bKNhDK09NF2C5/gJe1ePr0AC5lJ8dr3g9D9gnpA=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=eUel0ZyS4voooRXyAazrKUe9sSWvTOizWK/QjeafO1HHQov97lTtJ8zE/VKDW9kG/
+         4TXcKgbBadRJ3BgoKn/B2z5zwkAWMFvJ8SBdYfBK77Dlh7Fy5aGVrj3aoPsxUUd/xE
+         y65Dc84ASVq0gmCJBMtp+PFH0Qv5ZebfB3e/gzePfkauLe10Q2Ivk36A3qBe+YE3a5
+         vbkuLoN26XE7eZ7z1URW2wLY6gX9A5PKdjMKAq/8Y0Vy8UH/hGuYh/9hyfQb1cDpcy
+         Pk2k2jPTRZLjGbjjRAtbCtcr+Zr9O65rO7nxLtsU/OCybAlxauXdi0MbpIzGBrP+Cw
+         HdCgRe7dK//DQ==
+X-Virus-Scanned: amavisd-new at k24.co.id
+Received: from mta-02.k24.co.id ([127.0.0.1])
+        by localhost (mta-02.k24.co.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id J1sKnII_1ODb; Tue,  4 Oct 2022 04:58:14 +0700 (WIB)
+Received: from mailbox1.k24.co.id (mailbox1.k24.co.id [192.168.2.15])
+        by mta-02.k24.co.id (Postfix) with ESMTP id 198B0A0FAE;
+        Tue,  4 Oct 2022 04:57:51 +0700 (WIB)
+Date:   Tue, 4 Oct 2022 04:57:50 +0700 (WIB)
+From:   DIVERSITY CASH LOAN <fredy.daniswara@k24.co.id>
+Reply-To: BELINDA <belindasteenkamp14@gmail.com>
+Message-ID: <2129288997.3602620.1664834270921.JavaMail.zimbra@k24.co.id>
+Subject: New month promo
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.199.18.20]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [192.168.2.10]
+X-Mailer: Zimbra 8.8.15_GA_4372 (zclient/8.8.15_GA_4372)
+Thread-Index: FEQ3IfcU2FvE+SDQCgXbHke9nAOpgg==
+Thread-Topic: New month promo
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5013]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  1.0 MISSING_HEADERS Missing To: header
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [belindasteenkamp14[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-During Time2Retain timer there are no connections in the session.
-A session stop due to ACL/TPG removal is done by stopping its
-connections. For session in recovery it stops Time2Retain timer and
-that's it. The session hanges forever.
+Whatever your goals are we will customize a loan just right for you from up=
+ to TEN MILLION RANDS
 
-Call directly a session closure when no connections in the session.
-Do it in other context to make it possible to wait for session usage
-counter, that is decreased always after invocation of session stop.
+What can an unsecured loan do for you and your family and also your busines=
+s.
 
-Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
----
- drivers/target/iscsi/iscsi_target.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+??Pensioners, blacklisted, debt review clients and self-employed, no paysli=
+p are highly welcome ??
 
-diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
-index 3e91523e540b..967c969cfc10 100644
---- a/drivers/target/iscsi/iscsi_target.c
-+++ b/drivers/target/iscsi/iscsi_target.c
-@@ -4738,6 +4738,12 @@ void iscsit_stop_session(
- 	struct iscsit_conn *conn, *conn_tmp = NULL;
- 	int is_last;
- 
-+	if (!conn_count) {
-+		/* during Time2Retain timer there is no connections */
-+		schedule_work(&sess->session_close_worker);
-+		return;
-+	}
-+
- 	spin_lock_bh(&sess->conn_lock);
- 
- 	if (connection_sleep) {
--- 
-2.25.1
+Call ??or what=E2=80=99s-app???? on...+27677352072
+Email??: belindasteenkamp14@gmail.com
 
