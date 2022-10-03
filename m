@@ -2,95 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033075F32CC
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Oct 2022 17:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B9D5F336A
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Oct 2022 18:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiJCPow (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Oct 2022 11:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
+        id S229494AbiJCQXl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Oct 2022 12:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiJCPou (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Oct 2022 11:44:50 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4E2BF75
-        for <linux-scsi@vger.kernel.org>; Mon,  3 Oct 2022 08:44:45 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id v128-20020a1cac86000000b003b7a6ad5ccdso3079853wme.3
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Oct 2022 08:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=TNzyg0UzAnXZpoIQMzbZ86dnubMpwfhKufDpDTnPuxleteDaQsf5Z5FxHVntC+Rqmd
-         6010p4JbhQ129jIqnv4SDzPtDIC0k4Pz1Clmx1ySUWPDg5WrPT0EvLDzGIKcB4Obh1BC
-         rPmTIZvXslRiqwebdhRK5JA6tXk4rqUykPsxqwrqq7HhBKfJ9PSCpIW5jrBzSzukV42s
-         fHxjCjjOekqhiD5xQEFyyAktqERte/oK37l3zdAo3jgQUp+P9yvpCK3E7g79fhLnjs+Z
-         78zk1moQkntZ7RN6HqpXTAk4W0is28mBcbpW+RSkD1bb5EGeQZkEurTwnQD0nEdK7ZUS
-         PV+g==
+        with ESMTP id S229826AbiJCQXc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Oct 2022 12:23:32 -0400
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233F91DA57
+        for <linux-scsi@vger.kernel.org>; Mon,  3 Oct 2022 09:23:32 -0700 (PDT)
+Received: by mail-pg1-f178.google.com with SMTP id 3so10099760pga.1
+        for <linux-scsi@vger.kernel.org>; Mon, 03 Oct 2022 09:23:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=4M415pA1jUqxL8H36SPBZ7Z3qbbGE5LLYCiFqGpKVUsSUZtRX0CfyYT2Pzg/meHS52
-         VcBXfTVCP/1Iua94utH2STrsVRy0WOK50ngUEjgSvmSNIZ7vxLWSzjkMkUi9mw4Ggb8X
-         hohq597lA9G7t3XVcI1m/lbnRjSUfIio7K49D1GatbqfVTbrtrFBn1qNbZWfk3dGtlnA
-         lXeyweVRQDqEcPt6SC+d/Qb0tpuQUBlXXFUCuZrM3dtIn+tlVUE/IygShIA3sR84o4GS
-         fbc+fczeFQyman9vzGcp39m4mOab+l5KH480V0pAZqQfu0pWiNNqJJM/s6Shf9PWQjyj
-         zveQ==
-X-Gm-Message-State: ACrzQf0fCtMcix1qUN/WiNQq9Wi82dCaGiIZ6vpi2H0hla+a5zE+k8U6
-        OJRWbzTsZYzBcl2mG+8zjJOGiYmZjbhiv5jkMlc=
-X-Google-Smtp-Source: AMsMyM7NxrSkIGMA4opePuEHpZdW8RxzA2+hkHHxigVLVbJ0JN9TXq3Mxx7k6tHkYYKreyqu1YjLp6S1Hba92flW6nY=
-X-Received: by 2002:a05:600c:1da2:b0:3b4:856a:162c with SMTP id
- p34-20020a05600c1da200b003b4856a162cmr7130555wms.28.1664811884231; Mon, 03
- Oct 2022 08:44:44 -0700 (PDT)
+        bh=Vupukdl3405ARaMn5EQWDVKDATOUKY3TB+HxVyByscQ=;
+        b=dS8/0tWHzJe8PMj4Lb8kuRydrQqRzD8V+qYmDz3ddPaTWNliX+HSsED13sCALaHW/1
+         7nP8a/u0Ydx23VOyQBX4pJACEkZDmcPOiaNs8kYIFE3dlN7f4V+/3QwIiXzjdno0FzYP
+         LYHSp11XbhiL+klvSC7CeBDKkOv44rp7LhOzCkXDzu6H7CUZFl8NnwIwp4+zeYqAn6QQ
+         pm+JzpMK1VZL+VRmmL7a+juynXW1Q3nsEXKAP2axX7HDTrXub5WNWEzbncLoDLsB0Wx7
+         YcwQ0yJAuKFzpd+DS/ddt2MqY1079BsnLzpWrnF3N2wU4HkOJselyzJbfx0DtSwamdYK
+         91EQ==
+X-Gm-Message-State: ACrzQf3jtrho7eCX98BxTNr6NcVN//kXPS2hlQe+yrW4SFVgXyC3TX4x
+        udfYzPp6kRFf7xQrp21OOlU=
+X-Google-Smtp-Source: AMsMyM6V0kdf9s9j+JupEUdY7rB6+pEEml9+OygkXdIGyAmSNBj+2z6RCSoVIITVjz8EuVpCYGfxuw==
+X-Received: by 2002:a63:2b85:0:b0:451:45f5:7223 with SMTP id r127-20020a632b85000000b0045145f57223mr3070441pgr.168.1664814211526;
+        Mon, 03 Oct 2022 09:23:31 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id i13-20020a17090a2acd00b0020a8f44e52csm2798615pjg.38.2022.10.03.09.23.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 09:23:30 -0700 (PDT)
+Message-ID: <16a48f60-c754-5924-114b-c23c4f217374@acm.org>
+Date:   Mon, 3 Oct 2022 09:23:28 -0700
 MIME-Version: 1.0
-Received: by 2002:a5d:4748:0:0:0:0:0 with HTTP; Mon, 3 Oct 2022 08:44:43 -0700 (PDT)
-Reply-To: davidnelson7702626@gmail.com
-From:   hapy udu <hapy7367@gmail.com>
-Date:   Mon, 3 Oct 2022 16:44:43 +0100
-Message-ID: <CADgecZ0oDYEiSU4MUmJhkT1muk9nMCytv6-rue+S-YsQUC2Zmg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:343 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [hapy7367[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [hapy7367[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [davidnelson7702626[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v6 6/8] scsi: ufs: Simplify ufshcd_set_dev_pwr_mode()
+Content-Language: en-US
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>
+References: <20220929224421.587465-1-bvanassche@acm.org>
+ <20220929224421.587465-7-bvanassche@acm.org>
+ <eb9eae96-f9fc-2c5b-4caf-6b5efc00d931@intel.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <eb9eae96-f9fc-2c5b-4caf-6b5efc00d931@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
+On 10/2/22 23:28, Adrian Hunter wrote:
+> On 30/09/22 01:44, Bart Van Assche wrote:
+>> Simplify the code for incrementing the SCSI device reference count in
+>> ufshcd_set_dev_pwr_mode(). This patch removes one scsi_device_put() call
+>> that happens from atomic context.
+>>
+>> Cc: Adrian Hunter <adrian.hunter@intel.com>
+>> Cc: Avri Altman <avri.altman@wdc.com>
+>> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> 
+> Not sure what patch set "v6 6/8" refers to, nevertheless:
+> 
+> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+
+Hi Adrian,
+
+That means that this is the sixth patch of eight in version 6 of the 
+patch series that prepares for constifying the SCSI host template. The 
+entire patch series is available here: 
+https://lore.kernel.org/linux-scsi/20220929224421.587465-1-bvanassche@acm.org/
+
+Anyway, thanks for the review.
+
+Bart.
