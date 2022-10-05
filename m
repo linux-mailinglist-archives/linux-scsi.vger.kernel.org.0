@@ -2,84 +2,161 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AFC75F51BE
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Oct 2022 11:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889F35F5206
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Oct 2022 11:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiJEJak (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Oct 2022 05:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
+        id S229725AbiJEJsQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Oct 2022 05:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiJEJae (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Oct 2022 05:30:34 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BFD1EC57
-        for <linux-scsi@vger.kernel.org>; Wed,  5 Oct 2022 02:30:27 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id d196so1934051iof.11
-        for <linux-scsi@vger.kernel.org>; Wed, 05 Oct 2022 02:30:27 -0700 (PDT)
+        with ESMTP id S229774AbiJEJsN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Oct 2022 05:48:13 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6506E8A5
+        for <linux-scsi@vger.kernel.org>; Wed,  5 Oct 2022 02:48:11 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id p3-20020a17090a284300b0020a85fa3ffcso1145524pjf.2
+        for <linux-scsi@vger.kernel.org>; Wed, 05 Oct 2022 02:48:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
-        b=X7UEsEgJjqoNOvLJY6FO8Tvqtxut8IYL1K1nWtA4Ui76fyc6YdbJ4dnle9IV0O9KA2
-         vNcjVtJDxEAyNrcYdDn4Hh058EhNW+hV35PRDyoVvQhplRT2cxek5UOFLXX8KDVN+e1L
-         wcxI50AMEzfnCxpRPvIcVLWa6rKPNFL/tTjeowkFHNJN6nWe70CusOrgfyRAeNfAi4Ch
-         CNkPMVSxXUIo7GYepknInryuIakQxoXU6vtEfVk3N5ZeT3nFcnr/UzX3hDb8F6KXiAsB
-         heOw8t0vuhx8PLP+/WndBfEYY3BvLw1VBxYvho+kBEt4NkHrdE5edzJBMXB12mxboq/l
-         2y8Q==
+        bh=uAiOjs73GnPtRWDKlCBYpOmHeG3ElDSPTXYVbLmJn3Y=;
+        b=dh/s9gbrJ1NP2il6j7m7392rb5m/0olUhLw6ywfYrwbm+b05mgthbXGVeHCne6faSe
+         nEB8FWIww9/Mh3TPJYBTwQxHk9YQhBfOYEWSgISGS3x2V+1PSzpPW0fGwHCNvRUrDmsC
+         V4LPjNBP1ZNWd2lWycmQ+cVlk2hOYpk0wbD3BQW90ktRdTfHVQoOGdzFfsVLA+UV8P0L
+         yaYjHeb70WMgWdHpn0iX5L8LgNN78O1ThcYXr+GHqSaFRNBAWLFYqLr8IpSUK6wbVOaM
+         BO7XUtm7Hdl6sqI52mxM7YweUuOKwjFV07IZc9k6gah2y9PsEzpdZlxqQ3TbFVT9xR+n
+         gOow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
-        b=CaM1vvg32QUevrty5uqrgk+BXh2EzNDhbLUOqu46z3kWb9GGb9phoHx94Z5vFa1enk
-         4jac1B+wdNdCdg7o8ELk4CixJrsfBmx2jT8LWArCzEGrTF9bWKXwmrMdPvgZrvBY7PY1
-         pDEkuGimjlcf1DNf2OBOsiBp9BtMPWMKh1+iGs2TcZFMUXG6lOB8XK9i2zhe11hEt0cI
-         PqR02WxqWmQ4OPQ2XqjbBnjSycFTRAgMkB0ZKlKfdZuI0DrMcAxJsg8sekJIcoFXOK3x
-         TxbUNX1FyA8e8A+Habjiqsq94TGtCI213R/JlFZ93rxeoOBN6563cqSua0DY4QlUf+1c
-         PU6g==
-X-Gm-Message-State: ACrzQf0eZ03B6WRmXVTpqpvzWOonAkzn0j/p9bQnSMu+J6BzpRoXdoEk
-        ZLitxZL6cLwUmSHPQARLtASYJIgei6Eg7jN72FM=
-X-Google-Smtp-Source: AMsMyM6p12i9TE1fLu8jd0RqnEy2qUSJ3sW8kJdZfnbWU2aUQgzklK9lcu5J3Qx/PTHy5ExjtF6H4R8icl5tetL/aA4=
-X-Received: by 2002:a05:6638:238a:b0:35a:25b7:a1a7 with SMTP id
- q10-20020a056638238a00b0035a25b7a1a7mr15697554jat.92.1664962226512; Wed, 05
- Oct 2022 02:30:26 -0700 (PDT)
+        bh=uAiOjs73GnPtRWDKlCBYpOmHeG3ElDSPTXYVbLmJn3Y=;
+        b=nss66YMezhTb/hm1MjhWXAXON8SkuCu+6xqPCRY7S5zl4gxJETM1JFQg5MfbwcxDWf
+         zF0+I826B7x7t+QP7rIGCu2HUvPvS3i6OdoAgNpJeNcPSSmfXwW2IgZ9XszGhIZDFlCK
+         0zkmBSKcS5mCdUeTZNwNomVCGqs39vzpbJVOlSa8XlDP4q0m3iBO9Y4aYljrrBXaXgDa
+         mD4ksCWLf9ZBIYA0AwFXfQpLnosDkyo5PmpuALoYUBz9IrBfq0av607l9IDmyl+SbCBs
+         SICl+R4eOTRn3DxDpqSVSqfCpeJkOA3xgbn56FOX7L4MsO9MaRkDkuhS4jI6MJl2fLNC
+         6uxQ==
+X-Gm-Message-State: ACrzQf22KGuXa305+IY8CqZzI37BmJLeOFauVxuYHuQCPNLcKRsq9tn/
+        e0yVzOpkw5bCMWKcEjORI3yTyF4EuglC+jaS+99uUg==
+X-Google-Smtp-Source: AMsMyM6eqXlNc1atZOkkKgiG1yV3Y78Coz+AbzCXphLyt0GPdUFcokJxxEDnXeFGnrVe0bHv3fHf9rWqZFSPgK8TTJI=
+X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id
+ mw7-20020a17090b4d0700b001ef521cf051mr4350723pjb.164.1664963290949; Wed, 05
+ Oct 2022 02:48:10 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:174b:0:0:0:0 with HTTP; Wed, 5 Oct 2022 02:30:26
- -0700 (PDT)
-Reply-To: jennifermbaya036@gmail.com
-From:   "Mrs.Jennifer Mbaya" <ezechielgnonlonfoun@gmail.com>
-Date:   Wed, 5 Oct 2022 10:30:26 +0100
-Message-ID: <CA+=aNsgDsCCsCaJfm8p1AVDzwM=z4gZxSVrY=VnUkrScNfqoqw@mail.gmail.com>
-Subject: Edunsaaja
-To:     undisclosed-recipients:;
+References: <20221005032257.80681-1-kch@nvidia.com> <20221005032257.80681-2-kch@nvidia.com>
+ <6fee2d7a-7fd1-73ee-2911-87a4ed3e8769@opensource.wdc.com>
+In-Reply-To: <6fee2d7a-7fd1-73ee-2911-87a4ed3e8769@opensource.wdc.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 5 Oct 2022 11:47:34 +0200
+Message-ID: <CAPDyKFpBpiydQn+=24CqtaH_qa3tQfN2gQSiUrHCjnLSuy4=Kg@mail.gmail.com>
+Subject: Re: [RFC PATCH 01/21] block: add and use init tagset helper
+To:     Chaitanya Kulkarni <kch@nvidia.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-nvme@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, axboe@kernel.dk, efremov@linux.com,
+        josef@toxicpanda.com, idryomov@gmail.com,
+        dongsheng.yang@easystack.cn, haris.iqbal@ionos.com,
+        jinpu.wang@ionos.com, mst@redhat.com, jasowang@redhat.com,
+        pbonzini@redhat.com, stefanha@redhat.com, ohad@wizery.com,
+        andersson@kernel.org, baolin.wang@linux.alibaba.com,
+        richard@nod.at, miquel.raynal@bootlin.com, vigneshr@ti.com,
+        marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
+        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me, sth@linux.ibm.com,
+        hoeppner@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, hare@suse.de, bhelgaas@google.com,
+        john.garry@huawei.com, mcgrof@kernel.org,
+        christophe.jaillet@wanadoo.fr, vaibhavgupta40@gmail.com,
+        wsa+renesas@sang-engineering.com, johannes.thumshirn@wdc.com,
+        bvanassche@acm.org, ming.lei@redhat.com,
+        shinichiro.kawasaki@wdc.com, vincent.fu@samsung.com,
+        christoph.boehmwalder@linbit.com, joel@jms.id.au,
+        vincent.whitchurch@axis.com, nbd@other.debian.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, asahi@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Edunsaaja
+On Wed, 5 Oct 2022 at 07:11, Damien Le Moal
+<damien.lemoal@opensource.wdc.com> wrote:
+>
+> On 10/5/22 12:22, Chaitanya Kulkarni wrote:
+> > Add and use the helper to initialize the common fields of the tag_set
+> > such as blk_mq_ops, number of h/w queues, queue depth, command size,
+> > numa_node, timeout, BLK_MQ_F_XXX flags, driver data. This initialization
+> > is spread all over the block drivers. This avoids the code repetation of
+> > the inialization code of the tag set in current block drivers and any
+>
+> s/inialization/initialization
+> s/repetation/repetition
+>
+> > future ones.
+> >
+> > Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
+> > ---
+> >  block/blk-mq.c                | 20 ++++++++++++++++++++
+> >  drivers/block/null_blk/main.c | 10 +++-------
+> >  include/linux/blk-mq.h        |  5 +++++
+> >  3 files changed, 28 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/block/blk-mq.c b/block/blk-mq.c
+> > index 8070b6c10e8d..e3a8dd81bbe2 100644
+> > --- a/block/blk-mq.c
+> > +++ b/block/blk-mq.c
+> > @@ -4341,6 +4341,26 @@ static int blk_mq_alloc_tag_set_tags(struct blk_mq_tag_set *set,
+> >       return blk_mq_realloc_tag_set_tags(set, 0, new_nr_hw_queues);
+> >  }
+> >
+> > +void blk_mq_init_tag_set(struct blk_mq_tag_set *set,
+> > +             const struct blk_mq_ops *ops, unsigned int nr_hw_queues,
+> > +             unsigned int queue_depth, unsigned int cmd_size, int numa_node,
+> > +             unsigned int timeout, unsigned int flags, void *driver_data)
+>
+> That is an awful lot of arguments... I would be tempted to say pack all
+> these into a struct but then that would kind of negate this patchset goal.
+> Using a function with that many arguments will be error prone, and hard to
+> review... Not a fan.
 
-Nimess=C3=A4si on palkinto Yhdistyneilt=C3=A4 Kansakunnilta ja Maailman
-terveysj=C3=A4rjest=C3=B6lt=C3=A4, joka on osa kansainv=C3=A4list=C3=A4 val=
-uuttarahastoa, johon
-s=C3=A4hk=C3=B6postisi, osoite ja raha on luovutettu meille siirtoa varten,
-vahvista yst=C3=A4v=C3=A4llisesti tietosi siirtoa varten.
-Meit=C3=A4 kehotettiin siirt=C3=A4m=C3=A4=C3=A4n kaikki vireill=C3=A4 oleva=
-t tapahtumat
-seuraavien kahden aikana, mutta jos olet vastaanottanut rahasi, j=C3=A4t=C3=
-=A4
-t=C3=A4m=C3=A4 viesti huomioimatta, jos et toimi heti.
-Tarvitsemme kiireellist=C3=A4 vastausta t=C3=A4h=C3=A4n viestiin, t=C3=A4m=
-=C3=A4 ei ole yksi
-niist=C3=A4 Internet-huijareista, se on pandemiaapu.
-Jennifer
+I completely agree.
+
+But there is also another problem going down this route. If/when we
+realize that there is another parameter needed in the blk_mq_tag_set.
+Today that's quite easy to add (assuming the parameter can be
+optional), without changing the blk_mq_init_tag_set() interface.
+
+>
+> > +{
+> > +     if (!set)
+> > +             return;
+> > +
+> > +     set->ops = ops;
+> > +     set->nr_hw_queues = nr_hw_queues;
+> > +     set->queue_depth = queue_depth;
+> > +     set->cmd_size = cmd_size;
+> > +     set->numa_node = numa_node;
+> > +     set->timeout = timeout;
+> > +     set->flags = flags;
+> > +     set->driver_data = driver_data;
+> > +}
+> > +
+>
+
+[...]
+
+Kind regards
+Uffe
