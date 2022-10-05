@@ -2,209 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A337E5F5130
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Oct 2022 10:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFC75F51BE
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Oct 2022 11:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiJEIxu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Oct 2022 04:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
+        id S229566AbiJEJak (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Oct 2022 05:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiJEIxs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Oct 2022 04:53:48 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40175B05F;
-        Wed,  5 Oct 2022 01:53:46 -0700 (PDT)
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mj7cN2cncz6864m;
-        Wed,  5 Oct 2022 16:52:20 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 5 Oct 2022 10:53:44 +0200
-Received: from [10.48.148.227] (10.48.148.227) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 5 Oct 2022 09:53:43 +0100
-Message-ID: <27148ec5-d1ae-d9a2-1b00-a4c34d2da198@huawei.com>
-Date:   Wed, 5 Oct 2022 09:53:52 +0100
+        with ESMTP id S229565AbiJEJae (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Oct 2022 05:30:34 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BFD1EC57
+        for <linux-scsi@vger.kernel.org>; Wed,  5 Oct 2022 02:30:27 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id d196so1934051iof.11
+        for <linux-scsi@vger.kernel.org>; Wed, 05 Oct 2022 02:30:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
+        b=X7UEsEgJjqoNOvLJY6FO8Tvqtxut8IYL1K1nWtA4Ui76fyc6YdbJ4dnle9IV0O9KA2
+         vNcjVtJDxEAyNrcYdDn4Hh058EhNW+hV35PRDyoVvQhplRT2cxek5UOFLXX8KDVN+e1L
+         wcxI50AMEzfnCxpRPvIcVLWa6rKPNFL/tTjeowkFHNJN6nWe70CusOrgfyRAeNfAi4Ch
+         CNkPMVSxXUIo7GYepknInryuIakQxoXU6vtEfVk3N5ZeT3nFcnr/UzX3hDb8F6KXiAsB
+         heOw8t0vuhx8PLP+/WndBfEYY3BvLw1VBxYvho+kBEt4NkHrdE5edzJBMXB12mxboq/l
+         2y8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5N+aMihLorZXBHcklDfHgYNT/W4ZQvt0cLc1vwY1KVE=;
+        b=CaM1vvg32QUevrty5uqrgk+BXh2EzNDhbLUOqu46z3kWb9GGb9phoHx94Z5vFa1enk
+         4jac1B+wdNdCdg7o8ELk4CixJrsfBmx2jT8LWArCzEGrTF9bWKXwmrMdPvgZrvBY7PY1
+         pDEkuGimjlcf1DNf2OBOsiBp9BtMPWMKh1+iGs2TcZFMUXG6lOB8XK9i2zhe11hEt0cI
+         PqR02WxqWmQ4OPQ2XqjbBnjSycFTRAgMkB0ZKlKfdZuI0DrMcAxJsg8sekJIcoFXOK3x
+         TxbUNX1FyA8e8A+Habjiqsq94TGtCI213R/JlFZ93rxeoOBN6563cqSua0DY4QlUf+1c
+         PU6g==
+X-Gm-Message-State: ACrzQf0eZ03B6WRmXVTpqpvzWOonAkzn0j/p9bQnSMu+J6BzpRoXdoEk
+        ZLitxZL6cLwUmSHPQARLtASYJIgei6Eg7jN72FM=
+X-Google-Smtp-Source: AMsMyM6p12i9TE1fLu8jd0RqnEy2qUSJ3sW8kJdZfnbWU2aUQgzklK9lcu5J3Qx/PTHy5ExjtF6H4R8icl5tetL/aA4=
+X-Received: by 2002:a05:6638:238a:b0:35a:25b7:a1a7 with SMTP id
+ q10-20020a056638238a00b0035a25b7a1a7mr15697554jat.92.1664962226512; Wed, 05
+ Oct 2022 02:30:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v5 0/7] libsas and drivers: NCQ error handling
-From:   John Garry <john.garry@huawei.com>
-To:     Niklas Cassel <Niklas.Cassel@wdc.com>
-CC:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>,
-        yangxingui <yangxingui@huawei.com>,
-        yanaijie <yanaijie@huawei.com>
-References: <1664262298-239952-1-git-send-email-john.garry@huawei.com>
- <YzwvpUUftX6Ziurt@x1-carbon>
- <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
-In-Reply-To: <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.148.227]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6e02:174b:0:0:0:0 with HTTP; Wed, 5 Oct 2022 02:30:26
+ -0700 (PDT)
+Reply-To: jennifermbaya036@gmail.com
+From:   "Mrs.Jennifer Mbaya" <ezechielgnonlonfoun@gmail.com>
+Date:   Wed, 5 Oct 2022 10:30:26 +0100
+Message-ID: <CA+=aNsgDsCCsCaJfm8p1AVDzwM=z4gZxSVrY=VnUkrScNfqoqw@mail.gmail.com>
+Subject: Edunsaaja
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 04/10/2022 15:04, John Garry wrote:
->> Notes unrelated to this patch:
->>
->> Both before and after this series, this driver prints:
->> [  215.845053] ata21.00: exception Emask 0x0 SAct 0xfc0000 SErr 0x0 action 0x6
->> [  215.852308] ata21.00: failed command: WRITE FPDMA QUEUED
->> [  215.857801] ata21.00: cmd 61/00:00:00:3a:d3/01:00:b3:04:00/40 tag 18 ncq dma 131072 out
->>                           res 43/04:00:ff:3a:d3/00:00:b3:04:00/40 Emask 0x400 (NCQ error) <F>
->> [  215.874396] ata21.00: status: { DRDY SENSE ERR }
->> [  215.879192] ata21.00: error: { ABRT }
->> [  215.882997] ata21.00: failed command: WRITE FPDMA QUEUED
->> [  215.888479] ata21.00: cmd 61/00:00:00:3b:d3/01:00:b3:04:00/40 tag 19 ncq dma 131072 out
->>                           res 00/00:00:00:00:00/00:00:00:00:00/00 Emask 0x2 (HSM violation)
->> [  215.904814] ata21.00: failed command: WRITE FPDMA QUEUED
->> [  215.910311] ata21.00: cmd 61/00:00:00:3c:d3/01:00:b3:04:00/40 tag 20 ncq dma 131072 out
->>                           res 00/00:00:00:00:00/00:00:00:00:00/00 Emask 0x2 (HSM violation)
->> [  215.932679] ata21.00: failed command: WRITE FPDMA QUEUED
->> [  215.941203] ata21.00: cmd 61/00:00:00:3d:d3/01:00:b3:04:00/40 tag 21 ncq dma 131072 out
->>                           res 00/00:00:00:00:00/00:00:00:00:00/00 Emask 0x2 (HSM violation)
->> [  215.963616] ata21.00: failed command: WRITE FPDMA QUEUED
->> [  215.972150] ata21.00: cmd 61/00:00:00:3e:d3/01:00:b3:04:00/40 tag 22 ncq dma 131072 out
->>                           res 00/00:00:00:00:00/00:00:00:00:00/00 Emask 0x2 (HSM violation)
->> [  215.994532] ata21.00: failed command: WRITE FPDMA QUEUED
->> [  216.003124] ata21.00: cmd 61/00:00:00:3f:d3/01:00:b3:04:00/40 tag 23 ncq dma 131072 out
->>                           res 00/00:00:00:00:00/00:00:00:00:00/00 Emask 0x2 (HSM violation)
->>
->> HSM (Host State Machine) violation errors.
->>
->> For the same SATA drive connected via AHCI this will instead give:
->>
->> [ 3796.944923] ata14.00: exception Emask 0x0 SAct 0x80800003 SErr 0xc0000 action 0x0
->> [ 3796.959375] ata14.00: irq_stat 0x40000008
->> [ 3796.970140] ata14: SError: { CommWake 10B8B }
->> [ 3796.981231] ata14.00: failed command: WRITE FPDMA QUEUED
->> [ 3796.993237] ata14.00: cmd 61/00:08:00:7e:73/02:00:8e:08:00/40 tag 1 ncq dma 262144 out
->>                           res 43/04:01:00:00:00/00:00:00:00:00/40 Emask 0x1 (device error)
->> [ 3797.017984] ata14.00: status: { DRDY SENSE ERR }
->> [ 3797.026833] ata14.00: error: { ABRT }
->> [ 3797.034664] ata14.00: failed command: WRITE FPDMA QUEUED
->> [ 3797.043015] ata14.00: cmd 61/00:b8:00:60:73/0a:00:8e:08:00/40 tag 23 ncq dma 1310720 out
->>                           res 43/04:00:df:67:73/00:00:8e:08:00/40 Emask 0x400 (NCQ error) <F>
->> [ 3797.065224] ata14.00: status: { DRDY SENSE ERR }
->> [ 3797.072914] ata14.00: error: { ABRT }
->> [ 3797.079598] ata14.00: failed command: WRITE FPDMA QUEUED
->> [ 3797.087920] ata14.00: cmd 61/00:f8:00:6a:73/0a:00:8e:08:00/40 tag 31 ncq dma 1310720 out
->>                           res 43/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device error)
->> [ 3797.109800] ata14.00: status: { DRDY SENSE ERR }
->> [ 3797.117451] ata14.00: error: { ABRT }
->>
->> device error errors.
->>
->>
->> Except for the I/O that caused the NCQ error, the remaining outstanding I/Os,
->> regardless if they were aborted by the drive, as a side-effect of reading the
->> NCQ error log (see 13.7.4 Queued Error Log (10h) in SATA 3.5a spec),
->> or if they were aborted by the host (by sas_ata_device_link_abort()),
->> I don't think it is correct to report these as HSM violation errors.
->>
->> HSM violation errors are e.g. when you try to issue a command to a drive
->> that has ATA_BUSY bit set.
-> We had a similar issue for hisi_sas and solved in patch 4/7: don't set
-> ATA_ERR in the fis for those IO which complete with error, but abort the
-> IO via sas_abort_task().
-> 
-> For pm80xx the IO is either rejected (actually completes with rejection)
-> or is aborted via internal abort command. Maybe we can do similar for
-> pm8001 as we allow the IO to complete in both cases with error. I'll check.
+Edunsaaja
 
-Hi Niklas,
-
-Could you try a change like this on top:
-
-void sas_ata_device_link_abort(struct domain_device *device, bool 
-force_reset)
-{
-	struct ata_port *ap = device->sata_dev.ap;
-	struct ata_link *link = &ap->link;
-
-+	device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY;
-+	device->sata_dev.fis[3] = 0x04;
-
-	link->eh_info.err_mask |= AC_ERR_DEV;
-	if (force_reset)
-		link->eh_info.action |= ATA_EH_RESET;
-	ata_link_abort(link);
-}
-EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
-
-I tried it myself and it looked to work ok, except I have a problem with 
-my arm64 system in that the read log ext times-out and all TF show 
-"device error", like:
-
-[  350.257870] ata1.00: qc timeout (cmd 0x47)
-[  350.262054] pm80xx0:: mpi_sata_completion 2293: task null, freeing 
-CCB tag 2
-[  350.269128] ata1.00: Read log 0x10 page 0x00 failed, Emask 0x40
-
-[  350.281581] ata1: failed to read log page 10h (errno=-5)
-[  350.577181] ata1.00: exception Emask 0x1 SAct 0xffffffff SErr 0x0 
-action 0x6 frozen
-[  350.584836] ata1.00: failed command: READ FPDMA QUEUED
-[  350.589970] ata1.00: cmd 60/00:00:80:26:00/01:00:00:00:00/40 tag 0 
-ncq dma 131072 in
-          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
-error)
-[  350.605533] ata1.00: status: { DRDY ERR }
-[  350.609541] ata1.00: error: { ABRT }
-[  350.613115] ata1.00: failed command: READ FPDMA QUEUED
-[  350.618248] ata1.00: cmd 60/00:00:80:26:00/01:00:00:00:00/40 tag 1 
-ncq dma 131072 in
-          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
-error)
-[  350.633809] ata1.00: status: { DRDY ERR
-[  350.637813] ata1.00: error: { ABRT }
-[  350.641384] ata1.00: failed command: READ FPDMA QUEUED
-[  350.646515] ata1.00: cmd 60/00:00:80:26:00/01:00:00:00:00/40 tag 2 
-ncq dma 131072 in
-          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
-error)
-[  350.662076] ata1.00: status: { DRDY ERR
-[  350.666080] ata1.00: error: { ABRT }
-[  350.669652] ata1.00: failed command: READ FPDMA QUEUED
-[  350.674784] ata1.00: cmd 60/00:00:d8:26:00/01:00:00:00:00/40 tag 3 
-ncq dma 131072 in
-          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
-error)
-[  350.690344] ata1.00: status: { DRDY ERR
-[  350.694348] ata1.00: error: { ABRT }
-[  350.697919] ata1.00: failed command: READ FPDMA QUEUED
-[  350.703051] ata1.00: cmd 60/00:00:e0:26:00/01:00:00:00:00/40 tag 4 
-ncq dma 131072 in
-          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
-error)
-[  350.718612] ata1.00: status: { DRDY ERR
-[  350.722623] ata1.00: error: { ABRT }
-[  350.726196] ata1.00: failed command: READ FPDMA QUEUED
-[  350.731329] ata1.00: cmd 60/00:00:c8:26:00/01:00:00:00:00/40 tag 5 
-ncq dma 131072 in
-          res 41/04:00:00:00:00/00:00:00:00:00/00 Emask 0x1 (device 
-error)
-
-...
-
-
-Thanks,
-John
-
+Nimess=C3=A4si on palkinto Yhdistyneilt=C3=A4 Kansakunnilta ja Maailman
+terveysj=C3=A4rjest=C3=B6lt=C3=A4, joka on osa kansainv=C3=A4list=C3=A4 val=
+uuttarahastoa, johon
+s=C3=A4hk=C3=B6postisi, osoite ja raha on luovutettu meille siirtoa varten,
+vahvista yst=C3=A4v=C3=A4llisesti tietosi siirtoa varten.
+Meit=C3=A4 kehotettiin siirt=C3=A4m=C3=A4=C3=A4n kaikki vireill=C3=A4 oleva=
+t tapahtumat
+seuraavien kahden aikana, mutta jos olet vastaanottanut rahasi, j=C3=A4t=C3=
+=A4
+t=C3=A4m=C3=A4 viesti huomioimatta, jos et toimi heti.
+Tarvitsemme kiireellist=C3=A4 vastausta t=C3=A4h=C3=A4n viestiin, t=C3=A4m=
+=C3=A4 ei ole yksi
+niist=C3=A4 Internet-huijareista, se on pandemiaapu.
+Jennifer
