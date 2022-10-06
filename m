@@ -2,206 +2,146 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3265F5CD0
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Oct 2022 00:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D655F5E3C
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Oct 2022 03:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiJEWml (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Oct 2022 18:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
+        id S230020AbiJFBHN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Oct 2022 21:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiJEWmi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Oct 2022 18:42:38 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCCB844DB
-        for <linux-scsi@vger.kernel.org>; Wed,  5 Oct 2022 15:42:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1665009757; x=1696545757;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ye+uJQBPHDM9vZs8/S/YO83O6sbzCLI89NCuhi8PVy0=;
-  b=SJLbrtV7WAsKNiFwHYjt7Dp5aFjBn8i2ayCe93ZfgmlidQxE2KVtwIb5
-   1YeMERYQKb4jGa3L+2lR8Z/kdlNq9OqtKwbAKetuFsBkH6UWw30KIf15a
-   zggsly2qF366+qoKURTzEarH5nVDYbPtPd3qR0RgX0z0oVo/2A21BWZb5
-   me3l0m6NsvEoPczYwxqPgb/dwpDq/00p8J7A8QgVLJnHky9qfCzqP3sxe
-   0y04c+W1E21B+bYX2vAXNw5Btn8EiIU1QFzJk3USjXZJ2T7WP6hrA+mqk
-   +XWat3A4cY++rAqCF7RY1Umth8ad1+nMMfiHlVotBIhpAEBZVDTetIuJV
-   A==;
-X-IronPort-AV: E=Sophos;i="5.95,162,1661788800"; 
-   d="scan'208";a="325184302"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Oct 2022 06:42:35 +0800
-IronPort-SDR: 3/4rYDT3veimhc0ftSYV1hnQCF7yKQxa3RrftqVzgMFMJzrbYyW6e+hPRTqzE9cGNRCOQZdGwd
- HbqTTqOI6GCPL03JRmXxvby+iMaPOccIRIHa7Gp8xvFfMVq/JS3ABcpK60F2dTRS1u2k8WCfoo
- xilEKHnjhTPC0z8whwk0QzOTU1wJN7irzyojc8DtFth26OkRlONid4OsL8h0lbtnz5s532/maR
- skiqWqhkQQ0uojBGc9yWREn1Uh8zngFwdldEWxWMI1c1OApGKFyP+3+Qur4umB72bbH44g4XUU
- BOcup/1dSAG18awRSCTWYUPf
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Oct 2022 14:56:47 -0700
-IronPort-SDR: YG4pzWIVgdBokCNgOkgZib9qe/NFDcyRdAevZ7do4T14Bulro64YVKFMq0Lk/NURacOzYoOSZf
- 9h4EDudiT3AGZ/Vphjd90/6ZllXcYjQgYuS4mVLt1wF393XjHgAjsfDd9lAjkwSP4+NTsWm0IM
- +Qg+k1gJmwL7UBhYwA22aek0+PtLYjqsaxHIj4NRtz3xPX7jqofSUYqBPeNeGzz/Y4bLi3e+Qg
- KeWWJXUUe2bcp2ScnR35I4qMIGhBSTSpc34WYJw0BjnaZuvoHbLwmDu8Zkaqi5reuPsR5PjvFZ
- g/o=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Oct 2022 15:42:36 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MjV2M2Pfcz1RwqL
-        for <linux-scsi@vger.kernel.org>; Wed,  5 Oct 2022 15:42:35 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1665009754; x=1667601755; bh=Ye+uJQBPHDM9vZs8/S/YO83O6sbzCLI89NC
-        uhi8PVy0=; b=jWQE/xJ1HLeNMnc2londrG5iQCi+dAUm3xodwP6t4nFXoMWtzV2
-        36Nyc0JHxvdIl41SnQ0EFsO9sj6c30ikFQAH6lrwt765s2/jqZUuX8usMTtK56jm
-        CW1IjKLsdwvDNpGkQiSd5ah1X/EUmzTMan9Bb/G2zV8LkTBJOiLqIV8wsSTCJ0ZD
-        gesOV2VV15KAHBE2XPjoKGIViIJ9KunYBYMq30L0BIt9mTZAn10NcE42+qREGxzC
-        arWK4rrNjn0dhdHaQ/iVpXEFCZP9NKR+brvZnwHmv6ZGmM9Qg5t4C9laR16uYuQq
-        0K0P5R268n2CMIacRFPbnmaDSpg12mbfuBA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id kwnnCRkw0S1O for <linux-scsi@vger.kernel.org>;
-        Wed,  5 Oct 2022 15:42:34 -0700 (PDT)
-Received: from [10.225.163.106] (unknown [10.225.163.106])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MjV2J3vw3z1RvLy;
-        Wed,  5 Oct 2022 15:42:32 -0700 (PDT)
-Message-ID: <64ab35a7-f1ff-92ee-890e-89a5aee935a4@opensource.wdc.com>
-Date:   Thu, 6 Oct 2022 07:42:30 +0900
+        with ESMTP id S229965AbiJFBG7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Oct 2022 21:06:59 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778D463FF1;
+        Wed,  5 Oct 2022 18:06:58 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2960wkRI018077;
+        Thu, 6 Oct 2022 01:06:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=gdxKZfydN99/mBoP4HPQ626OusmYINSQ8qsm/8OQgWQ=;
+ b=O/4TNB8+zJcre2O8ENOEnvsgZGdmCSjw7eQFIBNZhwyGYYbyx6F1UGt9Qxew/KJZ+Wuh
+ D3oJ34Jxtaxs4cJ7WAaGZW3PjzSAAVR0Pshl94j6pLL7MZnanaVhG4H/KXSvSc6mPlBv
+ uygvYjZsFfe7BuoujE0Dyuxyq22rBKLg5xu1SctsdH7AAySPZb0oYQa/EO7DQGQ60aU4
+ WWzI4A+6Wg/ZrRon4oFW8IAuHZWmu3TcJTsJ7e2cbNxO8uykizgKcxNyOJpaN6dq56If
+ HwDoF9FQZExWxAUpU8tTLXQM2rAT07r8KoPFvS+VkPxiQnsY4WgVT0aj2lW8xv1pkpOz Pg== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0sq5tt2h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Oct 2022 01:06:50 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29616nTd017611
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Oct 2022 01:06:49 GMT
+Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 5 Oct 2022 18:06:48 -0700
+From:   Asutosh Das <quic_asutoshd@quicinc.com>
+To:     <quic_cang@quicinc.com>, <quic_nitirawa@quicinc.com>,
+        <quic_rampraka@quicinc.com>, <quic_bhaskarv@quicinc.com>,
+        <quic_richardp@quicinc.com>, <linux-scsi@vger.kernel.org>
+CC:     Asutosh Das <quic_asutoshd@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <quic_nguyenb@quicinc.com>,
+        <quic_xiaosenh@quicinc.com>, <bvanassche@acm.org>,
+        <avri.altman@wdc.com>, <mani@kernel.org>, <beanhuo@micron.com>
+Subject: [PATCH v2 00/17] Add Multi Circular Queue Support 
+Date:   Wed, 5 Oct 2022 18:05:59 -0700
+Message-ID: <cover.1665017636.git.quic_asutoshd@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v5 0/7] libsas and drivers: NCQ error handling
-Content-Language: en-US
-To:     Niklas Cassel <Niklas.Cassel@wdc.com>
-Cc:     John Garry <john.garry@huawei.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>,
-        yangxingui <yangxingui@huawei.com>,
-        yanaijie <yanaijie@huawei.com>
-References: <1664262298-239952-1-git-send-email-john.garry@huawei.com>
- <YzwvpUUftX6Ziurt@x1-carbon>
- <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
- <27148ec5-d1ae-d9a2-1b00-a4c34d2da198@huawei.com>
- <Yz33FGwd3YvQUAqT@x1-carbon>
- <5db6a7bc-dfeb-76e1-6899-7041daa934cf@opensource.wdc.com>
- <Yz4BLTPkXqyjW4a4@x1-carbon>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <Yz4BLTPkXqyjW4a4@x1-carbon>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: GNNHkoxst8BS7QKFxmCYFvVaDJN2Gu6Y
+X-Proofpoint-GUID: GNNHkoxst8BS7QKFxmCYFvVaDJN2Gu6Y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-05_05,2022-10-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ mlxscore=0 bulkscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210060005
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/6/22 07:11, Niklas Cassel wrote:
-> On Thu, Oct 06, 2022 at 06:36:05AM +0900, Damien Le Moal wrote:
->> On 10/6/22 06:28, Niklas Cassel wrote:
->>> On Wed, Oct 05, 2022 at 09:53:52AM +0100, John Garry wrote:
->>>> On 04/10/2022 15:04, John Garry wrote:
->>>>
->>>> Hi Niklas,
->>>>
->>>> Could you try a change like this on top:
->>>>
->>>> void sas_ata_device_link_abort(struct domain_device *device, bool
->>>> force_reset)
->>>> {
->>>> 	struct ata_port *ap = device->sata_dev.ap;
->>>> 	struct ata_link *link = &ap->link;
->>>>
->>>> +	device->sata_dev.fis[2] = ATA_ERR | ATA_DRDY;
->>>> +	device->sata_dev.fis[3] = 0x04;
->>>>
->>>> 	link->eh_info.err_mask |= AC_ERR_DEV;
->>>> 	if (force_reset)
->>>> 		link->eh_info.action |= ATA_EH_RESET;
->>>> 	ata_link_abort(link);
->>>> }
->>>> EXPORT_SYMBOL_GPL(sas_ata_device_link_abort);
->>>>
->>>> I tried it myself and it looked to work ok, except I have a problem with my
->>>> arm64 system in that the read log ext times-out and all TF show "device
->>>> error", like:
->>>
->>> Do you know why it fails to read the log?
->>> Can you read the NCQ Command Error log using ATA16 passthrough commands?
->>>
->>> sudo sg_sat_read_gplog -d --log=0x10 /dev/sdc
->>>
->>> The first byte is the last NCQ tag (in hex) that failed.
->>
->> libata issues read log as a non-ncq command under EH. So the NCQ error log
->> will not help.
-> 
-> Hello Damien,
-> 
-> John explained that he got a timeout from EH when reading the log:
-> [  350.281581] ata1: failed to read log page 10h (errno=-5)
-> [  350.577181] ata1.00: exception Emask 0x1 SAct 0xffffffff SErr 0x0 action 0x6 frozen
-> 
-> ata_eh_read_log_10h() uses ata_read_log_page(), which will first try to read
-> the log using READ LOG DMA EXT. If that fails, it will retry using READ LOG EXT.
-> 
-> Therefore, to see if this is a driver specific bug, I suggested to try to read
-> the NCQ Command Error log using ATA16 passthrough commands:
-> 
-> $ sudo sg_sat_read_gplog -d --log=0x10 /dev/sdc
-> will read the log using READ LOG DMA EXT.
-> 
-> $ sudo sg_sat_read_gplog --log=0x10 /dev/sdc
-> will read the log using READ LOG EXT.
-> 
-> Neither of these two suggested commands are NCQ commands.
-> (Neither command is encapsulated in a RECEIVE FPDMA QUEUED,
-> so I'm not sure what you mean.)
-> 
-> 
-> Garry, I now see that:
-> [  350.577181] ata1.00: exception Emask 0x1 SAct 0xffffffff SErr 0x0 action 0x6 frozen
-> Your port is frozen.
-> 
-> ata_read_log_page() calls ata_exec_internal() which calls ata_exec_internal_sg(),
-> which will simply return an error without sending down the command to the drive,
-> if the port is frozen.
-> 
-> Not sure why your port is frozen, mine is obviously not.
-> 
-> ata_do_link_abort() calls ata_eh_set_pending() without activating fast drain:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/ata/libata-eh.c?h=v6.0#n989
-> 
-> So I'm not sure why your port is frozen.
-> (The fast drain timer does freeze the port, but it shouldn't be enabled.)
-> It might be worthwhile to see who freezes the port in your case.
+UFS Multi-Circular Queue (MCQ) has been added in UFSHCI v4.0 to improve storage performance.
+The implementation uses the shared tagging mechanism so that tags are shared
+among the hardware queues. The number of hardware queues is configurable.
+This series doesn't include the ESI implementation for completion handling.
 
-Might come from the command timeout. John has had many problems with the
-pm80xx HBA in his Arm machine from a while back. Likely not a driver issue
-but a hw one... No-one seems to be able to recreate the same problem.
+This implementation has been verified by booting on an emulation platform.
+During testing, all low power modes were disabled and it was in HS-G1 mode.
 
-We need to try the HBA on our Arm board to see what happens.
+Please take a look and let us know your thoughts.
 
-> 
-> 
-> Kind regards,
-> Niklas
+v1 -> v2:
+- Added a non MCQ related change to use a function to extrace ufs extended
+feature
+- Addressed Mani's comments
+- Addressed Bart's comments
+
+v1:
+- Split the changes
+- Addressed Bart's comments
+- Addressed Bean's comments
+
+* RFC versions:
+v2 -> v3:
+- Split the changes based on functionality
+- Addressed queue configuration issues
+- Faster SQE tail pointer increments
+- Addressed comments from Bart and Manivannan
+
+v1 -> v2:
+- Enabled host_tagset
+- Added queue num configuration support
+- Added one more vops to allow vendor provide the wanted MAC
+- Determine nutrs and can_queue by considering both MAC, bqueuedepth and EXT_IID support
+- Postponed MCQ initialization and scsi_add_host() to async probe
+- Used (EXT_IID, Task Tag) tuple to support up to 4096 tasks (theoretically)
+
+Asutosh Das (17):
+  ufs: core: Probe for ext_iid support
+  ufs: core: Optimize duplicate code to read extended feature
+  ufs: core: Introduce Multi-circular queue capability
+  ufs: core: Defer adding host to scsi if mcq is supported
+  ufs: core: mcq: Introduce Multi Circular Queue
+  ufs: core: mcq: Configure resource regions
+  ufs: core: mcq: Calculate queue depth
+  ufs: core: mcq: Allocate memory for mcq mode
+  ufs: core: mcq: Configure operation and runtime interface
+  ufs: core: mcq: Use shared tags for MCQ mode
+  ufs: core: Prepare ufshcd_send_command for mcq
+  ufs: core: mcq: Find hardware queue to queue request
+  ufs: core: Prepare for completion in mcq
+  ufs: mcq: Add completion support of a cqe
+  ufs: core: mcq: Add completion support in poll
+  ufs: core: mcq: Enable Multi Circular Queue
+  ufs: qcom-host: Enable multi circular queue capability
+
+ drivers/ufs/core/Makefile      |   2 +-
+ drivers/ufs/core/ufs-mcq.c     | 495 +++++++++++++++++++++++++++++++++++++++++
+ drivers/ufs/core/ufshcd-priv.h |  84 ++++++-
+ drivers/ufs/core/ufshcd.c      | 345 ++++++++++++++++++++++------
+ drivers/ufs/host/ufs-qcom.c    |  49 ++++
+ drivers/ufs/host/ufs-qcom.h    |   4 +
+ include/ufs/ufs.h              |   6 +
+ include/ufs/ufshcd.h           | 136 +++++++++++
+ include/ufs/ufshci.h           |  63 ++++++
+ 9 files changed, 1116 insertions(+), 68 deletions(-)
+ create mode 100644 drivers/ufs/core/ufs-mcq.c
 
 -- 
-Damien Le Moal
-Western Digital Research
+2.7.4
 
