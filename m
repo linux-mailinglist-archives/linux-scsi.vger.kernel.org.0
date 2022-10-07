@@ -2,67 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924765F742A
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Oct 2022 08:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D17F35F78E1
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Oct 2022 15:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbiJGGWp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Oct 2022 02:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
+        id S229514AbiJGNXz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Oct 2022 09:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJGGWo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Oct 2022 02:22:44 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8159BEAEC
-        for <linux-scsi@vger.kernel.org>; Thu,  6 Oct 2022 23:22:41 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id d187so4099189vsd.6
-        for <linux-scsi@vger.kernel.org>; Thu, 06 Oct 2022 23:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ee1g+DQVjaU7Ixdagx5xQpa1KUPAjcmCcKTt3iTyQbc=;
-        b=nlWy561iwzw3ce+dKzSaIJFXC9kTXCw/2gFN1YA8RAEwElw0nM1wJNoAVQ14J2S11X
-         ThLEm7WELTxG6GOtZPEKHCxJKPnHEkyLD4GA1r1NcBmOIYn1MbDkmaLWHDn9F9V1mVPg
-         7uJPC63eS/Xu26e6RbByx0NUWuWfGm7zdJW0IcfMdEzInohF3YpDiRh32Wldbw4PKHvG
-         t4KbW6oZNedKSUfqjMwpfh7au2GvkTAuJUfEQrxTif7LL0RElxdD6fbQDxUd715tOWAL
-         xpdYT02aV7vmfte2v0Cl2EYuBQBnvo2htulwIZ7JdhK4auLf4TaF66XiaEOp6Av9bug+
-         99YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ee1g+DQVjaU7Ixdagx5xQpa1KUPAjcmCcKTt3iTyQbc=;
-        b=q+78eEiiDoLCBPmhFjCidjug5zINvLyF8OD8k4tGM3fsIJCWS8QxIKIR+G91ElFBN6
-         XBFJWFDiX6CsFZwJdQeDgAnu0HKkXHPKVEdOVMz9t0YQUK5SqBOG2abvFYONGKziDaT/
-         lJB7mHke37pTv5CSSvvP1MDoSdRupHo28JIbsp+Skj/jzd6qGecD3DvSyCa5pmVaIITO
-         DiN+ooEvS2rzaDKRWc3Cn4l0MyhwYZ1Us/rN6g+LMAo1gkJTQeRi9desxPwyGxCeVpq2
-         7ahhcrgijNd/4onbprV3lSPnTFiJfW57vushdRsHyORiEkIadfS/QFUJujQvSa02ZwrP
-         lC9Q==
-X-Gm-Message-State: ACrzQf0afA5dIkLHw6wubjd+q5FDClyOYeDIYbGQPHJHokaHHHCdrXNh
-        AtNcJF0Ot2ogIDVx+ikM+Aqvpn2zAowLzZ0n5yg=
-X-Google-Smtp-Source: AMsMyM5taRPFbOOF4sPd7aY0so/SzNkhfsht8cfaVSTa3+s9892AJ6fiiGrOxjeTMzsCVpjulXsSPdnlgg+TttTLn9w=
-X-Received: by 2002:a67:d303:0:b0:3a6:89ab:d81e with SMTP id
- a3-20020a67d303000000b003a689abd81emr1965343vsj.17.1665123760940; Thu, 06 Oct
- 2022 23:22:40 -0700 (PDT)
+        with ESMTP id S229644AbiJGNXx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Oct 2022 09:23:53 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F33BD01BF;
+        Fri,  7 Oct 2022 06:23:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1665149032; x=1696685032;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Trw3Ky/wAlHOsMe0Ydt3F+ofzQMskwlHAG5u+ZUCpns=;
+  b=PHJFXGoIkiv7QMWyU0GW5I20AhMUwZkC/oGy0ub/RQ1spAa+NpKYUPPb
+   sQ0gzM75czDB/w2BOvnB1v+wN7Cos/LTKk3PLXqcGdRuv/kwE3ZZ2R6Y0
+   pfOki6od1xenEZJN4H2FE7wXmTGYqAYRCsYKdXd+JNo/QBTj6fzwXMtfx
+   ghylyz5nKgPoPaK0+JOtbPTCgoOxuTvZHVELKvIzKyMAoDgyI3h6WBQim
+   IAkcdUTt73CGmg+MQso91M5SC9b68Fr/P0t6qdg3wadgdF05F+TEAAUJM
+   wZK9GqDF+qE0sntkQrG+IVdKhCrgohq8BBAR9E+BcQaJjFWayqD/JERKv
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,166,1661788800"; 
+   d="scan'208";a="213238163"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 07 Oct 2022 21:23:51 +0800
+IronPort-SDR: pLoQKAQjAwifzffBs/sn5nnu/8JwGum1FuwtbX4U06U3N/LNedWF++d6KtmRhvQrb2k74oTP31
+ B7fRe1/xRxJKEe8U4GUGWGSe9BWzyE/aBlKiWkLMqm7aWAqjJuopeeAnNBWbkyfWgTX7HTNnZj
+ WOlJ82ay80/RcKgvzdYxsUi7s3rJRfCuvW0EMXlzZyYQUuyYoVPOm7/kB3IgW95cmyAVuhHCRO
+ 40lQlAzKz48dVJGADAjil0pDSKYbv6zvJn+jnhJJrdtdO2v5g8gwg3J8sf1+l9Y125Rot2aovi
+ CevAsvGSfRhozGUzkdE1P+nQ
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Oct 2022 05:38:01 -0700
+IronPort-SDR: llWtY2KT8NYGk93HadKKuMhNrbG57wcKi/6fwxK+0xLVbJBoGJyDJtXFsqxZQEsp8JIbL9RYfd
+ c6vONeZklHHcI56tu9bmhL0tlJ4l1Z7Ixjouabc21o88RMw/c1DKyWOCbS7NKU4hYO5kpLOiz5
+ hFIE+ZCtxeAeM/WdMW3rsjcrlBDkp3+GZwh95Xnp5BDC4zP3sMe0Zd7eSSC4dyYCE61btrgGQL
+ 6164/PDAG0fEZbE1WVrDrMMbKVGLKomo9/j5Js/QtFMzerGcZUc6894Qc5lyXKiYwXOtIrsayt
+ kBU=
+WDCIronportException: Internal
+Received: from unknown (HELO x1-carbon.wdc.com) ([10.225.164.69])
+  by uls-op-cesaip02.wdc.com with ESMTP; 07 Oct 2022 06:23:48 -0700
+From:   Niklas Cassel <niklas.cassel@wdc.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Mikael Pettersson <mikpelinux@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     john.garry@huawei.com, Niklas Cassel <niklas.cassel@wdc.com>,
+        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: [PATCH 0/4] libata: misc frozen port cleanups
+Date:   Fri,  7 Oct 2022 15:23:36 +0200
+Message-Id: <20221007132342.1590367-1-niklas.cassel@wdc.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Sender: dede15441@gmail.com
-Received: by 2002:a59:c7d1:0:b0:2eb:d8fb:348f with HTTP; Thu, 6 Oct 2022
- 23:22:40 -0700 (PDT)
-From:   Farida Hamed <faridahamed0010@gmail.com>
-Date:   Thu, 6 Oct 2022 23:22:40 -0700
-X-Google-Sender-Auth: nh18C-S3SbmCROzQaBqz5qAu0_E
-Message-ID: <CABa=QoQjA82Jt61jgtTiraZCT_hiGNxuLsOLW=WV676Rx9wExw@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-How are you and your family
+Hello there,
+
+This series adds a new ata_port_is_frozen() helper function,
+and makes use of it in ata and libsas.
+
+Additionally, improve ata_read_log_page() to avoid a futile
+retry while the port is frozen.
+
+Kind regards,
+Niklas
+
+
+Niklas Cassel (4):
+  ata: add ata_port_is_frozen() helper
+  ata: make use of ata_port_is_frozen() helper
+  scsi: libsas: make use of ata_port_is_frozen() helper
+  ata: libata-core: do not retry reading the log on timeout
+
+ drivers/ata/libahci.c         |  6 +++---
+ drivers/ata/libata-acpi.c     |  4 ++--
+ drivers/ata/libata-core.c     |  7 ++++---
+ drivers/ata/libata-eh.c       | 21 ++++++++++-----------
+ drivers/ata/libata-sata.c     |  2 +-
+ drivers/ata/libata-scsi.c     |  2 +-
+ drivers/ata/sata_nv.c         |  2 +-
+ drivers/ata/sata_promise.c    |  2 +-
+ drivers/ata/sata_sx4.c        |  2 +-
+ drivers/scsi/libsas/sas_ata.c |  2 +-
+ include/linux/libata.h        |  5 +++++
+ 11 files changed, 30 insertions(+), 25 deletions(-)
+
+-- 
+2.37.3
+
