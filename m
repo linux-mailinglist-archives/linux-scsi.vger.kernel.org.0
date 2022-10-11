@@ -2,86 +2,121 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413B85FAE1D
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Oct 2022 10:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5E95FAF87
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Oct 2022 11:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJKILr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 11 Oct 2022 04:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
+        id S229658AbiJKJjs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Oct 2022 05:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiJKILl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Oct 2022 04:11:41 -0400
-Received: from o1.ptr8531.athenahealth.com (o1.ptr8531.athenahealth.com [149.72.192.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF87855AB
-        for <linux-scsi@vger.kernel.org>; Tue, 11 Oct 2022 01:11:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sendgrid.net;
-        h=content-type:mime-version:content-transfer-encoding:
-        content-description:subject:from:reply-to:to:cc;
-        s=smtpapi; bh=GXTi/ZBQpeGAqgz6fULJ1fEYyfHK+LA3nuX5jsJBDF4=;
-        b=VKYlXHDhhgqdx4t/WCkBc1ahWAtKi4SFV/5TvTcMwMaVwO8tAmLwOVKP+tKBfy+5tYzV
-        8ie1oJPefKKJ0cee2Z/sapqOWGCHQHa9xX6oWbBoujDoBkysr8h/W7X9ig5iSlh48IexKm
-        cDQVmE4X2WuD6d14qrxLlbrZRZp6e+iyk=
-Received: by filterdrecv-79ffd4c776-bkq29 with SMTP id filterdrecv-79ffd4c776-bkq29-1-63452309-67
-        2022-10-11 08:02:17.42696255 +0000 UTC m=+1160029.196476357
-Received: from bed-edi-netsec-util.ipa.idxedi.com (unknown)
-        by geopod-ismtpd-2-0 (SG) with ESMTP
-        id cFDRF_YgTMqfNi1wwtotoQ
-        Tue, 11 Oct 2022 08:02:17.237 +0000 (UTC)
-Received: from [212.162.151.153] (unknown [10.213.7.7])
-        by bed-edi-netsec-util.ipa.idxedi.com (Postfix) with ESMTP id 526F0401983E;
-        Tue, 11 Oct 2022 08:02:16 +0000 (UTC)
-Content-Type: text/plain; charset=us-ascii
-MIME-Version: 1.0
+        with ESMTP id S229489AbiJKJjl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Oct 2022 05:39:41 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB6FD48;
+        Tue, 11 Oct 2022 02:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1665481171;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=J8kcX+8LtEukoC4B1GeHkHmsTDqtm+m/Kn2u/N8i2bw=;
+    b=sPXhS+iFXOWYip5w4nkcUSkJiZqYFUhrS3Pua6NlIsgjZ2wKRlpr+/i7NUMJyCVoOf
+    alY8c0Zu1ZvNxkcfEkHJvsNHrg1Xn6CA66tg5+r3WVq2inwOFrHo3uVqMgqjWBqQ7hUN
+    ck8nen0t6xk0grf1NBLCBATow2t2K8XPkefpAfEt2pJIALeIVI6Q3TaELkj9LYOifNke
+    29ZO6ggqhPBGynJ7shmCwg9IJAB/xfugzHZTqlrR0IPPqnWebmzm0qqnjLK+SIlW1rdq
+    tdJMYY0/IfVSsOqJ6GyYlapacfrOsImy6nUD/EhedTsBByfICQMLdWkBs9jZq7FUSYcG
+    ecGg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSeBwhhSxarlUcu05JyILymw8y23V5/v2HsOC"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.33.110]
+    by smtp.strato.de (RZmta 48.2.0 DYNA|AUTH)
+    with ESMTPSA id zad98cy9B9dT58G
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 11 Oct 2022 11:39:29 +0200 (CEST)
+Message-ID: <bdd72ef290b3c9d5492255358686a39a7aa3cde6.camel@iokpp.de>
+Subject: Re: [PATCH v2 1/2] scsi: ufs: core: Remove unnecessary if statement
+From:   Bean Huo <beanhuo@iokpp.de>
+To:     daejun7.park@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 11 Oct 2022 11:39:27 +0200
+In-Reply-To: <20221011022153epcms2p1fcbf889099bd74279ed0d9b51ff26c1b@epcms2p1>
+References: <20221010092937.520013-2-beanhuo@iokpp.de>
+         <20221010092937.520013-1-beanhuo@iokpp.de>
+         <CGME20221010093042epcas2p2462d3c50d81d613574332e3f39d971e1@epcms2p1>
+         <20221011022153epcms2p1fcbf889099bd74279ed0d9b51ff26c1b@epcms2p1>
+Organization: IOKPP
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re: {Contract Offer}Liaison Needed In Your State...
-From:   "Ms. Lan Nguyen" <mail@redington.com>
-Date:   Tue, 11 Oct 2022 08:02:18 +0000 (UTC)
-Message-ID: <cFDRF_YgTMqfNi1wwtotoQ@geopod-ismtpd-2-0>
-Reply-To: 200475gm@gmail.com
-X-SG-EID: =?us-ascii?Q?1RXw+7imksxOrEm6ZjptBpldtpjT7eqnNy2epFXs+885a2DyzH7C1pZpsqkBco?=
- =?us-ascii?Q?p9R2K=2FemH=2FATZPoxAbfp9tJFssToRGUDgqX4PzU?=
- =?us-ascii?Q?M4nr0M0=2FJXTNa41LDlrw3OyL1yCGdWm6h78OvVM?=
- =?us-ascii?Q?FKPE0Tu6bBRPN6lHOTS=2F00Kpouhc6fsKNJFN6WB?=
- =?us-ascii?Q?QA+5xAN3MXwBv5+D5i=2Fnf1PvAY8dSaRXcvy7BV2?=
- =?us-ascii?Q?8MOfqejrir=2F9OtZOrGmTJs0wBb3eo8YP8DjDDKy?=
- =?us-ascii?Q?Q3850tRd7fL6wBaSzRmZg=3D=3D?=
-To:     Recipients <mail@redington.com>
-X-Entity-ID: 2Vq7tNtTJX480IEgJAuUOA==
-X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_95,DEAR_SOMETHING,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,URIBL_GREY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.4 URIBL_GREY Contains an URL listed in the URIBL greylist
-        *      [URIs: sendgrid.net]
-        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
-        *      [score: 0.9721]
-        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
-        *      mail domains are different
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *******
+User-Agent: Evolution 3.44.4-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Sir/Ma,
+On Tue, 2022-10-11 at 11:21 +0900, Daejun Park wrote:
+> Hi Bean=C2=A0Huo,
+>=20
+> I think ufs_is_valid_unit_desc_lun() is also used for
+> wb_buf_alloc_units_show() in ufs-sysfs.c.
+> So just removing this if-checkup=C2=A0will make different result when
+> check lun value.
+>=20
+
+Hi Daejun,
+
+Thanks for your review on the patch. Yes, I understood what you mean.
+But I don't think that's the problem. Without this patch, access on
+sysfs node "wb_shared_alloc_units" would get "invalid argument", while
+with this patch sysfs would return 00. According to the UFS
+specification:
+
+"If this value is =E2=80=980=E2=80=99, then the WriteBooster is not support=
+ed for this
+LU. The Logical unit among LU0 ~ LU7 can be configured for WriteBooster
+Buffer. Otherwise, whole WriteBooster Buffer configuration in this
+device is invalid."
+
+Per my understanding,  with this patch,  there is still no miss-
+explanation of this sysfs node. The key purpose of this patch is to
+remove any nonsense logical during the booting stage.
+
+please have a think my comments. thanks.
 
 
-A reputable pharmaceutical company from Vietnam is in need of a reliable in=
-dividual or corporate entity in your state to act as their Liaison; this wi=
-ll not affect your current job or business operations in anyway.  If intere=
-sted, reply for more information.
+Kind regards,
+Bean
 
 
-Sincerely,
-Ms. Lan Nguyen
+> Thanks,
+> Daejun
+>=20
+> > From:=C2=A0Bean=C2=A0Huo=C2=A0<beanhuo@micron.com>
+> >=20
+> > LUs=C2=A0with=C2=A0WB=C2=A0potential=C2=A0support=C2=A0are=C2=A0properl=
+y=C2=A0checked=C2=A0in=C2=A0ufshcd_wb_pro
+> > be()
+> > before=C2=A0calling=C2=A0ufshcd_read_unit_desc_param(),=C2=A0so=C2=A0re=
+move=C2=A0this=C2=A0unnece
+> > ssary
+> > if-
+> > checkup=C2=A0in=C2=A0ufs_is_valid_unit_desc_lun()=C2=A0to=C2=A0match=C2=
+=A0its=C2=A0function=C2=A0defin
+> > ition.
+
