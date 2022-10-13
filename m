@@ -2,71 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675315FDE02
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Oct 2022 18:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0315FE2DE
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Oct 2022 21:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiJMQKL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Oct 2022 12:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
+        id S229736AbiJMTqT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Oct 2022 15:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiJMQKJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Oct 2022 12:10:09 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6154BD16
-        for <linux-scsi@vger.kernel.org>; Thu, 13 Oct 2022 09:10:07 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id j7so2589115ybb.8
-        for <linux-scsi@vger.kernel.org>; Thu, 13 Oct 2022 09:10:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7yjFQDpt1A0PVB6Y+z0WDz8WhkQFK/ECc36rIFhhsU8=;
-        b=gl8Yr7f0+rYVV9sNgkoTbuWBKPTv4bo6yQLugOL/XqGa12mXRpO4gXQBxWaDFx3JTk
-         0s5i2s7SKZPHqhzBakBtg2KhnIjKsmLI9wBsfeQSKIuRKRjYO/DRXJn2oByDeo8EOqI/
-         lbvwWe/WKa1AWuXnh3I+0lu1YM0bp762lI4mg7dekE8upYQFcbLDI/Uq1fpbJD+obYU2
-         X8QF4JoRenSy1EV+Uu12F00KCIYhK3YcvWSkSOd2RuKgSWJpmmH/l163UZZjY4ublKw5
-         CY+4sSbhbTAkUb5fXmvf4gAlx7v81I14nvhGLxyPdTpGClm2splNf3tHkgryVkfSOsFw
-         xyLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7yjFQDpt1A0PVB6Y+z0WDz8WhkQFK/ECc36rIFhhsU8=;
-        b=uam+ouDDiKueu/ZNa/4ZJiBYfGo2SYibXmgP1PGYQTdZej/+o+xaxFHopumrHyssjo
-         kxe2DPye6oNoPyKz6HbVuVShgCaXE9DPblOsRORp58keiGUa1ouPX1LKntDR24uT5gZX
-         Gr2kmGHtuT7jTSEoj7w2HKnRoZrudyzOMqc9QhdZQakKBrKf0Y4ZuCQWMgFqXq2Fwn62
-         mw+UJ/CjgCqaSZBGzSZNAOB0Nhs5kxDVutRxY25HFNPahy09crOqbpBjUMGwOFWeHs4A
-         e3zV7G8mWtOsHQa3xhNLIzvMJKK8wjKOpOM71bSahDIKwlevq7rz5jaEwMD4W8Mb6z7w
-         GIuQ==
-X-Gm-Message-State: ACrzQf1h/sU4kLq4dnKT1nkAyq3ko7r9goQy4K3kFGQJWe0UcY5at4g/
-        u6bog1LVW2+VYCFxzlq+9IU2eKYWhIEuGZTW1ZI=
-X-Google-Smtp-Source: AMsMyM4zsZHg9JyCYNxR1tMV59gL2d8MUKWPmcX6CVYGKoNf8trHbQmDSgNTqsijsQgb9ZKQbC838YB/tv2LPJMP+zo=
-X-Received: by 2002:a25:ba07:0:b0:6a7:82bb:1041 with SMTP id
- t7-20020a25ba07000000b006a782bb1041mr691983ybg.102.1665677406258; Thu, 13 Oct
- 2022 09:10:06 -0700 (PDT)
+        with ESMTP id S229661AbiJMTqR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Oct 2022 15:46:17 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5C618B49D;
+        Thu, 13 Oct 2022 12:46:10 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29DJk36L041837;
+        Thu, 13 Oct 2022 14:46:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1665690363;
+        bh=GhIvSPMwfeAQY83CKUcyeJ66XyQ471sMxcqg2xYdHKA=;
+        h=From:To:CC:Subject:Date;
+        b=Yk62bC9u/aJQymIjtJLM5yUag9rOZzTMPfUo4pTGycoWbUO/lI/Zc20+rsgJi8bH8
+         k80cEZP1mDrQPxfRAt0h8esCt07QpfrDb6rIvZJmcGl2aS6D570lCWdA3tREIawZRl
+         MkDruAeAxkipe9u/qN+b3BxYq4zpQksoOkobTk4s=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29DJk3fp010259
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 13 Oct 2022 14:46:03 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 13
+ Oct 2022 14:46:03 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 13 Oct 2022 14:46:03 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29DJk1UH110251;
+        Thu, 13 Oct 2022 14:46:02 -0500
+From:   Matt Ranostay <mranostay@ti.com>
+To:     <vigneshr@ti.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <devicetree@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        Matt Ranostay <mranostay@ti.com>
+Subject: [PATCH] dt-bindings: ufs: cdns,ufshc: add missing dma-coherent field
+Date:   Thu, 13 Oct 2022 12:45:59 -0700
+Message-ID: <20221013194559.128643-1-mranostay@ti.com>
+X-Mailer: git-send-email 2.38.0.rc0.52.gdda7228a83
 MIME-Version: 1.0
-Received: by 2002:a26:7d7:0:0:0:0:0 with HTTP; Thu, 13 Oct 2022 09:10:05 -0700 (PDT)
-Reply-To: rosedarrendr@gmail.com
-From:   Rose Darren <uwasunday50@gmail.com>
-Date:   Thu, 13 Oct 2022 16:10:05 +0000
-Message-ID: <CAP4SeLB7kQ4rV42UcFa5f9Fx46ftCxwqS6KwFm50z23QOtRMUA@mail.gmail.com>
-Subject: =?UTF-8?B?SGFsbMOl?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Sn=C3=A4lla svara mig, jag skrev till dig f=C3=B6rut.
+Add missing dma-coherent property to schema which avoids the following warnings
 
-H=C3=A4lsningar
-Rose Darren
+ufs-wrapper@4e80000: ufs@4e84000: Unevaluated properties are not allowed ('dma-coherent' was unexpected)
+
+Signed-off-by: Matt Ranostay <mranostay@ti.com>
+---
+ Documentation/devicetree/bindings/ufs/cdns,ufshc.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/ufs/cdns,ufshc.yaml b/Documentation/devicetree/bindings/ufs/cdns,ufshc.yaml
+index fb45f66d6454..835e17269d2d 100644
+--- a/Documentation/devicetree/bindings/ufs/cdns,ufshc.yaml
++++ b/Documentation/devicetree/bindings/ufs/cdns,ufshc.yaml
+@@ -49,6 +49,8 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  dma-coherent: true
++
+ required:
+   - compatible
+   - clocks
+-- 
+2.38.0.rc0.52.gdda7228a83
+
