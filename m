@@ -2,47 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5DB5FD0C7
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Oct 2022 02:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA8F5FD1A3
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Oct 2022 02:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbiJMAaD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Oct 2022 20:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S232413AbiJMAlK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Oct 2022 20:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiJMA2d (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Oct 2022 20:28:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C31D15E0E0;
-        Wed, 12 Oct 2022 17:25:27 -0700 (PDT)
+        with ESMTP id S232385AbiJMAjw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Oct 2022 20:39:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A7C10D6A1;
+        Wed, 12 Oct 2022 17:32:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFCE4616F5;
-        Thu, 13 Oct 2022 00:21:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E844C4347C;
-        Thu, 13 Oct 2022 00:21:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26263B81CF2;
+        Thu, 13 Oct 2022 00:23:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED39C433B5;
+        Thu, 13 Oct 2022 00:23:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665620511;
-        bh=wywoabG9rCgAtYcjbucXslM1obEsgJ2KIBItP/wqNMc=;
+        s=k20201202; t=1665620631;
+        bh=N/ic3nvsn6gbap9xn1FFJo7xJmazvDTuIdIeuNaNTDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KPbetNGbymTA5rREsAAE8fwYtAQFHTDAvgTHDmxOIjxLT2Mo0L2YeSwnYdDxkxhmv
-         fB6mJsYSuJk9Rc0jF58vKVXrtcudYYYRv+tdrpYFui6iXkbGO5wzD2pizyttyfOJ+8
-         z1WxvXGzDA+ruze1PkbP4iyPMP6qwAdwubESgdXXSskhS91jX08ximlp1mHijmTTvE
-         u+AB/O3NBB7z8vV4z6FUU+calkQbK6yFu4S2ZlEU8HryoDdR48hrms2JKTF1xHkwKc
-         ZrtZpWsBUdqAHpWXCGWKeN7OpyOeWWy4xLO0zer5xFsLjg4Vhe9ZGHIxqXCWb2qUdL
-         FtDhJbho05Riw==
+        b=rAMnOFTkDmO9JQdcCkxXdp++h0mCmCFUh2mf7tg8G/5QhRYGNzfzixDhUqgzJi2eV
+         3nuINCtQM23/CRR5cjPuVl7fA5FAQ4UET80MN+Koiny+8LS2N/ZQfi0pspCuIPigrS
+         Ki11hvqGLaCwUnM8J0ZbA6O51dyVE3Hq4NUwmMZ989db9s/vQ1l3vs5OyViT9wWi6+
+         +JDP7yp6ZQN0pbOXdKM/uQVD+FiUVGd/7ISwZF0l29ciPZhkgCrPUgOTNL3tvtOmQP
+         hfWhuytYCA5dOv0+3JHF06usVepY/1nnmWwPp4uusSo0XGj9fWrzYzzz4BuNcDgRjB
+         TBSV4uCsdiRaw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Letu Ren <fantasquex@gmail.com>, Zheyu Ma <zheyuma97@gmail.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 08/47] scsi: 3w-9xxx: Avoid disabling device if failing to enable it
-Date:   Wed, 12 Oct 2022 20:20:43 -0400
-Message-Id: <20221013002124.1894077-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 07/33] scsi: 3w-9xxx: Avoid disabling device if failing to enable it
+Date:   Wed, 12 Oct 2022 20:23:06 -0400
+Message-Id: <20221013002334.1894749-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221013002124.1894077-1-sashal@kernel.org>
-References: <20221013002124.1894077-1-sashal@kernel.org>
+In-Reply-To: <20221013002334.1894749-1-sashal@kernel.org>
+References: <20221013002334.1894749-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/3w-9xxx.c b/drivers/scsi/3w-9xxx.c
-index e41cc354cc8a..6da591508f23 100644
+index 3337b1e80412..f6f92033132a 100644
 --- a/drivers/scsi/3w-9xxx.c
 +++ b/drivers/scsi/3w-9xxx.c
-@@ -2006,7 +2006,7 @@ static int twa_probe(struct pci_dev *pdev, const struct pci_device_id *dev_id)
+@@ -2014,7 +2014,7 @@ static int twa_probe(struct pci_dev *pdev, const struct pci_device_id *dev_id)
  	retval = pci_enable_device(pdev);
  	if (retval) {
  		TW_PRINTK(host, TW_DRIVER, 0x34, "Failed to enable pci device");
