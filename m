@@ -2,62 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B765FD45F
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Oct 2022 07:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA795FD4C7
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Oct 2022 08:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiJMF5r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Oct 2022 01:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        id S229825AbiJMG0z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Oct 2022 02:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiJMF5g (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Oct 2022 01:57:36 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5D0129776
-        for <linux-scsi@vger.kernel.org>; Wed, 12 Oct 2022 22:57:35 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id g28so1028276pfk.8
-        for <linux-scsi@vger.kernel.org>; Wed, 12 Oct 2022 22:57:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=huYKu3zCGUAjNe1V+fwzWUibgp5qt9T7Bp033OSK+pw=;
-        b=cankLalVl+oTUze4fEh3M4cDIxIMO244kfrzjwLUyK+LqPtqtrD5F7szBxl4p0oE9D
-         DRStNBhV/GgdIwXX0qMxP3ZxPgp2VfNY64xZiHXBtxOlGDs34jciNoerCqgCp1bgZm+1
-         +6Ti/fpmZDYHFwj7mBsy2wo1nWnxpmKXYimL94fx3m4H1u2nV/z5OZf478OxNvJmRFno
-         57Q2wxhaocNM3ox7SlrsdC4SyLGGfXTOQmWvHHx0I70U8W+dHZYeKRDc+txye7b8dQV/
-         kpOgrBFvvaeQR2EGDTgETbtDRNeEZHp0vrBvuLt1S3p/q9Q61rPSP6HLf5Bq+ysIE+m7
-         gtAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=huYKu3zCGUAjNe1V+fwzWUibgp5qt9T7Bp033OSK+pw=;
-        b=wzlBsAWTaOtj2SOwgTSQ4zHJzZR4NKdGU6Amkx5Lf3SiX9FoYsSmEPo8KD4LyEwSNZ
-         +LjBv0osTDvnJlYlGO1HUobANNclQxJqMbKNWEfonAC9bu5xtZHR7abwVrF/4hiBehIi
-         Ni4mAzz0+YytFw3p6K5WFy4/awnZIARyitOZT+wZntPX/0PWOWHoTBL0HKHQpWr3+PMK
-         Rl7TyDj1uP6hf0S0aMWgrKfGO9RJPT+JefwqqXjJu590voCN+O22/9ssqVsvZWcSV9XO
-         UxNYxih4WRwRfTKAR5NAwbpXr74azq2/3+4T/0nW3/7N8UkyzcYj0YKX6QZ2dL4hiDuG
-         3VAw==
-X-Gm-Message-State: ACrzQf11c62/o+vOCVEz9pPSABOwyBR9VZOujF61te326oUYEWX2Y9z9
-        5iFB8diS2UrV4sqZ3cU6tri5FL49POAqPki00ZM=
-X-Google-Smtp-Source: AMsMyM6XVztMlC2gldFAm8tD3791LrLUhbvVJsTTUtTrJ8FdX8zt9GenVNHllFpteg6utEmxMyAIJVN/Jnpj9OwOaBw=
-X-Received: by 2002:a65:6cc7:0:b0:42a:4d40:8dc1 with SMTP id
- g7-20020a656cc7000000b0042a4d408dc1mr28907178pgw.321.1665640655249; Wed, 12
- Oct 2022 22:57:35 -0700 (PDT)
+        with ESMTP id S229806AbiJMG0y (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Oct 2022 02:26:54 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36B626573;
+        Wed, 12 Oct 2022 23:26:51 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mnzx56B04zpVm6;
+        Thu, 13 Oct 2022 14:23:37 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 13 Oct 2022 14:26:49 +0800
+Subject: Re: [PATCH 4.19] scsi: sd: Fix 'sdkp' in sd_first_printk
+To:     Li kunyu <kunyu@nfschina.com>, <damien.lemoal@opensource.wdc.com>
+CC:     <jejb@linux.vnet.ibm.com>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>
+References: <0e67aa4d-f66e-f392-5950-31b1c90c287b@opensource.wdc.com>
+ <20221013044927.278854-1-kunyu@nfschina.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <badf255f-df60-fbc7-0f61-c69b99ebbaa6@huawei.com>
+Date:   Thu, 13 Oct 2022 14:26:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Sender: zjefftwilliams1@gmail.com
-Received: by 2002:a05:7300:18a7:b0:77:6573:124 with HTTP; Wed, 12 Oct 2022
- 22:57:34 -0700 (PDT)
-From:   Pavillion Tchi <tchipavillion7@gmail.com>
-Date:   Thu, 13 Oct 2022 05:57:34 +0000
-X-Google-Sender-Auth: ECjvfJPVSckDSJFUhz-kxggv1kk
-Message-ID: <CAHfYO7q1=yuGPSGnbst=vYMNC2RN8NTFcPpXgux8-nzA948WpQ@mail.gmail.com>
-Subject: Hallo
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221013044927.278854-1-kunyu@nfschina.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,6 +50,82 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Hallo
-Erhalten Sie meine vorherige E-Mail?
+
+On 2022/10/13 12:49, Li kunyu wrote:
+> 
+> This is defined in the 4.19 kernel:
+> 
+> #define sd_printk(prefix, sdsk, fmt, a...)                              \
+>          (sdsk)->disk ?                                                  \
+>                sdev_prefix_printk(prefix, (sdsk)->device,                \
+>                                   (sdsk)->disk->disk_name, fmt, ##a) :   \
+>                sdev_printk(prefix, (sdsk)->device, fmt, ##a)
+> 
+> #define sd_first_printk(prefix, sdsk, fmt, a...)                        \
+>          do {                                                            \
+>                  if ((sdkp)->first_scan)                                 \
+>                          sd_printk(prefix, sdsk, fmt, ##a);              \
+>          } while (0)
+> 
+> 
+> 
+> Most of the sdsk used in the macro definition has only one sdkp.
+> 
+> 
+> This is defined in the v6.0-rc7 kernel:
+> 
+> #define sd_printk(prefix, sdsk, fmt, a...)                              \
+>          (sdsk)->disk ?                                                  \
+>                sdev_prefix_printk(prefix, (sdsk)->device,                \
+>                                   (sdsk)->disk->disk_name, fmt, ##a) :   \
+>                sdev_printk(prefix, (sdsk)->device, fmt, ##a)
+> 
+> #define sd_first_printk(prefix, sdsk, fmt, a...)                        \
+>          do {                                                            \
+>                  if ((sdsk)->first_scan)                                 \
+>                          sd_printk(prefix, sdsk, fmt, ##a);              \
+>          } while (0)
+> 
+> Use sdsk in macro definition.
+> 
+> 
+> I did report an error when compiling sd. o in the 4.19 kernel. It was modified to say that no more errors were reported in sdsk. Can I continue the 6.0-rc7 writing method here.
+> 
+
+You should backport the mainline patch to 4.19, not create a new one.
+
+commit df46cac3f71c57e0b23f6865651629aaa54f8ca9
+Author: Dietmar Hahn <dietmar.hahn@ts.fujitsu.com>
+Date:   Tue Feb 5 11:10:48 2019 +0100
+
+     scsi: sd: Fix typo in sd_first_printk()
+
+     Commit b2bff6ceb61a9 ("[SCSI] sd: Quiesce mode sense error messages")
+     added the macro sd_first_printk(). The macro takes "sdsk" as argument
+     but dereferences "sdkp". This hasn't caused any real issues since all
+     callers of sd_first_printk() have an sdkp. But fix the typo.
+
+     [mkp: Turned this into a real patch and tweaked commit description]
+
+     Signed-off-by: Dietmar Hahn <dietmar.hahn@ts.fujitsu.com>
+     Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+
+diff --git a/drivers/scsi/sd.h b/drivers/scsi/sd.h
+index 1080c85d97f8..5796ace76225 100644
+--- a/drivers/scsi/sd.h
++++ b/drivers/scsi/sd.h
+@@ -132,7 +132,7 @@ static inline struct scsi_disk *scsi_disk(struct 
+gendisk *disk)
+
+  #define sd_first_printk(prefix, sdsk, fmt, a...)                       \
+         do {                                                            \
+-               if ((sdkp)->first_scan)                                 \
++               if ((sdsk)->first_scan)                                 \
+                         sd_printk(prefix, sdsk, fmt, ##a);              \
+         } while (0)
+
+
+
+> 
+> .
+> 
