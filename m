@@ -2,138 +2,138 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DE1600310
-	for <lists+linux-scsi@lfdr.de>; Sun, 16 Oct 2022 22:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A555560030E
+	for <lists+linux-scsi@lfdr.de>; Sun, 16 Oct 2022 22:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiJPUAR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 16 Oct 2022 16:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
+        id S229838AbiJPUAN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 16 Oct 2022 16:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbiJPUAK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 16 Oct 2022 16:00:10 -0400
+        with ESMTP id S229824AbiJPUAJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 16 Oct 2022 16:00:09 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ED6220FD
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05D523391
         for <linux-scsi@vger.kernel.org>; Sun, 16 Oct 2022 13:00:07 -0700 (PDT)
 Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29GJXnrK015579;
-        Sun, 16 Oct 2022 19:59:56 GMT
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29GJXnrL015579;
+        Sun, 16 Oct 2022 19:59:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=bKN/3na6/yeB6BRg9V7tGq/OT9G+2mZyp24rh/u+TKE=;
- b=hgybD9ni4OjlZZj4/P5Fjcbcn7n8NoB4IrvjShEbCwLNoyfOc1Mjo++RH30Lzd1mKJFJ
- Q8+nGomniaE7KGilGxxOGt2pplRd5o7tiSt09K0neZts4E1L6RXjyH/KT0cu/uBVNEvB
- sEycKUNFpV+cX+R5qyXcpGy/L9wOuqavadM0EZVem09ZVDHdKIzZh/gGj9qVVwPc56/R
- FifRXX8q9FyXFOe6MB0qx60+LqHn0y/cqx6pFvEY5Tkv4UCtJ578b5q7UmNUrs7mpVFy
- oHUIQAz5oE/xNekZs80hM4yJJJtGNP4vEXmgVj8bGgQmnQkf7CrsjUbtUTqLiibkOFdX xw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k8jt2g79m-1
+ bh=hQxVcrJ3Uo6hFBiz0ptcjbcp4kwxOTssETzpyjsjovk=;
+ b=OGhTxiY9v6JW2WgzoKOCocP2/KyQHql2ZvPx/lWOO04oFT4Wbb5o7pfRfpb1N8m0pelE
+ D6nW549UueUFf8JpoKpoPQWpNnyI1MdeKJLCeQaoqJyY+6sXxksTiYQ9nn/l5O96NU7Z
+ GjbBm5PvFMl7NPnqqzhpb7G83E6lNa1f1LgnBjUmfpLLpt4FJuA71SLHll338c3oJeXB
+ Ii1qxC1jWy+KIPZ6OpY9ARnDJbieu7cYIJV+E3h56AIKRajQUi25CkZGFe8KNNmGr3QG
+ 69SSUry8HT5GWsUb26g+gpmlBHT2NJKEMM0VmHJh4aFEID7Hwjb3HswBqbQNkXGI6Iy7 Gg== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k8jt2g79p-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 16 Oct 2022 19:59:56 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29GCAa7k001092;
-        Sun, 16 Oct 2022 19:59:55 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3k8hqwmgfm-2
+        Sun, 16 Oct 2022 19:59:59 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29GCTMgR040066;
+        Sun, 16 Oct 2022 19:59:58 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2042.outbound.protection.outlook.com [104.47.56.42])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3k8j0nc0ux-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 16 Oct 2022 19:59:55 +0000
+        Sun, 16 Oct 2022 19:59:58 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SgbY94NAPfXV4svo6Ya0UtFMi6au0OT9C6RROJHJ8SS1Q/Gta9ZPqh7TWiXrN+Dz6rGdvIprejZXrOC9fMGVKy9Z+AltYuzd8Iglzbxou/7g1v19geHDa/anNqxGp0gfY8QA5wUz4UC2XMEn8ze3QuqdRpJzu4S9uhLWBWbco3EH4ooIiX6HaqYZl4EYiPGoeDQaOJFfA13FcdHzH2DrrEs0LyTnr2gPS0I7+MUQ4HucjLjlEhRBvdsJNWWXg5t5VG02WAglpb+uAGCo0b189Sc2itUbGv7y738xowZ0Z2zTttqW+B1CKi74etQwveOPgHEbA73bDj/jgvPnMvabxg==
+ b=DndOC21TZImkxUDEo7INRv3Ptg8sct06cyzzcXoydajIF/dP7Etqy/o5WNSQBrDDTJdV9HMV1FNwYKeeMjYxX9jPWtpW3xpG8rH3FUG55fi6eEJZM5Dnu+sATawNVuOqKhdafv8yokAfaqO+Yr6DZ6WnpS0pv7JN4Tdy3G4IbEI8Vd41elgyCx0so6stwJxQke/HCHY/gdRwDf+1dCJ0WSxRotOi959Ap/XUbETXp2LRlZ5BOfDN4E06+FLoDXfBfOUVTcswgdiMW6h/3+Ump5JTAhsILGtDQVGhx4j9Gv55cEDb7lN7KKXC00NAV+x4prlIG1wlETcLWuTXlZo5vA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bKN/3na6/yeB6BRg9V7tGq/OT9G+2mZyp24rh/u+TKE=;
- b=VBYPlr5kygy57BQPGn1sACuKQBb3ThcgEva2Xy8dWHCHNBbqsJ37OE5f18XmBGrGWfKdumgI1PU3B05hNdw/w5SHpNExw9VSmTIHOWLKIiWLoSbGBWiwojmK90SeSfvMJP1HmnPa87UFARlGAzUoEKB1fIqdziXzg5o2ZKwiD/+9eYIf4YTLPwKXsDiq7BVgBrlIacR7GawnHf8MwRM+vS9+KDw2x2VRa+5CsFRHUPjcq/YVGLv+OGfaFOW7MfzlyBdgjNlRC/LpMWmXGygk2TmjAmISYoogY9f1GA3mawWxcA5PIoEcTNDxvw80FsrqOvj4y9U8JxgW8i8uHwrdrw==
+ bh=hQxVcrJ3Uo6hFBiz0ptcjbcp4kwxOTssETzpyjsjovk=;
+ b=HN/2iCLnV13l9luDDCabTEC5Rv3NT4l1TqV8Bc1QPYNkQa47JMexZ9klY9hvKmLJc3Y3BNH1paMbi7CyrrdUP/N5v9lZ1vkiiScKlSGlaTurTqpEH2OLay6ODufimXM+KmjmmB5QTitsFDB9ZSdUO1JsG3xtTuyx11ENqYRSYT3opleygZxRZ9oMkvjtzfj3WsSrLzby6CjHkMZAVfh4Qv2+VQ97k9ZU6bhDmzBVlTtM4mbvOZd8ZSvEQOthJUPzHY+ZPj64Rdoy4ovAlRVgStNERPzARm79K3dpng6+Aqyj0YFtzqkYOWB9LVh9kKSnvLODXve+si7FbikGUg5PSg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bKN/3na6/yeB6BRg9V7tGq/OT9G+2mZyp24rh/u+TKE=;
- b=zAGeaPFbwhqR1S2qhrnQKgA5y4YJIaN4GKxpcmPCn4z0ILonUdBezNRQ3WZYId7QZeLbG3kUgVbHOHvI67KMftk/u27b0MVv7jsGryeVPsBmA6nz+CQzVIPVFXPrEmxu+W/OHlZHeRTDAbzsTyHJ1sO5gKOf/o5HZwOnVO+mJig=
+ bh=hQxVcrJ3Uo6hFBiz0ptcjbcp4kwxOTssETzpyjsjovk=;
+ b=VwPCycBnPn/WNJIsQPHvCsBXb4EkRqE81Cj4zc9huBQ6MMLP9Qt/2GjbctDAXFPU5vz+bu2tDY4teC0iwQV1X6JAHG6EakLNnsRACs+5xVpvZLXpOmv98cIPj2+6aujz0H+hmVYuyslpIqz8QjkIcXSMhTqqe66DL2XdiJ68kME=
 Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
- MN0PR10MB5909.namprd10.prod.outlook.com (2603:10b6:208:3cf::6) with Microsoft
+ DS0PR10MB6727.namprd10.prod.outlook.com (2603:10b6:8:13a::15) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5723.32; Sun, 16 Oct 2022 19:59:54 +0000
+ 15.20.5723.29; Sun, 16 Oct 2022 19:59:56 +0000
 Received: from DM5PR10MB1466.namprd10.prod.outlook.com
  ([fe80::19f7:e081:85b4:c5df]) by DM5PR10MB1466.namprd10.prod.outlook.com
  ([fe80::19f7:e081:85b4:c5df%7]) with mapi id 15.20.5723.033; Sun, 16 Oct 2022
- 19:59:54 +0000
+ 19:59:55 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     bvanassche@acm.org, mwilck@suse.com, hch@lst.de,
         martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         james.bottomley@hansenpartnership.com
 Cc:     Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH v4 03/36] scsi: Add struct for args to execution functions
-Date:   Sun, 16 Oct 2022 14:59:13 -0500
-Message-Id: <20221016195946.7613-4-michael.christie@oracle.com>
+Subject: [PATCH v4 04/36] scsi: Add scsi_failure field to scsi_exec_args
+Date:   Sun, 16 Oct 2022 14:59:14 -0500
+Message-Id: <20221016195946.7613-5-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221016195946.7613-1-michael.christie@oracle.com>
 References: <20221016195946.7613-1-michael.christie@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: CH2PR08CA0028.namprd08.prod.outlook.com
- (2603:10b6:610:5a::38) To DM5PR10MB1466.namprd10.prod.outlook.com
+X-ClientProxiedBy: CH2PR15CA0008.namprd15.prod.outlook.com
+ (2603:10b6:610:51::18) To DM5PR10MB1466.namprd10.prod.outlook.com
  (2603:10b6:3:b::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1466:EE_|MN0PR10MB5909:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1a0bdcb6-e7c3-4ecc-00b2-08daafb0fe3a
+X-MS-TrafficTypeDiagnostic: DM5PR10MB1466:EE_|DS0PR10MB6727:EE_
+X-MS-Office365-Filtering-Correlation-Id: 540bd1ca-35e0-446b-7b46-08daafb0ff1c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ul1+Od3FYODAU67JhRk9LC2pOdsAnLeqvlCwQjyTkmWWHKMn6Q+Sp7mbHhxjcWL4yTmP6x4zQ/95PrRw3doQWVF9+2ggmUqdxRWhEVsRKPCYidfU4FEd1/HPwVCg4a6dh50jWH9JPT9OnB2es+ZlY57woVvHHWiFPOVLFNu2H8m/5yHamQmjHANQ9YqdBa2Bz+O7KrfCDWCD90DOtQEoF8cZjHCVMFq6jg2cxwC6fTzk3UZawi1CzQcPgy8u2TJ6xx94Cd2iSm7mFTIm5XM5LotDF9bPnuJi5qO7SHFgMJggUSnifGC7Wsd9/kOcO/zqjnbxqRHSWq7TEZ9Sg4t8Roh6drdXlb2tQB1syJ+Q8Vo4yTveqF6JkS8KBr7cmNHCiWGsnWHNCdRgHGeMrvTi5lOmOvFcnqVlYOl1y2cjFy58PSTATO/v+qqDs5bRUHmqQwtO8jz7L/V2f/yZ+iQlEcLzo8ZJIYtTR1jlfuxDzmcJsVrCuvEuOXI6eZaVwdp8hcNAJoRnGEcln/ccUOmuXQLKGzgg7fz2dNiKJLzDCDgajV1AKnFdO2EK2/Ml1XKbEAMJvie9cUSylpnTcjMN1cYJYKbrp4WK2g1op8Md+kuiSaaprXUPCA7oZLMcC3LNtfPJIVDDLvoZVPEPklcKmtjvg1Ecm1iQEddljRAdnEm1q3nI+nPDVriDsJhYS00gOOLb48Uf0tA1kn+F4SGNYA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(136003)(346002)(376002)(396003)(451199015)(6486002)(316002)(6666004)(478600001)(107886003)(66556008)(66476007)(6512007)(5660300002)(1076003)(186003)(2906002)(8676002)(66946007)(4326008)(6506007)(2616005)(8936002)(41300700001)(26005)(36756003)(83380400001)(38100700002)(86362001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: VSzYzn2kTRONyBwE3Ijqx2ZvwWMuF6nG0SRNQ7eSub/Ajk5tmbA64N86HRPz/MJhrXCIh9sWav3MAIY2Op945zO7siFXZeOajPmlObmpl/YLb45OyfQk22LmzrOClt0MA2VDmwVMcOkR7QokWSJB/eak2Ykl+OzS27TNKPiBCcSqDk+rgjZUDf3dAybbhisK8IOY+CUwk10fpR13qQ3gGWdSNJk12DlR2PNZf1I1XmuSB9h+KNA8mtPS2Ur86+HDvOoLo/Lwyc9BWGBDx492tY1aQgE1RFaI+FFW0TmtC6XAV3vCZImhe4eNJjINkh7/Tm0t18XJM4XLeXIXfx3aWrQ7Zcx2jIV8/Nr04AHHhy08uziZeYm8mqKc/3pDzz/At8F9n8En4/iOzhjPQAyp1mKfGUjX4H5jrD9kFoHbNyZOi8zc/xZXg/EXU1LYS4ZtTOWLvBeeM9jr/DjHYoBGuI19iDLtvtEwMbhjKpMZi6eHC/PqHCm9GZ7GlGPi8UbRlEFsOliNBwzFyLvmbA/7UrTQc8/dLqRgbFfi9pO6gxLE1Yt3cX6QnfUa+XRlK//aOUZxfXzptp4MlfE/ObmUBfIR302vUh2F/dPUZ3qC4L1qmJRtFT9JWHezSO3AyXuKtl6vz+NQQgezMljOhKNatCk5hRTbJ4TIhmmicxk5vQVQMnqYoAtLrr4zkTzb4/gGSnSn+xriICpeewEFc2/3HQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(39860400002)(376002)(346002)(396003)(451199015)(38100700002)(478600001)(6486002)(186003)(4326008)(2616005)(36756003)(6506007)(316002)(66476007)(107886003)(66946007)(66556008)(6666004)(1076003)(8676002)(5660300002)(6512007)(2906002)(26005)(8936002)(86362001)(41300700001)(83380400001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0GerLQtULP6+T0le9adGawHaC0DiqqQ2sruNiFQ8anoM8hF1aP3fOtL2c4ET?=
- =?us-ascii?Q?xSdVTBYNCgnmrDu+ADkm4ZAj+8dBB2KYYp/W1ncZp98JvfF56gFWvsA+f9as?=
- =?us-ascii?Q?nBqPIHwg0JQzhEKlowUQzq+EDB0ICb/SbEf5fFv0cfOVEhmjDwaCufkBeOdN?=
- =?us-ascii?Q?+vTpuw8bYCAWC5Xr9950p8PfQknII5V655AzFWigp5NMOtY5BxQIYtWbQEEE?=
- =?us-ascii?Q?iXbFBQM3GdZfMECyY5dAPJ1D3btzDo5QmiJbijoiqo2vNj7HankMmng9VqtT?=
- =?us-ascii?Q?hL8QBm748zwJNmEeMHwDHqHS+GmnFqqUlgXzatOFmuZ9GIxSkfUpnz3Fk7G6?=
- =?us-ascii?Q?/rremQfWr6qE9RMBNInNpR2kjzfs8gUcxjfVPWN3CFi8tJ6CVhvMn1TLm5WM?=
- =?us-ascii?Q?SqnbJEBy1B3fINT0iiIvsAh7ceRTg4pb9UUZ7Hef2cwcFoftjtImK948hrye?=
- =?us-ascii?Q?7vfNyGzEuuSH3XX3x0Gg2rDUOyS9juIe4w/sGraXtntXiF4qzh/Fh3PRxKL2?=
- =?us-ascii?Q?hKWOrQF+8l1joRNBcHPSy9IHU0qh0SBU5xq2QVV9G+msY4AL8tqKl4eJqORT?=
- =?us-ascii?Q?lsX1FTfDvlI++odhD/zuhNVZIvs5QCq3WxDZIx3dZQpZfuoT0ri5HNo9Ny5k?=
- =?us-ascii?Q?oAPiZakb80KsNR3FDFqv4FZGiKsEkhonwFYG+a10eGGU4y2mk1kIKo2WhB5B?=
- =?us-ascii?Q?WhffafzefZhv8lt9R6X6TLxekzzBwVVAdXoNZY38PwldiHAe+6JiW4+sbf4H?=
- =?us-ascii?Q?smBcYdPIlxVwBxO5HC2B4xXho7gKbwaTIHpMTQk4CLy8NDCiyY1ilh2y5i/H?=
- =?us-ascii?Q?KA8PSeD4Bj6uUQsgwh1puhgBP39270gBgjrbtIPOWOHlpJhIoPX3bfQg5ZOE?=
- =?us-ascii?Q?ju7CTw6oVpTvH4+1nedWYmwneeYpUs+5b+XvPnzXCcGNQjFe+HTKewP2SvCp?=
- =?us-ascii?Q?7rSndrh1lZV+xaoEMu2HKY0fDp0whIquo+NYYpssEKdDdzzOJ/4IYg5jeMwN?=
- =?us-ascii?Q?ne2ox3AHPKrBfBf3XXNvFnm1Eq1rzinIOTQIpJjEcYW+Jiqz6ehmDz4g8FHz?=
- =?us-ascii?Q?PWy1OBqsnszTPKg2IOP3j/CBxKt8YPVu2jgGcc47CRjfB/dtfYkz7V1HNQGh?=
- =?us-ascii?Q?Fc7nFddUto/Oz0szMTNerFifX5zKGYDaJqkZIcH896ewu2kOdhKWbSE6AWZl?=
- =?us-ascii?Q?5zgJV5xjnMubiw3iX/duYrYbbj3MfoBaJSWzOT6WKXU1s00jPa/ZFQKG4Vjw?=
- =?us-ascii?Q?Cb7MzL+dmHWytKdPoyN53ridhywyRDl5J0Qi7sR5rhTyPx4uOlUFyYemcQlr?=
- =?us-ascii?Q?E20X/G3sT0M3WHopE3Cfe4WhaJnrqjVxIw/JEV5IAlCBnJTA1ZDA4+g8O6en?=
- =?us-ascii?Q?Z4ckqcHNJPCQMpQQwN/XGit616IlTavLr07I+btNy1jHGarDCXNgSTZoNJNm?=
- =?us-ascii?Q?tTiIOFxULh1FWCZIkE/ugBFW5o/ZCe/BKMsgOejy9ube8BJphyCKS2x7R6oO?=
- =?us-ascii?Q?tfDKkut/Eh22Ctpjd3Y8ckEB+5ZMXg25CQqz7suvmGR30RuRDbH9A0gAz+Dl?=
- =?us-ascii?Q?WxKjojWUeuDtTKb40JB9ba3zpRosUYI4sLGtpQoIMCvcWSZEft0ACOJzs3o8?=
- =?us-ascii?Q?nA=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Mf4hgJhgwygrL+3PQ029eV6Ndd+liH+wqGEMR1/BSuHZYrAu5519520M/UBh?=
+ =?us-ascii?Q?7XZ6r5olQtH45fCxaXuWW5eGMfrhnaT695TY1rLkzgnPI7HVPWW1HgB7kdhK?=
+ =?us-ascii?Q?46FvFo7s1+CmcuC4ooBF+ZHUlW49zdkPxYp1OR000EWDnH2tFZAKhjl3mSci?=
+ =?us-ascii?Q?FmLCNTln7ERJoDDUkKwFC0VbNa0iEVkxJKYpPe+7AukWIBru8qYzhPpeICvS?=
+ =?us-ascii?Q?qdlfXC0T84Fn0AElsClBVC/3QNfu+/o8PEPAOI12uboUj68jafrBpL2DW+jy?=
+ =?us-ascii?Q?mzTSGJWMevfTYjditCu5RXjsYu0xf2sNcfUJRJkW5H9GkGmznVg177YgGvmC?=
+ =?us-ascii?Q?MexHuRmFTk7VwRUSstWF9KvxqGf7fW6v64qf5/PrNUb/8YZWXMGoibzeVLq+?=
+ =?us-ascii?Q?L5oyRSfh/26MjbJkfq8sMdFj+5tVNAXfJjFX6Bzj54uglp7eX6jtZ9p9Fkhd?=
+ =?us-ascii?Q?lzTlrz7bnzk8deJPYg98+WxiHT/E27CG771Y8T2RQFZkXWaoZSpvEEV5tmVm?=
+ =?us-ascii?Q?YT7fwAdpgpF0yy+YyR6xY3joEk8niOV9bHaHfx4TMbaD+SdFW6djjvcVlq5G?=
+ =?us-ascii?Q?YRtHHlEr0WvcvXXSB3ZBtMRWVHqj8qFeFofgo6Bdhg0FAeajvPggpVQzS64t?=
+ =?us-ascii?Q?U4sMVo09noWWXg0t4ZQRJXgY1YNULQbtqmG/NgBxcoWpLqOTuyjM5au7jq+7?=
+ =?us-ascii?Q?DwBOaAyOMpViYWjiIklXShazVqtKdKjuYiGoQdQ+iAj5pRjtiKb3tykceOcW?=
+ =?us-ascii?Q?QR1DN1hwGia9+zrW13zhRniiv8UFqu1FtCTOGwvLvPjPF0Dn/Ko54T5VENpC?=
+ =?us-ascii?Q?ifgWB86hqG8bYrVY12tMM6/Mvx/IOVs5IgVVqFF8oIP2nxFRzPvXXrcU0pn+?=
+ =?us-ascii?Q?SjQeCYHLLQwxkJg+0KBie55fQES8Mn3lHs/ieveGKc9FZfYroraoL05FgW9L?=
+ =?us-ascii?Q?NqnORSpmhRrEPodozuavZhzdxR/3n7EimLMS93/wE3nXL5UJhZGU2ynSPKtO?=
+ =?us-ascii?Q?Ml3Nn/7us1dU1ZldtrU7o1Gvd47MjD1VppNMF9X/0fI3mM/D5gt418MB0E8v?=
+ =?us-ascii?Q?kCiAnVCemkOeZ05jnAH5JcRnUlENfEl0PgapzvXfhE/8RpIeJXygOgZgB4Ky?=
+ =?us-ascii?Q?kt/G7HlhFhNHK+FyCIyspEmFAoVBhDU0RyWP2iczdMxTHWdxn39JjO+GrtR5?=
+ =?us-ascii?Q?A0VkvD7mc/N88v8brnAJ13BS+dkccuN6VHgXYQuuerAiK4VxpLp+64xRbnjP?=
+ =?us-ascii?Q?lanBa5e+TvnIHf5eF/B8n7yu+ymq53xapyb3+kOPGMv1P1kY3c8orUvfJWu9?=
+ =?us-ascii?Q?x4ZSkj/dagUtbhl8eVlJnHYLLuB2x5tdpk2iY6ZOosmB6cNTKFle2eLKOF2S?=
+ =?us-ascii?Q?Z/qbSDO9GkFJfoKgdcdhubT/fZgXF08ejM1hBzEB/5ni6aI/rhjvdvtCQipF?=
+ =?us-ascii?Q?XOBaOwQnl9eCNHR3hq7Vg/ujWnNSgZemMsaVqJcte19Y4XviVu6b0mhx9NZk?=
+ =?us-ascii?Q?7x1ruifhfV0fLJAU0OT5CXwZrdAUc9/5T5l1CyO/LuljOXvdHsYdOcAHsCRj?=
+ =?us-ascii?Q?W7YKYBkrwXZovceQy42FmS2BNB/k5lpkL/L7Ghj0D/uw3lAMj9QSy7WFt9ss?=
+ =?us-ascii?Q?pQ=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a0bdcb6-e7c3-4ecc-00b2-08daafb0fe3a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 540bd1ca-35e0-446b-7b46-08daafb0ff1c
 X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2022 19:59:54.1915
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2022 19:59:55.6601
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FWZfE9w1yNZRQTO+a8Z47xt73f2cP4jsENhjS0kT4P7vw25oLau7cB2cYX3jOEg2Q6nz/7scxC421NroCttiHQGCX5noGpgx508av/Kf0O8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB5909
+X-MS-Exchange-CrossTenant-UserPrincipalName: /g8OCv7owCiMKG2u/q4vejFu9T8xcKIFvh9sj2QoDOlA2EKKe8dweIz0u8FDOaok+CzjNNfMy32gPIMNQas9duie3/iFNnidblNiP8kL2mM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB6727
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-16_15,2022-10-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
- malwarescore=0 phishscore=0 mlxlogscore=999 spamscore=0 mlxscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 phishscore=0 malwarescore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
  definitions=main-2210160124
-X-Proofpoint-ORIG-GUID: VrzlRefTBD4OjqV_eR1Fjir2WeLTRJU5
-X-Proofpoint-GUID: VrzlRefTBD4OjqV_eR1Fjir2WeLTRJU5
+X-Proofpoint-ORIG-GUID: x8yXK7ba0KL7IGuqqI9o9qpAO71wYAbI
+X-Proofpoint-GUID: x8yXK7ba0KL7IGuqqI9o9qpAO71wYAbI
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -144,218 +144,49 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This begins to move the SCSI execution functions to use a struct for
-passing in args. This patch adds the new struct, converts the low level
-helpers and then adds a new helper the next patches will convert the rest
-of the code to.
+Allow SCSI execution callers to pass in a list of failures they want
+retried.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 Reviewed-by: Martin Wilck <mwilck@suse.com>
 Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/scsi_lib.c    | 69 +++++++++++++++-----------------------
- include/scsi/scsi_device.h | 69 ++++++++++++++++++++++++++++++--------
- 2 files changed, 82 insertions(+), 56 deletions(-)
+ drivers/scsi/scsi_lib.c    | 1 +
+ include/scsi/scsi_device.h | 2 ++
+ 2 files changed, 3 insertions(+)
 
 diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index eae438d53ac5..f0c55e2621da 100644
+index f0c55e2621da..0ad0e476f2cf 100644
 --- a/drivers/scsi/scsi_lib.c
 +++ b/drivers/scsi/scsi_lib.c
-@@ -185,55 +185,39 @@ void scsi_queue_insert(struct scsi_cmnd *cmd, int reason)
- 	__scsi_queue_insert(cmd, reason, true);
- }
- 
--
- /**
-- * __scsi_execute - insert request and wait for the result
-- * @sdev:	scsi device
-- * @cmd:	scsi command
-- * @data_direction: data direction
-- * @buffer:	data buffer
-- * @bufflen:	len of buffer
-- * @sense:	optional sense buffer
-- * @sshdr:	optional decoded sense header
-- * @timeout:	request timeout in HZ
-- * @retries:	number of times to retry request
-- * @flags:	flags for ->cmd_flags
-- * @rq_flags:	flags for ->rq_flags
-- * @resid:	optional residual length
-+ * __scsi_exec_req - insert request and wait for the result
-+ * @scsi_exec_args: See struct definition for description of each field
-  *
-  * Returns the scsi_cmnd result field if a command was executed, or a negative
-  * Linux error code if we didn't get that far.
-  */
--int __scsi_execute(struct scsi_device *sdev, const unsigned char *cmd,
--		 int data_direction, void *buffer, unsigned bufflen,
--		 unsigned char *sense, struct scsi_sense_hdr *sshdr,
--		 int timeout, int retries, blk_opf_t flags,
--		 req_flags_t rq_flags, int *resid)
-+int __scsi_exec_req(const struct scsi_exec_args *args)
- {
- 	struct request *req;
- 	struct scsi_cmnd *scmd;
- 	int ret;
- 
--	req = scsi_alloc_request(sdev->request_queue,
--			data_direction == DMA_TO_DEVICE ?
--			REQ_OP_DRV_OUT : REQ_OP_DRV_IN,
--			rq_flags & RQF_PM ? BLK_MQ_REQ_PM : 0);
-+	req = scsi_alloc_request(args->sdev->request_queue,
-+				 args->data_dir == DMA_TO_DEVICE ?
-+				 REQ_OP_DRV_OUT : REQ_OP_DRV_IN,
-+				 args->req_flags & RQF_PM ? BLK_MQ_REQ_PM : 0);
- 	if (IS_ERR(req))
- 		return PTR_ERR(req);
- 
--	if (bufflen) {
--		ret = blk_rq_map_kern(sdev->request_queue, req,
--				      buffer, bufflen, GFP_NOIO);
-+	if (args->buf) {
-+		ret = blk_rq_map_kern(args->sdev->request_queue, req, args->buf,
-+				      args->buf_len, GFP_NOIO);
- 		if (ret)
- 			goto out;
- 	}
- 	scmd = blk_mq_rq_to_pdu(req);
--	scmd->cmd_len = COMMAND_SIZE(cmd[0]);
--	memcpy(scmd->cmnd, cmd, scmd->cmd_len);
--	scmd->allowed = retries;
--	req->timeout = timeout;
--	req->cmd_flags |= flags;
--	req->rq_flags |= rq_flags | RQF_QUIET;
-+	scmd->cmd_len = COMMAND_SIZE(args->cmd[0]);
-+	memcpy(scmd->cmnd, args->cmd, scmd->cmd_len);
-+	scmd->allowed = args->retries;
-+	req->timeout = args->timeout;
-+	req->cmd_flags |= args->op_flags;
-+	req->rq_flags |= args->req_flags | RQF_QUIET;
- 
- 	/*
- 	 * head injection *required* here otherwise quiesce won't work
-@@ -246,23 +230,24 @@ int __scsi_execute(struct scsi_device *sdev, const unsigned char *cmd,
- 	 * is invalid.  Prevent the garbage from being misinterpreted
- 	 * and prevent security leaks by zeroing out the excess data.
- 	 */
--	if (unlikely(scmd->resid_len > 0 && scmd->resid_len <= bufflen))
--		memset(buffer + bufflen - scmd->resid_len, 0, scmd->resid_len);
--
--	if (resid)
--		*resid = scmd->resid_len;
--	if (sense && scmd->sense_len)
--		memcpy(sense, scmd->sense_buffer, SCSI_SENSE_BUFFERSIZE);
--	if (sshdr)
-+	if (unlikely(scmd->resid_len > 0 && scmd->resid_len <= args->buf_len))
-+		memset(args->buf + args->buf_len - scmd->resid_len, 0,
-+		       scmd->resid_len);
-+
-+	if (args->resid)
-+		*args->resid = scmd->resid_len;
-+	if (args->sense && scmd->sense_len)
-+		memcpy(args->sense, scmd->sense_buffer, SCSI_SENSE_BUFFERSIZE);
-+	if (args->sshdr)
- 		scsi_normalize_sense(scmd->sense_buffer, scmd->sense_len,
--				     sshdr);
-+				     args->sshdr);
- 	ret = scmd->result;
-  out:
- 	blk_mq_free_request(req);
- 
- 	return ret;
- }
--EXPORT_SYMBOL(__scsi_execute);
-+EXPORT_SYMBOL(__scsi_exec_req);
- 
- /*
-  * Wake up the error handler if necessary. Avoid as follows that the error
+@@ -215,6 +215,7 @@ int __scsi_exec_req(const struct scsi_exec_args *args)
+ 	scmd->cmd_len = COMMAND_SIZE(args->cmd[0]);
+ 	memcpy(scmd->cmnd, args->cmd, scmd->cmd_len);
+ 	scmd->allowed = args->retries;
++	scmd->failures = args->failures;
+ 	req->timeout = args->timeout;
+ 	req->cmd_flags |= args->op_flags;
+ 	req->rq_flags |= args->req_flags | RQF_QUIET;
 diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index c36656d8ac6c..d49a7157d7c1 100644
+index d49a7157d7c1..72d1690f4ff1 100644
 --- a/include/scsi/scsi_device.h
 +++ b/include/scsi/scsi_device.h
-@@ -455,28 +455,69 @@ extern const char *scsi_device_state_name(enum scsi_device_state);
- extern int scsi_is_sdev_device(const struct device *);
- extern int scsi_is_target_device(const struct device *);
- extern void scsi_sanitize_inquiry_string(unsigned char *s, int len);
--extern int __scsi_execute(struct scsi_device *sdev, const unsigned char *cmd,
--			int data_direction, void *buffer, unsigned bufflen,
--			unsigned char *sense, struct scsi_sense_hdr *sshdr,
--			int timeout, int retries, blk_opf_t flags,
--			req_flags_t rq_flags, int *resid);
-+
-+struct scsi_exec_args {
-+	struct scsi_device *sdev;	/* scsi device */
-+	const unsigned char *cmd;	/* scsi command */
-+	int data_dir;			/* DMA direction */
-+	void *buf;			/* data buffer */
-+	unsigned int buf_len;		/* len of buffer */
-+	unsigned char *sense;		/* optional sense buffer */
-+	unsigned int sense_len;		/* optional sense buffer len */
-+	struct scsi_sense_hdr *sshdr;	/* optional decoded sense header */
-+	int timeout;			/* request timeout in HZ */
-+	int retries;			/* number of times to retry request */
-+	blk_opf_t op_flags;		/* flags for ->cmd_flags */
-+	req_flags_t req_flags;		/* flags for ->rq_flags */
-+	int *resid;			/* optional residual length */
-+};
-+
-+extern int __scsi_exec_req(const struct scsi_exec_args *args);
-+/* Make sure any sense buffer is the correct size. */
-+#define scsi_exec_req(args)						\
-+({									\
-+	BUILD_BUG_ON(args.sense &&					\
-+		     args.sense_len != SCSI_SENSE_BUFFERSIZE);		\
-+	__scsi_exec_req(&args);					\
-+})
-+
- /* Make sure any sense buffer is the correct size. */
--#define scsi_execute(sdev, cmd, data_direction, buffer, bufflen, sense,	\
--		     sshdr, timeout, retries, flags, rq_flags, resid)	\
-+#define scsi_execute(_sdev, _cmd, _data_dir, _buffer, _bufflen, _sense,	\
-+		     _sshdr, _timeout, _retries, _flags, _rq_flags,	\
-+		     _resid)						\
- ({									\
--	BUILD_BUG_ON((sense) != NULL &&					\
--		     sizeof(sense) != SCSI_SENSE_BUFFERSIZE);		\
--	__scsi_execute(sdev, cmd, data_direction, buffer, bufflen,	\
--		       sense, sshdr, timeout, retries, flags, rq_flags,	\
--		       resid);						\
-+	BUILD_BUG_ON((_sense) != NULL &&				\
-+		     sizeof(_sense) != SCSI_SENSE_BUFFERSIZE);		\
-+	__scsi_exec_req(&((struct scsi_exec_args) {			\
-+				.sdev = _sdev,				\
-+				.cmd = _cmd,				\
-+				.data_dir = _data_dir,			\
-+				.buf = _buffer,				\
-+				.buf_len = _bufflen,			\
-+				.sense = _sense,			\
-+				.sshdr = _sshdr,			\
-+				.timeout = _timeout,			\
-+				.retries = _retries,			\
-+				.op_flags = _flags,			\
-+				.req_flags = _rq_flags,			\
-+				.resid = _resid, }));			\
- })
-+
- static inline int scsi_execute_req(struct scsi_device *sdev,
- 	const unsigned char *cmd, int data_direction, void *buffer,
- 	unsigned bufflen, struct scsi_sense_hdr *sshdr, int timeout,
- 	int retries, int *resid)
- {
--	return scsi_execute(sdev, cmd, data_direction, buffer,
--		bufflen, NULL, sshdr, timeout, retries,  0, 0, resid);
-+	return __scsi_exec_req(&(struct scsi_exec_args) {
-+					.sdev = sdev,
-+					.cmd = cmd,
-+					.data_dir = data_direction,
-+					.buf = buffer,
-+					.buf_len = bufflen,
-+					.sshdr = sshdr,
-+					.timeout = timeout,
-+					.retries = retries,
-+					.resid = resid });
- }
- extern void sdev_disable_disk_events(struct scsi_device *sdev);
- extern void sdev_enable_disk_events(struct scsi_device *sdev);
+@@ -14,6 +14,7 @@ struct bsg_device;
+ struct device;
+ struct request_queue;
+ struct scsi_cmnd;
++struct scsi_failure;
+ struct scsi_lun;
+ struct scsi_sense_hdr;
+ 
+@@ -470,6 +471,7 @@ struct scsi_exec_args {
+ 	blk_opf_t op_flags;		/* flags for ->cmd_flags */
+ 	req_flags_t req_flags;		/* flags for ->rq_flags */
+ 	int *resid;			/* optional residual length */
++	struct scsi_failure *failures;	/* optional failures to retry */
+ };
+ 
+ extern int __scsi_exec_req(const struct scsi_exec_args *args);
 -- 
 2.25.1
 
