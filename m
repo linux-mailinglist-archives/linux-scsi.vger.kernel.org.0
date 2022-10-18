@@ -2,99 +2,140 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FA96022E6
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Oct 2022 05:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464A760239C
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Oct 2022 07:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiJRDwR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Oct 2022 23:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        id S230295AbiJRFAs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Oct 2022 01:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJRDwP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Oct 2022 23:52:15 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB3F1D2
-        for <linux-scsi@vger.kernel.org>; Mon, 17 Oct 2022 20:52:13 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29HNYfeK019088;
-        Tue, 18 Oct 2022 03:52:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=P081kBpIhz1iYs37V3YqKs6facfzNA7osDtalRqbHRE=;
- b=ZMwxdJe2zVGUmPE7nYx4BhITJ8XdgQjUrVdkkBoGgMhyeg+F/unVtOwtmd/iPxFeJZUs
- PYYU/oJyWtwUuKOkeVSR3JTpuSwHu0Bk2rwRyzOesI2dtFDsuhT/LUsJyvo8QpSWD/Ss
- kivlTnbis03xhTcJ3RxyRA0fMy9p4mJNVB8pMmyZj4eTBOJgus8vPMmABWNE4z9izzUn
- azNXnvGgksLpX9UwhtAs3CEhyJ8HDGUvvU42RUOtGejf02tKOBi1s6h694Tf2fCqqQnx
- zI0twLWIlrjZ7sP+UJUoqA1fmXqYt31GT01pqYbkd8Py/1KSOhPV+yFOHrw62BSMXtl0 5Q== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3k7ndtds2t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Oct 2022 03:52:10 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29I0Jh9N036443;
-        Tue, 18 Oct 2022 03:52:09 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3k8htff2ba-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Oct 2022 03:52:09 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29I3q8fe029581;
-        Tue, 18 Oct 2022 03:52:08 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3k8htff2b0-2;
-        Tue, 18 Oct 2022 03:52:08 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, Uday Shankar <ushankar@purestorage.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Mike Christie <michael.christie@oracle.com>
-Subject: Re: [PATCH] restrict legal sdev_state transitions via sysfs
-Date:   Mon, 17 Oct 2022 23:52:07 -0400
-Message-Id: <166606442642.2366633.1466217934304768342.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220924000241.2967323-1-ushankar@purestorage.com>
-References: <20220924000241.2967323-1-ushankar@purestorage.com>
+        with ESMTP id S230016AbiJRE7r (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Oct 2022 00:59:47 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1834E6389
+        for <linux-scsi@vger.kernel.org>; Mon, 17 Oct 2022 21:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1666069169; x=1697605169;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wEzcwplt8kJCyupDcXus/05M19KXPbEFbO9P8ZHcDEM=;
+  b=l1ZEbiRKEd24adeT5j2Tc705SKdX2KYTHzxT+AKvD7SDhdGQuO+AS7tF
+   u3is/Ifct1jD7oVWm3N5nvbRNNxTfyy+xS+iOud3Gc0V0KD8DRs+opJI2
+   ndOUknL17J4hLp2BlADet7Y/bRORIUJFdZ9ELYPZOgBQV5Prww8g3/u6Y
+   v0JQ/AwyixCsJN7AuYcQ8ROGaPzcRgTBSEBhG5Y1XMiOSRKqccmsklubS
+   33grx2Zv6iVh8/ONxAG0X64WXgh0Cay9WixNNtv4MTfcTEIW0OpX69skE
+   mlnMKc9icwE6+000UhQbUHTuYSA9BYvb2L2PTnxQ+mlhDZiFi/qodqY10
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,193,1661788800"; 
+   d="scan'208";a="212411235"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 18 Oct 2022 12:59:25 +0800
+IronPort-SDR: xt2NuH1WaJrHXrxgO0/XuxauQQTqb91W4XmsL+UxbcHzUgagc1/BHrLPg1RwqinHPhrFjMf3i9
+ vFP/Hm4hmOnTGZ1A3RjWl48NjqjcO17j7oJDPtxHXotIoHBLqnTco1aCoYUruqYBfrTDKDKkx7
+ osI/ahoHytxVfUS/f7WvtMlRMquNwys2W5VHwgoZqz2nvfWxNW8iX6zspYSbmRTJj7CA63M1CK
+ 5m+Ziig1KLrPMtptY+vZGp246W6XqcUWrGWXtiMg3g5zrHU7Fjt62YbrriFdz8SJgeInEEi5U6
+ hHDdtOqzHOQDG0kIos69yxMI
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Oct 2022 21:18:57 -0700
+IronPort-SDR: nAi37A073FFFh2ql1quwtMzAi+snLpm7W8dlANriM5l6Eu8sYeUJHHT+YZmIzcdWmPWcA3Vb/x
+ SaWgZb4YnkVqJ2QHNDLR5bJvtFBu1CkOxeF6uEuC097Jav2fJnLjkXFuQzgrnWUsX4bNHnEzIa
+ dG4LYDs7s7GA+CYRKKFkxMijyRmIlghNtHtifFsS2nZ0/1BGyNweNoYOELD/HavgaQawMJ9zKg
+ LYersUvfmQu3enIuW/WvPEu3LueZ5go1OT54uM2k0e4r55mzI8XhfZs/jVA9K33DCnOQ5JNgaM
+ IeA=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Oct 2022 21:59:26 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Ms1qc5nVMz1Rwrq
+        for <linux-scsi@vger.kernel.org>; Mon, 17 Oct 2022 21:59:24 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1666069164; x=1668661165; bh=wEzcwplt8kJCyupDcXus/05M19KXPbEFbO9
+        P8ZHcDEM=; b=Mwvfem1AuR3HwawQDMQTp1SuAm+DOQotK6oyKhYbqFD2znV1D3A
+        AG2lh5xyJvsBpEwEVGyLUKixyqX+wMEo6mhzrLk++5WG4/cRqgwQKyCweGuwB9BL
+        keoclkPIqsTcLorlKxAmt8tShaFkspge+C/TDQS32U/jK+2wfgRkrbz9hW6+ddWN
+        pm/iEmrh9PESJU7y+vYAYjOE+rrHx0OMY+3uWPgbR5h2mMttO4WvLljLxnZTLqFx
+        TzJOII2VQFAlxr4KghlzfFsrqORYSfzQXYc0AyekxCZ8rbt5kG+hebHlf4wGPjW7
+        TvfBGNPu05rzXpcgZyFP/m8kWf9q4ibwatQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id vlqY7Z-CBIJN for <linux-scsi@vger.kernel.org>;
+        Mon, 17 Oct 2022 21:59:24 -0700 (PDT)
+Received: from [10.225.163.121] (unknown [10.225.163.121])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Ms1qb0cj8z1RvLy;
+        Mon, 17 Oct 2022 21:59:22 -0700 (PDT)
+Message-ID: <3c638814-4a9f-6506-b556-8ad64d920daf@opensource.wdc.com>
+Date:   Tue, 18 Oct 2022 13:59:21 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-17_13,2022-10-17_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=777 phishscore=0
- suspectscore=0 spamscore=0 adultscore=0 mlxscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210180020
-X-Proofpoint-ORIG-GUID: QkL20Qt9Fg3KSfJZpKDGr2KojN_FsAsy
-X-Proofpoint-GUID: QkL20Qt9Fg3KSfJZpKDGr2KojN_FsAsy
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 0/4] libata: misc frozen port cleanups
+Content-Language: en-US
+To:     Niklas Cassel <niklas.cassel@wdc.com>,
+        Mikael Pettersson <mikpelinux@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     john.garry@huawei.com, linux-ide@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20221007132342.1590367-1-niklas.cassel@wdc.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20221007132342.1590367-1-niklas.cassel@wdc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 23 Sep 2022 18:02:42 -0600, Uday Shankar wrote:
-
-> Userspace can currently write to sysfs to transition sdev_state to
-> RUNNING or OFFLINE from any source state. This causes issues because
-> proper transitioning out of some states involves steps besides just
-> changing sdev_state, so allowing userspace to change sdev_state
-> regardless of the source state can result in inconsistencies; e.g. with
-> iscsi we can end up with sdev_state == SDEV_RUNNING while the device
-> queue is quiesced. Any task attempting IO on the device will then hang,
-> and in more recent kernels, iscsid will hang as well. More detail about
-> this bug is provided in my first attempt:
-> https://groups.google.com/g/open-iscsi/c/PNKca4HgPDs/m/CXaDkntOAQAJ
+On 10/7/22 22:23, Niklas Cassel wrote:
+> Hello there,
 > 
-> [...]
+> This series adds a new ata_port_is_frozen() helper function,
+> and makes use of it in ata and libsas.
+> 
+> Additionally, improve ata_read_log_page() to avoid a futile
+> retry while the port is frozen.
+> 
+> Kind regards,
+> Niklas
+> 
+> 
+> Niklas Cassel (4):
+>   ata: add ata_port_is_frozen() helper
+>   ata: make use of ata_port_is_frozen() helper
+>   scsi: libsas: make use of ata_port_is_frozen() helper
+>   ata: libata-core: do not retry reading the log on timeout
+> 
+>  drivers/ata/libahci.c         |  6 +++---
+>  drivers/ata/libata-acpi.c     |  4 ++--
+>  drivers/ata/libata-core.c     |  7 ++++---
+>  drivers/ata/libata-eh.c       | 21 ++++++++++-----------
+>  drivers/ata/libata-sata.c     |  2 +-
+>  drivers/ata/libata-scsi.c     |  2 +-
+>  drivers/ata/sata_nv.c         |  2 +-
+>  drivers/ata/sata_promise.c    |  2 +-
+>  drivers/ata/sata_sx4.c        |  2 +-
+>  drivers/scsi/libsas/sas_ata.c |  2 +-
+>  include/linux/libata.h        |  5 +++++
+>  11 files changed, 30 insertions(+), 25 deletions(-)
+> 
 
-Applied to 6.1/scsi-fixes, thanks!
-
-[1/1] restrict legal sdev_state transitions via sysfs
-      https://git.kernel.org/mkp/scsi/c/2331ce6126be
+Applied to for-6.2. Thanks !
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Damien Le Moal
+Western Digital Research
+
