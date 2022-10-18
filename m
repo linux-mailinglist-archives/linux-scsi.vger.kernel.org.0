@@ -2,54 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4696033F0
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Oct 2022 22:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50316033F2
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Oct 2022 22:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiJRUan (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Oct 2022 16:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S230108AbiJRUay (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Oct 2022 16:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiJRUad (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Oct 2022 16:30:33 -0400
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD856647DF
-        for <linux-scsi@vger.kernel.org>; Tue, 18 Oct 2022 13:30:20 -0700 (PDT)
-Received: by mail-pg1-f182.google.com with SMTP id q1so14290293pgl.11
-        for <linux-scsi@vger.kernel.org>; Tue, 18 Oct 2022 13:30:20 -0700 (PDT)
+        with ESMTP id S230062AbiJRUam (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Oct 2022 16:30:42 -0400
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4586BD6E
+        for <linux-scsi@vger.kernel.org>; Tue, 18 Oct 2022 13:30:32 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id n7so14961087plp.1
+        for <linux-scsi@vger.kernel.org>; Tue, 18 Oct 2022 13:30:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UwIbGLiuZXIVrQS613fVUgRhpG6gP+e1rIUIpvDyBRw=;
-        b=OdmI7cWG2fgmBWklnL4pUJxDnzZH1zHuvOppvzMPBLZLNP4RbNv1Cw9caDLGYZaXnh
-         JDfm3sSEBmh5UMpxtNpn3L/kxYqvOjMbCLqZr2AkP9S9CNAJ9nS54b7/+gxXvV5V0INI
-         c9Gvnrkma665119nl9qMsY/x8rmuF76HKQZGUEI/awzaWvWXfEVB3Ifl4UiQ/qAj1i+C
-         p7D54KlrAnlA8Hl6WAY/gbnoF/5m3NlqFD4nn/0hdGFTEunjekeeh7/j7Y4KQWTaFnQZ
-         lFUrVWNV8tFbq91gxmyFbPMgx+GkGa6G3vXz+yTlqOsnGZNVitcDpTgcyI439oJbMew8
-         ngSg==
-X-Gm-Message-State: ACrzQf0Cq6Daoqg0izTkQoVpQAF5VwmE1mXTasapYMuDfZr5XlET3M6B
-        YTjjUD56KFPg4bv5GTV1CPo=
-X-Google-Smtp-Source: AMsMyM5t0HwuYneWvE6B3XkU381cxD1bhM8XlRCI5HNncAxajnxIENZWbzfkiQx3DfnpQxqZq4M3dQ==
-X-Received: by 2002:a62:cfc2:0:b0:565:cbcd:b0a3 with SMTP id b185-20020a62cfc2000000b00565cbcdb0a3mr4751720pfg.73.1666125020132;
-        Tue, 18 Oct 2022 13:30:20 -0700 (PDT)
+        bh=qWnttzuLG17GimzjQrTnKBKot+EDJDS/iAk03ZEeCQE=;
+        b=kXaOj/boH3+Gccy718WQlk6pnX8FLJiyllR4BPp8634tlZW2wFoP0vQdqViXehkRVA
+         yOnq9NvD4c7WDpWz5AoF17SMDhc8TyTtyI1A6MK8/BmYud78tjRiudl+TLLk1k4/oFY4
+         d0cxvlLjEIF/ccn1NvmsyKesKWyPsMHssUbpgGcaTtKCH+hpk1YwVQeitd/yl4Ad6uUC
+         C3GmUDxQ/r2AMsnp4fFxYIxdNXQHJP1vGdNf39i4Q9++MM1gSK+bYctpxtIJYX+gZAXD
+         Qp0GQgd1cvm5bnwkbMoLjjubY5IGX7BAOB6vRy/D6qm3CZ8rAQ8w8OQfSsevW/l3AouS
+         UUDA==
+X-Gm-Message-State: ACrzQf03rBrV/+Ho0xj5eBr2NLte8D7jnM1VMS/JsmPwNitFvG4/ImZT
+        M4AunvyO8+jYi11ASLdfUWg=
+X-Google-Smtp-Source: AMsMyM64Rhzi+fao61WPSxfHYXQUwtvHIGtRUIuL/mBOq8I0/GOWnDMY8yrQiSlAFb+dDcWn1cgh8Q==
+X-Received: by 2002:a17:90b:33ce:b0:20d:7450:6b49 with SMTP id lk14-20020a17090b33ce00b0020d74506b49mr5581318pjb.128.1666125031660;
+        Tue, 18 Oct 2022 13:30:31 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:522b:67a3:58b:5d29])
-        by smtp.gmail.com with ESMTPSA id h137-20020a62838f000000b005624ce0beb5sm9643677pfe.43.2022.10.18.13.30.17
+        by smtp.gmail.com with ESMTPSA id h137-20020a62838f000000b005624ce0beb5sm9643677pfe.43.2022.10.18.13.30.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 13:30:19 -0700 (PDT)
+        Tue, 18 Oct 2022 13:30:31 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
         Adrian Hunter <adrian.hunter@intel.com>,
         Bart Van Assche <bvanassche@acm.org>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
-        John Garry <john.garry@huawei.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Hannes Reinecke <hare@suse.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v4 03/10] scsi: core: Support failing requests while recovering
-Date:   Tue, 18 Oct 2022 13:29:51 -0700
-Message-Id: <20221018202958.1902564-4-bvanassche@acm.org>
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>
+Subject: [PATCH v4 04/10] scsi: ufs: Remove an outdated comment
+Date:   Tue, 18 Oct 2022 13:29:52 -0700
+Message-Id: <20221018202958.1902564-5-bvanassche@acm.org>
 X-Mailer: git-send-email 2.38.0.413.g74048e4d9e-goog
 In-Reply-To: <20221018202958.1902564-1-bvanassche@acm.org>
 References: <20221018202958.1902564-1-bvanassche@acm.org>
@@ -57,70 +56,35 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The current behavior for SCSI commands submitted while error recovery
-is ongoing is to retry command submission after error recovery has
-finished. See also the scsi_host_in_recovery() check in
-scsi_host_queue_ready(). Add support for failing SCSI commands while
-host recovery is in progress. This functionality will be used to fix a
-deadlock in the UFS driver.
+Although the host lock had to be held by ufshcd_clk_scaling_start_busy()
+callers when that function was introduced, that is no longer the case
+today. Hence remove the comment that claims that callers of this function
+must hold the host lock.
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Ming Lei <ming.lei@redhat.com>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Mike Christie <michael.christie@oracle.com>
-Cc: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/scsi_lib.c  | 8 +++++---
- include/scsi/scsi_cmnd.h | 3 ++-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ drivers/ufs/core/ufshcd.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index fa96d3cfdfa3..ec890865abae 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1341,9 +1341,6 @@ static inline int scsi_host_queue_ready(struct request_queue *q,
- 				   struct scsi_device *sdev,
- 				   struct scsi_cmnd *cmd)
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index c8f0fe740005..bdee494381ca 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -2013,7 +2013,6 @@ static void ufshcd_exit_clk_gating(struct ufs_hba *hba)
+ 	destroy_workqueue(hba->clk_gating.clk_gating_workq);
+ }
+ 
+-/* Must be called with host lock acquired */
+ static void ufshcd_clk_scaling_start_busy(struct ufs_hba *hba)
  {
--	if (scsi_host_in_recovery(shost))
--		return 0;
--
- 	if (atomic_read(&shost->host_blocked) > 0) {
- 		if (scsi_host_busy(shost) > 0)
- 			goto starved;
-@@ -1732,6 +1729,11 @@ static blk_status_t scsi_queue_rq(struct blk_mq_hw_ctx *hctx,
- 	ret = BLK_STS_RESOURCE;
- 	if (!scsi_target_queue_ready(shost, sdev))
- 		goto out_put_budget;
-+	if (unlikely(scsi_host_in_recovery(shost))) {
-+		if (cmd->flags & SCMD_FAIL_IF_RECOVERING)
-+			ret = BLK_STS_OFFLINE;
-+		goto out_dec_target_busy;
-+	}
- 	if (!scsi_host_queue_ready(q, shost, sdev, cmd))
- 		goto out_dec_target_busy;
- 
-diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
-index 7d3622db38ed..c2cb5f69635c 100644
---- a/include/scsi/scsi_cmnd.h
-+++ b/include/scsi/scsi_cmnd.h
-@@ -52,8 +52,9 @@ struct scsi_pointer {
- #define SCMD_TAGGED		(1 << 0)
- #define SCMD_INITIALIZED	(1 << 1)
- #define SCMD_LAST		(1 << 2)
-+#define SCMD_FAIL_IF_RECOVERING	(1 << 4)
- /* flags preserved across unprep / reprep */
--#define SCMD_PRESERVED_FLAGS	(SCMD_INITIALIZED)
-+#define SCMD_PRESERVED_FLAGS	(SCMD_INITIALIZED | SCMD_FAIL_IF_RECOVERING)
- 
- /* for scmd->state */
- #define SCMD_STATE_COMPLETE	0
+ 	bool queue_resume_work = false;
