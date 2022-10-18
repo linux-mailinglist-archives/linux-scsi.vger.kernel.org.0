@@ -2,85 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BA26031CD
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Oct 2022 19:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9138603224
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Oct 2022 20:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiJRRwF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Oct 2022 13:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S230000AbiJRSQw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Oct 2022 14:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiJRRwE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Oct 2022 13:52:04 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F03BD9F;
-        Tue, 18 Oct 2022 10:52:01 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 79E675C00C3;
-        Tue, 18 Oct 2022 13:51:58 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Tue, 18 Oct 2022 13:51:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1666115518; x=1666201918; bh=II
-        O0D0kV0kC6d6t3CNBJiQk8iztHZYQDVT51yInx5rI=; b=of0lhuBsdewkvzroYm
-        pr0kZIH+RZYDL0Wo1FEHRDsFfoAphN+8W8rUKeN8uzEfDSb8XKDcATTjBZpqoLJW
-        88Y7jFe5e9VIFfsk2XnMsIVMI7H+lfAHT//YQDZ2kOHZ3k951+KbZZe2+D0mOpBr
-        X4qqRj7eu+F/h8A0g8tj3QO+fKTo2TwB6u1WSLL77r4WjiC9QKUDwoc9rqyLlLlK
-        vP5Szbd3J0PNcwW6UBAj8Q5S9KlVYVWsSwrqhGMIMkeBKF8cuT5NwnTSWX29GCBc
-        CjkXtjE4ptHNpjE95qgLsJNzWnBKHwtwA1D59QV6vNfgSsW9Uv1c8SgZNqDm3af+
-        e5BA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666115518; x=1666201918; bh=IIO0D0kV0kC6d6t3CNBJiQk8iztH
-        ZYQDVT51yInx5rI=; b=UlYD9bS4qeEFSLLB8jrYCOXfE1W0mURHWCxl88c41f9+
-        tBx+9MFYwyL9ZlMmA2YuLuZQVrk26YhNRjnFnsT2EnmGAjEq5UyLGyMf0flLyhqA
-        kHxfYc3du40h92bDBq+Sp5hX6hbfv0vbjiTj/UBQ0D2KaW69h8K75HGUlu9NWLuo
-        TpZyaoE6jsNTAuCMaY6E71Kqo/xvoONP4rfJqLWFEU3ss0r5lx0UjmiYPxlIoHo/
-        Ax15WvLX8TmFmwSXLxZE6it7VebwKk3l/+d8LFgeSyWRdUfSpWtZxjNvdO9HAi5f
-        PTGvvXeM8WN1DzzVel/n9PuGjhSd8GhkXuxrdc6Y4A==
-X-ME-Sender: <xms:vedOY03aEm5RuxN5Xgvx6YPvdnhK13e1paPXdR3HIcfwziU1_zbPUA>
-    <xme:vedOY_E8Ghu9XMOF8I87KHM2YLAxOx4eoJTunFqXfzFty2_0MuZswbT5lE45c5H-c
-    7ElpB4EaVasIYndaYc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelvddgkeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
-    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
-    grthhtvghrnhepleevgfegffehvedtieevhfekheeftedtjeetudevieehveevieelgffh
-    ieevieeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:vedOY87QeEC3wngQQwliN65m7qefEXgtxl_qvb4x-fbxg4Z5_v1leg>
-    <xmx:vedOY91n1WXlMFwwMuIDMjkhxWK-0N3O0tH2hUMhATS4zxFuzm1O_w>
-    <xmx:vedOY3GLLblXHQNZSKQg_GkDD9_u4rHAEQ8V5QZ3rVz4yBXTX2ijLQ>
-    <xmx:vudOY85sz46vghWdJ52Ypq9szSb6fusZeMeGDI12o9KVugypb75Aig>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 63129A60082; Tue, 18 Oct 2022 13:51:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <d818d314-2b00-4667-9188-8d942665032c@app.fastmail.com>
-In-Reply-To: <20221018135720.670094-5-hch@lst.de>
-References: <20221018135720.670094-1-hch@lst.de>
- <20221018135720.670094-5-hch@lst.de>
-Date:   Tue, 18 Oct 2022 19:51:36 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "hch@lst.de" <hch@lst.de>, "Jens Axboe" <axboe@kernel.dk>
-Cc:     "Hector Martin" <marcan@marcan.st>,
-        "Keith Busch" <kbusch@kernel.org>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 4/4] nvme-apple: remove an extra queue reference
-Content-Type: text/plain
+        with ESMTP id S229787AbiJRSQr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Oct 2022 14:16:47 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DF37D1FF;
+        Tue, 18 Oct 2022 11:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1666116998;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=rC125LhrzcYLeAaz+7xLGt5TDzCO2tDpbxIYa+6CZ+Q=;
+    b=dUVBq4EWp7FElp68G5ubEHHU6vq7VSWGoRKg22Z3+nqAZ5DVhb361VMPwLbrgCzLA+
+    LD/GIjFVBdhKL7xVyCt3q/7GLptm4+mRf52hkjwye8pJyu8vQtjRRptFkKJ/wPFdqIkd
+    XhzU7Q29prm03Y7nO4Fj/vBqlDx+7TfPIdQxKUGbAbEoxnY7r+dNekLpHXEE+sTUN0H9
+    XxNqCXDJMARatumuPcSN3MCkKIHR8nfHeqt9eHsq3HS3QSKvTPGCWMqsh5rNvvvhCUs5
+    C4rh5NLtOC1b8em//4mVWvp7S6zZrZmpGaORLYF8Mjzfy8wL6BJMFQ4YLD52H4EJh2da
+    VG3w==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD2QzemV2tdlNlNRZBXiUw="
+X-RZG-CLASS-ID: mo00
+Received: from linux.micron.com
+    by smtp.strato.de (RZmta 48.2.0 AUTH)
+    with ESMTPSA id zad98cy9IIGZYSS
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 18 Oct 2022 20:16:35 +0200 (CEST)
+From:   Bean Huo <beanhuo@iokpp.de>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org, daejun7.park@samsung.com, huobean@gmail.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Changes for ufshcd.c
+Date:   Tue, 18 Oct 2022 20:16:24 +0200
+Message-Id: <20221018181627.326657-1-beanhuo@iokpp.de>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,12 +57,29 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Oct 18, 2022, at 15:57, Christoph Hellwig wrote:
-> Now that blk_mq_destroy_queue does not release the queue reference, there
-> is no need for a second admin queue reference to be held by the
-> apple_nvme structure.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+From: Bean Huo <beanhuo@micron.com>
 
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
+v2--v3:
+    1. Add patch 3/3
+    2. Add remove unused parameter param_offset in patch 1/3 based on Daejun's comment
+    3. Further optimized patch 2/3 based on Bart's comment
+
+v1--v2:
+    1. change in ufshcd_lu_init() in  patch 2/2:
+        1) Remove duplicate parameter initialization
+        2) Move lun parameter initialization before kmalloc()
+
+Bean Huo (3):
+  scsi: ufs: core: Remove unnecessary if statement
+  scsi: ufs: core: Cleanup ufshcd_slave_alloc()
+  scsi: ufs: core: Use is_visible to control UFS unit descriptor sysfs
+    nodes
+
+ drivers/ufs/core/ufs-sysfs.c   |  21 ++++-
+ drivers/ufs/core/ufshcd-priv.h |   6 +-
+ drivers/ufs/core/ufshcd.c      | 155 ++++++++++++---------------------
+ 3 files changed, 77 insertions(+), 105 deletions(-)
+
+-- 
+2.34.1
 
