@@ -2,68 +2,153 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BD7603B4D
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Oct 2022 10:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B123360425D
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Oct 2022 13:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbiJSITy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Oct 2022 04:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        id S234640AbiJSLAD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Oct 2022 07:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiJSITs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Oct 2022 04:19:48 -0400
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AB91FCD1;
-        Wed, 19 Oct 2022 01:19:40 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id w18so27813360wro.7;
-        Wed, 19 Oct 2022 01:19:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nWpDQmZNg8zKVk12QskQ7NNS05C4fI/JmZBKLdKyu8Q=;
-        b=gainN3JJKW4QlyonF0+wIXMDpcPhi2mTm5DpXdBT/4PM1PS6fbWXYwdoGOa91EMukI
-         KsfJGt+yH2bNmfniuoFs5HXaYD6+CJMpaF8PSyvcy27I0ZEn4zVHqvWm5CLu6VRX63kt
-         PK9yomY/FxX6EuEz7WoVpIxtJa9FBBtDPklPNob3jHyX4etQKhaowjqLBqnWAHDil6uz
-         i8ifHYOUbim/TU2lWr81r4i1gjHhUr/lFMDclOsJTusx1vMvDvVmgWPMQyY3hfvo/5VT
-         S4PEHMBLcxvQRyyMNtsiXDCLJj7zB0D3MJ7ks02JrEBx4sv5GjcpCa9BvMgAHkYw48q0
-         eN2Q==
-X-Gm-Message-State: ACrzQf1wvv4yAJVWAR/2IIx9qOYM+NFoUilnIPEJtqe+7TN89GUmem9V
-        OREIOJjDPLW3gfgK43Q36f4=
-X-Google-Smtp-Source: AMsMyM5wXkXOMf7f8IO6xMolfmR8pG6VjvA9rnVoAkzSpdMGj1++8w63nXLq76FhbkNVn2Vm63O5Jg==
-X-Received: by 2002:a05:6000:1786:b0:22e:3955:13a1 with SMTP id e6-20020a056000178600b0022e395513a1mr4197623wrg.624.1666167579379;
-        Wed, 19 Oct 2022 01:19:39 -0700 (PDT)
-Received: from [192.168.64.53] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id bi20-20020a05600c3d9400b003b49ab8ff53sm15131879wmb.8.2022.10.19.01.19.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 01:19:38 -0700 (PDT)
-Message-ID: <34fae217-1d72-3229-bf32-d0fed88cc641@grimberg.me>
-Date:   Wed, 19 Oct 2022 11:19:37 +0300
+        with ESMTP id S234993AbiJSK72 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Oct 2022 06:59:28 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92D8D42;
+        Wed, 19 Oct 2022 03:29:24 -0700 (PDT)
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MslmW4F1Kz689J4;
+        Wed, 19 Oct 2022 17:29:15 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 19 Oct 2022 11:32:27 +0200
+Received: from [10.126.171.238] (10.126.171.238) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 19 Oct 2022 10:32:26 +0100
+Message-ID: <4011744f-d6b5-acab-4efa-95465df4e98b@huawei.com>
+Date:   Wed, 19 Oct 2022 10:32:26 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 4/4] nvme-apple: remove an extra queue reference
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Keith Busch <kbusch@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org
-References: <20221018135720.670094-1-hch@lst.de>
- <20221018135720.670094-5-hch@lst.de>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <20221018135720.670094-5-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: libata and software reset
+To:     Niklas Cassel <Niklas.Cassel@wdc.com>
+CC:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hannes Reinecke <hare@suse.de>,
+        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        Xiang Chen <chenxiang66@hisilicon.com>
+References: <046e86d2-17e1-e85d-08a1-744ef975171c@huawei.com>
+ <Y07AmUoyq8+HVzQU@x1-carbon>
+In-Reply-To: <Y07AmUoyq8+HVzQU@x1-carbon>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.171.238]
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+On 18/10/2022 16:04, Niklas Cassel wrote:
+>> Hi guys,
+>>
+>> In the hisi_sas driver there are times in which we need to issue an ATA
+>> software reset. For this we use hisi_sas_softreset_ata_disk() ->
+>> sas_execute_ata_cmd() -> sas_execute_tmf(), which uses libsas "slow task"
+>> mechanism to issue the command.
+>>
+>> I would like if libata provided such a function to issue a software reset,
+>> such that we can send the command as an ATA queued command.
+>>
+>> The problem is that often when we would want to issue this software reset
+>> the associated ata port is frozen, like in ATA EH, and so we cannot issue
+>> ATA queued commands - internal or normal - at that time.
+>>
+>> Is there any way to solve this? Or I am just misunderstanding how and when
+>> ATA queued commands can and should be used?
+>>
+> Hello John,
+
+Hi Niklas,
+
+> 
+> See the kdoc above __ata_port_freeze():
+> "This function is called when HSM violation or some other
+> condition disrupts normal operation of the port.  Frozen port
+> is not allowed to perform any operation until the port is
+> thawed, which usually follows a successful reset.
+
+ok, I see.
+
+> 
+> ap->ops->freeze() callback can be used for freezing the port
+> hardware-wise (e.g. mask interrupt and stop DMA engine).  If a
+> port cannot be frozen hardware-wise, the interrupt handler
+> must ack and clear interrupts unconditionally while the port
+> is frozen."
+> 
+> 
+> ata_port_operations.qc_issue() is obviously an operation on the port,
+> so it makes sense that it is not allowed.
+
+hmmm..ok, then.
+
+
+> Interrupts are also usually masked or disabled at this time, so we
+> won't get an IRQ with the completion.
+
+Doesn't this policy really just depend on the host controller driver?
+
+> 
+> Perhaps one could argue that there could be an API to execute a polled
+> command. But if the port is in a bad state,
+  e.g. a HSM error (RDY bit
+> is not set), issuing a command would likely fail anyway, regardless if
+> using polling or IRQs.
+> 
+> 
+>> I assume that ata_port_operations.softreset callback requires a method to be
+>> able to issue the softreset directly from the driver, like ahci_softreset()
+>> -> ahci_do_softreset() -> ahci_exec_polled_cmd().
+> Yes, looking .softreset in a few ata drivers, they all seem issue the
+> softreset directly from the driver.
+> (e.g. ahci_do_softreset() calls ahci_exec_polled_cmd() which just always
+> uses bit 0 in PORT_CMD_ISSUE, so it ignores hw_tag.)
+> 
+> But I don't think that I fully understand your problem.
+> 
+> hisi_sas_softreset_ata_disk() -> sas_execute_ata_cmd() -> sas_execute_tmf()
+> calls lldd_execute_task() (hisi_sas_queue_command()) and then calls
+> waits for completion.
+> 
+> How is this different from e.g. the libahci case?
+
+The difference really comes down to the controller programming interface.
+
+For ahci we have a MMIO interface to issue the software reset command.
+
+For my SAS controller of interest, there is no such MMIO interface. To 
+issue the reset we build a h2d fis with a SRST set, and send on the 
+controller ring buffer like any other IO.
+
+As I mentioned, we can set the SRST for the h2d fis on the HW interface 
+without issue, and it works fine. The problem for me is that the command 
+comes via libsas/driver, and I would like it to come from libata such 
+that it has a ATA queued command associated. But then we have the 
+problem that the port is frozen at such times that we want to issue this 
+command.
+
+> Doesn't this end up being the same as resetting the port directly from the
+> driver? (if we ignore all the callbacks)
+> Or do you actually get stuck on a ata_port_is_frozen() check somewhere?
+
+
+Thanks,
+John
