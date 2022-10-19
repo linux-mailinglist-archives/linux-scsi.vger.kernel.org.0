@@ -2,138 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFA5604264
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Oct 2022 13:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA456046AD
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Oct 2022 15:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234713AbiJSLAy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Oct 2022 07:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
+        id S232077AbiJSNRM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Oct 2022 09:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234642AbiJSLAD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Oct 2022 07:00:03 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6610B5FAFF;
-        Wed, 19 Oct 2022 03:29:57 -0700 (PDT)
-X-UUID: a1a477f8d2004174af2ef6a0ad62a700-20221019
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=7oRov0aCEFFX2VAJP0Edz7qj0UNH2f2pTvq05OvqVMo=;
-        b=JJW1zrFkcqnJTdEUP65bDMvSLIa0mcmVLCkWIT1zyt8wxkHWf1jrcBJZoZuGiOma4tfwrEfDLqv0GT/+3wLp3oFrXGFkO2dSKnfK2e+9DAzE/2EW5+XminvHVBPOlIbBcjTTPzH27De0uP/3eg3EIU9rwlmAGx+/AEAXoVAMuko=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:03a65c0a-9bd1-4579-b0b5-6840e7f4a9bb,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:2ed6c6ee-314c-4293-acb8-ca4299dd021f,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: a1a477f8d2004174af2ef6a0ad62a700-20221019
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <eddie.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1781811733; Wed, 19 Oct 2022 18:28:31 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 19 Oct 2022 18:28:30 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 19 Oct 2022 18:28:30 +0800
-Message-ID: <052136dffaf0271e48d9ad5d7ade25805111ab27.camel@mediatek.com>
-Subject: Re: [PATCH v2 05/17] ufs: core: mcq: Introduce Multi Circular Queue
-From:   Eddie Huang <eddie.huang@mediatek.com>
-To:     Asutosh Das <quic_asutoshd@quicinc.com>
-CC:     <quic_cang@quicinc.com>, <quic_nitirawa@quicinc.com>,
-        <quic_rampraka@quicinc.com>, <quic_bhaskarv@quicinc.com>,
-        <quic_richardp@quicinc.com>, <linux-scsi@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <quic_nguyenb@quicinc.com>,
-        <quic_xiaosenh@quicinc.com>, <bvanassche@acm.org>,
-        <avri.altman@wdc.com>, <mani@kernel.org>, <beanhuo@micron.com>,
-        <stanley.chu@mediatek.com>, <liang-yen.wang@mediatek.com>
-Date:   Wed, 19 Oct 2022 18:28:30 +0800
-In-Reply-To: <20221018160048.GF10252@asutoshd-linux1.qualcomm.com>
-References: <cover.1665017636.git.quic_asutoshd@quicinc.com>
-         <11ee57da1d1872f8f02aa5d94e254ee9ddf4ef7a.1665017636.git.quic_asutoshd@quicinc.com>
-         <c89473d2cf48eb92b4afbd78578cd508c481f8b6.camel@mediatek.com>
-         <20221018160048.GF10252@asutoshd-linux1.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S230082AbiJSNQS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Oct 2022 09:16:18 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7E21FF8D;
+        Wed, 19 Oct 2022 06:02:06 -0700 (PDT)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MsmmM1fFCz67m9N;
+        Wed, 19 Oct 2022 18:14:11 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Wed, 19 Oct 2022 12:15:15 +0200
+Received: from [10.126.171.238] (10.126.171.238) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 19 Oct 2022 11:15:14 +0100
+Message-ID: <485beb99-d2a1-77d5-7a73-80bc3955f1f9@huawei.com>
+Date:   Wed, 19 Oct 2022 11:15:14 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: libata and software reset
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Niklas Cassel <Niklas.Cassel@wdc.com>
+CC:     Hannes Reinecke <hare@suse.de>,
+        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "Xiang Chen" <chenxiang66@hisilicon.com>
+References: <046e86d2-17e1-e85d-08a1-744ef975171c@huawei.com>
+ <Y07AmUoyq8+HVzQU@x1-carbon>
+ <4011744f-d6b5-acab-4efa-95465df4e98b@huawei.com>
+ <01229332-aa52-0952-5ef5-a223d726a369@opensource.wdc.com>
+In-Reply-To: <01229332-aa52-0952-5ef5-a223d726a369@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.126.171.238]
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Asutosh,
+On 19/10/2022 10:56, Damien Le Moal wrote:
+>> The difference really comes down to the controller programming interface.
+>>
+>> For ahci we have a MMIO interface to issue the software reset command.
+>>
+>> For my SAS controller of interest, there is no such MMIO interface. To
+>> issue the reset we build a h2d fis with a SRST set, and send on the
+>> controller ring buffer like any other IO.
+>>
+>> As I mentioned, we can set the SRST for the h2d fis on the HW interface
+>> without issue, and it works fine. The problem for me is that the command
+>> comes via libsas/driver, and I would like it to come from libata such
+>> that it has a ATA queued command associated. But then we have the
+>> problem that the port is frozen at such times that we want to issue this
+>> command.
+> Yeah, qc is too high level for this to work.
 
-On Tue, 2022-10-18 at 09:00 -0700, Asutosh Das wrote:
-> On Tue, Oct 18 2022 at 22:29 -0700, Eddie Huang wrote:
-> [...]
-> > > ---
-> > >  drivers/ufs/core/Makefile      |   2 +-
-> > >  drivers/ufs/core/ufs-mcq.c     | 113
-> > > +++++++++++++++++++++++++++++++++++++++++
-> 
-> [...]
-> > >  create mode 100644 drivers/ufs/core/ufs-mcq.c
-> > > 
-> > 
-> > [...]
-> > 
-> > >  /**
-> > >   * ufshcd_probe_hba - probe hba to detect device and initialize
-> > > it
-> > >   * @hba: per-adapter instance
-> > > @@ -8224,6 +8233,9 @@ static int ufshcd_probe_hba(struct ufs_hba
-> > > *hba, bool init_dev_params)
-> > >  			goto out;
-> > > 
-> > >  		if (is_mcq_supported(hba)) {
-> > > +			ret = ufshcd_config_mcq(hba);
-> 
-> [...]
-> 
-> > 
-> > ufshcd_probe_hba() may be called multiple times (from
-> > ufshcd_async_scan() and ufshcd_host_reset_and_restore()). It is not
-> > a
-> > good idea to allocate memory in ufshcd_config_mcq(). Although use
-> > parameter init_dev_params to decide call ufshcd_config_mcq() or
-> > not, it
-> > may cause ufshcd_host_reset_and_restore() not to configure MCQ
-> > (init
-> > SQ/CQ ptr...) again.
-> > 
-> 
-> I don't think the memory allocation can be moved prior to reading the
-> device
-> descriptor since the bQueueDepth is necessary.
-> But I agree to your point that ufshcd_host_reset_and_restore()
-> wouldn't
-> reconfigure MCQ now. Thanks.
-> 
-> > Suggest to separate configure MCQ (set hardware register) and
-> > allocate
-> > memory to different function
-> > 
-> 
-> How about I keep the memory allocation in ufshcd_probe_hba() within
-> the
-> init_dev_params check and separate out the initialization outside the
-> check.
-> That'd ensure that the configuration is done for each call to
-> ufshcd_probe_hba(). I'm open to any other idea that you may have,
-> plmk.
-> > 
+Some more background is that this is all related to the "reserved" 
+commands work. The issue is that it is difficult to differentiate 
+between this libsas softreset command and normal ATA queued commands - 
+the normal check is "is the device associated sata", but that doesn't 
+work. If we could always have a ATA queued command, then that would be 
+better. But, as you say, it is too high level.
 
-Sounds good to me. Please go ahead to make the modification
+Let me check what else I would do. BTW, I will send an update on that 
+work in a day or so.
 
-Thanks
-Eddie Huang
+> But we could probably do
+> something generic at TF or FIS level. libata-sata.c has already some
+> code in that area, something for a "reset TF/FIS" would fit in that file
+> too. libahci could also use that too.
+>
 
+yeah, that would seem a good consolidation.
 
+Thanks!
