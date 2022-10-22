@@ -2,72 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4BE6083F4
-	for <lists+linux-scsi@lfdr.de>; Sat, 22 Oct 2022 05:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357296083FA
+	for <lists+linux-scsi@lfdr.de>; Sat, 22 Oct 2022 05:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJVDwg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 21 Oct 2022 23:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        id S229808AbiJVDwr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 21 Oct 2022 23:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiJVDwd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Oct 2022 23:52:33 -0400
+        with ESMTP id S229786AbiJVDwn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Oct 2022 23:52:43 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043432958FE
-        for <linux-scsi@vger.kernel.org>; Fri, 21 Oct 2022 20:52:33 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29M1htbI007730;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC992A17DC;
+        Fri, 21 Oct 2022 20:52:42 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29M3Bt7C029569;
         Sat, 22 Oct 2022 03:52:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=yZEsjrjdwol8QcUOZpvcm2hX0Z9teHkM0JcprodIqCc=;
- b=bIlyeSj4kxyYqKve8gwvIRAZ63ZJYwVvoTKS2pZ+6AcoFbsskYivGUVj1SuwmxHxGsgy
- mmRqmpqHbmcfITvAlNIdueqnFHqlzacfmj0ZZKxqEszxVT88tRP4Gi3/1B8J4hQvJ5lr
- 5eUqVTRRg/0clAXWQiYFxwr6IFt9T/yCQkw3n+oAUVOldkJ7b9mhtZxUnSAV54I85Lz8
- +ud66z5i9Ea6K2F6uk6yoXAFmqJJjh7bUQZXKwf91twA+kVoT7/O4up0dzdwcPKdLP7S
- oV014yoz7XDQV3c5V9Ar4gRr/kmgU1T/b61n3Czga5WBB7FSv0HBl0L1N6EDKAi4z4Zq Qw== 
+ bh=txILRUl1gGHRsQYIne4v8MiDYagqsUt1reAFjSgIEJU=;
+ b=QsheaxyhTMJzb0eDLZdHE0VADjodErzIO+KNlH1SUtVoIgecom+1Yv4K71/rzL3LS0kU
+ iFjZbeRHRDhWO0cX1jqaMvejY1mperIyoZ5QaHiczdWXIm1nC/9wp96RbJhKpcRutPuT
+ OLyRS7KFz6A1wKwhxyoeGU3WVjmVbCUJ2pjgeaLpKipYTvelLtSw/N8OJ6ax9F1hCJRC
+ dB23FnQx1+FRjEOYyQObb4xN05h9AErmnWNt+IUNTWXixBd0IC5BBNn+kNR8UGAM5od8
+ x+u7x8htZ49ovhi+6+eCGXVSgfTHEqnfos8/1R8r6F44oov7mekeQKAXjQTvvoXGkfX0 fA== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kc741g2mr-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kc8db80pv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 22 Oct 2022 03:52:28 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29M1XXv9015255;
+        Sat, 22 Oct 2022 03:52:27 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kc6y8hk7v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Sat, 22 Oct 2022 03:52:27 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29M1XXv8015255;
-        Sat, 22 Oct 2022 03:52:26 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kc6y8hk7t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 22 Oct 2022 03:52:26 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29M3qOMI004796;
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29M3qOMK004796;
         Sat, 22 Oct 2022 03:52:26 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3kc6y8hk7g-3;
-        Sat, 22 Oct 2022 03:52:25 +0000
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3kc6y8hk7g-4;
+        Sat, 22 Oct 2022 03:52:26 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Igor Pylypiv <ipylypiv@google.com>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>
+To:     jejb@linux.ibm.com, jinpu.wang@cloud.ionos.com,
+        John Garry <john.garry@huawei.com>,
+        damien.lemoal@opensource.wdc.com
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Andrew Konecki <awkonecki@google.com>,
-        Jolly Shah <jollys@google.com>
-Subject: Re: [PATCH] scsi: pm80xx: Display proc_name in sysfs
-Date:   Fri, 21 Oct 2022 23:52:18 -0400
-Message-Id: <166641048598.3488171.18052773811685140212.b4-ty@oracle.com>
+        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
+        linux-scsi@vger.kernel.org, niklas.cassel@wdc.com,
+        yangxingui@huawei.com
+Subject: Re: [PATCH v6 0/8] libsas and drivers: NCQ error handling
+Date:   Fri, 21 Oct 2022 23:52:19 -0400
+Message-Id: <166641056340.3488251.247554797121338933.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221007230651.308969-1-ipylypiv@google.com>
-References: <20221007230651.308969-1-ipylypiv@google.com>
+In-Reply-To: <1665998435-199946-1-git-send-email-john.garry@huawei.com>
+References: <1665998435-199946-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=833 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=904 phishscore=0
  spamscore=0 suspectscore=0 bulkscore=0 malwarescore=0 mlxscore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2209130000 definitions=main-2210220021
-X-Proofpoint-GUID: fh-9_apgVW7OkoR71gzZb6zQc-rRf_gl
-X-Proofpoint-ORIG-GUID: fh-9_apgVW7OkoR71gzZb6zQc-rRf_gl
+X-Proofpoint-ORIG-GUID: MR--JWScZRsNyX6_n1Y39ZYQ9bnZPadC
+X-Proofpoint-GUID: MR--JWScZRsNyX6_n1Y39ZYQ9bnZPadC
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -78,21 +79,37 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 7 Oct 2022 16:06:51 -0700, Igor Pylypiv wrote:
+On Mon, 17 Oct 2022 17:20:27 +0800, John Garry wrote:
 
-> The proc_name entry in sysfs for pm80xx is "(null)" because it is
-> not initialized in scsi_host_template:
+> As reported in [0], the pm8001 driver NCQ error handling more or less
+> duplicates what libata does in link error handling, as follows:
+> - abort all commands
+> - do autopsy with read log ext 10 command
+> - reset the target to recover, if necessary
 > 
-> Before:
-> host:~# cat /sys/class/scsi_host/host6/proc_name
-> (null)
+> Indeed for the hisi_sas driver we want to add similar handling for NCQ
+> errors.
 > 
 > [...]
 
-Applied to 6.1/scsi-fixes, thanks!
+Applied to 6.2/scsi-queue, thanks!
 
-[1/1] scsi: pm80xx: Display proc_name in sysfs
-      https://git.kernel.org/mkp/scsi/c/181dfce9b63b
+[1/8] scsi: libsas: Add sas_ata_device_link_abort()
+      https://git.kernel.org/mkp/scsi/c/44112922674b
+[2/8] scsi: hisi_sas: Move slot variable definition in hisi_sas_abort_task()
+      https://git.kernel.org/mkp/scsi/c/4b329abc9180
+[3/8] scsi: hisi_sas: Add SATA_DISK_ERR bit handling for v3 hw
+      https://git.kernel.org/mkp/scsi/c/930d97dabdd5
+[4/8] scsi: hisi_sas: Modify v3 HW SATA disk error state completion processing
+      https://git.kernel.org/mkp/scsi/c/4ef4f1a61555
+[5/8] scsi: pm8001: Modify task abort handling for SATA task
+      https://git.kernel.org/mkp/scsi/c/0b639decf651
+[6/8] scsi: pm8001: Use sas_ata_device_link_abort() to handle NCQ errors
+      https://git.kernel.org/mkp/scsi/c/811be570a9a8
+[7/8] scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
+      https://git.kernel.org/mkp/scsi/c/8e8d43642f2f
+[8/8] scsi: libsas: Update SATA dev FIS in sas_ata_task_done()
+      https://git.kernel.org/mkp/scsi/c/cc22efbec011
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
