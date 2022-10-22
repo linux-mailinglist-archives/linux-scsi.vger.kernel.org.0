@@ -2,69 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25F16083F3
-	for <lists+linux-scsi@lfdr.de>; Sat, 22 Oct 2022 05:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C7D6083F6
+	for <lists+linux-scsi@lfdr.de>; Sat, 22 Oct 2022 05:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiJVDwc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 21 Oct 2022 23:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
+        id S229763AbiJVDwk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 21 Oct 2022 23:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiJVDw3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Oct 2022 23:52:29 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B06728E04A
-        for <linux-scsi@vger.kernel.org>; Fri, 21 Oct 2022 20:52:28 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29M2tRVZ015955;
-        Sat, 22 Oct 2022 03:52:25 GMT
+        with ESMTP id S229742AbiJVDwh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Oct 2022 23:52:37 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FE429F116
+        for <linux-scsi@vger.kernel.org>; Fri, 21 Oct 2022 20:52:37 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29M3Bt7B029569;
+        Sat, 22 Oct 2022 03:52:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=ItjWv2C1RdjGXyGboynZUJ1HrBJeMeiYmuBy4JS9MJk=;
- b=Jh7gNmiFSSIrx2OsOduWcneNg+NKCV5Vg7Y1M/9rRUkDSF9ulK8/PhOosbKf4KM2BWmf
- VA9kGCGvXfFuLI5NNZ6vBhwwXyW5UBTQSgGkp/azJMy4gqcMyxHk+Yuf5Dt8E43vc2Il
- byByXdET+z6oj/Fp9w4JCtatP5wOkf5tWOffYowlj3MtlvddD77lEQDHj4JDzeFjRh/z
- iPEURt+WThR2YdtuMVILmACgLVOLhdpoVS5bBwcn2DnPcm7prdeGpW2j7fGacE1goDB6
- 7aDEVguSeTZKsP+4wmUG2cflrEKt0z9vBBN7WMUOcbnv26En0u4rACQRxcAXYB8EW8G4 Tg== 
+ bh=OmrGACJV30e8qMtewXChM/so/WEinNOjlUsnsJ9WMmk=;
+ b=yidsQKBHfAEFTULCVuRU6jVmfauOJzQl21Eaf9AUscpj/KEEpqorCdKUO8Zhb9oNaF1t
+ OOVNqB3KGIXIledCwEU8Etdk3X44M/opJaYNPkfoLRDtWnxtij42/duiuaTTGGkkKWG2
+ HeD0CVDDDDoHCUQ9k+bYJC+1GnBGIHiUeTmRYEhREVjFINJxLLKLN2zFSTElZ9nSvIbz
+ j9fPS62OfUnS+1xomRdBn2PY++s5Uo3EC8WilX1qLK3fp7kK5TclHq8F5ws1PpkwTxN+
+ GXlOvgGdwTojk/M68aR0Bdpsxp4iGyeiR4oPu8bG9sl4ONCmXRVm1a1bAProSKqnOb4R XQ== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kc84sr13w-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kc8db80pu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 22 Oct 2022 03:52:25 +0000
+        Sat, 22 Oct 2022 03:52:27 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29M1XeAF015806;
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29M1XVfn015245;
         Sat, 22 Oct 2022 03:52:25 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kc6y8hk7j-1
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kc6y8hk7q-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Sat, 22 Oct 2022 03:52:25 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29M3qOME004796;
-        Sat, 22 Oct 2022 03:52:24 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29M3qOMG004796;
+        Sat, 22 Oct 2022 03:52:25 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3kc6y8hk7g-1;
-        Sat, 22 Oct 2022 03:52:24 +0000
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3kc6y8hk7g-2;
+        Sat, 22 Oct 2022 03:52:25 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v7 0/8] Prepare for constifying SCSI host templates
-Date:   Fri, 21 Oct 2022 23:52:16 -0400
-Message-Id: <166641056340.3488251.275208041460729736.b4-ty@oracle.com>
+To:     stanley.chu@mediatek.com, Jinyoung CHOI <j-young.choi@samsung.com>,
+        jejb@linux.ibm.com, Dukhyun Kwon <d_hyun.kwon@samsung.com>,
+        bvanassche@acm.org, avri.altman@wdc.com,
+        cpgsproxy3 <cpgsproxy3@samsung.com>, linux-scsi@vger.kernel.org,
+        beanhuo@micron.com, ALIM AKHTAR <alim.akhtar@samsung.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH] scsi: ufs: core: Fix the error log in ufshcd_query_flag_retry()
+Date:   Fri, 21 Oct 2022 23:52:17 -0400
+Message-Id: <166641048596.3488171.164153640940689454.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221015002418.30955-1-bvanassche@acm.org>
-References: <20221015002418.30955-1-bvanassche@acm.org>
+In-Reply-To: <1891546521.01666080182092.JavaMail.epsvc@epcpadp4>
+References: <CGME20221017022939epcms2p669fa5e5685ef5be1d6c4d1d3e74b6c51@epcms2p6> <1891546521.01666080182092.JavaMail.epsvc@epcpadp4>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=582 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
  spamscore=0 suspectscore=0 bulkscore=0 malwarescore=0 mlxscore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2209130000 definitions=main-2210220021
-X-Proofpoint-ORIG-GUID: X88j60Pf-RsGXqjOVX-VTQrqgNl9sOvj
-X-Proofpoint-GUID: X88j60Pf-RsGXqjOVX-VTQrqgNl9sOvj
+X-Proofpoint-ORIG-GUID: sOEYSc9MqArjCghGxIrs4w6ePw0rTeS0
+X-Proofpoint-GUID: sOEYSc9MqArjCghGxIrs4w6ePw0rTeS0
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -75,36 +78,17 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 14 Oct 2022 17:24:10 -0700, Bart Van Assche wrote:
+On Tue, 18 Oct 2022 16:30:03 +0900, Dukhyun Kwon wrote:
 
-> This patch series prepares for constifying SCSI host templates by moving the
-> members that are not constant out of the SCSI host template. Please consider
-> this patch series for the next merge window.
+> In ufshcd_query_flag_retry() failed log
+> is incorrectly output as "ufs attibute"
 > 
-> Thanks,
 > 
-> Bart.
-> 
-> [...]
 
-Applied to 6.2/scsi-queue, thanks!
+Applied to 6.1/scsi-fixes, thanks!
 
-[1/8] scsi: esas2r: Initialize two host template members implicitly
-      https://git.kernel.org/mkp/scsi/c/b6da92356cd6
-[2/8] scsi: esas2r: Introduce scsi_template_proc_dir()
-      https://git.kernel.org/mkp/scsi/c/77916da7e4a0
-[3/8] scsi: core: Fail host creation if creating the proc directory fails
-      https://git.kernel.org/mkp/scsi/c/ecca3f9b1636
-[4/8] scsi: core: Introduce a new list for SCSI proc directory entries
-      https://git.kernel.org/mkp/scsi/c/036abd614007
-[5/8] scsi: core: Rework scsi_single_lun_run()
-      https://git.kernel.org/mkp/scsi/c/d460f6240592
-[6/8] scsi: ufs: Simplify ufshcd_set_dev_pwr_mode()
-      https://git.kernel.org/mkp/scsi/c/6d1aa3b0589b
-[7/8] scsi: core: Remove the put_device() call from scsi_device_get()
-      https://git.kernel.org/mkp/scsi/c/195fae206ef2
-[8/8] scsi: core: Release SCSI devices synchronously
-      https://git.kernel.org/mkp/scsi/c/f93ed747e2c7
+[1/1] scsi: ufs: core: Fix the error log in ufshcd_query_flag_retry()
+      https://git.kernel.org/mkp/scsi/c/48ee79528081
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
