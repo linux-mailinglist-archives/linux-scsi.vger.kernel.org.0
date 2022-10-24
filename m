@@ -2,95 +2,140 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D553E60A8A3
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Oct 2022 15:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAA760AA1B
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Oct 2022 15:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235360AbiJXNKi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Oct 2022 09:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S230337AbiJXNbP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Oct 2022 09:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235870AbiJXNJx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Oct 2022 09:09:53 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4672C17401
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Oct 2022 05:23:32 -0700 (PDT)
-X-UUID: e6be62e6014a4862a44e8cd3b17c5021-20221024
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=sFjsyP8ZKZS0F9t1VR6XE2dkw5z7AQiMIr8WnQjyVtY=;
-        b=efs0JhyieJVELkYHwe9neZdl0pc+/ISG3YNll4VYweOOxZqxXU3KwSVZKl+63mhAil5K+7JBKkLzoMrrwKLRRUnxb6ODCyP1SmvB6rE+hX3E2tKPP6FGHFXPoIu+bLnXDobKj1zP+QAVCoKc0RkZeJaK7DYsLF2yroi7wMGRCjk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:7be86530-9179-44e1-96d9-f57c4cebb853,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.12,REQID:7be86530-9179-44e1-96d9-f57c4cebb853,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:62cd327,CLOUDID:9f6282c8-03ab-4171-989e-341ab5339257,B
-        ulkID:221024200608K5U9JB2K,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: e6be62e6014a4862a44e8cd3b17c5021-20221024
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <peter.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1158467370; Mon, 24 Oct 2022 20:06:06 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 24 Oct 2022 20:06:04 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 24 Oct 2022 20:06:04 +0800
-From:   <peter.wang@mediatek.com>
-To:     <stanley.chu@mediatek.com>, <linux-scsi@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>
-CC:     <wsd_upstream@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <alice.chao@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <powen.kao@mediatek.com>, <qilin.tan@mediatek.com>,
-        <lin.gui@mediatek.com>
-Subject: [PATCH v1] ufs: core: print more evt history
-Date:   Mon, 24 Oct 2022 20:06:02 +0800
-Message-ID: <20221024120602.30019-1-peter.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        with ESMTP id S233717AbiJXN1t (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Oct 2022 09:27:49 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A62CA9263
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Oct 2022 05:31:38 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id q71so8545048pgq.8
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Oct 2022 05:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u0tDptCglh3aCeJHm8NhQH6aRaJBh3iGlRSTZIkHGmM=;
+        b=DmtqFLxOmGWQMbYObhUv1Tvb/wkADSmrfdEgtgqpqcDpmE83P5ubITAqIBxsgQYuhV
+         eGb62gBg0FQcxRgKiaxQ+BYIiY7FHO5Tiu6plzSvgMLCbqB81tILEKh2AS4cSTCZXM/4
+         GdzP/Ze1HfY2AERTmvYQYBS5m5ZkDi9qa9JJ+ZD/ZUnTaH97gViCxd+j1/Rmy3pHq+ux
+         XbkFTvpi7KYXz/M590IbmLmsUiK/Y//a6MSHw5p8IqdK32s1HYaYVqcNw3yRH6vpnCWm
+         JadeqQ1L05eQRxUQ4d/BKKxxkNhoqzlY6n6W2goNmJH3w/lG2K0aHg0IkVuAicsowRYt
+         1Smg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u0tDptCglh3aCeJHm8NhQH6aRaJBh3iGlRSTZIkHGmM=;
+        b=YjEbUSf69FK1c3v19/0oxBzdP2P7UrTdxVdrh4iRWXjdF3kFXEDZzMNgY1DKwJJ/j3
+         BjHkQ2xqIWLWnQKgwmI1CIXyPJd2smC1wI1xFZwBLjJY7Y7ft6e3iIJn3PO91a5yXZgu
+         iVrjV0TIhFZDidPJfWlDk5beyZXrPCysCKl8miPo0X3/E5ih7W427z1f22vGBH1W8ETC
+         +tq/N+7gLhOAchOEHuyoBaDT+QOk3g3aDCmVb4BykNrgPxlYrT7RXa5FMQTSpPWYsTa6
+         BJekih47qLTZC9Rxf9+X1K3H0tUMFLXKETl9xgocmLPBu/g2QxSITJbPYA+GjYAN02E1
+         zRqQ==
+X-Gm-Message-State: ACrzQf1xCa+K6UA8bVQDqQ66EWsFt5/C3abndcvO+EjE96Cu+C8h2Xol
+        d6gOKl9kYAGEp8DU6krQxR/VVYtZbJZkxw==
+X-Google-Smtp-Source: AMsMyM5h2t5DUR0hPXTeGR1mtm1ZDy0a3mJtPv20GtvoCzxX+YTElKDhYcgycqbYp/gfDSf2Z04wuA==
+X-Received: by 2002:a0c:9c85:0:b0:4b1:a7b6:5485 with SMTP id i5-20020a0c9c85000000b004b1a7b65485mr27438028qvf.56.1666614084863;
+        Mon, 24 Oct 2022 05:21:24 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id z21-20020ac84555000000b00398df095cf5sm12613654qtn.34.2022.10.24.05.21.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 05:21:24 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1omwSJ-00DRet-HK;
+        Mon, 24 Oct 2022 09:21:23 -0300
+Date:   Mon, 24 Oct 2022 09:21:23 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Douglas Gilbert <dgilbert@interlog.com>
+Cc:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        jejb@linux.vnet.ibm.com, hare@suse.de, bvanassche@acm.org,
+        Bodo Stroesser <bostroesser@gmail.com>
+Subject: Re: [PATCH 1/5] sgl_alloc_order: remove 4 GiB limit
+Message-ID: <Y1aDQznakNaWD8kd@ziepe.ca>
+References: <20221024010244.9522-1-dgilbert@interlog.com>
+ <20221024010244.9522-2-dgilbert@interlog.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024010244.9522-2-dgilbert@interlog.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Peter Wang <peter.wang@mediatek.com>
+On Sun, Oct 23, 2022 at 09:02:40PM -0400, Douglas Gilbert wrote:
+> This patch fixes a check done by sgl_alloc_order() before it starts
+> any allocations. The comment in the original said: "Check for integer
+> overflow" but the right hand side of the expression in the condition
+> is resolved as u32 so it can not exceed UINT32_MAX (4 GiB) which
+> means 'length' can not exceed that value.
+> 
+> This function may be used to replace vmalloc(unsigned long) for a
+> large allocation (e.g. a ramdisk). vmalloc has no limit at 4 GiB so
+> it seems unreasonable that sgl_alloc_order() whose length type is
+> unsigned long long should be limited to 4 GB.
+> 
+> Solutions to this issue were discussed by Jason Gunthorpe
+> <jgg@ziepe.ca> and Bodo Stroesser <bostroesser@gmail.com>. This
+> version is base on a linux-scsi post by Jason titled: "Re:
+> [PATCH v7 1/4] sgl_alloc_order: remove 4 GiB limit" dated 20220201.
 
-Some error event is missing in ufshcd_print_evt_hist.
-Add print for this error event.
+You should link to lore here..
 
-Signed-off-by: Peter Wang <peter.wang@mediatek.com>
----
- drivers/ufs/core/ufshcd.c | 3 +++
- 1 file changed, 3 insertions(+)
+I think I prefer we just fix this so it doesn't have a problem in the
+first place - nothing needs the weird unsigned long long argument type:
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 7256e6c43ca6..ed354febed29 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -486,6 +486,9 @@ static void ufshcd_print_evt_hist(struct ufs_hba *hba)
- 	ufshcd_print_evt(hba, UFS_EVT_RESUME_ERR, "resume_fail");
- 	ufshcd_print_evt(hba, UFS_EVT_SUSPEND_ERR,
- 			 "suspend_fail");
-+	ufshcd_print_evt(hba, UFS_EVT_WL_RES_ERR, "wlun resume_fail");
-+	ufshcd_print_evt(hba, UFS_EVT_WL_SUSP_ERR,
-+			 "wlun suspend_fail");
- 	ufshcd_print_evt(hba, UFS_EVT_DEV_RESET, "dev_reset");
- 	ufshcd_print_evt(hba, UFS_EVT_HOST_RESET, "host_reset");
- 	ufshcd_print_evt(hba, UFS_EVT_ABORT, "task_abort");
--- 
-2.18.0
+diff --git a/lib/scatterlist.c b/lib/scatterlist.c
+index c8c3d675845c37..c39e19fa174bca 100644
+--- a/lib/scatterlist.c
++++ b/lib/scatterlist.c
+@@ -595,19 +595,17 @@ EXPORT_SYMBOL(sg_alloc_table_from_pages_segment);
+  *
+  * Returns: A pointer to an initialized scatterlist or %NULL upon failure.
+  */
+-struct scatterlist *sgl_alloc_order(unsigned long long length,
+-				    unsigned int order, bool chainable,
+-				    gfp_t gfp, unsigned int *nent_p)
++struct scatterlist *sgl_alloc_order(size_t length, unsigned int order,
++				    bool chainable, gfp_t gfp, size_t *nent_p)
+ {
+ 	struct scatterlist *sgl, *sg;
+ 	struct page *page;
+-	unsigned int nent, nalloc;
++	size_t nent, nalloc;
+ 	u32 elem_len;
+ 
+-	nent = round_up(length, PAGE_SIZE << order) >> (PAGE_SHIFT + order);
+-	/* Check for integer overflow */
+-	if (length > (nent << (PAGE_SHIFT + order)))
+-		return NULL;
++	nent = length >> (PAGE_SHIFT + order);
++	if (length % (1 << (PAGE_SHIFT + order)))
++		nent++;
+ 	nalloc = nent;
+ 	if (chainable) {
+ 		/* Check for integer overflow */
+@@ -649,8 +647,7 @@ EXPORT_SYMBOL(sgl_alloc_order);
+  *
+  * Returns: A pointer to an initialized scatterlist or %NULL upon failure.
+  */
+-struct scatterlist *sgl_alloc(unsigned long long length, gfp_t gfp,
+-			      unsigned int *nent_p)
++struct scatterlist *sgl_alloc(size_t length, gfp_t gfp, size_t *nent_p)
+ {
+ 	return sgl_alloc_order(length, 0, false, gfp, nent_p);
+ }
 
+Jason
