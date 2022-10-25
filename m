@@ -2,74 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DA260CDA4
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Oct 2022 15:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251BA60CEE1
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Oct 2022 16:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbiJYNgw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Oct 2022 09:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        id S230111AbiJYOYO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Oct 2022 10:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbiJYNgr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Oct 2022 09:36:47 -0400
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A254191D60;
-        Tue, 25 Oct 2022 06:36:46 -0700 (PDT)
-Received: by mail-pg1-f169.google.com with SMTP id q1so11467444pgl.11;
-        Tue, 25 Oct 2022 06:36:46 -0700 (PDT)
+        with ESMTP id S232135AbiJYOX7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Oct 2022 10:23:59 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D631E8C5D
+        for <linux-scsi@vger.kernel.org>; Tue, 25 Oct 2022 07:23:58 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so4904102pjk.2
+        for <linux-scsi@vger.kernel.org>; Tue, 25 Oct 2022 07:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sHFM7hSxk92IObPZe5vjZohRKRqPul0RJaS7riWUCk0=;
+        b=VIxooYOaxwZ61wqPop57waVSoQw62K9KchO4Wp0x3c75zgNLBtlXYzctK143sQY6B9
+         E0YCOoJUKy7pqGPDwJM86cc+VBMW+Of8qeUP7WqgStP83C08GuURb/GRfAIxAZcnWUL4
+         gnfHuEJ54AthJm+J/BnSaUpIFvukzEcSupHoI/t2p1ZJzZBISD+GnIrX6NZoB1a6feOq
+         WoXUJE9AdrVtQAx3ubTOL0DX1fwocYxcKOe2+UFBj01q4iXIPT0LiQFnBujKgAm8y0hY
+         4oPkaPV7vmscjbdlV2ge0Uwynwv5GwTYVKB+9nQ+rtLhJouETTVQCqzH5l2G6tnRPBJG
+         NqnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RwMLX94p14UQlTFG0MXaXfw8tgk5NXWCFsR6sl1nd1s=;
-        b=uYZX7snqHAssyqYnEpV2PMWej6dCRw0Y9YyuwhknlQDyVPAe3tguF33RqHCdPEAfap
-         LqpYL+/fmGCiYcqL8/VFy8fJ+tj5fr2qcomWYQ/gVuCG0EUEodxSpJz3Mm4rvmPZ1QAU
-         W7a6wqvRy67qk+usNFMpQhO1iTzlhdGz2MwKWmmHaJ1lu03MmWSoqaLFYed9yTRG4oTn
-         Ob2AHEr8Vf+iO0hbLQSDWUqcHVJ9WigCA3rBTQGon+s7y+G45YddYgXJZVdStIFJTDuO
-         WmtAXRNZAW8zh3dBm9u68BPwXqmcdXXHBGFmMjO/nzgJOe5cQrbWzKuHWyImPq4izM/Z
-         nBGw==
-X-Gm-Message-State: ACrzQf3U9vpwxqiZW4rYYvVdXvw3qp56zEH+VYHe63h02LuGQyF7Tauq
-        fbLhA2q0LAV7CzZexC4It30=
-X-Google-Smtp-Source: AMsMyM74SzJ9JZbZNZo3FynvYj2/T+Tn5bfZjCaWB8VMBFBglLl7REZECXeluuFdBZVVKSXE3hpGQw==
-X-Received: by 2002:a63:1917:0:b0:43c:1471:52b7 with SMTP id z23-20020a631917000000b0043c147152b7mr32406179pgl.522.1666705005893;
-        Tue, 25 Oct 2022 06:36:45 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id i6-20020a17090332c600b0017f57787a4asm1235163plr.229.2022.10.25.06.36.41
+        bh=sHFM7hSxk92IObPZe5vjZohRKRqPul0RJaS7riWUCk0=;
+        b=wZ2RvfDZjqwKPJ2hqYeL9EaIzkopgfnkVPCXsOjQ4rAbZWkFiAZj2e9w8QgnjXh3dX
+         TFH4yVOUuiVZo7yGM/8pDd7vicYiFXXC6BRkPki9HKL4FS6nmCJPcCLrj6ytTDzGFkZo
+         FSzOY1EnNMvf6bv8grftS10er/pWa6uZnZkjvB9uR5AEwUszyp8hsZ+Igt1i00Ulctq+
+         z98vdEqYyXPjOBptWcoC9e7Wq9hGik3gBE/09N620Rm1neKymDNiWZBxObf2fKz7Wv2A
+         3ieCZAX0rdc3NTg3vfYL9ahLQ8fwFf510splE/AeNsApPlNlc5wTqbR+P/h93e8SliTb
+         fP0w==
+X-Gm-Message-State: ACrzQf1tmQdzthqmjer3ZaBvpXemZFAU7u+nZLTP7SWt6NIKO/LJiJc3
+        qRcrDn1LLM4xXN607yBV/Cd99w==
+X-Google-Smtp-Source: AMsMyM741H7P8iGhv9Qw7LG3fWhtLsvG2uiB/1mucg/H0TheENBKEWlKAS7sZ5WnLe0/9edqqKWe1A==
+X-Received: by 2002:a17:90a:590a:b0:20a:e93e:2022 with SMTP id k10-20020a17090a590a00b0020ae93e2022mr44004197pji.141.1666707837740;
+        Tue, 25 Oct 2022 07:23:57 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id h1-20020a170902f54100b00186cf82717fsm330817plf.165.2022.10.25.07.23.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 06:36:44 -0700 (PDT)
-Message-ID: <d2d9f936-72d7-1d7f-f6e9-44aba745cac6@acm.org>
-Date:   Tue, 25 Oct 2022 06:36:41 -0700
+        Tue, 25 Oct 2022 07:23:57 -0700 (PDT)
+Message-ID: <2baca1bc-cee0-9a52-3fcd-bdb812e5f512@kernel.dk>
+Date:   Tue, 25 Oct 2022 08:23:56 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 2/3] scsi: ufs: core: Cleanup ufshcd_slave_alloc()
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 1/4] blk-mq: move the call to blk_put_queue out of
+ blk_mq_destroy_queue
 Content-Language: en-US
-To:     Bean Huo <beanhuo@iokpp.de>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, tomas.winkler@intel.com, cang@codeaurora.org,
-        daejun7.park@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221022213650.626766-1-beanhuo@iokpp.de>
- <20221022213650.626766-3-beanhuo@iokpp.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221022213650.626766-3-beanhuo@iokpp.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Keith Busch <kbusch@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org
+References: <20221018135720.670094-1-hch@lst.de>
+ <20221018135720.670094-2-hch@lst.de>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20221018135720.670094-2-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
         SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/22/22 14:36, Bean Huo wrote:
-> Combine ufshcd_get_lu_power_on_wp_status() and ufshcd_set_queue_depth()
-> into one single ufshcd_lu_init(), so that we only need to read the LUN
-> descriptor once.
+> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+> index 059737c1a2c19..07381673170b9 100644
+> --- a/drivers/nvme/host/core.c
+> +++ b/drivers/nvme/host/core.c
+> @@ -4847,6 +4847,7 @@ int nvme_alloc_admin_tag_set(struct nvme_ctrl *ctrl, struct blk_mq_tag_set *set,
+>  
+>  out_cleanup_admin_q:
+>  	blk_mq_destroy_queue(ctrl->fabrics_q);
+> +	blk_put_queue(ctrl->fabrics_q);
+>  out_free_tagset:
+>  	blk_mq_free_tag_set(ctrl->admin_tagset);
+>  	return ret;
+This is wrong and doesn't apply because it got fixed upstream:
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+commit 4739824e2d7878dcea88397a6758e31e3c5c124e
+Author: Dan Carpenter <error27@gmail.com>
+Date:   Sat Oct 15 11:25:56 2022 +0300
+
+    nvme: fix error pointer dereference in error handling
+
+Can you respin this series so we can get it applied?
+
+-- 
+Jens Axboe
 
