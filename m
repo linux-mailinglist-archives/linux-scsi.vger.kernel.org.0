@@ -2,103 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69DD60DDEE
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Oct 2022 11:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEBE60DEE7
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Oct 2022 12:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbiJZJV6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Oct 2022 05:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S233371AbiJZKgR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Oct 2022 06:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233243AbiJZJV5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Oct 2022 05:21:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D77A3AAC;
-        Wed, 26 Oct 2022 02:21:55 -0700 (PDT)
-X-UUID: 7efce5ed9e614751816215845ad27160-20221026
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=JoAhk7iug/nUjQM0ATBxIo4/S4gaXK4QbO+PxL1Vn60=;
-        b=ZJtAQPWGIbzURd+bce4p6emVe2oimYnCm50iKqryHnY9xVCMfLY7QjKes+bZUVqVrWA8N1LP4ZecYR2wKUEz6nkEFPY7G7V9GxzxyAFXNu2sHIJ9APEM/SVdIkfXr5rfDSGvt3F7hy118Hs94SGVliV5rMYzOICCOo0yyYhmibQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:b385b975-c8d9-4146-a876-50d8f47ea57c,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:424d3227-9eb1-469f-b210-e32d06cfa36e,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 7efce5ed9e614751816215845ad27160-20221026
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <eddie.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 653056957; Wed, 26 Oct 2022 17:21:49 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 26 Oct 2022 17:21:48 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs13n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Wed, 26 Oct 2022 17:21:48 +0800
-Message-ID: <772dd8da737e7fbf0c17f96538cc46df17b280f7.camel@mediatek.com>
-Subject: Re: [PATCH v3 00/17] Add Multi Circular Queue Support
-From:   Eddie Huang <eddie.huang@mediatek.com>
-To:     Asutosh Das <quic_asutoshd@quicinc.com>, <quic_cang@quicinc.com>,
-        <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>
-CC:     <quic_nguyenb@quicinc.com>, <quic_xiaosenh@quicinc.com>,
-        <stanley.chu@mediatek.com>, <daejun7.park@samsung.com>,
-        <bvanassche@acm.org>, <avri.altman@wdc.com>, <mani@kernel.org>,
-        <beanhuo@micron.com>, <quic_richardp@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-Date:   Wed, 26 Oct 2022 17:21:48 +0800
-In-Reply-To: <cover.1666288432.git.quic_asutoshd@quicinc.com>
-References: <cover.1666288432.git.quic_asutoshd@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S233317AbiJZKgQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Oct 2022 06:36:16 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D0F43E58
+        for <linux-scsi@vger.kernel.org>; Wed, 26 Oct 2022 03:36:15 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id p8so27592336lfu.11
+        for <linux-scsi@vger.kernel.org>; Wed, 26 Oct 2022 03:36:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=f6Wz1A4CW5P5+RVQ39/cNozpWA6Bx+Md7zjb4gIkf3c=;
+        b=g8zEnq/beTWN8RH2dXBmBuLwvlw2SmWEhU3NftmPP+qUNz9DXCf6yGvqeo8+t1ws59
+         /JN55dHJqv4E+MueD1DVKO7hbvKudFvJz1Xi4DBpXYiYk5gdvEXsNPxBjzrEMlX+fNgB
+         XnpCDxGgMHs/PBBGk2HQE5zO1niWkY6NHT3PwSHjJD+t0xpgLABG61YwFn0gbKEhM07S
+         SSfVNx74D+Mc2sjJFwUVCopyAq2YEGjwE6Ybk8Qw2fukrqYhqacRu8oc8s4kweFBSJ9a
+         RnMocn1g0OH6cY73RIqV7+603ABG1xU0c39i7oZGBh910Opg7Ie1t9tr9rvHcFwlDaNp
+         Pobg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f6Wz1A4CW5P5+RVQ39/cNozpWA6Bx+Md7zjb4gIkf3c=;
+        b=hvbzt7KkaJHYRN9W8jT2O0iMKVF7tzxWgSLjSQimbrO01yWJ8MIPFgKY6bNc6D4+/L
+         AGCha+zqAoWewyVaWpyUohOoVDFLAQ2Qb/+e92r10N2G6fJokGxZPedqpqtkMdEVwDEX
+         Yg2yBvEzkH3ON8QeWH5UbDH91JGotX2DoGc66n9S+264MiB9Uh3uB1wo2TjK+5aig7eg
+         NCOV+o5XxggZVTAg8T2NYEagveXwEpO3N73b48PXpps1sBjz8GJfAV2teBEkippVwUQL
+         HzU2GPKr6IbN01IOBpNighjsO9xY/ijnUXcP3y8nd4mCjoWVDTIr+OcSXUSeKbL6f144
+         EA/A==
+X-Gm-Message-State: ACrzQf3RFRIEykh7K6FnzlHDEdBImDg9Qo427ZSDgYBXvc4ECUuSdnZF
+        K5ooO2i6wZinAXvA++MeX0weWO6DFdUPGrksUZfASQ==
+X-Google-Smtp-Source: AMsMyM6Xt+v7OH5mRPGsrIQWb2eDOsO+EHaqXYf/ZqgeRZzS0Rw5xY/XyjgtPZsbmOEf198RtGMqdjJlCchuCQ3Q/54=
+X-Received: by 2002:a05:6512:298d:b0:4a3:371d:6cc3 with SMTP id
+ du13-20020a056512298d00b004a3371d6cc3mr14788177lfb.422.1666780574194; Wed, 26
+ Oct 2022 03:36:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+References: <1666781764-123090-1-git-send-email-john.garry@huawei.com>
+In-Reply-To: <1666781764-123090-1-git-send-email-john.garry@huawei.com>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Wed, 26 Oct 2022 12:36:03 +0200
+Message-ID: <CAMGffE=4YHc0ErLpLxmLQbM-AoCaMQ+1TGxG_nxoJxx-W4U01g@mail.gmail.com>
+Subject: Re: [PATCH] scsi: pm8001: Drop !task check in pm8001_abort_task()
+To:     John Garry <john.garry@huawei.com>
+Cc:     jinpu.wang@ionos.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, damien.lemoal@opensource.wdc.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Asutosh,
-
-On Thu, 2022-10-20 at 11:03 -0700, Asutosh Das wrote:
-> UFS Multi-Circular Queue (MCQ) has been added in UFSHCI v4.0 to
-> improve storage performance.
-> The implementation uses the shared tagging mechanism so that tags are
-> shared
-> among the hardware queues. The number of hardware queues is
-> configurable.
-> This series doesn't include the ESI implementation for completion
-> handling.
-> 
-> This implementation has been verified by booting on an emulation
-> platform.
-> During testing, all low power modes were disabled and it was in HS-G1 
-> mode.
-> 
-> Please take a look and let us know your thoughts.
-> 
-> v2 -> v3:
-> - Split ufshcd_config_mcq() into ufshcd_alloc_mcq() and
-> ufshcd_config_mcq()
-> - Use devm_kzalloc() in ufshcd_mcq_init()
-> - Free memory and resource allocation on error paths
-> - Corrected typos in code comments
-> 
-
-Thanks the patch and fixing. I port this series with patch [1] on
-Mediatek platform and test pass using FIO program
-
-Tested-by: eddie.huang@mediatek.com
-
-[1] https://patchwork.kernel.org/project/linux-scsi/list/?series=688941
-
-Eddie Huang
-
-
+On Wed, Oct 26, 2022 at 12:25 PM John Garry <john.garry@huawei.com> wrote:
+>
+> In commit 0b639decf651 ("scsi: pm8001: Modify task abort handling for SATA
+> task"), code was introduced to dereference "task" pointer in
+> pm8001_abort_task(). However there was a pre-existing later check for
+> "!task", which spooked the kernel test robot.
+>
+> Function pm8001_abort_task() should never be passed NULL for "task"
+> pointer, so remove that check. Also remove the "unlikely" hint, as this is
+> not fastpath code.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: John Garry <john.garry@huawei.com>
+Acked-by: Jack Wang <jinpu.wang@ionos.com>
+>
+> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+> index 2359e827c9e6..e5673c774f66 100644
+> --- a/drivers/scsi/pm8001/pm8001_sas.c
+> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+> @@ -979,7 +979,7 @@ int pm8001_abort_task(struct sas_task *task)
+>         u32 phy_id, port_id;
+>         struct sas_task_slow slow_task;
+>
+> -       if (unlikely(!task || !task->lldd_task || !task->dev))
+> +       if (!task->lldd_task || !task->dev)
+>                 return TMF_RESP_FUNC_FAILED;
+>
+>         dev = task->dev;
+> --
+> 2.25.1
+>
