@@ -2,310 +2,207 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3645D60EBC8
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Oct 2022 00:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4940360EC58
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Oct 2022 01:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiJZWog (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Oct 2022 18:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
+        id S234303AbiJZXXQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Oct 2022 19:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233479AbiJZWnz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Oct 2022 18:43:55 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E35B31382C4;
-        Wed, 26 Oct 2022 15:43:43 -0700 (PDT)
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 3E72645F4;
-        Thu, 27 Oct 2022 00:43:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1666824223;
-        bh=cWJrh+4WCcyvm/bC7QDo7SLpdliy33Tc64LT+Dh/mqI=;
-        h=Date:From:Cc:Subject:References:In-Reply-To:From;
-        b=kYdJqh4YcpcPbQ6fdbHeflPyOx4/DgP2plZfzVH+WFzCMTkcgQEUxmFjnTDD0nuVA
-         RvBWnX1Jefcy6oDHMM15a2rKgf/P5PYAUeXgi/5nUa/wCo++wYy3afds0uu6V9nWLZ
-         m7K3PCCJFILjnsnqEFyG2prno/5bYFZocOoAb6muvw+TmdPJaRmA6dF+hJmmvh+rHX
-         0ERAV6G+r5qDeBqHrQIcvRRoR/zz+EV+o+1QHSD2S4Tf/Ye1bR7yhdsgbkv61cNi7z
-         RaDf3MJA4GfJIq9KgQ4mqg7jYX3+Yi+NpoBx5EywRoFIpG1sg41sVN/FotYZIy0wpt
-         LmvfqKtU+0CXHkDDPtKHPxUhQMg9bCK3KG9JtxNQ2peYntO4tKcfC7RE9rboUzCUag
-         g6jsJsZfACuNHZMn28Li1jPMc/i3w+MQ2AM9wK5GBRq8GFeeJiQufwE6vBWPkyVdp/
-         G1X/O+2oBgu+BSgCismFWHlroKUez5dyYuu8wM67/lOAOy4uf3hWwqRzYEfHqCvjo5
-         K/aZvZFj7O7uwylTdATv9AEGwVgozQgfnzi1wAv7KEY31i1CWnCzNsPjiv+xYkQFVw
-         I4gHqRm+o97zz7lHl1np9/0tG+wTImqghyetflA1X/tuMB8up4N/cMl+wLF/J3T0RR
-         +Qqe8C6cSDEr9JBnvrRc05TE=
-Date:   Thu, 27 Oct 2022 00:43:42 +0200
-From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 14/15] scsi: ncr53c8xx: replace CCB_MAGIC with bool busy
-Message-ID: <182906437bbf7597968cc68e0babe6f7ff772f79.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
-References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+        with ESMTP id S234329AbiJZXWw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Oct 2022 19:22:52 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57CBD8F74;
+        Wed, 26 Oct 2022 16:20:51 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QM1x84014791;
+        Wed, 26 Oct 2022 23:19:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=g3qt/ijaZ+vHsvm3aqmwlHBCXPA2Ke6nOsYikt2FlT8=;
+ b=xcIvLiBIq0OccPllY+k0PBUBEN5avkPSiEi+gViN5FbbiFEnZGbFG1KIxaAfLTnjElz2
+ +feO1ngZPz3wl4qaqJnjXZU6Wd8RmYnkeKOCSdugIUHiP/f9ThfF94NXQvtqVpwvM+Hi
+ mZF2nG7OGPLc2msyCKszLYBd9vyzfwq2A7SlQ030Pv2qO76c+Z5AqCn6IC2hw5k3VUT8
+ sE60mOKVEX/WJYn5h4UcLeOdejUs2eUlExS2Q0yGdtmT/25kFTHVpRgHRnPa95pYdk/1
+ HJ1qWXu0kvgtgdqtU6FYROQVhOzo8g/OoNPb7HVW998nJvF6PBq8Egs3MhS6DLYYxmu6 dA== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kfays0jew-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 23:19:51 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29QMDn5h006678;
+        Wed, 26 Oct 2022 23:19:51 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2105.outbound.protection.outlook.com [104.47.70.105])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kfaggdrfa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 23:19:51 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UNAfAfFLgD1/F2y4fQYBeTGK6Giswwgscy59Wl6nbDGN4KwyhPSJAjbyoOpg+zLlRp12fL5aBxHTOC9JuuUmQFe0OkeXcKtKij5KEKnrD8/0/bX8UYtwjEm37kwBCgaa6aVJpfNJyVEUE7JTHRxiz86838k7O7iW9ejeTD+R76nhELN+uU/O/9pXcX8w9q/gz5qw6QJgdpjqiiMUfzWYyeNSyklDe6Fk9NJU+0npFI2iYETgufW34qCkBRJQYZr2fDb1OXnY3uHP5clVn+cG8ZrtQFNNBxpwtxhXEgNRMmk9LwspEMssmW7kcGL80vSdmpR29SeDiDZ5LkznkvDKcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g3qt/ijaZ+vHsvm3aqmwlHBCXPA2Ke6nOsYikt2FlT8=;
+ b=ZgYD1rsrwRxSK7mZsRDrJe71YoFbH/ZOr+0exuBUHJlqqLhh+43Ot0/82uzZOi482prBuUP4eRKQV+miWBiUJKNzSIeDzGl31z5X+QYHRwJz8p0cXJ52a27MAh6nbajJjeqxvDP/AOQG7ySAnmNDed/MGJVAM7B/SN3vCH8hL+BsYqqHB4Q2L/ozJYJL9ghixjdprLhIXl9Tm2nA7SFd7lVRTqbHz7aWV6oaYPSBeLAcKMJRvAP5pqaNcyftzsno3oSh4+3i40wEhH1X1mwDaWzuaCZNdRvuORJEntb7b4ntMVGcWFKpnCwIrVmBZH9tFSk1KAmpURU9+I6x4otjKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g3qt/ijaZ+vHsvm3aqmwlHBCXPA2Ke6nOsYikt2FlT8=;
+ b=WP3VgFqVCnCzrAbTtZaLwvVrwdJB4krIX1Wf/Dzx2uqTgUA6MhJgn3cATxfyCpMudKYnBFMQTsDAc5o7lYtLgCDBln/4Xd9QTSngckxkvSb5T6NnnygjwRz41vY6kNfuyPsH49z/DjW+2Y8cWo4T8/kXvx5d/GPzlWgVxvL6R3I=
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
+ DS7PR10MB5117.namprd10.prod.outlook.com (2603:10b6:5:3a6::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5746.28; Wed, 26 Oct 2022 23:19:48 +0000
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::19f7:e081:85b4:c5df]) by DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::19f7:e081:85b4:c5df%7]) with mapi id 15.20.5746.028; Wed, 26 Oct 2022
+ 23:19:48 +0000
+From:   Mike Christie <michael.christie@oracle.com>
+To:     bvanassche@acm.org, hch@lst.de, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        snitzer@kernel.org, axboe@kernel.dk,
+        linux-nvme@lists.infradead.org, chaitanyak@nvidia.com,
+        kbusch@kernel.org, target-devel@vger.kernel.org
+Subject: [PATCH v3 00/19] Use block pr_ops in LIO
+Date:   Wed, 26 Oct 2022 18:19:26 -0500
+Message-Id: <20221026231945.6609-1-michael.christie@oracle.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: CH0PR04CA0087.namprd04.prod.outlook.com
+ (2603:10b6:610:74::32) To DM5PR10MB1466.namprd10.prod.outlook.com
+ (2603:10b6:3:b::7)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o6rx3c4yjvpe22rt"
-Content-Disposition: inline
-In-Reply-To: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        MISSING_HEADERS,PDS_OTHER_BAD_TLD,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR10MB1466:EE_|DS7PR10MB5117:EE_
+X-MS-Office365-Filtering-Correlation-Id: 95b2b374-a0d8-4ea2-4e5d-08dab7a8934b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BuJ3Qj8k073tqx5GED3nHgt4uCqAFrHeKb0X5IR8lEFjMZgLi0+Tk0bWwRqHTBcn1pRPREng7wsXa/1TdCiTenajTN8c+Sss/2kCpI6irGsJcvEwZiFoZDSr7ll7q4mUyv2Egr+kbfuIPZekQr8jVzM8cG8Hce5g2g7YhYzSoW2SVvOvLRPpfdGiFiKYB+3KqGNqFkM8CWUcv9tmq7jWEMkJrvHK7NDwwRHSVHpcvXSwpJ2Ga1pFAQ3oFjHRrK36y3EftPlWczEeDKSHFhvXG7k6g484wcDKewJQ5aKfc/xKsaj9LEgoSXQyAHRkB0/o7JmomuAZbqc/tnNBS3YZL5RNtS09+uwnx3wmA0qzo/ASc2XdFD9IpZB2RhSOsmOhEywPOW0xor7uT256seqcnGPlQTGqm2E2hxbyfCzLB0dYBbKzTi2/ROVj4M9eZ5d3LrOUUCBYA+Vk94kzTaNFOsrgwSvfhi5c0aVK6u5A7Yfws++d58StWRdqFxjLB2y8ngbst171oEO6Xjr9WYVsjIE4gFttYhfmnYeCBmKSdCYU5aFUIt8c1AvQI3HUa2+e17JI+uLRfEsvOzJRD6et90oSmi9bettcQ82SEMcNuk6z5iaG5MKdKgqv9+rtMlBz6h4XPgylZDV0++/L4k8LSb7AnIxf5IEi+bQVrbXiP7ylRGe4v110vgHc6Vs/KwibDPKt9xhZLRjbubkRxCe0ed50sDAyvRlQq1aaNhJZeG9OFQdbK45494V2pE7CCeSdpjxNemTNUxusvVxEywOrCA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(136003)(346002)(396003)(376002)(451199015)(7416002)(8936002)(2616005)(1076003)(186003)(5660300002)(6512007)(41300700001)(26005)(86362001)(921005)(38100700002)(2906002)(36756003)(83380400001)(316002)(6666004)(66556008)(66946007)(66476007)(8676002)(6506007)(478600001)(966005)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zqmv+61QPhzch/kSKK+EoRE9qZlFfa/Z6ux7+ZPpFR28ZGYWplm5qLGBb50+?=
+ =?us-ascii?Q?BUOVIjS0itqvvnEQgyLng+MI3dNzxg8n5lZHjawrgHx2WDB6q+jODMpgishe?=
+ =?us-ascii?Q?bVLyFTtqVcsTkVIQj+KLbsWV1wizS7RQl2uJF0y4y+tBmdZ67N+AtU18KIQW?=
+ =?us-ascii?Q?2YERt5z5W0Xt2/Bvy0S/UY+GrXz2jIhHtwCSf3bE/KPlKycPrwG6U7OmBSN5?=
+ =?us-ascii?Q?4OiovaSgXj1ndlHfhmd9LhS8l/2csz5Z26zVTvQqGCQDzBHLNwkDo6HWc/bP?=
+ =?us-ascii?Q?Rqhymq46FBbt2hVkWD+33oDeLtcDo47n+xEPXOohC3ae0WGOlhTdczC+ODNJ?=
+ =?us-ascii?Q?y7e99BQ/IbifJPR6QJjQ68wKygazN+xKRQdgc6j/ACA9ZIXRnjzQTuaezcFq?=
+ =?us-ascii?Q?9Lk42ot3z1hag9FLhI/+3GyFmLbbEsww9ZnJt+OqzZydvhhIdY9hqdnGjydU?=
+ =?us-ascii?Q?SOMieyhKb5TU6pPDKiK0vxdDwJWCHHLYiDdNY2uAm2SH36ovHDCdHPbd44Cn?=
+ =?us-ascii?Q?4KfwfQO7QJ69MJPSYNuBSuRwSoO73ofTEgiOD7AbMUEaSgsyieH3tqOzAsly?=
+ =?us-ascii?Q?bTQHA3WVbDD7avH57civbSiRWGUe0ZJWLKdVrdqzKFF5iWDFTECNIE/ien/d?=
+ =?us-ascii?Q?eZnsLQCfatoaQ82a/3MZfkHhHhknz66/HVEu/Xniekej54XuoZ58POXCJ85K?=
+ =?us-ascii?Q?0xr3UQgUrxAc54dwLudcykJb8/PrAjH1w3CGeI/01lTqNHpRUYQkGobJl+wO?=
+ =?us-ascii?Q?8InmBHZ0VjcS7QZmKhiuLfJj8njvVfZeaNm9xlzdNN9j4cKUSLIRofZWREt9?=
+ =?us-ascii?Q?oLYIYW/jVN9b02QSAINXz9vjM8BUCTWPk/VROu++C5i0YnroqC3Avt+7CA0N?=
+ =?us-ascii?Q?/ub/UHgZOL8v0VXqNcuYdmif8/kOvat6QBsUnNJdaqLQlLt3Sy199oMm3XHo?=
+ =?us-ascii?Q?CjOBHZHjeOca2FU3qj/53i7RLH8zPA5VU1QHxpajjubVYXoTkMqwTjDLGUyw?=
+ =?us-ascii?Q?5/kWfIIaH9qVmYCdfMBNzpF2U4ibns0t1BHQnomOXVJUZp6al5rxWBnWUAd2?=
+ =?us-ascii?Q?PLe+7i0ul7zwnvBnlfm4M7PCSq2y9uxzGSaPb+w4VoxTkZpz63M1WRSiZ0QB?=
+ =?us-ascii?Q?wmQSH188Ovnb4PXRRXdpP9Vdqt60qanblUE2lbC3TWN5BnfWKnTcLKuuiVtP?=
+ =?us-ascii?Q?vnN0G4rHIdrhebZeoCwDxesUWa724wSGoaYj2govzQMAJ/0wv8Jwd0rbD2s1?=
+ =?us-ascii?Q?EbfQye/O5FamXmltLFGp08Oklhci5nwdoQ7oy0jfhxq8oD9VbHFbgdQpo0JC?=
+ =?us-ascii?Q?ra7bP/85YpmWuf9REmiW/HFUjmNtMEtkyhG28+PMwN92cBP5qRslGuq8Ms5i?=
+ =?us-ascii?Q?/j9qnV+qdl8KcNvvxOzzZxrdW0FYVGcAn0G7zWkXrOewIcOmGnaqroFxNlof?=
+ =?us-ascii?Q?4+vaU0Do4rYiNASwpm/nc27NjxdOY1lW6VNH69jUF6r7k/Yk/XWmKtDQ+DOz?=
+ =?us-ascii?Q?a3hlxuVMtnmrJMHjYtV3C7KUMVENkdSRhbmSePKvsWc75Yh6M2tfNll/ffAJ?=
+ =?us-ascii?Q?E2J0oiD/jLEbExXuUu48KpnGxEXN8uK6rs7A+OjSK4IMtCYhvUW30PQ3Qi3p?=
+ =?us-ascii?Q?Jg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95b2b374-a0d8-4ea2-4e5d-08dab7a8934b
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 23:19:48.2264
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EcRHH4EfjEfTwO8qIVLa5JVuGe0XH9Jkcyvadkp1bTvALka5RmSfCKIisR24M+JBKcjZX7dU55XFSuG612BlxVr3pvVbbtKDnnhVfGAbu+M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5117
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_08,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0
+ suspectscore=0 phishscore=0 adultscore=0 mlxscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210260128
+X-Proofpoint-ORIG-GUID: L1-gdQRgUE9BRo_Rc11VtCf1xg5mh0CG
+X-Proofpoint-GUID: L1-gdQRgUE9BRo_Rc11VtCf1xg5mh0CG
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+The following patches were built over Linus's tree and this patchset
 
---o6rx3c4yjvpe22rt
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+https://lore.kernel.org/all/20221023030403.33845-24-michael.christie@oracle.com/t/
 
-The only non-boolean check might as well be,
-since it just early-exits instead of of noting the bug:
-lower it to a boolean and make it less confusing
+which allows the SCSI layer passthrough users to control retries for
+commands like PRs used in this patchset.
 
-As for magic numbers, we have largely moved away from this approach,
-and we have better debugging instrumentation nowadays: kill it
+The patches in this thread allow us to use the block pr_ops with LIO's
+target_core_iblock module to support cluster applications in VMs.
+Currently, to use windows clustering or linux clustering (pacemaker +
+cluster labs scsi fence agents) in VMs with LIO and vhost-scsi, you have
+to use tcmu or pscsi or use a cluster aware FS/framework for the LIO pr
+file. Setting up a cluster FS/framework is pain and waste when your real
+backend device is already a distributed device, and pscsi and tcmu are
+nice for specific use cases, but iblock gives you the best performance and
+allows you to use stacked devices like dm-multipath. So these patches
+allow iblock to work like pscsi/tcmu where they can pass a PR command to
+the backend module. And then iblock will use the pr_ops to pass the PR
+command to the real devices similar to what we do for unmap today.
 
-Ref: https://lore.kernel.org/linux-doc/YyMlovoskUcHLEb7@kroah.com/
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
----
- Documentation/process/magic-number.rst        |  1 -
- .../it_IT/process/magic-number.rst            |  1 -
- .../zh_CN/process/magic-number.rst            |  1 -
- .../zh_TW/process/magic-number.rst            |  1 -
- drivers/scsi/ncr53c8xx.c                      | 25 ++++++-------------
- 5 files changed, 8 insertions(+), 21 deletions(-)
+The patches are separated in the following groups:
 
-diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
-/magic-number.rst
-index 6e432917a5a8..5a8c2755ac9c 100644
---- a/Documentation/process/magic-number.rst
-+++ b/Documentation/process/magic-number.rst
-@@ -68,5 +68,4 @@ Changelog::
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
- Magic Name            Number           Structure                File
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
--CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
-cumentation/translations/it_IT/process/magic-number.rst
-index 7d4c117ac626..2fbc1876534a 100644
---- a/Documentation/translations/it_IT/process/magic-number.rst
-+++ b/Documentation/translations/it_IT/process/magic-number.rst
-@@ -74,5 +74,4 @@ Registro dei cambiamenti::
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
- Nome magico           Numero           Struttura                File
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
--CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
-cumentation/translations/zh_CN/process/magic-number.rst
-index c17e3f20440a..f8ec4767bc4e 100644
---- a/Documentation/translations/zh_CN/process/magic-number.rst
-+++ b/Documentation/translations/zh_CN/process/magic-number.rst
-@@ -57,5 +57,4 @@ Linux =E9=AD=94=E6=9C=AF=E6=95=B0
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
- =E9=AD=94=E6=9C=AF=E6=95=B0=E5=90=8D              =E6=95=B0=E5=AD=97      =
-       =E7=BB=93=E6=9E=84                     =E6=96=87=E4=BB=B6
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
--CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
-cumentation/translations/zh_TW/process/magic-number.rst
-index e2eeb74e7192..0ccc60bee3d6 100644
---- a/Documentation/translations/zh_TW/process/magic-number.rst
-+++ b/Documentation/translations/zh_TW/process/magic-number.rst
-@@ -60,5 +60,4 @@ Linux =E9=AD=94=E8=A1=93=E6=95=B8
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
- =E9=AD=94=E8=A1=93=E6=95=B8=E5=90=8D              =E6=95=B8=E5=AD=97      =
-       =E7=B5=90=E6=A7=8B                     =E6=96=87=E4=BB=B6
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
--CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-diff --git a/drivers/scsi/ncr53c8xx.c b/drivers/scsi/ncr53c8xx.c
-index 4458449c960b..928417fca495 100644
---- a/drivers/scsi/ncr53c8xx.c
-+++ b/drivers/scsi/ncr53c8xx.c
-@@ -1095,15 +1095,6 @@ typedef u32 tagmap_t;
- #define NS_WIDE		(2)
- #define NS_PPR		(4)
-=20
--/*=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
--**
--**	Misc.
--**
--**=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
--*/
--
--#define CCB_MAGIC	(0xf2691ad2)
--
- /*=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
- **
- **	Declaration of structs.
-@@ -1567,7 +1558,7 @@ struct ccb {
- 	struct ccb *	link_ccb;	/* Host adapter CCB chain	*/
- 	struct list_head link_ccbq;	/* Link to unit CCB queue	*/
- 	u32		startp;		/* Initial data pointer		*/
--	u_long		magic;		/* Free / busy  CCB flag	*/
-+	bool		busy;
- };
-=20
- #define CCB_PHYS(cp,lbl)	(cp->p_ccb + offsetof(struct ccb, lbl))
-@@ -4356,7 +4347,7 @@ static int ncr_queue_command (struct ncb *np, struct =
-scsi_cmnd *cmd)
- 	*/
-=20
- 	/* activate this job.  */
--	cp->magic		=3D CCB_MAGIC;
-+	cp->busy		=3D true;
-=20
- 	/*
- 	**	insert next CCBs into start queue.
-@@ -4667,7 +4658,7 @@ void ncr_complete (struct ncb *np, struct ccb *cp)
- 	**	Sanity check
- 	*/
-=20
--	if (!cp || cp->magic !=3D CCB_MAGIC || !cp->cmd)
-+	if (!cp || !cp->busy || !cp->cmd)
- 		return;
-=20
- 	/*
-@@ -6998,7 +6989,7 @@ static struct ccb *ncr_get_ccb(struct ncb *np, struct=
- scsi_cmnd *cmd)
- 		qp =3D ncr_list_pop(&lp->free_ccbq);
- 		if (qp) {
- 			cp =3D list_entry(qp, struct ccb, link_ccbq);
--			if (cp->magic) {
-+			if (cp->busy) {
- 				PRINT_ADDR(cmd, "ccb free list corrupted "
- 						"(@%p)\n", cp);
- 				cp =3D NULL;
-@@ -7030,17 +7021,17 @@ static struct ccb *ncr_get_ccb(struct ncb *np, stru=
-ct scsi_cmnd *cmd)
- 	**	Wait until available.
- 	*/
- #if 0
--	while (cp->magic) {
-+	while (cp->busy) {
- 		if (flags & SCSI_NOSLEEP) break;
- 		if (tsleep ((caddr_t)cp, PRIBIO|PCATCH, "ncr", 0))
- 			break;
- 	}
- #endif
-=20
--	if (cp->magic)
-+	if (cp->busy)
- 		return NULL;
-=20
--	cp->magic =3D 1;
-+	cp->busy =3D true;
-=20
- 	/*
- 	**	Move to next available tag if tag used.
-@@ -7119,7 +7110,7 @@ static void ncr_free_ccb (struct ncb *np, struct ccb =
-*cp)
- 		}
- 	}
- 	cp -> host_status =3D HS_IDLE;
--	cp -> magic =3D 0;
-+	cp -> busy =3D false;
- 	if (cp->queued) {
- 		--np->queuedccbs;
- 		cp->queued =3D 0;
---=20
-2.30.2
+patches 1 - 11
+- Add callouts to read a reservation and it's keys.
 
---o6rx3c4yjvpe22rt
-Content-Type: application/pgp-signature; name="signature.asc"
+patches 12 - 15
+- Have pr_ops return a blk_status_t.
 
------BEGIN PGP SIGNATURE-----
+patches 16 - 19
+- Support for target_core_iblock to bypass the emulate PR code and call
+the pr_ops.
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNZuB0ACgkQvP0LAY0m
-WPHiAg/+L9QC6Bl0XGqH5HbiuvOgee8Jvd2OmYfbcK95JJGqq3EKk6CCOp+ntuWI
-W+b9oOqggflc0u4AQZ5Fj6ifX6bCd7m4PraPLH0q1aAqTZTsDhwaYF2ELCv0+7co
-IbA9jdVGXtTZAZ07LU9Us2f5yjg3KVlDxQSdUnOmYSEaJHjzFmCNKCh8rPaknyR9
-OFBP98C/YK35qAmFkBMUPlNYMXHcbk5jKlL7lfr3W7+QJpNQpyzaFqSgQ0sLBSWW
-U+1ccKdXxNRoFQrhn9tKOzdFQsrEUlKOkMtGfHQP3za42/+mMLLruM0DaxXBS5ed
-oI84nYgMnVlkGFolMoz8LdRhA2JcmrS2xEdzwKskqLWQMmR6TnAH1T3L+yHNZoy6
-fHq7AM42dYrgOJD6qoY9VDkoaHaOPki1aBb92guugR/pzuWuvZBhZ0XtC98r7fUU
-+hf6MHKbznywXdKe4MEEFW2XfusUlnHl3URhD4PBJtSpOVIobG2NsgBAgGE7soge
-iK9nPnceQ/fAoZAAvrp5qoMoaPJpgwg6sGLZKslmW4mxRKPlyo1ib+B34tyBkBv/
-ttbiN/jv/+ToeHPdgmoSrm08imwF/JlgFQiFr3zbxCXYXowDjGWpo+Bjsp1i1/7I
-v0T6munKcSPV6e/Qkf7zN4ZKZr1JXEzEoU/Dl1mCizu07x4cY5c=
-=XRrY
------END PGP SIGNATURE-----
+This patchset has been tested with the libiscsi PGR ops and with window's
+failover cluster verification test.
 
---o6rx3c4yjvpe22rt--
+v3:
+- Fix patch subject formatting.
+- Fix coding style.
+- Rearrange patches so helpers are added with users to avoid compilation
+errors.
+- Move pr type conversion to array and add nvme_pr_type.
+- Add Extended Data Structure control flag enum and use in code for checks.
+- Move nvme pr code to new file.
+- Add more info to patch subjects about why we need to add blk_status
+to pr_ops.
+- Use generic SCSI passthrough error handling interface.
+- Fix checkpatch --strict errors. Note that I kept the existing coding
+style that it complained about because it looked like it was the preferred
+style for the code and I didn't want a mix and match.
+
+v2:
+- Drop BLK_STS_NEXUS rename changes. Will do separately.
+- Add NVMe support.
+- Fixed bug in target_core_iblock where a variable was not initialized
+mentioned by Christoph.
+- Fixed sd pr_ops UA handling issue found when running libiscsi PGR tests.
+- Added patches to allow pr_ops to pass up a BLK_STS so we could return
+a RESERVATION_CONFLICT status when a pr_ops callout fails.
+
+
+
+
