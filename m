@@ -2,60 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D5B60EE2F
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Oct 2022 04:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AB360EE2B
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Oct 2022 04:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234024AbiJ0C7C (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Oct 2022 22:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        id S234036AbiJ0C6p (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Oct 2022 22:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234078AbiJ0C64 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Oct 2022 22:58:56 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF391413A2;
-        Wed, 26 Oct 2022 19:58:55 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QMGwml028121;
-        Thu, 27 Oct 2022 02:58:39 GMT
+        with ESMTP id S233849AbiJ0C6m (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Oct 2022 22:58:42 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525A0D8EEB
+        for <linux-scsi@vger.kernel.org>; Wed, 26 Oct 2022 19:58:42 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QM1xZS014791;
+        Thu, 27 Oct 2022 02:58:40 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=GOdvbBCviV+sUKkS/mhYvVLY7+zai9D1QExdE/q30PI=;
- b=jCwYTw9cnusBk82WWT+gpM+JYaxR17dtJwiI5SYniby4oGtfpc4EMH+YJkUVOjU+4k3X
- MKwkfRPrX/pyCsEcsqEWksNFDzRF0TDUz5+a87nJ0Kj++7I0wzFhmGDbJ5PF4h+ii11B
- 3nJT1Gdo4vNcgOTbOxI4gKk0qdrfcWokAh9qU9N4+if8FMiBUSFk/T0FQ2O/Pq44cHaL
- /iFoZ8BiPClRRF7mM07EBru5NwBhgwz1BQ1XpXY9DSZ02bgthByv27YxErCkIfVbASjZ
- cWVZ4xAH/btyXIY6wtIy5scyK5fmk53xzEYBSqefTgBpCE9Douay24fW1K6oES8cmpSC +Q== 
+ bh=wye36RKnSQcypgE8WBtv7zUkThgfoMC7m7LgTSpDK0A=;
+ b=GI8Z3U+sgKdOvS+coojlK+GUEupfTbyKHLuQlnvbQ1EeEQ3Qfvl7W42VpqnDfcS8hM6I
+ JJGvw1XAdl0r5liQ6TdPdpU9Zq3tcpn3+2lv7tj8h3dKKg31ClPOvGJ/p9T3cdoU6dOn
+ q3H/J5Jel0Jb8yaGujZQL3VJZKAzdXCkLKL3azxxncFkPSjgEpoRthxsRW93i2P8Ggh+
+ l7Xgy//qdgl1EyR+q1Fxcj9Lnk5xBS4tWs9Z5dqwsASqJCq2RER6JmjZUo8bR4D1rD+t
+ nFvDuyNPzDZ/P1Ow0cpzha9qejlwmuZ8Prv9FbG1gF8lbxefbmfqlLLJeOJajU1X1uzt 2Q== 
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kfawrrrub-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kfays0t46-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Oct 2022 02:58:40 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29QM89ik006563;
+        Thu, 27 Oct 2022 02:58:39 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kfaggh3hj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 27 Oct 2022 02:58:39 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29QLr9Ua006690;
-        Thu, 27 Oct 2022 02:58:38 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kfaggh3ha-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Oct 2022 02:58:38 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29R2wWsf007945;
-        Thu, 27 Oct 2022 02:58:38 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29R2wWsh007945;
+        Thu, 27 Oct 2022 02:58:39 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3kfaggh3fk-5;
-        Thu, 27 Oct 2022 02:58:37 +0000
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3kfaggh3fk-6;
+        Thu, 27 Oct 2022 02:58:38 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     jejb@linux.ibm.com, John Garry <john.garry@huawei.com>,
-        jinpu.wang@cloud.ionos.com, damien.lemoal@wdc.com
+To:     linux-scsi@vger.kernel.org, Justin Tee <justintee8345@gmail.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linuxarm@huawei.com, linux-scsi@vger.kernel.org,
-        ipylypiv@google.com, hare@suse.de, changyuanl@google.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/7] scsi: libsas: Use request tag in more drivers
-Date:   Wed, 26 Oct 2022 22:58:30 -0400
-Message-Id: <166683942540.3791741.16087477264542244957.b4-ty@oracle.com>
+        jsmart2021@gmail.com, Justin Tee <justin.tee@broadcom.com>
+Subject: Re: [PATCH 1/5] lpfc: Set sli4_param's cmf option to zero when CMF is turned off
+Date:   Wed, 26 Oct 2022 22:58:31 -0400
+Message-Id: <166683942544.3791741.13972934784912934052.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <1666091763-11023-1-git-send-email-john.garry@huawei.com>
-References: <1666091763-11023-1-git-send-email-john.garry@huawei.com>
+In-Reply-To: <20221017164323.14536-1-justintee8345@gmail.com>
+References: <20221017164323.14536-1-justintee8345@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,11 +60,11 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-26_10,2022-10-26_01,2022-06-22_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0
- suspectscore=0 phishscore=0 adultscore=0 mlxscore=0 mlxlogscore=852
+ suspectscore=0 phishscore=0 adultscore=0 mlxscore=0 mlxlogscore=901
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2210170000 definitions=main-2210270015
-X-Proofpoint-ORIG-GUID: 4oEJSaqQyNlo1T6IS3HIxFQxL-cvlntn
-X-Proofpoint-GUID: 4oEJSaqQyNlo1T6IS3HIxFQxL-cvlntn
+X-Proofpoint-ORIG-GUID: ndqPJmaHPTKobuWfmD2_tT5bScI9e6tN
+X-Proofpoint-GUID: ndqPJmaHPTKobuWfmD2_tT5bScI9e6tN
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -78,39 +75,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 18 Oct 2022 19:15:56 +0800, John Garry wrote:
+On Mon, 17 Oct 2022 09:43:19 -0700, Justin Tee wrote:
 
-> Currently hisi_sas is the only libsas driver which uses the request tag
-> for per-HW IO tag.
+> Add missed clearing of phba->sli4_hba.pc_sli4_params.cmf when CMF is turned
+> off.
 > 
-> All other libsas drivers manage the tags internally. Tag management in
-> pm8001 and mvsas is currently using a simple bitmap, so use the request
-> tag when available there. With this change we still need to manage tags
-> for libsas "internal" commands, like SMP commands, and any other
-> private commands so reserve some tags for this:
-> - For pm8001 I went with pre-existing and unused PM8001_RESERVE_SLOT size.
->   The value is 8, which should be enough. It is greater than mvsas, below,
->   but this driver sends a lot of other private commands to HW.
-> - For mvsas I went with 4, which still should be enough.
 > 
-> [...]
 
 Applied to 6.2/scsi-queue, thanks!
 
-[1/7] scsi: libsas: Add sas_task_find_rq()
-      https://git.kernel.org/mkp/scsi/c/a9ee3f840646
-[2/7] scsi: hisi_sas: Use sas_task_find_rq()
-      https://git.kernel.org/mkp/scsi/c/295fd2330a91
-[3/7] scsi: hisi_sas: Put reserved tags in lower region of tagset
-      https://git.kernel.org/mkp/scsi/c/f7d190a94e35
-[4/7] scsi: pm8001: Remove pm8001_tag_init()
-      https://git.kernel.org/mkp/scsi/c/1baa70d36403
-[5/7] scsi: pm8001: Use sas_task_find_rq() for tagging
-      https://git.kernel.org/mkp/scsi/c/6472cfb418a0
-[6/7] scsi: mvsas: Delete mvs_tag_init()
-      https://git.kernel.org/mkp/scsi/c/ffc9f9bf3f14
-[7/7] scsi: mvsas: Use sas_task_find_rq() for tagging
-      https://git.kernel.org/mkp/scsi/c/2acf97f199f9
+[1/5] lpfc: Set sli4_param's cmf option to zero when CMF is turned off
+      https://git.kernel.org/mkp/scsi/c/4fc66e7b16ad
+[2/5] lpfc: Fix hard lockup when reading the rx_monitor from debugfs
+      https://git.kernel.org/mkp/scsi/c/c44e50f4a0ec
+[3/5] lpfc: Log when congestion management limits are in effect
+      https://git.kernel.org/mkp/scsi/c/eaf660e4282b
+[4/5] lpfc: Create a sysfs entry called lpfc_xcvr_data for transceiver info
+      https://git.kernel.org/mkp/scsi/c/479b0917e447
+[5/5] lpfc: Update lpfc version to 14.2.0.8
+      https://git.kernel.org/mkp/scsi/c/24b3e45ca9c5
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
