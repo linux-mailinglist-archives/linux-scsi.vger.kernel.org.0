@@ -2,237 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8EB60F7C2
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Oct 2022 14:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A4560FB6D
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Oct 2022 17:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235731AbiJ0Mol (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 27 Oct 2022 08:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52712 "EHLO
+        id S236402AbiJ0PKZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 27 Oct 2022 11:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235724AbiJ0Moh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Oct 2022 08:44:37 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5E95F65;
-        Thu, 27 Oct 2022 05:44:30 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MylcQ1c1Lz15MCN;
-        Thu, 27 Oct 2022 20:39:34 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 20:44:28 +0800
-Received: from build.huawei.com (10.175.101.6) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 27 Oct 2022 20:44:27 +0800
-From:   Wenchao Hao <haowenchao@huawei.com>
-To:     Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        "Mike Christie" <michael.christie@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Steffen Maier <maier@linux.ibm.com>, <liuzhiqiang26@huawei.com>,
-        <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
-Subject: [PATCH v5] scsi:iscsi: Fix multiple iscsi session unbind event sent to userspace
-Date:   Thu, 27 Oct 2022 22:00:27 -0400
-Message-ID: <20221028020026.2870104-1-haowenchao@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S236092AbiJ0PJS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Oct 2022 11:09:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE15918F242;
+        Thu, 27 Oct 2022 08:09:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7441162396;
+        Thu, 27 Oct 2022 15:09:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5404C433D6;
+        Thu, 27 Oct 2022 15:09:14 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1oo4Ve-00Bvfa-0M;
+        Thu, 27 Oct 2022 11:09:30 -0400
+Message-ID: <20221027150929.939073415@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Thu, 27 Oct 2022 11:05:50 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: [RFC][PATCH v2 25/31] timers: scsi: Use del_timer_shutdown() before freeing timer
+References: <20221027150525.753064657@goodmis.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I found an issue that kernel would send ISCSI_KEVENT_UNBIND_SESSION
-for multiple times which should be fixed.
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-This patch introduce target_state in iscsi_cls_session to make
-sure session would send only one ISCSI_KEVENT_UNBIND_SESSION.
+Before a timer is freed, del_timer_shutdown() must be called.
 
-But this would break issue fixed in commit 13e60d3ba287 ("scsi: iscsi:
-Report unbind session event when the target has been removed"). The issue
-is iscsid died for any reason after it send unbind session to kernel, once
-iscsid restart again, it loss kernel's ISCSI_KEVENT_UNBIND_SESSION event.
+Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
 
-Now kernel think iscsi_cls_session has already sent an
-ISCSI_KEVENT_UNBIND_SESSION event and would not send it any more. Which
-would cause userspace unable to logout. Actually the session is in
-invalid state(it's target_id is INVALID), iscsid should not sync this
-session in it's restart.
-
-So we need to check session's target state during iscsid restart,
-if session is in unbound state, do not sync this session and perform
-session teardown. It's reasonable because once a session is unbound, we
-can not recover it any more(mainly because it's target id is INVALID)
-
-V5:
-- Add ISCSI_SESSION_TARGET_ALLOCATED to indicate the session's
-  target has been allocated but not scanned yet. We should
-  sync this session and scan this session when iscsid restarted.
-
-V4:
-- Move debug print out of spinlock critical section
-
-V3:
-- Make target bind state to a state kind rather than a bool.
-
-V2:
-- Using target_unbound rather than state to indicate session has been
-  unbound
-
-Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+Cc: Nilesh Javali <njavali@marvell.com>
+Cc: GR-QLogic-Storage-Upstream@marvell.com
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 51 +++++++++++++++++++++++++++++
- include/scsi/scsi_transport_iscsi.h |  8 +++++
- 2 files changed, 59 insertions(+)
+ drivers/scsi/qla2xxx/qla_edif.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index cd3db9684e52..2e0d1cd6d4ea 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -1676,6 +1676,30 @@ static const char *iscsi_session_state_name(int state)
- 	return name;
- }
+diff --git a/drivers/scsi/qla2xxx/qla_edif.c b/drivers/scsi/qla2xxx/qla_edif.c
+index 00ccc41cef14..01fc6869b99a 100644
+--- a/drivers/scsi/qla2xxx/qla_edif.c
++++ b/drivers/scsi/qla2xxx/qla_edif.c
+@@ -416,7 +416,7 @@ static void __qla2x00_release_all_sadb(struct scsi_qla_host *vha,
+ 				 */
+ 				if (edif_entry->delete_sa_index !=
+ 						INVALID_EDIF_SA_INDEX) {
+-					del_timer(&edif_entry->timer);
++					del_timer_shutdown(&edif_entry->timer);
  
-+static struct {
-+	int value;
-+	char *name;
-+} iscsi_session_target_state_names[] = {
-+	{ ISCSI_SESSION_TARGET_UNBOUND,		"UNBOUND" },
-+	{ ISCSI_SESSION_TARGET_ALLOCATED,	"ALLOCATED" },
-+	{ ISCSI_SESSION_TARGET_BOUND,		"BOUND" },
-+	{ ISCSI_SESSION_TARGET_UNBINDING,	"UNBINDING" },
-+};
-+
-+static const char *iscsi_session_target_state_name(int state)
-+{
-+	int i;
-+	char *name = NULL;
-+
-+	for (i = 0; i < ARRAY_SIZE(iscsi_session_target_state_names); i++) {
-+		if (iscsi_session_target_state_names[i].value == state) {
-+			name = iscsi_session_target_state_names[i].name;
-+			break;
-+		}
-+	}
-+	return name;
-+}
-+
- int iscsi_session_chkready(struct iscsi_cls_session *session)
- {
- 	int err;
-@@ -1779,6 +1803,7 @@ static int iscsi_user_scan_session(struct device *dev, void *data)
- 		goto user_scan_exit;
- 	}
- 	id = session->target_id;
-+	session->target_state = ISCSI_SESSION_TARGET_BOUND;
- 	spin_unlock_irqrestore(&session->lock, flags);
+ 					/* build and send the aen */
+ 					fcport->edif.rx_sa_set = 1;
+@@ -2799,7 +2799,7 @@ qla28xx_sa_update_iocb_entry(scsi_qla_host_t *v, struct req_que *req,
+ 			    "%s: removing edif_entry %p, new sa_index: 0x%x\n",
+ 			    __func__, edif_entry, pkt->sa_index);
+ 			qla_edif_list_delete_sa_index(sp->fcport, edif_entry);
+-			del_timer(&edif_entry->timer);
++			del_timer_shutdown(&edif_entry->timer);
  
- 	if (id != ISCSI_MAX_TARGET) {
-@@ -1899,6 +1924,7 @@ static void __iscsi_unblock_session(struct work_struct *work)
- 	cancel_delayed_work_sync(&session->recovery_work);
- 	spin_lock_irqsave(&session->lock, flags);
- 	session->state = ISCSI_SESSION_LOGGED_IN;
-+	session->target_state = ISCSI_SESSION_TARGET_ALLOCATED;
- 	spin_unlock_irqrestore(&session->lock, flags);
- 	/* start IO */
- 	scsi_target_unblock(&session->dev, SDEV_RUNNING);
-@@ -1961,6 +1987,15 @@ static void __iscsi_unbind_session(struct work_struct *work)
- 	unsigned long flags;
- 	unsigned int target_id;
- 
-+	spin_lock_irqsave(&session->lock, flags);
-+	if (session->target_state != ISCSI_SESSION_TARGET_BOUND) {
-+		spin_unlock_irqrestore(&session->lock, flags);
-+		ISCSI_DBG_TRANS_SESSION(session, "Abort unbind sesison\n");
-+		return;
-+	}
-+	session->target_state = ISCSI_SESSION_TARGET_UNBINDING;
-+	spin_unlock_irqrestore(&session->lock, flags);
-+
- 	ISCSI_DBG_TRANS_SESSION(session, "Unbinding session\n");
- 
- 	/* Prevent new scans and make sure scanning is not in progress */
-@@ -1984,6 +2019,9 @@ static void __iscsi_unbind_session(struct work_struct *work)
- 
- unbind_session_exit:
- 	iscsi_session_event(session, ISCSI_KEVENT_UNBIND_SESSION);
-+	spin_lock_irqsave(&session->lock, flags);
-+	session->target_state = ISCSI_SESSION_TARGET_UNBOUND;
-+	spin_unlock_irqrestore(&session->lock, flags);
- 	ISCSI_DBG_TRANS_SESSION(session, "Completed target removal\n");
- }
- 
-@@ -4368,6 +4406,16 @@ iscsi_session_attr(def_taskmgmt_tmo, ISCSI_PARAM_DEF_TASKMGMT_TMO, 0);
- iscsi_session_attr(discovery_parent_idx, ISCSI_PARAM_DISCOVERY_PARENT_IDX, 0);
- iscsi_session_attr(discovery_parent_type, ISCSI_PARAM_DISCOVERY_PARENT_TYPE, 0);
- 
-+static ssize_t
-+show_priv_session_target_state(struct device *dev, struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct iscsi_cls_session *session = iscsi_dev_to_session(dev->parent);
-+	return sysfs_emit(buf, "%s\n",
-+			iscsi_session_target_state_name(session->target_state));
-+}
-+static ISCSI_CLASS_ATTR(priv_sess, target_state, S_IRUGO,
-+			show_priv_session_target_state, NULL);
- static ssize_t
- show_priv_session_state(struct device *dev, struct device_attribute *attr,
- 			char *buf)
-@@ -4470,6 +4518,7 @@ static struct attribute *iscsi_session_attrs[] = {
- 	&dev_attr_sess_boot_target.attr,
- 	&dev_attr_priv_sess_recovery_tmo.attr,
- 	&dev_attr_priv_sess_state.attr,
-+	&dev_attr_priv_sess_target_state.attr,
- 	&dev_attr_priv_sess_creator.attr,
- 	&dev_attr_sess_chap_out_idx.attr,
- 	&dev_attr_sess_chap_in_idx.attr,
-@@ -4583,6 +4632,8 @@ static umode_t iscsi_session_attr_is_visible(struct kobject *kobj,
- 		return S_IRUGO | S_IWUSR;
- 	else if (attr == &dev_attr_priv_sess_state.attr)
- 		return S_IRUGO;
-+	else if (attr == &dev_attr_priv_sess_target_state.attr)
-+		return S_IRUGO;
- 	else if (attr == &dev_attr_priv_sess_creator.attr)
- 		return S_IRUGO;
- 	else if (attr == &dev_attr_priv_sess_target_id.attr)
-diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
-index cab52b0f11d0..db5db8dea28a 100644
---- a/include/scsi/scsi_transport_iscsi.h
-+++ b/include/scsi/scsi_transport_iscsi.h
-@@ -236,6 +236,13 @@ enum {
- 	ISCSI_SESSION_FREE,
- };
- 
-+enum {
-+	ISCSI_SESSION_TARGET_UNBOUND,
-+	ISCSI_SESSION_TARGET_ALLOCATED,
-+	ISCSI_SESSION_TARGET_BOUND,
-+	ISCSI_SESSION_TARGET_UNBINDING,
-+};
-+
- #define ISCSI_MAX_TARGET -1
- 
- struct iscsi_cls_session {
-@@ -264,6 +271,7 @@ struct iscsi_cls_session {
- 	 */
- 	pid_t creator;
- 	int state;
-+	int target_state;			/* session target bind state */
- 	int sid;				/* session id */
- 	void *dd_data;				/* LLD private data */
- 	struct device dev;	/* sysfs transport/container device */
+ 			ql_dbg(ql_dbg_edif, vha, 0x5033,
+ 			    "%s: releasing edif_entry %p, new sa_index: 0x%x\n",
 -- 
-2.35.3
-
+2.35.1
