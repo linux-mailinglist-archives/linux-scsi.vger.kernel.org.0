@@ -2,136 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46B661828A
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Nov 2022 16:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D703F61833D
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Nov 2022 16:47:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbiKCPXY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Nov 2022 11:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
+        id S232025AbiKCPri (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Nov 2022 11:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231687AbiKCPXW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Nov 2022 11:23:22 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE47E25EF
-        for <linux-scsi@vger.kernel.org>; Thu,  3 Nov 2022 08:23:20 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id s20so1337818qkg.5
-        for <linux-scsi@vger.kernel.org>; Thu, 03 Nov 2022 08:23:20 -0700 (PDT)
+        with ESMTP id S232002AbiKCPrg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Nov 2022 11:47:36 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740A517409
+        for <linux-scsi@vger.kernel.org>; Thu,  3 Nov 2022 08:47:35 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-367b8adf788so19386027b3.2
+        for <linux-scsi@vger.kernel.org>; Thu, 03 Nov 2022 08:47:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f7W935H1KbRw0Ag8QHM/Yn3lqfyL9ka2fjOWNd1WB1I=;
-        b=c6nzyMKW9ZnRtwa3zp76mKQ0QUn6sfJTsCuR8G4mpyrAxY54i5HSj7n6qSXMzftZ17
-         80m8TF5uOv4YXZFb5VC0HmjwMnd6inedHNSNgA/GcUaOnKei0IiD8BOi1vbZsOT3tCrI
-         2rYW/hQUTMKwCfn/T+utoFWvmmllBQXjZ2ykiqhGEKoT+MMUr/5ktX6RzNjmD+Ui3/H9
-         fy2n71ovs22yMfa2zo0wpjYYsPnfkDH99eq4X9KS1qirEdUCL8ckTwy/BMhKjCVuj5pf
-         aQFXgOmQYassXRfNcYJx49mTSK1RIhc+rbvLzJdyLlYLDfmWSt5LntqoE0eIHTUc7aCs
-         aKTA==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Pda/ir3/42gu/nV6jt1XuKeJNI/TI6DIbNvbhe+YGyI=;
+        b=GFKP0W6PZ9cCV38TDiPXLcXYelX3lkv1d47Dpo456DZpHCAEAzFNZb67dvnCBphH/k
+         GKZun8dRru1rp0wbihjweqW9z38fK/QeutbNbHBEDv+Jahq87DHBshqwTXRAgGcTCskC
+         tesOmE3A7rKtsoOHp2MpG3shpJLvR9E7yoDerRCblWDF56+9LoWI7C0JwFcuNPmgw7QK
+         B38nzVlX54U2e2m2A2g/lcG0EOHSn4RdPvPzNgCeuUkJW8zHFouz2HL3nEriWpVFZuyV
+         D5o6yNXt7nAybiIuBNm1zipidc9x6WR4fV5sJjQtQZ6fy9+41KEN7wzE/y75Zfnhj+wP
+         TEfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:sender:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f7W935H1KbRw0Ag8QHM/Yn3lqfyL9ka2fjOWNd1WB1I=;
-        b=hZ4SMCLd6GSut4VVAuxbqkCHHhu9YN0YVo82NAJoFerRHt/MhWsy7x7mtp1QDd4Tav
-         GyqrXAW7YUjOfUIiEVwwF62Udd+WrFvWsJN76ActVMqXi6rZdsh3EDeJmzCuPC9/3LQk
-         VFIuwvtky5by+JpwL59+nt0Le7/hjm1rpKvA8VKw9vUD+Iw+Swvim0taTmtMAL20DTsz
-         eMG7hlRM7kfnC1dFf9dWQCvRHWVh52SnodcNsmu87UmHXHgajzCaO/tZKQtwkiyBzht3
-         Ou5h3E51URZn381Ve6/YJQh+62e9vA9v25w+zUnIEZg4E4napTVhyDWSCNKyqIun2FKK
-         nPSg==
-X-Gm-Message-State: ACrzQf2ICnwJrWIt+O0Zl+mS5acYsIHHMeWkDmoSk5oKM+eH8onvsMc4
-        O4VSU1caz4ZOIQes6zpmHgZxJQ==
-X-Google-Smtp-Source: AMsMyM5I530rv1Yc4w34Zr+5MBIkr1bF9RF9uIG79s0fyenDsdb3MXMg/hmpxWiucjGppUIk5oaTNg==
-X-Received: by 2002:a37:de03:0:b0:6ee:88a2:eb9a with SMTP id h3-20020a37de03000000b006ee88a2eb9amr22330615qkj.241.1667488999874;
-        Thu, 03 Nov 2022 08:23:19 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id h6-20020ac85046000000b003a494b61e67sm675911qtm.46.2022.11.03.08.23.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 08:23:19 -0700 (PDT)
-Message-ID: <a170e4e8-fc9d-9be1-35ba-733f24cb93e8@linaro.org>
-Date:   Thu, 3 Nov 2022 11:23:17 -0400
+        bh=Pda/ir3/42gu/nV6jt1XuKeJNI/TI6DIbNvbhe+YGyI=;
+        b=5t9o65wXnKr9ByNY9SolDtRvcWt2egabv3Ibw8SBRRXHTDLNwvmRZg1uDizWIYlJEF
+         FnWtJ2JwZX0RDeqnWFOFUvyJeLGQM8wgCB8cWhZSe+xfo/qywUhIeKFq4+JYwKUzBTNI
+         EFy2QOM+7g/kFUEyhu5iadvUdf/LJl13f1pKI4K83t4Q02oMWw7Vhc69upms9wUg0vM5
+         Ag9fRTvBA2njZGyNzwcY2jqCfsV5EjeaSuU4B/5UuZh7z7ZPsHxfGbHXMFo6NjutXqL1
+         szh0K7r2M2PZd2DkS7mXl/DEswFdhVLt+SinllNK4J1+q2tk3fxQM0VHNs3dBVxKLpkm
+         iPtg==
+X-Gm-Message-State: ACrzQf3tvBErxFSVheJxfdJPjFfUg+xFf5HZeI2/RBMAsmnFkkMbwB9i
+        +yIExw2UJaRPTv/80DEUbvDOwmauVrSq+n063q8=
+X-Google-Smtp-Source: AMsMyM5UpMwEOEYfvHcgIqFEUvunejFnDK5TFTWzvTmxNNuDDZIAo5ClU5CIv5IZUnfQO4rcU239aqLhhRPQK/URBKo=
+X-Received: by 2002:a81:8883:0:b0:373:5319:bf0a with SMTP id
+ y125-20020a818883000000b003735319bf0amr10021627ywf.201.1667490454554; Thu, 03
+ Nov 2022 08:47:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 06/15] dt-bindings: ufs: Add "max-device-gear" property
- for UFS device
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        andersson@kernel.org, vkoul@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, quic_cang@quicinc.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-scsi@vger.kernel.org, dmitry.baryshkov@linaro.org,
-        ahalaney@redhat.com
-References: <20221031180217.32512-1-manivannan.sadhasivam@linaro.org>
- <20221031180217.32512-7-manivannan.sadhasivam@linaro.org>
- <1fe8fd96-7770-0bda-c970-aa38d030ff3b@linaro.org>
- <20221103122850.GD8434@thinkpad>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221103122850.GD8434@thinkpad>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: awardcommitee40@gmail.com
+Received: by 2002:a05:7010:45c2:b0:313:ba7e:115 with HTTP; Thu, 3 Nov 2022
+ 08:47:33 -0700 (PDT)
+From:   Mr Koffi Apo <mrkoffia5@gmail.com>
+Date:   Thu, 3 Nov 2022 03:47:33 -1200
+X-Google-Sender-Auth: Jfg4gra43glvZcxPy9AqHGxhc2o
+Message-ID: <CANzwTXZX-AWBDtbnPhHSehbippVBwXAOV_y583AkWHrzUBFW9A@mail.gmail.com>
+Subject: Get back to me urgently
+To:     koffiapo0011@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DEAR_SOMETHING,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,RISK_FREE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1135 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5021]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrkoffia5[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [awardcommitee40[at]gmail.com]
+        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 RISK_FREE No risk!
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 03/11/2022 08:28, Manivannan Sadhasivam wrote:
-> On Wed, Nov 02, 2022 at 03:09:50PM -0400, Krzysztof Kozlowski wrote:
->> On 31/10/2022 14:02, Manivannan Sadhasivam wrote:
->>> The maximum gear supported by the UFS device can be specified using the
->>> "max-device-gear" property. This allows the UFS controller to configure the
->>> TX/RX gear before starting communication with the UFS device.
->>
->> This is confusing. The UFS PHY provides gear capability, so what is the
->> "device" here? The attached memory? How could it report something else
->> than phy?
->>
-> 
-> This is the norm with any storage protocol, right? Both host and device
-> (memory) can support different speeds and the OEM can choose to put any
-> combinations (even though it might not be very efficient).
-> 
-> For instance,
-> 
-> PHY (G4) -> Device (G3)
+4 Ecowas Road
+Lome Togo
++22896977586
+3rd   Nov 2022
 
-Yes and look at MMC - no need to define "max mode" supported by eMMC.
-You define the modes supported by controller but the memory capabilities
-are being autodetected and negotiated.
+Dear sir
 
-> 
-> From the host perspective we know what the PHY can support but that's not the
-> same with the device until probing it. And probing requires using a minimum
-> supported gear. For sure we can use something like G2/G3 and reinit later but
-> as I learnt, that approach was rejected by the community when submitted
-> by Qualcomm earlier.
+I know that this mail will come to you as a surprise hence we do not
+know each other before communicating you with this piece of
+information. I am a financial controller expert and a Business Broker
+to a deceased Immigrant property Magnate. I hope that you will not
+expose or betray this trust and confidence that I am about to repose
+to you for the mutual benefit of both of us.
 
-It should be then referenced somewhere as it might be a reason to accept
-the property.
+I have an important message to you concerning the death of a
+relative/business mogul, and his fund valued at US$5 million he
+left behind in a Security/Finance house here in my country (Togo), and all
+the related transfer documents regard the fund are with me so I will
+like you to contact me so that we can pull out the fund for our
+personal use hence the Deceased has no relative left behind to claim
+the fund
 
-> 
->> The last sentence also suggests that you statically encode gear to avoid
->> runtime negotiation.
->>
-> 
-> Yes, the OEM should know what the max gear speed they want to run, so getting
-> this info from DT makes sense.
+just ring or email me immediately you are in receipt of this
+mail. Note, this transaction is 100% risk free, so you have nothing to
+worry about
 
-Not really if it is auto-detectable. Just because things are static is
-not the sole reason to put them into DT. The reason is - they are not
-detectable by OS/firmware thus we must have them in DT to be able to
-know it.
-
-
-
-Best regards,
-Krzysztof
-
+Regard
+Koffi Apo
++22896977586
