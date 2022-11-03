@@ -2,123 +2,117 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D703F61833D
-	for <lists+linux-scsi@lfdr.de>; Thu,  3 Nov 2022 16:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B858261872E
+	for <lists+linux-scsi@lfdr.de>; Thu,  3 Nov 2022 19:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbiKCPri (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Nov 2022 11:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
+        id S230337AbiKCSOY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Nov 2022 14:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiKCPrg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Nov 2022 11:47:36 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740A517409
-        for <linux-scsi@vger.kernel.org>; Thu,  3 Nov 2022 08:47:35 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-367b8adf788so19386027b3.2
-        for <linux-scsi@vger.kernel.org>; Thu, 03 Nov 2022 08:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pda/ir3/42gu/nV6jt1XuKeJNI/TI6DIbNvbhe+YGyI=;
-        b=GFKP0W6PZ9cCV38TDiPXLcXYelX3lkv1d47Dpo456DZpHCAEAzFNZb67dvnCBphH/k
-         GKZun8dRru1rp0wbihjweqW9z38fK/QeutbNbHBEDv+Jahq87DHBshqwTXRAgGcTCskC
-         tesOmE3A7rKtsoOHp2MpG3shpJLvR9E7yoDerRCblWDF56+9LoWI7C0JwFcuNPmgw7QK
-         B38nzVlX54U2e2m2A2g/lcG0EOHSn4RdPvPzNgCeuUkJW8zHFouz2HL3nEriWpVFZuyV
-         D5o6yNXt7nAybiIuBNm1zipidc9x6WR4fV5sJjQtQZ6fy9+41KEN7wzE/y75Zfnhj+wP
-         TEfw==
+        with ESMTP id S230165AbiKCSOW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Nov 2022 14:14:22 -0400
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EBF6252;
+        Thu,  3 Nov 2022 11:14:22 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id d20so1628823plr.10;
+        Thu, 03 Nov 2022 11:14:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pda/ir3/42gu/nV6jt1XuKeJNI/TI6DIbNvbhe+YGyI=;
-        b=5t9o65wXnKr9ByNY9SolDtRvcWt2egabv3Ibw8SBRRXHTDLNwvmRZg1uDizWIYlJEF
-         FnWtJ2JwZX0RDeqnWFOFUvyJeLGQM8wgCB8cWhZSe+xfo/qywUhIeKFq4+JYwKUzBTNI
-         EFy2QOM+7g/kFUEyhu5iadvUdf/LJl13f1pKI4K83t4Q02oMWw7Vhc69upms9wUg0vM5
-         Ag9fRTvBA2njZGyNzwcY2jqCfsV5EjeaSuU4B/5UuZh7z7ZPsHxfGbHXMFo6NjutXqL1
-         szh0K7r2M2PZd2DkS7mXl/DEswFdhVLt+SinllNK4J1+q2tk3fxQM0VHNs3dBVxKLpkm
-         iPtg==
-X-Gm-Message-State: ACrzQf3tvBErxFSVheJxfdJPjFfUg+xFf5HZeI2/RBMAsmnFkkMbwB9i
-        +yIExw2UJaRPTv/80DEUbvDOwmauVrSq+n063q8=
-X-Google-Smtp-Source: AMsMyM5UpMwEOEYfvHcgIqFEUvunejFnDK5TFTWzvTmxNNuDDZIAo5ClU5CIv5IZUnfQO4rcU239aqLhhRPQK/URBKo=
-X-Received: by 2002:a81:8883:0:b0:373:5319:bf0a with SMTP id
- y125-20020a818883000000b003735319bf0amr10021627ywf.201.1667490454554; Thu, 03
- Nov 2022 08:47:34 -0700 (PDT)
+        bh=AAumLxLnWfAM18CUZyhLKrEQTBxFDu0Nq3UHPT8n9DM=;
+        b=fiBPUBEIxIE3XElAT/zeDtSLPL9owi4Cu2Y7HwcnCiCYtBkLW0QZClAZ5lbtgvtbNZ
+         vqCp6yrCOlKTleMVslwJdnRmzs2LvwfFyd8fXls3GID7v77zPx+dts+PaYIjGCNBj55M
+         u93rLP75yHvKpwM1xfFgfGteCaLP1KFFQpbGsiOHIBABYvdrkpwYxx501CieBouqVvBP
+         X3Fdkedk1FAE3HMy+TviFA0/jWl59lJ5m7seNUkJ4zCB0g42I66Q1YadPYe1TGy+nAN8
+         CqTJ+jCxm83teJsmAHENq+E4ReFRXJNEYrA+tMJByXnp8HJrriyqmd+GAuttIjJTWCIU
+         Yixw==
+X-Gm-Message-State: ACrzQf3Vnx2PXwclG1NyzVb25I2fZadMZbHXxZdcqikYWtGBFVnE7MV1
+        4ZGxFZnXp/rKSOzp2wMi5c7APzsxG+M=
+X-Google-Smtp-Source: AMsMyM7EErA8tHxPvzrZVcpD4tDFhNKSgLTGblrV/zcW9vCOr6QKeDAhLbttK1YYZeyphS7cjxvfow==
+X-Received: by 2002:a17:90b:4d0e:b0:1f7:ae99:4d7f with SMTP id mw14-20020a17090b4d0e00b001f7ae994d7fmr49029090pjb.200.1667499261396;
+        Thu, 03 Nov 2022 11:14:21 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:881a:8a80:fdae:8683? ([2620:15c:211:201:881a:8a80:fdae:8683])
+        by smtp.gmail.com with ESMTPSA id q17-20020a17090311d100b00178b77b7e71sm958760plh.188.2022.11.03.11.14.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 11:14:20 -0700 (PDT)
+Message-ID: <84af9938-81bc-7c58-2210-7da935312d6a@acm.org>
+Date:   Thu, 3 Nov 2022 11:14:17 -0700
 MIME-Version: 1.0
-Sender: awardcommitee40@gmail.com
-Received: by 2002:a05:7010:45c2:b0:313:ba7e:115 with HTTP; Thu, 3 Nov 2022
- 08:47:33 -0700 (PDT)
-From:   Mr Koffi Apo <mrkoffia5@gmail.com>
-Date:   Thu, 3 Nov 2022 03:47:33 -1200
-X-Google-Sender-Auth: Jfg4gra43glvZcxPy9AqHGxhc2o
-Message-ID: <CANzwTXZX-AWBDtbnPhHSehbippVBwXAOV_y583AkWHrzUBFW9A@mail.gmail.com>
-Subject: Get back to me urgently
-To:     koffiapo0011@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DEAR_SOMETHING,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,RISK_FREE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1135 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5021]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrkoffia5[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [awardcommitee40[at]gmail.com]
-        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 RISK_FREE No risk!
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 03/19] scsi: Move sd_pr_type to header to share
+Content-Language: en-US
+To:     Mike Christie <michael.christie@oracle.com>, hch@lst.de,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        james.bottomley@hansenpartnership.com, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, snitzer@kernel.org, axboe@kernel.dk,
+        linux-nvme@lists.infradead.org, chaitanyak@nvidia.com,
+        kbusch@kernel.org, target-devel@vger.kernel.org
+References: <20221026231945.6609-1-michael.christie@oracle.com>
+ <20221026231945.6609-4-michael.christie@oracle.com>
+ <0123db70-6217-135a-4101-0609512e723b@acm.org>
+ <7b8cdc82-0aca-2f41-2eed-299dacf95771@oracle.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <7b8cdc82-0aca-2f41-2eed-299dacf95771@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-4 Ecowas Road
-Lome Togo
-+22896977586
-3rd   Nov 2022
+On 11/2/22 19:13, Mike Christie wrote:
+> On 11/2/22 5:47 PM, Bart Van Assche wrote:
+>> On 10/26/22 16:19, Mike Christie wrote:
+>>> +static inline enum scsi_pr_type block_pr_type_to_scsi(enum pr_type type)
+>>> +{
+>>> +    switch (type) {
+>>> +    case PR_WRITE_EXCLUSIVE:
+>>> +        return SCSI_PR_WRITE_EXCLUSIVE;
+>>> +    case PR_EXCLUSIVE_ACCESS:
+>>> +        return SCSI_PR_EXCLUSIVE_ACCESS;
+>>> +    case PR_WRITE_EXCLUSIVE_REG_ONLY:
+>>> +        return SCSI_PR_WRITE_EXCLUSIVE_REG_ONLY;
+>>> +    case PR_EXCLUSIVE_ACCESS_REG_ONLY:
+>>> +        return SCSI_PR_EXCLUSIVE_ACCESS_REG_ONLY;
+>>> +    case PR_WRITE_EXCLUSIVE_ALL_REGS:
+>>> +        return SCSI_PR_WRITE_EXCLUSIVE_ALL_REGS;
+>>> +    case PR_EXCLUSIVE_ACCESS_ALL_REGS:
+>>> +        return SCSI_PR_EXCLUSIVE_ACCESS_ALL_REGS;
+>>> +    default:
+>>> +        return 0;
+>>> +    }
+>>> +};
+>>
+>> Please leave out "default: return 0;" from the switch statement and add "return 0;" after the switch statement. That will make the compiler emit a warning if a value is added in enum pr_type but not in the above function.
+> 
+> Did you want that compiler warning functionality in the future code
+> or are you asking me to do the above only if we go the switch based
+> route?
+> 
+> Chaitanya requested me to make this array based in nvme/scsi. For this
+> approach, I can add a WARN or printk warning if the pr_type passed in
+> does not match a value in the array. I don't think I can do a compiler
+> warning though.
+> 
+> I didn't care, but I think the compiler warning route might be better
+> though.
 
-Dear sir
+Hi Mike,
 
-I know that this mail will come to you as a surprise hence we do not
-know each other before communicating you with this piece of
-information. I am a financial controller expert and a Business Broker
-to a deceased Immigrant property Magnate. I hope that you will not
-expose or betray this trust and confidence that I am about to repose
-to you for the mutual benefit of both of us.
+Although I do not have a strong opinion about this, keeping the switch 
+statement and moving the return statement out of the switch statement 
+has the advantage that the compiler will warn if the switch statement is 
+incomplete. I don't think that a similar warning would be emitted if the 
+switch statement would be converted into an array lookup.
 
-I have an important message to you concerning the death of a
-relative/business mogul, and his fund valued at US$5 million he
-left behind in a Security/Finance house here in my country (Togo), and all
-the related transfer documents regard the fund are with me so I will
-like you to contact me so that we can pull out the fund for our
-personal use hence the Deceased has no relative left behind to claim
-the fund
+Thanks,
 
-just ring or email me immediately you are in receipt of this
-mail. Note, this transaction is 100% risk free, so you have nothing to
-worry about
-
-Regard
-Koffi Apo
-+22896977586
+Bart.
