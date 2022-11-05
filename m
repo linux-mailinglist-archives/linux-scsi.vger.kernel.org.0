@@ -2,104 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542FF61D852
-	for <lists+linux-scsi@lfdr.de>; Sat,  5 Nov 2022 08:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF7561DA5F
+	for <lists+linux-scsi@lfdr.de>; Sat,  5 Nov 2022 13:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiKEHS5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 5 Nov 2022 03:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
+        id S229811AbiKEMkG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 5 Nov 2022 08:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiKEHSy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 5 Nov 2022 03:18:54 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2842BE9
-        for <linux-scsi@vger.kernel.org>; Sat,  5 Nov 2022 00:18:49 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N48402R9TzmVgC;
-        Sat,  5 Nov 2022 15:18:40 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 5 Nov 2022 15:18:48 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 5 Nov
- 2022 15:18:47 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-scsi@vger.kernel.org>
-CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH] scsi: libsas: fix error handling in sas_phy_add()
-Date:   Sat, 5 Nov 2022 15:17:25 +0800
-Message-ID: <20221105071725.2313316-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229866AbiKEMj7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 5 Nov 2022 08:39:59 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC42165A1
+        for <linux-scsi@vger.kernel.org>; Sat,  5 Nov 2022 05:39:58 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-13bd19c3b68so8212661fac.7
+        for <linux-scsi@vger.kernel.org>; Sat, 05 Nov 2022 05:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=mu8m7znM9duu/MEuox3wxE9uI+enJzfHDrHCiCJ0dxXEnbtqlugP30RV4pUA4LaD8D
+         DTqzL6R3iJdygnN0tebcl2jKMC1xnk2qmH9yHj5ZpYJsig0zgAkFbQEJMtQOsyMS9E9+
+         9mZsd+BXbCYizoNZILloIeJgVKBYQDDlfcxWmhtehgP0gShVz6QbysTuA73O0zNW89oN
+         M95vp9qd39mlLDduLYXTQkqHXtcuCB6sr4c0ysKpoCTw5s/vT8zmw06SHC/DLusZ9o66
+         sNkDbmLIhAcJBtA+VmbRSjB+l+4rXBDt3pKOG75zF9L+vjSBjo5n2zZjo+rRsufLH5jZ
+         6xmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
+        b=bSP30QCHRWhH6l8Mk/OjC1sbAWTbeoOA/x7LZm+O7uZEfDTZhF7uO4DU1cUQ9BqPR8
+         wiWo1vTAbGVxD+Ymiid3bI0vivrBkl9lmODjiLbcYIE84r53KxyUUsD2AMxJo1qLq9SW
+         Y3A099qBITL6UKbtFgN1uiBHp1RijTR8rP9rfHJqqZgRrAgQf5GdiK409k3OHL8D45fj
+         1QRMURyn5fBMavBzmZaaDtlkoFfdVoTa5TqJvKOLo1iGANrFYBM5ZLk6najNMhRCPiD3
+         HGjZ/ZQo4G8ZJVMcNVSdPOGCyO7qe8oWxdR82QXYZKgvP2gLiKE+ihLX+2LwYdyM3K8F
+         3wXg==
+X-Gm-Message-State: ACrzQf2L3nCxUZ5qRRyxKkjJlZoodblbLTUkT7NC5Wyqufw07rymGSRr
+        SdA+IS9NG2d6Z4C7Jc68jQKL3YcfZZfTWhrH1BBrxFUVh9o=
+X-Google-Smtp-Source: AMsMyM5GFe2gsiMaHXHXvp99K7JeNN2UuK6dELDyLpsoJjIUkQcn4q3aD74FbKEapmwctM2YF8x1D4LMLHeg4fM3LVk=
+X-Received: by 2002:a17:90b:4ac3:b0:213:3918:f276 with SMTP id
+ mh3-20020a17090b4ac300b002133918f276mr57022678pjb.19.1667651987563; Sat, 05
+ Nov 2022 05:39:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7301:2e91:b0:83:922d:c616 with HTTP; Sat, 5 Nov 2022
+ 05:39:47 -0700 (PDT)
+Reply-To: stefanopessia755@hotmail.com
+From:   Stefano Pessina <wamathaibenard@gmail.com>
+Date:   Sat, 5 Nov 2022 15:39:47 +0300
+Message-ID: <CAN7bvZKO8GxFn7CG_EtS_Of+AZ+KsuqTkq40Mq-yJDNrEHyakg@mail.gmail.com>
+Subject: Geldspende
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If transport_add_device() fails in sas_phy_add(), but it's not handled,
-it will lead kernel crash because of trying to delete not added device
-in transport_remove_device() called from sas_remove_host().
-
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000108
-CPU: 61 PID: 42829 Comm: rmmod Kdump: loaded Tainted: G        W          6.1.0-rc1+ #173
-pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : device_del+0x54/0x3d0
-lr : device_del+0x37c/0x3d0
-Call trace:
- device_del+0x54/0x3d0
- attribute_container_class_device_del+0x28/0x38
- transport_remove_classdev+0x6c/0x80
- attribute_container_device_trigger+0x108/0x110
- transport_remove_device+0x28/0x38
- sas_phy_delete+0x30/0x60 [scsi_transport_sas]
- do_sas_phy_delete+0x6c/0x80 [scsi_transport_sas]
- device_for_each_child+0x68/0xb0
- sas_remove_children+0x40/0x50 [scsi_transport_sas]
- sas_remove_host+0x20/0x38 [scsi_transport_sas]
- hisi_sas_remove+0x40/0x68 [hisi_sas_main]
- hisi_sas_v2_remove+0x20/0x30 [hisi_sas_v2_hw]
- platform_remove+0x2c/0x60
-
-Fix this by checking and handling return value of transport_add_device()
-in sas_phy_add(). transport_destroy_device() has been called in sas_phy_free()
-in the error path, so it's no need to call it here.
-
-Fixes: c7ebbbce366c ("[SCSI] SAS transport class")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/scsi/scsi_transport_sas.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/scsi_transport_sas.c b/drivers/scsi/scsi_transport_sas.c
-index 2f88c61216ee..cb364a7c6097 100644
---- a/drivers/scsi/scsi_transport_sas.c
-+++ b/drivers/scsi/scsi_transport_sas.c
-@@ -723,8 +723,11 @@ int sas_phy_add(struct sas_phy *phy)
- 
- 	error = device_add(&phy->dev);
- 	if (!error) {
--		transport_add_device(&phy->dev);
--		transport_configure_device(&phy->dev);
-+		error = transport_add_device(&phy->dev);
-+		if (!error)
-+			transport_configure_device(&phy->dev);
-+		else
-+			device_del(&phy->dev);
- 	}
- 
- 	return error;
--- 
-2.25.1
-
+--=20
+Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
+t.
+Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
+stefanopessia755@hotmail.com
