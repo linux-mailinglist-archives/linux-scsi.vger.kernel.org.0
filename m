@@ -2,152 +2,128 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F0B61F021
-	for <lists+linux-scsi@lfdr.de>; Mon,  7 Nov 2022 11:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D1861F030
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Nov 2022 11:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbiKGKUJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Nov 2022 05:20:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
+        id S231376AbiKGKVV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Nov 2022 05:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiKGKUI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Nov 2022 05:20:08 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8309B15814;
-        Mon,  7 Nov 2022 02:20:07 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2CE79225A3;
-        Mon,  7 Nov 2022 10:20:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667816406; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=31W9fG101zNzaHGLccQbFGakruspMGp88d1+Z6akzTQ=;
-        b=Mhi2thsXfu74Y69IHi0P38X6LmyNwLa+96iaD7GYWhRYdYqL8C/RP1TIt/CIduH+pjaSCj
-        T1BudNaW0s9A5E0yOMWh7HajjFriIhOTZC4r6g9sVKLji8cugmMyO/OOsak3lUb/dESHIY
-        fxMJ0eAg7QkFr7ZKrrb+b43Uo1wFPck=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667816406;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=31W9fG101zNzaHGLccQbFGakruspMGp88d1+Z6akzTQ=;
-        b=xrwOIk9Bj4wvUajWW/U8kLaO8E9SQohK95LtOh0F8G8PQBVFfnNNxrCwhTvorWJTJjGRvR
-        Jz/rL0Pdyh39AXCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D22C13AC7;
-        Mon,  7 Nov 2022 10:20:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WPXKAtbbaGO1awAAMHmgww
-        (envelope-from <hare@suse.de>); Mon, 07 Nov 2022 10:20:06 +0000
-Message-ID: <f4c4b350-70da-9f28-8675-d3319217e471@suse.de>
-Date:   Mon, 7 Nov 2022 11:20:05 +0100
+        with ESMTP id S231384AbiKGKVR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Nov 2022 05:21:17 -0500
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A012916582
+        for <linux-scsi@vger.kernel.org>; Mon,  7 Nov 2022 02:21:15 -0800 (PST)
+Received: by mail-pj1-x1041.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso12488559pjn.0
+        for <linux-scsi@vger.kernel.org>; Mon, 07 Nov 2022 02:21:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=L9okY7Icb0Gf5ctoFsS3m7Ms6FyffuhIG/wumllqb99pGSDM0eKoVdXRomu4k2Vvje
+         vaAAA5b5CG4T9vL3DYzTbt6i7ilTYVRiZHeAf51qWroCKMi/06UV8twkwYbbvcb58b0c
+         O8aiXYIeKLPGKFxD8AeTNjdm9XiiwAwYXXYnxXnBzQtt4ZaPQYbu2mn3d4/wBF5dq0sI
+         fYgKey8dWac3TMQ3pm+aZLL8XgADS0c8wc9DQhJYDoGLimjkDspSigMMA/pe1/be4Mmf
+         FTMTprRtatoAeN10/4e16TIuQYPcJ6zZ7AsqjnUqg8Bde3BWUPkO4V20s/KjpolOjYbD
+         1dVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=Rdp3N5QHzsq2gouA2DZhhQx5P2VbBF0LufaKoo+oq6WGxBsei9k4XTIJsasCaZHyYk
+         07HmumFU+lmBx+ZJ3nYnQcE+4RFklDlBmoGEIFRq5NRwhoYUBCu4C5G07PWqaZH5/cM1
+         /FKnmIB4W8f/ilLExKw7Sm3cHDVxDUplSHh0NZ7iMfkvseMBOuIUWkWB6w/07Qfpd3mk
+         ycQ9NOg+DwiofICiD8McEYn7ug+TV9S8RonhDktIqdq5x9E08rzTrMm7zCaUh9P6EXIl
+         OY2Du+MTY0PcEHBtz9dqibZUtzNXoyq2tx+ZovytYa+ohVMQ2uv/Sj1WMGgmAfK+Xl+U
+         r+HQ==
+X-Gm-Message-State: ACrzQf0ZWuHqpANNf37AroQhZB9yI/Dl0GIfw5wAnmQ9lQWYibrbp39A
+        ZiEP0iRgxMPMQoPfPqpYeLiqEIzQN2sWnU5bcco=
+X-Google-Smtp-Source: AMsMyM4Z92xjGZXgCyg2wym9Bu3/u65n6EL2ZpWI9kWf7s8xWZden0QG/zdZVfFd3uCVmOfceIs+YigxV7lXSF4Af+Y=
+X-Received: by 2002:a17:90b:2393:b0:213:ecb2:2e04 with SMTP id
+ mr19-20020a17090b239300b00213ecb22e04mr38944517pjb.100.1667816475223; Mon, 07
+ Nov 2022 02:21:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Content-Language: en-US
-To:     John Garry <john.g.garry@oracle.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        John Garry <john.garry@huawei.com>, axboe@kernel.dk,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        jinpu.wang@cloud.ionos.com, bvanassche@acm.org, hch@lst.de,
-        ming.lei@redhat.com, niklas.cassel@wdc.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com
-References: <1666693096-180008-1-git-send-email-john.garry@huawei.com>
- <1666693096-180008-17-git-send-email-john.garry@huawei.com>
- <6c0a4a75-786a-c946-57f2-c511bd765bcc@opensource.wdc.com>
- <d4535f4f-d9cf-30de-ce8c-9d8ee9c0decb@suse.de>
- <5417d401-6fb3-c1d7-58df-e24e0013cfb8@opensource.wdc.com>
- <331fffd7-b5db-9b4a-42ae-940a6b54a37f@suse.de>
- <59947ba8-d1a1-2e50-6199-f3974221f8fb@oracle.com>
-From:   Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH RFC v3 16/22] ata: libata-scsi: Allocate sdev early in
- port probe
-In-Reply-To: <59947ba8-d1a1-2e50-6199-f3974221f8fb@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a06:925:b0:587:19e0:c567 with HTTP; Mon, 7 Nov 2022
+ 02:21:14 -0800 (PST)
+Reply-To: contact@ammico.it
+From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <977638ib@gmail.com>
+Date:   Mon, 7 Nov 2022 11:21:14 +0100
+Message-ID: <CAHAXD+Z_SoFK+TjW_6apBCCLtc_awXEjaqOdf77jdLRxxup3TA@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1041 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [977638ib[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/7/22 11:09, John Garry wrote:
-> 
->>>>>>    @@ -4289,26 +4294,16 @@ void ata_scsi_scan_host(struct ata_port
->>>>>> *ap, int sync)
->>>>>>     repeat:
-> 
-> I've been trying to follow this thread, below, but got a bit lost ....
-> 
->>>>>>        ata_for_each_link(link, ap, EDGE) {
->>>>>>            ata_for_each_dev(dev, link, ENABLED) {
->>>>>> -            struct scsi_device *sdev;
->>>>>> +            struct Scsi_Host *shost = ap->scsi_host;
->>>>>>                int channel = 0, id = 0;
->>>>>>    -            if (dev->sdev)
->>>>>> -                continue;
->>>>>> -
->>>>>>                if (ata_is_host_link(link))
->>>>>>                    id = dev->devno;
->>>>>>                else
->>>>>>                    channel = link->pmp;
->>>>>>    -            sdev = __scsi_add_device(ap->scsi_host, channel, 
->>>>>> id, 0,
->>>>>> -                         NULL);
->>>>>> -            if (!IS_ERR(sdev)) {
->>>>>> -                dev->sdev = sdev;
->>>>>> -                ata_scsi_assign_ofnode(dev, ap);
->>>>>
->>>>> Is there something equivalent to what this function does inside
->>>>> scsi_scan_target() ? I had a quick look but did not see anything...
->>>>>
-> 
-> So are we discussing below whether we can have fixed channel, id, lun 
-> per ATA sdev per shost? If so, I don't think it would work as libsas 
-> uses dynamic target ids per host.
-> 
-Not static. target port enumeration would still be left to the driver / 
-transport, so it can do whatever it wants here.
-Idea was to match the 'ata_port' structure to the scsi target port; 
-well, not exactly 'match' but have a 1:1 relationship between them.
-_And_ to have a defined way on how the devices are enumerated; PATA 
-drives would always have LUN 0 and LUN 1(for the slave), and everything 
-else would use REPORT LUNs. For which we need an emulation for libata, 
-but that should be trivially to implement.
-
-With that we would know exactly how many scsi target ports we'll have, 
-and can create them based on hardware details before probing starts.
-Whether or not a _device_ is attached to that port is being determined 
-during scanning via the 'slave_alloc' or 'slave_configure' callbacks, so 
-we still would be able to blank out any not implemented or not connected 
-ports.
-_But_ it would align better with the SCSI layer, such that we can work 
-on integrating scanning and resetting, and make things like 
-'sd_revalidate' actually work for libata.
-
-And for libsas it might be worthwhile to check the 'scan_start' and 
-'scan_finished' callbacks; that seems to be the ticket here.
-
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
-
+Hei ja miten voit?
+Nimeni on rouva Evereen, l=C3=A4het=C3=A4n t=C3=A4m=C3=A4n viestin suurella=
+ toivolla
+v=C3=A4lit=C3=B6n vastaus, koska minun on teht=C3=A4v=C3=A4 uusi syd=C3=A4n=
+leikkaus
+t=C3=A4ll=C3=A4 hetkell=C3=A4 huonokuntoinen ja v=C3=A4h=C3=A4iset mahdolli=
+suudet selviyty=C3=A4.
+Mutta ennen kuin min=C3=A4
+Tee toinen vaarallinen operaatio, annan sen sinulle
+Minulla on 6 550 000 dollaria yhdysvaltalaisella pankkitilill=C3=A4
+sijoittamista, hallinnointia ja k=C3=A4ytt=C3=B6=C3=A4 varten
+voittoa hyv=C3=A4ntekev=C3=A4isyysprojektin toteuttamiseen. Tarkoitan saira=
+iden auttamista
+ja k=C3=B6yh=C3=A4t ovat viimeinen haluni maan p=C3=A4=C3=A4ll=C3=A4, sill=
+=C3=A4 minulla ei ole niit=C3=A4
+kenelt=C3=A4 perii rahaa.
+Vastaa minulle nopeasti
+terveisi=C3=A4
+Rouva Monika Evereen
+Florida, Amerikan Yhdysvallat
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+Hi and how are you?
+My name is Mrs. Evereen, I am sending this message with great hope for
+an immediate response, as I have to undergo heart reoperation in my
+current poor health with little chance of survival. But before I
+undertake the second dangerous operation, I will give you the
+$6,550,000 I have in my US bank account to invest well, manage and use
+the profits to run a charity project for me. I count helping the sick
+and the poor as my last wish on earth, because I have no one to
+inherit money from.
+Please give me a quick reply
+regards
+Mrs. Monika Evereen
+Florida, United States of America
