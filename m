@@ -2,128 +2,162 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D1861F030
-	for <lists+linux-scsi@lfdr.de>; Mon,  7 Nov 2022 11:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BF561F0E9
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Nov 2022 11:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiKGKVV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Nov 2022 05:21:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60910 "EHLO
+        id S231319AbiKGKiP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Nov 2022 05:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiKGKVR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Nov 2022 05:21:17 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A012916582
-        for <linux-scsi@vger.kernel.org>; Mon,  7 Nov 2022 02:21:15 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso12488559pjn.0
-        for <linux-scsi@vger.kernel.org>; Mon, 07 Nov 2022 02:21:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
-        b=L9okY7Icb0Gf5ctoFsS3m7Ms6FyffuhIG/wumllqb99pGSDM0eKoVdXRomu4k2Vvje
-         vaAAA5b5CG4T9vL3DYzTbt6i7ilTYVRiZHeAf51qWroCKMi/06UV8twkwYbbvcb58b0c
-         O8aiXYIeKLPGKFxD8AeTNjdm9XiiwAwYXXYnxXnBzQtt4ZaPQYbu2mn3d4/wBF5dq0sI
-         fYgKey8dWac3TMQ3pm+aZLL8XgADS0c8wc9DQhJYDoGLimjkDspSigMMA/pe1/be4Mmf
-         FTMTprRtatoAeN10/4e16TIuQYPcJ6zZ7AsqjnUqg8Bde3BWUPkO4V20s/KjpolOjYbD
-         1dVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
-        b=Rdp3N5QHzsq2gouA2DZhhQx5P2VbBF0LufaKoo+oq6WGxBsei9k4XTIJsasCaZHyYk
-         07HmumFU+lmBx+ZJ3nYnQcE+4RFklDlBmoGEIFRq5NRwhoYUBCu4C5G07PWqaZH5/cM1
-         /FKnmIB4W8f/ilLExKw7Sm3cHDVxDUplSHh0NZ7iMfkvseMBOuIUWkWB6w/07Qfpd3mk
-         ycQ9NOg+DwiofICiD8McEYn7ug+TV9S8RonhDktIqdq5x9E08rzTrMm7zCaUh9P6EXIl
-         OY2Du+MTY0PcEHBtz9dqibZUtzNXoyq2tx+ZovytYa+ohVMQ2uv/Sj1WMGgmAfK+Xl+U
-         r+HQ==
-X-Gm-Message-State: ACrzQf0ZWuHqpANNf37AroQhZB9yI/Dl0GIfw5wAnmQ9lQWYibrbp39A
-        ZiEP0iRgxMPMQoPfPqpYeLiqEIzQN2sWnU5bcco=
-X-Google-Smtp-Source: AMsMyM4Z92xjGZXgCyg2wym9Bu3/u65n6EL2ZpWI9kWf7s8xWZden0QG/zdZVfFd3uCVmOfceIs+YigxV7lXSF4Af+Y=
-X-Received: by 2002:a17:90b:2393:b0:213:ecb2:2e04 with SMTP id
- mr19-20020a17090b239300b00213ecb22e04mr38944517pjb.100.1667816475223; Mon, 07
- Nov 2022 02:21:15 -0800 (PST)
+        with ESMTP id S231420AbiKGKiL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Nov 2022 05:38:11 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCFB19025
+        for <linux-scsi@vger.kernel.org>; Mon,  7 Nov 2022 02:38:10 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5SK22nd0zpW6L;
+        Mon,  7 Nov 2022 18:34:30 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 18:38:08 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 18:38:08 +0800
+Subject: Re: [PATCH] scsi: libsas: fix error handling in sas_phy_add()
+To:     John Garry <john.g.garry@oracle.com>, <linux-scsi@vger.kernel.org>
+CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <yangyingliang@huawei.com>
+References: <20221105071725.2313316-1-yangyingliang@huawei.com>
+ <5ebc23f6-0043-4214-5b2b-43357f106fc7@oracle.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <1390c9b8-5e24-16de-2915-7e167eedfe7b@huawei.com>
+Date:   Mon, 7 Nov 2022 18:38:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Received: by 2002:a05:6a06:925:b0:587:19e0:c567 with HTTP; Mon, 7 Nov 2022
- 02:21:14 -0800 (PST)
-Reply-To: contact@ammico.it
-From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <977638ib@gmail.com>
-Date:   Mon, 7 Nov 2022 11:21:14 +0100
-Message-ID: <CAHAXD+Z_SoFK+TjW_6apBCCLtc_awXEjaqOdf77jdLRxxup3TA@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+In-Reply-To: <5ebc23f6-0043-4214-5b2b-43357f106fc7@oracle.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1041 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [977638ib[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hei ja miten voit?
-Nimeni on rouva Evereen, l=C3=A4het=C3=A4n t=C3=A4m=C3=A4n viestin suurella=
- toivolla
-v=C3=A4lit=C3=B6n vastaus, koska minun on teht=C3=A4v=C3=A4 uusi syd=C3=A4n=
-leikkaus
-t=C3=A4ll=C3=A4 hetkell=C3=A4 huonokuntoinen ja v=C3=A4h=C3=A4iset mahdolli=
-suudet selviyty=C3=A4.
-Mutta ennen kuin min=C3=A4
-Tee toinen vaarallinen operaatio, annan sen sinulle
-Minulla on 6 550 000 dollaria yhdysvaltalaisella pankkitilill=C3=A4
-sijoittamista, hallinnointia ja k=C3=A4ytt=C3=B6=C3=A4 varten
-voittoa hyv=C3=A4ntekev=C3=A4isyysprojektin toteuttamiseen. Tarkoitan saira=
-iden auttamista
-ja k=C3=B6yh=C3=A4t ovat viimeinen haluni maan p=C3=A4=C3=A4ll=C3=A4, sill=
-=C3=A4 minulla ei ole niit=C3=A4
-kenelt=C3=A4 perii rahaa.
-Vastaa minulle nopeasti
-terveisi=C3=A4
-Rouva Monika Evereen
-Florida, Amerikan Yhdysvallat
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-Hi and how are you?
-My name is Mrs. Evereen, I am sending this message with great hope for
-an immediate response, as I have to undergo heart reoperation in my
-current poor health with little chance of survival. But before I
-undertake the second dangerous operation, I will give you the
-$6,550,000 I have in my US bank account to invest well, manage and use
-the profits to run a charity project for me. I count helping the sick
-and the poor as my last wish on earth, because I have no one to
-inherit money from.
-Please give me a quick reply
-regards
-Mrs. Monika Evereen
-Florida, United States of America
+Hi,
+
+On 2022/11/7 17:35, John Garry wrote:
+> On 05/11/2022 07:17, Yang Yingliang wrote:
+>
+> This is not libsas.
+>
+> BTW, before I go further, note this:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst#n312 
+>
+Thanks for replying.
+
+Yes, it should be "scsi: scsi_transport_sas: XXX"
+>
+>> If transport_add_device() fails in sas_phy_add(), but it's not handled,
+>> it will lead kernel crash because of trying to delete not added device
+>> in transport_remove_device() called from sas_remove_host().
+>>
+>> Unable to handle kernel NULL pointer dereference at virtual address 
+>> 0000000000000108
+>> CPU: 61 PID: 42829 Comm: rmmod Kdump: loaded Tainted: G W          
+>> 6.1.0-rc1+ #173
+>> pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> pc : device_del+0x54/0x3d0
+>> lr : device_del+0x37c/0x3d0
+>> Call trace:
+>>   device_del+0x54/0x3d0
+>>   attribute_container_class_device_del+0x28/0x38
+>>   transport_remove_classdev+0x6c/0x80
+>>   attribute_container_device_trigger+0x108/0x110
+>>   transport_remove_device+0x28/0x38
+>>   sas_phy_delete+0x30/0x60 [scsi_transport_sas]
+>>   do_sas_phy_delete+0x6c/0x80 [scsi_transport_sas]
+>>   device_for_each_child+0x68/0xb0
+>>   sas_remove_children+0x40/0x50 [scsi_transport_sas]
+>>   sas_remove_host+0x20/0x38 [scsi_transport_sas]
+>>   hisi_sas_remove+0x40/0x68 [hisi_sas_main]
+>>   hisi_sas_v2_remove+0x20/0x30 [hisi_sas_v2_hw]
+>>   platform_remove+0x2c/0x60
+>>
+>> Fix this by checking and handling return value of transport_add_device()
+>> in sas_phy_add(). transport_destroy_device() has been called in 
+>> sas_phy_free()
+>> in the error path, so it's no need to call it here.
+>
+> "there's no need", rather than "it's no need". And I don't know why 
+> you bother even mentioning about transport_destroy_device().
+
+Because the device set up by transport_setup_device(), it should be 
+destroyed by transport_destroy_device(), so I mention this.
+
+>
+>>
+>> Fixes: c7ebbbce366c ("[SCSI] SAS transport class")
+>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>> ---
+>>   drivers/scsi/scsi_transport_sas.c | 7 +++++--
+>>   1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/scsi/scsi_transport_sas.c 
+>> b/drivers/scsi/scsi_transport_sas.c
+>> index 2f88c61216ee..cb364a7c6097 100644
+>> --- a/drivers/scsi/scsi_transport_sas.c
+>> +++ b/drivers/scsi/scsi_transport_sas.c
+>> @@ -723,8 +723,11 @@ int sas_phy_add(struct sas_phy *phy)
+>>         error = device_add(&phy->dev);
+>>       if (!error) {
+>
+> personally I think that the following looks better:
+>
+> int sas_phy_add(struct sas_phy *phy)
+> {
+>     int error;
+>
+>     error = device_add(&phy->dev);
+>     if (error)
+>         return error;
+>
+>     error = transport_add_device(&phy->dev);
+>     if (error) {
+>         device_del(&phy->dev);
+>         return error;
+>     }
+>     transport_configure_device(&phy->dev);
+>
+>     return 0;
+> }
+> EXPORT_SYMBOL(sas_phy_add);
+Yes, it's looks better, but I was trying to change least this code to 
+fix this problem.
+I can send a v2 later to change these.
+
+Thanks,
+Yang
+>
+>> - transport_add_device(&phy->dev);
+>> -        transport_configure_device(&phy->dev);
+>> +        error = transport_add_device(&phy->dev);
+>> +        if (!error)
+>> +            transport_configure_device(&phy->dev);
+>> +        else
+>> +            device_del(&phy->dev);
+>>       }
+>>         return error;
+>
+>
+> .
