@@ -2,49 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE730621D13
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Nov 2022 20:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFDF621CE1
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Nov 2022 20:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiKHThR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Nov 2022 14:37:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
+        id S229900AbiKHTTC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Nov 2022 14:19:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKHThP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Nov 2022 14:37:15 -0500
+        with ESMTP id S229906AbiKHTSt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Nov 2022 14:18:49 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2878169DF2
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Nov 2022 11:37:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2347542985
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Nov 2022 11:18:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1667936234; x=1699472234;
+  t=1667935123; x=1699471123;
   h=subject:from:to:cc:date:message-id:mime-version:
    content-transfer-encoding;
   bh=X5+6FqdY24s99yFdGuTfWrG1kHj9HtQbdchdDvA2N+0=;
-  b=eTpYHmJlWLhQxKE/SoqmQoJ/SRTX0Vl3xUk5DpzrtPkRMTiJB9jI+/+P
-   HfDZ4kiYYTbxihpAN53i7PyKX1lLMOJuqNz28PzZIqzKm71MiSR/gzXEs
-   TY7d96gcvHHYis7JR2IwyVdPV/9GDzUFRYWwAKLQ3VflMYTlIENxBxX+/
-   XB8WoADZFAVL5843muy//Mw75pxZh45hKadxmV7x+N5pUktwFULmaFqYi
-   7VS0l7v7Q6Feea+1+aPSf1a4W8EZVk1XOLK2WCe4d6pn/2GKr0YWFMMBn
-   nREalDSWsWuWRVYAVfqDBWXSJIUQ00Aw0NiwBrhgzJ7O0CidSkhkIRJtY
-   w==;
+  b=HIvRyoEC/bkbokAtDUlZkvIlOpeRPPrjYgL7PiWeyyqlWhdAqj2eczp4
+   RM1wzfOfq5ppV7NZqLcZoLCn7cPabBernl4dy+V9JeXJTSkPQ5+wfr5qa
+   Fqs/V1ecdwavOtWx4ZszKErylMZEAVKrKCsqx1RrB46ePp2zXmpgViPwW
+   xP99UZqL4m35nKVjkerJQ9jjqRbUwc8xVjKjYZqW+NL2mUv+dJHrkOn0q
+   t0Hf/tzZnmL4HLnxuGuyteGi61qRY7EyoOhNpFfNuU70CKF8cs44FKqBL
+   fm6Nz7cV7mXTIm6v1UYiVDalxy9UHYFWTpxqyWwq8kKV5HdI/g8jeCS6K
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="198950529"
+   d="scan'208";a="198948980"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Nov 2022 12:37:14 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Nov 2022 12:18:42 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 8 Nov 2022 12:37:14 -0700
-Received: from brunhilda.pdev.net (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ 15.1.2507.12; Tue, 8 Nov 2022 12:18:41 -0700
+Received: from brunhilda.pdev.net (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 8 Nov 2022 12:37:14 -0700
+ Transport; Tue, 8 Nov 2022 12:18:41 -0700
 Received: from brunhilda.pdev.net (localhost [127.0.0.1])
-        by brunhilda.pdev.net (8.15.2/8.15.2/Debian-22ubuntu3) with ESMTP id 2A8Je6Np323941;
-        Tue, 8 Nov 2022 13:40:06 -0600
+        by brunhilda.pdev.net (8.15.2/8.15.2/Debian-22ubuntu3) with ESMTP id 2A8JLXD1322567;
+        Tue, 8 Nov 2022 13:21:33 -0600
 Received: (from brace@localhost)
-        by brunhilda.pdev.net (8.15.2/8.15.2/Submit) id 2A8JJvVA322379;
-        Tue, 8 Nov 2022 13:19:57 -0600
+        by brunhilda.pdev.net (8.15.2/8.15.2/Submit) id 2A8JLWIk322566;
+        Tue, 8 Nov 2022 13:21:32 -0600
 X-Authentication-Warning: brunhilda.pdev.net: brace set sender to don.brace@microchip.com using -f
 Subject: [PATCH 0/8] smartpqi updates
 From:   Don Brace <don.brace@microchip.com>
@@ -53,10 +53,11 @@ To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
         <gerry.morong@microchip.com>, <mahesh.rajashekhara@microchip.com>,
         <mike.mcgowen@microchip.com>, <murthy.bhat@microchip.com>,
         <kumar.meiyappan@microchip.com>, <jeremy.reeves@microchip.com>,
-        <hch@infradead.org>
+        <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
+        <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Date:   Tue, 8 Nov 2022 13:19:57 -0600
-Message-ID: <166793515034.322300.10163320550137997010.stgit@brunhilda>
+Date:   Tue, 8 Nov 2022 13:21:32 -0600
+Message-ID: <166793527478.322537.6742384652975581503.stgit@brunhilda>
 User-Agent: StGit/1.5.dev2+g9ce680a52bd9
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
