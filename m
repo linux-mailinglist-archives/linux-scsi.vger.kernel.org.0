@@ -2,102 +2,143 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05E86207F9
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Nov 2022 05:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 120C56207C5
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Nov 2022 04:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbiKHEDw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Nov 2022 23:03:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S233099AbiKHDvG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Nov 2022 22:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233364AbiKHEDQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Nov 2022 23:03:16 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D065731EF1
-        for <linux-scsi@vger.kernel.org>; Mon,  7 Nov 2022 20:03:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1667880186; x=1699416186;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zWCZlBV0Du560Hsw2iMyyo75APBF5iv+MkGPs81UfQQ=;
-  b=HfH7hz0LUtvBGZl6kj2mv/up0BqbqO/6YvnhNA5uUENjE/isd031nUnK
-   Zj8rCU+Do1OGlR7q6KolMgY4MqNJX1fj1ZGPSPAD+5zpnGwtvFUpjulSQ
-   RjtKWjwGFf3No/FPiPaS8w/9ZQXFpGMRqQhsQpGcReZs0IQ0LlpJPLnRC
-   5Kc1KyLIRmvz3AP4t8xY9x+RIiQzxwQ/5lTNswBZ+vcEPVUCHLtw3zu+4
-   kaV5oa1H5YpmEa2Rbqm4In0Y/1mYKr6dQtIJZSs82akDjyNqW6NtZTLpz
-   6H1mjlKVHY5dQwe7JB3lSaUAqnyVN1iSVC3o/NM6W/CsfdIASPcL9CHD2
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,145,1665417600"; 
-   d="scan'208";a="215725359"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 08 Nov 2022 12:03:06 +0800
-IronPort-SDR: 7tMKhkDrxux66BefeTmYPus5vOl1GYbGM9hqGI0tLB/5HmhtosX2AiDHoB/0yJ9hxkxO2RcIJl
- 0wEHHrFgu9Rokyfv3vwtCV2NYILli+4cNFu+t0YHoBef29+DCExYPSK2ZXEY6VD0avj3sq2WSC
- adU5zn6GOjW5t5zO5LzfET/P6F4A6fbYU2vQzQ4POFHKM7xVMLv9BtOkf2JDoKk3T+XwgHvW53
- wLoFP7WZ43jU8sp4ynYZ6r+sHLymujZCXbLfaZZNHnUcZVyE7kacdi3XKWMXVtTBrpPvrVCO7e
- OOY=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Nov 2022 19:22:12 -0800
-IronPort-SDR: RIa6S0QjYhbeRAEQDs2xKbuY8qGmkUwaRFv+ElAt2+E6w5cbMq1+69E8QRvQUBjDpjl+Vrypy1
- 9SHJD/BRmrD/ebGq36jcmYy59md5CgeuPbxXIXA9ue9DeuIWHEZUXOIhjkgqmRlIRm4zJazFDu
- UE2ltFm1R2Rrzacr/3PXGYltSLrkkVXbx9IMurZva2zkwI3ulX3qk3mzKQslDBc0+VEn+Ws8Nl
- D4M6fEp5Oq7icJCbgVRVe1uqHSS/0+858t7jSYZrC5/jlA0bx7BDN7AgUFc12RoxIqoqQEdoQw
- usM=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Nov 2022 20:03:06 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4N5vJm67CNz1Rwt8
-        for <linux-scsi@vger.kernel.org>; Mon,  7 Nov 2022 19:50:48 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1667879447; x=1670471448; bh=zWCZlBV0Du560Hsw2iMyyo75APBF5iv+MkG
-        Ps81UfQQ=; b=QCilGdrE2aqDwoWOvbH52jTJfkeMCBflDkaj0Js77GIbKVdlBcw
-        tR5EWa9P2qVUoQYhuPLk6tBtnY13AY1/6UFMKIfdVNamHY7Aryi3FY26Mu30sn8j
-        vuDIHLkJHIqLI70cC/VoIXrY3H1mherXZTE1gj3YnCAGPnwNXO8gVCvV+tAGCYZr
-        kCnh0ivYjfQ0WkwGYTX6XWXW9UonMiSNE6UDebYNeoa62jXggA4T3A6f6FagFwkt
-        nYYtie9usTK87JbsVd6HQSq7fDhpRgGiMdeMy/UJOP9Zh0Xg4Pc43oDoPxNe/unC
-        2htXozfsunTwF4QYCRZ61lUAszCClE/XufQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id mrfe9NsnGglX for <linux-scsi@vger.kernel.org>;
-        Mon,  7 Nov 2022 19:50:47 -0800 (PST)
-Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4N5vJk311nz1RvLy;
-        Mon,  7 Nov 2022 19:50:46 -0800 (PST)
-Message-ID: <976bdcb7-cb97-9332-2bcc-5d98bc41871b@opensource.wdc.com>
-Date:   Tue, 8 Nov 2022 12:50:44 +0900
+        with ESMTP id S232920AbiKHDvF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Nov 2022 22:51:05 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0C52D76F;
+        Mon,  7 Nov 2022 19:51:04 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A80OVNo027238;
+        Tue, 8 Nov 2022 03:51:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=OLaH+vaTcDu8UL0+yKRBTe1dGwSDqkWLDyQNDHRkqLM=;
+ b=P5X/PK5gY55vWxJqaO34qin+BYGm0aP3cEfdzgOXTpKy7E60a0HvWH8vB6pb6Q/5Ag2y
+ YFJ0TEHfo/nCvsHx01L+mRZap/+ekw1zyfkcwsBblpO9JgBYJqQUsX6JR4drt6TMXGzp
+ azGvoHWLRfUbcNUJeXS785XU7L7Yq5tZ+aNaSB1ULw4S6t4Kasoo9fBp+8BGrxeEjwFt
+ MxFKqvgkKlNq25gbYJ73rP5bud6fzI2W9tdKvRdzvspNDIL0LThxm3XPDFBznWVkYGKe
+ dD9iqZvBGHN/TSfwHQmCoQ10ut91O09idYcIjKLPl3SArjmof3A3bgaxK/lraiduCF2k kw== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kngrenw3g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Nov 2022 03:51:03 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2A82CJOL025617;
+        Tue, 8 Nov 2022 03:50:58 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2042.outbound.protection.outlook.com [104.47.57.42])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kpcqfgwch-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Nov 2022 03:50:58 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FDMHdkvrQhsSNmwBi1/3nXOOZxT/+IL1Ey8u/aPjF8FY9GcVmPjNB3X1og6ND8laLg/j99ADMuu/Q3Ip9cpFtYU5szhYJemjNYYs+UXJ0cQ1raObPPtE1Xnef2M+f0k7YnGfTR4E0RRuBItS5sECZJ4T7egfXMhTOqF3mcfUQ4LhYQvYVXG8eC3xytkyaOJjuMn2Z42Vg16XBmctAZY4UkwFN3LsZSbcY21Hg3HLL6a36oFiQGuZULfpRoxS0YmO7FW6VqQC9gan3Li1EpPlhx7+MxNiE0hPYkNwx5KuFOdxmC4FOkpbdGEgi6Eeq+DpfsSxbMXokOq6j0F8ljc5XQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OLaH+vaTcDu8UL0+yKRBTe1dGwSDqkWLDyQNDHRkqLM=;
+ b=KUmEc4kHl9R/JrPTm4iuqPeiE2iFgXr2N72iBwlqCx6AeRp0oIeu76RXhnx55kMRZFISnKVngTdWBwSrwOp7ZYj+a/+rxtfbCQIE6jpW3zki/SQ0dSGtTcFUT+QCnf1IE/uLXZR8zrXURPeQshKU3KHbw+a5yNE66tlEb7UimiFowOtzMms1fxmRi82belM+8GKlttXZ+4hA0/FrPZzpX7HedbEPhphbeE00XnoU9Esb2QKjY5Iv8wDdz8bcSUiwbLHZKahmAJBzTGDD3AEGnhRJxD97voRvgOFD31558i/BgZU9I52+/aiza9/b6zKDESdbZ4t+ymeNeHKroi2LMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OLaH+vaTcDu8UL0+yKRBTe1dGwSDqkWLDyQNDHRkqLM=;
+ b=gjbEwmkEeLK4QWIY5duSE7ypaFjtUp5TCJl1VBEUU2tpBcvSBM1+YZ4OM1DkqIc3DdbwI5thx3RakEjEe6ImCfr6VbwuakXKP89iR87lIn54ljTjtu/4QE+yLzXgx0wWmMIs9IvxasP2J/PSRwhXFpUpM7hjy7B0HI1t+lcXQIE=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by DM4PR10MB6696.namprd10.prod.outlook.com (2603:10b6:8:110::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Tue, 8 Nov
+ 2022 03:50:56 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::f77e:1a1a:38b3:8ff1]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::f77e:1a1a:38b3:8ff1%9]) with mapi id 15.20.5791.027; Tue, 8 Nov 2022
+ 03:50:56 +0000
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: target: core: Remove unused variable unit_serial_len
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1sfiuhzoq.fsf@ca-mkp.ca.oracle.com>
+References: <20221101105326.31037-1-colin.i.king@gmail.com>
+Date:   Mon, 07 Nov 2022 22:50:54 -0500
+In-Reply-To: <20221101105326.31037-1-colin.i.king@gmail.com> (Colin Ian King's
+        message of "Tue, 1 Nov 2022 10:53:26 +0000")
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0118.namprd03.prod.outlook.com
+ (2603:10b6:a03:333::33) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2] ata: libata-core: do not issue non-internal commands
- once EH is pending
-To:     Niklas Cassel <Niklas.Cassel@wdc.com>,
-        John Garry <john.g.garry@oracle.com>
-Cc:     "tj@kernel.org" <tj@kernel.org>, "hare@suse.de" <hare@suse.de>,
-        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-References: <20221107161036.670237-1-niklas.cassel@wdc.com>
- <5a4fa5db-c706-5cf2-1145-bf091445d20e@oracle.com>
- <Y2mbX8MvYrF0FHaI@x1-carbon>
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <Y2mbX8MvYrF0FHaI@x1-carbon>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|DM4PR10MB6696:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3fa00e12-39d1-45cb-6746-08dac13c7101
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sno6Sc/Ga7b6ZYifgTuERRWsdoN87vwT20GkowRZ6VfGQ17BO6oAs40yRjkeLx/MiiS04pz+MQY1YMtJOElbTxjb/pqw/l8Sv/ci0V9LIb88JbdJklEN4Lq9PRfNhAiyJNFa/OnJ1oZ8WpjcZNNOO0Uj5ICQAscJEOT9AKAnuDUuLAqA7MDJAgpIhjVUVaL1173400m4MIpDNq+K/uoJ/WPoMguA0AQYXI5oeV/0V5emhOh9rRpYE/+irdGhvSdIFuTCiHAfQKqS+cLkpVnsqbjTosWW7FHKVGNurXa6DT4Liqz/dK6XEE998Fm2d+T0mYBUH86Fu8hPcycUEdEzsoLgayGqjyCpTyz54VY19cQA5konXrOsDTLG1t3N3GFup9HiFe/y5Xoz/2XqcQKPMlrEN24ZGxnqSlwI0XLnPb3a5o2XcheC+YW3swYtpwA0Cuq4FhgsgPb0CDy52s6YMx/VduH0dEUJp4MH42KfNeUIiPZHuGa1NV1bYhLBS44KpMVPXfVescnDeFsGACBtO/wOUWFfTv5i33vR2sjGVtibBKi7csAARz+G4CgTYOc3XP+H37NW+VjI9NPN+mQom4PZPHXMn7m+ZN2pRZiwmFDfZIVCCPxxIbJxgeCNOnG12ydpgHNCoj5Ry53Lq9QdfFATdQESTikwaQTipEFsrmpD498ijdTLYhXs4lnN/Y8Zu036C+IeKhVHoKIPPuudYg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(396003)(366004)(136003)(346002)(39860400002)(451199015)(8676002)(186003)(41300700001)(6506007)(66476007)(6916009)(316002)(5660300002)(26005)(36916002)(558084003)(4326008)(2906002)(8936002)(66556008)(6512007)(66946007)(6486002)(478600001)(86362001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LYYKgreJvHiYTrChjINjSgKs05ZT6gPjbvQzVIQZxafaYk5LcXE5Ll1tGP6R?=
+ =?us-ascii?Q?0Z7On6oWGHCNy0k57PpQ2lzZ4/0r2nyNdILx7+zfDxqe1WGebAhKU24fEY5s?=
+ =?us-ascii?Q?vFJolI3Yi1O/i/BOf6sEK+79iIy9J+T8u3mnUW7x/BhStIg4pW2+fOgoHJ/E?=
+ =?us-ascii?Q?QqAlBNCvx813rJaP9G3Vwd1nbwe1C+PmHEu68h5CGkvryBLjlcaz5S5mBNZk?=
+ =?us-ascii?Q?3Cbi6QgJg2mWaQ35z3+vKbw6JKo4EMInU6uquT23lvy8LzY2eECf0XhZ3ILz?=
+ =?us-ascii?Q?aFz7Haj48lfw0ubENrwE9o7NTAFYZrKMsZTd//cbbcOjdziE7RL/QV4fWwQo?=
+ =?us-ascii?Q?MEu08m0ICK0+XNfPWr0YKBYeiOWOchpDAmgZl+LSVL5Pej8+mLlsx2Z+Gcpj?=
+ =?us-ascii?Q?MWSRlSCd+cJg+nlFhSyElNO8zrqDCe6QmiZo39DTLheiGtxIeGrE9keyg0Jf?=
+ =?us-ascii?Q?BbvMMB5p/i0X0INeemGoZXDkEnPug3GJ7wsGCYEB3ChzgiiVugmsmtLT1nRt?=
+ =?us-ascii?Q?kfdOHMaycwFqcpNoc9aV6qaNHsyEtExWV/dXfQuCtY9kHcncHZ6cOgMGzUTJ?=
+ =?us-ascii?Q?cIcoDvOgp8h54JWQL987pbAsC+w+jDTJ8sOS+BbVzFofWTBkLhj7Y9DIe4Qm?=
+ =?us-ascii?Q?XMXr89rMfr6obQR0+IFlZoEprRl0pbNtcT++Vc/kDWVfN76VBY4Wk1puUUNG?=
+ =?us-ascii?Q?FM/L/JBiRd7GHiJQMA2b9Ih5ZMCYNEuZ6wvZImEkglBc0rIqN/nrkXRU2+ik?=
+ =?us-ascii?Q?9l525TjEolnNz8cwKSctWsQAUyVPdNgWBaBDoyNQyE5QcKmuq6lEnE4MjayL?=
+ =?us-ascii?Q?Xm9OWKxM2xjxLj2+7Egu5pC5k8F2EKXZopcViodG9TjZ4yEdQMHCrOJrI74F?=
+ =?us-ascii?Q?EUU1GqVB9F83MZOjUFnLtKbZQjHnCDcj4XdRES/kmbd3QUYhQEiSWBG6N/kX?=
+ =?us-ascii?Q?As+B1ebgw5LiSQtYX+u5LoH8Loq0PrCGVjkdo2G/oXALfzVUwSAQrCtPuww5?=
+ =?us-ascii?Q?+UM2NfwYWcZ2pG6ckHTQjScmm+3mhKNEvlFYiWwF0sYZn9C0oYGGxs9tnSmz?=
+ =?us-ascii?Q?AlFCJ2m5+DZ4Rt5Vn+1mBJ7pPkijmfCKFvgNfQqXkYkl/YN3IW0HYEUse8tg?=
+ =?us-ascii?Q?z0zTtTOosod/aeBFSuTBQJq632/yqt6gTswf5yO9z4Vrq6xr6sJ1K0A964mA?=
+ =?us-ascii?Q?wRuGrln2+YMLrL4jXhfHZZo74YCWcTKUROtaZBVfAs2049FUuRgeYMXyzrDr?=
+ =?us-ascii?Q?TnQMmKUdXMFtTLBdIfbMn7lIVfw3JpGZ5wjzqxQeg0kZrc0Yvp00a8udREfs?=
+ =?us-ascii?Q?cKYyq6hJSkXb+4yxx00akLmDRhEH20ew3n965XTByAkhIQNCPG1m1XsqyGaJ?=
+ =?us-ascii?Q?e8fHvPMOkzsLiAMzw0vi/UxrmiYcuPIIBfpvNY821f9sAmbwU+7oaCUfBQsY?=
+ =?us-ascii?Q?kwfBc4QfGDhZpS822BEjAJ2On9GI/ee2kDa/vosLtEOZy7wwQ7H9qdH9AH6F?=
+ =?us-ascii?Q?RZBI6WTm4JAVXfErSK2lUmQ6C/6XgvXLJ7Gd6Hm9gH4bER4gt6ssDsAICOJ5?=
+ =?us-ascii?Q?iRJsiADv626WyWjaGP7kxpljZ2XBcNySskPlMxir/SwyYk+0VMTjjymnpG4z?=
+ =?us-ascii?Q?Mg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fa00e12-39d1-45cb-6746-08dac13c7101
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 03:50:56.7066
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ju2mE9BLqp+KE6tsDl1ePhtme8yrz/972+fb9lJ9EOWblUTuB+5+E0z26fPRoB5T8mGVJJFALxtpArsUFtSMxZxTy6QEqsUlng1vNCvMgKo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6696
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0 mlxscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 bulkscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211080019
+X-Proofpoint-ORIG-GUID: -k7ip_seUuyH0X4auRUY0Opt2CbSHvNn
+X-Proofpoint-GUID: -k7ip_seUuyH0X4auRUY0Opt2CbSHvNn
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -105,143 +146,12 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-+ linux-scsi, Martin and James
+Colin,
 
-On 11/8/22 08:57, Niklas Cassel wrote:
-> On Mon, Nov 07, 2022 at 05:01:53PM +0000, John Garry wrote:
->> On 07/11/2022 16:10, Niklas Cassel wrote:
->>> scsi_queue_rq() will check if scsi_host_in_recovery() (state is
->>> SHOST_RECOVERY), and if so, it will _not_ issue a command via:
->>> scsi_dispatch_cmd() -> host->hostt->queuecommand() (ata_scsi_queuecmd())
->>> -> __ata_scsi_queuecmd() -> ata_scsi_translate() -> ata_qc_issue()
->>>
->>> Before commit e494f6a72839 ("[SCSI] improved eh timeout handler"),
->>> when receiving a TFES error IRQ, this was the call chain:
->>> ahci_error_intr() -> ata_port_abort() -> ata_do_link_abort() ->
->>> ata_qc_complete() -> ata_qc_schedule_eh() -> blk_abort_request() ->
->>> blk_rq_timed_out() -> q->rq_timed_out_fn() (scsi_times_out()) ->
->>> scsi_eh_scmd_add() -> scsi_host_set_state(shost, SHOST_RECOVERY)
->>>
->>> Which meant that as soon as the error IRQ was serviced, no additional
->>> commands sent from the block layer (scsi_queue_rq()) would be sent down
->>> to the device. (ATA internal commands originating for ATA EH could of
->>> course still be sent.)
->>>
->>> However, after commit e494f6a72839 ("[SCSI] improved eh timeout handler"),
->>> scsi_times_out() would instead result in a call to scsi_abort_command() ->
->>> queue_delayed_work(). work function: scmd_eh_abort_handler() would call
->>> scsi_eh_scmd_add(), which calls scsi_host_set_state(shost, SHOST_RECOVERY).
->>>
->>> (It was possible to get the old behavior if host->hostt->no_async_abort
->>> was set, but libata never used it, and this option was completely removed
->>> in commit a06586325f37 ("scsi: make asynchronous aborts mandatory"))
->>>
->>> Additionally, later in commit 358f70da49d7 ("blk-mq: make
->>> blk_abort_request() trigger timeout path"), blk_abort_request() was changed
->>> to also call the abort callback asynchronously.
->>>
->>> So now, after the TFES error irq has been serviced, we need to wait for
->>> two different workqueues to run their work, before the SHOST_RECOVERY
->>> state gets set.
->>>
->>> While the ATA specification states that a device should return command
->>> aborted for all commands queued after the device has entered error state,
->>> since ATA only keeps the sense data for the latest command (in non-NCQ
->>> case), we really don't want to send block layer commands to the device
->>> after it has entered error state. (Only ATA EH commands should be sent,
->>> to read the sense data etc.)
->>>
->>> While we could just call scsi_host_set_state(shost, SHOST_RECOVERY) from
->>> ata_qc_schedule_eh() directly, that might be a layering violation.
->>> So instead of doing that, add an additional check against the libata's own
->>> EH flag(s) before calling the qc_defer callback.
->>>
->>> Fixes: e494f6a72839 ("[SCSI] improved eh timeout handler")
->>> Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
->>> ---
->>> Changes since v1:
->>> -Implemented review comments from Damien.
->>>
->>>   drivers/ata/libata-scsi.c | 20 ++++++++++++++++++++
->>>   1 file changed, 20 insertions(+)
->>>
->>> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
->>> index 4cb914103382..383a208f5f99 100644
->>> --- a/drivers/ata/libata-scsi.c
->>> +++ b/drivers/ata/libata-scsi.c
->>> @@ -1736,6 +1736,26 @@ static int ata_scsi_translate(struct ata_device *dev, struct scsi_cmnd *cmd,
->>>   	if (xlat_func(qc))
->>>   		goto early_finish;
->>> +	/*
->>> +	 * scsi_queue_rq() will defer commands when in state SHOST_RECOVERY.
->>> +	 *
->>> +	 * When getting an error interrupt, ata_port_abort() will be called,
->>> +	 * which ends up calling ata_qc_schedule_eh() on all QCs.
->>> +	 *
->>> +	 * ata_qc_schedule_eh() will call ata_eh_set_pending() and then call
->>> +	 * blk_abort_request() on the given QC. blk_abort_request() will
->>> +	 * asynchronously end up calling scsi_eh_scmd_add(), which will set
->>> +	 * the state to SHOST_RECOVERY and wake up SCSI EH.
->>> +	 *
->>> +	 * In order to avoid requests from being issued to the device from the
->>> +	 * time ata_eh_set_pending() is called, to the time scsi_eh_scmd_add()
->>> +	 * sets the state to SHOST_RECOVERY, we defer requests here as well.
->>> +	 */
->>> +	if (ap->pflags & (ATA_PFLAG_EH_PENDING | ATA_PFLAG_EH_IN_PROGRESS)) {
->>> +		rc = ATA_DEFER_LINK;
->>> +		goto defer;
->>
->> Could we move this check earlier? I mean, we didn't need to have the qc
->> alloc'ed and xlat'ed for this check to be done, right?
-> 
-> Sure, we could put it in e.g. ata_scsi_queuecmd() or __ata_scsi_queuecmd().
-> 
-> 
-> Or, perhaps it is just time to accept that ATA EH is so interconnected with
-> SCSI EH, so the simplest thing is just to do:
-> 
-> --- a/drivers/ata/libata-eh.c
-> +++ b/drivers/ata/libata-eh.c
-> @@ -913,6 +913,7 @@ void ata_qc_schedule_eh(struct ata_queued_cmd *qc)
->  
->         qc->flags |= ATA_QCFLAG_FAILED;
->         ata_eh_set_pending(ap, 1);
-> +       scsi_host_set_state(ap->scsi_host, SHOST_RECOVERY);
+> Variable unit_serial_len is just being assigned and it's never used
+> anywhere else. The variable is redundant so remove it.
 
-Why put this in this function ? Nothing in ata_qc_schedule_eh() calls
-scsi_schedule_eh() or scsi_eh_scmd_add(), which set that state.
-It looks like ata_port->ops->sched_eh(), that is, ata_std_sched_eh(),
-would be a better place for this.
-
->  
->         /* The following will fail if timeout has already expired.
->          * ata_scsi_error() takes care of such scmds on EH entry.
-> 
-> 
-> Which appears to work just as well as the patch in $subject.
-> 
-> In commit ee7863bc68fa ("[PATCH] SCSI: implement shost->host_eh_scheduled")
-> Tejun mentioned that "... libata is planning to depart from SCSI, so, for the
-> time being, libata will be using SCSI EH to handle such exceptions."
-> 
-> Now, 16 years later, ATA is still using SCSI EH (see ata_port_schedule_eh() and
-> ata_std_sched_eh()) to schedule EH in the case when there are no QCs to abort:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/ata/libata-eh.c?h=v6.1-rc4#n1004
-> 
-> Damien, thoughts?
-
-I like this simpler fix better, but it does introduce a risk of (again)
-having problems with ata EH if scsi EH trigger/timing is changed.
-Unlikely now, but as this fix proves, not unheard of.
-
-The v2 change is fine too, modulo John's suggestion, which I agree with.
-At least it is consistent with the ata internal eh state accounting, so
-self contained within libata and somewhat less dependent on scsi state
-machine.
-
-Martin ? James ? Thoughts ?
+Applied to 6.2/scsi-staging, thanks!
 
 -- 
-Damien Le Moal
-Western Digital Research
-
+Martin K. Petersen	Oracle Linux Engineering
