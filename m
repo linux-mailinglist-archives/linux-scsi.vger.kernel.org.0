@@ -2,97 +2,140 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103AD6216C5
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Nov 2022 15:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434916219C9
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Nov 2022 17:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbiKHOcS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Nov 2022 09:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36612 "EHLO
+        id S234218AbiKHQuX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Nov 2022 11:50:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234338AbiKHObM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Nov 2022 09:31:12 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0416512AAB
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Nov 2022 06:31:05 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id m6so13997998pfb.0
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Nov 2022 06:31:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=plCZMl07mNxOy4FwEnJyPWecERqsJQyrHYHIsHPByWrtU1k24II845ABLvzsZ/utuV
-         xrfZ6D/e/ZRoyRjpbZ5oMDY9h9ndbu6gtWFiQs/CjHcVVSqci/vjYPMMyy1pnVJ69u5N
-         OM2Kwkcs/9db1KNzWi4t4Kki8xmdjDy37F969+9phg4q7Iutyq/zyteGqROU9T6wdO4n
-         lS/c2RFkn8H1h3UlswE5jNY6oMt5wQG8oq965L41J8fDh6fe1zek7KZifUk151Do70De
-         k9oKwcRkEhDvguAg4zcTYagV5rrGsvTLwyNtdWlzI5EY/CPrjAga8S7nNTzf3DHImH9S
-         a/jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=h9o+E3TliF+jFnp7ljdCvfjBMcXoSpBT4KmT4Rzp54O6/EPTrEGcIqmCCJIIe0gdlV
-         XEaDdxmkbTQ0ELNSU7I7tCQyosvbBLauMXui2GCagDDDmH11A8kuVKb2zlrS2XLVCB4y
-         PLP9lE+wVaiwAYJk/0Qn1H632GrJ+eP2lJWyyK7OL7b+8WjFS2Avfdx4yTSpxbt/MqYO
-         4hE6GWlQO6btm8SB5P5gEw6S7elaT5ui867MtePD2Oc18P1AsHBSSkIfZLq9AHrpj6vk
-         +9XOnDH3pz3DPXw644hrOIhncnT9KDGlF2P2nnHLjqY111QeUlZdZLPDyfNTXa6bLUSv
-         2qUA==
-X-Gm-Message-State: ACrzQf1wofHog0p1LVkWoelKy1mReWqIrx7l3/O+CFseZYX7wTUQ0Cxp
-        Bqe35Qo1HXPcadA8OMp8pw9GRrRYYydH1fkaW4Q=
-X-Google-Smtp-Source: AMsMyM5cpw1VKvG8gEasOMmG4UhkblJY7gBReqfbYX80x9OXEWSZokzXOm90JDY4L5h3JbfU+3ckCU+QNWhG8SGrNVo=
-X-Received: by 2002:a05:6a00:1da6:b0:56c:318a:f8ab with SMTP id
- z38-20020a056a001da600b0056c318af8abmr56843835pfw.82.1667917864342; Tue, 08
- Nov 2022 06:31:04 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ac4:c8c2:0:b0:56a:d900:eb11 with HTTP; Tue, 8 Nov 2022
- 06:31:03 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidbraddy01@gmail.com>
-Date:   Tue, 8 Nov 2022 14:31:03 +0000
-Message-ID: <CAHGOU4PvdrNhE2KifzdPkFxZTCG5gy+23qf130PwnSmJcLRSew@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
+        with ESMTP id S234286AbiKHQuV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Nov 2022 11:50:21 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE6157B5A;
+        Tue,  8 Nov 2022 08:50:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1667926210;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=7c4OzQgE338JFPjKcpP/KZGKw9KzVGPVi+wsbrwESPg=;
+    b=H9qX5HGT08ageoyoTrM/5eynuJeG3sAEVlIi7FvCgDS8VD9gsoHUgQfxpGx3AYK/2b
+    xsJMTuotiETPquVvJxHcU507L7HJ4+y7TSMH2eZREDQmjeA4em5wg+DrkhXLhF1z6dBB
+    5AIUyQ6dWpRyeuxfWamda+dPINM/QPdNUB5LjPlvjeYeqfrJ++6H2a0shYYpmaTScZ01
+    bGPfx9kAdrZmVSeITfBc6lS7ffGQsqa6CrLUkEkauZTP87/07VsoG9gDg3nASP0Va1cV
+    051KDIJku4X5oJl2WiAGImQfbGjUMgp+5L9tSY54KCzwYhSZXJFo5IX2DXlH0nO2nhou
+    rUEQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSeBwhhSxarlUcu05JCAPyj3VPAceccYJs0uz"
+X-RZG-CLASS-ID: mo00
+Received: from blinux
+    by smtp.strato.de (RZmta 48.2.1 AUTH)
+    with ESMTPSA id z9cfbfyA8Go7p2k
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 8 Nov 2022 17:50:07 +0100 (CET)
+Message-ID: <1eda1c55fdf8292c2912c6d0adb741d8dd7f0a20.camel@iokpp.de>
+Subject: Re: [RFC PATCH v1 1/2] ufs: core: Advanced RPMB detection
+From:   Bean Huo <beanhuo@iokpp.de>
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
+        "daejun7.park@samsung.com" <daejun7.park@samsung.com>,
+        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
+        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
+        "quic_xiaosenh@quicinc.com" <quic_xiaosenh@quicinc.com>,
+        "quic_richardp@quicinc.com" <quic_richardp@quicinc.com>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "hare@suse.de" <hare@suse.de>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 08 Nov 2022 17:50:06 +0100
+In-Reply-To: <DM6PR04MB6575145B168BB80F3D2910A7FC3F9@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <20221107131038.201724-1-beanhuo@iokpp.de>
+         <20221107131038.201724-2-beanhuo@iokpp.de>
+         <DM6PR04MB6575145B168BB80F3D2910A7FC3F9@DM6PR04MB6575.namprd04.prod.outlook.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:432 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4794]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidbraddy01[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidbraddy01[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+Avri, 
+
+thanks for your review.
+
+On Tue, 2022-11-08 at 13:40 +0000, Avri Altman wrote:
+> > From: Bean Huo <beanhuo@micron.com>
+> > 
+> > Check UFS Advanced RPMB LU enablement during ufshcd_lu_init().
+> > 
+> > Signed-off-by: Bean Huo <beanhuo@micron.com>
+> > ---
+> >  drivers/ufs/core/ufshcd.c | 4 ++++
+> >  include/ufs/ufs.h         | 3 +++
+> >  2 files changed, 7 insertions(+)
+> > 
+> > diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> > index
+> > ee73d7036133..d49e7a0b82ca 100644
+> > --- a/drivers/ufs/core/ufshcd.c
+> > +++ b/drivers/ufs/core/ufshcd.c
+> > @@ -4940,6 +4940,10 @@ static void ufshcd_lu_init(struct ufs_hba
+> > *hba,
+> > struct scsi_device *sdev)
+> >             desc_buf[UNIT_DESC_PARAM_LU_WR_PROTECT] ==
+> > UFS_LU_POWER_ON_WP)
+> >                 hba->dev_info.is_lu_power_on_wp = true;
+> > 
+> > +       if (desc_buf[UNIT_DESC_PARAM_UNIT_INDEX] == UFS_RPMB_UNIT
+> > &&
+> Please remind me why do we need both UFS_RPMB_UNIT and
+> UFS_UPIU_RPMB_WLUN ?
+
+I see. they are the same value, we should remove one, will change it in
+next version.
+> 
+> > +           desc_buf[UNIT_DESC_PARAM_RPMB_REGION_EN] & 1 << 4)
+> (1 << 4) or BIT(4) ?
+> 
+> > +                       hba->dev_info.b_advanced_rpmb_en = true;
+> > +
+> >         kfree(desc_buf);
+> >  set_qdepth:
+> >         /*
+> > diff --git a/include/ufs/ufs.h b/include/ufs/ufs.h index
+> > 1bba3fead2ce..2e617ab87750 100644
+> > --- a/include/ufs/ufs.h
+> > +++ b/include/ufs/ufs.h
+> > @@ -199,6 +199,7 @@ enum unit_desc_param {
+> >         UNIT_DESC_PARAM_PSA_SENSITIVE           = 0x7,
+> >         UNIT_DESC_PARAM_MEM_TYPE                = 0x8,
+> >         UNIT_DESC_PARAM_DATA_RELIABILITY        = 0x9,
+> > +       UNIT_DESC_PARAM_RPMB_REGION_EN          = 0x9,
+> This is awkward.  Better to define it, or - 
+> Maybe it's time for rpmb to have its own unit descriptor - it surely
+> deserve it.
+>  
+
+no problem, let me think about it, will add in the next version.
+
+
+
+
+Kind regards,
+Bean
+
