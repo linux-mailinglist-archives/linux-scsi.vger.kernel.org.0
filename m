@@ -2,79 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B98622084
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Nov 2022 00:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D37EB62225B
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Nov 2022 03:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiKHX5Q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Nov 2022 18:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S230128AbiKIC7s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Nov 2022 21:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiKHX5P (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Nov 2022 18:57:15 -0500
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62EC60E89
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Nov 2022 15:57:13 -0800 (PST)
-Received: by mail-pl1-f182.google.com with SMTP id l2so15548828pld.13
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Nov 2022 15:57:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KEYsrmcKqs20vMch/WIhQhq1D9Yp8ZTqB0AwfS0/PCI=;
-        b=AGY7ruuY50EW8IlT1ZpUSeYNIQCoxuv3qz2/KCI7vIO/hqYBjpIRCXz4rfP66MQXia
-         3nY66UgEjhuHceZ0V4JgVL3pvhVqUepNEVMR0te9mdhuedQDnzScnEGza7c6rjCTS1jR
-         EV4fl+L2dxLc4nyz37QTpv+APBBgGqUOHdQPJ6+TQBKSnwE61wtSP6JmoxVRsGs8kftV
-         5/WRESO+X04JOsoLF9ElbhqyZ/HWk+8ccdSUjKL1EPK69I6+gKGKEvRiyW9ZVLTT/R4u
-         pRkbxfJszZly0P01blC5F/HTvLSCRQF17j7/XblVnuqEDx76Vqy1p177cLATIp1wuUAs
-         Fb9g==
-X-Gm-Message-State: ACrzQf0dgvYIbpsuuuvi8P2eVde+zUarvOE+mFg/BaO6u/981juNqVgs
-        ekm6c+t/5uy2vau3zYwzXYA=
-X-Google-Smtp-Source: AMsMyM7lihg1jtOrAva0+X/1zZjPqHg0tiaEl3R8TTYl4QuMs9pLlW/KW6CAKY/fnfr/Rx9cVaEUAg==
-X-Received: by 2002:a17:902:e405:b0:186:b1bb:147a with SMTP id m5-20020a170902e40500b00186b1bb147amr57949647ple.19.1667951833331;
-        Tue, 08 Nov 2022 15:57:13 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:44ad:aec5:7cab:4532? ([2620:15c:211:201:44ad:aec5:7cab:4532])
-        by smtp.gmail.com with ESMTPSA id p64-20020a625b43000000b0056bdc3f5b29sm6868496pfb.186.2022.11.08.15.57.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 15:57:12 -0800 (PST)
-Message-ID: <132f8a3a-1cee-e660-4fb7-3a09ab22c10b@acm.org>
-Date:   Tue, 8 Nov 2022 15:57:10 -0800
+        with ESMTP id S229854AbiKIC7r (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Nov 2022 21:59:47 -0500
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EF414D24
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Nov 2022 18:59:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1667962784; x=1699498784;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OfIQdN3NjKqG7KYfy70+ohBS72pcj7SOga4MFPABIEo=;
+  b=R2CJfEJ4rJrRpbthIDm2PhqOyPYiS99NN1SyLyH1n//MFoS9axKO0aSF
+   3Hjt5PaPhFVFgHVj5nEHG0uFE5JrVRyTgOc1hTaN4DWadJoDl2v7qMoUB
+   NyNxHV1sCY1uySSzFBMPIOOd6ycvk+2HWVSN1lL7ka5R8qw6fvdGYiamT
+   Yv+8HGULv83k/kGJGu0doH1i6/t83oOLAjBBQxjYDO+FSLky4wgdbKruv
+   Hea4uKDhF9qqaza0uSxt3sk6kYDAjgDFXLZBSuFdX7IqNJ4s5G5N/Qjed
+   1Fe2tbNEOxpP1nufDP6tedj1yLDhfQg306iDt8V1eT+yfeNYA2NGqv9Cw
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,149,1665417600"; 
+   d="scan'208";a="220979687"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 09 Nov 2022 10:59:43 +0800
+IronPort-SDR: 1lbFgN9rMWoSBsiNqSfy+9V7mTpJCLUsFqL+0m0KuWeRUBocmejGoFP1nSLbkI3PPW8GFGxOOD
+ BQThwLec+64VensvE+vuQcYYR+yNmIk0QXJmWXnToNCtoFwIhSrWB0s+IAc29Dghha4cboZoaw
+ r+KEqz9Ld1BWNNT4yEQwGdgPOIEoBWN4ulg0BEk477l5Lr3PimvTpXQo1c4iLNDRCFX0Pnn4H4
+ uvKAZZQJNXACINgASQ7tyrkN0dkjmVZ0+bjBqjXfcgEyjKc3MtQ+SwxPt7fT8pf0TtQPAldP+u
+ PG8=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Nov 2022 18:18:48 -0800
+IronPort-SDR: aH1p7lCbZ8o/q66BV5+kh7MbvjsID4vmlnPlGKL0yhonIZgq+oAvSI8R0q8pF3n+C535Vsdpb+
+ isEqNeTif2serT+7fPM2lTtKsDagYsVmAaOjl0vcoBq/vvmTc1CdGVXC3J9+NKft8DBhxDjJyi
+ gybmwNgLjTukJIF+tZyw6jzLdMGYE8qTXn16IPSKfvAR9X7E+tkTBcUxcPsKvwITNIBAE9vQja
+ XAAGkm2Vv7yqTkbuR+SR8avIlbPXDcC0MNze9vzu5wlkDSjWHwdZJ8CgovhXgp+xqPmfpStXRH
+ 878=
+WDCIronportException: Internal
+Received: from shindev.dhcp.fujisawa.hgst.com (HELO shindev.fujisawa.hgst.com) ([10.149.52.207])
+  by uls-op-cesaip01.wdc.com with ESMTP; 08 Nov 2022 18:59:42 -0800
+From:   Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+To:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Dmitry Fomichev <Dmitry.Fomichev@wdc.com>,
+        Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Subject: [PATCH 0/2] scsi: sd: use READ/WRITE/SYNC (16) commands per ZBC
+Date:   Wed,  9 Nov 2022 11:59:39 +0900
+Message-Id: <20221109025941.1594612-1-shinichiro.kawasaki@wdc.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v6 02/35] scsi: Allow passthrough to override what errors
- to retry
-Content-Language: en-US
-To:     Mike Christie <michael.christie@oracle.com>, mwilck@suse.com,
-        hch@lst.de, martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        james.bottomley@hansenpartnership.com
-References: <20221104231927.9613-1-michael.christie@oracle.com>
- <20221104231927.9613-3-michael.christie@oracle.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221104231927.9613-3-michael.christie@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/4/22 16:18, Mike Christie wrote:
-> +/**
-> + * scsi_check_passthrough - Determine if passthrough scsi_cmnd needs a retry.
-> + * @scmd: scsi_cmnd to check.
-> + *
-> + * Return value:
-> + *	SCSI_RETURN_NOT_HANDLED - if the caller should process the command
+During work for a recent fix in libata-scsi [1], we checked which commands ZBC,
+or Zoned Block Commands specification, mandates for zoned block devices. We
+found two points to improve and this series has two patches to address them.
 
-Should "process the command" perhaps be changed into "examine the 
-command status" since SCSI devices process SCSI commands while 
-scsi_check_passthrough() callers examine the command status? Otherwise 
-this patch looks good to me. Hence:
+The first patch improves READ/WRITE (16) command enforcement. ZBC does not
+mandate these commands to host-aware zoned block devices but current code in
+sd_zbc_read_zones() assumes it. The second patch improves SYNCHRONIZE CACHE
+(16) command enforcement. ZBC mandates it for host-managed zoned block
+devices, and it should call it in place of SYNCHRONIZE CACHE (10).
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Of note is that the second patch depends on the libata-scsi fix [1], and should
+be merged to upstream after it.
+
+[1] https://lore.kernel.org/linux-ide/20221107040229.1548793-1-shinichiro.kawasaki@wdc.com/
+
+Shin'ichiro Kawasaki (2):
+  scsi: sd_zbc: do not enforce READ/WRITE (16) on host-aware devices
+  scsi: sd: enforce SYNCHRONIZE CACHE (16) on host-managed devices
+
+ drivers/scsi/sd.c          | 16 ++++++++++++----
+ drivers/scsi/sd_zbc.c      |  9 ++++++---
+ include/scsi/scsi_device.h |  1 +
+ 3 files changed, 19 insertions(+), 7 deletions(-)
+
+-- 
+2.37.1
+
