@@ -2,151 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9273662225C
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Nov 2022 03:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B60EF622205
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Nov 2022 03:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiKIC7u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Nov 2022 21:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S229777AbiKICnv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Nov 2022 21:43:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiKIC7s (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Nov 2022 21:59:48 -0500
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C301A224
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Nov 2022 18:59:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1667962787; x=1699498787;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KZ5Bp4L/1uG4qac+pAbZLDgLd7MTZ4c6uQu244VB0Ts=;
-  b=I/8un7XGk33l0sAM3ayzmkSzsLNh9v9aLHcxMLAmVpmb9rOS8bx7WiDd
-   6ZrUZS8CcNsG/2OdtVDgeExJZ8VkIuly56d8KLzQMx7jhnjFjrpzCyIR0
-   7dxrwfNvnsGSjwF30W/JrGL5DBQVQxj5yk8EosbeAu10puBv8n2Xx0TNK
-   Rxl6tHOorxzZ5MNWPZzuOYjItHY4+tZzcM6m+5e9unaqmIwY7ecawe5Ao
-   jIjpckAhLj3QU6/3ekQcsIXx5tVg3kE+WkggLsGHjA2Cr2BotbcMiSXKG
-   KUD7NzxSq3ApWPHzLArRP55Bv4k6vxP3FxTKUk0WZY65tK36uFbD3CV/2
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,149,1665417600"; 
-   d="scan'208";a="220979691"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 09 Nov 2022 10:59:45 +0800
-IronPort-SDR: zpitj1mE/n1unbcNlOkFcIFMCd1NPGQcu8U4d5VWA9pc1SlyEpN4u4gr4S4TSRmxgeR87FVHT+
- 2+HoXVVVUdf4G/gfkuU4s8AUn4RyRma0I6qFLb7P1qanOi/TrtNRP/eIzmBP/l5fynLGcMmIqw
- jvI40lOV5EIsL0OOxCAIsvYarCcpRNtX6VP501UTOOHngAB2YoSVJrkLV+vUMyIJQCAGMSjvIN
- pbjxZ3XjSJQyDihPSVjuBgajqxNzaaMOClEXDUWpOM/d5i+GuhrFu1PypzT8ASXFmFnVpEtZuw
- OxA=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Nov 2022 18:18:50 -0800
-IronPort-SDR: Yp8Brlp1DGvDEwB8KE9egI0Un7elqrU+uGD6+GSAiJXO/qaP4NpmL48PyAFN5p7H+7YCHXxENn
- l1C4QN9eDkggJ0NuNDxCDzvlEL5iEzvGNbr+Z+dQskjWdfYDJLloKFNPqjfYGEC18RHNrkSfxY
- b26IbBFvSxRV8FwmPALkvNz/juB3z/ML5gUHUcQViP7VbRQ9zMAAs/ZtubulolZQJP7/4BE8eg
- ZRsx02VfkOTz8Dn8J2PhCEWK3RI4C1690JhRsLijZl3U5FBqDERSQGvj8NB1jG0ELdJkDprWVJ
- ubo=
-WDCIronportException: Internal
-Received: from shindev.dhcp.fujisawa.hgst.com (HELO shindev.fujisawa.hgst.com) ([10.149.52.207])
-  by uls-op-cesaip01.wdc.com with ESMTP; 08 Nov 2022 18:59:45 -0800
-From:   Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-To:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Dmitry Fomichev <Dmitry.Fomichev@wdc.com>,
-        Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Subject: [PATCH 2/2] scsi: sd: enforce SYNCHRONIZE CACHE (16) on host-managed devices
-Date:   Wed,  9 Nov 2022 11:59:41 +0900
-Message-Id: <20221109025941.1594612-3-shinichiro.kawasaki@wdc.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221109025941.1594612-1-shinichiro.kawasaki@wdc.com>
-References: <20221109025941.1594612-1-shinichiro.kawasaki@wdc.com>
+        with ESMTP id S229492AbiKICnu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Nov 2022 21:43:50 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196E5FD14;
+        Tue,  8 Nov 2022 18:43:49 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N6Thl1zc8zpWDb;
+        Wed,  9 Nov 2022 10:40:07 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 10:43:47 +0800
+Received: from build.huawei.com (10.175.101.6) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 10:43:47 +0800
+From:   Wenchao Hao <haowenchao@huawei.com>
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Doug Gilbert <dgilbert@interlog.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Wenchao Hao <haowenchao@huawei.com>
+Subject: [RFC PATCH 0/5] scsi:scsi_debug:Add error injection for single lun
+Date:   Wed, 9 Nov 2022 10:59:45 -0500
+Message-ID: <20221109155950.3536976-1-haowenchao@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ZBC Zoned Block Commands specification mandates SYNCHRONIZE CACHE (16)
-for host-managed zoned block devices, but does not mandate SYNCHRONIZE
-CACHE (10). Call SYNCHRONIZE CACHE (16) in place of SYNCHRONIZE CACHE
-(10) to ensure that the command is always supported. For this purpose,
-add use_16_for_sync flag to struct scsi_device in same manner as
-use_16_for_rw flag.
+The original error injection mechanism was based on scsi_host which
+could not inject fault for a single SCSI device.
 
-Signed-off-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
----
- drivers/scsi/sd.c          | 16 ++++++++++++----
- drivers/scsi/sd_zbc.c      |  3 ++-
- include/scsi/scsi_device.h |  1 +
- 3 files changed, 15 insertions(+), 5 deletions(-)
+This patchset provides the ability to inject errors for a single
+SCSI device. Now we supports inject timeout errors, queuecommand
+errors, and hostbyte, driverbyte, statusbyte, and sense data for
+specific SCSI Command
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index eb76ba055021..faa2b55d1a21 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -1026,8 +1026,13 @@ static blk_status_t sd_setup_flush_cmnd(struct scsi_cmnd *cmd)
- 	/* flush requests don't perform I/O, zero the S/G table */
- 	memset(&cmd->sdb, 0, sizeof(cmd->sdb));
- 
--	cmd->cmnd[0] = SYNCHRONIZE_CACHE;
--	cmd->cmd_len = 10;
-+	if (cmd->device->use_16_for_sync) {
-+		cmd->cmnd[0] = SYNCHRONIZE_CACHE_16;
-+		cmd->cmd_len = 16;
-+	} else {
-+		cmd->cmnd[0] = SYNCHRONIZE_CACHE;
-+		cmd->cmd_len = 10;
-+	}
- 	cmd->transfersize = 0;
- 	cmd->allowed = sdkp->max_retries;
- 
-@@ -1587,9 +1592,12 @@ static int sd_sync_cache(struct scsi_disk *sdkp, struct scsi_sense_hdr *sshdr)
- 		sshdr = &my_sshdr;
- 
- 	for (retries = 3; retries > 0; --retries) {
--		unsigned char cmd[10] = { 0 };
-+		unsigned char cmd[16] = { 0 };
- 
--		cmd[0] = SYNCHRONIZE_CACHE;
-+		if (sdp->use_16_for_sync)
-+			cmd[0] = SYNCHRONIZE_CACHE_16;
-+		else
-+			cmd[0] = SYNCHRONIZE_CACHE;
- 		/*
- 		 * Leave the rest of the command zero to indicate
- 		 * flush everything.
-diff --git a/drivers/scsi/sd_zbc.c b/drivers/scsi/sd_zbc.c
-index 4717a55dbf35..a998f9c091dd 100644
---- a/drivers/scsi/sd_zbc.c
-+++ b/drivers/scsi/sd_zbc.c
-@@ -921,10 +921,11 @@ int sd_zbc_read_zones(struct scsi_disk *sdkp, u8 buf[SD_BUF_SIZE])
- 		return 0;
- 	}
- 
--	/* READ16/WRITE16 is mandatory for host-managed devices */
-+	/* READ16/WRITE16/SYNC16 is mandatory for host-managed devices */
- 	if (sdkp->device->type == TYPE_ZBC) {
- 		sdkp->device->use_16_for_rw = 1;
- 		sdkp->device->use_10_for_rw = 0;
-+		sdkp->device->use_16_for_sync = 1;
- 	}
- 
- 	if (!blk_queue_is_zoned(q)) {
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index c36656d8ac6c..afd2986007a4 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -184,6 +184,7 @@ struct scsi_device {
- 	unsigned no_report_opcodes:1;	/* no REPORT SUPPORTED OPERATION CODES */
- 	unsigned no_write_same:1;	/* no WRITE SAME command */
- 	unsigned use_16_for_rw:1; /* Use read/write(16) over read/write(10) */
-+	unsigned use_16_for_sync:1;	/* Use sync (16) over sync (10) */
- 	unsigned skip_ms_page_8:1;	/* do not use MODE SENSE page 0x08 */
- 	unsigned skip_ms_page_3f:1;	/* do not use MODE SENSE page 0x3f */
- 	unsigned skip_vpd_pages:1;	/* do not read VPD pages */
+The first patch add an sysfs interface to add and inquiry single
+device's error injection info; the second patch defined how to remove
+an injection which has been added. The following 3 patches use the
+injection info and generate the related error type.
+
+Wenchao Hao (5):
+  scsi:scsi_debug: Add sysfs interface to manager single devices' error inject
+  scsi:scsi_debug: Add interface to remove injection which has been added
+  scsi:scsi_debug: make command timeout if timeout error is injected
+  scsi:scsi_debug: Return failed value for specific command's queuecommand
+  scsi:scsi_debug: fail specific scsi command with result and sense data
+
+ drivers/scsi/scsi_debug.c | 295 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 295 insertions(+)
+
 -- 
-2.37.1
+2.35.3
 
