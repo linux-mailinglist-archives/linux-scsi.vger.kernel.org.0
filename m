@@ -2,55 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD90622BA7
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Nov 2022 13:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D64622BAF
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Nov 2022 13:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiKIMfG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Nov 2022 07:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
+        id S229806AbiKIMgo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Nov 2022 07:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiKIMfF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Nov 2022 07:35:05 -0500
+        with ESMTP id S229644AbiKIMgn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Nov 2022 07:36:43 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE914175BA
-        for <linux-scsi@vger.kernel.org>; Wed,  9 Nov 2022 04:35:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46820175B2
+        for <linux-scsi@vger.kernel.org>; Wed,  9 Nov 2022 04:36:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
         :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=btVed7kFbEych2ZX4eeTjPrBEcS0t4WUaf7Rl9XRxdg=; b=w9UHQjJE5RrcoZDI3iXjVj3ZW3
-        p1lmKULVZjGJcJwoBBUVw9GCVLv0WwUZe2wPs4QNHJ+frs1kzpAWNefCqIKFYzoH9bEoU+uUP5jhb
-        0lbANYtVtCz/V7YvfMICvUkN7f2vpniOj8aDjbKF3sP2WsM9N/eLfyBl98CE/euhh0TIO4Bjqfohl
-        QEPiOkXTnCp5I3vYUZkV/qulkMHI9iMDJKmhT4aO4aLxxdcfAgNlYxenf3ST7sXOifrM9M4Sqy9sg
-        ipiJ30bGK4V2FwhrdJsiTEJF7BGe24sEUP557afHPfONPhFCaMuVakyuaeVhpOgFz/NDsKImVDQV7
-        oNn40viw==;
+        bh=kUmCcduFIHqaMRYfTlJQwTcQ+aHwuVeIRuqx/cLz+CA=; b=s1vW8pBqKXA9EtkcrQjKWQMKZU
+        KrZ0QW7tPLoeJTVtNENtRRGMLeoMYHLLYRvj3NbwJabv3N0CBDtIeBJRrV0PaPBQpXqZgAlwzKod7
+        2eZ0HVVAPzhjWAv5fHfAJ4/DW8wZUKTMbu36E+HA0ME+ml6F2QNqkKcHxBkxgk+kM4qdd47oMxeDQ
+        m855SP/3WoIa7wQ+y3PqCxd0V2e2cIO7XWFaCKuTfHEm8wI1FQ++Apw/ThrMbt9Y8UDLGwW6dWL5x
+        mYzyt942jHxWG+7gChxaUM7ILtvgluOFz4A/2W1FjMiF8hIcjiLTtvqhDCX0U7hjb6nmD+diCsu7F
+        2cADJkYQ==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oskIE-00DPvl-BF; Wed, 09 Nov 2022 12:34:58 +0000
-Date:   Wed, 9 Nov 2022 04:34:58 -0800
+        id 1oskJu-00DQQN-SM; Wed, 09 Nov 2022 12:36:42 +0000
+Date:   Wed, 9 Nov 2022 04:36:42 -0800
 From:   Christoph Hellwig <hch@infradead.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Eric Biggers <ebiggers@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Keoseong Park <keosung.park@samsung.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: Re: [PATCH v3 5/5] scsi: ufs: Allow UFS host drivers to override the
- sg entry size
-Message-ID: <Y2uechJH/4GFDs8h@infradead.org>
-References: <20221108233339.412808-1-bvanassche@acm.org>
- <20221108233339.412808-6-bvanassche@acm.org>
+To:     Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Dmitry Fomichev <Dmitry.Fomichev@wdc.com>
+Subject: Re: [PATCH 0/2] scsi: sd: use READ/WRITE/SYNC (16) commands per ZBC
+Message-ID: <Y2ue2rZzf74/1V+U@infradead.org>
+References: <20221109025941.1594612-1-shinichiro.kawasaki@wdc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221108233339.412808-6-bvanassche@acm.org>
+In-Reply-To: <20221109025941.1594612-1-shinichiro.kawasaki@wdc.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -61,13 +50,6 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 03:33:39PM -0800, Bart Van Assche wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Modify the UFSHCD core to allow 'struct ufshcd_sg_entry' to be
-> variable-length. The default is the standard length, but variants can
-> override ufs_hba::sg_entry_size with a larger value if there are
-> vendor-specific fields following the standard ones.
-
-There is absolutely nothing 'vendor' in here, it is all implementation
-specifc.  I have no idea why no touching ufs can grasp this.
+What is the point in relaxing this?  Every modern device better support
+16 byte commands even if they aren't strictly required for host aware
+devices.
