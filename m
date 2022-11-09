@@ -2,106 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAFB622277
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Nov 2022 04:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 700E562228E
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Nov 2022 04:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiKIDMN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Nov 2022 22:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S230183AbiKIDZn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Nov 2022 22:25:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiKIDMM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Nov 2022 22:12:12 -0500
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71C01B9CF
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Nov 2022 19:12:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1667963530; x=1699499530;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zzYZwFhED9e8w/lYxA0enjt0ApQtlUXNWQQs5vJkrPM=;
-  b=CoVmwn3o5q7awRDaM6d/7N8c21cGpccbJf0XECRCv+VPB5hM33QaEowo
-   OasP+vhTkbKeVSGgqlI1I+dD27K+GASbwpM+Aw1ITPtjlOiRYZ8NLIYVU
-   PHgaI/tHz7BKa/I8WdoMQZ+JUoAoOaAo8Gv2TfI5v/DQAufahK5S41NJS
-   kwuybE1VQR4O1l7AcI10KSJhrDSPVnrqBR6M+ychEI5p6Jsu0EYqc2sxw
-   gKbuz0RAL8Puj3gnUWJGC8Hie3d66zXki6lU89M8D2cjqTsGAy9WLNI97
-   Aoup0RqowbSphFIV/phzc69UANHo0d9JDLUSs3BPxeGdLGJCeKiLM4Y/o
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,149,1665417600"; 
-   d="scan'208";a="327921010"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 09 Nov 2022 11:12:09 +0800
-IronPort-SDR: mSptsskn9CEQxjV8AZLamVe3CeabN3gK0zH9zwbRX/vHWiNzHUAc7LZuuufaAs497eQtJzeF1i
- +Cy9Wb0S7YwCo+qp4JXctRqSAID6Alt2Vw8qyIERCrayWEqHPEpEubGpEJzvF6BfBmqj08x2zz
- uOXgid64n8xef3Z4fhppRKlUgQMG9E1HsRpzMmsrnas0KZpTWpSwXSGdFzkuqoXg4bAd4OOagH
- 91lanyyGdn2lI4aaSR+sFerc8BWT5HcJM9ZTYnX+u+p4w3KUposap7FzprGEFB9vxyP1uvlslW
- FrQ=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Nov 2022 18:25:30 -0800
-IronPort-SDR: WIvCVapTAldW6ZnFggXlTI28e2mYd3FLU0AAB038GjJPfqoPk5DGqmFDCJ7L+0YrfA9N51BFE5
- 4qtHf5MsdbFCW5zvik8XM535SzpLSyTkHYWwmtubHszzDTszZ2XsHUG8dCncL+GWrgfhirvp1p
- 3/ioJGYhp1eOfYHk+jgqXH8iPRrCiVZUbTKU1FHqD3IjEKy9ULDfsN6VuFtJZuNthIipZLQmda
- aeUkSQFxbekbnJcGdn2RidLw699Wfn6S2y7Ssw248rKXg8rx1qYmSYpIL4rrn9bwhe0CoMehg1
- aNU=
-WDCIronportException: Internal
-Received: from shindev.dhcp.fujisawa.hgst.com (HELO shindev.fujisawa.hgst.com) ([10.149.52.207])
-  by uls-op-cesaip01.wdc.com with ESMTP; 08 Nov 2022 19:12:08 -0800
-From:   Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-To:     mpi3mr-linuxdrv.pdl@broadcom.com,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Subject: [PATCH] scsi: mpi3mr: suppress command reply debug prints
-Date:   Wed,  9 Nov 2022 12:12:07 +0900
-Message-Id: <20221109031207.1605138-1-shinichiro.kawasaki@wdc.com>
-X-Mailer: git-send-email 2.37.1
+        with ESMTP id S230182AbiKIDZi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Nov 2022 22:25:38 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D7527DFD
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Nov 2022 19:25:37 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N6Vcz2nlWzpVbm;
+        Wed,  9 Nov 2022 11:21:55 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 11:25:35 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
+ 2022 11:25:35 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-scsi@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>
+CC:     <sathya.prakash@broadcom.com>, <sreekanth.reddy@broadcom.com>,
+        <suganath-prabu.subramani@broadcom.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <yangyingliang@huawei.com>
+Subject: [PATCH] scsi: mpt3sas: fix possible resource leaks in mpt3sas_transport_port_add()
+Date:   Wed, 9 Nov 2022 11:24:03 +0800
+Message-ID: <20221109032403.1636422-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-After it receives command reply, mpi3mr driver checks command result. If
-the result is not zero, it prints out command information. This debug
-information is confusing since they are printed even when the non-zero
-result is expected. "Power-on or device reset occurred" is printed for
-Test Unit Ready command at drive detection. Inquiry failure for
-unsupported VPD page header is also printed. They are harmless but look
-like failures.
+In mpt3sas_transport_port_add(), if sas_rphy_add() returns error,
+sas_rphy_free() need be called to free the resource allocated in
+sas_end_device_alloc().
 
-To avoid the confusion, print the command reply debug information only
-when the module parameter logging_level has value MPI3_DEBUG_REPLY=128,
-in same manner as mpt3sas driver.
+Besides, it will lead a kernel crash:
 
-Signed-off-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000108
+CPU: 45 PID: 37020 Comm: bash Kdump: loaded Tainted: G        W          6.1.0-rc1+ #189
+pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : device_del+0x54/0x3d0
+lr : device_del+0x37c/0x3d0
+Call trace:
+ device_del+0x54/0x3d0
+ attribute_container_class_device_del+0x28/0x38
+ transport_remove_classdev+0x6c/0x80
+ attribute_container_device_trigger+0x108/0x110
+ transport_remove_device+0x28/0x38
+ sas_rphy_remove+0x50/0x78 [scsi_transport_sas]
+ sas_port_delete+0x30/0x148 [scsi_transport_sas]
+ do_sas_phy_delete+0x78/0x80 [scsi_transport_sas]
+ device_for_each_child+0x68/0xb0
+ sas_remove_children+0x30/0x50 [scsi_transport_sas]
+ sas_rphy_remove+0x38/0x78 [scsi_transport_sas]
+ sas_port_delete+0x30/0x148 [scsi_transport_sas]
+ do_sas_phy_delete+0x78/0x80 [scsi_transport_sas]
+ device_for_each_child+0x68/0xb0
+ sas_remove_children+0x30/0x50 [scsi_transport_sas]
+ sas_remove_host+0x20/0x38 [scsi_transport_sas]
+ scsih_remove+0xd8/0x420 [mpt3sas]
+
+Because transport_add_device() is not called when sas_rphy_add() fails,
+the device is not added, but sas_rphy_remove() is called to remove the
+device in remove() path, then it causes null-ptr-deref.
+
+Fixes: f92363d12359 ("[SCSI] mpt3sas: add new driver supporting 12GB SAS")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/scsi/mpi3mr/mpi3mr_os.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/mpt3sas/mpt3sas_transport.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index f77ee4051b00..2b95d1d375f2 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_os.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -3265,7 +3265,8 @@ void mpi3mr_process_op_reply_desc(struct mpi3mr_ioc *mrioc,
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_transport.c b/drivers/scsi/mpt3sas/mpt3sas_transport.c
+index 0681daee6c14..e5ecd6ada6cd 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_transport.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_transport.c
+@@ -829,6 +829,8 @@ mpt3sas_transport_port_add(struct MPT3SAS_ADAPTER *ioc, u16 handle,
+ 	if ((sas_rphy_add(rphy))) {
+ 		ioc_err(ioc, "failure at %s:%d/%s()!\n",
+ 			__FILE__, __LINE__, __func__);
++		sas_rphy_free(rphy);
++		rphy = NULL;
  	}
  
- 	if (scmd->result != (DID_OK << 16) && (scmd->cmnd[0] != ATA_12) &&
--	    (scmd->cmnd[0] != ATA_16)) {
-+	    (scmd->cmnd[0] != ATA_16) &&
-+	    mrioc->logging_level & MPI3_DEBUG_REPLY) {
- 		ioc_info(mrioc, "%s :scmd->result 0x%x\n", __func__,
- 		    scmd->result);
- 		scsi_print_command(scmd);
+ 	if (mpt3sas_port->remote_identify.device_type == SAS_END_DEVICE) {
 -- 
-2.37.1
+2.25.1
 
