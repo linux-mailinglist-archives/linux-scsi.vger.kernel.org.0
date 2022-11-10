@@ -2,102 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F72D62426D
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Nov 2022 13:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECB062435E
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Nov 2022 14:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbiKJMhq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Nov 2022 07:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S229827AbiKJNjA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Nov 2022 08:39:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKJMhp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Nov 2022 07:37:45 -0500
-X-Greylist: delayed 217 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Nov 2022 04:37:42 PST
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0FB6BDE7;
-        Thu, 10 Nov 2022 04:37:42 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N7Lvn041Tz4y0tx;
-        Thu, 10 Nov 2022 20:37:41 +0800 (CST)
-Received: from szxlzmapp06.zte.com.cn ([10.5.230.252])
-        by mse-fl1.zte.com.cn with SMTP id 2AACbWBI049553;
-        Thu, 10 Nov 2022 20:37:32 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp03[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Thu, 10 Nov 2022 20:37:35 +0800 (CST)
-Date:   Thu, 10 Nov 2022 20:37:35 +0800 (CST)
-X-Zmail-TransId: 2b05636cf08fffffffff92f28484
-X-Mailer: Zmail v1.0
-Message-ID: <202211102037359588718@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <njavali@marvell.com>
-Cc:     <gr-qlogic-storage-upstream@marvell.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHNjc2k6IHFsYTJ4eHg6IHVzZSBzdHJzY3B5KCkgaXMgbW9yZSByb2J1c3QgYW5kIHNhZmVy?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2AACbWBI049553
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 636CF095.000 by FangMail milter!
-X-FangMail-Envelope: 1668083861/4N7Lvn041Tz4y0tx/636CF095.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 636CF095.000/4N7Lvn041Tz4y0tx
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229575AbiKJNi7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Nov 2022 08:38:59 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA13F1400F;
+        Thu, 10 Nov 2022 05:38:58 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id gw22so1544317pjb.3;
+        Thu, 10 Nov 2022 05:38:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VGjzo6k1HgWuN54AaXTg+YSGJQzCDip4EE3SOo8wCPI=;
+        b=XSZYL/6B+eOI8G2YF+6Uf9V35FeFWo5Xs0RfLEykQdGRy1F5lUEV9zWwVEhkHyoJe8
+         kEtQExa/WAJ/Exudg4r5HEJeaRaFRBK5EF9Ez2VgMpScRb3nmbi2R5g+RMnHPizq1Equ
+         nkug8dk4OK5fuNBLDZNmAbg3aDrR1v9j4Mvb0uumeGDUFiPDUEbnX3Q6LMlLJqbKAbcF
+         fziVXXBUb7t6Xahn4PuspSVl3kOE0t//BEU+8TuZyDMiSJiGutTWN9baQtUmhixbqbLh
+         qxIRaJZXzz2nQi/vILPQ5fROn8G1Ch3xofIDAdzc4ioBMcEw7cBf0thHZijfiTjDZx7d
+         govg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VGjzo6k1HgWuN54AaXTg+YSGJQzCDip4EE3SOo8wCPI=;
+        b=xaH6N+Qw6sWRoJWVlZ9I1xS9SpoMXA4iBBovjhQMtcjzVsUtorREmXKuBFwpRiEneg
+         LLPzrL7u7AN1OWCr6PdeAbpt96PnZQc3ZCWWb8KtI1lZKhBZ5frsqKtwBs9hjNa7Gjy4
+         jz95e0vy7SKtapmrzrRHOorG9nhht2RVh1jD5PcnOLX8U2uA0JEEGAV/hioFAG84gLu5
+         iWyHs33+ILBtLj32qKOLd6ec9JqyNHjG/hbGd6FjriA4xqF93SgEHH9S8VPe0Jn3WKoI
+         TpIFl0QNj5EXQvjDoa0p3VQhwrJzae9c3aeKqO31oYg1vtC1RHkcM3MA3yjKITw4h13x
+         MsWg==
+X-Gm-Message-State: ACrzQf1LfCCrjhpUkr8LChwKV355MG46itycrBN7m+V3zHYAYud+ZbiG
+        3c+0u8hwqZ0oppETDikPQw8=
+X-Google-Smtp-Source: AMsMyM6F4gmk0VdMUEa6WFI2GrsZ07BMDcYfHGP3Cq4KDA+8KVBENFoqW8yK9nK/yP0FOVCNFWC0dg==
+X-Received: by 2002:a17:902:74cc:b0:17c:73a5:d7a1 with SMTP id f12-20020a17090274cc00b0017c73a5d7a1mr1339383plt.37.1668087538499;
+        Thu, 10 Nov 2022 05:38:58 -0800 (PST)
+Received: from xm06403pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id j8-20020a170903024800b00186b758c9fasm1609045plh.33.2022.11.10.05.38.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 05:38:57 -0800 (PST)
+From:   Zhe Wang <zhewang116@gmail.com>
+To:     martin.petersen@oracle.com, jejb@linux.ibm.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com
+Cc:     linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
+        zhe.wang1@unisoc.com, orsonzhai@gmail.com, yuelin.tang@unisoc.com,
+        zhenxiong.lai@unisoc.com
+Subject: [PATCH 0/2] Add support for Unisoc UFS host controller
+Date:   Thu, 10 Nov 2022 21:36:38 +0800
+Message-Id: <20221110133640.30522-1-zhewang116@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+From: Zhe Wang <zhe.wang1@unisoc.com>
 
-The implementation of strscpy() is more robust and safer.
-That's now the recommended way to copy NUL terminated strings.
+Add this patchset to support the Unisoc UFS host controller.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- drivers/scsi/qla2xxx/qla_init.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Zhe Wang (2):
+  dt-bindings: ufs: Add document for Unisoc UFS host controller
+  scsi: ufs-unisoc: Add support for Unisoc UFS host controller
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index ce4c5d728407..7b3782a212c0 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -4843,7 +4843,7 @@ qla2x00_set_model_info(scsi_qla_host_t *vha, uint8_t *model, size_t len,
- 		if (use_tbl &&
- 		    ha->pdev->subsystem_vendor == PCI_VENDOR_ID_QLOGIC &&
- 		    index < QLA_MODEL_NAMES)
--			strlcpy(ha->model_desc,
-+			strscpy(ha->model_desc,
- 			    qla2x00_model_name[index * 2 + 1],
- 			    sizeof(ha->model_desc));
- 	} else {
-@@ -4851,14 +4851,14 @@ qla2x00_set_model_info(scsi_qla_host_t *vha, uint8_t *model, size_t len,
- 		if (use_tbl &&
- 		    ha->pdev->subsystem_vendor == PCI_VENDOR_ID_QLOGIC &&
- 		    index < QLA_MODEL_NAMES) {
--			strlcpy(ha->model_number,
-+			strscpy(ha->model_number,
- 				qla2x00_model_name[index * 2],
- 				sizeof(ha->model_number));
--			strlcpy(ha->model_desc,
-+			strscpy(ha->model_desc,
- 			    qla2x00_model_name[index * 2 + 1],
- 			    sizeof(ha->model_desc));
- 		} else {
--			strlcpy(ha->model_number, def,
-+			strscpy(ha->model_number, def,
- 				sizeof(ha->model_number));
- 		}
- 	}
+ .../devicetree/bindings/ufs/sprd,ufs.yaml     |  72 +++
+ drivers/ufs/host/Kconfig                      |  12 +
+ drivers/ufs/host/Makefile                     |   1 +
+ drivers/ufs/host/ufs-sprd.c                   | 445 ++++++++++++++++++
+ drivers/ufs/host/ufs-sprd.h                   | 125 +++++
+ 5 files changed, 655 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/ufs/sprd,ufs.yaml
+ create mode 100644 drivers/ufs/host/ufs-sprd.c
+ create mode 100644 drivers/ufs/host/ufs-sprd.h
+
 -- 
-2.15.2
+2.17.1
+
