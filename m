@@ -2,36 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD69626B53
-	for <lists+linux-scsi@lfdr.de>; Sat, 12 Nov 2022 20:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A897626B51
+	for <lists+linux-scsi@lfdr.de>; Sat, 12 Nov 2022 20:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234858AbiKLTty (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 12 Nov 2022 14:49:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
+        id S234809AbiKLTtw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 12 Nov 2022 14:49:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbiKLTtw (ORCPT
+        with ESMTP id S230170AbiKLTtw (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Sat, 12 Nov 2022 14:49:52 -0500
 Received: from smtp.infotech.no (smtp.infotech.no [82.134.31.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2ACCDFCA
-        for <linux-scsi@vger.kernel.org>; Sat, 12 Nov 2022 11:49:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 571F49FE6
+        for <linux-scsi@vger.kernel.org>; Sat, 12 Nov 2022 11:49:48 -0800 (PST)
 Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id F127820417C;
-        Sat, 12 Nov 2022 20:49:49 +0100 (CET)
+        by smtp.infotech.no (Postfix) with ESMTP id BEEE72041AF;
+        Sat, 12 Nov 2022 20:49:46 +0100 (CET)
 X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
 Received: from smtp.infotech.no ([127.0.0.1])
         by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id iIL9zcF5bU6F; Sat, 12 Nov 2022 20:49:43 +0100 (CET)
+        with ESMTP id ZuNTJRzRd9rU; Sat, 12 Nov 2022 20:49:44 +0100 (CET)
 Received: from treten.bingwo.ca (host-45-78-203-98.dyn.295.ca [45.78.203.98])
-        by smtp.infotech.no (Postfix) with ESMTPA id 1A9D420414C;
-        Sat, 12 Nov 2022 20:49:41 +0100 (CET)
+        by smtp.infotech.no (Postfix) with ESMTPA id 6DCBA20416D;
+        Sat, 12 Nov 2022 20:49:43 +0100 (CET)
 From:   Douglas Gilbert <dgilbert@interlog.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
         bvanassche@acm.org, bostroesser@gmail.com, jgg@ziepe.ca
-Subject: [PATCH v2 0/5] scatterlist: add operations for scsi_debug
-Date:   Sat, 12 Nov 2022 14:49:34 -0500
-Message-Id: <20221112194939.4823-1-dgilbert@interlog.com>
+Subject: [PATCH v2 1/5] sgl_alloc_order: remove 4 GiB limit
+Date:   Sat, 12 Nov 2022 14:49:35 -0500
+Message-Id: <20221112194939.4823-2-dgilbert@interlog.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20221112194939.4823-1-dgilbert@interlog.com>
+References: <20221112194939.4823-1-dgilbert@interlog.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -42,54 +44,102 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The scsi_debug driver is essentially a ramdisk dressed up as a SCSI host
-with one or more SCSI devices attached. Like all low level SCSI drivers,
-the scsi_debug driver receives and provides data to the SCSI mid-level
-(and the block layer) using scatterlists whose interface is found in
-include/linux/scatterlist.h .
+This patch fixes a check done by sgl_alloc_order() before it starts
+any allocations. The comment in the original said: "Check for integer
+overflow" but the right hand side of the expression in the condition
+is resolved as u32 so it can not exceed UINT32_MAX (4 GiB) which
+means 'length' can not exceed that value.
 
-After trying kmalloc() then vmalloc() based storage for the scsi_debug
-driver, it was found that certain SCSI commands can be optimized if
-instead one or more scatterlists is used as its backing store. The
-specific SCSI command that benefits the most is VERIFY(BYTCHK=1) whose
-NVMe equivalent is COMPARE. These commands have data-out buffers
-provided by an application that are compared by the storage device
-with the LBA and count (of blocks) given in the command. In this
-case the sgl_equal_sgl() function can be used instead of setting up
-a temporary buffer.
+This function may be used to replace vmalloc(unsigned long) for a
+large allocation (e.g. a ramdisk). vmalloc has no limit at 4 GiB so
+it seems unreasonable that sgl_alloc_order() whose length type is
+unsigned long long should be limited to 4 GB.
 
-The implementation of the more common SCSI READ and WRITE commands are
-simplified by using the sgl_copy_sgl() function.
+Solutions to this issue were discussed by Jason Gunthorpe
+<jgg@ziepe.ca> and Bodo Stroesser <bostroesser@gmail.com>. This
+version is base on a linux-scsi post by Jason titled: "Re:
+[PATCH v7 1/4] sgl_alloc_order: remove 4 GiB limit" dated 20220201.
 
-The first patch in this series removes an undocumented 4 GB limit in
-the existing sgl_alloc_order() function.
+An earlier patch fixed a memory leak in sg_alloc_order() due to the
+misuse of sgl_free(). Take the opportunity to put a one line comment
+above sgl_free()'s declaration warning that it is not suitable when
+order > 0 .
 
-In the final patch of this series, the scsi_debug driver uses the
-new facilities in scatterlist to replace its vmalloc() backing store
-with a sgl_alloc_order() based store. Also several loops based on
-memcpy() and memcmp() are replaced by the new scatterlist copy
-and 'equal' functions.
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Bodo Stroesser <bostroesser@gmail.com>
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+---
+ include/linux/scatterlist.h |  1 +
+ lib/scatterlist.c           | 23 ++++++++++++++---------
+ 2 files changed, 15 insertions(+), 9 deletions(-)
 
-Changes since v1 (sent to linux-scsi list on 20221023)
-  - in sgl_alloc_order() add check that order argument is less
-    then MAX_ORDER; protects following call to round_up()
-  - in sdeb_sgl_cmp_buf() within scsi_debug.c remove call to
-    sg_miter_stop() as suggested by reviewer
-
-
-Douglas Gilbert (5):
-  sgl_alloc_order: remove 4 GiB limit
-  scatterlist: add sgl_copy_sgl() function
-  scatterlist: add sgl_equal_sgl() function
-  scatterlist: add sgl_memset()
-  scsi_debug: change store from vmalloc to sgl
-
- drivers/scsi/Kconfig        |   3 +-
- drivers/scsi/scsi_debug.c   | 442 ++++++++++++++++++++++++------------
- include/linux/scatterlist.h |  33 ++-
- lib/scatterlist.c           | 255 ++++++++++++++++++---
- 4 files changed, 562 insertions(+), 171 deletions(-)
-
+diff --git a/include/linux/scatterlist.h b/include/linux/scatterlist.h
+index 375a5e90d86a..0930755a756e 100644
+--- a/include/linux/scatterlist.h
++++ b/include/linux/scatterlist.h
+@@ -426,6 +426,7 @@ struct scatterlist *sgl_alloc(unsigned long long length, gfp_t gfp,
+ 			      unsigned int *nent_p);
+ void sgl_free_n_order(struct scatterlist *sgl, int nents, int order);
+ void sgl_free_order(struct scatterlist *sgl, int order);
++/* Only use sgl_free() when order is 0 */
+ void sgl_free(struct scatterlist *sgl);
+ #endif /* CONFIG_SGL_ALLOC */
+ 
+diff --git a/lib/scatterlist.c b/lib/scatterlist.c
+index c8c3d675845c..ee69d33d1228 100644
+--- a/lib/scatterlist.c
++++ b/lib/scatterlist.c
+@@ -585,13 +585,16 @@ EXPORT_SYMBOL(sg_alloc_table_from_pages_segment);
+ #ifdef CONFIG_SGL_ALLOC
+ 
+ /**
+- * sgl_alloc_order - allocate a scatterlist and its pages
++ * sgl_alloc_order - allocate a scatterlist with equally sized elements each
++ *		     of which has 2^@order continuous pages
+  * @length: Length in bytes of the scatterlist. Must be at least one
+- * @order: Second argument for alloc_pages()
++ * @order:  Second argument for alloc_pages(). Each sgl element size will
++ *	    be (PAGE_SIZE*2^@order) bytes. @order must not exceed 16.
+  * @chainable: Whether or not to allocate an extra element in the scatterlist
+- *	for scatterlist chaining purposes
++ *	       for scatterlist chaining purposes
+  * @gfp: Memory allocation flags
+- * @nent_p: [out] Number of entries in the scatterlist that have pages
++ * @nent_p: [out] Number of entries in the scatterlist that have pages.
++ *		  Ignored if @nent_p is NULL.
+  *
+  * Returns: A pointer to an initialized scatterlist or %NULL upon failure.
+  */
+@@ -601,14 +604,16 @@ struct scatterlist *sgl_alloc_order(unsigned long long length,
+ {
+ 	struct scatterlist *sgl, *sg;
+ 	struct page *page;
+-	unsigned int nent, nalloc;
++	uint64_t nent;
++	unsigned int nalloc;
+ 	u32 elem_len;
+ 
++	if (WARN_ON_ONCE(order >= MAX_ORDER))
++		return NULL;
+ 	nent = round_up(length, PAGE_SIZE << order) >> (PAGE_SHIFT + order);
+-	/* Check for integer overflow */
+-	if (length > (nent << (PAGE_SHIFT + order)))
++	if (nent > UINT_MAX)
+ 		return NULL;
+-	nalloc = nent;
++	nalloc = (unsigned int)nent;
+ 	if (chainable) {
+ 		/* Check for integer overflow */
+ 		if (nalloc + 1 < nalloc)
+@@ -636,7 +641,7 @@ struct scatterlist *sgl_alloc_order(unsigned long long length,
+ 	}
+ 	WARN_ONCE(length, "length = %lld\n", length);
+ 	if (nent_p)
+-		*nent_p = nent;
++		*nent_p = (unsigned int)nent;
+ 	return sgl;
+ }
+ EXPORT_SYMBOL(sgl_alloc_order);
 -- 
 2.37.2
 
