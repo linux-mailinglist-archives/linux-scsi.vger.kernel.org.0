@@ -2,74 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9D5626AEC
-	for <lists+linux-scsi@lfdr.de>; Sat, 12 Nov 2022 18:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD69626B53
+	for <lists+linux-scsi@lfdr.de>; Sat, 12 Nov 2022 20:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234982AbiKLRmm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 12 Nov 2022 12:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        id S234858AbiKLTty (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 12 Nov 2022 14:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234967AbiKLRml (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 12 Nov 2022 12:42:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A47711A3A;
-        Sat, 12 Nov 2022 09:42:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3425A60D38;
-        Sat, 12 Nov 2022 17:42:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 97A94C433C1;
-        Sat, 12 Nov 2022 17:42:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668274959;
-        bh=LoGoU/mN3+jE+RZnBTtTnhNpqkXse6sXyM9vcyeG/VI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Vg5xGRvPH0xQdnhj3wf4bR3g+wf6x5JNeKeVE30Bv/hxULdsG9yi0iAbsRN35n5Vj
-         r2oZvVRygqoI62k4WSuPE563Qa0z0uASANvAzeeGHFZZTvMBC1N4jS2v4LHZcCfh7J
-         7sAIMvgtYBIMCW8kkDPlwWa7MzQHzVEchbs1u+MxGm24fSSnwQdOqXBsZG1C61QV8d
-         WGAPQyc42FgEEt3T5T2yRvKt+JtT+gUS74HV7/RM1S+d1fjlafcLlw0q3d1pp6D5P9
-         YWQ1wlucvwRWJihsHCS9+g7Gh07lykmdVF7VfWlsLZ8vjSOT4wBAAs3GcqzEDJMUAC
-         +YqtedZaSbLZg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 81B85E270C6;
-        Sat, 12 Nov 2022 17:42:39 +0000 (UTC)
-Subject: Re: [GIT PULL] SCSI fixes for 6.0-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <d70b92ce5eb5b50b1a0975e8b3b21b9f48809ad8.camel@HansenPartnership.com>
-References: <d70b92ce5eb5b50b1a0975e8b3b21b9f48809ad8.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <d70b92ce5eb5b50b1a0975e8b3b21b9f48809ad8.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: ecb8c2580d37dbb641451049376d80c8afaa387f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fef7fd48922d11b22620e19f9c9101647bfe943d
-Message-Id: <166827495952.17539.355793184683159519.pr-tracker-bot@kernel.org>
-Date:   Sat, 12 Nov 2022 17:42:39 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231919AbiKLTtw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 12 Nov 2022 14:49:52 -0500
+Received: from smtp.infotech.no (smtp.infotech.no [82.134.31.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2ACCDFCA
+        for <linux-scsi@vger.kernel.org>; Sat, 12 Nov 2022 11:49:50 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id F127820417C;
+        Sat, 12 Nov 2022 20:49:49 +0100 (CET)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id iIL9zcF5bU6F; Sat, 12 Nov 2022 20:49:43 +0100 (CET)
+Received: from treten.bingwo.ca (host-45-78-203-98.dyn.295.ca [45.78.203.98])
+        by smtp.infotech.no (Postfix) with ESMTPA id 1A9D420414C;
+        Sat, 12 Nov 2022 20:49:41 +0100 (CET)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
+        bvanassche@acm.org, bostroesser@gmail.com, jgg@ziepe.ca
+Subject: [PATCH v2 0/5] scatterlist: add operations for scsi_debug
+Date:   Sat, 12 Nov 2022 14:49:34 -0500
+Message-Id: <20221112194939.4823-1-dgilbert@interlog.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Sat, 12 Nov 2022 10:02:40 -0500:
+The scsi_debug driver is essentially a ramdisk dressed up as a SCSI host
+with one or more SCSI devices attached. Like all low level SCSI drivers,
+the scsi_debug driver receives and provides data to the SCSI mid-level
+(and the block layer) using scatterlists whose interface is found in
+include/linux/scatterlist.h .
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+After trying kmalloc() then vmalloc() based storage for the scsi_debug
+driver, it was found that certain SCSI commands can be optimized if
+instead one or more scatterlists is used as its backing store. The
+specific SCSI command that benefits the most is VERIFY(BYTCHK=1) whose
+NVMe equivalent is COMPARE. These commands have data-out buffers
+provided by an application that are compared by the storage device
+with the LBA and count (of blocks) given in the command. In this
+case the sgl_equal_sgl() function can be used instead of setting up
+a temporary buffer.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fef7fd48922d11b22620e19f9c9101647bfe943d
+The implementation of the more common SCSI READ and WRITE commands are
+simplified by using the sgl_copy_sgl() function.
 
-Thank you!
+The first patch in this series removes an undocumented 4 GB limit in
+the existing sgl_alloc_order() function.
+
+In the final patch of this series, the scsi_debug driver uses the
+new facilities in scatterlist to replace its vmalloc() backing store
+with a sgl_alloc_order() based store. Also several loops based on
+memcpy() and memcmp() are replaced by the new scatterlist copy
+and 'equal' functions.
+
+Changes since v1 (sent to linux-scsi list on 20221023)
+  - in sgl_alloc_order() add check that order argument is less
+    then MAX_ORDER; protects following call to round_up()
+  - in sdeb_sgl_cmp_buf() within scsi_debug.c remove call to
+    sg_miter_stop() as suggested by reviewer
+
+
+Douglas Gilbert (5):
+  sgl_alloc_order: remove 4 GiB limit
+  scatterlist: add sgl_copy_sgl() function
+  scatterlist: add sgl_equal_sgl() function
+  scatterlist: add sgl_memset()
+  scsi_debug: change store from vmalloc to sgl
+
+ drivers/scsi/Kconfig        |   3 +-
+ drivers/scsi/scsi_debug.c   | 442 ++++++++++++++++++++++++------------
+ include/linux/scatterlist.h |  33 ++-
+ lib/scatterlist.c           | 255 ++++++++++++++++++---
+ 4 files changed, 562 insertions(+), 171 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.37.2
+
