@@ -2,104 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15048626BFF
-	for <lists+linux-scsi@lfdr.de>; Sat, 12 Nov 2022 22:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650A1626DEA
+	for <lists+linux-scsi@lfdr.de>; Sun, 13 Nov 2022 07:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235140AbiKLVmH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 12 Nov 2022 16:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        id S232676AbiKMGqs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 13 Nov 2022 01:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbiKLVmG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 12 Nov 2022 16:42:06 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2BE13F9D
-        for <linux-scsi@vger.kernel.org>; Sat, 12 Nov 2022 13:42:05 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id p4so8151843vsa.11
-        for <linux-scsi@vger.kernel.org>; Sat, 12 Nov 2022 13:42:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DcIP7sVO2A0wryRpupzUPWQywPt7sc4xyWCvZop1t1s=;
-        b=qd47u2S7ouyqL6LSWlM7XHpxaqNDS576rQHpcLc7ml8gVia/F1UNUUwuO5VZ2YcMXQ
-         LVoIz239vCHOeV5zn7oyubJzM8HGvnlQW+8r7pKBawTylkXqJzigOb45ABQuyqyGmheX
-         7fRXj2CcyMwvkhoqrqQAF+FkbvqBuNafJiQRGpyfOiB9/e8orkXfLIqghDI6Mr155hUu
-         t6G+Ky4pvOZp7uljEQOZu0zUgPjtVrQIJxBUG2KDrLKOCyh8mq2L6ofuGPDneZIgyxW5
-         DT47/pY/llWWWwar79QTUgqO91h0c+pbUpoB9JbLtnKA561mPQgO+qlDij3DTGTA8weI
-         2HQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DcIP7sVO2A0wryRpupzUPWQywPt7sc4xyWCvZop1t1s=;
-        b=tJ7aDrB/BFagmYTq9EJx2JQWxiHTXWG6uTUZxn1lft125fs5f8fhj4oxY88itUa8c/
-         asR7nXaefeTQuxft58z6eJ4111dG2QMaw5/1035BrC0jodKCNuD6m3yEhiVslyW5RNVM
-         sVZIroMrDG+2if1tauxoU5jWK7hE0pl1Mx/j6MGsHBOK07Mp0aLxGvCRavHDqniO47Pr
-         2CVE/c32z1+/MKoFNtTbupS9FZMOunwa6faiQUtEdtecoEpCsX4WkzzMvsA71Iaa/SIZ
-         K5PLz1Ttwphi5VtJ6Bx/IdGOvPvvFO4GLvA/OGy0Zg7KwmQUGPys+7IAGeTL3cGmsxAz
-         b+uw==
-X-Gm-Message-State: ANoB5pl2I2+YiPhnJjaLRRw8O96OjowWsUi9rDgWrlIOhvUqOT98Zoxx
-        avp2Pq+e698XQc0iNiP6qMn1eXTxZWpcx37wQUE=
-X-Google-Smtp-Source: AA0mqf5Vn++ciWmujfS8Ww5tiUrOu+90c0kHFXy40QaLwAbIuwXm3DRf1Y4cM32mJMsD5XfSCNNRnOoRMR5cWkLuIoM=
-X-Received: by 2002:a67:ebd4:0:b0:3ad:cd34:a28f with SMTP id
- y20-20020a67ebd4000000b003adcd34a28fmr3516709vso.76.1668289325006; Sat, 12
- Nov 2022 13:42:05 -0800 (PST)
+        with ESMTP id S231694AbiKMGqr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 13 Nov 2022 01:46:47 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD7110FEC
+        for <linux-scsi@vger.kernel.org>; Sat, 12 Nov 2022 22:46:45 -0800 (PST)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N92ys0gzCzHvlR;
+        Sun, 13 Nov 2022 14:46:13 +0800 (CST)
+Received: from huawei.com (10.175.100.227) by kwepemi500016.china.huawei.com
+ (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 13 Nov
+ 2022 14:46:40 +0800
+From:   Shang XiaoJing <shangxiaojing@huawei.com>
+To:     <brking@us.ibm.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <wayneb@linux.vnet.ibm.com>,
+        <James.Bottomley@suse.de>, <linux-scsi@vger.kernel.org>
+CC:     <shangxiaojing@huawei.com>
+Subject: [PATCH] scsi: ipr: Fix WARNING in ipr_init()
+Date:   Sun, 13 Nov 2022 14:45:13 +0800
+Message-ID: <20221113064513.14028-1-shangxiaojing@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:a59:d6d0:0:b0:323:7ec7:69c6 with HTTP; Sat, 12 Nov 2022
- 13:42:04 -0800 (PST)
-Reply-To: ch4781.r@proton.me
-From:   Mrs chanta B <123456432d543@gmail.com>
-Date:   Sat, 12 Nov 2022 21:42:04 +0000
-Message-ID: <CAGwDaqiLfjwrQdftHUcL8ZSbfX+fZ4v6wWe+H5Y1bf7jsBRM9Q@mail.gmail.com>
-Subject: Greetings, I am Mrs. Chantal. I got your contact information from a
- reputable business/professional directory.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=ADVANCE_FEE_3_NEW_MONEY,
-        BAYES_50,DEAR_FRIEND,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_HEX,
-        FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e2f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5297]
-        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
-        *  0.0 FROM_LOCAL_HEX From: localpart has long hexadecimal sequence
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [123456432d543[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [123456432d543[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_3_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: *******
+Content-Type: text/plain
+X-Originating-IP: [10.175.100.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear friend
+ipr_init() will not call unregister_reboot_notifier() when
+pci_register_driver() failed, which causes the WARNING. Call
+unregister_reboot_notifier() when pci_register_driver() failed.
 
-I have a business proposal worth the sum of 6 million dollars, Kindly
-notify me if interested.
+notifier callback ipr_halt [ipr] already registered
+WARNING: CPU: 3 PID: 299 at kernel/notifier.c:29
+notifier_chain_register+0x16d/0x230
+Modules linked in: ipr(+) xhci_pci_renesas xhci_hcd ehci_hcd usbcore
+led_class gpu_sched drm_buddy video wmi drm_ttm_helper ttm
+drm_display_helper drm_kms_helper drm drm_panel_orientation_quirks
+agpgart cfbft
+CPU: 3 PID: 299 Comm: modprobe Tainted: G        W
+6.1.0-rc1-00190-g39508d23b672-dirty #332
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+RIP: 0010:notifier_chain_register+0x16d/0x230
+Call Trace:
+ <TASK>
+ __blocking_notifier_chain_register+0x73/0xb0
+ ipr_init+0x30/0x1000 [ipr]
+ do_one_initcall+0xdb/0x480
+ do_init_module+0x1cf/0x680
+ load_module+0x6a50/0x70a0
+ __do_sys_finit_module+0x12f/0x1c0
+ do_syscall_64+0x3f/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Thanks
-Mrs Chantel
+Fixes: f72919ec2bbb ("[SCSI] ipr: implement shutdown changes and remove obsolete write cache parameter")
+Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+---
+ drivers/scsi/ipr.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+index 9d01a3e3c26a..2022ffb45041 100644
+--- a/drivers/scsi/ipr.c
++++ b/drivers/scsi/ipr.c
+@@ -10872,11 +10872,19 @@ static struct notifier_block ipr_notifier = {
+  **/
+ static int __init ipr_init(void)
+ {
++	int rc;
++
+ 	ipr_info("IBM Power RAID SCSI Device Driver version: %s %s\n",
+ 		 IPR_DRIVER_VERSION, IPR_DRIVER_DATE);
+ 
+ 	register_reboot_notifier(&ipr_notifier);
+-	return pci_register_driver(&ipr_driver);
++	rc = pci_register_driver(&ipr_driver);
++	if (rc) {
++		unregister_reboot_notifier(&ipr_notifier);
++		return rc;
++	}
++
++	return 0;
+ }
+ 
+ /**
+-- 
+2.17.1
+
