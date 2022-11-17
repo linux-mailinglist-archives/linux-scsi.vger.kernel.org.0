@@ -2,57 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F52062E42F
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Nov 2022 19:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D62A462E441
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Nov 2022 19:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240516AbiKQS3y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Nov 2022 13:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S240656AbiKQSaJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Nov 2022 13:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240524AbiKQS3n (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Nov 2022 13:29:43 -0500
+        with ESMTP id S240542AbiKQS3r (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Nov 2022 13:29:47 -0500
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE8F7D51C
-        for <linux-scsi@vger.kernel.org>; Thu, 17 Nov 2022 10:29:41 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHHhqa6028297;
-        Thu, 17 Nov 2022 18:29:39 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1087DEC6
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Nov 2022 10:29:47 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AHIPXR9014158;
+        Thu, 17 Nov 2022 18:29:42 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=epy++eZYuEUWoDQyv5+LjDGB/5IvkisxjciH1HmMKfo=;
- b=OqcJk54csQEXd6k7JlIeoZsoFko2+4cFP6zt3gzEcDx2F10odTEoSqz0hL46kb3TPmJi
- 6HzTE6FutXddl0UWHP+zMLf+rKXLgtGAPxyWFOb1Xa5UrC6zqiCkqKC+0fE0Rx6WHrDc
- cp28DYdAEk/0Y0GBKjkb8cSjAvcnCpVgF68clf/Pycrfy3Ebz07Yf9k6Gu2FSFoDvKMa
- dQ2lDYc67CKzvIc+YizXt3jKZRCdt/N/qKHK0h7ekxiyvJZcUS8+hZlTHF8PfXq+tei9
- pzFQA9gpjTaF5F/RHyTPfuKCc68/wJcOzQnC6RpPCCzO9cA3u1MnkjMxQkoJoxhYlZ0M TA== 
+ bh=nV8YLMtNYeuQcGRnGhERAgBEzEsObginrIzQfWMdTvM=;
+ b=IluykHUBRHzZymLL+kIrJwcyr1D79xXKd5Mw85BRga7uUqepUosJqC3GAkW66yyjCgtw
+ Eq30vxvElXFQbVSYXvG+Uq9BBHEfqSyfuZc8uVE+Rh5mi1V1hji7qTKkYgsw9pgwNiAu
+ /UHEh0lwy9U+++oEi5rZiHil9GjV65QJGyk6WkxZUQmu/03D1RX8U/W1VThyNTnuFs7/
+ 3VG64xoCYMM+Q4pJpGForIu4yT8MCDlAAjcRTPYhjQrM4hK7pCcBEkATACoGIUE3qaPV
+ 4UodJuUvSvWLsrydde4YxA/7copqeoh2DmrQ/crn5taRMtFq38JF+nqO93OLcxRs0w8l ZA== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kv8ykt0us-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kv3jst0sn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 18:29:38 +0000
+        Thu, 17 Nov 2022 18:29:41 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AHHHmUq010917;
-        Thu, 17 Nov 2022 18:29:36 GMT
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AHHHUEV010994;
+        Thu, 17 Nov 2022 18:29:37 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ku3kab0gs-1
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3ku3kab0h8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Nov 2022 18:29:36 +0000
+        Thu, 17 Nov 2022 18:29:37 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHITap1022894;
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AHITap3022894;
         Thu, 17 Nov 2022 18:29:36 GMT
 Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3ku3kab0gb-1;
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3ku3kab0gb-2;
         Thu, 17 Nov 2022 18:29:36 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     Bart Van Assche <bvanassche@acm.org>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 0/4] Call scsi_device_put() from non-atomic context
-Date:   Thu, 17 Nov 2022 13:29:23 -0500
-Message-Id: <166870943119.1584889.5824077853820808172.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org,
+        Giridhar Malavali <giridhar.malavali@qlogic.com>,
+        Arun Easi <arun.easi@qlogic.com>
+Subject: Re: [PATCH] scsi: qla2xxx: Fix set-but-not-used variable warnings
+Date:   Thu, 17 Nov 2022 13:29:24 -0500
+Message-Id: <166870943120.1584889.4901952216384811281.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221031224728.2607760-1-bvanassche@acm.org>
-References: <20221031224728.2607760-1-bvanassche@acm.org>
+In-Reply-To: <20221031224818.2607882-1-bvanassche@acm.org>
+References: <20221031224818.2607882-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,11 +62,11 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 adultscore=0
- phishscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999 spamscore=0
+ phishscore=0 malwarescore=0 suspectscore=0 mlxlogscore=891 spamscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
  definitions=main-2211170133
-X-Proofpoint-GUID: ohCUdbZimFfQIBx_mQ2E5ENWghXjQlAH
-X-Proofpoint-ORIG-GUID: ohCUdbZimFfQIBx_mQ2E5ENWghXjQlAH
+X-Proofpoint-ORIG-GUID: yzKoDVml0emG_Yvcz6XBAcPN7g6QumDY
+X-Proofpoint-GUID: yzKoDVml0emG_Yvcz6XBAcPN7g6QumDY
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -75,27 +77,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 31 Oct 2022 15:47:24 -0700, Bart Van Assche wrote:
+On Mon, 31 Oct 2022 15:48:18 -0700, Bart Van Assche wrote:
 
-> As reported by Dan Carpenter, a recent change may cause scsi_device_put() to
-> sleep while a few callers remain that call scsi_device_put() from atomic
-> context. This patch series converts those callers. Please consider this patch
-> series for the 6.0 kernel.
+> Fix the following two compiler warnings:
 > 
-> Thanks,
+> drivers/scsi/qla2xxx/qla_init.c: In function ‘qla24xx_async_abort_cmd’:
+> drivers/scsi/qla2xxx/qla_init.c:171:17: warning: variable ‘bail’ set but not used [-Wunused-but-set-variable]
+>   171 |         uint8_t bail;
+>       |                 ^~~~
+> drivers/scsi/qla2xxx/qla_init.c: In function ‘qla2x00_async_tm_cmd’:
+> drivers/scsi/qla2xxx/qla_init.c:2023:17: warning: variable ‘bail’ set but not used [-Wunused-but-set-variable]
+>  2023 |         uint8_t bail;
+>       |                 ^~~~
 > 
 > [...]
 
 Applied to 6.2/scsi-queue, thanks!
 
-[1/4] scsi: alua: Move a scsi_device_put() call out of alua_check_vpd()
-      https://git.kernel.org/mkp/scsi/c/0b25e17e9018
-[2/4] scsi: alua: Move a scsi_device_put() call out of alua_rtpg_select_sdev()
-      https://git.kernel.org/mkp/scsi/c/379e2554e3d1
-[3/4] scsi: bfa: Convert bfad_reset_sdev_bflags() from a macro into a function
-      https://git.kernel.org/mkp/scsi/c/2e5a6c3baccd
-[4/4] scsi: bfa: Rework bfad_reset_sdev_bflags()
-      https://git.kernel.org/mkp/scsi/c/2e79cf37b15b
+[1/1] scsi: qla2xxx: Fix set-but-not-used variable warnings
+      https://git.kernel.org/mkp/scsi/c/4fb2169d66b8
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
