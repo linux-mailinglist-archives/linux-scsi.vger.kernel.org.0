@@ -2,181 +2,140 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0DA62D55A
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Nov 2022 09:45:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B7962D654
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Nov 2022 10:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239314AbiKQIpq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Nov 2022 03:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S239811AbiKQJTw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Nov 2022 04:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239199AbiKQIpZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Nov 2022 03:45:25 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA0F5FAB;
-        Thu, 17 Nov 2022 00:45:15 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id gv23so3371534ejb.3;
-        Thu, 17 Nov 2022 00:45:15 -0800 (PST)
+        with ESMTP id S239590AbiKQJTv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Nov 2022 04:19:51 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EF6AF0B0
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Nov 2022 01:19:50 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id a29so1802663lfj.9
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Nov 2022 01:19:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=basFVZ/+OAjZQ+bU9lZZNayqlEJwnc7m7i2mGDGiNgw=;
-        b=JCvN/P0K70CRKEX1WCsmmbV3oS/EEn3ae9PsKN+mHiWECU3hQkNgH3RdpGEK/U3wx4
-         TBK5YqN3sjOxOVckWmXSh82sfqLM/WZLouKx/GV+3YzsgaE3hK7/HwQcUBvoe/S7CvDV
-         Q9Gkx5cjFmw2VBBSn8Y3AcRXF0wX1CPFPQw5FW1xpBI7MkZPoWLVXrN1XQAiq/s5tOsv
-         9vuDmRDdFoiLi2Z5D4YDSLLMtkGlVEPgcUjXm+d85ox2iIwigRTYSgDZvr7i62L6BYbs
-         /3yGyji9Ra8cNGO0gJKs6BjzeMHBccojU5f+8vvrULoLXqpMYN0ijy7oFQyiWD5K9ILK
-         8p+A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PQQyKzEK6pbcrPSZDA9nhPPbff1SP+zOVrULy0x9XLY=;
+        b=oAwLDzt6TSHz3Ex+qKXTZew/CXvHb2mx+XTWiIoSN0zYj3MasQJgm27lnxUqqkMD8z
+         n5C+3Gz3XZ9lowekcTGTzTZxohxtvq7FkQmhP2YhOhUlXlMeXXOom7SvZhhZHcFhrFjG
+         OuXgduSDsTU3JcmFNFMr1bcWcV22EiY/4DI7k6qdOMntmfMUcbjsKKOphd5EfZdQmLGB
+         MMTmZbXONRPmVUq6C7OiBTYJF9jXfdnLAzxFZevZ72jNBSZFWQ9SwmR90HS5SFw8k+Qi
+         GrHpkHYRq9/KiSuVbbOde0+xe0WjBq+NreY81YzxI7Sx6tpVV9Og3D01M+aKeHcJBzjb
+         0phw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=basFVZ/+OAjZQ+bU9lZZNayqlEJwnc7m7i2mGDGiNgw=;
-        b=6LU7V0rYa6GdcM2tkLNCTVaqfPKrzXkuO0a83JD+wSQImXITKyLPV2pcKgbS0PqWwM
-         o6OD4Jr9WCa+TgkIPUX5ygpld3ieg4mtmimUrs+8YcCT/f/lhMfEWDk3mWIrKSdtilLr
-         JNYtsNGOmDrSVdvZ56ZLPrN2wkObFa3jfBGKl3lJ3JEkpXt9jTsNcltqUzs7+lGkvoiU
-         VLgS28KE11VR7zw3izeKXTeiD6fZb6Is5xIk7k2YPoqRL8yHitJZCxFMJGXx/Dk4hqmK
-         T+DxiW1SPK5/n7G30Zv9p+JPenQXnPu7y2WZue+XOdwN1gB61IJA5GyeZP+MDHXeGYwu
-         u5jg==
-X-Gm-Message-State: ANoB5pnZGFNZXK2fz/m7ATN/xuRLxLclPcJ5ELHG2xtru/zewsKTl6Wk
-        5TzxtkKhwXcVqULB2FXNDHScsRdgNEkYEGtdPQY=
-X-Google-Smtp-Source: AA0mqf73o6bvreYL/RuxsjD2JKn0dNuEXjzmSyqwDCjAUgPcCpqx34cZLtiSpbwSboF8b31qWoGQPepRNY/X0mGwmyI=
-X-Received: by 2002:a17:906:ecaf:b0:78d:981a:d997 with SMTP id
- qh15-20020a170906ecaf00b0078d981ad997mr1322921ejb.654.1668674713912; Thu, 17
- Nov 2022 00:45:13 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PQQyKzEK6pbcrPSZDA9nhPPbff1SP+zOVrULy0x9XLY=;
+        b=owL5crNLbqNUDTxkD9riwH0RFhbrWYu+uPwWObkeuIxjZFoQQBXsQLBRn07b7eL+/N
+         8QoeWtmPxAqPrjp9yaaY1Unt85mvdZUHeqFYjN2e8RYwCuuT793vThKgDwXEClE2GodI
+         Ym1f8VzyVAKySJ64UsvpULHcTBvbrCrWlZ6ieFU5aF1cZG1N7RJaqLr0425Xe1ubwurE
+         6dhIRS8lb2KuQgnrRZIYZWNbThXJJ3ulTmyU8riiy5ick368VhhcgX+rOrTBKgkt8FSh
+         W18uQDFyLPf5rVYvR5FjFkXNIP7T6BZXK6Td4gu/vzJR4L+fjEIQat8o7Pjgmj4KZ8n/
+         tkHA==
+X-Gm-Message-State: ANoB5pksRavXizV/OOtDWeI6f3TTzB8/fXt1+1DBDA6UFOkDFRqXi4Pm
+        dVNKkIHISOWc9YSx9rLGOBrkUg==
+X-Google-Smtp-Source: AA0mqf5LZrCAZhUuSRm9lU1fBMgWwi7KDQKZzxhK50xwOs3Umx45mgzr5KEPHagIY+r4527NV83F6w==
+X-Received: by 2002:ac2:4558:0:b0:494:6bb2:485f with SMTP id j24-20020ac24558000000b004946bb2485fmr655662lfm.451.1668676788691;
+        Thu, 17 Nov 2022 01:19:48 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c26-20020ac2415a000000b0048a8c907fe9sm56977lfi.167.2022.11.17.01.19.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 01:19:48 -0800 (PST)
+Message-ID: <2c9152a3-f113-093a-57a9-27154529f34a@linaro.org>
+Date:   Thu, 17 Nov 2022 10:19:47 +0100
 MIME-Version: 1.0
-References: <20221116133131.6809-1-zhe.wang1@unisoc.com> <20221116133131.6809-2-zhe.wang1@unisoc.com>
- <87312b40-548d-dc60-588f-3583e496dcb3@linaro.org>
-In-Reply-To: <87312b40-548d-dc60-588f-3583e496dcb3@linaro.org>
-From:   Zhe Wang <zhewang116@gmail.com>
-Date:   Thu, 17 Nov 2022 16:45:02 +0800
-Message-ID: <CAJxzgGoebXFxeWa7TXe5yD+xAme=6YxTC-E9emUw2kG2zpH6+A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: ufs: Add document for Unisoc UFS host controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] dt-bindings: ufs: Add document for Unisoc UFS host
+ controller
+Content-Language: en-US
+To:     Zhe Wang <zhewang116@gmail.com>
 Cc:     Zhe Wang <zhe.wang1@unisoc.com>, martin.petersen@oracle.com,
         jejb@linux.ibm.com, krzysztof.kozlowski+dt@linaro.org,
         robh+dt@kernel.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
         linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
         orsonzhai@gmail.com, yuelin.tang@unisoc.com,
         zhenxiong.lai@unisoc.com, zhang.lyra@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221116133131.6809-1-zhe.wang1@unisoc.com>
+ <20221116133131.6809-2-zhe.wang1@unisoc.com>
+ <87312b40-548d-dc60-588f-3583e496dcb3@linaro.org>
+ <CAJxzgGoebXFxeWa7TXe5yD+xAme=6YxTC-E9emUw2kG2zpH6+A@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAJxzgGoebXFxeWa7TXe5yD+xAme=6YxTC-E9emUw2kG2zpH6+A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-hi Krzysztof
+On 17/11/2022 09:45, Zhe Wang wrote:
+> hi Krzysztof
+> 
+> On Thu, Nov 17, 2022 at 1:11 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 16/11/2022 14:31, Zhe Wang wrote:
+>>> Add Unisoc ums9620 ufs host controller devicetree document.
+>>>
+>>> Signed-off-by: Zhe Wang <zhe.wang1@unisoc.com>
+>>
+>> Thank you for your patch. There is something to discuss/improve.
+>>
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: ufs_eb
+>>> +      - const: ufs_cfg_eb
+>>> +      - const: ufsh
+>>> +      - const: ufsh_source
+>>> +
+>>> +  resets:
+>>> +    maxItems: 2
+>>> +
+>>> +  reset-names:
+>>> +    items:
+>>> +      - const: ufs
+>>> +      - const: ufsdev
+>>
+>> Both clock names and resets are still not useful. "ufs" is the name of
+>> the block, so reset name of "ufs" and "ufsdev" says nothing. This is the
+>> dev right?
+>>
+> 
+> Yes, this means reset on the device side. How about the modification below?
+> 
+> +  clock-names:
+> +    items:
+> +      - const: controller_eb
+> +      - const: cfg_eb
+> +      - const: core
+> +      - const: core_source
+> +
+> +  resets:
+> +    maxItems: 2
+> +
+> +  reset-names:
+> +    items:
+> +      - const: controller
+> +      - const: device
 
-On Thu, Nov 17, 2022 at 1:11 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 16/11/2022 14:31, Zhe Wang wrote:
-> > Add Unisoc ums9620 ufs host controller devicetree document.
-> >
-> > Signed-off-by: Zhe Wang <zhe.wang1@unisoc.com>
->
-> Thank you for your patch. There is something to discuss/improve.
->
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: ufs_eb
-> > +      - const: ufs_cfg_eb
-> > +      - const: ufsh
-> > +      - const: ufsh_source
-> > +
-> > +  resets:
-> > +    maxItems: 2
-> > +
-> > +  reset-names:
-> > +    items:
-> > +      - const: ufs
-> > +      - const: ufsdev
->
-> Both clock names and resets are still not useful. "ufs" is the name of
-> the block, so reset name of "ufs" and "ufsdev" says nothing. This is the
-> dev right?
->
+That's very good, thanks.
 
-Yes, this means reset on the device side. How about the modification below?
-
-+  clock-names:
-+    items:
-+      - const: controller_eb
-+      - const: cfg_eb
-+      - const: core
-+      - const: core_source
-+
-+  resets:
-+    maxItems: 2
-+
-+  reset-names:
-+    items:
-+      - const: controller
-+      - const: device
-
-> > +
-> > +  vdd-mphy-supply:
-> > +    description:
-> > +      Phandle to vdd-mphy supply regulator node.
-> > +
-> > +  sprd,ufs-anlg-syscon:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description: phandle of syscon used to control ufs analog regs.
-> > +
-> > +  sprd,aon-apb-syscon:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description: phandle of syscon used to control always-on regs.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  - resets
-> > +  - reset-names
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +
-> > +    ufs: ufs@22000000 {
-> > +        compatible = "sprd,ums9620-ufs";
-> > +        reg = <0x22000000 0x3000>;
-> > +        interrupts = <GIC_SPI 159 IRQ_TYPE_LEVEL_HIGH>;
-> > +        vcc-supply = <&vddemmccore>;
-> > +        vdd-mphy-supply = <&vddufs1v2>;
-> > +        clock-names = "ufs_eb", "ufs_cfg_eb", "ufsh", "ufsh_source";
-> > +        clocks = <&apahb_gate 5>, <&apahb_gate 22>, <&aonapb_clk 52>, <&g5l_pll 12>;
->
-> First clocks, then names.
->
-
-I'll fix it.
-
-> > +        reset-names = "ufs", "ufsdev";
-> > +        resets = <&apahb_gate 4>, <&aonapb_gate 69>;
->
-> First resets, then names.
->
-
-I'll fix it.
+> 
 
 Best regards,
-Zhe
+Krzysztof
 
-> > +        sprd,ufs-anlg-syscon = <&anlg_phy_g12_regs>;
-> > +        sprd,aon-apb-syscon = <&aon_apb_regs>;
-> > +    };
->
-> Best regards,
-> Krzysztof
->
