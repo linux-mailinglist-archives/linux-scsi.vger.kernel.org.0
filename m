@@ -2,21 +2,21 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F023262ED80
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Nov 2022 07:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C5F62ED7F
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Nov 2022 07:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240989AbiKRGMM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Nov 2022 01:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
+        id S240959AbiKRGML (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 18 Nov 2022 01:12:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240932AbiKRGMJ (ORCPT
+        with ESMTP id S229451AbiKRGMJ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Fri, 18 Nov 2022 01:12:09 -0500
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8806559175
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B9C4090D
         for <linux-scsi@vger.kernel.org>; Thu, 17 Nov 2022 22:12:08 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AI3jrjh000976;
-        Fri, 18 Nov 2022 06:12:01 GMT
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AI63W2s007760;
+        Fri, 18 Nov 2022 06:12:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type : subject :
  from : in-reply-to : date : cc : message-id : references : to :
  content-transfer-encoding : mime-version; s=pp1;
@@ -26,30 +26,30 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type 
  YRFi4VyzaLO5c/wG97ULG0ataF3PRbmlhveEfjXZazFzzoWDa22nONQx/QgeraJ5hf72
  6iBFpfypNRwe8CVD5zLOBJ/8vaws6ma6pJX9sKrcsNHFnKXF9U7Z75a/VNMDmT8hTbu/
  TKfmUzfeNrRThy26znblkHMQ0CL45zJiaBNuAoOqWs4phQ2Yc/gR/qqgPJGIPwUwvyut BQ== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kx2eaag36-1
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kx4evg5w8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 06:12:01 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AI66cG3017316;
-        Fri, 18 Nov 2022 06:11:59 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3kwthe0jq5-1
+        Fri, 18 Nov 2022 06:12:00 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AI66BKw000541;
+        Fri, 18 Nov 2022 06:11:58 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma05fra.de.ibm.com with ESMTP id 3kwsse0e8c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 06:11:59 +0000
+        Fri, 18 Nov 2022 06:11:58 +0000
 Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AI6Bvc866126262
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AI65qjo39125264
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Nov 2022 06:11:57 GMT
+        Fri, 18 Nov 2022 06:05:52 GMT
 Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 999E0AE056;
-        Fri, 18 Nov 2022 06:11:57 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D136AE045;
+        by IMSVA (Postfix) with ESMTP id 30BB8AE045;
         Fri, 18 Nov 2022 06:11:56 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DA4AFAE04D;
+        Fri, 18 Nov 2022 06:11:54 +0000 (GMT)
 Received: from smtpclient.apple (unknown [9.43.39.245])
         by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 18 Nov 2022 06:11:56 +0000 (GMT)
+        Fri, 18 Nov 2022 06:11:54 +0000 (GMT)
 Content-Type: text/plain;
         charset=us-ascii
 Subject: Re: [PATCH 1/2] scsi: alua: Revert "Move a scsi_device_put() call out
@@ -67,18 +67,18 @@ References: <20221117183626.2656196-1-bvanassche@acm.org>
 To:     Bart Van Assche <bvanassche@acm.org>
 X-Mailer: Apple Mail (2.3731.200.110.1.12)
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 1ugb0mquoGJeQycYdBVLZouYucUsWbsv
-X-Proofpoint-GUID: 1ugb0mquoGJeQycYdBVLZouYucUsWbsv
+X-Proofpoint-GUID: MCxTAbuXWPgwm88GY10HgYR4QhaHbqgb
+X-Proofpoint-ORIG-GUID: MCxTAbuXWPgwm88GY10HgYR4QhaHbqgb
 Content-Transfer-Encoding: 7bit
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-17_06,2022-11-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 mlxlogscore=950 spamscore=0 malwarescore=0
- clxscore=1015 impostorscore=0 suspectscore=0 phishscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=950
+ adultscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
+ clxscore=1011 bulkscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2210170000 definitions=main-2211180041
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
