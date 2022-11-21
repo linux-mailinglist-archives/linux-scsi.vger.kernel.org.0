@@ -2,75 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B53963202F
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Nov 2022 12:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F2F632027
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Nov 2022 12:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbiKULRX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Nov 2022 06:17:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
+        id S231148AbiKULQk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Nov 2022 06:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbiKULQg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Nov 2022 06:16:36 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21FD1D646
-        for <linux-scsi@vger.kernel.org>; Mon, 21 Nov 2022 03:12:01 -0800 (PST)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NG4Nb0FPqzqSZb;
-        Mon, 21 Nov 2022 19:07:27 +0800 (CST)
-Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 19:11:20 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500003.china.huawei.com
- (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 21 Nov
- 2022 19:11:19 +0800
-From:   Yu Liao <liaoyu15@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-CC:     <liaoyu15@huawei.com>, <liwei391@huawei.com>
-Subject: [PATCH] scsi: qla2xxx: Simplify condition check in qlt_free_session_done
-Date:   Mon, 21 Nov 2022 19:09:15 +0800
-Message-ID: <20221121110915.3450528-1-liaoyu15@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230407AbiKULQU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Nov 2022 06:16:20 -0500
+Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5BCC287E;
+        Mon, 21 Nov 2022 03:11:35 -0800 (PST)
+From:   Denis Arefev <arefev@swemel.ru>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
+        t=1669029064;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/EgY2lXCAdAF7z2NAmaypvnrmSLjUVovTOiSsKJSrC4=;
+        b=mrCHEs3LP4MiDp0HC7rR5o7PSz4Lyw/+K937QFY9hwoliOXZZU+B77+qFTxW/KOALmNICq
+        HZrN9qokGljlUTPg6PfBqMxjQG5KflbSyKzvcz/8oS+G0Jg6sBb7s7vydcUKH27vIEOGWj
+        QxGwY+0unt7q36VMC06COYt5syj09wU=
+To:     Anil Gurumurthy <anil.gurumurthy@qlogic.com>
+Cc:     Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trufanov@swemel.ru, vfh@swemel.ru
+Subject: 
+Date:   Mon, 21 Nov 2022 14:11:04 +0300
+Message-Id: <20221121111104.7186-1-arefev@swemel.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500003.china.huawei.com (7.185.36.200)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-!A || (A && B) is equivalent to !A || B. Hence, simplify condition.
+Date: Mon, 21 Nov 2022 13:29:03 +0300
+Subject: [PATCH] scsi:bfa: Eliminated buffer overflow
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Yu Liao <liaoyu15@huawei.com>
+Buffer 'cmd->adapter_hwpath' of size 32 accessed at
+bfad_bsg.c:101:103 can overflow, since its index 'i'
+can have value 32 that is out of range.
+
+Signed-off-by: Denis Arefev <arefev@swemel.ru>
 ---
- drivers/scsi/qla2xxx/qla_target.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/bfa/bfad_bsg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index bb754a950802..1e3e38d35968 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -1028,8 +1028,7 @@ void qlt_free_session_done(struct work_struct *work)
- 		}
+diff --git a/drivers/scsi/bfa/bfad_bsg.c b/drivers/scsi/bfa/bfad_bsg.c
+index be8dfbe13e90..78615ffc62ef 100644
+--- a/drivers/scsi/bfa/bfad_bsg.c
++++ b/drivers/scsi/bfa/bfad_bsg.c
+@@ -98,9 +98,9 @@ bfad_iocmd_ioc_get_info(struct bfad_s *bfad, void *cmd)
  
- 		if (ha->flags.edif_enabled &&
--		    (!own || (own &&
--			      own->iocb.u.isp24.status_subcode == ELS_PLOGI))) {
-+		    (!own || own->iocb.u.isp24.status_subcode == ELS_PLOGI)) {
- 			sess->edif.authok = 0;
- 			if (!ha->flags.host_shutting_down) {
- 				ql_dbg(ql_dbg_edif, vha, 0x911e,
+ 	/* set adapter hw path */
+ 	strcpy(iocmd->adapter_hwpath, bfad->pci_name);
+-	for (i = 0; iocmd->adapter_hwpath[i] != ':' && i < BFA_STRING_32; i++)
++	for (i = 0; iocmd->adapter_hwpath[i] != ':' && i < BFA_STRING_32-2; i++)
+ 		;
+-	for (; iocmd->adapter_hwpath[++i] != ':' && i < BFA_STRING_32; )
++	for (; iocmd->adapter_hwpath[++i] != ':' && i < BFA_STRING_32-1; )
+ 		;
+ 	iocmd->adapter_hwpath[i] = '\0';
+ 	iocmd->status = BFA_STATUS_OK;
 -- 
 2.25.1
 
