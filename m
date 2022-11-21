@@ -2,57 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFCF6316C9
-	for <lists+linux-scsi@lfdr.de>; Sun, 20 Nov 2022 23:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 905226317CA
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Nov 2022 01:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiKTWWl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 20 Nov 2022 17:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
+        id S229848AbiKUAfR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 20 Nov 2022 19:35:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiKTWWg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Nov 2022 17:22:36 -0500
-Received: from mo4-p04-ob.smtp.rzone.de (mo4-p04-ob.smtp.rzone.de [85.215.255.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CCF9FC8;
-        Sun, 20 Nov 2022 14:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1668982949;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=1XznSLoa8sEKJ2TJbavwF0mcz8Vokg4eo59VUxsl9Xw=;
-    b=pI1uxzt8lGvjuPqCiyiF8hOf7dGfzKDYNqZVE0VX/0mZFmKWJkBzS1PSfGWuvSFzv7
-    wi1VSbSE1Hxd0HqKVA3PcFGsPPxmb2GRp1Iugaqmo3DTwVZlKmZCKap2UtH6u6I2il1H
-    BS4xBk8VrdBzFzjyfX5Uvp28FyZT33AjmlRaqMHnND12zF6OslD2bW1eyXdev1+X5ARE
-    G2ikByL0PrOBoSRFnk206tUkSaxa7JJhtGAe74TZgT7QpuG8ibGE/tu1SNMwwQTsUUCl
-    czA/ISq1ejSnM3pwNgRCVjVKc7uLKHsRRjXEKFQET+jbSYNTNnI6oAvx/ObPit+nP8ns
-    FgXg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1QLj68UeUr1+U1RvWtIfZ/7Q8ZGqEBlwxF4QH61wYa9UK/y81Dg=="
-X-RZG-CLASS-ID: mo03
-Received: from blinux.speedport.ip
-    by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id z9cfbfyAKMMSWcA
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 20 Nov 2022 23:22:28 +0100 (CET)
-From:   Bean Huo <beanhuo@iokpp.de>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        daejun7.park@samsung.com, quic_cang@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
-        quic_richardp@quicinc.com, quic_asutoshd@quicinc.com, hare@suse.de
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] ufs: core: Add advanced RPMB support in ufs_bsg
-Date:   Sun, 20 Nov 2022 23:22:17 +0100
-Message-Id: <20221120222217.108492-7-beanhuo@iokpp.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221120222217.108492-1-beanhuo@iokpp.de>
-References: <20221120222217.108492-1-beanhuo@iokpp.de>
+        with ESMTP id S229933AbiKUAfB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 20 Nov 2022 19:35:01 -0500
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF1DB2D
+        for <linux-scsi@vger.kernel.org>; Sun, 20 Nov 2022 16:34:39 -0800 (PST)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221121003432epoutp03740d8169557d170f5c9194df01d2abf4~pclsfViD92369223692epoutp03r
+        for <linux-scsi@vger.kernel.org>; Mon, 21 Nov 2022 00:34:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221121003432epoutp03740d8169557d170f5c9194df01d2abf4~pclsfViD92369223692epoutp03r
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1668990872;
+        bh=BvjD1EvWtFZ3n4cwRbkPz7m31epfqvknwMJOF3uafG8=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=LxmZJSh27Pnna6ii4g2LtDj8MrcHGwS92l2x3fUI7fzWZD4RCETl1HABUHv0XYPiF
+         AaNAXh4mYl+gNIB7/Q0yjKYLciqQPYIfjjfecjKE2l6ekXGW8SL7TBpHsOmT4kG5s9
+         i2qS1U3T982PAPl4RVwiayvGGXri/s1qkHdnK4DQ=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20221121003432epcas1p3cb1fb6b4d4f600b36a6d212521b844ca~pclsEEivr0115401154epcas1p35;
+        Mon, 21 Nov 2022 00:34:32 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.38.247]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4NFpLH3dqXz4x9QC; Mon, 21 Nov
+        2022 00:34:31 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        5A.88.07146.797CA736; Mon, 21 Nov 2022 09:34:31 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20221121003431epcas1p1429429bf4bc1670c7b82b3889c017049~pclrBVIUi2214322143epcas1p1N;
+        Mon, 21 Nov 2022 00:34:31 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221121003431epsmtrp118e53d077b451ab31169e28cf8c8fc5a~pclrAdtK11572115721epsmtrp13;
+        Mon, 21 Nov 2022 00:34:31 +0000 (GMT)
+X-AuditID: b6c32a35-205ff70000021bea-c0-637ac797c3d4
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AF.E2.14392.697CA736; Mon, 21 Nov 2022 09:34:30 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.253.100.232]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20221121003430epsmtip2c936a1b9499d6689cde8d38829accf4a~pclq3sapg0494604946epsmtip2R;
+        Mon, 21 Nov 2022 00:34:30 +0000 (GMT)
+From:   Chanwoo Lee <cw9316.lee@samsung.com>
+To:     stanley.chu@mediatek.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, matthias.bgg@gmail.com,
+        linux-scsi@vger.kernel.org, linux-mediatek@lists.infradead.org
+Cc:     ChanWoo Lee <cw9316.lee@samsung.com>
+Subject: [PATCH] scsi: ufs: ufs-mediatek: Remove unnecessary return code
+Date:   Mon, 21 Nov 2022 09:33:38 +0900
+Message-Id: <20221121003338.11034-1-cw9316.lee@samsung.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjk+LIzCtJLcpLzFFi42LZdlhTT3f68apkg4aPEhYzTrWxWiy6sY3J
+        4nLzRUaL7us72CyWH//HZNHUYmyxdOtNRgd2j52z7rJ7TFh0gNFj85J6j5aT+1k8Pj69xeLR
+        t2UVo8fnTXIB7FHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+
+        AbpumTlA5ygplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswK9IoTc4tL89L18lJL
+        rAwNDIxMgQoTsjMOHWtmLjjPU7Hl9222BsZdXF2MHBwSAiYSUzcBmVwcQgI7GCWur7rPBOF8
+        YpToWH+NHcL5xiixf9F2RpiOdbe8IOJ7GSVetnQDFXECOV8YJbo/y4PUsAloSdw+5g1SIyKw
+        glHi6uFnLCA1zAIaEidnPQGrFxbwkGjY9Z8dpJ5FQFWi41gSSJhXwFpi/5c1rCC2hIC8xJ/7
+        PcwQcUGJkzOfQI2Rl2jeOpsZZL6EwC12ia2tS5kgGlwkpn9rg7KFJV4d38IOYUtJvOxvY4do
+        aGaU2Pb1EhOE08EosbH1BSNElbHEp8+fwb5kFtCUWL9LHyKsKLHz91xGiM18Eu++9rBCAoJX
+        oqNNCKJERWJO1zk2mF0fbzyGesBD4veBa0yQ8ImVePn8PcsERvlZSP6ZheSfWQiLFzAyr2IU
+        Sy0ozk1PLTYsMITHaXJ+7iZGcILUMt3BOPHtB71DjEwcjIcYJTiYlUR4RY5VJgvxpiRWVqUW
+        5ccXleakFh9iNAUG8ERmKdHkfGCKziuJNzSxNDAxMzKxMLY0NlMS522YoZUsJJCeWJKanZpa
+        kFoE08fEwSnVwJRZ9fZ1TwAb+60ouYklJadqlF7GSsn6t6y4cajgCvOms4ttZGeUFjzbsLkl
+        aWZ4a6j94tm/TDbZLuXKvLz3kvtl9Wh+bs/Fd7VO/4h6L9H9fMIOQ0P21269+2tfnFivOcVw
+        Rr1v5knLqGLz7YsmHCmuy0+Mmp8Xszz9TG5LcPuVA7ulOW1SjeTPP1m/9sumj0ZXOR5Y7f6p
+        NsVebPKUBNbjK/xeyEdJFQqxV1w+uOfJdY+E6Sutm8u5O4zPyV75eMbjl1aNEL+nu+miwzr6
+        7xyvrWFZv/kAM8Nupqk/3eYWfPo80yFjcXR8pO3X9oRtP+8ZaGjI1fW/Prlaj5FH56+7SV3t
+        +aze91act060JCuxFGckGmoxFxUnAgDM4IyRGQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCLMWRmVeSWpSXmKPExsWy7bCSvO6041XJBg1PrSxmnGpjtVh0YxuT
+        xeXmi4wW3dd3sFksP/6PyaKpxdhi6dabjA7sHjtn3WX3mLDoAKPH5iX1Hi0n97N4fHx6i8Wj
+        b8sqRo/Pm+QC2KO4bFJSczLLUov07RK4Mg4da2YuOM9TseX3bbYGxl1cXYwcHBICJhLrbnl1
+        MXJxCAnsZpS4sm41SxcjJ1BcSmL3/vNsEDXCEocPF0PUfGKUuH5tKhNInE1AS+L2MW+QuIjA
+        OkaJM9t+M4L0MgtoSJyc9YQdxBYW8JBo2PWfHaSeRUBVouNYEkiYV8BaYv+XNawQq+Ql/tzv
+        YYaIC0qcnPmEBWKMvETz1tnMExj5ZiFJzUKSWsDItIpRMrWgODc9t9iwwDAvtVyvODG3uDQv
+        XS85P3cTIzhgtTR3MG5f9UHvECMTB+MhRgkOZiURXpFjlclCvCmJlVWpRfnxRaU5qcWHGKU5
+        WJTEeS90nYwXEkhPLEnNTk0tSC2CyTJxcEo1MJkpnHz785r5ksi/l6bO2xLJsVVKk5OVNTJj
+        cuM0xbCgtxHMKZ0CYRq6ezIZ105QFflonLW+5YHSzTmsE1r6v/w4w6d5+pJA0fH5yiK2Gkdf
+        iK5WTDbe9/bZmrnLltcyKGuVZvhzCXxTepNfsEq9vCu0vWPquznNDytuTEiZsyqgUuvIn5Pn
+        GL2fzVhzvmvfIZ68BYnLS7meX+JL6ODjmu70gl9itvTu6LI7vlcWxdnEigb+XqV1sIDJ5+yk
+        zTNldxad/M6atuzbpgkHa8xcrFWD9PKyVxR/ljuXKeeh/S/jydpfwpN7Tgk0zSy9e1y0YkNI
+        eXDUmbJ0pp8KXdePrUjtnBRgqHfuvb9syrXnxUosxRmJhlrMRcWJADuug1bHAgAA
+X-CMS-MailID: 20221121003431epcas1p1429429bf4bc1670c7b82b3889c017049
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221121003431epcas1p1429429bf4bc1670c7b82b3889c017049
+References: <CGME20221121003431epcas1p1429429bf4bc1670c7b82b3889c017049@epcas1p1.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,446 +112,58 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+From: ChanWoo Lee <cw9316.lee@samsung.com>
 
-Add advanced RPMB support in ufs_bsg. For these reasons, we try to add
-Advanced RPMB support in ufs_bsg:
+Modify to remove unnecessary 'return 0' code.
 
-1. According to the UFS specification, only one RPMB operation can be
-performed at any time. We can ensure this by using reserved slot and
-its dev_cmd sync operation protection mechanism.
-
-2. For the Advanced RPMB, RPMB metadata is packaged in an EHS(Extra
-Header Segment) of a command UPIU, and the corresponding reply EHS
-(from the device) should also be returned to the user space.
-bsg_job->request and bsg_job->reply allow us to pass and return EHS
-from/back to userspace.
-
-Compared to normal/legacy RPMB, the advantage of advanced RPMB are:
-
-1. The data length in the Advanced RPBM data read/write command could
-be > 4KB. For the legacy RPMB, the data length in a single RPMB data
-transfer is 256 bytes.
-2.  All of the advanced RPMB operations will be a single command shot.
-But for the legacy  RPBM, take the read write-counter value as an example,
-you need two commands(first SECURITY PROTOCOL OUT, then the second SECURITY
-PROTOCOL IN).
-
-Signed-off-by: Bean Huo <beanhuo@micron.com>
+Signed-off-by: ChanWoo Lee <cw9316.lee@samsung.com>
 ---
- drivers/ufs/core/ufs_bsg.c       | 93 ++++++++++++++++++++++++++----
- drivers/ufs/core/ufshcd.c        | 99 ++++++++++++++++++++++++++++++++
- include/uapi/scsi/scsi_bsg_ufs.h | 46 ++++++++++++++-
- include/ufs/ufs.h                |  5 ++
- include/ufs/ufshcd.h             |  6 +-
- include/ufs/ufshci.h             |  1 +
- 6 files changed, 238 insertions(+), 12 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/ufs/core/ufs_bsg.c b/drivers/ufs/core/ufs_bsg.c
-index 850a0d798f63..a8e58faa7da2 100644
---- a/drivers/ufs/core/ufs_bsg.c
-+++ b/drivers/ufs/core/ufs_bsg.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/bsg-lib.h>
-+#include <linux/dma-mapping.h>
- #include <scsi/scsi.h>
- #include <scsi/scsi_host.h>
- #include "ufs_bsg.h"
-@@ -68,6 +69,72 @@ static int ufs_bsg_alloc_desc_buffer(struct ufs_hba *hba, struct bsg_job *job,
- 	return 0;
+diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
+index ef5816d82326..21d9b047539f 100644
+--- a/drivers/ufs/host/ufs-mediatek.c
++++ b/drivers/ufs/host/ufs-mediatek.c
+@@ -1095,7 +1095,7 @@ static void ufs_mtk_setup_clk_gating(struct ufs_hba *hba)
+ 	}
  }
  
-+static int ufs_bsg_exec_advanced_rpmb_req(struct ufs_hba *hba, struct bsg_job *job)
-+{
-+	struct ufs_rpmb_request *rpmb_request = job->request;
-+	struct ufs_rpmb_reply *rpmb_reply = job->reply;
-+	struct bsg_buffer *payload = NULL;
-+	enum dma_data_direction dir;
-+	struct scatterlist *sg_list;
-+	int rpmb_req_type;
-+	int sg_cnt;
-+	int ret;
-+	int data_len;
-+
-+	if (hba->ufs_version < ufshci_version(4, 0) || !hba->dev_info.b_advanced_rpmb_en ||
-+	    !(hba->capabilities & MASK_EHSLUTRD_SUPPORTED))
-+		return -EINVAL;
-+
-+	if (rpmb_request->ehs_req.length != 2 || rpmb_request->ehs_req.ehs_type != 1)
-+		return -EINVAL;
-+
-+	rpmb_req_type = be16_to_cpu(rpmb_request->ehs_req.meta.req_resp_type);
-+
-+	switch (rpmb_req_type) {
-+	case UFS_RPMB_WRITE_KEY:
-+	case UFS_RPMB_READ_CNT:
-+	case UFS_RPMB_PURGE_ENABLE:
-+		dir = DMA_NONE;
-+		break;
-+	case UFS_RPMB_WRITE:
-+	case UFS_RPMB_SEC_CONF_WRITE:
-+		dir = DMA_TO_DEVICE;
-+		break;
-+	case UFS_RPMB_READ:
-+	case UFS_RPMB_SEC_CONF_READ:
-+	case UFS_RPMB_PURGE_STATUS_READ:
-+		dir = DMA_FROM_DEVICE;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (dir != DMA_NONE) {
-+		payload = &job->request_payload;
-+		if (!payload || !payload->payload_len || !payload->sg_cnt)
-+			return -EINVAL;
-+
-+		sg_cnt = dma_map_sg(hba->host->dma_dev, payload->sg_list, payload->sg_cnt, dir);
-+		if (unlikely(!sg_cnt))
-+			return -ENOMEM;
-+		sg_list = payload->sg_list;
-+		data_len = payload->payload_len;
-+	}
-+
-+	ret = ufshcd_advanced_rpmb_req_handler(hba, &rpmb_request->bsg_request.upiu_req,
-+				   &rpmb_reply->bsg_reply.upiu_rsp, &rpmb_request->ehs_req,
-+				   &rpmb_reply->ehs_rsp, sg_cnt, sg_list, dir);
-+
-+	if (dir != DMA_NONE) {
-+		dma_unmap_sg(hba->host->dma_dev, payload->sg_list, payload->sg_cnt, dir);
-+
-+		if (!ret)
-+			rpmb_reply->bsg_reply.reply_payload_rcv_len = data_len;
-+	}
-+
-+	return ret;
-+}
-+
- static int ufs_bsg_request(struct bsg_job *job)
+-static int ufs_mtk_post_link(struct ufs_hba *hba)
++static void ufs_mtk_post_link(struct ufs_hba *hba)
  {
- 	struct ufs_bsg_request *bsg_request = job->request;
-@@ -75,10 +142,11 @@ static int ufs_bsg_request(struct bsg_job *job)
- 	struct ufs_hba *hba = shost_priv(dev_to_shost(job->dev->parent));
- 	struct uic_command uc = {};
- 	int msgcode;
--	uint8_t *desc_buff = NULL;
-+	uint8_t *buff = NULL;
- 	int desc_len = 0;
- 	enum query_opcode desc_op = UPIU_QUERY_OPCODE_NOP;
- 	int ret;
-+	bool rpmb = false;
+ 	/* enable unipro clock gating feature */
+ 	ufs_mtk_cfg_unipro_cg(hba, true);
+@@ -1106,8 +1106,6 @@ static int ufs_mtk_post_link(struct ufs_hba *hba)
+ 			FIELD_PREP(UFSHCI_AHIBERN8_SCALE_MASK, 3);
  
- 	bsg_reply->reply_payload_rcv_len = 0;
- 
-@@ -88,8 +156,7 @@ static int ufs_bsg_request(struct bsg_job *job)
- 	switch (msgcode) {
- 	case UPIU_TRANSACTION_QUERY_REQ:
- 		desc_op = bsg_request->upiu_req.qr.opcode;
--		ret = ufs_bsg_alloc_desc_buffer(hba, job, &desc_buff,
--						&desc_len, desc_op);
-+		ret = ufs_bsg_alloc_desc_buffer(hba, job, &buff, &desc_len, desc_op);
- 		if (ret)
- 			goto out;
- 		fallthrough;
-@@ -97,25 +164,31 @@ static int ufs_bsg_request(struct bsg_job *job)
- 	case UPIU_TRANSACTION_TASK_REQ:
- 		ret = ufshcd_exec_raw_upiu_cmd(hba, &bsg_request->upiu_req,
- 					       &bsg_reply->upiu_rsp, msgcode,
--					       desc_buff, &desc_len, desc_op);
-+					       buff, &desc_len, desc_op);
- 		if (ret)
- 			dev_err(hba->dev, "exe raw upiu: error code %d\n", ret);
--		else if (desc_op == UPIU_QUERY_OPCODE_READ_DESC && desc_len)
-+		else if (desc_op == UPIU_QUERY_OPCODE_READ_DESC && desc_len) {
- 			bsg_reply->reply_payload_rcv_len =
- 				sg_copy_from_buffer(job->request_payload.sg_list,
- 						    job->request_payload.sg_cnt,
--						    desc_buff, desc_len);
-+						    buff, desc_len);
-+		}
- 		break;
- 	case UPIU_TRANSACTION_UIC_CMD:
- 		memcpy(&uc, &bsg_request->upiu_req.uc, UIC_CMD_SIZE);
- 		ret = ufshcd_send_uic_cmd(hba, &uc);
- 		if (ret)
--			dev_err(hba->dev,
--				"send uic cmd: error code %d\n", ret);
-+			dev_err(hba->dev, "send uic cmd: error code %d\n", ret);
- 
- 		memcpy(&bsg_reply->upiu_rsp.uc, &uc, UIC_CMD_SIZE);
- 
- 		break;
-+	case UPIU_TRANSACTION_ARPMB_CMD:
-+		rpmb = true;
-+		ret = ufs_bsg_exec_advanced_rpmb_req(hba, job);
-+		if (ret)
-+			dev_err(hba->dev, "ARPMB OP failed: error code  %d\n", ret);
-+		break;
- 	default:
- 		ret = -ENOTSUPP;
- 		dev_err(hba->dev, "unsupported msgcode 0x%x\n", msgcode);
-@@ -125,9 +198,9 @@ static int ufs_bsg_request(struct bsg_job *job)
- 
- out:
- 	ufshcd_rpm_put_sync(hba);
--	kfree(desc_buff);
-+	kfree(buff);
- 	bsg_reply->result = ret;
--	job->reply_len = sizeof(struct ufs_bsg_reply);
-+	job->reply_len = !rpmb ? sizeof(struct ufs_bsg_reply) : sizeof(struct ufs_rpmb_reply);
- 	/* complete the job here only if no error */
- 	if (ret == 0)
- 		bsg_job_done(job, ret, bsg_reply->reply_payload_rcv_len);
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 2936e1e583c3..863aa9dd28bb 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -56,6 +56,9 @@
- /* Query request timeout */
- #define QUERY_REQ_TIMEOUT 1500 /* 1.5 seconds */
- 
-+/* Advanced RPMB request timeout */
-+#define ADVANCED_RPMB_REQ_TIMEOUT  3000 /* 3 seconds */
-+
- /* Task management command timeout */
- #define TM_CMD_TIMEOUT	100 /* msecs */
- 
-@@ -2956,6 +2959,12 @@ ufshcd_dev_cmd_completion(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
- 		dev_err(hba->dev, "%s: Reject UPIU not fully implemented\n",
- 				__func__);
- 		break;
-+	case UPIU_TRANSACTION_RESPONSE:
-+		if (hba->dev_cmd.type != DEV_CMD_TYPE_RPMB) {
-+			err = -EINVAL;
-+			dev_err(hba->dev, "%s: unexpected response %x\n", __func__, resp);
-+		}
-+		break;
- 	default:
- 		err = -EINVAL;
- 		dev_err(hba->dev, "%s: Invalid device management cmd response: %x\n",
-@@ -6984,6 +6993,96 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
- 	return err;
+ 	ufs_mtk_setup_clk_gating(hba);
+-
+-	return 0;
  }
  
-+/**
-+ * ufshcd_advanced_rpmb_req_handler - handle advanced RPMB request
-+ * @hba:	per adapter instance
-+ * @req_upiu:	upiu request
-+ * @rsp_upiu:	upiu reply
-+ * @req_ehs:	EHS field which contains Advanced RPMB Request Message
-+ * @rsp_ehs:	EHS field which returns Advanced RPMB Response Message
-+ * @sg_cnt:	The number of sg lists actually used
-+ * @sg_list:	Pointer to SG list when DATA IN/OUT UPIU is required in ARPMB operation
-+ * @dir:	DMA direction
-+ *
-+ * Returns zero on success, non-zero on failure
-+ */
-+int ufshcd_advanced_rpmb_req_handler(struct ufs_hba *hba, struct utp_upiu_req *req_upiu,
-+			 struct utp_upiu_req *rsp_upiu, struct ufs_ehs *req_ehs,
-+			 struct ufs_ehs *rsp_ehs, int sg_cnt, struct scatterlist *sg_list,
-+			 enum dma_data_direction dir)
-+{
-+	DECLARE_COMPLETION_ONSTACK(wait);
-+	const u32 tag = hba->reserved_slot;
-+	struct ufshcd_lrb *lrbp;
-+	int err = 0;
-+	u8 upiu_flags;
-+	u8 *ehs_data;
-+	u16 ehs_len;
-+
-+	/* Protects use of hba->reserved_slot. */
-+	ufshcd_hold(hba, false);
-+	mutex_lock(&hba->dev_cmd.lock);
-+	down_read(&hba->clk_scaling_lock);
-+
-+	lrbp = &hba->lrb[tag];
-+	WARN_ON(lrbp->cmd);
-+	lrbp->cmd = NULL;
-+	lrbp->task_tag = tag;
-+	lrbp->lun = UFS_UPIU_RPMB_WLUN;
-+
-+	lrbp->intr_cmd = true;
-+	ufshcd_prepare_lrbp_crypto(NULL, lrbp);
-+	hba->dev_cmd.type = DEV_CMD_TYPE_RPMB;
-+
-+	/* Advanced RPMB starts from UFS 4.0, so its command type is UTP_CMD_TYPE_UFS_STORAGE */
-+	lrbp->command_type = UTP_CMD_TYPE_UFS_STORAGE;
-+
-+	ufshcd_prepare_req_desc_hdr(lrbp, &upiu_flags, dir, 2);
-+
-+	/* update the task tag and LUN in the request upiu */
-+	req_upiu->header.dword_0 |= cpu_to_be32(upiu_flags << 16 | UFS_UPIU_RPMB_WLUN << 8 | tag);
-+
-+	/* copy the UPIU(contains CDB) request as it is */
-+	memcpy(lrbp->ucd_req_ptr, req_upiu, sizeof(*lrbp->ucd_req_ptr));
-+	/* Copy EHS, starting with byte32, immediately after the CDB package */
-+	memcpy(lrbp->ucd_req_ptr + 1, req_ehs, sizeof(*req_ehs));
-+
-+	if (dir != DMA_NONE && sg_list)
-+		ufshcd_sgl_to_prdt(hba, lrbp, sg_cnt, sg_list);
-+
-+	memset(lrbp->ucd_rsp_ptr, 0, sizeof(struct utp_upiu_rsp));
-+
-+	hba->dev_cmd.complete = &wait;
-+
-+	ufshcd_send_command(hba, tag);
-+
-+	err = ufshcd_wait_for_dev_cmd(hba, lrbp, ADVANCED_RPMB_REQ_TIMEOUT);
-+
-+	if (!err) {
-+		/* just copy the upiu response as it is */
-+		memcpy(rsp_upiu, lrbp->ucd_rsp_ptr, sizeof(*rsp_upiu));
-+		ehs_len = be32_to_cpu(lrbp->ucd_rsp_ptr->header.dword_2) >> 24;
-+		/*
-+		 * Since the bLength in EHS indicates the total size of the EHS Header and EHS Data
-+		 * in 32 Byte units, the value of the bLength Request/Response for Advanced RPMB
-+		 * Message is 02h
-+		 */
-+		if (ehs_len == 2 && rsp_ehs) {
-+			/*
-+			 * ucd_rsp_ptr points to a buffer with a length of 512 bytes
-+			 * (ALIGNED_UPIU_SIZE = 512), and the EHS data just starts from byte32
-+			 */
-+			ehs_data = (u8 *)lrbp->ucd_rsp_ptr + EHS_OFFSET_IN_RESPONSE;
-+			memcpy(rsp_ehs, ehs_data, ehs_len * 32);
-+		}
-+	}
-+
-+	up_read(&hba->clk_scaling_lock);
-+	mutex_unlock(&hba->dev_cmd.lock);
-+	ufshcd_release(hba);
-+	return err;
-+}
-+
- /**
-  * ufshcd_eh_device_reset_handler() - Reset a single logical unit.
-  * @cmd: SCSI command pointer
-diff --git a/include/uapi/scsi/scsi_bsg_ufs.h b/include/uapi/scsi/scsi_bsg_ufs.h
-index d55f2176dfd4..1d605aaf5d6f 100644
---- a/include/uapi/scsi/scsi_bsg_ufs.h
-+++ b/include/uapi/scsi/scsi_bsg_ufs.h
-@@ -14,10 +14,27 @@
-  */
+ static int ufs_mtk_link_startup_notify(struct ufs_hba *hba,
+@@ -1120,7 +1118,7 @@ static int ufs_mtk_link_startup_notify(struct ufs_hba *hba,
+ 		ret = ufs_mtk_pre_link(hba);
+ 		break;
+ 	case POST_CHANGE:
+-		ret = ufs_mtk_post_link(hba);
++		ufs_mtk_post_link(hba);
+ 		break;
+ 	default:
+ 		ret = -EINVAL;
+@@ -1272,9 +1270,8 @@ static int ufs_mtk_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
+ 	struct arm_smccc_res res;
  
- #define UFS_CDB_SIZE	16
--#define UPIU_TRANSACTION_UIC_CMD 0x1F
- /* uic commands are 4DW long, per UFSHCI V2.1 paragraph 5.6.1 */
- #define UIC_CMD_SIZE (sizeof(__u32) * 4)
+ 	if (status == PRE_CHANGE) {
+-		if (!ufshcd_is_auto_hibern8_supported(hba))
+-			return 0;
+-		ufs_mtk_auto_hibern8_disable(hba);
++		if (ufshcd_is_auto_hibern8_supported(hba))
++			ufs_mtk_auto_hibern8_disable(hba);
+ 		return 0;
+ 	}
  
-+enum ufs_bsg_msg_code {
-+	UPIU_TRANSACTION_UIC_CMD = 0x1F,
-+	UPIU_TRANSACTION_ARPMB_CMD,
-+};
-+
-+/* UFS RPMB Request Message Types */
-+enum ufs_rpmb_op_type {
-+	UFS_RPMB_WRITE_KEY		= 0x01,
-+	UFS_RPMB_READ_CNT		= 0x02,
-+	UFS_RPMB_WRITE			= 0x03,
-+	UFS_RPMB_READ			= 0x04,
-+	UFS_RPMB_READ_RESP		= 0x05,
-+	UFS_RPMB_SEC_CONF_WRITE		= 0x06,
-+	UFS_RPMB_SEC_CONF_READ		= 0x07,
-+	UFS_RPMB_PURGE_ENABLE		= 0x08,
-+	UFS_RPMB_PURGE_STATUS_READ	= 0x09,
-+};
-+
- /**
-  * struct utp_upiu_header - UPIU header structure
-  * @dword_0: UPIU header DW-0
-@@ -79,6 +96,23 @@ struct utp_upiu_req {
- 	};
- };
- 
-+struct ufs_arpmb_meta {
-+	__u16	req_resp_type;
-+	__u8	nonce[16];
-+	__u32	write_counter;
-+	__u16	addr_lun;
-+	__u16	block_count;
-+	__u16	result;
-+};
-+
-+struct ufs_ehs {
-+	__u8	length;
-+	__u8	ehs_type;
-+	__u16	ehssub_type;
-+	struct ufs_arpmb_meta meta;
-+	__u8	mac_key[32];
-+};
-+
- /* request (CDB) structure of the sg_io_v4 */
- struct ufs_bsg_request {
- 	__u32 msgcode;
-@@ -102,4 +136,14 @@ struct ufs_bsg_reply {
- 
- 	struct utp_upiu_req upiu_rsp;
- };
-+
-+struct ufs_rpmb_request {
-+	struct ufs_bsg_request bsg_request;
-+	struct ufs_ehs ehs_req;
-+};
-+
-+struct ufs_rpmb_reply {
-+	struct ufs_bsg_reply bsg_reply;
-+	struct ufs_ehs ehs_rsp;
-+};
- #endif /* UFS_BSG_H */
-diff --git a/include/ufs/ufs.h b/include/ufs/ufs.h
-index 17e401df674c..0c112195b288 100644
---- a/include/ufs/ufs.h
-+++ b/include/ufs/ufs.h
-@@ -49,6 +49,11 @@
-  */
- #define UFS_WB_EXCEED_LIFETIME		0x0B
- 
-+/*
-+ * In UFS Spec, the Extra Header Segment (EHS) starts from byte 32 in UPIU request/response packet
-+ */
-+#define EHS_OFFSET_IN_RESPONSE 32
-+
- /* Well known logical unit id in LUN field of UPIU */
- enum {
- 	UFS_UPIU_REPORT_LUNS_WLUN	= 0x81,
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 5cf81dff60aa..c3dfa8084b5c 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -30,6 +30,7 @@ struct ufs_hba;
- enum dev_cmd_type {
- 	DEV_CMD_TYPE_NOP		= 0x0,
- 	DEV_CMD_TYPE_QUERY		= 0x1,
-+	DEV_CMD_TYPE_RPMB		= 0x2,
- };
- 
- enum ufs_event_type {
-@@ -1201,7 +1202,10 @@ int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
- 			     int msgcode,
- 			     u8 *desc_buff, int *buff_len,
- 			     enum query_opcode desc_op);
--
-+int ufshcd_advanced_rpmb_req_handler(struct ufs_hba *hba, struct utp_upiu_req *req_upiu,
-+				     struct utp_upiu_req *rsp_upiu, struct ufs_ehs *ehs_req,
-+				     struct ufs_ehs *ehs_rsp, int sg_cnt,
-+				     struct scatterlist *sg_list, enum dma_data_direction dir);
- int ufshcd_wb_toggle(struct ufs_hba *hba, bool enable);
- int ufshcd_wb_toggle_buf_flush(struct ufs_hba *hba, bool enable);
- int ufshcd_suspend_prepare(struct device *dev);
-diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
-index f525566a0864..af216296b86e 100644
---- a/include/ufs/ufshci.h
-+++ b/include/ufs/ufshci.h
-@@ -63,6 +63,7 @@ enum {
- enum {
- 	MASK_TRANSFER_REQUESTS_SLOTS		= 0x0000001F,
- 	MASK_TASK_MANAGEMENT_REQUEST_SLOTS	= 0x00070000,
-+	MASK_EHSLUTRD_SUPPORTED			= 0x00400000,
- 	MASK_AUTO_HIBERN8_SUPPORT		= 0x00800000,
- 	MASK_64_ADDRESSING_SUPPORT		= 0x01000000,
- 	MASK_OUT_OF_ORDER_DATA_DELIVERY_SUPPORT	= 0x02000000,
 -- 
-2.25.1
+2.29.0
 
