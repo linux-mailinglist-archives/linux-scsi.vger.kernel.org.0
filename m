@@ -2,91 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9697B6368E3
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Nov 2022 19:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B86F4636BB4
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Nov 2022 21:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238832AbiKWScQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Nov 2022 13:32:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
+        id S236305AbiKWU6b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Nov 2022 15:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239813AbiKWSb6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Nov 2022 13:31:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB741CB69C;
-        Wed, 23 Nov 2022 10:31:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E3AC61E69;
-        Wed, 23 Nov 2022 18:31:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C22FEC433C1;
-        Wed, 23 Nov 2022 18:31:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669228294;
-        bh=K+Iq1u99ln+hWt6sHmpc/POIaayidRC/UWiGVIGIdPo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JWnz1fYtlQovd9Sfe2d4PpK7jSZeCJaljf/94LGXGqteXYfT08QpviBEtK9bQhwqw
-         SQ9+2Iv5n6HXH0auYSojq8L/BgP65EZpmw8ZONZcsId5WEopaI/a8UiBfid7flzF+R
-         xv4dXbjWBTHAC+ODl1jg+IZMWJB178FFxFe7H+qvKlTdfehFfSVZAo9tcMRoV9I2Ks
-         xo0zS8Hpi7OndVwilZP33AGfYc5NpkNZdCAAokI94jWLe+gZ8vnRjEgBCSWBAAZQo6
-         mjClvOwG52kLWL5eFaNooFlPP/hVZ3PZ9LJN9qeY90+G8JknHoGI1YmY6K6VTUEFm1
-         +Gki26dGDBEIQ==
-Date:   Wed, 23 Nov 2022 18:31:32 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        andersson@kernel.org, vkoul@kernel.org, quic_cang@quicinc.com,
-        quic_asutoshd@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-scsi@vger.kernel.org, dmitry.baryshkov@linaro.org,
-        ahalaney@redhat.com, abel.vesa@linaro.org
-Subject: Re: [PATCH v3 20/20] MAINTAINERS: Add myself as the maintainer for
- Qcom UFS driver
-Message-ID: <Y35nBIIRmu3w9C1C@gmail.com>
-References: <20221123074826.95369-1-manivannan.sadhasivam@linaro.org>
- <20221123074826.95369-21-manivannan.sadhasivam@linaro.org>
+        with ESMTP id S239170AbiKWU6H (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Nov 2022 15:58:07 -0500
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF29E0C8;
+        Wed, 23 Nov 2022 12:58:03 -0800 (PST)
+Received: by mail-pf1-f178.google.com with SMTP id x66so9828778pfx.3;
+        Wed, 23 Nov 2022 12:58:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rbxM8TRTKqiQCaG2etHAP+UycEMVCiMfi11R98Xmp3U=;
+        b=dRsh2TZAbnpcILQaMRoIWftrBqPvKesDwUIFtUZnHRRLPGM6pj8qRJoSOcRiL2K1xH
+         kNam7ApNCTtkj1N511uYtf5mQmOxtA9RFEAl46LJiTG6jI8fth47oCJ49Cx46YaQjRVA
+         7FY8IPl17Zv8Ij/Vz/2/gqeKj+EBSExgq5CReHcAHIK7xZW6dAlNtgKLnhtj9jEGhvjJ
+         Ti2sO3EMELf1lwRo8nMrSeDW12+1/lZ4petgaajCjmfA/+rNG1JVPq55gDURmS9CTId0
+         n6BysEyMpACHWGrhGuwtAJ/aDLeTK8Jq0dB5dm173F6NixVJe7ARU09DAvs9qC2iwxrK
+         LUdw==
+X-Gm-Message-State: ANoB5pmEwTY/kxhFSS+eorcxJZaMjcmVvrgm5zMgVSNh4DGPr8g/wrkW
+        +wPexIx3dqz8M5SQZQOYs4o=
+X-Google-Smtp-Source: AA0mqf59rGefP6xlUHtt0s7z/ntEnAYFtQJ3hLgZe4eN8vMiGWPmpoRjliG1W+ukJ2I0u6tPnBmwRA==
+X-Received: by 2002:a62:5f81:0:b0:56b:bb06:7dd5 with SMTP id t123-20020a625f81000000b0056bbb067dd5mr11190009pfb.3.1669237082397;
+        Wed, 23 Nov 2022 12:58:02 -0800 (PST)
+Received: from bvanassche-glaptop2.roam.corp.google.com ([2601:642:4c02:686d:4311:4764:eee7:ac6d])
+        by smtp.gmail.com with ESMTPSA id i89-20020a17090a3de200b0020b2082e0acsm1858809pjc.0.2022.11.23.12.58.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 12:58:01 -0800 (PST)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v2 0/8] Add support for segments smaller than one page
+Date:   Wed, 23 Nov 2022 12:57:32 -0800
+Message-Id: <20221123205740.463185-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123074826.95369-21-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 01:18:26PM +0530, Manivannan Sadhasivam wrote:
-> Qcom UFS driver has been left un-maintained till now. I'd like to step
-> up to maintain the driver and its binding.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cf0f18502372..149fd6daf52b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21097,6 +21097,14 @@ L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
->  S:	Maintained
->  F:	drivers/ufs/host/ufs-mediatek*
->  
-> +UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER QUALCOMM HOOKS
-> +M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> +L:	linux-arm-msm@vger.kernel.org
-> +L:	linux-scsi@vger.kernel.org
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> +F:	drivers/ufs/host/ufs-qcom.c
+Hi Jens,
 
-Thanks for volunteering to maintain this driver!
+Several embedded storage controllers need support for DMA segments that are
+smaller than the size of one virtual memory page. Hence this patch series.
+Please consider this patch series for the next merge window.
 
-What about ufs-qcom.h and ufs-qcom-ice.c?  Those are part of this driver too.
+Thanks,
 
-The pattern drivers/ufs/host/ufs-qcom* would cover all these files.
+Bart.
 
-- Eric
+Changes compared to v1:
+- Added a CONFIG variable that controls whether or not small segment support
+  is enabled.
+- Improved patch descriptions.
+
+Bart Van Assche (8):
+  block: Introduce CONFIG_BLK_SUB_PAGE_SEGMENTS and
+    QUEUE_FLAG_SUB_PAGE_SEGMENTS
+  block: Support configuring limits below the page size
+  block: Support submitting passthrough requests with small segments
+  block: Add support for filesystem requests and small segments
+  block: Add support for small segments in blk_rq_map_user_iov()
+  scsi: core: Set the SUB_PAGE_SEGMENTS request queue flag
+  scsi_debug: Support configuring the maximum segment size
+  null_blk: Support configuring the maximum segment size
+
+ block/Kconfig                     |  9 +++++++
+ block/blk-map.c                   | 43 ++++++++++++++++++++++++++-----
+ block/blk-merge.c                 |  6 +++--
+ block/blk-mq.c                    |  2 ++
+ block/blk-settings.c              | 20 ++++++++------
+ block/blk.h                       | 14 +++++++++-
+ drivers/block/null_blk/main.c     | 20 +++++++++++---
+ drivers/block/null_blk/null_blk.h |  1 +
+ drivers/scsi/scsi_debug.c         |  3 +++
+ drivers/scsi/scsi_lib.c           |  2 ++
+ include/linux/blkdev.h            |  7 +++++
+ 11 files changed, 107 insertions(+), 20 deletions(-)
+
