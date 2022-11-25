@@ -2,116 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC54638F2D
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Nov 2022 18:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1136390C2
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Nov 2022 21:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiKYRem (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Nov 2022 12:34:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
+        id S229990AbiKYUgc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Nov 2022 15:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKYRel (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Nov 2022 12:34:41 -0500
-Received: from mp-relay-01.fibernetics.ca (mp-relay-01.fibernetics.ca [208.85.217.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405C743AED
-        for <linux-scsi@vger.kernel.org>; Fri, 25 Nov 2022 09:34:40 -0800 (PST)
-Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mp-relay-01.fibernetics.ca (Postfix) with ESMTPS id D5FE3E17C8;
-        Fri, 25 Nov 2022 17:34:38 +0000 (UTC)
-Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
-        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id BCB3560460;
-        Fri, 25 Nov 2022 17:34:38 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: -0.199
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
-        by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
-        with ESMTP id Rz9xXZ8-6iPh; Fri, 25 Nov 2022 17:34:38 +0000 (UTC)
-Received: from [192.168.48.17] (host-45-78-203-98.dyn.295.ca [45.78.203.98])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dgilbert@interlog.com)
-        by mail.ca.inter.net (Postfix) with ESMTPSA id DD9336005F;
-        Fri, 25 Nov 2022 17:34:36 +0000 (UTC)
-Message-ID: <8a3a5d53-d1e1-0c95-4aea-923c46ac4e32@interlog.com>
-Date:   Fri, 25 Nov 2022 12:34:36 -0500
+        with ESMTP id S229757AbiKYUgb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Nov 2022 15:36:31 -0500
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD5353EFF
+        for <linux-scsi@vger.kernel.org>; Fri, 25 Nov 2022 12:36:30 -0800 (PST)
+Received: by mail-ot1-x343.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so3323215oti.5
+        for <linux-scsi@vger.kernel.org>; Fri, 25 Nov 2022 12:36:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TIhxpAqsxiwWwE4zx+/0K3DHs1igYNY8HnTilbOLRvQ=;
+        b=g0OJBX/L46Fe16Lu8zEyu6xd6xSVHHfq97nQNKYrqummezPA2qp8gg/t8N8ArDaTO7
+         Hwd4m3Vxq6TQMU2UwAnGx2P5nnedyCs6mjYmUbkRRLERZyLWiOU4mg8fbqxjPRan98tp
+         NBo1+ZD3gOZ3OQ10sA5JlhQ37oKvPtuf9CbFCLp6711KxhITVWtlRgooXlIedFsSFDbm
+         1IKn2t0f71/AQLNcDxX/bRK7+Ap6BrgRJcsDDpC8S9Owzy0TNB6IuCNxp8fWOoscfxst
+         /VomOB9HJo5ReVT2k+enfrXlsFjif3BLzC0XRYRsX1/3tQEjAHr1qR1T/RVRz97MosDD
+         YNCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TIhxpAqsxiwWwE4zx+/0K3DHs1igYNY8HnTilbOLRvQ=;
+        b=aAqP4Czu62qsRCXsxmlXs8X6mA52ElsSVHr3Cq82vsZY3qa1oyMoTKi8maCRt2UINN
+         mRdrpx+HlxbPognLCr3Eg0FdJyjPQp91uRMnyJNQXxCh2ZE+uSXL0POs6Gq7SGlhTumq
+         DXchVmWcbratLz1p0fxsEPyRhYTaxqnnQ9DHviyT8pLmY+4kndRHWfpu5b6JZ0HcXk8T
+         LuDO4o1u/rZ3G+tYFTmrJIweQYc1KbTlSrGMFHiwbd0/fV/6y3w6RyhC3ya7K6pBT9Rm
+         SI6XQ9fTGfdSWcLf4G3NMsolW062D+vxzAWPOHEPzJ/2M7uCogcXMSUL6fyR5VIHO5lw
+         M2nw==
+X-Gm-Message-State: ANoB5pkbe87H2j+3KrAXXmWw3qr8jgGSt57aOrFTmXtMa9iqZAgPgq1q
+        NG4SwOgaUnsMf2I7I6/ZT9iFEw9Wdag8fgHfoQ8=
+X-Google-Smtp-Source: AA0mqf7ChN5JGkIbDRjjvhf/QWBnxvtlwy5i8FG4PXziqxNpBN3InPngiVtC0CDPairmZ/7G3eX1kLqe+tA1UehCZqw=
+X-Received: by 2002:a05:6830:13c9:b0:66c:a3a8:3870 with SMTP id
+ e9-20020a05683013c900b0066ca3a83870mr10819424otq.54.1669408590110; Fri, 25
+ Nov 2022 12:36:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH v2 7/8] scsi_debug: Support configuring the maximum
- segment size
-To:     Bart Van Assche <bvanassche@acm.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-References: <20221123205740.463185-1-bvanassche@acm.org>
- <20221123205740.463185-8-bvanassche@acm.org>
-Content-Language: en-CA
-From:   Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <20221123205740.463185-8-bvanassche@acm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6840:6697:b0:faf:e552:8c5b with HTTP; Fri, 25 Nov 2022
+ 12:36:29 -0800 (PST)
+Reply-To: privatemails254@gmail.com
+From:   MS NADAGE LASSOU <hunhdd123@gmail.com>
+Date:   Fri, 25 Nov 2022 21:36:29 +0100
+Message-ID: <CA+9ouuqv2H=MoGCOvhsf_R2wTjr1sgutqb+QjhbyHF8SEMwLWg@mail.gmail.com>
+Subject: REPLY IMMEDIATELLY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:343 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4999]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [privatemails254[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [hunhdd123[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [hunhdd123[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2022-11-23 15:57, Bart Van Assche wrote:
-> Add a kernel module parameter for configuring the maximum segment size.
-> This patch enables testing SCSI support for segments smaller than the
-> page size.
-> 
-> Cc: Doug Gilbert <dgilbert@interlog.com>
-> Cc: Martin K. Petersen <martin.petersen@oracle.com>
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->   drivers/scsi/scsi_debug.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-> index bebda917b138..ea8f762c55c3 100644
-> --- a/drivers/scsi/scsi_debug.c
-> +++ b/drivers/scsi/scsi_debug.c
-> @@ -770,6 +770,7 @@ static int sdebug_sector_size = DEF_SECTOR_SIZE;
->   static int sdeb_tur_ms_to_ready = DEF_TUR_MS_TO_READY;
->   static int sdebug_virtual_gb = DEF_VIRTUAL_GB;
->   static int sdebug_vpd_use_hostno = DEF_VPD_USE_HOSTNO;
-> +static unsigned int sdebug_max_segment_size = -1U >   static unsigned int sdebug_lbpu = DEF_LBPU;
->   static unsigned int sdebug_lbpws = DEF_LBPWS;
->   static unsigned int sdebug_lbpws10 = DEF_LBPWS10;
-> @@ -5851,6 +5852,7 @@ module_param_named(ndelay, sdebug_ndelay, int, S_IRUGO | S_IWUSR);
->   module_param_named(no_lun_0, sdebug_no_lun_0, int, S_IRUGO | S_IWUSR);
->   module_param_named(no_rwlock, sdebug_no_rwlock, bool, S_IRUGO | S_IWUSR);
->   module_param_named(no_uld, sdebug_no_uld, int, S_IRUGO);
-> +module_param_named(max_segment_size, sdebug_max_segment_size, uint, S_IRUGO);
+Greetings.
 
-Could you place the above line in alphabetical order.
+I am Ms Nadage Lassou, I have a important =C2=A0business =C2=A0to discuss w=
+ith you,
+Thanks for your time and =C2=A0Attention.i will send you the details once i
+hear from you.
 
->   module_param_named(num_parts, sdebug_num_parts, int, S_IRUGO);
->   module_param_named(num_tgts, sdebug_num_tgts, int, S_IRUGO | S_IWUSR);
->   module_param_named(opt_blks, sdebug_opt_blks, int, S_IRUGO);
-> @@ -7815,6 +7817,7 @@ static int sdebug_driver_probe(struct device *dev)
->   
->   	sdebug_driver_template.can_queue = sdebug_max_queue;
->   	sdebug_driver_template.cmd_per_lun = sdebug_max_queue;
-> +	sdebug_driver_template.max_segment_size = sdebug_max_segment_size;
->   	if (!sdebug_clustering)
->   		sdebug_driver_template.dma_boundary = PAGE_SIZE - 1;
->   
-
-And could you add a
-MODULE_PARM_DESC(max_segment_size, "<1 line description>");
-
-entry as well (also in alphabetical order).
-
-Other than that:
-   Ack-ed by: Douglas Gilbert <dgilbert@interlog.com>
+Regards.
+Ms Nadage Lassou
