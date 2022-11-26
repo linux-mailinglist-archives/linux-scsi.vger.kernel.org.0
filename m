@@ -2,57 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5AD6393AC
-	for <lists+linux-scsi@lfdr.de>; Sat, 26 Nov 2022 04:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 601236393BB
+	for <lists+linux-scsi@lfdr.de>; Sat, 26 Nov 2022 04:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiKZD1u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Nov 2022 22:27:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
+        id S230291AbiKZD2q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Nov 2022 22:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiKZD1s (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Nov 2022 22:27:48 -0500
+        with ESMTP id S230304AbiKZD22 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Nov 2022 22:28:28 -0500
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E18EE36
-        for <linux-scsi@vger.kernel.org>; Fri, 25 Nov 2022 19:27:47 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AQ330Km018766;
-        Sat, 26 Nov 2022 03:27:46 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E0E1BE98;
+        Fri, 25 Nov 2022 19:28:24 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AQ2hbup007916;
+        Sat, 26 Nov 2022 03:27:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=1kKYqDn/GhtiWaDvYM0hdzQTdZjgrSvHR8pSfy6XSo8=;
- b=REU3Jg9JdRq39EPn67bWzV0v5MTQfKzGd96u3DB9RycJF6l9Y8/ZAp9BnoYvTQeQ1ppK
- bSE7UdNXHGINNoKfo5bUTCTsnbVw2ioDmh0xnORfDxl10IgZ7w7UnHuyvDbw8+zShXxX
- oa5d262Ujo7MQfPBHWFV7vRErLpi4qR7g0tAWp/dDZGAK5/FlZ0QpJjt5r04Owk2pz9A
- LloTezQvX6la6GNvMhjGzZxQyrgRfLlc/VBaJDGs53mWlPesfVr6Ye85mSSyuF1mebs7
- dtRhBbg3pqDcK4wMs3Svi2XhJidrZDFu9w5mVsidNTzTfTE5oeHYJEcAI5NqVLC1oReF jg== 
+ bh=AcagkFnJ+fxUlscIN6IjL6P7egIgluL1OZhulAL1UnQ=;
+ b=mvu81B1jAjb+iQ6MM92frRDUHEr4JjxmPPoaI8lGgelfK0tY26AeAGpXKYQqxl7PfakE
+ zKYR5gspEHq4K8A5lXxuzIhtLNaXvmIKO62/MRCp0/7BL781RtS2v7uCoevnZJ3y5Jpe
+ o4k15RYgVjtQOzJ7HMVMABblAwr0dtY49pEsscSVs8hehmj/twewXRy1+1LN1vLlT3G/
+ v2xYrPsJW6V6XrJm2hokCQMoNB7mRQcHFN2tzIe9dpmq/LftKP6ZeS9lIhBRARfqXgp+
+ Eaf1bj/wXzdFOlU5SlpQfuENIvXv9u+TNm6GxzDP01RMy7w2HAFdX8VSqM3T7Hplrxc0 Qw== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m397f8252-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m39k2g1ng-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 26 Nov 2022 03:27:46 +0000
+        Sat, 26 Nov 2022 03:27:47 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AQ1XRcT007263;
-        Sat, 26 Nov 2022 03:27:45 GMT
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AQ1XTWB007302;
+        Sat, 26 Nov 2022 03:27:47 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3m3988b80s-1
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3m3988b812-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 26 Nov 2022 03:27:45 +0000
+        Sat, 26 Nov 2022 03:27:47 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AQ3RhsZ028327;
-        Sat, 26 Nov 2022 03:27:45 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AQ3Rhsb028327;
+        Sat, 26 Nov 2022 03:27:46 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3m3988b7y9-7;
-        Sat, 26 Nov 2022 03:27:45 +0000
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3m3988b7y9-8;
+        Sat, 26 Nov 2022 03:27:46 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Justin Tee <justintee8345@gmail.com>, linux-scsi@vger.kernel.org
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        jsmart2021@gmail.com
-Subject: Re: [PATCH 0/6] lpfc: Update lpfc to revision 14.2.0.9
-Date:   Sat, 26 Nov 2022 03:27:38 +0000
-Message-Id: <166943312547.1684293.13037923418300351162.b4-ty@oracle.com>
+        Fenghua Yu <fenghua.yu@intel.com>, oss-drivers@corigine.com,
+        James Smart <james.smart@broadcom.com>,
+        Cornelia Huck <cohuck@redhat.com>, dmaengine@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, Will Deacon <will@kernel.org>,
+        Lee Jones <lee@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Roy Pledge <Roy.Pledge@nxp.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        netdev@vger.kernel.org, kvm@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        linux-scsi@vger.kernel.org, Dave Jiang <dave.jiang@intel.com>,
+        linux-ide@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Subject: Re: [patch 00/10] genirq/msi: Treewide cleanup of pointless linux/msi.h includes
+Date:   Sat, 26 Nov 2022 03:27:39 +0000
+Message-Id: <166943312556.1684293.1625990735787388062.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221116011921.105995-1-justintee8345@gmail.com>
-References: <20221116011921.105995-1-justintee8345@gmail.com>
+In-Reply-To: <20221113201935.776707081@linutronix.de>
+References: <20221113201935.776707081@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,11 +83,11 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-26_02,2022-11-25_01,2022-06-22_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 phishscore=0
- mlxlogscore=835 mlxscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ mlxlogscore=825 mlxscore=0 adultscore=0 bulkscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
  definitions=main-2211260024
-X-Proofpoint-ORIG-GUID: zg6NI0XXbOA5WPOSxYLx_3EXLTrWQ7lY
-X-Proofpoint-GUID: zg6NI0XXbOA5WPOSxYLx_3EXLTrWQ7lY
+X-Proofpoint-GUID: oUxjHgTGr4WNozsr_LV_OOFyzCy5QslK
+X-Proofpoint-ORIG-GUID: oUxjHgTGr4WNozsr_LV_OOFyzCy5QslK
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -75,37 +98,21 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 15 Nov 2022 17:19:15 -0800, Justin Tee wrote:
+On Sun, 13 Nov 2022 21:33:54 +0100 (CET), Thomas Gleixner wrote:
 
-> Update lpfc to revision 14.2.0.9
+> While working on per device MSI domains I noticed that quite some files
+> include linux/msi.h just because.
 > 
-> This patch set contains bug fixes and a change to a default setting.
+> The top level comment in the header file clearly says:
 > 
-> The patches were cut against Martin's 6.2/scsi-queue tree.
-> 
-> Justin Tee (6):
->   lpfc: Fix WQ|CQ|EQ resource check
->   lpfc: Correct bandwidth logging during receipt of congestion sync WCQE
->   lpfc: Fix MI capability display in cmf_info sysfs attribute
->   lpfc: Fix crash involving race between FLOGI timeout and devloss
->     handler
->   lpfc: Change default lpfc_suppress_rsp mode to off
->   lpfc: Update lpfc version to 14.2.0.9
+>   Regular device drivers have no business with any of these functions....
 > 
 > [...]
 
 Applied to 6.2/scsi-queue, thanks!
 
-[1/6] lpfc: Fix WQ|CQ|EQ resource check
-      https://git.kernel.org/mkp/scsi/c/2c1a0a7584f5
-[2/6] lpfc: Correct bandwidth logging during receipt of congestion sync WCQE
-      https://git.kernel.org/mkp/scsi/c/ae696255d655
-[3/6] lpfc: Fix MI capability display in cmf_info sysfs attribute
-      https://git.kernel.org/mkp/scsi/c/d99af587d59c
-[4/6] lpfc: Fix crash involving race between FLOGI timeout and devloss handler
-      https://git.kernel.org/mkp/scsi/c/97f256913c5d
-[6/6] lpfc: Update lpfc version to 14.2.0.9
-      https://git.kernel.org/mkp/scsi/c/d57d98fef46f
+[03/10] scsi: lpfc: Remove linux/msi.h include
+        https://git.kernel.org/mkp/scsi/c/cdd9344e00b4
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
