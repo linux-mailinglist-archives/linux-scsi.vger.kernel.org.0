@@ -2,69 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21646639410
-	for <lists+linux-scsi@lfdr.de>; Sat, 26 Nov 2022 07:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9938F6394CB
+	for <lists+linux-scsi@lfdr.de>; Sat, 26 Nov 2022 10:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiKZGJC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 26 Nov 2022 01:09:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S229600AbiKZJAO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 26 Nov 2022 04:00:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiKZGJB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 26 Nov 2022 01:09:01 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D53F205E5;
-        Fri, 25 Nov 2022 22:08:59 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NK1Wp0gVcz4f3kpS;
-        Sat, 26 Nov 2022 14:08:54 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgB3m9h4rYFj1lyxBA--.33831S3;
-        Sat, 26 Nov 2022 14:08:57 +0800 (CST)
-Subject: Re: Why is MEGASAS_SAS_QD set to 256?
-To:     Yu Kuai <yukuai1@huaweicloud.com>, Ming Lei <ming.lei@redhat.com>
-Cc:     John Garry <john.g.garry@oracle.com>, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        "zhangyi (F)" <yi.zhang@huawei.com>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <1c4d66ca-fe1a-3d1a-d7f9-4981d2fc9eb1@huaweicloud.com>
- <e11cdb17-053c-390c-9c48-36790eb70cc5@oracle.com>
- <2b89210a-222c-a919-ab5b-c76830308f92@huaweicloud.com>
- <Y4F3XG3lMCCKlLAr@T590>
- <aef69f3b-a8db-f34c-4a52-49ba9020f6cf@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <7fa1cf9f-3cd3-9ca8-8ddc-0c8407a466e8@huaweicloud.com>
-Date:   Sat, 26 Nov 2022 14:08:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        with ESMTP id S229450AbiKZJAK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 26 Nov 2022 04:00:10 -0500
+X-Greylist: delayed 1290 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Nov 2022 01:00:05 PST
+Received: from sp13.canonet.ne.jp (sp13.canonet.ne.jp [210.134.168.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBC802098C;
+        Sat, 26 Nov 2022 01:00:05 -0800 (PST)
+Received: from csp13.canonet.ne.jp (unknown [172.21.160.133])
+        by sp13.canonet.ne.jp (Postfix) with ESMTP id 099161E03D3;
+        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
+Received: from echeck13.canonet.ne.jp ([172.21.160.123])
+        by csp3 with ESMTP
+        id yqNVovGVhxJr5yqNVocUA4; Sat, 26 Nov 2022 17:17:37 +0900
+X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=S49nfKgP c=1 sm=1 tr=0
+ ts=6381cba1 cx=g_jp:t_eml p=JJaDG7uySNsA:10 p=Ik1pXvdftEAPl7FGfynI:22
+ a=c8wCX2VJ6RehaN9m5YqYzw==:117 a=yr9NA9NbXb0B05yJHQEWeQ==:17
+ a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10 a=9xFQ1JgjjksA:10 a=x7bEGLp0ZPQA:10
+ a=JQiPw2jszkcqZPIXoVMA:9 a=CjuIK1q_8ugA:10"
+X-CNT-CMCheck-Score: 100.00
+Received: from echeck13.canonet.ne.jp (localhost [127.0.0.1])
+        by esets.canonet.ne.jp (Postfix) with ESMTP id 9B11A1C0251;
+        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
+X-Virus-Scanner: This message was checked by ESET Mail Security
+        for Linux/BSD. For more information on ESET Mail Security,
+        please, visit our website: http://www.eset.com/.
+Received: from smtp13.canonet.ne.jp (unknown [172.21.160.103])
+        by echeck13.canonet.ne.jp (Postfix) with ESMTP id 6BA4E1C0263;
+        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
+Received: from eikohnet.co.jp (webmail.canonet.ne.jp [210.134.169.250])
+        by smtp13.canonet.ne.jp (Postfix) with ESMTPA id A506115F964;
+        Sat, 26 Nov 2022 17:17:36 +0900 (JST)
 MIME-Version: 1.0
-In-Reply-To: <aef69f3b-a8db-f34c-4a52-49ba9020f6cf@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgB3m9h4rYFj1lyxBA--.33831S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr4DJrWUZrykZry5Wr4DJwb_yoWfGFXEgw
-        4jkFn7Gw15Grs2qa1UJry5ArZ3GFZ3tasxA34qq3W5X39rC3W3KrW5Zw1rZan3Grsxtrn7
-        tr4Yg3WYqws09jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Gr0_Zr1l
-        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VU1a9aPUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <20221126081736.00001C7B.0156@eikohnet.co.jp>
+Date:   Sat, 26 Nov 2022 17:17:36 +0900
+From:   "Mrs Zainab Abbas" <toda@eikohnet.co.jp>
+To:     <Inbox@eikohnet.co.jp>
+Reply-To: <mrs.zainababbas75@gmail.com>
+Subject: Hi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+ORGANIZATION: Mrs Zainab Abbas
+X-MAILER: Active! mail
+X-EsetResult: clean, %VIRUSNAME%
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1669450657;VERSION=7940;MC=3218539519;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
+X-I-ESET-AS: RN=0;RNP=
+X-ESET-Antispam: OK
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
+        SPF_HELO_NONE,SPF_PASS,UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5018]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrs.zainababbas75[at]gmail.com]
+        *  1.0 HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  2.4 XPRIO_SHORT_SUBJ Has X Priority header + short subject
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,41 +78,10 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
+Hello,
+Good day, I am still waiting for your reply to my previous email, hope you see the email?
 
-在 2022/11/26 14:08, Yu Kuai 写道:
-> Hi, Ming
-> 
-> 在 2022/11/26 10:18, Ming Lei 写道:
->>
->> If you want aggressive merge on sequential IO workload, the queue 
->> depth need
->> to be a bit less, then more requests can be staggered into scheduler 
->> queue,
->> and merge chance is increased.
-> 
-> But if nr_requests >= queue_depth, it seems to me elevator will have no
-> effect, no request can be merged or sorted by scheduler, right?
-Sorry that should be nr_requests <= queue_depth.
+Regards
+Mrs Zainab Abbas
 
->>
->> If you want good perf on random IO perf, the queue depth needs to
->> be deep enough to have enough parallelism for saturating SSD internal.
->>
->> But we don't recognize sequential/random IO pattern, and usually fixed
->> queue depth is used.
-> 
-> Is it possible to use none elevator and set large queue_depth if nvme is
-> used in this case?
-> 
-> Thansk,
-> Kuai
->>
->> Thanks,
->> Ming
->>
->> .
->>
-> 
-> .
-> 
 
