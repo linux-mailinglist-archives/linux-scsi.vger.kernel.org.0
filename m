@@ -2,174 +2,136 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB62640581
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Dec 2022 12:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00048640676
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Dec 2022 13:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbiLBLJO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 2 Dec 2022 06:09:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
+        id S233073AbiLBMMH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 2 Dec 2022 07:12:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiLBLJM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Dec 2022 06:09:12 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24F5BD437;
-        Fri,  2 Dec 2022 03:09:08 -0800 (PST)
-X-UUID: c011386112fa427c97baf86fafe900e3-20221202
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=bC265sB92WUy60EDMEoKwHbK9TI5f/5traRQYAD0SHE=;
-        b=h4Rosn9bbrhbc3b7U2zBqgIfMk8g1WHQius171HKZCmP5mLfnJAN49UADMR+2tniWb/Olzj8XhHdHP1hn2t++sQsW9GLgMhMvftvUeUsbN/2PdCtjQ2+zje6fTdW4k+RWSYzXLQObE0gYX9EW/u/2olUU1MlN0qi4TIyZIRlFsk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:67211430-1edb-4fb8-8aef-a2014edcb5e6,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.14,REQID:67211430-1edb-4fb8-8aef-a2014edcb5e6,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:dcaaed0,CLOUDID:91d0636c-41fe-47b6-8eb4-ec192dedaf7d,B
-        ulkID:2212021909048DE5GKP2,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: c011386112fa427c97baf86fafe900e3-20221202
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-        (envelope-from <mason.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1068146848; Fri, 02 Dec 2022 19:09:02 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 2 Dec 2022 19:09:01 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 2 Dec 2022 19:09:00 +0800
-From:   Mason Zhang <mason.zhang@mediatek.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Peng Zhou <peng.zhou@mediatek.com>,
-        <wsd_upstream@mediatek.com>, Mason Zhang <Mason.Zhang@mediatek.com>
-Subject: [PATCH v1 1/1] scsi: ufs: core: fix device management cmd timeout flow
-Date:   Fri, 2 Dec 2022 18:58:17 +0800
-Message-ID: <20221202105817.19801-1-mason.zhang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        with ESMTP id S233152AbiLBMME (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Dec 2022 07:12:04 -0500
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CE1D2D8D;
+        Fri,  2 Dec 2022 04:11:58 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 0515941207;
+        Fri,  2 Dec 2022 12:11:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received:received; s=mta-01; t=1669983115; x=
+        1671797516; bh=LvOacjOBkfqk+aDT0pJIwXBlozs+ILLOC1yKowC2PLQ=; b=v
+        iqh9MYnwUFS4jzOD4wLHY45MAciMnNiH6BiQxn8N91bSJBL76lJBOu5rvLobgKSW
+        eShIKz7vFBO4vaEyBA4l78cpjPdpCnnPQzBrn1asdvEn86HMXnMaQDxDMFYpPv3X
+        rQYG6fF8XUj6ZBv8BkQV0zHbZwsh7fh0ETDCIqppOg=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id TF6Uakxfl_rv; Fri,  2 Dec 2022 15:11:55 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (T-EXCH-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 42C2240889;
+        Fri,  2 Dec 2022 15:11:54 +0300 (MSK)
+Received: from T-EXCH-08.corp.yadro.com (172.17.11.58) by
+ T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
+ 15.1.669.32; Fri, 2 Dec 2022 15:11:54 +0300
+Received: from NB-591.corp.yadro.com (10.199.18.20) by
+ T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.9; Fri, 2 Dec 2022 15:11:53 +0300
+From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
+To:     Martin Petersen <martin.petersen@oracle.com>,
+        <target-devel@vger.kernel.org>
+CC:     Christoph Hellwig <hch@infradead.org>,
+        <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
+        Dmitry Bogdanov <d.bogdanov@yadro.com>
+Subject: [PATCH v3 0/5] scsi: target: make RTPI an TPG identifier
+Date:   Fri, 2 Dec 2022 15:11:34 +0300
+Message-ID: <20221202121139.28180-1-d.bogdanov@yadro.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-MTK:  N
+X-Originating-IP: [10.199.18.20]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Mason Zhang <Mason.Zhang@mediatek.com>
+SAM-5 4.6.5.2 (Relative Port Identifier attribute) defines the attribute
+as unique across SCSI target ports:
+ The Relative Port Identifier attribute identifies a SCSI target port or
+ a SCSI initiator port relative to other SCSI ports in a SCSI target
+ device and any SCSI initiator devices contained within that SCSI target
+ device. A SCSI target device may assign relative port identifiers to
+ its SCSI target ports and any SCSI initiator ports. If relative port
+ identifiers are assigned, the SCSI target device shall assign each of
+ its SCSI target ports and any SCSI initiator ports a unique relative
+ port identifier from 1 to 65 535. SCSI target ports and SCSI initiator
+ ports share the same number space.
 
-In ufs error handler flow, host will send device management cmd(NOP OUT)
-to device for recovery link. If cmd response timeout, and clear doorbell
-fail, ufshcd_wait_for_dev_cmd will do nothing and return,
-hba->dev_cmd.complete struct not set to null.
+In the current TCM implementation, auto-incremented lun_rtpi weakly
+follows the model outlined by SAM-5 and SPC-4. In case of multiple SCSI
+target ports (se_portal_group's), which is common to scenario with
+multiple HBAs or multiple iSCSI/FC targets, it's possible to have two
+backstores (se_device's) with different values of lun_rtpi on the same
+SCSI target port.
 
-In this time, if cmd has been responsed by device, then it will
-call complete() in __ufshcd_transfer_req_compl, because of complete
-struct is alloced in stack, then the KE will occur.
+Similar issue happens during re-export. If a LUN of a backstore is
+removed from a target port and added again to the same target port, RTPI
+is incremented again and will be different from the first time.
 
-Fix the following crash:
-  ipanic_die+0x24/0x38 [mrdump]
-  die+0x344/0x748
-  arm64_notify_die+0x44/0x104
-  do_debug_exception+0x104/0x1e0
-  el1_dbg+0x38/0x54
-  el1_sync_handler+0x40/0x88
-  el1_sync+0x8c/0x140
-  queued_spin_lock_slowpath+0x2e4/0x3c0
-  __ufshcd_transfer_req_compl+0x3b0/0x1164
-  ufshcd_trc_handler+0x15c/0x308
-  ufshcd_host_reset_and_restore+0x54/0x260
-  ufshcd_reset_and_restore+0x28c/0x57c
-  ufshcd_err_handler+0xeb8/0x1b6c
-  process_one_work+0x288/0x964
-  worker_thread+0x4bc/0xc7c
-  kthread+0x15c/0x264
-  ret_from_fork+0x10/0x30
+The two issues happen because each se_device increments RTPI for its own
+LUNs independently.
 
-Change-Id: Id17da259894294b61bef41cf7dfb94506e7e0310
-Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
----
- drivers/ufs/core/ufshcd.c | 46 ++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 25 deletions(-)
+The behaviour means that a SCSI application client can't reliably make any
+sense of RTPI values reported by a LUN as it's not really related to SCSI
+target ports. A conforming target implementation must ensure that RTPI field is
+unique per port. The patchset resolves the issue.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index b1f59a5fe632..2b4934a562a6 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2979,35 +2979,31 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
- 		err = -ETIMEDOUT;
- 		dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n",
- 			__func__, lrbp->task_tag);
--		if (ufshcd_clear_cmds(hba, 1U << lrbp->task_tag) == 0) {
-+		if (ufshcd_clear_cmds(hba, 1U << lrbp->task_tag) == 0)
- 			/* successfully cleared the command, retry if needed */
- 			err = -EAGAIN;
-+		/*
-+		 * Since clearing the command succeeded we also need to
-+		 * clear the task tag bit from the outstanding_reqs
-+		 * variable.
-+		 */
-+		spin_lock_irqsave(&hba->outstanding_lock, flags);
-+		pending = test_bit(lrbp->task_tag,
-+				   &hba->outstanding_reqs);
-+		if (pending) {
-+			hba->dev_cmd.complete = NULL;
-+			__clear_bit(lrbp->task_tag,
-+				    &hba->outstanding_reqs);
-+		}
-+		spin_unlock_irqrestore(&hba->outstanding_lock, flags);
-+
-+		if (!pending) {
- 			/*
--			 * Since clearing the command succeeded we also need to
--			 * clear the task tag bit from the outstanding_reqs
--			 * variable.
-+			 * The completion handler ran while we tried to
-+			 * clear the command.
- 			 */
--			spin_lock_irqsave(&hba->outstanding_lock, flags);
--			pending = test_bit(lrbp->task_tag,
--					   &hba->outstanding_reqs);
--			if (pending) {
--				hba->dev_cmd.complete = NULL;
--				__clear_bit(lrbp->task_tag,
--					    &hba->outstanding_reqs);
--			}
--			spin_unlock_irqrestore(&hba->outstanding_lock, flags);
--
--			if (!pending) {
--				/*
--				 * The completion handler ran while we tried to
--				 * clear the command.
--				 */
--				time_left = 1;
--				goto retry;
--			}
--		} else {
--			dev_err(hba->dev, "%s: failed to clear tag %d\n",
--				__func__, lrbp->task_tag);
-+			time_left = 1;
-+			goto retry;
- 		}
- 	}
- 
+Make RTPI be part of se_tpg instead of se_lun. Make it configurable.
+
+Changelog:
+  v3:
+    make variable static
+    change core_ prefix to target_
+    split to tpg_enable/tpg_disable functions
+
+  v2:
+    use XArray for tracking RTPI instead of linked list
+    do not allow to change RTPI on enabled target port
+    drop not needed patches
+
+Dmitry Bogdanov (2):
+  scsi: target: core: Add RTPI field to target port
+  scsi: target: core: Add RTPI attribute for target port
+
+Roman Bolshakov (3):
+  scsi: target: core: Use RTPI from target port
+  scsi: target: core: Drop device-based RTPI
+  scsi: target: core: Add common port attributes
+
+ drivers/target/target_core_alua.c            |   4 +-
+ drivers/target/target_core_configfs.c        |   9 +-
+ drivers/target/target_core_device.c          |  43 +-------
+ drivers/target/target_core_fabric_configfs.c |  48 ++++++--
+ drivers/target/target_core_internal.h        |   3 +-
+ drivers/target/target_core_pr.c              |   8 +-
+ drivers/target/target_core_spc.c             |   2 +-
+ drivers/target/target_core_stat.c            |   6 +-
+ drivers/target/target_core_tpg.c             | 110 +++++++++++++++++--
+ include/target/target_core_base.h            |   7 +-
+ 10 files changed, 168 insertions(+), 72 deletions(-)
+
 -- 
-2.18.0
+2.25.1
 
