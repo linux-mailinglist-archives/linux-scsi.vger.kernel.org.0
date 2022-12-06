@@ -2,69 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFA564448E
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Dec 2022 14:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4239564494B
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Dec 2022 17:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbiLFNb4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Dec 2022 08:31:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
+        id S235554AbiLFQdJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Dec 2022 11:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234122AbiLFNbz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Dec 2022 08:31:55 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C8C222AD
-        for <linux-scsi@vger.kernel.org>; Tue,  6 Dec 2022 05:31:53 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-381662c78a9so151798967b3.7
-        for <linux-scsi@vger.kernel.org>; Tue, 06 Dec 2022 05:31:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=OeyCMsHYScRvVh8RXebzMnb6pRDfFrPhGFM5Oo/oZrwyoa5Qe6A4MFoFU3Mp0QEA1i
-         SYxbR4sBY6B2f4vL1OEJybUifemEqA8IjQX2J09dxjCQRODPxlkwi9ZEZSAu9TEhort/
-         rwllpgNt60odz5Nl0j8spOK2S4UH94zHMFD6KX6br/bHNI2fZHIzqWvZlcUTMKyD9vqw
-         pbBkxrH6eRDakHg6i3SDW/XG3pxdEfflEK99JxjqsHbJ7YAIkEj/5S6ueT5UYlPSmqQ/
-         Hub6z0zknduscVyttBCDKyxn8xzrz/kgtfd7lHkiDU9nHicul2vZth5Aja6oh/8jcMGO
-         G90g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=u/kn3wwRljhAJ3qvo6n8RSn5aMfpau1pKsOvYgWGjFNyHKdTHPCQ4H46FnD8wSkr5W
-         rc2PalTcXqB+wNIRS4FAoRTsBZMY2tCCBqn14pPRkVv6M+e+M28RJ/M6qvJDtqz3gOkk
-         VGhBbjKZsEbPd//sbs8T35WIISebY9GVrmCcTydaLH56ZSK5mlVDSz0ld/k3owDoUIKN
-         6LtnPlt6dpZZ5OGOy8FCybyzMLXaVTOuE6tT+hTPWlne2YLl6R5tkXk0uRv1AIQ3ALyH
-         HGPQtZDSw8Ux+RDpNnwHbfn8JC0yI+y0FUa/D6KKIh2wNkza5JHk1F4MsL6MBy6cTs4g
-         0cPA==
-X-Gm-Message-State: ANoB5pnqR/QfBDansAue45iBvkq2SvC2ZHd83fCwPO+VH79nZtqG4s7s
-        u1x2cd8Q0EvezU0o48ZnkZKjUAA/QgfXI7uRsxI=
-X-Google-Smtp-Source: AA0mqf7Z2Y5k3chtNt8kbVNLNOAPCXtgRbw0oMU6LK5Q/RiR2Ia6QNch2ZuKx5+xFv9D2teTY/76/SaSp4zD3zNfpik=
-X-Received: by 2002:a81:5243:0:b0:3d2:2098:c5fb with SMTP id
- g64-20020a815243000000b003d22098c5fbmr31214777ywb.121.1670333513086; Tue, 06
- Dec 2022 05:31:53 -0800 (PST)
+        with ESMTP id S235494AbiLFQcq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Dec 2022 11:32:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523F6C10
+        for <linux-scsi@vger.kernel.org>; Tue,  6 Dec 2022 08:31:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670344311;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f7tva0QRnvY34jr6F4y3N6frBD9DljEnyo24Q5FToPc=;
+        b=TAizLOlhZdqJicldnR26/nfM6VVi25HIgMPE7hZfPj3EIqUC/YcyTMKepIJMXt6pbabR8o
+        ki2TvRWTta+4cnPj1CIAv7HE+yk+sJYEEfUN/jOd5qO33yPsKZv15D7ADFARIXhzhboSJy
+        wiGZl8V4lOlZ+9q/cN6HJvKgMUdKO5Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-297-NHrOxJHpO8e_BNKhHHWkEQ-1; Tue, 06 Dec 2022 11:31:49 -0500
+X-MC-Unique: NHrOxJHpO8e_BNKhHHWkEQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B84DD86EB63;
+        Tue,  6 Dec 2022 16:31:48 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.218])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 090482028CE4;
+        Tue,  6 Dec 2022 16:31:47 +0000 (UTC)
+Date:   Tue, 6 Dec 2022 11:31:44 -0500
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Alvaro Karsz <alvaro.karsz@solid-run.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH v3] virtio_blk: add VIRTIO_BLK_F_LIFETIME feature support
+Message-ID: <Y49ucLGtCOtnbM0K@fedora>
+References: <20221205162035.2261037-1-alvaro.karsz@solid-run.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:a205:b0:314:d2a3:70a with HTTP; Tue, 6 Dec 2022
- 05:31:52 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <mrkojofofone01@gmail.com>
-Date:   Tue, 6 Dec 2022 13:31:52 +0000
-Message-ID: <CACJtp8vgE8Nrmo+zWDrnXRqoM_o=MmruUY09Qi=4vFfLMPDrtA@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Kf1ZFtRxkbtTQRVa"
+Content-Disposition: inline
+In-Reply-To: <20221205162035.2261037-1-alvaro.karsz@solid-run.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+
+--Kf1ZFtRxkbtTQRVa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, Dec 05, 2022 at 06:20:34PM +0200, Alvaro Karsz wrote:
+
+I don't like that the ioctl lifetime struct is passed through
+little-endian from the device to userspace. The point of this new ioctl
+is not to be a passthrough interface. The kernel should define a proper
+UABI struct for the ioctl and handle endianness conversion. But I think
+Michael is happy with this approach, so nevermind.
+
+> @@ -219,4 +247,8 @@ struct virtio_scsi_inhdr {
+>  #define VIRTIO_BLK_S_OK		0
+>  #define VIRTIO_BLK_S_IOERR	1
+>  #define VIRTIO_BLK_S_UNSUPP	2
+> +
+> +/* Virtblk ioctl commands */
+> +#define VBLK_GET_LIFETIME	_IOR('r', 0, struct virtio_blk_lifetime)
+
+Does something include <linux/ioctl.h> for _IOR()? Failure to include
+the necessary header file could break userspace applications that
+include <linux/virtio_blk.h>.
+
+Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
+
+--Kf1ZFtRxkbtTQRVa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmOPbnAACgkQnKSrs4Gr
+c8iLOggAsIIn2qOsdq8S+xOJLEgfRN7/BoDt8YZ8CMsipVZs0G2Y6iVOhZFBNe98
+W/edX+RVO5c7C8wPToA0QPqxO3hw7I/g6ztXeAm4KTx2mduzxQilJRDipEfpFOXV
+OnW7IUGMedQPrwbMNqeT32QpFk/OVicOH/QguVDmQajXMIPUSvfBCnsSm8aHDl9p
+YvADYVTPdoxJt3OTCGKXU7pfUwSC6/w8KVfxk3jnNKkuCDoEEeuCgkhyEc+CpGlo
+i6z4bn23yupNn/d9CPROsEYRSB07OI8iAj7n6r1QMP2TG9+dOHgA4nnd0kcSWwYO
+ZOnWHf2RJzEb34YNO5Bm0pio+X7vYQ==
+=PdE9
+-----END PGP SIGNATURE-----
+
+--Kf1ZFtRxkbtTQRVa--
+
