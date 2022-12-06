@@ -2,120 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA7B644460
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Dec 2022 14:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFA564448E
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Dec 2022 14:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235108AbiLFNOz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Dec 2022 08:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        id S233790AbiLFNb4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Dec 2022 08:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234832AbiLFNOi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Dec 2022 08:14:38 -0500
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9307B2C661
-        for <linux-scsi@vger.kernel.org>; Tue,  6 Dec 2022 05:13:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1670332438; x=1701868438;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=E+zH3taK7NgyDK8TXFfZUMrZiqituFM79TKPCsHMraQ=;
-  b=Ot38ApnwfBQSfwwjB43LvdFjhPMzEVK5UID03r4+pSQ4C3IQVUIoJqLh
-   rh+mVUnuYKj8NolyZxAQjT+rFoTwmuALtSEdtosHEXZs3stPfbZ1ArnI7
-   Q/xWOQiN2XzEBnuYREmgteCYvTEM3nZjnCyFE0LKxqqGYC6mo3ivI4XpZ
-   ZNctak7fq+0ZIaSEQZH1RD6/l/dLAhYzpIIHcng/CsTWAdMwgfXvE8ECt
-   NE6CxZMJcchaRApwzdo1NzVBnvzN1JdRXjZRqSaPgctzGA5aMAYNDYndx
-   PuN/HXmDzwUuwT/vbstl3K1KZw+FGx7XSx48OxFoJ47d4zz6nDth+FP1x
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,222,1665417600"; 
-   d="scan'208";a="322368418"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 06 Dec 2022 21:13:56 +0800
-IronPort-SDR: plTmR9DuOSTsrrSjsXHsFOWdBBjSdk+H29DJpkxOkCbjaCcKOUKZwGfGD/QhB1Q7VtkIjE6xkD
- 88uRrm4josJErYYC3c0fdT3Tl42IZvfxLbTjIyXnTLmRqqnoPPjHe0JR+WmnIE+rYJkpvj5NxE
- Uw/A7cWQQH1nzCMkslfReyYlqZciDintRJcOrKu5KW1R+/gWAVCXRi9dPnptE2s3cqabVfyYQp
- Sk38gt/rinMdO4ahtMFAu3JZ5nIN/GxAnTI7BTLacY/p7T6faj20Nt3zg+W97my4zrGmqmgndS
- 1fI=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Dec 2022 04:32:28 -0800
-IronPort-SDR: ysuBKngdOt919FjiNktpKEgenpsLBMWkqQkwdQtZAarFbHaS0UNc+uID4NVlzCcIK9hGUKFR/1
- ZFbOYWB+HeHglSxkalyKZUMJzfSAMJV6tXNRbZ6JMYGY9HydnLosNQA3NIYv197MKzIr6Fjq/v
- cw0TlePxMZZATBlM2NwalFS+xEzxuKC4vSIu4B0wZarkNQacHYnfrahG0fFIR3gMUfz3Ck78HE
- VqouLc66m4VkfXTyHrQLE8n6RiD1gWUO3YYFLGLlD5S6De34uZJtYrOllhUmiIxglhOCZyOdFG
- hPg=
-WDCIronportException: Internal
-Received: from dellx5.wdc.com (HELO x1-carbon.cphwdc) ([10.200.210.81])
-  by uls-op-cesaip01.wdc.com with ESMTP; 06 Dec 2022 05:13:54 -0800
-From:   Niklas Cassel <niklas.cassel@wdc.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Hannes Reinecke <hare@suse.de>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        John Garry <john.g.garry@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH v2] scsi_error: do not queue pointless abort workqueue functions
-Date:   Tue,  6 Dec 2022 14:13:45 +0100
-Message-Id: <20221206131346.2045375-1-niklas.cassel@wdc.com>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S234122AbiLFNbz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Dec 2022 08:31:55 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C8C222AD
+        for <linux-scsi@vger.kernel.org>; Tue,  6 Dec 2022 05:31:53 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-381662c78a9so151798967b3.7
+        for <linux-scsi@vger.kernel.org>; Tue, 06 Dec 2022 05:31:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
+        b=OeyCMsHYScRvVh8RXebzMnb6pRDfFrPhGFM5Oo/oZrwyoa5Qe6A4MFoFU3Mp0QEA1i
+         SYxbR4sBY6B2f4vL1OEJybUifemEqA8IjQX2J09dxjCQRODPxlkwi9ZEZSAu9TEhort/
+         rwllpgNt60odz5Nl0j8spOK2S4UH94zHMFD6KX6br/bHNI2fZHIzqWvZlcUTMKyD9vqw
+         pbBkxrH6eRDakHg6i3SDW/XG3pxdEfflEK99JxjqsHbJ7YAIkEj/5S6ueT5UYlPSmqQ/
+         Hub6z0zknduscVyttBCDKyxn8xzrz/kgtfd7lHkiDU9nHicul2vZth5Aja6oh/8jcMGO
+         G90g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
+        b=u/kn3wwRljhAJ3qvo6n8RSn5aMfpau1pKsOvYgWGjFNyHKdTHPCQ4H46FnD8wSkr5W
+         rc2PalTcXqB+wNIRS4FAoRTsBZMY2tCCBqn14pPRkVv6M+e+M28RJ/M6qvJDtqz3gOkk
+         VGhBbjKZsEbPd//sbs8T35WIISebY9GVrmCcTydaLH56ZSK5mlVDSz0ld/k3owDoUIKN
+         6LtnPlt6dpZZ5OGOy8FCybyzMLXaVTOuE6tT+hTPWlne2YLl6R5tkXk0uRv1AIQ3ALyH
+         HGPQtZDSw8Ux+RDpNnwHbfn8JC0yI+y0FUa/D6KKIh2wNkza5JHk1F4MsL6MBy6cTs4g
+         0cPA==
+X-Gm-Message-State: ANoB5pnqR/QfBDansAue45iBvkq2SvC2ZHd83fCwPO+VH79nZtqG4s7s
+        u1x2cd8Q0EvezU0o48ZnkZKjUAA/QgfXI7uRsxI=
+X-Google-Smtp-Source: AA0mqf7Z2Y5k3chtNt8kbVNLNOAPCXtgRbw0oMU6LK5Q/RiR2Ia6QNch2ZuKx5+xFv9D2teTY/76/SaSp4zD3zNfpik=
+X-Received: by 2002:a81:5243:0:b0:3d2:2098:c5fb with SMTP id
+ g64-20020a815243000000b003d22098c5fbmr31214777ywb.121.1670333513086; Tue, 06
+ Dec 2022 05:31:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7010:a205:b0:314:d2a3:70a with HTTP; Tue, 6 Dec 2022
+ 05:31:52 -0800 (PST)
+Reply-To: mr.abraham022@gmail.com
+From:   "Mr.Abraham" <mrkojofofone01@gmail.com>
+Date:   Tue, 6 Dec 2022 13:31:52 +0000
+Message-ID: <CACJtp8vgE8Nrmo+zWDrnXRqoM_o=MmruUY09Qi=4vFfLMPDrtA@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Hannes Reinecke <hare@suse.de>
-
-If a host template doesn't implement the .eh_abort_handler()
-there is no point in queueing the abort workqueue function;
-all it does is invoking SCSI EH anyway.
-So return 'FAILED' from scsi_abort_command() if the .eh_abort_handler()
-is not implemented and save us from having to wait for the
-abort workqueue function to complete.
-
-Cc: Niklas Cassel <niklas.cassel@wdc.com>
-Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc: John Garry <john.g.garry@oracle.com>
-Signed-off-by: Hannes Reinecke <hare@suse.de>
-[niklas: moved the check to the top of scsi_abort_command()]
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
----
-Changes since v1:
--moved the check to the top of scsi_abort_command(), as there is no need to
- perform the SCSI_EH_ABORT_SCHEDULED check if there is no eh_abort_handler.
-
-I know that John gave a review comment on V1 that it is possible to not
-allocate the shost->tmf_work_q in case there is no eh_abort_handler,
-however, that is more of a micro optimization. This patch significantly
-reduces the latency before SCSI EH is invoked for libata.
-
-It would be nice if we could get this patched merged for 6.2, for which
-the merge window opens soon.
-
- drivers/scsi/scsi_error.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index a7960ad2d386..2aa2c2aee6e7 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -231,6 +231,11 @@ scsi_abort_command(struct scsi_cmnd *scmd)
- 	struct Scsi_Host *shost = sdev->host;
- 	unsigned long flags;
- 
-+	if (!shost->hostt->eh_abort_handler) {
-+		/* No abort handler, fail command directly */
-+		return FAILED;
-+	}
-+
- 	if (scmd->eh_eflags & SCSI_EH_ABORT_SCHEDULED) {
- 		/*
- 		 * Retry after abort failed, escalate to next level.
--- 
-2.38.1
-
+My Greeting, Did you receive the letter i sent to you. Please answer me.
+Regard, Mr.Abraham
