@@ -2,112 +2,189 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E557364625A
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Dec 2022 21:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 953746462A9
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Dec 2022 21:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiLGU3O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Dec 2022 15:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S229787AbiLGUr1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Dec 2022 15:47:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiLGU3M (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Dec 2022 15:29:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CF030563
-        for <linux-scsi@vger.kernel.org>; Wed,  7 Dec 2022 12:28:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670444899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ERzjyp7zk5Z5+YVLaxlhiooylxoMa/YnIAQSVI50Phc=;
-        b=HNfgA+EBdik8a7ImgHBkU261GvxFLalqqOlJh1EE5gbfAPKF36NxpZa8qVD9wrzcp/adNT
-        kS9kJ7FL/HlkELxVa5h3KDrkNaKqo5SjLZ9Qkd+LtmCb/zvAz8QwCddWEZMF/UmpTfVlaF
-        ipCfryf8vSSMuMMY8CH4hRwRYnLZ5rY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-343-yLaC--uIN7GnUrHDseWqAw-1; Wed, 07 Dec 2022 15:28:18 -0500
-X-MC-Unique: yLaC--uIN7GnUrHDseWqAw-1
-Received: by mail-wm1-f72.google.com with SMTP id a6-20020a05600c224600b003d1f3ed49adso901971wmm.4
-        for <linux-scsi@vger.kernel.org>; Wed, 07 Dec 2022 12:28:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ERzjyp7zk5Z5+YVLaxlhiooylxoMa/YnIAQSVI50Phc=;
-        b=GVp79VaUlpt5dkumZ/bE7ROqBhLGIo30TS52QQt+73jv+4mhsIArgi58iJ6ULfVneS
-         15AG72NXC5cTWoS4cf3fHnC3aqC44OcuuwXS6gJpnganXhd2k+52LZQdNRzotAPUyZIK
-         3HyR2cjA4LRMmKmj++j+w38exqqS7+n52baqJULYyCKMuVjiX4fEInqR/XdDGzwR1lvc
-         lSdBX+GgSzrNrfti15pKU9+jnNY6JbxoFPl8tN5wJw4n8/atqdLGLWVSdXWQNsjiOJkE
-         ZUaKqWC6KHVcH19EsNG0dnHAtPBb2LaXbpStDIzRFZ52x6lSXq3PzWyhSfDNFvT23cWm
-         gJKA==
-X-Gm-Message-State: ANoB5pn0BEie/tAVln3Jby5PW1H5+oWYMLpGkpSnmzeLGZnLdjxgnuwq
-        dd3yicdf5WeKeBWEtQ7iHH380y792CDAZe88xKuQRtrQpOLltVr2UejcNYRsNvWApZW5AwFFiMz
-        Ufs+CDYazxa5OUAXcqPUT9g==
-X-Received: by 2002:adf:f98e:0:b0:242:324:ff88 with SMTP id f14-20020adff98e000000b002420324ff88mr35473841wrr.81.1670444897079;
-        Wed, 07 Dec 2022 12:28:17 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4QOq0RAPymVdkyXnh7/V2ZIzFLtZtJ+dwe3UW02/93b8NTVphp6L78PZAaWRCEXF7iho9Mtw==
-X-Received: by 2002:adf:f98e:0:b0:242:324:ff88 with SMTP id f14-20020adff98e000000b002420324ff88mr35473829wrr.81.1670444896831;
-        Wed, 07 Dec 2022 12:28:16 -0800 (PST)
-Received: from redhat.com ([2a02:14f:17a:1a4f:ce60:357c:370b:cc7e])
-        by smtp.gmail.com with ESMTPSA id b12-20020a5d634c000000b00241e8d00b79sm25007953wrw.54.2022.12.07.12.28.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 12:28:16 -0800 (PST)
-Date:   Wed, 7 Dec 2022 15:28:10 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Alvaro Karsz <alvaro.karsz@solid-run.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH v3] virtio_blk: add VIRTIO_BLK_F_LIFETIME feature support
-Message-ID: <20221207152116-mutt-send-email-mst@kernel.org>
-References: <20221205162035.2261037-1-alvaro.karsz@solid-run.com>
- <Y5BCQ/9/uhXdu35W@infradead.org>
- <20221207052001-mutt-send-email-mst@kernel.org>
- <Y5C/4H7Ettg/DcRz@infradead.org>
+        with ESMTP id S229786AbiLGUrX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Dec 2022 15:47:23 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1945E6868D;
+        Wed,  7 Dec 2022 12:47:13 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7Itgbv022450;
+        Wed, 7 Dec 2022 20:46:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=U8uY8us+snoKmlwkDFOiH0TPjtA7d31xQ8phTYZl3/k=;
+ b=VXUkM2ba2We4OhuABvWYbqSDAq5m/rr+VXT2Wd9pHNmWxcqlHEcZT6Pri0YWJY31hjdd
+ bbkR3NtBKH4Dky6i4eLrDGXpvX62pm3pwPB6d9tqpI0eCn6OzbBbrcKaVfPJEaJsTSpS
+ w44pRmVh/ZV7TUcHCcbWC5aDEE0bzCUgP/7HA0sJN/e+aVUHXg9XIcYLQH7ysh5vj+kg
+ SOMmvgBDg8MoRBgTj2zSdfmfgmj94yc9L4NTsBBCCYNEq4jTG8RRG4vvUUXHtGXggBBp
+ 4dIRmz/XTroWqEgvWQ/NK1JuLXiJI/xQW9jSCgjoeArVH4FlhM2kUOAjEn0fuNODfKoW Tg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mapg51qrx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Dec 2022 20:46:44 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B7KkhKZ012261
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Dec 2022 20:46:43 GMT
+Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 7 Dec 2022 12:46:42 -0800
+From:   Asutosh Das <quic_asutoshd@quicinc.com>
+To:     <quic_cang@quicinc.com>, <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>
+CC:     <quic_nguyenb@quicinc.com>, <quic_xiaosenh@quicinc.com>,
+        <stanley.chu@mediatek.com>, <eddie.huang@mediatek.com>,
+        <daejun7.park@samsung.com>, <bvanassche@acm.org>,
+        <avri.altman@wdc.com>, <mani@kernel.org>, <beanhuo@micron.com>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: [PATCH v10 00/16] Add Multi Circular Queue Support 
+Date:   Wed, 7 Dec 2022 12:46:11 -0800
+Message-ID: <cover.1670445698.git.quic_asutoshd@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5C/4H7Ettg/DcRz@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: K8JyG7mIY1tgWprqM3nHbY_5ufDDsi0d
+X-Proofpoint-GUID: K8JyG7mIY1tgWprqM3nHbY_5ufDDsi0d
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-07_09,2022-12-07_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212070174
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 08:31:28AM -0800, Christoph Hellwig wrote:
-> On Wed, Dec 07, 2022 at 05:21:48AM -0500, Michael S. Tsirkin wrote:
-> > Christoph you acked the spec patch adding this to virtio blk:
-> > 
-> > 	Still not a fan of the encoding, but at least it is properly documented
-> > 	now:
-> > 
-> > 	Acked-by: Christoph Hellwig <hch@lst.de>
-> > 
-> > Did you change your mind then? Or do you prefer a different encoding for
-> > the ioctl then? could you help sugesting what kind?
-> 
-> Well, it is good enough documented for a spec.  I don't think it is
-> a useful feature for Linux where virtio-blk is our minimum viable
-> paravirtualized block driver.
+Hi Martin,
 
-No idea what this means, sorry.  Now that's in the spec I expect (some)
-devices to implement it and if they do I see no reason not to expose the
-data to userspace.
+This patch series is an implementation of UFS Multi-Circular Queue.
+Please consider this series for next merge window.
+This implementation has been verified on a Qualcomm & MediaTek platform.
 
-Alvaro could you pls explain the use-case? Christoph has doubts that
-it's useful. Do you have a device implementing this?
+Thanks,
+Asutosh
+
+
+UFS Multi-Circular Queue (MCQ) has been added in UFSHCI v4.0 to improve storage performance.
+The implementation uses the shared tagging mechanism so that tags are shared
+among the hardware queues. The number of hardware queues is configurable.
+This series doesn't include the ESI implementation for completion handling.
+
+Please take a look and let us know your thoughts.
+
+v9 -> v10:
+- Fix few checkpatch warnings
+- Use div_u64() instead of direct division in ufshcd_mcq_get_tag() to fix a LKP
+warning
+
+v8 -> v9:
+- Added missing Reviewed-by tags.
+
+v7 -> v8:
+- Addressed Eddie's comments
+
+v6 -> v7:
+- Added missing Reviewed-by tags.
+
+v5 -> v6:
+- Addressed Mani's comments
+- Addressed Bart's comments
+
+v4 -> v5:
+- Fixed failure to fallback to SDB during initialization
+- Fixed failure when rpm-lvl=5 in the ufshcd_host_reset_and_restore() path
+- Improved ufshcd_mcq_config_nr_queues() to handle different configurations
+- Addressed Bart's comments
+- Verified read/write using FIO, clock gating, runtime-pm[lvl=3, lvl=5]
+
+v3 -> v4:
+- Added a kernel module parameter to disable MCQ mode
+- Added Bart's reviewed-by tag for some patches
+- Addressed Bart's comments
+
+v2 -> v3:
+- Split ufshcd_config_mcq() into ufshcd_alloc_mcq() and ufshcd_config_mcq()
+- Use devm_kzalloc() in ufshcd_mcq_init()
+- Free memory and resource allocation on error paths
+- Corrected typos in code comments
+
+v1 -> v2:
+- Added a non MCQ related change to use a function to extrace ufs extended
+feature
+- Addressed Mani's comments
+- Addressed Bart's comments
+
+v1:
+- Split the changes
+- Addressed Bart's comments
+- Addressed Bean's comments
+
+* RFC versions:
+v2 -> v3:
+- Split the changes based on functionality
+- Addressed queue configuration issues
+- Faster SQE tail pointer increments
+- Addressed comments from Bart and Manivannan
+
+v1 -> v2:
+- Enabled host_tagset
+- Added queue num configuration support
+- Added one more vops to allow vendor provide the wanted MAC
+- Determine nutrs and can_queue by considering both MAC, bqueuedepth and EXT_IID support
+- Postponed MCQ initialization and scsi_add_host() to async probe
+- Used (EXT_IID, Task Tag) tuple to support up to 4096 tasks (theoretically)
+
+Asutosh Das (16):
+  ufs: core: Optimize duplicate code to read extended feature
+  ufs: core: Probe for ext_iid support
+  ufs: core: Introduce Multi-circular queue capability
+  ufs: core: Defer adding host to scsi if mcq is supported
+  ufs: core: mcq: Add support to allocate multiple queues
+  ufs: core: mcq: Configure resource regions
+  ufs: core: mcq: Calculate queue depth
+  ufs: core: mcq: Allocate memory for mcq mode
+  ufs: core: mcq: Configure operation and runtime interface
+  ufs: core: mcq: Use shared tags for MCQ mode
+  ufs: core: Prepare ufshcd_send_command for mcq
+  ufs: core: mcq: Find hardware queue to queue request
+  ufs: core: Prepare for completion in mcq
+  ufs: mcq: Add completion support of a cqe
+  ufs: core: mcq: Add completion support in poll
+  ufs: core: mcq: Enable Multi Circular Queue
+
+ drivers/ufs/core/Makefile      |   2 +-
+ drivers/ufs/core/ufs-mcq.c     | 415 +++++++++++++++++++++++++++++++++++++++++
+ drivers/ufs/core/ufshcd-priv.h |  92 ++++++++-
+ drivers/ufs/core/ufshcd.c      | 395 ++++++++++++++++++++++++++++++++-------
+ drivers/ufs/host/ufs-qcom.c    | 146 +++++++++++++++
+ drivers/ufs/host/ufs-qcom.h    |   5 +
+ include/ufs/ufs.h              |   6 +
+ include/ufs/ufshcd.h           | 128 +++++++++++++
+ include/ufs/ufshci.h           |  64 +++++++
+ 9 files changed, 1186 insertions(+), 67 deletions(-)
+ create mode 100644 drivers/ufs/core/ufs-mcq.c
 
 -- 
-MST
+2.7.4
 
