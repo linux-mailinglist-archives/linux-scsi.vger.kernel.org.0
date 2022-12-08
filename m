@@ -2,48 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EBF647A45
-	for <lists+linux-scsi@lfdr.de>; Fri,  9 Dec 2022 00:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DF8647A47
+	for <lists+linux-scsi@lfdr.de>; Fri,  9 Dec 2022 00:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbiLHXof (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 8 Dec 2022 18:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
+        id S230386AbiLHXor (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 8 Dec 2022 18:44:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiLHXoI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Dec 2022 18:44:08 -0500
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F85A3AC15
-        for <linux-scsi@vger.kernel.org>; Thu,  8 Dec 2022 15:44:06 -0800 (PST)
-Received: by mail-pl1-f170.google.com with SMTP id t2so114304ply.2
-        for <linux-scsi@vger.kernel.org>; Thu, 08 Dec 2022 15:44:06 -0800 (PST)
+        with ESMTP id S229479AbiLHXoT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Dec 2022 18:44:19 -0500
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7F160B49
+        for <linux-scsi@vger.kernel.org>; Thu,  8 Dec 2022 15:44:07 -0800 (PST)
+Received: by mail-pj1-f53.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so6284120pje.5
+        for <linux-scsi@vger.kernel.org>; Thu, 08 Dec 2022 15:44:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0nrNVlNOwAxazJvmsTE1rK3sdQfMPeju4ArQiY56A7w=;
-        b=F4wdlCFvCitjbAAN6floe6taQrfEz3H+PlprzJjb1vPt8nhroFvFOP7ZBCFHDYVnf9
-         vB3WbQsRKMPDN04Zq4oWTpn+S0//Rnp9jWNzYFF0n0pxgzR3vOTaw2hkcEv0+vc3ciwk
-         trMy8KGIAwmKqrxJk76GxCWLUBPCkjIpuiVMJTMGqjRRwIeX/ttj1rNuwK+GNB3DtjxC
-         Ijyb55Y6FVSt6I7mxG2IqmW2PI+eDvMhd4cuexdsRVS37VuqGTfZqLwU2EjUll24iB/K
-         tK2NF66JV7qUXQ6Nv2N2sOp0dhaZi4c1Mw8q0xbRCFxJt/KqBlM2+vZZdtwYWqlMzbpo
-         o1Ww==
-X-Gm-Message-State: ANoB5pngujrNTG6N/SsN3AEyC+LlUbTabVem162xYOQg7XP/OGihci3k
-        +u50pnbPAAsZgirOZjRoBRU9H/i7lKk=
-X-Google-Smtp-Source: AA0mqf4P4OusyyDzXbZqhm3nNjxVbhzCzZr5/PbpbKTC/YaRAH2k6pjn5Nttn6L0mtt7hPO9/xMdbQ==
-X-Received: by 2002:a17:90b:310f:b0:219:d84:4446 with SMTP id gc15-20020a17090b310f00b002190d844446mr3632830pjb.26.1670543045330;
-        Thu, 08 Dec 2022 15:44:05 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wrtxazSPAT5yr8DbLGN4jpmxy6tfSJFDHl+FTDD3yJE=;
+        b=gYmS5LkOoumNazfUHrgnH2y6f7sj8uHVxmO4c8cNBfvIo26yfQtrLkZ+fzrABfU6Bl
+         CevK1oiCgxZhtNjgAnNgNiluZjEHiZ5TtN+kFPQCLZvLptSJm2VX5PfqdbcF5U4STn36
+         UefQeiwEZkcD1yh3Ao4TRsiQaHjaldFmLkzh8PdkZpR13p3aY8qABy4t62I+NVz3yyT7
+         9ipCDw9cLHlsvMxKXznkIbmHIHXMkdr5FulY7rfS6CgwkOOtLGL3PxkHuF70qEIW1Uyg
+         DF6Mw6KGAW2CXTnJJNoJo2ktZTOByJOYhTJZ0Ev+q9bmTuMJDYKQcwwPWsTR6MvE4IVg
+         QtZQ==
+X-Gm-Message-State: ANoB5pmcQo6/SFWlzi6cE03nEGAp2qSG9lRcer+JZgLA3mL3TwLPHUxW
+        nKwz/NvZwSs/ROjMyjaLFIY=
+X-Google-Smtp-Source: AA0mqf7hhGvYtwep41eIAeVKSOeay9TeTINWeTkkRpzjgHEb2eI1WgqbY4KlAFY8+xIaCA16d2bglg==
+X-Received: by 2002:a05:6a21:1644:b0:9d:efbe:a11d with SMTP id no4-20020a056a21164400b0009defbea11dmr4866883pzb.45.1670543047397;
+        Thu, 08 Dec 2022 15:44:07 -0800 (PST)
 Received: from bvanassche-glaptop2.roam.corp.google.com ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id t15-20020a17090a2f8f00b00213d28a6dedsm148553pjd.13.2022.12.08.15.44.03
+        by smtp.gmail.com with ESMTPSA id t15-20020a17090a2f8f00b00213d28a6dedsm148553pjd.13.2022.12.08.15.44.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 15:44:04 -0800 (PST)
+        Thu, 08 Dec 2022 15:44:06 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH v5 0/3] Prepare for upstreaming Pixel 6 and 7 UFS support
-Date:   Thu,  8 Dec 2022 15:43:55 -0800
-Message-Id: <20221208234358.252031-1-bvanassche@acm.org>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v5 1/3] scsi: ufs: Reduce the clock scaling latency
+Date:   Thu,  8 Dec 2022 15:43:56 -0800
+Message-Id: <20221208234358.252031-2-bvanassche@acm.org>
 X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+In-Reply-To: <20221208234358.252031-1-bvanassche@acm.org>
+References: <20221208234358.252031-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -56,43 +60,26 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Martin,
+Wait at most 20 ms before rechecking the doorbells instead of waiting
+for a potentially long time between doorbell checks.
 
-The patches in this series are a first step towards integrating support in the
-upstream kernel for the UFS controller in the Pixel 6 and 7. Please consider
-these patches for the next merge window.
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/ufs/core/ufshcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Note: instructions for downloading the Pixel kernel source code are available
-at https://source.android.com/setup/build/building-kernels.
-
-Thank you,
-
-Bart.
-
-Changes compared to v4:
-- Dropped two patches. Dropped one patch without Reviewed-by tag and another
-  patch that exports two functions without adding in-tree callers.
-
-Changes compared to v3:
-- Changed SCSI_UFS_VARIABLE_SG_ENTRY_SIZE from user-selectable into selected
-  only if needed.
-
-Changes compared to v2:
-- Addressed more review comments from Avri.
-
-Changes compared to v1:
-- Addressed Avri's review comments.
-- Added patch "Allow UFS host drivers to override the sg entry size".
-Bart Van Assche (2):
-  scsi: ufs: Reduce the clock scaling latency
-  scsi: ufs: Pass the clock scaling timeout as an argument
-
-Eric Biggers (1):
-  scsi: ufs: Allow UFS host drivers to override the sg entry size
-
- drivers/ufs/core/ufshcd.c | 60 ++++++++++++++++++++++-----------------
- drivers/ufs/host/Kconfig  |  4 +++
- include/ufs/ufshcd.h      | 30 ++++++++++++++++++++
- include/ufs/ufshci.h      |  9 ++++--
- 4 files changed, 75 insertions(+), 28 deletions(-)
-
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 2dbe24977822..b5d9088b7de3 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -1154,7 +1154,7 @@ static int ufshcd_wait_for_doorbell_clr(struct ufs_hba *hba,
+ 		}
+ 
+ 		spin_unlock_irqrestore(hba->host->host_lock, flags);
+-		schedule();
++		io_schedule_timeout(msecs_to_jiffies(20));
+ 		if (ktime_to_us(ktime_sub(ktime_get(), start)) >
+ 		    wait_timeout_us) {
+ 			timeout = true;
