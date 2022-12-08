@@ -2,67 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C9C646DD0
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Dec 2022 12:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3ACA646DD6
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Dec 2022 12:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiLHLCp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 8 Dec 2022 06:02:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
+        id S229735AbiLHLDT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 8 Dec 2022 06:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiLHLBm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Dec 2022 06:01:42 -0500
+        with ESMTP id S229895AbiLHLBt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Dec 2022 06:01:49 -0500
 Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA55C41;
-        Thu,  8 Dec 2022 03:00:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62875F32;
+        Thu,  8 Dec 2022 03:00:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1670497241; x=1702033241;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kiFPw97oMlOhbq1kwrootHJ7a+SdW1/7qB+ORfg0Kks=;
-  b=LXb8Z+kgJgJ2YPMEomV5y7aJnHTtg/ABp1WGaNEuTnQeWbWHihw6HUPr
-   rC+gtMcoU+2s9LyFHvo/gEONKp3Pl/NC5oDTCJ4jiZKSMRAj6L3lGnlwU
-   oqjmrSkhKGz42K36B+Y+uCqaJlc5MTTEncT4c/GRJ/ADCy5Lti+kSJ6PT
-   I4Bxu+tMv/2tKoQEu58okSaT6Aa/7M5bkIyWZD5S8mHCqLa1ri63Jfy4J
-   FaUHIOPuc9RqpjGhIERrIclOlh/PAqQHgwsRxlhMM6SYHJSAZ7Z2/D5DP
-   nBl4GF/l+Q65MgBR0Ii8zkz8Dvwj2Vj4Ed8uyF3yTdDGXcxtwyWlkCPVW
-   w==;
+  t=1670497245; x=1702033245;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=eZzNmPx8xLJS/2iCoWEwaDCKY/FsQzz0UuowB8TiF74=;
+  b=JKhRm+SXQqHlZNWwYzbr+pkWxh2asF6YtvDjEb1zRH6xNGx7bDomwVd0
+   URD9BmWN2GuxLQz5J2obvxR6N1wgUiGlyiDg/Pltzb4fDQUcMtwuO3+HG
+   9Pcw4Gs7/8F+XvTOMqGlgImkDYe0fZX5KhhMZ2hHjJcf+PDQUqXgGOM+G
+   gLnj+Sa7/A0cf/tFRFK4YpDjTkN8lHtTFgWqtt0JLxTimhTSeLYZcZBbz
+   W38vl6l/+ZDDUh1cGcSLGrNdMfHbQ7xHcl51UlEpUtieE8OmeHyvxQwww
+   5Gjq42N5ulQ2sG927lWdw7yRssgDjZxsJPfIhZ4d0Fl/f5jYGytGAJC7i
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.96,227,1665417600"; 
-   d="scan'208";a="223333335"
+   d="scan'208";a="223333349"
 Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 08 Dec 2022 19:00:40 +0800
-IronPort-SDR: py+XPYL6woTJI/s/hNeFS8UuOScHVGPIyl05LrK/0JqCarP5aoupbRYLppLCh1rcwD3NisiJY2
- IgEUOANAiJydvPwsaXxvZJ0a69rCB2/tbC8tCuRAMoAwQGU4viANB+1sdKUjWOlvznyKDV6N4w
- ifbnnlnrlLrZmRBDE8oQ1ytjyg3T8ikjhRC2GnhXgd0E4FlD5O3ZWG4JFBVKfbE7Q4pNx98kkN
- bW28LI6FKCOxTqaV3w/kRqESvGl30sl0H4P5EMt7oAiCUWokfOpj0I6CIlgx85iEyjeu+OXsTj
- xqg=
+  by ob1.hgst.iphmx.com with ESMTP; 08 Dec 2022 19:00:45 +0800
+IronPort-SDR: qFwo6cZ6GJfMJ97dlHioH79ZwAJiIC/Nh7akgWWekHAuNIxxr6/X3jca8G2jr2YpX9NBI+aZ4b
+ 375hcfHPTcoct1QiJULr0rThoAh4zqIkBk2Uc7NQ4/gtN1FltimlxtiMs1aibaaHzy0APQiOvv
+ FTpum78j16D8AbbEBcQXJEUSNCwJ6Hlyz8CpI30VHlFJxoyhWDfnNOIS7wycTnyTke01nBaKUI
+ ZegBQ/h+KGw7ZmuzomgV5ghkYhqnyuhBAcDk/oUtm6D+Hz+9Rfj16hmZuPWdGnqPbqKgRU0HZT
+ j6c=
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Dec 2022 02:13:25 -0800
-IronPort-SDR: irMqzqPhqy/9UX97tuiWYJwyz7O+TpEVyS4dWfgU6YrjQZdbb98FMnkk+oyubTT4SBJi1/w9tG
- X9Fn5ba2wjSuPwjMMR8np/OJzZ2CgtslCqgcgdRS9vKvT0dp4j0yCcVmeJosbKRfqEdEmyPwtZ
- jucIvh3rz4Pm4nmmXCfg4O8PzBrZwHre/zDq3wjejAXzSaYLrM3cCi2rEWjMkcbdRL+0tt2wum
- yCHQaqyuLqamzlOgDLXkDcZk1n59pUSDa2SQpzU9kZTl/uARAUwwERtq0OmbIRUP8HfBb4qD0c
- aaY=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Dec 2022 02:13:30 -0800
+IronPort-SDR: wtxiLUnrhNe1bjU6u31uZnMTChrS3DF2jbY1CDKrquhPyG9oT9jHE++Hj7OlqzdbqxyABipRH3
+ bF5e5L9mkVoUPN5VDqki7Px/+5fPqGLQSHKMtn3hMVc8/fdX8ZDHLGVwLa52MO+PvCla0xQRuL
+ sFhI+8RzwY2E6dwB+oyo2Q4tqsWRX+EkhSn8kOxaRqrp5N9LX2lkDXMJAfp2Tvl8ZwCpllRLDt
+ U34C0r6OkWRxWjq+zSYbMFQXA5UEponxyuWLQF4aB3oGgaXz6W7Jkes/ibdnw9Ktu7oeo10j8C
+ HiM=
 WDCIronportException: Internal
 Received: from dellx5.wdc.com (HELO x1-carbon.cphwdc) ([10.200.210.81])
-  by uls-op-cesaip01.wdc.com with ESMTP; 08 Dec 2022 03:00:38 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP; 08 Dec 2022 03:00:43 -0800
 From:   Niklas Cassel <niklas.cassel@wdc.com>
-To:     Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Mikael Pettersson <mikpelinux@gmail.com>,
+        Brian King <brking@us.ibm.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Brian King <brking@us.ibm.com>
+        "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org,
         Niklas Cassel <niklas.cassel@wdc.com>,
-        linux-block@vger.kernel.org, linux-ide@vger.kernel.org
-Subject: [PATCH 00/25] Add Command Duration Limits support
-Date:   Thu,  8 Dec 2022 11:59:16 +0100
-Message-Id: <20221208105947.2399894-1-niklas.cassel@wdc.com>
+        linux-ide@vger.kernel.org
+Subject: [PATCH 01/25] ata: scsi: rename flag ATA_QCFLAG_FAILED to ATA_QCFLAG_EH
+Date:   Thu,  8 Dec 2022 11:59:17 +0100
+Message-Id: <20221208105947.2399894-2-niklas.cassel@wdc.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221208105947.2399894-1-niklas.cassel@wdc.com>
+References: <20221208105947.2399894-1-niklas.cassel@wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
@@ -73,185 +72,423 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello,
+The name ATA_QCFLAG_FAILED is misleading since it does not mean that a
+QC was actually an error. It means that libata decided to schedule EH
+for the QC, so the QC is now owned by the libata error handler (EH).
 
-This series adds support for Command Duration Limits.
-The series is based on linux-next tag: next-20221205
-The series can also be found in git:
-https://github.com/floatious/linux/commits/cdl-v1
+The normal execution path is responsible for not accessing a QC owned
+by EH. libata core enforces the rule by returning NULL from
+ata_qc_from_tag() for QCs owned by EH.
 
+It is quite easy to mistake that a QC marked with ATA_QCFLAG_FAILED was
+an error. However, a QC that was actually an error is instead indicated
+by having qc->err_mask set. E.g. when we have a NCQ error, we abort all
+QCs, which currently will mark all QCs as ATA_QCFLAG_FAILED. However, it
+will only be a single QC that is an error (i.e. has qc->err_mask set).
 
-=================
-CDL in ATA / SCSI
-=================
-Command Duration Limits is defined in:
-T13 ATA Command Set - 5 (ACS-5) and
-T10 SCSI Primary Commands - 6 (SPC-6) respectively
-(a simpler version of CDL is defined in T10 SPC-5).
+Rename ATA_QCFLAG_FAILED to ATA_QCFLAG_EH to more clearly highlight that
+this flag simply means that a QC is now owned by EH. This new name will
+not mislead to think that the QC was an error (which is instead
+indicated by having qc->err_mask set).
 
-CDL defines Duration Limits Descriptors (DLD).
-7 DLDs for read commands and 7 DLDs for write commands.
-Simply put, a DLD contains a limit and a policy.
+This also makes it more obvious that the EH code skips all QCs that do
+not have ATA_QCFLAG_EH set (rather than ATA_QCFLAG_FAILED), since the EH
+code should simply only care about QCs that are owned by EH itself.
 
-A command can specify that a certain limit should be applied by setting
-the DLD index field (3 bits, so 0-7) in the command itself.
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+---
+ drivers/ata/acard-ahci.c      |  2 +-
+ drivers/ata/libahci.c         |  4 ++--
+ drivers/ata/libata-core.c     | 12 ++++++------
+ drivers/ata/libata-eh.c       | 22 +++++++++++-----------
+ drivers/ata/libata-sata.c     |  4 ++--
+ drivers/ata/libata-sff.c      |  4 ++--
+ drivers/ata/libata-trace.c    |  2 +-
+ drivers/ata/sata_fsl.c        |  2 +-
+ drivers/ata/sata_inic162x.c   |  2 +-
+ drivers/ata/sata_promise.c    |  2 +-
+ drivers/ata/sata_sil24.c      |  2 +-
+ drivers/ata/sata_sx4.c        |  2 +-
+ drivers/scsi/ipr.c            |  4 ++--
+ drivers/scsi/libsas/sas_ata.c |  8 ++++----
+ include/linux/libata.h        |  4 ++--
+ 15 files changed, 38 insertions(+), 38 deletions(-)
 
-The DLD index points to one of the 7 DLDs.
-DLD index 0 means no descriptor, so no limit.
-DLD index 1-7 means DLD 1-7.
-
-A DLD can have a few different policies, but the two major ones are:
--Policy 0xF (abort), command will be completed with command aborted error
-(ATA) or status CHECK CONDITION (SCSI), with sense data indicating that
-the command timed out.
--Policy 0xD (complete-unavailable), command will be completed without
-error (ATA) or status GOOD (SCSI), with sense data indicating that the
-command timed out. Note that the command will not have transferred any
-data to/from the device when the command timed out, even though the
-command returned success.
-
-Regardless of the CDL policy, in case of a CDL timeout, the I/O will
-result in a -ETIME error to user-space.
-
-The DLDs are defined in the CDL log page(s) and are readable and writable.
-For convenience, the kernel provides a sysfs interface for reading the
-descriptors. If a user really wants to change the descriptors, they can do
-so using a user-space application that sends passthrough commands,
-one such application is cdl-tools:
-https://github.com/westerndigitalcorporation/cdl-tools
-DAMIEN: need to change the settings on the repo so that it public
-
-
-==============================
-How to use CDL from user-space
-==============================
-Since CDL is mutually exclusive with NCQ priority
-(see ncq_prio_enable and sas_ncq_prio_enable in
-Documentation/ABI/testing/sysfs-block-device),
-CDL has to be enabled using:
-echo 1 > /sys/block/$bdev/device/duration_limits/enable
-
-In order for user-space to be able to select a specific DLD for an I/O,
-we have decided to reuse the I/O priority API.
-
-This means that we introduce a new priority class (IOPRIO_CLASS_DL).
-When using this class, the existing I/O priority levels (0-7) directly
-indicates the DLD index to use.
-
-By reusing the I/O priority API, the user can both define DLD to use
-per AIO (io_uring sqe->ioprio or libaio iocb->aio_reqprio) or per-thread
-(ioprio_set()).
-
-
-=======
-Testing
-=======
-With the following fio patch that simply adds the new priority class:
-https://github.com/westerndigitalcorporation/cdl-tools/blob/main/patches/fio-3.29-and-newer/0001-os-linux-Add-IORPIO_CLASS_DL-definition.patch
-
-CDL can be tested using fio, e.g.:
-fio --cmdprio_percentage=10 --cmdprio_class=4 --cmdprio=DLD_index
-
-A simple way to test is to use a DLD with a very short duration limit,
-and send large writes. Regardless of the CDL policy, in case of a CDL
-timeout, the I/O will result in a -ETIME error to user-space.
-
-In case of using a SATA drive, you might want to disable the write-cache:
-sudo hdparm -W 0 /dev/$bdev
-
-
-We have tested this patch series using:
--real hardware
--the following QEMU implementation:
-https://github.com/floatious/qemu/tree/cdl
-
-
-===================
-Further information
-===================
-For further information about CDL, see Damien's slides:
-
-Presented at SDC 2021:
-https://www.snia.org/sites/default/files/SDC/2021/pdfs/SNIA-SDC21-LeMoal-Be-On-Time-command-duration-limits-Feature-Support-in%20Linux.pdf
-
-Presented at Lund Linux Con 2022:
-https://drive.google.com/file/d/1I6ChFc0h4JY9qZdO1bY5oCAdYCSZVqWw/view?usp=sharing
-
-
-Kind regards,
-Niklas & Damien
-
-Damien Le Moal (14):
-  ata: libata: simplify qc_fill_rtf port operation interface
-  ata: libata-scsi: improve ata_scsiop_maint_in()
-  scsi: support retrieving sub-pages of mode pages
-  scsi: support service action in scsi_report_opcode()
-  block: introduce duration-limits priority class
-  block: introduce BLK_STS_DURATION_LIMIT
-  ata: libata: detect support for command duration limits
-  ata: libata-scsi: handle CDL bits in ata_scsiop_maint_in()
-  ata: libata-scsi: add support for CDL pages mode sense
-  ata: libata: add ATA feature control sub-page translation
-  ata: libata: set read/write commands CDL index
-  scsi: sd: detect support for command duration limits
-  scsi: sd: set read/write commands CDL index
-  Documentation: sysfs-block-device: document command duration limits
-
-Niklas Cassel (11):
-  ata: scsi: rename flag ATA_QCFLAG_FAILED to ATA_QCFLAG_EH
-  ata: libata: move NCQ related ATA_DFLAGs
-  ata: libata: fix broken NCQ command status handling
-  ata: libata: respect successfully completed commands during errors
-  ata: libata: allow ata_scsi_set_sense() to not set CHECK_CONDITION
-  ata: libata: allow ata_eh_request_sense() to not set CHECK_CONDITION
-  ata: libata-scsi: do not overwrite SCSI ML and status bytes
-  scsi: core: allow libata to complete successful commands via EH
-  scsi: move get_scsi_ml_byte() to scsi_priv.h
-  scsi: sd: handle read/write CDL timeout failures
-  ata: libata: handle completion of CDL commands using policy 0xD
-
- Documentation/ABI/testing/sysfs-block-device | 143 +++
- block/bfq-iosched.c                          |  10 +
- block/blk-core.c                             |   3 +
- block/blk-ioprio.c                           |   3 +
- block/ioprio.c                               |   3 +-
- block/mq-deadline.c                          |   1 +
- drivers/ata/acard-ahci.c                     |   8 +-
- drivers/ata/libahci.c                        | 171 +++-
- drivers/ata/libata-core.c                    | 219 ++++-
- drivers/ata/libata-eh.c                      | 139 ++-
- drivers/ata/libata-sata.c                    | 111 ++-
- drivers/ata/libata-scsi.c                    | 414 +++++++--
- drivers/ata/libata-sff.c                     |  10 +-
- drivers/ata/libata-trace.c                   |   2 +-
- drivers/ata/libata.h                         |   6 +-
- drivers/ata/sata_fsl.c                       |   5 +-
- drivers/ata/sata_inic162x.c                  |  14 +-
- drivers/ata/sata_promise.c                   |   2 +-
- drivers/ata/sata_sil24.c                     |   7 +-
- drivers/ata/sata_sx4.c                       |   2 +-
- drivers/scsi/Makefile                        |   2 +-
- drivers/scsi/ipr.c                           |  11 +-
- drivers/scsi/libsas/sas_ata.c                |  11 +-
- drivers/scsi/scsi.c                          |  28 +-
- drivers/scsi/scsi_error.c                    |  49 +-
- drivers/scsi/scsi_lib.c                      |  13 +-
- drivers/scsi/scsi_priv.h                     |   6 +
- drivers/scsi/scsi_transport_sas.c            |   2 +-
- drivers/scsi/sd.c                            |  37 +-
- drivers/scsi/sd.h                            |  71 ++
- drivers/scsi/sd_cdl.c                        | 894 +++++++++++++++++++
- drivers/scsi/sr.c                            |   2 +-
- include/linux/ata.h                          |  11 +-
- include/linux/blk_types.h                    |   6 +
- include/linux/ioprio.h                       |   2 +-
- include/linux/libata.h                       |  44 +-
- include/scsi/scsi_cmnd.h                     |   5 +
- include/scsi/scsi_device.h                   |   8 +-
- include/uapi/linux/ioprio.h                  |   7 +
- 39 files changed, 2225 insertions(+), 257 deletions(-)
- create mode 100644 drivers/scsi/sd_cdl.c
-
+diff --git a/drivers/ata/acard-ahci.c b/drivers/ata/acard-ahci.c
+index 7654a40c12b4..da74a86b70ba 100644
+--- a/drivers/ata/acard-ahci.c
++++ b/drivers/ata/acard-ahci.c
+@@ -263,7 +263,7 @@ static bool acard_ahci_qc_fill_rtf(struct ata_queued_cmd *qc)
+ 	 * Setup FIS.
+ 	 */
+ 	if (qc->tf.protocol == ATA_PROT_PIO && qc->dma_dir == DMA_FROM_DEVICE &&
+-	    !(qc->flags & ATA_QCFLAG_FAILED)) {
++	    !(qc->flags & ATA_QCFLAG_EH)) {
+ 		ata_tf_from_fis(rx_fis + RX_FIS_PIO_SETUP, &qc->result_tf);
+ 		qc->result_tf.status = (rx_fis + RX_FIS_PIO_SETUP)[15];
+ 	} else
+diff --git a/drivers/ata/libahci.c b/drivers/ata/libahci.c
+index 29acc35bf4a6..03aa9eb415d3 100644
+--- a/drivers/ata/libahci.c
++++ b/drivers/ata/libahci.c
+@@ -2068,7 +2068,7 @@ static bool ahci_qc_fill_rtf(struct ata_queued_cmd *qc)
+ 	 * Setup FIS.
+ 	 */
+ 	if (qc->tf.protocol == ATA_PROT_PIO && qc->dma_dir == DMA_FROM_DEVICE &&
+-	    !(qc->flags & ATA_QCFLAG_FAILED)) {
++	    !(qc->flags & ATA_QCFLAG_EH)) {
+ 		ata_tf_from_fis(rx_fis + RX_FIS_PIO_SETUP, &qc->result_tf);
+ 		qc->result_tf.status = (rx_fis + RX_FIS_PIO_SETUP)[15];
+ 
+@@ -2138,7 +2138,7 @@ static void ahci_post_internal_cmd(struct ata_queued_cmd *qc)
+ 	struct ata_port *ap = qc->ap;
+ 
+ 	/* make DMA engine forget about the failed command */
+-	if (qc->flags & ATA_QCFLAG_FAILED)
++	if (qc->flags & ATA_QCFLAG_EH)
+ 		ahci_kick_engine(ap);
+ }
+ 
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index 884ae73b11ea..6b03bebcde50 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -1590,7 +1590,7 @@ static unsigned ata_exec_internal_sg(struct ata_device *dev,
+ 		ap->ops->post_internal_cmd(qc);
+ 
+ 	/* perform minimal error analysis */
+-	if (qc->flags & ATA_QCFLAG_FAILED) {
++	if (qc->flags & ATA_QCFLAG_EH) {
+ 		if (qc->result_tf.status & (ATA_ERR | ATA_DF))
+ 			qc->err_mask |= AC_ERR_DEV;
+ 
+@@ -4683,10 +4683,10 @@ void ata_qc_complete(struct ata_queued_cmd *qc)
+ 	/* XXX: New EH and old EH use different mechanisms to
+ 	 * synchronize EH with regular execution path.
+ 	 *
+-	 * In new EH, a failed qc is marked with ATA_QCFLAG_FAILED.
++	 * In new EH, a qc owned by EH is marked with ATA_QCFLAG_EH.
+ 	 * Normal execution path is responsible for not accessing a
+-	 * failed qc.  libata core enforces the rule by returning NULL
+-	 * from ata_qc_from_tag() for failed qcs.
++	 * qc owned by EH.  libata core enforces the rule by returning NULL
++	 * from ata_qc_from_tag() for qcs owned by EH.
+ 	 *
+ 	 * Old EH depends on ata_qc_complete() nullifying completion
+ 	 * requests if ATA_QCFLAG_EH_SCHEDULED is set.  Old EH does
+@@ -4698,7 +4698,7 @@ void ata_qc_complete(struct ata_queued_cmd *qc)
+ 		struct ata_eh_info *ehi = &dev->link->eh_info;
+ 
+ 		if (unlikely(qc->err_mask))
+-			qc->flags |= ATA_QCFLAG_FAILED;
++			qc->flags |= ATA_QCFLAG_EH;
+ 
+ 		/*
+ 		 * Finish internal commands without any further processing
+@@ -4715,7 +4715,7 @@ void ata_qc_complete(struct ata_queued_cmd *qc)
+ 		 * Non-internal qc has failed.  Fill the result TF and
+ 		 * summon EH.
+ 		 */
+-		if (unlikely(qc->flags & ATA_QCFLAG_FAILED)) {
++		if (unlikely(qc->flags & ATA_QCFLAG_EH)) {
+ 			fill_result_tf(qc);
+ 			trace_ata_qc_complete_failed(qc);
+ 			ata_qc_schedule_eh(qc);
+diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+index 34303ce67c14..8cb250930c48 100644
+--- a/drivers/ata/libata-eh.c
++++ b/drivers/ata/libata-eh.c
+@@ -575,7 +575,7 @@ void ata_scsi_cmd_error_handler(struct Scsi_Host *host, struct ata_port *ap,
+ 	 * normal completion, error completion, and SCSI timeout.
+ 	 * Both completions can race against SCSI timeout.  When normal
+ 	 * completion wins, the qc never reaches EH.  When error
+-	 * completion wins, the qc has ATA_QCFLAG_FAILED set.
++	 * completion wins, the qc has ATA_QCFLAG_EH set.
+ 	 *
+ 	 * When SCSI timeout wins, things are a bit more complex.
+ 	 * Normal or error completion can occur after the timeout but
+@@ -611,10 +611,10 @@ void ata_scsi_cmd_error_handler(struct Scsi_Host *host, struct ata_port *ap,
+ 
+ 			if (i < ATA_MAX_QUEUE) {
+ 				/* the scmd has an associated qc */
+-				if (!(qc->flags & ATA_QCFLAG_FAILED)) {
++				if (!(qc->flags & ATA_QCFLAG_EH)) {
+ 					/* which hasn't failed yet, timeout */
+ 					qc->err_mask |= AC_ERR_TIMEOUT;
+-					qc->flags |= ATA_QCFLAG_FAILED;
++					qc->flags |= ATA_QCFLAG_EH;
+ 					nr_timedout++;
+ 				}
+ 			} else {
+@@ -631,7 +631,7 @@ void ata_scsi_cmd_error_handler(struct Scsi_Host *host, struct ata_port *ap,
+ 		 * this point but the state of the controller is
+ 		 * unknown.  Freeze the port to make sure the IRQ
+ 		 * handler doesn't diddle with those qcs.  This must
+-		 * be done atomically w.r.t. setting QCFLAG_FAILED.
++		 * be done atomically w.r.t. setting ATA_QCFLAG_EH.
+ 		 */
+ 		if (nr_timedout)
+ 			__ata_port_freeze(ap);
+@@ -911,12 +911,12 @@ void ata_qc_schedule_eh(struct ata_queued_cmd *qc)
+ 
+ 	WARN_ON(!ap->ops->error_handler);
+ 
+-	qc->flags |= ATA_QCFLAG_FAILED;
++	qc->flags |= ATA_QCFLAG_EH;
+ 	ata_eh_set_pending(ap, 1);
+ 
+ 	/* The following will fail if timeout has already expired.
+ 	 * ata_scsi_error() takes care of such scmds on EH entry.
+-	 * Note that ATA_QCFLAG_FAILED is unconditionally set after
++	 * Note that ATA_QCFLAG_EH is unconditionally set after
+ 	 * this function completes.
+ 	 */
+ 	blk_abort_request(scsi_cmd_to_rq(qc->scsicmd));
+@@ -994,7 +994,7 @@ static int ata_do_link_abort(struct ata_port *ap, struct ata_link *link)
+ 	/* include internal tag in iteration */
+ 	ata_qc_for_each_with_internal(ap, qc, tag) {
+ 		if (qc && (!link || qc->dev->link == link)) {
+-			qc->flags |= ATA_QCFLAG_FAILED;
++			qc->flags |= ATA_QCFLAG_EH;
+ 			ata_qc_complete(qc);
+ 			nr_aborted++;
+ 		}
+@@ -1954,7 +1954,7 @@ static void ata_eh_link_autopsy(struct ata_link *link)
+ 	all_err_mask |= ehc->i.err_mask;
+ 
+ 	ata_qc_for_each_raw(ap, qc, tag) {
+-		if (!(qc->flags & ATA_QCFLAG_FAILED) ||
++		if (!(qc->flags & ATA_QCFLAG_EH) ||
+ 		    qc->flags & ATA_QCFLAG_RETRY ||
+ 		    ata_dev_phys_link(qc->dev) != link)
+ 			continue;
+@@ -2232,7 +2232,7 @@ static void ata_eh_link_report(struct ata_link *link)
+ 		desc = ehc->i.desc;
+ 
+ 	ata_qc_for_each_raw(ap, qc, tag) {
+-		if (!(qc->flags & ATA_QCFLAG_FAILED) ||
++		if (!(qc->flags & ATA_QCFLAG_EH) ||
+ 		    ata_dev_phys_link(qc->dev) != link ||
+ 		    ((qc->flags & ATA_QCFLAG_QUIET) &&
+ 		     qc->err_mask == AC_ERR_DEV))
+@@ -2298,7 +2298,7 @@ static void ata_eh_link_report(struct ata_link *link)
+ 		char data_buf[20] = "";
+ 		char cdb_buf[70] = "";
+ 
+-		if (!(qc->flags & ATA_QCFLAG_FAILED) ||
++		if (!(qc->flags & ATA_QCFLAG_EH) ||
+ 		    ata_dev_phys_link(qc->dev) != link || !qc->err_mask)
+ 			continue;
+ 
+@@ -3802,7 +3802,7 @@ void ata_eh_finish(struct ata_port *ap)
+ 
+ 	/* retry or finish qcs */
+ 	ata_qc_for_each_raw(ap, qc, tag) {
+-		if (!(qc->flags & ATA_QCFLAG_FAILED))
++		if (!(qc->flags & ATA_QCFLAG_EH))
+ 			continue;
+ 
+ 		if (qc->err_mask) {
+diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
+index 18ef14e749a0..908f35acee1e 100644
+--- a/drivers/ata/libata-sata.c
++++ b/drivers/ata/libata-sata.c
+@@ -1429,7 +1429,7 @@ void ata_eh_analyze_ncq_error(struct ata_link *link)
+ 
+ 	/* has LLDD analyzed already? */
+ 	ata_qc_for_each_raw(ap, qc, tag) {
+-		if (!(qc->flags & ATA_QCFLAG_FAILED))
++		if (!(qc->flags & ATA_QCFLAG_EH))
+ 			continue;
+ 
+ 		if (qc->err_mask)
+@@ -1477,7 +1477,7 @@ void ata_eh_analyze_ncq_error(struct ata_link *link)
+ 	}
+ 
+ 	ata_qc_for_each_raw(ap, qc, tag) {
+-		if (!(qc->flags & ATA_QCFLAG_FAILED) ||
++		if (!(qc->flags & ATA_QCFLAG_EH) ||
+ 		    ata_dev_phys_link(qc->dev) != link)
+ 			continue;
+ 
+diff --git a/drivers/ata/libata-sff.c b/drivers/ata/libata-sff.c
+index 153f49e00713..34beda28e712 100644
+--- a/drivers/ata/libata-sff.c
++++ b/drivers/ata/libata-sff.c
+@@ -2073,7 +2073,7 @@ void ata_sff_error_handler(struct ata_port *ap)
+ 	unsigned long flags;
+ 
+ 	qc = __ata_qc_from_tag(ap, ap->link.active_tag);
+-	if (qc && !(qc->flags & ATA_QCFLAG_FAILED))
++	if (qc && !(qc->flags & ATA_QCFLAG_EH))
+ 		qc = NULL;
+ 
+ 	spin_lock_irqsave(ap->lock, flags);
+@@ -2796,7 +2796,7 @@ void ata_bmdma_error_handler(struct ata_port *ap)
+ 	bool thaw = false;
+ 
+ 	qc = __ata_qc_from_tag(ap, ap->link.active_tag);
+-	if (qc && !(qc->flags & ATA_QCFLAG_FAILED))
++	if (qc && !(qc->flags & ATA_QCFLAG_EH))
+ 		qc = NULL;
+ 
+ 	/* reset PIO HSM and stop DMA engine */
+diff --git a/drivers/ata/libata-trace.c b/drivers/ata/libata-trace.c
+index e0e4d0d5a100..9b5363fd0ab0 100644
+--- a/drivers/ata/libata-trace.c
++++ b/drivers/ata/libata-trace.c
+@@ -142,7 +142,7 @@ libata_trace_parse_qc_flags(struct trace_seq *p, unsigned int qc_flags)
+ 			trace_seq_printf(p, "QUIET ");
+ 		if (qc_flags & ATA_QCFLAG_RETRY)
+ 			trace_seq_printf(p, "RETRY ");
+-		if (qc_flags & ATA_QCFLAG_FAILED)
++		if (qc_flags & ATA_QCFLAG_EH)
+ 			trace_seq_printf(p, "FAILED ");
+ 		if (qc_flags & ATA_QCFLAG_SENSE_VALID)
+ 			trace_seq_printf(p, "SENSE_VALID ");
+diff --git a/drivers/ata/sata_fsl.c b/drivers/ata/sata_fsl.c
+index b9a4f68b371d..7eab9c4e1473 100644
+--- a/drivers/ata/sata_fsl.c
++++ b/drivers/ata/sata_fsl.c
+@@ -1042,7 +1042,7 @@ static void sata_fsl_error_handler(struct ata_port *ap)
+ 
+ static void sata_fsl_post_internal_cmd(struct ata_queued_cmd *qc)
+ {
+-	if (qc->flags & ATA_QCFLAG_FAILED)
++	if (qc->flags & ATA_QCFLAG_EH)
+ 		qc->err_mask |= AC_ERR_OTHER;
+ 
+ 	if (qc->err_mask) {
+diff --git a/drivers/ata/sata_inic162x.c b/drivers/ata/sata_inic162x.c
+index 11e518f0111c..f480ff456190 100644
+--- a/drivers/ata/sata_inic162x.c
++++ b/drivers/ata/sata_inic162x.c
+@@ -672,7 +672,7 @@ static void inic_error_handler(struct ata_port *ap)
+ static void inic_post_internal_cmd(struct ata_queued_cmd *qc)
+ {
+ 	/* make DMA engine forget about the failed command */
+-	if (qc->flags & ATA_QCFLAG_FAILED)
++	if (qc->flags & ATA_QCFLAG_EH)
+ 		inic_reset_port(inic_port_base(qc->ap));
+ }
+ 
+diff --git a/drivers/ata/sata_promise.c b/drivers/ata/sata_promise.c
+index 9cd7d8b71361..4e60e6c4c35a 100644
+--- a/drivers/ata/sata_promise.c
++++ b/drivers/ata/sata_promise.c
+@@ -828,7 +828,7 @@ static void pdc_post_internal_cmd(struct ata_queued_cmd *qc)
+ 	struct ata_port *ap = qc->ap;
+ 
+ 	/* make DMA engine forget about the failed command */
+-	if (qc->flags & ATA_QCFLAG_FAILED)
++	if (qc->flags & ATA_QCFLAG_EH)
+ 		pdc_reset_port(ap);
+ }
+ 
+diff --git a/drivers/ata/sata_sil24.c b/drivers/ata/sata_sil24.c
+index 2fef6ce93f07..0a01518a8d97 100644
+--- a/drivers/ata/sata_sil24.c
++++ b/drivers/ata/sata_sil24.c
+@@ -1185,7 +1185,7 @@ static void sil24_post_internal_cmd(struct ata_queued_cmd *qc)
+ 	struct ata_port *ap = qc->ap;
+ 
+ 	/* make DMA engine forget about the failed command */
+-	if ((qc->flags & ATA_QCFLAG_FAILED) && sil24_init_port(ap))
++	if ((qc->flags & ATA_QCFLAG_EH) && sil24_init_port(ap))
+ 		ata_eh_freeze_port(ap);
+ }
+ 
+diff --git a/drivers/ata/sata_sx4.c b/drivers/ata/sata_sx4.c
+index ab70cbc78f96..a92c60455b1d 100644
+--- a/drivers/ata/sata_sx4.c
++++ b/drivers/ata/sata_sx4.c
+@@ -866,7 +866,7 @@ static void pdc_post_internal_cmd(struct ata_queued_cmd *qc)
+ 	struct ata_port *ap = qc->ap;
+ 
+ 	/* make DMA engine forget about the failed command */
+-	if (qc->flags & ATA_QCFLAG_FAILED)
++	if (qc->flags & ATA_QCFLAG_EH)
+ 		pdc_reset_port(ap);
+ }
+ 
+diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+index 2022ffb45041..c68ca2218a05 100644
+--- a/drivers/scsi/ipr.c
++++ b/drivers/scsi/ipr.c
+@@ -5370,9 +5370,9 @@ static int __ipr_eh_dev_reset(struct scsi_cmnd *scsi_cmd)
+ 					continue;
+ 
+ 				ipr_cmd->done = ipr_sata_eh_done;
+-				if (!(ipr_cmd->qc->flags & ATA_QCFLAG_FAILED)) {
++				if (!(ipr_cmd->qc->flags & ATA_QCFLAG_EH)) {
+ 					ipr_cmd->qc->err_mask |= AC_ERR_TIMEOUT;
+-					ipr_cmd->qc->flags |= ATA_QCFLAG_FAILED;
++					ipr_cmd->qc->flags |= ATA_QCFLAG_EH;
+ 				}
+ 			}
+ 		}
+diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+index 1ccce706167a..14da33a3b6a6 100644
+--- a/drivers/scsi/libsas/sas_ata.c
++++ b/drivers/scsi/libsas/sas_ata.c
+@@ -125,7 +125,7 @@ static void sas_ata_task_done(struct sas_task *task)
+ 		} else {
+ 			link->eh_info.err_mask |= ac_err_mask(dev->sata_dev.fis[2]);
+ 			if (unlikely(link->eh_info.err_mask))
+-				qc->flags |= ATA_QCFLAG_FAILED;
++				qc->flags |= ATA_QCFLAG_EH;
+ 		}
+ 	} else {
+ 		ac = sas_to_ata_err(stat);
+@@ -136,7 +136,7 @@ static void sas_ata_task_done(struct sas_task *task)
+ 				qc->err_mask = ac;
+ 			} else {
+ 				link->eh_info.err_mask |= AC_ERR_DEV;
+-				qc->flags |= ATA_QCFLAG_FAILED;
++				qc->flags |= ATA_QCFLAG_EH;
+ 			}
+ 
+ 			dev->sata_dev.fis[2] = ATA_ERR | ATA_DRDY; /* tf status */
+@@ -476,7 +476,7 @@ static void sas_ata_internal_abort(struct sas_task *task)
+ 
+ static void sas_ata_post_internal(struct ata_queued_cmd *qc)
+ {
+-	if (qc->flags & ATA_QCFLAG_FAILED)
++	if (qc->flags & ATA_QCFLAG_EH)
+ 		qc->err_mask |= AC_ERR_OTHER;
+ 
+ 	if (qc->err_mask) {
+@@ -631,7 +631,7 @@ void sas_ata_task_abort(struct sas_task *task)
+ 
+ 	/* Internal command, fake a timeout and complete. */
+ 	qc->flags &= ~ATA_QCFLAG_ACTIVE;
+-	qc->flags |= ATA_QCFLAG_FAILED;
++	qc->flags |= ATA_QCFLAG_EH;
+ 	qc->err_mask |= AC_ERR_TIMEOUT;
+ 	waiting = qc->private_data;
+ 	complete(waiting);
+diff --git a/include/linux/libata.h b/include/linux/libata.h
+index c9149ebe7423..7985e6e2ae0e 100644
+--- a/include/linux/libata.h
++++ b/include/linux/libata.h
+@@ -206,7 +206,7 @@ enum {
+ 	ATA_QCFLAG_QUIET	= (1 << 6), /* don't report device error */
+ 	ATA_QCFLAG_RETRY	= (1 << 7), /* retry after failure */
+ 
+-	ATA_QCFLAG_FAILED	= (1 << 16), /* cmd failed and is owned by EH */
++	ATA_QCFLAG_EH		= (1 << 16), /* cmd aborted and owned by EH */
+ 	ATA_QCFLAG_SENSE_VALID	= (1 << 17), /* sense data valid */
+ 	ATA_QCFLAG_EH_SCHEDULED = (1 << 18), /* EH scheduled (obsolete) */
+ 
+@@ -1756,7 +1756,7 @@ static inline struct ata_queued_cmd *ata_qc_from_tag(struct ata_port *ap,
+ 		return qc;
+ 
+ 	if ((qc->flags & (ATA_QCFLAG_ACTIVE |
+-			  ATA_QCFLAG_FAILED)) == ATA_QCFLAG_ACTIVE)
++			  ATA_QCFLAG_EH)) == ATA_QCFLAG_ACTIVE)
+ 		return qc;
+ 
+ 	return NULL;
 -- 
 2.38.1
 
