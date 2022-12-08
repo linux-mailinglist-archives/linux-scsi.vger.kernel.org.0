@@ -2,127 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CEFF646782
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Dec 2022 04:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C56C64677C
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Dec 2022 04:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiLHDKT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Dec 2022 22:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S229692AbiLHDKQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Dec 2022 22:10:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLHDKP (ORCPT
+        with ESMTP id S229557AbiLHDKP (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Dec 2022 22:10:15 -0500
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58667614E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BAE7616E;
         Wed,  7 Dec 2022 19:10:12 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7NNehO002203;
-        Thu, 8 Dec 2022 03:10:10 GMT
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7NO0vA016777;
+        Thu, 8 Dec 2022 03:10:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=USiJSaGzY3DZonIuycbV+3cob+eNJv+C6IwgcYmV1GA=;
- b=o+or5IsK0YAklY1/JAKuALrTHseNI7TU7xampFTD30hXJ56FSkGGw8cEm6m9Z1J0xI4n
- 8ym4eS7yLlttJ+Xod7idYGiVxA59ZLMywX9cD2ZL04gzW0uworllHwfp6dttwe37zdKV
- RB8Ru5flLSB+TX5YpLtzYl4LUeW87K0/oQOk/cMUj0axsEJ6Zmt+ioCPnxMx6dWAr5Nl
- 1qwQkeNL0MSofJpcVrFx9qBL98uc3JHjBzYS5+GVLYrNtvxJ2zii7JtIozsDMLdqSX+X
- HIF7HwX2Onm+2siF2RrqgaNv2TbdZoV7Tit9nKs2+2KNw3ATSwqpwq9F6F0EgD68AdH+ hw== 
+ bh=Aj8bW69fJwO/TjDmSHtW/CEHCu9iXHXjBGHhUvzFZR8=;
+ b=ylpU0M4WAj6uX6QHdAmemJ6gyIPAw2S+rvvVYIzYaD+nMdXXUGrfBe1LOZ2AYczAonRv
+ Pym0elLFJdvx/Qc/twuYO9/4SwpavdYlaJFV+AdSMSlbXqNvmxeUFvlC6/fBTY9nUMdY
+ U3WqDysDDdIezyOi4sZG5WRVOYnBAayJmt5hMxlRjPcivZkNTzKe/VU6aP0PAZ4y6ge7
+ W9T57BBttjy9MU7h8bWR98oYv32oqdsDn4s2vFr6TenMbhcC831aDa25AGufeBrqV4E2
+ ELQoKm371pjKjCRrP1KmXOnGbvy7oULlT0IRqB/Mkkb7Ks5JtuYaYirrWSwHy8Kj9kG2 qg== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3maudusugc-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3maujkht40-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 08 Dec 2022 03:10:10 +0000
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B81ulYX009791;
-        Thu, 8 Dec 2022 03:10:09 GMT
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B81ulYY009791;
+        Thu, 8 Dec 2022 03:10:10 GMT
 Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa6a37hk-1
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa6a37hk-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 08 Dec 2022 03:10:09 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B+xZ68oeDcrEpXueGIic6obUhgyMM72cWVQm6Cy1DwFTq36TBlybQ8f89Kkjb8t89PdxIBEdPPwPQ+upkNpx7mBobmMVbmAOKJ8V/MGPgLuRfayImEDX6ay9or7j9TanbZLgoQ6ToRc3Us/pZhpEeg5HySaoqI0dslEiBeZYZXk/0HuvIoQR5sSEXI+3Sz/jqdkJJ8YEgQRD5MfgGGBpcSokVya9jiiNnjCXrhovQMDmOB+DPBwtnxman4FU6ksiFRiLj6qWhFXLO4DTxfbwX/IgP1okN89o9vRIwpEmWjfQNityxPChv1REMc2McarG+NzhLdOOHQB9QPbFXmgl2Q==
+ b=S88sFgNdJPtjRGf+96A+bX1voc+B7mdqEIMhd+u6Ajxq7NG+LfCLF65Rwwy5yULRgNUG5Xl08R8+YZkn5eA+ZlmrthSpOSgXSaIvOy+X3scEQS8baljliap/ZUEkGiYRybF1CoLVGxqwaNIlRmRIdWFGozxqafrqmEPlo1mU2H/PJ92s5UV7ce0UzPu9cw87BXUpn0H3WuaXk9/RmedcVCqKLSYaSvZwwKhma+LLwQSJ2k9yjnpUU2zX/84ZQ0ecRNQ5dEhYci77mI3IrOTujudw+D/NbTT+6eRHc4CuH2HQRu5hvDJuaXL2HUMcOsWIPebZB8aq/n+bIRb2IcV1Jg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=USiJSaGzY3DZonIuycbV+3cob+eNJv+C6IwgcYmV1GA=;
- b=l6bZ4hHdkOQIrCLK8GjKyXbARmf9kYupApE015CEj2kBlrHGfXJxSN1ii6i04c/gQMRoQJljNfZnS+ZtTcVog5a9Ce6bXa7qMy3REVoEuA7QiqT6a04/5micM48AJn70WjU/goKL7eoJM1TovctmoheJoO4sZ/kn2EvwNu2yr6KolyZnSV1R4h5bqcbLVx9ZvDmftNkQ/UKQse/EhyQWBSnqNrtaWJ2tA5ZJPHeV1hbFafgXbVduWwdqwUkVLk2lpu9YZoKxie5CyWMOlIsQzZjPrmdXNz+6MqX6oQLQCrOyu601vx76zK354rb6ELGL7mfotbo3KNQUflI9yj3gug==
+ bh=Aj8bW69fJwO/TjDmSHtW/CEHCu9iXHXjBGHhUvzFZR8=;
+ b=iYZm4dQAXEbOPbCdsysypfgLSJg2yHXOV/vuT/Q6If0zbaP0vwCMfIeWTl/Q6m0IVLS3UgsLeL194sS6el0iI8GV+nVn6+cBb8TXEkSHAZVR23k1Z5RKHRS/ie5yLhlT1CFZeOfXkThO4Bt5hZN3lkrLp4KWrbQahtW6keCoEDaFPZNZUEqR6WC9GHs5t29SBYhhdwN+y63NdU0QN6TdqF/NiOdoSV0GcmMChS0ADiL80DVRp9W5FdDy/R5XrNcjfLi9Q1oRXW+AhwvUSYgtyR/Tjr1SOOeb3HJQ3Mrwx3Y9vLlYRmtprHoEretj3CTW/XHev6w2VtqDL3h4Wfr8Lg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=USiJSaGzY3DZonIuycbV+3cob+eNJv+C6IwgcYmV1GA=;
- b=Fb3oA/W5HC6JVCJ6yoq3SJmAu3AWuA/8uKfp47IeXACzRIjd90cbAfLMOR5L7FWD9pBBVgBZwa9uD8OsVC/Y9ZEI5hZcRaisfD3FJSt9gjP/Larvlv8yJzOL1ADa9vgm+3xxutZrCJku2v5Ix2sYJU9Dk2A/Qd/oHY9XPEWNmH0=
+ bh=Aj8bW69fJwO/TjDmSHtW/CEHCu9iXHXjBGHhUvzFZR8=;
+ b=0J7cTejURWO0ON1wfPD6GR/3OtmtPcAbgUfwKmSfYCVL+R3qc+Q/UFnRdwexnCJ9BOE8VHpbj+m5HGcsGLZCh3mr5Ih1Ji3KTY9N3NdeiJnaVDVTZxr7q4j8fHyyaNL/VP6fsTHf+l709yBAcNoZ5kD1zz5B4739kgjgiUzQGqA=
 Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
  CH0PR10MB5132.namprd10.prod.outlook.com (2603:10b6:610:c2::22) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.14; Thu, 8 Dec 2022 03:10:07 +0000
+ 15.20.5880.14; Thu, 8 Dec 2022 03:10:08 +0000
 Received: from DM5PR10MB1466.namprd10.prod.outlook.com
  ([fe80::2dbb:4791:5a67:4372]) by DM5PR10MB1466.namprd10.prod.outlook.com
  ([fe80::2dbb:4791:5a67:4372%7]) with mapi id 15.20.5880.014; Thu, 8 Dec 2022
- 03:10:07 +0000
+ 03:10:08 +0000
 From:   Mike Christie <michael.christie@oracle.com>
 To:     mlombard@redhat.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
 Cc:     Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH 1/7] scsi: target: Move sess cmd counter to new struct
-Date:   Wed,  7 Dec 2022 21:09:56 -0600
-Message-Id: <20221208031002.106700-2-michael.christie@oracle.com>
+Subject: [PATCH 2/7] scsi: target: Move cmd counter allocation
+Date:   Wed,  7 Dec 2022 21:09:57 -0600
+Message-Id: <20221208031002.106700-3-michael.christie@oracle.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221208031002.106700-1-michael.christie@oracle.com>
 References: <20221208031002.106700-1-michael.christie@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: CH2PR02CA0026.namprd02.prod.outlook.com
- (2603:10b6:610:4e::36) To DM5PR10MB1466.namprd10.prod.outlook.com
+X-ClientProxiedBy: CH0PR04CA0113.namprd04.prod.outlook.com
+ (2603:10b6:610:75::28) To DM5PR10MB1466.namprd10.prod.outlook.com
  (2603:10b6:3:b::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DM5PR10MB1466:EE_|CH0PR10MB5132:EE_
-X-MS-Office365-Filtering-Correlation-Id: 469d02d9-8d97-41bb-361b-08dad8c9b56d
+X-MS-Office365-Filtering-Correlation-Id: 7658c11c-e96e-4bcb-4e62-08dad8c9b64d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QSuegqWe7KdRkwGrAhuFXqmpEu4zdEetaywUtH65BqsAUxuUDI2laVSVcvo8s4Z3XMs2/BJ6UX0Jy6QQeoPIgeskRzZjbt6oxfxxysG4MPvCM3sFJnIu3EOOj6TMCOkhowQzcb+HDeGpSdpn/K93hJL+r0HaPW8TJWPpCUocIwhKCTOFjZ7yWL9VYnbI5jUNGhB5aNzZaTZ8SktApL8p34sd5HjsLbi2c6K2q/t96X9zbFZFw7wjMaq9SOvG1RRk+toT6oRitoMqpVN1fWJARNtLVBoLyWfuLjKFrmOGKfSyQceeNBKY0ZvSqgY9THgGzty56CnQSlwt+Z7rIPwvT1GtK7RGllUZTa/+lMjMq+a7ww8XVa2PzA7XjYWJDd+LswgheebSUVSw+ysteYmmk1z/DgBQvfv792N55KSajzBpdzMzPuz1TNTQbGGoQyjsVEWcGmnkoUMyw7arwX3njx3gang3r70xqANx0+8l0yekNWhXxGRhkS8PPHO9Zy5GEWEmoXBoGMQYuEEsQ1uk5kpwekDXazaZ+v3V5CGpGr9JxrH9RfiMCDBbmteOs9xUru13FBI/OMZYEd/EGSaJRJFXOJRQc5ZSKXUpzcZjq6rbSUSjumaCKMYy67Y8gV/qLC0t/Rj2+n5Ea6P3KOzK8A==
+X-Microsoft-Antispam-Message-Info: +7wAmDpxHoeiR2fwGiRVXhx1VSYELaqVhcFctMlG3wg5oeWVi3H9wCeXDzJYtpNKcHjdD1MZgo5MiK9wo9bKP/qfxxEo4e4+sUFYDPj/+B6+A8PpVIIoRi+lqlXTbTmaNw/ryztxdI62wvqmNYK3MEmZMFHNcYdAo0wrT1euC2J9LXoih5T4rDVczejhb8Dr8E1q4zl/FZLEVU9k56aZhCge+7ODtp5bIln0CG6X7cz3rxFit6yWJXKDWceVxSFTpUQ/meCeuZXJDmMWXRGq3AdSUZ9yWKYr3TWCIyHTYSWsG+0+HjMZ7TyAXmItrEUWc6tJPPOv8IdThOXvI2R9dJOdGPwXq2+XyBt9YIjccKOqxOQwtAUZ3RH9FMqwHhak9zbQOZFBmaBqMs0ZH7MscKPHnuIHe8b6PY08adCMx4s4CuGndJ0R+sb8FWfSSHsZZPA3RxVfYkvLAMUv4eBwoKagga8dX6MMGk8hIiyNwik1+nlQYT93kTt+UVKvNiQUzcUsXzCNWn3cQYYH8lWW+DsNCHfRSGp/mE3RPx9+hNBY8PLY01CCYSvd1+bHKRX0dTQMi8zeD3P+kUavW7EdaypZ4ibHF8LD4SqxERZxYaHVUkZphNrMaDVjE/p8DudYf6kiw4S3IBNB+UI06KDfCQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199015)(38100700002)(8676002)(86362001)(83380400001)(66946007)(4326008)(41300700001)(2906002)(8936002)(66556008)(66476007)(6506007)(478600001)(6512007)(26005)(107886003)(6666004)(186003)(2616005)(316002)(1076003)(6486002)(5660300002)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?81DxMAPiupVCAhIvrjB553/dGY5r/Mbz5B3awPo0aFUcb2D/QcIxRFpBt7Hx?=
- =?us-ascii?Q?beMjhxFpqUUBd6Vz4K8O7zwLAJj3D33areWgMpikOunUnvhp4CQeVUI9gDSW?=
- =?us-ascii?Q?QBHSGuLx7XUxaj3FSiUCiN7SiXOj21DjGjQ852RNVQPN8+1dwtFrGH5HWfcs?=
- =?us-ascii?Q?GSm1NEzsrmTcsSkXFeSRDRWm+AiXRLt4Zv8ep3KWs9N/e7SpZZhtkbN9BpFB?=
- =?us-ascii?Q?cpwbfCFI+kGMRyiU1YSADmWFv7JetC/hHkWoMxkVe0iTR1izsWyCjkUekjCW?=
- =?us-ascii?Q?SHz4Ga+t8F9vAtdms3jYDT625qhVvmD5jdGD6PiYtHzK5RhKC0M/3M6iC2IM?=
- =?us-ascii?Q?a11b5AFZST+feaXqU5UNyt8ajKZrO0MluzI+tqhZrmk7Ws/Wa0V1GtW+kcl9?=
- =?us-ascii?Q?CdeSEPYaV7c4WK1C5XAv5MIJ1ulwp7uWn0eoL56ajFASa5PBNaEg+ZbNwswl?=
- =?us-ascii?Q?Nb4wrIWkQkWGeVxQ7MGVO3CJKx4AG50oaoLJtxnFSRGGF5t47OCzj3ERK7u2?=
- =?us-ascii?Q?cj3sA3X/rfEAEGpm0kRMImkEqhMpgzfuEuzNDvuknS8AYNzjKg8nNxvQp49y?=
- =?us-ascii?Q?L7bD48Cc7JTrdAh6WEo3Dm+44CGnylJ23l1vbbr4SK+mH7aKs4Hz7Y+xhPro?=
- =?us-ascii?Q?FD9OteHdvlj0sYDDJLPNsGOOXvrrq/M81rRVylRkXhl0VmntlghdsmzAFwL7?=
- =?us-ascii?Q?mXnEwI3KtgMwsQ/OSQMXNhbf1EuU6mTZVHPQAobiIIUfPYXZ1B5eckpP7SY6?=
- =?us-ascii?Q?KDS9NPPODppaDdPaVfGfg1dZc8lu1hK3QAHIP5EolyWNIhl6AZUt1zqZSwKt?=
- =?us-ascii?Q?L/Bj6UOGQgWyKuv5eLPZ1ESF9o5x6O1Msg8aOHAtjCpoZRVdiNiKB6EYAedD?=
- =?us-ascii?Q?/RaE7aySLt3XXBHSoYTNATBehFkOLa/qvtlSHgFHo2WRmKffT98y+h3FbcWh?=
- =?us-ascii?Q?MHlbiP+M/ON+vFV1iNtmzLk8Q132oqDK2AFxY+oYzmNs/z8hSnGRHYLC9Nli?=
- =?us-ascii?Q?s8KL6m8UjiJIp80edfX1n5rNFceyNOu4vaAO+tMYCVKP/432IFTgpACLaqRe?=
- =?us-ascii?Q?CnTqRb326S3M89MiyCww1b0GW1yERXG/ZIKwcOnfNUU0BavTgkf8OrIAw2Zv?=
- =?us-ascii?Q?rLimIiv8rYBdLud/BRcVkjekROsjC60cFsYjXcBUHCnFIXepsHIzd49gOSd9?=
- =?us-ascii?Q?cF07SoHroGW9AAm1Xx9cdN1iZGBGfl6iFrxBpOOzrEq7mA86Azq90CNwFBzD?=
- =?us-ascii?Q?F0lb4Vnijt25Jc7pRqozdkNMXinba7RSJEOrSBf0kRuU4TJFWFihbDC2gaoU?=
- =?us-ascii?Q?ZUWrLyR8M1ip6GQipx6vT+Yq4gddjeP2Ch++KtSp7VCkb2LSx95DhC5Mg7cy?=
- =?us-ascii?Q?+CHJyjwDTF2zzO9rhuQBVPgg8ZisGgniAOlWD/JT0To+CfXuFJ/sR0H+oeuw?=
- =?us-ascii?Q?cn9H+xNOPiHgquKgknSPP/pVgr8fHHsDK3abQT0a1LI8uUdQ7kHJaaN9Px0N?=
- =?us-ascii?Q?1wP9F37pZQWg4vfgIfqhxo8X5sYWjz2GLJ3DzJgZTNuzl/C+AJQGLRNpMaoQ?=
- =?us-ascii?Q?p+31ZJ+Uz7PSVd943imYBQhGznefQQyj4KYAqU3EMJPZTjnv2ss5+YSSOcPY?=
- =?us-ascii?Q?Ig=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YrbWlSZaLeGsnobLIgVGyHryBrWCU9kgH+zSnd6RGwjOwaQX9K/4EsREXfxs?=
+ =?us-ascii?Q?7zIV3qSdTlYbkQM2kLMry6PMbmrv40Bbeb4yina71WamK/LoKqS+hInRQJ5B?=
+ =?us-ascii?Q?2cmCuvA/QOxY2ecg0iLziOpLu5Fo+TuSavCbE4qKM1rXTLzG1Uus4T1bYL9D?=
+ =?us-ascii?Q?OIOoCyQxcdLpmoCa5t9S0qmwkrw6Zdd0NepHNlCpdpqaiQDYiS2Kgo0tKKlt?=
+ =?us-ascii?Q?qhnS18JzcPfGAWn8o0mbnzJNRylx5z3yzznxa0ASaCsE6q2QO137iSkJpwi9?=
+ =?us-ascii?Q?3/xExGhdGvfr6DOTaZNMCyYkOJjpxETSx+oN6KEE/DtlCYLV1+IGMToa7S7r?=
+ =?us-ascii?Q?aUBzRhsWyjL2bkhwfhzqynPwvSRBnUOPwafn857VtpndT2j/xFFNZ8robzBx?=
+ =?us-ascii?Q?C7viI2sB3BACYwCxfHBjsjX7tDhEdPpDiAR7xHbfNc52BLpfC3ZmuP8qyJFN?=
+ =?us-ascii?Q?4+AxHTkwe13WnPZ87hV2yRXbiIHB9W99XhCUuwYALvcOtDWgR57Kkpeo+/8u?=
+ =?us-ascii?Q?9Q1CJPCIOwZj8zstu+zNYUoo8J907+TCmMxKw6G6Vdrsgqf8IRmG3Smb6bt9?=
+ =?us-ascii?Q?pEAf0M1IjxdjzECFF1a/a7FTn8gtAyX805PIvvv9+xLEEggVk1Wc5Vkjht38?=
+ =?us-ascii?Q?orTDNdQmKLTPZbEDznb8d8G7IoIufN9klDWuXXxDGkz+kLsNw4/2564ucjIi?=
+ =?us-ascii?Q?YGBlgn9SFltS3pvKf0DYjjGFKOrd44Y9jiBgknD592tO7lwn5EWMzkITM+Bb?=
+ =?us-ascii?Q?SrHQ9z16KtAOVpGBA0/RYGIuSYdlzSxaRXIp8s14MKLf6yp8LNXPC6TiLXVl?=
+ =?us-ascii?Q?LCpkXUMVScG2N2Z/N34za5sUxsMdq89Qj+LL47PJ5DVZE9NXXGhsspkwR2I8?=
+ =?us-ascii?Q?RSD30SJe54J4VL0oxy/QXlOzgpxOd4lJuN/pGOJ5IGVvuZS/QUoGm7VSdX96?=
+ =?us-ascii?Q?G8dczY8PyHi00ERqQEpyh6YA3E8SjzrOWHx3e7Pd2FVOqmpyIUDd+rdAYldZ?=
+ =?us-ascii?Q?dRTkIo1l+Ex9e8Zvq2H7mIOqqj9HOWnfIWvADzdh8+YoNxSmBINSMAzFz0ar?=
+ =?us-ascii?Q?5WSpaPtgP8cqYPG28dF/pqEQvWBBrMHRgyN7vVmleXE14TlDQ03420RWE7ai?=
+ =?us-ascii?Q?RyHGrKc4YfFSywJ9vHZI2msERvkzYPzoBA29jO9IxI2HMlFpSy34Iq9ZZZpP?=
+ =?us-ascii?Q?p0qQFRcTsV5cAc+ZLFRESCugB3V7A3KNMRkLZ/M4sc6gZ/NMtwGP7QBM14XC?=
+ =?us-ascii?Q?XR0A2JLwal5wg5llk8+2wCdiAMW7fsgFxS3kZcr4yVSLUIm+sOnVBbNvD5FX?=
+ =?us-ascii?Q?vY1jEixHhUU0YvHjpzg/ziEZ4P30C/GGXedzCf/EINvF646ZAmupE1nM1TfM?=
+ =?us-ascii?Q?DWFwFuA7zBiKx3G9XlyaCSfPx0FPiwMHJVe7xnBoQrkpz89nzld3pCPneTbT?=
+ =?us-ascii?Q?7msXGOIEASFGrh9vGXMZjyzew+/L4RHj3SF97V80HJalp6tH1r1kLbPZTB6M?=
+ =?us-ascii?Q?1ykdvWrMRrKzj+yQqYAQ7TuK1md0WuSAWYYmMqHQG5TJWbcLVGuVYd4d2Crx?=
+ =?us-ascii?Q?Fidx+/GOpLsq/IVi8gNdWu9j+ITTP3wr/5xQiXwGA6UXsCk3JYjya45uyeo8?=
+ =?us-ascii?Q?jA=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 469d02d9-8d97-41bb-361b-08dad8c9b56d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7658c11c-e96e-4bcb-4e62-08dad8c9b64d
 X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2022 03:10:07.2393
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2022 03:10:08.6298
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: owCRR036TZ7mDS/Z4kp1veb5EJ11NIBL+F/pqrX8TuadEy0JCUxOOxRvJqNd10tUg6rjToU+e0JIW7DF8fI7qJUN9/M4/z84oPmgHrtpuDc=
+X-MS-Exchange-CrossTenant-UserPrincipalName: uAwr3zSP20qpWPKwyXw4x0e93MJ0F5P6yQgoxkBul3lJ73lxpECOIOPlXQ4lkaIMUSLTSIgiIy7FMNBebfjKVZXzMO167/Fc/VFAMGxw4jU=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5132
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
@@ -131,8 +131,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspe
  malwarescore=0 phishscore=0 mlxlogscore=999 spamscore=0 adultscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2210170000 definitions=main-2212080024
-X-Proofpoint-ORIG-GUID: 49hAcVCj6dE_Nd4iarPbxLF06Q6FAji7
-X-Proofpoint-GUID: 49hAcVCj6dE_Nd4iarPbxLF06Q6FAji7
+X-Proofpoint-ORIG-GUID: HlCWW4Jofqq11ZCZB-IgJnYNio11U_Je
+X-Proofpoint-GUID: HlCWW4Jofqq11ZCZB-IgJnYNio11U_Je
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -143,324 +143,204 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-iSCSI needs to wait on outstanding commands like how srp and the FC/fcoe
-drivers do. It can't use target_stop_session because for MCS support we
-can't stop the entire session during recovery because if other connections
-are ok then we want to be able to continue to execute IO on them.
+iSCSI needs to allocate its cmd counter per connection for MCS support
+where we need to stop and wait on commands running on a connection instead
+of per session. This moves the cmd counter allocation to
+target_setup_session which is used by drivers that need the stop+wait
+behavior per session.
 
-This patch moves the per session cmd counters to a new struct, so iSCSI
-can allocate it per connection. The xcopy code can also just not allocate
-it in the future since it doesn't need to track commands.
+xcopy doesn't need stop+wait at all, so we will be ok moving the cmd
+counter allocation outside of transport_init_session.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
 ---
- drivers/target/target_core_tpg.c         |   2 +-
- drivers/target/target_core_transport.c   | 141 ++++++++++++++++-------
- include/target/iscsi/iscsi_target_core.h |   1 +
- include/target/target_core_base.h        |  13 ++-
- 4 files changed, 112 insertions(+), 45 deletions(-)
+ drivers/target/target_core_internal.h  |  1 -
+ drivers/target/target_core_transport.c | 49 ++++++++++++--------------
+ drivers/target/target_core_xcopy.c     | 15 ++------
+ include/target/target_core_fabric.h    |  2 +-
+ 4 files changed, 26 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/target/target_core_tpg.c b/drivers/target/target_core_tpg.c
-index 736847c933e5..8ebccdbd94f0 100644
---- a/drivers/target/target_core_tpg.c
-+++ b/drivers/target/target_core_tpg.c
-@@ -328,7 +328,7 @@ static void target_shutdown_sessions(struct se_node_acl *acl)
- restart:
- 	spin_lock_irqsave(&acl->nacl_sess_lock, flags);
- 	list_for_each_entry(sess, &acl->acl_sess_list, sess_acl_list) {
--		if (atomic_read(&sess->stopped))
-+		if (sess->cmd_cnt && atomic_read(&sess->cmd_cnt->stopped))
- 			continue;
- 
- 		list_del_init(&sess->sess_acl_list);
+diff --git a/drivers/target/target_core_internal.h b/drivers/target/target_core_internal.h
+index 30fcf69e1a1d..23e5d7847a1a 100644
+--- a/drivers/target/target_core_internal.h
++++ b/drivers/target/target_core_internal.h
+@@ -137,7 +137,6 @@ int	init_se_kmem_caches(void);
+ void	release_se_kmem_caches(void);
+ u32	scsi_get_new_index(scsi_index_t);
+ void	transport_subsystem_check_init(void);
+-void	transport_uninit_session(struct se_session *);
+ unsigned char *transport_dump_cmd_direction(struct se_cmd *);
+ void	transport_dump_dev_state(struct se_device *, char *, int *);
+ void	transport_dump_dev_info(struct se_device *, struct se_lun *,
 diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index 7838dc20f713..60fbebe8c675 100644
+index 60fbebe8c675..314e384f4ee6 100644
 --- a/drivers/target/target_core_transport.c
 +++ b/drivers/target/target_core_transport.c
-@@ -220,11 +220,49 @@ void transport_subsystem_check_init(void)
- 	sub_api_initialized = 1;
- }
- 
--static void target_release_sess_cmd_refcnt(struct percpu_ref *ref)
-+static void target_release_cmd_refcnt(struct percpu_ref *ref)
+@@ -271,24 +271,14 @@ static void target_free_cmd_counter(struct target_cmd_counter *cmd_cnt)
+  *
+  * The caller must have zero-initialized @se_sess before calling this function.
+  */
+-int transport_init_session(struct se_session *se_sess)
++void transport_init_session(struct se_session *se_sess)
  {
--	struct se_session *sess = container_of(ref, typeof(*sess), cmd_count);
-+	struct target_cmd_counter *cmd_cnt  = container_of(ref,
-+							   typeof(*cmd_cnt),
-+							   refcnt);
-+	wake_up(&cmd_cnt->refcnt_wq);
-+}
-+
-+static struct target_cmd_counter *target_alloc_cmd_counter(void)
-+{
-+	struct target_cmd_counter *cmd_cnt;
-+	int rc;
-+
-+	cmd_cnt = kzalloc(sizeof(*cmd_cnt), GFP_KERNEL);
-+	if (!cmd_cnt)
-+		return NULL;
-+
-+	init_completion(&cmd_cnt->stop_done);
-+	init_waitqueue_head(&cmd_cnt->refcnt_wq);
-+	atomic_set(&cmd_cnt->stopped, 0);
-+
-+	rc = percpu_ref_init(&cmd_cnt->refcnt, target_release_cmd_refcnt, 0,
-+			     GFP_KERNEL);
-+	if (rc)
-+		goto free_cmd_cnt;
-+
-+	return cmd_cnt;
-+
-+free_cmd_cnt:
-+	kfree(cmd_cnt);
-+	return NULL;
-+}
-+
-+static void target_free_cmd_counter(struct target_cmd_counter *cmd_cnt)
-+{
-+	/*
-+	 * Drivers like loop do not call target_stop_session during session
-+	 * shutdown so we have to drop the ref taken at init time here.
-+	 */
-+	if (!atomic_read(&cmd_cnt->stopped))
-+		percpu_ref_put(&cmd_cnt->refcnt);
- 
--	wake_up(&sess->cmd_count_wq);
-+	percpu_ref_exit(&cmd_cnt->refcnt);
- }
- 
- /**
-@@ -238,25 +276,17 @@ int transport_init_session(struct se_session *se_sess)
  	INIT_LIST_HEAD(&se_sess->sess_list);
  	INIT_LIST_HEAD(&se_sess->sess_acl_list);
  	spin_lock_init(&se_sess->sess_cmd_lock);
--	init_waitqueue_head(&se_sess->cmd_count_wq);
--	init_completion(&se_sess->stop_done);
--	atomic_set(&se_sess->stopped, 0);
--	return percpu_ref_init(&se_sess->cmd_count,
--			       target_release_sess_cmd_refcnt, 0, GFP_KERNEL);
-+	se_sess->cmd_cnt = target_alloc_cmd_counter();
-+	if (!se_sess->cmd_cnt)
-+		return -ENOMEM;
-+
-+	return  0;
+-	se_sess->cmd_cnt = target_alloc_cmd_counter();
+-	if (!se_sess->cmd_cnt)
+-		return -ENOMEM;
+-
+-	return  0;
  }
  EXPORT_SYMBOL(transport_init_session);
  
- void transport_uninit_session(struct se_session *se_sess)
- {
--	/*
--	 * Drivers like iscsi and loop do not call target_stop_session
--	 * during session shutdown so we have to drop the ref taken at init
--	 * time here.
--	 */
--	if (!atomic_read(&se_sess->stopped))
--		percpu_ref_put(&se_sess->cmd_count);
+-void transport_uninit_session(struct se_session *se_sess)
+-{
+-	target_free_cmd_counter(se_sess->cmd_cnt);
+-}
 -
--	percpu_ref_exit(&se_sess->cmd_count);
-+	target_free_cmd_counter(se_sess->cmd_cnt);
- }
- 
  /**
-@@ -602,7 +632,6 @@ void transport_free_session(struct se_session *se_sess)
- 		sbitmap_queue_free(&se_sess->sess_tag_pool);
- 		kvfree(se_sess->sess_cmd_map);
- 	}
--	transport_uninit_session(se_sess);
- 	kmem_cache_free(se_sess_cache, se_sess);
- }
- EXPORT_SYMBOL(transport_free_session);
-@@ -655,8 +684,13 @@ EXPORT_SYMBOL(transport_deregister_session);
- 
- void target_remove_session(struct se_session *se_sess)
+  * transport_alloc_session - allocate a session object and initialize it
+  * @sup_prot_ops: bitmask that defines which T10-PI modes are supported.
+@@ -296,7 +286,6 @@ void transport_uninit_session(struct se_session *se_sess)
+ struct se_session *transport_alloc_session(enum target_prot_op sup_prot_ops)
  {
-+	struct target_cmd_counter *cmd_cnt = se_sess->cmd_cnt;
-+
- 	transport_deregister_session_configfs(se_sess);
- 	transport_deregister_session(se_sess);
-+
-+	if (cmd_cnt)
-+		target_free_cmd_counter(cmd_cnt);
- }
- EXPORT_SYMBOL(target_remove_session);
+ 	struct se_session *se_sess;
+-	int ret;
  
-@@ -2970,9 +3004,16 @@ int target_get_sess_cmd(struct se_cmd *se_cmd, bool ack_kref)
- 		se_cmd->se_cmd_flags |= SCF_ACK_KREF;
+ 	se_sess = kmem_cache_zalloc(se_sess_cache, GFP_KERNEL);
+ 	if (!se_sess) {
+@@ -304,11 +293,7 @@ struct se_session *transport_alloc_session(enum target_prot_op sup_prot_ops)
+ 				" se_sess_cache\n");
+ 		return ERR_PTR(-ENOMEM);
  	}
+-	ret = transport_init_session(se_sess);
+-	if (ret < 0) {
+-		kmem_cache_free(se_sess_cache, se_sess);
+-		return ERR_PTR(ret);
+-	}
++	transport_init_session(se_sess);
+ 	se_sess->sup_prot_ops = sup_prot_ops;
  
--	if (!percpu_ref_tryget_live(&se_sess->cmd_count))
--		ret = -ESHUTDOWN;
--
-+	/*
-+	 * Users like xcopy do not use counters since they never do a stop
-+	 * and wait.
-+	 */
-+	if (se_sess->cmd_cnt) {
-+		if (!percpu_ref_tryget_live(&se_sess->cmd_cnt->refcnt))
-+			ret = -ESHUTDOWN;
-+		else
-+			se_cmd->cmd_cnt = se_sess->cmd_cnt;
+ 	return se_sess;
+@@ -474,8 +459,13 @@ target_setup_session(struct se_portal_group *tpg,
+ 		     int (*callback)(struct se_portal_group *,
+ 				     struct se_session *, void *))
+ {
++	struct target_cmd_counter *cmd_cnt;
+ 	struct se_session *sess;
++	int rc;
+ 
++	cmd_cnt = target_alloc_cmd_counter();
++	if (!cmd_cnt)
++		return ERR_PTR(-ENOMEM);
+ 	/*
+ 	 * If the fabric driver is using percpu-ida based pre allocation
+ 	 * of I/O descriptor tags, go ahead and perform that setup now..
+@@ -485,29 +475,36 @@ target_setup_session(struct se_portal_group *tpg,
+ 	else
+ 		sess = transport_alloc_session(prot_op);
+ 
+-	if (IS_ERR(sess))
+-		return sess;
++	if (IS_ERR(sess)) {
++		rc = PTR_ERR(sess);
++		goto free_cnt;
 +	}
- 	if (ret && ack_kref)
- 		target_put_sess_cmd(se_cmd);
++	sess->cmd_cnt = cmd_cnt;
  
-@@ -2993,7 +3034,7 @@ static void target_free_cmd_mem(struct se_cmd *cmd)
- static void target_release_cmd_kref(struct kref *kref)
- {
- 	struct se_cmd *se_cmd = container_of(kref, struct se_cmd, cmd_kref);
--	struct se_session *se_sess = se_cmd->se_sess;
-+	struct target_cmd_counter *cmd_cnt = se_cmd->cmd_cnt;
- 	struct completion *free_compl = se_cmd->free_compl;
- 	struct completion *abrt_compl = se_cmd->abrt_compl;
+ 	sess->se_node_acl = core_tpg_check_initiator_node_acl(tpg,
+ 					(unsigned char *)initiatorname);
+ 	if (!sess->se_node_acl) {
+-		transport_free_session(sess);
+-		return ERR_PTR(-EACCES);
++		rc = -EACCES;
++		goto free_sess;
+ 	}
+ 	/*
+ 	 * Go ahead and perform any remaining fabric setup that is
+ 	 * required before transport_register_session().
+ 	 */
+ 	if (callback != NULL) {
+-		int rc = callback(tpg, sess, private);
+-		if (rc) {
+-			transport_free_session(sess);
+-			return ERR_PTR(rc);
+-		}
++		rc = callback(tpg, sess, private);
++		if (rc)
++			goto free_sess;
+ 	}
  
-@@ -3004,7 +3045,8 @@ static void target_release_cmd_kref(struct kref *kref)
- 	if (abrt_compl)
- 		complete(abrt_compl);
- 
--	percpu_ref_put(&se_sess->cmd_count);
-+	if (cmd_cnt)
-+		percpu_ref_put(&cmd_cnt->refcnt);
- }
- 
- /**
-@@ -3123,46 +3165,65 @@ void target_show_cmd(const char *pfx, struct se_cmd *cmd)
- }
- EXPORT_SYMBOL(target_show_cmd);
- 
--static void target_stop_session_confirm(struct percpu_ref *ref)
-+static void target_stop_cmd_counter_confirm(struct percpu_ref *ref)
- {
--	struct se_session *se_sess = container_of(ref, struct se_session,
--						  cmd_count);
--	complete_all(&se_sess->stop_done);
-+	struct target_cmd_counter *cmd_cnt = container_of(ref,
-+						struct target_cmd_counter,
-+						refcnt);
-+	complete_all(&cmd_cnt->stop_done);
-+}
+ 	transport_register_session(tpg, sess->se_node_acl, sess, private);
+ 	return sess;
 +
-+/**
-+ * target_stop_cmd_counter - Stop new IO from being added to the counter.
-+ * @cmd_cnt: counter to stop
-+ */
-+static void target_stop_cmd_counter(struct target_cmd_counter *cmd_cnt)
-+{
-+	pr_debug("Stopping command counter.\n");
-+	if (!atomic_cmpxchg(&cmd_cnt->stopped, 0, 1))
-+		percpu_ref_kill_and_confirm(&cmd_cnt->refcnt,
-+					    target_stop_cmd_counter_confirm);
++free_sess:
++	transport_free_session(sess);
++free_cnt:
++	target_free_cmd_counter(cmd_cnt);
++	return ERR_PTR(rc);
  }
+ EXPORT_SYMBOL(target_setup_session);
  
- /**
-  * target_stop_session - Stop new IO from being queued on the session.
-- * @se_sess:    session to stop
-+ * @se_sess: session to stop
-  */
- void target_stop_session(struct se_session *se_sess)
+diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
+index 49eaee022ef1..49a83500c8b7 100644
+--- a/drivers/target/target_core_xcopy.c
++++ b/drivers/target/target_core_xcopy.c
+@@ -461,8 +461,6 @@ static const struct target_core_fabric_ops xcopy_pt_tfo = {
+ 
+ int target_xcopy_setup_pt(void)
  {
--	pr_debug("Stopping session queue.\n");
--	if (atomic_cmpxchg(&se_sess->stopped, 0, 1) == 0)
--		percpu_ref_kill_and_confirm(&se_sess->cmd_count,
--					    target_stop_session_confirm);
-+	target_stop_cmd_counter(se_sess->cmd_cnt);
- }
- EXPORT_SYMBOL(target_stop_session);
+-	int ret;
+-
+ 	xcopy_wq = alloc_workqueue("xcopy_wq", WQ_MEM_RECLAIM, 0);
+ 	if (!xcopy_wq) {
+ 		pr_err("Unable to allocate xcopy_wq\n");
+@@ -479,9 +477,7 @@ int target_xcopy_setup_pt(void)
+ 	INIT_LIST_HEAD(&xcopy_pt_nacl.acl_list);
+ 	INIT_LIST_HEAD(&xcopy_pt_nacl.acl_sess_list);
+ 	memset(&xcopy_pt_sess, 0, sizeof(struct se_session));
+-	ret = transport_init_session(&xcopy_pt_sess);
+-	if (ret < 0)
+-		goto destroy_wq;
++	transport_init_session(&xcopy_pt_sess);
  
- /**
-- * target_wait_for_sess_cmds - Wait for outstanding commands
-- * @se_sess:    session to wait for active I/O
-+ * target_wait_for_cmds - Wait for outstanding cmds.
-+ * @cmd_cnt: counter to wait for active I/O for.
-  */
--void target_wait_for_sess_cmds(struct se_session *se_sess)
-+static void target_wait_for_cmds(struct target_cmd_counter *cmd_cnt)
+ 	xcopy_pt_nacl.se_tpg = &xcopy_pt_tpg;
+ 	xcopy_pt_nacl.nacl_sess = &xcopy_pt_sess;
+@@ -490,19 +486,12 @@ int target_xcopy_setup_pt(void)
+ 	xcopy_pt_sess.se_node_acl = &xcopy_pt_nacl;
+ 
+ 	return 0;
+-
+-destroy_wq:
+-	destroy_workqueue(xcopy_wq);
+-	xcopy_wq = NULL;
+-	return ret;
+ }
+ 
+ void target_xcopy_release_pt(void)
  {
- 	int ret;
- 
--	WARN_ON_ONCE(!atomic_read(&se_sess->stopped));
-+	WARN_ON_ONCE(!atomic_read(&cmd_cnt->stopped));
- 
- 	do {
- 		pr_debug("Waiting for running cmds to complete.\n");
--		ret = wait_event_timeout(se_sess->cmd_count_wq,
--				percpu_ref_is_zero(&se_sess->cmd_count),
--				180 * HZ);
-+		ret = wait_event_timeout(cmd_cnt->refcnt_wq,
-+					 percpu_ref_is_zero(&cmd_cnt->refcnt),
-+					 180 * HZ);
- 	} while (ret <= 0);
- 
--	wait_for_completion(&se_sess->stop_done);
-+	wait_for_completion(&cmd_cnt->stop_done);
- 	pr_debug("Waiting for cmds done.\n");
+-	if (xcopy_wq) {
++	if (xcopy_wq)
+ 		destroy_workqueue(xcopy_wq);
+-		transport_uninit_session(&xcopy_pt_sess);
+-	}
  }
-+
-+/**
-+ * target_wait_for_sess_cmds - Wait for outstanding commands
-+ * @se_sess: session to wait for active I/O
-+ */
-+void target_wait_for_sess_cmds(struct se_session *se_sess)
-+{
-+	target_wait_for_cmds(se_sess->cmd_cnt);
-+}
- EXPORT_SYMBOL(target_wait_for_sess_cmds);
  
  /*
-diff --git a/include/target/iscsi/iscsi_target_core.h b/include/target/iscsi/iscsi_target_core.h
-index 94d06ddfd80a..229118156a1f 100644
---- a/include/target/iscsi/iscsi_target_core.h
-+++ b/include/target/iscsi/iscsi_target_core.h
-@@ -600,6 +600,7 @@ struct iscsit_conn {
- 	struct iscsi_tpg_np	*tpg_np;
- 	/* Pointer to parent session */
- 	struct iscsit_session	*sess;
-+	struct target_cmd_counter *cmd_cnt;
- 	int			bitmap_id;
- 	int			rx_thread_active;
- 	struct task_struct	*rx_thread;
-diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
-index 12c9ba16217e..bd299790e99c 100644
---- a/include/target/target_core_base.h
-+++ b/include/target/target_core_base.h
-@@ -494,6 +494,7 @@ struct se_cmd {
- 	struct se_lun		*se_lun;
- 	/* Only used for internal passthrough and legacy TCM fabric modules */
- 	struct se_session	*se_sess;
-+	struct target_cmd_counter *cmd_cnt;
- 	struct se_tmr_req	*se_tmr_req;
- 	struct llist_node	se_cmd_list;
- 	struct completion	*free_compl;
-@@ -619,22 +620,26 @@ static inline struct se_node_acl *fabric_stat_to_nacl(struct config_item *item)
- 			acl_fabric_stat_group);
- }
+diff --git a/include/target/target_core_fabric.h b/include/target/target_core_fabric.h
+index 38f0662476d1..ff2ff7703aa6 100644
+--- a/include/target/target_core_fabric.h
++++ b/include/target/target_core_fabric.h
+@@ -133,7 +133,7 @@ struct se_session *target_setup_session(struct se_portal_group *,
+ 				struct se_session *, void *));
+ void target_remove_session(struct se_session *);
  
--struct se_session {
-+struct target_cmd_counter {
-+	struct percpu_ref	refcnt;
-+	wait_queue_head_t	refcnt_wq;
-+	struct completion	stop_done;
- 	atomic_t		stopped;
-+};
-+
-+struct se_session {
- 	u64			sess_bin_isid;
- 	enum target_prot_op	sup_prot_ops;
- 	enum target_prot_type	sess_prot_type;
- 	struct se_node_acl	*se_node_acl;
- 	struct se_portal_group *se_tpg;
- 	void			*fabric_sess_ptr;
--	struct percpu_ref	cmd_count;
- 	struct list_head	sess_list;
- 	struct list_head	sess_acl_list;
- 	spinlock_t		sess_cmd_lock;
--	wait_queue_head_t	cmd_count_wq;
--	struct completion	stop_done;
- 	void			*sess_cmd_map;
- 	struct sbitmap_queue	sess_tag_pool;
-+	struct target_cmd_counter *cmd_cnt;
- };
- 
- struct se_device;
+-int transport_init_session(struct se_session *se_sess);
++void transport_init_session(struct se_session *se_sess);
+ struct se_session *transport_alloc_session(enum target_prot_op);
+ int transport_alloc_session_tags(struct se_session *, unsigned int,
+ 		unsigned int);
 -- 
 2.25.1
 
