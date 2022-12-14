@@ -2,83 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2AA64CB4A
-	for <lists+linux-scsi@lfdr.de>; Wed, 14 Dec 2022 14:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 486D364CAE8
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Dec 2022 14:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237918AbiLNN3G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Dec 2022 08:29:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
+        id S237959AbiLNNR2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Dec 2022 08:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbiLNN3F (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Dec 2022 08:29:05 -0500
+        with ESMTP id S237778AbiLNNR1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Dec 2022 08:17:27 -0500
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7BB240BD
-        for <linux-scsi@vger.kernel.org>; Wed, 14 Dec 2022 05:29:03 -0800 (PST)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NXGPz601BzlVpZ;
-        Wed, 14 Dec 2022 21:27:51 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 14 Dec 2022 21:28:50 +0800
-Subject: Re: [PATCH v3 4/5] scsi: libsas: factor out sas_ata_add_dev()
-To:     John Garry <john.g.garry@oracle.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.ibm.com>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4A81B1F0
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Dec 2022 05:17:26 -0800 (PST)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NXG4x6b4hzqT8S;
+        Wed, 14 Dec 2022 21:13:05 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 14 Dec
+ 2022 21:17:22 +0800
+From:   Jason Yan <yanaijie@huawei.com>
+To:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
 CC:     <linux-scsi@vger.kernel.org>, <hare@suse.com>, <hch@lst.de>,
         <bvanassche@acm.org>, <jinpu.wang@cloud.ionos.com>,
-        <damien.lemoal@opensource.wdc.com>
-References: <20221214070608.4128546-1-yanaijie@huawei.com>
- <20221214070608.4128546-5-yanaijie@huawei.com>
- <f808191f-6723-257b-6cd6-3e2db2fa4b27@oracle.com>
- <913a6c69-6aa4-2d18-ecee-2fa8b97c888e@huawei.com>
- <113358cf-dde7-2494-744b-e5017db30948@oracle.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <e177044b-f10b-8a7b-9048-060c31b398ad@huawei.com>
-Date:   Wed, 14 Dec 2022 21:28:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        <damien.lemoal@opensource.wdc.com>, <john.g.garry@oracle.com>,
+        Jason Yan <yanaijie@huawei.com>
+Subject: [PATCH v4 0/5] scsi: libsas: Some coding style fixes and cleanups
+Date:   Wed, 14 Dec 2022 21:38:03 +0800
+Message-ID: <20221214133808.1649122-1-yanaijie@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <113358cf-dde7-2494-744b-e5017db30948@oracle.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  canpemm500004.china.huawei.com (7.192.104.92)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2022/12/14 21:16, John Garry wrote:
-> On 14/12/2022 12:47, Jason Yan wrote:
->>> Note: you made the changes as I suggested, so I think that you could 
->>> have picked up my RB tag from v2 series, thanks.
->>
->> Yeah I used to do that before. But last time Damien educated me that I
->> must drop all the RB tags after the patch is changed so I didn't take
->> it.
-> 
-> I think that they should be dropped if significant changes are made 
-> since the original tag was granted - that's for sure.
-> 
+A few coding style fixes and cleanups. There should be no functional
+changes in this series besides the debug log prints.
 
-Yes, definitely.
+v1->v2:
+  1. Drop patch #2 in v1.
+  2. Other misc changes suggested by John.
 
-> However if I supply a RB tag but also suggest a smallish change along 
-> with it and you implement that change in a new version, then it's ok to 
-> pick up the tag.
+v2->v3:
+  1. Add John's tag for patch #1 #3 #5.
+  2. /s/sata/SATA/
+  3. Make a global macro for prints of CONFIG_SCSI_SAS_ATA=N
 
-Thanks for the explanation. I'm not sure if Damien agree with that.
+v3->v4:
+  1. Add John and Jack's tag.
+  2. Change the macro for prints of CONFIG_SCSI_SAS_ATA=N to a function.
 
-> 
-> At a brief glance, I could not see this policy mentioned in 
-> submitting-patches.rst .
-> 
-> Thanks!
-> .
+Jason Yan (5):
+  scsi: libsas: move sas_get_ata_command_set() up to save the
+    declaration
+  scsi: libsas: change the coding style of sas_discover_sata()
+  scsi: libsas: remove useless dev_list delete in
+    sas_ex_discover_end_dev()
+  scsi: libsas: factor out sas_ata_add_dev()
+  scsi: libsas: factor out sas_ex_add_dev()
+
+ drivers/scsi/libsas/sas_ata.c      |  88 ++++++++++++++++----
+ drivers/scsi/libsas/sas_discover.c |   6 --
+ drivers/scsi/libsas/sas_expander.c | 125 ++++++++++-------------------
+ include/scsi/libsas.h              |   1 -
+ include/scsi/sas_ata.h             |  20 +++++
+ 5 files changed, 134 insertions(+), 106 deletions(-)
+
+-- 
+2.31.1
+
