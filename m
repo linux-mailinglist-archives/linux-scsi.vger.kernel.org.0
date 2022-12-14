@@ -2,164 +2,139 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481F064CAED
-	for <lists+linux-scsi@lfdr.de>; Wed, 14 Dec 2022 14:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AE964CCE8
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Dec 2022 16:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238379AbiLNNRg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Dec 2022 08:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
+        id S238769AbiLNPQO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Dec 2022 10:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238214AbiLNNR3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Dec 2022 08:17:29 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E424B205D8
-        for <linux-scsi@vger.kernel.org>; Wed, 14 Dec 2022 05:17:27 -0800 (PST)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NXG8q1CYWzlVmD;
-        Wed, 14 Dec 2022 21:16:27 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 14 Dec
- 2022 21:17:25 +0800
-From:   Jason Yan <yanaijie@huawei.com>
-To:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>, <hare@suse.com>, <hch@lst.de>,
-        <bvanassche@acm.org>, <jinpu.wang@cloud.ionos.com>,
-        <damien.lemoal@opensource.wdc.com>, <john.g.garry@oracle.com>,
-        Jason Yan <yanaijie@huawei.com>
-Subject: [PATCH v4 5/5] scsi: libsas: factor out sas_ex_add_dev()
-Date:   Wed, 14 Dec 2022 21:38:08 +0800
-Message-ID: <20221214133808.1649122-6-yanaijie@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221214133808.1649122-1-yanaijie@huawei.com>
-References: <20221214133808.1649122-1-yanaijie@huawei.com>
+        with ESMTP id S238245AbiLNPQG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Dec 2022 10:16:06 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F8112AB5
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Dec 2022 07:16:02 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3b56782b3f6so240132947b3.13
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Dec 2022 07:16:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=i8/7ompYoprPv6p5gopqt1zlXtmepYGFLCWXe2gsqzg=;
+        b=BUfL3YrZ28K+1n6E2SQ9fOqgRKi2RgeotU3ckXNn8xFWPTs42cuoGfphfjNQOV0pgx
+         7/jp35I3w0HRIOFVcsghYPgMBrhr8AMNN8/bTKnJa17Hz49AiqnR3KxJME/VVIigK+sS
+         o/Lm4IOiEo8w6nxX4t2A4IzKZLODEjcrKKDsdmGKLI1atzrsu3mpNZREk5A83gxmOZAt
+         L+k/IzYKvXs7B7hnKP1erYHIobJ4iQu87BD3pnHQtG8fBQOI4ExEQ0QtE/CElufFbNCA
+         yV0c98uSdPhEqukbLuFuzz8L6ZLLU8J5/FlBKjiGFYDWzKiB3XFMXdMwK39OTfRDW0AO
+         GSIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i8/7ompYoprPv6p5gopqt1zlXtmepYGFLCWXe2gsqzg=;
+        b=YmCDPuvXacxCiT8Lza5g3d5UWoss9zCnBP0hOeHDHp4i03Q2YT24s7K7pv9YqcH27m
+         jfHtufRes9hHBOh8KGkG7m6ycCWNuIktmWs5MxfSq6yqCwJrAe+7kwMtRMIqrc+RFiPo
+         ZhbrXraI5BM8jMo0iTUnQwH1AHiKFEtxCbj11axwQ5zYOGUav/ii78zl4+MRGSsKVJKj
+         z/ssuJP83LRwF6KiEA3Plf25kpPdUyASztUVNAbLroHuK0w87VBuf6NHEA1xgtd+qSMo
+         j6apZqtR37PNqFjPUjq11P6HhbFt5LMIC2VEiT1aNRi/sGhNEjYSzJ1fU85bZe7jnU7b
+         dBHQ==
+X-Gm-Message-State: ANoB5pnItqTc6Z/mq2XaLrV6skk6DkViFMzbuq9A679JUaCFoGTH69EM
+        fFC4YJ8hnHbV4XQB9FO5F8uIo69GOiWcKHUQfzt5hQ==
+X-Google-Smtp-Source: AA0mqf6N7NofCRVaBdlZmzX/2IFdQaSJdENS2yaazN5Bc4VEowcispQ6llOh6euNJwrBHENhxHLAYZsrXmLpw9L8cy4=
+X-Received: by 2002:a81:1e44:0:b0:370:7a9a:564 with SMTP id
+ e65-20020a811e44000000b003707a9a0564mr27785992ywe.278.1671030961275; Wed, 14
+ Dec 2022 07:16:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1670778651.git.david.keisarschm@mail.huji.ac.il>
+ <b3caaa5ac5fca4b729bf1ecd0d01968c09e6d083.1670778652.git.david.keisarschm@mail.huji.ac.il>
+ <Y5c8KLzJFz/XZMiM@zx2c4.com> <20221214123358.GA1062210@linux.intel.com>
+In-Reply-To: <20221214123358.GA1062210@linux.intel.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 14 Dec 2022 16:15:49 +0100
+Message-ID: <CANn89iJtK4m1cWvCwp=L_rEOEBa+B1kLZJAw0D9_cYPQcAj+Mw@mail.gmail.com>
+Subject: Re: [PATCH 1/5] Renaming weak prng invocations - prandom_bytes_state, prandom_u32_state
+To:     Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        david.keisarschm@mail.huji.ac.il,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        dri-devel@lists.freedesktop.org, Song Liu <song@kernel.org>,
+        linux-mtd@lists.infradead.org, Stanislav Fomichev <sdf@google.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Christoph Lameter <cl@linux.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Richard Weinberger <richard@nod.at>, x86@kernel.org,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>, ilay.bahat1@gmail.com,
+        Ingo Molnar <mingo@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        David Rientjes <rientjes@google.com>,
+        Yonghong Song <yhs@fb.com>, Paolo Abeni <pabeni@redhat.com>,
+        intel-gfx@lists.freedesktop.org, Petr Mladek <pmladek@suse.com>,
+        Jiri Olsa <jolsa@kernel.org>, Hao Luo <haoluo@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Hannes Reinecke <hare@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Pekka Enberg <penberg@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        aksecurity@gmail.com, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Factor out sas_ex_add_dev() to be consistent with sas_ata_add_dev() and
-unify the error handling.
+On Wed, Dec 14, 2022 at 1:34 PM Stanislaw Gruszka
+<stanislaw.gruszka@linux.intel.com> wrote:
+>
+> On Mon, Dec 12, 2022 at 03:35:20PM +0100, Jason A. Donenfeld wrote:
+> > Please CC me on future revisions.
+> >
+> > As of 6.2, the prandom namespace is *only* for predictable randomness.
+> > There's no need to rename anything. So nack on this patch 1/5.
+>
+> It is not obvious (for casual developers like me) that p in prandom
+> stands for predictable. Some renaming would be useful IMHO.
 
-Cc: John Garry <john.g.garry@oracle.com>
-Signed-off-by: Jason Yan <yanaijie@huawei.com>
-Reviewed-by: John Garry <john.g.garry@oracle.com>
----
- drivers/scsi/libsas/sas_expander.c | 68 +++++++++++++++++-------------
- 1 file changed, 39 insertions(+), 29 deletions(-)
+Renaming makes backports more complicated, because stable teams will
+have to 'undo' name changes.
+Stable teams are already overwhelmed by the amount of backports, and
+silly merge conflicts.
 
-diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-index 0e4e09a0286a..dc670304f181 100644
---- a/drivers/scsi/libsas/sas_expander.c
-+++ b/drivers/scsi/libsas/sas_expander.c
-@@ -751,13 +751,46 @@ static void sas_ex_get_linkrate(struct domain_device *parent,
- 	child->pathways = min(child->pathways, parent->pathways);
- }
- 
-+static int sas_ex_add_dev(struct domain_device *parent, struct ex_phy *phy,
-+			  struct domain_device *child, int phy_id)
-+{
-+	struct sas_rphy *rphy;
-+	int res;
-+
-+	child->dev_type = SAS_END_DEVICE;
-+	rphy = sas_end_device_alloc(phy->port);
-+	if (!rphy)
-+		return -ENOMEM;
-+
-+	child->tproto = phy->attached_tproto;
-+	sas_init_dev(child);
-+
-+	child->rphy = rphy;
-+	get_device(&rphy->dev);
-+	rphy->identify.phy_identifier = phy_id;
-+	sas_fill_in_rphy(child, rphy);
-+
-+	list_add_tail(&child->disco_list_node, &parent->port->disco_list);
-+
-+	res = sas_notify_lldd_dev_found(child);
-+	if (res) {
-+		pr_notice("notify lldd for device %016llx at %016llx:%02d returned 0x%x\n",
-+			  SAS_ADDR(child->sas_addr),
-+			  SAS_ADDR(parent->sas_addr), phy_id, res);
-+		sas_rphy_free(child->rphy);
-+		list_del(&child->disco_list_node);
-+		return res;
-+	}
-+
-+	return 0;
-+}
-+
- static struct domain_device *sas_ex_discover_end_dev(
- 	struct domain_device *parent, int phy_id)
- {
- 	struct expander_device *parent_ex = &parent->ex_dev;
- 	struct ex_phy *phy = &parent_ex->ex_phy[phy_id];
- 	struct domain_device *child = NULL;
--	struct sas_rphy *rphy;
- 	int res;
- 
- 	if (phy->attached_sata_host || phy->attached_sata_ps)
-@@ -787,44 +820,21 @@ static struct domain_device *sas_ex_discover_end_dev(
- 
- 	if ((phy->attached_tproto & SAS_PROTOCOL_STP) || phy->attached_sata_dev) {
- 		res = sas_ata_add_dev(parent, phy, child, phy_id);
--		if (res)
--			goto out_free;
- 	} else if (phy->attached_tproto & SAS_PROTOCOL_SSP) {
--		child->dev_type = SAS_END_DEVICE;
--		rphy = sas_end_device_alloc(phy->port);
--		/* FIXME: error handling */
--		if (unlikely(!rphy))
--			goto out_free;
--		child->tproto = phy->attached_tproto;
--		sas_init_dev(child);
--
--		child->rphy = rphy;
--		get_device(&rphy->dev);
--		rphy->identify.phy_identifier = phy_id;
--		sas_fill_in_rphy(child, rphy);
--
--		list_add_tail(&child->disco_list_node, &parent->port->disco_list);
--
--		res = sas_discover_end_dev(child);
--		if (res) {
--			pr_notice("sas_discover_end_dev() for device %016llx at %016llx:%02d returned 0x%x\n",
--				  SAS_ADDR(child->sas_addr),
--				  SAS_ADDR(parent->sas_addr), phy_id, res);
--			goto out_list_del;
--		}
-+		res = sas_ex_add_dev(parent, phy, child, phy_id);
- 	} else {
- 		pr_notice("target proto 0x%x at %016llx:0x%x not handled\n",
- 			  phy->attached_tproto, SAS_ADDR(parent->sas_addr),
- 			  phy_id);
--		goto out_free;
-+		res = -ENODEV;
- 	}
- 
-+	if (res)
-+		goto out_free;
-+
- 	list_add_tail(&child->siblings, &parent_ex->children);
- 	return child;
- 
-- out_list_del:
--	sas_rphy_free(child->rphy);
--	list_del(&child->disco_list_node);
-  out_free:
- 	sas_port_delete(phy->port);
-  out_err:
--- 
-2.31.1
+Take another example :
 
+u64 timecounter_read(struct timecounter *tc)
+
+You would think this function would read the timecounter, right ?
+
+Well, it _updates_ many fields from @tc, so a 'better name' would also
+be useful.
+
+linux kernel is not for casual readers.
