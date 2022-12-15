@@ -2,56 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4FE64D572
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Dec 2022 04:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8AF64D5A8
+	for <lists+linux-scsi@lfdr.de>; Thu, 15 Dec 2022 04:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiLODHN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Dec 2022 22:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
+        id S229496AbiLODqB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Dec 2022 22:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiLODHI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Dec 2022 22:07:08 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8000552150;
-        Wed, 14 Dec 2022 19:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1671073622; x=1702609622;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=fc+/8vFSou4s5+MOccYvq7ute0TTCtlSbQeVttuawN4=;
-  b=d6/x1t6K6KRd/+59DKk1poAEjy742NrMkTMb0TFZUAYwr+Vfbr580UVm
-   WzBIdedj3c6RN2Bq/iK+o8D0I6i+YKcPc3dN95oLcTK+0DxrZx1EpVqjo
-   GQ8hYEBoMagMETMZtK0/MvguKabGzPja0r5ZxdNTybt+P8cBrVtp7cRwb
-   w=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Dec 2022 19:07:02 -0800
-X-QCInternal: smtphost
-Received: from stor-presley.qualcomm.com ([192.168.140.85])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP; 14 Dec 2022 19:07:02 -0800
-Received: by stor-presley.qualcomm.com (Postfix, from userid 359480)
-        id 0BB4B20DB9; Wed, 14 Dec 2022 19:07:02 -0800 (PST)
-From:   Can Guo <quic_cang@quicinc.com>
-To:     quic_asutoshd@quicinc.com, bvanassche@acm.org, mani@kernel.org,
-        stanley.chu@mediatek.com, adrian.hunter@intel.com,
-        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Can Guo <quic_cang@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 3/3] ufs-host: qcom: Add MCQ ESI config vendor specific ops
-Date:   Wed, 14 Dec 2022 19:06:22 -0800
-Message-Id: <1671073583-10065-4-git-send-email-quic_cang@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1671073583-10065-1-git-send-email-quic_cang@quicinc.com>
-References: <1671073583-10065-1-git-send-email-quic_cang@quicinc.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        with ESMTP id S229484AbiLODqA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Dec 2022 22:46:00 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56C53FBA3
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Dec 2022 19:45:58 -0800 (PST)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NXdQv0kw7zRppt;
+        Thu, 15 Dec 2022 11:44:55 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 15 Dec 2022 11:45:56 +0800
+Subject: Re: [PATCH] scsi: hisi_sas: fix tags freeing for the reserverd tags
+To:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <hare@suse.com>, <hch@lst.de>,
+        <bvanassche@acm.org>, <jinpu.wang@cloud.ionos.com>,
+        <damien.lemoal@opensource.wdc.com>, <john.g.garry@oracle.com>,
+        Xiang Chen <chenxiang66@hisilicon.com>
+References: <20221215035220.77331-1-yanaijie@huawei.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <21bde6bc-bc16-2596-0644-65121d7c4dda@huawei.com>
+Date:   Thu, 15 Dec 2022 11:45:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
+MIME-Version: 1.0
+In-Reply-To: <20221215035220.77331-1-yanaijie@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,162 +51,53 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add MCQ ESI config vendor specific ops.
+On 2022/12/15 11:52, Jason Yan wrote:
+> John put the reserverd tags in lower region of tagset in commit f7d190a94e35
+> ("scsi: hisi_sas: Put reserved tags in lower region of tagset"). However
+> he only change the allocate function and forgot to change the tags free
+> function. This made my board failed to boot.
+> 
+> [   33.467345] hisi_sas_v3_hw 0000:b4:02.0: task exec: failed[-132]!
+> [   33.473413] sas: Executing internal abort failed 5000000000000603 (-132)
+> [   33.480088] hisi_sas_v3_hw 0000:b4:02.0: I_T nexus reset: internal abort (-132)
+> [   33.657336] hisi_sas_v3_hw 0000:b4:02.0: task exec: failed[-132]!
+> [   33.663403] ata7.00: failed to IDENTIFY (I/O error, err_mask=0x40)
+> [   35.787344] hisi_sas_v3_hw 0000:b4:04.0: task exec: failed[-132]!
+> [   35.793411] sas: Executing internal abort failed 5000000000000703 (-132)
+> [   35.800084] hisi_sas_v3_hw 0000:b4:04.0: I_T nexus reset: internal abort (-132)
+> [   35.977335] hisi_sas_v3_hw 0000:b4:04.0: task exec: failed[-132]!
+> [   35.983403] ata10.00: failed to IDENTIFY (I/O error, err_mask=0x40)
+> [   35.989643] ata10.00: revalidation failed (errno=-5)
+> 
+> Fixes: f7d190a94e35 ("scsi: hisi_sas: Put reserved tags in lower region of tagset")
+> Cc: John Garry <john.g.garry@oracle.com>
+> Cc: Xiang Chen <chenxiang66@hisilicon.com>
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> ---
+>   drivers/scsi/hisi_sas/hisi_sas_main.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+> index 41ba22f6c7f0..e2a99e55dd1b 100644
+> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
+> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+> @@ -162,7 +162,7 @@ static void hisi_sas_slot_index_clear(struct hisi_hba *hisi_hba, int slot_idx)
+>   static void hisi_sas_slot_index_free(struct hisi_hba *hisi_hba, int slot_idx)
+>   {
+>   	if (hisi_hba->hw->slot_index_alloc ||
+> -	    slot_idx >= HISI_SAS_UNRESERVED_IPTT) {
+> +	    slot_idx < HISI_SAS_UNRESERVED_IPTT) {
 
-Co-developed-by: Asutosh Das <quic_asutoshd@quicinc.com>
-Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
-Signed-off-by: Can Guo <quic_cang@quicinc.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/ufs/host/ufs-qcom.c | 97 +++++++++++++++++++++++++++++++++++++++++++++
- drivers/ufs/host/ufs-qcom.h |  5 +++
- 2 files changed, 102 insertions(+)
+Sorry this should be HISI_SAS_RESERVED_IPTT. I boot succeed with this 
+becuase HISI_SAS_UNRESERVED_IPTT is bigger than HISI_SAS_RESERVED_IPTT 
+and the tags can be freed.
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 96a58b4..ea5b5f7 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1568,6 +1568,101 @@ static int ufs_qcom_get_outstanding_cqs(struct ufs_hba *hba,
- 	return 0;
- }
- 
-+#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-+static void ufs_qcom_write_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
-+{
-+	struct device *dev = msi_desc_to_dev(desc);
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+
-+	ufshcd_mcq_config_esi(hba, msg);
-+}
-+
-+static irqreturn_t ufs_qcom_mcq_esi_handler(int irq, void *__hba)
-+{
-+	struct ufs_hba *hba = __hba;
-+	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-+	u32 id = irq - host->esi_base;
-+	struct ufs_hw_queue *hwq = &hba->uhq[id];
-+
-+	ufshcd_mcq_write_cqis(hba, 0x1, id);
-+	ufshcd_mcq_poll_cqe_nolock(hba, hwq);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ufs_qcom_config_esi(struct ufs_hba *hba)
-+{
-+	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-+	struct msi_desc *desc;
-+	struct msi_desc *failed_desc = NULL;
-+	int nr_irqs, ret;
-+
-+	if (host->esi_enabled)
-+		return 0;
-+	else if (host->esi_base < 0)
-+		return -EINVAL;
-+
-+	/*
-+	 * 1. We only handle CQs as of now.
-+	 * 2. Poll queues do not need ESI.
-+	 */
-+	nr_irqs = hba->nr_hw_queues - hba->nr_queues[HCTX_TYPE_POLL];
-+	ret = platform_msi_domain_alloc_irqs(hba->dev, nr_irqs,
-+					     ufs_qcom_write_msi_msg);
-+	if (ret)
-+		goto out;
-+
-+	msi_for_each_desc(desc, hba->dev, MSI_DESC_ALL) {
-+		if (!desc->msi_index)
-+			host->esi_base = desc->irq;
-+
-+		ret = devm_request_irq(hba->dev, desc->irq,
-+				       ufs_qcom_mcq_esi_handler,
-+				       IRQF_SHARED, "qcom-mcq-esi", hba);
-+		if (ret) {
-+			dev_err(hba->dev, "%s: Fail to request IRQ for %d, err = %d\n",
-+				__func__, desc->irq, ret);
-+			failed_desc = desc;
-+			break;
-+		}
-+	}
-+
-+	if (ret) {
-+		/* Rewind */
-+		msi_for_each_desc(desc, hba->dev, MSI_DESC_ALL) {
-+			if (desc == failed_desc)
-+				break;
-+			devm_free_irq(hba->dev, desc->irq, hba);
-+		}
-+		platform_msi_domain_free_irqs(hba->dev);
-+	} else {
-+		if (host->hw_ver.major == 6 && host->hw_ver.minor == 0 &&
-+		    host->hw_ver.step == 0) {
-+			ufshcd_writel(hba,
-+				      ufshcd_readl(hba, REG_UFS_CFG3) | 0x1F000,
-+				      REG_UFS_CFG3);
-+		}
-+		ufshcd_mcq_enable_esi(hba);
-+	}
-+
-+out:
-+	if (ret) {
-+		host->esi_base = -1;
-+		dev_warn(hba->dev, "Failed to request Platform MSI %d\n", ret);
-+	} else {
-+		host->esi_enabled = true;
-+	}
-+
-+	return ret;
-+}
-+
-+#else
-+static int ufs_qcom_config_esi(struct ufs_hba *hba)
-+{
-+	return -EOPNOTSUPP;
-+}
-+#endif
-+
- /*
-  * struct ufs_hba_qcom_vops - UFS QCOM specific variant operations
-  *
-@@ -1595,6 +1690,7 @@ static const struct ufs_hba_variant_ops ufs_hba_qcom_vops = {
- 	.get_hba_mac		= ufs_qcom_get_hba_mac,
- 	.op_runtime_config	= ufs_qcom_op_runtime_config,
- 	.get_outstanding_cqs	= ufs_qcom_get_outstanding_cqs,
-+	.config_esi		= ufs_qcom_config_esi,
- };
- 
- /**
-@@ -1628,6 +1724,7 @@ static int ufs_qcom_remove(struct platform_device *pdev)
- 
- 	pm_runtime_get_sync(&(pdev)->dev);
- 	ufshcd_remove(hba);
-+	platform_msi_domain_free_irqs(hba->dev);
- 	return 0;
- }
- 
-diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
-index 6912bdf..7937b41 100644
---- a/drivers/ufs/host/ufs-qcom.h
-+++ b/drivers/ufs/host/ufs-qcom.h
-@@ -54,6 +54,8 @@ enum {
- 	 * added in HW Version 3.0.0
- 	 */
- 	UFS_AH8_CFG				= 0xFC,
-+
-+	REG_UFS_CFG3				= 0x271C,
- };
- 
- /* QCOM UFS host controller vendor specific debug registers */
-@@ -226,6 +228,9 @@ struct ufs_qcom_host {
- 	struct reset_controller_dev rcdev;
- 
- 	struct gpio_desc *device_reset;
-+
-+	int esi_base;
-+	bool esi_enabled;
- };
- 
- static inline u32
--- 
-2.7.4
+I will send v2.
 
+Thanks,
+Jason
+
+>   		spin_lock(&hisi_hba->lock);
+>   		hisi_sas_slot_index_clear(hisi_hba, slot_idx);
+>   		spin_unlock(&hisi_hba->lock);
+> 
