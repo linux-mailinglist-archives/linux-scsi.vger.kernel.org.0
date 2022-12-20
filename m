@@ -2,49 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB4C65180B
-	for <lists+linux-scsi@lfdr.de>; Tue, 20 Dec 2022 02:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D41FE65180E
+	for <lists+linux-scsi@lfdr.de>; Tue, 20 Dec 2022 02:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbiLTBYx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 19 Dec 2022 20:24:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
+        id S233092AbiLTBYv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 19 Dec 2022 20:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbiLTBWh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Dec 2022 20:22:37 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4027EF01E;
-        Mon, 19 Dec 2022 17:21:50 -0800 (PST)
+        with ESMTP id S233202AbiLTBWk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Dec 2022 20:22:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AEBFCCE;
+        Mon, 19 Dec 2022 17:21:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8FD56CE1141;
-        Tue, 20 Dec 2022 01:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 941C7C43392;
-        Tue, 20 Dec 2022 01:21:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 641F56122C;
+        Tue, 20 Dec 2022 01:21:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1F5BC433F0;
+        Tue, 20 Dec 2022 01:21:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671499306;
-        bh=3QygPbOXrloJ/eEA4PsZVoyc71NYwiZTvrK7NjXB2D0=;
+        s=k20201202; t=1671499313;
+        bh=meXrmIHc4uB22MVvnpTkZ0t6/lXPGSax7WRu1NPzbQo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X2e/Vhb3d4aMezM7IOHYu2EMJwJ3pvXIJ7LmFM047KWqKNJmyiuUSbsoDgt8kJ3Lx
-         Bi9iaNp03PJerqniZ7mxxPIjV1r739Ofe26j0NwiLalKI0WuMs0w1M0cTVjLq7kp6m
-         MqWqKY+5L0RbncnqKqC2rpE2vB/E+pn1UsvZtHDPq6mh6oD2AWgLShrRLZx1zEdyyX
-         RomukiOtVgnSc0MTSqn3tooMYu0LrDxLUAJRnJuQ3DbocY4PLXGBs6ueAyNoExSZMW
-         Z/qMqXQ8plLWzcrTak/Ns39/MTxD/i1of1tJoCw0MbkT9KkG6qTpPSgwJdlvvOLVHn
-         3Sw2gWDnyCaZw==
+        b=CY8/VzROTZcB8q71U70ILPgIXT1JwhIJfYS4CqGFlffiPRUPExsVF9ZkfSjGA14+1
+         pWIObzXHVF4QznJ+IYky/Mb+ic+825GuE/I2416CyOH1+LGqf7+QZbOlmBRWWd5vLX
+         HmuvXZxNBrc9lnMBSwNI7MirrTQWKYq7as/5R4V21zsB5VFauLq0tpHvoWpA7j+GEK
+         MFssHw3Kg1eFFfJK4YgUdjcSWL1yeu6mg6lRVSchhOe0X7x0qu7JiKqFL4LLpJKrlY
+         r8tNPhMZTefyee0CfaIBAdApmjtAh4hfUGsMqswXk06jAZNRNcqk0h3iXNCO9DLVbW
+         zzNd1gqQyjcAQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kumar Meiyappan <Kumar.Meiyappan@microchip.com>,
-        Scott Benesh <scott.benesh@microchip.com>,
-        Scott Teel <scott.teel@microchip.com>,
-        Mike Mcgowan <mike.mcgowan@microchip.com>,
-        Kevin Barnett <kevin.barnett@microchip.com>,
-        Don Brace <don.brace@microchip.com>,
+Cc:     Maurizio Lombardi <mlombard@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
-        storagedev@microchip.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 09/16] scsi: smartpqi: Correct device removal for multi-actuator devices
-Date:   Mon, 19 Dec 2022 20:21:19 -0500
-Message-Id: <20221220012127.1222311-9-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, d.bogdanov@yadro.com,
+        k.shelekhin@yadro.com, mgurtovoy@nvidia.com,
+        yang.lee@linux.alibaba.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 12/16] scsi: target: iscsi: Fix a race condition between login_work and the login thread
+Date:   Mon, 19 Dec 2022 20:21:22 -0500
+Message-Id: <20221220012127.1222311-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221220012127.1222311-1-sashal@kernel.org>
 References: <20221220012127.1222311-1-sashal@kernel.org>
@@ -61,126 +59,79 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Kumar Meiyappan <Kumar.Meiyappan@microchip.com>
+From: Maurizio Lombardi <mlombard@redhat.com>
 
-[ Upstream commit cc9befcbbb5ebce77726f938508700d913530035 ]
+[ Upstream commit fec1b2fa62c162d03f5dcd7b03e3c89d3116d49f ]
 
-Correct device count for multi-actuator drives which can cause kernel
-panics.
+In case a malicious initiator sends some random data immediately after a
+login PDU; the iscsi_target_sk_data_ready() callback will schedule the
+login_work and, at the same time, the negotiation may end without clearing
+the LOGIN_FLAGS_INITIAL_PDU flag (because no additional PDU exchanges are
+required to complete the login).
 
-Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
-Reviewed-by: Scott Teel <scott.teel@microchip.com>
-Reviewed-by: Mike Mcgowan <mike.mcgowan@microchip.com>
-Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
-Signed-off-by: Kumar Meiyappan <Kumar.Meiyappan@microchip.com>
-Signed-off-by: Don Brace <don.brace@microchip.com>
-Link: https://lore.kernel.org/r/166793531872.322537.9003385780343419275.stgit@brunhilda
+The login has been completed but the login_work function will find the
+LOGIN_FLAGS_INITIAL_PDU flag set and will never stop from rescheduling
+itself; at this point, if the initiator drops the connection, the
+iscsit_conn structure will be freed, login_work will dereference a released
+socket structure and the kernel crashes.
+
+BUG: kernel NULL pointer dereference, address: 0000000000000230
+PF: supervisor write access in kernel mode
+PF: error_code(0x0002) - not-present page
+Workqueue: events iscsi_target_do_login_rx [iscsi_target_mod]
+RIP: 0010:_raw_read_lock_bh+0x15/0x30
+Call trace:
+ iscsi_target_do_login_rx+0x75/0x3f0 [iscsi_target_mod]
+ process_one_work+0x1e8/0x3c0
+
+Fix this bug by forcing login_work to stop after the login has been
+completed and the socket callbacks have been restored.
+
+Add a comment to clearify the return values of iscsi_target_do_login()
+
+Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
+Link: https://lore.kernel.org/r/20221115125638.102517-1-mlombard@redhat.com
+Reviewed-by: Mike Christie <michael.christie@oracle.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/smartpqi/smartpqi.h      |  2 +-
- drivers/scsi/smartpqi/smartpqi_init.c | 33 +++++++++++++++++++--------
- 2 files changed, 25 insertions(+), 10 deletions(-)
+ drivers/target/iscsi/iscsi_target_nego.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
-index e550b12e525a..c8235f15728b 100644
---- a/drivers/scsi/smartpqi/smartpqi.h
-+++ b/drivers/scsi/smartpqi/smartpqi.h
-@@ -1130,7 +1130,7 @@ struct pqi_scsi_dev {
- 	u8	phy_id;
- 	u8	ncq_prio_enable;
- 	u8	ncq_prio_support;
--	u8	multi_lun_device_lun_count;
-+	u8	lun_count;
- 	bool	raid_bypass_configured;	/* RAID bypass configured */
- 	bool	raid_bypass_enabled;	/* RAID bypass enabled */
- 	u32	next_bypass_group[RAID_MAP_MAX_DATA_DISKS_PER_ROW];
-diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 898b0054cfa1..e011d82172d5 100644
---- a/drivers/scsi/smartpqi/smartpqi_init.c
-+++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -1610,9 +1610,7 @@ static int pqi_get_physical_device_info(struct pqi_ctrl_info *ctrl_info,
- 		&id_phys->alternate_paths_phys_connector,
- 		sizeof(device->phys_connector));
- 	device->bay = id_phys->phys_bay_in_box;
--	device->multi_lun_device_lun_count = id_phys->multi_lun_device_lun_count;
--	if (!device->multi_lun_device_lun_count)
--		device->multi_lun_device_lun_count = 1;
-+	device->lun_count = id_phys->multi_lun_device_lun_count;
- 	if ((id_phys->even_more_flags & PQI_DEVICE_PHY_MAP_SUPPORTED) &&
- 		id_phys->phy_count)
- 		device->phy_id =
-@@ -1746,7 +1744,7 @@ static bool pqi_keep_device_offline(struct pqi_ctrl_info *ctrl_info,
- 	return offline;
+diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
+index f2919319ad38..ff49c8f3fe24 100644
+--- a/drivers/target/iscsi/iscsi_target_nego.c
++++ b/drivers/target/iscsi/iscsi_target_nego.c
+@@ -1018,6 +1018,13 @@ static int iscsi_target_handle_csg_one(struct iscsit_conn *conn, struct iscsi_lo
+ 	return 0;
  }
  
--static int pqi_get_device_info(struct pqi_ctrl_info *ctrl_info,
-+static int pqi_get_device_info_phys_logical(struct pqi_ctrl_info *ctrl_info,
- 	struct pqi_scsi_dev *device,
- 	struct bmic_identify_physical_device *id_phys)
++/*
++ * RETURN VALUE:
++ *
++ *  1 = Login successful
++ * -1 = Login failed
++ *  0 = More PDU exchanges required
++ */
+ static int iscsi_target_do_login(struct iscsit_conn *conn, struct iscsi_login *login)
  {
-@@ -1763,6 +1761,20 @@ static int pqi_get_device_info(struct pqi_ctrl_info *ctrl_info,
- 	return rc;
- }
+ 	int pdu_count = 0;
+@@ -1363,12 +1370,13 @@ int iscsi_target_start_negotiation(
+ 		ret = -1;
  
-+static int pqi_get_device_info(struct pqi_ctrl_info *ctrl_info,
-+	struct pqi_scsi_dev *device,
-+	struct bmic_identify_physical_device *id_phys)
-+{
-+	int rc;
-+
-+	rc = pqi_get_device_info_phys_logical(ctrl_info, device, id_phys);
-+
-+	if (rc == 0 && device->lun_count == 0)
-+		device->lun_count = 1;
-+
-+	return rc;
-+}
-+
- static void pqi_show_volume_status(struct pqi_ctrl_info *ctrl_info,
- 	struct pqi_scsi_dev *device)
- {
-@@ -1897,7 +1909,7 @@ static inline void pqi_remove_device(struct pqi_ctrl_info *ctrl_info, struct pqi
- 	int rc;
- 	int lun;
- 
--	for (lun = 0; lun < device->multi_lun_device_lun_count; lun++) {
-+	for (lun = 0; lun < device->lun_count; lun++) {
- 		rc = pqi_device_wait_for_pending_io(ctrl_info, device, lun,
- 			PQI_REMOVE_DEVICE_PENDING_IO_TIMEOUT_MSECS);
- 		if (rc)
-@@ -2076,6 +2088,7 @@ static void pqi_scsi_update_device(struct pqi_ctrl_info *ctrl_info,
- 	existing_device->sas_address = new_device->sas_address;
- 	existing_device->queue_depth = new_device->queue_depth;
- 	existing_device->device_offline = false;
-+	existing_device->lun_count = new_device->lun_count;
- 
- 	if (pqi_is_logical_device(existing_device)) {
- 		existing_device->is_external_raid_device = new_device->is_external_raid_device;
-@@ -2108,10 +2121,6 @@ static void pqi_scsi_update_device(struct pqi_ctrl_info *ctrl_info,
- 		existing_device->phy_connected_dev_type = new_device->phy_connected_dev_type;
- 		memcpy(existing_device->box, new_device->box, sizeof(existing_device->box));
- 		memcpy(existing_device->phys_connector, new_device->phys_connector, sizeof(existing_device->phys_connector));
--
--		existing_device->multi_lun_device_lun_count = new_device->multi_lun_device_lun_count;
--		if (existing_device->multi_lun_device_lun_count == 0)
--			existing_device->multi_lun_device_lun_count = 1;
+ 	if (ret < 0) {
+-		cancel_delayed_work_sync(&conn->login_work);
+ 		iscsi_target_restore_sock_callbacks(conn);
+ 		iscsi_remove_failed_auth_entry(conn);
  	}
- }
- 
-@@ -6484,6 +6493,12 @@ static void pqi_slave_destroy(struct scsi_device *sdev)
- 		return;
- 	}
- 
-+	device->lun_count--;
-+	if (device->lun_count > 0) {
-+		mutex_unlock(&ctrl_info->scan_mutex);
-+		return;
+-	if (ret != 0)
++	if (ret != 0) {
++		cancel_delayed_work_sync(&conn->login_work);
+ 		iscsi_target_nego_release(conn);
 +	}
-+
- 	spin_lock_irqsave(&ctrl_info->scsi_device_list_lock, flags);
- 	list_del(&device->scsi_device_list_entry);
- 	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 
+ 	return ret;
+ }
 -- 
 2.35.1
 
