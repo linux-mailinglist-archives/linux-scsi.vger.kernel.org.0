@@ -2,33 +2,33 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CE3653B5A
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Dec 2022 05:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D22653B5D
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Dec 2022 05:40:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234471AbiLVEjx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Dec 2022 23:39:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
+        id S235041AbiLVEkD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Dec 2022 23:40:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234981AbiLVEjp (ORCPT
+        with ESMTP id S235005AbiLVEjp (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 21 Dec 2022 23:39:45 -0500
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC2119C23
-        for <linux-scsi@vger.kernel.org>; Wed, 21 Dec 2022 20:39:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6686B1A235
+        for <linux-scsi@vger.kernel.org>; Wed, 21 Dec 2022 20:39:44 -0800 (PST)
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BM4OKMk020309
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BM4OKMl020309
         for <linux-scsi@vger.kernel.org>; Wed, 21 Dec 2022 20:39:43 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=l/XdOKT/lXcpjQjRZt7qyzEazEOzwQRt9ifVp9zEJew=;
- b=eP9tsfbNemlWmPND4T3ALJEX7PG4Yeh9W5NEALBAd1StJ/F5ahlFAcHD7TL7aNUq9ba9
- FHHOrUDpv9tw1Nx4+7m5tfe2f868J3gqLtTFa8tXU99KFawb8G3fUzd9T82+yS4jqYPP
- RjLEgyeCNwEZ3g1RtC7U4Mqjzpu/4lRmQVEl+Ka5KIxVkMIV3wlB75SNx5coRbmcHqmy
- z4YpafQuDoUdu8Qnp6444a0IE1RGuUobqKdlOB9rpZbH9Ere+W7yEMBOSUGaO/vxbf9n
- 1yRLk1n3whantkaOiM6wHgdG8rhbrhC+XLgOVUgwLAeEVr4XejBhaphUFcB19bQpoQx+ rw== 
+ content-type; s=pfpt0220; bh=C8SQt44vyoeVB8rAajyHSy8XSyuNPN39TmAN30dj3Ro=;
+ b=fozkPeLpp0jz+1NE5oMaPy0DsBALTbUA79K0+GzkVk/Q2+5UapANkoVpFjx0qpTE+WyU
+ 0Sz4kXnEEPhQfF1aLi7KsqkjAc7Uod8gWI+w0TXcxZAPPtvHG/MgYc4foFC0jeyVjZlq
+ i9M8IG4qYAxKcYzZwnERw1tlv8Et0HxM2vyyv7vgWpa/zEPsoJYn+zeUj2Dd11poWLIC
+ FwZdwfNnJUUPbaG2qtX4UY1+xfl6M886M45LJn4yGicczFoZ/w9yQt8GQKoMq0ltGEQ8
+ xDjSsB/iMHe5m8+hBK4btZA47SuJVzCcSJREwhwsMbTBdxYj/ipqsXxXOq3cJnzKa2Af Tg== 
 Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3mhe5rsdhc-1
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3mhe5rsdhc-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Wed, 21 Dec 2022 20:39:42 -0800
+        for <linux-scsi@vger.kernel.org>; Wed, 21 Dec 2022 20:39:43 -0800
 Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Dec
  2022 20:39:40 -0800
@@ -36,23 +36,23 @@ Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
  Transport; Wed, 21 Dec 2022 20:39:40 -0800
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 5ADE03F7068;
+        by maili.marvell.com (Postfix) with ESMTP id 82CDE3F7069;
         Wed, 21 Dec 2022 20:39:40 -0800 (PST)
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>, <bhazarika@marvell.com>,
         <agurumurthy@marvell.com>, <sdeodhar@marvell.com>
-Subject: [PATCH 01/10] qla2xxx: Remove dead code
-Date:   Wed, 21 Dec 2022 20:39:24 -0800
-Message-ID: <20221222043933.2825-2-njavali@marvell.com>
+Subject: [PATCH 02/10] qla2xxx: Remove dead code (GPNID)
+Date:   Wed, 21 Dec 2022 20:39:25 -0800
+Message-ID: <20221222043933.2825-3-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20221222043933.2825-1-njavali@marvell.com>
 References: <20221222043933.2825-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: VZIUUOrIS-WppQhUy77URJWxtKmVlDdC
-X-Proofpoint-ORIG-GUID: VZIUUOrIS-WppQhUy77URJWxtKmVlDdC
+X-Proofpoint-GUID: v56kk5SiuUtf7eqAF0faBdG49n1clD9P
+X-Proofpoint-ORIG-GUID: v56kk5SiuUtf7eqAF0faBdG49n1clD9P
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-22_01,2022-12-21_01,2022-06-22_01
@@ -67,189 +67,437 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-Removing drport field and FCPORT_UPDATE_NEEDED signals.
+Remove stale unused code for GPNID.
 
 Cc: stable@vger.kernel.org
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_attr.c |  5 ++--
- drivers/scsi/qla2xxx/qla_def.h  |  3 +--
- drivers/scsi/qla2xxx/qla_init.c | 48 ---------------------------------
- drivers/scsi/qla2xxx/qla_mid.c  |  9 -------
- drivers/scsi/qla2xxx/qla_os.c   | 13 ++-------
- 5 files changed, 5 insertions(+), 73 deletions(-)
+ drivers/scsi/qla2xxx/qla_def.h  |   7 +-
+ drivers/scsi/qla2xxx/qla_gbl.h  |   4 -
+ drivers/scsi/qla2xxx/qla_gs.c   | 297 --------------------------------
+ drivers/scsi/qla2xxx/qla_init.c |   2 +-
+ drivers/scsi/qla2xxx/qla_iocb.c |   2 +-
+ drivers/scsi/qla2xxx/qla_os.c   |   4 -
+ 6 files changed, 3 insertions(+), 313 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
-index fa1fcbfb946f..6a4bc59d6525 100644
---- a/drivers/scsi/qla2xxx/qla_attr.c
-+++ b/drivers/scsi/qla2xxx/qla_attr.c
-@@ -2732,7 +2732,7 @@ qla2x00_dev_loss_tmo_callbk(struct fc_rport *rport)
- 	spin_lock_irqsave(host->host_lock, flags);
- 	/* Confirm port has not reappeared before clearing pointers. */
- 	if (rport->port_state != FC_PORTSTATE_ONLINE) {
--		fcport->rport = fcport->drport = NULL;
-+		fcport->rport = NULL;
- 		*((fc_port_t **)rport->dd_data) = NULL;
- 	}
- 	spin_unlock_irqrestore(host->host_lock, flags);
-@@ -3171,8 +3171,7 @@ qla24xx_vport_delete(struct fc_vport *fc_vport)
- 
- 	set_bit(VPORT_DELETE, &vha->dpc_flags);
- 
--	while (test_bit(LOOP_RESYNC_ACTIVE, &vha->dpc_flags) ||
--	    test_bit(FCPORT_UPDATE_NEEDED, &vha->dpc_flags))
-+	while (test_bit(LOOP_RESYNC_ACTIVE, &vha->dpc_flags))
- 		msleep(1000);
- 
- 
 diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index cd4eb11b0707..0dde3fa9e258 100644
+index 0dde3fa9e258..9ee9ce613c75 100644
 --- a/drivers/scsi/qla2xxx/qla_def.h
 +++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -2596,7 +2596,7 @@ typedef struct fc_port {
+@@ -3479,7 +3479,6 @@ enum qla_work_type {
+ 	QLA_EVT_ASYNC_ADISC,
+ 	QLA_EVT_UEVENT,
+ 	QLA_EVT_AENFX,
+-	QLA_EVT_GPNID,
+ 	QLA_EVT_UNMAP,
+ 	QLA_EVT_NEW_SESS,
+ 	QLA_EVT_GPDB,
+@@ -3534,9 +3533,6 @@ struct qla_work_evt {
+ 		struct {
+ 			srb_t *sp;
+ 		} iosb;
+-		struct {
+-			port_id_t id;
+-		} gpnid;
+ 		struct {
+ 			port_id_t id;
+ 			u8 port_name[8];
+@@ -3544,7 +3540,7 @@ struct qla_work_evt {
+ 			void *pla;
+ 			u8 fc4_type;
+ 		} new_sess;
+-		struct { /*Get PDB, Get Speed, update fcport, gnl, gidpn */
++		struct { /*Get PDB, Get Speed, update fcport, gnl */
+ 			fc_port_t *fcport;
+ 			u8 opt;
+ 		} fcport;
+@@ -5025,7 +5021,6 @@ typedef struct scsi_qla_host {
+ 	uint8_t n2n_port_name[WWN_SIZE];
+ 	uint16_t	n2n_id;
+ 	__le16 dport_data[4];
+-	struct list_head gpnid_list;
+ 	struct fab_scan scan;
+ 	uint8_t	scm_fabric_connection_flags;
  
- 	int login_retry;
+diff --git a/drivers/scsi/qla2xxx/qla_gbl.h b/drivers/scsi/qla2xxx/qla_gbl.h
+index e3256e721be1..2acddc8dc943 100644
+--- a/drivers/scsi/qla2xxx/qla_gbl.h
++++ b/drivers/scsi/qla2xxx/qla_gbl.h
+@@ -721,10 +721,6 @@ extern int qla2x00_chk_ms_status(scsi_qla_host_t *, ms_iocb_entry_t *,
+ 	struct ct_sns_rsp *, const char *);
+ extern void qla2x00_async_iocb_timeout(void *data);
  
--	struct fc_rport *rport, *drport;
-+	struct fc_rport *rport;
- 	u32 supported_classes;
- 
- 	uint8_t fc4_type;
-@@ -4876,7 +4876,6 @@ typedef struct scsi_qla_host {
- #define ISP_ABORT_RETRY		10	/* ISP aborted. */
- #define BEACON_BLINK_NEEDED	11
- #define REGISTER_FDMI_NEEDED	12
--#define FCPORT_UPDATE_NEEDED	13
- #define VP_DPC_NEEDED		14	/* wake up for VP dpc handling */
- #define UNLOADING		15
- #define NPIV_CONFIG_NEEDED	16
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 6968e8d08968..ca216b820b1c 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -5224,27 +5224,6 @@ qla2x00_nvram_config(scsi_qla_host_t *vha)
- 	return (rval);
- }
- 
--static void
--qla2x00_rport_del(void *data)
--{
--	fc_port_t *fcport = data;
--	struct fc_rport *rport;
--	unsigned long flags;
+-extern int qla24xx_post_gpnid_work(struct scsi_qla_host *, port_id_t *);
+-extern int qla24xx_async_gpnid(scsi_qla_host_t *, port_id_t *);
+-void qla24xx_handle_gpnid_event(scsi_qla_host_t *, struct event_arg *);
 -
--	spin_lock_irqsave(fcport->vha->host->host_lock, flags);
--	rport = fcport->drport ? fcport->drport : fcport->rport;
--	fcport->drport = NULL;
--	spin_unlock_irqrestore(fcport->vha->host->host_lock, flags);
--	if (rport) {
--		ql_dbg(ql_dbg_disc, fcport->vha, 0x210b,
--		    "%s %8phN. rport %p roles %x\n",
--		    __func__, fcport->port_name, rport,
--		    rport->roles);
--
--		fc_remote_port_delete(rport);
--	}
--}
--
- void qla2x00_set_fcport_state(fc_port_t *fcport, int state)
- {
- 	int old_state;
-@@ -6761,33 +6740,6 @@ int qla2x00_perform_loop_resync(scsi_qla_host_t *ha)
+ int qla24xx_post_gpsc_work(struct scsi_qla_host *, fc_port_t *);
+ int qla24xx_async_gpsc(scsi_qla_host_t *, fc_port_t *);
+ void qla24xx_handle_gpsc_event(scsi_qla_host_t *, struct event_arg *);
+diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
+index 64ab070b8716..fe1eb06db654 100644
+--- a/drivers/scsi/qla2xxx/qla_gs.c
++++ b/drivers/scsi/qla2xxx/qla_gs.c
+@@ -2949,22 +2949,6 @@ int qla24xx_async_gpsc(scsi_qla_host_t *vha, fc_port_t *fcport)
  	return rval;
  }
  
--void
--qla2x00_update_fcports(scsi_qla_host_t *base_vha)
+-int qla24xx_post_gpnid_work(struct scsi_qla_host *vha, port_id_t *id)
 -{
--	fc_port_t *fcport;
--	struct scsi_qla_host *vha, *tvp;
--	struct qla_hw_data *ha = base_vha->hw;
--	unsigned long flags;
+-	struct qla_work_evt *e;
 -
--	spin_lock_irqsave(&ha->vport_slock, flags);
--	/* Go with deferred removal of rport references. */
--	list_for_each_entry_safe(vha, tvp, &base_vha->hw->vp_list, list) {
--		atomic_inc(&vha->vref_count);
--		list_for_each_entry(fcport, &vha->vp_fcports, list) {
--			if (fcport->drport &&
--			    atomic_read(&fcport->state) != FCS_UNCONFIGURED) {
--				spin_unlock_irqrestore(&ha->vport_slock, flags);
--				qla2x00_rport_del(fcport);
+-	if (test_bit(UNLOADING, &vha->dpc_flags) ||
+-	    (vha->vp_idx && test_bit(VPORT_DELETE, &vha->dpc_flags)))
+-		return 0;
 -
--				spin_lock_irqsave(&ha->vport_slock, flags);
--			}
--		}
--		atomic_dec(&vha->vref_count);
--		wake_up(&vha->vref_waitq);
--	}
--	spin_unlock_irqrestore(&ha->vport_slock, flags);
+-	e = qla2x00_alloc_work(vha, QLA_EVT_GPNID);
+-	if (!e)
+-		return QLA_FUNCTION_FAILED;
+-
+-	e->u.gpnid.id = *id;
+-	return qla2x00_post_work(vha, e);
 -}
 -
- /* Assumes idc_lock always held on entry */
- void
- qla83xx_reset_ownership(scsi_qla_host_t *vha)
-diff --git a/drivers/scsi/qla2xxx/qla_mid.c b/drivers/scsi/qla2xxx/qla_mid.c
-index 16a9f22bb860..5fff17da0202 100644
---- a/drivers/scsi/qla2xxx/qla_mid.c
-+++ b/drivers/scsi/qla2xxx/qla_mid.c
-@@ -384,15 +384,6 @@ qla2x00_do_dpc_vp(scsi_qla_host_t *vha)
- 		}
- 	}
+ void qla24xx_sp_unmap(scsi_qla_host_t *vha, srb_t *sp)
+ {
+ 	struct srb_iocb *c = &sp->u.iocb_cmd;
+@@ -2997,287 +2981,6 @@ void qla24xx_sp_unmap(scsi_qla_host_t *vha, srb_t *sp)
+ 	kref_put(&sp->cmd_kref, qla2x00_sp_release);
+ }
  
--	if (test_bit(FCPORT_UPDATE_NEEDED, &vha->dpc_flags)) {
--		ql_dbg(ql_dbg_dpc, vha, 0x4016,
--		    "FCPort update scheduled.\n");
--		qla2x00_update_fcports(vha);
--		clear_bit(FCPORT_UPDATE_NEEDED, &vha->dpc_flags);
--		ql_dbg(ql_dbg_dpc, vha, 0x4017,
--		    "FCPort update end.\n");
+-void qla24xx_handle_gpnid_event(scsi_qla_host_t *vha, struct event_arg *ea)
+-{
+-	fc_port_t *fcport, *conflict, *t;
+-	u16 data[2];
+-
+-	ql_dbg(ql_dbg_disc, vha, 0xffff,
+-	    "%s %d port_id: %06x\n",
+-	    __func__, __LINE__, ea->id.b24);
+-
+-	if (ea->rc) {
+-		/* cable is disconnected */
+-		list_for_each_entry_safe(fcport, t, &vha->vp_fcports, list) {
+-			if (fcport->d_id.b24 == ea->id.b24)
+-				fcport->scan_state = QLA_FCPORT_SCAN;
+-
+-			qlt_schedule_sess_for_deletion(fcport);
+-		}
+-	} else {
+-		/* cable is connected */
+-		fcport = qla2x00_find_fcport_by_wwpn(vha, ea->port_name, 1);
+-		if (fcport) {
+-			list_for_each_entry_safe(conflict, t, &vha->vp_fcports,
+-			    list) {
+-				if ((conflict->d_id.b24 == ea->id.b24) &&
+-				    (fcport != conflict))
+-					/*
+-					 * 2 fcports with conflict Nport ID or
+-					 * an existing fcport is having nport ID
+-					 * conflict with new fcport.
+-					 */
+-
+-					conflict->scan_state = QLA_FCPORT_SCAN;
+-
+-				qlt_schedule_sess_for_deletion(conflict);
+-			}
+-
+-			fcport->scan_needed = 0;
+-			fcport->rscn_gen++;
+-			fcport->scan_state = QLA_FCPORT_FOUND;
+-			fcport->flags |= FCF_FABRIC_DEVICE;
+-			if (fcport->login_retry == 0) {
+-				fcport->login_retry =
+-					vha->hw->login_retry_count;
+-				ql_dbg(ql_dbg_disc, vha, 0xffff,
+-				    "Port login retry %8phN, lid 0x%04x cnt=%d.\n",
+-				    fcport->port_name, fcport->loop_id,
+-				    fcport->login_retry);
+-			}
+-			switch (fcport->disc_state) {
+-			case DSC_LOGIN_COMPLETE:
+-				/* recheck session is still intact. */
+-				ql_dbg(ql_dbg_disc, vha, 0x210d,
+-				    "%s %d %8phC revalidate session with ADISC\n",
+-				    __func__, __LINE__, fcport->port_name);
+-				data[0] = data[1] = 0;
+-				qla2x00_post_async_adisc_work(vha, fcport,
+-				    data);
+-				break;
+-			case DSC_DELETED:
+-				ql_dbg(ql_dbg_disc, vha, 0x210d,
+-				    "%s %d %8phC login\n", __func__, __LINE__,
+-				    fcport->port_name);
+-				fcport->d_id = ea->id;
+-				qla24xx_fcport_handle_login(vha, fcport);
+-				break;
+-			case DSC_DELETE_PEND:
+-				fcport->d_id = ea->id;
+-				break;
+-			default:
+-				fcport->d_id = ea->id;
+-				break;
+-			}
+-		} else {
+-			list_for_each_entry_safe(conflict, t, &vha->vp_fcports,
+-			    list) {
+-				if (conflict->d_id.b24 == ea->id.b24) {
+-					/* 2 fcports with conflict Nport ID or
+-					 * an existing fcport is having nport ID
+-					 * conflict with new fcport.
+-					 */
+-					ql_dbg(ql_dbg_disc, vha, 0xffff,
+-					    "%s %d %8phC DS %d\n",
+-					    __func__, __LINE__,
+-					    conflict->port_name,
+-					    conflict->disc_state);
+-
+-					conflict->scan_state = QLA_FCPORT_SCAN;
+-					qlt_schedule_sess_for_deletion(conflict);
+-				}
+-			}
+-
+-			/* create new fcport */
+-			ql_dbg(ql_dbg_disc, vha, 0x2065,
+-			    "%s %d %8phC post new sess\n",
+-			    __func__, __LINE__, ea->port_name);
+-			qla24xx_post_newsess_work(vha, &ea->id,
+-			    ea->port_name, NULL, NULL, 0);
+-		}
+-	}
+-}
+-
+-static void qla2x00_async_gpnid_sp_done(srb_t *sp, int res)
+-{
+-	struct scsi_qla_host *vha = sp->vha;
+-	struct ct_sns_req *ct_req =
+-	    (struct ct_sns_req *)sp->u.iocb_cmd.u.ctarg.req;
+-	struct ct_sns_rsp *ct_rsp =
+-	    (struct ct_sns_rsp *)sp->u.iocb_cmd.u.ctarg.rsp;
+-	struct event_arg ea;
+-	struct qla_work_evt *e;
+-	unsigned long flags;
+-
+-	if (res)
+-		ql_dbg(ql_dbg_disc, vha, 0x2066,
+-		    "Async done-%s fail res %x rscn gen %d ID %3phC. %8phC\n",
+-		    sp->name, res, sp->gen1, &ct_req->req.port_id.port_id,
+-		    ct_rsp->rsp.gpn_id.port_name);
+-	else
+-		ql_dbg(ql_dbg_disc, vha, 0x2066,
+-		    "Async done-%s good rscn gen %d ID %3phC. %8phC\n",
+-		    sp->name, sp->gen1, &ct_req->req.port_id.port_id,
+-		    ct_rsp->rsp.gpn_id.port_name);
+-
+-	memset(&ea, 0, sizeof(ea));
+-	memcpy(ea.port_name, ct_rsp->rsp.gpn_id.port_name, WWN_SIZE);
+-	ea.sp = sp;
+-	ea.id = be_to_port_id(ct_req->req.port_id.port_id);
+-	ea.rc = res;
+-
+-	spin_lock_irqsave(&vha->hw->tgt.sess_lock, flags);
+-	list_del(&sp->elem);
+-	spin_unlock_irqrestore(&vha->hw->tgt.sess_lock, flags);
+-
+-	if (res) {
+-		if (res == QLA_FUNCTION_TIMEOUT) {
+-			qla24xx_post_gpnid_work(sp->vha, &ea.id);
+-			/* ref: INIT */
+-			kref_put(&sp->cmd_kref, qla2x00_sp_release);
+-			return;
+-		}
+-	} else if (sp->gen1) {
+-		/* There was another RSCN for this Nport ID */
+-		qla24xx_post_gpnid_work(sp->vha, &ea.id);
+-		/* ref: INIT */
+-		kref_put(&sp->cmd_kref, qla2x00_sp_release);
+-		return;
 -	}
 -
- 	if (test_bit(RELOGIN_NEEDED, &vha->dpc_flags) &&
- 	    !test_bit(LOOP_RESYNC_NEEDED, &vha->dpc_flags) &&
- 	    atomic_read(&vha->loop_state) != LOOP_DOWN) {
+-	qla24xx_handle_gpnid_event(vha, &ea);
+-
+-	e = qla2x00_alloc_work(vha, QLA_EVT_UNMAP);
+-	if (!e) {
+-		/* please ignore kernel warning. otherwise, we have mem leak. */
+-		dma_free_coherent(&vha->hw->pdev->dev,
+-				  sp->u.iocb_cmd.u.ctarg.req_allocated_size,
+-				  sp->u.iocb_cmd.u.ctarg.req,
+-				  sp->u.iocb_cmd.u.ctarg.req_dma);
+-		sp->u.iocb_cmd.u.ctarg.req = NULL;
+-
+-		dma_free_coherent(&vha->hw->pdev->dev,
+-				  sp->u.iocb_cmd.u.ctarg.rsp_allocated_size,
+-				  sp->u.iocb_cmd.u.ctarg.rsp,
+-				  sp->u.iocb_cmd.u.ctarg.rsp_dma);
+-		sp->u.iocb_cmd.u.ctarg.rsp = NULL;
+-
+-		/* ref: INIT */
+-		kref_put(&sp->cmd_kref, qla2x00_sp_release);
+-		return;
+-	}
+-
+-	e->u.iosb.sp = sp;
+-	qla2x00_post_work(vha, e);
+-}
+-
+-/* Get WWPN with Nport ID. */
+-int qla24xx_async_gpnid(scsi_qla_host_t *vha, port_id_t *id)
+-{
+-	int rval = QLA_FUNCTION_FAILED;
+-	struct ct_sns_req       *ct_req;
+-	srb_t *sp, *tsp;
+-	struct ct_sns_pkt *ct_sns;
+-	unsigned long flags;
+-
+-	if (!vha->flags.online)
+-		goto done;
+-
+-	/* ref: INIT */
+-	sp = qla2x00_get_sp(vha, NULL, GFP_KERNEL);
+-	if (!sp)
+-		goto done;
+-
+-	sp->type = SRB_CT_PTHRU_CMD;
+-	sp->name = "gpnid";
+-	sp->u.iocb_cmd.u.ctarg.id = *id;
+-	sp->gen1 = 0;
+-	qla2x00_init_async_sp(sp, qla2x00_get_async_timeout(vha) + 2,
+-			      qla2x00_async_gpnid_sp_done);
+-
+-	spin_lock_irqsave(&vha->hw->tgt.sess_lock, flags);
+-	list_for_each_entry(tsp, &vha->gpnid_list, elem) {
+-		if (tsp->u.iocb_cmd.u.ctarg.id.b24 == id->b24) {
+-			tsp->gen1++;
+-			spin_unlock_irqrestore(&vha->hw->tgt.sess_lock, flags);
+-			/* ref: INIT */
+-			kref_put(&sp->cmd_kref, qla2x00_sp_release);
+-			goto done;
+-		}
+-	}
+-	list_add_tail(&sp->elem, &vha->gpnid_list);
+-	spin_unlock_irqrestore(&vha->hw->tgt.sess_lock, flags);
+-
+-	sp->u.iocb_cmd.u.ctarg.req = dma_alloc_coherent(&vha->hw->pdev->dev,
+-		sizeof(struct ct_sns_pkt), &sp->u.iocb_cmd.u.ctarg.req_dma,
+-		GFP_KERNEL);
+-	sp->u.iocb_cmd.u.ctarg.req_allocated_size = sizeof(struct ct_sns_pkt);
+-	if (!sp->u.iocb_cmd.u.ctarg.req) {
+-		ql_log(ql_log_warn, vha, 0xd041,
+-		    "Failed to allocate ct_sns request.\n");
+-		goto done_free_sp;
+-	}
+-
+-	sp->u.iocb_cmd.u.ctarg.rsp = dma_alloc_coherent(&vha->hw->pdev->dev,
+-		sizeof(struct ct_sns_pkt), &sp->u.iocb_cmd.u.ctarg.rsp_dma,
+-		GFP_KERNEL);
+-	sp->u.iocb_cmd.u.ctarg.rsp_allocated_size = sizeof(struct ct_sns_pkt);
+-	if (!sp->u.iocb_cmd.u.ctarg.rsp) {
+-		ql_log(ql_log_warn, vha, 0xd042,
+-		    "Failed to allocate ct_sns request.\n");
+-		goto done_free_sp;
+-	}
+-
+-	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.rsp;
+-	memset(ct_sns, 0, sizeof(*ct_sns));
+-
+-	ct_sns = (struct ct_sns_pkt *)sp->u.iocb_cmd.u.ctarg.req;
+-	/* CT_IU preamble  */
+-	ct_req = qla2x00_prep_ct_req(ct_sns, GPN_ID_CMD, GPN_ID_RSP_SIZE);
+-
+-	/* GPN_ID req */
+-	ct_req->req.port_id.port_id = port_id_to_be_id(*id);
+-
+-	sp->u.iocb_cmd.u.ctarg.req_size = GPN_ID_REQ_SIZE;
+-	sp->u.iocb_cmd.u.ctarg.rsp_size = GPN_ID_RSP_SIZE;
+-	sp->u.iocb_cmd.u.ctarg.nport_handle = NPH_SNS;
+-
+-	ql_dbg(ql_dbg_disc, vha, 0x2067,
+-	    "Async-%s hdl=%x ID %3phC.\n", sp->name,
+-	    sp->handle, &ct_req->req.port_id.port_id);
+-
+-	rval = qla2x00_start_sp(sp);
+-	if (rval != QLA_SUCCESS)
+-		goto done_free_sp;
+-
+-	return rval;
+-
+-done_free_sp:
+-	spin_lock_irqsave(&vha->hw->vport_slock, flags);
+-	list_del(&sp->elem);
+-	spin_unlock_irqrestore(&vha->hw->vport_slock, flags);
+-
+-	if (sp->u.iocb_cmd.u.ctarg.req) {
+-		dma_free_coherent(&vha->hw->pdev->dev,
+-			sizeof(struct ct_sns_pkt),
+-			sp->u.iocb_cmd.u.ctarg.req,
+-			sp->u.iocb_cmd.u.ctarg.req_dma);
+-		sp->u.iocb_cmd.u.ctarg.req = NULL;
+-	}
+-	if (sp->u.iocb_cmd.u.ctarg.rsp) {
+-		dma_free_coherent(&vha->hw->pdev->dev,
+-			sizeof(struct ct_sns_pkt),
+-			sp->u.iocb_cmd.u.ctarg.rsp,
+-			sp->u.iocb_cmd.u.ctarg.rsp_dma);
+-		sp->u.iocb_cmd.u.ctarg.rsp = NULL;
+-	}
+-	/* ref: INIT */
+-	kref_put(&sp->cmd_kref, qla2x00_sp_release);
+-done:
+-	return rval;
+-}
+-
+-
+ void qla24xx_async_gffid_sp_done(srb_t *sp, int res)
+ {
+ 	struct scsi_qla_host *vha = sp->vha;
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index ca216b820b1c..c66a0106a7fc 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -2323,7 +2323,7 @@ qla24xx_handle_plogi_done_event(struct scsi_qla_host *vha, struct event_arg *ea)
+ 			ea->fcport->login_pause = 1;
+ 
+ 			ql_dbg(ql_dbg_disc, vha, 0x20ed,
+-			    "%s %d %8phC NPortId %06x inuse with loopid 0x%x. post gidpn\n",
++			    "%s %d %8phC NPortId %06x inuse with loopid 0x%x.\n",
+ 			    __func__, __LINE__, ea->fcport->port_name,
+ 			    ea->fcport->d_id.b24, lid);
+ 		} else {
+diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
+index 6b91dcfd994d..9a7cc0ba5f58 100644
+--- a/drivers/scsi/qla2xxx/qla_iocb.c
++++ b/drivers/scsi/qla2xxx/qla_iocb.c
+@@ -2920,7 +2920,7 @@ static void qla2x00_els_dcmd2_sp_done(srb_t *sp, int res)
+ 					conflict_fcport->conflict = fcport;
+ 					fcport->login_pause = 1;
+ 					ql_dbg(ql_dbg_disc, vha, 0x20ed,
+-					    "%s %d %8phC pid %06x inuse with lid %#x post gidpn\n",
++					    "%s %d %8phC pid %06x inuse with lid %#x.\n",
+ 					    __func__, __LINE__,
+ 					    fcport->port_name,
+ 					    fcport->d_id.b24, lid);
 diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 2d86f804872b..078b63b89189 100644
+index 078b63b89189..bbbdf2ffb682 100644
 --- a/drivers/scsi/qla2xxx/qla_os.c
 +++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -7025,11 +7025,6 @@ qla2x00_do_dpc(void *data)
- 			}
- 		}
+@@ -5016,7 +5016,6 @@ struct scsi_qla_host *qla2x00_create_host(struct scsi_host_template *sht,
+ 	INIT_LIST_HEAD(&vha->plogi_ack_list);
+ 	INIT_LIST_HEAD(&vha->qp_list);
+ 	INIT_LIST_HEAD(&vha->gnl.fcports);
+-	INIT_LIST_HEAD(&vha->gpnid_list);
+ 	INIT_WORK(&vha->iocb_work, qla2x00_iocb_work_fn);
  
--		if (test_and_clear_bit(FCPORT_UPDATE_NEEDED,
--		    &base_vha->dpc_flags)) {
--			qla2x00_update_fcports(base_vha);
--		}
--
- 		if (IS_QLAFX00(ha))
- 			goto loop_resync_check;
- 
-@@ -7525,7 +7520,6 @@ qla2x00_timer(struct timer_list *t)
- 	/* Schedule the DPC routine if needed */
- 	if ((test_bit(ISP_ABORT_NEEDED, &vha->dpc_flags) ||
- 	    test_bit(LOOP_RESYNC_NEEDED, &vha->dpc_flags) ||
--	    test_bit(FCPORT_UPDATE_NEEDED, &vha->dpc_flags) ||
- 	    start_dpc ||
- 	    test_bit(RESET_MARKER_NEEDED, &vha->dpc_flags) ||
- 	    test_bit(BEACON_BLINK_NEEDED, &vha->dpc_flags) ||
-@@ -7536,13 +7530,10 @@ qla2x00_timer(struct timer_list *t)
- 	    test_bit(PROCESS_PUREX_IOCB, &vha->dpc_flags))) {
- 		ql_dbg(ql_dbg_timer, vha, 0x600b,
- 		    "isp_abort_needed=%d loop_resync_needed=%d "
--		    "fcport_update_needed=%d start_dpc=%d "
--		    "reset_marker_needed=%d",
-+		    "start_dpc=%d reset_marker_needed=%d",
- 		    test_bit(ISP_ABORT_NEEDED, &vha->dpc_flags),
- 		    test_bit(LOOP_RESYNC_NEEDED, &vha->dpc_flags),
--		    test_bit(FCPORT_UPDATE_NEEDED, &vha->dpc_flags),
--		    start_dpc,
--		    test_bit(RESET_MARKER_NEEDED, &vha->dpc_flags));
-+		    start_dpc, test_bit(RESET_MARKER_NEEDED, &vha->dpc_flags));
- 		ql_dbg(ql_dbg_timer, vha, 0x600c,
- 		    "beacon_blink_needed=%d isp_unrecoverable=%d "
- 		    "fcoe_ctx_reset_needed=%d vp_dpc_needed=%d "
+ 	INIT_LIST_HEAD(&vha->purex_list.head);
+@@ -5461,9 +5460,6 @@ qla2x00_do_work(struct scsi_qla_host *vha)
+ 		case QLA_EVT_AENFX:
+ 			qlafx00_process_aen(vha, e);
+ 			break;
+-		case QLA_EVT_GPNID:
+-			qla24xx_async_gpnid(vha, &e->u.gpnid.id);
+-			break;
+ 		case QLA_EVT_UNMAP:
+ 			qla24xx_sp_unmap(vha, e->u.iosb.sp);
+ 			break;
 -- 
 2.19.0.rc0
 
