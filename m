@@ -2,347 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83BB65615F
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Dec 2022 10:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A026561A9
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Dec 2022 10:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbiLZJIj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 26 Dec 2022 04:08:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        id S231394AbiLZJtC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 26 Dec 2022 04:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbiLZJIh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 26 Dec 2022 04:08:37 -0500
-X-Greylist: delayed 134 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 26 Dec 2022 01:08:36 PST
-Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [178.154.239.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8281CD8;
-        Mon, 26 Dec 2022 01:08:35 -0800 (PST)
-Received: from myt5-8800bd68420f.qloud-c.yandex.net (myt5-8800bd68420f.qloud-c.yandex.net [IPv6:2a02:6b8:c12:4615:0:640:8800:bd68])
-        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id 5EA9D5FCEF;
-        Mon, 26 Dec 2022 12:06:19 +0300 (MSK)
-Received: from d-tatianin-nix.yandex-team.ru (unknown [2a02:6b8:b081:1::1:f])
-        by myt5-8800bd68420f.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id D6KfxX0ReqM1-CeqjHN3x;
-        Mon, 26 Dec 2022 12:06:17 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1672045577; bh=hreEt9oBsbG7JpAJajQXCkDGpKyNaPQ4PR/13o4Hum8=;
-        h=Message-Id:Date:Cc:Subject:To:From;
-        b=FDPwZddpeGNhoWfyPPtFZMHB8HDH6VkJWYc2dDIUr23c1K915T5eyXVE7ctFDtZvl
-         cHc4rsIx/fFm8YDlKfgGca2HbJvhvuTjxA36oLUbCfvH8zRO7D/lF7ve4mBYncQLYx
-         l9HLYED7E/FdQWDj3R/VlG52FptdR4IFeEHBNrS0=
-Authentication-Results: myt5-8800bd68420f.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Varun Prakash <varun@chelsio.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Lee Duncan <lduncan@suse.com>, Wu Bo <wubo40@huawei.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-Subject: [RESEND PATCH v2] cxgbi: move cxgbi_ddp_set_one_ppod to cxgb_ppm and remove its duplicate
-Date:   Mon, 26 Dec 2022 12:06:09 +0300
-Message-Id: <20221226090609.1917788-1-d-tatianin@yandex-team.ru>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229484AbiLZJsw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 26 Dec 2022 04:48:52 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD9C1B3
+        for <linux-scsi@vger.kernel.org>; Mon, 26 Dec 2022 01:48:50 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id gh17so25218559ejb.6
+        for <linux-scsi@vger.kernel.org>; Mon, 26 Dec 2022 01:48:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y7XukgsAlfYiKI+yuvdwyFpb/FGCy9p+ybfvm0wRi4Y=;
+        b=osMoQwk/1Lp4fBDvSmCbGfdmNOIPr0moJVz6VEUxLvYVDsOs+fTRyb4kaquh3zT1jD
+         LUqjgzuVDBpUdv7qe8Afw4A5YEw6wkLVaPPvNoF8Zu9yVLkGOFh067Zyem/dDRguh1Ff
+         xr3MlTElAdsZPPcMvtTC3VCToXDAhYIRPz3/18bhGbQ7xL84z7QA26He1VCu2p72P3nD
+         GZIRviFJztCWAHVrMGwPmf5umprs9+yTfJVIRm1aZbBqN+x8f6tqrKzD12UNZiQ/OjUB
+         FVrsy/MFvYfL1gJgwCdXddNK0q7M8KIKZ/Bwzv6GD6s2iv8Wc1QSmpmIl8hex8zFS2Iu
+         lKYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y7XukgsAlfYiKI+yuvdwyFpb/FGCy9p+ybfvm0wRi4Y=;
+        b=24ZR+fxLvscYnxgdLRiglriTCLIfOEpMM/QRHKHmbCj739IPIm6vuEKyX1FxzwmPjC
+         rJae6tO94o5ionHal+xf05He5JQiZRi6KIAANuwMOtSsdr+vcbQadnOhdi41h/TF4HoG
+         CM0uy+NWQHWx0nOg6zgtam6lmcWMiBv3irN7DeNx2//guz1V4ch0Af5+IhQwhJSgdQNj
+         pS0m76Qkk8Xdpuw9qMJCDT94DKjmp2i4mMwSfyHO3tOwfw3Z/XzeOrp88lYoCwZTW804
+         FMthytO91G8EqWckwJ50gDNq08BCf99GFMKzSEUNOA4byQbG59tYXdkk0AQ38YPuG+tv
+         mnvg==
+X-Gm-Message-State: AFqh2kozW1jiMpY8rMFzBD/FOAS9VeW4QKA5Wolgi4lhDKHX5l4eCUHy
+        4JsM02u4tYiCZg16bctMc+cNynk6/iZIKA5pX90=
+X-Google-Smtp-Source: AMrXdXvU8tQcszOplhZkH/2iyLmZ4NlMON73tdUK88ArMVTkZllFp25d5+qMYFmBDS5UmRi0ZVq4z4sHirfoLMAesD8=
+X-Received: by 2002:a17:906:8282:b0:7c1:9c6:aaa1 with SMTP id
+ h2-20020a170906828200b007c109c6aaa1mr1783078ejx.583.1672048129269; Mon, 26
+ Dec 2022 01:48:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:6408:1548:b0:1c8:b720:2cce with HTTP; Mon, 26 Dec 2022
+ 01:48:48 -0800 (PST)
+Reply-To: privatemails254@gmail.com
+From:   MS NADAGE LASSOU <mohammedibrahim08084@gmail.com>
+Date:   Mon, 26 Dec 2022 10:48:48 +0100
+Message-ID: <CADeLEaHvAx8B=xaa16zGdLtGy0EhbnVdQvL-_fPHt6ogue8g2w@mail.gmail.com>
+Subject: YOUR ATTENTON PLS.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:630 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mohammedibrahim08084[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [privatemails254[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mohammedibrahim08084[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-cxgbit and libcxgbi both used the exact same function but with slightly
-different names, and a missing NULL check in one case. Move the function
-to libcxgb/libcxgb_ppm.c and nuke the duplicate.
+Greetings.
 
-This also renames the function to cxgbi_ppm_set_one_ppod so that it
-matches the rest of the functions in cxgb_ppm.
-
-Found by Linux Verification Center (linuxtesting.org) with the SVACE
-static analysis tool.
-
-Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
-Acked-by: Varun Prakash <varun@chelsio.com>
----
- .../ethernet/chelsio/libcxgb/libcxgb_ppm.c    | 56 ++++++++++++++++++
- .../ethernet/chelsio/libcxgb/libcxgb_ppm.h    |  5 ++
- drivers/scsi/cxgbi/cxgb3i/cxgb3i.c            |  2 +-
- drivers/scsi/cxgbi/cxgb4i/cxgb4i.c            |  2 +-
- drivers/scsi/cxgbi/libcxgbi.c                 | 55 ------------------
- drivers/scsi/cxgbi/libcxgbi.h                 |  3 -
- drivers/target/iscsi/cxgbit/cxgbit_ddp.c      | 57 +------------------
- 7 files changed, 64 insertions(+), 116 deletions(-)
-
-diff --git a/drivers/net/ethernet/chelsio/libcxgb/libcxgb_ppm.c b/drivers/net/ethernet/chelsio/libcxgb/libcxgb_ppm.c
-index 854d87e1125c..9103826b0d27 100644
---- a/drivers/net/ethernet/chelsio/libcxgb/libcxgb_ppm.c
-+++ b/drivers/net/ethernet/chelsio/libcxgb/libcxgb_ppm.c
-@@ -527,6 +527,62 @@ unsigned int cxgbi_tagmask_set(unsigned int ppmax)
- }
- EXPORT_SYMBOL(cxgbi_tagmask_set);
- 
-+void
-+cxgbi_ppm_set_one_ppod(struct cxgbi_pagepod *ppod,
-+		       struct cxgbi_task_tag_info *ttinfo,
-+		       struct scatterlist **sg_pp, unsigned int *sg_off)
-+{
-+	struct scatterlist *sg = sg_pp ? *sg_pp : NULL;
-+	unsigned int offset = sg_off ? *sg_off : 0;
-+	dma_addr_t addr = 0UL;
-+	unsigned int len = 0;
-+	int i;
-+
-+	memcpy(ppod, &ttinfo->hdr, sizeof(struct cxgbi_pagepod_hdr));
-+
-+	if (sg) {
-+		addr = sg_dma_address(sg);
-+		len = sg_dma_len(sg);
-+	}
-+
-+	for (i = 0; i < PPOD_PAGES_MAX; i++) {
-+		if (sg) {
-+			ppod->addr[i] = cpu_to_be64(addr + offset);
-+			offset += PAGE_SIZE;
-+			if (offset == (len + sg->offset)) {
-+				offset = 0;
-+				sg = sg_next(sg);
-+				if (sg) {
-+					addr = sg_dma_address(sg);
-+					len = sg_dma_len(sg);
-+				}
-+			}
-+		} else {
-+			ppod->addr[i] = 0ULL;
-+		}
-+	}
-+
-+	/*
-+	 * the fifth address needs to be repeated in the next ppod, so do
-+	 * not move sg
-+	 */
-+	if (sg_pp) {
-+		*sg_pp = sg;
-+		*sg_off = offset;
-+	}
-+
-+	if (offset == len) {
-+		offset = 0;
-+		if (sg) {
-+			sg = sg_next(sg);
-+			if (sg)
-+				addr = sg_dma_address(sg);
-+		}
-+	}
-+	ppod->addr[i] = sg ? cpu_to_be64(addr + offset) : 0ULL;
-+}
-+EXPORT_SYMBOL(cxgbi_ppm_set_one_ppod);
-+
- MODULE_AUTHOR("Chelsio Communications");
- MODULE_DESCRIPTION("Chelsio common library");
- MODULE_LICENSE("Dual BSD/GPL");
-diff --git a/drivers/net/ethernet/chelsio/libcxgb/libcxgb_ppm.h b/drivers/net/ethernet/chelsio/libcxgb/libcxgb_ppm.h
-index 1b4156461ba1..f2178ee0b18a 100644
---- a/drivers/net/ethernet/chelsio/libcxgb/libcxgb_ppm.h
-+++ b/drivers/net/ethernet/chelsio/libcxgb/libcxgb_ppm.h
-@@ -332,4 +332,9 @@ int cxgbi_ppm_release(struct cxgbi_ppm *ppm);
- void cxgbi_tagmask_check(unsigned int tagmask, struct cxgbi_tag_format *);
- unsigned int cxgbi_tagmask_set(unsigned int ppmax);
- 
-+void
-+cxgbi_ppm_set_one_ppod(struct cxgbi_pagepod *ppod,
-+		       struct cxgbi_task_tag_info *ttinfo,
-+		       struct scatterlist **sg_pp, unsigned int *sg_off);
-+
- #endif	/*__LIBCXGB_PPM_H__*/
-diff --git a/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c b/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
-index ff9d4287937a..0399e82362b7 100644
---- a/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
-+++ b/drivers/scsi/cxgbi/cxgb3i/cxgb3i.c
-@@ -1115,7 +1115,7 @@ static int ddp_set_map(struct cxgbi_ppm *ppm, struct cxgbi_sock *csk,
- 		req = (struct ulp_mem_io *)skb->head;
- 		ppod = (struct cxgbi_pagepod *)(req + 1);
- 		sg_off = i * PPOD_PAGES_MAX;
--		cxgbi_ddp_set_one_ppod(ppod, ttinfo, &sg,
-+		cxgbi_ppm_set_one_ppod(ppod, ttinfo, &sg,
- 				       &sg_off);
- 		skb->priority = CPL_PRIORITY_CONTROL;
- 		cxgb3_ofld_send(ppm->lldev, skb);
-diff --git a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
-index c07d2e3b4bcf..1f768cc3fbfb 100644
---- a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
-+++ b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
-@@ -2035,7 +2035,7 @@ static int ddp_ppod_write_idata(struct cxgbi_ppm *ppm, struct cxgbi_sock *csk,
- 	ppod = (struct cxgbi_pagepod *)(idata + 1);
- 
- 	for (i = 0; i < npods; i++, ppod++)
--		cxgbi_ddp_set_one_ppod(ppod, ttinfo, sg_pp, sg_off);
-+		cxgbi_ppm_set_one_ppod(ppod, ttinfo, sg_pp, sg_off);
- 
- 	cxgbi_skcb_set_flag(skb, SKCBF_TX_MEM_WRITE);
- 	cxgbi_skcb_set_flag(skb, SKCBF_TX_FLAG_COMPL);
-diff --git a/drivers/scsi/cxgbi/libcxgbi.c b/drivers/scsi/cxgbi/libcxgbi.c
-index af281e271f88..6a2627a73f26 100644
---- a/drivers/scsi/cxgbi/libcxgbi.c
-+++ b/drivers/scsi/cxgbi/libcxgbi.c
-@@ -1151,61 +1151,6 @@ scmd_get_params(struct scsi_cmnd *sc, struct scatterlist **sgl,
- 	/* Caution: for protection sdb, sdb->length is invalid */
- }
- 
--void cxgbi_ddp_set_one_ppod(struct cxgbi_pagepod *ppod,
--			    struct cxgbi_task_tag_info *ttinfo,
--			    struct scatterlist **sg_pp, unsigned int *sg_off)
--{
--	struct scatterlist *sg = sg_pp ? *sg_pp : NULL;
--	unsigned int offset = sg_off ? *sg_off : 0;
--	dma_addr_t addr = 0UL;
--	unsigned int len = 0;
--	int i;
--
--	memcpy(ppod, &ttinfo->hdr, sizeof(struct cxgbi_pagepod_hdr));
--
--	if (sg) {
--		addr = sg_dma_address(sg);
--		len = sg_dma_len(sg);
--	}
--
--	for (i = 0; i < PPOD_PAGES_MAX; i++) {
--		if (sg) {
--			ppod->addr[i] = cpu_to_be64(addr + offset);
--			offset += PAGE_SIZE;
--			if (offset == (len + sg->offset)) {
--				offset = 0;
--				sg = sg_next(sg);
--				if (sg) {
--					addr = sg_dma_address(sg);
--					len = sg_dma_len(sg);
--				}
--			}
--		} else {
--			ppod->addr[i] = 0ULL;
--		}
--	}
--
--	/*
--	 * the fifth address needs to be repeated in the next ppod, so do
--	 * not move sg
--	 */
--	if (sg_pp) {
--		*sg_pp = sg;
--		*sg_off = offset;
--	}
--
--	if (offset == len) {
--		offset = 0;
--		sg = sg_next(sg);
--		if (sg) {
--			addr = sg_dma_address(sg);
--			len = sg_dma_len(sg);
--		}
--	}
--	ppod->addr[i] = sg ? cpu_to_be64(addr + offset) : 0ULL;
--}
--EXPORT_SYMBOL_GPL(cxgbi_ddp_set_one_ppod);
--
- /*
-  * APIs interacting with open-iscsi libraries
-  */
-diff --git a/drivers/scsi/cxgbi/libcxgbi.h b/drivers/scsi/cxgbi/libcxgbi.h
-index 3687b5c0cf90..f90e747bcb4f 100644
---- a/drivers/scsi/cxgbi/libcxgbi.h
-+++ b/drivers/scsi/cxgbi/libcxgbi.h
-@@ -636,9 +636,6 @@ int cxgbi_ddp_init(struct cxgbi_device *, unsigned int, unsigned int,
- 			unsigned int, unsigned int);
- int cxgbi_ddp_cleanup(struct cxgbi_device *);
- void cxgbi_ddp_page_size_factor(int *);
--void cxgbi_ddp_set_one_ppod(struct cxgbi_pagepod *,
--			    struct cxgbi_task_tag_info *,
--			    struct scatterlist **sg_pp, unsigned int *sg_off);
- int cxgbi_ddp_ppm_setup(void **ppm_pp, struct cxgbi_device *cdev,
- 			struct cxgbi_tag_format *tformat,
- 			unsigned int iscsi_size, unsigned int llimit,
-diff --git a/drivers/target/iscsi/cxgbit/cxgbit_ddp.c b/drivers/target/iscsi/cxgbit/cxgbit_ddp.c
-index 17fd0d8cc490..fe29f4962058 100644
---- a/drivers/target/iscsi/cxgbit/cxgbit_ddp.c
-+++ b/drivers/target/iscsi/cxgbit/cxgbit_ddp.c
-@@ -5,61 +5,6 @@
- 
- #include "cxgbit.h"
- 
--static void
--cxgbit_set_one_ppod(struct cxgbi_pagepod *ppod,
--		    struct cxgbi_task_tag_info *ttinfo,
--		    struct scatterlist **sg_pp, unsigned int *sg_off)
--{
--	struct scatterlist *sg = sg_pp ? *sg_pp : NULL;
--	unsigned int offset = sg_off ? *sg_off : 0;
--	dma_addr_t addr = 0UL;
--	unsigned int len = 0;
--	int i;
--
--	memcpy(ppod, &ttinfo->hdr, sizeof(struct cxgbi_pagepod_hdr));
--
--	if (sg) {
--		addr = sg_dma_address(sg);
--		len = sg_dma_len(sg);
--	}
--
--	for (i = 0; i < PPOD_PAGES_MAX; i++) {
--		if (sg) {
--			ppod->addr[i] = cpu_to_be64(addr + offset);
--			offset += PAGE_SIZE;
--			if (offset == (len + sg->offset)) {
--				offset = 0;
--				sg = sg_next(sg);
--				if (sg) {
--					addr = sg_dma_address(sg);
--					len = sg_dma_len(sg);
--				}
--			}
--		} else {
--			ppod->addr[i] = 0ULL;
--		}
--	}
--
--	/*
--	 * the fifth address needs to be repeated in the next ppod, so do
--	 * not move sg
--	 */
--	if (sg_pp) {
--		*sg_pp = sg;
--		*sg_off = offset;
--	}
--
--	if (offset == len) {
--		offset = 0;
--		if (sg) {
--			sg = sg_next(sg);
--			if (sg)
--				addr = sg_dma_address(sg);
--		}
--	}
--	ppod->addr[i] = sg ? cpu_to_be64(addr + offset) : 0ULL;
--}
--
- static struct sk_buff *
- cxgbit_ppod_init_idata(struct cxgbit_device *cdev, struct cxgbi_ppm *ppm,
- 		       unsigned int idx, unsigned int npods, unsigned int tid)
-@@ -116,7 +61,7 @@ cxgbit_ppod_write_idata(struct cxgbi_ppm *ppm, struct cxgbit_sock *csk,
- 	ppod = (struct cxgbi_pagepod *)(idata + 1);
- 
- 	for (i = 0; i < npods; i++, ppod++)
--		cxgbit_set_one_ppod(ppod, ttinfo, sg_pp, sg_off);
-+		cxgbi_ppm_set_one_ppod(ppod, ttinfo, sg_pp, sg_off);
- 
- 	__skb_queue_tail(&csk->ppodq, skb);
- 
--- 
-2.25.1
-
+I am Ms Nadage Lassou,I have important business discussIon with you
+for our benefit.
+Thanks for your time and =C2=A0Attention.
+Regards.
+Ms Nadage Lassou
