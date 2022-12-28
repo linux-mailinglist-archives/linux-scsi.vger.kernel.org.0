@@ -2,150 +2,229 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EC8657530
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Dec 2022 11:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DE2657533
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Dec 2022 11:16:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiL1KP2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Dec 2022 05:15:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
+        id S232720AbiL1KQU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Dec 2022 05:16:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiL1KP0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Dec 2022 05:15:26 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04olkn2029.outbound.protection.outlook.com [40.92.74.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0050F120
-        for <linux-scsi@vger.kernel.org>; Wed, 28 Dec 2022 02:15:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EKiQTJQo7HzQThjyVfZkB3hubP6xGd7vwAOPmCHrUGd4imelQ9Nl3bLkDUMF4U+MkFYE99s+omGkeVOqF7rBcN8oGnbZ3BJSeQtzkVcQ0j+Dx0+gpYZli+KyV9j8ZE3/mdu15LZVwjJ1KIm1WVIYvuZX46ZZYYmd7Ig/UJVm7oWwMjMUk0dm4ZMmcOHnjAPD0GN+qCbPCDMelkrgBpsQeTxoqeA5TkzyjRKOWCLzgHqOUgLvhS/VotAdZobgLxAZzvW4TRJMoV3LbCUlyOSdk0H93VM1KLAX8soD1flNtNCI7gb8B52MWpxirK8qPut0+POtOipIEURkehGf+Ipohw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LD1u47ftDyuqxjZr3ZYdhl48kYd5LlbLJyguO1RF4SA=;
- b=ZApoNvLlfP6POZXrIVrpb5V5lkIm8WZRuaXfTI4qG+PHiAEYl0mR4ubZbefeZBmX0TkV7ycmPBjfZ0ul6tEEiiIQLZlobz8MBzS2jT1zMoB0r+3da8JTjESf52WhYWPh5NOCP5szQZIRk9PPy6B+BKFWSfAMoaw/0zkraWF+6ynqcc7MU0vr8SAuol6decxPcjnvgZNwoulPu11IlhqPZ2ujU+Nfarwdq0JlpCej40EMPTmVqZMh3GZt2USMPPw8Bnt+xEaSeqh8cAbcDAVz2gQmynIePVSU73eV30T00l2eJPbkLKwCJJmGwRd2e3Z/BLGlOgQHhg6sY2w8L6skrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LD1u47ftDyuqxjZr3ZYdhl48kYd5LlbLJyguO1RF4SA=;
- b=UIPbfwsCtNujCtZz+666IoDCn4lmDKhk9BQXoD7QUdvfPMjo+sVFivdNSnNLxYxHfSVGZSriQZsmEJj8sxzfd+WbXlrapNI+tKkYnu/G3VpIW9xZmKHKAp3RLqL2R+8xD833YV+ttYFQ6eAkfR15H3l/vDg9Q22Egnc3KRYLrq28761xrYMVInb9i02hUJua7WndjGLerQr1lvUWfyPa51HpB4jc+40y3B1fPVj+QkTrigy+/0X9l/K05WEP2hisXZ3mODGE7joy2Icogz9I5Wa93UicZhAUZHG9GH0i70M9Wx1Z3qF3T5lVkgjqhBFWi88Dyxz0tJvX60QmDZ30rA==
-Received: from HE1P18901MB0138.EURP189.PROD.OUTLOOK.COM (2603:10a6:3:9b::14)
- by AM0P189MB0785.EURP189.PROD.OUTLOOK.COM (2603:10a6:208:19f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5966.17; Wed, 28 Dec
- 2022 10:15:24 +0000
-Received: from HE1P18901MB0138.EURP189.PROD.OUTLOOK.COM
- ([fe80::ff54:f6d3:aac5:b8af]) by HE1P18901MB0138.EURP189.PROD.OUTLOOK.COM
- ([fe80::ff54:f6d3:aac5:b8af%5]) with mapi id 15.20.5966.017; Wed, 28 Dec 2022
- 10:15:24 +0000
-Message-ID: <HE1P18901MB013819B9A535CC7B45E7C5C7E0F29@HE1P18901MB0138.EURP189.PROD.OUTLOOK.COM>
-Date:   Wed, 28 Dec 2022 11:15:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-From:   T_chan <t_chan4958@hotmail.com>
-Subject: [Question] Cap Sense data at 8 bytes or not for SCSI-2 ?
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN:  [KD0ResPKTL2fKPg4DQIi30J+Ir6EbNdJ]
-X-ClientProxiedBy: AM4PR05CA0036.eurprd05.prod.outlook.com (2603:10a6:205::49)
- To HE1P18901MB0138.EURP189.PROD.OUTLOOK.COM (2603:10a6:3:9b::14)
-X-Microsoft-Original-Message-ID: <1bc0611d-18dc-eb8c-44cb-bda7cb478028@hotmail.com>
+        with ESMTP id S229630AbiL1KQT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Dec 2022 05:16:19 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6DE120;
+        Wed, 28 Dec 2022 02:16:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1672222569; bh=KE0lBfKTFaOiQJ09ag9/+CSPiwxMIgnNmASY7Qrk4F4=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=iPsbC20881d4itO252qjVjpMQWdUQrjWkz6ew4/WU5+pMTcpeASyqNFLNCeyQvKet
+         KpeB093ZLxcZwcxAqAtFAEdyY656nPSYwGN6PFtH7Pr5Bhddbhij197aI/0AgruyKk
+         LkOYwadEwLQZoXSDbohs4ei3JcuaL0R3PaIt4m5c=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Wed, 28 Dec 2022 11:16:09 +0100 (CET)
+X-EA-Auth: EUYTIluwwGcxYCcnMCEx5HMuTzuulED8BsHgOtBH4xIEJJ79HyPbrh049Hxn/9dtntSlTSv9lWzIvXBMQSUYgRBjVYYykkn6
+Date:   Wed, 28 Dec 2022 15:45:59 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Nilesh Javali <njavali@marvell.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH] scsi: qla4xxx: Use sysfs_emit in show function callsbacks
+Message-ID: <Y6wXX9X7TkpnoXZC@qemulion>
+References: <Y5RF+PGBuiXu7UrX@qemulion>
+ <Y6DPMipC0V00uUu0@qemulion>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HE1P18901MB0138:EE_|AM0P189MB0785:EE_
-X-MS-Office365-Filtering-Correlation-Id: 470f99ae-79ec-40fc-aac5-08dae8bc6eed
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PSkZ94cgvtAJXdJKA6qZcykWN6cJl9X137rc8ZnRSCxpjhTKr98De1mvGYr3gke9oeKhRZhdZSzLnthnzgmUuj0ZUE9hQKgxuNDcXDDABJ8Y4maCFaLwLzmfuhX3NE9fREzBpQUb9oS15YGgCHw/hXdcZbwQeUBIIlYewo25f9Kr1yxpHOYmv28NQEjI7cLlTVYsWTQd+sGgLQbwsFmTEbTXFjRMwyaT+EXOo0Kamnw06wt+2ltiPC0FDBQzZVljUYTAKF3jhKP1jVPbGh+80wTTHzWxcfjP5tPc85kkwC9BvC22tv/oIBpnCeC2DW5WjnYu/AKBOwpUMajPIPUMbR1bNB9Nj0nh1zca+3OQnUw1StZn4MOLN5sRje1CaBocbCCOytqMi9BoHDIAdcP2ZZZUDMBycFCq5a+z9KMPzV0K94YtELcf72g+fOFYIC41jSCspDF/BC8w39UPAtraYLm+cZW7C+pifarxkcSkTUIZqohxqV/62RKWLa4Sw8X8/BVk0yMHCX7dA/Wqcf/5MWhy8h+CzPryfSD5eWK/g3QYtqRBI7PHlUXFDZ2JQ7H3iwBCtZSi1PlPkvqIRtq/YEr3/beQTHu1s07KM/kaCRs=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b2V3N2xqQ1VDQU5CbFhkQ202OFFYbUdZdWhFMXNtQ1NSV2VUOUZZR1NpU0hq?=
- =?utf-8?B?YUFIeDROdnIydEZqY2VOSGhZZHlXeWgrWFozdlFPM2hIQ0pOOCtyZ0tWd2Ur?=
- =?utf-8?B?TGZZVGpaMUJzQW1YeG5yMGxrWndYdlJxQ2pGbjNwWGY2OVJwOXM2RFhxSG5v?=
- =?utf-8?B?YTdNeDY3ZVZlaVNQMDR1Y0xPVFJWUTh3SGliOTM2aHVaMHBSNGlaTXlaUHJs?=
- =?utf-8?B?bmgwNjBjMEVyTEJTS0tTc2xMRndLTFVvdXE3UkcxOWRXMWI4L2VaZnBVOFJU?=
- =?utf-8?B?Z0orZkJSdVlSb0dFVzJuUmVpT2NaRlI3WDNWcTQ1NE1FK1ZaU2VtbTk2VHBB?=
- =?utf-8?B?QVZpN012Y05ZbzNLU1ZydzNJQTlZc3BNb0ZCTkt6bUplQjZ4OXVjN0wrdXh5?=
- =?utf-8?B?MWt2NStqcnlwbk9KR1M2eHg0UERTQTA3RnZsRGlHQzdTMERudXZUVDE3VEI0?=
- =?utf-8?B?YTVTc0g0WlNPb3VzSmwwZlVlUUFscVhzVS9NQTMyeTR2cTJsRGZjVVV2Witn?=
- =?utf-8?B?Z3hGOWJLUlNLQjNSaTZhQTNMRkY1UUcxanNSUFo5Uk85THpXOWJobmh3VFd6?=
- =?utf-8?B?clFqcURuWTJTV1FQcG1IWWdqVXdOYVpmendoZDNVeEl6N0dKQmVLM3NTazhI?=
- =?utf-8?B?a2sxaENhbC9kYmpRY0lMeUpwNFVaaDZUTVRJZkFVczdWa0NPTmdTNXRnSlV5?=
- =?utf-8?B?RmtuM2ZiODRXYld0OEh2S0tWVnUyTm9zSXVLNXo2R3QrNCtONU9SME1mNEcr?=
- =?utf-8?B?aCtHS3ZZM0RPbE5sQTFtdW52amd3Z1Q0dkhUOHdwUEFzaGtKZDF4TlQwL3h1?=
- =?utf-8?B?eWxCTFE3OGRPcUhUd2RZR2hDZ29nQnBSRWlJRk9Ka1RITW5wcGo5ZnVJSjZJ?=
- =?utf-8?B?K2Q5QVVhNWprdkMzNXFFSVNlSXVpQ2xPeDNyZXkvbllYRzBKTFJrV0s0Vkkz?=
- =?utf-8?B?bytuSlBnV3RJdWsvNE5ZVHI0cXFCYnRxY2MvMmRpOUkyM09NaUdQSk1oMU11?=
- =?utf-8?B?aVJCYzZYdmZlb0FvT1FDd3dFUUpLRktVOVVsMVNqWGhjVFBqYW45dWFUbUtj?=
- =?utf-8?B?Ym80L0dyVXJTU3lHUXorV1hucjd2T1FNbzNKVWVnU041Z0dSeEJNSnc0Znoy?=
- =?utf-8?B?R1VoRjIvZjVhOVFDVnFTL2FNanBBenl2SkhldzZKLzducWpVSWpqMUlLQVlk?=
- =?utf-8?B?OUtVaEkyTGRzeGtvOWYwSWlsRlJieXBGMU1YRDd6dS95eEhXR2dUMnlsM0Yr?=
- =?utf-8?B?SUhSTGlhSU1oa1k1UHlJOVZtT3JPNi9MYjgwZ2ZCd3NJZWVNOExmY2dSaHRz?=
- =?utf-8?B?Y1NsSmY3cWlKYTRJa1JzNk1nQVE3bWFuVDNZTkZDMWhtcnJmMDJlZUxhQ3hB?=
- =?utf-8?B?WDlXL0FyOEtjRmNQYUEvMnV4anZGa1VXMmU1K1FvZ3VkcytOZFBsdmtMemo2?=
- =?utf-8?B?OE53eVNJdkZ2VjlLMjNJRUROYUJTZkdud3ZYYmZ2K1FJTUFPTTJrTUlVYzFI?=
- =?utf-8?B?azlJVXdXSWFmWGY4aVMyeEJNeWFvQWhSZTNFWURiVGJSZWtXQ1BoUjh5Y0xK?=
- =?utf-8?B?NFZHVmU4QStINFI1TlN2d0lmTG9DQUd2Sm5LUmhYbVBKb2pkZGV1WkVNenFT?=
- =?utf-8?B?dFJvNDRXcnNicWhzVS83UlRPK2lYUjZoSVRYTWVQdU4wOHlHQkc3eTlqZHVi?=
- =?utf-8?B?WnFycS9iQWVNRDZsYWhBR2tLbHpJcGZxd09RQ2ZLUDVnNGcwTjNBdXpnPT0=?=
-X-OriginatorOrg: sct-15-20-4734-24-msonline-outlook-c54b5.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 470f99ae-79ec-40fc-aac5-08dae8bc6eed
-X-MS-Exchange-CrossTenant-AuthSource: HE1P18901MB0138.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Dec 2022 10:15:24.0942
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0P189MB0785
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6DPMipC0V00uUu0@qemulion>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Tue, Dec 20, 2022 at 02:23:06AM +0530, Deepak R Varma wrote:
+> On Sat, Dec 10, 2022 at 02:10:24PM +0530, Deepak R Varma wrote:
+> > According to Documentation/filesystems/sysfs.rst, the show() callback
+> > function of kobject attributes should strictly use sysfs_emit instead
+> > of sprintf family functions.
+> > Issue identified using the coccinelle device_attr_show.cocci script.
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+>
+> Hello,
+> May I please request a review and feedback on this patch?
+
 Hello,
+Requesting a review and feedback on this patch proposal please.
 
-Should the SCSI driver cap Sense data at 8 bytes for SCSI-2, when 
-'additional sense length field' = 0 ?
+Thank you,
+./drv
 
-In 1985's ECMA-111, the default sense data length seems to be 8 bytes, 
-but in the 1993's spec of SCSI-2 it seems to be 18 bytes.
-What I found related to that the SCSI-2 specs:
-"Targets shall be capable of returning eighteen bytes of data in 
-response to a REQUEST SENSE command."
-"The additional sense length field indicates the number of additional 
-sense bytes to follow."
+>
+> Thank you,
+> ./drv
+>
+> > ---
+> >  drivers/scsi/qla4xxx/ql4_attr.c | 32 ++++++++++++++++----------------
+> >  1 file changed, 16 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/drivers/scsi/qla4xxx/ql4_attr.c b/drivers/scsi/qla4xxx/ql4_attr.c
+> > index abfa6ef60480..773b8dbe1121 100644
+> > --- a/drivers/scsi/qla4xxx/ql4_attr.c
+> > +++ b/drivers/scsi/qla4xxx/ql4_attr.c
+> > @@ -156,11 +156,11 @@ qla4xxx_fw_version_show(struct device *dev,
+> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> >
+> >  	if (is_qla80XX(ha))
+> > -		return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d (%x)\n",
+> > +		return sysfs_emit(buf, "%d.%02d.%02d (%x)\n",
+> >  				ha->fw_info.fw_major, ha->fw_info.fw_minor,
+> >  				ha->fw_info.fw_patch, ha->fw_info.fw_build);
+> >  	else
+> > -		return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
+> > +		return sysfs_emit(buf, "%d.%02d.%02d.%02d\n",
+> >  				ha->fw_info.fw_major, ha->fw_info.fw_minor,
+> >  				ha->fw_info.fw_patch, ha->fw_info.fw_build);
+> >  }
+> > @@ -170,7 +170,7 @@ qla4xxx_serial_num_show(struct device *dev, struct device_attribute *attr,
+> >  			char *buf)
+> >  {
+> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> > -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->serial_number);
+> > +	return sysfs_emit(buf, "%s\n", ha->serial_number);
+> >  }
+> >
+> >  static ssize_t
+> > @@ -178,7 +178,7 @@ qla4xxx_iscsi_version_show(struct device *dev, struct device_attribute *attr,
+> >  			   char *buf)
+> >  {
+> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> > -	return snprintf(buf, PAGE_SIZE, "%d.%02d\n", ha->fw_info.iscsi_major,
+> > +	return sysfs_emit(buf, "%d.%02d\n", ha->fw_info.iscsi_major,
+> >  			ha->fw_info.iscsi_minor);
+> >  }
+> >
+> > @@ -187,7 +187,7 @@ qla4xxx_optrom_version_show(struct device *dev, struct device_attribute *attr,
+> >  			    char *buf)
+> >  {
+> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> > -	return snprintf(buf, PAGE_SIZE, "%d.%02d.%02d.%02d\n",
+> > +	return sysfs_emit(buf, "%d.%02d.%02d.%02d\n",
+> >  			ha->fw_info.bootload_major, ha->fw_info.bootload_minor,
+> >  			ha->fw_info.bootload_patch, ha->fw_info.bootload_build);
+> >  }
+> > @@ -197,7 +197,7 @@ qla4xxx_board_id_show(struct device *dev, struct device_attribute *attr,
+> >  		      char *buf)
+> >  {
+> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> > -	return snprintf(buf, PAGE_SIZE, "0x%08X\n", ha->board_id);
+> > +	return sysfs_emit(buf, "0x%08X\n", ha->board_id);
+> >  }
+> >
+> >  static ssize_t
+> > @@ -207,7 +207,7 @@ qla4xxx_fw_state_show(struct device *dev, struct device_attribute *attr,
+> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> >
+> >  	qla4xxx_get_firmware_state(ha);
+> > -	return snprintf(buf, PAGE_SIZE, "0x%08X%8X\n", ha->firmware_state,
+> > +	return sysfs_emit(buf, "0x%08X%8X\n", ha->firmware_state,
+> >  			ha->addl_fw_state);
+> >  }
+> >
+> > @@ -220,7 +220,7 @@ qla4xxx_phy_port_cnt_show(struct device *dev, struct device_attribute *attr,
+> >  	if (is_qla40XX(ha))
+> >  		return -ENOSYS;
+> >
+> > -	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_cnt);
+> > +	return sysfs_emit(buf, "0x%04X\n", ha->phy_port_cnt);
+> >  }
+> >
+> >  static ssize_t
+> > @@ -232,7 +232,7 @@ qla4xxx_phy_port_num_show(struct device *dev, struct device_attribute *attr,
+> >  	if (is_qla40XX(ha))
+> >  		return -ENOSYS;
+> >
+> > -	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->phy_port_num);
+> > +	return sysfs_emit(buf, "0x%04X\n", ha->phy_port_num);
+> >  }
+> >
+> >  static ssize_t
+> > @@ -244,7 +244,7 @@ qla4xxx_iscsi_func_cnt_show(struct device *dev, struct device_attribute *attr,
+> >  	if (is_qla40XX(ha))
+> >  		return -ENOSYS;
+> >
+> > -	return snprintf(buf, PAGE_SIZE, "0x%04X\n", ha->iscsi_pci_func_cnt);
+> > +	return sysfs_emit(buf, "0x%04X\n", ha->iscsi_pci_func_cnt);
+> >  }
+> >
+> >  static ssize_t
+> > @@ -253,7 +253,7 @@ qla4xxx_hba_model_show(struct device *dev, struct device_attribute *attr,
+> >  {
+> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> >
+> > -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->model_name);
+> > +	return sysfs_emit(buf, "%s\n", ha->model_name);
+> >  }
+> >
+> >  static ssize_t
+> > @@ -261,7 +261,7 @@ qla4xxx_fw_timestamp_show(struct device *dev, struct device_attribute *attr,
+> >  			  char *buf)
+> >  {
+> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> > -	return snprintf(buf, PAGE_SIZE, "%s %s\n", ha->fw_info.fw_build_date,
+> > +	return sysfs_emit(buf, "%s %s\n", ha->fw_info.fw_build_date,
+> >  			ha->fw_info.fw_build_time);
+> >  }
+> >
+> > @@ -270,7 +270,7 @@ qla4xxx_fw_build_user_show(struct device *dev, struct device_attribute *attr,
+> >  			   char *buf)
+> >  {
+> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> > -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->fw_info.fw_build_user);
+> > +	return sysfs_emit(buf, "%s\n", ha->fw_info.fw_build_user);
+> >  }
+> >
+> >  static ssize_t
+> > @@ -278,7 +278,7 @@ qla4xxx_fw_ext_timestamp_show(struct device *dev, struct device_attribute *attr,
+> >  			      char *buf)
+> >  {
+> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> > -	return snprintf(buf, PAGE_SIZE, "%s\n", ha->fw_info.extended_timestamp);
+> > +	return sysfs_emit(buf, "%s\n", ha->fw_info.extended_timestamp);
+> >  }
+> >
+> >  static ssize_t
+> > @@ -300,7 +300,7 @@ qla4xxx_fw_load_src_show(struct device *dev, struct device_attribute *attr,
+> >  		break;
+> >  	}
+> >
+> > -	return snprintf(buf, PAGE_SIZE, "%s\n", load_src);
+> > +	return sysfs_emit(buf, "%s\n", load_src);
+> >  }
+> >
+> >  static ssize_t
+> > @@ -309,7 +309,7 @@ qla4xxx_fw_uptime_show(struct device *dev, struct device_attribute *attr,
+> >  {
+> >  	struct scsi_qla_host *ha = to_qla_host(class_to_shost(dev));
+> >  	qla4xxx_about_firmware(ha);
+> > -	return snprintf(buf, PAGE_SIZE, "%u.%u secs\n", ha->fw_uptime_secs,
+> > +	return sysfs_emit(buf, "%u.%u secs\n", ha->fw_uptime_secs,
+> >  			ha->fw_uptime_msecs);
+> >  }
+> >
+> > --
+> > 2.34.1
+> >
 
-Context:
-I'm trying to make old (non-mainstream) SCSI-2 hardware from 1995 work 
-with Linux, with Adaptec 2940 / 2940AU host adapters.
-This device uses the sense data fields "Additional sense code" and 
-"Additional sense code qualifier" a lot to check the current state of 
-the device.
-Under Windows, I have no problems.
-Under Linux, it does not work, because the sense data that is returned 
-is capped at 8 bytes, and those 2 fields are located after that.
-
-Example 16 bytes of CDB, followed by 14 or 8 bytes of Sense data I 
-intercepted:
-
-Windows: requestor asked for 14 bytes of sense data
-SC_EXEC_SCSI_CMD READ_BUFFER (0x3C)
-3C 01 11 00 00 00 00 00 10 00 00 00 00 00 00 00
-F0 00 09 00 00 00 00 00 00 00 00 00 02 04
-
-Linux: requestor asked for 14 bytes of sense data, sg returned 8 bytes 
-(checked via sb_len_wr returned by ioctl() with interface_id = 'S')
-SC_EXEC_SCSI_CMD READ_BUFFER (0x3C)
-3C 01 11 00 00 00 00 00 10 00 00 00 00 00 00 00
-F0 00 09 00 00 00 00 00
-
-Thanks in advance,
-
-T.
 
