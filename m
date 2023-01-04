@@ -2,70 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BE165D34E
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Jan 2023 13:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D1065D52C
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Jan 2023 15:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239295AbjADMza (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 Jan 2023 07:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35840 "EHLO
+        id S235011AbjADOMU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 Jan 2023 09:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239014AbjADMyz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Jan 2023 07:54:55 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3101DDE8
-        for <linux-scsi@vger.kernel.org>; Wed,  4 Jan 2023 04:54:53 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id h8so16204962qkk.8
-        for <linux-scsi@vger.kernel.org>; Wed, 04 Jan 2023 04:54:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=BQfo1+41q2NZR57Q7BFlMODaOza2AgrRvUpAp3daCd4t1w84OEhFtXAM1g7CkVTr/y
-         mvXWkJvXCDM96Iy3cSf9E37Th3uZX5TzmwlIsHFzK3DAyLuSjJ8d3uR9drr/ahkzPGkt
-         iW+sw+gZOJCd7bumtfoM4UR2xOfXz6tdmGq2f+IJJhoSBazdofAm5Gs9PxuweXnk264c
-         knSGf1CtrqZScdeov1GoaGbl2sApMUXYjJGPCObPVA0UTlHx2t6+wdp4VOKHmsqLWM8X
-         lQt15zqigA6uJCG+q37n0r4mLK1MKtsniT1i9jhRA9qlN9E2Mf0sYN4W9Jd0n+39BoCK
-         yzWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=NT14Ii1OZk/QsEhO9xWjGAGJwbGSisxcFKNWxguX32KvhaZDnRotLMTdOfHwyRC69D
-         WfZisvw9cMHsM0nU8aY4RH4SqWXKs9Q2jD99Qkyz5EAUumyaXvMZL2K2WQqibt9pIiXH
-         f3jCObMAJAEjIYN66pwdDT4t2MxAJHlitQPoiwvSeYOFXnvQZsbaEJs2uFjHSG6s1u+4
-         E7tY3+daffKLSVPrIOBVx4tLUykDQK+eu7CGT2f5q/Fapuj1e4DmXDQHOMx3lPFRBZlk
-         ZpQyN0NXCL17XsEb781iRbT9s7ubGQ9ulsJMuucU4en74pSS36Im9rgMcIX3CcT2lVEI
-         BRUw==
-X-Gm-Message-State: AFqh2kpOBxtkP26mtDWed13Wmask/8Q2aQmwzXeD2zQY8W8YptaVH0mE
-        oyAmguTLRKNOUmbKgc/xNlmOfOiabmj0xWcS4mddPLtldts=
-X-Google-Smtp-Source: AMrXdXuKXTvNK0aSB9vnyjtdhrZfKmRzvU9Jw1W0zhcD7x19AMFVNgTh5oL+8ilZBOfTDf/bL64QVz1mYULxa/ftADs=
-X-Received: by 2002:ac8:568a:0:b0:3a9:688d:fad2 with SMTP id
- h10-20020ac8568a000000b003a9688dfad2mr1976067qta.646.1672836882017; Wed, 04
- Jan 2023 04:54:42 -0800 (PST)
+        with ESMTP id S239678AbjADOLv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Jan 2023 09:11:51 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5F811A1A;
+        Wed,  4 Jan 2023 06:10:58 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304DcWhg021439;
+        Wed, 4 Jan 2023 14:10:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=x9OOQVyq/BLgjeDzLgMuVgKdwd13+INdbkP4hoyCx8M=;
+ b=bJGXPFvwLGBs9NEGo/ZbNduNVWLWAJfUYlYhcyAvUD3ECmRrdNURr84t85beyjtUUSBu
+ bQXBeUEVlKmtf889NvVg6pNJSsU08LtEi9ztzZKkfEGXq+OokDDuKAvayuVRdb/rntab
+ +jOS9Ec1/Igkm/r1xRq4JP89xGAtDFNcw2+OPgssAVfI/zdnqvWyUjVW/xRLFI5HTB2c
+ OOMCKo0TrdsQLy9ySpU9+0eQvogfXq1/sn1bjyuzL76luoPTJ5BGqIULN1tga3a8tXZy
+ 2Ua4NB+IJClbUslNhdgrosiCjvyQ/e8DQcdIR7sdECCcmExbUf0IelyhFoVEWM2i9f6V tQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsvf9xtn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 14:10:48 +0000
+Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 304EAjoK014467
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 4 Jan 2023 14:10:45 GMT
+Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 4 Jan 2023 06:10:45 -0800
+Date:   Wed, 4 Jan 2023 06:10:45 -0800
+From:   Asutosh Das <quic_asutoshd@quicinc.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+CC:     Johan Hovold <johan+linaro@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>, Can Guo <quic_cang@quicinc.com>
+Subject: Re: [PATCH] scsi: ufs: core: fix devfreq deadlocks
+Message-ID: <20230104141045.GB8114@asutoshd-linux1.qualcomm.com>
+References: <20221222102121.18682-1-johan+linaro@kernel.org>
+ <85e91255-1e6f-f428-5376-08416d2107a2@acm.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6200:5d91:b0:4a5:78e9:2012 with HTTP; Wed, 4 Jan 2023
- 04:54:41 -0800 (PST)
-Reply-To: Gregdenzell9@gmail.com
-From:   Greg Denzell <mzsophie@gmail.com>
-Date:   Wed, 4 Jan 2023 12:54:41 +0000
-Message-ID: <CAEoj5=ZpJ15GRz-U33Ocbu5-P3Va+3bNv3476+mmJJ52cwx7tA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <85e91255-1e6f-f428-5376-08416d2107a2@acm.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: zEqWUFqKC9RYj1dTlGriAwsalX9RpyWw
+X-Proofpoint-GUID: zEqWUFqKC9RYj1dTlGriAwsalX9RpyWw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ clxscore=1011 mlxlogscore=767 priorityscore=1501 malwarescore=0
+ adultscore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301040120
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Seasons Greetings!
+On Tue, Jan 03 2023 at 13:45 -0800, Bart Van Assche wrote:
+>On 12/22/22 02:21, Johan Hovold wrote:
+>>+	/* Enable Write Booster if we have scaled up else disable it */
+>>+	if (ufshcd_enable_wb_if_scaling_up(hba))
+>>+		ufshcd_wb_toggle(hba, scale_up);
+>
+>Hi Asutosh,
+>
+>This patch is the second complaint about the mechanism that toggles 
+>the WriteBooster during clock scaling. Can this mechanism be removed 
+>entirely?
+>
+>I think this commit introduced that mechanism: 3d17b9b5ab11 ("scsi: 
+>ufs: Add write booster feature support"; v5.8).
+>
+>Thanks,
+>
+>Bart.
 
-This will remind you again that I have not yet received your reply to
-my last message to you.
+Hello Bart,
+Load based toggling of WB seemed fine to me then.
+I haven't thought about another method to toggle WriteBooster yet.
+Let me see if I can come up with something.
+IMT if you have a mechanism in mind, please let me know.
+
+-asd
+
+>
