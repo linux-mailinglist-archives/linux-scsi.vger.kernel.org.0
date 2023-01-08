@@ -2,62 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2212B661A88
-	for <lists+linux-scsi@lfdr.de>; Sun,  8 Jan 2023 23:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FBB661B28
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Jan 2023 00:40:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbjAHWop (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 8 Jan 2023 17:44:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S231229AbjAHXkq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 8 Jan 2023 18:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjAHWoo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 8 Jan 2023 17:44:44 -0500
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A2FF02A
-        for <linux-scsi@vger.kernel.org>; Sun,  8 Jan 2023 14:44:43 -0800 (PST)
-Received: by mail-pj1-f43.google.com with SMTP id l1-20020a17090a384100b00226f05b9595so5469931pjf.0
-        for <linux-scsi@vger.kernel.org>; Sun, 08 Jan 2023 14:44:43 -0800 (PST)
+        with ESMTP id S230334AbjAHXkp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 8 Jan 2023 18:40:45 -0500
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AD310566;
+        Sun,  8 Jan 2023 15:40:23 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id o8-20020a17090a9f8800b00223de0364beso10991720pjp.4;
+        Sun, 08 Jan 2023 15:40:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p68y4K12HDXYnLzyQXi9BeSM304eUujIBK7ac777WUM=;
-        b=c9kSqC2nLWkrGRvrzYNB9TEOxXtfPwm0g21TnvQt7Y1VMyoIyWtieZKuyYfNvpXZ7D
-         THGidJnczt6HGf/GrHzPMwtroR/U8rT5eTiQm80tx2yCtvDTSuBA1v7mTP4pBlCwW3v8
-         Ap2JBqNzB1jaD3LgPgw+2w1NZ87AwQRh/GTtJN2ZEp70/OeWmNpLiDPsRlmDr/gcoYGe
-         GWD7EY0qaIMR1tj801XCd5V7w0CbJi2BWrEuMfxJHdoNdk6/sqpiJM7oTL6X+laWfalT
-         9XvhjKQwaHVLA62UZk554dLI/ORMOGDhgAva6ye4ueYSRNoKw1MzKn69nw6FHn3clxUE
-         kHDQ==
-X-Gm-Message-State: AFqh2kpdDgSyIqP+xBWhrWNsg/s2MfXIvuay0UyqfMbu/h8a7NbJZRB9
-        vOVW8kArHJYQLgz8Wu2MwMw=
-X-Google-Smtp-Source: AMrXdXuxSqXGVSgtPlBfU2ia/pf3805nTU54ITcUJDDe9Xk2iHa1Lwh5+WxsDEd/xpoyB/suTCMKKg==
-X-Received: by 2002:a17:903:31c2:b0:192:7447:adfe with SMTP id v2-20020a17090331c200b001927447adfemr47534286ple.36.1673217882621;
-        Sun, 08 Jan 2023 14:44:42 -0800 (PST)
+        bh=aSpsWrXJfBg68rx5ebvZJ1VDSNR4IRkVbz99lzlH66o=;
+        b=WEe/LJ7HDr8ZklF999jVMAE0k+lGnRFFaDNkHrKvg2ngJjePn0101mrZQJJpb5zDNp
+         PuNnpVQdvEHw+BP8wMcwiDhyILEemrkM/OyGZxXj1m3o08to5h8hNen+oM49hlWfo1Z9
+         5fpdldtM2r527dQpSAzdmvJWYaq5WPfcuzy2eDwop4OwvOsUV+dKL8WzBGxoIT5qodgX
+         wnGsD1ZdG+G5CJLAqmBql+mMdkS9US6Ez9cbKRkMbnAp6/D5czSwixCBTHUHXE+xMEtD
+         qWIGrU2rwdbdIEXBWyPZsABsHS/qC997CBDMpbh5Q/LXbZVWAoWSHl74wafHLxJezAJb
+         FqwA==
+X-Gm-Message-State: AFqh2ko+x6vJRQYIqj5hSWcjn+A3DR2rkTs1dn3svQ0vOsJyfCcae7L4
+        7LgPAE5xFkuXCeBQ1YDeq1I=
+X-Google-Smtp-Source: AMrXdXvxoJkajP6OPO7YWgY41e11NI+SxAug0wlOqSZMf+SPUffR/T0+ZgBTolRa1gfQo8+YiMLPsA==
+X-Received: by 2002:a17:902:f80c:b0:189:a934:ee3e with SMTP id ix12-20020a170902f80c00b00189a934ee3emr72416345plb.62.1673221222742;
+        Sun, 08 Jan 2023 15:40:22 -0800 (PST)
 Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id f5-20020a170902ce8500b00178b9c997e5sm4610797plg.138.2023.01.08.14.44.40
+        by smtp.gmail.com with ESMTPSA id q5-20020a170902eb8500b001801aec1f6bsm4654584plg.141.2023.01.08.15.40.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 14:44:41 -0800 (PST)
-Message-ID: <8c7f62c9-3599-dda0-9db7-47fb31c37655@acm.org>
-Date:   Sun, 8 Jan 2023 14:44:39 -0800
+        Sun, 08 Jan 2023 15:40:21 -0800 (PST)
+Message-ID: <c948ae95-e543-7a03-db76-711eed624b94@acm.org>
+Date:   Sun, 8 Jan 2023 15:40:20 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH 3/3] scsi: ufs: Enable DMA clustering
+Subject: Re: [PATCH v2 0/3] Several compilation warnings fixes for UFS
+ Advanced RPMB
 Content-Language: en-US
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>
-References: <20230106215800.2249344-1-bvanassche@acm.org>
- <20230106215800.2249344-4-bvanassche@acm.org>
- <DM6PR04MB657596A68F5A93F22D6F6C66FCF99@DM6PR04MB6575.namprd04.prod.outlook.com>
+To:     Bean Huo <beanhuo@iokpp.de>, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        quic_cang@quicinc.com, quic_xiaosenh@quicinc.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230108224057.354438-1-beanhuo@iokpp.de>
 From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <DM6PR04MB657596A68F5A93F22D6F6C66FCF99@DM6PR04MB6575.namprd04.prod.outlook.com>
+In-Reply-To: <20230108224057.354438-1-beanhuo@iokpp.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
@@ -70,40 +65,12 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 1/8/23 00:20, Avri Altman wrote:
->> All UFS host controllers support DMA clustering. Hence enable DMA clustering.
->>
->> Note: without patch "Exynos: Fix the maximum segment size", this patch breaks
->> support for the Exynos controller.
->>
->> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
->> ---
->>   drivers/ufs/core/ufshcd.c | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c index
->> be18edf4ef7f..fe83fdda8d23 100644
->> --- a/drivers/ufs/core/ufshcd.c
->> +++ b/drivers/ufs/core/ufshcd.c
->> @@ -8429,7 +8429,6 @@ static struct scsi_host_template
->> ufshcd_driver_template = {
->>          .max_host_blocked       = 1,
->>          .track_queue_depth      = 1,
->>          .sdev_groups            = ufshcd_driver_groups,
->> -       .dma_boundary           = PAGE_SIZE - 1,
- >
-> Isn't DBC <= 256KB implies that for a boundary?
+On 1/8/23 14:40, Bean Huo wrote:
+> These patches are to fix several compilation warnings introduced by my commit:
+> 6ff265fc5ef6 ("scsi: ufs: core: bsg: Add advanced RPMB support in ufs_bsg"),
+> please consider this patch series for the next your merge window.
 
-Hi Avri,
+For the entire series:
 
-I don't think so. I think that the 256 KiB limit for the PRDT 
-corresponds to the max_segment_size parameter. The dma_boundary 
-parameter represents a boundary that must not be crossed by DMA 
-scatter/gather lists. I'm not aware of any restrictions on DMA 
-scatter/gather lists for UFS controllers other than the 256 KiB limit 
-for a single PRDT and a limitation to 32-bits addresses for controllers 
-that only support 32-bits DMA. The latter restriction is already handled 
-by ufshcd_set_dma_mask().
-
-Bart.
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
