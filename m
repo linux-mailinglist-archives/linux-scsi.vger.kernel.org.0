@@ -2,60 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EEB663527
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Jan 2023 00:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E77666352A
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Jan 2023 00:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237743AbjAIXWy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Jan 2023 18:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S237739AbjAIXW6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Jan 2023 18:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237616AbjAIXWv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Jan 2023 18:22:51 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEDD959C
-        for <linux-scsi@vger.kernel.org>; Mon,  9 Jan 2023 15:22:47 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id jl4so11288692plb.8
-        for <linux-scsi@vger.kernel.org>; Mon, 09 Jan 2023 15:22:47 -0800 (PST)
+        with ESMTP id S234906AbjAIXWx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Jan 2023 18:22:53 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038695591
+        for <linux-scsi@vger.kernel.org>; Mon,  9 Jan 2023 15:22:49 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id z9-20020a17090a468900b00226b6e7aeeaso11479270pjf.1
+        for <linux-scsi@vger.kernel.org>; Mon, 09 Jan 2023 15:22:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ir9HGZ45FJzt0JfYeTk3McJ+X2KaO54ZpeNTElTDStE=;
-        b=oKLj8WKoCvLJ0Y+mWcyeGfwvr3lXIr3dcv3KW2NjBwWN6+O7MAc8L200WPbdpYCP1X
-         8N6nOwSANteq0xVV6uYwf5iJi/UCatoNk/4r31OpX1r6jaf2dXIr8EREr8u5KIMmDJi2
-         tJnF8BuAdeworZLeHfp8elobwRCKAN0PkRqkqclo7k6n03SgYQxR8qb1sh5AA5mdGOa2
-         V6BtJ0tKfg/1a8hue/ST6Cd++S0VjdFjNF+uZ8D+Paf/vCfN77tyAalY7FYNYMvKPurf
-         gamTt74IMwmu4BN4zK8BXqHBuudynGS8Qt9IyEf0LQgF6fqdQUqCg5exmgEq1qeC65qV
-         4HlQ==
+        bh=8uUq+HbvoXMZpOyoCQi3I8VvGWUAYK/4dmUAWPinMXY=;
+        b=fJfBiFewz9Tydb5FY3MpwnyDfmVn5pZxIJSDOY809dI0wxKBEqCUrNQxt+cJHi+5Fk
+         r7CyqMr5xKmdx+su8qfXo4ZeXjjINuCznlyTTUmgGWnuXVKp9b583wgJUZ6NyBZOnc1G
+         2GNEFqp8WitmAQ2AmyyLjfLzzarT5HX9IK5UhHYH5XtXmhEWGIE5gsE7yXcFlSeVHhyU
+         noHOsyppUDIbVX1+2kZUYN/xEXgeC/c0tkPt3xgUjC2uScojXZMd5eafHN9iCixAvUIQ
+         ZnwQ65fR+rt/8KA+zjUNO9O0jPxw7g6MG+3n/62ZgP4fxxglVVSdFIsg8fPku370eWpd
+         iSig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ir9HGZ45FJzt0JfYeTk3McJ+X2KaO54ZpeNTElTDStE=;
-        b=kAIgBdBQo/j8mPNrihb2Xw90yL053ckmUDS9PtXd0nAlGhI6thS4EFT7ahWz06cA4v
-         p1ExdEVCze/0jDrLbw0P457sbW0QPm/Bha+hvN5k+fLHlEMZVIh9OanZ1MD48hbr1dds
-         nN7rtNEESkcUoLd8mAtlliTYUpaevwD48k436KSeXq+X34pg62uFvJU1aNnzrFEqD1Jj
-         YA3wHqrF8SusyjGUhGYkZog1BruJhXrKJ7IYYpl/lJrV7vGgtlVV3cKaylHD/0Nl4TYk
-         tlSDMp0JFAyp1Y/lvbdNgUGqV14agwwqPEUpOdLZn2XsOYqsImALDE3Ku2dk822nH2Ov
-         3LlA==
-X-Gm-Message-State: AFqh2kp0OmFTCWcyV8HURJC3ddrxrNnr0Ium/z8SdqTmibYjMuyL7elw
-        rGp3AH6JtMJOmazHS/GEyLWdteEsIt0=
-X-Google-Smtp-Source: AMrXdXsrqGevRoCXUPf5LTStJbPKSBfAkN1qAFYPNkvqF6FYaOUIy4GQPJjftOHIednitIvwlilTPg==
-X-Received: by 2002:a17:902:74c1:b0:193:2bc9:eb25 with SMTP id f1-20020a17090274c100b001932bc9eb25mr6146244plt.20.1673306566478;
-        Mon, 09 Jan 2023 15:22:46 -0800 (PST)
+        bh=8uUq+HbvoXMZpOyoCQi3I8VvGWUAYK/4dmUAWPinMXY=;
+        b=MrywLvEkKZPphN20cLmCp+7W0OFQCDmUeGrgoJRKnMnVRVeiNMDFzEtVlIs67Wxv99
+         OIMCG6PdFzIU40iXmOpy9g8OSp2z8nUHq1q1Gg1EEN2Et2VTmQdj3flahsdwU8ha9iwN
+         NixeiOgn6f0FdMbymtaomrGgbCDBKN2oidIqujIAg3y1FnUnHnHwLN+tYK4TUhV56dsg
+         vEyLv47v3/164fQxAogcye1VxeQIM/9DIGqsQEb0PaqwzmNh5PISerE83eXW80o3JH0e
+         SiHMLymxs+25kQwMclio1JcTyAfPi2vLj43lduoFOiNET1R8DmuwP57lEAcaDvnTMHiU
+         EBrA==
+X-Gm-Message-State: AFqh2kprkoZkpUFJbapDdZU1tDVXEod+RGs8nNRwX3s1cusgPI9ZZVNh
+        vhbug3kaLB1iNo3kGrHQUXl3ICXKfeE=
+X-Google-Smtp-Source: AMrXdXvjYQ5vgBJssrm+0x9zjgAmVMFWUvYlfVVM5aUTtRxoRaGaWnxsivzAhtN9SdXSXjTDp0xTZA==
+X-Received: by 2002:a17:903:2785:b0:194:3e2f:e078 with SMTP id jw5-20020a170903278500b001943e2fe078mr902914plb.43.1673306568267;
+        Mon, 09 Jan 2023 15:22:48 -0800 (PST)
 Received: from dhcp-10-231-55-133.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d22-20020a170902aa9600b001871461688esm6628572plr.175.2023.01.09.15.22.45
+        by smtp.gmail.com with ESMTPSA id d22-20020a170902aa9600b001871461688esm6628572plr.175.2023.01.09.15.22.47
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 09 Jan 2023 15:22:46 -0800 (PST)
+        Mon, 09 Jan 2023 15:22:48 -0800 (PST)
 From:   Justin Tee <justintee8345@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     jsmart2021@gmail.com, justin.tee@broadcom.com,
         Justin Tee <justintee8345@gmail.com>
-Subject: [PATCH 05/12] lpfc: Remove redundant clean up code in disable_vport
-Date:   Mon,  9 Jan 2023 15:33:10 -0800
-Message-Id: <20230109233317.54737-6-justintee8345@gmail.com>
+Subject: [PATCH 06/12] lpfc: Remove duplicate ndlp kref decrement in lpfc_cleanup_rpis
+Date:   Mon,  9 Jan 2023 15:33:11 -0800
+Message-Id: <20230109233317.54737-7-justintee8345@gmail.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20230109233317.54737-1-justintee8345@gmail.com>
 References: <20230109233317.54737-1-justintee8345@gmail.com>
@@ -71,53 +71,49 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The disable_vport path calls the discovery state machine on all ndlps, puts
-them into NPR state, and then calls lpfc_cleanup_rpis with the remove flag
-set.  This unintentionally decrements an ndlp's kref twice and can result
-in premature release of an ndlp because lpfc_dev_loss_tmo_handler triggers
-clean up of the ndlp again later.
+With faulty cables in PT2PT topology, an unintentional ndlp double kref
+decrement can occur.
 
-Remove redundant code in disable_vport that sets all the ndlps to NPR, and
-change the call to cleanup_rpis to not remove the ndlps.
-lpfc_dev_loss_tmo_handler will handle final removal of the ndlps.
+If a FLOGI request is outstanding before the link goes down, the missing
+FLOGI_ACC causes an F_Port ndlp to remain in the UNUSED state.  During link
+down, lpfc_cleanup_rpis is called and decrements an ndlp kref.
+Additionally, when the driver later decides to abort the FLOGI, the FLOGI
+completion handler decrements the ndlp kref a second time.
+
+Remove duplicate clean up logic in lpfc_cleanup_rpis because the updated
+FLOGI completion handler already handles the ndlp kref decrement.
 
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 ---
- drivers/scsi/lpfc/lpfc_vport.c | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 15 ---------------
+ 1 file changed, 15 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_vport.c b/drivers/scsi/lpfc/lpfc_vport.c
-index 4d171f5c213f..5aeda245369b 100644
---- a/drivers/scsi/lpfc/lpfc_vport.c
-+++ b/drivers/scsi/lpfc/lpfc_vport.c
-@@ -534,7 +534,7 @@ disable_vport(struct fc_vport *fc_vport)
- {
- 	struct lpfc_vport *vport = *(struct lpfc_vport **)fc_vport->dd_data;
- 	struct lpfc_hba   *phba = vport->phba;
--	struct lpfc_nodelist *ndlp = NULL, *next_ndlp = NULL;
-+	struct lpfc_nodelist *ndlp = NULL;
- 	struct Scsi_Host *shost = lpfc_shost_from_vport(vport);
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 80375d73b732..af0acf55b343 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -1129,21 +1129,6 @@ lpfc_cleanup_rpis(struct lpfc_vport *vport, int remove)
+ 	struct lpfc_nodelist *ndlp, *next_ndlp;
  
- 	/* Can't disable during an outstanding delete. */
-@@ -546,17 +546,7 @@ disable_vport(struct fc_vport *fc_vport)
- 		(void)lpfc_send_npiv_logo(vport, ndlp);
- 
- 	lpfc_sli_host_down(vport);
--
--	/* Mark all nodes for discovery so we can remove them by
--	 * calling lpfc_cleanup_rpis(vport, 1)
--	 */
--	list_for_each_entry_safe(ndlp, next_ndlp, &vport->fc_nodes, nlp_listp) {
--		if (ndlp->nlp_state == NLP_STE_UNUSED_NODE)
+ 	list_for_each_entry_safe(ndlp, next_ndlp, &vport->fc_nodes, nlp_listp) {
+-		if (ndlp->nlp_state == NLP_STE_UNUSED_NODE) {
+-			/* It's possible the FLOGI to the fabric node never
+-			 * successfully completed and never registered with the
+-			 * transport.  In this case there is no way to clean up
+-			 * the node.
+-			 */
+-			if (ndlp->nlp_DID == Fabric_DID) {
+-				if (ndlp->nlp_prev_state ==
+-				    NLP_STE_UNUSED_NODE &&
+-				    !ndlp->fc4_xpt_flags)
+-					lpfc_nlp_put(ndlp);
+-			}
 -			continue;
--		lpfc_disc_state_machine(vport, ndlp, NULL,
--					NLP_EVT_DEVICE_RECOVERY);
--	}
--	lpfc_cleanup_rpis(vport, 1);
-+	lpfc_cleanup_rpis(vport, 0);
- 
- 	lpfc_stop_vport_timers(vport);
- 	lpfc_unreg_all_rpis(vport);
+-		}
+-
+ 		if ((phba->sli3_options & LPFC_SLI3_VPORT_TEARDOWN) ||
+ 		    ((vport->port_type == LPFC_NPIV_PORT) &&
+ 		     ((ndlp->nlp_DID == NameServer_DID) ||
 -- 
 2.38.0
 
