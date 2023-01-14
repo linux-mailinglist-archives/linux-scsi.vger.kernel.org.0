@@ -2,138 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D9F66A8AD
-	for <lists+linux-scsi@lfdr.de>; Sat, 14 Jan 2023 03:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF96666A8DA
+	for <lists+linux-scsi@lfdr.de>; Sat, 14 Jan 2023 04:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbjANCaa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 13 Jan 2023 21:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
+        id S231487AbjANDHV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 13 Jan 2023 22:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbjANCa3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Jan 2023 21:30:29 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660358CBD6
-        for <linux-scsi@vger.kernel.org>; Fri, 13 Jan 2023 18:30:27 -0800 (PST)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230114023025epoutp0476e138cfb1d37f48c6ad1cbd554f19df~6DASbNZg43212132121epoutp04V
-        for <linux-scsi@vger.kernel.org>; Sat, 14 Jan 2023 02:30:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230114023025epoutp0476e138cfb1d37f48c6ad1cbd554f19df~6DASbNZg43212132121epoutp04V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1673663425;
-        bh=lJ0fGN2UC71gm5oXJk1BTD+ElD1EYPw0347IjGvFUTI=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=YnySHmk0SiI5OXLKWcj33DI69SDxvZr53PHmP94w52zuRUP1qC3gE5p4SsRwJ+d09
-         N6vu3hwMIZv3aiSYy2iaD31papuHgWTXlsbKdS48g98Y1O/X9fALyuB/0x2kh79WH4
-         Le6akk4Rcinx4QFmTmZH5qeSR/ll7s0Y1uAF2yTI=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20230114023024epcas5p311c5a8067f4907abdeaf1dd01d0f746f~6DARkgw3M2170221702epcas5p3W;
-        Sat, 14 Jan 2023 02:30:24 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Nv2M32C4Bz4x9Pr; Sat, 14 Jan
-        2023 02:30:23 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F5.A7.02301.FB312C36; Sat, 14 Jan 2023 11:30:23 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230114023022epcas5p37521ca1f5a34c36e33e0d73bd0066aa8~6DAPxmoH81760517605epcas5p3w;
-        Sat, 14 Jan 2023 02:30:22 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230114023022epsmtrp2a333e396e757c8f073105f0ad490a084~6DAPw6waP3027430274epsmtrp2i;
-        Sat, 14 Jan 2023 02:30:22 +0000 (GMT)
-X-AuditID: b6c32a49-473fd700000108fd-aa-63c213bf30db
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7A.1E.10542.EB312C36; Sat, 14 Jan 2023 11:30:22 +0900 (KST)
-Received: from FDSSW-LABPC-53.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.68]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230114023021epsmtip1f66c0e17557f8b31927a057b03729ec0~6DAOw6_mW1938419384epsmtip1J;
-        Sat, 14 Jan 2023 02:30:21 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     avri.altman@wdc.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH] scsi: MAINTAINERS: Add entry for Exynos UFS driver
-Date:   Sat, 14 Jan 2023 13:32:47 +0530
-Message-Id: <20230114080247.601312-1-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231479AbjANDHS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Jan 2023 22:07:18 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FC8892CD;
+        Fri, 13 Jan 2023 19:07:17 -0800 (PST)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30E2vunb023657;
+        Sat, 14 Jan 2023 03:07:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2022-7-12;
+ bh=5PJ9XeEkwfrQvKnXCHlQ2rF70kDlcqxpnDahK4D+4OQ=;
+ b=EP7lcwF3Fm69ylqvJ0+mVDbApuOiZnLT7vwLoLbZGAEQZLdKtJYZvQ4zuvcKW+XCwxuV
+ yndCnR0UQl7OBrmnWIopmweUfzPx90YJ1f8OxefJgo1mt7leGNnq++KXQ9QDAfUpu1Nt
+ h9DWJ3xkrrNtqg/KncwCyBOdnjAqm5AA8k4mFwPHPoLvmiSnl3wUXfwhide+BgfOOJYo
+ 85/g0viEipBgOsFJNb9TfH2ytQ66s2dWG4C05irdtTPVYqD/sVt8Dnqr0RNdN6LDpb97
+ sNczkGGNvlKnE6kxbEzr8u4kYK0SRlOI8B77N6puHPYj9aI8fJ7XtmooJBMHaQxibJ2Y 0Q== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3kaa80vx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 14 Jan 2023 03:07:07 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30E2xHml018474;
+        Sat, 14 Jan 2023 03:07:06 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n3m3d85su-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 14 Jan 2023 03:07:06 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30E375hB035466;
+        Sat, 14 Jan 2023 03:07:05 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3n3m3d85sp-1;
+        Sat, 14 Jan 2023 03:07:05 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        beanhuo@micron.com, bvanassche@acm.org, quic_cang@quicinc.com,
+        quic_xiaosenh@quicinc.com, Bean Huo <beanhuo@iokpp.de>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Several compilation warnings fixes for UFS Advanced RPMB
+Date:   Fri, 13 Jan 2023 22:06:39 -0500
+Message-Id: <167366469091.3069139.15644571425518842715.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230108224057.354438-1-beanhuo@iokpp.de>
+References: <20230108224057.354438-1-beanhuo@iokpp.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLKsWRmVeSWpSXmKPExsWy7bCmhu5+4UPJBisP8Fk8mLeNzeLlz6ts
-        FtM+/GS2uLxrDptF9/UdbBbLj/9jcmDzuHzF2+Pj01ssHn1bVjF6fN4k59F+oJspgDUq2yYj
-        NTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6AAlhbLEnFKg
-        UEBicbGSvp1NUX5pSapCRn5xia1SakFKToFJgV5xYm5xaV66Xl5qiZWhgYGRKVBhQnbG0Sbz
-        grusFVM/XGVpYHzB0sXIySEhYCKx9c0Hxi5GLg4hgd2MEp3XT0E5nxglXkxdzQThfGaUaG/+
-        DNfycN8pVojELkaJ2V+62CGcHiaJZ7M6mEGq2AS0Je5O3wLUzsEhImAj0fQNzGQWKJB4PsMC
-        pEJYwFli/7eXYDNZBFQlfvc3g3XyCthKfHj3hxVil7zEzEvf2SHighInZz4Bq2cGijdvnc0M
-        slZC4Bi7xNzj15ggGlwkHk6fxg5hC0u8Or4FypaS+PxuLxvIDRICHhKL/khBhDMk3i5fzwhh
-        20scuDKHBeJMTYn1u/QhVvFJ9P5+wgTRySvR0SYEUa0q0fzuKjREpCUmdndDXewh0Xq5FewT
-        IYFYiccN21gnMMrNQvLALCQPzEJYtoCReRWjZGpBcW56arFpgWFeajk8IpPzczcxgtOdlucO
-        xrsPPugdYmTiYDzEKMHBrCTCu+fo/mQh3pTEyqrUovz4otKc1OJDjKbAUJ3ILCWanA9MuHkl
-        8YYmlgYmZmZmJpbGZoZK4rypW+cnCwmkJ5akZqemFqQWwfQxcXBKNTDpntrrV1UVuTf98UUf
-        KfOC/mOnGTeuzsoVFH9lZ/nVkPPLivNxn6xPtf3mClfirfK/kO1nZTN1zmp2wdM3z7rMLLJ4
-        lW87+9s23p5/Yc5LZyRIp2vdUVZ5teN/7Lmf99hn/W75cPF0k5rXq8v75dNErJ0cH8zyea/O
-        WKRz8fXiaJ8Ih8/3BEOvBPREVjnJH//ry1h91a934pSyUp+686tq9zzcwRP77cUlgcijR5wP
-        pM8qOFQtud3Q32mS3bspqWeuqikcuPn02KW3RfP2xFxNuPJ+R8lex/mlAcwh7rVa6/jnsrw/
-        MqGBe6P0D3me9ouenjl/6u/cviR8LN9q2aLrZdZP3iXG73988Yuj/9zfSizFGYmGWsxFxYkA
-        /ziSJwAEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBLMWRmVeSWpSXmKPExsWy7bCSnO4+4UPJBmt2SVs8mLeNzeLlz6ts
-        FtM+/GS2uLxrDptF9/UdbBbLj/9jcmDzuHzF2+Pj01ssHn1bVjF6fN4k59F+oJspgDWKyyYl
-        NSezLLVI3y6BK+Nok3nBXdaKqR+usjQwvmDpYuTkkBAwkXi47xRrFyMXh5DADkaJa9v/sUEk
-        pCWub5zADmELS6z895wdoqiLSeLenD2sIAk2AW2Ju9O3MIHYIgJ2Eu2PrzKC2MwCJRKLvrSA
-        xYUFnCX2f3sJto1FQFXid38zM4jNK2Ar8eHdH1aIBfISMy99Z4eIC0qcnPmEBWKOvETz1tnM
-        Exj5ZiFJzUKSWsDItIpRMrWgODc9t9iwwCgvtVyvODG3uDQvXS85P3cTIzgwtbR2MO5Z9UHv
-        ECMTB+MhRgkOZiUR3j1H9ycL8aYkVlalFuXHF5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1
-        ILUIJsvEwSnVwLT7/zVjv/RpMxdFfv24/3qFlaprY9uT2au2d7+ssJl8gr187qdb3+fZtvLv
-        +xL9c/Hkmz0hqz955dQu2n73Rugx5eCDL2bOzOLeOLnKwo/Bio+pa/VXbQXJ+JO7lGc3fd50
-        /sR3hXONKocF9AX49889FKQU4P5bpV82I61tjsrkq0qS397Kpn60PPpTomDeys9qnId8XqqK
-        CnQf2T7Xd7vsvX9RC5KFpm8VmR9RGjDvqlzmtGUJJdqxF3MikvKi4vbu2+FySaCQuVxX4c1S
-        m0XaTAp5iQ86btYe/7i2YOGEKlNGC34ts/5r4QyvpDaLb2et+Xux8sdaSZF3l/rc3Niid92w
-        OR8SVbLx3NcdlU5KLMUZiYZazEXFiQBtMVzCuwIAAA==
-X-CMS-MailID: 20230114023022epcas5p37521ca1f5a34c36e33e0d73bd0066aa8
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230114023022epcas5p37521ca1f5a34c36e33e0d73bd0066aa8
-References: <CGME20230114023022epcas5p37521ca1f5a34c36e33e0d73bd0066aa8@epcas5p3.samsung.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-13_12,2023-01-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
+ mlxscore=0 mlxlogscore=866 bulkscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301140019
+X-Proofpoint-GUID: fJBu-MVgQMHAN15Pyg0r_CtxwkKDUSqP
+X-Proofpoint-ORIG-GUID: fJBu-MVgQMHAN15Pyg0r_CtxwkKDUSqP
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add maintainer entry for Exynos UFS driver.
+On Sun, 08 Jan 2023 23:40:54 +0100, Bean Huo wrote:
 
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+> These patches are to fix several compilation warnings introduced by my commit:
+> 6ff265fc5ef6 ("scsi: ufs: core: bsg: Add advanced RPMB support in ufs_bsg"),
+> please consider this patch series for the next your merge window.
+> Apologies for this!!
+> 
+> 
+> 
+> [...]
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9033d9ec7196..a960327de27f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21444,6 +21444,12 @@ L:	linux-scsi@vger.kernel.org
- S:	Supported
- F:	drivers/ufs/host/*dwc*
- 
-+UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER EXYNOS HOOKS
-+M:	Alim Akhtar <alim.akhtar@samsung.com>
-+L:	linux-scsi@vger.kernel.org
-+S:	Maintained
-+F:	drivers/ufs/host/ufs-exynos*
-+
- UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER MEDIATEK HOOKS
- M:	Stanley Chu <stanley.chu@mediatek.com>
- L:	linux-scsi@vger.kernel.org
+Applied to 6.3/scsi-queue, thanks!
+
+[1/3] scsi: ufs: core: bsg: Fix sometimes-uninitialized warnings
+      https://git.kernel.org/mkp/scsi/c/5e87c51f186e
+[2/3] scsi: core: Fix invisible definition compilation warning
+      https://git.kernel.org/mkp/scsi/c/f3e57da52812
+[3/3] scsi: ufs: core: bsg: Fix cast to restricted __be16 warning
+      https://git.kernel.org/mkp/scsi/c/e2cb6e8db69e
+
 -- 
-2.25.1
-
+Martin K. Petersen	Oracle Linux Engineering
