@@ -2,130 +2,162 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB6F66A8A8
-	for <lists+linux-scsi@lfdr.de>; Sat, 14 Jan 2023 03:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBE166A8B8
+	for <lists+linux-scsi@lfdr.de>; Sat, 14 Jan 2023 03:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjANCYS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 13 Jan 2023 21:24:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
+        id S229941AbjANCl6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 13 Jan 2023 21:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbjANCYQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Jan 2023 21:24:16 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DAF8BAAC
-        for <linux-scsi@vger.kernel.org>; Fri, 13 Jan 2023 18:24:14 -0800 (PST)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230114022409epoutp04006f5deb0b1a3cff3c83b65c728f2a98~6C6z78Xz23062030620epoutp045
-        for <linux-scsi@vger.kernel.org>; Sat, 14 Jan 2023 02:24:09 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230114022409epoutp04006f5deb0b1a3cff3c83b65c728f2a98~6C6z78Xz23062030620epoutp045
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1673663049;
-        bh=M7nDTLny6qwuEJCs3Z2LwxKMomMYxDRsSLLed5tPFuY=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=TXBnjnZOD2WvvFq4KvQmlWc9o3WjX5Sxvmgft5De6VPBSHTqWHw4jn2K650GHtH5p
-         LPbrMFDSh+LisMxLzsv3IIgKG3GLkHbQOQ56TGAhpOw94/Ho1scI566zQwz+AY+c64
-         wADY0YvlwMXVr+GVLLUhqjFkuUk2jQ/Oc9RthxI8=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20230114022408epcas5p4cfa350b8886d8847accb9b4f914bf4c5~6C6zLrlyx0644906449epcas5p4f;
-        Sat, 14 Jan 2023 02:24:08 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Nv2Cq1HZyz4x9Pv; Sat, 14 Jan
-        2023 02:24:07 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7D.32.62806.64212C36; Sat, 14 Jan 2023 11:24:07 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20230114022406epcas5p4963a02aee5acb201c5e3495b6cfd44fe~6C6xHkfe60743407434epcas5p4f;
-        Sat, 14 Jan 2023 02:24:06 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230114022406epsmtrp2ee4de19a21b18ffc1335dafcdb9472a9~6C6xG7H_D2642526425epsmtrp2r;
-        Sat, 14 Jan 2023 02:24:06 +0000 (GMT)
-X-AuditID: b6c32a4a-ea5fa7000000f556-be-63c21246cf51
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        14.E1.02211.54212C36; Sat, 14 Jan 2023 11:24:05 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.6]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230114022405epsmtip1b0b1c2703f82eeda7f0fafc657f0cbf5~6C6wIyYJt1655416554epsmtip1C;
-        Sat, 14 Jan 2023 02:24:04 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     avri.altman@wdc.com, bvanassche@acm.org,
-        martin.petersen@oracle.com, Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH] include: ufs: Remove duplicate entry
-Date:   Sat, 14 Jan 2023 07:50:10 +0530
-Message-Id: <20230114022010.27088-1-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLKsWRmVeSWpSXmKPExsWy7bCmhq670KFkgxMLmC0ezNvGZvHy51U2
-        i2kffjJbXN41h82i+/oONovlx/8xObB5XL7i7fHx6S0Wj74tqxg9Pm+S82g/0M0UwBqVbZOR
-        mpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdICSQlliTilQ
-        KCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8CkQK84Mbe4NC9dLy+1xMrQwMDIFKgwITvj+b5/
-        zAVPWCqO/VvK1MDYwNLFyMEhIWAiMeG6ehcjF4eQwG5GiQOXD7BCOJ8YJQ5v+cMC4XxjlPi3
-        9gF7FyMnWMei1kYmiMReRokf/XPYIZxmJokrX3+ygFSxCWhL3J2+hQlkh4iAjUTTNzCTWaBA
-        4vkMC5AKYQFTiYP9TUwgNouAqkRn8xs2EJsXqPrP1YdMELvkJVZvOMAMMl5CYBG7xMMzH1gh
-        Ei4SF24dYoSwhSVeHd8CdZyUxOd3e9kgXvOQWPRHCiKcIfF2+XqocnuJA1fmsECcoymxfpc+
-        SJhZgE+i9/cTJohOXomONiGIalWJ5ndXWSBsaYmJ3d1QB3hIrDkzjxnEFhKIleh4+pxpAqPM
-        LIShCxgZVzFKphYU56anFpsWGOWllsMjJjk/dxMjOB1pee1gfPjgg94hRiYOxkOMEhzMSiK8
-        e47uTxbiTUmsrEotyo8vKs1JLT7EaAoMpYnMUqLJ+cCEmFcSb2hiaWBiZmZmYmlsZqgkzpu6
-        dX6ykEB6YklqdmpqQWoRTB8TB6dUAxOryc6MW2L+DGJfzRe88BJscgx9xZmzIK086cycIPFj
-        vz7qeEX8N9/meDqpqKH2RLduaF64x74tK4t+lj7wYDXmtI/fcMiytsrru8aEpgCWxrXMabfS
-        eFwq7l4w2vTZxHbW7rYY6xqz1Qn5aWfeuvIczmR7vP4B0+mghNml7IEyTGVi8h3Tuh6Lf100
-        02fVtj01v999OKN7rS3WMUdjxeUnhy4zRWp3Ltjbuiy7eD2nwNmH306s3M5jV7T2hy+Pdmm8
-        y/eqSfy9l9+Iy7yu3uv5QkwlU9/+aNdu+2d3gnSbV3F9Td954+Ju9aspDDzzXiX6rPoxY12C
-        1YUTC/+UR9zlya969c++zqGdIVwgX4mlOCPRUIu5qDgRAKFlOM7QAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJJMWRmVeSWpSXmKPExsWy7bCSnK6r0KFkg1enrSwezNvGZvHy51U2
-        i2kffjJbXN41h82i+/oONovlx/8xObB5XL7i7fHx6S0Wj74tqxg9Pm+S82g/0M0UwBrFZZOS
-        mpNZllqkb5fAlfF83z/mgicsFcf+LWVqYGxg6WLk5JAQMJFY1NrI1MXIxSEksJtRYsqUh0wQ
-        CWmJ6xsnsEPYwhIr/z1nhyhqZJJ4e+4FWBGbgLbE3elbwGwRATuJ9sdXGUFsZoESiUVfWsDi
-        wgKmEgf7m8BsFgFVic7mN2wgNq+AjcSfqzDL5CVWbzjAPIGRZwEjwypGydSC4tz03GLDAsO8
-        1HK94sTc4tK8dL3k/NxNjODQ0dLcwbh91Qe9Q4xMHIyHGCU4mJVEePcc3Z8sxJuSWFmVWpQf
-        X1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dUAxP3kn3vz1dl2DzLPBh+Qyuo
-        z7/N+tvrgPd2N8682XHzqVnYyZ+ej8U6/LuWtL+ZPOPcVvOMOx/YdX8cD/k4w8p13eqZYYf+
-        HONYUbyw+pxj74lrwVncYffiG70l976ffWer+hz177ttTzLFNIhW8+mmrO6rWMsiXN14zvyD
-        ZbNpa8eygtwd9T33r/7Ue/bQ/tXbtcz2stzP+jqjAlLuy/awhhxda8y+pPbhpAnyGSzarKrH
-        FosVFF1+pbHnxbEPkxLV1jrM/HPCRoPXJK0jylRp14a3RZ/05/Aryp+a3x66W/MOf21o8eur
-        k9XunVkbbCazYcmS3UcO7a7TPeLQdKA2xGHKo9ZN11ynfe4o+t6hxFKckWioxVxUnAgA7f/Z
-        rowCAAA=
-X-CMS-MailID: 20230114022406epcas5p4963a02aee5acb201c5e3495b6cfd44fe
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230114022406epcas5p4963a02aee5acb201c5e3495b6cfd44fe
-References: <CGME20230114022406epcas5p4963a02aee5acb201c5e3495b6cfd44fe@epcas5p4.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230040AbjANCl5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Jan 2023 21:41:57 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A9113DE2
+        for <linux-scsi@vger.kernel.org>; Fri, 13 Jan 2023 18:41:54 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30DNO8Yk030816;
+        Sat, 14 Jan 2023 02:41:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=JL5+k7LENqFkq6hFazQE6O7uui7uadEdLpZLZpRPrd0=;
+ b=IHarEPQqVLs/RVvf7JfgwiHYKsHi0Pc8IsW2gR0DduQtTa8iOzfxPqSX3K5KGG0ct0Ak
+ 38bDO+Y7N07/fYW2ar0TOwnRx9dZr0yBwVqGHMOlRLHm96JplC9MYOcVJRmz9oYEwAQp
+ YxtLp7ZrenAguzFu0ETTlwSGmtk0gSRk/vbzmF3321uaeYWXSmIht7+a7ox2slUxnlgi
+ VNf+Gnbkmuo4JcoQAIIjsPmweFO6a7xlUO7eFTKtF5JG8poQqgEV1+qOLvZanBsdk8mf
+ ulNuT0Uf3EzAQyQPkRQAnZn3LTWRkX0aWpeB1u6fcYsKFUf3LwzHoMUe8ueX8gwCI96Z Tw== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3my0scp3u0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 14 Jan 2023 02:41:45 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30E2d9p8008335;
+        Sat, 14 Jan 2023 02:41:44 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n3ksx01g0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 14 Jan 2023 02:41:44 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lqh0LhwbrrWCKtPwtI7bgFcxKvLTK9s+wEvMnTnXrUeFldOsiaeBQq4CGn+8U0XJp6rAGKS+fx3bLHNHs5ZetXjnOjbGPwT7JAwZE1B9bQEbadQXS3UNFS5HHUnpZHkD+zD8HfKjJJJCBODhp9A+YKDc/fIErJoCMkFOZ/mWJF2Rshkis4LddwalkGBAJwOrVBcrAiCNtIm6c1UIOd1TYJyWCiCCeU4gCwlmyu5bAXd8xppS30HCuTb6Ki9ktWVpafGabMYuFWL2akCEAGcqyyBRfotJQ0M4+2nH5Ys8Uq8fCHTt9Rn7XmuCS7BIfqOWQb/HeV61B7PScSrbSYl80w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JL5+k7LENqFkq6hFazQE6O7uui7uadEdLpZLZpRPrd0=;
+ b=Bx5jNJHqltvuHszKrcGrws+3yTcagKt8SVixOC0HbVh88jGIEBQ2nAfpq2vsynqkaxm4/64CidJ9sC9D2Gou3PlFlrXH0yg5nMOnpmBJPGpYgBlaD27EN9KAMv4mBXvJz7f9FFHY0mMJL6IO6+uB7/8c6E6BNeMbroukTkYZ967yxHhIPdDqW7N7I4w3ybVz/T6pzMzZ9lWTVpeJ0xlrxb4hXCiFmCyqcvuqq3ilx0PnGFssv/JhS+rfA8cM8Ykjd6qjvVVIjN0Xw/zzyxe7TADwyrvPo2Rd3Sa4fP3iStJostglEPKSnmpwc9c/vaSvgkuo7V3+2BOUxEyTd6HGAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JL5+k7LENqFkq6hFazQE6O7uui7uadEdLpZLZpRPrd0=;
+ b=SltTo38+lR0rWYl5GDFsW+e2ewAKBMrzhPgrt/6Pv2lCUe5NqqRyQyc4Ofo+o5O+MjgmVXxN3ScN0cMqGZ/qMGp10kVYNqUmTy31syw9DjMB7y4b/Msyrm4Pes8MCSxXpN8h4y3ZghtxdG4SLGg3vcB1V1PJ9A7K8p62kYaf7rY=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by PH7PR10MB6132.namprd10.prod.outlook.com (2603:10b6:510:1f4::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.10; Sat, 14 Jan
+ 2023 02:41:42 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c7e9:609f:7151:f4a6]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c7e9:609f:7151:f4a6%8]) with mapi id 15.20.6002.013; Sat, 14 Jan 2023
+ 02:41:42 +0000
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     john.g.garry@oracle.com, bvanassche@acm.org, mwilck@suse.com,
+        hch@lst.de, martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        james.bottomley@hansenpartnership.com
+Subject: Re: [PATCH v4 00/15] scsi: Add struct for args to execution functions
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1v8l9suqv.fsf@ca-mkp.ca.oracle.com>
+References: <20221229190154.7467-1-michael.christie@oracle.com>
+Date:   Fri, 13 Jan 2023 21:41:39 -0500
+In-Reply-To: <20221229190154.7467-1-michael.christie@oracle.com> (Mike
+        Christie's message of "Thu, 29 Dec 2022 13:01:39 -0600")
+Content-Type: text/plain
+X-ClientProxiedBy: DM6PR05CA0052.namprd05.prod.outlook.com
+ (2603:10b6:5:335::21) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|PH7PR10MB6132:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1c1bbce-155c-4506-d0f9-08daf5d8de74
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gvRc8QgC07dUJUE3ql0GyrCtcWpVuNjWdKH2oQcKqpGNZIenGjxLcmPt5eiFWT7/hwEh7XrCYQsF1Ta3pt6E4Kf2gHJcLUvpHEggrULag3jKE+W1AhODyWHrqxFVkSQfpJZkF7E6PhUJmblShIbELa+vzCZ304CntEtHfLm6xwRAwxDt9Wwp/16IIboy5nYKw1+x3aJKcYI7eDvmWdbZx9IVAoUyCuAGadtCUt2lZTeeajBdvgBahS2n2uT4W9CPLsEkWYkDZBZPEl4yQS4u8s4iqzbFkd+DUVMMcKZ3Onc4Vblu41bmcNATgOWfpNO+iGdtz2ArQKP1oFaJeZFOxzdkDUlsZxvTot+BpdMfyB8phiV2yhLe7pblc9r53DDp1AAADY6HfrA7JcmF/7U90thafMmfrhxtepOSfHFSM8vQewdB70OxG+gry8L2BBfFVRQZ4BFMBBTVobL6JxBsAZdf/y8J1PeSge+l8OWqPXPexIXgVbQhqUE/t4/FUZ0Rsyhfrl/7mzgLgLoNkCB1mkkV5EFsnGsIiLWamWHKhaKr94m6VQL6b/p8coj8mnvWxb/Eo+51jOH9iZcXyMz3Gu/GrE8F8y3d6stH2CnMOUkvdy+hecLwgy98JHQka0C+orJ40fmbLJs+OLgpUmSUSA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(346002)(376002)(366004)(39860400002)(451199015)(6486002)(478600001)(36916002)(86362001)(2906002)(38100700002)(6512007)(6666004)(6506007)(26005)(8676002)(66476007)(186003)(5660300002)(66946007)(6862004)(4326008)(41300700001)(66556008)(4744005)(316002)(8936002)(6636002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VOnylAHVqluL7ziCYQaC0t838nVo/MCHK4rqBpNta9dJGYsQ06aRxQ0OSUBV?=
+ =?us-ascii?Q?brQIUYrbo4TEjEQKawVf3Fv+U4UbkQHMpTD52dxMgJ1HO7TvpVp+3/NM6/ZW?=
+ =?us-ascii?Q?rfWgFYGJ6a04HkfsY6p/CUQex+JYxqEuI0y4nh9PrpXb4lmjtRHNY0OOdXRu?=
+ =?us-ascii?Q?3NOU/lLuT7dSLxalen3Dit17iw8+jSrCvoCRDuEn3wKK5Mmu/3BgKo/By2T7?=
+ =?us-ascii?Q?QZ3aer5otiarPMRTDJv2yR7IwlEo8mkH9xC6/Ci1/za3jhbzMp9fUdH7y41i?=
+ =?us-ascii?Q?DjKbJY5CxV68CZeoBZl61Szsny+s8ffOe1tA7EXb2UYDZMdU1uL/6sjvEcoq?=
+ =?us-ascii?Q?C2uo1O2goVIn9h5vsV03X+/d857tXetP7H2LyGo5gwMZHu9pP+teXLgcaSgm?=
+ =?us-ascii?Q?WoWIPXcp8mH4O2T/DItCRKowK4t9shfiEgcnLSFrxR68fAvYg9QZrhZw7VhW?=
+ =?us-ascii?Q?fbf3a5/7bUDQTNvaMK90+Y8VUOO0vysMIBeg4bG4nX9A+AUVAxDab9tpfuhH?=
+ =?us-ascii?Q?7+ByCV0TAe1ET8ONtXTbnJaUOvXIL7+saJwMkvx8H+xYX3htxQLQFGh9sytd?=
+ =?us-ascii?Q?4WngBn4q+N9sqKKFzP4qwf8N0nFJ4/PD5rL34NkQE4ZQ37OBo2Ij3oEDphhJ?=
+ =?us-ascii?Q?LYXPWFyTElz8t4HB0GSj3lNTSUFzIUVM8iUUAAq8ooOVMzwzRJ57NNjC2CB3?=
+ =?us-ascii?Q?WfnQOPYbDVSDZ9Q+3cTaWrfghqzgxUZvi96cvCfO0czLU9YcbQWkqhaV3pDu?=
+ =?us-ascii?Q?XBqx+yVI/Plh/q2c9nVQr8F9Z5hrDSSR9Ji64o0e41eW9AgxVHdryEL766nO?=
+ =?us-ascii?Q?++fJVFPa8K47+DR56a8DQu1wtRj9TRMVdrXlUI6mlyNmIyY0NHQelITzQmO4?=
+ =?us-ascii?Q?SnQvK1ttpDv9CyqccMD9H19jN1CbgYn6dGI7GMSVdnY5oCmP+WwB9C7mPt2D?=
+ =?us-ascii?Q?eW6GxdlK5TvMN6AWw1lDW12j01SQQiOpdiNkZ7RMhKVmJNzV7OqBbUr5Ju/j?=
+ =?us-ascii?Q?O8gdAYy4uqwKRPW/xR2Ty7LLrKqAlzywq1zJpVgbgxP7ZodFPFt/ZnrfTYiL?=
+ =?us-ascii?Q?1Di7vOjoPp4SJt6QaAOlNLCTcIVssFJ0jaUxKDVVkP01H7nuOs8kxeNsC9x7?=
+ =?us-ascii?Q?MirtjOWE8qKmCQi/LZ4BBiAMYM0ItCYFCn6q8LaawFQeuGUY+v4yGSPCNZYs?=
+ =?us-ascii?Q?o4rndGUdm9APxm+1fFMrAW9aebE2gTexwo5K6/ugyRySkXWETGtjghr0U+Z1?=
+ =?us-ascii?Q?0Mr45vhlxvtbom5XfYvrkFyPTPxCI1S1CT8mKII549gt0OB7PT+c/VqRxNjX?=
+ =?us-ascii?Q?lKoJJhTeusMEVP3mv0Q2Kldj932Z/s7gKBrwhKpAXKqxHCyRH72R2PEmT1O2?=
+ =?us-ascii?Q?xB1NSGpPoQlgSqUlsZNtI4/JQsSrbWuNIiMO3uxlHwBrGe59tvR7ICitt0Pe?=
+ =?us-ascii?Q?pjLzlfHDXrx68Q2oRrOvnY8Kop7qfw9OBx5edrgDPfGvM5dmsPZJUQgTUi3f?=
+ =?us-ascii?Q?uv2rC0JWok3yBXyAF+wtbJNJteq/6ra/FTVW/aLhB6shRCk5LUr+6/9nSM7y?=
+ =?us-ascii?Q?766FP4tchs29eBYx1XhQwuuZ3bOYPgVfiQQ88Cor8KKHKkPOf+dftMpZgJRD?=
+ =?us-ascii?Q?TA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: KKnYUq6AC0EUKGb5p2JhyxOiv1OEpUgMl1CV7uyPg2PXjdH+1JzYVl/D/Q1m0RKOL383aKEw2XfdNVB2PeEMe6tmPSLgSBT9hmifm91S2CFnK9bhz5GKLXD8n400zUdRXjsbOEhMj+Y/RYjX1FG67GRGr/vITf3gi3u3vMstzFG0rvNtTJ5zZDAyahXfE2PpvFyv5WkeO5zlFmwCKaaxBlJi6IUlLxycITchoN90oMWthP+Xw5a4JBciDKboUStCsEoevdv0ECwm7Tc6pp6kxatRpvBuzE2kNc5oMurq+EqaZYTVGwtkG8jjWbJYMzDKVZY2wG/ZoBwk3xVzxkmhUDhsE8Pb5EJ+WzzMRrwz9aSlfdffXu9XbmM/Xrk63VvFqHWC+C1teUWl6noMizcAMYfn+esYknQlghvMm48Ng+OIn6Z3KpusL5aYCy+U+XkXIPEW0S5bjqNeej+qWfWLx4F+7mspz1oedbdCgjCjXZJUeDojAjQHPLbkx5h5mTbz5uBoM/fbqITJrK8Cz6c/zuig6xs7p4QmGBVRrP/GiC0LfwGAxLscZnvzO4kYNoUSLnbNLdaAqUMyyTNgoVYi6ptWTX2Y9wRJaESF1orTFrAps192/Ln3kWidSyxxDPzPaEZhj/sbxSBfab0Cj3ZfXz8nhU9apsPTKzcOThJBMXzE+Mhza6dijCzG+/48gR4E2wOz/WylICbn+R5tYIK8rTsXwuWPuhLwjQpJFPD9XqH47MfSYJGqJ6XoBUuTDPv6CqoHy329197yTTFyc8QW7jGZwT5YUjbbQCV2ExZ3X9SvJs9K4xmtiQggwcCRt/WTH7n1Wkdpeo7BbkhG+wKNuRhK0uXVrDszh1rccXJqasU3ZjHWAJYFGIQqayj4EfYG
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1c1bbce-155c-4506-d0f9-08daf5d8de74
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2023 02:41:42.2472
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: btAkuzTFSVAyjkOiF0e7JOak70Ev8vOha6PIxGxgfgcBZp9kmIeJG25Sp3Kr/louGmbzNH/5sn4dhaG1xzGHGbNFAFiB9fq4WjbhXUiSKBI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6132
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-13_12,2023-01-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 phishscore=0 mlxlogscore=983 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301140016
+X-Proofpoint-GUID: VcK1CMPdw3TUL1RrjjuBbg16RrmvKVX8
+X-Proofpoint-ORIG-GUID: VcK1CMPdw3TUL1RrjjuBbg16RrmvKVX8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-PA_GRANULARITY is duplicated, let's delete one of the entry.
 
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- include/ufs/unipro.h | 1 -
- 1 file changed, 1 deletion(-)
+Mike,
 
-diff --git a/include/ufs/unipro.h b/include/ufs/unipro.h
-index 6c553f98fe57..dc9dd1d23f0f 100644
---- a/include/ufs/unipro.h
-+++ b/include/ufs/unipro.h
-@@ -141,7 +141,6 @@
- #define PA_SAVECONFIGTIME	0x15A4
- #define PA_RXHSUNTERMCAP	0x15A5
- #define PA_RXLSTERMCAP		0x15A6
--#define PA_GRANULARITY		0x15AA
- #define PA_HIBERN8TIME		0x15A7
- #define PA_LOCALVERINFO		0x15A9
- #define PA_GRANULARITY		0x15AA
+> The following patches were made over Martin's scsi staging/next
+> branch.  They add a struct that contains optinal arguments to the
+> scsi_execute* functions. This will be needed for the patches that
+> allow the scsi passthrough users to control retries because I'm adding
+> a new optional argument. I separated the 2 sets to make it easier to
+> review and post.
+
+Applied to 6.3/scsi-staging, thanks!
+
 -- 
-2.25.1
-
+Martin K. Petersen	Oracle Linux Engineering
