@@ -2,75 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03A666A8DD
-	for <lists+linux-scsi@lfdr.de>; Sat, 14 Jan 2023 04:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB23366A8E9
+	for <lists+linux-scsi@lfdr.de>; Sat, 14 Jan 2023 04:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjANDHl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 13 Jan 2023 22:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S229793AbjANDTh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 13 Jan 2023 22:19:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbjANDHd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Jan 2023 22:07:33 -0500
+        with ESMTP id S230019AbjANDTg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Jan 2023 22:19:36 -0500
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1418D3B2;
-        Fri, 13 Jan 2023 19:07:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0709B892ED
+        for <linux-scsi@vger.kernel.org>; Fri, 13 Jan 2023 19:19:36 -0800 (PST)
 Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30E2wNNT023855;
-        Sat, 14 Jan 2023 03:07:09 GMT
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30E2vw6U023661;
+        Sat, 14 Jan 2023 03:19:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=FqBQjREvcACjBzDkIhCAkhf57aXLYf5/WwuqqldkKiI=;
- b=mrVXInI9EN+EES05LTP4C+nza58a0R8xZYXjSwUkoaB7ToaXwxbckIZdf7VxybybU9NC
- LweBF4iDZoaSXWbn2cybWT3jFpUM+gsyTCi0AL27r+e7xDdlvEidieyJokAuHnpnhGo5
- DTULO3MmbO0rtBetqnNXhwWiSnkinJZ6byJBAhXCTrs2JhScjdVCvixlKcr2d5/fML5P
- wLqG3fuhGgg4liegee4ZF2DGT0cbTve62xoScc5gORDy0vwnHdT2B3rI8jXF/dP9AgGc
- Y1A9Dpd/kIoH8LpDqadK1Md0N7rFfDbAjOI8Wcfnhbiy0aP7NsniTL2JU3wymjM6yAUG qQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3kaa80vy-1
+ bh=pkffGIpZBNdI3TASeJWTkWR7Bdi+LB0HcGWCVPw+pEw=;
+ b=i9BvjIBiFt8Grw7ElZ/7g/Gnr5SaQooGBl9ZCdJGQYIVww9unp+Qs1m+b2CWotUHr2dN
+ 5/sxy7rghKrC9QSmGgMcZ80VG9aAHfad6i9zY7BbFxJ539J1E/zTBlmzjHgqXwFPRdIY
+ wiUrJGnr4bOXixv9p1bfPa+phdId3508GIqaDRPo4Oud8e/XtNir0gnTALkV3nh36iPd
+ D2wMI6cmEI+S7Jfh5S31BLCtwAkY4NCdrAxQI7RfGKgg4GrQDTwQ/9cQL+q1nMp7G5ms
+ dH5S06T0a6EkRwAv/1SUc6ZUzHfQT4L1Jrq1glslLpmi6vHESCdvgH5lq9gZwwR1wUhF Ng== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3kaa813t-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 14 Jan 2023 03:07:09 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30E2xIfM018721;
-        Sat, 14 Jan 2023 03:07:07 GMT
+        Sat, 14 Jan 2023 03:19:33 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30E2mjk4005846;
+        Sat, 14 Jan 2023 03:19:32 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n3m3d85tb-1
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3n3kxgrjut-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 14 Jan 2023 03:07:07 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30E375hH035466;
-        Sat, 14 Jan 2023 03:07:06 GMT
+        Sat, 14 Jan 2023 03:19:32 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30E3JVop032298;
+        Sat, 14 Jan 2023 03:19:32 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3n3m3d85sp-4;
-        Sat, 14 Jan 2023 03:07:06 +0000
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3n3kxgrjun-1;
+        Sat, 14 Jan 2023 03:19:31 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     jejb@linux.ibm.com, andersson@kernel.org, vkoul@kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>
+To:     linux-scsi@vger.kernel.org, Justin Tee <justintee8345@gmail.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        quic_cang@quicinc.com, quic_asutoshd@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
-        dmitry.baryshkov@linaro.org, ahalaney@redhat.com,
-        abel.vesa@linaro.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
-        bvanassche@acm.org
-Subject: Re: (subset) [PATCH v5 00/23] ufs: qcom: Add HS-G4 support
-Date:   Fri, 13 Jan 2023 22:06:42 -0500
-Message-Id: <167366469091.3069139.11760332738434847058.b4-ty@oracle.com>
+        jsmart2021@gmail.com, justin.tee@broadcom.com
+Subject: Re: [PATCH 00/12] lpfc: Update lpfc to revision 14.2.0.10
+Date:   Fri, 13 Jan 2023 22:19:25 -0500
+Message-Id: <167366567316.3069740.1027608315657447483.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221222141001.54849-1-manivannan.sadhasivam@linaro.org>
-References: <20221222141001.54849-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20230109233317.54737-1-justintee8345@gmail.com>
+References: <20230109233317.54737-1-justintee8345@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-13_12,2023-01-13_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
- mlxscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301140019
-X-Proofpoint-GUID: 2Pb_fdYL-h4NF2yuk3MPFoRKBCY-MtfP
-X-Proofpoint-ORIG-GUID: 2Pb_fdYL-h4NF2yuk3MPFoRKBCY-MtfP
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=881 phishscore=0
+ bulkscore=0 spamscore=0 malwarescore=0 mlxscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301140021
+X-Proofpoint-GUID: oTXXg5gqf-eUBUxCDpku1CwSkVy9dSGu
+X-Proofpoint-ORIG-GUID: oTXXg5gqf-eUBUxCDpku1CwSkVy9dSGu
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -81,41 +75,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 22 Dec 2022 19:39:38 +0530, Manivannan Sadhasivam wrote:
+On Mon, 09 Jan 2023 15:33:05 -0800, Justin Tee wrote:
 
-> This series adds HS-G4 support to the Qcom UFS driver and PHY driver.
-> The newer Qcom platforms support configuring the UFS controller and PHY
-> in dual gears (i.e., controller/PHY can be configured to run in two gear
-> speeds). This is accomplished by adding two different PHY init sequences
-> to the PHY driver and the UFS driver requesting the one that's required
-> based on the platform configuration.
+> Update lpfc to revision 14.2.0.10
+> 
+> This patch set contains fixes for bugs, kernel test robot, and introduces
+> new attention type event handling.
+> 
+> The patches were cut against Martin's 6.3/scsi-queue tree.
 > 
 > [...]
 
 Applied to 6.3/scsi-queue, thanks!
 
-[13/23] scsi: ufs: ufs-qcom: Remove un-necessary goto statements
-        https://git.kernel.org/mkp/scsi/c/031312dbc695
-[14/23] scsi: ufs: ufs-qcom: Remove un-necessary WARN_ON()
-        https://git.kernel.org/mkp/scsi/c/a98c2183e81d
-[15/23] scsi: ufs: ufs-qcom: Use bitfields where appropriate
-        https://git.kernel.org/mkp/scsi/c/18fe2ab79bcf
-[16/23] scsi: ufs: ufs-qcom: Use dev_err_probe() for printing probe error
-        https://git.kernel.org/mkp/scsi/c/132b027205ef
-[17/23] scsi: ufs: ufs-qcom: Fix the Qcom register name for offset 0xD0
-        https://git.kernel.org/mkp/scsi/c/7959587f3284
-[18/23] scsi: ufs: core: Add reinit_notify() callback
-        https://git.kernel.org/mkp/scsi/c/c2c38c573a2e
-[19/23] scsi: ufs: core: Add support for reinitializing the UFS device
-        https://git.kernel.org/mkp/scsi/c/96a7141da332
-[20/23] scsi: ufs: ufs-qcom: Factor out the logic finding the HS Gear
-        https://git.kernel.org/mkp/scsi/c/c270986527f9
-[21/23] scsi: ufs: ufs-qcom: Add support for reinitializing the UFS device
-        https://git.kernel.org/mkp/scsi/c/baf5ddac90dc
-[22/23] scsi: ufs: ufs-qcom: Add support for finding max gear on new platforms
-        https://git.kernel.org/mkp/scsi/c/2c407fe97015
-[23/23] MAINTAINERS: Add myself as the maintainer for Qcom UFS drivers
-        https://git.kernel.org/mkp/scsi/c/39beef59128f
+[01/12] lpfc: Fix space indentation in lpfc_xcvr_data
+	https://git.kernel.org/mkp/scsi/c/6058304a66ba
+[02/12] lpfc: Replace outdated strncpy with strscpy
+	https://git.kernel.org/mkp/scsi/c/1f7b5f94f8d0
+[03/12] lpfc: Resolve miscellaneous variable set but not used compiler warnings
+	https://git.kernel.org/mkp/scsi/c/7ab07683aa4c
+[04/12] lpfc: Set max dma segment size to hba supported SGE length
+	https://git.kernel.org/mkp/scsi/c/b5c894cf430e
+[05/12] lpfc: Remove redundant clean up code in disable_vport
+	https://git.kernel.org/mkp/scsi/c/f81395570e6c
+[06/12] lpfc: Remove duplicate ndlp kref decrement in lpfc_cleanup_rpis
+	https://git.kernel.org/mkp/scsi/c/ecdf4ddf4eb7
+[07/12] lpfc: Exit PRLI completion handling early if ndlp not in PRLI_ISSUE state
+	https://git.kernel.org/mkp/scsi/c/c051f1a424a1
+[08/12] lpfc: Fix use-after-free KFENCE violation during sysfs firmware write
+	https://git.kernel.org/mkp/scsi/c/21681b81b9ae
+[09/12] lpfc: Reinitialize internal VMID data structures after FLOGI completion
+	https://git.kernel.org/mkp/scsi/c/f1d2337d3e58
+[10/12] lpfc: Introduce new attention types for lpfc_sli4_async_fc_evt hdlr
+	https://git.kernel.org/mkp/scsi/c/96fb8c34e5c1
+[11/12] lpfc: Update lpfc version to 14.2.0.10
+	https://git.kernel.org/mkp/scsi/c/41cf6bbe3d99
+[12/12] Copyright updates for 14.2.0.10 patches
+	https://git.kernel.org/mkp/scsi/c/191b5a38771d
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
