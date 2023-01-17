@@ -2,121 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F81670BF9
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Jan 2023 23:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B88C1670D9A
+	for <lists+linux-scsi@lfdr.de>; Wed, 18 Jan 2023 00:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjAQWp5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Jan 2023 17:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S230048AbjAQXea (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Jan 2023 18:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjAQWnf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Jan 2023 17:43:35 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EC866CF3
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Jan 2023 14:30:32 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id 3so33883559vsq.7
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Jan 2023 14:30:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ScEkSv/4ujt+FscJGahMwM/oQgqzcSsBVgCxU70QRJI=;
-        b=g2jwoIxQwdTnr1B7YJPOxcb2LNHairUXX0OqXhUcefSUqfesJfyBh6TTKdZh2u/frr
-         btO0PTYoDQPJuS1xetwC9tGF45q7xFo8K/czu2UqDUjOM5OPHWVkW/YMHlN/AkTRYQJ4
-         NMOCD1DNUSXb/N07F+oIjlhs4p8j3Zb9YsAU+n0/Gt1R+PDRdr5E6zP7MJUcXC3Ukjuh
-         yAqgC2od1nSX98bQRUs7rndYvCGOOwmIS8v/7raRWbYykEwv8WGVQUb2hyXYLbeR4R4/
-         NQbmbUX1HjuteCKPj4XZ+/dOnefbi7/2I2+ij8iMNJlsEA7JjGV2J2LMUN61elv3nEzA
-         wKBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ScEkSv/4ujt+FscJGahMwM/oQgqzcSsBVgCxU70QRJI=;
-        b=J6zZMfbgZcFBwelEhOUMG27Y41m85dHybKRqGaVZcRmHI6cikyupNHF8nUq0j3/uGO
-         TtyrpBzbpJCn8lFB9/NlqU4nW20phxP8PIxfIZw5ysnhs5WlfyzoIfMmy4MtEuBKGqOj
-         3Dz/QF9PZfdaWsIv7Ng0GqePfk+nOr1ZsVlJbo1ykoqql42fp4wpzsKMhER7LIO2h30z
-         p5vC6h1Rt/wd5i/SzpuEnkGhmOWv5k15QoJovEG08OYluCqb7+3O7yNy6wfcUBcQw37i
-         7qzEKLPQqZgOYI3flD1TYVLdsBPMUvYH+it49zZmIfoOrsK7cifdg6hd2twtCQAYVQAf
-         DcqA==
-X-Gm-Message-State: AFqh2kojFwnZR0MvcwGdYGm7UvZ3OBWzhRdxLt1yLIIiLBMIG1kNHsKe
-        hxoUaSlZNZn7Euf33Ocj5XYcenQYP6ymAYBk3Pz04w==
-X-Google-Smtp-Source: AMrXdXsasxzFes28B36W71fU5Iue+c6SDhtfvo6j1Ld/ub9DRIvDly3xpJu8wO0cQ3K8NP967lAk53nFxEnNJD9i4tI=
-X-Received: by 2002:a67:fb42:0:b0:3d0:d3fe:3d48 with SMTP id
- e2-20020a67fb42000000b003d0d3fe3d48mr557188vsr.32.1673994631663; Tue, 17 Jan
- 2023 14:30:31 -0800 (PST)
-MIME-Version: 1.0
-References: <CAJs=3_C+K0iumqYyKhphYLp=Qd7i6-Y6aDUgmYyY_rdnN1NAag@mail.gmail.com>
-In-Reply-To: <CAJs=3_C+K0iumqYyKhphYLp=Qd7i6-Y6aDUgmYyY_rdnN1NAag@mail.gmail.com>
-From:   Enrico Granata <egranata@google.com>
-Date:   Tue, 17 Jan 2023 15:30:20 -0700
-Message-ID: <CAPR809uYp6vGvCk4ugWOjbmd13WTm8fRg0f2Mdq3pxj6=d1McQ@mail.gmail.com>
-Subject: Re: Virtio-blk extended lifetime feature
-To:     Alvaro Karsz <alvaro.karsz@solid-run.com>,
-        Jahdiel Alvarez <jahdiel@google.com>
-Cc:     virtualization <virtualization@lists.linux-foundation.org>,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Christoph Hellwig <hch@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229695AbjAQXeF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Jan 2023 18:34:05 -0500
+Received: from air.basealt.ru (air.basealt.ru [194.107.17.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF6AA25AA
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Jan 2023 13:12:05 -0800 (PST)
+Received: by air.basealt.ru (Postfix, from userid 490)
+        id 430602F2022C; Tue, 17 Jan 2023 21:12:04 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+Received: from localhost (broadband-188-32-10-232.ip.moscow.rt.ru [188.32.10.232])
+        by air.basealt.ru (Postfix) with ESMTPSA id C33E22F2022A;
+        Tue, 17 Jan 2023 21:12:02 +0000 (UTC)
+Date:   Wed, 18 Jan 2023 00:12:01 +0300
+From:   "Alexey V. Vissarionov" <gremlin@altlinux.org>
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc:     "Alexey V. Vissarionov" <gremlin@altlinux.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-scsi@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Stephen M. Cameron" <scameron@beardog.cce.hp.com>,
+        storagedev@microchip.com, Don Brace <don.brace@microchip.com>,
+        lvc-project@linuxtesting.org
+Subject: Re: [lvc-project] [PATCH] scsi: hpsa: fix allocation size for
+ scsi_host_alloc()
+Message-ID: <20230117211201.GD15213@altlinux.org>
+References: <20230116133140.GB8107@altlinux.org>
+ <39006233-ff6f-82ad-b772-e00e789375a5@acm.org>
+ <20230117095644.GA12547@altlinux.org>
+ <30d3e555-4fb0-23df-abeb-e1c3dc41543e@ispras.ru>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KN5l+BnMqAQyZLvT"
+Content-Disposition: inline
+In-Reply-To: <30d3e555-4fb0-23df-abeb-e1c3dc41543e@ispras.ru>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
-I am going to add +Jahdiel Alvarez who is also looking into a similar
-issue, and also I would like to hear thoughts of people who may have
-worked with (embedded or otherwise) storage more recently than I have
 
-One thought that Jahdiel and myself were pondering is whether we need
-"type_a" and "type_b" fields at all, or if there should simply be a
-"wear estimate" field, which for eMMC, it could be max(typ_a, typ_b)
-but it could generalize to any number of cell or other algorithm, as
-long as it produces one unique estimate of wear
+--KN5l+BnMqAQyZLvT
+Content-Type: text/plain; charset=koi8-r
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-- Enrico
+On 2023-01-17 13:35:54 +0300, Alexey Khoroshilov wrote:
 
-Thanks,
-- Enrico
+ >>>> Fixes: b705690d8d16f708 ("[SCSI] hpsa: combine
+ >>>> hpsa_scsi_detect and hpsa_register_scsi")
+ >>> That seems incorrect to me. Shouldn't the Fixes tag be
+ >>> changed into the following?
+ >>> Fixes: edd163687ea5 ("[SCSI] hpsa: add driver for HP
+ >>> Smart Array controllers.")
+ >> % git blame -L 5853,+1 -- drivers/scsi/hpsa.c
+ >> b705690d8d16f7081 (Stephen M. Cameron 2012-01-19 14:00:53
+ >> -0600 5853)
+ >> sh =3D scsi_host_alloc(&hpsa_driver_template, sizeof(h));
+ >> Is anything wrong here?
+ > Yes, this commit just moves
+ > sh =3D scsi_host_alloc(&hpsa_driver_template, sizeof(h));
+ > from one function to another one.
+ > edd163687ea5 ("[SCSI] hpsa: add driver for HP Smart Array
+ > controllers.")
+ > is the correct commit introducing the bug.
+
+ACK.
+
+2 BVA: please use the correct commit number.
 
 
-On Sun, Jan 15, 2023 at 12:56 AM Alvaro Karsz
-<alvaro.karsz@solid-run.com> wrote:
->
-> Hi guys,
->
-> While trying to upstream the implementation of VIRTIO_BLK_F_LIFETIME
-> feature, many developers suggested that this feature should be
-> extended to include more cell types, since its current implementation
-> in virtio spec is relevant for MMC and UFS devices only.
->
-> The VIRTIO_BLK_F_LIFETIME defines the following fields:
->
-> - pre_eol_info:  the percentage of reserved blocks that are consumed.
-> - device_lifetime_est_typ_a: wear of SLC cells.
-> - device_lifetime_est_typ_b: wear of MLC cells.
->
-> (https://docs.oasis-open.org/virtio/virtio/v1.2/virtio-v1.2.html)
->
-> Following Michael's suggestion, I'd like to add to the virtio spec
-> with a new, extended lifetime command.
-> Since I'm more familiar with embedded type storage devices, I'd like
-> to ask you guys what fields you think should be included in the
-> extended command.
->
-> Thanks,
->
-> Alvaro
+--=20
+Alexey V. Vissarionov
+gremlin =F0=F2=E9 altlinux =F4=FE=EB org; +vii-cmiii-ccxxix-lxxix-xlii
+GPG: 0D92F19E1C0DC36E27F61A29CD17E2B43D879005 @ hkp://keys.gnupg.net
+
+--KN5l+BnMqAQyZLvT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIcBAEBCgAGBQJjxw8hAAoJEFv2F9znRj5KMnUP/0wrCMatHVkAAWWTHqgNtOMI
+l3oQpM5WYOmxiani91aMr1oIS9sU6GbG9U7FDgvOZ5M7jcb6o8tC92g0ghYAfoli
+T7N+NKhEcQIJRB6c7Xme+fAnK+WJIJnRS+aMrOZ667n7LPW/Q9WNe77pk6FcTipc
+umZt2QRJ8C75gJ2q63s8VuYuJ3k5O22PUEgLiB0OB1nlRVNXPvKg0LK/+57a3eJ7
+y0phuKbEVGglceBLMPK0MV5lLaehyR++kOsg0kd+OHmiJldaXNyjkeA9G/IzcCK7
+DOSw7y4syYiQ0d6xCo4UOhyJV5FGxpjwRD+UOgtUPfvvkNcGsVcCUtdXOSuj8QR0
+CKaxaNQn7n81Y2u92qTWwq9zQ2rdmyoQQUSzL8kVmDzAhCBo7LRfVRmX9rnF73XB
+KPv2v1GJ1gyhpP/3YyQunuAPwyvI10ASlPA5raHnHN5RWL3uxWzq03rPkfyBulYJ
+QrrCao40HDMsFd/15aVnLYO84fVAl7b0rsXIuoyfPe3XVHMzp50vQ6ePQBreDIUB
+5Dj2FTOqpUegG5yf5Lnvm9O4Nib1XKMv8gh2tn/uNY21QOvbvJgr1SZbKtY65kQJ
+L3oOZzNCb4VDVQJrAN+pVOKhLgGevVyPb8g2VMLFJqz/uiquhk2r1Vxtro8hxZvh
+j780cuf785rTsRIdMj9L
+=/AIU
+-----END PGP SIGNATURE-----
+
+--KN5l+BnMqAQyZLvT--
