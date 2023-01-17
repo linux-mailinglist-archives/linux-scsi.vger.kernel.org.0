@@ -2,200 +2,166 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A6F66E85E
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Jan 2023 22:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F319B66E877
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Jan 2023 22:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbjAQVZx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Jan 2023 16:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        id S229546AbjAQVbj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Jan 2023 16:31:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjAQVRo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Jan 2023 16:17:44 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F08546739
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Jan 2023 11:39:55 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30HGSh8L018443;
-        Tue, 17 Jan 2023 19:39:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=Ls1Afuk+vREBx4X5LIJCcRdVZS5cGA//lszq4XVSrL0=;
- b=byFmYIcO+3R1zBepCJBx2j1uYy/T0chFz4oOvHuC53Fg7nmnjiSCPcXSsXZEpjvAakZ9
- heEdmbzny7jYDFilJGA1rqZwDMq0LZe9QWXZdg1mxeu1dJySL9vhn3Gv22zqZrLxVDvL
- eDmYemBViJDDvCmYx/YVV/Nu2BXdBqIzWZO8TvDyYr+oI4hS79/61A8ZH+dWwjFgzyco
- eBcNSW3LCMPLMaXz8Y2B2Me+NwQ4Lw97/cC55lO5+7scnSVvNRS4o2/bdv3A5RbDPE0U
- C5k8ebmmBEOB/g0MgH75fzKNxV6F5uL+TUyDlwScjBoZ6oeKouexDSXJAQhrPSvl7f/3 8A== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n3k6c5rth-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Jan 2023 19:39:45 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30HIYWTf015222;
-        Tue, 17 Jan 2023 19:39:44 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2102.outbound.protection.outlook.com [104.47.55.102])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n4rq4shf2-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 Jan 2023 19:39:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ggmn4oJoY8Uygu2zkKXkp6tckVjlrZlzERovZLyOc+b6A7IWPIMtAdbwbAr6ZZPn43esGn8ZVpgKElrT0srtYzztE60I5oHnyVVzc5e3cwLBJeRLBHlzRESRvyAkjzM7+SfhYWRWbfk/flgHapom+l8L7tpjfHi2aD+wiMStXiObH8s0V2ldrCSZ2gvG6JLxXKgbe6BsrxkPlM5czKvSYiwAv8I6u2S9NNy5mLpIyk2EnE0va/KcP3SyqAPFh0nL0W4tbSvDn7WXyZuhIoszOAuc34A+cqZ5tOVPqPeMwCU3/K0ooqq6z3okRnZthm8JTMJOTfQyAmQICL98JgQ8Lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ls1Afuk+vREBx4X5LIJCcRdVZS5cGA//lszq4XVSrL0=;
- b=hcpm3cv3p0Xj+YdMMdnPEr8JfZTRKYQVaWQFbXzo7irFQQHy1MVgj94NCM7EX8LkgIAD7dWF8tA+myAaM08r5YSX445P99QQJs3HLB1fUcYZxWB101gHOo5IBLhPiaR2sr6XIJdGehyhFA465JucaGUoFWJlOHkJYE08W0HPGC4UF2UdZl+dZ9Mi5SFuL1Cv4k1JoIG509O/gkSE77azbirridXQdS36nwmIGD5xovVtF7AjZcoycxe4TB4x5N+YOOMTksn/Yk0H3EvfoZk9zNi+ukKN2bsER85vdBPw+g/qz1+Z2aS59d9GJ80joMxhw6mdAKAMQF4YFp1PFDTMDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ls1Afuk+vREBx4X5LIJCcRdVZS5cGA//lszq4XVSrL0=;
- b=b2DxLxtCANhizjZVN8CGpIiuSdBAd1DazTk8756nMdXG2arBeSQYOMTP8EHxsD71ITDCNLMli3rQfKmZfV99KuVlpQA0NP/peg+rwGoquMURWSXIYPWeVqKNIPfgu3btilq168cvPMafLDuDeVKeh1Bn0W0HSk5PUJXCs6k/vwQ=
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
- DS0PR10MB7222.namprd10.prod.outlook.com (2603:10b6:8:f2::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.11; Tue, 17 Jan 2023 19:39:43 +0000
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::c888:aca:1eb9:ca4f]) by DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::c888:aca:1eb9:ca4f%5]) with mapi id 15.20.6002.011; Tue, 17 Jan 2023
- 19:39:43 +0000
-From:   Mike Christie <michael.christie@oracle.com>
-To:     dinghui@sangfor.com.cn, haowenchao22@gmail.com, lduncan@suse.com,
-        cleech@redhat.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, jejb@linux.ibm.com
-Cc:     Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH v2 2/2] scsi: iscsi_tcp: Fix UAF during login when accessing the shost ipaddress
-Date:   Tue, 17 Jan 2023 13:39:37 -0600
-Message-Id: <20230117193937.21244-3-michael.christie@oracle.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230117193937.21244-1-michael.christie@oracle.com>
-References: <20230117193937.21244-1-michael.christie@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: DM6PR07CA0082.namprd07.prod.outlook.com
- (2603:10b6:5:337::15) To DM5PR10MB1466.namprd10.prod.outlook.com
- (2603:10b6:3:b::7)
+        with ESMTP id S229646AbjAQV3i (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Jan 2023 16:29:38 -0500
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674F145884;
+        Tue, 17 Jan 2023 11:55:40 -0800 (PST)
+Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
+        by mta-01.yadro.com (Proxmox) with ESMTP id 99DBF341B0C;
+        Tue, 17 Jan 2023 22:55:38 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
+        :cc:content-type:content-type:date:from:from:in-reply-to
+        :message-id:mime-version:references:reply-to:subject:subject:to
+        :to; s=mta-01; bh=L9mhak6iIHuHlM220SzcgMwNYm3+04KgMfEaH9Bw7xU=; b=
+        C695Y35+iXxzSS5wYiH3Ha//iNTh0+Ds7OhjPBM0rJdTYzrOGyMy0GrNbQij9JEm
+        /wWp7ix91tEzy/Xnkd+FY9QTW4zCXGipUFolserI4XNhinXdR6+tBATiZ6yKkcEG
+        lLCJQnMqMNh4RxEntDwfszlzxbxpFAf4pswyJFWJeCE=
+Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Proxmox) with ESMTPS id 8ABC5341ADE;
+        Tue, 17 Jan 2023 22:55:38 +0300 (MSK)
+Received: from yadro.com (10.199.18.20) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Tue, 17 Jan
+ 2023 22:55:38 +0300
+Date:   Tue, 17 Jan 2023 22:55:40 +0300
+From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
+To:     Mike Christie <michael.christie@oracle.com>
+CC:     <mlombard@redhat.com>, <martin.petersen@oracle.com>,
+        <mgurtovoy@nvidia.com>, <sagi@grimberg.me>,
+        <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>
+Subject: Re: [PATCH v2 11/13] scsi: target: Treat CMD_T_FABRIC_STOP like
+ CMD_T_STOP
+Message-ID: <20230117195540.GD31614@yadro.com>
+References: <20230112030832.110143-1-michael.christie@oracle.com>
+ <20230112030832.110143-12-michael.christie@oracle.com>
+ <20230113141512.GB31614@yadro.com>
+ <20230117115257.GC31614@yadro.com>
+ <5574fcc5-49ea-0cb4-bb95-cb011f21fc8c@oracle.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1466:EE_|DS0PR10MB7222:EE_
-X-MS-Office365-Filtering-Correlation-Id: 300e4cea-7ca1-454c-6eec-08daf8c294c1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CUkJilUqlpEhU2N5KSXCfebRs+lo+jUptghOXDYEzmPpFizWk1idhDBdXKoR6YeDN8tpapoaqaFWJqkl1FnfG2HGxzR4uu4bFNdOOEO85CSX3wzzoNLsT7QUG9wBOurkvgBpi9tcd49Ag9y79xcKstev2fPG14TnIrAajixb5EYb6yCRgKaZ+grgIeNbf2naCYPGS1Opc6i3QjbriPEKDKCC8aaon+75nPe0lA0qbJN+Shtsw7kNSuhA+BKo8cgUv/ACsNzY+UBb0O/KPbXfTyrs6+Ecc3yOlz/Lqs3FCEEZgd0EUgNQ96+CF+ZMKVGlpygW+N5axhvf0PtjWgsX+4AO0UU7GsI6d8Vz0eo9JjRuUmDaOBYw5tOzKEchEyySkZY2V9QSUEIUsKNIr7Jje7kb5QIBRX1n8szcstQi3nhkP6Y7KTTxLXdgVye4gc9A9LNlwRHcr4SWbOB1q0lsQiq9/TG1fAZqY3FEjpzYBNSeGfZsJotm5ahNQMwHFI1UwNUYuTlzIGNYUGz3Q5seQjJAv/94GKdemGZ7hsb9OL7Pb8pXte7tK4OxbRP2+GgacuouUMhvXSk7z4+8SYNNLaBwaQ8xLajjBZo96QdCRVfAhLt5YurTR8x69jVtEd5zKE4Uawm90ikQBKhfLNleyA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(396003)(346002)(366004)(39860400002)(451199015)(36756003)(83380400001)(107886003)(6506007)(6666004)(5660300002)(6512007)(186003)(2616005)(2906002)(1076003)(86362001)(26005)(38100700002)(316002)(41300700001)(66946007)(8676002)(66556008)(4326008)(478600001)(8936002)(66476007)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aBQIQswNIAggcMz7BfuGxMCTjVumwkrg5X99qPcyJi8w+EfO3Fuzh9fSaVOy?=
- =?us-ascii?Q?k20tRfri6RV4jrv78Nv/BXUUbljdgHtwtNGLTCjtU/ajWHvG6jWA0HrZuhuI?=
- =?us-ascii?Q?APMIPuoMNS0teS6AQugoAeCnnCOWs0bR9Ye3FoyGn+xK5zHZI2LsXLi933fA?=
- =?us-ascii?Q?iY+zQA8nt8T4HkZJxpxhvldxvy+yQVfexRDxyt2bZGAE4xsXnWq9cIXK9c53?=
- =?us-ascii?Q?MCO/Bxvk7d/x7ZufRqKBEPA06yk6CM+aNgQiFTJZnTHUqZIsg7hBY5uBEeHO?=
- =?us-ascii?Q?1qrQThjk53FO4lESaWr5leNS7arWnyB8NebT80+Q5y3l4kQ3et2WjLhOx7ol?=
- =?us-ascii?Q?yEORGAjRsCObNzmLfq9aAJY94jn2ibGsS/Xh28e2DH9h1S/jOUmW0SNOc28U?=
- =?us-ascii?Q?1W80uLldmHEOHpQvic0pGsRNYpFwyR5aDI28VyqO6kbBkCXfDoqlLj4mR2MR?=
- =?us-ascii?Q?h1fGt/S1XoE+zxWi7hImHNi1p9QJEG550r7V299cE2P0rq1pILzGb5zRzWTk?=
- =?us-ascii?Q?ofTIRB2c8Xsng7U1O4K3KEJY2cNr7KxXMq8/moIbVXnNJIMU+ysktPBrFamg?=
- =?us-ascii?Q?6zYbBmCk80ce+fVYqE8QXl0g0wmFzu9eEuiK7uNo9tZpTNXNOA4h6LPnoF+E?=
- =?us-ascii?Q?/qT9tcYthmReeRPPzHVKcRshIKVNGcGm2f2NTzQ8buJACq7A8wTJbrhGF9FW?=
- =?us-ascii?Q?ca7sUPBds2Ng/NxpKLUIspXTF8F0PUoGTh4OfG4c+DqkV5VFslrHpGjGedf2?=
- =?us-ascii?Q?aVtApqbv2RJvuha1oh+V9jqDc3OyIY/wBc4KvIGXuhHL1zO/YfrTN/zXCj0s?=
- =?us-ascii?Q?ZPTYNSQP1sbplt/xKXIT0rvoYZ0AuztyMQ7ULFJG8su7Id+nDU2UxUkgyoY1?=
- =?us-ascii?Q?NokZPosR7Jw5QT+EePtdVfkwT3+VgkbTfh3qTkMGNNWk8UG4fIckZbv36ByE?=
- =?us-ascii?Q?pnYcecxN1+ZeeFx1hbAPNCUz80Aw88rCZT95v5ra0+tplrbab/Q3U6pc1EBa?=
- =?us-ascii?Q?iSDXQFMI3um7zgoWzomoX6hc4+OMHNfpgJJg9P3HLhnfMPXXbqZZxcA12XCH?=
- =?us-ascii?Q?edqMgAV1MnOWD7Oneocgx4qqnhaNblSiQPKe/ly2LZNdUGQfmZzbZZX1yozX?=
- =?us-ascii?Q?VpHz+ixBOkFsmpXojThspcy7s4lmQgNhmuFFMkTPYwRHD9ajMwP/MPtBQ/PY?=
- =?us-ascii?Q?VyrizeTW4+5CS+aRyvnU7VgxMEmMzFaGEh+R5AcXMmQpRqycX+izbDjJ0bN+?=
- =?us-ascii?Q?IT6CTwL44rNi/kcd69DKXbeUOMaItl/VRz708AAr0PsGvAqro40xggpZNx5C?=
- =?us-ascii?Q?IXoZqjGqOYUw2odSOq5GNSBcazHh9DcJM1P5YcDRtmj936RBBI+u9iBULkbk?=
- =?us-ascii?Q?ZGsgkRWBzltEFJF3UgzVgZreOpYj2c/gsMyB5AigSUtUFKTtwMl0+HBfD5IL?=
- =?us-ascii?Q?WEAfOv9dPqPobZeyZPdSF3BJ8ee4rnzixKGJ63cbdYefdZwfvy+57e27Khxz?=
- =?us-ascii?Q?jjqrpFl/ovb7CjnK2D0Zl0Zt1uTXbeauspC+EQ8TZX3TALpwXEnCKcQExY/N?=
- =?us-ascii?Q?eMjUYAL+vG3+Qsr3uXkC4W9EmLwiTxWlrjkRWDaBcke+ZPgKTxjOSn2DBid8?=
- =?us-ascii?Q?RQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: WNOo5rj3cDsemVMUN87KBeryLLX0IK18hCb/usgD3MtKBAMVY4umFDBqWzYS1RugKOYnKoYt7opoN5rHwhC9FMc4KFreVlMw4nbWLMnXfeHGI4O3XNNI06z8r+sA7salQaEbXkjzyOAw+K8oUR+Jb6KVrPmdI0BZdphRWxhNEZD4e2NPy8EaWaR24RGX+4tCIzCSrJu1BWyM9/P43tvP4oYAxHnXCZasqTD5ZflzrI4vUuP/3AnWVqJUoXMqtkjR6EkKQXRgIIJJHbw/wxQkDFO38H8JqOWvJt1dNJQumAKREnJaSSvXCJgznB+KM8fefAV+iESI3sWw9flyj8uHVqZLEe34p8FkWSpMRkT8qTY4zLqc39n6Dkvx29qGQhrljCV352FhbPdVzzgVdyjI/TNo1IIsmQK+xT1Z8P6QM1ppShNkoReAzf19BIbWnjj0M87WSOwsr+06R+++f3EQZNb0LzTwbnleGMltB1qdCLPAqovC6lOu1GVgawsJPCzvaNgEvE9LD/g6T2qvAYdan6uMeKuQ+nkWbwtA6GzBT4pm4XA/IuVBhC9rpE55ov8Y5suOQlpZ0TcZ4ZgM1px0TYoAcaCvoxvpwuftCCoPep/tgyeTLmIrwrTjg5+0PWHDb4pGhBz1Kw9B2GPCTA3Sd7ImYDsMDlNkf3oY0KccTmiPYcdYbEEX3ugELVjx7TxEErITEJ6375ZuazC+f22PKNEbkWeGYPvTta8iazZlP6FRjbBRRcpmdAlU6gPMz60r4KJ0FSmNfyF8NDOsGGlQmpYniNTzRf9jVXdtIzaVsQVY+BYeDgQfHQWLTBYNiJAmmgqAiThLFGSRzc62PDzgZ/kCoLVqTxjQS1fs8iUe3Xdg5IWyolEFK27m243/ejgQY6tbpk+yJwSJ5CR0vrsYURb9RKd1aGztfJMbIHRFBtI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 300e4cea-7ca1-454c-6eec-08daf8c294c1
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 19:39:43.0957
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0XYqQKzCJVp4jK2vSUixmSCR3r6RCXi+CaOMlMGn1erW974tgETw9Em0fQFi4/XlW2u9Z/UMBdLcoGCjn79h31dgKNqSkC5hGGHWHnddOLY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7222
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-17_10,2023-01-17_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 mlxscore=0
- bulkscore=0 suspectscore=0 malwarescore=0 phishscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301170157
-X-Proofpoint-GUID: ADnd-bhRT-kVuBSeFD-dk6rS9k7xOJUS
-X-Proofpoint-ORIG-GUID: ADnd-bhRT-kVuBSeFD-dk6rS9k7xOJUS
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <5574fcc5-49ea-0cb4-bb95-cb011f21fc8c@oracle.com>
+X-Originating-IP: [10.199.18.20]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If during iscsi_sw_tcp_session_create iscsi_tcp_r2tpool_alloc fails
-userspace could be accessing the host's ipaddress attr. If we then
-free the session via iscsi_session_teardown while userspace is still
-accessing the session we will hit a use after free bug.
+On Tue, Jan 17, 2023 at 12:45:56PM -0600, Mike Christie wrote:
+> 
+> On 1/17/23 05:52, Dmitry Bogdanov wrote:
+> > On Fri, Jan 13, 2023 at 05:15:12PM +0300, Dmitry Bogdanov wrote:
+> >> On Wed, Jan 11, 2023 at 09:08:30PM -0600, Mike Christie wrote:
+> >>>
+> >>> iscsit will set CMD_T_FABRIC_STOP on running commands when its transport
+> >>> connection is down and it can't send/recv IO (tx/rx threads are killed
+> >>> or the cleanup thread is run from the one thats up). It will then loop
+> >>> over running commands and wait for LIO core to complete them or clean
+> >>> them up if they were on an internal queue waiting to be sent or ackd.
+> >>>
+> >>> Currently, CMD_T_FABRIC_STOP only stops TMRs from operating on the
+> >>> command but for isert we need to prevent LIO core from calling into
+> >>> iscsit callouts when the connection is being brought down. If LIO core
+> >>> queues commands to iscsit and it ends up adding to an internal queue
+> >>> instead of passing back to the driver then we can end up hanging waiting
+> >>> on command completion that never occurs because it's stuck on the internal
+> >>> list (the tx thread is stopped at this time, so it will never loop over
+> >>> the response list and call into isert). We also want to sync up on a
+> >>> point where we no longer call into isert so it can cleanup it's structs.
+> >>>
+> >>> This has LIO core treat CMD_T_FABRIC_STOP like CMD_T_STOP during
+> >>> command execution and also fixes the locking around the
+> >>> target_cmd_interrupted calls so we don't have a case where a command
+> >>> is marked CMD_T_COMPLETE and CMD_T_STOP|CMD_T_FABRIC_STOP at the same
+> >>> time.
+> >>>
+> >>> Signed-off-by: Mike Christie <michael.christie@oracle.com>
+> >>> ---
+> >>>  drivers/target/target_core_sbc.c       |  2 +-
+> >>>  drivers/target/target_core_transport.c | 27 +++++++++++++++-----------
+> >>>  2 files changed, 17 insertions(+), 12 deletions(-)
+> >>>
+> >>> diff --git a/drivers/target/target_core_sbc.c b/drivers/target/target_core_sbc.c
+> >>> index 7536ca797606..56136613767f 100644
+> >>> --- a/drivers/target/target_core_sbc.c
+> >>> +++ b/drivers/target/target_core_sbc.c
+> >>> @@ -459,7 +459,7 @@ static sense_reason_t compare_and_write_callback(struct se_cmd *cmd, bool succes
+> >>>                  * we don't have to perform the write operation.
+> >>>                  */
+> >>>                 WARN_ON(!(cmd->transport_state &
+> >>> -                       (CMD_T_ABORTED | CMD_T_STOP)));
+> >>> +                       (CMD_T_ABORTED | CMD_T_STOP | CMD_T_FABRIC_STOP)));
+> >>>                 goto out;
+> >>>         }
+> >>>         /*
+> >>> diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
+> >>> index cb3fdc81ba3b..02a9476945dc 100644
+> >>> --- a/drivers/target/target_core_transport.c
+> >>> +++ b/drivers/target/target_core_transport.c
+> >>> @@ -737,8 +737,8 @@ static int transport_cmd_check_stop_to_fabric(struct se_cmd *cmd)
+> >>>          * Determine if frontend context caller is requesting the stopping of
+> >>>          * this command for frontend exceptions.
+> >>>          */
+> >>> -       if (cmd->transport_state & CMD_T_STOP) {
+> >>> -               pr_debug("%s:%d CMD_T_STOP for ITT: 0x%08llx\n",
+> >>> +       if (cmd->transport_state & (CMD_T_STOP | CMD_T_FABRIC_STOP)) {
+> >>> +               pr_debug("%s:%d CMD_T_STOP|CMD_T_FABRIC_STOP for ITT: 0x%08llx\n",
+> >>>                         __func__, __LINE__, cmd->tag);
+> >>>
+> >>>                 spin_unlock_irqrestore(&cmd->t_state_lock, flags);
+> >>> @@ -889,7 +889,7 @@ static bool target_cmd_interrupted(struct se_cmd *cmd)
+> >>>                 INIT_WORK(&cmd->work, target_abort_work);
+> >>>                 queue_work(target_completion_wq, &cmd->work);
+> >>>                 return true;
+> >>> -       } else if (cmd->transport_state & CMD_T_STOP) {
+> >>> +       } else if (cmd->transport_state & (CMD_T_STOP | CMD_T_FABRIC_STOP)) {
+> >>>                 if (cmd->transport_complete_callback)
+> >>>                         cmd->transport_complete_callback(cmd, false, &post_ret);
+> >>>                 complete_all(&cmd->t_transport_stop_comp);
+> >>> @@ -907,13 +907,15 @@ void target_complete_cmd_with_sense(struct se_cmd *cmd, u8 scsi_status,
+> >>>         int success, cpu;
+> >>>         unsigned long flags;
+> >>>
+> >>> -       if (target_cmd_interrupted(cmd))
+> >>> +       spin_lock_irqsave(&cmd->t_state_lock, flags);
+> >>
+> >> That leads to a hardlock because
+> >> target_cmd_interrupted() => cmd->transport_complete_callback() also tooks
+> >> cmd->t_state_lock.
+> 
+> We shouldn't lock up because for the failure cases the transport_complete_callback
+> functions don't take the lock. They just cleanup and return.
 
-This patch has us set the tcp_sw_host->session after we have completed
-session creation and can no longer fail.
+The second callback (compare_and_write_post) does take the lock always.
+Although to be honest, that lock there has no sense.
 
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
----
- drivers/scsi/iscsi_tcp.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+> > But the taking the lock for read+write of cmd->t*_state is absolutelly right!
+> > It would be great if you manage to move transport_complete_callback()
+> > into other thread/job.
+> 
+> I'm not sure why we want to do that since none of the transport_complete_callback
+> sleep on failure. It seems to just add more complexity and we only have the 2
+> transport_complete_callback uses now, so it seems overkill.
 
-diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-index 9c0c8f34ef67..c3ad04ad66e0 100644
---- a/drivers/scsi/iscsi_tcp.c
-+++ b/drivers/scsi/iscsi_tcp.c
-@@ -848,7 +848,7 @@ static int iscsi_sw_tcp_host_get_param(struct Scsi_Host *shost,
- 				       enum iscsi_host_param param, char *buf)
- {
- 	struct iscsi_sw_tcp_host *tcp_sw_host = iscsi_host_priv(shost);
--	struct iscsi_session *session = tcp_sw_host->session;
-+	struct iscsi_session *session;
- 	struct iscsi_conn *conn;
- 	struct iscsi_tcp_conn *tcp_conn;
- 	struct iscsi_sw_tcp_conn *tcp_sw_conn;
-@@ -858,6 +858,7 @@ static int iscsi_sw_tcp_host_get_param(struct Scsi_Host *shost,
- 
- 	switch (param) {
- 	case ISCSI_HOST_PARAM_IPADDRESS:
-+		session = tcp_sw_host->session;
- 		if (!session)
- 			return -ENOTCONN;
- 
-@@ -958,11 +959,13 @@ iscsi_sw_tcp_session_create(struct iscsi_endpoint *ep, uint16_t cmds_max,
- 	if (!cls_session)
- 		goto remove_host;
- 	session = cls_session->dd_data;
--	tcp_sw_host = iscsi_host_priv(shost);
--	tcp_sw_host->session = session;
- 
- 	if (iscsi_tcp_r2tpool_alloc(session))
- 		goto remove_session;
-+
-+	/* We are now fully setup so expose the session to sysfs. */
-+	tcp_sw_host = iscsi_host_priv(shost);
-+	tcp_sw_host->session = session;
- 	return cls_session;
- 
- remove_session:
--- 
-2.25.1
+I have a personal interest on that :) Of course, it is just one of the
+ways to solve it.
+
+BR,
+ Dmitry
 
