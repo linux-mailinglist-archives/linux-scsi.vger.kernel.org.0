@@ -2,110 +2,121 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDFB670B98
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Jan 2023 23:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F81670BF9
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Jan 2023 23:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjAQWZF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Jan 2023 17:25:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
+        id S229620AbjAQWp5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Jan 2023 17:45:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjAQWYC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Jan 2023 17:24:02 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDE065ECA;
-        Tue, 17 Jan 2023 14:03:34 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 05C4634469;
-        Tue, 17 Jan 2023 22:03:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673993005; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cNlI+9UfYWFV0uaPvoECFFSdv2wmbsdPyIUgQd9knbY=;
-        b=PjrYgDT9wxvvYd/YDARNXxg/aCtgXm5tG+TXHfURfJw3vTLOtWAS7lMb9ND1gP0I93OH6C
-        G5QqMyEYqD2IVFJXN7Obzv08misoTK0zuHbZFUBQKcldT/Jvu8DGo05EMG7fivhrpeZVl+
-        aIJEKCh4CC6ufxQspXOTJxQefX645hI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B02C513357;
-        Tue, 17 Jan 2023 22:03:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lMl5KSwbx2NNCgAAMHmgww
-        (envelope-from <mwilck@suse.com>); Tue, 17 Jan 2023 22:03:24 +0000
-Message-ID: <983f47533ee56b2a954de97dc7e02cbcbc4f9841.camel@suse.com>
-Subject: Re: kernel BUG scsi_dh_alua sleeping from invalid context && kernel
- WARNING do not call blocking ops when !TASK_RUNNING
-From:   Martin Wilck <mwilck@suse.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Steffen Maier <maier@linux.ibm.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        linux-s390 <linux-s390@vger.kernel.org>
-Date:   Tue, 17 Jan 2023 23:03:24 +0100
-In-Reply-To: <2bea9c3e-2a61-a51e-c13b-796adabe6f71@acm.org>
-References: <b49e37d5-edfb-4c56-3eeb-62c7d5855c00@linux.ibm.com>
-         <017b6c73f56505e63519e4b79fe69d66abddf810.camel@suse.com>
-         <a9da2b27-882f-bc8e-3400-cb53440e2159@acm.org>
-         <125f247806396f19fd27dcfa71f530b5b4a529a6.camel@suse.com>
-         <c23a6bf4-0b6e-0bbb-b74d-af69756bcf9a@acm.org>
-         <ab7d61dd7f7c0289114e36fef6e9f282ad5c976b.camel@suse.com>
-         <2bea9c3e-2a61-a51e-c13b-796adabe6f71@acm.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
+        with ESMTP id S229656AbjAQWnf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Jan 2023 17:43:35 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EC866CF3
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Jan 2023 14:30:32 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id 3so33883559vsq.7
+        for <linux-scsi@vger.kernel.org>; Tue, 17 Jan 2023 14:30:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ScEkSv/4ujt+FscJGahMwM/oQgqzcSsBVgCxU70QRJI=;
+        b=g2jwoIxQwdTnr1B7YJPOxcb2LNHairUXX0OqXhUcefSUqfesJfyBh6TTKdZh2u/frr
+         btO0PTYoDQPJuS1xetwC9tGF45q7xFo8K/czu2UqDUjOM5OPHWVkW/YMHlN/AkTRYQJ4
+         NMOCD1DNUSXb/N07F+oIjlhs4p8j3Zb9YsAU+n0/Gt1R+PDRdr5E6zP7MJUcXC3Ukjuh
+         yAqgC2od1nSX98bQRUs7rndYvCGOOwmIS8v/7raRWbYykEwv8WGVQUb2hyXYLbeR4R4/
+         NQbmbUX1HjuteCKPj4XZ+/dOnefbi7/2I2+ij8iMNJlsEA7JjGV2J2LMUN61elv3nEzA
+         wKBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ScEkSv/4ujt+FscJGahMwM/oQgqzcSsBVgCxU70QRJI=;
+        b=J6zZMfbgZcFBwelEhOUMG27Y41m85dHybKRqGaVZcRmHI6cikyupNHF8nUq0j3/uGO
+         TtyrpBzbpJCn8lFB9/NlqU4nW20phxP8PIxfIZw5ysnhs5WlfyzoIfMmy4MtEuBKGqOj
+         3Dz/QF9PZfdaWsIv7Ng0GqePfk+nOr1ZsVlJbo1ykoqql42fp4wpzsKMhER7LIO2h30z
+         p5vC6h1Rt/wd5i/SzpuEnkGhmOWv5k15QoJovEG08OYluCqb7+3O7yNy6wfcUBcQw37i
+         7qzEKLPQqZgOYI3flD1TYVLdsBPMUvYH+it49zZmIfoOrsK7cifdg6hd2twtCQAYVQAf
+         DcqA==
+X-Gm-Message-State: AFqh2kojFwnZR0MvcwGdYGm7UvZ3OBWzhRdxLt1yLIIiLBMIG1kNHsKe
+        hxoUaSlZNZn7Euf33Ocj5XYcenQYP6ymAYBk3Pz04w==
+X-Google-Smtp-Source: AMrXdXsasxzFes28B36W71fU5Iue+c6SDhtfvo6j1Ld/ub9DRIvDly3xpJu8wO0cQ3K8NP967lAk53nFxEnNJD9i4tI=
+X-Received: by 2002:a67:fb42:0:b0:3d0:d3fe:3d48 with SMTP id
+ e2-20020a67fb42000000b003d0d3fe3d48mr557188vsr.32.1673994631663; Tue, 17 Jan
+ 2023 14:30:31 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJs=3_C+K0iumqYyKhphYLp=Qd7i6-Y6aDUgmYyY_rdnN1NAag@mail.gmail.com>
+In-Reply-To: <CAJs=3_C+K0iumqYyKhphYLp=Qd7i6-Y6aDUgmYyY_rdnN1NAag@mail.gmail.com>
+From:   Enrico Granata <egranata@google.com>
+Date:   Tue, 17 Jan 2023 15:30:20 -0700
+Message-ID: <CAPR809uYp6vGvCk4ugWOjbmd13WTm8fRg0f2Mdq3pxj6=d1McQ@mail.gmail.com>
+Subject: Re: Virtio-blk extended lifetime feature
+To:     Alvaro Karsz <alvaro.karsz@solid-run.com>,
+        Jahdiel Alvarez <jahdiel@google.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Christoph Hellwig <hch@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2023-01-17 at 13:52 -0800, Bart Van Assche wrote:
-> On 1/17/23 13:48, Martin Wilck wrote:
-> > Yes, that was my suggestion. Just defer the scsi_device_put() call
-> > in
-> > alua_rtpg_queue() in the case where the actual RTPG handler is not
-> > queued. I won't have time for that before next week though.
->=20
-> Hi Martin,
->=20
-> Do you agree that the call trace shared by Steffen is not sufficient
-> to=20
-> conclude that this change is necessary?
+Hi,
+I am going to add +Jahdiel Alvarez who is also looking into a similar
+issue, and also I would like to hear thoughts of people who may have
+worked with (embedded or otherwise) storage more recently than I have
 
-Hmm, I suppose I missed your point... to re-iterate my thinking:
+One thought that Jahdiel and myself were pondering is whether we need
+"type_a" and "type_b" fields at all, or if there should simply be a
+"wear estimate" field, which for eMMC, it could be max(typ_a, typ_b)
+but it could generalize to any number of cell or other algorithm, as
+long as it produces one unique estimate of wear
 
- 1 alua_queue_rtpg() must take a ref to the sdev before queueing work,
-   whether or not the caller already has one
- 2 queue_delayed_work() can fail
- 3 if queue_delayed_work() fails, alua_queue_rtpg() must drop the ref
-   it just took
- 4 BUT (and this is what I guess I missed) this ref can't be the last
-   one dropped, because the caller of alua_rtpg_queue() must still hold
-   a reference. And scsi_device_put() only sleeps if the last ref is
-   dropped. Therefore the issue in Steffen's call stack should
-   indeed be fixed just by removing the might_sleep(). If all callers
-   callers of alua_rtpg_queue() must hold an sdev reference (I believe=A0
-   they do), we can indeed remove the might_sleep() entirely.
+Thanks,
+- Enrico
 
-Is this correct reasoning, and what you meant previously? If yes, I
-agree, and I apologize for not realizing it in the first place.=A0
-But I think this is subtle enough to deserve a comment in the code.
+Thanks,
+- Enrico
 
-Thanks
-Martin
 
+On Sun, Jan 15, 2023 at 12:56 AM Alvaro Karsz
+<alvaro.karsz@solid-run.com> wrote:
+>
+> Hi guys,
+>
+> While trying to upstream the implementation of VIRTIO_BLK_F_LIFETIME
+> feature, many developers suggested that this feature should be
+> extended to include more cell types, since its current implementation
+> in virtio spec is relevant for MMC and UFS devices only.
+>
+> The VIRTIO_BLK_F_LIFETIME defines the following fields:
+>
+> - pre_eol_info:  the percentage of reserved blocks that are consumed.
+> - device_lifetime_est_typ_a: wear of SLC cells.
+> - device_lifetime_est_typ_b: wear of MLC cells.
+>
+> (https://docs.oasis-open.org/virtio/virtio/v1.2/virtio-v1.2.html)
+>
+> Following Michael's suggestion, I'd like to add to the virtio spec
+> with a new, extended lifetime command.
+> Since I'm more familiar with embedded type storage devices, I'd like
+> to ask you guys what fields you think should be included in the
+> extended command.
+>
+> Thanks,
+>
+> Alvaro
