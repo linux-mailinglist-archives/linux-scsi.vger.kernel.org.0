@@ -2,182 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DDE66E89A
-	for <lists+linux-scsi@lfdr.de>; Tue, 17 Jan 2023 22:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 201DF670C15
+	for <lists+linux-scsi@lfdr.de>; Tue, 17 Jan 2023 23:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjAQVjo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 17 Jan 2023 16:39:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
+        id S230093AbjAQWte (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 17 Jan 2023 17:49:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjAQViY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Jan 2023 16:38:24 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424ED39BB9
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Jan 2023 12:01:36 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id e3so22560345wru.13
-        for <linux-scsi@vger.kernel.org>; Tue, 17 Jan 2023 12:01:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4NbgmQ7vwZWISWrpORFndGUj0Z1v8WzwxSlAH052uaI=;
-        b=DDkxuKKBdTiKhwMOyfxlHgaEFjJoxSsFSon4tpKtYWiAsylwRuduHnpWAlMh7TIu5d
-         JqTK48Ax6peub1bM63LMmpHukChbBB/fEKpUHCI8TQEHitR883aApOvxbn9GcUYY404e
-         hxvRfDMj+UEA1qyAmwDlCy3/b4IMHm7izEKK2kWEkxUrYpo5xea4jIWf0uvixsQYFvCJ
-         Q1z/tMAHGqN4VbeUl83nZXq/8peD0AQkZEXLLJ/hTLKSl/r7gFTQexzuItqI5ikTa/3P
-         S9JOc2oY4pBoatoJHqRi97IZGnSKr5vA1yYZMy6v+avnIRLUx7ORskp0qU+77zkVfIfr
-         W4JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4NbgmQ7vwZWISWrpORFndGUj0Z1v8WzwxSlAH052uaI=;
-        b=fcKhi6vht5qmWJ6iwOHkIOWY1wE0Rco14WrWJyoAg42XVSdCBA6YefJWGCJ0Zh3wiY
-         +Yav2QQVwBC8SNjY9sMXl6sEG2e9dTsEaQ28ob3zOzYCGiAGcoxCTBwH3fVlhwYsTT0X
-         b4+f7ejEXi8LqDkih2hJkZ0xBOQF3ulablr3ZzGEW2SxGJxmipYeI9+OB4PEPq8XfkW/
-         le+nnBphHB4sVNKzwBD6tyk3S3L8DXHljIRIz7bsjzastjGBOKkyFbd/nMK5h/BEhEBD
-         r9JKJVPHv2DiTNnyleLsTTMuyDmmKtrixVqSZY9uzBhLfMJWAR5ppJXLvb8zcH8UG3Eg
-         dITA==
-X-Gm-Message-State: AFqh2krJTD5LusdZoNYV8z80iFrJtxBAvQpkv1vY+bVG0jsUFeyC2xEy
-        Y618YxiG8tGL40y1BDLo1JMyTw==
-X-Google-Smtp-Source: AMrXdXs4vMDYW9Wv8LmQ84pxtZoBKU4CXfy3IowTrSQqP8YN9k1B4gP9qV3XvnQv4pX/+ICuhpLO4Q==
-X-Received: by 2002:a5d:50c9:0:b0:2bd:db42:36cd with SMTP id f9-20020a5d50c9000000b002bddb4236cdmr3825481wrt.0.1673985694939;
-        Tue, 17 Jan 2023 12:01:34 -0800 (PST)
-Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id i15-20020a05600011cf00b00294176c2c01sm29185345wrx.86.2023.01.17.12.01.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 12:01:34 -0800 (PST)
-Message-ID: <b127bf23-8752-47be-d98e-4a61794a3c48@linaro.org>
-Date:   Tue, 17 Jan 2023 20:01:32 +0000
+        with ESMTP id S229848AbjAQWrr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 17 Jan 2023 17:47:47 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55AAB4E07;
+        Tue, 17 Jan 2023 13:48:45 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E5704349D3;
+        Tue, 17 Jan 2023 21:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1673992123; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ABmnaFOhAxeaDmI6GsVJDrQ8mjhYez5N9zWsCMIgoGA=;
+        b=U4yhLR7qkErvYgdEnY05Z0ysZVo6hjuYMI2j6onrulZ0WmZmqaYjywGqX6E5GQLbV+d12v
+        slZYTPS9ZRQojoaf5QD9gdduoexm7wKxN2Opp4l5MUmJX/f9ZY/cWvSLVifQlaTt0jRZPr
+        Eo2Q/Db5g0Dz/JORYP9yVXYjHn5q3kk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 979791390C;
+        Tue, 17 Jan 2023 21:48:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TTJcI7sXx2OWAwAAMHmgww
+        (envelope-from <mwilck@suse.com>); Tue, 17 Jan 2023 21:48:43 +0000
+Message-ID: <ab7d61dd7f7c0289114e36fef6e9f282ad5c976b.camel@suse.com>
+Subject: Re: kernel BUG scsi_dh_alua sleeping from invalid context && kernel
+ WARNING do not call blocking ops when !TASK_RUNNING
+From:   Martin Wilck <mwilck@suse.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Steffen Maier <maier@linux.ibm.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>
+Date:   Tue, 17 Jan 2023 22:48:42 +0100
+In-Reply-To: <c23a6bf4-0b6e-0bbb-b74d-af69756bcf9a@acm.org>
+References: <b49e37d5-edfb-4c56-3eeb-62c7d5855c00@linux.ibm.com>
+         <017b6c73f56505e63519e4b79fe69d66abddf810.camel@suse.com>
+         <a9da2b27-882f-bc8e-3400-cb53440e2159@acm.org>
+         <125f247806396f19fd27dcfa71f530b5b4a529a6.camel@suse.com>
+         <c23a6bf4-0b6e-0bbb-b74d-af69756bcf9a@acm.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v6 4/6] arm64: dts: qcom: sm6125: Add UFS nodes
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lux Aliaga <they@mint.lgbt>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
-        bvanassche@acm.org, keescook@chromium.org, tony.luck@intel.com,
-        gpiccoli@igalia.com
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
-        phone-devel@vger.kernel.org, martin.botka@somainline.org,
-        marijn.suijten@somainline.org
-References: <20230108195336.388349-1-they@mint.lgbt>
- <20230108195336.388349-5-they@mint.lgbt>
- <475d3f2f-114f-d6d2-89db-465ba7acd0d6@linaro.org>
- <f1f1337a-30cc-df3c-81d5-2daac61e874c@mint.lgbt>
- <PxopLVxLOIJ3_2bHt6pxk7OW4uY69s6KglHqShGI_CuUgDQFA_yn8HwD5gdoQpMpvYYqKXqVNhOQmwBQ6y0REQ==@protonmail.internalid>
- <51a8bb85-8fda-2d79-f753-9461316bae9e@linaro.org>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <51a8bb85-8fda-2d79-f753-9461316bae9e@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Tue, 2023-01-17 at 10:50 -0800, Bart Van Assche wrote:
+> On 1/17/23 01:28, Martin Wilck wrote:
+> > On Mon, 2023-01-16 at 09:48 -0800, Bart Van Assche wrote:
+> > > On 1/16/23 08:57, Martin Wilck wrote:
+> > > > Can we simply defer the scsi_device_put() to a workqueue?
+> > >=20
+> > > I'm concerned that would reintroduce a race condition when LLD
+> > > kernel
+> > > modules are removed.
+> >=20
+> > I don't follow. Normally, alua_rtpg_queue() queues rtpg_work, and
+> > alua_rtpg_work() will be called from the work queue and will
+> > eventually
+> > call scsi_device_put() when the RTPG is finished.
+> >=20
+> > alua_rtpg_queue() only calls scsi_device_put() if queueing
+> > rtpg_work
+> > fails[*]. If we deferred this scsi_device_put() call to a work
+> > queue,
+> > what would be the difference (wrt a module_put() race condition)
+> > compared to the case where queue_delayed_work() succeeds?
+> > In both cases, scsi_device_put() would be called from a work queue.
+> >=20
+> > Given that alua_rtpg_queue() must take a reference to the scsi
+> > device
+> > for the case that queueing succeeds, and that alua_rtpg_queue() is
+> > sometimes called in atomic context, I think deferring the
+> > scsi_device_put() call is the only option we have.
+>=20
+> Hi Martin,
+>=20
+> Before commit f93ed747e2c7 ("scsi: core: Release SCSI devices=20
+> synchronously") the SCSI device release code could continue running=20
+> asynchronously after the last module_put() call of the LLD associated
+> with the SCSI device.
+>=20
+> Since commit f93ed747e2c7 it is guaranteed that freeing device memory
+> (scsi_device_dev_release()) has finished before the last LLD=20
+> module_put() call happens.
+>=20
+> Do you perhaps plan to defer the scsi_device_put() calls in the ALUA=20
+> device handler to a workqueue?
 
+Yes, that was my suggestion. Just defer the scsi_device_put() call in
+alua_rtpg_queue() in the case where the actual RTPG handler is not
+queued. I won't have time for that before next week though.
 
-On 11/01/2023 12:04, Konrad Dybcio wrote:
-> 
-> 
-> On 11.01.2023 03:53, Lux Aliaga wrote:
->>
->> On 09/01/2023 09:18, Konrad Dybcio wrote:
->>>
->>> On 8.01.2023 20:53, Lux Aliaga wrote:
->>>> Adds a UFS host controller node and its corresponding PHY to
->>>> the sm6125 platform.
->>>>
->>>> Signed-off-by: Lux Aliaga <they@mint.lgbt>
->>>> ---
->>>>   arch/arm64/boot/dts/qcom/sm6125.dtsi | 57 ++++++++++++++++++++++++++++
->>>>   1 file changed, 57 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
->>>> index df5453fcf2b9..cec7071d5279 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
->>>> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
->>>> @@ -511,6 +511,63 @@ sdhc_2: mmc@4784000 {
->>>>               status = "disabled";
->>>>           };
->>>>   +        ufs_mem_hc: ufs@4804000 {
->>>> +            compatible = "qcom,sm6125-ufshc", "qcom,ufshc", "jedec,ufs-2.0";
->>>> +            reg = <0x04804000 0x3000>, <0x04810000 0x8000>;
->>> You need reg-names for ICE to probe, otherwise the second reg sits unused.
->>>
->>>> +            interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
->>>> +            phys = <&ufs_mem_phy>;
->>>> +            phy-names = "ufsphy";
->>>> +            lanes-per-direction = <1>;
->>>> +            #reset-cells = <1>;
->>>> +            resets = <&gcc GCC_UFS_PHY_BCR>;
->>>> +            reset-names = "rst";
->>>> +            iommus = <&apps_smmu 0x200 0x0>;
->>>> +
->>>> +            clock-names = "core_clk",
->>>> +                      "bus_aggr_clk",
->>>> +                      "iface_clk",
->>>> +                      "core_clk_unipro",
->>>> +                      "ref_clk",
->>>> +                      "tx_lane0_sync_clk",
->>>> +                      "rx_lane0_sync_clk",
->>>> +                      "ice_core_clk";
->>>> +            clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
->>>> +                 <&gcc GCC_SYS_NOC_UFS_PHY_AXI_CLK>,
->>>> +                 <&gcc GCC_UFS_PHY_AHB_CLK>,
->>>> +                 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
->>>> +                 <&rpmcc RPM_SMD_XO_CLK_SRC>,
->>>> +                 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
->>>> +                 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
->>>> +                 <&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
->>>> +            freq-table-hz = <50000000 240000000>,
->>>> +                    <0 0>,
->>>> +                    <0 0>,
->>>> +                    <37500000 150000000>,
->>>> +                    <0 0>,
->>>> +                    <0 0>,
->>>> +                    <0 0>,
->>>> +                    <75000000 300000000>;
->>>> +
->>>> +            status = "disabled";
->>>> +        };
->>>> +
->>>> +        ufs_mem_phy: phy@4807000 {
->>>> +            compatible = "qcom,sm6125-qmp-ufs-phy";
->>>> +            reg = <0x04807000 0x1c4>;
->>> Isn't this too small? Downstream says 0xdb8, but it's probably even bigger..
->> What do you think could help me find the new length of the registers? I tried 0x1000 and it probed just fine, but I'm not really sure until what extent I could push it.
-> The "true" values are probably only in documentation, which
-> I don't have.
+Martin
 
-This patch series uses the "new" DT layout, where there isn't a subnode
-to define the address ranges of the different components.
-
-The reg size would be correct if it used the "legacy" DT layout.
-
-Confirming in downstream, 0xdb8 is the correct value (it's what DT uses
-there and the phy-qcom-ufs-qmp-v3-660 driver confirms the biggest
-register offset is PHY_BASE (0xc00) + PHY_SIZE (0x1b4) = 0xdb4 inclusive)
-
-I'd suggest going for that in your next revision Lux.
-> 
-> Konrad
->>
-
--- 
-Kind Regards,
-Caleb (they/them)
