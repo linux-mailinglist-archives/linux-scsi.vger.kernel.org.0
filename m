@@ -2,146 +2,149 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0FC676328
-	for <lists+linux-scsi@lfdr.de>; Sat, 21 Jan 2023 03:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB84A6763D6
+	for <lists+linux-scsi@lfdr.de>; Sat, 21 Jan 2023 05:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjAUCnQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 20 Jan 2023 21:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
+        id S229687AbjAUEnB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 20 Jan 2023 23:43:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjAUCnP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 20 Jan 2023 21:43:15 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A747CCE8
-        for <linux-scsi@vger.kernel.org>; Fri, 20 Jan 2023 18:43:14 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id z20so4897322plc.2
-        for <linux-scsi@vger.kernel.org>; Fri, 20 Jan 2023 18:43:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=op5hDwjbzfVECTXQOpZ3gZ09SxcA7kYJCe8wIzxibno=;
-        b=fSup2CufQIQ67ziFp10s273fFAtZB5VClW3NgZsl3MYhnAt9Krio8iNmZDpRx4F07W
-         vYPX6P7gXQoLSIr3iXb5w8Zs0Fb50JuK3Xn6qDAYSZvE4Y2ShCt9OojDs47+VTUqbkkN
-         OBk6cN87lXPRq9KT+4OTULPSDTdm3OBfCoTkkaIv6u9ZIGsEfaGbqEMNshqsmBHaXvVN
-         DZGztUPRFHftTFo0yNM0JnK1rJJ+gwYZLKJF2aIsBLNmP89t2kT58dYCAwTocaUjKlyu
-         OVuVsrg2SizQ6JszpnmN1F9pOddPrhTbrRtq/8wpuWvjQnqgaEM+D9gyMLqIOhf1VoLn
-         GuFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=op5hDwjbzfVECTXQOpZ3gZ09SxcA7kYJCe8wIzxibno=;
-        b=NPQbVWTIzGGyr/51bo8tBfwO4yuJ0mrvAx3sHldtmCp8u1mFeB/yzVK7FLEJpnjo39
-         l3CwDFDhYZEwqZo3Dzv1sxxcK+UesiA2bKSZObcTsg8kJE+k23m60vl5tK2vgbxbtHpw
-         eoQHS/SVOUb1xWQ3Qo0dATmNAamUSHqeM1Wgd+ZJ6rn2+i7zqThXV27vCEeLcei1GNlw
-         KBMnJW0+ldwbVwJapMyRD6/ojNhBGoep+fSder6l18PqFJIGToQOxzje/jvFMEV9U9gS
-         LnTlCaIrwuwiwNyBEvD1F8uw6BmgFpCpZ4GgX/efRyzGcSasg2vRPTGQZr45glH8rK7P
-         Lu6A==
-X-Gm-Message-State: AFqh2kp3Z16MSrKTAPWDX4jPOYowB4IJvGNvipKA7KNxaeAoGCB85mAm
-        0lDxCf/2O46tlIx/gBD7M2HcjA==
-X-Google-Smtp-Source: AMrXdXuRWWnHng24jf4RnPPsvZIjmw9iXlZwxFx0aMH9XB1abOpKOB1bostUWA3clzV4umNAzybvtA==
-X-Received: by 2002:a17:903:32c2:b0:195:e437:ba2 with SMTP id i2-20020a17090332c200b00195e4370ba2mr1077515plr.6.1674268993690;
-        Fri, 20 Jan 2023 18:43:13 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id j5-20020a170902758500b00192d9258512sm27578041pll.154.2023.01.20.18.43.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 18:43:13 -0800 (PST)
-Message-ID: <6b1fa9a4-a06b-4b47-023d-b52f4efae6e5@kernel.dk>
-Date:   Fri, 20 Jan 2023 19:43:11 -0700
+        with ESMTP id S229644AbjAUEm7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 20 Jan 2023 23:42:59 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB745087D;
+        Fri, 20 Jan 2023 20:42:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674276178; x=1705812178;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kCNVyHhNIwA6ePSSurZL/eEV1rQKY6c6i+QOq90+b+E=;
+  b=kmqG6J2vFT7UdEGDgmvEqud7RpoYr9Lk46jcQXGESbZltPaHwROfvyC4
+   k0N3XxmuM0fR76oUdC6NTwi83KNqvRKcFEKmphGW8KJ5l26L3q9uxuFd8
+   +D2fny0H2RWwaATNHmd6rr9NW0iQ8o4+u1Jc2KM7rjDEz8z3eYLn88v+s
+   Gvg6bFhR6hnMybsjs67EKJVNX3XMP9Nxan5+mX/K6/uFvxgZP6Ogh/qmQ
+   3LrMTQaOA1fu1iey/FMrCrimEdukOZWKUxHWhoCaO6oVo1S8HU3ZcpfiL
+   sUR8wDsUrRChEJ8BvY7E4AnH8catPbCyBSvggVRtnR+0QIZioiMhgTi6G
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="306117863"
+X-IronPort-AV: E=Sophos;i="5.97,234,1669104000"; 
+   d="scan'208";a="306117863"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 20:42:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10596"; a="662767018"
+X-IronPort-AV: E=Sophos;i="5.97,234,1669104000"; 
+   d="scan'208";a="662767018"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 20 Jan 2023 20:42:52 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pJ5iN-0003Ua-0d;
+        Sat, 21 Jan 2023 04:42:51 +0000
+Date:   Sat, 21 Jan 2023 12:42:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anjana Hari <quic_ahari@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     oe-kbuild-all@lists.linux.dev, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, bvanassche@acm.org, konrad.dybcio@linaro.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_narepall@quicinc.com, quic_nitirawa@quicinc.com,
+        quic_rampraka@quicinc.com, Anjana Hari <quic_ahari@quicinc.com>
+Subject: Re: [PATCH v3 1/1] scsi: ufs: Add hibernation callbacks
+Message-ID: <202301211209.zKDppcLI-lkp@intel.com>
+References: <20230120113321.30433-2-quic_ahari@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 1/9] block: Introduce QUEUE_FLAG_SUB_PAGE_SEGMENTS and
- CONFIG_BLK_SUB_PAGE_SEGMENTS
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
-        Keith Busch <kbusch@kernel.org>
-References: <20230118225447.2809787-1-bvanassche@acm.org>
- <20230118225447.2809787-2-bvanassche@acm.org>
- <4f308b47-e08c-efa6-6a86-965ba6761350@kernel.dk>
- <f1317a6f-9c74-b41d-749e-f9dc34f0ad80@acm.org>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <f1317a6f-9c74-b41d-749e-f9dc34f0ad80@acm.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120113321.30433-2-quic_ahari@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 1/20/23 5:11?PM, Bart Van Assche wrote:
-> On 1/18/23 15:02, Jens Axboe wrote:
->> On 1/18/23 3:54?PM, Bart Van Assche wrote:
->>> Prepare for introducing support for segments smaller than the page size
->>> by introducing the request queue flag QUEUE_FLAG_SUB_PAGE_SEGMENTS.
->>> Introduce CONFIG_BLK_SUB_PAGE_SEGMENTS to prevent that performance of
->>> block drivers that support segments >= PAGE_SIZE would be affected.
->>>
->>> Cc: Christoph Hellwig <hch@lst.de>
->>> Cc: Ming Lei <ming.lei@redhat.com>
->>> Cc: Keith Busch <kbusch@kernel.org>
->>> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
->>> ---
->>>   block/Kconfig          | 9 +++++++++
->>>   include/linux/blkdev.h | 7 +++++++
->>>   2 files changed, 16 insertions(+)
->>>
->>> diff --git a/block/Kconfig b/block/Kconfig
->>> index 5d9d9c84d516..e85061d2175b 100644
->>> --- a/block/Kconfig
->>> +++ b/block/Kconfig
->>> @@ -35,6 +35,15 @@ config BLOCK_LEGACY_AUTOLOAD
->>>         created on demand, but scripts that manually create device nodes and
->>>         then call losetup might rely on this behavior.
->>>   +config BLK_SUB_PAGE_SEGMENTS
->>> +       bool "Support segments smaller than the page size"
->>> +       default n
->>> +       help
->>> +      Most storage controllers support DMA segments larger than the typical
->>> +      size of a virtual memory page. Some embedded controllers only support
->>> +      DMA segments smaller than the page size. Enable this option to support
->>> +      such controllers.
->>
->> This should not be a visible option at all, affected drivers should just
->> select it.
-> 
-> Hi Jens,
-> 
-> If CONFIG_BLK_SUB_PAGE_SEGMENTS is made invisible, how should this
-> option be enabled for the scsi_debug and null_blk drivers? Adding
-> "select BLK_SUB_PAGE_SEGMENTS" to the Kconfig section of these drivers
-> would have the unfortunate side effect that enabling either driver
-> would make all block drivers slower. How about making sub-page segment
-> support configurable for the scsi_debug and null_blk drivers only?
-> That would allow kernel developers who want to test the sub-page
-> segment support to enable this functionality without making e.g.
-> distro kernels slower.
+Hi Anjana,
 
-You'd need to have a separate sub-option for each of them, Kconfig
-style. But this also highlights the usual issue with pretending that
-Kconfig options means that this doesn't matter, because inevitably they
-end up getting enabled by default in distros anyway. And then you may as
-well not even have them...
+Thank you for the patch! Yet something to improve:
 
-Why can't we just handle this in the driver? The segment path is hard
-enough to grok in the first place, and this just makes it worse.
-Generally not a huge fan of punting this to the driver, but just maybe
-it'd make sense in this case since it's just the one. At least that
-seems a lot more palatable than the alternative.
+[auto build test ERROR on mkp-scsi/for-next]
+[also build test ERROR on next-20230120]
+[cannot apply to jejb-scsi/for-next linus/master v6.2-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Anjana-Hari/scsi-ufs-Add-hibernation-callbacks/20230120-193447
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20230120113321.30433-2-quic_ahari%40quicinc.com
+patch subject: [PATCH v3 1/1] scsi: ufs: Add hibernation callbacks
+config: arc-randconfig-r043-20230119 (https://download.01.org/0day-ci/archive/20230121/202301211209.zKDppcLI-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/239ad2244616006dd39bc9a5380108435d168a86
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Anjana-Hari/scsi-ufs-Add-hibernation-callbacks/20230120-193447
+        git checkout 239ad2244616006dd39bc9a5380108435d168a86
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/ufs/core/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/ufs/core/ufshcd.c: In function 'ufshcd_system_freeze':
+>> drivers/ufs/core/ufshcd.c:10004:15: error: implicit declaration of function 'ufshcd_system_suspend'; did you mean 'trace_ufshcd_system_suspend'? [-Werror=implicit-function-declaration]
+   10004 |         ret = ufshcd_system_suspend(dev);
+         |               ^~~~~~~~~~~~~~~~~~~~~
+         |               trace_ufshcd_system_suspend
+   drivers/ufs/core/ufshcd.c: In function 'ufshcd_system_restore':
+>> drivers/ufs/core/ufshcd.c:10017:16: error: implicit declaration of function 'ufshcd_system_resume'; did you mean 'ufshcd_system_restore'? [-Werror=implicit-function-declaration]
+   10017 |         return ufshcd_system_resume(dev);
+         |                ^~~~~~~~~~~~~~~~~~~~
+         |                ufshcd_system_restore
+   cc1: some warnings being treated as errors
+
+
+vim +10004 drivers/ufs/core/ufshcd.c
+
+  9993	
+  9994		struct ufs_hba *hba = dev_get_drvdata(dev);
+  9995		int ret = 0;
+  9996	
+  9997		/*
+  9998		 * Run time resume the controller to make sure
+  9999		 * the PM work queue threads do not try to resume
+ 10000		 * the child (scsi host), which leads to errors as
+ 10001		 * the controller is not yet resumed.
+ 10002		 */
+ 10003		pm_runtime_get_sync(hba->dev);
+ 10004		ret = ufshcd_system_suspend(dev);
+ 10005		pm_runtime_put_sync(hba->dev);
+ 10006	
+ 10007		return ret;
+ 10008	}
+ 10009	EXPORT_SYMBOL_GPL(ufshcd_system_freeze);
+ 10010	
+ 10011	int ufshcd_system_restore(struct device *dev)
+ 10012	{
+ 10013	
+ 10014		struct ufs_hba *hba = dev_get_drvdata(dev);
+ 10015	
+ 10016		hba->restore = true;
+ 10017		return ufshcd_system_resume(dev);
+ 10018	
 
 -- 
-Jens Axboe
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
