@@ -2,69 +2,126 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF76E676DFC
-	for <lists+linux-scsi@lfdr.de>; Sun, 22 Jan 2023 16:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE07A677182
+	for <lists+linux-scsi@lfdr.de>; Sun, 22 Jan 2023 19:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjAVPEJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 22 Jan 2023 10:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        id S230358AbjAVS03 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 22 Jan 2023 13:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjAVPEI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 22 Jan 2023 10:04:08 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88DB113E8
-        for <linux-scsi@vger.kernel.org>; Sun, 22 Jan 2023 07:04:07 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 207so7094243pfv.5
-        for <linux-scsi@vger.kernel.org>; Sun, 22 Jan 2023 07:04:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Blf9zcFk5P1Mbc/meUXEmRX9LDx7SbnEcdOJE5sSiao=;
-        b=oU9e1RI992ncs6PlQ/pcLmIzNbVGIbqqXqUBaFh8OmYkwO8bB5i8fOtzFiYx8fC4Lo
-         I66CDEircoXmqdb32HzA4S+1mhDMKbzyXWJphn9YcadQsmpycLIE0cVmJNzbnutQsPX9
-         WSgioMKRYQc+Cl3qD3RxTR7IQ4eW+5E021VfoA9x/WW295oWv9ipKmyvLlaJpPT39Igu
-         lJj29qQbckkxxH5tMqdcViVnj2grrGtxV4VkcthAu1eibL3FwZKFhX0/R12MghymCBDW
-         BMtUTWAnKfdC52os0SAJuaoh0eHWIIwZK1cdZiuGgPcPaRQyT+76h7Etkf2HIa90jy0V
-         Hlhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Blf9zcFk5P1Mbc/meUXEmRX9LDx7SbnEcdOJE5sSiao=;
-        b=2i7ICnQhgKzBLbOFL4y9ArFPJ59kU0eTyATw1FVeMMiteU5J0bL74aszUBXDJsll7j
-         jtKsD2qfo18p0R6MeqB+PfVpTHrBLER56u9NSWO/RFP9/csatHp69EV9zWtL3ED235y7
-         oDPf3thfRUwlWBh+ardfWzjwGOVXyitrFmiftfLSJ2nu2DpXOYhCsNYjy6kvofDDRGSB
-         BwWJ8d4yZ4QCGfgLlX3a/rnXGBY7OinEwhQ4uAIAZpnnbL6OCE8+NoCXVEiu+JoTHeoh
-         0tRAhn0NgOpad0jvSerLg/FTDF1I8di1iUtTOIU/Kl9DXka4ZG5Uh7KRK6i4jiqidmpR
-         wUpQ==
-X-Gm-Message-State: AFqh2kp3SN5gNF09gvTzZjGUPPi2nWNhzc2ltL6ppBAVZ2uu8/JOJZm6
-        26wsRjvpxEKS598HThWnqj+n9gID38wWlnx29+Y=
-X-Google-Smtp-Source: AMrXdXuZtANFmyGozFrwRa0pS7lGbzKarsHlaucJhegUij8hB/Dx7OK54DgwO+uvLa2Qa/V64oFos4UAPhyKAJfh68g=
-X-Received: by 2002:aa7:8c18:0:b0:58b:c751:ff5a with SMTP id
- c24-20020aa78c18000000b0058bc751ff5amr2353537pfd.67.1674399847376; Sun, 22
- Jan 2023 07:04:07 -0800 (PST)
+        with ESMTP id S231502AbjAVS0Z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 22 Jan 2023 13:26:25 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FBF1F90E;
+        Sun, 22 Jan 2023 10:26:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1674411971; bh=sniCASOe1ODyzMu7csbaPtyDibtigv6Yvb8lsLBEXvs=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=jKMsRSjmRZiVW/Z0zbv04IF/CGMJhUwKNNjzEb7MEe+qrHH642H3qHT/9noHqjCEL
+         KO072/MUreEJn3rEVzSVPMePRKErdbJMnLY6gU8MaLwFZwLLX882Vd1nFwlFpJi1bB
+         yU9wMcQVebF4+aVU1KVLKFAuY7jU29EYjNMRb1nE=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sun, 22 Jan 2023 19:26:11 +0100 (CET)
+X-EA-Auth: ckDisbBlfERhQdrSU2NzQxmYs3jWb2lFzVG5PGsvP97OQbJtxsIRZldBJ9Bq63tv8IEMFRV8UG/1fD8KXrVOxypOJwJmInsF
+Date:   Sun, 22 Jan 2023 23:56:07 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Satish Kharat <satishkh@cisco.com>,
+        Sesidhar Baddela <sebaddel@cisco.com>,
+        Karan Tilak Kumar <kartilak@cisco.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH] scsi: fnic: Use a variable for repeated mem_size
+ computation
+Message-ID: <Y81/v19WDKVIX7Bs@ubun2204.myguest.virtualbox.org>
+References: <Y77/V6Zk6BCisOMY@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6a20:4425:b0:b6:78d0:7ba4 with HTTP; Sun, 22 Jan 2023
- 07:04:06 -0800 (PST)
-Reply-To: globalservices322@gmail.com
-From:   Surajpal Surajpal <surajpals110@gmail.com>
-Date:   Sun, 22 Jan 2023 07:04:06 -0800
-Message-ID: <CAG+Qdqqt9oMAtfEoxhdjSK2Yn17G6z+VvwWGU+NLx2u3Wgc6=A@mail.gmail.com>
-Subject: Financial
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y77/V6Zk6BCisOMY@ubun2204.myguest.virtualbox.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-DO YOU NEED FINANCIAL HELP? IF YES. EMAIL US
+On Wed, Jan 11, 2023 at 11:56:31PM +0530, Deepak R Varma wrote:
+> Use a variable to upfront compute memory size to be allocated,
+> instead of repeatedly computing it at different instructions.
+> The reduced instruction length also allows to tidy up the code.
+> Issue identified using the array_size_dup Coccinelle semantic
+> patch.
+> 
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+
+Hello,
+Any feedback/review comments on this patch proposal please?
+
+Thank you,
+./drv
+
+>  drivers/scsi/fnic/fnic_trace.c | 19 +++++++------------
+>  1 file changed, 7 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/scsi/fnic/fnic_trace.c b/drivers/scsi/fnic/fnic_trace.c
+> index e03967463561..7b8ef74fc060 100644
+> --- a/drivers/scsi/fnic/fnic_trace.c
+> +++ b/drivers/scsi/fnic/fnic_trace.c
+> @@ -544,12 +544,10 @@ int fnic_fc_trace_init(void)
+>  	unsigned long fc_trace_buf_head;
+>  	int err = 0;
+>  	int i;
+> +	size_t mem_sz = array_size(PAGE_SIZE, fnic_fc_trace_max_pages);
+>  
+> -	fc_trace_max_entries = (fnic_fc_trace_max_pages * PAGE_SIZE)/
+> -				FC_TRC_SIZE_BYTES;
+> -	fnic_fc_ctlr_trace_buf_p =
+> -		(unsigned long)vmalloc(array_size(PAGE_SIZE,
+> -						  fnic_fc_trace_max_pages));
+> +	fc_trace_max_entries = mem_sz / FC_TRC_SIZE_BYTES;
+> +	fnic_fc_ctlr_trace_buf_p = (unsigned long)vmalloc(mem_sz);
+>  	if (!fnic_fc_ctlr_trace_buf_p) {
+>  		pr_err("fnic: Failed to allocate memory for "
+>  		       "FC Control Trace Buf\n");
+> @@ -557,13 +555,11 @@ int fnic_fc_trace_init(void)
+>  		goto err_fnic_fc_ctlr_trace_buf_init;
+>  	}
+>  
+> -	memset((void *)fnic_fc_ctlr_trace_buf_p, 0,
+> -			fnic_fc_trace_max_pages * PAGE_SIZE);
+> +	memset((void *)fnic_fc_ctlr_trace_buf_p, 0, mem_sz);
+>  
+>  	/* Allocate memory for page offset */
+> -	fc_trace_entries.page_offset =
+> -		vmalloc(array_size(fc_trace_max_entries,
+> -				   sizeof(unsigned long)));
+> +	mem_sz = array_size(fc_trace_max_entries, sizeof(unsigned long));
+> +	fc_trace_entries.page_offset = vmalloc(mem_sz);
+>  	if (!fc_trace_entries.page_offset) {
+>  		pr_err("fnic:Failed to allocate memory for page_offset\n");
+>  		if (fnic_fc_ctlr_trace_buf_p) {
+> @@ -574,8 +570,7 @@ int fnic_fc_trace_init(void)
+>  		err = -ENOMEM;
+>  		goto err_fnic_fc_ctlr_trace_buf_init;
+>  	}
+> -	memset((void *)fc_trace_entries.page_offset, 0,
+> -	       (fc_trace_max_entries * sizeof(unsigned long)));
+> +	memset((void *)fc_trace_entries.page_offset, 0, mem_sz);
+>  
+>  	fc_trace_entries.rd_idx = fc_trace_entries.wr_idx = 0;
+>  	fc_trace_buf_head = fnic_fc_ctlr_trace_buf_p;
+> -- 
+> 2.34.1
+> 
+> 
+> 
+
+
