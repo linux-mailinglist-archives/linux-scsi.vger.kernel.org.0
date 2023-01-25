@@ -2,304 +2,171 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB2967B96E
-	for <lists+linux-scsi@lfdr.de>; Wed, 25 Jan 2023 19:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C201A67BAA2
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Jan 2023 20:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235442AbjAYSh6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 25 Jan 2023 13:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S236115AbjAYTWN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 25 Jan 2023 14:22:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjAYSh5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 Jan 2023 13:37:57 -0500
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25AD113E8;
-        Wed, 25 Jan 2023 10:37:55 -0800 (PST)
-Received: by mail-pj1-f49.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso2983497pjg.2;
-        Wed, 25 Jan 2023 10:37:55 -0800 (PST)
+        with ESMTP id S235844AbjAYTWL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 Jan 2023 14:22:11 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40AF59E41
+        for <linux-scsi@vger.kernel.org>; Wed, 25 Jan 2023 11:22:08 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id p141so21563569ybg.12
+        for <linux-scsi@vger.kernel.org>; Wed, 25 Jan 2023 11:22:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=azRxZ4iz/UmvW0JqPrqtZcKNmaFt9MhDUKzgc4KSKbs=;
+        b=idbJO946IIJ5xclJl8K3ScrKphDS9TF1tg1AgsB8MPco32Ta3+qR61NnmqeUtsnx6v
+         goCUeETP5lzAzmASwAR43MDdzy2mxaLRi4K6yZE3Q+T5C1FUbuWCmQDSDtqKn5s2e6iw
+         g3L5+Ey8VBu5ZDVtB0a1Axssd66xmU+yYweeF+hE6jQwYilC1xMJq5jCj+NjIEVUsfL4
+         tw7nY9DM/DzPYd8vrkO+1JZY6FVSYBMjhRJz+WIxF8k5j1BI+Qpdb88Is7APtmnyodC7
+         tcl2VYHmnzhTEoT5QVoxpB++zHDpcXCuz10aLB8wrCQNw685txpV1MvZDG3GANSg7b1j
+         9Xwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9kuEv51EG0zNMhrIvpDUzfQvpav0zuBUyyhhMrhPuDU=;
-        b=YHbtP6IQ4xnXMVZvdnC+iBxvWJDgTLxqjIPfg2L/ezur/RikdA8uqjtkXhlvMKr3oy
-         fwwhamILbA7/qty19OxzTTCLbBIJpPOFnvxcz3sXD6PEabqcXP6JhZc/j2T6oPRKNvVl
-         wSqepjN0pCszKI8WZxN/KFF3i2bWklxO/zBHN7gyoLGdsrO9Gr9pYsOeEj1gUFktMMY1
-         zFQDWbm5QYc0/yFTDeQuqUOMqy55NWvP53AuxupVSEu4aG4gv57xO3Ywm87Dzo/yhUFi
-         bgDRm7B2s50reVZStoEGJ7PKMyzaQQCTyPqiK/1fvQxmTtMp1iPZ2Z7r2ok0WiWWPC+T
-         59nA==
-X-Gm-Message-State: AO0yUKWFTENIzV2L78/isS1gCaFcj8i+4IIIVH4WdGCXefXgg62I/5cC
-        lz6P8LEcPP5A4kCmJrmNaaE=
-X-Google-Smtp-Source: AK7set/eyzU5R1T8RxHzrGu8mMDZMxDBM+2Wemi9pKnGYeykwIi4w4++/Z8BzcQHI35taNc4h0qMxw==
-X-Received: by 2002:a17:90b:3e8e:b0:22c:1613:1656 with SMTP id rj14-20020a17090b3e8e00b0022c16131656mr976291pjb.26.1674671874852;
-        Wed, 25 Jan 2023 10:37:54 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:7512:ed47:db25:4294? ([2620:15c:211:201:7512:ed47:db25:4294])
-        by smtp.gmail.com with ESMTPSA id j3-20020a17090a3e0300b002263faf8431sm1986677pjc.17.2023.01.25.10.37.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 10:37:54 -0800 (PST)
-Message-ID: <e8324901-7c18-153f-b47f-112a394832bd@acm.org>
-Date:   Wed, 25 Jan 2023 10:37:52 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=azRxZ4iz/UmvW0JqPrqtZcKNmaFt9MhDUKzgc4KSKbs=;
+        b=l+t0BQss6l13HZtcTHB2qC1XsNeBbGDHJDBved2MfPQP5N5kVM8vb3aUBZ5BiXTLO+
+         2KnkNbYSMzJWS5tK5ymllkTc2siQufuGJJV13Lg0fx9X52NhHnnZCncMptt4ZlISuzrh
+         ZUGFM35pojhZI0njFL78zP4qld84bsI1CaeaJ1frGzR0t6bCOQWehEB1G9UfvfdNeX7V
+         p3L7vc5dOA0hCw72w++LajLNDHygXGK6mhyumz3gALxFe1fk5zhUT5o/qgx5/tX1aCP+
+         xJqhre/gPJHfN7lpcRUU2HlblPsUp9Ida9G+DNqbroQQdkPYVlDFRoCMWitcz0GnZ/Oy
+         nADw==
+X-Gm-Message-State: AO0yUKVDeqbwkw9SfHISZx2mX7EQ4SdvbIe9bzEWeAkwS430PWIZJVwp
+        eHx6ks+Ur477UvQEHcoolysHa2/YekT8GTk0/zBdRA==
+X-Google-Smtp-Source: AK7set9Keebho/efVX9+GO9rxFk2PCEOZWbQBvt6Ld/Tpsz3uuvCSMXu6oGPdxC/ITtQ87qnzhMkMAEzeywlAhveKx4=
+X-Received: by 2002:a25:c247:0:b0:80b:6201:bee7 with SMTP id
+ s68-20020a25c247000000b0080b6201bee7mr946541ybf.340.1674674527537; Wed, 25
+ Jan 2023 11:22:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3 01/18] block: introduce duration-limits priority class
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-block@vger.kernel.org
-References: <20230124190308.127318-1-niklas.cassel@wdc.com>
- <20230124190308.127318-2-niklas.cassel@wdc.com>
- <bd0ce7ad-cf9e-a647-9b1e-cb36e7bbe30f@acm.org>
- <731aeacc-74c0-396b-efa0-f9ae950566d8@opensource.wdc.com>
- <873e0213-94b5-0d81-a8aa-4671241e198c@acm.org>
- <4c345d8b-7efa-85c9-fe1c-1124ea5d9de6@opensource.wdc.com>
- <5066441f-e265-ed64-fa39-f77a931ab998@acm.org>
- <275993f1-f9e8-e7a8-e901-2f7d3a6bb501@opensource.wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <275993f1-f9e8-e7a8-e901-2f7d3a6bb501@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125083851.27759-1-surenb@google.com> <20230125083851.27759-2-surenb@google.com>
+ <Y9Dx0cPXF2yoLwww@hirez.programming.kicks-ass.net> <CAJuCfpEcVCZaCGzc-Wim25eaV5e6YG1YJAAdKwZ6JHViB0z8aw@mail.gmail.com>
+ <Y9F28J9njAtwifuL@casper.infradead.org>
+In-Reply-To: <Y9F28J9njAtwifuL@casper.infradead.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 25 Jan 2023 11:21:56 -0800
+Message-ID: <CAJuCfpHO7g-5GZep0e7r=dFTBhVHpN3R_pHMGOqetgrKyYzMFQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] mm: introduce vma->vm_flags modifier functions
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, akpm@linux-foundation.org,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, liam.howlett@oracle.com, ldufour@linux.ibm.com,
+        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        chenhuacai@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        qianweili@huawei.com, wangzhou1@hisilicon.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, l.stach@pengutronix.de,
+        krzysztof.kozlowski@linaro.org, patrik.r.jakobsson@gmail.com,
+        matthias.bgg@gmail.com, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        tomba@kernel.org, hjc@rock-chips.com, heiko@sntech.de,
+        ray.huang@amd.com, kraxel@redhat.com, sre@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        dimitri.sivanich@hpe.com, zhangfei.gao@linaro.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        dgilbert@interlog.com, hdegoede@redhat.com, mst@redhat.com,
+        jasowang@redhat.com, alex.williamson@redhat.com, deller@gmx.de,
+        jayalk@intworks.biz, viro@zeniv.linux.org.uk, nico@fluxnic.net,
+        xiang@kernel.org, chao@kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, miklos@szeredi.hu,
+        mike.kravetz@oracle.com, muchun.song@linux.dev, bhe@redhat.com,
+        andrii@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, perex@perex.cz, tiwai@suse.com,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-graphics-maintainer@vmware.com,
+        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org,
+        loongarch@lists.linux.dev, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, nvdimm@lists.linux.dev,
+        dmaengine@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-accelerators@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        devel@lists.orangefs.org, kexec@lists.infradead.org,
+        linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
+        selinux@vger.kernel.org, alsa-devel@alsa-project.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 1/24/23 17:19, Damien Le Moal wrote:
-> On 1/25/23 09:05, Bart Van Assche wrote:
->> Thanks again for the detailed reply. Your replies are very informative
->> and help me understand the context better.
->>
->> However, I'm still less than enthusiast about the introduction of the
->> I/O priority class IOPRIO_CLASS_DL. To me command duration limits (CDL)
->> is a mechanism that is supported by one storage standard (SCSI) and of
-> 
-> And ATA (ACS) too. Not just SCSI. This is actually an improvement over IO
-> priority (command priority) that is supported only by ATA NCQ and does not
-> exist with SCSI/SBC.
-> 
->> which it is not sure that it will be integrated in other storage
->> standards (NVMe, ...). Isn't the purpose of the block layer to provide
->> an interface that is independent of the specifics of a single storage
->> standard? This is why I'm in favor of letting the ATA core translate one
->> of the existing I/O priority classes into a CDL instead of introducing a
->> new I/O priority class (IOPRIO_CLASS_DL) in the block layer.
-> 
-> We discussed CDL with Hannes in the context of NVMe over fabrics. Their
-> may be interesting extensions to consider for NVMe in that context (the
-> value for local PCI attached NVMe drive is more limited at best).
-> 
-> I would argue that IO priority is the same: that is not supported by all
-> device classes either, and for those that support it, the semantic is not
-> identical (ATA vs NVMe). Yet, we have the RT class that maps to high
-> priority for ATA, and nothing else as far as I know.
-> 
-> CDL at least covers SCSI *and* ATA, and as mentioned above, could be used
-> by NVMe-of host drivers to do fancy link selection for a multipath setup
-> based on the link speed for instance.
-> 
-> We could overload the RT class with a mapping to CDL feature on scsi and
-> ata, but I think this is more confusing/messy than a separate class as we
-> implemented.
+On Wed, Jan 25, 2023 at 10:37 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Wed, Jan 25, 2023 at 08:49:50AM -0800, Suren Baghdasaryan wrote:
+> > On Wed, Jan 25, 2023 at 1:10 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> > > > +     /*
+> > > > +      * Flags, see mm.h.
+> > > > +      * WARNING! Do not modify directly.
+> > > > +      * Use {init|reset|set|clear|mod}_vm_flags() functions instead.
+> > > > +      */
+> > > > +     unsigned long vm_flags;
+> > >
+> > > We have __private and ACCESS_PRIVATE() to help with enforcing this.
+> >
+> > Thanks for pointing this out, Peter! I guess for that I'll need to
+> > convert all read accesses and provide get_vm_flags() too? That will
+> > cause some additional churt (a quick search shows 801 hits over 248
+> > files) but maybe it's worth it? I think Michal suggested that too in
+> > another patch. Should I do that while we are at it?
+>
+> Here's a trick I saw somewhere in the VFS:
+>
+>         union {
+>                 const vm_flags_t vm_flags;
+>                 vm_flags_t __private __vm_flags;
+>         };
+>
+> Now it can be read by anybody but written only by those using
+> ACCESS_PRIVATE.
 
-Hi Damien,
-
-The more I think about this, the more I'm convinced that it would be wrong
-to introduce IOPRIO_CLASS_DL. Datacenters will have a mix of drives that
-support CDL and drives that do not support CDL. It seems wrong to me to
-make user space software responsible for figuring out whether or not the
-drive supports CDL before it can be decided which I/O priority class should
-be used. This is something the kernel should do instead of user space
-software.
-
-If we would ask Android storage vendors to implement CDL then IOPRIO_CLASS_DL
-would cause trouble too. Android has support since considerable time to give
-the foreground application a higher I/O priority than background applications.
-The cgroup settings for foreground and background applications come from the
-task_profiles.json file (see also
-https://android.googlesource.com/platform/system/core/+/master/libprocessgroup/profiles/task_profiles.json).
-As one can see all the settings in that file are independent of the features
-of the storage device. Introducing IOPRIO_CLASS_DL in the kernel and using it
-in task_profiles.json would imply that the storage device type has to be
-determined before it can be decided whether or not IOPRIO_CLASS_DL can be used.
-This seems wrong to me.
-
-I downloaded the patch series in its entirety and applied it on a local kernel
-branch. I verified which changes would be needed to replace IOPRIO_CLASS_DL
-with IOPRIO_CLASS_RT. Can you help me with verifying the patch below?
-
-Regarding the BFQ changes in the patch below, is an I/O scheduler useful at all
-if CDL is used since a comment in the BFQ driver says that the disk should do
-the scheduling instead of BFQ if CDL is used?
-
-Thanks,
-
-Bart.
-
-
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 7add9346c585..815b884d6c5a 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -5545,14 +5545,6 @@ bfq_set_next_ioprio_data(struct bfq_queue *bfqq, struct bfq_io_cq *bic)
-  		bfqq->new_ioprio_class = IOPRIO_CLASS_IDLE;
-  		bfqq->new_ioprio = 7;
-  		break;
--	case IOPRIO_CLASS_DL:
--		/*
--		 * For the duration-limits class, we want the disk to do the
--		 * scheduling. So map all levels to the highest RT level.
--		 */
--		bfqq->new_ioprio = 0;
--		bfqq->new_ioprio_class = IOPRIO_CLASS_RT;
--		break;
-  	}
-
-  	if (bfqq->new_ioprio >= IOPRIO_NR_LEVELS) {
-@@ -5681,8 +5673,6 @@ static struct bfq_queue **bfq_async_queue_prio(struct bfq_data *bfqd,
-  		return &bfqg->async_bfqq[1][ioprio][act_idx];
-  	case IOPRIO_CLASS_IDLE:
-  		return &bfqg->async_idle_bfqq[act_idx];
--	case IOPRIO_CLASS_DL:
--		return &bfqg->async_bfqq[0][0][act_idx];
-  	default:
-  		return NULL;
-  	}
-diff --git a/block/blk-ioprio.c b/block/blk-ioprio.c
-index dfb5c3f447f4..8bb6b8eba4ce 100644
---- a/block/blk-ioprio.c
-+++ b/block/blk-ioprio.c
-@@ -27,7 +27,6 @@
-   * @POLICY_RESTRICT_TO_BE: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_RT into
-   *		IOPRIO_CLASS_BE.
-   * @POLICY_ALL_TO_IDLE: change the I/O priority class into IOPRIO_CLASS_IDLE.
-- * @POLICY_ALL_TO_DL: change the I/O priority class into IOPRIO_CLASS_DL.
-   *
-   * See also <linux/ioprio.h>.
-   */
-@@ -36,7 +35,6 @@ enum prio_policy {
-  	POLICY_NONE_TO_RT	= 1,
-  	POLICY_RESTRICT_TO_BE	= 2,
-  	POLICY_ALL_TO_IDLE	= 3,
--	POLICY_ALL_TO_DL	= 4,
-  };
-
-  static const char *policy_name[] = {
-@@ -44,7 +42,6 @@ static const char *policy_name[] = {
-  	[POLICY_NONE_TO_RT]	= "none-to-rt",
-  	[POLICY_RESTRICT_TO_BE]	= "restrict-to-be",
-  	[POLICY_ALL_TO_IDLE]	= "idle",
--	[POLICY_ALL_TO_DL]	= "duration-limits",
-  };
-
-  static struct blkcg_policy ioprio_policy;
-diff --git a/block/ioprio.c b/block/ioprio.c
-index 1b3a9da82597..32a456b45804 100644
---- a/block/ioprio.c
-+++ b/block/ioprio.c
-@@ -37,7 +37,6 @@ int ioprio_check_cap(int ioprio)
-
-  	switch (class) {
-  		case IOPRIO_CLASS_RT:
--		case IOPRIO_CLASS_DL:
-  			/*
-  			 * Originally this only checked for CAP_SYS_ADMIN,
-  			 * which was implicitly allowed for pid 0 by security
-@@ -48,7 +47,7 @@ int ioprio_check_cap(int ioprio)
-  			if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_NICE))
-  				return -EPERM;
-  			fallthrough;
--			/* RT and DL have prio field too */
-+			/* rt has prio field too */
-  		case IOPRIO_CLASS_BE:
-  			if (data >= IOPRIO_NR_LEVELS || data < 0)
-  				return -EINVAL;
-diff --git a/block/mq-deadline.c b/block/mq-deadline.c
-index 526d0ea4dbf9..f10c2a0d18d4 100644
---- a/block/mq-deadline.c
-+++ b/block/mq-deadline.c
-@@ -113,7 +113,6 @@ static const enum dd_prio ioprio_class_to_prio[] = {
-  	[IOPRIO_CLASS_RT]	= DD_RT_PRIO,
-  	[IOPRIO_CLASS_BE]	= DD_BE_PRIO,
-  	[IOPRIO_CLASS_IDLE]	= DD_IDLE_PRIO,
--	[IOPRIO_CLASS_DL]	= DD_RT_PRIO,
-  };
-
-  static inline struct rb_root *
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index b4761c3c4b91..3065b632e6ae 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -673,7 +673,7 @@ static inline void ata_set_tf_cdl(struct ata_queued_cmd *qc, int ioprio)
-  	struct ata_taskfile *tf = &qc->tf;
-  	int cdl;
-
--	if (IOPRIO_PRIO_CLASS(ioprio) != IOPRIO_CLASS_DL)
-+	if (IOPRIO_PRIO_CLASS(ioprio) != IOPRIO_CLASS_RT)
-  		return;
-
-  	cdl = IOPRIO_PRIO_DATA(ioprio) & 0x07;
-diff --git a/drivers/scsi/sd_cdl.c b/drivers/scsi/sd_cdl.c
-index 59d02dbb5ea1..c5286f5ddae4 100644
---- a/drivers/scsi/sd_cdl.c
-+++ b/drivers/scsi/sd_cdl.c
-@@ -880,10 +880,10 @@ int sd_cdl_dld(struct scsi_disk *sdkp, struct scsi_cmnd *scmd)
-  	unsigned int dld;
-
-  	/*
--	 * Use "no limit" if the request ioprio class is not IOPRIO_CLASS_DL
-+	 * Use "no limit" if the request ioprio class is not IOPRIO_CLASS_RT
-  	 * or if the user specified an invalid CDL descriptor index.
-  	 */
--	if (IOPRIO_PRIO_CLASS(ioprio) != IOPRIO_CLASS_DL)
-+	if (IOPRIO_PRIO_CLASS(ioprio) != IOPRIO_CLASS_RT)
-  		return 0;
-
-  	dld = IOPRIO_PRIO_DATA(ioprio);
-diff --git a/include/linux/ioprio.h b/include/linux/ioprio.h
-index 2f3fc2fbd668..7578d4f6a969 100644
---- a/include/linux/ioprio.h
-+++ b/include/linux/ioprio.h
-@@ -20,7 +20,7 @@ static inline bool ioprio_valid(unsigned short ioprio)
-  {
-  	unsigned short class = IOPRIO_PRIO_CLASS(ioprio);
-
--	return class > IOPRIO_CLASS_NONE && class <= IOPRIO_CLASS_DL;
-+	return class > IOPRIO_CLASS_NONE && class <= IOPRIO_CLASS_IDLE;
-  }
-
-  /*
-diff --git a/include/uapi/linux/ioprio.h b/include/uapi/linux/ioprio.h
-index 15908b9e9d8c..f70f2596a6bf 100644
---- a/include/uapi/linux/ioprio.h
-+++ b/include/uapi/linux/ioprio.h
-@@ -29,7 +29,6 @@ enum {
-  	IOPRIO_CLASS_RT,
-  	IOPRIO_CLASS_BE,
-  	IOPRIO_CLASS_IDLE,
--	IOPRIO_CLASS_DL,
-  };
-
-  /*
-@@ -38,12 +37,6 @@ enum {
-  #define IOPRIO_NR_LEVELS	8
-  #define IOPRIO_BE_NR		IOPRIO_NR_LEVELS
-
--/*
-- * The Duration limits class allows 8 levels: level 0 for "no limit" and levels
-- * 1 to 7, each corresponding to a read or write limit descriptor.
-- */
--#define IOPRIO_DL_NR_LEVELS	8
--
-  enum {
-  	IOPRIO_WHO_PROCESS = 1,
-  	IOPRIO_WHO_PGRP,
-
+Huh, this is quite nice! I think it does not save us from the cases
+when vma->vm_flags is passed by a reference and modified indirectly,
+like in ksm_madvise()? Though maybe such usecases are so rare (I found
+only 2 cases) that we can ignore this?
