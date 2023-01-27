@@ -2,96 +2,159 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C65267DCA5
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Jan 2023 04:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AACA167DD52
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Jan 2023 07:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233369AbjA0DXe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Jan 2023 22:23:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
+        id S230163AbjA0GCk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Jan 2023 01:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233118AbjA0DX3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Jan 2023 22:23:29 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2675728C3;
-        Thu, 26 Jan 2023 19:23:21 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30R0O4B3019439;
-        Fri, 27 Jan 2023 03:23:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=APQiqFhcmLn0pA4kVPJyftYdBrW0Ss0XbZAnK3xmEIU=;
- b=ytZ258WvrIJ6CqRt/zmNgiwW6Si5uXaQEMysOG6ZLHFHVJTiTyompdiKrEVtMEX3lAZf
- m9F6b3drFYFZyyVVCbzJRXMnppLjCA8f7QsHbqmYewuBP1LFFnvK3+kcBhx6R7ZesMFW
- G9WZwqht8hgkrODbSvVyLbsOG0hoaPZ21NZc5HLpUaPd3PJfDxt9AIpY0/7MIUl8+sJV
- RVi45FEQgE6bDOZ4bLyrv5rLjss6b9b+EO+UOmFQ6L1L25FespGQ8qjfgJb7UR/Ex58z
- g+W8ILHQrJmp1BcBeUhZMT59uGgI4H86vsWiSajwWu3S6gwjO/xniDbxW4mQAl3jR5Nz NQ== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3n88ku3sy1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 27 Jan 2023 03:23:16 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30QNlVcv007006;
-        Fri, 27 Jan 2023 03:23:16 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3n86g8nxsp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 27 Jan 2023 03:23:15 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30R3N7es036358;
-        Fri, 27 Jan 2023 03:23:15 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3n86g8nxpp-8;
-        Fri, 27 Jan 2023 03:23:15 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     njavali@marvell.com, jejb@linux.ibm.com, qutran@marvell.com,
-        Tom Rix <trix@redhat.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: qla2xxx: Change qla_trim_buf,__qla_adjust_buf functions to static
-Date:   Thu, 26 Jan 2023 22:23:01 -0500
-Message-Id: <167478863297.3972592.6357225235775673779.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230114013724.3943580-1-trix@redhat.com>
-References: <20230114013724.3943580-1-trix@redhat.com>
+        with ESMTP id S229510AbjA0GCk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Jan 2023 01:02:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D1811D;
+        Thu, 26 Jan 2023 22:02:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D944B81F4E;
+        Fri, 27 Jan 2023 06:02:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADCEC433EF;
+        Fri, 27 Jan 2023 06:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674799356;
+        bh=EDMyNIrw+oLHjunmlCJH3e/RuFV7JZ9L/1q+curyUOA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OakVE3E8KUnZEosBNRM0JZsq4SYmFIG3vYuWKodbeHeBdB9tWgxfdp3WGURwoH3uq
+         5znDLUwDNQWyePbZB4GJHnuonD8xIlrjQpF83UrpSTKPzVODkFuEmgYFt+JsQmfIYq
+         4Zu19+bMQBVnFT37nl0hsJWxwLUEA9uayOUzFmchLXOmhQbuDslv/KRjSLWaAxX2Lf
+         6JoGtg/t3jq+V7Y5Qj33s7b/xLiDdtnu3zh3sIxjfmdi0iIn4HqmjERFyS6iIF5yVK
+         2fI6Gptn+4+6yTjXtHEHrhOuN/deUQg0VscsuA/QVtR9Zk7HRRJcKgCh++eEZTyPXC
+         1X/TTG6DG4JvQ==
+Date:   Fri, 27 Jan 2023 11:32:21 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Can Guo <quic_cang@quicinc.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] scsi: ufs: qcom: fix platform_msi_domain_free_irqs()
+ reference
+Message-ID: <20230127060221.GB7809@thinkpad>
+References: <20230126211831.2274211-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-26_09,2023-01-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- bulkscore=0 mlxscore=0 mlxlogscore=931 adultscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301270029
-X-Proofpoint-GUID: GMC2wvpdUZj6FH-csm-4OaUmSaw6JGYn
-X-Proofpoint-ORIG-GUID: GMC2wvpdUZj6FH-csm-4OaUmSaw6JGYn
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230126211831.2274211-1-arnd@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 13 Jan 2023 20:37:24 -0500, Tom Rix wrote:
-
-> Smatch reports
-> drivers/scsi/qla2xxx/qla_mid.c:1189:6: warning: symbol 'qla_trim_buf' was not declared. Should it be static?
-> drivers/scsi/qla2xxx/qla_mid.c:1221:6: warning: symbol '__qla_adjust_buf' was not declared. Should it be static?
+On Thu, Jan 26, 2023 at 10:17:31PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> These functions are only used in qla_mid.c, so they should be static.
+> The newly added MSI support is mostly hidden inside of an #ifdef,
+> except for one line that now causes a build failure when MSI
+> is disabled:
 > 
+> drivers/ufs/host/ufs-qcom.c: In function 'ufs_qcom_remove':
+> drivers/ufs/host/ufs-qcom.c:1698:9: error: implicit declaration of function 'platform_msi_domain_free_irqs' [-Werror=i]
+>  1698 |         platform_msi_domain_free_irqs(hba->dev);
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> [...]
+> Above that, the symbol that guards the other call was recently
+> removed, so that is all dead code at the moment.
+> 
+> Remove the incorrect #ifdef and instead of a Kconfig dependency
+> to only allow building the driver when CONFIG_GENERIC_MSI_IRQ
+> is enabled. This symbol is always present when PCI_MSI
+> or ARM_GIC_V3_ITS are enabled, both of which should be present
+> on kernels that can run on Qualcomm SoCs.
+> 
+> The 'select RESET_CONTROLLER' in combination with this dependency
+> unfortunately causes a dependency loop and this is a user-visible
+> symbol, so it's better to change both to 'depends on'.
+> 
+> Fixes: 519b6274a777 ("scsi: ufs: qcom: Add MCQ ESI config vendor specific ops")
+> Fixes: 13e7accb81d6 ("genirq: Get rid of GENERIC_MSI_IRQ_DOMAIN")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Applied to 6.3/scsi-queue, thanks!
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-[1/1] scsi: qla2xxx: Change qla_trim_buf,__qla_adjust_buf functions to static
-      https://git.kernel.org/mkp/scsi/c/54c51253b3d5
+> ---
+> Not sure if this is the best solution, both the GENERIC_MSI_IRQ
+> dependencies and the RESET_CONTROLLER dependencies are a bit
+> inconsistent already. Feel free to pick another approach that
+> addresses both of the bugs I found.
+
+I think your proposed solution works best at the moment.
+
+Thanks,
+Mani
+
+> ---
+>  drivers/ufs/host/Kconfig    | 3 ++-
+>  drivers/ufs/host/ufs-qcom.c | 8 --------
+>  2 files changed, 2 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/ufs/host/Kconfig b/drivers/ufs/host/Kconfig
+> index 139064e70a34..663881437921 100644
+> --- a/drivers/ufs/host/Kconfig
+> +++ b/drivers/ufs/host/Kconfig
+> @@ -57,8 +57,9 @@ config SCSI_UFS_DWC_TC_PLATFORM
+>  config SCSI_UFS_QCOM
+>  	tristate "QCOM specific hooks to UFS controller platform driver"
+>  	depends on SCSI_UFSHCD_PLATFORM && ARCH_QCOM
+> +	depends on GENERIC_MSI_IRQ
+> +	depends on RESET_CONTROLLER
+>  	select QCOM_SCM if SCSI_UFS_CRYPTO
+> -	select RESET_CONTROLLER
+>  	help
+>  	  This selects the QCOM specific additions to UFSHCD platform driver.
+>  	  UFS host on QCOM needs some vendor specific configuration before
+> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+> index 681da3ea7154..eb66b5f6cf19 100644
+> --- a/drivers/ufs/host/ufs-qcom.c
+> +++ b/drivers/ufs/host/ufs-qcom.c
+> @@ -1538,7 +1538,6 @@ static int ufs_qcom_get_outstanding_cqs(struct ufs_hba *hba,
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
+>  static void ufs_qcom_write_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
+>  {
+>  	struct device *dev = msi_desc_to_dev(desc);
+> @@ -1626,13 +1625,6 @@ static int ufs_qcom_config_esi(struct ufs_hba *hba)
+>  	return ret;
+>  }
+>  
+> -#else
+> -static int ufs_qcom_config_esi(struct ufs_hba *hba)
+> -{
+> -	return -EOPNOTSUPP;
+> -}
+> -#endif
+> -
+>  /*
+>   * struct ufs_hba_qcom_vops - UFS QCOM specific variant operations
+>   *
+> -- 
+> 2.39.0
+> 
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+மணிவண்ணன் சதாசிவம்
