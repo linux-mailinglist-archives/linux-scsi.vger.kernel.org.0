@@ -2,98 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F66E67FD3C
-	for <lists+linux-scsi@lfdr.de>; Sun, 29 Jan 2023 07:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E946C67FD29
+	for <lists+linux-scsi@lfdr.de>; Sun, 29 Jan 2023 07:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjA2G7v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 29 Jan 2023 01:59:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S231524AbjA2GqO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 29 Jan 2023 01:46:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjA2G7u (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 Jan 2023 01:59:50 -0500
-X-Greylist: delayed 2195 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 28 Jan 2023 22:59:50 PST
-Received: from host.studiog.us (unknown [45.33.198.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F55012F3F
-        for <linux-scsi@vger.kernel.org>; Sat, 28 Jan 2023 22:59:50 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by host.studiog.us (Postfix) with ESMTP id 4CD4D46444;
-        Sun, 29 Jan 2023 06:20:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ascabi.org; h=
-        reply-to:date:date:from:from:subject:subject:content-description
-        :content-transfer-encoding:mime-version:content-type
-        :content-type; s=default; t=1674973244; x=1676787645; bh=CVtESjU
-        Kvnafk3T2GN6YxwR6+w/iBU8r/gqzE7wU7BE=; b=O562IIrHaCmL+ek2JYpmcT0
-        p7g4Oqx5EDrsCQe8pLzsoYSzTC4+H5U8iNjixUyBjMb2k7A/r0kOE3AeJ/G56bpw
-        BTYV0c8FN1Pqzs2Uzhu1tSmZ3tkvDzQjkDYDhrWejt/6qlVWChCu4ClXP1UZdu/T
-        XUXq4ApOjy4PNTW6MlDI=
-X-Virus-Scanned: Debian amavisd-new at host.studiog.us
-Received: from host.studiog.us ([127.0.0.1])
-        by localhost (host.studiog.us [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id DlX6tBwB95HJ; Sun, 29 Jan 2023 06:20:44 +0000 (UTC)
-Received: from [192.168.8.100] (unknown [154.118.34.117])
-        (Authenticated sender: test@ascabi.org)
-        by host.studiog.us (Postfix) with ESMTPSA id 64F454636F;
-        Sun, 29 Jan 2023 06:20:39 +0000 (UTC)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S229436AbjA2GqN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 Jan 2023 01:46:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C497E1A49F;
+        Sat, 28 Jan 2023 22:46:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66ECA60ADB;
+        Sun, 29 Jan 2023 06:46:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D06C433D2;
+        Sun, 29 Jan 2023 06:46:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674974771;
+        bh=npeg3NdAXSeFh0nJBawtsSuBw3Sl9H1tdBZe7sl/pHQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=063TiFkbbUmlduupGvA0jhdxoQ0fbyXEO+U/+4IbCRmy5rz5k1aluJvYJIe59E0cN
+         qcCV+GpPIgwKVOqk0r4Du5TkdqeBM6sabKdRgAVJtB5wY9NdSYt9SD6SyDIOvtb+rk
+         SiUZuf1ZU4Eka0NwbJxwnFAt7PBoPC7p++9msi7s=
+Date:   Sun, 29 Jan 2023 07:46:09 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Zhong Jinghua <zhongjinghua@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, hare@suse.de, bvanassche@acm.org,
+        emilne@redhat.com, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH-next v2 2/2] scsi: fix iscsi rescan fails to create block
+ device
+Message-ID: <Y9YWMQ4TuJfuXAzL@kroah.com>
+References: <20230128094146.205858-1-zhongjinghua@huawei.com>
+ <20230128094146.205858-3-zhongjinghua@huawei.com>
+ <Y9T8uQYEaGUZwpHO@kroah.com>
+ <b4927ca9-7330-3f32-f68f-1a449473a0ce@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Your funds release:
-To:     Recipients <tes@ascabi.org>
-From:   "Mr Femi Brown" <tes@ascabi.org>
-Date:   Sun, 29 Jan 2023 07:20:46 +0100
-Reply-To: info@ousos-elearning.com
-Message-Id: <20230129062044.4CD4D46444@host.studiog.us>
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_99,BAYES_999,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOTS_OF_MONEY,MONEY_FORM_SHORT,RDNS_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_FRAUD_PHISH,T_FILL_THIS_FORM_SHORT,T_HK_NAME_MR_MRS,
-        XFER_LOTSA_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_MR_MRS No description available.
-        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.0 XFER_LOTSA_MONEY Transfer a lot of money
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  0.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  0.0 T_FILL_THIS_FORM_FRAUD_PHISH Answer suspicious question(s)
-        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b4927ca9-7330-3f32-f68f-1a449473a0ce@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This mail is been writing to you because we have come to understand that
-you have lost a lot of money all because you want to receive your fund
-well note that all that have been put to a stop as the federal government of
-Nigeria has promised to assist you with the sum of $5million in other to
-compensate you and all you have to do is fill the below information s.
+On Sun, Jan 29, 2023 at 09:13:55AM +0800, Yu Kuai wrote:
+> Hi, Greg
+> 
+> 在 2023/01/28 18:45, Greg KH 写道:
+> > > diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+> > > index cac7c902cf70..a22109cdb8ef 100644
+> > > --- a/drivers/scsi/scsi_sysfs.c
+> > > +++ b/drivers/scsi/scsi_sysfs.c
+> > > @@ -1535,9 +1535,7 @@ static void __scsi_remove_target(struct scsi_target *starget)
+> > >   		if (sdev->channel != starget->channel ||
+> > >   		    sdev->id != starget->id)
+> > >   			continue;
+> > > -		if (sdev->sdev_state == SDEV_DEL ||
+> > > -		    sdev->sdev_state == SDEV_CANCEL ||
+> > > -		    !get_device(&sdev->sdev_gendev))
+> > > +		if (!get_device_unless_zero(&sdev->sdev_gendev))
+> > 
+> > If sdev_gendev is 0 here, the object is gone and you are working with
+> > memory that is already freed so something is _VERY_ wrong.
+> 
+> In fact, this patch will work:
+> 
+> In __scsi_remove_target(), 'host_lock' is held to protect iterating
+> siblings, and object will wait for this lock in
+> scsi_device_dev_release() to remove siblings. Hence sdev will not be
+> freed untill the lock is released.
 
-1 full name
+Then you got lucky, as that is not how a reference counted object should
+be working (i.e. the reference dropped to 0 and it still be kept alive.)
 
-2 home phone and cell phone number
+Please fix up the scsi logic here, don't abuse the reference count code.
 
-3 occupation
+thanks,
 
-4 amount that was lost by you
-
-Send this and get back at once.
-
-Warm regards
-
-Femi
+greg k-h
