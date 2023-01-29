@@ -2,121 +2,259 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80BA68006A
-	for <lists+linux-scsi@lfdr.de>; Sun, 29 Jan 2023 18:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 595CE6802CD
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 Jan 2023 00:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235128AbjA2Rbb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 29 Jan 2023 12:31:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
+        id S235490AbjA2XLN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 29 Jan 2023 18:11:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjA2Rba (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 Jan 2023 12:31:30 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E021715A;
-        Sun, 29 Jan 2023 09:31:29 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30TDlkJd012236;
-        Sun, 29 Jan 2023 17:31:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=qdC0xyKLoaOTuMWEF/2CnwWlSq5XIkTv79tuQEfcKlM=;
- b=VW8nLNYK+paIbt6urRpNm/3q/sqocgSiDCsaTd1+HCCComNS+Rx0CRUoLxm+ajUV0hf0
- vXutvC0vvAd5GZv3SvwAcZK9E+BU/YlPbNmHhcKzYoB7TFX+VduXJ/hqY1SvBCZuexOY
- 4wkWDCMIIR0HCXZtbfhbkEMEssL4bjh/IhSrLfR8RvtH2t+Jv9SASBI2m603ke5mlzuG
- GsYaioAR+a03HINTT9NMvwDcp4quz214ULy13eTAcabQnpfgeWi0d/vUsGmiL0TUlxll
- L6KcaZ3riJg/CnuLsyAYll6bpwjmsWImFIyHp+Ed+S/+TwTAZGL7hlEINEoCJ1d0/DFx Lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nddv1469e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 17:31:06 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30THV6S6030161;
-        Sun, 29 Jan 2023 17:31:06 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nddv14699-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 17:31:06 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30TDR3Hh026758;
-        Sun, 29 Jan 2023 17:31:05 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3ncvtmpvar-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 17:31:05 +0000
-Received: from b03ledav001.gho.boulder.ibm.com ([9.17.130.232])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30THV3Zw38994628
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 29 Jan 2023 17:31:04 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6B6B6E050;
-        Sun, 29 Jan 2023 17:33:07 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 31A7E6E04E;
-        Sun, 29 Jan 2023 17:33:05 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.211.110.248])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Sun, 29 Jan 2023 17:33:05 +0000 (GMT)
-Message-ID: <1b466057ed2e91b05388afbb5791639eb8abdd59.camel@linux.ibm.com>
-Subject: Re: [PATCH-next v2 2/2] scsi: fix iscsi rescan fails to create
- block device
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Zhong Jinghua <zhongjinghua@huawei.com>,
-        gregkh@linuxfoundation.org, martin.petersen@oracle.com,
-        hare@suse.de, bvanassche@acm.org, emilne@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        yi.zhang@huawei.com, yukuai3@huawei.com
-Date:   Sun, 29 Jan 2023 12:30:30 -0500
-In-Reply-To: <20230128094146.205858-3-zhongjinghua@huawei.com>
-References: <20230128094146.205858-1-zhongjinghua@huawei.com>
-         <20230128094146.205858-3-zhongjinghua@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        with ESMTP id S235195AbjA2XLD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 29 Jan 2023 18:11:03 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1781ADC4;
+        Sun, 29 Jan 2023 15:10:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=NQ7YgokTLfJq7c2D1zhGDjpisfmSP8xp8m3MmzMVL98=; b=tR5ChEh1M0Z7mmYghFZYDZkhYF
+        VwsBdewvyOhjcUGdyWIEJ3H9OnSGJvzGgGGGZK6So26F8lFBlOPLSVyT2MgVqp0F/7kFDvXC0/wJF
+        F8V88o2nnHVDmRqJkD+BL/KiXWv1Qm/VpDm8EvQqOCt6xD7Jf2tOAs/CfeuJLkkpjtQ6A3d9a7aIl
+        HBWFgKjNcLjPBir7kxsZcNI6e0nzt4fhSIlVln5iSKgticGUPEh3W2m/O3n7k+jPNFAodh6KmJuNN
+        sZE8ZbojS58xsI1pVvol23kXer5LTKxefgKbY9W0Us1t9+zMCnqXwf9SmPbfwDh5BVi7DqyzxV771
+        6Mnq71Lw==;
+Received: from [2601:1c2:d00:6a60::9526] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pMGp5-0020M2-Rb; Sun, 29 Jan 2023 23:10:55 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-mm@kvack.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, nvdimm@lists.linux.dev,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Jiri Pirko <jiri@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: [PATCH 0/9] Documentation: correct lots of spelling errors (series 2)
+Date:   Sun, 29 Jan 2023 15:10:44 -0800
+Message-Id: <20230129231053.20863-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uaOUbDbeIJ7bzyBQmbqB9mkUuaqfIdK-
-X-Proofpoint-GUID: tLV0rDBztqfXhwftHdWv4OmWn1a9UCGN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-29_09,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
- clxscore=1011 priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301290169
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, 2023-01-28 at 17:41 +0800, Zhong Jinghua wrote:
-> This error will cause a warning:
-> kobject_add_internal failed for block (error: -2 parent: 1:0:0:1).
-> In the lower version (such as 5.10), there is no corresponding error
-> handling, continuing
-> to go down will trigger a kernel panic, so cc stable.
+Maintainers of specific kernel subsystems are only Cc-ed on their
+respective patches, not the entire series. [if all goes well]
 
-Is this is important point and what you're saying is that this only
-panics on kernels before 5.10 or so because after that it's correctly
-failed by block device error handling so there's nothing to fix in
-later kernels?
+These patches are based on linux-next-20230127.
 
-In that case, isn't the correct fix to look at backporting the block
-device error handling:
 
-commit 83cbce9574462c6b4eed6797bdaf18fae6859ab3
-Author: Luis Chamberlain <mcgrof@kernel.org>
-Date:   Wed Aug 18 16:45:40 2021 +0200
+ [PATCH 1/9] Documentation: admin-guide: correct spelling
+ [PATCH 2/9] Documentation: driver-api: correct spelling
+ [PATCH 3/9] Documentation: hwmon: correct spelling
+ [PATCH 4/9] Documentation: networking: correct spelling
+ [PATCH 5/9] Documentation: RCU: correct spelling
+ [PATCH 6/9] Documentation: scsi/ChangeLog*: correct spelling
+ [PATCH 7/9] Documentation: scsi: correct spelling
+ [PATCH 8/9] Documentation: sparc: correct spelling
+ [PATCH 9/9] Documentation: userspace-api: correct spelling
 
-    block: add error handling for device_add_disk / add_disk
 
-?
+ Documentation/RCU/Design/Expedited-Grace-Periods/Expedited-Grace-Periods.rst         |    6 -
+ Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst                |    2 
+ Documentation/RCU/RTFP.txt                                                           |   10 +-
+ Documentation/RCU/UP.rst                                                             |    4 
+ Documentation/RCU/lockdep.rst                                                        |    2 
+ Documentation/RCU/torture.rst                                                        |    4 
+ Documentation/admin-guide/bcache.rst                                                 |    2 
+ Documentation/admin-guide/cgroup-v1/blkio-controller.rst                             |    2 
+ Documentation/admin-guide/cgroup-v2.rst                                              |   10 +-
+ Documentation/admin-guide/cifs/usage.rst                                             |    4 
+ Documentation/admin-guide/device-mapper/cache-policies.rst                           |    2 
+ Documentation/admin-guide/device-mapper/dm-ebs.rst                                   |    2 
+ Documentation/admin-guide/device-mapper/dm-zoned.rst                                 |    2 
+ Documentation/admin-guide/device-mapper/unstriped.rst                                |   10 +-
+ Documentation/admin-guide/dynamic-debug-howto.rst                                    |    2 
+ Documentation/admin-guide/gpio/gpio-sim.rst                                          |    2 
+ Documentation/admin-guide/hw-vuln/mds.rst                                            |    4 
+ Documentation/admin-guide/kernel-parameters.txt                                      |    8 -
+ Documentation/admin-guide/laptops/thinkpad-acpi.rst                                  |    2 
+ Documentation/admin-guide/md.rst                                                     |    2 
+ Documentation/admin-guide/media/bttv.rst                                             |    2 
+ Documentation/admin-guide/media/building.rst                                         |    2 
+ Documentation/admin-guide/media/si476x.rst                                           |    2 
+ Documentation/admin-guide/media/vivid.rst                                            |    2 
+ Documentation/admin-guide/mm/hugetlbpage.rst                                         |    2 
+ Documentation/admin-guide/mm/numa_memory_policy.rst                                  |    4 
+ Documentation/admin-guide/perf/hns3-pmu.rst                                          |    2 
+ Documentation/admin-guide/pm/amd-pstate.rst                                          |    2 
+ Documentation/admin-guide/spkguide.txt                                               |    4 
+ Documentation/admin-guide/sysctl/vm.rst                                              |    4 
+ Documentation/admin-guide/sysrq.rst                                                  |    2 
+ Documentation/driver-api/dma-buf.rst                                                 |    2 
+ Documentation/driver-api/dmaengine/client.rst                                        |    2 
+ Documentation/driver-api/dmaengine/dmatest.rst                                       |    2 
+ Documentation/driver-api/hsi.rst                                                     |    4 
+ Documentation/driver-api/io-mapping.rst                                              |    4 
+ Documentation/driver-api/md/md-cluster.rst                                           |    2 
+ Documentation/driver-api/md/raid5-cache.rst                                          |    2 
+ Documentation/driver-api/media/drivers/vidtv.rst                                     |    2 
+ Documentation/driver-api/media/dtv-demux.rst                                         |    2 
+ Documentation/driver-api/media/v4l2-subdev.rst                                       |    4 
+ Documentation/driver-api/mei/nfc.rst                                                 |    2 
+ Documentation/driver-api/nfc/nfc-hci.rst                                             |    2 
+ Documentation/driver-api/nvdimm/nvdimm.rst                                           |    2 
+ Documentation/driver-api/nvdimm/security.rst                                         |    2 
+ Documentation/driver-api/pin-control.rst                                             |    2 
+ Documentation/driver-api/pldmfw/index.rst                                            |    2 
+ Documentation/driver-api/serial/driver.rst                                           |    2 
+ Documentation/driver-api/surface_aggregator/ssh.rst                                  |    2 
+ Documentation/driver-api/thermal/intel_powerclamp.rst                                |    2 
+ Documentation/driver-api/usb/dwc3.rst                                                |    2 
+ Documentation/driver-api/usb/usb3-debug-port.rst                                     |    2 
+ Documentation/hwmon/aht10.rst                                                        |    2 
+ Documentation/hwmon/aspeed-pwm-tacho.rst                                             |    2 
+ Documentation/hwmon/corsair-psu.rst                                                  |    2 
+ Documentation/hwmon/gsc-hwmon.rst                                                    |    6 -
+ Documentation/hwmon/hwmon-kernel-api.rst                                             |    4 
+ Documentation/hwmon/ltc2978.rst                                                      |    2 
+ Documentation/hwmon/max6697.rst                                                      |    2 
+ Documentation/hwmon/menf21bmc.rst                                                    |    2 
+ Documentation/hwmon/pmbus-core.rst                                                   |    2 
+ Documentation/hwmon/sht4x.rst                                                        |    2 
+ Documentation/hwmon/smm665.rst                                                       |    2 
+ Documentation/hwmon/stpddc60.rst                                                     |    2 
+ Documentation/hwmon/vexpress.rst                                                     |    2 
+ Documentation/hwmon/via686a.rst                                                      |    2 
+ Documentation/networking/af_xdp.rst                                                  |    4 
+ Documentation/networking/arcnet-hardware.rst                                         |    2 
+ Documentation/networking/can.rst                                                     |    2 
+ Documentation/networking/can_ucan_protocol.rst                                       |    2 
+ Documentation/networking/cdc_mbim.rst                                                |    2 
+ Documentation/networking/device_drivers/atm/iphase.rst                               |    2 
+ Documentation/networking/device_drivers/can/ctu/ctucanfd-driver.rst                  |    4 
+ Documentation/networking/device_drivers/can/ctu/fsm_txt_buffer_user.svg              |    4 
+ Documentation/networking/device_drivers/ethernet/3com/vortex.rst                     |    2 
+ Documentation/networking/device_drivers/ethernet/aquantia/atlantic.rst               |    6 -
+ Documentation/networking/device_drivers/ethernet/freescale/dpaa2/mac-phy-support.rst |    2 
+ Documentation/networking/device_drivers/ethernet/marvell/octeontx2.rst               |    2 
+ Documentation/networking/device_drivers/ethernet/pensando/ionic.rst                  |    2 
+ Documentation/networking/device_drivers/ethernet/ti/am65_nuss_cpsw_switchdev.rst     |    2 
+ Documentation/networking/device_drivers/ethernet/ti/cpsw_switchdev.rst               |    2 
+ Documentation/networking/device_drivers/wwan/iosm.rst                                |    2 
+ Documentation/networking/devlink/ice.rst                                             |    4 
+ Documentation/networking/devlink/netdevsim.rst                                       |    2 
+ Documentation/networking/devlink/prestera.rst                                        |    2 
+ Documentation/networking/dsa/configuration.rst                                       |    2 
+ Documentation/networking/ethtool-netlink.rst                                         |    6 -
+ Documentation/networking/gtp.rst                                                     |    2 
+ Documentation/networking/ieee802154.rst                                              |    2 
+ Documentation/networking/ip-sysctl.rst                                               |    6 -
+ Documentation/networking/ipvlan.rst                                                  |    2 
+ Documentation/networking/j1939.rst                                                   |    2 
+ Documentation/networking/net_failover.rst                                            |    2 
+ Documentation/networking/netconsole.rst                                              |    2 
+ Documentation/networking/page_pool.rst                                               |    6 -
+ Documentation/networking/phonet.rst                                                  |    2 
+ Documentation/networking/phy.rst                                                     |    2 
+ Documentation/networking/regulatory.rst                                              |    4 
+ Documentation/networking/rxrpc.rst                                                   |    2 
+ Documentation/networking/snmp_counter.rst                                            |    4 
+ Documentation/networking/sysfs-tagging.rst                                           |    2 
+ Documentation/scsi/ChangeLog.lpfc                                                    |   36 ++++----
+ Documentation/scsi/ChangeLog.megaraid                                                |    8 -
+ Documentation/scsi/ChangeLog.megaraid_sas                                            |    4 
+ Documentation/scsi/ChangeLog.ncr53c8xx                                               |   16 +--
+ Documentation/scsi/ChangeLog.sym53c8xx                                               |   14 +--
+ Documentation/scsi/ChangeLog.sym53c8xx_2                                             |   10 +-
+ Documentation/scsi/ncr53c8xx.rst                                                     |    4 
+ Documentation/scsi/sym53c8xx_2.rst                                                   |    2 
+ Documentation/scsi/tcm_qla2xxx.rst                                                   |    2 
+ Documentation/scsi/ufs.rst                                                           |    2 
+ Documentation/sparc/adi.rst                                                          |    4 
+ Documentation/sparc/oradax/dax-hv-api.txt                                            |   44 +++++-----
+ Documentation/userspace-api/iommufd.rst                                              |    2 
+ Documentation/userspace-api/media/drivers/st-vgxy61.rst                              |    2 
+ Documentation/userspace-api/media/rc/lirc-set-wideband-receiver.rst                  |    2 
+ Documentation/userspace-api/media/rc/rc-protos.rst                                   |    2 
+ Documentation/userspace-api/media/rc/rc-tables.rst                                   |    2 
+ Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst                             |    2 
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst                  |    2 
+ Documentation/userspace-api/media/v4l/ext-ctrls-jpeg.rst                             |    2 
+ Documentation/userspace-api/media/v4l/hist-v4l2.rst                                  |    4 
+ Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst                            |    2 
+ Documentation/userspace-api/media/v4l/vidioc-cropcap.rst                             |    2 
+ Documentation/userspace-api/seccomp_filter.rst                                       |    2 
+ Documentation/userspace-api/sysfs-platform_profile.rst                               |    2 
+ 126 files changed, 232 insertions(+), 232 deletions(-)
 
-James
 
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: cgroups@vger.kernel.org
+Cc: Alasdair Kergon <agk@redhat.com>
+Cc: Mike Snitzer <snitzer@kernel.org>
+Cc: dm-devel@redhat.com
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: nvdimm@lists.linux.dev
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: dmaengine@vger.kernel.org
+Cc: Song Liu <song@kernel.org>
+Cc: linux-raid@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Cc: Jiri Pirko <jiri@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: rcu@vger.kernel.org
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
