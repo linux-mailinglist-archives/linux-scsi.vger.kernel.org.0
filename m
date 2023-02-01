@@ -2,131 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BE9686D83
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Feb 2023 18:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0287F686DA2
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Feb 2023 19:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbjBAR7q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Feb 2023 12:59:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
+        id S231904AbjBASGv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Feb 2023 13:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjBAR7p (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Feb 2023 12:59:45 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E777E4C0F1;
-        Wed,  1 Feb 2023 09:59:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1675274385; x=1706810385;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fSSmRj8Su784FKIaxCReilXY880KYgI8cMhPH/Q3QoE=;
-  b=O5yPWuFGC7cXDNITjNSE2xCexmnExp3AN35olW1PyC5V43EmCXrPaVvY
-   aJKj6yrFtvLFTXoBR3gIbc6eNZP3rMu5UFeBs8AC7gVGuWN0MmFQwS07V
-   pQinMIHeckzOcqGiSTamhiI1qb9HIhANZNZzKS4RrpJDD94+fsuWUjhsN
-   c=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Feb 2023 09:59:44 -0800
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 09:59:44 -0800
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 1 Feb 2023 09:59:43 -0800
-Date:   Wed, 1 Feb 2023 09:59:43 -0800
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-CC:     Alim Akhtar <alim.akhtar@samsung.com>,
+        with ESMTP id S229632AbjBASGr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Feb 2023 13:06:47 -0500
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F91B5B58E
+        for <linux-scsi@vger.kernel.org>; Wed,  1 Feb 2023 10:06:47 -0800 (PST)
+Received: by mail-pf1-f169.google.com with SMTP id cr11so11505186pfb.1
+        for <linux-scsi@vger.kernel.org>; Wed, 01 Feb 2023 10:06:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iKY4LW1/Cl2/XYtJE0bXvt24eYOHqab5i4LELMw+uMI=;
+        b=CcgEcKRp1qy5RHh7N8nzsK006lXsy2dIR3RYVJQPsDiePqMJvsIwgswMfrexRw3TQ0
+         AJQYW1WULIfPh4p6R6iqum4AiSkBZLiw3IqlcsZqODNzvDlkQEsUCsswEsWhUU97ej8b
+         FzgxXWgUmwhJmYCVWTIXXfXrPbCkBOtjHnrfN2ykhIWPXqk+Wshxh0QZwXC4QyH+dHn9
+         9wSm8jgJyekAl8K9FmVIU27Jm3fdd8ZHMi5bKm8DSAwWwnwK3hSN12gIpphFec8fcSep
+         u3RTt307913Y8xB5H+nuMgP15z5/pJ/SUgHmE/n6pbq/IH830vUuDkC8uv/SX+xmMo6M
+         UiKg==
+X-Gm-Message-State: AO0yUKWxeAo7FXUB/Uw5jvshHe7PEp963LrH9d73h3JFk4Nr0Fqz5hPp
+        r9kmkRTyX0I2wT85CUiO7DU=
+X-Google-Smtp-Source: AK7set/RXW8qKRyynpHfx7COAt4gj/HqZKschD/mYoblb/X7/3s9xJMsoP5/QICeawY73OTm7OcwFA==
+X-Received: by 2002:a05:6a00:300b:b0:593:af12:9460 with SMTP id ay11-20020a056a00300b00b00593af129460mr2878956pfb.34.1675274806621;
+        Wed, 01 Feb 2023 10:06:46 -0800 (PST)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:f3cf:17ca:687:af15])
+        by smtp.gmail.com with ESMTPSA id x13-20020aa78f0d000000b005825b8e0540sm7021264pfr.204.2023.02.01.10.06.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 10:06:45 -0800 (PST)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
         Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Bean Huo" <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        "Jinyoung Choi" <j-young.choi@samsung.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <mani@kernel.org>
-Subject: Re: [PATCH] scsi: ufs: core: Limit DMA alignment check
-Message-ID: <20230201175943.GB14334@asutoshd-linux1.qualcomm.com>
-References: <20230201034917.1902330-1-quic_bjorande@quicinc.com>
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH 0/2] Use SYNCHRONIZE CACHE instead of FUA for UFS devices
+Date:   Wed,  1 Feb 2023 10:06:35 -0800
+Message-Id: <20230201180637.2102556-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230201034917.1902330-1-quic_bjorande@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jan 31 2023 at 19:49 -0800, Bjorn Andersson wrote:
->The three DMA memory regions allocated for the host memory space is
->documented to require alignment of 128, 1024 and 1024 respectively, but
->the returned address is checked for PAGE_SIZE alignment.
->
->In the case these allocations are serviced by e.g. the Arm SMMU, the
->size and alignment will be determined by its supported page sizes. In
->most cases SZ_4K and a few larger sizes are available.
->
->In the typical configuration this does not cause problems, but in the
->event that the system PAGE_SIZE is increased beyond 4k, it's no longer
->reasonable to expect that the allocation will be PAGE_SIZE aligned.
->
->Limit the DMA alignment check to the actual alignment requirements
->written in the comments in the code, to avoid the UFS core refusing to
->initialize with such configuration.
->
->Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Hi Martin,
 
-Reviewed-by: Asutosh Das <quic_asutoshd@quicinc.com>
+Apparently UFS devices perform better when using SYNCHRONIZE CACHE instead of
+FUA. Hence this patch series that makes the SCSI core submit a SYNCHRONIZE
+CACHE command instead of setting the FUA bit for UFS devices. Please consider
+this patch series for the next merge window.
 
->---
-> drivers/ufs/core/ufshcd.c | 9 +++------
-> 1 file changed, 3 insertions(+), 6 deletions(-)
->
->diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
->index ec732e4bbbf4..d7f3f1ba9d12 100644
->--- a/drivers/ufs/core/ufshcd.c
->+++ b/drivers/ufs/core/ufshcd.c
->@@ -3724,12 +3724,9 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
->
-> 	/*
-> 	 * UFSHCI requires UTP command descriptor to be 128 byte aligned.
->-	 * make sure hba->ucdl_dma_addr is aligned to PAGE_SIZE
->-	 * if hba->ucdl_dma_addr is aligned to PAGE_SIZE, then it will
->-	 * be aligned to 128 bytes as well
-> 	 */
-> 	if (!hba->ucdl_base_addr ||
->-	    WARN_ON(hba->ucdl_dma_addr & (PAGE_SIZE - 1))) {
->+	    WARN_ON(hba->ucdl_dma_addr & (128 - 1))) {
-> 		dev_err(hba->dev,
-> 			"Command Descriptor Memory allocation failed\n");
-> 		goto out;
->@@ -3745,7 +3742,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
-> 						   &hba->utrdl_dma_addr,
-> 						   GFP_KERNEL);
-> 	if (!hba->utrdl_base_addr ||
->-	    WARN_ON(hba->utrdl_dma_addr & (PAGE_SIZE - 1))) {
->+	    WARN_ON(hba->utrdl_dma_addr & (1024 - 1))) {
-> 		dev_err(hba->dev,
-> 			"Transfer Descriptor Memory allocation failed\n");
-> 		goto out;
->@@ -3769,7 +3766,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
-> 						    &hba->utmrdl_dma_addr,
-> 						    GFP_KERNEL);
-> 	if (!hba->utmrdl_base_addr ||
->-	    WARN_ON(hba->utmrdl_dma_addr & (PAGE_SIZE - 1))) {
->+	    WARN_ON(hba->utmrdl_dma_addr & (1024 - 1))) {
-> 		dev_err(hba->dev,
-> 		"Task Management Descriptor Memory allocation failed\n");
-> 		goto out;
->-- 
->2.25.1
->
+Thanks,
+
+Bart.
+
+Asutosh Das (1):
+  scsi: ufs: Use SYNCHRONIZE CACHE instead of FUA
+
+Bart Van Assche (1):
+  scsi: core: Introduce the BLIST_BROKEN_FUA flag
+
+ drivers/scsi/scsi_scan.c    | 3 +++
+ drivers/ufs/core/ufshcd.c   | 3 +++
+ include/scsi/scsi_devinfo.h | 2 ++
+ 3 files changed, 8 insertions(+)
+
