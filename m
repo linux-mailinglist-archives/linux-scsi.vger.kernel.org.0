@@ -2,41 +2,41 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E38D688977
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Feb 2023 23:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7185E68897F
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Feb 2023 23:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232935AbjBBWCG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 2 Feb 2023 17:02:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S233122AbjBBWCk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 2 Feb 2023 17:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232695AbjBBWCD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Feb 2023 17:02:03 -0500
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F391F8AC18
-        for <linux-scsi@vger.kernel.org>; Thu,  2 Feb 2023 14:01:44 -0800 (PST)
-Received: by mail-pl1-f171.google.com with SMTP id h9so3318584plf.9
-        for <linux-scsi@vger.kernel.org>; Thu, 02 Feb 2023 14:01:44 -0800 (PST)
+        with ESMTP id S232845AbjBBWC3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Feb 2023 17:02:29 -0500
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7C88A7E1
+        for <linux-scsi@vger.kernel.org>; Thu,  2 Feb 2023 14:02:08 -0800 (PST)
+Received: by mail-pg1-f178.google.com with SMTP id 7so2349089pgh.7
+        for <linux-scsi@vger.kernel.org>; Thu, 02 Feb 2023 14:02:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=43Il6geCoBwdzoPJ2eu5yaFzdKGrs+yfucUHHgPZhuo=;
-        b=k9mZjcK7jVzt8RWqq3Oao/b//+JopprBO104Ti4BJR5osZRdVeC1ICZ/uw+5isuZDw
-         IsZfVI7UOYXie/cMCjVK6aNO1eRkuRNObBsg2pubj8RM8qaTWqVyhScaE61pl9Ssypo9
-         dmP+TV9eW66MMe5KLdpNs5JyZNnLIB6tIsvwLBuLbf/Iq67ZqQbh3Wj0cpKz0vZ5wFAv
-         KUowj2PDp4NN32d+IuSXzEMAUrN3SMVQYuJ+q2vmnnKfaGeR3suPngjNKGOZ0ivOoqWC
-         vF4Vuii1hWlmTFNMo/Vf+TT9fUaEoYMEPfWI6lLQ/Jjxb3H2JLgrWFgZXeerAddlTT1V
-         Apxw==
-X-Gm-Message-State: AO0yUKVwT6znhYEfxe9Kg7u1HkJhAdy7FQlnkd90W5z7mOZtHuOZzgdq
-        wYiTqxLaHh4UMoHzSMHZNfQ=
-X-Google-Smtp-Source: AK7set++ERfgiI4KnYYwd7RkDCvPL3gPZsuGOgsEoFFZVpTd6GxvBRlR4C8qPch4A3mWQ78F+oLgfA==
-X-Received: by 2002:a05:6a20:bf28:b0:bf:1e6b:663d with SMTP id gc40-20020a056a20bf2800b000bf1e6b663dmr7183315pzb.44.1675375265464;
-        Thu, 02 Feb 2023 14:01:05 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ikrUpVBGXYzn/1EetHKC0isY/rB99fOgVxyFG3kBxOM=;
+        b=7IDingRNNI5RZUTrbh941zZvxiinsPlEew2cJFPHqHorSnEPwM2KqN4T3zPNd6ANAk
+         tyH4ZEezfny9+zNyR4IG9HuDcj3smsFJzyNWsf0qtXltj8t37TNAUzS5dp7Mh7VO9G8a
+         nrPu3ijX2UY+KfQgqvBQqOXVtiSlD0i2JkRuezX8kdmfDUo4RTXAX1ybm3dZ4efyahTF
+         pT0HVfZiWM1TItcIwzXj1dZfiE66pRe4/GfXYNKsyraFUssXwSZbeEyOvUQB1XiZHOm2
+         eh3d+5wt3eAnCQQuUYGFOYxr1XKTAu/leaWGBaBA/dj0Y4ekLFnc4UATzUGdWx/j4Z7s
+         0CQQ==
+X-Gm-Message-State: AO0yUKXakCwzP3u4GpxScaWaVebvMGYxHTs9ZCFbQUPH86zPFZqucRng
+        2NbaMDSPFaSCWkD+Y6QlIi0=
+X-Google-Smtp-Source: AK7set/5R2oUPIxpmg6YB7vpLoEYvjh70pMsHW2geqP0cFtPL439A0KeXDId8SWVfu+Vg2O681X6YQ==
+X-Received: by 2002:a05:6a00:170c:b0:593:b736:165c with SMTP id h12-20020a056a00170c00b00593b736165cmr8229677pfc.3.1675375323637;
+        Thu, 02 Feb 2023 14:02:03 -0800 (PST)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:bf7f:37aa:6a01:bf09])
-        by smtp.gmail.com with ESMTPSA id t8-20020a63b708000000b004f1e87530cesm232951pgf.91.2023.02.02.14.01.03
+        by smtp.gmail.com with ESMTPSA id x6-20020a623106000000b0058bb79beefcsm162972pfx.123.2023.02.02.14.02.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 14:01:04 -0800 (PST)
+        Thu, 02 Feb 2023 14:02:02 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
@@ -45,58 +45,73 @@ Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
         linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Asutosh Das <quic_asutoshd@quicinc.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>
-Subject: [PATCH v2 2/2] scsi: ufs: Use SYNCHRONIZE CACHE instead of FUA
-Date:   Thu,  2 Feb 2023 14:00:41 -0800
-Message-Id: <20230202220041.560919-3-bvanassche@acm.org>
+        Can Guo <quic_cang@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Subject: [PATCH] scsi: ufs: Fix kernel-doc syntax
+Date:   Thu,  2 Feb 2023 14:01:42 -0800
+Message-Id: <20230202220155.561115-1-bvanassche@acm.org>
 X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-In-Reply-To: <20230202220041.560919-1-bvanassche@acm.org>
-References: <20230202220041.560919-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Asutosh Das <quic_asutoshd@quicinc.com>
+Fix the following kernel-doc warnings:
 
-UFS devices perform better when using SYNCHRONIZE CACHE command
-instead of the FUA flag. Hence this patch.
+drivers/ufs/core/ufs-mcq.c:87: warning: Function parameter or member 'hba' not described in 'ufshcd_mcq_config_mac'
+drivers/ufs/core/ufs-mcq.c:87: warning: Function parameter or member 'max_active_cmds' not described in 'ufshcd_mcq_config_mac'
+drivers/ufs/core/ufs-mcq.c:107: warning: Function parameter or member 'hba' not described in 'ufshcd_mcq_req_to_hwq'
+drivers/ufs/core/ufs-mcq.c:107: warning: Function parameter or member 'req' not described in 'ufshcd_mcq_req_to_hwq'
+drivers/ufs/core/ufs-mcq.c:128: warning: Function parameter or member 'hba' not described in 'ufshcd_mcq_decide_queue_depth'
 
-Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
+Cc: Asutosh Das <quic_asutoshd@quicinc.com>
+Fixes: 854f84e7feeb ("scsi: ufs: core: mcq: Find hardware queue to queue request")
+Fixes: 2468da61ea09 ("scsi: ufs: core: mcq: Configure operation and runtime interface")
+Fixes: 7224c806876e ("scsi: ufs: core: mcq: Calculate queue depth")
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-[ bvanassche: modified a source code comment ]
 ---
- drivers/ufs/core/ufshcd.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/ufs/core/ufs-mcq.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index bf3cb12ef02f..a8d42d9308da 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -24,6 +24,7 @@
- #include <linux/sched/clock.h>
- #include <scsi/scsi_cmnd.h>
- #include <scsi/scsi_dbg.h>
-+#include <scsi/scsi_devinfo.h>
- #include <scsi/scsi_driver.h>
- #include <scsi/scsi_eh.h>
- #include "ufshcd-priv.h"
-@@ -5056,6 +5057,9 @@ static int ufshcd_slave_alloc(struct scsi_device *sdev)
- 	/* WRITE_SAME command is not supported */
- 	sdev->no_write_same = 1;
+diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+index dd476f9e797c..31df052fbc41 100644
+--- a/drivers/ufs/core/ufs-mcq.c
++++ b/drivers/ufs/core/ufs-mcq.c
+@@ -77,8 +77,8 @@ MODULE_PARM_DESC(poll_queues,
  
-+	/* Use SYNCHRONIZE CACHE instead of FUA to improve performance */
-+	sdev->sdev_bflags = BLIST_BROKEN_FUA;
-+
- 	ufshcd_lu_init(hba, sdev);
+ /**
+  * ufshcd_mcq_config_mac - Set the #Max Activ Cmds.
+- * @hba - per adapter instance
+- * @max_active_cmds - maximum # of active commands to the device at any time.
++ * @hba: per adapter instance
++ * @max_active_cmds: maximum # of active commands to the device at any time.
+  *
+  * The controller won't send more than the max_active_cmds to the device at
+  * any time.
+@@ -96,8 +96,8 @@ void ufshcd_mcq_config_mac(struct ufs_hba *hba, u32 max_active_cmds)
+ /**
+  * ufshcd_mcq_req_to_hwq - find the hardware queue on which the
+  * request would be issued.
+- * @hba - per adapter instance
+- * @req - pointer to the request to be issued
++ * @hba: per adapter instance
++ * @req: pointer to the request to be issued
+  *
+  * Returns the hardware queue instance on which the request would
+  * be queued.
+@@ -114,7 +114,7 @@ struct ufs_hw_queue *ufshcd_mcq_req_to_hwq(struct ufs_hba *hba,
  
- 	ufshcd_setup_links(hba, sdev);
+ /**
+  * ufshcd_mcq_decide_queue_depth - decide the queue depth
+- * @hba - per adapter instance
++ * @hba: per adapter instance
+  *
+  * Returns queue-depth on success, non-zero on error
+  *
