@@ -2,87 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F500688458
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Feb 2023 17:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73656885C9
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Feb 2023 18:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbjBBQZw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 2 Feb 2023 11:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
+        id S231751AbjBBR6b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 2 Feb 2023 12:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjBBQZu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Feb 2023 11:25:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0366530EF
-        for <linux-scsi@vger.kernel.org>; Thu,  2 Feb 2023 08:24:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675355096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3RjW4DOZCvhQd1bXgafs79oHh0ytkPtehsJxnCjunDQ=;
-        b=XBknLssfSC0HDIf0VzeIFhy4Qyi7DqdNUq6LZrOwwT/xEaetZEYt1hOvzKlNonbZ+Oi/0Z
-        aUgGpvr22OQiIYu7N6GWBYKdB3Z786daCt9EqVxWpAGD/Bv9fbC+rlKSXolnwq4Ozf0OYC
-        lqGW24M3woTOqLMnNizQgZ9Fgr9yYb8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-86-KZpaF6VBNI2RzjwFDGD-XA-1; Thu, 02 Feb 2023 11:24:55 -0500
-X-MC-Unique: KZpaF6VBNI2RzjwFDGD-XA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6AF71296A606;
-        Thu,  2 Feb 2023 16:24:55 +0000 (UTC)
-Received: from localhost.localdomain.com (ovpn-192-75.brq.redhat.com [10.40.192.75])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E6076404BEC0;
-        Thu,  2 Feb 2023 16:24:54 +0000 (UTC)
-From:   Tomas Henzl <thenzl@redhat.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     mikoxyzzz@gmail.com
-Subject: [PATCH v2 4/4] ses: fix slab-out-of-bounds reported by KASAN in ses_intf_remove
-Date:   Thu,  2 Feb 2023 17:24:51 +0100
-Message-Id: <20230202162451.15346-5-thenzl@redhat.com>
-In-Reply-To: <20230202162451.15346-1-thenzl@redhat.com>
-References: <20230202162451.15346-1-thenzl@redhat.com>
+        with ESMTP id S229711AbjBBR63 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Feb 2023 12:58:29 -0500
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D87769B37;
+        Thu,  2 Feb 2023 09:58:29 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so6155455pjq.1;
+        Thu, 02 Feb 2023 09:58:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g7TfipDVShtVQTpW0FSroHYDXAV2hY7mVhCYjGpL6gc=;
+        b=P2lauL47xfc3/Kio2VmxgkUa7xmTL2E8vTyXqFMVCcF1s7RjyJXXsM7Uy6MDABNit0
+         VMair7Xs/5VTz6L3DiYrUte0gFmSbIb5TnLoN9tt31SOzw6N6GuqoiUXA6UAXks+g3Ze
+         NibRuyuS8tJcpv4GJxEMk9O6Id7uGlVrK8/nUd3aJYCFOLjkd9BowAIQxcrkkjZ8y1Rq
+         oSKAZtycgeENdCySICJ4hjCGrTEGG6TH33mlDqJhynAFgJTtevxCdmsyx4zz68Tv7Vlp
+         xiU4PlLX4K1ersU0Ej6FMxwdYgZMHMfLGfPXgn/vm7KBKFKgX4I6T9734pTTXav8kIYK
+         DdOA==
+X-Gm-Message-State: AO0yUKU9Gh9LN7oWpGv9PKH6v2RkvY0H6vKYZzcBRlG7WnUpAK5Ra3Tb
+        gT5/yauYgAsnRRleoK3N+kg=
+X-Google-Smtp-Source: AK7set9fAe9AwWa6YZu7dLL1f5KXAYAdfqmCS8CzDzM3SLiYLJXSp7Qf2MdVsRSKwQ+rNh1jXn/8cg==
+X-Received: by 2002:a17:90b:4d04:b0:22c:6fdb:88c2 with SMTP id mw4-20020a17090b4d0400b0022c6fdb88c2mr7390323pjb.30.1675360708533;
+        Thu, 02 Feb 2023 09:58:28 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:bf7f:37aa:6a01:bf09? ([2620:15c:211:201:bf7f:37aa:6a01:bf09])
+        by smtp.gmail.com with ESMTPSA id ne19-20020a17090b375300b00228eea35201sm3542973pjb.12.2023.02.02.09.58.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Feb 2023 09:58:27 -0800 (PST)
+Message-ID: <45a935b2-9603-8244-3d1c-6e5ad0445a81@acm.org>
+Date:   Thu, 2 Feb 2023 09:58:25 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 1/1] scsi: ufs: Add hibernation callbacks
+Content-Language: en-US
+To:     Anjana Hari <quic_ahari@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        konrad.dybcio@linaro.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_narepall@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_rampraka@quicinc.com
+References: <20230202161045.3956-1-quic_ahari@quicinc.com>
+ <20230202161045.3956-2-quic_ahari@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230202161045.3956-2-quic_ahari@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-A fix for:
-BUG: KASAN: slab-out-of-bounds in ses_intf_remove+0x23f/0x270 [ses]
-Read of size 8 at addr ffff88a10d32e5d8 by task rmmod/12013
-When edev->components is zero, accessing edev->component[0]
-members is wrong.
+On 2/2/23 08:10, Anjana Hari wrote:
+> Adds freeze, thaw and restore callbacks for hibernate and restore
+> functionality.
 
-Signed-off-by: Tomas Henzl <thenzl@redhat.com>
----
- drivers/scsi/ses.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
-index dbfe12f63c98..7a9eb54e8808 100644
---- a/drivers/scsi/ses.c
-+++ b/drivers/scsi/ses.c
-@@ -850,7 +850,8 @@ static void ses_intf_remove_enclosure(struct scsi_device *sdev)
- 	kfree(ses_dev->page2);
- 	kfree(ses_dev);
- 
--	kfree(edev->component[0].scratch);
-+	if (edev->components)
-+		kfree(edev->component[0].scratch);
- 
- 	put_device(&edev->edev);
- 	enclosure_unregister(edev);
--- 
-2.38.1
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
