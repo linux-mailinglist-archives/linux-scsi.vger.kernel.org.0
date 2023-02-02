@@ -2,51 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86512688976
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Feb 2023 23:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DC568897A
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Feb 2023 23:02:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjBBWB7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 2 Feb 2023 17:01:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
+        id S233108AbjBBWCO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 2 Feb 2023 17:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232593AbjBBWB6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Feb 2023 17:01:58 -0500
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36552885D4
-        for <linux-scsi@vger.kernel.org>; Thu,  2 Feb 2023 14:01:32 -0800 (PST)
-Received: by mail-pj1-f47.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so6550253pjq.1
-        for <linux-scsi@vger.kernel.org>; Thu, 02 Feb 2023 14:01:32 -0800 (PST)
+        with ESMTP id S232671AbjBBWCE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Feb 2023 17:02:04 -0500
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0DB611CB
+        for <linux-scsi@vger.kernel.org>; Thu,  2 Feb 2023 14:01:47 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so3140154pjb.5
+        for <linux-scsi@vger.kernel.org>; Thu, 02 Feb 2023 14:01:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6jaA09wzrIRgtIbC8xDy5PlXj/5BjpF7gR5JeHCrLa4=;
-        b=waNTSE3qL6vZDPY+LMo/mzQy8zUnyyQc9ScW9SyX7P2iSc/EsbEN/rCU7pprQcwszD
-         MTrALf1Qc06JLYWOWrnLw8dudx3c0uXtOCS9CGLjMAcwSNHERpP3mW1o6L2u48oCoM15
-         7Z672w0ZnXHnJK1D0nQLPWEDL8aJJDLrR+KXVniB/O5HsawOm8hVk6q1htGCGGDr583Y
-         VKFHrQ4qq1j4ZWiFpL7H5X9OlUNECY9k8b+zXCHKhudHn+eIkrsa2NaMLDYei/XEwkSi
-         g3nVTZ2Lt3DrsIeC521TQoJqF7PIy/KRjVTCN4ra1jlG5SR8WuYoDns9U49Oi4Nh95e8
-         oqPQ==
-X-Gm-Message-State: AO0yUKVU6u/pRnISfQjdedGOf7dNWiOS/XNVWL8FNlcoUftdVkZ2X3FK
-        AbaJmQWQEzALJ2KKLai2E88=
-X-Google-Smtp-Source: AK7set+n1q7z4lAvLk2wz2wnxP1/hVvuVXDxgEdiFGQafoB9KIKA9nTuCwkoQrWy0+h2jB4osLQ3mQ==
-X-Received: by 2002:a05:6a21:99a2:b0:bc:8a99:1943 with SMTP id ve34-20020a056a2199a200b000bc8a991943mr10011219pzb.15.1675375248511;
-        Thu, 02 Feb 2023 14:00:48 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cCsV+jzP+JpaM0BBwBo6UedbfdU5AJgR3rGPkgCzMEo=;
+        b=g97qzu0XiYLgbKy2GxtdcPPZU7jWZLFxfNxAdPJP6xjUMpxmdT813J+zkFOa82BCMT
+         prgf/9nrnwJNem3e3t6BO6x2IbnL5rs7I9cdKLkGIGLPRKa7RBr8Rov0uPSiFkENIv81
+         3klWUOyaSPlt4W0oahMJ4Phqq7cwjm6ipRLGus3wnBT032yg+ECw3OtJ92Rn0QqzT5Zo
+         7ZHwEVu3LAZpfLjrETT04ZhPmMLjpFUPdweh9IjX7TWNgq/ufdK4jvZEyM3Dwok2t4I4
+         OwguW41h2tmyDpSj3najvPUc+HjGBDA8+cCjukAoTr3I1Nia+ytNf9QJgXk4WHAH8l4L
+         Maqg==
+X-Gm-Message-State: AO0yUKVDjhHteMHFUBevOSyCuquulQT9IlmRR3cT8SMS+kfBhCVpi0AS
+        PerlSAaQejMAZS8bkLqdOTE=
+X-Google-Smtp-Source: AK7set81XjZcBxVfU4HH7l4kTSHLWOqRA+3mVvLG+u/ysSs67AhANhHF9sxO3TKAI465k+ktN39e0Q==
+X-Received: by 2002:a05:6a20:4b21:b0:bf:2a24:ba02 with SMTP id fp33-20020a056a204b2100b000bf2a24ba02mr2510063pzb.33.1675375250361;
+        Thu, 02 Feb 2023 14:00:50 -0800 (PST)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:bf7f:37aa:6a01:bf09])
-        by smtp.gmail.com with ESMTPSA id t8-20020a63b708000000b004f1e87530cesm232951pgf.91.2023.02.02.14.00.47
+        by smtp.gmail.com with ESMTPSA id t8-20020a63b708000000b004f1e87530cesm232951pgf.91.2023.02.02.14.00.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 14:00:47 -0800 (PST)
+        Thu, 02 Feb 2023 14:00:49 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
         Avri Altman <avri.altman@wdc.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH v2 0/2] Use SYNCHRONIZE CACHE instead of FUA for UFS devices
-Date:   Thu,  2 Feb 2023 14:00:39 -0800
-Message-Id: <20230202220041.560919-1-bvanassche@acm.org>
+        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: [PATCH v2 1/2] scsi: core: Introduce the BLIST_BROKEN_FUA flag
+Date:   Thu,  2 Feb 2023 14:00:40 -0800
+Message-Id: <20230202220041.560919-2-bvanassche@acm.org>
 X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+In-Reply-To: <20230202220041.560919-1-bvanassche@acm.org>
+References: <20230202220041.560919-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -59,30 +63,53 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Martin,
+UFS devices perform better when using SYNCHRONIZE CACHE command instead of
+the FUA flag. Introduce the BLIST_BROKEN_FUA flag for using SYNCHRONIZE
+CACHE instead of FUA.
 
-Measurements have shown that UFS devices perform better when using SYNCHRONIZE
-CACHE instead of FUA. Hence this patch series that makes the SCSI core submit
-a SYNCHRONIZE CACHE command instead of setting the FUA bit for UFS
-devices. Please consider this patch series for the next merge window.
+The BLIST_BROKEN_FUA flag can be set by using one of the following
+approaches:
+* From user space, by writing into /proc/scsi/device_info.
+* From the kernel, by setting sdev_bflags from the slave_alloc callback.
 
-Thanks,
+For a prior version of this patch, see also
+https://lore.kernel.org/lkml/YpecaXfIxZBHIcfj@google.com/T/
 
-Bart.
-
-Changes compared to v1:
-- Updated __BLIST_LAST_USED.
-- Added #include <scsi/scsi_devinfo.h> to fix a build error reported by the
-  kernel robot.
-
-Asutosh Das (1):
-  scsi: ufs: Use SYNCHRONIZE CACHE instead of FUA
-
-Bart Van Assche (1):
-  scsi: core: Introduce the BLIST_BROKEN_FUA flag
-
+Cc: Jaegeuk Kim <jaegeuk@kernel.org>
+Cc: Asutosh Das <quic_asutoshd@quicinc.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
  drivers/scsi/scsi_scan.c    | 3 +++
- drivers/ufs/core/ufshcd.c   | 4 ++++
  include/scsi/scsi_devinfo.h | 4 +++-
- 3 files changed, 10 insertions(+), 1 deletion(-)
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index a62925355c2c..c1eb6bfe7ed2 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1020,6 +1020,9 @@ static int scsi_add_lun(struct scsi_device *sdev, unsigned char *inq_result,
+ 	if (*bflags & BLIST_NO_RSOC)
+ 		sdev->no_report_opcodes = 1;
+ 
++	if (*bflags & BLIST_BROKEN_FUA)
++		sdev->broken_fua = 1;
++
+ 	/* set the device running here so that slave configure
+ 	 * may do I/O */
+ 	mutex_lock(&sdev->state_mutex);
+diff --git a/include/scsi/scsi_devinfo.h b/include/scsi/scsi_devinfo.h
+index 5d14adae21c7..783451dfa46e 100644
+--- a/include/scsi/scsi_devinfo.h
++++ b/include/scsi/scsi_devinfo.h
+@@ -68,8 +68,10 @@
+ #define BLIST_RETRY_ITF		((__force blist_flags_t)(1ULL << 32))
+ /* Always retry ABORTED_COMMAND with ASC 0xc1 */
+ #define BLIST_RETRY_ASC_C1	((__force blist_flags_t)(1ULL << 33))
++/* Use SYNCHRONIZE CACHE instead of FUA */
++#define BLIST_BROKEN_FUA	((__force blist_flags_t)(1ULL << 34))
+ 
+-#define __BLIST_LAST_USED BLIST_RETRY_ASC_C1
++#define __BLIST_LAST_USED BLIST_BROKEN_FUA
+ 
+ #define __BLIST_HIGH_UNUSED (~(__BLIST_LAST_USED | \
+ 			       (__force blist_flags_t) \
