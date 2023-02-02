@@ -2,72 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BE0687601
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Feb 2023 07:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F6C6875FA
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Feb 2023 07:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjBBGo1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 2 Feb 2023 01:44:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
+        id S231478AbjBBGmQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 2 Feb 2023 01:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjBBGoZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Feb 2023 01:44:25 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16B7D79C9B;
-        Wed,  1 Feb 2023 22:44:23 -0800 (PST)
+        with ESMTP id S231359AbjBBGmP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Feb 2023 01:42:15 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E34B681B10;
+        Wed,  1 Feb 2023 22:42:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=6hzHM
-        L8zJZo5EjDWZpassjEzpK+oxlFSmZP2G2l+x5s=; b=V/oxsXM0Iqsc6Q01CvuNZ
-        HZiDqNC1VadNjuJ3haAV5r/WLZlxZlw8lUr13A4UaldYeVRvZcpXF/ImXKJwIHBN
-        M0G+5LMQPuXh7M+2IKFqrPd640PpMS2ibVLWwHsBMyyMWcwvkQ0Z0htRAR2XaV8C
-        N27qJhsoapquVDEwywWKJo=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=BvKyp
+        2ja7z1Byi5l1hcgXBba6esEBWVxVsKc6Dkv+1M=; b=AcIj/Cln7UmQY5v4pVYb4
+        EFh/iTkAx8MbzCdm/AuaVzU9pC8DydP0Y+2QQYK3fqu5+9A/2EqEdVM7tc4qZ9e2
+        fk/5+3Sq2s/4RtfclI1cXxyH0y1mhM8WqLf5gvIPrEeQmUTeyfrUIFBduWtVWq92
+        PJkKK3Ju0ashZXfKDh2hKs=
 Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wB3ePTuV9tjNPomCg--.47862S2;
-        Thu, 02 Feb 2023 14:27:58 +0800 (CST)
+        by zwqz-smtp-mta-g0-2 (Coremail) with SMTP id _____wB3fXEWW9tjKt84Cg--.48881S2;
+        Thu, 02 Feb 2023 14:41:26 +0800 (CST)
 From:   Zheng Wang <zyytlz.wz@163.com>
 To:     mst@redhat.com
-Cc:     jasowang@redhat.com, pbonzini@redhat.com, stefanha@redhat.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
+Cc:     hackerzheng666@gmail.com, jasowang@redhat.com, pbonzini@redhat.com,
+        stefanha@redhat.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com,
         virtualization@lists.linux-foundation.org,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         security@kernel.org, alex000young@gmail.com,
         Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] scsi: virtio_scsi: Fix poential NULL pointer dereference in virtscsi_rescan_hotunplug
-Date:   Thu,  2 Feb 2023 14:27:56 +0800
-Message-Id: <20230202062756.21130-1-zyytlz.wz@163.com>
+Subject: [PATCH v2] scsi: virtio_scsi: Fix poential NULL pointer dereference in  virtscsi_rescan_hotunplug
+Date:   Thu,  2 Feb 2023 14:41:24 +0800
+Message-Id: <20230202064124.22277-1-zyytlz.wz@163.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wB3ePTuV9tjNPomCg--.47862S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7KFy5Cry8CrW7Gw4rGw1UGFg_yoW8ZF4kpr
-        WYy34jyw45Ga1xWayFgFZxCw1Y9ws7Wry7tayYg3y5WF45WryIqa1DJ34UZFW5XF95J3Z8
-        Aa10gF1j9ryDuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEL0eDUUUUU=
+X-CM-TRANSID: _____wB3fXEWW9tjKt84Cg--.48881S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KFy5Cry8CrW7Gw4rGr4rZrb_yoW8uF45pr
+        W5t34Yya1UGa1xWayFgFZxCr1Y9ws7Wry7tayYg39xWr45Wryxta1DJ347ZFy5XF95J3Z8
+        AF40gF1j9ryDuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEiSdxUUUUU=
 X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBugQKU1+GuBlNgQAAsT
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzhoKU2I0XNJUsQAAsw
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There is no check about the return value of kmalloc in 
-virtscsi_rescan_hotunplug. Add the check to avoid use 
+There is no check about the return value of kmalloc in
+virtscsi_rescan_hotunplug. Add the check to avoid use
 of null pointer 'inq_result' in case of the failure
 of kmalloc.
 
 Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 ---
- drivers/scsi/virtio_scsi.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+v2:
+- add kfree to avoid memory leak
+---
+ drivers/scsi/virtio_scsi.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-index d07d24c06b54..f198e281b1d3 100644
+index d07d24c06b54..a66d8815d738 100644
 --- a/drivers/scsi/virtio_scsi.c
 +++ b/drivers/scsi/virtio_scsi.c
-@@ -330,13 +330,16 @@ static void virtscsi_handle_param_change(struct virtio_scsi *vscsi,
+@@ -330,7 +330,7 @@ static void virtscsi_handle_param_change(struct virtio_scsi *vscsi,
  	scsi_device_put(sdev);
  }
  
@@ -76,16 +80,19 @@ index d07d24c06b54..f198e281b1d3 100644
  {
  	struct scsi_device *sdev;
  	struct Scsi_Host *shost = virtio_scsi_host(vscsi->vdev);
- 	unsigned char scsi_cmd[MAX_COMMAND_SIZE];
+@@ -338,6 +338,11 @@ static void virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
  	int result, inquiry_len, inq_result_len = 256;
  	char *inq_result = kmalloc(inq_result_len, GFP_KERNEL);
-+
-+	if (!inq_result)
-+		return -ENOMEM;
  
++	if (!inq_result) {
++		kfree(inq_result);
++		return -ENOMEM;
++	}
++
  	shost_for_each_device(sdev, shost) {
  		inquiry_len = sdev->inquiry_len ? sdev->inquiry_len : 36;
-@@ -366,6 +369,7 @@ static void virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
+ 
+@@ -366,6 +371,7 @@ static void virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
  	}
  
  	kfree(inq_result);
@@ -93,7 +100,7 @@ index d07d24c06b54..f198e281b1d3 100644
  }
  
  static void virtscsi_handle_event(struct work_struct *work)
-@@ -374,12 +378,15 @@ static void virtscsi_handle_event(struct work_struct *work)
+@@ -374,12 +380,15 @@ static void virtscsi_handle_event(struct work_struct *work)
  		container_of(work, struct virtio_scsi_event_node, work);
  	struct virtio_scsi *vscsi = event_node->vscsi;
  	struct virtio_scsi_event *event = &event_node->event;
