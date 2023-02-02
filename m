@@ -2,156 +2,117 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FB26875FF
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Feb 2023 07:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47806876C4
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Feb 2023 08:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbjBBGnq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 2 Feb 2023 01:43:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
+        id S231737AbjBBHwx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 2 Feb 2023 02:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjBBGnp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Feb 2023 01:43:45 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FEF79610;
-        Wed,  1 Feb 2023 22:43:41 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 78so613457pgb.8;
-        Wed, 01 Feb 2023 22:43:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/6YmpgxqYHWFyDMFSqsB9v0H6/GVgLJ+dAGeGtmdKXU=;
-        b=TqcYW+qnBnQySIccstphXQJ7F6RG+RhTdRL6onG8HxBk+/1LyjLDeFkjILMrM6cpci
-         fwKhHC8v3E635H1GgEEpOgsAY8fd5EwTTQZoApwTQdlG2NvoS/pQQ5eVZJMzx27WkXny
-         jP219rxjkY+AGURMMoJi7p5nfFxTSdcnsQPE4lAmvNIZnSTtAhP4q4VW9UnTrRD2CxwA
-         +ajf3b24+drBPHmiK/vHe6ptteYKvHxGrNeZELOp9wj7vGHNkYu9kn3DwACQgxpT4/jr
-         4lXAEy07w8jHZPiCpm35wHlVsk+yievpKhlUZZkXpJnLXBHQp5gy9HwUajBSO06liDUd
-         Yl0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/6YmpgxqYHWFyDMFSqsB9v0H6/GVgLJ+dAGeGtmdKXU=;
-        b=hdvlJs23h1mzj3aeIEc/YdCDQkfMTAIgkY1pE5vMc5huqPiJQDjDVRemooHUcBqyhF
-         fV6fKSh4YjT7Om3HnM7Lf9LLxEapAMVFbFhXx1XOv10pjKX8vxhIxxwsr+p6zPSfv4uC
-         pDl4+BToi7YC9h+g+zzUUdKVvZ/p0JerNBqJK8TYLuT7rcTY6wOLl0czyjhcysjoP6Ef
-         4B6nJip5cXnvP97PDX5Q1CzkxtDMjrK2CWcmTZ3xjaxa8QvpecL1p0YqkeuTodlXMxV6
-         luPa3SczDPhSLKb2Mif5IKiLkD+wXwA98z7NrjH4aPwdBiW1HzSpnT62/+mUL1dV3oyM
-         n/6A==
-X-Gm-Message-State: AO0yUKUk0krzpNXcYiWclZYkZQmUcv5q1AYkwh23fM7ZsUadBh0nm61i
-        v/F/skHrfmwQvMgsZkaIwDfusQ2W4xEk2cEq3hQ=
-X-Google-Smtp-Source: AK7set9FfOkCtldKGBIjsF9+aGWojF7+JU+GG1+akpUPeWmylHhn4anENWMbP9Du0zsSwhjdUW0d9FXr/c2CCMf3i7Q=
-X-Received: by 2002:a63:5150:0:b0:4d0:370b:5027 with SMTP id
- r16-20020a635150000000b004d0370b5027mr887411pgl.8.1675320221232; Wed, 01 Feb
- 2023 22:43:41 -0800 (PST)
+        with ESMTP id S229495AbjBBHww (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Feb 2023 02:52:52 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB2644BF
+        for <linux-scsi@vger.kernel.org>; Wed,  1 Feb 2023 23:52:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675324372; x=1706860372;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=i6+tP3D2TGh98JXO5uh77wrONpOtCnLHYBRLM/nCq9A=;
+  b=j81hSPwYCkcSQ3Z6kCvgHhxZWU8e+tTUOuz6zyGR0D6Goko3ObDCKVti
+   OzJo5iYG0J9m8sQnjyoTc0u0DmOARNmK3q1M4V3PeggeYWO50M0EhsgR4
+   0fllKlyI4B7GAJZ+wCtTuZ4oM07nYY1xIT5bDO+ncSZUEDXv3FlXHMQy4
+   AlOqV4PIAYYxLLwW4iOuChlf77OORK9mzpfrNFu6zL8yP0Dpla413rQhq
+   9Vt0sPDgNuYzpBJT8vv1nLlblzBGPAVT08mPzIqzESbS0LH5Iau5Pn8eR
+   YewNm6FmxDSuFCumPZxgO6Uvsy1N3qMOVAb3ZFgvNnOpHYD9zb7kjJs5O
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="329672120"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="329672120"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 23:52:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="807881057"
+X-IronPort-AV: E=Sophos;i="5.97,266,1669104000"; 
+   d="scan'208";a="807881057"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.60.179])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 23:52:48 -0800
+Message-ID: <fdbaf66c-b04b-2477-e778-6f6f054f0db2@intel.com>
+Date:   Thu, 2 Feb 2023 09:52:43 +0200
 MIME-Version: 1.0
-References: <20230202064124.22277-1-zyytlz.wz@163.com>
-In-Reply-To: <20230202064124.22277-1-zyytlz.wz@163.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Thu, 2 Feb 2023 14:43:29 +0800
-Message-ID: <CAJedcCw6DwgUyt4EDnWcw-xGZ3pRo5gbPqVjG5LM3AmHWGomNw@mail.gmail.com>
-Subject: Re: [PATCH v2] scsi: virtio_scsi: Fix poential NULL pointer
- dereference in virtscsi_rescan_hotunplug
-To:     Zheng Wang <zyytlz.wz@163.com>
-Cc:     mst@redhat.com, jasowang@redhat.com, pbonzini@redhat.com,
-        stefanha@redhat.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com,
-        virtualization@lists.linux-foundation.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        security@kernel.org, alex000young@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH 2/2] scsi: ufs: Use SYNCHRONIZE CACHE instead of FUA
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Asutosh Das <asutoshd@codeaurora.org>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Avri Altman <avri.altman@wdc.com>, linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+References: <20230201180637.2102556-1-bvanassche@acm.org>
+ <20230201180637.2102556-3-bvanassche@acm.org>
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230201180637.2102556-3-bvanassche@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-After writing the patch, I found there is an old patch about this issue.
-The link is : https://lore.kernel.org/all/ecb2f3c6-af8c-dd43-1dcf-0b5e8a9d8=
-848@redhat.com/
+On 1/02/23 20:06, Bart Van Assche wrote:
+> From: Asutosh Das <asutoshd@codeaurora.org>
+> 
+> UFS devices perform better when using SYNCHRONIZE CACHE command
+> instead of the FUA flag. Hence this patch.
 
-Best regards,
-Zheng Wang
+Hi
 
-Zheng Wang <zyytlz.wz@163.com> =E4=BA=8E2023=E5=B9=B42=E6=9C=882=E6=97=A5=
-=E5=91=A8=E5=9B=9B 14:42=E5=86=99=E9=81=93=EF=BC=9A
->
-> There is no check about the return value of kmalloc in
-> virtscsi_rescan_hotunplug. Add the check to avoid use
-> of null pointer 'inq_result' in case of the failure
-> of kmalloc.
->
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+It would be nice to get some clarification on what is
+going on for this case.
+
+This includes with Data Reliability enabled?
+
+In theory, WRITE+FUA should be at least as fast as
+WRITE+SYNCHRONIZE CACHE, right?
+
+Do we have any explanation for why that would not
+be true?
+
+In particular, is SYNCHRONIZE CACHE faster because
+it is not, in fact, providing Reliable Writes?
+
+> 
+> Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> [ bvanassche: modified a source code comment ]
 > ---
-> v2:
-> - add kfree to avoid memory leak
-> ---
->  drivers/scsi/virtio_scsi.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-> index d07d24c06b54..a66d8815d738 100644
-> --- a/drivers/scsi/virtio_scsi.c
-> +++ b/drivers/scsi/virtio_scsi.c
-> @@ -330,7 +330,7 @@ static void virtscsi_handle_param_change(struct virti=
-o_scsi *vscsi,
->         scsi_device_put(sdev);
->  }
->
-> -static void virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
-> +static int virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
->  {
->         struct scsi_device *sdev;
->         struct Scsi_Host *shost =3D virtio_scsi_host(vscsi->vdev);
-> @@ -338,6 +338,11 @@ static void virtscsi_rescan_hotunplug(struct virtio_=
-scsi *vscsi)
->         int result, inquiry_len, inq_result_len =3D 256;
->         char *inq_result =3D kmalloc(inq_result_len, GFP_KERNEL);
->
-> +       if (!inq_result) {
-> +               kfree(inq_result);
-> +               return -ENOMEM;
-> +       }
+>  drivers/ufs/core/ufshcd.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index bf3cb12ef02f..461aa51cfccc 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -5056,6 +5056,9 @@ static int ufshcd_slave_alloc(struct scsi_device *sdev)
+>  	/* WRITE_SAME command is not supported */
+>  	sdev->no_write_same = 1;
+>  
+> +	/* Use SYNCHRONIZE CACHE instead of FUA to improve performance */
+> +	sdev->sdev_bflags = BLIST_BROKEN_FUA;
 > +
->         shost_for_each_device(sdev, shost) {
->                 inquiry_len =3D sdev->inquiry_len ? sdev->inquiry_len : 3=
-6;
->
-> @@ -366,6 +371,7 @@ static void virtscsi_rescan_hotunplug(struct virtio_s=
-csi *vscsi)
->         }
->
->         kfree(inq_result);
-> +       return 0;
->  }
->
->  static void virtscsi_handle_event(struct work_struct *work)
-> @@ -374,12 +380,15 @@ static void virtscsi_handle_event(struct work_struc=
-t *work)
->                 container_of(work, struct virtio_scsi_event_node, work);
->         struct virtio_scsi *vscsi =3D event_node->vscsi;
->         struct virtio_scsi_event *event =3D &event_node->event;
-> +       int ret =3D 0;
->
->         if (event->event &
->             cpu_to_virtio32(vscsi->vdev, VIRTIO_SCSI_T_EVENTS_MISSED)) {
->                 event->event &=3D ~cpu_to_virtio32(vscsi->vdev,
->                                                    VIRTIO_SCSI_T_EVENTS_M=
-ISSED);
-> -               virtscsi_rescan_hotunplug(vscsi);
-> +               ret =3D virtscsi_rescan_hotunplug(vscsi);
-> +               if (ret)
-> +                       return;
->                 scsi_scan_host(virtio_scsi_host(vscsi->vdev));
->         }
->
-> --
-> 2.25.1
->
+>  	ufshcd_lu_init(hba, sdev);
+>  
+>  	ufshcd_setup_links(hba, sdev);
+
