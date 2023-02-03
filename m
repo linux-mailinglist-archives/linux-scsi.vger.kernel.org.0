@@ -2,79 +2,119 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487D16892C0
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Feb 2023 09:53:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86757689D4B
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Feb 2023 16:09:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbjBCIxZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Feb 2023 03:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S233865AbjBCPHm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Feb 2023 10:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbjBCIxY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Feb 2023 03:53:24 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C608520D16
-        for <linux-scsi@vger.kernel.org>; Fri,  3 Feb 2023 00:53:21 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id c11-20020a056e020bcb00b0030be9d07d63so2941052ilu.0
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Feb 2023 00:53:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HKmKJPDbIloaVF9wxjUKzLZJm032XxjfFf+EFpRM0Yk=;
-        b=NVxeZSDftOCB9Z8dD17VG6LshNHCkZ/UzeipGRkPAyLuhW1SBWf+ZnVLavE1xJyNmM
-         7pBya/bA3NCHnfA94QODsb2iW/c0ETgKMpc1f7DATWEP35jptNDlIQ8ikrDT+4uA4ZEr
-         7oaIc7PaZnxGLtpux01QvpYDTPhTzi7TiZAu/ZnF7lUBqfSt+1YDcxxFoy0QfWAXutWq
-         MjPk8OXpAXQ5lkkvsDaeZka+RPL2xOpyMgkhJ3VHFiSfAWqRqut7NIslBnsfAWjW8oYe
-         su6wQ/l02FmFDuLgKLIZ+3cq8oC6EmU44oHmeO1K3WH5vxIrR09qnXs2ZuaXgkQUWvoc
-         sziw==
-X-Gm-Message-State: AO0yUKUtYwwz51o3k+GHk+obsCzz+onJy3GNP0wlYT9Wi3MCZtTMKbQl
-        UCbjqGh6pUcpw9M4gL7e5hRf6gWeAEsVbPuKBuI215HctzCl
-X-Google-Smtp-Source: AK7set992YEjU59mc5KBs7LOS8DgjU2Yp0XuHbujD6DIew8NCUbNVWokx5RUonIbg1J0OqznsgdoGqUe6RiTEkrlZf+r1Sdtfvj2
+        with ESMTP id S233752AbjBCPHc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Feb 2023 10:07:32 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090CDA0EA5;
+        Fri,  3 Feb 2023 07:07:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=xaXfHvtmirT//H/Mo9JZTCfopwE0ARO2STlU1q4PXIU=; b=LwFg4o7FNRjNvzeL1UIeY+PB30
+        pigk8LO6ghAV/PW8A2diZklP7ONPkf/QuZ1j8F2QHoj76RmFvj/Q8pZxLQNZCU995h2ds4C/fgoU6
+        vJrgHAy3JyTeMQU3sBiEJ2k75Q4WOqSb0agWbK9kpPxrkSUpCMcMfqkAl8xQSVnMiGJsWds5MEA0/
+        ttVela2LE/82AgMzn2QpTZPgzNm+u+iJUJj6KJXJcu0gz4sOsbBmYQNi3tJoXH33FBOPEsxVAF/p5
+        5brK/jfAn9M2GdavX3Sg69iNnol9jENDgRqr7idObKYZRPtBjJSz+TRjAv8KvwNM3XfV2T+AE+LX+
+        QYoCj3mg==;
+Received: from [2001:4bb8:19a:272a:910:bb67:7287:f956] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pNxe8-002abR-B0; Fri, 03 Feb 2023 15:06:36 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Ilya Dryomov <idryomov@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Xiubo Li <xiubli@redhat.com>, Steve French <sfrench@samba.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-block@vger.kernel.org, ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        devel@lists.orangefs.org, io-uring@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: add bvec initialization helpers v2
+Date:   Fri,  3 Feb 2023 16:06:11 +0100
+Message-Id: <20230203150634.3199647-1-hch@lst.de>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-X-Received: by 2002:a02:ac8e:0:b0:3b1:92c0:ac28 with SMTP id
- x14-20020a02ac8e000000b003b192c0ac28mr2337676jan.74.1675414401053; Fri, 03
- Feb 2023 00:53:21 -0800 (PST)
-Date:   Fri, 03 Feb 2023 00:53:21 -0800
-In-Reply-To: <000000000000cbd8aa05f1fd2516@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000039fb2d05f3c7d0ed@google.com>
-Subject: Re: [syzbot] [ext4?] INFO: task hung in ext4_evict_ea_inode
-From:   syzbot <syzbot+38e6635a03c83c76297a@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, beanhuo@micron.com, bvanassche@acm.org,
-        hdanton@sina.com, jejb@linux.ibm.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        martin.petersen@oracle.com, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu, wsa+renesas@sang-engineering.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-syzbot has bisected this issue to:
+Hi all,
 
-commit 82ede9c19839079e7953a47895729852a440080c
-Author: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Date:   Tue Jun 21 14:46:53 2022 +0000
+this series adds the helpers to initalize a bvec.  These remove open coding of
+bvec internals and help with experimenting with other representations like
+a phys_addr_t instead of page + offset.
 
-    scsi: ufs: core: Fix typos in error messages
+Changes since v1:
+ - fix a typo
+ - simplify the code in ceph's __iter_get_bvecs a little bit further
+ - fix two subject prefixes
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=132b298b480000
-start commit:   a689b938df39 Merge tag 'block-2023-01-06' of git://git.ker..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10ab298b480000
-console output: https://syzkaller.appspot.com/x/log.txt?x=172b298b480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=33ad6720950f996d
-dashboard link: https://syzkaller.appspot.com/bug?extid=38e6635a03c83c76297a
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114dd83a480000
-
-Reported-by: syzbot+38e6635a03c83c76297a@syzkaller.appspotmail.com
-Fixes: 82ede9c19839 ("scsi: ufs: core: Fix typos in error messages")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Diffstat:
+ block/bio-integrity.c             |    7 ------
+ block/bio.c                       |   12 +----------
+ drivers/block/rbd.c               |    7 ++----
+ drivers/block/virtio_blk.c        |    4 ---
+ drivers/block/zram/zram_drv.c     |   15 +++-----------
+ drivers/nvme/host/core.c          |    4 ---
+ drivers/nvme/target/io-cmd-file.c |   10 +--------
+ drivers/nvme/target/tcp.c         |    5 +---
+ drivers/scsi/sd.c                 |   36 ++++++++++++++++------------------
+ drivers/target/target_core_file.c |   18 +++++------------
+ drivers/vhost/vringh.c            |    5 +---
+ fs/afs/write.c                    |    8 ++-----
+ fs/ceph/file.c                    |   12 +++--------
+ fs/cifs/connect.c                 |    5 ++--
+ fs/cifs/fscache.c                 |   16 +++++----------
+ fs/cifs/misc.c                    |    5 +---
+ fs/cifs/smb2ops.c                 |    6 ++---
+ fs/coredump.c                     |    7 +-----
+ fs/nfs/fscache.c                  |   16 +++++----------
+ fs/orangefs/inode.c               |   22 ++++++--------------
+ fs/splice.c                       |    5 +---
+ include/linux/bvec.h              |   40 ++++++++++++++++++++++++++++++++++++++
+ io_uring/rsrc.c                   |    4 ---
+ mm/page_io.c                      |    8 +------
+ net/ceph/messenger_v1.c           |    7 +-----
+ net/ceph/messenger_v2.c           |   28 ++++++++++----------------
+ net/rxrpc/rxperf.c                |    8 ++-----
+ net/sunrpc/svcsock.c              |    7 +-----
+ net/sunrpc/xdr.c                  |    5 +---
+ 29 files changed, 142 insertions(+), 190 deletions(-)
