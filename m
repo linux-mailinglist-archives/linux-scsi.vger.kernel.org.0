@@ -2,110 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6F468F1F9
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Feb 2023 16:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0AD68F5DC
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Feb 2023 18:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbjBHP2j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Feb 2023 10:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
+        id S231796AbjBHRoL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Feb 2023 12:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjBHP2h (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Feb 2023 10:28:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79FD72A0;
-        Wed,  8 Feb 2023 07:28:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E05CE616FC;
-        Wed,  8 Feb 2023 15:28:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8823AC433D2;
-        Wed,  8 Feb 2023 15:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675870115;
-        bh=HU9yDg0ckhjoVsidarnY13PzpvlqPHX5wbjSDIULsGo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bYomd0n8PB9/6/WZnQv2uVjcs5UKrELeLnk6ayos2rqUnMVE2h3FUPzQdF/1L7vzs
-         IvTqnCYWZTtD6Kb5y9vCOCoBl6KWbQnHZuE3E7lYPjgrOlVE+NF1g/eaIsoYjlfswp
-         6rsA2Kb4MEnQA0z7vwvl5AhuDSavgkfql40R8tVcGaDSzBMJEvvC/KpPJKDwAbKhXp
-         qpdWoeSIR5q2XXQ6dr1I+8l+JVtA/LAOeX6z3ieY4vmM3DICtU7Hgb9tWQ1ZOVmJMg
-         OT3NYHetABtwlJwtJQLpa5HpB39jDBF0PK4Zl21TsuZ3p/dFWmzm36JR6P5qvBArU9
-         K+hCq4poApCpg==
-Date:   Wed, 8 Feb 2023 20:58:26 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 2/2] dt-bindings: ufs: qcom: Add SM8550 compatible
- string
-Message-ID: <20230208152826.GA13510@thinkpad>
-References: <20230119151406.4168685-1-abel.vesa@linaro.org>
- <20230119151406.4168685-3-abel.vesa@linaro.org>
+        with ESMTP id S231929AbjBHRn4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Feb 2023 12:43:56 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3A556484;
+        Wed,  8 Feb 2023 09:42:14 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3ABD72233E;
+        Wed,  8 Feb 2023 17:40:59 +0000 (UTC)
+Received: from localhost (unknown [10.163.24.10])
+        by relay2.suse.de (Postfix) with ESMTP id F3C822C141;
+        Wed,  8 Feb 2023 17:40:58 +0000 (UTC)
+Received: by localhost (Postfix, from userid 1000)
+        id 1C9BFCA184; Wed,  8 Feb 2023 09:40:57 -0800 (PST)
+From:   Lee Duncan <leeman.duncan@gmail.com>
+To:     linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
+        netdev@vger.kernel.org
+Cc:     Lee Duncan <lduncan@suse.com>
+Subject: [RFC 0/9] Make iscsid-kernel communications namespace-aware
+Date:   Wed,  8 Feb 2023 09:40:48 -0800
+Message-Id: <cover.1675876731.git.lduncan@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230119151406.4168685-3-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 05:14:06PM +0200, Abel Vesa wrote:
-> Document the compatible for the UFS found on SM8550.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+From: Lee Duncan <lduncan@suse.com>
 
-Acked-by: Manivannan Sadhasivam <mani@kernel.org>
+This is a request for comment on a set of patches that
+modify the kernel iSCSI initiator communications so that
+they are namespace-aware. The goal is to allow multiple
+iSCSI daemon (iscsid) to run at once as long as they
+are in separate namespaces, and so that iscsid can
+run in containers.
 
-Thanks,
-Mani
+Comments and suggestions are more than welcome. I do not
+expect that this code is production-ready yet, and
+networking isn't my strongest suit (yet).
 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> index 54f5f8dc5c87..108c281e9d09 100644
-> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> @@ -33,6 +33,7 @@ properties:
->            - qcom,sm8250-ufshc
->            - qcom,sm8350-ufshc
->            - qcom,sm8450-ufshc
-> +          - qcom,sm8550-ufshc
->        - const: qcom,ufshc
->        - const: jedec,ufs-2.0
->  
-> @@ -106,6 +107,7 @@ allOf:
->                - qcom,sm8250-ufshc
->                - qcom,sm8350-ufshc
->                - qcom,sm8450-ufshc
-> +              - qcom,sm8550-ufshc
->      then:
->        properties:
->          clocks:
-> -- 
-> 2.34.1
-> 
+These patches were originally posted in 2015 by Chris
+Leech. There were some issues at the time about how
+to handle namespaces going away. I hope to address
+any issues raised with this patchset and then
+to merge these changes upstream to address working
+in working in containers.
+
+My contribution thus far has been to update these patches
+to work with the current upstream kernel.
+
+Chris Leech/Lee Duncan (9):
+  iscsi: create per-net iscsi netlink kernel sockets
+  iscsi: associate endpoints with a host
+  iscsi: sysfs filtering by network namespace
+  iscsi: make all iSCSI netlink multicast namespace aware
+  iscsi: set netns for iscsi_tcp hosts
+  iscsi: check net namespace for all iscsi lookup
+  iscsi: convert flashnode devices from bus to class
+  iscsi: rename iscsi_bus_flash_* to iscsi_flash_*
+  iscsi: filter flashnode sysfs by net namespace
+
+ drivers/infiniband/ulp/iser/iscsi_iser.c |   7 +-
+ drivers/scsi/be2iscsi/be_iscsi.c         |   6 +-
+ drivers/scsi/bnx2i/bnx2i_iscsi.c         |   6 +-
+ drivers/scsi/cxgbi/libcxgbi.c            |   6 +-
+ drivers/scsi/iscsi_tcp.c                 |   7 +
+ drivers/scsi/qedi/qedi_iscsi.c           |   6 +-
+ drivers/scsi/qla4xxx/ql4_os.c            |  64 +--
+ drivers/scsi/scsi_transport_iscsi.c      | 625 ++++++++++++++++-------
+ include/scsi/scsi_transport_iscsi.h      |  63 ++-
+ 9 files changed, 537 insertions(+), 253 deletions(-)
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.39.1
+
