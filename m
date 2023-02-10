@@ -2,100 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DF56924E5
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Feb 2023 18:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCEE69266D
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Feb 2023 20:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbjBJRzs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Feb 2023 12:55:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
+        id S233288AbjBJTdd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Feb 2023 14:33:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbjBJRzr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Feb 2023 12:55:47 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A8474041;
-        Fri, 10 Feb 2023 09:55:47 -0800 (PST)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31AHsATR013475;
-        Fri, 10 Feb 2023 17:55:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2022-7-12; bh=jdsxoJu/le3WzUyGsQ3i3KKDyAP1na77DcnDUC/E/QM=;
- b=tf6enj/DlSrXiBrbOaAtyv2ekPjDgbAOma8Hb8HAXfpVm1RdyOn72RMBSxzMrKf+v+bF
- AlbyVi/0J1HWchffonKQyVEY400Yvuvi2M+9dPyHkFSD29zy7qYmlZzBEBU+NKkggn7N
- OI+gDqzmCLR4e8weE0hm6NEeFFbh2m5gSl1QRIR+nl1KQ7k/Pnq0X7e32cq71CyrdZ7n
- mQWH2n95WNMUk1SEMnwHfUYb35nQTVTepM02+OwvaXrsAZUI1xS+fgzK+PQeSbYyPP9a
- /dQa56Q+LDkqKfOnuyrD1/FG4PBm4Wq/e+tzxyCpmaTQUCY3Uu8bkJHxzvAlU3yKp839 WA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhdy1e06m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 17:55:46 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31AGUH2r013754;
-        Fri, 10 Feb 2023 17:55:45 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3nhdtajccv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Feb 2023 17:55:45 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31AHti0P015195;
-        Fri, 10 Feb 2023 17:55:45 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3nhdtajcc6-1;
-        Fri, 10 Feb 2023 17:55:44 +0000
-From:   Alok Tiwari <alok.a.tiwari@oracle.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     alok.a.tiwari@oracle.com, darren.kenny@oracle.com,
-        michael.christie@oracle.com, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, martin.petersen@oracle.com,
-        d.bogdanov@yadro.com, r.bolshakov@yadro.com,
-        target-devel@vger.kernel.org
-Subject: [PATCH] scsi: target: core: Added a blank line after target_remove_from_tmr_list()
-Date:   Fri, 10 Feb 2023 09:55:22 -0800
-Message-Id: <20230210175521.1469826-1-alok.a.tiwari@oracle.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S233325AbjBJTd0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Feb 2023 14:33:26 -0500
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AB663109
+        for <linux-scsi@vger.kernel.org>; Fri, 10 Feb 2023 11:33:22 -0800 (PST)
+Received: by mail-pj1-f49.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso9266252pju.0
+        for <linux-scsi@vger.kernel.org>; Fri, 10 Feb 2023 11:33:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DCm1LWykd/v7wx3M+xj9y9kECkykoTeSpVK0kf2mxNI=;
+        b=kTKfsDPPpSuz3zJGl6ycygJa/0zMLcQFPrO/htZR4YPNCE91b7KeAZ9i4eafPN1zbD
+         SY6Zr0Cs2d65gV+BnvePNcSAaRUQ6PHA3bWm3kMrzsDivwmR/4dcM8pbdUTwqf5Ydkj6
+         psW1mWRqE73pBsyfWzCoZZluj/7jh6CoxiNe70hh8dGhmq1zycFEtav2DF6idzZrq96Z
+         DCkQ/0WXENjwqcvtM3sohN6hhiHLp5UvPP6W1ZRsCcF0CKfXQFWzv3+rtWkxZM/x9PNa
+         /bh1AiKlP0zTWlCmXjdUFh3om51NaLTZt5xz59A32Jt8ozr8B+BLGeHlIcPzkHpCqBAo
+         Sa1w==
+X-Gm-Message-State: AO0yUKV45RgVx3f03Oy9kV4WBl0OVoVgrZ0cly9yY1JRU3CnXtq5wkRE
+        Gn6KpasSOx4CJnKuXzZbKa0ddPYYn/0=
+X-Google-Smtp-Source: AK7set/Z3O3J+yKsMI9IjMrpxPycqfSnc2/ilI+EzsCwMC2LLhGUB8RQVLthBeed0UBNrxNZ304giA==
+X-Received: by 2002:a17:903:41c3:b0:199:75:9b4b with SMTP id u3-20020a17090341c300b0019900759b4bmr19453891ple.14.1676057602340;
+        Fri, 10 Feb 2023 11:33:22 -0800 (PST)
+Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:a834:2664:42:db8b])
+        by smtp.gmail.com with ESMTPSA id w9-20020a1709029a8900b0019605d48707sm3718356plp.114.2023.02.10.11.33.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 11:33:21 -0800 (PST)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v3 0/3] Simplify ufshcd_execute_start_stop()
+Date:   Fri, 10 Feb 2023 11:32:55 -0800
+Message-Id: <20230210193258.4004923-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-10_13,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 adultscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302100149
-X-Proofpoint-GUID: 9fl-1ScwRFIasn_SnS6nUQg5ANWyj-8b
-X-Proofpoint-ORIG-GUID: 9fl-1ScwRFIasn_SnS6nUQg5ANWyj-8b
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There is no separate blank line between target_remove_from_tmr_list() and
-transport_cmd_check_stop_to_fabric
-As per coding-style, it is require to separate functions with one blank line.
+Hi Martin,
 
-Fixes: 12b6fcd0ea7f ("scsi: target: core: Remove from tmr_list during LUN unlink")
-Signed-off-by: Alok Tiwari <alok.a.tiwari@oracle.com>
----
- drivers/target/target_core_transport.c | 1 +
- 1 file changed, 1 insertion(+)
+This patch series simplifies ufshcd_execute_start_stop() by using the new
+scsi_execute_cmd() function instead of open-coding it. Please consider this
+patch for the next merge window.
 
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index 5926316252eb..f1cdf78fc5ef 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -691,6 +691,7 @@ static void target_remove_from_tmr_list(struct se_cmd *cmd)
- 		spin_unlock_irqrestore(&dev->se_tmr_lock, flags);
- 	}
- }
-+
- /*
-  * This function is called by the target core after the target core has
-  * finished processing a SCSI command or SCSI TMF. Both the regular command
--- 
-2.39.1
+Thanks,
+
+Bart.
+
+Changes compared to v2:
+- Changed the type of scsi_exec_args.scmd_flags from unsigned int into int.
+- Left out a WARN_ON_ONCE() statement from patch 2/3 that was removed by patch
+  3/3 anyway.
+
+Changes compared to v1:
+- Addressed John's feedback that RQF_PM should always be set if BLK_MQ_REQ_PM
+  is set.
+- Added a third patch that makes RQF_PM to be set implicitly.
+
+Bart Van Assche (3):
+  scsi: core: Extend struct scsi_exec_args
+  scsi: ufs: Rely on the block layer for setting RQF_PM
+  scsi: ufs: Simplify ufshcd_execute_start_stop()
+
+ drivers/scsi/scsi_lib.c    |  1 +
+ drivers/ufs/core/ufshcd.c  | 35 ++++++++---------------------------
+ include/scsi/scsi_device.h |  1 +
+ 3 files changed, 10 insertions(+), 27 deletions(-)
 
