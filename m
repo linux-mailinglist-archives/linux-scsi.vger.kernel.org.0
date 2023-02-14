@@ -2,82 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38D2696A8A
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Feb 2023 17:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472BC696A75
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Feb 2023 17:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232819AbjBNQ7m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Feb 2023 11:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S232504AbjBNQ6A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Feb 2023 11:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232871AbjBNQ7X (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Feb 2023 11:59:23 -0500
+        with ESMTP id S229526AbjBNQ5x (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Feb 2023 11:57:53 -0500
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C642DE4F;
-        Tue, 14 Feb 2023 08:58:58 -0800 (PST)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EGY9Pp005532;
-        Tue, 14 Feb 2023 16:57:50 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2793A4EE3
+        for <linux-scsi@vger.kernel.org>; Tue, 14 Feb 2023 08:57:52 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31EGYIdf009051;
+        Tue, 14 Feb 2023 16:57:49 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=30UhpvvVeEJ74x+BZp2PjN//3LlD3wleEKrKnHvlEME=;
- b=2misEQBvI1JJ+56u+Isk0cVjdv3SudPEHPSoait3o7rcSbIUiV8kvbNovJXev5wnzRRT
- yQ2FDobU5eLDlpUHtycmSVgXhklWuWtXQyHRjAHg4K0sauxjALREy/2VhaHtDgCZdLaF
- WxYI96R7LpJAVqIrrE5IGe7UCpDyG8ufLqpiszIpg2aGbVIFZRZ6w2Y7Tf675ols5O2I
- yfYbzI5S2ct/M57g5be3lojAhGOcNXLEw2X/oeo77pxT6TjnWvmZmiG1mlLR5DMbyBcp
- LmGNOjxpVoIfmfqhy6o1eHoDUtrAQ8cCW6RDnWi5XswKte0lYf8KJhvyj0d5ylUCs/EQ lg== 
+ bh=GvB8z7O4AyWfVWXlmumaI+hqgCPYRENXFro+Nn6j8nM=;
+ b=LFHadtZkMIqRWcDcXe64FagZ+HGaJncuCmKdyHLMduD6/KOgIMaOFJe1GDXxMxUEw4Cr
+ 3AYOsz6azzgj6FtDEqkEH+tOp05GiEd9E/O+wBlvZk1QtAMU6eEnU22zc+7yW8OYMv3s
+ zeQ+a4Rl3s/PLBGyTTxC7be9nOtx8ho37HQLlgA+FKhg22cBLBY0wdTAvVNk0cDUoz/P
+ lDlKJ8gXkeILSRBsh+oBFmnyFj+LW74TPpr9zRq7xCWM/iQ25qY8fB7Ae78rOeZsM7z+
+ 5BZYMjR11oD5TcAmeS5m+AogNirV716l77gzdywFvCbXbBlHIW5ULwUrAM04b5Qfr0vD 4Q== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np1xb5yx8-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3np2w9wyan-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 14 Feb 2023 16:57:49 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31EGpwLS009585;
-        Tue, 14 Feb 2023 16:57:48 GMT
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31EGtkSO009613;
+        Tue, 14 Feb 2023 16:57:47 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1f5uukx-1
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3np1f5uum4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Feb 2023 16:57:48 +0000
+        Tue, 14 Feb 2023 16:57:47 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31EGuHou039739;
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31EGuHow039739;
         Tue, 14 Feb 2023 16:57:47 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3np1f5uuff-10;
-        Tue, 14 Feb 2023 16:57:46 +0000
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3np1f5uuff-11;
+        Tue, 14 Feb 2023 16:57:47 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+To:     linux-scsi@vger.kernel.org, Tomas Henzl <thenzl@redhat.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-mm@kvack.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, nvdimm@lists.linux.dev,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Jiri Pirko <jiri@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: (subset) [PATCH 0/9] Documentation: correct lots of spelling errors (series 2)
-Date:   Tue, 14 Feb 2023 11:57:36 -0500
-Message-Id: <167639371119.486235.3812806947516384921.b4-ty@oracle.com>
+        sreekanth.reddy@broadcom.com, suganath-prabu.subramani@broadcom.com
+Subject: Re: [PATCH] mpt3sas: fix a memory leak
+Date:   Tue, 14 Feb 2023 11:57:37 -0500
+Message-Id: <167639371127.486235.972397501077513405.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230129231053.20863-1-rdunlap@infradead.org>
-References: <20230129231053.20863-1-rdunlap@infradead.org>
+In-Reply-To: <20230207152159.18627-1-thenzl@redhat.com>
+References: <20230207152159.18627-1-thenzl@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -85,11 +60,11 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-14_11,2023-02-14_01,2023-02-09_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
- suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 adultscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=674 adultscore=0
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2302140144
-X-Proofpoint-ORIG-GUID: qDgMHyaxiheYWVhdwVSVG77rlBQfOrXl
-X-Proofpoint-GUID: qDgMHyaxiheYWVhdwVSVG77rlBQfOrXl
+X-Proofpoint-GUID: 3P24oiazwwKCOUM2mbqUWa0MzFPRoCpF
+X-Proofpoint-ORIG-GUID: 3P24oiazwwKCOUM2mbqUWa0MzFPRoCpF
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -100,32 +75,16 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 29 Jan 2023 15:10:44 -0800, Randy Dunlap wrote:
+On Tue, 07 Feb 2023 16:21:59 +0100, Tomas Henzl wrote:
 
-> Maintainers of specific kernel subsystems are only Cc-ed on their
-> respective patches, not the entire series. [if all goes well]
-> 
-> These patches are based on linux-next-20230127.
+> Add a forgotten kfree
 > 
 > 
->  [PATCH 1/9] Documentation: admin-guide: correct spelling
->  [PATCH 2/9] Documentation: driver-api: correct spelling
->  [PATCH 3/9] Documentation: hwmon: correct spelling
->  [PATCH 4/9] Documentation: networking: correct spelling
->  [PATCH 5/9] Documentation: RCU: correct spelling
->  [PATCH 6/9] Documentation: scsi/ChangeLog*: correct spelling
->  [PATCH 7/9] Documentation: scsi: correct spelling
->  [PATCH 8/9] Documentation: sparc: correct spelling
->  [PATCH 9/9] Documentation: userspace-api: correct spelling
-> 
-> [...]
 
 Applied to 6.3/scsi-queue, thanks!
 
-[6/9] Documentation: scsi/ChangeLog*: correct spelling
-      https://git.kernel.org/mkp/scsi/c/685d5ef436a9
-[7/9] Documentation: scsi: correct spelling
-      https://git.kernel.org/mkp/scsi/c/cf065a7da517
+[1/1] mpt3sas: fix a memory leak
+      https://git.kernel.org/mkp/scsi/c/54dd96015e8d
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
