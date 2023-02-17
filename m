@@ -2,100 +2,209 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA7D69A5AF
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Feb 2023 07:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E45769A5FF
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Feb 2023 08:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjBQGmB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 17 Feb 2023 01:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S229505AbjBQHSV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 17 Feb 2023 02:18:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBQGmA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 Feb 2023 01:42:00 -0500
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35573A093
-        for <linux-scsi@vger.kernel.org>; Thu, 16 Feb 2023 22:41:56 -0800 (PST)
-Received: by mail-vk1-xa2d.google.com with SMTP id 12so169098vkj.13
-        for <linux-scsi@vger.kernel.org>; Thu, 16 Feb 2023 22:41:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O+3r6Lwvhms6XJ6bo2c6l90xkWazMwajl6iI1ojTsco=;
-        b=MZN1hnRVVqw6S02YR9BFZ1XIx034Snwz/Cn2OZs36LCZwUC7Xhfw+YsdhYZeWKd85Y
-         BPnse0qWqhCec4Qa0Gnz2zKyl/M+nrWmC9C75n3rWxyckxckb1fArc+5/n6nmh16n6bi
-         YQUOAaPSfI6AQP2KOMy6yoUTY8tNGOZE5bgpMVFjQi3HVib5GzUZjLRJnatjMln9CwNy
-         Fz6yC7xcDDPtmO2j/VtLfCBe7/uVRhSVNYo5Y2Xyj1GEN7PK1502JSC/l5NlQ+x6j+PR
-         8OhtvMZ9ss81cskrQOM8toEEp+1c2DYuMZ8EjBnu+bZJPZe/E57080u0zkdJPxva4SlD
-         7y1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O+3r6Lwvhms6XJ6bo2c6l90xkWazMwajl6iI1ojTsco=;
-        b=jSI0EeP+m/UeRjqlKJx0ZVtfespAD/wG42hs8aM4VPYfGI80SdKRbFBO5aHJpTH9NU
-         XSXBtNfebjVxavNIEwnoVs/+Qcq5kn8jcvOEOfpoUNWNDCQgR1DUN/HuUp8lLZRkDoui
-         0B89uLjp0LahzEMwzMhG0b07qxUFIKVugV3IPpdYxaBUTq3wox4gVxpkd9OUMys5Wtoq
-         pRFuyGSFwvDZx5O+uNk2XZaRREVuDPI81mWMdvDci51dIAsfqX9bxLvcEf+9UMtMJo0Q
-         4lJvHj28G70qAHWanfRl9sc0AZlB7QjGexZzMako9/zIBNUDX5muHTJvBBGlHorwQs1H
-         nOcA==
-X-Gm-Message-State: AO0yUKVuoV41Sk29LE+oGocqL7iKHa+VCV1psSVsjsZb2KwJ9Dtk6i3n
-        Tq1crsuNgU2UFrSf4t9/R9WusYckAsDv/ljXc+k=
-X-Google-Smtp-Source: AK7set8T23btIryZWkVhuq3unfRZ1y/qWOgjeFkTzeONfKsB68vNpviltx2TNlhaWNNI2QrEoY1efH8u429LjqEapoI=
-X-Received: by 2002:a1f:9e0f:0:b0:401:355e:e0be with SMTP id
- h15-20020a1f9e0f000000b00401355ee0bemr1340450vke.17.1676616115815; Thu, 16
- Feb 2023 22:41:55 -0800 (PST)
+        with ESMTP id S229436AbjBQHSU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 Feb 2023 02:18:20 -0500
+X-Greylist: delayed 66 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Feb 2023 23:18:18 PST
+Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FF84FC9B
+        for <linux-scsi@vger.kernel.org>; Thu, 16 Feb 2023 23:18:18 -0800 (PST)
+Received: from ([60.208.111.195])
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id MZI00106;
+        Fri, 17 Feb 2023 15:17:06 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201607.home.langchao.com (10.100.2.7) with Microsoft SMTP Server id
+ 15.1.2507.16; Fri, 17 Feb 2023 15:17:06 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <james.smart@broadcom.com>, <dick.kennedy@broadcom.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] scsi: lpfc: Fix double word in comments
+Date:   Fri, 17 Feb 2023 02:17:05 -0500
+Message-ID: <20230217071705.2857-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-Received: by 2002:a59:d8ae:0:b0:3a3:49d7:7bd0 with HTTP; Thu, 16 Feb 2023
- 22:41:55 -0800 (PST)
-Reply-To: zongjianxin14@gmail.com
-From:   Zong Jianxin <majisamuel02@gmail.com>
-Date:   Fri, 17 Feb 2023 07:41:55 +0100
-Message-ID: <CANV+rvwyKObzQL=Mnozu7TV_k2kADXb-gJXcQBximwB3kFDq3g@mail.gmail.com>
-Subject: Urgent
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+Content-Type: text/plain
+X-Originating-IP: [10.200.104.97]
+tUid:   202321715170645ae4771eeddaaeef1bbfe4e87eb2436
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:a2d listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [zongjianxin14[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [majisamuel02[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [majisamuel02[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Remove the repeated word "the" in comments.
+
+Signed-off-by: Bo Liu <liubo03@inspur.com>
+---
+ drivers/scsi/lpfc/lpfc_attr.c    | 10 +++++-----
+ drivers/scsi/lpfc/lpfc_els.c     |  2 +-
+ drivers/scsi/lpfc/lpfc_hbadisc.c |  2 +-
+ drivers/scsi/lpfc/lpfc_init.c    |  4 ++--
+ drivers/scsi/lpfc/lpfc_mbox.c    |  4 ++--
+ drivers/scsi/lpfc/lpfc_nvmet.c   |  2 +-
+ drivers/scsi/lpfc/lpfc_sli.c     |  2 +-
+ 7 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+index 76c3434f8976..1a32b3f93d77 100644
+--- a/drivers/scsi/lpfc/lpfc_attr.c
++++ b/drivers/scsi/lpfc/lpfc_attr.c
+@@ -2541,7 +2541,7 @@ lpfc_sriov_hw_max_virtfn_show(struct device *dev,
+ 
+ /**
+  * lpfc_enable_bbcr_set: Sets an attribute value.
+- * @phba: pointer the the adapter structure.
++ * @phba: pointer the adapter structure.
+  * @val: integer attribute value.
+  *
+  * Description:
+@@ -2632,7 +2632,7 @@ lpfc_##attr##_show(struct device *dev, struct device_attribute *attr, \
+  * takes a default argument, a minimum and maximum argument.
+  *
+  * lpfc_##attr##_init: Initializes an attribute.
+- * @phba: pointer the the adapter structure.
++ * @phba: pointer the adapter structure.
+  * @val: integer attribute value.
+  *
+  * Validates the min and max values then sets the adapter config field
+@@ -2665,7 +2665,7 @@ lpfc_##attr##_init(struct lpfc_hba *phba, uint val) \
+  * into a function with the name lpfc_hba_queue_depth_set
+  *
+  * lpfc_##attr##_set: Sets an attribute value.
+- * @phba: pointer the the adapter structure.
++ * @phba: pointer the adapter structure.
+  * @val: integer attribute value.
+  *
+  * Description:
+@@ -2794,7 +2794,7 @@ lpfc_##attr##_show(struct device *dev, struct device_attribute *attr, \
+  * lpfc_##attr##_init: validates the min and max values then sets the
+  * adapter config field accordingly, or uses the default if out of range
+  * and prints an error message.
+- * @phba: pointer the the adapter structure.
++ * @phba: pointer the adapter structure.
+  * @val: integer attribute value.
+  *
+  * Returns:
+@@ -2826,7 +2826,7 @@ lpfc_##attr##_init(struct lpfc_vport *vport, uint val) \
+  * lpfc_##attr##_set: validates the min and max values then sets the
+  * adapter config field if in the valid range. prints error message
+  * and does not set the parameter if invalid.
+- * @phba: pointer the the adapter structure.
++ * @phba: pointer the adapter structure.
+  * @val:	integer attribute value.
+  *
+  * Returns:
+diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
+index 569639dc8b2c..cf55236a22ca 100644
+--- a/drivers/scsi/lpfc/lpfc_els.c
++++ b/drivers/scsi/lpfc/lpfc_els.c
+@@ -8886,7 +8886,7 @@ lpfc_els_rcv_rtv(struct lpfc_vport *vport, struct lpfc_iocbq *cmdiocb,
+  * @rrq: Pointer to the rrq struct.
+  *
+  * Build a ELS RRQ command and send it to the target. If the issue_iocb is
+- * Successful the the completion handler will clear the RRQ.
++ * Successful the completion handler will clear the RRQ.
+  *
+  * Return codes
+  *   0 - Successfully sent rrq els iocb.
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index a6df0a5b4006..32a2181c45f9 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -2459,7 +2459,7 @@ static void lpfc_sli4_fcf_pri_list_del(struct lpfc_hba *phba,
+  * @phba: pointer to lpfc hba data structure.
+  * @fcf_index: the index of the fcf record to update
+  * This routine acquires the hbalock and then set the LPFC_FCF_FLOGI_FAILED
+- * flag so the the round robin slection for the particular priority level
++ * flag so the round robin slection for the particular priority level
+  * will try a different fcf record that does not have this bit set.
+  * If the fcf record is re-read for any reason this flag is cleared brfore
+  * adding it to the priority list.
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 6eb4085a3a22..02024f2c758f 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -5502,7 +5502,7 @@ lpfc_sli4_async_link_evt(struct lpfc_hba *phba,
+ 	bf_set(lpfc_mbx_read_top_link_spd, la,
+ 	       (bf_get(lpfc_acqe_link_speed, acqe_link)));
+ 
+-	/* Fake the the following irrelvant fields */
++	/* Fake the following irrelvant fields */
+ 	bf_set(lpfc_mbx_read_top_topology, la, LPFC_TOPOLOGY_PT_PT);
+ 	bf_set(lpfc_mbx_read_top_alpa_granted, la, 0);
+ 	bf_set(lpfc_mbx_read_top_il, la, 0);
+@@ -12549,7 +12549,7 @@ lpfc_cpu_affinity_check(struct lpfc_hba *phba, int vectors)
+ 			/* Mark CPU as IRQ not assigned by the kernel */
+ 			cpup->flag |= LPFC_CPU_MAP_UNASSIGN;
+ 
+-			/* If so, find a new_cpup thats on the the SAME
++			/* If so, find a new_cpup thats on the SAME
+ 			 * phys_id as cpup. start_cpu will start where we
+ 			 * left off so all unassigned entries don't get assgined
+ 			 * the IRQ of the first entry.
+diff --git a/drivers/scsi/lpfc/lpfc_mbox.c b/drivers/scsi/lpfc/lpfc_mbox.c
+index 9858b1743769..cebb3d7598e5 100644
+--- a/drivers/scsi/lpfc/lpfc_mbox.c
++++ b/drivers/scsi/lpfc/lpfc_mbox.c
+@@ -2509,7 +2509,7 @@ lpfc_sli4_dump_page_a0(struct lpfc_hba *phba, struct lpfcMboxq *mbox)
+  * information via a READ_FCF mailbox command. This mailbox command also is used
+  * to indicate where received unsolicited frames from this FCF will be sent. By
+  * default this routine will set up the FCF to forward all unsolicited frames
+- * the the RQ ID passed in the @phba. This can be overridden by the caller for
++ * the RQ ID passed in the @phba. This can be overridden by the caller for
+  * more complicated setups.
+  **/
+ void
+@@ -2577,7 +2577,7 @@ lpfc_reg_fcfi(struct lpfc_hba *phba, struct lpfcMboxq *mbox)
+  * information via a READ_FCF mailbox command. This mailbox command also is used
+  * to indicate where received unsolicited frames from this FCF will be sent. By
+  * default this routine will set up the FCF to forward all unsolicited frames
+- * the the RQ ID passed in the @phba. This can be overridden by the caller for
++ * the RQ ID passed in the @phba. This can be overridden by the caller for
+  * more complicated setups.
+  **/
+ void
+diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
+index f7cfac0da9b6..7517dd55fe91 100644
+--- a/drivers/scsi/lpfc/lpfc_nvmet.c
++++ b/drivers/scsi/lpfc/lpfc_nvmet.c
+@@ -1469,7 +1469,7 @@ lpfc_nvmet_cleanup_io_context(struct lpfc_hba *phba)
+ 	if (!infop)
+ 		return;
+ 
+-	/* Cycle the the entire CPU context list for every MRQ */
++	/* Cycle the entire CPU context list for every MRQ */
+ 	for (i = 0; i < phba->cfg_nvmet_mrq; i++) {
+ 		for_each_present_cpu(j) {
+ 			infop = lpfc_get_ctx_list(phba, j, i);
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index edbd81c3b643..c5b69f313af3 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -20804,7 +20804,7 @@ lpfc_log_fw_write_cmpl(struct lpfc_hba *phba, u32 shdr_status,
+  * the offset after the write object mailbox has completed. @size is used to
+  * determine the end of the object and whether the eof bit should be set.
+  *
+- * Return 0 is successful and offset will contain the the new offset to use
++ * Return 0 is successful and offset will contain the new offset to use
+  * for the next write.
+  * Return negative value for error cases.
+  **/
 -- 
-Did you receive my previous email? I have a Profitable deal for you.
+2.27.0
 
-Thanks
-
-Zong Jianxin
