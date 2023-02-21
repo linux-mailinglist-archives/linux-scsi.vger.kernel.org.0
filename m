@@ -2,33 +2,33 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325CF69E434
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Feb 2023 17:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D062569E438
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Feb 2023 17:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233836AbjBUQGk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Feb 2023 11:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S234229AbjBUQGm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Feb 2023 11:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233659AbjBUQGj (ORCPT
+        with ESMTP id S232793AbjBUQGj (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Feb 2023 11:06:39 -0500
 Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061F92B288;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0B02BF17;
         Tue, 21 Feb 2023 08:06:37 -0800 (PST)
 Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
-        by mta-01.yadro.com (Proxmox) with ESMTP id 1B55E342031;
+        by mta-01.yadro.com (Proxmox) with ESMTP id D0667342030;
         Tue, 21 Feb 2023 19:06:35 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
         :cc:content-transfer-encoding:content-type:content-type:date
         :from:from:in-reply-to:message-id:mime-version:references
-        :reply-to:subject:subject:to:to; s=mta-01; bh=ofCmB0LA+TgBas53ua
-        9VwKa+Nu1ZBpccy+1UTM5kUbc=; b=DZf5dlFnSy2kUBr5ldcxcKksUZ9+JAGKl+
-        h/5HzEKmnqka7fIz193ypXiaTToGkUBm31D4Q4vrDxnt1BW9fdU8gJw5g5TQGWrH
-        V/B2v8VdVfdbZrqKi07vZxwh9njaggOTo5A79gG8Isfwdgx/sarKEiExoZWL/4hH
-        2EuKItw60=
+        :reply-to:subject:subject:to:to; s=mta-01; bh=EAGUnlk/YNx+xRJ7SG
+        dmtciK32GAgTT+rqpY7kcSd0g=; b=JedLhI6h99tokOqNKedNBvGJTz+4jRHhua
+        KcdDUy5ud2mexLjYz/RoMJn6UZvbb8nVBk6GOzsoDNWNGiYodPxrAtIawR/wrHsS
+        /Z7dCm+wzOy6Ex6wf8i9R4MlLd4F7FG9bIfPABxbe71HoVgTC4++37a0OH0tFKC6
+        Wv8p4mT3E=
 Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Proxmox) with ESMTPS id 119ED342024;
+        by mta-01.yadro.com (Proxmox) with ESMTPS id C5585342024;
         Tue, 21 Feb 2023 19:06:35 +0300 (MSK)
 Received: from NB-591.corp.yadro.com (10.178.114.42) by
  T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
@@ -40,10 +40,12 @@ To:     Martin Petersen <martin.petersen@oracle.com>,
 CC:     Christoph Hellwig <hch@infradead.org>,
         Mike Christie <michael.christie@oracle.com>,
         <linux-scsi@vger.kernel.org>, <linux@yadro.com>,
+        Roman Bolshakov <r.bolshakov@yadro.com>,
+        Christoph Hellwig <hch@lst.de>,
         Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [PATCH v4 1/4] scsi: target: core: Add RTPI field to target port
-Date:   Tue, 21 Feb 2023 19:06:19 +0300
-Message-ID: <20230221160622.7283-2-d.bogdanov@yadro.com>
+Subject: [PATCH v4 2/4] scsi: target: core: Use RTPI from target port
+Date:   Tue, 21 Feb 2023 19:06:20 +0300
+Message-ID: <20230221160622.7283-3-d.bogdanov@yadro.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230221160622.7283-1-d.bogdanov@yadro.com>
 References: <20230221160622.7283-1-d.bogdanov@yadro.com>
@@ -62,160 +64,142 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SAM-5 4.6.5.2 (Relative Port Identifier attribute) defines the attribute
-as unique across SCSI target ports.
+From: Roman Bolshakov <r.bolshakov@yadro.com>
 
-The change introduces RTPI attribute to se_portal group. The value is
-unique across all enabled SCSI target ports. It also limits number of
-SCSI target ports to 65535.
+Replace all references to RTPI from LUN field to se_portal_group field.
+It introduces consitent reporting of RTPI for all LUNs and all target
+ports.
 
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
 Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
 ---
-  v4:
-    use unused variable in target_tpg_disable
-    make tpg_rtpi variable u16 again
+ drivers/target/target_core_alua.c   | 4 ++--
+ drivers/target/target_core_device.c | 2 +-
+ drivers/target/target_core_pr.c     | 8 ++++----
+ drivers/target/target_core_spc.c    | 2 +-
+ drivers/target/target_core_stat.c   | 6 +++---
+ 5 files changed, 11 insertions(+), 11 deletions(-)
 
-  v3:
-    make variable static
-    change core_ prefix to target_
-    split to tpg_enable/tpg_disable functions
-
- v2:
-   rewrite using XArray to track usage of RTPI
----
- drivers/target/target_core_fabric_configfs.c |  9 ++--
- drivers/target/target_core_internal.h        |  2 +
- drivers/target/target_core_tpg.c             | 54 ++++++++++++++++++++
- include/target/target_core_base.h            |  2 +
- 4 files changed, 62 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/target/target_core_fabric_configfs.c b/drivers/target/target_core_fabric_configfs.c
-index 67b18a67317a..873da49ab704 100644
---- a/drivers/target/target_core_fabric_configfs.c
-+++ b/drivers/target/target_core_fabric_configfs.c
-@@ -836,13 +836,12 @@ static ssize_t target_fabric_tpg_base_enable_store(struct config_item *item,
+diff --git a/drivers/target/target_core_alua.c b/drivers/target/target_core_alua.c
+index c8470e7c0e10..3372856319f7 100644
+--- a/drivers/target/target_core_alua.c
++++ b/drivers/target/target_core_alua.c
+@@ -225,7 +225,7 @@ target_emulate_report_target_port_groups(struct se_cmd *cmd)
+ 			/*
+ 			 * Set RELATIVE TARGET PORT IDENTIFIER
+ 			 */
+-			put_unaligned_be16(lun->lun_rtpi, &buf[off]);
++			put_unaligned_be16(lun->lun_tpg->tpg_rtpi, &buf[off]);
+ 			off += 2;
+ 			rd_len += 4;
+ 		}
+@@ -399,7 +399,7 @@ target_emulate_set_target_port_groups(struct se_cmd *cmd)
+ 			spin_lock(&dev->se_port_lock);
+ 			list_for_each_entry(lun, &dev->dev_sep_list,
+ 							lun_dev_link) {
+-				if (lun->lun_rtpi != rtpi)
++				if (lun->lun_tpg->tpg_rtpi != rtpi)
+ 					continue;
  
- 	if (se_tpg->enabled == op)
- 		return count;
--
--	ret = se_tpg->se_tpg_tfo->fabric_enable_tpg(se_tpg, op);
-+	if (op)
-+		ret = target_tpg_enable(se_tpg);
-+	else
-+		ret = target_tpg_disable(se_tpg);
- 	if (ret)
- 		return ret;
--
--	se_tpg->enabled = op;
--
- 	return count;
- }
+ 				// XXX: racy unlock
+diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
+index f6e58410ec3f..93f7f050fdf1 100644
+--- a/drivers/target/target_core_device.c
++++ b/drivers/target/target_core_device.c
+@@ -223,7 +223,7 @@ struct se_dev_entry *core_get_se_deve_from_rtpi(
+ 				tpg->se_tpg_tfo->fabric_name);
+ 			continue;
+ 		}
+-		if (lun->lun_rtpi != rtpi)
++		if (lun->lun_tpg->tpg_rtpi != rtpi)
+ 			continue;
  
-diff --git a/drivers/target/target_core_internal.h b/drivers/target/target_core_internal.h
-index 38a6d08f75b3..82fd5768a662 100644
---- a/drivers/target/target_core_internal.h
-+++ b/drivers/target/target_core_internal.h
-@@ -132,6 +132,8 @@ void core_tpg_remove_lun(struct se_portal_group *, struct se_lun *);
- struct se_node_acl *core_tpg_add_initiator_node_acl(struct se_portal_group *tpg,
- 		const char *initiatorname);
- void core_tpg_del_initiator_node_acl(struct se_node_acl *acl);
-+int target_tpg_enable(struct se_portal_group *se_tpg);
-+int target_tpg_disable(struct se_portal_group *se_tpg);
- 
- /* target_core_transport.c */
- int	init_se_kmem_caches(void);
-diff --git a/drivers/target/target_core_tpg.c b/drivers/target/target_core_tpg.c
-index 736847c933e5..0de3385b94c5 100644
---- a/drivers/target/target_core_tpg.c
-+++ b/drivers/target/target_core_tpg.c
-@@ -31,6 +31,7 @@
- #include "target_core_ua.h"
- 
- extern struct se_device *g_lun0_dev;
-+static DEFINE_XARRAY_ALLOC(tpg_xa);
- 
- /*	__core_tpg_get_initiator_node_acl():
-  *
-@@ -439,6 +440,57 @@ static void core_tpg_lun_ref_release(struct percpu_ref *ref)
- 	complete(&lun->lun_shutdown_comp);
- }
- 
-+static int target_tpg_register_rtpi(struct se_portal_group *se_tpg)
-+{
-+	u32 val;
-+	int ret;
-+
-+	ret = xa_alloc(&tpg_xa, &val, se_tpg,
-+		       XA_LIMIT(1, USHRT_MAX), GFP_KERNEL);
-+	if (!ret)
-+		se_tpg->tpg_rtpi = val;
-+
-+	return ret;
-+}
-+
-+static void target_tpg_deregister_rtpi(struct se_portal_group *se_tpg)
-+{
-+	if (se_tpg->tpg_rtpi && se_tpg->enabled)
-+		xa_erase(&tpg_xa, se_tpg->tpg_rtpi);
-+}
-+
-+int target_tpg_enable(struct se_portal_group *se_tpg)
-+{
-+	int ret;
-+
-+	ret = target_tpg_register_rtpi(se_tpg);
-+	if (ret)
-+		return ret;
-+
-+	ret = se_tpg->se_tpg_tfo->fabric_enable_tpg(se_tpg, true);
-+	if (ret) {
-+		target_tpg_deregister_rtpi(se_tpg);
-+		return ret;
-+	}
-+
-+	se_tpg->enabled = true;
-+
-+	return 0;
-+}
-+
-+int target_tpg_disable(struct se_portal_group *se_tpg)
-+{
-+	int ret;
-+
-+	target_tpg_deregister_rtpi(se_tpg);
-+
-+	ret = se_tpg->se_tpg_tfo->fabric_enable_tpg(se_tpg, false);
-+	if (!ret)
-+		se_tpg->enabled = false;
-+
-+	return ret;
-+}
-+
- /* Does not change se_wwn->priv. */
- int core_tpg_register(
- 	struct se_wwn *se_wwn,
-@@ -535,6 +587,8 @@ int core_tpg_deregister(struct se_portal_group *se_tpg)
- 		kfree_rcu(se_tpg->tpg_virt_lun0, rcu_head);
+ 		kref_get(&deve->pr_kref);
+diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
+index 1493b1d01194..d19ec4e6a4c0 100644
+--- a/drivers/target/target_core_pr.c
++++ b/drivers/target/target_core_pr.c
+@@ -663,7 +663,7 @@ static struct t10_pr_registration *__core_scsi3_do_alloc_registration(
  	}
+ 	pr_reg->pr_res_mapped_lun = mapped_lun;
+ 	pr_reg->pr_aptpl_target_lun = lun->unpacked_lun;
+-	pr_reg->tg_pt_sep_rtpi = lun->lun_rtpi;
++	pr_reg->tg_pt_sep_rtpi = lun->lun_tpg->tpg_rtpi;
+ 	pr_reg->pr_res_key = sa_res_key;
+ 	pr_reg->pr_reg_all_tg_pt = all_tg_pt;
+ 	pr_reg->pr_reg_aptpl = aptpl;
+@@ -967,7 +967,7 @@ static int __core_scsi3_check_aptpl_registration(
+ 			rcu_read_unlock();
  
-+	target_tpg_deregister_rtpi(se_tpg);
-+
- 	return 0;
+ 			pr_reg->pr_reg_nacl = nacl;
+-			pr_reg->tg_pt_sep_rtpi = lun->lun_rtpi;
++			pr_reg->tg_pt_sep_rtpi = lun->lun_tpg->tpg_rtpi;
+ 			list_del(&pr_reg->pr_reg_aptpl_list);
+ 			spin_unlock(&pr_tmpl->aptpl_reg_lock);
+ 			/*
+@@ -1567,7 +1567,7 @@ core_scsi3_decode_spec_i_port(
+ 			 */
+ 			if (tmp_tpg->proto_id != proto_ident)
+ 				continue;
+-			dest_rtpi = tmp_lun->lun_rtpi;
++			dest_rtpi = tmp_lun->lun_tpg->tpg_rtpi;
+ 
+ 			iport_ptr = NULL;
+ 			i_str = target_parse_pr_out_transport_id(tmp_tpg,
+@@ -3225,7 +3225,7 @@ core_scsi3_emulate_pro_register_and_move(struct se_cmd *cmd, u64 res_key,
+ 
+ 	spin_lock(&dev->se_port_lock);
+ 	list_for_each_entry(tmp_lun, &dev->dev_sep_list, lun_dev_link) {
+-		if (tmp_lun->lun_rtpi != rtpi)
++		if (tmp_lun->lun_tpg->tpg_rtpi != rtpi)
+ 			continue;
+ 		dest_se_tpg = tmp_lun->lun_tpg;
+ 		dest_tf_ops = dest_se_tpg->se_tpg_tfo;
+diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
+index fcc7b10a7ae3..5bae45c3fb65 100644
+--- a/drivers/target/target_core_spc.c
++++ b/drivers/target/target_core_spc.c
+@@ -317,7 +317,7 @@ spc_emulate_evpd_83(struct se_cmd *cmd, unsigned char *buf)
+ 		/* Skip over Obsolete field in RTPI payload
+ 		 * in Table 472 */
+ 		off += 2;
+-		put_unaligned_be16(lun->lun_rtpi, &buf[off]);
++		put_unaligned_be16(lun->lun_tpg->tpg_rtpi, &buf[off]);
+ 		off += 2;
+ 		len += 8; /* Header size + Designation descriptor */
+ 		/*
+diff --git a/drivers/target/target_core_stat.c b/drivers/target/target_core_stat.c
+index f85ee5b0fd80..c42cbde8a31b 100644
+--- a/drivers/target/target_core_stat.c
++++ b/drivers/target/target_core_stat.c
+@@ -455,7 +455,7 @@ static ssize_t target_stat_port_indx_show(struct config_item *item, char *page)
+ 	rcu_read_lock();
+ 	dev = rcu_dereference(lun->lun_se_dev);
+ 	if (dev)
+-		ret = snprintf(page, PAGE_SIZE, "%u\n", lun->lun_rtpi);
++		ret = snprintf(page, PAGE_SIZE, "%u\n", lun->lun_tpg->tpg_rtpi);
+ 	rcu_read_unlock();
+ 	return ret;
  }
- EXPORT_SYMBOL(core_tpg_deregister);
-diff --git a/include/target/target_core_base.h b/include/target/target_core_base.h
-index 12c9ba16217e..814edf746395 100644
---- a/include/target/target_core_base.h
-+++ b/include/target/target_core_base.h
-@@ -920,6 +920,8 @@ struct se_portal_group {
- 	 */
- 	int			proto_id;
- 	bool			enabled;
-+	/* RELATIVE TARGET PORT IDENTIFIER */
-+	u16			tpg_rtpi;
- 	/* Used for PR SPEC_I_PT=1 and REGISTER_AND_MOVE */
- 	atomic_t		tpg_pr_ref_count;
- 	/* Spinlock for adding/removing ACLed Nodes */
+@@ -561,7 +561,7 @@ static ssize_t target_stat_tgt_port_indx_show(struct config_item *item,
+ 	rcu_read_lock();
+ 	dev = rcu_dereference(lun->lun_se_dev);
+ 	if (dev)
+-		ret = snprintf(page, PAGE_SIZE, "%u\n", lun->lun_rtpi);
++		ret = snprintf(page, PAGE_SIZE, "%u\n", lun->lun_tpg->tpg_rtpi);
+ 	rcu_read_unlock();
+ 	return ret;
+ }
+@@ -579,7 +579,7 @@ static ssize_t target_stat_tgt_port_name_show(struct config_item *item,
+ 	if (dev)
+ 		ret = snprintf(page, PAGE_SIZE, "%sPort#%u\n",
+ 			tpg->se_tpg_tfo->fabric_name,
+-			lun->lun_rtpi);
++			lun->lun_tpg->tpg_rtpi);
+ 	rcu_read_unlock();
+ 	return ret;
+ }
 -- 
 2.25.1
 
