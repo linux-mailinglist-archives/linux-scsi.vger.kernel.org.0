@@ -2,65 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A996A1DA7
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Feb 2023 15:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7BA6A1DAA
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Feb 2023 15:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjBXOo7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Feb 2023 09:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S230022AbjBXOpB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Feb 2023 09:45:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjBXOor (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Feb 2023 09:44:47 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2303BDB6
-        for <linux-scsi@vger.kernel.org>; Fri, 24 Feb 2023 06:44:43 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id l15so18110056pls.1
-        for <linux-scsi@vger.kernel.org>; Fri, 24 Feb 2023 06:44:43 -0800 (PST)
+        with ESMTP id S230001AbjBXOot (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Feb 2023 09:44:49 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5022C168A4
+        for <linux-scsi@vger.kernel.org>; Fri, 24 Feb 2023 06:44:47 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id l1so6323864pjt.2
+        for <linux-scsi@vger.kernel.org>; Fri, 24 Feb 2023 06:44:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xNGgYTKwdBeej4VsrKQsLux520uy7Kil0g2HIDxMeZI=;
-        b=do3ra+qiW0uHKVMPR1owoOYXcOBvNofhddTGmzMQa/gl0um0ygI2530DetL70IBvwB
-         UZYTx9CySzNtW4h5g5ETj0XQ5ibnJdcKIxpWz9IHTaQyPxbP4bW14hXoXBZj/1YyV3Ik
-         W7iDyDSH29QyrjHzGxtn8+/+6AVY1pPKz7pG0=
+        bh=AdJvs0X0Ecurr7XdE1/0PujzHlSzO3RkAnYd+7/e83E=;
+        b=IqddZRsiNBRLt8qxedQPlgLaME/j1oNRA3hmvIi4OU/6E6iV9zPA5yhDIdes19nOqi
+         Lqk05IsmJw58xel2UXwqSszGlaG9tOLhwu3/R9ZQsuGKeJLTy1DrAkIm8Sx4JnfBZNda
+         vT7iw03cwDXcVNfg8nfx+IICYjiPhgW2467nY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xNGgYTKwdBeej4VsrKQsLux520uy7Kil0g2HIDxMeZI=;
-        b=XQTigEuB+6y6fKs3kMUrqpdo5WmYNNK3TimlRaxdT1uTofHJXNnwypSv7aXIclZJTS
-         hSoQlGEL2tAaQgOVjP4cSHYPp+TpQSHVM+8eg9lOhb23adqdRXR/lK3GWY8a5CwKxZAs
-         xbalRAcANqtIzeftybDcCvgkLkKZICxJzbDZeDYeA6bsQ9UgC818U1lxT0Em37J/PCPD
-         Y3ngPcw8/E5JHBDPK5q8nVIfl4g3zvWnrMNQ7My0tAyaQxfBb5i9NxAi9XcFhiydziFz
-         DC8CnN0CuWSp9D7Bh17j3PIfKHm/DGODwOZ2FV3g9Wx1BuFRjdPAqpWzl+IodqnIhHPn
-         Tx2w==
-X-Gm-Message-State: AO0yUKUXTPdSGeccwQbf58cnwNl2PFUJjoWD0c3Bqmk1Md4M9CyvU5fO
-        E52g/maJP2yDD5b+TDUoXhPCOa/cYJJaWCu9w6o4RlzKq913MixL8Vi7dj48ezk/8oem4hCzlXC
-        zFTkQe4LHnF2H55ArE4XErRJ2GvZB3bBpXEiYdy4DBk1xg0qQ++QX6Adws6U2H8MJlErfUxVoDE
-        0UjgfRqlU=
-X-Google-Smtp-Source: AK7set8ifzpUCrwCI10BPRRDCTY42d3Cnu5FEevRRKsp31uKvedTNzbOM5m4OemOtcd/7n7ClL1mQA==
-X-Received: by 2002:a17:902:c403:b0:19a:880b:bfd1 with SMTP id k3-20020a170902c40300b0019a880bbfd1mr18735006plk.40.1677249882522;
-        Fri, 24 Feb 2023 06:44:42 -0800 (PST)
+        bh=AdJvs0X0Ecurr7XdE1/0PujzHlSzO3RkAnYd+7/e83E=;
+        b=dRehvg6CaRySlkxyXiIBjDdw2WIpzp0XoE1d5tt8QjH3gfRLOMXo/4TnyEJsQ3xi+5
+         Cp2PA9Uua2X4gGop5nO/PQF5hGzMSOgQE2xp+8cdvxKO5sNdJGqGjqJfgbKRHUa8qh9c
+         Nqbz2B/K6recNLc3fDG4DR0HjE7xPjwlllgRxXHPN+MxOHSSG2jpBnD8KRjTOlFHe1k8
+         csFk1nObjnUD4YaDmpKvs3SQaK19PDAcINEMw/nl3rk7R7EV/yVntkk0QBB8/VBkrBzm
+         1LT2pHCrALGj2TpD1cLtr91iDi7t/0GS+fchvs2OZ8yDKWmCgrgrDCJszwJv3f5vB7VX
+         MdPg==
+X-Gm-Message-State: AO0yUKXzP2DUogUtm1sacLvgmWiIIu3c2tHJYoCn05qLsHd/mt8AJHvz
+        S4F1c6YIWgKmCo0O2+5w7XixGlA0wJP0XhuhQzHs1SAqUzL1D3jITytnyIRPZy5oHibuDc6xpGB
+        BoAFIFCCCDFafqsLRF+JgBYvY/4dg0GGk4PWTQ1nO9EJ3Nbb91Gmk+V3pi/Qrl2Qj0f7pjG/KVV
+        rOBzSqQ5w=
+X-Google-Smtp-Source: AK7set8DSz+yRvHtTjAgpOh6DkGFPS6dJ3euquvNjOBpcus8VL2xeUOgHlhtIBs3YnVmaqnXOTiUMg==
+X-Received: by 2002:a17:903:2344:b0:19b:fa9:678b with SMTP id c4-20020a170903234400b0019b0fa9678bmr17347049plh.40.1677249886442;
+        Fri, 24 Feb 2023 06:44:46 -0800 (PST)
 Received: from localhost.localdomain ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170902a9c500b00186748fe6ccsm8911549plr.214.2023.02.24.06.44.40
+        by smtp.gmail.com with ESMTPSA id b5-20020a170902a9c500b00186748fe6ccsm8911549plr.214.2023.02.24.06.44.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 06:44:42 -0800 (PST)
+        Fri, 24 Feb 2023 06:44:46 -0800 (PST)
 From:   Ranjan Kumar <ranjan.kumar@broadcom.com>
 To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com
 Cc:     rajsekhar.chundru@broadcom.com, sathya.prakash@broadcom.com,
         sumit.saxena@broadcom.com,
         Ranjan Kumar <ranjan.kumar@broadcom.com>,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH 12/15] mpi3mr: NVMe commands size greater than 8K fails
-Date:   Fri, 24 Feb 2023 06:43:17 -0800
-Message-Id: <20230224144320.10601-13-ranjan.kumar@broadcom.com>
+Subject: [PATCH 13/15] mpi3mr: Bad drive in topology results kernel crash
+Date:   Fri, 24 Feb 2023 06:43:18 -0800
+Message-Id: <20230224144320.10601-14-ranjan.kumar@broadcom.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230224144320.10601-1-ranjan.kumar@broadcom.com>
 References: <20230224144320.10601-1-ranjan.kumar@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000078ec4805f5732b75"
+        boundary="000000000000b582bc05f5732bf6"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -70,47 +70,70 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---00000000000078ec4805f5732b75
+--000000000000b582bc05f5732bf6
 Content-Transfer-Encoding: 8bit
 
-A wrong variable is checked while populating PRP entries in the PRP
-page and that results in failure .Hence no PRP entries in the PRP
-page were successfully created and any NVMe Encapsulated commands
-with PRP of size greater than 8K failed
+When the SAS Transport Layer support is enabled and when a device
+exposed to the OS by the driver failed Inquiry commands then the
+driver frees up the memory allocated for an internal HBA port
+data structure. However, in some places, the reference to the
+freed memory is not cleared.When the firmware sends the Device Info
+change event for the same device again,then the freed memory is
+accessed and that leads to memory corruption and OS crash.
 
 Signed-off-by: Ranjan Kumar <ranjan.kumar@broadcom.com>
 Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 ---
- drivers/scsi/mpi3mr/mpi3mr_app.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/mpi3mr/mpi3mr_transport.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_app.c b/drivers/scsi/mpi3mr/mpi3mr_app.c
-index 935e26afc291..b2542708a36b 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_app.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_app.c
-@@ -894,7 +894,7 @@ static int mpi3mr_build_nvme_prp(struct mpi3mr_ioc *mrioc,
- 			 * each time through the loop.
- 			 */
- 			*prp_entry = cpu_to_le64(dma_addr);
--			if (*prp1_entry & sgemod_mask) {
-+			if (*prp_entry & sgemod_mask) {
- 				dprint_bsg_err(mrioc,
- 				    "%s: PRP address collides with SGE modifier\n",
- 				    __func__);
-@@ -903,7 +903,7 @@ static int mpi3mr_build_nvme_prp(struct mpi3mr_ioc *mrioc,
- 			*prp_entry &= ~sgemod_mask;
- 			*prp_entry |= sgemod_val;
- 			prp_entry++;
--			prp_entry_dma++;
-+			prp_entry_dma += prp_size;
- 		}
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_transport.c b/drivers/scsi/mpi3mr/mpi3mr_transport.c
+index d99f2094297a..e9d8420b1350 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_transport.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_transport.c
+@@ -2358,15 +2358,16 @@ int mpi3mr_report_tgtdev_to_sas_transport(struct mpi3mr_ioc *mrioc,
+ 	tgtdev->host_exposed = 1;
+ 	if (!mpi3mr_sas_port_add(mrioc, tgtdev->dev_handle,
+ 	    sas_address_parent, hba_port)) {
+-		tgtdev->host_exposed = 0;
+ 		retval = -1;
+-	} else if ((!tgtdev->starget)) {
+-		if (!mrioc->is_driver_loading)
++		} else if ((!tgtdev->starget) && (!mrioc->is_driver_loading)) {
+ 			mpi3mr_sas_port_remove(mrioc, sas_address,
+ 			    sas_address_parent, hba_port);
+-		tgtdev->host_exposed = 0;
+ 		retval = -1;
+ 	}
++	if (retval) {
++		tgtdev->dev_spec.sas_sata_inf.hba_port = NULL;
++		tgtdev->host_exposed = 0;
++	}
+ 	return retval;
+ }
  
- 		/*
+@@ -2395,6 +2396,7 @@ void mpi3mr_remove_tgtdev_from_sas_transport(struct mpi3mr_ioc *mrioc,
+ 	mpi3mr_sas_port_remove(mrioc, sas_address, sas_address_parent,
+ 	    hba_port);
+ 	tgtdev->host_exposed = 0;
++	tgtdev->dev_spec.sas_sata_inf.hba_port = NULL;
+ }
+ 
+ /**
+@@ -2451,7 +2453,7 @@ static u8 mpi3mr_get_port_id_by_rphy(struct mpi3mr_ioc *mrioc, struct sas_rphy *
+ 
+ 		tgtdev = __mpi3mr_get_tgtdev_by_addr_and_rphy(mrioc,
+ 			    rphy->identify.sas_address, rphy);
+-		if (tgtdev) {
++		if (tgtdev && tgtdev->dev_spec.sas_sata_inf.hba_port) {
+ 			port_id =
+ 				tgtdev->dev_spec.sas_sata_inf.hba_port->port_id;
+ 			mpi3mr_tgtdev_put(tgtdev);
 -- 
 2.31.1
 
 
---00000000000078ec4805f5732b75
+--000000000000b582bc05f5732bf6
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -181,13 +204,13 @@ nWsVitGa1sKS9usFXoW1bQXgJ9TtRdy8gka8b9SaKnh4TaiEKpdl8ztXhugWp7RpFGVu/ZZ8narx
 0H1L9W/UIr3J/uYokdFr+hIrXOfOwJLB18bWOTCVWxTEo4zYC8qZ/h7UcS5aispm/rkxggJtMIIC
 aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
 EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxMV+PqteWF5WGw7jsw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMlnIe5cEm7c1lWz0jBimubUJPuBkmSL
-CDIBfY42zeJBMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDIy
-NDE0NDQ0MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICOPPeSM5BeKlMyMJ006ikSg6YPLTHy/
+VzGUbzbCgVTPMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDIy
+NDE0NDQ0NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
 SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQDXPOAFRo8e9VsYFiJxZP8wbffL08NMhy+IjpsMFRW/HJe5LBYJ
-bnntkEGQTin0A8bmEvkIq5VG2aOGWRAKq6jcAsC6uk0hxS9RKDPWvwh26rj/eSUP26dsRfXiazKV
-9n+T6bNPRw6KF7Q87GylN3F7W7Lkn+CdinRcVC3/7KBnfaaB5cJ4ZjaK4FJM4fZ3IxMa+rQrbncF
-NozZKtUxFW60LK5xtcmACWGySzJ/hK6VxZt2XVriP5DrKh0g9DKt5wkXeYtMiPzOUhiFPXnm/MI6
-hg4pGbS782DmzaHLP6hreK5Q7KiS5d4V/3dAl3kfBUiJr+QhhrL1bUGn+6AI0X3g
---00000000000078ec4805f5732b75--
+ATANBgkqhkiG9w0BAQEFAASCAQA2n/pWDDFRQDDq1Z4eeZDz5SGa1TuvXH4HpIKRtvOtCImghcXa
+J9lC3Psury6ydIiIEwcQZwtuhGpGoS1eeAd6Oq7jfbflnxfffrGGki7IYb65rHeCdjsxX7VDVejq
+TU9T1sljioNU6fznBB9+0s98zF1GK0THwVg8E1NY21+0sLdakvxum6DOmcCJvnAIMgB/ZnhR9C01
+jzYIILvWnOKRV8s+dUVAiV0qcmRwGo+7EaKrQZvVl16HAFN6bS495IaKs+7WkjS42HEX+L+yCWvA
+k2/vVh0zoheowcrxIuWOwmrZ3SjhBP0XjVbkZpvSQ/gJCsP9qmLIKyRIt3/vwGXB
+--000000000000b582bc05f5732bf6--
