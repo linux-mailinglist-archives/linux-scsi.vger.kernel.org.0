@@ -2,65 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE8A6A1DAB
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Feb 2023 15:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054466A1DA8
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Feb 2023 15:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjBXOpD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Feb 2023 09:45:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
+        id S230012AbjBXOpA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Feb 2023 09:45:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjBXOoj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Feb 2023 09:44:39 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2897618ABC
-        for <linux-scsi@vger.kernel.org>; Fri, 24 Feb 2023 06:44:34 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id q31-20020a17090a17a200b0023750b69614so2912103pja.5
-        for <linux-scsi@vger.kernel.org>; Fri, 24 Feb 2023 06:44:34 -0800 (PST)
+        with ESMTP id S230056AbjBXOol (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Feb 2023 09:44:41 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEFB12065
+        for <linux-scsi@vger.kernel.org>; Fri, 24 Feb 2023 06:44:39 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id pt11so17322435pjb.1
+        for <linux-scsi@vger.kernel.org>; Fri, 24 Feb 2023 06:44:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wu/5vBDtIt/2CwvWKiSOVVIBdqUUtck6xP0LuooJPZs=;
-        b=SqmGg7rJvPskSLdDzftfu5PSykYmQLgQy4jU8T3W6xdhSvGlwAvGS8jAhdRIV5JYsM
-         T2LTw7aeukH2Wva9t1YIe91eBz8C7kcMbQcANgBhlLoQS2kOA4BTdNxo5dVmvMqV0BjG
-         BOHIosKWnd7brMbAHAhjLeRwY12kOWiL2ARpk=
+        bh=Lt8tM4k9kI2WJsiMlc0vRXqbkVOv32SUKQ8bmi3+/mU=;
+        b=h2i+ZBKoEUZ2/GXZ2XeFf0FzN5K3GdTTfbAd+v5nE3A4uf1J5mPhl9WgooKA6rDpk7
+         BXp0Brm8wilBiFdA1PqaB/E3Q9rVjW0D3rShd42B1lMRWmwacc/rb/aUXI6LXilTJIuS
+         uNKxwpVW4/FAZgtsb9jmZArrRX1ZaEHkf0C50=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wu/5vBDtIt/2CwvWKiSOVVIBdqUUtck6xP0LuooJPZs=;
-        b=y6Az/2kyKh6Sq8gQMPrzNp9sc+vwS017hG1q9o2n8TSGo0Rb20GBXaxi9EyL7V1umx
-         nNi/rzT9giWdk7EIYdHbaUdGiRqpkYHJaWDcwlXf6eBSwlj4VRVfCnoHGoWt9XWEEFxa
-         sHDStO7JqXsst5agJZSoj/OSBw/KuaJxviaqp/Ky6ePeaKM9NWrYM7pqDHshLzuGnQM5
-         ggOBACE1zd+5HUQPVxCvp63bpYFpv21l9/XjZC1YicJX2DMqBhkixDPh3xfgPrHaE6X+
-         +KCrAIh2dMqEoTAxc7UXUyLc1sNEb1XNm6dkZnq8IYUvjniYhn1yoiqg4+Q34RnA6QHr
-         9OaA==
-X-Gm-Message-State: AO0yUKWHz0f2gd5tDtZr8czwjW5ZaWvPFXGnTp133ige30/ZNGLHghDH
-        6kQLCnuB4kmHVMVR6TQyb3dxNanYZP7OxW3uyiEmKoyxOQBDSfSUhsR7/uitj01HSVViF6s1gnj
-        Nci9pzVDp8doKheK4knm3nY1VR0qvnR2aCIDxECdux9JMrxKGp8q4MBAU4ottSl80+nC26vOcaE
-        /PKhRrB2w=
-X-Google-Smtp-Source: AK7set+ma/FAcCU2xVAE6tdIoSDbng7t4r8nnsU9YfhLIrLzcrEEA3UlzmfNx7y61VEgETX+1/XxSg==
-X-Received: by 2002:a17:902:ea07:b0:19a:9831:c8d6 with SMTP id s7-20020a170902ea0700b0019a9831c8d6mr17145182plg.50.1677249873301;
-        Fri, 24 Feb 2023 06:44:33 -0800 (PST)
+        bh=Lt8tM4k9kI2WJsiMlc0vRXqbkVOv32SUKQ8bmi3+/mU=;
+        b=0SMkx3Bn+vpHEJ+ehgEWTx1UX3VXAJODHHxwSMZm4I0szyxkyi5gKh/kjDL1m+N9Xm
+         Lfk2PtKLYozHRfaMVhK76Anx3qxAlAdWQa6wXstwswlV9jICVFJnZPPRLcyLX0vGnXlP
+         b050zYs8vwdAtjEZcfxNws429E4vsatM/ekcAYCg56wd0c0bJa+zW2MkFr92xZAVaCP6
+         nJzBYe6EphyIH7b+7lOQQj0yABQf0IBaslQNpJ6SYyhHBYOcP1DYE7aVvY4phm8+9tw0
+         9IObzWGF3B8Qcz9rHA0VjyYhqicqSYWfPXNRFHjIFUZSolJCQ8f5DWmwDRLD7mudwFbj
+         jrdA==
+X-Gm-Message-State: AO0yUKXSuZmCtUQx8Ji9fHt6eA/G7oM2fq12iUq62SmIW6KZ2k9LFLN9
+        akiLuwR9O4q9nqKgzE6IIy1v6rAReMnyPw3FiOrSKCL3hnji1WXgwf44ABqcIzQWjC2U+IM8aQP
+        WxvpsesrEv0hpkR7msqlf3WnnuTm78meDoMcZTiGas6yMGQGmOoPs5YqB/y4r20S+A2AGIeHkNR
+        tWDaOfyBs=
+X-Google-Smtp-Source: AK7set8a+UTGE4WgTW/MpX9YDtkr4j99tx18mc2m2gRqYmyhi1qMgtJDnrgr58m1wPnJOSy9DN+E9g==
+X-Received: by 2002:a17:903:1108:b0:19c:c184:d208 with SMTP id n8-20020a170903110800b0019cc184d208mr6159662plh.66.1677249878404;
+        Fri, 24 Feb 2023 06:44:38 -0800 (PST)
 Received: from localhost.localdomain ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170902a9c500b00186748fe6ccsm8911549plr.214.2023.02.24.06.44.31
+        by smtp.gmail.com with ESMTPSA id b5-20020a170902a9c500b00186748fe6ccsm8911549plr.214.2023.02.24.06.44.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 06:44:33 -0800 (PST)
+        Fri, 24 Feb 2023 06:44:37 -0800 (PST)
 From:   Ranjan Kumar <ranjan.kumar@broadcom.com>
 To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com
 Cc:     rajsekhar.chundru@broadcom.com, sathya.prakash@broadcom.com,
         sumit.saxena@broadcom.com,
         Ranjan Kumar <ranjan.kumar@broadcom.com>,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH 10/15] mpi3mr: appropriate return values for failures in firmware init path
-Date:   Fri, 24 Feb 2023 06:43:15 -0800
-Message-Id: <20230224144320.10601-11-ranjan.kumar@broadcom.com>
+Subject: [PATCH 11/15] mpi3mr: Successive VD delete and add causes FW Fault
+Date:   Fri, 24 Feb 2023 06:43:16 -0800
+Message-Id: <20230224144320.10601-12-ranjan.kumar@broadcom.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230224144320.10601-1-ranjan.kumar@broadcom.com>
 References: <20230224144320.10601-1-ranjan.kumar@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ecdc5605f5732abf"
+        boundary="0000000000003a66ac05f5732bab"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -70,75 +70,184 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000ecdc5605f5732abf
+--0000000000003a66ac05f5732bab
 Content-Transfer-Encoding: 8bit
 
-The driver is modified to return a proper non-zero return value for all
-the cases when the controller initialization and re-initialization fails.
+Upon Virtual disk removal, firmware sends device status
+change event(Virtual disk remove event) and expects the
+driver to start device remove handshake(by sending target
+reset and IOU control command to firmware).But the driver
+does not initiate the device remove handshake which leads
+to the firmware FAULT.
 
 Signed-off-by: Ranjan Kumar <ranjan.kumar@broadcom.com>
 Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 ---
- drivers/scsi/mpi3mr/mpi3mr_fw.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/scsi/mpi3mr/mpi3mr.h    |  8 ++++++-
+ drivers/scsi/mpi3mr/mpi3mr_os.c | 41 +++++++++++++++++++++++++--------
+ 2 files changed, 38 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_fw.c b/drivers/scsi/mpi3mr/mpi3mr_fw.c
-index 936a6edb00f4..a2998893835b 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_fw.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_fw.c
-@@ -3856,8 +3856,10 @@ int mpi3mr_init_ioc(struct mpi3mr_ioc *mrioc)
- 	dprint_init(mrioc, "allocating config page buffers\n");
- 	mrioc->cfg_page = dma_alloc_coherent(&mrioc->pdev->dev,
- 	    MPI3MR_DEFAULT_CFG_PAGE_SZ, &mrioc->cfg_page_dma, GFP_KERNEL);
--	if (!mrioc->cfg_page)
-+	if (!mrioc->cfg_page) {
-+		retval = -1;
- 		goto out_failed_noretry;
-+	}
+diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
+index 258ad9d5ac90..e0c99dee1862 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr.h
++++ b/drivers/scsi/mpi3mr/mpi3mr.h
+@@ -654,7 +654,11 @@ union _form_spec_inf {
+ 	struct tgt_dev_vd vd_inf;
+ };
  
- 	mrioc->cfg_page_sz = MPI3MR_DEFAULT_CFG_PAGE_SZ;
+-
++enum mpi3mr_dev_state {
++	MPI3MR_DEV_CREATED = 1,
++	MPI3MR_DEV_REMOVE_HS_STARTED = 2,
++	MPI3MR_DEV_DELETED = 3,
++};
  
-@@ -3919,8 +3921,10 @@ int mpi3mr_init_ioc(struct mpi3mr_ioc *mrioc)
- 		dprint_init(mrioc, "allocating memory for throttle groups\n");
- 		sz = sizeof(struct mpi3mr_throttle_group_info);
- 		mrioc->throttle_groups = kcalloc(mrioc->num_io_throttle_group, sz, GFP_KERNEL);
--		if (!mrioc->throttle_groups)
-+		if (!mrioc->throttle_groups) {
-+			retval = -1;
- 			goto out_failed_noretry;
+ /**
+  * struct mpi3mr_tgt_dev - target device data structure
+@@ -678,6 +682,7 @@ union _form_spec_inf {
+  * @enclosure_logical_id: Enclosure logical identifier
+  * @dev_spec: Device type specific information
+  * @ref_count: Reference count
++ * @state: device state
+  */
+ struct mpi3mr_tgt_dev {
+ 	struct list_head list;
+@@ -699,6 +704,7 @@ struct mpi3mr_tgt_dev {
+ 	u64 enclosure_logical_id;
+ 	union _form_spec_inf dev_spec;
+ 	struct kref ref_count;
++	enum mpi3mr_dev_state state;
+ };
+ 
+ /**
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
+index 4fe2102ef331..6f9230a079c3 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_os.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
+@@ -652,6 +652,7 @@ static void mpi3mr_tgtdev_add_to_list(struct mpi3mr_ioc *mrioc,
+ 	mpi3mr_tgtdev_get(tgtdev);
+ 	INIT_LIST_HEAD(&tgtdev->list);
+ 	list_add_tail(&tgtdev->list, &mrioc->tgtdev_list);
++	tgtdev->state = MPI3MR_DEV_CREATED;
+ 	spin_unlock_irqrestore(&mrioc->tgtdev_lock, flags);
+ }
+ 
+@@ -659,20 +660,25 @@ static void mpi3mr_tgtdev_add_to_list(struct mpi3mr_ioc *mrioc,
+  * mpi3mr_tgtdev_del_from_list -Delete tgtdevice from the list
+  * @mrioc: Adapter instance reference
+  * @tgtdev: Target device
++ * @must_delete: Must delete the target device from the list irrespective
++ * of the device state.
+  *
+  * Remove the target device from the target device list
+  *
+  * Return: Nothing.
+  */
+ static void mpi3mr_tgtdev_del_from_list(struct mpi3mr_ioc *mrioc,
+-	struct mpi3mr_tgt_dev *tgtdev)
++	struct mpi3mr_tgt_dev *tgtdev, bool must_delete)
+ {
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&mrioc->tgtdev_lock, flags);
+-	if (!list_empty(&tgtdev->list)) {
+-		list_del_init(&tgtdev->list);
+-		mpi3mr_tgtdev_put(tgtdev);
++	if ((tgtdev->state == MPI3MR_DEV_REMOVE_HS_STARTED) || (must_delete == true)) {
++		if (!list_empty(&tgtdev->list)) {
++			list_del_init(&tgtdev->list);
++			tgtdev->state = MPI3MR_DEV_DELETED;
++			mpi3mr_tgtdev_put(tgtdev);
 +		}
  	}
+ 	spin_unlock_irqrestore(&mrioc->tgtdev_lock, flags);
+ }
+@@ -1036,7 +1042,7 @@ void mpi3mr_rfresh_tgtdevs(struct mpi3mr_ioc *mrioc)
+ 			    tgtdev->perst_id);
+ 			if (tgtdev->host_exposed)
+ 				mpi3mr_remove_tgtdev_from_host(mrioc, tgtdev);
+-			mpi3mr_tgtdev_del_from_list(mrioc, tgtdev);
++			mpi3mr_tgtdev_del_from_list(mrioc, tgtdev, true);
+ 			mpi3mr_tgtdev_put(tgtdev);
+ 		}
+ 	}
+@@ -1285,7 +1291,7 @@ static void mpi3mr_devstatuschg_evt_bh(struct mpi3mr_ioc *mrioc,
+ 		mpi3mr_remove_tgtdev_from_host(mrioc, tgtdev);
  
- 	retval = mpi3mr_enable_events(mrioc);
-@@ -3940,6 +3944,7 @@ int mpi3mr_init_ioc(struct mpi3mr_ioc *mrioc)
- 		mpi3mr_memset_buffers(mrioc);
- 		goto retry_init;
- 	}
-+	retval = -1;
- out_failed_noretry:
- 	ioc_err(mrioc, "controller initialization failed\n");
- 	mpi3mr_issue_reset(mrioc, MPI3_SYSIF_HOST_DIAG_RESET_ACTION_DIAG_FAULT,
-@@ -4052,6 +4057,7 @@ int mpi3mr_reinit_ioc(struct mpi3mr_ioc *mrioc, u8 is_resume)
- 		ioc_err(mrioc,
- 		    "cannot create minimum number of operational queues expected:%d created:%d\n",
- 		    mrioc->shost->nr_hw_queues, mrioc->num_op_reply_q);
-+		retval = -1;
- 		goto out_failed_noretry;
+ 	if (cleanup) {
+-		mpi3mr_tgtdev_del_from_list(mrioc, tgtdev);
++		mpi3mr_tgtdev_del_from_list(mrioc, tgtdev, false);
+ 		mpi3mr_tgtdev_put(tgtdev);
  	}
  
-@@ -4118,6 +4124,7 @@ int mpi3mr_reinit_ioc(struct mpi3mr_ioc *mrioc, u8 is_resume)
- 		mpi3mr_memset_buffers(mrioc);
- 		goto retry_init;
+@@ -1603,7 +1609,7 @@ static void mpi3mr_sastopochg_evt_bh(struct mpi3mr_ioc *mrioc,
+ 		case MPI3_EVENT_SAS_TOPO_PHY_RC_TARG_NOT_RESPONDING:
+ 			if (tgtdev->host_exposed)
+ 				mpi3mr_remove_tgtdev_from_host(mrioc, tgtdev);
+-			mpi3mr_tgtdev_del_from_list(mrioc, tgtdev);
++			mpi3mr_tgtdev_del_from_list(mrioc, tgtdev, false);
+ 			mpi3mr_tgtdev_put(tgtdev);
+ 			break;
+ 		case MPI3_EVENT_SAS_TOPO_PHY_RC_RESPONDING:
+@@ -1761,7 +1767,7 @@ static void mpi3mr_pcietopochg_evt_bh(struct mpi3mr_ioc *mrioc,
+ 		case MPI3_EVENT_PCIE_TOPO_PS_NOT_RESPONDING:
+ 			if (tgtdev->host_exposed)
+ 				mpi3mr_remove_tgtdev_from_host(mrioc, tgtdev);
+-			mpi3mr_tgtdev_del_from_list(mrioc, tgtdev);
++			mpi3mr_tgtdev_del_from_list(mrioc, tgtdev, false);
+ 			mpi3mr_tgtdev_put(tgtdev);
+ 			break;
+ 		default:
+@@ -2015,12 +2021,19 @@ static int mpi3mr_create_tgtdev(struct mpi3mr_ioc *mrioc,
+ 	int retval = 0;
+ 	struct mpi3mr_tgt_dev *tgtdev = NULL;
+ 	u16 perst_id = 0;
++	unsigned long flags;
+ 
+ 	perst_id = le16_to_cpu(dev_pg0->persistent_id);
+ 	if (perst_id == MPI3_DEVICE0_PERSISTENTID_INVALID)
+ 		return retval;
+ 
+-	tgtdev = mpi3mr_get_tgtdev_by_perst_id(mrioc, perst_id);
++	spin_lock_irqsave(&mrioc->tgtdev_lock, flags);
++	tgtdev = __mpi3mr_get_tgtdev_by_perst_id(mrioc, perst_id);
++
++	if (tgtdev)
++		tgtdev->state = MPI3MR_DEV_CREATED;
++	spin_unlock_irqrestore(&mrioc->tgtdev_lock, flags);
++
+ 	if (tgtdev) {
+ 		mpi3mr_update_tgtdev(mrioc, tgtdev, dev_pg0, true);
+ 		mpi3mr_tgtdev_put(tgtdev);
+@@ -2218,6 +2231,14 @@ static void mpi3mr_dev_rmhs_send_tm(struct mpi3mr_ioc *mrioc, u16 handle,
+ 	u8 retrycount = 5;
+ 	struct mpi3mr_drv_cmd *drv_cmd = cmdparam;
+ 	struct delayed_dev_rmhs_node *delayed_dev_rmhs = NULL;
++	struct mpi3mr_tgt_dev *tgtdev = NULL;
++	unsigned long flags;
++
++	spin_lock_irqsave(&mrioc->tgtdev_lock, flags);
++	tgtdev = __mpi3mr_get_tgtdev_by_handle(mrioc, handle);
++	if (tgtdev && (iou_rc == MPI3_CTRL_OP_REMOVE_DEVICE))
++		tgtdev->state = MPI3MR_DEV_REMOVE_HS_STARTED;
++	spin_unlock_irqrestore(&mrioc->tgtdev_lock, flags);
+ 
+ 	if (drv_cmd)
+ 		goto issue_cmd;
+@@ -5122,7 +5143,7 @@ static void mpi3mr_remove(struct pci_dev *pdev)
+ 	list_for_each_entry_safe(tgtdev, tgtdev_next, &mrioc->tgtdev_list,
+ 	    list) {
+ 		mpi3mr_remove_tgtdev_from_host(mrioc, tgtdev);
+-		mpi3mr_tgtdev_del_from_list(mrioc, tgtdev);
++		mpi3mr_tgtdev_del_from_list(mrioc, tgtdev, true);
+ 		mpi3mr_tgtdev_put(tgtdev);
  	}
-+	retval = -1;
- out_failed_noretry:
- 	ioc_err(mrioc, "controller %s is failed\n",
- 	    (is_resume)?"resume":"re-initialization");
+ 	mpi3mr_stop_watchdog(mrioc);
 -- 
 2.31.1
 
 
---000000000000ecdc5605f5732abf
+--0000000000003a66ac05f5732bab
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -209,13 +318,13 @@ nWsVitGa1sKS9usFXoW1bQXgJ9TtRdy8gka8b9SaKnh4TaiEKpdl8ztXhugWp7RpFGVu/ZZ8narx
 0H1L9W/UIr3J/uYokdFr+hIrXOfOwJLB18bWOTCVWxTEo4zYC8qZ/h7UcS5aispm/rkxggJtMIIC
 aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
 EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxMV+PqteWF5WGw7jsw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIKznVHM3+agv3M4JFEqRu+JHEyixWR8v
-Lt13+FzUcBGCMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDIy
-NDE0NDQzM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEINpY3E/9jDMB+QgcC79vR250Rd1IFlk2
+kjhwkG7einUlMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDIy
+NDE0NDQzOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
 SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQCMwJRPst7KMeEP5XhRvLD1PB5ibXjhGpkZ8pjwX06+wrSExc+2
-s1ZHbkw4AhZvhDliGeWbvwslG4E8gS+FqR3eKbav2tI95ODgjheHUURz+3qjhdqW7Xw0S7itrhxS
-ClvhllHcmTBr6K4twP3HRjme9syA2PUDFVqT879VEqGWAO3LvrSq9NsKCCW27fgMZvDjpbLL75TN
-Tzc23u1cEF0+aUKmMA3rWcfkoIzfmLIx/7GQCPyIjEHb8peaNSXzn1W7mzHCJYzX+qHwjfLnRyOi
-bd74Ws2xHeNMC6K1pu8O7y/+4c6KdDdOClRyb72IMMrd43HfJ2dedcmY2lFygbdr
---000000000000ecdc5605f5732abf--
+ATANBgkqhkiG9w0BAQEFAASCAQC7daMBOQt6P8J3Gss8sdeRgIGOKUQqY8beWdfaq8X8qA+6kkCK
+2T9u0k/MEKgWEqjp6lutB8NSlM/LGpbOUW+i3dyWcGBc79D6cvR78ROdsZq+G40RARcPfub3QdQv
+866vDpsFxSqcxoa05e1z7jUq3WkOG9CbU4wD9vP1BlB98B5e8573G8pJKQpBiWJsLHJ4UCBBvAV7
+Zd2yJ3kl4tR/dZLHrhDZ6qHrmZeJJNMd1emGrVACU/TbpNjnOj76Uz6LW97qoh8tMwH8x4ptUyi2
+GM5gRAO/0Ty+wQjBYminN6RAZg5kNmgVZma2KKGciQMYuSSH+/iIkgy8RkhM9zHJ
+--0000000000003a66ac05f5732bab--
