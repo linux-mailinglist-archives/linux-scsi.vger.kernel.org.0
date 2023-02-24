@@ -2,182 +2,245 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50F26A1DAD
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Feb 2023 15:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 491C46A209F
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Feb 2023 18:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjBXOpJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Feb 2023 09:45:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
+        id S229766AbjBXRpe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Feb 2023 12:45:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjBXOo4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Feb 2023 09:44:56 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670F612065
-        for <linux-scsi@vger.kernel.org>; Fri, 24 Feb 2023 06:44:55 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id s5so16890264plg.0
-        for <linux-scsi@vger.kernel.org>; Fri, 24 Feb 2023 06:44:55 -0800 (PST)
+        with ESMTP id S229702AbjBXRpc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Feb 2023 12:45:32 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3CE13529;
+        Fri, 24 Feb 2023 09:45:29 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31OHhwtP019983;
+        Fri, 24 Feb 2023 17:45:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=TJnlkmBsKXTXNyAh/UnSxlRNpQ8wVXlz1SzzGrPFZ/M=;
+ b=FvQUU/IRc2GKxetCJNl+ScgXFHrwnaGhWR8H7U3axItoM/HPN7OgD79KyzppOV/Mav/K
+ MNYvYMOskPtM0WzP9oFYj2AD8o2CJy/SCOeMp0wImVC61l75G7GbN2mf8Sq6jRTudL8I
+ kfI8h8YGB8jhDToddC4pU5FUaztyWh5pMIcwb3FnrHR5sPx3b6fkM6/V1LMcw8YYYEfV
+ V6hFwzLVdgtaUuF3uMrsQGDk7BBDZY6wsYaoyxkepvl8TkLe/xmE+d/zD9sbx3NPG/Cj
+ VeF319H5KqFI+YPehXyxYEfSLW+vVUmi+2TjYkpT1ptnYkAgSQXNOhwSNNAkBICSw9z3 lw== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ntp9twu3x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Feb 2023 17:45:09 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 31OG0ikw030220;
+        Fri, 24 Feb 2023 17:45:08 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ntn49ssch-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Feb 2023 17:45:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oOLssxY94n89oqANyZHmE+WIJyBCWp929HV1d6A9GKcEsPdCDd5XU8FkYFKIHJjJ1muspCzJhxCpd/Xz00ZPmq9d6oAExqKg470jZxbnz1sHzC+nLJ4GqKewE3sZiOAvUfJdd72RH84w/za1xabgp1Or7ISFvJozCBWaq3cXNAx0Jl8pNr10v+omM6OjLj+KR6j9PSREdekq8lPq5p1w+i4kq5yB9gX3aNA7xmRJfIP+urfv9zML0VbZrEzo7qLyytPSZL1FLvv/0g1EeuVcxkjY3h4pHL+7HzWCsphGq52esy4Fyn7AuJ5B/d/23a3/zJGnnedMKZGHb9ZmkCHkIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TJnlkmBsKXTXNyAh/UnSxlRNpQ8wVXlz1SzzGrPFZ/M=;
+ b=OTdzn8XCHWc7PZ+KYiCVT2vu1WVIQrK+/z8vl3aU4lHzLbWrGb2CHgtzt46XDFgMMKpBcEZmEHlcZNjhXTFEnyi5lSk/Tk/9Oys0O1BaAWX7yJLxbalk+vZg0YgsOivZCjoSvVbvB2nWPt+iXXosHnUYkqToEslxWWw1bdCLV12uT6e4iJlW1Agfim5sVKTvcXk+KnCPpP8UqhIzl+fYoxMS4ac/EvDkN2diFBlrBhV0hZb84udhB7Fpv+b80iYCorkLJ8F2mqOr2rOexP2mmgqVwS1M1maM6CkvoowDrE1QYDhB9HK5IUbtu627m9KlV9eUKA369lcHtAzfgXRoMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cg7XdTg+5QDWN1TQsXL49DT1/YglGUGNPxNsu9uHrgo=;
-        b=ciNmTtLHKx30vxi1XBY3msaohVU5l8JkMNFzNDjziM1YiYTyVpgu5Wh0v0HTvgJfFe
-         eeVAZWgEUpk10+oRNEY5yFl1gsGT1VGR6ZCQHGnnyWTK+ty408/MGyhvSmljIAXSln8f
-         2+hwojKH6R2EIU/AXFsOOA7H35SfFHLMtu76o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cg7XdTg+5QDWN1TQsXL49DT1/YglGUGNPxNsu9uHrgo=;
-        b=q5j8h6R0jEhFk/pI2nFm38dp4WZmOsLpKN05EBfnOGVLDhkfyit5FF8do2nl6A5kxE
-         MGr+fK/I4OqLeViliBJ1z/1a+k7fh1ybuCrfF6mpTMlYpiJCYE/Pm+WP3pxgclb0a3Ig
-         uDYpjQn52FzPsVnU3AZFI0VVPHbCVKsZ6epvpSfaBC/vFh8Qbj6ePJQItpGdPqJsw0s1
-         RdY8T1oKQN8zSnEHTQpLLTI+12gsjxcNaHv9SHQJ+QU/s4aOtFzbGU48npkyh9hJC6Qb
-         iB1xPFVbkmgzCmDqqRZ81TVGbdE6TlMgfrToqwK9uKZ3WgswDl8fZWkloAl2raUG3aI/
-         7+Pg==
-X-Gm-Message-State: AO0yUKU+8ihiugDSZ3EtIBbr3Alu/ZUfaiWcECkA7AU/GVg+ORniP1FB
-        Fqa4xhR+zCQCzjEOtSq4WsZRP+i2taedk2cwoDqLsEtiI8DtVVSgLD0adwACN9Kbk8B6BISbtda
-        9phFwhQYwyRvjq9t9lIOXDUjdTkkfKcFVc8l/YVtAkJkpLXm3+bvURRnyD1CZNB3Cihw9bWjyL6
-        DIun0LXOE=
-X-Google-Smtp-Source: AK7set8vmcS6hBas7YJmQaHNs9YLZh98lmtJ+KtbwEEs/+f9OwyIaYa1OA7xES0M3fQEI8Wfn/v7WQ==
-X-Received: by 2002:a17:902:c950:b0:19a:b44b:cca6 with SMTP id i16-20020a170902c95000b0019ab44bcca6mr19176487pla.24.1677249894504;
-        Fri, 24 Feb 2023 06:44:54 -0800 (PST)
-Received: from localhost.localdomain ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170902a9c500b00186748fe6ccsm8911549plr.214.2023.02.24.06.44.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Feb 2023 06:44:54 -0800 (PST)
-From:   Ranjan Kumar <ranjan.kumar@broadcom.com>
-To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com
-Cc:     rajsekhar.chundru@broadcom.com, sathya.prakash@broadcom.com,
-        sumit.saxena@broadcom.com,
-        Ranjan Kumar <ranjan.kumar@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH 15/15] mpi3mr: Update driver version to 8.4.1.0.0
-Date:   Fri, 24 Feb 2023 06:43:20 -0800
-Message-Id: <20230224144320.10601-16-ranjan.kumar@broadcom.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230224144320.10601-1-ranjan.kumar@broadcom.com>
-References: <20230224144320.10601-1-ranjan.kumar@broadcom.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TJnlkmBsKXTXNyAh/UnSxlRNpQ8wVXlz1SzzGrPFZ/M=;
+ b=KO8//AobnfDGECf7W+9Y/+VIZuxY77FvGqcitI2UCbw77EkW6ZzeKjVcWeYyT8u2VWWlNnmCgDXBhcTgFML9ZFdYMsISWA8VtfeO+wdKmw2hEaFcgCqINpTVoE7875TDgZNmd4jGJV00yR58kKFodrMd/Qjs0fBOLqGAjrGFFOc=
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
+ CH0PR10MB7535.namprd10.prod.outlook.com (2603:10b6:610:187::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.7; Fri, 24 Feb
+ 2023 17:45:05 +0000
+Received: from DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::7dd7:8d22:104:8d64]) by DM5PR10MB1466.namprd10.prod.outlook.com
+ ([fe80::7dd7:8d22:104:8d64%7]) with mapi id 15.20.6156.007; Fri, 24 Feb 2023
+ 17:45:05 +0000
+From:   Mike Christie <michael.christie@oracle.com>
+To:     bvanassche@acm.org, hch@lst.de, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        snitzer@kernel.org, axboe@kernel.dk,
+        linux-nvme@lists.infradead.org, chaitanyak@nvidia.com,
+        kbusch@kernel.org, target-devel@vger.kernel.org
+Subject: [PATCH v4 01/18] Use block pr_ops in LIO
+Date:   Fri, 24 Feb 2023 11:44:44 -0600
+Message-Id: <20230224174502.321490-1-michael.christie@oracle.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: DM5PR07CA0077.namprd07.prod.outlook.com
+ (2603:10b6:4:ad::42) To DM5PR10MB1466.namprd10.prod.outlook.com
+ (2603:10b6:3:b::7)
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002f1e2005f5732cb0"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM5PR10MB1466:EE_|CH0PR10MB7535:EE_
+X-MS-Office365-Filtering-Correlation-Id: 89aff5fd-382e-4625-ec53-08db168edce1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iFFgWg8m62M1Q0ZTI/kw8UTzI6/HvQKeM44buNdlYXQ7nH7xwfxA3R/7YbqYeGAvCvdlOr9XdKpPlpdjqzgW6GQFAj3SUuNlYgdFWUg+ReOCvmKUxbUc/S2/pVLmtQ5I65oMb3L0UFP4upxLAyCOZDVpy9Puj2UxEwsa9cBhd6eGYqhJi5yO4h4oxXW6p+rqsb6Wd/9fwsdN0V+B3wASZoLvaenYahmUviWwm8ZH1WmcwavnIMSn3EEoPFQO/YW+bCjg7BHvhUtEGnzzZ55ned5w+5M9B7H+f1dl3pIiAgZTk+/xktf7ZjXJycYYAmEQkpXXb4Sk5RvWIamf9XTH1ZSbQ6g71XrG9YYXValbOhs79jpWBnUInSyBYMjKQiOzPQnvM3GPFxyqyfizgv9c0i+yUA7ehUSJrm/idVuZuZYKBMtbJ/b4tRrf32JXgWWIi8Ufj8penP08aMpeLndx0HVo/JE1p9pDBNvPd6ew+09p0QtlhFa1CfEfFVh8s6kPKxdfLfOQJ2v4aqhYBuOmwL1daWBrh/F6akkUhSXGUK3VohM1AtBnelfjIDPlxb8hFIB/REbtSa+9rxjsH9NKbeDgaatzz/Q9uB/Qk7M0kNCWz4QECVbNQjJRIicTRhxF13DQ/glBCuieuFLJKtKyKgQ3DFrQSYUxue/mWTTE+xytq28uDxa6IFgP5F0JCdxe
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(376002)(39860400002)(136003)(396003)(451199018)(66476007)(66556008)(66946007)(8676002)(83380400001)(41300700001)(316002)(36756003)(186003)(8936002)(26005)(5660300002)(2616005)(38100700002)(7416002)(6512007)(921005)(966005)(86362001)(478600001)(2906002)(6486002)(6506007)(1076003)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MyLGzuJLw6qxfLd38DN/tIpM+X+hhoOy2RbabO9Xsm8IH+BSNYbQjwuYDrDP?=
+ =?us-ascii?Q?LtrIn5VM3hn1YV0snEsQiccDtkGsk0lF93kxOHWLBY75fB6qpI4KAJ6U/q2Z?=
+ =?us-ascii?Q?sOsihb5jvUv9a+Cayn5c/uxUQuc7+sG6yaUMAJv5gs78hmmHOV40mnXh+nEx?=
+ =?us-ascii?Q?qG+nfHUjXLUzm4DJHjECW7JyF0xvPccMPXNltFWN2r7bwJqcxLoyKRHFUPTk?=
+ =?us-ascii?Q?fyBNT+iZJxxhwhf3aOu32GLsxvou4daxo5bWpsy7s2MJMg7lIht/etpciLDW?=
+ =?us-ascii?Q?uBPj6cfuxC+XKxntFbTWk2dJU6lNViCROCYTXcs3McRzIfDxJxGX4D2qYNSP?=
+ =?us-ascii?Q?MJOUITYI7pu1ftil5nntsN9QAnYxsR2MXY+Lk/nYPvH/VJ3/gJgITxaZEL59?=
+ =?us-ascii?Q?gOge1s7sPUzqlqFhGwk6UrLYUCyACulvDSIcOAELq1vd+zHQTgnzncQUrK6g?=
+ =?us-ascii?Q?fju2Au0to3LUiGqgd1h88q0v1rHlU0YGvbS6RDzgY6GD7BXRtCiAGZ9t5QQB?=
+ =?us-ascii?Q?vI/XpLQjrqgc/HYwH300Mh8/uRxLenxKlZ/TcexINmgq3nokQBoVioxoXHrt?=
+ =?us-ascii?Q?kybq5FpEX2QSIzr0IAfIt3VZ77I+7pu5Ww515sZTNcoQZFKM1kLQ7HpB6t4P?=
+ =?us-ascii?Q?LG1THmhMMmzQs1R4wSPxAla3rstbLKKO+gyIxkNnfQ0Ffo1ZHXRpSGIZRgSQ?=
+ =?us-ascii?Q?Zkme40SEyecjXco0JiLy4oKqJVH5aHKUWzKlZjTMrXO4UIcY2Ch74B1HwPxR?=
+ =?us-ascii?Q?qUuHwpzhTnQ3X/eUr8xTFcg4PM7dNvKWOqzRJkjZeMfqF9Cvukp/Wi6dvcOy?=
+ =?us-ascii?Q?X6St6PA9gdH+ivq6rInNOhuxs8jrUZgdo8HFe6e98WIM04cqOG8zUkUWMoYH?=
+ =?us-ascii?Q?RSoXSYNSUOeO6JrqKj2OnpnL1ltl/zIFxS06rcLYoVt8y7/Pwsm4cTkXKA+4?=
+ =?us-ascii?Q?c3NRPthsoHgKMsMIID+e7LMm9CTaWAYmr8GBOGjLa7G+p01ewwhQbj/fHMdq?=
+ =?us-ascii?Q?cBWSmWPSpCO4Y0KG+Yac9uQly0mPvxI92n3i0mvNoXOCXv7ZRT/Yg05DT3dq?=
+ =?us-ascii?Q?ormZVE20Kkqk9KntXNe/fpaCqJ8KB/2ltsuAjvE3d4UBV/Y7rYOhkWhd1KJH?=
+ =?us-ascii?Q?oAQ+f73A5hvwLvGqXxa4Pc71W1oHp7gLjfib8R+ncGzwvwXsJzfkLicDxE8Y?=
+ =?us-ascii?Q?EeXChe0SvLzfN5ICBzXe97NnlEkQNVRq9RwGFUk3lvZ2gcr0PEY8gXb1/Vie?=
+ =?us-ascii?Q?4HwND1nEx0RaLG/JfIww3PxYYLhymaE398EW/WC0GejycD8JJa1xo3gf4CpE?=
+ =?us-ascii?Q?PD+b4j9Req8ictbBxX8Jm4hFqK1B0PB3qysmKRxC6pZTqttB2tis4RJtG1z9?=
+ =?us-ascii?Q?uq7xD2tFGzFmJbFo2yGgLF3nDFKeoRhTetCHDPSFeyvCe5BUOU4mw4xrDLd1?=
+ =?us-ascii?Q?cojdC9dBmGRNdbQfv5KTZJ3m/9iqSNs1cul5TOrNDMwUXX8h1H6nFZ/OLy/H?=
+ =?us-ascii?Q?UIXIw/iriwY9IcKhK/JzW8WSN1w0heET0/Th4OGih0D4l8pXNpA22QuyfzbU?=
+ =?us-ascii?Q?V1fwQKPAWTcK39RZn4f+q1Ce2UH67KFnxeXc9K/OHcyi+IGsVCR23nWgFI+0?=
+ =?us-ascii?Q?jg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?EQEvJ8MKzPTGe/p3e3S/RzqeB+lTSrXessVtEsDZxWhlvoiQ8p6lw72jVuDn?=
+ =?us-ascii?Q?DInPdYsqSZrP/kWF2mwIXn4pnOPG/U867dVFTGXXWG1CCHRsFVtCCAvsCV0u?=
+ =?us-ascii?Q?qUzLF397gZJ8ce+jmt+sGcdfNdy+YRGVxWav4g0MZjo9gne/rayEXrluUGwZ?=
+ =?us-ascii?Q?n3E6ny7GM6qEMCkrkqrx0kjrvRLusQ7fEW2C/60vWWIi0E79W4t54ul03tQ8?=
+ =?us-ascii?Q?+XKkBbdOfnSdZVeKMNKhWCzslHOY9Sqg+rw43K9FMxVwtWXD4OpW15h7fCld?=
+ =?us-ascii?Q?jB1sHpwdM3Gno6MQxNcUHyy+j191Zvf5OKc3kFu0m9etzwLrnY7mraDK5DpU?=
+ =?us-ascii?Q?SCGDHn4xNqFmjHkX3vl25Rxaim+fZak2Y8R7KPwSy14fIjGqCyyDA/ADKms4?=
+ =?us-ascii?Q?WEa55jtXJPcdC6enBVYAcBkU4Ei+KvImmH/4MtzMk4j4Q84ZFD6+ZwLlRQ9q?=
+ =?us-ascii?Q?FLYC6gYB8NAfTydbHhknNE6877mgCiHRsurn0p0JRohK7mP4yeMEYOFwZEt7?=
+ =?us-ascii?Q?yQwvGSoAKBrFLMwwRsy5gm52/0b3H5QPTvbR6oC22vBQsD7yzssCz9YXVXwS?=
+ =?us-ascii?Q?XDAsQHf0eRl3I8LsaiCBnSElrvoo06xIi3y/+/65KkrhXYGmNKPDSNbbGBF2?=
+ =?us-ascii?Q?oD59gw230TtQBDMzMz7DtPBLqv+h+Q7foEtq6b0wHB/iaSlhYhYGle6q4HTx?=
+ =?us-ascii?Q?ZgdlpwA9AZ6k/VXG739BhdeV7KQ0/BNmfZOrXCzH1QkoPCA7B+w0RXvt8ExW?=
+ =?us-ascii?Q?wNzOjBmPnqrMJD9U2ovVp1z3gqOqiBS+dhZDqKUIQs2cZzMlD7ldqxYu/JoT?=
+ =?us-ascii?Q?O4sBz3EZ5dp+0/ENEPUVouu6rub3xD20GrDULbAj8EqRncVkmXHoTkmyheBS?=
+ =?us-ascii?Q?Z/Vz/WCY+EnCCqsnsrBfXuVtzRRPUqfp+BSNiSJ2z1LWABd+9yCqCswcKIOR?=
+ =?us-ascii?Q?GSH/B2n+jEpVZIywX+rQNEPJER2+JV70Q0HhIsABAdTiBPnpZmX8FdKXbFoj?=
+ =?us-ascii?Q?vYDsyLOWAhj3GZRc2dyP8AFC/g=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89aff5fd-382e-4625-ec53-08db168edce1
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2023 17:45:05.1892
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pFHdQ51imIb5SMC5a4wiKjXkViIOAOVdMfynTk3bMR0tBCAaF+ELR/aJ4lUcXulja5XpDWcTf3PWl8E4S4Q/3pPULNCTd5ZEzWZVe5t/UgU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB7535
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-24_12,2023-02-24_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 phishscore=0
+ suspectscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302240139
+X-Proofpoint-GUID: OuvwkHYKZFwztoJSmsJoJfYsOTTfscjG
+X-Proofpoint-ORIG-GUID: OuvwkHYKZFwztoJSmsJoJfYsOTTfscjG
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---0000000000002f1e2005f5732cb0
-Content-Transfer-Encoding: 8bit
+The patches in this thread allow us to use the block pr_ops with LIO's
+target_core_iblock module to support cluster applications in VMs. They
+were built over Linus's tree. They also apply over linux-next and
+Martin's tree. They could also apply over Jens's tree but it needs the
+scsi_execute_cmd changes that just got merged into Linus's tree.
 
-Update driver version to 8.4.1.0.0
+Currently, to use windows clustering or linux clustering (pacemaker +
+cluster labs scsi fence agents) in VMs with LIO and vhost-scsi, you have
+to use tcmu or pscsi or use a cluster aware FS/framework for the LIO pr
+file. Setting up a cluster FS/framework is pain and waste when your real
+backend device is already a distributed device, and pscsi and tcmu are
+nice for specific use cases, but iblock gives you the best performance and
+allows you to use stacked devices like dm-multipath. So these patches
+allow iblock to work like pscsi/tcmu where they can pass a PR command to
+the backend module. And then iblock will use the pr_ops to pass the PR
+command to the real devices similar to what we do for unmap today.
 
-Signed-off-by: Ranjan Kumar <ranjan.kumar@broadcom.com>
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
----
- drivers/scsi/mpi3mr/mpi3mr.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The patches are separated in the following groups:
+Patch 1 - 2:
+- Add block layer callouts for reading reservations and rename reservation
+  error code.
+Patch 3 - 5:
+- SCSI support for new callouts.
+Patch 6:
+- DM support for new callouts.
+Patch 7 - 13:
+- NVMe support for new callouts.
+Patch 14 - 18:
+- LIO support for new callouts.
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
-index e0c99dee1862..e6a9c81bba33 100644
---- a/drivers/scsi/mpi3mr/mpi3mr.h
-+++ b/drivers/scsi/mpi3mr/mpi3mr.h
-@@ -56,8 +56,8 @@ extern struct list_head mrioc_list;
- extern int prot_mask;
- extern atomic64_t event_counter;
- 
--#define MPI3MR_DRIVER_VERSION	"8.2.0.3.0"
--#define MPI3MR_DRIVER_RELDATE	"08-September-2022"
-+#define MPI3MR_DRIVER_VERSION	"8.4.1.0.0"
-+#define MPI3MR_DRIVER_RELDATE	"24-February-2023"
- 
- #define MPI3MR_DRIVER_NAME	"mpi3mr"
- #define MPI3MR_DRIVER_LICENSE	"GPL"
--- 
-2.31.1
+This patchset has been tested with the libiscsi PGR ops and with window's
+failover cluster verification test. Note that for scsi backend devices we
+need this patchset:
+
+https://lore.kernel.org/linux-scsi/20230123221046.125483-1-michael.christie@oracle.com/T/#m4834a643ffb5bac2529d65d40906d3cfbdd9b1b7
+
+to handle UAs. To reduce the size of this patchset that's being done
+separately to make reviewing easier. And to make merging easier this
+patchset and the one above do not have any conflicts so can be merged
+in different trees.
+
+v4:
+- Pass read_keys number of keys instead of array len
+- Keep the switch use when converting between block and scsi/nvme PR
+types. Drop default case so compiler spits out warning if in the future
+a new value is added.
+- Add helper for handling
+nvme_send_ns_head_pr_command/nvme_send_ns_pr_command
+- Use void * instead of u8* for passing data buffer.
+- Rename status variable to rs.
+- Have caller init buffer/structs instead of nvme/scsi callouts.
+- Drop blk_status to err code.
+
+v3:
+- Fix patch subject formatting.
+- Fix coding style.
+- Rearrange patches so helpers are added with users to avoid compilation
+errors.
+- Move pr type conversion to array and add nvme_pr_type.
+- Add Extended Data Structure control flag enum and use in code for checks.
+- Move nvme pr code to new file.
+- Add more info to patch subjects about why we need to add blk_status
+to pr_ops.
+- Use generic SCSI passthrough error handling interface.
+- Fix checkpatch --strict errors. Note that I kept the existing coding
+style that it complained about because it looked like it was the preferred
+style for the code and I didn't want a mix and match.
+
+v2:
+- Drop BLK_STS_NEXUS rename changes. Will do separately.
+- Add NVMe support.
+- Fixed bug in target_core_iblock where a variable was not initialized
+mentioned by Christoph.
+- Fixed sd pr_ops UA handling issue found when running libiscsi PGR tests.
+- Added patches to allow pr_ops to pass up a BLK_STS so we could return
+a RESERVATION_CONFLICT status when a pr_ops callout fails.
 
 
---0000000000002f1e2005f5732cb0
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
 
-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
-GK2Ee6ez7fr/FL1RWbOPVHJR+deNIorOjW7U5HVwnRYhM1OR4mAkrkqcN+3kwae0KmVO3SDKFd7h
-Ok4L2e1ixyaRTo379Ur3iVTnagglDOliayMGRITBPe0CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcmFuamFuLmt1bWFyQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU8WuEiYXvpeCaubgLCCFoyRBc
-8QwwDQYJKoZIhvcNAQELBQADggEBAA5th3yz1fvJCBmK21x68IdDNFC0gmynT76I3fOgslLHc7ey
-lC9VXLb+vJ863blS/WxEOwf0fvc0ks7qYWl8xisInHu5AX9glaooGhLImlzE0l9rDf0tcq2kkgc4
-CXL9UGDEoqdxfRj3j9xn9fm9gpTBWSck6ufc/8RV1TLVjcZvrYkMqQwoVulGkr+HCnzaEFxBRmO/
-nWsVitGa1sKS9usFXoW1bQXgJ9TtRdy8gka8b9SaKnh4TaiEKpdl8ztXhugWp7RpFGVu/ZZ8narx
-0H1L9W/UIr3J/uYokdFr+hIrXOfOwJLB18bWOTCVWxTEo4zYC8qZ/h7UcS5aispm/rkxggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxMV+PqteWF5WGw7jsw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEAOH4hA+pBAU4QjYhmZgLJGuoKPr1wu
-virDx/KER7+iMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDIy
-NDE0NDQ1NFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQASH0CzJDGQKhuiqqfudPxb2JIzMYHzgyUoJ1ju8YOs2066yiHA
-BEAxYxUEnmKLf4FSy9x3ksm0yl006HNzr2lajexwqX4Pbr+UKqAIRZt5sIxGqZdrnsfr3UjEmYqq
-O2GMOHubzPiKJjMVW+yxVJlpkpaVeGke3QH3NH1+Ply2LIL0DFPqyYPSW9AamQNyI6LR8ed3Y1iq
-elka1ND71re66Q+D8Vi8/L4iGb4h0v1DLqEbG/BkvBYr9Dj+kefQgh+uT0S7YT9CwVeBeoelERZB
-0m8a3BZN1ZdLWozo06sd0PIYPTHrZ/XCV+k/Fl6KjwjTEBbtzqXkKRTnwVAX8QM8
---0000000000002f1e2005f5732cb0--
+
