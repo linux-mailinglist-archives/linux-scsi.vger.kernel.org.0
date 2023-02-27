@@ -2,57 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F9E6A38BA
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Feb 2023 03:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCF76A37A7
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Feb 2023 03:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjB0CgL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 26 Feb 2023 21:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
+        id S230388AbjB0CKw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 26 Feb 2023 21:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjB0Cf5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 26 Feb 2023 21:35:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244171B571;
-        Sun, 26 Feb 2023 18:35:18 -0800 (PST)
+        with ESMTP id S230519AbjB0CKL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 26 Feb 2023 21:10:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F81F1A64D;
+        Sun, 26 Feb 2023 18:09:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F027B60CA3;
-        Mon, 27 Feb 2023 02:07:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D994BC433D2;
-        Mon, 27 Feb 2023 02:07:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01F2160DD5;
+        Mon, 27 Feb 2023 02:09:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75EBBC4339C;
+        Mon, 27 Feb 2023 02:09:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677463678;
-        bh=QKIMaQF7XXFjtcqy6YI45gQA80BPDI6UUkz1miUBmhQ=;
+        s=k20201202; t=1677463754;
+        bh=yHkmIXxl4kKmlxFhuM3FCY/1Gqkqcb1R+RkfAgEC4pQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oAL/rslDWR76buDCf0MNOAIuY+C9iiGm8W3VOjx76/dUMrC3wg237Cdpn4+yUTJfG
-         Huek0ohwsh1cTgjmifbSzB7+hpEZw+Rx3e1RSvpLS/CbjhgpFtuM+Q2Umx1WBwS10B
-         EQuG0Ov9P+jbOcAQXTYmv3ua6MGAxaDsL+iM79v9lh9l3aneUmRMWcY/+hXlu1rMxY
-         HFhuuhF405sa+gpvyxy0A7taRF3fMAisZ2sbrG32awnCxju+achI3tVOXTkDBvtN+k
-         SPbG3OTlwgOTcL0zj1daet7buDAGX++pVOzmFagv4VBljziIIzFnivEF7MFj141Xwc
-         DXRVylWC6kjFA==
+        b=bfM8sCRrNvH33CuPxAhFFWknl91dNo3obEQqnEUIpKS659PGPwwYtzDjGZ43LtaAz
+         iX9ZFUH7FojMIIjSROV3bTbLRyGdNRxctSpZ30LpVG3yN2qMpnyZ79OXXTIwN4CTUY
+         ZVKbdoXfYqeT2s1hVinBHLbX5w72jcf+BCJmSNXUsyFtRKpkT5iYoZ8qlb/9q7VBOz
+         vTkzOudWCTuPaSbIAsHESHxgkEO7Z1cCGD3nOG+/F1ExYGRrixLW9gkwAGgZpEQX8Q
+         LK3GFtY7twJrPXJh7T5HouWpvnrHkd3xaRuBo7JuNvpMKDXyVBuZ3oIpM9GOkKiUN3
+         DFhZsMdSCRFpA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mason Zhang <Mason.Zhang@mediatek.com>,
-        Bart Van Assche <bvanassche@acm.org>,
+Cc:     Justin Tee <justin.tee@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
-        matthias.bgg@gmail.com, beanhuo@micron.com, avri.altman@wdc.com,
-        stanley.chu@mediatek.com, quic_asutoshd@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.1 47/58] scsi: ufs: core: Fix device management cmd timeout flow
-Date:   Sun, 26 Feb 2023 21:04:45 -0500
-Message-Id: <20230227020457.1048737-47-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 07/25] scsi: lpfc: Fix use-after-free KFENCE violation during sysfs firmware write
+Date:   Sun, 26 Feb 2023 21:08:30 -0500
+Message-Id: <20230227020855.1051605-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230227020457.1048737-1-sashal@kernel.org>
-References: <20230227020457.1048737-1-sashal@kernel.org>
+In-Reply-To: <20230227020855.1051605-1-sashal@kernel.org>
+References: <20230227020855.1051605-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,72 +57,93 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Mason Zhang <Mason.Zhang@mediatek.com>
+From: Justin Tee <justin.tee@broadcom.com>
 
-[ Upstream commit 36822124f9de200cedc2f42516301b50d386a6cd ]
+[ Upstream commit 21681b81b9ae548c5dae7ae00d931197a27f480c ]
 
-In the UFS error handling flow, the host will send a device management cmd
-(NOP OUT) to the device for link recovery. If this cmd times out and
-clearing the doorbell fails, ufshcd_wait_for_dev_cmd() will do nothing and
-return. hba->dev_cmd.complete struct is not set to NULL.
+During the sysfs firmware write process, a use-after-free read warning is
+logged from the lpfc_wr_object() routine:
 
-When this happens, if cmd has been completed by device, then we will call
-complete() in __ufshcd_transfer_req_compl(). Because the complete struct is
-allocated on the stack, the following crash will occur:
+  BUG: KFENCE: use-after-free read in lpfc_wr_object+0x235/0x310 [lpfc]
+  Use-after-free read at 0x0000000000cf164d (in kfence-#111):
+  lpfc_wr_object+0x235/0x310 [lpfc]
+  lpfc_write_firmware.cold+0x206/0x30d [lpfc]
+  lpfc_sli4_request_firmware_update+0xa6/0x100 [lpfc]
+  lpfc_request_firmware_upgrade_store+0x66/0xb0 [lpfc]
+  kernfs_fop_write_iter+0x121/0x1b0
+  new_sync_write+0x11c/0x1b0
+  vfs_write+0x1ef/0x280
+  ksys_write+0x5f/0xe0
+  do_syscall_64+0x59/0x90
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-  ipanic_die+0x24/0x38 [mrdump]
-  die+0x344/0x748
-  arm64_notify_die+0x44/0x104
-  do_debug_exception+0x104/0x1e0
-  el1_dbg+0x38/0x54
-  el1_sync_handler+0x40/0x88
-  el1_sync+0x8c/0x140
-  queued_spin_lock_slowpath+0x2e4/0x3c0
-  __ufshcd_transfer_req_compl+0x3b0/0x1164
-  ufshcd_trc_handler+0x15c/0x308
-  ufshcd_host_reset_and_restore+0x54/0x260
-  ufshcd_reset_and_restore+0x28c/0x57c
-  ufshcd_err_handler+0xeb8/0x1b6c
-  process_one_work+0x288/0x964
-  worker_thread+0x4bc/0xc7c
-  kthread+0x15c/0x264
-  ret_from_fork+0x10/0x30
+The driver accessed wr_object pointer data, which was initialized into
+mailbox payload memory, after the mailbox object was released back to the
+mailbox pool.
 
-Link: https://lore.kernel.org/r/20221216032532.1280-1-mason.zhang@mediatek.com
-Signed-off-by: Mason Zhang <Mason.Zhang@mediatek.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Fix by moving the mailbox free calls to the end of the routine ensuring
+that we don't reference internal mailbox memory after release.
+
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ufs/core/ufshcd.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/scsi/lpfc/lpfc_sli.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index fb5c9e2fc5348..dae49530201bf 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -3006,6 +3006,22 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
- 		} else {
- 			dev_err(hba->dev, "%s: failed to clear tag %d\n",
- 				__func__, lrbp->task_tag);
-+
-+			spin_lock_irqsave(&hba->outstanding_lock, flags);
-+			pending = test_bit(lrbp->task_tag,
-+					   &hba->outstanding_reqs);
-+			if (pending)
-+				hba->dev_cmd.complete = NULL;
-+			spin_unlock_irqrestore(&hba->outstanding_lock, flags);
-+
-+			if (!pending) {
-+				/*
-+				 * The completion handler ran while we tried to
-+				 * clear the command.
-+				 */
-+				time_left = 1;
-+				goto retry;
-+			}
- 		}
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index df3b190fccd16..7d333167047f5 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -21066,6 +21066,7 @@ lpfc_wr_object(struct lpfc_hba *phba, struct list_head *dmabuf_list,
+ 	struct lpfc_mbx_wr_object *wr_object;
+ 	LPFC_MBOXQ_t *mbox;
+ 	int rc = 0, i = 0;
++	int mbox_status = 0;
+ 	uint32_t shdr_status, shdr_add_status, shdr_add_status_2;
+ 	uint32_t shdr_change_status = 0, shdr_csf = 0;
+ 	uint32_t mbox_tmo;
+@@ -21111,11 +21112,15 @@ lpfc_wr_object(struct lpfc_hba *phba, struct list_head *dmabuf_list,
+ 	wr_object->u.request.bde_count = i;
+ 	bf_set(lpfc_wr_object_write_length, &wr_object->u.request, written);
+ 	if (!phba->sli4_hba.intr_enable)
+-		rc = lpfc_sli_issue_mbox(phba, mbox, MBX_POLL);
++		mbox_status = lpfc_sli_issue_mbox(phba, mbox, MBX_POLL);
+ 	else {
+ 		mbox_tmo = lpfc_mbox_tmo_val(phba, mbox);
+-		rc = lpfc_sli_issue_mbox_wait(phba, mbox, mbox_tmo);
++		mbox_status = lpfc_sli_issue_mbox_wait(phba, mbox, mbox_tmo);
  	}
++
++	/* The mbox status needs to be maintained to detect MBOX_TIMEOUT. */
++	rc = mbox_status;
++
+ 	/* The IOCTL status is embedded in the mailbox subheader. */
+ 	shdr_status = bf_get(lpfc_mbox_hdr_status,
+ 			     &wr_object->header.cfg_shdr.response);
+@@ -21130,10 +21135,6 @@ lpfc_wr_object(struct lpfc_hba *phba, struct list_head *dmabuf_list,
+ 				  &wr_object->u.response);
+ 	}
+ 
+-	if (!phba->sli4_hba.intr_enable)
+-		mempool_free(mbox, phba->mbox_mem_pool);
+-	else if (rc != MBX_TIMEOUT)
+-		mempool_free(mbox, phba->mbox_mem_pool);
+ 	if (shdr_status || shdr_add_status || shdr_add_status_2 || rc) {
+ 		lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
+ 				"3025 Write Object mailbox failed with "
+@@ -21151,6 +21152,12 @@ lpfc_wr_object(struct lpfc_hba *phba, struct list_head *dmabuf_list,
+ 		lpfc_log_fw_write_cmpl(phba, shdr_status, shdr_add_status,
+ 				       shdr_add_status_2, shdr_change_status,
+ 				       shdr_csf);
++
++	if (!phba->sli4_hba.intr_enable)
++		mempool_free(mbox, phba->mbox_mem_pool);
++	else if (mbox_status != MBX_TIMEOUT)
++		mempool_free(mbox, phba->mbox_mem_pool);
++
+ 	return rc;
+ }
  
 -- 
 2.39.0
