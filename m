@@ -2,145 +2,215 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A5A6A9419
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Mar 2023 10:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 927666A943D
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Mar 2023 10:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjCCJ2c (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Mar 2023 04:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S229916AbjCCJgc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Mar 2023 04:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbjCCJ1g (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Mar 2023 04:27:36 -0500
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E115C127;
-        Fri,  3 Mar 2023 01:26:57 -0800 (PST)
-Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
-        by mta-01.yadro.com (Proxmox) with ESMTP id C0595341DD8;
-        Fri,  3 Mar 2023 12:26:50 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
-        :cc:content-type:content-type:date:from:from:in-reply-to
-        :message-id:mime-version:references:reply-to:subject:subject:to
-        :to; s=mta-01; bh=P04PIElVFvC34mI847axbztzWtNrb29NinrEVpxXOtU=; b=
-        ggD5lN2hshds5ilqtko+OvWS892CjiqjQwHeDKD5zAnmUGCC79O2t6SnsDyIcNvp
-        VVcGzFrxYV5ck03S31U48weOR1n9ullsV1qR0rZsshBUXKUgx7EUzNwjcIs9Fypy
-        ZI0JHTc5wL8IDF8mlX+mMN/dSg60lVsKfd+CxRFoQAo=
-Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Proxmox) with ESMTPS id B6841341DAB;
-        Fri,  3 Mar 2023 12:26:50 +0300 (MSK)
-Received: from yadro.com (10.199.20.11) by T-EXCH-08.corp.yadro.com
- (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Fri, 3 Mar 2023
- 12:26:50 +0300
-Date:   Fri, 3 Mar 2023 12:26:50 +0300
-From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
-To:     Mike Christie <michael.christie@oracle.com>
-CC:     <mlombard@redhat.com>, <martin.petersen@oracle.com>,
-        <mgurtovoy@nvidia.com>, <sagi@grimberg.me>,
-        <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>
-Subject: Re: [PATCH v3 07/14] scsi: target: Fix multiple LUN_RESET handling
-Message-ID: <20230303092650.GC1340@yadro.com>
-References: <20230129234441.116310-1-michael.christie@oracle.com>
- <20230129234441.116310-8-michael.christie@oracle.com>
- <20230211085922.GA5419@yadro.com>
- <20230302094317.GB1340@yadro.com>
- <896813f7-9296-8072-fd2b-de25d9d4ffe0@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <896813f7-9296-8072-fd2b-de25d9d4ffe0@oracle.com>
-X-Originating-IP: [10.199.20.11]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229909AbjCCJgb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Mar 2023 04:36:31 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5232298F3;
+        Fri,  3 Mar 2023 01:36:29 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3238mH8R007788;
+        Fri, 3 Mar 2023 09:36:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=2gfBagHlN6y2kv5zAc1v1JPCBcPDYueOGdtNMXXB0ug=;
+ b=CtjFhs9utJpwI+nn1i8J+zbPtVeTg/WNYGWETZCiQLWJl+R/zC9akKxzbEHWlt/qoofS
+ Y/3Cd8+oPy4xcJBdqoDslsXYyhPi8G6uzKSp3nQQdOxcOEbxT1A91+nLE2Y2XkYC4LZv
+ c4vgktp8eU7VuYC/IpZPnK/zgmnaFUDp6sSMjkzPIYI+WutmKa4WZISpFop2hpmeoFhy
+ q0enqQJZYRay6ktOGB1YWDTeuuhXMQdOW8jgCXL2XMzKGj0j+MCrOkjVAgeVCeaijQUg
+ 3V6Qe9mVdi1IFzwS7jD+IJnWIbs01Co1pxG77CH/D7Qk9JQvDznYsjqjjiZVF6N9f+Ng aQ== 
+Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p3dpxg477-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 09:36:13 +0000
+Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3239aA7X032015;
+        Fri, 3 Mar 2023 09:36:10 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 3nybdkt0k3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 03 Mar 2023 09:36:10 +0000
+Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3239a9uV032010;
+        Fri, 3 Mar 2023 09:36:09 GMT
+Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
+        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 3239a8qg032007;
+        Fri, 03 Mar 2023 09:36:09 +0000
+Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 393357)
+        id D2EF54197; Fri,  3 Mar 2023 17:36:06 +0800 (CST)
+From:   Ziqi Chen <quic_ziqichen@quicinc.com>
+To:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        bvanassche@acm.org, mani@kernel.org, stanley.chu@mediatek.com,
+        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
+        junwoo80.lee@samsung.com, martin.petersen@oracle.com,
+        quic_ziqichen@quicinc.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-trace-kernel@vger.kernel.org (open list:TRACING)
+Subject: [PATCH v4] scsi: ufs: core: Add trace event for MCQ
+Date:   Fri,  3 Mar 2023 17:35:37 +0800
+Message-Id: <1677836154-29192-1-git-send-email-quic_ziqichen@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 1CXZXXP8FDtrVwtSbbzsna0jMAnQjrEv
+X-Proofpoint-GUID: 1CXZXXP8FDtrVwtSbbzsna0jMAnQjrEv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-03_01,2023-03-02_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ spamscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0
+ mlxlogscore=988 clxscore=1015 priorityscore=1501 mlxscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303030084
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 11:29:50AM -0600, Mike Christie wrote:
-> 
-> On 3/2/23 3:43 AM, Dmitry Bogdanov wrote:
-> > On Sat, Feb 11, 2023 at 11:59:22AM +0300, Dmitry Bogdanov wrote:
-> >> On Sun, Jan 29, 2023 at 05:44:34PM -0600, Mike Christie wrote:
-> >>>
-> >>> This fixes a bug where an initiator thinks a LUN_RESET has cleaned
-> >>> up running commands when it hasn't. The bug was added in:
-> >>>
-> >>> commit 51ec502a3266 ("target: Delete tmr from list before processing")
-> >>>
-> >>> The problem occurs when:
-> >>>
-> >>> 1. We have N IO cmds running in the target layer spread over 2 sessions.
-> >>> 2. The initiator sends a LUN_RESET for each session.
-> >>> 3. session1's LUN_RESET loops over all the running commands from both
-> >>> sessions and moves them to its local drain_task_list.
-> >>> 4. session2's LUN_RESET does not see the LUN_RESET from session1 because
-> >>> the commit above has it remove itself. session2 also does not see any
-> >>> commands since the other reset moved them off the state lists.
-> >>> 5. sessions2's LUN_RESET will then complete with a successful response.
-> >>> 6. sessions2's inititor believes the running commands on its session are
-> >>> now cleaned up due to the successful response and cleans up the running
-> >>> commands from its side. It then restarts them.
-> >>> 7. The commands do eventually complete on the backend and the target
-> >>> starts to return aborted task statuses for them. The initiator will
-> >>> either throw a invalid ITT error or might accidentally lookup a new task
-> >>> if the ITT has been reallocated already.
-> >>>
-> >>> This fixes the bug by reverting the patch.
-> >>>
-> >>> Fixes: 51ec502a3266 ("target: Delete tmr from list before processing")
-> >>> Signed-off-by: Mike Christie <michael.christie@oracle.com>
-> >>> Reviewed-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
-> >>
-> >> Actually, this patch even fixes a crash that we've just faced.
-> >> The second LUN_RESET moves the first LUN_RESET from tmr_list to its
-> >> drain_tmr_list, then the first LUN_RESET removes itself from second`s
-> >> drain_tmr_list, then the second LUN_RESET tries to remove the first from
-> >> the list and crashes because it was deleted already.
-> >> So,
-> >>
-> >> Tested-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
-> >
-> > Unfortunately, I am revoking my tags. This patch leads to deadlock of two
-> > LUN_RESETs waiting for each other in its drain_tmr_list.
-> >
-> > To keep LUN_RESETs ignoring each other something like that is needed:
-> >> ---
-> >>  drivers/target/target_core_tmr.c | 5 +++--
-> >>  1 file changed, 3 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/target/target_core_tmr.c b/drivers/target/target_core_tmr.c
-> >> index 2b95b4550a63..a60802b4c5a3 100644
-> >> --- a/drivers/target/target_core_tmr.c
-> >> +++ b/drivers/target/target_core_tmr.c
-> >> @@ -188,9 +188,10 @@ static void core_tmr_drain_tmr_list(
-> >>          * LUN_RESET tmr..
-> >>          */
-> >>         spin_lock_irqsave(&dev->se_tmr_lock, flags);
-> >> -       if (tmr)
-> >> -               list_del_init(&tmr->tmr_list);
-> >>         list_for_each_entry_safe(tmr_p, tmr_pp, &dev->dev_tmr_list, tmr_list) {
-> > - > +               if (tmr_p == tmr)
-> > - > +                       continue;
-> > - > +
-> >
-> > +             /* Ignore LUN_RESETs to avoid deadlocks */
-> > +             if (tmr_p->function == TMR_LUN_RESET)
-> > +                     continue;
-> > +
-> 
-> Shoot, that adds back the bug I was hitting.
+Added a new trace event to record MCQ relevant information
+for each request in MCQ mode, include hardware queue ID,
+SQ tail slot, CQ head slot and CQ tail slot.
 
-Haha, exactly.
+Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
 
-> I have an idea for how to fix both issues, but let me do some more testing
-> and will repost the set. Thanks for testing and reviewing this.
+---
+Changes to v3:
+- Free trace_ufshcd_command_mcq() from dependency on trace_ufshcd_command().
 
-scst serializes LUN_RESET execution, may be we should do the same.
+Changes to v2:
+- Shorten printing strings.
 
+Changes to v1:
+- Adjust the order of fileds to keep them aligned.
+---
+ drivers/ufs/core/ufshcd.c  | 17 ++++++++++++----
+ include/trace/events/ufs.h | 48 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 61 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 3b3cf78..e43aee1 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -426,6 +426,7 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+ 	struct ufshcd_lrb *lrbp = &hba->lrb[tag];
+ 	struct scsi_cmnd *cmd = lrbp->cmd;
+ 	struct request *rq = scsi_cmd_to_rq(cmd);
++	struct ufs_hw_queue *hwq;
+ 	int transfer_len = -1;
+ 
+ 	if (!cmd)
+@@ -433,7 +434,8 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+ 
+ 	/* trace UPIU also */
+ 	ufshcd_add_cmd_upiu_trace(hba, tag, str_t);
+-	if (!trace_ufshcd_command_enabled())
++	if (!trace_ufshcd_command_enabled() &&
++		!trace_ufshcd_command_mcq_enabled())
+ 		return;
+ 
+ 	opcode = cmd->cmnd[0];
+@@ -456,9 +458,16 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+ 	}
+ 
+ 	intr = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
+-	doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
+-	trace_ufshcd_command(dev_name(hba->dev), str_t, tag,
+-			doorbell, transfer_len, intr, lba, opcode, group_id);
++
++	if (is_mcq_enabled(hba)) {
++		hwq = ufshcd_mcq_req_to_hwq(hba, rq);
++		trace_ufshcd_command_mcq(dev_name(hba->dev), str_t, tag,
++				hwq, transfer_len, intr, lba, opcode, group_id);
++	} else {
++		doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
++		trace_ufshcd_command(dev_name(hba->dev), str_t, tag,
++				doorbell, transfer_len, intr, lba, opcode, group_id);
++	}
+ }
+ 
+ static void ufshcd_print_clk_freqs(struct ufs_hba *hba)
+diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
+index 599739e..604b2cd 100644
+--- a/include/trace/events/ufs.h
++++ b/include/trace/events/ufs.h
+@@ -10,6 +10,7 @@
+ #define _TRACE_UFS_H
+ 
+ #include <linux/tracepoint.h>
++#include <ufs/ufshcd.h>
+ 
+ #define str_opcode(opcode)						\
+ 	__print_symbolic(opcode,					\
+@@ -307,6 +308,53 @@ TRACE_EVENT(ufshcd_command,
+ 	)
+ );
+ 
++TRACE_EVENT(ufshcd_command_mcq,
++	TP_PROTO(const char *dev_name, enum ufs_trace_str_t str_t,
++		unsigned int tag, struct ufs_hw_queue *hwq, int transfer_len,
++		u32 intr, u64 lba, u8 opcode, u8 group_id),
++
++	TP_ARGS(dev_name, str_t, tag, hwq, transfer_len, intr, lba, opcode, group_id),
++
++	TP_STRUCT__entry(
++		__string(dev_name, dev_name)
++		__field(enum ufs_trace_str_t, str_t)
++		__field(unsigned int, tag)
++		__field(u32, hwq_id)
++		__field(u32, sq_tail)
++		__field(u32, cq_head)
++		__field(u32, cq_tail)
++		__field(int, transfer_len)
++		__field(u32, intr)
++		__field(u64, lba)
++		__field(u8, opcode)
++		__field(u8, group_id)
++	),
++
++	TP_fast_assign(
++		__assign_str(dev_name, dev_name);
++		__entry->str_t = str_t;
++		__entry->tag = tag;
++		__entry->hwq_id = hwq->id;
++		__entry->sq_tail = hwq->sq_tail_slot;
++		__entry->cq_head = hwq->cq_head_slot;
++		__entry->cq_tail = hwq->cq_tail_slot;
++		__entry->transfer_len = transfer_len;
++		__entry->intr = intr;
++		__entry->lba = lba;
++		__entry->opcode = opcode;
++		__entry->group_id = group_id;
++	),
++
++	TP_printk(
++		"%s: %s: tag: %u, hqid: %d, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x, sqt: %d, cqh: %d, cqt: %d",
++		show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name),
++		__entry->tag, __entry->hwq_id, __entry->transfer_len,
++		__entry->intr, __entry->lba, (u32)__entry->opcode,
++		str_opcode(__entry->opcode), (u32)__entry->group_id,
++		__entry->sq_tail, __entry->cq_head,  __entry->cq_tail
++	)
++);
++
+ TRACE_EVENT(ufshcd_uic_command,
+ 	TP_PROTO(const char *dev_name, enum ufs_trace_str_t str_t, u32 cmd,
+ 		 u32 arg1, u32 arg2, u32 arg3),
+-- 
+2.7.4
 
