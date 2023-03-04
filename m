@@ -2,49 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 859B46AA640
-	for <lists+linux-scsi@lfdr.de>; Sat,  4 Mar 2023 01:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC2A6AA642
+	for <lists+linux-scsi@lfdr.de>; Sat,  4 Mar 2023 01:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjCDAbw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Mar 2023 19:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S229560AbjCDAcF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Mar 2023 19:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjCDAbu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Mar 2023 19:31:50 -0500
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7312669231
-        for <linux-scsi@vger.kernel.org>; Fri,  3 Mar 2023 16:31:49 -0800 (PST)
-Received: by mail-pl1-f176.google.com with SMTP id a9so4499982plh.11
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Mar 2023 16:31:49 -0800 (PST)
+        with ESMTP id S229579AbjCDAbw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Mar 2023 19:31:52 -0500
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750AA65441
+        for <linux-scsi@vger.kernel.org>; Fri,  3 Mar 2023 16:31:51 -0800 (PST)
+Received: by mail-pl1-f170.google.com with SMTP id n6so4541627plf.5
+        for <linux-scsi@vger.kernel.org>; Fri, 03 Mar 2023 16:31:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677889909;
+        d=1e100.net; s=20210112; t=1677889911;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TRaBidyNT0CPspAryOSAJzVfbEYXDVCy844lk4y4E34=;
-        b=13rqYBn3KBvsetCghQjrLjCGM36AqXSD7IoqlEiHKzLgPSz8YGWfKoO3AO7fCFF9Eq
-         T4FIMdOPddrbWKxs63ifyqxYULzjduvcT24YCMiSbBAUltW6n9heUWV4d31hoL27fCXX
-         zUARMEv2lZ8ib+pYqtwqc4OhA3TQW7nRLe8Io3qjLyoAuHJXuxlRzcAN2uxKZdB5Pht2
-         7+kEzYBLa1HWLFhy2lwH3I+ze6U3L5AviJsuHOeFuYKfkC/FWDjFLwmwuHgaVPiWvAm6
-         ZGS7YgL7InjTWotvdVx/vkscYpCn+GQdC0G3FAzoMku8s3BeD75NY4tVl7R9Fscfsc3U
-         WgjQ==
-X-Gm-Message-State: AO0yUKX6YxOPYYde+8/iI3dcFV3SAUYLhEw6/QPytBBwfEfvn5noFHgT
-        N4yKlrEdY6g63XJksptTopk=
-X-Google-Smtp-Source: AK7set8hUhE7/TFiFiysdFdlfBQ5ZCoc5pmhseZjN/+/vxJkRRfbWDEOhhaEJxdiakf87sv0pYAIMg==
-X-Received: by 2002:a17:903:228f:b0:19a:9945:a7aa with SMTP id b15-20020a170903228f00b0019a9945a7aamr4404923plh.20.1677889908857;
-        Fri, 03 Mar 2023 16:31:48 -0800 (PST)
+        bh=qFxngvs+9YQWf/cm0pKR7KdAZBfNtlH0C+J3zrjYTbg=;
+        b=W7uaKwNcIefzMJLPKpaPh4SP2O6KEZPOLz4sX+fX1V2Viq4N0f4kRaydmFi5NE6vtC
+         sg8Y6qlB+m110Dyq0L+Lk3LYuq7479aqyoKv4w+th57SB+EtlrJ2Chd5SSWegF74STkP
+         z4OKTw2gc1/uhEcvIZJryW2vk+dV824JWRDM9NeK2WXYDOsl0bmyIgUHO2UnjKxFt+e/
+         OEQXMjYGqyNjbDBd30lsiKimNtSruyGJs4Ou9syQIjLEiqDe73PKFnLnRSoRooOXK2OO
+         5iX4p+sKmo7mdTtpZz86xu866CCEGvEYSWaTO+myirNgn07i77WCR4oQI6jnbTueIBvO
+         cnDQ==
+X-Gm-Message-State: AO0yUKXt4QXsg2qJUwgYFYPWVazLqaJqqKhWc+I2jC4fhEcZOGNoe0Ki
+        8/ECIYph2JK7+TpZqOn+PXw=
+X-Google-Smtp-Source: AK7set8O44FwcUFPyZGqL1jZmq6H424U2kZuHktJghuQVorzvyCJ2WeW49V5mo0KLRKdVXlFVEr0ig==
+X-Received: by 2002:a17:902:c185:b0:19c:a3be:d9f7 with SMTP id d5-20020a170902c18500b0019ca3bed9f7mr3518012pld.11.1677889910892;
+        Fri, 03 Mar 2023 16:31:50 -0800 (PST)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:efb8:1cdc:a06f:1b53])
-        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.31.47
+        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.31.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 16:31:48 -0800 (PST)
+        Fri, 03 Mar 2023 16:31:49 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>
-Subject: [PATCH 06/81] RDMA/srp: Declare the SCSI host template const
-Date:   Fri,  3 Mar 2023 16:29:48 -0800
-Message-Id: <20230304003103.2572793-7-bvanassche@acm.org>
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>
+Subject: [PATCH 07/81] scsi: message: fusion: Declare SCSI host template members const
+Date:   Fri,  3 Mar 2023 16:29:49 -0800
+Message-Id: <20230304003103.2572793-8-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
 In-Reply-To: <20230304003103.2572793-1-bvanassche@acm.org>
 References: <20230304003103.2572793-1-bvanassche@acm.org>
@@ -52,31 +54,59 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Make it explicit that the SRP host template is not modified.
+Make it explicit that the SCSI host templates are not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/infiniband/ulp/srp/ib_srp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/message/fusion/mptfc.c  | 2 +-
+ drivers/message/fusion/mptsas.c | 2 +-
+ drivers/message/fusion/mptspi.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
-index df21b30b7735..3446fbf5a560 100644
---- a/drivers/infiniband/ulp/srp/ib_srp.c
-+++ b/drivers/infiniband/ulp/srp/ib_srp.c
-@@ -3077,7 +3077,7 @@ static struct attribute *srp_host_attrs[] = {
+diff --git a/drivers/message/fusion/mptfc.c b/drivers/message/fusion/mptfc.c
+index fac747109209..22e7779a332b 100644
+--- a/drivers/message/fusion/mptfc.c
++++ b/drivers/message/fusion/mptfc.c
+@@ -105,7 +105,7 @@ static int mptfc_abort(struct scsi_cmnd *SCpnt);
+ static int mptfc_dev_reset(struct scsi_cmnd *SCpnt);
+ static int mptfc_bus_reset(struct scsi_cmnd *SCpnt);
  
- ATTRIBUTE_GROUPS(srp_host);
- 
--static struct scsi_host_template srp_template = {
-+static const struct scsi_host_template srp_template = {
+-static struct scsi_host_template mptfc_driver_template = {
++static const struct scsi_host_template mptfc_driver_template = {
  	.module				= THIS_MODULE,
- 	.name				= "InfiniBand SRP initiator",
- 	.proc_name			= DRV_NAME,
+ 	.proc_name			= "mptfc",
+ 	.show_info			= mptscsih_show_info,
+diff --git a/drivers/message/fusion/mptsas.c b/drivers/message/fusion/mptsas.c
+index 88fe4a860ae5..86f16f3ea478 100644
+--- a/drivers/message/fusion/mptsas.c
++++ b/drivers/message/fusion/mptsas.c
+@@ -1997,7 +1997,7 @@ static enum scsi_timeout_action mptsas_eh_timed_out(struct scsi_cmnd *sc)
+ }
+ 
+ 
+-static struct scsi_host_template mptsas_driver_template = {
++static const struct scsi_host_template mptsas_driver_template = {
+ 	.module				= THIS_MODULE,
+ 	.proc_name			= "mptsas",
+ 	.show_info			= mptscsih_show_info,
+diff --git a/drivers/message/fusion/mptspi.c b/drivers/message/fusion/mptspi.c
+index 62089a8caa2f..6c5920db1e9d 100644
+--- a/drivers/message/fusion/mptspi.c
++++ b/drivers/message/fusion/mptspi.c
+@@ -820,7 +820,7 @@ static void mptspi_slave_destroy(struct scsi_device *sdev)
+ 	mptscsih_slave_destroy(sdev);
+ }
+ 
+-static struct scsi_host_template mptspi_driver_template = {
++static const struct scsi_host_template mptspi_driver_template = {
+ 	.module				= THIS_MODULE,
+ 	.proc_name			= "mptspi",
+ 	.show_info			= mptscsih_show_info,
