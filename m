@@ -2,48 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A6A6AA653
-	for <lists+linux-scsi@lfdr.de>; Sat,  4 Mar 2023 01:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 607AE6AA657
+	for <lists+linux-scsi@lfdr.de>; Sat,  4 Mar 2023 01:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjCDAck (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Mar 2023 19:32:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
+        id S229886AbjCDAcx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Mar 2023 19:32:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjCDAce (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Mar 2023 19:32:34 -0500
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518046A1F2
-        for <linux-scsi@vger.kernel.org>; Fri,  3 Mar 2023 16:32:34 -0800 (PST)
-Received: by mail-pl1-f182.google.com with SMTP id h8so4510774plf.10
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Mar 2023 16:32:34 -0800 (PST)
+        with ESMTP id S229794AbjCDAci (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Mar 2023 19:32:38 -0500
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE4F6513D
+        for <linux-scsi@vger.kernel.org>; Fri,  3 Mar 2023 16:32:36 -0800 (PST)
+Received: by mail-pj1-f51.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so7855928pjb.3
+        for <linux-scsi@vger.kernel.org>; Fri, 03 Mar 2023 16:32:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677889954;
+        d=1e100.net; s=20210112; t=1677889956;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kH268M7KVsr02fjw5NLBwrnT+cyJ3HjwvjHBuiPtPhM=;
-        b=qUUTxr4OLcTbhMlClsiEzkqAZjODCeI6JEprBLfZC7N/yXO/z8dhV4ZBvbBuiUwnDD
-         Cfoch1JrjBBKiBsSsNjmk6OGdrBRDj0Z/CdqJap0ouLECeQArzSwdI9R5FXJp3Bs8C63
-         mg4kunuRTZOvKCwbZaZxsj5LTCGbZ1NYkFPeYEbrJ7TO8WqKWV7sGfROpJA46rhxCtx0
-         G+0jumQzkYoUdXPcNppuTMhpJcxun7GEQc7Xvs1yqkyJopVZ93R/UTV+FXtby6D/SQQ8
-         +d8CCsvfBRQ4DfVlCorK+aYTQxoGaPC0+4iOUvx10u91wiaFGM+UeYTiuVVoD5HxJx2w
-         jNoA==
-X-Gm-Message-State: AO0yUKUViHPy2nEMRP0GRCQrFi+UDMHkRsIrsvxWiRAGm7iLdPq+LPbU
-        7GdJQxbavsQI4m7fTKbyles=
-X-Google-Smtp-Source: AK7set/ZJLvm8qNWqPzEtvsFK12a4wGPTtiYy0r2kBsX7u1TtImIA/BAdwkxVmzUNmXNN5MOGyCRNw==
-X-Received: by 2002:a17:903:41cd:b0:19c:94ad:cbe8 with SMTP id u13-20020a17090341cd00b0019c94adcbe8mr4092835ple.36.1677889953957;
-        Fri, 03 Mar 2023 16:32:33 -0800 (PST)
+        bh=c47+d0pz7DNihHgR0GI5I+QfVkFleIpC/pj+/6FjG7w=;
+        b=7nV9MBYxFnN4vK8SaQayEo65NN+oGREPsCQ1mMEi0PNyVt/VLScSmSBcqUvdE3YlEj
+         6J4nTwMt9PIrJT0WunqbeM53N0LgPqRy3yTM82fquk1vr+CTdSB7VzqBtwhZaNlyHr0R
+         zDzE5vAoPpJiWgGmdsA7/mNXA0Vznaja88BvE5oa8UNNemXoicFVsGxs8Ad3zvHpyQmb
+         +zmOLmji5PQrcCvl5ji5N8gqjpn1EUHt6U0po7VNrDZqv6fOnFgf6jR1dcPHI00daEWH
+         nUBw2IkWOqx+CO+ZXSe7T+MDPfOyxcIxrmDaVttfidjlNZc6kSNKXtKu90qQKS6sdSHL
+         8EEQ==
+X-Gm-Message-State: AO0yUKXfXHXZbIhhslx2l1FqmksKalrHvftD6HzQlniimkT0KRJ4defY
+        Vy0xwKwXu5nrtgfn2ZRbIWU=
+X-Google-Smtp-Source: AK7set+Ds0k+T/J71TynPssUX1fj8wdKzMQBhXv3FsMjEca96lIDBLsQ+t9vEGuEGbZj0zB3d6Bt2w==
+X-Received: by 2002:a17:902:d4cf:b0:19c:eb9a:7712 with SMTP id o15-20020a170902d4cf00b0019ceb9a7712mr5044556plg.1.1677889955862;
+        Fri, 03 Mar 2023 16:32:35 -0800 (PST)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:efb8:1cdc:a06f:1b53])
-        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.32.32
+        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.32.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 16:32:33 -0800 (PST)
+        Fri, 03 Mar 2023 16:32:34 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Finn Thain <fthain@linux-m68k.org>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH 24/81] scsi: aha1740: Declare SCSI host template const
-Date:   Fri,  3 Mar 2023 16:30:06 -0800
-Message-Id: <20230304003103.2572793-25-bvanassche@acm.org>
+Subject: [PATCH 25/81] scsi: cumana: Declare SCSI host template const
+Date:   Fri,  3 Mar 2023 16:30:07 -0800
+Message-Id: <20230304003103.2572793-26-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
 In-Reply-To: <20230304003103.2572793-1-bvanassche@acm.org>
 References: <20230304003103.2572793-1-bvanassche@acm.org>
@@ -63,19 +66,33 @@ Make it explicit that the SCSI host template is not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/aha1740.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/arm/cumana_1.c | 2 +-
+ drivers/scsi/arm/cumana_2.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/aha1740.c b/drivers/scsi/aha1740.c
-index 134255751819..3d18945abaf7 100644
---- a/drivers/scsi/aha1740.c
-+++ b/drivers/scsi/aha1740.c
-@@ -543,7 +543,7 @@ static int aha1740_eh_abort_handler (struct scsi_cmnd *dummy)
- 	return SUCCESS;
+diff --git a/drivers/scsi/arm/cumana_1.c b/drivers/scsi/arm/cumana_1.c
+index 5d4f67ba74c0..d1a2a22ffe8c 100644
+--- a/drivers/scsi/arm/cumana_1.c
++++ b/drivers/scsi/arm/cumana_1.c
+@@ -211,7 +211,7 @@ static void cumanascsi_write(struct NCR5380_hostdata *hostdata,
+ 
+ #include "../NCR5380.c"
+ 
+-static struct scsi_host_template cumanascsi_template = {
++static const struct scsi_host_template cumanascsi_template = {
+ 	.module			= THIS_MODULE,
+ 	.name			= "Cumana 16-bit SCSI",
+ 	.info			= cumanascsi_info,
+diff --git a/drivers/scsi/arm/cumana_2.c b/drivers/scsi/arm/cumana_2.c
+index d15053f02472..c5d8f4313b31 100644
+--- a/drivers/scsi/arm/cumana_2.c
++++ b/drivers/scsi/arm/cumana_2.c
+@@ -356,7 +356,7 @@ static int cumanascsi_2_show_info(struct seq_file *m, struct Scsi_Host *host)
+ 	return 0;
  }
  
--static struct scsi_host_template aha1740_template = {
-+static const struct scsi_host_template aha1740_template = {
- 	.module           = THIS_MODULE,
- 	.proc_name        = "aha1740",
- 	.show_info        = aha1740_show_info,
+-static struct scsi_host_template cumanascsi2_template = {
++static const struct scsi_host_template cumanascsi2_template = {
+ 	.module				= THIS_MODULE,
+ 	.show_info			= cumanascsi_2_show_info,
+ 	.write_info			= cumanascsi_2_set_proc_info,
