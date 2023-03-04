@@ -2,49 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1774C6AA68A
-	for <lists+linux-scsi@lfdr.de>; Sat,  4 Mar 2023 01:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC176AA688
+	for <lists+linux-scsi@lfdr.de>; Sat,  4 Mar 2023 01:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjCDAfx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Mar 2023 19:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S230047AbjCDAfv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Mar 2023 19:35:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjCDAfN (ORCPT
+        with ESMTP id S229994AbjCDAfN (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Mar 2023 19:35:13 -0500
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A511835A5
-        for <linux-scsi@vger.kernel.org>; Fri,  3 Mar 2023 16:34:33 -0800 (PST)
-Received: by mail-pl1-f179.google.com with SMTP id i5so4560397pla.2
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Mar 2023 16:34:33 -0800 (PST)
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8394910257
+        for <linux-scsi@vger.kernel.org>; Fri,  3 Mar 2023 16:34:35 -0800 (PST)
+Received: by mail-pl1-f169.google.com with SMTP id i10so4517434plr.9
+        for <linux-scsi@vger.kernel.org>; Fri, 03 Mar 2023 16:34:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677890073;
+        d=1e100.net; s=20210112; t=1677890075;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NjinhKeW7v86XI4sdE5pIezlr7cmvUsX5RCaWRammAQ=;
-        b=Y7w3JTtZphWb6f6zqlhNAp63MNy2RxmeOwZfNGkMDCLsUwUA7CFvL+CvgOUpbmW+9M
-         ZqG1WS6PC7Ey3vJ9eK2qCXRkJEoWbNeFGlcJ9vB5P8QdnA5nuH7tkp64i7oNmHEqWff8
-         keb80CyQdP+Y1UOsPu1G40HLC65QW53/6JsMdzxYNBMCDDJdYN+C/vYPFj8fKVN132mp
-         cgUkiO7RDeDvAt7Btxw+Zp7nTJrS9YQy3CR0vCEAii4pwFYNYfZJuXZBuIH3LTdrAq3E
-         IWkTUYnUtViZ5FJGviVMf+5T49k0F8KcuTOjBIyNw7X4nuKpiqW3cbDIRyG014XUUVq5
-         whBw==
-X-Gm-Message-State: AO0yUKXc/3zWLOgsOroyrJGMkhWUNs6p+ASmX6y5SAmKAJH7ZH3nphVq
-        LNzkoV1wuAZqXrsivme1WEs=
-X-Google-Smtp-Source: AK7set+/XXGpb4K6YR1l2GCza7zK/xz3TbUj6NnmJkj+4+VMK+6CaP0nmsTINqUUPadv94yfV7LiBg==
-X-Received: by 2002:a17:902:ee45:b0:19e:6c7a:481 with SMTP id 5-20020a170902ee4500b0019e6c7a0481mr3046286plo.68.1677890073127;
-        Fri, 03 Mar 2023 16:34:33 -0800 (PST)
+        bh=Xqqv+aHKme2XMo/FdJ5muGw9JOXNAt4DfJWK98zODgU=;
+        b=8HvGpVSbI59o+q+cOo7YZHHZv/fPFHtxltaO/UOgAzZfN6W83ZEYo9QRQUtkGmJ+4U
+         j74Z5nHrQ696TCk0MMM2oESbs5ud4ZPwzD4zlj/UBZiCtpszZubFPSng0Cu01EcB2EVt
+         oklG5orJ7JcwrOsh1h+Utckv4U+iXLrWPU/LCw4iVuHbQtlJcZioEBPOQmyrxRP0a3Hb
+         0H91cvZdrOXvyxD/Man/YKZOx5Jjf7U0m0d15SguJgD6TjYp1j8Zy9CyRQGLgHOTT5Vx
+         RusU5e2RqBPyIhDp/KcQaBufWloatrOBjqfJS+b/LGbxp4XXt8Md0Fxwu79tDUHEdUTO
+         kHvw==
+X-Gm-Message-State: AO0yUKW5UEi4QIf8SscgFjzazO1zW8zYFD1082Zx5yJvYMewfdP4A0If
+        jOZjc42iwk8P7bijSujLsGI=
+X-Google-Smtp-Source: AK7set81qfNnNV+airLuqCNj7siARQWNktY+Zd/OGDLwHVE/Jvc6Gdn8yK9cHEqJ5fYxR30JASCXYA==
+X-Received: by 2002:a17:902:e809:b0:19a:9890:eac6 with SMTP id u9-20020a170902e80900b0019a9890eac6mr4289110plg.24.1677890074923;
+        Fri, 03 Mar 2023 16:34:34 -0800 (PST)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:efb8:1cdc:a06f:1b53])
-        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.34.31
+        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.34.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 16:34:32 -0800 (PST)
+        Fri, 03 Mar 2023 16:34:34 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH 73/81] scsi: sym53c8xx: Declare SCSI host template const
-Date:   Fri,  3 Mar 2023 16:30:55 -0800
-Message-Id: <20230304003103.2572793-74-bvanassche@acm.org>
+Subject: [PATCH 74/81] scsi: virtio-scsi: Declare SCSI host template const
+Date:   Fri,  3 Mar 2023 16:30:56 -0800
+Message-Id: <20230304003103.2572793-75-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
 In-Reply-To: <20230304003103.2572793-1-bvanassche@acm.org>
 References: <20230304003103.2572793-1-bvanassche@acm.org>
@@ -64,28 +65,19 @@ Make it explicit that the SCSI host template is not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/sym53c8xx_2/sym_glue.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/virtio_scsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/sym53c8xx_2/sym_glue.c b/drivers/scsi/sym53c8xx_2/sym_glue.c
-index 2e2852bd5860..ee36a9c15d9c 100644
---- a/drivers/scsi/sym53c8xx_2/sym_glue.c
-+++ b/drivers/scsi/sym53c8xx_2/sym_glue.c
-@@ -1224,7 +1224,7 @@ static void sym_free_resources(struct sym_hcb *np, struct pci_dev *pdev,
-  *  If all is OK, install interrupt handling and
-  *  start the timer daemon.
-  */
--static struct Scsi_Host *sym_attach(struct scsi_host_template *tpnt, int unit,
-+static struct Scsi_Host *sym_attach(const struct scsi_host_template *tpnt, int unit,
- 				    struct sym_device *dev)
- {
- 	struct sym_data *sym_data;
-@@ -1625,7 +1625,7 @@ static int sym_detach(struct Scsi_Host *shost, struct pci_dev *pdev)
- /*
-  * Driver host template.
-  */
--static struct scsi_host_template sym2_template = {
-+static const struct scsi_host_template sym2_template = {
- 	.module			= THIS_MODULE,
- 	.name			= "sym53c8xx",
- 	.info			= sym53c8xx_info, 
+diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
+index c5558c45ab3a..58498da9869a 100644
+--- a/drivers/scsi/virtio_scsi.c
++++ b/drivers/scsi/virtio_scsi.c
+@@ -746,7 +746,7 @@ static enum scsi_timeout_action virtscsi_eh_timed_out(struct scsi_cmnd *scmnd)
+ 	return SCSI_EH_RESET_TIMER;
+ }
+ 
+-static struct scsi_host_template virtscsi_host_template = {
++static const struct scsi_host_template virtscsi_host_template = {
+ 	.module = THIS_MODULE,
+ 	.name = "Virtio SCSI HBA",
+ 	.proc_name = "virtio_scsi",
