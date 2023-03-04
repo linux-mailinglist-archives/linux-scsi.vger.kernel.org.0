@@ -2,49 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118576AA668
-	for <lists+linux-scsi@lfdr.de>; Sat,  4 Mar 2023 01:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7156AA66B
+	for <lists+linux-scsi@lfdr.de>; Sat,  4 Mar 2023 01:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjCDAeK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Mar 2023 19:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
+        id S229926AbjCDAeR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Mar 2023 19:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbjCDAdp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Mar 2023 19:33:45 -0500
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEDF83EC
-        for <linux-scsi@vger.kernel.org>; Fri,  3 Mar 2023 16:33:14 -0800 (PST)
-Received: by mail-pj1-f47.google.com with SMTP id l1so4372232pjt.2
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Mar 2023 16:33:14 -0800 (PST)
+        with ESMTP id S229876AbjCDAdu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Mar 2023 19:33:50 -0500
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D0E65110
+        for <linux-scsi@vger.kernel.org>; Fri,  3 Mar 2023 16:33:21 -0800 (PST)
+Received: by mail-pl1-f181.google.com with SMTP id u5so4524626plq.7
+        for <linux-scsi@vger.kernel.org>; Fri, 03 Mar 2023 16:33:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677889994;
+        d=1e100.net; s=20210112; t=1677889996;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=239hkCXB94hvY9rEBCDXzyIlK2lqlyBB9GRut91MAN8=;
-        b=60XQYqcF2iyuVEQJG5b9rmOHMkoEoNYkdSR3w4rPZuPJ9OmhMAU7vaidD1Xz9EeCFA
-         ifnG/KP92rGKpgmz+MwrDdDjtr11tx7c4CTBdAZzihRwCkB+6X//0J888kqumtxuYURT
-         t6AOLw2xLyfbfb4De5kmVeGhq4NwhN4wFAICQmI4q5RuPApv7afWYVAEBtB+fn3ClD+s
-         5FVsvnlYrx+AQZkwEJRmu5AGHqeuY+sUApH5HAk9CDe/xzHXGNnGG1SOYafV0evoTYqm
-         gLxpuWlxeHqLAQ8f/Fd1soUf8DXSKcYGtNCvQbCTUByKP9jKVl/bi3AWyKg/iDrxbQ7t
-         fGHQ==
-X-Gm-Message-State: AO0yUKXJlNiBUwOqk/aFQ60UnddtadvF9NByEaNml/xY3maUcSXiOK/O
-        pw4sYWJTdYSey7kjlYDYhu4Cz48A7+odWQ==
-X-Google-Smtp-Source: AK7set+D3WafH14WtXlG5kUQWdhq+p2M8+To0KrJHv2HWbZqkzWfYQo8+qbMOqknkx0E9hHwJ8QMpw==
-X-Received: by 2002:a17:903:485:b0:19e:898f:8815 with SMTP id jj5-20020a170903048500b0019e898f8815mr3060789plb.9.1677889994172;
-        Fri, 03 Mar 2023 16:33:14 -0800 (PST)
+        bh=rAnNmf/vUnMbW3pIRgaKZexCYtM4BMG6dAuOPLNKlXg=;
+        b=XtMzavEPoIT+lrvhWUWYPSew8k7i6O7OjUjRVgVwpjfiatjeYEPTzbROZ8QjARYQ9Q
+         TWQkkaa0OTc0AOUulLHnby7uqlPVJHJsmtoz1RlaVlas7kgMNp/N7l6SgMAu/po2iRO6
+         TO043Hpiya9wMmcFc9ViEHWME+pF4jhxv8EdS3Fq7FZHIDiRnkFgkyqLruyIreCxuiV6
+         r258UpCM8xizKa8C5OmLrTKQus7LHFbFZuyZiuI5znEj+iPZRCmjYvzbQtU5axDYSbyQ
+         XUmFQUP2Q8e9qDYKRPm49BppVZXeLg0hOXlUEF9mZOzz0UosYVuXDPuoHP1jg2bZlBvi
+         j1uw==
+X-Gm-Message-State: AO0yUKWzzDEvMYDwYCa3UpSOV4BZgDn/87tp291RzlmhwHtG3XoOgc+m
+        ZEZFASxxe9V68g32WhlyIUabax7Eftp6Aw==
+X-Google-Smtp-Source: AK7set8EyVLqm3bN91kppuIzGophImvr2FsvH8787Byan/wLp/yc3UkdhE8g+YS1Nt3SgjUHYiBCEg==
+X-Received: by 2002:a17:903:492:b0:19e:773b:2215 with SMTP id jj18-20020a170903049200b0019e773b2215mr3364777plb.36.1677889996112;
+        Fri, 03 Mar 2023 16:33:16 -0800 (PST)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:efb8:1cdc:a06f:1b53])
-        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.33.12
+        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.33.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 16:33:13 -0800 (PST)
+        Fri, 03 Mar 2023 16:33:15 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        HighPoint Linux Team <linux@highpoint-tech.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH 43/81] scsi: hptiop: Declare SCSI host template const
-Date:   Fri,  3 Mar 2023 16:30:25 -0800
-Message-Id: <20230304003103.2572793-44-bvanassche@acm.org>
+Subject: [PATCH 44/81] scsi: ibmvfc: Declare SCSI host template const
+Date:   Fri,  3 Mar 2023 16:30:26 -0800
+Message-Id: <20230304003103.2572793-45-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
 In-Reply-To: <20230304003103.2572793-1-bvanassche@acm.org>
 References: <20230304003103.2572793-1-bvanassche@acm.org>
@@ -64,19 +65,19 @@ Make it explicit that the SCSI host template is not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/hptiop.c | 2 +-
+ drivers/scsi/ibmvscsi/ibmvfc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/hptiop.c b/drivers/scsi/hptiop.c
-index 7e8903718245..06ccb51bf6a9 100644
---- a/drivers/scsi/hptiop.c
-+++ b/drivers/scsi/hptiop.c
-@@ -1159,7 +1159,7 @@ static int hptiop_slave_config(struct scsi_device *sdev)
- 	return 0;
- }
+diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
+index 1a0c0b7289d2..ce9eb00e2ca0 100644
+--- a/drivers/scsi/ibmvscsi/ibmvfc.c
++++ b/drivers/scsi/ibmvscsi/ibmvfc.c
+@@ -3611,7 +3611,7 @@ static struct attribute *ibmvfc_host_attrs[] = {
+ 
+ ATTRIBUTE_GROUPS(ibmvfc_host);
  
 -static struct scsi_host_template driver_template = {
 +static const struct scsi_host_template driver_template = {
- 	.module                     = THIS_MODULE,
- 	.name                       = driver_name,
- 	.queuecommand               = hptiop_queuecommand,
+ 	.module = THIS_MODULE,
+ 	.name = "IBM POWER Virtual FC Adapter",
+ 	.proc_name = IBMVFC_NAME,
