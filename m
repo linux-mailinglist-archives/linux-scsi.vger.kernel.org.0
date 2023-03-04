@@ -2,49 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5026AA64B
-	for <lists+linux-scsi@lfdr.de>; Sat,  4 Mar 2023 01:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA666AA64C
+	for <lists+linux-scsi@lfdr.de>; Sat,  4 Mar 2023 01:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjCDAcT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S229714AbjCDAcT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Fri, 3 Mar 2023 19:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjCDAcJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Mar 2023 19:32:09 -0500
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5666A1C2
-        for <linux-scsi@vger.kernel.org>; Fri,  3 Mar 2023 16:32:08 -0800 (PST)
-Received: by mail-pj1-f47.google.com with SMTP id m20-20020a17090ab79400b00239d8e182efso7840389pjr.5
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Mar 2023 16:32:08 -0800 (PST)
+        with ESMTP id S229794AbjCDAcK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Mar 2023 19:32:10 -0500
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0237B6A1C4
+        for <linux-scsi@vger.kernel.org>; Fri,  3 Mar 2023 16:32:10 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id p20so4493570plw.13
+        for <linux-scsi@vger.kernel.org>; Fri, 03 Mar 2023 16:32:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677889927;
+        d=1e100.net; s=20210112; t=1677889929;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wymxuyu9oeqRFS6g9w4tBUT2F+EZK1WiYB207jxr3Bc=;
-        b=1nr9yOkUil64SyWmF1Qit2SPfRvFdPNRR5WA2aPd53bTz69vIEJKfznmknF1mch+o2
-         O8gp/gDWSYAUDwFZoIc0FGIueWRwfQYgv/lvUdy546srs11VfZDcJg6ZpbGaC+wa0dTp
-         nV/FZHQYxXBhMTG0AJjvkN6TVPjyieQ4Q0br4bfG2b7hSXMTQPeTzLeKlbq5ySJ8vNau
-         ZBrvTs2RIk5mdQyZe0ZxoimHeda8hZDF7svryt+Dfol6o13WPc8B2+TD5+x4XoNZ4NhY
-         xioEmAQ2sDqv56LVbcg53dZr8/Zn1tK6KqIkySXBK/TjdcigfLhL1VhRzUtEypDuQKsl
-         YeHg==
-X-Gm-Message-State: AO0yUKVeBUEkLPdw3igTqX5yq0hwd66/W+xVsi7bEUjyNTzqehZ83pR+
-        I+YeZVppKt5Ik3J4HiFZ88E=
-X-Google-Smtp-Source: AK7set89gKIjzYfC/EvcT2Y6EbbtEKLGbk3gnB5AdxGQ0YOoTkk2HgpNehWZqfaoxsvJxSH2q2ttaQ==
-X-Received: by 2002:a17:903:230e:b0:19c:c961:ac15 with SMTP id d14-20020a170903230e00b0019cc961ac15mr4213726plh.0.1677889927608;
-        Fri, 03 Mar 2023 16:32:07 -0800 (PST)
+        bh=0DwKfQtFgIgqVRLk7CJqp+SWpc3PgTs6DS8lVIZ4b8Q=;
+        b=ZBi3M94456H6L14ym2+GAdb7kpjkcQvpIErnsmQYbOyKj3VsGxeX0CmXTNWXqeqVG8
+         wVcd7EOoPootyE2geJaSCje50wR9k7bIAIBetjMg1XCoC2iSYH0AwaTY1TMxfAGzcJGN
+         mHH1P2CivtUfjqKIzdahhtd6y/l8zR1TZsJaP/IsDX5+QA6ln1gzJ/aCtlBuTW5u2qNq
+         uaA9JFLw2coHMm74wUBVuJtnezc5TLHVgPsqhV0bHEJa7qaDpQCTxfgg2HcOw2taGvID
+         Vh5AM4makliFo0T8ASG3okYjdBCOYhAIsXMTsS/tNVO3n7i1UoM4585Zwg0Gy2t3jw/p
+         BAaA==
+X-Gm-Message-State: AO0yUKX1lB3waQD5um+WQPXfagESRm5ThRBpV28AhNagUinsRgiXJQLU
+        yd6QXxSMecT7oO933CwGR08=
+X-Google-Smtp-Source: AK7set+deCXkerOKTgGpXfzIKDcpM0Ml1cTVxEZwV7aivp0QPZhZZHUsUKc8USUEKVRf7hN/ez3qDw==
+X-Received: by 2002:a17:903:2344:b0:19e:6e29:2a8c with SMTP id c4-20020a170903234400b0019e6e292a8cmr4372240plh.5.1677889929485;
+        Fri, 03 Mar 2023 16:32:09 -0800 (PST)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:efb8:1cdc:a06f:1b53])
-        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.32.05
+        by smtp.gmail.com with ESMTPSA id kk15-20020a170903070f00b00189743ed3b6sm2071078plb.64.2023.03.03.16.32.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 16:32:06 -0800 (PST)
+        Fri, 03 Mar 2023 16:32:08 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH 16/81] scsi: aacraid: Declare SCSI host template const
-Date:   Fri,  3 Mar 2023 16:29:58 -0800
-Message-Id: <20230304003103.2572793-17-bvanassche@acm.org>
+Subject: [PATCH 17/81] scsi: advansys: Declare SCSI host template const
+Date:   Fri,  3 Mar 2023 16:29:59 -0800
+Message-Id: <20230304003103.2572793-18-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
 In-Reply-To: <20230304003103.2572793-1-bvanassche@acm.org>
 References: <20230304003103.2572793-1-bvanassche@acm.org>
@@ -52,8 +53,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,19 +65,19 @@ Make it explicit that the SCSI host template is not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/aacraid/linit.c | 2 +-
+ drivers/scsi/advansys.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
-index 5ba5c18b77b4..d0c1f024592c 100644
---- a/drivers/scsi/aacraid/linit.c
-+++ b/drivers/scsi/aacraid/linit.c
-@@ -1476,7 +1476,7 @@ static const struct file_operations aac_cfg_fops = {
- 	.llseek		= noop_llseek,
- };
+diff --git a/drivers/scsi/advansys.c b/drivers/scsi/advansys.c
+index f301aec044bb..ab066bb27a57 100644
+--- a/drivers/scsi/advansys.c
++++ b/drivers/scsi/advansys.c
+@@ -10602,7 +10602,7 @@ static int AdvInitGetConfig(struct pci_dev *pdev, struct Scsi_Host *shost)
+ }
+ #endif
  
--static struct scsi_host_template aac_driver_template = {
-+static const struct scsi_host_template aac_driver_template = {
- 	.module				= THIS_MODULE,
- 	.name				= "AAC",
- 	.proc_name			= AAC_DRIVERNAME,
+-static struct scsi_host_template advansys_template = {
++static const struct scsi_host_template advansys_template = {
+ 	.proc_name = DRV_NAME,
+ #ifdef CONFIG_PROC_FS
+ 	.show_info = advansys_show_info,
