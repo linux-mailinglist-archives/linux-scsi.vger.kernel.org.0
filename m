@@ -2,115 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24956AC8BC
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Mar 2023 17:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7956AC8CB
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Mar 2023 17:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjCFQwF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Mar 2023 11:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        id S229815AbjCFQzX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Mar 2023 11:55:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjCFQwD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 11:52:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DD71FEA;
-        Mon,  6 Mar 2023 08:51:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B98AD61001;
-        Mon,  6 Mar 2023 16:49:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB615C433EF;
-        Mon,  6 Mar 2023 16:49:57 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="p7OvzPz1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1678121396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l0IN1VirqLiMA24UJjnZzI6umrNwjSsL7ENm7zhRfEY=;
-        b=p7OvzPz1NmfKhe6kfIuqjE+THJUupW4DBOjmYlYF+caw15CTip4wmluH9W1Flbbziaghta
-        9it828fCf9UjeM+GVJF6yiGH5IwDVBBToxv13m1Gr6Sn6dMmMxa0OIpkUeipfG8xYK/h8c
-        VRnTEB0oxbtXms6RWFdtVuaEt9rvUN8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 23ff5f42 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 6 Mar 2023 16:49:55 +0000 (UTC)
-Received: by mail-yb1-xb35.google.com with SMTP id v13so8823855ybu.0;
-        Mon, 06 Mar 2023 08:49:55 -0800 (PST)
-X-Gm-Message-State: AO0yUKWyrk7X+Mwn/2jQjt7u//l5Ze38dvVnboiuEKSYACkwU4OJwD7L
-        V0XiCNjvJzx/chpWGkluvioLXrhbarXtiA5d8V4=
-X-Google-Smtp-Source: AK7set9CK46/v8qFmWbdZ/4F4SRDr5QbKoIrAv/Wae6SuQP8a65V94c1vPHoCPtLR3gHjN4UILUiQdF7vxmAXeMOPdQ=
-X-Received: by 2002:a25:7808:0:b0:a4a:a708:2411 with SMTP id
- t8-20020a257808000000b00a4aa7082411mr6622201ybc.10.1678121092709; Mon, 06 Mar
- 2023 08:44:52 -0800 (PST)
+        with ESMTP id S229668AbjCFQzW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 11:55:22 -0500
+Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15B5273E
+        for <linux-scsi@vger.kernel.org>; Mon,  6 Mar 2023 08:54:49 -0800 (PST)
+Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
+        by amity.mint.lgbt (Postfix) with ESMTP id 4PVl5B3WDxz1S5Jl
+        for <linux-scsi@vger.kernel.org>; Mon,  6 Mar 2023 11:53:18 -0500 (EST)
+Authentication-Results: amity.mint.lgbt (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mint.lgbt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
+        content-transfer-encoding:mime-version:x-mailer:message-id:date
+        :subject:to:from; s=dkim; t=1678121597; x=1678985598; bh=uK+glyg
+        nD/QeqUlfo72/hfCeJTh8hcZKk6WDctNDr6Q=; b=b+J/bASLsMbh6bwPjrsJ3td
+        I5rkUH3avv4orgcdkrQoc5o55AfTI4IiPNGBxeE57PeBwQ8zjQROhXIB/Ky+BLq9
+        PT3+iGUheM2PldP/+TPyIF48pTCJKpB7eYMOuri5w0qu7bPOjHZqC+uCG1cfjk1t
+        0uOyZzFrEv3SY9hhERB2RCuALzdzMofO/5RAJ3r/JoN/5/26zmZfoJS+oaJ8OXTH
+        HVD7rJTV+Es7KPAq827GqZDu8xmm5IufdxoAa0mq5GE5HSP287gzxb4Pgh+ps35U
+        D3iXmMWqQxH/56Fe9LFOajWkJeZdGjtHnBC3U7RWow36fCZ0FNfGOFhjeCnmXxw=
+        =
+X-Virus-Scanned: amavisd-new at amity.mint.lgbt
+Received: from amity.mint.lgbt ([127.0.0.1])
+        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id U-CEcER3NOKx for <linux-scsi@vger.kernel.org>;
+        Mon,  6 Mar 2023 11:53:17 -0500 (EST)
+Received: from dorothy.. (unknown [186.105.8.42])
+        by amity.mint.lgbt (Postfix) with ESMTPSA id 4PVl4p1NzFz1S4vb;
+        Mon,  6 Mar 2023 11:52:57 -0500 (EST)
+From:   Lux Aliaga <they@mint.lgbt>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, bvanassche@acm.org, keescook@chromium.org,
+        tony.luck@intel.com, gpiccoli@igalia.com
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
+        phone-devel@vger.kernel.org, martin.botka@somainline.org,
+        marijn.suijten@somainline.org
+Subject: 
+Date:   Mon,  6 Mar 2023 13:52:39 -0300
+Message-Id: <20230306165246.14782-1-they@mint.lgbt>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230306160651.2016767-1-vernon2gm@gmail.com> <20230306160651.2016767-6-vernon2gm@gmail.com>
- <ZAYXJ2E+JHcp2kD/@yury-laptop>
-In-Reply-To: <ZAYXJ2E+JHcp2kD/@yury-laptop>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 6 Mar 2023 17:44:41 +0100
-X-Gmail-Original-Message-ID: <CAHmME9r_JXNCVVCNxZRQkafA=eOOu5k0+AweRDor3tNu283bdg@mail.gmail.com>
-Message-ID: <CAHmME9r_JXNCVVCNxZRQkafA=eOOu5k0+AweRDor3tNu283bdg@mail.gmail.com>
-Subject: Re: [PATCH 5/5] cpumask: fix comment of cpumask_xxx
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Vernon Yang <vernon2gm@gmail.com>, torvalds@linux-foundation.org,
-        tytso@mit.edu, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, linux-kernel@vger.kernel.org,
-        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 5:39=E2=80=AFPM Yury Norov <yury.norov@gmail.com> wr=
-ote:
->
-> On Tue, Mar 07, 2023 at 12:06:51AM +0800, Vernon Yang wrote:
-> > After commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumas=
-k
-> > optimizations"), the cpumask size is divided into three different case,
-> > so fix comment of cpumask_xxx correctly.
-> >
-> > Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
-> > ---
-> >  include/linux/cpumask.h | 46 ++++++++++++++++++++---------------------
-> >  1 file changed, 23 insertions(+), 23 deletions(-)
-> >
-> > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> > index 8fbe76607965..248bdb1c50dc 100644
-> > --- a/include/linux/cpumask.h
-> > +++ b/include/linux/cpumask.h
-> > @@ -155,7 +155,7 @@ static __always_inline unsigned int cpumask_check(u=
-nsigned int cpu)
-> >   * cpumask_first - get the first cpu in a cpumask
-> >   * @srcp: the cpumask pointer
-> >   *
-> > - * Returns >=3D nr_cpu_ids if no cpus set.
-> > + * Returns >=3D small_cpumask_bits if no cpus set.
->
-> There's no such thing like small_cpumask_bits. Here and everywhere,
-> nr_cpu_ids must be used.
->
-> Actually, before 596ff4a09b89 nr_cpumask_bits was deprecated, and it
-> must be like that for all users even now.
->
-> nr_cpumask_bits must be considered as internal cpumask parameter and
-> never referenced outside of cpumask code.
+Introduce Universal Flash Storage support on SM6125 and add support for t=
+he Xiaomi Mi A3 based on the former platform.
 
-What's the right thing I should do, then, for wireguard's usage and
-for random.c's usage? It sounds like you object to this patchset, but
-if the problem is real, it sounds like I should at least fix the two
-cases I maintain. What's the right check?
+Changes since v6:
+- Add struct for v3-660 UFS PHY offsets and modify sm6115 UFS PHY to use =
+it
+- Set ufs_mem_phy reg size to 0xdb8 in sm6125.dtsi
+- Drop "#address-cells" and "#size-cells" properties on reserved-memory n=
+ode in xiaomi-laurel-sprout dts
+- Move "status" last on &pon_resin node in xiaomi-laurel-sprout dts
+- Modify "&pm6125_gpio" pointer to "&pm6125_gpios" in xiaomi-laurel-sprou=
+t dts
 
-Jason
+v6: https://lore.kernel.org/linux-devicetree/20230108195336.388349-1-they=
+@mint.lgbt/
+v5: https://lore.kernel.org/linux-devicetree/20221231222420.75233-2-they@=
+mint.lgbt/
+
+
+
