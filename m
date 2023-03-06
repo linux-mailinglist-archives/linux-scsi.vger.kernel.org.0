@@ -2,65 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D737E6ACCC2
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Mar 2023 19:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A5D6ACCF6
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Mar 2023 19:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjCFSfX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Mar 2023 13:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
+        id S230108AbjCFSs1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Mar 2023 13:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjCFSfR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 13:35:17 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966313A865
-        for <linux-scsi@vger.kernel.org>; Mon,  6 Mar 2023 10:34:39 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id i34so42616514eda.7
-        for <linux-scsi@vger.kernel.org>; Mon, 06 Mar 2023 10:34:39 -0800 (PST)
+        with ESMTP id S229988AbjCFSsZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 13:48:25 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DFE2BEEF
+        for <linux-scsi@vger.kernel.org>; Mon,  6 Mar 2023 10:48:23 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id cw28so42799728edb.5
+        for <linux-scsi@vger.kernel.org>; Mon, 06 Mar 2023 10:48:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678127660;
+        d=linux-foundation.org; s=google; t=1678128502;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jUkuyszYTAoQtNUlKsSSIkY0E3vOhynrc0QM2L0Yxu4=;
-        b=OIdq6HFU9dxUkQTkbHlR0i3CxZpmNK8iA9/2k3NUR75lshbPEzybKO0ppeAVQtKuF4
-         CJjYFnA+CmnAnkSwQ9auq5lDt4oSxmdtzx25Tk8a4q++koXNiNtPwT68INEfqYrYeKPl
-         zlVnK5ytHemMRijZfUmH53IepVuSJ5DdUpViI=
+        bh=m+AuRXdo16JeR9PnbP32vE+RmxUJH9KHyOeCFYJO9N8=;
+        b=cfLBMhsxEmyjxzpNdu5x3WI0oXcOEnEr8VoAG5m38Cw4/kQTo9PWxpACKwcyjytSKD
+         ydU9ygHtlfqv6Q6/ugWeApD883giDkCXBpD8NOvECUqwxj4akokkyUxVfHre/EMVa2oa
+         4SHO37wicSka3vGgpwhCmiBzDQRvxlNbPRHeQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678127660;
+        d=1e100.net; s=20210112; t=1678128502;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jUkuyszYTAoQtNUlKsSSIkY0E3vOhynrc0QM2L0Yxu4=;
-        b=n5VKOxpKHtCII8Q4e7PMg1Weux/8pGcyaJGXgeHwQFxD875zo5hTf8NV4VlrgJNU9j
-         xUOmX1MifUR6Ru/y7mUEs40HLdXwuMe6BGFHm33zqipwThSc8+5UQh5+bsWdefasZwLa
-         TAs/d7DiA+BUK45DDnHRfGwZJ6mGHa5rCFb8oJvFWSyJAZLYYcSD2RClvTbibU2/bvto
-         bCQPJPUPoKQv0ap9EpFJ0BAodocHAtxo3rsYdW0m2AWL2OC8ZxMjZSgXo72CsFWYALfF
-         F48Du/yUqvyGt0eA7ZzjXwtUQpgAibj1XGamueo+OYYMxn95ldmtFEFUKdGkqa4WNdlU
-         nd5w==
-X-Gm-Message-State: AO0yUKUcol7vqtRDRXBxEMM1SM+QIf0FE/WpAln51vJvTAG9FXs4rZbb
-        lbPdZX+em0vHz5oBz72VQNV/SymiDgqdk2S2NetsIg==
-X-Google-Smtp-Source: AK7set+0LO9SnrIPP0E06AVckZkwGiH3T5OiROITE7iJu+h+OFt1AiR0iFUiQCD8u0S/8LzfJJ51BQ==
-X-Received: by 2002:a17:906:6b1a:b0:8b1:7ab0:a462 with SMTP id q26-20020a1709066b1a00b008b17ab0a462mr11208981ejr.7.1678127660641;
-        Mon, 06 Mar 2023 10:34:20 -0800 (PST)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id u7-20020a50d507000000b004acc6cbc451sm5521310edi.36.2023.03.06.10.34.19
+        bh=m+AuRXdo16JeR9PnbP32vE+RmxUJH9KHyOeCFYJO9N8=;
+        b=Xr8YBMackcyWwc/3ehb8WQ9bojIdZSMe/+N05JfblDamI/FSLCBZfjhyJLALLyz/bF
+         m/1EW0Ob2JrQ75lS6Ru3r2aQ+gzBIXww1X1NbnCn7urBQLJBsBMBHreQrzHnCultH0PC
+         1ZYfGpCOMnXdrMFTNXvf+Zf2xdA2YqySgpmfp9i0tzgoUiUgIpOeijj5ExYctCbNPKa0
+         oiLF89GjMUBVPkBS9F1ZO609xHgqr9zBxTdaKnM/JID/Lmww+niiB2Q7WI1Vu+ciEq+t
+         0YQlsbNL0O90sopFrSAuWJXE+KidNRXMh/jRoYc/2ScjxqtF77o6LyyGkSZur/cAWHki
+         wdxA==
+X-Gm-Message-State: AO0yUKXOyDgblafQBLU++vALog327TAaoqvHOZvxa9v1SWjkG68Qf4x5
+        llSoP7gjFEDe6/bQa0m37J5utaCQnIAfANHsdrkALg==
+X-Google-Smtp-Source: AK7set9rshReCYVvFem4q9Qywe1Zzr7HuOIxc0kpYkUTQjGO3YeaYTbfUrxwBF+/cjBg64foKg4blw==
+X-Received: by 2002:aa7:cd55:0:b0:4c0:e156:7954 with SMTP id v21-20020aa7cd55000000b004c0e1567954mr9151498edw.34.1678128502091;
+        Mon, 06 Mar 2023 10:48:22 -0800 (PST)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id u7-20020a50d507000000b004acc6cbc451sm5537222edi.36.2023.03.06.10.48.21
         for <linux-scsi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 10:34:19 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id s11so42592330edy.8
-        for <linux-scsi@vger.kernel.org>; Mon, 06 Mar 2023 10:34:19 -0800 (PST)
-X-Received: by 2002:a50:8711:0:b0:4bb:d098:2138 with SMTP id
- i17-20020a508711000000b004bbd0982138mr6329093edb.5.1678127659323; Mon, 06 Mar
- 2023 10:34:19 -0800 (PST)
+        Mon, 06 Mar 2023 10:48:21 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id x3so42681585edb.10
+        for <linux-scsi@vger.kernel.org>; Mon, 06 Mar 2023 10:48:21 -0800 (PST)
+X-Received: by 2002:a50:cd15:0:b0:4c1:1555:152f with SMTP id
+ z21-20020a50cd15000000b004c11555152fmr6419391edi.5.1678128500729; Mon, 06 Mar
+ 2023 10:48:20 -0800 (PST)
 MIME-Version: 1.0
-References: <20230306160651.2016767-1-vernon2gm@gmail.com> <20230306160651.2016767-6-vernon2gm@gmail.com>
- <CAHk-=whVnaTBt2Xm-A+8SMc5-q5CuZBDU6rUZ8yC8GoAnbTBvw@mail.gmail.com> <ZAYtRcbMeRUQFUw/@vernon-pc>
-In-Reply-To: <ZAYtRcbMeRUQFUw/@vernon-pc>
+References: <20230306160651.2016767-1-vernon2gm@gmail.com> <20230306160651.2016767-4-vernon2gm@gmail.com>
+In-Reply-To: <20230306160651.2016767-4-vernon2gm@gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 6 Mar 2023 10:34:02 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whA2kEBk3ibg3mrxpuXOAJKdM_MC4MQ8gLmxerZ5URfvg@mail.gmail.com>
-Message-ID: <CAHk-=whA2kEBk3ibg3mrxpuXOAJKdM_MC4MQ8gLmxerZ5URfvg@mail.gmail.com>
-Subject: Re: [PATCH 5/5] cpumask: fix comment of cpumask_xxx
+Date:   Mon, 6 Mar 2023 10:48:04 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj73=Os1p=W7D2va=Rd81ZKvjb35yWgXQNgn1hXNRpAbw@mail.gmail.com>
+Message-ID: <CAHk-=wj73=Os1p=W7D2va=Rd81ZKvjb35yWgXQNgn1hXNRpAbw@mail.gmail.com>
+Subject: Re: [PATCH 3/5] scsi: lpfc: fix lpfc_cpu_affinity_check() if no
+ further cpus set
 To:     Vernon Yang <vernon2gm@gmail.com>
 Cc:     tytso@mit.edu, Jason@zx2c4.com, davem@davemloft.net,
         edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
@@ -82,21 +82,33 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 10:13=E2=80=AFAM Vernon Yang <vernon2gm@gmail.com> w=
-rote:
+On Mon, Mar 6, 2023 at 8:07=E2=80=AFAM Vernon Yang <vernon2gm@gmail.com> wr=
+ote:
 >
-> I also just see nr_cpumask_size exposed to outside, so...
+> -                               if (new_cpu =3D=3D nr_cpumask_bits)
+> +                               if (new_cpu >=3D nr_cpumask_bits)
 
-Yeah, it's not great.
+This all should use "nr_cpu_ids", not "nr_cpumask_bits".
 
-nr_cpumask_bits came out of the exact same "this is an internal value
-that we use for optimized cpumask accesses", and existed exactly
-because it *might* be the same as 'nr_cpu_ids', but it might also be a
-simpler "small constant that is big enough" case.
+But I really suspect that it should all be rewritten to not do that
+thing over and over, but just use a helper function for it.
 
-It just depended on the exact kernel config which one was used.
+  int lpfc_next_present_cpu(int n, int alternate)
+  {
+        n =3D cpumask_next(n, cpu_present_mask);
+        if (n >=3D nr_cpu_ids)
+                n =3D alternate;
+        return n;
+  }
 
-But clearly that internal value then spread outside, and that then
-caused problems when the internal implementation changed.
+and then you could just use
 
-            Linus
+        start_cpu =3D lpfc_next_present_cpu(new_cpu, first_cpu);
+
+or similar.
+
+              Linus
+
+PS. We "kind of" already have a helper function for this:
+cpumask_next_wrap(). But it's really meant for a different pattern
+entirely, so let's not confuse things.
