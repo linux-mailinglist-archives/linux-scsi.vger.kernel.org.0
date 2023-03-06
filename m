@@ -2,116 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75466AB846
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Mar 2023 09:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 639C86ABC4A
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Mar 2023 11:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjCFI35 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Mar 2023 03:29:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
+        id S230270AbjCFK0i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Mar 2023 05:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjCFI3z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 03:29:55 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B623BDD8;
-        Mon,  6 Mar 2023 00:29:53 -0800 (PST)
-Received: from kwepemm600002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PVWsv59tFzKpsP;
-        Mon,  6 Mar 2023 16:27:47 +0800 (CST)
-Received: from [10.174.178.159] (10.174.178.159) by
- kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 6 Mar 2023 16:29:17 +0800
-Message-ID: <02189eaa-1964-3fa6-6a06-16d248a3d80d@huawei.com>
-Date:   Mon, 6 Mar 2023 16:29:16 +0800
+        with ESMTP id S230522AbjCFK0W (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 05:26:22 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B91265BD
+        for <linux-scsi@vger.kernel.org>; Mon,  6 Mar 2023 02:25:53 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-173435e0ec4so10774650fac.12
+        for <linux-scsi@vger.kernel.org>; Mon, 06 Mar 2023 02:25:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678098351;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vh7FN/ulAdnmY8O0LKz7bqpIFk4oOSQ9iCZ8VQ/AkNo=;
+        b=EDbhPO1WKzSJy97Cp1KR4Ue1wIcLFSscoH9L1E67CyPoJvstONJwP7RxKCqsDiuar/
+         4XZc6UhnyOFrEHlIQ3KmGU6oX8xWOyZpiVA4bD6F27cjopM5KQeiwoXnQq1r2hu/0hkW
+         LgiQ9FGonNq8AsMsEKBqZEvtwgOfW2lv3iUKapY2ocqE+LRWfsVifUNA3eNbIcULbvPT
+         nBBU0ns0xWwmvS7ETCAh5Z5lhdCiLVSRis+m63aq8CObwyUrMLAjGQpDeSf4OVAOQav5
+         5TuEH4NOUnTGCqcHGRIE0/tBavRRplzW4HaWY1DRs+pas+nyfL/37adPjYmqfexbl/Di
+         PS3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678098351;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vh7FN/ulAdnmY8O0LKz7bqpIFk4oOSQ9iCZ8VQ/AkNo=;
+        b=E/XefwKAyFcB1pneUTd5xyMWei0hlhYG0q0gJntRmiR5NkB74zeWRXBuIAclvkGnZZ
+         5bbSIPnA/4+iRergO9AvGYF6W7P1oppkydwWQRu7Xfd1Nmo+MdHmxK4soJq7vjuy85rR
+         Aq8Ja5oi2DLG7tLcYDPNGJWq2ajsa/WjD6iWYVOa2uRV3h9mygX+a8zyyqwcajGvOgOz
+         C0HgqsCL8JTDgmjVmgYfCJISu5CWUieci1ha480oxvbGU5gZsp0c1LQnl7eDNwHrMEJG
+         kDizR0OOyH7+GGFEnyHuRzMdYojHrek7Nys2KwFVlLvT/BRXqiLIWXdj00nf5nCLLUz9
+         ijCA==
+X-Gm-Message-State: AO0yUKXEVmxGUFgBupRFYBFH3gIOO53JCMiKX8nasoEYexnevHWVaPUo
+        EjZUcLNvVO+dZE370LtnsGknMm2GqxiqB8ARpWg=
+X-Google-Smtp-Source: AK7set9YqazPiOkBuGm+YrFZOLe51O90+qKBrIr6WBjXtnVrmZ9RIOYyWRLBWcHI+/rsVoNhMQhwnCpcR6G8n2Z6mzE=
+X-Received: by 2002:a05:6102:e44:b0:402:999f:44d3 with SMTP id
+ p4-20020a0561020e4400b00402999f44d3mr6975472vst.1.1678098330725; Mon, 06 Mar
+ 2023 02:25:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH-next] scsi: fix use-after-free problem in
- scsi_remove_target
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Zhong Jinghua <zhongjinghua@huaweicloud.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yukuai3@huawei.com>
-References: <20230213034321.3261114-1-zhongjinghua@huaweicloud.com>
- <5cf19e69-b851-abe9-9496-bbba33109404@acm.org>
-From:   zhongjinghua <zhongjinghua@huawei.com>
-In-Reply-To: <5cf19e69-b851-abe9-9496-bbba33109404@acm.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.159]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600002.china.huawei.com (7.193.23.29)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:a59:ce6f:0:b0:3ae:930b:3e70 with HTTP; Mon, 6 Mar 2023
+ 02:25:30 -0800 (PST)
+Reply-To: madis.scarl@terlera.it
+From:   "Ms Eve from U.N" <denisagotou@gmail.com>
+Date:   Mon, 6 Mar 2023 11:25:30 +0100
+Message-ID: <CAD6bNBi6bPCYboaF4-xBgmeUTFn6JMXqU6TNepQig=NRMqhdUg@mail.gmail.com>
+Subject: Re: Claim of Fund:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_SCAM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hello Good Morning,
+This is to bring to your notice that all our efforts to contact you
+through this your email ID failed Please Kindly contact Barrister.
+Steven Mike { mbarrsteven@gmail.com } on his private email for the
+claim of your compensation entitlement
 
-在 2023/3/2 3:46, Bart Van Assche 写道:
-> On 2/12/23 19:43, Zhong Jinghua wrote:
->> T0                            T1
->>   sdev_store_delete
->>    scsi_remove_device
->>     device_remove_file
->>      __scsi_remove_device
->>                              __iscsi_unbind_session
->>                               scsi_remove_target
->>                           spin_lock_irqsave
->>                                list_for_each_entry
->>       scsi_target_reap // starget->reaf 1 -> 0
->
-> What is "reaf"? Did you perhaps want to write "reap_ref"?
-Yes, I will modify late.
->
->> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
->> index e7893835b99a..0ad357ff4c59 100644
->> --- a/drivers/scsi/scsi_sysfs.c
->> +++ b/drivers/scsi/scsi_sysfs.c
->> @@ -1561,7 +1561,17 @@ void scsi_remove_target(struct device *dev)
->>               starget->state == STARGET_CREATED_REMOVE)
->>               continue;
->>           if (starget->dev.parent == dev || &starget->dev == dev) {
->> -            kref_get(&starget->reap_ref);
->> +
->> +            /*
->> +             * If starget->reap_ref is reduced to 0, it means
->> +             * that other processes are releasing it and
->> +             * there is no need to delete it again
->> +             */
->> +            if (!kref_get_unless_zero(&starget->reap_ref)) {
->> +                spin_unlock_irqrestore(shost->host_lock, flags);
->> +                goto restart;
->> +            }
->> +
->>               if (starget->state == STARGET_CREATED)
->>                   starget->state = STARGET_CREATED_REMOVE;
->>               else
->
-> The above comment should be made more clear, e.g. as follows: "If the 
-> reference count is already zero, skip this target. Calling 
-> kref_get_unless_zero() if the reference count is zero is safe because 
-> scsi_target_destroy() will wait until the host lock has been released 
-> before freeing starget."
-
-Agree. Thanks for your e.g.
-
-I will send the v2 late.
-
->
-> Otherwise this patch looks fine to me.
->
-> Thanks,
->
-> Bart.
->
->
-Thanks,
-
-Jinghua
-
+Note: You have to pay for the delivery fee.
+Yours Sincerely
+Mrs EVE LEWIS
