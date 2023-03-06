@@ -2,111 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5947A6ACF70
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Mar 2023 21:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F68E6ACF99
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Mar 2023 21:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCFUsN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Mar 2023 15:48:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S229540AbjCFUzL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Mar 2023 15:55:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjCFUsK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 15:48:10 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A0672B3B;
-        Mon,  6 Mar 2023 12:47:57 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id u5so11848138plq.7;
-        Mon, 06 Mar 2023 12:47:57 -0800 (PST)
+        with ESMTP id S229484AbjCFUzK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 15:55:10 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE8E3B21A
+        for <linux-scsi@vger.kernel.org>; Mon,  6 Mar 2023 12:55:08 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id s18so6410666pgq.1
+        for <linux-scsi@vger.kernel.org>; Mon, 06 Mar 2023 12:55:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678135676;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MGmtZmnDs5ASNE58FlHEoRflz4j5hRXcFcWdJp13C10=;
-        b=qYRs34Gk9hUvTs5ooXKPKoymdDDp1qyJBx1E+sIY2JvW1s22DJk2X7y1vFmfMeNrya
-         jjiZs95ll3Deo94LJL0MIxxSzm3AWRXtvMwqww3eAIRMZv1we4kFFe5CoNGogyjud4lu
-         pXxem8c/aN7PvEOkXxjWSMGHwMbKX563gMIWEEC8S196B2+ltQLn/Qz0WDJ+GiwYyu4/
-         v7TN1sQjBcS/3bHO/fl8LNr5VGX4MBH5kONmDgLJUmrWf5YzB0akr/Oq91jAVYUCyxPi
-         Lo/fnlVTqlRZPMUY2RyW7pa2rGqTEbKBIuL4RiQYRZ9a6C+RYptbZSpYXQaxMI9QmYTH
-         ru9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678135676;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20210112; t=1678136108;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MGmtZmnDs5ASNE58FlHEoRflz4j5hRXcFcWdJp13C10=;
-        b=7v+DGIXDLuUQ7NhQBJWM8rUyQ1nX+4MHDPgHAieFzgqidJAZwGf9qnJCOVGVVDUAzN
-         Ds54AIO13UjO6cTD2dAO3A+u95F5tSw5byIa2EbGYLXvroOqtF3yHb3fYttafvo3dmwO
-         qA9caNdbPPrOK/Jr7UtHWpYYhky/voUTDBfebr7pnwtjAgiH1C28nIfJ3KOLfUGrgXAw
-         RSHK7ZuH6ncw0GH/aYEFc5naSFuSrEHQWE2rUYFr6X2DzcygHhCoElU6MJNVompGlpoZ
-         5tiriI/vCSJ5Yw6HDCod9Q0nzpXf5nIPBa0mVtyvT+b/v6xKDLATZVcMpk0PTLOOfGea
-         OVBA==
-X-Gm-Message-State: AO0yUKWIYDY7j4iR3NjmlBMsRPOlXkpQBqP1JbaDSppSvSI7u21E3mNi
-        vkHnCcUNjuimckN0JMZtpB0=
-X-Google-Smtp-Source: AK7set/FIMLWtnvm1jz8Ak/Nanv3uUTjVLkFSHhdcorkKHDqQ6eoh1Z+NIyFSpqTUVyNVTkxCTNMkA==
-X-Received: by 2002:a05:6a20:1e61:b0:cb:a0e3:4598 with SMTP id cy33-20020a056a201e6100b000cba0e34598mr11460370pzb.43.1678135676488;
-        Mon, 06 Mar 2023 12:47:56 -0800 (PST)
-Received: from vernon-pc.. ([49.67.2.142])
-        by smtp.gmail.com with ESMTPSA id e23-20020aa78c57000000b005a75d85c0c7sm6699772pfd.51.2023.03.06.12.47.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 12:47:56 -0800 (PST)
-From:   Vernon Yang <vernon2gm@gmail.com>
-To:     torvalds@linux-foundation.org, tytso@mit.edu, Jason@zx2c4.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com
-Cc:     linux-kernel@vger.kernel.org, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Vernon Yang <vernon2gm@gmail.com>
-Subject: [PATCH v2 2/4] wireguard: fix wg_cpumask_choose_online() if no further cpus set
-Date:   Tue,  7 Mar 2023 04:47:21 +0800
-Message-Id: <20230306204723.2584724-3-vernon2gm@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230306204723.2584724-1-vernon2gm@gmail.com>
-References: <20230306204723.2584724-1-vernon2gm@gmail.com>
+        bh=7ZZZdjoB/M7aLHtUWeNwJwsyHFYWeUmbWoGEQvZrODI=;
+        b=VFc8b4kVMKZt6VOxj/S/2HFa51ssPQp5qOB6cGY3/WEO5/U+R+e5NryjCkeomCAEfK
+         LlH1zDIcHznWBxK6yNubgjrguM/x1L6P44kfidoPrWA/LVL8ylOSl75RRHSUgcg06Xgi
+         Jg86F3ehxHGtq26u/dNOh8kiiJIrQ4M0jdWKE4jxHhkH7ZV9EgnpCM5FGJ3SCN92jV9L
+         SNhOYxAJ9gJl9JDnTfusvucmBmmFIRxSrk/78zPNEF0mAaiWprDy5hX8o2mg2SDJI5+R
+         SOU8pLzUH9ZOYlLCX1ei2ZVzWEfjsrknkBY8of/iMPR4sY92COUAXmU2wjsJfBHMQr8B
+         PV1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678136108;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7ZZZdjoB/M7aLHtUWeNwJwsyHFYWeUmbWoGEQvZrODI=;
+        b=XJm6zoJoXPPeeGWTNxXA0JTM6FtotjY8cdAKSzDC9Mgp5ar+8K1VPfpUg8kZ6Z09t9
+         3l4WReqAJwAOyJ3dpFPrSZR4ItZZNevkCtKbPubcWGnIgNSJLeSqD6S3OHoGRM0pItsX
+         EvxB2M0XhqcI198manfeCoGkuPQi+GfsiKJD0Rat6t1/eEmZvbcsyL/aeOuvH1vMypHF
+         vQzX3vIYcvdHPj6gEBc62uACYbM6CnOtclq6aAoT+kisOoFkoOVx+tVkqxrOFgCQsKie
+         3fiorSAnCaSjlJr1+aNQV4JnYxAqVP4gACuww+Bg/5MRnjT1og+yuFegEbPk46X17GKW
+         cKjA==
+X-Gm-Message-State: AO0yUKXtlOGGxq28h8N5ISI3n0IYSF0OjIeKzgyY11FH6HpThn0Qr8TG
+        MabYZ2wYIkWWUdx22pK0pH2NKthYcsim7ZOYz/U=
+X-Google-Smtp-Source: AK7set+hJsxHOzQ7Z/oRJu/e5s7RyJDE4PoTqlouOJQ/hP1+biWPVB/B6jzwu8W/GJ7zXwmrNcPtKeLJeiH9APprP+I=
+X-Received: by 2002:a63:7f5d:0:b0:501:26b5:f0d2 with SMTP id
+ p29-20020a637f5d000000b0050126b5f0d2mr4204699pgn.3.1678136108078; Mon, 06 Mar
+ 2023 12:55:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: un30110@gmail.com
+Received: by 2002:a17:522:d272:b0:4cf:317:32a1 with HTTP; Mon, 6 Mar 2023
+ 12:55:07 -0800 (PST)
+From:   Calib Cassim <calibcassim00@gmail.com>
+Date:   Mon, 6 Mar 2023 22:55:07 +0200
+X-Google-Sender-Auth: jfZ4-_pjAHh8-usUkSrZNsNJyZ4
+Message-ID: <CAL6GujSD=j8GYJKtrbZ52QzEr8vVWTWooHBQ8hPT1MYPdRt5WA@mail.gmail.com>
+Subject: 
+To:     calibcassim0@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.2 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
+        MILLION_USD,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:536 listed in]
+        [list.dnswl.org]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [un30110[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [calibcassim00[at]gmail.com]
+        *  1.0 MILLION_USD BODY: Talks about millions of dollars
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  1.4 MONEY_FRAUD_5 Lots of money and many fraud phrases
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When cpumask_next() the return value is greater than or equal to
-nr_cpu_ids, it indicates invalid.
+GoodDay,
 
-Before commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
-optimizations"), when cpumask_next() returned an invalid cpu, the driver
-used the judgment equal to nr_cpu_ids to indicate the invalid cpu, so it
-happened to work normally, but this is the wrong approach.
+How are you?
 
-After commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
-optimizations"), these incorrect practices actively buggy, so fix it to
-correctly.
+My name is Calib Cassim, I work in Eskom Holdings Limited as a
+Financial Director, Auditing and Project Implementation.
 
-Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
----
- drivers/net/wireguard/queueing.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I got your email from my personal search on the internet for a
+reputable company or individual to assist me sincerely.
 
-diff --git a/drivers/net/wireguard/queueing.h b/drivers/net/wireguard/queueing.h
-index 583adb37ee1e..125284b346a7 100644
---- a/drivers/net/wireguard/queueing.h
-+++ b/drivers/net/wireguard/queueing.h
-@@ -106,7 +106,7 @@ static inline int wg_cpumask_choose_online(int *stored_cpu, unsigned int id)
- {
- 	unsigned int cpu = *stored_cpu, cpu_index, i;
- 
--	if (unlikely(cpu == nr_cpumask_bits ||
-+	if (unlikely(cpu >= nr_cpu_ids ||
- 		     !cpumask_test_cpu(cpu, cpu_online_mask))) {
- 		cpu_index = id % cpumask_weight(cpu_online_mask);
- 		cpu = cpumask_first(cpu_online_mask);
--- 
-2.34.1
+I have in my possession an overdue contract payment executed by a
+Foreign Contracting Firm through my Department, which I officially
+over-invoiced the amount of USD25 Million from the contract of
+USD500,000,000.00 (Five Hundred Million United States Dollars).
 
+Though the actual contract amount has been paid to the original
+contractor, the excess balance of USD 25 Million unclaimed.
+
+Since our Reserve Bank is busy paying our foreign contractors and
+agencies, I need your urgent help to front as the beneficiary of the
+unclaimed amount as a Foreign Agency to enable me to obtain the
+payment approvals on your name for the transfer.
+
+This deal is completely safe, secured and requires confidentiality,
+and your line of business does not matter. If you are interested,
+please indicate your percentage for your time and help to receive the
+money.
+
+Kindest Regards,
+
+Mr. Calib
+Email calibcassim0@gmail.com
