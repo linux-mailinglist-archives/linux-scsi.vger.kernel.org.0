@@ -2,64 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1426ACB37
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Mar 2023 18:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119596ACBDC
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Mar 2023 19:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjCFRtJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Mar 2023 12:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
+        id S229696AbjCFSDX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Mar 2023 13:03:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjCFRs4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 12:48:56 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC7A567A6
-        for <linux-scsi@vger.kernel.org>; Mon,  6 Mar 2023 09:48:26 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id a25so42330683edb.0
-        for <linux-scsi@vger.kernel.org>; Mon, 06 Mar 2023 09:48:25 -0800 (PST)
+        with ESMTP id S229542AbjCFSDV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 13:03:21 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8C97AA2
+        for <linux-scsi@vger.kernel.org>; Mon,  6 Mar 2023 10:02:51 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id cw28so42289398edb.5
+        for <linux-scsi@vger.kernel.org>; Mon, 06 Mar 2023 10:02:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678124872;
+        d=linux-foundation.org; s=google; t=1678125766;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yHxMDJkAMxG+U7tsJ3okEl2/ScLLX/X7tonuUjq/u1I=;
-        b=ckVkcyPoPmhakiRDn8WT3GtuhY1iVz4TCIFpaSpRNFSI5T5+f5NLSEXb7HrV0L1aIA
-         3njxBfRcnIMISOh8QOdW8d7OHbEvEK/fUE8EFBWiiwlx+uAecoKDuJY/UGdrpdtvTDmu
-         dvlI7sFA1gNjKGDa4lQafh2mXWwvBTIsa6xpw=
+        bh=nHiIbvE8ZF8yskiSHfLDDBQes7IipQHv7U2Dux2wiEU=;
+        b=aS+ztAEvl5rXUV+bl4aUHKg/JjsEs5Q5O8O5esPopXwbfxpYA6cmA8oaxYHNUlU/xv
+         pUDQ2Ag73sCMAC9SLcPIQilnahRnTUpOOhtVRnm6z8j74E8n2sdDsydvWCPi/1J2K4/F
+         Y77RZfSte/kHcjeeE//5gW1NADu31WanG7wgE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678124872;
+        d=1e100.net; s=20210112; t=1678125766;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yHxMDJkAMxG+U7tsJ3okEl2/ScLLX/X7tonuUjq/u1I=;
-        b=14MdXqLAoL6/wgZ7O8IAVpephAHL/r807Hhkoa+l3US4iP87sElkqj4nSML/Ku4Ltg
-         Wm7igFGnMRUM2GTvY3+Yzo7jJufP1yXis+ph5OoZjmuMzmeQfwZCTUk/z8HSnbzzA6Fi
-         pdTwI4++PeyVVQ9y33T4aqYFgBAYHOJrvOOWiSVGHwOgDaQDI5wCOkHIxAFbZp558IOw
-         wZfp/6t0tfMjnJrN0kFV0gwmIk6a2mUhpZ6nrdTKKo4qnDYLUKCyIKsCBYlH4j3c17Zb
-         HGD7fYAm/LYjckiLzNj31ApbMlRXYY+IHsgPRHtknV40iZvny2wKobF6YMGVR6X799WB
-         ru5A==
-X-Gm-Message-State: AO0yUKVTDPwPU0oW+zwGMPBPYe7F7F99wtVxwNRRB1oEW/F31De/4nfp
-        /GyzQycmZrqoA6rMFXRknuhpVATO/jO9kju4G1YVqw==
-X-Google-Smtp-Source: AK7set/jGKpcikKjI/tTMm5rvNV3qxGTox+L6y+yNONu3uxYGJifElo5ahabFud+M5oy+0jvoGX5SA==
-X-Received: by 2002:aa7:ccc7:0:b0:4ac:c4ed:f1d5 with SMTP id y7-20020aa7ccc7000000b004acc4edf1d5mr10154437edt.1.1678124872513;
-        Mon, 06 Mar 2023 09:47:52 -0800 (PST)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id e21-20020a50d4d5000000b004d47ce55e57sm3813919edj.10.2023.03.06.09.47.51
+        bh=nHiIbvE8ZF8yskiSHfLDDBQes7IipQHv7U2Dux2wiEU=;
+        b=6hggPf4+TYHorAwKBc/3KnBvtqIGBl3QTgyeNAxNy/YPVljp9sm0oixZB5l29LIcgM
+         nKclsWVQiCNbPKd3J5gvu0AYhubK4fRunZoPnwkko5yUEi5pPr71L0dzRADr78aINa82
+         m6P6UWDONXHSJleLE0xommMgntwnU+n/WarzkBegxFxSBWR96AbkythLCqwyrz7Rtuc8
+         YTqZ9FsPu4KMMF1I9b6F6czDHA8nR2Z74FniZcF8lCJynkzvasA5AhFsbIN6CMsb0VWx
+         mnVA1sx3XhiaeNJi435m5jj50VDSSHDTWvqgfs5k9qVYp3HiwoodmWx14PlrppRH5Ijs
+         /GSQ==
+X-Gm-Message-State: AO0yUKULf4OSCrJjEmgpA0NaZ0KqMDItDPNeHOWOwhq3HsIFpA3hoRzB
+        K2iqr8O7otyNMk48o3dpGQtridC4jDJo00mw1ixW2w==
+X-Google-Smtp-Source: AK7set9NS+Pizo6BarcHyhzXqyrGF6AU2/bUGMSfitxeskrbOkUxw2LJ8YvCGicCeLISvGM/dPsGNw==
+X-Received: by 2002:a17:907:3f18:b0:8f6:5a70:cccc with SMTP id hq24-20020a1709073f1800b008f65a70ccccmr15603102ejc.66.1678125765870;
+        Mon, 06 Mar 2023 10:02:45 -0800 (PST)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id ot19-20020a170906ccd300b008b9d2da5343sm4873140ejb.210.2023.03.06.10.02.44
         for <linux-scsi@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 09:47:51 -0800 (PST)
-Received: by mail-ed1-f53.google.com with SMTP id j11so22569447edq.4
-        for <linux-scsi@vger.kernel.org>; Mon, 06 Mar 2023 09:47:51 -0800 (PST)
-X-Received: by 2002:a17:906:4997:b0:877:7480:c75d with SMTP id
- p23-20020a170906499700b008777480c75dmr5674931eju.0.1678124871381; Mon, 06 Mar
- 2023 09:47:51 -0800 (PST)
+        Mon, 06 Mar 2023 10:02:45 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id g3so42385667eda.1
+        for <linux-scsi@vger.kernel.org>; Mon, 06 Mar 2023 10:02:44 -0800 (PST)
+X-Received: by 2002:a50:9fa8:0:b0:4ae:e5f1:7c50 with SMTP id
+ c37-20020a509fa8000000b004aee5f17c50mr6466912edf.5.1678125764592; Mon, 06 Mar
+ 2023 10:02:44 -0800 (PST)
 MIME-Version: 1.0
 References: <20230306160651.2016767-1-vernon2gm@gmail.com> <20230306160651.2016767-6-vernon2gm@gmail.com>
- <CAHk-=whVnaTBt2Xm-A+8SMc5-q5CuZBDU6rUZ8yC8GoAnbTBvw@mail.gmail.com>
-In-Reply-To: <CAHk-=whVnaTBt2Xm-A+8SMc5-q5CuZBDU6rUZ8yC8GoAnbTBvw@mail.gmail.com>
+ <CAHk-=whVnaTBt2Xm-A+8SMc5-q5CuZBDU6rUZ8yC8GoAnbTBvw@mail.gmail.com> <CAHk-=witXXeQuP9fgs4dDL2Ex0meXQiHJs+3JEfNdaPwngMVEg@mail.gmail.com>
+In-Reply-To: <CAHk-=witXXeQuP9fgs4dDL2Ex0meXQiHJs+3JEfNdaPwngMVEg@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 6 Mar 2023 09:47:34 -0800
-X-Gmail-Original-Message-ID: <CAHk-=witXXeQuP9fgs4dDL2Ex0meXQiHJs+3JEfNdaPwngMVEg@mail.gmail.com>
-Message-ID: <CAHk-=witXXeQuP9fgs4dDL2Ex0meXQiHJs+3JEfNdaPwngMVEg@mail.gmail.com>
+Date:   Mon, 6 Mar 2023 10:02:27 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj5hFp39ZM7fEtmctwkWdHHnx0X7c2j5Z8L+b18jUgcMQ@mail.gmail.com>
+Message-ID: <CAHk-=wj5hFp39ZM7fEtmctwkWdHHnx0X7c2j5Z8L+b18jUgcMQ@mail.gmail.com>
 Subject: Re: [PATCH 5/5] cpumask: fix comment of cpumask_xxx
 To:     Vernon Yang <vernon2gm@gmail.com>
 Cc:     tytso@mit.edu, Jason@zx2c4.com, davem@davemloft.net,
@@ -82,34 +82,48 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 9:29=E2=80=AFAM Linus Torvalds
+On Mon, Mar 6, 2023 at 9:47=E2=80=AFAM Linus Torvalds
 <torvalds@linux-foundation.org> wrote:
 >
-> The correct thing to do is always that
+> The drivers/char/random.c code is very wrong, and does
 >
->    * Returns >=3D nr_cpu_ids if no cpus set.
+>              if (cpu =3D=3D nr_cpumask_bits)
+>                              cpu =3D cpumask_first(&timer_cpus);
 >
-> because nr_cpu_ids is always the *smallest* of the access sizes.
->
-> Of course, right now Guenter seems to be reporting a problem with that
-> optimization, so unless I figure out what is going on I'll just need
-> to revert it anyway.
+> which fails miserably exactly because it doesn't use ">=3D".
 
-Ahh. And the reason is exactly that people do *not* follow that
-"Returns >=3D nr_cpu_ids" rule.
+Turns out this "cpu =3D=3D nr_cpumask_bits" pattern exists in a couple of
+other places too.
 
-The drivers/char/random.c code is very wrong, and does
+It was always wrong, but it always just happened to work. The lpfc
+SCSI driver in particular seems to *love* this pattern:
 
-             if (cpu =3D=3D nr_cpumask_bits)
-                             cpu =3D cpumask_first(&timer_cpus);
+        start_cpu =3D cpumask_next(new_cpu, cpu_present_mask);
+        if (start_cpu =3D=3D nr_cpumask_bits)
+                start_cpu =3D first_cpu;
 
-which fails miserably exactly because it doesn't use ">=3D".
+and has repeated it multiple times, all incorrect.
 
-Oh well.
+We do have "cpumask_next_wrap()", and that *seems* to be what the lpcf
+driver actually wants to do.
 
-I'll have to look for more of this pattern, but basically all those
-"xyz_cpumask_bits" things were supposed to always be just internal to
-that header file implementation, which is *exactly* why you have to
-check the result for ">=3D nr_cpu_ids".
+.. and then we have kernel/sched/fair.c, which is actually not buggy,
+just odd. It uses nr_cpumask_bits too, but it uses it purely for its
+own internal nefarious reasons - it's not actually related to the
+cpumask functions at all, its just used as a "not valid CPU number".
 
-       Linus
+I think that scheduler use is still very *wrong*, but it doesn't look
+actively buggy.
+
+The other cases all look very buggy indeed, but yes, they happened to
+work, and now they don't. So commit 596ff4a09b89 ("cpumask:
+re-introduce constant-sized cpumask optimizations") did break them.
+
+I'd rather fix these bad users than revert, but there does seem to be
+an alarming number of these things, which worries me:
+
+     git grep '=3D=3D nr_cpumask_bits'
+
+and that's just checking for this *exact* thing.
+
+                Linus
