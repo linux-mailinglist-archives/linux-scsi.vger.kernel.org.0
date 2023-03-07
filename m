@@ -2,88 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12E76AD510
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 03:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273836AD51A
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 03:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjCGC5P (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Mar 2023 21:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33296 "EHLO
+        id S230166AbjCGC5y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Mar 2023 21:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCGC5O (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 21:57:14 -0500
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025EE21947
-        for <linux-scsi@vger.kernel.org>; Mon,  6 Mar 2023 18:57:13 -0800 (PST)
-Received: by mail-pg1-f179.google.com with SMTP id d10so6790782pgt.12
-        for <linux-scsi@vger.kernel.org>; Mon, 06 Mar 2023 18:57:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678157832;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jp5p6Ej08bEBkoQXFt1xc9yMy9F89D+N/6bMZIM1YoQ=;
-        b=34XZcxC7GIjQfcvNAxQQD3640CRwqH8UzILorcs+zqKUrAehmTjQdsfClNLoF+2W2T
-         k6u8nK5ZwB9Bzp7FM7kNjqXPpXggiCgP3LVeZDypSi37vquA54UfWbAaTYpkJl9QndqS
-         +4lwtba2fD3xtQGKC8RkpKzCUyOV1phCTzKi/vivULA/yjMueYlBHYXeQmiwZJmuXYu0
-         1WRr9BjC3PMFlnNs2aW6pb+sp0Tk0ZRwaSzGmfnX4lDMWnzwqKU/Ye1J/VuEy+99n5gB
-         UiI6ccwsNi0e3okRuyYZcgAESCeoQKWYaiWmxdtbmoS0Ke+csKZYbMGD5lzvLQWTTz3d
-         XT5Q==
-X-Gm-Message-State: AO0yUKUaUP1cS1YEM8JRSp/5jpY60J/kFTpxg5tJZyeXyymI6gLn609Y
-        u2kIOdz+KIsan39Hd/4EWrk=
-X-Google-Smtp-Source: AK7set9CLRlN0x21xyp4O7hHm3x4NgQOdrwuZuGKY4JQAXi6Q52JOPL9+rhl1w7SiQ4310iEvxnE8Q==
-X-Received: by 2002:a62:7b53:0:b0:5e7:710d:5e4 with SMTP id w80-20020a627b53000000b005e7710d05e4mr10314184pfc.9.1678157832252;
-        Mon, 06 Mar 2023 18:57:12 -0800 (PST)
-Received: from [192.168.132.235] ([63.145.95.70])
-        by smtp.gmail.com with ESMTPSA id x20-20020a62fb14000000b005d6fcd8f9desm7118004pfm.94.2023.03.06.18.57.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 18:57:11 -0800 (PST)
-Message-ID: <add1722b-6077-fc73-1518-1753743c2a03@acm.org>
-Date:   Mon, 6 Mar 2023 18:57:10 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 48/81] scsi: iscsi: Declare SCSI host template const
-Content-Language: en-US
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Mike Christie <michael.christie@oracle.com>,
-        linux-scsi@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Ketan Mukadam <ketan.mukadam@broadcom.com>,
+        with ESMTP id S230158AbjCGC5v (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Mar 2023 21:57:51 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EA278CA4
+        for <linux-scsi@vger.kernel.org>; Mon,  6 Mar 2023 18:57:50 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326Nx4To023360;
+        Tue, 7 Mar 2023 02:57:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2022-7-12;
+ bh=kUmKTAEaDI9tfJvEL8nD3RlzGMzVIKyF4oWzJbAMf58=;
+ b=oqyd1HdP8TBfT6LvSZyayTE2PJN2XOUC8RKmilcnTaztC1be6COaiLapKfq7OT5iF05z
+ aUnUkWXce/+EY2dTnTxQaWkzb61hoVqFGZyB/z3YVdf96TRKd3KCB+aQwlKQnic7HVUl
+ RY7C7Ssds9TF8gZ9iJ+SiFeqMfPVJCBUwJjgJ7kVt1eidOKyTl2CNauIuubBR6C+7m+9
+ oeNKuLq57xdA50QUC725Yj0v94s0nApII1ei0U1hEYaM1lrgkHmesdoCY5bpLcg2raNR
+ y5XxanlpEypzKIb+qp2ki0MlEGRHc7E9BojMMUbjzTHQTyhzzcL/viCXsCkLQ+O6Am/g Jw== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p415hvhfh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Mar 2023 02:57:35 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 3271P0NQ037278;
+        Tue, 7 Mar 2023 02:57:34 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p4txdvjhv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Mar 2023 02:57:34 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3272vY2A009567;
+        Tue, 7 Mar 2023 02:57:34 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3p4txdvjhj-1;
+        Tue, 07 Mar 2023 02:57:34 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Varun Prakash <varun@chelsio.com>,
-        Artur Paszkiewicz <artur.paszkiewicz@intel.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Jesper Juhl <jesperjuhl76@gmail.com>
-References: <20230304003103.2572793-1-bvanassche@acm.org>
- <20230304003103.2572793-49-bvanassche@acm.org>
- <b89d5cfb-9c24-23e7-2ac5-0176c5a7b16f@oracle.com>
- <yq15ybdmiam.fsf@ca-mkp.ca.oracle.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <yq15ybdmiam.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Adrien Thierry <athierry@redhat.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: ufs: add soft dependency on governor_simpleondemand
+Date:   Mon,  6 Mar 2023 21:57:18 -0500
+Message-Id: <167815780198.2075334.6406565343205552078.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230220140740.14379-1-athierry@redhat.com>
+References: <20230220140740.14379-1-athierry@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_14,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 adultscore=0
+ spamscore=0 suspectscore=0 mlxlogscore=563 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303070025
+X-Proofpoint-GUID: Wc_Mtsvumvp0nEQpE1DwG9BrgEGgSRa2
+X-Proofpoint-ORIG-GUID: Wc_Mtsvumvp0nEQpE1DwG9BrgEGgSRa2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 3/6/23 18:02, Martin K. Petersen wrote:
-> Bart: Please put isci in a separate patch.
+On Mon, 20 Feb 2023 09:07:40 -0500, Adrien Thierry wrote:
 
-I will do that.
+> The ufshcd driver uses simpleondemand governor for devfreq. Add it to
+> the list of ufshcd softdeps to allow userspace initramfs tools like
+> dracut to automatically pull the governor module into the initramfs
+> together with ufs drivers.
+> 
+> 
 
-Thanks,
+Applied to 6.3/scsi-fixes, thanks!
 
-Bart.
+[1/1] scsi: ufs: add soft dependency on governor_simpleondemand
+      https://git.kernel.org/mkp/scsi/c/2ebe16155dc8
 
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
