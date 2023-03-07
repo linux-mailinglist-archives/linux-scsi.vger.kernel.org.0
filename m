@@ -2,38 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF4A6AD8C8
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 09:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E516AD914
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 09:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjCGIJx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Mar 2023 03:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
+        id S230135AbjCGITB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Mar 2023 03:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjCGIJj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Mar 2023 03:09:39 -0500
+        with ESMTP id S230189AbjCGISu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Mar 2023 03:18:50 -0500
 Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8373850998;
-        Tue,  7 Mar 2023 00:09:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7E54FF2B;
+        Tue,  7 Mar 2023 00:18:20 -0800 (PST)
 Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
-        by mta-01.yadro.com (Proxmox) with ESMTP id D49B1341EC3;
-        Tue,  7 Mar 2023 11:07:53 +0300 (MSK)
+        by mta-01.yadro.com (Proxmox) with ESMTP id 7538F341EC5;
+        Tue,  7 Mar 2023 11:07:54 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
         :cc:content-transfer-encoding:content-type:content-type:date
         :from:from:in-reply-to:message-id:mime-version:references
-        :reply-to:subject:subject:to:to; s=mta-01; bh=/0Z65Te9YumeUEZKFZ
-        KB9uaJskGVpt2BXfshxvgV7Ro=; b=RmwW4gvOMkK2mHqTOHC2JbRX8nlXAO05R/
-        3/ivlOSwsBVITAlNw7qer1K3ErChCZSS/0HUt12jWktlqQy1ad6YZkCw2l3tfsax
-        yI1MHKrUhPF1jxdr+iSzsKDSXujux3ZPavvcFMntVXcaPG5EhqUfyfDh5dlJic5H
-        /eSaQpv1A=
+        :reply-to:subject:subject:to:to; s=mta-01; bh=Nc0koPtsKLrnzRvVes
+        Wg4rclWj5D/Nb4ap3SWkSCm4c=; b=PIIs044lkVFy+D0uHKgCmiWD3/K/0dxGjM
+        2SmY8rhorl7q7MtsXfaeEdElkzS6kKogBWsoRScNVtz9WfHdkrghJ7ur44TTDNNN
+        dNy9jd8wjwuUl8c2mw+E3KA6R1RAz49gKsxmCRUkSH6KSkYHPsk2l+yHsmG0oLx2
+        aNB2FUJQo=
 Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Proxmox) with ESMTPS id CBB81341E00;
-        Tue,  7 Mar 2023 11:07:53 +0300 (MSK)
+        by mta-01.yadro.com (Proxmox) with ESMTPS id 6BC34341E00;
+        Tue,  7 Mar 2023 11:07:54 +0300 (MSK)
 Received: from NB-591.corp.yadro.com (10.199.20.11) by
  T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.9; Tue, 7 Mar 2023 11:07:52 +0300
+ 15.2.1118.9; Tue, 7 Mar 2023 11:07:53 +0300
 From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
 To:     Martin Petersen <martin.petersen@oracle.com>,
         <target-devel@vger.kernel.org>
@@ -51,9 +51,9 @@ CC:     Bart Van Assche <bvanassche@acm.org>,
         Jason Wang <jasowang@redhat.com>,
         Juergen Gross <jgross@suse.com>, <linux-scsi@vger.kernel.org>,
         <linux@yadro.com>, Dmitry Bogdanov <d.bogdanov@yadro.com>
-Subject: [PATCH v2 06/12] scsi: target: fcoe: remove default fabric ops callouts
-Date:   Tue, 7 Mar 2023 11:07:36 +0300
-Message-ID: <20230307080742.24631-7-d.bogdanov@yadro.com>
+Subject: [PATCH v2 07/12] usb: gadjet: f_tcm: remove default fabric ops callouts
+Date:   Tue, 7 Mar 2023 11:07:37 +0300
+Message-ID: <20230307080742.24631-8-d.bogdanov@yadro.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230307080742.24631-1-d.bogdanov@yadro.com>
 References: <20230307080742.24631-1-d.bogdanov@yadro.com>
@@ -77,79 +77,75 @@ default implementation in TCM Core.
 
 Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
 ---
- drivers/target/tcm_fc/tcm_fc.h   |  1 -
- drivers/target/tcm_fc/tfc_cmd.c  |  5 -----
- drivers/target/tcm_fc/tfc_conf.c | 15 ---------------
- 3 files changed, 21 deletions(-)
+ drivers/usb/gadget/function/f_tcm.c | 31 -----------------------------
+ 1 file changed, 31 deletions(-)
 
-diff --git a/drivers/target/tcm_fc/tcm_fc.h b/drivers/target/tcm_fc/tcm_fc.h
-index 2ff716d8cbdd..00e5573c6296 100644
---- a/drivers/target/tcm_fc/tcm_fc.h
-+++ b/drivers/target/tcm_fc/tcm_fc.h
-@@ -146,7 +146,6 @@ void ft_release_cmd(struct se_cmd *);
- int ft_queue_status(struct se_cmd *);
- int ft_queue_data_in(struct se_cmd *);
- int ft_write_pending(struct se_cmd *);
--int ft_get_cmd_state(struct se_cmd *);
- void ft_queue_tm_resp(struct se_cmd *);
- void ft_aborted_task(struct se_cmd *);
- 
-diff --git a/drivers/target/tcm_fc/tfc_cmd.c b/drivers/target/tcm_fc/tfc_cmd.c
-index 410b723f9d79..21783cd71c15 100644
---- a/drivers/target/tcm_fc/tfc_cmd.c
-+++ b/drivers/target/tcm_fc/tfc_cmd.c
-@@ -223,11 +223,6 @@ int ft_write_pending(struct se_cmd *se_cmd)
- 	return 0;
+diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+index 658e2e21fdd0..d9d2ac28da66 100644
+--- a/drivers/usb/gadget/function/f_tcm.c
++++ b/drivers/usb/gadget/function/f_tcm.c
+@@ -1253,11 +1253,6 @@ static int usbg_check_true(struct se_portal_group *se_tpg)
+ 	return 1;
  }
  
--int ft_get_cmd_state(struct se_cmd *se_cmd)
+-static int usbg_check_false(struct se_portal_group *se_tpg)
 -{
 -	return 0;
 -}
 -
- /*
-  * FC sequence response handler for follow-on sequences (data) and aborts.
-  */
-diff --git a/drivers/target/tcm_fc/tfc_conf.c b/drivers/target/tcm_fc/tfc_conf.c
-index 1a38c98f681b..6ac3fc1a7d39 100644
---- a/drivers/target/tcm_fc/tfc_conf.c
-+++ b/drivers/target/tcm_fc/tfc_conf.c
-@@ -398,15 +398,6 @@ static u16 ft_get_tag(struct se_portal_group *se_tpg)
- 	return ft_tpg(se_tpg)->index;
- }
- 
--static int ft_check_false(struct se_portal_group *se_tpg)
--{
--	return 0;
--}
--
--static void ft_set_default_node_attr(struct se_node_acl *se_nacl)
--{
--}
--
- static u32 ft_tpg_get_inst_index(struct se_portal_group *se_tpg)
+ static char *usbg_get_fabric_wwn(struct se_portal_group *se_tpg)
  {
- 	return ft_tpg(se_tpg)->index;
-@@ -418,10 +409,6 @@ static const struct target_core_fabric_ops ft_fabric_ops = {
- 	.node_acl_size =		sizeof(struct ft_node_acl),
- 	.tpg_get_wwn =			ft_get_fabric_wwn,
- 	.tpg_get_tag =			ft_get_tag,
--	.tpg_check_demo_mode =		ft_check_false,
--	.tpg_check_demo_mode_cache =	ft_check_false,
--	.tpg_check_demo_mode_write_protect = ft_check_false,
--	.tpg_check_prod_mode_write_protect = ft_check_false,
- 	.tpg_get_inst_index =		ft_tpg_get_inst_index,
- 	.check_stop_free =		ft_check_stop_free,
- 	.release_cmd =			ft_release_cmd,
-@@ -429,8 +416,6 @@ static const struct target_core_fabric_ops ft_fabric_ops = {
- 	.sess_get_index =		ft_sess_get_index,
- 	.sess_get_initiator_sid =	NULL,
- 	.write_pending =		ft_write_pending,
--	.set_default_node_attributes =	ft_set_default_node_attr,
--	.get_cmd_state =		ft_get_cmd_state,
- 	.queue_data_in =		ft_queue_data_in,
- 	.queue_status =			ft_queue_status,
- 	.queue_tm_rsp =			ft_queue_tm_resp,
+ 	struct usbg_tpg *tpg = container_of(se_tpg,
+@@ -1274,11 +1269,6 @@ static u16 usbg_get_tag(struct se_portal_group *se_tpg)
+ 	return tpg->tport_tpgt;
+ }
+ 
+-static u32 usbg_tpg_get_inst_index(struct se_portal_group *se_tpg)
+-{
+-	return 1;
+-}
+-
+ static void usbg_release_cmd(struct se_cmd *se_cmd)
+ {
+ 	struct usbg_cmd *cmd = container_of(se_cmd, struct usbg_cmd,
+@@ -1289,20 +1279,6 @@ static void usbg_release_cmd(struct se_cmd *se_cmd)
+ 	target_free_tag(se_sess, se_cmd);
+ }
+ 
+-static u32 usbg_sess_get_index(struct se_session *se_sess)
+-{
+-	return 0;
+-}
+-
+-static void usbg_set_default_node_attrs(struct se_node_acl *nacl)
+-{
+-}
+-
+-static int usbg_get_cmd_state(struct se_cmd *se_cmd)
+-{
+-	return 0;
+-}
+-
+ static void usbg_queue_tm_rsp(struct se_cmd *se_cmd)
+ {
+ }
+@@ -1691,16 +1667,9 @@ static const struct target_core_fabric_ops usbg_ops = {
+ 	.tpg_get_wwn			= usbg_get_fabric_wwn,
+ 	.tpg_get_tag			= usbg_get_tag,
+ 	.tpg_check_demo_mode		= usbg_check_true,
+-	.tpg_check_demo_mode_cache	= usbg_check_false,
+-	.tpg_check_demo_mode_write_protect = usbg_check_false,
+-	.tpg_check_prod_mode_write_protect = usbg_check_false,
+-	.tpg_get_inst_index		= usbg_tpg_get_inst_index,
+ 	.release_cmd			= usbg_release_cmd,
+-	.sess_get_index			= usbg_sess_get_index,
+ 	.sess_get_initiator_sid		= NULL,
+ 	.write_pending			= usbg_send_write_request,
+-	.set_default_node_attributes	= usbg_set_default_node_attrs,
+-	.get_cmd_state			= usbg_get_cmd_state,
+ 	.queue_data_in			= usbg_send_read_response,
+ 	.queue_status			= usbg_send_status_response,
+ 	.queue_tm_rsp			= usbg_queue_tm_rsp,
 -- 
 2.25.1
 
