@@ -2,71 +2,140 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584046ADC74
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 11:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3345D6ADC7E
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 11:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjCGKyU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Mar 2023 05:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
+        id S230382AbjCGK5H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Mar 2023 05:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjCGKyJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Mar 2023 05:54:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C747EE3
-        for <linux-scsi@vger.kernel.org>; Tue,  7 Mar 2023 02:53:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678186403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5TdUrxeEf6Uel5vyr/iSFTtgn6V0/F2rF4kmMh4g2jo=;
-        b=gz2MNzJSAwKDj92wADZ8m1zW+6V7SmHc6IzewjnXb1dtSvOa3B4jwsfkPRBZDxT96cnbzY
-        4qQ2lIQnrsEI1Fq8FrMcMJNYAKr0ibVY8CyDLaaFzUMUPkfXGmxob+krFLS0N6bcBj79eV
-        d2tvgi3a7M/zJBA7JWkFraMOSx7p1Jc=
-Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
- [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-527-9O0hTfqrNWGuUMBOmAArEw-1; Tue, 07 Mar 2023 05:53:22 -0500
-X-MC-Unique: 9O0hTfqrNWGuUMBOmAArEw-1
-Received: by mail-ua1-f70.google.com with SMTP id r17-20020ab06dd1000000b0069001d8950fso6323082uaf.10
-        for <linux-scsi@vger.kernel.org>; Tue, 07 Mar 2023 02:53:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678186399;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5TdUrxeEf6Uel5vyr/iSFTtgn6V0/F2rF4kmMh4g2jo=;
-        b=vK+GzHxI3W4X1ruojdyR+Jj/1FHBKnqvUNfjomlu2ny7GceL+dxjn5q9N3vETXL9z5
-         Zt1SXmhPaKUcgQFIITQNrqC33v6b8/+WwWpy/Y5r9+6zBvgWB8Cvqd8z0CCAHE+fcklJ
-         jw5HSGDbwmUUs3pZTZJ+xHYaCA4nRcdxkle7D/pKb/cKGVe34+Clg3pjwyU4uedIqjft
-         ZEHPI+k7sDEFe1wLg4NQguHCsmzYqLjS9xtBbMgRCJ2Ttj/dbDY2AA85SXpbu95wswZQ
-         w1a6nICAgGuNBwlpYZhuZUjlfAqrZma3Lztod3kMiayp2ma8OMuontuPtQ4MgWY3kEVQ
-         zIsA==
-X-Gm-Message-State: AO0yUKWa/purzeDAOK+DVk5elyn/f8j8mSs3cZ4Or/jSDqyvkBn5ocw8
-        bXw4LIcVk7vBvqEaXMULOEOzCbo/XuG9cDLIb099dfMpEaP0jmE6EVrys47eRGgkszsveF5eIfw
-        vqmr2nG4UE0xA2xLb+gPwUX7TzvI3G0Vgl/sJvA==
-X-Received: by 2002:a1f:4b01:0:b0:401:8898:ea44 with SMTP id y1-20020a1f4b01000000b004018898ea44mr8183340vka.3.1678186399387;
-        Tue, 07 Mar 2023 02:53:19 -0800 (PST)
-X-Google-Smtp-Source: AK7set8mue/AMf20USnH0awRjij8rWXkUCSmASgju7ls+ODa1QiPh94JZ2t4JIaikzbo/OWasRwuLUP8ADtsPcZrP6A=
-X-Received: by 2002:a1f:4b01:0:b0:401:8898:ea44 with SMTP id
- y1-20020a1f4b01000000b004018898ea44mr8183329vka.3.1678186399009; Tue, 07 Mar
- 2023 02:53:19 -0800 (PST)
+        with ESMTP id S230108AbjCGK4m (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Mar 2023 05:56:42 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60A653D8B;
+        Tue,  7 Mar 2023 02:56:40 -0800 (PST)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32784XGQ001987;
+        Tue, 7 Mar 2023 10:56:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=fFRgwhv6dWVlXHwUpj0+8beE1l8ZZNr7TgoljdegmuM=;
+ b=RNPpscNLIWtKuHXONSerX9tfiRJXy9zrCgxYlI5N6ILCajhrL5RzfE1qD7l4DUp5fTR0
+ S/eVQMmQ+uDc2c9wqWbytueIz7AbTquea2bX3CiIfCH0ElZqyd5BEsu92epO266syAqM
+ LAz0vSqg+MENkrYDDn+B5W2FGZGQQCh6XT1cC4JntTmne6cJyvvMTKapSstIJtC2/zH/
+ rJaBGynjhwxDtyZJXnlcXuZfOOX1IuKm5msCoWqCzbJygtpNNSWEu0gRf6lZj+ynBCWk
+ MCMshvZFZN8EZsIliX068jQCCNQso6EixVf3E22xA2wk7PHa1mbaWnPh0TATNR61PZP4 Pw== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p415hw872-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Mar 2023 10:56:37 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 327A0S67019086;
+        Tue, 7 Mar 2023 10:56:36 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3p4tur3wkf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Mar 2023 10:56:36 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OnVgZRiokaFLAFPkQIf2WTLboJ6R0/6JdwKTVDX2+ovr70JYcDusF2rHp61zypF2eFd16G7DKoV1YKeUAwIOHJYedTlJDx8uydxMhVnQtYDxECHpiEhIFpp7AApbgyRP9tkO0fo7bjF07AKDESevMTEoN+zEko1FugRSJNKqXAUPCZwD46v+BTzchhhXphiCTLm41g0X9T9KYH9ZHa5naQ88NlyWQD1HaboBNjqvk5qxt9ttuFZAQOf7qsSS2crvj2iKZUOpRIjq2ggVOaagP16W8mu8GLcm8TzraAldlN14bho6j2NhuhEXUkOKdvf1+jPwzAHkllCVxIHlIHml4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fFRgwhv6dWVlXHwUpj0+8beE1l8ZZNr7TgoljdegmuM=;
+ b=ebZyvBpavfthK5ojxGFjisUwJqUwba+zN/uNLgVKxjYCdEoWIwdeMQMWT55g/E8Lk7UxDAZK3Z5AjZfVBNQRvKvZXhZIt/fZyBurkveAlfDJcEd6E76oWe2GVr+2pFFXM5ePfIPgSyOQRQDfkR7QBAGl211JUDOvn8R+vNU3CV2yqL6AEFw67rgMz8uoVK0e+1Y02lmSqS0+kb7CjxEhnCz0tOSKPDHXtdXD+WPC2ZEbd+WB0pyLMH9rEA/QnIsuLuhPuwx96LMjH5jxikC6kuYXnCzpmPijYLxFUlieT6lVyDS/xpWkiCsXF2u1ZWjiOowpwbFS/tf/UcKjMUa8bg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fFRgwhv6dWVlXHwUpj0+8beE1l8ZZNr7TgoljdegmuM=;
+ b=WEQHEu0YgYoxgsK/HAa5QJKQKb2YoTy4uWk6bwyuCBbvyRqTbl156nAR2MGZOVursu/kd8taWG1rVHdBb0iJlMcQE+hm9xnBjIRs9R4BNbshqTaTFylPt7uIJiFQIoerx+1uvpjbRH6O88dKKCoAXgyVlC9mdwRkeGG2Dr8dDQ8=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by DM4PR10MB6719.namprd10.prod.outlook.com (2603:10b6:8:111::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Tue, 7 Mar
+ 2023 10:56:34 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::fff7:981:3ae6:92eb]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::fff7:981:3ae6:92eb%4]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
+ 10:56:34 +0000
+From:   John Garry <john.g.garry@oracle.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dgilbert@interlog.com, John Garry <john.g.garry@oracle.com>
+Subject: [PATCH 00/11] scsi_debug: Some minor improvements
+Date:   Tue,  7 Mar 2023 10:55:44 +0000
+Message-Id: <20230307105555.3745277-1-john.g.garry@oracle.com>
+X-Mailer: git-send-email 2.31.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: DM6PR08CA0034.namprd08.prod.outlook.com
+ (2603:10b6:5:80::47) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
 MIME-Version: 1.0
-References: <20230129234441.116310-1-michael.christie@oracle.com> <20230129234441.116310-2-michael.christie@oracle.com>
-In-Reply-To: <20230129234441.116310-2-michael.christie@oracle.com>
-From:   Maurizio Lombardi <mlombard@redhat.com>
-Date:   Tue, 7 Mar 2023 11:53:07 +0100
-Message-ID: <CAFL455mhWGo2TCRjkcSGM=_X=jOKCcc1a=q7kSg0bvhJuiC1ng@mail.gmail.com>
-Subject: Re: [PATCH v3 01/14] scsi: target: Move sess cmd counter to new struct
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     martin.petersen@oracle.com, mgurtovoy@nvidia.com, sagi@grimberg.me,
-        d.bogdanov@yadro.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|DM4PR10MB6719:EE_
+X-MS-Office365-Filtering-Correlation-Id: c876b516-d54f-4ddf-f0eb-08db1efa9de0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jAkA1VSjJgpBcMcZS2k950bPimClDzrPDa9hD6VfIx+nvWhtvijtiktcROwwVmzh/20WCGPqPTREg9SOrJClIm7oQOGJ+VZdSrpisKElBCiQTg+bDFWBsIvsgVi7KFNGawnub+smKHe4dJksne0/TMm8esUj5jQC//s4WGfk3qDziK4u7wHM+WQY44HhFfToh7s/KE3OC7xYP2z+cT2yV16NQFv5TBpVGQCueTYT58d+OBm12pX8kifQeRBeFpiackStzBHQmq9BzK2A91j6ZtV5ndS0Spkqs3v354445o/fsaujhOa7DhQvMLBvFbxalNETVGOcSkjwmZ6rF+tfWhFTKGuqeFtl4PgXKdXIeeWDRD5wK/r3BkoaXNRvWmmRIhaaqW57CeJRVeJeGABtULeMJVgNNv08gWwFemsYi6ipfqLmC8JWCCDP+nImShtDMRVne56ibxh2uxt3CHkg1dO6QkZ6sHKEQ/zdxl/mJYKVhARW9GFu5w47Ah4N38wWEd4k8L2BJClvCsHh49Zr8YgBE+MoEkGzfcIeFIxRu01Bl7apOQevDAc1Fu0yjmYnoJ0lh2TQFTZKr9VZoXas9OHUq0kTUKy/4+t/Rjm9th7F4cK7FsQI3/HLTldoA4C0KyCFmgGZYKdWKnHxtKt9sw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(136003)(376002)(366004)(39860400002)(451199018)(103116003)(66946007)(4326008)(66476007)(8676002)(41300700001)(83380400001)(2906002)(86362001)(38100700002)(8936002)(36756003)(66556008)(6486002)(478600001)(6636002)(316002)(5660300002)(26005)(186003)(2616005)(6512007)(1076003)(107886003)(6506007)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?b2P83IDHQsFxBm9MeJTzBcqLww5zXrD7ho/kb/ejFbBtDpbIXt5wRnDskRjs?=
+ =?us-ascii?Q?c26BcTO1bHJegmSR76zGq7Lgei/yCorvBLjYSlE8JPNo5B+Wx35t1AB48/sW?=
+ =?us-ascii?Q?Bt0+9LxxGQcKmsS6Bl7aXucW+ovD8RmDbK1yygCGt535pvqp4LrwK8C1SNuX?=
+ =?us-ascii?Q?aB5kW6Ylab2MjoP/ffNb7PyIHfK8ZQP1eVDt/XkSFhi62+fs9Xag8/jkd0MN?=
+ =?us-ascii?Q?FYPgWk5pXx2BUIA9aotliT+/q/T1oCYxwZTBFa3nj1PD/xfRZkmYiPZXGMVQ?=
+ =?us-ascii?Q?kuyBbzIdQoTFBy26e7zBo1VaWiowRVr24/EbqvzsMAZjTi1ZAqL9aKyM6Qm1?=
+ =?us-ascii?Q?fa8g1FNXyOH99a7UUwNEDEKrMZCO0uKM2FOhNXTF5d4Ty0VW7veiiuUIEjbx?=
+ =?us-ascii?Q?1Pjojlgtou/4KLLI+YDv1cpAmaS+aVPyreCHhi+MHK8Y1umTFp07fzh0ZaH/?=
+ =?us-ascii?Q?vqyFohjQ+29rZ2959WctztBlG4s+MI/WOBK9sTGELQ682huPHFnSS/CWfdI8?=
+ =?us-ascii?Q?FT6Zqy843gKC7C/YcTZzh8K+qmxm3MoLf/uiLesFwTcjhYMm279i9bTIj1nt?=
+ =?us-ascii?Q?4FmbpdCcabjX8x5cCqeccEV+dkTchmPSvSngZ8uHlPACL/m3lIL2QFmMGsbW?=
+ =?us-ascii?Q?4yJEy+tMSIPY00jchTyUmkc/tr2X8M9vrqhcViDWfg5/QryjtCFa4SOeuV+i?=
+ =?us-ascii?Q?4JhJIUwwlj2/xQ4uopi/FfQ1/CeyghwQZRi+JsrSGuKH8Ei+LRi0K3xx/AAg?=
+ =?us-ascii?Q?t8bGCwWKag7n2NlHAH+Coss2x53npA5fFinasUAc6lNT0ifvhgvgR0zPn1s/?=
+ =?us-ascii?Q?ZEuzj1jjYFt/SgKQba3MKxJMCrOONonnVmgcpYhCbhx1FN1pISWeW+lz6VbM?=
+ =?us-ascii?Q?f6ZWhLjE+1BqVvFZ868gejUYp8CDV4s523lyibjBWyOgC9XhU5oAFfIuLQh2?=
+ =?us-ascii?Q?D0+lEJEoUjkAcnICWVMKZyhC7LxM3s1IXsZHHLSOL0f6TQFXW8REsp83T4XX?=
+ =?us-ascii?Q?DjYZX8d7CJb6L01rRppIgiZXnk4cBMx0jfxaMI4Cnjq9YOXdZ2SJpBJvtglm?=
+ =?us-ascii?Q?Q3V6Z9cExsgFVfoKfAL/Vv/A+u17SzYYPy9OZyHtXVYSKgzUfubm0dt57Vcm?=
+ =?us-ascii?Q?TpeD/YRDrbkQXdFLemAT5ykADCWefRFuzQvlukHju6RS/2Wk/j4/cktVIePl?=
+ =?us-ascii?Q?iqgBYfwMdSX0StRwjyFjR3eKnvI93IgvglcMRKgl2XGFu95SVugj+DiuI8Mr?=
+ =?us-ascii?Q?tto8R5Lqhbz/Jp0JCtBNn4oQ/otpLMDlk8tkYe4tMFC8RopSdNjIpKpbVuEU?=
+ =?us-ascii?Q?HVky1Sbyr+xT2Ahwmba6mXCRugID14qBO4wzQlWGKSD9Bvi/irYd0WUwNVs8?=
+ =?us-ascii?Q?dbGe5mgblckR6G1wRSnIs+WliaC2pjcdSg3oEZEnvSDUA9m8picdJjN1MzCD?=
+ =?us-ascii?Q?xWlzNmEo9lKo8S72faYv+8qGQl8T8fkjiYZNGKMqO9oEzrAGzo74twTGMZIl?=
+ =?us-ascii?Q?TkP8qduapaTZNOUGdqmrT4bvzyg0oWNVQIv5tREKFXSdqxS1QxllZ0XL19zV?=
+ =?us-ascii?Q?1UyQzh2yy9mxDJU1VI65H/cGESEhaCAMdu3/zpCkxCgL/1T/pEvGgr9W4p5j?=
+ =?us-ascii?Q?HQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: RpdM2ueMKnznJ4bB/fdEy/KwD/UpFI6M/M/rkpQTV5W0Xz0oqjONroFKFL4bbkOGeCka5xcJT53Knfp3yew1TWH+RWkzdqtemdyvPF6eO75zzVKLzZj00xCaSb9ZImJemM5KpUIq2pzAFVGIfGAAwyYjdfFHYs0fNptKysMWN/QdsSMLPryYFVTeg+GnqFV+zhOfBYKYPjS0fvf68PvtocwuskUxwUrit0KIv6w0b6LIqcUqXywwO99ZVLlqVjlcCEN+72aD6ZbZ6yNuIEGiBo9dcRkDv2k7vEztHy4WpC776/umKZMgpqwjGM56ZGxZjosY6jwwYu3dUnMeJ+/6b+qA6zjiezAi90WpANm32fYkh1JshufLIXPzJVO6npi3ftaQyJhl4hMP46JgBwimUrqdwh4AdCMxhiOwD1/7jTeEMKtyBB0nrHjD4HU1LBMQN8sNC2JXDOS0t3xjsnXi+kcbgFgcXGH0N/ewmfKpuIbH6ZMu0WLvIoTeA5xc1UEbW7+4cDelXS4agJdLGTZ1FfBIM/1AnrCAwm3d7h7md+I2fj4nVxV/q6uOcTUQthXo9W0k1TDPIEX+eZVBmR4h1BO0nZZk8F7ISeX+Qp7d0gtttA1QVN1KP3xDW9//MdMtUAU2IAHkI4bvXVUuwqR+P6AOJ0lHtP6pmvYFGQcda0O3gmKPMkQ24PKpjLc7eyHY42VN36OIapuCvpRF0yXEQpZw2DCxwJlwsJHKcLSy3VOYz5whfa21q7DOCM2D1pKZfT/EvKACMQBKuNU/M2yBm+vHceJKZRnVur61nMMQoz5YgNDQ9M+AD4LgqI/dRaomROQDU9H7s0UCiR+jwQZ5eQ==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c876b516-d54f-4ddf-f0eb-08db1efa9de0
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 10:56:34.3416
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: v03TAQdjKfoitWMyuWCYzhRDlB+HuYF3t32bWQaqYSa/YEx1kjkbjjcYbAzeZf09hMgwoFkm+KKttvCa9Gw+Vw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6719
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-07_05,2023-03-07_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=875 bulkscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 suspectscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070098
+X-Proofpoint-GUID: aPNGr9s7qXIfdGZOG95Pws77psEMX7m0
+X-Proofpoint-ORIG-GUID: aPNGr9s7qXIfdGZOG95Pws77psEMX7m0
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,334 +144,37 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-po 30. 1. 2023 v 0:45 odes=C3=ADlatel Mike Christie
-<michael.christie@oracle.com> napsal:
->
-> iSCSI needs to wait on outstanding commands like how srp and the FC/fcoe
-> drivers do. It can't use target_stop_session because for MCS support we
-> can't stop the entire session during recovery because if other connection=
-s
-> are ok then we want to be able to continue to execute IO on them.
->
-> This patch moves the per session cmd counters to a new struct, so iSCSI
-> can allocate it per connection. The xcopy code can also just not allocate
-> it in the future since it doesn't need to track commands.
->
-> Signed-off-by: Mike Christie <michael.christie@oracle.com>
-> ---
->  drivers/target/target_core_tpg.c         |   2 +-
->  drivers/target/target_core_transport.c   | 135 ++++++++++++++++-------
->  include/target/iscsi/iscsi_target_core.h |   1 +
->  include/target/target_core_base.h        |  13 ++-
->  4 files changed, 107 insertions(+), 44 deletions(-)
->
-> diff --git a/drivers/target/target_core_tpg.c b/drivers/target/target_cor=
-e_tpg.c
-> index 736847c933e5..8ebccdbd94f0 100644
-> --- a/drivers/target/target_core_tpg.c
-> +++ b/drivers/target/target_core_tpg.c
-> @@ -328,7 +328,7 @@ static void target_shutdown_sessions(struct se_node_a=
-cl *acl)
->  restart:
->         spin_lock_irqsave(&acl->nacl_sess_lock, flags);
->         list_for_each_entry(sess, &acl->acl_sess_list, sess_acl_list) {
-> -               if (atomic_read(&sess->stopped))
-> +               if (sess->cmd_cnt && atomic_read(&sess->cmd_cnt->stopped)=
-)
->                         continue;
->
->                 list_del_init(&sess->sess_acl_list);
-> diff --git a/drivers/target/target_core_transport.c b/drivers/target/targ=
-et_core_transport.c
-> index 5926316252eb..3d6034f00dcd 100644
-> --- a/drivers/target/target_core_transport.c
-> +++ b/drivers/target/target_core_transport.c
-> @@ -220,11 +220,49 @@ void transport_subsystem_check_init(void)
->         sub_api_initialized =3D 1;
->  }
->
-> -static void target_release_sess_cmd_refcnt(struct percpu_ref *ref)
-> +static void target_release_cmd_refcnt(struct percpu_ref *ref)
->  {
-> -       struct se_session *sess =3D container_of(ref, typeof(*sess), cmd_=
-count);
-> +       struct target_cmd_counter *cmd_cnt  =3D container_of(ref,
-> +                                                          typeof(*cmd_cn=
-t),
-> +                                                          refcnt);
-> +       wake_up(&cmd_cnt->refcnt_wq);
-> +}
-> +
-> +static struct target_cmd_counter *target_alloc_cmd_counter(void)
-> +{
-> +       struct target_cmd_counter *cmd_cnt;
-> +       int rc;
-> +
-> +       cmd_cnt =3D kzalloc(sizeof(*cmd_cnt), GFP_KERNEL);
-> +       if (!cmd_cnt)
-> +               return NULL;
->
-> -       wake_up(&sess->cmd_count_wq);
-> +       init_completion(&cmd_cnt->stop_done);
-> +       init_waitqueue_head(&cmd_cnt->refcnt_wq);
-> +       atomic_set(&cmd_cnt->stopped, 0);
-> +
-> +       rc =3D percpu_ref_init(&cmd_cnt->refcnt, target_release_cmd_refcn=
-t, 0,
-> +                            GFP_KERNEL);
-> +       if (rc)
-> +               goto free_cmd_cnt;
-> +
-> +       return cmd_cnt;
-> +
-> +free_cmd_cnt:
-> +       kfree(cmd_cnt);
-> +       return NULL;
-> +}
-> +
-> +static void target_free_cmd_counter(struct target_cmd_counter *cmd_cnt)
-> +{
-> +       /*
-> +        * Drivers like loop do not call target_stop_session during sessi=
-on
-> +        * shutdown so we have to drop the ref taken at init time here.
-> +        */
-> +       if (!atomic_read(&cmd_cnt->stopped))
-> +               percpu_ref_put(&cmd_cnt->refcnt);
-> +
-> +       percpu_ref_exit(&cmd_cnt->refcnt);
->  }
->
->  /**
-> @@ -238,25 +276,17 @@ int transport_init_session(struct se_session *se_se=
-ss)
->         INIT_LIST_HEAD(&se_sess->sess_list);
->         INIT_LIST_HEAD(&se_sess->sess_acl_list);
->         spin_lock_init(&se_sess->sess_cmd_lock);
-> -       init_waitqueue_head(&se_sess->cmd_count_wq);
-> -       init_completion(&se_sess->stop_done);
-> -       atomic_set(&se_sess->stopped, 0);
-> -       return percpu_ref_init(&se_sess->cmd_count,
-> -                              target_release_sess_cmd_refcnt, 0, GFP_KER=
-NEL);
-> +       se_sess->cmd_cnt =3D target_alloc_cmd_counter();
-> +       if (!se_sess->cmd_cnt)
-> +               return -ENOMEM;
-> +
-> +       return  0;
->  }
->  EXPORT_SYMBOL(transport_init_session);
->
->  void transport_uninit_session(struct se_session *se_sess)
->  {
-> -       /*
-> -        * Drivers like iscsi and loop do not call target_stop_session
-> -        * during session shutdown so we have to drop the ref taken at in=
-it
-> -        * time here.
-> -        */
-> -       if (!atomic_read(&se_sess->stopped))
-> -               percpu_ref_put(&se_sess->cmd_count);
-> -
-> -       percpu_ref_exit(&se_sess->cmd_count);
-> +       target_free_cmd_counter(se_sess->cmd_cnt);
->  }
->
->  /**
-> @@ -2970,9 +3000,16 @@ int target_get_sess_cmd(struct se_cmd *se_cmd, boo=
-l ack_kref)
->                 se_cmd->se_cmd_flags |=3D SCF_ACK_KREF;
->         }
->
-> -       if (!percpu_ref_tryget_live(&se_sess->cmd_count))
-> -               ret =3D -ESHUTDOWN;
-> -
-> +       /*
-> +        * Users like xcopy do not use counters since they never do a sto=
-p
-> +        * and wait.
-> +        */
-> +       if (se_sess->cmd_cnt) {
-> +               if (!percpu_ref_tryget_live(&se_sess->cmd_cnt->refcnt))
-> +                       ret =3D -ESHUTDOWN;
-> +               else
-> +                       se_cmd->cmd_cnt =3D se_sess->cmd_cnt;
-> +       }
->         if (ret && ack_kref)
->                 target_put_sess_cmd(se_cmd);
->
-> @@ -2993,7 +3030,7 @@ static void target_free_cmd_mem(struct se_cmd *cmd)
->  static void target_release_cmd_kref(struct kref *kref)
->  {
->         struct se_cmd *se_cmd =3D container_of(kref, struct se_cmd, cmd_k=
-ref);
-> -       struct se_session *se_sess =3D se_cmd->se_sess;
-> +       struct target_cmd_counter *cmd_cnt =3D se_cmd->cmd_cnt;
->         struct completion *free_compl =3D se_cmd->free_compl;
->         struct completion *abrt_compl =3D se_cmd->abrt_compl;
->
-> @@ -3004,7 +3041,8 @@ static void target_release_cmd_kref(struct kref *kr=
-ef)
->         if (abrt_compl)
->                 complete(abrt_compl);
->
-> -       percpu_ref_put(&se_sess->cmd_count);
-> +       if (cmd_cnt)
-> +               percpu_ref_put(&cmd_cnt->refcnt);
->  }
->
->  /**
-> @@ -3123,46 +3161,65 @@ void target_show_cmd(const char *pfx, struct se_c=
-md *cmd)
->  }
->  EXPORT_SYMBOL(target_show_cmd);
->
-> -static void target_stop_session_confirm(struct percpu_ref *ref)
-> +static void target_stop_cmd_counter_confirm(struct percpu_ref *ref)
-> +{
-> +       struct target_cmd_counter *cmd_cnt =3D container_of(ref,
-> +                                               struct target_cmd_counter=
-,
-> +                                               refcnt);
-> +       complete_all(&cmd_cnt->stop_done);
-> +}
-> +
-> +/**
-> + * target_stop_cmd_counter - Stop new IO from being added to the counter=
-.
-> + * @cmd_cnt: counter to stop
-> + */
-> +static void target_stop_cmd_counter(struct target_cmd_counter *cmd_cnt)
->  {
-> -       struct se_session *se_sess =3D container_of(ref, struct se_sessio=
-n,
-> -                                                 cmd_count);
-> -       complete_all(&se_sess->stop_done);
-> +       pr_debug("Stopping command counter.\n");
-> +       if (!atomic_cmpxchg(&cmd_cnt->stopped, 0, 1))
-> +               percpu_ref_kill_and_confirm(&cmd_cnt->refcnt,
-> +                                           target_stop_cmd_counter_confi=
-rm);
->  }
->
->  /**
->   * target_stop_session - Stop new IO from being queued on the session.
-> - * @se_sess:    session to stop
-> + * @se_sess: session to stop
->   */
->  void target_stop_session(struct se_session *se_sess)
->  {
-> -       pr_debug("Stopping session queue.\n");
-> -       if (atomic_cmpxchg(&se_sess->stopped, 0, 1) =3D=3D 0)
-> -               percpu_ref_kill_and_confirm(&se_sess->cmd_count,
-> -                                           target_stop_session_confirm);
-> +       target_stop_cmd_counter(se_sess->cmd_cnt);
->  }
->  EXPORT_SYMBOL(target_stop_session);
->
->  /**
-> - * target_wait_for_sess_cmds - Wait for outstanding commands
-> - * @se_sess:    session to wait for active I/O
-> + * target_wait_for_cmds - Wait for outstanding cmds.
-> + * @cmd_cnt: counter to wait for active I/O for.
->   */
-> -void target_wait_for_sess_cmds(struct se_session *se_sess)
-> +static void target_wait_for_cmds(struct target_cmd_counter *cmd_cnt)
->  {
->         int ret;
->
-> -       WARN_ON_ONCE(!atomic_read(&se_sess->stopped));
-> +       WARN_ON_ONCE(!atomic_read(&cmd_cnt->stopped));
->
->         do {
->                 pr_debug("Waiting for running cmds to complete.\n");
-> -               ret =3D wait_event_timeout(se_sess->cmd_count_wq,
-> -                               percpu_ref_is_zero(&se_sess->cmd_count),
-> -                               180 * HZ);
-> +               ret =3D wait_event_timeout(cmd_cnt->refcnt_wq,
-> +                                        percpu_ref_is_zero(&cmd_cnt->ref=
-cnt),
-> +                                        180 * HZ);
->         } while (ret <=3D 0);
->
-> -       wait_for_completion(&se_sess->stop_done);
-> +       wait_for_completion(&cmd_cnt->stop_done);
->         pr_debug("Waiting for cmds done.\n");
->  }
-> +
-> +/**
-> + * target_wait_for_sess_cmds - Wait for outstanding commands
-> + * @se_sess: session to wait for active I/O
-> + */
-> +void target_wait_for_sess_cmds(struct se_session *se_sess)
-> +{
-> +       target_wait_for_cmds(se_sess->cmd_cnt);
-> +}
->  EXPORT_SYMBOL(target_wait_for_sess_cmds);
->
->  /*
-> diff --git a/include/target/iscsi/iscsi_target_core.h b/include/target/is=
-csi/iscsi_target_core.h
-> index 94d06ddfd80a..229118156a1f 100644
-> --- a/include/target/iscsi/iscsi_target_core.h
-> +++ b/include/target/iscsi/iscsi_target_core.h
-> @@ -600,6 +600,7 @@ struct iscsit_conn {
->         struct iscsi_tpg_np     *tpg_np;
->         /* Pointer to parent session */
->         struct iscsit_session   *sess;
-> +       struct target_cmd_counter *cmd_cnt;
->         int                     bitmap_id;
->         int                     rx_thread_active;
->         struct task_struct      *rx_thread;
-> diff --git a/include/target/target_core_base.h b/include/target/target_co=
-re_base.h
-> index 12c9ba16217e..bd299790e99c 100644
-> --- a/include/target/target_core_base.h
-> +++ b/include/target/target_core_base.h
-> @@ -494,6 +494,7 @@ struct se_cmd {
->         struct se_lun           *se_lun;
->         /* Only used for internal passthrough and legacy TCM fabric modul=
-es */
->         struct se_session       *se_sess;
-> +       struct target_cmd_counter *cmd_cnt;
->         struct se_tmr_req       *se_tmr_req;
->         struct llist_node       se_cmd_list;
->         struct completion       *free_compl;
-> @@ -619,22 +620,26 @@ static inline struct se_node_acl *fabric_stat_to_na=
-cl(struct config_item *item)
->                         acl_fabric_stat_group);
->  }
->
-> -struct se_session {
-> +struct target_cmd_counter {
-> +       struct percpu_ref       refcnt;
-> +       wait_queue_head_t       refcnt_wq;
-> +       struct completion       stop_done;
->         atomic_t                stopped;
-> +};
-> +
-> +struct se_session {
->         u64                     sess_bin_isid;
->         enum target_prot_op     sup_prot_ops;
->         enum target_prot_type   sess_prot_type;
->         struct se_node_acl      *se_node_acl;
->         struct se_portal_group *se_tpg;
->         void                    *fabric_sess_ptr;
-> -       struct percpu_ref       cmd_count;
->         struct list_head        sess_list;
->         struct list_head        sess_acl_list;
->         spinlock_t              sess_cmd_lock;
-> -       wait_queue_head_t       cmd_count_wq;
-> -       struct completion       stop_done;
->         void                    *sess_cmd_map;
->         struct sbitmap_queue    sess_tag_pool;
-> +       struct target_cmd_counter *cmd_cnt;
->  };
->
->  struct se_device;
-> --
-> 2.25.1
->
+This series contains a bunch of minor improvements to the driver. I have
+another bunch waiting with more major changes.
 
-Reviewed-by: Maurizio Lombardi <mlombard@redhat.com>
+Most of the changes are quite straightforward, and the only patches of note are
+as follows:
+- Fix the command abort feature, enabled with host option SDEBUG_OPT_CMD_ABORT
+- Drop driver count of queued commands per device
+- Add poll mode completions to statistics. We already have poll mode callback
+  call count, so maybe it was intentional to omit poll mode from the
+  statistics.
+  
+Based on scsi-staging 6.4 @ commit ffba85603c62 ("Merge patch series "lpfc: Update lpfc to revision 14.2.0.11")
+
+John Garry (11):
+  scsi: scsi_debug: Don't hold driver host struct pointer in
+    host->hostdata[]
+  scsi: scsi_debug: Stop setting devip->sdbg_host twice
+  scsi: scsi_debug: Drop scsi_debug_abort() NULL pointer checks
+  scsi: scsi_debug: Drop scsi_debug_device_reset() NULL pointer checks
+  scsi: scsi_debug: Drop scsi_debug_target_reset() NULL pointer checks
+  scsi: scsi_debug: Drop scsi_debug_bus_reset() NULL pointer checks
+  scsi: scsi_debug: Drop scsi_debug_host_reset() device NULL pointer
+    check
+  scsi: scsi_debug: Drop check for num_in_q exceeding queue depth
+  scsi: scsi_debug: Drop sdebug_dev_info.num_in_q
+  scsi: scsi_debug: Get command abort feature working again
+  scsi: scsi_debug: Add poll mode deferred completions to statistics
+
+ drivers/scsi/scsi_debug.c | 201 ++++++++++++++------------------------
+ 1 file changed, 74 insertions(+), 127 deletions(-)
+
+-- 
+2.35.3
 
