@@ -2,32 +2,32 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDF96AEBFB
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 18:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9B56AF142
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 19:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbjCGRus (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Mar 2023 12:50:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
+        id S233150AbjCGSl4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Mar 2023 13:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbjCGRuY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Mar 2023 12:50:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31808A0296;
-        Tue,  7 Mar 2023 09:45:24 -0800 (PST)
+        with ESMTP id S233088AbjCGSle (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Mar 2023 13:41:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB7FB329E;
+        Tue,  7 Mar 2023 10:32:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2FC5614E8;
-        Tue,  7 Mar 2023 17:45:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B75CEC433EF;
-        Tue,  7 Mar 2023 17:45:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5B41B8199A;
+        Tue,  7 Mar 2023 18:31:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB51BC433EF;
+        Tue,  7 Mar 2023 18:31:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678211123;
+        s=korg; t=1678213887;
         bh=eZhh6BSFQ1k6BW1csQ0X36HHVeHgWxg0M5U+VtotJqY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b1RXqCRggUynjMgz4L0pMspKQhydFmiEEDLdbxFZYVX+ACrpts+KdfanYIp4ZNDbW
-         QSWuoGibFBKLsS/A1r28uTbJlGkELrXpTa8Y7Ov+HjSxvL7vG+cSQ5Qh6OZCUgly25
-         X5MWPiSPs5TGjkS7iKwwRh3PIVCG14yDaD4hA7Ts=
+        b=xPQ09NJwiGTfbVouSOI96LYXp5y1gNSVE+/2JjcJVk6gfdLpA0SnDlXk3qehBljwQ
+         D4bZBbAAsrDF7myMOy+1WUCzEoYMf8LmSJ0GFjGUpH6AgUVRRtVkyXFIywPOdq5Md3
+         /SSd5SbexvYhjbiFghLDUwWpxYrooAutcyJAbr2s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.2 0729/1001] scsi: snic: Fix memory leak with using debugfs_lookup()
-Date:   Tue,  7 Mar 2023 17:58:21 +0100
-Message-Id: <20230307170053.340405583@linuxfoundation.org>
+Subject: [PATCH 6.1 634/885] scsi: snic: Fix memory leak with using debugfs_lookup()
+Date:   Tue,  7 Mar 2023 17:59:28 +0100
+Message-Id: <20230307170029.727556491@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307170022.094103862@linuxfoundation.org>
-References: <20230307170022.094103862@linuxfoundation.org>
+In-Reply-To: <20230307170001.594919529@linuxfoundation.org>
+References: <20230307170001.594919529@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
