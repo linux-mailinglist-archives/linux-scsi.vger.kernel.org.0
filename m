@@ -2,125 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D70F6AF10D
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 19:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB066AF500
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 20:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbjCGSiz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Mar 2023 13:38:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
+        id S234033AbjCGTVi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Mar 2023 14:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbjCGSig (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Mar 2023 13:38:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355EDA226B;
-        Tue,  7 Mar 2023 10:30:07 -0800 (PST)
+        with ESMTP id S234029AbjCGTVV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Mar 2023 14:21:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0691721A37;
+        Tue,  7 Mar 2023 11:05:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4138B819C2;
-        Tue,  7 Mar 2023 18:29:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE31C4339C;
-        Tue,  7 Mar 2023 18:29:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678213749;
-        bh=5BE9wZCtaDseXu0/Lv+W7WCLDoimdI41Hg2fMs8HhDA=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95F3361522;
+        Tue,  7 Mar 2023 19:05:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB066C4339B;
+        Tue,  7 Mar 2023 19:05:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678215935;
+        bh=TJTuEqUMBE4XDYbx9SMFo7zhWcls3E7sHIW8CdRKqJE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A+QWpy5vzZ9/X3juu/fwf9cVoeaZqgxgUo3SAVMRWvYy2BXQA8ukuCt/CITD93mzl
-         rGRACDKas4jH63jQpx2P3iqRMboehcUDh3Dp1QeWzku9yTa1e4b76VexBRJbSdAbpY
-         z4cNtBYASorZ35SwDq3RcXProMs8qZ7s+7IaspemytoPzgI7nns8XNTadaAqLKIfpI
-         vPYYUsTOL+GU5aafA3VhoMLb2HZu5lFUYUIjJtyF3Wy3WlBkLrCgjHnhvRQIEMicyy
-         A1SFf2YukrqvJKeyoGfCOY35fhyAZtTe28Ww2t0Mf44DTtQXOy5J769iniV3zK8CPP
-         qc0J5lpcBPI5g==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com
-Subject: [PATCH 10/10] scsi: qla4xxx: Drop redundant pci_enable_pcie_error_reporting()
-Date:   Tue,  7 Mar 2023 12:28:42 -0600
-Message-Id: <20230307182842.870378-11-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230307182842.870378-1-helgaas@kernel.org>
-References: <20230307182842.870378-1-helgaas@kernel.org>
+        b=diHnyduWbmKK8jstsJo2kRYN0pbWmG9A/UWdq8vAwJWDEPPqcPzDRXx99rGLvrWcw
+         zY7L2fUHltgue/x4cltaION9zMamElNeJHqseJnieYoBJ6X6vvwnqv3/m4TN9Gh627
+         dlEgRYTA/zFX4+dcZ5E6tZ8JPjWmgzM+F1ZzqO5A=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Karan Tilak Kumar <kartilak@cisco.com>,
+        Sesidhar Baddela <sebaddel@cisco.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 421/567] scsi: snic: Fix memory leak with using debugfs_lookup()
+Date:   Tue,  7 Mar 2023 18:02:37 +0100
+Message-Id: <20230307165924.126363478@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230307165905.838066027@linuxfoundation.org>
+References: <20230307165905.838066027@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-pci_enable_pcie_error_reporting() enables the device to send ERR_*
-Messages.  Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is
-native"), the PCI core does this for all devices during enumeration, so the
-driver doesn't need to do it itself.
+[ Upstream commit ad0e4e2fab928477f74d742e6e77d79245d3d3e7 ]
 
-Remove the redundant pci_enable_pcie_error_reporting() call from the
-driver.  Also remove the corresponding pci_disable_pcie_error_reporting()
-from the driver .remove() path.
+When calling debugfs_lookup() the result must have dput() called on it,
+otherwise the memory will leak over time.  To make things simpler, just
+call debugfs_lookup_and_remove() instead which handles all of the logic at
+once.
 
-Note that this only controls ERR_* Messages from the device.  An ERR_*
-Message may cause the Root Port to generate an interrupt, depending on the
-AER Root Error Command register managed by the AER service driver.
-
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Nilesh Javali <njavali@marvell.com>
-Cc: Manish Rangankar <mrangankar@marvell.com>
-Cc: GR-QLogic-Storage-Upstream@marvell.com
+Link: https://lore.kernel.org/r/20230202141009.2290380-1-gregkh@linuxfoundation.org
+Cc: Karan Tilak Kumar <kartilak@cisco.com>
+Cc: Sesidhar Baddela <sebaddel@cisco.com>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla4xxx/ql4_def.h | 1 -
- drivers/scsi/qla4xxx/ql4_os.c  | 4 ----
- 2 files changed, 5 deletions(-)
+ drivers/scsi/snic/snic_debugfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla4xxx/ql4_def.h b/drivers/scsi/qla4xxx/ql4_def.h
-index 5f82c8afd5e0..5e683ba49fa5 100644
---- a/drivers/scsi/qla4xxx/ql4_def.h
-+++ b/drivers/scsi/qla4xxx/ql4_def.h
-@@ -23,7 +23,6 @@
- #include <linux/delay.h>
- #include <linux/interrupt.h>
- #include <linux/mutex.h>
--#include <linux/aer.h>
- #include <linux/bsg-lib.h>
- #include <linux/vmalloc.h>
- 
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index 005502125b27..ee6d784c095c 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -8639,8 +8639,6 @@ static int qla4xxx_probe_adapter(struct pci_dev *pdev,
- 	ha->host_no = host->host_no;
- 	ha->func_num = PCI_FUNC(ha->pdev->devfn);
- 
--	pci_enable_pcie_error_reporting(pdev);
--
- 	/* Setup Runtime configurable options */
- 	if (is_qla8022(ha)) {
- 		ha->isp_ops = &qla4_82xx_isp_ops;
-@@ -8867,7 +8865,6 @@ static int qla4xxx_probe_adapter(struct pci_dev *pdev,
- 	qla4xxx_free_adapter(ha);
- 
- probe_failed_ioconfig:
--	pci_disable_pcie_error_reporting(pdev);
- 	scsi_host_put(ha->host);
- 
- probe_disable_device:
-@@ -9022,7 +9019,6 @@ static void qla4xxx_remove_adapter(struct pci_dev *pdev)
- 
- 	scsi_host_put(ha->host);
- 
--	pci_disable_pcie_error_reporting(pdev);
- 	pci_disable_device(pdev);
+diff --git a/drivers/scsi/snic/snic_debugfs.c b/drivers/scsi/snic/snic_debugfs.c
+index 5e0faeba516e5..76baa4f9a06e3 100644
+--- a/drivers/scsi/snic/snic_debugfs.c
++++ b/drivers/scsi/snic/snic_debugfs.c
+@@ -451,6 +451,6 @@ void snic_trc_debugfs_init(void)
+ void
+ snic_trc_debugfs_term(void)
+ {
+-	debugfs_remove(debugfs_lookup(TRC_FILE, snic_glob->trc_root));
+-	debugfs_remove(debugfs_lookup(TRC_ENABLE_FILE, snic_glob->trc_root));
++	debugfs_lookup_and_remove(TRC_FILE, snic_glob->trc_root);
++	debugfs_lookup_and_remove(TRC_ENABLE_FILE, snic_glob->trc_root);
  }
- 
 -- 
-2.25.1
+2.39.2
+
+
 
