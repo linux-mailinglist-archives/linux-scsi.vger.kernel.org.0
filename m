@@ -2,454 +2,190 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7706AD8CB
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 09:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E666AD97A
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Mar 2023 09:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjCGIKC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Mar 2023 03:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
+        id S229937AbjCGIoa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Mar 2023 03:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbjCGIJr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Mar 2023 03:09:47 -0500
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B883509B4;
-        Tue,  7 Mar 2023 00:09:10 -0800 (PST)
-Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
-        by mta-01.yadro.com (Proxmox) with ESMTP id 07E72341EDD;
-        Tue,  7 Mar 2023 11:07:59 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :from:from:in-reply-to:message-id:mime-version:references
-        :reply-to:subject:subject:to:to; s=mta-01; bh=iQMFxPEZSI8TZt1EiC
-        PMyQKQdPfPchxjwyX5Lun++3I=; b=O2rL5+HT53IEW/WFcd/wLye8Yhy1VKsybr
-        oY1R7VLdcBhUuaYKkvEv+bfvFKoIKV7o3fwvPtyT3qbkeY0CgEHRKtjx6hEdWUn8
-        qKC9Rgcyyh/bysS4DVSS/dIPTFBH9eqW6BxxI32jyybAXfyMw6dLvElEABXUwxSm
-        /0BWZ01d4=
-Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229889AbjCGIo2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Mar 2023 03:44:28 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C527621A30;
+        Tue,  7 Mar 2023 00:44:27 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mta-01.yadro.com (Proxmox) with ESMTPS id F1DBF341E00;
-        Tue,  7 Mar 2023 11:07:58 +0300 (MSK)
-Received: from NB-591.corp.yadro.com (10.199.20.11) by
- T-EXCH-08.corp.yadro.com (172.17.11.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.9; Tue, 7 Mar 2023 11:07:58 +0300
-From:   Dmitry Bogdanov <d.bogdanov@yadro.com>
-To:     Martin Petersen <martin.petersen@oracle.com>,
-        <target-devel@vger.kernel.org>
-CC:     Bart Van Assche <bvanassche@acm.org>,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7D4F31FE15;
+        Tue,  7 Mar 2023 08:44:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678178666; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fpp5fJ0mtPUEcLO5to7TtnY2YnQzTrn2DF4WCeU+az4=;
+        b=mqRCzhl/Cm7TQs09oRbc552uzTjY5IvRfi7PeN478XCHN/bIMP0OYGdkq31LHAp+CXmKuS
+        fal0aIBYQ6OJ+igydlQ/3A/n/ORqvSnW3TFXHfT7KUdnXXSk6q9VtV5A3ZNZ2JHv8IBdNo
+        /SqQNYC+YgMiQ4fsehaKdlhyMTfjG2g=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C9AF913440;
+        Tue,  7 Mar 2023 08:44:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Vvx0Lmn5BmSxIQAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 07 Mar 2023 08:44:25 +0000
+Message-ID: <e4bc16e7-7079-b0fc-45a5-6487b5f5dbd7@suse.com>
+Date:   Tue, 7 Mar 2023 09:44:25 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 09/12] xen-scsiback: remove default fabric ops callouts
+Content-Language: en-US
+To:     Dmitry Bogdanov <d.bogdanov@yadro.com>,
+        Martin Petersen <martin.petersen@oracle.com>,
+        target-devel@vger.kernel.org
+Cc:     Bart Van Assche <bvanassche@acm.org>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         Leon Romanovsky <leon@kernel.org>,
         James Smart <james.smart@broadcom.com>,
         Ram Vegesna <ram.vegesna@broadcom.com>,
         Michael Cyr <mikecyr@linux.ibm.com>,
         Nilesh Javali <njavali@marvell.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
         Chris Boot <bootc@bootc.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Juergen Gross <jgross@suse.com>, <linux-scsi@vger.kernel.org>,
-        <linux@yadro.com>, Dmitry Bogdanov <d.bogdanov@yadro.com>,
-        Konstantin Shelekhin <k.shelekhin@yadro.com>
-Subject: [PATCH v2 12/12] target: add virtual remote target
-Date:   Tue, 7 Mar 2023 11:07:42 +0300
-Message-ID: <20230307080742.24631-13-d.bogdanov@yadro.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230307080742.24631-1-d.bogdanov@yadro.com>
+        Jason Wang <jasowang@redhat.com>, linux-scsi@vger.kernel.org,
+        linux@yadro.com
 References: <20230307080742.24631-1-d.bogdanov@yadro.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.199.20.11]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ <20230307080742.24631-10-d.bogdanov@yadro.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20230307080742.24631-10-d.bogdanov@yadro.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------nAtLO0YWE60c3PPvHyM7iD7y"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Create virtual remote target module.
-It can be used to see a whole acl/lun/tpg configuration from all nodes
-in storage cluster.
-For example, it allows to setup remote ports in ALUA port groups. To
-report all ports in a cluster in REPORT TARGET PORT GROUP command.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------nAtLO0YWE60c3PPvHyM7iD7y
+Content-Type: multipart/mixed; boundary="------------79f0NVxjGFQSVW8ECCW9fDcG";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Dmitry Bogdanov <d.bogdanov@yadro.com>,
+ Martin Petersen <martin.petersen@oracle.com>, target-devel@vger.kernel.org
+Cc: Bart Van Assche <bvanassche@acm.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Leon Romanovsky <leon@kernel.org>, James Smart <james.smart@broadcom.com>,
+ Ram Vegesna <ram.vegesna@broadcom.com>, Michael Cyr <mikecyr@linux.ibm.com>,
+ Nilesh Javali <njavali@marvell.com>, GR-QLogic-Storage-Upstream@marvell.com,
+ Chris Boot <bootc@bootc.net>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, "Michael S . Tsirkin" <mst@redhat.com>,
+ Jason Wang <jasowang@redhat.com>, linux-scsi@vger.kernel.org, linux@yadro.com
+Message-ID: <e4bc16e7-7079-b0fc-45a5-6487b5f5dbd7@suse.com>
+Subject: Re: [PATCH v2 09/12] xen-scsiback: remove default fabric ops callouts
+References: <20230307080742.24631-1-d.bogdanov@yadro.com>
+ <20230307080742.24631-10-d.bogdanov@yadro.com>
+In-Reply-To: <20230307080742.24631-10-d.bogdanov@yadro.com>
 
-Suggested-by: Konstantin Shelekhin <k.shelekhin@yadro.com>
-Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
----
-v2:
-   code style cleanup
-   remove default ops implementations
----
- drivers/target/Kconfig                 |   1 +
- drivers/target/Makefile                |   1 +
- drivers/target/tcm_remote/Kconfig      |   8 +
- drivers/target/tcm_remote/Makefile     |   2 +
- drivers/target/tcm_remote/tcm_remote.c | 277 +++++++++++++++++++++++++
- drivers/target/tcm_remote/tcm_remote.h |  20 ++
- 6 files changed, 309 insertions(+)
- create mode 100644 drivers/target/tcm_remote/Kconfig
- create mode 100644 drivers/target/tcm_remote/Makefile
- create mode 100644 drivers/target/tcm_remote/tcm_remote.c
- create mode 100644 drivers/target/tcm_remote/tcm_remote.h
+--------------79f0NVxjGFQSVW8ECCW9fDcG
+Content-Type: multipart/mixed; boundary="------------5uGalXVVWNV0gNgVDvHb9NLJ"
 
-diff --git a/drivers/target/Kconfig b/drivers/target/Kconfig
-index 72171ea3dd53..92641d39126a 100644
---- a/drivers/target/Kconfig
-+++ b/drivers/target/Kconfig
-@@ -47,5 +47,6 @@ source "drivers/target/loopback/Kconfig"
- source "drivers/target/tcm_fc/Kconfig"
- source "drivers/target/iscsi/Kconfig"
- source "drivers/target/sbp/Kconfig"
-+source "drivers/target/tcm_remote/Kconfig"
- 
- endif
-diff --git a/drivers/target/Makefile b/drivers/target/Makefile
-index 45634747377e..431b84abfb94 100644
---- a/drivers/target/Makefile
-+++ b/drivers/target/Makefile
-@@ -30,3 +30,4 @@ obj-$(CONFIG_LOOPBACK_TARGET)	+= loopback/
- obj-$(CONFIG_TCM_FC)		+= tcm_fc/
- obj-$(CONFIG_ISCSI_TARGET)	+= iscsi/
- obj-$(CONFIG_SBP_TARGET)	+= sbp/
-+obj-$(CONFIG_REMOTE_TARGET)	+= tcm_remote/
-diff --git a/drivers/target/tcm_remote/Kconfig b/drivers/target/tcm_remote/Kconfig
-new file mode 100644
-index 000000000000..e6bebb5fe6f1
---- /dev/null
-+++ b/drivers/target/tcm_remote/Kconfig
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+config REMOTE_TARGET
-+	tristate "TCM Virtual Remote target"
-+	depends on SCSI
-+	help
-+	  Say Y here to enable the TCM Virtual Remote fabric
-+	  That fabric is a dummy fabric to tell TCM about configuration
-+	  of TPG/ACL/LUN on peer nodes in a cluster.
-diff --git a/drivers/target/tcm_remote/Makefile b/drivers/target/tcm_remote/Makefile
-new file mode 100644
-index 000000000000..5818ffd0b0fa
---- /dev/null
-+++ b/drivers/target/tcm_remote/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_REMOTE_TARGET)	+= tcm_remote.o
-diff --git a/drivers/target/tcm_remote/tcm_remote.c b/drivers/target/tcm_remote/tcm_remote.c
-new file mode 100644
-index 000000000000..1b7ce7803685
---- /dev/null
-+++ b/drivers/target/tcm_remote/tcm_remote.c
-@@ -0,0 +1,277 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#include <linux/module.h>
-+#include <linux/moduleparam.h>
-+#include <linux/init.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <linux/configfs.h>
-+#include <scsi/scsi.h>
-+#include <scsi/scsi_tcq.h>
-+#include <scsi/scsi_host.h>
-+#include <scsi/scsi_device.h>
-+#include <scsi/scsi_cmnd.h>
-+
-+#include <target/target_core_base.h>
-+#include <target/target_core_fabric.h>
-+
-+#include "tcm_remote.h"
-+
-+static inline struct tcm_remote_tpg *remote_tpg(struct se_portal_group *se_tpg)
-+{
-+	return container_of(se_tpg, struct tcm_remote_tpg, remote_se_tpg);
-+}
-+
-+static char *tcm_remote_get_endpoint_wwn(struct se_portal_group *se_tpg)
-+{
-+	/*
-+	 * Return the passed NAA identifier for the Target Port
-+	 */
-+	return &remote_tpg(se_tpg)->remote_hba->remote_wwn_address[0];
-+}
-+
-+static u16 tcm_remote_get_tag(struct se_portal_group *se_tpg)
-+{
-+	/*
-+	 * This Tag is used when forming SCSI Name identifier in EVPD=1 0x83
-+	 * to represent the SCSI Target Port.
-+	 */
-+	return remote_tpg(se_tpg)->remote_tpgt;
-+}
-+
-+static int tcm_remote_dummy_cmd_fn(struct se_cmd *se_cmd)
-+{
-+	return 0;
-+}
-+
-+static void tcm_remote_dummy_cmd_void_fn(struct se_cmd *se_cmd)
-+{
-+
-+}
-+
-+static char *tcm_remote_dump_proto_id(struct tcm_remote_hba *remote_hba)
-+{
-+	switch (remote_hba->remote_proto_id) {
-+	case SCSI_PROTOCOL_SAS:
-+		return "SAS";
-+	case SCSI_PROTOCOL_SRP:
-+		return "SRP";
-+	case SCSI_PROTOCOL_FCP:
-+		return "FCP";
-+	case SCSI_PROTOCOL_ISCSI:
-+		return "iSCSI";
-+	default:
-+		break;
-+	}
-+
-+	return "Unknown";
-+}
-+
-+static int tcm_remote_port_link(
-+	struct se_portal_group *se_tpg,
-+	struct se_lun *lun)
-+{
-+	pr_debug("TCM_Remote_ConfigFS: Port Link LUN %lld Successful\n",
-+		  lun->unpacked_lun);
-+	return 0;
-+}
-+
-+static void tcm_remote_port_unlink(
-+	struct se_portal_group *se_tpg,
-+	struct se_lun *lun)
-+{
-+	pr_debug("TCM_Remote_ConfigFS: Port Unlink LUN %lld Successful\n",
-+		  lun->unpacked_lun);
-+}
-+
-+static struct se_portal_group *tcm_remote_make_tpg(
-+	struct se_wwn *wwn,
-+	const char *name)
-+{
-+	struct tcm_remote_hba *remote_hba = container_of(wwn,
-+			struct tcm_remote_hba, remote_hba_wwn);
-+	struct tcm_remote_tpg *remote_tpg;
-+	unsigned long tpgt;
-+	int ret;
-+
-+	if (strstr(name, "tpgt_") != name) {
-+		pr_err("Unable to locate \"tpgt_#\" directory group\n");
-+		return ERR_PTR(-EINVAL);
-+	}
-+	if (kstrtoul(name+5, 10, &tpgt))
-+		return ERR_PTR(-EINVAL);
-+
-+	if (tpgt >= TL_TPGS_PER_HBA) {
-+		pr_err("Passed tpgt: %lu exceeds TL_TPGS_PER_HBA: %u\n",
-+		       tpgt, TL_TPGS_PER_HBA);
-+		return ERR_PTR(-EINVAL);
-+	}
-+	remote_tpg = &remote_hba->remote_hba_tpgs[tpgt];
-+	remote_tpg->remote_hba = remote_hba;
-+	remote_tpg->remote_tpgt = tpgt;
-+	/*
-+	 * Register the remote_tpg as a emulated TCM Target Endpoint
-+	 */
-+	ret = core_tpg_register(wwn, &remote_tpg->remote_se_tpg,
-+				remote_hba->remote_proto_id);
-+	if (ret < 0)
-+		return ERR_PTR(-ENOMEM);
-+
-+	pr_debug("TCM_Remote_ConfigFS: Allocated Emulated %s Target Port %s,t,0x%04lx\n",
-+		 tcm_remote_dump_proto_id(remote_hba),
-+		 config_item_name(&wwn->wwn_group.cg_item), tpgt);
-+	return &remote_tpg->remote_se_tpg;
-+}
-+
-+static void tcm_remote_drop_tpg(struct se_portal_group *se_tpg)
-+{
-+	struct se_wwn *wwn = se_tpg->se_tpg_wwn;
-+	struct tcm_remote_tpg *remote_tpg = container_of(se_tpg,
-+				struct tcm_remote_tpg, remote_se_tpg);
-+	struct tcm_remote_hba *remote_hba;
-+	unsigned short tpgt;
-+
-+	remote_hba = remote_tpg->remote_hba;
-+	tpgt = remote_tpg->remote_tpgt;
-+
-+	/*
-+	 * Deregister the remote_tpg as a emulated TCM Target Endpoint
-+	 */
-+	core_tpg_deregister(se_tpg);
-+
-+	remote_tpg->remote_hba = NULL;
-+	remote_tpg->remote_tpgt = 0;
-+
-+	pr_debug("TCM_Remote_ConfigFS: Deallocated Emulated %s Target Port %s,t,0x%04x\n",
-+		 tcm_remote_dump_proto_id(remote_hba),
-+		 config_item_name(&wwn->wwn_group.cg_item), tpgt);
-+}
-+
-+static struct se_wwn *tcm_remote_make_wwn(
-+	struct target_fabric_configfs *tf,
-+	struct config_group *group,
-+	const char *name)
-+{
-+	struct tcm_remote_hba *remote_hba;
-+	char *ptr;
-+	int ret, off = 0;
-+
-+	remote_hba = kzalloc(sizeof(*remote_hba), GFP_KERNEL);
-+	if (!remote_hba)
-+		return ERR_PTR(-ENOMEM);
-+
-+	/*
-+	 * Determine the emulated Protocol Identifier and Target Port Name
-+	 * based on the incoming configfs directory name.
-+	 */
-+	ptr = strstr(name, "naa.");
-+	if (ptr) {
-+		remote_hba->remote_proto_id = SCSI_PROTOCOL_SAS;
-+		goto check_len;
-+	}
-+	ptr = strstr(name, "fc.");
-+	if (ptr) {
-+		remote_hba->remote_proto_id = SCSI_PROTOCOL_FCP;
-+		off = 3; /* Skip over "fc." */
-+		goto check_len;
-+	}
-+	ptr = strstr(name, "0x");
-+	if (ptr) {
-+		remote_hba->remote_proto_id = SCSI_PROTOCOL_SRP;
-+		off = 2; /* Skip over "0x" */
-+		goto check_len;
-+	}
-+	ptr = strstr(name, "iqn.");
-+	if (!ptr) {
-+		pr_err("Unable to locate prefix for emulated Target Port: %s\n",
-+		       name);
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+	remote_hba->remote_proto_id = SCSI_PROTOCOL_ISCSI;
-+
-+check_len:
-+	if (strlen(name) >= TL_WWN_ADDR_LEN) {
-+		pr_err("Emulated NAA %s Address: %s, exceeds max: %d\n",
-+		       name, tcm_remote_dump_proto_id(remote_hba), TL_WWN_ADDR_LEN);
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+	snprintf(&remote_hba->remote_wwn_address[0], TL_WWN_ADDR_LEN, "%s", &name[off]);
-+
-+	pr_debug("TCM_Remote_ConfigFS: Allocated emulated Target %s Address: %s\n",
-+		 tcm_remote_dump_proto_id(remote_hba), name);
-+	return &remote_hba->remote_hba_wwn;
-+out:
-+	kfree(remote_hba);
-+	return ERR_PTR(ret);
-+}
-+
-+static void tcm_remote_drop_wwn(struct se_wwn *wwn)
-+{
-+	struct tcm_remote_hba *remote_hba = container_of(wwn,
-+				struct tcm_remote_hba, remote_hba_wwn);
-+
-+	pr_debug("TCM_Remote_ConfigFS: Deallocating emulated Target %s Address: %s\n",
-+		 tcm_remote_dump_proto_id(remote_hba),
-+		 remote_hba->remote_wwn_address);
-+	kfree(remote_hba);
-+}
-+
-+static ssize_t tcm_remote_wwn_version_show(struct config_item *item, char *page)
-+{
-+	return sprintf(page, "TCM Remote Fabric module %s\n", TCM_REMOTE_VERSION);
-+}
-+
-+CONFIGFS_ATTR_RO(tcm_remote_wwn_, version);
-+
-+static struct configfs_attribute *tcm_remote_wwn_attrs[] = {
-+	&tcm_remote_wwn_attr_version,
-+	NULL,
-+};
-+
-+static const struct target_core_fabric_ops remote_ops = {
-+	.module				= THIS_MODULE,
-+	.fabric_name			= "remote",
-+	.tpg_get_wwn			= tcm_remote_get_endpoint_wwn,
-+	.tpg_get_tag			= tcm_remote_get_tag,
-+	.check_stop_free		= tcm_remote_dummy_cmd_fn,
-+	.release_cmd			= tcm_remote_dummy_cmd_void_fn,
-+	.write_pending			= tcm_remote_dummy_cmd_fn,
-+	.queue_data_in			= tcm_remote_dummy_cmd_fn,
-+	.queue_status			= tcm_remote_dummy_cmd_fn,
-+	.queue_tm_rsp			= tcm_remote_dummy_cmd_void_fn,
-+	.aborted_task			= tcm_remote_dummy_cmd_void_fn,
-+	.fabric_make_wwn		= tcm_remote_make_wwn,
-+	.fabric_drop_wwn		= tcm_remote_drop_wwn,
-+	.fabric_make_tpg		= tcm_remote_make_tpg,
-+	.fabric_drop_tpg		= tcm_remote_drop_tpg,
-+	.fabric_post_link		= tcm_remote_port_link,
-+	.fabric_pre_unlink		= tcm_remote_port_unlink,
-+	.tfc_wwn_attrs			= tcm_remote_wwn_attrs,
-+};
-+
-+static int __init tcm_remote_fabric_init(void)
-+{
-+	int ret = -ENOMEM;
-+
-+	ret = target_register_template(&remote_ops);
-+	if (ret)
-+		goto out;
-+
-+	return 0;
-+
-+out:
-+	return ret;
-+}
-+
-+static void __exit tcm_remote_fabric_exit(void)
-+{
-+	target_unregister_template(&remote_ops);
-+}
-+
-+MODULE_DESCRIPTION("TCM virtual remote target");
-+MODULE_AUTHOR("Dmitry Bogdanov <d.bogdanov@yadro.com>");
-+MODULE_LICENSE("GPL");
-+module_init(tcm_remote_fabric_init);
-+module_exit(tcm_remote_fabric_exit);
-diff --git a/drivers/target/tcm_remote/tcm_remote.h b/drivers/target/tcm_remote/tcm_remote.h
-new file mode 100644
-index 000000000000..913d1a6eb3a2
---- /dev/null
-+++ b/drivers/target/tcm_remote/tcm_remote.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/types.h>
-+#include <linux/device.h>
-+
-+#define TCM_REMOTE_VERSION		"v0.1"
-+#define TL_WWN_ADDR_LEN			256
-+#define TL_TPGS_PER_HBA			32
-+
-+struct tcm_remote_tpg {
-+	unsigned short remote_tpgt;
-+	struct se_portal_group remote_se_tpg;
-+	struct tcm_remote_hba *remote_hba;
-+};
-+
-+struct tcm_remote_hba {
-+	u8 remote_proto_id;
-+	unsigned char remote_wwn_address[TL_WWN_ADDR_LEN];
-+	struct tcm_remote_tpg remote_hba_tpgs[TL_TPGS_PER_HBA];
-+	struct se_wwn remote_hba_wwn;
-+};
--- 
-2.25.1
+--------------5uGalXVVWNV0gNgVDvHb9NLJ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
+T24gMDcuMDMuMjMgMDk6MDcsIERtaXRyeSBCb2dkYW5vdiB3cm90ZToNCj4gUmVtb3ZlIGNh
+bGxvdXRzIHRoYXQgaGF2ZSB0aGUgaW1wbGVtZW50YXRpb24gbGlrZSBhDQo+IGRlZmF1bHQg
+aW1wbGVtZW50YXRpb24gaW4gVENNIENvcmUuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBEbWl0
+cnkgQm9nZGFub3YgPGQuYm9nZGFub3ZAeWFkcm8uY29tPg0KDQpBY2tlZC1ieTogSnVlcmdl
+biBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0KDQoNCkp1ZXJnZW4NCg0K
+--------------5uGalXVVWNV0gNgVDvHb9NLJ
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------5uGalXVVWNV0gNgVDvHb9NLJ--
+
+--------------79f0NVxjGFQSVW8ECCW9fDcG--
+
+--------------nAtLO0YWE60c3PPvHyM7iD7y
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmQG+WkFAwAAAAAACgkQsN6d1ii/Ey9X
+5wf/QK3lq6alFc2nr45n7UsoS/zy0bRFsjlOMwwEePibTS4DF6j3oEa5QE4WNiAT67KKD/wTCdZh
+IvKuMMuIqk5x/D1/N9Vj+tiOrZe5zYpLC9ZiXgyI30PqcoCb7wJ4RCIQFhroHdlYV6b3PhnvI4AB
++Twi4MePIyfH2yuLtX86nQiml5g7Cpt+ljW93nqTG1oZAV6hp8dxEQgiXvmRWqR39weQC1Zl5On3
+qfQV76uc1jG6ZdBjMHoLeO4DBXTjTM1rx4O47mlyLFbUKGCi6dOJVQeST8wYTigjjMYapoPTH3Xo
+y5YGPmUUBHHHpbvu6bTXvBl1yBE+wUFvMgPEClog9g==
+=mWXI
+-----END PGP SIGNATURE-----
+
+--------------nAtLO0YWE60c3PPvHyM7iD7y--
