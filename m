@@ -2,48 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C9F6B2D76
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Mar 2023 20:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B34E6B2D79
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Mar 2023 20:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjCIT1h (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Mar 2023 14:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S229939AbjCIT1l (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Mar 2023 14:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjCIT1b (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Mar 2023 14:27:31 -0500
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446F5F05C8
-        for <linux-scsi@vger.kernel.org>; Thu,  9 Mar 2023 11:27:27 -0800 (PST)
-Received: by mail-pg1-f170.google.com with SMTP id 16so1694098pge.11
-        for <linux-scsi@vger.kernel.org>; Thu, 09 Mar 2023 11:27:27 -0800 (PST)
+        with ESMTP id S230074AbjCIT1c (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Mar 2023 14:27:32 -0500
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF8DF05D6
+        for <linux-scsi@vger.kernel.org>; Thu,  9 Mar 2023 11:27:28 -0800 (PST)
+Received: by mail-pf1-f176.google.com with SMTP id ce7so2182415pfb.9
+        for <linux-scsi@vger.kernel.org>; Thu, 09 Mar 2023 11:27:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678390046;
+        d=1e100.net; s=20210112; t=1678390048;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=H9QNk6q17I8CdJSB5JsrnuqP/ZBn9pNyTOjnOStZX4E=;
-        b=HWSozTiJqWAoJHtQ5bWsJ30PiO36YJuFLBaZ6X506z3ezi1i4HtRrohXz9sTjcrCMd
-         BYcXYof3noVpvhws4HD5f1Y7xwr1aNwSQFk+OSlONKw8MBMFdBActVjqb1rd/WwtuBQW
-         6E3XjhKgP9/Mk5tB8Vt6qBS7IC95BddW9WRx60wXim0hWAOjZf7YaXR+DsS0hNSR2C1A
-         NESacIgXFayT09MD4c94C6jG+eTf/afBMu18b0Hi3qElv1ynLbY6C+7ISRrxZuee7OBk
-         VDDgOh5h1VsXwiAEiGTkse6EgXiy6WWajfUfVTLpjGaYTU/e+gCzK+aVMc/yGKsdNOWQ
-         E48Q==
-X-Gm-Message-State: AO0yUKVnrBxqfN+FWr7e9ZXn9MLOSftb6PCz/nFBJRkIxODtcEuxCJcu
-        vlk3MlDywGZ/S441Y1zXT/c=
-X-Google-Smtp-Source: AK7set/QisJIRDK8gmKWYPcUnoUydkNrqsTqgp5DPInRT0jDgsyXcqX3NS8A5fy36HIqz76x4nUmmQ==
-X-Received: by 2002:aa7:9f4e:0:b0:5aa:6597:507b with SMTP id h14-20020aa79f4e000000b005aa6597507bmr21271036pfr.12.1678390046621;
-        Thu, 09 Mar 2023 11:27:26 -0800 (PST)
+        bh=xOqT7dLP4YcCtL1jZVtGdq9lau6Z+QsWChHpf/+Jq3I=;
+        b=cN+vNmIX3weG+GazLlnQ8RH8ywwRPRk+/02/xdYrDupPyNBBOyX/hFkCEQj8ok65mj
+         vcoozwEC8qz91jSq744E5cHtyMSzHHYgOQDeqhAlVVPu/mATe00+5MIvZfCJcrPmGFOS
+         mCaydMoxKKCm0gT2Z/aX/sQTlASBRAFRxPXbcBvAjGa1fOwHRGH/4z1yOca9NZ6qffpR
+         n+9rAMGOreSWRSt7640h9xNU9Gmr2Jg8Wuw/bXDquTr011qPpRiwsprRINTjxCmW5ItH
+         Pcg9/k3yHbAjKb6KEvGHMWgVsCE7xagJRlzSGrPMSntauvGdMvsbWMIGNXR9dmyY0BhT
+         Bjmg==
+X-Gm-Message-State: AO0yUKVrGrcetaZWJ37jp7CiXSa0yI7xJPZfRVj92ZyXmWNGU/gb2nre
+        R5BX/ojPSkp9acB9xy/f9nrwKgQSI7rW8g==
+X-Google-Smtp-Source: AK7set/CAK7D0cDxsb32XNQlNubig5a004u0QukLn487pOUItJCTsvh9WKcqNhS1Ps346vNiJUoL6w==
+X-Received: by 2002:aa7:9d84:0:b0:5a8:b958:e348 with SMTP id f4-20020aa79d84000000b005a8b958e348mr17145241pfq.28.1678390048301;
+        Thu, 09 Mar 2023 11:27:28 -0800 (PST)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:bf9f:35c8:4915:cb24])
-        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b0058d8f23af26sm11570955pff.157.2023.03.09.11.27.25
+        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b0058d8f23af26sm11570955pff.157.2023.03.09.11.27.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 11:27:25 -0800 (PST)
+        Thu, 09 Mar 2023 11:27:27 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 13/82] scsi: a100u2w: Declare SCSI host template const
-Date:   Thu,  9 Mar 2023 11:25:05 -0800
-Message-Id: <20230309192614.2240602-14-bvanassche@acm.org>
+Subject: [PATCH v2 14/82] scsi: a2091: Declare SCSI host template const
+Date:   Thu,  9 Mar 2023 11:25:06 -0800
+Message-Id: <20230309192614.2240602-15-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230309192614.2240602-1-bvanassche@acm.org>
 References: <20230309192614.2240602-1-bvanassche@acm.org>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,19 +63,19 @@ Make it explicit that the SCSI host template is not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/a100u2w.c | 2 +-
+ drivers/scsi/a2091.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/a100u2w.c b/drivers/scsi/a100u2w.c
-index d02eb5b213d0..b95147fb18b0 100644
---- a/drivers/scsi/a100u2w.c
-+++ b/drivers/scsi/a100u2w.c
-@@ -1065,7 +1065,7 @@ static irqreturn_t inia100_intr(int irqno, void *devid)
- 	return res;
+diff --git a/drivers/scsi/a2091.c b/drivers/scsi/a2091.c
+index 74312400468b..204448bfd04b 100644
+--- a/drivers/scsi/a2091.c
++++ b/drivers/scsi/a2091.c
+@@ -180,7 +180,7 @@ static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
+ 	}
  }
  
--static struct scsi_host_template inia100_template = {
-+static const struct scsi_host_template inia100_template = {
- 	.proc_name		= "inia100",
- 	.name			= inia100_REVID,
- 	.queuecommand		= inia100_queue,
+-static struct scsi_host_template a2091_scsi_template = {
++static const struct scsi_host_template a2091_scsi_template = {
+ 	.module			= THIS_MODULE,
+ 	.name			= "Commodore A2091/A590 SCSI",
+ 	.show_info		= wd33c93_show_info,
