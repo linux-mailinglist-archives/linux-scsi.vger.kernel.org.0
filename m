@@ -2,49 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C866B2D77
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Mar 2023 20:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C9F6B2D76
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Mar 2023 20:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjCIT1i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Mar 2023 14:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
+        id S229981AbjCIT1h (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Mar 2023 14:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjCIT11 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Mar 2023 14:27:27 -0500
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A778EE293
-        for <linux-scsi@vger.kernel.org>; Thu,  9 Mar 2023 11:27:25 -0800 (PST)
-Received: by mail-pg1-f180.google.com with SMTP id q189so1705089pga.9
-        for <linux-scsi@vger.kernel.org>; Thu, 09 Mar 2023 11:27:25 -0800 (PST)
+        with ESMTP id S229874AbjCIT1b (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Mar 2023 14:27:31 -0500
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446F5F05C8
+        for <linux-scsi@vger.kernel.org>; Thu,  9 Mar 2023 11:27:27 -0800 (PST)
+Received: by mail-pg1-f170.google.com with SMTP id 16so1694098pge.11
+        for <linux-scsi@vger.kernel.org>; Thu, 09 Mar 2023 11:27:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678390045;
+        d=1e100.net; s=20210112; t=1678390046;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Wvru8kVY2I3MSun55wPTjy7EC406KfhAV63CSzUeJMc=;
-        b=Y7xOv2fxWTbbv97BjyArrYpK3r9XGpw9QabHL0BSmnypkLX9MaLaFo+4d7vbDzT1V5
-         5pR/mjSQCOdzOn1D70ssThgYHHqol80P5XEbYo2j5Or/b8+hdLTbzUrZdnLEraXr4uNf
-         KRF0qoRBYu5mw4DuEw5wa6DJrmM4WO8r/bYw++Eal60L5eaPXriagWKDT1GtmWdskv3r
-         oMs50gyLFug+2J8Ki+uqF5S65qhuCHfceX+3VgPtBR84XxB+vO7tNnmBHz2kiPlPnfFn
-         oWJaBr8Ehuqf3DbaFKoz85l26LPl8sIz1LJXSh0+/t0+6OOkaqb7MdLgMVKDFH4GSa70
-         JYjQ==
-X-Gm-Message-State: AO0yUKXnT3LbvArOrxDxHi6qF8RywVBX3doYksSzolixaRIAeiavPAbh
-        02JlQ4beAlU/slvvTuPklqc=
-X-Google-Smtp-Source: AK7set96jNrlLocDv2+vzdLKJ2Px0Pzxz2BgBEbmhaQydywEWWc5aGppOLSzE50MbzxeaOEYmlai3A==
-X-Received: by 2002:a62:17d0:0:b0:5e2:da34:4aad with SMTP id 199-20020a6217d0000000b005e2da344aadmr19835630pfx.27.1678390044701;
-        Thu, 09 Mar 2023 11:27:24 -0800 (PST)
+        bh=H9QNk6q17I8CdJSB5JsrnuqP/ZBn9pNyTOjnOStZX4E=;
+        b=HWSozTiJqWAoJHtQ5bWsJ30PiO36YJuFLBaZ6X506z3ezi1i4HtRrohXz9sTjcrCMd
+         BYcXYof3noVpvhws4HD5f1Y7xwr1aNwSQFk+OSlONKw8MBMFdBActVjqb1rd/WwtuBQW
+         6E3XjhKgP9/Mk5tB8Vt6qBS7IC95BddW9WRx60wXim0hWAOjZf7YaXR+DsS0hNSR2C1A
+         NESacIgXFayT09MD4c94C6jG+eTf/afBMu18b0Hi3qElv1ynLbY6C+7ISRrxZuee7OBk
+         VDDgOh5h1VsXwiAEiGTkse6EgXiy6WWajfUfVTLpjGaYTU/e+gCzK+aVMc/yGKsdNOWQ
+         E48Q==
+X-Gm-Message-State: AO0yUKVnrBxqfN+FWr7e9ZXn9MLOSftb6PCz/nFBJRkIxODtcEuxCJcu
+        vlk3MlDywGZ/S441Y1zXT/c=
+X-Google-Smtp-Source: AK7set/QisJIRDK8gmKWYPcUnoUydkNrqsTqgp5DPInRT0jDgsyXcqX3NS8A5fy36HIqz76x4nUmmQ==
+X-Received: by 2002:aa7:9f4e:0:b0:5aa:6597:507b with SMTP id h14-20020aa79f4e000000b005aa6597507bmr21271036pfr.12.1678390046621;
+        Thu, 09 Mar 2023 11:27:26 -0800 (PST)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:bf9f:35c8:4915:cb24])
-        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b0058d8f23af26sm11570955pff.157.2023.03.09.11.27.22
+        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b0058d8f23af26sm11570955pff.157.2023.03.09.11.27.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 11:27:23 -0800 (PST)
+        Thu, 09 Mar 2023 11:27:25 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Khalid Aziz <khalid@gonehiking.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 12/82] scsi: BusLogic: Declare SCSI host template const
-Date:   Thu,  9 Mar 2023 11:25:04 -0800
-Message-Id: <20230309192614.2240602-13-bvanassche@acm.org>
+Subject: [PATCH v2 13/82] scsi: a100u2w: Declare SCSI host template const
+Date:   Thu,  9 Mar 2023 11:25:05 -0800
+Message-Id: <20230309192614.2240602-14-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230309192614.2240602-1-bvanassche@acm.org>
 References: <20230309192614.2240602-1-bvanassche@acm.org>
@@ -62,31 +61,21 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Make it explicit that the SCSI host template is not modified.
 
-Acked-by: Khalid Aziz <khalid@gonehiking.org>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/BusLogic.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/a100u2w.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
-index f7b7ffda1161..72ceaf650b0d 100644
---- a/drivers/scsi/BusLogic.c
-+++ b/drivers/scsi/BusLogic.c
-@@ -54,7 +54,7 @@
- #define FAILURE (-1)
- #endif
+diff --git a/drivers/scsi/a100u2w.c b/drivers/scsi/a100u2w.c
+index d02eb5b213d0..b95147fb18b0 100644
+--- a/drivers/scsi/a100u2w.c
++++ b/drivers/scsi/a100u2w.c
+@@ -1065,7 +1065,7 @@ static irqreturn_t inia100_intr(int irqno, void *devid)
+ 	return res;
+ }
  
--static struct scsi_host_template blogic_template;
-+static const struct scsi_host_template blogic_template;
- 
- /*
-   blogic_drvr_options_count is a count of the number of BusLogic Driver
-@@ -3663,7 +3663,7 @@ static int __init blogic_parseopts(char *options)
-   Get it all started
- */
- 
--static struct scsi_host_template blogic_template = {
-+static const struct scsi_host_template blogic_template = {
- 	.module = THIS_MODULE,
- 	.proc_name = "BusLogic",
- 	.write_info = blogic_write_info,
+-static struct scsi_host_template inia100_template = {
++static const struct scsi_host_template inia100_template = {
+ 	.proc_name		= "inia100",
+ 	.name			= inia100_REVID,
+ 	.queuecommand		= inia100_queue,
