@@ -2,48 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF0C6B2D6F
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Mar 2023 20:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8486B2D70
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Mar 2023 20:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjCIT1S (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Mar 2023 14:27:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S229895AbjCIT1T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Mar 2023 14:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjCIT1P (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Mar 2023 14:27:15 -0500
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EADEA00D
-        for <linux-scsi@vger.kernel.org>; Thu,  9 Mar 2023 11:27:11 -0800 (PST)
-Received: by mail-pj1-f43.google.com with SMTP id x34so3101159pjj.0
-        for <linux-scsi@vger.kernel.org>; Thu, 09 Mar 2023 11:27:11 -0800 (PST)
+        with ESMTP id S229628AbjCIT1Q (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Mar 2023 14:27:16 -0500
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5B6EABA2
+        for <linux-scsi@vger.kernel.org>; Thu,  9 Mar 2023 11:27:13 -0800 (PST)
+Received: by mail-pg1-f178.google.com with SMTP id y19so1713005pgk.5
+        for <linux-scsi@vger.kernel.org>; Thu, 09 Mar 2023 11:27:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678390031;
+        d=1e100.net; s=20210112; t=1678390033;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QxASyLi8nqGzT795DVp8Cos4Ht8OMveiQULpG2J4on4=;
-        b=ToHLE3EtS1VKkWmn9mCoGs2gBjtquB2gPoCGJk/r0oaYIdLb2oHKWRiByiknbaUkv5
-         wRtJs2xSEEC5BqSiqRfqreeMbL1SePvevocepTr/d2hVFFcH6XtZzV3/H+Dq/Lnt/JAQ
-         tfCuHbmWUwKXcv1cu7sOMKiShYvgVgEoC4uiWCU5C3pTdZ2OP0ABL8CHsQCJo1eg3e73
-         7drUXKBaE39hKhssD8UAH+AdeM5mo3Wxj7UuVPlTkBcjWrLgBSCGU4M0ODL8Y87Ha47w
-         AVlxwQaOGFFkTLSOIEaIMNe9oDZ9cK/OGsYdGnTZiMxd0PGXsXiQ37SRQ438CABDsycH
-         L7Bg==
-X-Gm-Message-State: AO0yUKUcqLNPr2ubHEd7lKyWx0XDSHvObv+RwwHsdc90GX+KAES5XOR0
-        F2H2pOkPX5c0AWKhBstgsfY=
-X-Google-Smtp-Source: AK7set/62RStAAsaqc8dr2EzPTlq+uD5m4v6DadFpRT8iHSb4xEOAVvSsZ7/BIM4mlYgg3LzlV8z+Q==
-X-Received: by 2002:a05:6a20:7d9e:b0:cd:8ed8:8e1d with SMTP id v30-20020a056a207d9e00b000cd8ed88e1dmr23787031pzj.12.1678390030961;
-        Thu, 09 Mar 2023 11:27:10 -0800 (PST)
+        bh=TRaBidyNT0CPspAryOSAJzVfbEYXDVCy844lk4y4E34=;
+        b=Mn/liIwhYcsppQHtfxaaiC6h40UqIeUE/SgKeMNPIqaXNETjQfvilFa2Qk2PhwebLJ
+         YLx8Ct3/LIMs/s8gT1cXSX3M1P8k1EcL0d3nMkWgQVCxYoVYDYtBapE7Srteb/GiTnPp
+         STahe8aEfL/jDktsCP8r80i8yNbULhgbxa2+IGRZVJ5o7u/g4u25i172VqRJ8sexq/tz
+         NRLI4/IzTuME/dxA3ghAL7ak45tjlkbUczJpaYx/Gfn/k3RfbQQ++BxN0+0noocVXuYK
+         rI4sdvADt4KT3lRZ3eQxxP4QDSKUYGDuJFJXh2ZsAccRdzk1rT0vAs3Z0tF3HxQ9OWir
+         E3vA==
+X-Gm-Message-State: AO0yUKUjYHIkr/Uhjp6E4jKhWIjj4Aqnkt2fEPIRyF9OOjieX7UAW7dB
+        BPrG/UkuI0M5fuS4NGl5RGkf7HlninU=
+X-Google-Smtp-Source: AK7set9t2V7QmRhu8xyBr09VGasrCxGp3KwGiPUaVE5BV+HAtr+3CR/pTokI/5n1qJ1+KGPAAJ5fAQ==
+X-Received: by 2002:aa7:9f1a:0:b0:5df:5310:e2f9 with SMTP id g26-20020aa79f1a000000b005df5310e2f9mr16385392pfr.22.1678390033020;
+        Thu, 09 Mar 2023 11:27:13 -0800 (PST)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:bf9f:35c8:4915:cb24])
-        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b0058d8f23af26sm11570955pff.157.2023.03.09.11.27.09
+        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b0058d8f23af26sm11570955pff.157.2023.03.09.11.27.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 11:27:10 -0800 (PST)
+        Thu, 09 Mar 2023 11:27:11 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>
-Subject: [PATCH v2 05/82] firewire: sbp2: Declare the SCSI host template const
-Date:   Thu,  9 Mar 2023 11:24:57 -0800
-Message-Id: <20230309192614.2240602-6-bvanassche@acm.org>
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>
+Subject: [PATCH v2 06/82] RDMA/srp: Declare the SCSI host template const
+Date:   Thu,  9 Mar 2023 11:24:58 -0800
+Message-Id: <20230309192614.2240602-7-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230309192614.2240602-1-bvanassche@acm.org>
 References: <20230309192614.2240602-1-bvanassche@acm.org>
@@ -59,33 +60,23 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Make it explicit that the sbp2 host template it not modified.
+Make it explicit that the SRP host template is not modified.
 
-Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/firewire/sbp2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/infiniband/ulp/srp/ib_srp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/firewire/sbp2.c b/drivers/firewire/sbp2.c
-index 60051c0cabea..26db5b8dfc1e 100644
---- a/drivers/firewire/sbp2.c
-+++ b/drivers/firewire/sbp2.c
-@@ -1117,7 +1117,7 @@ static void sbp2_init_workarounds(struct sbp2_target *tgt, u32 model,
- 	tgt->workarounds = w;
- }
+diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
+index df21b30b7735..3446fbf5a560 100644
+--- a/drivers/infiniband/ulp/srp/ib_srp.c
++++ b/drivers/infiniband/ulp/srp/ib_srp.c
+@@ -3077,7 +3077,7 @@ static struct attribute *srp_host_attrs[] = {
  
--static struct scsi_host_template scsi_driver_template;
-+static const struct scsi_host_template scsi_driver_template;
- static void sbp2_remove(struct fw_unit *unit);
+ ATTRIBUTE_GROUPS(srp_host);
  
- static int sbp2_probe(struct fw_unit *unit, const struct ieee1394_device_id *id)
-@@ -1586,7 +1586,7 @@ static struct attribute *sbp2_scsi_sysfs_attrs[] = {
- 
- ATTRIBUTE_GROUPS(sbp2_scsi_sysfs);
- 
--static struct scsi_host_template scsi_driver_template = {
-+static const struct scsi_host_template scsi_driver_template = {
- 	.module			= THIS_MODULE,
- 	.name			= "SBP-2 IEEE-1394",
- 	.proc_name		= "sbp2",
+-static struct scsi_host_template srp_template = {
++static const struct scsi_host_template srp_template = {
+ 	.module				= THIS_MODULE,
+ 	.name				= "InfiniBand SRP initiator",
+ 	.proc_name			= DRV_NAME,
