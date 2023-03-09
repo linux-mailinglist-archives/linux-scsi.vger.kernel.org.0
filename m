@@ -2,48 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B68B6B2DB1
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Mar 2023 20:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 773636B2DB8
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Mar 2023 20:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjCITbp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Mar 2023 14:31:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S229893AbjCITbz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Mar 2023 14:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjCITay (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Mar 2023 14:30:54 -0500
+        with ESMTP id S229511AbjCITbC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Mar 2023 14:31:02 -0500
 Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054D662D9F
-        for <linux-scsi@vger.kernel.org>; Thu,  9 Mar 2023 11:29:59 -0800 (PST)
-Received: by mail-pg1-f181.google.com with SMTP id d10so1700865pgt.12
-        for <linux-scsi@vger.kernel.org>; Thu, 09 Mar 2023 11:29:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB9867801
+        for <linux-scsi@vger.kernel.org>; Thu,  9 Mar 2023 11:30:01 -0800 (PST)
+Received: by mail-pg1-f181.google.com with SMTP id 16so1697809pge.11
+        for <linux-scsi@vger.kernel.org>; Thu, 09 Mar 2023 11:30:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678390199;
+        d=1e100.net; s=20210112; t=1678390201;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zmH/5IDY29elfLiT8SdhUeTtrZ6olPcPm8Il5WJPzag=;
-        b=3jnPiayuKJ2axU1CsruSNAjE7ZQmWZ7RcpedWP7nrtKK/dugx8iqfX7kF6Uf+pkfmX
-         K7x36mmLMv4DXBbHb3Pdz1RqX0dTfN+N5/l/J0wqbbDSArScy5VIOgJLwTfVCEkfPr27
-         hSo+Od5/xXfk6cPACu5uNEkmeKWCwQ6MFieZHaDWODKVLROwpAC6Zcys/KEtnJhcwdoU
-         AdKdpQhBa2Y5NXT+O8+DS9Cu/vTyGL8PX7ghP2pHNgqoO4YXlZoouC1UgbEEif37CC9Q
-         iZvjMzu7ZC/8vCSDEHFUY5myzXXI4eVooYLjczwEunElHzk31PmS26qbPWVtZGbs8q0K
-         7Xsw==
-X-Gm-Message-State: AO0yUKWGOB6t6pbOHWF/205Iz9tHqSWhjYucgUkz1GPEwRQ9AGaM36Yp
-        C/b/1N0euJxadIwPS1RK/v4=
-X-Google-Smtp-Source: AK7set8lMicPMHIH5Axscm64BIvpF7nGdsIGod+bIC9qfdY9HY/hEeJpSPSZUOCAcqBCqDTfn6f0FA==
-X-Received: by 2002:a62:1bd2:0:b0:5a9:b6f4:778a with SMTP id b201-20020a621bd2000000b005a9b6f4778amr20774978pfb.24.1678390199437;
-        Thu, 09 Mar 2023 11:29:59 -0800 (PST)
+        bh=KrCJy7oKZ0NcxdBtk/yFFeEQwBZTbtLM0nNDWv0I1ic=;
+        b=CCQvMDrq4vNSL6C3HAsSFv5d9dNUOdyBTEpBAa59/FVHj+90WAysGwo8uRdRMSKikG
+         PNULEWziv9VWXCJLZlp2dB05hzvcsCh8OJKx2pH8aSVPB5Uh8SdVLMinLBlTSUuJJO/A
+         w4rf6xZBwZN4aQ3RNIj/glhzUMfy4xYNycOafy/ynnYX2FW+IXkSaR9azbyRYg0OJbSY
+         x3aJnfIX/Tvm4C/iqLtXMY91LZabt6P8RJDjfWPiNr7tMNa52nHeMHhCv2Ccpf4cnQPW
+         bnPBKK4G+f7I0sTQDojAOQ3a3EL5bYUBSeKq9g/z0FQMPqnASwBXbv3bGXhYWllshsQW
+         4GzQ==
+X-Gm-Message-State: AO0yUKWUh5DiC4aqDRsyupiQ0pBm8yknM2x+fz6tgYmUCx6f1DjxQ1AS
+        NudE/RGk5wQxhfoAPmf0uBQ=
+X-Google-Smtp-Source: AK7set+/ygbTh1gaa2qtr4DSUnCH7cflnR2+b5PTy1G1b959BuhRG3suXmgAOHiv1c5NZyim4Y6mTg==
+X-Received: by 2002:a62:1dc8:0:b0:5a8:a250:bc16 with SMTP id d191-20020a621dc8000000b005a8a250bc16mr17347957pfd.3.1678390201245;
+        Thu, 09 Mar 2023 11:30:01 -0800 (PST)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:bf9f:35c8:4915:cb24])
-        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b0058d8f23af26sm11570955pff.157.2023.03.09.11.29.58
+        by smtp.gmail.com with ESMTPSA id j24-20020a62b618000000b0058d8f23af26sm11570955pff.157.2023.03.09.11.29.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 11:29:58 -0800 (PST)
+        Thu, 09 Mar 2023 11:30:00 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Don Brace <don.brace@microchip.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v2 70/82] scsi: sgiwd93: Declare SCSI host template const
-Date:   Thu,  9 Mar 2023 11:26:02 -0800
-Message-Id: <20230309192614.2240602-71-bvanassche@acm.org>
+Subject: [PATCH v2 71/82] scsi: smartpqi: Declare SCSI host template const
+Date:   Thu,  9 Mar 2023 11:26:03 -0800
+Message-Id: <20230309192614.2240602-72-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230309192614.2240602-1-bvanassche@acm.org>
 References: <20230309192614.2240602-1-bvanassche@acm.org>
@@ -63,19 +64,19 @@ Make it explicit that the SCSI host template is not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/sgiwd93.c | 2 +-
+ drivers/scsi/smartpqi/smartpqi_init.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/sgiwd93.c b/drivers/scsi/sgiwd93.c
-index 57d5dff62f63..88e2b5eb9caa 100644
---- a/drivers/scsi/sgiwd93.c
-+++ b/drivers/scsi/sgiwd93.c
-@@ -204,7 +204,7 @@ static inline void init_hpc_chain(struct ip22_hostdata *hdata)
-  * arguments not with pointers.  So this is going to blow up beautyfully
-  * on 64-bit systems with memory outside the compat address spaces.
-  */
--static struct scsi_host_template sgiwd93_template = {
-+static const struct scsi_host_template sgiwd93_template = {
- 	.module			= THIS_MODULE,
- 	.proc_name		= "SGIWD93",
- 	.name			= "SGI WD93",
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 49a8f91810b6..03de97cd72c2 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -7403,7 +7403,7 @@ static struct attribute *pqi_sdev_attrs[] = {
+ 
+ ATTRIBUTE_GROUPS(pqi_sdev);
+ 
+-static struct scsi_host_template pqi_driver_template = {
++static const struct scsi_host_template pqi_driver_template = {
+ 	.module = THIS_MODULE,
+ 	.name = DRIVER_NAME_SHORT,
+ 	.proc_name = DRIVER_NAME_SHORT,
