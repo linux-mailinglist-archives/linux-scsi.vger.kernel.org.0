@@ -2,50 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B556C0845
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Mar 2023 02:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3586B6C0894
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Mar 2023 02:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjCTBIW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 19 Mar 2023 21:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        id S229774AbjCTBgA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 19 Mar 2023 21:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbjCTBH4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Mar 2023 21:07:56 -0400
+        with ESMTP id S229765AbjCTBfl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Mar 2023 21:35:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9B11F4A0;
-        Sun, 19 Mar 2023 18:00:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84E176B3;
+        Sun, 19 Mar 2023 18:29:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E947B80D43;
-        Mon, 20 Mar 2023 00:53:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4631C433D2;
-        Mon, 20 Mar 2023 00:53:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18CADB80D4F;
+        Mon, 20 Mar 2023 00:54:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDDCAC433EF;
+        Mon, 20 Mar 2023 00:54:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679273626;
-        bh=5VMwDl1Jsw26GjyXU8bTq4Dwad0lh0CCc32p19PzZOs=;
+        s=k20201202; t=1679273686;
+        bh=S92CcyWhvxH5rDjNGNtndcNeQr7FnAOumVDxLSX/x6M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L9pJ0cn0FWdQRwcIIrRN9y9pYZsl60CLi8SCUNILSwNoyz3loxHJ0qPKbKqknfntQ
-         Zq6xzs+wt6dOuLVs2YobH3on4bP/hFu+l1OYDIssxCzise6LVWmXMDGDK2HUj3JlNX
-         BTaRFWpW5IaBCTVsZfzzZKkL6UBgKZZKzqiLrWjYwlIEVlL0FjAHCPM95CVkEA2uw/
-         JQtRyyLSj9maY4JZBmdP9r3MryCvXbQ5rCL3ZCELDOxJrg1pivtwztwN2svPNVa4RH
-         NIyDBHm+2NzkGdmtBehHBmxapaxm+mMkRzCP9llBaGJIdNDWTCcoaIFCX9lGsrdyYP
-         N91WfyXuaziHQ==
+        b=cqKd6T9ZOdxacCNLCOxiZ+pjpfT3U7+dxUqS1gcI4mcevx+vooeTbIUDiPaVvXmUN
+         EfpDqcQ2KS19xrQwZehR39/rwhj8253kGUjQST9ziBHmREpgaOL+rKNqSJrIwH0h0G
+         NmYR2doIY4Tk1/VonvC4YBFPR+J03bK9pM+juRY6hqIS7H3eutfl3FjByUQHHfdF0v
+         T12z/JbRv4Bm9TX1aajBZp7TKl6CFAdHBjvUOAbs69CSUWh6D3BpnfsHg1DPOK113S
+         Lu0Fn0SYVDULQ2YuJTuOxXq5NABz92q7Wh9Qv1D612VAu/QHFzMZ8sxJeyuWykiqN6
+         6sxjkWTugc3rA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ranjan Kumar <ranjan.kumar@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+Cc:     Jakob Koschel <jkl820.git@gmail.com>,
+        Justin Tee <justin.tee@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, sathya.prakash@broadcom.com,
-        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        jejb@linux.ibm.com, mpi3mr-linuxdrv.pdl@broadcom.com,
+        Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 20/30] scsi: mpi3mr: NVMe command size greater than 8K fails
-Date:   Sun, 19 Mar 2023 20:52:45 -0400
-Message-Id: <20230320005258.1428043-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 14/29] scsi: lpfc: Avoid usage of list iterator variable after loop
+Date:   Sun, 19 Mar 2023 20:53:56 -0400
+Message-Id: <20230320005413.1428452-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320005258.1428043-1-sashal@kernel.org>
-References: <20230320005258.1428043-1-sashal@kernel.org>
+In-Reply-To: <20230320005413.1428452-1-sashal@kernel.org>
+References: <20230320005413.1428452-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,46 +58,59 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Ranjan Kumar <ranjan.kumar@broadcom.com>
+From: Jakob Koschel <jkl820.git@gmail.com>
 
-[ Upstream commit 4f297e856a7b5da2f2c66a12e739666e23943560 ]
+[ Upstream commit 2850b23e9f9ae3696e472d2883ea1b43aafa884e ]
 
-A wrong variable is checked while populating PRP entries in the PRP page
-and this results in failure. No PRP entries in the PRP page were
-successfully created and any NVMe Encapsulated commands with PRP of size
-greater than 8K failed.
+If the &epd_pool->list is empty when executing
+lpfc_get_io_buf_from_expedite_pool() the function would return an invalid
+pointer. Even in the case if the list is guaranteed to be populated, the
+iterator variable should not be used after the loop to be more robust for
+future changes.
 
-Signed-off-by: Ranjan Kumar <ranjan.kumar@broadcom.com>
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Link: https://lore.kernel.org/r/20230228140835.4075-6-ranjan.kumar@broadcom.com
+Linus proposed to avoid any use of the list iterator variable after the
+loop, in the attempt to move the list iterator variable declaration into
+the macro to avoid any potential misuse after the loop [1].
+
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+Link: https://lore.kernel.org/r/20230301-scsi-lpfc-avoid-list-iterator-after-loop-v1-1-325578ae7561@gmail.com
+Reviewed-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/mpi3mr/mpi3mr_app.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_sli.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_app.c b/drivers/scsi/mpi3mr/mpi3mr_app.c
-index bff6377023979..d10c6afb7f9cd 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_app.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_app.c
-@@ -886,7 +886,7 @@ static int mpi3mr_build_nvme_prp(struct mpi3mr_ioc *mrioc,
- 			 * each time through the loop.
- 			 */
- 			*prp_entry = cpu_to_le64(dma_addr);
--			if (*prp1_entry & sgemod_mask) {
-+			if (*prp_entry & sgemod_mask) {
- 				dprint_bsg_err(mrioc,
- 				    "%s: PRP address collides with SGE modifier\n",
- 				    __func__);
-@@ -895,7 +895,7 @@ static int mpi3mr_build_nvme_prp(struct mpi3mr_ioc *mrioc,
- 			*prp_entry &= ~sgemod_mask;
- 			*prp_entry |= sgemod_val;
- 			prp_entry++;
--			prp_entry_dma++;
-+			prp_entry_dma += prp_size;
- 		}
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index 43e06bb917e77..b44bb3ae22ad9 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -21886,20 +21886,20 @@ lpfc_get_io_buf_from_private_pool(struct lpfc_hba *phba,
+ static struct lpfc_io_buf *
+ lpfc_get_io_buf_from_expedite_pool(struct lpfc_hba *phba)
+ {
+-	struct lpfc_io_buf *lpfc_ncmd;
++	struct lpfc_io_buf *lpfc_ncmd = NULL, *iter;
+ 	struct lpfc_io_buf *lpfc_ncmd_next;
+ 	unsigned long iflag;
+ 	struct lpfc_epd_pool *epd_pool;
  
- 		/*
+ 	epd_pool = &phba->epd_pool;
+-	lpfc_ncmd = NULL;
+ 
+ 	spin_lock_irqsave(&epd_pool->lock, iflag);
+ 	if (epd_pool->count > 0) {
+-		list_for_each_entry_safe(lpfc_ncmd, lpfc_ncmd_next,
++		list_for_each_entry_safe(iter, lpfc_ncmd_next,
+ 					 &epd_pool->list, list) {
+-			list_del(&lpfc_ncmd->list);
++			list_del(&iter->list);
+ 			epd_pool->count--;
++			lpfc_ncmd = iter;
+ 			break;
+ 		}
+ 	}
 -- 
 2.39.2
 
