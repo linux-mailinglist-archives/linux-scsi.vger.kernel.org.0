@@ -2,117 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669266C08C4
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Mar 2023 02:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99C86C0926
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Mar 2023 04:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjCTB7v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 19 Mar 2023 21:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S229642AbjCTDDw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 19 Mar 2023 23:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjCTB7u (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Mar 2023 21:59:50 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0F53AA4
-        for <linux-scsi@vger.kernel.org>; Sun, 19 Mar 2023 18:59:47 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id h25so1404769lfv.6
-        for <linux-scsi@vger.kernel.org>; Sun, 19 Mar 2023 18:59:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679277585;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=veHR4OeBVdmMM7ZoMMD2LEaF+ZQb01kUcsthEQZ+G8o=;
-        b=SNcJ+0V8W1TJ4MntzJ+tWV7MHo4J3GQzdu8n70Frwh9hfIq8QJeAepOPu8iQN8X+PI
-         718jEIJg59mxJDYCZRplEWtR5a0GmEVRh4EPAtJkC6Hq5jJlDEALE1binS+iGalKfCmv
-         EGPciyy8uyBqEs3OImQsnGjVKl5PsCY2jrNl8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679277585;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=veHR4OeBVdmMM7ZoMMD2LEaF+ZQb01kUcsthEQZ+G8o=;
-        b=o0f4MEwreWht7MBjUDi209+S2X1tShrqiRYoE0rHo5/K+xlSMMkakNP2RmWrrrhKe+
-         NnK55Ppt2v4jKzAt/Cm1//sroYtVuvVZHdYdBmnSQ/pkAFuVCH/prGD8TIql9oPxZl/A
-         Jx7zfiRhZnC9i2gppxtIt5EqDvKY6eM/4ZBqzxh/Fz0/VTeEcTKW8rqu/3MIMMrWOK3h
-         Tf4dFz1PmVJVT4s1Nh5AysX0LXebU91n/vqFQY2fzrOexcZ7u7CLlmeTVoUTd30jDlGJ
-         /JFBJPs8AqrM88z8oEeUMLPEHwHrHR5BNHeiwDqdnLvF7UXOCKVY6udtyAYyz4mPwWMC
-         zbdA==
-X-Gm-Message-State: AO0yUKUZHCMy70jS1u5zeV16QNYdER9MyMbOO4SmcXgjPTf6UfZZeBgs
-        Plw93N8Wrl/HghMWUrcwNZ5W7THTusXT4VXr5BUm3w==
-X-Google-Smtp-Source: AK7set/XJFVEQIoLo6u0LSW2T83t8rtT2LybFFysGqGyz7d6iPEbfC/arxd6J/Xti7IQhzM4bvrJqA==
-X-Received: by 2002:a19:7503:0:b0:4af:5088:959c with SMTP id y3-20020a197503000000b004af5088959cmr6561293lfe.2.1679277585445;
-        Sun, 19 Mar 2023 18:59:45 -0700 (PDT)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id c17-20020ac25311000000b004db3900da02sm1472543lfh.73.2023.03.19.18.59.45
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Mar 2023 18:59:45 -0700 (PDT)
-Received: by mail-lj1-f171.google.com with SMTP id t14so10588435ljd.5
-        for <linux-scsi@vger.kernel.org>; Sun, 19 Mar 2023 18:59:45 -0700 (PDT)
-X-Received: by 2002:a17:906:2294:b0:927:912:6baf with SMTP id
- p20-20020a170906229400b0092709126bafmr2817236eja.15.1679277564111; Sun, 19
- Mar 2023 18:59:24 -0700 (PDT)
+        with ESMTP id S229486AbjCTDDt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Mar 2023 23:03:49 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CDC1997
+        for <linux-scsi@vger.kernel.org>; Sun, 19 Mar 2023 20:03:47 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Pg0196spKz9tMR;
+        Mon, 20 Mar 2023 11:03:25 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 20 Mar 2023 11:03:45 +0800
+From:   chenxiang <chenxiang66@hisilicon.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
+        Xiang Chen <chenxiang66@hisilicon.com>
+Subject: [PATCH 0/4] scsi: hisi_sas: Some misc changes
+Date:   Mon, 20 Mar 2023 11:34:21 +0800
+Message-ID: <1679283265-115066-1-git-send-email-chenxiang66@hisilicon.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-References: <20230320005258.1428043-1-sashal@kernel.org> <20230320005258.1428043-9-sashal@kernel.org>
-In-Reply-To: <20230320005258.1428043-9-sashal@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 19 Mar 2023 18:59:07 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgpK-Gm-nOybRKs1LTD5yb7rPHQ4+=PCDvq61mUpBskYw@mail.gmail.com>
-Message-ID: <CAHk-=wgpK-Gm-nOybRKs1LTD5yb7rPHQ4+=PCDvq61mUpBskYw@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 6.2 09/30] cpumask: fix incorrect cpumask scanning
- result checks
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Vernon Yang <vernon2gm@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, mpe@ellerman.id.au,
-        tytso@mit.edu, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, christophe.leroy@csgroup.eu,
-        npiggin@gmail.com, dmitry.osipenko@collabora.com, joel@jms.id.au,
-        nathanl@linux.ibm.com, gustavoars@kernel.org,
-        naveen.n.rao@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
-        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, Mar 19, 2023 at 5:53=E2=80=AFPM Sasha Levin <sashal@kernel.org> wro=
-te:
->
-> [ Upstream commit 8ca09d5fa3549d142c2080a72a4c70ce389163cd ]
+From: Xiang Chen <chenxiang66@hisilicon.com>
 
-These are technically real fixes, but they are really just "documented
-behavior" fixes, and don't actually matter unless you also have
-596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
-optimizations"), which doesn't look like stable material.
+This series contain some fixes including:
+- Grab sas_dev lock when traversing sas_dev list to avoid NULL pointer
+- Handle NCQ error when IPTT is valid
+- Ensure all enabled PHYs up during controller reset
+- Exit suspend state when usage count of runtime PM is greater than 0
 
-And if somebody *does* decide to backport commit 596ff4a09b89, you
-should then backport all of
+Xingui Yang (2):
+  scsi: hisi_sas: Grab sas_dev lock when traversing the members of
+    sas_dev.list
+  scsi: hisi_sas: Handle NCQ error when IPTT is valid
 
-  6015b1aca1a2 sched_getaffinity: don't assume 'cpumask_size()' is
-fully initialized
-  e7304080e0e5 cpumask: relax sanity checking constraints
-  63355b9884b3 cpumask: be more careful with 'cpumask_setall()'
-  8ca09d5fa354 cpumask: fix incorrect cpumask scanning result checks
+Yihang Li (2):
+  scsi: hisi_sas: Ensure all enabled PHYs up during controller reset
+  scsi: hisi_sas: Exit suspending state when usage count is greater than
+    0
 
-but again, none of these matter as long as the constant-sized cpumask
-optimized case doesn't exist.
+ drivers/scsi/hisi_sas/hisi_sas.h       |  3 +-
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 57 ++++++++++++++++++-----
+ drivers/scsi/hisi_sas/hisi_sas_v1_hw.c |  8 +++-
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  8 +++-
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 83 ++++++++++++++++++++++++++--------
+ 5 files changed, 124 insertions(+), 35 deletions(-)
 
-(Technically, FORCE_NR_CPUS also does the constant-size optimizations
-even before, but that will complain loudly if that constant size then
-doesn't match nr_cpu_ids, so ..).
+-- 
+2.8.1
 
-                   Linus
