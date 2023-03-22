@@ -2,48 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7AD6C55F3
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Mar 2023 21:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037216C55F5
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Mar 2023 21:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjCVUCO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Mar 2023 16:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S230494AbjCVUCX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Mar 2023 16:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbjCVUB1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Mar 2023 16:01:27 -0400
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7F66B31E
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:58:55 -0700 (PDT)
-Received: by mail-pl1-f172.google.com with SMTP id ix20so20302035plb.3
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:58:55 -0700 (PDT)
+        with ESMTP id S231495AbjCVUBu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Mar 2023 16:01:50 -0400
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777D36BC02
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:58:56 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so20230380pjt.5
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:58:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679515119;
+        d=1e100.net; s=20210112; t=1679515121;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xct695NTdKunJwZpBlsAMpxZPmRVUZn+AcEa7DsrRUQ=;
-        b=hJFTkgidnLMKFlvRTwHvHDI//PXLJrmSDB773zy8pwocL64neP7QH8Y9jYLDoExIJA
-         QtTnIkCVD/7qnmb34enMJhD5LMcWFfxJuVVVxWyWnmpIBKqbvREIggukGKLizJS9aFvJ
-         1CdZ/af/ZsFxOoa+Bg4BhC1xtkjvRGVnO+jbROVjg5Xw7irRDMkLDcQCpzvQ8Xu5AtDT
-         /ArUEO3JYHpAwCbPtaFCFBAEBk49SAmplW8r35C0AB1HVNRj3Ai+xPf8dUHALrUpEKGH
-         dnYDVHP10jC0mSP+7K50AnCNkxqzfwuHaofzCUAQch+JShSnSPsrW0iM1oWr4Hff8lNA
-         VJNA==
-X-Gm-Message-State: AO0yUKU2TAKul/lGickmgrxR8Ezxg06SYEsJQL7cMXC0muvCk1n1YCtk
-        xc7jIEL3KCFX8i0ZYBvJu2U=
-X-Google-Smtp-Source: AK7set/wiFQZdBUvujG4YTJD64YFezGsAO5Shbwt0m+LlrJwosdmebai6gUArpKIsu8NG5jI+Mu8sg==
-X-Received: by 2002:a17:90b:4d8f:b0:23d:3a3f:950b with SMTP id oj15-20020a17090b4d8f00b0023d3a3f950bmr5310356pjb.22.1679515119400;
-        Wed, 22 Mar 2023 12:58:39 -0700 (PDT)
+        bh=GFtVFboVcSjfPqmwHcJZEXr1SNf/HwV0uYa9XL6rvBg=;
+        b=8EvdPr4y6vKQakz8GzkaxnSztAtAm//9bIG7tG6jzOYxtQcVVVJgona0KZOANtQHPG
+         ldVbhZ8VztRPBPYq0bxiMmkon9VVg3to0S709wYtiEoxa0L93jCnv/2t8yhQYDjDFwOn
+         STqT+YaGL6muRYzcx33FI5bDFvowi8aQVbCS/mvMjRkaxoYqVqqvW2RaTss9cjwjfXPB
+         Gig90KIfijjKgMcF5vCLnR+jJcYBAn8TM7iANbDfnfw0dri3fFauK09wr8Ed6uhGWzXv
+         59uznS4fZzccS4p05qmxUOMQMD8uAJ9D90pP8zbMfVbvhiTBYtbVjEF0l5YKJ5NEY5dt
+         m4DQ==
+X-Gm-Message-State: AO0yUKWmHAfD+13Wh0y2F2uv2BQ5HiZUP+vHpYsC2fg/5rkPINIuswsZ
+        5nfZlbL9Eh8kwT5swh7p2Yi9o0YHCtah0Q==
+X-Google-Smtp-Source: AK7set++xJB+N2RtegeFsOVno5qMJifUIgJjNi4HYnNfSsCXmDv5pfQqnvKDHBBk4z6i+/ZfJFg0aA==
+X-Received: by 2002:a17:90b:164d:b0:23f:9fac:6b35 with SMTP id il13-20020a17090b164d00b0023f9fac6b35mr4720408pjb.39.1679515120746;
+        Wed, 22 Mar 2023 12:58:40 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:ad4e:d902:f46f:5b50])
-        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.58.38
+        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.58.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 12:58:39 -0700 (PDT)
+        Wed, 22 Mar 2023 12:58:40 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v3 66/80] scsi: qla1280: Declare SCSI host template const
-Date:   Wed, 22 Mar 2023 12:55:01 -0700
-Message-Id: <20230322195515.1267197-67-bvanassche@acm.org>
+Subject: [PATCH v3 67/80] scsi: qla2xxx: Declare SCSI host template const
+Date:   Wed, 22 Mar 2023 12:55:02 -0700
+Message-Id: <20230322195515.1267197-68-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230322195515.1267197-1-bvanassche@acm.org>
 References: <20230322195515.1267197-1-bvanassche@acm.org>
@@ -51,8 +53,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
         FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,19 +65,49 @@ Make it explicit that the SCSI host template is not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla1280.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_gbl.h | 2 +-
+ drivers/scsi/qla2xxx/qla_mid.c | 2 +-
+ drivers/scsi/qla2xxx/qla_os.c  | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/qla1280.c b/drivers/scsi/qla1280.c
-index 1e7f4d138e06..6e5e89aaa283 100644
---- a/drivers/scsi/qla1280.c
-+++ b/drivers/scsi/qla1280.c
-@@ -4115,7 +4115,7 @@ qla1280_get_token(char *str)
+diff --git a/drivers/scsi/qla2xxx/qla_gbl.h b/drivers/scsi/qla2xxx/qla_gbl.h
+index 9142df876c73..7bc2f634bab9 100644
+--- a/drivers/scsi/qla2xxx/qla_gbl.h
++++ b/drivers/scsi/qla2xxx/qla_gbl.h
+@@ -213,7 +213,7 @@ extern void qla2x00_free_exchoffld_buffer(struct qla_hw_data *);
+ 
+ extern int qla81xx_restart_mpi_firmware(scsi_qla_host_t *);
+ 
+-extern struct scsi_qla_host *qla2x00_create_host(struct scsi_host_template *,
++extern struct scsi_qla_host *qla2x00_create_host(const struct scsi_host_template *,
+ 	struct qla_hw_data *);
+ extern void qla2x00_free_host(struct scsi_qla_host *);
+ extern void qla2x00_relogin(struct scsi_qla_host *);
+diff --git a/drivers/scsi/qla2xxx/qla_mid.c b/drivers/scsi/qla2xxx/qla_mid.c
+index 78661b658dcd..b67416951a5f 100644
+--- a/drivers/scsi/qla2xxx/qla_mid.c
++++ b/drivers/scsi/qla2xxx/qla_mid.c
+@@ -496,7 +496,7 @@ qla24xx_create_vhost(struct fc_vport *fc_vport)
+ 	scsi_qla_host_t *base_vha = shost_priv(fc_vport->shost);
+ 	struct qla_hw_data *ha = base_vha->hw;
+ 	scsi_qla_host_t *vha;
+-	struct scsi_host_template *sht = &qla2xxx_driver_template;
++	const struct scsi_host_template *sht = &qla2xxx_driver_template;
+ 	struct Scsi_Host *host;
+ 
+ 	vha = qla2x00_create_host(sht, ha);
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index a6c5e0d8641d..27f3e99b7818 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -4999,8 +4999,8 @@ qla2x00_mem_free(struct qla_hw_data *ha)
+ 	ha->vp_map = NULL;
  }
  
- 
--static struct scsi_host_template qla1280_driver_template = {
-+static const struct scsi_host_template qla1280_driver_template = {
- 	.module			= THIS_MODULE,
- 	.proc_name		= "qla1280",
- 	.name			= "Qlogic ISP 1280/12160",
+-struct scsi_qla_host *qla2x00_create_host(struct scsi_host_template *sht,
+-						struct qla_hw_data *ha)
++struct scsi_qla_host *qla2x00_create_host(const struct scsi_host_template *sht,
++					  struct qla_hw_data *ha)
+ {
+ 	struct Scsi_Host *host;
+ 	struct scsi_qla_host *vha = NULL;
