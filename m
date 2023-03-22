@@ -2,48 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F164D6C5548
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Mar 2023 20:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 533526C554A
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Mar 2023 20:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjCVT5A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Mar 2023 15:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
+        id S230267AbjCVT5I (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Mar 2023 15:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjCVT4n (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Mar 2023 15:56:43 -0400
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36B15B5CF
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:56:35 -0700 (PDT)
-Received: by mail-pl1-f169.google.com with SMTP id o2so12884365plg.4
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:56:35 -0700 (PDT)
+        with ESMTP id S230047AbjCVT4r (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Mar 2023 15:56:47 -0400
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5460F61AB8
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:56:37 -0700 (PDT)
+Received: by mail-pj1-f44.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so24654036pjt.2
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:56:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679514995;
+        d=1e100.net; s=20210112; t=1679514997;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=H9QNk6q17I8CdJSB5JsrnuqP/ZBn9pNyTOjnOStZX4E=;
-        b=OkSZBPv3L5XE+QtJE7aVzsGlFa0KM5SDl6KJAKfhLhxfGy4gA7ufaGXeuWLPzX40vz
-         9jMiS1ZaH+SntJqdc+6bG0b/QS74pCvtdc6ftA0Pum6TQMaRBgwasoIkA9QJFwy4OnYg
-         RE3zl3wVoRIhkWeg+4viR4Pga/oTnQtx3ioFOc2q6HxOEEH8M7Iev239jtP+gkDaBFro
-         rYO7wpd8wGlU0kTKmydXOfvhN4ZGHlN4KE0IRHyOpFGHpSpfYgpeSQKt1KG0DFA1gKN9
-         E7pa2UserpeSPR9OL1fsoMI44E+jR1BaKXaEBbFw98W4GwM2jIOPhcUBXkIzonw8ESc1
-         AGwA==
-X-Gm-Message-State: AO0yUKWWJAj7XJLc+ZLKs/jGiWEhcCG+JyESRcDHV7B+xydApHWF1480
-        3ZV3nkfYmTDHd/beyTwAIRg=
-X-Google-Smtp-Source: AK7set/SxTj9zihr+Mu1q7hG62qnY/tprk3ivF2U3ZV/Z0W9eb2d07Imkr6QhKcU+NP6nbimDN+YvA==
-X-Received: by 2002:a17:90b:1d8c:b0:237:b4c0:e15b with SMTP id pf12-20020a17090b1d8c00b00237b4c0e15bmr4938606pjb.44.1679514995473;
-        Wed, 22 Mar 2023 12:56:35 -0700 (PDT)
+        bh=xOqT7dLP4YcCtL1jZVtGdq9lau6Z+QsWChHpf/+Jq3I=;
+        b=OIDQfUyaQ2eejhuZtGIVEBYpWEJg4S/LR22QAY+JCkRFZXZ4oU7BYFVNhydhB1B/sU
+         OwpGQ2JD/WsGKi14y1pwds8Sk1ctUo6OHzfkedTYb15fSvmWLrXYgEaZPx2BODBwspuA
+         iKby2FLC82zSpc/LBK+Kyk6z2JW/TKPC6xjFBa9PFpT2fkuBZVRXBGhdX8SpVOWEdD+B
+         2mhjR0/V3ajeD/vApEhd0cA+77OeOg4k798/uUYJ9B01qjq28/I2pK4GN1GG1CIssK0Y
+         PHFWtt53Uk78ZE1aY9twcVSOwWRTshQ3MXe+xq0Pavq8hBxQLxwONWT72X1O5EZyU8HA
+         MmEQ==
+X-Gm-Message-State: AO0yUKWy9cj9wCWvc+82HQM3BMjLmzYk5H2+xEKKF8/nAOqyWbksfnwt
+        JrL+GC+0hfjN76OZF5ce568=
+X-Google-Smtp-Source: AK7set9jzNuu3QaDD0+DoKXEIRcf9y2bSKHFqj2hcgUBO5XXvGbP2unr5vy+Rqf57OnbmBadLyxRQg==
+X-Received: by 2002:a17:90b:1d10:b0:23f:2661:f94c with SMTP id on16-20020a17090b1d1000b0023f2661f94cmr4902838pjb.47.1679514996776;
+        Wed, 22 Mar 2023 12:56:36 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:ad4e:d902:f46f:5b50])
-        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.56.34
+        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.56.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 12:56:35 -0700 (PDT)
+        Wed, 22 Mar 2023 12:56:36 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v3 13/80] scsi: a100u2w: Declare SCSI host template const
-Date:   Wed, 22 Mar 2023 12:54:08 -0700
-Message-Id: <20230322195515.1267197-14-bvanassche@acm.org>
+Subject: [PATCH v3 14/80] scsi: a2091: Declare SCSI host template const
+Date:   Wed, 22 Mar 2023 12:54:09 -0700
+Message-Id: <20230322195515.1267197-15-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230322195515.1267197-1-bvanassche@acm.org>
 References: <20230322195515.1267197-1-bvanassche@acm.org>
@@ -63,19 +63,19 @@ Make it explicit that the SCSI host template is not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/a100u2w.c | 2 +-
+ drivers/scsi/a2091.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/a100u2w.c b/drivers/scsi/a100u2w.c
-index d02eb5b213d0..b95147fb18b0 100644
---- a/drivers/scsi/a100u2w.c
-+++ b/drivers/scsi/a100u2w.c
-@@ -1065,7 +1065,7 @@ static irqreturn_t inia100_intr(int irqno, void *devid)
- 	return res;
+diff --git a/drivers/scsi/a2091.c b/drivers/scsi/a2091.c
+index 74312400468b..204448bfd04b 100644
+--- a/drivers/scsi/a2091.c
++++ b/drivers/scsi/a2091.c
+@@ -180,7 +180,7 @@ static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
+ 	}
  }
  
--static struct scsi_host_template inia100_template = {
-+static const struct scsi_host_template inia100_template = {
- 	.proc_name		= "inia100",
- 	.name			= inia100_REVID,
- 	.queuecommand		= inia100_queue,
+-static struct scsi_host_template a2091_scsi_template = {
++static const struct scsi_host_template a2091_scsi_template = {
+ 	.module			= THIS_MODULE,
+ 	.name			= "Commodore A2091/A590 SCSI",
+ 	.show_info		= wd33c93_show_info,
