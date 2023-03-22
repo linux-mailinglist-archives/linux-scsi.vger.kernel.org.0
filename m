@@ -2,50 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A26D46C55FA
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Mar 2023 21:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799276C55FB
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Mar 2023 21:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjCVUCb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Mar 2023 16:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
+        id S231502AbjCVUCg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Mar 2023 16:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbjCVUB4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Mar 2023 16:01:56 -0400
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2958B6BC09
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:59:03 -0700 (PDT)
-Received: by mail-pj1-f50.google.com with SMTP id l7so2457561pjg.5
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:59:03 -0700 (PDT)
+        with ESMTP id S231164AbjCVUCA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Mar 2023 16:02:00 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FEC6BC23
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:59:05 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so20230611pjt.5
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:59:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679515125;
+        d=1e100.net; s=20210112; t=1679515127;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=x8zmmOkwIoIKAWyiwthdityD4hZhxjndZB0ZAklYRAQ=;
-        b=5VPQ9T8pKxk4l1KKJ9SMA6aGxrmWTHqT2qggDiak7x7mJw5ygLftn4Hi/VlFDyK+6m
-         9yXd8+d7FJBSInzMQyzA5VYcEzUFBViiEvbTzVB1RUYjLwAGo8/mZ2+oTCDJFTCHx/6M
-         KL8XPaTd5Xdr3erwOw9Kp/s7XNV/WgfNdxrEyLAaUT6DibISAPIgait8SiR82c6NiHz5
-         TYDyzwbEl1WV+Z7Tk1yhatjn5NyCNJ7w3T53mEd8EIS7oB9+yGkz09KjjoW+gfxTpyqc
-         gpfDbd3lw7sUrWbe7E0yO03E1g35hT5Js3N7GKQWAviidii0k7gFUJ13WW3YTwaPVfpT
-         EHvA==
-X-Gm-Message-State: AO0yUKV1WEJcoqHB34goY8dlM7Jibm95/pOwachhRaLLe4gd9y+aVg3F
-        MYfxi3C0BOcgPIczBQVr6A4=
-X-Google-Smtp-Source: AK7set94jTr17trw6yiZL4N6DnYL+337liZoii/aVMyOruf3I2uV4QrUs9beleTsXzRYiVsiDxPdlA==
-X-Received: by 2002:a17:90b:4b06:b0:23f:635e:51e5 with SMTP id lx6-20020a17090b4b0600b0023f635e51e5mr4799243pjb.36.1679515125451;
-        Wed, 22 Mar 2023 12:58:45 -0700 (PDT)
+        bh=xpoH3ZmMyEfzGffayIrMYkM/us+uEKnG/TchdnkTiAk=;
+        b=h0uIqJfcKZ2YzAF99Jnsi0eCGaoKIhpyzF3OITiDuwnbOww2ZUneJG6feNMTkoTFzZ
+         XmRMwsw/HXp7W+h4fQRzFVMdy+Ix1DBUD9F58z1uDUDZYPQ7s/5MdTBmcA/nHCdjIlNV
+         Dde63u/pqHYfniGZQ1Uj7HsBPUHD6R4k4JJDIbZUvuitpTQigqGpHPUNGB3hHhm+MFQQ
+         zaojW0DV3TkGa3WUK+MXejh3bG67SlGY+wmVCioMQUkynzPUtPSmRytdcn93OgOVAE+V
+         G7NDLbT5wad17ppe7q7hZg6CQj3b/XxeFTFbXSGZlpzqnV/qzmVY7zdeinjTrNWlec8P
+         F25w==
+X-Gm-Message-State: AO0yUKXvoFgD1rKz693NYqYt8p+gghkfOflLE1FZAyGnxs5c8uAjpXlW
+        IoRvKteZDIymcveJSaP5fm0=
+X-Google-Smtp-Source: AK7set9js3hK9C3wsO0w8SAQXfldEvVQKBw2qqFgohq4X/j5yDNhWDXygr4Er7PFiWizLuXHlm0CbQ==
+X-Received: by 2002:a17:90b:3e82:b0:23d:5485:b80e with SMTP id rj2-20020a17090b3e8200b0023d5485b80emr5254316pjb.6.1679515126677;
+        Wed, 22 Mar 2023 12:58:46 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:ad4e:d902:f46f:5b50])
-        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.58.44
+        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.58.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 12:58:45 -0700 (PDT)
+        Wed, 22 Mar 2023 12:58:46 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Karan Tilak Kumar <kartilak@cisco.com>,
-        Sesidhar Baddela <sebaddel@cisco.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v3 71/80] scsi: snic: Declare SCSI host template const
-Date:   Wed, 22 Mar 2023 12:55:06 -0700
-Message-Id: <20230322195515.1267197-72-bvanassche@acm.org>
+Subject: [PATCH v3 72/80] scsi: stex: Declare SCSI host template const
+Date:   Wed, 22 Mar 2023 12:55:07 -0700
+Message-Id: <20230322195515.1267197-73-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230322195515.1267197-1-bvanassche@acm.org>
 References: <20230322195515.1267197-1-bvanassche@acm.org>
@@ -65,19 +63,19 @@ Make it explicit that the SCSI host template is not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/snic/snic_main.c | 2 +-
+ drivers/scsi/stex.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/snic/snic_main.c b/drivers/scsi/snic/snic_main.c
-index 174f7811fe50..cc824dcfe7da 100644
---- a/drivers/scsi/snic/snic_main.c
-+++ b/drivers/scsi/snic/snic_main.c
-@@ -100,7 +100,7 @@ snic_change_queue_depth(struct scsi_device *sdev, int qdepth)
- 	return sdev->queue_depth;
+diff --git a/drivers/scsi/stex.c b/drivers/scsi/stex.c
+index 8def242675ef..5b230e149c3d 100644
+--- a/drivers/scsi/stex.c
++++ b/drivers/scsi/stex.c
+@@ -1472,7 +1472,7 @@ static int stex_biosparam(struct scsi_device *sdev,
+ 	return 0;
  }
  
--static struct scsi_host_template snic_host_template = {
-+static const struct scsi_host_template snic_host_template = {
- 	.module = THIS_MODULE,
- 	.name = SNIC_DRV_NAME,
- 	.queuecommand = snic_queuecommand,
+-static struct scsi_host_template driver_template = {
++static const struct scsi_host_template driver_template = {
+ 	.module				= THIS_MODULE,
+ 	.name				= DRV_NAME,
+ 	.proc_name			= DRV_NAME,
