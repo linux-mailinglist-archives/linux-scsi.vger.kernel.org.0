@@ -2,51 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A366C5560
+	by mail.lfdr.de (Postfix) with ESMTP id D5E3A6C5561
 	for <lists+linux-scsi@lfdr.de>; Wed, 22 Mar 2023 20:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbjCVT57 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Mar 2023 15:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
+        id S229620AbjCVT6B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Mar 2023 15:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjCVT5b (ORCPT
+        with ESMTP id S230444AbjCVT5b (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Mar 2023 15:57:31 -0400
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE21269CE8
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:57:10 -0700 (PDT)
-Received: by mail-pj1-f50.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so20254927pjz.1
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:57:10 -0700 (PDT)
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00F369CD1
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:57:11 -0700 (PDT)
+Received: by mail-pj1-f45.google.com with SMTP id d13so19539327pjh.0
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:57:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679515030;
+        d=1e100.net; s=20210112; t=1679515031;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OIPb3HYAXuW5r7Endmq1PVAaSjgIGGcvZm+x2bOLt/M=;
-        b=IAG0gBYE1dACvnIBJ6vOwGWxM0j1jz32CytFTDsUv3zjg7D1XgvIaMat29uzzPsRKQ
-         qHr0VG4Sx/Rl1wHx/C7p2mtMewtthjXcZSrUujkguhXCckfe1rLmQUPl/jVwXSijkDzm
-         UnKXnb/MJ9SLRtyuyZQmo/FTnJXaRMKLbszU9n0VFFlKj79H/KXXiTJMl1H417I8wcPq
-         DpCkpmpNeCQ1G33XgVaJZSRPF5wcx3ew+lDBJEUhWvvmf+mvUbT+kVLR38eOJy9/k4SB
-         ZMzANWc9wzVARmkDmZ2FOHFm1uyDkd1fIchGJz45NHYKTgaKk+e2cw54i9xaExxzQZql
-         BRNA==
-X-Gm-Message-State: AAQBX9eW7cUhY+CPm2lhx1FxkjxoQXmaLnhN15nQLhJnYY2hcA1O85vX
-        kTCYqTAYrxCj1+BccSVv6ns=
-X-Google-Smtp-Source: AKy350ZxRJXYqdjZ1McqZ/noir3TjnMUwYcTfyF+dLEow+XlsIVeO++MQVn448gDj6kHtjz83ds8Ug==
-X-Received: by 2002:a17:90a:8b92:b0:240:883:8ff8 with SMTP id z18-20020a17090a8b9200b0024008838ff8mr3244144pjn.3.1679515030153;
-        Wed, 22 Mar 2023 12:57:10 -0700 (PDT)
+        bh=dtvaziFz+alOfUQZbNe+VAlPBd5fDCw1fGTb/wB6Zxw=;
+        b=v1wyq9Q783hwJJ88jwwfy6VQqSztBd1W3hx32LxYP600TOUElP844dID9maRfQybHC
+         zgd2Ca6DhKrQTvOJrMKqEv3RFLRLRSYGFpUe0J3cL5ymmW48PhpwzLdup46hmkQ8rT8w
+         DxrpYH1nd0l900UxkIPmf0r+r9toK1fExQj0OfudtnGtIf9yIykdshnqI6VXy9WG2le0
+         zXwCxNej8CyYV6M9S451AVBZc3TPdmt+KkT7aUzmRybPMDP0Cx0LRT8MBX2cMYkurygf
+         P+iZSQ9kgsTASbjFlTYFsWtkZhlBfSGcYXoKpspbxssNL07noJCZyPrxl6uETSn65pxr
+         7wyw==
+X-Gm-Message-State: AO0yUKXvthn69I2sCE+Bdnn/xYR7VTCuiEev3h1fIfsBJXcNTvegfSpg
+        geGMqxxdu6OsWj2NZ7mT+QU=
+X-Google-Smtp-Source: AK7set+z9MoEqWEy0f+OAbr0Pb4vFNXfVhuPN4/8GESKV5oDrjvH5Q0k9IyVsYfKXHTs4pYkMC233w==
+X-Received: by 2002:a17:90b:4d07:b0:237:91df:9fcd with SMTP id mw7-20020a17090b4d0700b0023791df9fcdmr4165299pjb.48.1679515031291;
+        Wed, 22 Mar 2023 12:57:11 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:ad4e:d902:f46f:5b50])
-        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.57.09
+        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.57.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 12:57:09 -0700 (PDT)
+        Wed, 22 Mar 2023 12:57:10 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Finn Thain <fthain@linux-m68k.org>,
-        Michael Schmitz <schmitzmic@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v3 27/80] scsi: oak: Declare SCSI host template const
-Date:   Wed, 22 Mar 2023 12:54:22 -0700
-Message-Id: <20230322195515.1267197-28-bvanassche@acm.org>
+Subject: [PATCH v3 28/80] scsi: powertec: Declare SCSI host template const
+Date:   Wed, 22 Mar 2023 12:54:23 -0700
+Message-Id: <20230322195515.1267197-29-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230322195515.1267197-1-bvanassche@acm.org>
 References: <20230322195515.1267197-1-bvanassche@acm.org>
@@ -66,19 +64,19 @@ Make it explicit that the SCSI host template is not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/arm/oak.c | 2 +-
+ drivers/scsi/arm/powertec.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/arm/oak.c b/drivers/scsi/arm/oak.c
-index f18a0620c808..d69245007096 100644
---- a/drivers/scsi/arm/oak.c
-+++ b/drivers/scsi/arm/oak.c
-@@ -100,7 +100,7 @@ printk("reading %p len %d\n", addr, len);
+diff --git a/drivers/scsi/arm/powertec.c b/drivers/scsi/arm/powertec.c
+index 7586d2a03812..3b5991427886 100644
+--- a/drivers/scsi/arm/powertec.c
++++ b/drivers/scsi/arm/powertec.c
+@@ -279,7 +279,7 @@ powertecscsi_store_term(struct device *dev, struct device_attribute *attr, const
+ static DEVICE_ATTR(bus_term, S_IRUGO | S_IWUSR,
+ 		   powertecscsi_show_term, powertecscsi_store_term);
  
- #include "../NCR5380.c"
- 
--static struct scsi_host_template oakscsi_template = {
-+static const struct scsi_host_template oakscsi_template = {
- 	.module			= THIS_MODULE,
- 	.name			= "Oak 16-bit SCSI",
- 	.info			= oakscsi_info,
+-static struct scsi_host_template powertecscsi_template = {
++static const struct scsi_host_template powertecscsi_template = {
+ 	.module				= THIS_MODULE,
+ 	.show_info			= powertecscsi_show_info,
+ 	.write_info			= powertecscsi_set_proc_info,
