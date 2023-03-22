@@ -2,49 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E9E6C5544
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Mar 2023 20:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D506C5546
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Mar 2023 20:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjCVT4u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Mar 2023 15:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
+        id S230169AbjCVT4y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Mar 2023 15:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjCVT4k (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Mar 2023 15:56:40 -0400
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089A55BCA4
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:56:31 -0700 (PDT)
-Received: by mail-pj1-f53.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso24686152pjb.0
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:56:31 -0700 (PDT)
+        with ESMTP id S230064AbjCVT4n (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Mar 2023 15:56:43 -0400
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763CB5ADF4
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:56:32 -0700 (PDT)
+Received: by mail-pl1-f173.google.com with SMTP id o2so12884226plg.4
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:56:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679514990;
+        d=1e100.net; s=20210112; t=1679514992;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fMZZSzHNKzDNL64pOw/gqMY4JB5yYVuh2s/FZomE/a4=;
-        b=wpb2rLWOXDmtAkgcpamPMhgk+CRsYn4fWuvBYccDHM9Ic8EU0bRW2kOqLVOKJZgZCS
-         fzHzzwB23j++lSAue1ezErKlq8fmwkUKQzY2blZGeO/UZKUjK2JgeLBZGKa7DWVrYpga
-         WqIP61kNrmw8L7cDdVoRga16M8m82c+I0qNK+gPrXQvFRJIHmfQqeACenbn+hKHAs2kY
-         ouOCB9CuKEWhE0AivZ1BbK/QMcHUiS7+6w5lwIgefnWTDpXguxbsMob8bGqnxR+PH5db
-         ZOBCs65iQA10ERem5CvdjLxdNZiFsa4Er0PWqaG+LXJoVOdbLyaoJrvDc10GklDb2naR
-         TU9g==
-X-Gm-Message-State: AO0yUKXNpe7d4hZHQFTpvhUyhywI9VT33+g6W3n3/Chpg97btV9fwIlC
-        tysdiQeMmZ2Aoz9Pss7q01g=
-X-Google-Smtp-Source: AK7set9Hpr0Jm2dXhg6mJO+SHaZReYA3JHmZIUvo3nc2gTKE/U1JI/EXGiF6KxUo7rLLM6VCyxk5CA==
-X-Received: by 2002:a17:90a:1918:b0:23a:8d71:99d with SMTP id 24-20020a17090a191800b0023a8d71099dmr4800136pjg.22.1679514990479;
-        Wed, 22 Mar 2023 12:56:30 -0700 (PDT)
+        bh=wlyhrjS/HEDGCdAm7rlCI5/1sqj4pYqwf5Yq1hTnrno=;
+        b=4WQl2rd9fqYY6rQiAsPEyK3YSTagiimP/xOa0Kmb3RErvnfFsK7c2403dOqfs+IMxZ
+         aXcYnTZ/e3flALU34SQ3jdpjdi2vMCO7mC+vcucpIbcvLBUTjSofRlF2gZCCLqgxNmyU
+         r0A+Sznasf9lJzcY7O6PP5f/RwEQ3CRF0TbVplovrgezZYx+qHgtRRiiu+ZFU3ue23dT
+         4nwF3xH9sUbCWHbDcOHJCoon/JGuy0KKmqPDFw+R6Qf0PR0Rot+MZO6l214dffzy8giI
+         gtXwFjXrMlgsegjgQkFUVWjXTyy6zLW6+/Qjamr8hJ7FghCQzDGyHkPUnQtQ2wuDaO0q
+         uSGQ==
+X-Gm-Message-State: AO0yUKX8VhNY8tPhp48Zr/fIZmJDxToGtLkhta+Id/NvKHZrwe5xncdc
+        iWVMcDCJcHl7M06bjlggvkVzPIEAgHI=
+X-Google-Smtp-Source: AK7set8jShp4aZ69rpZlLyVg4jeW4inWmOlLsL8c/lzGbN/YDCYUnCXyA1s7jb8w7/tm2TsHkFMJhQ==
+X-Received: by 2002:a17:90b:4c04:b0:23f:5ab0:68a2 with SMTP id na4-20020a17090b4c0400b0023f5ab068a2mr4764936pjb.40.1679514991884;
+        Wed, 22 Mar 2023 12:56:31 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:ad4e:d902:f46f:5b50])
-        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.56.29
+        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.56.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 12:56:29 -0700 (PDT)
+        Wed, 22 Mar 2023 12:56:31 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Adam Radford <aradford@gmail.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v3 09/80] scsi: 3w-9xxx: Declare SCSI host template const
-Date:   Wed, 22 Mar 2023 12:54:04 -0700
-Message-Id: <20230322195515.1267197-10-bvanassche@acm.org>
+Subject: [PATCH v3 10/80] scsi: 3w-sas: Declare SCSI host template const
+Date:   Wed, 22 Mar 2023 12:54:05 -0700
+Message-Id: <20230322195515.1267197-11-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230322195515.1267197-1-bvanassche@acm.org>
 References: <20230322195515.1267197-1-bvanassche@acm.org>
@@ -64,20 +64,20 @@ Make it explicit that the SCSI host template is not modified.
 
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/3w-9xxx.c | 3 +--
+ drivers/scsi/3w-sas.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/3w-9xxx.c b/drivers/scsi/3w-9xxx.c
-index 6cb9cca9565b..38d20a69ee12 100644
---- a/drivers/scsi/3w-9xxx.c
-+++ b/drivers/scsi/3w-9xxx.c
-@@ -1976,8 +1976,7 @@ static int twa_slave_configure(struct scsi_device *sdev)
+diff --git a/drivers/scsi/3w-sas.c b/drivers/scsi/3w-sas.c
+index f41c93454f0c..55989eaa2d9f 100644
+--- a/drivers/scsi/3w-sas.c
++++ b/drivers/scsi/3w-sas.c
+@@ -1530,8 +1530,7 @@ static int twl_slave_configure(struct scsi_device *sdev)
  	return 0;
- } /* End twa_slave_configure() */
+ } /* End twl_slave_configure() */
  
 -/* scsi_host_template initializer */
 -static struct scsi_host_template driver_template = {
 +static const struct scsi_host_template driver_template = {
  	.module			= THIS_MODULE,
- 	.name			= "3ware 9000 Storage Controller",
- 	.queuecommand		= twa_scsi_queue,
+ 	.name			= "3w-sas",
+ 	.queuecommand		= twl_scsi_queue,
