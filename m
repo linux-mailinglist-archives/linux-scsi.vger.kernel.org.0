@@ -2,48 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D17C6C55B2
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Mar 2023 21:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4C86C55C1
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Mar 2023 21:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbjCVUA1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Mar 2023 16:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S231435AbjCVUAw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Mar 2023 16:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbjCVT7i (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Mar 2023 15:59:38 -0400
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BC312F04
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:58:12 -0700 (PDT)
-Received: by mail-pj1-f45.google.com with SMTP id a16so15160858pjs.4
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:58:12 -0700 (PDT)
+        with ESMTP id S231365AbjCVT7z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Mar 2023 15:59:55 -0400
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF8E5A922
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:58:21 -0700 (PDT)
+Received: by mail-pj1-f51.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so24645819pjv.5
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Mar 2023 12:58:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679515090;
+        d=1e100.net; s=20210112; t=1679515099;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AnK8Yqpa8id/oOS0MLZlCpDLRfS4lc4w7yWCDfvnNtc=;
-        b=l9kqm71KcakfY6963mBmUmGBHujTWCA1y0nC5Nde4pbRh2P9EjT8axe3NuN+95Pf3s
-         tr9DwE0+kqwgbe/aCAi3Mal49GvDaZlXAbpssnCknl8erxG3WpuHQEVPRCz74A/nF6kF
-         eijSUBIHiOskpK7hvkJQyBbTsmzv3qP9+bgiN7Gi5sVaUVB7GBQO70GeU6vJaDqxjzgy
-         VxORpj+Bzr2ude/qowejHm4y92MbTizqTQDHD8UmDmPLt8v3FlPqT3pNNSVzoWb62WNg
-         aQx1ak/4cc9qR/KjL4wldlCGNT1I4qF/2gsYCJHhKuuLcQPQGW6Fx4AViOis/lnK9z4i
-         nyXA==
-X-Gm-Message-State: AO0yUKVx/z1bSuNSUrwAw+aruXb0zV/3cNv7/nKE6KODW6lVF6yDBhcv
-        WUl8c9JU/keuj6h/SE5/ifk=
-X-Google-Smtp-Source: AK7set/M9cuVdBAlbt24Nz+2EYxmIygt9efcFwYgXd5iKVcBSZ308FkK/EbWtvNuUGYVUSLmsR42dQ==
-X-Received: by 2002:a17:90b:4b8e:b0:23c:ffd2:6502 with SMTP id lr14-20020a17090b4b8e00b0023cffd26502mr5415387pjb.12.1679515090257;
-        Wed, 22 Mar 2023 12:58:10 -0700 (PDT)
+        bh=zeBcHhBT8lTvtzrpIMuLtB00FAo06aPx5N7DZXVv5iM=;
+        b=dbSnq+00nN7sSN7BTlN1Dh0PNsCmTSVJETSEnRGpBx5q4dXGtL5v/ebBTEO7jBwRPy
+         8piLGJb3BXRUgEpT0LOaY/ElPgNvetMb5BsWCYABFUshHN8YIhMoP7p/M7HbVMrHGGoK
+         arDjdhtmeQS2r0d6h7TbesREoUum3Gem+MB/AY6vv0+gdOO8J26+rx8WNoID70vo8L7/
+         DyZvrRk1hYGVZl2RSJuAvchO74JI9dztMl41sY27iBbyRgAZ5TfHUYUZpvxwKPJQArAW
+         U8bWfUdZeYPj/i6hKk9S/JnKpyKb/c7bZuIQuiUPoLCN/fB7h90UFyypdfkhg1B2LHzv
+         VJUA==
+X-Gm-Message-State: AO0yUKVwW973kzThUtWftjMYMAVeblv08IuUMnihIlWArI3HYeHOxiGb
+        JCJj28XXd8yCwRWukI/lbys=
+X-Google-Smtp-Source: AK7set/EdKb8gtD5iXIpz6Dvtxd7je51MELT1GmC86I2zifGH1JTaECKwOrextQJj9pvcZ0uTlNzug==
+X-Received: by 2002:a17:90b:4d8a:b0:23f:9fac:6b31 with SMTP id oj10-20020a17090b4d8a00b0023f9fac6b31mr4682090pjb.25.1679515099267;
+        Wed, 22 Mar 2023 12:58:19 -0700 (PDT)
 Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:ad4e:d902:f46f:5b50])
-        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.58.09
+        by smtp.gmail.com with ESMTPSA id g2-20020a17090adac200b00233cde36909sm13574815pjx.21.2023.03.22.12.58.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Mar 2023 12:58:09 -0700 (PDT)
+        Wed, 22 Mar 2023 12:58:18 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: [PATCH v3 55/80] scsi: mvme147: Declare SCSI host template const
-Date:   Wed, 22 Mar 2023 12:54:50 -0700
-Message-Id: <20230322195515.1267197-56-bvanassche@acm.org>
+        John Garry <john.g.garry@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Alexey Galakhov <agalakhov@gmail.com>,
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCH v3 56/80] scsi: mvsas: Declare SCSI host template const
+Date:   Wed, 22 Mar 2023 12:54:51 -0700
+Message-Id: <20230322195515.1267197-57-bvanassche@acm.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230322195515.1267197-1-bvanassche@acm.org>
 References: <20230322195515.1267197-1-bvanassche@acm.org>
@@ -61,21 +64,22 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Make it explicit that the SCSI host template is not modified.
 
+Reviewed-by: John Garry <john.g.garry@oracle.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/mvme147.c | 2 +-
+ drivers/scsi/mvsas/mv_init.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/mvme147.c b/drivers/scsi/mvme147.c
-index 472fa043094f..98b99c0f5bc7 100644
---- a/drivers/scsi/mvme147.c
-+++ b/drivers/scsi/mvme147.c
-@@ -69,7 +69,7 @@ static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
- 	m147_pcc->dma_cntrl = 0;
- }
+diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
+index cfe84473a515..49e2a5e7ce54 100644
+--- a/drivers/scsi/mvsas/mv_init.c
++++ b/drivers/scsi/mvsas/mv_init.c
+@@ -29,7 +29,7 @@ static const struct attribute_group *mvst_host_groups[];
  
--static struct scsi_host_template mvme147_host_template = {
-+static const struct scsi_host_template mvme147_host_template = {
+ #define SOC_SAS_NUM 2
+ 
+-static struct scsi_host_template mvs_sht = {
++static const struct scsi_host_template mvs_sht = {
  	.module			= THIS_MODULE,
- 	.proc_name		= "MVME147",
- 	.name			= "MVME147 built-in SCSI",
+ 	.name			= DRV_NAME,
+ 	.queuecommand		= sas_queuecommand,
