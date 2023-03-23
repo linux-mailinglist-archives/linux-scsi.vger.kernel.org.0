@@ -2,61 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DBA6C64DF
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Mar 2023 11:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EABC6C64E9
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Mar 2023 11:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjCWKZ5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 Mar 2023 06:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42074 "EHLO
+        id S231419AbjCWK0I (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 Mar 2023 06:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjCWKZg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Mar 2023 06:25:36 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10A51B2D4
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Mar 2023 03:25:30 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id r11so3074855wrr.12
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Mar 2023 03:25:30 -0700 (PDT)
+        with ESMTP id S231331AbjCWKZr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Mar 2023 06:25:47 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342E215881
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Mar 2023 03:25:32 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id t15so19855830wrz.7
+        for <linux-scsi@vger.kernel.org>; Thu, 23 Mar 2023 03:25:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679567129;
+        d=linaro.org; s=google; t=1679567130;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KpNLyip69wJmwS3OqBQsHCVctKdhVF4LiqZDmDMUITQ=;
-        b=ksoJnpaK/Zy6H22m19pDj2+MsjnTWx5V52xHiYII2sZY3NnOGH/VCPayWVplJI49n4
-         ND5pCgxvdcpo2zY5ivvI+6PaEQb3RUIrHghG0fXowpUPDaiRdFNFFoaptC6atp2LFDu4
-         /7l8Ft9XzQI/dgI2u5Kwjzjf3EGfetJ/nD19W1xeFExSOR/0ZrGeJgeovF+mJ5cIQcS6
-         IIUH+yBHXb4uTAbLYXpoijgnFWQYeSiSA6Q4cZyNbB1P4/nuqF4+tRfG4scuPUaaB4PZ
-         oy7rac3DSmLy92YeMtCqS/0R/2asitjiEoWzOpdqfo6qh7rO6b/GqtLVjy5psj/Std9W
-         pipQ==
+        bh=NXsWO/AvbcGFTuUSdH/Ht1at3O5Z+IWMIafYvf7D2hY=;
+        b=A9nrFruVwvfmdqAa9k/GzLJISL5s8P9n/DnONHFbHsC4BZcSiPBiEWZW4SndgxqNqH
+         AFDBsjSdFfjmF8X+3YJVe1NhRW4klv0GCccjBnuHu6WS6mBFEV7K/Fq3xwfR2//IN2o6
+         mjbX6TWGFtGMZazqhza4iYRg+bjhcYb2RjvobGnTYZRMRZpu2N3n3BEDCMbmppRoU+vR
+         Egm2SgKlW78u920qdCFa7U5TfJ3M8KvW/ey5y+fVHJAnz0K+7x6xxXwRMCZMSJMmIudB
+         9WIBg/dGHgJK3KfociRtxSLXRXLa3gfSBgqSTAIIjmMiNbNFBuIZnrp9L3RLEeIZQybc
+         unFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679567129;
+        d=1e100.net; s=20210112; t=1679567130;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KpNLyip69wJmwS3OqBQsHCVctKdhVF4LiqZDmDMUITQ=;
-        b=rVwF0SdyrfcC4zyv1jB3r4vNOJCxASxvhA7HUtKhFYZjQgJq8P6Jbx6S2uCFV1VfY0
-         kW0HSEyNsIMR9gyH1nma0it0v/WAnM/0PU/MqIWTQXLSXkIWv6jBMBQNs6ITjaEYOLsl
-         AcC9pbWj3z6GvBij4GpSR4qSzZe0Kys4WL67bsMJ6eAMR5HfPeuL2GufHzbwmNY1utbB
-         ek9Yk+Xxdn5BqMgjmvVbKbU6832EDF2zlw3g5Gem0hK94lCKub+EZRYM1S293ORAePJn
-         l3189FSJMhEYzovGq4PjTTeMRPIJokM4YxGFG3XoOVXerm/j7l5mfFREKKk2q/CBzfxY
-         aIZg==
-X-Gm-Message-State: AAQBX9detxCylFjmRh3b9VpPZHpYRrtDlOhdv29+CokYxHIqwjq/6vJa
-        QUm0FS1xZrlnklq3zLp17lMRQA==
-X-Google-Smtp-Source: AKy350aWTw8oMw5mfdjhhl2Uko+aQ7QMPlClfObRzjyqr46IHBi4Ee5GKUOe7E4wHzsM5OQklZnfuQ==
-X-Received: by 2002:a5d:6187:0:b0:2ce:adbf:cb14 with SMTP id j7-20020a5d6187000000b002ceadbfcb14mr1824465wru.28.1679567129412;
-        Thu, 23 Mar 2023 03:25:29 -0700 (PDT)
+        bh=NXsWO/AvbcGFTuUSdH/Ht1at3O5Z+IWMIafYvf7D2hY=;
+        b=AA5hSbBPWS78vROQyV4OFgJH2pnk5ar0s/e1U5SiwmqiS1bhj8VKtDIKPQSc20ylNt
+         x5BAq2It6ecUKuXiuw/R7UYu2RnQ8mt+0DJysoXGnUn5EAoeuB59oVyhs8VXUhnv/aPA
+         AKO8s8Q5FXM+B+RWsRkQHuFkFrmsC9xuqh27oSc6H876mXGstmUELb32N0j6lRfztxvL
+         kCMdAEE1EzqClu4dfxcdbIu5agy348Ae6CgM+OMVyBjU1rHCNq9+8RbF5DdYnD9U0ngY
+         UFnTou+ipl62E5JVIRBa3M6SbhCvIYtAFaIlHaPzKg/JO5ZnqmgGasB+N5W8gedpGvWM
+         FK4Q==
+X-Gm-Message-State: AAQBX9dMg9qAbrOvL0b9y0pcBoATPvbsMGFCIMeLy235oEBv0qiwNNcw
+        z4Aob9F7ogoMEDTg7/vZ36SeOQ==
+X-Google-Smtp-Source: AKy350Z33LMigoWNcasOJWMOplYwZYW6nEi7NOOO6EGbUFZGcXiy7Ec1b7YTrrUOUFvjfEWS/EaUfA==
+X-Received: by 2002:adf:decb:0:b0:2d1:9ce9:2b8f with SMTP id i11-20020adfdecb000000b002d19ce92b8fmr2257319wrn.66.1679567130680;
+        Thu, 23 Mar 2023 03:25:30 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id e23-20020a5d5957000000b002cfefa50a8esm15753530wri.98.2023.03.23.03.25.28
+        by smtp.gmail.com with ESMTPSA id e23-20020a5d5957000000b002cfefa50a8esm15753530wri.98.2023.03.23.03.25.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 03:25:29 -0700 (PDT)
+        Thu, 23 Mar 2023 03:25:30 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 23 Mar 2023 11:25:18 +0100
-Subject: [PATCH 3/8] dt-bindings: ufs: qcom: document the fact the UFS
- controller can have an ICE core
+Date:   Thu, 23 Mar 2023 11:25:19 +0100
+Subject: [PATCH 4/8] arm64: dts: qcom: sm8450: remove invalid properties in
+ cluster-sleep nodes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-3-3ead1e418fe4@linaro.org>
+Message-Id: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-4-3ead1e418fe4@linaro.org>
 References: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org>
 In-Reply-To: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -90,35 +90,44 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Move the qcom,sm8450-ufshc to the right allOf:if allowing the ICE clocks
-and registers to be specified.
+Fixes the following DT bindings check error:
+domain-idle-states: cluster-sleep-0: 'idle-state-name', 'local-timer-stop' do not match any of the regexes:
+'pinctrl-[0-9]+'
+domain-idle-states: cluster-sleep-1: 'idle-state-name', 'local-timer-stop' do not match any of the regexes:
+'pinctrl-[0-9]+'
 
-Fixes: 462c5c0aa798 ("dt-bindings: ufs: qcom,ufs: convert to dtschema")
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-index c5a06c048389..4527bcb949b7 100644
---- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-@@ -108,7 +108,6 @@ allOf:
-               - qcom,sc8280xp-ufshc
-               - qcom,sm8250-ufshc
-               - qcom,sm8350-ufshc
--              - qcom,sm8450-ufshc
-               - qcom,sm8550-ufshc
-     then:
-       properties:
-@@ -137,6 +136,7 @@ allOf:
-               - qcom,sdm845-ufshc
-               - qcom,sm6350-ufshc
-               - qcom,sm8150-ufshc
-+              - qcom,sm8450-ufshc
-     then:
-       properties:
-         clocks:
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 78fb65bd15cc..ff55fcfdd676 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -255,22 +255,18 @@ BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
+ 		domain-idle-states {
+ 			CLUSTER_SLEEP_0: cluster-sleep-0 {
+ 				compatible = "domain-idle-state";
+-				idle-state-name = "cluster-l3-off";
+ 				arm,psci-suspend-param = <0x41000044>;
+ 				entry-latency-us = <1050>;
+ 				exit-latency-us = <2500>;
+ 				min-residency-us = <5309>;
+-				local-timer-stop;
+ 			};
+ 
+ 			CLUSTER_SLEEP_1: cluster-sleep-1 {
+ 				compatible = "domain-idle-state";
+-				idle-state-name = "cluster-power-collapse";
+ 				arm,psci-suspend-param = <0x4100c344>;
+ 				entry-latency-us = <2700>;
+ 				exit-latency-us = <3500>;
+ 				min-residency-us = <13959>;
+-				local-timer-stop;
+ 			};
+ 		};
+ 	};
 
 -- 
 2.34.1
