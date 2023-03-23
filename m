@@ -2,119 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431226C64F5
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Mar 2023 11:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C11396C656C
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Mar 2023 11:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbjCWK0X (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 Mar 2023 06:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S231614AbjCWKnH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 Mar 2023 06:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjCWKZ6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Mar 2023 06:25:58 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42391C7F2
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Mar 2023 03:25:35 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id l27so11546231wrb.2
-        for <linux-scsi@vger.kernel.org>; Thu, 23 Mar 2023 03:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679567135;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iaQACbxWFe/pP0PYdcE2NPjjd/o5GOPyZh6BOGAwiP8=;
-        b=EDK/OC2gr0VhTqb/8cfkz3D7WlMPMQM2ELils/2BJph5U5K9iidkuqoUxZlw2Rh4yY
-         bG9nXl3bN8p8ByXNnmUizw7VxwxiBMaFatQ+QWA25ecnX8/EvkWtD1qcL6FpEOZlvnYR
-         +xXKkFPGzURm1L4waqYLeX9UhOuOT3swffCfg/GmLq0qa1q7bk/Ng/0EV8WUnS+G8AXF
-         LfT0kd80T66ZOC5MG/60vWfd0UC2E2zAJ0zP1F9NUpF1IXB5ZbmaYYbC+YBQ7NEA1XMt
-         uFCH47IhPi3S2YE2gzbkBClbF/PAUwlHbpmJ1w+7vZSAOQStcKGGz+EZvu0JdKwZXyzX
-         sPug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679567135;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iaQACbxWFe/pP0PYdcE2NPjjd/o5GOPyZh6BOGAwiP8=;
-        b=hsU9XuPEG94AhLMf3eJOat9g8ouyi3eVW5TPDC1cZJeq9VxpJOhcce4ga0nE+qEdDo
-         Z53bWL2b3RCkoz79nAbhHFiUgNEuLELBO3rw3SH5UcxIQoO90q0Qgw8vdfSevAfFjrjY
-         pF9uHoyuw8CNUEWks2ZO0yQP/M2fl3HWTpVd5haCCLQsaT3Wwq9i1wALz4GdLG7P0pCP
-         JE/XiQl5qXzHhfi1cbqunbvojFmDAuPxg+i6o7FCkETQyU/wSBy+yN1ab69QVJk6kN0r
-         7Ng7MyEpSNbDQrqTP8k8eDAAABs47CH2yEtyOmZy4yCxpC9Kc7mOjvlys8MABI1V04Az
-         bRFw==
-X-Gm-Message-State: AAQBX9fUk0VhA2AyeUuFU+MzRhM9ff7H7yzTQIMax2B/CbYnQIdBNCDQ
-        V56ZWoUk1TPz6ijNfy1sJ38Qsw==
-X-Google-Smtp-Source: AKy350bCeDHpSVI8xLS6NQ/SiOOsVX2JYPYHUtQ3vn3tZY3Uc4D9P3VP7wUr81eOPMcUs86Lve47yw==
-X-Received: by 2002:a5d:49c3:0:b0:2d9:5608:ee0 with SMTP id t3-20020a5d49c3000000b002d956080ee0mr1808899wrs.69.1679567135399;
-        Thu, 23 Mar 2023 03:25:35 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id e23-20020a5d5957000000b002cfefa50a8esm15753530wri.98.2023.03.23.03.25.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 03:25:34 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 23 Mar 2023 11:25:23 +0100
-Subject: [PATCH 8/8] arm64: dts: qcom: sm8450: fix pcie1 gpios properties
- name
+        with ESMTP id S230456AbjCWKmt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 Mar 2023 06:42:49 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2391E39B93;
+        Thu, 23 Mar 2023 03:40:00 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32N9c2jD012567;
+        Thu, 23 Mar 2023 10:38:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=x4gGfbzba1hFOh69yFSCSNrEAtDOldJBZZWSAOaH1Tk=;
+ b=L9F5G/jjhnIKdp/Nx/uu5HDtA7nrpL48Q13W+cpIPOQTNLQ735zPH7cMrYmPfoCFZh9g
+ hiVH/eBv/gYVkXX+QRY0HLykYRkovu3s61CKmoJUvcq1EDXDNNzpXwo9jckbYm1uocR7
+ HJn9ZXhgLwpH3ExaLUJBo3P+OR/ptidwRSBqE7fg9ag6Nduh9ygCkAMu2Gdt6V9Obu67
+ 2EUTgajr1uAo/MBV7JeApI2vsQh5AGj8DblSWg6v3md6TVq/XDWbrPtdFoJJNcIMqKbV
+ 85w63Fb7CJ6+x3eSVxDJIdS/64Gt00bp6HcGWeMRzti7sRV2BJY6Kb8gFFG52Ppi5UNu oA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pgm9x8461-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 10:38:33 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32NAcW6f015397
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 10:38:33 GMT
+Received: from [192.168.143.77] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 23 Mar
+ 2023 03:38:32 -0700
+Message-ID: <3d34a25b-5311-e660-a724-b1c11bbaf5fc@quicinc.com>
+Date:   Thu, 23 Mar 2023 03:38:31 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-8-3ead1e418fe4@linaro.org>
-References: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org>
-In-Reply-To: <20230323-topic-sm8450-upstream-dt-bindings-fixes-v1-0-3ead1e418fe4@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH v3 1/5] ufs: mcq: Add supporting functions for mcq
+ abort
+Content-Language: en-US
+To:     John Garry <john.g.garry@oracle.com>, <quic_asutoshd@quicinc.com>,
+        <quic_cang@quicinc.com>, <bvanassche@acm.org>, <mani@kernel.org>,
+        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
+        <beanhuo@micron.com>, <avri.altman@wdc.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-scsi@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1679564391.git.quic_nguyenb@quicinc.com>
+ <90b7b370269674fd7c0f505b59e0993c5b95a316.1679564391.git.quic_nguyenb@quicinc.com>
+ <e251e5c3-152e-3ebe-aa9f-c5cfa36cfc3f@oracle.com>
+From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+In-Reply-To: <e251e5c3-152e-3ebe-aa9f-c5cfa36cfc3f@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Ut5nuLZeD5l4MgNjxhop62huPm-FlNFM
+X-Proofpoint-ORIG-GUID: Ut5nuLZeD5l4MgNjxhop62huPm-FlNFM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 spamscore=0 impostorscore=0
+ priorityscore=1501 clxscore=1011 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230080
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add the final "s" to the pgio properties and fix the invalid "enable"
-name to the correct "wake", checked against the HDK8450 schematics.
-
-Fixes: bc6588bc25fb ("arm64: dts: qcom: sm8450: add PCIe1 root device")
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 8ecc48c7c5ef..d964d3fbe20c 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -1908,8 +1908,8 @@ pcie1: pci@1c08000 {
- 			phys = <&pcie1_lane>;
- 			phy-names = "pciephy";
- 
--			perst-gpio = <&tlmm 97 GPIO_ACTIVE_LOW>;
--			enable-gpio = <&tlmm 99 GPIO_ACTIVE_HIGH>;
-+			perst-gpios = <&tlmm 97 GPIO_ACTIVE_LOW>;
-+			wake-gpios = <&tlmm 99 GPIO_ACTIVE_HIGH>;
- 
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pcie1_default_state>;
-
--- 
-2.34.1
+On 3/23/2023 3:07 AM, John Garry wrote:
+> On 23/03/2023 09:53, Bao D. Nguyen wrote:
+>> +static int ufshcd_mcq_poll_register(void __iomem *reg, u32 mask,
+>> +            u32 val, unsigned long timeout_ms)
+>> +{
+>> +    unsigned long timeout = jiffies + msecs_to_jiffies(timeout_ms);
+>> +    int err = 0;
+>> +
+>> +    /* ignore bits that we don't intend to wait on */
+>> +    val = val & mask;
+>> +
+>> +    while ((readl(reg) & mask) != val) {
+>> +        usleep_range(10, 50);
+>> +        if (time_after(jiffies, timeout)) {
+>> +            err = -ETIMEDOUT;
+>> +            break;
+>> +        }
+>
+> This looks just like readl_poll_timeout()
+I will make the change in the next revision. Thanks John.
+>
+>> +    }
+>> +
+>> +    return err;
+>> +}
+>
 
