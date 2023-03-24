@@ -2,61 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3FA6C874C
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Mar 2023 22:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7156C8744
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Mar 2023 22:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbjCXVHf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Mar 2023 17:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
+        id S231926AbjCXVHU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Mar 2023 17:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbjCXVHa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Mar 2023 17:07:30 -0400
+        with ESMTP id S231875AbjCXVHS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Mar 2023 17:07:18 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18FB206B5;
-        Fri, 24 Mar 2023 14:07:24 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OL4GHL006330;
-        Fri, 24 Mar 2023 21:07:07 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D80E8A5A
+        for <linux-scsi@vger.kernel.org>; Fri, 24 Mar 2023 14:07:17 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OKxvUE005332;
+        Fri, 24 Mar 2023 21:07:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=NCjvrc7Wpz+DaegJFn5Jy0vVWEJp5qfRagdUGDd7FO4=;
- b=fUO29j0/kd4uZ9gB1qSdSiF13vgKmOmjcWrF4TlTMdHCYjnraOtvtt5il8a3PV3sQTNk
- 9Z+Ma8E+b1gsEewN+lqb/Yag/NeT2KUyullJiozFm31eQwCDqdorrWV5Ev6HJHrCRVP3
- GiMtXds4hCzsSBM1r0S87ea4XR/x18EcP1dKV3XWx2QZOazmTHQecfPLKnd40DbJbyEo
- vBtMT3Yj7l9BQecMalwLmDRR+PK37OuUDT+oPlZz5PJnllXQ7L88dGTeFhwD2fyTqwHL
- XaAIaFpi5euGT+3yWPJDmQ9v75TiXpY/JpRJxc+yPtIQR9cbuOymvpMn4Agycg4LkK4X tA== 
+ bh=yfdu95TqijfSnzEZeTt/kGKjK6QVK1mgb5pH56Mp+DM=;
+ b=qOPXi+hePnx8igWguWECVj2U5VT2X1cHSRgOfWRiW4UTJ6Uu0YS7jAFGfRpC1MR5ePq6
+ nhXHXq0NZn5pJ5PQDOe8Q75cPLTgLtXT/9tkOhzqvi7w5GqqIGIeu/kLLaRim2NVgQNP
+ gPjpKSz8Heh3o/IUlw8E+TT/ymAZynyN2MU6efh9iY6hkzOq+PeyzO7GMRe3BpnHbNBD
+ ynV6ubHh0Ccp6d2qXaIZay5TAORubGUgn8FRybT1x/ioeChSzqu9td1yBWzMW9nBwC5C
+ 0dg1mV5MSS6OpOUSfM+zrv7wKGrrQosWmh2jqoAIBC3RZRQslWnA7tLaOYpxi6La1G34 nA== 
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3phkey806p-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3phkcn00mu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 24 Mar 2023 21:07:07 +0000
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32OIn276027708;
-        Fri, 24 Mar 2023 21:07:06 GMT
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32OL5RMA027694;
+        Fri, 24 Mar 2023 21:07:07 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pgxk4se31-1
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pgxk4se3a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Mar 2023 21:07:06 +0000
+        Fri, 24 Mar 2023 21:07:07 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32OL76f2017159;
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32OL76f4017159;
         Fri, 24 Mar 2023 21:07:06 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3pgxk4se2p-1;
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3pgxk4se2p-2;
         Fri, 24 Mar 2023 21:07:06 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Satish Kharat <satishkh@cisco.com>,
-        Sesidhar Baddela <sebaddel@cisco.com>,
-        Karan Tilak Kumar <kartilak@cisco.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: Re: [PATCH v1 1/1] scsi: fnic: Switch to use %ptTs
-Date:   Fri, 24 Mar 2023 17:06:52 -0400
-Message-Id: <167969123959.59527.3782523368342950875.b4-ty@oracle.com>
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Asutosh Das <quic_asutoshd@quicinc.com>
+Subject: Re: [PATCH 1/2] scsi: ufs: core: Disable the reset settle delay
+Date:   Fri, 24 Mar 2023 17:06:53 -0400
+Message-Id: <167969123961.59527.11003937087212932580.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230314145813.66112-1-andriy.shevchenko@linux.intel.com>
-References: <20230314145813.66112-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230314205822.313447-1-bvanassche@acm.org>
+References: <20230314205822.313447-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -64,11 +67,11 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-24_11,2023-03-24_01,2023-02-09_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
- malwarescore=0 spamscore=0 mlxlogscore=644 adultscore=0 mlxscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=617 adultscore=0 mlxscore=0
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303200000 definitions=main-2303240160
-X-Proofpoint-GUID: q-XnmCuVyNHroP0HSjgFeA6ZBTsbiACk
-X-Proofpoint-ORIG-GUID: q-XnmCuVyNHroP0HSjgFeA6ZBTsbiACk
+X-Proofpoint-GUID: AVnong-xcgMl5nYeVk-LQ3e5HD_R-vor
+X-Proofpoint-ORIG-GUID: AVnong-xcgMl5nYeVk-LQ3e5HD_R-vor
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -79,17 +82,17 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 14 Mar 2023 16:58:13 +0200, Andy Shevchenko wrote:
+On Tue, 14 Mar 2023 13:58:12 -0700, Bart Van Assche wrote:
 
-> Use %ptTs instead of open-coded variant to print contents
-> of time64_t type in human readable form.
+> Neither UFS host controllers nor UFS devices require a ten second delay
+> after a host reset or after a bus reset. Hence this patch.
 > 
 > 
 
 Applied to 6.4/scsi-queue, thanks!
 
-[1/1] scsi: fnic: Switch to use %ptTs
-      https://git.kernel.org/mkp/scsi/c/58b42c949b30
+[1/2] scsi: ufs: core: Disable the reset settle delay
+      https://git.kernel.org/mkp/scsi/c/fb5ea4f5202b
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
