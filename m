@@ -2,86 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4D66C7F26
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Mar 2023 14:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB5A6C80A0
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Mar 2023 16:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjCXNxk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Mar 2023 09:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
+        id S232235AbjCXPC0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Mar 2023 11:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCXNxj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Mar 2023 09:53:39 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374F312CEE
-        for <linux-scsi@vger.kernel.org>; Fri, 24 Mar 2023 06:53:38 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ODqA33038362;
-        Fri, 24 Mar 2023 13:53:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to : sender :
- content-transfer-encoding : mime-version; s=pp1;
- bh=IBKYCG/Vkno8PCrhAjpczXnz4iLl5t2AMSy90x6Bwrs=;
- b=l09YCeFtPu6sP6zOd1d2WzXy+zPzj3Y77IR3iqrj254Cts9lVnPfPTwCtyu8NP0FK6vP
- 27E4bbCPaEFaQbyB6/jXeuMWoFCMrydrGqWs1WPj1Ohnk9xeav7U9vdPPFBqBhs/7w/m
- n1X6YmQe0qHZFyQ4/OGWaRLZva11Dea64xS0ZKoR8Uf8uoGwYhiGxmcOgxmrE9FkzSw3
- /jdquZfzcG7py0tag88eWhngUYpdw/GcdmIOsNgOaH1IZa8sO7rnffFPJWY86HogfqJa
- A4v0EMqf/XYedSCpCWm/js8W3iYkdWof4hD8xaFzAy0JjBECsfFBTTh8c6S1My+hZbDD lA== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3phd4c00jm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 13:53:32 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32NLrLKs024568;
-        Fri, 24 Mar 2023 13:53:30 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3pgy2t8r8r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 13:53:30 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32ODrSlS29557484
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Mar 2023 13:53:28 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E694D20040;
-        Fri, 24 Mar 2023 13:53:27 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D13D320043;
-        Fri, 24 Mar 2023 13:53:27 +0000 (GMT)
-Received: from t480-pf1aa2c2 (unknown [9.171.7.28])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Fri, 24 Mar 2023 13:53:27 +0000 (GMT)
-Received: from bblock by t480-pf1aa2c2 with local (Exim 4.96)
-        (envelope-from <bblock@linux.ibm.com>)
-        id 1pfhrD-0055my-0y;
-        Fri, 24 Mar 2023 14:53:27 +0100
-Date:   Fri, 24 Mar 2023 13:53:27 +0000
-From:   Benjamin Block <bblock@linux.ibm.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] scsi: Improves scsi_vpd_inquiry() checks
-Message-ID: <20230324135327.GA1027618@t480-pf1aa2c2>
-References: <20230322022211.116327-1-damien.lemoal@opensource.wdc.com>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20230322022211.116327-1-damien.lemoal@opensource.wdc.com>
-Sender: Benjamin Block <bblock@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: yZfmGbBnuWop8BIDK_GugAoqxPm7q5Wq
-X-Proofpoint-ORIG-GUID: yZfmGbBnuWop8BIDK_GugAoqxPm7q5Wq
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S231868AbjCXPCZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Mar 2023 11:02:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9513E199E3
+        for <linux-scsi@vger.kernel.org>; Fri, 24 Mar 2023 08:01:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679670098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=B4tL8croKD/v4eH0U1kmJCyqhohosjWOQr9oI3RNYX8=;
+        b=Vjl/3EJj9SVhiWX10OaUKL2IHS+kpWsDvaGz9Et+xTgIO5+0jDPMeVzcy508hR1rrfeOLR
+        9k+/KpKj5CGIOi9rYBZkECcpNetuj0ZBASqHRNzGTeNLGV/YF/US9wA6IK1ahOe8FhWAQX
+        zvew1auqQ/CKWftG8bOTuuXzvPg4gZo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-157-weKHCYR8NzW2gEhuNICTYg-1; Fri, 24 Mar 2023 11:01:36 -0400
+X-MC-Unique: weKHCYR8NzW2gEhuNICTYg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 034CE101A54F;
+        Fri, 24 Mar 2023 15:01:36 +0000 (UTC)
+Received: from localhost.localdomain.com (unknown [10.45.225.82])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F91A492C3E;
+        Fri, 24 Mar 2023 15:01:35 +0000 (UTC)
+From:   Tomas Henzl <thenzl@redhat.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     sumit.saxena@broadcom.com, chandrakanth.patil@broadcom.com
+Subject: [PATCH] scsi: megaraid_sas: fix for a crash after a double completion
+Date:   Fri, 24 Mar 2023 16:01:34 +0100
+Message-Id: <20230324150134.14696-1-thenzl@redhat.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_08,2023-03-24_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- malwarescore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0
- phishscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2303240109
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,35 +55,40 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 11:22:11AM +0900, Damien Le Moal wrote:
-> Some USB-SATA adapters have a broken behavior when a non supported VPD
-> page is probed: depending on the VPD page number, a 4 byte header with a
-> valid VPD page number but with a 0 lenghth is returned. Currently,
-> scsi_vpd_inquiry() only checks that the page number is valid to
-> determine if the page is supported, which results in VPD page users
-> receiving only the 4 B header for the non existent page. This error
-> manifests itself very often with page 0xb9 for the concurrent
-> Positioning Ranges detection done by sd_read_cpr(), resulting in the
-> error message:
-> 
-> sd 0:0:0:0: [sda] Invalid Concurrent Positioning Ranges VPD page
-> 
-> Prevent such misleading error message by adding a check in
-> scsi_vpd_inquiry() to verify that the page length is not 0.
-> 
-> Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> ---
->  drivers/scsi/scsi.c | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
+When a physical disk is attached directly "without JBOD MAP support"
+(see megasas_get_tm_devhandle) then there is no real error handling in the
+driver.
+Return FAILED instead of SUCCESS.
 
-Looks good to me.
+Fixes: 18365b138508 ("megaraid_sas: Task management support")
 
+Signed-off-by: Tomas Henzl <thenzl@redhat.com>
+---
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
-
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index 6597e118c805..52b71eb3fd34 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -4768,7 +4768,7 @@ int megasas_task_abort_fusion(struct scsi_cmnd *scmd)
+ 	devhandle = megasas_get_tm_devhandle(scmd->device);
+ 
+ 	if (devhandle == (u16)ULONG_MAX) {
+-		ret = SUCCESS;
++		ret = FAILED;
+ 		sdev_printk(KERN_INFO, scmd->device,
+ 			"task abort issued for invalid devhandle\n");
+ 		mutex_unlock(&instance->reset_mutex);
+@@ -4838,7 +4838,7 @@ int megasas_reset_target_fusion(struct scsi_cmnd *scmd)
+ 	devhandle = megasas_get_tm_devhandle(scmd->device);
+ 
+ 	if (devhandle == (u16)ULONG_MAX) {
+-		ret = SUCCESS;
++		ret = FAILED;
+ 		sdev_printk(KERN_INFO, scmd->device,
+ 			"target reset issued for invalid devhandle\n");
+ 		mutex_unlock(&instance->reset_mutex);
 -- 
-Best Regards, Benjamin Block        /        Linux on IBM Z Kernel Development
-IBM Deutschland Research & Development GmbH    /   https://www.ibm.com/privacy
-Vors. Aufs.-R.: Gregor Pillen         /         Geschäftsführung: David Faller
-Sitz der Ges.: Böblingen     /    Registergericht: AmtsG Stuttgart, HRB 243294
+2.39.1
+
