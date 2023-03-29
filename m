@@ -2,78 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456CA6CD743
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Mar 2023 12:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596466CD76E
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Mar 2023 12:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbjC2KFe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Mar 2023 06:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
+        id S229926AbjC2KNW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Mar 2023 06:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbjC2KFb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Mar 2023 06:05:31 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CA7422C;
-        Wed, 29 Mar 2023 03:05:23 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32T9IXj0023535;
-        Wed, 29 Mar 2023 10:04:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=M6UdeRRKL/zUjp3x6XS53zx8lDXujOFd2N4mnA5FkGk=;
- b=JZVBAzS7nMRSVxs9RKTYm7IFH7xNU62ht6dlRqX98K5dBi3IuPDCERfDAxUzku83m0T7
- PW4p49yl5P2y28SIOk/QFfMUVjqIc6/QBZvcbgeKrBvc5ADua4JbDOXt6h1ry0N2WO/3
- ApMAEsNDl0KJUwhYbTfm+jOYfUQLxJw4kZW4eiuxfD9uLVM/5saTDDGAcbwgFbdIIXnO
- 4488iF4wKHeMyJCOfZYY/f8F/AI1ZAZ5ZygZEXqlfH+AuMC9qEMAlwPg22haEPwZQRE5
- 2Tc0J1+XvW6HB9uWSyy44zdgxYDNHtm9vZmjO9qG6bfKc15SBhfxKRz3lPRsRWvam+yR bw== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pmawsh3kk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Mar 2023 10:04:12 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32TA3rxs003259
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Mar 2023 10:03:53 GMT
-Received: from stor-berry.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 29 Mar 2023 03:03:52 -0700
-From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-To:     <quic_asutoshd@quicinc.com>, <quic_cang@quicinc.com>,
-        <bvanassche@acm.org>, <mani@kernel.org>,
-        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
-        <beanhuo@micron.com>, <avri.altman@wdc.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 5/5] ufs: core: Add error handling for MCQ mode
-Date:   Wed, 29 Mar 2023 03:01:49 -0700
-Message-ID: <56ff07e08dbaa6ca3db265c41fa8922a63797905.1680083571.git.quic_nguyenb@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1680083571.git.quic_nguyenb@quicinc.com>
-References: <cover.1680083571.git.quic_nguyenb@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GMBzRODFWm8mil_W2jisso2fIDKCZhJh
-X-Proofpoint-ORIG-GUID: GMBzRODFWm8mil_W2jisso2fIDKCZhJh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-29_04,2023-03-28_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 lowpriorityscore=0
- spamscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2303290084
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        with ESMTP id S229729AbjC2KNV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Mar 2023 06:13:21 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D844C2D5E;
+        Wed, 29 Mar 2023 03:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1680084799; x=1711620799;
+  h=from:to:cc:subject:date:message-id;
+  bh=jtzfWNpg8V71nZT+AF+a7PC+PUuPnz6DFGkaJlc3Oc4=;
+  b=BipglQFkFoPVEqaVdPxuEt4117GwyQWH7m255Ijqe3bUAttYZnYT3maL
+   oxcKO2O4izxZ5ArrBruvpi0O/1mVp1BRsCKY5NgBcdaHijqH1RkOa0S+k
+   b9Hb/UiNoG1FhFdf8HRUdbuzEo5aUviL0mVKqIDy+4YOEAW4qQfaFCz9/
+   TuTD4LGZAvfcx/K/tnPtGU6RI8nM5PnGy3/xq9lsEcDkO531qiyvEoXIX
+   R28CpZ6BeRP3Wa4WMLk0WZgGHktQN7vGpPzcE/zduSEgXkW1CCC6v3baD
+   lcGb+tcxh/qmGRbG/e59i/LQKM8IO+3M+sA8kp0yupOGDVx4YVWgi6ndA
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,300,1673884800"; 
+   d="scan'208";a="226595765"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 29 Mar 2023 18:13:18 +0800
+IronPort-SDR: cpqZ8qXgT+oZmfK7N5tpyFI9tBisK0Sghv6JcosEwQCzzfPNAAGzfFYListmOokL+bgH+OQHl7
+ uO5TAR4gBjRuqIB3aypQXKLhNOB/bUbuR7+lfNe2i26u7XtZ+lAJI1u+J1MGVcXy6+HpUQkvA7
+ iNDVD4VxVZtRV4kUz8V5iHHOZqr76zuvwaSlf1HmEsHxUtff/p38M6ZL9woiC2JQGEGLhxEUn0
+ eVrRvKyNyXTsTPyRcui8R8soke0RUWi3VhezOgDGJC2OP8y5Z8omJlVzZ/EMGLn6dccKRIKeth
+ XF8=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2023 02:23:47 -0700
+IronPort-SDR: z0rBdREVaLI9B0r5EaKTr1Gzc29yFugofpD/rTDUuQ3IYp2pBY7Qos6xbp/fI5DPe4nTG2V0UF
+ Ekm1+luJjWUtqdsg+TE1+afxIUniKafAnolD8srN4KJcApR87GNOJU6KbnJTxJd7wXd06KA5fN
+ Da09/WSjYTwE6n2LSnKvkmbIDYXSb8uxnAMAu5QakxuGlXq7C0b9jxGFUXaa+BHScHc+Y984Y9
+ tljhsCFRrNtBplIelRP3dGQWwhvFdWemCPo78Wf2BpKejSUme7Fkhw9BRqSffvoidLJbQAzRtU
+ 4Qs=
+WDCIronportException: Internal
+Received: from bxygm33.ad.shared ([10.45.30.255])
+  by uls-op-cesaip02.wdc.com with ESMTP; 29 Mar 2023 03:13:17 -0700
+From:   Avri Altman <avri.altman@wdc.com>
+To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Avri Altman <avri.altman@wdc.com>
+Subject: [PATCH 0/2] scsi: ufs: mcq: 2 minor cleanups
+Date:   Wed, 29 Mar 2023 13:13:01 +0300
+Message-Id: <20230329101303.18377-1-avri.altman@wdc.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,141 +64,17 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add support for error handling for MCQ mode.
+2 (untested) minor mcq cleanups.
 
-Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
----
- drivers/ufs/core/ufshcd.c | 80 ++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 69 insertions(+), 11 deletions(-)
+Avri Altman (2):
+  scsi: ufs: mcq: Annotate ufshcd_inc_sq_tail appropriately
+  scsi: ufs: mcq: Use pointer arithmetic in send_command
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index fef1907..e947f7f 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -3127,6 +3127,12 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
- 		err = -ETIMEDOUT;
- 		dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n",
- 			__func__, lrbp->task_tag);
-+
-+		/* MCQ mode */
-+		if (is_mcq_enabled(hba))
-+			return ufshcd_clear_cmds(hba, 1UL << lrbp->task_tag);
-+
-+		/* SDB mode */
- 		if (ufshcd_clear_cmds(hba, 1UL << lrbp->task_tag) == 0) {
- 			/* successfully cleared the command, retry if needed */
- 			err = -EAGAIN;
-@@ -5562,6 +5568,10 @@ static int ufshcd_poll(struct Scsi_Host *shost, unsigned int queue_num)
-  */
- static irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
- {
-+	struct ufshcd_lrb *lrbp;
-+	u32 hwq_num, utag;
-+	int tag;
-+
- 	/* Resetting interrupt aggregation counters first and reading the
- 	 * DOOR_BELL afterward allows us to handle all the completed requests.
- 	 * In order to prevent other interrupts starvation the DB is read once
-@@ -5580,7 +5590,22 @@ static irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
- 	 * Ignore the ufshcd_poll() return value and return IRQ_HANDLED since we
- 	 * do not want polling to trigger spurious interrupt complaints.
- 	 */
--	ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT);
-+	if (!is_mcq_enabled(hba)) {
-+		ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT);
-+		goto out;
-+	}
-+
-+	/* MCQ mode */
-+	for (tag = 0; tag < hba->nutrs; tag++) {
-+		lrbp = &hba->lrb[tag];
-+		if (lrbp->cmd) {
-+			utag = blk_mq_unique_tag(scsi_cmd_to_rq(lrbp->cmd));
-+			hwq_num = blk_mq_unique_tag_to_hwq(utag);
-+			ufshcd_poll(hba->host, hwq_num);
-+		}
-+	}
-+
-+out:
- 
- 	return IRQ_HANDLED;
- }
-@@ -6359,18 +6384,36 @@ static bool ufshcd_abort_all(struct ufs_hba *hba)
- 	bool needs_reset = false;
- 	int tag, ret;
- 
--	/* Clear pending transfer requests */
--	for_each_set_bit(tag, &hba->outstanding_reqs, hba->nutrs) {
--		ret = ufshcd_try_to_abort_task(hba, tag);
--		dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag,
--			hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1,
--			ret ? "failed" : "succeeded");
--		if (ret) {
--			needs_reset = true;
--			goto out;
-+	if (is_mcq_enabled(hba)) {
-+		struct ufshcd_lrb *lrbp;
-+		int tag;
-+
-+		for (tag = 0; tag < hba->nutrs; tag++) {
-+			lrbp = &hba->lrb[tag];
-+			if (lrbp->cmd) {
-+				ret = ufshcd_try_to_abort_task(hba, tag);
-+				dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag,
-+					hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1,
-+					ret ? "failed" : "succeeded");
-+			}
-+			if (ret) {
-+				needs_reset = true;
-+				goto out;
-+			}
-+		}
-+	} else {
-+		/* Clear pending transfer requests */
-+		for_each_set_bit(tag, &hba->outstanding_reqs, hba->nutrs) {
-+			ret = ufshcd_try_to_abort_task(hba, tag);
-+			dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag,
-+				hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1,
-+				ret ? "failed" : "succeeded");
-+			if (ret) {
-+				needs_reset = true;
-+				goto out;
-+			}
- 		}
- 	}
--
- 	/* Clear pending task management requests */
- 	for_each_set_bit(tag, &hba->outstanding_tasks, hba->nutmrs) {
- 		if (ufshcd_clear_tm_cmd(hba, tag)) {
-@@ -7302,6 +7345,8 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
- 	unsigned long flags, pending_reqs = 0, not_cleared = 0;
- 	struct Scsi_Host *host;
- 	struct ufs_hba *hba;
-+	struct ufs_hw_queue *hwq;
-+	struct ufshcd_lrb *lrbp;
- 	u32 pos;
- 	int err;
- 	u8 resp = 0xF, lun;
-@@ -7317,6 +7362,19 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
- 		goto out;
- 	}
- 
-+	if (is_mcq_enabled(hba)) {
-+		for (pos = 0; pos < hba->nutrs; pos++) {
-+			lrbp = &hba->lrb[pos];
-+			if (lrbp->cmd && lrbp->lun == lun) {
-+				ufshcd_clear_cmds(hba, 1UL << pos);
-+				hwq = ufshcd_mcq_req_to_hwq(hba, scsi_cmd_to_rq(lrbp->cmd));
-+				ufshcd_mcq_poll_cqe_lock(hba, hwq);
-+			}
-+		}
-+		err = 0;
-+		goto out;
-+	}
-+
- 	/* clear the commands that were pending for corresponding LUN */
- 	spin_lock_irqsave(&hba->outstanding_lock, flags);
- 	for_each_set_bit(pos, &hba->outstanding_reqs, hba->nutrs)
+ drivers/ufs/core/ufshcd-priv.h | 1 +
+ drivers/ufs/core/ufshcd.c      | 5 +++--
+ include/ufs/ufshcd.h           | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
+
 -- 
-2.7.4
+2.17.1
 
