@@ -2,70 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC2A6CDAB9
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Mar 2023 15:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A4D6CDC42
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Mar 2023 16:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjC2N0H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Mar 2023 09:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
+        id S231348AbjC2OVA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Mar 2023 10:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjC2N0B (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Mar 2023 09:26:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A2CD8
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Mar 2023 06:24:52 -0700 (PDT)
+        with ESMTP id S230512AbjC2OTa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Mar 2023 10:19:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E5D6188
+        for <linux-scsi@vger.kernel.org>; Wed, 29 Mar 2023 07:16:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680096291;
+        s=mimecast20190719; t=1680099332;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rtS7QVAtuYQjDEY7nXHnoqbfop6chvBfZPGcSLcnwDU=;
-        b=R7G5+qa2bAPZzw5b+Fb/3gBgSFVZQ1nWAdHUXQR9Di0sjpvOTL9HLnhyMRLogWQmCC6HKN
-        j9FJSey9TgocpvbXH2ty11PbEofqDlQEjsSCe9lM85MBoDsX3XjV7o+g7e4Ko76s3JILFD
-        TCFlgU+la7kMRjIKhaz/DmASQ7s8P1k=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-650-CkKAlFiNN76-dNEHmk0CXA-1; Wed, 29 Mar 2023 09:24:50 -0400
-X-MC-Unique: CkKAlFiNN76-dNEHmk0CXA-1
-Received: by mail-qv1-f70.google.com with SMTP id px9-20020a056214050900b005d510cdfc41so6629500qvb.7
-        for <linux-scsi@vger.kernel.org>; Wed, 29 Mar 2023 06:24:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680096290;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rtS7QVAtuYQjDEY7nXHnoqbfop6chvBfZPGcSLcnwDU=;
-        b=H3ZxXNnAfRK9BP2tP4J3Ic6YUuntTIw7MrQtt02GCzhTPet0l2kncAcCse4o3gPCBU
-         vEJhBl6GIdcwinipeQER15Qc1udAZqBAYIlTCSLZMKUv9XJs09noNB4PhgkvhzwJ+jLL
-         f9mQRxse6hwsulqUIRzHycgmRFVjzzhPFvYiv+KgasJ5Q7eJpnaJzBEhQYebGeRSaUcH
-         dpGn4eJNx2XSTfw4kM/DCtAU5HUbypVsoxU3C+Ng0UXGUnqcVL5GtTrlc5812ZoCy2VE
-         NvKz/+3WYXVQ452z1hk3okFN4Q00WjhWMrG0ZjiEH45LPzG2ge0cTkZ93suWjbhIbRp0
-         j2gA==
-X-Gm-Message-State: AO0yUKUAjH9t5xRrjdvzrF27WXfauschj6DrLsG0cJt8KD+IwNk+nJB3
-        MVg/vQoCRbzGAWyRTVCu2bNR/LbTqiaUIIytO1ac+Ny5BZ9gf6GwiyXDTDOH677SICJhr9FMfo7
-        IYiQ7DI26KmzwVd6SfJi3qA==
-X-Received: by 2002:a05:622a:1903:b0:3e3:982b:f535 with SMTP id w3-20020a05622a190300b003e3982bf535mr35038323qtc.33.1680096290100;
-        Wed, 29 Mar 2023 06:24:50 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/pxHT+zYmnDLN7+oI3EGOeAUDzDtVHPAhTMokbOjOy3WQMS3mqH9rtro9CtstXRdGMpp050g==
-X-Received: by 2002:a05:622a:1903:b0:3e3:982b:f535 with SMTP id w3-20020a05622a190300b003e3982bf535mr35038289qtc.33.1680096289729;
-        Wed, 29 Mar 2023 06:24:49 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id l6-20020ac848c6000000b003bfb0ea8094sm9803279qtr.83.2023.03.29.06.24.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 06:24:49 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     martin.petersen@oracle.com, nathan@kernel.org,
-        ndesaulniers@google.com
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] scsi: target: core: remove unused prod_len variable
-Date:   Wed, 29 Mar 2023 09:24:21 -0400
-Message-Id: <20230329132421.1809362-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gZm+OH3nuU2w5lgBIDJ5zMpRPGFGHnStb+oddo8E9cs=;
+        b=B1w1ZF3SQs4MDgmV4lwaw3FWVXtS6Y/9MnGgEPsIsOHEBzPYfhMsofVK88/qj8oLlBUw1+
+        /FDWk2yr8YKB8103wGfVQRcCLRac0YGAo0nENfkWwGWL2ozmIuxowh3g6uQN6y1fiNUf/t
+        UqDB+mUJsR4d3Baj6sDGIm0IpXDzX5s=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-427-ZeMxTUzWPHqK1lFKrZJGyg-1; Wed, 29 Mar 2023 10:15:27 -0400
+X-MC-Unique: ZeMxTUzWPHqK1lFKrZJGyg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DB5A61C0758C;
+        Wed, 29 Mar 2023 14:15:26 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B2C022166B33;
+        Wed, 29 Mar 2023 14:15:24 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Subject: [RFC PATCH v2 32/48] iscsi: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
+Date:   Wed, 29 Mar 2023 15:13:38 +0100
+Message-Id: <20230329141354.516864-33-dhowells@redhat.com>
+In-Reply-To: <20230329141354.516864-1-dhowells@redhat.com>
+References: <20230329141354.516864-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -76,41 +72,151 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-clang with W=1 reports
-drivers/target/target_core_spc.c:229:6: error: variable
-  'prod_len' set but not used [-Werror,-Wunused-but-set-variable]
-        u32 prod_len;
-            ^
-This variable is not used so remove it.
+Use sendmsg() with MSG_SPLICE_PAGES rather than sendpage.  This allows
+multiple pages and multipage folios to be passed through.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+TODO: iscsit_fe_sendpage_sg() should perhaps set up a bio_vec array for the
+entire set of pages it's going to transfer plus two for the header and
+trailer and page fragments to hold the header and trailer - and then call
+sendmsg once for the entire message.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: linux-scsi@vger.kernel.org
+cc: target-devel@vger.kernel.org
+cc: netdev@vger.kernel.org
 ---
- drivers/target/target_core_spc.c | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/scsi/iscsi_tcp.c                 | 31 ++++++++++++------------
+ drivers/scsi/iscsi_tcp.h                 |  2 +-
+ drivers/target/iscsi/iscsi_target_util.c | 14 ++++++-----
+ 3 files changed, 24 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
-index 5bae45c3fb65..89c0d56294cc 100644
---- a/drivers/target/target_core_spc.c
-+++ b/drivers/target/target_core_spc.c
-@@ -226,7 +226,6 @@ spc_emulate_evpd_83(struct se_cmd *cmd, unsigned char *buf)
- 	struct t10_alua_lu_gp_member *lu_gp_mem;
- 	struct t10_alua_tg_pt_gp *tg_pt_gp;
- 	unsigned char *prod = &dev->t10_wwn.model[0];
--	u32 prod_len;
- 	u32 off = 0;
- 	u16 len = 0, id_len;
+diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+index c76f82fb8b63..cf3eb55d2a76 100644
+--- a/drivers/scsi/iscsi_tcp.c
++++ b/drivers/scsi/iscsi_tcp.c
+@@ -301,35 +301,37 @@ static int iscsi_sw_tcp_xmit_segment(struct iscsi_tcp_conn *tcp_conn,
  
-@@ -267,10 +266,6 @@ spc_emulate_evpd_83(struct se_cmd *cmd, unsigned char *buf)
- 	 * T10 Vendor Identifier Page, see spc4r17 section 7.7.3.4
+ 	while (!iscsi_tcp_segment_done(tcp_conn, segment, 0, r)) {
+ 		struct scatterlist *sg;
++		struct msghdr msg = {};
++		union {
++			struct kvec kv;
++			struct bio_vec bv;
++		} vec;
+ 		unsigned int offset, copy;
+-		int flags = 0;
+ 
+ 		r = 0;
+ 		offset = segment->copied;
+ 		copy = segment->size - offset;
+ 
+ 		if (segment->total_copied + segment->size < segment->total_size)
+-			flags |= MSG_MORE | MSG_SENDPAGE_NOTLAST;
++			msg.msg_flags |= MSG_MORE | MSG_SENDPAGE_NOTLAST;
+ 
+ 		if (tcp_sw_conn->queue_recv)
+-			flags |= MSG_DONTWAIT;
++			msg.msg_flags |= MSG_DONTWAIT;
+ 
+-		/* Use sendpage if we can; else fall back to sendmsg */
+ 		if (!segment->data) {
++			if (tcp_conn->iscsi_conn->datadgst_en)
++				msg.msg_flags |= MSG_SPLICE_PAGES;
+ 			sg = segment->sg;
+ 			offset += segment->sg_offset + sg->offset;
+-			r = tcp_sw_conn->sendpage(sk, sg_page(sg), offset,
+-						  copy, flags);
++			bvec_set_page(&vec.bv, sg_page(sg), copy, offset);
++			iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &vec.bv, 1, copy);
+ 		} else {
+-			struct msghdr msg = { .msg_flags = flags };
+-			struct kvec iov = {
+-				.iov_base = segment->data + offset,
+-				.iov_len = copy
+-			};
+-
+-			r = kernel_sendmsg(sk, &msg, &iov, 1, copy);
++			vec.kv.iov_base = segment->data + offset;
++			vec.kv.iov_len  = copy;
++			iov_iter_kvec(&msg.msg_iter, ITER_SOURCE, &vec.kv, 1, copy);
+ 		}
+ 
++		r = sock_sendmsg(sk, &msg);
+ 		if (r < 0) {
+ 			iscsi_tcp_segment_unmap(segment);
+ 			return r;
+@@ -746,7 +748,6 @@ iscsi_sw_tcp_conn_bind(struct iscsi_cls_session *cls_session,
+ 	sock_no_linger(sk);
+ 
+ 	iscsi_sw_tcp_conn_set_callbacks(conn);
+-	tcp_sw_conn->sendpage = tcp_sw_conn->sock->ops->sendpage;
+ 	/*
+ 	 * set receive state machine into initial state
  	 */
- 	id_len = 8; /* For Vendor field */
--	prod_len = 4; /* For VPD Header */
--	prod_len += 8; /* For Vendor field */
--	prod_len += strlen(prod);
--	prod_len++; /* For : */
+@@ -778,8 +779,6 @@ static int iscsi_sw_tcp_conn_set_param(struct iscsi_cls_conn *cls_conn,
+ 			mutex_unlock(&tcp_sw_conn->sock_lock);
+ 			return -ENOTCONN;
+ 		}
+-		tcp_sw_conn->sendpage = conn->datadgst_en ?
+-			sock_no_sendpage : tcp_sw_conn->sock->ops->sendpage;
+ 		mutex_unlock(&tcp_sw_conn->sock_lock);
+ 		break;
+ 	case ISCSI_PARAM_MAX_R2T:
+diff --git a/drivers/scsi/iscsi_tcp.h b/drivers/scsi/iscsi_tcp.h
+index 68e14a344904..d6ec08d7eb63 100644
+--- a/drivers/scsi/iscsi_tcp.h
++++ b/drivers/scsi/iscsi_tcp.h
+@@ -48,7 +48,7 @@ struct iscsi_sw_tcp_conn {
+ 	uint32_t		sendpage_failures_cnt;
+ 	uint32_t		discontiguous_hdr_cnt;
  
- 	if (dev->dev_flags & DF_EMULATED_VPD_UNIT_SERIAL)
- 		id_len += sprintf(&buf[off+12], "%s:%s", prod,
--- 
-2.27.0
+-	ssize_t (*sendpage)(struct socket *, struct page *, int, size_t, int);
++	bool			can_splice_to_tcp;
+ };
+ 
+ struct iscsi_sw_tcp_host {
+diff --git a/drivers/target/iscsi/iscsi_target_util.c b/drivers/target/iscsi/iscsi_target_util.c
+index 26dc8ed3045b..c7d58e41ac3b 100644
+--- a/drivers/target/iscsi/iscsi_target_util.c
++++ b/drivers/target/iscsi/iscsi_target_util.c
+@@ -1078,6 +1078,8 @@ int iscsit_fe_sendpage_sg(
+ 	struct iscsit_conn *conn)
+ {
+ 	struct scatterlist *sg = cmd->first_data_sg;
++	struct bio_vec bvec;
++	struct msghdr msghdr = { .msg_flags = MSG_SPLICE_PAGES,	};
+ 	struct kvec iov;
+ 	u32 tx_hdr_size, data_len;
+ 	u32 offset = cmd->first_data_sg_off;
+@@ -1121,17 +1123,17 @@ int iscsit_fe_sendpage_sg(
+ 		u32 space = (sg->length - offset);
+ 		u32 sub_len = min_t(u32, data_len, space);
+ send_pg:
+-		tx_sent = conn->sock->ops->sendpage(conn->sock,
+-					sg_page(sg), sg->offset + offset, sub_len, 0);
++		bvec_set_page(&bvec, sg_page(sg), sub_len, sg->offset + offset);
++		iov_iter_bvec(&msghdr.msg_iter, ITER_SOURCE, &bvec, 1, sub_len);
++
++		tx_sent = conn->sock->ops->sendmsg(conn->sock, &msghdr, sub_len);
+ 		if (tx_sent != sub_len) {
+ 			if (tx_sent == -EAGAIN) {
+-				pr_err("tcp_sendpage() returned"
+-						" -EAGAIN\n");
++				pr_err("sendmsg/splice returned -EAGAIN\n");
+ 				goto send_pg;
+ 			}
+ 
+-			pr_err("tcp_sendpage() failure: %d\n",
+-					tx_sent);
++			pr_err("sendmsg/splice failure: %d\n", tx_sent);
+ 			return -1;
+ 		}
+ 
 
