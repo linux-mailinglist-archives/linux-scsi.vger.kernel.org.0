@@ -2,74 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757646CF4B6
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Mar 2023 22:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1D26CF4BB
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Mar 2023 22:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjC2Usa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Mar 2023 16:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
+        id S229574AbjC2Uu5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Mar 2023 16:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjC2UsW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Mar 2023 16:48:22 -0400
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF9844B8;
-        Wed, 29 Mar 2023 13:48:22 -0700 (PDT)
-Received: by mail-pf1-f177.google.com with SMTP id b7so1038187pfv.2;
-        Wed, 29 Mar 2023 13:48:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680122902;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzpgvE6nKQNuR4O/KkAOD/tL9byNb1qJHAAmJlyDmXs=;
-        b=XEx9li+LOz+eBHn0gDdwnF/1MApOjVSzol7kkYjRzAxEhXqMwUhuWLj3HNoyDfMslF
-         5D5+/tWhYsn8nVJSFgiKWIbHy7RBPudDteg6tseVbDxqhi+3cTZtuZYNDKHMLVAxG9H0
-         EYSd1oI8e+up3PpWf7+4UqTSztPR8764d/W3FzDDjhsvuhyQLopkKOPj3/uwJ873rYpa
-         jK7b2z/Jc7PpS7DVTkZ+sMlp97HrC/OVMQylq3G3djwtCQiLgxIGb7KuTSA2uF8ipzoq
-         FWh/D4rg5GNiN10zDOT22ZrX9XILOvL8jILwkwHY0uwot8DuccjsATQkWcTOzOS7+XDL
-         xaGw==
-X-Gm-Message-State: AAQBX9ew3JYsFruCwqDmq+JhY/G3UgX1X6hgqgBWhw0kiZln5preOim8
-        +PWoD5FOXBmo41VJxBEDw0c=
-X-Google-Smtp-Source: AKy350bbqWlYjE+fXIlgWV7IZ86U6AitGIoUAUVrIh21So7TSrCV9nr+UuZrx6rHfXtVafWgqnhmHw==
-X-Received: by 2002:aa7:9908:0:b0:5a8:a0df:a624 with SMTP id z8-20020aa79908000000b005a8a0dfa624mr18118299pff.22.1680122901632;
-        Wed, 29 Mar 2023 13:48:21 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:c058:cec1:e4c9:184e? ([2620:15c:211:201:c058:cec1:e4c9:184e])
-        by smtp.gmail.com with ESMTPSA id h3-20020aa786c3000000b005a9cb8edee3sm23352538pfo.85.2023.03.29.13.48.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 13:48:21 -0700 (PDT)
-Message-ID: <c3860fdc-9018-bb8b-e1e7-def3da77dc42@acm.org>
-Date:   Wed, 29 Mar 2023 13:48:19 -0700
+        with ESMTP id S229607AbjC2Uu4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Mar 2023 16:50:56 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDB64C20
+        for <linux-scsi@vger.kernel.org>; Wed, 29 Mar 2023 13:50:52 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32TH9agQ029513;
+        Wed, 29 Mar 2023 20:50:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=M1LcwuJU7E8HNJUZs7WltYMe8BPH8qLRTA6EIglVB94=;
+ b=o4/p4JEe/D5F5hos3bl6MWPkYZYuh45xIj5n2kngW8sot8umaofzCPf2ZqSMVE84ysIV
+ xCBFZGzR4mo5RwZxXP771CVISDMoc+ljcjTpQehs4/uRZaKaDUOeRMd4yOevDp89I8Tb
+ tokZZBs7GDC3yknRj4sFV2sOAFe9PYf6tEd2bCdVuVjktfyLW2SJtjfY6akM25VsPe4A
+ T2/mlaJJ8yT1zTw3NgcNBQvPxhcAZ2S7ehRL0PWaE1OHewpKhd+eLjrtyF3rfMqVlPs8
+ nBEC/enQurBqZvUsxBcWCgQ2//WWjXioDs+rvH7ItT/Gpb9oWSkz/eCupfXv64ZTd1Xi BA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pm6k837c4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 20:50:22 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32TKoLbF004000
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Mar 2023 20:50:21 GMT
+Received: from [192.168.143.77] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 29 Mar
+ 2023 13:50:20 -0700
+Message-ID: <8dae9795-3d81-ce0c-bc6f-2751d8309ff5@quicinc.com>
+Date:   Wed, 29 Mar 2023 13:50:20 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/2] scsi: ufs: mcq: 2 minor cleanups
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 0/5] ufs: core: mcq: Add ufshcd_abort() and error
+ handler support in MCQ mode
 Content-Language: en-US
-To:     Avri Altman <avri.altman@wdc.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230329101303.18377-1-avri.altman@wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230329101303.18377-1-avri.altman@wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Bart Van Assche <bvanassche@acm.org>, <quic_asutoshd@quicinc.com>,
+        <quic_cang@quicinc.com>, <mani@kernel.org>,
+        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
+        <beanhuo@micron.com>, <avri.altman@wdc.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>
+References: <cover.1680083571.git.quic_nguyenb@quicinc.com>
+ <16c79431-0a04-6d07-9965-b3af400b8329@acm.org>
+From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+In-Reply-To: <16c79431-0a04-6d07-9965-b3af400b8329@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: D_-Fhf4lYpUq4VStBMlchxCIhzYBRI-p
+X-Proofpoint-GUID: D_-Fhf4lYpUq4VStBMlchxCIhzYBRI-p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-29_14,2023-03-28_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 clxscore=1015 adultscore=0 phishscore=0 suspectscore=0
+ mlxscore=0 impostorscore=0 priorityscore=1501 malwarescore=0
+ mlxlogscore=806 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2303290158
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 3/29/23 03:13, Avri Altman wrote:
-> 2 (untested) minor mcq cleanups.
-
-I cannot test this series. I hope someone else can.
+On 3/29/2023 1:47 PM, Bart Van Assche wrote:
+> On 3/29/23 03:01, Bao D. Nguyen wrote:
+>> This patch series enable support for ufshcd_abort() and error handler 
+>> in MCQ mode.
+>> The first 3 patches are for supporting ufshcd_abort().
+>> The 4th and 5th patches are for supporting error handler.
+>
+> Is this perhaps a resend of v1? Last time this series was posted it 
+> had version number 3.
+>
+Hi Bart, I am not sure if I did it correctly or not. The last time I 
+posted, it was with RFC tag in the subject. I have made some minor 
+changes to address the comments and some bug fixes. I am posting the 
+patches again without "RFC" tag now.
 
 Thanks,
 
-Bart.
+Bao
+
+> Thanks,
+>
+> Bart.
+
 
