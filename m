@@ -2,117 +2,221 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81666D2396
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 Mar 2023 17:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BFE6D25CB
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 Mar 2023 18:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjCaPHj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 Mar 2023 11:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S232241AbjCaQiC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 Mar 2023 12:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbjCaPHi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 Mar 2023 11:07:38 -0400
-X-Greylist: delayed 11886 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 31 Mar 2023 08:06:54 PDT
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3291DFBE
-        for <linux-scsi@vger.kernel.org>; Fri, 31 Mar 2023 08:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1680275208;
-        bh=nVcH5Rcn34Wh14BOzeh6dRnlFo6hzf1EpRVFrRh7Lx0=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=UtiT01GBY0BzZC6T6AoemBE3qshuBS7Vyo2dIWci+LDB+nbyuhcs7CKlfb1dLbgA1
-         0FA0rnA55QN5oGX7jbECz9U+NN4LS5vm3sjZcjey9lT69mxB9jvje148mULNbNO3NL
-         EtFQnS6+qX7YVbVBHwWtum6/bJ+cEVXFc06GJDl8=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id C47FF128696A;
-        Fri, 31 Mar 2023 11:06:48 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id uVSS4KJsireh; Fri, 31 Mar 2023 11:06:48 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1680275208;
-        bh=nVcH5Rcn34Wh14BOzeh6dRnlFo6hzf1EpRVFrRh7Lx0=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=UtiT01GBY0BzZC6T6AoemBE3qshuBS7Vyo2dIWci+LDB+nbyuhcs7CKlfb1dLbgA1
-         0FA0rnA55QN5oGX7jbECz9U+NN4LS5vm3sjZcjey9lT69mxB9jvje148mULNbNO3NL
-         EtFQnS6+qX7YVbVBHwWtum6/bJ+cEVXFc06GJDl8=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2A74512868F7;
-        Fri, 31 Mar 2023 11:06:48 -0400 (EDT)
-Message-ID: <488bb066654104bc6b84fdc45595232305519597.camel@HansenPartnership.com>
-Subject: Re: [PATCH] scsi: sd: mark the scsi device in shutdown as deleted
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Tomas Henzl <thenzl@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        linux-scsi@vger.kernel.org
-Date:   Fri, 31 Mar 2023 11:06:46 -0400
-In-Reply-To: <457808a0-1ec2-d846-075c-7f8812a7a416@redhat.com>
-References: <20230330164943.11607-1-thenzl@redhat.com>
-         <af17886b-5b18-f71f-9fe7-ea929f30b5a6@oracle.com>
-         <e4dd3ea37807166820e3b3b7e5102e23ab6b3898.camel@HansenPartnership.com>
-         <457808a0-1ec2-d846-075c-7f8812a7a416@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        with ESMTP id S232499AbjCaQhm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 Mar 2023 12:37:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6339B2BECD
+        for <linux-scsi@vger.kernel.org>; Fri, 31 Mar 2023 09:33:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680280389;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gZm+OH3nuU2w5lgBIDJ5zMpRPGFGHnStb+oddo8E9cs=;
+        b=Zf/EnpvBMzq3vBcJMTLp7rR46Rl/QcmBApDwtCFcZuDhedm8JuPBzm+RfwopKeicwvsFGq
+        Pq2b5HaIb1LIrE8y6Tl6gY8y8Aainym3stn//6kzJExaOn7fSsqNdzUPtLOARydHpmiMDC
+        nqLr1GWhY5qTVhFvUBvF/Fyr8KGAjaA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-641-aQ6YNqtSNLCDJnr_-8NcqQ-1; Fri, 31 Mar 2023 12:11:12 -0400
+X-MC-Unique: aQ6YNqtSNLCDJnr_-8NcqQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83939802D1A;
+        Fri, 31 Mar 2023 16:11:11 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5AF014020C82;
+        Fri, 31 Mar 2023 16:11:09 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Subject: [PATCH v3 40/55] iscsi: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
+Date:   Fri, 31 Mar 2023 17:08:59 +0100
+Message-Id: <20230331160914.1608208-41-dhowells@redhat.com>
+In-Reply-To: <20230331160914.1608208-1-dhowells@redhat.com>
+References: <20230331160914.1608208-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 2023-03-31 at 16:11 +0200, Tomas Henzl wrote:
-> On 3/31/23 13:48, James Bottomley wrote:
-> > On Thu, 2023-03-30 at 12:12 -0500, Mike Christie wrote:
-[...]
-> > > Are we going to do:
-> > > 1. __scsi_remove_device sets the state to SDEV_CANCEL at the
-> > > beginning of the function
-> > 
-> > It will also interfere with target and host device removal.  They
-> > traverse their own lists and assume that anything in DEL is already
-> > being removed, which won't be the case here.  So basically, after
-> > this happens it's impossible to clean the device trees.  It also
-> > means any I/O to the root device wouldn't be allowed.
->  
-> How will it interfere? After a return from sd_remove or via
-> device_unregister->__scsi_remove_device the device state is SDEV_DEL
-> regardless whether this patch has been added or not. Or is
-> sd_shutdown called directly?
+Use sendmsg() with MSG_SPLICE_PAGES rather than sendpage.  This allows
+multiple pages and multipage folios to be passed through.
 
-I thought it was called directly from the restart logic via the
-device_shutdown() call (see kernel/reboot.c:kernel_restart_prepare())
-and was completely independent of any other state transitions within
-the device model ... however, I'd really like *you* to confirm this.
+TODO: iscsit_fe_sendpage_sg() should perhaps set up a bio_vec array for the
+entire set of pages it's going to transfer plus two for the header and
+trailer and page fragments to hold the header and trailer - and then call
+sendmsg once for the entire message.
 
-I think by the time it's called, we're already in the system death
-throes, so if there were going to be an orderly shut down it's already
-happened, but if not, once you set a devices state to DEL, it will
-defeat any later attempt to do orderly remove of the host or target.
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: linux-scsi@vger.kernel.org
+cc: target-devel@vger.kernel.org
+cc: netdev@vger.kernel.org
+---
+ drivers/scsi/iscsi_tcp.c                 | 31 ++++++++++++------------
+ drivers/scsi/iscsi_tcp.h                 |  2 +-
+ drivers/target/iscsi/iscsi_target_util.c | 14 ++++++-----
+ 3 files changed, 24 insertions(+), 23 deletions(-)
 
-> > I assume the contention is that if we get here, we're either going
-> > for immediate shutdown or all the root device remounting to read
-> > only has already been done?  If so, could you say that?
->  
-> I can't say that, quite the opposite (see body of the mail). When the
-> system goes shutdown the individual device's .shutdown is called.
-> Just moments after sd shutdown the LLD shutdown is entered and the
-> driver stops any I/O immediately anyway. With this patch the I/O is
-> stopped before reaching LLD with a reasonable message and without
-> error correction mechanism in place.
-> 
-> I also assume that no I/O after sd_shutdown was projected when it was
-> written as there is a cache sync followed by a device power down.
-
-It seems reasonable, but can you validate that?  Shutdown is called
-both from reboot and kexec and if we stop IO to a quiescing root device
-before it completes, so that all filesystems come back dirty, we'll
-have a lot of unhappy users ...
-
-James
+diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+index c76f82fb8b63..cf3eb55d2a76 100644
+--- a/drivers/scsi/iscsi_tcp.c
++++ b/drivers/scsi/iscsi_tcp.c
+@@ -301,35 +301,37 @@ static int iscsi_sw_tcp_xmit_segment(struct iscsi_tcp_conn *tcp_conn,
+ 
+ 	while (!iscsi_tcp_segment_done(tcp_conn, segment, 0, r)) {
+ 		struct scatterlist *sg;
++		struct msghdr msg = {};
++		union {
++			struct kvec kv;
++			struct bio_vec bv;
++		} vec;
+ 		unsigned int offset, copy;
+-		int flags = 0;
+ 
+ 		r = 0;
+ 		offset = segment->copied;
+ 		copy = segment->size - offset;
+ 
+ 		if (segment->total_copied + segment->size < segment->total_size)
+-			flags |= MSG_MORE | MSG_SENDPAGE_NOTLAST;
++			msg.msg_flags |= MSG_MORE | MSG_SENDPAGE_NOTLAST;
+ 
+ 		if (tcp_sw_conn->queue_recv)
+-			flags |= MSG_DONTWAIT;
++			msg.msg_flags |= MSG_DONTWAIT;
+ 
+-		/* Use sendpage if we can; else fall back to sendmsg */
+ 		if (!segment->data) {
++			if (tcp_conn->iscsi_conn->datadgst_en)
++				msg.msg_flags |= MSG_SPLICE_PAGES;
+ 			sg = segment->sg;
+ 			offset += segment->sg_offset + sg->offset;
+-			r = tcp_sw_conn->sendpage(sk, sg_page(sg), offset,
+-						  copy, flags);
++			bvec_set_page(&vec.bv, sg_page(sg), copy, offset);
++			iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &vec.bv, 1, copy);
+ 		} else {
+-			struct msghdr msg = { .msg_flags = flags };
+-			struct kvec iov = {
+-				.iov_base = segment->data + offset,
+-				.iov_len = copy
+-			};
+-
+-			r = kernel_sendmsg(sk, &msg, &iov, 1, copy);
++			vec.kv.iov_base = segment->data + offset;
++			vec.kv.iov_len  = copy;
++			iov_iter_kvec(&msg.msg_iter, ITER_SOURCE, &vec.kv, 1, copy);
+ 		}
+ 
++		r = sock_sendmsg(sk, &msg);
+ 		if (r < 0) {
+ 			iscsi_tcp_segment_unmap(segment);
+ 			return r;
+@@ -746,7 +748,6 @@ iscsi_sw_tcp_conn_bind(struct iscsi_cls_session *cls_session,
+ 	sock_no_linger(sk);
+ 
+ 	iscsi_sw_tcp_conn_set_callbacks(conn);
+-	tcp_sw_conn->sendpage = tcp_sw_conn->sock->ops->sendpage;
+ 	/*
+ 	 * set receive state machine into initial state
+ 	 */
+@@ -778,8 +779,6 @@ static int iscsi_sw_tcp_conn_set_param(struct iscsi_cls_conn *cls_conn,
+ 			mutex_unlock(&tcp_sw_conn->sock_lock);
+ 			return -ENOTCONN;
+ 		}
+-		tcp_sw_conn->sendpage = conn->datadgst_en ?
+-			sock_no_sendpage : tcp_sw_conn->sock->ops->sendpage;
+ 		mutex_unlock(&tcp_sw_conn->sock_lock);
+ 		break;
+ 	case ISCSI_PARAM_MAX_R2T:
+diff --git a/drivers/scsi/iscsi_tcp.h b/drivers/scsi/iscsi_tcp.h
+index 68e14a344904..d6ec08d7eb63 100644
+--- a/drivers/scsi/iscsi_tcp.h
++++ b/drivers/scsi/iscsi_tcp.h
+@@ -48,7 +48,7 @@ struct iscsi_sw_tcp_conn {
+ 	uint32_t		sendpage_failures_cnt;
+ 	uint32_t		discontiguous_hdr_cnt;
+ 
+-	ssize_t (*sendpage)(struct socket *, struct page *, int, size_t, int);
++	bool			can_splice_to_tcp;
+ };
+ 
+ struct iscsi_sw_tcp_host {
+diff --git a/drivers/target/iscsi/iscsi_target_util.c b/drivers/target/iscsi/iscsi_target_util.c
+index 26dc8ed3045b..c7d58e41ac3b 100644
+--- a/drivers/target/iscsi/iscsi_target_util.c
++++ b/drivers/target/iscsi/iscsi_target_util.c
+@@ -1078,6 +1078,8 @@ int iscsit_fe_sendpage_sg(
+ 	struct iscsit_conn *conn)
+ {
+ 	struct scatterlist *sg = cmd->first_data_sg;
++	struct bio_vec bvec;
++	struct msghdr msghdr = { .msg_flags = MSG_SPLICE_PAGES,	};
+ 	struct kvec iov;
+ 	u32 tx_hdr_size, data_len;
+ 	u32 offset = cmd->first_data_sg_off;
+@@ -1121,17 +1123,17 @@ int iscsit_fe_sendpage_sg(
+ 		u32 space = (sg->length - offset);
+ 		u32 sub_len = min_t(u32, data_len, space);
+ send_pg:
+-		tx_sent = conn->sock->ops->sendpage(conn->sock,
+-					sg_page(sg), sg->offset + offset, sub_len, 0);
++		bvec_set_page(&bvec, sg_page(sg), sub_len, sg->offset + offset);
++		iov_iter_bvec(&msghdr.msg_iter, ITER_SOURCE, &bvec, 1, sub_len);
++
++		tx_sent = conn->sock->ops->sendmsg(conn->sock, &msghdr, sub_len);
+ 		if (tx_sent != sub_len) {
+ 			if (tx_sent == -EAGAIN) {
+-				pr_err("tcp_sendpage() returned"
+-						" -EAGAIN\n");
++				pr_err("sendmsg/splice returned -EAGAIN\n");
+ 				goto send_pg;
+ 			}
+ 
+-			pr_err("tcp_sendpage() failure: %d\n",
+-					tx_sent);
++			pr_err("sendmsg/splice failure: %d\n", tx_sent);
+ 			return -1;
+ 		}
+ 
 
