@@ -2,68 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2FD6D258A
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 Mar 2023 18:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEF06D2762
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 Mar 2023 19:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbjCaQby (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 Mar 2023 12:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
+        id S232430AbjCaR7u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 Mar 2023 13:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233180AbjCaQbi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 Mar 2023 12:31:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6821823FD5
-        for <linux-scsi@vger.kernel.org>; Fri, 31 Mar 2023 09:27:10 -0700 (PDT)
+        with ESMTP id S231127AbjCaR7t (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 Mar 2023 13:59:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EA123698
+        for <linux-scsi@vger.kernel.org>; Fri, 31 Mar 2023 10:58:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680279984;
+        s=mimecast20190719; t=1680285482;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=AvuVQhbB6sQNpw8Mymcj39/nOL4/GBRsblrkJXNADLc=;
-        b=fetSo+NnRYsTTW4NnK34EfNShN3hoyrhXklV5XrKyyv+2GLg+ybZbDtJFy56lRJ5gZM/iu
-        BA3POylgWD27Lv00jdT2rZMvVWl455bB6OxPjX+MRN5PXjvfTafOfvReVJYnqepD5CDCRv
-        h95VwAXEI2glldiPmYam9buUH8UFMf0=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5O8+xHFKv06WCG7nCwq4CEs9To8ieEt1S6DRRcwc6+g=;
+        b=Ppgrrez9sQ0Id5nDNVAaNRgNJlXVYzRQSO42cJo5tSXMHuJ5s3KhwOLZ2EPTwdug3Ky1fo
+        Hl0ofLXD8EcuvaE9QBgPPB8CkAlja+k0NZPMYpGfAfw2u4+nK1sF03ua2YE5bq0kafEZO+
+        aWRr3lNQ+rPxH0YHe/cNpQrIH9TJPB8=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-635-Z9PmePWDODerdH2fgv-PeQ-1; Fri, 31 Mar 2023 12:26:21 -0400
-X-MC-Unique: Z9PmePWDODerdH2fgv-PeQ-1
-Received: by mail-qk1-f199.google.com with SMTP id o63-20020a374142000000b007467ef381beso10739310qka.16
-        for <linux-scsi@vger.kernel.org>; Fri, 31 Mar 2023 09:26:21 -0700 (PDT)
+ us-mta-178-0O3_L9-XNhii9gXv1_mizA-1; Fri, 31 Mar 2023 13:58:00 -0400
+X-MC-Unique: 0O3_L9-XNhii9gXv1_mizA-1
+Received: by mail-qv1-f69.google.com with SMTP id pe26-20020a056214495a00b005df3eac4c0bso6979843qvb.1
+        for <linux-scsi@vger.kernel.org>; Fri, 31 Mar 2023 10:58:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680279980;
+        d=1e100.net; s=20210112; t=1680285480;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AvuVQhbB6sQNpw8Mymcj39/nOL4/GBRsblrkJXNADLc=;
-        b=dZKetiBf4kpN/XyU1LLkBjA/+VEopEdF9Tk2f4w2UlFZHyMAlsdld5sJPtoUqPWKvt
-         a0+OT0yeZvQ4CTS9DrYay4+dKfq41LA8lpfVQ1A/W25Ted9djY1vjmQ3BvdNklvwu5xy
-         BpZXlRohSR/BD7NkRAyEpmZXLAeejpLrQ5S0HRd8zt109lubnDVRUNUsif07dV525szr
-         00OG0oSWGmuLfKMwIxarO1boPzCRaDK0Di+Rl3mp7C04Qq9Rn5BdY6oR6AYbI6lPVP5n
-         oxDJbMW6SnviFAhnP9AweLBFYAnQLLjtHKzTGeQaw3GSfW+jBvDc7y509XxgKZ+KgcNo
-         WomQ==
-X-Gm-Message-State: AAQBX9dByCv7DTynNliOBQK1dH7WhVTjeL63IInvXSu4l7oJ+cZfLPN2
-        dIU9Raomqe5/9YfAPfSzwHMpfieaVTv2vDK6ykaQmQt4epFrCmUf6O4sFOtK1mouJPUGZb7UeaQ
-        Rf+Co3mrYgEWd9iRU/wROTg==
-X-Received: by 2002:a05:6214:29e6:b0:5c4:2d5b:9ecb with SMTP id jv6-20020a05621429e600b005c42d5b9ecbmr45686510qvb.44.1680279980622;
-        Fri, 31 Mar 2023 09:26:20 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YD0+MFLtyL0hz01T2VfOCtBoAHzNkgeAtkgnyc80Jt1xyT6cWzJEU09c2avvC5ytNcGXvx6g==
-X-Received: by 2002:a05:6214:29e6:b0:5c4:2d5b:9ecb with SMTP id jv6-20020a05621429e600b005c42d5b9ecbmr45686486qvb.44.1680279980365;
-        Fri, 31 Mar 2023 09:26:20 -0700 (PDT)
+        bh=5O8+xHFKv06WCG7nCwq4CEs9To8ieEt1S6DRRcwc6+g=;
+        b=n0krSG1hKvtCNZbSwYCaJx+PtdgCE8cM69X9YY5N1iL2kDk0z0In1IYNmNnIBfPEGE
+         egGJ7rm2OX3ThhuJxmXQsn8s9kaxN7JhpMFwKyDYm5wP6N5XmLa6tumfaFtd6miWpLlr
+         uGRl+Vb8M3CQMJ4shM/2izQED5WLLTPgzLKhyfvn7rpMjnJb+ul2tHEEG8oS/vlrsoll
+         C9dtOqXpnHKsBq0lKcBwYARdwRu9XAWZ/sGUyMKbEkldV79KnA193KHfDNoKmY2Izokf
+         KECxLrbql61i32wAzX3c97WqE8QaQ0rNN7ItQ+V/TJaBm4yQCU8unoOp4gimeDBCHBuD
+         s5Mw==
+X-Gm-Message-State: AAQBX9d4yCTDFO7NsKfE7m0XI2NKHdwUOP4HFbz4OlUAyhXeMasbpRkh
+        jpEaqVrhMgOn74VvkSVLpW2sRJxaXAVL3CsS3A7XA9DvdEcaoMQ1l0SJcby+o3hIDF0OzHZ2A3W
+        gjnqme3V0YjYuDv4yjCbtXA==
+X-Received: by 2002:a05:6214:410f:b0:572:80ea:5fc7 with SMTP id kc15-20020a056214410f00b0057280ea5fc7mr42990020qvb.41.1680285480465;
+        Fri, 31 Mar 2023 10:58:00 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZAB+2E58L9cx7PfO4++k4UHX5C/oFrianAF5m/clXDQYWYq5EBw8/U5MgBdC3hhUE5TFzLHg==
+X-Received: by 2002:a05:6214:410f:b0:572:80ea:5fc7 with SMTP id kc15-20020a056214410f00b0057280ea5fc7mr42989995qvb.41.1680285480233;
+        Fri, 31 Mar 2023 10:58:00 -0700 (PDT)
 Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id j2-20020a0cc342000000b005dd8b93459esm711514qvi.54.2023.03.31.09.26.19
+        by smtp.gmail.com with ESMTPSA id j10-20020a0cfd4a000000b005dd8b934578sm768480qvs.16.2023.03.31.10.57.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 09:26:20 -0700 (PDT)
+        Fri, 31 Mar 2023 10:57:59 -0700 (PDT)
 From:   Tom Rix <trix@redhat.com>
-To:     sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com, nathan@kernel.org,
+To:     njavali@marvell.com, mrangankar@marvell.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, nathan@kernel.org,
         ndesaulniers@google.com
-Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+Cc:     GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
         Tom Rix <trix@redhat.com>
-Subject: [PATCH] scsi: message: fusion: remove unused timeleft variable
-Date:   Fri, 31 Mar 2023 12:26:17 -0400
-Message-Id: <20230331162617.1858394-1-trix@redhat.com>
+Subject: [PATCH] [SCSI] qla4xxx: remove unused count variable
+Date:   Fri, 31 Mar 2023 13:57:57 -0400
+Message-Id: <20230331175757.1860780-1-trix@redhat.com>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,38 +78,36 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 clang with W=1 reports
-drivers/message/fusion/mptsas.c:4796:17: error: variable
-  'timeleft' set but not used [-Werror,-Wunused-but-set-variable]
-        unsigned long    timeleft;
-                         ^
+drivers/scsi/qla4xxx/ql4_isr.c:475:11: error: variable
+  'count' set but not used [-Werror,-Wunused-but-set-variable]
+        uint32_t count = 0;
+                 ^
 This variable is not used so remove it.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/message/fusion/mptsas.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/scsi/qla4xxx/ql4_isr.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/message/fusion/mptsas.c b/drivers/message/fusion/mptsas.c
-index 86f16f3ea478..d458665e2fc9 100644
---- a/drivers/message/fusion/mptsas.c
-+++ b/drivers/message/fusion/mptsas.c
-@@ -4793,7 +4793,6 @@ mptsas_issue_tm(MPT_ADAPTER *ioc, u8 type, u8 channel, u8 id, u64 lun,
- 	MPT_FRAME_HDR	*mf;
- 	SCSITaskMgmt_t	*pScsiTm;
- 	int		 retval;
--	unsigned long	 timeleft;
+diff --git a/drivers/scsi/qla4xxx/ql4_isr.c b/drivers/scsi/qla4xxx/ql4_isr.c
+index 6f0e77dc2a34..cf52258ecdde 100644
+--- a/drivers/scsi/qla4xxx/ql4_isr.c
++++ b/drivers/scsi/qla4xxx/ql4_isr.c
+@@ -472,14 +472,12 @@ static void qla4xxx_mbox_status_entry(struct scsi_qla_host *ha,
+  **/
+ void qla4xxx_process_response_queue(struct scsi_qla_host *ha)
+ {
+-	uint32_t count = 0;
+ 	struct srb *srb = NULL;
+ 	struct status_entry *sts_entry;
  
- 	*issue_reset = 0;
- 	mf = mpt_get_msg_frame(mptsasDeviceResetCtx, ioc);
-@@ -4829,8 +4828,6 @@ mptsas_issue_tm(MPT_ADAPTER *ioc, u8 type, u8 channel, u8 id, u64 lun,
- 	mpt_put_msg_frame_hi_pri(mptsasDeviceResetCtx, ioc, mf);
+ 	/* Process all responses from response queue */
+ 	while ((ha->response_ptr->signature != RESPONSE_PROCESSED)) {
+ 		sts_entry = (struct status_entry *) ha->response_ptr;
+-		count++;
  
- 	/* Now wait for the command to complete */
--	timeleft = wait_for_completion_timeout(&ioc->taskmgmt_cmds.done,
--	    timeout*HZ);
- 	if (!(ioc->taskmgmt_cmds.status & MPT_MGMT_STATUS_COMMAND_GOOD)) {
- 		retval = -1; /* return failure */
- 		dtmprintk(ioc, printk(MYIOC_s_ERR_FMT
+ 		/* Advance pointers for next entry */
+ 		if (ha->response_out == (RESPONSE_QUEUE_DEPTH - 1)) {
 -- 
 2.27.0
 
