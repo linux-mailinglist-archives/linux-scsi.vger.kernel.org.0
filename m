@@ -2,73 +2,159 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5806D2213
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 Mar 2023 16:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC826D2224
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 Mar 2023 16:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjCaOK2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 Mar 2023 10:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        id S232598AbjCaOMu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 Mar 2023 10:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232644AbjCaOK0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 Mar 2023 10:10:26 -0400
-Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5791E1E738
-        for <linux-scsi@vger.kernel.org>; Fri, 31 Mar 2023 07:10:23 -0700 (PDT)
-Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-544787916d9so416382577b3.13
-        for <linux-scsi@vger.kernel.org>; Fri, 31 Mar 2023 07:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680271822;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y5t9haSUmu6+LRsJr/oOTk9eZWnzPg4O73mmGdbJGS8=;
-        b=jx5o/zRQSipB+lOnld2KcT34K+G/baT1WBlLs6da1WIIUEjXaHQxUBdcg++4c2HtQq
-         kU8Z1gHYdB3HTp/M+8LIJGdKPkxtdH26I5fXrPcd8J9QCX/ypjckklKZV+7WzRm4eIof
-         bxo32kRfLQRyVV39pVUaW4Zst6ShOnO/y1pptW3TJnha1f/hyS1eW6DSbMTP9MK6uWI5
-         rLx/T8zucWaqMup9+o0g0JT8TkNjD1zLasAC05ey1GD5YS3tOzj1bCHXNmjHn1kQu6p5
-         0J994d6ietVEj5BB9nRdIn+tXhDXR/zJen4Fb+N+UkAGIiI2hYhw6pqEC5FqfruclCsa
-         KM6Q==
+        with ESMTP id S232396AbjCaOMs (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 Mar 2023 10:12:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B07E1F783
+        for <linux-scsi@vger.kernel.org>; Fri, 31 Mar 2023 07:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680271912;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZF6/7UFw/AEgE9yuXCD//qE8UNr7AYOx1w2+NhD94bU=;
+        b=TwEk7oY2y2HYXJ/NYu+dkZ+u54liI68csN12HKmwPShIA/XIqnW5xOIuseLaB/73ugfH3Q
+        CHzpjKIMpRizFWj/+O3H8JRqoBFvCCnOAT0k9vjT5zkZeFDVOnWkHdwkJXjkUtnsCfsLbf
+        Bn0N6gNrRFJQ7sFzx8n86Jz+/APnMSw=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-461-pfVF9HGBMH26TfYgTMsv5A-1; Fri, 31 Mar 2023 10:11:51 -0400
+X-MC-Unique: pfVF9HGBMH26TfYgTMsv5A-1
+Received: by mail-wm1-f70.google.com with SMTP id j27-20020a05600c1c1b00b003edd2023418so12095975wms.4
+        for <linux-scsi@vger.kernel.org>; Fri, 31 Mar 2023 07:11:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680271822;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y5t9haSUmu6+LRsJr/oOTk9eZWnzPg4O73mmGdbJGS8=;
-        b=A2Q1ln4ywuvxuBgeH/2zeC0WS2lhLe2IPwYyCvn9EGVp1qebL/g394J9pn8zGh22J4
-         O9rWlZhuqtOPB1C/XfJ78mHecU7m4moUH6puOzXarF8v1N9kcCKXAxukSL1mg1ygmLXH
-         QUe+nXBqcVvPXlS1eUSgcj35oBpel1XiXH4v+W41/8WskILosNS8zrvjL+mP5I27csTf
-         YaQTD/xT1FpKMSQ0XMk/rx4cZ239YzP2GdRlqWTJdXHTGo0yrgwlZ3Fe7zwsGRVh8qRB
-         okqXChr4MJW09d5U0d3974rMOLteImfExfXiNtyxTgRbNJVOk8+J3AjoJ+Wi2ZntOFqc
-         2xsQ==
-X-Gm-Message-State: AAQBX9e8Gm60Yvol5P4Qh1pwiHPfw1hCqM5Bz5hTnB8Ic+KK05Y1pajC
-        IOfjXSYaM0+lHgEDfafoX7lJ5vPlFf6ac0RnEFA=
-X-Google-Smtp-Source: AKy350ZqSYGxDNvzouHUKuHPUIZpCKmcggalyfhxfnYepzZW8JmCIr3+BLCZ7LBpqWJJ2tUub6JwGjqxhCjgPeFtk7I=
-X-Received: by 2002:a81:b647:0:b0:541:a17f:c779 with SMTP id
- h7-20020a81b647000000b00541a17fc779mr13767597ywk.4.1680271822514; Fri, 31 Mar
- 2023 07:10:22 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680271910;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZF6/7UFw/AEgE9yuXCD//qE8UNr7AYOx1w2+NhD94bU=;
+        b=LvM5zSuaDf71oSBUVy/iuTo5dROstLs2CulA0ezO/igCFQMHq9LN2kA+t68MEid+pm
+         5GHkjdF7QEaDLdT8SDXx08p+wJ8toxUpLMUqVQGCDliLdqjjqDfjiLXd1/oSBKy9dzgH
+         d72P05HhZLlC8t/uv3SadIDXrckwKgsQBD6oRgsBOr4XlQdB/P2QJP0vYNhUxKYnnnJ+
+         pAbWkyIgOAvwRnaamLy2cyXUSKeAT6klAfbpHbDOQlqigmngMQ0vifisJYvTiZ23S2wq
+         7NBNq9oI43nk7binLPVhYI/+ZA4wpb/CMvwsb7gr6Cn8oX/+KsJgRUMNk947034ru93F
+         8A0A==
+X-Gm-Message-State: AAQBX9e/eBtVrdVDryaT3Gph4BE/UvUnotsmLfrmpteJv03mT+duDAM8
+        lG0h1RMSIqMC047DNsmluv65x58LIOUo92Ge3Qkw/s8xkb0E6QYyTGw5UJQwY8laeUkqB9dHkk0
+        PQU0QFSOt5yas0pW5mE5E4Q==
+X-Received: by 2002:adf:e443:0:b0:2c7:6bb:fb7a with SMTP id t3-20020adfe443000000b002c706bbfb7amr22179797wrm.54.1680271909956;
+        Fri, 31 Mar 2023 07:11:49 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aVzbeuj4DkrWma4eNOSa+LInSi0MD9w3uw0fhAgLCcVJ6esHewMOr4CBjpNPBW9Cw/tyzc1g==
+X-Received: by 2002:adf:e443:0:b0:2c7:6bb:fb7a with SMTP id t3-20020adfe443000000b002c706bbfb7amr22179783wrm.54.1680271909677;
+        Fri, 31 Mar 2023 07:11:49 -0700 (PDT)
+Received: from [192.168.0.107] (ip4-83-240-118-160.cust.nbox.cz. [83.240.118.160])
+        by smtp.gmail.com with ESMTPSA id d14-20020a5d4f8e000000b002d1bfe3269esm2303719wru.59.2023.03.31.07.11.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Mar 2023 07:11:49 -0700 (PDT)
+Message-ID: <457808a0-1ec2-d846-075c-7f8812a7a416@redhat.com>
+Date:   Fri, 31 Mar 2023 16:11:48 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:7108:7693:b0:2ea:28fd:9131 with HTTP; Fri, 31 Mar 2023
- 07:10:22 -0700 (PDT)
-Reply-To: felixglas37@gmail.com
-From:   Douglas Felix <legalrightschamber07@gmail.com>
-Date:   Fri, 31 Mar 2023 14:10:22 +0000
-Message-ID: <CALi75Oo-55EgVs2vVPx0NWLUh0ddVT-hjmCrLJBHrVge2AZ2Lw@mail.gmail.com>
-Subject: =?UTF-8?B?5YaN5Lya?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] scsi: sd: mark the scsi device in shutdown as deleted
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        linux-scsi@vger.kernel.org
+References: <20230330164943.11607-1-thenzl@redhat.com>
+ <af17886b-5b18-f71f-9fe7-ea929f30b5a6@oracle.com>
+ <e4dd3ea37807166820e3b3b7e5102e23ab6b3898.camel@HansenPartnership.com>
+Content-Language: en-US
+From:   Tomas Henzl <thenzl@redhat.com>
+In-Reply-To: <e4dd3ea37807166820e3b3b7e5102e23ab6b3898.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-LS0gDQrkuIrlkajmn5DkuKrml7blgJnlr4TkuobkuIDlsIHpgq7ku7bnu5nkvaDvvIzmnJ/mnJsN
-CuaUtuWIsOS9oOeahOWbnuS/oe+8jOS9huS7pOaIkeaDiuiutueahOaYr+S9oOS7juadpeayoeac
-iei0ueW/g+WbnuWkjeOAgg0K6K+35Zue5aSN6L+b5LiA5q2l55qE6Kej6YeK44CCDQoNCuiCg+eE
-tu+8jA0K5b6L5biI44CCIOmBk+agvOaLieaWr+iPsuWIqeWFi+aWrw0K
+On 3/31/23 13:48, James Bottomley wrote:
+> On Thu, 2023-03-30 at 12:12 -0500, Mike Christie wrote:
+>> On 3/30/23 11:49 AM, Tomas Henzl wrote:
+>>> Set the state to deleted in sd_shutdown so that the attached LLD
+>>> doesn't receive new I/O (can happen when in kexec) later after
+>>> LLD's shutdown function has been called.
+>>>
+>>> Signed-off-by: Tomas Henzl <thenzl@redhat.com>
+>>> ---
+>>>  drivers/scsi/sd.c | 7 +++++++
+>>>  1 file changed, 7 insertions(+)
+>>>
+>>> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+>>> index 4f28dd617eca..8095f0302e66 100644
+>>> --- a/drivers/scsi/sd.c
+>>> +++ b/drivers/scsi/sd.c
+>>> @@ -3694,10 +3694,13 @@ static int sd_start_stop_device(struct
+>>> scsi_disk *sdkp, int start)
+>>>  static void sd_shutdown(struct device *dev)
+>>>  {
+>>>         struct scsi_disk *sdkp = dev_get_drvdata(dev);
+>>> +       struct scsi_device *sdp;
+>>>  
+>>>         if (!sdkp)
+>>>                 return;         /* this can happen */
+>>>  
+>>> +       sdp = sdkp->device;
+>>> +
+>>>         if (pm_runtime_suspended(dev))
+>>>                 return;
+>>>  
+>>> @@ -3710,6 +3713,10 @@ static void sd_shutdown(struct device *dev)
+>>>                 sd_printk(KERN_NOTICE, sdkp, "Stopping disk\n");
+>>>                 sd_start_stop_device(sdkp, 0);
+>>>         }
+>>> +
+>>> +       mutex_lock(&sdp->state_mutex);
+>>> +       scsi_device_set_state(sdp, SDEV_DEL);
+>>> +       mutex_unlock(&sdp->state_mutex);
+>>>  }
+>>
+>> If this is run for device removal what state will be in here?
+>>
+>> Are we going to do:
+>> 1. __scsi_remove_device sets the state to SDEV_CANCEL at the
+>> beginning of the function
+> 
+> It will also interfere with target and host device removal.  They
+> traverse their own lists and assume that anything in DEL is already
+> being removed, which won't be the case here.  So basically, after this
+> happens it's impossible to clean the device trees.  It also means any
+> I/O to the root device wouldn't be allowed.
+How will it interfere? After a return from sd_remove or via
+device_unregister->__scsi_remove_device the device state is SDEV_DEL
+regardless whether this patch has been added or not. Or is sd_shutdown
+called directly?
+
+> I assume the contention is that if we get here, we're either going for
+> immediate shutdown or all the root device remounting to read only has
+> already been done?  If so, could you say that?
+I can't say that, quite the opposite (see body of the mail). When the
+system goes shutdown the individual device's .shutdown is called. Just
+moments after sd shutdown the LLD shutdown is entered and the driver
+stops any I/O immediately anyway. With this patch the I/O is stopped
+before reaching LLD with a reasonable message and without error
+correction mechanism in place.
+
+I also assume that no I/O after sd_shutdown was projected when it was
+written as there is a cache sync followed by a device power down.
+
+Tomas
+
+> 
+> James
+> 
+
