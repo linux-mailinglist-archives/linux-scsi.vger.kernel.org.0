@@ -2,85 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A076D3043
-	for <lists+linux-scsi@lfdr.de>; Sat,  1 Apr 2023 13:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD336D3377
+	for <lists+linux-scsi@lfdr.de>; Sat,  1 Apr 2023 21:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjDALuu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 1 Apr 2023 07:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
+        id S230044AbjDATXQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 1 Apr 2023 15:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjDALut (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 1 Apr 2023 07:50:49 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D671C1CD
-        for <linux-scsi@vger.kernel.org>; Sat,  1 Apr 2023 04:50:47 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id p2so19032811qtw.13
-        for <linux-scsi@vger.kernel.org>; Sat, 01 Apr 2023 04:50:46 -0700 (PDT)
+        with ESMTP id S229997AbjDATXP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 1 Apr 2023 15:23:15 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E4E26582
+        for <linux-scsi@vger.kernel.org>; Sat,  1 Apr 2023 12:23:08 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id h8so102531660ede.8
+        for <linux-scsi@vger.kernel.org>; Sat, 01 Apr 2023 12:23:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680349846;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WqGpnxzWplzffE6Th9lsSK73X294LhiCIk+YQ6eCW7g=;
-        b=IdaItY++KSAxKZE2GD7GhsNxkwQbc3fvdwXlQ+Sjtrc48U8WTU3hEPD5sqs6zdkhNX
-         xGO8CSES2iZbIQIfV5q8HejzNhF8E/r+ofM8CfqVTVrljE+NxCMFunXeSlx/OE2uzId7
-         GtMnDszaMXZwsQRnceuVPTkRhCADmo0VbY9A7rzQ9k4UZNuFdOCqbYufQRjJr2JCxoYD
-         WemBqCfxxkPqVC9dfzVnm1R+x/QNMlV3IcrjCOWeXGT6bZ8axblx2JywtqEg1HaI1pmW
-         y+rSDk7qke7iKxHL9AQGoJDbD6sJFEGrt2i3mlbQsfP72jrh9YP9s8nQCSj/Xkf78hgO
-         +52w==
+        d=linaro.org; s=google; t=1680376986;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SxubnhYm3jfKN0Ni+OwaWHmeJgo11h1uYRx+ExBZagg=;
+        b=dxGgfjhp7yW18ErPJ6AtgVqAzDIKJQBiQp9bXFdKCfFwCnISVqC8opflw9rCXmYjCd
+         RLa7u/LNPZ3qjvkSDwON62jF3LJF3iM3o1GDWaeD2p/O7fMXIVkorf+x88cGetUPpAXV
+         uqjRltcX9nI9LNhHjEk0yecNraB4BT4OojWFICsI+qH3rg0K3pETyCX4KPt71KMeeTxt
+         9azGohH0AfqtLIRSozBJD6lP0J6+uIUj3ARQXF03f1BK18qNjVPs0FP7JcnYWRXVyC7O
+         VeulW1gwCXuA9MtxFyZmRJOJdNV0E16wE+limzxOk7pnJL4SoKAnVaPKh5TqYiQcPl2U
+         CWpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680349846;
-        h=to:subject:message-id:date:from:sender:mime-version
+        d=1e100.net; s=20210112; t=1680376986;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WqGpnxzWplzffE6Th9lsSK73X294LhiCIk+YQ6eCW7g=;
-        b=h+OyO5zRFk0E2I8jK2GGda5Qoh6QLCLetAkDnjx78ZxxUye+XlFRkflF3ef6gYFoyv
-         ABp5OIOPNL4Y6rssEn2HexeZbHLwZcAENXoh+yDz+IocZlRHlafk16L1CeLuOUHQn8ym
-         37dhYiG109+Qp9AI3h6i5u+NVz/+3/uyZ1/bKx5fQX8jLw1snyv1cyfEIWziCOrgoyhr
-         iiCVTQHlWLDc3bdTsbQfeyZnXQ+dfUMZCpkwaIJ12LjapFqjBXA+GjoUh1XVOEB0iWZE
-         EvmWOrLI4n4pBEa2wFxUJ0WnPBoIDfcO240nyrECtxLsbOCNUWpDxUDS8ifBZBje2Uct
-         awrw==
-X-Gm-Message-State: AO0yUKXFGpJ9SFTtFC4191tKI8y1bOOV6QJ5tGn7liFSDNuJsaH6DLP/
-        50KH9tWP8cZ20lqFbk1INHjiqJ0Hrnpb60NnqZc=
-X-Google-Smtp-Source: AK7set+Dny1YsnqENzHhY58L7BiqyweUljQb8ebkmBz6OxDPgQHOV1UidTkmkSWv/lZK/1QRnSR1ptHaOUWbawlx7yQ=
-X-Received: by 2002:a05:622a:b:b0:3df:58e7:4aa5 with SMTP id
- x11-20020a05622a000b00b003df58e74aa5mr11649376qtw.0.1680349845799; Sat, 01
- Apr 2023 04:50:45 -0700 (PDT)
+        bh=SxubnhYm3jfKN0Ni+OwaWHmeJgo11h1uYRx+ExBZagg=;
+        b=NyrmeWeWoicugGG5yzH+tQb0mKMcDVOPX8EOx3mTCEwnvgZPYCmwmZShDPfE5i8+Sc
+         WHOo/JRA0GHv1dhuCg+7Wsxb5X5RuQnnoZip1x8XNtvaOSce6+MrspIzR+4RH0GPSuC9
+         YOYUy7zcNfyMkAbjBSm9yXVE7cUo2SRLkxRkWcxhv6dg9NcOpE6e/I/UPTmkeXHCqlq8
+         LdwoWt6As1zE9PNnAutAfRfimdgVCYMD18mtJwt9AJ1LInDwWyCjYp6D8ybzsM9jnrdq
+         aJ9baoe2xy12FYQa3rwsXfmaoAsgymxXl76/5B8lOIktPWQc3DURvezaH+khKrmfqgci
+         ysnA==
+X-Gm-Message-State: AAQBX9dbyXl01TvsoiEH1Fvde0q3SuZIOmCpIJxlDK9GMnhE6SbZDfnL
+        5fxB1fEcVl7AIdhEf9CkwbhSdA==
+X-Google-Smtp-Source: AKy350b0NXjR/U8vfwo3A5JtmgyMjcISvzCcUb2nQvie/SWSShZk997o5fmaRBVBxusyDmayNttG2Q==
+X-Received: by 2002:a17:907:2d29:b0:8fa:b2b:9de with SMTP id gs41-20020a1709072d2900b008fa0b2b09demr38707076ejc.25.1680376986626;
+        Sat, 01 Apr 2023 12:23:06 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ec00:3acd:519:c7c2? ([2a02:810d:15c0:828:ec00:3acd:519:c7c2])
+        by smtp.gmail.com with ESMTPSA id d20-20020a170906c21400b00947792df079sm2385584ejz.115.2023.04.01.12.23.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Apr 2023 12:23:06 -0700 (PDT)
+Message-ID: <fdfc3914-ea61-a281-53ce-7271fab61dad@linaro.org>
+Date:   Sat, 1 Apr 2023 21:23:04 +0200
 MIME-Version: 1.0
-Sender: hraymar912@gmail.com
-Received: by 2002:a05:622a:58c:b0:3bf:da51:aaa with HTTP; Sat, 1 Apr 2023
- 04:50:45 -0700 (PDT)
-From:   Mrs Aisha Al-Qaddafi <mrsaishag16@gmail.com>
-Date:   Sat, 1 Apr 2023 11:50:45 +0000
-X-Google-Sender-Auth: QTiV8JK1yWJs26jwwPn5Wk8J3n4
-Message-ID: <CAAm86_aCTZFxwuyVrOWjE91UUFXFRQTmpwCt+htH-Rs-cYR10Q@mail.gmail.com>
-Subject: Can i trust you My beloved One, I need your assistance.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        LOTS_OF_MONEY,MILLION_HUNDRED,MILLION_USD,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/5] dt-bindings: ufs: qcom: add compatible for sa8775p
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230331195920.582620-1-brgl@bgdev.pl>
+ <20230331195920.582620-2-brgl@bgdev.pl>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230331195920.582620-2-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In the name of Allah the Merciful,Peace be upon you and God's mercy
-and blessings be upon you
-Please bear with me. I am writing this letter to you with tears and
-sorrow from my heart.
-I am sending this message to you from where i am now, Aisha Ghaddafi
-is my name, I am presently living here,i am a Widow and single Mother
-with three Children, the only biological Daughter of late Libyan
-President (Late Colonel Muammar Ghaddafi) and presently I am under
-political asylum protection by the government of this country.
+On 31/03/2023 21:59, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> Add the compatible string for the UFS on sa8775p platforms.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> index c5a06c048389..4abd3c0950e2 100644
+> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> @@ -27,6 +27,7 @@ properties:
+>            - qcom,msm8996-ufshc
+>            - qcom,msm8998-ufshc
+>            - qcom,sc8280xp-ufshc
+> +          - qcom,sa8775p-ufshc
 
-I have funds worth $27.500.000.00 US Dollars "Twenty Seven Million
-Five Hundred Thousand United State Dollars" which I want to entrust to
-you for investment project assistance in your country.
+Please keep the alphabetical order (also in your second hunk).
 
-Kindly reply urgently for more details.
-Yours Truly
-Aisha
+Best regards,
+Krzysztof
+
