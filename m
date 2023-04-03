@@ -2,74 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B936D3BC6
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Apr 2023 04:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19356D3C0A
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Apr 2023 05:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjDCCUY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 2 Apr 2023 22:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        id S230451AbjDCDNW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 2 Apr 2023 23:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjDCCUX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 2 Apr 2023 22:20:23 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FD25258
-        for <linux-scsi@vger.kernel.org>; Sun,  2 Apr 2023 19:20:22 -0700 (PDT)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 332JhZLQ030798;
-        Mon, 3 Apr 2023 02:20:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2022-7-12;
- bh=ekjhlV7/3qW3X/2paHAKsnJv/bFKMDWm3A0JE2r9o4M=;
- b=HMaOJQzFXr1vimhGloR8BL0l6JiY7a7tg+bXOu2t+ABysuWF3qMHL2bXWjjvbhIZeHuX
- wR4VlHMdHkZJ+nD9t1FVw/MoBS5Z8vlWYrAKSVvsbvK9urfNRll7ZMcqZGmIZS0LhAkb
- 7ACwXAVKItmUG8dtzYAP6Gh00F/vLc4eO8I9VcBNT1UxBz0kRLIYN10RZyoI9CkDIwLM
- t+O2TjUVU00cemHN4ybml3UJJ3kClZVwDLPkP9osJPX6flNyWDkJF5+TIbfqJnGinPuU
- CjSdZiD8HJS32ludQjXDdTXa8qF4J8OlwTEyr0BcNCo0Hdnytegu2xba8xSr/ce26hbt aQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppbhbt24y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 03 Apr 2023 02:20:21 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 332MO8et017423;
-        Mon, 3 Apr 2023 02:20:20 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pptp4n16v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 03 Apr 2023 02:20:19 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3332COOt008162;
-        Mon, 3 Apr 2023 02:20:19 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3pptp4n164-3;
-        Mon, 03 Apr 2023 02:20:19 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org,
-        Ranjan Kumar <ranjan.kumar@broadcom.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        rajsekhar.chundru@broadcom.com, sathya.prakash@broadcom.com,
-        sumit.saxena@broadcom.com, chandrakanth.patil@broadcom.com
-Subject: Re: [PATCH] mpi3mr: soft reset in progress fault code (0xF002) handling
-Date:   Sun,  2 Apr 2023 22:20:14 -0400
-Message-Id: <168048838485.1036111.17232694198324553524.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230331122317.11391-1-ranjan.kumar@broadcom.com>
-References: <20230331122317.11391-1-ranjan.kumar@broadcom.com>
+        with ESMTP id S231189AbjDCDNS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 2 Apr 2023 23:13:18 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C028F30E2
+        for <linux-scsi@vger.kernel.org>; Sun,  2 Apr 2023 20:13:15 -0700 (PDT)
+Received: from canpemm100004.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PqbV66hKVznZsC;
+        Mon,  3 Apr 2023 11:09:50 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm100004.china.huawei.com (7.192.105.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 3 Apr 2023 11:13:13 +0800
+Subject: Re: [PATCH 3/3] scsi: libsas: Simplify sas_check_parent_topology()
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <hare@suse.com>, <hch@lst.de>,
+        <bvanassche@acm.org>, <jinpu.wang@cloud.ionos.com>,
+        <john.g.garry@oracle.com>
+References: <20230401081526.1655279-1-yanaijie@huawei.com>
+ <20230401081526.1655279-4-yanaijie@huawei.com>
+ <48d385f7-92b5-4e99-7e32-119db6a74f3f@opensource.wdc.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <64897a78-19ff-d064-1edb-7cc7e928b309@huawei.com>
+Date:   Mon, 3 Apr 2023 11:13:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-31_07,2023-03-31_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
- mlxlogscore=999 bulkscore=0 malwarescore=0 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304030015
-X-Proofpoint-GUID: f8lZAJU73ThubSihRRGbir0I2OGg7_29
-X-Proofpoint-ORIG-GUID: f8lZAJU73ThubSihRRGbir0I2OGg7_29
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <48d385f7-92b5-4e99-7e32-119db6a74f3f@opensource.wdc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm100004.china.huawei.com (7.192.105.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.7 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,22 +53,63 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 31 Mar 2023 17:53:17 +0530, Ranjan Kumar wrote:
-
-> The driver is exiting from the fault watchdog thread if it
-> sees the 0xF002 (Soft reset in progress) fault code,  If the
-> driver initiates the soft reset, then the driver restarts the
-> watchdog at the end of the soft reset completion.  However, if
-> the soft reset is initiated by the firmware asynchronously then
-> the driver will never restart the watchdog and never re-initialize
-> the controller after the asynchronous soft reset completion.
+On 2023/4/2 13:00, Damien Le Moal wrote:
+> On 4/1/23 17:15, Jason Yan wrote:
+>> Factor out a new helper sas_check_phy_topology() to simplify
+>> sas_check_parent_topology(). And centralize the calling of
+>> sas_print_parent_topology_bug().
+>>
+>> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+>> ---
+>>   drivers/scsi/libsas/sas_expander.c | 95 +++++++++++++++++-------------
+>>   1 file changed, 55 insertions(+), 40 deletions(-)
+>>
+>> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
+>> index c0841652f0e0..bffcccdbda6b 100644
+>> --- a/drivers/scsi/libsas/sas_expander.c
+>> +++ b/drivers/scsi/libsas/sas_expander.c
+>> @@ -1238,11 +1238,59 @@ static int sas_check_eeds(struct domain_device *child,
+>>   	return res;
+>>   }
+>>   
+>> -/* Here we spill over 80 columns.  It is intentional.
+>> - */
+>> -static int sas_check_parent_topology(struct domain_device *child)
+>> +
+>> +static int sas_check_phy_topology(struct domain_device *child, struct ex_phy *parent_phy)
 > 
-> [...]
+> Long line. Break after the first argument.
 
-Applied to 6.3/scsi-fixes, thanks!
+And also some lines exceed 80 columns, I wonder if you want me to break 
+them or something else to shorten them too.
 
-[1/1] mpi3mr: soft reset in progress fault code (0xF002) handling
-      https://git.kernel.org/mkp/scsi/c/a3d27dfdcfc2
+> 
+>>   {
+>>   	struct expander_device *child_ex = &child->ex_dev;
+>> +	struct ex_phy *child_phy = &child_ex->ex_phy[parent_phy->attached_phy_id];
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+This line is slightly longer than 80, but I prefer to keep them as is.
+
+>> +	struct expander_device *parent_ex = &child->parent->ex_dev;
+>> +	bool print_topology_bug = false;
+>> +	int res = 0;
+>> +
+>> +	switch (child->parent->dev_type) {
+>> +	case SAS_EDGE_EXPANDER_DEVICE:
+>> +		if (child->dev_type == SAS_FANOUT_EXPANDER_DEVICE) {
+>> +			if (parent_phy->routing_attr != SUBTRACTIVE_ROUTING ||
+>> +				child_phy->routing_attr != TABLE_ROUTING) {
+>> +				res = -ENODEV;
+>> +				print_topology_bug = true;
+>> +			}
+>> +		} else if (parent_phy->routing_attr == SUBTRACTIVE_ROUTING) {
+>> +			if (child_phy->routing_attr == SUBTRACTIVE_ROUTING) {
+>> +				res = sas_check_eeds(child, parent_phy, child_phy);
+
+And this line too. If someone insist to keep it in 80 columns, it may be 
+written like:
+
++				res = sas_check_eeds(child, parent_phy,
++						     child_phy);
+
+Which I do not like either.
