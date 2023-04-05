@@ -2,108 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4B06D7603
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Apr 2023 09:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AEB6D770E
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Apr 2023 10:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237259AbjDEH5Q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Apr 2023 03:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
+        id S237377AbjDEIgU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Apr 2023 04:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237005AbjDEH5K (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Apr 2023 03:57:10 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9044ECD
-        for <linux-scsi@vger.kernel.org>; Wed,  5 Apr 2023 00:57:04 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5027d3f4cd7so237955a12.0
-        for <linux-scsi@vger.kernel.org>; Wed, 05 Apr 2023 00:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680681423;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
-        b=ZFAmFQTn20XXB58Hm1LdXdWSQ5ZKxD4voHxxAhS1cKrInxf7DLRcTSbw0glAYuheNd
-         QsgC19PfAnkNACoih4X9yWq8Ua2f3Z5aqpAwmyG7K5XHuwPNdYpOLvr+4dizYlmkwqvh
-         8ippA6GSg6vwbKsguRd+gNlt6Q3d6qdPQH52wPe4yUNm7drYy8w79XnI6OkaMCxGYxXe
-         MDkio/NlgHAyk3tGfHbZ8+FvtwIbKJyHeY9Hl3c4m/UBMxdY642/4m0lMYD1+lZcL9DU
-         GTGlzj7aK8t/dfhFV0ZGCnZD6XTAnjOEHb+Mkw5/16dwcMVpicpYd4/+ImRJVe79/Ozv
-         w6jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680681423;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
-        b=FyD6l0yH13JFZEjrPdff9eCJXz9hIcyEEM2RBlIFelbgpBoQWmWRvCm74RPj1LYdnc
-         CJEk6HFiOwgdh+hAeouR32tFKhJY9fbZ812zttWuABWwJwy3Eu6T95yyidupg2NuTGEe
-         L9l9QYafZ4cQRcyEUnpJbXI5xkcXGZRqarprdrHuKgd4XZYPuJDXjIfvGfcQu0rNg2Bf
-         Ax3D3oxCyCU5q0t1+y17aJ7BUErBAWme7qguMyxj+bLU2XQ6YZ/5lozvQhGWdmUUutaD
-         Tvnx45FiNu/p9ETyup7Qr0TKhlZWqBWtfIhAu0R9XHQEjsqpnHMAQ0KLg9JW/73Tb17F
-         1Pjg==
-X-Gm-Message-State: AAQBX9elB2EmAV/EvZ8vnwN0edCwEHQGoK01P8skN0AKicapFO5qf11O
-        YYR/BrJzqiC6eS2FMaSluQcxacXx+7qSWgJ+BJ4=
-X-Google-Smtp-Source: AKy350b+6mlAYsE5jCYer29QJ01MP1yshNVCPV/yu1iTNStkeOVxzQSr9n/dP8VlK7PnohYB4ysIDujVG47xryzVK58=
-X-Received: by 2002:a50:d781:0:b0:500:547b:4e1b with SMTP id
- w1-20020a50d781000000b00500547b4e1bmr691870edi.6.1680681423244; Wed, 05 Apr
- 2023 00:57:03 -0700 (PDT)
+        with ESMTP id S237128AbjDEIgT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Apr 2023 04:36:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA65271C;
+        Wed,  5 Apr 2023 01:36:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41E90621F6;
+        Wed,  5 Apr 2023 08:36:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A95C4339E;
+        Wed,  5 Apr 2023 08:36:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680683777;
+        bh=ImzeZUFNJhml8hQCobJLElzt2smrsWg3HmVJ1efYQPQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RRzrlb4grcco6JMZ9hj9E0jLzPYBeGHOSy5nGU5wJ0BCNcmhkO7gL0eSp1+Pv3fc5
+         7dVTq19HHGbuUrQEtx8PpzK0JzPPkk5xJX9aDPSBBiOGwwWPC5vjKeyBMKiLUQ+Qga
+         fsOqMcthI4xiZEV7pcwc6kdEbBV/qnOkBqkk9Lw7UnNWz/e5VcM2xoZxAiXOdC7jte
+         dppIPlfq/MAwmKFl7W25PwvPNQRNKBqIqOJT9AuEp6SoNjSnNn06h4Xts8l1hmz0Ms
+         OxkXZX4CXveuWXtrXaxVTXSAmG4WQTWMqco/DR9D1wifQvNPwEPMuHE8G/Ag7tbmDU
+         U48TP0O3LOOmw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Xiang Chen <chenxiang66@hisilicon.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Yihang Li <liyihang9@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, John Garry <john.garry@huawei.com>,
+        Xingui Yang <yangxingui@huawei.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: hisi_sas: work around build failure in suspend function
+Date:   Wed,  5 Apr 2023 10:36:04 +0200
+Message-Id: <20230405083611.3376739-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Received: by 2002:a05:7208:2202:b0:65:e547:3943 with HTTP; Wed, 5 Apr 2023
- 00:57:02 -0700 (PDT)
-Reply-To: tamimbinhamadalthani00@gmail.com
-From:   Tamim Mohammed Taher <cisskhadidiatou890@gmail.com>
-Date:   Wed, 5 Apr 2023 00:57:02 -0700
-Message-ID: <CAAYY=dZe5ZjJ2b2KEkYbGOEnyScbFaaGqjvb6EmPHE7Lypp0cg@mail.gmail.com>
-Subject: RE:Saudi Arabia-Inquiry about your products.!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=DEAR_SOMETHING,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:536 listed in]
-        [list.dnswl.org]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [tamimbinhamadalthani00[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cisskhadidiatou890[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cisskhadidiatou890[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.7 DEAR_SOMETHING BODY: Contains 'Dear (something)'
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Sir/Madam,
+From: Arnd Bergmann <arnd@arndb.de>
 
+The suspend/resume functions in this driver seem to have multiple
+problems, the latest one just got introduced by a bugfix:
 
+drivers/scsi/hisi_sas/hisi_sas_v3_hw.c: In function '_suspend_v3_hw':
+drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:5142:39: error: 'struct dev_pm_info' has no member named 'usage_count'
+ 5142 |         if (atomic_read(&device->power.usage_count)) {
+drivers/scsi/hisi_sas/hisi_sas_v3_hw.c: In function '_suspend_v3_hw':
+drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:5142:39: error: 'struct dev_pm_info' has no member named 'usage_count'
+ 5142 |         if (atomic_read(&device->power.usage_count)) {
 
-Can you supply your products to  the government of (Saudi Arabia). We
-buy in larger quantity if your company can supply please reply with
-your products detail for more information.
+As far as I can tell, the 'usage_count' is not meant to be accessed
+by device drivers at all, though I don't know what the driver is
+supposed to do instead.
 
-Looking forward to hearing from you.
+Another problem is the use of the deprecated UNIVERSAL_DEV_PM_OPS(),
+and marking functions as __maybe_unused to avoid warnings about
+unused functions.  This should probably be changed to using
+DEFINE_RUNTIME_DEV_PM_OPS().
 
-Thanks and Regards
+Both changes require actually understanding what the driver needs to
+do, and being able to test this, so instead here is the simplest
+patch to make it pass the randconfig builds instead.
 
- Mr.Tamim Mohammed Taher
+Fixes: e368d38cb952 ("scsi: hisi_sas: Exit suspend state when usage count is greater than 0")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+Maintainers: If possible, please revisit this to do a proper fix.
+If that takes too much time, this patch can be applied as a
+workaround in the meantime, and might also help in case the
+e368d38cb952 patch gets backported to stable kernels.
+---
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Email:tamimbinhamadalthani00@gmail.com
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index d160b9b7479b..12d588454f5d 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -5139,11 +5139,13 @@ static int _suspend_v3_hw(struct device *device)
+ 	flush_workqueue(hisi_hba->wq);
+ 	interrupt_disable_v3_hw(hisi_hba);
+ 
++#ifdef CONFIG_PM
+ 	if (atomic_read(&device->power.usage_count)) {
+ 		dev_err(dev, "PM suspend: host status cannot be suspended\n");
+ 		rc = -EBUSY;
+ 		goto err_out;
+ 	}
++#endif
+ 
+ 	rc = disable_host_v3_hw(hisi_hba);
+ 	if (rc) {
+@@ -5162,7 +5164,9 @@ static int _suspend_v3_hw(struct device *device)
+ 
+ err_out_recover_host:
+ 	enable_host_v3_hw(hisi_hba);
++#ifdef CONFIG_PM
+ err_out:
++#endif
+ 	interrupt_enable_v3_hw(hisi_hba);
+ 	clear_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
+ 	clear_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags);
+-- 
+2.39.2
+
