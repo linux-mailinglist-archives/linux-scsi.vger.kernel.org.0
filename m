@@ -2,211 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F2E6D745E
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Apr 2023 08:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4B06D7603
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Apr 2023 09:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237041AbjDEG0I (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Apr 2023 02:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S237259AbjDEH5Q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Apr 2023 03:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236802AbjDEG0G (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Apr 2023 02:26:06 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D267730D4;
-        Tue,  4 Apr 2023 23:26:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 514691FDCF;
-        Wed,  5 Apr 2023 06:26:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680675962; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fPklOGrK0wvx9foU45fbSO1T7AAWrRW0ezTW2IuveIs=;
-        b=W1BxH9INLTbRXuhqHrkuflqGKzVtAQKZPVfONL9HDieGVaM8S2yyIY/uYwDRh/dfj3cvxT
-        bQxtl1Saj3DwErlTC+PM5Le7yyqvuS3c1Wzf8MY1/Dm9H57L6OXR1S6EBL1Z63f0Yerkg/
-        q0T/BIzLomrr8RrLEvm4w/f6WuP17i0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680675962;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fPklOGrK0wvx9foU45fbSO1T7AAWrRW0ezTW2IuveIs=;
-        b=/uwtE0c0WiNQgRjZo0OuSEpwoVWPzoUvm+zeb2gkLi0Ueun+GkD2WH+PW2OoIrJPJoQGun
-        EdX2SnYJ6N3d7MAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6855113A10;
-        Wed,  5 Apr 2023 06:26:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CH8TFnkULWRMfwAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 05 Apr 2023 06:26:01 +0000
-Message-ID: <c94c94f7-1a22-72b0-bcf6-a6de6c61a3ec@suse.de>
-Date:   Wed, 5 Apr 2023 08:26:00 +0200
+        with ESMTP id S237005AbjDEH5K (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Apr 2023 03:57:10 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9044ECD
+        for <linux-scsi@vger.kernel.org>; Wed,  5 Apr 2023 00:57:04 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5027d3f4cd7so237955a12.0
+        for <linux-scsi@vger.kernel.org>; Wed, 05 Apr 2023 00:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680681423;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
+        b=ZFAmFQTn20XXB58Hm1LdXdWSQ5ZKxD4voHxxAhS1cKrInxf7DLRcTSbw0glAYuheNd
+         QsgC19PfAnkNACoih4X9yWq8Ua2f3Z5aqpAwmyG7K5XHuwPNdYpOLvr+4dizYlmkwqvh
+         8ippA6GSg6vwbKsguRd+gNlt6Q3d6qdPQH52wPe4yUNm7drYy8w79XnI6OkaMCxGYxXe
+         MDkio/NlgHAyk3tGfHbZ8+FvtwIbKJyHeY9Hl3c4m/UBMxdY642/4m0lMYD1+lZcL9DU
+         GTGlzj7aK8t/dfhFV0ZGCnZD6XTAnjOEHb+Mkw5/16dwcMVpicpYd4/+ImRJVe79/Ozv
+         w6jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680681423;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
+        b=FyD6l0yH13JFZEjrPdff9eCJXz9hIcyEEM2RBlIFelbgpBoQWmWRvCm74RPj1LYdnc
+         CJEk6HFiOwgdh+hAeouR32tFKhJY9fbZ812zttWuABWwJwy3Eu6T95yyidupg2NuTGEe
+         L9l9QYafZ4cQRcyEUnpJbXI5xkcXGZRqarprdrHuKgd4XZYPuJDXjIfvGfcQu0rNg2Bf
+         Ax3D3oxCyCU5q0t1+y17aJ7BUErBAWme7qguMyxj+bLU2XQ6YZ/5lozvQhGWdmUUutaD
+         Tvnx45FiNu/p9ETyup7Qr0TKhlZWqBWtfIhAu0R9XHQEjsqpnHMAQ0KLg9JW/73Tb17F
+         1Pjg==
+X-Gm-Message-State: AAQBX9elB2EmAV/EvZ8vnwN0edCwEHQGoK01P8skN0AKicapFO5qf11O
+        YYR/BrJzqiC6eS2FMaSluQcxacXx+7qSWgJ+BJ4=
+X-Google-Smtp-Source: AKy350b+6mlAYsE5jCYer29QJ01MP1yshNVCPV/yu1iTNStkeOVxzQSr9n/dP8VlK7PnohYB4ysIDujVG47xryzVK58=
+X-Received: by 2002:a50:d781:0:b0:500:547b:4e1b with SMTP id
+ w1-20020a50d781000000b00500547b4e1bmr691870edi.6.1680681423244; Wed, 05 Apr
+ 2023 00:57:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 08/19] scsi: detect support for command duration limits
-Content-Language: en-US
-To:     Damien Le Moal <dlemoal@fastmail.com>,
-        Niklas Cassel <nks@flawful.org>, Jens Axboe <axboe@kernel.dk>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-block@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>
-References: <20230404182428.715140-1-nks@flawful.org>
- <20230404182428.715140-9-nks@flawful.org>
- <d55ac074-73df-eab3-f0b8-c70d8efb4b72@suse.de>
- <d25d8427-1313-5696-8e23-87eadc4e6d6b@fastmail.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <d25d8427-1313-5696-8e23-87eadc4e6d6b@fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:7208:2202:b0:65:e547:3943 with HTTP; Wed, 5 Apr 2023
+ 00:57:02 -0700 (PDT)
+Reply-To: tamimbinhamadalthani00@gmail.com
+From:   Tamim Mohammed Taher <cisskhadidiatou890@gmail.com>
+Date:   Wed, 5 Apr 2023 00:57:02 -0700
+Message-ID: <CAAYY=dZe5ZjJ2b2KEkYbGOEnyScbFaaGqjvb6EmPHE7Lypp0cg@mail.gmail.com>
+Subject: RE:Saudi Arabia-Inquiry about your products.!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=DEAR_SOMETHING,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:536 listed in]
+        [list.dnswl.org]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [tamimbinhamadalthani00[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [cisskhadidiatou890[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [cisskhadidiatou890[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.7 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 4/5/23 01:27, Damien Le Moal wrote:
-> On 4/5/23 03:48, Hannes Reinecke wrote:
->> On 4/4/23 20:24, Niklas Cassel wrote:
->>> From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
->>>
->>> Introduce the function scsi_cdl_check() to detect if a device supports
->>> command duration limits (CDL). Support for the READ 16, WRITE 16,
->>> READ 32 and WRITE 32 commands are checked using the function
->>> scsi_report_opcode() to probe the rwcdlp and cdlp bits as they indicate
->>> the mode page defining the command duration limits descriptors that
->>> apply to the command being tested.
->>>
->>> If any of these commands support CDL, the field cdl_supported of
->>> struct scsi_device is set to 1 to indicate that the device supports CDL.
->>>
->>> Support for CDL for a device is advertizes through sysfs using the new
->>> cdl_supported device attribute. This attribute value is 1 for a device
->>> supporting CDL and 0 otherwise.
->>>
->>> Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
->>> Co-developed-by: Niklas Cassel <niklas.cassel@wdc.com>
->>> Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
->>> ---
->>>    Documentation/ABI/testing/sysfs-block-device |  9 +++
->>>    drivers/scsi/scsi.c                          | 81 ++++++++++++++++++++
->>>    drivers/scsi/scsi_scan.c                     |  3 +
->>>    drivers/scsi/scsi_sysfs.c                    |  2 +
->>>    include/scsi/scsi_device.h                   |  3 +
->>>    5 files changed, 98 insertions(+)
->>>
->>> diff --git a/Documentation/ABI/testing/sysfs-block-device b/Documentation/ABI/testing/sysfs-block-device
->>> index 7ac7b19b2f72..ee3610a25845 100644
->>> --- a/Documentation/ABI/testing/sysfs-block-device
->>> +++ b/Documentation/ABI/testing/sysfs-block-device
->>> @@ -95,3 +95,12 @@ Description:
->>>    		This file does not exist if the HBA driver does not implement
->>>    		support for the SATA NCQ priority feature, regardless of the
->>>    		device support for this feature.
->>> +
->>> +
->>> +What:		/sys/block/*/device/cdl_supported
->>> +Date:		Mar, 2023
->>> +KernelVersion:	v6.4
->>> +Contact:	linux-scsi@vger.kernel.org
->>> +Description:
->>> +		(RO) Indicates if the device supports the command duration
->>> +		limits feature found in some ATA and SCSI devices.
->>> diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
->>> index 62d9472e08e9..c03814ce23ca 100644
->>> --- a/drivers/scsi/scsi.c
->>> +++ b/drivers/scsi/scsi.c
->>> @@ -570,6 +570,87 @@ int scsi_report_opcode(struct scsi_device *sdev, unsigned char *buffer,
->>>    }
->>>    EXPORT_SYMBOL(scsi_report_opcode);
->>>    
->>> +#define SCSI_CDL_CHECK_BUF_LEN	64
->>> +
->>> +static bool scsi_cdl_check_cmd(struct scsi_device *sdev, u8 opcode, u16 sa,
->>> +			       unsigned char *buf)
->>> +{
->>> +	int ret;
->>> +	u8 cdlp;
->>> +
->>> +	/* Check operation code */
->>> +	ret = scsi_report_opcode(sdev, buf, SCSI_CDL_CHECK_BUF_LEN, opcode, sa);
->>> +	if (ret <= 0)
->>> +		return false;
->>> +
->>> +	if ((buf[1] & 0x03) != 0x03)
->>> +		return false;
->>> +
->>> +	/* See SPC-6, one command format of REPORT SUPPORTED OPERATION CODES */
->>> +	cdlp = (buf[1] & 0x18) >> 3;
->>> +	if (buf[0] & 0x01) {
->>> +		/* rwcdlp == 1 */
->>> +		switch (cdlp) {
->>> +		case 0x01:
->>> +			/* T2A page */
->>> +			return true;
->>> +		case 0x02:
->>> +			/* T2B page */
->>> +			return true;
->>> +		}
->>> +	} else {
->>> +		/* rwcdlp == 0 */
->>> +		switch (cdlp) {
->>> +		case 0x01:
->>> +			/* A page */
->>> +			return true;
->>> +		case 0x02:
->>> +			/* B page */
->>> +			return true;
->>> +		}
->>> +	}
->>> +
->>> +	return false;
->>> +}
->>> +
->> Why do we need to check this when writing to sysfs? Shouldn't we detect
->> this during startup / revalidate?
-> 
-> Hmm, I think you missed the call chain on this one (the patch starting with the
-> sys attribute doc changes is a little confusing).
-> 
-> scsi_cdl_check_cmd() is called from scsi_cdl_check(), which is itself called
-> from scsi_add_lun() (for initial device scan) and scsi_rescan_device() for
-> revalidate. scsi_cdl_check() will set sdev->cdl_supported to 1 for devices
-> supporting CDL, which is what sysfs cdl_supported show method uses, and later,
-> the cdl_enable attribute show/store method use that too. That function is not
-> called from sysfs attributes methods.
-> 
-> Note that this function was moved from sd.c to scsi.c as CDL is defined is SPC,
-> not SBC.
-> 
-Indeed, you are right.
+Dear Sir/Madam,
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-Cheers,
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
-Myers, Andrew McDonald, Martje Boudien Moerman
+Can you supply your products to  the government of (Saudi Arabia). We
+buy in larger quantity if your company can supply please reply with
+your products detail for more information.
 
+Looking forward to hearing from you.
+
+Thanks and Regards
+
+ Mr.Tamim Mohammed Taher
+
+Email:tamimbinhamadalthani00@gmail.com
