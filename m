@@ -2,124 +2,129 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFE76DBD1C
-	for <lists+linux-scsi@lfdr.de>; Sat,  8 Apr 2023 23:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664116DBD47
+	for <lists+linux-scsi@lfdr.de>; Sat,  8 Apr 2023 23:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbjDHVAS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 8 Apr 2023 17:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
+        id S229504AbjDHVkz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 8 Apr 2023 17:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDHVAQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 8 Apr 2023 17:00:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C1A49C6
-        for <linux-scsi@vger.kernel.org>; Sat,  8 Apr 2023 13:59:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680987568;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JB083fTTSxcCs2UaKyWljOb6rAwe9wu+A7E1B77ylxo=;
-        b=XoghHeQlKKXcfLnw60R9bVwO6GCbUKZx9M/njBXe0uVeUKI8iDB5nHkbcR/jUzuO1bmF3n
-        UnGjlIOMkzJhSC50y2ZJxgaONopD2KAAdxoHNBr7RILeQhjAqLLwR+85gO+bBgpY2A17HA
-        f57NSpM0muzBd785g2w+GxTG16dQb7k=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-81-O8DAQJdINgmmn0p8VIhx0g-1; Sat, 08 Apr 2023 16:59:24 -0400
-X-MC-Unique: O8DAQJdINgmmn0p8VIhx0g-1
-Received: by mail-qv1-f72.google.com with SMTP id l15-20020a0cd6cf000000b005df451a51ddso16689375qvi.9
-        for <linux-scsi@vger.kernel.org>; Sat, 08 Apr 2023 13:59:24 -0700 (PDT)
+        with ESMTP id S229497AbjDHVkv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 8 Apr 2023 17:40:51 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421AE5BBF
+        for <linux-scsi@vger.kernel.org>; Sat,  8 Apr 2023 14:40:48 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id v29so1557411wra.13
+        for <linux-scsi@vger.kernel.org>; Sat, 08 Apr 2023 14:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680990047; x=1683582047;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1r1SnOX6wBN2nHGoU3kualPj54nGeQSAaKXS+XIlZkY=;
+        b=bBHCoWqCZjmRMr/6jc1rmR8Zb3K5vch/8ZNshCg45bdBET0jkywDKUWqGOJiRN2Z8B
+         X4s3n6cRGmlKcNQfE65/c9k15VqfINbbSEi+w0fFsPOyau57izi4gZHjRELdirmkOcqS
+         b/MGT5prRycMjYmnmUm7uXaNiYZUaBUvMf+bJOPztSwftxdAjr4yS7ae5FoEKcxn8qc/
+         JDrouNcvioskloCtX1qRiDEb+JKBUDRk1sivUHgDEKNzmWDVHl8/ojePIAmAktLC/62R
+         6QoHzgqQnSMuVxwyHSG/qNDjTiR1QKk75H+ztg+h4NggiFsBGTBDJA56pE5roG/+1uw2
+         CWLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680987564; x=1683579564;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JB083fTTSxcCs2UaKyWljOb6rAwe9wu+A7E1B77ylxo=;
-        b=CGDPZQn5j19C9Kdaa3NeTf6adKoSoExhyNIfZLmpTI0Fb92tyBhD8PnMnSRovijy7w
-         ePBD1nZg1h7mEgb+fU8lwSA8s8famFhW23wxqRiRWAN/0XwczIS9betSQrYMdsxWAuy6
-         6Hp5xO88wwwW1g0oa3k3uP811ZKnCnvUDeya+mXnlz2f1Ipr24yXFaWRGBpMdWKmNcoQ
-         ZfOw17IFGA0Aoe2FZmIQr+uLyAVIBe7s777Ka2YEPvoDAGknjijCXLwDDYF7WKRBhoNA
-         L4uBGcRGzQe2VuSXaCQ49OZqRQV+0EEE5S1BmzxFuWL7g4ETSEMPjkjIXNgiXu0K9pD6
-         zABA==
-X-Gm-Message-State: AAQBX9cxsfdYCwIJsN/pvFGga8FEEkn+cKuJyjlKQ1zBsvHrP8bmHDYi
-        qENpoXxXNi5aL+j7Q8BeDVY4o+EB7kelobZiRy4xokPtlgIrWdIbyrZ4RvkfzcgXcI1MZEBB5Lo
-        EgnlydmoFY/TRnFZfWbf2cQ==
-X-Received: by 2002:a05:622a:1c8:b0:3b6:323d:bcac with SMTP id t8-20020a05622a01c800b003b6323dbcacmr11453639qtw.32.1680987564322;
-        Sat, 08 Apr 2023 13:59:24 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aYUbzmXXNfn+2D5TYwhbESQknNyeaqwFmbX9EPTvGd9HoI3tRYmadT5MvPqFYYQ/X3JjklCA==
-X-Received: by 2002:a05:622a:1c8:b0:3b6:323d:bcac with SMTP id t8-20020a05622a01c800b003b6323dbcacmr11453628qtw.32.1680987564102;
-        Sat, 08 Apr 2023 13:59:24 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id q75-20020a37434e000000b007485a383921sm2205619qka.116.2023.04.08.13.59.23
+        d=1e100.net; s=20210112; t=1680990047; x=1683582047;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1r1SnOX6wBN2nHGoU3kualPj54nGeQSAaKXS+XIlZkY=;
+        b=Ja/zgjq4Btn8fLGV2g2LVJQ3fFk0POzM5XMnN5TBFKgW6QTXblB8TTAYKyrTSwa5mF
+         lbqs6dq9JjdQXUgtyxB0BgSOxaPBKl+yl4wQok1fCb1wQ64d1Vcph1WHOMsk26q/ih1y
+         r+ycs/2eH9snQvdixBomIYiANnRX0xiPR2eADSt1xCd/cOOCNtk/WA5VZjOdPgsTX4Ja
+         Jeaeo4h6P4OwLKNrheKrURCEBRsSARmeiiyEwLXsa6wEuw48YOMYG7zbejvHbQvewvjD
+         24a7oJVj5Nmh3/GYWgEsqgWPP3+a+VgnOAFYMo6bjiLU9kDkBHMUS0/ATN2dR7gUdwi7
+         AAWg==
+X-Gm-Message-State: AAQBX9fWyt2yyyNzdyigDTt1PHeg8KySTOlTzgi0ZPBtEQzBe7NiKbV4
+        sX1QvNAUJ88BZZ1cAlR32GMgQA==
+X-Google-Smtp-Source: AKy350YFShjn4hELK46QnNTz06X559nncDEtCLRY2NKWt5Icc+qKjSwPyUFsi9Ob6YNkuINvGr+6TQ==
+X-Received: by 2002:a5d:50d0:0:b0:2ce:ae4c:c429 with SMTP id f16-20020a5d50d0000000b002ceae4cc429mr3829849wrt.4.1680990046639;
+        Sat, 08 Apr 2023 14:40:46 -0700 (PDT)
+Received: from localhost.localdomain ([188.25.26.161])
+        by smtp.gmail.com with ESMTPSA id s6-20020a5d4ec6000000b002efb6e0c495sm3061377wrv.91.2023.04.08.14.40.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 13:59:23 -0700 (PDT)
-Date:   Sat, 8 Apr 2023 13:59:21 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sat, 08 Apr 2023 14:40:46 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
         linux-scsi@vger.kernel.org
-Subject: Re: question about mpt3sas commit fae21608c31c
-Message-ID: <hwlhzyqc42lnkifu6izsrx4lpqgjltjnrrcyzxhxmawgx3emeg@qxadku6yknpa>
-References: <gn42g3poxa4aqgttt3ck6cb5jwhpwovm3l7hay5z65d5tlfec3@kfs5mtqb2rlh>
+Subject: [PATCH v7 0/3] Add dedicated Qcom ICE driver
+Date:   Sun,  9 Apr 2023 00:40:38 +0300
+Message-Id: <20230408214041.533749-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <gn42g3poxa4aqgttt3ck6cb5jwhpwovm3l7hay5z65d5tlfec3@kfs5mtqb2rlh>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, Apr 08, 2023 at 12:18:29PM -0700, Jerry Snitselaar wrote:
-> We've had some people trying to track a problem for months revolving
-> around a system hanging at shutdown, and last thing they see being a
-> message from mpt3sas about a reset. They quickly bisected down to the
-> commit below, and reverted it made the problem go away for the
-> customer.
-> 
-> b424eaa1b51c ("scsi: mpt3sas: Transition IOC to Ready state during shutdown")
-> 
+As both SDCC and UFS drivers use the ICE with duplicated implementation,
+while none of the currently supported platforms make use concomitantly
+of the same ICE IP block instance, the new SM8550 allows both UFS and
+SDCC to do so. In order to support such scenario, there is a need for
+a unified implementation and a devicetree node to be shared between
+both types of storage devices. So lets drop the duplicate implementation
+of the ICE from both SDCC and UFS and make it a dedicated (soc) driver.
 
-That should be (grabbed the wrong commit id):
+The v6 is here:
+https://lore.kernel.org/all/20230407105029.2274111-1-abel.vesa@linaro.org/
 
-fae21608c31c ("scsi: mpt3sas: Transition IOC to Ready state during shutdown")
+Changes since v6:
+ * Dropped the patches 1, 3 and 6 as they are already in Bjorn's tree.
+ * Dropped the minItems for both the qcom,ice and the reg in the
+   qcom,ice compatile subschema, in the ufs schema file,
+   like Krzysztof suggested
 
-> I got asked to look at something since I recently at another issue
-> that involved mpt3sas at shutdown, so I was looking through the
-> history, saw this commit being mentined. Looking at it, I'm not sure
-> why it is doing what is doing.
-> 
-> It says it is to perform a soft reset, but that was already happening before this commit via:
-> 
-> scsih_shutdown -> mpt3sas_base_detach -> mpt3sas_base_free_resources -> _base_make_ioc_ready(ioc, SOFT_RESET);
-> 
-> The original submission [1] had the following commit message:
-> 
-> "During shutdown just move the IOC state to Ready state
-> by issuing MUR. No need to free any IOC memory pools."
-> 
-> But is now skipping more than not freeing the memory pools. It no
-> longer frees memory that was kalloc'd, it doesn't unmap something that
-> was iomapped, it no longer cleans up the fault reset workqueue, and no
-> longer calls the pci cleanup code. It also no longer does the things
-> it moved to scsih_shutdown under the pci access mutex, nor uses the if
-> condition that was in mpt3sas_base_free_resources.
-> 
-> [1] https://lore.kernel.org/r/20210705145951.32258-1-sreekanth.reddy@broadcom.com
-> 
-> 
-> Am I missing something, and what the commit does here is really okay?
-> 
-> 
-> Regards,
-> Jerry
-> 
+Changes since v5:
+ * See each individual patch for changelogs.
+
+Changes since v4:
+ * dropped the SDHCI dt-bindings patch as it will be added along
+   with the first use of qcom,ice property from an SDHCI DT node
+
+
+Abel Vesa (3):
+  dt-bindings: ufs: qcom: Add ICE phandle
+  scsi: ufs: ufs-qcom: Switch to the new ICE API
+  mmc: sdhci-msm: Switch to the new ICE API
+
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     |  24 ++
+ drivers/mmc/host/Kconfig                      |   2 +-
+ drivers/mmc/host/sdhci-msm.c                  | 223 ++++------------
+ drivers/ufs/host/Kconfig                      |   2 +-
+ drivers/ufs/host/Makefile                     |   4 +-
+ drivers/ufs/host/ufs-qcom-ice.c               | 244 ------------------
+ drivers/ufs/host/ufs-qcom.c                   |  99 ++++++-
+ drivers/ufs/host/ufs-qcom.h                   |  32 +--
+ 8 files changed, 176 insertions(+), 454 deletions(-)
+ delete mode 100644 drivers/ufs/host/ufs-qcom-ice.c
+
+-- 
+2.34.1
 
