@@ -2,151 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108DF6DDAAA
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Apr 2023 14:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330876DDBAE
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Apr 2023 15:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjDKMWI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 11 Apr 2023 08:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
+        id S230429AbjDKNFR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Apr 2023 09:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjDKMWH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Apr 2023 08:22:07 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C429940C6;
-        Tue, 11 Apr 2023 05:22:05 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id o1so10171282lfc.2;
-        Tue, 11 Apr 2023 05:22:05 -0700 (PDT)
+        with ESMTP id S230412AbjDKNFD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Apr 2023 09:05:03 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931714228
+        for <linux-scsi@vger.kernel.org>; Tue, 11 Apr 2023 06:04:50 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id o6-20020a05600c4fc600b003ef6e6754c5so2156962wmq.5
+        for <linux-scsi@vger.kernel.org>; Tue, 11 Apr 2023 06:04:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1681218289;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qYe+MGPT9BvgNTQao8r5YoHx9jSImbM+Yzl5JdLRqIc=;
+        b=hVZ3SwYl0OMmYsZaktA4PBdt9FadcHLKLFYV9Y3oM0OwQMDSvu0iLQvhsEk273pBFz
+         xMjYDP0n7IEjOWvg0jISH4vr2oIC/LyzfkTZe4at0Vr/uAALu81PnqpyLw+wnzfZTkOu
+         TmmYK/UpBhgsP/7GQxJnjCUe2pBPAKV/CQTAmMGl8sZ1EImT7qlINWkY4JXfZ/GrWP4R
+         kNx5eTCgbw5jeQ3dd40Zt6Xm+q2a3SxD5X8uzYor6aZ6NYE+DFGibBhxxrQmDPt07nNo
+         UO/oZCVEaKDxUGsMoWQdcNXYTyk7IivtZey9/F1/u1rsT/Wp5oauw87Dn7CTk390xBgT
+         EPuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681215724;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:dkim-signature:dkim-signature
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P0CfEwwxRtpT41g8a6YsRRGMNfYTxceqIiIsFCToW5o=;
-        b=Qlm39oo1uwN2R1XrnH6TujBBGRSvw8Usk4/CKvF2HqgylgMCZsYoebFcm2L/94I6dj
-         q6VLaY81ZZteQKy+IrrSxgrsB1hAFXyYgL2p4Pi/HBFR1KBl5A2t9U1qt6f8ieTcur3w
-         N1A2IJ0SPAvsYsh0dfw2710Ql/q3572B+IVjaHURrdYaDlKebeohHZt21aILQT8N0tJC
-         0lzljxfWSli/nkxrmuOKPObWX+66bAKRdNW0jqaq2dZhlzyoMFCAOSN9ZSXmEuNj+Ssk
-         UkFiTaALvteVcijXgr9h7aJyog0KON0edIDtz5SO0Hd1q6vY6ChkR6Bo2i+IavoMT7Ni
-         tlJg==
-X-Gm-Message-State: AAQBX9eA0A1i6H4kKV23JwGO4QwYsWMGqPkV/Dn+4sASpyMtvKeP/eQ2
-        2GhM3vPwu5psE2jKoW/HkcLmnJbJdyhPmzH/
-X-Google-Smtp-Source: AKy350YcsRFNTafYFBVxlq7IsxWLdwjZmewy5xDiKmI45ffHR99wywc33ew9+03mdnSDkYfhIFcdJQ==
-X-Received: by 2002:ac2:5307:0:b0:4eb:3b4c:50a3 with SMTP id c7-20020ac25307000000b004eb3b4c50a3mr2615918lfh.29.1681215724128;
-        Tue, 11 Apr 2023 05:22:04 -0700 (PDT)
-Received: from flawful.org (c-fcf6e255.011-101-6d6c6d3.bbcust.telenor.se. [85.226.246.252])
-        by smtp.gmail.com with ESMTPSA id r6-20020a056512102600b004e843d6244csm2540278lfr.99.2023.04.11.05.22.03
+        d=1e100.net; s=20210112; t=1681218289;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qYe+MGPT9BvgNTQao8r5YoHx9jSImbM+Yzl5JdLRqIc=;
+        b=PFHYrwtOKrrkPE82rqqvHqml1qjXunBB+t6lH/55INYZP5ijD0R7rvP0SI3O7Z5Y+q
+         WdPetYHmoRGxCUMUwInyMZgHCM7p01iYR2vM++8Eoo+a4fzMD3v+oMBToG5Bdr34AvaH
+         /8RR+5L9XSqO/Nhh86W4Xoj0gokfhoH7Fp09ztXNonbMWfqNkJqZT8hLNS0+CMB9/4px
+         KVskzYBMIURYQz1oDmVaWp/riP+P7bi0sF7tZHUhNxJx8UUcoEzq6m/y/wwWlqmXq27J
+         i4Afa50E5ioBGJRSACfuA2vL8KWdAjRducItuHrwtKMIL0Ho59KgeRfg6Nodhi+s3X4X
+         l/rQ==
+X-Gm-Message-State: AAQBX9fU9nPty5vN8Lo/dYg7BhKeLDme/CLS/P/BJg/Rjg4Lzjg1apMP
+        GTaA8R4QNQWcTRMoAtacJGQVyg==
+X-Google-Smtp-Source: AKy350ZfLdAiU/iKV0HLRk3Wy+S1F1keCNjX+IH2eaUg8QZgScVfnsLzAoOiiBKsX+Op60vdlbkezw==
+X-Received: by 2002:a05:600c:2294:b0:3ef:f26b:a173 with SMTP id 20-20020a05600c229400b003eff26ba173mr1910380wmf.14.1681218288917;
+        Tue, 11 Apr 2023 06:04:48 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:a099:fc1d:c99a:bfc3])
+        by smtp.gmail.com with ESMTPSA id t6-20020a7bc3c6000000b003f04646838esm16921301wmj.39.2023.04.11.06.04.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 05:22:03 -0700 (PDT)
-Received: by flawful.org (Postfix, from userid 112)
-        id 24541458; Tue, 11 Apr 2023 14:22:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=flawful.org; s=mail;
-        t=1681215723; bh=/LguqkW2Bx5Nx7Nq830RqXMFmLCkG4fHgOSjgc/o8hk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=phJQywzKolyrZmvjPFQHlKnTkNKjK6N9V5T/BxzvhN0fNxLi7gRiR9NVr8kcLnKak
-         dG2vI+aXuo67idi9p9b+F1E+IS/9nuOyvMgFoUxZJz/SUoHGa87Dx29nxcJGnU/7bm
-         ECMENityREAkt4ABxj3hZkgMrh5Sb+aGQPCqaPfs=
+        Tue, 11 Apr 2023 06:04:48 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v3 0/5] arm64: qcom: sa8775p: add support for UFS
+Date:   Tue, 11 Apr 2023 15:04:41 +0200
+Message-Id: <20230411130446.401440-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-Received: from x1-carbon (unknown [87.116.37.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by flawful.org (Postfix) with ESMTPSA id F40CE458;
-        Tue, 11 Apr 2023 14:21:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=flawful.org; s=mail;
-        t=1681215696; bh=/LguqkW2Bx5Nx7Nq830RqXMFmLCkG4fHgOSjgc/o8hk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mW7y5YiX6yqgycGI4V5C3rc93lrUvbbVuOGxTetRdzZ0rNEVnjr1lNXuLCPu1qL21
-         Yv8KIw29kxjbr6Ii8q4NSjSdXK/pU82tEZl3g0kjsp/WPG8R6rVLkKn6l57k37n5uA
-         Ui1jKrfwJg4z3s9+rDT2fGyBqgVQ60mfFAyvBwms=
-Date:   Tue, 11 Apr 2023 14:20:41 +0200
-From:   Niklas Cassel <nks@flawful.org>
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-block@vger.kernel.org
-Subject: Re: [PATCH v6 09/19] scsi: allow enabling and disabling command
- duration limits
-Message-ID: <ZDVQmX2bYoRBYR1Y@x1-carbon>
-References: <20230406113252.41211-1-nks@flawful.org>
- <20230406113252.41211-10-nks@flawful.org>
- <20230411061648.GD18719@lst.de>
- <e9cf65ce-e1f0-4d99-31e7-75b8e88e2a89@kernel.org>
- <20230411072317.GA22683@lst.de>
- <15ad7cf9-e385-9cea-964a-4a2eac35385c@kernel.org>
- <ZDVLsIi/OhkxNcGb@x1-carbon>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDVLsIi/OhkxNcGb@x1-carbon>
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 01:59:44PM +0200, Niklas Cassel wrote:
-> On Tue, Apr 11, 2023 at 04:38:48PM +0900, Damien Le Moal wrote:
-> > On 4/11/23 16:23, Christoph Hellwig wrote:
-> > > On Tue, Apr 11, 2023 at 04:09:34PM +0900, Damien Le Moal wrote:
-> > >> But yes, I guess we could just unconditionally enable CDL for ATA on device scan
-> > >> to be on par with scsi, which has CDL always enabled.
-> > > 
-> > > I'd prefer that.  With a module option to not enable it just to be
-> > > safe.
-> > 
-> > Then it may be better to move the cdl_enable attribute store definition for ATA
-> > devices to libata. That would be less messy that way. Let me see if that can be
-> > done cleanly.
-> 
-> I don't think that the SCSI mode select can just be replaced with simple
-> SET FEATURES in libata.
-> 
-> If we move the SET FEATURES call to a function in libata, and then use a
-> function pointer in the scsi_host_template, and let only libata set this
-> function pointer (similar to e.g. how the queue_depth sysfs attribute works),
-> then the code will no longer work for SATA devices connected to a SAS HBA.
-> 
-> 
-> 
-> The current code simply checks if VPD page89 (the ATA Information VPD
-> page - which is defined in the SCSI to ATA Translation (SAT) standard)
-> exists. This page (and thus the sdev->vpd_pg89 pointer) will only exist
-> if either:
-> 1) An ATA device is connected to a SATA controller. This page will then
-> be implemented by libata.
-> 2) An ATA device is connected to a SAS HBA. The SAS HB will then provide
-> this page. (The page will not exist for SCSI devices connected to the
-> same SAS HBA.)
-> 
-> For case 1) with the current code, scsi.c will call scsi_mode_select()
-> which will be translated by libata before being sent down to the device.
-> 
-> For case 2) with the current code, scsi.c will send down a SCSI mode
-> select to the SAS HBA, and the SAS HBA will be responsible for translating
-> the command before sending it to the device.
-> 
-> So I actually think that the current way to check if vpd page89 exists
-> is probably the "cleanest" solution that I can think of.
-> 
-> If you have a better suggestion that will work for both case 1) and
-> case 2), I will be happy to change the code accordingly.
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
+Update relevant DT bindings, add new config to the driver and add UFS
+and PHY nodes to the .dtsi and enable them in the board .dts for
+sa8775p-ride.
 
-In addition to:
-https://github.com/torvalds/linux/blame/v6.3-rc6/drivers/scsi/sd.c#L3066-L3074
+v2 -> v3:
+- fix DT bindings: move allOf: below required:
+- collect review tags
 
-checking for the existence of VPD page89 is also currently done by e.g.:
-https://github.com/torvalds/linux/blob/v6.3-rc6/drivers/scsi/mpt3sas/mpt3sas_scsih.c#L12607
-and
-https://github.com/torvalds/linux/blob/v6.3-rc6/drivers/hwmon/drivetemp.c#L340
+v1 -> v2:
+- order new compatibles alphabetically
+- rework the UFS PHY bindings to accomodate more clocks
+- add a comment in the .dts regarding a non-standard clock used
+  by the UFS PHY
 
+Bartosz Golaszewski (5):
+  dt-bindings: ufs: qcom: add compatible for sa8775p
+  dt-bindings: phy: qmp-ufs: describe the UFS PHY for sa8775p
+  phy: qualcomm: phy-qcom-qmp-ufs: add definitions for sa8775p
+  arm64: dts: qcom: sa8775p: add UFS nodes
+  arm64: dts: qcom: sa8775p-ride: enable UFS
 
-Kind regards,
-Niklas
+ .../phy/qcom,sc8280xp-qmp-ufs-phy.yaml        | 26 ++++++++-
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     |  2 +
+ arch/arm64/boot/dts/qcom/sa8775p-ride.dts     | 19 ++++++
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 58 +++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-ufs.c       | 38 ++++++++++++
+ 5 files changed, 142 insertions(+), 1 deletion(-)
+
+-- 
+2.37.2
+
