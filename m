@@ -2,79 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A556DDBA5
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Apr 2023 15:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0E66DDBC4
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Apr 2023 15:10:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjDKNFN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 11 Apr 2023 09:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S230226AbjDKNKb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Apr 2023 09:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjDKNFG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Apr 2023 09:05:06 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAC04ED0
-        for <linux-scsi@vger.kernel.org>; Tue, 11 Apr 2023 06:04:56 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id he13so9497780wmb.2
-        for <linux-scsi@vger.kernel.org>; Tue, 11 Apr 2023 06:04:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1681218295;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jC6gWh/93zTyDqTCTM2LE5tDkTpbOI5ydojvv7gVZxA=;
-        b=FFCPUtV2Lhbi5fQvjeIDIR8Qg/uJ/rl9m+UeCwBQTVM4lkw1j9B+ZpUeZ6gDN9B0uS
-         5KYFuGOrfu30VupuAu3H3BT4zFFj2fo4YnCOMS94hGmzRtWbUaevbONsQYJhFZ2K4P9X
-         L/nKMZc4qzDqDbJSKMCbVwiT74/tyLf1IDhYwNoVGTBX3FfTleMUmDJ+X3a0/Ds+fXw8
-         6hXszRubOP119xDL6FbpP8/1iwy5ixar/TfWolzTcqPXDIGuUrUteyXffTqCwC/E32e0
-         flTv2fTqn2e4oht+v5shjskCYLvSETVjg+KpbnXDFJtk3DRy0oV4jCvdM/AIo9b0kCt8
-         xDiw==
+        with ESMTP id S230196AbjDKNKa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Apr 2023 09:10:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14A944A3
+        for <linux-scsi@vger.kernel.org>; Tue, 11 Apr 2023 06:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681218582;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A3A3R77QZ++3XaMR8dl2QnKnilDtweVc9Y+y5AYwQ1g=;
+        b=Y7E/zWTTCa18xNCjjKhJ4qN0KEqw8GPoBE52bUWBBGlQ7BCc7AilEM+AIFEkpbJ/UUB1Eo
+        Zl16N+Ke0YjT7q8o4JiryZMwOxPBmoShtKMPp2KkaC2ecrCCljZyZaZIi+FkI8Fc9LUwhg
+        5vjYhQc/wyD3+un33w7zs+WWYPd96/M=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-292-aKboxxDDOQqof0comk-6Ng-1; Tue, 11 Apr 2023 09:09:41 -0400
+X-MC-Unique: aKboxxDDOQqof0comk-6Ng-1
+Received: by mail-wm1-f70.google.com with SMTP id h22-20020a05600c351600b003ef739416c3so17138650wmq.4
+        for <linux-scsi@vger.kernel.org>; Tue, 11 Apr 2023 06:09:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681218295;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jC6gWh/93zTyDqTCTM2LE5tDkTpbOI5ydojvv7gVZxA=;
-        b=spSnxl1c3/V8YSqESdniHIa3cFpkixbZMTrDwvZXpU2D3Rb/fUIAkfQ61zAeHQMcs9
-         wtdQzMU1p+XIjh9ffVsORMuOzVIMbQAi8Z3lLIvuTcJ0b01Acgbvu4gEBU91j/JdhX1M
-         SRyMWhMy8LvbeGiJg5zIP8bSA00DiAatBbAnboJMtQKwY/dEhovTbDMEoIR9C7wLUlyh
-         HAlSVxqjFNnIo9qzDOJi6WBU3PK+j0icheRQI4CsGnDeBeNI9YVccYhyCemy1C5z53FC
-         L8RfsyKrdvOehaTVUGWskdWdi+3wbh7i+wdzBeBgXoHPatsHlgiaDf3bTum3FtQDBNCi
-         LCxQ==
-X-Gm-Message-State: AAQBX9fkrYRGIMUAISsC31GwoziGtnzdt/DM39gduDwR5Yl5aVPmPql7
-        dpkCSkzGDOtwZNzxfhjY1ObnVw==
-X-Google-Smtp-Source: AKy350Z92G2IhtFFM8sPmnrWvnbsC166u3rxSYJBKLJmnUOC9WEFR1kTpLmES+RFg8ATH3kOBYYeCQ==
-X-Received: by 2002:a7b:c419:0:b0:3eb:2e32:72c3 with SMTP id k25-20020a7bc419000000b003eb2e3272c3mr10768600wmi.22.1681218294957;
-        Tue, 11 Apr 2023 06:04:54 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:a099:fc1d:c99a:bfc3])
-        by smtp.gmail.com with ESMTPSA id t6-20020a7bc3c6000000b003f04646838esm16921301wmj.39.2023.04.11.06.04.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 06:04:54 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v3 5/5] arm64: dts: qcom: sa8775p-ride: enable UFS
-Date:   Tue, 11 Apr 2023 15:04:46 +0200
-Message-Id: <20230411130446.401440-6-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230411130446.401440-1-brgl@bgdev.pl>
-References: <20230411130446.401440-1-brgl@bgdev.pl>
+        d=1e100.net; s=20210112; t=1681218580; x=1683810580;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A3A3R77QZ++3XaMR8dl2QnKnilDtweVc9Y+y5AYwQ1g=;
+        b=ZDiysXw1x/5v9werdF3bGfhjJElXBs+1pgrW6BQwpJ7UryDkz2w+NGHS8pGUtMT27n
+         fizq+rc/KdVZDlIOi1ATLyVwe2dr6td2KoVRy+0bcCu/FD66m2Xk5MjzwnOJ9ixTKcWB
+         d4Lupbb50z1+nx7I71DrADgoamFeZjhUIQ35NQZ9H91i5Io0MCzTNTIu2K+I6Q0Zy3FE
+         MbB9HXL3Fd9o4PvdQ4wq5A5nkcBEb/wMXwCGlPg4jqmcFB02iUUTMX2rYFun+HidzLkw
+         lnEDWLe3VvvtGx/lfMAaPBKyoU3noyJtgshthGeMi8xW5BFRbF7/5kisfiBps4ULeopa
+         ClHA==
+X-Gm-Message-State: AAQBX9cBn3g8corJuMJT+v1/JMm9PcWHpbgqiElvBsB7Ee9srfFm1kPe
+        s/tcO6aIVdlInyqv8cvW1zp7O5QWo5aCTEThLkzc9APADrf/u317gKS+YL9Do1kpcz2Bel9frYk
+        BiajC5VVoYH1fjgjmB51j8w==
+X-Received: by 2002:a05:600c:2294:b0:3ef:f26b:a173 with SMTP id 20-20020a05600c229400b003eff26ba173mr1922468wmf.14.1681218579956;
+        Tue, 11 Apr 2023 06:09:39 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y+G8fHm5KIqpnQIvGEeucSsttPSYQTuadQhFguxu8j0VBW9g0AE4iNUT//MmnnCF6H1v1TsA==
+X-Received: by 2002:a05:600c:2294:b0:3ef:f26b:a173 with SMTP id 20-20020a05600c229400b003eff26ba173mr1922452wmf.14.1681218579655;
+        Tue, 11 Apr 2023 06:09:39 -0700 (PDT)
+Received: from [192.168.0.107] (ip4-83-240-118-160.cust.nbox.cz. [83.240.118.160])
+        by smtp.gmail.com with ESMTPSA id q5-20020a7bce85000000b003ede3e54ed7sm16967535wmj.6.2023.04.11.06.09.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Apr 2023 06:09:39 -0700 (PDT)
+Message-ID: <3b2829ee-93f1-feb1-d113-cbc084d23149@redhat.com>
+Date:   Tue, 11 Apr 2023 15:09:38 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: question about mpt3sas commit b424eaa1b51c
+To:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+References: <gn42g3poxa4aqgttt3ck6cb5jwhpwovm3l7hay5z65d5tlfec3@kfs5mtqb2rlh>
+Content-Language: en-US
+From:   Tomas Henzl <thenzl@redhat.com>
+In-Reply-To: <gn42g3poxa4aqgttt3ck6cb5jwhpwovm3l7hay5z65d5tlfec3@kfs5mtqb2rlh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,59 +83,57 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 4/8/23 21:18, Jerry Snitselaar wrote:
+> We've had some people trying to track a problem for months revolving
+> around a system hanging at shutdown, and last thing they see being a
+> message from mpt3sas about a reset. They quickly bisected down to the
+> commit below, and reverted it made the problem go away for the
+> customer.
+> 
+> b424eaa1b51c ("scsi: mpt3sas: Transition IOC to Ready state during shutdown")
+> 
+> I got asked to look at something since I recently at another issue
+> that involved mpt3sas at shutdown, so I was looking through the
+> history, saw this commit being mentined. Looking at it, I'm not sure
+> why it is doing what is doing.
+> 
+> It says it is to perform a soft reset, but that was already happening before this commit via:
+> 
+> scsih_shutdown -> mpt3sas_base_detach -> mpt3sas_base_free_resources -> _base_make_ioc_ready(ioc, SOFT_RESET);
+> 
+> The original submission [1] had the following commit message:
+> 
+> "During shutdown just move the IOC state to Ready state
+> by issuing MUR. No need to free any IOC memory pools."
+> 
+> But is now skipping more than not freeing the memory pools. It no
+> longer frees memory that was kalloc'd, it doesn't unmap something that
+> was iomapped, it no longer cleans up the fault reset workqueue, and no
+> longer calls the pci cleanup code. It also no longer does the things
+> it moved to scsih_shutdown under the pci access mutex, nor uses the if
+> condition that was in mpt3sas_base_free_resources.
+> 
+> [1] https://lore.kernel.org/r/20210705145951.32258-1-sreekanth.reddy@broadcom.com
+> 
+> 
+> Am I missing something, and what the commit does here is really okay?
 
-Enable the UFS and its PHY on sa8775p-ride.
+When a driver's shutdown method is called it may be still processing in
+parallel I/Os (that may also happen any time later) so not releasing the
+resources the driver has allocated is correct. A next step is then a
+power off or a boot of a new kernel anyway.
+A driver should stop DMA transfers and IRQ's, silence itself and when
+needed inform the attached hw to flush memory or whatever else.
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+(The fix I've posted for the DMA issue in shutdown has this subject
+'mpt3sas: fix an issue when driver's being removed')
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-index f238a02a5448..2bb001a3ea55 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-@@ -5,6 +5,7 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- 
- #include "sa8775p.dtsi"
-@@ -20,6 +21,7 @@ aliases {
- 		serial2 = &uart17;
- 		i2c18 = &i2c18;
- 		spi16 = &spi16;
-+		ufshc1 = &ufs_mem_hc;
- 	};
- 
- 	chosen {
-@@ -426,6 +428,23 @@ &uart17 {
- 	status = "okay";
- };
- 
-+&ufs_mem_hc {
-+	reset-gpios = <&tlmm 149 GPIO_ACTIVE_LOW>;
-+	vcc-supply = <&vreg_l8a>;
-+	vcc-max-microamp = <1100000>;
-+	vccq-supply = <&vreg_l4c>;
-+	vccq-max-microamp = <1200000>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l4a>;
-+	vdda-pll-supply = <&vreg_l1c>;
-+
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <38400000>;
- };
--- 
-2.37.2
+Regards,
+Tomas
+
+> 
+> 
+> Regards,
+> Jerry
+> 
 
