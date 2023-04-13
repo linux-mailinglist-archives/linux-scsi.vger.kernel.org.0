@@ -2,105 +2,132 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6551C6E08B8
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Apr 2023 10:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 866AE6E0A9C
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Apr 2023 11:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjDMIPs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Apr 2023 04:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
+        id S230060AbjDMJvX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Apr 2023 05:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjDMIPr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Apr 2023 04:15:47 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713AD902B
-        for <linux-scsi@vger.kernel.org>; Thu, 13 Apr 2023 01:15:26 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id hg14-20020a17090b300e00b002471efa7a8fso797225pjb.0
-        for <linux-scsi@vger.kernel.org>; Thu, 13 Apr 2023 01:15:26 -0700 (PDT)
+        with ESMTP id S229893AbjDMJvP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Apr 2023 05:51:15 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9106D903D
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Apr 2023 02:51:05 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id a9so13312260vsh.3
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Apr 2023 02:51:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681373726; x=1683965726;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+        d=linaro.org; s=google; t=1681379464; x=1683971464;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9jdV+oxR7hymkmAcO25PV9p0v0m+J7g6fYMaGnJuArE=;
-        b=Er2WaIqMyZjIjpf+TH6izzg0XCUhIXP7M3Uj9gCkht3wC+J1bmcGYWSnLWJB8Du7uN
-         5/kZtEccHiq7Ang1R9XdgE6sKhCNARUI7HUi7hS35SJOBRYHd0Al1wueyLelzJjhbqOB
-         8RH79ycDV9dPN4Df12GEa03qfjmU2xbVJu23dX3D82rOGQvFxyWUsVkScbJtR1vIG9hJ
-         kvzhCdb1iPyBhz1DWhOByNP/R1Bwv9pYV4Rn6JJFu5O5UYT95HDOjRFWvnlZnYZckLcP
-         tjenyd24JL6WNH07O7O6/wa8TF4DX2/r5GtYcndtnLHkzBMHTu4xh3I4+kb3ys1lIxst
-         BY7Q==
+        bh=5/1cCA7ARMmBDMVmrz4hr0FRe4hg+/OHyteC+tHS04g=;
+        b=EfKmzk5B4ODNxPx+xdp/ob3uZ7O1n47kiT0o7olkIk4CX7pZ5HBZSimgUzFf/HquBA
+         3g628x3Rpp3Am+SaHS1LLbJ4Jhlarvi6nhGllSOqMelnC2/IMpnO0NLSzTKeqbq04bJp
+         IVLxRIo/ERVcNW6mFiR+uuHEtD0oH702xr7OP69Cxkj6r5mvBubaamcEkFaDJIeNmNnf
+         QdU+uFnxgLWR6c1ni9FnDE9/yDVQLTxJIBH30fA1PmEoxT8eOUW1HZ8hyVFRiLS9pFNS
+         N//oEsgAvv38iZ8j0rYHU1tQHJy/PNxy13MdVLEy+Kwzm2tmmNupdOJRjyGeyKeU7g8Y
+         KDGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681373726; x=1683965726;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+        d=1e100.net; s=20221208; t=1681379464; x=1683971464;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9jdV+oxR7hymkmAcO25PV9p0v0m+J7g6fYMaGnJuArE=;
-        b=VOX3EjYQbAAXzUq/rPWihSiFSc0A9n2d+JE3vRRNlKePMtkID8+RP3lziHMa8mJAlU
-         uJGwBpNlBVM8qMbrMBipEmqb0r99V9cyjd/5iA5KmBWkgdB1XTw1WY6mibfACFiUBvRf
-         0j25Gh9EfSUi9HmnklONXxCIe4VhTWTaS3V3mUSXXHPRwOV+YdMaYJwNGpIaIA+3dOIk
-         FjjJRXLDFVfOq+OC90EbBrBpLBhq0zV8fgeXknhP08qms2H4dpZoJozi6jYiN2Les4ax
-         wOb+3J/nF19UKRIiGtDBHVOjN61/JzTkNemvsnUXUdpQDF/mGucdFGCuhwIJHSR1oEHy
-         JGPg==
-X-Gm-Message-State: AAQBX9ekm8x1nw2OmtaRojrQf9j41LHIKenfLZFvtje9oQ8uBErgLYF0
-        hUfHMpOovRs21Vb/qn9Wl6eYd8EsuvoyKhJHb4A=
-X-Google-Smtp-Source: AKy350bgnF5aLj4SJMSBycuBsDyU4NLTjYSGBqHRp7G1f7/1qgAG9+Fxm4oZ6vrJBVGcMebK1o4eR/nBOsP/rRh0q7I=
-X-Received: by 2002:a17:90a:558f:b0:244:ae2c:d5d with SMTP id
- c15-20020a17090a558f00b00244ae2c0d5dmr265793pji.4.1681373725623; Thu, 13 Apr
- 2023 01:15:25 -0700 (PDT)
+        bh=5/1cCA7ARMmBDMVmrz4hr0FRe4hg+/OHyteC+tHS04g=;
+        b=D4HWOaJ34sab5c4cDbc+xj52yCuniJi3vJlmZRjX1XIsiNkEHLbDYW2mjnslvrM91j
+         TMRgZrF+pqrk+XjnTR+T5w5bagoRKqHa6kYkCzD+2sxL0NUpXCZHbGgXGPHiCObOgrsG
+         jupP0zD0KCSRhSCsPykujCn6kCoJCXEapVshJVLAPJgknMfflOqS02Lyh2AcPxbqZP3h
+         QxQYvFkYF5T8QbuHF7flsKD5o7e1TGicDVrguKm4VCtOaUe0mg2xsjT1daiRKSDOjLzf
+         M60UV0hxZHT6yMenOzdJ82X/HqVw/JNJSTJZNUAHECCplQ2Y7viwXyTj8LipEO+Bvfxw
+         1MKA==
+X-Gm-Message-State: AAQBX9ff4sHMJuOpc4EgNeOSLaGv6Q/vG3G6z41vh5QLaYIynfXKMhN4
+        n8038x9D4+lkm12QIiq8ym7vB8fLafCIrOYa4Z0eNw==
+X-Google-Smtp-Source: AKy350aPWg8QPSOy/2PHkhrh6sAkwuh8+NOSRnErraPKD6xHUPGtdIg/0oa13IGXGEwruNWS6Z0XHf1YhCtKpgAgMbc=
+X-Received: by 2002:a67:c30c:0:b0:42c:9c6e:a5d2 with SMTP id
+ r12-20020a67c30c000000b0042c9c6ea5d2mr913874vsj.1.1681379464384; Thu, 13 Apr
+ 2023 02:51:04 -0700 (PDT)
 MIME-Version: 1.0
-Sender: rubenlorusso106@gmail.com
-Received: by 2002:a05:6a10:24c7:b0:3bc:b7f6:8a30 with HTTP; Thu, 13 Apr 2023
- 01:15:25 -0700 (PDT)
-From:   Sophia Erick <sdltdkggl3455@gmail.com>
-Date:   Thu, 13 Apr 2023 10:15:25 +0200
-X-Google-Sender-Auth: jhc1WakEStWAzRq3h-hTG2h9XBQ
-Message-ID: <CAGDc9RTDohNYsJN8ifir=Md_nct01LTJ=jAf1qa_4K3UPhNjXw@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
+References: <20230407200551.12660-1-michael.christie@oracle.com>
+ <20230412093617.285177-1-naresh.kamboju@linaro.org> <CA+G9fYv2nEBe=kJK4veunkvXD9GvqyaPFQ7rUbMD1S4+0nUS3Q@mail.gmail.com>
+ <e85746b2-9736-9041-9327-1ad1299aa155@oracle.com>
+In-Reply-To: <e85746b2-9736-9041-9327-1ad1299aa155@oracle.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 13 Apr 2023 15:20:53 +0530
+Message-ID: <CA+G9fYu5T3HwXzcU4ouNhYY0zOZhJgbc6AXFS0q1wHgV65AEDA@mail.gmail.com>
+Subject: Re: [PATCH v6 00/18] Use block pr_ops in LIO
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     axboe@kernel.dk, bvanassche@acm.org, chaitanyak@nvidia.com,
+        dm-devel@redhat.com, hch@lst.de,
+        james.bottomley@hansenpartnership.com, kbusch@kernel.org,
+        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        snitzer@kernel.org, target-devel@vger.kernel.org, vbabka@suse.cz,
+        mgorman@techsingularity.net, halbuer@sra.uni-hannover.de,
+        keescook@chromium.org, akpm@linux-foundation.org,
+        kirill.shutemov@linux.intel.com, willy@infradead.org,
+        mkoutny@suse.com, roman.gushchin@linux.dev, ryan.roberts@arm.com,
+        shy828301@gmail.com, yuzhao@google.com, zokeefe@google.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,
-        HK_RANDOM_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-May the peace of God be with you ,
+On Wed, 12 Apr 2023 at 23:59, Mike Christie <michael.christie@oracle.com> wrote:
+>
+> On 4/12/23 5:25 AM, Naresh Kamboju wrote:
+> > On Wed, 12 Apr 2023 at 15:06, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >>
+> >> [sorry for the adding you in CC]
+> >>
+> >> While running LTP controllers test suite on this patch set applied on top of
+> >> the next-20230406 and the following kernel panic noticed on qemu-i386.
+> >
+> > Also noticed on qemu-x86_64.
+> >
+> > Crash log link,
+> > ------------------
+> > - https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/lore_kernel_org_linux-block_20230404140835_25166-1-sergei_shtepa_veeam_com/testrun/16171908/suite/log-parser-test/test/check-kernel-panic/log
+> > - https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/lore_kernel_org_linux-block_20230404140835_25166-1-sergei_shtepa_veeam_com/testrun/16171908/suite/log-parser-test/tests/
+>
+> Can you point me to the original report? I don't think my patches are the cause of
+> the failure, or if they are there is a crazy bug.
+>
+> Above, I think you pointed me to the wrong link above because it looks like that's
+> for a different patchset. Or did I misunderstand the testing and that link has my
+> patches included?
+>
+> I did see my patches tested:
+>
+> https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/
+>
+> but they seem to fail in similar places as other failures that day, and the
+> failures don't seem related to my patches. It doesn't look like you are doing
+> anything nvme or block pr ioctl related and just failing on forks and OOM.
+> It looks like you are booting from a scsi device but I only touched the scsi
+> layer's code for persistent reservations and the tests don't seem to be
+> using that code.
 
-   This letter might be a surprise to you, But I believe that you will
-be honest to fulfill my final wish. I bring peace and love to you. It
-is by the grace of god, I had no choice than to do what is lawful and
-right in the sight of God for eternal life and in the sight of man for
-witness of god=E2=80=99s mercy and glory upon my life. My dear, I sent this
-mail praying it will find you in a good condition, since I myself am
-in a very critical health condition in which I sleep every night
-without knowing if I may be alive to see the next day. I am Mrs.Sophia
-Erick, a widow suffering from a long time illness. I have some funds I
-inherited from my late husband, the sum of (Eleven Million Dollars) my
-Doctor told me recently that I have serious sickness which is a cancer
-problem. What disturbs me most is my stroke sickness. Having known my
-condition, I decided to donate this fund to a good person that will
-utilize it the way I am going to instruct herein. I need a very honest
-and God fearing person who can claim this money and use it for Charity
-works, for orphanages and gives justice and help to the poor, needy
-and widows says The Lord." Jeremiah 22:15-16.and also build schools
-for less privilege that will be named after my late husband if
-possible and to promote the word of god and the effort that the house
-of god is maintained.
+Thanks for the analysis on these reports.
+Since it is based on top of Linux next-20230306, I will re-validate the base
+and get back to you with my findings.
 
- I do not want a situation where this money will be used in an ungodly
-manner. That's why I'm taking this decision. I'm not afraid of death,
-so I know where I'm going. I accept this decision because I do not
-have any child who will inherit this money after I die. Please I want
-your sincere and urgent answer to know if you will be able to execute
-this project, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of god be with you and all those that you
-love and  care for.
+- Naresh
 
-Mrs. Sophia Erick.
+
+>
+>
+>
+> >
+> > lore link,
+> > https://lore.kernel.org/linux-block/20230407200551.12660-1-michael.christie@oracle.com/
+> >
+> >
+> > --
+> > Linaro LKFT
+> > https://lkft.linaro.org
+>
