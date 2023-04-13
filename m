@@ -2,85 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A846E0836
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Apr 2023 09:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6551C6E08B8
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Apr 2023 10:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjDMHt7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Apr 2023 03:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
+        id S230351AbjDMIPs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Apr 2023 04:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbjDMHtv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Apr 2023 03:49:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC649752
-        for <linux-scsi@vger.kernel.org>; Thu, 13 Apr 2023 00:49:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B210C63C22
-        for <linux-scsi@vger.kernel.org>; Thu, 13 Apr 2023 07:49:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF85C4339B;
-        Thu, 13 Apr 2023 07:49:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681372163;
-        bh=VRMaZtbAhiyqbRhRW0/8AxhfoS98Xb+4pypSA2l7Sao=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bdV1vlrrsECmDKuft0kfCUk2yEZjaLM+pZ5ZJI6kPLmr+Pk84i7HqM8Q1FqBRYdN8
-         gnMYDp+VUI5Tz1GZ5YgKsz2CXPlGBv2TC/veinGln+2CDeqIpczo5kB/IyIlC4mrCw
-         pr65qytwgCdhVQnO/Ijw5WkM1p80QimOgTR1NVTCR9vtovJMSrQTHkKWvtMMsVO24w
-         YfhNnlOsnWIgluzQa3psm3bjdN86EAlidl33YM8Vs2yiJw8fA1tSDLN10MezLhrFB6
-         SavrGNsdnUielZPkTuAIOaJDidQjIwaLA/u8ObHYKEoDrF0uzZdffFUSKaJ7ahB9fW
-         IMkIOxusa+41w==
-Message-ID: <91517007-5a82-4f66-219a-5f1cbedad22f@kernel.org>
-Date:   Thu, 13 Apr 2023 16:49:21 +0900
+        with ESMTP id S230350AbjDMIPr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Apr 2023 04:15:47 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713AD902B
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Apr 2023 01:15:26 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id hg14-20020a17090b300e00b002471efa7a8fso797225pjb.0
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Apr 2023 01:15:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681373726; x=1683965726;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9jdV+oxR7hymkmAcO25PV9p0v0m+J7g6fYMaGnJuArE=;
+        b=Er2WaIqMyZjIjpf+TH6izzg0XCUhIXP7M3Uj9gCkht3wC+J1bmcGYWSnLWJB8Du7uN
+         5/kZtEccHiq7Ang1R9XdgE6sKhCNARUI7HUi7hS35SJOBRYHd0Al1wueyLelzJjhbqOB
+         8RH79ycDV9dPN4Df12GEa03qfjmU2xbVJu23dX3D82rOGQvFxyWUsVkScbJtR1vIG9hJ
+         kvzhCdb1iPyBhz1DWhOByNP/R1Bwv9pYV4Rn6JJFu5O5UYT95HDOjRFWvnlZnYZckLcP
+         tjenyd24JL6WNH07O7O6/wa8TF4DX2/r5GtYcndtnLHkzBMHTu4xh3I4+kb3ys1lIxst
+         BY7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681373726; x=1683965726;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9jdV+oxR7hymkmAcO25PV9p0v0m+J7g6fYMaGnJuArE=;
+        b=VOX3EjYQbAAXzUq/rPWihSiFSc0A9n2d+JE3vRRNlKePMtkID8+RP3lziHMa8mJAlU
+         uJGwBpNlBVM8qMbrMBipEmqb0r99V9cyjd/5iA5KmBWkgdB1XTw1WY6mibfACFiUBvRf
+         0j25Gh9EfSUi9HmnklONXxCIe4VhTWTaS3V3mUSXXHPRwOV+YdMaYJwNGpIaIA+3dOIk
+         FjjJRXLDFVfOq+OC90EbBrBpLBhq0zV8fgeXknhP08qms2H4dpZoJozi6jYiN2Les4ax
+         wOb+3J/nF19UKRIiGtDBHVOjN61/JzTkNemvsnUXUdpQDF/mGucdFGCuhwIJHSR1oEHy
+         JGPg==
+X-Gm-Message-State: AAQBX9ekm8x1nw2OmtaRojrQf9j41LHIKenfLZFvtje9oQ8uBErgLYF0
+        hUfHMpOovRs21Vb/qn9Wl6eYd8EsuvoyKhJHb4A=
+X-Google-Smtp-Source: AKy350bgnF5aLj4SJMSBycuBsDyU4NLTjYSGBqHRp7G1f7/1qgAG9+Fxm4oZ6vrJBVGcMebK1o4eR/nBOsP/rRh0q7I=
+X-Received: by 2002:a17:90a:558f:b0:244:ae2c:d5d with SMTP id
+ c15-20020a17090a558f00b00244ae2c0d5dmr265793pji.4.1681373725623; Thu, 13 Apr
+ 2023 01:15:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] ipr: Remove SATA support
-Content-Language: en-US
-To:     John Garry <john.g.garry@oracle.com>,
-        Brian King <brking@linux.vnet.ibm.com>,
-        martin.petersen@oracle.com
-Cc:     jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        wenxiong@linux.ibm.com
-References: <20230412174015.114764-1-brking@linux.vnet.ibm.com>
- <a4f2f204-d14f-ddd4-eeb9-9d132e090de6@oracle.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <a4f2f204-d14f-ddd4-eeb9-9d132e090de6@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: rubenlorusso106@gmail.com
+Received: by 2002:a05:6a10:24c7:b0:3bc:b7f6:8a30 with HTTP; Thu, 13 Apr 2023
+ 01:15:25 -0700 (PDT)
+From:   Sophia Erick <sdltdkggl3455@gmail.com>
+Date:   Thu, 13 Apr 2023 10:15:25 +0200
+X-Google-Sender-Auth: jhc1WakEStWAzRq3h-hTG2h9XBQ
+Message-ID: <CAGDc9RTDohNYsJN8ifir=Md_nct01LTJ=jAf1qa_4K3UPhNjXw@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.8 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,
+        HK_RANDOM_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 4/13/23 16:35, John Garry wrote:
-> On 12/04/2023 18:40, Brian King wrote:
->> Linux SATA support in ipr has always been limited to SATA DVDs. The last
->> systems that had the option of including a SATA DVD was Power 8,
->> which have been withdrawn for sometime now, so this support can
->> be removed.
->>
->> Signed-off-by: Brian King<brking@linux.vnet.ibm.com>
->> ---
-> 
-> Thanks,
-> 
-> Reviewed-by: John Garry <john.g.garry@oracle.com>
-> 
->> -#endif
->>   	.queuecommand = ipr_queuecommand,
->> -	.dma_need_drain = ata_scsi_dma_need_drain,
-> 
-> This would only be used by libsas now - maybe we should relocate it 
-> there (from libata), but prob better not.
+May the peace of God be with you ,
 
-Given that with this patch, all ATA drivers will use ->error_handler, there are
-lots of cleanups we can do. Let's work on that once this patch is queued !
+   This letter might be a surprise to you, But I believe that you will
+be honest to fulfill my final wish. I bring peace and love to you. It
+is by the grace of god, I had no choice than to do what is lawful and
+right in the sight of God for eternal life and in the sight of man for
+witness of god=E2=80=99s mercy and glory upon my life. My dear, I sent this
+mail praying it will find you in a good condition, since I myself am
+in a very critical health condition in which I sleep every night
+without knowing if I may be alive to see the next day. I am Mrs.Sophia
+Erick, a widow suffering from a long time illness. I have some funds I
+inherited from my late husband, the sum of (Eleven Million Dollars) my
+Doctor told me recently that I have serious sickness which is a cancer
+problem. What disturbs me most is my stroke sickness. Having known my
+condition, I decided to donate this fund to a good person that will
+utilize it the way I am going to instruct herein. I need a very honest
+and God fearing person who can claim this money and use it for Charity
+works, for orphanages and gives justice and help to the poor, needy
+and widows says The Lord." Jeremiah 22:15-16.and also build schools
+for less privilege that will be named after my late husband if
+possible and to promote the word of god and the effort that the house
+of god is maintained.
 
+ I do not want a situation where this money will be used in an ungodly
+manner. That's why I'm taking this decision. I'm not afraid of death,
+so I know where I'm going. I accept this decision because I do not
+have any child who will inherit this money after I die. Please I want
+your sincere and urgent answer to know if you will be able to execute
+this project, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of god be with you and all those that you
+love and  care for.
+
+Mrs. Sophia Erick.
