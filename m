@@ -2,122 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71816E1EDB
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Apr 2023 10:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5026E1F44
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Apr 2023 11:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbjDNI6P (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 Apr 2023 04:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
+        id S229774AbjDNJ1r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 Apr 2023 05:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjDNI6O (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 Apr 2023 04:58:14 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566631984;
-        Fri, 14 Apr 2023 01:58:13 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id BA0C95821D1;
-        Fri, 14 Apr 2023 04:58:12 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Fri, 14 Apr 2023 04:58:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1681462692; x=1681463292; bh=z9
-        fI6flsniMESwlS/oyoGAx8Z8tukxDoFa/ouV9jXT0=; b=BeVr8Z+4QK1IHwzzSq
-        BYZLsxTPjd41nQ7NZkp6mpn+bAxIkjXNcm1HslKC0zEWmhPRIMb/1wac8lA5KS39
-        Gl3vnqJgkz+Zl47lyPMYN9ukaVe/V1FoLy8hG6Ol4A+ECpO5+jADfUZ8S8TOVkMn
-        bh9dxWKip2K/XgzMZcJStmSrUIjCtGP1N/s9bCKMqNwGvADm17AVu6yYXGEdAJHC
-        +PivNo5YqZJrF5100Rnuv3dmX/mPb21V38W6dloXv9ktFfPmY7G4D7fcrOWEYjBX
-        VzI+mU76HY9X5u5WAC8bVOqFbo2LV2/hjzJq0Qn9fPpaDRWDwuBUeHRRdc5qS1Ap
-        aWcQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=ie1e949a3.fm3; t=1681462692; x=1681463292; bh=z9f
-        I6flsniMESwlS/oyoGAx8Z8tukxDoFa/ouV9jXT0=; b=XVPMjLQio2rI+ZPhD3r
-        emkvelZ+489Gu3W4rfuHhQhatNUDXw+I+Kw4Bv9kFAkG3BXBNcd0U59ykz40sZ5l
-        aidsEaepSvd/EoK8OFXVbp8TTCCYyhsbArDG93qzXjZnKifgi3rKrVXGnlwBcWAv
-        AY+CeZvdhlS9OayMydaKFbB8JLkrVFrnZV74sax8ZwbRoc2JiiBtIeD0SC34QAzi
-        rn6i5mx5w0yKqU2QNYhpybHffvcErbE7rEYlGkcLtUmyw/MfSeHLDfia7Z4oxwQz
-        I1ioidEnptkQhfhab69xY4SDPlP/t5mLBdTdm7jpL/WAYMPNmxve2/E0499b2G8t
-        Q/w==
-X-ME-Sender: <xms:pBU5ZH0B0qWvYH2vNYQlZp7reW2MJxlSrqJ4DjOP7L28x0s6J9ttQA>
-    <xme:pBU5ZGEM81TLrq_6EDUVSICpEvlHL4wMoY3iQqLhyuaeCqviXTsKiUvLWZDiKV4Of
-    yDv8fgHfO6qB_uC5KI>
-X-ME-Received: <xmr:pBU5ZH7DZwfnBr_QR3Jv_NqsEm0-HpAIjF-be1V4C25PG3P49YrLqj9cbWosjGu0rJ15ARIb9QvnCd3Oa7VnMw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeltddguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtsfdttddtvdenucfhrhhomhepufhhihhn
-    kdhitghhihhrohcumfgrfigrshgrkhhiuceoshhhihhnihgthhhirhhosehfrghsthhmrg
-    hilhdrtghomheqnecuggftrfgrthhtvghrnhepffehffetgfdugeffffelvdfgjefgkedv
-    hfehgeefveffgfffvedtueekgeevvefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrgh
-    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehshhhi
-    nhhitghhihhrohesfhgrshhtmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:pBU5ZM3c3CHSc3q2z_XVOys11LAg8cQ0OaMTmBhBMFUKnLzzuerk1A>
-    <xmx:pBU5ZKH1qWiNQl-qodiv2rNnPAvjkH8siNlNJ846R__4OJ2kdEt3FA>
-    <xmx:pBU5ZN_XXtLh-Uqq0kV8Fp1Igkwc_rfN2kgcTM88358O6UL3cea68w>
-    <xmx:pBU5ZPS1h0l08-HoQSauXcwiutGMacVxsPVeNvMG622lnV67XG34i3MTWgM>
-Feedback-ID: ie1e949a3:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Apr 2023 04:58:11 -0400 (EDT)
-Date:   Fri, 14 Apr 2023 17:58:09 +0900
-From:   Shin'ichiro Kawasaki <shinichiro@fastmail.com>
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>, linux-scsi@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: Re: blktests scsi/007 failure
-Message-ID: <3xwglpdpmit2obtf5p475gojdoqe42rmteki5hvoavzwle6kqr@bl7xginwaeli>
-References: <725nkvuvvbf4qwiylarw5r56tjt3r6nrvy5sijk6affzqv2s3e@6xapeviellsp>
- <5ebd61e0-0835-94cd-b55b-942a9c72b5b5@oracle.com>
+        with ESMTP id S229543AbjDNJ1q (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 Apr 2023 05:27:46 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7C92100
+        for <linux-scsi@vger.kernel.org>; Fri, 14 Apr 2023 02:27:45 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-187878a90e6so7278181fac.0
+        for <linux-scsi@vger.kernel.org>; Fri, 14 Apr 2023 02:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681464465; x=1684056465;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y5t9haSUmu6+LRsJr/oOTk9eZWnzPg4O73mmGdbJGS8=;
+        b=mnBIqAQ2L5Ze9F2kBJ8W2oieZItv/QJkyU3jvSFUohV042BVHDi03huxptU/Cuq2z6
+         gI8Cz0QPtjX6jGxcB6GBpdosvUFqER56eRrzVmb/MyxBBtjwXJY7hEALaIDGbysKWkgJ
+         cymBPwhOfwGH9tfLNfebXs5kkxZLHfbHkSVfZDjqJw6y9hMUjD4MRaaxohpJoAOCg2Xj
+         g+u8hYvvTd+2RfoHWRSewEA93dONk4Pf6ygJdwXNOlFLCv4GpteqNlowrhZXHXjo2XDW
+         LeuncbvhGK/uzNwC60OymMOmJxdlz0mJ7wqfaykNl+ik96L43/Ekv7IerTXBtT+wWRZM
+         6VwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681464465; x=1684056465;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y5t9haSUmu6+LRsJr/oOTk9eZWnzPg4O73mmGdbJGS8=;
+        b=U00nlsip/rwMYS7aynlhpbFgXjDcgD5UoMuA7FEgKCkx1O085oexxxOQlt6gdMZbhU
+         Ww5XPX1oSwIgz0l1Cp+/0Y2VXZcqy9ws6ou1lQboqcuyJ6jtHMvGxqNq8tos/UnLcbW8
+         0/lx6T3nx0K8ZeHTgk3F0lL+ir7dKOTxbNmH/8yU6fUz788OwgSZCT9+AKdFTBiET1KP
+         jFuE3jx2ruxVyzcevNG8w/QgQPvL4vabFna9/Gzar5AgUjNe3xYrvo9/BP1TYL6sB1WG
+         dXdvcAHrNf8M1uCAQls8klmRFDFlCIomGM5Nv1Q9XYbiilOjTkgLs0CewYQbkd45tYr+
+         PcEw==
+X-Gm-Message-State: AAQBX9dfdgbJ8adSdu7KCZGNiKMTtD08UhmiWNrdPbFZ1v3LH0a+ukj+
+        EVWZYw09mSaKpP3mZA7YK/x78bgpeB8AgPPUrJw=
+X-Google-Smtp-Source: AKy350Yzfo5Bw2CHdA1XxIFSMmjIAl5hoYHTb6reyp6zrf/18GsEX+3P9LzNDs9Uhm7Kz2nl1QXS8A2g1K4k3CBRgII=
+X-Received: by 2002:a05:6870:5606:b0:184:68ea:5205 with SMTP id
+ m6-20020a056870560600b0018468ea5205mr2717600oao.7.1681464465046; Fri, 14 Apr
+ 2023 02:27:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5ebd61e0-0835-94cd-b55b-942a9c72b5b5@oracle.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:914b:b0:10e:bef1:3a6e with HTTP; Fri, 14 Apr 2023
+ 02:27:44 -0700 (PDT)
+Reply-To: felixglas37@gmail.com
+From:   "Mr. Douglas Felix" <legalrightschambersfb01@gmail.com>
+Date:   Fri, 14 Apr 2023 09:27:44 +0000
+Message-ID: <CAEMzxqVtwPqLbPigXmpMv=LOnnrUvWYnoxm95W=cno0bP9ozLg@mail.gmail.com>
+Subject: =?UTF-8?B?5YaN5Lya?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Apr 14, 2023 / 09:33, John Garry wrote:
-> On 14/04/2023 08:36, Shin'ichiro Kawasaki wrote:
-> > Hello Bart,
-> > 
-> > Recently, I built a new blktests trial environment on QEMU. With this
-> > environment, I observe scsi/007 failure. FYI, let me share blktests output [1]
-> > and kernel message [2].
-> > 
-> 
-> I did not notice which kernel you are using - did you mention it somewhere?
-
-I forgot to mention it. Sorry. I observe the failure with kernel versions 6.2
-and 6.3-rcX.
-
-> 
-> > I found the failure depends on kernel configs for debug such as KASAN. When I
-> > enable KASAN, the test case fails. When I disable KASAN, the test case passes.
-> > It looks that the failure depends on the slow kernel (and/or slow machine).
-> > 
-> > The test case sets 1 second to the block layer timeout to trigger the SCSI error
-> > handler. It also sets 3 seconds to scsi_debug delay assuming the error handler
-> > completes before the 3 seconds. From the kernel message, it looks that the error
-> > handler takes longer than the 3 seconds delay, so I/O completes as success
-> > before the error handler completion. This I/O success is not expected then the
-> > test case fails. As a trial, I extended the scsi_debug delay time to 10 seconds,
-> > then I observed the test case passes.
-> > 
-> > Do you expect the I/O success by slow SCSI error handler? If so, the test case
-> > needs improvement by extending the scsi_debug delay time.
-> 
-> The failure may be due to one of my changes. Please see
-> https://lore.kernel.org/lkml/5bdbfbbc-bac1-84a1-5f50-33a443e3292a@oracle.com/
-
-Thanks for the notice. I think your changes were applied to 6.4/scsi-queue,
-which I've not yet tried. Then it should not be related to your changes.
+LS0gDQrkuIrlkajmn5DkuKrml7blgJnlr4TkuobkuIDlsIHpgq7ku7bnu5nkvaDvvIzmnJ/mnJsN
+CuaUtuWIsOS9oOeahOWbnuS/oe+8jOS9huS7pOaIkeaDiuiutueahOaYr+S9oOS7juadpeayoeac
+iei0ueW/g+WbnuWkjeOAgg0K6K+35Zue5aSN6L+b5LiA5q2l55qE6Kej6YeK44CCDQoNCuiCg+eE
+tu+8jA0K5b6L5biI44CCIOmBk+agvOaLieaWr+iPsuWIqeWFi+aWrw0K
