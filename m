@@ -2,97 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52596E4D7C
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Apr 2023 17:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A076E50AE
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Apr 2023 21:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbjDQPnf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Apr 2023 11:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S230357AbjDQTOk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Apr 2023 15:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjDQPne (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Apr 2023 11:43:34 -0400
-X-Greylist: delayed 1788 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 08:43:27 PDT
-Received: from gw.red-soft.ru (red-soft.ru [188.246.186.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E60DD184;
-        Mon, 17 Apr 2023 08:43:27 -0700 (PDT)
-Received: from arch.red-soft.biz (unknown [10.81.81.211])
-        by gw.red-soft.ru (Postfix) with ESMTPA id 0C4803E10E2;
-        Mon, 17 Apr 2023 18:08:03 +0300 (MSK)
-From:   Artem Chernyshev <artem.chernyshev@red-soft.ru>
-To:     Don Brace <don.brace@microchip.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc:     Artem Chernyshev <artem.chernyshev@red-soft.ru>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        storagedev@microchip.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] scsi: hpsa: Remove unreachable code
-Date:   Mon, 17 Apr 2023 18:07:57 +0300
-Message-Id: <20230417150757.62902-1-artem.chernyshev@red-soft.ru>
-X-Mailer: git-send-email 2.40.0
+        with ESMTP id S230254AbjDQTOj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Apr 2023 15:14:39 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D45210EF
+        for <linux-scsi@vger.kernel.org>; Mon, 17 Apr 2023 12:13:53 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id ok10so4857728qvb.11
+        for <linux-scsi@vger.kernel.org>; Mon, 17 Apr 2023 12:13:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681758832; x=1684350832;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yBtJVDxHkjT7DQCSOQzNe2IthXptum9ChouKTqEU27w=;
+        b=emtWxBtrbs/uNsixyJqtbmWh2fTe8d7Rk0bVP10sNulMT/MeU/WQdwhe5+MtQs91et
+         vYwnVH1HzvwponTCHTwXpBc1xqIDcRA0PwobzLjrRFnbAZVg8T1buZ6vSRPVtbhLtj4+
+         tphvYWM9ff108hRsuPfA6dEnegYz6nDZ17IAMCtvGpIhw2SvIKnwyu5x3ivscui+6q8H
+         TnjYfDt2Mg0NInf46UaEfmfHCj2oncGSVzbgZrEFlJdpk7pEIdX+Xni3trL0h3ows+s7
+         feElNH+0UKXkS1fQ06/r7YLAt4cljRGhHR+gbDZvyAqZfDkt5iZjTdWqBkONnejLOfMK
+         8ouQ==
+X-Gm-Message-State: AAQBX9e78kFUvF0iLBOzA5NtldpSBKUvPpPqo+7B36cRFGS49voupuCz
+        V+QNYdoXTSzJIfvZYfhzR5lR
+X-Google-Smtp-Source: AKy350YhhMmQjUtscx8DWNyjxCDA5LGW9pBXnmkkJTzahbIxgePxnjEG+PUB8GZIdmsQdXDjMB2WVw==
+X-Received: by 2002:a05:6214:5084:b0:5ef:6101:3282 with SMTP id kk4-20020a056214508400b005ef61013282mr11320857qvb.0.1681758832583;
+        Mon, 17 Apr 2023 12:13:52 -0700 (PDT)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id ed25-20020a05620a491900b0074856680834sm3332329qkb.132.2023.04.17.12.13.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 12:13:52 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 15:13:50 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     bvanassche@acm.org, hch@lst.de, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com,
+        linux-block@vger.kernel.org, dm-devel@redhat.com, axboe@kernel.dk,
+        linux-nvme@lists.infradead.org, chaitanyak@nvidia.com,
+        kbusch@kernel.org, target-devel@vger.kernel.org
+Subject: Re: [PATCH v6 06/18] dm: Add support for block PR read
+ keys/reservation
+Message-ID: <ZD2abp1WQ0FqYXAT@redhat.com>
+References: <20230407200551.12660-1-michael.christie@oracle.com>
+ <20230407200551.12660-7-michael.christie@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 176767 [Apr 17 2023]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: artem.chernyshev@red-soft.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 509 509 b12bcaa7ba85624b485f2b6b92324b70964a1c65, {Tracking_from_domain_doesnt_match_to}, red-soft.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;arch.red-soft.biz:7.1.1
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2023/04/17 13:10:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/04/17 09:07:00 #21118574
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407200551.12660-7-michael.christie@oracle.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-hpsa_lookup_board_id() can't return negative value, so we can
-remove redundant if-statement
+On Fri, Apr 07 2023 at  4:05P -0400,
+Mike Christie <michael.christie@oracle.com> wrote:
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> This adds support in dm for the block PR read keys and read reservation
+> callouts.
+> 
+> Signed-off-by: Mike Christie <michael.christie@oracle.com>
 
-Fixes: c8cd71f1f32a ("scsi: hpsa: Remove 'hpsa_allow_any' module option")
-Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
----
- drivers/scsi/hpsa.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
-
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index f6da34850af9..caf04295efac 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -7871,8 +7871,6 @@ static int hpsa_pci_init(struct ctlr_info *h)
- 	bool legacy_board;
- 
- 	prod_index = hpsa_lookup_board_id(h->pdev, &h->board_id, &legacy_board);
--	if (prod_index < 0)
--		return prod_index;
- 	h->product_name = products[prod_index].product_name;
- 	h->access = *(products[prod_index].access);
- 	h->legacy_board = legacy_board;
-@@ -8670,12 +8668,7 @@ static int hpsa_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	if (number_of_controllers == 0)
- 		printk(KERN_INFO DRIVER_NAME "\n");
- 
--	rc = hpsa_lookup_board_id(pdev, &board_id, NULL);
--	if (rc < 0) {
--		dev_warn(&pdev->dev, "Board ID not found\n");
--		return rc;
--	}
--
-+	hpsa_lookup_board_id(pdev, &board_id, NULL);
- 	rc = hpsa_init_reset_devices(pdev, board_id);
- 	if (rc) {
- 		if (rc != -ENOTSUPP)
--- 
-2.40.0
-
+Acked-by: Mike Snitzer <snitzer@kernel.org>
