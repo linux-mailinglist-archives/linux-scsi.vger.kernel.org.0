@@ -2,74 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A076E50AE
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Apr 2023 21:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1A36E5091
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Apr 2023 21:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjDQTOk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Apr 2023 15:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
+        id S230330AbjDQTFt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Apr 2023 15:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjDQTOj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Apr 2023 15:14:39 -0400
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D45210EF
-        for <linux-scsi@vger.kernel.org>; Mon, 17 Apr 2023 12:13:53 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id ok10so4857728qvb.11
-        for <linux-scsi@vger.kernel.org>; Mon, 17 Apr 2023 12:13:53 -0700 (PDT)
+        with ESMTP id S229972AbjDQTFq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Apr 2023 15:05:46 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FBE5BB3
+        for <linux-scsi@vger.kernel.org>; Mon, 17 Apr 2023 12:05:30 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63b875d0027so587539b3a.1
+        for <linux-scsi@vger.kernel.org>; Mon, 17 Apr 2023 12:05:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681758329; x=1684350329;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nu0FgEWXnpBhPGUc+h6nHpwsNCiBBQeBvwietVqpOCY=;
+        b=rs8LRKi2T7r1Q8sfy/jTMRmPs5+tHvVONgNZHTCYj+654MQOLFlBQgG0zcN445LGzw
+         Sq/a1JwYgIKv4uqdWR9lu1ZVqCM5jVIlH64pQ1C2E9Ba/9ykAC8kQbpC2M+YUq25NJip
+         A1DukqA6LvWhp3uyBjaZoE3Iu56vz/xJXKe2OS0D2m8fHOYA/s1+7uMwjhcYKOvYrKGY
+         xJcfLQ0b90M0RtXECvlK+DhnDCdZ/lZyBuZ/8r2rq5XQKf612Cd0E6oDmF7hGbj6iJ5l
+         Cgc7PjSsbK1eSd+RuwUUKufWBppg2fHVMKKgSVy7+TcZSMiKGlruUZd1yfTGiZ4DkGAM
+         jPxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681758832; x=1684350832;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yBtJVDxHkjT7DQCSOQzNe2IthXptum9ChouKTqEU27w=;
-        b=emtWxBtrbs/uNsixyJqtbmWh2fTe8d7Rk0bVP10sNulMT/MeU/WQdwhe5+MtQs91et
-         vYwnVH1HzvwponTCHTwXpBc1xqIDcRA0PwobzLjrRFnbAZVg8T1buZ6vSRPVtbhLtj4+
-         tphvYWM9ff108hRsuPfA6dEnegYz6nDZ17IAMCtvGpIhw2SvIKnwyu5x3ivscui+6q8H
-         TnjYfDt2Mg0NInf46UaEfmfHCj2oncGSVzbgZrEFlJdpk7pEIdX+Xni3trL0h3ows+s7
-         feElNH+0UKXkS1fQ06/r7YLAt4cljRGhHR+gbDZvyAqZfDkt5iZjTdWqBkONnejLOfMK
-         8ouQ==
-X-Gm-Message-State: AAQBX9e78kFUvF0iLBOzA5NtldpSBKUvPpPqo+7B36cRFGS49voupuCz
-        V+QNYdoXTSzJIfvZYfhzR5lR
-X-Google-Smtp-Source: AKy350YhhMmQjUtscx8DWNyjxCDA5LGW9pBXnmkkJTzahbIxgePxnjEG+PUB8GZIdmsQdXDjMB2WVw==
-X-Received: by 2002:a05:6214:5084:b0:5ef:6101:3282 with SMTP id kk4-20020a056214508400b005ef61013282mr11320857qvb.0.1681758832583;
-        Mon, 17 Apr 2023 12:13:52 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id ed25-20020a05620a491900b0074856680834sm3332329qkb.132.2023.04.17.12.13.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Apr 2023 12:13:52 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 15:13:50 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     bvanassche@acm.org, hch@lst.de, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com,
-        linux-block@vger.kernel.org, dm-devel@redhat.com, axboe@kernel.dk,
-        linux-nvme@lists.infradead.org, chaitanyak@nvidia.com,
-        kbusch@kernel.org, target-devel@vger.kernel.org
-Subject: Re: [PATCH v6 06/18] dm: Add support for block PR read
- keys/reservation
-Message-ID: <ZD2abp1WQ0FqYXAT@redhat.com>
-References: <20230407200551.12660-1-michael.christie@oracle.com>
- <20230407200551.12660-7-michael.christie@oracle.com>
+        d=1e100.net; s=20221208; t=1681758329; x=1684350329;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nu0FgEWXnpBhPGUc+h6nHpwsNCiBBQeBvwietVqpOCY=;
+        b=JSClSZdR2Nsbx/0VicbrcbFA/3VQ9TGJNENKNZLhuPEZi2+I/x0vSq8WQnCStq/c4t
+         7KYlF7a1ODyH+UfQeeC9MR7Jcd3tKaBqCD9dmE8alKEGdMg1j6iM1vilbLKFkLsos55E
+         H5GXBeA98/A9Z20BRkdFQkv+YArk4EE644y47pEQafTb+QRM46Fnr6vOO1IgT+TRhgVi
+         sHRHUZJlsTlAxBrs8HG6JbgeULSbi7ajo6E7mAiNwkeWtapdkZNdjHyPgu1UQweZDha+
+         dDq8jRg1a2tyu/8RnQkSRXHQAD3LTL6Lo4pAFMoxCXBWKIaJ1i3QkJNKz1m1SaP6sLmx
+         ntjQ==
+X-Gm-Message-State: AAQBX9d31/AHLm0ttDQYJ3JmyRgbIdA/QZcBlhSSDA8Jr6ouoijopj1S
+        STHQutuf8EPEq1caq+2mvdIRk/vq9pc=
+X-Google-Smtp-Source: AKy350bErss/wYLzRjwFW08nzvmt9D1Oy3JAWIiV1kGr0dpMinxiPDEpYx6p3WqwkPJSiJEkuSna8w==
+X-Received: by 2002:a05:6a00:1c9e:b0:63d:344c:f123 with SMTP id y30-20020a056a001c9e00b0063d344cf123mr703466pfw.1.1681758329237;
+        Mon, 17 Apr 2023 12:05:29 -0700 (PDT)
+Received: from dhcp-10-231-55-133.dhcp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id x18-20020aa793b2000000b0063b7c42a070sm4291439pff.68.2023.04.17.12.05.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 17 Apr 2023 12:05:28 -0700 (PDT)
+From:   Justin Tee <justintee8345@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     jsmart2021@gmail.com, justin.tee@broadcom.com,
+        Justin Tee <justintee8345@gmail.com>
+Subject: [PATCH 0/7] lpfc: Update lpfc to revision 14.2.0.12
+Date:   Mon, 17 Apr 2023 12:15:51 -0700
+Message-Id: <20230417191558.83100-1-justintee8345@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407200551.12660-7-michael.christie@oracle.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Apr 07 2023 at  4:05P -0400,
-Mike Christie <michael.christie@oracle.com> wrote:
+Update lpfc to revision 14.2.0.12
 
-> This adds support in dm for the block PR read keys and read reservation
-> callouts.
-> 
-> Signed-off-by: Mike Christie <michael.christie@oracle.com>
+This patch set contains fixes flagged by code analyzer tools, introduces a
+new CQE status to handle DMA errors, and replaces the usage of blk
+interrupts with threaded interrupts.
 
-Acked-by: Mike Snitzer <snitzer@kernel.org>
+The patches were cut against Martin's 6.4/scsi-queue tree.
+
+Justin Tee (7):
+  lpfc: Fix verbose logging for scsi commands issued to SES devices
+  lpfc: Fix double free in lpfc_cmpl_els_logo_acc caused by
+    lpfc_nlp_not_used
+  lpfc: Match lock ordering of lpfc_cmd->buf_lock and hbalock for abort
+    paths
+  lpfc: Update congestion warning notification period
+  lpfc: Add new RCQE status for handling DMA failures
+  lpfc: Replace blk_irq_poll intr handler with threaded irq
+  lpfc: Update lpfc version to 14.2.0.12
+
+ drivers/scsi/lpfc/lpfc_attr.c    |   4 +-
+ drivers/scsi/lpfc/lpfc_crtn.h    |   4 +-
+ drivers/scsi/lpfc/lpfc_els.c     |  30 +--
+ drivers/scsi/lpfc/lpfc_hbadisc.c |  24 +-
+ drivers/scsi/lpfc/lpfc_hw4.h     |  11 +-
+ drivers/scsi/lpfc/lpfc_init.c    |  26 +-
+ drivers/scsi/lpfc/lpfc_nvme.c    |  44 ++--
+ drivers/scsi/lpfc/lpfc_scsi.c    |   3 +-
+ drivers/scsi/lpfc/lpfc_sli.c     | 392 +++++++++++++++++++------------
+ drivers/scsi/lpfc/lpfc_sli4.h    |   4 +-
+ drivers/scsi/lpfc/lpfc_version.h |   2 +-
+ 11 files changed, 309 insertions(+), 235 deletions(-)
+
+-- 
+2.38.0
+
