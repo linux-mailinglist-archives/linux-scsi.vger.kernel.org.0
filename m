@@ -2,74 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3696E58EA
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Apr 2023 07:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2D56E5A75
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Apr 2023 09:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjDRF7j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Apr 2023 01:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
+        id S230414AbjDRHaf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Apr 2023 03:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjDRF7g (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Apr 2023 01:59:36 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C646059E0
-        for <linux-scsi@vger.kernel.org>; Mon, 17 Apr 2023 22:59:32 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id xd13so36321999ejb.4
-        for <linux-scsi@vger.kernel.org>; Mon, 17 Apr 2023 22:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681797571; x=1684389571;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=h2u+IvYIbnFxxtQG/ZtOJXOGODtmHZE6DE2kphmV5deUhBtI5SSl5ZpPS81I4DoyvM
-         cL/QsMoq/nZ79QoTUVBpjigDCpbkhNV4ihdOYSWAZCOke9dA/QR1VB/koOlQ9LVEDYMX
-         XtbtlwSc8k7WA+c3R6xpugIUkMv4IcvxiBX5jugHOkE6bIQRd6XIP4bPoYTYUOtLJ8cY
-         jqOSy7VahCSY+50nHqKMLAvtMY0jgSKZG9RLZ0VM4rlX3dlYAIwPmpAZEs5sdE1jKPzt
-         sUSa+Yt3rvdogEL685HX9OzzgKvbxUuLxSFiR0ubii95w3DTWRmDDneYGKBqJn2l6obd
-         7Bag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681797571; x=1684389571;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=Z4tGWguST2qpHUHi+TKnubp9fU0BllgrK+YhO8CLo48Se9oE6RDoneDT4IXl8wIKm8
-         UAAV++uzWSMi7TQ6OGIaVUxfXOcitXFN0yn/HBBT2teeJki1EclCVOtW9A/reeWCr5vh
-         yMgR+KUy0ale6uIplULtAWCaEjdUBYANVXl/xHY7/yeYR1t9dvVyg8sE794DLiSMpHAs
-         50zqmCho2fotgAEaOC1ZEnTp9H9nR6RTh0rZdLfDTZEq65bnqZ6YTkIwqVRefR9G4IYs
-         POYut2lPYZPdBO0wJOofzvurdIGr8uWDHMzidsy8yBwod4Ow7UWn/fmy3KM+PJl6IpaA
-         lt4Q==
-X-Gm-Message-State: AAQBX9eAqs4UBNsRPRDkdJIrWvX7rt6GLdRDLGtL/ATVd5PWVru+KJ3B
-        vVTbSHmfggPYyE8iz7RlfmqI+PQmsmGBQPLhFOqVAhC0+wQApAtN
-X-Google-Smtp-Source: AKy350YRsUSKQ0+i58Lzun7WtY7IrRwSkm+DWIi2JdfS71rVYYWUT2OQ/a/Q5PRWIBazn3AQLm2dWBYGVxBajLvvRoE=
-X-Received: by 2002:a05:6512:96b:b0:4e8:4b7a:6b73 with SMTP id
- v11-20020a056512096b00b004e84b7a6b73mr2935594lft.4.1681797550844; Mon, 17 Apr
- 2023 22:59:10 -0700 (PDT)
+        with ESMTP id S230045AbjDRHad (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Apr 2023 03:30:33 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFB240D5
+        for <linux-scsi@vger.kernel.org>; Tue, 18 Apr 2023 00:30:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681803029; x=1713339029;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nEpuEFJCSItlIZj86fTEnNc3HiNARjEBUxKSBEDC7Gs=;
+  b=ZJ2hWDEyx80zHzUi5yGOlL9gNmLDYLAAjlHOTHEJ1tFDTb/X72F0ilbS
+   AyoMGhzMqKrkvUtCLHSk+o9mpwkYnV3LjT8tyFJKKg1vNEmWltk4sFwi7
+   8YHF5UmJDZP0wlxhMnN4T2zUBNIAMMfpVmzkHkuGmsJubcFfm/CtoyxDL
+   Y9109yznjW7ViiIsT0GVN80M19Ao+MQSegCkdxgfsoldN1sCZ2WlF+7p8
+   Qpt81BZm5nmAi9vAi/Q551pq5cKqZkTd+pJyXDch+yR9KvI3VpAqoGtA+
+   P5bnyQw32z32bKn00zOCbA/Vq+5/9byRkafdQjVAdh/LoRedPntnFVxZf
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="407996965"
+X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
+   d="scan'208";a="407996965"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 00:30:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="815101708"
+X-IronPort-AV: E=Sophos;i="5.99,206,1677571200"; 
+   d="scan'208";a="815101708"
+Received: from choiwony-mobl.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.90])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2023 00:30:16 -0700
+Message-ID: <7caf7c60-40b6-4aef-63f1-e5598ebbd7f6@intel.com>
+Date:   Tue, 18 Apr 2023 10:30:12 +0300
 MIME-Version: 1.0
-Received: by 2002:ab2:2681:0:b0:1b6:840f:9075 with HTTP; Mon, 17 Apr 2023
- 22:59:10 -0700 (PDT)
-Reply-To: mariamkouame.info@myself.com
-From:   Mariam Kouame <mariamkouame1992@gmail.com>
-Date:   Mon, 17 Apr 2023 22:59:10 -0700
-Message-ID: <CADUz=agNY633M0qMXMnAP3Ms7-3rKuWtAZGCOQZKeYpCdBxT_w@mail.gmail.com>
-Subject: from mariam kouame
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v2 3/4] scsi: ufs: Increase the START STOP UNIT timeout
+ from one to ten seconds
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Avri Altman <avri.altman@wdc.com>, linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Asutosh Das <quic_asutoshd@quicinc.com>
+References: <20230417230656.523826-1-bvanassche@acm.org>
+ <20230417230656.523826-4-bvanassche@acm.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230417230656.523826-4-bvanassche@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear,
+On 18/04/23 02:06, Bart Van Assche wrote:
+> One UFS vendor asked to increase the UFS timeout from 1 s to 3 s.
+> Another UFS vendor asked to increase the UFS timeout from 1 s to 10 s.
+> Hence this patch that increases the UFS timeout to 10 s. This patch can
+> cause the total timeout to exceed 20 s, the Android shutdown timeout.
+> This is fine since the loop around ufshcd_execute_start_stop() exists to
+> deal with unit attentions and because unit attentions are reported
+> quickly.
+> 
+> Fixes: dcd5b7637c6d ("scsi: ufs: Reduce the START STOP UNIT timeout")
+> Fixes: 8f2c96420c6e ("scsi: ufs: core: Reduce the power mode change timeout")
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 
-Please grant me permission to share a very crucial discussion with
-you. I am looking forward to hearing from you at your earliest
-convenience.
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-Mrs. Mariam Kouame
+> ---
+>  drivers/ufs/core/ufshcd.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index 784787cf08c3..6831eb1afc30 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -9182,7 +9182,8 @@ static int ufshcd_execute_start_stop(struct scsi_device *sdev,
+>  	};
+>  
+>  	return scsi_execute_cmd(sdev, cdb, REQ_OP_DRV_IN, /*buffer=*/NULL,
+> -			/*bufflen=*/0, /*timeout=*/HZ, /*retries=*/0, &args);
+> +			/*bufflen=*/0, /*timeout=*/10 * HZ, /*retries=*/0,
+> +			&args);
+>  }
+>  
+>  /**
+
