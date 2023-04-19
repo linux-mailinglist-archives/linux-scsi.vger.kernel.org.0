@@ -2,84 +2,157 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928A76E87F6
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Apr 2023 04:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A5F6E80AD
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Apr 2023 19:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjDTC1j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Apr 2023 22:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
+        id S232695AbjDSRzS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Apr 2023 13:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjDTC1i (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Apr 2023 22:27:38 -0400
-X-Greylist: delayed 41276 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 19:27:35 PDT
-Received: from server1.dwan.co.in (server1.dwan.co.in [45.116.231.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B7046A5
-        for <linux-scsi@vger.kernel.org>; Wed, 19 Apr 2023 19:27:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=thereachhotel.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=HYhJlGts6Jt31ADPLklgWlHAVbf8g93o7zqJYTt3bDY=; b=iKNEBSrm0rRJdg7iCBZQ6yGzzl
-        7S6KuuxPDyTlXpmmRVzK689/g86UOE23ze2ekSZbn9ObvXlKd2G1vmNXi2xEcsySIeV8wiCOfYTUk
-        4DE9kYSTqFGcmSjvHjqCC1/glv3taDGdaP/5QQcBQG1OK2rj49QAs66RzD8DGsLzN421zElweG+SB
-        oVTuDY12ObmJYEr4SmxUixE27I193Yoaz6BrTlGzrza7FboIx2hHUAbXGM+U8mk0RWY7Mz34bw2bG
-        CPFthjlLvm02c/TsCyHRPIUZAXZvt8j9rpmSe8n6XZmeHr7DivCURR9TnLhqpaySfRqWlCye9qYEt
-        JPWYhyjQ==;
-Received: from ip233.ip-51-161-212.net ([51.161.212.233]:55538 helo=thereachhotel.com)
-        by server1.dwan.co.in with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <clients@thereachhotel.com>)
-        id 1pp9HW-0000dC-0U
-        for linux-scsi@vger.kernel.org;
-        Wed, 19 Apr 2023 20:29:36 +0530
-Reply-To: jonnypatrick123@mailfence.com
-From:   =?UTF-8?B?TXlzdGVyeSBTaG9wcGVy?= <clients@thereachhotel.com>
-To:     linux-scsi@vger.kernel.org
-Subject: =?UTF-8?B?UGFydCBUaW1lIEpvYiBPZmZlcg==?=
-Date:   19 Apr 2023 07:59:35 -0700
-Message-ID: <20230419075935.F5AE632A9E001072@thereachhotel.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server1.dwan.co.in
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - thereachhotel.com
-X-Get-Message-Sender-Via: server1.dwan.co.in: authenticated_id: clients@thereachhotel.com
-X-Authenticated-Sender: server1.dwan.co.in: clients@thereachhotel.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
-        FILL_THIS_FORM_LONG,FROM_EXCESS_BASE64,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S231201AbjDSRzR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Apr 2023 13:55:17 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0340C4EC6
+        for <linux-scsi@vger.kernel.org>; Wed, 19 Apr 2023 10:55:16 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f89e7de94so4370147b3.17
+        for <linux-scsi@vger.kernel.org>; Wed, 19 Apr 2023 10:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681926915; x=1684518915;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hfKbsTvYMuDBJ3f8L2RgBa2t3+n8sbG5Rzd4mp8z1KE=;
+        b=0pVIsViMHhkGqQpcek7+vhQ9W+oXFYe2LJRj96FsB7BgMi5SHS8QW+hLSYNgTqPtxn
+         JqAsWl3L5h4nCg4EsUZXeKVPpMirFYNYyvmtzfqPP/ExjsfGXKM9nW1XUOTSAMzEOk8t
+         OS07Yr4msyQd4vett/5WwJ/HRb/IN6AqQKI53ZJpfpOzYe1aJ3x+3vOOchmscpaJA7YA
+         mDrn0KgKwCfHiunTE3uSxpmLMGMLZ1nuzM38wmnvF8u1BXlcWpRyG7aRALIShGn5RUWx
+         CISnbxXrKjnph1jESJ6/0zWPu8yafJ5p+coupXok/+zO06hgDI2Ys5G1i52+zf6nuXX6
+         1c0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681926915; x=1684518915;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hfKbsTvYMuDBJ3f8L2RgBa2t3+n8sbG5Rzd4mp8z1KE=;
+        b=kipKoUNQ2S69Bh0V+29a703AXJXXp9xpaiiaV4Kl641qu3Yd1Vh4KfMnntTw6rrSSD
+         +nvU4PlWld1jBo4bZ1+81iFJsdSV2AZb2VapWBjkT1xdhngcWE1CbSfAMXfaPmKd7/6u
+         RffwEMlgM2+293Jdk6udX8dSsDYb8+C3zG2NAwPzvKVsD7ZjKTpZhjmnlItwztCE2AL4
+         Vm0cbzjJ6GzaA36MS2jSYC4orJ1meUbQhgCVoHuISVx0WtfEfK+zuX8njnr0/cXMXGJO
+         4fD+kZ7RYZv3FUMnL26tY4usyArV6QB52kHhtPgplxaeuNN0w2oLJroqsCHUo2GLaSPw
+         oE6Q==
+X-Gm-Message-State: AAQBX9d6FtNIsWHhirgNDXl8bqGPrZdtdD6tvgxnQ18S8/U3YaAyOhae
+        FqwHhJ3Xp3iCfdcnaKRnm0qTgyzg6lWrGA==
+X-Google-Smtp-Source: AKy350ZnW4FMeGR7MYtF5Mj6A5GrZFl9LH1s+yJ9nRosIkTgHK6BQTU8w1BwI09rAqNvtLTH2oaG5zjMKLs9LQ==
+X-Received: from pranav-first.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:390b])
+ (user=pranavpp job=sendgmr) by 2002:a25:d0d2:0:b0:b92:5a75:9f55 with SMTP id
+ h201-20020a25d0d2000000b00b925a759f55mr377324ybg.1.1681926915241; Wed, 19 Apr
+ 2023 10:55:15 -0700 (PDT)
+Date:   Wed, 19 Apr 2023 17:55:02 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <20230419175502.919999-1-pranavpp@google.com>
+Subject: [PATCH] scsi: pm80xx: Add GET_NVMD timeout during probe
+From:   Pranav Prasad <pranavpp@google.com>
+To:     Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Changyuan Lyu <changyuanl@google.com>,
+        Pranav Prasad <pranavpp@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear linux-scsi@vger.kernel.org,
+From: Changyuan Lyu <changyuanl@google.com>
 
-We have a mystery shopping assignment at any stores in your area=20
-and your wage is $500/assignment and you get at least 2=20
-Assignments weekly, After you sign up you will have access to=20
-training materials. This will not affect your present job. Please=20
-send the information below to sign up
-=2E
-Full Name:
-Mailing Street Address or P.O BOX:
-Apt/Suite, If Any:
-City:
-State:
-Zip Code:
-Cell Phone:
-Age:
+Added a wait timeout to prevent the kernel from waiting for the 
+GET_NVMD response forever during probe. Added a check for the
+controller state before issuing GET_NVMD request.
 
-Best Regards
-John Patrick
+Signed-off-by: Changyuan Lyu <changyuanl@google.com>
+Signed-off-by: Pranav Prasad <pranavpp@google.com>
+---
+ drivers/scsi/pm8001/pm8001_init.c | 29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+index 7e589fe3e010..5ca20ccdce34 100644
+--- a/drivers/scsi/pm8001/pm8001_init.c
++++ b/drivers/scsi/pm8001/pm8001_init.c
+@@ -666,7 +666,7 @@ static void  pm8001_post_sas_ha_init(struct Scsi_Host *shost,
+  * Currently we just set the fixed SAS address to our HBA, for manufacture,
+  * it should read from the EEPROM
+  */
+-static void pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
++static int pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
+ {
+ 	u8 i, j;
+ 	u8 sas_add[8];
+@@ -679,6 +679,12 @@ static void pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
+ 	struct pm8001_ioctl_payload payload;
+ 	u16 deviceid;
+ 	int rc;
++	unsigned long time_remaining;
++
++	if (PM8001_CHIP_DISP->fatal_errors(pm8001_ha)) {
++		pm8001_dbg(pm8001_ha, FAIL, "controller is in fatal error state\n");
++		return -EIO;
++	}
+ 
+ 	pci_read_config_word(pm8001_ha->pdev, PCI_DEVICE_ID, &deviceid);
+ 	pm8001_ha->nvmd_completion = &completion;
+@@ -703,16 +709,23 @@ static void pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
+ 	payload.offset = 0;
+ 	payload.func_specific = kzalloc(payload.rd_length, GFP_KERNEL);
+ 	if (!payload.func_specific) {
+-		pm8001_dbg(pm8001_ha, INIT, "mem alloc fail\n");
+-		return;
++		pm8001_dbg(pm8001_ha, FAIL, "mem alloc fail\n");
++		return -ENOMEM;
+ 	}
+ 	rc = PM8001_CHIP_DISP->get_nvmd_req(pm8001_ha, &payload);
+ 	if (rc) {
+ 		kfree(payload.func_specific);
+-		pm8001_dbg(pm8001_ha, INIT, "nvmd failed\n");
+-		return;
++		pm8001_dbg(pm8001_ha, FAIL, "nvmd failed\n");
++		return -EIO;
++	}
++	time_remaining = wait_for_completion_timeout(&completion,
++				msecs_to_jiffies(60*1000)); // 1 min
++	if (!time_remaining) {
++		kfree(payload.func_specific);
++		pm8001_dbg(pm8001_ha, FAIL, "get_nvmd_req timeout\n");
++		return -EIO;
+ 	}
+-	wait_for_completion(&completion);
++
+ 
+ 	for (i = 0, j = 0; i <= 7; i++, j++) {
+ 		if (pm8001_ha->chip_id == chip_8001) {
+@@ -751,6 +764,7 @@ static void pm8001_init_sas_add(struct pm8001_hba_info *pm8001_ha)
+ 	memcpy(pm8001_ha->sas_addr, &pm8001_ha->phy[0].dev_sas_addr,
+ 		SAS_ADDR_SIZE);
+ #endif
++	return 0;
+ }
+ 
+ /*
+@@ -1166,7 +1180,8 @@ static int pm8001_pci_probe(struct pci_dev *pdev,
+ 		pm80xx_set_thermal_config(pm8001_ha);
+ 	}
+ 
+-	pm8001_init_sas_add(pm8001_ha);
++	if (pm8001_init_sas_add(pm8001_ha))
++		goto err_out_shost;
+ 	/* phy setting support for motherboard controller */
+ 	rc = pm8001_configure_phy_settings(pm8001_ha);
+ 	if (rc)
+-- 
+2.40.0.634.g4ca3ef3211-goog
+
