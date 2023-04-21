@@ -2,51 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3AB6EA156
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Apr 2023 03:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1ACE6EA1A7
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Apr 2023 04:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbjDUB5z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 20 Apr 2023 21:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
+        id S233533AbjDUCc2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 20 Apr 2023 22:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjDUB5y (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Apr 2023 21:57:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359CE198D
-        for <linux-scsi@vger.kernel.org>; Thu, 20 Apr 2023 18:57:53 -0700 (PDT)
-Received: from canpemm100004.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Q2cxy1v3szSw6s;
-        Fri, 21 Apr 2023 09:53:42 +0800 (CST)
-Received: from [10.174.179.14] (10.174.179.14) by
- canpemm100004.china.huawei.com (7.192.105.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 21 Apr 2023 09:57:51 +0800
-Subject: Re: [PATCH v2 2/3] scsi: libsas: Remove an empty branch in
- sas_check_parent_topology()
-To:     Christoph Hellwig <hch@lst.de>
-CC:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>,
-        <linux-scsi@vger.kernel.org>, <hare@suse.com>,
-        <bvanassche@acm.org>, <jinpu.wang@cloud.ionos.com>,
-        <damien.lemoal@opensource.wdc.com>, <john.g.garry@oracle.com>
-References: <20230420143339.2769414-1-yanaijie@huawei.com>
- <20230420143339.2769414-3-yanaijie@huawei.com>
- <20230420150201.GB11103@lst.de>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <6fe2b1df-3b7a-c3aa-9210-d2786fc9f82e@huawei.com>
-Date:   Fri, 21 Apr 2023 09:57:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        with ESMTP id S233225AbjDUCc1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Apr 2023 22:32:27 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F7130ED
+        for <linux-scsi@vger.kernel.org>; Thu, 20 Apr 2023 19:32:23 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2a7ac8a2c8bso10660471fa.3
+        for <linux-scsi@vger.kernel.org>; Thu, 20 Apr 2023 19:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682044341; x=1684636341;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V1QDd65i/47s9L2ZzIwcXb8wI3A/+arhp9EgPexyDaQ=;
+        b=mp5GkkIUNrGkCGU96HaA66msaEQ+ifFkvNwojciOUewaoy4gxKy88UAkqo0Wr4Dovg
+         htypPR1l/kd3r4x8P7pHzEgYFFKwLnEm8te5Rrw4L3cosaFxdzOyH4dxrVqxqfgnJMpa
+         45re3S8WoDMW2jLwSX5Rnr3YnoNJECVAq1vTLr0RVT1fbAAhAitSC5s5pvdUznlfKOCN
+         pJccuFYzuWRVmeQRHg8dHSlZAmdFJq2R5ZEm+wvkJUXgbFm/u3f1CzlTvA8Nn/NB8FwW
+         Cjc0ebS0BWxrqehPuv+shdWIYmJ6HBqo6joiEMm/8ggkAdmgT56/UOuk65N5qmGaEtA7
+         xiNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682044341; x=1684636341;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V1QDd65i/47s9L2ZzIwcXb8wI3A/+arhp9EgPexyDaQ=;
+        b=HMX7yEzzcTe19/bEzmN8EwxHUxvpwx6iIfrNuYV5EdNNHro6pV60ZsfPT2W6StJvbd
+         y2erdEVej0ValB3/vTv+hkm7Qf+YrR7iEJQ8puMK0onMBBFe9YIcLP5VXh+M7DqEmwr6
+         OqaCxSlp/jvZ3RwOw+Vn4QWbnCRxjKV6I+2WhRHQmwNYLTbznM2J/JhENVBRotpvQ/G4
+         hM9QbOC8E2og7QuceeDHuPXgSPdLu2oFzjN/qOzZ+vEhxMAtQhGRVTKSwNR21mmf9fHb
+         eL7xquwTcDE9PbgSwBPLcquSjX65/c3F9oVC4iqiuRTLifwo75ogzwf1C7o8Xv8U6Fgb
+         OAaQ==
+X-Gm-Message-State: AAQBX9cYWQXH3XUOK13a4H9V7GunHLvdKtsUI2ILHzKqnQ/4FzFFraMe
+        xP8DaZrWXcn2i/E0PgejEHVezhhXwDnAwP3uTg==
+X-Google-Smtp-Source: AKy350ZyRDbg66rhGZPcJKjt1FshptD/5aDZ+rPBQpwAjnXM2aEBieyslvTx1+r3TjurYiwaR/YSoXpcXH50390WPgs=
+X-Received: by 2002:a2e:8046:0:b0:2a7:6e85:e287 with SMTP id
+ p6-20020a2e8046000000b002a76e85e287mr162384ljg.45.1682044341113; Thu, 20 Apr
+ 2023 19:32:21 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230420150201.GB11103@lst.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.14]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm100004.china.huawei.com (7.192.105.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <cover.1681764704.git.quic_nguyenb@quicinc.com>
+In-Reply-To: <cover.1681764704.git.quic_nguyenb@quicinc.com>
+From:   Stanley Chu <chu.stanley@gmail.com>
+Date:   Fri, 21 Apr 2023 10:32:09 +0800
+Message-ID: <CAGaU9a88zZhH0P2GM0_MvtcbEMaUW9kq5Fn5f662QvRuY-pbbg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] ufs: core: mcq: Add ufshcd_abort() and error
+ handler support in MCQ mode
+To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+Cc:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        bvanassche@acm.org, mani@kernel.org, Powen.Kao@mediatek.com,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        beanhuo@micron.com, avri.altman@wdc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,14 +72,42 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2023/4/20 23:02, Christoph Hellwig wrote:
-> On Thu, Apr 20, 2023 at 10:33:38PM +0800, Jason Yan wrote:
->> There is an empty "All good" branch in sas_check_parent_topology(). We can
->> reverse the test statement and remove the empty branch.
-> 
-> Eww, this code is pretty unreadable (as-is and after the change).
-> Can you move SAS_EDGE_EXPANDER_DEVICE case into a helper to
-> make it readabke?  That has the extra upside of just being able to
-> return the error code instead of assigning it to res.
+Bao D. Nguyen <quic_nguyenb@quicinc.com> =E6=96=BC 2023=E5=B9=B44=E6=9C=881=
+8=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=885:12=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> This patch series enable support for ufshcd_abort() and error handler in =
+MCQ mode.
+> The first 3 patches are for supporting ufshcd_abort().
+> The 4th and 5th patches are for supporting error handler.
+>
+> Bao D. Nguyen (5):
+>   ufs: mcq: Add supporting functions for mcq abort
+>   ufs: mcq: Add support for clean up mcq resources
+>   ufs: mcq: Added ufshcd_mcq_abort()
+>   ufs: mcq: Use ufshcd_mcq_poll_cqe_lock() in mcq mode
+>   ufs: core: Add error handling for MCQ mode
+> ---
+> v1->v2:
+> patch #1: Addressed Powen's comment. Replaced read_poll_timeout()
+> with ufshcd_mcq_poll_register(). The function read_poll_timeout()
+> may sleep while the caller is holding a spin_lock(). Poll the registers
+> in a tight loop instead.
+> ---
+>
+>  drivers/ufs/core/ufs-mcq.c     | 258 +++++++++++++++++++++++++++++++++++=
++++++-
+>  drivers/ufs/core/ufshcd-priv.h |  15 ++-
+>  drivers/ufs/core/ufshcd.c      | 140 ++++++++++++++++++----
+>  drivers/ufs/host/ufs-qcom.c    |   2 +-
+>  include/ufs/ufshcd.h           |   2 +-
+>  include/ufs/ufshci.h           |  17 +++
+>  6 files changed, 404 insertions(+), 30 deletions(-)
+>
+> --
+> 2.7.4
+>
 
-Sure.
+This series looks good to me.
+
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
