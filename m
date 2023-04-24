@@ -2,74 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582E46ECAAB
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Apr 2023 12:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F396ECFF7
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Apr 2023 16:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjDXKv6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Apr 2023 06:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S231733AbjDXOJC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Apr 2023 10:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbjDXKv4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Apr 2023 06:51:56 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAF535AA
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Apr 2023 03:51:51 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-54f8d59a8a9so50704167b3.0
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Apr 2023 03:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682333511; x=1684925511;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=BDOU7+6CjKGfGxohfwPSUG5dvZEz+JIUkSiwN2TDnXREO1m7tnshm1ywQFqtwjCtuy
-         sdc62qMh2n/GKkLEd6inRVKNj3gr719YRClRe48cHw3AS8uelP+ymyFB0srKimerVisT
-         13Xtkz0SBiM8bJqS0byCbOX7vMjZt1uP8WbY7Dvmdpvz4bea0qvNLSFK3Fpq3xaNdk1A
-         qM5VVSk6ocRnmhVuQME3HxgmrkTm+A9wuvOqJRe5jylGoGOAUFMgmutSHMerkJpOSlvK
-         vk/P+3RIGhTNsyHCwljHvfrhHmReD3nCq/AILJxglY3kVglksym9zePn5jHaXsmq1bcD
-         nsfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682333511; x=1684925511;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=bvo6vucVM6+8J2orwsDHlLJ7YkbWnuKrmE3/2JQdl96coP0my9Hxr+j5kDZhuQ+aHV
-         11gfea+/iw84mDXuZVV+agbhAIR06gwI4CmhCEIzoErCqpMDC5PToBovgLDJNMzR8buK
-         QWGRVVOkVouQIqw5xEzgOixfeSGxQ6ZwMJCVxJgpKfWhjcebhetwtW/lcD/0YMWbFPFK
-         0cSBHvgSAM+1sONEOjuBTTH2C3oAaXqY4uzWW9/nG8iUiosh6BzHyHTeVKzdDoQbWEBQ
-         I3woYIqhUAJvqf28CYDLV1mMRkoDJ8LMHPBFiKi8aP4GraZMx/QIztCC6tPHqhNrR1vV
-         KsYg==
-X-Gm-Message-State: AAQBX9d65eM+8emlPvGptFyu2DMoj/BPf/Xhse+xMS4TQvIh10FKpgof
-        AXOrniWjKKWriJIG0gvgZK+lSe06zOkq6v4X3HA=
-X-Google-Smtp-Source: AKy350YG4FdHU8gQxPU2msbtN2QdEjv9b6BhW9wIbc0BoX66FKTBxxpsjwaRJQwRDUNbtvTNf1tLcLROs6TnCelMCbI=
-X-Received: by 2002:a81:4809:0:b0:533:9fa7:bbe9 with SMTP id
- v9-20020a814809000000b005339fa7bbe9mr7936227ywa.8.1682333511052; Mon, 24 Apr
- 2023 03:51:51 -0700 (PDT)
+        with ESMTP id S231329AbjDXOJA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Apr 2023 10:09:00 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2226183;
+        Mon, 24 Apr 2023 07:08:55 -0700 (PDT)
+X-UUID: 8964ea7ee2a911eda9a90f0bb45854f4-20230424
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=VBNgfPox3XxLAEflJ4BDzAmRzKjHNDFwIAfMD7sjnM4=;
+        b=j+BpRzbUvJCEoCyEGCX84C4rXisrSxbFELkIPfYAiOoLiKFpwRASQ3Yydxs3lWI8Ypzt94SZXDAbGZ2oe6XExX2AqA8S2Ppt4v/U81tgNqGCnbilpQQKGQ6r8J5aGMGykQ7qQx2G8VoeepaqZlzD0SUwQxEvG88gCe/y5/JiPXA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:9d85d965-8681-4f06-b67a-4fa95056f927,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.22,REQID:9d85d965-8681-4f06-b67a-4fa95056f927,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:120426c,CLOUDID:788e1285-cd9c-45f5-8134-710979e3df0e,B
+        ulkID:230424220852TH9ZQ5GO,BulkQuantity:1,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,
+        OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 8964ea7ee2a911eda9a90f0bb45854f4-20230424
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <powen.kao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 549468779; Mon, 24 Apr 2023 22:08:50 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Mon, 24 Apr 2023 22:08:48 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Mon, 24 Apr 2023 22:08:48 +0800
+From:   Po-Wen Kao <powen.kao@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
+        <stanley.chu@mediatek.com>, <powen.kao@mediatek.com>,
+        <alice.chao@mediatek.com>, <naomi.chu@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <cc.chou@mediatek.com>,
+        <eddie.huang@mediatek.com>, <mason.zhang@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>
+Subject: [PATCH v5 0/3] Several UFS MCQ Code Changes
+Date:   Mon, 24 Apr 2023 22:08:32 +0800
+Message-ID: <20230424140839.22358-1-powen.kao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Received: by 2002:a05:7010:7499:b0:32d:e51f:dee8 with HTTP; Mon, 24 Apr 2023
- 03:51:50 -0700 (PDT)
-Reply-To: mariamkouame.info@myself.com
-From:   Mariam Kouame <mariamkouame1990@gmail.com>
-Date:   Mon, 24 Apr 2023 03:51:50 -0700
-Message-ID: <CAKXL+w08stRVVXkGQO0pBQ1x_ozGpGTcLNjscr9ZhQ3xnJgTTA@mail.gmail.com>
-Subject: from mariam kouame
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear,
+v4 -> v5
+- Send MTK driver MCQ support as independent patch and address Bart's 
+comment there
+    "[PATCH v1 0/2] Add MCQ support for MTK platform"
 
-Please grant me permission to share a very crucial discussion with
-you. I am looking forward to hearing from you at your earliest
-convenience.
+v3 -> v4
+- Rebase on latest scsi-next/staging
+- Drop "scsi: ufs: core: Remove redundant check" since it's already fixed
+- Improve commit message as suggested by Manivannan Sadhasivam
+- Fix patch check error
 
-Mrs. Mariam Kouame
+v2 -> v3
+- Remove "scsi: ufs: core: Add hwq print for debug".
+	send later when error handling is ready.
+- Rename patch title to match convention "scsi: ufs: ufs-mediatek:..."
+- Add explanation for (nr_hw_queues = MAXQ + 1)
+- Remove dummy line
+
+v1 -> v2:
+- Add 2 new patches
+	- Update MTK driver for mcq
+	- Export symbols for MTK driver
+- Fix commit message in "scsi: ufs: core: Fix mcq nr_hw_queues"
+- Split name change and fix into two patches
+
+
+Po-Wen Kao (3):
+  scsi: ufs: core: Fix mcq tag calcualtion
+  scsi: ufs: core: Rename symbol sizeof_utp_transfer_cmd_desc()
+  scsi: ufs: core: Fix mcq nr_hw_queues
+
+ drivers/ufs/core/ufs-mcq.c | 5 +++--
+ drivers/ufs/core/ufshcd.c  | 8 ++++----
+ include/ufs/ufshcd.h       | 2 +-
+ 3 files changed, 8 insertions(+), 7 deletions(-)
+
+-- 
+2.18.0
+
