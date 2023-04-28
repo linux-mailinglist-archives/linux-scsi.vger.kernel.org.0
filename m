@@ -2,57 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96276F12E3
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Apr 2023 09:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13EA6F12E1
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Apr 2023 09:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345444AbjD1Hyf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Apr 2023 03:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S1345711AbjD1Hya (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Apr 2023 03:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345645AbjD1HyW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Apr 2023 03:54:22 -0400
+        with ESMTP id S1345674AbjD1HyX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Apr 2023 03:54:23 -0400
 Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA153595
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA744203
         for <linux-scsi@vger.kernel.org>; Fri, 28 Apr 2023 00:53:51 -0700 (PDT)
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33S4F4is030886
-        for <linux-scsi@vger.kernel.org>; Fri, 28 Apr 2023 00:53:48 -0700
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33S4F4it030886
+        for <linux-scsi@vger.kernel.org>; Fri, 28 Apr 2023 00:53:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=91nfxUMvbEYK2aK5R/HJci4hWLZPiahowYXjA1Sc54U=;
- b=O76RGZsDedAqM4FUN/jgckcV0tIR1uWjzMI1kGB45ZzfNB86rpWeZaEaQSC6nV0R0qF3
- nEydeCYqJ4u0fpq/XIYtmrBHEw/EtPSZ2bgxo5s81eYzqZoeRplHZFPVU9lOA7NPpp8y
- 32RQOvTvYvgJy4tzj4p80gxa9L/1ujxxeRApGkOG3v86hI+TJjIcxUt2O2l6G3bftcF5
- fM891kcx5Aag8Y1Z3qz1m3ukEBEZyp/8nJ8rYXZovg++9WcMxKHifJaQhagT2T2giGo1
- BkT8ThG3oEotpcFQPumpKuvRXNCTusvcBJPUiXhjn7/goUSUDRti0gh63+mR1e0upzsw jw== 
+ content-type; s=pfpt0220; bh=JJgpwq9SoRin7Kg1AZVNOmglZ9PaHr8ui65LdB/nGsU=;
+ b=hjig8b7oJwkbpQIwk1bVZukzvpGWLb/AUg4jQYv7DTUj8o8VZaEfLvAM/K3cerAQd7Xf
+ KP4WxT3pBPldxP19JLIKbxlwHjq68UGcp0+lKz4HNT26OlWg4mDV8DQ45KHawXzpdDXL
+ RjPzNGvlfP8wS8F/x9Bx/pKuHy81QoKUzsqWUql4DFfkfqyh36PPOsG39fqS6be70pcC
+ sW1jMACKSPJ5v+PfsL1TF0jKs0UB40RXBQPEOTnrnKGiNPG+7AM3Sikc5aeUvI59Ra9o
+ 68MaWyiJ6BH0tqVHD3ePoFMtmu+jbIS6Q00JOf3bZawG5nbHZVmqxB0q/T7DbOmE51n7 /w== 
 Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3q85x60vaa-3
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3q85x60vaa-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
         for <linux-scsi@vger.kernel.org>; Fri, 28 Apr 2023 00:53:48 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 28 Apr
  2023 00:53:46 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
  Transport; Fri, 28 Apr 2023 00:53:46 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 7542F5B6938;
+        by maili.marvell.com (Postfix) with ESMTP id 89AC05B6939;
         Fri, 28 Apr 2023 00:53:45 -0700 (PDT)
 From:   Nilesh Javali <njavali@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>,
         <GR-QLogic-Storage-Upstream@marvell.com>, <bhazarika@marvell.com>,
         <agurumurthy@marvell.com>, <sdeodhar@marvell.com>
-Subject: [PATCH v2 4/7] qla2xxx: Fix hang in task management
-Date:   Fri, 28 Apr 2023 00:53:36 -0700
-Message-ID: <20230428075339.32551-5-njavali@marvell.com>
+Subject: [PATCH v2 5/7] qla2xxx: Fix mem access after free
+Date:   Fri, 28 Apr 2023 00:53:37 -0700
+Message-ID: <20230428075339.32551-6-njavali@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20230428075339.32551-1-njavali@marvell.com>
 References: <20230428075339.32551-1-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-GUID: y9xSBltBXCqNroEj3bB0VXyyq0N5T4LH
-X-Proofpoint-ORIG-GUID: y9xSBltBXCqNroEj3bB0VXyyq0N5T4LH
+X-Proofpoint-GUID: Z4-El4iGPRjmjxLZV4xx2TvEisPNeK2O
+X-Proofpoint-ORIG-GUID: Z4-El4iGPRjmjxLZV4xx2TvEisPNeK2O
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-28_02,2023-04-27_01,2023-02-09_01
@@ -68,185 +68,298 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-Task management command hangs where a side
-band chip reset failed to nudge the TMF
-from it's current send path.
+System crash, where driver is accessing scsi layer's
+memory (scsi_cmnd->device->host) to search for a well known internal
+pointer (vha). The scsi_cmnd was released back to upper layer which
+could be freed, but the driver is still accessing it.
 
-Add additional error check to block TMF
-from entering during chip reset and along
-the TMF path to cause it to bail out, skip
-over abort of marker.
+7 [ffffa8e8d2c3f8d0] page_fault at ffffffff86c010fe
+  [exception RIP: __qla2x00_eh_wait_for_pending_commands+240]
+  RIP: ffffffffc0642350  RSP: ffffa8e8d2c3f988  RFLAGS: 00010286
+  RAX: 0000000000000165  RBX: 0000000000000002  RCX: 00000000000036d8
+  RDX: 0000000000000000  RSI: ffff9c5c56535188  RDI: 0000000000000286
+  RBP: ffff9c5bf7aa4a58   R8: ffff9c589aecdb70   R9: 00000000000003d1
+  R10: 0000000000000001  R11: 0000000000380000 R12: ffff9c5c5392bc78
+  R13: ffff9c57044ff5c0 R14: ffff9c56b5a3aa00  R15: 00000000000006db
+  ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+8 [ffffa8e8d2c3f9c8] qla2x00_eh_wait_for_pending_commands at ffffffffc0646dd5 [qla2xxx]
+9 [ffffa8e8d2c3fa00] __qla2x00_async_tm_cmd at ffffffffc0658094 [qla2xxx]
+
+Remove access of freed memory. Currently the driver was checking to see if
+scsi_done was called by seeing if the sp->type has changed. Instead,
+check to see if the command has left the  oustanding_cmds[] array as
+sign of scsi_done was called.
 
 Cc: stable@vger.kernel.org
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_def.h  |  4 +++
- drivers/scsi/qla2xxx/qla_init.c | 60 +++++++++++++++++++++++++++++++--
- 2 files changed, 61 insertions(+), 3 deletions(-)
+ drivers/scsi/qla2xxx/qla_isr.c |  38 ++++++++--
+ drivers/scsi/qla2xxx/qla_os.c  | 130 ++++++++++++++++-----------------
+ 2 files changed, 95 insertions(+), 73 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index 0971150953a9..3e0be0136cad 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -5516,4 +5516,8 @@ struct ql_vnd_tgt_stats_resp {
- 	_fp->disc_state, _fp->scan_state, _fp->loop_id, _fp->deleted, \
- 	_fp->flags
- 
-+#define TMF_NOT_READY(_fcport) \
-+	(!_fcport || IS_SESSION_DELETED(_fcport) || atomic_read(&_fcport->state) != FCS_ONLINE || \
-+	!_fcport->vha->hw->flags.fw_started)
-+
- #endif
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 17649cf9c39d..b61597d6882c 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -1996,6 +1996,11 @@ qla2x00_tmf_iocb_timeout(void *data)
- 	int rc, h;
- 	unsigned long flags;
- 
-+	if (sp->type == SRB_MARKER) {
-+		complete(&tmf->u.tmf.comp);
-+		return;
-+	}
-+
- 	rc = qla24xx_async_abort_cmd(sp, false);
- 	if (rc) {
- 		spin_lock_irqsave(sp->qpair->qp_lock_ptr, flags);
-@@ -2023,6 +2028,7 @@ static void qla_marker_sp_done(srb_t *sp, int res)
- 		    sp->handle, sp->fcport->d_id.b24, sp->u.iocb_cmd.u.tmf.flags,
- 		    sp->u.iocb_cmd.u.tmf.lun, sp->qpair->id);
- 
-+	sp->u.iocb_cmd.u.tmf.data = res;
- 	complete(&tmf->u.tmf.comp);
+diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+index f3107508cf12..a07c010b0843 100644
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -1862,9 +1862,9 @@ qla2x00_process_completed_request(struct scsi_qla_host *vha,
+ 	}
  }
  
-@@ -2039,6 +2045,11 @@ static void qla_marker_sp_done(srb_t *sp, int res)
- 	} while (cnt); \
- }
- 
-+/**
-+ * qla26xx_marker: send marker IOCB and wait for the completion of it.
-+ * @arg: pointer to argument list.
-+ *    It is assume caller will provide an fcport pointer and modifier
-+ */
- static int
- qla26xx_marker(struct tmf_arg *arg)
+-srb_t *
+-qla2x00_get_sp_from_handle(scsi_qla_host_t *vha, const char *func,
+-    struct req_que *req, void *iocb)
++static srb_t *
++qla_get_sp_from_handle(scsi_qla_host_t *vha, const char *func,
++		       struct req_que *req, void *iocb, u16 *ret_index)
  {
-@@ -2048,6 +2059,14 @@ qla26xx_marker(struct tmf_arg *arg)
- 	int rval = QLA_FUNCTION_FAILED;
- 	fc_port_t *fcport = arg->fcport;
- 
-+	if (TMF_NOT_READY(arg->fcport)) {
-+		ql_dbg(ql_dbg_taskm, vha, 0x8039,
-+		    "FC port not ready for marker loop-id=%x portid=%06x modifier=%x lun=%lld qp=%d.\n",
-+		    fcport->loop_id, fcport->d_id.b24,
-+		    arg->modifier, arg->lun, arg->qpair->id);
-+		return QLA_SUSPENDED;
-+	}
-+
- 	/* ref: INIT */
- 	sp = qla2xxx_get_qpair_sp(vha, arg->qpair, fcport, GFP_KERNEL);
- 	if (!sp)
-@@ -2074,11 +2093,19 @@ qla26xx_marker(struct tmf_arg *arg)
- 
- 	if (rval != QLA_SUCCESS) {
- 		ql_log(ql_log_warn, vha, 0x8031,
--		    "Marker IOCB failed (%x).\n", rval);
-+		    "Marker IOCB send failure (%x).\n", rval);
- 		goto done_free_sp;
+ 	struct qla_hw_data *ha = vha->hw;
+ 	sts_entry_t *pkt = iocb;
+@@ -1899,12 +1899,25 @@ qla2x00_get_sp_from_handle(scsi_qla_host_t *vha, const char *func,
+ 		return NULL;
  	}
  
- 	wait_for_completion(&tm_iocb->u.tmf.comp);
-+	rval = tm_iocb->u.tmf.data;
-+
-+	if (rval != QLA_SUCCESS) {
-+		ql_log(ql_log_warn, vha, 0x8019,
-+		    "Marker failed hdl=%x loop-id=%x portid=%06x modifier=%x lun=%lld qp=%d rval %d.\n",
-+		    sp->handle, fcport->loop_id, fcport->d_id.b24,
-+		    arg->modifier, arg->lun, sp->qpair->id, rval);
-+	}
- 
- done_free_sp:
- 	/* ref: INIT */
-@@ -2091,6 +2118,8 @@ static void qla2x00_tmf_sp_done(srb_t *sp, int res)
- {
- 	struct srb_iocb *tmf = &sp->u.iocb_cmd;
- 
-+	if (res)
-+		tmf->u.tmf.data = res;
- 	complete(&tmf->u.tmf.comp);
+-	req->outstanding_cmds[index] = NULL;
+-
++	*ret_index = index;
+ 	qla_put_fw_resources(sp->qpair, &sp->iores);
+ 	return sp;
  }
  
-@@ -2104,6 +2133,14 @@ __qla2x00_async_tm_cmd(struct tmf_arg *arg)
- 
- 	fc_port_t *fcport = arg->fcport;
- 
-+	if (TMF_NOT_READY(arg->fcport)) {
-+		ql_dbg(ql_dbg_taskm, vha, 0x8032,
-+		    "FC port not ready for TM command loop-id=%x portid=%06x modifier=%x lun=%lld qp=%d.\n",
-+		    fcport->loop_id, fcport->d_id.b24,
-+		    arg->modifier, arg->lun, arg->qpair->id);
-+		return QLA_SUSPENDED;
-+	}
++srb_t *
++qla2x00_get_sp_from_handle(scsi_qla_host_t *vha, const char *func,
++			   struct req_que *req, void *iocb)
++{
++	uint16_t index;
++	srb_t *sp;
 +
- 	/* ref: INIT */
- 	sp = qla2xxx_get_qpair_sp(vha, arg->qpair, fcport, GFP_KERNEL);
- 	if (!sp)
-@@ -2178,7 +2215,9 @@ int qla_get_tmf(fc_port_t *fcport)
- 		msleep(1);
- 
- 		spin_lock_irqsave(&ha->tgt.sess_lock, flags);
--		if (fcport->deleted) {
-+		if (TMF_NOT_READY(fcport)) {
-+			ql_log(ql_log_warn, vha, 0x802c,
-+			    "Unable to acquire TM resource due to disruption.\n");
- 			rc = EIO;
- 			break;
- 		}
-@@ -2204,7 +2243,10 @@ qla2x00_async_tm_cmd(fc_port_t *fcport, uint32_t flags, uint64_t lun,
- 	struct scsi_qla_host *vha = fcport->vha;
- 	struct qla_qpair *qpair;
- 	struct tmf_arg a;
--	int i, rval;
-+	int i, rval = QLA_SUCCESS;
++	sp = qla_get_sp_from_handle(vha, func, req, iocb, &index);
++	if (sp)
++		req->outstanding_cmds[index] = NULL;
 +
-+	if (TMF_NOT_READY(fcport))
-+		return QLA_SUSPENDED;
- 
- 	a.vha = fcport->vha;
- 	a.fcport = fcport;
-@@ -2223,6 +2265,14 @@ qla2x00_async_tm_cmd(fc_port_t *fcport, uint32_t flags, uint64_t lun,
- 			qpair = vha->hw->queue_pair_map[i];
- 			if (!qpair)
- 				continue;
++	return sp;
++}
 +
-+			if (TMF_NOT_READY(fcport)) {
-+				ql_log(ql_log_warn, vha, 0x8026,
-+				    "Unable to send TM due to disruption.\n");
-+				rval = QLA_SUSPENDED;
+ static void
+ qla2x00_mbx_iocb_entry(scsi_qla_host_t *vha, struct req_que *req,
+     struct mbx_entry *mbx)
+@@ -3237,13 +3250,13 @@ qla2x00_status_entry(scsi_qla_host_t *vha, struct rsp_que *rsp, void *pkt)
+ 		return;
+ 	}
+ 
+-	req->outstanding_cmds[handle] = NULL;
+ 	cp = GET_CMD_SP(sp);
+ 	if (cp == NULL) {
+ 		ql_dbg(ql_dbg_io, vha, 0x3018,
+ 		    "Command already returned (0x%x/%p).\n",
+ 		    sts->handle, sp);
+ 
++		req->outstanding_cmds[handle] = NULL;
+ 		return;
+ 	}
+ 
+@@ -3514,6 +3527,9 @@ qla2x00_status_entry(scsi_qla_host_t *vha, struct rsp_que *rsp, void *pkt)
+ 
+ 	if (rsp->status_srb == NULL)
+ 		sp->done(sp, res);
++
++	/* for io's, clearing of outstanding_cmds[handle] means scsi_done was called */
++	req->outstanding_cmds[handle] = NULL;
+ }
+ 
+ /**
+@@ -3590,6 +3606,7 @@ qla2x00_error_entry(scsi_qla_host_t *vha, struct rsp_que *rsp, sts_entry_t *pkt)
+ 	uint16_t que = MSW(pkt->handle);
+ 	struct req_que *req = NULL;
+ 	int res = DID_ERROR << 16;
++	u16 index;
+ 
+ 	ql_dbg(ql_dbg_async, vha, 0x502a,
+ 	    "iocb type %xh with error status %xh, handle %xh, rspq id %d\n",
+@@ -3608,7 +3625,6 @@ qla2x00_error_entry(scsi_qla_host_t *vha, struct rsp_que *rsp, sts_entry_t *pkt)
+ 
+ 	switch (pkt->entry_type) {
+ 	case NOTIFY_ACK_TYPE:
+-	case STATUS_TYPE:
+ 	case STATUS_CONT_TYPE:
+ 	case LOGINOUT_PORT_IOCB_TYPE:
+ 	case CT_IOCB_TYPE:
+@@ -3628,6 +3644,14 @@ qla2x00_error_entry(scsi_qla_host_t *vha, struct rsp_que *rsp, sts_entry_t *pkt)
+ 	case CTIO_TYPE7:
+ 	case CTIO_CRC2:
+ 		return 1;
++	case STATUS_TYPE:
++		sp = qla_get_sp_from_handle(vha, func, req, pkt, &index);
++		if (sp) {
++			sp->done(sp, res);
++			req->outstanding_cmds[index] = NULL;
++			return 0;
++		}
++		break;
+ 	}
+ fatal:
+ 	ql_log(ql_log_warn, vha, 0x5030,
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index d0cdbfe771a9..60734c569401 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -1078,43 +1078,6 @@ qla2xxx_mqueuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd,
+ 	return 0;
+ }
+ 
+-/*
+- * qla2x00_eh_wait_on_command
+- *    Waits for the command to be returned by the Firmware for some
+- *    max time.
+- *
+- * Input:
+- *    cmd = Scsi Command to wait on.
+- *
+- * Return:
+- *    Completed in time : QLA_SUCCESS
+- *    Did not complete in time : QLA_FUNCTION_FAILED
+- */
+-static int
+-qla2x00_eh_wait_on_command(struct scsi_cmnd *cmd)
+-{
+-#define ABORT_POLLING_PERIOD	1000
+-#define ABORT_WAIT_ITER		((2 * 1000) / (ABORT_POLLING_PERIOD))
+-	unsigned long wait_iter = ABORT_WAIT_ITER;
+-	scsi_qla_host_t *vha = shost_priv(cmd->device->host);
+-	struct qla_hw_data *ha = vha->hw;
+-	srb_t *sp = scsi_cmd_priv(cmd);
+-	int ret = QLA_SUCCESS;
+-
+-	if (unlikely(pci_channel_offline(ha->pdev)) || ha->flags.eeh_busy) {
+-		ql_dbg(ql_dbg_taskm, vha, 0x8005,
+-		    "Return:eh_wait.\n");
+-		return ret;
+-	}
+-
+-	while (sp->type && wait_iter--)
+-		msleep(ABORT_POLLING_PERIOD);
+-	if (sp->type)
+-		ret = QLA_FUNCTION_FAILED;
+-
+-	return ret;
+-}
+-
+ /*
+  * qla2x00_wait_for_hba_online
+  *    Wait till the HBA is online after going through
+@@ -1365,6 +1328,9 @@ qla2xxx_eh_abort(struct scsi_cmnd *cmd)
+ 	return ret;
+ }
+ 
++#define ABORT_POLLING_PERIOD	1000
++#define ABORT_WAIT_ITER		((2 * 1000) / (ABORT_POLLING_PERIOD))
++
+ /*
+  * Returns: QLA_SUCCESS or QLA_FUNCTION_FAILED.
+  */
+@@ -1378,41 +1344,73 @@ __qla2x00_eh_wait_for_pending_commands(struct qla_qpair *qpair, unsigned int t,
+ 	struct req_que *req = qpair->req;
+ 	srb_t *sp;
+ 	struct scsi_cmnd *cmd;
++	unsigned long wait_iter = ABORT_WAIT_ITER;
++	bool found;
++	struct qla_hw_data *ha = vha->hw;
+ 
+ 	status = QLA_SUCCESS;
+ 
+-	spin_lock_irqsave(qpair->qp_lock_ptr, flags);
+-	for (cnt = 1; status == QLA_SUCCESS &&
+-		cnt < req->num_outstanding_cmds; cnt++) {
+-		sp = req->outstanding_cmds[cnt];
+-		if (!sp)
+-			continue;
+-		if (sp->type != SRB_SCSI_CMD)
+-			continue;
+-		if (vha->vp_idx != sp->vha->vp_idx)
+-			continue;
+-		match = 0;
+-		cmd = GET_CMD_SP(sp);
+-		switch (type) {
+-		case WAIT_HOST:
+-			match = 1;
+-			break;
+-		case WAIT_TARGET:
+-			match = cmd->device->id == t;
+-			break;
+-		case WAIT_LUN:
+-			match = (cmd->device->id == t &&
+-				cmd->device->lun == l);
+-			break;
+-		}
+-		if (!match)
+-			continue;
++	while (wait_iter--) {
++		found = false;
+ 
+-		spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
+-		status = qla2x00_eh_wait_on_command(cmd);
+ 		spin_lock_irqsave(qpair->qp_lock_ptr, flags);
++		for (cnt = 1; cnt < req->num_outstanding_cmds; cnt++) {
++			sp = req->outstanding_cmds[cnt];
++			if (!sp)
++				continue;
++			if (sp->type != SRB_SCSI_CMD)
++				continue;
++			if (vha->vp_idx != sp->vha->vp_idx)
++				continue;
++			match = 0;
++			cmd = GET_CMD_SP(sp);
++			switch (type) {
++			case WAIT_HOST:
++				match = 1;
++				break;
++			case WAIT_TARGET:
++				if (sp->fcport)
++					match = sp->fcport->d_id.b24 == t;
++				else
++					match = 0;
++				break;
++			case WAIT_LUN:
++				if (sp->fcport)
++					match = (sp->fcport->d_id.b24 == t &&
++						cmd->device->lun == l);
++				else
++					match = 0;
 +				break;
 +			}
++			if (!match)
++				continue;
 +
- 			a.qpair = qpair;
- 			a.flags = flags|TCF_NOTMCMD_TO_TARGET;
- 			rval = __qla2x00_async_tm_cmd(&a);
-@@ -2231,10 +2281,14 @@ qla2x00_async_tm_cmd(fc_port_t *fcport, uint32_t flags, uint64_t lun,
- 		}
++			spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
++
++			if (unlikely(pci_channel_offline(ha->pdev)) ||
++			    ha->flags.eeh_busy) {
++				ql_dbg(ql_dbg_taskm, vha, 0x8005,
++				    "Return:eh_wait.\n");
++				return status;
++			}
++
++			/*
++			 * SRB_SCSI_CMD is still in the outstanding_cmds array.
++			 * it means scsi_done has not called. Wait for it to
++			 * clear from outstanding_cmds.
++			 */
++			msleep(ABORT_POLLING_PERIOD);
++			spin_lock_irqsave(qpair->qp_lock_ptr, flags);
++			found = true;
++		}
++		spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
++
++		if (!found)
++			break;
  	}
- 
-+	if (rval)
-+		goto bailout;
+-	spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
 +
- 	a.qpair = vha->hw->base_qpair;
- 	a.flags = flags;
- 	rval = __qla2x00_async_tm_cmd(&a);
++	if (!wait_iter && found)
++		status = QLA_FUNCTION_FAILED;
  
-+bailout:
- 	if (a.modifier == MK_SYNC_ID_LUN)
- 		qla_put_tmf(fcport);
- 
+ 	return status;
+ }
 -- 
 2.23.1
 
