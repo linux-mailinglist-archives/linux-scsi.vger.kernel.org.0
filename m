@@ -2,43 +2,43 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9A76F1BC7
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Apr 2023 17:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B058F6F1BCB
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Apr 2023 17:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346388AbjD1PiW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Apr 2023 11:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        id S1346465AbjD1Pic (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Apr 2023 11:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346135AbjD1PiC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Apr 2023 11:38:02 -0400
+        with ESMTP id S1346442AbjD1PiH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Apr 2023 11:38:07 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F41984
-        for <linux-scsi@vger.kernel.org>; Fri, 28 Apr 2023 08:37:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148105BAC
+        for <linux-scsi@vger.kernel.org>; Fri, 28 Apr 2023 08:37:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1682696265; x=1714232265;
+  t=1682696270; x=1714232270;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=UsZqljxeabf4R9q6N3sdhM30ZyWjLB7cW7LX8LOQvro=;
-  b=rMPIiGDz+IjKAvrdPobOnn6Ppt1DnS32JdCSPlLVgCO9iP6KIKYJVkdn
-   Ot1U/aFXaKjhCOGoKdOTtwBxaQmhPzaWNrO+huGUl0RdcwH9tBvLW/Iqc
-   ObqIOUjktM0kfFX9/BGPpi5GcLgt1pEC0oiGNDQi6ZbB8gFKdQ6Gk1Zdh
-   KYW2Lp5OLGqk1Cd/dfeWludgp/iFzef8dFvnMZ/rWrC3vQ7DNFUvbMFwm
-   PVY9BWMHULolboSIvLlBYaWP1f6yEcw+ScRTeivN71eigE21PmZj1+lqy
-   lfDSXgrF6IiQNL7BbdcKDAAM17Oy9vSZHkosfdPXMRB7YdacOmCn9rqV0
-   A==;
+  bh=xJ/HmM//w8pSvzUIsHagQhBijwjjuliLKI69jp4nrS8=;
+  b=f1FnoWBBk0dDjwZxqsgMH9Pk/UzJeeWVt0EMLLw58xg+hSpQI3bW2OHs
+   z9wuw+yXD/CQpFY9MadIweT+MpgnaiSj6Mc7FXPLAPtSeWE5oLeZOAkQ8
+   pJFhKs7dXKZSsHUrnyRknBNUPxcw3qVnkbna731cigJ+wypl82Gu0UHQl
+   9zFCDvubXzn0LIDS6MghPaxuoAp9lhW6UADtlXjzpJsZLEZgBG1Cf85He
+   QOwjmvQT2lrxfZU9WxrU+3lyVxui3GEWJ4Sy/nbuBiqzoLtQXazZAREWO
+   c5N81vqxTwiqtH4+4xuHXYeZJoKMc4OodPIag/P+aSAmWkZhb0VzPn0Ct
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.99,234,1677567600"; 
-   d="scan'208";a="211156470"
+   d="scan'208";a="211156473"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Apr 2023 08:36:59 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Apr 2023 08:37:00 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 28 Apr 2023 08:36:58 -0700
+ 15.1.2507.21; Fri, 28 Apr 2023 08:36:59 -0700
 Received: from brunhilda.pdev.net (10.10.115.15) by chn-vm-ex03.mchp-main.com
  (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Fri, 28 Apr 2023 08:36:57 -0700
+ Transport; Fri, 28 Apr 2023 08:36:59 -0700
 From:   Don Brace <don.brace@microchip.com>
 To:     <don.brace@microchip.com>, <Kevin.Barnett@microchip.com>,
         <scott.teel@microchip.com>, <Justin.Lindley@microchip.com>,
@@ -49,9 +49,9 @@ To:     <don.brace@microchip.com>, <Kevin.Barnett@microchip.com>,
         <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
         <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
 CC:     <linux-scsi@vger.kernel.org>
-Subject: [PATCH 03/12] smartpqi: remove null pointer check
-Date:   Fri, 28 Apr 2023 10:37:03 -0500
-Message-ID: <20230428153712.297638-4-don.brace@microchip.com>
+Subject: [PATCH 04/12] smartpqi: fix-rare-sas-transport-mem-leak
+Date:   Fri, 28 Apr 2023 10:37:04 -0500
+Message-ID: <20230428153712.297638-5-don.brace@microchip.com>
 X-Mailer: git-send-email 2.40.1.375.g9ce9dea4e1
 In-Reply-To: <20230428153712.297638-1-don.brace@microchip.com>
 References: <20230428153712.297638-1-don.brace@microchip.com>
@@ -68,63 +68,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Kevin Barnett <kevin.barnett@microchip.com>
+Free rphy when pqi_sas_port_add_rphy() returns an error.
 
-Remove an unnecessary check for a null pointer.
-This unnecessary check was flagged by Coverity.
+If pqi_sas_port_add_rphy() returns an error, the 'rphy' allocated
+in sas_end_device_alloc() needs to be freed.
+
+It should be noted that no issues were ever reported.
 
 Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
 Reviewed-by: Scott Teel <scott.teel@microchip.com>
 Reviewed-by: Mike McGowen <mike.mcgowen@microchip.com>
-Signed-off-by: Kevin Barnett <kevin.barnett@microchip.com>
+Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
+Suggested-by: Yang Yingliang <yangyingliang@huawei.com>
 Signed-off-by: Don Brace <don.brace@microchip.com>
 ---
- .../scsi/smartpqi/smartpqi_sas_transport.c    | 28 +++++++++----------
- 1 file changed, 13 insertions(+), 15 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_sas_transport.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/smartpqi/smartpqi_sas_transport.c b/drivers/scsi/smartpqi/smartpqi_sas_transport.c
-index 13e8c539010e..52dbe37364bf 100644
+index 52dbe37364bf..36b90b55cf5f 100644
 --- a/drivers/scsi/smartpqi/smartpqi_sas_transport.c
 +++ b/drivers/scsi/smartpqi/smartpqi_sas_transport.c
-@@ -92,25 +92,23 @@ static int pqi_sas_port_add_rphy(struct pqi_sas_port *pqi_sas_port,
+@@ -293,10 +293,12 @@ int pqi_add_sas_device(struct pqi_sas_node *pqi_sas_node,
  
- 	identify = &rphy->identify;
- 	identify->sas_address = pqi_sas_port->sas_address;
-+	identify->phy_identifier = pqi_sas_port->device->phy_id;
+ 	rc = pqi_sas_port_add_rphy(pqi_sas_port, rphy);
+ 	if (rc)
+-		goto free_sas_port;
++		goto free_sas_rphy;
  
- 	identify->initiator_port_protocols = SAS_PROTOCOL_ALL;
- 	identify->target_port_protocols = SAS_PROTOCOL_STP;
+ 	return 0;
  
--	if (pqi_sas_port->device) {
--		identify->phy_identifier = pqi_sas_port->device->phy_id;
--		switch (pqi_sas_port->device->device_type) {
--		case SA_DEVICE_TYPE_SAS:
--		case SA_DEVICE_TYPE_SES:
--		case SA_DEVICE_TYPE_NVME:
--			identify->target_port_protocols = SAS_PROTOCOL_SSP;
--			break;
--		case SA_DEVICE_TYPE_EXPANDER_SMP:
--			identify->target_port_protocols = SAS_PROTOCOL_SMP;
--			break;
--		case SA_DEVICE_TYPE_SATA:
--		default:
--			break;
--		}
-+	switch (pqi_sas_port->device->device_type) {
-+	case SA_DEVICE_TYPE_SAS:
-+	case SA_DEVICE_TYPE_SES:
-+	case SA_DEVICE_TYPE_NVME:
-+		identify->target_port_protocols = SAS_PROTOCOL_SSP;
-+		break;
-+	case SA_DEVICE_TYPE_EXPANDER_SMP:
-+		identify->target_port_protocols = SAS_PROTOCOL_SMP;
-+		break;
-+	case SA_DEVICE_TYPE_SATA:
-+	default:
-+		break;
- 	}
- 
- 	return sas_rphy_add(rphy);
++free_sas_rphy:
++	sas_rphy_free(rphy);
+ free_sas_port:
+ 	pqi_free_sas_port(pqi_sas_port);
+ 	device->sas_port = NULL;
 -- 
 2.40.1.375.g9ce9dea4e1
 
