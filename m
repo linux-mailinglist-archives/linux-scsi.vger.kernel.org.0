@@ -2,147 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD83C6F42E9
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 May 2023 13:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390E36F437D
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 May 2023 14:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234023AbjEBLlb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 May 2023 07:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
+        id S233548AbjEBMPq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 May 2023 08:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234032AbjEBLl3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 May 2023 07:41:29 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA0B4C2D
-        for <linux-scsi@vger.kernel.org>; Tue,  2 May 2023 04:41:13 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230502113118epoutp01604cfe479a94474bce0eff5d8498c4c2~bUDXdj3g01134311343epoutp01k
-        for <linux-scsi@vger.kernel.org>; Tue,  2 May 2023 11:31:18 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230502113118epoutp01604cfe479a94474bce0eff5d8498c4c2~bUDXdj3g01134311343epoutp01k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683027078;
-        bh=xmiMWORcrOAQxNE1CAsFrz5Kae9r4tZ/FFzkcGFfdC0=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=Lus+BKz2FMRCNma36805QyV7fTskm4DQfG6SWoXiJ5qY09kLcbd8jDENB0zK8DKEx
-         bTYMHpxjTNUQ22ojXNL3nfNiEAwpTCxC4psVMhJHKWP2DDwg1abHTb40DMBBDUNq+K
-         MtCZbbjna42OOtiJKPy1iL05/HfqK8UxeilQ1z68=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20230502113117epcas2p1e97a512ba73df6dd2165af28259e1979~bUDXD4WrM0355803558epcas2p1D;
-        Tue,  2 May 2023 11:31:17 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Q9dFJ6Gjgz4x9Pp; Tue,  2 May
-        2023 11:31:16 +0000 (GMT)
-X-AuditID: b6c32a46-8b7ff7000001438d-69-6450f484f687
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        FE.5E.17293.484F0546; Tue,  2 May 2023 20:31:16 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH] scsi: ufs: core: Use readable 'return 0' in
- ufshcd_hba_capabilities()
-Reply-To: keosung.park@samsung.com
-Sender: Keoseong Park <keosung.park@samsung.com>
-From:   Keoseong Park <keosung.park@samsung.com>
-To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230502113116epcms2p7b83da0d683e29f667c38f5430b985388@epcms2p7>
-Date:   Tue, 02 May 2023 20:31:16 +0900
-X-CMS-MailID: 20230502113116epcms2p7b83da0d683e29f667c38f5430b985388
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFJsWRmVeSWpSXmKPExsWy7bCmqW7Ll4AUg6WTDS0ezNvGZvHy51U2
-        i4MPO1kspn34yWzx8pCmxaPbzxgtFt3YxmRxedccNovu6zvYLA58WMVosfz4PyaLhR1zWSyW
-        br3J6MDrcfmKt8emVZ1sHhMWHWD0aDm5n8Xj+/oONo+PT2+xeEzcU+fRt2UVo8fnTXIe7Qe6
-        mQK4orJtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4BO
-        V1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBfoFSfmFpfmpevlpZZYGRoYGJkC
-        FSZkZxzpO85U0M5VsfR7L2MD42KOLkZODgkBE4mVy5exdDFycQgJ7GCU+NDRxd7FyMHBKyAo
-        8XeHMEiNsECExN4pP5hBbCEBJYmuhVuZIeIGEuum7wGz2QT0JKb8vsMIMkdEYCOLxL8bB1kh
-        FvBKzGh/ygJhS0tsX76VEcLWkPixrJcZwhaVuLn6LTuM/f7YfKgaEYnWe2ehagQlHvzcDRWX
-        lGg9s5UNwq6XaH1/ih1ksYTABEaJxmN/oAbpS1zr2Ai2mFfAV2LBzZlgNouAqsTGfXugBrlI
-        XPq0AyzOLCAvsf3tHGaQ55kFNCXW79IHMSUElCWO3IKq4JPoOPyXHeatho2/sbJ3zHvCBGGr
-        STxasAUaDDISF+ecY4YY6SHRuNVpAqPiLERAz0JywiyEExYwMq9iFEstKM5NTy02KjCCx21y
-        fu4mRnAi1nLbwTjl7Qe9Q4xMHIyHGCU4mJVEeD8U+qUI8aYkVlalFuXHF5XmpBYfYjQFen4i
-        s5Rocj4wF+SVxBuaWBqYmJkZmhuZGpgrifNK255MFhJITyxJzU5NLUgtgulj4uCUamASfNw8
-        27YnONyeebts35Tt+zm9/jx4J/1g/1w7j5C2KL7riW/2OS4JXf13TuW7R87MzzR+C2Yk377D
-        vI/H88Cm+MyHNerqeqbfN5YHdyxZVdN+RPqklNiNr3fEIyLERf5tO9199a2G4LvqGO4b/A91
-        AxXD/+kVurTOF1Q+dDOZY6/I1R8CThsfett+aMvUXsZW5Za8r9bo0YVZNQdZ5lY8PXUxtvS9
-        3dL/RhcdXdyuvilm2+3GsTZ8+76kR2EXMm11bjBrKbvJTftUfJV920qvl6/npXo6PRMUq2ir
-        S0ve4fPmv0iAZMpMc749Vr0Pj60/6MsuEib6cD1r4NMTtwK92RlMzW5fcNT9JmBuLK3EUpyR
-        aKjFXFScCACdAcKtTQQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230502113116epcms2p7b83da0d683e29f667c38f5430b985388
-References: <CGME20230502113116epcms2p7b83da0d683e29f667c38f5430b985388@epcms2p7>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        with ESMTP id S234142AbjEBMPo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 May 2023 08:15:44 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D2010CE
+        for <linux-scsi@vger.kernel.org>; Tue,  2 May 2023 05:15:42 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-192798cf019so932508fac.3
+        for <linux-scsi@vger.kernel.org>; Tue, 02 May 2023 05:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683029742; x=1685621742;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UFDCcpPxDmkQZsud8dmALV/HSiV3stf7Ud3TXlSZ1wA=;
+        b=Em96I0iTF2A6o3J/ORbPNgTQDb/X5WPO2+3u9AnRSaUwbbtikDeHttGXBticraotaC
+         RhxV9mGQVQj4tjbfZx7r1ccBoX4O4NEcXfPXZXGh3l7H4Ft7kgSuhN/9jh5Qd5fVK5pH
+         ikn71Tk8SZC48NhHClOCCgBDxC8NICVFpEXA4QupryUHJnT6vJkIKOfcUNoxeQ73oBjg
+         zgCC9JjagCyBOzCTZ44ZuzraHsbJd5sIBDHB6btrLz1e3AumteJRJ2PgbQOqa0qJ0qzh
+         a9bVc0YVl9KTEs6ZtbqpI2qzB1dCaBWlv+CKMPu+ftaGeXXB7+eiNN6jsTIVYw0kvRCD
+         kxEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683029742; x=1685621742;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UFDCcpPxDmkQZsud8dmALV/HSiV3stf7Ud3TXlSZ1wA=;
+        b=TYJWAjmiqSuvDF87MsFbvAvNT9wMuU0aq/4ceoxqUPx9HoGkdl3bjrXmxPzUfsKnzj
+         x9n/9gedDSG77eFrec/VdFGcZll/UKEFtgGHzXO3KfwYsq1mrKT1ENbsg9lCe7KqJTJS
+         ByUmK8Z3+yKT14JfTbOTDiwm2NIqtW8cH0jhMa3F4HW78mYz/J0cltFG9C7jf2UK8w5a
+         hDZnxB4d3Vb8bNKThzBwkbSb7rDgjnFz696hXJ7fU2b9grHZv21J5gvvl6TwPkre1slQ
+         F3m5Gnn4wsi1HxqCAgKdHLImnlL4QaS44LfFfq3vaqV7SDeU4bvfY4US6El7eCqeDslk
+         drlw==
+X-Gm-Message-State: AC+VfDzx5FZEfhUrltZFSNIEVchMK5zvRazHK7tVXzw5BNpDsMVoOGfy
+        4SvJYoKrLn/jWyds3gerWvmJEOt3kXbiTNEpfDQfT7qjn3A=
+X-Google-Smtp-Source: ACHHUZ7A6SbxrSbXo/QVeZo2lhTICROhzUdLaf9rigkMM+uiUSpVaVaKvSQGYPy7OvR9R+KnBp+8kdalZGV/1uhMq34=
+X-Received: by 2002:a05:6808:6:b0:38b:5349:e112 with SMTP id
+ u6-20020a056808000600b0038b5349e112mr7478821oic.46.1683029741755; Tue, 02 May
+ 2023 05:15:41 -0700 (PDT)
+MIME-Version: 1.0
+Sender: ericgloriapaul@gmail.com
+Received: by 2002:a05:6358:4903:b0:11a:758f:2411 with HTTP; Tue, 2 May 2023
+ 05:15:41 -0700 (PDT)
+From:   Stepan CHERNOVETSKY <chernovetskyistepan@gmail.com>
+Date:   Tue, 2 May 2023 13:15:41 +0100
+X-Google-Sender-Auth: 8WASfav0oDciR8-v2NgO5GSztsc
+Message-ID: <CAApFGfT5BJC5HikDxBuWaOaLmtj1tR8g8GVbAKK9PMK+FuX7MQ@mail.gmail.com>
+Subject: Investment Inquiries.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.7 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_50,
+        DEAR_SOMETHING,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:32 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4920]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ericgloriapaul[at]gmail.com]
+        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.0 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The 'err' variable is the result of ufshcd_hba_init_crypto_capabilities()
-regardless of MCQ capabilities. Return 'err' immediately when the function
-error occurs. And if it is not an error, explicitly return 0.
+Dear Sir/Madam,
 
-Anyway, if ufshcd_hba_init_crypto_capabilities() returns error, MCQ
-capabilities is not used because it fails to initialize UFS driver.
+Please do not be embarrassed for contacting you through this medium; I
+got your contact from Google people search and then decided to contact
+you. My goal is to establish a viable business relationship with you
+there in your country.
 
-Signed-off-by: Keoseong Park <keosung.park@samsung.com>
----
- drivers/ufs/core/ufshcd.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+I am  Mr Stepan CHERNOVETSKYI from Kyiv (Ukraine); I was a
+businessman, Investor and Founder of Chernovetskyi Investment Group
+(CIG) in Kyiv before Russia=E2=80=99s Invasion of my country. My business h=
+as
+been destroyed by the Russian military troops and there are no
+meaningful economic activities going on in my country.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 9434328ba323..44328eb4158d 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2343,18 +2343,20 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
- 
- 	/* Read crypto capabilities */
- 	err = ufshcd_hba_init_crypto_capabilities(hba);
--	if (err)
-+	if (err) {
- 		dev_err(hba->dev, "crypto setup failed\n");
-+		return err;
-+	}
- 
- 	hba->mcq_sup = FIELD_GET(MASK_MCQ_SUPPORT, hba->capabilities);
- 	if (!hba->mcq_sup)
--		return err;
-+		return 0;
- 
- 	hba->mcq_capabilities = ufshcd_readl(hba, REG_MCQCAP);
- 	hba->ext_iid_sup = FIELD_GET(MASK_EXT_IID_SUPPORT,
- 				     hba->mcq_capabilities);
- 
--	return err;
-+	return 0;
- }
- 
- /**
--- 
-2.17.1
+I am looking for your help and assistance to buy properties and other
+investment projects, I consider it necessary to diversify my
+investment project in your country, due to the invasion of Russia to
+my country, Ukraine and to safeguard the future of my family.
 
+Please, I would like to discuss with you the possibility of how we can
+work together as business partners and invest in your country through
+your assistance, if you can help me.
+
+Please, if you are interested in partnering with me, please respond
+urgently for more information.
+
+Yours Sincerely,
+Mr Stepan CHERNOVETSKYI Leonid.
+Chairman and founder of Chernovetskyi Investment Group (CIG)
