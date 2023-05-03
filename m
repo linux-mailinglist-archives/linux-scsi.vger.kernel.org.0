@@ -2,88 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861BB6F4FA7
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 May 2023 07:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4B346F5002
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 May 2023 08:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjECFKa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 May 2023 01:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
+        id S229602AbjECGU1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 May 2023 02:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjECFK3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 May 2023 01:10:29 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560F5198C;
-        Tue,  2 May 2023 22:10:28 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f137dbaa4fso366065e87.2;
-        Tue, 02 May 2023 22:10:28 -0700 (PDT)
+        with ESMTP id S229506AbjECGUZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 May 2023 02:20:25 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE022680
+        for <linux-scsi@vger.kernel.org>; Tue,  2 May 2023 23:20:24 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-192adab8f0eso75240fac.2
+        for <linux-scsi@vger.kernel.org>; Tue, 02 May 2023 23:20:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683090626; x=1685682626;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/gUMcAb9p0mtdNtbUOeVy8zAV4NOHZstBj8s8GNLqlo=;
-        b=rXbyC8wiohAIZnaCzgut2ymBY5J5zPwmSUhFhzl9ol/JU4Sy2uQwvsnu1NbXM1LMHd
-         kLe6iUxw1O2vUz6cY8rvR2d3JOcgFPnDmMUOdQtgY1VXK8LUMsfCkTJ1AG6MNqk/q5bK
-         kaRel+B/SFxikNOV64r3HIVJeq9ZJl1A5VlU0ANcugWa4WVbSSt5l+kxniIvkTD4/ZhE
-         eI57ZB+tFb4Sct1jA7UChoyLxFZVZBgMYQe7WZZ34CxeOICI86FzQ3mkXSUaqJRHHld2
-         XNNIFISSRqRhwPSGIo7u5UgPESeKIzJiaUncBqeKqT6VbKkFJDqLqO7kEpqsen3wS1JY
-         u1KQ==
+        d=gmail.com; s=20221208; t=1683094823; x=1685686823;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nHhH2clqN/moR+BtPwqo9RJEjJKqZSsX5yPmJcGuU/4=;
+        b=Qm23IJ3qwDu2GYHmte3rmr/BwmR1sLshT4bpO+8HkDufXbff5NxEl1qQpfmhKnIJYI
+         3Ukaw4Mz4uqK95sK6Mx5stQhQr6jUxP/g2duYrtSeToW/p/5XaBIeHn+B36zaY9XSYSK
+         SPllXwfuUQZiIpV5MZN+lGiSvMvIW8h7qkuZIo2oj0xJCyJbqb/5hZFutQOdoAVRyK7w
+         mPYEC9ikwEEUnzu+cn7/cpkljdi6vMXsS/IQswya2wBwBb6oVSCjcA/1VNMDLxD/IwtA
+         h2Gia4mkWfvxwj79Jj4OAr1WtCfYO+neB8jUp8/hoR9KzusebxdzqaM5EKH6k24TacoM
+         TaaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683090626; x=1685682626;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/gUMcAb9p0mtdNtbUOeVy8zAV4NOHZstBj8s8GNLqlo=;
-        b=ltgAE4F5Me5/OH3tMye41UnNqUJJgySqw24jIT4hAA9pffFtoV2R89aB+PbIe2XTOl
-         kdgi/c9onm67vMjcA3GTkbeq4LaC5zTKrBi8NeyyHpza19+/Nbml2p5iiKQjOIvxxz9D
-         ZuX5bL+pjTnV/9TX62NnR9BVPKECafxMFcg88euVkRCSODDGKifKDwW5OGagg1cHJdzN
-         hiWvB26OWXRkoGGlhdnGfNhXPgY208UYzZ3LZRmjCGqO+GuyYj+CYuyvFgIIcau51RhT
-         B0BwqJfVAV80C7Vo3Y1q7xSBXdzvubBpguqKdn+7+vyviw/SpCUPfFRvwWdO45KgjCSg
-         3U3w==
-X-Gm-Message-State: AC+VfDzr8Tzd453vgWDOZTNetxKwSgKX4ZWs/DBg8sMrM6Ck0bxj0J0t
-        +PQni4D3K9OcEKkUxRA3rXMyt/WSMLf/sR1y1A==
-X-Google-Smtp-Source: ACHHUZ6HugMTcvUOsV69lbdyeCpg3dHGRyKco7GUIMPTz/WpvdDDFDxbuGmiiy/fYUIOfBPvyKlzjJqDW4B/nm4tK2c=
-X-Received: by 2002:ac2:5d6a:0:b0:4dc:4b92:dbc4 with SMTP id
- h10-20020ac25d6a000000b004dc4b92dbc4mr445424lft.14.1683090626163; Tue, 02 May
- 2023 22:10:26 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683094823; x=1685686823;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nHhH2clqN/moR+BtPwqo9RJEjJKqZSsX5yPmJcGuU/4=;
+        b=AopFifwupPxLHXItNKyILkrKhWlh5ADfUYwRF/lkt3CGugmBFsRpfjW52XExxXeF1T
+         sg+m6TgG0s30K1z+eJ6TErXzH53fhbchrED2N1GMTR8R/u2yriPLHex6d1N5zqh8e71/
+         Pmzo8ifo2R6kGw2pb7H85XV5Ny2EMqBqS8sEFJbJ4uIKjFEAi8cMTkZ5KBlDdTFzzOiQ
+         rK3MxYdSnitEMdwZRFmYnrkdWjqlUpGCteb7OyMZ6GGs1i6fqPGbvJxizOQ7jQHFs6rq
+         DmxIMYFQldd3+TJFeyTEgyBJg/pkpAZcpHA6Si7VVrT8mn7NT46rDnYp00WxSIvSP6xb
+         +WGA==
+X-Gm-Message-State: AC+VfDyYL5aJ1vRI/zhH0ua9Bc/ykfP+coSNgUwJMkMa6D4BRfHOSqFb
+        QMRMoDBMERpng7etURTFvP9hcsFUP0IIiSsikAU=
+X-Google-Smtp-Source: ACHHUZ4pi4LSU/sM9203YQp7lAK8IMxN6yS2IO19MPnb45VQmNVsDbq94Wl/y4WRXOzKEK0PX2WjGnk6MY1w9veUMHA=
+X-Received: by 2002:a05:6808:4249:b0:390:5e63:8146 with SMTP id
+ dp9-20020a056808424900b003905e638146mr9275448oib.42.1683094823053; Tue, 02
+ May 2023 23:20:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20230427094420epcms2p1043333a3e0c0cf58e66164e0b83b3b02@epcms2p1>
- <20230427094420epcms2p1043333a3e0c0cf58e66164e0b83b3b02@epcms2p1>
-In-Reply-To: <20230427094420epcms2p1043333a3e0c0cf58e66164e0b83b3b02@epcms2p1>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Wed, 3 May 2023 13:10:13 +0800
-Message-ID: <CAGaU9a9B7gAfJk8F_4_v3OAYuGA2MAAOEbq09aJrbhCZqo7CaA@mail.gmail.com>
-Subject: Re: [PATCH] scsi: ufs: core: Change the module parameter macro of use_mcq_mode
-To:     keosung.park@samsung.com
-Cc:     ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Received: by 2002:ac9:7516:0:b0:4bb:a83f:27ab with HTTP; Tue, 2 May 2023
+ 23:20:22 -0700 (PDT)
+Reply-To: jennifermbaya036@gmail.com
+From:   "Mrs.Jennifer Mbaya" <promiseokemini1@gmail.com>
+Date:   Wed, 3 May 2023 07:20:22 +0100
+Message-ID: <CA+Pj5bSgizWpYmDx9fiDRwMZEAy5b7Tvnqid=gvxRja66phjiQ@mail.gmail.com>
+Subject: =?UTF-8?B?UHLDrWplbWNh?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        HK_NAME_FM_MR_MRS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:2a listed in]
+        [list.dnswl.org]
+        * -0.5 BAYES_05 BODY: Bayes spam probability is 1 to 5%
+        *      [score: 0.0123]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [promiseokemini1[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [jennifermbaya036[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [promiseokemini1[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  1.5 HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Keoseong Park <keosung.park@samsung.com> =E6=96=BC 2023=E5=B9=B44=E6=9C=882=
-7=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=885:48=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> mcq_mode_ops uses only param_{set,get}_bool(). Therefore, convert
-> module_param_cb() to module_param() and remove the mcq_mode_ops.
->
+Pr=C3=ADjemca
+Dostali ste sa na ocenenie od Organiz=C3=A1cie Spojen=C3=BDch n=C3=A1rodov =
+pridru=C5=BEenej k
+medzin=C3=A1rodn=C3=BD menov=C3=BD fond, v ktorom bola va=C5=A1a e-mailov=
+=C3=A1 adresa a fond
+n=C3=A1m boli uvolnen=C3=A9 na v=C3=A1=C5=A1 prevod, preto po=C5=A1lite svo=
+je =C3=BAdaje na prevod.
 
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+Dostali sme pokyn, aby sme v=C5=A1etky neuhraden=C3=A9 transakcie previedli=
+ v
+r=C3=A1mci nasleduj=C3=BAceho
+48 hod=C3=ADn, alebo ste u=C5=BE dostali svoj fond, ak okam=C5=BEite nevyho=
+viete. Pozn=C3=A1mka:
+Potrebujeme va=C5=A1u naliehav=C3=BA odpoved, toto nie je jeden z t=C3=BDch
+internetov=C3=BDch podvodn=C3=ADkov
+tam vonku, je to =C3=BAlava od COVID-19.
+
+Thanks
+Jennifer Mbaya
