@@ -2,118 +2,162 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B346F5002
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 May 2023 08:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503296F5056
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 May 2023 08:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjECGU1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 May 2023 02:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
+        id S229706AbjECGuY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 May 2023 02:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjECGUZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 May 2023 02:20:25 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE022680
-        for <linux-scsi@vger.kernel.org>; Tue,  2 May 2023 23:20:24 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-192adab8f0eso75240fac.2
-        for <linux-scsi@vger.kernel.org>; Tue, 02 May 2023 23:20:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683094823; x=1685686823;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nHhH2clqN/moR+BtPwqo9RJEjJKqZSsX5yPmJcGuU/4=;
-        b=Qm23IJ3qwDu2GYHmte3rmr/BwmR1sLshT4bpO+8HkDufXbff5NxEl1qQpfmhKnIJYI
-         3Ukaw4Mz4uqK95sK6Mx5stQhQr6jUxP/g2duYrtSeToW/p/5XaBIeHn+B36zaY9XSYSK
-         SPllXwfuUQZiIpV5MZN+lGiSvMvIW8h7qkuZIo2oj0xJCyJbqb/5hZFutQOdoAVRyK7w
-         mPYEC9ikwEEUnzu+cn7/cpkljdi6vMXsS/IQswya2wBwBb6oVSCjcA/1VNMDLxD/IwtA
-         h2Gia4mkWfvxwj79Jj4OAr1WtCfYO+neB8jUp8/hoR9KzusebxdzqaM5EKH6k24TacoM
-         TaaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683094823; x=1685686823;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nHhH2clqN/moR+BtPwqo9RJEjJKqZSsX5yPmJcGuU/4=;
-        b=AopFifwupPxLHXItNKyILkrKhWlh5ADfUYwRF/lkt3CGugmBFsRpfjW52XExxXeF1T
-         sg+m6TgG0s30K1z+eJ6TErXzH53fhbchrED2N1GMTR8R/u2yriPLHex6d1N5zqh8e71/
-         Pmzo8ifo2R6kGw2pb7H85XV5Ny2EMqBqS8sEFJbJ4uIKjFEAi8cMTkZ5KBlDdTFzzOiQ
-         rK3MxYdSnitEMdwZRFmYnrkdWjqlUpGCteb7OyMZ6GGs1i6fqPGbvJxizOQ7jQHFs6rq
-         DmxIMYFQldd3+TJFeyTEgyBJg/pkpAZcpHA6Si7VVrT8mn7NT46rDnYp00WxSIvSP6xb
-         +WGA==
-X-Gm-Message-State: AC+VfDyYL5aJ1vRI/zhH0ua9Bc/ykfP+coSNgUwJMkMa6D4BRfHOSqFb
-        QMRMoDBMERpng7etURTFvP9hcsFUP0IIiSsikAU=
-X-Google-Smtp-Source: ACHHUZ4pi4LSU/sM9203YQp7lAK8IMxN6yS2IO19MPnb45VQmNVsDbq94Wl/y4WRXOzKEK0PX2WjGnk6MY1w9veUMHA=
-X-Received: by 2002:a05:6808:4249:b0:390:5e63:8146 with SMTP id
- dp9-20020a056808424900b003905e638146mr9275448oib.42.1683094823053; Tue, 02
- May 2023 23:20:23 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ac9:7516:0:b0:4bb:a83f:27ab with HTTP; Tue, 2 May 2023
- 23:20:22 -0700 (PDT)
-Reply-To: jennifermbaya036@gmail.com
-From:   "Mrs.Jennifer Mbaya" <promiseokemini1@gmail.com>
-Date:   Wed, 3 May 2023 07:20:22 +0100
-Message-ID: <CA+Pj5bSgizWpYmDx9fiDRwMZEAy5b7Tvnqid=gvxRja66phjiQ@mail.gmail.com>
-Subject: =?UTF-8?B?UHLDrWplbWNh?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        HK_NAME_FM_MR_MRS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2001:4860:4864:20:0:0:0:2a listed in]
-        [list.dnswl.org]
-        * -0.5 BAYES_05 BODY: Bayes spam probability is 1 to 5%
-        *      [score: 0.0123]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [promiseokemini1[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jennifermbaya036[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [promiseokemini1[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  1.5 HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+        with ESMTP id S229692AbjECGuW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 May 2023 02:50:22 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8A6272A
+        for <linux-scsi@vger.kernel.org>; Tue,  2 May 2023 23:50:15 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230503065003epoutp01d4dc28c1559555098fd27541d9b0432e~bj3GMJgmH2694626946epoutp01a
+        for <linux-scsi@vger.kernel.org>; Wed,  3 May 2023 06:50:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230503065003epoutp01d4dc28c1559555098fd27541d9b0432e~bj3GMJgmH2694626946epoutp01a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683096603;
+        bh=CM+8mMQP2iq+VCp4c684wdumP+wzl9e8MEJfoEWqXDI=;
+        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
+        b=o0NMDxX6PyNlAvMh6mMIKdIXzA52+uIgyfnTp1Q/esM406ft09ZJAh2HME98OM3Ip
+         cIiD+bK+ejavG8f6SeBtQUFKrGz9ElmVQt6CZuU39Tyr9U6At1ObljfA44LiQqflYP
+         XrQyKSLaVfCEPPdFfRqfL6R7AoVSyl/38ENLk/JU=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20230503065003epcas2p38a30ebb96e1684d4c852825b0d0d9e7a~bj3Fsuu4D0342503425epcas2p3r;
+        Wed,  3 May 2023 06:50:03 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.97]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4QB6yL2Cnzz4x9Q0; Wed,  3 May
+        2023 06:50:02 +0000 (GMT)
+X-AuditID: b6c32a45-6d1fd70000020cc1-8c-6452041a1bc4
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3F.78.03265.A1402546; Wed,  3 May 2023 15:50:02 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE:(2) [PATCH] scsi: ufs: core: Use readable 'return 0' in
+ ufshcd_hba_capabilities()
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Keoseong Park <keosung.park@samsung.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <28ea2183-d1ce-f42d-1765-9d07d7481eda@acm.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230503065001epcms2p55114ae8c2d6dc6bbae680af747177454@epcms2p5>
+Date:   Wed, 03 May 2023 15:50:01 +0900
+X-CMS-MailID: 20230503065001epcms2p55114ae8c2d6dc6bbae680af747177454
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFJsWRmVeSWpSXmKPExsWy7bCmma4US1CKwcrHvBYP5m1js3j58yqb
+        xcGHnSwW0z78ZLZ4eUjTYtGNbUwWx0++Y7S4vGsOm0X39R1sFgc+rGK0WH78H5PFwo65LBZL
+        t95kdOD1uHzF22PTqk42jwmLDjB6tJzcz+LxfX0Hm8fHp7dYPCbuqfPo27KK0ePzJjmP9gPd
+        TAFcUdk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUCn
+        KymUJeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIKzAv0ihNzi0vz0vXyUkusDA0MjEyB
+        ChOyM5afvcVW8Jy34uGsbsYGxincXYycHBICJhLXbl5n7GLk4hAS2MEoMXFmB0sXIwcHr4Cg
+        xN8dwiCmsEC8xLzXwSDlQgJKEl0LtzKD2MICBhLrpu8Bs9kE9CSm/L4DNkZE4AaLROPhDlaI
+        +bwSM9qfskDY0hLbl29lBLE5Bawl1v+6yQQR15D4sayXGcIWlbi5+i07jP3+2HxGCFtEovXe
+        WagaQYkHP3dDxSUlWs9sZYOw6yVa359iBzlCQmACo0TjsT9Qg/QlrnVsBDuCV8BXYvazo2AN
+        LAKqElvun4c6wkVizZSrYHFmAXmJ7W/nMIM8zyygKbF+lz6IKSGgLHHkFgtEBZ9Ex+G/7DAv
+        Nmz8jZW9Y94TqOlqEo8WbIEGiYzExTnnmCcwKs1CBPQsJHtnIexdwMi8ilEstaA4Nz212KjA
+        EB63yfm5mxjBiVjLdQfj5Lcf9A4xMnEwHmKU4GBWEuH9UOiXIsSbklhZlVqUH19UmpNafIjR
+        FOjjicxSosn5wFyQVxJvaGJpYGJmZmhuZGpgriTOK217MllIID2xJDU7NbUgtQimj4mDU6qB
+        yVp9joJn2/WIDo6da5q+V60O78/S++atJOli5P/jt8ZV2ZKcBxNFLcISdxvtN6ooX1XM4tO4
+        1da33/i+14yMn4cTT9YJ3JnAxB+V4yAbmORxdO4OAbE7Sfv3XO76sltZIGXnrZSfKR0Gs167
+        Cji7mfTyeeguXybRHCkjWWzTd+LVVakixj9pLMxbgsXXHOyOf9Cb++bbYr/k050vr8pyJR1P
+        sGfmKjS5FK3oxGz3R2lGx4775We9LC25pSae/cDCtsnPprT0tWIPq8D3af82LUldafiSUy3J
+        UOOmVdNGQa1F7pM+n3y78VCYRwHrjIhtqxXZv929ppWwrOdKiJimaeUD0Zybu7snv6970q3E
+        UpyRaKjFXFScCADt+7QjTQQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230502113116epcms2p7b83da0d683e29f667c38f5430b985388
+References: <28ea2183-d1ce-f42d-1765-9d07d7481eda@acm.org>
+        <20230502113116epcms2p7b83da0d683e29f667c38f5430b985388@epcms2p7>
+        <CGME20230502113116epcms2p7b83da0d683e29f667c38f5430b985388@epcms2p5>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Pr=C3=ADjemca
-Dostali ste sa na ocenenie od Organiz=C3=A1cie Spojen=C3=BDch n=C3=A1rodov =
-pridru=C5=BEenej k
-medzin=C3=A1rodn=C3=BD menov=C3=BD fond, v ktorom bola va=C5=A1a e-mailov=
-=C3=A1 adresa a fond
-n=C3=A1m boli uvolnen=C3=A9 na v=C3=A1=C5=A1 prevod, preto po=C5=A1lite svo=
-je =C3=BAdaje na prevod.
+>On 5/2/23 04:31, Keoseong Park wrote:
+>> The 'err' variable is the result of ufshcd_hba_init_crypto_capabilities()
+>> regardless of MCQ capabilities. Return 'err' immediately when the function
+>> error occurs. And if it is not an error, explicitly return 0.
+>> 
+>> Anyway, if ufshcd_hba_init_crypto_capabilities() returns error, MCQ
+>> capabilities is not used because it fails to initialize UFS driver.
+>> 
+>> Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+>> ---
+>>   drivers/ufs/core/ufshcd.c | 8 +++++---
+>>   1 file changed, 5 insertions(+), 3 deletions(-)
+>> 
+>> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+>> index 9434328ba323..44328eb4158d 100644
+>> --- a/drivers/ufs/core/ufshcd.c
+>> +++ b/drivers/ufs/core/ufshcd.c
+>> @@ -2343,18 +2343,20 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
+>>   
+>>   	/* Read crypto capabilities */
+>>   	err = ufshcd_hba_init_crypto_capabilities(hba);
+>> -	if (err)
+>> +	if (err) {
+>>   		dev_err(hba->dev, "crypto setup failed\n");
+>> +		return err;
+>> +	}
+>>   
+>>   	hba->mcq_sup = FIELD_GET(MASK_MCQ_SUPPORT, hba->capabilities);
+>>   	if (!hba->mcq_sup)
+>> -		return err;
+>> +		return 0;
+>>   
+>>   	hba->mcq_capabilities = ufshcd_readl(hba, REG_MCQCAP);
+>>   	hba->ext_iid_sup = FIELD_GET(MASK_EXT_IID_SUPPORT,
+>>   				     hba->mcq_capabilities);
+>>   
+>> -	return err;
+>> +	return 0;
+>>   }
+>
+>The most important change in this patch is that ufshcd_hba_capabilities()
+>returns earlier if ufshcd_hba_init_crypto_capabilities() fails. Please
+>change the patch title such that it reflects this change instead of the
+>other less important change.
 
-Dostali sme pokyn, aby sme v=C5=A1etky neuhraden=C3=A9 transakcie previedli=
- v
-r=C3=A1mci nasleduj=C3=BAceho
-48 hod=C3=ADn, alebo ste u=C5=BE dostali svoj fond, ak okam=C5=BEite nevyho=
-viete. Pozn=C3=A1mka:
-Potrebujeme va=C5=A1u naliehav=C3=BA odpoved, toto nie je jeden z t=C3=BDch
-internetov=C3=BDch podvodn=C3=ADkov
-tam vonku, je to =C3=BAlava od COVID-19.
+OK, I will change it.
 
-Thanks
-Jennifer Mbaya
+Best Regards,
+Keoseong
+
+>
+>Thanks,
+>
+>Bart.
