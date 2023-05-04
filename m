@@ -2,109 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A41B6F7655
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 May 2023 22:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD75C6F7755
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 May 2023 22:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232549AbjEDUGH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 4 May 2023 16:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
+        id S229622AbjEDUpr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 4 May 2023 16:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbjEDUFj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 May 2023 16:05:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70D918DDF;
-        Thu,  4 May 2023 12:53:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4928A63898;
-        Thu,  4 May 2023 19:52:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B259AC4339B;
-        Thu,  4 May 2023 19:52:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229948;
-        bh=3ZM+S5ZLa6liQWKlVaUeIUBP8rK1Yupb0pYlfSdbCSA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gyt4ibw8kNz9K169DuIsdqjSIsBekqNwYSB31oDCepxlXolcZzISdrweZThfq0swA
-         tNoL4llPBZbvAxsm2WrdPZlPARrN9bwt5mWnFsj3Zxw7b7cHAC1U+t4UHCg9GXidi5
-         BOSLu2wIdKkt9aLGteEIioPfRc5OFyjIKKFzOulny8rPV4X1WFpk21OrT+k0KEIuZL
-         XpHYZxRLpa2BD9g0CaIkuBYc9fzcnWUj02wI6Mk0WOU1m+ZZvoF+u0Ox03+7Yuik+H
-         ifeCITIxnXP41p1HrWH/1dicYub4k6jlTcHr7UiFH3RkrKB1w3BR5EWEuz6SxvksMg
-         QzE0KiffriXhQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zheng Wang <zyytlz.wz@163.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, sathya.prakash@broadcom.com,
-        sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 07/13] scsi: message: mptlan: Fix use after free bug in mptlan_remove() due to race condition
-Date:   Thu,  4 May 2023 15:51:59 -0400
-Message-Id: <20230504195207.3809116-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230504195207.3809116-1-sashal@kernel.org>
-References: <20230504195207.3809116-1-sashal@kernel.org>
+        with ESMTP id S229609AbjEDUpa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 May 2023 16:45:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C73156A1
+        for <linux-scsi@vger.kernel.org>; Thu,  4 May 2023 13:42:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683232905;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9W1Zsoz6z+YP+cxJPViag88+eoCge/nILvYxACPZGtQ=;
+        b=Dqh6I4kh3Q8cN/F8706uipH1J94iYlhnRLyPWq4pKP33uApcLRgKshCEtR06t8+kUoP86y
+        vZmIwUi36l85Wpc7wFklTHIfl3D7qwmnIYE0eUbJHzk8kmrZ6yty/MCXD3fzmoh7E1nV5e
+        Q302BoVrU35mHDGUjoc4k3EYi/uD2hg=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-78-2x0AigkQMr-UQHSy4Sjf9w-1; Thu, 04 May 2023 16:41:44 -0400
+X-MC-Unique: 2x0AigkQMr-UQHSy4Sjf9w-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3ef6decfabeso5758321cf.0
+        for <linux-scsi@vger.kernel.org>; Thu, 04 May 2023 13:41:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683232903; x=1685824903;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9W1Zsoz6z+YP+cxJPViag88+eoCge/nILvYxACPZGtQ=;
+        b=gUH5MQJsKuUAyvWKCXjJefFdxjN+y/UXm2zr+aV34+HaDPzqwwMkcQpF0v527XCoch
+         d9oLwpPhXWVmbxmY4ZRbJVxsgdkePENSk3PKSnOw5Acb/DiJcM810PXpSEbEEYLdwneR
+         rCZ+E0CAO6PAv5wbQZ3emOMJrZG1pkTz/4SjGkAmxH1CWGxdCQmirM5UX3Q9TP52Dn5v
+         xl0PrPkgxjvUnSfTpGuOTFCXOF21XyH8o/PeEUYj4m7QvXvBF+Uc9W5f0J4iTZpi/+0l
+         cot4yBJi8fBxiwW35XI6nsQGYuULcSWTI1BvLxV12JPDF2miJRMFv08KbpAiHT8EAguE
+         rDZg==
+X-Gm-Message-State: AC+VfDwwpjbHJp1LhVHepj5uoda7kKmS23bEtChg2Oi7cTvK2E062gkq
+        RP9v/irsk7ibshdiuDogW3ly9LEbNwQiUv5XwRx1h8HsIDryNrzoqqkPt2WevxLxOUzz5XiT2gH
+        tVAHpb7a7l8yTxUG4FhYQFw==
+X-Received: by 2002:a05:622a:1482:b0:3ef:3fd8:9209 with SMTP id t2-20020a05622a148200b003ef3fd89209mr7860892qtx.48.1683232903716;
+        Thu, 04 May 2023 13:41:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5sqBUtFrSM46EgamHSslz3Cly3hy0Rw75yEGIIJQVlsyTywTwm9SVP9oXHM1gIGTBv65ZIbA==
+X-Received: by 2002:a05:622a:1482:b0:3ef:3fd8:9209 with SMTP id t2-20020a05622a148200b003ef3fd89209mr7860870qtx.48.1683232903430;
+        Thu, 04 May 2023 13:41:43 -0700 (PDT)
+Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
+        by smtp.gmail.com with ESMTPSA id fd9-20020a05622a4d0900b003d65e257f10sm9150872qtb.79.2023.05.04.13.41.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 13:41:42 -0700 (PDT)
+Date:   Thu, 4 May 2023 16:41:40 -0400
+From:   Adrien Thierry <athierry@redhat.com>
+To:     Stanley Chu <chu.stanley@gmail.com>, peter.wang@mediatek.com,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] Revert "scsi: ufs: core: Initialize devfreq
+ synchronously"
+Message-ID: <ZFQYhHwlc+UnbKWc@fedora>
+References: <20230329205426.46393-1-athierry@redhat.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230329205426.46393-1-athierry@redhat.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Zheng Wang <zyytlz.wz@163.com>
+Hi,
 
-[ Upstream commit f486893288f3e9b171b836f43853a6426515d800 ]
+On Wed, Mar 29, 2023 at 04:54:25PM -0400, Adrien Thierry wrote:
+> This reverts commit 7dafc3e007918384c8693ff8d70381b5c1e9c247.
+> 
+> This patch introduced a regression [1] where hba->pwr_info is used
+> before being initialized, which could create issues in
+> ufshcd_scale_gear(). Revert it until a better solution is found.
+> 
+> [1] https://lore.kernel.org/all/CAGaU9a_PMZhqv+YJ0r3w-hJMsR922oxW6Kg59vw+oen-NZ6Otw@mail.gmail.com
+> 
+> Signed-off-by: Adrien Thierry <athierry@redhat.com>
+> ---
+>  drivers/ufs/core/ufshcd.c | 47 +++++++++++++--------------------------
+>  include/ufs/ufshcd.h      |  1 -
+>  2 files changed, 16 insertions(+), 32 deletions(-)
+>
 
-mptlan_probe() calls mpt_register_lan_device() which initializes the
-&priv->post_buckets_task workqueue. A call to
-mpt_lan_wake_post_buckets_task() will subsequently start the work.
+I've been working on a fixed version, and realized the original issue [1]
+has been fixed by [2]. Thanks to the softdep, whenever the ufs core and
+the simple ondemand governor are built as modules, the governor module
+will be loaded before the ufs core module. Thus, the ufs core doesn't end
+up calling request_module because the governor is already loaded.
 
-During driver unload in mptlan_remove() the following race may occur:
+So, it looks like there's now no need to submit a fixed version.
 
-CPU0                  CPU1
+[1] https://lore.kernel.org/all/20230217194423.42553-1-athierry@redhat.com/
+[2] https://lore.kernel.org/all/20230220140740.14379-1-athierry@redhat.com/
 
-                    |mpt_lan_post_receive_buckets_work()
-mptlan_remove()     |
-  free_netdev()     |
-    kfree(dev);     |
-                    |
-                    | dev->mtu
-                    |   //use
+Best,
 
-Fix this by finishing the work prior to cleaning up in mptlan_remove().
-
-[mkp: we really should remove mptlan instead of attempting to fix it]
-
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Link: https://lore.kernel.org/r/20230318081635.796479-1-zyytlz.wz@163.com
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/message/fusion/mptlan.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/message/fusion/mptlan.c b/drivers/message/fusion/mptlan.c
-index 55dd71bbdc2aa..74d0ae00b0827 100644
---- a/drivers/message/fusion/mptlan.c
-+++ b/drivers/message/fusion/mptlan.c
-@@ -1429,7 +1429,9 @@ mptlan_remove(struct pci_dev *pdev)
- {
- 	MPT_ADAPTER 		*ioc = pci_get_drvdata(pdev);
- 	struct net_device	*dev = ioc->netdev;
-+	struct mpt_lan_priv *priv = netdev_priv(dev);
- 
-+	cancel_delayed_work_sync(&priv->post_buckets_task);
- 	if(dev != NULL) {
- 		unregister_netdev(dev);
- 		free_netdev(dev);
--- 
-2.39.2
+Adrien
 
