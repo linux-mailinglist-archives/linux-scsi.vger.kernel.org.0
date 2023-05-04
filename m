@@ -2,48 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89666F752B
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 May 2023 21:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8766F75CD
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 May 2023 22:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjEDT4h (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 4 May 2023 15:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
+        id S232300AbjEDUCD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 4 May 2023 16:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbjEDT4D (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 May 2023 15:56:03 -0400
+        with ESMTP id S232297AbjEDUBN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 May 2023 16:01:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED4411606;
-        Thu,  4 May 2023 12:49:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C570A1890B;
+        Thu,  4 May 2023 12:51:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 300806380E;
-        Thu,  4 May 2023 19:49:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F620C4339B;
-        Thu,  4 May 2023 19:49:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38CB863846;
+        Thu,  4 May 2023 19:49:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68A9C433EF;
+        Thu,  4 May 2023 19:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229742;
-        bh=/TGR4uKvgJibnKmgX0SbV59BKNwneOqpzqjWdmtOygY=;
+        s=k20201202; t=1683229789;
+        bh=izABLxX+9a8wiRgDI3zSiWIjNG9o+UA2j3BELE3awTQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YzyW9+pMwHn8u04EvEO/P6Z8oxkKwkmGngUx15lJy1+YeZH1Kk+nnWiFvFUrR3+1q
-         c6pB+9doUNqCtLGFuTpE4XVdvA9y2Rpd7STjegFo0JzcF8mGofzw6BC/CJycOdLfip
-         e9e0J9pILkYpHf3/hCtze5XFluZJohRlFQeYeye626MDEUc2w4I7Aq8PT8psorrO6k
-         El/j9YHMO91rOdliQUHkAsEtAOqKJUsxb56hziyAUJyqhEkuz5wbCL81uELiVx6F/g
-         x1PTel2vYFaHs8NLbQ2YLWgY4cIUZczCgeyTZeazV+f50Oof84lYAfmcXZWw99x4YO
-         zhxtCIu+xUtLg==
+        b=ZmuJZnQRgaLkdSF+Z5kfWIqDK/kqXmJXpHEBXm4Pfz7AJHZkHJ00W5XxP6kO4mrMb
+         53sm1CVjYcNq/K4dkpLYpde7BMzKNiV2B2hYHSTCq1LkJmsGiYytL2BiQN4/CDJiYc
+         niQqICbHxsFms3nx0hhdrxXAt8N4kgiPIDZ5pTORKo2kfFttTt39AO08ZJIL+wMQyU
+         yBkLWsZn5mmhnOEtfWbs6oSYcSrtJbtMDMh4u+DctkRgxlovoOn5iDCnc1p790eoPg
+         j1lqynNbOP/kF7LH3PHL+Rz2GXstIGWKOrX8A4bDrvso6hPztmv33aVpR4Pz3g11em
+         vpVTT6q4ki4Uw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+Cc:     Justin Tee <justin.tee@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
-        avri.altman@wdc.com, bvanassche@acm.org, beanhuo@micron.com,
+        Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 14/30] scsi: ufs: ufs-pci: Add support for Intel Lunar Lake
-Date:   Thu,  4 May 2023 15:48:07 -0400
-Message-Id: <20230504194824.3808028-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 05/24] scsi: lpfc: Prevent lpfc_debugfs_lockstat_write() buffer overflow
+Date:   Thu,  4 May 2023 15:49:18 -0400
+Message-Id: <20230504194937.3808414-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230504194824.3808028-1-sashal@kernel.org>
-References: <20230504194824.3808028-1-sashal@kernel.org>
+In-Reply-To: <20230504194937.3808414-1-sashal@kernel.org>
+References: <20230504194937.3808414-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,31 +58,53 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Justin Tee <justin.tee@broadcom.com>
 
-[ Upstream commit 0a07d3c7a1d205b47d9f3608ff4e9d1065d63b6d ]
+[ Upstream commit c6087b82a9146826564a55c5ca0164cac40348f5 ]
 
-Add PCI ID to support Intel Lunar Lake, same as MTL.
+A static code analysis tool flagged the possibility of buffer overflow when
+using copy_from_user() for a debugfs entry.
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Link: https://lore.kernel.org/r/20230328105832.3495-1-adrian.hunter@intel.com
+Currently, it is possible that copy_from_user() copies more bytes than what
+would fit in the mybuf char array.  Add a min() restriction check between
+sizeof(mybuf) - 1 and nbytes passed from the userspace buffer to protect
+against buffer overflow.
+
+Link: https://lore.kernel.org/r/20230301231626.9621-2-justintee8345@gmail.com
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufshcd-pci.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/scsi/lpfc/lpfc_debugfs.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufshcd-pci.c b/drivers/scsi/ufs/ufshcd-pci.c
-index e892b9feffb11..0920530a72d28 100644
---- a/drivers/scsi/ufs/ufshcd-pci.c
-+++ b/drivers/scsi/ufs/ufshcd-pci.c
-@@ -596,6 +596,7 @@ static const struct pci_device_id ufshcd_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, 0x51FF), (kernel_ulong_t)&ufs_intel_adl_hba_vops },
- 	{ PCI_VDEVICE(INTEL, 0x54FF), (kernel_ulong_t)&ufs_intel_adl_hba_vops },
- 	{ PCI_VDEVICE(INTEL, 0x7E47), (kernel_ulong_t)&ufs_intel_mtl_hba_vops },
-+	{ PCI_VDEVICE(INTEL, 0xA847), (kernel_ulong_t)&ufs_intel_mtl_hba_vops },
- 	{ }	/* terminate list */
- };
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index fbc76d69ea0b4..2b77cbbcdccb6 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -2159,10 +2159,13 @@ lpfc_debugfs_lockstat_write(struct file *file, const char __user *buf,
+ 	char mybuf[64];
+ 	char *pbuf;
+ 	int i;
++	size_t bsize;
+ 
+ 	memset(mybuf, 0, sizeof(mybuf));
+ 
+-	if (copy_from_user(mybuf, buf, nbytes))
++	bsize = min(nbytes, (sizeof(mybuf) - 1));
++
++	if (copy_from_user(mybuf, buf, bsize))
+ 		return -EFAULT;
+ 	pbuf = &mybuf[0];
+ 
+@@ -2183,7 +2186,7 @@ lpfc_debugfs_lockstat_write(struct file *file, const char __user *buf,
+ 			qp->lock_conflict.wq_access = 0;
+ 		}
+ 	}
+-	return nbytes;
++	return bsize;
+ }
+ #endif
  
 -- 
 2.39.2
