@@ -2,45 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493946F7448
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 May 2023 21:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5216F7414
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 May 2023 21:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjEDTu2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 4 May 2023 15:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S230484AbjEDTsB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 4 May 2023 15:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbjEDTtW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 May 2023 15:49:22 -0400
+        with ESMTP id S230002AbjEDTrI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 May 2023 15:47:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB8BAD0B;
-        Thu,  4 May 2023 12:45:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA88E17DEA;
+        Thu,  4 May 2023 12:45:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D670C6376C;
-        Thu,  4 May 2023 19:44:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65919C433EF;
-        Thu,  4 May 2023 19:44:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5132763774;
+        Thu,  4 May 2023 19:45:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63897C4339C;
+        Thu,  4 May 2023 19:45:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229482;
-        bh=tKW8dUpdhSHpT2lZhf4Flzj//Bbc/0xy7Svv4E1su60=;
+        s=k20201202; t=1683229503;
+        bh=hUoPHgkgFeSmgpT+GyBiuCiIZCGJ4a49BAhUVhMi/lQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gjy/vR8SGSH+GUO2ZXfQRKFvQgTyoErMBfcCkBABx+uquRJeSlT0r/U3ZnINJtOh3
-         7FZpTLig7l9MGRsbqgOItDqFgUaIqd9q7cfsWHzW5fFQdvsa9KBqwktd/1qojiynDR
-         6iF2iDmMYcUbEe73m8aVDcsu285fczKn4gzDbpnDChgRIh+pnpqv5A1Bp3mfFwbqOz
-         tjQ3EmpfDvuJY/SwgoWt2G/vQ09h90a3ZbrPBYlA1KEziy2zYwmVIo4xsvDhm0jrC9
-         dvqiOxRMTpbSK77ueJe2dRdcftQ1/Aj8/iBgtQcZz+jJMtsqLQGL9mutfbqPFdvHM1
-         onbMYwu7VWS+A==
+        b=YFytZjnvKQkPGTSsh7R+4zSe2NDYlSkSJ+9VflNUB8MSDJcitoxujDjDOjDogrQRF
+         w/hSnBBvr/qd9/YdnA0l94p9+Eg/bUGsbVVnTwBAh/oYp90K5nEu+RbSjv/FPAQR/y
+         N/1CuO+qD84QH7rEBMJm0Zd+NNc4QJlW+E+moGoPTpA9ErNVCLK09AWD2ne9w2FjGl
+         JFCl1h2FUkYC3jfaoGiJKQryAogw26TKVIUM9j94UHpVkgzTcTzgyBzGxItYnhSeJs
+         tBHnN/lptIAbRyVBXRoxsbshgIKJwJcTSOncZ58g9qrgm9oQDdLPBNSq8zWC2UJOVL
+         8XP4Cml1nFBkA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Justin Tee <justin.tee@broadcom.com>,
+Cc:     Dmitry Bogdanov <d.bogdanov@yadro.com>, Forza <forza@tnonline.net>,
+        Mike Christie <michael.christie@oracle.com>,
+        Maurizio Lombardi <mlombard@redhat.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 09/53] scsi: lpfc: Correct used_rpi count when devloss tmo fires with no recovery
-Date:   Thu,  4 May 2023 15:43:29 -0400
-Message-Id: <20230504194413.3806354-9-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, mgurtovoy@nvidia.com,
+        justinstitt@google.com, mingzhe.zou@easystack.cn,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 16/53] scsi: target: iscsit: Free cmds before session free
+Date:   Thu,  4 May 2023 15:43:36 -0400
+Message-Id: <20230504194413.3806354-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194413.3806354-1-sashal@kernel.org>
 References: <20230504194413.3806354-1-sashal@kernel.org>
@@ -58,68 +60,62 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Justin Tee <justin.tee@broadcom.com>
+From: Dmitry Bogdanov <d.bogdanov@yadro.com>
 
-[ Upstream commit db651ec22524eb8f9c854fbb4d9acd5d7e5be9e4 ]
+[ Upstream commit d8990b5a4d065f38f35d69bcd627ec5a7f8330ca ]
 
-A fabric controller can sometimes send an RDP request right before a link
-down event.  Because of this outstanding RDP request, the driver does not
-remove the last reference count on its ndlp causing a potential leak of RPI
-resources when devloss tmo fires.
+Commands from recovery entries are freed after session has been closed.
+That leads to use-after-free at command free or NPE with such call trace:
 
-In lpfc_cmpl_els_rsp(), modify the NPIV clause to always allow the
-lpfc_drop_node() routine to execute when not registered with SCSI
-transport.
+Time2Retain timer expired for SID: 1, cleaning up iSCSI session.
+BUG: kernel NULL pointer dereference, address: 0000000000000140
+RIP: 0010:sbitmap_queue_clear+0x3a/0xa0
+Call Trace:
+ target_release_cmd_kref+0xd1/0x1f0 [target_core_mod]
+ transport_generic_free_cmd+0xd1/0x180 [target_core_mod]
+ iscsit_free_cmd+0x53/0xd0 [iscsi_target_mod]
+ iscsit_free_connection_recovery_entries+0x29d/0x320 [iscsi_target_mod]
+ iscsit_close_session+0x13a/0x140 [iscsi_target_mod]
+ iscsit_check_post_dataout+0x440/0x440 [iscsi_target_mod]
+ call_timer_fn+0x24/0x140
 
-This relaxes the contraint that an NPIV ndlp must be in a specific state in
-order to call lpfc_drop node.  Logic is revised such that the
-lpfc_drop_node() routine is always called to ensure the last ndlp decrement
-occurs.
+Move cleanup of recovery enrties to before session freeing.
 
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Link: https://lore.kernel.org/r/20230301231626.9621-7-justintee8345@gmail.com
+Reported-by: Forza <forza@tnonline.net>
+Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Link: https://lore.kernel.org/r/20230319015620.96006-7-michael.christie@oracle.com
+Reviewed-by: Maurizio Lombardi <mlombard@redhat.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+ drivers/target/iscsi/iscsi_target.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 919741bbe267b..05719bd97f4d4 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -5428,18 +5428,20 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 	 * these conditions and release the RPI.
- 	 */
- 	if (phba->sli_rev == LPFC_SLI_REV4 &&
--	    (vport && vport->port_type == LPFC_NPIV_PORT) &&
--	    !(ndlp->fc4_xpt_flags & SCSI_XPT_REGD) &&
--	    ndlp->nlp_flag & NLP_RELEASE_RPI) {
--		if (ndlp->nlp_state !=  NLP_STE_PLOGI_ISSUE &&
--		    ndlp->nlp_state != NLP_STE_REG_LOGIN_ISSUE) {
--			lpfc_sli4_free_rpi(phba, ndlp->nlp_rpi);
--			spin_lock_irq(&ndlp->lock);
--			ndlp->nlp_rpi = LPFC_RPI_ALLOC_ERROR;
--			ndlp->nlp_flag &= ~NLP_RELEASE_RPI;
--			spin_unlock_irq(&ndlp->lock);
--			lpfc_drop_node(vport, ndlp);
-+	    vport && vport->port_type == LPFC_NPIV_PORT &&
-+	    !(ndlp->fc4_xpt_flags & SCSI_XPT_REGD)) {
-+		if (ndlp->nlp_flag & NLP_RELEASE_RPI) {
-+			if (ndlp->nlp_state != NLP_STE_PLOGI_ISSUE &&
-+			    ndlp->nlp_state != NLP_STE_REG_LOGIN_ISSUE) {
-+				lpfc_sli4_free_rpi(phba, ndlp->nlp_rpi);
-+				spin_lock_irq(&ndlp->lock);
-+				ndlp->nlp_rpi = LPFC_RPI_ALLOC_ERROR;
-+				ndlp->nlp_flag &= ~NLP_RELEASE_RPI;
-+				spin_unlock_irq(&ndlp->lock);
-+			}
- 		}
-+
-+		lpfc_drop_node(vport, ndlp);
- 	}
+diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
+index baf4da7bb3b4e..412efb576f785 100644
+--- a/drivers/target/iscsi/iscsi_target.c
++++ b/drivers/target/iscsi/iscsi_target.c
+@@ -4517,6 +4517,9 @@ int iscsit_close_session(struct iscsit_session *sess, bool can_sleep)
+ 	iscsit_stop_time2retain_timer(sess);
+ 	spin_unlock_bh(&se_tpg->session_lock);
  
- 	/* Release the originating I/O reference. */
++	if (sess->sess_ops->ErrorRecoveryLevel == 2)
++		iscsit_free_connection_recovery_entries(sess);
++
+ 	/*
+ 	 * transport_deregister_session_configfs() will clear the
+ 	 * struct se_node_acl->nacl_sess pointer now as a iscsi_np process context
+@@ -4540,9 +4543,6 @@ int iscsit_close_session(struct iscsit_session *sess, bool can_sleep)
+ 
+ 	transport_deregister_session(sess->se_sess);
+ 
+-	if (sess->sess_ops->ErrorRecoveryLevel == 2)
+-		iscsit_free_connection_recovery_entries(sess);
+-
+ 	iscsit_free_all_ooo_cmdsns(sess);
+ 
+ 	spin_lock_bh(&se_tpg->session_lock);
 -- 
 2.39.2
 
