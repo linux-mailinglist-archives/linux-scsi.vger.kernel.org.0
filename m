@@ -2,47 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D5D6F736F
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 May 2023 21:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697D86F737B
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 May 2023 21:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjEDTnQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 4 May 2023 15:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
+        id S230100AbjEDTnj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 4 May 2023 15:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjEDTnF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 May 2023 15:43:05 -0400
+        with ESMTP id S229707AbjEDTnS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 May 2023 15:43:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E20C7D99;
-        Thu,  4 May 2023 12:42:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA03983C9;
+        Thu,  4 May 2023 12:42:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D0196370D;
-        Thu,  4 May 2023 19:42:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45FE2C43443;
-        Thu,  4 May 2023 19:42:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A0FC62EB8;
+        Thu,  4 May 2023 19:42:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B40E1C433D2;
+        Thu,  4 May 2023 19:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683229361;
-        bh=hUoPHgkgFeSmgpT+GyBiuCiIZCGJ4a49BAhUVhMi/lQ=;
+        s=k20201202; t=1683229365;
+        bh=jKJQM7Amchlo/TIBhIhoRm4akaWOf6RtKsRisaHbqM8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CWrKOQLPqp0zmwDnQ28ZWEQONIzn2PqRkTfx7gLZAwodYBy0MJ3llb9vSd4MJHp32
-         jtc2ZmNrX34ZyO1ZshX72biRc3e1Wmr4q/r043cl0GDqghDBXj91z0h0J0DvsHIMef
-         DuF3uGBHIc0NN09DMA8USeqI7C2H3gYPptf/FOYxQ0v+tVXbOWd3R/5Pp4D5mnqyD9
-         UysCNXOqvviRvf+Ow3EnNh12JvSdJch38S3mnu1ZtcrDez84bMapSzHPVRk0JtrYQA
-         K80fv/gntqtMDr16/yffBEPGFQD/HvascheqqEWYcNp2JCpnS2TmXaBOboNlDBwlch
-         ois20cyNtvVQg==
+        b=VRl4QQIPolaCjJH2s2kXK2ImQDR709+tnAhUVXaVSuNcNaCx1wvr1Jr1dQb2RL/Hy
+         TXJ5bMguVLCItNXWqjPU8ILXqRdt1CiSMA1EemlxCECVfnxiAdyOMqV+hwM1xr1HUF
+         t029i70kqoCG2/xqY1M5hPmG/Lewo7c02mT/4YqsFIQpaUQOOo1ILs+N/ytKa8iPRm
+         H+4ujsyv0EkIjCWVqlf1CTAzC6xZJpJNqjbTTxvQXx745lziKSOAtvcupKfo6oMYsC
+         liLf4K1JPJnlar4eVrmGYC9MFpxSBynwndjLhlVHNep1u4QGoQUEbWUTU1w/f0hKNv
+         ubux6h7KquiKg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Bogdanov <d.bogdanov@yadro.com>, Forza <forza@tnonline.net>,
-        Mike Christie <michael.christie@oracle.com>,
-        Maurizio Lombardi <mlombard@redhat.com>,
+Cc:     Zheng Wang <zyytlz.wz@163.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, mgurtovoy@nvidia.com,
-        mingzhe.zou@easystack.cn, justinstitt@google.com,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 19/59] scsi: target: iscsit: Free cmds before session free
-Date:   Thu,  4 May 2023 15:41:02 -0400
-Message-Id: <20230504194142.3805425-19-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, sathya.prakash@broadcom.com,
+        sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 21/59] scsi: message: mptlan: Fix use after free bug in mptlan_remove() due to race condition
+Date:   Thu,  4 May 2023 15:41:04 -0400
+Message-Id: <20230504194142.3805425-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194142.3805425-1-sashal@kernel.org>
 References: <20230504194142.3805425-1-sashal@kernel.org>
@@ -60,62 +59,52 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Dmitry Bogdanov <d.bogdanov@yadro.com>
+From: Zheng Wang <zyytlz.wz@163.com>
 
-[ Upstream commit d8990b5a4d065f38f35d69bcd627ec5a7f8330ca ]
+[ Upstream commit f486893288f3e9b171b836f43853a6426515d800 ]
 
-Commands from recovery entries are freed after session has been closed.
-That leads to use-after-free at command free or NPE with such call trace:
+mptlan_probe() calls mpt_register_lan_device() which initializes the
+&priv->post_buckets_task workqueue. A call to
+mpt_lan_wake_post_buckets_task() will subsequently start the work.
 
-Time2Retain timer expired for SID: 1, cleaning up iSCSI session.
-BUG: kernel NULL pointer dereference, address: 0000000000000140
-RIP: 0010:sbitmap_queue_clear+0x3a/0xa0
-Call Trace:
- target_release_cmd_kref+0xd1/0x1f0 [target_core_mod]
- transport_generic_free_cmd+0xd1/0x180 [target_core_mod]
- iscsit_free_cmd+0x53/0xd0 [iscsi_target_mod]
- iscsit_free_connection_recovery_entries+0x29d/0x320 [iscsi_target_mod]
- iscsit_close_session+0x13a/0x140 [iscsi_target_mod]
- iscsit_check_post_dataout+0x440/0x440 [iscsi_target_mod]
- call_timer_fn+0x24/0x140
+During driver unload in mptlan_remove() the following race may occur:
 
-Move cleanup of recovery enrties to before session freeing.
+CPU0                  CPU1
 
-Reported-by: Forza <forza@tnonline.net>
-Signed-off-by: Dmitry Bogdanov <d.bogdanov@yadro.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Link: https://lore.kernel.org/r/20230319015620.96006-7-michael.christie@oracle.com
-Reviewed-by: Maurizio Lombardi <mlombard@redhat.com>
+                    |mpt_lan_post_receive_buckets_work()
+mptlan_remove()     |
+  free_netdev()     |
+    kfree(dev);     |
+                    |
+                    | dev->mtu
+                    |   //use
+
+Fix this by finishing the work prior to cleaning up in mptlan_remove().
+
+[mkp: we really should remove mptlan instead of attempting to fix it]
+
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Link: https://lore.kernel.org/r/20230318081635.796479-1-zyytlz.wz@163.com
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/target/iscsi/iscsi_target.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/message/fusion/mptlan.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
-index baf4da7bb3b4e..412efb576f785 100644
---- a/drivers/target/iscsi/iscsi_target.c
-+++ b/drivers/target/iscsi/iscsi_target.c
-@@ -4517,6 +4517,9 @@ int iscsit_close_session(struct iscsit_session *sess, bool can_sleep)
- 	iscsit_stop_time2retain_timer(sess);
- 	spin_unlock_bh(&se_tpg->session_lock);
+diff --git a/drivers/message/fusion/mptlan.c b/drivers/message/fusion/mptlan.c
+index 142eb5d5d9df6..de2e7bcf47847 100644
+--- a/drivers/message/fusion/mptlan.c
++++ b/drivers/message/fusion/mptlan.c
+@@ -1433,7 +1433,9 @@ mptlan_remove(struct pci_dev *pdev)
+ {
+ 	MPT_ADAPTER 		*ioc = pci_get_drvdata(pdev);
+ 	struct net_device	*dev = ioc->netdev;
++	struct mpt_lan_priv *priv = netdev_priv(dev);
  
-+	if (sess->sess_ops->ErrorRecoveryLevel == 2)
-+		iscsit_free_connection_recovery_entries(sess);
-+
- 	/*
- 	 * transport_deregister_session_configfs() will clear the
- 	 * struct se_node_acl->nacl_sess pointer now as a iscsi_np process context
-@@ -4540,9 +4543,6 @@ int iscsit_close_session(struct iscsit_session *sess, bool can_sleep)
- 
- 	transport_deregister_session(sess->se_sess);
- 
--	if (sess->sess_ops->ErrorRecoveryLevel == 2)
--		iscsit_free_connection_recovery_entries(sess);
--
- 	iscsit_free_all_ooo_cmdsns(sess);
- 
- 	spin_lock_bh(&se_tpg->session_lock);
++	cancel_delayed_work_sync(&priv->post_buckets_task);
+ 	if(dev != NULL) {
+ 		unregister_netdev(dev);
+ 		free_netdev(dev);
 -- 
 2.39.2
 
