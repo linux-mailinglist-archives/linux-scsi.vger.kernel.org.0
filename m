@@ -2,109 +2,145 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3196F7F03
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 May 2023 10:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7E86F7F8B
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 May 2023 11:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbjEEI2s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 5 May 2023 04:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S231569AbjEEJGf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 5 May 2023 05:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjEEI2X (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 May 2023 04:28:23 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EB01A122;
-        Fri,  5 May 2023 01:27:18 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64115eef620so17933997b3a.1;
-        Fri, 05 May 2023 01:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683275237; x=1685867237;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=el/Rn7qzup/497ytaREh2DImIqrYtRSHCU5jaoJYhms=;
-        b=Iyf4GbJlx14NUP+57ckxFwh5TzvX8eMEKwjajIAGWX4UjGhM/SAV61BJ6vUaIL/YjV
-         lKg8sk/u6zp4qHfTiyA2zwSnBu6sCg0FFsGuwFBregRmVW/ba8p0MUEHtVmZnyiE0F/G
-         q74XuzMO2Ek7aw571eR3OZpb9fiRP2Hc5EeEUoGmwgU2125XrVHc4NKanACv5myZhNOg
-         ygThbAaBC08/sYEXJ1aafJhqEkdBsFSSHuen7bVmtgfjWxSC4GRg4BonT2tKYjMAtS2W
-         yz4fk4KbX5r0R//jEFRUcnVYJSC9e3NZhsgLiV9F2CZMGBbw5Mm7V2EvN+R6WnoEDtmG
-         UojA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683275237; x=1685867237;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=el/Rn7qzup/497ytaREh2DImIqrYtRSHCU5jaoJYhms=;
-        b=dV8uY3xk24lfH7XU7YnQ5/ZFGpXzNxEVCwiuFq4i4rUydC2nUYlKZx774kQ2wPnF1t
-         gCf+wenfsDZDLySUygxcFPCqnfGwyaEBLbYIK6DQrL6DXhug39yuVoMul25qqdUQPinV
-         R2Kb2xEcDcPyN9IO3VPCzhSMJ/zmlw5I+NesJCzByrfplFt4haGThPDAD3Kv6yvOQJJZ
-         bD+BTzC82EMgYpx4S6GY4ycWV8mrrh6d2shYikYm7zxehNOoaqHd3eglaA/SXMy0ud0P
-         IkF4VSl9HvXxYTxugvEpoad5Mq8bCJx5BbXwBupx20SxV++ggTYqZaS6BUkLd8SfR1t0
-         +VkA==
-X-Gm-Message-State: AC+VfDyZNXC6gKLdfBvcCtP4yJCFKJ2cRLmV/lMx/JYmxAwzwch3WSqM
-        j0BevlcDx2ezg86SrLyNxdk=
-X-Google-Smtp-Source: ACHHUZ6U1yKFWRfgcLq5hhCullhfXhzyXSkcylWLS/d1geITMe7fLICBHN3EiylDtt7kpx3RmhVryw==
-X-Received: by 2002:a05:6a00:2d0b:b0:5a8:9858:750a with SMTP id fa11-20020a056a002d0b00b005a89858750amr1140902pfb.13.1683275237537;
-        Fri, 05 May 2023 01:27:17 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-14.three.co.id. [116.206.28.14])
-        by smtp.gmail.com with ESMTPSA id r15-20020a63440f000000b0051b8172fa68sm1068333pga.38.2023.05.05.01.27.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 May 2023 01:27:16 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 5473F106280; Fri,  5 May 2023 15:27:12 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linux SCSI <linux-scsi@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>
-Cc:     Oliver Neukum <oliver@neukum.org>, Ali Akcaagac <aliakc@web.de>,
-        Jamie Lenehan <lenehan@twibble.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 3/3] Documentation: scsi: dc395x: Remove reference to 2.4 driver
-Date:   Fri,  5 May 2023 15:27:04 +0700
-Message-Id: <20230505082704.16228-4-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230505082704.16228-1-bagasdotme@gmail.com>
-References: <20230505082704.16228-1-bagasdotme@gmail.com>
+        with ESMTP id S231578AbjEEJG2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 May 2023 05:06:28 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0964D19432;
+        Fri,  5 May 2023 02:06:19 -0700 (PDT)
+Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QCPnx2bPjz18L2Y;
+        Fri,  5 May 2023 17:02:13 +0800 (CST)
+Received: from [10.67.101.126] (10.67.101.126) by
+ dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 5 May 2023 17:06:17 +0800
+Message-ID: <02d36ee9-cdad-454d-d822-95442d7bd67b@huawei.com>
+Date:   Fri, 5 May 2023 17:06:17 +0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=968; i=bagasdotme@gmail.com; h=from:subject; bh=+UknXRJJBadqLnLOgfRQbspacSVeqok6a0BQmw70Uac=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkhe29sL9oa+4xJVH2qyvINTQcWzubVu1eao9wwa1/Ak vqCefszO0pZGMS4GGTFFFkmJfI1nd5lJHKhfa0jzBxWJpAhDFycAjARTxlGhhlafzJCz4XcKGK4 N/XD5rj1f9wDcvVjWCo2ij7myw5+kczwT/HH1/uKnbzpdp/Zj0ofnPD5erGW/UFG7zULLWU9v3l P4AQA
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
+Content-Language: en-CA
+To:     Damien Le Moal <dlemoal@kernel.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <john.g.garry@oracle.com>,
+        <damien.lemoal@opensource.wdc.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+        <kangfenglong@huawei.com>
+References: <20230505025712.19438-1-yangxingui@huawei.com>
+ <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
+From:   yangxingui <yangxingui@huawei.com>
+In-Reply-To: <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.101.126]
+X-ClientProxiedBy: dggpemm100017.china.huawei.com (7.185.36.220) To
+ dggpemm500012.china.huawei.com (7.185.36.89)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The 2.4 driver link returns 404. As no one runs 2.4 kernel anymore,
-remove the stale reference.
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/scsi/dc395x.rst | 4 ----
- 1 file changed, 4 deletions(-)
 
-diff --git a/Documentation/scsi/dc395x.rst b/Documentation/scsi/dc395x.rst
-index c413b629809bcd..a6320561543650 100644
---- a/Documentation/scsi/dc395x.rst
-+++ b/Documentation/scsi/dc395x.rst
-@@ -11,10 +11,6 @@ be safe to use. Testing with hard disks has not been done to any
- great degree and caution should be exercised if you want to attempt
- to use this driver with hard disks.
- 
--This is a 2.5 only driver. For a 2.4 driver please see the original
--driver (which this driver started from) at
--http://www.garloff.de/kurt/linux/dc395/
--
- Problems, questions and patches should be submitted to the `Linux SCSI
- mailing list <linux-scsi@vger.kernel.org>`_.
- 
--- 
-An old man doll... just what I always wanted! - Clara
+On 2023/5/5 16:17, Damien Le Moal wrote:
+> On 2023/05/05 11:57, Xingui Yang wrote:
+>> The function ata_get_identity() uses the helper ata_scsi_find_dev() to get
+>> the ata_device structure of a scsi device. However, when the ata device is
+>> managed by libsas, ata_scsi_find_dev() returns NULL, turning
+>> ata_get_identity() into a nop and always returns -ENOMSG.
+> 
+> What do you do to hit the issue ? A while back for me it was the queue depth
+> setting causing problems. As Garry mentioned, this led to patch 141f3d6256e5
+> ("ata: libata-sata: Fix device queue depth control").
+Attempt to return the correct value at ata_scsi_find_dev() instead of 
+NULL, when the ata device is managed by libsas?
+> 
+>>
+>> Fix this by checking whether ATA_FLAG_SAS_HOST is set for ap->flags in
+>> ata_scsi_find_dev(), as the flag is only used in libsas. If
+>> ATA_FLAG_SAS_HOST is set, use sas_to_ata_dev() to find associated ATA
+>> device.
+>>
+>> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+>> ---
+>> Changes to v1
+>> - Let ata_scsi_find_dev() return the correct value and don't keep replacing
+>> calls to ata_scsi_find_dev().
+>>
+>>   drivers/ata/libata-scsi.c | 12 ++++++++++--
+>>   drivers/ata/libata.h      |  2 +-
+>>   2 files changed, 11 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+>> index 7bb12deab70c..aa580ea341fa 100644
+>> --- a/drivers/ata/libata-scsi.c
+>> +++ b/drivers/ata/libata-scsi.c
+>> @@ -26,6 +26,7 @@
+>>   #include <scsi/scsi_device.h>
+>>   #include <scsi/scsi_tcq.h>
+>>   #include <scsi/scsi_transport.h>
+>> +#include <scsi/libsas.h>
+>>   #include <linux/libata.h>
+>>   #include <linux/hdreg.h>
+>>   #include <linux/uaccess.h>
+>> @@ -2745,10 +2746,17 @@ static struct ata_device *__ata_scsi_find_dev(struct ata_port *ap,
+>>    *	Associated ATA device, or %NULL if not found.
+>>    */
+>>   struct ata_device *
+>> -ata_scsi_find_dev(struct ata_port *ap, const struct scsi_device *scsidev)
+> 
+> Why drop the const ?
+If we use sdev_to_domain_dev(), there will be a compilation warning. But 
+we can replace with scsidev->sdev_target->hostdata.
+> 
+>> +ata_scsi_find_dev(struct ata_port *ap, struct scsi_device *scsidev)
+>>   {
+>> -	struct ata_device *dev = __ata_scsi_find_dev(ap, scsidev);
+>> +	struct ata_device *dev;
+>> +
+>> +	if (ap->flags & ATA_FLAG_SAS_HOST) {
+>> +		struct domain_device *ddev = sdev_to_domain_dev(scsidev);
+>> +
+>> +		return sas_to_ata_dev(ddev);
+> 
+> Do you really need the ddev variable ? Also, this really should be a libsas
+> helper. I beleive this pattern is repeated in several places in libsas, so that
+> would nicely clean things up.
+As above, we can replace with scsidev->sdev_target->hostdata.
 
+Thanks,
+Xingui
+> 
+>> +	}
+>>   
+>> +	dev = __ata_scsi_find_dev(ap, scsidev);
+>>   	if (unlikely(!dev || !ata_dev_enabled(dev)))
+>>   		return NULL;
+>>   
+>> diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
+>> index 926d0d33cd29..6d66f46da064 100644
+>> --- a/drivers/ata/libata.h
+>> +++ b/drivers/ata/libata.h
+>> @@ -109,7 +109,7 @@ static inline void ata_acpi_bind_dev(struct ata_device *dev) {}
+>>   
+>>   /* libata-scsi.c */
+>>   extern struct ata_device *ata_scsi_find_dev(struct ata_port *ap,
+>> -					    const struct scsi_device *scsidev);
+>> +					    struct scsi_device *scsidev);
+>>   extern int ata_scsi_add_hosts(struct ata_host *host,
+>>   			      const struct scsi_host_template *sht);
+>>   extern void ata_scsi_scan_host(struct ata_port *ap, int sync);
+> 
