@@ -2,124 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6466F991A
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 May 2023 17:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFAD6F995B
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 May 2023 17:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjEGPDH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 7 May 2023 11:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        id S231783AbjEGP3u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 7 May 2023 11:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjEGPDG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 May 2023 11:03:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3298B7EF5;
-        Sun,  7 May 2023 08:03:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B935560E09;
-        Sun,  7 May 2023 15:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C08C433EF;
-        Sun,  7 May 2023 15:03:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683471784;
-        bh=tyMJVdXEq4oCoHCPYlSJKEY5GmMz0MTWHInscNM+1lk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=H6dE5fi1rymlSBMXaQgjrnyB6XL8gL1nhUcKsuTdU+L738FJFQwmr0jep1lWcJ9ce
-         LV8XZLoxoyfZ+WwCbWZem7y7gk4vX9QNSE1dwN1SU96xEpHS8vtOb0nCOEAo5mczHx
-         l4P9rKuo6xMl2PmsmZSj8Mv00zwGGEpOjteA7Yg5WHVSGZyBlvkWUfVm72417pnhV5
-         opArf7LoWpdQ2N30BQEufwt7A3e10Rn5DmqHa/u9winMRQNGw/98rINJZtB5JSSHfp
-         wtsfqUH/BZWFKxaPkbQZeypjX2R+KbhOHMgv8VielJaU3qkVUJaRZy2Fdjj2jf/7/9
-         9mjUni4tRpVXQ==
-Message-ID: <087b77f8-3ff2-87ce-d197-e238b8ad9047@kernel.org>
-Date:   Mon, 8 May 2023 00:02:59 +0900
+        with ESMTP id S231788AbjEGP3q (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 May 2023 11:29:46 -0400
+Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F21B469B
+        for <linux-scsi@vger.kernel.org>; Sun,  7 May 2023 08:29:45 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id vgDDpvXaKGGqgvgDDpcwUC; Sun, 07 May 2023 17:22:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1683472933;
+        bh=I6v/9qwu418rPG9padWDpMt9k7O+xJOyw+vQEwDIKVg=;
+        h=From:To:Cc:Subject:Date;
+        b=Tpn1eTHPwGQl9t/TXXTEWoDe5wjOKWa8xl/XMUaM+LwitkS85U0d+eZzlY8KKD09N
+         9DA5g46Xnc9+eMkIlzNgJD58rDem0bCSSW8MNQCzRd9wxKE/ZmgzInmO/q2nT1W8be
+         LepW6wu2evBnCTkc/sQAu1veARRc518oMvhxgkQ1MF2gXm6WEla3sQtPXGl0jOU8v1
+         kz8L3Fg6U8qeeqnUiX+ki23kF/tMqctwlRhKHZ5qVsjx2gbaKsPgpCiub2v/i2YKiU
+         6QXnLksuf6U58Ye7a/ays6j4tMYk3eEiv1ScZjhVPu1Y59KhoLAwY3IfjauTjAm2rv
+         bFebmCcTFH+xQ==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 07 May 2023 17:22:13 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        mpi3mr-linuxdrv.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH] scsi: mpi3mr: Fix the type used for pointers to bitmap
+Date:   Sun,  7 May 2023 17:22:10 +0200
+Message-Id: <5ff41d1b0f1020c37a5efab9fd8df4244bd0fb5a.1683472897.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
-Content-Language: en-US
-To:     John Garry <john.g.garry@oracle.com>,
-        yangxingui <yangxingui@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, prime.zeng@hisilicon.com,
-        kangfenglong@huawei.com
-References: <20230505025712.19438-1-yangxingui@huawei.com>
- <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
- <b13c9445-39c5-f207-d5d0-d6c86eee54ae@oracle.com>
- <1b703656-e966-63f8-19dd-33e4e9914676@huawei.com>
- <cae0ac63-f391-08c0-c646-23037485c189@oracle.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <cae0ac63-f391-08c0-c646-23037485c189@oracle.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2023/05/05 18:51, John Garry wrote:
-> On 05/05/2023 10:14, yangxingui wrote:
->>> hmmm... is it really acceptable that libata is referencing libsas? I 
->>> didn't think that it would be. libsas uses libata, not the other way 
->>> around.
->> Yeah, I didn't expect that either. Is there any other way? If so, is 
->> patch v1 OK?
-> 
-> I still think that we can do better than v1.
-> 
->>>
->>>>>   #include <linux/libata.h>
->>>>>   #include <linux/hdreg.h>
->>>>>   #include <linux/uaccess.h>
->>>>> @@ -2745,10 +2746,17 @@ static struct ata_device 
->>>>> *__ata_scsi_find_dev(struct ata_port *ap,
->>>>>    *    Associated ATA device, or %NULL if not found.
->>>>>    */
->>>>>   struct ata_device *
->>>>> -ata_scsi_find_dev(struct ata_port *ap, const struct scsi_device 
->>>>> *scsidev)
->>>> Why drop the const ?
->>>>
->>>>> +ata_scsi_find_dev(struct ata_port *ap, struct scsi_device *scsidev)
->>>>>   {
->>>>> -    struct ata_device *dev = __ata_scsi_find_dev(ap, scsidev);
->>>>> +    struct ata_device *dev;
->>>>> +
->>>>> +    if (ap->flags & ATA_FLAG_SAS_HOST) {
->>>
->>> And this is SAS host. Not necessarily libsas (even though with ipr 
->>> libata usage gone, it would be the only user).
->> Add a new flag only for libsas?
-> 
-> No, because of previous reason.
-> 
-> Please remind me - at what point do we error within ata_scsi_find_dev() 
-> and return NULL for a libsas host?
-> 
-> Note: it would be good to include that commit message for future reference.
-> 
-> Maybe we could add a method to ata_port_operations to do this lookup. I 
-> assume that is abusing ata_port_operations purpose, since it's mostly 
-> for HW methods.
-> 
-> Or do we actually use sdev->hostdata for libata or libsas? If not, maybe 
-> we could store the struct ata_device pointer there.
-> 
-> I'm just thinking out loud now...
+Bitmaps are "unsigned long[]", so better use "unsigned long *" instead of
+a plain "void *" when dealing with pointers to bitmaps.
 
-Agree. Ideally, libasas should not be any different than a for a drive used with
-ahci/sata/pata adapters. After all, all of them are scsi devices as well. So we
-need to understand why this happens only with libsas and correct the device
-setup there.
+This is more informative.
 
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/scsi/mpi3mr/mpi3mr.h    | 2 +-
+ drivers/scsi/mpi3mr/mpi3mr_fw.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/mpi3mr/mpi3mr.h b/drivers/scsi/mpi3mr/mpi3mr.h
+index dfe6b87fe288..eaa5a508811e 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr.h
++++ b/drivers/scsi/mpi3mr/mpi3mr.h
+@@ -1142,7 +1142,7 @@ struct mpi3mr_ioc {
+ 	struct mpi3mr_drv_cmd evtack_cmds[MPI3MR_NUM_EVTACKCMD];
+ 	void *devrem_bitmap;
+ 	u16 dev_handle_bitmap_bits;
+-	void *removepend_bitmap;
++	unsigned long *removepend_bitmap;
+ 	struct list_head delayed_rmhs_list;
+ 	void *evtack_cmds_bitmap;
+ 	struct list_head delayed_evtack_cmds_list;
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_fw.c b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+index 075fa67e95ee..9b56d13821c6 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_fw.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+@@ -1134,7 +1134,7 @@ static int mpi3mr_issue_and_process_mur(struct mpi3mr_ioc *mrioc,
+ static int
+ mpi3mr_revalidate_factsdata(struct mpi3mr_ioc *mrioc)
+ {
+-	void *removepend_bitmap;
++	unsigned long *removepend_bitmap;
+ 
+ 	if (mrioc->facts.reply_sz > mrioc->reply_sz) {
+ 		ioc_err(mrioc,
 -- 
-Damien Le Moal
-Western Digital Research
+2.34.1
 
