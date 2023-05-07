@@ -2,56 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A7C6F950E
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 May 2023 01:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5086F9673
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 May 2023 03:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjEFXbd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 6 May 2023 19:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S230293AbjEGBad (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 6 May 2023 21:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjEFXb1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 May 2023 19:31:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E28A5E7
-        for <linux-scsi@vger.kernel.org>; Sat,  6 May 2023 16:30:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683415804;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FfaTz/2MrDTTsMWsUnYC5jvyRAk9JjCsw82BS68rkgY=;
-        b=Y0VL91LijQTOT/I8uIfYADAmYHB/tKMA7dSjSdAeojvxDbJpv+mJn+IMLGU9GaKkndkeav
-        Og0za6FRdKnVrFheIAEGuscmBxrJolX87cPGxwYl229NKBYHD4LJeOKrxF7RJq+w97qVar
-        ttI/oGXvceAMOdS/isRIujM/lE/PzIM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-9PcE-jBHMyeYo5I4A6zfxg-1; Sat, 06 May 2023 19:30:01 -0400
-X-MC-Unique: 9PcE-jBHMyeYo5I4A6zfxg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 220703806700;
-        Sat,  6 May 2023 23:30:01 +0000 (UTC)
-Received: from toolbox.redhat.com (unknown [10.2.16.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8E59E440BC;
-        Sat,  6 May 2023 23:30:00 +0000 (UTC)
-From:   Chris Leech <cleech@redhat.com>
-To:     Lee Duncan <lduncan@suse.com>, linux-scsi@vger.kernel.org,
-        open-iscsi@googlegroups.com, netdev@vger.kernel.org
-Cc:     Chris Leech <cleech@redhat.com>
-Subject: [PATCH 11/11] iscsi: force destroy sesions when a network namespace exits
-Date:   Sat,  6 May 2023 16:29:30 -0700
-Message-Id: <20230506232930.195451-12-cleech@redhat.com>
-In-Reply-To: <20230506232930.195451-1-cleech@redhat.com>
-References: <20230506232930.195451-1-cleech@redhat.com>
+        with ESMTP id S229578AbjEGBac (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 May 2023 21:30:32 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739C659DA;
+        Sat,  6 May 2023 18:30:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683423028; x=1714959028;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MtO0R0FCOQcpoNzvtKmnJchsNJz4oYhO7UXIY2uBX1Q=;
+  b=adDadfrhD5ZsBxJxHNLLlQEPx/K9HFjLGGBZ1eTK7xWF6LNYg+U5d5zM
+   qgeXmbSv9izzbIhzT7ytLiv40dFXNjD+ACyc1vXNyLXnu3/yO4HJROZ6w
+   t/tG+ql0a0J8D/vWK9GaKHbjUJybI7GI49yo6+WpBVQx6z6v9iYa/s8sB
+   3zK8TfUQ3PT0OOPiscVPr2+AvdvRuS+Xlk79Wrk0k70+cdTO0u6CxWiYE
+   VaAR12668XWVgLfKseLLghMKvT8HzEPkb1cPTYXICzvMbp32nhnJkOIbV
+   vMulX8J871Ha0lqChK0lh3koxRGpJHzOe8++cMtOejdlY2z9NF8Bx6/2x
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10702"; a="348259146"
+X-IronPort-AV: E=Sophos;i="5.99,256,1677571200"; 
+   d="scan'208";a="348259146"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2023 18:30:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10702"; a="728606711"
+X-IronPort-AV: E=Sophos;i="5.99,256,1677571200"; 
+   d="scan'208";a="728606711"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 06 May 2023 18:30:25 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pvTEH-0000YJ-09;
+        Sun, 07 May 2023 01:30:25 +0000
+Date:   Sun, 7 May 2023 09:29:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chris Leech <cleech@redhat.com>, Lee Duncan <lduncan@suse.com>,
+        linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
+        netdev@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Chris Leech <cleech@redhat.com>
+Subject: Re: [PATCH 06/11] iscsi: set netns for tcp and iser hosts
+Message-ID: <202305070938.QRjcW4tq-lkp@intel.com>
+References: <20230506232930.195451-7-cleech@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230506232930.195451-7-cleech@redhat.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,48 +66,115 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The namespace is gone, so there is no userspace to clean up.
-Force close all the sessions.
+Hi Chris,
 
-This should be enough for software transports, there's no implementation
-of migrating physical iSCSI hosts between network namespaces currently.
+kernel test robot noticed the following build warnings:
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Chris Leech <cleech@redhat.com>
----
- drivers/scsi/scsi_transport_iscsi.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on jejb-scsi/for-next horms-ipvs/master linus/master v6.3 next-20230505]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 15d28186996d..10e9414844d8 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -5235,9 +5235,25 @@ static int __net_init iscsi_net_init(struct net *net)
- 
- static void __net_exit iscsi_net_exit(struct net *net)
- {
-+	struct iscsi_cls_session *session, *tmp;
- 	struct iscsi_net *isn;
-+	unsigned long flags;
-+	LIST_HEAD(sessions);
- 
- 	isn = net_generic(net, iscsi_net_id);
-+
-+	spin_lock_irqsave(&isn->sesslock, flags);
-+	list_replace_init(&isn->sesslist, &sessions);
-+	spin_unlock_irqrestore(&isn->sesslock, flags);
-+
-+	/* force session destruction, there is no userspace anymore */
-+	list_for_each_entry_safe(session, tmp, &sessions, sess_list) {
-+		device_for_each_child(&session->dev, NULL,
-+				      iscsi_iter_force_destroy_conn_fn);
-+		flush_work(&session->destroy_work);
-+		__iscsi_destroy_session(&session->destroy_work);
-+	}
-+
- 	netlink_kernel_release(isn->nls);
- 	isn->nls = NULL;
- }
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Leech/iscsi-create-per-net-iscsi-netlink-kernel-sockets/20230507-073308
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20230506232930.195451-7-cleech%40redhat.com
+patch subject: [PATCH 06/11] iscsi: set netns for tcp and iser hosts
+config: powerpc-randconfig-r016-20230507 (https://download.01.org/0day-ci/archive/20230507/202305070938.QRjcW4tq-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/a287abe6fb8da0c4af44c1d83fad9ca4fcb7184f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chris-Leech/iscsi-create-per-net-iscsi-netlink-kernel-sockets/20230507-073308
+        git checkout a287abe6fb8da0c4af44c1d83fad9ca4fcb7184f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/scsi/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305070938.QRjcW4tq-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/scsi/scsi_transport_iscsi.c:234:1: warning: no previous prototype for function '__iscsi_create_endpoint' [-Wmissing-prototypes]
+   __iscsi_create_endpoint(struct Scsi_Host *shost, int dd_size, struct net *net)
+   ^
+   drivers/scsi/scsi_transport_iscsi.c:233:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct iscsi_endpoint *
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/__iscsi_create_endpoint +234 drivers/scsi/scsi_transport_iscsi.c
+
+   232	
+   233	struct iscsi_endpoint *
+ > 234	__iscsi_create_endpoint(struct Scsi_Host *shost, int dd_size, struct net *net)
+   235	{
+   236		struct iscsi_endpoint *ep;
+   237		int err, id;
+   238	
+   239		ep = kzalloc(sizeof(*ep) + dd_size, GFP_KERNEL);
+   240		if (!ep)
+   241			return NULL;
+   242	
+   243		mutex_lock(&iscsi_ep_idr_mutex);
+   244	
+   245		/*
+   246		 * First endpoint id should be 1 to comply with user space
+   247		 * applications (iscsid).
+   248		 */
+   249		id = idr_alloc(&iscsi_ep_idr, ep, 1, -1, GFP_NOIO);
+   250		if (id < 0) {
+   251			mutex_unlock(&iscsi_ep_idr_mutex);
+   252			printk(KERN_ERR "Could not allocate endpoint ID. Error %d.\n",
+   253			       id);
+   254			goto free_ep;
+   255		}
+   256		mutex_unlock(&iscsi_ep_idr_mutex);
+   257	
+   258		ep->id = id;
+   259		ep->dev.class = &iscsi_endpoint_class;
+   260		if (shost)
+   261			ep->dev.parent = &shost->shost_gendev;
+   262		if (net)
+   263			ep->netns = net;
+   264		dev_set_name(&ep->dev, "ep-%d", id);
+   265		err = device_register(&ep->dev);
+   266	        if (err)
+   267			goto put_dev;
+   268	
+   269		err = sysfs_create_group(&ep->dev.kobj, &iscsi_endpoint_group);
+   270		if (err)
+   271			goto unregister_dev;
+   272	
+   273		if (dd_size)
+   274			ep->dd_data = &ep[1];
+   275		return ep;
+   276	
+   277	unregister_dev:
+   278		device_unregister(&ep->dev);
+   279		return NULL;
+   280	
+   281	put_dev:
+   282		mutex_lock(&iscsi_ep_idr_mutex);
+   283		idr_remove(&iscsi_ep_idr, id);
+   284		mutex_unlock(&iscsi_ep_idr_mutex);
+   285		put_device(&ep->dev);
+   286		return NULL;
+   287	free_ep:
+   288		kfree(ep);
+   289		return NULL;
+   290	}
+   291	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
