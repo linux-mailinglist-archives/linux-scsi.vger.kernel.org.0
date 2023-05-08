@@ -2,106 +2,192 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 667E16FB1E9
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 May 2023 15:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 696AB6FB241
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 May 2023 16:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233746AbjEHNo6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 8 May 2023 09:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        id S234367AbjEHOJY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 8 May 2023 10:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbjEHNo4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 May 2023 09:44:56 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB95C25276;
-        Mon,  8 May 2023 06:44:54 -0700 (PDT)
-Received: from [IPV6:2001:250:4000:5122:23cb:1d84:8ee4:cdb3] ([172.16.0.254])
-        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 348DheMI007261-348DheMJ007261
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Mon, 8 May 2023 21:43:40 +0800
-Message-ID: <b7154e2c-0438-87d1-9edc-7eb1aad40cd1@hust.edu.cn>
-Date:   Mon, 8 May 2023 21:40:41 +0800
+        with ESMTP id S234122AbjEHOJX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 May 2023 10:09:23 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C314C17
+        for <linux-scsi@vger.kernel.org>; Mon,  8 May 2023 07:09:20 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348E5Zea024863;
+        Mon, 8 May 2023 14:08:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to : sender :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=8UHUO5FqrWvui7+aTjjkgUEEJkrXICVtYTUQb4DyEro=;
+ b=mvCnfCzEyCsxg0yBNLbdXNXf68YVAcEnSzIuO1fEnfg0fRIMC/oBoY6I0YRKTbUqbVtR
+ 1dFv2X8FGb6owgGafbhNbmts2Ox2oOpp7s78NpnNB/oz60B142LrIAVzaoYNgGw0whM7
+ oJp3TQQqZukfi0JXt10wk2CUSGS0ai5Wep9xY0UhZhnAZ49+e3A/a/9zXoKP/UOOfWau
+ X6jCishm/ToUn9WtsWK+u4XhaKAheIY7fKJzZ/NTjVgBoJwqXc+CfYWA8fNiW3kGBnXC
+ OVnVP46qDfhW/cwYjidpOdABENN7YdauJO59jvML9qUEkx3c9Uxqzx7Ig6LL3t5t/xz3 VQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qf1yr19at-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 14:08:38 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 348E664p028311;
+        Mon, 8 May 2023 14:08:32 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qf1yr14vt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 14:08:32 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 348BXPnE007850;
+        Mon, 8 May 2023 14:05:57 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3qdeh6gxpu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 08 May 2023 14:05:56 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 348E5sob17433088
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 8 May 2023 14:05:54 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8759F2004B;
+        Mon,  8 May 2023 14:05:54 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 62CF320040;
+        Mon,  8 May 2023 14:05:54 +0000 (GMT)
+Received: from t480-pf1aa2c2 (unknown [9.171.41.150])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon,  8 May 2023 14:05:54 +0000 (GMT)
+Received: from bblock by t480-pf1aa2c2 with local (Exim 4.96)
+        (envelope-from <bblock@linux.ibm.com>)
+        id 1pw1Uv-000aUz-1S;
+        Mon, 08 May 2023 16:05:53 +0200
+Date:   Mon, 8 May 2023 14:05:53 +0000
+From:   Benjamin Block <bblock@linux.ibm.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        John Garry <john.g.garry@oracle.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Changyuan Lyu <changyuanl@google.com>,
+        Jolly Shah <jollys@google.com>,
+        Vishakha Channapattan <vishakhavc@google.com>
+Subject: Re: [PATCH v2 3/5] scsi: core: Trace SCSI sense data
+Message-ID: <20230508140553.GD9720@t480-pf1aa2c2.fritz.box>
+References: <20230503230654.2441121-1-bvanassche@acm.org>
+ <20230503230654.2441121-4-bvanassche@acm.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20230503230654.2441121-4-bvanassche@acm.org>
+Sender: Benjamin Block <bblock@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qP8E7qMVrYHgC5RZ9IoV_M8HnOhVbceh
+X-Proofpoint-ORIG-GUID: o1ymxom0dGOgps-KV_SNvMiGCYWGdhbq
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drivers: mpt3sas: mpt3sas_debugfs: return value check of
- `mpt3sas_debugfs_root`
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Tomas Henzl <thenzl@redhat.com>
-Cc:     Jing Xu <U202112064@hust.edu.cn>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        hust-os-kernel-patches@googlegroups.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230423122535.31019-1-U202112064@hust.edu.cn>
- <6e69b57c-80ae-8b6e-cb5f-9e05da46ecd6@redhat.com>
- <1484408f-f68e-4354-ab59-56af9cd1ef14@kili.mountain>
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-In-Reply-To: <1484408f-f68e-4354-ab59-56af9cd1ef14@kili.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-08_10,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 clxscore=1011 priorityscore=1501
+ spamscore=0 mlxlogscore=999 impostorscore=0 phishscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305080095
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-
-
-On 5/3/23 01:06, Dan Carpenter wrote:
-> On Tue, May 02, 2023 at 05:53:10PM +0200, Tomas Henzl wrote:
->> On 4/23/23 14:25, Jing Xu wrote:
->>> Smatch complains that:
->>> mpt3sas_init_debugfs() warn: 'mpt3sas_debugfs_root' is an error
->>> pointer or valid
->>>
->>> There is no need to check the return value of the debugfs_create_dir()
->>> function, just delete the dead code.
->>>
->>> Fixes: 2b01b293f359 ("scsi: mpt3sas: Capture IOC data for debugging purposes")
->>> Signed-off-by: Jing Xu <U202112064@hust.edu.cn>
->>> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
->>> ---
->>>   drivers/scsi/mpt3sas/mpt3sas_debugfs.c | 2 --
->>>   1 file changed, 2 deletions(-)
->>>
->>> diff --git a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
->>> index a6ab1db81167..c92e08c130b9 100644
->>> --- a/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
->>> +++ b/drivers/scsi/mpt3sas/mpt3sas_debugfs.c
->>> @@ -99,8 +99,6 @@ static const struct file_operations mpt3sas_debugfs_iocdump_fops = {
->>>   void mpt3sas_init_debugfs(void)
->>>   {
->>>   	mpt3sas_debugfs_root = debugfs_create_dir("mpt3sas", NULL);
->>> -	if (!mpt3sas_debugfs_root)
->>> -		pr_info("mpt3sas: Cannot create debugfs root\n");
->> Hi Jing,
->> most drivers just ignore the return value but here the author wanted to
->> have the information logged.
->> Can you instead of removing the message modify the 'if' condition so it
->> suits the author's intention?
+On Wed, May 03, 2023 at 04:06:52PM -0700, Bart Van Assche wrote:
+> If a command fails, SCSI sense data is essential to determine why it
+> failed. Hence make the sense key, ASC and ASCQ codes available in the
+> ftrace output.
 > 
-> This code was always just wrong.
+> Cc: Niklas Cassel <niklas.cassel@wdc.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Ming Lei <ming.lei@redhat.com>
+> Cc: Hannes Reinecke <hare@suse.de>
+> Cc: John Garry <john.g.garry@oracle.com>
+> Cc: Mike Christie <michael.christie@oracle.com>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+>  include/trace/events/scsi.h | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
 > 
-> The history of this is slightly complicated and boring.  These days it's
-> harmless dead code so I guess it's less bad than before.
+> diff --git a/include/trace/events/scsi.h b/include/trace/events/scsi.h
+> index a2c7befd451a..6c4be1ebe268 100644
+> --- a/include/trace/events/scsi.h
+> +++ b/include/trace/events/scsi.h
+> @@ -269,9 +269,14 @@ DECLARE_EVENT_CLASS(scsi_cmd_done_timeout_template,
+>  		__field( unsigned int,	prot_sglen )
+>  		__field( unsigned char,	prot_op )
+>  		__dynamic_array(unsigned char,	cmnd, cmd->cmd_len)
+> +		__field( u8, sense_key )
+> +		__field( u8, asc )
+> +		__field( u8, ascq )
+>  	),
+>  
+>  	TP_fast_assign(
+> +		struct scsi_sense_hdr sshdr;
+> +
+>  		__entry->host_no	= cmd->device->host->host_no;
+>  		__entry->channel	= cmd->device->channel;
+>  		__entry->id		= cmd->device->id;
+> @@ -285,11 +290,22 @@ DECLARE_EVENT_CLASS(scsi_cmd_done_timeout_template,
+>  		__entry->prot_sglen	= scsi_prot_sg_count(cmd);
+>  		__entry->prot_op	= scsi_get_prot_op(cmd);
+>  		memcpy(__get_dynamic_array(cmnd), cmd->cmnd, cmd->cmd_len);
+> +		if (cmd->sense_buffer && SCSI_SENSE_VALID(cmd) &&
 
-Hi Dan and Tomas,
+Can't hurt to have these explicitly here, but these checks are also
+done by `scsi_command_normalize_sense()` AFAICT.
 
-Any conclusion about this patch? The student Jing Xu is not sure about 
-how to revise this patch.
+> +		    scsi_command_normalize_sense(cmd, &sshdr)) {
+> +			__entry->sense_key = sshdr.sense_key;
+> +			__entry->asc = sshdr.asc;
+> +			__entry->ascq = sshdr.ascq;
+> +		} else {
+> +			__entry->sense_key = 0;
+> +			__entry->asc = 0;
+> +			__entry->ascq = 0;
+> +		}
+>  	),
+>  
+>  	TP_printk("host_no=%u channel=%u id=%u lun=%u data_sgl=%u prot_sgl=%u " \
+>  		  "prot_op=%s driver_tag=%d scheduler_tag=%d cmnd=(%s %s raw=%s) " \
+> -		  "result=(driver=%s host=%s message=%s status=%s)",
+> +		  "result=(driver=%s host=%s message=%s status=%s "
+> +		  "sense_key=%u asc=%#x ascq=%#x))",
 
-> 
-> 
-> regards,
-> dan carpenter
+In SPC, these are all in base 16, and some existing functions in
+`scsi_logging.c` format Sense Key as base 16. We probably should keep
+this consistent and also format Sense Key with `%#x`.
+
+>  		  __entry->host_no, __entry->channel, __entry->id,
+>  		  __entry->lun, __entry->data_sglen, __entry->prot_sglen,
+>  		  show_prot_op_name(__entry->prot_op), __entry->driver_tag,
+> @@ -299,7 +315,8 @@ DECLARE_EVENT_CLASS(scsi_cmd_done_timeout_template,
+>  		  "DRIVER_OK",
+>  		  show_hostbyte_name(((__entry->result) >> 16) & 0xff),
+>  		  "COMMAND_COMPLETE",
+> -		  show_statusbyte_name(__entry->result & 0xff))
+> +		  show_statusbyte_name(__entry->result & 0xff),
+> +		  __entry->sense_key, __entry->asc, __entry->ascq)
+>  );
+>  
+>  DEFINE_EVENT(scsi_cmd_done_timeout_template, scsi_dispatch_cmd_done,
+
+-- 
+Best Regards, Benjamin Block        /        Linux on IBM Z Kernel Development
+IBM Deutschland Research & Development GmbH    /   https://www.ibm.com/privacy
+Vors. Aufs.-R.: Gregor Pillen         /         Geschäftsführung: David Faller
+Sitz der Ges.: Böblingen     /    Registergericht: AmtsG Stuttgart, HRB 243294
