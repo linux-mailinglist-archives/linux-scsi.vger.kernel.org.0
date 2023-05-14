@@ -2,74 +2,126 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4AF701B22
-	for <lists+linux-scsi@lfdr.de>; Sun, 14 May 2023 04:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C56B701D01
+	for <lists+linux-scsi@lfdr.de>; Sun, 14 May 2023 13:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjENCLl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 13 May 2023 22:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
+        id S237177AbjENLLk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 14 May 2023 07:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjENCLj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 13 May 2023 22:11:39 -0400
-X-Greylist: delayed 5776 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 13 May 2023 19:11:27 PDT
-Received: from lizimbra02.cittadellasalute.to.it (lizimbra02.cittadellasalute.to.it [109.69.144.62])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6BA021FD4;
-        Sat, 13 May 2023 19:11:27 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by lizimbra02.cittadellasalute.to.it (Postfix) with ESMTP id A128442ACC91;
-        Sun, 14 May 2023 01:40:48 +0200 (CEST)
-Received: from lizimbra02.cittadellasalute.to.it ([127.0.0.1])
-        by localhost (lizimbra02.cittadellasalute.to.it [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id khbjRv2cOSm7; Sun, 14 May 2023 01:40:48 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lizimbra02.cittadellasalute.to.it (Postfix) with ESMTP id 1F74542ACC92;
-        Sun, 14 May 2023 01:40:48 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at lizimbra02.cittadellasalute.to.it
-Received: from lizimbra02.cittadellasalute.to.it ([127.0.0.1])
-        by localhost (lizimbra02.cittadellasalute.to.it [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id LoMvHxOYdFG7; Sun, 14 May 2023 01:40:48 +0200 (CEST)
-Received: from lizimbra07.cittadellasalute.to.it (lizimbra07.cittadellasalute.to.it [172.19.100.53])
-        by lizimbra02.cittadellasalute.to.it (Postfix) with ESMTPS id D1A6242ACC7D;
-        Sun, 14 May 2023 01:40:47 +0200 (CEST)
-Received: from lizimbra07.cittadellasalute.to.it (localhost [127.0.0.1])
-        by lizimbra07.cittadellasalute.to.it (Postfix) with ESMTP id 4QJctC6k6MzN88FC;
-        Sat, 13 May 2023 22:38:59 +0200 (CEST)
-Date:   Sat, 13 May 2023 22:38:59 +0200 (CEST)
-From:   Account principale <vbiondo@cittadellasalute.to.it>
-Reply-To: Account principale <bbirseas@gmail.com>
-Message-ID: <1447419241.15368554.1684010339859.JavaMail.zimbra@cittadellasalute.to.it>
-Subject: Re: blessed deal!
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [138.199.54.63, 172.19.100.208]
-X-Mailer: Zimbra 8.8.15_GA_4481 (zclient/8.8.15_GA_4481)
-Thread-Index: gJrk2dVlC19ulCkNR++YnlAzcUzr/w==
-Thread-Topic: blessed deal!
-X-Spam-Status: Yes, score=7.0 required=5.0 tests=BAYES_50,DATE_IN_PAST_03_06,
-        FREEMAIL_FORGED_REPLYTO,MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4993]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.6 DATE_IN_PAST_03_06 Date: is 3 to 6 hours before Received: date
-        *  1.0 MISSING_HEADERS Missing To: header
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *******
+        with ESMTP id S231506AbjENLLi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 May 2023 07:11:38 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290501AB;
+        Sun, 14 May 2023 04:11:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C7FC622018;
+        Sun, 14 May 2023 11:11:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684062695; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dM0REp/aFlq5rTBVepN8+Kk3O3vNuraV4e8TpGqBFL4=;
+        b=nuS3rFLQE7aWLcb6wgIERgMpDjblXdUAWtNrB4jAQ0MXp7m//zHwlLfsU+SBLlRbnpFuva
+        Hi0oo+fU5d22m4+WsqGL4rNVhJKrIcCseQy9upc4gWVqAsDVXIJalSjHF01+Pm/6bGBncc
+        vWJxYRaHenkbnJ1XZFAYSLUrE8+NfwI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684062695;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dM0REp/aFlq5rTBVepN8+Kk3O3vNuraV4e8TpGqBFL4=;
+        b=FJ7q9s6JUFsx438i8ingu9p6C+Yy+vLx9/nm0UUtJNVcgRSd4oTeY2vbo0TbWHuCgK09o/
+        2/QtMvfBf2a4jFBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5B10C138F5;
+        Sun, 14 May 2023 11:11:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NxdmEubBYGSxdAAAMHmgww
+        (envelope-from <colyli@suse.de>); Sun, 14 May 2023 11:11:34 +0000
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [RFC PATCH] block: add meaningful macro for flush op flags
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <20230512080757.387523-1-kch@nvidia.com>
+Date:   Sun, 14 May 2023 13:11:22 +0200
+Cc:     linux-block@vger.kernel.org,
+        Bcache Linux <linux-bcache@vger.kernel.org>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, axboe@kernel.dk,
+        kent.overstreet@gmail.com, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, song@kernel.org, hch@lst.de, sagi@grimberg.me,
+        martin.petersen@oracle.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <08DD3B6F-0A2D-4725-847F-BACF40D07310@suse.de>
+References: <20230512080757.387523-1-kch@nvidia.com>
+To:     Chaitanya Kulkarni <kch@nvidia.com>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
 
-Hello!
-Did you see my blessed deal message???
-From the United States Marine Corps (USMC)
-Sgt Irene
+> 2023=E5=B9=B45=E6=9C=8812=E6=97=A5 10:07=EF=BC=8CChaitanya Kulkarni =
+<kch@nvidia.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> Flush requests are implemented as REQ_OP_WRITE + REQ_OP_PREFLUSH
+> combination and not REQ_OP_FLUSH + REQ_PREFLUSH combination.
+>=20
+> This unclear nature has lead to the confusion and bugs in the code for
+> block drivers causing more work for testing, reviews and fixes :-
+>=20
+> 1. https://lore.kernel.org/all/ZFHgefWofVt24tRl@infradead.org/
+> 2. https://marc.info/?l=3Dlinux-block&m=3D168386364026498&w=3D2
+>=20
+> Add a macro (name can me more meaningful) with a meaningful comment
+> clearing the confusion and replace the REQ_OP_WRITE | REQ_PREFLUSH =
+with
+> the new macro name that also saves code repetation.
+>=20
+> Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
+
+> --- a/include/linux/blk_types.h
+> +++ b/include/linux/blk_types.h
+> @@ -455,6 +455,13 @@ enum req_flag_bits {
+> #define REQ_NOMERGE_FLAGS \
+> (REQ_NOMERGE | REQ_PREFLUSH | REQ_FUA)
+>=20
+> +/*
+> + * Flush requests are implemented as REQ_OP_WRITE + REQ_OP_PREFLUSH =
+combination
+> + * and not REQ_OP_FLUSH + REQ_PREFLUSH combination.
+> + */
+> +
+> +#define REQ_FLUSH_OPF (REQ_OP_WRITE | REQ_PREFLUSH)
+> +
+> enum stat_group {
+> STAT_READ,
+> STAT_WRITE,
+> --=20
+
+Personally I like current explicit way, it is simpler than an extra =
+macro. This is just my own points, FYI.
+
+Thanks.
+
+Coly Li
+
