@@ -2,96 +2,135 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9499E70215E
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 May 2023 04:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B614C7021DE
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 May 2023 04:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbjEOCK5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 14 May 2023 22:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
+        id S230166AbjEOCzH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 14 May 2023 22:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233214AbjEOCKy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 May 2023 22:10:54 -0400
+        with ESMTP id S229672AbjEOCzG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 May 2023 22:55:06 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D161E10F3
-        for <linux-scsi@vger.kernel.org>; Sun, 14 May 2023 19:10:51 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QKN590fmBzTklC;
-        Mon, 15 May 2023 10:06:05 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1350E7A
+        for <linux-scsi@vger.kernel.org>; Sun, 14 May 2023 19:55:04 -0700 (PDT)
+Received: from kwepemm600012.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QKP495jKMzTkfx;
+        Mon, 15 May 2023 10:50:17 +0800 (CST)
+Received: from [10.174.178.220] (10.174.178.220) by
+ kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 15 May 2023 10:10:49 +0800
-From:   chenxiang <chenxiang66@hisilicon.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
-        Xingui Yang <yangxingui@huawei.com>,
-        Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [PATCH 3/3] scsi: hisi_sas: Fix warnings detected by sparse
-Date:   Mon, 15 May 2023 10:41:21 +0800
-Message-ID: <1684118481-95908-4-git-send-email-chenxiang66@hisilicon.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1684118481-95908-1-git-send-email-chenxiang66@hisilicon.com>
-References: <1684118481-95908-1-git-send-email-chenxiang66@hisilicon.com>
+ 15.1.2507.23; Mon, 15 May 2023 10:55:01 +0800
+Message-ID: <e08f3fe4-a14e-c1c7-4344-7fbe0b50d44f@huawei.com>
+Date:   Mon, 15 May 2023 10:55:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500016.china.huawei.com (7.221.188.220)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: SCSI: Consumer of
+ scsi_devices->iorequest_cnt/iodone_cnt/ioerr_cnt
+To:     Ming Lei <ming.lei@redhat.com>, <linux-scsi@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     <emilne@redhat.com>, <czhong@redhat.com>,
+        Wenchao Hao <haowenchao@huawei.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        <linfeilong@huawei.com>
+References: <ZF+zB+bB7iqe0wGd@ovpn-8-17.pek2.redhat.com>
+Content-Language: en-US
+From:   "haowenchao (C)" <haowenchao2@huawei.com>
+In-Reply-To: <ZF+zB+bB7iqe0wGd@ovpn-8-17.pek2.redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.220]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600012.china.huawei.com (7.193.23.74)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Xingui Yang <yangxingui@huawei.com>
+On 2023/5/13 23:55, Ming Lei wrote:
+> Hello Guys,
+> 
+> scsi_device->iorequest_cnt/iodone_cnt/ioerr_cnt are only inc/dec,
+> and exported to userspace via sysfs in kernel, and not see any kernel
+> consumers, so the exported counters are only for userspace, just be curious
+> which/how applications consume them?
+> 
 
-This patch fixes the following warning:
-drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:2168:43: sparse: sparse: restricted __le32 degrades to integer
+These counters are used to checking the disk health status in a certain scenario
+for us.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304161254.NztCVZIO-lkp@intel.com/
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
-Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
----
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+> These counters not only adds cost in fast path, but also causes kernel panic,
+> especially the "atomic_inc(&cmd->device->iorequest_cnt)" in
+> scsi_queue_rq(), because cmd->device may be freed after returning
+> from scsi_dispatch_cmd(), which is introduced by:
+> 
+> cfee29ffb45b ("scsi: core: Do not increase scsi_device's iorequest_cnt if dispatch failed")
+> 
+> If there aren't explicit applications which depend on these counters,
+> I'd suggest to kill the three since all are not in stable ABI. Otherwise
+> I think we need to revert cfee29ffb45b.
+> 
+> 
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 3d1869c..20e1607 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -2216,6 +2216,7 @@ slot_err_v3_hw(struct hisi_hba *hisi_hba, struct sas_task *task,
- 	u32 trans_tx_fail_type = le32_to_cpu(record->trans_tx_fail_type);
- 	u16 sipc_rx_err_type = le16_to_cpu(record->sipc_rx_err_type);
- 	u32 dw3 = le32_to_cpu(complete_hdr->dw3);
-+	u32 dw0 = le32_to_cpu(complete_hdr->dw0);
- 
- 	switch (task->task_proto) {
- 	case SAS_PROTOCOL_SSP:
-@@ -2225,8 +2226,8 @@ slot_err_v3_hw(struct hisi_hba *hisi_hba, struct sas_task *task,
- 			 * but I/O information has been written to the host memory, we examine
- 			 * response IU.
- 			 */
--			if (!(complete_hdr->dw0 & CMPLT_HDR_RSPNS_GOOD_MSK) &&
--				(complete_hdr->dw0 & CMPLT_HDR_RSPNS_XFRD_MSK))
-+			if (!(dw0 & CMPLT_HDR_RSPNS_GOOD_MSK) &&
-+			    (dw0 & CMPLT_HDR_RSPNS_XFRD_MSK))
- 				return false;
- 
- 			ts->residual = trans_tx_fail_type;
-@@ -2242,7 +2243,7 @@ slot_err_v3_hw(struct hisi_hba *hisi_hba, struct sas_task *task,
- 	case SAS_PROTOCOL_SATA:
- 	case SAS_PROTOCOL_STP:
- 	case SAS_PROTOCOL_SATA | SAS_PROTOCOL_STP:
--		if ((complete_hdr->dw0 & CMPLT_HDR_RSPNS_XFRD_MSK) &&
-+		if ((dw0 & CMPLT_HDR_RSPNS_XFRD_MSK) &&
- 		    (sipc_rx_err_type & RX_FIS_STATUS_ERR_MSK)) {
- 			ts->stat = SAS_PROTO_RESPONSE;
- 		} else if (dma_rx_err_type & RX_DATA_LEN_UNDERFLOW_MSK) {
--- 
-2.8.1
+Sorry for introduce this bug.
+
+We would check these counters after iodone_cnt equal to iorequest_cnt. So
+cfee29ffb45b is aimed to fix the issue of iorequest_cnt is increased for
+multiple times if scsi_dispatch_cmd() failed.
+
+Maybe we should revert cfee29ffb45b and fix the original issue with following
+changes:
+
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 03964b26f3f2..0226c9279cef 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1485,6 +1485,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
+                  */
+                 SCSI_LOG_MLQUEUE(3, scmd_printk(KERN_INFO, cmd,
+                         "queuecommand : device blocked\n"));
++               atomic_dec(&cmd->device->iorequest_cnt);
+                 return SCSI_MLQUEUE_DEVICE_BUSY;
+         }
+  
+@@ -1517,6 +1518,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
+         trace_scsi_dispatch_cmd_start(cmd);
+         rtn = host->hostt->queuecommand(host, cmd);
+         if (rtn) {
++               atomic_dec(&cmd->device->iorequest_cnt);
+                 trace_scsi_dispatch_cmd_error(cmd, rtn);
+                 if (rtn != SCSI_MLQUEUE_DEVICE_BUSY &&
+                     rtn != SCSI_MLQUEUE_TARGET_BUSY)
+
+> 
+> [1] [linux]$ git grep -n -E "iorequest_cnt|iodone_cnt|ioerr_cnt" ./
+> Documentation/scsi/st.rst:222:value as iodone_cnt at the device level. The tape statistics only count
+> drivers/scsi/scsi_error.c:362:  atomic_inc(&scmd->device->iodone_cnt);
+> drivers/scsi/scsi_lib.c:1428:   atomic_inc(&cmd->device->iodone_cnt);
+> drivers/scsi/scsi_lib.c:1430:           atomic_inc(&cmd->device->ioerr_cnt);
+> drivers/scsi/scsi_lib.c:1764:   atomic_inc(&cmd->device->iorequest_cnt);
+> drivers/scsi/scsi_sysfs.c:968:show_sdev_iostat(iorequest_cnt);
+> drivers/scsi/scsi_sysfs.c:969:show_sdev_iostat(iodone_cnt);
+> drivers/scsi/scsi_sysfs.c:970:show_sdev_iostat(ioerr_cnt);
+> drivers/scsi/scsi_sysfs.c:1288: &dev_attr_iorequest_cnt.attr,
+> drivers/scsi/scsi_sysfs.c:1289: &dev_attr_iodone_cnt.attr,
+> drivers/scsi/scsi_sysfs.c:1290: &dev_attr_ioerr_cnt.attr,
+> drivers/scsi/sd.c:3531: atomic_set(&sdkp->device->ioerr_cnt, 0);
+> include/scsi/scsi_device.h:234: atomic_t iorequest_cnt;
+> include/scsi/scsi_device.h:235: atomic_t iodone_cnt;
+> include/scsi/scsi_device.h:236: atomic_t ioerr_cnt;
+> 
+> 
+> 
+> 
+> Thanks,
+> Ming
+> 
 
