@@ -2,176 +2,132 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845B87043A8
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 May 2023 04:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59307043EF
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 May 2023 05:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjEPCyS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 May 2023 22:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        id S229891AbjEPD2X (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 May 2023 23:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjEPCyQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 May 2023 22:54:16 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4658772A6;
-        Mon, 15 May 2023 19:54:09 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-3318961b385so4671305ab.1;
-        Mon, 15 May 2023 19:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684205648; x=1686797648;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtKA4eT8yj93tAAG41WBzq6N9lG9sUaUVzM+cNzwt40=;
-        b=dxuyT+qbv4dqQFqXMkQkvzY9uDbHAKYJMe6sJF+Bysx7Kc2QD+IYsILNbX7beFcBzp
-         0CT55qh7u10RYQc0zvn1mhb33zqodA+sJy6d8XYl7r3CydFg1hRDBm/pO07sI1ha9vtF
-         Lv7Y78tGN4EwYh9M3QTPytdzI7J7rc3fIVoaEf+5FV92S43glSdYv3jjkE5ADsAN9aCp
-         Y3Bxk7Cpjt0/IZZb1LBmzXm367HHwjbVIbWt+XiBotil2ycIpNRA0QrxSsC7vYBVUPOB
-         T/REGUpTBqeoyZvPrCV85SF0yRpkYxh/WYzPAUkZyI/dsor6/rgs17Ps93iVTgM56P/1
-         Z0EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684205648; x=1686797648;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dtKA4eT8yj93tAAG41WBzq6N9lG9sUaUVzM+cNzwt40=;
-        b=FV2qJWXQPJMyCcmDWuTwMs/xCgIWt3A8WJI7H3oCbIgaNvQxkcSD9DSU4AjimPtQRT
-         nNuXkv93uM1Fcg8LYu6W0gxI/Amt0upyGW2X5w81rC41FMqCeBifrsJv9A96m9N5AAoI
-         JxRQ7VGDUW976sq0z/T1jf6ap+WA4Rq8CWqQdEiAHu3FvlvJFwB9VRwfdE15EYY4xRHo
-         TXq+ndASdszICi72NgdCtO23Dly7yN38xd3GAF92chEFrNznKtF4AsUUaUIRSg7kB8yS
-         4lc/41udQgaCvAjhosdX0641D6jhBa1edPQOIJ1gPNQ3kttDSDJqbVZf54zm2+zzEtu+
-         5zVA==
-X-Gm-Message-State: AC+VfDykKYbbPdTNcWtoeEeuquywEuep7BCQQorxPHiynzMn+0jqlbpF
-        AsTHGCjjaIXdl6pljfQYpUA=
-X-Google-Smtp-Source: ACHHUZ7K3cPbqubQIkjOAz+WA04TCWjc3F+K0Kms7k8utB5Fd+jilycbwjSjLl46bAaWzT0p49OQvQ==
-X-Received: by 2002:a05:6602:2c4f:b0:76c:4e64:2a20 with SMTP id x15-20020a0566022c4f00b0076c4e642a20mr921907iov.9.1684205648189;
-        Mon, 15 May 2023 19:54:08 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id h2-20020a02b602000000b0041844cb2c2dsm4225712jam.115.2023.05.15.19.54.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 19:54:07 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH] scsi: qla2xxx: Replace all non-returning strlcpy with strscpy
-Date:   Tue, 16 May 2023 02:54:04 +0000
-Message-ID: <20230516025404.2843867-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+        with ESMTP id S229468AbjEPD2W (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 May 2023 23:28:22 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E189F49E0
+        for <linux-scsi@vger.kernel.org>; Mon, 15 May 2023 20:28:19 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230516032816epoutp022213a7a4fee1bfe6752c70fcc164af95~fgfoebVc00734607346epoutp02e
+        for <linux-scsi@vger.kernel.org>; Tue, 16 May 2023 03:28:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230516032816epoutp022213a7a4fee1bfe6752c70fcc164af95~fgfoebVc00734607346epoutp02e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1684207696;
+        bh=RmOSHTOoPYKhK/p+mE50qHzvxD9qqtl9Q289YGqv+pM=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=LRmQk9mXM0bVTmI7pZ0djNVaDba8CMY/iZArzNgh35UFCRELKgz5CMaIVDD8rlsSW
+         eu5xmtMHGdvW9eItayqEEuVB5qNBj2WgQV6yjaHRuAcT0Uc8j9UTCxp8u1re8DvzoW
+         WslDoPoGBTzTXWAXY8I581VWKZMEEvJsXSPx7J6A=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230516032816epcas2p2c71f9136e21a950828288a2024efae09~fgfoAVnNK2004520045epcas2p2X;
+        Tue, 16 May 2023 03:28:16 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.99]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4QL1sW6CkKz4x9Pr; Tue, 16 May
+        2023 03:28:15 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F8.10.08199.F48F2646; Tue, 16 May 2023 12:28:15 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20230516032815epcas2p3926607c79fd9118d3d0f91e6161aef0f~fgfnA1GG12787927879epcas2p32;
+        Tue, 16 May 2023 03:28:15 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230516032815epsmtrp2c472083aacac672e0737b6622694fd81~fgfnAOCcq2696126961epsmtrp2c;
+        Tue, 16 May 2023 03:28:15 +0000 (GMT)
+X-AuditID: b6c32a47-e99fd70000002007-75-6462f84f7ca9
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        5D.3C.27706.F48F2646; Tue, 16 May 2023 12:28:15 +0900 (KST)
+Received: from KORCO011456 (unknown [10.229.38.105]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230516032815epsmtip19d3fdf42a4342d5476f84fe6826f57bb~fgfm0z6IG2258622586epsmtip1X;
+        Tue, 16 May 2023 03:28:15 +0000 (GMT)
+From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
+To:     "'Bao D. Nguyen'" <quic_nguyenb@quicinc.com>,
+        <linux-scsi@vger.kernel.org>, <sc.suh@samsung.com>,
+        <hy50.seo@samsung.com>, <sh425.lee@samsung.com>,
+        <kwangwon.min@samsung.com>
+In-Reply-To: <991cac52-22bc-0150-4332-76ac044c5bcb@quicinc.com>
+Subject: RE: [RFC PATCH v1] ufs: poll HCS.UCRDY before issuing a UIC command
+Date:   Tue, 16 May 2023 12:28:15 +0900
+Message-ID: <012d01d987a6$733d2c10$59b78430$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGTQ//Bn9HITMBER2fQmcGpYd1IAgEVn6BsAYR8HMav0/O+YA==
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphk+LIzCtJLcpLzFFi42LZdljTTNf/R1KKQV+vocXqxQ9YLLbe2Mli
+        0X19B5vF1BfH2S267t5gtFj67y2LA5vHxD11Hn1bVjF6fN4kF8AclW2TkZqYklqkkJqXnJ+S
+        mZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA7RWSaEsMacUKBSQWFyspG9nU5Rf
+        WpKqkJFfXGKrlFqQklNgXqBXnJhbXJqXrpeXWmJlaGBgZApUmJCdcW7WG/aC60wVN9sfsjQw
+        djB1MXJySAiYSEyfswnMFhLYwShxdbtiFyMXkP2JUeLWxqnMEIlvjBLTu2JgGt5tvsQCEd/L
+        KDHtrDdEw0tGiXMNjWANbALaEtMe7mYFSYgIbGWU6Nu1mQ0kwSlgL7HlzFVGEFtYwEdi6cEW
+        sNUsAqoSXbP+gU3lFbCU6Np3mhHCFpQ4OfMJWJxZQF5i+9s5zBBXKEj8fLqMFcQWEXCSmPfh
+        GlSNiMTszjZmkMUSAi/ZJZb9v8AG0eAisX5hBwuELSzx6vgWdghbSuLzu71ANRxAdrbEnoVi
+        EOEKicXT3kKVG0vMetbOCFLCLKApsX6XPkS1ssSRW1Bb+SQ6Dv9lhwjzSnS0CUE0Kkv8mjSZ
+        EcKWlJh58w7UTg+Je3+OME5gVJyF5MdZSH6cheSXWQh7FzCyrGIUSy0ozk1PLTYqMIbHdHJ+
+        7iZGcHLUct/BOOPtB71DjEwcjIcYJTiYlUR422fGpwjxpiRWVqUW5ccXleakFh9iNAWG+kRm
+        KdHkfGB6ziuJNzSxNDAxMzM0NzI1MFcS55W2PZksJJCeWJKanZpakFoE08fEwSnVwLQvfMLF
+        1UF/1LZ0TJq1JefoKYFNLep3q2Z0rYuc8FTozsLFVWvZvqxiFmpQ11frMdQICbn5t2Tv7uua
+        d/7bHL73JXNiQUt07XvjTxM4/l/a8PKjp3kLT96rY8Vh5s/neVgoB/xlkzktlq23Xt7VaYrD
+        8UnZu08uXCzT4NnbY2/o/XcmoyQDmyn3TynbMssF1jzuER9/Xg20ceja98bl3i7dDVJzrqm8
+        UpocvqTi/MRSMZ89TTem2am/8exUuOi14t3EleJTcr4Le9yJVmlMevntTedfec7tMwp7YxPu
+        NOSt1RPkcZI6sHp+313+mu9MvI5PPBdxJ6zfdy8gvPUqm1hljodJ42F2gTDRlq2uc5VYijMS
+        DbWYi4oTAUBNH2QXBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOLMWRmVeSWpSXmKPExsWy7bCSnK7/j6QUg//HBS1WL37AYrH1xk4W
+        i+7rO9gspr44zm7RdfcGo8XSf29ZHNg8Ju6p8+jbsorR4/MmuQDmKC6blNSczLLUIn27BK6M
+        c7PesBdcZ6q42f6QpYGxg6mLkZNDQsBE4t3mSyxdjFwcQgK7GSX2tL5hhkhISpzY+ZwRwhaW
+        uN9yhBWi6DmjxOPHXSwgCTYBbYlpD3ezgtgiIN2tO+VAbCGB04wSXydagNicAvYSW85cBRsk
+        LOAjsfRgC9hmFgFVia5Z/8Dm8ApYSnTtO80IYQtKnJz5BCzODDS/92ErI4QtL7H97Ryo4xQk
+        fj5dBrXXSWLeh2tQ9SISszvbmCcwCs1CMmoWklGzkIyahaRlASPLKkbJ1ILi3PTcYsMCw7zU
+        cr3ixNzi0rx0veT83E2M4LjQ0tzBuH3VB71DjEwcjIcYJTiYlUR422fGpwjxpiRWVqUW5ccX
+        leakFh9ilOZgURLnvdB1Ml5IID2xJDU7NbUgtQgmy8TBKdXAdFRL/WKZ14nVy+7dOZljKbXb
+        7UHILvuD+qVP2yP29Vc4F552OFB6OLuDuWGWPNu+aqft9/Mlo2ReczLGHEnwPl8bdmzlkvOi
+        wicz5AvW9KbnBl9wt8lODGTI0CydccpbbPXCa8XnbrgV3+32m3zToueg3fN/Ky4EK9/Ku/3K
+        /LD1nkqRTtHtnNovPV8snbn+cH1d8QKfkhWP1To25rpb5Ft+3XL2i6+59K5NuhaNV/at8Nrk
+        vDO9aP7FJq5LRc8sTouv9fh8irfnikrG0dw3EhYtErIZfnOdTqZmTPbcN0N7RYzQ5/KM/4xO
+        2r5nVXeH2h8NFlOfMc1+/RVOM/kpZ+a6a7+7tEnMff5Py1Y2JZbijERDLeai4kQAr/ctq/oC
+        AAA=
+X-CMS-MailID: 20230516032815epcas2p3926607c79fd9118d3d0f91e6161aef0f
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230509083312epcas2p375f77d18a9026f7d263750baf9c9a5bb
+References: <CGME20230509083312epcas2p375f77d18a9026f7d263750baf9c9a5bb@epcas2p3.samsung.com>
+        <1683620674-160173-1-git-send-email-kwmad.kim@samsung.com>
+        <991cac52-22bc-0150-4332-76ac044c5bcb@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
-No return values were used, so direct replacement is safe.
+> > +	do {
+> > +		val = ufshcd_readl(hba, REG_CONTROLLER_STATUS) &
+> > +			UIC_COMMAND_READY;
+> > +		if (val)
+> > +			break;
+> > +		usleep_range(500, 1000);
+> Hi Kiwoong,
+> It looks like you are sleeping while holding the spin_lock_irqsave(hba-
+> >host->host_lock, flags) in ufshcd_send_uic_cmd()?
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
+You're right. Let me fix it.
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
- drivers/scsi/qla2xxx/qla_init.c |    8 ++++----
- drivers/scsi/qla2xxx/qla_mr.c   |   20 ++++++++++----------
- 2 files changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index ec0423ec6681..e831d14a4044 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -4861,7 +4861,7 @@ qla2x00_set_model_info(scsi_qla_host_t *vha, uint8_t *model, size_t len,
- 		if (use_tbl &&
- 		    ha->pdev->subsystem_vendor == PCI_VENDOR_ID_QLOGIC &&
- 		    index < QLA_MODEL_NAMES)
--			strlcpy(ha->model_desc,
-+			strscpy(ha->model_desc,
- 			    qla2x00_model_name[index * 2 + 1],
- 			    sizeof(ha->model_desc));
- 	} else {
-@@ -4869,14 +4869,14 @@ qla2x00_set_model_info(scsi_qla_host_t *vha, uint8_t *model, size_t len,
- 		if (use_tbl &&
- 		    ha->pdev->subsystem_vendor == PCI_VENDOR_ID_QLOGIC &&
- 		    index < QLA_MODEL_NAMES) {
--			strlcpy(ha->model_number,
-+			strscpy(ha->model_number,
- 				qla2x00_model_name[index * 2],
- 				sizeof(ha->model_number));
--			strlcpy(ha->model_desc,
-+			strscpy(ha->model_desc,
- 			    qla2x00_model_name[index * 2 + 1],
- 			    sizeof(ha->model_desc));
- 		} else {
--			strlcpy(ha->model_number, def,
-+			strscpy(ha->model_number, def,
- 				sizeof(ha->model_number));
- 		}
- 	}
-diff --git a/drivers/scsi/qla2xxx/qla_mr.c b/drivers/scsi/qla2xxx/qla_mr.c
-index f726eb8449c5..083f94e43fba 100644
---- a/drivers/scsi/qla2xxx/qla_mr.c
-+++ b/drivers/scsi/qla2xxx/qla_mr.c
-@@ -691,7 +691,7 @@ qlafx00_pci_info_str(struct scsi_qla_host *vha, char *str, size_t str_len)
- 	struct qla_hw_data *ha = vha->hw;
- 
- 	if (pci_is_pcie(ha->pdev))
--		strlcpy(str, "PCIe iSA", str_len);
-+		strscpy(str, "PCIe iSA", str_len);
- 	return str;
- }
- 
-@@ -1850,21 +1850,21 @@ qlafx00_fx_disc(scsi_qla_host_t *vha, fc_port_t *fcport, uint16_t fx_type)
- 			phost_info = &preg_hsi->hsi;
- 			memset(preg_hsi, 0, sizeof(struct register_host_info));
- 			phost_info->os_type = OS_TYPE_LINUX;
--			strlcpy(phost_info->sysname, p_sysid->sysname,
-+			strscpy(phost_info->sysname, p_sysid->sysname,
- 				sizeof(phost_info->sysname));
--			strlcpy(phost_info->nodename, p_sysid->nodename,
-+			strscpy(phost_info->nodename, p_sysid->nodename,
- 				sizeof(phost_info->nodename));
- 			if (!strcmp(phost_info->nodename, "(none)"))
- 				ha->mr.host_info_resend = true;
--			strlcpy(phost_info->release, p_sysid->release,
-+			strscpy(phost_info->release, p_sysid->release,
- 				sizeof(phost_info->release));
--			strlcpy(phost_info->version, p_sysid->version,
-+			strscpy(phost_info->version, p_sysid->version,
- 				sizeof(phost_info->version));
--			strlcpy(phost_info->machine, p_sysid->machine,
-+			strscpy(phost_info->machine, p_sysid->machine,
- 				sizeof(phost_info->machine));
--			strlcpy(phost_info->domainname, p_sysid->domainname,
-+			strscpy(phost_info->domainname, p_sysid->domainname,
- 				sizeof(phost_info->domainname));
--			strlcpy(phost_info->hostdriver, QLA2XXX_VERSION,
-+			strscpy(phost_info->hostdriver, QLA2XXX_VERSION,
- 				sizeof(phost_info->hostdriver));
- 			preg_hsi->utc = (uint64_t)ktime_get_real_seconds();
- 			ql_dbg(ql_dbg_init, vha, 0x0149,
-@@ -1909,9 +1909,9 @@ qlafx00_fx_disc(scsi_qla_host_t *vha, fc_port_t *fcport, uint16_t fx_type)
- 	if (fx_type == FXDISC_GET_CONFIG_INFO) {
- 		struct config_info_data *pinfo =
- 		    (struct config_info_data *) fdisc->u.fxiocb.rsp_addr;
--		strlcpy(vha->hw->model_number, pinfo->model_num,
-+		strscpy(vha->hw->model_number, pinfo->model_num,
- 			ARRAY_SIZE(vha->hw->model_number));
--		strlcpy(vha->hw->model_desc, pinfo->model_description,
-+		strscpy(vha->hw->model_desc, pinfo->model_description,
- 			ARRAY_SIZE(vha->hw->model_desc));
- 		memcpy(&vha->hw->mr.symbolic_name, pinfo->symbolic_name,
- 		    sizeof(vha->hw->mr.symbolic_name));
 
