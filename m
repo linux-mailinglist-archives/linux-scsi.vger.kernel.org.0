@@ -2,92 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B9670764A
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 May 2023 01:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FA17076A7
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 May 2023 02:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjEQXJ4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 May 2023 19:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
+        id S229648AbjERAAS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 May 2023 20:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjEQXJu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 May 2023 19:09:50 -0400
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DECF5270
-        for <linux-scsi@vger.kernel.org>; Wed, 17 May 2023 16:09:38 -0700 (PDT)
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-643990c5319so999948b3a.2
-        for <linux-scsi@vger.kernel.org>; Wed, 17 May 2023 16:09:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684364977; x=1686956977;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ayP7PD7vRVU1mwC0IUNGGeoZSbvK9/rrOfR1Ufk+uSw=;
-        b=I6waPoZYcg6h8O84vkVE7YHIWI+JwBYsXqEXqVuybAMyvKvzobBUWgXw7NtFQMEb5U
-         OvG8DUnE9tWzo/Uw/1OA7tu3P3SsELlySsTTvPVdUEej8lLbNs5T/n4UIRPjtCmU9RHi
-         jf3f+8qexxX3YOEFyylApYL/bVPwZlehVijnYtLwAQouDKzbwK5ltTiJv00ScaL2ZUyj
-         22yau6dTv4p/HA0kzmBscdZhS4cs0C6CsUdMdvqU4bhUmcgzIBQrW/CQIr9yFMHNQzn3
-         819cT9Fim8jTAMOy5JCe3gnyPdHUL4NWdHde8unTTlCrjSnv8fiwofKvaLMzdrT8ioTB
-         tcaA==
-X-Gm-Message-State: AC+VfDz4Roi3/lHzRTP6s8gGPwQjn/kLgYqWF1HQuPp74upfq6AVbd3t
-        LNaYzMZ7XTWGwY5Pz5FUkIQ=
-X-Google-Smtp-Source: ACHHUZ45vIUmaZgBORY4vgSKE+1M7dVxZwOMeznua/L70337e7/EBmm/mMmfXmiecSg4hdxyIX/dBw==
-X-Received: by 2002:a05:6a00:190e:b0:643:558d:9ce2 with SMTP id y14-20020a056a00190e00b00643558d9ce2mr1655301pfi.21.1684364977599;
-        Wed, 17 May 2023 16:09:37 -0700 (PDT)
-Received: from bvanassche-glaptop2.roam.corp.google.com ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id e9-20020a656789000000b005286ea6190esm15080694pgr.20.2023.05.17.16.09.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 16:09:37 -0700 (PDT)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org,
-        Bart Van Assche <bvanassche@acm.org>,
-        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
-        John Garry <john.g.garry@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>
-Subject: [PATCH v3 4/4] scsi: core: Delay running the queue if the host is blocked
-Date:   Wed, 17 May 2023 16:09:27 -0700
-Message-ID: <20230517230927.1091124-5-bvanassche@acm.org>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-In-Reply-To: <20230517230927.1091124-1-bvanassche@acm.org>
-References: <20230517230927.1091124-1-bvanassche@acm.org>
+        with ESMTP id S229460AbjERAAR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 May 2023 20:00:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FA8DB
+        for <linux-scsi@vger.kernel.org>; Wed, 17 May 2023 16:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684367969;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zaAw3DfruQqVK9HMPFMNTD+vmz7lKsGTCrArzNfkgXE=;
+        b=QxhJj/v9mZCuixOJzdzgi0NVNZdwxlBrfJZF6Z9OsIc6iH/Z15PZ7EVlluQUDhYQFZBmx+
+        AAyKtbaSqMxgeqCMLSIbB1hLJ/FRsiFgaLdWWmD4RgZuu+Pygl31SC/NLFr3bfIXstk2Xk
+        34BafZt+/+GHETzxNGwT70rhBZuZpjs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-403-mmyuWlg1NuygLcC0g-tDqQ-1; Wed, 17 May 2023 19:59:19 -0400
+X-MC-Unique: mmyuWlg1NuygLcC0g-tDqQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2994867942;
+        Wed, 17 May 2023 23:59:18 +0000 (UTC)
+Received: from ovpn-8-16.pek2.redhat.com (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E626F492B00;
+        Wed, 17 May 2023 23:59:14 +0000 (UTC)
+Date:   Thu, 18 May 2023 07:59:09 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org,
+        Mike Christie <michael.christie@oracle.com>,
+        Ye Bin <yebin10@huawei.com>, Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH v2 1/4] scsi: core: Rework scsi_host_block()
+Message-ID: <ZGVqTQZ1CWdH2Hng@ovpn-8-16.pek2.redhat.com>
+References: <20230517222359.1066918-1-bvanassche@acm.org>
+ <20230517222359.1066918-2-bvanassche@acm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517222359.1066918-2-bvanassche@acm.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Tell the block layer to rerun the queue after a delay instead of
-immediately if the SCSI LLD decided to block the host.
+On Wed, May 17, 2023 at 03:23:56PM -0700, Bart Van Assche wrote:
+> Make scsi_host_block() easier to read by converting it to the widely used
+> early-return style. See also commit f983622ae605 ("scsi: core: Avoid
+> calling synchronize_rcu() for each device in scsi_host_block()").
+> 
+> Reviewed-by: Mike Christie <michael.christie@oracle.com>
+> Cc: Ming Lei <ming.lei@redhat.com>
+> Cc: Ye Bin <yebin10@huawei.com>
+> Cc: Hannes Reinecke <hare@suse.de>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 
-Note: neither scsi_run_host_queues() nor scsi_run_queue() are called
-from the fast path.
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Cc: Ming Lei <ming.lei@redhat.com>
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: John Garry <john.g.garry@oracle.com>
-Cc: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/scsi_lib.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Ming
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index e4f34217b879..b37718ebbbfc 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1767,7 +1767,7 @@ static blk_status_t scsi_queue_rq(struct blk_mq_hw_ctx *hctx,
- 		break;
- 	case BLK_STS_RESOURCE:
- 	case BLK_STS_ZONE_RESOURCE:
--		if (scsi_device_blocked(sdev))
-+		if (scsi_device_blocked(sdev) || shost->host_self_blocked)
- 			ret = BLK_STS_DEV_RESOURCE;
- 		break;
- 	case BLK_STS_AGAIN:
