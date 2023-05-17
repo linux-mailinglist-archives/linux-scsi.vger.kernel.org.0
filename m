@@ -2,95 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8957075C6
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 May 2023 01:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0368E70764D
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 May 2023 01:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjEQXCR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 May 2023 19:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
+        id S229996AbjEQXKA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 May 2023 19:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjEQXCO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 May 2023 19:02:14 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AEB61AB
-        for <linux-scsi@vger.kernel.org>; Wed, 17 May 2023 16:02:06 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ae4f28454bso10849495ad.3
-        for <linux-scsi@vger.kernel.org>; Wed, 17 May 2023 16:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684364526; x=1686956526;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NCOs9XFCFeYjn/qRnbFLhpqd0QIqRRTHRKO1/+0RAUk=;
-        b=hblzA3PbsTRQj6+lS+RlZl1Bd8A+m4ZU2gRkGKogDTW2wJqSkEx6ZBxuNyeQhCXmO/
-         7U6aPZGf5+vHz+ckkVvoPkEV42PklylLIZkRyTnzUlpACKLZIomqzSnqlpjZ0O8yve08
-         FxK3KLI7abAFw3PZBgAl5IPQmQOw7B7VwPl3Y=
+        with ESMTP id S230029AbjEQXJt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 May 2023 19:09:49 -0400
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAB794
+        for <linux-scsi@vger.kernel.org>; Wed, 17 May 2023 16:09:34 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6434e65d808so1325363b3a.3
+        for <linux-scsi@vger.kernel.org>; Wed, 17 May 2023 16:09:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684364526; x=1686956526;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NCOs9XFCFeYjn/qRnbFLhpqd0QIqRRTHRKO1/+0RAUk=;
-        b=ADoebxxxo3w8PM70IhIUb6U70/FTTEfynu6pcUdquuqdN+4tBDNrpVGzP6+QNARUX4
-         adxvtf+hcpgbn3GM3FME1clZBKAdw7t1BZ/NHAGooF+3IEOHzYH9jXs070nFgmCL5WCH
-         hna47etPaaYIMloxCk/zxyJ/HoOtE0X5G8FtaNpVTTv6dfdvhIgPl8OhB1CNAS7xvBKH
-         a+abM7SjNgDzguBUeomUbxLXVD2wF8uP08WpEgVdPKZVisJGdKZ0qjsG5xEV05FMxvI4
-         NEOutdkeGxkIsrVc+UGNSi//Vg0mQ07ko0DdVtPFWIIeB4AKy/wP9OYRoJKnNmgGhrKK
-         rjNA==
-X-Gm-Message-State: AC+VfDycrRDtRTSD+QJosp3y83YGx6neSS6vtYZhGns1cfyvoX+S2GmD
-        07gcwrb00XP/YPT8Sn/m75TYcg==
-X-Google-Smtp-Source: ACHHUZ7Qe0iBjeZmvcgnaHOBEs733JZVei10a9MeOfdNB6l5X05u502QW9KQ28OgeMcXVjjkg2bwog==
-X-Received: by 2002:a17:902:ec8a:b0:19f:87b5:1873 with SMTP id x10-20020a170902ec8a00b0019f87b51873mr342789plg.62.1684364526317;
-        Wed, 17 May 2023 16:02:06 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d15-20020a170902728f00b001a69c1c78e7sm18008090pll.71.2023.05.17.16.02.05
+        d=1e100.net; s=20221208; t=1684364973; x=1686956973;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ncMK8Ugm8M4NlRUB5CMYbK0tGMcjM+SGm9gH17Np2TA=;
+        b=jMObdtoFyxoA4vAWHSwaLmit6gGz3IbE8hjFNCNQVkz5uR9CsJ3jlsOxoplf5+qH+w
+         dqsSXZRzYGrY98jSd4POjShHZ5ehBFf3+icOFiU/ISgJdQmMbZj1/0k/DSdzGXc3r8QX
+         j8KBLUXYTWZErnvw3JHH6DUWVA7TceoY/7l4DCXbm0rpzfBOeCQ9sNIT3gMWLKWkFEiZ
+         lWF3yJbDm+yJRl2SDwVRNyDsNWIK4uxk4gZNAwIfv3ij3T1p75j9/lpxwzBbxyFOdAhX
+         N4Mwz37JJP1P+UJ6zFhOLpTICXOJgVjjP45ihQzBDcr3P6QrbubrKh0EFDLQD+y4hLWs
+         ViNA==
+X-Gm-Message-State: AC+VfDwnvlCUbGYxbr/OF7o8xcZoGKNQ+U9B7U1jVghwi8XKgEh7kBDX
+        b212crQC8p5UuoiEn30nAmagMT9qUbQ=
+X-Google-Smtp-Source: ACHHUZ5N+M7gwzHfiJHH+rCVFWJfXSEKX2Du81mF+HqvE/3qQU2W3SJSHSY4hBjTpnA/wgjb7sHe0Q==
+X-Received: by 2002:a05:6a20:3947:b0:104:70cf:eeb8 with SMTP id r7-20020a056a20394700b0010470cfeeb8mr26923710pzg.33.1684364973422;
+        Wed, 17 May 2023 16:09:33 -0700 (PDT)
+Received: from bvanassche-glaptop2.roam.corp.google.com ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id e9-20020a656789000000b005286ea6190esm15080694pgr.20.2023.05.17.16.09.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 16:02:05 -0700 (PDT)
-Date:   Wed, 17 May 2023 16:02:05 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        James Smart <james.smart@broadcom.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/2][next] scsi: lpfc: Replace one-element array with
- flexible-array member
-Message-ID: <202305171602.2C715B078F@keescook>
-References: <cover.1684358315.git.gustavoars@kernel.org>
- <6c6dcab88524c14c47fd06b9332bd96162656db5.1684358315.git.gustavoars@kernel.org>
+        Wed, 17 May 2023 16:09:32 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH v3 0/4] SCSI core patches
+Date:   Wed, 17 May 2023 16:09:23 -0700
+Message-ID: <20230517230927.1091124-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c6dcab88524c14c47fd06b9332bd96162656db5.1684358315.git.gustavoars@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, May 17, 2023 at 03:22:45PM -0600, Gustavo A. R. Silva wrote:
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element arrays with flexible-array
-> members in a couple of structures, and refactor the rest of the code,
-> accordingly.
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
-> 
-> This results in no differences in binary output.
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/295
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Hi Martin,
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Please consider these SCSI core patches for the next merge window.
 
--- 
-Kees Cook
+Thanks,
+
+Bart.
+
+Changes compared to v2:
+- Dropped patch "scsi: core: Update a source code comment".
+- In patch "scsi: core: Trace SCSI sense data", changed the format for the
+  sense key and left out a superfluous parenthese.
+- In patch "scsi: core: Only kick the requeue list if necessary", moved the
+  blk_mq_kick_requeue_list() from scsi_run_host_queues() into scsi_run_queue().
+
+Changes compared to v1:
+- Improved the SCSI tracing patch as requested by Steven Rostedt and
+  Niklas Cassel.
+- Added patch "scsi: core: Delay running the queue if the host is blocked".
+
+Bart Van Assche (4):
+  scsi: core: Use min() instead of open-coding it
+  scsi: core: Trace SCSI sense data
+  scsi: core: Only kick the requeue list if necessary
+  scsi: core: Delay running the queue if the host is blocked
+
+ drivers/scsi/scsi_common.c  |  3 +--
+ drivers/scsi/scsi_lib.c     | 15 +++++++++------
+ include/trace/events/scsi.h | 21 +++++++++++++++++++--
+ 3 files changed, 29 insertions(+), 10 deletions(-)
+
