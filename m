@@ -2,69 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A653270C934
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 May 2023 21:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFE170C892
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 May 2023 21:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235269AbjEVTps (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 May 2023 15:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
+        id S235071AbjEVTkJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 May 2023 15:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235256AbjEVTpr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 May 2023 15:45:47 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DEECF
-        for <linux-scsi@vger.kernel.org>; Mon, 22 May 2023 12:45:45 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-19674cab442so4896981fac.3
-        for <linux-scsi@vger.kernel.org>; Mon, 22 May 2023 12:45:45 -0700 (PDT)
+        with ESMTP id S235158AbjEVTj7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 May 2023 15:39:59 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E62BA3
+        for <linux-scsi@vger.kernel.org>; Mon, 22 May 2023 12:39:52 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64d2b42a8f9so3464321b3a.3
+        for <linux-scsi@vger.kernel.org>; Mon, 22 May 2023 12:39:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684784744; x=1687376744;
+        d=chromium.org; s=google; t=1684784391; x=1687376391;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jNAaP6+XJai6xtjlcDTjy2E1GXqny00MK+4AdCDW8Kw=;
-        b=DLqbWreBhVkCJiiJkvsOkHF49qc5AOlzR848e2BZJfl5KOrNWtcKN0zZaK8usqjzLT
-         C7hTUFpnArYccMdkjalMHpC7FCTbWyRe9h6y687XE4XxYV56HiZ1uo9ycIeuleLOT7pn
-         QTTtv9AtaHrTpND9AOV6CzQGD+7wg5vRa1ifU=
+        bh=K2jEpAMn2sppJym9VTffGg66OqE+Owax2jsJobO+lpY=;
+        b=GAhvMxLqlktEQWQhaTQzC0fI6WX0lWg5TOpNgoOFjFdrLDlZG5E7GmIAA1rSQCa89S
+         vmhBNcre+8RDeFRCKiHq1mCkFwBYk1iukc1MhHJW0yHfX4mFq8sQAWmM2tgF+IOtfmMF
+         BmcQ66ZNJNBl+QANYvaC5Vw6XN12vK60wnrpA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684784744; x=1687376744;
+        d=1e100.net; s=20221208; t=1684784391; x=1687376391;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jNAaP6+XJai6xtjlcDTjy2E1GXqny00MK+4AdCDW8Kw=;
-        b=CeriY1+89bEPeCHDSO84T2QApSDKM8esTdio9TKRV8wCdhZ/FR3dmCFGBF3TZDAvBZ
-         2ISnzw7kCB5Wbdh0H4HUqvETr5sgWnNh9g2zTcIXLoKcilbEFFsEb32Zmh6vZYqsbR1J
-         9egUKe6OuiznxluuUbVMwlcJM7g2ioOs7CB7266BfsEqq5m8YuJKSrcpYHtCu4btBfvw
-         C1mUXB967ZIAAH3Gk+znx0wymjjVF7yJTdfFGmYD/pM1+uFRg/2T3PD9+BKrh8Mu/oNJ
-         MU30Yn5+mPRclfq6QcHo2UqGrG25oznKiL9vELE709z2lelBYUWxl+mEcRvfUeUoSxUa
-         xDUQ==
-X-Gm-Message-State: AC+VfDwd4EwX4GD/6mg73Ga+XnyOOJ3M0k4dDRda8/yiAKt63x1Zz0oT
-        qeSUVYC66se94mvj/PwPhCYQVTF8IRmw4wiELNA=
-X-Google-Smtp-Source: ACHHUZ7XSGaVK8OAFHtgEWwhmN/dPCgY/hsNSkZ6wHyqo93wCVtLQOXdhbv7Nf33xNA7cZ9ma8oqXA==
-X-Received: by 2002:a17:90a:70ce:b0:255:4f4c:368 with SMTP id a14-20020a17090a70ce00b002554f4c0368mr5138998pjm.27.1684784390970;
-        Mon, 22 May 2023 12:39:50 -0700 (PDT)
+        bh=K2jEpAMn2sppJym9VTffGg66OqE+Owax2jsJobO+lpY=;
+        b=UTQ5qu3RWDLl5YUGFI603+dS2bKlrj9smQ8Hm+wONj/+Q8rIebCEOGI88Vu+wuRKfW
+         aV059O+sBK8y1co+BQKlAtPH5Mx0Kf4sMWriignIFqJioh2BKpq46Tsr0cktrU0Wvdw4
+         3BBcYTi9Yk/oz1iJNfLyvyh1Cte1D2XQJfBvj7R+h1Ri2jXuVNtxS8tHPxC6SO3tprgH
+         dvuZXOdIFKlXRdkyyIKTDK3IzBK1A2uYJS4IPSvbTxtcmsABQ5DoPqg5lJvkIe5qLXnb
+         4KMpdChI3md9dk1O+JoU/f5sJ0TU4ykXbbEEYlc0T+Gpv6jvV1IA2XxO4MBhQC+0pSfv
+         trTA==
+X-Gm-Message-State: AC+VfDy+QSBZ/jmgZHAZcipMeZirmQB66JzgFyApAA9Uk+gzAzxcsTnf
+        HIKS+3uouJrIbSQ0g/t3N75IPg==
+X-Google-Smtp-Source: ACHHUZ7XfU8otOHEaRosJGVI4waVEHdxQa79hW26NIgI5Mt2wGy/s+FrfhQZE3HBm0GnospWfH/K6w==
+X-Received: by 2002:a17:902:e80e:b0:1af:a058:cc2d with SMTP id u14-20020a170902e80e00b001afa058cc2dmr7655903plg.57.1684784391659;
+        Mon, 22 May 2023 12:39:51 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id r13-20020a17090a940d00b0025352448ba9sm6234829pjo.0.2023.05.22.12.39.48
+        by smtp.gmail.com with ESMTPSA id i1-20020a17090332c100b001a94a497b50sm5227419plr.20.2023.05.22.12.39.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 22 May 2023 12:39:49 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
-To:     azeemshaikh38@gmail.com, tyreld@linux.ibm.com
-Cc:     Kees Cook <keescook@chromium.org>, mpe@ellerman.id.au,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        christophe.leroy@csgroup.eu, npiggin@gmail.com,
-        linux-kernel@vger.kernel.org, jejb@linux.ibm.com,
-        linux-hardening@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] scsi: ibmvscsi: Replace all non-returning strlcpy with strscpy
-Date:   Mon, 22 May 2023 12:39:40 -0700
-Message-Id: <168478437624.244538.16463667694387498508.b4-ty@chromium.org>
+To:     njavali@marvell.com, mrangankar@marvell.com,
+        GR-QLogic-Storage-Upstream@marvell.com, azeemshaikh38@gmail.com
+Cc:     Kees Cook <keescook@chromium.org>, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, linux-kernel@vger.kernel.org,
+        jejb@linux.ibm.com, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] scsi: qedi: Replace all non-returning strlcpy with strscpy
+Date:   Mon, 22 May 2023 12:39:41 -0700
+Message-Id: <168478437625.244538.15778765475911379516.b4-ty@chromium.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230517143409.1520298-1-azeemshaikh38@gmail.com>
-References: <20230517143409.1520298-1-azeemshaikh38@gmail.com>
+In-Reply-To: <20230517143509.1520387-1-azeemshaikh38@gmail.com>
+References: <20230517143509.1520387-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,7 +71,7 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 17 May 2023 14:34:09 +0000, Azeem Shaikh wrote:
+On Wed, 17 May 2023 14:35:09 +0000, Azeem Shaikh wrote:
 > strlcpy() reads the entire source buffer first.
 > This read may exceed the destination size limit.
 > This is both inefficient and can lead to linear read
@@ -85,8 +84,8 @@ On Wed, 17 May 2023 14:34:09 +0000, Azeem Shaikh wrote:
 
 Applied to for-next/hardening, thanks!
 
-[1/1] scsi: ibmvscsi: Replace all non-returning strlcpy with strscpy
-      https://git.kernel.org/kees/c/015f6618194e
+[1/1] scsi: qedi: Replace all non-returning strlcpy with strscpy
+      https://git.kernel.org/kees/c/66f7f4013aa9
 
 -- 
 Kees Cook
