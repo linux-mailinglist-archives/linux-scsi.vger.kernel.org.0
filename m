@@ -2,53 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1912070C44E
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 May 2023 19:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC6C70C757
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 May 2023 21:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232924AbjEVRdL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Mon, 22 May 2023 13:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
+        id S234685AbjEVT2e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 May 2023 15:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbjEVRdK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 May 2023 13:33:10 -0400
-X-Greylist: delayed 13986 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 May 2023 10:33:08 PDT
-Received: from freesmtp-001.cafe24.com (freesmtp-001.cafe24.com [116.126.142.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49FAFF;
-        Mon, 22 May 2023 10:33:08 -0700 (PDT)
-Received: from [10.5.0.2] (unknown [185.225.234.172])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: angel12345@cafe24.com)
-        by freesmtp-001.cafe24.com (Postfix) with ESMTP id EE410BF7E1;
-        Sun, 21 May 2023 20:55:13 +0900 (KST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S234672AbjEVT22 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 May 2023 15:28:28 -0400
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3F6138;
+        Mon, 22 May 2023 12:28:26 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1ae763f9c0bso34063205ad.2;
+        Mon, 22 May 2023 12:28:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684783705; x=1687375705;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JDLVme7cQW9uRtsD1UVWARAozjiu6N7bQTx8gZDxsdQ=;
+        b=OvyI//kvkR2CsF2sWdueTmiRyNUDffrjew+igYByOOLgNPOtBOq05PdRSfF8xGgZwu
+         NsIUKflX7Cg88bRnoxyUTQLQtjXFTxQAm4WTPmRqw6AL2zlbsHbLVh0kHAO9tYCY0qxn
+         zW480EaZxR07piBt6g6l6X/Mh3brH6TF+AC49jPdoUtvXopD4z9b5BVbmxnlOkupobJs
+         bcdjf7ZE+61QPiWcy7KNtWpQpxj5BRHkr5hEEWjlEqCvZDa8Jb8ydhlowkneQBlBdZ6l
+         HPyT+fIs+inM7NKG5e3bLdvpCTfrMQ3LuHnl7WlIALguS00iTkoQ+PofGkbfUj9dUAh2
+         773Q==
+X-Gm-Message-State: AC+VfDxU2s5UV529iJoV1raqvgdKbZRZbYALbFRffAGJEyzLCEliYHMQ
+        QsBW59xHCMHRokNOR+eGKqE=
+X-Google-Smtp-Source: ACHHUZ5J0wE2koZk8s5RFZPNkjJcT9HU32czYmQLoWwjVphgoj7dOovDzODtz6Og4MZsW8cXNQNgCg==
+X-Received: by 2002:a17:902:f547:b0:1ac:9890:1c49 with SMTP id h7-20020a170902f54700b001ac98901c49mr16629605plf.15.1684783705569;
+        Mon, 22 May 2023 12:28:25 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:642f:e57f:85fb:3794? ([2620:15c:211:201:642f:e57f:85fb:3794])
+        by smtp.gmail.com with ESMTPSA id r14-20020a17090a454e00b002535e5e6078sm6185316pjm.56.2023.05.22.12.28.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 12:28:25 -0700 (PDT)
+Message-ID: <89053bf1-6bc3-3778-7662-14d15bd778a3@acm.org>
+Date:   Mon, 22 May 2023 12:28:23 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Did you know??
-To:     Recipients <angel12345@cafe24.com>
-From:   angel12345@cafe24.com
-Date:   Sun, 21 May 2023 06:54:50 -0500
-Reply-To: francesandpatrickconnolly@aol.com
-Message-Id: <20230521115514.EE410BF7E1@freesmtp-001.cafe24.com>
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,NIXSPAM_IXHASH,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5002]
-        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [116.126.142.92 listed in wl.mailspike.net]
-        *  0.0 T_SPF_PERMERROR SPF: test of record failed (permerror)
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: spinlock recursion in aio_complete()
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        linux-aio@kvack.org, linux-parisc <linux-parisc@vger.kernel.org>
+References: <5057d550-c3f4-be34-d3e6-390790051232@gmx.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <5057d550-c3f4-be34-d3e6-390790051232@gmx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hurry, you have been selected as one of the 10 lucky winners to receive €400,000 each through the Frances and Patrick Connolly Support Life charity project. For more information, please contact Ms. Nadine at francesandpatrickconnolly@aol.com
+On 5/20/23 22:43, Helge Deller wrote:
+> On a single-CPU parisc64 machine I face the spinlock recursion below.
+> Happens reproduceably directly at bootup since kernel 6.2 (and ~ 6.1.5).
+> Kernel is built for SMP. Same kernel binary works nicely on machines with more than
+> one CPU, but stops on UP machines.
+> Any idea or patch I could try?
+
+How about performing one or more of the following actions?
+* Translating aio_complete+0x68 into a line number.
+* Repeating the test with lockdep enabled.
+* Bisecting this issue.
+
+Thanks,
+
+Bart.
