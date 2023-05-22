@@ -2,91 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFE170C892
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 May 2023 21:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D8D70CB94
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 May 2023 22:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235071AbjEVTkJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 May 2023 15:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34124 "EHLO
+        id S231966AbjEVUvz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 May 2023 16:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235158AbjEVTj7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 May 2023 15:39:59 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E62BA3
-        for <linux-scsi@vger.kernel.org>; Mon, 22 May 2023 12:39:52 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64d2b42a8f9so3464321b3a.3
-        for <linux-scsi@vger.kernel.org>; Mon, 22 May 2023 12:39:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684784391; x=1687376391;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K2jEpAMn2sppJym9VTffGg66OqE+Owax2jsJobO+lpY=;
-        b=GAhvMxLqlktEQWQhaTQzC0fI6WX0lWg5TOpNgoOFjFdrLDlZG5E7GmIAA1rSQCa89S
-         vmhBNcre+8RDeFRCKiHq1mCkFwBYk1iukc1MhHJW0yHfX4mFq8sQAWmM2tgF+IOtfmMF
-         BmcQ66ZNJNBl+QANYvaC5Vw6XN12vK60wnrpA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684784391; x=1687376391;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K2jEpAMn2sppJym9VTffGg66OqE+Owax2jsJobO+lpY=;
-        b=UTQ5qu3RWDLl5YUGFI603+dS2bKlrj9smQ8Hm+wONj/+Q8rIebCEOGI88Vu+wuRKfW
-         aV059O+sBK8y1co+BQKlAtPH5Mx0Kf4sMWriignIFqJioh2BKpq46Tsr0cktrU0Wvdw4
-         3BBcYTi9Yk/oz1iJNfLyvyh1Cte1D2XQJfBvj7R+h1Ri2jXuVNtxS8tHPxC6SO3tprgH
-         dvuZXOdIFKlXRdkyyIKTDK3IzBK1A2uYJS4IPSvbTxtcmsABQ5DoPqg5lJvkIe5qLXnb
-         4KMpdChI3md9dk1O+JoU/f5sJ0TU4ykXbbEEYlc0T+Gpv6jvV1IA2XxO4MBhQC+0pSfv
-         trTA==
-X-Gm-Message-State: AC+VfDy+QSBZ/jmgZHAZcipMeZirmQB66JzgFyApAA9Uk+gzAzxcsTnf
-        HIKS+3uouJrIbSQ0g/t3N75IPg==
-X-Google-Smtp-Source: ACHHUZ7XfU8otOHEaRosJGVI4waVEHdxQa79hW26NIgI5Mt2wGy/s+FrfhQZE3HBm0GnospWfH/K6w==
-X-Received: by 2002:a17:902:e80e:b0:1af:a058:cc2d with SMTP id u14-20020a170902e80e00b001afa058cc2dmr7655903plg.57.1684784391659;
-        Mon, 22 May 2023 12:39:51 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id i1-20020a17090332c100b001a94a497b50sm5227419plr.20.2023.05.22.12.39.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 12:39:49 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     njavali@marvell.com, mrangankar@marvell.com,
-        GR-QLogic-Storage-Upstream@marvell.com, azeemshaikh38@gmail.com
-Cc:     Kees Cook <keescook@chromium.org>, linux-scsi@vger.kernel.org,
-        martin.petersen@oracle.com, linux-kernel@vger.kernel.org,
-        jejb@linux.ibm.com, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] scsi: qedi: Replace all non-returning strlcpy with strscpy
-Date:   Mon, 22 May 2023 12:39:41 -0700
-Message-Id: <168478437625.244538.15778765475911379516.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230517143509.1520387-1-azeemshaikh38@gmail.com>
-References: <20230517143509.1520387-1-azeemshaikh38@gmail.com>
+        with ESMTP id S229562AbjEVUvz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 May 2023 16:51:55 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFFC92;
+        Mon, 22 May 2023 13:51:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684788705; i=deller@gmx.de;
+        bh=PlwiIjbt31eASWGjhy+grQ3UHqKEgPfDTNdFcM3wHws=;
+        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
+        b=K1nPPummJSI7JYFm698wuU7sJnI2n88QjQUGQQFafh4GPbY/tGRfk6UZaRqDds0+9
+         lRYunmX3LVguH9+ZUdBbLXwCxiNyYNanP0RVwwws+GTt/70/DgfarEUs0zj4FOdqYR
+         IYVHcelzhecBk3N7I6d32+0XX9BuMYyOFpkVm8NlynjpD6ytAUX60QpKL20Ny8eYNm
+         YA2hz76eO5iEOEQYSSGhAq2psD0pKVw5cY5T0MFM04gFNT1+LnjJY6Onn+m8yT1Ra9
+         XdBFKC2HyBI6uk12pCC1WnJQV5h43XNSj9P9Iyw/bgWEI4++XtrGO4eRDNDDlIYxH0
+         hyB6u/a9k1O7g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.144.112]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mxm3Q-1qLKd520vW-00zEA6; Mon, 22
+ May 2023 22:51:45 +0200
+Message-ID: <8bd7faad-abf4-f7b3-03c9-e06f9b5d2148@gmx.de>
+Date:   Mon, 22 May 2023 22:51:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: spinlock recursion in aio_complete()
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        linux-aio@kvack.org, linux-parisc <linux-parisc@vger.kernel.org>
+References: <5057d550-c3f4-be34-d3e6-390790051232@gmx.de>
+ <89053bf1-6bc3-3778-7662-14d15bd778a3@acm.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <89053bf1-6bc3-3778-7662-14d15bd778a3@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:b4PH3HvBV4wZ7jefTyqXdSuXHKGxrGZFZOLEaNETAjmjdcbdgUG
+ RPL+bpFkCh4Sxdhdrm7k9c0PvqUpkJx9F0GBZAXutdYKAoy8k3a5GHWwDOZEmz4kPci13sG
+ UAvnLp6jvJ92mloPTBqT6ruydbjuyNkAWHa2c+g6rCyWFfuPFVk9Dil/mzuHz9SafR935hw
+ yX9n6in/hjYr/9iCKVMNQ==
+UI-OutboundReport: notjunk:1;M01:P0:WPRbdojmkes=;i2ZnPMdoqwtiOk0LjluAg/Y53OP
+ t5WSN7xaPblH0knq0JFHD4aa3rB91gYl0q/uSDzmzDb0RXd3gcFidCzN4gloSjiQoWB5byohS
+ 1SZvZxxK+yKOYij26ixu2nqEXaOYMSjLoR8xgNikDVO5NMSAAOg1mVOPC+joC+F3ebc84z6D5
+ zlaifXiewPvCkEqIZng/SPRGo+zcUOxs6MBxCKDZQ+5GBjGyGRfBREibNDIWBA1mXTpB12LZ0
+ bk3nMUA4iRWpLBn4AZS3iLKb6Rs29a6nvKgLN9e5gqV3Jifa+If09BHvirpAylUFKATixLm8F
+ ut1K+dji9oeloM4zZzgnLEc5KVTG1gwhxuingVm1oHCyNe71hbvUxCzYXYPLdm7uXzlZsuzaN
+ dTV4oYuX/LGzCSr9lC3JYuaGXSFwOBXaXM8z6z5F1oEbEOBIoDt54C8KZitfOuqec0x7WdR4w
+ 1NH69iCKadYDkM6VttxKQGtD3O90V2ecO671AcCMrc/P7oHCNzbc23kYSyCvgh3+/ejLXytlp
+ W8Cn+Ni/SOF2YQfm2JQStqWA+g29nKcR64xlaLOArKVf+1hN+DI7eD1t3GgVXdMYtgaDidEUJ
+ 3q7kJdkK/6w4RQYMiXmV85XfH5DsAASNy9rU5cEgVZgEuHKur4d/w25NXYBu1oMYnysnzy4y8
+ GalYw8sudY0+Onm3x4P6xKMgy423Dr4Hy0kwTvWjRAgJjQ7/HgkLR0rseZbNkIqQxWZKzn+0b
+ nI/LHsZXd6MfeVTs8K93PQbgNRMRxRqnSo28o/e6rSu6hVg7Rd5jpKA8sZ25qOr0VMBBMhdF8
+ ha2BXBEDPIWj1e0cPsWVq/cv4Q6oSEm51Ih6a+oNc0N04xrRD1U/CGJmveTJ6CRZwNbI0pE+T
+ JQpTiAeWReAbhRpG7pQZeaFapmeZj64pIt0N2pB5zoqkIsuzOW00hfECpc+UVu7Cskql2j1Qi
+ xHYf+g==
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 17 May 2023 14:35:09 +0000, Azeem Shaikh wrote:
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with strscpy().
-> No return values were used, so direct replacement is safe.
-> 
-> [...]
+On 5/22/23 21:28, Bart Van Assche wrote:
+> On 5/20/23 22:43, Helge Deller wrote:
+>> On a single-CPU parisc64 machine I face the spinlock recursion below.
+>> Happens reproduceably directly at bootup since kernel 6.2 (and ~ 6.1.5)=
+.
+>> Kernel is built for SMP. Same kernel binary works nicely on machines wi=
+th more than
+>> one CPU, but stops on UP machines.
+>> Any idea or patch I could try?
+>
+> How about performing one or more of the following actions?
+> * Translating aio_complete+0x68 into a line number.
 
-Applied to for-next/hardening, thanks!
+It hangs in fs/aio.c:1128, function aio_complete(), in this call:
+	spin_lock_irqsave(&ctx->completion_lock, flags);
 
-[1/1] scsi: qedi: Replace all non-returning strlcpy with strscpy
-      https://git.kernel.org/kees/c/66f7f4013aa9
+> * Repeating the test with lockdep enabled.
 
--- 
-Kees Cook
+Hmm... We don't have LOCKDEP yet on parisc :-(
 
+> * Bisecting this issue.
+
+Will try, but this process is *very* slow as it happens on one machine onl=
+y,
+it's only accessible remotely, uses endless time to reboot and I have no
+easy way to netboot kernels...
+
+Helge
