@@ -2,138 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC1370BC26
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 May 2023 13:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E4E70BFD4
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 May 2023 15:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbjEVLsA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 May 2023 07:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
+        id S231499AbjEVNbw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 May 2023 09:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbjEVLr7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 May 2023 07:47:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C599FAA;
-        Mon, 22 May 2023 04:47:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64162615C1;
-        Mon, 22 May 2023 11:47:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB7BBC4339E;
-        Mon, 22 May 2023 11:47:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684756076;
-        bh=k67MFS8V9LYxjMTds9Q4HRsZBrBFA2bqwNkkrXZrHr4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=I+J1Yj3YgOtgoMIyYMf0dCcMQVvwmPReczJBO79s5QDE9J+D9PayliEp3VHtSNeCD
-         7MOpGgMKCqwfbYrYjkvYNTINjLUvmQY+/Bi8DhsAQJ2Dng2tc70rSQ4rqgnYO3tlsd
-         A+qKrzPgOalPfi01BOLVRh9r5PmRHY0OHYTGQ9tq0hCHIH0+nX25Ht1uIPVWqLIq/6
-         t39QtPSctJXNNtI0vas/isCaWzhWg6rDKlj1wh+phwEkKRsVw+zPZD0tNSSe/qkb9h
-         1969l7wk6rkRTYA9BdT/Rak8+TQgmvxJ1jTzjqCY4oUK9AO0yqECTQAY50jJqPfOPS
-         opplunzuNUtTg==
-Message-ID: <2a5f6751-7120-1ea8-1a1e-d401b433a34a@kernel.org>
-Date:   Mon, 22 May 2023 20:47:54 +0900
+        with ESMTP id S230379AbjEVNbt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 May 2023 09:31:49 -0400
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A89B7;
+        Mon, 22 May 2023 06:31:47 -0700 (PDT)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-64d5b4c3ffeso1101869b3a.2;
+        Mon, 22 May 2023 06:31:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684762306; x=1687354306;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UHYEd02GTyq7nAlTVtvxKLhdJyZw7c4OhrepDRgpNdU=;
+        b=PTnxmtfU9loHX8OPnf6tJpjGd2AHu9G25NEJFkG6da61B3PiJejPqBNnasNg9KvJVu
+         I9lVxUWpiU5/KwIZLgP9BUt6ul/Ji2H7/dyOuXj5xaAxYab209s/mc+M+t+ABTXJY0Sy
+         ZxgRCIQ89YjLDP0eZ+CS+dkSZRouAADV/3LzkEtHmKDFzHOFsnGCnbi3XRrUfLPi9sH9
+         FLb/Wumxk1E4QYqxiZbDYh9PEZ/erE0uhM8rJs3jDc7PVNIq6RaI4yjJr6b/vyf+9mH2
+         WIdc1lOu65JaGvkCtHboBB3FJCLOkKGLNYVxUb1WNDjrkPYH00kMSfGQprdGui38u05P
+         knpg==
+X-Gm-Message-State: AC+VfDx4Qx4Y8BgT217b0dlrtnQF75sRK+oMZTh9MpryOiSEpnN8dhdz
+        u+hGssfUBXQ5rG+R/M27JcB0gtTKsAQ=
+X-Google-Smtp-Source: ACHHUZ64ycLv6MYTMBnDHVm5SH0u65hNtk5tgJL558kYtj9S/PGdn1U65sA69VOELpHjq4hUQpiTfQ==
+X-Received: by 2002:aa7:88c4:0:b0:64c:c65f:7322 with SMTP id k4-20020aa788c4000000b0064cc65f7322mr13598959pff.30.1684762306295;
+        Mon, 22 May 2023 06:31:46 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id b8-20020aa78708000000b0064d27a28451sm4137878pfo.100.2023.05.22.06.31.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 06:31:45 -0700 (PDT)
+Message-ID: <191c7661-c47f-5aba-97b9-ff698bda4bc7@acm.org>
+Date:   Mon, 22 May 2023 06:31:44 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] scsi: Let scsi_execute_cmd() mark args->sshdr as invalid
 Content-Language: en-US
 To:     John Garry <john.g.garry@oracle.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        yangxingui <yangxingui@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, prime.zeng@hisilicon.com,
-        kangfenglong@huawei.com
-References: <20230505025712.19438-1-yangxingui@huawei.com>
- <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
- <02d36ee9-cdad-454d-d822-95442d7bd67b@huawei.com>
- <f4ba7a92-1f00-c254-d196-7d21fe14dee2@kernel.org>
- <938d6b5b-0271-977d-f046-5fd70d29b3ca@huawei.com>
- <a5c2e157-aaf7-1300-3fbb-1300ac216cee@kernel.org>
- <68953040-1622-254b-f6f8-b279eccacfb1@kernel.org>
- <c88dcbc3-d530-3e9e-f674-a2fe64ad5fdc@huawei.com>
- <43d5ba4a-efc7-09ae-74dc-81b19f635a19@oracle.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <43d5ba4a-efc7-09ae-74dc-81b19f635a19@oracle.com>
-Content-Type: text/plain; charset=UTF-8
+        Juergen Gross <jgross@suse.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>, stable@vger.kernel.org
+References: <20230511123432.5793-1-jgross@suse.com>
+ <yq1ttwbsoii.fsf@ca-mkp.ca.oracle.com>
+ <6614f626-d174-03d0-0993-79e6f6169b71@suse.com>
+ <9d356278-c826-dacf-cbe0-79f512b7970e@oracle.com>
+ <60aeffe4-b31d-4ea3-d4ea-f50ae25e0316@suse.com>
+ <74879c87-689f-6a8e-a177-8bde4c9c4e51@oracle.com>
+ <fb0efbd1-a54f-09d6-bd27-6f665b461e58@acm.org>
+ <554bfa20-2228-8655-09e2-492cbfa183fa@oracle.com>
+ <c9f0bc23-d5c1-23ba-2752-d89be9fef04a@acm.org>
+ <611e1210-d89b-9046-ac3f-68a89af6159e@oracle.com>
+ <ff04d098-17cc-42c5-cf72-2128fb43114e@acm.org>
+ <73e3da3d-ed90-6c38-3c8c-13653bd89944@oracle.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <73e3da3d-ed90-6c38-3c8c-13653bd89944@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/22/23 20:28, John Garry wrote:
-> On 22/05/2023 09:00, Jason Yan wrote:
->>
->> OK, so the issue is that __ata_scsi_find_dev() calls ata_find_dev() with 
->> devno
->> == scsidev->id. This leads to devno being 0, 1, 2 and 3 for connected 
->> drives
+On 5/22/23 02:55, John Garry wrote:
+> On 19/05/2023 18:39, Bart Van Assche wrote:
+>>        *args->resid = scmd->resid_len;
+>> -    if (args->sense)
+>> -        memcpy(args->sense, scmd->sense_buffer, SCSI_SENSE_BUFFERSIZE);
+>> +    if (args->sense) {
+>> +        *args->sense = scmd->sense_buffer;
+>> +        scmd->sense_buffer = NULL;
 > 
-> This numbering comes from sas_rphy_add():
-> ...
-> if (identify->device_type == SAS_END_DEVICE &&
->      (identify->target_port_protocols &
->       (SAS_PROTOCOL_SSP | SAS_PROTOCOL_STP | SAS_PROTOCOL_SATA)))
-> 	rphy->scsi_target_id = sas_host->next_target_id++;
-> 
-> ..
-> 
-> 	scsi_scan_target(&rphy->dev, 0, rphy->scsi_target_id, lun,
-> SCSI_SCAN_INITIAL);
-> }
-> 
-> So libata and scsi_transport_sas just use different sdev id numbering 
-> schemes for host scan.
-> 
->> sdd, sd1, sdf and sdg, as shown by lsscsi. However, each drive has its own
->> port+link, with the link for each one having  ata_link_max_devices() == 
->> 1, so
->> ata_find_dev() works only for the first drive with scsidev->id == 0 and 
->> fails
->> for the others. A naive fix would be this:
->>
->> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
->> index 7bb12deab70c..e4d6f17d7ccc 100644
->> --- a/drivers/ata/libata-scsi.c
->> +++ b/drivers/ata/libata-scsi.c
->> @@ -2718,7 +2718,7 @@ static struct ata_device *__ata_scsi_find_dev(struct
->> ata_port *ap,
->>           if (!sata_pmp_attached(ap)) {
->>                   if (unlikely(scsidev->channel || scsidev->lun))
->>                           return NULL;
->> -               devno = scsidev->id;
->> +               devno = 0;
-> Would this pattern work:
-> 
-> ata_for_each_dev(ata_dev, link, ALL) {
-> 	if (ata_dev->sdev == sdev)
-> 		return ata_dev;
-> }
+> I think that you will agree that this is not a good pattern to follow. 
+> We cannot have SCSI core allocating the sense buffer but a driver 
+> freeing it.
 
-That would work too I think, even though a loop is a bit ugly...
+Why not? Something similar can happen anywhere in the kernel anywhere 
+reference counting is used.
 
-> 
-> If not, I think it's ok to have devno = 0 assignment under SAS_HOST 
-> flag, even though it's far from ideal. Not both of these are not 
-> preferred, then, as I mentioned before, some per-port callback to do the 
-> conversion.
-
-See the proper patch I posted a few min ago (I cc-ed you). I do not use SAS_HOST
-flag :)
-
-> 
-> Thanks,
-> John
-
--- 
-Damien Le Moal
-Western Digital Research
+Bart.
 
