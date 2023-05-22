@@ -2,65 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4152270C888
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 May 2023 21:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DBF70C894
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 May 2023 21:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235003AbjEVTjl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 May 2023 15:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33668 "EHLO
+        id S235099AbjEVTkK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 May 2023 15:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235019AbjEVTjj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 May 2023 15:39:39 -0400
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F450DC
-        for <linux-scsi@vger.kernel.org>; Mon, 22 May 2023 12:39:36 -0700 (PDT)
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-517bdc9e81dso3480398a12.1
-        for <linux-scsi@vger.kernel.org>; Mon, 22 May 2023 12:39:36 -0700 (PDT)
+        with ESMTP id S235134AbjEVTjz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 May 2023 15:39:55 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5870111A
+        for <linux-scsi@vger.kernel.org>; Mon, 22 May 2023 12:39:50 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64d3fdcadb8so2290745b3a.3
+        for <linux-scsi@vger.kernel.org>; Mon, 22 May 2023 12:39:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684784389; x=1687376389;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H5RqcsZrHQ+sjRlKQFXMF6X3aaR4SZn4pKZGgKU1YWg=;
+        b=R31XgMZUzGR6DdVrmbq8rfIYc7SyOMXqcY0H7pvGchQt1B4VQC4D7lXyV+gm6ZUtxW
+         01HtBFXbSkM9NyGXFvOS6DtSfjwr9fPnJ6nEAa0ZvZ1vfTzDpQRHpecl78vUq0HCssYL
+         6QxuF3n/ucpgcH4XjhN3wiiYtJW0l0l0wBoao=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684784376; x=1687376376;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E/NiyBUNQN6CkF6aj4DN1C8F8wjzkWvvcCeqt2HH4sk=;
-        b=bxJJY/ASjEw1aH6TTxr6x6zbXKV+xZ36Zda/ufSlCaHWxAc3gNTVvpcgsanpRNsOIr
-         hm1YUya8Z8MrQU+kRou4//VV46C/z1B+aHqzWgvSaD1ITGQgaOiwFoQRmzNvDVNk46jT
-         kFuYj8HOs8LRrrBHCps3Wueu2ocq6/WBaNlMhVbXFX1NtDF6YjJoWZpIzLQ/1pYm6B3D
-         Kbo34deyDAlg7YGg++l78GNBVxwlL2xMXWPUB1vkgSAZ492svdO+24sOt2iqLfEuYavv
-         hFHPTZj7PkIr9OrOtDtqtnW0pHV8XW0VwA4lafGybKI17MKDkbGLTt5606GJl8/jCugn
-         BcFg==
-X-Gm-Message-State: AC+VfDyyxoH68EgsrxRtHuC0a4Afxa/ozguPm/KS58m2S1nFqsCU83yt
-        inJwNA1BBgj7XyWlY/1/Jkw=
-X-Google-Smtp-Source: ACHHUZ5b8eaaE/s+TlKsBaNGb5jceAfzXaZVEDPUh5Y/9pf1kl8wrRHKjsHDMVJdAf3hnYDqLlBsOQ==
-X-Received: by 2002:a17:902:c1c4:b0:1af:b678:5168 with SMTP id c4-20020a170902c1c400b001afb6785168mr3399534plc.67.1684784375679;
-        Mon, 22 May 2023 12:39:35 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:642f:e57f:85fb:3794? ([2620:15c:211:201:642f:e57f:85fb:3794])
-        by smtp.gmail.com with ESMTPSA id x4-20020a170902ea8400b001a1adbe215asm5214326plb.142.2023.05.22.12.39.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 12:39:35 -0700 (PDT)
-Message-ID: <59ad7f1e-5c53-be7f-6668-a74d9860d19b@acm.org>
-Date:   Mon, 22 May 2023 12:39:32 -0700
+        d=1e100.net; s=20221208; t=1684784389; x=1687376389;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H5RqcsZrHQ+sjRlKQFXMF6X3aaR4SZn4pKZGgKU1YWg=;
+        b=N+r2o/qfAb9BwP1tA9ZLiaY73uoSyH0E4ZmwgcIm5s+A5Rxss7r7NxR3B4hXmTOYV9
+         oY56RV6mjj1VdXNf9L4VBaSJJ8+DSXCM5uPB6w8ZngyqU4QtwVyuxQ8FQOPITge4p/Of
+         SEi9XiaV1lXBBf0mijbMFYFjUovMfSaoI4nDltYaoXs8PbMdcnvlGd310BEYGMS0oOxa
+         xF7OxFYJEqmreT2PT9yz1YlRRx3RZFCqkZynnGZrOZCMTgAjNRUhzHMZWNKUtkQF7Ehm
+         EIVLcO7PGb1sxp132bDjShFT2oNtFCQSW823yMhkqQJGn4CskjFeOOZRC7roaywWaXLO
+         eXMQ==
+X-Gm-Message-State: AC+VfDzEBQRzGTPdYjlmYoQcddcXYb2VjjEH/eZIqLKWx3WYSfp4b6uJ
+        bsbqTB8o5Q0USuniE6C4dliKug==
+X-Google-Smtp-Source: ACHHUZ5Feu4PuUW4w9WTgTQrMG+v/QmFNOiL5RD1syYCI0wPs30vDwADkA8yVxZQTalAjCJLq+cnJQ==
+X-Received: by 2002:a05:6a00:2e01:b0:64d:3fb3:9ed9 with SMTP id fc1-20020a056a002e0100b0064d3fb39ed9mr13637170pfb.23.1684784389535;
+        Mon, 22 May 2023 12:39:49 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id a19-20020aa78653000000b0064d74808738sm1625690pfo.214.2023.05.22.12.39.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 12:39:47 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     azeemshaikh38@gmail.com, Adam Radford <aradford@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jejb@linux.ibm.com, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] scsi: 3w-9xxx: Replace all non-returning strlcpy with strscpy
+Date:   Mon, 22 May 2023 12:39:37 -0700
+Message-Id: <168478437626.244538.8257051598276343700.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230517142955.1519572-1-azeemshaikh38@gmail.com>
+References: <20230517142955.1519572-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 0/4] UFS host controller driver patches
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-References: <20230517223157.1068210-1-bvanassche@acm.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230517223157.1068210-1-bvanassche@acm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,13 +70,22 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/17/23 15:31, Bart Van Assche wrote:
-> Please consider these four UFS host controller driver patches for the next
-> merge window.
+On Wed, 17 May 2023 14:29:55 +0000, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> No return values were used, so direct replacement is safe.
+> 
+> [...]
 
-Also for this patch series, please help with reviewing this series.
+Applied to for-next/hardening, thanks!
 
-Thanks,
+[1/1] scsi: 3w-9xxx: Replace all non-returning strlcpy with strscpy
+      https://git.kernel.org/kees/c/fa36c95739ab
 
-Bart.
+-- 
+Kees Cook
 
