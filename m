@@ -2,64 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7E070E488
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 May 2023 20:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7132970E48A
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 May 2023 20:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237148AbjEWSWn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 May 2023 14:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
+        id S237019AbjEWSWp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 May 2023 14:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236660AbjEWSWe (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 May 2023 14:22:34 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9299EE5
-        for <linux-scsi@vger.kernel.org>; Tue, 23 May 2023 11:22:33 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ae65e44536so6262375ad.0
-        for <linux-scsi@vger.kernel.org>; Tue, 23 May 2023 11:22:33 -0700 (PDT)
+        with ESMTP id S236973AbjEWSWm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 May 2023 14:22:42 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D6C91
+        for <linux-scsi@vger.kernel.org>; Tue, 23 May 2023 11:22:36 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-52888681eebso355380a12.0
+        for <linux-scsi@vger.kernel.org>; Tue, 23 May 2023 11:22:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684866153; x=1687458153;
+        d=gmail.com; s=20221208; t=1684866155; x=1687458155;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SIDFmi2a2NujVCZcHyQ+iux/mZ6eRjQJ2YrqzAx7F1o=;
-        b=Wo4NCRXNAPZKS25sF4XdgRswgFcO7NU2q4YqJnQUneVbfJRmMq0LxJG7Ra1ajo2GbL
-         kRsq/RGvv0W0id/6P8YrLQQgcflaNa6wGx94hsHAFHPhZ3I1fkaCI1w1A2IYgl08xWAy
-         YDKVZOISJ/HmfsFvrlXUsyKTed9i/wh19YQ5YhFy/6WgVKh+7r8q+KFBYxYf4WsDbmyk
-         ClsNUQGTc/lECoLSiW0xQu5Ncr8sYyU/25aTEtKi7CpzFrioCGt676bI8NiuBAnP40NC
-         AQDKvVT5ospDlXbQ/r1Npk9z65iQLpDh2x8qhPOEZG3j8UE3ZTc2cuc6YbgShhrOQLdF
-         nGZw==
+        bh=ropAzCCllF6eKn5RRkEiwcllPoz4AYCNGAvsxRzmgNo=;
+        b=pr2BMLJx2dk//Y41xCP0BMf7QppPKFfOz0oYD/BONcTEIFNJQPpM/TBnMdv4h/H7Ri
+         zVDilcduKQxee90A7EDNPH0iyfOG1aJhcotOsnoXUqMKR2N/JNrYTKjUIaPVdzYTug/U
+         e+Rpg9xDEfSjtplWqdBJhmmcYfcmAbSSpANjG9uQCSKOQrWOKWS5LIrhETGnxnQeUfBV
+         G6uUrIKt+Dgnt/xJi5E+XZI6xPv5KP/Mi04gmAB/kJN3dfnsSoSTTygqqQitULIYOFyF
+         UMunSI9ri5Aavj6wZhc6PQwNB17QKU0SNLO3t7fS2+mC2p14DGQjU5958LhWZa5tEl6C
+         9nsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684866153; x=1687458153;
+        d=1e100.net; s=20221208; t=1684866155; x=1687458155;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SIDFmi2a2NujVCZcHyQ+iux/mZ6eRjQJ2YrqzAx7F1o=;
-        b=Lo/6Z+ndZgyFoArcgQ+6nWVmyeeDeqWlxRvus51YxiSFcY/mnDVSFPUc+1nCKaeuwd
-         9vKEBosLvzyyxrQH/kse+gc5aqG90P3JQpFrXSOR/Ypn+IMP6QWH82spI/J5j1OIufgK
-         1fTve79eFWYteV19Q0hsWyfAb5HJibrifGyuf1X47uAOTxcFI3k/3piX23LGfZNBaLlQ
-         nCFpcezD0Q4cSjwycMLRoYd7BMz6+P8cxS2JdzuTV64rFpTg4xGyEjF2WFrZcSXpPxDU
-         DyuxWmIcw98n0mFW7XxdNaJyrLM6+ekQr3hvrxS+OT3EaUwG4Ok5K59UE19F5BZVjlfZ
-         CjRQ==
-X-Gm-Message-State: AC+VfDwpSGP5OE5CxslYjxEc//4hkyuHCmNTxScCWB8saPIhZVpEC9Wj
-        JJS1rHzq7nwkFAnmwKnfzZVY09RGsAU=
-X-Google-Smtp-Source: ACHHUZ5jvklZCWrmphwBy60CBjhxW/2y6e8g5ykTP9E4NCxtUtUs8+tswo34oXIE86Tz8JcQTi5YbQ==
-X-Received: by 2002:a17:903:2341:b0:1ac:3ebc:af0c with SMTP id c1-20020a170903234100b001ac3ebcaf0cmr15959683plh.1.1684866152824;
-        Tue, 23 May 2023 11:22:32 -0700 (PDT)
+        bh=ropAzCCllF6eKn5RRkEiwcllPoz4AYCNGAvsxRzmgNo=;
+        b=Kn0JdhNOwjihitNkjI0zftUt7OBUiC7ZSJyg0s+3hg/hlSAif7xdXMsJRkprfNiaKX
+         PnmKW7HFaWLHiwcjA3SVBgDomVduYHQgbrAhEovPyB+kkOmZyXZ5bdCIujPs/MfozNv2
+         Y0B0WTi6xvMEZtTgI/gV1kcukEGkk8skBqzpIY5VUjR/3E+IqFqHd0++7Z3Dl4umOmAU
+         SJv5+3fGVjubojKCmK7DfrBSXHCJNwQdD6psOHEFOIWKGZ2eFO50etofjfyT12ea5z8O
+         Sw49LHWV3EjosGwfTo/U20U9MRxfYWdtVU3l6YDEyLdSJF+hZ8gfzZ2hMQE/6BlbtnGx
+         Q7gg==
+X-Gm-Message-State: AC+VfDxknlFjiM/pdGkybRwcfferZRyGB/Alar260TseKQ2+wlvRynAo
+        ng14mQqlH9Bo7sJ38bkZRuvyUfLhKRA=
+X-Google-Smtp-Source: ACHHUZ7GJOiUttIQo/XV43yc0BMVrueng/pQSi6b4oJQKEFMIu84cldCKSSTvPIaRs1CZ2OJeQW4dQ==
+X-Received: by 2002:a17:902:ec8a:b0:1a9:6467:aa8d with SMTP id x10-20020a170902ec8a00b001a96467aa8dmr16183875plg.1.1684866155358;
+        Tue, 23 May 2023 11:22:35 -0700 (PDT)
 Received: from dhcp-10-231-55-133.dhcp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id w10-20020a170902e88a00b001a687c505e9sm7070870plg.237.2023.05.23.11.22.32
+        by smtp.gmail.com with ESMTPSA id w10-20020a170902e88a00b001a687c505e9sm7070870plg.237.2023.05.23.11.22.34
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 23 May 2023 11:22:32 -0700 (PDT)
+        Tue, 23 May 2023 11:22:35 -0700 (PDT)
 From:   Justin Tee <justintee8345@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     jsmart2021@gmail.com, justin.tee@broadcom.com,
         Justin Tee <justintee8345@gmail.com>
-Subject: [PATCH 8/9] lpfc: Update lpfc version to 14.2.0.13
-Date:   Tue, 23 May 2023 11:32:05 -0700
-Message-Id: <20230523183206.7728-9-justintee8345@gmail.com>
+Subject: [PATCH 9/9] lpfc: Copyright updates for 14.2.0.13 patches
+Date:   Tue, 23 May 2023 11:32:06 -0700
+Message-Id: <20230523183206.7728-10-justintee8345@gmail.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20230523183206.7728-1-justintee8345@gmail.com>
 References: <20230523183206.7728-1-justintee8345@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -71,26 +72,40 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update lpfc version to 14.2.0.13
+Update copyrights to 2023 for files modified in the 14.2.0.13 patch set.
 
 Signed-off-by: Justin Tee <justin.tee@broadcom.com>
 ---
- drivers/scsi/lpfc/lpfc_version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_logmsg.h | 2 +-
+ drivers/scsi/lpfc/lpfc_nvmet.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_version.h b/drivers/scsi/lpfc/lpfc_version.h
-index 5fda8ac6b883..6f35491aed0f 100644
---- a/drivers/scsi/lpfc/lpfc_version.h
-+++ b/drivers/scsi/lpfc/lpfc_version.h
-@@ -20,7 +20,7 @@
-  * included with this package.                                     *
-  *******************************************************************/
- 
--#define LPFC_DRIVER_VERSION "14.2.0.12"
-+#define LPFC_DRIVER_VERSION "14.2.0.13"
- #define LPFC_DRIVER_NAME		"lpfc"
- 
- /* Used for SLI 2/3 */
+diff --git a/drivers/scsi/lpfc/lpfc_logmsg.h b/drivers/scsi/lpfc/lpfc_logmsg.h
+index 324b865db0e1..f896ec610433 100644
+--- a/drivers/scsi/lpfc/lpfc_logmsg.h
++++ b/drivers/scsi/lpfc/lpfc_logmsg.h
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2022 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2023 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
+  * Copyright (C) 2004-2009 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
+diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
+index ce201465dc6f..dff4584d338b 100644
+--- a/drivers/scsi/lpfc/lpfc_nvmet.c
++++ b/drivers/scsi/lpfc/lpfc_nvmet.c
+@@ -1,7 +1,7 @@
+ /*******************************************************************
+  * This file is part of the Emulex Linux Device Driver for         *
+  * Fibre Channel Host Bus Adapters.                                *
+- * Copyright (C) 2017-2022 Broadcom. All Rights Reserved. The term *
++ * Copyright (C) 2017-2023 Broadcom. All Rights Reserved. The term *
+  * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
+  * Copyright (C) 2004-2016 Emulex.  All rights reserved.           *
+  * EMULEX and SLI are trademarks of Emulex.                        *
 -- 
 2.38.0
 
