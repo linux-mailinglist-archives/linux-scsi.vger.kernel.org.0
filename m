@@ -2,35 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADCC7114A3
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 May 2023 20:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EC971153B
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 May 2023 20:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242108AbjEYSjL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 25 May 2023 14:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
+        id S242427AbjEYSnz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 25 May 2023 14:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242022AbjEYSij (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 May 2023 14:38:39 -0400
+        with ESMTP id S242268AbjEYSnl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 May 2023 14:43:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1352DE69;
-        Thu, 25 May 2023 11:36:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92CE10FB;
+        Thu, 25 May 2023 11:40:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64C5B648DF;
-        Thu, 25 May 2023 18:35:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B14EC433D2;
-        Thu, 25 May 2023 18:35:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 930B960C07;
+        Thu, 25 May 2023 18:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36EB7C4339B;
+        Thu, 25 May 2023 18:38:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039728;
-        bh=YTQNMzu6xtBpjnBNiSqKehjsTvKGspXh7Ovuy4IeBbM=;
+        s=k20201202; t=1685039901;
+        bh=P/peyh5WpAYMJe0ntuLy22A+iOI/4fbFq/pWTMDopZQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TEF8om+3V87NjWJpxwz/dUyIr6AE4ZfhVa7hU0kmCZUaqYo2lLA+vD1eHJ0WC2sb5
-         vKZlfx/mR4/ynZQ4o9dJShDrUWoCZCqfk6xTRLiR6xfHSGwgzFdTk0zUZR18lZChlr
-         dlIfGZHUMHdDyebSM2PWEnmGIdWOATxNP/Q6oxsa7Kh5Igu6R3Zdb/x8VkOvVvVYQZ
-         SFKgXnA2SCgWxiVrD7PGqhpn2BchNB5Ne4A8v6OjGwmNGbO1vLbQy9bBTyVjS2njOc
-         Y0PguFtX9bKbbp5LYt/pQu3yH21hQrIvbJkJxCOMbw9tIYHAK7YhYQmgt3/x1zuQA2
-         YxHAQrm1EIERw==
+        b=EmNqLNIoQkl72By1SJxh2DvveQR13sdIFQa897iSQS11AMJNVjol+V3U3/ytv7Q9f
+         KuXyn8Z6kyWBWu/mkViAcMzindvgBVTqjZ28hhy90SMoslnJvp5vqDmpvm2KqZYf3C
+         o4icwaDN6xmzKM7nHqCvyMZY230BxzBx8WoDyl6Zld6wf6+k2fZTnvPFrJz1Wbozhs
+         c/HPeZT74CQTkxACrTVryPbdJ7PVQnw0RVAgwsx09m9BwSwYnD0bDflpHPWJRNh2G3
+         2SEyazvmZ6VXuv6zovlBEkqzNf/T7GN913dU66WZyr4ojnXQRgTWCZ4g2Blwzr71uL
+         dSTmmXGpokUzw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Wenchao Hao <haowenchao2@huawei.com>,
@@ -38,12 +38,12 @@ Cc:     Wenchao Hao <haowenchao2@huawei.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 53/67] scsi: core: Decrease scsi_device's iorequest_cnt if dispatch failed
-Date:   Thu, 25 May 2023 14:31:30 -0400
-Message-Id: <20230525183144.1717540-53-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 43/57] scsi: core: Decrease scsi_device's iorequest_cnt if dispatch failed
+Date:   Thu, 25 May 2023 14:35:53 -0400
+Message-Id: <20230525183607.1793983-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525183144.1717540-1-sashal@kernel.org>
-References: <20230525183144.1717540-1-sashal@kernel.org>
+In-Reply-To: <20230525183607.1793983-1-sashal@kernel.org>
+References: <20230525183607.1793983-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -82,10 +82,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 03964b26f3f27..0226c9279cef6 100644
+index 8b89fab7c4206..fb6e9a7a7f58b 100644
 --- a/drivers/scsi/scsi_lib.c
 +++ b/drivers/scsi/scsi_lib.c
-@@ -1485,6 +1485,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
+@@ -1491,6 +1491,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
  		 */
  		SCSI_LOG_MLQUEUE(3, scmd_printk(KERN_INFO, cmd,
  			"queuecommand : device blocked\n"));
@@ -93,7 +93,7 @@ index 03964b26f3f27..0226c9279cef6 100644
  		return SCSI_MLQUEUE_DEVICE_BUSY;
  	}
  
-@@ -1517,6 +1518,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
+@@ -1523,6 +1524,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
  	trace_scsi_dispatch_cmd_start(cmd);
  	rtn = host->hostt->queuecommand(host, cmd);
  	if (rtn) {
