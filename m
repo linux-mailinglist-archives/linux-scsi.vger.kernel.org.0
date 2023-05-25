@@ -2,132 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C75710914
-	for <lists+linux-scsi@lfdr.de>; Thu, 25 May 2023 11:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCFB710CC8
+	for <lists+linux-scsi@lfdr.de>; Thu, 25 May 2023 15:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240791AbjEYJjj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 25 May 2023 05:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S234503AbjEYNAc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 25 May 2023 09:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240682AbjEYJjK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 May 2023 05:39:10 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6FE19D
-        for <linux-scsi@vger.kernel.org>; Thu, 25 May 2023 02:38:02 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-783e5c64d29so521066241.1
-        for <linux-scsi@vger.kernel.org>; Thu, 25 May 2023 02:38:02 -0700 (PDT)
+        with ESMTP id S241202AbjEYNAK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 25 May 2023 09:00:10 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F2DE45
+        for <linux-scsi@vger.kernel.org>; Thu, 25 May 2023 05:59:57 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id a640c23a62f3a-96fd3a658eeso91687066b.1
+        for <linux-scsi@vger.kernel.org>; Thu, 25 May 2023 05:59:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1685007481; x=1687599481;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oEJFrZVH1rjo4B3+YvFZtJFJ+STMe28dWj3W1cbfjMs=;
-        b=iM2dxEBGMSs2nJR2qB95J2e/i2Np/iJRynzb0xvTDnfd99o52WnVpmlrE+ekNrdP21
-         lmFU512dtt04r3jw/y9ly4KvHRST8MXGu3XVTnkxtP2RE8qSEVcn/9w+WecabUewP9Qe
-         7p6w13DuBGgg24cRZDnYPAuAxqwd1pV2GkP+S4nF1+W6faHxDtCV++fg2FCzaO02oR7W
-         kFuXYFtxORG0kp7v+Zl4VA1/yWISCnBOirroGOPOYjymNrIS/3EV5QG1CoBjwVbpjhBk
-         XaAt9wRu05Uk1DFMHcz0qrvKmDo2lyFbQaSjmscE8ujrledQgK8tDBHsodiZuP0YgJkw
-         I8kg==
+        d=gmail.com; s=20221208; t=1685019596; x=1687611596;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cpy7HUUl9JUJVfHeyZRx3CTbUVGObKlyKlmgTELiasw=;
+        b=F0j/0BGqkV+g1s//XRbh/qZbYYT/zVg925VF/Y/PwGKL5doE5KF0ftitU2wlO/3iWf
+         emtmJabb7vvO7k8Q9o7X80sm6mhMgrHJpNXTxYi7/wSZslLjcL8D8CkRUyjI8WwX+cNP
+         K0qTRgIVOeG/5aWzBPLMf3cPR7iLIK0636bqBX2+VKZrTRmZxxxZ8VvoPZYY6HZtwziZ
+         6dBcjWyl6cvGIyprCDKGymOhUBkR8kAgA/cHp0FAeePwu+PvMlog+lhj8vG1iVUV8C4i
+         /Cavw73D6lN5wi+rsqcE4WdxUOHdbI+Anw3cs2vu0CkY7k7qmOfVY9cHPioHIDyVWC1O
+         j0zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685007481; x=1687599481;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oEJFrZVH1rjo4B3+YvFZtJFJ+STMe28dWj3W1cbfjMs=;
-        b=lSzx3zPcCbZJa4qYe5PGqLzzBg3chazPDR81TQb018z7Nqq8IY1LCl8DmRUJ9XnfYb
-         4KCN40vk7+Bx4VZRohe47U6DdJubLe5IgLeQESBmH5Wof0xD4r74kwshZibmjbtKZuwZ
-         p2IRZI8blUqW41g1/bwB1XvH2Vk0wM1ImycKRF4sKjqLGjUsk9HMEA0JDhegjAVU8Ued
-         0WESP2x2lUtuToUkI/0QyQZk5C2zVkA68wHNJ+0dVnTGOGNy5uRxi8d+bVrGgNKJEQ8U
-         3pPaDwoxMNeZXFptt1RNa1pzQDwAaeL1XozD6ad7hx6fiUUNDmvalATnqsk2ayJJYo6/
-         jqgA==
-X-Gm-Message-State: AC+VfDzTUEfjx0INh2z1neHGFmw/dtUFX9IrkLgzVolZ/9gJ7yuZy5Ty
-        9ohYBqKpf49CB4MNfqHuuhFjNR65ruSvT+MDB/+wkA==
-X-Google-Smtp-Source: ACHHUZ7WpOy3wCLD5AtzEtx27Y4bEWHrtU9zN+2rZF5BNaH1IbmVOHvB1XOktMAjYDfHAtlHwjS6fZtVO9liQY+ETCk=
-X-Received: by 2002:a67:dc8c:0:b0:439:6c06:606e with SMTP id
- g12-20020a67dc8c000000b004396c06606emr795944vsk.0.1685007481350; Thu, 25 May
- 2023 02:38:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685019596; x=1687611596;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cpy7HUUl9JUJVfHeyZRx3CTbUVGObKlyKlmgTELiasw=;
+        b=e73b0sYTxIHwy5B5RBSv0ZCIOycE+fo6BhA92+p3FFhGoEd7EaUejak0YEzhXVQtWg
+         ZTZcjv0XcIzxwAGkmAMndSLOty9GQ4helXNiuDW92KXKdCWOOapYpXb0nqOxLE4mJw9T
+         EeIkyjNJM/mRALBrHPKoyQdDEafRm5VtEJ69XgZ3sXyPYnq2+lFCJ8W8BCI73i3dLo8m
+         iFkfLXLKsA5Z754n34Uu+hjbHntoRTQ/WqZj2lS0Ch8l/jI0AgRXGisRbWuFn6urifJk
+         LwH0w7I5cndaDwH/y+VcQVxGbxcIA40hk1AET70ddmVLFzwWqOHUCZuziK7x2oRN30gx
+         GqAw==
+X-Gm-Message-State: AC+VfDwZ8loIak8Ap/q3qxnBlBSTkZU41l6XNwcoQg0f6n2ep90ys632
+        +gzANgsqd1eC7uXPgXSF8UxHk0BI5iZzbs7AwyE=
+X-Google-Smtp-Source: ACHHUZ7vApnlZTNzQwuszyTX9ej/W6Pi9U/c+lzwA29qoCr5/SOJWP/PTLR4mt+fu0KM9v4evFD1McD0XXJUjY8A4RA=
+X-Received: by 2002:a17:907:3da3:b0:969:acdc:c4df with SMTP id
+ he35-20020a1709073da300b00969acdcc4dfmr1738237ejc.4.1685019595735; Thu, 25
+ May 2023 05:59:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230411130446.401440-1-brgl@bgdev.pl> <20230411130446.401440-2-brgl@bgdev.pl>
- <CAMRc=MdDct0UzJPpOTuKHmm23Jc529NwkBWJJmXfeevpkQaSxQ@mail.gmail.com>
-In-Reply-To: <CAMRc=MdDct0UzJPpOTuKHmm23Jc529NwkBWJJmXfeevpkQaSxQ@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 25 May 2023 11:37:50 +0200
-Message-ID: <CAMRc=Me4EQ_7ArCeJASzKTimuSH=yNkrwm9DgE93s7kjdS5Nrw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] dt-bindings: ufs: qcom: add compatible for sa8775p
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Received: by 2002:a17:907:944b:b0:957:1d94:103d with HTTP; Thu, 25 May 2023
+ 05:59:54 -0700 (PDT)
+Reply-To: philipsjohnsongoodp@gmail.com
+From:   philips <ekesineugwu5@gmail.com>
+Date:   Thu, 25 May 2023 14:59:54 +0200
+Message-ID: <CALM=UYrzD0kbQeZFYpew1U5zjVwvnnvtqb1=o0rRfdUsKBm6aA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, May 16, 2023 at 12:06=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl=
-> wrote:
->
-> On Tue, Apr 11, 2023 at 3:04=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.p=
-l> wrote:
-> >
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > Add the compatible string for the UFS on sa8775p platforms.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> >  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Docu=
-mentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> > index c5a06c048389..b1c00424c2b0 100644
-> > --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> > +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> > @@ -26,6 +26,7 @@ properties:
-> >            - qcom,msm8994-ufshc
-> >            - qcom,msm8996-ufshc
-> >            - qcom,msm8998-ufshc
-> > +          - qcom,sa8775p-ufshc
-> >            - qcom,sc8280xp-ufshc
-> >            - qcom,sdm845-ufshc
-> >            - qcom,sm6350-ufshc
-> > @@ -105,6 +106,7 @@ allOf:
-> >            contains:
-> >              enum:
-> >                - qcom,msm8998-ufshc
-> > +              - qcom,sa8775p-ufshc
-> >                - qcom,sc8280xp-ufshc
-> >                - qcom,sm8250-ufshc
-> >                - qcom,sm8350-ufshc
-> > --
-> > 2.37.2
-> >
->
-> Bjorn,
->
-> Are you picking this one up as well or should it go through Rob's tree?
->
-> Bart
-
-Gentle ping.
-
-Bart
+0JTQvtGA0L7Qs9C+0Lkg0LTRgNGD0LMsDQrQnNC10L3RjyDQt9C+0LLRg9GCINCR0LDRgC7QpNC4
+0LvQuNC/0YEg0JTQttC+0L3RgdC+0L0sINGPINCw0LTQstC+0LrQsNGCINC4INGH0LDRgdGC0L3R
+i9C5DQrQvNC10L3QtdC00LbQtdGAINC/0L4g0YDQsNCx0L7RgtC1INGBINC60LvQuNC10L3RgtCw
+0LzQuCDQvNC+0LXQvNGDINC/0L7QutC+0LnQvdC+0LzRgyDQutC70LjQtdC90YLRgy4g0JIgMjAx
+NyDQs9C+0LTRgw0K0LzQvtC5INC60LvQuNC10L3RgiDQv9C+INC40LzQtdC90LgNCtCc0LjRgdGC
+0LXRgCDQmtCw0YDQu9C+0YEsINGPINGB0LLRj9C30LDQu9GB0Y8g0YEg0LLQsNC80Lgg0L/QviDR
+gtC+0Lkg0L/RgNC40YfQuNC90LUsINGH0YLQviDQstGLDQrQvdC+0YHQuNGC0Ywg0L7QtNC90YMg
+0YTQsNC80LjQu9C40Y4g0YEg0L/QvtC60L7QudC90YvQvCwg0Lgg0Y8g0LzQvtCz0YMg0L/RgNC1
+0LTRgdGC0LDQstC40YLRjCDQstCw0YEg0LrQsNC6DQrQsdC10L3QtdGE0LjRhtC40LDRgCDQuCDQ
+sdC70LjQttCw0LnRiNC40Lkg0YDQvtC00YHRgtCy0LXQvdC90LjQuiDRgdGA0LXQtNGB0YLQsiDQ
+vNC+0LXQs9C+INC/0L7QutC+0LnQvdC+0LPQviDQutC70LjQtdC90YLQsCwg0YLQvtCz0LTQsCDQ
+stGLDQrQstGL0YHRgtGD0L/QuNGC0Ywg0LIg0LrQsNGH0LXRgdGC0LLQtSDQtdCz0L4g0LHQu9C4
+0LbQsNC50YjQtdCz0L4g0YDQvtC00YHRgtCy0LXQvdC90LjQutCwINC4INC/0L7RgtGA0LXQsdC+
+0LLQsNGC0YwNCtGB0YDQtdC00YHRgtCy0LAuINC+0YHRgtCw0LLQu9GP0YLRjCDQvdCw0LvQuNGH
+0L3Ri9C1DQrQvdCw0YHQu9C10LTRgdGC0LLQviDRgdC10LzQuCDQvNC40LvQu9C40L7QvdC+0LIg
+0L/Rj9GC0LjRgdC+0YIg0YLRi9GB0Y/RhyDQodC+0LXQtNC40L3QtdC90L3Ri9GFINCo0YLQsNGC
+0L7Qsg0K0JTQvtC70LvQsNGA0L7QsiAoNyA1MDAgMDAwLDAwINC00L7Qu9C70LDRgNC+0LIg0KHQ
+qNCQKS4g0JzQvtC5INC/0L7QutC+0LnQvdGL0Lkg0LrQu9C40LXQvdGCINC4INC30LDQutCw0LTR
+i9GH0L3Ri9C5DQrQtNGA0YPQsyDQstGL0YDQvtGBINCyDQrCq9CU0L7QvCDQsdC10Lcg0LzQsNGC
+0LXRgNC4wrsuINCjINC90LXQs9C+INC90LUg0LHRi9C70L4g0L3QuCDRgdC10LzRjNC4LCDQvdC4
+INCx0LXQvdC10YTQuNGG0LjQsNGA0LAsINC90Lgg0YHQu9C10LTRg9GO0YnQtdCz0L4NCtGA0L7Q
+tNGB0YLQstC10L3QvdC40LrQvtCyINCyINC90LDRgdC70LXQtNGB0YLQstC+INCh0YDQtdC00YHR
+gtCy0LAg0L7RgdGC0LDQstC70LXQvdGLINCyINCx0LDQvdC60LUuDQrQktGLINC00L7Qu9C20L3R
+iyDRgdCy0Y/Qt9Cw0YLRjNGB0Y8g0YHQviDQvNC90L7QuSDRh9C10YDQtdC3INC80L7QuSDQu9C4
+0YfQvdGL0Lkg0LDQtNGA0LXRgSDRjdC70LXQutGC0YDQvtC90L3QvtC5INC/0L7Rh9GC0Ys6DQpw
+aGlsaXBzam9obnNvbmdvb2RwQGdtYWlsLmNvbQ0K0KEg0L3QsNC40LvRg9GH0YjQuNC80Lgg0L/Q
+vtC20LXQu9Cw0L3QuNGP0LzQuCwNCtCR0LDRgC4g0KTQuNC70LjQv9GBINCU0LbQvtC90YHQvtC9
+DQo=
