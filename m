@@ -2,75 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7061A712544
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 May 2023 13:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E18712A16
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 May 2023 17:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbjEZLJR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 May 2023 07:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
+        id S244214AbjEZP6g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 May 2023 11:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjEZLJP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 May 2023 07:09:15 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76F6F7
-        for <linux-scsi@vger.kernel.org>; Fri, 26 May 2023 04:09:14 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510e419d701so1106950a12.1
-        for <linux-scsi@vger.kernel.org>; Fri, 26 May 2023 04:09:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685099353; x=1687691353;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=h+f0WP/+N5MvUYe92/BSqybSsARXcqQ8M6AlwJr5eQc=;
-        b=bEtrC/C4oxYdlVFoZ8Wt/mJ7zJTzwPXUsL94S5GOJYXs9azAYYqYVjoKqnMSGtwjRP
-         jAitUgqCgVmIUzJEoPw7tfqwr0ZMgGQOGSQH6ONxyFJfLqFBje6MUZ0IogT0fV0a6Unx
-         MbV9LHrpPmmeq8xz3R4R6paM/ZmR+RHn/fWa4oOpdGwwuxNkjQcqTBuAsdXMEIDRm557
-         q3gs0514/I22YIpn6fvugK0Iwh05WVxaQJfJJbKwzdJ7zX+J70uwaWORqHdbnKjXRxXh
-         MhEuayBTIQvEhrB8CImjPlDRY15UTuI2NEbaiBWsab+JkFKVkX5ndER5+nneAfLp94zl
-         mHOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685099353; x=1687691353;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h+f0WP/+N5MvUYe92/BSqybSsARXcqQ8M6AlwJr5eQc=;
-        b=VDOkB1N6UGygasuZBTqizU0nuImRkExH/YoVGJtZf//PnqCcw0ehYVCyQfdkO4vgRf
-         AvIET50UUUZIa3xtCow/QkEwc+6yrlK+9UtldHEhgEisA6CQqvDWhSoG5UTRu45wOOg9
-         p7h05TnUgySF4O/HJpWtoFrHhLp5vSz6Uwo/E3ynFbnQgsKLcjLrq+pfKx0mlxler3RI
-         hmSu9C+APSjywqF+Emak4nEDlgh2EpitLbXnV2Yr9qX5PXcgVJeFVQaEsSSdh74E6HbK
-         8MbSAOXL++dZ3WzeZI/CWKZgUv2+kgVIktKmXuTtzCpgF+nWdw3ESm231q82IFnDYl5Y
-         fRxQ==
-X-Gm-Message-State: AC+VfDz8Um3/BwpqtQ/i0IO6+aAPlhFNgR8pSIvSlmll+lFajC8adOJn
-        4lkY7+HG6Ic7695ZxUZlDvjtUdsYsiohIBH1/HY=
-X-Google-Smtp-Source: ACHHUZ7LsKwimMLX1HBDVi3Xe1t98CmDkZhp3GHZnDFfpsyAb5UxUcKNUrM+aSHdSbKWLlYq3sx9q+69wdSIF+/eLzA=
-X-Received: by 2002:a05:6402:1a2c:b0:506:7d65:c1fb with SMTP id
- be12-20020a0564021a2c00b005067d65c1fbmr162678edb.30.1685099353227; Fri, 26
- May 2023 04:09:13 -0700 (PDT)
+        with ESMTP id S243698AbjEZP6f (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 May 2023 11:58:35 -0400
+X-Greylist: delayed 554 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 26 May 2023 08:58:33 PDT
+Received: from out-18.mta0.migadu.com (out-18.mta0.migadu.com [91.218.175.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E36D10A
+        for <linux-scsi@vger.kernel.org>; Fri, 26 May 2023 08:58:33 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685116156;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3T1uOil3H6JZ0A20Wy7Xg4wFXp60Swnu6f66HFlzrXs=;
+        b=j1zCirSxEiElqWRN5se32FpZD2r1znYeumfNWe68aAQSKGo2aA0fZze6T3+qXDyIwUCeR6
+        VI0z8UrWqgpxX3ixM0TpEq0Fcqe4Vtt/bvezkSDzwntUyv8zcw2nDIBJut2M34KrztRJrV
+        Zm180a3Bwt7sLIWx/LyNN/RvSs6ENlk=
+From:   Jackie Liu <liu.yun@linux.dev>
+To:     njavali@marvell.com
+Cc:     GR-QLogic-Storage-Upstream@marvell.com, linux-scsi@vger.kernel.org
+Subject: [PATCH] scsi: qla2xxx: remove unnecessary NULL pointer check
+Date:   Fri, 26 May 2023 23:49:05 +0800
+Message-Id: <20230526154905.1419042-1-liu.yun@linux.dev>
 MIME-Version: 1.0
-Received: by 2002:ab4:a872:0:b0:215:8936:d3be with HTTP; Fri, 26 May 2023
- 04:09:12 -0700 (PDT)
-Reply-To: laurabr8@outlook.com
-From:   Laura Brown <jeswa7m@gmail.com>
-Date:   Fri, 26 May 2023 11:09:12 +0000
-Message-ID: <CACGCBD60q=90=z=N4yVHPZr8ByC9fg8yzod+ftfvVb9Su8GVmQ@mail.gmail.com>
-Subject: =?UTF-8?B?15nXldedINeY15XXkQ==?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-15nXldedINeY15XXkQ0KDQrXkNeg15kg15zXldeo15Qg15HXqNeQ15XXnywg15nXpteo16rXmSDX
-kNeZ16rXmiDXp9ep16gg15HXoNeV15LXoiDXnNei15nXlteR15XXnyDXlNen16jXnyDXlNee16DX
-ldeXINep15wg15Mi16gg15HXqNeQ15XXnw0K16nXnCA4LjUg157Xmdec15nXldefINeT15XXnNeo
-INep15nXldeX15bXqCDXnNeX16nXkdeV16DXmi4g15nXqteo15Qg157XlteQ16osINeR16LXoden
-15Qg15bXlSDXkNeg15kg16jXldem15Qg16nXqtep15nXkdeVDQrXkdeh15XXk9eZ15XXqi4NCg0K
-15zXldeo15Qg15HXqNeQ15XXnw0K
+From: Jackie Liu <liuyun01@kylinos.cn>
+
+By the time we get here, fcport can't be NULL, because task_work is
+can't be NULL, so this NULL check is not necessary, just cleanup.
+
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
+---
+ drivers/scsi/qla2xxx/qla_target.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index 5258b07687a9..0ba089a753f2 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -684,7 +684,7 @@ void qla24xx_delete_sess_fn(struct work_struct *work)
+ 	fc_port_t *fcport = container_of(work, struct fc_port, del_work);
+ 	struct qla_hw_data *ha = NULL;
+ 
+-	if (!fcport || !fcport->vha || !fcport->vha->hw)
++	if (!fcport->vha || !fcport->vha->hw)
+ 		return;
+ 
+ 	ha = fcport->vha->hw;
+-- 
+2.25.1
+
