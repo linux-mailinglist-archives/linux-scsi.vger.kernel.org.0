@@ -2,118 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B405C7227B7
-	for <lists+linux-scsi@lfdr.de>; Mon,  5 Jun 2023 15:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDA7722DE6
+	for <lists+linux-scsi@lfdr.de>; Mon,  5 Jun 2023 19:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbjFENoK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 5 Jun 2023 09:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
+        id S234879AbjFERwC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 5 Jun 2023 13:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjFENoJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Jun 2023 09:44:09 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF2BED;
-        Mon,  5 Jun 2023 06:44:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mCvoAgk8zhYKOoAjq5TY4OQ9rPhl649ZNxRx5rL2Pgk=; b=e00kjrppO7/UDAnEpoZmC5VmeB
-        E7eqvoNBSi328I1yZzpw0lKldIjK1ThTD2ydNi6t4PHGUucx35NQa5ecMm28xvQGCrpyDtL7lJqBl
-        4m7nOY6IDie9bSDo7UKhjMbU64mjO97fyAloPxrKcx236Krf2g3yyuA1fQtCNgI0lIP73npePLbM7
-        ob5/IqEq55gpp9viuo4Cs37S9snTDPe6VyK3CpAZ0Cp7v+p7Q4K6+cgS0ndKVb0FIwjHunEgbAPdS
-        +VxyJ0VfdPZZ4klREtVPPzMUShagY9Vu6etyAyUchmf8dKFza+DJQ/rkIS5B7LIDcMcUR9zf6rKBJ
-        9BpC9mOA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q6AUn-00FeYT-1D;
-        Mon, 05 Jun 2023 13:43:41 +0000
-Date:   Mon, 5 Jun 2023 06:43:41 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Nitesh Shetty <nj.shetty@samsung.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        willy@infradead.org, hare@suse.de, djwong@kernel.org,
-        bvanassche@acm.org, ming.lei@redhat.com, dlemoal@kernel.org,
-        nitheshshetty@gmail.com, gost.dev@samsung.com,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        Javier =?iso-8859-1?Q?Gonz=E1lez?= <javier.gonz@samsung.com>,
-        Anuj Gupta <anuj20.g@samsung.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v12 5/9] nvme: add copy offload support
-Message-ID: <ZH3mjUb+yqI11XD8@infradead.org>
-References: <20230605121732.28468-1-nj.shetty@samsung.com>
- <CGME20230605122310epcas5p4aaebfc26fe5377613a36fe50423cf494@epcas5p4.samsung.com>
- <20230605121732.28468-6-nj.shetty@samsung.com>
+        with ESMTP id S229559AbjFERwB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Jun 2023 13:52:01 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484A7C7
+        for <linux-scsi@vger.kernel.org>; Mon,  5 Jun 2023 10:52:00 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b0218c979cso29071175ad.3
+        for <linux-scsi@vger.kernel.org>; Mon, 05 Jun 2023 10:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685987519; x=1688579519;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1W5OXAE6/wPgGYy1ffyxQ21z9u1FMp2glvber/gHEu8=;
+        b=QQeiQcL/ziadlUZCRO9i2TRtVWZh3KYB9les5L5de97QpnNN48C/cZ9ZRtf4o7Nyu5
+         /UrlMwIMgbZhPJ8Z7GSQeRd8ZoezCOVg81ymvJGmf6MaoWDAHXSmMwW+FOKBB1pYEHEW
+         8tGtFuws07TG65jbcquMq2OpZOBtCxIRmff9mscxHqV2UBoI2Hie6FrvWnJ4Wj9XfvSn
+         L4ho49eXoN2EUgJN1BE2N8bTXHXOh12Zo4XKCndZNRUM2HGdp8PFd8NlWmYP8ouNWXpB
+         kdmu4RZA0kU7gNdop488f5lTRs/qTY32PJDheq74ztc/KTeoi65JzkmzX5xR80Oxcss+
+         xysA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685987519; x=1688579519;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1W5OXAE6/wPgGYy1ffyxQ21z9u1FMp2glvber/gHEu8=;
+        b=Xre0VuV047KtfsFfSkBXoUUOmCU54MVedbh7d0+qPOKUwrdN5lnR23JJ8FYQ16GTUI
+         QmljNAQ81poonhV9ps10PZ5TaJaPLlHkevexvzhDN4h1Z4GRosP4eAqVoZab9Fkp07t4
+         vtUPU2W/ST1tdZzQ9haG0EV2GX/V6yj4fekLiM02KOrjL2HJT+5LA5j4n8HLemkG+a/4
+         +IAgjmFzQnnXnPeWHI7zfeSnE09ZPDE6/bk0KxUgTgbT7wlV7yqgjmm/+54K5vzJwLue
+         U/5Q88GemEWTF/PqEIsSKsJ/HqAUaNs6xB/J0jVavOY+5ZzKb+QOhpd/5aVp/f3j4yf+
+         6rpQ==
+X-Gm-Message-State: AC+VfDyRq3fH79hOhia4oPtNyTwIAQTbvIAyhRfLqbuv6iWcGQlop6d5
+        B0CG2n2WKIJTGOuEzAO/yzxCaY8bF6LNam31A2M=
+X-Google-Smtp-Source: ACHHUZ5fxHy0Zu44OPahQjpztQ+bpDTaPW3lzSQsbLs5Nu50if+VD4zLzX1qFx4pLip276+b4NXGFV99z2sn7um214Q=
+X-Received: by 2002:a17:902:7c0c:b0:1b2:1b20:c45b with SMTP id
+ x12-20020a1709027c0c00b001b21b20c45bmr1163689pll.54.1685987519554; Mon, 05
+ Jun 2023 10:51:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605121732.28468-6-nj.shetty@samsung.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6a10:e946:b0:4b8:da72:eb35 with HTTP; Mon, 5 Jun 2023
+ 10:51:58 -0700 (PDT)
+Reply-To: ethelmelzermikel@gmail.com
+From:   Ethel Melzer Mikel <qelizabeth318@gmail.com>
+Date:   Mon, 5 Jun 2023 10:51:58 -0700
+Message-ID: <CAKoP_qoOBUt+BkWw4ZPyYtRaAyTevitXbxX1HX6=HuKhMjhnSQ@mail.gmail.com>
+Subject: Brauchen Sie einen Kredit
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
->  		break;
->  	case REQ_OP_READ:
-> -		ret = nvme_setup_rw(ns, req, cmd, nvme_cmd_read);
-> +		if (unlikely(req->cmd_flags & REQ_COPY))
-> +			nvme_setup_copy_read(ns, req);
-> +		else
-> +			ret = nvme_setup_rw(ns, req, cmd, nvme_cmd_read);
->  		break;
->  	case REQ_OP_WRITE:
-> -		ret = nvme_setup_rw(ns, req, cmd, nvme_cmd_write);
-> +		if (unlikely(req->cmd_flags & REQ_COPY))
-> +			ret = nvme_setup_copy_write(ns, req, cmd);
-> +		else
-> +			ret = nvme_setup_rw(ns, req, cmd, nvme_cmd_write);
+Hallo guten Tag.
 
-Yikes.  Overloading REQ_OP_READ and REQ_OP_WRITE with something entirely
-different brings us back the horrors of the block layer 15 years ago.
-Don't do that.  Please add separate REQ_COPY_IN/OUT (or maybe
-SEND/RECEIVE or whatever) methods.
+Mein Name ist Ethel Melzer, ich lebe in Deutschland und das Leben ist leben=
+swert
+bequem f=C3=BCr mich und meine Familie und ich habe es wirklich noch nie ge=
+sehen
+Mir wurde in meinem Leben so viel G=C3=BCte gezeigt, da ich eine schwierige
+Mutter bin
+Ich habe zwei Kinder und hatte ein ernstes Problem
+dass ich Geld brauchte und zur Bank gegangen bin, um einen Kredit
+aufzunehmen, und sie haben mich umgedreht
+unten und sage das
+Ich habe keine Kreditkarte, von dort bin ich zu meinen Geschwistern
+gelaufen und sie waren dort
+Ich konnte nicht helfen, als ich dann durch Yahoo-Antworten st=C3=B6berte u=
+nd ich
+bin auf den Kreditgeber Fast Link Worldwide Loans Financial Services gesto=
+=C3=9Fen
+der Kredite zu einem erschwinglichen Zinssatz vergibt, und ich war dort
+Ich habe von so vielen Betr=C3=BCgereien im Internet geh=C3=B6rt, bin aber
+dar=C3=BCber verzweifelt
+Situation hatte ich keine andere Wahl, als es =C3=BCberraschenderweise zu v=
+ersuchen
+Es war alles wie ein Traum, als ich einen Kredit von 250.000 erhielt.
+Ich sagte zu meinem
+Selbst, dass ich laut in die Welt schreien werde
+der Wunder Gottes zu mir durch diesen gottesf=C3=BCrchtigen Kreditgeber Fas=
+t
+Link Worldwide Loans Financial Services und ich werde jeden beraten
+echtes und ernsthaftes Darlehensbed=C3=BCrfnis
+Kontaktieren Sie diese gottesf=C3=BCrchtige Kreditgesellschaft =C3=BCber di=
+e
+offizielle E-Mail-Adresse
+(fastlinkloanfirm1@gmail.com) und ich m=C3=B6chte, dass Sie alle daf=C3=BCr=
+ beten
+Unternehmen f=C3=BCr mich.
 
-> +	/* setting copy limits */
-> +	if (blk_queue_flag_test_and_set(QUEUE_FLAG_COPY, q))
-
-I don't understand this comment.
-
-> +struct nvme_copy_token {
-> +	char *subsys;
-> +	struct nvme_ns *ns;
-> +	sector_t src_sector;
-> +	sector_t sectors;
-> +};
-
-Why do we need a subsys token?  Inter-namespace copy is pretty crazy,
-and not really anything we should aim for.  But this whole token design
-is pretty odd anyway.  The only thing we'd need is a sequence number /
-idr / etc to find an input and output side match up, as long as we
-stick to the proper namespace scope.
-
-> +	if (unlikely((req->cmd_flags & REQ_COPY) &&
-> +				(req_op(req) == REQ_OP_READ))) {
-> +		blk_mq_start_request(req);
-> +		return BLK_STS_OK;
-> +	}
-
-This really needs to be hiden inside of nvme_setup_cmd.  And given
-that other drivers might need similar handling the best way is probably
-to have a new magic BLK_STS_* value for request started but we're
-not actually sending it to hardware.
+DANKE
+Ethel Melzer
