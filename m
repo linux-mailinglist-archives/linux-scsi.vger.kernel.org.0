@@ -2,88 +2,138 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2C0721782
-	for <lists+linux-scsi@lfdr.de>; Sun,  4 Jun 2023 15:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E461A721B71
+	for <lists+linux-scsi@lfdr.de>; Mon,  5 Jun 2023 03:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjFDNzF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 4 Jun 2023 09:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
+        id S232586AbjFEBZR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 4 Jun 2023 21:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbjFDNyt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 4 Jun 2023 09:54:49 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85AFC4;
-        Sun,  4 Jun 2023 06:54:48 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6af93a6166fso3713291a34.3;
-        Sun, 04 Jun 2023 06:54:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685886888; x=1688478888;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=398DweTlvnrqAPgAmCkIV4gpM61hKO5ZN+p9g45ys7k=;
-        b=kEnNEPqc8uAb25S7+zOR6sqQ/Yi5NCcYcWYtxXdv76t4GzrfK0aWHwMq3FIrHI6Ifo
-         nl9oUsXEwU+syP2iNo0slwfzlojKHSVMMqa8gwFAbCpaGM3sYLG6TvuYpscjCbQYtBvB
-         ky+UwC5fW525NkRdSCOUOglRZdus6Zkzm59gDSe6JcKeE8agtYX+W8wxVgi7nbvoyHY+
-         xx2lN/eOyMid/O07jlPksxVnQltGO0I8vNhhHAUgJMT+upVWBmOkyISsbqxKdi0FHhh8
-         txZk94qwY/55UXv82/35IpCaiwfF9BKMJsmR1/b4fFzvthHrEZGtfJI/sJaaGbzU7Q0r
-         LB5w==
-X-Gm-Message-State: AC+VfDwO+gRvMqeW6xGbMHg2dYFPEsPCq+a0FeHQ8SO+oyXd5qdmWcOJ
-        8fIcPWlPwuicDzQMT0wyc6o=
-X-Google-Smtp-Source: ACHHUZ7cwtzyt5D9RgMFE9Kn7oLD1/onCwsiUMOYyWBnMjsTLlIHqspvJXaE/284jkjorJbH/1BgWw==
-X-Received: by 2002:a9d:590b:0:b0:6a6:5a48:1f9b with SMTP id t11-20020a9d590b000000b006a65a481f9bmr7408473oth.8.1685886887659;
-        Sun, 04 Jun 2023 06:54:47 -0700 (PDT)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id p30-20020a631e5e000000b00514256c05c2sm4230201pgm.7.2023.06.04.06.54.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jun 2023 06:54:47 -0700 (PDT)
-Message-ID: <59a03648-f65f-0c7c-b200-1b24f321c2d6@acm.org>
-Date:   Sun, 4 Jun 2023 06:54:45 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 3/3] scsi: simplify scsi_stop_queue()
-Content-Language: en-US
-To:     mwilck@suse.com, "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>
-Cc:     James Bottomley <jejb@linux.vnet.ibm.com>,
-        Bart Van Assche <Bart.VanAssche@sandisk.com>,
-        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        Hannes Reinecke <hare@suse.de>
-References: <20230602163845.32108-1-mwilck@suse.com>
- <20230602163845.32108-4-mwilck@suse.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230602163845.32108-4-mwilck@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S232148AbjFEBZP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 4 Jun 2023 21:25:15 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CADDE
+        for <linux-scsi@vger.kernel.org>; Sun,  4 Jun 2023 18:25:11 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230605012508epoutp042c25f9e850098135b2c02310651d9540~lnt0eVaoT1219612196epoutp04i
+        for <linux-scsi@vger.kernel.org>; Mon,  5 Jun 2023 01:25:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230605012508epoutp042c25f9e850098135b2c02310651d9540~lnt0eVaoT1219612196epoutp04i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1685928308;
+        bh=2blGkSBBXm4zaLKMkTF38nrbVzbShP93LN6Q/TbaAuM=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=TVkjGzon02wi1rwrFcwX64+16C+TH5eekeASvMvXhBhZKZA+/9Z1U/cYmRghgutUi
+         QXEa+Ihu8gmspgmUhM1dR0++Lb9BmrUCv/NVrS0GkbMOd7Nr71TgjJvPyPUIJaIBIt
+         09H4Y+hQQNv3mxRuE5Xhui2EKBoNis6gkuMTE0I8=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230605012507epcas2p16feef1a85cd1f1e7c2ce8d1d5ed44acb~lntzuasNx2538025380epcas2p1L;
+        Mon,  5 Jun 2023 01:25:07 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.98]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4QZGBB53mKz4x9Pp; Mon,  5 Jun
+        2023 01:25:06 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        5D.15.44220.2793D746; Mon,  5 Jun 2023 10:25:06 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230605012505epcas2p4fa6facb5ad68289d0e7904bc77ea8506~lntyLypHN2614626146epcas2p4Q;
+        Mon,  5 Jun 2023 01:25:05 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230605012505epsmtrp140d4fb9441fe73f812c40d8b77b481df~lntyKyADN2747127471epsmtrp1E;
+        Mon,  5 Jun 2023 01:25:05 +0000 (GMT)
+X-AuditID: b6c32a48-9f1ff7000000acbc-a4-647d3972eda7
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        25.28.28392.1793D746; Mon,  5 Jun 2023 10:25:05 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [10.229.95.128]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230605012505epsmtip2788b0e72cc95051b24bb53b89f6521a8~lntx71Rbv3164931649epsmtip2D;
+        Mon,  5 Jun 2023 01:25:05 +0000 (GMT)
+From:   Kiwoong Kim <kwmad.kim@samsung.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, beanhuo@micron.com,
+        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, kwangwon.min@samsung.com,
+        junwoo80.lee@samsung.com
+Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
+Subject: [PATCH v2 0/3] change UIC command handling
+Date:   Mon,  5 Jun 2023 10:15:51 +0900
+Message-Id: <cover.1685927620.git.kwmad.kim@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphk+LIzCtJLcpLzFFi42LZdljTQrfIsjbFYN08ZYuTT9awWTyYt43N
+        4uXPq2wWBx92slhM+/CT2WL14gcsFotubGOy2PW3mcli642dLBY3txxlsbi8aw6bRff1HWwW
+        y4//Y7LounuD0WLpv7csDvwel694eyze85LJY8KiA4we39d3sHl8fHqLxaNvyypGj8+b5Dza
+        D3QzBXBEZdtkpCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXm
+        AB2vpFCWmFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1IySkwL9ArTswtLs1L18tLLbEyNDAw
+        MgUqTMjO2DPpDVPBFraKi9v3sTQwbmXtYuTkkBAwkeiavpOpi5GLQ0hgB6NE45nj7BDOJ0aJ
+        Wd//QDmfGSWOzT7IDtOy98ELZojELkaJHZefQjk/GCW2/TzCDFLFJqAp8fTmVCYQW0TgBpPE
+        k35REJtZQF1i14QTYHFhAWOJrffXsoHYLAKqEseefwXr5RWwkNjavIwJYpucxM1znWALJAQa
+        OSQuLdnNDJFwkfhyrZcNwhaWeHV8C9R5UhIv+9uAbA4gO1tiz0IxiHCFxOJpb1kgbGOJWc/a
+        GUFKmIHuXL9LH6JaWeLILRaIK/kkOg7/hRrCK9HRJgTRqCzxa9JkRghbUmLmzTtQOz0kvl+7
+        CHaLkECsxNe3q5gnMMrOQpi/gJFxFaNYakFxbnpqsVGBCTyOkvNzNzGCk6OWxw7G2W8/6B1i
+        ZOJgPMQowcGsJMK7y6s6RYg3JbGyKrUoP76oNCe1+BCjKTC0JjJLiSbnA9NzXkm8oYmlgYmZ
+        maG5kamBuZI478cO5RQhgfTEktTs1NSC1CKYPiYOTqkGJvaEuxvLna9+OeFef6Z4+33T9ol1
+        N/uW59xQ6az6d/ncxAeq7xfpHfp3cr1N77X9NXHOKUoK3UrMu/N/z99yYWEHN4vA92afdsWA
+        CeznX5ZdtC5jszoxY0P6qgO7X/Xtnb7n6qv7DHkGq6WXHj5wz42Ro/CtqPAxH7/9ScudM1P+
+        t5zTSWYxnvE/0MIwoOnX4m0WW7un3Ktq/KtSy3iHX29RuNPN4kWrPxeHLFj/3WD7BZbAC37P
+        2ORLdQ+X5cndPLUqLFPx5+UOK4VnE3YrGCoxqCQ4XnNYuXLlzXgLeQajx3tv7Vi2RrbI2ePh
+        h8RSnWcNVzi/O6ZIOW9ISJlpxPVzV/eKR+t+BYl4Nv81vq/EUpyRaKjFXFScCAD4H9FRFwQA
+        AA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGLMWRmVeSWpSXmKPExsWy7bCSvG6hZW2KQeMrOYuTT9awWTyYt43N
+        4uXPq2wWBx92slhM+/CT2WL14gcsFotubGOy2PW3mcli642dLBY3txxlsbi8aw6bRff1HWwW
+        y4//Y7LounuD0WLpv7csDvwel694eyze85LJY8KiA4we39d3sHl8fHqLxaNvyypGj8+b5Dza
+        D3QzBXBEcdmkpOZklqUW6dslcGXsmfSGqWALW8XF7ftYGhi3snYxcnJICJhI7H3wgrmLkYtD
+        SGAHo0RL639GiISkxImdz6FsYYn7LUdYIYq+MUq0f25lAUmwCWhKPL05lQkkISLwikli7v9T
+        YB3MAuoSuyacYAKxhQWMJbbeX8sGYrMIqEoce/6VGcTmFbCQ2Nq8jAlig5zEzXOdzBMYeRYw
+        MqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAgOWi2tHYx7Vn3QO8TIxMF4iFGCg1lJ
+        hHeXV3WKEG9KYmVValF+fFFpTmrxIUZpDhYlcd4LXSfjhQTSE0tSs1NTC1KLYLJMHJxSDUzc
+        Vkf3mP/lff/j4L8jf5TKE6+aP+z51egexGJR9vyxwLcgS4tdga6vzmzsuzvLYUNIxIrVM+61
+        Tn11y/RaRUx8T+ZV3uOTwg2qqpN7bPNLTut+VZinFBQeuctRMVv664ZX9d4LHkzRM5k42Tx6
+        zTe2XxM0Z7aLLD/cwiE+4bRamdy9le3Hbfy0tcK2MN3vFr7uYhy/Yn3Y+5I2M4eZD1a/e2gv
+        3BzQ3RwgwbhApvzCkuW8Fw5kfHPPUOm6POsY42Of6qO612SvXo55e+rAF97znzKnFUyfvjEn
+        aqfKpxaNVCPRVe5ihYu4LVIP2789pzpzoeaDA5adc18ZG156rfvRYg1HBlfDTot/XErBs5WU
+        WIozEg21mIuKEwE0pwG6yQIAAA==
+X-CMS-MailID: 20230605012505epcas2p4fa6facb5ad68289d0e7904bc77ea8506
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230605012505epcas2p4fa6facb5ad68289d0e7904bc77ea8506
+References: <CGME20230605012505epcas2p4fa6facb5ad68289d0e7904bc77ea8506@epcas2p4.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/2/23 09:38, mwilck@suse.com wrote:
-> @@ -2910,6 +2904,13 @@ scsi_target_block(struct device *dev)
->   					device_block);
->   	else
->   		device_for_each_child(dev, NULL, target_block);
-> +
-> +	/*
-> +	 * SCSI never enables blk-mq's BLK_MQ_F_BLOCKING flag,
-> +	 * so blk_mq_wait_quiesce_done() comes down to just synchronize_rcu().
-> +	 * Just calling it once is enough.
-> +	 */
-> +	synchronize_rcu();
->   }
->   EXPORT_SYMBOL_GPL(scsi_target_block);
+v1 -> v2: remove an unused variable in __ufshcd_send_uic_cmd
 
-The above comment is wrong. See also commit b125bb99559e ("scsi:
-core: Support setting BLK_MQ_F_BLOCKING").
+There are two issues on UIC command handling related to auto hibern8.
+https://lore.kernel.org/linux-scsi/1684208012-114324-1-git-send-email-kwmad.kim@samsung.com/
+https://lore.kernel.org/linux-scsi/1684209152-115304-1-git-send-email-kwmad.kim@samsung.com/
 
-Bart.
+Now I combine the two things into this thread.
+And one thing added to make part of submitting a UIC command apart
+from the critical section w/ host_lock.
+
+Kiwoong Kim (3):
+  ufs: make __ufshcd_send_uic_cmd not wrapped by host_lock
+  ufs: poll HCS.UCRDY before issuing a UIC command
+  ufs: poll pmc until another pa request is completed
+
+ drivers/ufs/core/ufshcd.c | 110 ++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 77 insertions(+), 33 deletions(-)
+
+-- 
+2.7.4
 
