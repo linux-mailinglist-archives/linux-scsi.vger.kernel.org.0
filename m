@@ -2,120 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9879B72477E
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jun 2023 17:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC92724823
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jun 2023 17:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237911AbjFFPUD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Jun 2023 11:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S237798AbjFFPq0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Jun 2023 11:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238667AbjFFPUA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Jun 2023 11:20:00 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18FBE6C
-        for <linux-scsi@vger.kernel.org>; Tue,  6 Jun 2023 08:19:58 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f6170b1486so5029436e87.0
-        for <linux-scsi@vger.kernel.org>; Tue, 06 Jun 2023 08:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686064797; x=1688656797;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PXSnykSl2m8GUoGHPGyHMUT1Oob4xT3ddV97ZlLQSfo=;
-        b=gFhgmpMY05DjQ8KsKO/uybTiJ9yKPK2xD+mrm86hZm3kxTo0gvsPmO0dg1Zk44zvV4
-         exLmOivLJFGJMFyRwmA43Vo1gbtXtDiPD80eITDxvuEtrcRP0H4ybDXbek9y6dGBIAdk
-         nX4bsHQpZyoX4QV1tsGw5ZX7qvNuQmW2EOdfi02Kw08k1NnUcSiobTiO9cCh70ovT1Ia
-         VnrlZxy5SHVU28JlRHN2jpSpAFL9fPDbHKEgpfnRVSf/nMGp+GszSWrtUkt63qZI/w0D
-         VEaR91u11dtZBtb/EsevqMkevj7oRgMFyMHOnbrr2rfXiwqQca1rhc2nJDUuQfwN5h5X
-         psGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686064797; x=1688656797;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PXSnykSl2m8GUoGHPGyHMUT1Oob4xT3ddV97ZlLQSfo=;
-        b=UtGI2qR6as09uT2n8pke09NGcwZjo4Gcjui1agkAPVnmC7SRNW2JCjeyjl2gVZBODn
-         BJj/xNw69ooxI2W8wYChLcwuNraywApukGGtOL87Wt0wZTwZqPjYX9LLUp8OuOqPig+5
-         e9xa8FS/HeSub3eZDUAvM4e+qdx58ZXeqxssOQRVhiVohUxZOHGp5h9V6JRb4zmErqd6
-         xuSCvfhwKZ2GHovhSb32+MZ0GLfmNzM/QxQR/NUTSnoCDwG2j/RSnJQhebHDq8m8trS0
-         msaE4uoetRS9x8gWiUfJRYDR9v5aliQfwClrZK7CzEXWKf38b04wR1RHss2ST5TKUjxN
-         17og==
-X-Gm-Message-State: AC+VfDy+uGxBGwB8ySA+RIIRIsMbZIrIJgDcCa6MF5tvjFgkZLM9YMvq
-        /QcRa+ujqqoWe1i0jT7XXfFsqnP6c51OO9wj/Co=
-X-Google-Smtp-Source: ACHHUZ5Bnc8SwAKxEjMAjEKFmdYjpebbkLljMTFnQAv85r7Hx5hcuzvq30JLw7RoxUyeqYz79wwD4jxUqh3vYW3vLHs=
-X-Received: by 2002:a05:6512:33c5:b0:4f4:f38a:4423 with SMTP id
- d5-20020a05651233c500b004f4f38a4423mr5677644lfg.27.1686064796697; Tue, 06 Jun
- 2023 08:19:56 -0700 (PDT)
+        with ESMTP id S237541AbjFFPqT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Jun 2023 11:46:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A071E43
+        for <linux-scsi@vger.kernel.org>; Tue,  6 Jun 2023 08:46:16 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6Yst-0007ZJ-SU; Tue, 06 Jun 2023 17:46:11 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6Ysq-005XYy-Oe; Tue, 06 Jun 2023 17:46:08 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6Ysp-00BkJs-RD; Tue, 06 Jun 2023 17:46:07 +0200
+Date:   Tue, 6 Jun 2023 17:46:07 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     kernel@pengutronix.de, "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, Xiang Chen <chenxiang66@hisilicon.com>
+Subject: Re: [PATCH] scsi: hisi_sas: Convert to platform remove callback
+ returning void
+Message-ID: <20230606154607.omxmmuckgpzuwm4c@pengutronix.de>
+References: <20230518202043.261739-1-u.kleine-koenig@pengutronix.de>
+ <yq1353ch738.fsf@ca-mkp.ca.oracle.com>
 MIME-Version: 1.0
-Sender: traoreseriba174@gmail.com
-Received: by 2002:a2e:8506:0:b0:2b1:b972:80e1 with HTTP; Tue, 6 Jun 2023
- 08:19:55 -0700 (PDT)
-From:   Maya olivier <madamoliviermaya@gmail.com>
-Date:   Tue, 6 Jun 2023 08:19:55 -0700
-X-Google-Sender-Auth: mW5_BVm4uCr6nQhKewon7buTT3o
-Message-ID: <CAKViA0XbyYvDnKXdMQjxVoM++uvCRnbWwaUhNbbL0FNXqy1rww@mail.gmail.com>
-Subject: Have a nice weekend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [traoreseriba174[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [madamoliviermaya[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2sevzlmmviwrqyju"
+Content-Disposition: inline
+In-Reply-To: <yq1353ch738.fsf@ca-mkp.ca.oracle.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-scsi@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I am Mrs. Maya Oliver,
-From the United Kingdom. Firstly, I am married to Mr. Patrick Oliver,
-A diamond and gold merchant who owns a small gold Mine in Thailand
-Bangkok; He died of Cardiovascular Disease in mid-March 2011. During
-his lifetime he deposited the sum of =E2=82=AC 12.7 Euros in a bank in Bang=
-kok
-the capital city of Thailand. The deposited money was from the sale of
-the shares, death benefits payment and entitlements of my deceased
-husband by his company. Since his death I decided not to remarry, when
-my late husband was Alive he deposited the sum of =E2=82=AC 12.7 Million Eu=
-ro)
-Twelve million, Seven hundred Thousand Euro) in a bank in Thailand,
-Presently this money is Still in the bank. And My Doctor told me that
-I don't have much time to leave because of the cancer problem, having
-known my condition I decided to hand you over this fund to take Care
-of the less-privileged people
-Meanwhile i have concluded with the bank to transfer the funds to you,
-through the listed options below 1, Money gram 2, ATM card,3 RIA 4,
-Online Transfer
- Please i will be glad to hear from you before i can send you the
-contact details of the bank.
-You can contact the bank for the transaction with the email below:
-transferriamoney0@gmail.com
-Mrs. Maya Oliver
+
+--2sevzlmmviwrqyju
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello Martin,
+
+On Wed, May 31, 2023 at 11:08:25AM -0400, Martin K. Petersen wrote:
+> > The .remove() callback for a platform driver returns an int which
+> > makes many driver authors wrongly assume it's possible to do error
+> > handling by returning an error code. However the value returned is
+> > (mostly) ignored and this typically results in resource leaks. To
+> > improve here there is a quest to make the remove callback return void.
+> > In the first step of this quest all drivers are converted to
+> > .remove_new() which already returns void.
+>=20
+> Applied to 6.5/scsi-staging, thanks!
+
+I don't see it there:
+
+	$ git fetch git://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git ref=
+s/heads/6.5/scsi-staging
+	From https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi
+	 * branch                      6.5/scsi-staging -> FETCH_HEAD
+
+	$ git log --oneline v6.3..FETCH_HEAD --author=3DUwe --grep=3Dhisi_sas | wc=
+ -l
+	0
+
+What am I missing?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--2sevzlmmviwrqyju
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR/VL4ACgkQj4D7WH0S
+/k7iNAgAoP1C4DsAi2E5tvXLt9LuCis+3UMkllz/A0fE3/bUv9cOIrEcndpxmefj
+Bl8W8oAAznEp49TUxATKx8zuafn/wQftqTYZpFLYWpqjEKxi0nZhuI1bjY6xVMcd
+i6e2JViwA9fDMo7vUJhaEJRwGqhM3LBA7ls43pG1p8AkO7nFEQ7xzpFamiXFHisY
+OozPOqsSbFeCC5j2OogEPlTxMjfa+q1Wfo+/Gt99j0E7GncvP0mn5vDwbFShBKgU
+rtxS3h3dklPMAXoQDonYxc/QX0kFRYSIndlydm+DF7Cjwytxzl9pAN3NJucP/3tI
+S4tnUOMGBYm2VteTVN9b+gud0oPTow==
+=zVkr
+-----END PGP SIGNATURE-----
+
+--2sevzlmmviwrqyju--
