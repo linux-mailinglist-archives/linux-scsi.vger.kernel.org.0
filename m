@@ -2,61 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943FD724D38
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jun 2023 21:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B485724E27
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jun 2023 22:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233975AbjFFTjP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Jun 2023 15:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
+        id S236918AbjFFUd6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Jun 2023 16:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjFFTiy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Jun 2023 15:38:54 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9A410D7;
-        Tue,  6 Jun 2023 12:38:53 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 53B5B1FD95;
-        Tue,  6 Jun 2023 19:38:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686080332; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bXxH/xRJ6ryUI8Yc/IKZBzn1JvzrziF9j7uphU/kqjg=;
-        b=tOvRyK5YbJRNuxdRMUelNSEY+Xb3gniZOVr3L78+JxY3Y5GE0G9jSGTcR2z6eA8zhtwe0C
-        1cbw7ZuGZrv2nKTXc2PlCElvJ5fhFQzYBiWkk4i3aUWdygch6VPXDy06PEl1ZRpuCSHhj3
-        8MXj/QwoRdpF09aG44k1X3zKTg/7zws=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D69413776;
-        Tue,  6 Jun 2023 19:38:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id QGQtAUyLf2RaFwAAMHmgww
-        (envelope-from <mwilck@suse.com>); Tue, 06 Jun 2023 19:38:52 +0000
-From:   mwilck@suse.com
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        with ESMTP id S234193AbjFFUd5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Jun 2023 16:33:57 -0400
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9507B1A7;
+        Tue,  6 Jun 2023 13:33:56 -0700 (PDT)
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-256931ec244so5687966a91.3;
+        Tue, 06 Jun 2023 13:33:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686083636; x=1688675636;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MgJp+orwk1NKxueTZD2IplILXAWARVtQ9HQ4gN8T56w=;
+        b=UeLbdlSvBGqlOFJlTSI3vhBZ93+qSLbefLqPhyy4PrZreXgcMrF3KvaYwWekrBOnN9
+         Oq9CsEdImWHqlOQekGdbffRPY8I8U9BEJzyNH8O6G8MSdLA7yCFC388B4baBin4QUNDK
+         C41lFfJtroAJYiuwxrydnnceBwDZCOdX3JHOouEznCtkAM1SrMMxcJSUZ6pBwifBIw0u
+         JeFTNYwRKfRDhdfZ2qRF6Cet9FySP2gFyLy+93Sf3sYuGq4NZSFD+GYCe6Qr3RDqIuk8
+         ZzEEm1hoFhWYJpyFbMeGpTw6omN4Gget2qzhxZIOMSUKqCiDQ3zOHy0uHM0h14rRiJEB
+         Vvwg==
+X-Gm-Message-State: AC+VfDz9xb1OvrvepG6YscwHM1APuYlzWonkNjTzBo93p3HhcMRk+jiu
+        8zyLgpKnfGNiqux/QwBNMhM=
+X-Google-Smtp-Source: ACHHUZ54ZXhppPBlZio1a0xCAdGhS7743bczBArw4DhbAmwgKbH4ZpB5w23QwGVm1a0qzsRA08VCUg==
+X-Received: by 2002:a17:902:f683:b0:1af:b92d:b5fe with SMTP id l3-20020a170902f68300b001afb92db5femr4114616plg.0.1686083635869;
+        Tue, 06 Jun 2023 13:33:55 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id q16-20020a170902bd9000b001a64011899asm8899148pls.25.2023.06.06.13.33.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 13:33:55 -0700 (PDT)
+Message-ID: <3c9414d7-fd6d-f6fd-31c0-16fadb5bb574@acm.org>
+Date:   Tue, 6 Jun 2023 13:33:54 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 0/3] scsi: fixes for targets with many LUNs
+Content-Language: en-US
+To:     mwilck@suse.com, "Martin K. Petersen" <martin.petersen@oracle.com>,
         Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
         Bart Van Assche <Bart.VanAssche@sandisk.com>
 Cc:     James Bottomley <jejb@linux.vnet.ibm.com>,
         linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH v2 3/3] scsi: simplify scsi_stop_queue()
-Date:   Tue,  6 Jun 2023 21:38:45 +0200
-Message-Id: <20230606193845.9627-4-mwilck@suse.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230606193845.9627-1-mwilck@suse.com>
 References: <20230606193845.9627-1-mwilck@suse.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230606193845.9627-1-mwilck@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,104 +66,19 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Hannes Reinecke <hare@suse.de>
+On 6/6/23 12:38, mwilck@suse.com wrote:
+> From: Martin Wilck <mwilck@suse.com>
+> 
+> This patch series addresses some issues we saw in a test setup
+> with a large number of SCSI LUNs. The first two patches simply
+> increase the number of available sg and bsg devices. The last one
+> fixes an large delay we encountered between blocking a Fibre Channel
+> remote port and the dev_loss_tmo.
+> 
+> Changes v1 -> v2:
+>   - call blk_mq_wait_quiesce_done() from scsi_target_block() to
+>     cover the case where BLK_MQ_F_BLOCKING is set (Bart van Assche)
 
-scsi_target_block() calls scsi_stop_queue() for each scsi_device
-and scsi_stop_queue() calls blk_mq_wait_quiesce_done() for each LUN.
-As blk_mq_wait_quiesce_done() comes down to synchronize_rcu() for
-SCSI queues, this can cause substantial delay for scsi_target_block()
-on a target with a lot of logical units (we measured more than 100s
-delay for blocking a FC rport with 2048 LUNs).
+For the entire series:
 
-Simplify scsi_stop_queue(), which is only called in this code path, to never
-wait for the quiescing to finish. Rather call blk_mq_wait_quiesce_done()
-from scsi_target_block() after iterating over all devices.
-
-Also, move the call to scsi_stop_queue() in scsi_internal_device_block()
-out of the code section where the state_mutex is held.
-
-This patch uses the same basic idea as f983622ae605 ("scsi: core: Avoid
-calling synchronize_rcu() for each device in scsi_host_block()").
-
-Signed-off-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Martin Wilck <mwilck@suse.com>
----
- drivers/scsi/scsi_lib.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 25489fbd94c6..bc78bea62755 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -2726,24 +2726,18 @@ void scsi_start_queue(struct scsi_device *sdev)
- 		blk_mq_unquiesce_queue(sdev->request_queue);
- }
- 
--static void scsi_stop_queue(struct scsi_device *sdev, bool nowait)
-+static void scsi_stop_queue(struct scsi_device *sdev)
- {
- 	/*
- 	 * The atomic variable of ->queue_stopped covers that
- 	 * blk_mq_quiesce_queue* is balanced with blk_mq_unquiesce_queue.
- 	 *
- 	 * However, we still need to wait until quiesce is done
--	 * in case that queue has been stopped.
-+	 * in case that queue has been stopped. This is done in
-+	 * scsi_target_block() for all devices of the target.
- 	 */
--	if (!cmpxchg(&sdev->queue_stopped, 0, 1)) {
--		if (nowait)
--			blk_mq_quiesce_queue_nowait(sdev->request_queue);
--		else
--			blk_mq_quiesce_queue(sdev->request_queue);
--	} else {
--		if (!nowait)
--			blk_mq_wait_quiesce_done(sdev->request_queue->tag_set);
--	}
-+	if (!cmpxchg(&sdev->queue_stopped, 0, 1))
-+		blk_mq_quiesce_queue_nowait(sdev->request_queue);
- }
- 
- /**
-@@ -2770,7 +2764,7 @@ int scsi_internal_device_block_nowait(struct scsi_device *sdev)
- 	 * request queue.
- 	 */
- 	if (!ret)
--		scsi_stop_queue(sdev, true);
-+		scsi_stop_queue(sdev);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(scsi_internal_device_block_nowait);
-@@ -2796,9 +2790,9 @@ static int scsi_internal_device_block(struct scsi_device *sdev)
- 
- 	mutex_lock(&sdev->state_mutex);
- 	err = __scsi_internal_device_block_nowait(sdev);
--	if (err == 0)
--		scsi_stop_queue(sdev, false);
- 	mutex_unlock(&sdev->state_mutex);
-+	if (err == 0)
-+		scsi_stop_queue(sdev);
- 
- 	return err;
- }
-@@ -2906,11 +2900,17 @@ target_block(struct device *dev, void *data)
- void
- scsi_target_block(struct device *dev)
- {
-+	struct Scsi_Host *shost = dev_to_shost(dev);
-+
- 	if (scsi_is_target_device(dev))
- 		starget_for_each_device(to_scsi_target(dev), NULL,
- 					device_block);
- 	else
- 		device_for_each_child(dev, NULL, target_block);
-+
-+	/* Wait for ongoing scsi_queue_rq() calls to finish. */
-+	if (!WARN_ON_ONCE(!shost))
-+		blk_mq_wait_quiesce_done(&shost->tag_set);
- }
- EXPORT_SYMBOL_GPL(scsi_target_block);
- 
--- 
-2.40.1
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
