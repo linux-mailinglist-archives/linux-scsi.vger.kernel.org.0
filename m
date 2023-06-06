@@ -2,162 +2,120 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7512724383
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jun 2023 15:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9879B72477E
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Jun 2023 17:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233398AbjFFNDV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Jun 2023 09:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S237911AbjFFPUD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Jun 2023 11:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjFFNDV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Jun 2023 09:03:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A81F4
-        for <linux-scsi@vger.kernel.org>; Tue,  6 Jun 2023 06:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686056560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JRcRRTG+mqlO4mJEu7HX8NmYwUMGAhmL5rrRoJ2JEDQ=;
-        b=DPUa1HwB9AkMCMZfkgK2sX6M7aqmMcQ/zlozUxvQEw+jQLqLyxHa8sLEurIWi6VJpZvU8w
-        I+7pwrkUPWvLA/E1Ys2Y/TuT9VOclPcrp7oVQd7pfeiyi9kFJy96FzodOBiUJjt8mKZo0V
-        nUku9fup1G8UY3r2Zw3Tid/9N/0Mv40=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-19-yEd6r6VfORGUXlT2TpcTCw-1; Tue, 06 Jun 2023 09:02:37 -0400
-X-MC-Unique: yEd6r6VfORGUXlT2TpcTCw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53C0C8032F5;
-        Tue,  6 Jun 2023 13:02:36 +0000 (UTC)
-Received: from [10.22.16.51] (unknown [10.22.16.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B2A554087C62;
-        Tue,  6 Jun 2023 13:02:35 +0000 (UTC)
-Message-ID: <3ef3bb51-ed26-9f52-84cf-93dc3f365ccb@redhat.com>
-Date:   Tue, 6 Jun 2023 09:02:35 -0400
+        with ESMTP id S238667AbjFFPUA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Jun 2023 11:20:00 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18FBE6C
+        for <linux-scsi@vger.kernel.org>; Tue,  6 Jun 2023 08:19:58 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f6170b1486so5029436e87.0
+        for <linux-scsi@vger.kernel.org>; Tue, 06 Jun 2023 08:19:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686064797; x=1688656797;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PXSnykSl2m8GUoGHPGyHMUT1Oob4xT3ddV97ZlLQSfo=;
+        b=gFhgmpMY05DjQ8KsKO/uybTiJ9yKPK2xD+mrm86hZm3kxTo0gvsPmO0dg1Zk44zvV4
+         exLmOivLJFGJMFyRwmA43Vo1gbtXtDiPD80eITDxvuEtrcRP0H4ybDXbek9y6dGBIAdk
+         nX4bsHQpZyoX4QV1tsGw5ZX7qvNuQmW2EOdfi02Kw08k1NnUcSiobTiO9cCh70ovT1Ia
+         VnrlZxy5SHVU28JlRHN2jpSpAFL9fPDbHKEgpfnRVSf/nMGp+GszSWrtUkt63qZI/w0D
+         VEaR91u11dtZBtb/EsevqMkevj7oRgMFyMHOnbrr2rfXiwqQca1rhc2nJDUuQfwN5h5X
+         psGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686064797; x=1688656797;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PXSnykSl2m8GUoGHPGyHMUT1Oob4xT3ddV97ZlLQSfo=;
+        b=UtGI2qR6as09uT2n8pke09NGcwZjo4Gcjui1agkAPVnmC7SRNW2JCjeyjl2gVZBODn
+         BJj/xNw69ooxI2W8wYChLcwuNraywApukGGtOL87Wt0wZTwZqPjYX9LLUp8OuOqPig+5
+         e9xa8FS/HeSub3eZDUAvM4e+qdx58ZXeqxssOQRVhiVohUxZOHGp5h9V6JRb4zmErqd6
+         xuSCvfhwKZ2GHovhSb32+MZ0GLfmNzM/QxQR/NUTSnoCDwG2j/RSnJQhebHDq8m8trS0
+         msaE4uoetRS9x8gWiUfJRYDR9v5aliQfwClrZK7CzEXWKf38b04wR1RHss2ST5TKUjxN
+         17og==
+X-Gm-Message-State: AC+VfDy+uGxBGwB8ySA+RIIRIsMbZIrIJgDcCa6MF5tvjFgkZLM9YMvq
+        /QcRa+ujqqoWe1i0jT7XXfFsqnP6c51OO9wj/Co=
+X-Google-Smtp-Source: ACHHUZ5Bnc8SwAKxEjMAjEKFmdYjpebbkLljMTFnQAv85r7Hx5hcuzvq30JLw7RoxUyeqYz79wwD4jxUqh3vYW3vLHs=
+X-Received: by 2002:a05:6512:33c5:b0:4f4:f38a:4423 with SMTP id
+ d5-20020a05651233c500b004f4f38a4423mr5677644lfg.27.1686064796697; Tue, 06 Jun
+ 2023 08:19:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [bug report] WARNING: CPU: 23 PID: 35995 at lib/refcount.c:28
- refcount_warn_saturate+0xba/0x110
-Content-Language: en-US
-To:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        Saurav Kashyap <skashyap@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>
-References: <CAGS2=YoMsjT19mVP9Te_Mx1yKpgLDbZuDQnUV_VLCjhJ=F8D8w@mail.gmail.com>
-Cc:     Guangwu Zhang <guazhang@redhat.com>
-From:   John Meneghini <jmeneghi@redhat.com>
-Organization: RHEL Core Storge Team
-In-Reply-To: <CAGS2=YoMsjT19mVP9Te_Mx1yKpgLDbZuDQnUV_VLCjhJ=F8D8w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Sender: traoreseriba174@gmail.com
+Received: by 2002:a2e:8506:0:b0:2b1:b972:80e1 with HTTP; Tue, 6 Jun 2023
+ 08:19:55 -0700 (PDT)
+From:   Maya olivier <madamoliviermaya@gmail.com>
+Date:   Tue, 6 Jun 2023 08:19:55 -0700
+X-Google-Sender-Auth: mW5_BVm4uCr6nQhKewon7buTT3o
+Message-ID: <CAKViA0XbyYvDnKXdMQjxVoM++uvCRnbWwaUhNbbL0FNXqy1rww@mail.gmail.com>
+Subject: Have a nice weekend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:12f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [traoreseriba174[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [madamoliviermaya[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Saurav, Nilesh,
-
-Can you please look into this?  It seems we have a major regression in the 6.5 QEDF driver.
-
-/John
-
-On 6/5/23 23:17, Guangwu Zhang wrote:
-> Hi,
-> qedf IO testing found the error with latest linux-block/for-next,
-> please have a look.
-> 
-> kernel repo : https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-> commit: Merge branch 'for-6.5/block' into for-next
-> 
-> 
-> [ 7305.031233] ------------[ cut here ]------------
-> [ 7305.033749] [0000:04:00.2]:[qedf_process_error_detect:1525]:11:
-> tx_buff_off=00000000, rx_buff_off=00000000, rx_id=073f
-> [ 7305.038904] refcount_t: underflow; use-after-free.
-> [ 7305.038918] WARNING: CPU: 23 PID: 35995 at lib/refcount.c:28
-> refcount_warn_saturate+0xba/0x110
-> [ 7305.065853] Modules linked in: nfsv3 nfs_acl bnx2fc cnic uio
-> rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_resolver nfs lockd grace fscache
-> netfs sunrpc vfat fat dm_service_time dm_multipath intel_rapl_msr
-> intel_rapl_common sb_edac x86_pkg_temp_thermal intel_powerclamp
-> coretemp kvm_intel kvm mgag200 i2c_algo_bit drm_shmem_helper
-> dell_wmi_descriptor drm_kms_helper ipmi_ssif ledtrig_audio
-> sparse_keymap irqbypass rfkill rapl video syscopyarea intel_cstate
-> mei_me ipmi_si sysfillrect mei intel_uncore iTCO_wdt sysimgblt pcspkr
-> iTCO_vendor_support dcdbas mxm_wmi ipmi_devintf lpc_ich
-> ipmi_msghandler acpi_power_meter drm fuse xfs libcrc32c sr_mod sd_mod
-> cdrom t10_pi sg qede qedf crct10dif_pclmul crc32_pclmul crc32c_intel
-> qed ahci libahci ghash_clmulni_intel libata libfcoe libfc tg3
-> megaraid_sas scsi_transport_fc crc8 wmi dm_mirror dm_region_hash
-> dm_log dm_mod [last unloaded: tls]
-> [ 7305.151246] CPU: 23 PID: 35995 Comm: kworker/23:0 Kdump: loaded Not
-> tainted 6.4.0-rc3+ #1
-> [ 7305.160379] Hardware name: Dell Inc. PowerEdge R730/0H21J3, BIOS
-> 2.16.0 07/20/2022
-> [ 7305.168832] Workqueue: qedf_io_wq qedf_fp_io_handler [qedf]
-> [ 7305.175069] RIP: 0010:refcount_warn_saturate+0xba/0x110
-> [ 7305.180911] Code: 01 01 e8 c9 4d ae ff 0f 0b c3 cc cc cc cc 80 3d
-> 1a ae 6f 01 00 75 85 48 c7 c7 d8 e3 bb ac c6 05 0a ae 6f 01 01 e8 a6
-> 4d ae ff <0f> 0b c3 cc cc cc cc 80 3d f5 ad 6f 01 00 0f 85 5e ff ff ff
-> 48 c7
-> [ 7305.201873] RSP: 0018:ffff9cc488507e80 EFLAGS: 00010282
-> [ 7305.207708] RAX: 0000000000000000 RBX: ffff904a44ac7410 RCX: 0000000000000027
-> [ 7305.215685] RDX: ffff904e2fcdf848 RSI: 0000000000000001 RDI: ffff904e2fcdf840
-> [ 7305.223654] RBP: ffff9046cc488040 R08: 80000000ffff9b21 R09: 657466612d657375
-> [ 7305.231623] R10: 203b776f6c667265 R11: 646e75203a745f74 R12: ffff904e2fcf1880
-> [ 7305.239591] R13: ffffbcc47fcc7500 R14: 0000000000000000 R15: ffffbcc47fcc7505
-> [ 7305.247559] FS:  0000000000000000(0000) GS:ffff904e2fcc0000(0000)
-> knlGS:0000000000000000
-> [ 7305.256595] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 7305.263011] CR2: 0000563088c3b008 CR3: 0000000102bfc006 CR4: 00000000001706e0
-> [ 7305.267445] [0000:04:00.2]:[qedf_process_error_detect:1519]:11:
-> Error detection CQE, xid=0x743
-> [ 7305.270983] Call Trace:
-> [ 7305.280598] [0000:04:00.2]:[qedf_process_error_detect:1521]:11:
-> err_warn_bitmap=00000040:00000000
-> [ 7305.283328]  <TASK>
-> [ 7305.283330]  qedf_fp_io_handler+0x40/0x50 [qedf]
-> [ 7305.293237] [0000:04:00.2]:[qedf_process_error_detect:1525]:11:
-> tx_buff_off=00000000, rx_buff_off=00000000, rx_id=04ec
-> [ 7305.295574]  process_one_work+0x1e5/0x3f0
-> [ 7305.296755] [0000:04:00.2]:[qedf_process_error_detect:1519]:11:
-> Error detection CQE, xid=0x194
-> [ 7305.296761] [0000:04:00.2]:[qedf_process_error_detect:1521]:11:
-> err_warn_bitmap=00000040:00000000
-> [ 7305.296764] [0000:04:00.2]:[qedf_process_error_detect:1525]:11:
-> tx_buff_off=00000000, rx_buff_off=00000000, rx_id=013d
-> [ 7305.324202] [0000:04:00.2]:[qedf_process_error_detect:1519]:11:
-> Error detection CQE, xid=0x37c
-> [ 7305.326752]  ? __pfx_worker_thread+0x10/0x10
-> [ 7305.336659] [0000:04:00.2]:[qedf_process_error_detect:1521]:11:
-> err_warn_bitmap=00000040:00000000
-> [ 7305.337543] [0000:04:00.2]:[qedf_process_error_detect:1519]:11:
-> Error detection CQE, xid=0x47b
-> [ 7305.337549] [0000:04:00.2]:[qedf_process_error_detect:1521]:11:
-> err_warn_bitmap=00000000:00004000
-> [ 7305.337552] [0000:04:00.2]:[qedf_process_error_detect:1525]:11:
-> tx_buff_off=00000000, rx_buff_off=00000000, rx_id=06ed
-> [ 7305.348603]  worker_thread+0x50/0x3a0
-> [ 7305.358219] [0000:04:00.2]:[qedf_process_error_detect:1525]:11:
-> tx_buff_off=00000000, rx_buff_off=00000000, rx_id=04ed
-> [ 7305.362987]  ? __pfx_worker_thread+0x10/0x10
-> [ 7305.373920] [0000:04:00.2]:[qedf_process_error_detect:1519]:11:
-> Error detection CQE, xid=0x731
-> [ 7305.382497]  kthread+0xe2/0x110
-> [ 7305.382502]  ? __pfx_kthread+0x10/0x10
-> [ 7305.382505]  ret_from_fork+0x2c/0x50
-> [ 7305.382511]  </TASK>
-> [ 7305.382512] ---[ end trace 0000000000000000 ]---
-> 
-
+I am Mrs. Maya Oliver,
+From the United Kingdom. Firstly, I am married to Mr. Patrick Oliver,
+A diamond and gold merchant who owns a small gold Mine in Thailand
+Bangkok; He died of Cardiovascular Disease in mid-March 2011. During
+his lifetime he deposited the sum of =E2=82=AC 12.7 Euros in a bank in Bang=
+kok
+the capital city of Thailand. The deposited money was from the sale of
+the shares, death benefits payment and entitlements of my deceased
+husband by his company. Since his death I decided not to remarry, when
+my late husband was Alive he deposited the sum of =E2=82=AC 12.7 Million Eu=
+ro)
+Twelve million, Seven hundred Thousand Euro) in a bank in Thailand,
+Presently this money is Still in the bank. And My Doctor told me that
+I don't have much time to leave because of the cancer problem, having
+known my condition I decided to hand you over this fund to take Care
+of the less-privileged people
+Meanwhile i have concluded with the bank to transfer the funds to you,
+through the listed options below 1, Money gram 2, ATM card,3 RIA 4,
+Online Transfer
+ Please i will be glad to hear from you before i can send you the
+contact details of the bank.
+You can contact the bank for the transaction with the email below:
+transferriamoney0@gmail.com
+Mrs. Maya Oliver
