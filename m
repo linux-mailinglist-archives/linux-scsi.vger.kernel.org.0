@@ -2,101 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3FD725B12
-	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jun 2023 11:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9F8725D4D
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Jun 2023 13:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239420AbjFGJvn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 7 Jun 2023 05:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
+        id S238257AbjFGLiw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 7 Jun 2023 07:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234384AbjFGJvm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jun 2023 05:51:42 -0400
-X-Greylist: delayed 403 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Jun 2023 02:51:39 PDT
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55A7E49;
-        Wed,  7 Jun 2023 02:51:39 -0700 (PDT)
-Received: from ed3e173716be.home.arpa (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowACniR4dU4BkidqzDA--.1731S2;
-        Wed, 07 Jun 2023 17:51:25 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     james.smart@broadcom.com, ram.vegesna@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        chenzhongjin@huawei.com, dwagner@suse.de, hare@suse.de
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] scsi: efct: Add missing check for ioremap
-Date:   Wed,  7 Jun 2023 17:51:24 +0800
-Message-Id: <20230607095124.38414-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S234009AbjFGLiv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 7 Jun 2023 07:38:51 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7A11730
+        for <linux-scsi@vger.kernel.org>; Wed,  7 Jun 2023 04:38:49 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357BIesp030024
+        for <linux-scsi@vger.kernel.org>; Wed, 7 Jun 2023 04:38:49 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=nE9zLv/HSNb4fDsWyXulh38a/z46yFnmg/muj8mYep0=;
+ b=amc74j27m6Ym5BG7YckRKZS6Evt4s9H2hbdgYjT8xUmFB+l0/aP8EYgGOdHMYS+MZwb3
+ tseCq7M7GDbjSXE2TDGzfsV1akWKfKyb0IPW2+6RNQurEPWEbjdvbLjeS45GEnytVsnW
+ ytJW+leLhs5M+AZG5y+UTMPNEVoAMpo4S0ZYm5qrbSwhCWm//g9sK+y5umITqAaIFhJZ
+ j+61nsdVX0E+F2cbVmqTqzuS3XfNVHVPK9CrZEBnKtrQUubaRCkYO6yDX2PAU2sUEJR/
+ 7ry0+J5Bp1U9CdiohSehcwSj9R546Ftzmh2UBPyqLGxcDIEmHGMp3zYrRRPsgBGA8PkM TQ== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3r2a75afe9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Wed, 07 Jun 2023 04:38:49 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 7 Jun
+ 2023 04:38:46 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 7 Jun 2023 04:38:46 -0700
+Received: from localhost.marvell.com (unknown [10.30.46.195])
+        by maili.marvell.com (Postfix) with ESMTP id 17BA73F7045;
+        Wed,  7 Jun 2023 04:38:44 -0700 (PDT)
+From:   Nilesh Javali <njavali@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        <agurumurthy@marvell.com>, <sdeodhar@marvell.com>
+Subject: [PATCH v2 0/8] qla2xxx klocwork fixes
+Date:   Wed, 7 Jun 2023 17:08:35 +0530
+Message-ID: <20230607113843.37185-1-njavali@marvell.com>
+X-Mailer: git-send-email 2.23.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowACniR4dU4BkidqzDA--.1731S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Xw4Utry8AF4fJF48ZFWDurg_yoW8JrW7pF
-        WSvay5uF4rtF45Kr1UAF1UCF1Fva40v3yDurWjg343uay0qFyrtFWfJFyakr15A3yktw17
-        tw15JFy8Xa4DJaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6r4fMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7VUjC385UUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: Svv2wHXn2zfpM0OT3aZfwj_wU72rII50
+X-Proofpoint-GUID: Svv2wHXn2zfpM0OT3aZfwj_wU72rII50
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_06,2023-06-07_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add check for ioremap() and return the error if it fails in order to
-guarantee the success of ioremap().
+Martin,
 
-Fixes: 4df84e846624 ("scsi: elx: efct: Driver initialization routines")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+Please apply the qla2xxx driver klocwork fixes to
+the scsi tree at your earliest convenience.
 
-v1 -> v2:
+Thanks,
+Nilesh
 
-1. Add "rc = -EINVAL;" in the error handling.
----
- drivers/scsi/elx/efct/efct_driver.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+v2:
+- Incorporate review comments for patch 2/8, 3/8, 7/8.
 
-diff --git a/drivers/scsi/elx/efct/efct_driver.c b/drivers/scsi/elx/efct/efct_driver.c
-index 49fd2cfed70c..8cb6d42b7432 100644
---- a/drivers/scsi/elx/efct/efct_driver.c
-+++ b/drivers/scsi/elx/efct/efct_driver.c
-@@ -528,6 +528,10 @@ efct_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		if (pci_resource_flags(pdev, i) & IORESOURCE_MEM) {
- 			efct->reg[r] = ioremap(pci_resource_start(pdev, i),
- 					       pci_resource_len(pdev, i));
-+			if (!efct->reg[r]) {
-+				rc = -EINVAL;
-+				goto ioremap_out;
-+			}
- 			r++;
- 		}
- 
-@@ -580,7 +584,7 @@ efct_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	efct_teardown_msix(efct);
- dma_mask_out:
- 	pci_set_drvdata(pdev, NULL);
--
-+ioremap_out:
- 	for (i = 0; i < EFCT_PCI_MAX_REGS; i++) {
- 		if (efct->reg[i])
- 			iounmap(efct->reg[i]);
+Bikash Hazarika (2):
+  qla2xxx: klocwork - Fix potential null pointer dereference
+  qla2xxx: klocwork - correct the index of array
+
+Nilesh Javali (4):
+  qla2xxx: klocwork - Array index may go out of bound
+  qla2xxx: klocwork - avoid fcport pointer dereference
+  qla2xxx: klocwork - Check valid rport returned by fc_bsg_to_rport
+  qla2xxx: Update version to 10.02.08.400-k
+
+Quinn Tran (1):
+  qla2xxx: klocwork - Fix buffer overrun
+
+Shreyas Deodhar (1):
+  qla2xxx: klocwork - pointer may be dereferenced
+
+ drivers/scsi/qla2xxx/qla_bsg.c     | 6 ++++++
+ drivers/scsi/qla2xxx/qla_edif.c    | 4 ++--
+ drivers/scsi/qla2xxx/qla_init.c    | 2 +-
+ drivers/scsi/qla2xxx/qla_inline.h  | 5 ++++-
+ drivers/scsi/qla2xxx/qla_iocb.c    | 3 ++-
+ drivers/scsi/qla2xxx/qla_os.c      | 3 ++-
+ drivers/scsi/qla2xxx/qla_version.h | 4 ++--
+ 7 files changed, 19 insertions(+), 8 deletions(-)
+
+
+base-commit: 44ef1604ae9492a7d9238ea79aa0cc7b4c4de860
 -- 
-2.25.1
+2.23.1
 
