@@ -2,196 +2,161 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C896727FFB
-	for <lists+linux-scsi@lfdr.de>; Thu,  8 Jun 2023 14:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F32D9727FF0
+	for <lists+linux-scsi@lfdr.de>; Thu,  8 Jun 2023 14:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236541AbjFHM20 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 8 Jun 2023 08:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
+        id S235746AbjFHM00 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 8 Jun 2023 08:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbjFHM2Z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Jun 2023 08:28:25 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAEF1BCC
-        for <linux-scsi@vger.kernel.org>; Thu,  8 Jun 2023 05:28:21 -0700 (PDT)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230608122817epoutp0363896207738c6e5540488d7261d6400c~mrsshSVUe2936329363epoutp03n
-        for <linux-scsi@vger.kernel.org>; Thu,  8 Jun 2023 12:28:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230608122817epoutp0363896207738c6e5540488d7261d6400c~mrsshSVUe2936329363epoutp03n
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1686227297;
-        bh=GZqw1aJu5pQAcbuNe5g1lBrt+2PDDEf+dePaVVQDS9s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p6Nqjjuu323EgW1PfGfqX9S543LcDWBAHpwVhdSvNzestljvOe5/emCzIMcgExWiF
-         lmhorRuVtF5HFRc1mPrIbmschikqI0wahHWKQ48jf1vDltErrQMPjPRTkAIV1EAEx/
-         BO4EZtx7OZA0KHEXSE2CmA+UuJyxKbhNd+vwNFnI=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20230608122816epcas5p2b58dd7d8b7124a1c8760ab13fef80505~mrsrSQhHv0812208122epcas5p2X;
-        Thu,  8 Jun 2023 12:28:16 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4QcNlz32Q5z4x9Pp; Thu,  8 Jun
-        2023 12:28:15 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        35.C7.16380.F59C1846; Thu,  8 Jun 2023 21:28:15 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230608121123epcas5p3071e22355035496648768f4cd420dee1~mrd7ftIoY0769507695epcas5p3f;
-        Thu,  8 Jun 2023 12:11:23 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230608121123epsmtrp1727243a3d59cf2e910bb0ea7b28766b9~mrd7eajJr2145721457epsmtrp1h;
-        Thu,  8 Jun 2023 12:11:23 +0000 (GMT)
-X-AuditID: b6c32a4b-56fff70000013ffc-51-6481c95f127e
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8C.0C.28392.B65C1846; Thu,  8 Jun 2023 21:11:23 +0900 (KST)
-Received: from green245 (unknown [107.99.41.245]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230608121118epsmtip15e30d20fec6e750fa9049485a81dc2e6~mrd3Q0W5H2318023180epsmtip1C;
-        Thu,  8 Jun 2023 12:11:18 +0000 (GMT)
-Date:   Thu, 8 Jun 2023 17:38:17 +0530
-From:   Nitesh Shetty <nj.shetty@samsung.com>
-To:     Christoph Hellwig <hch@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        willy@infradead.org, hare@suse.de, djwong@kernel.org,
-        bvanassche@acm.org, ming.lei@redhat.com, dlemoal@kernel.org,
-        nitheshshetty@gmail.com, gost.dev@samsung.com,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        Javier =?utf-8?B?R29uesOhbGV6?= <javier.gonz@samsung.com>,
-        Anuj Gupta <anuj20.g@samsung.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v12 5/9] nvme: add copy offload support
-Message-ID: <20230608120817.jg4xb4jhg77mlksw@green245>
+        with ESMTP id S229753AbjFHM0Z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 8 Jun 2023 08:26:25 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CFD30C2
+        for <linux-scsi@vger.kernel.org>; Thu,  8 Jun 2023 05:25:55 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75d5469c856so46141785a.2
+        for <linux-scsi@vger.kernel.org>; Thu, 08 Jun 2023 05:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686227153; x=1688819153;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y2URvdto5eovnOZ9veTkEuCq8gCsNpoi88vZrtanDiw=;
+        b=LgpyQBY+iU6ik73+n5Xif2M3IAjVaJpXywDoqyfj99Fm804yGwxLPgfWd7n/zrMcaJ
+         OW92/cOUTHp0kbFCN2VRwpE9Gk19qsnWLBXczJY0MyTXnSzzye/FvMohQy/eSkDOJhbU
+         Jd6zxxc0LtV79Gwz91HxrxMosubFwYjtb4aEYgadbLSRAMpSqA3bteUkLVRA8pqqtZi2
+         wXbv5q4WbwkcPi/2Z0xzl0Ook6LdIAtXr1wNh9+0dAkd7F7h0VzV6kj+BvNv4CFTDz4r
+         nGaO0f49YMxBaZWKD5ZkjNAQjHzw6qCXb0OCopsJxgnJk2zaeiOyCP+HBiYj3RZvKNye
+         4J7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686227153; x=1688819153;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y2URvdto5eovnOZ9veTkEuCq8gCsNpoi88vZrtanDiw=;
+        b=VN5xIM5vVeO5n+GLVDG3sPlEHhQ11E2X+ml3GvbDO3JxBMGuy+1jGIuhfegtxG1xeD
+         iMC0/9SYQCJ9knfZ0mKUyG1MFnhzPSMcaQY0+XUt5SY1nwVw5isBRSfUgZlLQ6u7ZAq4
+         OQ63HIaVZmiboObQ0SZWxGx6ImeJkvUhE3b+q0pad9x2Ogf/oWVwBedG4aGVzWYY1D7W
+         pmd+AukYBPLWzQqkNtfjWLreKl1NNkdtOW/j+qX/bS/YPi9IshYueRVRmSbkiw9GVqt9
+         r2elYab0Oh/LXuv+VmHMSSfH1/rw8yGOhMPenTJivRUs7OYSN17WKoJqhCKcC2vtkQMC
+         sPHw==
+X-Gm-Message-State: AC+VfDyTGE2CwDNPG0rLoGB/Dd6M8HaRo0iBt2cSBEUJ+0Y3Xjamx8Io
+        Ti4zjsIJzVmbswV/CI1pu0fKfPtSLxwTRfljh7CSvIlkEiV0vg==
+X-Google-Smtp-Source: ACHHUZ56CXoUQUcvzxm94pRLtum4/Tr+9T8qQhRCOVBk7qCpI3tDEmZf8YfJhgvLj3Yl6bmBElZ55sgX6f729xWZwXA=
+X-Received: by 2002:ad4:5de7:0:b0:62b:4e7e:8aba with SMTP id
+ jn7-20020ad45de7000000b0062b4e7e8abamr1232957qvb.60.1686226812125; Thu, 08
+ Jun 2023 05:20:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <ZIAt7vL+/isPJEl5@infradead.org>
-User-Agent: NeoMutt/20171215
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTdxTH97ttb4uu7vJw+/GYkGqUR4p0lPqDWTGRyV2QDbe4zIFiQ68t
-        jz7sQ3QaBZwwMAgCAqtuPCzvRSwoQ1SGZYqABLUgCipM6jZxoiKKjgFraV3875PveZ+Tw6I5
-        tTHdWPFyDaWSi5I4+AJ6U7vPCm5sZ6o4oLjbEdV3XaahtNwZGqq7m4OjR+0TABU+fU1D5rYM
-        gEzmRWjk11B0YfwYA91uO4uh8+V5GOrOLcdQTd0lDJ0re4ah0TvPmejS3GMc5RlvAvSgX4eh
-        C4N+qCxdT0fnL3TSkanlOI5KKh8w0aGBZhxVdcxiyJh/AEPN5lSATj56QkdXBt1R70wHA02/
-        Oo6v9SRNfRGkbrgHJ8/q7jLJ3nsGOtlY7UuaerRkQ20mTjbq95Pnbqfg5InD+Qwy+8A4Tj57
-        MEgnn7T24+Th07WAbOzeQz5vWBLl+E3iaiklElMqL0oepxDHyyVCTsSXsetigwQBPC4vGK3i
-        eMlFMkrICdsQxV0fn2RZFsdrpyhJa5GiRGo1Z+Wa1SqFVkN5SRVqjZBDKcVJSr7SXy2SqbVy
-        ib+c0oTwAgI+CrI4bkuUDhp/AcoCYtffk9mMFFDNzgIOLEjwoWFsGs8CC1hOxDkAJ/XPmFaD
-        EzEBoL7T32Z4DmBvjwl7E5FxeRzYDC0A/jhksIf/AeCtoSGa1YtOLINFumFLKhYLJ/xg9xzL
-        KrsQW+G14sp5FxpRy4RtsxwrOxMfw5GBR/M6mxDA9CET08aOsPMHM92axoHgwhvlkVZ5MeEB
-        iyte0KxlITHhAH/LOTpfChJhsHY8zNanMxzrOM20sRt8mJNu52RYU1CN22K/A1A3oAM2Qyg8
-        2JVj700KWwtLaTb9Q3i06yRm0xfB7GmzfRFs2PzTG14Kf64vxW3sCm9OpdqZhIZr/9r3cwqD
-        rQdL6LnAU/fWbLq36tk4BGY+TWPoLPPQCHdYNcuyoQ+sb1lZChi1wJVSqmUSSh2kDJRTyf/f
-        O04hawDzr+Qb0Qzujzz1NwKMBYwAsmgcF3ZC6H6xE1ss2v0tpVLEqrRJlNoIgiynOkJzWxyn
-        sPyiXBPL4wcH8AUCAT84UMDjfMBeIeyMcyIkIg2VSFFKSvUmDmM5uKVgp8r/ApPvlpzRV3pv
-        fhKVnreuah370y7FjLAk8Mqcdlf467OZHfxI9xsGbuGuAV8pd8veu6nUwaGitMivZnL2eGxK
-        j9lYPCaTLUyLupq/c9VLwSchrzJl0Z/vk23rem+heckLv9Fw1VR0zEPfmATy8pHEYY+twsdu
-        nrfcLn4f0rd3/aYlZQXuvfuWzpjP5B2bldR4b0+5Kl9T73GM6hkUe0/24c7Rdy7G7Z4Ydi7y
-        qmuKDGcaCpYzxctendhyv31zhcu+jTt+f+1a2P+nT0bImHBt44jfZ47J/3AE1Tu+eCGJZ89O
-        LQ++HnT9XsCikney5qYFTRUb5Au/TvDX89PfT9nzckvy8dHtHLpaKuL50lRq0X/7hAE60wQA
-        AA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkleLIzCtJLcpLzFFi42LZdlhJTjf7aGOKQeMkdov1p44xWzRN+Mts
-        sfpuP5vF68OfGC2mffjJbPHkQDujxeUnfBYP9ttb7H03m9Xi5oGdTBZ7Fk1isjg9YRGTxcrV
-        R5ksdi/8yGTx+M5ndouj/9+yWUw6dI3R4unVWUwWe29pWyxsW8JisWfvSRaLy7vmsFnMX/aU
-        3aL7+g42i+XH/zFZHJrczGSx40kjo8W61+9ZLE7ckrY4//c4q8XvH3PYHOQ9Ll/x9ph1/yyb
-        x85Zd9k9zt/byOKxeYWWx+WzpR6bVnWyeWxeUu+x+2YDm8fivsmsHr3N79g8Pj69xeLxft9V
-        No++LasYPTafrvb4vEkuQDCKyyYlNSezLLVI3y6BK+Puec2CY7wV82f9Zm9g/MLVxcjJISFg
-        ItF+7B1jFyMXh5DADkaJ7submSESkhLL/h6BsoUlVv57zg5R9IRR4n3XRHaQBIuAisT0WfeB
-        bA4ONgFtidP/OUDCIgJxEn0nl7CC1DMLrGOX+Lr1GtggYQFriQfXX4PZvAJmEm23L4PNERLY
-        xCSxdaIHRFxQ4uTMJywgNjNQzbzND5lB5jMLSEss/8cBYnIK6EpcWuQLUiEqICMxY+lX5gmM
-        grOQNM9C0jwLoXkBI/MqRsnUguLc9NxiwwKjvNRyveLE3OLSvHS95PzcTYzgVKKltYNxz6oP
-        eocYmTgYDzFKcDArifBm2denCPGmJFZWpRblxxeV5qQWH2KU5mBREue90HUyXkggPbEkNTs1
-        tSC1CCbLxMEp1cC0Z/knhkyZ9r8vrY6G/u3XyoiLVXFded7avvNzMZsSt92BTVm3f5S9+L/j
-        84YrLIuW+YTYt19/G+sq09h5L2TOh3Ymro695XcKY5ZUvlf61nN3tVR3flDMrFqLx+fLdspf
-        sxVwOzCtZULjVaW8xqWrrDljfhw45sMZdFODhS9+09yva/5KbH6y/NK9a4qJmTyrDa8tYk+R
-        nO5bpLDL5u0rA6eVblPXK54/tZA/i0H7/pH4T2V1gfqcUsK3WeNk5vdXMVqda4vuW/N5hsLE
-        NRkvZziXxG3oLP7424zdPD90BmuCzsa8x7buqXH/s2+kXbU7Jme48sLZ8Nh6xW3PrY7HxWjs
-        qXgtuM5Ty2Z7gocSS3FGoqEWc1FxIgCzmsAqlAMAAA==
-X-CMS-MailID: 20230608121123epcas5p3071e22355035496648768f4cd420dee1
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----RbnLpepSOhDWt1JmDV6HMUWO9Dmn-C3OOrycHY1seGoKI43i=_57f1d_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230605122310epcas5p4aaebfc26fe5377613a36fe50423cf494
-References: <20230605121732.28468-1-nj.shetty@samsung.com>
-        <CGME20230605122310epcas5p4aaebfc26fe5377613a36fe50423cf494@epcas5p4.samsung.com>
-        <20230605121732.28468-6-nj.shetty@samsung.com>
-        <ZH3mjUb+yqI11XD8@infradead.org> <20230606113535.rjbhe6eqlyqk4pqq@green245>
-        <ZIAt7vL+/isPJEl5@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:a0c:f5ce:0:b0:61a:6ff1:329c with HTTP; Thu, 8 Jun 2023
+ 05:20:11 -0700 (PDT)
+Reply-To: markusblocher3@gmail.com
+From:   Markus Christoph Bloche <ahmadtijjani3737@gmail.com>
+Date:   Thu, 8 Jun 2023 13:20:11 +0100
+Message-ID: <CAEHyr=3GFftQi8sd7C38Thnrk-hs_qqH0j1t=3zeW3w+NuoiPA@mail.gmail.com>
+Subject: SPENDENANGEBOT VON 1,000,000.00 AN SIE
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:732 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ahmadtijjani3737[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ahmadtijjani3737[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [markusblocher3[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-------RbnLpepSOhDWt1JmDV6HMUWO9Dmn-C3OOrycHY1seGoKI43i=_57f1d_
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Disposition: inline
+HALLO HALLO,,
 
-Hi Christoph and Martin,
-
-On 23/06/07 12:12AM, Christoph Hellwig wrote:
->On Tue, Jun 06, 2023 at 05:05:35PM +0530, Nitesh Shetty wrote:
->> Downside will be duplicating checks which are present for read, write in
->> block layer, device-mapper and zoned devices.
->> But we can do this, shouldn't be an issue.
->
->Yes.  Please never overload operations, this is just causing problems
->everywhere, and that why I split the operations from the flag a few
->years ago.
->
-
-Sure, we will add REQ_COPY_IN/OUT and send a new version.
-
->> The idea behind subsys is to prevent copy across different subsystem.
->> For example, copy across nvme subsystem and the scsi subsystem. [1]
->> At present, we don't support inter-namespace(copy across NVMe namespace),
->> but after community feedback for previous series we left scope for it.
->
->Never leave scope for something that isn't actually added.  That just
->creates a giant maintainance nightmare.  Cross-device copies are giant
->nightmare in general, and in the case of NVMe completely unusable
->as currently done in the working group.  Messing up something that
->is entirely reasonable (local copy) for something like that is a sure
->way to never get this series in.
-
-Sure, we can do away with subsys and realign more on single namespace copy.
-We are planning to use token to store source info, such as src sector,
-len and namespace. Something like below,
-
-struct nvme_copy_token {
-	struct nvme_ns *ns; // to make sure we are copying within same namespace
-/* store source info during *IN operation, will be used by *OUT operation */
-	sector_t src_sector;
-	sector_t sectors;
-};
-Do you have any better way to handle this in mind ?
-
-
-Thank you,
-Nitesh Shetty
-
-------RbnLpepSOhDWt1JmDV6HMUWO9Dmn-C3OOrycHY1seGoKI43i=_57f1d_
-Content-Type: text/plain; charset="utf-8"
-
-
-------RbnLpepSOhDWt1JmDV6HMUWO9Dmn-C3OOrycHY1seGoKI43i=_57f1d_--
+   ich bin Markus Christoph Bloche,
+Vorstandsvorsitzender/CEO/Gesch=C3=A4ftsf=C3=BChrer,
+Dottikon ES Holding AG. Ein Schweizer Gesch=C3=A4ftsmann, Investor und
+Pr=C3=A4sident/CEO/Gesch=C3=A4ftsf=C3=BChrer, Dottikon ES Holding AG. Ich b=
+in dabei
+Das Ruder von 9 Unternehmen, deren Vorsitzender ich bin
+Evide AG, Chairman, Chief Executive Officer und MD bei Dottikon Es
+Holding AG, Pr=C3=A4sident und Chief Executive Officer von Dottikon Exclusi=
+ve
+Synthesis AG, Hairman f=C3=BCr Frugan Holding AG,
+Vorstandsvorsitzender der agrocult AG und Vorstandsvorsitzender der
+Cultivport AG (beide sind
+Tochtergesellschaften der Frugan Holding AG) und Pr=C3=A4sident der Evolma
+Holding AG.
+Ich habe promoviert und mache derzeit einen Bachelor-Abschluss
+von der Eidgen=C3=B6ssischen Technischen Hochschule. Ich habe beschlossen, =
+aufzugeben
+Jedes Jahr spende ich 25 Prozent meines Privatverm=C3=B6gens f=C3=BCr wohlt=
+=C3=A4tige
+Zwecke und an die Armen
+seit dem Ausbruch der globalen Pandemie, die viele zu Verlusten gef=C3=BChr=
+t hat
+ihren Job und viele L=C3=A4nder versuchen immer noch, sich zu erholen. Ich
+und meine Familie
+Ich habe zugestimmt, 25 % meines Privatverm=C3=B6gens an Einzelpersonen aus=
+zugeben
+Jahr 2023 aus dem Gewinn meines Unternehmens, um zur Reduzierung des
+Hochs beizutragen
+Armutsquote, die durch diese globale Pandemie und die anhaltende verursacht=
+ wird
+Krieg zwischen Russland und der Ukraine, der viele L=C3=A4nder betroffen
+hat. Also habe ich
+beschlossen, 1.000.000,00 Euro an Sie zu spenden. Kontaktieren Sie
+mich noch heute auf meinem
+Pers=C3=B6nliche E-Mail: markusblocher3@gmail.com. mit Ihrem
+Spendencode: EGIP/EWU2023/28392.
+Sie k=C3=B6nnen auch =C3=BCber den folgenden Link mehr =C3=BCber mich lesen=
+:
+https://en.wikipedia.org/wiki/Markus_Blocher.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Dies ist noch einmal Ihr Spendencode: EGIP/EWU2023/28392.
+Bitte antworten Sie mit dem SPENDENCODE auf meine pers=C3=B6nliche E-Mail:
+markusblocher3@gmail.com.
+  Wir hoffen, Sie und Ihre Familie mit dieser Spende gl=C3=BCcklich zu mach=
+en.
+Um zu best=C3=A4tigen und sicherzustellen, dass dies 100 % legitim und echt
+ist. Besuchen Sie mich bitte
+Verifizierte Google-Seite zur Best=C3=A4tigung und um mehr =C3=BCber mich z=
+u erfahren:
+https://www.bloomberg.com/profile/person/6131291?leadSource=3Duverify%20wal=
+l,
+Mit freundlichen Gr=C3=BC=C3=9Fen.
+Markus Christoph Blocher, Pr=C3=A4sident/CEO/Gesch=C3=A4ftsf=C3=BChrer, Dot=
+tikon ES
+Holding AG.
