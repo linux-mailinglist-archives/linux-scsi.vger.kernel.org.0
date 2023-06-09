@@ -2,121 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8934F729CF2
-	for <lists+linux-scsi@lfdr.de>; Fri,  9 Jun 2023 16:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D813729E2A
+	for <lists+linux-scsi@lfdr.de>; Fri,  9 Jun 2023 17:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241466AbjFIOd0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 9 Jun 2023 10:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
+        id S241269AbjFIPSf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 9 Jun 2023 11:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241426AbjFIOdZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 9 Jun 2023 10:33:25 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D4E3580
-        for <linux-scsi@vger.kernel.org>; Fri,  9 Jun 2023 07:33:21 -0700 (PDT)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230609143317epoutp04c9a08d50a398a08457399fea93c727ab~nBDHsQQP_2560725607epoutp04O
-        for <linux-scsi@vger.kernel.org>; Fri,  9 Jun 2023 14:33:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230609143317epoutp04c9a08d50a398a08457399fea93c727ab~nBDHsQQP_2560725607epoutp04O
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1686321197;
-        bh=me+rLSB/b9GJujJAu0CxdDXUqp8gKCsUQo7RBcotCvU=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=c1Njslau/uUZ4+VH3HULWeK1O6V8EHLK2Iv+aPrdj3Oc501HsSB/T8M5bKdLy6y2l
-         P4/Cb/2DOefmyNQSlQI7zVUkJgCmOxUPDs/e/ghmcwJwHz7r3CB+9QdwgZdmysn5UM
-         vZ87RsjGjDfGQnQNl7zm72BEjQa8cDOwoYZqY6eY=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20230609143316epcas5p33ad45ed9c8971f82e327789259db5671~nBDGOQmll2770927709epcas5p3N;
-        Fri,  9 Jun 2023 14:33:16 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Qd3Tk5Q5Dz4x9Pp; Fri,  9 Jun
-        2023 14:33:14 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F5.95.04567.A2833846; Fri,  9 Jun 2023 23:33:14 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230609143314epcas5p10b58341bcfc6c4beba80f9260efc37df~nBDEKzFjc1099610996epcas5p1R;
-        Fri,  9 Jun 2023 14:33:14 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230609143314epsmtrp154e5d8efd48e5f965618d24077296bf8~nBDEHrbSQ2364323643epsmtrp1T;
-        Fri,  9 Jun 2023 14:33:14 +0000 (GMT)
-X-AuditID: b6c32a49-943ff700000011d7-92-6483382adb43
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        64.37.28392.92833846; Fri,  9 Jun 2023 23:33:14 +0900 (KST)
-Received: from alimakhtar04 (unknown [107.122.12.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230609143312epsmtip2db4e030b83f2545c23689acb258fcf0b~nBDCiMLnf1736317363epsmtip28;
-        Fri,  9 Jun 2023 14:33:12 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        "'Avri Altman'" <avri.altman@wdc.com>,
-        "'Bart Van Assche'" <bvanassche@acm.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
-        "'Conor Dooley'" <conor+dt@kernel.org>,
-        <linux-scsi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        with ESMTP id S239661AbjFIPSe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 9 Jun 2023 11:18:34 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D66B269A;
+        Fri,  9 Jun 2023 08:18:32 -0700 (PDT)
+X-UUID: e16bf54806d811eeb20a276fd37b9834-20230609
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=pf6wOR3QwBpqRrbCCzQI3m8dQ1fomGKSQzhmJ3BU2hk=;
+        b=mrI3zVwVOVNsgBTgQ3o3VX5BNjtPLo/nEZQFnQ5R9cTRVMEOyf6o5rKv+jiv6WBkvEUlPEpFxMvbABx2zwzlz2aW0m/c1qb7lsn1ddOj+zpt9weDoCwg06U7aA05oZIzURYM/uClGDggzK+IK1Q5Rkuw+NQNRMwS5vm81iaI4nI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.26,REQID:80259494-7073-472d-ac81-e5dcc8e7f378,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.26,REQID:80259494-7073-472d-ac81-e5dcc8e7f378,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:cb9a4e1,CLOUDID:77fd966e-2f20-4998-991c-3b78627e4938,B
+        ulkID:230609231827BZA3AU36,BulkQuantity:0,Recheck:0,SF:19|48|38|29|28|17,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,
+        TF_CID_SPAM_SNR
+X-UUID: e16bf54806d811eeb20a276fd37b9834-20230609
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <powen.kao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 509786790; Fri, 09 Jun 2023 23:18:25 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 9 Jun 2023 23:18:24 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 9 Jun 2023 23:18:24 +0800
+From:   Po-Wen Kao <powen.kao@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-In-Reply-To: <20230609140651.64488-1-krzysztof.kozlowski@linaro.org>
-Subject: RE: [PATCH] dt-bindings: ufs: samsung,exynos: drop unneeded quotes
-Date:   Fri, 9 Jun 2023 20:03:10 +0530
-Message-ID: <1efd01d99adf$5289fe20$f79dfa60$@samsung.com>
+        <linux-mediatek@lists.infradead.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
+        <stanley.chu@mediatek.com>, <powen.kao@mediatek.com>,
+        <alice.chao@mediatek.com>, <naomi.chu@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <cc.chou@mediatek.com>,
+        <eddie.huang@mediatek.com>
+Subject: [PATCH v1 1/2] scsi: ufs: mcq: Fix the incorrect OCS value for the device command
+Date:   Fri, 9 Jun 2023 23:17:55 +0800
+Message-ID: <20230609151758.19070-1-powen.kao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJ2GdCv8AveMME/ypslsmkvG38IjAO0j+NfrivkBWA=
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAJsWRmVeSWpSXmKPExsWy7bCmhq6WRXOKwbVFGhYvf15ls5j24Sez
-        xZq955gs5h85x2rR9+Ihs8Xe11vZLTY9vsZqcXnXHDaLGef3MVl0X9/BZtG69wi7A7fH5Sve
-        HptWdbJ53Lm2h81j85J6j8+b5DzaD3QzBbBFZdtkpCampBYppOYl56dk5qXbKnkHxzvHm5oZ
-        GOoaWlqYKynkJeam2iq5+AToumXmAF2npFCWmFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1I
-        ySkwKdArTswtLs1L18tLLbEyNDAwMgUqTMjO6N93mqngHV9F99r1bA2M+3m6GDk5JARMJPa/
-        e8rUxcjFISSwm1Fi2/XX7BDOJ0aJiVcb2UCqhAQ+M0rcXKLZxcgB1vH6sQhEzS5GiXv3W1kh
-        nJeMEg8P7GcHaWAT0JXYsbiNDSQhInCWWeLXiVNgCU4BF4lLq2cwg9jCAt4SvV8WMILYLAIq
-        EgfnNYPFeQUsJWb86mWDsAUlTs58wgJiMwvIS2x/O4cZ4m4FiZ9Pl7GC2CICVhJrN91mhqgR
-        l3h59Ag7RM0WDon7G0IhbBeJlnaIXRICwhKvjm+BqpGSeNnfxg7xmYfEoj9SEOEMibfL10OV
-        20scuDKHBaSEWUBTYv0ufYhNfBK9v58wQXTySnS0CUFUq0o0v7vKAmFLS0zs7maFsD0k3s8+
-        zQYJqumMEouuv2KbwKgwC8mTs5A8OQvJM7MQNi9gZFnFKJlaUJybnlpsWmCYl1oOj+7k/NxN
-        jOCkq+W5g/Hugw96hxiZOBgPMUpwMCuJ8GqbNKcI8aYkVlalFuXHF5XmpBYfYjQFhvxEZinR
-        5Hxg2s8riTc0sTQwMTMzM7E0NjNUEudVtz2ZLCSQnliSmp2aWpBaBNPHxMEp1cA0ycL7o+n5
-        2rOspqJvGqQOP72iGdeQkty7zGXvGy29X575iW2dhbE3evRyv/8/rfTj0NxS2xPeebN8299U
-        RM/d5sYQLKukazbXOPH4/5P6amFnbRUEXpZnyNTeX3Nkavf5bw8n+1cvPsTOPVldNf3buQYh
-        rXWi7pu/HdpY8N0g59l/gbvnghZU3EzWZqxoWszwxP/iliXu9qrvdfXPpeiK+2wTWhhoY3yy
-        IlShMvJbpdWb0hNbtskZKkx6+2dCWHyuFVvg3ecL7T0Mljq79qYePZyopfphYarAhIeHt7M2
-        zE64+lpirbRak5Li/N1ly9mObwj4+ltQuC1+K5/a40cVEzsDV9i9vWem8fiARKwSS3FGoqEW
-        c1FxIgDHGrboQwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42LZdlhJXlfLojnF4MwyRouXP6+yWUz78JPZ
-        Ys3ec0wW84+cY7Xoe/GQ2WLv663sFpseX2O1uLxrDpvFjPP7mCy6r+9gs2jde4Tdgdvj8hVv
-        j02rOtk87lzbw+axeUm9x+dNch7tB7qZAtiiuGxSUnMyy1KL9O0SuDL6951mKnjHV9G9dj1b
-        A+N+ni5GDg4JAROJ149Fuhi5OIQEdjBKHPj5gqWLkRMoLi1xfeMEdghbWGLlv+fsEEXPGSWO
-        HF3MCJJgE9CV2LG4jQ0kISJwlVniy+/JjBBVUxklbv9uBqviFHCRuLR6BjOILSzgLdH7ZQFY
-        nEVAReLgvGawOK+ApcSMX71sELagxMmZT1hAzmMW0JNo2whWziwgL7H97RxmiIsUJH4+XcYK
-        YosIWEms3XSbGaJGXOLl0SPsExiFZiGZNAth0iwkk2Yh6VjAyLKKUTK1oDg3PbfYsMAoL7Vc
-        rzgxt7g0L10vOT93EyM4xrS0djDuWfVB7xAjEwfjIUYJDmYlEV5tk+YUId6UxMqq1KL8+KLS
-        nNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqemFqQWwWSZODilGpiWW+x6J7dzheXOJQK/fs+9Okns
-        aIBt//UtTMv0Tx9te2sk/OPMlzpZv+3vWmU5Hge5/C3r+SAnttNxuiGfY+TJSW+zZddPf7lF
-        xULifGdtYk/ZtHbl7pYwl90/zHK3fV6mXyD89NHtb3+4MwxPnt944Pq1LSWTijU9Mn+zK+sF
-        GblrMBXIhgv21Ko9V83zMV8/R8q4KrXkTP1lb7UZgml1L2eG+r+5NYH3ZP2dnbt041auFl3s
-        msB/9d/zpQXvL9dEXWCNe2BfLJewoNqufNW995MXbSgWbElU3Ot7L9dn56U5LPZ7koS7dqqZ
-        P/iW1X/AmtVq+v9GBuvtv6e7lC1teboi69My4aI5un7af9SUWIozEg21mIuKEwErhDYfIAMA
-        AA==
-X-CMS-MailID: 20230609143314epcas5p10b58341bcfc6c4beba80f9260efc37df
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230609140700epcas5p39500e13a887cbbcf0f79f7b3a5b3789d
-References: <CGME20230609140700epcas5p39500e13a887cbbcf0f79f7b3a5b3789d@epcas5p3.samsung.com>
-        <20230609140651.64488-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,51 +79,88 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Krzysztof
+From: Stanley Chu <stanley.chu@mediatek.com>
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Sent: Friday, June 9, 2023 7:37 PM
-> To: Alim Akhtar <alim.akhtar@samsung.com>; Avri Altman
-> <avri.altman@wdc.com>; Bart Van Assche <bvanassche@acm.org>; Rob
-> Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-> <krzysztof.kozlowski+dt@linaro.org>; Conor Dooley
-> <conor+dt@kernel.org>; linux-scsi@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
-> samsung-soc@vger.kernel.org; linux-kernel@vger.kernel.org
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Subject: [PATCH] dt-bindings: ufs: samsung,exynos: drop unneeded quotes
-> 
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Thanks!
+In MCQ mode, when a device command uses a hardware queue shared
+with other commands, a race condition may occur in the following scenario:
 
-Acked-by: Alim Akhtar <alim.akhtar@samsung.com>
+1. A device command is completed in CQx with CQE entry "e".
+2. The interrupt handler copies the "cqe" pointer to "hba->dev_cmd.cqe"
+   and completes "hba->dev_cmd.complete".
+3. The "ufshcd_wait_for_dev_cmd()" function is awakened and retrieves
+   the OCS value from "hba->dev_cmd.cqe".
 
->  Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/ufs/samsung,exynos-
-> ufs.yaml b/Documentation/devicetree/bindings/ufs/samsung,exynos-
-> ufs.yaml
-> index a9988798898d..88cc1e3a0c88 100644
-> --- a/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
-> @@ -54,7 +54,7 @@ properties:
->      const: ufs-phy
-> 
->    samsung,sysreg:
-> -    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->      description: Should be phandle/offset pair. The phandle to the syscon
-> node
->                   which indicates the FSYSx sysreg interface and the
-offset of
->                   the control register for UFS io coherency setting.
-> --
-> 2.34.1
+However, there is a possibility that the CQE entry "e" will be overwritten
+by newly completed commands in CQx, resulting in an incorrect OCS value
+being received by "ufshcd_wait_for_dev_cmd()".
 
+To avoid this race condition, the OCS value should be immediately copied
+to the struct "lrb" of the device command. Then "ufshcd_wait_for_dev_cmd()"
+can retrieve the OCS value from the struct "lrb".
+
+Fixes: b5167638ec82 ("scsi: ufs: core: mcq: Add support to allocate multiple queues")
+Suggested-by: Can Guo <quic_cang@quicinc.com>
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+---
+ drivers/ufs/core/ufshcd.c | 11 ++++++++---
+ include/ufs/ufshcd.h      |  1 -
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 5da62248ebc4..df8782981d8c 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -3086,7 +3086,7 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
+ 		 * not trigger any race conditions.
+ 		 */
+ 		hba->dev_cmd.complete = NULL;
+-		err = ufshcd_get_tr_ocs(lrbp, hba->dev_cmd.cqe);
++		err = ufshcd_get_tr_ocs(lrbp, NULL);
+ 		if (!err)
+ 			err = ufshcd_dev_cmd_completion(hba, lrbp);
+ 	} else {
+@@ -3182,7 +3182,6 @@ static int ufshcd_exec_dev_cmd(struct ufs_hba *hba,
+ 		goto out;
+ 
+ 	hba->dev_cmd.complete = &wait;
+-	hba->dev_cmd.cqe = NULL;
+ 
+ 	ufshcd_add_query_upiu_trace(hba, UFS_QUERY_SEND, lrbp->ucd_req_ptr);
+ 
+@@ -5431,6 +5430,7 @@ void ufshcd_compl_one_cqe(struct ufs_hba *hba, int task_tag,
+ {
+ 	struct ufshcd_lrb *lrbp;
+ 	struct scsi_cmnd *cmd;
++	enum utp_ocs ocs;
+ 
+ 	lrbp = &hba->lrb[task_tag];
+ 	lrbp->compl_time_stamp = ktime_get();
+@@ -5446,7 +5446,12 @@ void ufshcd_compl_one_cqe(struct ufs_hba *hba, int task_tag,
+ 	} else if (lrbp->command_type == UTP_CMD_TYPE_DEV_MANAGE ||
+ 		   lrbp->command_type == UTP_CMD_TYPE_UFS_STORAGE) {
+ 		if (hba->dev_cmd.complete) {
+-			hba->dev_cmd.cqe = cqe;
++			if (cqe) {
++				ocs = le32_to_cpu(cqe->status) & MASK_OCS;
++				lrbp->utr_descriptor_ptr->header.dword_2 =
++					cpu_to_le32(ocs);
++			}
++			ufshcd_add_command_trace(hba, task_tag, UFS_DEV_COMP);
+ 			complete(hba->dev_cmd.complete);
+ 			ufshcd_clk_scaling_update_busy(hba);
+ 		}
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index 9b2d1859f885..602615e6d1bf 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -225,7 +225,6 @@ struct ufs_dev_cmd {
+ 	struct mutex lock;
+ 	struct completion *complete;
+ 	struct ufs_query query;
+-	struct cq_entry *cqe;
+ };
+ 
+ /**
+-- 
+2.18.0
 
