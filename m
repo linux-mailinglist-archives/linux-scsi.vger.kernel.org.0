@@ -2,67 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A14C72C8DA
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Jun 2023 16:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D52872C942
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Jun 2023 17:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236626AbjFLOmp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 12 Jun 2023 10:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
+        id S239179AbjFLPDk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 12 Jun 2023 11:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239373AbjFLOk2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Jun 2023 10:40:28 -0400
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF881B2;
-        Mon, 12 Jun 2023 07:40:26 -0700 (PDT)
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1b3c3f2d71eso8229425ad.2;
-        Mon, 12 Jun 2023 07:40:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686580826; x=1689172826;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V2k5h5v6QzCcR3eX2PETHxqpP7p+MsuD7VNAtY9j2X8=;
-        b=TVGdFhuZTTzkiM4eSi6ccUZHupcCJvGsUCyaYOQ/xxeY4j6RB8nxPwUtz8P1AQU30D
-         b4QDm9zzlIUTkZEPOKI9XCCPNyHXLJdS6FmCDPZogJ41ro+DYGqObDhtBdHg2zTHV0/X
-         CC2VFT0/aPjQnFSrc/MV6niM4QFDD1wk3QhB2z9AxpF88Ra0Vf2OOK30oWaXhAMnFXsk
-         RbElDzLc+9UV8fhLFU1ZUVlOFApOK8rZTaUSdYGTwmQC63Ffkpaa5PKto3prQDWsWmXL
-         nj5la0PIs+02DS1ogo6EKjeISzW+FPfeQDUQ1rL2HAvuyPD4WrNIl2kBHRvWJ1efxGJR
-         49Lw==
-X-Gm-Message-State: AC+VfDx3xcuJ2oYRnREM48C/AKiDWeTMqrJD1veHNccw2DCxxg9f2h07
-        qc7EBpofpXEDvCPdEE8x5so=
-X-Google-Smtp-Source: ACHHUZ6egE9KlLIhazWftG0Nc619mPVQjblmmoart7BaveADrHDJZm8cMpprlOORgCQGRmtObxAC3Q==
-X-Received: by 2002:a17:90b:388f:b0:255:6c5b:3660 with SMTP id mu15-20020a17090b388f00b002556c5b3660mr7826413pjb.20.1686580826113;
-        Mon, 12 Jun 2023 07:40:26 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id 6-20020a17090a030600b0024dfb8271a4sm8157323pje.21.2023.06.12.07.40.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 07:40:25 -0700 (PDT)
-Message-ID: <b3bbc7c7-d607-8ad8-03ed-3ce18c0274e1@acm.org>
-Date:   Mon, 12 Jun 2023 07:40:23 -0700
+        with ESMTP id S239175AbjFLPDX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Jun 2023 11:03:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6E0CC;
+        Mon, 12 Jun 2023 08:03:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 652E61FDAA;
+        Mon, 12 Jun 2023 15:03:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686582200; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=4RRLF67QU9Cka1JulfEZOYPSL3pjhbA85Tmqle8Ma9k=;
+        b=r/ahxzOTTp91xlft6REYlge957cZ1laMQsCwBCxtLEhdHMZREnY1OuJVw7u61vFOJZXH6D
+        Eddj/UHlk6XCBb5nCamdUspU5i2M3CRrTeN0Gis+zYLyjDGsdDfFwfCH8beWvTCZuc+Ymy
+        nqvND375Nsq2hIOEN1s8xKaA5BziXAQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 03BE6138EC;
+        Mon, 12 Jun 2023 15:03:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XGmuObczh2RMMAAAMHmgww
+        (envelope-from <mwilck@suse.com>); Mon, 12 Jun 2023 15:03:19 +0000
+From:   mwilck@suse.com
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     James Bottomley <jejb@linux.vnet.ibm.com>,
+        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>, Martin Wilck <mwilck@suse.com>
+Subject: [PATCH v4 0/6] scsi: fixes for targets with many LUNs, and scsi_target_block rework
+Date:   Mon, 12 Jun 2023 17:03:03 +0200
+Message-Id: <20230612150309.18103-1-mwilck@suse.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 0/4] ufs: Introduce MCQ Quirks for MediaTek host
-Content-Language: en-US
-To:     Po-Wen Kao <powen.kao@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, alice.chao@mediatek.com,
-        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
-        cc.chou@mediatek.com, eddie.huang@mediatek.com
-References: <20230612085817.12275-1-powen.kao@mediatek.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230612085817.12275-1-powen.kao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,13 +60,53 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/12/23 01:58, Po-Wen Kao wrote:
-> v1
-> Introduce quirks for non-standard part of UFSHCI and address Bart's comment
-> from last patch
-> https://lore.kernel.org/all/20230328103801.11198-1-powen.kao@mediatek.com/
+From: Martin Wilck <mwilck@suse.com>
 
-For the entire series:
+This patch series addresses some issues we saw in a test setup
+with a large number of SCSI LUNs. The first two patches simply
+increase the number of available sg and bsg devices. 3-5 fix
+a large delay we encountered between blocking a Fibre Channel
+remote port and the dev_loss_tmo. 6 renames scsi_target_block()
+to scsi_block_targets(), and makes additional changes to this API,
+as suggested in the review of the v2 series.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Changes v3 -> v4:
+ - skipped 4/8: keep state_mutex held while quiescing queue (Bart van Assche),
+   added a comment in 4/6 to explain the rationale
+ - renamed scsi_target_block() to scsi_block_targets() (Christoph Hellwig), and
+   merged the previous patches 7/8 and 8/8 modifying this API into 6/6.
+ - rebased to latest mkp/queue branch
+
+Changes v2 -> v3:
+ - Split previous 3/3 into 4 separate patches as suggested by
+   Christoph Hellwig.
+ - Added 7/8 and 8/8, as suggested by Christoph and Bart van Assche.
+ - Added s-o-b and reviewed-by tags.
+
+Changes v1 -> v2:
+ - call blk_mq_wait_quiesce_done() from scsi_target_block() to
+   cover the case where BLK_MQ_F_BLOCKING is set (Bart van Assche)
+
+Hannes Reinecke (2):
+  bsg: increase number of devices
+  scsi: sg: increase number of devices
+
+Martin Wilck (4):
+  scsi: merge scsi_internal_device_block() and device_block()
+  scsi: don't wait for quiesce in scsi_stop_queue()
+  scsi: don't wait for quiesce in scsi_device_block()
+  scsi: replace scsi_target_block() by scsi_block_targets()
+
+ block/bsg.c                         |  2 +-
+ drivers/scsi/scsi_lib.c             | 76 ++++++++++++++---------------
+ drivers/scsi/scsi_transport_fc.c    |  2 +-
+ drivers/scsi/scsi_transport_iscsi.c |  3 +-
+ drivers/scsi/scsi_transport_srp.c   |  6 +--
+ drivers/scsi/sg.c                   |  2 +-
+ drivers/scsi/snic/snic_disc.c       |  2 +-
+ include/scsi/scsi_device.h          |  2 +-
+ 8 files changed, 46 insertions(+), 49 deletions(-)
+
+-- 
+2.40.1
 
