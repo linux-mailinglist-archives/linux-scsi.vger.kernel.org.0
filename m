@@ -2,108 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A061972EA15
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Jun 2023 19:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF58372EAC9
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Jun 2023 20:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239828AbjFMRmt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 13 Jun 2023 13:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
+        id S238845AbjFMSWz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 13 Jun 2023 14:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239815AbjFMRmi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Jun 2023 13:42:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C753C12C;
-        Tue, 13 Jun 2023 10:42:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 790331FDB3;
-        Tue, 13 Jun 2023 17:42:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686678156; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WzUnbj2Z8R2eaoIp796RXqZoXFmua2lq+BATt4dO7+M=;
-        b=fybD/6nJ5nm9pwxvwVFuQG0PwhN5jYfSiBzz8sB3Ln4enykuiGxKtYMEEvgCvbhkGX9RLF
-        YRBctEUtEnk8V8F1NaHPYS04ujUFUnx1maPd4gDakRFQIqvl3kpo0OYvFMlMoUu6bCeh9z
-        IFGaMWLQ5spHbRIVtmvpc9hYG3eC40k=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1E28A13483;
-        Tue, 13 Jun 2023 17:42:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UM5yBYyqiGSWXwAAMHmgww
-        (envelope-from <mwilck@suse.com>); Tue, 13 Jun 2023 17:42:36 +0000
-From:   mwilck@suse.com
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     James Bottomley <jejb@linux.vnet.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        Hannes Reinecke <hare@suse.de>, Martin Wilck <mwilck@suse.com>
-Subject: [PATCH v6 7/7] scsi: improve warning message in scsi_device_block()
-Date:   Tue, 13 Jun 2023 19:42:27 +0200
-Message-Id: <20230613174227.11235-8-mwilck@suse.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230613174227.11235-1-mwilck@suse.com>
-References: <20230613174227.11235-1-mwilck@suse.com>
+        with ESMTP id S238913AbjFMSWy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Jun 2023 14:22:54 -0400
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8F51709
+        for <linux-scsi@vger.kernel.org>; Tue, 13 Jun 2023 11:22:52 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-651f2f38634so5882998b3a.0
+        for <linux-scsi@vger.kernel.org>; Tue, 13 Jun 2023 11:22:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686680572; x=1689272572;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5VgXM6sYRXu4WWCBU55bsPHcqdjZYxwo1hgv/LscC4=;
+        b=Sm6M61o1b8OIqri0AM4mAaEznLCr51BwbaxSUhzipUcwaygtbILk6jTD5H9FZsL9Ip
+         vyIhy8lud9WoJSF5Qr+1GyOvNE6jP9oovZjFC3soVP4jvIP/yc/l1taWu4HoiEKZMAFv
+         qcvyNtzmgQ/oW8Io4EAvKJaNZCxIJSrQasiWyx2mhBlm8o62RwjZ9svLvSn5QrLpn89+
+         DCS4VeFfS8/WGh6Hx9Belf5nC/37s9jEN+lxiCEuQ0b3d7lq0O7v/kDtCHJHsjm/4Mfh
+         sCBMFna+8nePMR6yi/oxnsSp63//LoczHe/8AvkTWLWmVziLdzleMjDgnsFdHh1anNAj
+         5bEw==
+X-Gm-Message-State: AC+VfDxrUhHjs+LBmTL9BGR8orVKu9Osc/95/UcktCOMhRSUYemVpk7c
+        UWh+9I8DU1x8JWP7Me843QBg8ivWDjg=
+X-Google-Smtp-Source: ACHHUZ4tjCN0Dv2lUj1xoPujIAsBhxLTrlmJRRUkN5MubWez9X1qNYn8OBSVI4b3YdMXSzH7qBbm/g==
+X-Received: by 2002:a05:6a00:21d0:b0:662:5146:c77a with SMTP id t16-20020a056a0021d000b006625146c77amr17398428pfj.31.1686680572142;
+        Tue, 13 Jun 2023 11:22:52 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id a23-20020a62bd17000000b0062d859a33d1sm8918331pff.84.2023.06.13.11.22.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 11:22:51 -0700 (PDT)
+Message-ID: <c3b42f98-31f8-39f4-4540-cccf0bfe31cd@acm.org>
+Date:   Tue, 13 Jun 2023 11:22:50 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] scsi: ufs: ufs-pci: Add support for Intel Arrow Lake
+Content-Language: en-US
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>, linux-scsi@vger.kernel.org
+References: <20230613170327.61186-1-adrian.hunter@intel.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230613170327.61186-1-adrian.hunter@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Martin Wilck <mwilck@suse.com>
+On 6/13/23 10:03, Adrian Hunter wrote:
+> Add PCI ID to support Intel Arrow Lake, same as MTL.
 
-If __scsi_internal_device_block() returns an error, it is always -EINVAL
-because of an invalid state transition. For debugging purposes, it makes
-more sense to print the device state.
+The patch looks good to me but the "same as MTL" text in the patch 
+description looks confusing to me?
 
-Signed-off-by: Martin Wilck <mwilck@suse.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
----
- drivers/scsi/scsi_lib.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Thanks,
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 4607e4ea169e..9fe0fe1feba7 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -2790,9 +2790,11 @@ EXPORT_SYMBOL_GPL(scsi_internal_device_block_nowait);
- static void scsi_device_block(struct scsi_device *sdev, void *data)
- {
- 	int err;
-+	enum scsi_device_state state;
- 
- 	mutex_lock(&sdev->state_mutex);
- 	err = __scsi_internal_device_block_nowait(sdev);
-+	state = sdev->sdev_state;
- 	if (err == 0)
- 		/*
- 		 * scsi_stop_queue() must be called with the state_mutex
-@@ -2803,8 +2805,8 @@ static void scsi_device_block(struct scsi_device *sdev, void *data)
- 
- 	mutex_unlock(&sdev->state_mutex);
- 
--	WARN_ONCE(err, "__scsi_internal_device_block_nowait(%s) failed: err = %d\n",
--		  dev_name(&sdev->sdev_gendev), err);
-+	WARN_ONCE(err, "%s: failed to block %s in state %d\n",
-+		  __func__, dev_name(&sdev->sdev_gendev), state);
- }
- 
- /**
--- 
-2.40.1
-
+Bart.
