@@ -2,84 +2,124 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E3072E8F9
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Jun 2023 19:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFCDB72EA1B
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Jun 2023 19:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235168AbjFMRDo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 13 Jun 2023 13:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
+        id S238615AbjFMRmq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 13 Jun 2023 13:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235159AbjFMRDn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Jun 2023 13:03:43 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CC4183
-        for <linux-scsi@vger.kernel.org>; Tue, 13 Jun 2023 10:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686675822; x=1718211822;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=O3CQWZszT99rUkqHIh4iMrBofBOBQdyi+z2V+wOzVeo=;
-  b=DQusQDwpTtaMGnnFmzqNoefv25W+hb4ZPRa9JFSjEMGI6hV0+2Yzof5V
-   hTqLapk9PtLpmXYUvYLc35iobJQq0bpqXAY69uwaJs0oZ5SVnWdt1tDJ8
-   +wA/r7tCNJzvybZVVjXvDefa/dFrnXCBDVjpHLjlWKBrXuGKeNRI/Wcgv
-   pk0nfDZLoJdLTThOR/3rdV132Q/hnpoJELffikgU1T1eSxcVjJVeICr6E
-   QSNPveq4IM7JdG1KQjOpXDJSF7/F+kwrGRlzPnHI9ipam5iWlAOiWib+Z
-   PBVJe3lHjHR7RPG1d4TxnNSQiyBzvnp5j+/CL8o0uZfIuay7zg6RyqvLY
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="424281753"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="424281753"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 10:03:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="824491436"
-X-IronPort-AV: E=Sophos;i="6.00,240,1681196400"; 
-   d="scan'208";a="824491436"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.251.212.213])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 10:03:39 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>, linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: ufs: ufs-pci: Add support for Intel Arrow Lake
-Date:   Tue, 13 Jun 2023 20:03:27 +0300
-Message-Id: <20230613170327.61186-1-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S239238AbjFMRmg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Jun 2023 13:42:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9E0E1;
+        Tue, 13 Jun 2023 10:42:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 333B021D18;
+        Tue, 13 Jun 2023 17:42:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686678153; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=AuwRmjJOYk1TsLTcz/TbJRJ+h6xQPxlYzNk2yeUo3Gw=;
+        b=KYCdrGPYqVmIJZ2QPFCpweOUO8nsNOMheLy29SBO+wTPJJ7m1CnV7Io1yW4JEU/8Pcn5Y3
+        oMMEGkVCw7otKQNE9VVRGNE+MN0+jGNAp3Ho1jc5gJg0v+xsBI4yKMePTrZCOrwblX4unn
+        qEfJqwMFr0n2XepXhSQ9YbyAz799FfY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C027A13483;
+        Tue, 13 Jun 2023 17:42:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mcaTLIiqiGSWXwAAMHmgww
+        (envelope-from <mwilck@suse.com>); Tue, 13 Jun 2023 17:42:32 +0000
+From:   mwilck@suse.com
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     James Bottomley <jejb@linux.vnet.ibm.com>,
+        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>, Martin Wilck <mwilck@suse.com>
+Subject: [PATCH v6 0/7] scsi: fixes for targets with many LUNs, and scsi_target_block rework
+Date:   Tue, 13 Jun 2023 19:42:20 +0200
+Message-Id: <20230613174227.11235-1-mwilck@suse.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add PCI ID to support Intel Arrow Lake, same as MTL.
+From: Martin Wilck <mwilck@suse.com>
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- drivers/ufs/host/ufshcd-pci.c | 1 +
- 1 file changed, 1 insertion(+)
+This patch series addresses some issues we saw in a test setup
+with a large number of SCSI LUNs. The first two patches simply
+increase the number of available sg and bsg devices. 3-5 fix
+a large delay we encountered between blocking a Fibre Channel
+remote port and the dev_loss_tmo. 6 renames scsi_target_block()
+to scsi_block_targets(), and makes additional changes to this API,
+as suggested in the review of the v2 series. 7 improves a warning message.
 
-diff --git a/drivers/ufs/host/ufshcd-pci.c b/drivers/ufs/host/ufshcd-pci.c
-index 38276dac8e52..cf3987773051 100644
---- a/drivers/ufs/host/ufshcd-pci.c
-+++ b/drivers/ufs/host/ufshcd-pci.c
-@@ -599,6 +599,7 @@ static const struct pci_device_id ufshcd_pci_tbl[] = {
- 	{ PCI_VDEVICE(INTEL, 0x54FF), (kernel_ulong_t)&ufs_intel_adl_hba_vops },
- 	{ PCI_VDEVICE(INTEL, 0x7E47), (kernel_ulong_t)&ufs_intel_mtl_hba_vops },
- 	{ PCI_VDEVICE(INTEL, 0xA847), (kernel_ulong_t)&ufs_intel_mtl_hba_vops },
-+	{ PCI_VDEVICE(INTEL, 0x7747), (kernel_ulong_t)&ufs_intel_mtl_hba_vops },
- 	{ }	/* terminate list */
- };
- 
+Changes v5 -> v6
+ - 6/7: inverted order of arguments for scsi_block_targets (Christoph Hellwig), dropped "extern"
+   (I took the liberty not to remove previous "Reviewed-by"'s because of this change)
+ - 5/7: wrapped one over-long comment line
+ - added tags
+
+Changes v4 -> v5:
+ - added 7/7 to improve the WARN_ON_ONCE in scsi_device_block() (Bart van Assche)
+ - 6/7: added WARN_ON_ONCE in scsi_block_targets() (Bart van Assche)
+ - 4/7: improved comment (Bart van Assche)
+ - Added tags
+
+Changes v3 -> v4:
+ - skipped 4/8: keep state_mutex held while quiescing queue (Bart van Assche),
+   added a comment in 4/6 to explain the rationale
+ - renamed scsi_target_block() to scsi_block_targets() (Christoph Hellwig), and
+   merged the previous patches 7/8 and 8/8 modifying this API into 6/6.
+ - rebased to latest mkp/queue branch
+
+Changes v2 -> v3:
+ - Split previous 3/3 into 4 separate patches as suggested by
+   Christoph Hellwig.
+ - Added 7/8 and 8/8, as suggested by Christoph and Bart van Assche.
+ - Added s-o-b and reviewed-by tags.
+
+Changes v1 -> v2:
+ - call blk_mq_wait_quiesce_done() from scsi_target_block() to
+   cover the case where BLK_MQ_F_BLOCKING is set (Bart van Assche)
+
+Hannes Reinecke (2):
+  bsg: increase number of devices
+  scsi: sg: increase number of devices
+
+Martin Wilck (5):
+  scsi: merge scsi_internal_device_block() and device_block()
+  scsi: don't wait for quiesce in scsi_stop_queue()
+  scsi: don't wait for quiesce in scsi_device_block()
+  scsi: replace scsi_target_block() by scsi_block_targets()
+  scsi: improve warning message in scsi_device_block()
+
+ block/bsg.c                         |  2 +-
+ drivers/scsi/scsi_lib.c             | 80 ++++++++++++++---------------
+ drivers/scsi/scsi_transport_fc.c    |  2 +-
+ drivers/scsi/scsi_transport_iscsi.c |  3 +-
+ drivers/scsi/scsi_transport_srp.c   |  6 +--
+ drivers/scsi/sg.c                   |  2 +-
+ drivers/scsi/snic/snic_disc.c       |  2 +-
+ include/scsi/scsi_device.h          |  2 +-
+ 8 files changed, 50 insertions(+), 49 deletions(-)
+
 -- 
-2.34.1
+2.40.1
 
