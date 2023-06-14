@@ -2,96 +2,128 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8637E70F7EC
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 May 2023 15:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4ED872F254
+	for <lists+linux-scsi@lfdr.de>; Wed, 14 Jun 2023 03:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235459AbjEXNln convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 24 May 2023 09:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        id S241790AbjFNB6n (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 13 Jun 2023 21:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235478AbjEXNlk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 May 2023 09:41:40 -0400
-X-Greylist: delayed 10471 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 24 May 2023 06:41:21 PDT
-Received: from mail.dom-cr.it (mail.dom-cr.it [88.60.204.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F94E47
-        for <linux-scsi@vger.kernel.org>; Wed, 24 May 2023 06:41:21 -0700 (PDT)
-Message-ID: <1285629455-13472@mail.dom-cr.it>
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=AXB_XMAILER_MIMEOLE_OL_024C2,
-        BAYES_50,FORGED_MUA_OUTLOOK,FROM_MISSP_MSFT,FROM_MISSP_USER,
-        FSL_NEW_HELO_USER,LOTS_OF_MONEY,MISSING_HEADERS,MSGID_FROM_MTA_HEADER,
-        NSL_RCVD_FROM_USER,RCVD_IN_SORBS_WEB,REPLYTO_WITHOUT_TO_CC,
-        SPF_HELO_NONE,SPF_SOFTFAIL,TO_NO_BRKTS_MSFT,T_DATE_IN_FUTURE_96_Q,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *******
-X-Footer: ZG9tLWNyLml0
-Received: from User ([185.24.233.4])
-        (authenticated user info@dom-cr.it)
-        by mail.dom-cr.it with ESMTPA;
-        Wed, 24 May 2023 11:18:20 +0200
-Reply-To: <admin@agnisurakshaservices.com>
-From:   "Mazin Hussein" <admin@agnisurakshaservices.com>
-Subject: Products Needed      
-Date:   Sat, 24 Jun 2023 09:17:26 -0700
+        with ESMTP id S233260AbjFNB6m (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Jun 2023 21:58:42 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17ED1FC9;
+        Tue, 13 Jun 2023 18:58:26 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QgpVR0MJpz4f3tNm;
+        Wed, 14 Jun 2023 09:58:23 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgCnD7O+HolkasWdLg--.26820S3;
+        Wed, 14 Jun 2023 09:58:23 +0800 (CST)
+Subject: Re: [PATCH 2/2] ufs: don't use the fair tag sharings
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Yu Kuai <yukuai1@huaweicloud.com>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Ed Tsai <ed.tsai@mediatek.com>, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        stanley.chu@mediatek.com, peter.wang@mediatek.com,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        powen.kao@mediatek.com, naomi.chu@mediatek.com,
+        wsd_upstream@mediatek.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230509065230.32552-1-ed.tsai@mediatek.com>
+ <20230509065230.32552-3-ed.tsai@mediatek.com>
+ <ZF0K7A6G2cYBjSgn@infradead.org>
+ <aa9af9ae-62a4-6469-244c-b5d9106bb044@acm.org>
+ <ZF5G5ztMng8Xbd1W@infradead.org>
+ <2740ee82-e35f-1cbf-f5d0-373f94eb14a5@acm.org>
+ <de3f41a0-b13d-d4f6-765a-19b857bce53e@huaweicloud.com>
+ <86065501-ab2e-09b4-71cd-c0b18ede00ed@acm.org>
+ <a26e28a6-91e0-e803-749e-2ce957711c64@huaweicloud.com>
+ <097caed2-10b3-7cd1-7c06-90f983e5c720@acm.org>
+ <f9ccab59-91a1-69d5-6d20-2c6ea0e24b5a@huaweicloud.com>
+ <66906bd5-d73f-af96-bf38-c6aee576fa73@acm.org>
+ <bef8340e-f051-db63-5c2f-a2bc94c678ac@huaweicloud.com>
+ <04a4d0db-2f2d-e2fc-5458-4ddf852ffc8a@acm.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <3e9e42aa-9a0d-2b73-194b-5c229e9ed533@huaweicloud.com>
+Date:   Wed, 14 Jun 2023 09:58:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4957]
-        *  0.0 NSL_RCVD_FROM_USER Received from User
-        *  1.5 RCVD_IN_SORBS_WEB RBL: SORBS: sender is an abusable web server
-        *      [185.24.233.4 listed in dnsbl.sorbs.net]
-        *  1.0 MISSING_HEADERS Missing To: header
-        *  0.0 T_DATE_IN_FUTURE_96_Q Date: is 4 days to 4 months after
-        *      Received: date
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  0.0 FSL_NEW_HELO_USER Spam's using Helo and User
-        *  0.0 MSGID_FROM_MTA_HEADER Message-Id was added by a relay
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 AXB_XMAILER_MIMEOLE_OL_024C2 Yet another X header trait
-        *  0.0 FROM_MISSP_USER From misspaced, from "User"
-        *  0.0 FROM_MISSP_MSFT From misspaced + supposed Microsoft tool
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 TO_NO_BRKTS_MSFT To: lacks brackets and supposed Microsoft tool
-        *  1.9 FORGED_MUA_OUTLOOK Forged mail pretending to be from MS Outlook
+In-Reply-To: <04a4d0db-2f2d-e2fc-5458-4ddf852ffc8a@acm.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCnD7O+HolkasWdLg--.26820S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF43JrWUJr4fWrykXrW3Awb_yoW8Jw4Upa
+        y8tFZIkFs7J398AwsrX3W8uayftwn3Jr97Jr1fG347Zwn09w4fZw4Ut3909rZ3Zr97Cr12
+        gay8Xr95X3s5Z37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
+        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUAxhLUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Supplier,
+Hi,
 
-We invite you to take part in ongoing rebuilding of our great country, Iraq after many years of conflicts. We are determined to purchase your products in large quantities.
+在 2023/06/13 22:07, Bart Van Assche 写道:
+> On 5/18/23 00:55, Yu Kuai wrote:
+>> 在 2023/05/18 10:23, Bart Van Assche 写道:
+>>> On 5/17/23 18:49, Yu Kuai wrote:
+>>>> Currently, fair share from hctx_may_queue() requires two
+>>>> atomic_read(active_queues and active_requests), I think this smoothing
+>>>> method can be placed into get_tag fail path, for example, the more 
+>>>> times
+>>>> a disk failed to get tag in a period of time, the more tag this disk 
+>>>> can
+>>>> get, and all the information can be updated here(perhaps directly
+>>>> record how many tags a disk can get, then hctx_may_queue() still only
+>>>> require 2 atomic_read()).
+>>>
+>>> That sounds interesting to me. Do you perhaps plan to implement this 
+>>> approach and to post it as a patch?
+>>
+>> Of course, I'll try to send a RFC patch.
+> 
+> Hi Kuai,
+> 
+> Has this RFC patch already been posted or did I perhaps miss it?
 
-A consideration also is that your quotation must be CIF Port of Umm Qasr.
+Sorry for the delay, I finished switch from not share to fair share
+directly verion, however, I found that it's not that simple to add a
+smoothing method, and I'm stuck here for now.
 
-Get back to me asap for more details
+I'll try to send a RFC verion soon, the smoothing method may not be
+flexible, but I'll make sure it can work for your simple case that
+2 device share tags, and one only issue few io while the other issue
+lots of io.
 
-Best Regards,
-
-Mazin Hussein
-
-
-
-Ai sensi del D.Lgs. 196/03 tutti i diritti relativi al seguente messaggio ed ai documenti allegati sono riservati. Le informazioni contenute in questo messaggio e nei suoi (eventuali) allegati sono confidenziali e sono da intendersi riservate solo al/ai destinatario/i indicato/i. Qualora il ricevente non fosse il reale destinatario del messaggio è invitato a non utilizzarlo né a copiarlo (anche per parti), né ad effettuare qualsiasi azione in conseguenza ad esso. Il ricevente è inoltre pregato di eliminare dal proprio sistema il messaggio (ed i relativi allegati), dandone gentilmente comunicazione al mittente. Qualsiasi utilizzo non autorizzato del contenuto di questo messaggio costituisce violazione dell'obbligo di non prendere cognizione della corrispondenza tra altri soggetti, salvo più grave illecito, ed espone il responsabile alle relative conseguenze civili e penali.
-________________________________________
-This message and its attachments are under copyright.
-This message and its attachments (if any) contain confidential, proprietary and legally privileged information and it is intended only for the use of the receiver named above. If you are not the intended recipianet of this message you are hereby notified thet you must not use/copy it in any form or take any action in reliance on it. If you have received this message in error, please, delete it (and its attachments) from your system and kindly inform the sender of this e-mail by replying.
-________________________________________
-in caso di risposta si prega di inviare a ………
-
-DOM-CR S.P.A.
-SEDE IN TORINO- VIA REGALDI N° 13
-CAPITALE SOCIALE EURO 1.144.000,00 int.vers.
-C.F & Registro Imprese n. 09889360153
-P.IVA 05988590013
-C.C.I.A.A n° 751005
+Thanks,
+Kuai
+> 
+> Thanks,
+> 
+> Bart.
+> 
+> 
+> .
+> 
 
