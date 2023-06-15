@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5D373175E
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Jun 2023 13:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D75E731775
+	for <lists+linux-scsi@lfdr.de>; Thu, 15 Jun 2023 13:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344348AbjFOLmO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 15 Jun 2023 07:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S1344410AbjFOLnA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 15 Jun 2023 07:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344287AbjFOLlb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Jun 2023 07:41:31 -0400
+        with ESMTP id S1344285AbjFOLmN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 15 Jun 2023 07:42:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EC530F1;
-        Thu, 15 Jun 2023 04:39:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15DD30FF;
+        Thu, 15 Jun 2023 04:39:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03F6963A26;
-        Thu, 15 Jun 2023 11:39:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AD39C433C9;
-        Thu, 15 Jun 2023 11:39:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C31B660F23;
+        Thu, 15 Jun 2023 11:39:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24328C433C8;
+        Thu, 15 Jun 2023 11:39:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829163;
-        bh=y2DswBpHL8u2iGZ5hXkyTSPIJrD2A0iPxtuY3ySUUng=;
+        s=k20201202; t=1686829184;
+        bh=VvcDlxUQaRiX2ruxjT8DhrhgUh+QPAZStuGAHH2eEFk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kin9JrHk/dP8Bo8chnzW966gIYCCPbNVAYKXzMwu//8lhtVbHBU+fMptsunJ3LIae
-         kRUrU2L6sEMaaPDHz3YA0bmJLBGN2IjvjPHyhumyTpHfVlQaA5jhF98ByLa7/TiiXg
-         GbQaAR222alK1/MjaaFQJdYkXrg5gEmvHhtiGGmJNptLfxQ0RMBaJ9xyzkdixKbVSc
-         bnTMQXFkHccvgUc29cNmmTqrhZbJOMMMII8+1ZqYdkTrMNa43KVB7Ngoj7znaC0Bg2
-         0prr3VtYgvAKGGfLMTGlB48Lk+Mox94+mro6vozo2qypCAtkMjRbsGhRwALbKqurwx
-         sJp1nJMrv1ALQ==
+        b=BFTbIG4F95727E1Yj7SXmajheqXbePlOczW1ruZjSP0tzshVSqFyY5f2dVO8CDKV6
+         3/x2f2p/ccvDfDXzka1EPQEL0bcDuH8yUbzIpSBmKYLFpov1pwrCT1OlJusRyRMqCF
+         QaVjKG11lipRBAxOidFNZaWfYthT/WdaGID0V9M1Af64m6jlm1u6zntuVl06w2t256
+         XDrY1fJfHzxplj61gMxDLGCgFkq+U/Jlpm5PKrzXkT/2aLACqDHjaXwnicl9i+aUhZ
+         h3tjhb+IXzpD9oXFO29nsAqIMImSge/5Vu/HwMv3X1vA/kXEymO3baYm5v3NVYWcTp
+         cCdayddVQ9Kfw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Maurizio Lombardi <mlombard@redhat.com>,
@@ -40,16 +40,16 @@ Cc:     Maurizio Lombardi <mlombard@redhat.com>,
         Sasha Levin <sashal@kernel.org>, d.bogdanov@yadro.com,
         peilin.ye@bytedance.com, yang.lee@linux.alibaba.com,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 2/9] scsi: target: iscsi: Prevent login threads from racing between each other
-Date:   Thu, 15 Jun 2023 07:39:10 -0400
-Message-Id: <20230615113917.649505-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 2/8] scsi: target: iscsi: Prevent login threads from racing between each other
+Date:   Thu, 15 Jun 2023 07:39:32 -0400
+Message-Id: <20230615113938.649627-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230615113917.649505-1-sashal@kernel.org>
-References: <20230615113917.649505-1-sashal@kernel.org>
+In-Reply-To: <20230615113938.649627-1-sashal@kernel.org>
+References: <20230615113938.649627-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.184
+X-stable-base: Linux 5.4.247
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -92,10 +92,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
-index 8b40f10976ff8..3931565018880 100644
+index e32d93b927428..4017464a5909b 100644
 --- a/drivers/target/iscsi/iscsi_target_nego.c
 +++ b/drivers/target/iscsi/iscsi_target_nego.c
-@@ -1079,6 +1079,7 @@ int iscsi_target_locate_portal(
+@@ -1053,6 +1053,7 @@ int iscsi_target_locate_portal(
  	iscsi_target_set_sock_callbacks(conn);
  
  	login->np = np;
@@ -103,7 +103,7 @@ index 8b40f10976ff8..3931565018880 100644
  
  	login_req = (struct iscsi_login_req *) login->req;
  	payload_length = ntoh24(login_req->dlength);
-@@ -1148,7 +1149,6 @@ int iscsi_target_locate_portal(
+@@ -1122,7 +1123,6 @@ int iscsi_target_locate_portal(
  	 */
  	sessiontype = strncmp(s_buf, DISCOVERY, 9);
  	if (!sessiontype) {
@@ -111,7 +111,7 @@ index 8b40f10976ff8..3931565018880 100644
  		if (!login->leading_connection)
  			goto get_target;
  
-@@ -1165,9 +1165,11 @@ int iscsi_target_locate_portal(
+@@ -1139,9 +1139,11 @@ int iscsi_target_locate_portal(
  		 * Serialize access across the discovery struct iscsi_portal_group to
  		 * process login attempt.
  		 */
