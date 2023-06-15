@@ -2,98 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D5D730D19
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Jun 2023 04:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DCD730D2F
+	for <lists+linux-scsi@lfdr.de>; Thu, 15 Jun 2023 04:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241619AbjFOCQ7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Jun 2023 22:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
+        id S237432AbjFOCY1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Jun 2023 22:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238287AbjFOCQy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Jun 2023 22:16:54 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C6F2688
-        for <linux-scsi@vger.kernel.org>; Wed, 14 Jun 2023 19:16:44 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35EKJ3Jp021119;
-        Thu, 15 Jun 2023 02:16:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=gyiLvTrF88JwSLnz0QhVvz+Yk2+BZVgq7+2A2ugev0w=;
- b=q3mxeZXRuKFVccpUo5BMXx5nyQnwbJqVYkPw6PMRp1R9hYecvrJcwKV97NNKCZ/9GEyz
- tkfRoMi2NWR/ZN5Iyu+N78Ltj7+oxOq6iEWNbiEvvlIifD39vcslgZ5crOp2vDiBBzuZ
- lv4SMcp1I34xSDCl0ZQ9IMEFPwYEocgW7f9AxI+LBtBnxsm3I9JAMj+jAQbgD4RbRaSC
- OKH4vnSDAjaufQpZYMTdhxzPrfQ+c55NBb1OVCSfk/xAkDltt/ZfQE8oGfcdmE6b3Z8a
- p0U+ZC3StpgZfzKnaO7oqjS0JIikm07YDK3ANvHANCbNjRiA7MDbhnfgRTm7XMX/kBsJ gA== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4fkdrsq8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Jun 2023 02:16:31 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35F1eG0Y016307;
-        Thu, 15 Jun 2023 02:16:30 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm6bny1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Jun 2023 02:16:30 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35F2EE7N027953;
-        Thu, 15 Jun 2023 02:16:29 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3r4fm6bnx8-5;
-        Thu, 15 Jun 2023 02:16:29 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Xiang Chen <chenxiang66@hisilicon.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] scsi: hisi_sas: Convert to platform remove callback returning void
-Date:   Wed, 14 Jun 2023 22:16:24 -0400
-Message-Id: <168679535177.3778526.40812618653119585.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230518202043.261739-1-u.kleine-koenig@pengutronix.de>
-References: <20230518202043.261739-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S238346AbjFOCY0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Jun 2023 22:24:26 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E40F1FCC
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Jun 2023 19:24:25 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b3cdc7cfc6so6028555ad.1
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Jun 2023 19:24:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686795865; x=1689387865;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RSR50Y8VWLWHMMq4nms0HKVmdE5u9BBnFe5bAJ0HtnY=;
+        b=w1vYVgJzS9pjyHpDGocrQGNlRMjxacXj+jIRXxU0M+NratXeH2J2xuxppoGEHZSovM
+         K6SGNblnvVnW6J4J5WrkRU6J8XezgqcuX8cZPLTROTqY8UMesNzmU+GCI+7XCjo4hjwz
+         0BrieDbaOjOvWm1XYpyddJtBmirQsd6sdsbIL0mi+tEBwpZ3WIbpS2n8aghMYuUSABVQ
+         erOBT//6m+9y5vr809Yj0aLal+bzxoqzyvSia9giXgmhe/rPjPJkK39vcH00NV97cwxR
+         XCILag4gHkBoyy4IO2LZZrn04hbQJWqxpd6ubLSSRazSfGgF7vx1MpiPC+5RUO4eoLr1
+         BZ3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686795865; x=1689387865;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RSR50Y8VWLWHMMq4nms0HKVmdE5u9BBnFe5bAJ0HtnY=;
+        b=ebxxxXKywvHK46AOuFvHyIAGnP45gfYldeDlG9BYxsQtVBEv4QuvYCZw0iuVO1zDWY
+         rx0UqPCtsq+DS0sjhOnj38SLKzehtvR0WWRWLa6M46jJEINK6ekqZDw6N2cgapO+wtT/
+         RKNSEalJG7jHVmeY1q/l/fyPjOFWSnrlQxPk1QyW9v5gUkA8Z/Ssj2xEAGYrlAAotllN
+         fWvC2zEWxXVXTXhMgWNxTfC0vV5Ka+K8J5WjKNkSnxq3I8uhKZz+aEogNNj9Oflytoos
+         ZxQMU9a0axQu/0dXyxm6jJ+xwX/Jj4Q6sOAgw+XUWEPRCoox6RVtq4AKSnuxzwKTsDKX
+         YIUA==
+X-Gm-Message-State: AC+VfDwM2uhj2eNSxpIyflpbTGh7t+KNDfiaAMaeXhPlOUNe16w9aJri
+        Okzf0X3pVClHSAcRUJ2CyFz4Tg==
+X-Google-Smtp-Source: ACHHUZ5D2OcFpcRCZ+WTQ8jJZZpZqq2lo8r/m6n+auc6W6Vc799H8O2HZWqfA6aNnF4o9Emqd8jxpA==
+X-Received: by 2002:a17:902:f682:b0:1b3:d4bb:3515 with SMTP id l2-20020a170902f68200b001b3d4bb3515mr11038855plg.0.1686795864826;
+        Wed, 14 Jun 2023 19:24:24 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902714b00b001ae0b373382sm12977035plm.198.2023.06.14.19.24.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 19:24:24 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     hch@lst.de, dgilbert@interlog.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+In-Reply-To: <20230610022003.2557284-1-yukuai1@huaweicloud.com>
+References: <20230610022003.2557284-1-yukuai1@huaweicloud.com>
+Subject: Re: [PATCH v5 0/3] fix blktrace debugfs entries leakage
+Message-Id: <168679586333.2051714.1943947298850230853.b4-ty@kernel.dk>
+Date:   Wed, 14 Jun 2023 20:24:23 -0600
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_14,2023-06-14_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 mlxscore=0
- spamscore=0 malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306150017
-X-Proofpoint-ORIG-GUID: XS_U0zL6cof38ND-Dut66CAd74L9p1bJ
-X-Proofpoint-GUID: XS_U0zL6cof38ND-Dut66CAd74L9p1bJ
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 18 May 2023 22:20:43 +0200, Uwe Kleine-König wrote:
 
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
+On Sat, 10 Jun 2023 10:20:00 +0800, Yu Kuai wrote:
+> Changes in v5:
+>  - blk_trace_shutdown() can't be used for module, add a new patch to use
+>  inline function for blk_trace_remove() to fix build warning from v3.
+>  - add review tag for patch 2,3 that is the same from v3.
+> 
+> Changes in v4:
+>  - blk_trace_remove() will trigger build warning if blktrace config is
+>  not enabled, use blk_trace_shutdown() instead.
 > 
 > [...]
 
-Applied to 6.5/scsi-queue, thanks!
+Applied, thanks!
 
-[1/1] scsi: hisi_sas: Convert to platform remove callback returning void
-      https://git.kernel.org/mkp/scsi/c/8cd6d0a39452
+[1/3] blktrace: use inline function for blk_trace_remove() while blktrace is disabled
+      commit: cbe7cff4a76bc749dd70264ca5cf924e2adf9296
+[2/3] scsi: sg: fix blktrace debugfs entries leakage
+      commit: db59133e927916d8a25ee1fd8264f2808040909d
+[3/3] block: fix blktrace debugfs entries leakage
+      commit: dd7de3704af9989b780693d51eaea49a665bd9c2
 
+Best regards,
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Jens Axboe
+
+
+
