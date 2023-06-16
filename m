@@ -2,159 +2,356 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406BD7335EC
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Jun 2023 18:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1357337C2
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Jun 2023 19:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244653AbjFPQXf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 16 Jun 2023 12:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
+        id S1345032AbjFPR5H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 16 Jun 2023 13:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbjFPQXa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 16 Jun 2023 12:23:30 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4DE1A3
-        for <linux-scsi@vger.kernel.org>; Fri, 16 Jun 2023 09:23:28 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GCiU23024630;
-        Fri, 16 Jun 2023 16:23:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2023-03-30;
- bh=eNSmtOccgCy5GM2Wq8fGXhjSvSo/vKVFdWZbRA2qOko=;
- b=PSNXqxpJCTtO/6nGSSrW+GCmvuM3nII/OGnAzmCtYppatgR458Jyvp7WZzYzE/35MEjh
- qm0e3D7zTdB+QbDyReTIdltTM/KGwuvI+WGIQZsBPsCDTZpANTWEro5COJPNth/2I9AY
- dSgwWpJn8T268q3FqERxUv79JYR2pjNCXG2CKk6gocj8SevHOduWVPSSQRG5K8X1WQv4
- A1UNma84jnz6urofna+NGYihjS/g/vox3NO2JY8UCtKdgB86tCFX43taKwN+xv8Izj71
- h4SSMS3TkevUY+HRaE5j07kRSigFSCYDh3BwTXBl+sP9vHGBr8jySHZOQyOyuNAestbX OQ== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4hquvmur-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Jun 2023 16:23:27 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35GFaJRu033575;
-        Fri, 16 Jun 2023 16:23:26 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm8eh86-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Jun 2023 16:23:26 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j+n4NSwuuma1VkUYF/mkE703sTPiEBEHUXjBQpNjXuYmOMbVqACBRK/QA1Ee24XDDqFDVtDi11FkiJU+RlzgHAn5LCPhKNFd9zM8valtf/7g5dSDDSuZHBDbL9iaPXS/eLf6zDlaZ9hGb3nQYt3PfzZSYS3h4/uWD7JIW/H4Z1gP2+NMFf/w1zUIfbDGYf2DcIMHZzjiGzAJndrIwQrB/RKPKw+bohIOqrrzous65uO4oml6UXn01CTWgpUkK/cOy2ogByr4druMu7sbxnRlELq5EWUQns//3fMQ8hwN0GRzCG2LQKCaNrBHj8EjXKLPVdMoFaMrn+38f8ICMZF7Ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eNSmtOccgCy5GM2Wq8fGXhjSvSo/vKVFdWZbRA2qOko=;
- b=ZZlD3w90S77N9SCMquMKX7Cdt4n0wwqx/sEWQselSiEZ7NZB5l8UBcXj+/xVJLedSSOnZWc6bEdoQbI1C5FK27vrJ5YSfF4a1Hk+LZR3YP+HOMaYbxEHdchHbChQz4I44MbzYuprq72nLVoVduJfTR+RVhMDckdRRNc4CVf+SajUQCYQVnXLDq+NXoaDpagP0StDzVaqwlOEhqTUvcfCqnt+F22mqicZMw8d8/FL7jJQL90SCGkKZGN19t0wibcvxC1ONyhh4UxtZ0mnxi1/Q/+sNB8gDUPsZPwa2ThC1JeQf9EcHGJrq6iWIZWZK5z2mv/4KsaiQ7noy77rWxv3Mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eNSmtOccgCy5GM2Wq8fGXhjSvSo/vKVFdWZbRA2qOko=;
- b=ZIPD1k0XPdXJ4p5hmBR/7fofgTlNS894MfRggqeG41+CGdcLMBUlcBfGAhMk7Ai8vr1cOz2t7GfJz2m5mQOdeWwAOotHMmEVg+/cPFZKo9hrmly9FvOsfwe6R1vHbpIvXCaxq4cu31whAvFzsR/EuOzPwuVcMDZVwN2/vvSTN5c=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by DM6PR10MB4170.namprd10.prod.outlook.com (2603:10b6:5:213::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.25; Fri, 16 Jun
- 2023 16:23:17 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::b77c:5f48:7b34:39c0]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::b77c:5f48:7b34:39c0%7]) with mapi id 15.20.6500.026; Fri, 16 Jun 2023
- 16:23:17 +0000
-To:     Nilesh Javali <njavali@marvell.com>
-Cc:     <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        <agurumurthy@marvell.com>, <sdeodhar@marvell.com>
-Subject: Re: [PATCH] qla2xxx: Remove unused nvme_ls_waitq wait queue.
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq15y7ntlzq.fsf@ca-mkp.ca.oracle.com>
-References: <20230615074633.12721-1-njavali@marvell.com>
-Date:   Fri, 16 Jun 2023 12:23:14 -0400
-In-Reply-To: <20230615074633.12721-1-njavali@marvell.com> (Nilesh Javali's
-        message of "Thu, 15 Jun 2023 13:16:33 +0530")
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0246.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::11) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|DM6PR10MB4170:EE_
-X-MS-Office365-Filtering-Correlation-Id: 32616b28-650f-4689-8f6e-08db6e85fdc2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QApIDm84aoerEFwJe7Mi0MHO4xi5dF8mNRcYgNpooPCDYALHa4Qr28UhfUirf7K7HJXqN7sAUxPVETDs0VFObxCn+NvbikykqMd9gJE0Tvfm+Ms8ZnyiVK/qumzAAhIsDpUyr+yrtLrASCcu8cDTn6TKxAQXibSY3ixlTb1D7HJqlYWZZm5WmGiS15I/G6JU9gvJ/Hj2oSCL7dtiyoVN2C4tXTW6GFJC/7NcoqXNBYN11SZW+f3FYb7hkGnIFrb7aYi9ESc+QtSu51pkTxoqr+uPc29jgJyXuWgsaGwMTFcd9uIj1Bv/Ef4DgHa3pSk9DezaY3SJs3X3zV9PSVczXYk5g47AFbW4qDGaGU0TCnz4rswhUB7mOS9b8donAWvaXwkD/wzjGet+GMVrFMpNUkY9d+5EzTZg4Gyq12MdQ8bk++SklYoofQTWZrx3iA8jwgL2APXTbWDP6z4RSDq4U1uai8M3N9nWSQu+9l3NEJJBS3c+OANZ9G/oiuobzwxz5tH4nd829krApoO97jLWohgxsI46Fbt9qjmX86NFP94M/WIHSv4kTh7k2/ibRW/Z
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(346002)(366004)(376002)(396003)(451199021)(478600001)(6486002)(36916002)(6666004)(38100700002)(26005)(6512007)(186003)(6506007)(558084003)(316002)(41300700001)(66946007)(6916009)(66556008)(66476007)(4326008)(86362001)(2906002)(5660300002)(8936002)(8676002)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Io1Xpb0rAqV/8fHyxuT1vWqckJRh+mdZDCzTXypUvm7tK3Ua/uCXJTviFAxr?=
- =?us-ascii?Q?x+a4j2dZkX8E2AIBBoVimRRJNMRYyGVAFiOlkqlIANUcZKNVZV3i2BDYscF9?=
- =?us-ascii?Q?oPAzfvQeAsC9hPq2zja9qnPXT9csvm4C1b+0kOaN1LQKzIATD+sO7wKvPwT8?=
- =?us-ascii?Q?OJplp7JGOo4vjsQFILDpaOK4kWjX4LNjo2tvqai5oyigooPPoylzKj7QvZfc?=
- =?us-ascii?Q?N/mxxYZ0O3xDcHY4vSkolRheE8U9eQd9yc0L/555O+bJHTqtkRRthVHe92TL?=
- =?us-ascii?Q?kGjUz4Kri5R9lGQ1alpwA0pYeBRfhKY3gOZmHupzSe+HQ+4xJdiQkcThtEjQ?=
- =?us-ascii?Q?k2r+QWUq5Javd01s0yDEXyTRBgTV4uZQxhV6O/O27uLXahUZ+F8gZGlHJjnH?=
- =?us-ascii?Q?d3ZdvoT5gqoO/QCuK/2QUIw9BeF+ifRJ3Nk/6X51P3s6NGlgVcdqlfRGSU7z?=
- =?us-ascii?Q?K8WcqH3mVHSKTnMYkt70laVRLQvAJWxAbdkSEMzfzZt0ndlM1z7Vehh7XhBG?=
- =?us-ascii?Q?vbYcR0Cx+SP9Zekq7CsZZUUP/v6UJIWh+t5ipWfeEOpX+ThomRJX/CG/LMpn?=
- =?us-ascii?Q?KtJoKZ2w8pX0rr1lemkEW1MAFCs7zw8u12QGA7N7WTrdnOSgLe2JhuQYs/Jl?=
- =?us-ascii?Q?/rR6N4XvYLuYAvndfG+oSBcWgXeJqQnAnhloOuOmYykavp3AR2p6eWlgR3O3?=
- =?us-ascii?Q?2SrRA19Pf4ZCsPR9p4v4pjimSjphBDObvnQ12MtCeVk0SGq7T8KcGR/5SAMw?=
- =?us-ascii?Q?/W7x33BEJnhgaZ7BFaUg2Jd0uH2x2VMyUx6PqGh35mQA6SnBiJjEo1A6plRR?=
- =?us-ascii?Q?r+nEN6nob9YL6dfa+S9jkiSzG7yl7QycRdyg+8uVo+rCdwbXZ5Seo3e/GVrs?=
- =?us-ascii?Q?Sa6m6PubVu8RceboLSfuaPGbBuLMk1dkRcSpft7OjjFHjHTC98HE+wB7GclK?=
- =?us-ascii?Q?01OLzcqhP8wxD6BZWrKuxvwxGAtgLxEMEfqepjDyKDRrOIQT55x4SXfPuKVz?=
- =?us-ascii?Q?JRHsNQQgIGr36uDWNxDia9qf2r9KGn69U6z7EgwED+zhIAOBAFGD2YCCYkGF?=
- =?us-ascii?Q?Ac7eAQGAUtta7/TkbfBbLiRWa0onEjuS7g/6BD0UT8TV8tr5QWxWySeSejHa?=
- =?us-ascii?Q?Tuuv16zxlF5ab6OA5T4WOuUTVhCcJQ1YRi++vKoLQGEHab0nF25zffg1k586?=
- =?us-ascii?Q?IBuk/44U61/663jIwz1W5VQZ4ZKENtQ5ZWMRymDNlIlUqRy2yZhybYlcNG42?=
- =?us-ascii?Q?MKEjngkc3MNPORF3EIsutFpkOc80KwC5hdy+me+czQbnx+QRoET5FQLj/CvZ?=
- =?us-ascii?Q?cNUVrmqE5pnpLOq+wENVkPDJ4hgtuviUlAS83f1t/FJgjFFdtsta5hUc/dTA?=
- =?us-ascii?Q?UOLCRHwq0+j9y26QtSmztj0NjyeGJPXmdAWAV2NahcCv+WjBiiqNi8U9IasX?=
- =?us-ascii?Q?20wj2rjjloTkNx7JG6r5OMukiyBO6ptKeFNKQI1JYaSs7GO0BcgqyW8hI3Bl?=
- =?us-ascii?Q?/DJ1eAU0C2zPHgzE/lPQ+bV6PVBvVgxZSck15xjX6CCr5q1q/lmgX2hAPW/w?=
- =?us-ascii?Q?+dGWB0JbHMMQFa+tp1+/BTQxkxJPF6hG5QvJmgixAUxpjOHnZa0gCzXuCs9A?=
- =?us-ascii?Q?Yg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: ontsZ3h1sceC+gHH7mvUJzzJN88VF6tVz8LldlIq/fc0hW1fmXGEXegZtFKYLvdC2zjCrNziO1Ypm2tmePhlBpZ4AZMyIxAFqiW+EMVuTBQ0tY3Bq4aHWqoCDi2ZD6/unSPoEcJSqOB1h2QX+9kqASRDezKoBhLoLAhpFILiGPdz30z2zp/eeNokqH7y3e6teC8kmHnlLq2nQoQ/Lej0pOb4PY3hkOLvDGexH4b/dsi6duTf4RfDZVhFWoQhnPm8qWXbSQbge5d2U8n1lG9UAuFbG6LsjsDjmEvWruCscP9mVAiOXyuO/X+4cJANfcw/Yxu9ouG0EudpL4KexjfbZhFj4LFpHmaz5e+s9y2o1eOb7VRPQXK0ueQRZlDB//xzaNgr7F6ku10fS6tNHwCII/ceV3Vx/Uu4F1255GRJzAg4Irlh6rssjAp/Rx9uTirX0ov1klp3ojCmFUYMSy2QkpSVeLqYkKjcTiou48mdMPThfJWkagwtIU0oQ3AvwbQ8ZFi4dK1BcQ6k7InNrSTxj+2jOqKqYqthjD9PjKH5PNGBq/C2xupezZPtKGF/VuBQbhkumWCVcGnyYjpbVhTPWpgYgEqveYLq/JLlqcEh9dWwBfsYSmPQVMpIvsRUdIlc9GaXgCkDaxwqamGdTtlXB5OSzK424i4qb7SUoSAWJcfbdg0zT9biv1oPARqbTllrhfU3oWSqI4t5O4VesgGh/1eKU03baBASdGqBwS5XGymcIXuTB/H6p4NTwngkPrxVKlkzYzWIS7U8ginbuZFazNDo6JcB2BxxducC0E0HdPc=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 32616b28-650f-4689-8f6e-08db6e85fdc2
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2023 16:23:17.1683
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bkzI7Syd8/PrjcRPeHrkGvE0qmFsvOzgns2hsJohY7F9Wu6BKm2azx3qKxN6UKnh9pLE8KE6IMdTYWyOB28I08bw29uMSNHR8Rg2gjInqzs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4170
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-16_10,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 phishscore=0
- suspectscore=0 mlxlogscore=877 bulkscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306160147
-X-Proofpoint-ORIG-GUID: OXP1RoOnCSSZNMLx-Es8G6piYgnBy3i3
-X-Proofpoint-GUID: OXP1RoOnCSSZNMLx-Es8G6piYgnBy3i3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S1345397AbjFPR47 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 16 Jun 2023 13:56:59 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7513A8F;
+        Fri, 16 Jun 2023 10:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686938213; x=1718474213;
+  h=date:from:to:cc:subject:message-id;
+  bh=dHryKIkk8/2CTQfcM0R17XhQOqNhailCRjnxMpU/Z2k=;
+  b=YaHWEbWCKTZb3UMT+pPtdGu6caNa4uYmj4M5yCCmQvOiDNglrbnpZS3T
+   ixnNZJSVb/qX/4UEUhUVteQPfKbwarQwQL+LLrcqD6Rcad5kvHav2K7/N
+   gVXgqxPQwqJTLw3TfJGGMWxqWI6iuIG9EY6BYi7pZV+Pjp7fmEb3Id3cH
+   ODy9UBQnVEfungnRjXMvhTblTO5RLQMEv0p7mG8+EKnysDVz6M6KQvzaJ
+   FaEf1KNpfwqgDL0IWoKB2gLAaWk1+OdIZU0wgjIAR/nHHScHkGBuDAiJH
+   B1BKYl2D6x6MQZeE9vNOd42SNDfZGn57+qsda9gl6H+VZriJfEMjgihSZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="425213638"
+X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
+   d="scan'208";a="425213638"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 10:56:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="742744959"
+X-IronPort-AV: E=Sophos;i="6.00,248,1681196400"; 
+   d="scan'208";a="742744959"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 16 Jun 2023 10:56:47 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qADgk-0001f2-1u;
+        Fri, 16 Jun 2023 17:56:46 +0000
+Date:   Sat, 17 Jun 2023 01:56:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        apparmor@lists.ubuntu.com, intel-gfx@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-arm-kernel@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netdev@vger.kernel.org, ntfs3@lists.linux.dev,
+        samba-technical@lists.samba.org
+Subject: [linux-next:master] BUILD REGRESSION
+ f7efed9f38f886edb450041b82a6f15d663c98f8
+Message-ID: <202306170124.CtQqzf0I-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: f7efed9f38f886edb450041b82a6f15d663c98f8  Add linux-next specific files for 20230616
 
-Nilesh,
+Error/Warning reports:
 
-> System crash when qla2x00_start_sp(sp) returns error code EGAIN and
-> wake_up gets called for uninitialized wait queue
-> sp->nvme_ls_waitq.
+https://lore.kernel.org/oe-kbuild-all/202306100035.VTusNhm4-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202306122223.HHER4zOo-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202306141719.MJHClSrC-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202306141934.UKmM9bFX-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202306142017.23VmBLmG-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202306151506.goHEegOd-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202306160203.DB48f7wR-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202306160811.nV1bMsK4-lkp@intel.com
 
-Applied to 6.5/scsi-staging, thanks!
+Error/Warning: (recently discovered and may have been fixed)
+
+arch/parisc/kernel/pdt.c:65:6: warning: no previous prototype for 'arch_report_meminfo' [-Wmissing-prototypes]
+drivers/block/pktcdvd.c:1371:13: warning: stack frame size (2496) exceeds limit (2048) in 'pkt_handle_packets' [-Wframe-larger-than]
+drivers/char/mem.c:164:25: error: implicit declaration of function 'unxlate_dev_mem_ptr'; did you mean 'xlate_dev_mem_ptr'? [-Werror=implicit-function-declaration]
+drivers/gpu/drm/i915/display/intel_display_power.h:255:70: error: declaration of 'struct seq_file' will not be visible outside of this function [-Werror,-Wvisibility]
+drivers/leds/leds-cht-wcove.c:144:21: warning: no previous prototype for 'cht_wc_leds_brightness_get' [-Wmissing-prototypes]
+drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1036:1: warning: the frame size of 1112 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+drivers/scsi/FlashPoint.c:1712:12: warning: stack frame size (4208) exceeds limit (2048) in 'FlashPoint_HandleInterrupt' [-Wframe-larger-than]
+fs/ntfs3/super.c:1094:12: warning: stack frame size (2384) exceeds limit (2048) in 'ntfs_fill_super' [-Wframe-larger-than]
+lib/kunit/executor_test.c:138:4: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+lib/kunit/test.c:775:38: warning: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Wcast-function-type-strict]
+security/apparmor/policy_unpack.c:1173: warning: expecting prototype for verify_dfa_accept_xindex(). Prototype was for verify_dfa_accept_index() instead
+
+Unverified Error/Warning (likely false positive, please contact us if interested):
+
+drivers/net/ethernet/mellanox/mlx5/core/lib/devcom.c:98 mlx5_devcom_register_device() error: uninitialized symbol 'tmp_dev'.
+drivers/opp/core.c:2710 dev_pm_opp_xlate_performance_state() warn: variable dereferenced before check 'src_table' (see line 2698)
+drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype was for USB_STRAP_HOST() instead
+fs/btrfs/volumes.c:6404 btrfs_map_block() error: we previously assumed 'mirror_num_ret' could be null (see line 6242)
+fs/smb/client/cifsfs.c:982 cifs_smb3_do_mount() warn: possible memory leak of 'cifs_sb'
+fs/smb/client/cifssmb.c:4089 CIFSFindFirst() warn: missing error code? 'rc'
+fs/smb/client/cifssmb.c:4216 CIFSFindNext() warn: missing error code? 'rc'
+fs/smb/client/connect.c:2775 cifs_match_super() error: 'tlink' dereferencing possible ERR_PTR()
+fs/smb/client/connect.c:2974 generic_ip_connect() error: we previously assumed 'socket' could be null (see line 2962)
+lib/kunit/test.c:336 __kunit_abort() warn: ignoring unreachable code.
+make[2]: *** No rule to make target 'rustdoc'.
+{standard input}: Error: local label `"2" (instance number 9 of a fb label)' is not defined
+{standard input}:1097: Error: pcrel too far
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- arm-randconfig-r046-20230615
+|   `-- drivers-media-platform-verisilicon-rockchip_vpu981_hw_av1_dec.c:warning:the-frame-size-of-bytes-is-larger-than-bytes
+|-- i386-allyesconfig
+|   `-- drivers-leds-leds-cht-wcove.c:warning:no-previous-prototype-for-cht_wc_leds_brightness_get
+|-- i386-randconfig-m021-20230614
+|   |-- drivers-opp-core.c-dev_pm_opp_xlate_performance_state()-warn:variable-dereferenced-before-check-src_table-(see-line-)
+|   |-- fs-smb-client-cifsfs.c-cifs_smb3_do_mount()-warn:possible-memory-leak-of-cifs_sb
+|   |-- fs-smb-client-cifssmb.c-CIFSFindFirst()-warn:missing-error-code-rc
+|   |-- fs-smb-client-cifssmb.c-CIFSFindNext()-warn:missing-error-code-rc
+|   |-- fs-smb-client-connect.c-cifs_match_super()-error:tlink-dereferencing-possible-ERR_PTR()
+|   `-- fs-smb-client-connect.c-generic_ip_connect()-error:we-previously-assumed-socket-could-be-null-(see-line-)
+|-- microblaze-randconfig-m031-20230614
+|   `-- drivers-opp-core.c-dev_pm_opp_xlate_performance_state()-warn:variable-dereferenced-before-check-src_table-(see-line-)
+|-- mips-randconfig-m041-20230615
+|   |-- drivers-opp-core.c-dev_pm_opp_xlate_performance_state()-warn:variable-dereferenced-before-check-src_table-(see-line-)
+|   |-- fs-btrfs-volumes.c-btrfs_map_block()-error:we-previously-assumed-mirror_num_ret-could-be-null-(see-line-)
+|   `-- lib-kunit-test.c-__kunit_abort()-warn:ignoring-unreachable-code.
+|-- parisc-allyesconfig
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-defconfig
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-randconfig-c004-20230614
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-randconfig-r001-20230616
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-randconfig-r011-20230615
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-randconfig-r021-20230615
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-randconfig-r036-20230615
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc-randconfig-s042-20230614
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- parisc64-defconfig
+|   `-- arch-parisc-kernel-pdt.c:warning:no-previous-prototype-for-arch_report_meminfo
+|-- riscv-allmodconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- riscv-allyesconfig
+|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
+|-- riscv-randconfig-s031-20230612
+|   |-- arch-riscv-kernel-signal.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-noderef-__user-datap-got-void
+|   `-- arch-riscv-kernel-signal.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-__x-got-void-noderef-__user-assigned-datap
+|-- sh-allmodconfig
+|   |-- drivers-char-mem.c:error:implicit-declaration-of-function-unxlate_dev_mem_ptr
+|   |-- standard-input:Error:local-label-(instance-number-of-a-fb-label)-is-not-defined
+|   `-- standard-input:Error:pcrel-too-far
+|-- sh-j2_defconfig
+|   `-- drivers-char-mem.c:error:implicit-declaration-of-function-unxlate_dev_mem_ptr
+|-- x86_64-allyesconfig
+|   `-- drivers-leds-leds-cht-wcove.c:warning:no-previous-prototype-for-cht_wc_leds_brightness_get
+`-- x86_64-randconfig-m001-20230612
+    |-- drivers-net-ethernet-mellanox-mlx5-core-lib-devcom.c-mlx5_devcom_register_device()-error:uninitialized-symbol-tmp_dev-.
+    |-- fs-smb-client-cifsfs.c-cifs_smb3_do_mount()-warn:possible-memory-leak-of-cifs_sb
+    |-- fs-smb-client-cifssmb.c-CIFSFindFirst()-warn:missing-error-code-rc
+    |-- fs-smb-client-cifssmb.c-CIFSFindNext()-warn:missing-error-code-rc
+    |-- fs-smb-client-connect.c-cifs_match_super()-error:tlink-dereferencing-possible-ERR_PTR()
+    `-- fs-smb-client-connect.c-generic_ip_connect()-error:we-previously-assumed-socket-could-be-null-(see-line-)
+clang_recent_errors
+|-- hexagon-buildonly-randconfig-r002-20230615
+|   |-- lib-kunit-executor_test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|   `-- lib-kunit-test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|-- hexagon-randconfig-r025-20230615
+|   |-- lib-kunit-executor_test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|   `-- lib-kunit-test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|-- hexagon-randconfig-r041-20230615
+|   |-- lib-kunit-executor_test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|   `-- lib-kunit-test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|-- i386-randconfig-i001-20230614
+|   `-- security-apparmor-policy_unpack.c:warning:expecting-prototype-for-verify_dfa_accept_xindex().-Prototype-was-for-verify_dfa_accept_index()-instead
+|-- i386-randconfig-i012-20230615
+|   `-- security-apparmor-policy_unpack.c:warning:expecting-prototype-for-verify_dfa_accept_xindex().-Prototype-was-for-verify_dfa_accept_index()-instead
+|-- i386-randconfig-i013-20230615
+|   `-- drivers-gpu-drm-i915-display-intel_display_power.h:error:declaration-of-struct-seq_file-will-not-be-visible-outside-of-this-function-Werror-Wvisibility
+|-- riscv-buildonly-randconfig-r001-20230615
+|   |-- drivers-block-pktcdvd.c:warning:stack-frame-size-()-exceeds-limit-()-in-pkt_handle_packets
+|   |-- drivers-scsi-FlashPoint.c:warning:stack-frame-size-()-exceeds-limit-()-in-FlashPoint_HandleInterrupt
+|   `-- fs-ntfs3-super.c:warning:stack-frame-size-()-exceeds-limit-()-in-ntfs_fill_super
+|-- riscv-randconfig-r042-20230615
+|   `-- lib-kunit-test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|-- s390-randconfig-r026-20230615
+|   |-- lib-kunit-executor_test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|   `-- lib-kunit-test.c:warning:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type
+|-- x86_64-randconfig-a005-20230614
+|   |-- net-netfilter-ipvs-ip_vs_proto.o:warning:objtool:.init.text:unexpected-end-of-section
+|   `-- security-apparmor-policy_unpack.c:warning:expecting-prototype-for-verify_dfa_accept_xindex().-Prototype-was-for-verify_dfa_accept_index()-instead
+|-- x86_64-randconfig-a015-20230615
+|   `-- drivers-net-ethernet-jme.o:warning:objtool:.text.jme_check_link:unexpected-end-of-section
+|-- x86_64-randconfig-r003-20230616
+|   `-- security-apparmor-policy_unpack.c:warning:expecting-prototype-for-verify_dfa_accept_xindex().-Prototype-was-for-verify_dfa_accept_index()-instead
+`-- x86_64-rhel-8.3-rust
+    |-- make:No-rule-to-make-target-rustdoc-.
+    `-- security-apparmor-policy_unpack.c:warning:expecting-prototype-for-verify_dfa_accept_xindex().-Prototype-was-for-verify_dfa_accept_index()-instead
+
+elapsed time: 733m
+
+configs tested: 135
+configs skipped: 5
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                        nsimosci_defconfig   gcc  
+arc                  randconfig-r043-20230615   gcc  
+arc                           tb10x_defconfig   gcc  
+arm                              alldefconfig   clang
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         axm55xx_defconfig   gcc  
+arm                        clps711x_defconfig   gcc  
+arm                                 defconfig   gcc  
+arm                          gemini_defconfig   gcc  
+arm                           imxrt_defconfig   gcc  
+arm                      integrator_defconfig   gcc  
+arm                             mxs_defconfig   clang
+arm                         nhk8815_defconfig   gcc  
+arm                  randconfig-r046-20230615   gcc  
+arm                         s5pv210_defconfig   clang
+arm                        spear6xx_defconfig   gcc  
+arm                           sunxi_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+hexagon      buildonly-randconfig-r002-20230615   clang
+hexagon              randconfig-r024-20230615   clang
+hexagon              randconfig-r025-20230615   clang
+hexagon              randconfig-r035-20230615   clang
+hexagon              randconfig-r041-20230615   clang
+hexagon              randconfig-r045-20230615   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230614   clang
+i386                 randconfig-i002-20230614   clang
+i386                 randconfig-i003-20230614   clang
+i386                 randconfig-i004-20230614   clang
+i386                 randconfig-i005-20230614   clang
+i386                 randconfig-i006-20230614   clang
+i386                 randconfig-i011-20230615   clang
+i386                 randconfig-i012-20230615   clang
+i386                 randconfig-i013-20230615   clang
+i386                 randconfig-i014-20230615   clang
+i386                 randconfig-i015-20230615   clang
+i386                 randconfig-i016-20230615   clang
+i386                 randconfig-r015-20230615   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r013-20230615   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r012-20230615   gcc  
+m68k                 randconfig-r016-20230615   gcc  
+m68k                 randconfig-r033-20230615   gcc  
+m68k                        stmark2_defconfig   gcc  
+m68k                           virt_defconfig   gcc  
+microblaze   buildonly-randconfig-r005-20230615   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                  cavium_octeon_defconfig   clang
+mips                     decstation_defconfig   gcc  
+mips                    maltaup_xpa_defconfig   gcc  
+mips                        omega2p_defconfig   clang
+mips                 randconfig-r023-20230615   gcc  
+mips                   sb1250_swarm_defconfig   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r005-20230616   gcc  
+nios2                randconfig-r014-20230615   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r001-20230616   gcc  
+parisc               randconfig-r011-20230615   gcc  
+parisc               randconfig-r021-20230615   gcc  
+parisc               randconfig-r036-20230615   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                        cell_defconfig   gcc  
+powerpc                     kilauea_defconfig   clang
+powerpc                      makalu_defconfig   gcc  
+powerpc                     ppa8548_defconfig   clang
+powerpc                      walnut_defconfig   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv        buildonly-randconfig-r001-20230615   clang
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230615   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r026-20230615   clang
+s390                 randconfig-r044-20230615   clang
+sh                               allmodconfig   gcc  
+sh                                  defconfig   gcc  
+sh                         ecovec24_defconfig   gcc  
+sh                               j2_defconfig   gcc  
+sh                          kfr2r09_defconfig   gcc  
+sh                          landisk_defconfig   gcc  
+sh                   randconfig-r031-20230615   gcc  
+sparc                            allyesconfig   gcc  
+sparc        buildonly-randconfig-r003-20230615   gcc  
+sparc        buildonly-randconfig-r004-20230615   gcc  
+sparc                               defconfig   gcc  
+sparc                       sparc32_defconfig   gcc  
+sparc64              randconfig-r004-20230616   gcc  
+sparc64              randconfig-r006-20230616   gcc  
+sparc64              randconfig-r022-20230615   gcc  
+sparc64              randconfig-r032-20230615   gcc  
+um                               alldefconfig   gcc  
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230614   clang
+x86_64               randconfig-a002-20230614   clang
+x86_64               randconfig-a003-20230614   clang
+x86_64               randconfig-a004-20230614   clang
+x86_64               randconfig-a005-20230614   clang
+x86_64               randconfig-a006-20230614   clang
+x86_64               randconfig-a011-20230615   clang
+x86_64               randconfig-a012-20230615   clang
+x86_64               randconfig-a013-20230615   clang
+x86_64               randconfig-a014-20230615   clang
+x86_64               randconfig-a015-20230615   clang
+x86_64               randconfig-a016-20230615   clang
+x86_64               randconfig-r003-20230616   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
