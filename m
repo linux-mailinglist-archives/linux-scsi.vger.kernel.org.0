@@ -2,104 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F6F733EEA
-	for <lists+linux-scsi@lfdr.de>; Sat, 17 Jun 2023 08:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247EA733F77
+	for <lists+linux-scsi@lfdr.de>; Sat, 17 Jun 2023 10:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbjFQGz2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 17 Jun 2023 02:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        id S1346278AbjFQILP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 17 Jun 2023 04:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjFQGz1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 17 Jun 2023 02:55:27 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FC91BF2;
-        Fri, 16 Jun 2023 23:55:25 -0700 (PDT)
-Received: from mars.fo.jb.local ([188.174.26.59]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis) id
- 1MKKER-1qOv5Z2Ob9-00LqEc; Sat, 17 Jun 2023 08:55:14 +0200
-Received: from localhost (unknown [127.0.0.1])
-        by mars.fo.jb.local (Postfix) with ESMTP id 1B72617F700;
-        Sat, 17 Jun 2023 06:55:13 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at jmbreuer.net
-Received: from mars.fo.jb.local ([127.0.0.1])
-        by localhost (mars.jmbreuer.net [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id O10Sinob0lYP; Sat, 17 Jun 2023 08:55:06 +0200 (CEST)
-Received: from sol.fo.jb.local (sol.fo.jb.local [192.168.23.1])
-        by mars.fo.jb.local (Postfix) with ESMTP id 79A3817F6FD;
-        Sat, 17 Jun 2023 08:55:06 +0200 (CEST)
-Received: from [192.168.23.25] (mars.fo.jb.local [192.168.23.254])
-        by sol.fo.jb.local (Postfix) with ESMTPSA id 699DB604E111;
-        Sat, 17 Jun 2023 08:55:06 +0200 (CEST)
-Message-ID: <0a698809-bc7d-e5a1-7825-d42001121913@jmbreuer.net>
-Date:   Sat, 17 Jun 2023 08:55:06 +0200
+        with ESMTP id S232319AbjFQILN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 17 Jun 2023 04:11:13 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23371FD7
+        for <linux-scsi@vger.kernel.org>; Sat, 17 Jun 2023 01:11:11 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3f9cf20da51so13649001cf.2
+        for <linux-scsi@vger.kernel.org>; Sat, 17 Jun 2023 01:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686989470; x=1689581470;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MWQNGLK/qseLS2fgWBrtpuV4pmsnjGbMg/iUuFsRN24=;
+        b=aSzx/3xoAfZ7wPvHYAot5nj1QE4GtQZWoQM1yFnsPNiYtwjIspnSk/PwNbVlrtx8yC
+         T1H/shZekzqq00hajSAR9sBEFpkqodTQd4HFqi3yd6ftQzIbs5RUjNiPP1Y+HpsvDesW
+         KL7xMuZB9ubF9oDMP9N8qoPXhq3asfwmrTiwSuN+cmbUBe9TGLt6NtfKz6Id6jVM+iaI
+         nFtU77JX+1MZ97v5pr1Uxt2KGLhSk4PZj0alEgnZhxbiz+XsTuOEuDwW4cllmZG+QXzL
+         wJ0H8vOn645iqWm4hbDr218BZXivKej6YtKC2VKPVvqD6cBdYqMPhvAo4kDVqboc0w1W
+         qgfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686989470; x=1689581470;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MWQNGLK/qseLS2fgWBrtpuV4pmsnjGbMg/iUuFsRN24=;
+        b=hv5Xx9VSkIn9kp0kYBcVEQtzDogFXsvDDFZ6mC5jdL6pCXUIgFDopEalmlm64xLwhx
+         +BIVPKLqi5tXEMiQDJ2PPo6Hc57Re/TU5yFdwv9xKLoJPl6UML/w1Y+pvRNj2HriG1Lx
+         SFftravrrI1ABkgw4G/NOrsbT0/UAdgHlRgsT2IG64LJxiJpYTjhWZFNYLJUjrPIt9tD
+         KqE4mNct+zI8GRKIGSBqck1Gn983/z38p1ShMRwStZmz7LXJY595vj8J/XP5w1EBAm6X
+         ro4D8543YZUwyTl+ishBAaoPoHPXL40X8AE++sLyLKRrOH7JN0RNKJ+5Cm2UEbclFhtD
+         QnjQ==
+X-Gm-Message-State: AC+VfDyjAQC5RAW6ouhcVZmXvSjyvaoxQ1A+kBMvKALVve8uGw1gNKzp
+        ZFAmADpMCm48ehtvWAqTSFi35Jr0qJzV85KrEKE=
+X-Google-Smtp-Source: ACHHUZ6MG5dsi1Ip7rS6wITfDSyyxU9ZtBorgpN3bcAZV4Z8feYQf4sdrPCSIUIurw70pVgLxpsqp0beq2+/1bImWug=
+X-Received: by 2002:ac8:5c47:0:b0:3f6:bbca:f235 with SMTP id
+ j7-20020ac85c47000000b003f6bbcaf235mr5889682qtj.40.1686989470182; Sat, 17 Jun
+ 2023 01:11:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] ata: libata-scsi: Avoid deadlock on rescan after device
- resume
-Content-Language: en-GB
-To:     Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-References: <20230615083326.161875-1-dlemoal@kernel.org>
- <df96d9fd-e8fa-c1d0-d6b0-4327ddf45514@kernel.org>
-From:   Joe Breuer <linux-kernel@jmbreuer.net>
-Organization: Joachim Breuer EDV
-In-Reply-To: <df96d9fd-e8fa-c1d0-d6b0-4327ddf45514@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:qZD4QCK8F7Rs7ceT1tXfgEvUCZQM3a5iiUCoS1qfo5jBRATWuoQ
- K1ZTqHEC7fVxvk2WBwGFsF27Ba86wILNIm6E1ZxRo+k3/GAPdscHB5mUdTMNm5jRXequ6sX
- xlfef8b5d98ArDFOVhcbPConrDPH+oBSQLoYJtPydKNv76Hsc/sXCQ02jOJcR6KMPeqyw9x
- XfCx/6I6C4bXC/mk+Yptg==
-UI-OutboundReport: notjunk:1;M01:P0:40Z1lR+UeDI=;jHOkXEFBdhKEEQR+Ae3m1rMG/ok
- 6dR8wrj++3iAVzZMvzchlKCK+PW4jwDtGkZ8t2Zr/Rzz2E8L8qfLBPm8junCYv7dvrhppxTb4
- POiEfwfbnnWCoPRQW4Uj6In1aX46gZsCH5DBxk9lQdd65T+an/DF9C0oHwdYH3Iyek0pTsDzN
- hPDb83OcKQ8ElgrlUey9xqU7VUZo+64X1mKzvhnDFsVQzG99tsjjGX9I4ryg/4+zaz8vEMOC3
- mVJzg6hvkuskcJoSChC+bEcfZ9htCz/2k9vh2KSi1FT2s4t711AX4zmctqO6tyLP1foYwclh8
- b5x41UxW6EWsErS3KVlC9vFWTPyZrdWzGIzaf15OYuyW9YRvWBYFGApfByIN2Ti0thPUTcNid
- fFR22xeKhZKMArwT1HJdleUwfNWq8VbEFsb5b5j8fuEMiOPq/sg0CqFTtqjsRaLYLwQcJFNiE
- veuH6riKqDK+2QweKZR4U0QTwgrbBCvQ9mOJNfHDi2vRt4Uz7WB+vZWPmPCCIfaBpr8NY3ekr
- dZbnQXS923vIJoragK+EYdOMefs8HM3+Y8R5klXaKxZhx4pEvKpxR/yTllcHjokIN64QGunEe
- 7PDY0adcY01l2XP+KRIN0EfcAcBK/4qhhNAUG1nApoZXzvUVC5ZfT4ZRAbFInVzXuzHK7REZW
- MBZwFoz2TCPsn6T/Q/ECmwkU6TtpmcJs3KYMg6rUHw==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:ac8:5803:0:b0:3e6:4de8:bdf5 with HTTP; Sat, 17 Jun 2023
+ 01:11:09 -0700 (PDT)
+Reply-To: richestatesfamily@gmail.com
+From:   Richard Warren <richrichwarren@gmail.com>
+Date:   Sat, 17 Jun 2023 21:11:09 +1300
+Message-ID: <CACsZJV=vhWakLkKo1NwJyWdkNQgamNB5Ze9sAjGhdZg8-mF1sA@mail.gmail.com>
+Subject: I will like you to assist me invest in your country will detail you
+ more after hearing from you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 15.06.23 10:35, Damien Le Moal wrote:
-> On 6/15/23 17:33, Damien Le Moal wrote:
-> Joe, Kai-Heng,
-> 
-> I cannot recreate the issue on my test machines. So it would be great if you
-> could test this new candidate fix.
-
-Thank you for looking into this!
-
-I've tried this patch against 6.3.4 on the affected machine, and it 
-looks like a full success. Suspend/resume work without any deadlocks, 
-and the optical drive stays usable after resuming.
-
-Since the patch and discussion around it mentions async vs 'guaranteed 
-order' power management: My original tests (without any patch) were with 
-both pm_async=0 and pm_async=1, no difference on my affected system.
-Also, with pm_trace=1, which is documented to imply pm_async=0.
-
->> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->> Reported-by: Joe Breuer <linux-kernel@jmbreuer.net>
->> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217530
->> Fixes: a19a93e4c6a9 ("scsi: core: pm: Rely on the device driver core for async power management")
->> Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
-
-Tested-by: <linux-kernel@jmbreuer.net>
-
+I will like you to assist me invest in your country will detail you
+more after hearing from you
