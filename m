@@ -2,60 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212A473947C
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Jun 2023 03:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F11A73946F
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Jun 2023 03:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjFVB17 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Jun 2023 21:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
+        id S229796AbjFVB0n (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Jun 2023 21:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjFVB16 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 21 Jun 2023 21:27:58 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F7B26AF
-        for <linux-scsi@vger.kernel.org>; Wed, 21 Jun 2023 18:27:24 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LKF3qZ030168;
-        Thu, 22 Jun 2023 01:26:34 GMT
+        with ESMTP id S229637AbjFVB0l (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 21 Jun 2023 21:26:41 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432031BD2;
+        Wed, 21 Jun 2023 18:26:40 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LKMYmI030100;
+        Thu, 22 Jun 2023 01:26:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=KmJw9gBM755uPsmCtvXxd91jpdF5WyIpNm79vyKLfpU=;
- b=bfA2/IMDIR7VLkp1KOwrkrI2WiKWpaxxC4z3bth2tdrSNL2LMTycUFCcdL3LKUBysznO
- gqn/sF2MGZfnJFtPNVnCP+r7toEGtkAOvJDf6Go+zmJQcgfnSngVwhzj0AapPniwcIvC
- YoL0jw8tEMGM6p5fNJzMm728ziPUOMCttEWJfUK82KTlphAm1QI+8vzwCntLL/yv+qaK
- MWDIPcGC6I46pe/0GLOpIV2s+npyihF0gZOOk/GAsGb2YT9cqzxayK4OrykDoKsX2cgt
- u3zVJiZ9rC051pJJYSzPsU5HHtcjc4fWDepDTg4xAo6yvfM5yEAzCVRb7ouQxUumT109 XA== 
+ bh=sgGAGARs9EYRkrFIXZTgZTxyGFjpcSODZlJHTlvf6qM=;
+ b=i4WUVWaAp8FxbavN1scYCIYSVMjGYwg92L4OPOtxMg2C57AVSNWZT9wnXjowY/BJOvnh
+ Zu3tGnvt5b2PjnwqsPa9S+FY8jInt/stI1W+defdv/iWkWz+TB+E8RR1RWz1H/c71Sit
+ Uj07xiCUoRRTpruDzfTgrWl0KyxT07TK4OnmlxPnjsZj27/rqzIxOsIJmBFtvba3DUoj
+ e194AwjvMNIl1zpXUgC4RilmjP7TaA1iyLyXkM6QL9Qp+W9k7KN1CI9LAvWS+vahNcI+
+ lwg2n7kRBWdlzoZiR+DSx5X8Qakh3Lee0AEF3lB2zkK+x50Jxq80GVaJfEuz/bxS91dA iQ== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r94etru71-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r93rbrtr1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 22 Jun 2023 01:26:34 +0000
+        Thu, 22 Jun 2023 01:26:35 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35M0Bsnn038670;
-        Thu, 22 Jun 2023 01:26:33 GMT
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35LMenVS038672;
+        Thu, 22 Jun 2023 01:26:34 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r9396thxv-1
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r9396thxy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Thu, 22 Jun 2023 01:26:33 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35M1QXap038374;
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35M1QXar038374;
         Thu, 22 Jun 2023 01:26:33 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3r9396thxp-1;
-        Thu, 22 Jun 2023 01:26:32 +0000
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3r9396thxp-2;
+        Thu, 22 Jun 2023 01:26:33 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>
+To:     linux-scsi@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: ufs: ufs-pci: Add support for Intel Arrow Lake
-Date:   Wed, 21 Jun 2023 21:26:19 -0400
-Message-Id: <168739587259.247655.4816702978211993046.b4-ty@oracle.com>
+        Linus Walleij <linus.walleij@linaro.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>
+Subject: Re: [PATCH RESEND] block: improve ioprio value validity checks
+Date:   Wed, 21 Jun 2023 21:26:20 -0400
+Message-Id: <168739587238.247655.7821502100444129447.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230613170327.61186-1-adrian.hunter@intel.com>
-References: <20230613170327.61186-1-adrian.hunter@intel.com>
+In-Reply-To: <20230608095556.124001-1-dlemoal@kernel.org>
+References: <20230608095556.124001-1-dlemoal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -63,11 +62,11 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-06-21_14,2023-06-16_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 suspectscore=0
- adultscore=0 mlxscore=0 mlxlogscore=884 malwarescore=0 phishscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=600 malwarescore=0 phishscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
  definitions=main-2306220009
-X-Proofpoint-GUID: 7E0dbiCQ_rRBFhNu8RsXdBGkWAU7Nm2X
-X-Proofpoint-ORIG-GUID: 7E0dbiCQ_rRBFhNu8RsXdBGkWAU7Nm2X
+X-Proofpoint-ORIG-GUID: 6Rh6LqVZWO8Ui6BHW215g0KyXMa9lW41
+X-Proofpoint-GUID: 6Rh6LqVZWO8Ui6BHW215g0KyXMa9lW41
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -78,16 +77,22 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 13 Jun 2023 20:03:27 +0300, Adrian Hunter wrote:
+On Thu, 08 Jun 2023 18:55:56 +0900, Damien Le Moal wrote:
 
-> Add PCI ID to support Intel Arrow Lake, same as MTL.
+> The introduction of the macro IOPRIO_PRIO_LEVEL() in commit
+> eca2040972b4 ("scsi: block: ioprio: Clean up interface definition")
+> results in an iopriority level to always be masked using the macro
+> IOPRIO_LEVEL_MASK, and thus to the kernel always seeing an acceptable
+> value for an I/O priority level when checked in ioprio_check_cap().
+> Before this patch, this function would return an error for some (but not
+> all) invalid values for a level valid range of [0..7].
 > 
-> 
+> [...]
 
 Applied to 6.5/scsi-queue, thanks!
 
-[1/1] scsi: ufs: ufs-pci: Add support for Intel Arrow Lake
-      https://git.kernel.org/mkp/scsi/c/51031cc3f903
+[1/1] block: improve ioprio value validity checks
+      https://git.kernel.org/mkp/scsi/c/01584c1e2337
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
