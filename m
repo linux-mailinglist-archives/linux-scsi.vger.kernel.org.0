@@ -2,91 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FAB973947F
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Jun 2023 03:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE6573946C
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Jun 2023 03:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjFVB3g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 21 Jun 2023 21:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
+        id S229707AbjFVB0l (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 21 Jun 2023 21:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFVB3f (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 21 Jun 2023 21:29:35 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30A91BD7
-        for <linux-scsi@vger.kernel.org>; Wed, 21 Jun 2023 18:29:33 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 4EC1224002E
-        for <linux-scsi@vger.kernel.org>; Thu, 22 Jun 2023 03:29:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1687397371; bh=D4Csd5WfGqhnig4L4X+fLUt56k9ygxpxQWLQs8PeNuI=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
-         Content-Transfer-Encoding:From;
-        b=mKMXtX4rHbJ8BeDf4HadpoLOj/M7gHT/VtkFQRJX1+PCs1gWNlDtsV4r4y+Z7fLww
-         /TzWkBg/APDT22KiYMTJ2r8Q7ATdK2i89v1M72QYEU8prnFyBQe2IzhpZCrZTf2JO7
-         gBDTbbSBRx75z4qRaXkjbh0vTmJG+Z453C5FojiNl3d4xBwSyvx9xiATpqSxaUDrHE
-         7ElAgfla+K/MiV1LPWYJXBC0kRCcTKpwzptmBAxhXJ/HN3ayLSM/QyN8bRAhGEjABA
-         PpdDayrGpIJ+huAIyvbwulvDTX+5w/eQSDfsWUzIbPxxdK64AJ3yvblMRukWR21RUp
-         6BcPj8hL+LaSQ==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4QmjTH2RS3z6tvh;
-        Thu, 22 Jun 2023 03:29:23 +0200 (CEST)
-From:   Yueh-Shun Li <shamrocklee@posteo.net>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>
-Cc:     linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yueh-Shun Li <shamrocklee@posteo.net>
-Subject: [PATCH 0/8] Fix comment typos about "transmit"
-Date:   Thu, 22 Jun 2023 01:26:21 +0000
-Message-Id: <20230622012627.15050-1-shamrocklee@posteo.net>
+        with ESMTP id S229483AbjFVB0j (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 21 Jun 2023 21:26:39 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783B71BD3
+        for <linux-scsi@vger.kernel.org>; Wed, 21 Jun 2023 18:26:38 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LKQH2D003650;
+        Thu, 22 Jun 2023 01:26:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-03-30;
+ bh=RCb8GFDkuIjEOCvWMCOlclG3FhwaP3K6p+tI0omrUF8=;
+ b=Ii4NdhAg+9Srz2jwYuxZvk2dfwenAZvnK6IMFC2HhS2YHqUponmsvq1wcsEvxDNhCauP
+ AlRXDlKcoSfiTwchQHjN07ZR3u8EdRc8GvvjeBOnjH3Z7ZJ6kxAPAwBOieOM/z74RKWN
+ qL3WdC4B1ut6VucdnL03egsFvitJdYBeME+dzqft10DwhYRHxxjDeQQ96HttxEKJDkAJ
+ l9maI/md8QhbVjvkPaa9BB8E9O+TnqAYOg2rfGRow9wGqUw0z0a0N/hQUBDKrYEk6eHU
+ vSWytYvixRH6yqrQNtToSD8Y6zgc5ce6nickrQfkfXicGzTteEi9K5FXwqAMreXvKjz1 Rg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r95cu0qyt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jun 2023 01:26:35 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35LN4K22038647;
+        Thu, 22 Jun 2023 01:26:34 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r9396thy4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jun 2023 01:26:34 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35M1QXat038374;
+        Thu, 22 Jun 2023 01:26:33 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3r9396thxp-3;
+        Thu, 22 Jun 2023 01:26:33 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCH] scsi: sd_zbc: use PAGE_SECTORS_SHIFT
+Date:   Wed, 21 Jun 2023 21:26:21 -0400
+Message-Id: <168739587258.247655.15465348998050283623.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230613-sd_zbc-page_sectors-v1-1-363460a4413d@wdc.com>
+References: <20230613-sd_zbc-page_sectors-v1-1-363460a4413d@wdc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_14,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=607 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306220009
+X-Proofpoint-GUID: gS9SDOk26Nu_rvaUF0ZhYrsnB_xUa__c
+X-Proofpoint-ORIG-GUID: gS9SDOk26Nu_rvaUF0ZhYrsnB_xUa__c
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix typos about "transmit" missing the first "s"
-found by searching with keyword "tram" in the first 7
-patches.
+On Tue, 13 Jun 2023 05:31:45 -0700, Johannes Thumshirn wrote:
 
-Add related patterns to "scripts/spelling.txt" in the
-last patch.
+> Use PAGE_SECTORS_SHIFT instead of open-coding it.
+> 
+> 
 
-Yueh-Shun Li (8):
-  RDMA/rxe: fix comment typo
-  i40e, xsk: fix comment typo
-  zd1211rw: fix comment typo
-  scsi: fix comment typo
-  tcp: fix comment typo
-  net/tls: fix comment typo
-  selftests: mptcp: connect: fix comment typo
-  scripts/spelling.txt: Add "transmit" patterns
+Applied to 6.5/scsi-queue, thanks!
 
- drivers/infiniband/sw/rxe/rxe_verbs.h              |  2 +-
- drivers/net/ethernet/intel/i40e/i40e_xsk.c         |  2 +-
- drivers/net/wireless/zydas/zd1211rw/zd_usb.c       |  2 +-
- drivers/scsi/isci/scu_task_context.h               |  2 +-
- net/ipv4/tcp_input.c                               |  2 +-
- net/tls/tls_device_fallback.c                      |  2 +-
- scripts/spelling.txt                               | 11 +++++++++++
- tools/testing/selftests/net/mptcp/mptcp_connect.sh |  2 +-
- 8 files changed, 18 insertions(+), 7 deletions(-)
+[1/1] scsi: sd_zbc: use PAGE_SECTORS_SHIFT
+      https://git.kernel.org/mkp/scsi/c/ce31dc540a01
 
 -- 
-2.38.1
-
+Martin K. Petersen	Oracle Linux Engineering
