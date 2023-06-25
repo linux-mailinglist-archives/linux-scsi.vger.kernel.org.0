@@ -2,79 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFA473CD94
-	for <lists+linux-scsi@lfdr.de>; Sun, 25 Jun 2023 02:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84CE73CDD1
+	for <lists+linux-scsi@lfdr.de>; Sun, 25 Jun 2023 03:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjFYAxM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 24 Jun 2023 20:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S229943AbjFYBgZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 24 Jun 2023 21:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjFYAxL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 24 Jun 2023 20:53:11 -0400
-X-Greylist: delayed 138 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 24 Jun 2023 17:53:09 PDT
-Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BFB10D8;
-        Sat, 24 Jun 2023 17:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1687654387;
-        bh=gQH4VaAwMjpN/17+66P6tp7c9VnLsslmB8qz1LllLJk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=zYlfl6mEXm2bGrHLswgty64ZXiywBYn0psiAYhkPVD3iKbtiYJ0mEtCS7xAjjvSFE
-         i4G/H+so735Ap19ytImuFErGlSMVCGYXznV9nz4SihkJ4zVMWooai4QcUhulBiVS6m
-         6N6qcjUzYLmjYve0l93qbEgDpoUZRpunfw2csV5M=
-Received: from localhost.localdomain ([39.156.73.12])
-        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
-        id D441B6B7; Sun, 25 Jun 2023 08:53:04 +0800
-X-QQ-mid: xmsmtpt1687654384tphqfewpw
-Message-ID: <tencent_DE0C5A84DAB2B62E1B543C5F4B4727118F09@qq.com>
-X-QQ-XMAILINFO: NMGzQWUSIfvTPAq7WF7g3gVA8xXBb7bkZIy6xeiCUzUlrR3syishj+Ur2X7kxZ
-         rdECZFBxwRu3ZMZgI+gN3I0jCGDY9rhfqcH+aNfsULkSB57pAsnpkNC2VVfOwNqxEtwQwyoqn1lX
-         HCdP9MOLb3SLeFezh97/bibNxfNw86EUXUAJYBBR3TS8GUjQeuZwc+3n62ZMD6x6q/p8b/7wFzWe
-         BghXoSde/DmyXvQSoyGTXTxdKq6+cSVTvU2jxTRTQ+uyKl3bCjjYFv2CZJFsz/pWNDBlh3OKPmkj
-         8vc0rZ+tRWikjCzuL5koghXfPU0vFo0QdPR72CmfLpbP0E8jI6UBDFLayS+f0VGq/3NSC3xF6IIs
-         1mdNDvj/N/PqlaP01ExYkL/+RsL1ZtZuvgwr8c2Jh1F8WFQpKa5lEDzkrOUu8xmfyPmNDAXiyXoN
-         llkIZQrIDABF0zfv/BEOg31qyqYELkmRpvE/3xiqU1mlYnUaJ9XDt8K6es2c0PlObrqfwgNmgQ5u
-         45N6vJpMclLLg/bU6ggarvEKAhv8I+FvsSbQgmYe4N3ke8tMLecF7jDjPeP2nhFgatFhV8/thOdz
-         fPvh1DlBJUuF+nAVMl30u7OYN0HOYzdquZuNBn04cyETPiNrS4G+LmvenPOm5/ShmE6ssmWf3g6r
-         xHxof6qzW2yThrFZtsd5/Bmes2FRMf4vXbgjbeOx+HP7HyjVkHxQiHMp6jM4I5+J+z9nKRv7PFej
-         o1hL4Da02/BZMZvoXHj1yVHFR7lHpO9Yqz7KG1HOUp2pn3pSziWK8LqEXYh7ZzRGZEbCtckCXN9T
-         xWBUJkvU5j+MuQ+puIEFPFjBNUNgEkr7u6XZD9bvocIkE+oONZECeqSWfO3FII1bJDhQnTXwxfYH
-         GjZlcB2g+R02V0LvoKHGOU9Ier/L3j1aB2SPi4+rCOR4Fe6i6EsQ3eWURSiMJVfkqYUfL5FXQ/J1
-         OJADEcZXH8Af0p2vzGOJIF7Q0hBHktGLzDCXG34hBm5YC26LeE4DeG3SS8N6l4
-X-QQ-XMRINFO: MMd9k4KOWfk4EI9u9DiMAPPHFKKkl9Wo5w==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     bvanassche@acm.org
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        martin.petersen@oracle.com, michael.christie@oracle.com,
-        rongtao@cestc.cn, rtoax@foxmail.com, target-devel@vger.kernel.org
-Subject: Re: Re: [PATCH] docs: target: Convert tcm_mod_builder.py print syntax to python3
-Date:   Sun, 25 Jun 2023 08:53:03 +0800
-X-OQ-MSGID: <20230625005303.5464-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <debdc47a-c377-e457-5643-415d93ced54a@acm.org>
-References: <debdc47a-c377-e457-5643-415d93ced54a@acm.org>
+        with ESMTP id S229537AbjFYBgX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 24 Jun 2023 21:36:23 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE09BE5F;
+        Sat, 24 Jun 2023 18:36:22 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-39ecf031271so1739778b6e.1;
+        Sat, 24 Jun 2023 18:36:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687656982; x=1690248982;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6QES8iPVEs5Vp3VQZYa61QQkFQNBLSrnWKF7w6PAZtA=;
+        b=QG6FKqHYaoaONGGum/fcu/e23BgVbvLri3Btc7WrsT4pzp6FaPk5kZuw4WiGbTFuyO
+         oAX7EcYng4AVlja/R20qngrLmr5QXYtfUPa4+djzwKJHJrREc221CTfeel8K/r6r1Bwf
+         UPwmeYsITKN/TwDnusHennjGR4z14ijhp0/7ak6u+Eq2EbiZwmHka+3/hhfvrtLPRFWN
+         didqUCOwKEj5V8ZQhmJupJ1ds3mq+qT2Mq0dAfr3pQhl4v699wyRP49Z0cifkDwWvFq7
+         sAAtZr72K08srKUER+29F6uoWzn8enTdLtQUUWCF4W51HJeN2UVzDGkyGxXC23tELPXX
+         AzYQ==
+X-Gm-Message-State: AC+VfDy3WZ8WPXGYZ+//jUSHtStl1YwaJMukD39M1W0I+Q/ZMDOY+rEF
+        h6AGf3kVdMg+brubOAEVpnlsdXtH5xc=
+X-Google-Smtp-Source: ACHHUZ4It5O46YdG9BmcmgbA5yUzsHMVPQoRSR1CkNrQcEXwpZtIfr57LBj3oN85Na3xYuxKaULfQg==
+X-Received: by 2002:a05:6808:ec3:b0:39e:b58c:13d5 with SMTP id q3-20020a0568080ec300b0039eb58c13d5mr28074938oiv.17.1687656982135;
+        Sat, 24 Jun 2023 18:36:22 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id x42-20020a056a000bea00b0066f37665a6asm690494pfu.117.2023.06.24.18.36.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Jun 2023 18:36:21 -0700 (PDT)
+Message-ID: <83fcf19d-b9a1-5369-d8f0-d80e00ae8dfd@acm.org>
+Date:   Sat, 24 Jun 2023 18:36:19 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] docs: target: Remove useless tcm_mod_builder.py
+Content-Language: en-US
+To:     Rong Tao <rtoax@foxmail.com>, martin.petersen@oracle.com
+Cc:     rongtao@cestc.cn, Jonathan Corbet <corbet@lwn.net>,
+        "open list:SCSI TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        "open list:SCSI TARGET SUBSYSTEM" <target-devel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <tencent_E3643D5F0AA8CCBEF28C6A233A18B808CD0A@qq.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <tencent_E3643D5F0AA8CCBEF28C6A233A18B808CD0A@qq.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Sorry for the late reply, I just submit v2[0], remove tcm_mod_builder.py
-totally. Please review.
+On 6/24/23 17:50, Rong Tao wrote:
+> This script is not used and requires additional development to sync with
+> the SCSI target code.
 
-Thanks,
-
-Rong Tao.
-
-
-[0] https://lore.kernel.org/lkml/tencent_E3643D5F0AA8CCBEF28C6A233A18B808CD0A@qq.com/
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
