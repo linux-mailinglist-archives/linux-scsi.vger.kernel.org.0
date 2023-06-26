@@ -2,80 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949E573D96B
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jun 2023 10:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273AD73D982
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jun 2023 10:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjFZIQV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 26 Jun 2023 04:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S230213AbjFZITP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 26 Jun 2023 04:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjFZIQS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 26 Jun 2023 04:16:18 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A7CE44
-        for <linux-scsi@vger.kernel.org>; Mon, 26 Jun 2023 01:16:16 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-991e69499d1so21090266b.2
-        for <linux-scsi@vger.kernel.org>; Mon, 26 Jun 2023 01:16:16 -0700 (PDT)
+        with ESMTP id S230173AbjFZITN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 26 Jun 2023 04:19:13 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B59AC
+        for <linux-scsi@vger.kernel.org>; Mon, 26 Jun 2023 01:19:12 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-988a076a7d3so457032766b.3
+        for <linux-scsi@vger.kernel.org>; Mon, 26 Jun 2023 01:19:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1687767375; x=1690359375;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PzrG3UTQMv24aqqyJ4HuHcMxqLMgWVT3rshhNA4f4yA=;
-        b=AujfvBqUOERGZYcrtu35naU40C2xZtvAxwYUyprrz9GGpKUikKYkuO/cT+ENo6uAS0
-         ++9QHTIrY0XlgtSVlKcmj812+aYHQIZtsCCXpNnkX4VPqKVgsD/+2N0a/AN1eHEyZmvw
-         uGuenuFXo7ZUrN078schSxTrY+8ry/BzduSXodfy2XZ/vvGB4D0MVlxytUYEhcPWj/qg
-         T/348a9anyrLsF/sz5vmkLVRC0/TyrxkQlv3xYJXek9UhSzqeulTCNJ62+2XTCEfxycR
-         o7M0xL4phPnRucrcGSr4Hkk9A2mcSQ3hvpPSE689sweXkBb1CbCskBWfZa60v1oRLUvU
-         Rvvg==
+        d=fairphone.com; s=fair; t=1687767550; x=1690359550;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6vGI+nta4xCb7jjtw4SWdamXlIICUlHtM/Q20S/nMlw=;
+        b=lunbIA+tI5QGU+sYKJbiveO7P3sCFCXTWS+j97EzgY6iJlkaSMi97c9Ko94N4P+Lgj
+         6Rj9PnlZCeN+RJlQe/7PJDGwPpPLUgFGVe5Rq8sKCDhMcbQH9XxElWOIK5D1s0lIQbPe
+         cQ/zvTrnRu0V+H0IW8YT6zE9Csm83cdAkFdWFgxsfn8c/HbF8u0hawfzgncwtpMI5hlp
+         UPsdQ60xqpI5mO09VVHotOLyE6FC2M5mJhUCmMAHY+u6JcwdhJbbydtcBq5m35h9hfcb
+         yuYhV0aZ+LVR8EiCDV0WLA0VAs0qD1eirChspsSMiMAkC4vkyMMFS55SO5SKPE9u0EYG
+         ZJOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687767375; x=1690359375;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PzrG3UTQMv24aqqyJ4HuHcMxqLMgWVT3rshhNA4f4yA=;
-        b=KLyuOMrkBhQCj9b1ddfYnIdboWp1HIhpWA0ojSZXcS17aaShEN9RlIh0683nTQH8r+
-         LAMdRaFwbtQIOtHwXnULJxpC4+8DWWHOsTw95mS0IbfnbXsJU+o+rc5QllV9Dv6aU9eF
-         L5LRIOgapkQUxM/UX9FYTjkzNTo3aqrFRizn2EjhsH+lyeguMLX9gaT77YaABt+qt9p0
-         QntUpfb7FkqPwDb1UHn7Wu3WoI9DhN/ktGB2fWEAlzxeGqt8aAryR785XhIlDenye5Fs
-         lSfXI7ZmlmsrlGm8JssQTjMxO0mLwJinIv1DxGiAQZ9SezNLwTrLJPb6w8A1fjF0I6ho
-         olWw==
-X-Gm-Message-State: AC+VfDwWPlw/wP0ThilDiGxgv6eLWdJ0B5TIJUOc2E8ug1P/bMpIKAIk
-        mzGy8qFSKL5FBzhJLDnqBXUaLA==
-X-Google-Smtp-Source: ACHHUZ5F9fvoXgjhnq9skj8rdwunM3W0BZNCjB4r1eGM7eWvK9W+EP+t99/yg7EAa+Ho+4nd24m56g==
-X-Received: by 2002:a17:907:6d20:b0:991:edf7:4115 with SMTP id sa32-20020a1709076d2000b00991edf74115mr247285ejc.2.1687767375026;
-        Mon, 26 Jun 2023 01:16:15 -0700 (PDT)
-Received: from [172.16.240.113] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id bm4-20020a170906c04400b0094f07545d40sm2935617ejb.220.2023.06.26.01.16.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 01:16:14 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Mon, 26 Jun 2023 10:15:59 +0200
-Subject: [PATCH v4 3/3] dt-bindings: ufs: qcom: Fix sm8450 bindings
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221209-dt-binding-ufs-v4-3-14ced60f3d1b@fairphone.com>
-References: <20221209-dt-binding-ufs-v4-0-14ced60f3d1b@fairphone.com>
-In-Reply-To: <20221209-dt-binding-ufs-v4-0-14ced60f3d1b@fairphone.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Iskren Chernev <me@iskren.info>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Eric Biggers <ebiggers@google.com>
-X-Mailer: b4 0.12.2
+        d=1e100.net; s=20221208; t=1687767550; x=1690359550;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6vGI+nta4xCb7jjtw4SWdamXlIICUlHtM/Q20S/nMlw=;
+        b=TJtwJgdpIstH8wCKLM2NWsxRuBR7Lm2DCeXV5/rZWqHsKEPna7Z/d1sVU8U+TNiNDx
+         Fz9+FLshJmDlQTI2ClXu3MWc/f+6mwVmVetv5uvVL6UZ/M8o/N/9oHruvWzhs4x3SXBy
+         ooN8jLK9FXj7aaNsC2rHb37gtrh/YNRhvWlUNNoEiEBUR1arpjvnaBR2hf2PV2yj90jg
+         pwhnrIff87T89EHR1T0gu0wIeHR8CEBa/jVEz2pYpGyC2mc6TkoPcIlilFyd2F53lq+w
+         HNqT9ypbXDBvw4cfXbRE4OWWwzJ9/MG97h+rimFJIGd1rxV/apmTaZfX6LzyeOeR3t7Z
+         c2gg==
+X-Gm-Message-State: AC+VfDzg4u+jJjpnWP0k3GrsT07RhmNMbyln5qxXGPbr5U5UCUbzatQW
+        mzJTYD4sJ+oykNe0gzrghARscA==
+X-Google-Smtp-Source: ACHHUZ6tDjEL7i629oGAPKobpegpi1tWcqiC6lIxFPHE3WnYQ2IkEVA9iayQg7YPMnyuVyqfRh8ygQ==
+X-Received: by 2002:a17:907:96ab:b0:991:d2a8:658a with SMTP id hd43-20020a17090796ab00b00991d2a8658amr1104916ejc.34.1687767550551;
+        Mon, 26 Jun 2023 01:19:10 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id gw10-20020a170906f14a00b0098e16f8c198sm2300279ejb.18.2023.06.26.01.19.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 01:19:10 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 26 Jun 2023 10:19:09 +0200
+Message-Id: <CTMFNWKMSCJP.DBPZEW25594L@otso>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Rob Herring" <robh@kernel.org>
+Cc:     "Abel Vesa" <abel.vesa@linaro.org>,
+        "Manivannan Sadhasivam" <mani@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        "Avri Altman" <avri.altman@wdc.com>,
+        "Bart Van Assche" <bvanassche@acm.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/5] scsi: dt-bindings: ufs: qcom: Fix warning for
+ sdm845 by adding reg-names
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+X-Mailer: aerc 0.15.1
+References: <20230623113009.2512206-1-abel.vesa@linaro.org>
+ <20230623113009.2512206-6-abel.vesa@linaro.org>
+ <cd84b8c6-fac7-ecef-26be-792a1b04a102@linaro.org>
+ <CTK1AI4TVYRZ.F77OZB62YYC0@otso> <20230623211746.GA1128583-robh@kernel.org>
+ <CTMDIQGOYMKD.1BP88GSB03U54@otso>
+ <d3970163-b8e8-9665-3761-8942c28adaa8@linaro.org>
+In-Reply-To: <d3970163-b8e8-9665-3761-8942c28adaa8@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -86,78 +91,54 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SM8450 actually supports ICE (Inline Crypto Engine) so adjust the
-bindings and the example to match.
+On Mon Jun 26, 2023 at 9:41 AM CEST, Krzysztof Kozlowski wrote:
+> On 26/06/2023 08:38, Luca Weiss wrote:
+> >>>> but I guess no resends and it can be superseded.
+> >>>
+> >>> Right, the patches got reviews but was never applied... I really need=
+ to
+> >>> find a strategy to keep track of sent patches until they're applied w=
+ith
+> >>> my work mailbox, it's not the first time that a patch has gotten
+> >>> forgotten.
+> >>
+> >> There was an error reported on the above series. Why would it be=20
+> >> applied?
+> >=20
+> > The error report at [0] complains about reg-names but I'm quite sure
+> > that patch 2/3 resolves this error. Does your bot only apply one patch
+> > at a time and run the check or apply all of them and then run it? It's
+> > been a while but I'm fairly sure I ran all of the checks before sending
+> > since I also documented some other patches in the cover letter there.
+>
+> You did it in cover letter, not in the patch, so there is no dependency
+> for bots recorded.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
-Reviewed-by: Iskren Chernev <me@iskren.info>
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+I'm not aware how to put extra comments into a patch in a series with
+b4, at least last time I checked I don't think it was possible? But I
+also thought the cover letter was exactly there for giving some
+background of the series and documenting any dependencies on other
+patches.
 
-diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-index b5fc686cb3a1..04baa98bf7e4 100644
---- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-@@ -119,7 +119,6 @@ allOf:
-               - qcom,sc8280xp-ufshc
-               - qcom,sm8250-ufshc
-               - qcom,sm8350-ufshc
--              - qcom,sm8450-ufshc
-               - qcom,sm8550-ufshc
-     then:
-       properties:
-@@ -150,6 +149,7 @@ allOf:
-               - qcom,sdm845-ufshc
-               - qcom,sm6350-ufshc
-               - qcom,sm8150-ufshc
-+              - qcom,sm8450-ufshc
-     then:
-       properties:
-         clocks:
-@@ -275,7 +275,9 @@ examples:
-         ufs@1d84000 {
-             compatible = "qcom,sm8450-ufshc", "qcom,ufshc",
-                          "jedec,ufs-2.0";
--            reg = <0 0x01d84000 0 0x3000>;
-+            reg = <0 0x01d84000 0 0x3000>,
-+                  <0 0x01d88000 0 0x8000>;
-+            reg-names = "std", "ice";
-             interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
-             phys = <&ufs_mem_phy_lanes>;
-             phy-names = "ufsphy";
-@@ -303,7 +305,8 @@ examples:
-                           "ref_clk",
-                           "tx_lane0_sync_clk",
-                           "rx_lane0_sync_clk",
--                          "rx_lane1_sync_clk";
-+                          "rx_lane1_sync_clk",
-+                          "ice_core_clk";
-             clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
-                      <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-                      <&gcc GCC_UFS_PHY_AHB_CLK>,
-@@ -311,7 +314,8 @@ examples:
-                      <&rpmhcc RPMH_CXO_CLK>,
-                      <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
-                      <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
--                     <&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
-+                     <&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>,
-+                     <&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
-             freq-table-hz = <75000000 300000000>,
-                             <0 0>,
-                             <0 0>,
-@@ -319,6 +323,7 @@ examples:
-                             <75000000 300000000>,
-                             <0 0>,
-                             <0 0>,
--                            <0 0>;
-+                            <0 0>,
-+                            <75000000 300000000>;
-         };
-     };
+>
+> >=20
+> > [0] https://lore.kernel.org/all/167241769341.1925758.178566816349494461=
+14.robh@kernel.org/
+>
+> Your patch 2/3 could not be=C2=A0applied to any tree. 3/3 applied but wit=
+hout
+> previous one caused warnings.
 
--- 
-2.41.0
+Anyways, just resent the series as v4, maybe this time it can get picked
+up... Should have enough reviews by now :)
+
+Regards
+Luca
+
+>
+>
+>
+>
+> Best regards,
+> Krzysztof
 
