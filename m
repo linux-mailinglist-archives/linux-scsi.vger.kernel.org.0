@@ -2,58 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4BE773ED39
-	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jun 2023 23:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CDB73ED9E
+	for <lists+linux-scsi@lfdr.de>; Mon, 26 Jun 2023 23:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjFZVuq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 26 Jun 2023 17:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
+        id S231192AbjFZVyR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 26 Jun 2023 17:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjFZVua (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 26 Jun 2023 17:50:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14D12120;
-        Mon, 26 Jun 2023 14:50:18 -0700 (PDT)
+        with ESMTP id S231418AbjFZVxk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 26 Jun 2023 17:53:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E652E10D9;
+        Mon, 26 Jun 2023 14:51:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7D3A60F8A;
-        Mon, 26 Jun 2023 21:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20CA3C433C0;
-        Mon, 26 Jun 2023 21:50:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C796B60F90;
+        Mon, 26 Jun 2023 21:50:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D829C4339A;
+        Mon, 26 Jun 2023 21:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687816217;
-        bh=vPUy6XY/B+dQEPw1DSuwiNt7K3yaaqM+8wE18p3ZM10=;
+        s=k20201202; t=1687816249;
+        bh=3hsCxAv+i5MwlWWz9tGfdVU2AThTqIFOUfFoZs/xDTU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kgsEx1vEM3/CBmQE3mGhmJiHlOCTJvqSEGYIialnQB5rRTx7Ompqk4okVIBmpJ88Y
-         N9GZNnjwQYm5FQXMsJUR45yeg/jVSXK+xgb3HZHO5kOLc9Bihm+wQxEH7z63xK9yWq
-         IsIQDdKnyabHhUh3XbR5yYLOqDo+1X2NzGfSuLYO5NXJtPILNjgBLO+NrZN+LaFKOa
-         Yn7wAsL6h5nhWqGYfypjria319lFH6Qc0hlhxiDgXyXmx4fuEk4HI9rjnuZ2dl3tLg
-         8pFcCNIRajj6kK69FYEYT2Y32yGCHQP8l2TU8BbzM7T+jiZY3x9zF2WuiBjHmXVRoX
-         Snf1gqkDMxmNA==
+        b=CPgheNJohFgMOW4EyFzjm2G9aTDBad5cFrxM/o49iw88TMXW8w3jXOYlspDE+VN0V
+         c7p1h9VZCExY9ldF5t8Er7dB/ASosX82GEOUZvu0QnvAADet9mwjklIW/IyM2zaG0z
+         l4GKo4TGyzvn8EM9OVvOH8YQBAI5FEXX4/PCRpYEkPuItr/iQvuAJiB/o/K3EDZaMh
+         zqOvhhiLUrkOYnIqIPB5RyUiL0lBGnrV+WnYgLW4tF/425OVrA9/KNUenKJ8xm3tWN
+         evUK8wooWftvnXyyiJcWJJH4qr833kp+CK0OfkacLwxnQpTtnws7t3xst6qfLaUWC8
+         lpKtBplcUFp1A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Justin Tee <justintee8345@gmail.com>,
-        Justin Tee <justin.tee@broadcom.com>,
-        kernel test robot <lkp@intel.com>,
+Cc:     Sagar Biradar <sagar.biradar@microchip.com>,
+        Gilbert Wu <gilbert.wu@microchip.com>,
+        Sagar Biradar <Sagar.Biradar@microchip.com>,
+        John Garry <john.g.garry@oracle.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 12/16] scsi: lpfc: Fix incorrect big endian type assignment in bsg loopback path
-Date:   Mon, 26 Jun 2023 17:49:52 -0400
-Message-Id: <20230626214956.178942-12-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, aacraid@microsemi.com,
+        jejb@linux.ibm.com, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 10/15] scsi: aacraid: Reply queue mapping to CPUs based on IRQ affinity
+Date:   Mon, 26 Jun 2023 17:50:26 -0400
+Message-Id: <20230626215031.179159-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230626214956.178942-1-sashal@kernel.org>
-References: <20230626214956.178942-1-sashal@kernel.org>
+In-Reply-To: <20230626215031.179159-1-sashal@kernel.org>
+References: <20230626215031.179159-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.3.9
+X-stable-base: Linux 6.1.35
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,59 +62,156 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Justin Tee <justintee8345@gmail.com>
+From: Sagar Biradar <sagar.biradar@microchip.com>
 
-[ Upstream commit 9cefd6e7e0a77b0fbca5c793f6fb6821b0962775 ]
+[ Upstream commit 9dc704dcc09eae7d21b5da0615eb2ed79278f63e ]
 
-The kernel test robot reported sparse warnings regarding incorrect type
-assignment for __be16 variables in bsg loopback path.
+Fix the I/O hang that arises because of the MSIx vector not having a mapped
+online CPU upon receiving completion.
 
-Change the flagged lines to use the be16_to_cpu() and cpu_to_be16() macros
-appropriately.
+SCSI cmds take the blk_mq route, which is setup during init. Reserved cmds
+fetch the vector_no from mq_map after init is complete. Before init, they
+have to use 0 - as per the norm.
 
-Signed-off-by: Justin Tee <justin.tee@broadcom.com>
-Link: https://lore.kernel.org/r/20230614175944.3577-1-justintee8345@gmail.com
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306110819.sDIKiGgg-lkp@intel.com/
+Reviewed-by: Gilbert Wu <gilbert.wu@microchip.com>
+Signed-off-by: Sagar Biradar <Sagar.Biradar@microchip.com>
+Reviewed-by: John Garry <john.g.garry@oracle.com>
+Link: https://lore.kernel.org/r/20230519230834.27436-1-sagar.biradar@microchip.com
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_bsg.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/scsi/aacraid/aacraid.h |  1 +
+ drivers/scsi/aacraid/commsup.c |  6 +++++-
+ drivers/scsi/aacraid/linit.c   | 14 ++++++++++++++
+ drivers/scsi/aacraid/src.c     | 25 +++++++++++++++++++++++--
+ 4 files changed, 43 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
-index 852b025e2fecf..b54fafb486e06 100644
---- a/drivers/scsi/lpfc/lpfc_bsg.c
-+++ b/drivers/scsi/lpfc/lpfc_bsg.c
-@@ -889,7 +889,7 @@ lpfc_bsg_ct_unsol_event(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
- 			struct lpfc_iocbq *piocbq)
+diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
+index 5e115e8b2ba46..7c6efde75da66 100644
+--- a/drivers/scsi/aacraid/aacraid.h
++++ b/drivers/scsi/aacraid/aacraid.h
+@@ -1678,6 +1678,7 @@ struct aac_dev
+ 	u32			handle_pci_error;
+ 	bool			init_reset;
+ 	u8			soft_reset_support;
++	u8			use_map_queue;
+ };
+ 
+ #define aac_adapter_interrupt(dev) \
+diff --git a/drivers/scsi/aacraid/commsup.c b/drivers/scsi/aacraid/commsup.c
+index deb32c9f4b3e6..3f062e4013ab6 100644
+--- a/drivers/scsi/aacraid/commsup.c
++++ b/drivers/scsi/aacraid/commsup.c
+@@ -223,8 +223,12 @@ int aac_fib_setup(struct aac_dev * dev)
+ struct fib *aac_fib_alloc_tag(struct aac_dev *dev, struct scsi_cmnd *scmd)
  {
- 	uint32_t evt_req_id = 0;
--	uint32_t cmd;
-+	u16 cmd;
- 	struct lpfc_dmabuf *dmabuf = NULL;
- 	struct lpfc_bsg_event *evt;
- 	struct event_data *evt_dat = NULL;
-@@ -915,7 +915,7 @@ lpfc_bsg_ct_unsol_event(struct lpfc_hba *phba, struct lpfc_sli_ring *pring,
+ 	struct fib *fibptr;
++	u32 blk_tag;
++	int i;
  
- 	ct_req = (struct lpfc_sli_ct_request *)bdeBuf1->virt;
- 	evt_req_id = ct_req->FsType;
--	cmd = ct_req->CommandResponse.bits.CmdRsp;
-+	cmd = be16_to_cpu(ct_req->CommandResponse.bits.CmdRsp);
+-	fibptr = &dev->fibs[scsi_cmd_to_rq(scmd)->tag];
++	blk_tag = blk_mq_unique_tag(scsi_cmd_to_rq(scmd));
++	i = blk_mq_unique_tag_to_tag(blk_tag);
++	fibptr = &dev->fibs[i];
+ 	/*
+ 	 *	Null out fields that depend on being zero at the start of
+ 	 *	each I/O
+diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
+index 5ba5c18b77b46..bff49b8ab057d 100644
+--- a/drivers/scsi/aacraid/linit.c
++++ b/drivers/scsi/aacraid/linit.c
+@@ -19,6 +19,7 @@
  
- 	spin_lock_irqsave(&phba->ct_ev_lock, flags);
- 	list_for_each_entry(evt, &phba->ct_ev_waiters, node) {
-@@ -3186,8 +3186,8 @@ lpfc_bsg_diag_loopback_run(struct bsg_job *job)
- 			ctreq->RevisionId.bits.InId = 0;
- 			ctreq->FsType = SLI_CT_ELX_LOOPBACK;
- 			ctreq->FsSubType = 0;
--			ctreq->CommandResponse.bits.CmdRsp = ELX_LOOPBACK_DATA;
--			ctreq->CommandResponse.bits.Size   = size;
-+			ctreq->CommandResponse.bits.CmdRsp = cpu_to_be16(ELX_LOOPBACK_DATA);
-+			ctreq->CommandResponse.bits.Size   = cpu_to_be16(size);
- 			segment_offset = ELX_LOOPBACK_HEADER_SZ;
- 		} else
- 			segment_offset = 0;
+ #include <linux/compat.h>
+ #include <linux/blkdev.h>
++#include <linux/blk-mq-pci.h>
+ #include <linux/completion.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+@@ -505,6 +506,15 @@ static int aac_slave_configure(struct scsi_device *sdev)
+ 	return 0;
+ }
+ 
++static void aac_map_queues(struct Scsi_Host *shost)
++{
++	struct aac_dev *aac = (struct aac_dev *)shost->hostdata;
++
++	blk_mq_pci_map_queues(&shost->tag_set.map[HCTX_TYPE_DEFAULT],
++			      aac->pdev, 0);
++	aac->use_map_queue = true;
++}
++
+ /**
+  *	aac_change_queue_depth		-	alter queue depths
+  *	@sdev:	SCSI device we are considering
+@@ -1489,6 +1499,7 @@ static struct scsi_host_template aac_driver_template = {
+ 	.bios_param			= aac_biosparm,
+ 	.shost_groups			= aac_host_groups,
+ 	.slave_configure		= aac_slave_configure,
++	.map_queues			= aac_map_queues,
+ 	.change_queue_depth		= aac_change_queue_depth,
+ 	.sdev_groups			= aac_dev_groups,
+ 	.eh_abort_handler		= aac_eh_abort,
+@@ -1776,6 +1787,8 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	shost->max_lun = AAC_MAX_LUN;
+ 
+ 	pci_set_drvdata(pdev, shost);
++	shost->nr_hw_queues = aac->max_msix;
++	shost->host_tagset = 1;
+ 
+ 	error = scsi_add_host(shost, &pdev->dev);
+ 	if (error)
+@@ -1908,6 +1921,7 @@ static void aac_remove_one(struct pci_dev *pdev)
+ 	struct aac_dev *aac = (struct aac_dev *)shost->hostdata;
+ 
+ 	aac_cancel_rescan_worker(aac);
++	aac->use_map_queue = false;
+ 	scsi_remove_host(shost);
+ 
+ 	__aac_shutdown(aac);
+diff --git a/drivers/scsi/aacraid/src.c b/drivers/scsi/aacraid/src.c
+index 11ef58204e96f..61949f3741886 100644
+--- a/drivers/scsi/aacraid/src.c
++++ b/drivers/scsi/aacraid/src.c
+@@ -493,6 +493,10 @@ static int aac_src_deliver_message(struct fib *fib)
+ #endif
+ 
+ 	u16 vector_no;
++	struct scsi_cmnd *scmd;
++	u32 blk_tag;
++	struct Scsi_Host *shost = dev->scsi_host_ptr;
++	struct blk_mq_queue_map *qmap;
+ 
+ 	atomic_inc(&q->numpending);
+ 
+@@ -505,8 +509,25 @@ static int aac_src_deliver_message(struct fib *fib)
+ 		if ((dev->comm_interface == AAC_COMM_MESSAGE_TYPE3)
+ 			&& dev->sa_firmware)
+ 			vector_no = aac_get_vector(dev);
+-		else
+-			vector_no = fib->vector_no;
++		else {
++			if (!fib->vector_no || !fib->callback_data) {
++				if (shost && dev->use_map_queue) {
++					qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
++					vector_no = qmap->mq_map[raw_smp_processor_id()];
++				}
++				/*
++				 *	We hardcode the vector_no for
++				 *	reserved commands as a valid shost is
++				 *	absent during the init
++				 */
++				else
++					vector_no = 0;
++			} else {
++				scmd = (struct scsi_cmnd *)fib->callback_data;
++				blk_tag = blk_mq_unique_tag(scsi_cmd_to_rq(scmd));
++				vector_no = blk_mq_unique_tag_to_hwq(blk_tag);
++			}
++		}
+ 
+ 		if (native_hba) {
+ 			if (fib->flags & FIB_CONTEXT_FLAG_NATIVE_HBA_TMF) {
 -- 
 2.39.2
 
