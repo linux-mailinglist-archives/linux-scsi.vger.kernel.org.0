@@ -2,141 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6149E73F748
-	for <lists+linux-scsi@lfdr.de>; Tue, 27 Jun 2023 10:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7343973F948
+	for <lists+linux-scsi@lfdr.de>; Tue, 27 Jun 2023 11:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjF0Ib5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 27 Jun 2023 04:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
+        id S231839AbjF0J4a (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 27 Jun 2023 05:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjF0IbW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 27 Jun 2023 04:31:22 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E5E30F4
-        for <linux-scsi@vger.kernel.org>; Tue, 27 Jun 2023 01:30:07 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-988a076a7d3so627905666b.3
-        for <linux-scsi@vger.kernel.org>; Tue, 27 Jun 2023 01:30:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1687854603; x=1690446603;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mThrgyARyedryNmjWfnH4cpZ5pepRN8cVLn3M8pGEJY=;
-        b=2nvDVQEZUxNnVZ2cn0fsA8A0oh1DdvDZvaBPZYQEH+YcsDB8ssrVIV4GaFC60NcHhL
-         HyGKYzgOy/ChvDJU+qRDmPAgfLXtAMJWk37ekLsrOfHfO36JecHazPE4cHDos+XezL4G
-         Fy8eZTTAkpKGGau29aB6cbehqHFr7rNwf+6MyrO4rmqZdU/giXS8d2s0WLUoqitCvUSu
-         DpliyDGaJOMx+LdhtiIc2N+4rG1CgvTcyJEN2wDDgR7Cl9cWFIY+y0pYkotcO8aNExEd
-         k6KYtDvWR1u/zrNFAc1Ox7aEw99qxLqlBszPwVD9Ye8s/8fZSRxcxHPgjnrw+nF9ctLW
-         6rjg==
+        with ESMTP id S231806AbjF0Jz5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 27 Jun 2023 05:55:57 -0400
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6642691;
+        Tue, 27 Jun 2023 02:55:15 -0700 (PDT)
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-34568286979so19721235ab.2;
+        Tue, 27 Jun 2023 02:55:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687854603; x=1690446603;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+        d=1e100.net; s=20221208; t=1687859714; x=1690451714;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=mThrgyARyedryNmjWfnH4cpZ5pepRN8cVLn3M8pGEJY=;
-        b=RleM47fw8nVc2WN2FmRviRVtPmGB48gd0YCGHRf3r2ABCDG6q2jj2te8rnTnl79b7V
-         dhLPNel8S+SBNruBTT2RHe1eQ+GX/ooODOWd50F80+/68C7VZiyRl6LZgob0ave291cp
-         pek30EddZxekclBy82KDy4E7JH/Za6s7qJPTGVfIudsUAxwAUBycUwGvEPWBAg9YyDfI
-         M5dBf8MYWytfvLNv9Paq2Ucy19QDKpXAm2SvT79xF2jCxo+elcCc7PblM3LvGAmi7mi2
-         HAvMocFh51cIzD2Lgn+GlkpiHT0Q6Mn+9AYSklLH4JgtF77C9VHPv8msCNKmMZhK0nzu
-         UI7w==
-X-Gm-Message-State: AC+VfDwRFRoZhVO3Chq0ahatDKF94psdcDbsk+5BwkYUpItOAy7MEuJo
-        f66hsiWPpAh1f/XQJqQLZGg3rQ==
-X-Google-Smtp-Source: ACHHUZ5Gd8wXkVemQElq8PbfvR+hM+lFW1Yl6baf3RwARcEPbCvXGdlVnJBe7lQN8mKIJavn5lW7aw==
-X-Received: by 2002:a17:907:983:b0:94e:2db:533e with SMTP id bf3-20020a170907098300b0094e02db533emr30833010ejc.49.1687854602813;
-        Tue, 27 Jun 2023 01:30:02 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id pv18-20020a170907209200b0098dc18c1429sm4246134ejb.209.2023.06.27.01.30.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 01:30:02 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 27 Jun 2023 10:30:01 +0200
-Message-Id: <CTNAIROO2XIU.3FFYTSQL4OIM7@otso>
-Subject: Re: [PATCH v4 2/3] dt-bindings: ufs: qcom: Add reg-names property
- for ICE
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Alim Akhtar" <alim.akhtar@samsung.com>,
-        "Avri Altman" <avri.altman@wdc.com>,
-        "Bart Van Assche" <bvanassche@acm.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Iskren Chernev" <me@iskren.info>,
-        "Manivannan Sadhasivam" <mani@kernel.org>,
-        "Conor Dooley" <conor+dt@kernel.org>
-Cc:     <linux-arm-msm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, "Eric Biggers" <ebiggers@google.com>
-X-Mailer: aerc 0.15.1
-References: <20221209-dt-binding-ufs-v4-0-14ced60f3d1b@fairphone.com>
- <20221209-dt-binding-ufs-v4-2-14ced60f3d1b@fairphone.com>
- <c0ce5ce7-d18f-15b9-176e-822d99c638e2@linaro.org>
-In-Reply-To: <c0ce5ce7-d18f-15b9-176e-822d99c638e2@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        bh=0TZ3MSYKMTSwcYTzU8pfjJrA+SIj1fT6OF7x/GirJ9U=;
+        b=ahxTVOTh9VDxSJTNbK1LCwlQBozSAPMuOGYJ6IIcWaudz0p5qa9byGCksnt91Y15UJ
+         NsJW7ZkWvG4oxhWWUUCzyh+cclp+KUAiqGS09aLMkQh2xGdHKdx2iFkYh01qo9X4gJ3o
+         Cpm69b3gkeH7I88QY2fdY3DxH7Bn4o4y2Zih40RbP1SQJTcxxPibDqx3Eo7XNqUaPxvo
+         jhD/04WD9+Af1Eoj92ykcmAhj80VWrRoB0CBIIve5luK5o1PRh64V6aYqouq/9h6dCol
+         A7Y1QTbA8piXlXCqzdo4IuhahGj9S0A5ingfisOfQjaPNyNvgAC7I6kGn4QTXAv6PIr1
+         utvA==
+X-Gm-Message-State: AC+VfDwlEvjqp3tXTPmQDFS809Bj0TCBAa4iRB7/jHOJeHjtXvSYm3ts
+        e66wdFLto7/xX99fyOZlRJN8oJ42qA==
+X-Google-Smtp-Source: ACHHUZ74NSK9HlVoxn1NExoX0rzO816CzJ5JTaA/XJZrlI3UYg8id7RsR1lOBIKFYR8W3ruSs/eOPQ==
+X-Received: by 2002:a92:c808:0:b0:345:8abb:5b36 with SMTP id v8-20020a92c808000000b003458abb5b36mr5894921iln.9.1687859714144;
+        Tue, 27 Jun 2023 02:55:14 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id ep17-20020a0566384e1100b00420e6c58971sm2311442jab.178.2023.06.27.02.55.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 02:55:13 -0700 (PDT)
+Received: (nullmailer pid 1233680 invoked by uid 1000);
+        Tue, 27 Jun 2023 09:55:11 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     Conor Dooley <conor+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Iskren Chernev <me@iskren.info>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Avri Altman <avri.altman@wdc.com>, linux-scsi@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-kernel@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20221209-dt-binding-ufs-v5-3-c9a58c0a53f5@fairphone.com>
+References: <20221209-dt-binding-ufs-v5-0-c9a58c0a53f5@fairphone.com>
+ <20221209-dt-binding-ufs-v5-3-c9a58c0a53f5@fairphone.com>
+Message-Id: <168785971145.1233664.7985274899454909326.robh@kernel.org>
+Subject: Re: [PATCH v5 3/5] dt-bindings: ufs: qcom: Add ICE to sm8450
+ example
+Date:   Tue, 27 Jun 2023 03:55:11 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon Jun 26, 2023 at 10:26 AM CEST, Krzysztof Kozlowski wrote:
-> On 26/06/2023 10:15, Luca Weiss wrote:
-> > The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add thi=
-s
-> > in the bindings so the existing dts can validate successfully.
-> >=20
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Reviewed-by: Eric Biggers <ebiggers@google.com>
-> > Reviewed-by: Iskren Chernev <me@iskren.info>
-> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > ---
-> >  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 20 +++++++++++++=
-+++++++
-> >  1 file changed, 20 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Docu=
-mentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> > index eb3de2fde6b0..b5fc686cb3a1 100644
-> > --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> > +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> > @@ -80,6 +80,10 @@ properties:
-> >      minItems: 1
-> >      maxItems: 2
-> > =20
-> > +  reg-names:
-> > +    minItems: 1
-> > +    maxItems: 2
-> > +
-> >    required-opps:
-> >      maxItems: 1
-> > =20
-> > @@ -135,6 +139,8 @@ allOf:
-> >          reg:
-> >            minItems: 1
-> >            maxItems: 1
-> > +        reg-names:
-> > +          maxItems: 1
->
-> I see I reviewed, but I don't think the patch is correct. It allows any
-> reg-names. I think my advice from v1 was not understood. The names
-> should be defined in top-level.
 
-Thanks for your review, I hope it's resolved in v5 of this series.
-Please check :)
+On Tue, 27 Jun 2023 10:28:03 +0200, Luca Weiss wrote:
+> SM8450 actually supports ICE (Inline Crypto Engine) so adjust the
+> example to match.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Regards
-Luca
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
->
-> Best regards,
-> Krzysztof
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.example.dtb: ufs@1d84000: Unevaluated properties are not allowed ('qcom,ice' was unexpected)
+	from schema $id: http://devicetree.org/schemas/ufs/qcom,ufs.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221209-dt-binding-ufs-v5-3-c9a58c0a53f5@fairphone.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
