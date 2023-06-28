@@ -2,237 +2,165 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47E6740B20
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Jun 2023 10:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFB5740A84
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Jun 2023 10:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234312AbjF1IWc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Jun 2023 04:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233700AbjF1IOR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Jun 2023 04:14:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C49535AD;
-        Wed, 28 Jun 2023 01:09:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9039561313;
-        Wed, 28 Jun 2023 06:51:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0FDC433C8;
-        Wed, 28 Jun 2023 06:51:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687935073;
-        bh=kFdGBo6KtB8a4oZ+cEW87+zyKqsMbfQQzmLbCpziW2A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kla7NE7DMvYZIgfUZ+N8bsXWQJ2Oc/m2Js4i+rQGT9fpYXdLy6GxXEjWJ+zIzAfkB
-         IHA+dC3ZfZvps7e9zAw2JenAv7FzJQqi6TTiQP+IPlyCk9pjlzjVkxKwaBs2gi95Mi
-         zhxGn8q/BBi+wc3/JQZFnI2kbIr5n3K4eA3PRb1Jv+VQoNSU58TFRzQiytkOMHJ/mn
-         TYxE7GsnKfzTSJUej8iljS/LmGmU4AH7oAyseW0nVEy4w/7QAbWGdJk8C8izw3yjMf
-         LRKpLT8rO1+Kh8X8mE1O6o3z2qIvgYp7o6n7YFu3bZ7v+4piec/JNxgOecHYdcQ+go
-         /rqZHDjb4CWIg==
-Message-ID: <365d5129-b65e-919a-3ceb-cc2ccf6b7a5a@kernel.org>
-Date:   Wed, 28 Jun 2023 15:51:09 +0900
+        id S233222AbjF1IGj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Jun 2023 04:06:39 -0400
+Received: from mail-sgaapc01on2090.outbound.protection.outlook.com ([40.107.215.90]:52481
+        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232395AbjF1ICM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:02:12 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MQmUHr5+pIOFD9XItmaHCn7kQ0cekgGsm/wKcI126ieRLIt2i4smjEW44aF5BW8v0qfY89KAvjaZM8JE3spFDx3swpCbSlIUyTkQ52MyBm4nMXoBlNoH3ICYPNf/28CgArUWIDact0iRXLc/iyTCp5UbWgqtmTtDq+CiZKl4VMQUE9LHOLViVusjcIu6iWRsOBXcGYneu0sxVrLFXZwZWeXWoAEDwwV4DeI/uxyDc44af0MLvDSPCZUwgU08olCcMidViN62IzZ/4x/Uqk8EuFYfYgTyI5/26sWBSwvwM7hmS0jIPXjbl3F9snlQsVZv3cDGWhrSi9DpkgcLvg5TPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bq8rD+ulC0Si0Fh4BNlbuY1k52oJkdZPdCLk3lJrugs=;
+ b=UjvcFjISpWgRUxqYC+k1EUmYisi3TsaDNBd57nmNS8jED3m63h395hcKbUi4oLBGXdzHy+aivBdxOBBkeSvJDMWKLOCQB8Cc2+niJOPpd8E4vAW/4l6yKRtFRYlMgsGxYHG/aq9N/ymmSBSYe3yQ4iNpUs7JtkK8a7ffGQfdsbey+TnDTenPybtoLE9rCqFj2KcKMOUFAHGetcDENb3j9mWRmkLFFNbzivOrTNKOSUZNzQdjW+fO/Px1mHr01n1C6LVtB6pDf7A8dfBg/JYE8aB4gpMy3Qg3owu1nT8qNM/lws9+25ClEV8MW4kwyDcLn8grlhEp8bTUI4Eo15VRlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bq8rD+ulC0Si0Fh4BNlbuY1k52oJkdZPdCLk3lJrugs=;
+ b=YKy0M2j4yMbdBbXicu5Wr02sOJXgWqosiL5B8W+OsCxsgTzWSZ/Tj9uvX5Pj8Rsw2IutFVkGEXW6FhFygDBQPCaibB3v35hZWiIGSveRVHrCPv2CMiCrZUVHHhA6QdlXkUVJSEAy/o5G8uFIBy1gnIm0MoR8WpDni3xCyKWqrMNC4dTeo/G7UC7Y2ah1JdHg/WOgArCM0RL4bK5Bdf8rZNn9xGaz13BLN9zSxYT87u4F4Df+LKmoWtRIX8u6rY6ARqAazzS6R5GUEBiWJ2xUsbDY8VaV0EWUiOQcPM4Xhe41ldx/ZNmdSG9XzKq5VeNCAC4euq14yiQTWCtqEmEcTA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+ by SI2PR06MB3979.apcprd06.prod.outlook.com (2603:1096:4:f4::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.26; Wed, 28 Jun 2023 07:02:40 +0000
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e%6]) with mapi id 15.20.6521.023; Wed, 28 Jun 2023
+ 07:02:39 +0000
+From:   Lu Hongfei <luhongfei@vivo.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com,
+        Tang Huan <tanghuan@vivo.com>
+Subject: [PATCH] scsi: ufs: Optimize the WB flush process to save device power consumption
+Date:   Wed, 28 Jun 2023 15:02:27 +0800
+Message-Id: <20230628070229.61855-1-luhongfei@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYWPR01CA0018.jpnprd01.prod.outlook.com
+ (2603:1096:400:a9::23) To TYZPR06MB6697.apcprd06.prod.outlook.com
+ (2603:1096:400:451::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v13 4/9] fs, block: copy_file_range for def_blk_ops for
- direct block device
-Content-Language: en-US
-To:     Nitesh Shetty <nj.shetty@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        willy@infradead.org, hare@suse.de, djwong@kernel.org,
-        bvanassche@acm.org, ming.lei@redhat.com, nitheshshetty@gmail.com,
-        gost.dev@samsung.com, Anuj Gupta <anuj20.g@samsung.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org
-References: <20230627183629.26571-1-nj.shetty@samsung.com>
- <CGME20230627184029epcas5p49a29676fa6dff5f24ddfa5c64e525a51@epcas5p4.samsung.com>
- <20230627183629.26571-5-nj.shetty@samsung.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20230627183629.26571-5-nj.shetty@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|SI2PR06MB3979:EE_
+X-MS-Office365-Filtering-Correlation-Id: b63aee31-f676-44f3-e629-08db77a5a953
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fuIzxtD/TSEowq9SKGU40wxYTFpfl139/lnU/nmlhHIeuf0RBFNmcb41Bci2+rc2HnnvgMNa+tQD3AKLseOPIX0ZSZ4QcVXTTFP0BNPu8Gg3HxcI6NgvMOmfC4NCZgRl9CC/ee0jYIoGOta6jdw3ZSLDvevoqiWwmrf5taeMLfyR0lUfYyz3csavxjI8oHx7xEzs3lgd7nDLPnzBcfa52aE+fWWr7bqOHkZrjKZShU7wzuX9+yc+4UrU1DYuOwVWHy/ytp/DaylHtJLhx/6FZvT1P427CC15ViTWkbN/FUOYdUCZfNibc5x9xqjJyLMyBDoB9UfFCBPYzwVZ7E1mttdRCajLcQCjVaOCFbAhlfSHhDkonBr5j9fs2IvR31aAulvX8PTRt/ijBa7BCFxBzxqfPL7M+2sqv3NUnv3om7xab+8eWVHwaSbtSVqgV1dTXP4OVIeKgHomM2GbSSQ7CqnQrJAw6w7GmoevKBGQWS2PBBcy1AjJuvBdx2izeMqAA8V3kaAT9NvJlmwTku0e8V+OO282UyUPk4ePN5rIdoCyo7SQjbRmbiMC3BZscLdv/OkFtu2RECXE4vqGCa7oCE8eJfxZfNjpkTuUsw42E6wdYRwHUb2REBrV6WHTbdHeD8S0M9ddu5c61uEh0emT8Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(39860400002)(376002)(366004)(451199021)(1076003)(107886003)(52116002)(6486002)(83380400001)(6666004)(110136005)(26005)(2906002)(2616005)(6512007)(186003)(478600001)(6506007)(5660300002)(36756003)(921005)(7416002)(38350700002)(38100700002)(316002)(4326008)(66946007)(66556008)(8676002)(8936002)(86362001)(41300700001)(66476007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jtjBNreCzE06QofNTOUT8d4azKLhGt6ahSh7v3LEdSNfafoh+e2kQhetkIcs?=
+ =?us-ascii?Q?dPHt83jnl6Fq+gaX13s9Ve1F8iY8GhuuqGkQjizo5IsbHcX5G1O8uq0XPaNz?=
+ =?us-ascii?Q?OMvLPAJLKxej0mMgx4Uxt+OhZz73RfQiR63n+OsGj+a7WfmrGGmIW9VWDn7h?=
+ =?us-ascii?Q?ZKE+lMvAkri93TS5CLafjBRw1T9ac2cYQLHPBIoYEUsV2nWKfQ3EU1UoNcSU?=
+ =?us-ascii?Q?NRj35jUJZLDBUGcoPgfdXC6FSnjYL+0//gwZwgdyoHQ698/NHzgrbvtNKRis?=
+ =?us-ascii?Q?faX5dvmMe0DGgN/b0tnxR0CP+zzDhY0GBb4yX9B2nyl5nPQUoO3ASvTIwk0D?=
+ =?us-ascii?Q?2LKQfzagJFK+QTUWGBduIqDYsn3avjhR0JhR4y9gz7X1zAqa1DPtmYWgtQ2I?=
+ =?us-ascii?Q?r1oYR9JYmx5LfwUeHJzovTU+pAiGyUE6v4V3NZ5alRURsZSZml+TY6buRzRr?=
+ =?us-ascii?Q?rynUTc30syU3cG+GxSHz5qXy4vQQIH4d0H8OWfXeu+VyTYA2TEWBwghhnnJ/?=
+ =?us-ascii?Q?W8JnAfj58JJIDRMlboW6qkZM4e1FLn8o57CFB8TXTEZn93cbImLBcpMO8wll?=
+ =?us-ascii?Q?ql9xAipH1KGfaA1oeOe3Hxx3Qfr27NgvTUsZwNjOfdTZw92Khj9ugGWrhIoL?=
+ =?us-ascii?Q?cEF1ZcVDQTnzOj+wct80lm0a5e1fA8Vn64nQoEbUSY8eR3f1C2D8TSJ94jmm?=
+ =?us-ascii?Q?eRKKbuPPxBSfbNy+RGBXsJbaMm7bAw7iBigfltSGaJX+T4VAJHevA/dHZ8pP?=
+ =?us-ascii?Q?d55u0brCl+1JNDmUj8hlJBGhRLbR0F884NyQ0UABJMPaJRAF/Aplo1sujCUc?=
+ =?us-ascii?Q?G7MAOtqOoFule+dkUmvog+qUziZnoC4m/94OSfRk3zx1DmgoCOZkd6P26oK6?=
+ =?us-ascii?Q?GSVOGbl1N/yMposlP+scoNFM/wuEJekZVB4oTIycVJsDBJ0Vz+6sAbBIW0AU?=
+ =?us-ascii?Q?qzNaTP/oPfoyUWoob1gurAjolXfCqEdneZXGUXuVbqlh2rspb2aD4ZOC4Jum?=
+ =?us-ascii?Q?mfBZ6V4oKHAAklBiaYVfz+kEi/RuV++cJSWs1fuKsn7Ny0i3RAkW9nED8LwE?=
+ =?us-ascii?Q?KfAMSsba+eGwQ32+lIRPm4o8oyKNGUTpk7MaQc2U0zpX0g90n6wDCaliEHPv?=
+ =?us-ascii?Q?La7NAusRI7OQNb+rWUvSkSlGlowpwmnVMgzg6tUhXdiQ1+7HPmdIXzrjpUDm?=
+ =?us-ascii?Q?hUCT7dH+uvXKTIpAN9yNJI2H273CUkM8t2X5GZxjnACPV6kbE5gFYoBV5q9n?=
+ =?us-ascii?Q?bSlMltA89K56poGdLRXHrLGyo5nVmVvh4u1v2ZM5gwfr0bFtbwHoLQsoQBap?=
+ =?us-ascii?Q?Mj78jkacB6oNzP9tNqN8zBaN8pJFG05rwG7qtRwdG5BRBmzh1J8dsA+0ltHY?=
+ =?us-ascii?Q?/Hu2DHiyVZ2CN5GsNN5zBjFFGeJyUYmJgSFetATpbYY+Vb0yI07ejDJSrPZK?=
+ =?us-ascii?Q?8xk3qZjM3bjaA6wkajtZXOg2P9VoDUtbDwY1VoHuZg3W6CzduasvjdOKKf36?=
+ =?us-ascii?Q?M2TDiWQPV+QCv9OsWudz3MaStfH+rlYwqxhCu0fovsu355ADAuqPJ5gFV0bM?=
+ =?us-ascii?Q?elDknrwLJs8+wLTtziLWpJm90/zxSQxuNxFfn8K1?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b63aee31-f676-44f3-e629-08db77a5a953
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 07:02:39.8920
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f+G/+XnTzZHT0G8iVKcdZnmexnTVFEj8oSHLZr9zCReccvAOvf1MYAR8hlyj7DUuhevQnUryp5kmy7fg9jZmLw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB3979
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/28/23 03:36, Nitesh Shetty wrote:
-> For direct block device opened with O_DIRECT, use copy_file_range to
-> issue device copy offload, and fallback to generic_copy_file_range incase
-> device copy offload capability is absent.
+In the original logic, WB Hibern Flush was always on.
+During suspend flow, the host will determine whether the device needs
+BKOP or WB flush, and if so, it will keep VCC supply.
+WB flush is only a part of BKOP, and device that needs BKOP do not
+necessarily need WB flush if the conditions are not met. Therefore,
+if WB flush is not needed, it will be better to disable WB Hibern
+Flush, which could save device power consumption. When WB Hibern
+Flush is needed, enable it again.
 
-...if the device does not support copy offload or the device files are not open
-with O_DIRECT.
+In this way, the WB Hibern Flush always on strategy is changed to a dynamic
+on/off strategy.
 
-No ?
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+Signed-off-by: Tang Huan <tanghuan@vivo.com>
+---
+ drivers/ufs/core/ufshcd.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-> Modify checks to allow bdevs to use copy_file_range.
-> 
-> Suggested-by: Ming Lei <ming.lei@redhat.com>
-> Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
-> Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
-> ---
->  block/blk-lib.c        | 26 ++++++++++++++++++++++++++
->  block/fops.c           | 20 ++++++++++++++++++++
->  fs/read_write.c        |  7 +++++--
->  include/linux/blkdev.h |  4 ++++
->  4 files changed, 55 insertions(+), 2 deletions(-)
-> 
-> diff --git a/block/blk-lib.c b/block/blk-lib.c
-> index 09e0d5d51d03..7d8e09a99254 100644
-> --- a/block/blk-lib.c
-> +++ b/block/blk-lib.c
-> @@ -473,6 +473,32 @@ ssize_t blkdev_copy_offload(
->  }
->  EXPORT_SYMBOL_GPL(blkdev_copy_offload);
->  
-> +/* Copy source offset from source block device to destination block
-> + * device. Returns the length of bytes copied.
-> + */
-
-Multi-line comment style: start with a "/*" line please.
-
-> +ssize_t blkdev_copy_offload_failfast(
-
-What is the "failfast" in the name for ?
-
-> +		struct block_device *bdev_in, loff_t pos_in,
-> +		struct block_device *bdev_out, loff_t pos_out,
-> +		size_t len, gfp_t gfp_mask)
-> +{
-> +	struct request_queue *in_q = bdev_get_queue(bdev_in);
-> +	struct request_queue *out_q = bdev_get_queue(bdev_out);
-> +	ssize_t ret = 0;
-
-You do not need this initialization.
-
-> +
-> +	if (blkdev_copy_sanity_check(bdev_in, pos_in, bdev_out, pos_out, len))
-> +		return 0;
-> +
-> +	if (blk_queue_copy(in_q) && blk_queue_copy(out_q)) {
-
-Given that I think we do not allow copies between different devices, in_q and
-out_q should always be the same, no ?
-
-> +		ret = __blkdev_copy_offload(bdev_in, pos_in, bdev_out, pos_out,
-> +				len, NULL, NULL, gfp_mask);
-
-Same here. Why pass 2 bdevs if we only allow copies within the same device ?
-
-> +		if (ret < 0)
-> +			return 0;
-> +	}
-> +
-> +	return ret;
-
-return 0;
-
-> +}
-> +EXPORT_SYMBOL_GPL(blkdev_copy_offload_failfast);
-> +
->  static int __blkdev_issue_write_zeroes(struct block_device *bdev,
->  		sector_t sector, sector_t nr_sects, gfp_t gfp_mask,
->  		struct bio **biop, unsigned flags)
-> diff --git a/block/fops.c b/block/fops.c
-> index a286bf3325c5..a1576304f269 100644
-> --- a/block/fops.c
-> +++ b/block/fops.c
-> @@ -621,6 +621,25 @@ static ssize_t blkdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
->  	return ret;
->  }
->  
-> +static ssize_t blkdev_copy_file_range(struct file *file_in, loff_t pos_in,
-> +				struct file *file_out, loff_t pos_out,
-> +				size_t len, unsigned int flags)
-> +{
-> +	struct block_device *in_bdev = I_BDEV(bdev_file_inode(file_in));
-> +	struct block_device *out_bdev = I_BDEV(bdev_file_inode(file_out));
-> +	ssize_t comp_len = 0;
-> +
-> +	if ((file_in->f_iocb_flags & IOCB_DIRECT) &&
-> +		(file_out->f_iocb_flags & IOCB_DIRECT))
-> +		comp_len = blkdev_copy_offload_failfast(in_bdev, pos_in,
-> +				out_bdev, pos_out, len, GFP_KERNEL);
-> +	if (comp_len != len)
-> +		comp_len = generic_copy_file_range(file_in, pos_in + comp_len,
-> +			file_out, pos_out + comp_len, len - comp_len, flags);
-> +
-> +	return comp_len;
-> +}
-> +
->  #define	BLKDEV_FALLOC_FL_SUPPORTED					\
->  		(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE |		\
->  		 FALLOC_FL_ZERO_RANGE | FALLOC_FL_NO_HIDE_STALE)
-> @@ -714,6 +733,7 @@ const struct file_operations def_blk_fops = {
->  	.splice_read	= filemap_splice_read,
->  	.splice_write	= iter_file_splice_write,
->  	.fallocate	= blkdev_fallocate,
-> +	.copy_file_range = blkdev_copy_file_range,
->  };
->  
->  static __init int blkdev_init(void)
-> diff --git a/fs/read_write.c b/fs/read_write.c
-> index b07de77ef126..d27148a2543f 100644
-> --- a/fs/read_write.c
-> +++ b/fs/read_write.c
-> @@ -1447,7 +1447,8 @@ static int generic_copy_file_checks(struct file *file_in, loff_t pos_in,
->  		return -EOVERFLOW;
->  
->  	/* Shorten the copy to EOF */
-> -	size_in = i_size_read(inode_in);
-> +	size_in = i_size_read(file_in->f_mapping->host);
-> +
->  	if (pos_in >= size_in)
->  		count = 0;
->  	else
-> @@ -1708,7 +1709,9 @@ int generic_file_rw_checks(struct file *file_in, struct file *file_out)
->  	/* Don't copy dirs, pipes, sockets... */
->  	if (S_ISDIR(inode_in->i_mode) || S_ISDIR(inode_out->i_mode))
->  		return -EISDIR;
-> -	if (!S_ISREG(inode_in->i_mode) || !S_ISREG(inode_out->i_mode))
-> +
-> +	if ((!S_ISREG(inode_in->i_mode) || !S_ISREG(inode_out->i_mode)) &&
-> +		(!S_ISBLK(inode_in->i_mode) || !S_ISBLK(inode_out->i_mode)))
->  		return -EINVAL;
->  
->  	if (!(file_in->f_mode & FMODE_READ) ||
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index c176bf6173c5..850168cad080 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -1047,6 +1047,10 @@ ssize_t blkdev_copy_offload(
->  		struct block_device *bdev_in, loff_t pos_in,
->  		struct block_device *bdev_out, loff_t pos_out,
->  		size_t len, cio_iodone_t end_io, void *private, gfp_t gfp_mask);
-> +ssize_t blkdev_copy_offload_failfast(
-> +		struct block_device *bdev_in, loff_t pos_in,
-> +		struct block_device *bdev_out, loff_t pos_out,
-> +		size_t len, gfp_t gfp_mask);
->  struct bio *bio_map_kern(struct request_queue *q, void *data, unsigned int len,
->  		gfp_t gfp_mask);
->  void bio_map_kern_endio(struct bio *bio);
-
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 983fae84d9e8..484d7fa96407 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -9592,13 +9592,20 @@ static int __ufshcd_wl_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 		 * If device needs to do BKOP or WB buffer flush during
+ 		 * Hibern8, keep device power mode as "active power mode"
+ 		 * and VCC supply.
++		 * If device does not need WB buffer flush now, it's better
++		 * to disable WB flush during H8 to save power consumption.
+ 		 */
+-		hba->dev_info.b_rpm_dev_flush_capable =
+-			hba->auto_bkops_enabled ||
+-			(((req_link_state == UIC_LINK_HIBERN8_STATE) ||
+-			((req_link_state == UIC_LINK_ACTIVE_STATE) &&
+-			ufshcd_is_auto_hibern8_enabled(hba))) &&
+-			ufshcd_wb_need_flush(hba));
++		hba->dev_info.b_rpm_dev_flush_capable = hba->auto_bkops_enabled;
++		if (((req_link_state == UIC_LINK_HIBERN8_STATE) ||
++		    ((req_link_state == UIC_LINK_ACTIVE_STATE) &&
++		    ufshcd_is_auto_hibern8_enabled(hba))) &&
++		    ufshcd_wb_need_flush(hba)) {
++			ufshcd_wb_toggle_buf_flush_during_h8(hba, true);
++			hba->dev_info.b_rpm_dev_flush_capable = true;
++		} else {
++			ufshcd_wb_toggle_buf_flush_during_h8(hba, false);
++		}
++
+ 	}
+ 
+ 	flush_work(&hba->eeh_work);
 -- 
-Damien Le Moal
-Western Digital Research
+2.39.0
 
