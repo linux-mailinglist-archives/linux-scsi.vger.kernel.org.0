@@ -2,90 +2,307 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425FE740C46
-	for <lists+linux-scsi@lfdr.de>; Wed, 28 Jun 2023 11:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0A8740B1E
+	for <lists+linux-scsi@lfdr.de>; Wed, 28 Jun 2023 10:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233162AbjF1JDp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Jun 2023 05:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
+        id S234270AbjF1IWZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Jun 2023 04:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233944AbjF1IY6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Jun 2023 04:24:58 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFB63C30
-        for <linux-scsi@vger.kernel.org>; Wed, 28 Jun 2023 01:14:36 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-19674cab442so4596587fac.3
-        for <linux-scsi@vger.kernel.org>; Wed, 28 Jun 2023 01:14:36 -0700 (PDT)
+        with ESMTP id S234104AbjF1IOy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Jun 2023 04:14:54 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CFE35B7
+        for <linux-scsi@vger.kernel.org>; Wed, 28 Jun 2023 01:10:38 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b8171718a1so16362755ad.2
+        for <linux-scsi@vger.kernel.org>; Wed, 28 Jun 2023 01:10:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1687940075; x=1690532075;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=X2O/gLLDYOPm83pLGmjG0HrJX259blEamKGNyuYdEpM=;
-        b=gMS0wFdcyXW7aJAfQL0sbe/8RnKKp0oZbNM7Kq5MOIs20y38mvQMfg+1YSqVt108vU
-         tQWovnsQPSg113zbbMrzdz6XxXKfzIwFASbHDSvWB+NfCa6WkZhhsVO8mvY2gtQs9uTx
-         6YhMyMqj2+Y8yNV6Psw8XX0G3As+2qz5sAc4c=
+        d=broadcom.com; s=google; t=1687939838; x=1690531838;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5gbdY5u6jdN7FEDe1c0yeuMkNCytMkKjay9qzsY06q4=;
+        b=MD11Nfmln84OrQ6VVR7nmYz9v/pxve7L+ThM2ggb8HgDRr8y4amPLpviDwcQnZLh2w
+         MEFjSd9eola5bzOHpEGgHOypiRxk8JX8EWjUunM5oD8i9vTwprY4ei1zAyKDofChGEQ9
+         uAEfnV/yBz4i4jSLgoFRijy3LdN3COL+RqiRc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687940075; x=1690532075;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X2O/gLLDYOPm83pLGmjG0HrJX259blEamKGNyuYdEpM=;
-        b=EjURkLg/5Yz35Ev4Bdmx6BYCWuhAVOir5QV9zcPxTRqPduO4lmYkRRYmzuzoTOwzBo
-         OLDycLoU8/hX9qK3Vft0wISNHRx9uMEcNAZCJz5V2FYd2lIrUWCv9uewO4aYbwQ1ROOp
-         QkzjBmacsAHB/MrSoNzvmVr2sSTBSnLY3TVFysJHo+T9uIHMuPXvWvtN1Z9t9jTnCPnw
-         nMkgVgijHDDLGlhhxjKOOxXgidGKN6z0tOlwZhKq0iGEmOFzcMTlJUNg97dFvVB/sHjw
-         fSzRsKmlL7DrgtKKNjrGYlXiFxB4UJwujclHLWM4LQWJtl0D52veYhWz01VC58r22WRO
-         79Wg==
-X-Gm-Message-State: AC+VfDxi/6nb3Gcaybt+WEQeGt6ZXTaU4AXdqAyJbhXvivFnoxGrQcHU
-        RFquN3LsFaIWfq55ZGptd4UoMqVsDwYn/rE1vTHsPw0LZW5PSy+IMhokSpY44Nh6Ny+koCYMJad
-        CP9lM1p3hZwWYcX73DcYhOjdOhVW1PARDzs0CTr2xdINorye2GHTC0Nz2yKmsV20Ui3vUOqx6bV
-        8Fv1OSQ+3SOw==
-X-Google-Smtp-Source: ACHHUZ5SKdfPmNOAbM4BMFQjNI8rU1ntvKI9sa6T9aPYAbQlE8Os5BL7p34qXzXWk1npI4t+QuJdhw==
-X-Received: by 2002:a17:90a:199:b0:25b:d8fe:2c92 with SMTP id 25-20020a17090a019900b0025bd8fe2c92mr30293641pjc.48.1687935958803;
-        Wed, 28 Jun 2023 00:05:58 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687939838; x=1690531838;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5gbdY5u6jdN7FEDe1c0yeuMkNCytMkKjay9qzsY06q4=;
+        b=k7VLg96P/JT0/NtoFRs0Mctc22mEw521qDVGY0KqPI7XmcO/6rFN8PcPZ4mqg2ICmB
+         I12uEHLmXTOTGrkZa+Dg9bCcP+/NZ2Pdb57b5o12IqD7U3Qyurn/YSsso++CgPkvll/i
+         OT6A02GzpEe5MSKECOzPNnuBAPt53zUFWJosUYkW1wfm60R2Cs8Z9Gk6TWgv6fwtRZJq
+         r1duRRVnvrmgX6xC4RzqKiSp2EvlBZEsHAXsU2HbK+nkhpiBkdgBsOc3fqoYFk0OzInt
+         kNiuxioGFVUE4QWjW3FPDfAsRt3D9BKyPSuQ7/8S7ZNMZexfib5rsWcNUNzQqu08fKGJ
+         ANIg==
+X-Gm-Message-State: AC+VfDwVyZFWcQ+BnxgzkmI2ix2V977Na3yCvShRIHvl/lUYNg4Lv8AN
+        qFImFaB3VketShtuzZUj6TefY+LaZaFMy4rbtXA11fMeEiZGME0LdInRFI8Rv7YJ6Twcg0yHDEA
+        UziU22w6RvLBcGpcuSlaUyOgdYkRXE0l6Ppbod7I3+e3Oe3wczAtHWpmFCBEdSdWJ5vcCZjdEVa
+        F+E4SsxMQZoQ==
+X-Google-Smtp-Source: ACHHUZ56lGmQzd+sH/aXCG8IYx1ePUiRRuXskOWQAznv3zfVKnmeqmlO4k530y6Fn9w9HKKEvagVlQ==
+X-Received: by 2002:a17:90a:7522:b0:25d:e321:c4e8 with SMTP id q31-20020a17090a752200b0025de321c4e8mr33103155pjk.41.1687935961128;
+        Wed, 28 Jun 2023 00:06:01 -0700 (PDT)
 Received: from localhost.localdomain ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id oj3-20020a17090b4d8300b0024e4f169931sm8964361pjb.2.2023.06.28.00.05.56
+        by smtp.gmail.com with ESMTPSA id oj3-20020a17090b4d8300b0024e4f169931sm8964361pjb.2.2023.06.28.00.05.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 00:05:58 -0700 (PDT)
+        Wed, 28 Jun 2023 00:06:00 -0700 (PDT)
 From:   Ranjan Kumar <ranjan.kumar@broadcom.com>
 To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com
 Cc:     sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
-        Ranjan Kumar <ranjan.kumar@broadcom.com>
-Subject: [PATCH 0/2] mpt3sas: Contains Defect
-Date:   Wed, 28 Jun 2023 12:35:09 +0530
-Message-Id: <20230628070511.27774-1-ranjan.kumar@broadcom.com>
+        Ranjan Kumar <ranjan.kumar@broadcom.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/2] mpt3sas: Perform additional retries if Doorbell read returns 0
+Date:   Wed, 28 Jun 2023 12:35:10 +0530
+Message-Id: <20230628070511.27774-2-ranjan.kumar@broadcom.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20230628070511.27774-1-ranjan.kumar@broadcom.com>
+References: <20230628070511.27774-1-ranjan.kumar@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a19f5705ff2c2c07"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        boundary="00000000000078d7f105ff2c1e30"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000a19f5705ff2c2c07
+--00000000000078d7f105ff2c1e30
 Content-Transfer-Encoding: 8bit
 
-Defect and removal of non required volatile qualifier of mpt3sas driver.
+Doorbell and Host diagnostic registers could return 0 even
+after 3 retries and that leads to occasional resets of the
+controllers, hence increased the retry count to thirty.
 
-Ranjan Kumar (2):
-  mpt3sas: Perform additional retries if Doorbell read returns 0
-  mpt3sas: Removing volatile qualifier
-
- drivers/scsi/mpt3sas/mpi/mpi2.h     |  2 +-
+Fixes: b899202901a8 ("mpt3sas: Add separate function for aero doorbell reads ")
+Cc: stable@vger.kernel.org
+Signed-off-by: Ranjan Kumar <ranjan.kumar@broadcom.com>
+---
  drivers/scsi/mpt3sas/mpt3sas_base.c | 50 ++++++++++++++++-------------
  drivers/scsi/mpt3sas/mpt3sas_base.h |  4 ++-
- 3 files changed, 32 insertions(+), 24 deletions(-)
+ 2 files changed, 31 insertions(+), 23 deletions(-)
 
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index 53f5492579cb..44e7ccb6f780 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -201,20 +201,20 @@ module_param_call(mpt3sas_fwfault_debug, _scsih_set_fwfault_debug,
+  * while reading the system interface register.
+  */
+ static inline u32
+-_base_readl_aero(const volatile void __iomem *addr)
++_base_readl_aero(const volatile void __iomem *addr, u8 retry_count)
+ {
+ 	u32 i = 0, ret_val;
+ 
+ 	do {
+ 		ret_val = readl(addr);
+ 		i++;
+-	} while (ret_val == 0 && i < 3);
++	} while (ret_val == 0 && i < retry_count);
+ 
+ 	return ret_val;
+ }
+ 
+ static inline u32
+-_base_readl(const volatile void __iomem *addr)
++_base_readl(const volatile void __iomem *addr, u8 retry_count)
+ {
+ 	return readl(addr);
+ }
+@@ -940,7 +940,7 @@ mpt3sas_halt_firmware(struct MPT3SAS_ADAPTER *ioc)
+ 
+ 	dump_stack();
+ 
+-	doorbell = ioc->base_readl(&ioc->chip->Doorbell);
++	doorbell = ioc->base_readl(&ioc->chip->Doorbell, READL_RETRY_COUNT_OF_THIRTY);
+ 	if ((doorbell & MPI2_IOC_STATE_MASK) == MPI2_IOC_STATE_FAULT) {
+ 		mpt3sas_print_fault_code(ioc, doorbell &
+ 		    MPI2_DOORBELL_DATA_MASK);
+@@ -1617,10 +1617,10 @@ mpt3sas_base_mask_interrupts(struct MPT3SAS_ADAPTER *ioc)
+ 	u32 him_register;
+ 
+ 	ioc->mask_interrupts = 1;
+-	him_register = ioc->base_readl(&ioc->chip->HostInterruptMask);
++	him_register = ioc->base_readl(&ioc->chip->HostInterruptMask, READL_RETRY_COUNT_OF_THREE);
+ 	him_register |= MPI2_HIM_DIM + MPI2_HIM_RIM + MPI2_HIM_RESET_IRQ_MASK;
+ 	writel(him_register, &ioc->chip->HostInterruptMask);
+-	ioc->base_readl(&ioc->chip->HostInterruptMask);
++	ioc->base_readl(&ioc->chip->HostInterruptMask, READL_RETRY_COUNT_OF_THREE);
+ }
+ 
+ /**
+@@ -1634,7 +1634,7 @@ mpt3sas_base_unmask_interrupts(struct MPT3SAS_ADAPTER *ioc)
+ {
+ 	u32 him_register;
+ 
+-	him_register = ioc->base_readl(&ioc->chip->HostInterruptMask);
++	him_register = ioc->base_readl(&ioc->chip->HostInterruptMask, READL_RETRY_COUNT_OF_THREE);
+ 	him_register &= ~MPI2_HIM_RIM;
+ 	writel(him_register, &ioc->chip->HostInterruptMask);
+ 	ioc->mask_interrupts = 0;
+@@ -6686,7 +6686,7 @@ mpt3sas_base_get_iocstate(struct MPT3SAS_ADAPTER *ioc, int cooked)
+ {
+ 	u32 s, sc;
+ 
+-	s = ioc->base_readl(&ioc->chip->Doorbell);
++	s = ioc->base_readl(&ioc->chip->Doorbell, READL_RETRY_COUNT_OF_THIRTY);
+ 	sc = s & MPI2_IOC_STATE_MASK;
+ 	return cooked ? sc : s;
+ }
+@@ -6760,7 +6760,8 @@ _base_wait_for_doorbell_int(struct MPT3SAS_ADAPTER *ioc, int timeout)
+ 	count = 0;
+ 	cntdn = 1000 * timeout;
+ 	do {
+-		int_status = ioc->base_readl(&ioc->chip->HostInterruptStatus);
++		int_status = ioc->base_readl(&ioc->chip->HostInterruptStatus,
++							READL_RETRY_COUNT_OF_THREE);
+ 		if (int_status & MPI2_HIS_IOC2SYS_DB_STATUS) {
+ 			dhsprintk(ioc,
+ 				  ioc_info(ioc, "%s: successful count(%d), timeout(%d)\n",
+@@ -6786,7 +6787,8 @@ _base_spin_on_doorbell_int(struct MPT3SAS_ADAPTER *ioc, int timeout)
+ 	count = 0;
+ 	cntdn = 2000 * timeout;
+ 	do {
+-		int_status = ioc->base_readl(&ioc->chip->HostInterruptStatus);
++		int_status = ioc->base_readl(&ioc->chip->HostInterruptStatus,
++							READL_RETRY_COUNT_OF_THREE);
+ 		if (int_status & MPI2_HIS_IOC2SYS_DB_STATUS) {
+ 			dhsprintk(ioc,
+ 				  ioc_info(ioc, "%s: successful count(%d), timeout(%d)\n",
+@@ -6824,14 +6826,16 @@ _base_wait_for_doorbell_ack(struct MPT3SAS_ADAPTER *ioc, int timeout)
+ 	count = 0;
+ 	cntdn = 1000 * timeout;
+ 	do {
+-		int_status = ioc->base_readl(&ioc->chip->HostInterruptStatus);
++		int_status = ioc->base_readl(&ioc->chip->HostInterruptStatus,
++							READL_RETRY_COUNT_OF_THREE);
+ 		if (!(int_status & MPI2_HIS_SYS2IOC_DB_STATUS)) {
+ 			dhsprintk(ioc,
+ 				  ioc_info(ioc, "%s: successful count(%d), timeout(%d)\n",
+ 					   __func__, count, timeout));
+ 			return 0;
+ 		} else if (int_status & MPI2_HIS_IOC2SYS_DB_STATUS) {
+-			doorbell = ioc->base_readl(&ioc->chip->Doorbell);
++			doorbell = ioc->base_readl(&ioc->chip->Doorbell,
++							READL_RETRY_COUNT_OF_THIRTY);
+ 			if ((doorbell & MPI2_IOC_STATE_MASK) ==
+ 			    MPI2_IOC_STATE_FAULT) {
+ 				mpt3sas_print_fault_code(ioc, doorbell);
+@@ -6871,7 +6875,7 @@ _base_wait_for_doorbell_not_used(struct MPT3SAS_ADAPTER *ioc, int timeout)
+ 	count = 0;
+ 	cntdn = 1000 * timeout;
+ 	do {
+-		doorbell_reg = ioc->base_readl(&ioc->chip->Doorbell);
++		doorbell_reg = ioc->base_readl(&ioc->chip->Doorbell, READL_RETRY_COUNT_OF_THIRTY);
+ 		if (!(doorbell_reg & MPI2_DOORBELL_USED)) {
+ 			dhsprintk(ioc,
+ 				  ioc_info(ioc, "%s: successful count(%d), timeout(%d)\n",
+@@ -7019,13 +7023,13 @@ _base_handshake_req_reply_wait(struct MPT3SAS_ADAPTER *ioc, int request_bytes,
+ 	__le32 *mfp;
+ 
+ 	/* make sure doorbell is not in use */
+-	if ((ioc->base_readl(&ioc->chip->Doorbell) & MPI2_DOORBELL_USED)) {
++	if ((ioc->base_readl(&ioc->chip->Doorbell, READL_RETRY_COUNT_OF_THIRTY) & MPI2_DOORBELL_USED)) {
+ 		ioc_err(ioc, "doorbell is in use (line=%d)\n", __LINE__);
+ 		return -EFAULT;
+ 	}
+ 
+ 	/* clear pending doorbell interrupts from previous state changes */
+-	if (ioc->base_readl(&ioc->chip->HostInterruptStatus) &
++	if (ioc->base_readl(&ioc->chip->HostInterruptStatus, READL_RETRY_COUNT_OF_THREE) &
+ 	    MPI2_HIS_IOC2SYS_DB_STATUS)
+ 		writel(0, &ioc->chip->HostInterruptStatus);
+ 
+@@ -7068,7 +7072,7 @@ _base_handshake_req_reply_wait(struct MPT3SAS_ADAPTER *ioc, int request_bytes,
+ 	}
+ 
+ 	/* read the first two 16-bits, it gives the total length of the reply */
+-	reply[0] = le16_to_cpu(ioc->base_readl(&ioc->chip->Doorbell)
++	reply[0] = le16_to_cpu(ioc->base_readl(&ioc->chip->Doorbell, READL_RETRY_COUNT_OF_THIRTY)
+ 	    & MPI2_DOORBELL_DATA_MASK);
+ 	writel(0, &ioc->chip->HostInterruptStatus);
+ 	if ((_base_wait_for_doorbell_int(ioc, 5))) {
+@@ -7076,7 +7080,7 @@ _base_handshake_req_reply_wait(struct MPT3SAS_ADAPTER *ioc, int request_bytes,
+ 			__LINE__);
+ 		return -EFAULT;
+ 	}
+-	reply[1] = le16_to_cpu(ioc->base_readl(&ioc->chip->Doorbell)
++	reply[1] = le16_to_cpu(ioc->base_readl(&ioc->chip->Doorbell, READL_RETRY_COUNT_OF_THIRTY)
+ 	    & MPI2_DOORBELL_DATA_MASK);
+ 	writel(0, &ioc->chip->HostInterruptStatus);
+ 
+@@ -7087,10 +7091,10 @@ _base_handshake_req_reply_wait(struct MPT3SAS_ADAPTER *ioc, int request_bytes,
+ 			return -EFAULT;
+ 		}
+ 		if (i >=  reply_bytes/2) /* overflow case */
+-			ioc->base_readl(&ioc->chip->Doorbell);
++			ioc->base_readl(&ioc->chip->Doorbell, READL_RETRY_COUNT_OF_THIRTY);
+ 		else
+ 			reply[i] = le16_to_cpu(
+-			    ioc->base_readl(&ioc->chip->Doorbell)
++			    ioc->base_readl(&ioc->chip->Doorbell, READL_RETRY_COUNT_OF_THIRTY)
+ 			    & MPI2_DOORBELL_DATA_MASK);
+ 		writel(0, &ioc->chip->HostInterruptStatus);
+ 	}
+@@ -7949,14 +7953,15 @@ _base_diag_reset(struct MPT3SAS_ADAPTER *ioc)
+ 			goto out;
+ 		}
+ 
+-		host_diagnostic = ioc->base_readl(&ioc->chip->HostDiagnostic);
++		host_diagnostic = ioc->base_readl(&ioc->chip->HostDiagnostic,
++								READL_RETRY_COUNT_OF_THIRTY);
+ 		drsprintk(ioc,
+ 			  ioc_info(ioc, "wrote magic sequence: count(%d), host_diagnostic(0x%08x)\n",
+ 				   count, host_diagnostic));
+ 
+ 	} while ((host_diagnostic & MPI2_DIAG_DIAG_WRITE_ENABLE) == 0);
+ 
+-	hcb_size = ioc->base_readl(&ioc->chip->HCBSize);
++	hcb_size = ioc->base_readl(&ioc->chip->HCBSize, READL_RETRY_COUNT_OF_THREE);
+ 
+ 	drsprintk(ioc, ioc_info(ioc, "diag reset: issued\n"));
+ 	writel(host_diagnostic | MPI2_DIAG_RESET_ADAPTER,
+@@ -7969,7 +7974,8 @@ _base_diag_reset(struct MPT3SAS_ADAPTER *ioc)
+ 	for (count = 0; count < (300000000 /
+ 		MPI2_HARD_RESET_PCIE_SECOND_READ_DELAY_MICRO_SEC); count++) {
+ 
+-		host_diagnostic = ioc->base_readl(&ioc->chip->HostDiagnostic);
++		host_diagnostic = ioc->base_readl(&ioc->chip->HostDiagnostic,
++								READL_RETRY_COUNT_OF_THIRTY);
+ 
+ 		if (host_diagnostic == 0xFFFFFFFF) {
+ 			ioc_info(ioc,
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
+index 05364aa15ecd..3b8ec4fd2d21 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.h
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+@@ -160,6 +160,8 @@
+ 
+ #define IOC_OPERATIONAL_WAIT_COUNT	10
+ 
++#define READL_RETRY_COUNT_OF_THIRTY	30
++#define READL_RETRY_COUNT_OF_THREE	3
+ /*
+  * NVMe defines
+  */
+@@ -994,7 +996,7 @@ typedef void (*NVME_BUILD_PRP)(struct MPT3SAS_ADAPTER *ioc, u16 smid,
+ typedef void (*PUT_SMID_IO_FP_HIP) (struct MPT3SAS_ADAPTER *ioc, u16 smid,
+ 	u16 funcdep);
+ typedef void (*PUT_SMID_DEFAULT) (struct MPT3SAS_ADAPTER *ioc, u16 smid);
+-typedef u32 (*BASE_READ_REG) (const volatile void __iomem *addr);
++typedef u32 (*BASE_READ_REG) (const volatile void __iomem *addr, u8 retry_count);
+ /*
+  * To get high iops reply queue's msix index when high iops mode is enabled
+  * else get the msix index of general reply queues.
 -- 
 2.31.1
 
 
---000000000000a19f5705ff2c2c07
+--00000000000078d7f105ff2c1e30
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -156,13 +373,13 @@ nWsVitGa1sKS9usFXoW1bQXgJ9TtRdy8gka8b9SaKnh4TaiEKpdl8ztXhugWp7RpFGVu/ZZ8narx
 0H1L9W/UIr3J/uYokdFr+hIrXOfOwJLB18bWOTCVWxTEo4zYC8qZ/h7UcS5aispm/rkxggJtMIIC
 aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
 EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxMV+PqteWF5WGw7jsw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIK2nR5ZHQ0mUFvPXreRVi6LOF3z7aMW4
-N1X6n28XRZXfMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYy
-ODA4MTQzNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOv/cC3Cld4qn0magTdTUVjFGARTTIgk
+VRgCh11eB3xCMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYy
+ODA4MTAzOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
 SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQA1/DtrfRv9Tl6PfUSRWjy6KlmDmSB9QzpGcdOuVZKiiq0NBswg
-prwv7fnFb/pjOdSxGUIGqDe5dS28/Yen0lBydfHyzQjRMmZQz0qd+4DmnGGwfN90mcFmjKm71Nkw
-Y6V2AShTgnxzyri7BALUWtDxz7SjV7ctVx4IffyBl08zUT7PX/nj8fH9fxb09DNKdlfhDRR7LDP+
-oI4rCkU8nCGsKTi51YlWeGF+Z78+qXulsFRMDIeecx9qL1sL28DqW3R+8SUfaQaTafD5012yQ0MV
-elux1y7WVv3E8JMlGck7Sod+lrgw8mPD6LrOOZB3aSWIU36rJd31NhCDsGeArupC
---000000000000a19f5705ff2c2c07--
+ATANBgkqhkiG9w0BAQEFAASCAQDj3+HmZ1f3O4lFHBEio91nKI+JtH8PZMOm/dY8sU7y9ogwV2Yv
+J3dsVSRv5LxJoECg8OasFhaTcQ4GnLXvBfqADvXlxJiBwd8Tq4dmCPjD6i+X+wQ+wKBclVjmIL4w
+1bVCuktGdXQb5lTpJ00By1l0mveRnVvnh1c6DzXwFnhNulBoDabcfbXUI9ClAsW3uc5oVpl3Oktr
+pEbrpmkcQWgOiVhVR2bilc9osVdNuqY88DZ4d/AmjU5Ma05q92w1jOkF7Wm2BOEW6F4zf1aPuCAt
+xl6/rRJn6bL+BdkzAGjIR7JpnGgse9VfHWa2W2PtufuAn2ghxs2mARXxYOUZGWwg
+--00000000000078d7f105ff2c1e30--
