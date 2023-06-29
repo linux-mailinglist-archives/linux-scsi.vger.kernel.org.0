@@ -2,75 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CD2741E6F
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jun 2023 04:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01304741EBE
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Jun 2023 05:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbjF2Clt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 28 Jun 2023 22:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
+        id S231783AbjF2DdP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 28 Jun 2023 23:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjF2Clm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Jun 2023 22:41:42 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07734213D;
-        Wed, 28 Jun 2023 19:41:42 -0700 (PDT)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T1jdWI011098;
-        Thu, 29 Jun 2023 02:41:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=UvCn9ZNxcDPRHpVi/Z+CAyOuMROaxNkLOuH/lWROc1s=;
- b=G6Z+gxN5e5IQKR+aoDFIkeWJ0bMngm9cqTsK20RTTRrU7RiC9W4SBkSEaBxUk2Q7mDOq
- rW1domaRbUX187ipX82dGChdpPGZcRVZstiVUu/opGnn+dMueA2y4HNyyb9aTKUMIf+g
- 8GOqCyP5XUhKlvoHaVAUMVxdpKLHbs13TdH4ztc24QPJSB3xfaBFfuAO8m6ZTKoBCw/8
- 4Jg4NZKLJjnhL6No35UUW+gKDs/Z/YGVd8LwyEjnqA+VF8ppB0bZJOvmgLc4SLXNQyEM
- Z5YVp1NOpmxGSJjcMNEdU8B+jpoi3WdvBH/DJhj6KqauwxbLWrQmEO0etHfDPLsI5Vud HA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rdqdtt4yn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Jun 2023 02:41:36 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35T0DEH2004005;
-        Thu, 29 Jun 2023 02:41:35 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rdpxcvem5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Jun 2023 02:41:35 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35T2fYLH009945;
-        Thu, 29 Jun 2023 02:41:34 GMT
-Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3rdpxcveka-3;
-        Thu, 29 Jun 2023 02:41:34 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Don Brace <don.brace@microchip.com>,
+        with ESMTP id S230475AbjF2DdK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 28 Jun 2023 23:33:10 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A3B2680
+        for <linux-scsi@vger.kernel.org>; Wed, 28 Jun 2023 20:33:06 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230629033303epoutp04d960216dad7404d7773f2e9369866f42~tA8XTPXh10418604186epoutp04S
+        for <linux-scsi@vger.kernel.org>; Thu, 29 Jun 2023 03:33:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230629033303epoutp04d960216dad7404d7773f2e9369866f42~tA8XTPXh10418604186epoutp04S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1688009583;
+        bh=u5DsHg6ggkF/1rIcP6TAqj75zRX9a4htppIh4mOdKpo=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=p8idRiEPX6hYP2oqqWGm+6m8nfQ34BAibhoqSBXnBMaLmzKhWamh8qjGkUI9ACQCb
+         SZUkSYVOPPNYneDb7G4Jb4QgZGi0kgxT0Inqr/TbRZJgqhHgYeFmWAnmA/prU3nSNz
+         3AOC8i7IQ7MJxQ4+e/c8D4y7lTpSueQCnZAdIQZQ=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20230629033302epcas2p33d0ba10ec94e85602736e0c461ff1e28~tA8Wrz7Pn1597615976epcas2p3h;
+        Thu, 29 Jun 2023 03:33:02 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp3.localdomain
+        (Postfix) with ESMTP id 4Qs3tk5s9nz4x9Q0; Thu, 29 Jun 2023 03:33:02 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: RE:(2) [PATCH] scsi: ufs: Optimize the WB flush process to save
+ device power consumption
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     Avri Altman <Avri.Altman@wdc.com>, Lu Hongfei <luhongfei@vivo.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        Bart Van Assche <bvanassche@acm.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        storagedev@microchip.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] scsi: smartpqi: Replace one-element arrays with flexible-array members
-Date:   Wed, 28 Jun 2023 22:41:29 -0400
-Message-Id: <168800630155.587979.4081903286029728024.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <ZJNdKDkuRbFZpASS@work>
-References: <ZJNdKDkuRbFZpASS@work>
-MIME-Version: 1.0
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        Keoseong Park <keosung.park@samsung.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "opensource.kernel@vivo.com" <opensource.kernel@vivo.com>,
+        Tang Huan <tanghuan@vivo.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <DM6PR04MB65757599481E7CAA98D89CE1FC24A@DM6PR04MB6575.namprd04.prod.outlook.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1296674576.21688009582803.JavaMail.epsvc@epcpadp4>
+Date:   Thu, 29 Jun 2023 12:11:52 +0900
+X-CMS-MailID: 20230629031152epcms2p178df92a3dce855dca2c661bed5d2a272
+Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_14,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 mlxscore=0
- mlxlogscore=735 bulkscore=0 spamscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306290022
-X-Proofpoint-GUID: N1OEdKKqtfguBYFJ4t_gdKa9W3y1nod4
-X-Proofpoint-ORIG-GUID: N1OEdKKqtfguBYFJ4t_gdKa9W3y1nod4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20230628110055epcas2p2c957a4a995635c8e9280958c9a34a8f6
+References: <DM6PR04MB65757599481E7CAA98D89CE1FC24A@DM6PR04MB6575.namprd04.prod.outlook.com>
+        <20230628070229.61855-1-luhongfei@vivo.com>
+        <CGME20230628110055epcas2p2c957a4a995635c8e9280958c9a34a8f6@epcms2p1>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,22 +85,29 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 21 Jun 2023 14:27:20 -0600, Gustavo A. R. Silva wrote:
+>> 
+>> In the original logic, WB Hibern Flush was always on.
+>> During suspend flow, the host will determine whether the device needs
+>> BKOP or WB flush, and if so, it will keep VCC supply.
+>> WB flush is only a part of BKOP, and device that needs BKOP do not
+>> necessarily need WB flush if the conditions are not met. Therefore,
+>> if WB flush is not needed, it will be better to disable WB Hibern
+>> Flush,..... 
+>I beg to differ on this conclusion.
+>If you expect SLC write performance, without fluctuations,
+>the host should let the device manage its wb buffer on its own.
+>This is exactly what flush on hibernate does and better leave it be.
+>
+>Thanks,
+>Avri
 
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element arrays with flexible-array
-> members in a couple of structures, and refactor the rest of the code,
-> accordingly.
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy().
-> 
-> [...]
+Hi, Lu Hongfei.
 
-Applied to 6.5/scsi-queue, thanks!
+I agree with avri.
+In fact, I am not sure if there will be a significant improvement in
+power consumption.
+In addition, for the toggle of the function, a code that compares with
+the existing value must be added to prevent unnecessary queries.
 
-[1/1] scsi: smartpqi: Replace one-element arrays with flexible-array members
-      https://git.kernel.org/mkp/scsi/c/6f0a92fd7db1
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Best Regards,
+Jinyoung.
