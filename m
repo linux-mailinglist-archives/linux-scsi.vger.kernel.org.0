@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AE674510E
-	for <lists+linux-scsi@lfdr.de>; Sun,  2 Jul 2023 21:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AC9745132
+	for <lists+linux-scsi@lfdr.de>; Sun,  2 Jul 2023 21:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbjGBToP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 2 Jul 2023 15:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
+        id S232614AbjGBTpI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 2 Jul 2023 15:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbjGBTnH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 2 Jul 2023 15:43:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBE02122;
-        Sun,  2 Jul 2023 12:42:07 -0700 (PDT)
+        with ESMTP id S232287AbjGBTnw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 2 Jul 2023 15:43:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB66930C4;
+        Sun,  2 Jul 2023 12:42:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECA1A60CF9;
-        Sun,  2 Jul 2023 19:41:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA65C433C7;
-        Sun,  2 Jul 2023 19:41:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB70D60DBB;
+        Sun,  2 Jul 2023 19:41:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68C87C433CB;
+        Sun,  2 Jul 2023 19:41:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326891;
-        bh=N/N7KV2ya6gMiKA/u+eeu8WR2lgqm6LYdipuZUuUgbE=;
+        s=k20201202; t=1688326908;
+        bh=vwIPQsA9ss39tT8edDvtEp5dl/vUI9YCo04YkJpvxlw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GA6pGdrApKSEM2fnxl2NqHUCcqcLs8qx02gDHJIed8TwjKajcWKKxOgYlVkCoJ5jg
-         hRs2bI63KPHHmvyG1jbUD5RWkENMQe6BFx8YplP34r3acYewihwe5Zlh6IJFgvCWuf
-         xkZm8ERRzIS8Odz7MHFp/VIQPzfea9fV0zh2jVVNx2dGitDsMVah4oVUQ/e9Z7VyFW
-         dDfoiRZF8ybWPLKrbtg2PYFVo5N40Lpc96oPpkXNrBeIQa0lvlyqBiXaT7qEgGkJ23
-         q9LB4tyPpSLxGovx/1XqgYWxcRHFzGtrIXZZWvtD/gHSvSmowZOfdt9xlf9f2UIb+m
-         dyC6AICida6LA==
+        b=Rd0VCCLuHZIXd8YTZIl54pFR7Bm8kzIAAn4ovNkbWkQaSmeRjDAo38lx0NlJZBWsz
+         M/6HtzVyFDcog06+YUIuzyIiJs49Jva/i75XNKL1m4p5GCXk9TuDAe/AHW0m10fiUR
+         iOT3XxwKVX8Wz2A6iAJztkW3ZG5jKVbNSevT0uo8PM/qqK+flfVwKlBdrnP7LyOzwg
+         TO/1vyzJSTZMJfZjGtTsw8xVnsB9S0ALoBkUtWeET68K5Rr0jPgxd8HBGQOxsh9N/t
+         4tZGWoEowmvu5Hjrt6lpcYF+yQp9cbkidj6AmWWM+MY71eWB0QriFbpEuiVaF9nmqa
+         0HlHrYXUGaCLw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yu Kuai <yukuai3@huawei.com>, Christoph Hellwig <hch@lst.de>,
@@ -39,19 +39,19 @@ Cc:     Yu Kuai <yukuai3@huawei.com>, Christoph Hellwig <hch@lst.de>,
         Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
         dgilbert@interlog.com, jejb@linux.ibm.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 08/12] scsi: sg: fix blktrace debugfs entries leakage
-Date:   Sun,  2 Jul 2023 15:41:13 -0400
-Message-Id: <20230702194118.1777794-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 06/10] scsi: sg: fix blktrace debugfs entries leakage
+Date:   Sun,  2 Jul 2023 15:41:35 -0400
+Message-Id: <20230702194139.1778398-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230702194118.1777794-1-sashal@kernel.org>
-References: <20230702194118.1777794-1-sashal@kernel.org>
+In-Reply-To: <20230702194139.1778398-1-sashal@kernel.org>
+References: <20230702194139.1778398-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.37
+X-stable-base: Linux 5.15.119
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,10 +89,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 9 insertions(+)
 
 diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 12344be14232b..3d7c27f0bd688 100644
+index d771a1988f942..f4d0e17dd0678 100644
 --- a/drivers/scsi/sg.c
 +++ b/drivers/scsi/sg.c
-@@ -1496,6 +1496,10 @@ sg_add_device(struct device *cl_dev, struct class_interface *cl_intf)
+@@ -1497,6 +1497,10 @@ sg_add_device(struct device *cl_dev, struct class_interface *cl_intf)
  	int error;
  	unsigned long iflags;
  
@@ -103,7 +103,7 @@ index 12344be14232b..3d7c27f0bd688 100644
  	error = -ENOMEM;
  	cdev = cdev_alloc();
  	if (!cdev) {
-@@ -1553,6 +1557,7 @@ sg_add_device(struct device *cl_dev, struct class_interface *cl_intf)
+@@ -1554,6 +1558,7 @@ sg_add_device(struct device *cl_dev, struct class_interface *cl_intf)
  out:
  	if (cdev)
  		cdev_del(cdev);
@@ -111,7 +111,7 @@ index 12344be14232b..3d7c27f0bd688 100644
  	return error;
  }
  
-@@ -1560,6 +1565,7 @@ static void
+@@ -1561,6 +1566,7 @@ static void
  sg_device_destroy(struct kref *kref)
  {
  	struct sg_device *sdp = container_of(kref, struct sg_device, d_ref);
@@ -119,7 +119,7 @@ index 12344be14232b..3d7c27f0bd688 100644
  	unsigned long flags;
  
  	/* CAUTION!  Note that the device can still be found via idr_find()
-@@ -1567,6 +1573,9 @@ sg_device_destroy(struct kref *kref)
+@@ -1568,6 +1574,9 @@ sg_device_destroy(struct kref *kref)
  	 * any other cleanup.
  	 */
  
