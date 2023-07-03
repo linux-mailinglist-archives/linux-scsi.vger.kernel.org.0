@@ -2,107 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD55B74567F
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jul 2023 09:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCF6745B86
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jul 2023 13:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjGCHy7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jul 2023 03:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
+        id S231184AbjGCLs7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jul 2023 07:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjGCHy6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jul 2023 03:54:58 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6316E44
-        for <linux-scsi@vger.kernel.org>; Mon,  3 Jul 2023 00:54:57 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so2484798a12.0
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Jul 2023 00:54:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688370897; x=1690962897;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TeuCdbnwsAHnqDBfC7rDDNVNtHMdoFyzrxSIPCF7yVs=;
-        b=a6rQa8e2jk1XM1oPsrQGgEoQku5lgBslEb2lvX7KnVAKijiHmoXaM7orGmkcsnI97V
-         n5Tpi+6ovm9Xriiy28PO3ife3xpi0JyqUQlE+R0nKKIKWpmezJx5JGwLrAwSfZWNDxfv
-         Dj08mdeaYprZWBP68tu+gyQcby1nnRh7u1Js82ebl00YaBJTBf/YPaw042ZM4Rw7X69n
-         GQQyXQC/pM0BSntd6bgBS6qZ4ncPOzoqNLO7dmKf2y6ql2E3H8OPU9cmwUTID2wptygH
-         kxZpV2NHUrCO0B6lzGYVyx0zhRby1wOMvU9XHWqwd3CcUJerxiITFol4A13ZovNuh8ho
-         huZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688370897; x=1690962897;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TeuCdbnwsAHnqDBfC7rDDNVNtHMdoFyzrxSIPCF7yVs=;
-        b=NUoXu1ES8UbO6V4mDvrwIkygaOMAqWCy+Nci4WxabHrHHJCFbDx/NsQmreyDkZxaFS
-         DUDl0rahsArqTdL35mtKnK6HBSobvQ+A2bwyxl+dJh/SI7XFfy3zV0APw5bNFJpwEzr7
-         ZQboYVga1fgu53O7RH+0h/MGg0jyaQBH9THN9s7OUogFQRUg/XjsUvVN0PYXo3aW5cCz
-         7BREmmigcbR6eEGMhA52ZIKrHlHd8y/whK7uXA2wEg4EdzsWaNVps/5AzlIwB8ALE7Yo
-         2l/dthG0d/CQ8b+3n4HhyXdLMvv+ko/l7u4SdHMnL1IxwavnrQ6RHehm8DHb5Z2c29+9
-         4LPA==
-X-Gm-Message-State: AC+VfDzQr7KakUUI9LMV3vAGhqyQWkZ6jnSHx9xboVEiL9ie8RteEYPQ
-        sWGTsAHwYgqHvQgO6YDOF9kd29lu1WaKAFTBs6U=
-X-Google-Smtp-Source: ACHHUZ5Z9vxQNcaDnuOjb6iAwmLYaPoUztZ+RijrQV18NpuC2BbdgDvj1sXnmpFs3nBofIeTI0eY0fF+48c3QPqTO5o=
-X-Received: by 2002:a05:6a20:1584:b0:125:3445:8af0 with SMTP id
- h4-20020a056a20158400b0012534458af0mr15087722pzj.7.1688370897133; Mon, 03 Jul
- 2023 00:54:57 -0700 (PDT)
+        with ESMTP id S229928AbjGCLs7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jul 2023 07:48:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADC1E8;
+        Mon,  3 Jul 2023 04:48:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2247460F03;
+        Mon,  3 Jul 2023 11:48:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD04C433C7;
+        Mon,  3 Jul 2023 11:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688384936;
+        bh=94E1xNeUaIhmByKLDdNMrVR1xm0w+a+Mcuf+Blcmadc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WbI6uLApPdI5dT9UVGlzwVzAKqDwBkfbJje5v74MQrn25edivWB2mBcmuQhny5Btt
+         f0SF+P1kYRMTnOyNdM0bSQkbYxL6R+gxLAdRD2sMaYYI/2q47d3BmAIIc7InTkbm+z
+         PzZZ5TyPUMkwOShlfNTsksnsVZg5JfRgZo2+RmlA1uUhFdCxyjx6j7pJZiQ5DLkqWi
+         YGr0jG96eySZaUmlVuxVOyK+3CFFeknltvP0Dwdy8b6t5pbNogHWoMFaMrWeQMm5W2
+         pDjSKb2MoXUxAc2LOu9dMKvHzFEXFr7tCimrdivOf3r524jlPSS9z7IbKV0SM+bOn3
+         CemdKD6+pQKYg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Sagar Biradar <sagar.biradar@microchip.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Gilbert Wu <gilbert.wu@microchip.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: aacraid: avoid -Warray-bounds warning
+Date:   Mon,  3 Jul 2023 13:48:46 +0200
+Message-Id: <20230703114851.1194510-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Received: by 2002:a05:7300:b54a:b0:c9:d741:5301 with HTTP; Mon, 3 Jul 2023
- 00:54:56 -0700 (PDT)
-Reply-To: ethelmelzermikel@gmail.com
-From:   Ethel Melzer Mikel <greatgod55484@gmail.com>
-Date:   Mon, 3 Jul 2023 00:54:56 -0700
-Message-ID: <CABGXPAxDo2yMdgbtC-oznJe1cduvfr7o8AJBaumExA-JGJkedQ@mail.gmail.com>
-Subject: Brauchen Sie einen Kredit
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hallo, guten Abend, ich bin Ethel Melzer aus Deutschland, ich m=C3=B6chte s=
-chnell
-Nutzen Sie dieses Medium, um Zeugnis dar=C3=BCber zu geben, wie Gott mich
-zu einer echten Welt gef=C3=BChrt hat
-Kreditgeber, der mein Leben von einem armen in ein armes Leben verwandelt h=
-at
-reiche Frau, die jetzt auf ein gesundes und wohlhabendes Leben ohne
-verzichten kann
-Stress oder finanzielle Schwierigkeiten. Nach so vielen Monaten des Versuch=
-s
-Ich habe im Internet einen Kredit aufgenommen und wurde betrogen, ich
-war so verzweifelt
-Ich bekomme online einen Kredit von einem echten Kreditgeber, der
-meinen Kredit nicht aufstockt
-Stress, dann beschloss ich, einen Freund von mir zu kontaktieren, der
-k=C3=BCrzlich einen bekommen hatte
-Online-Kredit, wir diskutierten =C3=BCber das Problem und kamen zu unserem =
-Schluss
-erz=C3=A4hlte mir von einem Kreditunternehmen namens Fast Link Worldwide
-Loan Financial
-Dienstleistungen. Also beantragte ich einen Kredit in H=C3=B6he von
-(250.000) mit niedrigem Zinssatz
-Der Zinssatz betrug nur 3 %, so dass der Kredit problemlos und
-stressfrei genehmigt werden konnte
-Alle Vorbereitungen bez=C3=BCglich der Darlehens=C3=BCbertragung wurden
-getroffen und abgeschlossen
-In weniger als 24 Stunden wurde der Kredit auf mein Bankkonto
-=C3=BCberwiesen. also ich
-Ich m=C3=B6chte jedem, der einen Kredit ben=C3=B6tigt, raten, sich noch heu=
-te
-schnell an ihn zu wenden
-auf der offiziellen E-Mail des Unternehmens =C3=BCber:
-(fastlinkloanfirm1@gmail.com) Sie
-Ich wei=C3=9F nicht, dass ich das tue, und ich bete, dass Gott sie daf=C3=
-=BCr segnen wird
-Gute Dinge, die sie in meinem Leben und dem meiner Familie getan haben.
-Akzeptieren Sie die Zusicherung meiner besten Gr=C3=BC=C3=9Fe
-Ethel Melzer
+From: Arnd Bergmann <arnd@arndb.de>
+
+The one-element array in aac_aifcmd is actually meant as a flexible array,
+and causes an overflow warning that can be avoided using the normal
+flex arrays:
+
+drivers/scsi/aacraid/commsup.c:1166:17: error: array index 1 is past the end of the array (that has type 'u8[1]' (aka 'unsigned char[1]'), cast to '__le32 *' (aka 'unsigned int *')) [-Werror,-Warray-bounds]
+                                (((__le32 *)aifcmd->data)[1] == cpu_to_le32(3));
+                                            ^             ~
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/scsi/aacraid/aacraid.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
+index 7c6efde75da66..73b6ac0c01f54 100644
+--- a/drivers/scsi/aacraid/aacraid.h
++++ b/drivers/scsi/aacraid/aacraid.h
+@@ -2618,7 +2618,7 @@ struct aac_hba_info {
+ struct aac_aifcmd {
+ 	__le32 command;		/* Tell host what type of notify this is */
+ 	__le32 seqnum;		/* To allow ordering of reports (if necessary) */
+-	u8 data[1];		/* Undefined length (from kernel viewpoint) */
++	u8 data[];		/* Undefined length (from kernel viewpoint) */
+ };
+ 
+ /**
+-- 
+2.39.2
+
