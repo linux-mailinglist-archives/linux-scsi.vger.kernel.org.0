@@ -2,130 +2,181 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1B27454A0
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jul 2023 06:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9697455E4
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jul 2023 09:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjGCErD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jul 2023 00:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S230024AbjGCHXd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jul 2023 03:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjGCEqz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org.>); Mon, 3 Jul 2023 00:46:55 -0400
-Received: from correo.intt.gob.ve (correo.intt.gob.ve [190.202.82.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F221AB
-        for <linux-scsi@vger.kernel.org>; Sun,  2 Jul 2023 21:46:51 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by correo.intt.gob.ve (Postfix) with ESMTP id 9C7DF64CB5B79;
-        Mon,  3 Jul 2023 00:46:50 -0400 (-04)
-Received: from correo.intt.gob.ve ([127.0.0.1])
-        by localhost (correo.intt.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 9qGyQA8ki6Tk; Mon,  3 Jul 2023 00:46:50 -0400 (-04)
-Received: from localhost (localhost [127.0.0.1])
-        by correo.intt.gob.ve (Postfix) with ESMTP id 3121064CB5B72;
-        Mon,  3 Jul 2023 00:46:50 -0400 (-04)
-DKIM-Filter: OpenDKIM Filter v2.10.3 correo.intt.gob.ve 3121064CB5B72
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intt.gob.ve;
-        s=FBEC6F20-35AF-11EC-8F84-10E90F4A6E15; t=1688359610;
-        bh=ylO/yOAJQdCi7ZZ/o7iUqdoXdPlka6TCJMimWm3pD1s=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=v7NpQMRzbQY20pFtglNgaXMesDbBdF+NmsAtZHzTVwedSa+8242HBNISXoJsUVLf8
-         mpx6Aj8m94wWfvMDDmzqUYRME/3xDTrhUceZMY5ZIVK9V+3kO9+6m2c5pVnNRDvsGH
-         slIS9S2Se94HI+FFIiin6gJnilIL7/vvBtKu1J8tRQTSkq48b6oFyYZ7XsCsJdpGRR
-         JTwE8YYnYTT4uycKej/iood3bZOtUd7nBzY3hQZ/To1f8iH8rh6ep0G1H54gBuHRtN
-         s6Nutb4Srm5GSkaazXfBfzCtMwobqB9KvefRcDYCTq8a+7kVO19dqO8NuQRoOo99Hd
-         PRt3Smcas3cgg==
-X-Virus-Scanned: amavisd-new at correo.intt.gob.ve
-Received: from correo.intt.gob.ve ([127.0.0.1])
-        by localhost (correo.intt.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id NcIt_IdWi1sp; Mon,  3 Jul 2023 00:46:50 -0400 (-04)
-Received: from [192.168.1.118] (unknown [188.126.89.7])
-        by correo.intt.gob.ve (Postfix) with ESMTPSA id E449B64C8D6CD;
-        Mon,  3 Jul 2023 00:46:41 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S229814AbjGCHXc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jul 2023 03:23:32 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA20D1;
+        Mon,  3 Jul 2023 00:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1688369011; x=1719905011;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version;
+  bh=joufdrNO2/FLdgGzlnaieoHfZ28FYCwNXGhrZ08f24E=;
+  b=N4xHNvNBRnS/jHz4n3CA5Scc7WzWQoIGbZxjNlV5PKApg9CvHNr80FuE
+   QK9i+qW7nnh+tcUQUUlbWJlcEKwLSVRhzmgyQ13mgdO44nkjh0ohfW1gD
+   1arOw9sMB4YeFS2odgL8P52fvX4iaHCSXq4zF9AQIkosK2tsZPgZXaraB
+   wb3Qw+3ZN/wmtT9m5lhYOai6kdLr8Dd/SPVYKr77F29057OytPswXpb/5
+   o7Nopnl0a2FUNhPJjbINvoWnPtvQ78jMeAnkezjBY+u6ZzU04VNp7Cyzl
+   /PiWgD5sXjYtsFOerqZgiM/hrcYFoShZ4UpDoHKcxHIPWYtOc6mxL+wag
+   w==;
+X-IronPort-AV: E=Sophos;i="6.01,177,1684771200"; 
+   d="scan'208";a="235452684"
+Received: from mail-mw2nam10lp2101.outbound.protection.outlook.com (HELO NAM10-MW2-obe.outbound.protection.outlook.com) ([104.47.55.101])
+  by ob1.hgst.iphmx.com with ESMTP; 03 Jul 2023 15:23:30 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HnhKMS7flRzVESrgCLwYVBuspbpS6ktnSAzUO1Q8fAO/+9RXJ6bgti0Ks8+0lFe69zJCr/rZGdDY3pkgnnZqEBGur+tXwb9qCQ9OVFLVKqZzE73c+Cj9qWHr93j0uE3s+hQigO5Qa0Et1ZsE/Eg51WsHbE6zN1UIAvKbLPMN8xW4gtj79YvZDO+7IG2AmI8jiyJqO4iKDQIA3Y4dmicNevyXqc2fXBOeVHnPrzM0uUBn+bLMfTuYXnQBqyc9O5Y5RpAEu3rjWsjwJveqgjTHrGwiVZvXtgpbCKdjC4SJax4d6uSDMLiMiI5wkIE9uJCd9PS9UVs6dqb7LDhxIDe8Aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=joufdrNO2/FLdgGzlnaieoHfZ28FYCwNXGhrZ08f24E=;
+ b=GIitawMJjvCqmsi5irVxaj6Nrj3qT3MFxU7P6GWPKzHr+Q+q/bMuf+XHi8peM24MsrpUjJmo247ybuVwOU1/OnVKERTnGlvJ53hanaE77//rJjbQaDCnUUXJRa0vGsgat+zjXl74aywx18Go6jtsR8zejbmrK84oz8jTrR86H3viJM5xiaXDVNfVMQv8lr9mb+EQZgTy7Vf2oLm+k3QPnTNz8NyEVVNYSm59IQG9+FginnETtVrm0FvfczhDVbDOKtgntAUQelE/RzTJVD493cEqMaxJYiPWI+eWa427F4uX71bpz4fNe0MVA1F+VWzfkRt/ZZljMSeHBskYpCpecw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=joufdrNO2/FLdgGzlnaieoHfZ28FYCwNXGhrZ08f24E=;
+ b=BqxymfVsY0j0Z4xiM8a9Gn7BUkXNcoFfnBxoGdriQ4gQYysT5hp7n3IMM71dXtRHXXIgudH+XP9F4OTTySwW1XEktDqN6Is4X9twLPHTwPCGmKQZiwO7fEDJ++dnjxRN8KiXo0QnWOeDQ4agQ1Kzs0vts1HD35S21kPxu4mPP60=
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com (2603:10b6:510:12::17)
+ by DM6PR04MB7019.namprd04.prod.outlook.com (2603:10b6:5:246::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Mon, 3 Jul
+ 2023 07:23:28 +0000
+Received: from PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::23cf:dbe4:375c:9936]) by PH0PR04MB7416.namprd04.prod.outlook.com
+ ([fe80::23cf:dbe4:375c:9936%6]) with mapi id 15.20.6544.024; Mon, 3 Jul 2023
+ 07:23:28 +0000
+From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+To:     Damien Le Moal <dlemoal@kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v3 1/5] scsi: sd_zbc: Set zone limits before revalidating
+ zones
+Thread-Topic: [PATCH v3 1/5] scsi: sd_zbc: Set zone limits before revalidating
+ zones
+Thread-Index: AQHZrVjYlhlkOd48mUqmNxUDCIhsoK+no9OA
+Date:   Mon, 3 Jul 2023 07:23:28 +0000
+Message-ID: <fb209ce9-4ffe-8dee-8619-624507965bda@wdc.com>
+References: <20230703024812.76778-1-dlemoal@kernel.org>
+ <20230703024812.76778-2-dlemoal@kernel.org>
+In-Reply-To: <20230703024812.76778-2-dlemoal@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR04MB7416:EE_|DM6PR04MB7019:EE_
+x-ms-office365-filtering-correlation-id: 03a262ad-2131-4fed-ae05-08db7b966578
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nCJjb0oLoyWkyO+LIWDTbr3cSuiiFOgClolQeHLKnqk9eC/NMaSD0+eYdTbFanReb2zKzTLaJMMkPzOI1elne+cRw4SmBNFCjgbv7z9BXvUq7eHaCsp/DJAcMWKEyywwJZ24axXsIGEmctwAGJCQZQFw64XA1d8SOaMfeIHW/Qi4ffqnpv6ddZX0//L9J0EM9wggbSoa3BkqHLU7NfIa4dPoKtziHpxPyKijlVLwcAumMgZT/2Yw/WtVZM7avRKMDBbObOjYSqcs3JYNkvZRtxqcpsvv9xvHml77zv8EzZqVqh1W1m3W/Hb01aphSOHkJ7clcRVuN5zZTnrR7Dn3HQDDCUIJXGdTk1RdduKM4i/PfHMmfs42YVblndGxng6FkY6TWWzNv+P19Cc938DHNeeKmvYKoibIIZvsmfoZTFwrMaDI5ZAiJ+hXFPUI6i4n1fBGfHYMwKQgvCKZABeDpswx/0zNujTR2S18n4/AHwzK97NYP5+c3yk5sYMGUMWoRQM6xAn2rAqT8mYJ164PXTeOkpjOELaFXY2tFup1fnfk88zIy5bKF5YNVKgl5r1dq670GwtGAJjlF8cz4qaMXRA0PBTL1eTB7Eh8ThUaSVsEk2mqzs8ClpC2SbMzPKgcWnQTCtzhVNPunhhOIT2w434aF4qX7ccFa3/3oqhcRALQ+40tVtCXL+Ml6P/1kcwX
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR04MB7416.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(39860400002)(396003)(376002)(451199021)(31686004)(82960400001)(478600001)(71200400001)(6512007)(6506007)(31696002)(86362001)(2616005)(186003)(4270600006)(38100700002)(64756008)(66446008)(66556008)(66946007)(66476007)(110136005)(91956017)(6486002)(76116006)(316002)(122000001)(5660300002)(8676002)(8936002)(38070700005)(19618925003)(41300700001)(2906002)(558084003)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VEFIOVo4N1p5TGljcERJUGxSWWVrbkhIQWpiSEdwcFVoMWJLd05TNHZ3TkhJ?=
+ =?utf-8?B?YStLSEJNNkZxZ3p4N1dWNmxIcDdWVHhVTld6SFRLdUxlRjFvUnlIZ0ZxK2gr?=
+ =?utf-8?B?S253c0NlTXlDNTVhTGloQnRZeXNCeG1HeWZ3TVhRZGdhWmZjd092eWI2bXBB?=
+ =?utf-8?B?eFd1T1lGN3lDcWNwSU9raGhKK3VXeEZvZlBlK09jaXR0TmliLzA2VjhIakdC?=
+ =?utf-8?B?dFpnckVzYmxwNlRHYnd4TndXSDdLTlRzMUh1aXZaeTJMVFRIdmVwLzF4ckN5?=
+ =?utf-8?B?R09rWllCRVB3VlBzRGdZenlTZkUvNWN2dThiZDNGbWM5aWFSRXI0aS9yL3NV?=
+ =?utf-8?B?TUpJYWhjY3NCQ1M4cGpjME1JRXpjbjRBR3ZVbDFmc1NZRjg4MEJnemJmbktP?=
+ =?utf-8?B?SDhLRkU3azFCMTdQclNUclNybWl3RnNSL1g1SURXak41Wk1LQ1duTVN1S0Vk?=
+ =?utf-8?B?QVBjYU91NW95SmIrNFIydmtIK3Brb0Mxa2tudmFpRnBXNjJTNDR1WVdCVHVU?=
+ =?utf-8?B?OUphWmtqMlorUHZzSHVpRXRuMjIycVJsUGJTRHBqWHIzNDM3c1FHbENsZHhW?=
+ =?utf-8?B?NXJlQ1pNTm9qWCtoN29DSzdFdXVtSmI0MkFLcTlILzIrOHlUbHFwekg2NSt3?=
+ =?utf-8?B?b2FYNk93TzVpUzR1UndrWlNObUdKS09DNDBxWStlTTFtbk9RTHpCSGdQbEta?=
+ =?utf-8?B?SUlmemQwN0dPUFJEdHpha3U5L0xEenE0SlA1ZG5PdWg0eDBGUks0alVjZWlw?=
+ =?utf-8?B?VXN3NzNFT2ZHZURFbzkzOElyODI3d1BsOHBJZytpdjVwbm13Q3BySGtYUzV0?=
+ =?utf-8?B?RXRDcTRhL0xlSk01NjJQMUpWV3RoWHJJcENDbkhqVXJJcnkwUnlZelRZOFVh?=
+ =?utf-8?B?YWk0VzYraEs5YzB3L3pSNC9zNUhzelM1eUFwM2JxeDhtclJjWWVJQVo3R2Ns?=
+ =?utf-8?B?Z0hvNXRxd3JFZUt6WTNIb212L1VOWmdZY1NCRW53bVRmOXVYVjRwZERPdElG?=
+ =?utf-8?B?WFFmUy9uN0g1T3RxTnhTUi9ZQ1h4eUlTaXNsQUs1b1owUGxoWUZGNVFzZkpj?=
+ =?utf-8?B?WlR4aDhHOU1qeVVueW9VN0xuRHVwRjZaUW96RTVoeDNqaVVxcXpxZFRVcjk2?=
+ =?utf-8?B?NWs4SUR0NExjQzI1aUFGbGZ6VEJTajh1QVM4aHo2dnE2MURyeFFXUzVZMmRk?=
+ =?utf-8?B?Q3FFME4wUEtrZ1kwTW4rUkp5blE1bi9TU0pEbE1YeVRMajgwMjJhQnovNEF3?=
+ =?utf-8?B?Y1M1K3lzZWw5TGd4ZytPTWt5UWdoZWJPc3dKdlFMTmR2UGxwakg2VDlmWm1p?=
+ =?utf-8?B?czhDWU9YdG1iNjQvUlNHTXNGek5OU3BGSW14dUxWOXFoT2VLQnkwRHV2SUhw?=
+ =?utf-8?B?K2ttOEVvYkpNOHBqbVp1VUM0Qmw3VkhGTGR5em5QQzBZMmJIeWg1V1FOMEtM?=
+ =?utf-8?B?RmxWMUNXbzYrUVZpZkR2VHkwYktxWUhFK3dlT05OLzdCLzcrZHRYUG4wMU5Q?=
+ =?utf-8?B?bE5XRGMxWjN2REhOVUd3QUNKQXJYUzRUVlJGKzJ1aUtqdytKN2NDc3QvMkRv?=
+ =?utf-8?B?VFErS3BZd2wrTlZML29oaHJ6RlprNG91MGVDSGVWUzJib3IrY0tnUmp5emdE?=
+ =?utf-8?B?MElUbTdiMHd4cnBpK0g4bjVzRWlESnh2dWlYdTNaeks3cXZkeUo4Z3JrbHp2?=
+ =?utf-8?B?YThBRVBjL2p1dkYrckppN3JVTkNzOTFmODJTU1BYOUg5VXRjK3kxeWMxUXRa?=
+ =?utf-8?B?aGZuTjJlVzA1SnpZVzJkTzR6YnpqbWJQbk1ObURXaHpBbnVDVjFaRWhYNHNG?=
+ =?utf-8?B?NFM4NG9GUkNNTGV2Y1U0Sk04TzRCYjF0eWw0RERyQ3hNYzRrVVNwZG1oaFMr?=
+ =?utf-8?B?VkZrZDJpMVNKaEFNNEZEeTJUdy9YNUFVTjRJalZYYnhxeHUvSDQ5ZEpuSUpG?=
+ =?utf-8?B?ekxtWmlqekY1Q2U3eFpCR0FzL2h5cGd6dldLZGE0eGwzNW53VVdaNEQrZXpo?=
+ =?utf-8?B?LzZ0V1NIdVJJbFY2V3g0Z3pld2lVSm8zUmZYeUxybDVITklvcTJnTlhVaitn?=
+ =?utf-8?B?UnRpRW5sbEw3TTQxanBCQWhCbHc0b0lPU1FLditrM212eUJQUDBWMXRGcVh4?=
+ =?utf-8?B?cHBZdW1ld0t5dHF5TlZDL281REkrN3JLeGhSVThWOGt3K09rNCtnTVFlc0Fy?=
+ =?utf-8?B?UGx6UjNBRVN0TU1tM1NFUnYyamdSS3RRVVBmaXJkR2Z6OVVtb1FEcHJ2TXZq?=
+ =?utf-8?B?dnh1WjRIN1Vnc1dObFliZ0RtNlhnPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3323C36A199EA1499C4F7FF7DCA34F30@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: I'd Appreciate It If You Take A Look
-To:     Recipients <ellop692@intt.gob.ve>
-From:   "Alessio Cosimo" <ellop692@intt.gob.ve>
-Date:   Mon, 03 Jul 2023 05:46:24 +0100
-Reply-To: alcosimo@yandex.com
-Message-Id: <20230703044641.E449B64C8D6CD@correo.intt.gob.ve>
-X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [188.126.89.7 listed in zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?WTI0b0FHdy9CM21MdTZhN09EcllFVXd6Q2RrWUNYUkZRZVkwWWM1cncwWkJn?=
+ =?utf-8?B?KzZpNkZNM2pMU2tIUk5ET1pJajdYSis0RjFzb1I0VW45dmJLZ2lpR0lYQVlH?=
+ =?utf-8?B?WVcxNGxTZ2hrNjRSaStkTmxZQkpvMnNTSXhJcEZFUm04QmJtYkVzb2poanVR?=
+ =?utf-8?B?RXcyOVRDYWZITFM0eWJDMFZIeHRWQksvN1lmTVRiaTJDK0hkNnIxYUFMZlhQ?=
+ =?utf-8?B?WjBISXlEbHBsMVNsRnJIR1hCcWJvVnJlUGNxUnUrekZ5R1Y4U2F0N09WWWxy?=
+ =?utf-8?B?b1UrMVVoTjE5NFdocTNSOU9nWFk2ZzRvWnpKSDRkQit4ZlE2VHVneTZlaTdy?=
+ =?utf-8?B?UmltNFFmMGJTMnJxYVVIQko0cmsyVW1YRStHS1dGU1Fxa05IdE5mci9pRUs4?=
+ =?utf-8?B?WUU1TzAwMnl0cVVrdmwzeWNyR0VEUVBRcGJMUVl0THlVRG9tSDFuUlQ5MUs1?=
+ =?utf-8?B?bzU2WXdBM2xpbU0vREtSYVI5VWcxTlRhMXl6MlRTSE1WODZwWUdkc1ZlUVFv?=
+ =?utf-8?B?TmVPblptT0xtM3BrcjA3b2NwREREUDVZYm45M242ei95NEovNENUS0ZpUCtZ?=
+ =?utf-8?B?dmJOWkxPMzdranRRbERLOS9sQXRnQlg5R3RDUms2OXUxMERnNjlsYXNpOHFs?=
+ =?utf-8?B?THZaSFpJRUJ6S0pOMmY0R1hBRlRueGY3SUpVTEJVU3lkSG9YeUhkRnRuekdZ?=
+ =?utf-8?B?cCtsMW5lWG0vRS96c1I2NUlDOUYzTFNFaHFQK29SNVZXYW8xWTdNYTZrZjFI?=
+ =?utf-8?B?VzAwWFFXK1BlRzZ4OXFPVHgrTng0U1ZSbWo0ZnErTlhVbFpKVTJ6aXlCa3U0?=
+ =?utf-8?B?Q1ZYZUxnSW9lc2ZBNmhqbFEzcHpZaUErTHpnNVlNZ0lYYVVMTHMweVQvN3hG?=
+ =?utf-8?B?QnhlajBOdzlEdVBiYUFvajRhczZvU1hYMEhYY0tkUjN1ZkZiTWk5b203NnJ2?=
+ =?utf-8?B?NndXeEJCdkJVLy9ncTNoZExBSG9NWGFZU3ZkLzZ0T1FGSFNLZ2h5UjdNVnQ1?=
+ =?utf-8?B?OEx2UXM1NFkwOUhGTFBEaEkrUVp0eGpVYUs4UTVRVDdJMHpiTnlxdlpLdlFI?=
+ =?utf-8?B?cXV3ZDlWZHp1bXNJcVZyelliZWJ3UE1FRjVSNTRvb1Nyei8vSlE2ek42N0Ji?=
+ =?utf-8?B?Ym5Qa1JkY1dKZjNaMHRlOVJhTTZZaVhCMzJNdGZrMjUwN1QxNGNFUjJZTWlo?=
+ =?utf-8?B?TGpaZzNIZHR5d20va3dVZWtYeXc5ai8zWEg4SmdUNTN2RWRXSENQckxtT1Rz?=
+ =?utf-8?Q?pM6PIyCZl7nPoO8?=
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7416.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03a262ad-2131-4fed-ae05-08db7b966578
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jul 2023 07:23:28.0751
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G7Tppb9j63KpTQvJ+Ka5ZRLwoRvf+ki2BU5Nq/rXTI6XJsT7TOm4kVoxL91mAWnRXuhwcwNWDK8E+OF1IoUGX41jAPB2kGTqhJhZBCbM4qc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB7019
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi, I'm Alessio - I know your time is valuable so I will keep it short.
-
-I'm a Binary Options Trader with years of experience in helping clients ach=
-ieve their financial goals by maximizing their profits through strategic in=
-vestments. I provide a service of helping amateurs and inexperienced person=
-s manage their stock portfolio via any of the Stock brokerages am authorize=
-d to work with, for a commission. I provide a professional service with a h=
-igh level of experience and many years of practice. =
-
-
-Binary Options Trading is a financial product of profiting through predicti=
-ng the movement of various assets such as gold, silver, the USD, etc. It is=
- very similar to other forms of investment such as Commodities, Shares, Ass=
-ets, and Stocks. It's a large industry where you can make a lot of money on=
-ly if you know how to read trends and use the right strategies.
-My team and I tested theories for ten years, and they work tremendously wel=
-l. We have been able to come up with a well-crafted strategy that works han=
-d in hand with a dynamic signal-generating auto trading software, with an i=
-nbuilt risk management system to earn you up to 60% ROI monthly, for both b=
-eginners and professionals to help deliver good and profitable results. Bec=
-ause of its guarantee anyone can trade in it -- Meaning your funds are safe=
-, and secured and the platforms are legal. It's a lucrative form of investm=
-ent and highly recommended. =
-
-
-Who do we work with?
-- Busy professionals/newbies who want to increase their income, savings, an=
-d investments.
-- People who want to build their wealth but lack time, knowledge,  and expe=
-rience to trade or manage their trading accounts.
-- People who want to build a strong retirement fund. =
-
-
-Why work with us?
-- We are experienced professionals with the ability to exceed your financia=
-l goals with minimum effort.
-- It is a unique opportunity, it is a deal that serves a minimal chance of =
-losing your investment when properly managed and creates opportunities to m=
-ake thousands of dollars annually. There is nothing that keeps me up at nig=
-ht more than thinking about how I can create value for people. =
-
-
-If you're willing to give me 10-15 minutes of your time, it would be apprec=
-iated and I assure you that as a team; we will do everything in our power t=
-o help you break through your biggest challenges.
-If you are interested; Kindly email a response for continuation and further=
- guidelines. I will then happily arrange a strategy to decide the best cour=
-se of action to exceed your financial goals. =
-
-
-All The Best,
-Alessio Cosimo.
+TG9va3MgZ29vZCwNClJldmlld2VkLWJ5OiBKb2hhbm5lcyBUaHVtc2hpcm4gPGpvaGFubmVzLnRo
+dW1zaGlybkB3ZGMuY29tPg0K
