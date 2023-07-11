@@ -2,71 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C013774F539
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jul 2023 18:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E8274F592
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jul 2023 18:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbjGKQcT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 11 Jul 2023 12:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S233042AbjGKQdm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Jul 2023 12:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbjGKQcP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Jul 2023 12:32:15 -0400
+        with ESMTP id S233449AbjGKQdH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Jul 2023 12:33:07 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CA81717;
-        Tue, 11 Jul 2023 09:32:12 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B9O4D8003075;
-        Tue, 11 Jul 2023 16:32:01 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5422110CB;
+        Tue, 11 Jul 2023 09:32:55 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BG3O1f022902;
+        Tue, 11 Jul 2023 16:32:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=duJo6dFZPc9TZ+zeNFKEGWFdOQH0TAr+ovYMi+zg3Yc=;
- b=Vlsl8wL/bFboyFYNKXgcRadKw4fZJm8Enf9mLgttkhJZnRVef+opeem0UMQpPXMC2LrN
- BeJcBTRDggGyJBHzn8sePBnutmVDTx6PxRlQAmrwvhp19wvQ8tvRFs3d4pCfKCflPhli
- QH5H7/5ssSqVDmevyPSKV4PQ7btmQ75x9sYj5k8koo+9CLtYgQnGBSAFq6rNJTmQ/FhE
- +6B+CGGnhwK6YWqYzLTXGPYpqM6wDRApQev0VtIPENOzCyppgpDPx6YCAuxWqPG3l9+E
- SRXU2SodKbDtBLPaVALkAeZ4MgQBj/Iz4JSqvLe+4H66eiQvca2U1k+8Zokap96tSO2B tg== 
+ bh=+4V1nFRqwTelDtAcI310e7e7t3xc9C8kzlyU277DNxs=;
+ b=ymbOEdbzGq63lkQ0RO+iBGkUQEcS4UO/lxjF5K2PqFLto+ysV4TEsKigi8pkSD+0XbV3
+ XL1VOnexhj0u4/lo6XBn/xKbWSCP26vhMmRAizm8IRK0RiyBmzMxWVgii4+mt2saQDoe
+ WQkfBM6MOBixvv4+SnNsom8ajpTprr/jzywgI6bM0UJ9nti/578BpsbF+a3T3kS3400U
+ qjrAwqeuyDNTIGrKLmM9yjvATi3gM7M2TcV35rsN6hK23qmhlVJ+Q2GA+3HbmZr/Ok6j
+ 74UXMpMsv5v2yolmJdhg0gscYbkGqAGt8XqOJSHUbr49tqGPzkT/fCW47BE+ftkelpr9 sA== 
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rr8xukrx8-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rpyud5e6f-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 16:32:00 +0000
+        Tue, 11 Jul 2023 16:32:04 +0000
 Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 36BF8eDB007120;
-        Tue, 11 Jul 2023 16:31:59 GMT
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 36BGUtBm007087;
+        Tue, 11 Jul 2023 16:32:03 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx854c9t-1
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx854cdv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 11 Jul 2023 16:31:59 +0000
+        Tue, 11 Jul 2023 16:32:03 +0000
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36BGQBXN019529;
-        Tue, 11 Jul 2023 16:31:58 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36BGQBXP019529;
+        Tue, 11 Jul 2023 16:32:02 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3rpx854c4h-3;
-        Tue, 11 Jul 2023 16:31:58 +0000
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3rpx854c4h-4;
+        Tue, 11 Jul 2023 16:32:02 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-nvme@lists.infradead.org, Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>, linux-scsi@vger.kernel.org,
-        Damien Le Moal <dlemoal@kernel.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH v3 0/5] Improve checks in blk_revalidate_disk_zones()
-Date:   Tue, 11 Jul 2023 12:31:44 -0400
-Message-Id: <168909306220.1197987.14432939684729585921.b4-ty@oracle.com>
+To:     linux-hyperv@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        kernel-janitors@vger.kernel.org, keescook@chromium.org,
+        christophe.jaillet@wanadoo.fr, kuba@kernel.org,
+        kasan-dev@googlegroups.com,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>, iommu@lists.linux.dev,
+        linux-tegra@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Krishna Reddy <vdumpa@nvidia.com>,
+        virtualization@lists.linux-foundation.org,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        linux-scsi@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org, John Stultz <jstultz@google.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Laura Abbott <labbott@redhat.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Shailend Chand <shailend@google.com>,
+        linux-rdma@vger.kernel.org, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-sgx@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 00/24] use vmalloc_array and vcalloc
+Date:   Tue, 11 Jul 2023 12:31:45 -0400
+Message-Id: <168909306205.1197987.4062725942946508296.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230703024812.76778-1-dlemoal@kernel.org>
-References: <20230703024812.76778-1-dlemoal@kernel.org>
+In-Reply-To: <20230627144339.144478-1-Julia.Lawall@inria.fr>
+References: <20230627144339.144478-1-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-11_08,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=643
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=801
  adultscore=0 mlxscore=0 spamscore=0 phishscore=0 malwarescore=0
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2305260000 definitions=main-2307110148
-X-Proofpoint-GUID: O48tnqYTQ71yllnqdpl3Xg3Ox4QMLAJx
-X-Proofpoint-ORIG-GUID: O48tnqYTQ71yllnqdpl3Xg3Ox4QMLAJx
+X-Proofpoint-ORIG-GUID: VdiqWRAD5JOoA45uglvHtoSxe29wDWJY
+X-Proofpoint-GUID: VdiqWRAD5JOoA45uglvHtoSxe29wDWJY
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
@@ -78,39 +98,23 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 03 Jul 2023 11:48:07 +0900, Damien Le Moal wrote:
+On Tue, 27 Jun 2023 16:43:15 +0200, Julia Lawall wrote:
 
-> blk_revalidate_disk_zones() implements checks of the zones of a zoned
-> block device, verifying that the zone size is a power of 2 number of
-> sectors, that all zones (except possibly the last one) have the same
-> size and that zones cover the entire addressing space of the device.
+> The functions vmalloc_array and vcalloc were introduced in
 > 
-> While these checks are appropriate to verify that well tested hardware
-> devices have an adequate zone configurations, they lack in certain areas
-> which may result in issues with potentially buggy emulated devices
-> implemented with user drivers such as ublk or tcmu. Specifically, this
-> function does not check if the device driver indicated support for the
-> mandatory zone append writes, that is, if the device
-> max_zone_append_sectors queue limit is set to a non-zero value.
-> Additionally, invalid zones such as a zero length zone with a start
-> sector equal to the device capacity will not be detected and result in
-> out of bounds use of the zone bitmaps prepared with the callback
-> function blk_revalidate_zone_cb().
+> commit a8749a35c399 ("mm: vmalloc: introduce array allocation functions")
+> 
+> but are not used much yet.  This series introduces uses of
+> these functions, to protect against multiplication overflows.
 > 
 > [...]
 
 Applied to 6.5/scsi-fixes, thanks!
 
-[1/5] scsi: sd_zbc: Set zone limits before revalidating zones
-      https://git.kernel.org/mkp/scsi/c/f79846ca2f04
-[2/5] nvme: zns: Set zone limits before revalidating zones
-      https://git.kernel.org/mkp/scsi/c/d226b0a2b683
-[3/5] block: nullblk: Set zone limits before revalidating zones
-      https://git.kernel.org/mkp/scsi/c/a442b899fe17
-[4/5] block: virtio_blk: Set zone limits before revalidating zones
-      https://git.kernel.org/mkp/scsi/c/a3d96ed21507
-[5/5] block: improve checks in blk_revalidate_disk_zones()
-      https://git.kernel.org/mkp/scsi/c/03e51c4a74b9
+[07/24] scsi: fnic: use vmalloc_array and vcalloc
+        https://git.kernel.org/mkp/scsi/c/b34c7dcaf311
+[24/24] scsi: qla2xxx: use vmalloc_array and vcalloc
+        https://git.kernel.org/mkp/scsi/c/04d91b783acf
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
