@@ -2,95 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809B874E470
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jul 2023 04:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D8074E638
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jul 2023 07:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjGKCom (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 10 Jul 2023 22:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S229736AbjGKFJn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Jul 2023 01:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjGKCoj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 10 Jul 2023 22:44:39 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E88E49
-        for <linux-scsi@vger.kernel.org>; Mon, 10 Jul 2023 19:44:38 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4R0Q9t1kykztR9l;
-        Tue, 11 Jul 2023 10:41:38 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 11 Jul 2023 10:44:35 +0800
-From:   chenxiang <chenxiang66@hisilicon.com>
-To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linuxarm@huawei.com>, <linux-scsi@vger.kernel.org>,
-        Yihang Li <liyihang9@huawei.com>,
-        Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [PATCH 3/3] scsi: hisi_sas: Delete unused lock in hisi_sas_port_notify_formed()
-Date:   Tue, 11 Jul 2023 11:15:00 +0800
-Message-ID: <1689045300-44318-4-git-send-email-chenxiang66@hisilicon.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1689045300-44318-1-git-send-email-chenxiang66@hisilicon.com>
-References: <1689045300-44318-1-git-send-email-chenxiang66@hisilicon.com>
+        with ESMTP id S229503AbjGKFJl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Jul 2023 01:09:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2180FFE
+        for <linux-scsi@vger.kernel.org>; Mon, 10 Jul 2023 22:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7WTLsmvVN0w90UyytXcDu+G0r4YWlA6ad0Cb2mFsFDQ=; b=TGqzEq8AWuQ61ZwbQMJ6JLtzG0
+        HfjBqI4wisylnDYBkEtRf/4aH3HmNxFc3Id2yR8WIqjNGmB2PEsYBUUXrsSmefNd9US5Dm3cT0dfF
+        oIuoglfeQ2ZjOAFiWKUcgIe4CEUouD0V0Wk0kHacsBdOTRiesAxXkz0Spbr975MqLi/bfftkAUgN9
+        k+symAbloOoU8WWNtFMQ+dWHUkuUKVOdBIGrfcjdP8xSYSZZAY8Etcf/IOaVg060e5BOZPoGWHtNv
+        8wXyCsj8GyIsheThKypVYEzpN4H2QVMBwIzVQT3nVMcgXfGg79lxodBJwZGevHIaryF/I8XMnX0zV
+        BpwFJrIA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJ5d2-00DifZ-2K;
+        Tue, 11 Jul 2023 05:09:36 +0000
+Date:   Mon, 10 Jul 2023 22:09:36 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, linux-scsi@vger.kernel.org,
+        Avri Altman <avri.altman@wdc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Can Guo <quic_cang@quicinc.com>, Bean Huo <beanhuo@micron.com>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        Ziqi Chen <quic_ziqichen@quicinc.com>
+Subject: Re: [PATCH] scsi: ufs: Include major and minor number in UFS command
+ tracing output
+Message-ID: <ZKzkEMIvrICQ3dWK@infradead.org>
+References: <20230706215124.4113546-1-bvanassche@acm.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230706215124.4113546-1-bvanassche@acm.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Yihang Li <liyihang9@huawei.com>
+On Thu, Jul 06, 2023 at 02:51:04PM -0700, Bart Van Assche wrote:
+>  	TP_fast_assign(
+> -		__assign_str(dev_name, dev_name);
+> +		__entry->dev = disk_devt(sdev->request_queue->disk);
 
-Currently spinlock hisi_hba->lock is used by interrupt and thread together
-which require to use spin_lock_irqsave/spin_unlcok_irqrestore, but some
-places still use spin_lock/unlock.
-Check with the code and find there is no necessary to use hisi_hba->lock
-in function hisi_sas_port_notify_formed() which is the only place that
-use spinlock in interrupt. So delete unused lock in
-hisi_sas_port_notify_formed().
-
-Signed-off-by: Yihang Li <liyihang9@huawei.com>
-Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
----
- drivers/scsi/hisi_sas/hisi_sas_main.c | 5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 8f22ece..7a62590 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -1065,23 +1065,18 @@ EXPORT_SYMBOL_GPL(hisi_sas_phy_enable);
- 
- static void hisi_sas_port_notify_formed(struct asd_sas_phy *sas_phy)
- {
--	struct sas_ha_struct *sas_ha = sas_phy->ha;
--	struct hisi_hba *hisi_hba = sas_ha->lldd_ha;
- 	struct hisi_sas_phy *phy = sas_phy->lldd_phy;
- 	struct asd_sas_port *sas_port = sas_phy->port;
- 	struct hisi_sas_port *port;
--	unsigned long flags;
- 
- 	if (!sas_port)
- 		return;
- 
- 	port = to_hisi_sas_port(sas_port);
--	spin_lock_irqsave(&hisi_hba->lock, flags);
- 	port->port_attached = 1;
- 	port->id = phy->port_id;
- 	phy->port = port;
- 	sas_port->lldd_port = port;
--	spin_unlock_irqrestore(&hisi_hba->lock, flags);
- }
- 
- static void hisi_sas_do_release_task(struct hisi_hba *hisi_hba, struct sas_task *task,
--- 
-2.8.1
+sdev->request_queue->disk can be NULL and no LLDD has any business
+looking at it, as it is owned by the ULD (if one is actually bound).
 
