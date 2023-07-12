@@ -2,338 +2,171 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8BB750553
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jul 2023 12:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A6B7505A9
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jul 2023 13:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjGLK6f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Jul 2023 06:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
+        id S232757AbjGLLMP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Jul 2023 07:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231693AbjGLK6e (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jul 2023 06:58:34 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D082D11D
-        for <linux-scsi@vger.kernel.org>; Wed, 12 Jul 2023 03:58:32 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-26304be177fso3450767a91.1
-        for <linux-scsi@vger.kernel.org>; Wed, 12 Jul 2023 03:58:32 -0700 (PDT)
+        with ESMTP id S230022AbjGLLMO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jul 2023 07:12:14 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420BB10FC
+        for <linux-scsi@vger.kernel.org>; Wed, 12 Jul 2023 04:12:13 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C6sBpO015223;
+        Wed, 12 Jul 2023 11:12:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=mTff4XnrSg+t/vx/ccIb3zzNgC4z1ddVqMDtjxKUpUs=;
+ b=yCIutQpJHiijNGMrwrzWub+L7z9kjuLQU7p1M49jzNd6VE3/Cs0f7Ovcxy+/ST0HnLJc
+ J8o0QeyBbGSII9XX0rOQGyqcv6F42QL9a1Cif6419TFtDED5rAUyXgaDWpR+RWEao0jG
+ 9nLI5JuGrgynLqcuqEViX5xn8+dAaHBPn97G+6vzJJ0jEjMuvQsK5Bg1vk8azYkkSCrs
+ vH0aTLm4H6ZWeGLlhgPHsEmsi3xRGhDTRGChyKWHow/2+3/OMSeSum1tliJA5UFFWe3y
+ 0xtq52Tq5fFoC00xM83P48FURiE1R8eKvThgGytZpYktMnomh2BGDusBELujI3lx7MOD Rg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rr5h15kxv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Jul 2023 11:12:02 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 36C9mXfN008401;
+        Wed, 12 Jul 2023 11:12:01 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2106.outbound.protection.outlook.com [104.47.58.106])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rpx8cn70h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Jul 2023 11:12:01 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MqPD6nNsBkYAeklJygEwqGxDr9/RBOsTpI5Kbba0THEFo+6FZCPoDlBL6syxUl5sZV+8qrpejoj+UXr+gcEgYWuOhOa3OpXmUFCKW5PlE2j6yieB0Gym8YRP3Jm3AjbQYLK+iq0Hn4PNAcOwWQzMIlxPzW8hYmGwoBjVXbMhwy2SpelZls3pF0m1LNQsyokh+96Da2pFyCptydqx/68hqjPEBxs0RZNh0zoSTdoxFd7VZDzY+Snr5R93p0WSHrBb+zEGmr0byzYsICtT6995lU1m5ymIaHz/vO8fR40LYHqcazEfUGa+yBjGTXo7CuEZokctJFYapFVcB9NFLUYxIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mTff4XnrSg+t/vx/ccIb3zzNgC4z1ddVqMDtjxKUpUs=;
+ b=EiKBbrfA2c64gx1Re+hhpsO2U5Sdx2Al2Ow/hqeujT2j8KWJsUu2PKQwzhm0T1nK6O+unxLm80U06UAi0Tcvw3oTsgzhRyXpU/bvxSEbRPgaAzHc9y+yIv/J5qQesiQtPFiLMO6+RGzIm0a1GfggeAiYIqWX/6XtWVr3mbQ4AbnCvmDURlvIvo/mMzMS1EJEXQnw7WGT1q4QkyMI5w7DbSgLYmfFmVxdxueZdOc3J2YOsW2B+P6IJANX8uAlpamO55t2wIZztrVlAq3sQFJqqdqfYhZQSJAgino583wZWKhE9w0W5zVKmmTzEfKZsNyeqHGlgH2sLlM1DJEopiR2fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689159512; x=1691751512;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:resent-to:resent-message-id
-         :resent-date:resent-from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9lRntyMiDXIrlEPonKFcypmd70adqqA/4SVPD5U+6Pw=;
-        b=Yked1ykPK+EhbetiTWQPgUVk4gwsffYx552qbH5lTwJRGzx5Qg2l9GW7wBjVNalB5R
-         lDkWxykCn6YJog38rnzN3RivmHEpcgKxRcIpwcRuPtxt5thnFoxkZJZnRQFRon8J7gXy
-         B+Eg6wYLASEJGAvynwSOGuFWP3jbjyQ+dFfz9U4GiklP3Wz14jCo3yhDCk+aXUb9ciuW
-         J1eFOtmULszcwwk9lc5MLpIp6e7+BEtZBwTbxI1MJW9s6YLFYsY/vNFpvybUJpW9H+7f
-         T3estYdXUtq7J9L7XYI+h0NBz96SE7VANkvrVtbvRndfPOZOrd971Q8d8xbJO1GFPfkd
-         zn3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689159512; x=1691751512;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:resent-to:resent-message-id
-         :resent-date:resent-from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9lRntyMiDXIrlEPonKFcypmd70adqqA/4SVPD5U+6Pw=;
-        b=NH9rS4z9ptHNeQ7yrhXrwrju8FO3DEvFQlljDjyuRQJvbJtW8ieEvySq/CLs077sYn
-         AFj202KiFU3+VZijgh7o0po3UQAABrMyeeFDdHklMVthRm0PFRXzYZ7ic5chwh8DIeGi
-         YxgtHPGZFrD8L2fo2UZUmbmIv3wX5lCKkfpijEX8icfmO34/BPvtGRhPMS3edAjs5yy7
-         sOA0mMl7i+Y8qhRqy8ChyhgMGCtvForBgz4v+xFEyZLqmXqW2u9SQX+mWSg6r4+znns6
-         feHuFB4k0Ctccy4820HM2FcjPexhN8/hooSGW3enNKXkANckYdP7TkBFL+cLG8rVvl/W
-         Ms5A==
-X-Gm-Message-State: ABy/qLah7dn8prBhRytRzAA/x7CKghAIzvi40vJ9SdsiWIQZ4i2UuZV5
-        rqOKWOk3nnyQj2t9PxsAfSAB
-X-Google-Smtp-Source: APBJJlFQojqeOd292vD611B3QjXN4nDdKe2Y8Furi1R2O+U33Ovwbt0HhiOlBohDjxabJWZZnRPz3A==
-X-Received: by 2002:a17:90a:c211:b0:260:e256:27c7 with SMTP id e17-20020a17090ac21100b00260e25627c7mr14107392pjt.15.1689159512280;
-        Wed, 12 Jul 2023 03:58:32 -0700 (PDT)
-Received: from thinkpad ([117.207.27.131])
-        by smtp.gmail.com with ESMTPSA id gw10-20020a17090b0a4a00b00262fc84b931sm9724918pjb.44.2023.07.12.03.58.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 03:58:32 -0700 (PDT)
-Received: from localhost.localdomain ([117.207.27.131])
-        by smtp.gmail.com with ESMTPSA id k15-20020aa790cf000000b00666b3706be6sm3247860pfk.107.2023.07.12.03.36.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 03:36:16 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 14/14] scsi: ufs: qcom: Add support for scaling interconnects
-Date:   Wed, 12 Jul 2023 16:02:13 +0530
-Message-Id: <20230712103213.101770-19-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
-References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mTff4XnrSg+t/vx/ccIb3zzNgC4z1ddVqMDtjxKUpUs=;
+ b=WUALMjtvhll56eXc7FV869DRKswvsMRiIlHPPnn3LJuJeMyX0/9Hf45EFT2i2o+SGWv2acAlzsttpqmiqf0bK+SE4KL2QYhcg2CNxOJGkdbjyQ6P8KOBlm3p6Kj2gZKuWqS4u2NgAR1Ox8Bvr3s+let2BkGtooy74mgCxOg5kRI=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by IA1PR10MB6050.namprd10.prod.outlook.com (2603:10b6:208:38a::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Wed, 12 Jul
+ 2023 11:11:59 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::e38:5b81:b87f:c1eb]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::e38:5b81:b87f:c1eb%7]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
+ 11:11:58 +0000
+Message-ID: <f58993fb-61cb-f376-1e19-863e74b87bb4@oracle.com>
+Date:   Wed, 12 Jul 2023 12:11:53 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v9 03/33] scsi: Add scsi_failure field to scsi_exec_args
+To:     Mike Christie <michael.christie@oracle.com>, bvanassche@acm.org,
+        mwilck@suse.com, hch@lst.de, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, james.bottomley@hansenpartnership.com
+References: <20230711214620.87232-1-michael.christie@oracle.com>
+ <20230711214620.87232-4-michael.christie@oracle.com>
+Content-Language: en-US
+From:   John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <20230711214620.87232-4-michael.christie@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0027.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2ae::17) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TUID: nOs3QcYXVJwn
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|IA1PR10MB6050:EE_
+X-MS-Office365-Filtering-Correlation-Id: 32415271-345e-471b-8f2c-08db82c8cf22
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G+/6/jExeS9Maz8M1El8C9TYSRHiSKJea9V0euyJucq1Lst0ZclWjjBmYiwWLejL/BGgMuLUI0cu4fMWDKgE5qP/mAhg7/Y088bWA/GqxvoMKd4+dxvEjgIQj08xGQ1ypdK2E0urQQFje1Vv8bHcnueql9jsGfkgy3EsuLq642ZMq2pHduUHLGaq4e68dKy/IahgOReG6tUY4xgi7q08EceHNN8DI+4UE7gDj2dCVzvtXHCedaIu75tdDHvkrTg+FbZz7ggjOm55axTH7FLfW6NEOustOUJ9RE/zxoxdp5b0Yj5QU1qvWowG6GsB+JHfgVq8Qb1Ze6X2SvJNnvuX71OxYRWnAOo2y+UkD2/Y1562V7l2UNnfZoFBpuRVhWqf8nIBvi8kncB+Tijs4TtzhUqspH97u13sXinYVvUOWXjoksgaWmldRZF9Tva7Z4kW9W/9WvnS6Rikah3ZSOKH8ZTI6UUvDRYBCeuru5ViFQfE5jnrqNoBrU/mnwfySTTvtMAD5vhiJShXcCCh5DM34Z29QZnoOSn/lgXHIDWsgbmvaa6pr94feeTMNXEtwHLyWkBjIxgH4QOo0nQ0EHr8pbReNwG3t9L1FnHMJ5CX8WL61UFG3x7lr9kfd7UlbzCmH9ii+iolfEEPNfMUPX3umQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(136003)(39860400002)(366004)(376002)(451199021)(86362001)(38100700002)(31696002)(31686004)(36756003)(6666004)(36916002)(6486002)(26005)(6506007)(186003)(6512007)(53546011)(478600001)(2616005)(2906002)(316002)(5660300002)(66556008)(66946007)(66476007)(8936002)(8676002)(4744005)(83380400001)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aFFNUDBmTzBBcnd5c1JIRWNxYm1RSkFPVkdGaU45ZHFaa1RIdHVUYW9Tam81?=
+ =?utf-8?B?ZkVUQ2VaM0FIcGkwRGR1enI4VkZOQlIzREN5cE1tTjdMRkdGdTZILzdEVktv?=
+ =?utf-8?B?aHRuc0swdWx2QUV3dVRZdkJVZ0p4UG85SzdJSis1Y2lpb0R6TGVoTXdBSlRz?=
+ =?utf-8?B?Vjlva3hiSDV6bTA3SzFDaHRZNXN6UzNYaTNUNEFDRFBpY1lPRHZ6dzVIQWNS?=
+ =?utf-8?B?UGljMitOLzB3VjRTVUhmdktGdWpEQmw4b29PWkNxTFNQWlNPSzF0Q1NEVFlR?=
+ =?utf-8?B?dHRhcEFZNGNCTnhiNkRqNnQ5N3hCNm5TajNVMFZmdmVmMCtMdXM0bDE2a0Fr?=
+ =?utf-8?B?NUtjTW1wYmI5YjY0QUxyb2NTSjN6Vi9ya1lKSVRmMWpaM1N2Y3FaQWVxUGVa?=
+ =?utf-8?B?OVQ5Z0xucFJ1MFVadTFRV2gydzJVakhQZFRZV2J2RW5GU3I0OEJVZXNFVjh4?=
+ =?utf-8?B?OGRuZjlWSEhTYjlGRTR1VHJWVXM3Q1VCZnRuSWsrSklpd2VXN2V5Qm41WXpN?=
+ =?utf-8?B?ZkpncEtDY0ZIeDU0RDRyQlJXUksyK1NiL3FxcDEzcWhNZnU0WldJT25WRGF1?=
+ =?utf-8?B?TEtNd3lWbUZ4OTZPelFaeHA4NXIwNXNqQWNGbUhwKzVsU3ZwUFBoYVU4bXRB?=
+ =?utf-8?B?ZENoSDh6SlRNdVVOL1F1Mll1eEtqelJGQ0xNK0xwTHIyQWkzQjNlc00wM2tp?=
+ =?utf-8?B?V0prVHpYYysrYS8rR3dCN3J6VlF6V09qT0NzbllRNmcvUUdMelpuUjRUWHdj?=
+ =?utf-8?B?Sm1XaU4zMjVSOEY2NWNRWWRwUXh2S0dLWWFqTXNlY29GTXVtR1lNRm8yeXR6?=
+ =?utf-8?B?TnRsNmQ0MUlWVW95QzRPVzJ4R0JWTUwvM0h3MnlqdE12YnNMaUNnNDBpUEx4?=
+ =?utf-8?B?VHRjeFBoY3dLeXRlZGdlc0JVZndWMjJ4Ri9wek4yMkFsTlhmcDdvbDArZDBs?=
+ =?utf-8?B?dUgxMUM1SXNBaldwWWJOOHEzaUY0Ly9pMklIOE9heVN0ci9nNmRhRWd5V2g1?=
+ =?utf-8?B?MGRJK05zUzJlN3I2ZldkVWduWnJOZi9ObDlXLzdRV3p3K1NqY290b2JjZmZE?=
+ =?utf-8?B?Q2pqdW1lTm1SWmFXUUVHc0ZpSjFnclU1TUNVR1NwTjYvbHBJMWY0bGZMcFp2?=
+ =?utf-8?B?dXBBVjdrejM5K3pUZE5aS2dkYVNvUUZQTExsOFFmOTlZQm92U1BsYzRrSG5K?=
+ =?utf-8?B?ZjZGN1VJbDV4QlIvN0VHMFNCTmcxYTBzcklTdDAxNTFZK0U4MXpFT1U4ZGV6?=
+ =?utf-8?B?UVV2WVcrNXpMd2FNYzh6ZDQzbHlPOGM2dkN5Nm5hOWJKSzBMQS91MU5iME5z?=
+ =?utf-8?B?N0ZFcTEwN2FwT1BOeWhQVlZCZ1ZmcE11UmFKcWpBRlBhdTJyNUZEWm5TbjdI?=
+ =?utf-8?B?TGVLd3RjQ3krREFFYVNDSGhXWVMxeGQ2Zkw4R3pUOTFwNTFHVHBJUzF5OFJp?=
+ =?utf-8?B?ODcrdFo3WFpFQmw3QzdkS0cvUzZkbW5Bd3JTeDBFNVpvMFBXMk9HN0Y1U2JU?=
+ =?utf-8?B?M2kxL1VPNEdIRHprNFdyVmh5QklBN2R4VlVCbmE0Q1RxM1dCV2Rnazd5azFM?=
+ =?utf-8?B?dFh4VUlyeFhuOCt0RkJaK0FoV2grcHFCZjRGUHE2bEtLaFM4SktsVWp1S01K?=
+ =?utf-8?B?RVVzVjBXcExhTHJ0UjlSRjRFdXRhSEFkdzJFSWhmTTFCc1U5Z1dwdDNyYkV3?=
+ =?utf-8?B?dUJJWC9CNHhWTElxNkxJMjJFL052TzV6L0R6eHNqWlArc09aRjRIZlA5UlR2?=
+ =?utf-8?B?OUQxSm9BM3VoNkFCL0dlQlFwdFo3RFNocko2RGdoRitvcm9KOFIwSW5XRnpW?=
+ =?utf-8?B?c2NCS3NYT0dLenlJcWg3Sk56RnFHZ1V0cW1tRk4rb241aVBNam8yWEJQUk5w?=
+ =?utf-8?B?MzQvSHJsNmtna240bm1EZGZVREdPSWJnN0VPSEViNzloU2dOREZPTG4yVXRJ?=
+ =?utf-8?B?NXY1ZmYzL2E1ekgwV0t5djFkLzBxTzBoaXJSSFMwZ0diWmU0c2JucWVqQ2V3?=
+ =?utf-8?B?RVhhWlJ4T1Jjdks4QS9lN3BXUDRnb3dRVDlTdzFYb3hFei9xeE5XM0J1L3hW?=
+ =?utf-8?B?aDVGQmVYVWVjbFhJTTFsSDNoa0FaVC8zVFlLck94WEU2OHBXMjRLVXpIc2E1?=
+ =?utf-8?Q?hI1apdiW7z5ZkQ6+ODZ8nVlRP?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: GYaaPbY5qECRgplieqgBYDApX+V0gzJ4pAtd0M80VMCtDpr0MRRPFKcP5xD910Sn50dKYZAHXivgW6lDCJrXjJ4egF6T7REKr+QQHmUqELnkqyj/8HSidcCLakeEDs5EFRLHHBGMAlW78lrXNZzUr5eepYQMm0gQO3iItX5ZdeZZDnXeZSOVvbpwNnyUmjvkyAH/zS7yaOAM20YSVcRFxbc4w84WP20xEOO6N0zU7wqt1WMFApv8BV2c6lMyz1+JUTwYscsIsiiLeAD25SRz6x+6NHSbfmuaI9R+YW1oEGkJvC7GlPnHyu+F4/lBYn1jNkoHwMrsKBeq4lrPjckAq65q1rDtqJoQ8X056WTvMJoKAR40pEQpFwLDofyje4KgMvpc4ySObNcAo/xTEPHLvsjPczfegkcjznOoVazDdOnOWgo+SjqyoxzB+9/A8pIj8pnJhsgHT4aX77t00Wis7c30r/ZHCfNQcDt/HsyHPEVfmx+tUkzAKsG//TCdJZ6c+ER12MvyKccubo7xvDkvber8TiVIseKDXHf25w9X0XJXwUHhBAs5zj2CXxhIVj+dkJjzSYOrzn9Q7/xGrEeyEkFYCCEUz86V8NRFFBoDxjai5JyDHE0dxBQqYaPnKLqn31WnNiNkdUDO3zxvd+xX/j6htUd1qmu5HBVhDzNqYXlEr2iAuTn4drHl5VIT/MCtlKupvO92ByKL2/k7Y/A7/uUxK7YwJ2Btge3TIGjnI1tlSdlEps6F+ZV3hftnTpbcWs+4tVtIrsmAvFt/yhDt3wpLh/WMpRGHD26h7Ku5gFj4hVwGoDhO+xmR/x+Qr0hMVbZTEGTOdFo9gyFqSl35d+RZnJF2pEQ2w+6PkiN2k0j/yowa4Nqg8LaKbiA1UwXF
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32415271-345e-471b-8f2c-08db82c8cf22
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 11:11:58.6701
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vUYBgVxsgNtWC5BZLo0Wx+2GCtaziKV5wzsOXkg1mlEaxsETplij3UdJFIYNgCxC6Mq+QlVrDwWkOCqQZtZqcw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6050
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_06,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=969
+ adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307120099
+X-Proofpoint-ORIG-GUID: T5L5VYxH9DF32RTXqF26xMQaKnubf9S9
+X-Proofpoint-GUID: T5L5VYxH9DF32RTXqF26xMQaKnubf9S9
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Qcom SoCs require scaling the interconnect paths for proper working of the
-peripherals connected through interconnects. Even for accessing the UFS
-controller, someone should setup the interconnect paths. So far, the
-bootloaders used to setup the interconnect paths before booting linux as
-they need to access the UFS storage for things like fetching boot firmware.
-But with the advent of multi boot options, bootloader nowadays like in
-SA8540p SoC do not setup the interconnect paths at all.
+On 11/07/2023 22:45, Mike Christie wrote:
+> Allow SCSI execution callers to pass in a list of failures they want
+> retried.
+> 
+> Signed-off-by: Mike Christie<michael.christie@oracle.com>
+> Reviewed-by: Martin Wilck<mwilck@suse.com>
+> Reviewed-by: Bart Van Assche<bvanassche@acm.org>
+> Reviewed-by: Christoph Hellwig<hch@lst.de>
+> ---
 
-So trying to configure UFS in the absence of the interconnect path
-configuration, results in boot crash.
-
-To fix this issue and also to dynamically scale the interconnects (UFS-DDR
-and CPU-UFS), interconnect API support is added to the Qcom UFS driver.
-With this support, the interconnect paths are scaled dynamically based on
-the gear configuration.
-
-During the early stage of ufs_qcom_init(), ufs_qcom_icc_init() will setup
-the paths to max bandwidth to allow configuring the UFS registers. Touching
-the registers without configuring the icc paths would result in a crash.
-However, we don't really need to set max vote for the icc paths as any
-minimal vote would suffice. But the max value would allow initialization to
-be done faster. After init, the bandwidth will get updated using
-ufs_qcom_icc_update_bw() based on the gear and lane configuration.
-
-The bandwidth values defined in ufs_qcom_bw_table struct are taken from
-Qcom downstream vendor devicetree source and are calculated as per the
-UFS3.1 Spec, Section 6.4.1, HS Gear Rates. So it is fixed across platforms.
-
-Cc: Brian Masney <bmasney@redhat.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/ufs/host/ufs-qcom.c | 131 +++++++++++++++++++++++++++++++++++-
- drivers/ufs/host/ufs-qcom.h |   3 +
- 2 files changed, 133 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 8d6fd4c3324f..8a3132d45a65 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -7,6 +7,7 @@
- #include <linux/time.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/interconnect.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-@@ -46,6 +47,49 @@ enum {
- 	TSTBUS_MAX,
- };
- 
-+#define QCOM_UFS_MAX_GEAR 4
-+#define QCOM_UFS_MAX_LANE 2
-+
-+enum {
-+	MODE_MIN,
-+	MODE_PWM,
-+	MODE_HS_RA,
-+	MODE_HS_RB,
-+	MODE_MAX,
-+};
-+
-+struct __ufs_qcom_bw_table {
-+	u32 bw1;
-+	u32 bw2;
-+} ufs_qcom_bw_table[MODE_MAX + 1][QCOM_UFS_MAX_GEAR + 1][QCOM_UFS_MAX_LANE + 1] = {
-+	[MODE_MIN][0][0] = { 0,		0 },	/* Bandwidth values are in KB/s */
-+	[MODE_PWM][1][1] = { 922,	1000 },
-+	[MODE_PWM][2][1] = { 1844,	1000 },
-+	[MODE_PWM][3][1] = { 3688,	1000 },
-+	[MODE_PWM][4][1] = { 7376,	1000 },
-+	[MODE_PWM][1][2] = { 1844,	1000 },
-+	[MODE_PWM][2][2] = { 3688,	1000 },
-+	[MODE_PWM][3][2] = { 7376,	1000 },
-+	[MODE_PWM][4][2] = { 14752,	1000 },
-+	[MODE_HS_RA][1][1] = { 127796,	1000 },
-+	[MODE_HS_RA][2][1] = { 255591,	1000 },
-+	[MODE_HS_RA][3][1] = { 1492582,	102400 },
-+	[MODE_HS_RA][4][1] = { 2915200,	204800 },
-+	[MODE_HS_RA][1][2] = { 255591,	1000 },
-+	[MODE_HS_RA][2][2] = { 511181,	1000 },
-+	[MODE_HS_RA][3][2] = { 1492582,	204800 },
-+	[MODE_HS_RA][4][2] = { 2915200,	409600 },
-+	[MODE_HS_RB][1][1] = { 149422,	1000 },
-+	[MODE_HS_RB][2][1] = { 298189,	1000 },
-+	[MODE_HS_RB][3][1] = { 1492582,	102400 },
-+	[MODE_HS_RB][4][1] = { 2915200,	204800 },
-+	[MODE_HS_RB][1][2] = { 298189,	1000 },
-+	[MODE_HS_RB][2][2] = { 596378,	1000 },
-+	[MODE_HS_RB][3][2] = { 1492582,	204800 },
-+	[MODE_HS_RB][4][2] = { 2915200,	409600 },
-+	[MODE_MAX][0][0] = { 7643136, 307200 },
-+};
-+
- static struct ufs_qcom_host *ufs_qcom_hosts[MAX_UFS_QCOM_HOSTS];
- 
- static void ufs_qcom_get_default_testbus_cfg(struct ufs_qcom_host *host);
-@@ -789,6 +833,51 @@ static void ufs_qcom_dev_ref_clk_ctrl(struct ufs_qcom_host *host, bool enable)
- 	}
- }
- 
-+static int ufs_qcom_icc_set_bw(struct ufs_qcom_host *host, u32 bw1, u32 bw2)
-+{
-+	struct device *dev = host->hba->dev;
-+	int ret;
-+
-+	ret = icc_set_bw(host->icc_ddr, 0, bw1);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to set bandwidth request: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = icc_set_bw(host->icc_cpu, 0, bw2);
-+	if (ret < 0) {
-+		dev_err(dev, "failed to set bandwidth request: %d\n", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct __ufs_qcom_bw_table ufs_qcom_get_bw_table(struct ufs_qcom_host *host)
-+{
-+	struct ufs_pa_layer_attr *p = &host->dev_req_params;
-+	int gear = max_t(u32, p->gear_rx, p->gear_tx);
-+	int lane = max_t(u32, p->lane_rx, p->lane_tx);
-+
-+	if (ufshcd_is_hs_mode(p)) {
-+		if (p->hs_rate == PA_HS_MODE_B)
-+			return ufs_qcom_bw_table[MODE_HS_RB][gear][lane];
-+		else
-+			return ufs_qcom_bw_table[MODE_HS_RA][gear][lane];
-+	} else {
-+		return ufs_qcom_bw_table[MODE_PWM][gear][lane];
-+	}
-+}
-+
-+static int ufs_qcom_icc_update_bw(struct ufs_qcom_host *host)
-+{
-+	struct __ufs_qcom_bw_table bw_table;
-+
-+	bw_table = ufs_qcom_get_bw_table(host);
-+
-+	return ufs_qcom_icc_set_bw(host, bw_table.bw1, bw_table.bw2);
-+}
-+
- static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
- 				enum ufs_notify_change_status status,
- 				struct ufs_pa_layer_attr *dev_max_params,
-@@ -852,6 +941,8 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
- 		memcpy(&host->dev_req_params,
- 				dev_req_params, sizeof(*dev_req_params));
- 
-+		ufs_qcom_icc_update_bw(host);
-+
- 		/* disable the device ref clock if entered PWM mode */
- 		if (ufshcd_is_hs_mode(&hba->pwr_info) &&
- 			!ufshcd_is_hs_mode(dev_req_params))
-@@ -981,7 +1072,9 @@ static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
- 
- 	switch (status) {
- 	case PRE_CHANGE:
--		if (!on) {
-+		if (on) {
-+			ufs_qcom_icc_update_bw(host);
-+		} else {
- 			if (!ufs_qcom_is_link_active(hba)) {
- 				/* disable device ref_clk */
- 				ufs_qcom_dev_ref_clk_ctrl(host, false);
-@@ -993,6 +1086,9 @@ static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
- 			/* enable the device ref clock for HS mode*/
- 			if (ufshcd_is_hs_mode(&hba->pwr_info))
- 				ufs_qcom_dev_ref_clk_ctrl(host, true);
-+		} else {
-+			ufs_qcom_icc_set_bw(host, ufs_qcom_bw_table[MODE_MIN][0][0].bw1,
-+					    ufs_qcom_bw_table[MODE_MIN][0][0].bw2);
- 		}
- 		break;
- 	}
-@@ -1031,6 +1127,34 @@ static const struct reset_control_ops ufs_qcom_reset_ops = {
- 	.deassert = ufs_qcom_reset_deassert,
- };
- 
-+static int ufs_qcom_icc_init(struct ufs_qcom_host *host)
-+{
-+	struct device *dev = host->hba->dev;
-+	int ret;
-+
-+	host->icc_ddr = devm_of_icc_get(dev, "ufs-ddr");
-+	if (IS_ERR(host->icc_ddr))
-+		return dev_err_probe(dev, PTR_ERR(host->icc_ddr),
-+				    "failed to acquire interconnect path\n");
-+
-+	host->icc_cpu = devm_of_icc_get(dev, "cpu-ufs");
-+	if (IS_ERR(host->icc_cpu))
-+		return dev_err_probe(dev, PTR_ERR(host->icc_cpu),
-+				    "failed to acquire interconnect path\n");
-+
-+	/*
-+	 * Set Maximum bandwidth vote before initializing the UFS controller and
-+	 * device. Ideally, a minimal interconnect vote would suffice for the
-+	 * initialization, but a max vote would allow faster initialization.
-+	 */
-+	ret = ufs_qcom_icc_set_bw(host, ufs_qcom_bw_table[MODE_MAX][0][0].bw1,
-+				  ufs_qcom_bw_table[MODE_MAX][0][0].bw2);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to set bandwidth request\n");
-+
-+	return 0;
-+}
-+
- /**
-  * ufs_qcom_init - bind phy with controller
-  * @hba: host controller instance
-@@ -1085,6 +1209,10 @@ static int ufs_qcom_init(struct ufs_hba *hba)
- 		}
- 	}
- 
-+	err = ufs_qcom_icc_init(host);
-+	if (err)
-+		goto out_variant_clear;
-+
- 	host->device_reset = devm_gpiod_get_optional(dev, "reset",
- 						     GPIOD_OUT_HIGH);
- 	if (IS_ERR(host->device_reset)) {
-@@ -1282,6 +1410,7 @@ static int ufs_qcom_clk_scale_notify(struct ufs_hba *hba,
- 				    dev_req_params->pwr_rx,
- 				    dev_req_params->hs_rate,
- 				    false);
-+		ufs_qcom_icc_update_bw(host);
- 		ufshcd_uic_hibern8_exit(hba);
- 	}
- 
-diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
-index 6289ad5a42d0..dc27395ecba1 100644
---- a/drivers/ufs/host/ufs-qcom.h
-+++ b/drivers/ufs/host/ufs-qcom.h
-@@ -206,6 +206,9 @@ struct ufs_qcom_host {
- 	struct clk *tx_l1_sync_clk;
- 	bool is_lane_clks_enabled;
- 
-+	struct icc_path *icc_ddr;
-+	struct icc_path *icc_cpu;
-+
- #ifdef CONFIG_SCSI_UFS_CRYPTO
- 	struct qcom_ice *ice;
- #endif
--- 
-2.25.1
-
+Reviewed-by: John Garry <john.g.garry@oracle.com>
