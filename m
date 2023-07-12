@@ -2,85 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183FE7500BE
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jul 2023 10:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B35475019B
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jul 2023 10:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbjGLIHz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Jul 2023 04:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
+        id S232209AbjGLId2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Jul 2023 04:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjGLIHy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jul 2023 04:07:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19D7DC
-        for <linux-scsi@vger.kernel.org>; Wed, 12 Jul 2023 01:07:02 -0700 (PDT)
+        with ESMTP id S232957AbjGLIdE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jul 2023 04:33:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4305D2101
+        for <linux-scsi@vger.kernel.org>; Wed, 12 Jul 2023 01:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689149222;
+        s=mimecast20190719; t=1689150488;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=O59WCKxUbMfNmDOivxXW/OE1WeT+hJiPQK1AgImH5r8=;
-        b=RWeuK75NjFPuxrjPXk52kJOIwlZLGHNnas72tUC0Px+SJidvB0a8UrWl52ux5Sq2sX7Xah
-        3ukL/OaRk6b3ojS9GYzufwvMOepfGoSwAKuWLfK8g5nY3W0bS9jXjygNKA8PSziKxwFsAS
-        64xK3lGnRJ6usM9ymd/PJpt6MVkq2zQ=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Ft77lorj+s2P25VAIDS7kNl8SOhboxm+h8Bgo4H0PZo=;
+        b=Pf34cqWXaDsHPzQ6ljhVlphEdcnt68AFclWH+VrBAvtW8NMNk6RdMSm6WzDfQBoLiusICE
+        WIKAWaKIYJrjqicMQB3rWi7yXSQ0JMyBKwRwFLMQJm3Xkd7jIv4ecZxaXRH7tMKfvVoQpJ
+        +K7CeUvzQVDCrn2uq3RMDhtQUgHX3Cg=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-591-OO4lOyVcPJy7LreoZ5WiPg-1; Wed, 12 Jul 2023 04:07:00 -0400
-X-MC-Unique: OO4lOyVcPJy7LreoZ5WiPg-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9932bf9a1e8so418727166b.0
-        for <linux-scsi@vger.kernel.org>; Wed, 12 Jul 2023 01:07:00 -0700 (PDT)
+ us-mta-382-ACqKEXGUMRO0EGTGzPhXYQ-1; Wed, 12 Jul 2023 04:28:07 -0400
+X-MC-Unique: ACqKEXGUMRO0EGTGzPhXYQ-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-765de3a3404so886690685a.2
+        for <linux-scsi@vger.kernel.org>; Wed, 12 Jul 2023 01:28:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689149219; x=1691741219;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O59WCKxUbMfNmDOivxXW/OE1WeT+hJiPQK1AgImH5r8=;
-        b=F7Jqf0MuzoSnM5DzDDQXUa5zupq+hT3th+Y2MsriroZ2w9JEW20dK7fqhcTQ0Q7iNO
-         MB/tu46SKURXaGKaNfi/nWWMvlQYsN/tyIJ44Tn8GKQkgaF7JGcoOEVtyIrmzY90kNZb
-         0+DgmWvZZVB1pXN4UyZZyvZCi+WaH/r2eN9Y75/imWmaMpPHsNRVQp4jvcOANJhWIv9w
-         L/GNgSW9dl9x04g/N4k5J6h73YGKjOVi5fTbDtluBb6v00zTTtNYu2L5yepYLltuyRJw
-         bov2o/4MLPSZyZQDsloiJK26I8WNcc2dDrkXWHnzYsarh1MGnk+uGNnqAWR8nhTqHVP9
-         DvpQ==
-X-Gm-Message-State: ABy/qLYKwGMq7eqbnTjL1uhRaDL4prZrPhcZCEvlwsxh4njHEzQshl+A
-        fL1z4rcBElXB0h5+xFXbghMnKKBu9uozhJZpnR30ukggnYk/yXRLLVEANTzAH2R5iD4IVsktrvQ
-        P8kuXIXMhUapTS7GJTT78HA==
-X-Received: by 2002:a17:906:74d6:b0:993:e860:f20 with SMTP id z22-20020a17090674d600b00993e8600f20mr11896928ejl.19.1689149219505;
-        Wed, 12 Jul 2023 01:06:59 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGuq7PuqcFm5S8HFkqYTOvb4nN21xQh/cSvepQEY3PNGwe/jmsaBmcKV8FXkw8sNp4Dce30IQ==
-X-Received: by 2002:a17:906:74d6:b0:993:e860:f20 with SMTP id z22-20020a17090674d600b00993e8600f20mr11896899ejl.19.1689149219068;
-        Wed, 12 Jul 2023 01:06:59 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id e22-20020a170906249600b00992dcae806bsm2197356ejb.5.2023.07.12.01.06.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 01:06:57 -0700 (PDT)
-Message-ID: <10a3d00f-a3a2-91d1-0f94-9758cdc4b969@redhat.com>
-Date:   Wed, 12 Jul 2023 10:06:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] Revert "virtio-scsi: Send "REPORTED LUNS CHANGED" sense
- data upon disk hotplug events"
-Content-Language: en-US
-To:     Mike Christie <michael.christie@oracle.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>
-Cc:     Fam Zheng <fam@euphon.net>, Thomas Huth <thuth@redhat.com>,
+        d=1e100.net; s=20221208; t=1689150487; x=1691742487;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ft77lorj+s2P25VAIDS7kNl8SOhboxm+h8Bgo4H0PZo=;
+        b=ijFCKtO39RvVbqkMONe4n4xENFkDHqInoZNUEM3ffWg6AdA1TSORpKByrJIpe7+MjD
+         +eCd+cUABdXbT/S3pKLbLbtka/z6xGlXfNF++rMWHxwLo8plOn1A3tqmPBabshPCztoK
+         PTd4HncuZCK8l+YTuMtQ/TJuoaMM4r5nFNHh1PAahtNROWsxY47V4MdmFupKLnxpBcTR
+         kLGf00s79Vba9ZOJYLs5qSrxI1qqSjOK6rBHDIvbLDDkGduSApZl1iHCGnaBOt01bmx3
+         VW5/ZjgMu3Xw4JArqot7KmjNJdPC6zXSFC3H1vUT1IepqxGo0kcZzrrMiJ4PZctZgWQp
+         rI0g==
+X-Gm-Message-State: ABy/qLYXMUcBTIPFqL0SzkLe/P5wzY/ZdTQt5HXh5mVgPTmsaYnn2CCu
+        1QBsz9+5tv5j57TaEihlbhp4s/JblY7U1WeHOnIn/couSJ4CRY6EM8ILzOi4eth3/umClUV7FSH
+        BDvPA1sxkX4JgYVbNqcm8QQ==
+X-Received: by 2002:a37:2c81:0:b0:767:29c9:c647 with SMTP id s123-20020a372c81000000b0076729c9c647mr15297878qkh.28.1689150486784;
+        Wed, 12 Jul 2023 01:28:06 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHCMxGd3FqAHhYi1J0QB6yKcMGoqDkeMZFSBQlJdK2/+s7Yle4fe+XU3U2z7dv77pMeVxMJ6g==
+X-Received: by 2002:a37:2c81:0:b0:767:29c9:c647 with SMTP id s123-20020a372c81000000b0076729c9c647mr15297866qkh.28.1689150486449;
+        Wed, 12 Jul 2023 01:28:06 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-53-134-6.retail.telecomitalia.it. [82.53.134.6])
+        by smtp.gmail.com with ESMTPSA id x21-20020a05620a01f500b007678ee16016sm1975987qkn.45.2023.07.12.01.28.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 01:28:04 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 10:28:00 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Stefan Hajnoczi <stefanha@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Fam Zheng <fam@euphon.net>, Thomas Huth <thuth@redhat.com>,
         Mark Kanda <mark.kanda@oracle.com>, linux-scsi@vger.kernel.org,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         "Michael S. Tsirkin" <mst@redhat.com>, qemu-stable@nongnu.org,
         qemu-devel@nongnu.org, virtualization@lists.linux-foundation.org,
         "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: Re: [PATCH] Revert "virtio-scsi: Send "REPORTED LUNS CHANGED" sense
+ data upon disk hotplug events"
+Message-ID: <v6xzholcgdem3c2jkkuhqtmhzo4wflvkh53nohcgtjpgkh5y2e@bb7vliper2f3>
 References: <20230705071523.15496-1-sgarzare@redhat.com>
  <i3od362o6unuimlqna3aaedliaabauj6g545esg7txidd4s44e@bkx5des6zytx>
- <765f14c5-a938-ebd9-6383-4fe3d5c812ca@oracle.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <765f14c5-a938-ebd9-6383-4fe3d5c812ca@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+ <CAJSP0QX5bf1Gp6mnQ0620FS61n=cY6n_ca7O-cAcH7pYCV2frw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAJSP0QX5bf1Gp6mnQ0620FS61n=cY6n_ca7O-cAcH7pYCV2frw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -90,45 +86,169 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/11/23 22:21, Mike Christie wrote:
-> What was the issue you are seeing?
-> 
-> Was it something like you get the UA. We retry then on one of the
-> retries the sense is not setup correctly, so the scsi error handler
-> runs? That fails and the device goes offline?
-> 
-> If you turn on scsi debugging you would see:
-> 
-> 
-> [  335.445922] sd 0:0:0:0: [sda] tag#15 Add. Sense: Reported luns data has changed
-> [  335.445922] sd 0:0:0:0: [sda] tag#16 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> [  335.445925] sd 0:0:0:0: [sda] tag#16 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> [  335.445929] sd 0:0:0:0: [sda] tag#17 Done: FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_OK cmd_age=0s
-> [  335.445932] sd 0:0:0:0: [sda] tag#17 CDB: Write(10) 2a 00 00 db 4f c0 00 00 20 00
-> [  335.445934] sd 0:0:0:0: [sda] tag#17 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> [  335.445936] sd 0:0:0:0: [sda] tag#17 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> [  335.445938] sd 0:0:0:0: [sda] tag#17 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> [  335.445940] sd 0:0:0:0: [sda] tag#17 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> [  335.445942] sd 0:0:0:0: [sda] tag#17 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> [  335.445945] sd 0:0:0:0: [sda] tag#17 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> [  335.451447] scsi host0: scsi_eh_0: waking up 0/2/2
-> [  335.451453] scsi host0: Total of 2 commands on 1 devices require eh work
-> [  335.451457] sd 0:0:0:0: [sda] tag#16 scsi_eh_0: requesting sense
+On Tue, Jul 11, 2023 at 01:41:31PM -0400, Stefan Hajnoczi wrote:
+>On Tue, 11 Jul 2023 at 13:06, Stefano Garzarella <sgarzare@redhat.com> wrote:
+>>
+>> CCing `./scripts/get_maintainer.pl -f drivers/scsi/virtio_scsi.c`,
+>> since I found a few things in the virtio-scsi driver...
+>>
+>> FYI we have seen that Linux has problems with a QEMU patch for the
+>> virtio-scsi device (details at the bottom of this email in the revert
+>> commit message and BZ).
+>>
+>>
+>> This is what I found when I looked at the Linux code:
+>>
+>> In scsi_report_sense() in linux/drivers/scsi/scsi_error.c linux calls
+>> scsi_report_lun_change() that set `sdev_target->expecting_lun_change =
+>> 1` when we receive a UNIT ATTENTION with REPORT LUNS CHANGED
+>> (sshdr->asc == 0x3f && sshdr->ascq == 0x0e).
+>>
+>> When `sdev_target->expecting_lun_change = 1` is set and we call
+>> scsi_check_sense(), for example to check the next UNIT ATTENTION, it
+>> will return NEEDS_RETRY, that I think will cause the issues we are
+>> seeing.
+>>
+>> `sdev_target->expecting_lun_change` is reset only in
+>> scsi_decide_disposition() when `REPORT_LUNS` command returns with
+>> SAM_STAT_GOOD.
+>> That command is issued in scsi_report_lun_scan() called by
+>> __scsi_scan_target(), called for example by scsi_scan_target(),
+>> scsi_scan_host(), etc.
+>>
+>> So, checking QEMU, we send VIRTIO_SCSI_EVT_RESET_RESCAN during hotplug
+>> and VIRTIO_SCSI_EVT_RESET_REMOVED during hotunplug. In both cases now we
+>> send also the UNIT ATTENTION.
+>>
+>> In the virtio-scsi driver, when we receive VIRTIO_SCSI_EVT_RESET_RESCAN
+>> (hotplug) we call scsi_scan_target() or scsi_add_device(). Both of them
+>> will call __scsi_scan_target() at some points, sending `REPORT_LUNS`
+>> command to the device. This does not happen for
+>> VIRTIO_SCSI_EVT_RESET_REMOVED (hotunplug). Indeed if I remove the
+>> UNIT ATTENTION from the hotunplug in QEMU, everything works well.
+>>
+>> So, I tried to add a scan also for VIRTIO_SCSI_EVT_RESET_REMOVED:
+>>
+>> diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
+>> index bd5633667d01..c57658a63097 100644
+>> --- a/drivers/scsi/virtio_scsi.c
+>> +++ b/drivers/scsi/virtio_scsi.c
+>> @@ -291,6 +291,7 @@ static void virtscsi_handle_transport_reset(struct virtio_scsi *vscsi,
+>>                  }
+>>                  break;
+>>          case VIRTIO_SCSI_EVT_RESET_REMOVED:
+>> +               scsi_scan_host(shost);
+>>                  sdev = scsi_device_lookup(shost, 0, target, lun);
+>>                  if (sdev) {
+>>                          scsi_remove_device(sdev);
+>>
+>> This somehow helps, now linux only breaks if the plug/unplug frequency
+>> is really high. If I put a 5 second sleep between plug/unplug events, it
+>> doesn't break (at least for the duration of my test which has been
+>> running for about 30 minutes, before it used to break after about a
+>> minute).
+>>
+>> Another thing I noticed is that in QEMU maybe we should set the UNIT
+>> ATTENTION first and then send the event on the virtqueue, because the
+>> scan should happen after the unit attention, but I don't know if in any
+>> case the unit attention is processed before the virtqueue.
+>>
+>> I mean something like this:
+>>
+>> diff --git a/hw/scsi/virtio-scsi.c b/hw/scsi/virtio-scsi.c
+>> index 45b95ea070..13db40f4f3 100644
+>> --- a/hw/scsi/virtio-scsi.c
+>> +++ b/hw/scsi/virtio-scsi.c
+>> @@ -1079,8 +1079,8 @@ static void virtio_scsi_hotplug(HotplugHandler *hotplug_dev, DeviceState *dev,
+>>           };
+>>
+>>           virtio_scsi_acquire(s);
+>> -        virtio_scsi_push_event(s, &info);
+>>           scsi_bus_set_ua(&s->bus, SENSE_CODE(REPORTED_LUNS_CHANGED));
+>> +        virtio_scsi_push_event(s, &info);
+>>           virtio_scsi_release(s);
+>>       }
+>>   }
+>> @@ -1111,8 +1111,8 @@ static void virtio_scsi_hotunplug(HotplugHandler *hotplug_dev, DeviceState *dev,
+>>
+>>       if (virtio_vdev_has_feature(vdev, VIRTIO_SCSI_F_HOTPLUG)) {
+>>           virtio_scsi_acquire(s);
+>> -        virtio_scsi_push_event(s, &info);
+>>           scsi_bus_set_ua(&s->bus, SENSE_CODE(REPORTED_LUNS_CHANGED));
+>> +        virtio_scsi_push_event(s, &info);
+>>           virtio_scsi_release(s);
+>>       }
+>>   }
+>
+>That is racy. It's up to the guest whether the event virtqueue or the
+>UNIT ATTENTION will be processed first.
 
-Does this log come from internal discussions within Oracle?
+Yep, agree. I wrote above that UA could be processed in a different
+order. It was just another potential problem.
 
-> I don't know the qemu scsi code well, but I scanned the code for my co-worker
-> and my guess was commit 8cc5583abe6419e7faaebc9fbd109f34f4c850f2 had a race in it.
-> 
-> How is locking done? when it is a bus level UA but there are multiple devices
-> on the bus?
+>
+>If the device wants to ensure ordering then it must withhold the event
+>until the driver has responded to the UNIT ATTENTION. That may not be
+>a good idea though.
+>
+>I'd like to understand the root cause before choosing a solution.
 
-No locking should be necessary, the code is single threaded.  However, 
-what can happen is that two consecutive calls to 
-virtio_scsi_handle_cmd_req_prepare use the unit attention ReqOps, and 
-then the second virtio_scsi_handle_cmd_req_submit finds no unit 
-attention (see the loop in virtio_scsi_handle_cmd_vq).  That can 
-definitely explain the log above.
+This last patch is not the solution.
 
-Paolo
+I think the root cause is in the Linux driver and SCSI subsystem.
+When the SCSI code receive an UA with REPORTED LUN CHANGED, it seems
+it expects that `REPORT_LUNS` command is issued (I tried to describe it
+in the first part).
+
+The problem is that the SCSI stack does not send this command, so we
+should do it in the driver. In fact we do it for
+VIRTIO_SCSI_EVT_RESET_RESCAN (hotplug), but not for
+VIRTIO_SCSI_EVT_RESET_REMOVED (hotunplug).
+
+I think that's where the problem is, but I don't know if that's what the
+specification expects, I haven't found much information on that :-(
+
+>
+>> At this point I think the problem is on the handling of the
+>> VIRTIO_SCSI_EVT_RESET_REMOVED event in the virtio-scsi driver, where
+>> somehow we have to redo the bus scan, but scsi_scan_host() doesn't seem
+>> to be enough when the event rate is very high.
+>
+>Why is it necessary to rescan the whole bus instead of removing just
+>the device that has been unplugged?
+
+I hope I covered in the previous answer.
+
+>
+>> I don't know if along with this fix, we also need to limit the rate in
+>> QEMU somehow.
+>
+>Why is a high rate problematic?
+
+Could be related on the race that you mention before (also without that
+untested diff there should be the race)
+
+>
+>> Sorry for the length of this email, but I'm not familiar with SCSI and
+>> wanted some suggestions on how to proceed.
+>>
+>> Paolo, Stefan, Linux SCSI maintainers, any suggestion?
+>
+>I don't know the Linux SCSI code well enough to say, sorry. I think we
+>need input from someone familiar with the code.
+
+Thank you very much for the suggestions!
+I will try to ping the SCSI maintainers.
+
+>
+>However, QEMU is not at liberty to make changes that break existing
+>guests. So even if it turns out the specs allow something or there is
+>an existing bug in virtio_scsi.ko, we still can't break existing
+>guests.
+
+Yes, I can see that. We need to revert or somehow fix the device in
+QEMU.
+
+Thanks,
+Stefano
 
