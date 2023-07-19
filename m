@@ -2,134 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD92975C638
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Jul 2023 13:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40D775C715
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Jul 2023 14:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjGUL5z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 21 Jul 2023 07:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S230516AbjGUMrD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 21 Jul 2023 08:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbjGUL5q (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Jul 2023 07:57:46 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF81172A
-        for <linux-scsi@vger.kernel.org>; Fri, 21 Jul 2023 04:57:43 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-666e5f0d60bso1246111b3a.3
-        for <linux-scsi@vger.kernel.org>; Fri, 21 Jul 2023 04:57:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689940663; x=1690545463;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gZeVRbN8i3RBrNfW3X1oiz7Rg1AaV6+VX/SLakSfZZA=;
-        b=iKCl353NEddqXRkMvTc4WhEeB5hqbKgT/AUtGB7CfQ3YsTpdC12YZHueB2HFGxILa4
-         2pNgMS7KN3+B/t+ZVNJ6rAciQHePdD+PGsiRPXItha92UsFbSShlGk5dC5uVq+/P85u+
-         qeEpAkebRFfP395V1y6H+WCmtXlJtlMBhyzgnjXPDV7BIZu40cDh5nZcPzfX3lxoZJxn
-         eMq8MPrY+6v0LcHnCapxqWDswAjp9tMbhbbeeT0Z60Cx8+hHLUvWQKwXzHn7Of/a1S6b
-         yEWlmQQAfuncH9J1eYTu2cQLGjm6hMskc8C65A7yzBtJN/85tWwwZvbzERH6Fk2BbCnH
-         feUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689940663; x=1690545463;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gZeVRbN8i3RBrNfW3X1oiz7Rg1AaV6+VX/SLakSfZZA=;
-        b=WM6uX3lmXYFHfpKonxyDIYWO/w6KKQ/H4acDjs58TF1FpfE6mxfMXF3FU5sJ7hcdjX
-         hENQxgN2xcukHGuox2bGOMhDUPcvYwVxuv0DZ1forQDKyZsYg9zXod7tk8YVQtMcd+GO
-         JjjL2hmPrqykg/kVjkOuj6Fn0Wm8Je87mX0LkVLRln2cFHlI+AVDCdtNSM90Ch8jbPLl
-         +Z61h82l/MPMEQi/SLal19zQsfkrQNX6zbrdR8x08hUjE531W+lGEDOy3EmPsKZ1c75t
-         hUveuFrRp0tn7V8POTqnctSO2P5V0Q+Xlc+Py4thLJVkK11+af7u/v2pBngSQe/CNO+n
-         lNcQ==
-X-Gm-Message-State: ABy/qLZZpvtyQ/itxryrO/FNgSf0+IjkR/6weKGdse7YvKc281l3oJ0e
-        J946VXi7oJCieitYuH09Ju5B
-X-Google-Smtp-Source: APBJJlEvmEp/uWX9S9crTApKWRrgbE4M1ih0yNWyhpPGUZogOYzA/q6Zy/eF3S72X0sFN2yoWHinGA==
-X-Received: by 2002:a05:6a00:2404:b0:681:3ed2:b493 with SMTP id z4-20020a056a00240400b006813ed2b493mr1319785pfh.26.1689940662836;
-        Fri, 21 Jul 2023 04:57:42 -0700 (PDT)
-Received: from thinkpad ([117.206.118.181])
-        by smtp.gmail.com with ESMTPSA id ff17-20020a056a002f5100b006675c242548sm2803366pfb.182.2023.07.21.04.57.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 04:57:42 -0700 (PDT)
-Date:   Fri, 21 Jul 2023 17:27:31 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/15] arm64: dts: qcom: sdm845: Fix the min frequency
- of "ice_core_clk"
-Message-ID: <20230721115731.GB2536@thinkpad>
-References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
- <20230720054100.9940-5-manivannan.sadhasivam@linaro.org>
- <20230721071801.e6ngfnkwg2ujsklg@vireshk-i7>
+        with ESMTP id S230436AbjGUMrA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Jul 2023 08:47:00 -0400
+X-Greylist: delayed 127754 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Jul 2023 05:46:56 PDT
+Received: from mailsenadoer.gob.ar (mailsenadoer.gob.ar [190.183.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B406A2D56;
+        Fri, 21 Jul 2023 05:46:56 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mailsenadoer.gob.ar (Postfix) with ESMTP id 8607613E70F2;
+        Wed, 19 Jul 2023 20:22:23 -0300 (-03)
+Received: from mailsenadoer.gob.ar ([127.0.0.1])
+        by localhost (mailsenadoer.gob.ar [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id yEZnGTSqF8zs; Wed, 19 Jul 2023 20:22:23 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by mailsenadoer.gob.ar (Postfix) with ESMTP id 6657D13E71AA;
+        Wed, 19 Jul 2023 20:20:22 -0300 (-03)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mailsenadoer.gob.ar 6657D13E71AA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailsenadoer.gob.ar;
+        s=dkimmailsenadoer; t=1689808822;
+        bh=Aor/WLwl4h5zbhGzya8ajVmHiT+79UPpoXAPFDddDh4=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=Y+H7bn1uKPFHClAzE6Rt3a9iEGfFIglZ3gKlxUR530Vk+kqkhRCCzKDtTXf9LNwh3
+         hvb/0+LNPFxb7aqfN7tODIwuw8KQLnxoelzZtNX36OmHOGk4L4Hbp7yQn+FcicXdC8
+         yTnd7Hp6+V3kXSO4X/O9MxU/X/QnVOlpxo83p1NIMul+PvP8kqSDAfJYNSGo0aG2C3
+         ooZZNxmODlzrhHp0mNc96bOSQHVGZ2SmtWPx86Kkt6a4/uFo1Ci/cvvOx837ZhklWh
+         bE5T2l3Q6b3oxektzZiEXp22W3rxoBL6VaLugIjxbXGB//hhF0jUBmtuXJuulk+OBH
+         wX6zoaDDBIiKg==
+X-Virus-Scanned: amavisd-new at mailsenadoer.gob.ar
+Received: from mailsenadoer.gob.ar ([127.0.0.1])
+        by localhost (mailsenadoer.gob.ar [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id U_25FNL1zjpd; Wed, 19 Jul 2023 20:20:22 -0300 (-03)
+Received: from [192.168.0.37] (unknown [41.216.203.66])
+        by mailsenadoer.gob.ar (Postfix) with ESMTPSA id 2FB2113E6E6C;
+        Wed, 19 Jul 2023 20:18:13 -0300 (-03)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230721071801.e6ngfnkwg2ujsklg@vireshk-i7>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?b?RHVsZcW+aXTDoSB6cHLDoXZhOyDigqwgMiwwMDAsMDAwJzAwIEVVUg==?=
+To:     Recipients <santacruz@mailsenadoer.gob.ar>
+From:   "Pan Richard Wahl" <santacruz@mailsenadoer.gob.ar>
+Date:   Wed, 19 Jul 2023 16:18:04 -0700
+Reply-To: info@wahlfoundation.org
+Message-Id: <20230719231814.2FB2113E6E6C@mailsenadoer.gob.ar>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L5,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Jul 21, 2023 at 12:48:01PM +0530, Viresh Kumar wrote:
-> On 20-07-23, 11:10, Manivannan Sadhasivam wrote:
-> > Minimum frequency of the "ice_core_clk" should be 75MHz as specified in the
-> > downstream vendor devicetree. So fix it!
-> > 
-> > https://git.codelinaro.org/clo/la/kernel/msm-4.9/-/blob/LA.UM.7.3.r1-09300-sdm845.0/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > 
-> > Fixes: 433f9a57298f ("arm64: dts: sdm845: add Inline Crypto Engine registers and clock")
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > index 9ed74bf72d05..89520a9fe1e3 100644
-> > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > @@ -2614,7 +2614,7 @@ ufs_mem_hc: ufshc@1d84000 {
-> >  				<0 0>,
-> >  				<0 0>,
-> >  				<0 0>,
-> > -				<0 300000000>;
-> > +				<75000000 300000000>;
-> >  
-> >  			status = "disabled";
-> >  		};
-> 
-> Please keep new feature and fixes like this in separate series. This
-> could be merged directly in the currently ongoing kernel rc and
-> doesn't need to wait for this series.
-> 
-> Or at least keep the commit at the top, so another maintainer can
-> simply pick it.
-> 
+Drah=C3=BD pr=C3=ADteli,
 
-That's what I did. This patch and previous patch are the fixes patches, so they
-are posted on top of other dts patches to be merged separately if required.
+Jsem pan Richard Wahl, mega v=C3=ADtez 533 milionu $ v jackpotu Mega Millio=
+ns. Daruji 5 n=C3=A1hodne vybran=C3=BDm lidem. Pokud obdr=C5=BE=C3=ADte ten=
+to e-mail, byl v=C3=A1=C5=A1 e-mail vybr=C3=A1n po roztocen=C3=AD koule. Ve=
+t=C5=A1inu sv=C3=A9ho majetku jsem rozdal rade charitativn=C3=ADch organiza=
+c=C3=AD a organizac=C3=AD. Dobrovolne jsem se rozhodl venovat v=C3=A1m c=C3=
+=A1stku =E2=82=AC 2,000,000'00 EUR jako jednomu z 5 vybran=C3=BDch, abych s=
+i overil sv=C3=A9 v=C3=BDhry prostrednictv=C3=ADm n=C3=AD=C5=BEe uveden=C3=
+=A9 str=C3=A1nky YouTube.
 
-- Mani
+VID=C3=8DTE ME ZDE https://www.youtube.com/watch?v=3Dtne02ExNDrw
 
-> -- 
-> viresh
+TOTO JE V=C3=81=C5=A0 DAROVAC=C3=8D K=C3=93D: [DFDW43034RW2023]
 
--- 
-மணிவண்ணன் சதாசிவம்
+Odpovezte na tento e-mail a uvedte k=C3=B3d daru: info@wahlfoundation.org
+
+Douf=C3=A1m, =C5=BEe v=C3=A1m a va=C5=A1=C3=AD rodine udel=C3=A1m radost.
+
+Pozdravy,
+Pan Richard Wahl
