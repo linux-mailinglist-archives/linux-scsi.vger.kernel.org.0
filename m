@@ -2,124 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3936A763BAF
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jul 2023 17:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE6B763C47
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jul 2023 18:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234954AbjGZPzK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Jul 2023 11:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
+        id S233429AbjGZQUv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Jul 2023 12:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234559AbjGZPzB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jul 2023 11:55:01 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AEE1FDA;
-        Wed, 26 Jul 2023 08:55:00 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b89cfb4571so54932025ad.3;
-        Wed, 26 Jul 2023 08:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690386899; x=1690991699;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SYiHL2ozOyveWI+inxTTjHDwvkbYdJrgipWUXhsAZL8=;
-        b=XEEaYSyrQBL08qMVHdURLxPg5HEFytl+QWJysi0dcml55zzU8VjgK8f0K9eoPnPn5/
-         wkZeb8U0u9i3QUMPEurHZgt1aw0tyAWrIOUzonI2QSR+Ln3Os5J2YUMquG1TK/Nv2vZ8
-         278UlKmWtO4ihPhYVt1c8pwksd1D1ApNGMJjGqW+rZo4ibZRdeJtu/WZYbhH5IF6kEqD
-         YMqjY69FaoPO861gPmitfAVMeyZkMR5cqyrfHFtBQqwLrBOR0IT7pK7J/crhzKuVDJrB
-         1VLym1UabHqIGpuNWm2rg81GzSr6ukS1i+clRe4g/AN7DTisy10Z7Q+2gBltfWg7zMOC
-         67ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690386899; x=1690991699;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SYiHL2ozOyveWI+inxTTjHDwvkbYdJrgipWUXhsAZL8=;
-        b=GPlqM+FL8rctGZbtJyP0uTPotlE5xOnKY4BicVVnlvMV4N0UXEWNstus/UQGmJj5s1
-         2Nn/JjWB9aJOunedqTWf1zq1mvxfN6buEJTDurrRZ1MXTUSmkfwby7cxEcu+wbZMmRoV
-         UKg1DlaZUF1egp+k/KLO5cHiNyxqdf5v/Hx0zxBmOp2iHUsB4ScJ0ANAnBr2HR2T4NBJ
-         MAM0bxkaev35f1HvvISzD2XATY42/Xcw3VSDWJ6pMD+LME8Qmuh3El1vGitMdg54JkOj
-         g1e1+WUyq/dtkFjnu/ltat7N216Li357P5+TfRGv+k/Vcoh83zyfeeqlfS5nEoZVJ37E
-         gozw==
-X-Gm-Message-State: ABy/qLYtoo0RMx90EkHnBRFWw0UQD6rintAstTCIplIgD1sy32xTR6Sj
-        NQ8YT32s6tJ8zvCKwAvxB4c=
-X-Google-Smtp-Source: APBJJlGRulKVjZFH9+XlJrADMb7WxxRiq7QGaFsRAROTOVPtbMDCVpTbHAi/LgejMzkTaatj9FFNAQ==
-X-Received: by 2002:a17:902:ced2:b0:1b8:b459:f47a with SMTP id d18-20020a170902ced200b001b8b459f47amr3168837plg.34.1690386899385;
-        Wed, 26 Jul 2023 08:54:59 -0700 (PDT)
-Received: from 377044c6c369.cse.ust.hk (191host097.mobilenet.cse.ust.hk. [143.89.191.97])
-        by smtp.gmail.com with ESMTPSA id q17-20020a170902dad100b001ac6b926621sm13314320plx.292.2023.07.26.08.54.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jul 2023 08:54:58 -0700 (PDT)
-From:   Chengfeng Ye <dg573847474@gmail.com>
-To:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        justin.tee@broadcom.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chengfeng Ye <dg573847474@gmail.com>
-Subject: [PATCH] scsi: lpfc: Fix potential deadlock on &phba->hbalock
-Date:   Wed, 26 Jul 2023 15:53:42 +0000
-Message-Id: <20230726155342.51623-1-dg573847474@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233070AbjGZQUt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jul 2023 12:20:49 -0400
+Received: from mailsenadoer.gob.ar (mailsenadoer.gob.ar [190.183.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15671BDA
+        for <linux-scsi@vger.kernel.org>; Wed, 26 Jul 2023 09:20:45 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mailsenadoer.gob.ar (Postfix) with ESMTP id E85A7184786D
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jul 2023 14:20:18 -0300 (-03)
+Received: from mailsenadoer.gob.ar ([127.0.0.1])
+        by localhost (mailsenadoer.gob.ar [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id O0dvwawl6E8l for <linux-scsi@vger.kernel.org>;
+        Mon, 24 Jul 2023 14:20:18 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by mailsenadoer.gob.ar (Postfix) with ESMTP id 814771A43490
+        for <linux-scsi@vger.kernel.org>; Sat, 22 Jul 2023 12:03:31 -0300 (-03)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mailsenadoer.gob.ar 814771A43490
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailsenadoer.gob.ar;
+        s=dkimmailsenadoer; t=1690038211;
+        bh=Aor/WLwl4h5zbhGzya8ajVmHiT+79UPpoXAPFDddDh4=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=izc7509Si/vIGj67XjaJEcGOx+BxCrTseIBX4q79gvYKRDwX6tIcr7zE0bpyXzV8O
+         iDzQmaXVMerCzL091qkYw20E4uyLUY1L96bP4B0X5mHQimteEddMYAbSsHlhCWX7Ko
+         kF+oVcJh2ZJ9UDi3IMERpVxhQnSuDOFr83RMUteIZEWFFy+uYa6hzg3M4KG2l/tQ5g
+         OhXRTaRx0oQJQcL5V0zb+ju+AtAoQ5FzPeCoivJBEWBgeFWSLh51Bqs2rg60qxyoXu
+         T45eOGn8CWOmeV6KUB6aHTlHBtz25ogef9a8xIbMK1mW/QZiZUy6plpbTsjbG96lTA
+         JGBwLvdkUyWaA==
+X-Virus-Scanned: amavisd-new at mailsenadoer.gob.ar
+Received: from mailsenadoer.gob.ar ([127.0.0.1])
+        by localhost (mailsenadoer.gob.ar [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ZE_g4qwVYV_e for <linux-scsi@vger.kernel.org>;
+        Sat, 22 Jul 2023 12:03:31 -0300 (-03)
+Received: from [192.168.0.166] (unknown [105.8.7.246])
+        by mailsenadoer.gob.ar (Postfix) with ESMTPSA id 61AD017050D9
+        for <linux-scsi@vger.kernel.org>; Fri, 21 Jul 2023 13:57:07 -0300 (-03)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?b?RHVsZcW+aXTDoSB6cHLDoXZhOyDigqwgMiwwMDAsMDAwJzAwIEVVUg==?=
+To:     linux-scsi@vger.kernel.org
+From:   "Pan Richard Wahl" <santacruz@mailsenadoer.gob.ar>
+Date:   Fri, 21 Jul 2023 09:57:03 -0700
+Reply-To: info@wahlfoundation.org
+Message-Id: <20230721165709.61AD017050D9@mailsenadoer.gob.ar>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-As &phba->hbalock is acquired by hardirq such as lpfc_sli_intr_handler(),
-process context code acquiring the lock &phba->hbalock should disable
-irq, otherwise deadlock could happen if the irq preempt the execution
-while the lock is held in process context on the same CPU.
+Drah=C3=BD pr=C3=ADteli,
 
-Most lock acquicision site disables irq but inside the callback
-lpfc_cmpl_els_uvem() the lock is acquired without explicitly disable irq.
-The outside caller of this callback also seems not disable irq.
+Jsem pan Richard Wahl, mega v=C3=ADtez 533 milionu $ v jackpotu Mega Millio=
+ns. Daruji 5 n=C3=A1hodne vybran=C3=BDm lidem. Pokud obdr=C5=BE=C3=ADte ten=
+to e-mail, byl v=C3=A1=C5=A1 e-mail vybr=C3=A1n po roztocen=C3=AD koule. Ve=
+t=C5=A1inu sv=C3=A9ho majetku jsem rozdal rade charitativn=C3=ADch organiza=
+c=C3=AD a organizac=C3=AD. Dobrovolne jsem se rozhodl venovat v=C3=A1m c=C3=
+=A1stku =E2=82=AC 2,000,000'00 EUR jako jednomu z 5 vybran=C3=BDch, abych s=
+i overil sv=C3=A9 v=C3=BDhry prostrednictv=C3=ADm n=C3=AD=C5=BEe uveden=C3=
+=A9 str=C3=A1nky YouTube.
 
-[Deadlock Scenario]
-lpfc_cmpl_els_uvem()
-    -> spin_lock(&phba->hbalock)
-        <irq>
-        -> lpfc_sli_intr_handle()
-        -> spin_lock(&phba->hbalock); (deadlock here)
+VID=C3=8DTE ME ZDE https://www.youtube.com/watch?v=3Dtne02ExNDrw
 
-This flaw was found by an experimental static analysis tool I am
-developing for irq-related deadlock.
+TOTO JE V=C3=81=C5=A0 DAROVAC=C3=8D K=C3=93D: [DFDW43034RW2023]
 
-The patch fix the potential deadlock by spin_lock_irqsave() just like
-other callsite.
+Odpovezte na tento e-mail a uvedte k=C3=B3d daru: info@wahlfoundation.org
 
-Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
----
- drivers/scsi/lpfc/lpfc_els.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Douf=C3=A1m, =C5=BEe v=C3=A1m a va=C5=A1=C3=AD rodine udel=C3=A1m radost.
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 2bad9954c355..9667b4937b3a 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -12398,6 +12398,7 @@ lpfc_cmpl_els_uvem(struct lpfc_hba *phba, struct lpfc_iocbq *icmdiocb,
- 	u32 ulp_word4 = get_job_word4(phba, rspiocb);
- 	struct lpfc_dmabuf *dmabuf = icmdiocb->cmd_dmabuf;
- 	struct lpfc_vmid *vmid;
-+	unsigned long flags;
- 
- 	vmid = vmid_context->vmp;
- 	if (!ndlp || ndlp->nlp_state != NLP_STE_UNMAPPED_NODE)
-@@ -12419,11 +12420,11 @@ lpfc_cmpl_els_uvem(struct lpfc_hba *phba, struct lpfc_iocbq *icmdiocb,
- 				 ulp_status, ulp_word4);
- 		goto out;
- 	}
--	spin_lock(&phba->hbalock);
-+	spin_lock_irqsave(&phba->hbalock, flags);
- 	/* Set IN USE flag */
- 	vport->vmid_flag |= LPFC_VMID_IN_USE;
- 	phba->pport->vmid_flag |= LPFC_VMID_IN_USE;
--	spin_unlock(&phba->hbalock);
-+	spin_unlock_irqrestore(&phba->hbalock, flags);
- 
- 	if (vmid_context->instantiated) {
- 		write_lock(&vport->vmid_lock);
--- 
-2.17.1
-
+Pozdravy,
+Pan Richard Wahl
