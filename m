@@ -2,117 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01F075E06A
-	for <lists+linux-scsi@lfdr.de>; Sun, 23 Jul 2023 10:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250CA75E12F
+	for <lists+linux-scsi@lfdr.de>; Sun, 23 Jul 2023 12:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjGWIBK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 23 Jul 2023 04:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
+        id S229835AbjGWKT4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 23 Jul 2023 06:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGWIBJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 23 Jul 2023 04:01:09 -0400
-Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FCFEB1;
-        Sun, 23 Jul 2023 01:01:07 -0700 (PDT)
-Received: from localhost.localdomain (unknown [39.174.92.167])
-        by mail-app3 (Coremail) with SMTP id cC_KCgD3qJ043rxkZHd_Cw--.45492S4;
-        Sun, 23 Jul 2023 16:00:57 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     njavali@marvell.com, mrangankar@marvell.com,
-        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lin Ma <linma@zju.edu.cn>
-Subject: [PATCH v1] scsi: qla4xxx: Add length check when paring nlattrs
-Date:   Sun, 23 Jul 2023 16:00:53 +0800
-Message-Id: <20230723080053.3714534-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgD3qJ043rxkZHd_Cw--.45492S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZF1rAF1UCw4DAr48uFW3Jrb_yoW8tr1Dpa
-        yvga4Ykw4qkw1fAr17Ar48ZwsYkw1xtFWDG3Waq348A3ZxXFWfuFy7GFySvryDAws5Ar1a
-        qrs5tFyFgr9rXFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJV
-        W8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfU50PfDUUUU
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229653AbjGWKTz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 23 Jul 2023 06:19:55 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87D9120;
+        Sun, 23 Jul 2023 03:19:54 -0700 (PDT)
+Received: from kwepemm600012.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4R7zj95Mw9zNmJ5;
+        Sun, 23 Jul 2023 18:16:29 +0800 (CST)
+Received: from build.huawei.com (10.175.101.6) by
+ kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Sun, 23 Jul 2023 18:19:50 +0800
+From:   Wenchao Hao <haowenchao2@huawei.com>
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Dan Carpenter <error27@gmail.com>, <louhongxiang@huawei.com>,
+        Wenchao Hao <haowenchao2@huawei.com>
+Subject: [PATCH v3 0/9] scsi:scsi_debug: Add error injection for single device
+Date:   Mon, 24 Jul 2023 07:40:56 +0800
+Message-ID: <20230723234105.1628982-1-haowenchao2@huawei.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600012.china.huawei.com (7.193.23.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There are three places that qla4xxx looply parses nlattrs
-* qla4xxx_set_chap_entry(...)
-* qla4xxx_iface_set_param(...)
-* qla4xxx_sysfs_ddb_set_param(...)
-and each of them directly converts the nlattr to specific pointer of
-structure without length checking. This could be dangerous as those
-attributes are not validated before and a malformed nlattr (e.g., length
-0) could result in an OOB read that leaks heap dirty data.
+The original error injection mechanism was based on scsi_host which
+could not inject fault for a single SCSI device.
 
-This patch adds the nla_len check before accessing the nlattr data and
-error return EINVAL if the length check fails.
+This patchset provides the ability to inject errors for a single
+SCSI device. Now we supports inject timeout errors, queuecommand
+errors, and hostbyte, driverbyte, statusbyte, and sense data for
+specific SCSI Command. Two new error injection is defined to make
+abort command or reset LUN failed.
 
-Fixes: 26ffd7b45fe9 ("[SCSI] qla4xxx: Add support to set CHAP entries")
-Fixes: 1e9e2be3ee03 ("[SCSI] qla4xxx: Add flash node mgmt support")
-Fixes: 00c31889f751 ("[SCSI] qla4xxx: fix data alignment and use nl helpers")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
----
- drivers/scsi/qla4xxx/ql4_os.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Besides error injection for single device, this patchset add a
+new interface to make reset target failed for each scsi_target.
 
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index b2a3988e1e15..675332e49a7b 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -968,6 +968,11 @@ static int qla4xxx_set_chap_entry(struct Scsi_Host *shost, void *data, int len)
- 	memset(&chap_rec, 0, sizeof(chap_rec));
- 
- 	nla_for_each_attr(attr, data, len, rem) {
-+		if (nla_len(attr) < sizeof(*param_info)) {
-+			rc = -EINVAL;
-+			goto exit_set_chap;
-+		}
-+
- 		param_info = nla_data(attr);
- 
- 		switch (param_info->param) {
-@@ -2750,6 +2755,11 @@ qla4xxx_iface_set_param(struct Scsi_Host *shost, void *data, uint32_t len)
- 	}
- 
- 	nla_for_each_attr(attr, data, len, rem) {
-+		if (nla_len(attr) < sizeof(*iface_param)) {
-+			rval = -EINVAL;
-+			goto exit_init_fw_cb;
-+		}
-+
- 		iface_param = nla_data(attr);
- 
- 		if (iface_param->param_type == ISCSI_NET_PARAM) {
-@@ -8104,6 +8114,11 @@ qla4xxx_sysfs_ddb_set_param(struct iscsi_bus_flash_session *fnode_sess,
- 
- 	memset((void *)&chap_tbl, 0, sizeof(chap_tbl));
- 	nla_for_each_attr(attr, data, len, rem) {
-+		if (nla_len(attr) < sizeof(*fnode_param)) {
-+			rc = -EINVAL;
-+			goto exit_set_param;
-+		}
-+
- 		fnode_param = nla_data(attr);
- 
- 		switch (fnode_param->param) {
+The first two patch add an debugfs interface to add and inquiry single
+device's error injection info; the third patch defined how to remove
+an injection which has been added. The following 5 patches use the
+injection info and generate the related error type. The last one just
+Add a new interface to make reset target failed.
+
+V3:
+  - Add two more error types to fail abort command and lun reset
+  - Fix memleak when rmmod scsi_debug without clearing errors injected
+  - Fix memkeak because did not implement release in sdebug_error_fops
+  - Fix possible NULL point access in scsi_debug_slave_destroy
+  - Move specific error type's description to each single patch which
+    implement this error type
+  - Add interface to make target reset fail
+
+V2:
+  - Using debugfs rather than sysfs attribute interface to manage error
+
+Wenchao Hao (9):
+  scsi:scsi_debug: create scsi_debug directory in the debugfs filesystem
+  scsi:scsi_debug: Add interface to manage single device's error inject
+  scsi:scsi_debug: Define grammar to remove added error injection
+  scsi:scsi_debug: timeout command if the error is injected
+  scsi:scsi_debug: Return failed value if the error is injected
+  scsi:scsi_debug: set command's result and sense data if the error is injected
+  scsi:scsi_debug: Add new error injection abort failed
+  scsi:scsi_debug: Add new error injection reset lun failed
+  scsi:scsi_debug: Add debugfs interface to fail target reset
+
+ drivers/scsi/scsi_debug.c | 503 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 498 insertions(+), 5 deletions(-)
+
 -- 
-2.17.1
+2.35.3
 
