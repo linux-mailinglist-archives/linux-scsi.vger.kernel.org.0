@@ -2,59 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CEC7600C7
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jul 2023 22:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6E57600A6
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jul 2023 22:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjGXU5b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jul 2023 16:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
+        id S229826AbjGXUul (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jul 2023 16:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjGXU5a (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jul 2023 16:57:30 -0400
-X-Greylist: delayed 812 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Jul 2023 13:57:27 PDT
-Received: from mail.cybernetics.com (mail.cybernetics.com [72.215.153.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4611729
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jul 2023 13:57:27 -0700 (PDT)
-X-ASG-Debug-ID: 1690231433-1cf4391f2718a3f0001-ziuLRu
-Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id ckntnvKwGMAvM1j7; Mon, 24 Jul 2023 16:43:53 -0400 (EDT)
-X-Barracuda-Envelope-From: tonyb@cybernetics.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.10.4.126
-X-ASG-Whitelist: Client
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
-        bh=vEkIZa3trZFApyXz99Xah7C6lrxYHNxCiLNzQIDhMWs=;
-        h=Content-Transfer-Encoding:Content-Type:Subject:From:Cc:To:Content-Language:
-        MIME-Version:Date:Message-ID; b=TJgzCvxUcbSYTrmpYpWVwQOrCp+CPrbFkLQnnYppKgqSd
-        m/DrIaLt5YEWsGABC6MjJ4p453KT3JLJu7OUMfQoMjkiPzswNpPHy/vKKjAm83lkCj6TprFA9kGie
-        eemaYwGCuE/S2zS/g9DU5vBXvVbZuffEI135bHcV3zJaVt1X0=
-Received: from [10.157.2.224] (HELO [192.168.200.1])
-  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
-  with ESMTPS id 12730561; Mon, 24 Jul 2023 16:43:53 -0400
-Message-ID: <b570f5fe-cb7c-863a-6ed9-f6774c219b88@cybernetics.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.157.2.224
-Date:   Mon, 24 Jul 2023 16:43:53 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Content-Language: en-US
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        with ESMTP id S229577AbjGXUuj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jul 2023 16:50:39 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45AE10C3;
+        Mon, 24 Jul 2023 13:50:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OYTJvIAB8armLdjFxMwh4eSieKXJT6xjO05VM/ChcnE=; b=RMBu/I6CBq72t9E1PN6/U2q1BC
+        eEsWz4I0tSZ8p+V45mL1CpupwdqzYM3GAAm8hap3+9Eo+JXttG8Uq6TYvXlk3A2yOq4UvR1IjLbN2
+        szIw/YgCYt+x1bnuKVZveBQ+gtNCoRo/+9ZVHaR1rkQmYcHehjuPhwgc0WHDGjDIPZjPAB3sIm1sB
+        YB492rfmmvzsg3EIUmBo2qWFaS6Qaf5C/0mL/VXiIHCfd9IFEVz+55KgELrmVkaoiYCwS2gCwWmjX
+        XaWMTHOiysJJiMUp0Lc1wAEawuzk/wQ7BTUNB2eYSEf7ndLI13dnzU2thU2gfZNO2L0iXsKwd+dEL
+        +I7jynKw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qO2Uy-002i3Y-1O;
+        Mon, 24 Jul 2023 20:49:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F1030300155;
+        Mon, 24 Jul 2023 22:49:42 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D1AD32CC644CB; Mon, 24 Jul 2023 22:49:42 +0200 (CEST)
+Date:   Mon, 24 Jul 2023 22:49:42 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        James Smart <james.smart@broadcom.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Willy Tarreau <w@1wt.eu>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-From:   Tony Battersby <tonyb@cybernetics.com>
-Subject: [PATCH RFC] scsi {add,remove}-single-device and /proc/scsi/scsi
-Content-Type: text/plain; charset=UTF-8
-X-ASG-Orig-Subj: [PATCH RFC] scsi {add,remove}-single-device and /proc/scsi/scsi
-Content-Transfer-Encoding: 8bit
-X-Barracuda-Connect: UNKNOWN[10.10.4.126]
-X-Barracuda-Start-Time: 1690231433
-X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 0
-X-Virus-Scanned: by bsmtpd at cybernetics.com
-X-Barracuda-Scan-Msg-Size: 4248
+        linux-scsi@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Huang Rui <ray.huang@amd.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>
+Subject: Re: [patch 17/29] x86/cpu: Provide a sane leaf 0xb/0x1f parser
+Message-ID: <20230724204942.GD3745454@hirez.programming.kicks-ass.net>
+References: <20230724155329.474037902@linutronix.de>
+ <20230724172844.690165660@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230724172844.690165660@linutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,133 +73,120 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I am trying to fix a bug in the parser for these commands:
+On Mon, Jul 24, 2023 at 07:44:17PM +0200, Thomas Gleixner wrote:
 
-echo "scsi add-single-device host channel id lun" > /proc/scsi/scsi
-echo "scsi remove-single-device host channel id lun" > /proc/scsi/scsi
+> +static inline bool topo_subleaf(struct topo_scan *tscan, u32 leaf, u32 subleaf)
+> +{
+> +	unsigned int dom, maxtype = leaf == 0xb ? CORE_TYPE + 1 : MAX_TYPE;
+> +	struct {
+> +		// eax
+> +		u32	x2apic_shift	:  5, // Number of bits to shift APIC ID right
+> +					      // for the topology ID at the next level
+> +			__rsvd0		: 27; // Reserved
+> +					      // ebx
+> +		u32	num_processors	: 16, // Number of processors at current level
+> +			__rsvd1		: 16; // Reserved
+> +					      // ecx
+> +		u32	level		:  8, // Current topology level. Same as sub leaf number
+> +			type		:  8, // Level type. If 0, invalid
+> +			__rsvd2		: 16; // Reserved
+> +					      // edx
+> +		u32	x2apic_id	: 32; // X2APIC ID of the current logical processor
 
-With the current parser, if you omit some of the fields (for example the
-lun), then the kernel will usually fill in the missing parameters with a
-0, but on rare occasion it might supply something else.  So my question
-for linux-scsi is: does anyone rely on omitting some of the parameters
-in the cmds above and expect the kernel to supply 0 for the missing
-parameters (for example lun is often 0)?  If so, then I can make the
-parser always supply a 0 for the missing parameters.  If not, then I can
-make the parser return an error if there are paramters missing, on the
-theory that guessing which device to add or remove is a bad idea.
+That comment seems inconsistent, either have then all aligned or move
+all register names left.
 
-Below is the patch to return an error for a missing parameter.  The
-patch to use 0 instead of returning an error is similar but intead of
-goto uses:
+But yeah, I think this is more or less what we ended up with last time I
+went through this.
 
-host    = (p < end) ? simple_strtoul(p, &p, 0) : 0;
-channel = (p + 1 < end) ? simple_strtoul(p + 1, &p, 0) : 0;
-id      = (p + 1 < end) ? simple_strtoul(p + 1, &p, 0) : 0;
-lun     = (p + 1 < end) ? simple_strtoul(p + 1, &p, 0) : 0;
+> +	} sl;
+> +
+> +	cpuid_subleaf(leaf, subleaf, &sl);
+> +
+> +	if (!sl.num_processors || sl.type == INVALID_TYPE)
+> +		return false;
+> +
+> +	if (sl.type >= maxtype) {
+> +		/*
+> +		 * As the subleafs are ordered in domain level order, this
+> +		 * could be recovered in theory by propagating the
+> +		 * information at the last parsed level.
+> +		 *
+> +		 * But if the infinite wisdom of hardware folks decides to
+> +		 * create a new domain type between CORE and MODULE or DIE
+> +		 * and DIEGRP, then that would overwrite the CORE or DIE
+> +		 * information.
+> +		 *
+> +		 * It really would have been too obvious to make the domain
+> +		 * type space sparse and leave a few reserved types between
+> +		 * the points which might change instead of forcing
+> +		 * software to either create a monstrosity of workarounds
+> +		 * or just being up the creek without a paddle.
+> +		 *
+> +		 * Refuse to implement monstrosity, emit an error and try
+> +		 * to survive.
+> +		 */
+> +		pr_err_once("Topology: leaf 0x%x:%d Unknown domain type %u\n",
+> +			    leaf, subleaf, sl.type);
+> +		return true;
+> +	}
+> +
+> +	dom = topo_domain_map[sl.type];
+> +	if (!dom) {
+> +		tscan->c->topo.initial_apicid = sl.x2apic_id;
+> +	} else if (tscan->c->topo.initial_apicid != sl.x2apic_id) {
+> +		pr_warn_once(FW_BUG "CPUID leaf 0x%x subleaf %d APIC ID mismatch %x != %x\n",
+> +			     leaf, subleaf, tscan->c->topo.initial_apicid, sl.x2apic_id);
+> +	}
+> +
+> +	topology_set_dom(tscan, dom, sl.x2apic_shift, sl.num_processors);
+> +	return true;
+> +}
+> +
+> +static bool parse_topology_leaf(struct topo_scan *tscan, u32 leaf)
+> +{
+> +	u32 subleaf;
+> +
+> +	if (tscan->c->cpuid_level < leaf)
+> +		return false;
+> +
+> +	/* Read all available subleafs and populate the levels */
+> +	for (subleaf = 0; topo_subleaf(tscan, leaf, subleaf); subleaf++);
 
----
+Personally I prefer:
 
-From 4f8f3291b18fddb2cf75581a2a2cf847fd2896a7 Mon Sep 17 00:00:00 2001
-From: Tony Battersby <tonyb@cybernetics.com>
-Date: Fri, 21 Jul 2023 11:12:27 -0400
-Subject: [PATCH] scsi: core: fix parsing of scsi {add,remove}-single-device
+	for (;;)
+		;
 
-When parsing the "scsi add-single-device" and
-"scsi remove-single-device" commands written to /proc/scsi/scsi, make
-sure the parser doesn't skip over the NUL string terminator and read
-past the end of the user-supplied string.
+that is, have the semicolon on it's own line, but meh.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Cc: stable@vger.kernel.org
-Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
----
- drivers/scsi/scsi_proc.c | 48 +++++++++++++++++++++++++++++++---------
- 1 file changed, 37 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/scsi/scsi_proc.c b/drivers/scsi/scsi_proc.c
-index 4a6eb1741be0..b27c8da83e62 100644
---- a/drivers/scsi/scsi_proc.c
-+++ b/drivers/scsi/scsi_proc.c
-@@ -406,7 +406,7 @@ static ssize_t proc_scsi_write(struct file *file, const char __user *buf,
- 			       size_t length, loff_t *ppos)
- {
- 	int host, channel, id, lun;
--	char *buffer, *p;
-+	char *buffer, *end, *p;
- 	int err;
- 
- 	if (!buf || length > PAGE_SIZE)
-@@ -421,10 +421,14 @@ static ssize_t proc_scsi_write(struct file *file, const char __user *buf,
- 		goto out;
- 
- 	err = -EINVAL;
--	if (length < PAGE_SIZE)
--		buffer[length] = '\0';
--	else if (buffer[PAGE_SIZE-1])
--		goto out;
-+	if (length < PAGE_SIZE) {
-+		end = buffer + length;
-+		*end = '\0';
-+	} else {
-+		end = buffer + PAGE_SIZE - 1;
-+		if (*end)
-+			goto out;
-+	}
- 
- 	/*
- 	 * Usage: echo "scsi add-single-device 0 1 2 3" >/proc/scsi/scsi
-@@ -432,11 +436,22 @@ static ssize_t proc_scsi_write(struct file *file, const char __user *buf,
- 	 */
- 	if (!strncmp("scsi add-single-device", buffer, 22)) {
- 		p = buffer + 23;
-+		if (p >= end)
-+			goto out;
- 
- 		host = simple_strtoul(p, &p, 0);
--		channel = simple_strtoul(p + 1, &p, 0);
--		id = simple_strtoul(p + 1, &p, 0);
--		lun = simple_strtoul(p + 1, &p, 0);
-+		if (++p >= end)
-+			goto out;
-+
-+		channel = simple_strtoul(p, &p, 0);
-+		if (++p >= end)
-+			goto out;
-+
-+		id = simple_strtoul(p, &p, 0);
-+		if (++p >= end)
-+			goto out;
-+
-+		lun = simple_strtoul(p, &p, 0);
- 
- 		err = scsi_add_single_device(host, channel, id, lun);
- 
-@@ -446,11 +461,22 @@ static ssize_t proc_scsi_write(struct file *file, const char __user *buf,
- 	 */
- 	} else if (!strncmp("scsi remove-single-device", buffer, 25)) {
- 		p = buffer + 26;
-+		if (p >= end)
-+			goto out;
- 
- 		host = simple_strtoul(p, &p, 0);
--		channel = simple_strtoul(p + 1, &p, 0);
--		id = simple_strtoul(p + 1, &p, 0);
--		lun = simple_strtoul(p + 1, &p, 0);
-+		if (++p >= end)
-+			goto out;
-+
-+		channel = simple_strtoul(p, &p, 0);
-+		if (++p >= end)
-+			goto out;
-+
-+		id = simple_strtoul(p, &p, 0);
-+		if (++p >= end)
-+			goto out;
-+
-+		lun = simple_strtoul(p, &p, 0);
- 
- 		err = scsi_remove_single_device(host, channel, id, lun);
- 	}
--- 
-2.25.1
-
+> +
+> +	/* If subleaf 0 failed to parse, give up */
+> +	if (!subleaf)
+> +		return false;
+> +
+> +	/*
+> +	 * There are machines in the wild which have shift 0 in the subleaf
+> +	 * 0, but advertise 2 logical processors at that level. They are
+> +	 * truly SMT.
+> +	 */
+> +	if (!tscan->dom_shifts[TOPO_SMT_DOMAIN] && tscan->dom_ncpus[TOPO_SMT_DOMAIN] > 1) {
+> +		u16 sft = get_count_order(tscan->dom_ncpus[TOPO_SMT_DOMAIN]);
+> +
+> +		pr_warn_once(FW_BUG "CPUID leaf 0x%x subleaf 0 has shift level 0 but %u CPUs\n",
+> +			     leaf, tscan->dom_ncpus[TOPO_SMT_DOMAIN]);
+> +		topology_update_dom(tscan, TOPO_SMT_DOMAIN, sft, tscan->dom_ncpus[TOPO_SMT_DOMAIN]);
+> +	}
+> +
+> +	set_cpu_cap(tscan->c, X86_FEATURE_XTOPOLOGY);
+> +	return true;
+> +}
+> +
+> +bool cpu_parse_topology_ext(struct topo_scan *tscan)
+> +{
+> +	/* Try lead 0x1F first. If not available try leaf 0x0b */
+> +	if (parse_topology_leaf(tscan, 0x1f))
+> +		return true;
+> +	return parse_topology_leaf(tscan, 0x0b);
+> +}
+> 
