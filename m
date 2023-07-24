@@ -2,149 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D0075F59B
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jul 2023 14:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4454175F622
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jul 2023 14:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbjGXMDj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jul 2023 08:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S230338AbjGXMVA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jul 2023 08:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjGXMDh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jul 2023 08:03:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE59FE74
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jul 2023 05:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690200169;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q6dlAfJE+Uq5H6USgolHQ9RHH+YwIscLGk0H+vxgGw8=;
-        b=Ew4v3Rj1KH3CVe5tX0DNo1vnKdBIqaxsLROrnV/Gi9j2s+WnqVCH9jJWpgmKIGL0IBvWnr
-        aAUxwbjjyYpq4AGKIUl8dCxqZFvSp415HzaookxeDA1IYPbdIUQ0/ht3rJWd3XfETftKPF
-        UYxoXFEscGJq1Mi9Le6O/0aQLLcnVhY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-679-lPRFhz7cP-iWFybwFKXSEg-1; Mon, 24 Jul 2023 08:02:45 -0400
-X-MC-Unique: lPRFhz7cP-iWFybwFKXSEg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S229866AbjGXMU6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jul 2023 08:20:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEBB13D;
+        Mon, 24 Jul 2023 05:20:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 04DFC810BB2;
-        Mon, 24 Jul 2023 12:02:45 +0000 (UTC)
-Received: from localhost (dhcp-10-40-5-80.brq.redhat.com [10.40.5.80])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B1507400F1F;
-        Mon, 24 Jul 2023 12:02:44 +0000 (UTC)
-From:   Oleksandr Natalenko <oleksandr@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org, Saurav Kashyap <skashyap@marvell.com>,
-        Javed Hasan <jhasan@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A755561149;
+        Mon, 24 Jul 2023 12:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA628C433CC;
+        Mon, 24 Jul 2023 12:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690201236;
+        bh=TZvmwAFuS4u+vLp3XBVWaUA/bTmykDSIMnh6Tz5bu+0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=r6er/ayWEK7YxoMzdWjRyaig5T7E1A4u6f3j/u5DAVXNGwACIEqB0A6NIGTsE91xt
+         oSSIKI/KWVhXMfkFwa7zn61kNTxz5qLAeC44plpJ9/fwvcTthqvyWfVsul8Rf4RM3v
+         pT3isXuR7vmhKtehn3GOCKvob0ET5OyNEP0/ky7oCWAALPN6oX4AaaD00siWvllTGG
+         IdZgZYBcmFjxfHuyxw4X0ingZiT7l8A7xHYnIv8ejNVHnEuuXp7wyd6gAMK8132NEq
+         V/CB9P9KaaJLs2l6PS3YEEvbL6R5fc6I/+j2CMHIAakw+xrO6Aibw3hq3uGMPvygcG
+         JeqeniSZu1dRw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jozef Bacik <jobacik@redhat.com>,
-        Laurence Oberman <loberman@redhat.com>,
-        Rob Evers <revers@redhat.com>
-Subject: [RFC PATCH 3/3] scsi: qedf: do not touch __user pointer in qedf_dbg_fp_int_cmd_read() directly
-Date:   Mon, 24 Jul 2023 14:02:41 +0200
-Message-ID: <20230724120241.40495-4-oleksandr@redhat.com>
-In-Reply-To: <20230724120241.40495-1-oleksandr@redhat.com>
-References: <20230724120241.40495-1-oleksandr@redhat.com>
+        Ziqi Chen <quic_ziqichen@quicinc.com>,
+        Can Guo <quic_cang@quicinc.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: ufs: qcom: remove unused variable
+Date:   Mon, 24 Jul 2023 14:19:58 +0200
+Message-Id: <20230724122029.1430482-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The qedf_dbg_fp_int_cmd_read() function invokes sprintf()
-directly on a __user pointer, which may crash the kernel.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Avoid doing that by vmalloc()'ating a buffer for scnprintf()
-and then calling simple_read_from_buffer() which does a proper
-copy_to_user() call.
+A recent change removed the only user of a local variable that needs
+to now also be removed:
 
-Signed-off-by: Oleksandr Natalenko <oleksandr@redhat.com>
+drivers/ufs/host/ufs-qcom.c: In function 'ufs_qcom_mcq_esi_handler':
+drivers/ufs/host/ufs-qcom.c:1652:31: error: unused variable 'host' [-Werror=unused-variable]
+
+Fixes: 8f2b78652d055 ("scsi: ufs: qcom: Get queue ID from MSI index in ESI handler")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/scsi/qedf/qedf_dbg.h     |  2 ++
- drivers/scsi/qedf/qedf_debugfs.c | 21 +++++++++++++++------
- 2 files changed, 17 insertions(+), 6 deletions(-)
+ drivers/ufs/host/ufs-qcom.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/qedf/qedf_dbg.h b/drivers/scsi/qedf/qedf_dbg.h
-index f4d81127239eb..5ec2b817c694a 100644
---- a/drivers/scsi/qedf/qedf_dbg.h
-+++ b/drivers/scsi/qedf/qedf_dbg.h
-@@ -59,6 +59,8 @@ extern uint qedf_debug;
- #define QEDF_LOG_NOTICE	0x40000000	/* Notice logs */
- #define QEDF_LOG_WARN		0x80000000	/* Warning logs */
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index 3ee5ff905f9a6..5728e94b6527b 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -1649,7 +1649,6 @@ static irqreturn_t ufs_qcom_mcq_esi_handler(int irq, void *data)
+ 	struct msi_desc *desc = data;
+ 	struct device *dev = msi_desc_to_dev(desc);
+ 	struct ufs_hba *hba = dev_get_drvdata(dev);
+-	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+ 	u32 id = desc->msi_index;
+ 	struct ufs_hw_queue *hwq = &hba->uhq[id];
  
-+#define QEDF_DEBUGFS_LOG_LEN (2 * PAGE_SIZE)
-+
- /* Debug context structure */
- struct qedf_dbg_ctx {
- 	unsigned int host_no;
-diff --git a/drivers/scsi/qedf/qedf_debugfs.c b/drivers/scsi/qedf/qedf_debugfs.c
-index f910af0029a2c..6db996b73fe39 100644
---- a/drivers/scsi/qedf/qedf_debugfs.c
-+++ b/drivers/scsi/qedf/qedf_debugfs.c
-@@ -8,6 +8,7 @@
- #include <linux/uaccess.h>
- #include <linux/debugfs.h>
- #include <linux/module.h>
-+#include <linux/vmalloc.h>
- 
- #include "qedf.h"
- #include "qedf_dbg.h"
-@@ -98,7 +99,9 @@ static ssize_t
- qedf_dbg_fp_int_cmd_read(struct file *filp, char __user *buffer, size_t count,
- 			 loff_t *ppos)
- {
-+	ssize_t ret;
- 	size_t cnt = 0;
-+	char *cbuf;
- 	int id;
- 	struct qedf_fastpath *fp = NULL;
- 	struct qedf_dbg_ctx *qedf_dbg =
-@@ -108,19 +111,25 @@ qedf_dbg_fp_int_cmd_read(struct file *filp, char __user *buffer, size_t count,
- 
- 	QEDF_INFO(qedf_dbg, QEDF_LOG_DEBUGFS, "entered\n");
- 
--	cnt = sprintf(buffer, "\nFastpath I/O completions\n\n");
-+	cbuf = vmalloc(QEDF_DEBUGFS_LOG_LEN);
-+	if (!cbuf)
-+		return 0;
-+
-+	cnt += scnprintf(cbuf + cnt, QEDF_DEBUGFS_LOG_LEN - cnt, "\nFastpath I/O completions\n\n");
- 
- 	for (id = 0; id < qedf->num_queues; id++) {
- 		fp = &(qedf->fp_array[id]);
- 		if (fp->sb_id == QEDF_SB_ID_NULL)
- 			continue;
--		cnt += sprintf((buffer + cnt), "#%d: %lu\n", id,
--			       fp->completions);
-+		cnt += scnprintf(cbuf + cnt, QEDF_DEBUGFS_LOG_LEN - cnt,
-+				 "#%d: %lu\n", id, fp->completions);
- 	}
- 
--	cnt = min_t(int, count, cnt - *ppos);
--	*ppos += cnt;
--	return cnt;
-+	ret = simple_read_from_buffer(buffer, count, ppos, cbuf, cnt);
-+
-+	vfree(cbuf);
-+
-+	return ret;
- }
- 
- static ssize_t
 -- 
-2.41.0
+2.39.2
 
