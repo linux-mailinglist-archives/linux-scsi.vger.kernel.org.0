@@ -2,122 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2BC761E4B
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jul 2023 18:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820CE76200F
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jul 2023 19:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjGYQTn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jul 2023 12:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S229693AbjGYR05 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jul 2023 13:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjGYQTj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jul 2023 12:19:39 -0400
-Received: from rs227.mailgun.us (rs227.mailgun.us [209.61.151.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E89FD
-        for <linux-scsi@vger.kernel.org>; Tue, 25 Jul 2023 09:19:26 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1690301965; x=1690309165; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Subject: Cc: To: To:
- From: From: Sender: Sender; bh=XpCJhzJkJBUGoyjOoMfRPKbTguUgPXwvzyrJfExm90E=;
- b=PxaYqM1BkuIs3cXONLPcHuqzGSd94LrnNlZc72bf3pQbSqQY4f03yIj/18RFZDYtSWaN4BrL2Bd+JCwrXzENryEIVHxhfcAJvdYhrO+bg+pMKYPzNQLuM5fn0zkPSlAy/4gu0DxliFtBKzHuGm3DHZ5IqMlvllIixmdk8URHTDzFqEBNoeOSzsO4kjzqXLwzuR9ffwvPiBz6yl93xlCT+rdQ43/+1QamLhGbgaNP9s5yHEQ0W9RXRlG01ZwY5Ckswi2a+4UjqpgqmNjIo3q910TBEFkI9/upVpdIEvKZ5L4ClXkESN3jSKCg7c0ZzXreSh9Wk0wRsREjnXy3uCgO+w==
-X-Mailgun-Sending-Ip: 209.61.151.227
-X-Mailgun-Sid: WyI0OWM5MyIsImxpbnV4LXNjc2lAdmdlci5rZXJuZWwub3JnIiwiOTNkNWFiIl0=
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by c1186c613a58 with SMTP id
- 64bff4e06f49ebc4e506eac8 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 25 Jul 2023 16:14:24 GMT
-Sender: james@equiv.tech
-From:   James Seo <james@equiv.tech>
-To:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>
-Cc:     James Seo <james@equiv.tech>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] scsi: mpt3sas: Replace a dynamic allocation with a local variable
-Date:   Tue, 25 Jul 2023 09:13:31 -0700
-Message-Id: <20230725161331.27481-7-james@equiv.tech>
-In-Reply-To: <20230725161331.27481-1-james@equiv.tech>
-References: <20230725161331.27481-1-james@equiv.tech>
+        with ESMTP id S230356AbjGYR04 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jul 2023 13:26:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41E41BE1
+        for <linux-scsi@vger.kernel.org>; Tue, 25 Jul 2023 10:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1690305965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RfdbdDNr9lvtPioh6nTqIGvUGGU1L46kxvnNKym7qno=;
+        b=Z3EWvYM5sMuFYjFP7y342mj5HjP50ALH07XTbPVHN2yQwJ+459gWvmMxVlifESvvR9ceov
+        BYlgZVVIMpXiXXn+joRLHkUBq1bUHDT9ai9fYfZd1lYpdUgIdPn5VPs07IIowhJJ45vP4u
+        fPqOyZ0iZK9nk3OzWC6lOpKXmu0vHHY=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-283-OHXZMGCyMXOPHFdKEVYPvQ-1; Tue, 25 Jul 2023 13:26:03 -0400
+X-MC-Unique: OHXZMGCyMXOPHFdKEVYPvQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6A8E51C09040;
+        Tue, 25 Jul 2023 17:25:59 +0000 (UTC)
+Received: from rhel-developer-toolbox-latest (unknown [10.2.16.250])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 39BB1200B66C;
+        Tue, 25 Jul 2023 17:25:56 +0000 (UTC)
+Date:   Tue, 25 Jul 2023 10:25:54 -0700
+From:   Chris Leech <cleech@redhat.com>
+To:     Lin Ma <linma@zju.edu.cn>
+Cc:     lduncan@suse.com, michael.christie@oracle.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, vikas.chaudhary@qlogic.com,
+        JBottomley@parallels.com, mchan@broadcom.com, benli@broadcom.com,
+        ogerlitz@voltaire.com, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] scsi: iscsi: Add length check for nlattr payload
+Message-ID: <ZMAFoszXQ3vwc9It@rhel-developer-toolbox-latest>
+References: <20230725024529.428311-1-linma@zju.edu.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230725024529.428311-1-linma@zju.edu.cn>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This dynamic allocation can be replaced with a local variable.
+On Tue, Jul 25, 2023 at 10:45:29AM +0800, Lin Ma wrote:
+> The current NETLINK_ISCSI netlink parsing loop checks every nlmsg to
+> make sure the length is bigger than the sizeof(struct iscsi_uevent) and
+> then calls iscsi_if_recv_msg(...).
+> 
+>   nlh = nlmsg_hdr(skb);
+>   if (nlh->nlmsg_len < sizeof(*nlh) + sizeof(*ev) ||
+>     skb->len < nlh->nlmsg_len) {
+>     break;
+>   }
+>   ...
+>   err = iscsi_if_recv_msg(skb, nlh, &group);
+> 
+> Hence, in iscsi_if_recv_msg, the nlmsg_data can be safely converted to
+> iscsi_uevent as the length is already checked.
+> 
+> However, in the following parsing, the length of nlattr payload is never
+> checked before the payload is converted to other data structures in some
+> consumers. A bad one for example is function iscsi_set_path(...) who
+> converts the payload to type iscsi_path without any checks.
 
-Signed-off-by: James Seo <james@equiv.tech>
----
- drivers/scsi/mpt3sas/mpt3sas_base.c | 19 +++++--------------
- 1 file changed, 5 insertions(+), 14 deletions(-)
+Thank you for doing the code review on this, I think these changes look
+good.
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index cd6f36094159..a32a6fa728a7 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -5361,10 +5361,9 @@ _base_update_diag_trigger_pages(struct MPT3SAS_ADAPTER *ioc)
- static int _base_assign_fw_reported_qd(struct MPT3SAS_ADAPTER *ioc)
- {
- 	Mpi2ConfigReply_t mpi_reply;
--	Mpi2SasIOUnitPage1_t *sas_iounit_pg1 = NULL;
-+	Mpi2SasIOUnitPage1_t sas_iounit_pg1;
- 	Mpi26PCIeIOUnitPage1_t pcie_iounit_pg1;
- 	u16 depth;
--	int sz;
- 	int rc = 0;
- 
- 	ioc->max_wideport_qd = MPT3SAS_SAS_QUEUE_DEPTH;
-@@ -5374,28 +5373,21 @@ static int _base_assign_fw_reported_qd(struct MPT3SAS_ADAPTER *ioc)
- 	if (!ioc->is_gen35_ioc)
- 		goto out;
- 	/* sas iounit page 1 */
--	sz = offsetof(Mpi2SasIOUnitPage1_t, PhyData);
--	sas_iounit_pg1 = kzalloc(sizeof(Mpi2SasIOUnitPage1_t), GFP_KERNEL);
--	if (!sas_iounit_pg1) {
--		pr_err("%s: failure at %s:%d/%s()!\n",
--		    ioc->name, __FILE__, __LINE__, __func__);
--		return rc;
--	}
- 	rc = mpt3sas_config_get_sas_iounit_pg1(ioc, &mpi_reply,
--	    sas_iounit_pg1, sz);
-+	    &sas_iounit_pg1, sizeof(Mpi2SasIOUnitPage1_t));
- 	if (rc) {
- 		pr_err("%s: failure at %s:%d/%s()!\n",
- 		    ioc->name, __FILE__, __LINE__, __func__);
- 		goto out;
- 	}
- 
--	depth = le16_to_cpu(sas_iounit_pg1->SASWideMaxQueueDepth);
-+	depth = le16_to_cpu(sas_iounit_pg1.SASWideMaxQueueDepth);
- 	ioc->max_wideport_qd = (depth ? depth : MPT3SAS_SAS_QUEUE_DEPTH);
- 
--	depth = le16_to_cpu(sas_iounit_pg1->SASNarrowMaxQueueDepth);
-+	depth = le16_to_cpu(sas_iounit_pg1.SASNarrowMaxQueueDepth);
- 	ioc->max_narrowport_qd = (depth ? depth : MPT3SAS_SAS_QUEUE_DEPTH);
- 
--	depth = sas_iounit_pg1->SATAMaxQDepth;
-+	depth = sas_iounit_pg1.SATAMaxQDepth;
- 	ioc->max_sata_qd = (depth ? depth : MPT3SAS_SATA_QUEUE_DEPTH);
- 
- 	/* pcie iounit page 1 */
-@@ -5414,7 +5406,6 @@ static int _base_assign_fw_reported_qd(struct MPT3SAS_ADAPTER *ioc)
- 	    "MaxWidePortQD: 0x%x MaxNarrowPortQD: 0x%x MaxSataQD: 0x%x MaxNvmeQD: 0x%x\n",
- 	    ioc->max_wideport_qd, ioc->max_narrowport_qd,
- 	    ioc->max_sata_qd, ioc->max_nvme_qd));
--	kfree(sas_iounit_pg1);
- 	return rc;
- }
- 
--- 
-2.39.2
+Reviewed-by: Chris Leech <cleech@redhat.com>
 
