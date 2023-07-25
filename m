@@ -2,114 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F02762239
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jul 2023 21:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F66076224A
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jul 2023 21:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjGYT2O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jul 2023 15:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
+        id S231358AbjGYTbR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jul 2023 15:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbjGYT2L (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jul 2023 15:28:11 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94961FE;
-        Tue, 25 Jul 2023 12:28:10 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36PBT5MT001889;
-        Tue, 25 Jul 2023 19:27:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=cS16Xqrg2iJTs/6E607OdqvHSWo3HavCEpJocMm0Bxc=;
- b=OKlrr5arRmaF5/cCD914aof8JSSPMM6o3I5AYquFiedCvO5kO9yU4kW7gTetonCutCnh
- MJR1yXhcagcUi3Zsk3l9B9R0Uc2siYQzTd0pVwspn6Xlez5vr/j995j6iW6Z1gLzyV0n
- DJNmrhK/uxKRtzE2YLe3MQ7JYjUTcVzHUo8oRG3IRPLOpm0HZwpN6KNh4lCnrj8gOzap
- qo4KCFd1V5fsrxppVbkywSRKWix3i17PvvA7u5368+6WmkWabFuyVo0S4BeuAmFAt7hf
- om04ku7MGwpkH4JO/nKO+tlr9UgkIPMpqMLuyr6zbawB9mX9CGH8wLNiENvTIRcXiVWK sw== 
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s1v6ubama-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jul 2023 19:27:21 +0000
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 36PJRI4Z032690;
-        Tue, 25 Jul 2023 19:27:18 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3s086kx1yf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 25 Jul 2023 19:27:18 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36PJRHQV032683;
-        Tue, 25 Jul 2023 19:27:17 GMT
-Received: from hu-maiyas-hyd.qualcomm.com (hu-nitirawa-hyd.qualcomm.com [10.213.109.152])
-        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 36PJRHCq032678;
-        Tue, 25 Jul 2023 19:27:17 +0000
-Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2342877)
-        id EF4E45001B7; Wed, 26 Jul 2023 00:57:16 +0530 (+0530)
-From:   Nitin Rawat <quic_nitirawa@quicinc.com>
-To:     powen.kao@mediatek.com, bvanassche@acm.org,
-        alim.akhtar@samsung.com, adrian.hunter@intel.com,
-        jejb@linux.ibm.com, stanley.chu@mediatek.com,
-        asutoshd@codeaurora.org, quic_cang@quicinc.com, mani@kernel.org,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        ebiggers@google.com, agross@kernel.org, Arthur.Simchaev@wdc.com,
-        konrad.dybcio@linaro.org
-Cc:     quic_ziqichen@quicinc.com, quic_nguyenb@quicinc.com,
-        quic_narepall@quicinc.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        Manish Pandey <quic_mapa@quicinc.com>
-Subject: [PATCH V1 2/2] scsi: ufs: ufs-qcom: check host controller state
-Date:   Wed, 26 Jul 2023 00:57:10 +0530
-Message-Id: <20230725192710.26698-3-quic_nitirawa@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230725192710.26698-1-quic_nitirawa@quicinc.com>
-References: <20230725192710.26698-1-quic_nitirawa@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: uBXE_Fa1OxtnatsY-akVNZr_I3VkUYe6
-X-Proofpoint-GUID: uBXE_Fa1OxtnatsY-akVNZr_I3VkUYe6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-25_10,2023-07-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- mlxscore=0 spamscore=0 adultscore=0 phishscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307250167
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S230259AbjGYTbQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jul 2023 15:31:16 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F12F2139
+        for <linux-scsi@vger.kernel.org>; Tue, 25 Jul 2023 12:31:14 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6686ef86110so3371338b3a.2
+        for <linux-scsi@vger.kernel.org>; Tue, 25 Jul 2023 12:31:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690313473; x=1690918273;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pJ/uG1DkstZEC0YXswlfcg4mzuHx2dCPosAJ8nyYiKU=;
+        b=N4dmGGUd5s7Hnf7BUnXknOffvw5RpCLujs6YXVokTy7O+HKMwVP0BU5FsErUDPuXSv
+         B5m4B4qn5zWpnhbLVDHf3/MxJ/0h8i821OvgUw9V4JOnkF/iIGO9pttdJzeIEulyl2hd
+         ZakAh0DuQxZbuJ7ezALUYb+8r5+qN3/hXxPpj97JD/80NI6y7OfP/ahBFasL2wO7qiYk
+         XNvNPhPpsSztOXvmtvhgQGHGlxzDVxDBBMIjia69p3q46fkANcLfFXi9Dh8pD/oBpLN9
+         JqsFFcoub+fBOF0rYBe0ciF8Z7LUvvg8HPYqlC1nHCwagkw0o4eRh1Lb5L3c2k0Sq/6l
+         wJ0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690313473; x=1690918273;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pJ/uG1DkstZEC0YXswlfcg4mzuHx2dCPosAJ8nyYiKU=;
+        b=cx3CDRFMl1sngGZ6SdGv90Crq01ku3ZCE61b4J9hkw8naWoekMiLBooWhl2OI/y/K4
+         yvTueLTCuJYeJiNXTjNpi3KS3GSpkWsEA4BbbIJxyCrh+qCi8l/yKHzd65GtB7yISrNB
+         +AIIPDOh4dIiyROuHJS21orWPyReKQzg/1J+PzmeVjn8VUrBkjD8+ELOsOuYDu9MZWxK
+         xDD/G5H0sAMT705agrTxl21VSuLi8EaWFO1ZGPR8YvW6fain2XWojwkFuu/SvwdKiIdD
+         cjdZy2ituGRi/nN3fnt8Cwdg2vOzwqBTqoi+bimTGljgFYVRnIPl4W465vSfANp0J8Qo
+         fmgg==
+X-Gm-Message-State: ABy/qLbxWOZR9X/f7eLONFZ3cR1Ri1XwXdOSlOBwSVnWzG3d8c8E9KyX
+        Ac4KPHpVfR+PxmKbpfOD9OB4PA==
+X-Google-Smtp-Source: APBJJlEfiph3z9DO+KiJlO/NzedTyFz4ru8f0+GFAU4bYhlVeMPYwsoE9ZGEbBxIQqIQuL9kxelcfQ==
+X-Received: by 2002:a05:6a00:2292:b0:64c:b45f:fc86 with SMTP id f18-20020a056a00229200b0064cb45ffc86mr162622pfe.17.1690313473383;
+        Tue, 25 Jul 2023 12:31:13 -0700 (PDT)
+Received: from google.com ([2620:15c:2c5:12:97dd:f6a2:bd1a:5c1a])
+        by smtp.gmail.com with ESMTPSA id e15-20020aa78c4f000000b00686bef984e2sm93693pfd.80.2023.07.25.12.31.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jul 2023 12:31:12 -0700 (PDT)
+Date:   Tue, 25 Jul 2023 12:31:08 -0700
+From:   Igor Pylypiv <ipylypiv@google.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-scsi@vger.kernel.org, jinpu.wang@cloud.ionos.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        changyuanl@google.com, pranavpp@google.com
+Subject: Re: [PATCH] scsi: pm80xx: fix error return code in pm8001_pci_probe()
+Message-ID: <ZMAi/F7ycX+NUzY5@google.com>
+References: <20230725125706.566990-1-yangyingliang@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230725125706.566990-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Check host controller state before sending hibern8 command.
+On Tue, Jul 25, 2023 at 08:57:06PM +0800, Yang Yingliang wrote:
+> If pm8001_init_sas_add() fails, return error code in pm8001_pci_probe().
+> 
+> Fixes: 14a8f116cdc0 ("scsi: pm80xx: Add GET_NVMD timeout during probe")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Signed-off-by: Manish Pandey <quic_mapa@quicinc.com>
-Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
----
- drivers/ufs/host/ufs-qcom.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Reviewed-by: Igor Pylypiv <ipylypiv@google.com>
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 8d6fd4c3324f..95412e98a598 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1254,6 +1254,10 @@ static int ufs_qcom_clk_scale_notify(struct ufs_hba *hba,
- 	struct ufs_pa_layer_attr *dev_req_params = &host->dev_req_params;
- 	int err = 0;
-
-+	/* check the host controller state before sending hibern8 cmd */
-+	if (!ufshcd_is_hba_active(hba))
-+		return 0;
-+
- 	if (status == PRE_CHANGE) {
- 		err = ufshcd_uic_hibern8_enter(hba);
- 		if (err)
---
-2.17.1
-
+> ---
+>  drivers/scsi/pm8001/pm8001_init.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+> index 2e886c1d867d..4995e1ef4e0e 100644
+> --- a/drivers/scsi/pm8001/pm8001_init.c
+> +++ b/drivers/scsi/pm8001/pm8001_init.c
+> @@ -1181,7 +1181,8 @@ static int pm8001_pci_probe(struct pci_dev *pdev,
+>  		pm80xx_set_thermal_config(pm8001_ha);
+>  	}
+>  
+> -	if (pm8001_init_sas_add(pm8001_ha))
+> +	rc = pm8001_init_sas_add(pm8001_ha);
+> +	if (rc)
+>  		goto err_out_shost;
+>  	/* phy setting support for motherboard controller */
+>  	rc = pm8001_configure_phy_settings(pm8001_ha);
+> -- 
+> 2.25.1
+> 
