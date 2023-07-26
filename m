@@ -2,129 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F779763514
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jul 2023 13:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3E07635FF
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jul 2023 14:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbjGZLfE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Jul 2023 07:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S232371AbjGZMOg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Jul 2023 08:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjGZLfC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jul 2023 07:35:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68967AA
-        for <linux-scsi@vger.kernel.org>; Wed, 26 Jul 2023 04:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690371255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3Jw46pEqoG1JcwCkUZQGSGX6+2Sim05zqEJGgawvmzU=;
-        b=F5YqsmU+JoM1vYO9CtNGmf0Gj3hF2Rdc5d1sP/HVYwPz5mlUDj3SzC3LyoRJOmfFzNpkhL
-        cxd8zdl4Qad4bsoHh+MgitU/R+89RbqF7z+9phxm3OT0mLinSVb4UlFeyDLR9qn/Yq2i1Y
-        DfQ88MIOBV7gSNErqZQ0Z8BLJK0j+CY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-49-QX68alr1OeC0yznYYve55A-1; Wed, 26 Jul 2023 07:34:11 -0400
-X-MC-Unique: QX68alr1OeC0yznYYve55A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8ED78800888;
-        Wed, 26 Jul 2023 11:34:11 +0000 (UTC)
-Received: from butterfly.localnet (unknown [10.45.224.168])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DD216F782E;
-        Wed, 26 Jul 2023 11:34:10 +0000 (UTC)
-From:   Oleksandr Natalenko <oleksandr@redhat.com>
-To:     Saurav Kashyap <skashyap@marvell.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Subject: Re: [PATCH] qedf: Changed string copy method for "stop_io_on_error" from
- sprintf to put_user
-Date:   Wed, 26 Jul 2023 13:34:04 +0200
-Message-ID: <12251400.O9o76ZdvQC@redhat.com>
-Organization: Red Hat
-In-Reply-To: <182fcf92-913f-81dc-6017-01435821bf80@wdc.com>
-References: <20230726101236.11922-1-skashyap@marvell.com>
- <182fcf92-913f-81dc-6017-01435821bf80@wdc.com>
+        with ESMTP id S233803AbjGZMOd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jul 2023 08:14:33 -0400
+Received: from mta-04.yadro.com (mta-04.yadro.com [89.207.88.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1941D19BF;
+        Wed, 26 Jul 2023 05:14:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-04.yadro.com 959E5C0007
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-04;
+        t=1690372540; bh=xdgyRgw1OcoQaf1uILZNJ74oN+M3FHJX3tQ++Y+yd8w=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+        b=hwaCui+VKoi920x6Rg1sN7Za54/UKvr9EdXO5zcxwJ48X9lQHwcXVP4qLVGfgZ1hU
+         R8VWjNqGG/5WzATfGQoqBU/0vFQuD955mUMk8hy/4GysrrFwr9iY26Vkt8RtwbPyon
+         WXFK1Ry+W85RY/M2Ms6fqqMaRaf0GCmiaLtht5SIwE/SaZxQuf9qcB+SZ1zUv0DHoY
+         1310tsYaaIuJCmJX6ESSh5vgcnyqJwYqA6OzKV9ylnDocrdfpcktqbsldvgac7Akew
+         oZsUmFF169VMWhI3ACSpvINB2zLhAPQEHOxOcdTEN1SRk8ESSjubkOtxvDh/ZkutqT
+         RtCeL2ecT+P0w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; s=mta-03;
+        t=1690372540; bh=xdgyRgw1OcoQaf1uILZNJ74oN+M3FHJX3tQ++Y+yd8w=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+        b=aieNPyJkIRvZatE5q7k55c9MeQfDpNQoGaf2XFByQljNMgO4zjQ6/B3d6Bbdrf8p/
+         jNyaot8RIATbJvLD+YMnlxEMJKOG6xxdqMh/rHZ6dKMxCc9f3lkHO6sKcDeN4Dkrxy
+         4/YiUP+/V+MR8w9R5tF+40JQykYOIBibd4gga8LjoADsDqGLZUkGWDgcAlqU99Yt/X
+         flhi51sI1eOZ9ACvLmFq3pNyyWXCT5cUZMdXEA1q3PRmU8sfSwpRa2E4xNig3GkQe5
+         BaBfwLsEeX9MbOtnQ6/jK0MRlyfEKnCGslSuFxA+Q7H/jwPh5EQ00/ICO9N2wePnFI
+         hWx9RHB7QDL1w==
+From:   Anastasia Kovaleva <a.kovaleva@yadro.com>
+To:     <martin.petersen@oracle.com>, <michael.christie@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>,
+        <linux@yadro.com>
+Subject: [RFC PATCH 0/3] SCSI target logs
+Date:   Wed, 26 Jul 2023 14:55:06 +0300
+Message-ID: <20230726115509.357-1-a.kovaleva@yadro.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart5693819.DvuYhMxLoT";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-ClientProxiedBy: T-EXCH-08.corp.yadro.com (172.17.11.58) To
+ T-EXCH-09.corp.yadro.com (172.17.11.59)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---nextPart5693819.DvuYhMxLoT
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
-From: Oleksandr Natalenko <oleksandr@redhat.com>
-Cc: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Date: Wed, 26 Jul 2023 13:34:04 +0200
-Message-ID: <12251400.O9o76ZdvQC@redhat.com>
-Organization: Red Hat
-In-Reply-To: <182fcf92-913f-81dc-6017-01435821bf80@wdc.com>
-MIME-Version: 1.0
+This patch is an initial work on scsi target logging improvement, that
+was discussed here:
+https://lore.kernel.org/target-devel/ZF0MiCRW8HWm8YYj@yadro.com/
+This is an example of how it will look.
 
-Hello.
+Things worth mentioning:
 
-On st=C5=99eda 26. =C4=8Dervence 2023 12:55:52 CEST Johannes Thumshirn wrot=
-e:
-> On 26.07.23 12:12, Saurav Kashyap wrote:
->=20
-> That one seems to be a duplicate of:
->=20
-> https://lore.kernel.org/linux-scsi/20230724120241.40495-2-oleksandr@redha=
-t.com/
->=20
-> Which looks IMHO way nicer than the put_user() calls.
+1. I've decided not to implement target_lun_LEVEL() and implement
+   target_cmd_LEVEL() instead because the mapped lun is stored in the
+   se_cmd structure, and most of the time we already have the cmd when
+   we want to log a lun.
 
-Thanks for checking that submission. Yes, I'd appreciate some reaction on i=
-t as a) open-coding what can be done with a simple simple_read_from_buffer(=
-) is a questionable decision; and b) there are two more places where the sa=
-me issue occurs, and the RFC I posted should fix those too.
+2. Target prefix such as "core" or "iscsi" will be defined in the
+   beginning of each file.
 
-> Regards,
->=20
->      Johannes
->=20
->=20
+For example, you can test it with such command:
+
+   sg_inq -f -c --page=255 /dev/sda
 
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
-Principal Software Maintenance Engineer
---nextPart5693819.DvuYhMxLoT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+And the log output will look like that:
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEENQb0bxzeq+SMr0+vn464/xkP+AUFAmTBBKwACgkQn464/xkP
-+AV4VA//aLZ2GNJqdriBggpRk+IcZpn61juRyDzQBsqIv8HodJ3VyqPkqPswICac
-srRoYCvgapOBS2ZWDjBqfzDqFpY912YCm3JbXnwnQCjMvFW8aAzMMhH5nDRWczo5
-iRz6oiXsXe4KhDUkuVEOj+dJMzj/LEjyTjBQlDXZnl+AE9mXg7dcvD6K8q8hVnt/
-vOpfSIerJDDZMw4qG+wSOryC3ZR27tKFyB5wNdUb3Elr16yKz89/NV4HsAGh51oo
-7bpwIpKESVNNCvaGBt3YRYB6KcTAvDPBFG88bY/DrNrRZ61DUaq4obYdKeyawko9
-E6PHAh8yeO9FJI1x9jdBfLZMcjuii49mIyPLTunsj4X/YOQWIopGTsTSdwXa4Bwa
-45t8opZ4J/7Ylz1yYJyFSjtklerRhAzygke/+wQt1J/IMVsKQskVFV01gp9Nrx2Y
-pseK5DTDt85AV9bXZRmFtNCnHisO3At21T7jBiMX+gBqhCHw1OrhPlDJZj3rZmzN
-mpptVcwOh+RWZVUhQzNdW8Cq3JV1RIRe53FGX6U8BNsZlp3SXaRB0X27xOA7RdVC
-1NTPjKGF1/dVmnpbjx1Gu9llDt9mvx7B6g+3OuBx7CaHmsefU/jvwixlOhPtAM8F
-tsFzEJExtbLAiUv5k7mSzbmNypJ28jgxeC2K3oDvGr8LjN1OwyQ=
-=I2lJ
------END PGP SIGNATURE-----
-
---nextPart5693819.DvuYhMxLoT--
+   [ 2229.586394] target core (iqn.1996-04.de.suse:01:6e84cb30fc63 -> 1/0): INQUIRY with EVPD==0 but PAGE CODE=ff
 
 
+For bio errors log will look like that:
+
+   [ 3354.495867] target iblock (iqn.1996-04.de.suse:01:6e84cb30fc63 -> 1/0): bio error: 0000000097ff0ac0, err: 10
+
+I'll be thankful for your comments and suggestions. It would also be
+great if you could tell me whether it would be better to send the entire
+series for all modules at onse, or send patches for each module
+individually as soon as they are ready.
+
+Kind regards,
+Anastasia Kovaleva
+
+Anastasia Kovaleva (3):
+  target: core: Initial work on improving SCSI target logs
+  target: core: apply the new wrapper to spc
+  target: core: apply the new wrapper to iblock
+
+ drivers/target/target_core_iblock.c | 94 ++++++++++++++---------------
+ drivers/target/target_core_spc.c    | 27 ++++-----
+ include/target/target_core_base.h   | 25 ++++++++
+ 3 files changed, 82 insertions(+), 64 deletions(-)
+
+-- 
+2.40.1
 
