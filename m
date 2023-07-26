@@ -2,131 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 859FE7637D1
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jul 2023 15:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 333B9763AA7
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jul 2023 17:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233004AbjGZNmi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Jul 2023 09:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        id S233434AbjGZPQ4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Jul 2023 11:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbjGZNm3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jul 2023 09:42:29 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14133118;
-        Wed, 26 Jul 2023 06:42:29 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36QD1f6B032532;
-        Wed, 26 Jul 2023 13:41:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=v3fJG4hcwnQVClC9EqYXRi1q8buYQM/N3AKD0PIMSv8=;
- b=nPqdlHybAlxKpVTFKcgta9RsIPtkRZ+JZdH2nRyLP6iyf0RJkwb7uyRCQLDmbtZMOTuT
- zLST+rj/Yg5ZZeyLOBbRUEnRoJhD/ORrZ80QB+rFY4ZghJV+kipmwvnVcwzIVyNwq+ct
- kC4ZGnDUwrjznSQtnc3+WdCwjAqLBhn2qLvombXEmxxoYQ/76198STiIShHXSq6A5mTP
- dkPznSu9hvQ0ec6ObV40shfmkajprwTpPFdyoZGSQ/NkOl5punSz7MGaq7snauHhGSSF
- 72PLOV9elvUOIQF5OF+XRY9Jc6ehKz1ByzawKumCY/yM5V0my77pf78rrCpwxw/Y1wms hA== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s2fms2mg9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jul 2023 13:41:48 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 36QDfjqQ017649;
-        Wed, 26 Jul 2023 13:41:45 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3s086kxdvw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 26 Jul 2023 13:41:45 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36QDfi8M017644;
-        Wed, 26 Jul 2023 13:41:44 GMT
-Received: from hu-maiyas-hyd.qualcomm.com (hu-nitirawa-hyd.qualcomm.com [10.213.109.152])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 36QDfigO017642;
-        Wed, 26 Jul 2023 13:41:44 +0000
-Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2342877)
-        id E85455001B7; Wed, 26 Jul 2023 19:11:43 +0530 (+0530)
-From:   Nitin Rawat <quic_nitirawa@quicinc.com>
-To:     powen.kao@mediatek.com, bvanassche@acm.org,
-        alim.akhtar@samsung.com, adrian.hunter@intel.com,
-        jejb@linux.ibm.com, stanley.chu@mediatek.com,
-        asutoshd@codeaurora.org, quic_cang@quicinc.com, mani@kernel.org,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        ebiggers@google.com, agross@kernel.org, Arthur.Simchaev@wdc.com,
-        konrad.dybcio@linaro.org
-Cc:     quic_ziqichen@quicinc.com, quic_nguyenb@quicinc.com,
-        quic_narepall@quicinc.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        Manish Pandey <quic_mapa@quicinc.com>
-Subject: [PATCH V2 2/2] scsi: ufs: ufs-qcom: check host controller state
-Date:   Wed, 26 Jul 2023 19:11:40 +0530
-Message-Id: <20230726134140.7180-3-quic_nitirawa@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230726134140.7180-1-quic_nitirawa@quicinc.com>
-References: <20230726134140.7180-1-quic_nitirawa@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: qZ1nNmFTooGi6Xevl3uv6A18fTLficFb
-X-Proofpoint-ORIG-GUID: qZ1nNmFTooGi6Xevl3uv6A18fTLficFb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-26_06,2023-07-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- bulkscore=0 phishscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- clxscore=1015 lowpriorityscore=0 suspectscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307260121
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234861AbjGZPQS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jul 2023 11:16:18 -0400
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A7F2689;
+        Wed, 26 Jul 2023 08:15:55 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-686d8c8fc65so551269b3a.0;
+        Wed, 26 Jul 2023 08:15:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690384550; x=1690989350;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=40AQ+XJtyU4wwLajz5n0xznNpRCm8LEwpMPI/0Nzfig=;
+        b=AJwOrH390Mi9kvrxa1Hj1NDZQ5qk6N0vQDzyi2KXzBaEAJ1KDvLxoV3JUojPiysORP
+         v19GdO3NPU/eq2qNqSY3lt0bURJMFgcaj+QDLtrgWcoNcHkSHc+9QOxVeVhemcPqxl0e
+         USfksh+8nQ94JF0B0AIMsJ2lQPQPWp5/6tu24NpuqcOT75ZB3jD/9H+Vo9QiKyDYCWlk
+         Wz8rWAn1ZJzbNKmE5w680qKX0idYITmnKVyWALs/nnX74Ti9t7E0hh84ukW+DbnTSOgS
+         q2bFUTP2zVQo1e9CO1tyHIKz9qV9ypjejj+OGPja3KBevsW/ff6E8tTUyKRjkoJlPJXN
+         Qn4g==
+X-Gm-Message-State: ABy/qLYH3wlZKaJSySX5aO3rgGEr4hqGGdU1/g9cqAL8UjyYefNXElHP
+        Oa2CS+nMI+MWNwDZmbYonsyBoC0VYq8=
+X-Google-Smtp-Source: APBJJlHqGQPyqEqeCryi2vnEVxVRhMDF2EtGYa5yBPkqQu3AdMGWF42HPtc7d/xyEzyuiSl2fFULMA==
+X-Received: by 2002:a05:6a21:78a3:b0:12e:ae87:45d2 with SMTP id bf35-20020a056a2178a300b0012eae8745d2mr2151952pzc.51.1690384549821;
+        Wed, 26 Jul 2023 08:15:49 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:7ecb:b0e6:dc38:b05f? ([2620:15c:211:201:7ecb:b0e6:dc38:b05f])
+        by smtp.gmail.com with ESMTPSA id x9-20020a056a00270900b00654228f9e93sm11585586pfv.120.2023.07.26.08.15.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jul 2023 08:15:49 -0700 (PDT)
+Message-ID: <f3a58522-3957-bd70-df87-9df7e4547195@acm.org>
+Date:   Wed, 26 Jul 2023 08:15:47 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC PATCH 2/3] target: core: apply the new wrapper to spc
+Content-Language: en-US
+To:     Anastasia Kovaleva <a.kovaleva@yadro.com>,
+        martin.petersen@oracle.com, michael.christie@oracle.com
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux@yadro.com
+References: <20230726115509.357-1-a.kovaleva@yadro.com>
+ <20230726115509.357-3-a.kovaleva@yadro.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230726115509.357-3-a.kovaleva@yadro.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Commit <52a518019ca1> (Fix missing clk change notification) added UFS
-clock scaling notification to ufshcd_host_reset_and_restore. This
-invokes hibern8 enter and exit on qualcomm platform which fails because
-controller is in reset state.
+On 7/26/23 04:55, Anastasia Kovaleva wrote:
+> +#define TARGET_PREFIX "core"
 
-Fix this by checking the Host controller state before sending
-hibern8 command.
+I'm not sure this is a good choice for a logging prefix since this name 
+does not make it clear that log lines come from the SCSI target core. 
+How about "scsi_tgt" as prefix? "stgt" is probably not a good choice 
+since this is the former name of a user-space SCSI target project 
+(https://github.com/fujita/tgt).
 
-__ufshcd_wl_resume()
-ufshcd_reset_and_restore()
-ufshcd_host_reset_and_restore()
-ufshcd_scale_clks()
-ufshcd_vops_clk_scale_notify()
-ufs_qcom_clk_scale_notify()
-ufshcd_uic_hibern8_enter()
-
-Fixes: 52a518019ca1 ("scsi: ufs: core: Fix missing clk change notification on host reset")
-
-Co-developed-by: Manish Pandey <quic_mapa@quicinc.com>
-Signed-off-by: Manish Pandey <quic_mapa@quicinc.com>
-Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
----
- drivers/ufs/host/ufs-qcom.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 8d6fd4c3324f..95412e98a598 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1254,6 +1254,10 @@ static int ufs_qcom_clk_scale_notify(struct ufs_hba *hba,
- 	struct ufs_pa_layer_attr *dev_req_params = &host->dev_req_params;
- 	int err = 0;
-
-+	/* check the host controller state before sending hibern8 cmd */
-+	if (!ufshcd_is_hba_active(hba))
-+		return 0;
-+
- 	if (status == PRE_CHANGE) {
- 		err = ufshcd_uic_hibern8_enter(hba);
- 		if (err)
---
-2.17.1
+Bart.
 
