@@ -2,49 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC747699A4
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 Jul 2023 16:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82D57699A8
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 Jul 2023 16:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjGaOhU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 31 Jul 2023 10:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
+        id S232420AbjGaOhm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 31 Jul 2023 10:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjGaOhT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Jul 2023 10:37:19 -0400
+        with ESMTP id S232350AbjGaOhk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Jul 2023 10:37:40 -0400
 Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81A718C;
-        Mon, 31 Jul 2023 07:37:17 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b974031aeaso68327361fa.0;
-        Mon, 31 Jul 2023 07:37:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADFB10D;
+        Mon, 31 Jul 2023 07:37:39 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b9db1de50cso29223991fa.3;
+        Mon, 31 Jul 2023 07:37:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690814236; x=1691419036;
+        d=1e100.net; s=20221208; t=1690814257; x=1691419057;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:dkim-signature:dkim-signature
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ClupZYKS8JeUk1us3Kwcw+jicJe7n/nJrCJP2EkCW4E=;
-        b=WdB0XvdDtIcmLtxh3v98UEMexneqfrm+gu8IS+DtySID/lXwiHfmCpsw5xiNWJ0hi4
-         gFU7D0FWQ9SeswsnmDUlVHtyCHEH6gAPJG5m0eZYqwy8L06+6ed6jwD/cJxhN2emLpZX
-         jegotFAQQlmXFw8EKY9ANEw35BwWl25WkDpnTQM4dyPuhymTXp6d7oo2Ue1yTLkAhk7D
-         ebBlNkeXJWgJyvs9//nn95IaG82FtpGlkdxDmF6ZkKx54S8PyQKnpzDzFrYYxtz1VXln
-         aIKyypC/qvsIHJUKaago1q+yOa87XpdGwO/Fq4jKndbKY7qtftxsVKEKmIZPowrKE4oi
-         l8OQ==
-X-Gm-Message-State: ABy/qLbTf3krP3WzPd/pk4mmeWsoEfONTBATAobxcNMw5kcDauIhvB98
-        HipnJ4EXMfg1Xn3EwlnTP7qWA7N8oOIPoA==
-X-Google-Smtp-Source: APBJJlGA60tBkMqqqg24CY8U0/c7KwD9QpPms2R9yki9ULaCMhJtHD7LDeWJ+7mL8gKVjnsAe8dQ6Q==
-X-Received: by 2002:a2e:8eca:0:b0:2b9:d0dc:53a9 with SMTP id e10-20020a2e8eca000000b002b9d0dc53a9mr100411ljl.27.1690814235907;
-        Mon, 31 Jul 2023 07:37:15 -0700 (PDT)
+        bh=l3262UZbqhpzRYxsP7pqYyAwibxaw8SDUP49ZVnrvd4=;
+        b=iTOOTSVqdwSzvPIYUyUe6K9pQfupA33whZ4nbMl6ckxYrGD/mHNn4RSRVWjG4sXsSZ
+         zzN3WOe7YlaGqAuK/QJVMHI1klxLXthrTIuhThA4g7rC3kYjuZUSWlkN5lA4oNbpnKVL
+         txE8De8dSxYG55EfIdgS+bJtggBH85+lVTzNb90jCj7Lw7mVOGQQpbbkqypTYB1hTbnC
+         ICD4+j5YThSdzGzmGvQvy8bJzroyk6ZVl6y0ApUQA5rg3t0owSfjMxiBonaIzx4KwFir
+         Di3FJR08PU4dBBFIaMfW436kF6SScqRsuGs1opGOugscbO1jxZWxj7sSWJ1x09bG9WG+
+         cNcw==
+X-Gm-Message-State: ABy/qLac1riRri//+2nQJtHYoYfUJyauW8ymFZ7iEoABMWXv8Th40rgQ
+        oTi1lP2A3C/QwAw0zNGYPwZiBWComCN6Qw==
+X-Google-Smtp-Source: APBJJlEpfVZw7xjiV8YIPchfSVb5WSUzwuiIL8zOu1QQIZlC/mBPcmMdeeCapppS0s5vgFyGx/W91g==
+X-Received: by 2002:a2e:9208:0:b0:2b9:20fe:4bcc with SMTP id k8-20020a2e9208000000b002b920fe4bccmr131124ljg.21.1690814257245;
+        Mon, 31 Jul 2023 07:37:37 -0700 (PDT)
 Received: from flawful.org (c-f5f0e255.011-101-6d6c6d3.bbcust.telenor.se. [85.226.240.245])
-        by smtp.gmail.com with ESMTPSA id c3-20020a2e9483000000b002b6ea79c613sm2591761ljh.94.2023.07.31.07.37.15
+        by smtp.gmail.com with ESMTPSA id o7-20020a2e90c7000000b002b9db7df0dasm1462020ljg.8.2023.07.31.07.37.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 07:37:15 -0700 (PDT)
+        Mon, 31 Jul 2023 07:37:36 -0700 (PDT)
 Received: by flawful.org (Postfix, from userid 112)
-        id 8CE9E3F6E; Mon, 31 Jul 2023 16:37:13 +0200 (CEST)
+        id 20CFC3F6D; Mon, 31 Jul 2023 16:37:36 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=flawful.org; s=mail;
-        t=1690814234; bh=j0ZTQkAUQkYnLxb8vQUkk8v3PeseaLM00aHRAEfW8EU=;
+        t=1690814256; bh=aYpQaAOAdQJkKNUxNr2UGOSCBZVeg17udL95x37+lpc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vHr75Q6W+V3It+CL7/6FnYJOZu2z3ycOIUsED15bvKdRRtSVZt9yES7XUbz3wmuUy
-         U35i5UwrXc6PwNDfptCzujuAYgOLel9mQMBwGu24YiCPumRhBdpFDrD8L6Kz1dzgzQ
-         6+KwCunXe65YmPHA6puqEHmlGZO41IO5jv7QvRjg=
+        b=ECkbLa5OjO/fgDsUqyLMyPUticRPv/r3Xich/X63D6fNcrebilnvatpC0Y5RfuDSV
+         ED4j99NgojirJnM+kuRQh3UbHGki/7i1S4cGc8zF+Kj+sT6sLs41KaACjeO6BT0GU2
+         nnn2FaEq9yjZ8anPk+yOf2tRp6P9K/OinvawvItg=
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 X-Spam-Level: 
@@ -57,14 +57,14 @@ Received: from x1-carbon.lan (OpenWrt.lan [192.168.1.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by flawful.org (Postfix) with ESMTPSA id B5D8E4018;
-        Mon, 31 Jul 2023 16:34:47 +0200 (CEST)
+        by flawful.org (Postfix) with ESMTPSA id ADBAF41C7;
+        Mon, 31 Jul 2023 16:34:48 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=flawful.org; s=mail;
-        t=1690814087; bh=j0ZTQkAUQkYnLxb8vQUkk8v3PeseaLM00aHRAEfW8EU=;
+        t=1690814088; bh=aYpQaAOAdQJkKNUxNr2UGOSCBZVeg17udL95x37+lpc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WzxRKOA9tJbeeBZx9gjmnW8EEUI74W+gPTYvBgh2dlk09DLqMs9xKWdLjLyY5Rc3g
-         OrKNO19PuZAHVj9zYB5AmbK0t4LeYkG0+udsyXybxVwX1Up/uSpfUiQToOgaFq8QYT
-         wj8cM5HpL5CW3lWvj6lAJN1WUF+wzIwl/kvqnYqg=
+        b=eBruudOLA8MGLY2ynZiUwAzuyeuKDRPI+pbThJeiAbh6wumpUV97BeGocGKhh14iz
+         uy9/26C6/LSQQoh9pMQ7pAtHJrhocexzuxtVx/Yfpo3zrOd8XajsRKcM7wOBnh2Lji
+         EjhLDm58yxOWHQNsUzXDMqeo4OSYB9x0mcQob8K8=
 From:   Niklas Cassel <nks@flawful.org>
 To:     Damien Le Moal <dlemoal@kernel.org>,
         John Garry <john.g.garry@oracle.com>,
@@ -74,9 +74,9 @@ To:     Damien Le Moal <dlemoal@kernel.org>,
 Cc:     Hannes Reinecke <hare@suse.com>, linux-ide@vger.kernel.org,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Niklas Cassel <niklas.cassel@wdc.com>
-Subject: [PATCH v4 02/10] ata,scsi: remove ata_sas_port_{start,stop} callbacks
-Date:   Mon, 31 Jul 2023 16:34:13 +0200
-Message-ID: <20230731143432.58886-3-nks@flawful.org>
+Subject: [PATCH v4 03/10] ata,scsi: remove ata_sas_port_destroy()
+Date:   Mon, 31 Jul 2023 16:34:14 +0200
+Message-ID: <20230731143432.58886-4-nks@flawful.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230731143432.58886-1-nks@flawful.org>
 References: <20230731143432.58886-1-nks@flawful.org>
@@ -88,106 +88,82 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Hannes Reinecke <hare@suse.de>
 
-Callbacks are empty now, so remove them.
-
-Also, remove the call to ap->ops->port_start() in ata_sas_port_init(),
-as this would otherwise cause a NULL pointer dereference, now when the
-callback is gone.
+Is now a wrapper around kfree(), so call it directly.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
-[niklas: remove the call to ap->ops->port_start() in ata_sas_port_init()]
 Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+Reviewed-by: John Garry <john.g.garry@oracle.com>
 Reviewed-by: Jason Yan <yanaijie@huawei.com>
 ---
- drivers/ata/libata-sata.c     | 38 -----------------------------------
- drivers/scsi/libsas/sas_ata.c |  2 --
- include/linux/libata.h        |  2 --
- 3 files changed, 42 deletions(-)
+ drivers/ata/libata-sata.c          | 14 --------------
+ drivers/scsi/libsas/sas_ata.c      |  2 +-
+ drivers/scsi/libsas/sas_discover.c |  2 +-
+ include/linux/libata.h             |  1 -
+ 4 files changed, 2 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
-index 99d4ab04bcce..a8256cb08763 100644
+index a8256cb08763..b5de0f40ea25 100644
 --- a/drivers/ata/libata-sata.c
 +++ b/drivers/ata/libata-sata.c
-@@ -1144,40 +1144,6 @@ struct ata_port *ata_sas_port_alloc(struct ata_host *host,
+@@ -1194,20 +1194,6 @@ void ata_sas_tport_delete(struct ata_port *ap)
  }
- EXPORT_SYMBOL_GPL(ata_sas_port_alloc);
+ EXPORT_SYMBOL_GPL(ata_sas_tport_delete);
  
 -/**
-- *	ata_sas_port_start - Set port up for dma.
-- *	@ap: Port to initialize
+- *	ata_sas_port_destroy - Destroy a SATA port allocated by ata_sas_port_alloc
+- *	@ap: SATA port to destroy
 - *
-- *	Called just after data structures for each port are
-- *	initialized.
-- *
-- *	May be used as the port_start() entry in ata_port_operations.
-- *
-- *	LOCKING:
-- *	Inherited from caller.
-- */
--int ata_sas_port_start(struct ata_port *ap)
--{
--	/* the port is marked as frozen at allocation time */
--	return 0;
--}
--EXPORT_SYMBOL_GPL(ata_sas_port_start);
--
--/**
-- *	ata_sas_port_stop - Undo ata_sas_port_start()
-- *	@ap: Port to shut down
-- *
-- *	May be used as the port_stop() entry in ata_port_operations.
-- *
-- *	LOCKING:
-- *	Inherited from caller.
 - */
 -
--void ata_sas_port_stop(struct ata_port *ap)
+-void ata_sas_port_destroy(struct ata_port *ap)
 -{
+-	if (ap->ops->port_stop)
+-		ap->ops->port_stop(ap);
+-	kfree(ap);
 -}
--EXPORT_SYMBOL_GPL(ata_sas_port_stop);
+-EXPORT_SYMBOL_GPL(ata_sas_port_destroy);
 -
  /**
-  * ata_sas_async_probe - simply schedule probing and return
-  * @ap: Port to probe
-@@ -1211,10 +1177,6 @@ EXPORT_SYMBOL_GPL(ata_sas_sync_probe);
- 
- int ata_sas_port_init(struct ata_port *ap)
- {
--	int rc = ap->ops->port_start(ap);
--
--	if (rc)
--		return rc;
- 	ap->print_id = atomic_inc_return(&ata_print_id);
- 	return 0;
- }
+  *	ata_sas_slave_configure - Default slave_config routine for libata devices
+  *	@sdev: SCSI device to configure
 diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-index 77714a495cbb..7ead1f1be97f 100644
+index 7ead1f1be97f..a2eb9a2191c0 100644
 --- a/drivers/scsi/libsas/sas_ata.c
 +++ b/drivers/scsi/libsas/sas_ata.c
-@@ -565,8 +565,6 @@ static struct ata_port_operations sas_sata_ops = {
- 	.qc_prep		= ata_noop_qc_prep,
- 	.qc_issue		= sas_ata_qc_issue,
- 	.qc_fill_rtf		= sas_ata_qc_fill_rtf,
--	.port_start		= ata_sas_port_start,
--	.port_stop		= ata_sas_port_stop,
- 	.set_dmamode		= sas_ata_set_dmamode,
- 	.sched_eh		= sas_ata_sched_eh,
- 	.end_eh			= sas_ata_end_eh,
+@@ -619,7 +619,7 @@ int sas_ata_init(struct domain_device *found_dev)
+ 	return 0;
+ 
+ destroy_port:
+-	ata_sas_port_destroy(ap);
++	kfree(ap);
+ free_host:
+ 	ata_host_put(ata_host);
+ 	return rc;
+diff --git a/drivers/scsi/libsas/sas_discover.c b/drivers/scsi/libsas/sas_discover.c
+index 8c6afe724944..07e18cdb85c7 100644
+--- a/drivers/scsi/libsas/sas_discover.c
++++ b/drivers/scsi/libsas/sas_discover.c
+@@ -301,7 +301,7 @@ void sas_free_device(struct kref *kref)
+ 
+ 	if (dev_is_sata(dev) && dev->sata_dev.ap) {
+ 		ata_sas_tport_delete(dev->sata_dev.ap);
+-		ata_sas_port_destroy(dev->sata_dev.ap);
++		kfree(dev->sata_dev.ap);
+ 		ata_host_put(dev->sata_dev.ata_host);
+ 		dev->sata_dev.ata_host = NULL;
+ 		dev->sata_dev.ap = NULL;
 diff --git a/include/linux/libata.h b/include/linux/libata.h
-index 3eeea76c30de..5faf2d5d3da5 100644
+index 5faf2d5d3da5..bc755a1864a0 100644
 --- a/include/linux/libata.h
 +++ b/include/linux/libata.h
-@@ -1244,10 +1244,8 @@ extern struct ata_port *ata_sas_port_alloc(struct ata_host *,
+@@ -1238,7 +1238,6 @@ extern int sata_link_debounce(struct ata_link *link,
+ extern int sata_link_scr_lpm(struct ata_link *link, enum ata_lpm_policy policy,
+ 			     bool spm_wakeup);
+ extern int ata_slave_link_init(struct ata_port *ap);
+-extern void ata_sas_port_destroy(struct ata_port *);
+ extern struct ata_port *ata_sas_port_alloc(struct ata_host *,
+ 					   struct ata_port_info *, struct Scsi_Host *);
  extern void ata_sas_async_probe(struct ata_port *ap);
- extern int ata_sas_sync_probe(struct ata_port *ap);
- extern int ata_sas_port_init(struct ata_port *);
--extern int ata_sas_port_start(struct ata_port *ap);
- extern int ata_sas_tport_add(struct device *parent, struct ata_port *ap);
- extern void ata_sas_tport_delete(struct ata_port *ap);
--extern void ata_sas_port_stop(struct ata_port *ap);
- extern int ata_sas_slave_configure(struct scsi_device *, struct ata_port *);
- extern int ata_sas_queuecmd(struct scsi_cmnd *cmd, struct ata_port *ap);
- extern void ata_tf_to_fis(const struct ata_taskfile *tf,
 -- 
 2.41.0
 
