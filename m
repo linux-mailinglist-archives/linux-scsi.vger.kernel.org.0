@@ -2,76 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1A776A16D
-	for <lists+linux-scsi@lfdr.de>; Mon, 31 Jul 2023 21:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CEE776A176
+	for <lists+linux-scsi@lfdr.de>; Mon, 31 Jul 2023 21:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjGaTn4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 31 Jul 2023 15:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S230518AbjGaTpe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 31 Jul 2023 15:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjGaTnz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Jul 2023 15:43:55 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333971B2
-        for <linux-scsi@vger.kernel.org>; Mon, 31 Jul 2023 12:43:54 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-55ae2075990so3069211a12.0
-        for <linux-scsi@vger.kernel.org>; Mon, 31 Jul 2023 12:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soe.ucsc.edu; s=soe-google-2018; t=1690832633; x=1691437433;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2srF+VwsfZK2mGTSZ1/Lzy6JxU0qS8lMwLV+lKLY4gk=;
-        b=KNrPgz59EKXF/Cdi8VB+MqUgLmWvFCd6rarGZ1xw8oblswwKFiFfdzqnrAx986D6G8
-         9w0qN93ko6rlHDKeGSQwrvCCITCfv5GNQcsqd+3Cs5Ul3UnWJkm0y11UFqoYbZY3VdYP
-         iPtKz5KMpW319YBzaF+LNP7PxRGKF/OX7TPiRyVPJ1Low21ZPP5RiwLgt6fh98m9Skxz
-         LCvCyroPQTP92S66ctbcg/BMXU2bTOHLXBSpbEiqFZUYHBSmNkCNdT1kYFCQNq3a2saj
-         F+hgE1kp9CoK24xq50ISNYRW1PuiCqihCNZpQhxaeDrZFol/PK03QQKKCgXpV7+09Hl+
-         qGvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690832633; x=1691437433;
-        h=content-transfer-encoding:in-reply-to:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2srF+VwsfZK2mGTSZ1/Lzy6JxU0qS8lMwLV+lKLY4gk=;
-        b=Oqs+BkuApVyU4xa+5Q2z3/9iMUWA9UelrOOeoYfSR3ir3YLOePylJe9VIBcFpWqi3q
-         JzDBXh7ICd0uW8Pfh7d5UiU3ZSgAdgrmyJc3MqsJnAC4A99b/qR3dXOzPGgAAIfYKdDZ
-         tzT2Hnp7AQmxsCLlCXeIgXKydD2H5jcDSJNHYeM4FKBr8NGYqv/xMJHiRuFbfwPGxFwU
-         /NSB8TUva9kGLqnPRaqVYJb7UbUgBUMwuldRtCcGbqO5aE+ZebeSkf6GOEagTpmspl8d
-         zBIv0SRrs7gU02F+XsTWJdqCb8kMkmjYYpKiWiug1dmkBHsCL52KdqZI4OWoevKIU4r9
-         U4gg==
-X-Gm-Message-State: ABy/qLZXBpqMHwAeM+57Q8CxiJ5cmKpDopbRnqlUFfZk5VjhVaEmtAAE
-        wEBDlD1BE9qB39eTScvkP6eQRQ==
-X-Google-Smtp-Source: APBJJlH1fVcQ97yyq8Zt7838/qVW3ws0AdnOmmS0wxBtL/mM82/pvD3MXZ7hdqU8RKAFXjjF4TkV2A==
-X-Received: by 2002:a17:90b:1003:b0:25e:d727:6fb4 with SMTP id gm3-20020a17090b100300b0025ed7276fb4mr9340515pjb.2.1690832633462;
-        Mon, 31 Jul 2023 12:43:53 -0700 (PDT)
-Received: from [192.168.1.50] (99-189-239-182.lightspeed.sntcca.sbcglobal.net. [99.189.239.182])
-        by smtp.gmail.com with ESMTPSA id p21-20020a17090adf9500b00263d3448141sm6574393pjv.8.2023.07.31.12.43.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jul 2023 12:43:52 -0700 (PDT)
-From:   Paul Ausbeck <paula@soe.ucsc.edu>
-X-Google-Original-From: Paul Ausbeck <paula@alumni.cse.ucsc.edu>
-Message-ID: <a8d35a0e-fe01-e889-615a-2f2e104e2492@alumni.cse.ucsc.edu>
-Date:   Mon, 31 Jul 2023 12:43:51 -0700
+        with ESMTP id S231157AbjGaTp2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 31 Jul 2023 15:45:28 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A808919A8;
+        Mon, 31 Jul 2023 12:45:27 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36VDTlPg004805;
+        Mon, 31 Jul 2023 19:45:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-03-30;
+ bh=0uCvLANzUv5q0GFuut0rkbznrdAhj4YklMN+UOXatSI=;
+ b=QeXtED+aTXb3JvQLBWxWnWMNOE8ZF/hzJAhGeg/v9F/CXYZMM32e+crqhqsVQsGHSyAX
+ rX6xUWm5nswQjNjbZlNg0F3zwIQCEOjWNEMxU5ZA9idhwu8PtPq0rJQ7vc2f/JhPE4j0
+ LHrrz+JBHS8sJ4PlAxTldH/FmJWaoEdB/lURMdoXR27sHroDRTmW+m6QvtefVUWiE0nG
+ 71iMA78dbh8jbUjxAVJqqb65Fgb/dKzTRpyVRiI8ptrVmr+99fW9LO3C3Q+sF9qpzL2Y
+ ZTnH/JfjTpWPaPME/Hc1ZmyfjeozEPu+EjLCBWXGUWxbYlBePkcVKruVCEAiVBQlr339 VA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3s4uauucxc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jul 2023 19:45:15 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 36VIFhNB013780;
+        Mon, 31 Jul 2023 19:45:15 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3s4s75cmh8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 31 Jul 2023 19:45:14 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 36VJjEfZ025102;
+        Mon, 31 Jul 2023 19:45:14 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3s4s75cmf1-1;
+        Mon, 31 Jul 2023 19:45:14 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Ziqi Chen <quic_ziqichen@quicinc.com>,
+        Can Guo <quic_cang@quicinc.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: ufs: qcom: remove unused variable
+Date:   Mon, 31 Jul 2023 15:45:02 -0400
+Message-Id: <169083266395.2873709.3009390472022184364.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230724122029.1430482-1-arnd@kernel.org>
+References: <20230724122029.1430482-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] ata,scsi: do not issue START STOP UNIT on resume
-Content-Language: en-US
-To:     Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Paul Ausbeck <paula@soe.ucsc.edu>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        TW <dalzot@gmail.com>, regressions@lists.linux.dev,
-        Bart Van Assche <bvanassche@acm.org>
-References: <20230731003956.572414-1-dlemoal@kernel.org>
-In-Reply-To: <20230731003956.572414-1-dlemoal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-31_13,2023-07-31_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
+ mlxlogscore=760 malwarescore=0 adultscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2307310179
+X-Proofpoint-ORIG-GUID: saQK65WiNYEOnYbrCcExnMh7feaLj1q9
+X-Proofpoint-GUID: saQK65WiNYEOnYbrCcExnMh7feaLj1q9
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,47 +88,21 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/30/23 17:39, Damien Le Moal wrote:
-> During system resume, ata_port_pm_resume() triggers ata EH to
-> 1) Resume the controller
-> 2) Reset and rescan the ports
-> 3) Revalidate devices
-> This EH execution is started asynchronously from ata_port_pm_resume(),
-> which means that when sd_resume() is executed, none or only part of the
-> above processing may have been executed. However, sd_resume() issues a
-> START STOP UNIT to wake up the drive from sleep mode. This command is
-> translated to ATA with ata_scsi_start_stop_xlat() and issued to the
-> device. However, depending on the state of execution of the EH process
-> and revalidation triggerred by ata_port_pm_resume(), two things may
-> happen:
-> 1) The START STOP UNIT fails if it is received before the controller has
->     been reenabled at the beginning of the EH execution. This is visible
->     with error messages like:
-> 
-> ata10.00: device reported invalid CHS sector 0
-> sd 9:0:0:0: [sdc] Start/Stop Unit failed: Result: hostbyte=DID_OK driverbyte=DRIVER_OK
-> sd 9:0:0:0: [sdc] Sense Key : Illegal Request [current]
-> sd 9:0:0:0: [sdc] Add. Sense: Unaligned write command
-> sd 9:0:0:0: PM: dpm_run_callback(): scsi_bus_resume+0x0/0x90 returns -5
-> sd 9:0:0:0: PM: failed to resume async: error -5
-> 
-> 2) The START STOP UNIT command is received while the EH process is
->     on-going, which mean that it is stopped and must wait for its
->     completion, at which point the command is rather useless as the drive
->     is already fully spun up already. This case results also in a
->     significant delay in sd_resume() which is observable by users as
->     the entire system resume completion is delayed.
-> 
-> Given that ATA devices will be woken up by libata activity on resume,
-> sd_resume() has no need to issue a START STOP UNIT command, which solves
-> the above mentioned problems. Do not issue this command by introducing
-> the new scsi_device flag no_start_on_resume and setting this flag to 1
-> in ata_scsi_dev_config(). sd_resume() is modified to issue a START STOP
-> UNIT command only if this flag is not set.
-> 
-> Reported-by: Paul Ausbeck<paula@soe.ucsc.edu>
-> Closes:https://bugzilla.kernel.org/show_bug.cgi?id=215880
-> Fixes: a19a93e4c6a9 ("scsi: core: pm: Rely on the device driver core for async power management")
-> Signed-off-by: Damien Le Moal<dlemoal@kernel.org>
+On Mon, 24 Jul 2023 14:19:58 +0200, Arnd Bergmann wrote:
 
-Tested-by: Paul Ausbeck <paula@soe.ucsc.edu>
+> A recent change removed the only user of a local variable that needs
+> to now also be removed:
+> 
+> drivers/ufs/host/ufs-qcom.c: In function 'ufs_qcom_mcq_esi_handler':
+> drivers/ufs/host/ufs-qcom.c:1652:31: error: unused variable 'host' [-Werror=unused-variable]
+> 
+> 
+> [...]
+
+Applied to 6.6/scsi-queue, thanks!
+
+[1/1] scsi: ufs: qcom: remove unused variable
+      https://git.kernel.org/mkp/scsi/c/65aca38b8ce7
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
