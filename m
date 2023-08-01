@@ -2,94 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47C676B383
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Aug 2023 13:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7237876B492
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Aug 2023 14:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234361AbjHALlh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Aug 2023 07:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39562 "EHLO
+        id S232268AbjHAMRV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Aug 2023 08:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234354AbjHALl3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Aug 2023 07:41:29 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D78E43
-        for <linux-scsi@vger.kernel.org>; Tue,  1 Aug 2023 04:41:28 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 371ALASi013888
-        for <linux-scsi@vger.kernel.org>; Tue, 1 Aug 2023 04:41:28 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=B364mlNIPEUAjGv4CKhXDSNw/RnoZAT8/rDGqvGBMZs=;
- b=iNfyqqCyBEbS+r0euSoBFTNPSvlAgrtXWhCjGiUpuzqwFVijgmPCzG4p2pp2cVDF00p4
- Jd9h3Cvm+6hSUp4DasX00v3C82l6kiVrGaNj6R9X52/7ON+jRy/ibb+oyTkwa9LGPXT7
- Lc1UQ0bsTh3ZBK27m9gnBQTO3wC9UQ4vC792KBHfBovveZtZJBcfbI4FTmtKsdEFTnkd
- 0nRQ3uy2M64k/gwXV1ftwKb+PKBVA9nb2XOszLmXUADQWFoR4c6l5UwbGC4lGiqV2my0
- C8mK9KXhU7jTr0zHxVfhDPSgkUcOLJGuVBebZ3eqFkRg8o4rSwiFbzDwPn8+3znPPR3f uA== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3s707dg83s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Tue, 01 Aug 2023 04:41:28 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 1 Aug
- 2023 04:41:26 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Tue, 1 Aug 2023 04:41:26 -0700
-Received: from localhost.marvell.com (unknown [10.30.46.195])
-        by maili.marvell.com (Postfix) with ESMTP id 917FF3F7044;
-        Tue,  1 Aug 2023 04:41:24 -0700 (PDT)
-From:   Nilesh Javali <njavali@marvell.com>
-To:     <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        <agurumurthy@marvell.com>, <sdeodhar@marvell.com>
-Subject: [PATCH 10/10] qla2xxx: Update version to 10.02.09.100-k
-Date:   Tue, 1 Aug 2023 17:10:57 +0530
-Message-ID: <20230801114057.27039-11-njavali@marvell.com>
-X-Mailer: git-send-email 2.23.1
-In-Reply-To: <20230801114057.27039-1-njavali@marvell.com>
-References: <20230801114057.27039-1-njavali@marvell.com>
+        with ESMTP id S232185AbjHAMRR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Aug 2023 08:17:17 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE085210D
+        for <linux-scsi@vger.kernel.org>; Tue,  1 Aug 2023 05:16:45 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-79a2d0e0ce6so1345229241.3
+        for <linux-scsi@vger.kernel.org>; Tue, 01 Aug 2023 05:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690892203; x=1691497003;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=P7KMPAGh6NlnTnD5lkpWaGqJsOcwuB2UI/6mC3n3LBk=;
+        b=mjtZY3OFs3s5aOiEaSCQBZoAvipmtOnrzzQPqVNlqs4d8Q0VcoZNYI4+02y449Gisl
+         f2DXV5YbjUT1Drj2gQwXWN02RaaMK6ssN8JdHIguPJ2L+JIlLTDhO7ue+gaqBGqYS6id
+         RGd04rkmQXdwY9cr3tknVf8xP7w8WKWHIAwbIGBh2mUQSWFpjmb9NYwv36ZR/b6WQlfX
+         0xkp0+ckyPSLkEcR5H4xHy42OPfPsKjxswNntwGOiCa7vrmg6W+dPtARb+ICYTJ9UmcT
+         LYWa89MjW2aU5eIgDWc1t+1rPx25P7+xcR+CJdgcNW0PPxdOh1yTvtsbUyrAOJokN+oe
+         7tWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690892203; x=1691497003;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P7KMPAGh6NlnTnD5lkpWaGqJsOcwuB2UI/6mC3n3LBk=;
+        b=Ejq8pQGH9MNEX2VOaEoWr1giP7QyE1RxmWxjwnyT5fVo4xQNWkYBK94Uu2lEvmUNJS
+         cPIqgglLdaDA8+N1wPacKZO/E8ir6W/WyHHqLRgvdjN+PH7T5iJeHTZTH9LnfzP4Pec8
+         Mxix2K6KiKY9MX24EWfmUmfVqLpPZEEJ7EJG7qkUvzFsJW31HNNpq53DhyaWOV3r1StQ
+         2w2ahy32OFrIOjqPYv7IuiOe0rsP9t+yV2dGY+NdxyHN/AjNg1xFWT5UKtBzneWRoBdH
+         1K1OPghttqiW1xsKsZxuyk/avLE94WVDn+9i9fXBCHQEm3nUyAh+R0uSWBLz/0Q+85+p
+         IbLQ==
+X-Gm-Message-State: ABy/qLahFq6iAtTaOma7BFtbf2958fGtHxvRLKAX8peHqXwlBBI/Oj1o
+        o6Ag1pZvHvrN5J+g+zdqa/eoO0tc9CYnDdJ2qjbmvy+QBNMQfKHp83Q=
+X-Google-Smtp-Source: APBJJlGcvvgozeFW/7IFKU0qI9C3S2si5rDkhW2xeQeDdaCu0/6DDLOfEK/KM+GujWYsL45S5btDzQNNtA12BUGslbo=
+X-Received: by 2002:a05:6102:87:b0:443:6c48:4d49 with SMTP id
+ t7-20020a056102008700b004436c484d49mr1506490vsp.10.1690892203480; Tue, 01 Aug
+ 2023 05:16:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: HJAIgbRK6TVxUGCVsTyoawcHWZEvEyyc
-X-Proofpoint-ORIG-GUID: HJAIgbRK6TVxUGCVsTyoawcHWZEvEyyc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-01_06,2023-08-01_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 1 Aug 2023 17:46:32 +0530
+Message-ID: <CA+G9fYur8UJoUyTLJFVEJPh-15TJ7kbdD2q8xVz8a3fLjkxxVw@mail.gmail.com>
+Subject: next: arm64: gcc-8-defconfig: ufshcd.c:10629:2: /builds/linux/include/linux/compiler_types.h:397:38:
+ error: call to '__compiletime_assert_553' declared with attribute error:
+ BUILD_BUG_ON failed:
+To:     open list <linux-kernel@vger.kernel.org>,
+        linux-scsi@vger.kernel.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
----
- drivers/scsi/qla2xxx/qla_version.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Following build error noticed while building Linux next-20230801 tag
+arm64 defconfig with gcc-8 toolchain.
 
-diff --git a/drivers/scsi/qla2xxx/qla_version.h b/drivers/scsi/qla2xxx/qla_version.h
-index 81bdf6b03241..d903563e969e 100644
---- a/drivers/scsi/qla2xxx/qla_version.h
-+++ b/drivers/scsi/qla2xxx/qla_version.h
-@@ -6,9 +6,9 @@
- /*
-  * Driver version
-  */
--#define QLA2XXX_VERSION      "10.02.08.500-k"
-+#define QLA2XXX_VERSION      "10.02.09.100-k"
- 
- #define QLA_DRIVER_MAJOR_VER	10
- #define QLA_DRIVER_MINOR_VER	2
--#define QLA_DRIVER_PATCH_VER	8
--#define QLA_DRIVER_BETA_VER	500
-+#define QLA_DRIVER_PATCH_VER	9
-+#define QLA_DRIVER_BETA_VER	100
--- 
-2.23.1
+Regressions found on arm64:
 
+  - build/gcc-8-defconfig
+  - build/gcc-8-defconfig-40bc7ee5
+
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+log:
+-----
+In function 'ufshcd_check_header_layout',
+    inlined from 'ufshcd_core_init' at
+/builds/linux/drivers/ufs/core/ufshcd.c:10629:2:
+/builds/linux/include/linux/compiler_types.h:397:38: error: call to
+'__compiletime_assert_553' declared with attribute error: BUILD_BUG_ON
+failed: ((u8 *)&(struct request_desc_header){ .enable_crypto = 1})[2]
+!= 0x80
+  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                                      ^
+
+
+Links:
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230801/testrun/18754886/suite/build/test/gcc-8-defconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230801/testrun/18754886/suite/build/test/gcc-8-defconfig/details/
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230801/testrun/18754886/suite/build/test/gcc-8-defconfig/history/
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
