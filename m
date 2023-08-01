@@ -2,105 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4267076AC1C
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Aug 2023 11:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEAD76AE5F
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Aug 2023 11:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbjHAJFo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 1 Aug 2023 05:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S233156AbjHAJiO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 1 Aug 2023 05:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbjHAJFN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Aug 2023 05:05:13 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A92230F7
-        for <linux-scsi@vger.kernel.org>; Tue,  1 Aug 2023 02:03:38 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-686efb9ee3cso5113532b3a.3
-        for <linux-scsi@vger.kernel.org>; Tue, 01 Aug 2023 02:03:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690880616; x=1691485416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dl31qmpoVvkSjyLSpZPfwkWIRx8GhdUOBKx/4n/3L7U=;
-        b=aV+1dhYFoQbThS/XG6H4CkBcRwxAYBFxA8B3Q+sVquHfgQ5/TDAjK6as3P7Y/6eedr
-         dHTCVOlHqZL44kpDUtW2Hq0lmQVvKSe7GTxFwxalpwFrRu+gTUM7mArtdckgfAu6s3L4
-         Cgr4edYOU1UYHd3bVI8eNB4vAzAS9/eE3pFEGbDJrCnamnLFC807pss2LyoN9DQLuDaf
-         P2ceYyYr89Vy6nwgELd2tGgt7O8VYmSBPUriTwWp5XEeKMWOtfh989r87GMEJY9FDZnD
-         +OtnozrChpUhdiWa44+0CuEo9+j/SsfEmER4y3u/II6LpjFikdLNj8qI54P63YmcykCi
-         W6YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690880616; x=1691485416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dl31qmpoVvkSjyLSpZPfwkWIRx8GhdUOBKx/4n/3L7U=;
-        b=iF8Y50zZ+AqDllfh4TYRqGS8hX44kTv+NAFrzHNuZpgdhSX2p8B5gTZ6i0XhgPKLnM
-         LQ1va6fZZ7G3vuL8bbdwWrqodbH1Mwsuo1tQlxiTYvi2CTHMWzjmujOHuCp5LV6UdY2e
-         mbe4jddxII7qpkHn02xDFWhV0eFMjNyNJy0OKjdcZy85Swi2oacsfiF5yl6E+EQzpItG
-         zHfGvLdrPPDDPtEhc324jUIFCuA7IZa4QuO4PmjE2FGedSeOEw1bw3/Q+I2EL4YIDrVo
-         Ed5FTcXnTh7tnOYPLHhbxgCfiqDKIeOMFGYFs4qcUEdIFAkPm4W3f8u8tvi9eE+nF9ES
-         xmkA==
-X-Gm-Message-State: ABy/qLZBha94it13S0/SD4sGCmUZIVNl8ae31hhylmvHUNsH1CVU31d0
-        4ALQ7+KL4MAi0U+rAcc1jfcQMw==
-X-Google-Smtp-Source: APBJJlH6oCr2tZeWpewSHACfnDCdQHNervXhutIyQgatxkDxrpBPXL7suSS9iuOmjWItMEsVtIbYsg==
-X-Received: by 2002:a05:6a20:a11d:b0:13d:3b4d:e4b4 with SMTP id q29-20020a056a20a11d00b0013d3b4de4b4mr11186875pzk.9.1690880616089;
-        Tue, 01 Aug 2023 02:03:36 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id m8-20020aa78a08000000b00686bbf5c573sm5719659pfa.119.2023.08.01.02.03.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Aug 2023 02:03:35 -0700 (PDT)
-Date:   Tue, 1 Aug 2023 14:33:33 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] scsi: ufs: host: Add support for parsing OPP
-Message-ID: <20230801090333.pqqugj4tcarwdl2o@vireshk-i7>
-References: <20230731163357.49045-1-manivannan.sadhasivam@linaro.org>
- <20230731163357.49045-5-manivannan.sadhasivam@linaro.org>
+        with ESMTP id S233134AbjHAJhp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 1 Aug 2023 05:37:45 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227742134
+        for <linux-scsi@vger.kernel.org>; Tue,  1 Aug 2023 02:36:06 -0700 (PDT)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RFV0k4QMLz1GDNX;
+        Tue,  1 Aug 2023 17:19:02 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.202) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Tue, 1 Aug 2023 17:20:03 +0800
+From:   Zhu Wang <wangzhu9@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <gregkh@suse.de>, <kay.sievers@vrfy.org>,
+        <James.Bottomley@HansenPartnership.com>,
+        <linux-scsi@vger.kernel.org>
+CC:     <wangzhu9@huawei.com>
+Subject: [PATCH -next] scsi: core: fix error handling for dev_set_name
+Date:   Tue, 1 Aug 2023 17:19:33 +0800
+Message-ID: <20230801091933.31794-1-wangzhu9@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230731163357.49045-5-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.202]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 31-07-23, 22:03, Manivannan Sadhasivam wrote:
-> +int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
-> +			   struct dev_pm_opp *opp, void *data,
-> +			   bool scaling_down)
-> +{
-> +	struct ufs_hba *hba = dev_get_drvdata(dev);
-> +	struct list_head *head = &hba->clk_list_head;
-> +	struct ufs_clk_info *clki;
-> +	unsigned long freq;
-> +	u8 idx = 0;
-> +	int ret;
-> +
-> +	list_for_each_entry(clki, head, list) {
-> +		if (!IS_ERR_OR_NULL(clki->clk)) {
+The driver do not handle the possible returning error of dev_set_name,
+if it returned fail, some operations should be rollback or there may be
+possible memory leak. We use put_device to free the device and use kfree
+to free the memory in the error handle path.
 
-NULL is considered as a valid clock AFAIR, so you must only be doing
-IS_ERR() here I guess.
+Fixes: 71610f55fa4d ("[SCSI] struct device - replace bus_id with dev_name(), dev_set_name()")
+Signed-off-by: Zhu Wang <wangzhu9@huawei.com>
+---
+ drivers/scsi/scsi_scan.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index aa13feb17c62..36808a52ab09 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -509,7 +509,13 @@ static struct scsi_target *scsi_alloc_target(struct device *parent,
+ 	device_initialize(dev);
+ 	kref_init(&starget->reap_ref);
+ 	dev->parent = get_device(parent);
+-	dev_set_name(dev, "target%d:%d:%d", shost->host_no, channel, id);
++	error = dev_set_name(dev, "target%d:%d:%d", shost->host_no, channel, id);
++	if (error) {
++		dev_err(dev, "%s: dev_set_name failed, error %d\n", __func__, error);
++		put_device(dev);
++		kfree(starget);
++		return NULL;
++	}
+ 	dev->bus = &scsi_bus_type;
+ 	dev->type = &scsi_target_type;
+ 	scsi_enable_async_suspend(dev);
 -- 
-viresh
+2.17.1
+
