@@ -2,121 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C158676C3EC
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Aug 2023 06:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4A076C4EC
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Aug 2023 07:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbjHBEKw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Aug 2023 00:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
+        id S231623AbjHBFg2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Aug 2023 01:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbjHBEKn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Aug 2023 00:10:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A7CFE;
-        Tue,  1 Aug 2023 21:10:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6771D617B2;
-        Wed,  2 Aug 2023 04:10:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 702DCC4160E;
-        Wed,  2 Aug 2023 04:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690949436;
-        bh=CW5MQD6wbPn2XWv3mTPcvjccKvbQtz4v/5O98VDOY8U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C6Fbde6DnVnnKeIbxZkFR398Uc5YYsorRG01i6rljwGuuwOh6XPiPXfYFZkmCMpDv
-         om6QeBWAYH3mM0cGcUpScnBQP4ZdEuR1osEmdtKV4MpHZeczTmDaDB0Ezgyg2ZhM7N
-         y+7Da+lYC3ftEpMs+EjEL+dP5xOJv5Rqm4sIYmOfyIIWKV/kDSbWF12pQiQgVlR+9V
-         2gX1zzZUAu7Pnpoq6LcDtEtfM52GcfGPPzgWYzpoW7OnpYzxhZ4kK4DAepaIC66iIk
-         6N655rYDaz3/U+YsPCQvUaISJzh9mD14bR0/mWz67z70UW+AGAp7iPGh0o4f0pUslH
-         mgEt/nLKPJ6ew==
-Date:   Wed, 2 Aug 2023 09:40:19 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Nitin Rawat <quic_nitirawa@quicinc.com>
-Cc:     powen.kao@mediatek.com, bvanassche@acm.org,
-        alim.akhtar@samsung.com, adrian.hunter@intel.com,
-        jejb@linux.ibm.com, stanley.chu@mediatek.com,
-        asutoshd@codeaurora.org, quic_cang@quicinc.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        ebiggers@google.com, agross@kernel.org, Arthur.Simchaev@wdc.com,
-        konrad.dybcio@linaro.org, quic_ziqichen@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_narepall@quicinc.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Manish Pandey <quic_mapa@quicinc.com>
-Subject: Re: [PATCH V2 2/2] scsi: ufs: ufs-qcom: check host controller state
-Message-ID: <20230802041019.GC2370@thinkpad>
-References: <20230726134140.7180-1-quic_nitirawa@quicinc.com>
- <20230726134140.7180-3-quic_nitirawa@quicinc.com>
+        with ESMTP id S230409AbjHBFg1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Aug 2023 01:36:27 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0954ED
+        for <linux-scsi@vger.kernel.org>; Tue,  1 Aug 2023 22:36:25 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-686f8614ce5so6049169b3a.3
+        for <linux-scsi@vger.kernel.org>; Tue, 01 Aug 2023 22:36:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690954585; x=1691559385;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=v4Fc7P6F/s9IcK1ZkkE4eKQ9aXOxzO0/vcsB9Z0O/Gk=;
+        b=BBVnGf/vOrDe8m9btKDPytfzv/3xhPsvVTOq6PPU5677am04z3rpQfbGwl5UonDa4R
+         7oHUnEstdprokoKtwBIsc3ttdEXtNM2ePOFFnLtrBs0m8iIHcpvqPONw5X/PFAqWGnvu
+         TX5E8BaZhskQrJ/d3WjL6LFKnto8/IyQ3CMP4lLWIET68PrmxFh9u8o6A9wCG7At/lch
+         5ArMhTg+8YvDFC89vUeYJmouV1H6S0yazsrRKloi4HpCVtvYMQKjWhZFFPvXTn8Hh5p0
+         pN6DCPUYkQgn22EWG4vq1CYg3gLhWsCkdsuhrDeHGW1/a7P0o4mUfnurYjqEpLXNReRg
+         ejSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690954585; x=1691559385;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v4Fc7P6F/s9IcK1ZkkE4eKQ9aXOxzO0/vcsB9Z0O/Gk=;
+        b=XHQd++pjsMxoxnhwCLBFDF9cdEfjGmP/qKsGRIe9pQdaJ5TpIvR4kL3hqSc27SCyFC
+         ehyMmUbYCvfc1sNRZWxmZU7+0rTETrap6v3vBM6ClF9g35DztNNzsEkPosdjoRbN6qLS
+         FG7y7MTcb6pQrKfMVitO8A+vVaJVUeKxALG9SOsKrc8cpMQhqZaZPmu4m019XW7iZeyM
+         p2V8v//1ViHt+RCf0wK2dm3MVNKAbBPf4QTo3Fvob5q/t6LN3IlYySFWzWG+1nTbk3/Q
+         mJHliXePBwru5xexkNpTWWQtApRHbtUmUMSdnQ7POrRqu8z8GAI98yqvKugLzG9EHO6t
+         hNow==
+X-Gm-Message-State: ABy/qLZXTKygWgcAZux0yXidOQw9JNnl/7BohLSwXlm0WpS6ssYPng3U
+        +W/xYgIDO8G2c+yqDhGncsPJ
+X-Google-Smtp-Source: APBJJlHOPFFjWAsy/EsguxUGZlcRDKZJJ6x7vD35Quk1YIaSvrN0TR8JHhwQG+8BdPDm5/VTrfRfuQ==
+X-Received: by 2002:a05:6a00:1249:b0:674:6dd4:8337 with SMTP id u9-20020a056a00124900b006746dd48337mr17486395pfi.12.1690954585157;
+        Tue, 01 Aug 2023 22:36:25 -0700 (PDT)
+Received: from thinkpad ([117.193.209.129])
+        by smtp.gmail.com with ESMTPSA id y15-20020a637d0f000000b00563b36264besm10780727pgc.85.2023.08.01.22.36.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Aug 2023 22:36:24 -0700 (PDT)
+Date:   Wed, 2 Aug 2023 11:06:13 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/6] scsi: ufs: host: Add support for parsing OPP
+Message-ID: <20230802053613.GF2370@thinkpad>
+References: <20230731163357.49045-1-manivannan.sadhasivam@linaro.org>
+ <20230731163357.49045-5-manivannan.sadhasivam@linaro.org>
+ <20230801090333.pqqugj4tcarwdl2o@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230726134140.7180-3-quic_nitirawa@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230801090333.pqqugj4tcarwdl2o@vireshk-i7>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Jul 26, 2023 at 07:11:40PM +0530, Nitin Rawat wrote:
-> Commit <52a518019ca1> (Fix missing clk change notification) added UFS
-> clock scaling notification to ufshcd_host_reset_and_restore. This
-> invokes hibern8 enter and exit on qualcomm platform which fails because
-> controller is in reset state.
+On Tue, Aug 01, 2023 at 02:33:33PM +0530, Viresh Kumar wrote:
+> On 31-07-23, 22:03, Manivannan Sadhasivam wrote:
+> > +int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
+> > +			   struct dev_pm_opp *opp, void *data,
+> > +			   bool scaling_down)
+> > +{
+> > +	struct ufs_hba *hba = dev_get_drvdata(dev);
+> > +	struct list_head *head = &hba->clk_list_head;
+> > +	struct ufs_clk_info *clki;
+> > +	unsigned long freq;
+> > +	u8 idx = 0;
+> > +	int ret;
+> > +
+> > +	list_for_each_entry(clki, head, list) {
+> > +		if (!IS_ERR_OR_NULL(clki->clk)) {
 > 
-> Fix this by checking the Host controller state before sending
-> hibern8 command.
-> 
-> __ufshcd_wl_resume()
-> ufshcd_reset_and_restore()
-> ufshcd_host_reset_and_restore()
-> ufshcd_scale_clks()
-> ufshcd_vops_clk_scale_notify()
-> ufs_qcom_clk_scale_notify()
-> ufshcd_uic_hibern8_enter()
-> 
-> Fixes: 52a518019ca1 ("scsi: ufs: core: Fix missing clk change notification on host reset")
-> 
+> NULL is considered as a valid clock AFAIR, so you must only be doing
+> IS_ERR() here I guess.
 
-Nit: No need of a newline here.
-
-> Co-developed-by: Manish Pandey <quic_mapa@quicinc.com>
-> Signed-off-by: Manish Pandey <quic_mapa@quicinc.com>
-> Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
-
-Acked-by: Manivannan Sadhasivam <mani@kernel.org>
+Agree that clk_ APIs accept NULL clk, but we already have IS_ERR_OR_NULL() check
+everywhere in the driver for clk handling. So I used the same for consistency.
 
 - Mani
 
-> ---
->  drivers/ufs/host/ufs-qcom.c | 4 ++++
->  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> index 8d6fd4c3324f..95412e98a598 100644
-> --- a/drivers/ufs/host/ufs-qcom.c
-> +++ b/drivers/ufs/host/ufs-qcom.c
-> @@ -1254,6 +1254,10 @@ static int ufs_qcom_clk_scale_notify(struct ufs_hba *hba,
->  	struct ufs_pa_layer_attr *dev_req_params = &host->dev_req_params;
->  	int err = 0;
-> 
-> +	/* check the host controller state before sending hibern8 cmd */
-> +	if (!ufshcd_is_hba_active(hba))
-> +		return 0;
-> +
->  	if (status == PRE_CHANGE) {
->  		err = ufshcd_uic_hibern8_enter(hba);
->  		if (err)
-> --
-> 2.17.1
-> 
+> -- 
+> viresh
 
 -- 
 மணிவண்ணன் சதாசிவம்
