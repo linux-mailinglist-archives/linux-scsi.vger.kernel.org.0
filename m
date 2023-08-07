@@ -2,166 +2,134 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861D877163F
-	for <lists+linux-scsi@lfdr.de>; Sun,  6 Aug 2023 19:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E147717E0
+	for <lists+linux-scsi@lfdr.de>; Mon,  7 Aug 2023 03:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjHFRJt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 6 Aug 2023 13:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        id S229548AbjHGBhg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 6 Aug 2023 21:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjHFRJn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 6 Aug 2023 13:09:43 -0400
-Received: from so254-32.mailgun.net (so254-32.mailgun.net [198.61.254.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27F31BCE
-        for <linux-scsi@vger.kernel.org>; Sun,  6 Aug 2023 10:09:14 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=equiv.tech; q=dns/txt;
- s=mx; t=1691341754; x=1691348954; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Subject: Cc: To: To:
- From: From: Sender: Sender; bh=+vpMgPndr8tHLDfj/uP9qR3t+hzWfcdZs69eLq08/jo=;
- b=g/UVj12uTj/FHErk1dYuUbspNTPeStThlEVvn0BOmB7vBcefe9UGMTbV3QmS1MzbsE/xRIoGJ+nDBYLDFxxPqbkzgLwF1U4ZXDcm3S/HGhpHX3CnDg3euwM8963loIlC/lbqp9GX1kMJX6L6VMnAAvEE0DmZHtQf+4+2eyiETrP93SbQPpgHTnr4gTfYuCWImbO9t3XZEn+GTyEXQxOLjL6Uia6bvbDdmZ2j19Yy04cD6CqMEyP62krR6td4uxQTz5cyMoohGFaHuxbD6luuMn8N6C54lkUTqwsA5MdX1+kc5Jmvog67alkhTrfNKVUNT2vV1B3a4j/HmYLrKJ0y6g==
-X-Mailgun-Sending-Ip: 198.61.254.32
-X-Mailgun-Sid: WyI0OWM5MyIsImxpbnV4LXNjc2lAdmdlci5rZXJuZWwub3JnIiwiOTNkNWFiIl0=
-Received: from mail.equiv.tech (equiv.tech [142.93.28.83]) by 0893f9b7a9d0 with SMTP id
- 64cfd3baf85b1f0c8f8a5a79 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sun, 06 Aug 2023 17:09:14 GMT
-Sender: james@equiv.tech
-From:   James Seo <james@equiv.tech>
-To:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>
-Cc:     James Seo <james@equiv.tech>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 12/12] scsi: mpt3sas: Replace dynamic allocations with local variables
-Date:   Sun,  6 Aug 2023 10:06:04 -0700
-Message-Id: <20230806170604.16143-13-james@equiv.tech>
-In-Reply-To: <20230806170604.16143-1-james@equiv.tech>
-References: <20230806170604.16143-1-james@equiv.tech>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229498AbjHGBhf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 6 Aug 2023 21:37:35 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0A6171A
+        for <linux-scsi@vger.kernel.org>; Sun,  6 Aug 2023 18:37:32 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230807013728epoutp03006d30ff7a395832f5b2ac4c8d9c707f~49hlZBTUO2179721797epoutp03f
+        for <linux-scsi@vger.kernel.org>; Mon,  7 Aug 2023 01:37:28 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230807013728epoutp03006d30ff7a395832f5b2ac4c8d9c707f~49hlZBTUO2179721797epoutp03f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1691372248;
+        bh=eRp0hDxbLoDkI+EKmlyx1gM8DLMIflAnTWMEe1OnN5Q=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=l033EONLee9a1ouTeBHQTTXg5u09htwLi+RDYh613BRNziBxMNGBqznhpsr44p22b
+         7Q2qeRPddsLCTDifpXwhyc3psSk4k448JxFuRWFpgEK0MJ9rt9sxmtuN07JHFA3CUa
+         n0LeYM1/5zcq6EWMPmfqd+f5vvtLsFJUaFW/3g+w=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230807013728epcas2p2169ae6ebe391ebec62d5113e5f651204~49hkySrnI2090220902epcas2p2I;
+        Mon,  7 Aug 2023 01:37:28 +0000 (GMT)
+Received: from epsmgec2p1-new.samsung.com (unknown [182.195.36.70]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4RJzTM1mjLz4x9Py; Mon,  7 Aug
+        2023 01:37:27 +0000 (GMT)
+X-AuditID: b6c32a4d-853ff70000047356-d9-64d04ad72a4e
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmgec2p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0C.0E.29526.7DA40D46; Mon,  7 Aug 2023 10:37:27 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v2] scsi: ufs: ufs-pci: Add support for QEMU
+Reply-To: jeuk20.kim@samsung.com
+Sender: Jeuk Kim <jeuk20.kim@samsung.com>
+From:   Jeuk Kim <jeuk20.kim@samsung.com>
+To:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        Jeuk Kim <jeuk20.kim@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230807013726epcms2p1c604cb8e98680aebebb7cc5ab2d580f5@epcms2p1>
+Date:   Mon, 07 Aug 2023 10:37:26 +0900
+X-CMS-MailID: 20230807013726epcms2p1c604cb8e98680aebebb7cc5ab2d580f5
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFJsWRmVeSWpSXmKPExsWy7bCmme51rwspBrcfsFmcfLKGzeLlz6ts
+        FtM+/GS2eHlI02LRjW1MFve3XmO0uLxrDptF9/UdbBbLj/9jcuD0uHzF22PxnpdMHhMWHWD0
+        +Pj0FotH35ZVjB6fN8l5tB/oZgpgj8q2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0
+        MFdSyEvMTbVVcvEJ0HXLzAE6TEmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYF6g
+        V5yYW1yal66Xl1piZWhgYGQKVJiQnTGh/RBrwVGuivnv+9kaGF9wdDFyckgImEis2H2csYuR
+        i0NIYA+jxMlNf5m6GDk4eAUEJf7uEAapERawkbhw5g4ziC0koCAxZ1sHO0RcU2L6+olg5WwC
+        6hKnF5qDjBERmMckMenOR7AaZoE6id1z/rBB7OKVmNH+lAXClpbYvnwrI4StIfFjWS8zhC0q
+        cXP1W3YY+/2x+VA1IhKt985C1QhKPPi5GyouKXHq22NWCHs6o8SC/6YgR0gILGCU+NU8HapB
+        X+Jax0awxbwCvhKHpi1iBzmaRUBV4sX/aIgSF4k9h/ZB3Swvsf3tHGaQEmagH9fv0gcxJQSU
+        JY7cYoGo4JPoOPyXHearho2/sbJ3zHvCBGGrSCxuPswKMUZKYsPu0AmMSrMQwTwLydpZCGsX
+        MDKvYpRKLSjOTU9NNiow1M1LLYfHbnJ+7iZGcCLV8t3B+Hr9X71DjEwcjIcYJTiYlUR45z05
+        nyLEm5JYWZValB9fVJqTWnyI0RTo54nMUqLJ+cBUnlcSb2hiaWBiZmZobmRqYK4kznuvdW6K
+        kEB6YklqdmpqQWoRTB8TB6dUA5Ol43U26cJ9cTa8vf9rDvTNj+1nnHfo6jYDo09Rs6R2vns4
+        8cST1dzWLb9+ZbxKMxVe+uLupJMs+cfcKhNdTLacuRd7z/GnqprUtZqw2O3SugErvnc5e3Y2
+        /xJrufbewvPhEp+vD6br9Ey/4Osz63aU0FWJY9NZtb61vg7quBMidKBv98I5hkVXnL7UrlW4
+        6PYtgZvv0b0/ugZcVqKvN25pebDBqczg/33T86EP7/+dLu9aGTv1w4oPG5h5JljoPzi/58YZ
+        9gtsCtumveiyzbtW8+BqX8Fxh3hn9g2PNmuoLLLKWK3569yrF08e3DvezK4nzT2tQj39ll9s
+        2NR5uy6cbJe+7fPQRzGFvy6tYJWUEktxRqKhFnNRcSIAowBJcS0EAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230807013726epcms2p1c604cb8e98680aebebb7cc5ab2d580f5
+References: <CGME20230807013726epcms2p1c604cb8e98680aebebb7cc5ab2d580f5@epcms2p1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-mpt3sas_scsih.c:_scsih_scan_for_devices_after_reset() allocates and
-fetches a MPI2_CONFIG_PAGE_RAID_VOL_0 struct (Mpi2RaidVolPage0_t) and
-a MPI2_CONFIG_PAGE_RAID_VOL_1 struct (Mpi2RaidVolPage1_t), but does
-not include the terminal flexible array members in the struct size
-calculations, fetch those members, or otherwise use those members in
-any way.
+To ensure that the pci based QEMU ufs device properly works with linux,
+register the device id (0x0013) and vendor id (0x1b36) of QEMU ufs device.
 
-These dynamic allocations can be replaced with local variables.
+QEMU UFS will enable testing of the UFS driver inside a virtual machine
+on systems without UFS host controller. It can also be used to preemptively
+implement and test new features before the real device is created.
 
-Signed-off-by: James Seo <james@equiv.tech>
+The new qemu ufs device can be found at
+https://lore.kernel.org/qemu-devel/20230727155239.GA979354@fedora
+
+Signed-off-by: Jeuk Kim <jeuk20.kim@samsung.com>
 ---
- drivers/scsi/mpt3sas/mpt3sas_scsih.c | 37 +++++++++-------------------
- 1 file changed, 12 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-index d5426a520a77..354341fc867f 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -10370,8 +10370,8 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 	Mpi2ExpanderPage0_t expander_pg0;
- 	Mpi2SasDevicePage0_t sas_device_pg0;
- 	Mpi26PCIeDevicePage0_t pcie_device_pg0;
--	Mpi2RaidVolPage1_t *volume_pg1;
--	Mpi2RaidVolPage0_t *volume_pg0;
-+	Mpi2RaidVolPage1_t volume_pg1;
-+	Mpi2RaidVolPage0_t volume_pg0;
- 	Mpi2RaidPhysDiskPage0_t pd_pg0;
- 	Mpi2EventIrConfigElement_t element;
- 	Mpi2ConfigReply_t mpi_reply;
-@@ -10386,16 +10386,6 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 	u8 retry_count;
- 	unsigned long flags;
+Since v1:
+- Based on Adrian's comment, I modified the commit message to be
+  more detailed.
+
+---
+ drivers/ufs/host/ufshcd-pci.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/ufs/host/ufshcd-pci.c b/drivers/ufs/host/ufshcd-pci.c
+index cf3987773051..29d322931427 100644
+--- a/drivers/ufs/host/ufshcd-pci.c
++++ b/drivers/ufs/host/ufshcd-pci.c
+@@ -590,6 +590,7 @@ static const struct dev_pm_ops ufshcd_pci_pm_ops = {
+ };
  
--	volume_pg0 = kzalloc(sizeof(*volume_pg0), GFP_KERNEL);
--	if (!volume_pg0)
--		return;
--
--	volume_pg1 = kzalloc(sizeof(*volume_pg1), GFP_KERNEL);
--	if (!volume_pg1) {
--		kfree(volume_pg0);
--		return;
--	}
--
- 	ioc_info(ioc, "scan devices: start\n");
- 
- 	_scsih_sas_host_refresh(ioc);
-@@ -10505,7 +10495,7 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 	/* volumes */
- 	handle = 0xFFFF;
- 	while (!(mpt3sas_config_get_raid_volume_pg1(ioc, &mpi_reply,
--	    volume_pg1, MPI2_RAID_VOLUME_PGAD_FORM_GET_NEXT_HANDLE, handle))) {
-+	    &volume_pg1, MPI2_RAID_VOLUME_PGAD_FORM_GET_NEXT_HANDLE, handle))) {
- 		ioc_status = le16_to_cpu(mpi_reply.IOCStatus) &
- 		    MPI2_IOCSTATUS_MASK;
- 		if (ioc_status != MPI2_IOCSTATUS_SUCCESS) {
-@@ -10513,15 +10503,15 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 				 ioc_status, le32_to_cpu(mpi_reply.IOCLogInfo));
- 			break;
- 		}
--		handle = le16_to_cpu(volume_pg1->DevHandle);
-+		handle = le16_to_cpu(volume_pg1.DevHandle);
- 		spin_lock_irqsave(&ioc->raid_device_lock, flags);
- 		raid_device = _scsih_raid_device_find_by_wwid(ioc,
--		    le64_to_cpu(volume_pg1->WWID));
-+		    le64_to_cpu(volume_pg1.WWID));
- 		spin_unlock_irqrestore(&ioc->raid_device_lock, flags);
- 		if (raid_device)
- 			continue;
- 		if (mpt3sas_config_get_raid_volume_pg0(ioc, &mpi_reply,
--		    volume_pg0, MPI2_RAID_VOLUME_PGAD_FORM_HANDLE, handle,
-+		    &volume_pg0, MPI2_RAID_VOLUME_PGAD_FORM_HANDLE, handle,
- 		     sizeof(Mpi2RaidVolPage0_t)))
- 			continue;
- 		ioc_status = le16_to_cpu(mpi_reply.IOCStatus) &
-@@ -10531,17 +10521,17 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 				 ioc_status, le32_to_cpu(mpi_reply.IOCLogInfo));
- 			break;
- 		}
--		if (volume_pg0->VolumeState == MPI2_RAID_VOL_STATE_OPTIMAL ||
--		    volume_pg0->VolumeState == MPI2_RAID_VOL_STATE_ONLINE ||
--		    volume_pg0->VolumeState == MPI2_RAID_VOL_STATE_DEGRADED) {
-+		if (volume_pg0.VolumeState == MPI2_RAID_VOL_STATE_OPTIMAL ||
-+		    volume_pg0.VolumeState == MPI2_RAID_VOL_STATE_ONLINE ||
-+		    volume_pg0.VolumeState == MPI2_RAID_VOL_STATE_DEGRADED) {
- 			memset(&element, 0, sizeof(Mpi2EventIrConfigElement_t));
- 			element.ReasonCode = MPI2_EVENT_IR_CHANGE_RC_ADDED;
--			element.VolDevHandle = volume_pg1->DevHandle;
-+			element.VolDevHandle = volume_pg1.DevHandle;
- 			ioc_info(ioc, "\tBEFORE adding volume: handle (0x%04x)\n",
--				 volume_pg1->DevHandle);
-+				 volume_pg1.DevHandle);
- 			_scsih_sas_volume_add(ioc, &element);
- 			ioc_info(ioc, "\tAFTER adding volume: handle (0x%04x)\n",
--				 volume_pg1->DevHandle);
-+				 volume_pg1.DevHandle);
- 		}
- 	}
- 
-@@ -10630,9 +10620,6 @@ _scsih_scan_for_devices_after_reset(struct MPT3SAS_ADAPTER *ioc)
- 			 handle, (u64)le64_to_cpu(pcie_device_pg0.WWID));
- 	}
- 
--	kfree(volume_pg0);
--	kfree(volume_pg1);
--
- 	ioc_info(ioc, "\tpcie devices: pcie end devices complete\n");
- 	ioc_info(ioc, "scan devices: complete\n");
- }
+ static const struct pci_device_id ufshcd_pci_tbl[] = {
++	{ PCI_VENDOR_ID_REDHAT, 0x0013, PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0 },
+ 	{ PCI_VENDOR_ID_SAMSUNG, 0xC00C, PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0 },
+ 	{ PCI_VDEVICE(INTEL, 0x9DFA), (kernel_ulong_t)&ufs_intel_cnl_hba_vops },
+ 	{ PCI_VDEVICE(INTEL, 0x4B41), (kernel_ulong_t)&ufs_intel_ehl_hba_vops },
 -- 
-2.39.2
-
+2.34.1
