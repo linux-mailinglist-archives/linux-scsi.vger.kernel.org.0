@@ -2,72 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4B17744E1
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Aug 2023 20:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BE47747A6
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Aug 2023 21:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235851AbjHHSat (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Aug 2023 14:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S234082AbjHHTRe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Aug 2023 15:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235848AbjHHSab (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Aug 2023 14:30:31 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63117268EC
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Aug 2023 10:49:27 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKt844l1zztRgf;
-        Tue,  8 Aug 2023 20:40:36 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
- 2023 20:44:04 +0800
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-To:     <linux-scsi@vger.kernel.org>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next] scsi: ufs: Remove redundant of_match_ptr()
-Date:   Tue, 8 Aug 2023 20:43:30 +0800
-Message-ID: <20230808124330.4045207-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S236085AbjHHTRQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Aug 2023 15:17:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B679BFAEF5;
+        Tue,  8 Aug 2023 09:40:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2FCE62592;
+        Tue,  8 Aug 2023 14:12:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03657C433C8;
+        Tue,  8 Aug 2023 14:12:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691503935;
+        bh=Gdw0yHvTeezw/jw3SrhRILCCcZGJNShWGWctFVDSQXw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=p9Ex+c9JWhnxp4g5gnrSMuTgVk63I4xv5r2TH8SDBw522pwboI/4X68yNbw7ZJdrw
+         soIDcT+lK+Z+EyiSDU+TyLm/7P7smOGOakAV5mgzp/IzN79had7SyduuDuhU/WRWV1
+         PvgEJcdBXCupXQWalygjRncAXxbNkd/RdsV9lkP+N5H9fMww50oBbx4JJ+dQDAclLl
+         niDLS1hPp2vqKhPYFrqPJgIA2SCQiZAZLN5YuwNt1+IDsBGxg9VAVB+mzQYKfEAQLy
+         2qam6hbntG3k4Oaz5NP6ksT2AZRZ/nwF27UMiv94/JHU4Ff5eI/7PmRaciixfwdZ0b
+         HkKl7Ht5QZLPA==
+Message-ID: <067b15a6-1db2-719b-918d-286be4966f11@kernel.org>
+Date:   Tue, 8 Aug 2023 22:12:11 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v5] scsi: support packing multi-segment in UNMAP command
+Content-Language: en-US
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230310123604.1820231-1-chao@kernel.org>
+ <b53321ab-679d-e007-6407-6bd00149948e@kernel.org>
+ <yq17ct0nijm.fsf@ca-mkp.ca.oracle.com>
+ <f93949dd-e90f-a9bf-33b3-4f31c4328c7d@kernel.org>
+ <yq1sfabni01.fsf@ca-mkp.ca.oracle.com>
+ <d3c1c2cb-9076-523b-da81-a1b632b4b0f5@kernel.org>
+ <yq1h6p9k4vk.fsf@ca-mkp.ca.oracle.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <yq1h6p9k4vk.fsf@ca-mkp.ca.oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The driver depends on CONFIG_OF, it is not necessary to use
-of_match_ptr() here.
+On 2023/8/8 22:04, Martin K. Petersen wrote:
+> Been working on this series to address the reported regressions. Spent
+> quite a bit of time on it last week.
 
-Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
----
- drivers/ufs/host/tc-dwc-g210-pltfrm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Martin, thanks for the help. :)
 
-diff --git a/drivers/ufs/host/tc-dwc-g210-pltfrm.c b/drivers/ufs/host/tc-dwc-g210-pltfrm.c
-index 4d5389dd9585..5d27855cc4f2 100644
---- a/drivers/ufs/host/tc-dwc-g210-pltfrm.c
-+++ b/drivers/ufs/host/tc-dwc-g210-pltfrm.c
-@@ -95,7 +95,7 @@ static struct platform_driver tc_dwc_g210_pltfm_driver = {
- 	.driver		= {
- 		.name	= "tc-dwc-g210-pltfm",
- 		.pm	= &tc_dwc_g210_pltfm_pm_ops,
--		.of_match_table	= of_match_ptr(tc_dwc_g210_pltfm_match),
-+		.of_match_table	= tc_dwc_g210_pltfm_match,
- 	},
- };
- 
--- 
-2.34.1
+Could you please share the report? Maybe I can join to check it.
 
+Thanks,
