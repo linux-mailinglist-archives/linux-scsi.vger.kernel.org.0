@@ -2,60 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEB9773CCC
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Aug 2023 18:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01957773FB4
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Aug 2023 18:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbjHHQJ4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Aug 2023 12:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S233622AbjHHQvV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Aug 2023 12:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbjHHQIL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Aug 2023 12:08:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72662D74
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Aug 2023 08:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691509537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3+EnSRWzHYRgAwaPfCvnjx1xuC05RKXl9LNASqVbR8A=;
-        b=GUk9nE2rk0+gzS9M01TAarR+gCYwrich9dRn+rGMDfI+OBqt6ou5n8oETVWB03Tl/or+uD
-        UbU+hk9hnZnc3e3JPxdiZM1VLujQes2zCwLwQCehtryR8hhaKVY6tmBt33fSqrlxYH6xll
-        UdfvZaM9Xl0qpyfE5zEVJ9oQmWNF1U4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-219-u2FxbA53OHqCOhATeSOWcQ-1; Tue, 08 Aug 2023 06:43:37 -0400
-X-MC-Unique: u2FxbA53OHqCOhATeSOWcQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DB4BC8007CE;
-        Tue,  8 Aug 2023 10:43:36 +0000 (UTC)
-Received: from localhost (unknown [10.72.120.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1547A140E962;
-        Tue,  8 Aug 2023 10:43:35 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        linux-nvme@lists.infradead.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     linux-block@vger.kernel.org, Wen Xiong <wenxiong@linux.ibm.com>,
-        Keith Busch <kbusch@kernel.org>, Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V3 14/14] blk-mq: add helpers for treating kdump kernel
-Date:   Tue,  8 Aug 2023 18:42:39 +0800
-Message-Id: <20230808104239.146085-15-ming.lei@redhat.com>
-In-Reply-To: <20230808104239.146085-1-ming.lei@redhat.com>
-References: <20230808104239.146085-1-ming.lei@redhat.com>
+        with ESMTP id S232662AbjHHQuZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Aug 2023 12:50:25 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7381417AAF;
+        Tue,  8 Aug 2023 08:57:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691510261; x=1723046261;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cnBdJaBsrsJ0gjx/7Mw5KRxcPDcdCrlyG2bBt+cQ1Sk=;
+  b=St9rDyL80sKjqoFBuwFkVufDSkX+0j/w7MN2Ja2DuwYiAKJ3MFxO4/KG
+   A3CxMqg/nAkyzzIRPa8lSMgPZRkoX8oPgRsK4lGi4VhKtKOhllndWUKVw
+   u/7wYij0GZIpxBqdpbdiqpfjDGBs1e5fv7GrQvueZRgaRDPJEY2oA2z8k
+   I+UC66BEwsHjdksV6vMqAPT0PkN25R40o8h8Hy9ElX/hnGJAek2iYpGTD
+   acV3O3RVWRB2aUiNXsckg2OA/rNFts6jHYfcdBp7dw71pWmcEzyNCGD73
+   y9Xa6OcMXFJrRe37L8fMMjeOiGBqNuuGtXJovFLLWiKb17isN6Y2Reo8b
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="369716041"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="369716041"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 06:07:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="845471839"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="845471839"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Aug 2023 06:07:25 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qTMQm-00934S-0T;
+        Tue, 08 Aug 2023 16:07:24 +0300
+Date:   Tue, 8 Aug 2023 16:07:23 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Justin Tee <justin.tee@broadcom.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: Re: [PATCH v1 1/1] scsi: lpfc: Do not abuse UUID APIs
+Message-ID: <ZNI+C2iMG8AbSpQF@smile.fi.intel.com>
+References: <20230807095823.33902-1-andriy.shevchenko@linux.intel.com>
+ <ZNERiABjPliMWu8f@smile.fi.intel.com>
+ <CAAmqgVNCHhU2o-6CRT62X+as_AVs=FH3iCvQC9Eyp_vx5L9Mkw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAmqgVNCHhU2o-6CRT62X+as_AVs=FH3iCvQC9Eyp_vx5L9Mkw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,93 +70,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Clean up code a bit by adding helpers for treating kdump kernel
-specially.
+On Mon, Aug 07, 2023 at 10:45:03AM -0700, Justin Tee wrote:
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- block/blk-mq.c | 39 +++++++++++++++++++++++++++------------
- 1 file changed, 27 insertions(+), 12 deletions(-)
+> -- 
+> This electronic communication and the information and any files transmitted 
+> with it, or attached to it, are confidential and are intended solely for 
+> the use of the individual or entity to whom it is addressed and may contain 
+> information that is confidential, legally privileged, protected by privacy 
+> laws, or otherwise restricted from disclosure to anyone else. If you are 
+> not the intended recipient or the person responsible for delivering the 
+> e-mail to the intended recipient, you are hereby notified that any use, 
+> copying, distributing, dissemination, forwarding, printing, or copying of 
+> this e-mail is strictly prohibited. If you received this e-mail in error, 
+> please return the e-mail to the sender, delete it from your computer, and 
+> destroy any printed copy of it.
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 617d6f849a7b..afa51df2f0d3 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -147,6 +147,8 @@ EXPORT_SYMBOL_GPL(blk_mq_freeze_queue_wait);
-  * driver has to take blk-mq max supported nr_hw_queues into account
-  * when figuring out nr_hw_queues from hardware info, for avoiding
-  * inconsistency between driver and blk-mq.
-+ *
-+ * Limit to single queue in case of kdump kernel
-  */
- unsigned int blk_mq_max_nr_hw_queues(void)
- {
-@@ -4370,7 +4372,7 @@ static void blk_mq_update_queue_map(struct blk_mq_tag_set *set)
- 	if (set->nr_maps == 1)
- 		set->map[HCTX_TYPE_DEFAULT].nr_queues = set->nr_hw_queues;
- 
--	if (set->ops->map_queues && !is_kdump_kernel()) {
-+	if (set->ops->map_queues) {
- 		int i;
- 
- 		/*
-@@ -4420,6 +4422,22 @@ static int blk_mq_realloc_tag_set_tags(struct blk_mq_tag_set *set,
- 	return 0;
- }
- 
-+/* Limit to single map in case of kdump kernel */
-+static unsigned int blk_mq_max_nr_maps(void)
-+{
-+	if (is_kdump_kernel())
-+		return 1;
-+	return HCTX_MAX_TYPES;
-+}
-+
-+/* Limit to 64 in case of kdump kernel */
-+static unsigned int blk_mq_max_depth(void)
-+{
-+	if (is_kdump_kernel())
-+		return 64;
-+	return BLK_MQ_MAX_DEPTH;
-+}
-+
- /*
-  * Alloc a tag set to be associated with one or more request queues.
-  * May fail with EINVAL for various error conditions. May adjust the
-@@ -4456,16 +4474,13 @@ int blk_mq_alloc_tag_set(struct blk_mq_tag_set *set)
- 	else if (set->nr_maps > HCTX_MAX_TYPES)
- 		return -EINVAL;
- 
--	/*
--	 * If a crashdump is active, then we are potentially in a very
--	 * memory constrained environment. Limit us to 1 queue and
--	 * 64 tags to prevent using too much memory.
--	 */
--	if (is_kdump_kernel()) {
--		set->nr_hw_queues = 1;
--		set->nr_maps = 1;
--		set->queue_depth = min(64U, set->queue_depth);
--	}
-+	if (set->nr_hw_queues > blk_mq_max_nr_hw_queues())
-+		set->nr_hw_queues = blk_mq_max_nr_hw_queues();
-+	if (set->nr_maps > blk_mq_max_nr_maps())
-+		set->nr_maps = blk_mq_max_nr_maps();
-+	if (set->queue_depth > blk_mq_max_depth())
-+		set->queue_depth = blk_mq_max_depth();
-+
- 	/*
- 	 * There is no use for more h/w queues than cpus if we just have
- 	 * a single map
-@@ -4495,7 +4510,7 @@ int blk_mq_alloc_tag_set(struct blk_mq_tag_set *set)
- 						  GFP_KERNEL, set->numa_node);
- 		if (!set->map[i].mq_map)
- 			goto out_free_mq_map;
--		set->map[i].nr_queues = is_kdump_kernel() ? 1 : set->nr_hw_queues;
-+		set->map[i].nr_queues = set->nr_hw_queues;
- 	}
- 
- 	blk_mq_update_queue_map(set);
+Removed from mailbox.
+
 -- 
-2.40.1
+With Best Regards,
+Andy Shevchenko
+
 
