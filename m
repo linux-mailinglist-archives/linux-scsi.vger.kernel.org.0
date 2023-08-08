@@ -2,73 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BE47747A6
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Aug 2023 21:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4D3774580
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Aug 2023 20:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234082AbjHHTRe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Aug 2023 15:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S232655AbjHHSnB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Aug 2023 14:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236085AbjHHTRQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Aug 2023 15:17:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B679BFAEF5;
-        Tue,  8 Aug 2023 09:40:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2FCE62592;
-        Tue,  8 Aug 2023 14:12:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03657C433C8;
-        Tue,  8 Aug 2023 14:12:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691503935;
-        bh=Gdw0yHvTeezw/jw3SrhRILCCcZGJNShWGWctFVDSQXw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=p9Ex+c9JWhnxp4g5gnrSMuTgVk63I4xv5r2TH8SDBw522pwboI/4X68yNbw7ZJdrw
-         soIDcT+lK+Z+EyiSDU+TyLm/7P7smOGOakAV5mgzp/IzN79had7SyduuDuhU/WRWV1
-         PvgEJcdBXCupXQWalygjRncAXxbNkd/RdsV9lkP+N5H9fMww50oBbx4JJ+dQDAclLl
-         niDLS1hPp2vqKhPYFrqPJgIA2SCQiZAZLN5YuwNt1+IDsBGxg9VAVB+mzQYKfEAQLy
-         2qam6hbntG3k4Oaz5NP6ksT2AZRZ/nwF27UMiv94/JHU4Ff5eI/7PmRaciixfwdZ0b
-         HkKl7Ht5QZLPA==
-Message-ID: <067b15a6-1db2-719b-918d-286be4966f11@kernel.org>
-Date:   Tue, 8 Aug 2023 22:12:11 +0800
+        with ESMTP id S233571AbjHHSmZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Aug 2023 14:42:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E07591B31
+        for <linux-scsi@vger.kernel.org>; Tue,  8 Aug 2023 10:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1691515990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rdR/nWVu06E+qaDd21vThD7HnAhSxkVHgZWXT66GKkM=;
+        b=OSxGyrCOKN+D5/ggvVc9BJ9xFTTtXvz2ZyXhMr2lON8AWKgBbx+aI9h8nKP5bQPuK9/uBi
+        OBbn68GcIPT4zUKAUHxpZNxqSXCLQqV/I5xMHUboPmaNy84MqFXVFF7A2RuGERmkvdEbCn
+        /0McHz3MgFSruDF6FMwiVmmkKuP8idk=
+Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
+ [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-665-VSCvt5xqMuuUZhTtYKx8IA-1; Tue, 08 Aug 2023 10:27:12 -0400
+X-MC-Unique: VSCvt5xqMuuUZhTtYKx8IA-1
+Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-d4e1be2dd10so3466579276.0
+        for <linux-scsi@vger.kernel.org>; Tue, 08 Aug 2023 07:27:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691504831; x=1692109631;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rdR/nWVu06E+qaDd21vThD7HnAhSxkVHgZWXT66GKkM=;
+        b=XQd7SVG/vBTFGiZt4/rTy0BYVIn1koULRtD+9aTytx9gAWawOFKkhFV8k+DH7gznjY
+         ntfIqRjoTZKSQWwErcaXEQTxvOP03XG3nDN2pGBIkjrzF81fLxrIBLac3pXwKbTRDavN
+         7dUzGhmKcmBxRWhVCZHffu0LrfDX4L/o2VpVCien/wj/T8SxLlKZ/7nefaPPM3uYBcDb
+         /OgtrwBmh0MyUh260D11hCTwEARyU9iZnbSpxXfbwnOtFG8PfolLCmyIy4fGKuH2n7Uz
+         Ou7XsSbgm05wFJzUTYuTRz4unOlwZp8lCjH9fe7NVbE0wRfpY0liVLalxExdxXMLfLgj
+         AojA==
+X-Gm-Message-State: AOJu0YyxgozPg3lVEBLnxDyWg6huu85jbtxIRBUiskNLDXeyrqqo5cSK
+        BRQoe4KITU8ImXaSjACBgwj7EiQX1ZWqNd2cZ7vwcfzS4tV+vvZ3ja5HnstzjtB2b4mfngZbVUn
+        RsnSa4Kefk1Adx58n/tmqMw==
+X-Received: by 2002:a25:aa31:0:b0:ced:6134:7606 with SMTP id s46-20020a25aa31000000b00ced61347606mr13222324ybi.30.1691504831617;
+        Tue, 08 Aug 2023 07:27:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFYUnMBFGOvVTn0B2fVJuWFGk0rbvX7MlTI9s+MDkABAAgnqZK/6AMRAo9gbZmrxokTCuY6Gg==
+X-Received: by 2002:a25:aa31:0:b0:ced:6134:7606 with SMTP id s46-20020a25aa31000000b00ced61347606mr13222304ybi.30.1691504831336;
+        Tue, 08 Aug 2023 07:27:11 -0700 (PDT)
+Received: from brian-x1.redhat.com (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id y9-20020a259c89000000b00c71e4833957sm2713058ybo.63.2023.08.08.07.27.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Aug 2023 07:27:10 -0700 (PDT)
+From:   Brian Masney <bmasney@redhat.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] scsi: ufs: convert probe to use dev_err_probe()
+Date:   Tue,  8 Aug 2023 10:26:48 -0400
+Message-ID: <20230808142650.1713432-1-bmasney@redhat.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v5] scsi: support packing multi-segment in UNMAP command
-Content-Language: en-US
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230310123604.1820231-1-chao@kernel.org>
- <b53321ab-679d-e007-6407-6bd00149948e@kernel.org>
- <yq17ct0nijm.fsf@ca-mkp.ca.oracle.com>
- <f93949dd-e90f-a9bf-33b3-4f31c4328c7d@kernel.org>
- <yq1sfabni01.fsf@ca-mkp.ca.oracle.com>
- <d3c1c2cb-9076-523b-da81-a1b632b4b0f5@kernel.org>
- <yq1h6p9k4vk.fsf@ca-mkp.ca.oracle.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <yq1h6p9k4vk.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2023/8/8 22:04, Martin K. Petersen wrote:
-> Been working on this series to address the reported regressions. Spent
-> quite a bit of time on it last week.
+The following two log messages are shown on bootup due to an
+-EPROBE_DEFER when booting on a Qualcomm sa8775p development board:
 
-Martin, thanks for the help. :)
+    ufshcd-qcom 1d84000.ufs: ufshcd_variant_hba_init: variant qcom init
+        failed err -517
+    ufshcd-qcom 1d84000.ufs: Initialization failed
 
-Could you please share the report? Maybe I can join to check it.
+This patch series converts the relevant two probe functions over to use
+dev_err_probe() so that these messages are not shown on bootup.
 
-Thanks,
+Brian Masney (2):
+  scsi: ufs: core: convert to dev_err_probe() in hba_init
+  scsi: ufs: host: convert to dev_err_probe() in pltfrm_init
+
+ drivers/ufs/core/ufshcd.c        | 17 +++++++++--------
+ drivers/ufs/host/ufshcd-pltfrm.c |  2 +-
+ 2 files changed, 10 insertions(+), 9 deletions(-)
+
+-- 
+2.41.0
+
