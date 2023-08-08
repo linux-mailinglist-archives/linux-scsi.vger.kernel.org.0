@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798AE7736E4
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Aug 2023 04:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B18C7736E7
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Aug 2023 04:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjHHCnr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 7 Aug 2023 22:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S230526AbjHHCnu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 7 Aug 2023 22:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjHHCno (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Aug 2023 22:43:44 -0400
+        with ESMTP id S231179AbjHHCnp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 7 Aug 2023 22:43:45 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB6D10C4
-        for <linux-scsi@vger.kernel.org>; Mon,  7 Aug 2023 19:43:43 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3781iOhF030950;
-        Tue, 8 Aug 2023 02:43:37 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9509210CC
+        for <linux-scsi@vger.kernel.org>; Mon,  7 Aug 2023 19:43:44 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3781iJ5L022421;
+        Tue, 8 Aug 2023 02:43:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=corp-2023-03-30;
- bh=7NITKGssSwWWjQHyvje4Xvw7Owa3YbNpB91GIdB88UE=;
- b=3C7jWYZEZy79t/0ECgY6vra8fzvxkNcsPMJClXN4Wa34cAXM+u/oKE9dgKXWIdJbBxQ2
- Iw/aLVLBbGXSNWawdxJ9GtPm4Qq+SVP+9UoZN/dMOZxBa7vEY449wdTBcdI3iwZGQTki
- kc0k1FGZ/bpYBagqb/3KAjmq4KWlorJEcVtY2SMMVxr0yhXHzREeM3b9F+kXNR6mRhcn
- dUVx+3DwznlDisWvjDJz2thGrhsvhUZPjHYsYbP6WOoC755B2NSrqoIoqBohcrBIpnsC
- fs9HV1iUWBsYrRwgP9lw/D2/LHqVdfAEtNY/9PhDe3vvr+dhSnVdrA+UopZH58tISw3j Og== 
+ bh=PLUbfNGZSvRaaMJNTL+H0ux1CC6Z+qBpSaadx6CNN88=;
+ b=ZgIy6OZcfqfap25E+bwd4yKvCR0ceYDNUgj4Y8KGHrwYsbpT8ws4xad9HlvGJD1vA94a
+ ILMNa9NTL8jbdgV29OoU/kO0TyYXdx1ZN18VScK0DcHWfIUmoRi8GuJ5LafglpniJIz7
+ xRtfEU34v7KedyTuen0Lg42ZNiesQovXxRghMFC5Kn0bl0laMifWoyN6+ulkic4nEcnq
+ zuemGDTez07VNvPxIKj8m3kzuPBDsW4aB3YsF+nlde2QqW7Dik4kz4ptcOEz8wNNcHbE
+ IRs+ixlShGreQs+Izwg/0WS1dViW9obVcUIEqYn9wTpAXjGkpaGf/wpFqhqt94jTpHX4 lw== 
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3s9d12c5qv-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3s9eaam3ym-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 08 Aug 2023 02:43:37 +0000
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 37823WRg027686;
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3780IrdT027338;
         Tue, 8 Aug 2023 02:43:36 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3s9cv55wg9-1
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3s9cv55wgb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 08 Aug 2023 02:43:36 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3782hYGn038171;
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3782hYGp038171;
         Tue, 8 Aug 2023 02:43:35 GMT
 Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3s9cv55wfu-3;
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3s9cv55wfu-4;
         Tue, 08 Aug 2023 02:43:35 +0000
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 To:     lduncan@suse.com, cleech@redhat.com,
@@ -49,12 +49,12 @@ To:     lduncan@suse.com, cleech@redhat.com,
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, GR-QLogic-Storage-Upstream@marvell.com,
         jmeneghi@redhat.com
-Subject: Re: [PATCH] qedf: fix firmware halt over suspend and resume
-Date:   Mon,  7 Aug 2023 22:43:24 -0400
-Message-Id: <169146257051.4040705.3288512658805351231.b4-ty@oracle.com>
+Subject: Re: [PATCH] qedi: fix firmware halt over suspend and resume
+Date:   Mon,  7 Aug 2023 22:43:25 -0400
+Message-Id: <169146257051.4040705.7535713641468252810.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230807093725.46829-1-njavali@marvell.com>
-References: <20230807093725.46829-1-njavali@marvell.com>
+In-Reply-To: <20230807093725.46829-2-njavali@marvell.com>
+References: <20230807093725.46829-1-njavali@marvell.com> <20230807093725.46829-2-njavali@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -65,8 +65,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=594 b
  adultscore=0 mlxscore=0 spamscore=0 suspectscore=0 malwarescore=0
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2306200000 definitions=main-2308080022
-X-Proofpoint-GUID: flMUooCuYdEH6XTFAlyTD7QSf9YD-Xv6
-X-Proofpoint-ORIG-GUID: flMUooCuYdEH6XTFAlyTD7QSf9YD-Xv6
+X-Proofpoint-ORIG-GUID: ky1XDRRbv985gpUPatYSY9VDggel7Bak
+X-Proofpoint-GUID: ky1XDRRbv985gpUPatYSY9VDggel7Bak
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
@@ -77,7 +77,7 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 07 Aug 2023 15:07:24 +0530, Nilesh Javali wrote:
+On Mon, 07 Aug 2023 15:07:25 +0530, Nilesh Javali wrote:
 
 > While performing certain power-off sequences, PCI drivers are
 > called to suspend and resume their underlying devices through
@@ -91,8 +91,8 @@ On Mon, 07 Aug 2023 15:07:24 +0530, Nilesh Javali wrote:
 
 Applied to 6.5/scsi-fixes, thanks!
 
-[1/1] qedf: fix firmware halt over suspend and resume
-      https://git.kernel.org/mkp/scsi/c/ef222f551e7c
+[1/1] qedi: fix firmware halt over suspend and resume
+      https://git.kernel.org/mkp/scsi/c/1516ee035df3
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
