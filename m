@@ -2,219 +2,238 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4841D7749E2
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Aug 2023 22:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F365C774BDA
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Aug 2023 22:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbjHHUFw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Aug 2023 16:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
+        id S231270AbjHHU6z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Aug 2023 16:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232416AbjHHUFl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Aug 2023 16:05:41 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB27995F2
-        for <linux-scsi@vger.kernel.org>; Tue,  8 Aug 2023 11:26:00 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-3492905f546so22883195ab.0
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Aug 2023 11:26:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1691519160; x=1692123960;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sL6dGzlrX0FycpSy6GA7fAcrUlb9k8qMB+97PDbhRDI=;
-        b=A+uuqGRMFQC+NSXikt61ZE0snidXeAMneuYA7AALWoUhYJ9FIf2UCJ8qSotIFR3ikX
-         W+4uWWlU0Ssyf46NVWirFBSTlzr8MLk+jcRjkp0yTDSFw2/pK7HF8Sa3Ymekyz7PSwZr
-         +nleBtSVBCyHNh4f3qYT9N+VuLKAegog+oTCY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691519160; x=1692123960;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sL6dGzlrX0FycpSy6GA7fAcrUlb9k8qMB+97PDbhRDI=;
-        b=TM73Ezy+fczO53OYMmIRh0N4Fx7RfEX+tdsyUquihUYF7U413aGQ6apu+SNnmggAYi
-         d6VSmxHYxpgD+hk1Teh7IIBTcKfwUY4K1cv+dRGS6jWa/rpVUYkEWpEMPTmliWERLceo
-         JEFoeXwobOOfNQiOfwJ6paOo6cgPlnnfb+XSoda/j4pBXDOKLzrusexyuSavAFpedqvs
-         MZoYcqvExm8mlrZ3uIYTJEEmQvZxpmF+JDZ/oJYqrpg/itjb4/+3cfv/W67u7rKHh6KU
-         V4I8F0Emdb+rksAUmuz862RJ5cG5xI6enbqdSqnTJ344ytyVNCWmO2JXTFOd38rYGX/v
-         xxvA==
-X-Gm-Message-State: AOJu0YyWIj5vGnuOIG7k/Fsgn0GIRHJLeWDaj+VaW7x+Y0srMSsluhmh
-        BSOGTjy6nLJ4C1t3GUojFQj2MhqfV/K605D3cA+AzS4vJoCnYYQyBhp+lbdL04Z/cl13UEECIMk
-        d3qahtIvk6hjQMU95gmB3bUiENsR+
-X-Google-Smtp-Source: AGHT+IGUoP6RGoarxDOQIJJWXyU+mRJcXOUsX7iDE9rA4MUuyo0yCMFAHPpttqBVFoHLeq0gf8reiC4AopC6eCqzANo=
-X-Received: by 2002:a05:6e02:10d3:b0:348:987a:fd8c with SMTP id
- s19-20020a056e0210d300b00348987afd8cmr425976ilj.31.1691519159645; Tue, 08 Aug
- 2023 11:25:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230807095823.33902-1-andriy.shevchenko@linux.intel.com>
- <ZNERiABjPliMWu8f@smile.fi.intel.com> <CAAmqgVNCHhU2o-6CRT62X+as_AVs=FH3iCvQC9Eyp_vx5L9Mkw@mail.gmail.com>
- <ZNI+C2iMG8AbSpQF@smile.fi.intel.com>
-In-Reply-To: <ZNI+C2iMG8AbSpQF@smile.fi.intel.com>
-From:   Justin Tee <justin.tee@broadcom.com>
-Date:   Tue, 8 Aug 2023 11:25:48 -0700
-Message-ID: <CAAmqgVPGRt1bdQ0TrverzWNfM2MEcw4DhmNsWL+xMPOBeZ7tKw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] scsi: lpfc: Do not abuse UUID APIs
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        James Smart <james.smart@broadcom.com>,
+        with ESMTP id S235747AbjHHUme (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Aug 2023 16:42:34 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FCB1258E;
+        Tue,  8 Aug 2023 13:16:02 -0700 (PDT)
+Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 378DSu0T015121;
+        Tue, 8 Aug 2023 20:14:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pps0720; bh=9vJT8bKhEAnOfhS+ZgqFuvvCuPXRd+QjwmyH8Jc1q3g=;
+ b=n7mYzI93w3IbvBYaqPT9utujnGzVbDQiEuAaCcow6nI2dWHOKFjDaoNR6MRlVAtr7D5Y
+ +LaGUV0DIIWLZM7A1sFtzpxNG8meumV3fOheO4ubsuNI8GLfUXBlSOAGsljLULPdMtWq
+ MTX4abNXnYkghRTncpnoXai7ivzP0hw/4UU0O0x9Nlsda9DX+gW4ZgbzVIJf32FNJxu+
+ 9y/gGg8nAX8ODih8a5vjlclRAhAUf7tuko/elstIxVxmrMaxLp24XWYCOhfy9HJjjYpQ
+ 0pw/yuL9yYa57a9IZfFffwgS1L+c7kAPh0sIixgJFgrmnGInBQfRIwTmgdmQt2Nf9KKq xQ== 
+Received: from p1lg14878.it.hpe.com ([16.230.97.204])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3sbpmfucm9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Aug 2023 20:14:55 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id CEFBDD2E4;
+        Tue,  8 Aug 2023 20:14:53 +0000 (UTC)
+Received: from swahl-home.5wahls.com (unknown [16.231.227.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 67AF4810631;
+        Tue,  8 Aug 2023 20:14:51 +0000 (UTC)
+Date:   Tue, 8 Aug 2023 15:14:49 -0500
+From:   Steve Wahl <steve.wahl@hpe.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ab23d406026d7e85"
+        James Smart <james.smart@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Huang Rui <ray.huang@amd.com>, Juergen Gross <jgross@suse.com>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>
+Subject: Re: [patch v2 15/38] x86/apic: Use u32 for phys_pkg_id()
+Message-ID: <ZNKiKPHhcyHxlXnf@swahl-home.5wahls.com>
+References: <20230728105650.565799744@linutronix.de>
+ <20230728120930.507111034@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230728120930.507111034@linutronix.de>
+X-Proofpoint-GUID: ySsGeZcIcooai50K8DVW75TnHWC7cPWo
+X-Proofpoint-ORIG-GUID: ySsGeZcIcooai50K8DVW75TnHWC7cPWo
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-08_18,2023-08-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ bulkscore=0 priorityscore=1501 impostorscore=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 suspectscore=0 malwarescore=0 clxscore=1011
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308080179
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---000000000000ab23d406026d7e85
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
 
-On Tue, Aug 8, 2023 at 6:07=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Aug 07, 2023 at 10:45:03AM -0700, Justin Tee wrote:
->
-> > --
-> > This electronic communication and the information and any files transmi=
-tted
-> > with it, or attached to it, are confidential and are intended solely fo=
-r
-> > the use of the individual or entity to whom it is addressed and may con=
-tain
-> > information that is confidential, legally privileged, protected by priv=
-acy
-> > laws, or otherwise restricted from disclosure to anyone else. If you ar=
-e
-> > not the intended recipient or the person responsible for delivering the
-> > e-mail to the intended recipient, you are hereby notified that any use,
-> > copying, distributing, dissemination, forwarding, printing, or copying =
-of
-> > this e-mail is strictly prohibited. If you received this e-mail in erro=
-r,
-> > please return the e-mail to the sender, delete it from your computer, a=
-nd
-> > destroy any printed copy of it.
->
-> Removed from mailbox.
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+On Fri, Jul 28, 2023 at 02:13:01PM +0200, Thomas Gleixner wrote:
+> APIC IDs are used with random data types u16, u32, int, unsigned int,
+> unsigned long.
+> 
+> Make it all consistently use u32 because that reflects the hardware
+> register width even if that callback going to be removed soonish.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  arch/x86/include/asm/apic.h          |    2 +-
+>  arch/x86/kernel/apic/apic_flat_64.c  |    2 +-
+>  arch/x86/kernel/apic/apic_noop.c     |    2 +-
+>  arch/x86/kernel/apic/apic_numachip.c |    2 +-
+>  arch/x86/kernel/apic/bigsmp_32.c     |    2 +-
+>  arch/x86/kernel/apic/local.h         |    2 +-
+>  arch/x86/kernel/apic/probe_32.c      |    2 +-
+>  arch/x86/kernel/apic/x2apic_phys.c   |    2 +-
+>  arch/x86/kernel/apic/x2apic_uv_x.c   |    2 +-
+>  arch/x86/kernel/vsmp_64.c            |    2 +-
+>  arch/x86/xen/apic.c                  |    2 +-
+>  11 files changed, 11 insertions(+), 11 deletions(-)
+> 
+> --- a/arch/x86/include/asm/apic.h
+> +++ b/arch/x86/include/asm/apic.h
+> @@ -296,7 +296,7 @@ struct apic {
+>  	void	(*init_apic_ldr)(void);
+>  	void	(*ioapic_phys_id_map)(physid_mask_t *phys_map, physid_mask_t *retmap);
+>  	u32	(*cpu_present_to_apicid)(int mps_cpu);
+> -	int	(*phys_pkg_id)(int cpuid_apic, int index_msb);
+> +	u32	(*phys_pkg_id)(u32 cpuid_apic, int index_msb);
+>  
+>  	u32	(*get_apic_id)(unsigned long x);
+>  	u32	(*set_apic_id)(unsigned int id);
+> --- a/arch/x86/kernel/apic/apic_flat_64.c
+> +++ b/arch/x86/kernel/apic/apic_flat_64.c
+> @@ -66,7 +66,7 @@ static u32 set_apic_id(unsigned int id)
+>  	return (id & 0xFF) << 24;
+>  }
+>  
+> -static int flat_phys_pkg_id(int initial_apic_id, int index_msb)
+> +static u32 flat_phys_pkg_id(u32 initial_apic_id, int index_msb)
+>  {
+>  	return initial_apic_id >> index_msb;
+>  }
+> --- a/arch/x86/kernel/apic/apic_noop.c
+> +++ b/arch/x86/kernel/apic/apic_noop.c
+> @@ -29,7 +29,7 @@ static void noop_send_IPI_self(int vecto
+>  static void noop_apic_icr_write(u32 low, u32 id) { }
+>  static int noop_wakeup_secondary_cpu(int apicid, unsigned long start_eip) { return -1; }
+>  static u64 noop_apic_icr_read(void) { return 0; }
+> -static int noop_phys_pkg_id(int cpuid_apic, int index_msb) { return 0; }
+> +static u32 noop_phys_pkg_id(u32 cpuid_apic, int index_msb) { return 0; }
+>  static unsigned int noop_get_apic_id(unsigned long x) { return 0; }
+>  static void noop_apic_eoi(void) { }
+>  
+> --- a/arch/x86/kernel/apic/apic_numachip.c
+> +++ b/arch/x86/kernel/apic/apic_numachip.c
+> @@ -56,7 +56,7 @@ static u32 numachip2_set_apic_id(unsigne
+>  	return id << 24;
+>  }
+>  
+> -static int numachip_phys_pkg_id(int initial_apic_id, int index_msb)
+> +static u32 numachip_phys_pkg_id(u32 initial_apic_id, int index_msb)
+>  {
+>  	return initial_apic_id >> index_msb;
+>  }
+> --- a/arch/x86/kernel/apic/bigsmp_32.c
+> +++ b/arch/x86/kernel/apic/bigsmp_32.c
+> @@ -29,7 +29,7 @@ static void bigsmp_ioapic_phys_id_map(ph
+>  	physids_promote(0xFFL, retmap);
+>  }
+>  
+> -static int bigsmp_phys_pkg_id(int cpuid_apic, int index_msb)
+> +static u32 bigsmp_phys_pkg_id(u32 cpuid_apic, int index_msb)
+>  {
+>  	return cpuid_apic >> index_msb;
+>  }
+> --- a/arch/x86/kernel/apic/local.h
+> +++ b/arch/x86/kernel/apic/local.h
+> @@ -17,7 +17,7 @@
+>  void __x2apic_send_IPI_dest(unsigned int apicid, int vector, unsigned int dest);
+>  unsigned int x2apic_get_apic_id(unsigned long id);
+>  u32 x2apic_set_apic_id(unsigned int id);
+> -int x2apic_phys_pkg_id(int initial_apicid, int index_msb);
+> +u32 x2apic_phys_pkg_id(u32 initial_apicid, int index_msb);
+>  
+>  void x2apic_send_IPI_all(int vector);
+>  void x2apic_send_IPI_allbutself(int vector);
+> --- a/arch/x86/kernel/apic/probe_32.c
+> +++ b/arch/x86/kernel/apic/probe_32.c
+> @@ -18,7 +18,7 @@
+>  
+>  #include "local.h"
+>  
+> -static int default_phys_pkg_id(int cpuid_apic, int index_msb)
+> +static u32 default_phys_pkg_id(u32 cpuid_apic, int index_msb)
+>  {
+>  	return cpuid_apic >> index_msb;
+>  }
+> --- a/arch/x86/kernel/apic/x2apic_phys.c
+> +++ b/arch/x86/kernel/apic/x2apic_phys.c
+> @@ -134,7 +134,7 @@ u32 x2apic_set_apic_id(unsigned int id)
+>  	return id;
+>  }
+>  
+> -int x2apic_phys_pkg_id(int initial_apicid, int index_msb)
+> +u32 x2apic_phys_pkg_id(u32 initial_apicid, int index_msb)
+>  {
+>  	return initial_apicid >> index_msb;
+>  }
+> --- a/arch/x86/kernel/apic/x2apic_uv_x.c
+> +++ b/arch/x86/kernel/apic/x2apic_uv_x.c
+> @@ -790,7 +790,7 @@ static unsigned int uv_read_apic_id(void
+>  	return x2apic_get_apic_id(apic_read(APIC_ID));
+>  }
+>  
+> -static int uv_phys_pkg_id(int initial_apicid, int index_msb)
+> +static u32 uv_phys_pkg_id(u32 initial_apicid, int index_msb)
+>  {
+>  	return uv_read_apic_id() >> index_msb;
+>  }
+> --- a/arch/x86/kernel/vsmp_64.c
+> +++ b/arch/x86/kernel/vsmp_64.c
+> @@ -127,7 +127,7 @@ static void __init vsmp_cap_cpus(void)
+>  #endif
+>  }
+>  
+> -static int apicid_phys_pkg_id(int initial_apic_id, int index_msb)
+> +static u32 apicid_phys_pkg_id(u32 initial_apic_id, int index_msb)
+>  {
+>  	return read_apic_id() >> index_msb;
+>  }
+> --- a/arch/x86/xen/apic.c
+> +++ b/arch/x86/xen/apic.c
+> @@ -110,7 +110,7 @@ static int xen_madt_oem_check(char *oem_
+>  	return xen_pv_domain();
+>  }
+>  
+> -static int xen_phys_pkg_id(int initial_apic_id, int index_msb)
+> +static u32 xen_phys_pkg_id(u32 initial_apic_id, int index_msb)
+>  {
+>  	return initial_apic_id >> index_msb;
+>  }
+> 
 
-Hi Andy,
-
-There is no need to remove from mailbox because you were the intended
-recipient of my previous email as well as everyone subscribed to the
-linux-scsi and linux-kernel mailing list  (:
-
-I still prefer sizeof(vport->lpfc_vmid_host_uuid) instead of
-LPFC_COMPRESS_VMID_SIZE.
-
-Thanks,
-Justin
-
---=20
-This electronic communication and the information and any files transmitted=
-=20
-with it, or attached to it, are confidential and are intended solely for=20
-the use of the individual or entity to whom it is addressed and may contain=
-=20
-information that is confidential, legally privileged, protected by privacy=
-=20
-laws, or otherwise restricted from disclosure to anyone else. If you are=20
-not the intended recipient or the person responsible for delivering the=20
-e-mail to the intended recipient, you are hereby notified that any use,=20
-copying, distributing, dissemination, forwarding, printing, or copying of=
-=20
-this e-mail is strictly prohibited. If you received this e-mail in error,=
-=20
-please return the e-mail to the sender, delete it from your computer, and=
-=20
-destroy any printed copy of it.
-
---000000000000ab23d406026d7e85
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-QsyUohclvlxgt5d/MsBG6WZxZ+uppzNvjEk/wUu+6JQNUVEMviA6eBCCi+4ShjZUbGPES11h5lw/
-wuyQZDIjy+1hGPtLHBXI/QQEbU3OVdTRn+aEMwIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
-MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
-dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
-HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
-bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
-Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
-gRdqdXN0aW4udGVlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
-gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUlHfvnuNaLp52RO2Y2En9J+7MKI4wDQYJ
-KoZIhvcNAQELBQADggEBAGaBsEmLZwejb3YsmigadLZGto3hJ7Erq2YZLhL7Pgtxft1/j4JNLsRN
-t3ZJIW2Xzfbj0p328xRekSP1gjZ9Szre0fxEFXH1sS1a7WP9E0fHxVW07xVsxGxo5opAh5Gf/bQH
-S4x9pCO48FJI310L1RGQiqFKY/OECnXO821y8MAyObbGo9HNHP4Sk6F5J1v2qJzbLtMfj8ybbTGe
-SidstRgjOIqMldZs2Koio14QFE7hJY+8KRiKfq+eb1EwQTMzBxZsMOL5vUSZjYg2+Fqwyr6YYp0w
-Lsq/wH9o18xSvL/FikpG4JRxiT20RdM6DQrk9lv8ijASZCuN3JR61WUNz2AxggJtMIICaQIBATBr
-MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
-YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwMd6BsMSBDsagVFtYwDQYJYIZI
-AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIG4qg67B+FMpOQPmx3l0+PK9SXsZuYQJddARvi/Q
-o5n8MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDgwODE4MjYw
-MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
-AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
-hkiG9w0BAQEFAASCAQA/jnGaDg0sZyb6wGD3YaWyAQfWJ1UrR3ep10xCBEJH7QI1D5QFUDw6m8jq
-I9bocgswQgb6ItLWMyz745muoygj95EuC7pDmyNIDohLlwxjLL1FLKH07at4rzEOuKH4sDLmyUAR
-dCPv6yPlSUe57UAFYWR8O5CJpQ6CEZXekiYshywiFxoBA9Pb7KsLP4PiMpeFF27PytH5zVMxTjmD
-EPtr9yD7Kfj3Ucg21niREz1Y7hieNG0m2QTOr1Qlfz4bnK0OgAH7iAjF8rBZVIw7j7VldJCMxoo8
-K7Ykda2Ifp3k9cdTnQvtf1UKJy38sq8zGxZqPlo2iTfoeW6uHOU5SxbW
---000000000000ab23d406026d7e85--
+-- 
+Steve Wahl, Hewlett Packard Enterprise
