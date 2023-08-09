@@ -2,99 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D36776184
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Aug 2023 15:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4869177621D
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Aug 2023 16:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjHINpn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Aug 2023 09:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S233163AbjHIOLm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Aug 2023 10:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjHINpn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Aug 2023 09:45:43 -0400
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F9A1986;
-        Wed,  9 Aug 2023 06:45:42 -0700 (PDT)
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-268b3ddc894so3874489a91.1;
-        Wed, 09 Aug 2023 06:45:42 -0700 (PDT)
+        with ESMTP id S229978AbjHIOLl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Aug 2023 10:11:41 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9671FD7
+        for <linux-scsi@vger.kernel.org>; Wed,  9 Aug 2023 07:11:40 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5839f38342fso75107637b3.0
+        for <linux-scsi@vger.kernel.org>; Wed, 09 Aug 2023 07:11:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google; t=1691590300; x=1692195100;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=34i6iKDP0xEhvs3ST3hBs6nBUaQZGtmJ6ZJ/h8b6qxc=;
+        b=WFRd6SnAL0CN+fvlIQRJMgHjg7eOAgFUJbQkf1aFOyyB8PqaGS8cSqy6iQvPUGu/AC
+         VubrA30/pDB/fwFxfd8VpgVLajTenIa5kyb6SyNxxvdwFhTPlzkNCp/7E0BSzqTJGwgJ
+         AqRYr7E2atC98ld7b7/dPHHLLA3geGFiOjNaY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691588742; x=1692193542;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Dpl1Z+1e37FDIIxjHDTTIhIJ9sjPbxUhzPUxRhhyuI=;
-        b=GBSzmq2sMNoyH0TWD/UqJGNJznJlSKeIaxd2VSJoDxdu79uUYGO2wbS6sZHkmcBy4x
-         2E/0C0tOd4III1NQVNiHal6ynkVUAvxeCgnrlKRMGjTbL5HQxEMXHhheS+T2TcSmPe+r
-         demdnajur08muKTUH3XOhFk6wHyWC7sWnh2sz+O2ZVCw11MDTwGQiGTddpYI82z/up9O
-         NivALHkZ8fa2MExPMTYdEo3K0zXP+iUOLDmQ3sqoDorpLfOKgJJ32G5A8/ktCu0iUKCm
-         KTgSyEECf+VLTReXeemz7MOOOaCdSU85sKKOBSlsCZ4JYvSYXY/fcFrwzHAnQlDtR+jU
-         B11w==
-X-Gm-Message-State: AOJu0YzMAPUGrxNUWW8xrSNlWHUE/IIxHlnsMtiAL1Ab62jCt61V+/9b
-        piC/ZdA+uyNl51Ejk92yqiA=
-X-Google-Smtp-Source: AGHT+IHBcvmWzou/w5ZYj6qiwXAbaSxwPp6ps8nZpIrsu22GqEvYIcdlm08UvbgT1jdVFtAi8nMHAA==
-X-Received: by 2002:a17:90a:5314:b0:268:ce03:e17e with SMTP id x20-20020a17090a531400b00268ce03e17emr2035284pjh.47.1691588741442;
-        Wed, 09 Aug 2023 06:45:41 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id nh10-20020a17090b364a00b002690aa4c292sm1462143pjb.39.2023.08.09.06.45.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Aug 2023 06:45:40 -0700 (PDT)
-Message-ID: <49370c83-cbda-2c95-8f74-408dca738c75@acm.org>
-Date:   Wed, 9 Aug 2023 06:45:39 -0700
+        d=1e100.net; s=20221208; t=1691590300; x=1692195100;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=34i6iKDP0xEhvs3ST3hBs6nBUaQZGtmJ6ZJ/h8b6qxc=;
+        b=QMB197NN/K6DVZAaGJlahESHtTL0dpzlLUuzx1Jq7/S7518FRrQtqkGElXlOeL033H
+         nh9uJJrPJYfcgT6NrbAT9brhFuo0mhPZ8tOjFYbqZLjsNmqsggibgjKX3VkgspdLVEkp
+         k+KzdliMDcgV1H3udy5Hn8QcNPgYl/DbY4zUdeFoGcC4L/Tkk+0kiP0PoqFzCNn0JaGx
+         4G4/Jh8RIW203nQ5yKKDcked6N5mrpP5vYkIeYUdoFPAj4EDpaTr/tUdrMlAIz1aHIkp
+         FH0L2XRIJnvn/gAfPtBMT2GdF9+AGSeI/wrt7dDcpcSnLho+nIa6mW1QRBR0Dw47K1L/
+         P5MA==
+X-Gm-Message-State: AOJu0YxTzLgS933qSN4S5AjbTuHR55NMzmiEt24vkT/4vhnhRrnzT5t4
+        6WttuDw6VpsUde73ValDsj4PUw==
+X-Google-Smtp-Source: AGHT+IHWl09PlCcDhzDmnd3MIv5OYyumiMk8BMzkfwDq8nV+RETz/pPMMQ8qOpnvCs3BuL5EA/bpJQ==
+X-Received: by 2002:a0d:e587:0:b0:583:4304:75a4 with SMTP id o129-20020a0de587000000b00583430475a4mr2832236ywe.29.1691590299861;
+        Wed, 09 Aug 2023 07:11:39 -0700 (PDT)
+Received: from sunraycer.home ([2601:246:5d81:5e3b::100])
+        by smtp.gmail.com with ESMTPSA id j12-20020a81920c000000b00573898fb12bsm4017726ywg.82.2023.08.09.07.11.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Aug 2023 07:11:39 -0700 (PDT)
+Received: from puyallup.home (localhost [127.0.0.1])
+        by sunraycer.home (Postfix) with ESMTPA id F289A5C3722;
+        Wed,  9 Aug 2023 09:11:38 -0500 (CDT)
+From:   Steve Magnani <magnani@ieee.org>
+To:     Quinn Tran <qutran@marvell.com>
+Cc:     linux-kernel@vger.kernel.org, Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        linux-scsi@vger.kernel.org, "Steven J. Magnani" <magnani@ieee.org>
+Subject: [PATCH] scsi: qla2xxx: Prevent firmware rejection of MBC_GET_RNID_PARAMS
+Date:   Wed,  9 Aug 2023 09:10:59 -0500
+Message-Id: <20230809141059.10790-1-magnani@ieee.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v6 1/7] block: Introduce the flag
- QUEUE_FLAG_NO_ZONE_WRITE_LOCK
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Ming Lei <ming.lei@redhat.com>
-References: <20230804154821.3232094-1-bvanassche@acm.org>
- <20230804154821.3232094-2-bvanassche@acm.org>
- <dd230762-804c-bb8a-24e0-123afd81e26c@kernel.dk>
- <ede0c18a-f5d0-94af-5175-9be54aa85082@acm.org>
- <067228e1-cd13-cf70-40fd-409f9b9ba557@kernel.dk>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <067228e1-cd13-cf70-40fd-409f9b9ba557@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/8/23 15:27, Jens Axboe wrote:
-> I don't think setting that flag by default makes a lot of sense, if the
-> device in question isn't zoned. Maybe have variants of BLK_ZONED_* which
-> has a locked and unlocked variant for each where it applies? Perhaps
-> have the lock flag be common between them so you can check them in the
-> same way? That'd keep the fact that it's zoned and if it needs locking
-> in the same spot, rather than scatter them in two spots.
+At least some firmware (for example, QLE2692 FW 8.08.231 (d0d5)) returns
+MBS_COMMAND_PARAMETER_ERROR when MBC_GET_RNID_PARAMS(RNID_TYPE_PORT_LOGIN)
+is issued with a transfer length of 4 (DWords). Correct the overrun fix to
+issue a "normal" transfer length and instead limit copy-out of desired
+PLOGI data to the space available for it.
 
-Hi Jens,
-
-That's an interesting suggestion but there is a complication: the zone type
-is set by different code than the code that decides whether or not locking
-is required. For SCSI devices the zone type is set from inside
-drivers/scsi/sd.c or drivers/scsi/sd_zbc.c while the locking requirements
-come from the SCSI LLD (drivers/ufs/core/ufshcd.c). Additionally, the code
-for converting between model type and model string in scsi_debug.c would
-look weird if BLK_ZONED_* is split into locked and unlocked variants. See
-also the zbc_model_strs_*[] arrays and the sdeb_zbc_model_str() function.
-
-It should be possible to move the flag that indicates whether or not zone
-locking is required into struct queue_limits next to "enum blk_zoned_model
-zoned;". If nobody objects I will select this alternative.
-
-Thanks,
-
-Bart.
-
-
+Fixes: b68710a8094f ("scsi: qla2xxx: Fix buffer overrun")
+Signed-off-by: "Steven J. Magnani" <magnani@ieee.org>
+---
+--- a/drivers/scsi/qla2xxx/qla_init.c	2023-08-01 03:46:21.727114453 -0500
++++ b/drivers/scsi/qla2xxx/qla_init.c	2023-08-08 23:18:46.475286995 -0500
+@@ -5549,7 +5549,8 @@ static void qla_get_login_template(scsi_
+ 	__be32 *q;
+ 
+ 	memset(ha->init_cb, 0, ha->init_cb_size);
+-	sz = min_t(int, sizeof(struct fc_els_csp), ha->init_cb_size);
++	/* At least some firmware requires sz > sizeof(fc_els_csp) */
++	sz = min_t(int, sizeof(struct fc_els_flogi), ha->init_cb_size);
+ 	rval = qla24xx_get_port_login_templ(vha, ha->init_cb_dma,
+ 					    ha->init_cb, sz);
+ 	if (rval != QLA_SUCCESS) {
+@@ -5560,6 +5561,7 @@ static void qla_get_login_template(scsi_
+ 	q = (__be32 *)&ha->plogi_els_payld.fl_csp;
+ 
+ 	bp = (uint32_t *)ha->init_cb;
++	sz = min_t(u32, sizeof(struct fc_els_csp), sz);
+ 	cpu_to_be32_array(q, bp, sz / 4);
+ 	ha->flags.plogi_template_valid = 1;
+ }
+------------------------------------------------------------------------
+ Steven J. Magnani               "I claim this network for MARS!
+                                  Earthling, return my space modulator!"
+ #include <standard.disclaimer>
