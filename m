@@ -2,118 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB83776719
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Aug 2023 20:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179917767BC
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Aug 2023 20:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjHISTJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Aug 2023 14:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
+        id S233188AbjHIS53 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Aug 2023 14:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjHISTI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Aug 2023 14:19:08 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11213A3;
-        Wed,  9 Aug 2023 11:19:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1691605138; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=OiV+vb/8hz5q30vY3EKAd6GRD1/veELDDFzu7WpsaeoTqBcsebwSlf4Xen+EwWXB7/
-    e0Jbg2w/mVFM3JCVxzzAapTVmoLKFTUJtRKgxJqU6tlSSTJ/9t+ENGIhN1AqdjuQtv6u
-    Umb7O2Ce8MAUIIrMszpO8qXObKl/Magiclx8v/jO8efqA5FNfVRrY38c+RKhElPSIoHa
-    4nOdnb5Lz2Lt9WKUNYBckVyyv0xY8z8yDKVO1MczdD1V6HpCxI2S4wJjc0TrGUyD5Q6k
-    lBI3FW1XYorh21qmqVf2yeUuxdlWnueTrTWKr7iYegD5rdtSyNKA2wx9G0/xuTVRZ79I
-    3dXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1691605138;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=25wQxvsz2tJRkMoBU+Z8a5c7VcMyZjz+ALvQJUrTZe0=;
-    b=RmHa7xKePzwSfF+MHnaExXCz3r1vWdBA8SMC9DYITVeFu0EgQs/nMRsEvEGxGRgcKW
-    OYWZ4dQ1rAdhRp6XHvdfCU6EXi7NFX+1lBmDXkHlXOix7hZ+YUVLpZSFMW2qdD1+S1Gb
-    eouAdSlpRuJhy0QUax0bEWMOqZ3joBxOxdfnrQaNzSzV6D7gi125/+ZdMH/GMbax8W5N
-    xt+WO6Drw3BO1KzfcQAjQ7xYbMHs7vCwBT7whjrTJkYo5qT4Ouwb6+7rKztJPl1sB0cq
-    E5rYnQ46iG5kRzB3Bk7/nOmJbuSsz9O+LCmnNam+VbPhU4LzBYnS2HnCGNFkcjqTwfIc
-    HTVA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1691605138;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=25wQxvsz2tJRkMoBU+Z8a5c7VcMyZjz+ALvQJUrTZe0=;
-    b=nU5y4QoXVY6BF7uRKC7iZnSY2BulSdeEIbZQ5iam62PUJh5R8FknT8PpEizViW1ZTB
-    twMki0r+YbGHhXqx8HqmQs1oAluyGhFF75bK7Sfm9JHT5Zuzs3IGkF1DcqzIafphhFaj
-    4ZHfG06KBY7hv2pajy4rbiIpvPW5hVJ+uHpa9qqoew1Zxu3x73oSxI4rbMEukH3+r609
-    OtNSo/2qsUdNnSglA45JZ3vTrs//zV+5GHDaWrFmvWOKZ0O1LfIhXVbzFHWdpWmY8XQE
-    uNn1qEHFffIYDW040JTLmwKRJNg/ms7wtwTaPjExtlkC89pp1oTDUDOx/JU0CTLshKN5
-    9rDQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1691605138;
-    s=strato-dkim-0003; d=iokpp.de;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=25wQxvsz2tJRkMoBU+Z8a5c7VcMyZjz+ALvQJUrTZe0=;
-    b=ShC4DrYsnFpnFLOkJMtFk4aqNpPhlimx3vHqCK7YIEP4tCJLRNrjNbJ32fo/JVbyR6
-    aFP0PHEDfyIR2Qbb8HDg==
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1QLj68UeUr1+U1B7WtoHeqrQNqrexjtNBJQI8izfAF0DFZj1zmA=="
-Received: from blinux.speedport.ip
-    by smtp.strato.de (RZmta 49.6.6 AUTH)
-    with ESMTPSA id z12fdaz79IIwh70
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 9 Aug 2023 20:18:58 +0200 (CEST)
-From:   Bean Huo <beanhuo@iokpp.de>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org, jonghwi.rha@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] scsi: ufs: core: No need to update UPIU.header.flags and lun in advanced RPMB handler
-Date:   Wed,  9 Aug 2023 20:18:47 +0200
-Message-Id: <20230809181847.102123-3-beanhuo@iokpp.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230809181847.102123-1-beanhuo@iokpp.de>
-References: <20230809181847.102123-1-beanhuo@iokpp.de>
+        with ESMTP id S232365AbjHIS52 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Aug 2023 14:57:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BB4E51
+        for <linux-scsi@vger.kernel.org>; Wed,  9 Aug 2023 11:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1691607398;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EOeT56fYFXenbiTjEbqIlGNmaCm7sLXNGQKrx5ZWC5o=;
+        b=iwLOc8Y9imXuuWImoEEUE1kjOJ3dR1dOTJtgADdkoGQXz9845qTA78sTwqM61tc+xINgzj
+        Ez+9G6pBdgmzTAvnwlgyU79MKFhxPhqHX9RyecL07LPGN/gJpTiHwvfTaXa6L1/oy2OkNN
+        TyQBtmApbSLrebAHu8cScrU5h48yFyk=
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
+ [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-326-vOWWBCw5OvWMfd7L_mGZpg-1; Wed, 09 Aug 2023 14:56:37 -0400
+X-MC-Unique: vOWWBCw5OvWMfd7L_mGZpg-1
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-585fb08172bso2725797b3.2
+        for <linux-scsi@vger.kernel.org>; Wed, 09 Aug 2023 11:56:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691607396; x=1692212196;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EOeT56fYFXenbiTjEbqIlGNmaCm7sLXNGQKrx5ZWC5o=;
+        b=HXNgIfnErY5CEgu9TfQCK4Rn5rritrAGSV7JpdGn3/t1PWdmXvL4q/R77b1nCRFio3
+         9TNDu8Y/dQ8H61f8/9q0FEVnslHXJhpXuiO8cvQueaIyL0XDIEy1c6qcPwdtV6KA6rBm
+         4o1m6f0/VaxxUDrllSbi2vZdJqh05/ebbj2we2vMGVumJnIh0utGiMjZHSJ+kxnqR+G3
+         JCO9cQMtbkaNF8u9/ZEK34InODNlxjq4exdw1TI83WO98dsEEwUuu1p20QCRc4dEslx9
+         nBeUjGNxCu0wf1aGwh+29bwssrpG3WSAkLcpeFYZPSJhSPXhj4Ll1+HL2NryLjdeWA3M
+         jriw==
+X-Gm-Message-State: AOJu0YyoDcJTA04vdtNyphXhYWJHOvBdGwSp2Wvs/4CallqQnRzWMKzc
+        5YHX/wsLtKi3jES2Y6IZYGDXkeOqY+fg1RxBbdb6vrBXVwN8v/egqEd6he8Vx3lTcooOJF0PW8Z
+        amh7wRFXXd5sHnbzLD8Dd2g==
+X-Received: by 2002:a81:4f91:0:b0:57a:9b2c:51f1 with SMTP id d139-20020a814f91000000b0057a9b2c51f1mr211519ywb.1.1691607396775;
+        Wed, 09 Aug 2023 11:56:36 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHeb8QRGb74j1vFryxurJ7SZstqb4N5IPmc6D8B1e4Q/O0UeGAeI1H9yFfnG7Vqoixf40LJ4Q==
+X-Received: by 2002:a81:4f91:0:b0:57a:9b2c:51f1 with SMTP id d139-20020a814f91000000b0057a9b2c51f1mr211500ywb.1.1691607396536;
+        Wed, 09 Aug 2023 11:56:36 -0700 (PDT)
+Received: from brian-x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id e9-20020a81dd09000000b0058038e6609csm4101487ywn.74.2023.08.09.11.56.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Aug 2023 11:56:35 -0700 (PDT)
+Date:   Wed, 9 Aug 2023 14:56:33 -0400
+From:   Brian Masney <bmasney@redhat.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] scsi: ufs: core: convert to dev_err_probe() in
+ hba_init
+Message-ID: <ZNPhYRslrcwAHo3Y@brian-x1>
+References: <20230808142650.1713432-1-bmasney@redhat.com>
+ <20230808142650.1713432-2-bmasney@redhat.com>
+ <20230808162929.a1b784ad42bd346cd87747b9@hugovil.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230808162929.a1b784ad42bd346cd87747b9@hugovil.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+On Tue, Aug 08, 2023 at 04:29:29PM -0400, Hugo Villeneuve wrote:
+> On Tue,  8 Aug 2023 10:26:49 -0400
+> Brian Masney <bmasney@redhat.com> wrote:
+> 
+> > Convert ufshcd_variant_hba_init() over to use dev_err_probe() to avoid
+> > log messages like the following on bootup:
+> > 
+> >     ufshcd-qcom 1d84000.ufs: ufshcd_variant_hba_init: variant qcom init
+> >         failed err -517
+> > 
+> > While changes are being made here, let's go ahead and clean up the rest
+> > of that function.
+> 
+> Hi,
+> you should not combine code cleanup and fixes/improvements in the same
+> patch, split them.
 
-For advanced RPMB requests, its UPIU package should be fully initialized
-in its ufs-bsg-based application, except for task tag. in ufshcd.c,  we
-just copy UPIU (with CDB) request as-is.
+This is a pretty simple patch as is, and split up the code clean up is
+not very useful on its own. I'll just skip doing the code cleanup and
+only post the dev_err_probe() change in v2.
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/ufs/core/ufshcd.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 7f965ac18ee8..446f949154c3 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -7250,9 +7250,7 @@ int ufshcd_advanced_rpmb_req_handler(struct ufs_hba *hba, struct utp_upiu_req *r
- 	else
- 		ufshcd_prepare_req_desc_hdr(lrbp, &upiu_flags, dir, 0);
- 
--	/* update the task tag and LUN in the request upiu */
--	req_upiu->header.flags = upiu_flags;
--	req_upiu->header.lun = UFS_UPIU_RPMB_WLUN;
-+	/* update the task tag */
- 	req_upiu->header.task_tag = tag;
- 
- 	/* copy the UPIU(contains CDB) request as it is */
--- 
-2.34.1
+Brian
 
