@@ -2,76 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD44776677
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Aug 2023 19:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15D6477671E
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Aug 2023 20:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbjHIR2r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Aug 2023 13:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S231337AbjHISWH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Aug 2023 14:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbjHIR2p (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Aug 2023 13:28:45 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97781EE
-        for <linux-scsi@vger.kernel.org>; Wed,  9 Aug 2023 10:28:42 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-58451f0fefeso1573127b3.3
-        for <linux-scsi@vger.kernel.org>; Wed, 09 Aug 2023 10:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google; t=1691602122; x=1692206922;
-        h=content-transfer-encoding:message-id:references:in-reply-to:subject
-         :cc:to:from:date:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w5GHkqllOrwa7dKjTHTMacksa/BCngUM75YVKngzb84=;
-        b=e5LzrZn59/0i0VBuG6353Wmc/jFvdaVaQytmwbjSxYDCk34yEp8PDkhT2vGcnrcFnJ
-         /b6ENtHApcz7MsGLKPoya22WAvN1w13LWZolIBeE2F7GqawZkdj00o8qBK2EDpu06hca
-         N3EoRMrltIHmMZsx+Kvs+Us8njn5MwOXvvyBE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691602122; x=1692206922;
-        h=content-transfer-encoding:message-id:references:in-reply-to:subject
-         :cc:to:from:date:mime-version:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=w5GHkqllOrwa7dKjTHTMacksa/BCngUM75YVKngzb84=;
-        b=CeJJlBD0k/nR6XUa1sXW6C/yv2YIjXCajr8bAvmnYGBlNr6MJYOtaf8gVzgGKQfTNU
-         oGtf8GVaVX4QNz1uu7zNkQfKO5rRIOd8zXaDEMoE56RuTfJGHW1vnRWXp/z0UC6BkuN3
-         0zQIz6FrX3h78kgPH4H3ReDdazMeEzDxTQpL2fFfa0ohaQ7RZ0nrLajBTON05p7UgisQ
-         vN5v6CB72WC+cvJcZicAND/dfS4+zcDCrUGJMysbwrfdxe3FhOAm4La8ZHRa5ybxLzb2
-         JQRchgAwwEAGqNrYiAuNDTJtT6V5z6Tx3MwQs4NAwkbVnOIMFg3sLiHHbX+DFm844mP2
-         M0JQ==
-X-Gm-Message-State: AOJu0YxOHp6XKWRa7tP3UFrAl8EWMjvu2NHDTVPsLlbXnlYa9qZg/bQZ
-        vU/Xd+3hR0K0IerfjijFNwXIJQ==
-X-Google-Smtp-Source: AGHT+IHnuIrs3PweL9xunsuqoCKY17H82lE7cx9iaHFpRDYegJH258vHKi0V/9LAgF/GQyHIiowhsw==
-X-Received: by 2002:a81:9282:0:b0:585:5fbf:1bf1 with SMTP id j124-20020a819282000000b005855fbf1bf1mr3438208ywg.48.1691602121836;
-        Wed, 09 Aug 2023 10:28:41 -0700 (PDT)
-Received: from sunraycer.home ([2601:246:5d81:5e3b::100])
-        by smtp.gmail.com with ESMTPSA id u123-20020a818481000000b00559f1cb8444sm4066142ywf.70.2023.08.09.10.28.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Aug 2023 10:28:41 -0700 (PDT)
-Received: from 10.10.2.100 (sunraycer [10.10.2.100])
-        by sunraycer.home (Postfix) with ESMTPSA id E94F55C406E;
-        Wed,  9 Aug 2023 12:28:40 -0500 (CDT)
+        with ESMTP id S229600AbjHISWF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Aug 2023 14:22:05 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E8AA3;
+        Wed,  9 Aug 2023 11:22:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1691605138; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=XM4sr2CAYdhjssDICKDMRF5ZfstZlvok/UwBedCxUO2BvIX0CTmddYEdzKdR346awf
+    EwUL67Q7+uB+ovWirm0/qQzk8/3ho7hffXB33YX+/yl+d61hrzc6g7uwAOumol1W3+SE
+    Q5BIsFI/t4gLInQNlpwacHspw6NjGxd27n1p6Ga5WyvLCe3x9RhbGCykJq9CK3xcEktj
+    H7VmqF7NodHCB04yV6uMT0ni+5PelDDwvCGY+A/2NJ8PpMWn7WvL9SgIXwRcQZSrrRw6
+    Q11X2bnO7zfluADApepsd1zr9zdtSmQA0v1sex3hM82ZdYAYjJNVcyVwU7nEHVW0c0dk
+    EPNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1691605138;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=akOL4x92l/R4AJBfp0LVm9K4HuoWtw92adyC60DXSDI=;
+    b=FlZyQqaEIjHokMB1O3YEEe9fN0lkBPIFYdbuzrbfAT9GjZkr0xsbVDhRXc9Wz1QKg/
+    Iz97cOd6hR/6oGQdaoREeGw7GdQhWVxmF8ZhdPTQDjF3hPjzgA6ot/cPyytL5vbbILLS
+    ZyYAQ4rxF63js0vcYvjmeGvZ1DXe+972QUTxaAklZW6IMNQysBuGn3NDfHrqO2H+SNvr
+    iZ4PWuPkdbDpQGgICjCSqjenobXlQTQboFGrkqBtZsIy8hVQa/9DYON0sRykS7rAaop+
+    xIdfWc3h28LGFTVL0ZdzM+75AZcT27GFTskoKZ+J1b+i1wHBIwBgcsupVrrvkmyp2GrA
+    3X/Q==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1691605138;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=akOL4x92l/R4AJBfp0LVm9K4HuoWtw92adyC60DXSDI=;
+    b=ZEAkR+394O8qX1L1g/S9gIKe/rHmWWMT0V8fUGcNPx1l2M7hhyNJ9Qt1Ilo+dW2VF7
+    KA/+0mB3CZks36k9P15QY9MeYwxLRkKY+RICJFO26Sr7E4GGtFV8NymXcAdw8lV4T/ZJ
+    x8jw/o9hyvCzC/gBF7R7W79qYEFmJYiqY8mTzjUzfuUqwbNysXwUcgSQvDRo2z4NNfij
+    /Q4sCTZ+nPKypZd7nKp3G4qD415kdxPmrCPnn5VFTEKqxRVVbKQBe+lL7CheJ/T4Vfau
+    2pz6xDKmQScggMV7WYDoTvvm1D36DJdzzXbQbDbgjY1B6KEPhxNnhRfhZVQwEcffWNjj
+    ub8w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1691605138;
+    s=strato-dkim-0003; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=akOL4x92l/R4AJBfp0LVm9K4HuoWtw92adyC60DXSDI=;
+    b=yoHzjYe+FxjKBxX2dHgrY1pSYRbMykMPPaJdKBnqyeoN0f9PopR3B9ScA1VC7LOLRK
+    XMS5O8braDlm5lC8JMBw==
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1QLj68UeUr1+U1B7WtoHeqrQNqrexjtNBJQI8izfAF0DFZj1zmA=="
+Received: from blinux.speedport.ip
+    by smtp.strato.de (RZmta 49.6.6 AUTH)
+    with ESMTPSA id z12fdaz79IIuh6y
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 9 Aug 2023 20:18:56 +0200 (CEST)
+From:   Bean Huo <beanhuo@iokpp.de>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org, jonghwi.rha@samsung.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bean Huo <beanhuo@iokpp.de>
+Subject: [PATCH v1 0/2] Changes for UFS advanced RPMB
+Date:   Wed,  9 Aug 2023 20:18:45 +0200
+Message-Id: <20230809181847.102123-1-beanhuo@iokpp.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date:   Wed, 09 Aug 2023 12:28:40 -0500
-From:   steve <magnani@ieee.org>
-To:     Steve Magnani <magnani@ieee.org>
-Cc:     Quinn Tran <qutran@marvell.com>, linux-kernel@vger.kernel.org,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: qla2xxx: Prevent firmware rejection of
- MBC_GET_RNID_PARAMS
-In-Reply-To: <20230809141059.10790-1-magnani@ieee.org>
-References: <20230809141059.10790-1-magnani@ieee.org>
-Message-ID: <2f4214c089c0269786abe1695fe7adec@sunraycer.home>
-X-Sender: steve@sunraycer.home
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,52 +84,17 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Please disregard. It looks like the original patch b68710a8094f reduced 
-the amount of data copied off so much that port logins are broken even 
-though with my patch the firmware now processes GET_RNID_PARAMS. The 
-breakage has been introduced during 6.5 (and propagated into 5.x stable 
-branches) so there is some urgency to getting a proper fix.
 
-I will send a short series to revert b68710a8094f and replace it with 
-what I think is the correct overrun fix. AFAICT the overrun is only a 
-single dword.
+Bean Huo (2):
+  scsi: ufs: core: Add advanced RPMB support where UFSHCI 4.0 does not
+    support EHS length in UTRD
+  scsi: ufs: core: No need to update UPIU.header.flags and lun in
+    advanced RPMB handler
 
+ drivers/ufs/core/ufs_bsg.c |  3 +--
+ drivers/ufs/core/ufshcd.c  | 14 ++++++++++----
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
---Steve
+-- 
+2.34.1
 
-
-On 2023-08-09 09:10, Steve Magnani wrote:
-> At least some firmware (for example, QLE2692 FW 8.08.231 (d0d5)) 
-> returns
-> MBS_COMMAND_PARAMETER_ERROR when 
-> MBC_GET_RNID_PARAMS(RNID_TYPE_PORT_LOGIN)
-> is issued with a transfer length of 4 (DWords). Correct the overrun fix 
-> to
-> issue a "normal" transfer length and instead limit copy-out of desired
-> PLOGI data to the space available for it.
-> 
-> Fixes: b68710a8094f ("scsi: qla2xxx: Fix buffer overrun")
-> Signed-off-by: "Steven J. Magnani" <magnani@ieee.org>
-> ---
-> --- a/drivers/scsi/qla2xxx/qla_init.c	2023-08-01 03:46:21.727114453 
-> -0500
-> +++ b/drivers/scsi/qla2xxx/qla_init.c	2023-08-08 23:18:46.475286995 
-> -0500
-> @@ -5549,7 +5549,8 @@ static void qla_get_login_template(scsi_
->  	__be32 *q;
-> 
->  	memset(ha->init_cb, 0, ha->init_cb_size);
-> -	sz = min_t(int, sizeof(struct fc_els_csp), ha->init_cb_size);
-> +	/* At least some firmware requires sz > sizeof(fc_els_csp) */
-> +	sz = min_t(int, sizeof(struct fc_els_flogi), ha->init_cb_size);
->  	rval = qla24xx_get_port_login_templ(vha, ha->init_cb_dma,
->  					    ha->init_cb, sz);
->  	if (rval != QLA_SUCCESS) {
-> @@ -5560,6 +5561,7 @@ static void qla_get_login_template(scsi_
->  	q = (__be32 *)&ha->plogi_els_payld.fl_csp;
-> 
->  	bp = (uint32_t *)ha->init_cb;
-> +	sz = min_t(u32, sizeof(struct fc_els_csp), sz);
->  	cpu_to_be32_array(q, bp, sz / 4);
->  	ha->flags.plogi_template_valid = 1;
->  }
