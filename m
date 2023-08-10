@@ -2,85 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0A4777AE3
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Aug 2023 16:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A317A777B8B
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Aug 2023 17:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235815AbjHJOiT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Aug 2023 10:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
+        id S235970AbjHJPEY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Aug 2023 11:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234883AbjHJOiS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Aug 2023 10:38:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083272684;
-        Thu, 10 Aug 2023 07:38:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D64D65E46;
-        Thu, 10 Aug 2023 14:38:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8AC1C433C7;
-        Thu, 10 Aug 2023 14:38:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691678297;
-        bh=dma8etxQj28F8UTj/qSKe+KW6fpXEEl/4Ff+L1nZ6Lg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YizyZBQGNHhqJ2u3CnZvafAwPR+Bogcyn+JN2WkFFI6k4hkFSk3WGW+dT1iGhQoBg
-         CEL/bfruetDwwXgn4C784tctu0ACtE/BcnCTI//2B75K6mAc2emGGy1AwUEhnKdtef
-         IEVqw6X9wbrQ0mUamgnQw/bAEtMsc4SoIFunzDSLXvekLNq7zLXE8/XJeZUsp2vNhs
-         B/6w5KXE5ECTGlhJqnLSEO9zqy8oG1etYyXLVvPmDG1RkjyiK7RuL/+/rAbc9Tm4D9
-         4dexzTtS90+ppwCWhDo14xoggjBdsNJ9sKS1+QialOdMp2vnGjuvwVaAMmR5u/UuMm
-         7CcqurgX1r5Eg==
-Date:   Thu, 10 Aug 2023 07:41:08 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Nitin Rawat <quic_nitirawa@quicinc.com>
-Cc:     mani@kernel.org, quic_nguyenb@quicinc.com, quic_cang@quicinc.com,
-        quic_asutoshd@quicinc.com, avri.altman@wdc.com,
-        martin.petersen@oracle.com, beanhuo@micron.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        agross@kernel.org, konrad.dybcio@linaro.org, jejb@linux.ibm.com,
-        linux-arm-msm@vger.kernel.org, quic_ziqichen@quicinc.com,
-        Naveen Kumar Goud Arepalli <quic_narepall@quicinc.com>
-Subject: Re: [PATCH V3] scsi: ufs: qcom: Align programming sequence as per HW
- spec
-Message-ID: <yw5mgmk5q6vhwmu5oiqpg5kvafhlojzposoiaiy4j7wynov6sg@fgbx3twcsuwd>
-References: <20230809151243.17531-1-quic_nitirawa@quicinc.com>
+        with ESMTP id S231825AbjHJPEY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Aug 2023 11:04:24 -0400
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207B72686
+        for <linux-scsi@vger.kernel.org>; Thu, 10 Aug 2023 08:04:23 -0700 (PDT)
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-686b9920362so740293b3a.1
+        for <linux-scsi@vger.kernel.org>; Thu, 10 Aug 2023 08:04:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691679862; x=1692284662;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wi0QeqkTxyfwO3yE8dM2dEfhNbz9+I8YMxeKmTfYnLU=;
+        b=RJtFIojfgMo3ZCIfiSOYiIXoE5LgfTKiJdQw9ugo0LDYTETNLLFF5KQeuKI8zZbtV2
+         xCimn+LCa1wC3OPzb2c7VsRyeLu3MQFx84cLqudfBaEKFBP2h2vb/q/oh494/PABmitx
+         uGBy+qEmGuTZg9boNjRZVhUpNzhP7Dwrbo37Xb5uxw0+FLUq7kJln1jHnGiVNaJf+Y9A
+         8gSPiAKOL2fNfEkfCel79V3AI5xcojdJ3b+mVQ6djmXSVsOlcelhKJdE3NoTdwVKHWw4
+         8nZtko4CpaoLbryOOsPW72OW9UZGntlCcrAvtR4zQGwAdL7uvY/UrfbXgzU2p6qWH/rv
+         i5yA==
+X-Gm-Message-State: AOJu0YxGS822kOT9wWA1jnY3H2sH2tw97ZPyVIkNdgfpGHaHcox0Pdmy
+        2tu/pV8AehhCL5ez/2F99zI=
+X-Google-Smtp-Source: AGHT+IFxxP8S4PsCspJNPVTmv+aFos2002eIl5MJdcYd/Hr44LwOdwWr61tptGhHF3ZJrOUUn2SX6g==
+X-Received: by 2002:a05:6a00:2284:b0:686:5e0d:bd4f with SMTP id f4-20020a056a00228400b006865e0dbd4fmr2841075pfe.0.1691679862228;
+        Thu, 10 Aug 2023 08:04:22 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id 24-20020aa79218000000b006827c26f148sm1611958pfo.195.2023.08.10.08.04.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Aug 2023 08:04:21 -0700 (PDT)
+Message-ID: <5b991ddb-5e32-0870-a196-c3139aec86a4@acm.org>
+Date:   Thu, 10 Aug 2023 08:04:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230809151243.17531-1-quic_nitirawa@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [bug report] scsi: core: Fix possible memory leak if device_add()
+ fails
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@linaro.org>,
+        wangzhu <wangzhu9@huawei.com>
+Cc:     linux-scsi@vger.kernel.org
+References: <5121c883-ef71-41d9-8153-472cf319a7b8@moroto.mountain>
+ <470fb552-7356-4a62-a4bd-545b4f94e040@huawei.com>
+ <26b9c8c4-70b8-4517-91b8-9eafa2b81aca@kadam.mountain>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <26b9c8c4-70b8-4517-91b8-9eafa2b81aca@kadam.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Aug 09, 2023 at 08:42:43PM +0530, Nitin Rawat wrote:
-> Align clock configuration as per Qualcomm UFS controller
-> hardware specification.
+On 8/10/23 05:26, Dan Carpenter wrote:
+> On Thu, Aug 10, 2023 at 08:05:21PM +0800, wangzhu wrote:
+>> Hello Dan Carpenter:
+>>
+>>
+>> Sorry for the patch 04b5b5cb0136 I submitted, I thought put_dev(&rc->dev) is
+>> not the same as kfree(rc).
+>>
+>> Then should I submit a revert patch again, or you can fix it yourself?
+>> please let me know what I can do.
 > 
-> This change updates UFS_SYS1CLK_1US, CORE_CLK_1US_CYCLES,
-> PA_VS_CORE_CLK_40NS_CYCLES timer configuration for Qunipro
-> and UTP to align with Qualcomm UFS HW specification.
+> The original code was buggy and the new code is slightly buggier.
+> 
+> Instead of reverting, lets see if anyone knows the correct way to fix
+> this.  If no one comments within a week then I agree that reverting is
+> better than a double free.
 
-"Code is wrong, make code right"
+The standard solution is to have two error paths: one error path that
+cleans up the actions performed before device_add() and a second error
+path with a put_device() call in case device_add() fails. See e.g.
+sd_probe().
 
+Bart.
 
-I find it hard to believe that "the clock configuration is wrong" takes
-207 lines of code to address.
-
-Please instead describe the problem you're solving, to ensure that
-current and future readers of this commit message have a chance to
-understand why this change was made.
-
-The "describing your changes" section in the documentation is good,
-please read it:
-https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
-
-Regards,
-Bjorn
