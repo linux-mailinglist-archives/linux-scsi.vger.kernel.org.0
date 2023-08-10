@@ -2,76 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CDA777E13
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Aug 2023 18:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB8577814E
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Aug 2023 21:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236709AbjHJQVo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Aug 2023 12:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S234120AbjHJTS6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 10 Aug 2023 15:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236675AbjHJQVm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Aug 2023 12:21:42 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A8F270A;
-        Thu, 10 Aug 2023 09:21:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=nzbm7zQ6piDxhfyPXbFOtMIzi1rH9tl9eRtCZrp6e/g=; b=0tuO6XmD/1avgiWMDtNwlVC9G2
-        mO72eTVDQn19DyCZkHq0Gk0RSvpuoXidwIkEvJn0/WVgOfSx1/TFzcCSxJsIOJ6p1vCg1KGEzsXEu
-        QjMsO+P+W3ACg2gwHJFi3gRy6QUPFvrgNprH54dILqMZ2A+9oneHnyCEW+DzL69zRqEDzvu7XuRQX
-        uCXUxNamWuxzQUkst1DRE5y/wbFjnHuJ5VKINnWvHGShkpE6PYAhiOrN1HzEQyrhmMfuUma7d37x0
-        QUxtcAib1rzB992eb7lcU+MVGVqZZWZLI9bVUukHCV+NjpSmyQjjfur6XMdrrpslKX532GYZ1cy1P
-        lbQdzGfQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qU8Pl-008AuS-1j;
-        Thu, 10 Aug 2023 16:21:33 +0000
-Date:   Thu, 10 Aug 2023 09:21:33 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Richard Weinberger <richard@nod.at>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Stephan Wurm <stephan.wurm@a-eberle.de>,
-        stable <stable@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Oliver Neukum <oliver@neukum.org>,
-        Ali Akcaagac <aliakc@web.de>,
-        Jamie Lenehan <lenehan@twibble.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Subject: Re: [PATCH 1/7] ubi: block: Refactor sg list processing for highmem
-Message-ID: <ZNUOjQVivR/5pFKE@infradead.org>
-References: <20230810160019.16977-1-richard@nod.at>
- <20230810160019.16977-2-richard@nod.at>
- <ZNUK8nWnUYB6B4Kg@infradead.org>
- <298860961.5257332.1691684136772.JavaMail.zimbra@nod.at>
+        with ESMTP id S236396AbjHJTSq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Aug 2023 15:18:46 -0400
+X-Greylist: delayed 315 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Aug 2023 12:18:42 PDT
+Received: from smtp.derooysewissel.nl (C323FAC3.static.ziggozakelijk.nl [195.35.250.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DF913D
+        for <linux-scsi@vger.kernel.org>; Thu, 10 Aug 2023 12:18:42 -0700 (PDT)
+Received: from exchange02.ogh-drw.local (192.168.10.156) by
+ exchange01.ogh-drw.local (192.168.10.155) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.20; Thu, 10 Aug 2023 21:12:31 +0200
+Received: from [94.156.102.62] (192.168.10.245) by relay.derooysewissel.nl
+ (192.168.10.156) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Thu, 10 Aug 2023 21:12:31 +0200
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <298860961.5257332.1691684136772.JavaMail.zimbra@nod.at>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: my subjectInvestment Bank of London 
+To:     Recipients <mdings@derooysewissel.nl>
+From:   "Mr. Kerry Morgan" <mdings@derooysewissel.nl>
+Date:   Thu, 10 Aug 2023 21:12:30 +0200
+Reply-To: <unitednation.kerrymorgan@yandex.com>
+Message-ID: <a13863df-e1b2-46a5-a9a8-dd51a8b30846@exchange02.ogh-drw.local>
+X-Spam-Status: No, score=3.9 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,HK_NAME_MR_MRS,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 06:15:36PM +0200, Richard Weinberger wrote:
-> >> The followup patches in this series will switch to kmap_sg()
-> >> and we can remove our own helper and the bounce buffer.
-> > 
-> > Please just use kmap_local and avoid the bounce buffering.
-> 
-> Patch 6 does this.
+Achtung: Begünstigter des Fonds,
 
-But why add the bounce buffering first if you can avoid it from the
-very beginning by just using kmap_local instead of adding a new
-caller for the deprecate kmap_atomic?
+ Wir wurden von der European Investment Bank of London und dem IWF beauftragt, den Grund für die unnötige Verzögerung bei rechtlich genehmigten Fonds zu untersuchen. Während unserer Untersuchung haben wir festgestellt, dass Ihre Zahlung durch korrupte Bankangestellte verzögert wurde, die versuchten, Ihr Geld auf Ihre persönlichen Konten umzuleiten.
+
+Um diesen zweifelhaften Akt zu verhindern, haben wir eine Vereinbarung mit der Europäischen Investitionsbank in London und dem Internationalen Währungsfonds (IWF), dass wir diese Zahlung verwalten und überwachen können. Vermeiden Sie verzweifelte Situationen mit Banken und anderen kriminellen Behörden.
+Wir haben eine unwiderrufliche Zahlungsgarantie für Ihre MFI-Zahlung erhalten. Hiermit teilen wir Ihnen mit, dass die Europäische Investitionsbank beschlossen hat, Ihnen den Betrag von 3.500.000,00 € zu erstatten und per Banküberweisung auf Ihr Bankkonto zu überweisen.
+
+Bitte wenden Sie sich unter der unten angegebenen E-Mail-Adresse
+an die Korrespondentin Herr Kerry MorganE-Mail: unitednation.kerrymorgan@yandex.com
+
+Sie können mir auch Ihre WhatsApp-Nummer sendenSie sollten die angeforderten Informationen daher schnellstmöglich an Herr Seiji Yosh senden, um unnötige Verzögerungen zu vermeiden. Die Europäische Investitionsbank muss Ihr Geld unverzüglich auf Ihr Bankkonto überweisen. Derzeit können wir nichts Wesentliches tun, ohne die erforderlichen Informationen von Ihnen gemäß unseren Bankprotokollen zu erheben. Wir möchten Sie daher bitten, die entsprechenden Informationen in den folgenden Tools sorgfältig zu lesen und auszufüllen, um eine sofortige Bearbeitung Ihrer Ansprüche zu ermöglichen.
+Danke
+
+Herr Kerry Morgan
+unitednation.kerrymorgan@yandex.com
