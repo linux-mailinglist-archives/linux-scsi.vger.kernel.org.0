@@ -2,72 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B817B778C93
-	for <lists+linux-scsi@lfdr.de>; Fri, 11 Aug 2023 13:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E10A778F78
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Aug 2023 14:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234782AbjHKLBP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 11 Aug 2023 07:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        id S236520AbjHKM1e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Aug 2023 08:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbjHKLBN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Aug 2023 07:01:13 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79CDAE7E
-        for <linux-scsi@vger.kernel.org>; Fri, 11 Aug 2023 04:01:12 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RMgkf1zyNzqSfc;
-        Fri, 11 Aug 2023 18:58:18 +0800 (CST)
-Received: from huawei.com (10.175.113.25) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 11 Aug
- 2023 19:01:09 +0800
-From:   Zheng Zengkai <zhengzengkai@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <wangxiongfeng2@huawei.com>,
-        <zhengzengkai@huawei.com>
-Subject: [PATCH -next] scsi: pmcraid: Use pci_dev_id() to simplify the code
-Date:   Fri, 11 Aug 2023 19:13:10 +0800
-Message-ID: <20230811111310.32364-1-zhengzengkai@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        with ESMTP id S235414AbjHKM1c (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Aug 2023 08:27:32 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E55FE60;
+        Fri, 11 Aug 2023 05:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=96Jyxa0hgrG24aZgu2ilDmsPaDJbIFT8CvAcqFGq7ak=; b=Lt8QMt/qiwPklQXJKNxAAayl50
+        ejm5z3TauQQgWXDYeiy6ev7CoxuktCUjLml+tQTXB0FrmwYo9bGjhm2G8bwiVtr2qWkYfM3c8FNl1
+        cPDaz7ayPa6vktH3ev1ZeHUse0hr9sV3dSKzn62142iTuA8TTM4tDaiYAHOFhJAm7nP3aQxRbODoe
+        cl8s2GHmVFeXScu6jrXcZHGDTmN2udO8XZ0pPwfpsd5QoOiRLOiFHXD6KYR9f2MEyvA/KeT9RzHmF
+        DIvDgADu/AxqynsuMYC3hcwdLyXOsBeZQBLnrFNVOoRqDCMnS+8kcWICKZ1ml8I/4TT3bYAOcmKWy
+        N15IsxAA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qUREm-00Abyw-17;
+        Fri, 11 Aug 2023 12:27:28 +0000
+Date:   Fri, 11 Aug 2023 05:27:28 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Alasdair Kergon <agk@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Kleikamp <shaggy@kernel.org>,
+        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        jfs-discussion@lists.sourceforge.net,
+        Joern Engel <joern@lazybastard.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Song Liu <song@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v2 0/29] block: Make blkdev_get_by_*() return handle
+Message-ID: <ZNYpMPM5o4q1xcIt@infradead.org>
+References: <20230810171429.31759-1-jack@suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230810171429.31759-1-jack@suse.cz>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-PCI core API pci_dev_id() can be used to get the BDF number for a pci
-device. We don't need to compose it manually. Use pci_dev_id() to
-simplify the code a little bit.
+Except for a mostly cosmetic nitpick this looks good to me:
 
-Signed-off-by: Zheng Zengkai <zhengzengkai@huawei.com>
----
- drivers/scsi/pmcraid.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Acked-by: Christoph Hellwig <hch@lst.de>
 
-diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-index 9415a4819470..50dc30051f22 100644
---- a/drivers/scsi/pmcraid.c
-+++ b/drivers/scsi/pmcraid.c
-@@ -3584,8 +3584,7 @@ static ssize_t pmcraid_show_adapter_id(
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct pmcraid_instance *pinstance =
- 		(struct pmcraid_instance *)shost->hostdata;
--	u32 adapter_id = (pinstance->pdev->bus->number << 8) |
--		pinstance->pdev->devfn;
-+	u32 adapter_id = pci_dev_id(pinstance->pdev);
- 	u32 aen_group = pmcraid_event_family.id;
- 
- 	return snprintf(buf, PAGE_SIZE,
--- 
-2.20.1
-
+That's not eactly the deep review I'd like to do, but as I'm about to
+head out for vacation that's probably as good as it gets.
