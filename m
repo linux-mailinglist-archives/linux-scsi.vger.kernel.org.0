@@ -2,106 +2,152 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A644577B05C
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Aug 2023 06:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA21477B647
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Aug 2023 12:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbjHNES5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Aug 2023 00:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S236424AbjHNKOn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Aug 2023 06:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbjHNESc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Aug 2023 00:18:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FC2AD;
-        Sun, 13 Aug 2023 21:18:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1EA761735;
-        Mon, 14 Aug 2023 04:18:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2270C433C7;
-        Mon, 14 Aug 2023 04:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691986708;
-        bh=sdCfbwOrNrhHX8FDcR9lXmBqbKqdYnF0NA1vNvBZblY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JBrSLtIZyE7zg2HN4loSGX9LSMxSSG7S9UdIGKDmIBkPmKYB+63ZAhFOv+2efgWNM
-         it+vAbFZD68GQMyHt+fX1pt6g92KGtOsY3vTp+w7I4gPDkYyyR7bzsUe8RkT+aAWlC
-         4ZyVz4zPB0f1AO8GmhuTbuYrV3mXj018cLs1EhXKcT+jyckOfZzhgHXfhEjCrozbpj
-         9Sp4aFbXi0ETw2YcC7CIriYumMTyuQD04jYR9U1xbazqNyYyr13GTbHn8CHaVRZdH4
-         BNHLOZiFAnIKphRKLHwiyasz5NMP40MSe9RY8eGFrkRCMbjMpvx30rv9I+MbhTeKMn
-         /r4fG2T+brfFQ==
-Message-ID: <5b6f882b-82ab-6a00-4a2d-4e93b8c1d973@kernel.org>
-Date:   Mon, 14 Aug 2023 13:18:25 +0900
+        with ESMTP id S236488AbjHNKOV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Aug 2023 06:14:21 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F032410C8
+        for <linux-scsi@vger.kernel.org>; Mon, 14 Aug 2023 03:14:19 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-986d8332f50so557317166b.0
+        for <linux-scsi@vger.kernel.org>; Mon, 14 Aug 2023 03:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1692008058; x=1692612858;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OaliXMOmH9SU1C2DkaplWarCzA0RpYIWvO0eSAY4J5I=;
+        b=vhCN3qS28z+GMKAMta2CsJCod5E7MyhhhaMf8cj9l8nCIRSTLPjLvlnMVZEAmZkgZC
+         yKZrsq0jgS11wzSOqKQh1GTzxApFlOVH/VwbQ32oInbjMF6eDt8eC6pH0Z72biW/Bnid
+         aHu5GAx8MzjyGI0j8xBURqGZyfYML1egsi2pHUNiDqqBHm/Zka0fL6Bya2jjdbGuKZb0
+         KR6hRXDM+ZaSXYLvb5jkxxYHE892EGSjXnxtoTMYwwi5s2KqFzbplyidMBAY8v/xkY5z
+         tzwOTnhRjdDlrRGRU+iSYJFhzv2KbqrgFh2zsNlv3Z/dCiDdrcX3yp10SJkf2DswHOEQ
+         1IxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692008058; x=1692612858;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OaliXMOmH9SU1C2DkaplWarCzA0RpYIWvO0eSAY4J5I=;
+        b=jfKNzViVczniQgbP97NnHmrSIjRiaJUB5u2Bp3yFwvJXtg9f5uWX0KuQLyHt8W2jaJ
+         RlcIOh60D/vzl4T3YxquYiCguZqcHFrNrVKZvIcpS3AXCDyFed7VhPiG2ue5D4X52dPt
+         VC3hZTDbAzVKJ8OLZM601QsFMXOjs4VCjvyzjctNaz1tAIy9amoo4a/zNQmbAHpDA2x+
+         8dzmuuZBshYZuJOHuPs1jzf88NBYgscdV9cQUeBw0qH7QmwZ932C41QK9aHMAE6wR8pD
+         fcdCcYCZkm/8jd/3hNQCidsuGEeyaGqUvFQUl328O8i3/rnJYa3MRTLOcxh9HhGOxzTN
+         IVEw==
+X-Gm-Message-State: AOJu0YxKg7Z0lFkrQkzzm+4iK8JjUKyVq+mvScylhJH7EbL+EmnewCTv
+        +PpuV32Iv6yfE7xLq31f2jiZKw==
+X-Google-Smtp-Source: AGHT+IFAjrefQcQM3SmBv83W2ILzm+6amDEF8zNjt221YcLaHgS5StgoYPz3Ya4i5UynFBXurtVucw==
+X-Received: by 2002:a17:906:2ce:b0:99c:aa43:b20c with SMTP id 14-20020a17090602ce00b0099caa43b20cmr7183610ejk.33.1692008058483;
+        Mon, 14 Aug 2023 03:14:18 -0700 (PDT)
+Received: from otso.luca.vpn.lucaweiss.eu (212095005216.public.telering.at. [212.95.5.216])
+        by smtp.gmail.com with ESMTPSA id os5-20020a170906af6500b00993a37aebc5sm5472870ejb.50.2023.08.14.03.14.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Aug 2023 03:14:18 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH v6 0/4] Fix some issues in QCOM UFS bindings
+Date:   Mon, 14 Aug 2023 12:14:12 +0200
+Message-Id: <20230814-dt-binding-ufs-v6-0-fd94845adeda@fairphone.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v8 3/9] scsi: core: Call .eh_prepare_resubmit() before
- resubmitting
-Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-References: <20230811213604.548235-1-bvanassche@acm.org>
- <20230811213604.548235-4-bvanassche@acm.org>
- <29cca660-4e66-002c-7378-2d2df5c79a08@kernel.org>
- <057e08f2-7349-bcad-c21d-11586c059fac@acm.org>
- <02d18d6a-ece5-f8f6-0c6c-4468c86c9ea1@kernel.org>
- <ee3e2f36-1089-f95c-8145-ea91d5912fde@acm.org>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <ee3e2f36-1089-f95c-8145-ea91d5912fde@acm.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAHT+2WQC/33QzW7DIAwA4FepOJfJGAilp77HtAPB0CC1pII20
+ lTl3Wftuiwn/0j+LPstemoldXE+vEVLS+llrlwMx4OIU6jXJAtxLRAQFYKX9JRjqVTqVb5yl0g
+ uD8Z5lzMKHhpDT3JsocaJx+rrduPmVPpzbt+/SxbF4fNfb1ES5IksYIakOLnkUNpjmmv6iPNdf
+ DG34D6BTFB0AczgvXV+i9D7hGbCeE98lQ6g4xZh9gnDhDIx0QBZkxq3CLtPWCaiD/YUIVid//x
+ iXdcf5L0meMEBAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Iskren Chernev <me@iskren.info>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Rob Herring <robh@kernel.org>, Iskren Chernev <me@iskren.info>
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/14/23 12:23, Bart Van Assche wrote:
-> On 8/13/23 19:41, Damien Le Moal wrote:
->> But at the very least, may be mention in the commit message that you also add
->> the unit tests associated with the change ?
-> 
-> Hi Damien,
-> 
-> I will mention this in the patch description when I repost this patch.
-> 
->> Another remark: we'll need this sorting only for devices that are zoned and do
->> not need zone write locking. For other cases (most cases in fact), we don't and
->> this could have some performance impact (e.g. fast RAID systems). Is there a way
->> to have this eh_prepare_resubmit to do nothing for regular devices to avoid that ?
-> 
-> The common case is that all commands passed to the SCSI error handler
-> are associated with the same ULD. For this case list_sort() iterates
-> once over the list with commands that have to be resubmitted because
-> all eh_prepare_resubmit pointers are identical. The code introduced
-> in the next patch requires O(n^2) time with n the number of commands
-> passed to the error handler. I expect this time to be smaller than the
-> time needed to wake up the error handler if n < 100. Waking up the
-> error handler involves expediting the grace period (call_rcu_hurry())
-> and a context switch. I expect that these two mechanisms combined will
-> take more time than the list_sort() call if the number of commands that
-> failed is below 100. In other words, I don't think that
-> scsi_call_prepare_resubmit() will slow down error handling measurably
-> for the cases we care about.
-> 
-> Do you perhaps want me to change the code in the next patch such that
-> it takes O(n) time instead of O(n^2) time in case no zoned devices are
-> involved?
+This series aims to solve the dtbs_check errors from the qcom ufs
+bindings. It has changed in scope a bit since v1, so it may be a bit all
+over the place.
 
-I was more thinking of a mean to not call scsi_call_prepare_resubmit() at all if
-no zoned devices with use_zone_write_lock == true are involved.
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+Changes in v6:
+- Rebase on linux-next
+- Drop applied dts patch
+- Pick up tags
+- Link to v5: https://lore.kernel.org/r/20221209-dt-binding-ufs-v5-0-c9a58c0a53f5@fairphone.com
 
+Changes in v5:
+- Convert sm8450.dtsi to use qcom,ice property, so stop modifying schema
+  for sm8450 and only add qcom,ice property.
+- Move reg-names names to top-level with only minItems/maxItems in the
+  'if'
+- Link to v4: https://lore.kernel.org/r/20221209-dt-binding-ufs-v4-0-14ced60f3d1b@fairphone.com
+
+Changes in v4:
+- Pick up tags
+- Rebase on linux-next (again)
+- Link to v3: https://lore.kernel.org/r/20221209-dt-binding-ufs-v3-0-499dff23a03c@fairphone.com
+
+Changes in v3:
+- Drop applied patch
+- Pick up sm6115 patch from v5 https://lore.kernel.org/all/20221030094258.486428-2-iskren.chernev@gmail.com/
+- Rebase on linux-next
+- Link to v2: https://lore.kernel.org/r/20221209-dt-binding-ufs-v2-0-dc7a04699579@fairphone.com
+
+Changes in v2:
+- Add new patch adding reg-names to sm6115 & rebase series on top of sm6115
+  addition
+- Fix binding example after sm8450 move, split this patch from original patch
+  since it became too big
+- Move reg-names definition to top-level
+- Link to v1: https://lore.kernel.org/r/20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com
+
+---
+Iskren Chernev (1):
+      dt-bindings: ufs: qcom: Add sm6115 binding
+
+Luca Weiss (3):
+      dt-bindings: ufs: qcom: Add reg-names property for ICE
+      dt-bindings: ufs: qcom: Add ICE to sm8450 example
+      dt-bindings: crypto: ice: Document sm8450 inline crypto engine
+
+ .../bindings/crypto/qcom,inline-crypto-engine.yaml |  1 +
+ .../devicetree/bindings/ufs/qcom,ufs.yaml          | 44 ++++++++++++++++++++++
+ 2 files changed, 45 insertions(+)
+---
+base-commit: 13055cce6d3df0a2704721d6e2fd9011e973f53d
+change-id: 20221209-dt-binding-ufs-2d7f64797ff2
+
+Best regards,
 -- 
-Damien Le Moal
-Western Digital Research
+Luca Weiss <luca.weiss@fairphone.com>
 
