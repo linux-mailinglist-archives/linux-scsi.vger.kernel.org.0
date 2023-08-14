@@ -2,116 +2,128 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F3C77B640
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Aug 2023 12:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D06D477B791
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Aug 2023 13:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236287AbjHNKOm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Aug 2023 06:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48874 "EHLO
+        id S234412AbjHNL1L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Aug 2023 07:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236717AbjHNKO2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Aug 2023 06:14:28 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA398133
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Aug 2023 03:14:26 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b9cdba1228so64535071fa.2
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Aug 2023 03:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1692008065; x=1692612865;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I83KyFDhUVnCPx9y366vR3xpO/5sGGkMxv/PQ7v8Fw0=;
-        b=rO2zGjR9Va+S5MUXy6gxgaDEzcGHw9OuD6aMVa1xPlHQBpgF3GuCn9VpyJTDONmG2u
-         UOf71K5log6TLInqx8u72GbDaAYyM0Tk8/ftOi9cvdal8R21w7/nCGu+ag+QgE5K8ucw
-         Ix5/8fvA5YW+FyY7lWGDJ6UUzNEXifq6fIs3T01Ou5kFgIgUWwIJ9PYCFbQF//g6Xa0v
-         K0p4rLBvySrf3lgBkTSFQ29223fuuyONzolRtVe9qwpJyuu3sI1xSC7exemn3PcrJhsY
-         Yr8yz3NzwitFgrs/Lk8AacFyoJRUrWUDS+QQisoH2F4xQwbK6Ij5bKc49If8yuPl6rzj
-         Fqyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692008065; x=1692612865;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I83KyFDhUVnCPx9y366vR3xpO/5sGGkMxv/PQ7v8Fw0=;
-        b=lL2FSPKTMXigIsHc7rb/DkMAKSAMGWL/g0/IiHyJjrh90Lv2UUPQqRkC/oCh1DzgN3
-         7Qv7sODs25OTyKliw4jfCHDo2gpHC1oYOyoUmrOuV2tJmlZaXItS7frzD/f7sWhuJN+q
-         LzUGnqpDpESqsWYW/at3uSZcsK35I9RcV8BJyX2bgvxrwu7Ojmpeq8zk9Kq/6ZeQ5Myi
-         t3a7DQmjoUvRZux0wmoi9+Z0EbQrrfG1pUOs/SlZtGSYCvUZawHLpYK/ZYeZ5luqUEnU
-         6LNiCvO3/gKGqeaOL+yPW43/cGSbpFTrE3wuAJ2AvkhJBr0vWjs1cNoF+iw4a5vcPufD
-         PEyw==
-X-Gm-Message-State: AOJu0Yy6NO5VVyN4HgNBn3h2blC/mmLCAa1eI+kTXuXYVTpKqbCo9D4d
-        VwKq9xuhb5YacTQs37DUCfd/lQ==
-X-Google-Smtp-Source: AGHT+IE+cNjSLZKnX1joMZVDOUeJz9XLWS7JFmYF2fGu2r3hV8E8pwivCDMNZ9yIdROEghBe2azAmw==
-X-Received: by 2002:a2e:808f:0:b0:2b9:ec57:c330 with SMTP id i15-20020a2e808f000000b002b9ec57c330mr6261247ljg.7.1692008065036;
-        Mon, 14 Aug 2023 03:14:25 -0700 (PDT)
-Received: from otso.luca.vpn.lucaweiss.eu (212095005216.public.telering.at. [212.95.5.216])
-        by smtp.gmail.com with ESMTPSA id os5-20020a170906af6500b00993a37aebc5sm5472870ejb.50.2023.08.14.03.14.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 03:14:24 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Mon, 14 Aug 2023 12:14:16 +0200
-Subject: [PATCH v6 4/4] dt-bindings: crypto: ice: Document sm8450 inline
- crypto engine
+        with ESMTP id S233903AbjHNL0h (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Aug 2023 07:26:37 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19765E61;
+        Mon, 14 Aug 2023 04:26:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692012397; x=1723548397;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=4alXUbWY/jCOus0cSzC/GsFDI54X66LesvCwVXEbq2Q=;
+  b=QiLhtCqXbOnXrdGQwFAEa2Drn7srzXPoiJrVjnFEuh0CF2c6Q+uUNqOo
+   dRDRd3kM93rY9/uoCYeM0MQO40Nw2qIdbHr7eCOrxzxEvfJt5bQN+uBu7
+   0MFODSdx9poECVZvkQZJjPreHD69oOh1wwnZR7auJXk+Lb0AsJxBjhjxV
+   YEE2L1fVFOOfPfqAdkbqDFDW/e9JA70N3YZRXK8w/w6RxFYLeEpeosPg6
+   Ie6rcUUK4y04ugedzHaJaCUuvjXzDOE8FNb66PvE8NodgOxSFmi51APCY
+   VfSrEJTpU4baVRfp6PMukyK1Pte++o38j0Q8s7IbRprwib7LwAAVGWljA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10801"; a="356980149"
+X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
+   d="scan'208";a="356980149"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 04:26:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10801"; a="762906161"
+X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
+   d="scan'208";a="762906161"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.51.71])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 04:26:32 -0700
+Message-ID: <f1e154c4-bbb3-18a2-cb7a-41adae292b48@intel.com>
+Date:   Mon, 14 Aug 2023 14:26:27 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.14.0
+Subject: Re: [RESEND PATCH v3 2/2] ufs: poll HCS.UCRDY before issuing a UIC
+ command
+Content-Language: en-US
+To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, bvanassche@acm.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com, sc.suh@samsung.com,
+        hy50.seo@samsung.com, sh425.lee@samsung.com,
+        kwangwon.min@samsung.com, junwoo80.lee@samsung.com,
+        wkon.kim@samsung.com
+References: <cover.1690939662.git.kwmad.kim@samsung.com>
+ <CGME20230802013852epcas2p2334d33036d7d1a0bdbefaf5bb844928e@epcas2p2.samsung.com>
+ <9c7ccbfb8fe05c29ab3e31d9cd14e6b91065b8b0.1690939662.git.kwmad.kim@samsung.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <9c7ccbfb8fe05c29ab3e31d9cd14e6b91065b8b0.1690939662.git.kwmad.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230814-dt-binding-ufs-v6-4-fd94845adeda@fairphone.com>
-References: <20230814-dt-binding-ufs-v6-0-fd94845adeda@fairphone.com>
-In-Reply-To: <20230814-dt-binding-ufs-v6-0-fd94845adeda@fairphone.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Iskren Chernev <me@iskren.info>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.12.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Document the compatible used for the inline crypto engine found on
-SM8450.
+On 2/08/23 04:28, Kiwoong Kim wrote:
+> With auto hibern8 enabled, UIC could be working
+> for a while to process a hibern8 operation and HCI
+> reports UIC not ready for a short term through HCS.UCRDY.
+> And UFS driver can't recognize the operation.
+> UFSHCI spec specifies UCRDY like this:
+> whether the host controller is ready to process UIC COMMAND
+> 
+> The 'ready' could be seen as many different meanings. If the meaning
+> includes not processing any request from HCI, processing a hibern8
+> operation can be 'not ready'. In this situation, the driver needs to
+> wait until the operations is completed.
+> 
+> Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+> ---
+>  drivers/ufs/core/ufshcd.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index a89d39a..10ccc85 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/module.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/sched/clock.h>
+> +#include <linux/iopoll.h>
+>  #include <scsi/scsi_cmnd.h>
+>  #include <scsi/scsi_dbg.h>
+>  #include <scsi/scsi_driver.h>
+> @@ -2365,7 +2366,11 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
+>   */
+>  static inline bool ufshcd_ready_for_uic_cmd(struct ufs_hba *hba)
+>  {
+> -	return ufshcd_readl(hba, REG_CONTROLLER_STATUS) & UIC_COMMAND_READY;
+> +	u32 val;
+> +	int ret = read_poll_timeout(ufshcd_readl, val, val & UIC_COMMAND_READY,
+> +				    500, UIC_CMD_TIMEOUT * 1000, false, hba,
+> +				    REG_CONTROLLER_STATUS);
+> +	return ret == 0 ? true : false;
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Could use a comment in the code.
 
-diff --git a/Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml b/Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml
-index 92e1d76e29ee..7da9aa82d837 100644
---- a/Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml
-+++ b/Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml
-@@ -13,6 +13,7 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - qcom,sm8450-inline-crypto-engine
-           - qcom,sm8550-inline-crypto-engine
-       - const: qcom,inline-crypto-engine
- 
+And perhaps the following is neater:
 
--- 
-2.41.0
+	u32 val;
+
+	return !read_poll_timeout(ufshcd_readl, val, val & UIC_COMMAND_READY,
+				  500, UIC_CMD_TIMEOUT * 1000, false, hba,
+				  REG_CONTROLLER_STATUS);
+
+>  }
+>  
+>  /**
 
