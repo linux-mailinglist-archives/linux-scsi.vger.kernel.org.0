@@ -2,204 +2,252 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D864677BB3F
-	for <lists+linux-scsi@lfdr.de>; Mon, 14 Aug 2023 16:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564F677BB80
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Aug 2023 16:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232304AbjHNOL5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 14 Aug 2023 10:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S230454AbjHNO0b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Aug 2023 10:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232343AbjHNOLm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Aug 2023 10:11:42 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36471705;
-        Mon, 14 Aug 2023 07:11:38 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37ECiS4L015365;
-        Mon, 14 Aug 2023 14:11:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2023-03-30; bh=37Sh5CR7SvPEjCIXRW9X4ynzpCHUEcCXDLQspxCF0hc=;
- b=TZFllJLYPh4UdPyYbl6YtY8dAzkb8XEZvyZr7kGBHQVgSJdU7ydlWxFXo+TZ63I7rXHU
- VzmLdaTy+9EYbban6o80283FSIcbyYYBEsYFzj4SLlh5GGLB/rVAS6B+gfGpOb47IcPa
- ccnQQl0A/eI5yll5W/734+8bEYaJezxTiAcsN5dgG+gxf9TfUHtiPzqEOkkI7rDTdYi6
- TJK9nT4o603OD9jol3/FLBN8GSYOQNMleLe24cifayq4cOUGnBu+EPMnnJEfXLCzlz2o
- Fz8Bp2N0KumF3zM+puFliSyGtTNFFxjsvDFjUt6skAvnyVDrcMTzZzTSR3CX4Y5s12aH 1Q== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3se2yfjqd7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Aug 2023 14:11:25 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 37EDJ2EY019914;
-        Mon, 14 Aug 2023 14:11:24 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3sey3u6pa6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Aug 2023 14:11:24 +0000
+        with ESMTP id S229461AbjHNO0Z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 14 Aug 2023 10:26:25 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F334CB2
+        for <linux-scsi@vger.kernel.org>; Mon, 14 Aug 2023 07:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692023183; x=1723559183;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BHJlxgjFngrsX4D/cQ9gbPz0CX4TISDy0HL8Qt2Dd90=;
+  b=FsAkzDieCo7sHWd1YJmzA6pAeFskOlDbNGf78JfJtFGGoVD4313q9xbl
+   1ZzSMD/BqykFNA7W8yPzwSHWPv6fX4TM4bqRutH1s8p5TpR9q8HNYNAOa
+   TX8bXHIQz0AvTBqMzET7W9lXcmuSbUfhPfWqvb0cp7eXQGKz9FCPsmca1
+   XeWlKAWW2Ab1c5t8QNLy5oOR4j8jbpyyaPDhW/KuepXtnmQzBDanyLZnT
+   wE0I2+BaZqWK8FrlA1Cm/JPb+njsuxlHR5MgftXy5FKanxwOnFHVsNGS9
+   gv8I8qeqr3Cv0ORbJO5LWWuH3cDYzPF2uHNK4oV7c0A81POyKg5E+WwXi
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="372043256"
+X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
+   d="scan'208";a="372043256"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 07:26:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="876954122"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Aug 2023 07:26:27 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 14 Aug 2023 07:26:23 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Mon, 14 Aug 2023 07:26:23 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Mon, 14 Aug 2023 07:26:23 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JwkOtCdtPawzrYLyrspiD1oNvsX+W0nIXppoxMSP4m9647WQyLKSKaHhqxs/W15oRlc66p5+Qdy9N9A//L8C9+cvv0Va0Qh6NPmm9YHEzky2kshUktNGPLLXqR+YWXrxYwuZGNbsDSqtrNXbz3+6CMz+3pHNisIBZhvqAN7Iug0hDtrr6zhIDdGCdXW5kAuFVAPcFe39QPEfKZD/VTD9UA5O34PyN6oOgb58GNSZdYObA0uteswnBwaRkUtD+fgvaMXhkoGVMi+a2noW3+ZbKroC50FNjnsjX8UPgloN9PTveTiA4xZaolquiv9tA76tOSjlSnrnr0vuYG/1W+4GDA==
+ b=e0UAzkqjBzTnMaW0tfIUW8MjZpsXLboZG6okAZvmS5fQ5alJGvxd2Dm4vKzzEi4QhkmK/YX9kcZJNwAyfQuwu3rDzvXm5BOJRiwyJnvEsePruhjhBY336se5iYU+dPCEiX2ko19Ttke2gCyRw9OPiDwy07kWcGxjRd3nZl+DZRxESXwnAgVs4u0q+Rpl3sY+uCX58SE2WjK8v0tKcPB3IvvDMbTH6j7XZ2GYobV0JrdKJt2yoRaTntfOaTzsRWLoss+9x/d3ghwVR3p14L4Lbe60DzgjaRVGWqMPlu2+ltG8z/zv/gXkIKXF/TGbKDmS+FmgEuctsR31e9aFGg1hWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=37Sh5CR7SvPEjCIXRW9X4ynzpCHUEcCXDLQspxCF0hc=;
- b=Vcf0gzJ3BNSI/tzWbvflmmsLggilMpt6cDsbqexVBLVZ/NG547wglb4tzGxmVzsF5XKlpv78nnvDQ1PGsa7Iclft7msAWyAB90tfOU8CxfFCMRTj3No4rW99dp6dcm9K6tiaSKfAqDff0ilc2IqE/DUXsEn3u/QrEzaBK5XXNmol2LCqKuc6mUADo39uuSnLkXKDknmqLpxzvtXIBerT+4qJtf8S+SOY0qaQsSMAm7rK+IGvBSoMWJH4T6JdAgiUc2Zri6u8SIxvXuYwNpK6c3gjvzQignn755fYK8VbfwZk4/YYgFYLFaPwEmxwy+xua0ubMqsK62EO48ndqZ4mWw==
+ bh=McNKDAxCY+sVg6ttc1VuIwwDiKHXKXCeqP0pLQ/6kDs=;
+ b=Gq15Z4U4CIe767gpyNgvmHYVNR3YEJqX1M9yLuoEGTTKG265mHxzr2qmSx3RW/jJ5D3KQCydJ6vaPZMBGwbZa1rtmg08+p2SY8xEq30lAw+TPppBbmxQCNwbTvGKB/Yd0QYHJPw6IPCb46tguuWktEb6KbGT3UhcRAydkk9Qf8oBoj7Bqy8k9MRM4BAMIOljrDtnFVaNyFt2gAfMT2T8Yb/+f7I80HfJoMhyQNfyr3ZHuobxme6fd4UeQrFdara6R7uNT5AjiWHstci2dPodwq4vIMzoWo/mFjQfYJ7ePzqMUYw37pyxpflGDpcmydeQ1+i/43c67OAPnqQL/nRT/A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=37Sh5CR7SvPEjCIXRW9X4ynzpCHUEcCXDLQspxCF0hc=;
- b=gUY8+B3xFL0m9Oq3Ln+rD4fNpfYnnqe2HKDolkfblrg5TaUiglKsMDAu42CNGH2h1VbpfB33RYT1TnDBsSbhjQNnQFn2dj0fIbMVQrkBPzw6Weny/NmT805bcvbj9w84pq+XTA12clpt8e4bjR78ubQiE8ellziRgKoa57T6Frk=
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
- by MW4PR10MB6417.namprd10.prod.outlook.com (2603:10b6:303:1e9::9) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB6779.namprd11.prod.outlook.com (2603:10b6:510:1ca::17)
+ by MN0PR11MB6182.namprd11.prod.outlook.com (2603:10b6:208:3c6::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.26; Mon, 14 Aug
- 2023 14:11:21 +0000
-Received: from DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::ebfd:c49c:6b8:6fce]) by DM6PR10MB4313.namprd10.prod.outlook.com
- ([fe80::ebfd:c49c:6b8:6fce%7]) with mapi id 15.20.6678.022; Mon, 14 Aug 2023
- 14:11:21 +0000
-From:   John Garry <john.g.garry@oracle.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        chenxiang66@hisilicon.com, artur.paszkiewicz@intel.com,
-        yanaijie@huawei.com, jinpu.wang@cloud.ionos.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dlemoal@kernel.org, John Garry <john.g.garry@oracle.com>
-Subject: [PATCH 10/10] scsi: libsas: Delete sas_ata_task.retry_count
-Date:   Mon, 14 Aug 2023 14:10:22 +0000
-Message-Id: <20230814141022.36875-11-john.g.garry@oracle.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230814141022.36875-1-john.g.garry@oracle.com>
-References: <20230814141022.36875-1-john.g.garry@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: DS7PR07CA0009.namprd07.prod.outlook.com
- (2603:10b6:5:3af::9) To DM6PR10MB4313.namprd10.prod.outlook.com
- (2603:10b6:5:212::20)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.24; Mon, 14 Aug
+ 2023 14:26:18 +0000
+Received: from PH8PR11MB6779.namprd11.prod.outlook.com
+ ([fe80::73c6:1231:e700:924]) by PH8PR11MB6779.namprd11.prod.outlook.com
+ ([fe80::73c6:1231:e700:924%4]) with mapi id 15.20.6678.022; Mon, 14 Aug 2023
+ 14:26:17 +0000
+Date:   Mon, 14 Aug 2023 22:26:07 +0800
+From:   kernel test robot <oliver.sang@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+CC:     <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        "Christoph Hellwig" <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
+        <linux-scsi@vger.kernel.org>, <oliver.sang@intel.com>
+Subject: [bvanassche:block-for-next] [scsi]  a034ed36f6:
+ BUG:kernel_NULL_pointer_dereference,address
+Message-ID: <202308142205.fe3e80ec-oliver.sang@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-ClientProxiedBy: SI2PR02CA0014.apcprd02.prod.outlook.com
+ (2603:1096:4:194::19) To PH8PR11MB6779.namprd11.prod.outlook.com
+ (2603:10b6:510:1ca::17)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|MW4PR10MB6417:EE_
-X-MS-Office365-Filtering-Correlation-Id: a6082cd2-1590-4d6c-7f1c-08db9cd055db
+X-MS-TrafficTypeDiagnostic: PH8PR11MB6779:EE_|MN0PR11MB6182:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4375751d-f9ca-4d02-02f6-08db9cd26c51
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I5LUawi8usiIYmHw5etJbUci/9Avb8IBaeoXIz5CP3hgr9zxBeVhsM63mkwgeMSHn6pQma7sQJSSHKcQjI1T4EM/ncN9LSWUrVOO+0f6rByaYrJZzn0xY96Tr0kcNuNmAOvQnVrM+1aFv+0n+EhDPQ+cqNOrJ6RX340badt/AwYjVU1qONYnJmEV2OuM5Gg6LfjiIM4GQMalL66unlb3naeJFViKQSagHYVquTmbOjQileGMmtcqzCywo1g/81tAZ36K5igB5XtQTLoz37rtvFJmud/bVsI6Qh6ndVD4NGaM2oIY4+D8W3DIKsKQRP6KS774U88NSpm65vkbyOtsfzhpaT1NSvxUmclsBMSJ4WXDc6myR8kXMPj6MUb/qEo0l7OiNNBbQx9dtwSqZP+4yFCiuhQJ4Xzw8KgIu7lU6LKkvMycWlK3vS2NveRdYsT0gfVkjJYwoQjgCYZWyYPMk2r3m7YlrZXbrpcbJrbmBgR/5yNE8u/Q6Y7Kr0m78bPJ9/4gKyBrAPoHlFGlJtaUzAsk1+d/b4htdj0kFCDQKEcOvn6tqT5FdESXSgtStmdG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(396003)(136003)(39860400002)(376002)(1800799006)(186006)(451199021)(38100700002)(36756003)(86362001)(103116003)(6512007)(6506007)(6486002)(478600001)(2906002)(1076003)(107886003)(2616005)(26005)(83380400001)(316002)(41300700001)(66946007)(66556008)(66476007)(5660300002)(8676002)(8936002)(4326008);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: kYyAiClxgyurVKWZ2qiWsQClbSCQ9zaBFgGeVx2fM9LWVQIw8EudoI+hly4G8vUU3EQPG2HYl2Y3IBHEvVD+IO4AWPJ+1L3inepTNXFRSF7VOOsINY2/lxU+ejHr/1wbzpFiWwptMCX+4iVgn/h2lZ5tJDN66H0TKcOWKtxU76EOnP/PwU2RhQ8jNg9/r+RgUpoLf1QmuVf8Ly2V8jfVdi8PmBn6TR8k98eZ5kRdIwnjUdKDAVpEKxCv6k/ncLz3zIbrc/qJPL2MaWgfacg/f8BilhjWvK1s8lj1z4qHEvYtTWQ+mLl4Fe/Gkq03chs7PU8S/iPRCziUznxmoLz5M5QIjBhDVYmHtp+UATp3gOZwFId8UzIIEPO1xCrmuRkvSg0Z/7YGK7LYtcX0oFaBjk176H0ZeotdsgNjfim5uvmV1G/Hiij1X7M7k+I0XKE4jxnjxjRseWjUcxOIASgEXxL+AbBerV+cp5uOvlRdjJaX2rxsOI4UUI+3nRF5rJNRdDcVW+avDFNKZ+VHZAkT9zbGTbY6t3N1Qka5d/WKVZaxot+QVurJw9KhpGTd+t48FFGZF+4DSLqgpGlnuY9n4A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6779.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(376002)(39860400002)(396003)(136003)(451199021)(186006)(1800799006)(36756003)(5660300002)(2906002)(86362001)(83380400001)(66476007)(66556008)(6916009)(4326008)(66946007)(54906003)(38100700002)(316002)(41300700001)(107886003)(1076003)(26005)(2616005)(6512007)(6486002)(6506007)(45080400002)(8936002)(6666004)(478600001)(966005)(82960400001)(8676002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jCdpewP7PaHgPdM4zoumseFso1ssAu6VslV9GvP/k8bq6GhRHcKrpbiMRSj5?=
- =?us-ascii?Q?feeZVRlEnLme/eVyAYE8m+gkSQb2i7ouEV/R6Mzq169WwFoyhF7sGZumf2kp?=
- =?us-ascii?Q?KuCGOjYcIRNBgcOLJEDskf9VUPjeFTlIGYgoj8DgmizBD2t/BTgJTYES3YWB?=
- =?us-ascii?Q?7UhtnZSMUpQJijbiQn2GojkrykAi8O/DaNPt2qbHEzIbPi0Znt1LfoBIiwxm?=
- =?us-ascii?Q?UieuwDQgxTK7fZWnRi/X9a287YowOuAE7/PCbeZwZRqw537qBt7YQHewcJx7?=
- =?us-ascii?Q?tVaaQTQZili6ilMNs1NE55dBrKE4NWnBB3DoHGFfcnWJN18hhqB+YO48yHdp?=
- =?us-ascii?Q?JOPlXOlT0ry2yyfDIz2DKBWn/gfilDmQaCg+bQvDHF/ZYM0MNUrdakrkZhyU?=
- =?us-ascii?Q?U2WrlaVcuZmkbixTn7BgYAS+o1hERDF0ab3wXNk08axqDyyRLv3pKP+ILvp0?=
- =?us-ascii?Q?ndWXfTFzne+VjknfWQiqbTPA06y5mLV6oazJRKVkZn89/86zLL9/uWA6UVXM?=
- =?us-ascii?Q?q7VnctB8VbJgHO2mapSiSuVqM3RagXlqcBaB6uuvNgLmjxCOX8nUXA0ABQYF?=
- =?us-ascii?Q?UtSvybBXjw+SPKbhJrWQh5xwOnfXao48W9ntAK1XirwB/xguJp+EgCmw/PqC?=
- =?us-ascii?Q?+AWOV11klDjcd+nAwBoQuv7sZbtITx152x6MXPdkoNNkBDZTpiNhjFfhB4Iw?=
- =?us-ascii?Q?B//UnDNSINGxYhjP5gQmBBjbZJmQqHgHgUdo1XVRphm1OAmR/DJlNsbw0K1R?=
- =?us-ascii?Q?mS5YzHplbu5fFipmC8BofPZsyrqdGqcZ4eMsgzy5cdFqtRd2y7PaTFpItx8i?=
- =?us-ascii?Q?k3/cHNtp8+JIyIppCp9UV+TZiqNu5lnmVytfpA1OoRYzOG6coRsO/SH/zEKv?=
- =?us-ascii?Q?zDYwToM4kB1OEJ6uQ0sBPn4PW4XZG+5kR8QkgoljJIhiKbYnrkEp/d6Qs20m?=
- =?us-ascii?Q?ZqPA+PyCrqH5hIW8k7AMSaru6RnlMIF6AJpYznvSM6Bb7Io1V3vBT0THjngE?=
- =?us-ascii?Q?HfdOuVk+trP0KTVGHDbWZM7Z8UPBEr/4HKudY59WLpztF7/yZl8/OFL1YKsz?=
- =?us-ascii?Q?nUhU7Vl59eD8wNHL7bQQncYMwnzDEZVjsZLuNKxCPjNTlcQ9d0pzA3UBWbU4?=
- =?us-ascii?Q?wOhJbnldHmbf8dFHqkh4ODm6uEoUsiTe1tfUCq5YsiwUN89cLhEMIlrCYWZi?=
- =?us-ascii?Q?a9FVyUYXYFF+/Q4mM2BUBRrFfbzX3lb/xQJrnFdOn4rBSRNM6eWfi+oGZpyo?=
- =?us-ascii?Q?78zE0nLCY2MtysxrY5aqBEK3ln9fo93Qe3RrTIqPgv7yFTRZ+xLCdei8UOeP?=
- =?us-ascii?Q?PZ3ffB76x9OPw3YVbJAsT2WH780LxW6m8KjqK+L8fwEF5r9JwqaDUem4MvHq?=
- =?us-ascii?Q?Na5TIp6697U8Yz6Ef+QlGa79SQ9f9XjDHTQC6K8StqLTaSmpgE3J2fXwOBo2?=
- =?us-ascii?Q?LWa0g7V56at0dQhJSajVxSXdQqb3unFtms1YTNnGrGcWoD25fDzF27DRuXL/?=
- =?us-ascii?Q?ygpg6Vf4J4O4Pwa585HUoyn36LNFH/pHe9zxDiZDDev7Zz7nATjiYOxQN9T1?=
- =?us-ascii?Q?G0iGGNoeOR6m3nON3N03Hdhz/f4lPdUpbIHQgoDCJ+1UUwmox1zDuQkhztgm?=
- =?us-ascii?Q?iw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?mc7dQSJ9C2/aGU3aUyCGJ/+rDWVdmylrYaTaBr6EODSRd2MnTL2mMWiOHbHA?=
- =?us-ascii?Q?Cve4ZJALHXq2c7FCOIhqEJEeHbTzpc6505NYSQwmItGVJfFZ8YVFib88sxyK?=
- =?us-ascii?Q?2EA03lmff1IYlXCPCYkLzrQs8AfRpKcyTKThpPmn4pge1yBRYq3+7Bc70vZu?=
- =?us-ascii?Q?gAhAhK3ArHmTor9H+yVDJXR4m26EVrdfHN7a1afECVeKMXlUWET/jhv2LUlK?=
- =?us-ascii?Q?LkGeZX7YfkpTSLW9sCrXjYV5VACB/oFs+FhjcTSG3E8IGAib8TeEt1945p5T?=
- =?us-ascii?Q?83uv0yfruNMxklLuLf9FdvBZEOvVGdFR+aELFA+AP/EjkzLGkQNWOInLS08y?=
- =?us-ascii?Q?Umt2Kc8Kl3x9s00i3zQDNgdFpXzKgI0nD5eNKv8m1NGIFRCCvP90eyArEMTn?=
- =?us-ascii?Q?jqABqlQxHU92dS2CaO7/fM1xJdL4vM3Y2RtXFm5P4NV1R531YC9k+5wGVpYE?=
- =?us-ascii?Q?eLFtLJJr/8MmWSTDhG1pHcgo8LXELEpc8zxZZmzUY2GYrT4c3GJgskMX8OvU?=
- =?us-ascii?Q?r8d62QxS74F6sVYm589Z+fZ6cY/LVNOtAMkxjUwlYMCKoKXzmB/oSMPzLbx2?=
- =?us-ascii?Q?afqmriB6I0SMpGxR1I+cmyn7nbY3xBcbKMjS39gJQ2XJ37OhPL1OAcmZtGmZ?=
- =?us-ascii?Q?aKOlV0teHhc3CEwYlPgnh+FRO6LbfY68FTz0Yoxsg0E2ycXn7N2jLo8qf9LZ?=
- =?us-ascii?Q?Yhy3TJcBbyvszvhpqErKYUAMGsKUmWGG9UUEAeus5bmePMHUzaGUgVXJuTTE?=
- =?us-ascii?Q?WwrtS+Zaqys2UVe7x7QsaI4gnMG2dOYEzigwrI9vg4IBAOGqnPKwZLuXcVe+?=
- =?us-ascii?Q?i+6hBisZZxtecYrUHiWHpiketJLmpeXo9o0LAeBhvgY3FUIAiOH9Cdpp/LBV?=
- =?us-ascii?Q?hGx++lfF2ykr5N46T5ZudbLLc749ncUX4JeijrqAQFS9+bclRqHRELyNKLh7?=
- =?us-ascii?Q?Bc9i+vwCBIDuKpAaeKUlWA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6082cd2-1590-4d6c-7f1c-08db9cd055db
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sbPytT6L4SH4vhawOFCt/7FJ20S4BAVPAc1/kv8trF5o5O7plwYD/qFNOSv5?=
+ =?us-ascii?Q?YxgwCOIeKMK0LZPo3jS8O8vGBw9bnyC/7hVjPb2EfD5xRa/2KrF20dym8Kxd?=
+ =?us-ascii?Q?rO5tZaWsC2CW/WXcwHS4ZNPjYrvWv9zVVhVTy/F6h8+4i1L1xFtU3PgAezZy?=
+ =?us-ascii?Q?jrgFR7Tiozc+To+rg6mUjElH/H7HKbB6MK9YL06OoEWXkcB8lRMRaDEKtOSk?=
+ =?us-ascii?Q?EKH68QGp+J3jhg8scsnoUqFZqHCwsa7XdMa9JIklS2lcdd/SNRyes/xYCI4Q?=
+ =?us-ascii?Q?ZDcljxvCt25P2OyoMSHZQ8UlhWSp8mH2HDwwC1hOZS006ESRjABN51/i/Je1?=
+ =?us-ascii?Q?muB4dxoogKgWVkuM+6SFwlaJBXw6IXCcusKaZu/GMVhV14zxrfczkceCRbPT?=
+ =?us-ascii?Q?V7tHl+jnmw1q8wjlS7YB9wr0BGNXDmCkjWoG1eaKaZt03DFnNrEhGhWsltcz?=
+ =?us-ascii?Q?gSm6PUCzzc6AN250ej4MSzpI4TsrAc7nXBLJ7+4W3dy4239RGNrR+GgwsR8p?=
+ =?us-ascii?Q?IBXoU6kqqAsRPIH9ivb28t34socuTP6NRf5jFV2iN6o9kgu8i1rAffa9DLG7?=
+ =?us-ascii?Q?P5YTPVZeE9qUlTxRx1Xbx3jYfIuE+u2qVIGhtw/570LOlQLXeJf4d/SMD5NC?=
+ =?us-ascii?Q?OG4aQJh15XPHe4WIOuFh4kko8Dx0VRzxpYVog57Qoz9qXInyOASfx2tH2V4w?=
+ =?us-ascii?Q?SWRR1g7HwuLVHw0G7fx+tGyNWYYfvgyxoQkKxwtFTrUSvE+feHMcy1cR9Q3U?=
+ =?us-ascii?Q?Ksk0amI/ehMxZYvHIs5KrrN+etbz/J0nu6GHGKWVOdO9jgTFJwnI9IXlKNHQ?=
+ =?us-ascii?Q?45Du0wRzYyXGHCNFr3MOe2wYAbyPTZMuJyRSU1AVbHxcAbXz+VwM/2E9DfLv?=
+ =?us-ascii?Q?wQSSJAhSSQT8v47Pih0ogJug6F2ELP3GKSOuHOEesDIgmrtpdR1WPwVGK0dZ?=
+ =?us-ascii?Q?D1r35OTP7p8hkth4Oe6l66NJZ8EXRvrXTGK1lm+R+ikGixfTD+0AfCrjfB0w?=
+ =?us-ascii?Q?EvMMHmXj/4GztSSeEKKrypHdz2wOIVPGbL/dXYeOqHANXUFHFr5Gp5MkZ3rj?=
+ =?us-ascii?Q?bsVwSQgoyr7V/qtWs+peYBMDfR+z9xdcEmSNYBQGo7xeohYewDzcQFgz+pLA?=
+ =?us-ascii?Q?K+9sEENiM1X5whJ551GFoLpmhv2jyD6ud9b6FzCRDm/Re4rPAQSBbiTh6okH?=
+ =?us-ascii?Q?8mR3LmhB9lj/pvSSFue2aVf+yhMyoekEktFVqlR20rImB+w7Ye9uKjgjgHjb?=
+ =?us-ascii?Q?GihaqhvNiVUlqV6hCn9utua3CV4+WhoMPm5HzmjthkCtvhPBECCOhHHkc3UV?=
+ =?us-ascii?Q?Vl1iBNQEkMg209dkcyld9p3nDlhsYisTlhl3gQkEXqnCpy7wyr5LQCvvhBVX?=
+ =?us-ascii?Q?ctQx2TmDAw7DKw1FumEArQ5CMLUEt3fSg5Z7lgCKM4ma6nSGMwZHx5WGLqn5?=
+ =?us-ascii?Q?ta354JHGkfzR1GhUV3FhH4gqL6IoUXNS+9KS99ziozKy5Vo9b7rrRwBu8JkT?=
+ =?us-ascii?Q?j0u+e25b9vldu5w9LoK/JgFk2cQQkwHgQsdFyxf5evQTmmrGByyu4gIXSOgk?=
+ =?us-ascii?Q?c1Ajqg5RA3XmBIAEmPN5IXAsSr0BRElwTEGv9xNxvIEbsW7KPqjK7tNAs67h?=
+ =?us-ascii?Q?QQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4375751d-f9ca-4d02-02f6-08db9cd26c51
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6779.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2023 14:11:21.1461
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2023 14:26:17.9198
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F9Ng/g0KGjSdxTrMS6VeZb978EqvcJg3aVAAuJNz2zWIg4UJCsY8NdhAUF6II0zvhLqsxVEzZsgKLfk0sm+sfQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6417
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-14_10,2023-08-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
- spamscore=0 mlxscore=0 adultscore=0 bulkscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308140131
-X-Proofpoint-ORIG-GUID: KVyVJpYM_XscvSmnBjPX-gJ_sGEsGmgZ
-X-Proofpoint-GUID: KVyVJpYM_XscvSmnBjPX-gJ_sGEsGmgZ
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: BgqiqSzxrGCoqoL3IzkcIeV4fc89T26XnZaFAVQA+yjh+ae7yT/53vkPffAXgps6sDbjNu+neBQsLq3qqB4w3w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6182
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Since libsas was introduced in commit 2908d778ab3e ("[SCSI] aic94xx: new
-driver"), sas_ata_task.retry_count is never set, so delete it and the
-reference in asd_build_ata_ascb().
 
-Signed-off-by: John Garry <john.g.garry@oracle.com>
----
- drivers/scsi/aic94xx/aic94xx_task.c | 2 +-
- include/scsi/libsas.h               | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/aic94xx/aic94xx_task.c b/drivers/scsi/aic94xx/aic94xx_task.c
-index 21b69e592664..4bfd03724ad6 100644
---- a/drivers/scsi/aic94xx/aic94xx_task.c
-+++ b/drivers/scsi/aic94xx/aic94xx_task.c
-@@ -388,7 +388,7 @@ static int asd_build_ata_ascb(struct asd_ascb *ascb, struct sas_task *task,
- 		flags |= data_dir_flags[task->data_dir];
- 		scb->ata_task.ata_flags = flags;
- 
--		scb->ata_task.retry_count = task->ata_task.retry_count;
-+		scb->ata_task.retry_count = 0;
- 
- 		scb->ata_task.flags = 0;
- 	}
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index a65c16643315..2601f5775a99 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -525,8 +525,6 @@ struct sas_ata_task {
- 	struct host_to_dev_fis fis;
- 	u8     atapi_packet[16];  /* 0 if not ATAPI task */
- 
--	u8     retry_count;	  /* hardware retry, should be > 0 */
--
- 	u8     dma_xfer:1;	  /* PIO:0 or DMA:1 */
- 	u8     use_ncq:1;
- 
+Hello,
+
+kernel test robot noticed "BUG:kernel_NULL_pointer_dereference,address" on:
+
+commit: a034ed36f6462d88aeb8738931398a34a0ecf5f8 ("scsi: core: Call .eh_prepare_resubmit() before resubmitting")
+https://github.com/bvanassche/linux block-for-next
+
+in testcase: boot
+
+compiler: gcc-12
+test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+
+(please refer to attached dmesg/kmsg for entire log/backtrace)
+
+
++---------------------------------------------+------------+------------+
+|                                             | e4c5981e9c | a034ed36f6 |
++---------------------------------------------+------------+------------+
+| boot_successes                              | 13         | 0          |
+| boot_failures                               | 0          | 12         |
+| BUG:kernel_NULL_pointer_dereference,address | 0          | 12         |
+| Oops:#[##]                                  | 0          | 12         |
+| RIP:scsi_call_prepare_resubmit              | 0          | 12         |
+| Kernel_panic-not_syncing:Fatal_exception    | 0          | 12         |
++---------------------------------------------+------------+------------+
+
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <oliver.sang@intel.com>
+| Closes: https://lore.kernel.org/oe-lkp/202308142205.fe3e80ec-oliver.sang@intel.com
+
+
+
+[    4.517792][  T681] ata2: found unknown device (class 0)
+[    4.519992][  T681] ata2.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
+[    4.525033][   T31] scsi 1:0:0:0: CD-ROM            QEMU     QEMU DVD-ROM     2.5+ PQ: 0 ANSI: 5
+[    4.549819][  T681] BUG: kernel NULL pointer dereference, address: 00000000000000c0
+[    4.551823][  T681] #PF: supervisor read access in kernel mode
+[    4.553329][  T681] #PF: error_code(0x0000) - not-present page
+[    4.553794][  T681] PGD 0 P4D 0
+[    4.553794][  T681] Oops: 0000 [#1] PREEMPT SMP PTI
+[    4.553794][  T681] CPU: 0 PID: 681 Comm: scsi_eh_1 Not tainted 6.5.0-rc5-00182-ga034ed36f646 #1
+[    4.553794][  T681] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+[    4.553794][  T681] RIP: 0010:scsi_call_prepare_resubmit+0x8f/0x152
+[    4.553794][  T681] Code: 8b 80 20 02 00 00 31 c0 f3 ab 48 8d 45 08 49 39 c5 74 17 48 8b 45 00 4c 3b 80 20 02 00 00 75 0a 48 8b 6d 08 48 83 ed 08 eb e0 <49> 83 b8
+ c0 00 00 00 00 75 0d 48 8b 45 08 48 89 ee 48 8d 50 f8 eb
+[    4.553794][  T681] RSP: 0000:ffffc90001307e00 EFLAGS: 00010246
+[    4.553794][  T681] RAX: ffff888129413d80 RBX: ffff888129410000 RCX: 0000000000000000
+[    4.553794][  T681] RDX: ffff888129413d78 RSI: ffff888129a8d0f0 RDI: ffffc90001307e10
+[    4.553794][  T681] RBP: ffff888129413d78 R08: 0000000000000000 R09: 0000000000000000
+[    4.553794][  T681] R10: 0000000000000000 R11: 0000000000000000 R12: ffffc90001307e00
+[    4.553794][  T681] R13: ffff888129413d80 R14: ffff888129413dd8 R15: 0000000000000001
+[    4.553794][  T681] FS:  0000000000000000(0000) GS:ffff88842fc00000(0000) knlGS:0000000000000000
+[    4.553794][  T681] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    4.553794][  T681] CR2: 00000000000000c0 CR3: 0000000002432000 CR4: 00000000000406f0
+[    4.553794][  T681] Call Trace:
+[    4.553794][  T681]  <TASK>
+[    4.553794][  T681]  ? __die_body+0x1e/0x5c
+[    4.553794][  T681]  ? page_fault_oops+0xf3/0x13c
+[    4.553794][  T681]  ? kernelmode_fixup_or_oops+0xa4/0xb0
+[    4.553794][  T681]  ? __bad_area_nosemaphore+0x43/0x1bc
+[    4.553794][  T681]  ? exc_page_fault+0xfd/0x116
+[    4.553794][  T681]  ? asm_exc_page_fault+0x26/0x30
+[    4.553794][  T681]  ? scsi_call_prepare_resubmit+0x8f/0x152
+[    4.553794][  T681]  scsi_eh_flush_done_q+0x15/0x10d
+[    4.553794][  T681]  ata_scsi_port_error_handler+0x486/0x4ff
+[    4.553794][  T681]  ? scsi_unjam_host+0x1b0/0x1b0
+[    4.553794][  T681]  ata_scsi_error+0x95/0xbe
+[    4.553794][  T681]  scsi_error_handler+0x14c/0x1ca
+[    4.553794][  T681]  kthread+0xf6/0xfe
+[    4.553794][  T681]  ? kthread_complete_and_exit+0x1f/0x1f
+[    4.553794][  T681]  ret_from_fork+0x25/0x37
+[    4.553794][  T681]  ? kthread_complete_and_exit+0x1f/0x1f
+[    4.553794][  T681]  ret_from_fork_asm+0x11/0x20
+[    4.553794][  T681]  </TASK>
+[    4.553794][  T681] Modules linked in:
+[    4.553794][  T681] CR2: 00000000000000c0
+[    4.553794][  T681] ---[ end trace 0000000000000000 ]---
+[    4.553794][  T681] RIP: 0010:scsi_call_prepare_resubmit+0x8f/0x152
+[    4.553794][  T681] Code: 8b 80 20 02 00 00 31 c0 f3 ab 48 8d 45 08 49 39 c5 74 17 48 8b 45 00 4c 3b 80 20 02 00 00 75 0a 48 8b 6d 08 48 83 ed 08 eb e0 <49> 83 b8
+ c0 00 00 00 00 75 0d 48 8b 45 08 48 89 ee 48 8d 50 f8 eb
+[    4.553794][  T681] RSP: 0000:ffffc90001307e00 EFLAGS: 00010246
+[    4.553794][  T681] RAX: ffff888129413d80 RBX: ffff888129410000 RCX: 0000000000000000
+[    4.553794][  T681] RDX: ffff888129413d78 RSI: ffff888129a8d0f0 RDI: ffffc90001307e10
+[    4.553794][  T681] RBP: ffff888129413d78 R08: 0000000000000000 R09: 0000000000000000
+[    4.553794][  T681] R10: 0000000000000000 R11: 0000000000000000 R12: ffffc90001307e00
+[    4.553794][  T681] R13: ffff888129413d80 R14: ffff888129413dd8 R15: 0000000000000001
+[    4.553794][  T681] FS:  0000000000000000(0000) GS:ffff88842fc00000(0000) knlGS:0000000000000000
+[    4.553794][  T681] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    4.553794][  T681] CR2: 00000000000000c0 CR3: 0000000002432000 CR4: 00000000000406f0
+[    4.553794][  T681] Kernel panic - not syncing: Fatal exception
+[    4.553794][  T681] Kernel Offset: disabled
+
+
+
+The kernel config and materials to reproduce are available at:
+https://download.01.org/0day-ci/archive/20230814/202308142205.fe3e80ec-oliver.sang@intel.com
+
+
+
 -- 
-2.35.3
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
