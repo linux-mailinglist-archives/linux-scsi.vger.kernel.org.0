@@ -2,115 +2,147 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F08777F57D
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Aug 2023 13:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C23677F768
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Aug 2023 15:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350415AbjHQLnj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Aug 2023 07:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
+        id S1351256AbjHQNMw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Aug 2023 09:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350410AbjHQLnK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Aug 2023 07:43:10 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0C2198C;
-        Thu, 17 Aug 2023 04:43:08 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1bb84194bf3so49161895ad.3;
-        Thu, 17 Aug 2023 04:43:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692272588; x=1692877388;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=45rLKFe/XGdWEKHKL/OvhqCh4xyXYRWTSCuP5teWtaA=;
-        b=PsO2n5E3s0Nq8bo5r7Wbpoo97Bw4xVKOmW9g+n/5j1f96rtp8ah+m0dGMPO0tzt3d8
-         WlyrW7jIxqqObwuKgO3Dy4mkQD+I4n091NzGIMmRqvRzewT1XDngW+7abAvyjbI0yKdu
-         amyTa9kr/u50Vi8Zsiw6FnqmHZ1Uc6AEAzAZvsjqE/Qr9FU/7HMbWQS1Jj6TOck4/VD/
-         BgZBIN4KI0VYY0m38b6WnMi6mbODbZ5tmdcV+3DfUswxbDIo2kDiTWrBK14IPCI9HmEO
-         Am+L6pX/vxkCL0Gri+6eB2jFJYAUlhJQz9hQhqkmY+0qqJnZ4TRUVErPuQ4n21cahIZx
-         aniQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692272588; x=1692877388;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=45rLKFe/XGdWEKHKL/OvhqCh4xyXYRWTSCuP5teWtaA=;
-        b=WouLOEQ55XMkTbT+V6XfB1LIcA6flFO5E1YqqvijEuton3bgqNVzfVETe5dhIT8E7O
-         wLUb5gEWKxiajCK5Bum6sdtjP4DCHt3TCRAmlgGZDVELNLj7jHaPcAjmXrqGVIrlGSbl
-         9TIt+YkOeU81QKjmBJHmXtkjCHPsLS3Us/3h1gwvnrWG/zg+lRwKfy2lnEIw3RSFR/WA
-         KfuLbwbJ4geCEg0prcq6qj6DBOQjDH3UlJ6xWYvI11jRQzj5nv/pZPuO7nYK6VfwZdRS
-         sFmSWkRfzmm1pguIVkGq9+iGUIt6BSGK+Tz2yZSdRA6pAL6nfTv1FlMmrDFNjkmT1X7I
-         dyYA==
-X-Gm-Message-State: AOJu0Yz37c8tWZPKeNb2LrvhfRxfyjS/Sh2alZc1ib4/KgCjmh/D+/Sn
-        eVmr7XKnHl5ULVnEfTWaaF4=
-X-Google-Smtp-Source: AGHT+IEW0RBHUjzorOFWrjg2otfzDibWdKDDtxIBhh0+8BxwA+o0wRWvCn53MdbaZnI7SyLeOBTsAg==
-X-Received: by 2002:a17:902:db0e:b0:1bb:25bd:d091 with SMTP id m14-20020a170902db0e00b001bb25bdd091mr4862224plx.30.1692272588373;
-        Thu, 17 Aug 2023 04:43:08 -0700 (PDT)
-Received: from localhost.localdomain ([2409:40c2:1016:aeca:454:68e4:51c8:d1cf])
-        by smtp.gmail.com with ESMTPSA id iw12-20020a170903044c00b001bb9d6b1baasm14951767plb.198.2023.08.17.04.43.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 04:43:07 -0700 (PDT)
-From:   coolrrsh@gmail.com
-To:     james.smart@broadcom.com, ram.vegesna@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        rdunlap@infradead.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        Rajeshwar R Shinde <coolrrsh@gmail.com>
-Subject: [PATCH v3] scsi: sli4: Remove code duplication
-Date:   Thu, 17 Aug 2023 17:13:01 +0530
-Message-Id: <20230817114301.17601-1-coolrrsh@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1351374AbjHQNM2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Aug 2023 09:12:28 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A183591
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Aug 2023 06:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1692277920; x=1723813920;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sJvnErBOzSXsSIPJZWHGnycYkGaFssUg37w+ziaVPiY=;
+  b=Ksir3ZHPJKmCqpV/T/nIsHhwpzjrJJ69ok7IOpuCjruECrPCkRmicAjN
+   pWPF8Ewez045frgXJM183mzbqKMpgRf5NQqxDw8xo6l+BVkcg/YMJPGaJ
+   9uewhoZM/1brYaLYnxOrZtY7XeIfObcJR9jhb7W7AmK0ZAREaaa0CT/dE
+   BnXgTnpwn1DLhYWJ/Xdp/9n+tEob86GimUZkn8bGFCRnOHgDdnXB8RWJf
+   zgeQU/xmKmQfA9M4nZPWxa1TnwSFNZBn8fynrQulTqcU8PPEQ+SEHNO9E
+   5x0ept+3zZh/A5g2K05R6xJM3PSC294Qen8l5VQdIoke94pdvl99KIZyZ
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="242128325"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Aug 2023 06:11:02 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 17 Aug 2023 06:10:23 -0700
+Received: from brunhilda.pdev.net (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Thu, 17 Aug 2023 06:10:22 -0700
+From:   Don Brace <don.brace@microchip.com>
+To:     <don.brace@microchip.com>, <Kevin.Barnett@microchip.com>,
+        <scott.teel@microchip.com>, <Justin.Lindley@microchip.com>,
+        <scott.benesh@microchip.com>, <gerry.morong@microchip.com>,
+        <mahesh.rajashekhara@microchip.com>, <mike.mcgowen@microchip.com>,
+        <murthy.bhat@microchip.com>, <kumar.meiyappan@microchip.com>,
+        <jeremy.reeves@microchip.com>, <david.strahan@microchip.com>,
+        <hch@infradead.org>, <jejb@linux.vnet.ibm.com>,
+        <joseph.szczypek@hpe.com>, <POSWALD@suse.com>
+CC:     <linux-scsi@vger.kernel.org>
+Subject: [PATCH 0/9] smartpqi updates
+Date:   Thu, 17 Aug 2023 08:12:23 -0500
+Message-ID: <20230817131232.86754-1-don.brace@microchip.com>
+X-Mailer: git-send-email 2.42.0.rc2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Rajeshwar R Shinde <coolrrsh@gmail.com>
+These patches are based on Martin Petersen's 6.6/scsi-queue tree
+  https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git
+  6.6/scsi-queue
 
-In the function sli_xmit_bls_rsp64_wqe, the 'if' and 'else' conditions
-evaluates the same expression and gives same output. Also, params->s_id
-shall not be equal to U32_MAX. Therefore removing the unused code.
+There is a large format-only patch to align our kernel.org driver with
+our out-of-box driver. We add patches to our oob driver first, run
+regression tests on these patches, then apply them to our kernel.org
+driver. Having the formatting align facilitates patch management and
+internal reviews. The contextual differences was becoming quite
+tedious.
 
-This fixes coccinelle warning such as:
-drivers/scsi/elx/libefc_sli/sli4.c:2320:2-4: WARNING: possible
-condition with no effect (if == else)
+The biggest functional change to smartpqi is the addition of an abort
+handler. Some customers were complaining about I/O stalls to all devices
+when only one device is reset. Adding an abort handler helps to prevent
+I/O stalls to all devices.
 
-Signed-off-by: Rajeshwar R Shinde <coolrrsh@gmail.com>
+All of the reset of the patches are small changes to logging messages,
+MACRO and variable name changes, and one minor change for LUN assignments.
+
+This set of changes consists of:
+* smartpqi-reformat-to-align-with-oob-driver
+  There have been a lot of format changes to our out-of-box driver. To
+  make adding patches from our oob driver to our kernel.org driver
+  (in-box), align formatting.
+  This is a format-only patch. No functional changes.
+* smartpqi-add-abort-handler
+  When a device reset occurs, the SML pauses I/O to all devices presented
+  by a controller instance causing some performance issues.
+  To only affect device with a problematic request, we added an abort handler.
+  The abort handler is implemented by using a device reset, but I/O to the
+  other devices is no longer affected.
+* smartpqi-refactor-rename-MACRO-to-clarify-purpose
+  The MACRO SOP_RC_INCORRECT_LOGICAL_UNIT was used to check for a condition 
+  where a TMF was sent an incorrect LUN. We renamed this MACRO to
+  SOP_TMF_INCORRECT_LOGICAL_UNIT for clarity.
+* smartpqi-refactor-rename-pciinfo-to-pci_info
+  Change the pciinfo variable to pci_info to make more readable code.
+  No functional changes.
+* smartpqi-simplify-lun_number-assignment
+  We simplified the conditional expression used to populate LUN numbers
+  for requests.
+* smartpqi-enhance-shutdown-notification
+  Clarify controller cache flush errors. We added in more precise information
+  to the cache flush informational message.
+  No functional changes.
+* smartpqi-enhance-controller-offline-notification
+  The driver can offline a controller for multiple reasons. We added
+  a description of why these rare offline actions are taken. And a function
+  to provide the specific details of the shutdown.
+* smartpqi-enhance-error-messages
+  We added host:bus:target:lun to messages emitted in our reset/abort handlers.
+  No functional changes.
+* smartpqi-change-driver-version-to-2.1.24-046
+
 ---
-v1->v2
-Modified patch and the corrected the warnings using checkpatch.
-v2->v3
-Modified patch details keeping HW descriptor variable.
 
----
- drivers/scsi/elx/libefc_sli/sli4.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+David Strahan (3):
+  smartpqi: simplify lun_number assignment
+  smartpqi: enhance shutdown notification
+  smartpqi: enhance controller offline notification
 
-diff --git a/drivers/scsi/elx/libefc_sli/sli4.c b/drivers/scsi/elx/libefc_sli/sli4.c
-index 8f96049f62dd..5e7fb110bc3f 100644
---- a/drivers/scsi/elx/libefc_sli/sli4.c
-+++ b/drivers/scsi/elx/libefc_sli/sli4.c
-@@ -2317,12 +2317,8 @@ sli_xmit_bls_rsp64_wqe(struct sli4 *sli, void *buf,
- 		SLI4_GENERIC_CONTEXT_VPI << SLI4_BLS_RSP_WQE_CT_SHFT;
- 		bls->context_tag = cpu_to_le16(params->vpi);
- 
--		if (params->s_id != U32_MAX)
--			bls->local_n_port_id_dword |=
--				cpu_to_le32(params->s_id & 0x00ffffff);
--		else
--			bls->local_n_port_id_dword |=
--				cpu_to_le32(params->s_id & 0x00ffffff);
-+		bls->local_n_port_id_dword |=
-+			cpu_to_le32(params->s_id & 0x00ffffff);
- 
- 		dw_ridflags = (dw_ridflags & ~SLI4_BLS_RSP_RID) |
- 			       (params->d_id & SLI4_BLS_RSP_RID);
+Don Brace (1):
+  smartpqi: change driver version to 2.1.24-046
+
+Kevin Barnett (4):
+  smartpqi: reformat to align with oob driver
+  smartpqi: add abort handler
+  smartpqi: refactor rename MACRO to clarify purpose
+  smartpqi: refactor rename pciinfo to pci_info
+
+Mahesh Rajashekhara (1):
+  smartpqi: enhance error messages
+
+ drivers/scsi/smartpqi/smartpqi.h      |   16 +-
+ drivers/scsi/smartpqi/smartpqi_init.c | 1852 ++++++++++---------------
+ 2 files changed, 755 insertions(+), 1113 deletions(-)
+
 -- 
-2.25.1
+2.42.0.rc2
 
