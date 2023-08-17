@@ -2,83 +2,149 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC05B77F8AA
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Aug 2023 16:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309E077FA2B
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Aug 2023 17:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351805AbjHQOVZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Aug 2023 10:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S1352630AbjHQPD3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Aug 2023 11:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351811AbjHQOVV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Aug 2023 10:21:21 -0400
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFA230C6;
-        Thu, 17 Aug 2023 07:21:19 -0700 (PDT)
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1bdc8081147so7019095ad.1;
-        Thu, 17 Aug 2023 07:21:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692282079; x=1692886879;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=doPszRaxb9/4aAuNDgX3hC/2hLgfoHZ5dbhDCD5Yc84=;
-        b=GE46xeWYJM8E+28luULAeiTHBf1zb3k5yYa8GzC5oQrTfnv2Uum1D9vQ2nkr4RnulG
-         76rOQ0Hal8TaZdwihhaLQlBS9+sTuR1SEzL2RVk4HTEzhLgaXHRb5uzXFvEizB5LoHO0
-         P0gNseEKZyyGD1b96AFwuSZ545GgpTzt1hiWuANd6KzUeUIGHPV1xp62RHbkWRnm0QtP
-         uiNTEPN74AIIg75LsTNFKRN/ZBiGI2Pu44NEeptjERGIPh8FIlXjrxpC2tBsn2WFN5pd
-         +bf1lMcIetmkjvux8lY2dv6nqnIh5YhSYO2i6DqlSbVmYu2+C7c2uSaecb5U1ELOUVQ2
-         mODA==
-X-Gm-Message-State: AOJu0Yycwz0IJ6K0t2yi/s8ST1w0J3jK2u0azuWJZMRy8PplTA7OrR+D
-        DyXJjOzLgnmGxMhADf0MIh0=
-X-Google-Smtp-Source: AGHT+IGK2O968MxULonLkiIvt0R8Fnr37jU6Li4FQru1mc7wC2vtfEJavqSEFjuNCY3YSvHzpj1YWA==
-X-Received: by 2002:a17:902:d4c2:b0:1bd:9498:f15d with SMTP id o2-20020a170902d4c200b001bd9498f15dmr3298255plg.24.1692282079283;
-        Thu, 17 Aug 2023 07:21:19 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:dfd:6f25:f7be:a9ca? ([2620:15c:211:201:dfd:6f25:f7be:a9ca])
-        by smtp.gmail.com with ESMTPSA id jh15-20020a170903328f00b001bde77f3d0esm7673475plb.117.2023.08.17.07.21.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Aug 2023 07:21:18 -0700 (PDT)
-Message-ID: <5f45675d-20ac-02b5-8f88-edcc0d4ffc8a@acm.org>
-Date:   Thu, 17 Aug 2023 07:21:16 -0700
+        with ESMTP id S1352717AbjHQPDL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Aug 2023 11:03:11 -0400
+Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC542D7E;
+        Thu, 17 Aug 2023 08:02:59 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 50CB041FDC;
+        Thu, 17 Aug 2023 15:02:54 +0000 (UTC)
+Received: from pdx1-sub0-mail-a204.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 5DDB84205E;
+        Thu, 17 Aug 2023 15:02:53 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1692284573; a=rsa-sha256;
+        cv=none;
+        b=obOU/x0Y30heMlVeyHmmWH/Tsx12DAhOZShjEzBYfYQ8r+WLzpub7hganyajOxVp0kfRSE
+        eRIuEyMJUHNehcME91c4Q1ulU1B9JXcJ1mFQyrbU4J2/HJa5Vzfm+L7xZYoTfIw0Mpu6L5
+        ch0w+6Tl3TSZjz/akRldrtbiylD52cuXPeqQX/+4xd0gP3VQXCavnDnzBK8W41pbmqPNpW
+        2ZlhEKK++pbqnP5r6DXIywnsH5MrADqJSy7lSCb0ik/ZxxA5KHJdulsLeX5+Kgtz9lySHK
+        M80q9eRePVAKyWbkbkAV81OD1WK0SMRaL8mycq+qcwBjpeFoB0BbivdHNAvIfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1692284573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=2ikIu5Vu9hrwUCXXlJg+KGfK7awTsQni2Zw7DEGoD6Y=;
+        b=q8GMs5lfayiD/mkpSBAhM6dX03N+XtZbDK3KUyWiRT0bEgqiZ6tAyDmo81TsV52O/52sY6
+        a5qxPuhKdmmSkNw3Xo0iRjXk5tAGIYVRjZ8nfj7+9uz1y+Y4byNh45swpwhYRz9Z3cmH2i
+        /cNMsm63/Fch+0rJAaXGwYtrlyEErpCZPbvJ9mU2TLKa/+gLjBeROxI5fuPIeInPLyz0QG
+        39L5EBqRWqeV0yipv2fp9n699+KGw8P+5ZVTMat6aECnaI4ywVSFJH6rXY8QnynIg3/qfN
+        F9FJ36mPit7C3FGI0R0wQv2CNVWhhrIqssibNDcIJ1cdh9IEe3uxnlHJGZ8iaQ==
+ARC-Authentication-Results: i=1;
+        rspamd-849d547c58-bl8tx;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Glossy-Company: 04d594e336ec7684_1692284574126_3500299165
+X-MC-Loop-Signature: 1692284574126:1619188933
+X-MC-Ingress-Time: 1692284574126
+Received: from pdx1-sub0-mail-a204.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.101.184.221 (trex/6.9.1);
+        Thu, 17 Aug 2023 15:02:54 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a204.dreamhost.com (Postfix) with ESMTPSA id 4RRSt44G1PzlT;
+        Thu, 17 Aug 2023 08:02:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1692284573;
+        bh=2ikIu5Vu9hrwUCXXlJg+KGfK7awTsQni2Zw7DEGoD6Y=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=nMzNfljsgfso3ZioKJSyDJeu9yqw1nTPnYudU1ZkGSwXYKPNtUE83wCIIxHg00oiM
+         sC4UbdJELd4UgpRRR56wC3vHpoE2Pl+un3w0+1xKxp1INdtcRkLNt0BISVvy7ebSqO
+         Iuct2nMcHWU3Q0uHkkDUlBusMFC/rbWRK+q8ku1x7zITCqLcD+lDV8cry3ll04STCn
+         7HZnIG1eiyk3HHc8KzQDL3v7lZFOcRiusUL2WAN6iAHyxhGQZgNCsW2vEmyghkYpAe
+         XK4TKmzo3kfkA0UQ2H5hD2xR8xFWUF6Mi3Dj9aqx52gC4A8try/NDRona5N8v63XDV
+         ITHehtL6o29Bg==
+Date:   Thu, 17 Aug 2023 07:24:15 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Chengfeng Ye <dg573847474@gmail.com>
+Cc:     hare@suse.de, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        bigeasy@linutronix.de, satishkh@cisco.com, sebaddel@cisco.com,
+        kartilak@cisco.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] scsi: fcoe: Fix potential deadlock on
+ &fip->ctlr_lock
+Message-ID: <unc6tesuw2b7wi3nqacikah2wxbefmnlufjn7x3gidqbo3u5gg@jopyg7nj5ckf>
+References: <20230816155524.5913-1-dg573847474@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Subject: Re: [PATCH v9 02/17] block: Only use write locking if necessary
-Content-Language: en-US
-To:     Damien Le Moal <dlemoal@kernel.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>
-References: <20230816195447.3703954-1-bvanassche@acm.org>
- <20230816195447.3703954-3-bvanassche@acm.org>
- <0b3b4453-52a1-75e3-4dfd-6aae74c8c257@kernel.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <0b3b4453-52a1-75e3-4dfd-6aae74c8c257@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230816155524.5913-1-dg573847474@gmail.com>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/17/23 04:01, Damien Le Moal wrote:
-> On 8/17/23 04:53, Bart Van Assche wrote:
->> Make blk_req_needs_zone_write_lock() return false if
->> q->limits.use_zone_write_lock is false. Inline this function because it
->> is short and because it is called from the hot path of the mq-deadline
->> I/O scheduler.
-> 
-> Your are not actually inlining the function. Did you forget to move it to
-> blkdev.h ?
+On Wed, 16 Aug 2023, Chengfeng Ye wrote:
 
-I considered inlining but eventually decided not to inline 
-blk_req_needs_zone_write_lock(). I will update the patch description.
+>There is a long call chain that &fip->ctlr_lock is acquired by isr
+>fnic_isr_msix_wq_copy() under hard irq context. Thus other process
+>context code acquiring the lock should disable irq, otherwise
+>deadlock could happen if the irq preempt the execution while the
+>lock is held in process context on the same CPU.
+>
+>[ISR]
+>fnic_isr_msix_wq_copy()
+> -> fnic_wq_copy_cmpl_handler()
+> -> fnic_fcpio_cmpl_handler()
+> -> fnic_fcpio_flogi_reg_cmpl_handler()
+> -> fnic_flush_tx()
+> -> fnic_send_frame()
+> -> fcoe_ctlr_els_send()
+> -> spin_lock_bh(&fip->ctlr_lock)
+>
+>[Process Context]
+>1. fcoe_ctlr_timer_work()
+> -> fcoe_ctlr_flogi_send()
+> -> spin_lock_bh(&fip->ctlr_lock)
+>
+>2. fcoe_ctlr_recv_work()
+> -> fcoe_ctlr_recv_handler()
+> -> fcoe_ctlr_recv_els()
+> -> fcoe_ctlr_announce()
+> -> spin_lock_bh(&fip->ctlr_lock)
+>
+>3. fcoe_ctlr_recv_work()
+> -> fcoe_ctlr_recv_handler()
+> -> fcoe_ctlr_recv_els()
+> -> fcoe_ctlr_flogi_retry()
+> -> spin_lock_bh(&fip->ctlr_lock)
+>
+>4. -> fcoe_xmit()
+> -> fcoe_ctlr_els_send()
+> -> spin_lock_bh(&fip->ctlr_lock)
+>
+>spin_lock_bh() is not enough since fnic_isr_msix_wq_copy() is a
+>hardirq.
+>
+>These flaws were found by an experimental static analysis tool I am
+>developing for irq-related deadlock.
+>
+>The patch fix the potential deadlocks by spin_lock_irqsave() to
+>disable hard irq.
 
-Thanks,
-
-Bart.
-
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
