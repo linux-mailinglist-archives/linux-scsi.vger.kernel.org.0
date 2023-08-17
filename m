@@ -2,116 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82C577F9AF
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Aug 2023 16:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9EC77FA2D
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Aug 2023 17:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352308AbjHQOwg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Aug 2023 10:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S1352644AbjHQPDa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Aug 2023 11:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352295AbjHQOwF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Aug 2023 10:52:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA12FBF;
-        Thu, 17 Aug 2023 07:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=wYEcyK46K6KN9IIi0RnZeATO9I6pLm4XjX5dQ7B0Nws=; b=3D1BJw0TbO+uh99t4IPtzRJYVV
-        PkVR5R8XjKuFSvfoUrZxbUfdehUeELlZHQOG6lN1uJMfLngnfLswZ0n144vNIWwCfppUd6Bn1wBna
-        ufjHuFM3vU/FkHA/3skCuXnzUFNjXpZsPJvN+V75G1k3fAkMIQvjm/Rc5HGiEcidZkrOSrPRYm1ke
-        crOexaePXayA81TG+qVn4g+ocK4vqGp5Pr3OBkyz1YZniI0Ajuyo5KsQk9Awrt5g0fJV5pQyjCUqj
-        ErKBzSV6W15nnIPEL6YPA/ieDeTp41UmOEiRfP2CRTioeWXO6sbhpS3yy27cX+OZo5NhA5k66zmuj
-        a1bicnfA==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qWeLs-006bSc-2I;
-        Thu, 17 Aug 2023 14:51:56 +0000
-Message-ID: <79ac6ee9-247a-c3da-c0f7-8c26bd0b1ad0@infradead.org>
-Date:   Thu, 17 Aug 2023 07:51:56 -0700
+        with ESMTP id S1352738AbjHQPDR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Aug 2023 11:03:17 -0400
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AB7271B;
+        Thu, 17 Aug 2023 08:03:13 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1bee82fad0fso18653365ad.2;
+        Thu, 17 Aug 2023 08:03:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692284593; x=1692889393;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VkyNVwau1UkJkpgmnHLFLBBi23j/yIVeTDH1Jc5k/Qg=;
+        b=d19XwFkMrdswzgSoG+8AW7IETyaDR/HsRU3DVwt8i7TOMl7eanYrdaGiA9eAMvsV5e
+         UZxln3/8OGe/ItNO190R8kQas16F6rSwrrEsNUfzeaqNl53AKALkpB9gI6ajXSXClF2t
+         +QcCHPisVcdJsq6iU6piFV6A7tHP5XjIaVGXDKdIbi85JtPUVHOALhvyUWJZssskpreC
+         zDLs2NxBReOEq6BDpwRY9aBacd1NWOduEEE11i9a5Qfs4mvu6iPqJFYFAHxvOOk23+TU
+         tQSDNZp16mcybyJxSYnn1dQaOLmFtuGl2ucTzO5AcRB9C5fHWmAwV2gAR74/LewmRUUH
+         NeqQ==
+X-Gm-Message-State: AOJu0Yzna/UnoBbObEpyRHpBahmTx9A1r53asG01wtz8NM+kjj0RGBHk
+        Cv/EP3qSr2fzzNo7SFHM6ElHpZKujzY=
+X-Google-Smtp-Source: AGHT+IFzTe6mUffmd4kapTQ7pVQiqSk1++WWnA9Gzt+QXxx8XNfvImd5LK5Q/zhrd6OKLIKwbwl4BQ==
+X-Received: by 2002:a17:902:db0e:b0:1b7:e49f:1d with SMTP id m14-20020a170902db0e00b001b7e49f001dmr5240397plx.62.1692284592802;
+        Thu, 17 Aug 2023 08:03:12 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:dfd:6f25:f7be:a9ca? ([2620:15c:211:201:dfd:6f25:f7be:a9ca])
+        by smtp.gmail.com with ESMTPSA id e5-20020a17090301c500b001b8a8154f3fsm15250113plh.270.2023.08.17.08.03.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Aug 2023 08:03:11 -0700 (PDT)
+Message-ID: <b9ade5d5-a160-5ecb-8dc5-777e8a586d51@acm.org>
+Date:   Thu, 17 Aug 2023 08:02:46 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v2] scsi: sli4: Remove the buggy code
+ Thunderbird/102.13.1
+From:   Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [RESEND PATCH v3 2/2] ufs: poll HCS.UCRDY before issuing a UIC
+ command
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com, sc.suh@samsung.com,
+        hy50.seo@samsung.com, sh425.lee@samsung.com,
+        kwangwon.min@samsung.com, junwoo80.lee@samsung.com,
+        wkon.kim@samsung.com
+References: <cover.1690939662.git.kwmad.kim@samsung.com>
+ <CGME20230802013852epcas2p2334d33036d7d1a0bdbefaf5bb844928e@epcas2p2.samsung.com>
+ <9c7ccbfb8fe05c29ab3e31d9cd14e6b91065b8b0.1690939662.git.kwmad.kim@samsung.com>
+ <f1e154c4-bbb3-18a2-cb7a-41adae292b48@intel.com>
 Content-Language: en-US
-To:     Dmitry Bogdanov <d.bogdanov@yadro.com>, coolrrsh@gmail.com
-Cc:     james.smart@broadcom.com, ram.vegesna@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20230817103751.16350-1-coolrrsh@gmail.com>
- <20230817105252.GA14370@yadro.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230817105252.GA14370@yadro.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <f1e154c4-bbb3-18a2-cb7a-41adae292b48@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-
-
-On 8/17/23 03:52, Dmitry Bogdanov wrote:
-> On Thu, Aug 17, 2023 at 04:07:51PM +0530, coolrrsh@gmail.com wrote:
->>
->> From: Rajeshwar R Shinde <coolrrsh@gmail.com>
->>
->> In the function sli_xmit_bls_rsp64_wqe, the 'if' and 'else' conditions
->> evaluates the same expression and gives same output. Also the variable
->> bls->local_n_port_id_dword is not used anywhere. Therefore removing the
->> redundant code.
->>
->> This fixes coccinelle warning such as:
->> drivers/scsi/elx/libefc_sli/sli4.c:2320:2-4: WARNING: possible
->> condition with no effect (if == else)
->>
->> Signed-off-by: Rajeshwar R Shinde <coolrrsh@gmail.com>
->> ---
->> v1->v2
->> Modified patch and verified with checkpatch.pl.
->>
->> ---
->>  drivers/scsi/elx/libefc_sli/sli4.c | 7 -------
->>  1 file changed, 7 deletions(-)
->>
->> diff --git a/drivers/scsi/elx/libefc_sli/sli4.c b/drivers/scsi/elx/libefc_sli/sli4.c
->> index 8f96049f62dd..af661b769464 100644
->> --- a/drivers/scsi/elx/libefc_sli/sli4.c
->> +++ b/drivers/scsi/elx/libefc_sli/sli4.c
->> @@ -2317,13 +2317,6 @@ sli_xmit_bls_rsp64_wqe(struct sli4 *sli, void *buf,
->>                 SLI4_GENERIC_CONTEXT_VPI << SLI4_BLS_RSP_WQE_CT_SHFT;
->>                 bls->context_tag = cpu_to_le16(params->vpi);
->>
->> -               if (params->s_id != U32_MAX)
->> -                       bls->local_n_port_id_dword |=
->> -                               cpu_to_le32(params->s_id & 0x00ffffff);
->> -               else
->> -                       bls->local_n_port_id_dword |=
->> -                               cpu_to_le32(params->s_id & 0x00ffffff);
->> -
+On 8/14/23 04:26, Adrian Hunter wrote:
+> And perhaps the following is neater:
 > 
-> omg, it is not an unused variable. Whole bls is a HW descriptor, all of
-> its variables are used by HW. You should keep v1 version of the patch.
-> According to the comment at the beginning of the funciton s_id here shall
-> be != U32_MAX. That is an explanation for your v1 patch.
+> 	u32 val;
 > 
+> 	return !read_poll_timeout(ufshcd_readl, val, val & UIC_COMMAND_READY,
+> 				  500, UIC_CMD_TIMEOUT * 1000, false, hba,
+> 				  REG_CONTROLLER_STATUS);
 
-Thanks for your comments.
+Would the above make readers of that code wonder whether read_poll_timeout()
+perhaps returns a boolean? Wouldn't it be better to test the
+read_poll_timeout() return value as follows?
 
->>                 dw_ridflags = (dw_ridflags & ~SLI4_BLS_RSP_RID) |
->>                                (params->d_id & SLI4_BLS_RSP_RID);
->>
->> --
->> 2.25.1
->>
+  	return read_poll_timeout(ufshcd_readl, val, val & UIC_COMMAND_READY,
+  				  500, UIC_CMD_TIMEOUT * 1000, false, hba,
+  				  REG_CONTROLLER_STATUS) == 0;
 
--- 
-~Randy
+Thanks,
+
+Bart.
