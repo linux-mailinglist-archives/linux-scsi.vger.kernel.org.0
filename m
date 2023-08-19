@@ -2,235 +2,138 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA2178157F
-	for <lists+linux-scsi@lfdr.de>; Sat, 19 Aug 2023 00:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 603517817D2
+	for <lists+linux-scsi@lfdr.de>; Sat, 19 Aug 2023 09:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241694AbjHRWqE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Aug 2023 18:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
+        id S1344064AbjHSHDz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 19 Aug 2023 03:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241581AbjHRWpd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 18 Aug 2023 18:45:33 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300E82D5A
-        for <linux-scsi@vger.kernel.org>; Fri, 18 Aug 2023 15:45:32 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1c4c6717e61so942110fac.1
-        for <linux-scsi@vger.kernel.org>; Fri, 18 Aug 2023 15:45:32 -0700 (PDT)
+        with ESMTP id S1343972AbjHSHDW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 19 Aug 2023 03:03:22 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E10A30F6
+        for <linux-scsi@vger.kernel.org>; Sat, 19 Aug 2023 00:03:17 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id 5614622812f47-3a76d882052so1184541b6e.0
+        for <linux-scsi@vger.kernel.org>; Sat, 19 Aug 2023 00:03:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692398731; x=1693003531;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QygEeSu2+EI7ASxsujX9swnwPudJtp2NTT1DQMu/YOY=;
-        b=13eNzCD9sX2VN/KksrBUrqJj3CGxkKFOftkmqC9MoQ5hJVsQ9127+SZDg5ckS/b3Kw
-         KhTQf8vpNt3pdyL1Kk7Nsz78fYti+ZhRuHEcb9Q67blmaPLrEbouJCi6VU15h8ryspFV
-         MC7DFKEFdO+hTaZJDPDw96NxIrylQfhQfKPA+l2luv2yHIZ80tqZZV6gol4ugWM4sEFE
-         5wqWUP6MhU0DNBvrndI8tcsx1UB1RaRC5dqgKKTBSkYx/7eaeieoqRrwiVXIg7nv/cQt
-         UpSqC80A0gw1ecCFMYLGI/n7dVbC1yiaVNImYieaRw2yFhx8mn/xA4YY/39t8CnGlKcD
-         ibsg==
+        d=gmail.com; s=20221208; t=1692428597; x=1693033397;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
+        b=nLON0lFU1HFxhxnwtvUZc9wvmWS7rbdnt2RdpqIoCtsDwWwHx0Gyjn1xZGSC5eb2FC
+         WmmpNW+ObIBj4H3oVA528E09LKJ9Oh4DAMKSu6pEL6PL1RhqFN61P9gLSK/8SD4vx9bP
+         JUWK2MGIfhLYg/xJvX06ahmCeb/lUSvcNrFKmvYLJLEYQO5IwjUSUqLNIk0w8cK+2/XQ
+         dSqtK5eCnXC+wrkDAzHrF00pkROWtcttibp6ntDQXOVUlo6vsHjNyWdY7UHT1JYeF2xL
+         PB0ef0uQvzc5mw6gaoXP2KOWKvpRua/iGaOI4B4VGugPnWVRf5iIcCLUY0NkKk3Xl8rO
+         5wkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692398731; x=1693003531;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1692428597; x=1693033397;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QygEeSu2+EI7ASxsujX9swnwPudJtp2NTT1DQMu/YOY=;
-        b=CDkhEiGaP8BZsyhE0AxMfS5dovh6+LVN32JAOvVZFhisxh1QyYgDdQS+KrPLacTDYJ
-         pJlej9yVntaAlOxDsQblB+Y2+dyDlvY5kgeK0hXm5LIvQ0oX9caAbBlRjuFIxhZ5N4Wv
-         vY6DQoyVyUJLsV3ZGgDW3D6D8xHKkL+kCmDYGDBwcd/ORngOiw6y6jjSO2NS8FfSXBXF
-         Mb+DxlsRNfQTOdGpvcm+5S2MSEQhqVEzhLJATfk/ZThF0HF5TN8SFacQgP8+CRczou26
-         +iRljdIWFTfcQizwGLxMVlO85we4fFcc0tnqAlil5xz4kWpXrahqh0RZTtcy7sD6D8yd
-         6XNw==
-X-Gm-Message-State: AOJu0Yz4ymIXAz71/PrykhCMAdRSPNhxROwXY5c95bEsYhJm2jONB0nR
-        u7DFKYXluhmHDiy4WaxsWni+PQ==
-X-Google-Smtp-Source: AGHT+IHHLZE3H+zbLOa5NBrwKUFwLqQmXu4bECmXZKV5vhrm0a5tdv9fJXyOcjWdzH50ZAebC+Ea6A==
-X-Received: by 2002:a05:6871:68d:b0:187:92fb:6ecb with SMTP id l13-20020a056871068d00b0018792fb6ecbmr650959oao.20.1692398730939;
-        Fri, 18 Aug 2023 15:45:30 -0700 (PDT)
-Received: from google.com ([2620:15c:2c5:13:4f6e:2bd9:cb46:7849])
-        by smtp.gmail.com with ESMTPSA id 101-20020a17090a09ee00b00263f8915aa3sm4038761pjo.31.2023.08.18.15.45.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 15:45:30 -0700 (PDT)
-Date:   Fri, 18 Aug 2023 15:45:25 -0700
-From:   Igor Pylypiv <ipylypiv@google.com>
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
-        Jack Wang <jinpu.wang@cloud.ionos.com>
-Subject: Re: [PATCH 3/3] scsi: pm80xx: Set RETFIS when requested by libsas
-Message-ID: <ZN/0heaKv6DfNrFj@google.com>
-References: <20230817214137.462044-1-ipylypiv@google.com>
- <20230817214137.462044-3-ipylypiv@google.com>
- <febb997e-fc77-5ac2-0a58-57f66c20b313@kernel.org>
+        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
+        b=iyyii8dVp+qExSdKkpOsvKNWkEaStLqRKq0WlMvpaYoBUZjRY7rOSq0vYSUty+F1QS
+         PX9lfpMPzV01ycsks939EA1V8noAaLCWd7FUfLxjFGjkqSQkvpSUXNzMQZTmSn9gQMlv
+         9C4neg/BUHBpksxP2c0qChJWOK9hcYdhO9aTwsTB4asDJ17PZZFk07yzx2NGcqnlmPtR
+         sDvfHhaIqONOCGq4udK7+ZKGnjdOXkq7cKbSmcV8XjFRJMnVyz/D82dInqyKpTWYNT7R
+         n7qUjDMK4f/6+oEw3uvKT9qETkhR8Z2c7TEs1El5JQq+a2y/e0vq4PPQdZLGryJ0whH5
+         yG9Q==
+X-Gm-Message-State: AOJu0Yxwc7Es4ZYglFgC+DSXeXSAXd04raZlYIsY/b8cwx+ZBGmaIyNy
+        IaI2wn/FZvI6xCJNUliPEOS7snHECiAlOg8u3VEMnq889ckTrg==
+X-Google-Smtp-Source: AGHT+IHBFHux9W7amy752XAKQ4G+pXj9K8KLABgekYkKVjTaNiUovhqWPJjy5q7mdLIzANUAVG24gzrYlmHT6Kjn7Kk=
+X-Received: by 2002:a81:8782:0:b0:589:a9fc:ffcd with SMTP id
+ x124-20020a818782000000b00589a9fcffcdmr1407212ywf.20.1692428576106; Sat, 19
+ Aug 2023 00:02:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <febb997e-fc77-5ac2-0a58-57f66c20b313@kernel.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Reply-To: razumkoykhailo@gmail.com
+Sender: mrtombaba@gmail.com
+Received: by 2002:a05:7000:5395:b0:4f4:2174:eed4 with HTTP; Sat, 19 Aug 2023
+ 00:02:55 -0700 (PDT)
+From:   "Mr.Razum Khailo" <razumkoykhailo@gmail.com>
+Date:   Sat, 19 Aug 2023 00:02:55 -0700
+X-Google-Sender-Auth: TD1SbUwALQWUaG93zNo0ky4SaO8
+Message-ID: <CADXgghn2t3mU_VvtZDjHwnbadg2QnVcJ30yFd0kN8SL6NDhY1g@mail.gmail.com>
+Subject: Greetings from Ukraine,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        MILLION_USD,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:241 listed in]
+        [list.dnswl.org]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [razumkoykhailo[at]gmail.com]
+        *  2.0 MILLION_USD BODY: Talks about millions of dollars
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.4 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  2.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Aug 18, 2023 at 08:12:13AM +0900, Damien Le Moal wrote:
-> On 2023/08/18 6:41, Igor Pylypiv wrote:
-> > By default PM80xx HBAs return FIS only when a drive reports an error.
-> 
-> s/FIS/SDB FIS or even better "Set Device Bits (SDB) FIS" to be clear.
-> 
-> > The RETFIS bit forces the controller to populate FIS even when a drive
-> > reports no error.
-> 
-> And here s/FIS/SDB FIS
-
-Keeping "FIS" per discussion in PATCH 2/3 (SDB FIS applies only to NCQ).
-
-> 
-> > 
-> > Signed-off-by: Igor Pylypiv <ipylypiv@google.com>
-> > ---
-> >  drivers/scsi/pm8001/pm8001_hwi.c |  8 +++++---
-> >  drivers/scsi/pm8001/pm8001_hwi.h |  2 +-
-> >  drivers/scsi/pm8001/pm80xx_hwi.c | 11 ++++++-----
-> >  drivers/scsi/pm8001/pm80xx_hwi.h |  2 +-
-> >  4 files changed, 13 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-> > index 73cd25f30ca5..255553dcadb9 100644
-> > --- a/drivers/scsi/pm8001/pm8001_hwi.c
-> > +++ b/drivers/scsi/pm8001/pm8001_hwi.c
-> > @@ -4095,7 +4095,7 @@ static int pm8001_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
-> >  	u32 hdr_tag, ncg_tag = 0;
-> >  	u64 phys_addr;
-> >  	u32 ATAP = 0x0;
-> > -	u32 dir;
-> > +	u32 dir, retfis;
-> >  	u32  opc = OPC_INB_SATA_HOST_OPSTART;
-> >  
-> >  	memset(&sata_cmd, 0, sizeof(sata_cmd));
-> > @@ -4124,8 +4124,10 @@ static int pm8001_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
-> >  	sata_cmd.tag = cpu_to_le32(tag);
-> >  	sata_cmd.device_id = cpu_to_le32(pm8001_ha_dev->device_id);
-> >  	sata_cmd.data_len = cpu_to_le32(task->total_xfer_len);
-> > -	sata_cmd.ncqtag_atap_dir_m =
-> > -		cpu_to_le32(((ncg_tag & 0xff)<<16)|((ATAP & 0x3f) << 10) | dir);
-> > +	retfis = task->ata_task.return_fis_on_success;
-> 
-> While I think this should be OK, I think it would be safer to do:
-> 
-> 	u32 dir, retfis = 0;
-> 
-> 	...
-> 
-> 	if (task->ata_task.return_fis_on_success)
-> 		retfis = 1;
-> 
-> to avoid issues with funky compilers doing some tricky handling of single bit
-> fields.
-> 
-> > +	sata_cmd.retfis_ncqtag_atap_dir_m =
-> > +		cpu_to_le32((retfis << 24) | ((ncg_tag & 0xff) << 16) |
-> > +				((ATAP & 0x3f) << 10) | dir);
-> 
-> Please align this line with "(retfis << 24)" above.
-
-Thanks Damien! I'll update the code in v2.
- 
-> >  	sata_cmd.sata_fis = task->ata_task.fis;
-> >  	if (likely(!task->ata_task.device_control_reg_update))
-> >  		sata_cmd.sata_fis.flags |= 0x80;/* C=1: update ATA cmd reg */
-> > diff --git a/drivers/scsi/pm8001/pm8001_hwi.h b/drivers/scsi/pm8001/pm8001_hwi.h
-> > index 961d0465b923..fc2127dcb58d 100644
-> > --- a/drivers/scsi/pm8001/pm8001_hwi.h
-> > +++ b/drivers/scsi/pm8001/pm8001_hwi.h
-> > @@ -515,7 +515,7 @@ struct sata_start_req {
-> >  	__le32	tag;
-> >  	__le32	device_id;
-> >  	__le32	data_len;
-> > -	__le32	ncqtag_atap_dir_m;
-> > +	__le32	retfis_ncqtag_atap_dir_m;
-> 
-> Naming this field from what is set in it is unusual... Not sure how the
-> controller spce named this field, but we should use that and stop changing it's
-> name whenever we change the bits that are set.
-
-I see this naming as "what can be set" rather than "what is set" (yes, retfis
-wasn't there for some reason). These four bytes are assentially a bitfield.
-
-While we can change this to a bitfield I would like to keep the current single
-filed as there are other fields that follow the same naming pattern
-e.g. ase_sh_lm_slr_phyid, phyid_npip_portstate, phyid_portid, etc.
-
-> 
-> >  	struct host_to_dev_fis	sata_fis;
-> >  	u32	reserved1;
-> >  	u32	reserved2;
-> > diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-> > index 39a12ee94a72..e839fb53f0e3 100644
-> > --- a/drivers/scsi/pm8001/pm80xx_hwi.c
-> > +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-> > @@ -4457,7 +4457,7 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
-> >  	u64 phys_addr, end_addr;
-> >  	u32 end_addr_high, end_addr_low;
-> >  	u32 ATAP = 0x0;
-> > -	u32 dir;
-> > +	u32 dir, retfis;
-> >  	u32 opc = OPC_INB_SATA_HOST_OPSTART;
-> >  	memset(&sata_cmd, 0, sizeof(sata_cmd));
-> >  
-> > @@ -4487,6 +4487,7 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
-> >  	sata_cmd.tag = cpu_to_le32(tag);
-> >  	sata_cmd.device_id = cpu_to_le32(pm8001_ha_dev->device_id);
-> >  	sata_cmd.data_len = cpu_to_le32(task->total_xfer_len);
-> > +	retfis = task->ata_task.return_fis_on_success;
-> >  
-> >  	sata_cmd.sata_fis = task->ata_task.fis;
-> >  	if (likely(!task->ata_task.device_control_reg_update))
-> > @@ -4502,8 +4503,8 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
-> >  		opc = OPC_INB_SATA_DIF_ENC_IO;
-> >  
-> >  		/* set encryption bit */
-> > -		sata_cmd.ncqtag_atap_dir_m_dad =
-> > -			cpu_to_le32(((ncg_tag & 0xff)<<16)|
-> > +		sata_cmd.retfis_ncqtag_atap_dir_m_dad =
-> > +			cpu_to_le32((retfis << 24) | ((ncg_tag & 0xff) << 16) |
-> >  				((ATAP & 0x3f) << 10) | 0x20 | dir);
-> 
-> Same comments here.
-> 
-> >  							/* dad (bit 0-1) is 0 */
-> >  		/* fill in PRD (scatter/gather) table, if any */
-> > @@ -4569,8 +4570,8 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
-> >  			   "Sending Normal SATA command 0x%x inb %x\n",
-> >  			   sata_cmd.sata_fis.command, q_index);
-> >  		/* dad (bit 0-1) is 0 */
-> > -		sata_cmd.ncqtag_atap_dir_m_dad =
-> > -			cpu_to_le32(((ncg_tag & 0xff)<<16) |
-> > +		sata_cmd.retfis_ncqtag_atap_dir_m_dad =
-> > +			cpu_to_le32((retfis << 24) | ((ncg_tag & 0xff) << 16) |
-> >  					((ATAP & 0x3f) << 10) | dir);
-> >  
-> >  		/* fill in PRD (scatter/gather) table, if any */
-> > diff --git a/drivers/scsi/pm8001/pm80xx_hwi.h b/drivers/scsi/pm8001/pm80xx_hwi.h
-> > index acf6e3005b84..eb8fd37b2066 100644
-> > --- a/drivers/scsi/pm8001/pm80xx_hwi.h
-> > +++ b/drivers/scsi/pm8001/pm80xx_hwi.h
-> > @@ -731,7 +731,7 @@ struct sata_start_req {
-> >  	__le32	tag;
-> >  	__le32	device_id;
-> >  	__le32	data_len;
-> > -	__le32	ncqtag_atap_dir_m_dad;
-> > +	__le32	retfis_ncqtag_atap_dir_m_dad;
-> >  	struct host_to_dev_fis	sata_fis;
-> >  	u32	reserved1;
-> >  	u32	reserved2;	/* dword 11. rsvd for normal I/O. */
-> 
-> -- 
-> Damien Le Moal
-> Western Digital Research
-
-Thank you,
-Igor 
+R3JlZXRpbmdzwqBmcm9twqBVa3JhaW5lLA0KDQpNci7CoFJhenVta292wqBNeWtoYWlsbyzCoGFu
+wqBlbnRyZXByZW5ldXLCoGJ1c2luZXNzbWFuwqBmcm9twqBPZGVzc2ENClVrcmFpbmUuwqBXaXRo
+aW7CoGHCoHllYXLCoHBsdXPCoHNvbWXCoG1vbnRoc8Kgbm93LMKgbW9yZcKgdGhhbsKgOC4ywqBt
+aWxsaW9uDQpwZW9wbGXCoGFyb3VuZMKgdGhlwqBjaXRpZXPCoG9mwqBtecKgY291bnRyecKgVWty
+YWluZcKgaGF2ZcKgYmVlbsKgZXZhY3VhdGVkwqB0bw0KYcKgc2FmZcKgbG9jYXRpb27CoGFuZMKg
+b3V0wqBvZsKgdGhlwqBjb3VudHJ5LMKgbW9zdMKgZXNwZWNpYWxsecKgY2hpbGRyZW7CoHdpdGgN
+CnRoZWlywqBwYXJlbnRzLMKgbnVyc2luZ8KgbW90aGVyc8KgYW5kwqBwcmVnbmFudMKgd29tZW4s
+wqBhbmTCoHRob3NlwqB3aG/CoGhhdmUNCmJlZW7CoHNlcmlvdXNsecKgd291bmRlZMKgYW5kwqBu
+ZWVkwqB1cmdlbnTCoG1lZGljYWzCoGF0dGVudGlvbi7CoEnCoHdhc8KgYW1vbmcNCnRob3NlwqB0
+aGF0wqB3ZXJlwqBhYmxlwqB0b8KgZXZhY3VhdGXCoHRvwqBvdXLCoG5laWdoYm91cmluZ8KgY291
+bnRyaWVzwqBhbmTCoEnigJltDQpub3fCoGluwqB0aGXCoHJlZnVnZWXCoGNhbXDCoG9mwqBUZXLC
+oEFwZWzCoEdyb25pbmdlbsKgaW7CoHRoZcKgTmV0aGVybGFuZHMuDQoNCknCoG5lZWTCoGHCoGZv
+cmVpZ27CoHBhcnRuZXLCoHRvwqBlbmFibGXCoG1lwqB0b8KgdHJhbnNwb3J0wqBtecKgaW52ZXN0
+bWVudA0KY2FwaXRhbMKgYW5kwqB0aGVuwqByZWxvY2F0ZcKgd2l0aMKgbXnCoGZhbWlseSzCoGhv
+bmVzdGx5wqBpwqB3aXNowqBJwqB3aWxsDQpkaXNjdXNzwqBtb3JlwqBhbmTCoGdldMKgYWxvbmcu
+wqBJwqBuZWVkwqBhwqBwYXJ0bmVywqBiZWNhdXNlwqBtecKgaW52ZXN0bWVudA0KY2FwaXRhbMKg
+aXPCoGluwqBtecKgaW50ZXJuYXRpb25hbMKgYWNjb3VudC7CoEnigJltwqBpbnRlcmVzdGVkwqBp
+bsKgYnV5aW5nDQpwcm9wZXJ0aWVzLMKgaG91c2VzLMKgYnVpbGRpbmfCoHJlYWzCoGVzdGF0ZXMs
+wqBtecKgY2FwaXRhbMKgZm9ywqBpbnZlc3RtZW50DQppc8KgKCQzMMKgTWlsbGlvbsKgVVNEKcKg
+LsKgVGhlwqBmaW5hbmNpYWzCoGluc3RpdHV0aW9uc8KgaW7CoG15wqBjb3VudHJ5DQpVa3JhaW5l
+wqBhcmXCoGFsbMKgc2hvdMKgZG93bsKgZHVlwqB0b8KgdGhlwqBjcmlzaXPCoG9mwqB0aGlzwqB3
+YXLCoG9uwqBVa3JhaW5lDQpzb2lswqBiecKgdGhlwqBSdXNzaWFuwqBmb3JjZXMuwqBNZWFud2hp
+bGUswqBpZsKgdGhlcmXCoGlzwqBhbnnCoHByb2ZpdGFibGUNCmludmVzdG1lbnTCoHRoYXTCoHlv
+dcKgaGF2ZcKgc2/CoG11Y2jCoGV4cGVyaWVuY2XCoGluwqB5b3VywqBjb3VudHJ5LMKgdGhlbsKg
+d2UNCmNhbsKgam9pbsKgdG9nZXRoZXLCoGFzwqBwYXJ0bmVyc8Kgc2luY2XCoEnigJltwqBhwqBm
+b3JlaWduZXIuDQoNCknCoGNhbWXCoGFjcm9zc8KgeW91csKgZS1tYWlswqBjb250YWN0wqB0aHJv
+dWdowqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLCoGFzc2lzdGFu
+Y2XCoGFuZMKgScKgZGVjaWRlZMKgdG/CoGNvbnRhY3TCoHlvdcKgZGlyZWN0bHnCoHRvwqBhc2vC
+oHlvdcKgaWYNCnlvdcKga25vd8KgYW55wqBsdWNyYXRpdmXCoGJ1c2luZXNzwqBpbnZlc3RtZW50
+wqBpbsKgeW91csKgY291bnRyecKgacKgY2FuDQppbnZlc3TCoG15wqBtb25lecKgc2luY2XCoG15
+wqBjb3VudHJ5wqBVa3JhaW5lwqBzZWN1cml0ecKgYW5kwqBlY29ub21pYw0KaW5kZXBlbmRlbnTC
+oGhhc8KgbG9zdMKgdG/CoHRoZcKgZ3JlYXRlc3TCoGxvd2VywqBsZXZlbCzCoGFuZMKgb3VywqBj
+dWx0dXJlwqBoYXMNCmxvc3TCoGluY2x1ZGluZ8Kgb3VywqBoYXBwaW5lc3PCoGhhc8KgYmVlbsKg
+dGFrZW7CoGF3YXnCoGZyb23CoHVzLsKgT3VywqBjb3VudHJ5DQpoYXPCoGJlZW7CoG9uwqBmaXJl
+wqBmb3LCoG1vcmXCoHRoYW7CoGHCoHllYXLCoG5vdy4NCg0KSWbCoHlvdcKgYXJlwqBjYXBhYmxl
+wqBvZsKgaGFuZGxpbmfCoHRoaXPCoGJ1c2luZXNzwqBwYXJ0bmVyc2hpcCzCoGNvbnRhY3TCoG1l
+DQpmb3LCoG1vcmXCoGRldGFpbHMswqBJwqB3aWxswqBhcHByZWNpYXRlwqBpdMKgaWbCoHlvdcKg
+Y2FuwqBjb250YWN0wqBtZQ0KaW1tZWRpYXRlbHkuwqBZb3XCoG1hecKgYXPCoHdlbGzCoHRlbGzC
+oG1lwqBhwqBsaXR0bGXCoG1vcmXCoGFib3V0wqB5b3Vyc2VsZi4NCkNvbnRhY3TCoG1lwqB1cmdl
+bnRsecKgdG/CoGVuYWJsZcKgdXPCoHRvwqBwcm9jZWVkwqB3aXRowqB0aGXCoGJ1c2luZXNzLsKg
+ScKgd2lsbA0KYmXCoHdhaXRpbmfCoGZvcsKgeW91csKgcmVzcG9uc2UuwqBNecKgc2luY2VyZcKg
+YXBvbG9naWVzwqBmb3LCoHRoZQ0KaW5jb252ZW5pZW5jZS4NCg0KDQpUaGFua8KgeW91IQ0KDQpN
+ci4gUmF6dW1rb3bCoE15a2hhaWxvLg0K
