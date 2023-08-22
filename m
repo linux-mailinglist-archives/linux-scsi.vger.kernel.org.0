@@ -2,167 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D2A784A33
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Aug 2023 21:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D5C784D84
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Aug 2023 01:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjHVTUT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Aug 2023 15:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
+        id S231807AbjHVXxz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Aug 2023 19:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjHVTUR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Aug 2023 15:20:17 -0400
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3704E47;
-        Tue, 22 Aug 2023 12:20:13 -0700 (PDT)
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-56c250ff3d3so1770394a12.1;
-        Tue, 22 Aug 2023 12:20:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692732013; x=1693336813;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S7we6QROJmCV/8TDowAkj10fIMIa6vF9cLXAVjoPLfg=;
-        b=AiAEHg0JOa335VjGS5sb3ygg/lz8qVXvqWarpQSZlF9ytpHLrTOeQeKcXEAtvjculG
-         0ed5qeXfBPXYsQdnNdZezp2B24uEgVYEgFtkJREZtwLFW4JCoG8Fh70af22rMW5AOEB4
-         miMlmB60DKQ1sG/ysZCRebHw45y+37ulq4mwL4OOyWwDH48Z/a1t7WrZxdHBYMP2X1qf
-         0X0px1z69iml7K+AGqqvEljaxJfHMf9J4tUEYhBve2HrAHjcD70kjwofV28YJ62L6KKj
-         RsWp2BN/VcuJ2LfaOgTZ+d0tvFMiXpHhWSFsLUf/eqrO6QyH7RQfKqsM6DtVX4tu7L0S
-         OmmQ==
-X-Gm-Message-State: AOJu0YzqVsa1R0ckbyHGJazGe1aMSfT9fKuffme5Ls4zMbDdrfyzWXuo
-        rZC3qMixi6kGDte/i1f9Wi4=
-X-Google-Smtp-Source: AGHT+IG52W/qHjA28sRpb5Sk+prL6Zjt6oJtfk9HOW9Pf2eoDLJnRaati81bpfu92hIp8it42zbJuw==
-X-Received: by 2002:a17:90a:d392:b0:269:3757:54bb with SMTP id q18-20020a17090ad39200b00269375754bbmr14923755pju.11.1692732013040;
-        Tue, 22 Aug 2023 12:20:13 -0700 (PDT)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:88be:bf57:de29:7cc])
-        by smtp.gmail.com with ESMTPSA id m11-20020a17090a414b00b002696bd123e4sm8081632pjg.46.2023.08.22.12.20.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Aug 2023 12:20:12 -0700 (PDT)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Bao D . Nguyen" <quic_nguyenb@quicinc.com>,
-        Can Guo <quic_cang@quicinc.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Subject: [PATCH v11 16/16] scsi: ufs: Inform the block layer about write ordering
-Date:   Tue, 22 Aug 2023 12:17:11 -0700
-Message-ID: <20230822191822.337080-17-bvanassche@acm.org>
-X-Mailer: git-send-email 2.42.0.rc1.204.g551eb34607-goog
-In-Reply-To: <20230822191822.337080-1-bvanassche@acm.org>
-References: <20230822191822.337080-1-bvanassche@acm.org>
+        with ESMTP id S229635AbjHVXxy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Aug 2023 19:53:54 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF79CFE;
+        Tue, 22 Aug 2023 16:53:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692748433; x=1724284433;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S6aNe+EVKfavzRzFWZfuxF/UFuLG6/wm1koeauKhU4k=;
+  b=Ss5CMgSNpoH3K26j02US6iChobLOoQgf+4XxeLr8O9ECCYiKl7VKqjHj
+   5W10rWN20Zjm9zjLJZSPGqaqTOaSlg1zfB/9Mu8IEHRa9oLGkTckM0wau
+   d+cd8hFMYt5+e5+iTdSfl/jnqAwpeN9hsVeXShW0JySmw9TTy4TZGYkg0
+   oKxrk5pczfYlu37LbxbVqlHYpTTNr1f6s02Wbb1BSAUwZ8imhiCzaFg4w
+   UbhG/jky3ylRYUqgziJTtRhrr8a5IRuiKaCI9+ERV3bZpEuv6A4g2CKNU
+   oSqLW3XsvldGpNx0beM+EtlfpLm1xPd82gbSb55mwaeWeFOabRCuvc0AB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="372909075"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="372909075"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 16:53:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="801884468"
+X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
+   d="scan'208";a="801884468"
+Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Aug 2023 16:53:50 -0700
+Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qYbC1-0000dE-2w;
+        Tue, 22 Aug 2023 23:53:49 +0000
+Date:   Wed, 23 Aug 2023 07:53:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Zhu Wang <wangzhu9@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, dan.carpenter@linaro.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: Re: [PATCH -next] scsi: core: fix double free in
+ raid_component_add()
+Message-ID: <202308230741.jbMc6KYG-lkp@intel.com>
+References: <baecaad7-7124-b9ae-ab79-1b7c6fa95c98@acm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <baecaad7-7124-b9ae-ab79-1b7c6fa95c98@acm.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From the UFSHCI 4.0 specification, about the legacy (single queue) mode:
-"The host controller always process transfer requests in-order according
-to the order submitted to the list. In case of multiple commands with
-single doorbell register ringing (batch mode), The dispatch order for
-these transfer requests by host controller will base on their index in
-the List. A transfer request with lower index value will be executed
-before a transfer request with higher index value."
+Hi Bart,
 
-From the UFSHCI 4.0 specification, about the MCQ mode:
-"Command Submission
-1. Host SW writes an Entry to SQ
-2. Host SW updates SQ doorbell tail pointer
+kernel test robot noticed the following build warnings:
 
-Command Processing
-3. After fetching the Entry, Host Controller updates SQ doorbell head
-   pointer
-4. Host controller sends COMMAND UPIU to UFS device"
+[auto build test WARNING on mkp-scsi/for-next]
+[cannot apply to next-20230821 jejb-scsi/for-next linus/master v6.5-rc7 next-20230822]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-In other words, for both legacy and MCQ mode, UFS controllers are
-required to forward commands to the UFS device in the order these
-commands have been received from the host.
+url:    https://github.com/intel-lab-lkp/linux/commits/Bart-Van-Assche/Re-PATCH-next-scsi-core-fix-double-free-in-raid_component_add/20230822-035432
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/baecaad7-7124-b9ae-ab79-1b7c6fa95c98%40acm.org
+patch subject: Re: [PATCH -next] scsi: core: fix double free in raid_component_add()
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230823/202308230741.jbMc6KYG-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230823/202308230741.jbMc6KYG-lkp@intel.com/reproduce)
 
-Notes:
-- For legacy mode this is only correct if the host submits one
-  command at a time. The UFS driver does this.
-- Also in legacy mode, the command order is not preserved if
-  auto-hibernation is enabled in the UFS controller. Hence, enable
-  zone write locking if auto-hibernation is enabled.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308230741.jbMc6KYG-lkp@intel.com/
 
-This patch improves performance as follows on my test setup:
-- With the mq-deadline scheduler: 2.5x more IOPS for small writes.
-- When not using an I/O scheduler compared to using mq-deadline with
-  zone locking: 4x more IOPS for small writes.
+All warnings (new ones prefixed by >>):
 
-Reviewed-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-Reviewed-by: Can Guo <quic_cang@quicinc.com>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
-Cc: Avri Altman <avri.altman@wdc.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/ufs/core/ufshcd.c | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+>> drivers/scsi/raid_class.c:212:13: warning: 'raid_component_release' defined but not used [-Wunused-function]
+     212 | static void raid_component_release(struct device *dev)
+         |             ^~~~~~~~~~~~~~~~~~~~~~
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index c28a362b5b99..a685058d4943 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -4357,6 +4357,19 @@ static int ufshcd_update_preserves_write_order(struct ufs_hba *hba,
- 				return -EPERM;
- 		}
- 	}
-+	shost_for_each_device(sdev, hba->host)
-+		blk_freeze_queue_start(sdev->request_queue);
-+	shost_for_each_device(sdev, hba->host) {
-+		struct request_queue *q = sdev->request_queue;
-+
-+		blk_mq_freeze_queue_wait(q);
-+		q->limits.driver_preserves_write_order = preserves_write_order;
-+		blk_queue_required_elevator_features(q,
-+			preserves_write_order ? 0 : ELEVATOR_F_ZBD_SEQ_WRITE);
-+		if (q->disk)
-+			disk_set_zoned(q->disk, q->limits.zoned);
-+		blk_mq_unfreeze_queue(q);
-+	}
- 
- 	return 0;
- }
-@@ -4397,7 +4410,8 @@ int ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit)
- 
- 	if (!is_mcq_enabled(hba) && !prev_state && new_state) {
- 		/*
--		 * Auto-hibernation will be enabled for legacy UFSHCI mode.
-+		 * Auto-hibernation will be enabled for legacy UFSHCI mode. Tell
-+		 * the block layer that write requests may be reordered.
- 		 */
- 		ret = ufshcd_update_preserves_write_order(hba, false);
- 		if (ret)
-@@ -4413,7 +4427,8 @@ int ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit)
- 	}
- 	if (!is_mcq_enabled(hba) && prev_state && !new_state) {
- 		/*
--		 * Auto-hibernation has been disabled.
-+		 * Auto-hibernation has been disabled. Tell the block layer that
-+		 * the order of write requests is preserved.
- 		 */
- 		ret = ufshcd_update_preserves_write_order(hba, true);
- 		WARN_ON_ONCE(ret);
-@@ -5191,6 +5206,9 @@ static int ufshcd_slave_configure(struct scsi_device *sdev)
- 
- 	ufshcd_hpb_configure(hba, sdev);
- 
-+	q->limits.driver_preserves_write_order =
-+		!ufshcd_is_auto_hibern8_supported(hba) ||
-+		FIELD_GET(UFSHCI_AHIBERN8_TIMER_MASK, hba->ahit) == 0;
- 	blk_queue_update_dma_pad(q, PRDT_DATA_BYTE_COUNT_PAD - 1);
- 	if (hba->quirks & UFSHCD_QUIRK_4KB_DMA_ALIGNMENT)
- 		blk_queue_update_dma_alignment(q, SZ_4K - 1);
+
+vim +/raid_component_release +212 drivers/scsi/raid_class.c
+
+b1081ea6f000de James Bottomley 2005-11-06  211  
+ee959b00c335d7 Tony Jones      2008-02-22 @212  static void raid_component_release(struct device *dev)
+b1081ea6f000de James Bottomley 2005-11-06  213  {
+ee959b00c335d7 Tony Jones      2008-02-22  214  	struct raid_component *rc =
+ee959b00c335d7 Tony Jones      2008-02-22  215  		container_of(dev, struct raid_component, dev);
+ee959b00c335d7 Tony Jones      2008-02-22  216  	dev_printk(KERN_ERR, rc->dev.parent, "COMPONENT RELEASE\n");
+ee959b00c335d7 Tony Jones      2008-02-22  217  	put_device(rc->dev.parent);
+b1081ea6f000de James Bottomley 2005-11-06  218  	kfree(rc);
+b1081ea6f000de James Bottomley 2005-11-06  219  }
+61a7afa2c476a3 James Bottomley 2005-08-16  220  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
