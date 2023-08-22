@@ -2,54 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C78B783F96
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Aug 2023 13:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847747840BF
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Aug 2023 14:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235293AbjHVLiV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Aug 2023 07:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49390 "EHLO
+        id S235088AbjHVM1j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Aug 2023 08:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbjHVLiR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Aug 2023 07:38:17 -0400
+        with ESMTP id S235142AbjHVLhm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Aug 2023 07:37:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DA0E6C;
-        Tue, 22 Aug 2023 04:37:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2D3E5E;
+        Tue, 22 Aug 2023 04:37:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E38C36538F;
-        Tue, 22 Aug 2023 11:37:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E44C433CB;
-        Tue, 22 Aug 2023 11:37:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 538376535C;
+        Tue, 22 Aug 2023 11:36:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3082C433CA;
+        Tue, 22 Aug 2023 11:36:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692704259;
-        bh=28dopH/9gA+1tqzVakq4FVJFAhk5Y4JfAi/XUlsF/f4=;
+        s=k20201202; t=1692704193;
+        bh=WTD3lJunNv5sofpRbLtPclgLM1LNn+JnUh5Z8n1If3Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YZJiZW76yiG6O11M/20YrhCJtBh65jOcAYC8EyR/iX2GDRTQp2DiYs5jGP7+RgY5y
-         BEC0tQ8xxqASqF7tVeakntMR/Xd7q7JmvIYZOMH4r+kSFOIEEe2jut3l3QzwM0P5lw
-         SKa9cw9UTKQoyU6OQ5rtBi7h959oM7eokLPQdxy7kz9DnSQRw8wmFTM+XGuN6Wlpsk
-         oUH8PMngulhOXU2Wqyk+2Uwj62eyLRJtnp6abPr8A8DmzeYMZjctH9jtLvnoGXPPwX
-         eas+rZeMXzv9QjeDM9RO0p6SOSfavdwLV0Rmp9rei63i0WxHiHCrl83jOdBhmc2gHb
-         rIVceH0ie6XQw==
+        b=uidtmBTy5SonAbrOCBTPXzb9gDBrMcknynBSteTENhEbjCSMI5uoUy0tQlXN/80wh
+         gam7x99gnBnJufB2sXAD6ZFEYzeh/3MaQEQ9ibmlN1jR6KykKr+TspkuI2cAtbmeLq
+         kdTkoQiRr06KwC1W6KZTidFGBkmjkP+XTugshH1bB1fkB6Rk6bbsOOxEwQcUvd3s0v
+         QzUPI41GngZKfe4nrOMan1tnjSIOqMDDEoZCQEeuO1uEAb/9z6/A/0n3JAY/zNFS8K
+         vspr9GUNyHSpUMAW6oEkdlUUvFyzj11LlQdQa6k8yAbQ1nkO3+NVPQwipw10iga9Dj
+         GCaU3mnwfXUjA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chengfeng Ye <dg573847474@gmail.com>,
-        Manish Rangankar <mrangankar@marvell.com>,
+Cc:     Justin Tee <justin.tee@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, njavali@marvell.com,
-        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
+        Sasha Levin <sashal@kernel.org>, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 2/2] scsi: qedi: Fix potential deadlock on &qedi_percpu->p_work_lock
-Date:   Tue, 22 Aug 2023 07:37:34 -0400
-Message-Id: <20230822113735.3551762-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 03/10] scsi: lpfc: Remove reftag check in DIF paths
+Date:   Tue, 22 Aug 2023 07:36:21 -0400
+Message-Id: <20230822113628.3551393-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230822113735.3551762-1-sashal@kernel.org>
-References: <20230822113735.3551762-1-sashal@kernel.org>
+In-Reply-To: <20230822113628.3551393-1-sashal@kernel.org>
+References: <20230822113628.3551393-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.14.323
+X-stable-base: Linux 6.1.46
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -61,65 +60,106 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Chengfeng Ye <dg573847474@gmail.com>
+From: Justin Tee <justin.tee@broadcom.com>
 
-[ Upstream commit dd64f80587190265ca8a0f4be6c64c2fda6d3ac2 ]
+[ Upstream commit 8eebf0e84f0614cebc7347f7bbccba4056d77d42 ]
 
-As &qedi_percpu->p_work_lock is acquired by hard IRQ qedi_msix_handler(),
-other acquisitions of the same lock under process context should disable
-IRQ, otherwise deadlock could happen if the IRQ preempts the execution
-while the lock is held in process context on the same CPU.
+When preparing protection DIF I/O for DMA, the driver obtains reference
+tags from scsi_prot_ref_tag().  Previously, there was a wrong assumption
+that an all 0xffffffff value meant error and thus the driver failed the
+I/O.  This patch removes the evaluation code and accepts whatever the upper
+layer returns.
 
-qedi_cpu_offline() is one such function which acquires the lock in process
-context.
-
-[Deadlock Scenario]
-qedi_cpu_offline()
-    ->spin_lock(&p->p_work_lock)
-        <irq>
-        ->qedi_msix_handler()
-        ->edi_process_completions()
-        ->spin_lock_irqsave(&p->p_work_lock, flags); (deadlock here)
-
-This flaw was found by an experimental static analysis tool I am developing
-for IRQ-related deadlocks.
-
-The tentative patch fix the potential deadlock by spin_lock_irqsave()
-under process context.
-
-Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
-Link: https://lore.kernel.org/r/20230726125655.4197-1-dg573847474@gmail.com
-Acked-by: Manish Rangankar <mrangankar@marvell.com>
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Link: https://lore.kernel.org/r/20230803211932.155745-1-justintee8345@gmail.com
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qedi/qedi_main.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_scsi.c | 20 +++-----------------
+ 1 file changed, 3 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.c
-index 09f57ef35990c..b8b177018031c 100644
---- a/drivers/scsi/qedi/qedi_main.c
-+++ b/drivers/scsi/qedi/qedi_main.c
-@@ -1669,8 +1669,9 @@ static int qedi_cpu_offline(unsigned int cpu)
- 	struct qedi_percpu_s *p = this_cpu_ptr(&qedi_percpu);
- 	struct qedi_work *work, *tmp;
- 	struct task_struct *thread;
-+	unsigned long flags;
- 
--	spin_lock_bh(&p->p_work_lock);
-+	spin_lock_irqsave(&p->p_work_lock, flags);
- 	thread = p->iothread;
- 	p->iothread = NULL;
- 
-@@ -1681,7 +1682,7 @@ static int qedi_cpu_offline(unsigned int cpu)
- 			kfree(work);
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index 7a1563564df7f..7aac9fc719675 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -109,8 +109,6 @@ lpfc_sli4_set_rsp_sgl_last(struct lpfc_hba *phba,
  	}
+ }
  
--	spin_unlock_bh(&p->p_work_lock);
-+	spin_unlock_irqrestore(&p->p_work_lock, flags);
- 	if (thread)
- 		kthread_stop(thread);
- 	return 0;
+-#define LPFC_INVALID_REFTAG ((u32)-1)
+-
+ /**
+  * lpfc_rampdown_queue_depth - Post RAMP_DOWN_QUEUE event to worker thread
+  * @phba: The Hba for which this call is being executed.
+@@ -978,8 +976,6 @@ lpfc_bg_err_inject(struct lpfc_hba *phba, struct scsi_cmnd *sc,
+ 
+ 	sgpe = scsi_prot_sglist(sc);
+ 	lba = scsi_prot_ref_tag(sc);
+-	if (lba == LPFC_INVALID_REFTAG)
+-		return 0;
+ 
+ 	/* First check if we need to match the LBA */
+ 	if (phba->lpfc_injerr_lba != LPFC_INJERR_LBA_OFF) {
+@@ -1560,8 +1556,6 @@ lpfc_bg_setup_bpl(struct lpfc_hba *phba, struct scsi_cmnd *sc,
+ 
+ 	/* extract some info from the scsi command for pde*/
+ 	reftag = scsi_prot_ref_tag(sc);
+-	if (reftag == LPFC_INVALID_REFTAG)
+-		goto out;
+ 
+ #ifdef CONFIG_SCSI_LPFC_DEBUG_FS
+ 	rc = lpfc_bg_err_inject(phba, sc, &reftag, NULL, 1);
+@@ -1723,8 +1717,6 @@ lpfc_bg_setup_bpl_prot(struct lpfc_hba *phba, struct scsi_cmnd *sc,
+ 	/* extract some info from the scsi command */
+ 	blksize = scsi_prot_interval(sc);
+ 	reftag = scsi_prot_ref_tag(sc);
+-	if (reftag == LPFC_INVALID_REFTAG)
+-		goto out;
+ 
+ #ifdef CONFIG_SCSI_LPFC_DEBUG_FS
+ 	rc = lpfc_bg_err_inject(phba, sc, &reftag, NULL, 1);
+@@ -1954,8 +1946,6 @@ lpfc_bg_setup_sgl(struct lpfc_hba *phba, struct scsi_cmnd *sc,
+ 
+ 	/* extract some info from the scsi command for pde*/
+ 	reftag = scsi_prot_ref_tag(sc);
+-	if (reftag == LPFC_INVALID_REFTAG)
+-		goto out;
+ 
+ #ifdef CONFIG_SCSI_LPFC_DEBUG_FS
+ 	rc = lpfc_bg_err_inject(phba, sc, &reftag, NULL, 1);
+@@ -2155,8 +2145,6 @@ lpfc_bg_setup_sgl_prot(struct lpfc_hba *phba, struct scsi_cmnd *sc,
+ 	/* extract some info from the scsi command */
+ 	blksize = scsi_prot_interval(sc);
+ 	reftag = scsi_prot_ref_tag(sc);
+-	if (reftag == LPFC_INVALID_REFTAG)
+-		goto out;
+ 
+ #ifdef CONFIG_SCSI_LPFC_DEBUG_FS
+ 	rc = lpfc_bg_err_inject(phba, sc, &reftag, NULL, 1);
+@@ -2748,8 +2736,6 @@ lpfc_calc_bg_err(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd)
+ 
+ 		src = (struct scsi_dif_tuple *)sg_virt(sgpe);
+ 		start_ref_tag = scsi_prot_ref_tag(cmd);
+-		if (start_ref_tag == LPFC_INVALID_REFTAG)
+-			goto out;
+ 		start_app_tag = src->app_tag;
+ 		len = sgpe->length;
+ 		while (src && protsegcnt) {
+@@ -3495,11 +3481,11 @@ lpfc_bg_scsi_prep_dma_buf_s4(struct lpfc_hba *phba,
+ 			     scsi_cmnd->sc_data_direction);
+ 
+ 	lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
+-			"9084 Cannot setup S/G List for HBA"
+-			"IO segs %d/%d SGL %d SCSI %d: %d %d\n",
++			"9084 Cannot setup S/G List for HBA "
++			"IO segs %d/%d SGL %d SCSI %d: %d %d %d\n",
+ 			lpfc_cmd->seg_cnt, lpfc_cmd->prot_seg_cnt,
+ 			phba->cfg_total_seg_cnt, phba->cfg_sg_seg_cnt,
+-			prot_group_type, num_sge);
++			prot_group_type, num_sge, ret);
+ 
+ 	lpfc_cmd->seg_cnt = 0;
+ 	lpfc_cmd->prot_seg_cnt = 0;
 -- 
 2.40.1
 
