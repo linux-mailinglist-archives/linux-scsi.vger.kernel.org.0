@@ -2,235 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE653785611
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Aug 2023 12:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7EB785C2E
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Aug 2023 17:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbjHWKuZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Aug 2023 06:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
+        id S237267AbjHWPeW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Aug 2023 11:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbjHWKuG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Aug 2023 06:50:06 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3519E5A;
-        Wed, 23 Aug 2023 03:49:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DD73121F46;
-        Wed, 23 Aug 2023 10:48:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1692787738; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xLp8wxdpKpq8KTQotrZDbbnw1nZi05RZ0xIeaAOP2x4=;
-        b=i4MLB5+BZGRlAVIOnQNWV2KtbDqP1LLiqJk8XnLozBQIqF4hGi7oPeFBJH2l60Ho8NJGSa
-        38FppjxGs16pCwGz/xlaVDAcpkTn7I/iorICvcjpqttBqIEKG5T561IX5lFk2wHLktBgIt
-        aw+PKxy0GOtQ4H23RIQ7UOWko3SI/PM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1692787738;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xLp8wxdpKpq8KTQotrZDbbnw1nZi05RZ0xIeaAOP2x4=;
-        b=kUSs9Z3bn6eUI+XIoAhTpobeuWWFRDqiEp52dbKNrSXgOuxDaXisMSpHLNC6FJnimgg8cv
-        /UadFtIImI/NKUCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C35EA13592;
-        Wed, 23 Aug 2023 10:48:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eyenLxrk5WRTIAAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 23 Aug 2023 10:48:58 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 60F96A078F; Wed, 23 Aug 2023 12:48:57 +0200 (CEST)
-From:   Jan Kara <jack@suse.cz>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, <linux-fsdevel@vger.kernel.org>,
-        <linux-block@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
-        target-devel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH 15/29] scsi: target: Convert to bdev_open_by_path()
-Date:   Wed, 23 Aug 2023 12:48:26 +0200
-Message-Id: <20230823104857.11437-15-jack@suse.cz>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230818123232.2269-1-jack@suse.cz>
-References: <20230818123232.2269-1-jack@suse.cz>
+        with ESMTP id S233602AbjHWPeV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Aug 2023 11:34:21 -0400
+X-Greylist: delayed 910 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Aug 2023 08:34:16 PDT
+Received: from mail.parlimen.gov.my (mail.parlimen.gov.my [58.26.67.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 428B9E59
+        for <linux-scsi@vger.kernel.org>; Wed, 23 Aug 2023 08:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; d=parlimen.gov.my; s=key01; c=relaxed/simple;
+        q=dns/txt; i=@parlimen.gov.my; t=1692803864; x=2556717464;
+        h=From:Sender:Reply-To:Subject:Date:Message-Id:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=DZK/hUNZcQiWd+YDahnFB82lNq4aIorj2cbUs+jPCnw=;
+        b=YOsWOjwpBw0J5lv1Kg+GR0UVhSaLSSoc7qP19wtRpYz9egKUm2HjYMe/45sKnVZE
+        SGke/K9dMCoZ0NWZ8tlxC4wT51w330ztwO94Qzn+S0dNivOqSOMU2S+75fI20wNC
+        hS0Qk1L0FdnaiL914cmxL6suZ2f04CIM7jkyVwbBZIVdMQS+fkn6hG2ZxLe1B89U
+        F2M09WilJkG8Eiazgspa60iYgOeVxGz1VvwoC/e/knw5yQeijvdDUg6Onk6TEv7h
+        OZviui/+BxPbgEMu1IXPbHebmTAqxSRUm7veqFxty+M5CKEQ7QQeW0XmfP+oS5uc
+        7EdSl4ZhwnfzzQBX9DWsww==;
+X-AuditID: 0a0a1e06-e16c770000004717-8c-64e6231878ac
+Received: from pmail.parlimen.gov.my (Unknown_Domain [10.0.10.134])
+        by mail.parlimen.gov.my (Parlimen Mail Filtering) with SMTP id 94.40.18199.81326E46; Wed, 23 Aug 2023 23:17:44 +0800 (+08)
+Received: from localhost (localhost [127.0.0.1])
+        by pmail.parlimen.gov.my (Postfix) with ESMTP id 46F601C5BED9;
+        Wed, 23 Aug 2023 23:17:28 +0800 (+08)
+Received: from pmail.parlimen.gov.my ([127.0.0.1])
+        by localhost (pmail.parlimen.gov.my [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Bcd0gdTcBzJ9; Wed, 23 Aug 2023 23:17:27 +0800 (+08)
+Received: from localhost (localhost [127.0.0.1])
+        by pmail.parlimen.gov.my (Postfix) with ESMTP id 245EB1C5ABCA;
+        Wed, 23 Aug 2023 23:04:15 +0800 (+08)
+X-Virus-Scanned: amavisd-new at pmail.parlimen.gov.my
+Received: from pmail.parlimen.gov.my ([127.0.0.1])
+        by localhost (pmail.parlimen.gov.my [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id v8m_duzucM-s; Wed, 23 Aug 2023 23:04:15 +0800 (+08)
+Received: from [10.18.0.17] (unknown [45.87.214.118])
+        by pmail.parlimen.gov.my (Postfix) with ESMTPSA id 5E4A81C553AF;
+        Wed, 23 Aug 2023 22:41:37 +0800 (+08)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5419; i=jack@suse.cz; h=from:subject; bh=6kZvIq8BZizDHY8AGnmJ3i/dK8lV3iBpu+CtF7nME7M=; b=owEBbQGS/pANAwAIAZydqgc/ZEDZAcsmYgBk5eP7oIFf66pcHWOaFjbkKBeqFiapoWsAciZgdrSG K/m0GauJATMEAAEIAB0WIQSrWdEr1p4yirVVKBycnaoHP2RA2QUCZOXj+wAKCRCcnaoHP2RA2f9CCA CDmUs+SH0RqU6uC1VVkYLvqWDeQV/uOmRnoGAWfEvQ98+vHWaRygHr9PXLFYuCT+I4H/caIfK6Chma wQAvV1jLDwita3AK8vwlMF1/7pioa1XLFQQErVXXUUW3gtIxERfB0+ew2qJEs1TGFc+nqWNEKZtUKo NyCeyCR8ViEFw9XP8kR0bi3rJ9stipaMNRm4oH2C8HZEitR09hdGB5S26BeNgZNB6C+p1W7bs340// OX9+ivxqM65EbX4frfp75G+jrdY7aOfpDaD9HTOs6G9xgkBoq/pWOMDNci9AiriBXOnJkk5dWolPcG gWBu8s0+jJkIspiGCW2u3LDKCZE4mA
-X-Developer-Key: i=jack@suse.cz; a=openpgp; fpr=93C6099A142276A28BBE35D815BC833443038D8C
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re:
+To:     Recipients <fazlimr@parlimen.gov.my>
+From:   "Ge. Capital Finance" <fazlimr@parlimen.gov.my>
+Date:   Wed, 23 Aug 2023 13:41:39 -0100
+Reply-To: info@gecapitalfinace.com
+X-Antivirus: Avast (VPS 230823-2, 23/8/2023), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20230823144138.5E4A81C553AF@pmail.parlimen.gov.my>
+X-Brightmail-Tracker: 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
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_50,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Convert iblock and pscsi drivers to use bdev_open_by_path() and pass the
-handle around.
+Hello
 
-CC: target-devel@vger.kernel.org
-CC: linux-scsi@vger.kernel.org
-Acked-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Jan Kara <jack@suse.cz>
----
- drivers/target/target_core_iblock.c | 19 +++++++++++--------
- drivers/target/target_core_iblock.h |  1 +
- drivers/target/target_core_pscsi.c  | 26 +++++++++++++-------------
- drivers/target/target_core_pscsi.h  |  2 +-
- 4 files changed, 26 insertions(+), 22 deletions(-)
+Sind Sie an einer finanziellen Unterst=FCtzung f=FCr den gesch=E4ftlichen o=
+der privaten Bedarf f=FCr nur 2 Prozent Zinssatz interessiert? Bitte kontak=
+tieren Sie uns jetzt =FCber: info@gecapitalfinace.com
 
-diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
-index 3d1b511ea284..3695a9f8d8a5 100644
---- a/drivers/target/target_core_iblock.c
-+++ b/drivers/target/target_core_iblock.c
-@@ -91,7 +91,8 @@ static int iblock_configure_device(struct se_device *dev)
- {
- 	struct iblock_dev *ib_dev = IBLOCK_DEV(dev);
- 	struct request_queue *q;
--	struct block_device *bd = NULL;
-+	struct bdev_handle *bdev_handle;
-+	struct block_device *bd;
- 	struct blk_integrity *bi;
- 	blk_mode_t mode = BLK_OPEN_READ;
- 	unsigned int max_write_zeroes_sectors;
-@@ -116,12 +117,14 @@ static int iblock_configure_device(struct se_device *dev)
- 	else
- 		dev->dev_flags |= DF_READ_ONLY;
- 
--	bd = blkdev_get_by_path(ib_dev->ibd_udev_path, mode, ib_dev, NULL);
--	if (IS_ERR(bd)) {
--		ret = PTR_ERR(bd);
-+	bdev_handle = bdev_open_by_path(ib_dev->ibd_udev_path, mode, ib_dev,
-+					NULL);
-+	if (IS_ERR(bdev_handle)) {
-+		ret = PTR_ERR(bdev_handle);
- 		goto out_free_bioset;
- 	}
--	ib_dev->ibd_bd = bd;
-+	ib_dev->ibd_bdev_handle = bdev_handle;
-+	ib_dev->ibd_bd = bd = bdev_handle->bdev;
- 
- 	q = bdev_get_queue(bd);
- 
-@@ -177,7 +180,7 @@ static int iblock_configure_device(struct se_device *dev)
- 	return 0;
- 
- out_blkdev_put:
--	blkdev_put(ib_dev->ibd_bd, ib_dev);
-+	bdev_release(ib_dev->ibd_bdev_handle);
- out_free_bioset:
- 	bioset_exit(&ib_dev->ibd_bio_set);
- out:
-@@ -202,8 +205,8 @@ static void iblock_destroy_device(struct se_device *dev)
- {
- 	struct iblock_dev *ib_dev = IBLOCK_DEV(dev);
- 
--	if (ib_dev->ibd_bd != NULL)
--		blkdev_put(ib_dev->ibd_bd, ib_dev);
-+	if (ib_dev->ibd_bdev_handle)
-+		bdev_release(ib_dev->ibd_bdev_handle);
- 	bioset_exit(&ib_dev->ibd_bio_set);
- }
- 
-diff --git a/drivers/target/target_core_iblock.h b/drivers/target/target_core_iblock.h
-index 8c55375d2f75..683f9a55945b 100644
---- a/drivers/target/target_core_iblock.h
-+++ b/drivers/target/target_core_iblock.h
-@@ -32,6 +32,7 @@ struct iblock_dev {
- 	u32	ibd_flags;
- 	struct bio_set	ibd_bio_set;
- 	struct block_device *ibd_bd;
-+	struct bdev_handle *ibd_bdev_handle;
- 	bool ibd_readonly;
- 	struct iblock_dev_plug *ibd_plug;
- } ____cacheline_aligned;
-diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
-index 0d4f09693ef4..41b7489d37ce 100644
---- a/drivers/target/target_core_pscsi.c
-+++ b/drivers/target/target_core_pscsi.c
-@@ -352,7 +352,7 @@ static int pscsi_create_type_disk(struct se_device *dev, struct scsi_device *sd)
- 	struct pscsi_hba_virt *phv = dev->se_hba->hba_ptr;
- 	struct pscsi_dev_virt *pdv = PSCSI_DEV(dev);
- 	struct Scsi_Host *sh = sd->host;
--	struct block_device *bd;
-+	struct bdev_handle *bdev_handle;
- 	int ret;
- 
- 	if (scsi_device_get(sd)) {
-@@ -366,18 +366,18 @@ static int pscsi_create_type_disk(struct se_device *dev, struct scsi_device *sd)
- 	 * Claim exclusive struct block_device access to struct scsi_device
- 	 * for TYPE_DISK and TYPE_ZBC using supplied udev_path
- 	 */
--	bd = blkdev_get_by_path(dev->udev_path, BLK_OPEN_WRITE | BLK_OPEN_READ,
--				pdv, NULL);
--	if (IS_ERR(bd)) {
--		pr_err("pSCSI: blkdev_get_by_path() failed\n");
-+	bdev_handle = bdev_open_by_path(dev->udev_path,
-+				BLK_OPEN_WRITE | BLK_OPEN_READ, pdv, NULL);
-+	if (IS_ERR(bdev_handle)) {
-+		pr_err("pSCSI: bdev_open_by_path() failed\n");
- 		scsi_device_put(sd);
--		return PTR_ERR(bd);
-+		return PTR_ERR(bdev_handle);
- 	}
--	pdv->pdv_bd = bd;
-+	pdv->pdv_bdev_handle = bdev_handle;
- 
- 	ret = pscsi_add_device_to_list(dev, sd);
- 	if (ret) {
--		blkdev_put(pdv->pdv_bd, pdv);
-+		bdev_release(bdev_handle);
- 		scsi_device_put(sd);
- 		return ret;
- 	}
-@@ -564,9 +564,9 @@ static void pscsi_destroy_device(struct se_device *dev)
- 		 * from pscsi_create_type_disk()
- 		 */
- 		if ((sd->type == TYPE_DISK || sd->type == TYPE_ZBC) &&
--		    pdv->pdv_bd) {
--			blkdev_put(pdv->pdv_bd, pdv);
--			pdv->pdv_bd = NULL;
-+		    pdv->pdv_bdev_handle) {
-+			bdev_release(pdv->pdv_bdev_handle);
-+			pdv->pdv_bdev_handle = NULL;
- 		}
- 		/*
- 		 * For HBA mode PHV_LLD_SCSI_HOST_NO, release the reference
-@@ -994,8 +994,8 @@ static sector_t pscsi_get_blocks(struct se_device *dev)
- {
- 	struct pscsi_dev_virt *pdv = PSCSI_DEV(dev);
- 
--	if (pdv->pdv_bd)
--		return bdev_nr_sectors(pdv->pdv_bd);
-+	if (pdv->pdv_bdev_handle)
-+		return bdev_nr_sectors(pdv->pdv_bdev_handle->bdev);
- 	return 0;
- }
- 
-diff --git a/drivers/target/target_core_pscsi.h b/drivers/target/target_core_pscsi.h
-index 23d9a6e340d4..b0a3ef136592 100644
---- a/drivers/target/target_core_pscsi.h
-+++ b/drivers/target/target_core_pscsi.h
-@@ -37,7 +37,7 @@ struct pscsi_dev_virt {
- 	int	pdv_channel_id;
- 	int	pdv_target_id;
- 	int	pdv_lun_id;
--	struct block_device *pdv_bd;
-+	struct bdev_handle *pdv_bdev_handle;
- 	struct scsi_device *pdv_sd;
- 	struct Scsi_Host *pdv_lld_host;
- } ____cacheline_aligned;
--- 
-2.35.3
+Are you interested in financial assistance for business or personal use for=
+ just 2 percent interest rate? Kindly contact us now via: info@gecapitalfin=
+ace.com
 
+Regard
+Susan
+Address: 800 Long Ridge Road
+Stamford,CT 06902 United States
+Phone Number: +1 7033898593
