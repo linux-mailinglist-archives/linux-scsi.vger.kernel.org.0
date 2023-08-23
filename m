@@ -2,131 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4BB785BC2
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Aug 2023 17:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89234785C54
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Aug 2023 17:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236859AbjHWPRi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Aug 2023 11:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
+        id S235555AbjHWPo2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Aug 2023 11:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236635AbjHWPRf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Aug 2023 11:17:35 -0400
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB38FE7B;
-        Wed, 23 Aug 2023 08:17:08 -0700 (PDT)
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-68a5457b930so2274862b3a.2;
-        Wed, 23 Aug 2023 08:17:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692803750; x=1693408550;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zODWKjFLTG3KmUmUSCQMpsPng8pgZqpf54yZxjbJeIM=;
-        b=Mbvia6qOwvJMIc84ucyrorABNwIaVgU7xgFquIfaU1P0V4BiFSf1RGYaQbBbNWEAUD
-         /jpGJicYQ9mqdget5pA8lFwZFjPvsebpNB+Uli6vN1UUGZ5vaAUFgwgxREgFNX0tpkFK
-         HdtXi/ayQI6/K02iBf1jJG/vE49Ag9TvyW58yfcDyK+63MigH20l46tEDyvDMW/x32/e
-         Vu3yCWrF8JYIDN2yCMA/d3xIStEO35c3Gk5u7+IXyoyAteMCVG/ImCTQ7pSWERLksHVy
-         N5z/dMJkJHXRULkJAHz2nrXcUAeO63iRSIANdXYxg00T3otlErAaggYm6Z351ifpozuC
-         u9hg==
-X-Gm-Message-State: AOJu0YzfkRAK1LnTWfULv0AVZxdLD2TQkCyygcnMh66k0lAy6vzhF+cA
-        T/J6Jjo9Ejw5m/SArnK5zq4=
-X-Google-Smtp-Source: AGHT+IEn9RxZPIi/WKzeL2IegtOWXt2Mn6gK9OOAe4ovitiHA04S28ASCgRbLGZCBJ5jxFFtvK946g==
-X-Received: by 2002:a05:6a20:548f:b0:137:23f1:4281 with SMTP id i15-20020a056a20548f00b0013723f14281mr12825204pzk.12.1692803749675;
-        Wed, 23 Aug 2023 08:15:49 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:ecb6:e8b9:f433:b4b4? ([2620:15c:211:201:ecb6:e8b9:f433:b4b4])
-        by smtp.gmail.com with ESMTPSA id f21-20020a170902e99500b001b896686c78sm11068708plb.66.2023.08.23.08.15.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Aug 2023 08:15:48 -0700 (PDT)
-Message-ID: <078d2954-f4af-6678-29ce-d8f65ff1397a@acm.org>
-Date:   Wed, 23 Aug 2023 08:15:47 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Subject: Re: [PATCH v11 04/16] scsi: core: Introduce a mechanism for
- reordering requests in the error handler
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Hannes Reinecke <hare@suse.de>, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Ming Lei <ming.lei@redhat.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-References: <20230822191822.337080-1-bvanassche@acm.org>
- <20230822191822.337080-5-bvanassche@acm.org>
- <3562fc36-4bc2-b4fb-a2ad-1e310baf1b47@suse.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <3562fc36-4bc2-b4fb-a2ad-1e310baf1b47@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232038AbjHWPo1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Aug 2023 11:44:27 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F015E70;
+        Wed, 23 Aug 2023 08:44:26 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37NDDXgW012456;
+        Wed, 23 Aug 2023 15:44:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=MHjQtJmdnklgfC97Z+9qIdhrLaowKL2QnIkLQkzJl7o=;
+ b=YaPeytV9JEyP2aGwlqXUrjEui1Sh+L+xdcNTGogtu/ECuOTy52uKKk5jrKtlZ/YUi7gS
+ 0NNu1ZhMN9OpIZsfut/MZx3+NkL6ljt5IyLxaluyYN3WdM9FxO/OyZKazwgv/juu/J0F
+ RYEFE2PnlH+lfiTxo2zv+8AZmO50MlP17Gwi35izCbv1mlFZ3qCfRPs+RqPBOR4NG7N0
+ 4O9ZoywfMjX/CvS1Hu3KyhkiNmfXwvvirAI7GPwW+OlScnkfcVoOotFWFhSaeN0h5DdT
+ ozbqrypNjfXXkl4l/kaQ135gYH9W8mpOnvX3s+/mIh/B76lU/qWdBuUkQLEw7/gESlvw PQ== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sn2ext9ns-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Aug 2023 15:44:19 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 37NFiGuj029184;
+        Wed, 23 Aug 2023 15:44:16 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3sjptm3qdf-1;
+        Wed, 23 Aug 2023 15:44:16 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37NFiGKq029178;
+        Wed, 23 Aug 2023 15:44:16 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-nitirawa-hyd.qualcomm.com [10.213.109.152])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 37NFiG7o029177;
+        Wed, 23 Aug 2023 15:44:16 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2342877)
+        id 576B35000AA; Wed, 23 Aug 2023 21:14:15 +0530 (+0530)
+From:   Nitin Rawat <quic_nitirawa@quicinc.com>
+To:     mani@kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     quic_cang@quicinc.com, quic_nguyenb@quicinc.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Nitin Rawat <quic_nitirawa@quicinc.com>
+Subject: [PATCH V5 0/6] scsi: ufs: qcom: Align programming sequence as per HW spec
+Date:   Wed, 23 Aug 2023 21:14:07 +0530
+Message-Id: <20230823154413.23788-1-quic_nitirawa@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 4bRYYtqvE5LG8IHvEqPo65NhqpwjjGHP
+X-Proofpoint-ORIG-GUID: 4bRYYtqvE5LG8IHvEqPo65NhqpwjjGHP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-23_09,2023-08-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=720
+ mlxscore=0 lowpriorityscore=0 priorityscore=1501 impostorscore=0
+ malwarescore=0 suspectscore=0 adultscore=0 phishscore=0 bulkscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308230142
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/22/23 23:26, Hannes Reinecke wrote:
-> On 8/22/23 21:16, Bart Van Assche wrote:
->> +/*
->> + * Comparison function that allows to sort SCSI commands by ULD driver.
->> + */
->> +static int scsi_cmp_uld(void *priv, const struct list_head *_a,
->> +            const struct list_head *_b)
->> +{
->> +    struct scsi_cmnd *a = list_entry(_a, typeof(*a), eh_entry);
->> +    struct scsi_cmnd *b = list_entry(_b, typeof(*b), eh_entry);
->> +
->> +    /* See also the comment above the list_sort() definition. */
->> +    return scsi_cmd_to_driver(a) > scsi_cmd_to_driver(b);
-> 
-> I have to agree with Christoph here.
-> Comparing LBA numbers at the SCSI level is really the wrong place.
-> SCSI commands might be anything, and quite some of these commands don't
-> even have LBA numbers. So trying to order them will be pointless.
-> 
-> The reordering mechanism really has to go into the block layer, with
-> the driver failing the request and the block layer resubmitting in-order.
+This patch aligns programming sequence as per Qualcomm UFS
+hardware specification.
 
-Hi Hannes,
+Changes from v4:
+- Addressed bjorn comment to split single patch to multiple patches.
 
-Please take another look at patches 04/16 and 05/16. As one can see no
-LBA numbers are being compared in the SCSI core - comparing LBA numbers
-happens in the sd (SCSI disk) driver. The code that you replied to
-compares ULD pointers, a well-defined concept in the SCSI core.
+Changes from v3:
+-Addressed bjorn comment to update commit msg to capture change details.
 
-Your request to move the functionality from patches 04/16 and 05/16 into
-the block layer would involve the following:
-* Report the unaligned write errors (because a write did not happen at the
-   write pointer) to the block layer (BLK_STS_WP_MISMATCH?).
-* Introduce a mechanism in the block layer for postponing error handling
-   until all outstanding commands have failed. The approach from the SCSI
-   core (tracking the number of failed and the number of busy commands
-   and only waking up the error handler after these counters are equal)
-   would be unacceptable because of the runtime overhead this mechanism
-   would introduce in the block layer hot path. Additionally, I strongly
-   doubt that it is possible to introduce any mechanism for postponing
-   error handling in the block layer without introducing additional
-   overhead in the hot path.
-* Christoph's opinion is that NVMe software should use zone append
-   (REQ_OP_ZONE_APPEND) instead of regular writes (REQ_OP_WRITE) when
-   writing to a zoned namespace. So the SCSI subsystem would be the only
-   user of the new mechanism introduced in the block layer. The reason we
-   chose REQ_OP_WRITE for zoned UFS devices is because the SCSI standard
-   does not support a zone append command and introducing a zone append
-   command in the SCSI standards is not something that can be realized in
-   time for the first generation of zoned UFS devices.
+Changes from v2:
+- Addressed bao comment, removed duplicate clock timer cfg API call
 
-Because I assume that both Jens and Christoph disagree strongly with your
-request: I have no plans to move the code for sorting zoned writes into
-the block layer core.
+Changes from v1:
+- Addressed bao comment, removed wrapper function
+- Tab alignment
 
-Jens and Christoph, please correct me if I misunderstood something.
+Nitin Rawat (6):
+  scsi: ufs: qcom: Update offset for core_clk_1us_cycles
+  scsi: ufs: qcom: Configure PA_VS_CORE_CLK_40NS_CYCLES for Unipro core
+    clk
+  scsi: ufs: qcom: Add multiple frequency support for unipro clk
+    attributes
+  scsi: ufs: qcom: Align unipro clk attributes as per Hardware
+    specification
+  scsi: ufs: qcom: Refactor ufs_qcom_cfg_timers function.
+  scsi: ufs: qcom: Handle unipro clk HW division based on scaling
+    conditions.
 
-Thanks,
+ drivers/ufs/host/ufs-qcom.c | 239 +++++++++++++++++++++++++++---------
+ drivers/ufs/host/ufs-qcom.h |  15 ++-
+ 2 files changed, 197 insertions(+), 57 deletions(-)
 
-Bart.
+--
+2.17.1
+
